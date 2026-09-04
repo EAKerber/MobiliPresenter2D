@@ -1,0 +1,41 @@
+{
+  "checkpointId": "cozinha-01-module02-fidelity-fix1",
+  "cleanupRoi": [
+    484,
+    590,
+    498,
+    856
+  ],
+  "currentGoldenSha256": "fef84103531acf469b2e3a29f0b6df12f384c961b86c3dc5770967614fa545a8",
+  "currentModule02Sha256": "dcda8c31812678db8eb1e4d5fc88d23dfd8cd77e50a8a75d726df62af6075faf",
+  "expectedFinishMaskBounds": [
+    498,
+    590,
+    757,
+    856
+  ],
+  "expectedGoldenChangedPixelCount": 3579,
+  "expectedModule02AlphaBounds": [
+    498,
+    590,
+    757,
+    856
+  ],
+  "finishMaskSha256": "bd5050d0e2b90b00acfe122f7e5e9ae52b48ab717e48412ee16694357a6100b7",
+  "parentCheckpointId": "cozinha-01-phase3-stone-split1",
+  "parentCommit": "d8ec0dd15c7dc9e61623b5eb3a4bd346b4e7d587",
+  "parentGoldenSha256": "b626b8ae3669f7feda5824c7cbdc2de2593e3290d5fcfab58c78c6d7d53f4413",
+  "parentModule02Sha256": "6ba1ad26835d349a28b098bd6c60182b369ec66e51ea2b1a8cc263f30c44da98",
+  "protectedAppliance": [
+    516,
+    611,
+    720,
+    838
+  ],
+  "schemaVersion": "R4Module02Fidelity 0.1",
+  "visualDecisions": [
+    "remove-column-contamination",
+    "enable-module02-front-finish",
+    "protect-complete-oven-appliance"
+  ]
+}

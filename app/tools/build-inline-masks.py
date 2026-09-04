@@ -12,6 +12,7 @@ PROJECT_ROOT = Path(__file__).resolve().parent.parent
 OUTPUT_PATH = PROJECT_ROOT / "data" / "mask-data.js"
 MASK_PATHS = (
     "assets/kitchen/masks/01.png",
+    "assets/kitchen/masks/02.png",
     "assets/kitchen/masks/03.png",
     "assets/kitchen/masks/04.png",
     "assets/kitchen/masks/05.png",

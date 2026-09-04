@@ -14,13 +14,13 @@ PROJECT_ROOT = Path(__file__).resolve().parent.parent
 TECHNICAL_DATA = PROJECT_ROOT / "data" / "technical-data.json"
 REPORT_PATH = PROJECT_ROOT / "reports" / "module02-alpha-fix-validation.json"
 COMPOSED_PATH = PROJECT_ROOT / "reports" / "default-composed.png"
-MODULE02_PATH = PROJECT_ROOT / "tools" / "sources" / "02_inferior_fogao-combined-v2.png"
-MODULE02_ALPHA_PATH = PROJECT_ROOT / "tools" / "masks" / "module02-alpha-approved-v2.png"
+MODULE02_PATH = PROJECT_ROOT / "tools" / "sources" / "02_inferior_fogao-combined-v3.png"
+MODULE02_ALPHA_PATH = PROJECT_ROOT / "tools" / "masks" / "module02-alpha-approved-v3.png"
 STONE_SPLITS = (
     (
         PROJECT_ROOT / "assets" / "kitchen" / "layers" / "02_inferior_fogao.png",
         PROJECT_ROOT / "assets" / "kitchen" / "layers" / "stone-02-cozinha.png",
-        PROJECT_ROOT / "tools" / "sources" / "02_inferior_fogao-combined-v2.png",
+        PROJECT_ROOT / "tools" / "sources" / "02_inferior_fogao-combined-v3.png",
     ),
     (
         PROJECT_ROOT / "assets" / "kitchen" / "layers" / "03_inferior_pia.png",
