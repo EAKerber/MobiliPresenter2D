@@ -22,6 +22,25 @@
       ]
     },
     {
+      "id": "module-02-bay-completion",
+      "label": "Completação fotográfica da baia do módulo 02",
+      "targetVariants": ["module-02-hidden"],
+      "authorizedRoi": [470, 480, 780, 930],
+      "minAlphaBBox": { "width": 12, "height": 120 },
+      "maxAlphaBBoxArea": 139500,
+      "resolvesDebtCodes": ["raw-neighbor-cut"],
+      "visualChecklist": [
+        "left-termination-natural",
+        "right-termination-natural",
+        "worktop-termination-natural",
+        "wall-continuity",
+        "floor-plinth-continuity",
+        "lighting-match",
+        "no-visible-seam",
+        "no-background-leak"
+      ]
+    },
+    {
       "id": "module-02-right-endcap",
       "label": "Fechamento direito do módulo 02",
       "targetVariants": ["module-03-hidden"],
