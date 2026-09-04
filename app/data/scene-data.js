@@ -9,7 +9,7 @@
 
   const scene = {
     schemaVersion: "Scene2D 1.0",
-    manifestVersion: "cozinha-01@2026-09-02-phase3-stone-split1",
+    manifestVersion: "cozinha-01@2026-09-04-r4-module02-fidelity1",
     id: "cozinha-01",
     label: "Cozinha Casa em Módulos",
     canvas: { width: 1536, height: 1024 },
@@ -58,12 +58,12 @@
         kind: "module",
         zIndex: 200,
         asset: "assets/kitchen/layers/02_inferior_fogao.png",
-        maskAsset: null,
-        alphaBounds: { x: 484, y: 590, width: 273, height: 266 },
+        maskAsset: "assets/kitchen/masks/02.png",
+        alphaBounds: { x: 498, y: 590, width: 259, height: 266 },
         defaultVisible: true,
         controllable: true,
         hostId: null,
-        finishGroups: [],
+        finishGroups: ["fronts-all"],
         tags: ["lower", "cooking-zone"]
       },
       {
@@ -210,6 +210,7 @@
         scope: "global",
         targets: [
           "module-01",
+          "module-02",
           "module-03",
           "module-04",
           "module-05",

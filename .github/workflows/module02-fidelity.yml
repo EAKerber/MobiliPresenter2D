@@ -1,0 +1,73 @@
+name: Module 02 fidelity
+
+on:
+  pull_request:
+    paths:
+      - 'app/assets/kitchen/layers/02_inferior_fogao.png'
+      - 'app/assets/kitchen/masks/02.png'
+      - 'app/assets/kitchen/composicao-completa.png'
+      - 'app/data/scene-data.js'
+      - 'app/data/mask-data.js'
+      - 'app/data/technical-data.json'
+      - 'app/tools/build-inline-masks.py'
+      - 'app/tools/validate-assets.py'
+      - 'app/tools/apply-r4-module02-fidelity.py'
+      - 'app/tools/masks/module02-alpha-approved-v3.png'
+      - 'app/tools/sources/02_inferior_fogao-combined-v3.png'
+      - 'reference/baseline-manifest.json'
+      - 'reference/r4-module02-fidelity.json'
+      - 'reference/visual-debt.md'
+      - 'tools/validate-r4-module02.py'
+      - '.github/workflows/module02-fidelity.yml'
+      - 'docs/work/r4-module02-fidelity.md'
+      - 'netlify.toml'
+  push:
+    branches: [main]
+    paths:
+      - 'app/**'
+      - 'reference/baseline-manifest.json'
+      - 'reference/r4-module02-fidelity.json'
+      - 'tools/validate-r4-module02.py'
+      - '.github/workflows/module02-fidelity.yml'
+      - 'docs/work/r4-module02-fidelity.md'
+      - 'netlify.toml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  module02-fidelity:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install image tooling
+        run: python -m pip install -r tools/requirements.txt
+      - name: Materialize parent visual evidence
+        run: |
+          mkdir -p /tmp/r4-parent /tmp/r4-review
+          git show d8ec0dd15c7dc9e61623b5eb3a4bd346b4e7d587:app/assets/kitchen/composicao-completa.png > /tmp/r4-parent/golden.png
+          git show d8ec0dd15c7dc9e61623b5eb3a4bd346b4e7d587:app/assets/kitchen/layers/02_inferior_fogao.png > /tmp/r4-parent/module02.png
+      - name: Validate current checkpoint
+        run: python tools/validate-baseline.py
+      - name: Validate canonical app runtime and assets
+        working-directory: app
+        run: npm test
+      - name: Validate bounded R4 visual transition
+        run: |
+          python tools/validate-r4-module02.py \
+            --previous-golden /tmp/r4-parent/golden.png \
+            --previous-module /tmp/r4-parent/module02.png \
+            --output-dir /tmp/r4-review
+          cat /tmp/r4-review/summary.json
+      - name: Upload R4 visual gates
+        uses: actions/upload-artifact@v4
+        with:
+          name: r4-module02-fidelity-${{ github.run_id }}
+          path: /tmp/r4-review
+          if-no-files-found: error

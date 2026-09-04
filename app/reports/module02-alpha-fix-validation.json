@@ -1,6 +1,6 @@
 {
   "schemaVersion": "FidelityReport2D 1.0",
-  "baselineId": "cozinha-01-phase3-stone-split1",
+  "baselineId": "cozinha-01-module02-fidelity-fix1",
   "passed": true,
   "canvas": [
     1536,
@@ -14,7 +14,7 @@
     {
       "module": "assets/kitchen/layers/02_inferior_fogao.png",
       "stone": "assets/kitchen/layers/stone-02-cozinha.png",
-      "source": "tools/sources/02_inferior_fogao-combined-v2.png",
+      "source": "tools/sources/02_inferior_fogao-combined-v3.png",
       "differentPixels": 0,
       "differenceBounds": null
     },
@@ -42,7 +42,7 @@
       ]
     },
     "assets/kitchen/composicao-completa.png": {
-      "sha256": "b626b8ae3669f7feda5824c7cbdc2de2593e3290d5fcfab58c78c6d7d53f4413",
+      "sha256": "fef84103531acf469b2e3a29f0b6df12f384c961b86c3dc5770967614fa545a8",
       "size": [
         1536,
         1024
@@ -68,13 +68,13 @@
       ]
     },
     "assets/kitchen/layers/02_inferior_fogao.png": {
-      "sha256": "6ba1ad26835d349a28b098bd6c60182b369ec66e51ea2b1a8cc263f30c44da98",
+      "sha256": "dcda8c31812678db8eb1e4d5fc88d23dfd8cd77e50a8a75d726df62af6075faf",
       "size": [
         1536,
         1024
       ],
       "alphaBounds": [
-        484,
+        498,
         590,
         757,
         856
@@ -198,12 +198,17 @@
       ]
     },
     "assets/kitchen/masks/02.png": {
-      "sha256": "64085d665f67f408b0cd67f69bebaa5a814b79eeed296c3d952e62988d7a440f",
+      "sha256": "bd5050d0e2b90b00acfe122f7e5e9ae52b48ab717e48412ee16694357a6100b7",
       "size": [
         1536,
         1024
       ],
-      "alphaBounds": null
+      "alphaBounds": [
+        498,
+        590,
+        757,
+        856
+      ]
     },
     "assets/kitchen/masks/03.png": {
       "sha256": "ec948e091e98daa90d0ceb56d714e40a75d2e6bb7be6a435ad01bb8b0ffd93cb",
@@ -286,19 +291,6 @@
       ],
       "alphaBounds": null
     },
-    "tools/sources/02_inferior_fogao-combined-v2.png": {
-      "sha256": "c9c031f2a4d37be49d72de293d64ce579f42e56b934342e49017d203085646b0",
-      "size": [
-        1536,
-        1024
-      ],
-      "alphaBounds": [
-        484,
-        491,
-        764,
-        912
-      ]
-    },
     "tools/sources/03_inferior_pia-combined-v1.png": {
       "sha256": "32f2b66f9dbf3d911b739ae080fe2f352e2015ac2f24bddd51984b8ff384cd66",
       "size": [
@@ -309,6 +301,19 @@
         736,
         442,
         1217,
+        912
+      ]
+    },
+    "tools/sources/02_inferior_fogao-combined-v3.png": {
+      "sha256": "2c32c401637a1037b95d0c11599c003933111c13397f24cf90aeffd710a86673",
+      "size": [
+        1536,
+        1024
+      ],
+      "alphaBounds": [
+        484,
+        491,
+        764,
         912
       ]
     }

@@ -29,8 +29,8 @@
         1024
       ],
       "path": "app/assets/kitchen/composicao-completa.png",
-      "sha256": "b626b8ae3669f7feda5824c7cbdc2de2593e3290d5fcfab58c78c6d7d53f4413",
-      "size": 2111991
+      "sha256": "fef84103531acf469b2e3a29f0b6df12f384c961b86c3dc5770967614fa545a8",
+      "size": 2112814
     },
     {
       "alphaBounds": [
@@ -50,7 +50,7 @@
     },
     {
       "alphaBounds": [
-        484,
+        498,
         590,
         757,
         856
@@ -61,8 +61,8 @@
         1024
       ],
       "path": "app/assets/kitchen/layers/02_inferior_fogao.png",
-      "sha256": "6ba1ad26835d349a28b098bd6c60182b369ec66e51ea2b1a8cc263f30c44da98",
-      "size": 112386
+      "sha256": "dcda8c31812678db8eb1e4d5fc88d23dfd8cd77e50a8a75d726df62af6075faf",
+      "size": 112355
     },
     {
       "alphaBounds": [
@@ -209,15 +209,20 @@
       "size": 6697
     },
     {
-      "alphaBounds": null,
+      "alphaBounds": [
+        498,
+        590,
+        757,
+        856
+      ],
       "canonicalCanvas": true,
       "dimensions": [
         1536,
         1024
       ],
       "path": "app/assets/kitchen/masks/02.png",
-      "sha256": "64085d665f67f408b0cd67f69bebaa5a814b79eeed296c3d952e62988d7a440f",
-      "size": 6177
+      "sha256": "bd5050d0e2b90b00acfe122f7e5e9ae52b48ab717e48412ee16694357a6100b7",
+      "size": 8607
     },
     {
       "alphaBounds": [
@@ -323,22 +328,6 @@
     },
     {
       "alphaBounds": [
-        484,
-        491,
-        764,
-        912
-      ],
-      "canonicalCanvas": true,
-      "dimensions": [
-        1536,
-        1024
-      ],
-      "path": "app/tools/sources/02_inferior_fogao-combined-v2.png",
-      "sha256": "c9c031f2a4d37be49d72de293d64ce579f42e56b934342e49017d203085646b0",
-      "size": 222284
-    },
-    {
-      "alphaBounds": [
         736,
         442,
         1217,
@@ -352,9 +341,25 @@
       "path": "app/tools/sources/03_inferior_pia-combined-v1.png",
       "sha256": "32f2b66f9dbf3d911b739ae080fe2f352e2015ac2f24bddd51984b8ff384cd66",
       "size": 340278
+    },
+    {
+      "alphaBounds": [
+        484,
+        491,
+        764,
+        912
+      ],
+      "canonicalCanvas": true,
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "path": "app/tools/sources/02_inferior_fogao-combined-v3.png",
+      "sha256": "2c32c401637a1037b95d0c11599c003933111c13397f24cf90aeffd710a86673",
+      "size": 222274
     }
   ],
-  "baselineId": "cozinha-01-phase3-stone-split1",
+  "baselineId": "cozinha-01-module02-fidelity-fix1",
   "canvas": {
     "height": 1024,
     "origin": [
@@ -381,7 +386,7 @@
   "expectedRuntime": {
     "controllableEntities": 8,
     "entities": 11,
-    "initialFingerprint": "scene2d-89ce17bc",
+    "initialFingerprint": "scene2d-e7c8dba7",
     "passed": true
   },
   "files": [
@@ -412,8 +417,8 @@
     },
     {
       "path": "app/assets/kitchen/composicao-completa.png",
-      "sha256": "b626b8ae3669f7feda5824c7cbdc2de2593e3290d5fcfab58c78c6d7d53f4413",
-      "size": 2111991
+      "sha256": "fef84103531acf469b2e3a29f0b6df12f384c961b86c3dc5770967614fa545a8",
+      "size": 2112814
     },
     {
       "path": "app/assets/kitchen/layers/01_modulo_lavanderia.png",
@@ -422,8 +427,8 @@
     },
     {
       "path": "app/assets/kitchen/layers/02_inferior_fogao.png",
-      "sha256": "6ba1ad26835d349a28b098bd6c60182b369ec66e51ea2b1a8cc263f30c44da98",
-      "size": 112386
+      "sha256": "dcda8c31812678db8eb1e4d5fc88d23dfd8cd77e50a8a75d726df62af6075faf",
+      "size": 112355
     },
     {
       "path": "app/assets/kitchen/layers/03_inferior_pia.png",
@@ -472,8 +477,8 @@
     },
     {
       "path": "app/assets/kitchen/masks/02.png",
-      "sha256": "64085d665f67f408b0cd67f69bebaa5a814b79eeed296c3d952e62988d7a440f",
-      "size": 6177
+      "sha256": "bd5050d0e2b90b00acfe122f7e5e9ae52b48ab717e48412ee16694357a6100b7",
+      "size": 8607
     },
     {
       "path": "app/assets/kitchen/masks/03.png",
@@ -537,18 +542,18 @@
     },
     {
       "path": "app/data/mask-data.js",
-      "sha256": "d0455344654279ceaa960e160d343757fe4fdcc91cfc9e60ec7c8b5322f41f87",
-      "size": 55976
+      "sha256": "5b458177c64a39c12a2ffa9b3a8fd4d6756e38c039bf7c9138610283830e7052",
+      "size": 67507
     },
     {
       "path": "app/data/scene-data.js",
-      "sha256": "7c10274b8287133baedcb8b2c2b671bc749ff8550981f3ff67e6be70f3a15285",
-      "size": 7786
+      "sha256": "2510f3fe94eb01544f572d979c6358976be5e0d55d1d58f2643b9636dd5533af",
+      "size": 7848
     },
     {
       "path": "app/data/technical-data.json",
-      "sha256": "9f9ad48a44e2cc6287478c708f74fc8a1ea929a912afb0c210d1a52184b16e28",
-      "size": 4407
+      "sha256": "298171b63c47439f2a403e553e20b15d2a55d4da5b055a2c95a9b1a38d195dfa",
+      "size": 5644
     },
     {
       "path": "app/docs/CHECKPOINTS.md",
@@ -582,13 +587,13 @@
     },
     {
       "path": "app/reports/default-composed.png",
-      "sha256": "b626b8ae3669f7feda5824c7cbdc2de2593e3290d5fcfab58c78c6d7d53f4413",
-      "size": 2111991
+      "sha256": "fef84103531acf469b2e3a29f0b6df12f384c961b86c3dc5770967614fa545a8",
+      "size": 2112814
     },
     {
       "path": "app/reports/module02-alpha-fix-validation.json",
-      "sha256": "3273594d43bd661e8fde7f92ca9197c68738f716c3998bead08171641e4426dc",
-      "size": 6936
+      "sha256": "16c397cb9da43bb1f612df759b44c05cf6bbda52b987528c330a06ee425eb8b9",
+      "size": 6995
     },
     {
       "path": "app/reports/phase-1-validation.json",
@@ -616,9 +621,14 @@
       "size": 8759
     },
     {
+      "path": "app/tools/apply-r4-module02-fidelity.py",
+      "sha256": "94d77da9dae8b27782c9d5cb773659c7de4ebf43836128a85bcbc785d2e14c61",
+      "size": 3873
+    },
+    {
       "path": "app/tools/build-inline-masks.py",
-      "sha256": "dd72e800635bb29ef93e64137c02e3f7780f44cca52249b3518e49e6ab2cc7fb",
-      "size": 1255
+      "sha256": "2512e42fe4a1f85f2783ff2af71e65c4a9b5fa4de949b8ccffaf3f39002de8e1",
+      "size": 1290
     },
     {
       "path": "app/tools/build-module02-alpha-v2.py",
@@ -641,6 +651,11 @@
       "size": 3821
     },
     {
+      "path": "app/tools/masks/module02-alpha-approved-v3.png",
+      "sha256": "8d71dd22b33900a8ad5a9bcf16b90254399dfdb06818ab5abcf2fb6779f7b636",
+      "size": 3811
+    },
+    {
       "path": "app/tools/masks/module02-alpha-approved.png",
       "sha256": "fd211b2250f599a370328fabdfd263d73f556e387627a21c3de549e43b060dd7",
       "size": 4347
@@ -649,6 +664,11 @@
       "path": "app/tools/sources/02_inferior_fogao-combined-v2.png",
       "sha256": "c9c031f2a4d37be49d72de293d64ce579f42e56b934342e49017d203085646b0",
       "size": 222284
+    },
+    {
+      "path": "app/tools/sources/02_inferior_fogao-combined-v3.png",
+      "sha256": "2c32c401637a1037b95d0c11599c003933111c13397f24cf90aeffd710a86673",
+      "size": 222274
     },
     {
       "path": "app/tools/sources/03_inferior_pia-combined-v1.png",
@@ -667,7 +687,7 @@
     },
     {
       "path": "app/tools/validate-assets.py",
-      "sha256": "c70a5c98bf15d0f423250ea72394184b555e7358da398c87673ddc500d65acc7",
+      "sha256": "5ab15958516c4749b96fc97d5603ac6dfd035d55b0ec6940938af32e39f6d55f",
       "size": 7096
     }
   ],
@@ -684,33 +704,32 @@
       1024
     ],
     "path": "app/assets/kitchen/composicao-completa.png",
-    "sha256": "b626b8ae3669f7feda5824c7cbdc2de2593e3290d5fcfab58c78c6d7d53f4413",
-    "size": 2111991
+    "sha256": "fef84103531acf469b2e3a29f0b6df12f384c961b86c3dc5770967614fa545a8",
+    "size": 2112814
+  },
+  "mutation": {
+    "cleanupRoi": [
+      484,
+      590,
+      498,
+      856
+    ],
+    "goldenChangedPixelCountFromParent": 3579,
+    "outsideCleanupRoiDifferenceCount": 0,
+    "reasons": [
+      "remove-column-contamination",
+      "enable-module02-front-finish"
+    ],
+    "slice": "R4"
+  },
+  "parentBaseline": {
+    "archiveSha256": "ab419606d02a3e785810aa32ca9a31e576c09d8619abd59acfe47a4fda9bd189",
+    "baselineId": "cozinha-01-phase3-stone-split1",
+    "commit": "d8ec0dd15c7dc9e61623b5eb3a4bd346b4e7d587"
   },
   "sceneId": "cozinha-01",
   "schemaVersion": "BaselineManifest 0.1",
-  "source": {
-    "actualUploadName": "casa-em-modulos-configurador-recorte-pedras-v3.3.0.zip",
-    "archiveName": "casa-em-modulos-configurador-recorte-pedras-v3.3.0.zip",
-    "archiveSha256": "ab419606d02a3e785810aa32ca9a31e576c09d8619abd59acfe47a4fda9bd189",
-    "archiveSize": 7741469,
-    "exactBytesRequired": true,
-    "materializedInRepository": true,
-    "sourceLocated": true
-  },
   "sourceValidation": {
-    "canonicalCore": {
-      "controllableEntities": 8,
-      "entities": 11,
-      "initialFingerprint": "scene2d-89ce17bc",
-      "passed": true
-    },
-    "canonicalFidelity": {
-      "assetCount": 23,
-      "differenceBounds": null,
-      "passed": true,
-      "pixelDifferenceCount": 0
-    },
     "differenceBounds": null,
     "pixelDifferenceCount": 0,
     "trackedAssetCount": 23
