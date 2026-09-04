@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Visualizador interativo dos módulos da cozinha Casa em Módulos."
+    />
+    <title>Casa em Módulos — Configurador</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="topbar__inner">
+        <div class="brand">
+          <span class="brand__mark" aria-hidden="true">▱</span>
+          <div>
+            <h1>Casa em Módulos</h1>
+            <p>Composição interativa por camadas</p>
+          </div>
+        </div>
+
+        <div class="topbar__actions">
+          <button class="button button--secondary" id="gridButton" type="button" aria-pressed="false">
+            <span aria-hidden="true">▦</span>
+            <span class="button__wide-label">Malha</span>
+          </button>
+          <button class="button button--secondary" id="restoreButton" type="button">
+            <span aria-hidden="true">↺</span>
+            <span class="button__wide-label">Restaurar</span>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <main class="workspace">
+      <section class="viewer-card" aria-label="Visualização da cozinha">
+        <div class="viewer" id="viewer">
+          <img
+            id="sceneBase"
+            class="scene-layer"
+            src="assets/kitchen/base.png"
+            alt="Cenário da cozinha sem os módulos"
+            draggable="false"
+          />
+          <div id="sceneLayers"></div>
+
+          <div class="alignment-grid" id="alignmentGrid" aria-hidden="true"></div>
+        </div>
+
+        <footer class="viewer-card__footer">
+          <p class="layer-status" aria-live="polite">
+            <span aria-hidden="true"></span>
+            <strong id="visibleCount">8</strong> de <span id="totalCount">8</span> camadas visíveis
+          </p>
+          <p>1536 × 1024 px · origem preservada</p>
+        </footer>
+      </section>
+
+      <aside class="controls">
+        <section class="panel">
+          <header class="panel__header">
+            <div>
+              <h2>Módulos</h2>
+              <p>Marque ou desmarque cada camada.</p>
+            </div>
+            <div class="icon-actions">
+              <button id="showAllButton" type="button" title="Mostrar todos" aria-label="Mostrar todos">◉</button>
+              <button id="hideAllButton" type="button" title="Ocultar todos" aria-label="Ocultar todos">○</button>
+            </div>
+          </header>
+
+          <div class="module-list" id="moduleList"></div>
+        </section>
+
+        <section class="panel">
+          <header class="finish-heading">
+            <span aria-hidden="true">◐</span>
+            <div>
+              <h2>Acabamento geral</h2>
+              <p>Todas as frentes da composição</p>
+            </div>
+          </header>
+
+          <div class="finish-controls">
+            <fieldset>
+              <legend>Cor das frentes</legend>
+              <div class="swatches" id="finishSwatches"></div>
+            </fieldset>
+
+            <fieldset>
+              <legend>Textura</legend>
+              <input id="textureInput" type="file" accept="image/*" hidden />
+              <button class="button button--upload" id="textureButton" type="button">
+                <span aria-hidden="true">▧</span>
+                <span id="textureLabel">Carregar imagem de amadeirado</span>
+              </button>
+            </fieldset>
+
+            <button class="button button--reset" id="resetFinishButton" type="button" disabled>
+              <span aria-hidden="true">↺</span>
+              Voltar ao acabamento original
+            </button>
+          </div>
+        </section>
+      </aside>
+    </main>
+
+    <script src="data/scene-data.js"></script>
+    <script src="data/mask-data.js"></script>
+    <script src="core/state.js"></script>
+    <script src="core/visibility.js"></script>
+    <script src="core/validation.js"></script>
+    <script src="core/fingerprint.js"></script>
+    <script src="core/finishes.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>

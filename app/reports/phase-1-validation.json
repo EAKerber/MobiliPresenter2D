@@ -1,0 +1,239 @@
+{
+  "schemaVersion": "FidelityReport2D 1.0",
+  "baselineId": "cozinha-01-v3",
+  "passed": true,
+  "canvas": [
+    1536,
+    1024
+  ],
+  "assetCount": 18,
+  "pixelDifferenceCount": 0,
+  "differenceBounds": null,
+  "errors": [],
+  "files": {
+    "assets/kitchen/base.png": {
+      "sha256": "f7e2154187cd74d437035ff8ead2059f3ae842887e96093918475e9616749a70",
+      "size": [
+        1536,
+        1024
+      ],
+      "alphaBounds": [
+        0,
+        0,
+        1536,
+        1024
+      ]
+    },
+    "assets/kitchen/composicao-completa.png": {
+      "sha256": "6c8e6d8153bd0d76a7e3ef50b4f81a4e787b86a937674345aace0cfbf3da1d7b",
+      "size": [
+        1536,
+        1024
+      ],
+      "alphaBounds": [
+        0,
+        0,
+        1536,
+        1024
+      ]
+    },
+    "assets/kitchen/layers/01_modulo_lavanderia.png": {
+      "sha256": "70d5eb1d6066a16a3a6fe3d6d97b9efcafa08065241d087703ece6d95b75de0a",
+      "size": [
+        1536,
+        1024
+      ],
+      "alphaBounds": [
+        122,
+        54,
+        393,
+        309
+      ]
+    },
+    "assets/kitchen/layers/02_inferior_fogao.png": {
+      "sha256": "c1fc09ac1757f44273f00bf96c1d8047db3c9fe357922c3b1eb2fd053c5415f2",
+      "size": [
+        1536,
+        1024
+      ],
+      "alphaBounds": [
+        471,
+        456,
+        764,
+        912
+      ]
+    },
+    "assets/kitchen/layers/03_inferior_pia.png": {
+      "sha256": "32f2b66f9dbf3d911b739ae080fe2f352e2015ac2f24bddd51984b8ff384cd66",
+      "size": [
+        1536,
+        1024
+      ],
+      "alphaBounds": [
+        736,
+        442,
+        1217,
+        912
+      ]
+    },
+    "assets/kitchen/layers/04_lateral_geladeira.png": {
+      "sha256": "2f6b70502704d0fb87c32cc5f4306f0c65954bf5639ba0613805bc888721c2d4",
+      "size": [
+        1536,
+        1024
+      ],
+      "alphaBounds": [
+        1205,
+        44,
+        1243,
+        914
+      ]
+    },
+    "assets/kitchen/layers/05_aereo_fogao.png": {
+      "sha256": "1c25711a13ba8c8f4b6d984c79c606263101dc71ee468d34979644d7e6dcf93c",
+      "size": [
+        1536,
+        1024
+      ],
+      "alphaBounds": [
+        490,
+        60,
+        765,
+        336
+      ]
+    },
+    "assets/kitchen/layers/06_aereo_pia.png": {
+      "sha256": "037619446795514d243f8764be922e771b999a4e35e63e5af92ffeffd2625400",
+      "size": [
+        1536,
+        1024
+      ],
+      "alphaBounds": [
+        745,
+        60,
+        1225,
+        338
+      ]
+    },
+    "assets/kitchen/layers/07_aereo_geladeira.png": {
+      "sha256": "0722c385e0c19de4bac2338f094473d117557c5ea4b1959558832a8335205082",
+      "size": [
+        1536,
+        1024
+      ],
+      "alphaBounds": [
+        1232,
+        46,
+        1506,
+        231
+      ]
+    },
+    "assets/kitchen/layers/08_iluminacao.png": {
+      "sha256": "aa85eb0dd818e96f154da576ea8a22f11fbff5a00ab7520844b61c68fe07aa2d",
+      "size": [
+        1536,
+        1024
+      ],
+      "alphaBounds": [
+        715,
+        266,
+        1249,
+        379
+      ]
+    },
+    "assets/kitchen/masks/01.png": {
+      "sha256": "03aa65cf92260099bbce9add9b93c22d54a08c3a89a7d77a4d5ef186cfb279e8",
+      "size": [
+        1536,
+        1024
+      ],
+      "alphaBounds": [
+        132,
+        65,
+        354,
+        281
+      ]
+    },
+    "assets/kitchen/masks/02.png": {
+      "sha256": "64085d665f67f408b0cd67f69bebaa5a814b79eeed296c3d952e62988d7a440f",
+      "size": [
+        1536,
+        1024
+      ],
+      "alphaBounds": null
+    },
+    "assets/kitchen/masks/03.png": {
+      "sha256": "ec948e091e98daa90d0ceb56d714e40a75d2e6bb7be6a435ad01bb8b0ffd93cb",
+      "size": [
+        1536,
+        1024
+      ],
+      "alphaBounds": [
+        746,
+        590,
+        1204,
+        856
+      ]
+    },
+    "assets/kitchen/masks/04.png": {
+      "sha256": "64e25ff3dcd38adf0afb0e68bb7d6fd130ab0578f687d2a6d10dc241c4d4e1d9",
+      "size": [
+        1536,
+        1024
+      ],
+      "alphaBounds": [
+        1209,
+        50,
+        1231,
+        900
+      ]
+    },
+    "assets/kitchen/masks/05.png": {
+      "sha256": "6d4ea577ca788d3294ea8a3a6b0b57cdabd5249c0190762084d53ab67ec4cb12",
+      "size": [
+        1536,
+        1024
+      ],
+      "alphaBounds": [
+        506,
+        65,
+        751,
+        256
+      ]
+    },
+    "assets/kitchen/masks/06.png": {
+      "sha256": "5e22fd008f03a4ac429dc964c21e8b4b1604132d926a16b10ba85526fc2c1f6a",
+      "size": [
+        1536,
+        1024
+      ],
+      "alphaBounds": [
+        752,
+        65,
+        1207,
+        310
+      ]
+    },
+    "assets/kitchen/masks/07.png": {
+      "sha256": "a9bc2425f1695d908d9a7ae427d654efb2d1a42cf137b520b0c7b54eb09d2c8c",
+      "size": [
+        1536,
+        1024
+      ],
+      "alphaBounds": [
+        1240,
+        50,
+        1489,
+        205
+      ]
+    },
+    "assets/kitchen/masks/08.png": {
+      "sha256": "64085d665f67f408b0cd67f69bebaa5a814b79eeed296c3d952e62988d7a440f",
+      "size": [
+        1536,
+        1024
+      ],
+      "alphaBounds": null
+    }
+  }
+}

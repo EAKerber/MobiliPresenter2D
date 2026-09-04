@@ -1,0 +1,453 @@
+{
+  "schemaVersion": "ReuseInventory 1.0",
+  "title": "Inventário de reaproveitamento do MobiliPresenter para o compositor 2D",
+  "createdAt": "2026-09-02",
+  "source": {
+    "repository": "EAKerber/MobiliPresenter",
+    "branch": "main",
+    "commit": "539173ed46de49b90ca32f09d3ac4caabd183c56",
+    "mode": "read-only"
+  },
+  "target": {
+    "product": "Casa em Módulos — configurador 2D data-driven",
+    "canvasPx": [1536, 1024],
+    "runtime": "HTML/CSS/JavaScript sem dependências obrigatórias",
+    "renderer": "camadas fotográficas 2D"
+  },
+  "classifications": {
+    "use": "portar ou reescrever a regra no núcleo 2D",
+    "adapt": "preservar conceito e trocar geometria/material por pixels/assets",
+    "consult": "fonte de requisitos ou aprendizado; não é dependência",
+    "defer": "fora do primeiro incremento",
+    "discard": "não entra no novo projeto"
+  },
+  "inventory": [
+    {
+      "path": "scene-core/src/contracts/model.ts",
+      "classification": "adapt",
+      "take": ["entity ids", "entity kinds", "visibility intent", "host ownership", "controllable", "substitution groups"],
+      "drop": ["3D geometry", "rigid transforms", "camera", "render envelopes"]
+    },
+    {
+      "path": "scene-core/src/state/scene-state.ts",
+      "classification": "use",
+      "take": ["effective visibility", "visibility reasons", "host-hidden", "replacement-when-primary-hidden", "cycle detection"],
+      "implementation": "rewrite in plain JavaScript"
+    },
+    {
+      "path": "scene-core/src/core/signature.ts",
+      "classification": "adapt",
+      "take": ["stable fingerprint concept"],
+      "implementation": "serialize ordered 2D state"
+    },
+    {
+      "path": "scene-core/src/contracts/appearance.ts",
+      "classification": "adapt",
+      "take": ["presets", "assignment precedence", "semantic emitters"],
+      "drop": ["PBR material parameters", "texture mapping in 3D"]
+    },
+    {
+      "path": "scene-core/src/appearance/materials.ts",
+      "classification": "consult",
+      "take": ["default and entity override precedence"],
+      "drop": ["material registry implementation"]
+    },
+    {
+      "path": "scene-core/src/appearance/lighting.ts",
+      "classification": "adapt",
+      "take": ["lights follow effective entity visibility"],
+      "implementation": "resolve 2D lighting layers"
+    },
+    {
+      "path": "scene-core/src/contracts/hardware.ts",
+      "classification": "adapt",
+      "take": ["hardware definitions", "host anchors"],
+      "implementation": "pixel anchors and photographic overlays"
+    },
+    {
+      "path": "scene-core/src/hardware/anchors.ts",
+      "classification": "adapt",
+      "take": ["anchor validation", "host validation"],
+      "drop": ["3D transforms"]
+    },
+    {
+      "path": "scene-core/src/fixtures/current-scene.ts",
+      "classification": "adapt",
+      "take": ["ownership", "hosted items", "module02 to freestanding range substitution"]
+    },
+    {
+      "path": "scene-core/src/fixtures/current-geometry.ts",
+      "classification": "consult",
+      "take": ["technical dimensions", "physical adjacency"],
+      "drop": ["box geometry as visual source"]
+    },
+    {
+      "path": "scene-core/src/fixtures/current-context.ts",
+      "classification": "consult",
+      "take": ["module context and technical relationships"]
+    },
+    {
+      "path": "scene-core/src/fixtures/current-laundry.ts",
+      "classification": "consult",
+      "take": ["module01 technical data"]
+    },
+    {
+      "path": "scene-core/src/fixtures/current-hardware.ts",
+      "classification": "adapt",
+      "take": ["handle intent and host surfaces"],
+      "note": "recalibrate every anchor in pixels"
+    },
+    {
+      "path": "scene-core/src/fixtures/current-appearance.ts",
+      "classification": "consult",
+      "take": ["appliance roles", "required visual cues", "source hints"],
+      "drop": ["parametric rendering policy"]
+    },
+    {
+      "path": "scene-core/src/fixtures/current-under-cab-light.ts",
+      "classification": "adapt",
+      "take": ["lighting ownership and color intent"]
+    },
+    {
+      "path": "scene-core/src/fixtures/current-faucet.ts",
+      "classification": "consult",
+      "take": ["technical reference only"]
+    },
+    {
+      "path": "scene-core/src/fixtures/current-camera.ts",
+      "classification": "discard",
+      "reason": "the approved raster canvas already contains the camera projection"
+    },
+    {
+      "path": "scene-core/src/fixtures/current-fidelity.ts",
+      "classification": "adapt",
+      "take": ["canonical viewport concept"],
+      "implementation": "1536x1024 raster canvas"
+    },
+    {
+      "path": "scene-core/src/fidelity/report.ts",
+      "classification": "use",
+      "take": ["hard soft human gates", "expected observed tolerance", "regression report"],
+      "implementation": "rewrite for 2D pixels"
+    },
+    {
+      "path": "scene-core/src/fidelity/overlay.ts",
+      "classification": "adapt",
+      "take": ["grid", "landmarks", "bounds"],
+      "implementation": "pixel-space overlays"
+    },
+    {
+      "path": "scene-core/src/fidelity/readability.ts",
+      "classification": "adapt",
+      "take": ["edge and contrast probes"],
+      "implementation": "2D crop analysis"
+    },
+    {
+      "path": "scene-core/src/fidelity/projection.ts",
+      "classification": "discard",
+      "reason": "no 3D projection in target architecture"
+    },
+    {
+      "path": "viewer-next/src/runtime/viewer-state.ts",
+      "classification": "use",
+      "take": ["reducer", "default state", "configuration fingerprint"],
+      "implementation": "rewrite without TypeScript dependency"
+    },
+    {
+      "path": "viewer-next/src/runtime/query.ts",
+      "classification": "adapt",
+      "take": ["alias and id lookup"]
+    },
+    {
+      "path": "viewer-next/src/runtime/presets.ts",
+      "classification": "adapt",
+      "take": ["preset catalogs"],
+      "implementation": "assets and masks instead of PBR materials"
+    },
+    {
+      "path": "viewer-next/src/runtime/sync.ts",
+      "classification": "consult",
+      "take": ["separate visibility material and light synchronization"],
+      "implementation": "new DOM compositor"
+    },
+    {
+      "path": "viewer-next/src/runtime/composition.ts",
+      "classification": "discard",
+      "reason": "Three.js composition"
+    },
+    {
+      "path": "viewer-next/src/api/ui-contract.ts",
+      "classification": "use",
+      "take": ["catalog", "snapshot", "commands", "UI boundary"],
+      "implementation": "small plain-JS API"
+    },
+    {
+      "path": "viewer-next/src/api/ui-adapter.ts",
+      "classification": "adapt",
+      "take": ["UI does not infer domain catalogs"]
+    },
+    {
+      "path": "viewer-next/src/ui/runtime-controls.ts",
+      "classification": "consult",
+      "take": ["guided flow patterns"],
+      "drop": ["current implementation coupling"]
+    },
+    {
+      "path": "viewer-next/src/ui/*.css",
+      "classification": "consult",
+      "take": ["responsive allocation", "visual language cues"]
+    },
+    {
+      "path": "viewer-next/src/presentation/contracts.ts",
+      "classification": "adapt",
+      "take": ["identity", "dimensions", "facts", "components", "notices", "dependencies", "finish policies"]
+    },
+    {
+      "path": "viewer-next/src/presentation/technical-catalog.ts",
+      "classification": "adapt",
+      "take": ["verified technical data only"]
+    },
+    {
+      "path": "viewer-next/src/presentation/compile.ts",
+      "classification": "defer",
+      "reason": "not required for the first data-driven compositor increment"
+    },
+    {
+      "path": "viewer-next/src/presentation/current-service.ts",
+      "classification": "defer",
+      "reason": "module detail is a later UI phase"
+    },
+    {
+      "path": "viewer-next/src/presentation/technical-diagram.ts",
+      "classification": "defer",
+      "note": "prefer authored technical assets later"
+    },
+    {
+      "path": "viewer-next/src/presentation/technical-view-geometry.ts",
+      "classification": "discard",
+      "reason": "3D-derived technical projection is not the target visual authority"
+    },
+    {
+      "path": "viewer-next/src/renderer/three/**",
+      "classification": "discard",
+      "reason": "target renderer is photographic 2D",
+      "exceptions": [
+        "consult wall-tiles.ts to avoid continuous tile phase on column",
+        "consult lighting ownership concept",
+        "consult hardware family semantics"
+      ]
+    },
+    {
+      "path": "viewer-next/src/fixtures/stone-presets.ts",
+      "classification": "adapt",
+      "take": ["global stone preset applies to both stone pieces"],
+      "implementation": "photographic stone assets"
+    },
+    {
+      "path": "viewer-next/src/fixtures/faucet-presets.ts",
+      "classification": "consult",
+      "take": ["catalog pattern"],
+      "note": "only add faucet choices if product requests them"
+    },
+    {
+      "path": "viewer-next/tests/viewer-state.test.mjs",
+      "classification": "use",
+      "take": ["state and fingerprint test patterns"]
+    },
+    {
+      "path": "viewer-next/tests/ui-contract.test.mjs",
+      "classification": "use",
+      "take": ["UI contract test patterns"]
+    },
+    {
+      "path": "viewer-next/tests/query.test.mjs",
+      "classification": "adapt",
+      "take": ["alias query tests"]
+    },
+    {
+      "path": "viewer-next/tests/stone-presets.test.mjs",
+      "classification": "adapt",
+      "take": ["global stone consistency tests"]
+    },
+    {
+      "path": "viewer-next/tests/readability_compare.py",
+      "classification": "adapt",
+      "take": ["crop comparison workflow"]
+    },
+    {
+      "path": "viewer-next/tests/fidelity_smoke.py",
+      "classification": "adapt",
+      "take": ["visual smoke workflow"]
+    },
+    {
+      "path": "scene-core/tests/state.test.mjs",
+      "classification": "use",
+      "take": ["visibility host and cycle test cases"]
+    },
+    {
+      "path": "scene-core/tests/substitution.test.mjs",
+      "classification": "use",
+      "take": ["module02 and range substitution cases"]
+    },
+    {
+      "path": "scene-core/tests/hardware-anchor.test.mjs",
+      "classification": "adapt",
+      "take": ["anchor validation cases"]
+    },
+    {
+      "path": "viewer-next/tests/*renderer*.test.mjs",
+      "classification": "discard",
+      "reason": "Three.js backend does not exist in target"
+    },
+    {
+      "path": "viewer-next/tests/{materials,lighting,appliances,shadows,post,wall-tiles}.test.mjs",
+      "classification": "discard",
+      "reason": "3D appearance backend tests"
+    },
+    {
+      "path": "fidelity/baselines/**",
+      "classification": "consult",
+      "take": ["baseline structure"],
+      "drop": ["3D numeric expectations"]
+    },
+    {
+      "path": "fidelity/migrations/**",
+      "classification": "discard",
+      "reason": "historical renderer migrations"
+    },
+    {
+      "path": "scene-source/current/fixed-camera-calibration.json",
+      "classification": "discard",
+      "reason": "raster canvas is authoritative"
+    },
+    {
+      "path": "scene-source/current/promob-dxf-profile.json",
+      "classification": "consult",
+      "take": ["technical evidence"]
+    },
+    {
+      "path": "scene-core/src/source/dxf.ts",
+      "classification": "defer",
+      "reason": "optional future ingestion, not current runtime"
+    },
+    {
+      "path": "scene-core/tools/dxf_inventory.py",
+      "classification": "defer",
+      "reason": "optional offline tool"
+    },
+    {
+      "path": "scene-core/src/core/camera.ts",
+      "classification": "discard"
+    },
+    {
+      "path": "scene-core/src/core/math.ts",
+      "classification": "discard",
+      "note": "only generic helpers may be rewritten if later proven necessary"
+    },
+    {
+      "path": "docs/adr/0002-scene-core-boundaries.md",
+      "classification": "adapt",
+      "take": ["data runtime and renderer separation", "deterministic logical state"]
+    },
+    {
+      "path": "docs/adr/0003-technical-presentation-contract.md",
+      "classification": "consult"
+    },
+    {
+      "path": "docs/plans/fidelity-harness-v1.md",
+      "classification": "use",
+      "implementation": "rewrite gates for raster pixels"
+    },
+    {
+      "path": "docs/plans/fixed-view-renderer-0.1.md",
+      "classification": "consult",
+      "take": ["fixed-frame invariant", "renderer is derived"],
+      "drop": ["Three.js backend", "PBR", "camera projection"]
+    },
+    {
+      "path": "docs/ui/guided-configurator-v0.3.md",
+      "classification": "use",
+      "take": ["modules finishes accessories summary", "persistent scene"]
+    },
+    {
+      "path": "docs/ui/responsive-fixed-frame-v0.1.md",
+      "classification": "adapt"
+    },
+    {
+      "path": "docs/specs/fh06-1-oven-stone-sink-faucet.md",
+      "classification": "consult",
+      "take": ["known visual requirements"]
+    },
+    {
+      "path": "docs/specs/fh06-2-under-cabinet-lighting.md",
+      "classification": "consult",
+      "take": ["lighting requirements"]
+    },
+    {
+      "path": "ops/**",
+      "classification": "discard",
+      "reason": "agent governance and operational state are unrelated to the product runtime"
+    },
+    {
+      "path": "tools/**",
+      "classification": "discard",
+      "reason": "root agent Git coordination tooling is unrelated to the product"
+    },
+    {
+      "path": ".github/workflows/agent-*.yml",
+      "classification": "discard"
+    },
+    {
+      "path": ".github/workflows/{scene-core,viewer-next}.yml",
+      "classification": "consult",
+      "take": ["CI test sequencing concept"],
+      "implementation": "replace with minimal target-project CI if needed"
+    },
+    {
+      "path": "docs/architecture/agent-*.md",
+      "classification": "discard"
+    },
+    {
+      "path": "docs/experiments/**",
+      "classification": "discard"
+    },
+    {
+      "path": "docs/kickstarts/**",
+      "classification": "discard"
+    },
+    {
+      "path": "AGENTS.md",
+      "classification": "discard",
+      "reason": "applies to the original repository only"
+    },
+    {
+      "path": "netlify.toml",
+      "classification": "discard",
+      "reason": "deployment choice belongs to the new project"
+    },
+    {
+      "path": "pending.html",
+      "classification": "discard"
+    }
+  ],
+  "implementationOrder": [
+    "freeze-v3-baseline",
+    "externalize-scene-data-with-zero-visual-change",
+    "implement-effective-visibility-and-substitutions",
+    "correct-column-and-asset-boundaries",
+    "add-global-front-and-stone-presets",
+    "add-handle-overlays",
+    "add-lighting-switch",
+    "add-decor-entities",
+    "refine-guided-ui",
+    "add-export-and-hardening"
+  ],
+  "doNotReopen": [
+    "2D versus 3D renderer decision",
+    "runtime AI generation",
+    "free camera navigation",
+    "Three.js as target backend",
+    "procedural wood as preferred appearance",
+    "PBR as primary lighting solution"
+  ]
+}
