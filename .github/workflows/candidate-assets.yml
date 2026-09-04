@@ -7,9 +7,11 @@ on:
       - 'reference/variant-cases.json'
       - 'tools/validate_candidate_assets.py'
       - 'tools/render_candidate_review.py'
+      - 'tools/render_candidate_set_review.py'
       - 'tools/variant_fidelity_manifest.js'
       - 'tools/render_variant_fidelity.py'
       - 'tests/test_candidate_asset_gates.py'
+      - 'tests/test_candidate_asset_sets.py'
       - '.github/workflows/candidate-assets.yml'
       - 'docs/work/r3-candidate-asset-gates.md'
       - 'docs/work/r5a-module02-hidden.md'
@@ -20,9 +22,11 @@ on:
       - 'reference/variant-cases.json'
       - 'tools/validate_candidate_assets.py'
       - 'tools/render_candidate_review.py'
+      - 'tools/render_candidate_set_review.py'
       - 'tools/variant_fidelity_manifest.js'
       - 'tools/render_variant_fidelity.py'
       - 'tests/test_candidate_asset_gates.py'
+      - 'tests/test_candidate_asset_sets.py'
       - '.github/workflows/candidate-assets.yml'
       - 'docs/work/r3-candidate-asset-gates.md'
       - 'docs/work/r5a-module02-hidden.md'
@@ -42,7 +46,7 @@ jobs:
       - name: Install image tooling
         run: python -m pip install -r tools/requirements.txt
       - name: Unit-test candidate gates
-        run: python -m unittest tests/test_candidate_asset_gates.py
+        run: python -m unittest tests/test_candidate_asset_gates.py tests/test_candidate_asset_sets.py
       - name: Preserve canonical R0 baseline
         run: python tools/validate-baseline.py
       - name: Preserve canonical app runtime
@@ -62,7 +66,7 @@ jobs:
           python tools/validate_candidate_assets.py \
             --output /tmp/candidate-review/intake.json
           cat /tmp/candidate-review/intake.json
-      - name: Compose visual review gates
+      - name: Compose individual visual review gates
         run: |
           python tools/render_candidate_review.py \
             --variant-manifest /tmp/candidate-review/variant-manifest.json \
@@ -70,6 +74,15 @@ jobs:
             --intake-report /tmp/candidate-review/intake.json \
             --output-dir /tmp/candidate-review/candidates
           cat /tmp/candidate-review/candidates/summary.json
+      - name: Compose stacked candidate-set gates
+        run: |
+          python tools/render_candidate_set_review.py \
+            --sets review-assets/candidate-sets.json \
+            --variant-manifest /tmp/candidate-review/variant-manifest.json \
+            --variant-render-dir /tmp/candidate-review/variants \
+            --intake-report /tmp/candidate-review/intake.json \
+            --output-dir /tmp/candidate-review/sets
+          cat /tmp/candidate-review/sets/summary.json
       - name: Upload visual review artifact
         uses: actions/upload-artifact@v4
         with:
