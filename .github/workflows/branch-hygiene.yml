@@ -1,0 +1,81 @@
+name: Branch hygiene
+
+on:
+  pull_request:
+    paths:
+      - 'tools/branch_hygiene_*.py'
+      - 'ops/branch-dispositions.json'
+      - 'tests/test_branch_hygiene_plan.py'
+      - '.github/workflows/branch-hygiene.yml'
+      - 'docs/work/r1-branch-hygiene.md'
+  push:
+    branches: [main]
+    paths:
+      - 'tools/branch_hygiene_*.py'
+      - 'ops/branch-dispositions.json'
+      - 'tests/test_branch_hygiene_plan.py'
+      - '.github/workflows/branch-hygiene.yml'
+  schedule:
+    - cron: '17 6 * * 1'
+  workflow_dispatch:
+
+concurrency:
+  group: branch-hygiene
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+  pull-requests: read
+
+jobs:
+  plan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Unit tests
+        run: python -m unittest tests/test_branch_hygiene_plan.py
+      - name: Compile tools
+        run: python -m py_compile tools/branch_hygiene_plan.py tools/branch_hygiene_observe.py tools/branch_hygiene_apply.py
+      - name: Materialize fresh observation
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: python tools/branch_hygiene_observe.py --output /tmp/branch-observation.json
+      - name: Build exact plan
+        run: |
+          python tools/branch_hygiene_plan.py \
+            --observation /tmp/branch-observation.json \
+            --dispositions ops/branch-dispositions.json \
+            --output /tmp/branch-plan.json
+          python - <<'PY'
+          import json
+          p=json.load(open('/tmp/branch-plan.json'))
+          open('/tmp/branch-plan-hash.txt','w').write(p['planHash'])
+          print('DELETE_CANDIDATES', [e['branch'] for e in p['entries'] if e['action']=='delete-candidate'])
+          PY
+      - name: Apply exact plan only after policy lands on main
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          MOBILIPRESENTER2D_BRANCH_HYGIENE_AUTHORIZED: '1'
+        run: |
+          python tools/branch_hygiene_apply.py \
+            --plan /tmp/branch-plan.json \
+            --dispositions ops/branch-dispositions.json \
+            --expected-plan "$(cat /tmp/branch-plan-hash.txt)" \
+            --receipt /tmp/branch-apply-receipt.json
+      - name: Upload evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: branch-hygiene-${{ github.run_id }}
+          path: |
+            /tmp/branch-observation.json
+            /tmp/branch-plan.json
+            /tmp/branch-plan-hash.txt
+            /tmp/branch-apply-receipt.json
+          if-no-files-found: warn
