@@ -1,0 +1,42 @@
+{
+  "schemaVersion": "CandidateAssetRoles 0.1",
+  "sceneId": "cozinha-01",
+  "canvas": { "width": 1536, "height": 1024, "origin": [0, 0] },
+  "roles": [
+    {
+      "id": "range-freestanding",
+      "label": "Fogão convencional substituto",
+      "targetVariants": ["module-02-hidden"],
+      "authorizedRoi": [460, 430, 790, 950],
+      "minAlphaBBox": { "width": 120, "height": 220 },
+      "maxAlphaBBoxArea": 171600,
+      "resolvesDebtCodes": ["replacement-placeholder"],
+      "visualChecklist": [
+        "fits-opening",
+        "perspective-match",
+        "worktop-height-match",
+        "floor-contact-natural",
+        "lighting-match",
+        "no-pasted-object-look",
+        "no-background-leak"
+      ]
+    },
+    {
+      "id": "module-02-right-endcap",
+      "label": "Fechamento direito do módulo 02",
+      "targetVariants": ["module-03-hidden"],
+      "authorizedRoi": [715, 455, 815, 930],
+      "minAlphaBBox": { "width": 12, "height": 120 },
+      "maxAlphaBBoxArea": 47500,
+      "resolvesDebtCodes": ["raw-neighbor-cut"],
+      "visualChecklist": [
+        "stone-termination-natural",
+        "cabinet-side-natural",
+        "plinth-continuity",
+        "lighting-match",
+        "no-visible-seam",
+        "no-background-leak"
+      ]
+    }
+  ]
+}
