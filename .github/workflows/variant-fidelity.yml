@@ -1,0 +1,60 @@
+name: Variant fidelity
+
+on:
+  pull_request:
+    paths:
+      - 'app/**'
+      - 'reference/variant-cases.json'
+      - 'reference/visual-debt.md'
+      - 'tools/variant_fidelity_manifest.js'
+      - 'tools/render_variant_fidelity.py'
+      - '.github/workflows/variant-fidelity.yml'
+      - 'docs/work/r2-variant-fidelity.md'
+  push:
+    branches: [main]
+    paths:
+      - 'app/**'
+      - 'reference/variant-cases.json'
+      - 'reference/visual-debt.md'
+      - 'tools/variant_fidelity_manifest.js'
+      - 'tools/render_variant_fidelity.py'
+      - '.github/workflows/variant-fidelity.yml'
+      - 'docs/work/r2-variant-fidelity.md'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  variants:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install image validation tooling
+        run: python -m pip install -r tools/requirements.txt
+      - name: Preserve canonical R0 baseline
+        run: python tools/validate-baseline.py
+      - name: Validate canonical app runtime
+        working-directory: app
+        run: npm test
+      - name: Derive variant manifests from Scene2D state
+        run: |
+          node tools/variant_fidelity_manifest.js \
+            --cases reference/variant-cases.json \
+            --output /tmp/variant-fidelity/manifest.json
+      - name: Render variant fixtures
+        run: |
+          python tools/render_variant_fidelity.py \
+            --manifest /tmp/variant-fidelity/manifest.json \
+            --output-dir /tmp/variant-fidelity/rendered
+      - name: Show fidelity summary
+        run: cat /tmp/variant-fidelity/rendered/summary.json
+      - name: Upload review artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: variant-fidelity-${{ github.run_id }}
+          path: /tmp/variant-fidelity
+          if-no-files-found: error
