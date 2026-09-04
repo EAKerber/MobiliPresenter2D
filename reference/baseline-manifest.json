@@ -1,25 +1,28 @@
 {
   "schemaVersion": "BaselineManifest 0.1",
-  "status": "UNMATERIALIZED",
+  "status": "SOURCE_VALIDATED",
   "sceneId": "cozinha-01",
-  "intendedSource": {
-    "project": "casa-em-modulos-configurador",
-    "checkpoint": "v3.3.0",
+  "baselineId": "cozinha-01-phase3-stone-split1",
+  "source": {
+    "archiveName": "casa-em-modulos-configurador-recorte-pedras-v3.3.0.zip",
+    "archiveSize": 7741469,
+    "archiveSha256": "ab419606d02a3e785810aa32ca9a31e576c09d8619abd59acfe47a4fda9bd189",
     "exactBytesRequired": true,
-    "sourceLocated": false,
-    "reason": "BASELINE_SOURCE_MISSING"
+    "sourceLocated": true,
+    "materializedInRepository": false,
+    "reason": "BASELINE_BYTES_TRANSPORT_PENDING",
+    "inventoryPath": "reference/source-inventory-v3.3.0.json",
+    "validationPath": "reference/source-validation-v3.3.0.json"
   },
-  "canvas": {
-    "width": 1536,
-    "height": 1024,
-    "origin": [0, 0]
-  },
+  "canvas": {"width": 1536, "height": 1024, "origin": [0, 0]},
+  "files": [],
   "golden": null,
   "assets": [],
-  "requiredValidation": {
-    "dimensions": true,
-    "sha256": true,
-    "alphaBounds": true,
-    "defaultCompositionVsGolden": "exact-when-applicable"
+  "defaultComposition": null,
+  "expectedRuntime": {
+    "passed": true,
+    "initialFingerprint": "scene2d-89ce17bc",
+    "entities": 11,
+    "controllableEntities": 8
   }
 }
