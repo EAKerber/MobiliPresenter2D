@@ -1,0 +1,719 @@
+{
+  "assets": [
+    {
+      "alphaBounds": [
+        0,
+        0,
+        1536,
+        1024
+      ],
+      "canonicalCanvas": true,
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "path": "app/assets/kitchen/base.png",
+      "sha256": "f7e2154187cd74d437035ff8ead2059f3ae842887e96093918475e9616749a70",
+      "size": 1954448
+    },
+    {
+      "alphaBounds": [
+        0,
+        0,
+        1536,
+        1024
+      ],
+      "canonicalCanvas": true,
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "path": "app/assets/kitchen/composicao-completa.png",
+      "sha256": "b626b8ae3669f7feda5824c7cbdc2de2593e3290d5fcfab58c78c6d7d53f4413",
+      "size": 2111991
+    },
+    {
+      "alphaBounds": [
+        122,
+        54,
+        393,
+        309
+      ],
+      "canonicalCanvas": true,
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "path": "app/assets/kitchen/layers/01_modulo_lavanderia.png",
+      "sha256": "70d5eb1d6066a16a3a6fe3d6d97b9efcafa08065241d087703ece6d95b75de0a",
+      "size": 85596
+    },
+    {
+      "alphaBounds": [
+        484,
+        590,
+        757,
+        856
+      ],
+      "canonicalCanvas": true,
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "path": "app/assets/kitchen/layers/02_inferior_fogao.png",
+      "sha256": "6ba1ad26835d349a28b098bd6c60182b369ec66e51ea2b1a8cc263f30c44da98",
+      "size": 112386
+    },
+    {
+      "alphaBounds": [
+        484,
+        491,
+        764,
+        912
+      ],
+      "canonicalCanvas": true,
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "path": "app/assets/kitchen/layers/stone-02-cozinha.png",
+      "sha256": "03f8e394e0192d5f969562c610ad62f83e498e77e5c0eacc363c86b6e8315595",
+      "size": 120842
+    },
+    {
+      "alphaBounds": [
+        736,
+        590,
+        1217,
+        856
+      ],
+      "canonicalCanvas": true,
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "path": "app/assets/kitchen/layers/03_inferior_pia.png",
+      "sha256": "11206a486ffb74938ecde1de1de7972c96f63fb32924d34a385eb70b6c94cca7",
+      "size": 184619
+    },
+    {
+      "alphaBounds": [
+        736,
+        442,
+        1217,
+        912
+      ],
+      "canonicalCanvas": true,
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "path": "app/assets/kitchen/layers/stone-03-pia.png",
+      "sha256": "1d1fc7e3f249de8011bc5c736f34aba2025055960aa64fc4f42eee90c46819e9",
+      "size": 166655
+    },
+    {
+      "alphaBounds": [
+        1205,
+        44,
+        1243,
+        914
+      ],
+      "canonicalCanvas": true,
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "path": "app/assets/kitchen/layers/04_lateral_geladeira.png",
+      "sha256": "2f6b70502704d0fb87c32cc5f4306f0c65954bf5639ba0613805bc888721c2d4",
+      "size": 8882
+    },
+    {
+      "alphaBounds": [
+        490,
+        60,
+        765,
+        336
+      ],
+      "canonicalCanvas": true,
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "path": "app/assets/kitchen/layers/05_aereo_fogao.png",
+      "sha256": "1c25711a13ba8c8f4b6d984c79c606263101dc71ee468d34979644d7e6dcf93c",
+      "size": 109727
+    },
+    {
+      "alphaBounds": [
+        745,
+        60,
+        1225,
+        338
+      ],
+      "canonicalCanvas": true,
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "path": "app/assets/kitchen/layers/06_aereo_pia.png",
+      "sha256": "037619446795514d243f8764be922e771b999a4e35e63e5af92ffeffd2625400",
+      "size": 167886
+    },
+    {
+      "alphaBounds": [
+        1232,
+        46,
+        1506,
+        231
+      ],
+      "canonicalCanvas": true,
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "path": "app/assets/kitchen/layers/07_aereo_geladeira.png",
+      "sha256": "0722c385e0c19de4bac2338f094473d117557c5ea4b1959558832a8335205082",
+      "size": 67427
+    },
+    {
+      "alphaBounds": [
+        715,
+        266,
+        1249,
+        379
+      ],
+      "canonicalCanvas": true,
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "path": "app/assets/kitchen/layers/08_iluminacao.png",
+      "sha256": "aa85eb0dd818e96f154da576ea8a22f11fbff5a00ab7520844b61c68fe07aa2d",
+      "size": 9505
+    },
+    {
+      "alphaBounds": [
+        132,
+        65,
+        354,
+        281
+      ],
+      "canonicalCanvas": true,
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "path": "app/assets/kitchen/masks/01.png",
+      "sha256": "03aa65cf92260099bbce9add9b93c22d54a08c3a89a7d77a4d5ef186cfb279e8",
+      "size": 6697
+    },
+    {
+      "alphaBounds": null,
+      "canonicalCanvas": true,
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "path": "app/assets/kitchen/masks/02.png",
+      "sha256": "64085d665f67f408b0cd67f69bebaa5a814b79eeed296c3d952e62988d7a440f",
+      "size": 6177
+    },
+    {
+      "alphaBounds": [
+        746,
+        590,
+        1204,
+        856
+      ],
+      "canonicalCanvas": true,
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "path": "app/assets/kitchen/masks/03.png",
+      "sha256": "ec948e091e98daa90d0ceb56d714e40a75d2e6bb7be6a435ad01bb8b0ffd93cb",
+      "size": 6812
+    },
+    {
+      "alphaBounds": [
+        1209,
+        50,
+        1231,
+        900
+      ],
+      "canonicalCanvas": true,
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "path": "app/assets/kitchen/masks/04.png",
+      "sha256": "64e25ff3dcd38adf0afb0e68bb7d6fd130ab0578f687d2a6d10dc241c4d4e1d9",
+      "size": 8151
+    },
+    {
+      "alphaBounds": [
+        506,
+        65,
+        751,
+        256
+      ],
+      "canonicalCanvas": true,
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "path": "app/assets/kitchen/masks/05.png",
+      "sha256": "6d4ea577ca788d3294ea8a3a6b0b57cdabd5249c0190762084d53ab67ec4cb12",
+      "size": 6639
+    },
+    {
+      "alphaBounds": [
+        752,
+        65,
+        1207,
+        310
+      ],
+      "canonicalCanvas": true,
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "path": "app/assets/kitchen/masks/06.png",
+      "sha256": "5e22fd008f03a4ac429dc964c21e8b4b1604132d926a16b10ba85526fc2c1f6a",
+      "size": 6781
+    },
+    {
+      "alphaBounds": [
+        1240,
+        50,
+        1489,
+        205
+      ],
+      "canonicalCanvas": true,
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "path": "app/assets/kitchen/masks/07.png",
+      "sha256": "a9bc2425f1695d908d9a7ae427d654efb2d1a42cf137b520b0c7b54eb09d2c8c",
+      "size": 6555
+    },
+    {
+      "alphaBounds": null,
+      "canonicalCanvas": true,
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "path": "app/assets/kitchen/masks/08.png",
+      "sha256": "64085d665f67f408b0cd67f69bebaa5a814b79eeed296c3d952e62988d7a440f",
+      "size": 6177
+    },
+    {
+      "alphaBounds": null,
+      "canonicalCanvas": true,
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "path": "app/assets/kitchen/substitutions/range-freestanding-placeholder.png",
+      "sha256": "64085d665f67f408b0cd67f69bebaa5a814b79eeed296c3d952e62988d7a440f",
+      "size": 6177
+    },
+    {
+      "alphaBounds": [
+        484,
+        491,
+        764,
+        912
+      ],
+      "canonicalCanvas": true,
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "path": "app/tools/sources/02_inferior_fogao-combined-v2.png",
+      "sha256": "c9c031f2a4d37be49d72de293d64ce579f42e56b934342e49017d203085646b0",
+      "size": 222284
+    },
+    {
+      "alphaBounds": [
+        736,
+        442,
+        1217,
+        912
+      ],
+      "canonicalCanvas": true,
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "path": "app/tools/sources/03_inferior_pia-combined-v1.png",
+      "sha256": "32f2b66f9dbf3d911b739ae080fe2f352e2015ac2f24bddd51984b8ff384cd66",
+      "size": 340278
+    }
+  ],
+  "baselineId": "cozinha-01-phase3-stone-split1",
+  "canvas": {
+    "height": 1024,
+    "origin": [
+      0,
+      0
+    ],
+    "width": 1536
+  },
+  "defaultComposition": {
+    "background": "app/assets/kitchen/base.png",
+    "layers": [
+      "app/assets/kitchen/layers/01_modulo_lavanderia.png",
+      "app/assets/kitchen/layers/02_inferior_fogao.png",
+      "app/assets/kitchen/layers/stone-02-cozinha.png",
+      "app/assets/kitchen/layers/03_inferior_pia.png",
+      "app/assets/kitchen/layers/stone-03-pia.png",
+      "app/assets/kitchen/layers/04_lateral_geladeira.png",
+      "app/assets/kitchen/layers/05_aereo_fogao.png",
+      "app/assets/kitchen/layers/06_aereo_pia.png",
+      "app/assets/kitchen/layers/07_aereo_geladeira.png",
+      "app/assets/kitchen/layers/08_iluminacao.png"
+    ]
+  },
+  "expectedRuntime": {
+    "controllableEntities": 8,
+    "entities": 11,
+    "initialFingerprint": "scene2d-89ce17bc",
+    "passed": true
+  },
+  "files": [
+    {
+      "path": "app/.gitignore",
+      "sha256": "35d940f5e608b2a4ef2a41ecf7263d2d4e3e18aa8aab9a98a57fa57e5607dfa5",
+      "size": 498
+    },
+    {
+      "path": "app/.openai/hosting.json",
+      "sha256": "acd36d3f807073815721de842edaaa378fc083c0f85eb32a44a055b3f65f6a6d",
+      "size": 134
+    },
+    {
+      "path": "app/README.md",
+      "sha256": "fdf323a74fd73a1763ed5a5da6711a51a83eb77723aa00284661dcd773a538d5",
+      "size": 2278
+    },
+    {
+      "path": "app/app.js",
+      "sha256": "e1151ff41bec98e813e78f2e177326a5099ae74e4b8c228c6a0d34955966d26e",
+      "size": 11128
+    },
+    {
+      "path": "app/assets/kitchen/base.png",
+      "sha256": "f7e2154187cd74d437035ff8ead2059f3ae842887e96093918475e9616749a70",
+      "size": 1954448
+    },
+    {
+      "path": "app/assets/kitchen/composicao-completa.png",
+      "sha256": "b626b8ae3669f7feda5824c7cbdc2de2593e3290d5fcfab58c78c6d7d53f4413",
+      "size": 2111991
+    },
+    {
+      "path": "app/assets/kitchen/layers/01_modulo_lavanderia.png",
+      "sha256": "70d5eb1d6066a16a3a6fe3d6d97b9efcafa08065241d087703ece6d95b75de0a",
+      "size": 85596
+    },
+    {
+      "path": "app/assets/kitchen/layers/02_inferior_fogao.png",
+      "sha256": "6ba1ad26835d349a28b098bd6c60182b369ec66e51ea2b1a8cc263f30c44da98",
+      "size": 112386
+    },
+    {
+      "path": "app/assets/kitchen/layers/03_inferior_pia.png",
+      "sha256": "11206a486ffb74938ecde1de1de7972c96f63fb32924d34a385eb70b6c94cca7",
+      "size": 184619
+    },
+    {
+      "path": "app/assets/kitchen/layers/04_lateral_geladeira.png",
+      "sha256": "2f6b70502704d0fb87c32cc5f4306f0c65954bf5639ba0613805bc888721c2d4",
+      "size": 8882
+    },
+    {
+      "path": "app/assets/kitchen/layers/05_aereo_fogao.png",
+      "sha256": "1c25711a13ba8c8f4b6d984c79c606263101dc71ee468d34979644d7e6dcf93c",
+      "size": 109727
+    },
+    {
+      "path": "app/assets/kitchen/layers/06_aereo_pia.png",
+      "sha256": "037619446795514d243f8764be922e771b999a4e35e63e5af92ffeffd2625400",
+      "size": 167886
+    },
+    {
+      "path": "app/assets/kitchen/layers/07_aereo_geladeira.png",
+      "sha256": "0722c385e0c19de4bac2338f094473d117557c5ea4b1959558832a8335205082",
+      "size": 67427
+    },
+    {
+      "path": "app/assets/kitchen/layers/08_iluminacao.png",
+      "sha256": "aa85eb0dd818e96f154da576ea8a22f11fbff5a00ab7520844b61c68fe07aa2d",
+      "size": 9505
+    },
+    {
+      "path": "app/assets/kitchen/layers/stone-02-cozinha.png",
+      "sha256": "03f8e394e0192d5f969562c610ad62f83e498e77e5c0eacc363c86b6e8315595",
+      "size": 120842
+    },
+    {
+      "path": "app/assets/kitchen/layers/stone-03-pia.png",
+      "sha256": "1d1fc7e3f249de8011bc5c736f34aba2025055960aa64fc4f42eee90c46819e9",
+      "size": 166655
+    },
+    {
+      "path": "app/assets/kitchen/masks/01.png",
+      "sha256": "03aa65cf92260099bbce9add9b93c22d54a08c3a89a7d77a4d5ef186cfb279e8",
+      "size": 6697
+    },
+    {
+      "path": "app/assets/kitchen/masks/02.png",
+      "sha256": "64085d665f67f408b0cd67f69bebaa5a814b79eeed296c3d952e62988d7a440f",
+      "size": 6177
+    },
+    {
+      "path": "app/assets/kitchen/masks/03.png",
+      "sha256": "ec948e091e98daa90d0ceb56d714e40a75d2e6bb7be6a435ad01bb8b0ffd93cb",
+      "size": 6812
+    },
+    {
+      "path": "app/assets/kitchen/masks/04.png",
+      "sha256": "64e25ff3dcd38adf0afb0e68bb7d6fd130ab0578f687d2a6d10dc241c4d4e1d9",
+      "size": 8151
+    },
+    {
+      "path": "app/assets/kitchen/masks/05.png",
+      "sha256": "6d4ea577ca788d3294ea8a3a6b0b57cdabd5249c0190762084d53ab67ec4cb12",
+      "size": 6639
+    },
+    {
+      "path": "app/assets/kitchen/masks/06.png",
+      "sha256": "5e22fd008f03a4ac429dc964c21e8b4b1604132d926a16b10ba85526fc2c1f6a",
+      "size": 6781
+    },
+    {
+      "path": "app/assets/kitchen/masks/07.png",
+      "sha256": "a9bc2425f1695d908d9a7ae427d654efb2d1a42cf137b520b0c7b54eb09d2c8c",
+      "size": 6555
+    },
+    {
+      "path": "app/assets/kitchen/masks/08.png",
+      "sha256": "64085d665f67f408b0cd67f69bebaa5a814b79eeed296c3d952e62988d7a440f",
+      "size": 6177
+    },
+    {
+      "path": "app/assets/kitchen/substitutions/range-freestanding-placeholder.png",
+      "sha256": "64085d665f67f408b0cd67f69bebaa5a814b79eeed296c3d952e62988d7a440f",
+      "size": 6177
+    },
+    {
+      "path": "app/core/fingerprint.js",
+      "sha256": "b584ba2f7a3ae80b06c68da4b24b877899b3ac2583a46ac46fbfc94fdbb45251",
+      "size": 1690
+    },
+    {
+      "path": "app/core/finishes.js",
+      "sha256": "64cbb42d2224a722a71a4fe38b8b2a8b624dd022335bf9859a081f6f23d58d43",
+      "size": 1021
+    },
+    {
+      "path": "app/core/state.js",
+      "sha256": "6f3ec688acf375c2080f38f5992a676056341e23b414edfb9c733af0864ea248",
+      "size": 1446
+    },
+    {
+      "path": "app/core/validation.js",
+      "sha256": "45798a7828d99563e47726b01b24ab14ce9e75915ea00967c71cc544e762101b",
+      "size": 3797
+    },
+    {
+      "path": "app/core/visibility.js",
+      "sha256": "b6c4c1fc17a01207447ce1d864ba923a5a577dd559e94eb55f66f656f1806cb8",
+      "size": 2602
+    },
+    {
+      "path": "app/data/mask-data.js",
+      "sha256": "d0455344654279ceaa960e160d343757fe4fdcc91cfc9e60ec7c8b5322f41f87",
+      "size": 55976
+    },
+    {
+      "path": "app/data/scene-data.js",
+      "sha256": "7c10274b8287133baedcb8b2c2b671bc749ff8550981f3ff67e6be70f3a15285",
+      "size": 7786
+    },
+    {
+      "path": "app/data/technical-data.json",
+      "sha256": "9f9ad48a44e2cc6287478c708f74fc8a1ea929a912afb0c210d1a52184b16e28",
+      "size": 4407
+    },
+    {
+      "path": "app/docs/CHECKPOINTS.md",
+      "sha256": "b78644b972e4196a8915c91779b1d751c315059de8b98a80288d5c78929abfcf",
+      "size": 5237
+    },
+    {
+      "path": "app/docs/GUIA-IMPLEMENTACAO-2D-DATA-DRIVEN.md",
+      "sha256": "927c790fbd9ffc7927bcd52a2a6d75a15af90408176b63431f3a424fe6cdde20",
+      "size": 26237
+    },
+    {
+      "path": "app/docs/inventario-reuso-mobilipresenter.json",
+      "sha256": "f9501b6cda9f4d0960f3cae67906db2733d32d9638ac0f0452650271f81fa95e",
+      "size": 14939
+    },
+    {
+      "path": "app/drizzle/meta/_journal.json",
+      "sha256": "90cb374e093894d0efce6f1830d873a42aadd8ba49d2f024495e5cb2e1c8c303",
+      "size": 61
+    },
+    {
+      "path": "app/index.html",
+      "sha256": "7a640eb1acba556dea383f7b7285436088751dd47cf9bc7dd6310db091592df7",
+      "size": 4210
+    },
+    {
+      "path": "app/package.json",
+      "sha256": "f551e5d57a3b7d6ba8ddfcd52ff95fce70e7af9123c6850cacce1fa9e813b8d1",
+      "size": 502
+    },
+    {
+      "path": "app/reports/default-composed.png",
+      "sha256": "b626b8ae3669f7feda5824c7cbdc2de2593e3290d5fcfab58c78c6d7d53f4413",
+      "size": 2111991
+    },
+    {
+      "path": "app/reports/module02-alpha-fix-validation.json",
+      "sha256": "3273594d43bd661e8fde7f92ca9197c68738f716c3998bead08171641e4426dc",
+      "size": 6936
+    },
+    {
+      "path": "app/reports/phase-1-validation.json",
+      "sha256": "38a4c71d4254e4df75a4915028fcf235774775de6f477777f03f5ea0c3647fdd",
+      "size": 4976
+    },
+    {
+      "path": "app/reports/phase-2-validation.json",
+      "sha256": "3192f36aa8e5c73b6ce05db2ac36bce41ad22c345b29cf60d31404f4f8f4cca2",
+      "size": 5218
+    },
+    {
+      "path": "app/reports/wall-base-fix-validation.json",
+      "sha256": "f689d6d317891d4ecb48b8855b015054de0125f5d49be178c5dfebcad7b36ef8",
+      "size": 5237
+    },
+    {
+      "path": "app/scripts/build-static.sh",
+      "sha256": "a3a8bdbc9386e7fb75355b5333e4b6987ee1b9295282d385d3c9566f5d1b1e2f",
+      "size": 888
+    },
+    {
+      "path": "app/styles.css",
+      "sha256": "7ae138dc44dee75d17cd16fad3513eef63593379e9073fe4b11fe0adaa510555",
+      "size": 8759
+    },
+    {
+      "path": "app/tools/build-inline-masks.py",
+      "sha256": "dd72e800635bb29ef93e64137c02e3f7780f44cca52249b3518e49e6ab2cc7fb",
+      "size": 1255
+    },
+    {
+      "path": "app/tools/build-module02-alpha-v2.py",
+      "sha256": "55d60df879c325daa90a2ae9da3ddae071fb26d19ecd5fb9bee44d491e3d4dfc",
+      "size": 3366
+    },
+    {
+      "path": "app/tools/compose-reference.py",
+      "sha256": "f65a73bf4f0cfecb1bb1f6abafabd0a348d36f7edc9249a9067c0f4414f8c770",
+      "size": 988
+    },
+    {
+      "path": "app/tools/fix-module02-alpha.py",
+      "sha256": "91b6d4a16d22f623620d308fab717cc27f46cebf5c5cec4edea6c70f58c8d954",
+      "size": 1839
+    },
+    {
+      "path": "app/tools/masks/module02-alpha-approved-v2.png",
+      "sha256": "9541cd529d72079de453833c66eb81a7002fd0f987a2027b029c70b7cb2b39ca",
+      "size": 3821
+    },
+    {
+      "path": "app/tools/masks/module02-alpha-approved.png",
+      "sha256": "fd211b2250f599a370328fabdfd263d73f556e387627a21c3de549e43b060dd7",
+      "size": 4347
+    },
+    {
+      "path": "app/tools/sources/02_inferior_fogao-combined-v2.png",
+      "sha256": "c9c031f2a4d37be49d72de293d64ce579f42e56b934342e49017d203085646b0",
+      "size": 222284
+    },
+    {
+      "path": "app/tools/sources/03_inferior_pia-combined-v1.png",
+      "sha256": "32f2b66f9dbf3d911b739ae080fe2f352e2015ac2f24bddd51984b8ff384cd66",
+      "size": 340278
+    },
+    {
+      "path": "app/tools/split-stone-layers.py",
+      "sha256": "89e49454bc63e69aed7361c58da71da59e17d1b08bf2aff59065fbd1c04daae2",
+      "size": 2382
+    },
+    {
+      "path": "app/tools/test-core.js",
+      "sha256": "5c744894e7b7c9bd656a7efee74dfe2257fa988c91233dddc90efb46d542cc7f",
+      "size": 7936
+    },
+    {
+      "path": "app/tools/validate-assets.py",
+      "sha256": "c70a5c98bf15d0f423250ea72394184b555e7358da398c87673ddc500d65acc7",
+      "size": 7096
+    }
+  ],
+  "golden": {
+    "alphaBounds": [
+      0,
+      0,
+      1536,
+      1024
+    ],
+    "canonicalCanvas": true,
+    "dimensions": [
+      1536,
+      1024
+    ],
+    "path": "app/assets/kitchen/composicao-completa.png",
+    "sha256": "b626b8ae3669f7feda5824c7cbdc2de2593e3290d5fcfab58c78c6d7d53f4413",
+    "size": 2111991
+  },
+  "sceneId": "cozinha-01",
+  "schemaVersion": "BaselineManifest 0.1",
+  "source": {
+    "actualUploadName": "casa-em-modulos-configurador-recorte-pedras-v3.3.0.zip",
+    "archiveName": "casa-em-modulos-configurador-recorte-pedras-v3.3.0.zip",
+    "archiveSha256": "ab419606d02a3e785810aa32ca9a31e576c09d8619abd59acfe47a4fda9bd189",
+    "archiveSize": 7741469,
+    "exactBytesRequired": true,
+    "materializedInRepository": true,
+    "sourceLocated": true
+  },
+  "sourceValidation": {
+    "canonicalCore": {
+      "controllableEntities": 8,
+      "entities": 11,
+      "initialFingerprint": "scene2d-89ce17bc",
+      "passed": true
+    },
+    "canonicalFidelity": {
+      "assetCount": 23,
+      "differenceBounds": null,
+      "passed": true,
+      "pixelDifferenceCount": 0
+    },
+    "differenceBounds": null,
+    "pixelDifferenceCount": 0,
+    "trackedAssetCount": 23
+  },
+  "status": "READY"
+}

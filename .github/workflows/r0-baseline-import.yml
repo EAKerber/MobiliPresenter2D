@@ -1,0 +1,94 @@
+name: R0 baseline import
+
+on:
+  push:
+    branches:
+      - incoming/r0-v3.3.0
+
+concurrency:
+  group: r0-baseline-import
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  import:
+    name: Verify and materialize v3.3.0
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout incoming branch
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install validation tooling
+        run: python -m pip install -r tools/requirements.txt
+      - name: Locate one incoming ZIP
+        id: archive
+        shell: bash
+        run: |
+          set -euo pipefail
+          mapfile -t archives < <(find . -maxdepth 2 -type f -name '*.zip' -not -path './.git/*' | sort)
+          if [ "${#archives[@]}" -ne 1 ]; then
+            echo "Expected exactly one ZIP on the incoming branch; found ${#archives[@]}." >&2
+            exit 2
+          fi
+          echo "path=${archives[0]}" >> "$GITHUB_OUTPUT"
+      - name: Verify archive and materialize isolated tree
+        run: >-
+          python tools/import-baseline-archive.py
+          "${{ steps.archive.outputs.path }}"
+          --output-root /tmp/r0-materialized
+      - name: Re-observe target branch
+        id: target
+        shell: bash
+        env:
+          TARGET_BRANCH: work/r0-baseline-freeze
+        run: |
+          set -euo pipefail
+          git fetch origin "refs/heads/${TARGET_BRANCH}:refs/remotes/origin/${TARGET_BRANCH}"
+          target_sha="$(git rev-parse "refs/remotes/origin/${TARGET_BRANCH}")"
+          echo "sha=${target_sha}" >> "$GITHUB_OUTPUT"
+      - name: Build candidate commit on target head
+        shell: bash
+        env:
+          TARGET_BRANCH: work/r0-baseline-freeze
+          TARGET_SHA: ${{ steps.target.outputs.sha }}
+        run: |
+          set -euo pipefail
+          git switch --detach "$TARGET_SHA"
+          rm -rf app
+          cp -a /tmp/r0-materialized/app ./app
+          cp /tmp/r0-materialized/reference/baseline-manifest.json reference/baseline-manifest.json
+          cp /tmp/r0-materialized/reference/source-validation-v3.3.0.json reference/source-validation-v3.3.0.json
+          python tools/validate-baseline.py
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add app reference/baseline-manifest.json reference/source-validation-v3.3.0.json
+          git commit -m 'chore(r0): materialize canonical v3.3.0 baseline [baseline-import]'
+      - name: CAS-style push with final readback
+        shell: bash
+        env:
+          TARGET_BRANCH: work/r0-baseline-freeze
+          EXPECTED_TARGET_SHA: ${{ steps.target.outputs.sha }}
+        run: |
+          set -euo pipefail
+          remote_before="$(git ls-remote origin "refs/heads/${TARGET_BRANCH}" | cut -f1)"
+          if [ "$remote_before" != "$EXPECTED_TARGET_SHA" ]; then
+            echo "TARGET_HEAD_DRIFT:${remote_before}!=${EXPECTED_TARGET_SHA}" >&2
+            exit 2
+          fi
+          candidate_sha="$(git rev-parse HEAD)"
+          git push origin "HEAD:refs/heads/${TARGET_BRANCH}"
+          remote_after="$(git ls-remote origin "refs/heads/${TARGET_BRANCH}" | cut -f1)"
+          if [ "$remote_after" != "$candidate_sha" ]; then
+            echo "TARGET_READBACK_FAILED:${remote_after}!=${candidate_sha}" >&2
+            exit 2
+          fi
+          echo "R0_IMPORT_RECEIPT target=${TARGET_BRANCH} base=${EXPECTED_TARGET_SHA} result=${candidate_sha} readback=PASS"
