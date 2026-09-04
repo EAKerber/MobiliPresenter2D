@@ -1,0 +1,25 @@
+{
+  "schemaVersion": "BaselineManifest 0.1",
+  "status": "UNMATERIALIZED",
+  "sceneId": "cozinha-01",
+  "intendedSource": {
+    "project": "casa-em-modulos-configurador",
+    "checkpoint": "v3.3.0",
+    "exactBytesRequired": true,
+    "sourceLocated": false,
+    "reason": "BASELINE_SOURCE_MISSING"
+  },
+  "canvas": {
+    "width": 1536,
+    "height": 1024,
+    "origin": [0, 0]
+  },
+  "golden": null,
+  "assets": [],
+  "requiredValidation": {
+    "dimensions": true,
+    "sha256": true,
+    "alphaBounds": true,
+    "defaultCompositionVsGolden": "exact-when-applicable"
+  }
+}
