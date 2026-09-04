@@ -1,0 +1,25 @@
+{
+  "schemaVersion": "BranchDispositionSet 0.1",
+  "controlBranch": "main",
+  "preserveBranches": [],
+  "terminalBranches": [
+    {
+      "branch": "work/r0-baseline-freeze-check",
+      "sha": "7ef7efb362fc29f91de7399a82c3e4ba1c1baafa",
+      "reason": "validation-only",
+      "allowDelete": true,
+      "note": "Two validation-only commits; the recorded branch had zero net file diff from its starting tree. Exact current SHA is required."
+    },
+    {
+      "branch": "incoming/r0-v3.3.0",
+      "sha": "c8b53cd71a55b320916ac34901dcad35749d598d",
+      "reason": "completed-import-carrier",
+      "allowDelete": true,
+      "evidence": {
+        "archiveSha256": "ab419606d02a3e785810aa32ca9a31e576c09d8619abd59acfe47a4fda9bd189",
+        "materializedTargetSha": "4f2f1a5d9ff9386db94277aa69838e751b067152",
+        "mergedMainSha": "04b565816db5886d13ef6f438a152c7720c60e05"
+      }
+    }
+  ]
+}
