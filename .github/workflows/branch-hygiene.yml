@@ -10,11 +10,6 @@ on:
       - 'docs/work/r1-branch-hygiene.md'
   push:
     branches: [main]
-    paths:
-      - 'tools/branch_hygiene_*.py'
-      - 'ops/branch-dispositions.json'
-      - 'tests/test_branch_hygiene_plan.py'
-      - '.github/workflows/branch-hygiene.yml'
   schedule:
     - cron: '17 6 * * 1'
   workflow_dispatch:
@@ -57,7 +52,7 @@ jobs:
           open('/tmp/branch-plan-hash.txt','w').write(p['planHash'])
           print('DELETE_CANDIDATES', [e['branch'] for e in p['entries'] if e['action']=='delete-candidate'])
           PY
-      - name: Apply exact plan only after policy lands on main
+      - name: Apply exact plan after every main transition
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         env:
           GITHUB_TOKEN: ${{ github.token }}
