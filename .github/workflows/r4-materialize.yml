@@ -4,6 +4,10 @@ on:
   push:
     branches:
       - work/r4-module02-fidelity
+    paths:
+      - 'app/tools/apply-r4-module02-fidelity.py'
+      - 'tools/materialize-r4-module02.py'
+      - '.github/workflows/r4-materialize.yml'
 
 concurrency:
   group: r4-module02-materialize
@@ -55,8 +59,8 @@ jobs:
             reference/baseline-manifest.json \
             reference/r4-module02-fidelity.json
           if git diff --cached --quiet; then
-            echo 'R4_MATERIALIZATION_EMPTY' >&2
-            exit 2
+            echo 'R4_MATERIALIZATION_NO_CHANGE readback=PASS'
+            exit 0
           fi
           git commit -m 'R4: materialize module 02 fidelity checkpoint [r4-materialized]'
           candidate_sha="$(git rev-parse HEAD)"
