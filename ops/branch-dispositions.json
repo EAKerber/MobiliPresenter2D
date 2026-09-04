@@ -20,6 +20,19 @@
         "materializedTargetSha": "4f2f1a5d9ff9386db94277aa69838e751b067152",
         "mergedMainSha": "04b565816db5886d13ef6f438a152c7720c60e05"
       }
+    },
+    {
+      "branch": "work/r4-module02-fidelity",
+      "sha": "248a9e925191daff1e7071be4d96f47c3cd04a95",
+      "reason": "squash-merged-r4-tree-identical",
+      "allowDelete": true,
+      "evidence": {
+        "mergedMainSha": "022c7c36df4e356925177ceaaba1bad4effaf482",
+        "branchTreeSha": "80a7bab9e83f66131689df95eabaec559c231efd",
+        "mergedMainTreeSha": "80a7bab9e83f66131689df95eabaec559c231efd",
+        "pullRequest": 6
+      },
+      "note": "PR #6 was squash-merged. Branch and merged main have the exact same Git tree; deletion remains bound to this exact branch SHA."
     }
   ]
 }
