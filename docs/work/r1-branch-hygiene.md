@@ -1,6 +1,6 @@
 # R1 — Evidence-based branch hygiene
 
-Status: candidate
+Status: active
 
 ## Purpose
 
@@ -18,19 +18,25 @@ Automatic evidence is intentionally narrow: a non-control branch whose current h
 
 Before apply, the executor rematerializes the whole observation and plan. Any changed branch inventory, control head, PR relationship, branch SHA, policy, or plan hash blocks mutation. After every delete, the complete remote branch inventory must equal the expected inventory with only that exact ref removed.
 
-## R0 cleanup dispositions
+## Trigger policy
 
-Two R0 branches are automatically explainable by ancestry after PR #1 merged:
+Pull-request runs are dry-run only so a change to the hygiene logic can expose its candidate set before integration. Scheduled and manual runs are audit-only.
 
+Every push to `main` performs a fresh observation/plan and may apply that exact plan. This is intentionally not path-filtered: a normal product PR merge must be able to clean its just-integrated branch. The same CAS/readback rules apply to every main transition; a no-candidate plan is a valid no-op.
+
+Branches that must survive a main transition can be listed explicitly in `ops/branch-dispositions.json` under `preserveBranches`.
+
+## R0/R1 bootstrap result
+
+The first accepted R1 plan removed five exact refs and left only `main`:
+
+- `incoming/r0-v3.3.0`
 - `work/r0-baseline-freeze`
+- `work/r0-baseline-freeze-check`
 - `work/r0-baseline-tools-stage`
+- `work/r1-branch-hygiene`
 
-Two diverged branches require explicit terminal records:
-
-- `work/r0-baseline-freeze-check` — validation-only branch, exact SHA recorded;
-- `incoming/r0-v3.3.0` — completed binary import carrier, exact SHA plus archive/materialization evidence recorded.
-
-The pull-request workflow is dry-run only. Scheduled and manual runs are also audit-only. Destructive apply occurs only on a push to `main` that changes this hygiene policy/tooling, after the same code has had a PR opportunity to expose its plan.
+Receipt: `deletedCount=5`, `remainingBranchCount=1`, `readback=PASS`.
 
 ## Non-goals
 
