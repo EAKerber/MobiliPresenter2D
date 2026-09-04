@@ -1,0 +1,33 @@
+{
+  "schemaVersion": "CandidateAssetSets 0.1",
+  "sceneId": "cozinha-01",
+  "sets": [
+    {
+      "id": "module-02-hidden-complete",
+      "targetVariant": "module-02-hidden",
+      "roleOrder": [
+        "module-02-bay-completion",
+        "range-freestanding"
+      ],
+      "resolvesDebtCodes": [
+        "raw-neighbor-cut",
+        "replacement-placeholder"
+      ],
+      "visualChecklist": [
+        "range-bay-contact-natural",
+        "no-double-edge",
+        "no-overlap-artifact",
+        "shadow-contact-coherent",
+        "neighbor-modules-untouched",
+        "no-visible-seam"
+      ],
+      "humanReview": {
+        "status": "PENDING",
+        "reviewer": null,
+        "reviewedAt": null,
+        "candidateSha256ByRole": {},
+        "checklist": {}
+      }
+    }
+  ]
+}
