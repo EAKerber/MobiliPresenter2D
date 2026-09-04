@@ -12,6 +12,7 @@ on:
       - 'tests/test_candidate_asset_gates.py'
       - '.github/workflows/candidate-assets.yml'
       - 'docs/work/r3-candidate-asset-gates.md'
+      - 'docs/work/r5a-module02-hidden.md'
   push:
     branches: [main]
     paths:
@@ -24,6 +25,7 @@ on:
       - 'tests/test_candidate_asset_gates.py'
       - '.github/workflows/candidate-assets.yml'
       - 'docs/work/r3-candidate-asset-gates.md'
+      - 'docs/work/r5a-module02-hidden.md'
   workflow_dispatch:
 
 permissions:
