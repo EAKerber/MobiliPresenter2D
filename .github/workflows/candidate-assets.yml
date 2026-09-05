@@ -6,12 +6,16 @@ on:
       - 'review-assets/**'
       - 'reference/variant-cases.json'
       - 'tools/validate_candidate_assets.py'
+      - 'tools/validate_authoring_provenance.py'
+      - 'tools/extract_candidate_delta.py'
       - 'tools/render_candidate_review.py'
       - 'tools/render_candidate_set_review.py'
       - 'tools/variant_fidelity_manifest.js'
       - 'tools/render_variant_fidelity.py'
       - 'tests/test_candidate_asset_gates.py'
       - 'tests/test_candidate_asset_sets.py'
+      - 'tests/test_candidate_delta_authoring.py'
+      - 'tests/test_candidate_authoring_provenance.py'
       - '.github/workflows/candidate-assets.yml'
       - 'docs/work/r3-candidate-asset-gates.md'
       - 'docs/work/r5a-module02-hidden.md'
@@ -21,12 +25,16 @@ on:
       - 'review-assets/**'
       - 'reference/variant-cases.json'
       - 'tools/validate_candidate_assets.py'
+      - 'tools/validate_authoring_provenance.py'
+      - 'tools/extract_candidate_delta.py'
       - 'tools/render_candidate_review.py'
       - 'tools/render_candidate_set_review.py'
       - 'tools/variant_fidelity_manifest.js'
       - 'tools/render_variant_fidelity.py'
       - 'tests/test_candidate_asset_gates.py'
       - 'tests/test_candidate_asset_sets.py'
+      - 'tests/test_candidate_delta_authoring.py'
+      - 'tests/test_candidate_authoring_provenance.py'
       - '.github/workflows/candidate-assets.yml'
       - 'docs/work/r3-candidate-asset-gates.md'
       - 'docs/work/r5a-module02-hidden.md'
@@ -46,7 +54,12 @@ jobs:
       - name: Install image tooling
         run: python -m pip install -r tools/requirements.txt
       - name: Unit-test candidate gates
-        run: python -m unittest tests/test_candidate_asset_gates.py tests/test_candidate_asset_sets.py
+        run: >-
+          python -m unittest
+          tests/test_candidate_asset_gates.py
+          tests/test_candidate_asset_sets.py
+          tests/test_candidate_delta_authoring.py
+          tests/test_candidate_authoring_provenance.py
       - name: Preserve canonical R0 baseline
         run: python tools/validate-baseline.py
       - name: Preserve canonical app runtime
@@ -66,6 +79,11 @@ jobs:
           python tools/validate_candidate_assets.py \
             --output /tmp/candidate-review/intake.json
           cat /tmp/candidate-review/intake.json
+      - name: Validate canonical authoring provenance
+        run: |
+          python tools/validate_authoring_provenance.py \
+            --output /tmp/candidate-review/authoring-provenance.json
+          cat /tmp/candidate-review/authoring-provenance.json
       - name: Compose individual visual review gates
         run: |
           python tools/render_candidate_review.py \
