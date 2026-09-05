@@ -10,6 +10,7 @@
       "authorizedRoi": [460, 430, 790, 950],
       "minAlphaBBox": { "width": 120, "height": 220 },
       "maxAlphaBBoxArea": 171600,
+      "authoringContractId": "range-freestanding-edit",
       "resolvesDebtCodes": ["replacement-placeholder"],
       "visualChecklist": [
         "fits-opening",
@@ -28,6 +29,7 @@
       "authorizedRoi": [470, 480, 780, 930],
       "minAlphaBBox": { "width": 12, "height": 120 },
       "maxAlphaBBoxArea": 139500,
+      "authoringContractId": "module-02-bay-completion-edit",
       "resolvesDebtCodes": ["raw-neighbor-cut"],
       "visualChecklist": [
         "left-termination-natural",
