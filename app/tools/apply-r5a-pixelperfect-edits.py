@@ -1,17 +1,10 @@
 #!/usr/bin/env python3
-"""Materialize accepted R5A pixel-perfect edits from canonical R4 assets.
+"""Materialize accepted R5A pixel-perfect edits from rebuilt source layers.
 
-This is an editing pass, not image synthesis:
-- remove the confirmed stone-02 contamination by alpha reduction;
-- derive exposed 02/03 stone variants by alpha reduction only;
-- derive exact joint bridges that restore the removed pixels when both hosts are visible;
-- rebuild module-02 finish mask from its own alpha minus the appliance-protected ROI;
-- recompose the current golden in canonical z-order.
-
-No RGB value is invented or mutated in stone variants/bridges.
+Editing only: alpha cleanup, conditional stone clips/bridges, finish mask and golden recomposition.
+No stone RGB synthesis is performed.
 """
 from __future__ import annotations
-
 from pathlib import Path
 from PIL import Image
 import json
@@ -25,9 +18,9 @@ BRIDGES = KITCHEN / "bridges"
 VARIANTS.mkdir(parents=True, exist_ok=True)
 BRIDGES.mkdir(parents=True, exist_ok=True)
 
+MODULE02 = LAYERS / "02_inferior_fogao.png"
 STONE02 = LAYERS / "stone-02-cozinha.png"
 STONE03 = LAYERS / "stone-03-pia.png"
-MODULE02 = LAYERS / "02_inferior_fogao.png"
 STONE02_EXPOSED = VARIANTS / "stone-02-cozinha-exposed-right.png"
 STONE03_EXPOSED = VARIANTS / "stone-03-pia-exposed-left.png"
 STONE02_BRIDGE = BRIDGES / "stone-02-joint-bridge.png"
@@ -56,18 +49,28 @@ COMPOSITION = (
     "layers/08_iluminacao.png",
 )
 
-
-def lerp_boundary(points: tuple[tuple[int, int], ...], y: int) -> float:
+def lerp_boundary(points, y):
     pts = sorted(points, key=lambda p: p[1])
     if y <= pts[0][1]: return float(pts[0][0])
     if y >= pts[-1][1]: return float(pts[-1][0])
     for (x0, y0), (x1, y1) in zip(pts, pts[1:]):
         if y0 <= y <= y1:
-            if y1 == y0: return float(x1)
-            t = (y - y0) / (y1 - y0)
+            t = (y - y0) / (y1 - y0) if y1 != y0 else 1
             return x0 + (x1 - x0) * t
     raise AssertionError("unreachable")
 
+def clean_module02_left_strip() -> int:
+    image = Image.open(MODULE02).convert("RGBA")
+    px = image.load()
+    changed = 0
+    for y in range(590, 856):
+        for x in range(484, 498):
+            r, g, b, a = px[x, y]
+            if a:
+                px[x, y] = (r, g, b, 0)
+                changed += 1
+    image.save(MODULE02)
+    return changed
 
 def clean_stone02_left() -> int:
     image = Image.open(STONE02).convert("RGBA")
@@ -83,8 +86,7 @@ def clean_stone02_left() -> int:
     image.save(STONE02)
     return changed
 
-
-def clip_and_bridge(source: Path, variant_path: Path, bridge_path: Path, *, side: str, points, roi) -> int:
+def clip_and_bridge(source, variant_path, bridge_path, *, side, points, roi) -> int:
     original = Image.open(source).convert("RGBA")
     variant = original.copy()
     bridge = Image.new("RGBA", original.size, (0, 0, 0, 0))
@@ -93,9 +95,7 @@ def clip_and_bridge(source: Path, variant_path: Path, bridge_path: Path, *, side
     removed = 0
     for y in range(y0, y1):
         boundary = lerp_boundary(points, y)
-        if side == "right": xs = range(max(int(boundary) + 1, x0), x1)
-        elif side == "left": xs = range(x0, min(int(boundary), x1))
-        else: raise ValueError(side)
+        xs = range(max(int(boundary) + 1, x0), x1) if side == "right" else range(x0, min(int(boundary), x1))
         for x in xs:
             pixel = op[x, y]
             if pixel[3]:
@@ -104,11 +104,9 @@ def clip_and_bridge(source: Path, variant_path: Path, bridge_path: Path, *, side
                 removed += 1
     variant.save(variant_path)
     bridge.save(bridge_path)
-    reconstructed = Image.alpha_composite(variant, bridge)
-    if reconstructed.tobytes() != original.tobytes():
+    if Image.alpha_composite(variant, bridge).tobytes() != original.tobytes():
         raise RuntimeError(f"joint bridge does not reconstruct source exactly: {source}")
     return removed
-
 
 def build_module02_finish_mask() -> dict[str, object]:
     module = Image.open(MODULE02).convert("RGBA")
@@ -129,7 +127,6 @@ def build_module02_finish_mask() -> dict[str, object]:
         "maskNonTransparentPixels": sum(1 for value in mask.getdata() if value),
     }
 
-
 def compose_golden() -> None:
     composed = Image.open(KITCHEN / "base.png").convert("RGBA")
     for relative in COMPOSITION:
@@ -138,10 +135,10 @@ def compose_golden() -> None:
         composed = Image.alpha_composite(composed, layer)
     composed.save(GOLDEN)
 
-
 def main() -> int:
     result = {
-        "schemaVersion": "R5APixelPerfectMaterialization 0.1",
+        "schemaVersion": "R5APixelPerfectMaterialization 0.2",
+        "module02LeftStripAlphaRemoved": clean_module02_left_strip(),
         "stone02ColumnWedgeAlphaRemoved": clean_stone02_left(),
         "stone02ExposedRightAlphaRemoved": clip_and_bridge(STONE02, STONE02_EXPOSED, STONE02_BRIDGE, side="right", points=STONE02_RIGHT_EDGE_POINTS, roi=(738, 518, 765, 590)),
         "stone03ExposedLeftAlphaRemoved": clip_and_bridge(STONE03, STONE03_EXPOSED, STONE03_BRIDGE, side="left", points=STONE03_LEFT_EDGE_POINTS, roi=(736, 516, 756, 590)),
