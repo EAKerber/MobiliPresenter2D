@@ -13,15 +13,47 @@ R5A splits the visual repair into two independent photographic roles:
 
 The two candidates are reviewed individually and again as the ordered set `module-02-hidden-complete`.
 
+## Canonical authoring frame
+
+The authoring source is not a prompt-created approximation of a kitchen. It is the exact 1536×1024 frame generated from the repository scene:
+
+- canonical empty room: `app/assets/kitchen/base.png`;
+- target variant: `module-02-hidden`;
+- target fingerprint: `scene2d-e990f538`;
+- fixed origin: `(0,0)`.
+
+Known geometric anchors in the current assets:
+
+- module-02 layer alpha bbox: `[498,590,757,856]`;
+- stone-02 alpha bbox: `[484,491,764,912]`;
+- module-03 begins at approximately `x=736`.
+
+The image model may be used only as an offline localized editor of this full frame. A newly composed scene with merely semantic similarity is not a valid candidate source.
+
 ## Measured ROI
 
 The exact post-R4 variant was rendered by `Candidate asset gates` on PR #8 before the role was frozen.
 
-- bay-completion authorized ROI: `[470, 480, 780, 930]`
-- range authorized ROI: `[460, 430, 790, 950]`
-- canvas: `1536 × 1024`, origin `(0,0)`
+- bay-completion authorized ROI: `[470, 480, 780, 930]`;
+- range authorized ROI: `[460, 430, 790, 950]`;
+- canvas: `1536 × 1024`, origin `(0,0)`.
 
-The bay ROI is deliberately wider than the expected opaque repair pixels so the authoring pass can finish both exposed terminations and their contact surfaces without touching remote modules.
+The ROI is a maximum authoring boundary, not an instruction to fill the whole rectangle. The final candidate alpha is derived from the actual changed pixels.
+
+## Delta extraction contract
+
+`review-assets/authoring-contracts.json` binds the bay and range roles to `edit-existing-canonical-frame`. After an image edit returns a full frame, `tools/extract_candidate_delta.py` compares it against its exact source frame.
+
+Hard gates:
+
+- source and edited frames must both be 1536×1024;
+- visible RGB diff must be non-empty;
+- visible diff outside the role ROI must be exactly 0 pixels;
+- the candidate is a transparent 1536×1024 layer containing only changed replacement pixels;
+- recomposing `source + candidate` must reproduce the edited frame with exactly 0 RGB mismatch pixels;
+- candidate metadata records source-frame SHA, edited-frame SHA, extraction report and required source references.
+
+For bay completion the required references are the canonical `base.png` and `variant:module-02-hidden@scene2d-e990f538`. The later range pass additionally requires the selected bay-completion context.
 
 ## Candidate set
 
@@ -53,12 +85,13 @@ The set gate independently verifies that visible change is confined to the union
 ## Authoring sequence
 
 1. render exact `module-02-hidden` from the current scene core;
-2. author bay completion without a range;
-3. extract only changed pixels inside the bay ROI into a transparent full-canvas candidate;
-4. pass structural + individual visual gates;
-5. compose the approved/selected bay candidate on the variant;
-6. author the freestanding range against that corrected context;
-7. extract the range candidate inside its authorized ROI;
-8. pass structural + individual visual gates;
-9. run stacked set gate and inspect combined artifact;
-10. only after exact-hash approval, promote both runtime assets and update scene substitutions.
+2. use that exact full frame as the primary image-edit target;
+3. author bay completion without a range and without changing any remote pixel;
+4. run deterministic delta extraction and require 0 outside-ROI change + 0 round-trip mismatch;
+5. pass authoring provenance, structural and individual visual gates;
+6. visually inspect the bay candidate before continuing;
+7. compose the selected bay candidate on the variant;
+8. use that exact corrected full frame as the source for the range edit;
+9. extract and gate the range candidate in the same way;
+10. run stacked set gate and inspect combined artifact;
+11. only after exact-hash approval, promote both runtime assets and update scene substitutions.
