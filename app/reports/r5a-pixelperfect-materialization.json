@@ -1,0 +1,17 @@
+{
+  "schemaVersion": "R5APixelPerfectMaterialization 0.2",
+  "module02LeftStripAlphaRemoved": 3597,
+  "stone02ColumnWedgeAlphaRemoved": 677,
+  "stone02ExposedRightAlphaRemoved": 822,
+  "stone03ExposedLeftAlphaRemoved": 758,
+  "module02FinishMask": {
+    "protectedPixelsCleared": 51513,
+    "maskBounds": [
+      498,
+      590,
+      757,
+      856
+    ],
+    "maskNonTransparentPixels": 17381
+  }
+}

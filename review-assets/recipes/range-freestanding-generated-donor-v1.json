@@ -1,0 +1,60 @@
+{
+  "alphaThresholdBelow": 6,
+  "authoringContractId": "range-freestanding-edit",
+  "authorizedRoi": [
+    460,
+    430,
+    790,
+    950
+  ],
+  "canvas": {
+    "height": 1024,
+    "width": 1536
+  },
+  "contactShadow": {
+    "enabled": true,
+    "gaussianBlurRadius": 4,
+    "opacityScale": 0.2,
+    "pasteYOffsetFromBottom": -7,
+    "sourceBottomRows": 30
+  },
+  "donor": {
+    "packedBase64Chunks": [
+      "review-assets/recipes/donor/range-freestanding-donor-v1.part01.b64",
+      "review-assets/recipes/donor/range-freestanding-donor-v1.part02.b64",
+      "review-assets/recipes/donor/range-freestanding-donor-v1.part03.b64",
+      "review-assets/recipes/donor/range-freestanding-donor-v1.part04.b64"
+    ],
+    "packedFormat": "WEBP",
+    "packedSha256": "27d27dc302b213c814f7a7a999757632b77043d87dd5bca67a8b80eedc6e8022",
+    "processing": [
+      "deterministic-segmentation",
+      "deterministic-brand-neutralization",
+      "alpha-crop",
+      "webp-q90-pack"
+    ],
+    "sourceGenId": "00d9aaf0-de7b-45b7-ba9a-0fcd387a0761",
+    "sourceGeneratedFrameSha256": "57f3cf3241cc93a6b34d161e539877a3f792c124a537f777e7545b10ec020d39",
+    "sourceMethod": "image_gen"
+  },
+  "id": "range-freestanding-generated-donor-v1",
+  "output": {
+    "candidateId": "range-freestanding-generated-donor-v1",
+    "candidatePath": "review-assets/candidates/range-freestanding-generated-donor-v1/candidate.png",
+    "differencePath": "review-assets/candidates/range-freestanding-generated-donor-v1/difference.png",
+    "extractionReportPath": "review-assets/candidates/range-freestanding-generated-donor-v1/extraction-report.json",
+    "metadataPath": "review-assets/candidates/range-freestanding-generated-donor-v1/candidate.json"
+  },
+  "placementBox": [
+    495,
+    570,
+    742,
+    900
+  ],
+  "resampling": "LANCZOS",
+  "role": "range-freestanding",
+  "schemaVersion": "GeneratedDonorPlacementRecipe 0.1",
+  "sourceFrameSha256": "3bebae52fc781ed0bf391cf6ef82c62f7caa810551dc261481f51976c2de7a85",
+  "targetVariant": "module-02-hidden",
+  "targetVariantFingerprint": "scene2d-4692e364"
+}

@@ -10,9 +10,12 @@
       entitiesById.set(entity.id, entity);
       if (!Number.isInteger(entity.zIndex)) errors.push({ code: "invalid-z-index", entityId: entity.id });
       if (typeof entity.asset !== "string" || !entity.asset) errors.push({ code: "missing-asset", entityId: entity.id });
-      if (entity.hostId && !scene.entities.some((candidate) => candidate.id === entity.hostId)) {
-        errors.push({ code: "host-missing", entityId: entity.id, hostId: entity.hostId });
-      }
+      const hostIds = entity.hostIds || (entity.hostId ? [entity.hostId] : []);
+      hostIds.forEach((hostId) => {
+        if (!scene.entities.some((candidate) => candidate.id === hostId)) {
+          errors.push({ code: "host-missing", entityId: entity.id, hostId });
+        }
+      });
     });
 
     const defaultIds = new Set();
@@ -40,13 +43,16 @@
     const visited = new Set();
     const visiting = new Set();
     function visitHost(entity) {
-      if (visited.has(entity.id) || !entity.hostId || !entitiesById.has(entity.hostId)) return;
+      if (visited.has(entity.id)) return;
       if (visiting.has(entity.id)) {
         errors.push({ code: "host-cycle", entityId: entity.id });
         return;
       }
       visiting.add(entity.id);
-      visitHost(entitiesById.get(entity.hostId));
+      const hostIds = entity.hostIds || (entity.hostId ? [entity.hostId] : []);
+      hostIds.forEach((hostId) => {
+        if (entitiesById.has(hostId)) visitHost(entitiesById.get(hostId));
+      });
       visiting.delete(entity.id);
       visited.add(entity.id);
     }
@@ -65,7 +71,7 @@
       }
 
       dependencyVisiting.add(entity.id);
-      const dependencyIds = [entity.hostId, substitutionByReplacement.get(entity.id)].filter(Boolean);
+      const dependencyIds = [...(entity.hostIds || (entity.hostId ? [entity.hostId] : [])), substitutionByReplacement.get(entity.id)].filter(Boolean);
       dependencyIds.forEach((dependencyId) => {
         const dependency = entitiesById.get(dependencyId);
         if (dependency) visitVisibilityDependencies(dependency);

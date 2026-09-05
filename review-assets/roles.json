@@ -10,6 +10,7 @@
       "authorizedRoi": [460, 430, 790, 950],
       "minAlphaBBox": { "width": 120, "height": 220 },
       "maxAlphaBBoxArea": 171600,
+      "authoringContractId": "range-freestanding-edit",
       "resolvesDebtCodes": ["replacement-placeholder"],
       "visualChecklist": [
         "fits-opening",
@@ -18,6 +19,27 @@
         "floor-contact-natural",
         "lighting-match",
         "no-pasted-object-look",
+        "no-background-leak"
+      ]
+    },
+    {
+      "id": "module-03-left-termination",
+      "label": "Terminação esquerda visível do módulo 03 quando o módulo 02 está ausente",
+      "targetVariants": ["module-02-hidden"],
+      "authorizedRoi": [720, 510, 755, 600],
+      "minAlphaBBox": { "width": 2, "height": 8 },
+      "maxAlphaBBoxArea": 3150,
+      "authoringContractId": "module-03-left-termination-edit",
+      "resolvesDebtCodes": ["raw-neighbor-cut"],
+      "visualChecklist": [
+        "backsplash-edge-natural",
+        "countertop-corner-natural",
+        "stone-overhang-plausible",
+        "no-forced-side-panel",
+        "cabinet-face-untouched",
+        "neighbor-modules-untouched",
+        "lighting-match",
+        "no-visible-seam",
         "no-background-leak"
       ]
     },
