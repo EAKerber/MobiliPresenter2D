@@ -33,7 +33,11 @@ def sha256_file(path: Path) -> str:
 
 
 def metadata_files(root: Path) -> list[Path]:
-    return sorted(path for path in root.rglob("*.json") if path.name != "extraction-report.json" and not path.name.startswith("_"))
+    return sorted(
+        path
+        for path in root.rglob("*.json")
+        if path.name != "extraction-report.json" and not path.name.startswith("_")
+    )
 
 
 def require_repo_relative(relative: str) -> Path:
@@ -63,8 +67,13 @@ def validate_record(metadata_path: Path, roles_doc: dict[str, Any], contracts_do
         raise AuthoringProvenanceError("AUTHORING_CONTRACT_MODE_INVALID", contract_id)
 
     provenance = metadata.get("provenance") or {}
-    if provenance.get("method") != "image-edit":
-        raise AuthoringProvenanceError("AUTHORING_METHOD_INVALID", repr(provenance.get("method")))
+    method = provenance.get("method")
+    allowed_methods = contract.get("allowedMethods", ["image-edit"])
+    if method not in allowed_methods:
+        raise AuthoringProvenanceError(
+            "AUTHORING_METHOD_INVALID",
+            f"{method!r} not in {allowed_methods!r}",
+        )
     if provenance.get("authoringContractId") != contract_id:
         raise AuthoringProvenanceError("AUTHORING_CONTRACT_BINDING_MISMATCH", repr(provenance.get("authoringContractId")))
     if provenance.get("deltaExtractionRequired") is not True:
@@ -78,6 +87,23 @@ def validate_record(metadata_path: Path, roles_doc: dict[str, Any], contracts_do
         value = provenance.get(field)
         if not isinstance(value, str) or not HEX64.fullmatch(value):
             raise AuthoringProvenanceError("AUTHORING_FRAME_HASH_INVALID", f"{field}={value!r}")
+
+    recipe_rel = None
+    recipe_sha = None
+    if method == "derived":
+        recipe_rel = provenance.get("recipe")
+        recipe_sha = provenance.get("recipeSha256")
+        if not isinstance(recipe_rel, str) or not isinstance(recipe_sha, str) or not HEX64.fullmatch(recipe_sha):
+            raise AuthoringProvenanceError("AUTHORING_RECIPE_PROVENANCE_MISSING", repr(recipe_rel))
+        recipe_path = require_repo_relative(recipe_rel)
+        if not recipe_path.exists():
+            raise AuthoringProvenanceError("AUTHORING_RECIPE_MISSING", recipe_rel)
+        actual_recipe_sha = sha256_file(recipe_path)
+        if actual_recipe_sha != recipe_sha:
+            raise AuthoringProvenanceError(
+                "AUTHORING_RECIPE_HASH_MISMATCH",
+                f"{actual_recipe_sha} != {recipe_sha}",
+            )
 
     report_rel = provenance.get("extractionReport")
     if not isinstance(report_rel, str):
@@ -93,13 +119,17 @@ def validate_record(metadata_path: Path, roles_doc: dict[str, Any], contracts_do
         "targetVariant": metadata.get("targetVariant"),
         "authoringContractId": contract_id,
         "sourceFrameSha256": provenance["sourceFrameSha256"],
-        "editedFrameSha256": provenance["editedFrameSha256"]
+        "editedFrameSha256": provenance["editedFrameSha256"],
     }
     for key, value in expected.items():
         if report.get(key) != value:
             raise AuthoringProvenanceError("AUTHORING_EXTRACTION_REPORT_MISMATCH", f"{key}: {report.get(key)!r} != {value!r}")
     if report.get("outsideAuthorizedRoiChangedPixelCount") != 0 or report.get("roundtripMismatchPixelCount") != 0:
         raise AuthoringProvenanceError("AUTHORING_EXTRACTION_GATE_NOT_CLEAN", report_rel)
+
+    if method == "derived":
+        if report.get("recipePath") != recipe_rel or report.get("recipeSha256") != recipe_sha:
+            raise AuthoringProvenanceError("AUTHORING_RECIPE_REPORT_MISMATCH", report_rel)
 
     image_rel = metadata.get("imagePath")
     if not isinstance(image_rel, str):
@@ -115,10 +145,12 @@ def validate_record(metadata_path: Path, roles_doc: dict[str, Any], contracts_do
         "id": metadata.get("id"),
         "role": role_id,
         "status": "PASS",
+        "method": method,
         "authoringContractId": contract_id,
         "candidateSha256": actual_candidate_sha,
         "sourceFrameSha256": provenance["sourceFrameSha256"],
-        "editedFrameSha256": provenance["editedFrameSha256"]
+        "editedFrameSha256": provenance["editedFrameSha256"],
+        "recipeSha256": recipe_sha,
     }
 
 
@@ -140,7 +172,7 @@ def validate_all(candidate_root: Path, roles_path: Path, contracts_path: Path) -
         "code": "NO_CANDIDATES" if not records else None,
         "candidateCount": len(records),
         "failureCount": len(failures),
-        "records": records
+        "records": records,
     }
 
 
@@ -156,10 +188,23 @@ def main() -> int:
     except (OSError, KeyError, json.JSONDecodeError, AuthoringProvenanceError) as exc:
         code = exc.code if isinstance(exc, AuthoringProvenanceError) else "AUTHORING_PROVENANCE_ERROR"
         detail = exc.detail if isinstance(exc, AuthoringProvenanceError) else str(exc)
-        report = {"schemaVersion": "CandidateAuthoringProvenanceReport 0.1", "status": "FAIL", "code": code, "detail": detail, "candidateCount": 0, "failureCount": 1, "records": []}
+        report = {
+            "schemaVersion": "CandidateAuthoringProvenanceReport 0.1",
+            "status": "FAIL",
+            "code": code,
+            "detail": detail,
+            "candidateCount": 0,
+            "failureCount": 1,
+            "records": [],
+        }
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(json.dumps(report, indent=2, ensure_ascii=False, sort_keys=True) + "\n", encoding="utf-8")
-    print(json.dumps({"status": report["status"], "code": report.get("code"), "candidateCount": report.get("candidateCount", 0), "failureCount": report.get("failureCount", 0)}, sort_keys=True))
+    print(json.dumps({
+        "status": report["status"],
+        "code": report.get("code"),
+        "candidateCount": report.get("candidateCount", 0),
+        "failureCount": report.get("failureCount", 0),
+    }, sort_keys=True))
     return 0 if report["status"] == "PASS" else 1
 
 
