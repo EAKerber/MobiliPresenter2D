@@ -55,7 +55,9 @@ def find_metadata(candidate_root: Path) -> list[Path]:
     return sorted(
         path
         for path in candidate_root.rglob("*.json")
-        if path.is_file() and not path.name.startswith("_")
+        if path.is_file()
+        and not path.name.startswith("_")
+        and path.name != "extraction-report.json"
     )
 
 
