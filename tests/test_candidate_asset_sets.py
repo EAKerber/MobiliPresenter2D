@@ -34,7 +34,7 @@ class CandidateAssetSetTests(unittest.TestCase):
             "sets": [{
                 "id": "module-02-hidden-complete",
                 "targetVariant": "module-02-hidden",
-                "roleOrder": ["module-02-bay-completion", "range-freestanding"],
+                "roleOrder": ["module-03-left-termination", "range-freestanding"],
                 "resolvesDebtCodes": ["raw-neighbor-cut", "replacement-placeholder"],
                 "visualChecklist": ["contact-natural", "no-seam"],
                 "humanReview": {
@@ -80,9 +80,14 @@ class CandidateAssetSetTests(unittest.TestCase):
         self.assertEqual(result["reviews"][0]["setState"], "INCOMPLETE")
 
     def test_complete_pending_set_composes_in_declared_order(self):
-        bay = self.make_candidate("bay", "module-02-bay-completion", (480, 500, 520, 700), (470, 480, 780, 930))
+        termination = self.make_candidate(
+            "termination",
+            "module-03-left-termination",
+            (728, 540, 736, 588),
+            (720, 510, 755, 600),
+        )
         stove = self.make_candidate("range", "range-freestanding", (520, 500, 700, 900), (460, 430, 790, 950))
-        intake = {"schemaVersion": "CandidateAssetIntakeReport 0.1", "status": "PASS", "candidates": [bay, stove]}
+        intake = {"schemaVersion": "CandidateAssetIntakeReport 0.1", "status": "PASS", "candidates": [termination, stove]}
         result = setreview.render_sets(self.sets, self.variant_manifest, intake, self.variant_dir, self.out)
         review = result["reviews"][0]
         self.assertEqual(result["status"], "PASS")
@@ -93,35 +98,51 @@ class CandidateAssetSetTests(unittest.TestCase):
         self.assertTrue((self.out / "module-02-hidden-complete" / "review-sheet.jpg").exists())
 
     def test_ambiguous_role_fails_closed(self):
-        bay = self.make_candidate("bay", "module-02-bay-completion", (480, 500, 520, 700), (470, 480, 780, 930))
+        termination = self.make_candidate(
+            "termination",
+            "module-03-left-termination",
+            (728, 540, 736, 588),
+            (720, 510, 755, 600),
+        )
         stove1 = self.make_candidate("range1", "range-freestanding", (520, 500, 650, 850), (460, 430, 790, 950))
         stove2 = self.make_candidate("range2", "range-freestanding", (540, 500, 700, 850), (460, 430, 790, 950))
-        intake = {"schemaVersion": "CandidateAssetIntakeReport 0.1", "status": "PASS", "candidates": [bay, stove1, stove2]}
+        intake = {"schemaVersion": "CandidateAssetIntakeReport 0.1", "status": "PASS", "candidates": [termination, stove1, stove2]}
         result = setreview.render_sets(self.sets, self.variant_manifest, intake, self.variant_dir, self.out)
         self.assertEqual(result["status"], "FAIL")
         self.assertEqual(result["reviews"][0]["errorCode"], "SET_ROLE_AMBIGUOUS")
 
     def test_set_approval_is_bound_to_exact_candidate_hashes(self):
-        bay = self.make_candidate("bay", "module-02-bay-completion", (480, 500, 520, 700), (470, 480, 780, 930), promotion=True)
+        termination = self.make_candidate(
+            "termination",
+            "module-03-left-termination",
+            (728, 540, 736, 588),
+            (720, 510, 755, 600),
+            promotion=True,
+        )
         stove = self.make_candidate("range", "range-freestanding", (520, 500, 700, 900), (460, 430, 790, 950), promotion=True)
         self.sets["sets"][0]["humanReview"] = {
             "status": "APPROVED",
             "reviewer": "human-reviewer",
             "reviewedAt": "2026-09-04T20:00:00-03:00",
             "candidateSha256ByRole": {
-                "module-02-bay-completion": bay["imageSha256"],
+                "module-03-left-termination": termination["imageSha256"],
                 "range-freestanding": stove["imageSha256"],
             },
             "checklist": {"contact-natural": True, "no-seam": True},
         }
-        intake = {"schemaVersion": "CandidateAssetIntakeReport 0.1", "status": "PASS", "candidates": [bay, stove]}
+        intake = {"schemaVersion": "CandidateAssetIntakeReport 0.1", "status": "PASS", "candidates": [termination, stove]}
         result = setreview.render_sets(self.sets, self.variant_manifest, intake, self.variant_dir, self.out)
         self.assertEqual(result["promotionEligibleCount"], 1)
 
     def test_diff_outside_declared_rois_fails_machine_gate(self):
-        bay = self.make_candidate("bay", "module-02-bay-completion", (100, 100, 120, 120), (470, 480, 780, 930))
+        termination = self.make_candidate(
+            "termination",
+            "module-03-left-termination",
+            (100, 100, 120, 120),
+            (720, 510, 755, 600),
+        )
         stove = self.make_candidate("range", "range-freestanding", (520, 500, 700, 900), (460, 430, 790, 950))
-        intake = {"schemaVersion": "CandidateAssetIntakeReport 0.1", "status": "PASS", "candidates": [bay, stove]}
+        intake = {"schemaVersion": "CandidateAssetIntakeReport 0.1", "status": "PASS", "candidates": [termination, stove]}
         result = setreview.render_sets(self.sets, self.variant_manifest, intake, self.variant_dir, self.out)
         self.assertEqual(result["status"], "FAIL")
         self.assertEqual(result["reviews"][0]["machineVisualGate"], "FAIL")
