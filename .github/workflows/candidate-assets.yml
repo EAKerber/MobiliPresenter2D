@@ -3,46 +3,24 @@ name: Candidate asset gates
 on:
   pull_request:
     paths:
+      - 'app/**'
       - 'review-assets/**'
-      - 'reference/variant-cases.json'
-      - 'tools/validate_candidate_assets.py'
-      - 'tools/validate_authoring_provenance.py'
-      - 'tools/extract_candidate_delta.py'
-      - 'tools/materialize_candidate_recipe.py'
-      - 'tools/render_candidate_review.py'
-      - 'tools/render_candidate_set_review.py'
-      - 'tools/variant_fidelity_manifest.js'
-      - 'tools/render_variant_fidelity.py'
-      - 'tests/test_candidate_asset_gates.py'
-      - 'tests/test_candidate_asset_sets.py'
-      - 'tests/test_candidate_delta_authoring.py'
-      - 'tests/test_candidate_authoring_provenance.py'
+      - 'reference/**'
+      - 'tools/**'
+      - 'tests/**'
       - '.github/workflows/candidate-assets.yml'
-      - '.github/workflows/r5a-materialize-candidate.yml'
-      - 'docs/work/r3-candidate-asset-gates.md'
       - 'docs/work/r5a-module02-hidden.md'
   push:
     branches:
       - main
       - work/r5a-module02-hidden
     paths:
+      - 'app/**'
       - 'review-assets/**'
-      - 'reference/variant-cases.json'
-      - 'tools/validate_candidate_assets.py'
-      - 'tools/validate_authoring_provenance.py'
-      - 'tools/extract_candidate_delta.py'
-      - 'tools/materialize_candidate_recipe.py'
-      - 'tools/render_candidate_review.py'
-      - 'tools/render_candidate_set_review.py'
-      - 'tools/variant_fidelity_manifest.js'
-      - 'tools/render_variant_fidelity.py'
-      - 'tests/test_candidate_asset_gates.py'
-      - 'tests/test_candidate_asset_sets.py'
-      - 'tests/test_candidate_delta_authoring.py'
-      - 'tests/test_candidate_authoring_provenance.py'
+      - 'reference/**'
+      - 'tools/**'
+      - 'tests/**'
       - '.github/workflows/candidate-assets.yml'
-      - '.github/workflows/r5a-materialize-candidate.yml'
-      - 'docs/work/r3-candidate-asset-gates.md'
       - 'docs/work/r5a-module02-hidden.md'
   workflow_dispatch:
 
@@ -51,7 +29,7 @@ permissions:
 
 jobs:
   materialize-r5a:
-    if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/work/r5a-module02-hidden' && !contains(github.event.head_commit.message, '[r5a-candidate-materialized]') }}
+    if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/work/r5a-module02-hidden' && !contains(github.event.head_commit.message, '[r5a-pixelperfect-materialized]') }}
     permissions:
       contents: write
     runs-on: ubuntu-latest
@@ -67,7 +45,19 @@ jobs:
           node-version: '22'
       - name: Install image tooling
         run: python -m pip install -r tools/requirements.txt
-      - name: Render exact target variant
+      - name: Materialize accepted deterministic R5A edits
+        working-directory: app
+        run: |
+          npm run build:stone-layers
+          npm run build:r5a-pixelperfect
+          npm run build:inline-masks
+          npm run build:technical-data
+          npm test
+      - name: Refresh canonical baseline manifest
+        run: |
+          python tools/refresh-baseline-manifest.py
+          python tools/validate-baseline.py
+      - name: Validate target variants before commit
         run: |
           mkdir -p /tmp/r5a-materialize/variants
           node tools/variant_fidelity_manifest.js \
@@ -76,20 +66,7 @@ jobs:
           python tools/render_variant_fidelity.py \
             --manifest /tmp/r5a-materialize/variant-manifest.json \
             --output-dir /tmp/r5a-materialize/variants
-      - name: Materialize deterministic termination candidate
-        run: |
-          python tools/materialize_candidate_recipe.py \
-            --recipe review-assets/recipes/module-03-left-termination-e-rounded-9px.json \
-            --source-frame /tmp/r5a-materialize/variants/module-02-hidden.png \
-            --variant-manifest /tmp/r5a-materialize/variant-manifest.json \
-            --output-dir review-assets/candidates/module-03-left-termination-e-rounded-9px
-      - name: Validate materialized candidate before commit
-        run: |
-          python tools/validate_candidate_assets.py --output /tmp/r5a-materialize/intake.json
-          python tools/validate_authoring_provenance.py --output /tmp/r5a-materialize/provenance.json
-          cat /tmp/r5a-materialize/intake.json
-          cat /tmp/r5a-materialize/provenance.json
-      - name: Commit generated candidate with CAS readback
+      - name: Commit generated R5A assets with CAS readback
         shell: bash
         env:
           TARGET_BRANCH: work/r5a-module02-hidden
@@ -98,12 +75,24 @@ jobs:
           set -euo pipefail
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add review-assets/candidates/module-03-left-termination-e-rounded-9px
+          git add \
+            app/assets/kitchen/layers/stone-02-cozinha.png \
+            app/assets/kitchen/variants/stone-02-cozinha-exposed-right.png \
+            app/assets/kitchen/variants/stone-03-pia-exposed-left.png \
+            app/assets/kitchen/bridges/stone-02-joint-bridge.png \
+            app/assets/kitchen/bridges/stone-03-joint-bridge.png \
+            app/assets/kitchen/masks/02.png \
+            app/assets/kitchen/composicao-completa.png \
+            app/data/mask-data.js \
+            app/data/technical-data.json \
+            app/reports/r5a-pixelperfect-materialization.json \
+            app/reports/r5a-pixelperfect-gate.json \
+            reference/baseline-manifest.json
           if git diff --cached --quiet; then
-            echo 'R5A_CANDIDATE_MATERIALIZATION_NO_CHANGE readback=PASS'
+            echo 'R5A_PIXELPERFECT_MATERIALIZATION_NO_CHANGE readback=PASS'
             exit 0
           fi
-          git commit -m 'R5A: materialize module 03 termination candidate [r5a-candidate-materialized]'
+          git commit -m 'R5A: materialize accepted pixel-perfect edits [r5a-pixelperfect-materialized]'
           candidate_sha="$(git rev-parse HEAD)"
           remote_before="$(git ls-remote origin "refs/heads/${TARGET_BRANCH}" | cut -f1)"
           if [ "$remote_before" != "$EXPECTED_HEAD" ]; then
@@ -116,16 +105,19 @@ jobs:
             echo "TARGET_READBACK_FAILED:${remote_after}!=${candidate_sha}" >&2
             exit 2
           fi
-          echo "R5A_CANDIDATE_MATERIALIZATION_RECEIPT base=${EXPECTED_HEAD} result=${candidate_sha} readback=PASS"
+          echo "R5A_PIXELPERFECT_MATERIALIZATION_RECEIPT base=${EXPECTED_HEAD} result=${candidate_sha} readback=PASS"
 
   candidate-gates:
-    if: ${{ github.event_name != 'push' || github.ref != 'refs/heads/work/r5a-module02-hidden' || contains(github.event.head_commit.message, '[r5a-candidate-materialized]') }}
+    if: ${{ github.event_name != 'push' || github.ref != 'refs/heads/work/r5a-module02-hidden' || contains(github.event.head_commit.message, '[r5a-pixelperfect-materialized]') }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
       - name: Install image tooling
         run: python -m pip install -r tools/requirements.txt
       - name: Unit-test candidate gates
@@ -135,12 +127,12 @@ jobs:
           tests/test_candidate_asset_sets.py
           tests/test_candidate_delta_authoring.py
           tests/test_candidate_authoring_provenance.py
-      - name: Preserve canonical R0 baseline
+      - name: Preserve canonical baseline
         run: python tools/validate-baseline.py
-      - name: Preserve canonical app runtime
+      - name: Preserve app runtime and R5A pixel-perfect invariants
         working-directory: app
         run: npm test
-      - name: Derive R2 target variants
+      - name: Derive target variants
         run: |
           mkdir -p /tmp/candidate-review
           node tools/variant_fidelity_manifest.js \
@@ -151,13 +143,11 @@ jobs:
             --output-dir /tmp/candidate-review/variants
       - name: Structural candidate intake
         run: |
-          python tools/validate_candidate_assets.py \
-            --output /tmp/candidate-review/intake.json
+          python tools/validate_candidate_assets.py --output /tmp/candidate-review/intake.json
           cat /tmp/candidate-review/intake.json
-      - name: Validate canonical authoring provenance
+      - name: Validate authoring provenance
         run: |
-          python tools/validate_authoring_provenance.py \
-            --output /tmp/candidate-review/authoring-provenance.json
+          python tools/validate_authoring_provenance.py --output /tmp/candidate-review/authoring-provenance.json
           cat /tmp/candidate-review/authoring-provenance.json
       - name: Compose individual visual review gates
         run: |

@@ -6,18 +6,18 @@
       "id": "module-02-hidden-complete",
       "targetVariant": "module-02-hidden",
       "roleOrder": [
-        "module-03-left-termination",
         "range-freestanding"
       ],
       "resolvesDebtCodes": [
-        "raw-neighbor-cut",
         "replacement-placeholder"
       ],
       "visualChecklist": [
-        "range-termination-clearance-natural",
-        "no-double-edge",
-        "no-overlap-artifact",
-        "shadow-contact-coherent",
+        "range-fits-bay",
+        "range-perspective-matches-camera",
+        "range-counter-height-plausible",
+        "range-floor-contact-natural",
+        "range-lighting-match",
+        "range-not-pasted-on",
         "neighbor-modules-untouched",
         "no-visible-seam"
       ],

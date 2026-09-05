@@ -11,7 +11,9 @@
       "expectedVisibilityReasons": {
         "range-freestanding": "substitution-primary-visible",
         "stone-02": "visible",
-        "stone-03": "visible"
+        "stone-03": "visible",
+        "stone-02-joint-bridge": "visible",
+        "stone-03-joint-bridge": "visible"
       }
     },
     {
@@ -21,24 +23,28 @@
         { "type": "set-visibility", "entityId": "module-02", "visible": false }
       ],
       "expectedVisualStatus": "known-debt",
-      "expectedDebtCodes": ["replacement-placeholder", "raw-neighbor-cut"],
+      "expectedDebtCodes": ["replacement-placeholder"],
       "expectedVisibilityReasons": {
         "module-02": "intent-off",
         "stone-02": "host-hidden",
+        "stone-02-joint-bridge": "host-hidden",
+        "stone-03-joint-bridge": "host-hidden",
         "range-freestanding": "visible"
       }
     },
     {
       "id": "module-03-hidden",
-      "label": "Módulo 03 oculto",
+      "label": "Módulo 03 oculto / terminação determinística ativa",
       "actions": [
         { "type": "set-visibility", "entityId": "module-03", "visible": false }
       ],
-      "expectedVisualStatus": "known-debt",
-      "expectedDebtCodes": ["raw-neighbor-cut"],
+      "expectedVisualStatus": "validated",
+      "expectedDebtCodes": [],
       "expectedVisibilityReasons": {
         "module-03": "intent-off",
-        "stone-03": "host-hidden"
+        "stone-03": "host-hidden",
+        "stone-02-joint-bridge": "host-hidden",
+        "stone-03-joint-bridge": "host-hidden"
       }
     }
   ]
