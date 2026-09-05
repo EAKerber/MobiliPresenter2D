@@ -1,0 +1,29 @@
+{
+  "expectedImageSha256": "345b27891c9200eb6d49414073d24e25d89fcf615169d85b7bc6565d2d7e7edc",
+  "humanReview": {
+    "checklist": {},
+    "reviewedAt": null,
+    "reviewer": null,
+    "status": "PENDING"
+  },
+  "id": "range-freestanding-generated-donor-v1",
+  "imagePath": "review-assets/candidates/range-freestanding-generated-donor-v1/candidate.png",
+  "provenance": {
+    "authoringContractId": "range-freestanding-edit",
+    "deltaExtractionRequired": true,
+    "editedFrameSha256": "f82bac0d7e6145532aaa2af046c5bdfebbed71289368657c0a0a3bbed1cd1dc2",
+    "extractionReport": "review-assets/candidates/range-freestanding-generated-donor-v1/extraction-report.json",
+    "method": "generated-donor-derived",
+    "sourceFrameSha256": "3bebae52fc781ed0bf391cf6ef82c62f7caa810551dc261481f51976c2de7a85",
+    "sourceReferences": [
+      "app/assets/kitchen/base.png",
+      "variant:module-02-hidden@scene2d-4692e364",
+      "image_gen:00d9aaf0-de7b-45b7-ba9a-0fcd387a0761"
+    ]
+  },
+  "role": "range-freestanding",
+  "schemaVersion": "CandidateAsset 0.1",
+  "status": "REVIEW",
+  "targetScene": "cozinha-01",
+  "targetVariant": "module-02-hidden"
+}

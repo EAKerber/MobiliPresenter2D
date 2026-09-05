@@ -1,0 +1,54 @@
+{
+  "authoringContractId": "range-freestanding-edit",
+  "authorizedRoi": [
+    460,
+    430,
+    790,
+    950
+  ],
+  "candidateAlphaBounds": [
+    495,
+    571,
+    742,
+    923
+  ],
+  "candidateSha256": "345b27891c9200eb6d49414073d24e25d89fcf615169d85b7bc6565d2d7e7edc",
+  "canvas": {
+    "height": 1024,
+    "width": 1536
+  },
+  "changedPixelCount": 78876,
+  "deltaMode": "opaque-replacement-pixels",
+  "differenceBounds": [
+    495,
+    571,
+    742,
+    923
+  ],
+  "donor": {
+    "packedSha256": "27d27dc302b213c814f7a7a999757632b77043d87dd5bca67a8b80eedc6e8022",
+    "placementBox": [
+      495,
+      570,
+      742,
+      900
+    ],
+    "processing": [
+      "deterministic-segmentation",
+      "deterministic-brand-neutralization",
+      "alpha-crop",
+      "webp-q90-pack"
+    ],
+    "sourceGenId": "00d9aaf0-de7b-45b7-ba9a-0fcd387a0761",
+    "sourceGeneratedFrameSha256": "57f3cf3241cc93a6b34d161e539877a3f792c124a537f777e7545b10ec020d39",
+    "sourceMethod": "image_gen"
+  },
+  "editedFrameSha256": "f82bac0d7e6145532aaa2af046c5bdfebbed71289368657c0a0a3bbed1cd1dc2",
+  "outsideAuthorizedRoiChangedPixelCount": 0,
+  "role": "range-freestanding",
+  "roundtripMismatchPixelCount": 0,
+  "schemaVersion": "CandidateDeltaExtractionReport 0.1",
+  "sourceFrameSha256": "3bebae52fc781ed0bf391cf6ef82c62f7caa810551dc261481f51976c2de7a85",
+  "status": "PASS",
+  "targetVariant": "module-02-hidden"
+}
