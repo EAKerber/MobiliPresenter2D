@@ -52,13 +52,23 @@ def main() -> int:
     args = parser.parse_args()
 
     try:
-        recipe = load_json(args.recipe)
+        recipe_path = args.recipe.resolve()
+        output_dir = args.output_dir.resolve()
+        roles_path = args.roles.resolve()
+        contracts_path = args.contracts.resolve()
+        manifest_path = args.variant_manifest.resolve()
+        source_frame_path = args.source_frame.resolve()
+
+        recipe_path.relative_to(ROOT.resolve())
+        output_dir.relative_to(ROOT.resolve())
+
+        recipe = load_json(recipe_path)
         if recipe.get("schemaVersion") != "CandidatePixelRecipe 0.1":
             raise RecipeError(f"RECIPE_SCHEMA_UNSUPPORTED:{recipe.get('schemaVersion')!r}")
 
-        roles_doc = load_json(args.roles)
-        contracts_doc = load_json(args.contracts)
-        manifest = load_json(args.variant_manifest)
+        roles_doc = load_json(roles_path)
+        contracts_doc = load_json(contracts_path)
+        manifest = load_json(manifest_path)
         role = one(roles_doc["roles"], "id", recipe["role"], "RECIPE_ROLE")
         contract = one(contracts_doc["contracts"], "id", recipe["authoringContractId"], "RECIPE_CONTRACT")
         case = one(manifest["cases"], "id", recipe["targetVariant"], "RECIPE_VARIANT")
@@ -75,7 +85,7 @@ def main() -> int:
         if "derived" not in allowed:
             raise RecipeError("RECIPE_DERIVED_METHOD_NOT_ALLOWED")
 
-        with Image.open(args.source_frame) as opened:
+        with Image.open(source_frame_path) as opened:
             source = opened.convert("RGBA")
         expected_size = (roles_doc["canvas"]["width"], roles_doc["canvas"]["height"])
         if source.size != expected_size:
@@ -110,18 +120,19 @@ def main() -> int:
         if report["differenceBounds"] != recipe.get("expectedPixelBounds"):
             raise RecipeError(f"RECIPE_DIFF_BOUNDS:{report['differenceBounds']}!={recipe.get('expectedPixelBounds')}")
 
-        args.output_dir.mkdir(parents=True, exist_ok=True)
-        candidate_path = args.output_dir / "candidate.png"
-        difference_path = args.output_dir / "difference.png"
-        report_path = args.output_dir / "extraction-report.json"
-        metadata_path = args.output_dir / "candidate.json"
+        output_dir.mkdir(parents=True, exist_ok=True)
+        candidate_path = output_dir / "candidate.png"
+        difference_path = output_dir / "difference.png"
+        report_path = output_dir / "extraction-report.json"
+        metadata_path = output_dir / "candidate.json"
         candidate.save(candidate_path)
         difference.save(difference_path)
 
-        source_sha = sha256_file(args.source_frame)
+        source_sha = sha256_file(source_frame_path)
         edited_sha = png_sha(edited)
         candidate_sha = sha256_file(candidate_path)
-        recipe_sha = sha256_file(args.recipe)
+        recipe_sha = sha256_file(recipe_path)
+        recipe_rel = recipe_path.relative_to(ROOT.resolve()).as_posix()
         report.update({
             "role": recipe["role"],
             "targetVariant": recipe["targetVariant"],
@@ -129,14 +140,13 @@ def main() -> int:
             "sourceFrameSha256": source_sha,
             "editedFrameSha256": edited_sha,
             "candidateSha256": candidate_sha,
-            "recipePath": args.recipe.relative_to(ROOT).as_posix(),
+            "recipePath": recipe_rel,
             "recipeSha256": recipe_sha,
         })
         report_path.write_text(json.dumps(report, indent=2, ensure_ascii=False, sort_keys=True) + "\n", encoding="utf-8")
 
-        image_rel = candidate_path.relative_to(ROOT).as_posix()
-        report_rel = report_path.relative_to(ROOT).as_posix()
-        recipe_rel = args.recipe.relative_to(ROOT).as_posix()
+        image_rel = candidate_path.relative_to(ROOT.resolve()).as_posix()
+        report_rel = report_path.relative_to(ROOT.resolve()).as_posix()
         metadata = {
             "schemaVersion": "CandidateAsset 0.1",
             "id": recipe["id"],
