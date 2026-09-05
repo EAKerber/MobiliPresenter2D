@@ -9,6 +9,7 @@
       "targetVariant": "module-02-hidden",
       "targetVariantFingerprint": "scene2d-e990f538",
       "mode": "edit-existing-canonical-frame",
+      "allowedMethods": ["image-edit", "derived"],
       "canonicalBaseAsset": "app/assets/kitchen/base.png",
       "measuredGeometry": {
         "existingLeftEdgeX": 736,
@@ -36,6 +37,7 @@
       "targetVariant": "module-02-hidden",
       "targetVariantFingerprint": "scene2d-e990f538",
       "mode": "edit-existing-canonical-frame",
+      "allowedMethods": ["image-edit"],
       "canonicalBaseAsset": "app/assets/kitchen/base.png",
       "requiredContextRoles": ["module-03-left-termination"],
       "requiredSourceReferences": [
