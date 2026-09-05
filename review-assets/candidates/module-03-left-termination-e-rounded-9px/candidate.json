@@ -1,0 +1,28 @@
+{
+  "expectedImageSha256": "cd853fa75eaf10735a08d54af942fa50a5c6edf51549af3c96170e1fcaff4dec",
+  "humanReview": {
+    "checklist": {},
+    "reviewedAt": null,
+    "reviewer": null,
+    "status": "PENDING"
+  },
+  "id": "module-03-left-termination-e-rounded-9px",
+  "imagePath": "review-assets/candidates/module-03-left-termination-e-rounded-9px/candidate.png",
+  "provenance": {
+    "authoringContractId": "module-03-left-termination-edit",
+    "deltaExtractionRequired": true,
+    "editedFrameSha256": "6257be990d8b9d693508cff1c50d657c216f2f016a76f05f2f640be1c89982fc",
+    "extractionReport": "review-assets/candidates/module-03-left-termination-e-rounded-9px/extraction-report.json",
+    "method": "image-edit",
+    "sourceFrameSha256": "e4ad40325d2f86943bfe5e44bd9b15884510093b38fd7a24f89f4fc0bc112f04",
+    "sourceReferences": [
+      "app/assets/kitchen/base.png",
+      "variant:module-02-hidden@scene2d-e990f538"
+    ]
+  },
+  "role": "module-03-left-termination",
+  "schemaVersion": "CandidateAsset 0.1",
+  "status": "REVIEW",
+  "targetScene": "cozinha-01",
+  "targetVariant": "module-02-hidden"
+}
