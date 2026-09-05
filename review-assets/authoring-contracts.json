@@ -1,7 +1,14 @@
 {
   "schemaVersion": "CandidateAuthoringContracts 0.1",
   "sceneId": "cozinha-01",
-  "canvas": { "width": 1536, "height": 1024, "origin": [0, 0] },
+  "canvas": {
+    "width": 1536,
+    "height": 1024,
+    "origin": [
+      0,
+      0
+    ]
+  },
   "contracts": [
     {
       "id": "module-03-left-termination-edit",
@@ -9,12 +16,21 @@
       "targetVariant": "module-02-hidden",
       "targetVariantFingerprint": "scene2d-e990f538",
       "mode": "edit-existing-canonical-frame",
-      "allowedMethods": ["image-edit", "derived"],
+      "allowedMethods": [
+        "image-edit",
+        "derived"
+      ],
       "canonicalBaseAsset": "app/assets/kitchen/base.png",
       "measuredGeometry": {
         "existingLeftEdgeX": 736,
-        "backsplashY": [520, 568],
-        "countertopTransitionY": [568, 589],
+        "backsplashY": [
+          520,
+          568
+        ],
+        "countertopTransitionY": [
+          568,
+          589
+        ],
         "cabinetFaceLeftEdgeX": 736,
         "interpretation": "keep backsplash and cabinet face on the measured edge; only expose the small stone return/rounded overhang that the fixed camera can see"
       },
@@ -35,16 +51,23 @@
       "id": "range-freestanding-edit",
       "role": "range-freestanding",
       "targetVariant": "module-02-hidden",
-      "targetVariantFingerprint": "scene2d-e990f538",
+      "targetVariantFingerprint": "scene2d-4692e364",
       "mode": "edit-existing-canonical-frame",
-      "allowedMethods": ["image-edit"],
+      "allowedMethods": [
+        "image-edit",
+        "generated-donor-derived"
+      ],
       "canonicalBaseAsset": "app/assets/kitchen/base.png",
-      "requiredContextRoles": ["module-03-left-termination"],
       "requiredSourceReferences": [
         "app/assets/kitchen/base.png",
-        "variant:module-02-hidden@scene2d-e990f538",
-        "candidate-role:module-03-left-termination"
+        "variant:module-02-hidden@scene2d-4692e364"
       ],
+      "generatedDonorPolicy": {
+        "allowed": true,
+        "purpose": "A generated full-scene attempt may be used only as a donor for the appliance. The final candidate must be deterministically segmented/composited over the exact canonical target frame.",
+        "outsideAuthorizedRoiPolicy": "zero-change",
+        "brandOrProductClaims": "remove or neutralize generated brand marks unless separately authoritative"
+      },
       "deltaExtractionRequired": true,
       "deltaMode": "opaque-replacement-pixels",
       "outsideAuthorizedRoiPolicy": "zero-change"

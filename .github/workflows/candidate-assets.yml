@@ -57,7 +57,7 @@ jobs:
         run: |
           python tools/refresh-baseline-manifest.py
           python tools/validate-baseline.py
-      - name: Validate target variants before commit
+      - name: Derive target variants before candidate materialization
         run: |
           mkdir -p /tmp/r5a-materialize/variants
           node tools/variant_fidelity_manifest.js \
@@ -66,6 +66,15 @@ jobs:
           python tools/render_variant_fidelity.py \
             --manifest /tmp/r5a-materialize/variant-manifest.json \
             --output-dir /tmp/r5a-materialize/variants
+      - name: Materialize generated-donor range candidate
+        run: |
+          python tools/materialize_range_donor_recipe.py \
+            --recipe review-assets/recipes/range-freestanding-generated-donor-v1.json \
+            --source-frame /tmp/r5a-materialize/variants/module-02-hidden.png \
+            --variant-manifest /tmp/r5a-materialize/variant-manifest.json \
+            --output-dir review-assets/candidates/range-freestanding-generated-donor-v1
+          python tools/validate_candidate_assets.py --output /tmp/r5a-materialize/intake.json
+          python tools/validate_authoring_provenance.py --output /tmp/r5a-materialize/provenance.json
       - name: Commit generated R5A assets with CAS readback
         shell: bash
         env:
@@ -87,12 +96,13 @@ jobs:
             app/data/technical-data.json \
             app/reports/r5a-pixelperfect-materialization.json \
             app/reports/r5a-pixelperfect-gate.json \
-            reference/baseline-manifest.json
+            reference/baseline-manifest.json \
+            review-assets/candidates/range-freestanding-generated-donor-v1
           if git diff --cached --quiet; then
             echo 'R5A_PIXELPERFECT_MATERIALIZATION_NO_CHANGE readback=PASS'
             exit 0
           fi
-          git commit -m 'R5A: materialize accepted pixel-perfect edits [r5a-pixelperfect-materialized]'
+          git commit -m 'R5A: materialize pixel-perfect edits and range candidate [r5a-pixelperfect-materialized]'
           candidate_sha="$(git rev-parse HEAD)"
           remote_before="$(git ls-remote origin "refs/heads/${TARGET_BRANCH}" | cut -f1)"
           if [ "$remote_before" != "$EXPECTED_HEAD" ]; then
