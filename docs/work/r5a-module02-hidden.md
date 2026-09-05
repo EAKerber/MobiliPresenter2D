@@ -35,13 +35,16 @@ Hard gates require:
 
 ## Hosted materialization receipt
 
-The pixel assets are rebuilt in GitHub Actions rather than transported manually. Current accepted materialization:
+The pixel assets are rebuilt in GitHub Actions rather than transported manually. Latest clean materialization:
 
-- base commit: `618d1177da8138d8b8b130ed0a52ffe576a2ac90`;
-- resulting commit: `f8a427a0f91a67f44702de287c133a8f8dd9fd9e`;
+- base commit: `38d65d9f07697cd87da958f0eb227dfec24e42cf`;
+- resulting commit: `28c3bd7e087c225ce6b97f1b7ed302b5fb6d7a60`;
 - readback: `PASS`;
+- canonical manifest excludes `app/reports/**` because reports are derived QA outputs, not baseline authority;
 - baseline id: `cozinha-01-r5a-pixelperfect-bridges1`;
-- default composition: `0px` against current golden;
+- baseline validation: `28 assets / 62 canonical files / 0px`;
+- current asset validation: `27 tracked images / 0px`;
+- R5A pixel-perfect gate: `PASS`;
 - default fingerprint: `scene2d-2c39d7fa`;
 - module-02-hidden fingerprint: `scene2d-4692e364`;
 - module-03-hidden fingerprint: `scene2d-e63f7d18`.
