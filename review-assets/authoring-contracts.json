@@ -10,6 +10,18 @@
       "targetVariantFingerprint": "scene2d-e990f538",
       "mode": "edit-existing-canonical-frame",
       "canonicalBaseAsset": "app/assets/kitchen/base.png",
+      "measuredGeometry": {
+        "existingLeftEdgeX": 736,
+        "backsplashY": [520, 568],
+        "countertopTransitionY": [568, 589],
+        "cabinetFaceLeftEdgeX": 736,
+        "interpretation": "keep backsplash and cabinet face on the measured edge; only expose the small stone return/rounded overhang that the fixed camera can see"
+      },
+      "forbiddenAuthoringOutcomes": [
+        "invented-full-height-divider",
+        "forced-side-panel",
+        "remote-scene-reconstruction"
+      ],
       "requiredSourceReferences": [
         "app/assets/kitchen/base.png",
         "variant:module-02-hidden@scene2d-e990f538"
