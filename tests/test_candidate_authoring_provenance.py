@@ -17,14 +17,14 @@ class CandidateAuthoringProvenanceTests(unittest.TestCase):
         self.root = Path(self.temp.name)
         self.original_repo_root = provenance.REPO_ROOT
         provenance.REPO_ROOT = self.root
-        self.candidate_root = self.root / "review-assets" / "candidates" / "bay-001"
+        self.candidate_root = self.root / "review-assets" / "candidates" / "termination-001"
         self.candidate_root.mkdir(parents=True)
-        self.roles = {"roles": [{"id": "module-02-bay-completion", "authoringContractId": "bay-edit"}]}
+        self.roles = {"roles": [{"id": "module-03-left-termination", "authoringContractId": "termination-edit"}]}
         self.contracts = {
             "schemaVersion": "CandidateAuthoringContracts 0.1",
             "contracts": [{
-                "id": "bay-edit",
-                "role": "module-02-bay-completion",
+                "id": "termination-edit",
+                "role": "module-03-left-termination",
                 "targetVariant": "module-02-hidden",
                 "mode": "edit-existing-canonical-frame",
                 "deltaExtractionRequired": True,
@@ -38,9 +38,9 @@ class CandidateAuthoringProvenanceTests(unittest.TestCase):
         self.report.write_text(json.dumps({
             "schemaVersion": "CandidateDeltaExtractionReport 0.1",
             "status": "PASS",
-            "role": "module-02-bay-completion",
+            "role": "module-03-left-termination",
             "targetVariant": "module-02-hidden",
-            "authoringContractId": "bay-edit",
+            "authoringContractId": "termination-edit",
             "sourceFrameSha256": "1" * 64,
             "editedFrameSha256": "2" * 64,
             "candidateSha256": self.image_sha,
@@ -59,19 +59,19 @@ class CandidateAuthoringProvenanceTests(unittest.TestCase):
     def metadata(self):
         return {
             "schemaVersion": "CandidateAsset 0.1",
-            "id": "bay-001",
-            "role": "module-02-bay-completion",
+            "id": "termination-001",
+            "role": "module-03-left-termination",
             "targetVariant": "module-02-hidden",
-            "imagePath": "review-assets/candidates/bay-001/candidate.png",
+            "imagePath": "review-assets/candidates/termination-001/candidate.png",
             "expectedImageSha256": self.image_sha,
             "provenance": {
                 "method": "image-edit",
-                "authoringContractId": "bay-edit",
+                "authoringContractId": "termination-edit",
                 "sourceReferences": ["base.png", "variant:module-02-hidden@fingerprint"],
                 "sourceFrameSha256": "1" * 64,
                 "editedFrameSha256": "2" * 64,
                 "deltaExtractionRequired": True,
-                "extractionReport": "review-assets/candidates/bay-001/extraction-report.json",
+                "extractionReport": "review-assets/candidates/termination-001/extraction-report.json",
             },
         }
 
