@@ -27,6 +27,8 @@
   ],
   "editedFrameSha256": "6257be990d8b9d693508cff1c50d657c216f2f016a76f05f2f640be1c89982fc",
   "outsideAuthorizedRoiChangedPixelCount": 0,
+  "recipePath": "review-assets/recipes/module-03-left-termination-e-rounded-9px.json",
+  "recipeSha256": "86eb2d8e9ad47f83fe470fdcaaa8a188148db55c898e189af7642f181573e42e",
   "role": "module-03-left-termination",
   "roundtripMismatchPixelCount": 0,
   "schemaVersion": "CandidateDeltaExtractionReport 0.1",
