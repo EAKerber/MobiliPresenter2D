@@ -688,46 +688,6 @@
       "size": 763
     },
     {
-      "path": "app/reports/current-asset-validation.json",
-      "sha256": "6b265592c1ff133431f8a14dcacb0919f4256cf909c020670043cd6bfeb02d52",
-      "size": 7529
-    },
-    {
-      "path": "app/reports/default-composed.png",
-      "sha256": "79ef8138e6011f52ac000982ae5855a7ac14c74e75f3fcd2a62d614cd29e9ba0",
-      "size": 2112648
-    },
-    {
-      "path": "app/reports/module02-alpha-fix-validation.json",
-      "sha256": "16c397cb9da43bb1f612df759b44c05cf6bbda52b987528c330a06ee425eb8b9",
-      "size": 6995
-    },
-    {
-      "path": "app/reports/phase-1-validation.json",
-      "sha256": "38a4c71d4254e4df75a4915028fcf235774775de6f477777f03f5ea0c3647fdd",
-      "size": 4976
-    },
-    {
-      "path": "app/reports/phase-2-validation.json",
-      "sha256": "3192f36aa8e5c73b6ce05db2ac36bce41ad22c345b29cf60d31404f4f8f4cca2",
-      "size": 5218
-    },
-    {
-      "path": "app/reports/r5a-pixelperfect-gate.json",
-      "sha256": "61792e2e7feb142f2e90697cb895ef414a7d809fa8aebf7505f6ee689ccd1ec2",
-      "size": 850
-    },
-    {
-      "path": "app/reports/r5a-pixelperfect-materialization.json",
-      "sha256": "dc699bf2383f2986a64b87c25a92e4b9f5d2bf7cd7ba9da36395db655d28e530",
-      "size": 401
-    },
-    {
-      "path": "app/reports/wall-base-fix-validation.json",
-      "sha256": "f689d6d317891d4ecb48b8855b015054de0125f5d49be178c5dfebcad7b36ef8",
-      "size": 5237
-    },
-    {
       "path": "app/scripts/build-static.sh",
       "sha256": "a3a8bdbc9386e7fb75355b5333e4b6987ee1b9295282d385d3c9566f5d1b1e2f",
       "size": 888
