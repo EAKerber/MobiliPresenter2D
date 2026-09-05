@@ -4,8 +4,8 @@
   "canvas": { "width": 1536, "height": 1024, "origin": [0, 0] },
   "contracts": [
     {
-      "id": "module-02-bay-completion-edit",
-      "role": "module-02-bay-completion",
+      "id": "module-03-left-termination-edit",
+      "role": "module-03-left-termination",
       "targetVariant": "module-02-hidden",
       "targetVariantFingerprint": "scene2d-e990f538",
       "mode": "edit-existing-canonical-frame",
@@ -25,11 +25,11 @@
       "targetVariantFingerprint": "scene2d-e990f538",
       "mode": "edit-existing-canonical-frame",
       "canonicalBaseAsset": "app/assets/kitchen/base.png",
-      "requiredContextRoles": ["module-02-bay-completion"],
+      "requiredContextRoles": ["module-03-left-termination"],
       "requiredSourceReferences": [
         "app/assets/kitchen/base.png",
         "variant:module-02-hidden@scene2d-e990f538",
-        "candidate-role:module-02-bay-completion"
+        "candidate-role:module-03-left-termination"
       ],
       "deltaExtractionRequired": true,
       "deltaMode": "opaque-replacement-pixels",
