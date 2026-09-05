@@ -6,43 +6,52 @@ Status: in progress
 
 Complete the deterministic `module-02-hidden` variant without changing the canonical default. The target variant fingerprint at R5A start is `scene2d-e990f538`.
 
-R5A splits the visual repair into two independent photographic roles:
+R5A now splits the repair into two narrowly-scoped photographic roles:
 
-1. `module-02-bay-completion` — repairs raw architectural/stone/cabinet terminations exposed when module 02 is hidden;
+1. `module-03-left-termination` — finishes only the physically visible left termination of module 03 when module 02 is absent;
 2. `range-freestanding` — supplies only the conventional freestanding range.
 
 The two candidates are reviewed individually and again as the ordered set `module-02-hidden-complete`.
 
+## Corrected physical interpretation
+
+The first R5A prototypes A/B were rejected because they invented a full-height divider/side panel. That geometry is not supported by the fixed camera view.
+
+The canonical post-R4 frame gives a narrower, measurable interpretation:
+
+- existing left edge of module 03 stone/cabinet: `x=736`;
+- backsplash visible edge: approximately `y=520..568`;
+- countertop/front transition: approximately `y=568..589`;
+- cabinet face remains aligned at `x=736` below the stone.
+
+Therefore the repair is **not** a bay-filling panel. It is a short stone termination: preserve the vertical backsplash edge, then expose only the small rounded/chamfered countertop return/overhang that the camera can physically see. The cabinet front below must remain untouched unless later evidence proves a small side reveal is visible.
+
 ## Canonical authoring frame
 
-The authoring source is not a prompt-created approximation of a kitchen. It is the exact 1536×1024 frame generated from the repository scene:
+The authoring source is the exact 1536×1024 frame generated from the repository scene, never a semantically similar reconstruction:
 
 - canonical empty room: `app/assets/kitchen/base.png`;
 - target variant: `module-02-hidden`;
 - target fingerprint: `scene2d-e990f538`;
 - fixed origin: `(0,0)`.
 
-Known geometric anchors in the current assets:
+Known anchors retained from the current assets:
 
 - module-02 layer alpha bbox: `[498,590,757,856]`;
 - stone-02 alpha bbox: `[484,491,764,912]`;
-- module-03 begins at approximately `x=736`.
-
-The image model may be used only as an offline localized editor of this full frame. A newly composed scene with merely semantic similarity is not a valid candidate source.
+- module-03 measured left edge: `x=736`.
 
 ## Measured ROI
 
-The exact post-R4 variant was rendered by `Candidate asset gates` on PR #8 before the role was frozen.
-
-- bay-completion authorized ROI: `[470, 480, 780, 930]`;
+- termination authorized ROI: `[720, 510, 755, 600]`;
 - range authorized ROI: `[460, 430, 790, 950]`;
 - canvas: `1536 × 1024`, origin `(0,0)`.
 
-The ROI is a maximum authoring boundary, not an instruction to fill the whole rectangle. The final candidate alpha is derived from the actual changed pixels.
+The termination ROI is a maximum authoring envelope, not permission to fill the whole rectangle. The expected candidate alpha bounds are much smaller.
 
 ## Delta extraction contract
 
-`review-assets/authoring-contracts.json` binds the bay and range roles to `edit-existing-canonical-frame`. After an image edit returns a full frame, `tools/extract_candidate_delta.py` compares it against its exact source frame.
+`review-assets/authoring-contracts.json` binds the termination and range roles to `edit-existing-canonical-frame`. After an image edit returns a full frame, `tools/extract_candidate_delta.py` compares it against its exact source frame.
 
 Hard gates:
 
@@ -53,7 +62,7 @@ Hard gates:
 - recomposing `source + candidate` must reproduce the edited frame with exactly 0 RGB mismatch pixels;
 - candidate metadata records source-frame SHA, edited-frame SHA, extraction report and required source references.
 
-For bay completion the required references are the canonical `base.png` and `variant:module-02-hidden@scene2d-e990f538`. The later range pass additionally requires the selected bay-completion context.
+The range pass additionally requires the selected `module-03-left-termination` context.
 
 ## Candidate set
 
@@ -61,7 +70,7 @@ For bay completion the required references are the canonical `base.png` and `var
 
 ```text
 module-02-hidden
-  + module-02-bay-completion
+  + module-03-left-termination
   + range-freestanding
 ```
 
@@ -71,7 +80,20 @@ Selection is fail-closed:
 - more than one structurally valid candidate for a required role → `FAIL / SET_ROLE_AMBIGUOUS`;
 - exactly one per role → deterministic composition in declared order.
 
-The set gate independently verifies that visible change is confined to the union of the selected candidates' authorized ROIs. Set approval is bound to the exact candidate SHA-256 values and requires the complete set-level visual checklist in addition to each candidate's own approval.
+The set gate independently verifies that visible change is confined to the union of the selected candidate ROIs. Set approval is bound to the exact candidate SHA-256 values and requires the complete set-level visual checklist in addition to each candidate's own approval.
+
+## Visual gate for the termination
+
+The termination candidate must satisfy all of the following:
+
+- backsplash edge remains natural;
+- countertop corner/return follows the fixed-camera perspective;
+- stone overhang is physically plausible and small;
+- no full-height divider or forced side panel is introduced;
+- module 03 cabinet face is unchanged;
+- neighboring modules are unchanged;
+- lighting/material continuity is preserved;
+- no seam or background leak is visible.
 
 ## Hard invariants
 
@@ -85,13 +107,13 @@ The set gate independently verifies that visible change is confined to the union
 ## Authoring sequence
 
 1. render exact `module-02-hidden` from the current scene core;
-2. use that exact full frame as the primary image-edit target;
-3. author bay completion without a range and without changing any remote pixel;
-4. run deterministic delta extraction and require 0 outside-ROI change + 0 round-trip mismatch;
-5. pass authoring provenance, structural and individual visual gates;
-6. visually inspect the bay candidate before continuing;
-7. compose the selected bay candidate on the variant;
-8. use that exact corrected full frame as the source for the range edit;
-9. extract and gate the range candidate in the same way;
-10. run stacked set gate and inspect combined artifact;
+2. author only `module-03-left-termination`;
+3. extract changed pixels inside the narrow termination ROI;
+4. pass structural + provenance + individual visual gates;
+5. visually inspect the termination before continuing;
+6. compose the selected termination candidate on the variant;
+7. author the freestanding range against that corrected context;
+8. extract the range candidate inside its authorized ROI;
+9. pass structural + individual visual gates;
+10. run stacked set gate and inspect the combined artifact;
 11. only after exact-hash approval, promote both runtime assets and update scene substitutions.
