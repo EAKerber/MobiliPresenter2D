@@ -6,7 +6,7 @@
       "id": "module-02-hidden-complete",
       "targetVariant": "module-02-hidden",
       "roleOrder": [
-        "module-02-bay-completion",
+        "module-03-left-termination",
         "range-freestanding"
       ],
       "resolvesDebtCodes": [
@@ -14,7 +14,7 @@
         "replacement-placeholder"
       ],
       "visualChecklist": [
-        "range-bay-contact-natural",
+        "range-termination-clearance-natural",
         "no-double-edge",
         "no-overlap-artifact",
         "shadow-contact-coherent",
