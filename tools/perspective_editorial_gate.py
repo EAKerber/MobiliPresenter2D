@@ -12,6 +12,38 @@ def signed(value: float, positive: str, negative: str, deadzone: float=0.0) -> s
     if abs(value) <= deadzone: return 'none'
     return positive if value > 0 else negative
 
+def _signed_depth_gate(ref: dict, obs: dict, thr: dict) -> tuple[dict, str, list[str]]:
+    ref_vec=ref.get('signedDepthVector')
+    obs_vec=obs.get('signedDepthVector')
+    if not ref_vec:
+        return {'status':PASS,'required':False}, 'none', []
+    if not obs_vec:
+        return {'status':FAIL,'required':True,'reason':'candidate-vector-missing'}, 'measure-required', ['signed_depth_vector_missing']
+    rdx=float(ref_vec['dx']); rdy=float(ref_vec['dy']); odx=float(obs_vec['dx']); ody=float(obs_vec['dy'])
+    if rdy==0 or ody==0:
+        return {'status':FAIL,'required':True,'reason':'zero-dy'}, 'measure-required', ['signed_depth_vector_invalid']
+    ref_slope=rdx/rdy; obs_slope=odx/ody; error=abs(obs_slope-ref_slope)
+    direction_match=(rdx==0 and odx==0) or (rdx*odx>0)
+    limit=float(thr['signedDepthSlopeErrorMax'])
+    status=PASS if direction_match and error<=limit else FAIL
+    correction='none'
+    if status==FAIL:
+        correction='rear-edge-right' if obs_slope>ref_slope else 'rear-edge-left'
+    diagnostics=[]
+    if status==PASS:
+        diagnostics.append('signed_depth_aligned')
+    elif not direction_match:
+        diagnostics.append('signed_depth_direction_inverted')
+    else:
+        diagnostics.append('signed_depth_slope_off')
+    return {
+      'status':status,'required':True,
+      'referenceVector':{'dx':rdx,'dy':rdy},'candidateVector':{'dx':odx,'dy':ody},
+      'referenceSlope':round(ref_slope,4),'candidateSlope':round(obs_slope,4),
+      'slopeError':round(error,4),'slopeErrorLimit':limit,'directionMatch':direction_match,
+      'referenceSource':ref_vec.get('source')
+    }, correction, diagnostics
+
 def evaluate(grid: dict, measurement: dict) -> dict:
     ref=grid['reference']; obs=measurement['candidate']; thr=grid['thresholds']
     ref_depth=ref['counterFrontY']-ref['counterBackY']
@@ -24,6 +56,7 @@ def evaluate(grid: dict, measurement: dict) -> dict:
     obs_center=(obs['leftX']+obs['rightX'])/2
     center=obs_center-ref_center
     width=(obs['rightX']-obs['leftX'])-(ref['bayRightX']-ref['bayLeftX'])
+    signed_depth, yaw_correction, signed_depth_diagnostics=_signed_depth_gate(ref,obs,thr)
     gates={
       'horizontalRoll': {'status':PASS if abs(obs.get('rollDeviationDeg',0))<=thr['horizontalRollDeg'] else FAIL,'observedDeg':obs.get('rollDeviationDeg',0),'limitDeg':thr['horizontalRollDeg']},
       'verticalAxis': {'status':PASS if abs(obs.get('verticalAxisDeviationDeg',0))<=thr['verticalAxisDeg'] else FAIL,'observedDeg':obs.get('verticalAxisDeviationDeg',0),'limitDeg':thr['verticalAxisDeg']},
@@ -33,6 +66,7 @@ def evaluate(grid: dict, measurement: dict) -> dict:
       'floorContact': {'status':PASS if abs(floor)<=thr['floorContactPx'] else FAIL,'offsetPx':round(floor,2),'limitPx':thr['floorContactPx']},
       'centerAlignment': {'status':PASS if abs(center)<=thr['centerAlignmentPx'] else FAIL,'offsetPx':round(center,2),'limitPx':thr['centerAlignmentPx']},
       'widthFit': {'status':PASS if abs(width)<=thr['widthFitPx'] else FAIL,'offsetPx':round(width,2),'limitPx':thr['widthFitPx']},
+      'signedDepthVector': signed_depth,
     }
     top_ok=gates['frontAlignment']['status']==PASS and gates['backAlignment']['status']==PASS
     depth_ok=gates['projectedDepth']['status']==PASS
@@ -44,6 +78,7 @@ def evaluate(grid: dict, measurement: dict) -> dict:
       'depthAdjustment':'none' if depth_ok else ('increase-depth' if ratio<thr['depthRatioMin'] else 'decrease-depth'),
       'horizontalTranslation':'none' if center_ok else signed(center,'left','right',1),
       'verticalScale':('expand-vertical' if floor_ok and avg>thr['frontAlignmentPx'] and not top_ok else ('compress-vertical' if floor_ok and avg<-thr['frontAlignmentPx'] and not top_ok else 'none')),
+      'yawCorrection':yaw_correction,
     }
     overall=FAIL if any(g['status']==FAIL for g in gates.values()) else PASS
     diagnostics=[]
@@ -54,10 +89,11 @@ def evaluate(grid: dict, measurement: dict) -> dict:
     diagnostics.append('floor_contact_ok' if floor_ok else 'floor_contact_off')
     diagnostics.append('centering_ok' if center_ok else 'centering_off')
     diagnostics.append('width_fit_ok' if gates['widthFit']['status']==PASS else 'width_fit_off')
+    diagnostics.extend(signed_depth_diagnostics)
     if depth_ok and gates['horizontalRoll']['status']==PASS and gates['verticalAxis']['status']==PASS and floor_ok and not top_ok:
         diagnostics.append('looks_like_inverted_editorial_correction')
     return {
-      'schemaVersion':'PerspectiveEditorialGate 0.1','sceneId':grid['sceneId'],'candidateId':measurement['candidateId'],'role':measurement['role'],'targetVariant':measurement['targetVariant'],'overall':overall,
+      'schemaVersion':'PerspectiveEditorialGate 0.2','sceneId':grid['sceneId'],'candidateId':measurement['candidateId'],'role':measurement['role'],'targetVariant':measurement['targetVariant'],'overall':overall,
       'measures':{'referenceTopPlaneDepthPx':ref_depth,'candidateTopPlaneDepthPx':round(obs_depth,2),'topPlaneDepthRatio':round(ratio,4),'frontEdgeOffsetPx':round(front,2),'backEdgeOffsetPx':round(back,2),'floorContactOffsetPx':round(floor,2),'centerOffsetPx':round(center,2),'widthOffsetPx':round(width,2)},
       'vectors':vectors,'diagnostics':diagnostics,'gates':gates,'authoringTransform':measurement.get('authoringTransform')
     }
@@ -78,15 +114,24 @@ def overlay(grid: dict, measurement: dict, result: dict, source_path: Path, cand
                 d.line((cx,cy,cx,cy-55),fill=(50,90,220),width=4); d.polygon([(cx,cy-66),(cx-8,cy-50),(cx+8,cy-50)],fill=(50,90,220))
             elif result['vectors']['verticalTranslation']=='down':
                 d.line((cx,cy,cx,cy+55),fill=(50,90,220),width=4); d.polygon([(cx,cy+66),(cx-8,cy+50),(cx+8,cy+50)],fill=(50,90,220))
+            ref_vec=ref.get('signedDepthVector'); obs_vec=obs.get('signedDepthVector')
+            if ref_vec and obs_vec:
+                sx=max(20,min(p.width-20,cx+70)); sy=max(25,int(round(obs['cooktopBackY']-yo+8)))
+                scale=2.0
+                rdx=float(ref_vec['dx']); rdy=float(ref_vec['dy']); odx=float(obs_vec['dx']); ody=float(obs_vec['dy'])
+                d.line((sx,sy,int(round(sx+rdx*scale)),int(round(sy+rdy*scale))),fill=(30,160,70),width=4)
+                d.line((sx,sy,int(round(sx+odx*scale)),int(round(sy+ody*scale))),fill=(50,90,220),width=3)
+                d.text((sx+8,sy-18),'depth ref/obj',fill=(20,20,20))
         return p
-    left=panel(src,False); right=panel(cand,True); header=145
+    left=panel(src,False); right=panel(cand,True); header=160
     sheet=Image.new('RGB',(left.width+right.width,left.height+header),'white'); sheet.paste(left,(0,header)); sheet.paste(right,(left.width,header)); d=ImageDraw.Draw(sheet)
     d.text((12,12),f"PERSPECTIVE EDITORIAL GATE — {result['overall']}",fill='black')
     d.text((12,38),f"vectors: {result['vectors']}",fill='black')
     m=result['measures']; d.text((12,64),f"depth ref={m['referenceTopPlaneDepthPx']} obj={m['candidateTopPlaneDepthPx']} ratio={m['topPlaneDepthRatio']}",fill='black')
     d.text((12,88),f"front={m['frontEdgeOffsetPx']}px back={m['backEdgeOffsetPx']}px floor={m['floorContactOffsetPx']}px",fill='black')
-    d.text((12,112),f"center={m['centerOffsetPx']}px width={m['widthOffsetPx']}px",fill='black')
-    d.text((12,132),', '.join(result['diagnostics']),fill='black')
+    sd=result['gates']['signedDepthVector']; d.text((12,112),f"signed depth={sd.get('status')} refSlope={sd.get('referenceSlope')} objSlope={sd.get('candidateSlope')} err={sd.get('slopeError')}",fill='black')
+    d.text((12,136),f"center={m['centerOffsetPx']}px width={m['widthOffsetPx']}px",fill='black')
+    d.text((12,150),', '.join(result['diagnostics']),fill='black')
     out.parent.mkdir(parents=True,exist_ok=True); sheet.save(out)
 
 def main():
