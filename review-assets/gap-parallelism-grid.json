@@ -1,22 +1,43 @@
 {
-  "schemaVersion": "GapParallelismGrid 0.1",
+  "schemaVersion": "GapParallelismGrid 0.2",
   "sceneId": "cozinha-01",
   "anchorPercent": [48.6, 54.6],
   "anchorPixel": [746, 559],
-  "measurementRows": [540, 586],
+  "horizon": {
+    "y": 552.6,
+    "role": "semantic evaluation cut; local gap comparison starts below this line",
+    "source": "human markup calibration on the 5x local gap review"
+  },
+  "evaluationBandY": [553.2, 575.0],
   "reference": {
-    "back": [751, 520],
-    "front": [742, 586],
-    "source": "module-03 exposed-left stone edge on authoritative module-02-hidden frame"
+    "authority": "human-calibrated",
+    "line": {
+      "slopeDxDy": -0.4809818313541041,
+      "intercept": 1017.1919515694187
+    },
+    "source": "human red correction of the real module-03 stone edge below the local horizon",
+    "calibration": {
+      "zoomCropCanvas": [700, 500, 790, 620],
+      "zoomScale": 5,
+      "annotationPalette": {
+        "horizonPurple": [163, 73, 164],
+        "stoneReferenceRed": [237, 28, 36]
+      },
+      "note": "The previous [751,520] -> [742,586] reference was rejected because it ignored the local horizon and under-estimated the actual stone angle."
+    }
   },
   "thresholds": {
-    "slopeErrorMax": 0.02,
-    "minGapPx": 2.0,
-    "maxGapPx": 8.0
+    "slopeErrorMax": 0.025,
+    "angleErrorDegMax": 1.5,
+    "minGapPx": 0.5,
+    "maxGapPx": 6.0,
+    "maxGapVariationPx": 1.75
   },
   "policy": {
     "signedDirectionRequired": true,
     "positiveGapRequired": true,
+    "horizonRequired": true,
+    "humanCalibratedReferenceRequired": true,
     "measurementIsEditorialNotEditAuthorization": true,
     "blockingRoles": ["range-freestanding"]
   }
