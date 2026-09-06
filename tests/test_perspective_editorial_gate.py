@@ -9,11 +9,11 @@ class PerspectiveEditorialGateTests(unittest.TestCase):
     def setUp(self):
         self.grid={
           'sceneId':'cozinha-01',
-          'reference':{'counterBackY':520,'counterFrontY':586,'floorContactY':898,'verticalAxisX':742,'bayLeftX':495,'bayRightX':742},
-          'thresholds':{'horizontalRollDeg':0.75,'verticalAxisDeg':0.75,'depthRatioMin':0.90,'depthRatioMax':1.10,'frontAlignmentPx':4,'backAlignmentPx':6,'floorContactPx':5,'centerAlignmentPx':4,'widthFitPx':4}
+          'reference':{'counterBackY':520,'counterFrontY':586,'floorContactY':898,'verticalAxisX':742,'bayLeftX':495,'bayRightX':742,'signedDepthVector':{'dx':-9,'dy':66,'source':'test'}},
+          'thresholds':{'horizontalRollDeg':0.75,'verticalAxisDeg':0.75,'depthRatioMin':0.90,'depthRatioMax':1.10,'frontAlignmentPx':4,'backAlignmentPx':6,'floorContactPx':5,'centerAlignmentPx':4,'widthFitPx':4,'signedDepthSlopeErrorMax':0.02}
         }
-    def measurement(self, cid, back, front, floor=898):
-        return {'candidateId':cid,'role':'range-freestanding','targetVariant':'module-02-hidden','candidate':{'cooktopBackY':back,'cooktopFrontY':front,'floorContactY':floor,'leftX':495,'rightX':742,'rollDeviationDeg':0.0,'verticalAxisDeviationDeg':0.0}}
+    def measurement(self, cid, back, front, floor=898, depth=(-12,84)):
+        return {'candidateId':cid,'role':'range-freestanding','targetVariant':'module-02-hidden','candidate':{'cooktopBackY':back,'cooktopFrontY':front,'floorContactY':floor,'leftX':495,'rightX':742,'rollDeviationDeg':0.0,'verticalAxisDeviationDeg':0.0,'signedDepthVector':{'dx':depth[0],'dy':depth[1]}}}
     def test_old_fit_fails_with_signed_up_vector(self):
         r=peg.evaluate(self.grid,self.measurement('old',578,638))
         self.assertEqual(r['overall'],'FAIL')
@@ -26,13 +26,25 @@ class PerspectiveEditorialGateTests(unittest.TestCase):
         r=peg.evaluate(self.grid,m)
         self.assertEqual(r['overall'],'FAIL')
         self.assertEqual(r['vectors']['horizontalTranslation'],'left')
-
-    def test_vector_corrected_fit_passes(self):
-        r=peg.evaluate(self.grid,self.measurement('v2',517.5,588.78,897.62))
+    def test_inverted_depth_direction_fails_and_points_rear_right(self):
+        r=peg.evaluate(self.grid,self.measurement('inverted',517.5,588.78,897.62,depth=(12,84)))
+        self.assertEqual(r['overall'],'FAIL')
+        self.assertEqual(r['gates']['signedDepthVector']['status'],'FAIL')
+        self.assertFalse(r['gates']['signedDepthVector']['directionMatch'])
+        self.assertEqual(r['vectors']['yawCorrection'],'rear-edge-right')
+        self.assertIn('signed_depth_direction_inverted',r['diagnostics'])
+    def test_zero_depth_yaw_fails_and_points_rear_right(self):
+        r=peg.evaluate(self.grid,self.measurement('zero-yaw',517.5,588.78,897.62,depth=(0,84)))
+        self.assertEqual(r['overall'],'FAIL')
+        self.assertEqual(r['vectors']['yawCorrection'],'rear-edge-right')
+    def test_vector_and_yaw_corrected_fit_passes(self):
+        r=peg.evaluate(self.grid,self.measurement('v2',517.5,588.78,897.62,depth=(-12,84)))
         self.assertEqual(r['overall'],'PASS')
         self.assertEqual(r['vectors']['verticalTranslation'],'none')
         self.assertEqual(r['vectors']['depthAdjustment'],'none')
         self.assertEqual(r['vectors']['horizontalTranslation'],'none')
         self.assertEqual(r['vectors']['verticalScale'],'none')
+        self.assertEqual(r['vectors']['yawCorrection'],'none')
+        self.assertIn('signed_depth_aligned',r['diagnostics'])
 
 if __name__=='__main__': unittest.main()
