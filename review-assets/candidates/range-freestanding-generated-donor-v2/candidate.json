@@ -1,5 +1,5 @@
 {
-  "expectedImageSha256": "3f1e173c3ef17eb5974da50c9ed3cc1e03f924f7edb1c98a121c0f2dbb31805c",
+  "expectedImageSha256": "f5e2289b2bf1376d2d7481f357da532ac8e24d493abd9643ada5506eb2617115",
   "humanReview": {
     "checklist": {},
     "reviewedAt": null,
@@ -11,7 +11,7 @@
   "provenance": {
     "authoringContractId": "range-freestanding-edit",
     "deltaExtractionRequired": true,
-    "editedFrameSha256": "232172eba8a3c3caa20a1c04d9eea6195dfbb6d3b0be9363d596a61549b52571",
+    "editedFrameSha256": "d61a8592aa7ffb36bf10433daaf53f443689908d91094a34e3f3a1300fae2dfe",
     "extractionReport": "review-assets/candidates/range-freestanding-generated-donor-v2/extraction-report.json",
     "method": "generated-donor-derived",
     "sourceFrameSha256": "3bebae52fc781ed0bf391cf6ef82c62f7caa810551dc261481f51976c2de7a85",

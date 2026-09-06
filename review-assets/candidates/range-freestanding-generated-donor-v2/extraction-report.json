@@ -12,7 +12,7 @@
     742,
     923
   ],
-  "candidateSha256": "3f1e173c3ef17eb5974da50c9ed3cc1e03f924f7edb1c98a121c0f2dbb31805c",
+  "candidateSha256": "f5e2289b2bf1376d2d7481f357da532ac8e24d493abd9643ada5506eb2617115",
   "canvas": {
     "height": 1024,
     "width": 1536
@@ -27,6 +27,15 @@
   ],
   "donor": {
     "packedSha256": "53cf378cc40e4a3d18f6ea6c5fd63fcd7fe22e48152ac73394c16c06019d40e0",
+    "perspectiveAdjustment": {
+      "bodyBelowHingePreserved": true,
+      "direction": "rear-right",
+      "frontShiftPx": 0,
+      "hingeLocalY": 84,
+      "rearShiftPx": 12,
+      "reason": "signed scene depth vector is negative-x toward the front; move only the rear cooktop edge right until candidate slope matches the measured stone reference",
+      "type": "top-plane-rear-shift"
+    },
     "placementBox": [
       495,
       508,
@@ -46,7 +55,7 @@
     "sourceGeneratedFrameSha256": "77ba25445d80fbf2dd4aa753b4be0a74ed0503c99f5743f68b7db89cef909a44",
     "sourceMethod": "image_gen"
   },
-  "editedFrameSha256": "232172eba8a3c3caa20a1c04d9eea6195dfbb6d3b0be9363d596a61549b52571",
+  "editedFrameSha256": "d61a8592aa7ffb36bf10433daaf53f443689908d91094a34e3f3a1300fae2dfe",
   "outsideAuthorizedRoiChangedPixelCount": 0,
   "role": "range-freestanding",
   "roundtripMismatchPixelCount": 0,
