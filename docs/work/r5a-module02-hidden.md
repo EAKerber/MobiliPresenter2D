@@ -1,6 +1,6 @@
 # R5A — module-02-hidden completion
 
-Status: deterministic geometry materialized; `range-freestanding` pending.
+Status: deterministic geometry materialized; `range-freestanding` v2 under human review.
 
 ## Accepted deterministic geometry
 
@@ -33,14 +33,8 @@ Hard gates require:
 - mask pixels inside the appliance-protected rectangle: `0`;
 - mask is non-empty.
 
-## Hosted materialization receipt
+## Hosted deterministic geometry receipt
 
-The pixel assets are rebuilt in GitHub Actions rather than transported manually. Latest clean materialization:
-
-- base commit: `38d65d9f07697cd87da958f0eb227dfec24e42cf`;
-- resulting commit: `28c3bd7e087c225ce6b97f1b7ed302b5fb6d7a60`;
-- readback: `PASS`;
-- canonical manifest excludes `app/reports/**` because reports are derived QA outputs, not baseline authority;
 - baseline id: `cozinha-01-r5a-pixelperfect-bridges1`;
 - baseline validation: `28 assets / 62 canonical files / 0px`;
 - current asset validation: `27 tracked images / 0px`;
@@ -49,27 +43,55 @@ The pixel assets are rebuilt in GitHub Actions rather than transported manually.
 - module-02-hidden fingerprint: `scene2d-4692e364`;
 - module-03-hidden fingerprint: `scene2d-e63f7d18`.
 
-The only remaining visual debt in `module-02-hidden` is `replacement-placeholder`.
+The only remaining visual debt in `module-02-hidden` is `replacement-placeholder` until a range candidate receives human approval and promotion.
 
-## Remaining R5A role: range-freestanding
-
-The next authoring step is the first genuinely generative one. It must use the exact full-canvas `module-02-hidden` render from this materialized state as its primary edit target.
-
-Authoring contract:
+## Range authoring contract
 
 ```text
 exact 1536x1024 module-02-hidden frame
-  -> localized image edit: add only freestanding range
+  -> generated donor used only as source material
+  -> deterministic alpha preparation / placement
   -> full-frame edited result
   -> pixel diff against exact source
   -> extract full-canvas RGBA candidate delta
   -> outside-ROI visible diff must be 0
   -> source + candidate must reproduce edited frame exactly
-  -> machine review
+  -> perspective editorial gate
   -> human visual review
 ```
 
-The range is never generated as a standalone semantic kitchen scene and is never promoted directly from image generation output.
+No generated scene is promoted directly.
+
+## Perspective editorial gate
+
+R5A formalizes a deterministic high-level visual gate using a measured scene grid and signed correction vectors. It evaluates roll, vertical axis, projected top-plane depth, front/back counter alignment, floor contact, centering and width fit. Failed measures emit corrective vectors such as `up`, `left`, `increase-depth` or `expand-vertical`; passing measures emit `none`.
+
+The first range fit preserved width and floor contact but left the cooktop approximately 55 px too low. The gate classified that fit as an inverted editorial correction and emitted `verticalTranslation=up` plus `verticalScale=expand-vertical`.
+
+The selected v2 transform keeps X and the floor fixed and expands the range upward:
+
+- previous placement: `[495,570,742,900]`;
+- v2 placement: `[495,508,742,900]`;
+- declared back edge: `517.50`;
+- declared front edge: `588.78`;
+- declared floor contact: `897.62`;
+- scene back/front/floor references: `520 / 586 / 898`.
+
+## Hosted range-v2 materialization receipt
+
+GitHub Actions rebuilt the v2 candidate from the versioned donor payload and deterministic recipe:
+
+- materializer base: `86affbaff39d959c89989614514cf59126368b4c`;
+- materialized commit: `b60186d32f55770b7d3fd5363536dd0dd08d5900`;
+- readback: `PASS`;
+- candidate SHA-256: `3f1e173c3ef17eb5974da50c9ed3cc1e03f924f7edb1c98a121c0f2dbb31805c`;
+- changed pixels: `96530`;
+- difference bounds: `[495,508,742,923]`;
+- changed pixels outside authorized ROI: `0`;
+- round-trip mismatch pixels: `0`;
+- source frame SHA-256: `3bebae52fc781ed0bf391cf6ef82c62f7caa810551dc261481f51976c2de7a85`.
+
+The rejected v1 range candidate was removed from the active candidate inbox but remains available in Git history. The v2 candidate remains `REVIEW / PENDING`; no runtime promotion has occurred.
 
 ## Visual checklist for range
 
