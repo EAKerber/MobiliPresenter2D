@@ -360,6 +360,22 @@
     },
     {
       "alphaBounds": [
+        494,
+        531,
+        751,
+        886
+      ],
+      "canonicalCanvas": true,
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "path": "app/assets/kitchen/substitutions/range-freestanding.png",
+      "sha256": "0b8146b10ee4b4e4c9f96b34a44ab5adf71657e1392cb5024de9278aa1862864",
+      "size": 1910816
+    },
+    {
+      "alphaBounds": [
         484,
         491,
         757,
@@ -484,8 +500,8 @@
     },
     {
       "path": "app/README.md",
-      "sha256": "fdf323a74fd73a1763ed5a5da6711a51a83eb77723aa00284661dcd773a538d5",
-      "size": 2278
+      "sha256": "5f65674b264ae41a17ed2703f8d9543f1a1579826f44e98401ad4eb0b8618e68",
+      "size": 2390
     },
     {
       "path": "app/app.js",
@@ -608,6 +624,11 @@
       "size": 6177
     },
     {
+      "path": "app/assets/kitchen/substitutions/range-freestanding.png",
+      "sha256": "0b8146b10ee4b4e4c9f96b34a44ab5adf71657e1392cb5024de9278aa1862864",
+      "size": 1910816
+    },
+    {
       "path": "app/assets/kitchen/variants/stone-02-cozinha-exposed-right.png",
       "sha256": "e1ab1e0134d249104dcf7bf7192922612f5aa72b155811689a997d5d83f1ca11",
       "size": 120758
@@ -649,13 +670,13 @@
     },
     {
       "path": "app/data/scene-data.js",
-      "sha256": "1fd9330cb7f650bb93efdea7870770e12e3f031267ae78f92a515a17fe5503e8",
-      "size": 8999
+      "sha256": "a5ae496e802577e827bec1396c3a9580d26a6967a2aecd9b426e62120ecdcade",
+      "size": 9004
     },
     {
       "path": "app/data/technical-data.json",
-      "sha256": "72203d7ee7df947798ad32e22a0332d13aa789319a99ced5ba147fe7cf5e875b",
-      "size": 6728
+      "sha256": "05595b225992bd9ef38ed951f481da253790669c010337b5f290eba3423b3a3c",
+      "size": 6962
     },
     {
       "path": "app/docs/CHECKPOINTS.md",
@@ -769,8 +790,8 @@
     },
     {
       "path": "app/tools/update-technical-data.py",
-      "sha256": "f9d8ee64fa724c63c49fba6bc836e51139d223b53c327742c5ba9427dac44013",
-      "size": 2167
+      "sha256": "95fa3de7450462c85de92afdad499df337514631639744134fcb0514c5de9470",
+      "size": 2230
     },
     {
       "path": "app/tools/validate-assets.py",

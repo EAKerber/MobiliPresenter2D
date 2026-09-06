@@ -26,9 +26,9 @@ Não é necessário instalar Node.js, npm ou qualquer biblioteca.
 
 ## Estado da migração
 
-Fase 2 concluída: módulos, controles, ordem e defaults vêm dos dados; relações de hospedagem e substituições são resolvidas declarativamente. A Fase 3 começou com a separação determinística das pedras dos módulos 02 e 03. O fogão convencional ainda é um placeholder totalmente transparente. A correção 3.2.2 eliminou os pixels de parede incorporados ao alfa do módulo 02. A correção 3.2.3 consertou branco e preto. A correção 3.2.4 incorporou as máscaras ao JavaScript para permitir a recoloração ao abrir o `index.html` diretamente no Chrome ou Firefox.
+Fase 2 concluída: módulos, controles, ordem e defaults vêm dos dados; relações de hospedagem e substituições são resolvidas declarativamente. A Fase 3 começou com a separação determinística das pedras dos módulos 02 e 03. O fogão convencional aprovado agora aparece ao ocultar o módulo 02, usando uma camada RGBA estática. A correção 3.2.2 eliminou os pixels de parede incorporados ao alfa do módulo 02. A correção 3.2.3 consertou branco e preto. A correção 3.2.4 incorporou as máscaras ao JavaScript para permitir a recoloração ao abrir o `index.html` diretamente no Chrome ou Firefox.
 
-As próximas fases devem seguir `docs/GUIA-IMPLEMENTACAO-2D-DATA-DRIVEN.md`. O próximo asset estrutural aprovável da Fase 3 é o fogão fotográfico; máscaras específicas de pedra serão produzidas antes de habilitar seus acabamentos.
+As próximas fases devem seguir `docs/GUIA-IMPLEMENTACAO-2D-DATA-DRIVEN.md`. O fogão fotográfico foi integrado na R5A; resta a revisão final dos estados estruturais. Máscaras específicas de pedra serão produzidas antes de habilitar seus acabamentos. Veja `../docs/work/STATUS-ATUAL.md` para o ponto de retomada.
 
 ## Validação opcional
 

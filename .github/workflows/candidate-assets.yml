@@ -76,15 +76,6 @@ jobs:
           python tools/render_variant_fidelity.py \
             --manifest /tmp/r5a-materialize/variant-manifest.json \
             --output-dir /tmp/r5a-materialize/variants
-      - name: Materialize vector-corrected generated-donor range candidate
-        run: |
-          python tools/materialize_range_donor_recipe_v2.py \
-            --recipe review-assets/recipes/range-freestanding-generated-donor-v2.json \
-            --source-frame /tmp/r5a-materialize/variants/module-02-hidden.png \
-            --variant-manifest /tmp/r5a-materialize/variant-manifest.json \
-            --output-dir review-assets/candidates/range-freestanding-generated-donor-v2
-          python tools/validate_candidate_assets.py --output /tmp/r5a-materialize/intake.json
-          python tools/validate_authoring_provenance.py --output /tmp/r5a-materialize/provenance.json
       - name: Commit generated R5A assets with CAS readback
         shell: bash
         env:
@@ -107,7 +98,7 @@ jobs:
             app/reports/r5a-pixelperfect-materialization.json \
             app/reports/r5a-pixelperfect-gate.json \
             reference/baseline-manifest.json \
-            review-assets/candidates/range-freestanding-generated-donor-v2
+            review-assets/approved/range-freestanding
           if git diff --cached --quiet; then
             echo 'R5A_PIXELPERFECT_MATERIALIZATION_NO_CHANGE readback=PASS'
             exit 0
@@ -164,6 +155,8 @@ jobs:
           python tools/render_variant_fidelity.py \
             --manifest /tmp/candidate-review/variant-manifest.json \
             --output-dir /tmp/candidate-review/variants
+      - name: Verify approved range runtime pixels
+        run: python tools/validate_approved_range.py --manifest /tmp/candidate-review/variant-manifest.json --output-dir /tmp/candidate-review/approved-range
       - name: Structural candidate intake
         run: |
           python tools/validate_candidate_assets.py --output /tmp/candidate-review/intake.json

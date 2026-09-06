@@ -20,10 +20,14 @@
       "id": "module-02-hidden",
       "label": "Módulo 02 oculto / substituição ativa",
       "actions": [
-        { "type": "set-visibility", "entityId": "module-02", "visible": false }
+        {
+          "type": "set-visibility",
+          "entityId": "module-02",
+          "visible": false
+        }
       ],
-      "expectedVisualStatus": "known-debt",
-      "expectedDebtCodes": ["replacement-placeholder"],
+      "expectedVisualStatus": "validated",
+      "expectedDebtCodes": [],
       "expectedVisibilityReasons": {
         "module-02": "intent-off",
         "stone-02": "host-hidden",
@@ -36,7 +40,11 @@
       "id": "module-03-hidden",
       "label": "Módulo 03 oculto / terminação determinística ativa",
       "actions": [
-        { "type": "set-visibility", "entityId": "module-03", "visible": false }
+        {
+          "type": "set-visibility",
+          "entityId": "module-03",
+          "visible": false
+        }
       ],
       "expectedVisualStatus": "validated",
       "expectedDebtCodes": [],
