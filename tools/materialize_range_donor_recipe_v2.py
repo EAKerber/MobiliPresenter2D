@@ -13,6 +13,18 @@ def count_changed(a,b):
         for x in range(a.width):
             if pa[x,y]!=pb[x,y]: c+=1; xs.append(x); ys.append(y)
     return c, ([min(xs),min(ys),max(xs)+1,max(ys)+1] if xs else None)
+def apply_top_plane_yaw(image: Image.Image, cfg: dict | None) -> Image.Image:
+    if not cfg: return image
+    if cfg.get('type')!='top-plane-rear-shift': raise SystemExit('unsupported perspective adjustment')
+    rear_shift=float(cfg.get('rearShiftPx',0)); hinge=int(cfg.get('hingeLocalY',0)); front_shift=float(cfg.get('frontShiftPx',0))
+    if hinge<2 or hinge>image.height: raise SystemExit(f'invalid top-plane hinge: {hinge}')
+    out=image.copy(); w=image.width
+    for y in range(hinge):
+        t=y/(hinge-1); shift=rear_shift*(1-t)+front_shift*t
+        row=image.crop((0,y,w,y+1))
+        row=row.transform((w,1),Image.Transform.AFFINE,(1,0,-shift,0,1,0),resample=Image.Resampling.BICUBIC)
+        out.paste(row,(0,y))
+    return out
 def main():
     ap=argparse.ArgumentParser(); ap.add_argument('--recipe',type=Path,required=True); ap.add_argument('--source-frame',type=Path,required=True); ap.add_argument('--variant-manifest',type=Path,required=True); ap.add_argument('--output-dir',type=Path,required=True); args=ap.parse_args()
     recipe=load(args.recipe)
@@ -39,6 +51,7 @@ def main():
     x0,y0,x1,y1=recipe['placementBox']; target_size=(x1-x0,y1-y0)
     if donor.size!=target_size: donor=donor.resize(target_size,Image.Resampling.LANCZOS)
     threshold=int(recipe.get('alphaThresholdBelow',0)); alpha=donor.getchannel('A').point(lambda v:0 if v<threshold else v); donor.putalpha(alpha)
+    perspective_cfg=recipe.get('perspectiveAdjustment'); donor=apply_top_plane_yaw(donor,perspective_cfg); alpha=donor.getchannel('A')
     overlay=Image.new('RGBA',source.size,(0,0,0,0)); shadow_cfg=recipe.get('contactShadow') or {}
     if shadow_cfg.get('enabled'):
         rows=int(shadow_cfg['sourceBottomRows']); radius=float(shadow_cfg['gaussianBlurRadius']); yoff=int(shadow_cfg['pasteYOffsetFromBottom']); scale=float(shadow_cfg['opacityScale']); bottom=alpha.crop((0,max(0,alpha.height-rows),alpha.width,alpha.height)).filter(ImageFilter.GaussianBlur(radius)); sa=Image.new('L',source.size,0); sa.paste(bottom,(x0,y1+yoff)); sa=sa.point(lambda v:max(0,min(255,int(v*scale)))); shadow=Image.new('RGBA',source.size,(0,0,0,255)); shadow.putalpha(sa); overlay=Image.alpha_composite(overlay,shadow)
@@ -59,9 +72,9 @@ def main():
             if ps[x,y]!=pe[x,y]: dap[x,y]=255
     diff.putalpha(da); diff.save(dp)
     tmp=out/'_edited.png'; edited.save(tmp); candidate_sha=sha_file(cp); edited_sha=sha_file(tmp); tmp.unlink()
-    report={'schemaVersion':'CandidateDeltaExtractionReport 0.1','status':'PASS','role':recipe['role'],'targetVariant':recipe['targetVariant'],'authoringContractId':recipe['authoringContractId'],'canvas':recipe['canvas'],'authorizedRoi':roi,'deltaMode':'opaque-replacement-pixels','candidateAlphaBounds':list(delta.getchannel('A').getbbox()),'differenceBounds':bounds,'changedPixelCount':changed_count,'outsideAuthorizedRoiChangedPixelCount':outside,'roundtripMismatchPixelCount':mismatch,'candidateSha256':candidate_sha,'sourceFrameSha256':source_sha,'editedFrameSha256':edited_sha,'donor':{'sourceMethod':donor_doc['sourceMethod'],'sourceGenId':donor_doc['sourceGenId'],'sourceGeneratedFrameSha256':donor_doc['sourceGeneratedFrameSha256'],'packedSha256':donor_doc['packedSha256'],'processing':donor_doc['processing'],'robustAlphaCropThreshold':robust,'placementBox':recipe['placementBox']}}
+    report={'schemaVersion':'CandidateDeltaExtractionReport 0.1','status':'PASS','role':recipe['role'],'targetVariant':recipe['targetVariant'],'authoringContractId':recipe['authoringContractId'],'canvas':recipe['canvas'],'authorizedRoi':roi,'deltaMode':'opaque-replacement-pixels','candidateAlphaBounds':list(delta.getchannel('A').getbbox()),'differenceBounds':bounds,'changedPixelCount':changed_count,'outsideAuthorizedRoiChangedPixelCount':outside,'roundtripMismatchPixelCount':mismatch,'candidateSha256':candidate_sha,'sourceFrameSha256':source_sha,'editedFrameSha256':edited_sha,'donor':{'sourceMethod':donor_doc['sourceMethod'],'sourceGenId':donor_doc['sourceGenId'],'sourceGeneratedFrameSha256':donor_doc['sourceGeneratedFrameSha256'],'packedSha256':donor_doc['packedSha256'],'processing':donor_doc['processing'],'robustAlphaCropThreshold':robust,'placementBox':recipe['placementBox'],'perspectiveAdjustment':perspective_cfg}}
     rp.write_text(json.dumps(report,indent=2,ensure_ascii=False,sort_keys=True)+'\n',encoding='utf-8')
     meta={'schemaVersion':'CandidateAsset 0.1','id':recipe['output']['candidateId'],'role':recipe['role'],'targetScene':'cozinha-01','targetVariant':recipe['targetVariant'],'imagePath':recipe['output']['candidatePath'],'expectedImageSha256':candidate_sha,'status':'REVIEW','humanReview':{'status':'PENDING','reviewer':None,'reviewedAt':None,'checklist':{}},'provenance':{'method':'generated-donor-derived','authoringContractId':recipe['authoringContractId'],'deltaExtractionRequired':True,'sourceReferences':['app/assets/kitchen/base.png',f"variant:{recipe['targetVariant']}@{recipe['targetVariantFingerprint']}",f"image_gen:{donor_doc['sourceGenId']}"],'sourceFrameSha256':source_sha,'editedFrameSha256':edited_sha,'extractionReport':recipe['output']['extractionReportPath']}}
     mp.write_text(json.dumps(meta,indent=2,ensure_ascii=False,sort_keys=True)+'\n',encoding='utf-8')
-    print(json.dumps({'status':'PASS','candidateSha256':candidate_sha,'changedPixelCount':changed_count,'differenceBounds':bounds,'outsideAuthorizedRoiChangedPixelCount':outside,'roundtripMismatchPixelCount':mismatch,'sourceFrameSha256':source_sha},sort_keys=True)); return 0
+    print(json.dumps({'status':'PASS','candidateSha256':candidate_sha,'changedPixelCount':changed_count,'differenceBounds':bounds,'outsideAuthorizedRoiChangedPixelCount':outside,'roundtripMismatchPixelCount':mismatch,'sourceFrameSha256':source_sha,'perspectiveAdjustment':perspective_cfg},sort_keys=True)); return 0
 if __name__=='__main__': raise SystemExit(main())
