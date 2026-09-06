@@ -53,6 +53,8 @@ jobs:
           tests/test_candidate_delta_authoring.py
           tests/test_candidate_authoring_provenance.py
           tests/test_perspective_editorial_gate.py
+          tests/test_gap_parallelism_gate.py
+          tests/test_gap_pixel_gate.py
       - name: Materialize accepted deterministic R5A edits
         working-directory: app
         run: |
@@ -146,6 +148,8 @@ jobs:
           tests/test_candidate_delta_authoring.py
           tests/test_candidate_authoring_provenance.py
           tests/test_perspective_editorial_gate.py
+          tests/test_gap_parallelism_gate.py
+          tests/test_gap_pixel_gate.py
       - name: Preserve canonical baseline
         run: python tools/validate-baseline.py
       - name: Preserve app runtime and R5A pixel-perfect invariants

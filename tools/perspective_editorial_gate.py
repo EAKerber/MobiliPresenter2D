@@ -94,6 +94,7 @@ def evaluate(grid: dict, measurement: dict) -> dict:
         diagnostics.append('looks_like_inverted_editorial_correction')
     return {
       'schemaVersion':'PerspectiveEditorialGate 0.2','sceneId':grid['sceneId'],'candidateId':measurement['candidateId'],'role':measurement['role'],'targetVariant':measurement['targetVariant'],'overall':overall,
+      'scope':'declared-geometry-only','pixelEdgeVerification':'NOT_EVALUATED','promotionEligible':False,
       'measures':{'referenceTopPlaneDepthPx':ref_depth,'candidateTopPlaneDepthPx':round(obs_depth,2),'topPlaneDepthRatio':round(ratio,4),'frontEdgeOffsetPx':round(front,2),'backEdgeOffsetPx':round(back,2),'floorContactOffsetPx':round(floor,2),'centerOffsetPx':round(center,2),'widthOffsetPx':round(width,2)},
       'vectors':vectors,'diagnostics':diagnostics,'gates':gates,'authoringTransform':measurement.get('authoringTransform')
     }
@@ -125,7 +126,7 @@ def overlay(grid: dict, measurement: dict, result: dict, source_path: Path, cand
         return p
     left=panel(src,False); right=panel(cand,True); header=160
     sheet=Image.new('RGB',(left.width+right.width,left.height+header),'white'); sheet.paste(left,(0,header)); sheet.paste(right,(left.width,header)); d=ImageDraw.Draw(sheet)
-    d.text((12,12),f"PERSPECTIVE EDITORIAL GATE — {result['overall']}",fill='black')
+    d.text((12,12),f"DECLARED GEOMETRY — {result['overall']} | pixel edges NOT VERIFIED",fill='black')
     d.text((12,38),f"vectors: {result['vectors']}",fill='black')
     m=result['measures']; d.text((12,64),f"depth ref={m['referenceTopPlaneDepthPx']} obj={m['candidateTopPlaneDepthPx']} ratio={m['topPlaneDepthRatio']}",fill='black')
     d.text((12,88),f"front={m['frontEdgeOffsetPx']}px back={m['backEdgeOffsetPx']}px floor={m['floorContactOffsetPx']}px",fill='black')

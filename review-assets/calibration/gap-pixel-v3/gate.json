@@ -1,0 +1,583 @@
+{
+  "schemaVersion": "GapPixelGate 0.1",
+  "overall": "FAIL",
+  "scope": "local-visible-support-geometry",
+  "humanReview": "PENDING",
+  "promotionEligible": false,
+  "coordinateSystem": {
+    "origin": "top-left",
+    "x": "right",
+    "y": "down",
+    "units": "image pixels",
+    "sceneOffset": [
+      715,
+      515
+    ]
+  },
+  "horizontalReference": {
+    "y": 37.60000000000002,
+    "role": "user horizontal reference, near backsplash/top surface transition; not a physical vanishing horizon"
+  },
+  "evaluationRows": [
+    38,
+    52
+  ],
+  "referenceLine": {
+    "slopeDxDy": -0.5,
+    "intercept": 53.266666666666666,
+    "rmsPx": 0.24944382578492943
+  },
+  "referencePoints": [
+    [
+      34.5,
+      38
+    ],
+    [
+      33.5,
+      39
+    ],
+    [
+      33.5,
+      40
+    ],
+    [
+      32.5,
+      41
+    ],
+    [
+      32.5,
+      42
+    ],
+    [
+      31.5,
+      43
+    ],
+    [
+      31.5,
+      44
+    ],
+    [
+      30.5,
+      45
+    ],
+    [
+      30.5,
+      46
+    ],
+    [
+      29.5,
+      47
+    ],
+    [
+      29.5,
+      48
+    ],
+    [
+      28.5,
+      49
+    ],
+    [
+      28.5,
+      50
+    ],
+    [
+      27.5,
+      51
+    ],
+    [
+      27.5,
+      52
+    ]
+  ],
+  "thresholdSweep": [
+    {
+      "deltaThreshold": 8,
+      "status": "FAIL",
+      "candidateLine": {
+        "slopeDxDy": -0.09285714285714286,
+        "intercept": 32.21190476190476,
+        "rmsPx": 0.29654090432267166
+      },
+      "angleErrorDeg": 21.259941570867603,
+      "slopeError": 0.40714285714285714,
+      "gapPx": {
+        "min": 0.0,
+        "max": 6.0,
+        "variation": 6.0
+      },
+      "gates": {
+        "angle": false,
+        "slope": false,
+        "minGap": false,
+        "maxGap": true,
+        "gapVariation": false,
+        "referenceStraightness": true,
+        "candidateStraightness": true
+      },
+      "rows": [
+        {
+          "y": 38,
+          "referenceX": 34.5,
+          "candidateX": 28.5,
+          "gapPx": 6.0
+        },
+        {
+          "y": 39,
+          "referenceX": 33.5,
+          "candidateX": 28.5,
+          "gapPx": 5.0
+        },
+        {
+          "y": 40,
+          "referenceX": 33.5,
+          "candidateX": 28.5,
+          "gapPx": 5.0
+        },
+        {
+          "y": 41,
+          "referenceX": 32.5,
+          "candidateX": 28.5,
+          "gapPx": 4.0
+        },
+        {
+          "y": 42,
+          "referenceX": 32.5,
+          "candidateX": 28.5,
+          "gapPx": 4.0
+        },
+        {
+          "y": 43,
+          "referenceX": 31.5,
+          "candidateX": 28.5,
+          "gapPx": 3.0
+        },
+        {
+          "y": 44,
+          "referenceX": 31.5,
+          "candidateX": 28.5,
+          "gapPx": 3.0
+        },
+        {
+          "y": 45,
+          "referenceX": 30.5,
+          "candidateX": 27.5,
+          "gapPx": 3.0
+        },
+        {
+          "y": 46,
+          "referenceX": 30.5,
+          "candidateX": 27.5,
+          "gapPx": 3.0
+        },
+        {
+          "y": 47,
+          "referenceX": 29.5,
+          "candidateX": 28.5,
+          "gapPx": 1.0
+        },
+        {
+          "y": 48,
+          "referenceX": 29.5,
+          "candidateX": 27.5,
+          "gapPx": 2.0
+        },
+        {
+          "y": 49,
+          "referenceX": 28.5,
+          "candidateX": 27.5,
+          "gapPx": 1.0
+        },
+        {
+          "y": 50,
+          "referenceX": 28.5,
+          "candidateX": 27.5,
+          "gapPx": 1.0
+        },
+        {
+          "y": 51,
+          "referenceX": 27.5,
+          "candidateX": 27.5,
+          "gapPx": 0.0
+        },
+        {
+          "y": 52,
+          "referenceX": 27.5,
+          "candidateX": 27.5,
+          "gapPx": 0.0
+        }
+      ]
+    },
+    {
+      "deltaThreshold": 16,
+      "status": "FAIL",
+      "candidateLine": {
+        "slopeDxDy": -0.1,
+        "intercept": 32.46666666666667,
+        "rmsPx": 0.24944382578492943
+      },
+      "angleErrorDeg": 20.854458039578347,
+      "slopeError": 0.4,
+      "gapPx": {
+        "min": 0.0,
+        "max": 6.0,
+        "variation": 6.0
+      },
+      "gates": {
+        "angle": false,
+        "slope": false,
+        "minGap": false,
+        "maxGap": true,
+        "gapVariation": false,
+        "referenceStraightness": true,
+        "candidateStraightness": true
+      },
+      "rows": [
+        {
+          "y": 38,
+          "referenceX": 34.5,
+          "candidateX": 28.5,
+          "gapPx": 6.0
+        },
+        {
+          "y": 39,
+          "referenceX": 33.5,
+          "candidateX": 28.5,
+          "gapPx": 5.0
+        },
+        {
+          "y": 40,
+          "referenceX": 33.5,
+          "candidateX": 28.5,
+          "gapPx": 5.0
+        },
+        {
+          "y": 41,
+          "referenceX": 32.5,
+          "candidateX": 28.5,
+          "gapPx": 4.0
+        },
+        {
+          "y": 42,
+          "referenceX": 32.5,
+          "candidateX": 28.5,
+          "gapPx": 4.0
+        },
+        {
+          "y": 43,
+          "referenceX": 31.5,
+          "candidateX": 28.5,
+          "gapPx": 3.0
+        },
+        {
+          "y": 44,
+          "referenceX": 31.5,
+          "candidateX": 28.5,
+          "gapPx": 3.0
+        },
+        {
+          "y": 45,
+          "referenceX": 30.5,
+          "candidateX": 27.5,
+          "gapPx": 3.0
+        },
+        {
+          "y": 46,
+          "referenceX": 30.5,
+          "candidateX": 27.5,
+          "gapPx": 3.0
+        },
+        {
+          "y": 47,
+          "referenceX": 29.5,
+          "candidateX": 27.5,
+          "gapPx": 2.0
+        },
+        {
+          "y": 48,
+          "referenceX": 29.5,
+          "candidateX": 27.5,
+          "gapPx": 2.0
+        },
+        {
+          "y": 49,
+          "referenceX": 28.5,
+          "candidateX": 27.5,
+          "gapPx": 1.0
+        },
+        {
+          "y": 50,
+          "referenceX": 28.5,
+          "candidateX": 27.5,
+          "gapPx": 1.0
+        },
+        {
+          "y": 51,
+          "referenceX": 27.5,
+          "candidateX": 27.5,
+          "gapPx": 0.0
+        },
+        {
+          "y": 52,
+          "referenceX": 27.5,
+          "candidateX": 27.5,
+          "gapPx": 0.0
+        }
+      ]
+    },
+    {
+      "deltaThreshold": 24,
+      "status": "FAIL",
+      "candidateLine": {
+        "slopeDxDy": -0.11785714285714285,
+        "intercept": 33.13690476190476,
+        "rmsPx": 0.31027381660372366
+      },
+      "angleErrorDeg": 19.84334205711777,
+      "slopeError": 0.3821428571428571,
+      "gapPx": {
+        "min": 0.0,
+        "max": 6.0,
+        "variation": 6.0
+      },
+      "gates": {
+        "angle": false,
+        "slope": false,
+        "minGap": false,
+        "maxGap": true,
+        "gapVariation": false,
+        "referenceStraightness": true,
+        "candidateStraightness": true
+      },
+      "rows": [
+        {
+          "y": 38,
+          "referenceX": 34.5,
+          "candidateX": 28.5,
+          "gapPx": 6.0
+        },
+        {
+          "y": 39,
+          "referenceX": 33.5,
+          "candidateX": 28.5,
+          "gapPx": 5.0
+        },
+        {
+          "y": 40,
+          "referenceX": 33.5,
+          "candidateX": 28.5,
+          "gapPx": 5.0
+        },
+        {
+          "y": 41,
+          "referenceX": 32.5,
+          "candidateX": 28.5,
+          "gapPx": 4.0
+        },
+        {
+          "y": 42,
+          "referenceX": 32.5,
+          "candidateX": 28.5,
+          "gapPx": 4.0
+        },
+        {
+          "y": 43,
+          "referenceX": 31.5,
+          "candidateX": 27.5,
+          "gapPx": 4.0
+        },
+        {
+          "y": 44,
+          "referenceX": 31.5,
+          "candidateX": 28.5,
+          "gapPx": 3.0
+        },
+        {
+          "y": 45,
+          "referenceX": 30.5,
+          "candidateX": 27.5,
+          "gapPx": 3.0
+        },
+        {
+          "y": 46,
+          "referenceX": 30.5,
+          "candidateX": 27.5,
+          "gapPx": 3.0
+        },
+        {
+          "y": 47,
+          "referenceX": 29.5,
+          "candidateX": 27.5,
+          "gapPx": 2.0
+        },
+        {
+          "y": 48,
+          "referenceX": 29.5,
+          "candidateX": 27.5,
+          "gapPx": 2.0
+        },
+        {
+          "y": 49,
+          "referenceX": 28.5,
+          "candidateX": 27.5,
+          "gapPx": 1.0
+        },
+        {
+          "y": 50,
+          "referenceX": 28.5,
+          "candidateX": 27.5,
+          "gapPx": 1.0
+        },
+        {
+          "y": 51,
+          "referenceX": 27.5,
+          "candidateX": 27.5,
+          "gapPx": 0.0
+        },
+        {
+          "y": 52,
+          "referenceX": 27.5,
+          "candidateX": 26.5,
+          "gapPx": 1.0
+        }
+      ]
+    },
+    {
+      "deltaThreshold": 32,
+      "status": "FAIL",
+      "candidateLine": {
+        "slopeDxDy": -0.11785714285714285,
+        "intercept": 33.13690476190476,
+        "rmsPx": 0.31027381660372366
+      },
+      "angleErrorDeg": 19.84334205711777,
+      "slopeError": 0.3821428571428571,
+      "gapPx": {
+        "min": 0.0,
+        "max": 6.0,
+        "variation": 6.0
+      },
+      "gates": {
+        "angle": false,
+        "slope": false,
+        "minGap": false,
+        "maxGap": true,
+        "gapVariation": false,
+        "referenceStraightness": true,
+        "candidateStraightness": true
+      },
+      "rows": [
+        {
+          "y": 38,
+          "referenceX": 34.5,
+          "candidateX": 28.5,
+          "gapPx": 6.0
+        },
+        {
+          "y": 39,
+          "referenceX": 33.5,
+          "candidateX": 28.5,
+          "gapPx": 5.0
+        },
+        {
+          "y": 40,
+          "referenceX": 33.5,
+          "candidateX": 28.5,
+          "gapPx": 5.0
+        },
+        {
+          "y": 41,
+          "referenceX": 32.5,
+          "candidateX": 28.5,
+          "gapPx": 4.0
+        },
+        {
+          "y": 42,
+          "referenceX": 32.5,
+          "candidateX": 28.5,
+          "gapPx": 4.0
+        },
+        {
+          "y": 43,
+          "referenceX": 31.5,
+          "candidateX": 27.5,
+          "gapPx": 4.0
+        },
+        {
+          "y": 44,
+          "referenceX": 31.5,
+          "candidateX": 28.5,
+          "gapPx": 3.0
+        },
+        {
+          "y": 45,
+          "referenceX": 30.5,
+          "candidateX": 27.5,
+          "gapPx": 3.0
+        },
+        {
+          "y": 46,
+          "referenceX": 30.5,
+          "candidateX": 27.5,
+          "gapPx": 3.0
+        },
+        {
+          "y": 47,
+          "referenceX": 29.5,
+          "candidateX": 27.5,
+          "gapPx": 2.0
+        },
+        {
+          "y": 48,
+          "referenceX": 29.5,
+          "candidateX": 27.5,
+          "gapPx": 2.0
+        },
+        {
+          "y": 49,
+          "referenceX": 28.5,
+          "candidateX": 27.5,
+          "gapPx": 1.0
+        },
+        {
+          "y": 50,
+          "referenceX": 28.5,
+          "candidateX": 27.5,
+          "gapPx": 1.0
+        },
+        {
+          "y": 51,
+          "referenceX": 27.5,
+          "candidateX": 27.5,
+          "gapPx": 0.0
+        },
+        {
+          "y": 52,
+          "referenceX": 27.5,
+          "candidateX": 26.5,
+          "gapPx": 1.0
+        }
+      ]
+    }
+  ],
+  "limitations": [
+    "Delta support depends on contrast against the exact clean source, not recovered donor alpha.",
+    "Horizontal gap width is not a world-space distance.",
+    "The local horizontal reference is recorded independently, not inferred as a vanishing horizon.",
+    "A local PASS does not establish whole-cooktop planarity, pitch, or visual approval."
+  ],
+  "inputs": {
+    "source": {
+      "sha256": "efe78da925fac51b4377db7f42f09581be629ee48d456f8a7f5a6e99bd22174d",
+      "filename": "source.png"
+    },
+    "candidate": {
+      "sha256": "2aedd8f3e5ba906dd7ab5312ea4c6a551f81c0a1866e0b3b9ec64e86797ec3df",
+      "filename": "candidate.png"
+    },
+    "reference": {
+      "sha256": "310375a58cdd965107f2514c0ec0fd941e8cbf2706afdb56a4ed655beeb5972e",
+      "filename": "reference.png"
+    }
+  },
+  "configSha256": "f85ce1a6f124d3100b747e4993d653f710ff0ba1c1d29d4940ea585bf1793bf7"
+}
