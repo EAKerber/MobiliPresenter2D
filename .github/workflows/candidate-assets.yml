@@ -66,13 +66,13 @@ jobs:
           python tools/render_variant_fidelity.py \
             --manifest /tmp/r5a-materialize/variant-manifest.json \
             --output-dir /tmp/r5a-materialize/variants
-      - name: Materialize generated-donor range candidate
+      - name: Materialize vector-corrected generated-donor range candidate
         run: |
-          python tools/materialize_range_donor_recipe.py \
-            --recipe review-assets/recipes/range-freestanding-generated-donor-v1.json \
+          python tools/materialize_range_donor_recipe_v2.py \
+            --recipe review-assets/recipes/range-freestanding-generated-donor-v2.json \
             --source-frame /tmp/r5a-materialize/variants/module-02-hidden.png \
             --variant-manifest /tmp/r5a-materialize/variant-manifest.json \
-            --output-dir review-assets/candidates/range-freestanding-generated-donor-v1
+            --output-dir review-assets/candidates/range-freestanding-generated-donor-v2
           python tools/validate_candidate_assets.py --output /tmp/r5a-materialize/intake.json
           python tools/validate_authoring_provenance.py --output /tmp/r5a-materialize/provenance.json
       - name: Commit generated R5A assets with CAS readback
@@ -97,7 +97,7 @@ jobs:
             app/reports/r5a-pixelperfect-materialization.json \
             app/reports/r5a-pixelperfect-gate.json \
             reference/baseline-manifest.json \
-            review-assets/candidates/range-freestanding-generated-donor-v1
+            review-assets/candidates/range-freestanding-generated-donor-v2
           if git diff --cached --quiet; then
             echo 'R5A_PIXELPERFECT_MATERIALIZATION_NO_CHANGE readback=PASS'
             exit 0
@@ -137,6 +137,7 @@ jobs:
           tests/test_candidate_asset_sets.py
           tests/test_candidate_delta_authoring.py
           tests/test_candidate_authoring_provenance.py
+          tests/test_perspective_editorial_gate.py
       - name: Preserve canonical baseline
         run: python tools/validate-baseline.py
       - name: Preserve app runtime and R5A pixel-perfect invariants
@@ -167,6 +168,24 @@ jobs:
             --intake-report /tmp/candidate-review/intake.json \
             --output-dir /tmp/candidate-review/candidates
           cat /tmp/candidate-review/candidates/summary.json
+      - name: Perspective editorial gate
+        shell: bash
+        run: |
+          set -euo pipefail
+          candidate=/tmp/candidate-review/candidates/range-freestanding-generated-donor-v2/composed.png
+          if [ -f "$candidate" ]; then
+            mkdir -p /tmp/candidate-review/editorial
+            python tools/perspective_editorial_gate.py \
+              --grid review-assets/perspective-grid.json \
+              --measurement review-assets/perspective-measurements/range-freestanding-generated-donor-v2.json \
+              --source-image /tmp/candidate-review/variants/module-02-hidden.png \
+              --candidate-image "$candidate" \
+              --output-json /tmp/candidate-review/editorial/range-freestanding-generated-donor-v2.json \
+              --output-png /tmp/candidate-review/editorial/range-freestanding-generated-donor-v2.png
+            cat /tmp/candidate-review/editorial/range-freestanding-generated-donor-v2.json
+          else
+            echo 'Perspective editorial gate skipped: v2 candidate not materialized in this revision.'
+          fi
       - name: Compose stacked candidate-set gates
         run: |
           python tools/render_candidate_set_review.py \

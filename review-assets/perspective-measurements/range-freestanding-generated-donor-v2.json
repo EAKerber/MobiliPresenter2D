@@ -1,0 +1,24 @@
+{
+  "schemaVersion": "PerspectiveEditorialMeasurement 0.1",
+  "sceneId": "cozinha-01",
+  "candidateId": "range-freestanding-generated-donor-v2",
+  "role": "range-freestanding",
+  "targetVariant": "module-02-hidden",
+  "measurementMethod": "explicit-grid-anchors",
+  "candidate": {
+    "cooktopBackY": 517.5,
+    "cooktopFrontY": 588.78,
+    "floorContactY": 897.62,
+    "leftX": 495,
+    "rightX": 742,
+    "rollDeviationDeg": 0.0,
+    "verticalAxisDeviationDeg": 0.0
+  },
+  "authoringTransform": {
+    "type": "vertical-scale-anchored-at-floor",
+    "previousPlacementBox": [495, 570, 742, 900],
+    "placementBox": [495, 508, 742, 900],
+    "verticalScale": 1.1879,
+    "reason": "previous fit had correct width/floor contact but cooktop plane was ~55 px too low; preserve X and floor, expand upward"
+  }
+}
