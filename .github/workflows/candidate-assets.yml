@@ -45,6 +45,14 @@ jobs:
           node-version: '22'
       - name: Install image tooling
         run: python -m pip install -r tools/requirements.txt
+      - name: Unit-test candidate gates
+        run: >-
+          python -m unittest
+          tests/test_candidate_asset_gates.py
+          tests/test_candidate_asset_sets.py
+          tests/test_candidate_delta_authoring.py
+          tests/test_candidate_authoring_provenance.py
+          tests/test_perspective_editorial_gate.py
       - name: Materialize accepted deterministic R5A edits
         working-directory: app
         run: |
