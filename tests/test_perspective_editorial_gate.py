@@ -4,6 +4,8 @@ import unittest
 ROOT=Path(__file__).resolve().parents[1]
 spec=importlib.util.spec_from_file_location('peg',ROOT/'tools'/'perspective_editorial_gate.py')
 peg=importlib.util.module_from_spec(spec); spec.loader.exec_module(peg)
+gap_spec=importlib.util.spec_from_file_location('gpg',ROOT/'tools'/'gap_parallelism_gate.py')
+gpg=importlib.util.module_from_spec(gap_spec); gap_spec.loader.exec_module(gpg)
 
 class PerspectiveEditorialGateTests(unittest.TestCase):
     def setUp(self):
@@ -46,5 +48,53 @@ class PerspectiveEditorialGateTests(unittest.TestCase):
         self.assertEqual(r['vectors']['verticalScale'],'none')
         self.assertEqual(r['vectors']['yawCorrection'],'none')
         self.assertIn('signed_depth_aligned',r['diagnostics'])
+
+
+class HumanCalibratedLocalGapGateTests(unittest.TestCase):
+    def setUp(self):
+        self.grid={
+          'schemaVersion':'GapParallelismGrid 0.2',
+          'sceneId':'cozinha-01',
+          'anchorPercent':[48.6,54.6],
+          'anchorPixel':[746,559],
+          'horizon':{'y':552.6,'role':'semantic evaluation cut','source':'human markup'},
+          'evaluationBandY':[553.2,575.0],
+          'reference':{
+            'authority':'human-calibrated',
+            'line':{'slopeDxDy':-0.4809818313541041,'intercept':1017.1919515694187},
+            'source':'human red correction',
+            'calibration':{'zoomScale':5}
+          },
+          'thresholds':{'slopeErrorMax':0.025,'angleErrorDegMax':1.5,'minGapPx':0.5,'maxGapPx':6.0,'maxGapVariationPx':1.75}
+        }
+    def measurement(self,cid,slope,intercept):
+        return {'schemaVersion':'GapParallelismMeasurement 0.2','sceneId':'cozinha-01','candidateId':cid,'role':'range-freestanding','targetVariant':'module-02-hidden','candidate':{'line':{'slopeDxDy':slope,'intercept':intercept}}}
+    def test_previous_agent_pass_becomes_fail_when_horizon_and_red_line_are_authority(self):
+        r=gpg.evaluate(self.grid,self.measurement('old-p8-s28',-0.11293054771315682,805.55))
+        self.assertEqual(r['overall'],'FAIL')
+        self.assertGreater(r['angleErrorDeg'],19.0)
+        self.assertEqual(r['gates']['angle'],'FAIL')
+        self.assertIn('horizon_applied',r['diagnostics'])
+        self.assertIn('human_calibrated_reference',r['diagnostics'])
+    def test_parallel_human_calibrated_candidate_passes(self):
+        r=gpg.evaluate(self.grid,self.measurement('corrected',-0.49181253529079216,1019.8004685897108))
+        self.assertEqual(r['overall'],'PASS')
+        self.assertEqual(r['gates']['parallelism'],'PASS')
+        self.assertEqual(r['gates']['angle'],'PASS')
+        self.assertEqual(r['gates']['gapVariation'],'PASS')
+        self.assertEqual(r['vector'],'none')
+    def test_opposite_direction_is_never_accepted(self):
+        r=gpg.evaluate(self.grid,self.measurement('inverted',+0.4809818313541041,474.0))
+        self.assertEqual(r['overall'],'FAIL')
+        self.assertFalse(r['directionMatch'])
+        self.assertIn('gap_direction_inverted',r['diagnostics'])
+    def test_horizon_clips_rows_above_semantic_cut(self):
+        r=gpg.evaluate(self.grid,self.measurement('corrected',-0.49181253529079216,1019.8004685897108))
+        self.assertEqual(r['evaluationRows'],[554,575])
+        self.assertEqual(r['horizonY'],552.6)
+    def test_v02_rejects_agent_inferred_reference_authority(self):
+        grid=dict(self.grid); grid['reference']=dict(self.grid['reference']); grid['reference']['authority']='agent-inferred'
+        with self.assertRaisesRegex(ValueError,'human-calibrated'):
+            gpg.evaluate(grid,self.measurement('x',-0.49,1019.8))
 
 if __name__=='__main__': unittest.main()
