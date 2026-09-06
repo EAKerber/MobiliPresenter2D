@@ -1,5 +1,11 @@
 # Perspective editorial gate
 
+**Evidence scope correction:** the R5A yaw PASS below is a result on declared
+geometry, not pixel-edge or human visual approval. The original stone reference
+was rejected during human review. See
+[R5A pixel calibration](../work/r5a-gap-pixel-calibration.md) for the measured
+failure, independent horizontal reference, contrast sweep and rejected warp.
+
 ## Purpose
 
 The perspective editorial gate turns high-level visual placement decisions into reproducible measurements and signed correction vectors. It complements, rather than replaces, ROI/diff and transparency gates.

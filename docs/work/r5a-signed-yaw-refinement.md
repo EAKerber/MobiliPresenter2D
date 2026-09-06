@@ -1,5 +1,10 @@
 # R5A — signed yaw refinement
 
+**Calibration correction:** the geometric PASS described below is historical
+and is not evidence of real pixel-edge alignment. Its stone reference combines
+different contour segments. See [pixel calibration](r5a-gap-pixel-calibration.md)
+for the human correction and the independently measured p8/s28 FAIL.
+
 After the v2 height correction, human review identified a remaining orientation mismatch. The correction is not a whole-object 2D rotation: that would tilt the oven body and re-open vertical/floor gates. R5A therefore adds a signed depth-vector dimension to the Perspective Editorial Gate.
 
 Reference from the exposed module-03 stone edge:

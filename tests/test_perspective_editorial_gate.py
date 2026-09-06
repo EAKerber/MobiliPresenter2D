@@ -57,7 +57,7 @@ class HumanCalibratedLocalGapGateTests(unittest.TestCase):
           'sceneId':'cozinha-01',
           'anchorPercent':[48.6,54.6],
           'anchorPixel':[746,559],
-          'horizon':{'y':552.6,'role':'semantic evaluation cut','source':'human markup'},
+          'horizon':{'y':552.6,'role':'independent horizontal reference','source':'human markup'},
           'evaluationBandY':[553.2,575.0],
           'reference':{
             'authority':'human-calibrated',
@@ -74,7 +74,7 @@ class HumanCalibratedLocalGapGateTests(unittest.TestCase):
         self.assertEqual(r['overall'],'FAIL')
         self.assertGreater(r['angleErrorDeg'],19.0)
         self.assertEqual(r['gates']['angle'],'FAIL')
-        self.assertIn('horizon_applied',r['diagnostics'])
+        self.assertIn('horizontal_reference_recorded',r['diagnostics'])
         self.assertIn('human_calibrated_reference',r['diagnostics'])
     def test_parallel_human_calibrated_candidate_passes(self):
         r=gpg.evaluate(self.grid,self.measurement('corrected',-0.49181253529079216,1019.8004685897108))
@@ -88,7 +88,7 @@ class HumanCalibratedLocalGapGateTests(unittest.TestCase):
         self.assertEqual(r['overall'],'FAIL')
         self.assertFalse(r['directionMatch'])
         self.assertIn('gap_direction_inverted',r['diagnostics'])
-    def test_horizon_clips_rows_above_semantic_cut(self):
+    def test_explicit_band_rounds_rows_and_records_horizontal_reference(self):
         r=gpg.evaluate(self.grid,self.measurement('corrected',-0.49181253529079216,1019.8004685897108))
         self.assertEqual(r['evaluationRows'],[554,575])
         self.assertEqual(r['horizonY'],552.6)

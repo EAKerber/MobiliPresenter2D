@@ -39,7 +39,7 @@ class GapParallelismGateTests(unittest.TestCase):
         }
 
     def test_parallel_positive_gap_passes(self):
-        result = gap_gate.evaluate(self.grid, self.measurement('pass', [748, 540], [742, 586]))
+        result = gap_gate.evaluate(self.grid, self.measurement('pass', [745, 540], [739, 586]))
         self.assertEqual(result['overall'], 'PASS')
         self.assertEqual(result['gates']['parallelism'], 'PASS')
         self.assertEqual(result['gates']['positiveGap'], 'PASS')
@@ -59,13 +59,23 @@ class GapParallelismGateTests(unittest.TestCase):
         self.assertEqual(result['gates']['positiveGap'], 'FAIL')
         self.assertEqual(result['vector'], 'increase-gap')
 
-    def test_experimental_p8_s28_geometry_passes(self):
-        # Fitted line from deterministic local experiment: slope≈-0.1380,
-        # with a 2.36..4.27 px positive gap to the authoritative stone edge.
-        result = gap_gate.evaluate(self.grid, self.measurement('p8-s28', [747.35, 540], [741.0, 586]))
+    def test_historical_declared_lines_do_not_verify_asset_pixels(self):
+        # Historical wrong reference can still produce arithmetic PASS.
+        # This must never be presented as pixel-edge verification.
+        result = gap_gate.evaluate(self.grid, self.measurement('historical-declared', [744.35, 540], [738.0, 586]))
         self.assertEqual(result['overall'], 'PASS')
         self.assertLessEqual(result['slopeError'], 0.02)
         self.assertGreaterEqual(result['gapPx']['min'], 2.0)
+        self.assertEqual(result['pixelEdgeVerification'], 'NOT_EVALUATED')
+        self.assertFalse(result['promotionEligible'])
+
+    def test_horizontal_reference_does_not_implicitly_clip_band(self):
+        self.grid.update(schemaVersion='GapParallelismGrid 0.2',
+                         horizon={'y': 552.6}, evaluationBandY=[540, 586])
+        self.grid['reference'].update(authority='human-calibrated')
+        result = gap_gate.evaluate(self.grid, self.measurement('declared', [748, 540], [742, 586]))
+        self.assertEqual(result['evaluationRows'], [540, 586])
+        self.assertEqual(result['horizonY'], 552.6)
 
 
 if __name__ == '__main__':
