@@ -1,6 +1,6 @@
 # R5A — module-02-hidden completion
 
-Status: deterministic geometry materialized; `range-freestanding` v2 under human review.
+Status: deterministic geometry materialized; `range-freestanding` v2 with height + signed yaw correction is at human visual review.
 
 ## Accepted deterministic geometry
 
@@ -51,6 +51,7 @@ The only remaining visual debt in `module-02-hidden` is `replacement-placeholder
 exact 1536x1024 module-02-hidden frame
   -> generated donor used only as source material
   -> deterministic alpha preparation / placement
+  -> deterministic signed perspective correction
   -> full-frame edited result
   -> pixel diff against exact source
   -> extract full-canvas RGBA candidate delta
@@ -64,34 +65,57 @@ No generated scene is promoted directly.
 
 ## Perspective editorial gate
 
-R5A formalizes a deterministic high-level visual gate using a measured scene grid and signed correction vectors. It evaluates roll, vertical axis, projected top-plane depth, front/back counter alignment, floor contact, centering and width fit. Failed measures emit corrective vectors such as `up`, `left`, `increase-depth` or `expand-vertical`; passing measures emit `none`.
+R5A formalizes a deterministic high-level visual gate using a measured scene grid and signed correction vectors. It evaluates roll, vertical axis, projected top-plane depth, front/back counter alignment, floor contact, centering, width fit and signed depth/yaw orientation. Failed measures emit corrective vectors such as `up`, `left`, `increase-depth`, `expand-vertical`, `rear-edge-right` or `rear-edge-left`; passing measures emit `none`.
 
 The first range fit preserved width and floor contact but left the cooktop approximately 55 px too low. The gate classified that fit as an inverted editorial correction and emitted `verticalTranslation=up` plus `verticalScale=expand-vertical`.
 
-The selected v2 transform keeps X and the floor fixed and expands the range upward:
+The selected height transform keeps X and the floor fixed and expands the range upward:
 
 - previous placement: `[495,570,742,900]`;
-- v2 placement: `[495,508,742,900]`;
+- current placement: `[495,508,742,900]`;
 - declared back edge: `517.50`;
 - declared front edge: `588.78`;
 - declared floor contact: `897.62`;
 - scene back/front/floor references: `520 / 586 / 898`.
 
-## Hosted range-v2 materialization receipt
+A subsequent symmetric yaw sweep tested both signs instead of assuming a correction direction. The measured scene depth reference comes from the exposed module-03 stone edge:
 
-GitHub Actions rebuilt the v2 candidate from the versioned donor payload and deterministic recipe:
+- reference vector: `[-9,+66]`, slope `-0.1364`;
+- negative-sign corrections diverged from the reference;
+- selected correction moves only the rear cooktop edge `+12 px` right, fading to `0 px` at local `y=84`;
+- oven body and floor contact below that hinge remain unchanged;
+- candidate vector: `[-12,+84]`, slope `-0.1429`;
+- signed slope error: `0.0065` with limit `0.02`;
+- direction match: `true`;
+- resulting `yawCorrection`: `none`.
 
-- materializer base: `86affbaff39d959c89989614514cf59126368b4c`;
-- materialized commit: `b60186d32f55770b7d3fd5363536dd0dd08d5900`;
-- readback: `PASS`;
-- candidate SHA-256: `3f1e173c3ef17eb5974da50c9ed3cc1e03f924f7edb1c98a121c0f2dbb31805c`;
+## Current hosted range-v2 receipt
+
+GitHub Actions rebuilt the candidate from the versioned donor payload and deterministic recipe with the signed yaw transform physically applied to the candidate bytes:
+
+- active candidate SHA-256: `f5e2289b2bf1376d2d7481f357da532ac8e24d493abd9643ada5506eb2617115`;
+- edited frame SHA-256: `d61a8592aa7ffb36bf10433daaf53f443689908d91094a34e3f3a1300fae2dfe`;
 - changed pixels: `96530`;
 - difference bounds: `[495,508,742,923]`;
 - changed pixels outside authorized ROI: `0`;
 - round-trip mismatch pixels: `0`;
 - source frame SHA-256: `3bebae52fc781ed0bf391cf6ef82c62f7caa810551dc261481f51976c2de7a85`.
 
-The rejected v1 range candidate was removed from the active candidate inbox but remains available in Git history. The v2 candidate remains `REVIEW / PENDING`; no runtime promotion has occurred.
+Final candidate-gates run `34003581293` passed:
+
+- 24 unit tests;
+- canonical baseline / golden `0px`;
+- R5A pixel-perfect invariants;
+- candidate intake;
+- authoring provenance;
+- individual machine visual gate;
+- signed Perspective Editorial Gate;
+- complete candidate-set machine gate;
+- review artifact upload.
+
+The signed editorial result is `PASS` with all correction vectors `none`. Artifact ID: `9980221625`, SHA-256 digest `64746b54ed278d0893027c40919245c40c43dab21ad7234419c735ddb778535c`.
+
+The rejected v1 range candidate was removed from the active candidate inbox but remains available in Git history. The current v2 candidate remains `REVIEW / PENDING`; no runtime promotion has occurred.
 
 ## Visual checklist for range
 
