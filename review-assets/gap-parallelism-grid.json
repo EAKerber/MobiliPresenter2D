@@ -1,0 +1,23 @@
+{
+  "schemaVersion": "GapParallelismGrid 0.1",
+  "sceneId": "cozinha-01",
+  "anchorPercent": [48.6, 54.6],
+  "anchorPixel": [746, 559],
+  "measurementRows": [540, 586],
+  "reference": {
+    "back": [751, 520],
+    "front": [742, 586],
+    "source": "module-03 exposed-left stone edge on authoritative module-02-hidden frame"
+  },
+  "thresholds": {
+    "slopeErrorMax": 0.02,
+    "minGapPx": 2.0,
+    "maxGapPx": 8.0
+  },
+  "policy": {
+    "signedDirectionRequired": true,
+    "positiveGapRequired": true,
+    "measurementIsEditorialNotEditAuthorization": true,
+    "blockingRoles": ["range-freestanding"]
+  }
+}
