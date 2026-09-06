@@ -38,6 +38,7 @@
       "alpha-threshold",
       "pre-scale-247x392",
       "vertical-vector-correction",
+      "top-plane-signed-yaw-correction",
       "webp-q90-pack"
     ],
     "robustAlphaCropThreshold": 0,
