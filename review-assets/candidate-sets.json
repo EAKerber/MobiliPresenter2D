@@ -1,0 +1,33 @@
+{
+  "schemaVersion": "CandidateAssetSets 0.1",
+  "sceneId": "cozinha-01",
+  "sets": [
+    {
+      "id": "module-02-hidden-complete",
+      "targetVariant": "module-02-hidden",
+      "roleOrder": [
+        "range-freestanding"
+      ],
+      "resolvesDebtCodes": [
+        "replacement-placeholder"
+      ],
+      "visualChecklist": [
+        "range-fits-bay",
+        "range-perspective-matches-camera",
+        "range-counter-height-plausible",
+        "range-floor-contact-natural",
+        "range-lighting-match",
+        "range-not-pasted-on",
+        "neighbor-modules-untouched",
+        "no-visible-seam"
+      ],
+      "humanReview": {
+        "status": "PENDING",
+        "reviewer": null,
+        "reviewedAt": null,
+        "candidateSha256ByRole": {},
+        "checklist": {}
+      }
+    }
+  ]
+}

@@ -1,6 +1,6 @@
 {
   "schemaVersion": "AssetBaseline2D 1.0",
-  "baselineId": "cozinha-01-module02-fidelity-fix1",
+  "baselineId": "cozinha-01-r5a-pixelperfect-bridges1",
   "canvas": {
     "width": 1536,
     "height": 1024
@@ -8,9 +8,11 @@
   "compositionOrder": [
     "assets/kitchen/layers/01_modulo_lavanderia.png",
     "assets/kitchen/layers/02_inferior_fogao.png",
-    "assets/kitchen/layers/stone-02-cozinha.png",
+    "assets/kitchen/variants/stone-02-cozinha-exposed-right.png",
+    "assets/kitchen/bridges/stone-02-joint-bridge.png",
     "assets/kitchen/layers/03_inferior_pia.png",
-    "assets/kitchen/layers/stone-03-pia.png",
+    "assets/kitchen/variants/stone-03-pia-exposed-left.png",
+    "assets/kitchen/bridges/stone-03-joint-bridge.png",
     "assets/kitchen/layers/04_lateral_geladeira.png",
     "assets/kitchen/layers/05_aereo_fogao.png",
     "assets/kitchen/layers/06_aereo_pia.png",
@@ -28,7 +30,7 @@
       ]
     },
     "assets/kitchen/composicao-completa.png": {
-      "sha256": "fef84103531acf469b2e3a29f0b6df12f384c961b86c3dc5770967614fa545a8",
+      "sha256": "79ef8138e6011f52ac000982ae5855a7ac14c74e75f3fcd2a62d614cd29e9ba0",
       "alphaBounds": [
         0,
         0,
@@ -55,7 +57,7 @@
       ]
     },
     "assets/kitchen/layers/stone-02-cozinha.png": {
-      "sha256": "03f8e394e0192d5f969562c610ad62f83e498e77e5c0eacc363c86b6e8315595",
+      "sha256": "5317874508ac3738dd8aaffb60e1f6db5e623edb2d8261d7674934b3225359dd",
       "alphaBounds": [
         484,
         491,
@@ -136,12 +138,12 @@
       ]
     },
     "assets/kitchen/masks/02.png": {
-      "sha256": "bd5050d0e2b90b00acfe122f7e5e9ae52b48ab717e48412ee16694357a6100b7",
+      "sha256": "bfecd09f46d0566b6d774bdba496d6870972bf4bc785fb5f34281dddfe569b80",
       "alphaBounds": [
-        498,
-        590,
-        757,
-        856
+        0,
+        0,
+        1536,
+        1024
       ]
     },
     "assets/kitchen/masks/03.png": {
@@ -212,6 +214,42 @@
         484,
         491,
         764,
+        912
+      ]
+    },
+    "assets/kitchen/bridges/stone-02-joint-bridge.png": {
+      "sha256": "e178e88edf0f412d1f0922bf335e7b524e80e888a3e2189fcd51ccc048a3d108",
+      "alphaBounds": [
+        745,
+        521,
+        764,
+        590
+      ]
+    },
+    "assets/kitchen/bridges/stone-03-joint-bridge.png": {
+      "sha256": "d17fe629516c7aad1d79120c139f15529820a51ad260639ec5ce411e7aa222c3",
+      "alphaBounds": [
+        736,
+        516,
+        751,
+        590
+      ]
+    },
+    "assets/kitchen/variants/stone-02-cozinha-exposed-right.png": {
+      "sha256": "e1ab1e0134d249104dcf7bf7192922612f5aa72b155811689a997d5d83f1ca11",
+      "alphaBounds": [
+        484,
+        491,
+        757,
+        912
+      ]
+    },
+    "assets/kitchen/variants/stone-03-pia-exposed-left.png": {
+      "sha256": "7f298d33310610831ce1e9d0b095c0a26ffd89b003ac2fcc629ed1e23332e419",
+      "alphaBounds": [
+        736,
+        442,
+        1217,
         912
       ]
     }

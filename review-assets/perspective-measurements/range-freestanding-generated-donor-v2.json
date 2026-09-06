@@ -1,0 +1,35 @@
+{
+  "schemaVersion": "PerspectiveEditorialMeasurement 0.1",
+  "sceneId": "cozinha-01",
+  "candidateId": "range-freestanding-generated-donor-v2",
+  "role": "range-freestanding",
+  "targetVariant": "module-02-hidden",
+  "measurementMethod": "explicit-grid-anchors+signed-depth-vector",
+  "candidate": {
+    "cooktopBackY": 517.5,
+    "cooktopFrontY": 588.78,
+    "floorContactY": 897.62,
+    "leftX": 495,
+    "rightX": 742,
+    "rollDeviationDeg": 0.0,
+    "verticalAxisDeviationDeg": 0.0,
+    "signedDepthVector": {
+      "dx": -12,
+      "dy": 84,
+      "source": "deterministic top-plane rear shift: rear +12px, front +0px over local y=0..84"
+    }
+  },
+  "authoringTransform": {
+    "type": "vertical-scale-anchored-at-floor+top-plane-rear-shift",
+    "previousPlacementBox": [495, 570, 742, 900],
+    "placementBox": [495, 508, 742, 900],
+    "verticalScale": 1.1879,
+    "perspectiveAdjustment": {
+      "rearShiftPx": 12,
+      "frontShiftPx": 0,
+      "hingeLocalY": 84,
+      "bodyBelowHingePreserved": true
+    },
+    "reason": "preserve accepted height/width/floor fit; correct only the signed depth orientation of the cooktop plane"
+  }
+}

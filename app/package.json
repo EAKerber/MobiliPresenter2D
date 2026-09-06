@@ -5,8 +5,10 @@
   "description": "Configurador Casa em Módulos em HTML, CSS e JavaScript puro.",
   "scripts": {
     "build:stone-layers": "python3 tools/split-stone-layers.py",
+    "build:r5a-pixelperfect": "python3 tools/apply-r5a-pixelperfect-edits.py",
     "build:inline-masks": "python3 tools/build-inline-masks.py",
-    "build": "npm run build:stone-layers && npm run build:inline-masks && bash scripts/build-static.sh",
-    "test": "node tools/test-core.js && python3 tools/validate-assets.py"
+    "build:technical-data": "python3 tools/update-technical-data.py",
+    "build": "npm run build:stone-layers && npm run build:r5a-pixelperfect && npm run build:inline-masks && npm run build:technical-data && bash scripts/build-static.sh",
+    "test": "node tools/test-core.js && python3 tools/validate-assets.py && python3 tools/validate-r5a-pixelperfect.py"
   }
 }

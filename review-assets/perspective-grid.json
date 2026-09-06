@@ -1,0 +1,37 @@
+{
+  "schemaVersion": "PerspectiveEditorialGrid 0.1",
+  "sceneId": "cozinha-01",
+  "reference": {
+    "counterBackY": 520,
+    "counterFrontY": 586,
+    "floorContactY": 898,
+    "verticalAxisX": 742,
+    "bayLeftX": 495,
+    "bayRightX": 742,
+    "signedDepthVector": {
+      "dx": -9,
+      "dy": 66,
+      "source": "module-03 exposed-left stone edge: back≈[751,520] -> front≈[742,586]"
+    }
+  },
+  "thresholds": {
+    "horizontalRollDeg": 0.75,
+    "verticalAxisDeg": 0.75,
+    "depthRatioMin": 0.9,
+    "depthRatioMax": 1.1,
+    "frontAlignmentPx": 4,
+    "backAlignmentPx": 6,
+    "floorContactPx": 5,
+    "centerAlignmentPx": 4,
+    "widthFitPx": 4,
+    "signedDepthSlopeErrorMax": 0.02
+  },
+  "policy": {
+    "signedVectorsRequired": true,
+    "emitVectorOnlyWhenGateFails": true,
+    "humanReadableOverlayRequired": true,
+    "blockingRoles": [
+      "range-freestanding"
+    ]
+  }
+}

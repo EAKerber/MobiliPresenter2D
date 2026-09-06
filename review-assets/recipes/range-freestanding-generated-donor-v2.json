@@ -1,0 +1,67 @@
+{
+  "schemaVersion": "GeneratedDonorPlacementRecipe 0.2",
+  "id": "range-freestanding-generated-donor-v2",
+  "role": "range-freestanding",
+  "targetVariant": "module-02-hidden",
+  "targetVariantFingerprint": "scene2d-4692e364",
+  "authoringContractId": "range-freestanding-edit",
+  "canvas": {
+    "width": 1536,
+    "height": 1024
+  },
+  "authorizedRoi": [460, 430, 790, 950],
+  "sourceFrameSha256": "3bebae52fc781ed0bf391cf6ef82c62f7caa810551dc261481f51976c2de7a85",
+  "donor": {
+    "sourceMethod": "image_gen",
+    "sourceGenId": "173b7d25-2e87-4069-8337-c8b2f150edd3",
+    "sourceGeneratedFrameSha256": "77ba25445d80fbf2dd4aa753b4be0a74ed0503c99f5743f68b7db89cef909a44",
+    "packedFormat": "WEBP",
+    "packedSha256": "53cf378cc40e4a3d18f6ea6c5fd63fcd7fe22e48152ac73394c16c06019d40e0",
+    "processing": [
+      "robust-alpha-crop",
+      "alpha-threshold",
+      "pre-scale-247x392",
+      "vertical-vector-correction",
+      "top-plane-signed-yaw-correction",
+      "webp-q90-pack"
+    ],
+    "robustAlphaCropThreshold": 0,
+    "packedBase64Chunks": [
+      "review-assets/recipes/donor/range-freestanding-donor-v2-q90.part00.b64",
+      "review-assets/recipes/donor/range-freestanding-donor-v2-q90.part01.b64",
+      "review-assets/recipes/donor/range-freestanding-donor-v2-q90.part02.b64",
+      "review-assets/recipes/donor/range-freestanding-donor-v2-q90.part03.b64",
+      "review-assets/recipes/donor/range-freestanding-donor-v2-q90.part04.b64",
+      "review-assets/recipes/donor/range-freestanding-donor-v2-q90.part05.b64",
+      "review-assets/recipes/donor/range-freestanding-donor-v2-q90.part06.b64",
+      "review-assets/recipes/donor/range-freestanding-donor-v2-q90.part07.b64",
+      "review-assets/recipes/donor/range-freestanding-donor-v2-q90.part08.b64"
+    ]
+  },
+  "placementBox": [495, 508, 742, 900],
+  "resampling": "LANCZOS",
+  "alphaThresholdBelow": 4,
+  "perspectiveAdjustment": {
+    "type": "top-plane-rear-shift",
+    "rearShiftPx": 12,
+    "frontShiftPx": 0,
+    "hingeLocalY": 84,
+    "direction": "rear-right",
+    "bodyBelowHingePreserved": true,
+    "reason": "signed scene depth vector is negative-x toward the front; move only the rear cooktop edge right until candidate slope matches the measured stone reference"
+  },
+  "contactShadow": {
+    "enabled": true,
+    "sourceBottomRows": 30,
+    "gaussianBlurRadius": 4,
+    "pasteYOffsetFromBottom": -7,
+    "opacityScale": 0.2
+  },
+  "output": {
+    "candidateId": "range-freestanding-generated-donor-v2",
+    "candidatePath": "review-assets/candidates/range-freestanding-generated-donor-v2/candidate.png",
+    "differencePath": "review-assets/candidates/range-freestanding-generated-donor-v2/difference.png",
+    "extractionReportPath": "review-assets/candidates/range-freestanding-generated-donor-v2/extraction-report.json",
+    "metadataPath": "review-assets/candidates/range-freestanding-generated-donor-v2/candidate.json"
+  }
+}

@@ -55,7 +55,9 @@ def find_metadata(candidate_root: Path) -> list[Path]:
     return sorted(
         path
         for path in candidate_root.rglob("*.json")
-        if path.is_file() and not path.name.startswith("_")
+        if path.is_file()
+        and not path.name.startswith("_")
+        and path.name != "extraction-report.json"
     )
 
 
@@ -135,7 +137,13 @@ def validate_candidate(
         )
 
     provenance = metadata.get("provenance") or {}
-    if provenance.get("method") not in {"image-generation", "image-edit", "manual", "derived"}:
+    if provenance.get("method") not in {
+        "image-generation",
+        "image-edit",
+        "manual",
+        "derived",
+        "generated-donor-derived",
+    }:
         raise CandidateValidationError("CANDIDATE_PROVENANCE_METHOD_INVALID", repr(provenance.get("method")))
     references = provenance.get("sourceReferences")
     if not isinstance(references, list) or len(references) < 2 or not all(isinstance(item, str) and item for item in references):
