@@ -1,0 +1,43 @@
+{
+  "searchX": [
+    0,
+    50
+  ],
+  "evaluationRows": [
+    38,
+    52
+  ],
+  "horizontalReference": {
+    "y": 37.60000000000002,
+    "role": "user horizontal reference, near backsplash/top surface transition; not a physical vanishing horizon"
+  },
+  "alphaThreshold": 128,
+  "deltaThresholds": [
+    8,
+    16,
+    24,
+    32
+  ],
+  "thresholds": {
+    "angleErrorDegMax": 1.5,
+    "slopeErrorMax": 0.025,
+    "minGapPx": 0.5,
+    "maxGapPx": 6,
+    "maxGapVariationPx": 1.75,
+    "lineRmsMaxPx": 0.5
+  },
+  "expectedSha256": {
+    "source": "efe78da925fac51b4377db7f42f09581be629ee48d456f8a7f5a6e99bd22174d",
+    "candidate": "2aedd8f3e5ba906dd7ab5312ea4c6a551f81c0a1866e0b3b9ec64e86797ec3df",
+    "reference": "310375a58cdd965107f2514c0ec0fd941e8cbf2706afdb56a4ed655beeb5972e"
+  },
+  "sceneOffset": [
+    715,
+    515
+  ],
+  "fullFrameSha256": {
+    "source": "3bebae52fc781ed0bf391cf6ef82c62f7caa810551dc261481f51976c2de7a85",
+    "candidate": "f30bfecff2c795f3d32a9061ec9b6d6ae116cbf1af9721961753751ec5c77b15",
+    "reference": "7f298d33310610831ce1e9d0b095c0a26ffd89b003ac2fcc629ed1e23332e419"
+  }
+}

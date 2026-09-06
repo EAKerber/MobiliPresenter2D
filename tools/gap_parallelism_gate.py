@@ -38,10 +38,12 @@ def _evaluation_rows(grid: dict) -> tuple[int, int, float | None]:
     if grid.get("schemaVersion") == "GapParallelismGrid 0.2":
         horizon = float(grid["horizon"]["y"])
         band = grid["evaluationBandY"]
-        y0 = max(float(band[0]), horizon)
+        # The horizontal annotation is an independent reference, not an
+        # inferred physical horizon or an automatic semantic clipping rule.
+        y0 = float(band[0])
         y1 = float(band[1])
         if y1 < y0:
-            raise ValueError("evaluation band must extend below the horizon")
+            raise ValueError("evaluation band must be ascending")
         return math.ceil(y0), math.floor(y1), horizon
     rows = grid["measurementRows"]
     y0, y1 = int(rows[0]), int(rows[1])
@@ -116,7 +118,7 @@ def evaluate(grid: dict, measurement: dict) -> dict:
     if variation_limit is not None:
         diagnostics.append("gap_variation_stable" if variation_pass else "gap_variation_excessive")
     if grid_schema == "GapParallelismGrid 0.2":
-        diagnostics.append("horizon_applied")
+        diagnostics.append("horizontal_reference_recorded")
         diagnostics.append("human_calibrated_reference")
 
     result = {
@@ -126,6 +128,9 @@ def evaluate(grid: dict, measurement: dict) -> dict:
         "role": measurement.get("role"),
         "targetVariant": measurement.get("targetVariant"),
         "overall": status,
+        "scope": "declared-line-geometry-only",
+        "pixelEdgeVerification": "NOT_EVALUATED",
+        "promotionEligible": False,
         "reference": {
             "slopeDxDy": round(ref_slope, 6),
             "intercept": round(ref_intercept, 6),
