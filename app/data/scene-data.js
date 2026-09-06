@@ -9,7 +9,7 @@
 
   const scene = {
     schemaVersion: "Scene2D 1.0",
-    manifestVersion: "cozinha-01@2026-09-05-r5a-pixelperfect-bridges1",
+    manifestVersion: "cozinha-01@2026-09-06-r5a-approved-range",
     id: "cozinha-01",
     label: "Cozinha Casa em Módulos",
     canvas: { width: 1536, height: 1024 },
@@ -224,15 +224,15 @@
         label: "Fogão convencional",
         kind: "substitution",
         zIndex: 205,
-        asset: "assets/kitchen/substitutions/range-freestanding-placeholder.png",
+        asset: "assets/kitchen/substitutions/range-freestanding.png",
         maskAsset: null,
-        alphaBounds: null,
+        alphaBounds: { x: 494, y: 531, width: 257, height: 355 },
         defaultVisible: false,
         controllable: false,
         visibilityIntent: "auto",
         hostId: null,
         finishGroups: [],
-        tags: ["replacement", "cooking-zone", "placeholder"]
+        tags: ["replacement", "cooking-zone"]
       }
     ],
     finishGroups: [

@@ -1,6 +1,8 @@
 # R5A — module-02-hidden completion
 
-Status: deterministic geometry materialized; `range-freestanding` v2 with height + signed yaw correction is at human visual review.
+Current status: approved generated range cutout integrated in runtime. See [current project status](STATUS-ATUAL.md).
+
+The receipts below are historical. The old v2 perspective PASS was invalidated by human calibration and does not approve the current asset.
 
 ## Accepted deterministic geometry
 

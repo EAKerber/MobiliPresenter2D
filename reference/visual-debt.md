@@ -25,7 +25,7 @@ Resolution direction: explicit photographic completion/endcap assets validated t
 
 ### `replacement-placeholder`
 
-When `module-02` is hidden, scene semantics activate `range-freestanding`, but its current asset remains intentionally transparent.
+Resolved in the R5A approved-range branch: hiding `module-02` activates the approved full-canvas RGBA range. The former transparent-placeholder debt is historical.
 
 Resolution direction: replace only the approved substitution asset with a fixed-camera photographic layer; do not alter visibility semantics to conceal the missing asset.
 

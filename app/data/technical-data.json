@@ -252,6 +252,15 @@
         1217,
         912
       ]
+    },
+    "assets/kitchen/substitutions/range-freestanding.png": {
+      "sha256": "0b8146b10ee4b4e4c9f96b34a44ab5adf71657e1392cb5024de9278aa1862864",
+      "alphaBounds": [
+        494,
+        531,
+        751,
+        886
+      ]
     }
   }
 }

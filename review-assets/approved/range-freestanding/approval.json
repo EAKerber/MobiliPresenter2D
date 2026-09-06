@@ -1,0 +1,22 @@
+{
+  "schemaVersion": "ApprovedRange 1.0",
+  "asset": "app/assets/kitchen/substitutions/range-freestanding.png",
+  "assetSha256": "0b8146b10ee4b4e4c9f96b34a44ab5adf71657e1392cb5024de9278aa1862864",
+  "mask": "review-assets/approved/range-freestanding/mask.png",
+  "maskSha256": "28f6df8b59eea9e0e3e20511b6651f3044d89ae5f2b712ee823707077b8c5fd7",
+  "sourceImageSha256": "5b427a6c07861f99cb8fbaf99afdcb14d2251ff254f20c185e9cd0ccf4a499ec",
+  "cleanFrameSha256": "3bebae52fc781ed0bf391cf6ef82c62f7caa810551dc261481f51976c2de7a85",
+  "authorizedRoi": [
+    460,
+    430,
+    790,
+    950
+  ],
+  "humanAppearanceApproval": {
+    "quote": "a ultima imagem está ótima. consegue a mascara do objeto separado?",
+    "scope": "generated stove appearance; deterministic cutout preserves source pixels"
+  },
+  "integrationAuthorization": "pode implementar ao repositório atual?",
+  "priorGeometricPassApplicable": false,
+  "floorShadowIncluded": false
+}
