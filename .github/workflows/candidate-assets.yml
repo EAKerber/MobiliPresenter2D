@@ -55,6 +55,7 @@ jobs:
           tests/test_perspective_editorial_gate.py
           tests/test_gap_parallelism_gate.py
           tests/test_gap_pixel_gate.py
+          tests/test_stone_surface_masks.py
       - name: Materialize accepted deterministic R5A edits
         working-directory: app
         run: |
@@ -141,6 +142,7 @@ jobs:
           tests/test_perspective_editorial_gate.py
           tests/test_gap_parallelism_gate.py
           tests/test_gap_pixel_gate.py
+          tests/test_stone_surface_masks.py
       - name: Preserve canonical baseline
         run: python tools/validate-baseline.py
       - name: Preserve app runtime and R5A pixel-perfect invariants
@@ -157,6 +159,8 @@ jobs:
             --output-dir /tmp/candidate-review/variants
       - name: Verify approved range runtime pixels
         run: python tools/validate_approved_range.py --manifest /tmp/candidate-review/variant-manifest.json --output-dir /tmp/candidate-review/approved-range
+      - name: Materialize stone surface mask review
+        run: python tools/build_stone_surface_masks.py --output-dir /tmp/candidate-review/stone-masks
       - name: Structural candidate intake
         run: |
           python tools/validate_candidate_assets.py --output /tmp/candidate-review/intake.json
