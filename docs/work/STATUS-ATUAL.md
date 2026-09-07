@@ -1,4 +1,4 @@
-# Estado atual — 2026-09-06
+# Estado atual — 2026-09-07
 
 ## Onde estamos
 
@@ -9,7 +9,7 @@ O README da raiz ainda descrevia o bootstrap R0; este documento passa a ser o po
 | Fase do produto | Situação observada |
 | --- | --- |
 | 0–2: baseline, dados e relações | Implementadas; composição inicial preservada, visibilidade e substituições testadas. |
-| 3: assets estruturais | Pedras separadas, alpha e juntas 02/03 corrigidos; fogão aprovado integrado nesta branch. Revisão final da fase ainda pendente. |
+| 3: assets estruturais | Pedras separadas, alpha e juntas 02/03 corrigidos; fogão aprovado integrado nesta branch. Revisão técnica de quatro estados concluída; fechamento estético pendente. |
 | 4: acabamentos globais | Cores lisas já têm infraestrutura; catálogo fotográfico de madeira/pedras e máscaras específicas ainda precisam de fechamento. |
 | 5: puxadores | Planejada. |
 | 6: iluminação | Toggle/layer existentes; fechamento da fase ainda não declarado. |
@@ -34,8 +34,8 @@ Nenhuma geração ocorre no runtime.
 
 ## Ordem de retomada
 
-1. Revisar esta composição integrada e os estados módulo 02/03 ocultos, especialmente contato de piso e acabamento da máscara.
-2. Conferir o débito histórico dos azulejos da coluna e demais itens estruturais; não declarar a Fase 3 inteira concluída sem essa revisão.
+1. Revisão técnica realizada nos quatro estados, incluindo 02 e 03 ocultos juntos. Revisão estética restante: contato de piso e borda do fogão isolado.
+2. Coluna inspecionada: nenhum defeito evidente reproduzido, sem alteração do background. Registro de débitos atualizado; detalhes em `r5a-structural-review.md`.
 3. Fechar a Fase 3 e iniciar a Fase 4: máscaras de pedra e um conjunto pequeno de acabamentos globais, preservando caixaria branca e reset original.
 4. Seguir puxadores → iluminação → decoração → UI/resumo → exportação conforme o guia.
 
