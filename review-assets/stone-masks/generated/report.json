@@ -1,0 +1,239 @@
+{
+  "schemaVersion": "StoneMaskBuildReport 0.1",
+  "status": "PASS",
+  "semanticApproval": "PENDING",
+  "runtimeInstalled": false,
+  "configSha256": "40d3c2a237c51455ad39a2410c3d66690b1281854a4fc2f4e89e5218709a6c36",
+  "records": [
+    {
+      "asset": "stone-02-exposed",
+      "surface": "backsplash",
+      "file": "stone-02-exposed-backsplash.png",
+      "sha256": "2735b5d7f684dc793d2b10398d711007e05f8aff2c36b654079cc925984aa8d4",
+      "nonzeroPixels": 1288,
+      "bounds": [
+        524,
+        521,
+        747,
+        552
+      ],
+      "outsideOwnerAlphaPixels": 0,
+      "protectedPixels": 0
+    },
+    {
+      "asset": "stone-02-exposed",
+      "surface": "top",
+      "file": "stone-02-exposed-top.png",
+      "sha256": "724d6a5857a7f469f58bf3eaf779fb65a468a22adcdc9f1d2569e8442bf6504e",
+      "nonzeroPixels": 1025,
+      "bounds": [
+        492,
+        552,
+        747,
+        575
+      ],
+      "outsideOwnerAlphaPixels": 0,
+      "protectedPixels": 0
+    },
+    {
+      "asset": "stone-02-exposed",
+      "surface": "front-edge",
+      "file": "stone-02-exposed-front-edge.png",
+      "sha256": "9a3e40e75f54dab3849edaf20099a1fc47b4a5641f4ddbbd36fd54ad3b8914c3",
+      "nonzeroPixels": 3295,
+      "bounds": [
+        492,
+        575,
+        746,
+        588
+      ],
+      "outsideOwnerAlphaPixels": 0,
+      "protectedPixels": 0
+    },
+    {
+      "asset": "stone-02-exposed",
+      "surface": "plinth",
+      "file": "stone-02-exposed-plinth.png",
+      "sha256": "b753f8cd81a329c2164b9b9a15372372da1503a4fcf7ca81b1dd67dd9ca6f390",
+      "nonzeroPixels": 8712,
+      "bounds": [
+        503,
+        858,
+        745,
+        894
+      ],
+      "outsideOwnerAlphaPixels": 0,
+      "protectedPixels": 0
+    },
+    {
+      "asset": "stone-02-bridge",
+      "surface": "backsplash",
+      "file": "stone-02-bridge-backsplash.png",
+      "sha256": "eb4205fe56272618f6106989cbbf2c7dfdbdde09b93420024b0c764c64d36c9b",
+      "nonzeroPixels": 403,
+      "bounds": [
+        747,
+        521,
+        764,
+        552
+      ],
+      "outsideOwnerAlphaPixels": 0,
+      "protectedPixels": 0
+    },
+    {
+      "asset": "stone-02-bridge",
+      "surface": "top",
+      "file": "stone-02-bridge-top.png",
+      "sha256": "00835efac590f0278d976f77b111ea45dcb18b98bc6923c94880a80f159212d7",
+      "nonzeroPixels": 150,
+      "bounds": [
+        745,
+        552,
+        756,
+        575
+      ],
+      "outsideOwnerAlphaPixels": 0,
+      "protectedPixels": 0
+    },
+    {
+      "asset": "stone-02-bridge",
+      "surface": "front-edge",
+      "file": "stone-02-bridge-front-edge.png",
+      "sha256": "efeea5f5b8485af5e359d188455a44fcfd003fb9e3af5842435c250b8e977a41",
+      "nonzeroPixels": 7,
+      "bounds": [
+        745,
+        575,
+        746,
+        588
+      ],
+      "outsideOwnerAlphaPixels": 0,
+      "protectedPixels": 0
+    },
+    {
+      "asset": "stone-02-bridge",
+      "surface": "plinth",
+      "file": "stone-02-bridge-plinth.png",
+      "sha256": "7d76e71a63a8171d2fb932d53f8b55591f27b5e14fa0d4daad6762cc279a53be",
+      "nonzeroPixels": 0,
+      "bounds": null,
+      "outsideOwnerAlphaPixels": 0,
+      "protectedPixels": 0
+    },
+    {
+      "asset": "stone-03-exposed",
+      "surface": "backsplash",
+      "file": "stone-03-exposed-backsplash.png",
+      "sha256": "2db690b2acdbb165d9a650e33c7da811a3510e6eb957d2904ddc689d0bbaedff",
+      "nonzeroPixels": 9792,
+      "bounds": [
+        751,
+        520,
+        1194,
+        552
+      ],
+      "outsideOwnerAlphaPixels": 0,
+      "protectedPixels": 0
+    },
+    {
+      "asset": "stone-03-exposed",
+      "surface": "top",
+      "file": "stone-03-exposed-top.png",
+      "sha256": "6b48c4a18f305808fdcb5ed38cca43584d368671300a7c5aac1f14abe20868ca",
+      "nonzeroPixels": 6003,
+      "bounds": [
+        740,
+        552,
+        1204,
+        575
+      ],
+      "outsideOwnerAlphaPixels": 0,
+      "protectedPixels": 0
+    },
+    {
+      "asset": "stone-03-exposed",
+      "surface": "front-edge",
+      "file": "stone-03-exposed-front-edge.png",
+      "sha256": "1e28e4ab220e3b745a37dd2ede57a847f35034143c4c8f5c370b34e836f1744f",
+      "nonzeroPixels": 6043,
+      "bounds": [
+        739,
+        575,
+        1204,
+        588
+      ],
+      "outsideOwnerAlphaPixels": 0,
+      "protectedPixels": 0
+    },
+    {
+      "asset": "stone-03-exposed",
+      "surface": "plinth",
+      "file": "stone-03-exposed-plinth.png",
+      "sha256": "8c4da733bc3c5262ee88f3413e38ec17b60f05ba728ec58bfc1933f1f87f95b3",
+      "nonzeroPixels": 16560,
+      "bounds": [
+        744,
+        858,
+        1204,
+        894
+      ],
+      "outsideOwnerAlphaPixels": 0,
+      "protectedPixels": 0
+    },
+    {
+      "asset": "stone-03-bridge",
+      "surface": "backsplash",
+      "file": "stone-03-bridge-backsplash.png",
+      "sha256": "79d705ee0cd8a7b8929773a853690ff4343d931f022c9a2cecedc232b7e79878",
+      "nonzeroPixels": 256,
+      "bounds": [
+        743,
+        520,
+        751,
+        552
+      ],
+      "outsideOwnerAlphaPixels": 0,
+      "protectedPixels": 0
+    },
+    {
+      "asset": "stone-03-bridge",
+      "surface": "top",
+      "file": "stone-03-bridge-top.png",
+      "sha256": "a753992bfb1845c0f448846d23b64c5ef5947a772b052d7c7f2204b4fcacb86c",
+      "nonzeroPixels": 94,
+      "bounds": [
+        738,
+        552,
+        750,
+        574
+      ],
+      "outsideOwnerAlphaPixels": 0,
+      "protectedPixels": 0
+    },
+    {
+      "asset": "stone-03-bridge",
+      "surface": "front-edge",
+      "file": "stone-03-bridge-front-edge.png",
+      "sha256": "dc48f57d42a843a358d9a0584f562b8df1214c5b445974d7b56d8bb273b2eb07",
+      "nonzeroPixels": 13,
+      "bounds": [
+        738,
+        575,
+        740,
+        587
+      ],
+      "outsideOwnerAlphaPixels": 0,
+      "protectedPixels": 0
+    },
+    {
+      "asset": "stone-03-bridge",
+      "surface": "plinth",
+      "file": "stone-03-bridge-plinth.png",
+      "sha256": "7d76e71a63a8171d2fb932d53f8b55591f27b5e14fa0d4daad6762cc279a53be",
+      "nonzeroPixels": 0,
+      "bounds": null,
+      "outsideOwnerAlphaPixels": 0,
+      "protectedPixels": 0
+    }
+  ]
+}

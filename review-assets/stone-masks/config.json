@@ -1,0 +1,308 @@
+{
+  "schemaVersion": "StoneSurfaceMasks 0.1",
+  "status": "REVIEW",
+  "canvas": [
+    1536,
+    1024
+  ],
+  "coordinates": "canonical pixels; polygon boundaries inclusive; no transforms",
+  "supersampling": 4,
+  "groups": {
+    "stone-02": {
+      "surfaces": {
+        "backsplash": [
+          [
+            524,
+            521
+          ],
+          [
+            763,
+            521
+          ],
+          [
+            763,
+            551
+          ],
+          [
+            524,
+            551
+          ]
+        ],
+        "top": [
+          [
+            524,
+            552
+          ],
+          [
+            762,
+            552
+          ],
+          [
+            745,
+            574
+          ],
+          [
+            492,
+            574
+          ]
+        ],
+        "front-edge": [
+          [
+            492,
+            575
+          ],
+          [
+            745,
+            575
+          ],
+          [
+            745,
+            587
+          ],
+          [
+            492,
+            587
+          ]
+        ],
+        "plinth": [
+          [
+            503,
+            858
+          ],
+          [
+            744,
+            858
+          ],
+          [
+            744,
+            893
+          ],
+          [
+            503,
+            893
+          ]
+        ]
+      },
+      "protected": {
+        "cooktop": [
+          [
+            532,
+            544
+          ],
+          [
+            728,
+            544
+          ],
+          [
+            736,
+            572
+          ],
+          [
+            517,
+            572
+          ]
+        ],
+        "left-pan": [
+          [
+            541,
+            490
+          ],
+          [
+            633,
+            490
+          ],
+          [
+            633,
+            551
+          ],
+          [
+            541,
+            551
+          ]
+        ],
+        "right-pan": [
+          [
+            641,
+            491
+          ],
+          [
+            722,
+            491
+          ],
+          [
+            722,
+            551
+          ],
+          [
+            641,
+            551
+          ]
+        ]
+      }
+    },
+    "stone-03": {
+      "surfaces": {
+        "backsplash": [
+          [
+            743,
+            520
+          ],
+          [
+            1193,
+            520
+          ],
+          [
+            1193,
+            551
+          ],
+          [
+            743,
+            551
+          ]
+        ],
+        "top": [
+          [
+            744,
+            552
+          ],
+          [
+            1194,
+            552
+          ],
+          [
+            1203,
+            574
+          ],
+          [
+            737,
+            574
+          ]
+        ],
+        "front-edge": [
+          [
+            737,
+            575
+          ],
+          [
+            1203,
+            575
+          ],
+          [
+            1203,
+            587
+          ],
+          [
+            737,
+            587
+          ]
+        ],
+        "plinth": [
+          [
+            744,
+            858
+          ],
+          [
+            1203,
+            858
+          ],
+          [
+            1203,
+            893
+          ],
+          [
+            744,
+            893
+          ]
+        ]
+      },
+      "protected": {
+        "drainer": [
+          [
+            784,
+            441
+          ],
+          [
+            874,
+            441
+          ],
+          [
+            874,
+            564
+          ],
+          [
+            784,
+            564
+          ]
+        ],
+        "faucet": [
+          [
+            988,
+            439
+          ],
+          [
+            1033,
+            439
+          ],
+          [
+            1033,
+            558
+          ],
+          [
+            988,
+            558
+          ]
+        ],
+        "sink": [
+          [
+            934,
+            554
+          ],
+          [
+            1075,
+            554
+          ],
+          [
+            1092,
+            574
+          ],
+          [
+            932,
+            574
+          ]
+        ]
+      }
+    }
+  },
+  "assets": [
+    {
+      "id": "stone-02-exposed",
+      "group": "stone-02",
+      "path": "app/assets/kitchen/variants/stone-02-cozinha-exposed-right.png",
+      "sha256": "e1ab1e0134d249104dcf7bf7192922612f5aa72b155811689a997d5d83f1ca11"
+    },
+    {
+      "id": "stone-02-bridge",
+      "group": "stone-02",
+      "path": "app/assets/kitchen/bridges/stone-02-joint-bridge.png",
+      "sha256": "e178e88edf0f412d1f0922bf335e7b524e80e888a3e2189fcd51ccc048a3d108"
+    },
+    {
+      "id": "stone-03-exposed",
+      "group": "stone-03",
+      "path": "app/assets/kitchen/variants/stone-03-pia-exposed-left.png",
+      "sha256": "7f298d33310610831ce1e9d0b095c0a26ffd89b003ac2fcc629ed1e23332e419"
+    },
+    {
+      "id": "stone-03-bridge",
+      "group": "stone-03",
+      "path": "app/assets/kitchen/bridges/stone-03-joint-bridge.png",
+      "sha256": "d17fe629516c7aad1d79120c139f15529820a51ad260639ec5ce411e7aa222c3"
+    }
+  ],
+  "limitations": [
+    "Manual conservative regions, not final semantic segmentation.",
+    "Stone behind/near protected objects remains unselected intentionally.",
+    "Masks are not installed in runtime and do not enable a finish.",
+    "Bridge masks follow existing host visibility; do not merge them permanently."
+  ]
+}
