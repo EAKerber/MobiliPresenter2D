@@ -1,0 +1,28 @@
+{
+  "schemaVersion": "StoneCleanPlateGate 0.1",
+  "status": "PASS",
+  "semanticReview": "PENDING",
+  "runtimePromoted": false,
+  "sourceSha256": "79ef8138e6011f52ac000982ae5855a7ac14c74e75f3fcd2a62d614cd29e9ba0",
+  "donorRegionsSha256": "8c0f8e1cd550f7b98d720d3d3120f4e11b585a69cff981a7c1d1e4a200c1005f",
+  "candidateSha256": "5f833b2d4c764b4a15df3c65d7fc18ae3e42edd6055981c85cfcdb1ddec886f0",
+  "composedSha256": "db9d0dd158ebad6a35b3d11fbe8ca6b75a08a4e620b41ff83fdaecdcb6ed0ef2",
+  "changedPixels": 18376,
+  "outsideRemovalMaskChangedPixels": 0,
+  "roundtripMismatchPixels": 0,
+  "protectedRegionChangedPixels": {
+    "sink-and-faucet": 0,
+    "front-edge": 0,
+    "plinth": 0
+  },
+  "byRegion": {
+    "pans-02": 8958,
+    "drainer-03": 9418
+  },
+  "bounds": [
+    536,
+    441,
+    870,
+    565
+  ]
+}

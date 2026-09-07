@@ -50,3 +50,9 @@ O guia completo permanece em `app/docs/GUIA-IMPLEMENTACAO-2D-DATA-DRIVEN.md`.
 
 Branch `work/r6-stone-surface-masks`, sobre o PR #10. Contrato, config, máscaras e overlay em `review-assets/stone-masks/`.
 Recortes conservadores, sem aprovação semântica automática. Nenhuma alteração de aparência no app.
+
+## Revisão humana das máscaras e base limpa
+
+Frente (amarelo) e rodapé (azul) aprovados pelo usuário e preservados por hash.
+Magenta com problemas nas panelas/escorredor: preparada base limpa generativa confinada, em `review-assets/stone-cleanplate/`.
+Cuba e torneira permanecem originais. Candidato em REVIEW: ainda falta julgar a textura reconstruída e separar os componentes em camadas; nenhuma promoção automática.

@@ -1,0 +1,14 @@
+{
+  "userQuote": "o amarelo da frente e o azul da parte de baixo estão ótimos",
+  "scope": "front-edge and plinth masks only",
+  "sha256ByPath": {
+    "review-assets/stone-masks/generated/stone-02-bridge-front-edge.png": "efeea5f5b8485af5e359d188455a44fcfd003fb9e3af5842435c250b8e977a41",
+    "review-assets/stone-masks/generated/stone-02-exposed-front-edge.png": "9a3e40e75f54dab3849edaf20099a1fc47b4a5641f4ddbbd36fd54ad3b8914c3",
+    "review-assets/stone-masks/generated/stone-03-bridge-front-edge.png": "dc48f57d42a843a358d9a0584f562b8df1214c5b445974d7b56d8bb273b2eb07",
+    "review-assets/stone-masks/generated/stone-03-exposed-front-edge.png": "1e28e4ab220e3b745a37dd2ede57a847f35034143c4c8f5c370b34e836f1744f",
+    "review-assets/stone-masks/generated/stone-02-bridge-plinth.png": "7d76e71a63a8171d2fb932d53f8b55591f27b5e14fa0d4daad6762cc279a53be",
+    "review-assets/stone-masks/generated/stone-02-exposed-plinth.png": "b753f8cd81a329c2164b9b9a15372372da1503a4fcf7ca81b1dd67dd9ca6f390",
+    "review-assets/stone-masks/generated/stone-03-bridge-plinth.png": "7d76e71a63a8171d2fb932d53f8b55591f27b5e14fa0d4daad6762cc279a53be",
+    "review-assets/stone-masks/generated/stone-03-exposed-plinth.png": "8c4da733bc3c5262ee88f3413e38ec17b60f05ba728ec58bfc1933f1f87f95b3"
+  }
+}
