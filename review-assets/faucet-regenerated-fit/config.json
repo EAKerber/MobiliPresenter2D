@@ -1,0 +1,18 @@
+{
+  "status": "REVIEW",
+  "source": "review-assets/stone-backing/source.png",
+  "backing": "review-assets/stone-backing/generated/backing.png",
+  "removalMask": "review-assets/stone-backing/generated/faucet-mask.png",
+  "fitXYWH": [
+    991,
+    443,
+    35,
+    115
+  ],
+  "sha256": {
+    "review-assets/stone-backing/source.png": "8d37ec9083cec188aeb0a579a69b787365457185c0290c9daa065690679f1a9b",
+    "review-assets/stone-backing/generated/backing.png": "2604cf592dc42ad8dc75ba49379518879f892e954242cc22bfee1068fad23449",
+    "review-assets/stone-backing/generated/faucet-mask.png": "c19d2c127504ddfb09411962d2719b6da93a60523aac825ff8e57b112dac1043",
+    "review-assets/faucet-regenerated-fit/donor.png": "62d05b64e3b66df2af227163b5dca469da16750939c77bb15dbe6323abb52557"
+  }
+}
