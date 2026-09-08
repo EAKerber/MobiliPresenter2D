@@ -1,0 +1,76 @@
+{
+  "status": "REVIEW",
+  "runtimeInstalled": false,
+  "faucetAssetSha256": "a63f286ee45b0124fa4274b09c4cd5ab7fb3a0d49f6da302698a6eb64caa2f70",
+  "cases": [
+    {
+      "case": "default",
+      "color": "graphite-diagnostic",
+      "neutralReplayMismatchPixels": 0,
+      "changedPixels": 54224,
+      "outsideMaterialMaskPixels": 0,
+      "opaqueFaucetChangedPixels": 0
+    },
+    {
+      "case": "default",
+      "color": "light-diagnostic",
+      "neutralReplayMismatchPixels": 0,
+      "changedPixels": 54105,
+      "outsideMaterialMaskPixels": 0,
+      "opaqueFaucetChangedPixels": 0
+    },
+    {
+      "case": "module-02-hidden",
+      "color": "graphite-diagnostic",
+      "neutralReplayMismatchPixels": 0,
+      "changedPixels": 39895,
+      "outsideMaterialMaskPixels": 0,
+      "opaqueFaucetChangedPixels": 0
+    },
+    {
+      "case": "module-02-hidden",
+      "color": "light-diagnostic",
+      "neutralReplayMismatchPixels": 0,
+      "changedPixels": 39794,
+      "outsideMaterialMaskPixels": 0,
+      "opaqueFaucetChangedPixels": 0
+    },
+    {
+      "case": "module-03-hidden",
+      "color": "graphite-diagnostic",
+      "neutralReplayMismatchPixels": 0,
+      "changedPixels": 14320,
+      "outsideMaterialMaskPixels": 0,
+      "opaqueFaucetChangedPixels": 0
+    },
+    {
+      "case": "module-03-hidden",
+      "color": "light-diagnostic",
+      "neutralReplayMismatchPixels": 0,
+      "changedPixels": 14303,
+      "outsideMaterialMaskPixels": 0,
+      "opaqueFaucetChangedPixels": 0
+    },
+    {
+      "case": "modules-02-03-hidden",
+      "color": "graphite-diagnostic",
+      "neutralReplayMismatchPixels": 0,
+      "changedPixels": 0,
+      "outsideMaterialMaskPixels": 0,
+      "opaqueFaucetChangedPixels": 0
+    },
+    {
+      "case": "modules-02-03-hidden",
+      "color": "light-diagnostic",
+      "neutralReplayMismatchPixels": 0,
+      "changedPixels": 0,
+      "outsideMaterialMaskPixels": 0,
+      "opaqueFaucetChangedPixels": 0
+    }
+  ],
+  "limitations": [
+    "Conservative masks still leave original-stone islands around cooktop, sink and drainer.",
+    "Diagnostic flat colors are not a finished stone catalog.",
+    "Translucent faucet edge pixels correctly depend on the new background; the unchanged RGBA layer is the invariant."
+  ]
+}
