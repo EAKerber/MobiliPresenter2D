@@ -1,0 +1,67 @@
+{
+  "status": "REVIEW",
+  "runtimeInstalled": false,
+  "method": "4x polygon coverage, BOX downsample; fixed opaque core; bounded one-pixel neighborhood",
+  "sourceSha256": "8d37ec9083cec188aeb0a579a69b787365457185c0290c9daa065690679f1a9b",
+  "objects": [
+    {
+      "id": "cooktop",
+      "alphaChangedPixels": 477,
+      "partialAlphaPixels": 461,
+      "selectedRgbChangedPixels": 0,
+      "backgrounds": [
+        {
+          "background": "#ff00ff",
+          "changedPixels": 477,
+          "outsideBandPixels": 0
+        },
+        {
+          "background": "#151515",
+          "changedPixels": 475,
+          "outsideBandPixels": 0
+        }
+      ]
+    },
+    {
+      "id": "sink",
+      "alphaChangedPixels": 176,
+      "partialAlphaPixels": 176,
+      "selectedRgbChangedPixels": 0,
+      "backgrounds": [
+        {
+          "background": "#ff00ff",
+          "changedPixels": 176,
+          "outsideBandPixels": 0
+        },
+        {
+          "background": "#151515",
+          "changedPixels": 176,
+          "outsideBandPixels": 0
+        }
+      ]
+    },
+    {
+      "id": "faucet",
+      "alphaChangedPixels": 271,
+      "partialAlphaPixels": 261,
+      "selectedRgbChangedPixels": 0,
+      "backgrounds": [
+        {
+          "background": "#ff00ff",
+          "changedPixels": 271,
+          "outsideBandPixels": 0
+        },
+        {
+          "background": "#151515",
+          "changedPixels": 271,
+          "outsideBandPixels": 0
+        }
+      ]
+    }
+  ],
+  "limitations": [
+    "Coverage is based on authored polygons, not measured physical opacity.",
+    "Source RGB still contains mixed background at some boundaries; AA is not color decontamination.",
+    "No guarantee of exact recomposition on the original backing with this new alpha."
+  ]
+}
