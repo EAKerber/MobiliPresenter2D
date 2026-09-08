@@ -1,0 +1,36 @@
+{
+  "technicalStatus": "PASS",
+  "semanticReview": "PENDING",
+  "runtimeInstalled": false,
+  "rgbChangedPixels": 462,
+  "alphaChangedPixels": 0,
+  "outsideEdgePixels": 0,
+  "interiorChangedPixels": 0,
+  "sceneChangedPixels": 462,
+  "sceneOutsideEdgePixels": 0,
+  "contrasts": [
+    {
+      "background": "#ff00ff",
+      "changedPixels": 462,
+      "outsideEdgePixels": 0
+    },
+    {
+      "background": "#151515",
+      "changedPixels": 462,
+      "outsideEdgePixels": 0
+    },
+    {
+      "background": "#eeeeee",
+      "changedPixels": 462,
+      "outsideEdgePixels": 0
+    }
+  ],
+  "candidateSha256": "f1edc873f5c1985d7be635ba9737aa1d51e33f2906ebb91986490b6d4ea803bd",
+  "sceneSha256": "2c591d4a7f7faa8f870f86fcca94da40cba758cabec63ba92008f14762f746f2",
+  "donorSha256": "f8e9d142d159d1e3bd1215a4661a6b61c4cddd5a29585d1ef9bccac702c6f631",
+  "limitations": [
+    "Fixed silhouette from PR16; generated geometry is not adopted.",
+    "Boundary RGB donor can include gray matte contamination and altered highlights; semantic review required.",
+    "This replaces edge color only and does not establish object-off roundtrip."
+  ]
+}

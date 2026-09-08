@@ -81,3 +81,9 @@ O contraste ainda revela franjas claras: máscaras permanecem em REVIEW. Não pr
 
 `work/r6-object-antialias`: cobertura a 4× apenas no alpha, limitada à faixa de borda. 924 pixels de alpha alterados, zero mudanças fora da faixa nos fundos de contraste, RGB selecionado preservado. Comparação em `review-assets/object-antialias/generated/comparison.png`.
 Serrilhado discretamente suavizado; franjas claras ainda visíveis. Sem promoção: próxima dívida é separar fundo contaminante de reflexo metálico, não aplicar mais blur. Os experimentos generativos específicos citados pelo usuário não foram localizados; prompts de geração confinada já versionados continuam sendo referência para eventuais novas intervenções.
+
+## Correção generativa localizada da torneira
+
+`work/r6-faucet-edge-donor`, sobre PR #16. Alvo e guia separados; geração incorporada apenas na faixa autorizada com alfa fixo. 462 pixels RGB alterados, zero fora da faixa ou no interior protegido.
+A geração bruta alterou também o interior e o fundo, descartados pelo materializador. A saída 1122×1402 foi mapeada ao crop 128×160; erro relativo de proporção <0,04%, sem registro por feições.
+Comparação em `review-assets/faucet-edge-donor/generated/comparison.png`. Melhora visual inconclusiva, franja ainda visível: candidato não selecionado para runtime. Métodos/limites e reprodução documentados no README do experimento.
