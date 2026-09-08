@@ -1,0 +1,28 @@
+{
+  "technicalStatus": "PASS",
+  "semanticReview": "PENDING",
+  "runtimeInstalled": false,
+  "fitXYWH": [
+    991,
+    443,
+    35,
+    115
+  ],
+  "changedPixels": 4526,
+  "outsideReplacementPixels": 0,
+  "frontAndPlinthChangedPixels": 0,
+  "alphaBounds": [
+    991,
+    443,
+    1026,
+    558
+  ],
+  "sceneSha256": "b4063a50bd087b7598d8bf33326a411aaf7c9e7f6d8056a70f5bd09e9e2b7579",
+  "layerSha256": "a63f286ee45b0124fa4274b09c4cd5ab7fb3a0d49f6da302698a6eb64caa2f70",
+  "limitations": [
+    "Whole-object replacement changes internal appearance.",
+    "Inferred backing removes old faucet; source remains exact outside removal/new-alpha union.",
+    "Full regeneration donor has residual edge artifacts; judging at native resolution is required.",
+    "Manual base/height fit, no physical camera calibration or human approval."
+  ]
+}
