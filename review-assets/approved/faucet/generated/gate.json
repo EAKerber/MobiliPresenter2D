@@ -1,0 +1,34 @@
+{
+  "status": "PASS",
+  "humanAppearance": "APPROVED",
+  "cases": [
+    {
+      "id": "default",
+      "faucetVisible": true,
+      "changedPixels": 4526,
+      "outsideApprovedMaskPixels": 0,
+      "approvedCompositionMismatchPixels": 0
+    },
+    {
+      "id": "module-02-hidden",
+      "faucetVisible": true,
+      "changedPixels": 4526,
+      "outsideApprovedMaskPixels": 0,
+      "approvedCompositionMismatchPixels": 0
+    },
+    {
+      "id": "module-03-hidden",
+      "faucetVisible": false,
+      "changedPixels": 0,
+      "outsideApprovedMaskPixels": 0,
+      "approvedCompositionMismatchPixels": 0
+    },
+    {
+      "id": "modules-02-03-hidden",
+      "faucetVisible": false,
+      "changedPixels": 0,
+      "outsideApprovedMaskPixels": 0,
+      "approvedCompositionMismatchPixels": 0
+    }
+  ]
+}

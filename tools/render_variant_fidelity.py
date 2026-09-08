@@ -77,11 +77,17 @@ def main() -> int:
         }
         if case["id"] == "default":
             default_seen = True
-            difference = ImageChops.difference(rendered, golden)
+            # Preserve original golden; permit exactly the separately pinned human-approved overlay.
+            from validate_approved_faucet import approved_overlay
+            approved = Image.alpha_composite(golden, approved_overlay())
+            assert rendered.tobytes() == approved.tobytes(), 'default differs from approved composition'
+            original_diff = ImageChops.difference(rendered.convert("RGB"), golden.convert("RGB"))
+            record["approvedChangePixelCount"] = nonzero_pixel_count(original_diff)
+            difference = ImageChops.difference(rendered.convert("RGB"), approved.convert("RGB"))
             difference_bounds = difference.getbbox()
-            record["goldenDifferenceBounds"] = list(difference_bounds) if difference_bounds else None
-            record["goldenPixelDifferenceCount"] = nonzero_pixel_count(difference) if difference_bounds else 0
-            if record["goldenPixelDifferenceCount"] != 0:
+            record["approvedReferenceDifferenceBounds"] = list(difference_bounds) if difference_bounds else None
+            record["approvedReferencePixelDifferenceCount"] = nonzero_pixel_count(difference) if difference_bounds else 0
+            if record["approvedReferencePixelDifferenceCount"] != 0:
                 raise RuntimeError(f"default variant diverged from golden: {record}")
         summary["cases"].append(record)
 
@@ -92,7 +98,7 @@ def main() -> int:
     print(json.dumps({
         "status": "PASS",
         "cases": len(summary["cases"]),
-        "defaultPixelDifferenceCount": 0,
+        "defaultApprovedReferenceMismatchPixels": 0,
     }, sort_keys=True))
     return 0
 

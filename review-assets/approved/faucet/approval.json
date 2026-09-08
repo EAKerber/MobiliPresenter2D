@@ -1,0 +1,17 @@
+{
+  "status": "APPROVED",
+  "entityId": "faucet-approved",
+  "asset": "app/assets/kitchen/overlays/faucet-approved.png",
+  "assetSha256": "94e58e8184c47d0adfeb50ca368c20fa3ba6bbe6239e5b079a0af11b96ad82ac",
+  "mask": "review-assets/approved/faucet/mask.png",
+  "maskSha256": "c19d2c127504ddfb09411962d2719b6da93a60523aac825ff8e57b112dac1043",
+  "approvedLayer": "review-assets/faucet-regenerated-fit/generated/faucet.png",
+  "approvedLayerSha256": "a63f286ee45b0124fa4274b09c4cd5ab7fb3a0d49f6da302698a6eb64caa2f70",
+  "host": "module-03",
+  "humanAppearanceApproval": {
+    "quote": "Achei bom, a cor é diferente mas não parece fora do lugar",
+    "scope": "Appearance and fit shown in PR18, including color difference."
+  },
+  "integrationAuthorization": "ótimo, prossiga",
+  "limitation": "Fixed-position backing patch; not a finish-independent material mask."
+}

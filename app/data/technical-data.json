@@ -261,6 +261,15 @@
         751,
         886
       ]
+    },
+    "assets/kitchen/overlays/faucet-approved.png": {
+      "sha256": "94e58e8184c47d0adfeb50ca368c20fa3ba6bbe6239e5b079a0af11b96ad82ac",
+      "alphaBounds": [
+        986,
+        439,
+        1035,
+        562
+      ]
     }
   }
 }

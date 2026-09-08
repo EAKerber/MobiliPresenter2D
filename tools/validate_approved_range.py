@@ -30,7 +30,8 @@ def main():
     clean = render_case(base, clean_case, layer.size)
     composed = render_case(base, case, layer.size)
     args.output_dir.mkdir(parents=True, exist_ok=True)
-    clean.save(args.output_dir/'clean.png')
+    historical_clean = render_case(base, {**clean_case, 'visibleEntities':[e for e in clean_case['visibleEntities'] if e['id']!='faucet-approved']}, layer.size)
+    historical_clean.save(args.output_dir/'clean.png')
     assert hashlib.sha256((args.output_dir/'clean.png').read_bytes()).hexdigest() == receipt['cleanFrameSha256'], 'canonical clean frame drift'
     diff = ImageChops.difference(clean.convert('RGB'), composed.convert('RGB'))
     bands = diff.split()
@@ -51,11 +52,12 @@ def main():
     isolated = render_case(base, isolated_case, layer.size)
     assert isolated.tobytes() == Image.alpha_composite(isolated_clean, layer).tobytes(), 'isolated range clipped or overwritten'
     isolated.save(args.output_dir/'both-hidden.png')
-    default = render_case(base, cases['default'], layer.size)
+    historical_default = {**cases['default'], 'visibleEntities':[e for e in cases['default']['visibleEntities'] if e['id']!='faucet-approved']}
+    default = render_case(base, historical_default, layer.size)
     golden = Image.open(ROOT/'app'/manifest['goldenAsset']).convert('RGBA')
     assert default.tobytes()==golden.tobytes(), 'default golden changed'
     composed.save(args.output_dir/'composed.png')
-    report={'status':'PASS','assetSha256':receipt['assetSha256'],'changedPixels':changed.histogram()[255],'outsideRoiChangedPixels':0,'outsideMaskChangedPixels':0,'defaultGoldenChangedPixels':0,'alphaBounds':list(mask.getbbox()),'humanApprovalScope':receipt['humanAppearanceApproval']['scope'],'geometryGate':'NOT_CLAIMED','bothHiddenLayerExact':True}
+    report={'status':'PASS','assetSha256':receipt['assetSha256'],'changedPixels':changed.histogram()[255],'outsideRoiChangedPixels':0,'outsideMaskChangedPixels':0,'historicalDefaultGoldenChangedPixels':0,'alphaBounds':list(mask.getbbox()),'humanApprovalScope':receipt['humanAppearanceApproval']['scope'],'geometryGate':'NOT_CLAIMED','bothHiddenLayerExact':True}
     (args.output_dir/'gate.json').write_text(json.dumps(report,indent=2)+'\n')
     print(json.dumps(report))
 
