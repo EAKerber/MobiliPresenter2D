@@ -348,6 +348,22 @@
       "size": 6177
     },
     {
+      "alphaBounds": [
+        986,
+        439,
+        1035,
+        562
+      ],
+      "canonicalCanvas": true,
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "path": "app/assets/kitchen/overlays/faucet-approved.png",
+      "sha256": "94e58e8184c47d0adfeb50ca368c20fa3ba6bbe6239e5b079a0af11b96ad82ac",
+      "size": 19065
+    },
+    {
       "alphaBounds": null,
       "canonicalCanvas": true,
       "dimensions": [
@@ -483,8 +499,8 @@
   },
   "expectedRuntime": {
     "controllableEntities": 8,
-    "entities": 11,
-    "initialFingerprint": "scene2d-e7c8dba7",
+    "entities": 14,
+    "initialFingerprint": "scene2d-66522012",
     "passed": true
   },
   "files": [
@@ -619,6 +635,11 @@
       "size": 6177
     },
     {
+      "path": "app/assets/kitchen/overlays/faucet-approved.png",
+      "sha256": "94e58e8184c47d0adfeb50ca368c20fa3ba6bbe6239e5b079a0af11b96ad82ac",
+      "size": 19065
+    },
+    {
       "path": "app/assets/kitchen/substitutions/range-freestanding-placeholder.png",
       "sha256": "64085d665f67f408b0cd67f69bebaa5a814b79eeed296c3d952e62988d7a440f",
       "size": 6177
@@ -670,13 +691,13 @@
     },
     {
       "path": "app/data/scene-data.js",
-      "sha256": "a5ae496e802577e827bec1396c3a9580d26a6967a2aecd9b426e62120ecdcade",
-      "size": 9004
+      "sha256": "3559a8a0e4a31a13828328ae323fba612cbf0a0a8d7f42f80848671e7d7220ff",
+      "size": 9422
     },
     {
       "path": "app/data/technical-data.json",
-      "sha256": "05595b225992bd9ef38ed951f481da253790669c010337b5f290eba3423b3a3c",
-      "size": 6962
+      "sha256": "9560c12d99da8fe9b00f20918e392bb7826b4dde6d1e6b91c4d623091833ca82",
+      "size": 7189
     },
     {
       "path": "app/docs/CHECKPOINTS.md",
@@ -785,13 +806,13 @@
     },
     {
       "path": "app/tools/test-core.js",
-      "sha256": "f8212428f34b9a8d5566c9dad217344f26de0d3678b7a7d8baeae5b081d78f22",
-      "size": 2868
+      "sha256": "9ab72af5d30c810d2ecc43347e4d1e3345e71cb2b2bf2b35a263eaaef2ff3b37",
+      "size": 3017
     },
     {
       "path": "app/tools/update-technical-data.py",
-      "sha256": "95fa3de7450462c85de92afdad499df337514631639744134fcb0514c5de9470",
-      "size": 2230
+      "sha256": "8b45e11762d0bcd3da561fb65abdd6168d736ced333cf99ae5bc356158771826",
+      "size": 2285
     },
     {
       "path": "app/tools/validate-assets.py",

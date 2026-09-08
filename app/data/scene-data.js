@@ -9,7 +9,7 @@
 
   const scene = {
     schemaVersion: "Scene2D 1.0",
-    manifestVersion: "cozinha-01@2026-09-06-r5a-approved-range",
+    manifestVersion: "cozinha-01@r6-approved-faucet",
     id: "cozinha-01",
     label: "Cozinha Casa em Módulos",
     canvas: { width: 1536, height: 1024 },
@@ -22,6 +22,7 @@
         "stone-02",
         "module-03",
         "stone-03",
+        "faucet-approved",
         "stone-02-joint-bridge",
         "stone-03-joint-bridge",
         "module-04",
@@ -38,6 +39,14 @@
       gridVisible: false
     },
     entities: [
+      {
+        id: "faucet-approved", alias: "03T", label: "Torneira",
+        kind: "accessory", zIndex: 303,
+        asset: "assets/kitchen/overlays/faucet-approved.png", maskAsset: null,
+        alphaBounds: { x: 986, y: 439, width: 49, height: 123 },
+        defaultVisible: true, controllable: false, hostId: "module-03",
+        finishGroups: [], tags: ["approved-faucet", "sink-zone"]
+      },
       {
         id: "module-01",
         alias: "01",

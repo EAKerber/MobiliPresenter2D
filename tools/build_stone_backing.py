@@ -16,6 +16,8 @@ def source_frame(manifest):
     im=Image.open(ROOT/'app'/manifest['baseAsset']).convert('RGBA')
     case=next(c for c in manifest['cases'] if c['id']=='default')
     for entity in case['visibleEntities']:
+        # PR14 source predates the separately validated approved faucet overlay.
+        if entity['id']=='faucet-approved':continue
         layers=[o for o in ownership if o['hostEntity']==entity['id']]
         paths=[ROOT/'review-assets/stone-components/generated'/o['path'] for o in layers] if layers else [ROOT/'app'/entity['asset']]
         for path in paths:im=Image.alpha_composite(im,Image.open(path).convert('RGBA'))
