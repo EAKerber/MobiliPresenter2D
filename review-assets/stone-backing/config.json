@@ -1,0 +1,122 @@
+{
+  "schemaVersion": "StoneBacking 0.1",
+  "status": "REVIEW",
+  "sourceSha256": "8d37ec9083cec188aeb0a579a69b787365457185c0290c9daa065690679f1a9b",
+  "polygons": {
+    "cooktop": [
+      [
+        [
+          540,
+          536
+        ],
+        [
+          722,
+          536
+        ],
+        [
+          738,
+          550
+        ],
+        [
+          734,
+          574
+        ],
+        [
+          515,
+          574
+        ],
+        [
+          517,
+          561
+        ],
+        [
+          535,
+          545
+        ]
+      ]
+    ],
+    "faucet": [
+      [
+        [
+          986,
+          560
+        ],
+        [
+          986,
+          456
+        ],
+        [
+          997,
+          439
+        ],
+        [
+          1011,
+          439
+        ],
+        [
+          1021,
+          452
+        ],
+        [
+          1026,
+          494
+        ],
+        [
+          1015,
+          494
+        ],
+        [
+          1015,
+          511
+        ],
+        [
+          1033,
+          511
+        ],
+        [
+          1034,
+          547
+        ],
+        [
+          1014,
+          547
+        ],
+        [
+          1014,
+          561
+        ]
+      ]
+    ],
+    "sink": [
+      [
+        [
+          930,
+          552
+        ],
+        [
+          1076,
+          552
+        ],
+        [
+          1092,
+          567
+        ],
+        [
+          1092,
+          574
+        ],
+        [
+          930,
+          574
+        ]
+      ]
+    ]
+  },
+  "priority": [
+    "faucet",
+    "sink",
+    "cooktop"
+  ],
+  "protectedFrontEdgeY": 575,
+  "note": "Fixed-position presence patches, not movable alpha-matted object assets. Background inside masks is inferred."
+}
