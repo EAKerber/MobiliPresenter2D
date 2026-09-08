@@ -87,3 +87,8 @@ Serrilhado discretamente suavizado; franjas claras ainda visíveis. Sem promoç�
 `work/r6-faucet-edge-donor`, sobre PR #16. Alvo e guia separados; geração incorporada apenas na faixa autorizada com alfa fixo. 462 pixels RGB alterados, zero fora da faixa ou no interior protegido.
 A geração bruta alterou também o interior e o fundo, descartados pelo materializador. A saída 1122×1402 foi mapeada ao crop 128×160; erro relativo de proporção <0,04%, sem registro por feições.
 Comparação em `review-assets/faucet-edge-donor/generated/comparison.png`. Melhora visual inconclusiva, franja ainda visível: candidato não selecionado para runtime. Métodos/limites e reprodução documentados no README do experimento.
+
+## Fit da torneira regenerada integralmente
+
+Branch `work/r6-faucet-regenerated-fit`, sobre PR #17. Candidato 35×115 em (991,443), base y558; 4.526 pixels alterados e zero fora da máscara de remoção unida ao alfa novo. Fonte candidata, não golden. Comparação nativa/3× em `review-assets/faucet-regenerated-fit/generated/fit-review.png`.
+Encaixe visual plausível, menor franja bege na escala de uso, porém metal mais brilhante e detalhes diferentes. Aguarda revisão humana; runtime não alterado.
