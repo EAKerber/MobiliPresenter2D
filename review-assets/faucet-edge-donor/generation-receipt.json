@@ -1,0 +1,24 @@
+{
+  "tool": "image_gen.imagegen",
+  "rawName": "exec-1ead6eca-4ef9-40e6-a54d-faa2e4c6d877.png",
+  "rawSha256": "0ac6f334816f34d9a7d65ce351ca8334caf55316d31e8ceb5296179a6748bf68",
+  "rawCanvas": [
+    1122,
+    1402
+  ],
+  "requestedCanvas": [
+    1024,
+    1280
+  ],
+  "aspectRatioRelativeError": 0.0003566333808844302,
+  "mapping": "Full normalized canvas to 128x160 crop; BOX. No feature registration or warp.",
+  "editTarget": "target.png",
+  "guideOnly": "guide.png",
+  "inputHashes": {
+    "target.png": "eb5c70726ecdb89e3020af116b7d4f43c70554268129b54b4417b029ac591db4",
+    "guide.png": "a6e6568165f5ae9ad0df7a57e7c7beff10b0aa5735927032d29a664615452741",
+    "prompt.txt": "5e13276d3b9fac2a67ab97cd3d09a87a3a04a66891897dc23357dbdcfd606c3f"
+  },
+  "warning": "Raw donor changes interior and background; discarded by fixed edge mask.",
+  "standaloneExperiment": "Target-vs-reference distinction adopted from recovered B5 instructions; no claim of reproducing its outcome."
+}

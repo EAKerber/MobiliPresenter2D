@@ -1,0 +1,25 @@
+{
+  "status": "REVIEW",
+  "crop": [
+    944,
+    416,
+    1072,
+    576
+  ],
+  "scale": 8,
+  "targetSize": [
+    1024,
+    1280
+  ],
+  "object": "review-assets/object-antialias/generated/faucet.png",
+  "allowedBand": "review-assets/object-antialias/generated/faucet-allowed-band.png",
+  "source": "review-assets/stone-backing/source.png",
+  "sha256": {
+    "review-assets/object-antialias/generated/faucet.png": "f089ce9c3d90f2671fde402628deeee915fb9d7c03c8d0f234e4231fbc8bb1e5",
+    "review-assets/object-antialias/generated/faucet-allowed-band.png": "061dc561fd34fc2bd6585232093be6fb94fb3bce87644c30afbc7f016a9ccac8",
+    "review-assets/stone-backing/source.png": "8d37ec9083cec188aeb0a579a69b787365457185c0290c9daa065690679f1a9b"
+  },
+  "alphaPolicy": "unchanged from PR16",
+  "editTarget": "target.png",
+  "guideOnly": "guide.png"
+}
