@@ -1,0 +1,36 @@
+{
+  "status": "REVIEW",
+  "runtimeInstalled": false,
+  "sourceRgbModifiedPixels": 0,
+  "trimap": {
+    "0": "outside",
+    "128": "one-pixel boundary to inspect, not automatic approval",
+    "255": "polygon interior, not verified semantic ground truth"
+  },
+  "objects": [
+    {
+      "id": "cooktop",
+      "selectedPixels": 5271,
+      "removedFromPrevious": 762,
+      "addedToPrevious": 11,
+      "uncertainBandPixels": 1135,
+      "semanticReview": "PENDING"
+    },
+    {
+      "id": "sink",
+      "selectedPixels": 1643,
+      "removedFromPrevious": 0,
+      "addedToPrevious": 298,
+      "uncertainBandPixels": 642,
+      "semanticReview": "PENDING"
+    },
+    {
+      "id": "faucet",
+      "selectedPixels": 1628,
+      "removedFromPrevious": 0,
+      "addedToPrevious": 0,
+      "uncertainBandPixels": 884,
+      "semanticReview": "PENDING"
+    }
+  ]
+}
