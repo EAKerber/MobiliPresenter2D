@@ -99,3 +99,8 @@ Usuário aprovou o fit e a diferença de cor: “Achei bom, a cor é diferente m
 Entidade `faucet-approved` acompanha `module-03`, sem controle independente. 4.526 pixels alterados nos estados com pia; zero alteração com pia oculta e zero fora da máscara aprovada. Aparência e fit originais do candidato preservados exatamente.
 Golden canônico original permanece intacto. A validação de variantes compara o default com golden + camada aprovada e relata a alteração explicitamente. A camada contém fundo de remoção em posição fixa: futuros acabamentos devem substituir esse backing, não recolori-lo como se fosse metal.
 Integração na branch/PR, sem merge na main ou publicação. Próximos itens R6 continuam sendo máscaras de material, revisão de cuba/cooktop e catálogo de acabamentos.
+
+## Prévia de acabamentos — separação do backing da torneira
+
+`work/r6-stone-finish-preview`, sobre PR #19. Recompõe o metal aprovado sobre backing recolorido, recuperando exatamente o runtime sem cor. Oito combinações de diagnóstico passaram nos gates de confinamento e preservação do metal opaco.
+A máscara de acabamento ainda deixa ilhas da pedra original ao redor da cuba, cooktop/panelas e escorredor. Comparação em `review-assets/stone-finish-preview/generated/review.png`. Sem novos presets no runtime; próxima etapa é fechar essas exclusões semanticamente, não promover as cores de diagnóstico.
