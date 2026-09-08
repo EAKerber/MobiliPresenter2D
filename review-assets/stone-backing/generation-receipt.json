@@ -1,0 +1,14 @@
+{
+  "tool": "image_gen.imagegen",
+  "rawGeneration": "exec-ca47858d-30c2-4c66-84a6-fec121e9053d.png",
+  "rawSha256": "3f78315a478be4e100afe6ebbe81876529a50c8bb15d739dafd0e91c991d1242",
+  "inputs": {
+    "source.png": "8d37ec9083cec188aeb0a579a69b787365457185c0290c9daa065690679f1a9b",
+    "guide.png": "1e1239cf5976d944379dc4097051a1a31d37d22664e84a83b4e9e5206767eadb",
+    "prompt.txt": "ef91a1a4a2c65792c24c5dd1e5ec372974e2a86091e360e93c6dbc2dda212bc4"
+  },
+  "rawDonorVersioned": false,
+  "replayDonor": "generated/donor-regions.png",
+  "maskRefinement": "Faucet stem coverage corrected after visual review; no second generation.",
+  "semanticReview": "PENDING"
+}

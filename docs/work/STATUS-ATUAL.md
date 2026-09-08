@@ -1,4 +1,4 @@
-# Estado atual — 2026-09-07
+# Estado atual — 2026-09-08
 
 ## Onde estamos
 
@@ -62,3 +62,12 @@ Cuba e torneira permanecem originais. Candidato em REVIEW: ainda falta julgar a 
 Separação candidata em pedra, cooktop, cuba, torneira e contexto de preservação.
 Recomposição exata em quatro estados e zero diff fora das máscaras. Parede original reaparece nos locais removidos acima da pedra.
 Arquivos/limites em `review-assets/stone-components/README.md`. Revisão semântica e textura ainda pendentes; não existem toggles independentes nem promoção no runtime.
+
+## Base sob os componentes — R6 em revisão
+
+Branch `work/r6-stone-backing`, sobre `work/r6-stone-components` (PR #13).
+Reconstrução generativa confinada sob cooktop, cuba e torneira; oito combinações de presença reproduzíveis em `review-assets/stone-backing/`.
+15.996 pixels alterados ao remover os três, zero fora das máscaras, zero na frente/rodapé. Recolocar todos recupera exatamente a composição candidata do PR #13 (não o golden do runtime).
+A primeira máscara deixou um segmento da torneira; a inspeção visual identificou o defeito e o contorno foi corrigido antes desta entrega.
+Os patches restauram pixels originais em posição fixa, incluindo contexto local: não são recortes móveis nem máscaras prontas para trocar materiais.
+Próxima etapa: julgar textura e bordas da base reconstruída, refinar máscaras semânticas de material e então integrar componentes vinculados aos módulos. Main, runtime e publicação permanecem sem alterações nesta etapa.

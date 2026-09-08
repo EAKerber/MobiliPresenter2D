@@ -1,0 +1,135 @@
+{
+  "status": "PASS",
+  "semanticReview": "PENDING",
+  "runtimeInstalled": false,
+  "sourceSha256": "8d37ec9083cec188aeb0a579a69b787365457185c0290c9daa065690679f1a9b",
+  "donorRegionsSha256": "5662309829164e664e310f4a7e899c0742bf9176170d5ee8c7c0474a0894594e",
+  "backingSha256": "2604cf592dc42ad8dc75ba49379518879f892e954242cc22bfee1068fad23449",
+  "backingChangedPixels": 15996,
+  "outsideBackingMaskPixels": 0,
+  "frontEdgeAndPlinthChangedPixels": 0,
+  "allPresentMismatchPixels": 0,
+  "states": [
+    {
+      "present": {
+        "faucet": false,
+        "sink": false,
+        "cooktop": false
+      },
+      "changedPixels": 15996,
+      "outsideAbsentMaskPixels": 0
+    },
+    {
+      "present": {
+        "faucet": false,
+        "sink": false,
+        "cooktop": true
+      },
+      "changedPixels": 7861,
+      "outsideAbsentMaskPixels": 0
+    },
+    {
+      "present": {
+        "faucet": false,
+        "sink": true,
+        "cooktop": false
+      },
+      "changedPixels": 12664,
+      "outsideAbsentMaskPixels": 0
+    },
+    {
+      "present": {
+        "faucet": false,
+        "sink": true,
+        "cooktop": true
+      },
+      "changedPixels": 4529,
+      "outsideAbsentMaskPixels": 0
+    },
+    {
+      "present": {
+        "faucet": true,
+        "sink": false,
+        "cooktop": false
+      },
+      "changedPixels": 11467,
+      "outsideAbsentMaskPixels": 0
+    },
+    {
+      "present": {
+        "faucet": true,
+        "sink": false,
+        "cooktop": true
+      },
+      "changedPixels": 3332,
+      "outsideAbsentMaskPixels": 0
+    },
+    {
+      "present": {
+        "faucet": true,
+        "sink": true,
+        "cooktop": false
+      },
+      "changedPixels": 8135,
+      "outsideAbsentMaskPixels": 0
+    },
+    {
+      "present": {
+        "faucet": true,
+        "sink": true,
+        "cooktop": true
+      },
+      "changedPixels": 0,
+      "outsideAbsentMaskPixels": 0
+    }
+  ],
+  "layers": [
+    {
+      "id": "faucet",
+      "host": "module-03",
+      "image": "faucet-present.png",
+      "sha256": "6078f233ce3b386d564bb564d4e834a333503543584cb329d6f71f6def9a12b1",
+      "bounds": [
+        986,
+        439,
+        1035,
+        562
+      ],
+      "kind": "fixed-position-presence-patch",
+      "movable": false
+    },
+    {
+      "id": "sink",
+      "host": "module-03",
+      "image": "sink-present.png",
+      "sha256": "11fef6c1f846029f5d024235319df2deff37cfb788871e31568490a5155b2c47",
+      "bounds": [
+        930,
+        552,
+        1093,
+        575
+      ],
+      "kind": "fixed-position-presence-patch",
+      "movable": false
+    },
+    {
+      "id": "cooktop",
+      "host": "module-02",
+      "image": "cooktop-present.png",
+      "sha256": "33ec9452ae4f3d51f4ce3032bdc11c2c8aa15e422e01399d1e8b9e6fda7d25b5",
+      "bounds": [
+        515,
+        536,
+        739,
+        575
+      ],
+      "kind": "fixed-position-presence-patch",
+      "movable": false
+    }
+  ],
+  "limitations": [
+    "Reconstructed stone is inferred and needs visual review.",
+    "Presence patches contain original local context and are fixed-position, not movable objects.",
+    "Backing must be hosted with corresponding module; no runtime integration in this increment."
+  ]
+}
