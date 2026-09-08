@@ -56,3 +56,9 @@ Recortes conservadores, sem aprovação semântica automática. Nenhuma alteraç
 Frente (amarelo) e rodapé (azul) aprovados pelo usuário e preservados por hash.
 Magenta com problemas nas panelas/escorredor: preparada base limpa generativa confinada, em `review-assets/stone-cleanplate/`.
 Cuba e torneira permanecem originais. Candidato em REVIEW: ainda falta julgar a textura reconstruída e separar os componentes em camadas; nenhuma promoção automática.
+
+## Componentes R6 — 2026-09-08
+
+Separação candidata em pedra, cooktop, cuba, torneira e contexto de preservação.
+Recomposição exata em quatro estados e zero diff fora das máscaras. Parede original reaparece nos locais removidos acima da pedra.
+Arquivos/limites em `review-assets/stone-components/README.md`. Revisão semântica e textura ainda pendentes; não existem toggles independentes nem promoção no runtime.

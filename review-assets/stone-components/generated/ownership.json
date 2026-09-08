@@ -1,0 +1,97 @@
+{
+  "status": "REVIEW",
+  "runtimeInstalled": false,
+  "layers": [
+    {
+      "id": "stone-02-cooktop",
+      "hostEntity": "stone-02",
+      "path": "stone-02-cooktop.png",
+      "sha256": "fd9f1279fe65bf8307e8fbbc2d368bbaf1f018fb3301f7a0bdc0dff27322ebbd",
+      "alphaBounds": [
+        520,
+        540,
+        734,
+        572
+      ],
+      "independentToggleSupported": false
+    },
+    {
+      "id": "stone-02-material",
+      "hostEntity": "stone-02",
+      "path": "stone-02-material.png",
+      "sha256": "de2da684a5b37a2fea7e2b37a55d9aea098662690ac7cb87681314d1a008babf",
+      "alphaBounds": [
+        487,
+        520,
+        747,
+        899
+      ],
+      "independentToggleSupported": false
+    },
+    {
+      "id": "stone-02-context",
+      "hostEntity": "stone-02",
+      "path": "stone-02-context.png",
+      "sha256": "f8201a1c254d48bd3654077285b678f71231e5efddafb794c5b222d385e64f62",
+      "alphaBounds": [
+        484,
+        491,
+        757,
+        912
+      ],
+      "independentToggleSupported": false
+    },
+    {
+      "id": "stone-03-sink",
+      "hostEntity": "stone-03",
+      "path": "stone-03-sink.png",
+      "sha256": "5172bb8cb289ccb7b4f5b770581d242c300619de52ce4c828ab94a9a25f0648d",
+      "alphaBounds": [
+        938,
+        562,
+        1084,
+        572
+      ],
+      "independentToggleSupported": false
+    },
+    {
+      "id": "stone-03-faucet",
+      "hostEntity": "stone-03",
+      "path": "stone-03-faucet.png",
+      "sha256": "9f97a5ecc36b1ffa558ed5ba8fdd602166d7f3a4334aeee50db2638575cebe66",
+      "alphaBounds": [
+        993,
+        444,
+        1027,
+        558
+      ],
+      "independentToggleSupported": false
+    },
+    {
+      "id": "stone-03-material",
+      "hostEntity": "stone-03",
+      "path": "stone-03-material.png",
+      "sha256": "77f6bd03f2660e27d4d38224167971a791f09c617bdd2cd37ef1725a1ff1d1b0",
+      "alphaBounds": [
+        739,
+        519,
+        1207,
+        900
+      ],
+      "independentToggleSupported": false
+    },
+    {
+      "id": "stone-03-context",
+      "hostEntity": "stone-03",
+      "path": "stone-03-context.png",
+      "sha256": "3ebeb0588454eb88a9acda9ca28262e60faa22f999cfc0fd5458e04ed06e1ac1",
+      "alphaBounds": [
+        736,
+        442,
+        1217,
+        912
+      ],
+      "independentToggleSupported": false
+    }
+  ]
+}
