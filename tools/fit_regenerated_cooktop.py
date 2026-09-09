@@ -8,6 +8,8 @@ from materialize_stone_cleanplate import masks, changed, count
 ROOT=Path(__file__).resolve().parents[1]
 
 def run(manifest,out):
+    from validate_approved_components import historical_manifest
+    manifest=historical_manifest(manifest)
     folder=ROOT/'review-assets/cooktop-regenerated-fit'
     config=json.loads((folder/'config.json').read_text())
     for name,digest in config['sha256'].items():
