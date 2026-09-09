@@ -1,0 +1,16 @@
+{
+  "status": "REVIEW",
+  "fitXYWH": [
+    520,
+    540,
+    214,
+    32
+  ],
+  "sha256": {
+    "review-assets/cooktop-regenerated-fit/donor.png": "427d504658e61134aede5e73748bf5681e900127766b61d12396c25f448030ec",
+    "review-assets/stone-backing/generated/backing.png": "2604cf592dc42ad8dc75ba49379518879f892e954242cc22bfee1068fad23449",
+    "review-assets/stone-backing/generated/cooktop-mask.png": "9a1df2bfe834da2accafc5113777affb749bb932ca86ec20c0bdccdd5af979df",
+    "review-assets/stone-cleanplate/generated/composed.png": "db9d0dd158ebad6a35b3d11fbe8ca6b75a08a4e620b41ff83fdaecdcb6ed0ef2",
+    "review-assets/stone-cleanplate/config.json": "367ae5a0c56063c487be269063b0052a17e0c5a66f57241c615259ce1dbb5f60"
+  }
+}

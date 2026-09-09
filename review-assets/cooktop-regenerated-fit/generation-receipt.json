@@ -1,0 +1,21 @@
+{
+  "tool": "image_gen.imagegen",
+  "rawName": "exec-d709d6f9-5d66-4d7a-8b11-8afc3c774ec7.png",
+  "rawSha256": "344c2eadd965a3f8c4c8f921b1bab90740eb1b70d49d4cab0e3a66ecfdeca915",
+  "rawCanvas": [
+    1882,
+    836
+  ],
+  "retainedCrop": [
+    18,
+    256,
+    1863,
+    577
+  ],
+  "alphaRule": "bbox alpha>=128 plus 3 pixels; original alpha retained",
+  "rejectedAttempts": [
+    "exec-164e8a4e-f99c-4fac-b17e-42691767def1.png: RGB painted checkerboard",
+    "exec-d3fa2b7d-f590-4b56-9243-34e95e280da3.png: RGB painted checkerboard"
+  ],
+  "semanticReview": "PENDING"
+}
