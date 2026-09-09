@@ -112,3 +112,7 @@ Fase R6: candidato isolado em `review-assets/sink-regenerated-fit`, após a torn
 ## Continuação — cooktop regenerado em revisão (2026-09-09)
 
 R6: cooktop isolado em `review-assets/cooktop-regenerated-fit`, fit 214 × 32 em (520,540). Duas saídas com xadrez pintado foram rejeitadas; terceira geração tem alpha real. Remoção das panelas reutiliza apenas a máscara histórica correspondente. 13.745 pixels alterados; zero fora do suporte e zero na cuba/torneira/escorredor, frente e corpo. CI reproduz o candidato. Julgamento visual PENDING; main/runtime preservados. Cuba segue em revisão no PR21. Próxima etapa: remoção do escorredor e revisão conjunta dos componentes.
+
+## Continuação — escorredor removido e conjunto R6 (2026-09-09)
+
+`review-assets/drainer-clean-review`: reparo generativo local remove vestígios da reconstrução anterior, limitado à máscara histórica e faixa y520..564. Parede reconstruída anterior preservada. 9.418 pixels na remoção; conjunto com cuba/cooktop: 26.495, zero fora dos suportes, zero sobreposição e round-trip exato. Revisão visual PENDING para textura e conjunto. CI recompõe os três candidatos. Sem instalação no runtime/main. Próximo passo: julgamento visual conjunto e, se aprovado, integração dos componentes com regras de visibilidade e acabamento.
