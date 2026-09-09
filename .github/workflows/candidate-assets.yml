@@ -189,6 +189,8 @@ jobs:
         run: python tools/fit_regenerated_sink.py --manifest /tmp/candidate-review/variant-manifest.json --output-dir /tmp/candidate-review/sink-regenerated-fit
       - name: Review regenerated cooktop and confined pot removal
         run: python tools/fit_regenerated_cooktop.py --manifest /tmp/candidate-review/variant-manifest.json --output-dir /tmp/candidate-review/cooktop-regenerated-fit
+      - name: Review confined drainer repair and joint components
+        run: python tools/review_drainer_clean.py --manifest /tmp/candidate-review/variant-manifest.json --output-dir /tmp/candidate-review/drainer-clean-review
       - name: Structural candidate intake
         run: |
           python tools/validate_candidate_assets.py --output /tmp/candidate-review/intake.json

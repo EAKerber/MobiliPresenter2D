@@ -1,0 +1,15 @@
+{
+  "tool": "image_gen.imagegen",
+  "rawName": "exec-8cde0181-8b8f-4a4a-abfa-f4ebf2cb7c31.png",
+  "rawSha256": "a2f5efe3f6349aff2377c0a5063ef517608873301aa8c86d142c3a17a2af0bb0",
+  "rawSize": [
+    1293,
+    1216
+  ],
+  "retainedSize": [
+    170,
+    160
+  ],
+  "method": "resize crop to scene scale; retain only historical removal mask intersect repairBand",
+  "semanticReview": "PENDING"
+}
