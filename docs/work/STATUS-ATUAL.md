@@ -108,3 +108,7 @@ A máscara de acabamento ainda deixa ilhas da pedra original ao redor da cuba, c
 ## Continuação — cuba regenerada em revisão (2026-09-09)
 
 Fase R6: candidato isolado em `review-assets/sink-regenerated-fit`, após a torneira aprovada e os testes de acabamento. Fit 149 × 12 em (936,561); 3.332 pixels alterados e zero fora da região autorizada. Probes locais claro/grafite preservam metais opacos e recompõem a torneira sem transportar fundo bege. Gate de reprodução incluído no Candidate Asset Gates. Aprovação visual PENDING; runtime e main sem alteração. Próximos: avaliação da cuba, cooktop sem panelas e remoção independente do escorredor.
+
+## Continuação — cooktop regenerado em revisão (2026-09-09)
+
+R6: cooktop isolado em `review-assets/cooktop-regenerated-fit`, fit 214 × 32 em (520,540). Duas saídas com xadrez pintado foram rejeitadas; terceira geração tem alpha real. Remoção das panelas reutiliza apenas a máscara histórica correspondente. 13.745 pixels alterados; zero fora do suporte e zero na cuba/torneira/escorredor, frente e corpo. CI reproduz o candidato. Julgamento visual PENDING; main/runtime preservados. Cuba segue em revisão no PR21. Próxima etapa: remoção do escorredor e revisão conjunta dos componentes.
