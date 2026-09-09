@@ -1,0 +1,22 @@
+{
+  "technicalStatus": "PASS",
+  "semanticReview": "PENDING",
+  "runtimeInstalled": false,
+  "fitXYWH": [
+    520,
+    540,
+    214,
+    32
+  ],
+  "changedPixels": 13745,
+  "outsideReplacementPixels": 0,
+  "sinkFaucetDrainerChangedPixels": 0,
+  "frontEdgeBodyChangedPixels": 0,
+  "opaqueCooktopChangedByProbe": 0,
+  "limitations": [
+    "Generated grate and knob geometry needs visual review.",
+    "Uses previously inferred pot-removal backing inside its mask only.",
+    "Independent width/height fit is not a perspective proof.",
+    "Solid local probes are not finished stone materials."
+  ]
+}
