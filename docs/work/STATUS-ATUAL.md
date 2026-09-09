@@ -104,3 +104,7 @@ Integração na branch/PR, sem merge na main ou publicação. Próximos itens R6
 
 `work/r6-stone-finish-preview`, sobre PR #19. Recompõe o metal aprovado sobre backing recolorido, recuperando exatamente o runtime sem cor. Oito combinações de diagnóstico passaram nos gates de confinamento e preservação do metal opaco.
 A máscara de acabamento ainda deixa ilhas da pedra original ao redor da cuba, cooktop/panelas e escorredor. Comparação em `review-assets/stone-finish-preview/generated/review.png`. Sem novos presets no runtime; próxima etapa é fechar essas exclusões semanticamente, não promover as cores de diagnóstico.
+
+## Continuação — cuba regenerada em revisão (2026-09-09)
+
+Fase R6: candidato isolado em `review-assets/sink-regenerated-fit`, após a torneira aprovada e os testes de acabamento. Fit 149 × 12 em (936,561); 3.332 pixels alterados e zero fora da região autorizada. Probes locais claro/grafite preservam metais opacos e recompõem a torneira sem transportar fundo bege. Gate de reprodução incluído no Candidate Asset Gates. Aprovação visual PENDING; runtime e main sem alteração. Próximos: avaliação da cuba, cooktop sem panelas e remoção independente do escorredor.

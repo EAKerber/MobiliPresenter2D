@@ -185,6 +185,8 @@ jobs:
         run: python tools/fit_regenerated_faucet.py --output-dir /tmp/candidate-review/faucet-regenerated-fit
       - name: Review stone finish masks beneath approved faucet
         run: python tools/preview_stone_finishes.py --manifest /tmp/candidate-review/variant-manifest.json --output-dir /tmp/candidate-review/stone-finish-preview
+      - name: Review regenerated sink fit and confined color probes
+        run: python tools/fit_regenerated_sink.py --manifest /tmp/candidate-review/variant-manifest.json --output-dir /tmp/candidate-review/sink-regenerated-fit
       - name: Structural candidate intake
         run: |
           python tools/validate_candidate_assets.py --output /tmp/candidate-review/intake.json

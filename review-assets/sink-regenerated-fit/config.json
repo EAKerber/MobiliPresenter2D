@@ -1,0 +1,8 @@
+{
+  "status": "REVIEW",
+  "sha256": {
+    "review-assets/sink-regenerated-fit/donor.png": "408e2fa0b8c367b79fe5915bd6952bc3b967bba00b98abe9178b46f87abb6050",
+    "review-assets/stone-backing/generated/backing.png": "2604cf592dc42ad8dc75ba49379518879f892e954242cc22bfee1068fad23449",
+    "review-assets/stone-backing/generated/sink-mask.png": "d9cdd49c9f0e0a12c2271fe087a118fa990679006422f0c9327e0740b9ce88b2"
+  }
+}
