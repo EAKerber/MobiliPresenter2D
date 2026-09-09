@@ -1,0 +1,18 @@
+{
+  "tool": "image_gen.imagegen",
+  "rawName": "exec-f6f72b1d-98d5-49f2-8fbb-f404b897a30b.png",
+  "rawSha256": "d649916c10dad509815faf34f401d1c3cc20a66c0c90c413f0971cd31ad00af6",
+  "rawCanvas": [
+    2170,
+    725
+  ],
+  "retainedCrop": [
+    89,
+    319,
+    2087,
+    464
+  ],
+  "alphaRule": "bbox alpha>=128 plus 3 pixels; retain original alpha inside crop",
+  "reference": "reference.png",
+  "generationIntent": "Reconstruct entire sink on transparent background, preserve very flat 149:12 projection and complete metal rim, remove granite contamination; no faucet or scene."
+}
