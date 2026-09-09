@@ -1,0 +1,16 @@
+{
+  "technicalStatus": "PASS",
+  "semanticReview": "PENDING",
+  "runtimeInstalled": false,
+  "drainerChangedPixels": 9418,
+  "jointChangedPixels": 26495,
+  "outsideDrainerMaskPixels": 0,
+  "outsideJointSupportPixels": 0,
+  "candidateOverlapPixels": 0,
+  "roundtripMismatchPixels": 0,
+  "limitations": [
+    "Reconstructed hidden stone texture is inferred, not recovered.",
+    "Sink and cooktop retain their individual pending visual reviews.",
+    "Joint review is default-state only; no runtime visibility integration."
+  ]
+}
