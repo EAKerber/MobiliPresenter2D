@@ -11,6 +11,8 @@ def diff(a,b):
     return ImageChops.lighter(ImageChops.lighter(r,g),b).point(lambda p:255 if p else 0)
 def count(m):return sum(m.histogram()[1:])
 def run(manifest,out):
+    from validate_approved_components import historical_manifest
+    manifest=historical_manifest(manifest)
     approved_overlay() # Verify pinned approval and exact source fit before separating backing.
     cfg=json.loads((ROOT/'review-assets/stone-finish-preview/config.json').read_text())
     base=Image.open(ROOT/'app'/manifest['baseAsset']).convert('RGBA')

@@ -165,6 +165,8 @@ jobs:
             --output-dir /tmp/candidate-review/variants
       - name: Verify approved faucet runtime pixels and host visibility
         run: python tools/validate_approved_faucet.py --manifest /tmp/candidate-review/variant-manifest.json --output-dir /tmp/candidate-review/approved-faucet
+      - name: Verify approved component pixels and host visibility
+        run: python tools/validate_approved_components.py --manifest /tmp/candidate-review/variant-manifest.json --output-dir /tmp/candidate-review/approved-components
       - name: Verify approved range runtime pixels
         run: python tools/validate_approved_range.py --manifest /tmp/candidate-review/variant-manifest.json --output-dir /tmp/candidate-review/approved-range
       - name: Materialize stone surface mask review

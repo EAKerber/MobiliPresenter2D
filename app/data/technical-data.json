@@ -270,6 +270,33 @@
         1035,
         562
       ]
+    },
+    "assets/kitchen/overlays/cooktop-approved.png": {
+      "sha256": "038c8c1b2bf7d1dc8227a5922aa42c274bcb9e3f9a1a821dff792ec2fadce79e",
+      "alphaBounds": [
+        515,
+        491,
+        739,
+        575
+      ]
+    },
+    "assets/kitchen/overlays/drainer-approved.png": {
+      "sha256": "013a5fed375cbfd63451450747bdbd99f7915f548b77691c536aa8bd992cd724",
+      "alphaBounds": [
+        786,
+        441,
+        870,
+        565
+      ]
+    },
+    "assets/kitchen/overlays/sink-approved.png": {
+      "sha256": "fc11c20680c9098035f27d9a1d0dc7659617356956564b9e2a2ac07331fd24a9",
+      "alphaBounds": [
+        930,
+        552,
+        1093,
+        575
+      ]
     }
   }
 }

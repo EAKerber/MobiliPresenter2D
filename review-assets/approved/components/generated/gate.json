@@ -1,0 +1,30 @@
+{
+  "status": "PASS",
+  "humanAppearance": "APPROVED",
+  "cases": [
+    {
+      "case": "default",
+      "changedPixels": 26495,
+      "outsideApprovedSupportPixels": 0,
+      "compositionMismatchPixels": 0
+    },
+    {
+      "case": "module-02-hidden",
+      "changedPixels": 12750,
+      "outsideApprovedSupportPixels": 0,
+      "compositionMismatchPixels": 0
+    },
+    {
+      "case": "module-03-hidden",
+      "changedPixels": 13744,
+      "outsideApprovedSupportPixels": 0,
+      "compositionMismatchPixels": 0
+    },
+    {
+      "case": "modules-02-03-hidden",
+      "changedPixels": 0,
+      "outsideApprovedSupportPixels": 0,
+      "compositionMismatchPixels": 0
+    }
+  ]
+}
