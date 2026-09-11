@@ -80,6 +80,10 @@ def main() -> int:
             # Preserve original golden; permit exactly the separately pinned human-approved overlay.
             from validate_approved_faucet import approved_overlay
             approved = Image.alpha_composite(golden, approved_overlay())
+            from validate_approved_stone import approved_patches
+            ids = {e['id'] for e in case['visibleEntities']}
+            for entity_id, patch in approved_patches().items():
+                if entity_id in ids: approved = Image.alpha_composite(approved, patch)
             assert rendered.tobytes() == approved.tobytes(), 'default differs from approved composition'
             original_diff = ImageChops.difference(rendered.convert("RGB"), golden.convert("RGB"))
             record["approvedChangePixelCount"] = nonzero_pixel_count(original_diff)

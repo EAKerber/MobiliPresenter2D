@@ -1,0 +1,104 @@
+{
+  "status": "PASS",
+  "cases": [
+    {
+      "case": "default",
+      "approvedReplayMismatchPixels": 0,
+      "outsideApprovalPixels": 0,
+      "changedPixels": 26495
+    },
+    {
+      "case": "module-02-hidden",
+      "approvedReplayMismatchPixels": 0,
+      "outsideApprovalPixels": 0,
+      "changedPixels": 12750
+    },
+    {
+      "case": "module-03-hidden",
+      "approvedReplayMismatchPixels": 0,
+      "outsideApprovalPixels": 0,
+      "changedPixels": 13748
+    },
+    {
+      "case": "modules-02-03-hidden",
+      "approvedReplayMismatchPixels": 0,
+      "outsideApprovalPixels": 0,
+      "changedPixels": 0
+    }
+  ],
+  "colors": [
+    {
+      "case": "default",
+      "color": "graphite",
+      "outsideStonePixels": 0,
+      "opaqueObjectsChangedPixels": 0
+    },
+    {
+      "case": "default",
+      "color": "light",
+      "outsideStonePixels": 0,
+      "opaqueObjectsChangedPixels": 0
+    },
+    {
+      "case": "default",
+      "color": "custom",
+      "outsideStonePixels": 0,
+      "opaqueObjectsChangedPixels": 0
+    },
+    {
+      "case": "module-02-hidden",
+      "color": "graphite",
+      "outsideStonePixels": 0,
+      "opaqueObjectsChangedPixels": 0
+    },
+    {
+      "case": "module-02-hidden",
+      "color": "light",
+      "outsideStonePixels": 0,
+      "opaqueObjectsChangedPixels": 0
+    },
+    {
+      "case": "module-02-hidden",
+      "color": "custom",
+      "outsideStonePixels": 0,
+      "opaqueObjectsChangedPixels": 0
+    },
+    {
+      "case": "module-03-hidden",
+      "color": "graphite",
+      "outsideStonePixels": 0,
+      "opaqueObjectsChangedPixels": 0
+    },
+    {
+      "case": "module-03-hidden",
+      "color": "light",
+      "outsideStonePixels": 0,
+      "opaqueObjectsChangedPixels": 0
+    },
+    {
+      "case": "module-03-hidden",
+      "color": "custom",
+      "outsideStonePixels": 0,
+      "opaqueObjectsChangedPixels": 0
+    },
+    {
+      "case": "modules-02-03-hidden",
+      "color": "graphite",
+      "outsideStonePixels": 0,
+      "opaqueObjectsChangedPixels": 0
+    },
+    {
+      "case": "modules-02-03-hidden",
+      "color": "light",
+      "outsideStonePixels": 0,
+      "opaqueObjectsChangedPixels": 0
+    },
+    {
+      "case": "modules-02-03-hidden",
+      "color": "custom",
+      "outsideStonePixels": 0,
+      "opaqueObjectsChangedPixels": 0
+    }
+  ],
+  "resetOverlayEmpty": true
+}

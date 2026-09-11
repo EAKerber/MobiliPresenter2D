@@ -1,0 +1,13 @@
+{
+  "status": "APPROVED",
+  "date": "2026-09-11",
+  "quote": "aprovo, pode prosseguir com o controle de cor da pedra e pipline planejado",
+  "scope": "Appearance of PR23 joint sink, cooktop and drainer removal shown in this chat; authorization to integrate and implement stone color. New color results are not covered by this appearance approval.",
+  "sourceCommit": "93f1e71501907331df8ab643a661d5e39528d83c",
+  "sha256": {
+    "review-assets/approved/stone-components/source-manifest.json": "7684ab1d8b7d779a637813828eb8fb17d779a66d37860aeea797b3aa289437a4",
+    "review-assets/drainer-clean-review/generated/review.png": "856e049b4c50c5570d5afe7e1a543bc41caa3160b787fc417f13ff54c1143f86",
+    "app/assets/kitchen/overlays/approved-stone-02.png": "30e5c1a6e79454cc7aa90c51492d45f608ead3e05e5c53e7b15ca0ae7c373553",
+    "app/assets/kitchen/overlays/approved-stone-03.png": "b2304e4c547091c36c368397350bf2759407668f019025b73213e7b84c3cac1c"
+  }
+}

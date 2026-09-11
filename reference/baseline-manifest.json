@@ -349,6 +349,38 @@
     },
     {
       "alphaBounds": [
+        515,
+        491,
+        739,
+        575
+      ],
+      "canonicalCanvas": true,
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "path": "app/assets/kitchen/overlays/approved-stone-02.png",
+      "sha256": "30e5c1a6e79454cc7aa90c51492d45f608ead3e05e5c53e7b15ca0ae7c373553",
+      "size": 43315
+    },
+    {
+      "alphaBounds": [
+        786,
+        441,
+        1093,
+        575
+      ],
+      "canonicalCanvas": true,
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "path": "app/assets/kitchen/overlays/approved-stone-03.png",
+      "sha256": "b2304e4c547091c36c368397350bf2759407668f019025b73213e7b84c3cac1c",
+      "size": 36495
+    },
+    {
+      "alphaBounds": [
         986,
         439,
         1035,
@@ -521,8 +553,8 @@
     },
     {
       "path": "app/app.js",
-      "sha256": "e1151ff41bec98e813e78f2e177326a5099ae74e4b8c228c6a0d34955966d26e",
-      "size": 11128
+      "sha256": "d57045b8b9abe54cf2c4b47dc9c3cf9755331375f72a49dea7582a9037ecb00c",
+      "size": 12329
     },
     {
       "path": "app/assets/kitchen/base.png",
@@ -635,6 +667,16 @@
       "size": 6177
     },
     {
+      "path": "app/assets/kitchen/overlays/approved-stone-02.png",
+      "sha256": "30e5c1a6e79454cc7aa90c51492d45f608ead3e05e5c53e7b15ca0ae7c373553",
+      "size": 43315
+    },
+    {
+      "path": "app/assets/kitchen/overlays/approved-stone-03.png",
+      "sha256": "b2304e4c547091c36c368397350bf2759407668f019025b73213e7b84c3cac1c",
+      "size": 36495
+    },
+    {
       "path": "app/assets/kitchen/overlays/faucet-approved.png",
       "sha256": "94e58e8184c47d0adfeb50ca368c20fa3ba6bbe6239e5b079a0af11b96ad82ac",
       "size": 19065
@@ -661,8 +703,8 @@
     },
     {
       "path": "app/core/fingerprint.js",
-      "sha256": "b584ba2f7a3ae80b06c68da4b24b877899b3ac2583a46ac46fbfc94fdbb45251",
-      "size": 1690
+      "sha256": "b7bdb99a5fc97772016f4cb36fc2c18dc55bf14a0dc6894d7bfa83829164ff52",
+      "size": 1734
     },
     {
       "path": "app/core/finishes.js",
@@ -671,8 +713,13 @@
     },
     {
       "path": "app/core/state.js",
-      "sha256": "6f3ec688acf375c2080f38f5992a676056341e23b414edfb9c733af0864ea248",
-      "size": 1446
+      "sha256": "17b8df1554f7adf5efee8382a5fc0434e020db2b2f2c78a547bf750e4c5f4620",
+      "size": 1470
+    },
+    {
+      "path": "app/core/stone.js",
+      "sha256": "583ded730d3801ab3d09020e14a69e291abcef8a63c8c4ba7b1a601e4877054a",
+      "size": 2704
     },
     {
       "path": "app/core/validation.js",
@@ -691,13 +738,18 @@
     },
     {
       "path": "app/data/scene-data.js",
-      "sha256": "3559a8a0e4a31a13828328ae323fba612cbf0a0a8d7f42f80848671e7d7220ff",
-      "size": 9422
+      "sha256": "03aa3974ae4fa64444bd40e71774f32b98facf4dba6196a8f36a0ba2c6f335d7",
+      "size": 10631
+    },
+    {
+      "path": "app/data/stone-data.js",
+      "sha256": "0cb1bf8fe435971b92e031943a1d4bea8d61402f73d2c9212648c068a61b5923",
+      "size": 1243135
     },
     {
       "path": "app/data/technical-data.json",
-      "sha256": "9560c12d99da8fe9b00f20918e392bb7826b4dde6d1e6b91c4d623091833ca82",
-      "size": 7189
+      "sha256": "ef51d1ea24f6fb8274fdd1ffdb49c8e4a49e86d722b50c1a932b33520b9a0453",
+      "size": 7646
     },
     {
       "path": "app/docs/CHECKPOINTS.md",
@@ -721,8 +773,8 @@
     },
     {
       "path": "app/index.html",
-      "sha256": "7a640eb1acba556dea383f7b7285436088751dd47cf9bc7dd6310db091592df7",
-      "size": 4210
+      "sha256": "72cd878ccffd2063a5ab0bac64295c466d7459bce4d774b96861d724de731866",
+      "size": 5701
     },
     {
       "path": "app/package.json",
@@ -731,13 +783,13 @@
     },
     {
       "path": "app/scripts/build-static.sh",
-      "sha256": "a3a8bdbc9386e7fb75355b5333e4b6987ee1b9295282d385d3c9566f5d1b1e2f",
-      "size": 888
+      "sha256": "0c6956df379253dfed576e9a37471c499254cf02f60ec312219c20750f4cb16e",
+      "size": 1014
     },
     {
       "path": "app/styles.css",
-      "sha256": "7ae138dc44dee75d17cd16fad3513eef63593379e9073fe4b11fe0adaa510555",
-      "size": 8759
+      "sha256": "832c82b7076efe02cb1b9dcc0513861e854b4094a2284e7081f2dc3fcf87c007",
+      "size": 8880
     },
     {
       "path": "app/tools/apply-r4-module02-fidelity.py",
@@ -806,13 +858,13 @@
     },
     {
       "path": "app/tools/test-core.js",
-      "sha256": "9ab72af5d30c810d2ecc43347e4d1e3345e71cb2b2bf2b35a263eaaef2ff3b37",
+      "sha256": "5990fcd903ad5b2386000254e3cfb279b8339f84322952633dc04ceb4d998ad1",
       "size": 3017
     },
     {
       "path": "app/tools/update-technical-data.py",
-      "sha256": "8b45e11762d0bcd3da561fb65abdd6168d736ced333cf99ae5bc356158771826",
-      "size": 2285
+      "sha256": "b8b069d6420bf43b22ba9ca455d33a55fd761830b899be6e247eb5a00556320a",
+      "size": 2399
     },
     {
       "path": "app/tools/validate-assets.py",
