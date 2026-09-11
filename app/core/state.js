@@ -16,6 +16,7 @@
       customColor: null,
       customTextureKey: null,
       stoneFinishId: scene.defaultConfiguration.stoneFinishId,
+      stoneColor: null,
       handlePresetId: scene.defaultConfiguration.handlePresetId,
       lightingPresetId: scene.defaultConfiguration.lightingPresetId,
       decorVisibility: {},

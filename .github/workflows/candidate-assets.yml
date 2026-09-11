@@ -163,6 +163,10 @@ jobs:
           python tools/render_variant_fidelity.py \
             --manifest /tmp/candidate-review/variant-manifest.json \
             --output-dir /tmp/candidate-review/variants
+      - name: Validate current stone integration and preserve historical replay inputs
+        run: |
+          python tools/validate_approved_stone.py --manifest /tmp/candidate-review/variant-manifest.json --output-dir /tmp/candidate-review/approved-stone
+          cp review-assets/approved/stone-components/source-manifest.json /tmp/candidate-review/historical-manifest.json
       - name: Verify approved faucet runtime pixels and host visibility
         run: python tools/validate_approved_faucet.py --manifest /tmp/candidate-review/variant-manifest.json --output-dir /tmp/candidate-review/approved-faucet
       - name: Verify approved range runtime pixels
@@ -172,9 +176,9 @@ jobs:
       - name: Rebuild confined stone clean plate
         run: python tools/materialize_stone_cleanplate.py --donor review-assets/stone-cleanplate/generated/donor-regions.png --output-dir /tmp/candidate-review/stone-cleanplate
       - name: Verify candidate stone component split
-        run: python tools/split_stone_components.py --manifest /tmp/candidate-review/variant-manifest.json --output-dir /tmp/candidate-review/stone-components
+        run: python tools/split_stone_components.py --manifest /tmp/candidate-review/historical-manifest.json --output-dir /tmp/candidate-review/stone-components
       - name: Rebuild confined stone backing and eight presence states
-        run: python tools/build_stone_backing.py --manifest /tmp/candidate-review/variant-manifest.json --donor review-assets/stone-backing/generated/donor-regions.png --output-dir /tmp/candidate-review/stone-backing
+        run: python tools/build_stone_backing.py --manifest /tmp/candidate-review/historical-manifest.json --donor review-assets/stone-backing/generated/donor-regions.png --output-dir /tmp/candidate-review/stone-backing
       - name: Render object contour contrast review
         run: python tools/review_object_contours.py --output-dir /tmp/candidate-review/object-contours
       - name: Compare bounded object antialias
@@ -184,13 +188,13 @@ jobs:
       - name: Fit regenerated faucet and verify replacement footprint
         run: python tools/fit_regenerated_faucet.py --output-dir /tmp/candidate-review/faucet-regenerated-fit
       - name: Review stone finish masks beneath approved faucet
-        run: python tools/preview_stone_finishes.py --manifest /tmp/candidate-review/variant-manifest.json --output-dir /tmp/candidate-review/stone-finish-preview
+        run: python tools/preview_stone_finishes.py --manifest /tmp/candidate-review/historical-manifest.json --output-dir /tmp/candidate-review/stone-finish-preview
       - name: Review regenerated sink fit and confined color probes
-        run: python tools/fit_regenerated_sink.py --manifest /tmp/candidate-review/variant-manifest.json --output-dir /tmp/candidate-review/sink-regenerated-fit
+        run: python tools/fit_regenerated_sink.py --manifest /tmp/candidate-review/historical-manifest.json --output-dir /tmp/candidate-review/sink-regenerated-fit
       - name: Review regenerated cooktop and confined pot removal
-        run: python tools/fit_regenerated_cooktop.py --manifest /tmp/candidate-review/variant-manifest.json --output-dir /tmp/candidate-review/cooktop-regenerated-fit
+        run: python tools/fit_regenerated_cooktop.py --manifest /tmp/candidate-review/historical-manifest.json --output-dir /tmp/candidate-review/cooktop-regenerated-fit
       - name: Review confined drainer repair and joint components
-        run: python tools/review_drainer_clean.py --manifest /tmp/candidate-review/variant-manifest.json --output-dir /tmp/candidate-review/drainer-clean-review
+        run: python tools/review_drainer_clean.py --manifest /tmp/candidate-review/historical-manifest.json --output-dir /tmp/candidate-review/drainer-clean-review
       - name: Structural candidate intake
         run: |
           python tools/validate_candidate_assets.py --output /tmp/candidate-review/intake.json
