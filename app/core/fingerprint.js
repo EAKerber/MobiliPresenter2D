@@ -14,6 +14,7 @@
       customColor: state.customColor,
       customTextureKey: state.customTextureKey,
       stoneFinishId: state.stoneFinishId,
+      stoneColor: state.stoneColor || null,
       handlePresetId: state.handlePresetId,
       lightingPresetId: state.lightingPresetId,
       decorVisibility: state.decorVisibility,

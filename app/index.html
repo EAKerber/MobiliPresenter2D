@@ -46,6 +46,7 @@
           />
           <div id="sceneLayers"></div>
 
+          <canvas id="stoneCanvas" class="scene-layer stone-color-layer" width="1536" height="1024" aria-hidden="true"></canvas>
           <div class="alignment-grid" id="alignmentGrid" aria-hidden="true"></div>
         </div>
 
@@ -104,6 +105,19 @@
             </button>
           </div>
         </section>
+        <section class="panel">
+          <header class="finish-heading"><div><h2>Pedra</h2><p>Cor da bancada, revestimento e rodapé</p></div></header>
+          <div class="finish-controls">
+            <fieldset><legend>Cor da pedra</legend><div class="swatches" id="stoneSwatches">
+              <button type="button" class="swatch" data-stone-color="#34383d" style="--swatch:#34383d" aria-label="Pedra grafite" title="Grafite" aria-pressed="false"></button>
+              <button type="button" class="swatch" data-stone-color="#d8d8d2" style="--swatch:#d8d8d2" aria-label="Pedra clara" title="Clara" aria-pressed="false"></button>
+              <button type="button" class="swatch" data-stone-color="#968371" style="--swatch:#968371" aria-label="Pedra areia" title="Areia" aria-pressed="false"></button>
+              <label class="custom-color" title="Outra cor da pedra"><span></span><input id="stoneColor" type="color" value="#34383d" aria-label="Outra cor da pedra"></label>
+            </div></fieldset>
+            <p id="stoneStatus" aria-live="polite">Simulação de cor sobre a textura existente.</p>
+            <button type="button" class="button button--reset" id="resetStone" disabled>Voltar à pedra original</button>
+          </div>
+        </section>
       </aside>
     </main>
 
@@ -114,6 +128,8 @@
     <script src="core/validation.js"></script>
     <script src="core/fingerprint.js"></script>
     <script src="core/finishes.js"></script>
+    <script src="data/stone-data.js"></script>
+    <script src="core/stone.js"></script>
     <script src="app.js"></script>
   </body>
 </html>

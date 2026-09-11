@@ -1,6 +1,12 @@
-# Estado atual — 2026-09-08
+# Estado atual — 2026-09-11
 
-## Onde estamos
+## Retomada mais recente — R6 cor da pedra
+
+Usuário aprovou o conjunto PR23 e autorizou o controle de cor. `work/r6-stone-color-control` integra os patches aprovados vinculados aos módulos e acrescenta cor independente para pedra, preservando a textura, metais e reset original. Aprovação por hashes, fonte histórica fixada e reprodução em `review-assets/approved/stone-components/`.
+
+Gates: quatro estados neutros exatos; doze combinações de cor/visibilidade sem alterar pixels fora da pedra nem metal opaco. A aparência das novas cores e a interação em navegador ainda precisam de revisão; acesso à prévia local indisponível nesta sessão. Próximo passo: testar a interface e julgar as bordas de acabamento antes de merge/publicação. Main e produção não alteradas.
+
+## Onde estamos (histórico das fases)
 
 Fase 3: revisão técnica R5A concluída, revisão estética final pendente.
 Fase 4: preparação R6 de máscaras de pedra iniciada, sem novos acabamentos no runtime.

@@ -9,7 +9,7 @@
 
   const scene = {
     schemaVersion: "Scene2D 1.0",
-    manifestVersion: "cozinha-01@r6-approved-faucet",
+    manifestVersion: "cozinha-01@r6-stone-color",
     id: "cozinha-01",
     label: "Cozinha Casa em Módulos",
     canvas: { width: 1536, height: 1024 },
@@ -23,6 +23,8 @@
         "module-03",
         "stone-03",
         "faucet-approved",
+        "approved-stone-02",
+        "approved-stone-03",
         "stone-02-joint-bridge",
         "stone-03-joint-bridge",
         "module-04",
@@ -39,6 +41,50 @@
       gridVisible: false
     },
     entities: [
+      {
+        "id": "approved-stone-02",
+        "alias": "02A",
+        "label": "Componentes aprovados 02",
+        "kind": "accessory",
+        "zIndex": 305,
+        "asset": "assets/kitchen/overlays/approved-stone-02.png",
+        "maskAsset": null,
+        "alphaBounds": {
+          "x": 515,
+          "y": 491,
+          "width": 224,
+          "height": 84
+        },
+        "defaultVisible": true,
+        "controllable": false,
+        "hostId": "module-02",
+        "finishGroups": [],
+        "tags": [
+          "approved-stone-components"
+        ]
+      },
+      {
+        "id": "approved-stone-03",
+        "alias": "03A",
+        "label": "Componentes aprovados 03",
+        "kind": "accessory",
+        "zIndex": 306,
+        "asset": "assets/kitchen/overlays/approved-stone-03.png",
+        "maskAsset": null,
+        "alphaBounds": {
+          "x": 786,
+          "y": 441,
+          "width": 307,
+          "height": 134
+        },
+        "defaultVisible": true,
+        "controllable": false,
+        "hostId": "module-03",
+        "finishGroups": [],
+        "tags": [
+          "approved-stone-components"
+        ]
+      },
       {
         id: "faucet-approved", alias: "03T", label: "Torneira",
         kind: "accessory", zIndex: 303,

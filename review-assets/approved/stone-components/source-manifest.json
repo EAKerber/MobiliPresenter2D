@@ -1,0 +1,661 @@
+{
+  "schemaVersion": "VariantRenderManifest 0.1",
+  "sceneId": "cozinha-01",
+  "sceneManifestVersion": "cozinha-01@r6-approved-faucet",
+  "canvas": {
+    "width": 1536,
+    "height": 1024
+  },
+  "baseAsset": "assets/kitchen/base.png",
+  "goldenAsset": "assets/kitchen/composicao-completa.png",
+  "cases": [
+    {
+      "id": "default",
+      "label": "Default canônico",
+      "fingerprint": "scene2d-66522012",
+      "expectedVisualStatus": "golden",
+      "expectedDebtCodes": [],
+      "visibilityReasons": {
+        "faucet-approved": {
+          "visible": true,
+          "reason": "visible"
+        },
+        "module-01": {
+          "visible": true,
+          "reason": "visible"
+        },
+        "module-02": {
+          "visible": true,
+          "reason": "visible"
+        },
+        "stone-02": {
+          "visible": true,
+          "reason": "visible"
+        },
+        "module-03": {
+          "visible": true,
+          "reason": "visible"
+        },
+        "stone-03": {
+          "visible": true,
+          "reason": "visible"
+        },
+        "module-04": {
+          "visible": true,
+          "reason": "visible"
+        },
+        "module-05": {
+          "visible": true,
+          "reason": "visible"
+        },
+        "module-06": {
+          "visible": true,
+          "reason": "visible"
+        },
+        "module-07": {
+          "visible": true,
+          "reason": "visible"
+        },
+        "lighting-08": {
+          "visible": true,
+          "reason": "visible"
+        },
+        "stone-02-joint-bridge": {
+          "visible": true,
+          "reason": "visible"
+        },
+        "stone-03-joint-bridge": {
+          "visible": true,
+          "reason": "visible"
+        },
+        "range-freestanding": {
+          "visible": false,
+          "reason": "substitution-primary-visible"
+        }
+      },
+      "visibleEntities": [
+        {
+          "id": "module-01",
+          "asset": "assets/kitchen/layers/01_modulo_lavanderia.png",
+          "zIndex": 100,
+          "tags": [
+            "lower",
+            "laundry-zone"
+          ],
+          "placeholder": false
+        },
+        {
+          "id": "module-02",
+          "asset": "assets/kitchen/layers/02_inferior_fogao.png",
+          "zIndex": 200,
+          "tags": [
+            "lower",
+            "cooking-zone"
+          ],
+          "placeholder": false
+        },
+        {
+          "id": "stone-02",
+          "asset": "assets/kitchen/variants/stone-02-cozinha-exposed-right.png",
+          "zIndex": 201,
+          "tags": [
+            "stone",
+            "cooking-zone"
+          ],
+          "placeholder": false
+        },
+        {
+          "id": "stone-02-joint-bridge",
+          "asset": "assets/kitchen/bridges/stone-02-joint-bridge.png",
+          "zIndex": 202,
+          "tags": [
+            "stone",
+            "joint",
+            "cooking-zone",
+            "sink-zone"
+          ],
+          "placeholder": false
+        },
+        {
+          "id": "module-03",
+          "asset": "assets/kitchen/layers/03_inferior_pia.png",
+          "zIndex": 300,
+          "tags": [
+            "lower",
+            "sink-zone"
+          ],
+          "placeholder": false
+        },
+        {
+          "id": "stone-03",
+          "asset": "assets/kitchen/variants/stone-03-pia-exposed-left.png",
+          "zIndex": 301,
+          "tags": [
+            "stone",
+            "sink-zone"
+          ],
+          "placeholder": false
+        },
+        {
+          "id": "stone-03-joint-bridge",
+          "asset": "assets/kitchen/bridges/stone-03-joint-bridge.png",
+          "zIndex": 302,
+          "tags": [
+            "stone",
+            "joint",
+            "cooking-zone",
+            "sink-zone"
+          ],
+          "placeholder": false
+        },
+        {
+          "id": "faucet-approved",
+          "asset": "assets/kitchen/overlays/faucet-approved.png",
+          "zIndex": 303,
+          "tags": [
+            "approved-faucet",
+            "sink-zone"
+          ],
+          "placeholder": false
+        },
+        {
+          "id": "module-04",
+          "asset": "assets/kitchen/layers/04_lateral_geladeira.png",
+          "zIndex": 400,
+          "tags": [
+            "tall",
+            "refrigerator-zone"
+          ],
+          "placeholder": false
+        },
+        {
+          "id": "module-05",
+          "asset": "assets/kitchen/layers/05_aereo_fogao.png",
+          "zIndex": 500,
+          "tags": [
+            "upper",
+            "cooking-zone"
+          ],
+          "placeholder": false
+        },
+        {
+          "id": "module-06",
+          "asset": "assets/kitchen/layers/06_aereo_pia.png",
+          "zIndex": 600,
+          "tags": [
+            "upper",
+            "sink-zone"
+          ],
+          "placeholder": false
+        },
+        {
+          "id": "module-07",
+          "asset": "assets/kitchen/layers/07_aereo_geladeira.png",
+          "zIndex": 700,
+          "tags": [
+            "upper",
+            "refrigerator-zone"
+          ],
+          "placeholder": false
+        },
+        {
+          "id": "lighting-08",
+          "asset": "assets/kitchen/layers/08_iluminacao.png",
+          "zIndex": 800,
+          "tags": [
+            "lighting"
+          ],
+          "placeholder": false
+        }
+      ]
+    },
+    {
+      "id": "module-02-hidden",
+      "label": "Módulo 02 oculto / substituição ativa",
+      "fingerprint": "scene2d-b7f75b30",
+      "expectedVisualStatus": "validated",
+      "expectedDebtCodes": [],
+      "visibilityReasons": {
+        "faucet-approved": {
+          "visible": true,
+          "reason": "visible"
+        },
+        "module-01": {
+          "visible": true,
+          "reason": "visible"
+        },
+        "module-02": {
+          "visible": false,
+          "reason": "intent-off"
+        },
+        "stone-02": {
+          "visible": false,
+          "reason": "host-hidden"
+        },
+        "module-03": {
+          "visible": true,
+          "reason": "visible"
+        },
+        "stone-03": {
+          "visible": true,
+          "reason": "visible"
+        },
+        "module-04": {
+          "visible": true,
+          "reason": "visible"
+        },
+        "module-05": {
+          "visible": true,
+          "reason": "visible"
+        },
+        "module-06": {
+          "visible": true,
+          "reason": "visible"
+        },
+        "module-07": {
+          "visible": true,
+          "reason": "visible"
+        },
+        "lighting-08": {
+          "visible": true,
+          "reason": "visible"
+        },
+        "stone-02-joint-bridge": {
+          "visible": false,
+          "reason": "host-hidden"
+        },
+        "stone-03-joint-bridge": {
+          "visible": false,
+          "reason": "host-hidden"
+        },
+        "range-freestanding": {
+          "visible": true,
+          "reason": "visible"
+        }
+      },
+      "visibleEntities": [
+        {
+          "id": "module-01",
+          "asset": "assets/kitchen/layers/01_modulo_lavanderia.png",
+          "zIndex": 100,
+          "tags": [
+            "lower",
+            "laundry-zone"
+          ],
+          "placeholder": false
+        },
+        {
+          "id": "range-freestanding",
+          "asset": "assets/kitchen/substitutions/range-freestanding.png",
+          "zIndex": 205,
+          "tags": [
+            "replacement",
+            "cooking-zone"
+          ],
+          "placeholder": false
+        },
+        {
+          "id": "module-03",
+          "asset": "assets/kitchen/layers/03_inferior_pia.png",
+          "zIndex": 300,
+          "tags": [
+            "lower",
+            "sink-zone"
+          ],
+          "placeholder": false
+        },
+        {
+          "id": "stone-03",
+          "asset": "assets/kitchen/variants/stone-03-pia-exposed-left.png",
+          "zIndex": 301,
+          "tags": [
+            "stone",
+            "sink-zone"
+          ],
+          "placeholder": false
+        },
+        {
+          "id": "faucet-approved",
+          "asset": "assets/kitchen/overlays/faucet-approved.png",
+          "zIndex": 303,
+          "tags": [
+            "approved-faucet",
+            "sink-zone"
+          ],
+          "placeholder": false
+        },
+        {
+          "id": "module-04",
+          "asset": "assets/kitchen/layers/04_lateral_geladeira.png",
+          "zIndex": 400,
+          "tags": [
+            "tall",
+            "refrigerator-zone"
+          ],
+          "placeholder": false
+        },
+        {
+          "id": "module-05",
+          "asset": "assets/kitchen/layers/05_aereo_fogao.png",
+          "zIndex": 500,
+          "tags": [
+            "upper",
+            "cooking-zone"
+          ],
+          "placeholder": false
+        },
+        {
+          "id": "module-06",
+          "asset": "assets/kitchen/layers/06_aereo_pia.png",
+          "zIndex": 600,
+          "tags": [
+            "upper",
+            "sink-zone"
+          ],
+          "placeholder": false
+        },
+        {
+          "id": "module-07",
+          "asset": "assets/kitchen/layers/07_aereo_geladeira.png",
+          "zIndex": 700,
+          "tags": [
+            "upper",
+            "refrigerator-zone"
+          ],
+          "placeholder": false
+        },
+        {
+          "id": "lighting-08",
+          "asset": "assets/kitchen/layers/08_iluminacao.png",
+          "zIndex": 800,
+          "tags": [
+            "lighting"
+          ],
+          "placeholder": false
+        }
+      ]
+    },
+    {
+      "id": "module-03-hidden",
+      "label": "Módulo 03 oculto / terminação determinística ativa",
+      "fingerprint": "scene2d-1429ce10",
+      "expectedVisualStatus": "validated",
+      "expectedDebtCodes": [],
+      "visibilityReasons": {
+        "faucet-approved": {
+          "visible": false,
+          "reason": "host-hidden"
+        },
+        "module-01": {
+          "visible": true,
+          "reason": "visible"
+        },
+        "module-02": {
+          "visible": true,
+          "reason": "visible"
+        },
+        "stone-02": {
+          "visible": true,
+          "reason": "visible"
+        },
+        "module-03": {
+          "visible": false,
+          "reason": "intent-off"
+        },
+        "stone-03": {
+          "visible": false,
+          "reason": "host-hidden"
+        },
+        "module-04": {
+          "visible": true,
+          "reason": "visible"
+        },
+        "module-05": {
+          "visible": true,
+          "reason": "visible"
+        },
+        "module-06": {
+          "visible": true,
+          "reason": "visible"
+        },
+        "module-07": {
+          "visible": true,
+          "reason": "visible"
+        },
+        "lighting-08": {
+          "visible": true,
+          "reason": "visible"
+        },
+        "stone-02-joint-bridge": {
+          "visible": false,
+          "reason": "host-hidden"
+        },
+        "stone-03-joint-bridge": {
+          "visible": false,
+          "reason": "host-hidden"
+        },
+        "range-freestanding": {
+          "visible": false,
+          "reason": "substitution-primary-visible"
+        }
+      },
+      "visibleEntities": [
+        {
+          "id": "module-01",
+          "asset": "assets/kitchen/layers/01_modulo_lavanderia.png",
+          "zIndex": 100,
+          "tags": [
+            "lower",
+            "laundry-zone"
+          ],
+          "placeholder": false
+        },
+        {
+          "id": "module-02",
+          "asset": "assets/kitchen/layers/02_inferior_fogao.png",
+          "zIndex": 200,
+          "tags": [
+            "lower",
+            "cooking-zone"
+          ],
+          "placeholder": false
+        },
+        {
+          "id": "stone-02",
+          "asset": "assets/kitchen/variants/stone-02-cozinha-exposed-right.png",
+          "zIndex": 201,
+          "tags": [
+            "stone",
+            "cooking-zone"
+          ],
+          "placeholder": false
+        },
+        {
+          "id": "module-04",
+          "asset": "assets/kitchen/layers/04_lateral_geladeira.png",
+          "zIndex": 400,
+          "tags": [
+            "tall",
+            "refrigerator-zone"
+          ],
+          "placeholder": false
+        },
+        {
+          "id": "module-05",
+          "asset": "assets/kitchen/layers/05_aereo_fogao.png",
+          "zIndex": 500,
+          "tags": [
+            "upper",
+            "cooking-zone"
+          ],
+          "placeholder": false
+        },
+        {
+          "id": "module-06",
+          "asset": "assets/kitchen/layers/06_aereo_pia.png",
+          "zIndex": 600,
+          "tags": [
+            "upper",
+            "sink-zone"
+          ],
+          "placeholder": false
+        },
+        {
+          "id": "module-07",
+          "asset": "assets/kitchen/layers/07_aereo_geladeira.png",
+          "zIndex": 700,
+          "tags": [
+            "upper",
+            "refrigerator-zone"
+          ],
+          "placeholder": false
+        },
+        {
+          "id": "lighting-08",
+          "asset": "assets/kitchen/layers/08_iluminacao.png",
+          "zIndex": 800,
+          "tags": [
+            "lighting"
+          ],
+          "placeholder": false
+        }
+      ]
+    },
+    {
+      "id": "modules-02-03-hidden",
+      "label": "Módulos 02 e 03 ocultos / fogão isolado",
+      "fingerprint": "scene2d-8db54c59",
+      "expectedVisualStatus": "review",
+      "expectedDebtCodes": [],
+      "visibilityReasons": {
+        "faucet-approved": {
+          "visible": false,
+          "reason": "host-hidden"
+        },
+        "module-01": {
+          "visible": true,
+          "reason": "visible"
+        },
+        "module-02": {
+          "visible": false,
+          "reason": "intent-off"
+        },
+        "stone-02": {
+          "visible": false,
+          "reason": "host-hidden"
+        },
+        "module-03": {
+          "visible": false,
+          "reason": "intent-off"
+        },
+        "stone-03": {
+          "visible": false,
+          "reason": "host-hidden"
+        },
+        "module-04": {
+          "visible": true,
+          "reason": "visible"
+        },
+        "module-05": {
+          "visible": true,
+          "reason": "visible"
+        },
+        "module-06": {
+          "visible": true,
+          "reason": "visible"
+        },
+        "module-07": {
+          "visible": true,
+          "reason": "visible"
+        },
+        "lighting-08": {
+          "visible": true,
+          "reason": "visible"
+        },
+        "stone-02-joint-bridge": {
+          "visible": false,
+          "reason": "host-hidden"
+        },
+        "stone-03-joint-bridge": {
+          "visible": false,
+          "reason": "host-hidden"
+        },
+        "range-freestanding": {
+          "visible": true,
+          "reason": "visible"
+        }
+      },
+      "visibleEntities": [
+        {
+          "id": "module-01",
+          "asset": "assets/kitchen/layers/01_modulo_lavanderia.png",
+          "zIndex": 100,
+          "tags": [
+            "lower",
+            "laundry-zone"
+          ],
+          "placeholder": false
+        },
+        {
+          "id": "range-freestanding",
+          "asset": "assets/kitchen/substitutions/range-freestanding.png",
+          "zIndex": 205,
+          "tags": [
+            "replacement",
+            "cooking-zone"
+          ],
+          "placeholder": false
+        },
+        {
+          "id": "module-04",
+          "asset": "assets/kitchen/layers/04_lateral_geladeira.png",
+          "zIndex": 400,
+          "tags": [
+            "tall",
+            "refrigerator-zone"
+          ],
+          "placeholder": false
+        },
+        {
+          "id": "module-05",
+          "asset": "assets/kitchen/layers/05_aereo_fogao.png",
+          "zIndex": 500,
+          "tags": [
+            "upper",
+            "cooking-zone"
+          ],
+          "placeholder": false
+        },
+        {
+          "id": "module-06",
+          "asset": "assets/kitchen/layers/06_aereo_pia.png",
+          "zIndex": 600,
+          "tags": [
+            "upper",
+            "sink-zone"
+          ],
+          "placeholder": false
+        },
+        {
+          "id": "module-07",
+          "asset": "assets/kitchen/layers/07_aereo_geladeira.png",
+          "zIndex": 700,
+          "tags": [
+            "upper",
+            "refrigerator-zone"
+          ],
+          "placeholder": false
+        },
+        {
+          "id": "lighting-08",
+          "asset": "assets/kitchen/layers/08_iluminacao.png",
+          "zIndex": 800,
+          "tags": [
+            "lighting"
+          ],
+          "placeholder": false
+        }
+      ]
+    }
+  ]
+}

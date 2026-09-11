@@ -270,6 +270,24 @@
         1035,
         562
       ]
+    },
+    "assets/kitchen/overlays/approved-stone-02.png": {
+      "sha256": "30e5c1a6e79454cc7aa90c51492d45f608ead3e05e5c53e7b15ca0ae7c373553",
+      "alphaBounds": [
+        515,
+        491,
+        739,
+        575
+      ]
+    },
+    "assets/kitchen/overlays/approved-stone-03.png": {
+      "sha256": "b2304e4c547091c36c368397350bf2759407668f019025b73213e7b84c3cac1c",
+      "alphaBounds": [
+        786,
+        441,
+        1093,
+        575
+      ]
     }
   }
 }

@@ -141,6 +141,8 @@
   const textureLabel = document.getElementById("textureLabel");
   const resetFinishButton = document.getElementById("resetFinishButton");
 
+  const renderStone = global.CasaStone.createRenderer(document.getElementById("stoneCanvas"), global.CASA_STONE_DATA);
+
   function syncFingerprint() {
     const value = fingerprint.computeFingerprint(scene, state);
     document.body.dataset.sceneFingerprint = value;
@@ -154,6 +156,7 @@
   }
 
   function syncLayerVisibility() {
+    renderStone(state);
     const resolved = visibility.resolveVisibility(scene, state);
     layerGroups.forEach((layer) => {
       const result = resolved[layer.dataset.entityId];
@@ -280,10 +283,32 @@
   textureInput.addEventListener("change", () => applyTexture(textureInput.files?.[0]));
   resetFinishButton.addEventListener("click", resetFinish);
 
+  const stoneColor = document.getElementById("stoneColor");
+  const resetStone = document.getElementById("resetStone");
+  const stoneButtons = [...document.querySelectorAll("[data-stone-color]")];
+  function applyStone(color) {
+    state.stoneColor = color;
+    state.stoneFinishId = color ? "stone-custom" : "stone-original";
+    if (color) stoneColor.value = color;
+    resetStone.disabled = !color;
+    stoneButtons.forEach(button => {
+      const selected = button.dataset.stoneColor === color;
+      button.classList.toggle("is-selected", selected);
+      button.setAttribute("aria-pressed", String(selected));
+    });
+    document.getElementById("stoneStatus").textContent = "Simulação de cor sobre a textura existente.";
+    renderStone(state);
+    syncFingerprint();
+  }
+  stoneButtons.forEach(button => button.addEventListener("click", () => applyStone(button.dataset.stoneColor)));
+  stoneColor.addEventListener("input", () => applyStone(stoneColor.value));
+  resetStone.addEventListener("click", () => applyStone(null));
+
   restoreButton.addEventListener("click", () => {
     state = core.createInitialState(scene);
     setAllVisibility(true);
     resetFinish();
+    applyStone(null);
     alignmentGrid.classList.remove("is-visible");
     gridButton.setAttribute("aria-pressed", "false");
     syncFingerprint();
