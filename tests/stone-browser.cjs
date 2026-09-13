@@ -29,6 +29,9 @@ const {chromium} = require('playwright');
   assert.equal((await state()).stoneColor,'#34383d');
   assert.equal(await page.getByRole('button',{name:'Pedra grafite',exact:true}).getAttribute('aria-pressed'),'true');
   await screenshot('desktop-graphite');
+  assert(await page.locator('#viewer').evaluate(el => {
+    const rect=el.getBoundingClientRect();return rect.top>=0 && rect.bottom<=innerHeight;
+  }), 'desktop must show the kitchen while choosing stone color');
   await page.getByRole('button',{name:'Pedra clara',exact:true}).click();
   await page.waitForFunction(previous => document.getElementById('stoneCanvas').getContext('2d').getImageData(1100,540,1,1).data[0] !== previous, graphite[0]);
   assert.equal((await state()).stoneColor,'#d8d8d2');
@@ -74,6 +77,10 @@ const {chromium} = require('playwright');
   await waitColor(1100,540);
   assert(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth),'mobile horizontal overflow');
   await screenshot('mobile-graphite');
+  assert(await page.locator('#viewer').evaluate(el => {
+    const rect=el.getBoundingClientRect();return rect.top>=0 && rect.bottom<=innerHeight;
+  }), 'mobile must show the kitchen while choosing stone color');
+  await page.screenshot({path:path.join(output,'mobile-viewport.png'),animations:'disabled'});
   assert.deepEqual(errors,[]);
   fs.writeFileSync(path.join(output,'result.json'),JSON.stringify({status:'PASS',desktop:[1366,768],mobile:[390,844],resetViewerExact:true,independentFinishes:true,visibilityCases:4,pageErrors:errors},null,2));
   await browser.close();

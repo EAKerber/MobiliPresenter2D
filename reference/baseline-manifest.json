@@ -788,8 +788,8 @@
     },
     {
       "path": "app/styles.css",
-      "sha256": "832c82b7076efe02cb1b9dcc0513861e854b4094a2284e7081f2dc3fcf87c007",
-      "size": 8880
+      "sha256": "a6b6575b8ed704cc5ae603bf772104d7fb6fd0ddbadad3da3faa2fa79e31449e",
+      "size": 9377
     },
     {
       "path": "app/tools/apply-r4-module02-fidelity.py",
