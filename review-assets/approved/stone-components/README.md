@@ -21,4 +21,4 @@ As máscaras de frente e rodapé são reutilizadas sem reautoria. Tampo e revest
 
 Integração na branch, sem merge ou deploy. A aparência neutra está aprovada. As cores novas são uma implementação para revisão, não abrangidas retroativamente pela aprovação do PR23. `color-review.png` mostra original, grafite, claro e uma cor livre.
 
-Validação visual da interface no navegador pendente: o browser remoto bloqueou a prévia local, e o download do Chromium local expirou. Sintaxe, empacotamento, núcleo, fidelidade e renderização determinística foram verificados.
+Validação de interação concluída em Chromium no GitHub Actions: cores, reset visual exato, independência das frentes, quatro estados de visibilidade e ausência de overflow horizontal em 390×844 passaram. Teste versionado em `tests/stone-browser.cjs`, workflow `Stone browser`; capturas ficam no artefato do CI. A cena permanece visível durante o ajuste: controles com rolagem própria no desktop, visualizador fixado durante a rolagem no celular. A aprovação humana das novas cores permanece pendente.
