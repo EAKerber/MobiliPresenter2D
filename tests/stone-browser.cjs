@@ -52,8 +52,8 @@ const {chromium} = require('playwright');
   assert.equal((await state()).stoneColor,'#34383d','front reset must preserve stone');
 
   for (const [a,b,id] of [[false,true,'module-02-hidden'],[true,false,'module-03-hidden'],[false,false,'both-hidden'],[true,true,'both-visible']]) {
-    await page.getByLabel('Inferior do fogão',{exact:true}).setChecked(a);
-    await page.getByLabel('Inferior da pia',{exact:true}).setChecked(b);
+    await page.getByRole('checkbox',{name:/Inferior do fogão/}).setChecked(a);
+    await page.getByRole('checkbox',{name:/Inferior da pia/}).setChecked(b);
     if (a||b) await waitColor(b?1100:600,530); else await waitEmpty();
     const visible = await page.evaluate(() => window.CASA_EM_MODULOS_DEBUG.getVisibility());
     assert.equal(visible['approved-stone-02'].visible,a);
