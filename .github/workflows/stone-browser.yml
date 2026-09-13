@@ -1,0 +1,34 @@
+name: Stone browser
+on:
+  pull_request:
+    paths:
+      - 'app/**'
+      - 'tests/stone-browser.cjs'
+      - '.github/workflows/stone-browser.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  browser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install isolated browser test tooling
+        run: |
+          npm install --prefix /tmp/stone-browser-tools --no-audit --no-fund playwright@1.62.1
+          /tmp/stone-browser-tools/node_modules/.bin/playwright install --with-deps chromium
+      - name: Test actual stone controls and capture desktop/mobile
+        env:
+          NODE_PATH: /tmp/stone-browser-tools/node_modules
+        run: node tests/stone-browser.cjs /tmp/stone-browser-review
+      - name: Save interface review
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: stone-browser-${{ github.run_id }}
+          path: /tmp/stone-browser-review
+          if-no-files-found: ignore
