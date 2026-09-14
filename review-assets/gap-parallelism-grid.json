@@ -5,7 +5,7 @@
   "anchorPixel": [746, 559],
   "horizon": {
     "y": 552.6,
-    "role": "semantic evaluation cut; local gap comparison starts below this line",
+    "role": "user horizontal reference; no automatic clipping or physical vanishing-horizon inference",
     "source": "human markup calibration on the 5x local gap review"
   },
   "evaluationBandY": [553.2, 575.0],
@@ -23,7 +23,7 @@
         "horizonPurple": [163, 73, 164],
         "stoneReferenceRed": [237, 28, 36]
       },
-      "note": "The previous [751,520] -> [742,586] reference was rejected because it ignored the local horizon and under-estimated the actual stone angle."
+      "note": "Historical markup calibration, not a pixel-edge measurement. The red stroke supplies direction, not physical gap width. Use review-assets/calibration/gap-pixel-v3/config.json and tools/gap_pixel_gate.py for the measured p8/s28 regression. The actual stone diagonal ends near scene y=569; this historical annotation band includes part of the following vertical contour."
     }
   },
   "thresholds": {
@@ -39,6 +39,7 @@
     "horizonRequired": true,
     "humanCalibratedReferenceRequired": true,
     "measurementIsEditorialNotEditAuthorization": true,
-    "blockingRoles": ["range-freestanding"]
+    "blockingRoles": ["range-freestanding"],
+    "referenceStatus": "ANNOTATION_ONLY_NOT_ASSET_APPROVAL"
   }
 }
