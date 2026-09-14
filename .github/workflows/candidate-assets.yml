@@ -58,6 +58,7 @@ jobs:
           tests/test_stone_surface_masks.py
           tests/test_stone_cleanplate.py
           tests/test_stone_backing.py
+          tests/test_faucet_edge.py
       - name: Materialize accepted deterministic R5A edits
         working-directory: app
         run: |
@@ -147,6 +148,7 @@ jobs:
           tests/test_stone_surface_masks.py
           tests/test_stone_cleanplate.py
           tests/test_stone_backing.py
+          tests/test_faucet_edge.py
       - name: Preserve canonical baseline
         run: python tools/validate-baseline.py
       - name: Preserve app runtime and R5A pixel-perfect invariants
@@ -175,6 +177,8 @@ jobs:
         run: python tools/review_object_contours.py --output-dir /tmp/candidate-review/object-contours
       - name: Compare bounded object antialias
         run: python tools/review_object_antialias.py --output-dir /tmp/candidate-review/object-antialias
+      - name: Rebuild confined faucet edge donor
+        run: python tools/materialize_faucet_edge.py --donor review-assets/faucet-edge-donor/donor-crop.png --output-dir /tmp/candidate-review/faucet-edge-donor
       - name: Structural candidate intake
         run: |
           python tools/validate_candidate_assets.py --output /tmp/candidate-review/intake.json
