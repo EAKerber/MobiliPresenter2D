@@ -4,33 +4,18 @@
   "canvas": {
     "width": 1536,
     "height": 1024,
-    "origin": [
-      0,
-      0
-    ]
+    "origin": [0, 0]
   },
   "roles": [
     {
       "id": "range-freestanding",
       "label": "Fogão convencional substituto",
-      "targetVariants": [
-        "module-02-hidden"
-      ],
-      "authorizedRoi": [
-        460,
-        430,
-        790,
-        950
-      ],
-      "minAlphaBBox": {
-        "width": 120,
-        "height": 220
-      },
+      "targetVariants": ["module-02-hidden"],
+      "authorizedRoi": [460, 430, 790, 950],
+      "minAlphaBBox": {"width": 120, "height": 220},
       "maxAlphaBBoxArea": 171600,
       "authoringContractId": "range-freestanding-edit",
-      "resolvesDebtCodes": [
-        "replacement-placeholder"
-      ],
+      "resolvesDebtCodes": ["replacement-placeholder"],
       "visualChecklist": [
         "fits-opening",
         "perspective-match",
@@ -44,24 +29,12 @@
     {
       "id": "module-03-left-termination",
       "label": "Terminação esquerda visível do módulo 03 quando o módulo 02 está ausente",
-      "targetVariants": [
-        "module-02-hidden"
-      ],
-      "authorizedRoi": [
-        720,
-        510,
-        755,
-        600
-      ],
-      "minAlphaBBox": {
-        "width": 2,
-        "height": 8
-      },
+      "targetVariants": ["module-02-hidden"],
+      "authorizedRoi": [720, 510, 755, 600],
+      "minAlphaBBox": {"width": 2, "height": 8},
       "maxAlphaBBoxArea": 3150,
       "authoringContractId": "module-03-left-termination-edit",
-      "resolvesDebtCodes": [
-        "raw-neighbor-cut"
-      ],
+      "resolvesDebtCodes": ["raw-neighbor-cut"],
       "visualChecklist": [
         "backsplash-edge-natural",
         "countertop-corner-natural",
@@ -77,23 +50,11 @@
     {
       "id": "module-02-right-endcap",
       "label": "Fechamento direito do módulo 02",
-      "targetVariants": [
-        "module-03-hidden"
-      ],
-      "authorizedRoi": [
-        715,
-        455,
-        815,
-        930
-      ],
-      "minAlphaBBox": {
-        "width": 12,
-        "height": 120
-      },
+      "targetVariants": ["module-03-hidden"],
+      "authorizedRoi": [715, 455, 815, 930],
+      "minAlphaBBox": {"width": 12, "height": 120},
       "maxAlphaBBoxArea": 47500,
-      "resolvesDebtCodes": [
-        "raw-neighbor-cut"
-      ],
+      "resolvesDebtCodes": ["raw-neighbor-cut"],
       "visualChecklist": [
         "stone-termination-natural",
         "cabinet-side-natural",
@@ -106,24 +67,12 @@
     {
       "id": "module-02-right-exposed-face",
       "label": "Lateral direita exposta do módulo 02 quando o módulo 03 está ausente",
-      "targetVariants": [
-        "module-03-hidden"
-      ],
-      "authorizedRoi": [
-        740,
-        585,
-        766,
-        900
-      ],
-      "minAlphaBBox": {
-        "width": 4,
-        "height": 120
-      },
-      "maxAlphaBBoxArea": 8190,
+      "targetVariants": ["module-03-hidden"],
+      "authorizedRoi": [742, 520, 764, 899],
+      "minAlphaBBox": {"width": 8, "height": 250},
+      "maxAlphaBBoxArea": 8338,
       "authoringContractId": "module-02-right-exposed-face-edit",
-      "resolvesDebtCodes": [
-        "raw-neighbor-cut"
-      ],
+      "resolvesDebtCodes": ["module-02-exposed-side-missing"],
       "visualChecklist": [
         "carcass-side-natural",
         "existing-stone-termination-untouched",
