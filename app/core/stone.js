@@ -80,14 +80,18 @@
       if (!state.stoneColor) return;
       const id = caseId(state), color = state.stoneColor;
       if (!cache.has(id)) cache.set(id, Promise.all(['neutral','under','objects','mask'].map(k => pixels(data[id][k]))));
+      const urls = visibleBridgeAssets(state, resolvedBridgeEntities);
+      const bridgesPromise = Promise.all(urls.map(bridgePixels)).catch(error => {
+        console.error(error);
+        return [];
+      });
       try {
-        const urls = visibleBridgeAssets(state, resolvedBridgeEntities);
-        const [inputs, bridges] = await Promise.all([
-          cache.get(id),
-          Promise.all(urls.map(bridgePixels))
-        ]);
+        const inputs = await cache.get(id);
         if (ticket !== revision) return;
         const result = recolor(...inputs, color);
+        context.putImageData(new ImageData(result, width, height), 0, 0);
+        const bridges = await bridgesPromise;
+        if (ticket !== revision || !bridges.length) return;
         bridges.forEach(bridge => patchUncoveredBridge(result, inputs[3], bridge, color));
         context.putImageData(new ImageData(result, width, height), 0, 0);
       } catch (error) {
