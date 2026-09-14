@@ -1,40 +1,34 @@
-# Baseline visual debt
+# Current visual debt — R5A, 2026-09-07
 
-Status: observed against current checkpoint `cozinha-01-module02-fidelity-fix1`
+This list describes the approved-range work branch. It replaces stale R4 claims;
+historical checkpoints remain in Git. A machine gate is not human aesthetic approval.
 
-The original v3.3.0 materialization remains the historical parent. R4 changes only the bounded module-02 cleanup ROI and introduces a real finish mask for module 02.
+## Resolved implementation debt
 
-## Default canonical composition
+- Module 02 column contamination: bounded alpha cleanup implemented in R4.
+- Module 02 finish coverage: real mask protects appliance pixels.
+- Stone 02/03 joints: subtractive variants and exact conditional bridges implemented in R5A; reconstruction and golden gates pass.
+- Replacement placeholder: approved stove RGBA now appears when module 02 is hidden.
 
-Current default fingerprint: `scene2d-e7c8dba7`.
+The old `raw-neighbor-cut` description and endcap proposal do not describe the
+current subtractive stone solution. Do not reintroduce the old completion overlay.
 
-- **Module 02 column contamination:** resolved in R4 by clearing only the alpha strip `[484, 590, 498, 856]`. The current golden differs from the parent golden in 3,579 pixels and zero pixels outside that ROI.
-- **Module 02 finish coverage:** resolved at the scene-contract level. Module 02 now belongs to `fronts-all` and uses `assets/kitchen/masks/02.png`; the external cabinet/frame changes finish while the complete oven appliance remains protected.
-- **Column definition / tile phase:** no active default defect reproduced.
-- **Module 03 → module 04 contact:** no incoherent overlap or open seam in the default; keep under regression observation.
-- **Stone split 02/03:** no new seam introduced; current default recomposition remains 0 px against its current golden.
-- **Cooktop/pans stone artifact:** not reproduced in the current default.
+## Current visual review
 
-## Confirmed non-default debt
-
-### `raw-neighbor-cut`
-
-When `module-02` or `module-03` is hidden, neighboring photographic layers still expose incomplete side/stone terminations. R4 intentionally does not repair these states.
-
-Resolution direction: explicit photographic completion/endcap assets validated through the R3 candidate pipeline.
-
-### `replacement-placeholder`
-
-When `module-02` is hidden, scene semantics activate `range-freestanding`, but its current asset remains intentionally transparent.
-
-Resolution direction: replace only the approved substitution asset with a fixed-camera photographic layer; do not alter visibility semantics to conceal the missing asset.
+- Column/tile phase: no obvious active defect reproduced during the 2026-09-07 image inspection. This is a qualitative observation, not measured physical tile alignment. No background edit justified.
+- Module 03/04 contact and stone joint: no obvious new seam in the rendered cases; retain regression checks.
+- Stove: approved appearance and unchanged masked pixels. The mask excludes a separate floor shadow; floor-contact appearance remains a visual review item.
+- Both modules hidden: stove layer renders exactly without cabinet/stone occlusion. Its isolated right edge and floor contact need human judgment; do not synthesize a new side or shadow without a concrete correction brief.
 
 ## Reproducible cases
 
-`reference/variant-cases.json` remains the authority for review actions. With the R4 scene manifest:
+| Case | Current fingerprint | Evidence |
+| --- | --- | --- |
+| default | scene2d-913a7841 | Exact current golden, 0 changed pixels |
+| module-02-hidden | scene2d-b00d727b | Approved replacement; changes confined to object mask |
+| module-03-hidden | scene2d-5e212005 | Exposed stone 02, bridges hidden |
+| modules-02-03-hidden | scene2d-339d55d8 | Exact isolated stove layer; both stones and bridges hidden |
 
-- `default` → `scene2d-e7c8dba7`
-- `module-02-hidden` → `scene2d-e990f538`
-- `module-03-hidden` → `scene2d-ea7073bc`
-
-The default case remains a hard pixel gate. Hidden-state cases remain human-review debt until their photographic completion assets are authored and promoted.
+`reference/variant-cases.json` defines the actions and visibility assertions.
+The fourth case is marked `review`, not human-approved. Phase 3 technical review
+is complete for these four cases; final aesthetic closure is not implied.

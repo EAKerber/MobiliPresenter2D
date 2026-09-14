@@ -1,7 +1,8 @@
 {
   "schemaVersion": "CandidateAssetSets 0.1",
   "sceneId": "cozinha-01",
-  "sets": [
+  "sets": [],
+  "archivedSets": [
     {
       "id": "module-02-hidden-complete",
       "targetVariant": "module-02-hidden",
@@ -29,5 +30,6 @@
         "checklist": {}
       }
     }
-  ]
+  ],
+  "retirementReason": "Approved range integrated into runtime; old candidate set must not overlay the replacement."
 }

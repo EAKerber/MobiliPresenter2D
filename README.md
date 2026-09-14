@@ -1,11 +1,11 @@
 # MobiliPresenter2D
 
-Photographic 2D kitchen configurator with a fixed canonical canvas and deterministic runtime.
+Configurador fotográfico 2D em câmera fixa, canvas 1536 × 1024 e runtime determinístico.
 
-## Repository bootstrap
+**Estado atual: Fase 3 — assets estruturais / R5A.** O fogão aprovado foi integrado à substituição do módulo 02 nesta branch.
 
-This initial commit only materializes the previously empty repository so normal work can proceed on branches.
+Leia [Estado atual e próximos passos](docs/work/STATUS-ATUAL.md) para retomar o projeto sem reconstruir o histórico.
+O [guia geral](app/docs/GUIA-IMPLEMENTACAO-2D-DATA-DRIVEN.md) descreve as fases 0–9.
 
-Current implementation slice: **R0 — canonical baseline freeze**.
-
-The approved v3.3.0 baseline source is not yet present in this repository. It must be imported from the exact original checkpoint bytes; it must not be reconstructed from documentation or chat history.
+Abra `app/index.html` para usar o configurador. A execução local não exige servidor.
+Validação: `cd app && npm test`. As alterações seguem branches de trabalho; main permanece protegida.
