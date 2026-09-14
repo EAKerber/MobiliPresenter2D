@@ -96,6 +96,7 @@ const {chromium} = require('playwright');
     await screenshot(id);
   }
   // A pending image decode or color draw must never resurrect a cleared layer.
+  await page.setViewportSize({width:1366,height:768});
   await page.getByRole('button',{name:'Pedra clara',exact:true}).click();
   await page.getByRole('button',{name:'Restaurar',exact:false}).click();
   await waitEmpty();
