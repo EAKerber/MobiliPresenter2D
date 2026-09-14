@@ -1,0 +1,43 @@
+{
+  "status": "PASS",
+  "semanticReview": "PENDING",
+  "runtimeInstalled": false,
+  "owners": [
+    {
+      "host": "stone-02",
+      "splitRoundtripMismatchPixels": 0,
+      "wallAlphaRemovedPixels": 2837
+    },
+    {
+      "host": "stone-03",
+      "splitRoundtripMismatchPixels": 0,
+      "wallAlphaRemovedPixels": 5411
+    }
+  ],
+  "cases": [
+    {
+      "id": "default",
+      "changedPixels": 17749,
+      "outsideAuthorizedMaskPixels": 0,
+      "splitRoundtripMismatchPixels": 0
+    },
+    {
+      "id": "module-02-hidden",
+      "changedPixels": 9190,
+      "outsideAuthorizedMaskPixels": 0,
+      "splitRoundtripMismatchPixels": 0
+    },
+    {
+      "id": "module-03-hidden",
+      "changedPixels": 8559,
+      "outsideAuthorizedMaskPixels": 0,
+      "splitRoundtripMismatchPixels": 0
+    },
+    {
+      "id": "modules-02-03-hidden",
+      "changedPixels": 0,
+      "outsideAuthorizedMaskPixels": 0,
+      "splitRoundtripMismatchPixels": 0
+    }
+  ]
+}
