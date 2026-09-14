@@ -80,12 +80,12 @@ jobs:
           EXPECTED_HEAD: ${{ github.sha }}
         run: |
           set -euo pipefail
+          rm -rf tools/__pycache__
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add review-assets/candidates/module-02-exposed-right-side-v1 app/assets/kitchen/overlays/module-02-right-exposed-face.png
           git rm .github/workflows/raw-variant-capture-temp.yml
-          allowed='^(A |M |D  |R  |\?\?) (review-assets/candidates/module-02-exposed-right-side-v1/|app/assets/kitchen/overlays/module-02-right-exposed-face.png|\.github/workflows/raw-variant-capture-temp.yml)'
-          unexpected="$(git status --short | grep -Ev "$allowed" || true)"
+          unexpected="$(git status --short | grep -Ev '^(A  review-assets/candidates/module-02-exposed-right-side-v1/|A  app/assets/kitchen/overlays/module-02-right-exposed-face\.png$|D  \.github/workflows/raw-variant-capture-temp\.yml$)' || true)"
           if [ -n "$unexpected" ]; then
             echo "UNEXPECTED_WORKTREE_CHANGES" >&2
             echo "$unexpected" >&2
