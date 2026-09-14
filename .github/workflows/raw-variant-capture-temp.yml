@@ -9,65 +9,26 @@ permissions:
 jobs:
   capture:
     runs-on: ubuntu-latest
-    timeout-minutes: 8
+    timeout-minutes: 6
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - name: Install isolated browser tooling
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install renderer dependency
+        run: python -m pip install -r tools/requirements.txt
+      - name: Render exact deterministic variants
         run: |
-          npm install --prefix /tmp/raw-capture-tools --no-audit --no-fund playwright@1.62.1
-          /tmp/raw-capture-tools/node_modules/.bin/playwright install --with-deps chromium
-      - name: Capture exact 1536x1024 canonical variants
-        env:
-          NODE_PATH: /tmp/raw-capture-tools/node_modules
-        run: |
-          cat > /tmp/capture.cjs <<'JS'
-          const fs = require('node:fs');
-          const path = require('node:path');
-          const crypto = require('node:crypto');
-          const {pathToFileURL} = require('node:url');
-          const {chromium} = require('playwright');
-          (async()=>{
-            const out='/tmp/raw-variant-capture'; fs.mkdirSync(out,{recursive:true});
-            const browser=await chromium.launch({headless:true});
-            const page=await browser.newPage({viewport:{width:1600,height:1100},deviceScaleFactor:1});
-            await page.goto(pathToFileURL(path.resolve('app/index.html')).href);
-            await page.evaluate(()=>Promise.all(Array.from(document.images,i=>i.decode())));
-            await page.addStyleTag({content:`
-              .topbar,.controls,.viewer-card__footer{display:none!important}
-              .workspace{display:block!important;padding:0!important;margin:0!important;max-width:none!important}
-              .viewer-card{width:1536px!important;max-width:none!important;position:static!important;margin:0!important;border:0!important;border-radius:0!important;box-shadow:none!important}
-              .viewer{width:1536px!important;height:1024px!important;aspect-ratio:auto!important}
-              body{margin:0!important;background:transparent!important}
-            `});
-            const viewer=page.locator('#viewer');
-            const capture=async(name)=>{
-              const box=await viewer.boundingBox();
-              if(!box || box.width!==1536 || box.height!==1024) throw new Error('unexpected viewer box '+JSON.stringify(box));
-              const p=path.join(out,name+'.png');
-              await viewer.screenshot({path:p,animations:'disabled'});
-              return {name,sha256:crypto.createHash('sha256').update(fs.readFileSync(p)).digest('hex'),fingerprint:await page.evaluate(()=>window.CASA_EM_MODULOS_CURRENT_FINGERPRINT),state:await page.evaluate(()=>window.CASA_EM_MODULOS_DEBUG.getState()),visibility:await page.evaluate(()=>window.CASA_EM_MODULOS_DEBUG.getVisibility())};
-            };
-            const records=[];
-            records.push(await capture('both-visible-canonical'));
-            await page.evaluate(()=>{
-              const toggle=document.querySelector('[data-module-toggle="module-03"]');
-              if(!toggle) throw new Error('module-03 toggle missing');
-              toggle.checked=false;
-              toggle.dispatchEvent(new Event('change',{bubbles:true}));
-            });
-            await page.waitForFunction(()=>window.CASA_EM_MODULOS_DEBUG.getVisibility()['module-03']?.visible===false);
-            records.push(await capture('module-03-hidden-canonical'));
-            fs.writeFileSync(path.join(out,'capture.json'),JSON.stringify({canvas:[1536,1024],records},null,2));
-            await browser.close();
-          })().catch(e=>{console.error(e);process.exit(1)});
-          JS
-          node /tmp/capture.cjs
-      - name: Upload canonical captures
+          mkdir -p /tmp/raw-variant-render/views
+          node tools/variant_fidelity_manifest.js --cases reference/variant-cases.json --output /tmp/raw-variant-render/manifest.json
+          python tools/render_variant_fidelity.py --manifest /tmp/raw-variant-render/manifest.json --output-dir /tmp/raw-variant-render/views
+          sha256sum /tmp/raw-variant-render/views/module-03-hidden.png /tmp/raw-variant-render/views/default.png > /tmp/raw-variant-render/sha256.txt
+      - name: Upload deterministic captures
         uses: actions/upload-artifact@v4
         with:
-          name: raw-variant-capture-${{ github.run_id }}
-          path: /tmp/raw-variant-capture
+          name: raw-variant-render-${{ github.run_id }}
+          path: /tmp/raw-variant-render
           if-no-files-found: error
