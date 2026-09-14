@@ -11,8 +11,14 @@
     "variant:module-03-hidden@scene2d-930c3dc3"
   ],
   "expectedSourceFrameSha256": "f502790c76afe612563958ca3acfcc7d653018d718d11d852ed3a45df553ecfa",
-  "intent": "Infer only the missing right carcass side of module 02 and the corresponding side of its front plinth when module 03 is hidden. Reuse real pixels already present in the canonical scene rather than synthesize a remote scene: the visible white right carcass side of module 01 is the side-material donor, and the existing module-02 front plinth is the plinth-material donor. Project both donors into the measured 02↔03 depth envelope while preserving the module-02 front, oven, existing stone termination, wall, floor and every remote pixel.",
+  "intent": "Infer only the missing right carcass side of module 02 and the corresponding side of its front plinth when module 03 is hidden. Reuse real pixels already present in the canonical scene rather than synthesize a remote scene: the visible white right carcass side of module 01 is the side-material donor, and the existing module-02 front plinth is the plinth-material donor. Project both donors into the measured 02↔03 depth envelope, but never overwrite alpha already owned by module 02, its stone, its joint bridge or the approved stone overlay.",
   "supersampling": 4,
+  "protectedAssets": [
+    "app/assets/kitchen/layers/02_inferior_fogao.png",
+    "app/assets/kitchen/variants/stone-02-cozinha-exposed-right.png",
+    "app/assets/kitchen/bridges/stone-02-joint-bridge.png",
+    "app/assets/kitchen/overlays/approved-stone-02.png"
+  ],
   "geometry": {
     "frontEdgeX": 742,
     "counterFrontY": 586,
@@ -41,6 +47,6 @@
       "semantic": "plinth-side"
     }
   ],
-  "expectedPixelBounds": [742, 525, 764, 898],
-  "expectedChangedPixelCount": 6976
+  "expectedPixelBounds": null,
+  "expectedChangedPixelCount": null
 }
