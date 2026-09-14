@@ -27,6 +27,49 @@ for (const entity of scene.entities) {
   const expected=b?{x:b[0],y:b[1],width:b[2]-b[0],height:b[3]-b[1]}:null;
   assert.equal(JSON.stringify(entity.alphaBounds),JSON.stringify(expected),entity.id);
 }
+const occlusionProbeScene = {
+  entities: [
+    { id: "probe-host", zIndex: 1, asset: "host.png", defaultVisible: true },
+    { id: "probe-occluder", zIndex: 2, asset: "occluder.png", defaultVisible: true },
+    {
+      id: "probe-exposed-face",
+      zIndex: 3,
+      asset: "face.png",
+      defaultVisible: true,
+      hostId: "probe-host",
+      occludedByIds: ["probe-occluder"]
+    }
+  ],
+  defaultConfiguration: { visible: ["probe-host", "probe-occluder", "probe-exposed-face"] },
+  substitutionGroups: [],
+  finishGroups: []
+};
+assert.deepEqual(Array.from(validation.validateScene(occlusionProbeScene)), []);
+const occlusionProbeState = {
+  visibilityByEntity: {
+    "probe-host": true,
+    "probe-occluder": true,
+    "probe-exposed-face": true
+  }
+};
+let probeVisibility = visibility.resolveVisibility(occlusionProbeScene, occlusionProbeState);
+assert.equal(probeVisibility["probe-exposed-face"].reason, "occluded");
+occlusionProbeState.visibilityByEntity["probe-occluder"] = false;
+probeVisibility = visibility.resolveVisibility(occlusionProbeScene, occlusionProbeState);
+assert.equal(probeVisibility["probe-exposed-face"].reason, "visible");
+occlusionProbeState.visibilityByEntity["probe-host"] = false;
+probeVisibility = visibility.resolveVisibility(occlusionProbeScene, occlusionProbeState);
+assert.equal(probeVisibility["probe-exposed-face"].reason, "host-hidden");
+const invalidOcclusionProbeScene = {
+  ...occlusionProbeScene,
+  entities: occlusionProbeScene.entities.map((entity) =>
+    entity.id === "probe-exposed-face" ? { ...entity, occludedByIds: ["missing-neighbor"] } : entity
+  )
+};
+assert.equal(
+  Array.from(validation.validateScene(invalidOcclusionProbeScene)).some((error) => error.code === "occluder-missing"),
+  true
+);
 const initial=core.createInitialState(scene);
 assert.equal(visibility.resolveVisibility(scene,initial)["faucet-approved"].visible,true);
 const fp=fingerprints.computeFingerprint(scene,initial);
