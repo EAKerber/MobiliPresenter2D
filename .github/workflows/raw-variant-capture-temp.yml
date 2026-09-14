@@ -35,7 +35,7 @@ jobs:
             const page=await browser.newPage({viewport:{width:1600,height:1100},deviceScaleFactor:1});
             await page.goto(pathToFileURL(path.resolve('app/index.html')).href);
             await page.evaluate(()=>Promise.all(Array.from(document.images,i=>i.decode())));
-            const style=await page.addStyleTag({content:`
+            await page.addStyleTag({content:`
               .topbar,.controls,.viewer-card__footer{display:none!important}
               .workspace{display:block!important;padding:0!important;margin:0!important;max-width:none!important}
               .viewer-card{width:1536px!important;max-width:none!important;position:static!important;margin:0!important;border:0!important;border-radius:0!important;box-shadow:none!important}
@@ -52,7 +52,12 @@ jobs:
             };
             const records=[];
             records.push(await capture('both-visible-canonical'));
-            await page.getByRole('checkbox',{name:/Inferior da pia/}).setChecked(false);
+            await page.evaluate(()=>{
+              const toggle=document.querySelector('[data-module-toggle="module-03"]');
+              if(!toggle) throw new Error('module-03 toggle missing');
+              toggle.checked=false;
+              toggle.dispatchEvent(new Event('change',{bubbles:true}));
+            });
             await page.waitForFunction(()=>window.CASA_EM_MODULOS_DEBUG.getVisibility()['module-03']?.visible===false);
             records.push(await capture('module-03-hidden-canonical'));
             fs.writeFileSync(path.join(out,'capture.json'),JSON.stringify({canvas:[1536,1024],records},null,2));
