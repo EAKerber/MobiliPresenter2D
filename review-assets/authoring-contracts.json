@@ -4,10 +4,7 @@
   "canvas": {
     "width": 1536,
     "height": 1024,
-    "origin": [
-      0,
-      0
-    ]
+    "origin": [0, 0]
   },
   "contracts": [
     {
@@ -16,21 +13,12 @@
       "targetVariant": "module-02-hidden",
       "targetVariantFingerprint": "scene2d-e990f538",
       "mode": "edit-existing-canonical-frame",
-      "allowedMethods": [
-        "image-edit",
-        "derived"
-      ],
+      "allowedMethods": ["image-edit", "derived"],
       "canonicalBaseAsset": "app/assets/kitchen/base.png",
       "measuredGeometry": {
         "existingLeftEdgeX": 736,
-        "backsplashY": [
-          520,
-          568
-        ],
-        "countertopTransitionY": [
-          568,
-          589
-        ],
+        "backsplashY": [520, 568],
+        "countertopTransitionY": [568, 589],
         "cabinetFaceLeftEdgeX": 736,
         "interpretation": "keep backsplash and cabinet face on the measured edge; only expose the small stone return/rounded overhang that the fixed camera can see"
       },
@@ -53,10 +41,7 @@
       "targetVariant": "module-02-hidden",
       "targetVariantFingerprint": "scene2d-4692e364",
       "mode": "edit-existing-canonical-frame",
-      "allowedMethods": [
-        "image-edit",
-        "generated-donor-derived"
-      ],
+      "allowedMethods": ["image-edit", "generated-donor-derived"],
       "canonicalBaseAsset": "app/assets/kitchen/base.png",
       "requiredSourceReferences": [
         "app/assets/kitchen/base.png",
@@ -78,61 +63,28 @@
       "targetVariant": "module-03-hidden",
       "targetVariantFingerprint": "scene2d-930c3dc3",
       "mode": "edit-existing-canonical-frame",
-      "allowedMethods": [
-        "image-edit",
-        "generated-donor-derived",
-        "derived"
-      ],
+      "allowedMethods": ["image-edit", "generated-donor-derived", "derived"],
       "canonicalBaseAsset": "app/assets/kitchen/base.png",
       "measuredGeometry": {
-        "frontEdgeX": 744,
-        "cabinetTopY": 589,
-        "wallFloorY": 856,
-        "frontFloorY": 897,
+        "frontEdgeX": 742,
+        "counterFrontY": 586,
+        "cabinetFrontBottomY": 857,
+        "floorContactY": 898,
         "exposedStoneDepthEdge": {
-          "back": [
-            763,
-            521
-          ],
-          "front": [
-            744,
-            588
-          ],
-          "dx": -19,
-          "dy": 67,
-          "interpretation": "real visible stone edge measured on the exact module-03-hidden frame; use as a contextual depth cue, not as automatic proof of the cabinet side back boundary"
+          "back": [763, 525],
+          "front": [742, 586],
+          "interpretation": "real local depth cue measured from the exact deterministic module-03-hidden frame; it constrains a bounded donor projection but is not claimed as complete world-space camera calibration"
         },
-        "authorizedRoi": [
-          740,
-          585,
-          766,
-          900
-        ],
-        "hypothesisSupportPolygon": [
-          [
-            744,
-            589
-          ],
-          [
-            763,
-            589
-          ],
-          [
-            763,
-            856
-          ],
-          [
-            744,
-            897
-          ]
-        ],
-        "interpretation": "infer only the narrow right carcass/side surface exposed when module 03 is absent; preserve the existing stone termination and front face. The proposed back boundary is a reviewable geometric hypothesis derived from the visible stone depth, not an approved physical measurement."
+        "authorizedRoi": [742, 520, 764, 899],
+        "sidePanelTargetQuad": [[742, 586], [763, 525], [763, 796], [742, 857]],
+        "plinthTargetQuad": [[742, 857], [763, 796], [763, 837], [742, 898]],
+        "interpretation": "infer only the narrow right carcass side and matching plinth side exposed when module 03 is absent. Preserve the existing stone termination and front face. The rear boundaries remain reviewable hypotheses derived from visible local depth evidence."
       },
       "materialSemantics": {
         "surfaceClass": "carcass-side",
         "frontFinishParticipation": "not-assumed",
         "stoneFinishParticipation": false,
-        "note": "Do not tint the inferred face as a front finish unless later evidence explicitly classifies it as that material."
+        "note": "The canonical scene already contains a visible white right carcass side on module 01; reuse that real scene material as donor rather than automatically tinting this inferred face as a front finish."
       },
       "forbiddenAuthoringOutcomes": [
         "remote-scene-reconstruction",
@@ -140,7 +92,7 @@
         "front-face-replacement",
         "oven-replacement",
         "stone-reconstruction",
-        "wall-floor-reconstruction",
+        "wall-floor-reconstruction-outside-roi",
         "invented-wide-side-panel",
         "invented-shadow-outside-roi"
       ],
@@ -150,7 +102,7 @@
       ],
       "generatedDonorPolicy": {
         "allowed": true,
-        "purpose": "Generation may infer missing appearance only as donor material. Final runtime authority must be a deterministic delta extracted from the exact canonical module-03-hidden frame and confined to the authorized ROI.",
+        "purpose": "Generation may infer missing appearance only as donor material. Prefer canonical in-scene donors when an equivalent material is already visible. Final runtime authority must be a deterministic delta extracted from the exact canonical module-03-hidden frame and confined to the authorized ROI.",
         "outsideAuthorizedRoiPolicy": "zero-change",
         "directGeneratedScenePromotion": false
       },
