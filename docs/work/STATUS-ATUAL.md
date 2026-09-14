@@ -92,3 +92,10 @@ Comparação em `review-assets/faucet-edge-donor/generated/comparison.png`. Melh
 
 Branch `work/r6-faucet-regenerated-fit`, sobre PR #17. Candidato 35×115 em (991,443), base y558; 4.526 pixels alterados e zero fora da máscara de remoção unida ao alfa novo. Fonte candidata, não golden. Comparação nativa/3× em `review-assets/faucet-regenerated-fit/generated/fit-review.png`.
 Encaixe visual plausível, menor franja bege na escala de uso, porém metal mais brilhante e detalhes diferentes. Aguarda revisão humana; runtime não alterado.
+
+## Torneira aprovada — integrada ao runtime da branch
+
+Usuário aprovou o fit e a diferença de cor: “Achei bom, a cor é diferente mas não parece fora do lugar”. Integração autorizada em seguida. Branch `work/r6-approved-faucet`, sobre PR #18.
+Entidade `faucet-approved` acompanha `module-03`, sem controle independente. 4.526 pixels alterados nos estados com pia; zero alteração com pia oculta e zero fora da máscara aprovada. Aparência e fit originais do candidato preservados exatamente.
+Golden canônico original permanece intacto. A validação de variantes compara o default com golden + camada aprovada e relata a alteração explicitamente. A camada contém fundo de remoção em posição fixa: futuros acabamentos devem substituir esse backing, não recolori-lo como se fosse metal.
+Integração na branch/PR, sem merge na main ou publicação. Próximos itens R6 continuam sendo máscaras de material, revisão de cuba/cooktop e catálogo de acabamentos.
