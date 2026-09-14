@@ -718,8 +718,8 @@
     },
     {
       "path": "app/core/stone.js",
-      "sha256": "583ded730d3801ab3d09020e14a69e291abcef8a63c8c4ba7b1a601e4877054a",
-      "size": 2704
+      "sha256": "2f6e6284db64d9505eca77ca22fe487beec756a95b474bbb595b3410698eece7",
+      "size": 4678
     },
     {
       "path": "app/core/validation.js",
@@ -858,8 +858,8 @@
     },
     {
       "path": "app/tools/test-core.js",
-      "sha256": "16be40984e94428019296e4d048f8db8deb2bd0ef84090e8c6c3490c0fccb7ed",
-      "size": 3010
+      "sha256": "d679eff787506661eeb57a91a69d0c8f62ca89581af8845369404069653b4d74",
+      "size": 4075
     },
     {
       "path": "app/tools/update-technical-data.py",
