@@ -1,0 +1,46 @@
+{
+  "schemaVersion": "PerspectiveDonorRecipe 0.1",
+  "id": "module-02-exposed-right-side-v1",
+  "role": "module-02-right-exposed-face",
+  "targetVariant": "module-03-hidden",
+  "targetVariantFingerprint": "scene2d-930c3dc3",
+  "authoringContractId": "module-02-right-exposed-face-edit",
+  "sourceReferences": [
+    "app/assets/kitchen/base.png",
+    "app/assets/kitchen/composicao-completa.png",
+    "variant:module-03-hidden@scene2d-930c3dc3"
+  ],
+  "expectedSourceFrameSha256": "f502790c76afe612563958ca3acfcc7d653018d718d11d852ed3a45df553ecfa",
+  "intent": "Infer only the missing right carcass side of module 02 and the corresponding side of its front plinth when module 03 is hidden. Reuse real pixels already present in the canonical scene rather than synthesize a remote scene: the visible white right carcass side of module 01 is the side-material donor, and the existing module-02 front plinth is the plinth-material donor. Project both donors into the measured 02↔03 depth envelope while preserving the module-02 front, oven, existing stone termination, wall, floor and every remote pixel.",
+  "supersampling": 4,
+  "geometry": {
+    "frontEdgeX": 742,
+    "counterFrontY": 586,
+    "cabinetFrontBottomY": 857,
+    "floorContactY": 898,
+    "observedTopDepthReference": {
+      "front": [742, 586],
+      "back": [763, 525],
+      "interpretation": "bounded contextual depth cue measured from the exact deterministic module-03-hidden render; it constrains the donor projection but is not claimed as world-space camera calibration"
+    },
+    "authorizedRoi": [742, 520, 764, 899]
+  },
+  "operations": [
+    {
+      "id": "carcass-side-from-module-01",
+      "type": "perspective-copy",
+      "donorQuad": [[354, 59], [382, 79], [382, 299], [354, 282]],
+      "targetQuad": [[742, 586], [763, 525], [763, 796], [742, 857]],
+      "semantic": "carcass-side"
+    },
+    {
+      "id": "plinth-side-from-module-02-front",
+      "type": "perspective-copy",
+      "donorQuad": [[620, 857], [700, 857], [700, 898], [620, 898]],
+      "targetQuad": [[742, 857], [763, 796], [763, 837], [742, 898]],
+      "semantic": "plinth-side"
+    }
+  ],
+  "expectedPixelBounds": [742, 525, 764, 898],
+  "expectedChangedPixelCount": 6976
+}
