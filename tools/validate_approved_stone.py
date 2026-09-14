@@ -38,6 +38,17 @@ def run(manifest,out):
             if key in ids:
                 expected=Image.alpha_composite(expected,patches[key])
                 support=ImageChops.lighter(support,patches[key].getchannel('A'))
+        # The exposed-corner bridges are now host-local so the remaining stone
+        # keeps a finished termination when the neighboring module is hidden.
+        # They are intentionally absent from the historical hidden-state
+        # manifests; replay them as the bounded, approved delta.
+        historical_ids={e['id'] for e in next(c for c in historical['cases'] if c['id']==case['id'])['visibleEntities']}
+        for entity in case['visibleEntities']:
+            if entity['id'].endswith('-joint-bridge') and entity['id'] not in historical_ids:
+                bridge=Image.open(ROOT/'app'/entity['asset']).convert('RGBA')
+                expected=Image.alpha_composite(expected,bridge)
+                bridge_support=bridge.getchannel('A').point(lambda value:255 if value else 0)
+                support=ImageChops.lighter(support,bridge_support)
         actual=render_case(base,case,SIZE)
         assert actual.tobytes()==expected.tobytes(),'runtime differs from approved composition'
         rgb=ImageChops.difference(actual.convert('RGB'),before.convert('RGB')).split()
