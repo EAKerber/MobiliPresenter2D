@@ -773,8 +773,8 @@
     },
     {
       "path": "app/index.html",
-      "sha256": "72cd878ccffd2063a5ab0bac64295c466d7459bce4d774b96861d724de731866",
-      "size": 5701
+      "sha256": "a68d5db7de5af31345275f36c81f2c9ba2f38c45d48ba61ada38cf81586c286d",
+      "size": 5743
     },
     {
       "path": "app/package.json",

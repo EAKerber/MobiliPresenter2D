@@ -37,9 +37,13 @@ const {chromium} = require('playwright');
   await page.getByRole('button',{name:'Pedra clara',exact:true}).click();
   await page.waitForFunction(previous => document.getElementById('stoneCanvas').getContext('2d').getImageData(1100,540,1,1).data[0] !== previous, graphite[0]);
   assert.equal((await state()).stoneColor,'#d8d8d2');
+  const light = await canvasPixel(1100,540);
   await screenshot('desktop-light');
   await page.getByRole('button',{name:'Pedra areia',exact:true}).press('Enter');
-  await page.waitForFunction(() => window.CASA_EM_MODULOS_DEBUG.getState().stoneColor === '#968371');
+  await page.waitForFunction(previous => {
+    const pixel = document.getElementById('stoneCanvas').getContext('2d').getImageData(1100,540,1,1).data;
+    return window.CASA_EM_MODULOS_DEBUG.getState().stoneColor === '#968371' && pixel[0] !== previous;
+  }, light[0]);
   assert.equal((await state()).stoneColor,'#968371');
   assert.equal(await page.getByRole('button',{name:'Pedra areia',exact:true}).getAttribute('aria-pressed'),'true');
   await screenshot('desktop-sand');
@@ -82,6 +86,8 @@ const {chromium} = require('playwright');
     assert.equal(layout.viewerPosition,viewerPosition,`${width}px viewer position`);
     breakpoints.push({width,...layout});
   }
+  assert.equal(await page.getByRole('button',{name:'Malha',exact:true}).count(),1,'mobile grid button must keep its accessible name');
+  assert.equal(await page.getByRole('button',{name:'Restaurar',exact:true}).count(),1,'mobile restore button must keep its accessible name');
 
   for (const [a,b,id] of [[false,true,'module-02-hidden'],[true,false,'module-03-hidden'],[false,false,'both-hidden'],[true,true,'both-visible']]) {
     await page.getByRole('checkbox',{name:/Inferior do fogão/}).setChecked(a);
@@ -96,7 +102,6 @@ const {chromium} = require('playwright');
     await screenshot(id);
   }
   // A pending image decode or color draw must never resurrect a cleared layer.
-  await page.setViewportSize({width:1366,height:768});
   await page.getByRole('button',{name:'Pedra clara',exact:true}).click();
   await page.getByRole('button',{name:'Restaurar',exact:false}).click();
   await waitEmpty();
