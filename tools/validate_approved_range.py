@@ -30,7 +30,11 @@ def main():
     clean = render_case(base, clean_case, layer.size)
     composed = render_case(base, case, layer.size)
     args.output_dir.mkdir(parents=True, exist_ok=True)
-    historical_clean = render_case(base, {**clean_case, 'visibleEntities':[e for e in clean_case['visibleEntities'] if e['id'] not in {'faucet-approved','approved-stone-02','approved-stone-03'}]}, layer.size)
+    historical_only = {'faucet-approved','approved-stone-02','approved-stone-03'}
+    # Host-local joint bridges are a new hidden-state termination delta; the
+    # frozen range receipt predates them and must replay the historical frame.
+    historical_only |= {'stone-02-joint-bridge','stone-03-joint-bridge'}
+    historical_clean = render_case(base, {**clean_case, 'visibleEntities':[e for e in clean_case['visibleEntities'] if e['id'] not in historical_only]}, layer.size)
     historical_clean.save(args.output_dir/'clean.png')
     assert hashlib.sha256((args.output_dir/'clean.png').read_bytes()).hexdigest() == receipt['cleanFrameSha256'], 'canonical clean frame drift'
     diff = ImageChops.difference(clean.convert('RGB'), composed.convert('RGB'))
