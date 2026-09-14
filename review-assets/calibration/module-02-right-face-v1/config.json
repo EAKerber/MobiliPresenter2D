@@ -1,0 +1,82 @@
+{
+  "schemaVersion": "Module02ExposedRightFaceCalibration 0.1",
+  "sceneId": "cozinha-01",
+  "targetVariant": "module-03-hidden",
+  "sourceFrame": {
+    "artifactRun": 34904328637,
+    "headSha": "94534e817678bdfc337c693e9de4fe76a9d55bc6",
+    "sha256": "f502790c76afe612563958ca3acfcc7d653018d718d11d852ed3a45df553ecfa",
+    "size": [
+      1536,
+      1024
+    ]
+  },
+  "crop": {
+    "bounds": [
+      450,
+      500,
+      820,
+      930
+    ],
+    "sourceSha256": "342368e9662901a95b377e4e6a983f14dc2139760d0fba12901b88080fd743d0"
+  },
+  "measuredAnchors": {
+    "frontEdgeX": 744,
+    "stoneExposedEdge": {
+      "back": [
+        763,
+        521
+      ],
+      "front": [
+        744,
+        588
+      ],
+      "dx": -19,
+      "dy": 67
+    },
+    "cabinetTopY": 589,
+    "wallFloorY": 856,
+    "frontFloorY": 897
+  },
+  "authoring": {
+    "authorizedRoi": [
+      740,
+      585,
+      766,
+      900
+    ],
+    "hypothesisSupportPolygon": [
+      [
+        744,
+        589
+      ],
+      [
+        763,
+        589
+      ],
+      [
+        763,
+        856
+      ],
+      [
+        744,
+        897
+      ]
+    ],
+    "policy": [
+      "generated output is donor only",
+      "do not alter stone, oven/front face, wall, floor, or other modules outside authorized ROI",
+      "infer only the missing right carcass/side surface and physically necessary seam/shading",
+      "carcass is not assumed to belong to front-finish recoloring",
+      "final candidate must be extracted as deterministic full-canvas RGBA delta",
+      "outside-authorized-ROI visible diff must be zero",
+      "round-trip mismatch must be zero"
+    ]
+  },
+  "evidenceStatus": {
+    "frontEdge": "measured-from-visible-pixels",
+    "stoneEdge": "measured-from-visible-pixels",
+    "backEdge": "geometric-hypothesis-from-exposed-stone-depth; requires visual validation",
+    "approval": "NOT_APPROVED"
+  }
+}
