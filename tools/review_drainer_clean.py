@@ -9,6 +9,8 @@ from fit_regenerated_sink import run as sink_run
 from fit_regenerated_cooktop import run as cooktop_run
 ROOT=Path(__file__).resolve().parents[1]
 def run(manifest,out):
+    from validate_approved_components import historical_manifest
+    manifest=historical_manifest(manifest)
     p=ROOT/'review-assets/drainer-clean-review';cfg=json.loads((p/'config.json').read_text())
     for name,digest in cfg['sha256'].items():
         assert hashlib.sha256((ROOT/name).read_bytes()).hexdigest()==digest,'input drift'

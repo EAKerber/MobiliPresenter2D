@@ -469,6 +469,54 @@
       "path": "app/tools/sources/03_inferior_pia-combined-v1.png",
       "sha256": "32f2b66f9dbf3d911b739ae080fe2f352e2015ac2f24bddd51984b8ff384cd66",
       "size": 340278
+    },
+    {
+      "path": "app/assets/kitchen/overlays/sink-approved.png",
+      "size": 15376,
+      "sha256": "fc11c20680c9098035f27d9a1d0dc7659617356956564b9e2a2ac07331fd24a9",
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "canonicalCanvas": true,
+      "alphaBounds": [
+        930,
+        552,
+        1093,
+        575
+      ]
+    },
+    {
+      "path": "app/assets/kitchen/overlays/cooktop-approved.png",
+      "size": 43415,
+      "sha256": "038c8c1b2bf7d1dc8227a5922aa42c274bcb9e3f9a1a821dff792ec2fadce79e",
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "canonicalCanvas": true,
+      "alphaBounds": [
+        515,
+        491,
+        739,
+        575
+      ]
+    },
+    {
+      "path": "app/assets/kitchen/overlays/drainer-approved.png",
+      "size": 27527,
+      "sha256": "013a5fed375cbfd63451450747bdbd99f7915f548b77691c536aa8bd992cd724",
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "canonicalCanvas": true,
+      "alphaBounds": [
+        786,
+        441,
+        870,
+        565
+      ]
     }
   ],
   "baselineId": "cozinha-01-r5a-pixelperfect-bridges1",
@@ -499,8 +547,8 @@
   },
   "expectedRuntime": {
     "controllableEntities": 8,
-    "entities": 14,
-    "initialFingerprint": "scene2d-66522012",
+    "entities": 17,
+    "initialFingerprint": "scene2d-60948f5b",
     "passed": true
   },
   "files": [
@@ -691,13 +739,13 @@
     },
     {
       "path": "app/data/scene-data.js",
-      "sha256": "3559a8a0e4a31a13828328ae323fba612cbf0a0a8d7f42f80848671e7d7220ff",
-      "size": 9422
+      "sha256": "35d6d6c87e5308f8b25033597b7118b61c95e47972fcb9ad4ccbb6e6fbd577ff",
+      "size": 10686
     },
     {
       "path": "app/data/technical-data.json",
-      "sha256": "9560c12d99da8fe9b00f20918e392bb7826b4dde6d1e6b91c4d623091833ca82",
-      "size": 7189
+      "sha256": "3215beaa50a71babdf8053cfec4ead72a6372a7ec4f4970de1168611485a71a2",
+      "size": 7868
     },
     {
       "path": "app/docs/CHECKPOINTS.md",
@@ -806,13 +854,13 @@
     },
     {
       "path": "app/tools/test-core.js",
-      "sha256": "9ab72af5d30c810d2ecc43347e4d1e3345e71cb2b2bf2b35a263eaaef2ff3b37",
-      "size": 3017
+      "sha256": "8d038e398f4546a70b5048ab3789db089b4ad206c3947bc306794c7ca5bc3195",
+      "size": 3285
     },
     {
       "path": "app/tools/update-technical-data.py",
-      "sha256": "8b45e11762d0bcd3da561fb65abdd6168d736ced333cf99ae5bc356158771826",
-      "size": 2285
+      "sha256": "d3aa4c23a734eafadd99241ed8b3e35cf1442d27e1d3afce26151cd39ba32b2d",
+      "size": 2396
     },
     {
       "path": "app/tools/validate-assets.py",
@@ -823,6 +871,21 @@
       "path": "app/tools/validate-r5a-pixelperfect.py",
       "sha256": "b63931d7d985a1b7c8be4437b2c2d64737aa0bd171ce2f3e2372187ac35aba09",
       "size": 4466
+    },
+    {
+      "path": "app/assets/kitchen/overlays/sink-approved.png",
+      "size": 15376,
+      "sha256": "fc11c20680c9098035f27d9a1d0dc7659617356956564b9e2a2ac07331fd24a9"
+    },
+    {
+      "path": "app/assets/kitchen/overlays/cooktop-approved.png",
+      "size": 43415,
+      "sha256": "038c8c1b2bf7d1dc8227a5922aa42c274bcb9e3f9a1a821dff792ec2fadce79e"
+    },
+    {
+      "path": "app/assets/kitchen/overlays/drainer-approved.png",
+      "size": 27527,
+      "sha256": "013a5fed375cbfd63451450747bdbd99f7915f548b77691c536aa8bd992cd724"
     }
   ],
   "golden": {

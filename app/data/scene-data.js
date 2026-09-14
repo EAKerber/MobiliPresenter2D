@@ -9,7 +9,7 @@
 
   const scene = {
     schemaVersion: "Scene2D 1.0",
-    manifestVersion: "cozinha-01@r6-approved-faucet",
+    manifestVersion: "cozinha-01@r6-approved-components",
     id: "cozinha-01",
     label: "Cozinha Casa em Módulos",
     canvas: { width: 1536, height: 1024 },
@@ -23,6 +23,9 @@
         "module-03",
         "stone-03",
         "faucet-approved",
+        "cooktop-approved",
+        "sink-approved",
+        "drainer-approved",
         "stone-02-joint-bridge",
         "stone-03-joint-bridge",
         "module-04",
@@ -39,6 +42,9 @@
       gridVisible: false
     },
     entities: [
+      {"id": "cooktop-approved", "alias": "02C", "label": "Cooktop", "kind": "accessory", "zIndex": 304, "asset": "assets/kitchen/overlays/cooktop-approved.png", "maskAsset": null, "alphaBounds": {"x": 515, "y": 491, "width": 224, "height": 84}, "defaultVisible": true, "controllable": false, "hostId": "module-02", "finishGroups": [], "tags": ["approved-component", "fixed-camera-patch"]},
+      {"id": "sink-approved", "alias": "03C", "label": "Cuba", "kind": "accessory", "zIndex": 305, "asset": "assets/kitchen/overlays/sink-approved.png", "maskAsset": null, "alphaBounds": {"x": 930, "y": 552, "width": 163, "height": 23}, "defaultVisible": true, "controllable": false, "hostId": "module-03", "finishGroups": [], "tags": ["approved-component", "fixed-camera-patch"]},
+      {"id": "drainer-approved", "alias": "03D", "label": "Bancada sem escorredor", "kind": "accessory", "zIndex": 306, "asset": "assets/kitchen/overlays/drainer-approved.png", "maskAsset": null, "alphaBounds": {"x": 786, "y": 441, "width": 84, "height": 124}, "defaultVisible": true, "controllable": false, "hostId": "module-03", "finishGroups": [], "tags": ["approved-component", "fixed-camera-patch"]},
       {
         id: "faucet-approved", alias: "03T", label: "Torneira",
         kind: "accessory", zIndex: 303,

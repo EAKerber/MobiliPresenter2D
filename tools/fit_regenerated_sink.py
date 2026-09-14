@@ -10,6 +10,8 @@ def delta(a,b):
     r,g,b=ImageChops.difference(a.convert('RGB'),b.convert('RGB')).split()
     return ImageChops.lighter(ImageChops.lighter(r,g),b).point(lambda p:255 if p else 0)
 def run(manifest,out):
+    from validate_approved_components import historical_manifest
+    manifest=historical_manifest(manifest)
     p=ROOT/'review-assets/sink-regenerated-fit';cfg=json.loads((p/'config.json').read_text())
     for name,digest in cfg['sha256'].items():
         assert hashlib.sha256((ROOT/name).read_bytes()).hexdigest()==digest,'input drift'

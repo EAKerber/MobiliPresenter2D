@@ -12,6 +12,8 @@ def selection(size,polygons):
     return m
 
 def split(config,manifest,out):
+    from validate_approved_components import historical_manifest
+    manifest=historical_manifest(manifest)
     out.mkdir(parents=True,exist_ok=True)
     cleanpath=ROOT/'review-assets/stone-cleanplate/generated/composed.png'
     if sha(cleanpath)!=config['cleanFrameSha256']:raise ValueError('clean frame drift')

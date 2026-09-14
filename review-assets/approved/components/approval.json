@@ -1,0 +1,45 @@
+{
+  "status": "APPROVED",
+  "humanQuote": "\u00d3timo, prossiga",
+  "scope": "Joint composition shown after PR23: sink, cooktop without pots and drainer removal; work-branch runtime integration. No finish approval.",
+  "sourceCommit": "93f1e71501907331df8ab643a661d5e39528d83c",
+  "jointPixelsSha256": "b1ca3b7080e17e7437566e4e3ec51455d723b74c037c62c7e91b7e6fa3faa723",
+  "components": [
+    {
+      "id": "cooktop-approved",
+      "hostId": "module-02",
+      "asset": "app/assets/kitchen/overlays/cooktop-approved.png",
+      "assetSha256": "038c8c1b2bf7d1dc8227a5922aa42c274bcb9e3f9a1a821dff792ec2fadce79e",
+      "bounds": [
+        515,
+        491,
+        739,
+        575
+      ]
+    },
+    {
+      "id": "sink-approved",
+      "hostId": "module-03",
+      "asset": "app/assets/kitchen/overlays/sink-approved.png",
+      "assetSha256": "fc11c20680c9098035f27d9a1d0dc7659617356956564b9e2a2ac07331fd24a9",
+      "bounds": [
+        930,
+        552,
+        1093,
+        575
+      ]
+    },
+    {
+      "id": "drainer-approved",
+      "hostId": "module-03",
+      "asset": "app/assets/kitchen/overlays/drainer-approved.png",
+      "assetSha256": "013a5fed375cbfd63451450747bdbd99f7915f548b77691c536aa8bd992cd724",
+      "bounds": [
+        786,
+        441,
+        870,
+        565
+      ]
+    }
+  ]
+}

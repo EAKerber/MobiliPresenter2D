@@ -30,7 +30,7 @@ def main():
     clean = render_case(base, clean_case, layer.size)
     composed = render_case(base, case, layer.size)
     args.output_dir.mkdir(parents=True, exist_ok=True)
-    historical_clean = render_case(base, {**clean_case, 'visibleEntities':[e for e in clean_case['visibleEntities'] if e['id']!='faucet-approved']}, layer.size)
+    historical_clean = render_case(base, {**clean_case, 'visibleEntities':[e for e in clean_case['visibleEntities'] if e['id'] not in {'faucet-approved','sink-approved','cooktop-approved','drainer-approved'}]}, layer.size)
     historical_clean.save(args.output_dir/'clean.png')
     assert hashlib.sha256((args.output_dir/'clean.png').read_bytes()).hexdigest() == receipt['cleanFrameSha256'], 'canonical clean frame drift'
     diff = ImageChops.difference(clean.convert('RGB'), composed.convert('RGB'))
@@ -52,7 +52,7 @@ def main():
     isolated = render_case(base, isolated_case, layer.size)
     assert isolated.tobytes() == Image.alpha_composite(isolated_clean, layer).tobytes(), 'isolated range clipped or overwritten'
     isolated.save(args.output_dir/'both-hidden.png')
-    historical_default = {**cases['default'], 'visibleEntities':[e for e in cases['default']['visibleEntities'] if e['id']!='faucet-approved']}
+    historical_default = {**cases['default'], 'visibleEntities':[e for e in cases['default']['visibleEntities'] if e['id'] not in {'faucet-approved','sink-approved','cooktop-approved','drainer-approved'}]}
     default = render_case(base, historical_default, layer.size)
     golden = Image.open(ROOT/'app'/manifest['goldenAsset']).convert('RGBA')
     assert default.tobytes()==golden.tobytes(), 'default golden changed'

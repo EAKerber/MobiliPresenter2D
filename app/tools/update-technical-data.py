@@ -42,6 +42,7 @@ def main() -> int:
         "assets/kitchen/overlays/faucet-approved.png",
         "assets/kitchen/composicao-completa.png",
     })
+    tracked.update({"assets/kitchen/overlays/"+name+"-approved.png" for name in ("cooktop","sink","drainer")})
     files = data.setdefault("files", {})
     for rel in sorted(tracked):
         path = ROOT / rel

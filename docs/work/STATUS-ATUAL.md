@@ -116,3 +116,9 @@ R6: cooktop isolado em `review-assets/cooktop-regenerated-fit`, fit 214 × 32 em
 ## Continuação — escorredor removido e conjunto R6 (2026-09-09)
 
 `review-assets/drainer-clean-review`: reparo generativo local remove vestígios da reconstrução anterior, limitado à máscara histórica e faixa y520..564. Parede reconstruída anterior preservada. 9.418 pixels na remoção; conjunto com cuba/cooktop: 26.495, zero fora dos suportes, zero sobreposição e round-trip exato. Revisão visual PENDING para textura e conjunto. CI recompõe os três candidatos. Sem instalação no runtime/main. Próximo passo: julgamento visual conjunto e, se aprovado, integração dos componentes com regras de visibilidade e acabamento.
+
+## Integração — conjunto R6 aprovado (2026-09-09)
+
+Após “Ótimo, prossiga” na revisão conjunta do PR23, registrados recibo e patches em `review-assets/approved/components`. Runtime de trabalho passa a 17 entidades: cooktop acompanha módulo 2; cuba e remoção do escorredor acompanham módulo 3. Composição default idêntica ao conjunto aprovado (26.495 pixels em relação ao runtime anterior). Quatro estados validados com zero diferença fora dos suportes; torneira e fogão independente preservados. Histórico de experimentos reproduz suas fontes anteriores explicitamente. Main e deploy sem alteração.
+
+Próximo trabalho R6: separar fundo/material dos patches para recoloração contínua da pedra. Os patches atuais são substituições na câmera fixa, não objetos móveis nem acabamentos aprovados.
