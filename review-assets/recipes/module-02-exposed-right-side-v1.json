@@ -40,6 +40,6 @@
       "semantic": "carcass-side-clean-sample"
     }
   ],
-  "expectedPixelBounds": null,
-  "expectedChangedPixelCount": null
+  "expectedPixelBounds": [755, 525, 764, 815],
+  "expectedChangedPixelCount": 1910
 }
