@@ -16,6 +16,11 @@
           errors.push({ code: "host-missing", entityId: entity.id, hostId });
         }
       });
+      (entity.occludedByIds || []).forEach((occluderId) => {
+        if (!scene.entities.some((candidate) => candidate.id === occluderId)) {
+          errors.push({ code: "occluder-missing", entityId: entity.id, occluderId });
+        }
+      });
     });
 
     const defaultIds = new Set();
@@ -71,7 +76,11 @@
       }
 
       dependencyVisiting.add(entity.id);
-      const dependencyIds = [...(entity.hostIds || (entity.hostId ? [entity.hostId] : [])), substitutionByReplacement.get(entity.id)].filter(Boolean);
+      const dependencyIds = [
+        ...(entity.hostIds || (entity.hostId ? [entity.hostId] : [])),
+        ...(entity.occludedByIds || []),
+        substitutionByReplacement.get(entity.id)
+      ].filter(Boolean);
       dependencyIds.forEach((dependencyId) => {
         const dependency = entitiesById.get(dependencyId);
         if (dependency) visitVisibilityDependencies(dependency);
