@@ -32,7 +32,7 @@ jobs:
             --source-frame /tmp/module02-side-review/variants/module-03-hidden.png \
             --variant-manifest /tmp/module02-side-review/variant-manifest.json \
             --output-dir review-assets/candidates/module-02-exposed-right-side-v1
-      - name: Audit overlap against module and stone layers
+      - name: Require zero overlap with protected canonical layers
         run: |
           python - <<'PY'
           import json
@@ -45,17 +45,18 @@ jobs:
           candidate=Image.open('review-assets/candidates/module-02-exposed-right-side-v1/candidate.png').convert('RGBA').getchannel('A')
           cp=candidate.load()
           report={}
+          failures=[]
           for entity_id in ['module-02','stone-02','stone-02-joint-bridge','approved-stone-02']:
               asset=root/'app'/entities[entity_id]['asset']
               alpha=Image.open(asset).convert('RGBA').getchannel('A')
               ap=alpha.load()
-              overlap=0
-              for y in range(candidate.height):
-                  for x in range(candidate.width):
-                      if cp[x,y] and ap[x,y]: overlap += 1
+              overlap=sum(1 for y in range(candidate.height) for x in range(candidate.width) if cp[x,y] and ap[x,y])
               report[entity_id]={'asset':str(asset),'candidateAlphaOverlapPixels':overlap}
+              if overlap: failures.append(f'{entity_id}:{overlap}')
           Path('/tmp/module02-side-review/layer-overlap.json').write_text(json.dumps(report,indent=2)+'\n')
           print(json.dumps(report,sort_keys=True))
+          if failures:
+              raise SystemExit('PROTECTED_LAYER_OVERLAP:' + ','.join(failures))
           PY
       - name: Validate candidate structure and provenance
         run: |
