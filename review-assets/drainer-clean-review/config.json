@@ -1,0 +1,18 @@
+{
+  "status": "REVIEW",
+  "crop": [
+    760,
+    425,
+    930,
+    585
+  ],
+  "repairBand": [
+    520,
+    565
+  ],
+  "sha256": {
+    "review-assets/drainer-clean-review/donor.png": "2c12db9095e29b53c6a537627b90d510f00800dfda4f392d14a793db5cb8d018",
+    "review-assets/stone-cleanplate/generated/composed.png": "db9d0dd158ebad6a35b3d11fbe8ca6b75a08a4e620b41ff83fdaecdcb6ed0ef2",
+    "review-assets/stone-cleanplate/config.json": "367ae5a0c56063c487be269063b0052a17e0c5a66f57241c615259ce1dbb5f60"
+  }
+}
