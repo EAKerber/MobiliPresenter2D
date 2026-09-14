@@ -76,3 +76,8 @@ Próxima etapa: julgar textura e bordas da base reconstruída, refinar máscaras
 
 `work/r6-object-contours`, sobre PR #14: cooktop com contorno mais detalhado e borda da cuba ampliada; torneira conservada para evitar corte de metal por erosão automática. Contraste magenta/ciano/escuro e trimaps de um pixel em `review-assets/object-contours/`.
 O contraste ainda revela franjas claras: máscaras permanecem em REVIEW. Não promover para acabamentos sem revisão semântica; nenhum RGB selecionado é alterado e nenhum asset do runtime é substituído.
+
+## Antialias — experimento após PR #15
+
+`work/r6-object-antialias`: cobertura a 4× apenas no alpha, limitada à faixa de borda. 924 pixels de alpha alterados, zero mudanças fora da faixa nos fundos de contraste, RGB selecionado preservado. Comparação em `review-assets/object-antialias/generated/comparison.png`.
+Serrilhado discretamente suavizado; franjas claras ainda visíveis. Sem promoção: próxima dívida é separar fundo contaminante de reflexo metálico, não aplicar mais blur. Os experimentos generativos específicos citados pelo usuário não foram localizados; prompts de geração confinada já versionados continuam sendo referência para eventuais novas intervenções.
