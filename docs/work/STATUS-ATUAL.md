@@ -2,7 +2,8 @@
 
 ## Onde estamos
 
-Fase 3 do guia de migração (assets estruturais), incremento R5A.
+Fase 3: revisão técnica R5A concluída, revisão estética final pendente.
+Fase 4: preparação R6 de máscaras de pedra iniciada, sem novos acabamentos no runtime.
 As fases do produto e os incrementos R0–R5A são duas numerações diferentes.
 O README da raiz ainda descrevia o bootstrap R0; este documento passa a ser o ponto de retomada.
 
@@ -10,7 +11,7 @@ O README da raiz ainda descrevia o bootstrap R0; este documento passa a ser o po
 | --- | --- |
 | 0–2: baseline, dados e relações | Implementadas; composição inicial preservada, visibilidade e substituições testadas. |
 | 3: assets estruturais | Pedras separadas, alpha e juntas 02/03 corrigidos; fogão aprovado integrado nesta branch. Revisão técnica de quatro estados concluída; fechamento estético pendente. |
-| 4: acabamentos globais | Cores lisas já têm infraestrutura; catálogo fotográfico de madeira/pedras e máscaras específicas ainda precisam de fechamento. |
+| 4: acabamentos globais | Cores lisas existentes; máscaras de pedra R6 em revisão, com superfícies e objetos protegidos separados. Catálogo fotográfico ainda pendente. |
 | 5: puxadores | Planejada. |
 | 6: iluminação | Toggle/layer existentes; fechamento da fase ainda não declarado. |
 | 7: decoração | Planejada. |
@@ -44,3 +45,8 @@ Nenhuma geração ocorre no runtime.
 Implementação em `work/r5a-approved-range`, sobre `work/r5a-gap-pixel-calibration` (PR #9), que depende de `work/r5a-module02-hidden` (PR #8).
 A main e a publicação do site não foram alteradas. A integração está disponível na branch/PR; ainda não equivale a merge ou deploy.
 O guia completo permanece em `app/docs/GUIA-IMPLEMENTACAO-2D-DATA-DRIVEN.md`.
+
+## Preparação R6 — máscaras de pedra
+
+Branch `work/r6-stone-surface-masks`, sobre o PR #10. Contrato, config, máscaras e overlay em `review-assets/stone-masks/`.
+Recortes conservadores, sem aprovação semântica automática. Nenhuma alteração de aparência no app.
