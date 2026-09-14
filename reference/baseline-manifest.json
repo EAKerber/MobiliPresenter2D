@@ -18,6 +18,38 @@
     },
     {
       "alphaBounds": [
+        745,
+        521,
+        764,
+        590
+      ],
+      "canonicalCanvas": true,
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "path": "app/assets/kitchen/bridges/stone-02-joint-bridge.png",
+      "sha256": "e178e88edf0f412d1f0922bf335e7b524e80e888a3e2189fcd51ccc048a3d108",
+      "size": 8225
+    },
+    {
+      "alphaBounds": [
+        736,
+        516,
+        751,
+        590
+      ],
+      "canonicalCanvas": true,
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "path": "app/assets/kitchen/bridges/stone-03-joint-bridge.png",
+      "sha256": "d17fe629516c7aad1d79120c139f15529820a51ad260639ec5ce411e7aa222c3",
+      "size": 8072
+    },
+    {
+      "alphaBounds": [
         0,
         0,
         1536,
@@ -29,8 +61,8 @@
         1024
       ],
       "path": "app/assets/kitchen/composicao-completa.png",
-      "sha256": "fef84103531acf469b2e3a29f0b6df12f384c961b86c3dc5770967614fa545a8",
-      "size": 2112814
+      "sha256": "79ef8138e6011f52ac000982ae5855a7ac14c74e75f3fcd2a62d614cd29e9ba0",
+      "size": 2112648
     },
     {
       "alphaBounds": [
@@ -66,22 +98,6 @@
     },
     {
       "alphaBounds": [
-        484,
-        491,
-        764,
-        912
-      ],
-      "canonicalCanvas": true,
-      "dimensions": [
-        1536,
-        1024
-      ],
-      "path": "app/assets/kitchen/layers/stone-02-cozinha.png",
-      "sha256": "03f8e394e0192d5f969562c610ad62f83e498e77e5c0eacc363c86b6e8315595",
-      "size": 120842
-    },
-    {
-      "alphaBounds": [
         736,
         590,
         1217,
@@ -95,22 +111,6 @@
       "path": "app/assets/kitchen/layers/03_inferior_pia.png",
       "sha256": "11206a486ffb74938ecde1de1de7972c96f63fb32924d34a385eb70b6c94cca7",
       "size": 184619
-    },
-    {
-      "alphaBounds": [
-        736,
-        442,
-        1217,
-        912
-      ],
-      "canonicalCanvas": true,
-      "dimensions": [
-        1536,
-        1024
-      ],
-      "path": "app/assets/kitchen/layers/stone-03-pia.png",
-      "sha256": "1d1fc7e3f249de8011bc5c736f34aba2025055960aa64fc4f42eee90c46819e9",
-      "size": 166655
     },
     {
       "alphaBounds": [
@@ -194,6 +194,38 @@
     },
     {
       "alphaBounds": [
+        484,
+        491,
+        764,
+        912
+      ],
+      "canonicalCanvas": true,
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "path": "app/assets/kitchen/layers/stone-02-cozinha.png",
+      "sha256": "5317874508ac3738dd8aaffb60e1f6db5e623edb2d8261d7674934b3225359dd",
+      "size": 120809
+    },
+    {
+      "alphaBounds": [
+        736,
+        442,
+        1217,
+        912
+      ],
+      "canonicalCanvas": true,
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "path": "app/assets/kitchen/layers/stone-03-pia.png",
+      "sha256": "1d1fc7e3f249de8011bc5c736f34aba2025055960aa64fc4f42eee90c46819e9",
+      "size": 166655
+    },
+    {
+      "alphaBounds": [
         132,
         65,
         354,
@@ -210,10 +242,10 @@
     },
     {
       "alphaBounds": [
-        498,
-        590,
-        757,
-        856
+        0,
+        0,
+        1536,
+        1024
       ],
       "canonicalCanvas": true,
       "dimensions": [
@@ -221,8 +253,8 @@
         1024
       ],
       "path": "app/assets/kitchen/masks/02.png",
-      "sha256": "bd5050d0e2b90b00acfe122f7e5e9ae52b48ab717e48412ee16694357a6100b7",
-      "size": 8607
+      "sha256": "bfecd09f46d0566b6d774bdba496d6870972bf4bc785fb5f34281dddfe569b80",
+      "size": 2200
     },
     {
       "alphaBounds": [
@@ -328,6 +360,22 @@
     },
     {
       "alphaBounds": [
+        484,
+        491,
+        757,
+        912
+      ],
+      "canonicalCanvas": true,
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "path": "app/assets/kitchen/variants/stone-02-cozinha-exposed-right.png",
+      "sha256": "e1ab1e0134d249104dcf7bf7192922612f5aa72b155811689a997d5d83f1ca11",
+      "size": 120758
+    },
+    {
+      "alphaBounds": [
         736,
         442,
         1217,
@@ -338,9 +386,25 @@
         1536,
         1024
       ],
-      "path": "app/tools/sources/03_inferior_pia-combined-v1.png",
-      "sha256": "32f2b66f9dbf3d911b739ae080fe2f352e2015ac2f24bddd51984b8ff384cd66",
-      "size": 340278
+      "path": "app/assets/kitchen/variants/stone-03-pia-exposed-left.png",
+      "sha256": "7f298d33310610831ce1e9d0b095c0a26ffd89b003ac2fcc629ed1e23332e419",
+      "size": 166647
+    },
+    {
+      "alphaBounds": [
+        484,
+        491,
+        764,
+        912
+      ],
+      "canonicalCanvas": true,
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "path": "app/tools/sources/02_inferior_fogao-combined-v2.png",
+      "sha256": "c9c031f2a4d37be49d72de293d64ce579f42e56b934342e49017d203085646b0",
+      "size": 222284
     },
     {
       "alphaBounds": [
@@ -357,9 +421,25 @@
       "path": "app/tools/sources/02_inferior_fogao-combined-v3.png",
       "sha256": "2c32c401637a1037b95d0c11599c003933111c13397f24cf90aeffd710a86673",
       "size": 222274
+    },
+    {
+      "alphaBounds": [
+        736,
+        442,
+        1217,
+        912
+      ],
+      "canonicalCanvas": true,
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "path": "app/tools/sources/03_inferior_pia-combined-v1.png",
+      "sha256": "32f2b66f9dbf3d911b739ae080fe2f352e2015ac2f24bddd51984b8ff384cd66",
+      "size": 340278
     }
   ],
-  "baselineId": "cozinha-01-module02-fidelity-fix1",
+  "baselineId": "cozinha-01-r5a-pixelperfect-bridges1",
   "canvas": {
     "height": 1024,
     "origin": [
@@ -373,9 +453,11 @@
     "layers": [
       "app/assets/kitchen/layers/01_modulo_lavanderia.png",
       "app/assets/kitchen/layers/02_inferior_fogao.png",
-      "app/assets/kitchen/layers/stone-02-cozinha.png",
+      "app/assets/kitchen/variants/stone-02-cozinha-exposed-right.png",
+      "app/assets/kitchen/bridges/stone-02-joint-bridge.png",
       "app/assets/kitchen/layers/03_inferior_pia.png",
-      "app/assets/kitchen/layers/stone-03-pia.png",
+      "app/assets/kitchen/variants/stone-03-pia-exposed-left.png",
+      "app/assets/kitchen/bridges/stone-03-joint-bridge.png",
       "app/assets/kitchen/layers/04_lateral_geladeira.png",
       "app/assets/kitchen/layers/05_aereo_fogao.png",
       "app/assets/kitchen/layers/06_aereo_pia.png",
@@ -416,9 +498,19 @@
       "size": 1954448
     },
     {
+      "path": "app/assets/kitchen/bridges/stone-02-joint-bridge.png",
+      "sha256": "e178e88edf0f412d1f0922bf335e7b524e80e888a3e2189fcd51ccc048a3d108",
+      "size": 8225
+    },
+    {
+      "path": "app/assets/kitchen/bridges/stone-03-joint-bridge.png",
+      "sha256": "d17fe629516c7aad1d79120c139f15529820a51ad260639ec5ce411e7aa222c3",
+      "size": 8072
+    },
+    {
       "path": "app/assets/kitchen/composicao-completa.png",
-      "sha256": "fef84103531acf469b2e3a29f0b6df12f384c961b86c3dc5770967614fa545a8",
-      "size": 2112814
+      "sha256": "79ef8138e6011f52ac000982ae5855a7ac14c74e75f3fcd2a62d614cd29e9ba0",
+      "size": 2112648
     },
     {
       "path": "app/assets/kitchen/layers/01_modulo_lavanderia.png",
@@ -462,8 +554,8 @@
     },
     {
       "path": "app/assets/kitchen/layers/stone-02-cozinha.png",
-      "sha256": "03f8e394e0192d5f969562c610ad62f83e498e77e5c0eacc363c86b6e8315595",
-      "size": 120842
+      "sha256": "5317874508ac3738dd8aaffb60e1f6db5e623edb2d8261d7674934b3225359dd",
+      "size": 120809
     },
     {
       "path": "app/assets/kitchen/layers/stone-03-pia.png",
@@ -477,8 +569,8 @@
     },
     {
       "path": "app/assets/kitchen/masks/02.png",
-      "sha256": "bd5050d0e2b90b00acfe122f7e5e9ae52b48ab717e48412ee16694357a6100b7",
-      "size": 8607
+      "sha256": "bfecd09f46d0566b6d774bdba496d6870972bf4bc785fb5f34281dddfe569b80",
+      "size": 2200
     },
     {
       "path": "app/assets/kitchen/masks/03.png",
@@ -516,6 +608,16 @@
       "size": 6177
     },
     {
+      "path": "app/assets/kitchen/variants/stone-02-cozinha-exposed-right.png",
+      "sha256": "e1ab1e0134d249104dcf7bf7192922612f5aa72b155811689a997d5d83f1ca11",
+      "size": 120758
+    },
+    {
+      "path": "app/assets/kitchen/variants/stone-03-pia-exposed-left.png",
+      "sha256": "7f298d33310610831ce1e9d0b095c0a26ffd89b003ac2fcc629ed1e23332e419",
+      "size": 166647
+    },
+    {
       "path": "app/core/fingerprint.js",
       "sha256": "b584ba2f7a3ae80b06c68da4b24b877899b3ac2583a46ac46fbfc94fdbb45251",
       "size": 1690
@@ -532,28 +634,28 @@
     },
     {
       "path": "app/core/validation.js",
-      "sha256": "45798a7828d99563e47726b01b24ab14ce9e75915ea00967c71cc544e762101b",
-      "size": 3797
+      "sha256": "e8fdfc0a3240c351e6af7a30ee231bd92fbac544d6be5ab1f788ec1789f63efd",
+      "size": 4035
     },
     {
       "path": "app/core/visibility.js",
-      "sha256": "b6c4c1fc17a01207447ce1d864ba923a5a577dd559e94eb55f66f656f1806cb8",
-      "size": 2602
+      "sha256": "4ab544cede221c5b7de1acf43a723c807794b7b7856857a423cd1b1d16ee563c",
+      "size": 2723
     },
     {
       "path": "app/data/mask-data.js",
-      "sha256": "5b458177c64a39c12a2ffa9b3a8fd4d6756e38c039bf7c9138610283830e7052",
-      "size": 67507
+      "sha256": "8fc5bcd34a327b4ddb022c7a9828d87b8c9911951679e47bc09a68650b4befde",
+      "size": 58967
     },
     {
       "path": "app/data/scene-data.js",
-      "sha256": "2510f3fe94eb01544f572d979c6358976be5e0d55d1d58f2643b9636dd5533af",
-      "size": 7848
+      "sha256": "1fd9330cb7f650bb93efdea7870770e12e3f031267ae78f92a515a17fe5503e8",
+      "size": 8999
     },
     {
       "path": "app/data/technical-data.json",
-      "sha256": "298171b63c47439f2a403e553e20b15d2a55d4da5b055a2c95a9b1a38d195dfa",
-      "size": 5644
+      "sha256": "72203d7ee7df947798ad32e22a0332d13aa789319a99ced5ba147fe7cf5e875b",
+      "size": 6728
     },
     {
       "path": "app/docs/CHECKPOINTS.md",
@@ -582,33 +684,8 @@
     },
     {
       "path": "app/package.json",
-      "sha256": "f551e5d57a3b7d6ba8ddfcd52ff95fce70e7af9123c6850cacce1fa9e813b8d1",
-      "size": 502
-    },
-    {
-      "path": "app/reports/default-composed.png",
-      "sha256": "fef84103531acf469b2e3a29f0b6df12f384c961b86c3dc5770967614fa545a8",
-      "size": 2112814
-    },
-    {
-      "path": "app/reports/module02-alpha-fix-validation.json",
-      "sha256": "16c397cb9da43bb1f612df759b44c05cf6bbda52b987528c330a06ee425eb8b9",
-      "size": 6995
-    },
-    {
-      "path": "app/reports/phase-1-validation.json",
-      "sha256": "38a4c71d4254e4df75a4915028fcf235774775de6f477777f03f5ea0c3647fdd",
-      "size": 4976
-    },
-    {
-      "path": "app/reports/phase-2-validation.json",
-      "sha256": "3192f36aa8e5c73b6ce05db2ac36bce41ad22c345b29cf60d31404f4f8f4cca2",
-      "size": 5218
-    },
-    {
-      "path": "app/reports/wall-base-fix-validation.json",
-      "sha256": "f689d6d317891d4ecb48b8855b015054de0125f5d49be178c5dfebcad7b36ef8",
-      "size": 5237
+      "sha256": "5f6482db585594a7376e021a1c8c243345dbb14223825c2ed4f1246366bccb02",
+      "size": 763
     },
     {
       "path": "app/scripts/build-static.sh",
@@ -624,6 +701,11 @@
       "path": "app/tools/apply-r4-module02-fidelity.py",
       "sha256": "94d77da9dae8b27782c9d5cb773659c7de4ebf43836128a85bcbc785d2e14c61",
       "size": 3873
+    },
+    {
+      "path": "app/tools/apply-r5a-pixelperfect-edits.py",
+      "sha256": "08e3bd3b7b007d241e6ce641ccb5ec48f74f1bbca33558d53ac968e489ffb7f7",
+      "size": 5977
     },
     {
       "path": "app/tools/build-inline-masks.py",
@@ -682,13 +764,23 @@
     },
     {
       "path": "app/tools/test-core.js",
-      "sha256": "5c744894e7b7c9bd656a7efee74dfe2257fa988c91233dddc90efb46d542cc7f",
-      "size": 7936
+      "sha256": "f8212428f34b9a8d5566c9dad217344f26de0d3678b7a7d8baeae5b081d78f22",
+      "size": 2868
+    },
+    {
+      "path": "app/tools/update-technical-data.py",
+      "sha256": "f9d8ee64fa724c63c49fba6bc836e51139d223b53c327742c5ba9427dac44013",
+      "size": 2167
     },
     {
       "path": "app/tools/validate-assets.py",
-      "sha256": "5ab15958516c4749b96fc97d5603ac6dfd035d55b0ec6940938af32e39f6d55f",
-      "size": 7096
+      "sha256": "dbc77504cd44e3bab74ab99755cd2ba3fe79f044bce11967a1c4debe89647ca7",
+      "size": 3301
+    },
+    {
+      "path": "app/tools/validate-r5a-pixelperfect.py",
+      "sha256": "b63931d7d985a1b7c8be4437b2c2d64737aa0bd171ce2f3e2372187ac35aba09",
+      "size": 4466
     }
   ],
   "golden": {
@@ -704,8 +796,8 @@
       1024
     ],
     "path": "app/assets/kitchen/composicao-completa.png",
-    "sha256": "fef84103531acf469b2e3a29f0b6df12f384c961b86c3dc5770967614fa545a8",
-    "size": 2112814
+    "sha256": "79ef8138e6011f52ac000982ae5855a7ac14c74e75f3fcd2a62d614cd29e9ba0",
+    "size": 2112648
   },
   "mutation": {
     "cleanupRoi": [

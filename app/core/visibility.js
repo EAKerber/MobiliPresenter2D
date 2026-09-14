@@ -32,12 +32,16 @@
           : { visible: false, reason: hasIntent ? "intent-off" : "default-hidden" };
       }
 
-      if (entity.hostId) {
-        const host = entitiesById.get(entity.hostId);
+      const hostIds = entity.hostIds || (entity.hostId ? [entity.hostId] : []);
+      for (const hostId of hostIds) {
+        const host = entitiesById.get(hostId);
         if (!host) {
           result = { visible: false, reason: "host-missing" };
-        } else if (!resolveEntity(host.id).visible) {
+          break;
+        }
+        if (!resolveEntity(host.id).visible) {
           result = { visible: false, reason: "host-hidden" };
+          break;
         }
       }
 

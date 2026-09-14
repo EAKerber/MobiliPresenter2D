@@ -1,0 +1,42 @@
+{
+  "schemaVersion": "R5APixelPerfectGate 0.2",
+  "status": "PASS",
+  "gates": {
+    "stone02Bridge": {
+      "reconstructsSourceExactly": true,
+      "variantRgbMutationPixels": 0,
+      "variantAlphaIncreasePixels": 0,
+      "bridgeAlphaBounds": [
+        745,
+        521,
+        764,
+        590
+      ]
+    },
+    "stone03Bridge": {
+      "reconstructsSourceExactly": true,
+      "variantRgbMutationPixels": 0,
+      "variantAlphaIncreasePixels": 0,
+      "bridgeAlphaBounds": [
+        736,
+        516,
+        751,
+        590
+      ]
+    },
+    "module02FinishMask": {
+      "maskNonTransparentPixels": 17381,
+      "maskOutsideModuleAlphaPixels": 0,
+      "protectedApplianceMaskPixels": 0,
+      "maskBounds": [
+        498,
+        590,
+        757,
+        856
+      ]
+    },
+    "golden": {
+      "pixelDifferenceCount": 0
+    }
+  }
+}

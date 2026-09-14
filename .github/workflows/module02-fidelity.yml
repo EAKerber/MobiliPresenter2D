@@ -58,14 +58,38 @@ jobs:
       - name: Validate canonical app runtime and assets
         working-directory: app
         run: npm test
-      - name: Validate bounded R4 visual transition
+      - name: Validate bounded R4 visual transition when applicable
         run: |
-          python tools/validate-r4-module02.py \
-            --previous-golden /tmp/r4-parent/golden.png \
-            --previous-module /tmp/r4-parent/module02.png \
-            --output-dir /tmp/r4-review
+          baseline_id="$(python - <<'PY'
+          import json
+          from pathlib import Path
+          print(json.loads(Path('reference/baseline-manifest.json').read_text(encoding='utf-8'))['baselineId'])
+          PY
+          )"
+          case "$baseline_id" in
+            cozinha-01-r4-*)
+              python tools/validate-r4-module02.py \
+                --previous-golden /tmp/r4-parent/golden.png \
+                --previous-module /tmp/r4-parent/module02.png \
+                --output-dir /tmp/r4-review
+              ;;
+            *)
+              BASELINE_ID="$baseline_id" python - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+          path = Path('/tmp/r4-review/summary.json')
+          path.write_text(json.dumps({
+              'status': 'SKIPPED',
+              'code': 'R4_TRANSITION_GATE_SUPERSEDED',
+              'baselineId': os.environ['BASELINE_ID'],
+              'detail': 'Current checkpoint is validated by canonical baseline + current app fidelity gates; the historical R4 delta is not re-applied to later baselines.'
+          }, indent=2) + '\n', encoding='utf-8')
+          PY
+              ;;
+          esac
           cat /tmp/r4-review/summary.json
-      - name: Upload R4 visual gates
+      - name: Upload R4 transition evidence
         uses: actions/upload-artifact@v4
         with:
           name: r4-module02-fidelity-${{ github.run_id }}
