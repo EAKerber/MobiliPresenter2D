@@ -1,11 +1,14 @@
-import ast
 import copy
 import json
 from pathlib import Path
+import sys
 import tempfile
 import unittest
 from PIL import Image, ImageChops
 from tools.build_stone_surface_masks import build, ROOT, sha
+
+sys.path.insert(0, str(ROOT/'tools'))
+from build_approved_stone import material_mask
 
 class StoneSurfaceMasksTests(unittest.TestCase):
     @classmethod
@@ -40,21 +43,19 @@ class StoneSurfaceMasksTests(unittest.TestCase):
                 occupied=ImageChops.lighter(occupied,mask.point(lambda v:255 if v else 0))
 
     def test_approved_materializer_bridge_visibility_follows_host(self):
-        source=(ROOT/'tools/build_approved_stone.py').read_text()
-        tree=ast.parse(source)
-        functions={node.name:node for node in tree.body if isinstance(node,ast.FunctionDef)}
-        self.assertIn('asset_visible_in_case',functions)
-        calls=[node for node in ast.walk(functions['build']) if isinstance(node,ast.Call) and isinstance(node.func,ast.Name) and node.func.id=='asset_visible_in_case']
-        self.assertTrue(calls,'approved stone build must use host visibility helper')
-        namespace={}
-        selected=[functions['host_id'],functions['asset_visible_in_case']]
-        exec(compile(ast.Module(body=selected,type_ignores=[]),'build_approved_stone.py','exec'),namespace)
-        visible=namespace['asset_visible_in_case']
-        for asset in self.config['assets']:
-            host='module-'+asset['group'][-2:]
-            other='module-03' if host=='module-02' else 'module-02'
-            self.assertTrue(visible(asset,{host}),asset['id'])
-            self.assertFalse(visible(asset,{other}),asset['id'])
+        for asset_id,host,other in [
+            ('stone-02-joint-bridge','module-02','module-03'),
+            ('stone-03-joint-bridge','module-03','module-02'),
+        ]:
+            asset=next(item for item in self.config['assets'] if item['id']==asset_id)
+            bridge_config=copy.deepcopy(self.config)
+            bridge_config['assets']=[asset]
+            own=material_mask(bridge_config,{host})
+            hidden=material_mask(bridge_config,{other})
+            full=material_mask(self.config,{host})
+            self.assertIsNotNone(own.getbbox(),f'{asset_id} must contribute material pixels when its host alone is visible')
+            self.assertIsNone(hidden.getbbox(),f'{asset_id} must not contribute when its host is hidden')
+            self.assertIsNone(ImageChops.subtract(own,full).getbbox(),f'{asset_id} pixels must be included in the host-only material mask')
 
     def test_changed_source_requires_recalibration(self):
         changed=copy.deepcopy(self.config)
