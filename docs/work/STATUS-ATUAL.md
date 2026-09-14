@@ -8,6 +8,12 @@ Gates: quatro estados neutros exatos; doze combinações de cor/visibilidade sem
 
 O PR #25 foi integrado na `main` no commit `9ec9cb052c43cccf2ffd5cbb8c1b2c947ef2bc27` e publicado em <https://mobilipresenter2d.netlify.app/>. A publicação foi autorizada depois da revisão funcional. O próximo fechamento é confirmar o smoke da URL pública e registrar o julgamento estético dos tons e das bordas conservadoras.
 
+## Regressão visual encontrada após a publicação
+
+Uma captura do usuário revelou que o acabamento das frentes tingia a cena inteira quando o módulo 02 estava visível e deixava silhuetas claras nas áreas reconstruídas das panelas, escorredor e torneira. A causa era `app/assets/kitchen/masks/02.png` salvo como grayscale opaco, embora o CSS consuma o canal alfa. O hotfix restaura o alfa semântico, atualiza o materializador e o gate, e acrescenta uma regressão para impedir a repetição.
+
+O mesmo hotfix faz as pontes de terminação das pedras dependerem apenas do módulo que termina: a ponta direita da pedra 02 permanece visível quando o módulo 03 é ocultado, e a ponta esquerda da pedra 03 permanece visível quando o módulo 02 é ocultado. A composição default continua pixel a pixel idêntica.
+
 ## Onde estamos (histórico das fases)
 
 Fase 3: revisão técnica R5A concluída, revisão estética final pendente.

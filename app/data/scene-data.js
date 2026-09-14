@@ -254,7 +254,7 @@
         alphaBounds: { x: 745, y: 521, width: 19, height: 69 },
         defaultVisible: true,
         controllable: false,
-        hostIds: ["module-02", "module-03"],
+        hostIds: ["module-02"],
         finishGroups: [],
         tags: ["stone", "joint", "cooking-zone", "sink-zone"]
       },
@@ -269,7 +269,7 @@
         alphaBounds: { x: 736, y: 516, width: 15, height: 74 },
         defaultVisible: true,
         controllable: false,
-        hostIds: ["module-02", "module-03"],
+        hostIds: ["module-03"],
         finishGroups: [],
         tags: ["stone", "joint", "cooking-zone", "sink-zone"]
       },

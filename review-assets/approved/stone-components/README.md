@@ -21,4 +21,6 @@ As máscaras de frente e rodapé são reutilizadas sem reautoria. Tampo e revest
 
 Integração publicada na `main` pelo PR #25, commit `9ec9cb052c43cccf2ffd5cbb8c1b2c947ef2bc27`, em <https://mobilipresenter2d.netlify.app/>. A aparência neutra está aprovada. A autorização posterior de publicação não reescreve retroativamente o escopo da aprovação do PR23; `color-review.png` continua registrando original, grafite, claro e uma cor livre para avaliação dos tons.
 
+Após a publicação, foi encontrado um defeito independente na máscara histórica de acabamento do módulo 02, que cobria a cena por usar PNG grayscale sem alfa. O hotfix em revisão corrige a representação para RGBA e preserva as pontes de terminação nas configurações em que apenas um dos módulos 02/03 permanece visível.
+
 Validação de interação concluída em Chromium no GitHub Actions: cores, reset visual exato, independência das frentes, quatro estados de visibilidade e ausência de overflow horizontal em 390×844 passaram. Teste versionado em `tests/stone-browser.cjs`, workflow `Stone browser`; capturas ficam no artefato do CI. A cena permanece visível durante o ajuste: controles com rolagem própria no desktop, visualizador fixado durante a rolagem no celular. A aprovação humana das novas cores permanece pendente.

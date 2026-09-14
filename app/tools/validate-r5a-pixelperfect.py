@@ -35,7 +35,8 @@ def bridge_gate(source_rel: str, variant_rel: str, bridge_rel: str) -> dict[str,
 
 def mask_gate() -> dict[str, object]:
     module = Image.open(K / "layers/02_inferior_fogao.png").convert("RGBA").getchannel("A")
-    mask = Image.open(K / "masks/02.png").convert("L")
+    mask_image = Image.open(K / "masks/02.png").convert("RGBA")
+    mask = mask_image.getchannel("A")
     mp, kp = module.load(), mask.load()
     outside = protected = nonzero = 0
     for y in range(mask.height):
@@ -46,6 +47,8 @@ def mask_gate() -> dict[str, object]:
                 if 516 <= x < 739 and 609 <= y < 840: protected += 1
     return {
         "maskNonTransparentPixels": nonzero,
+        "maskMode": Image.open(K / "masks/02.png").mode,
+        "maskHasSemanticAlpha": "A" in Image.open(K / "masks/02.png").getbands(),
         "maskOutsideModuleAlphaPixels": outside,
         "protectedApplianceMaskPixels": protected,
         "maskBounds": list(mask.getbbox()) if mask.getbbox() else None,
@@ -78,6 +81,7 @@ def main() -> int:
         and gates["module02FinishMask"]["maskOutsideModuleAlphaPixels"] == 0
         and gates["module02FinishMask"]["protectedApplianceMaskPixels"] == 0
         and gates["module02FinishMask"]["maskNonTransparentPixels"] > 0
+        and gates["module02FinishMask"]["maskHasSemanticAlpha"]
         and gates["golden"]["pixelDifferenceCount"] == 0
     )
     payload = {"schemaVersion": "R5APixelPerfectGate 0.2", "status": "PASS" if passed else "FAIL", "gates": gates}

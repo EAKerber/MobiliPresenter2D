@@ -32,7 +32,7 @@
         "module-02": "intent-off",
         "stone-02": "host-hidden",
         "stone-02-joint-bridge": "host-hidden",
-        "stone-03-joint-bridge": "host-hidden",
+        "stone-03-joint-bridge": "visible",
         "range-freestanding": "visible"
       }
     },
@@ -51,7 +51,7 @@
       "expectedVisibilityReasons": {
         "module-03": "intent-off",
         "stone-03": "host-hidden",
-        "stone-02-joint-bridge": "host-hidden",
+        "stone-02-joint-bridge": "visible",
         "stone-03-joint-bridge": "host-hidden"
       }
     },

@@ -96,6 +96,8 @@ const {chromium} = require('playwright');
     const visible = await page.evaluate(() => window.CASA_EM_MODULOS_DEBUG.getVisibility());
     assert.equal(visible['approved-stone-02'].visible,a);
     assert.equal(visible['approved-stone-03'].visible,b);
+    assert.equal(visible['stone-02-joint-bridge'].visible,a);
+    assert.equal(visible['stone-03-joint-bridge'].visible,b);
     assert.equal(visible['faucet-approved'].visible,b);
     if (!a) assert.equal((await canvasPixel(600,530))[3],0);
     if (!b) assert.equal((await canvasPixel(1100,530))[3],0);

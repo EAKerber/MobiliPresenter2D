@@ -119,7 +119,11 @@ def build_module02_finish_mask() -> dict[str, object]:
             if mp[x, y]:
                 mp[x, y] = 0
                 cleared += 1
-    mask.save(MASK02)
+    # CSS consumes the mask through its alpha channel. Keep the luminance
+    # support in RGB as well so legacy L-based diagnostics remain meaningful,
+    # but never write an opaque grayscale PNG here.
+    rgba_mask = Image.merge("RGBA", (mask, mask, mask, mask))
+    rgba_mask.save(MASK02)
     bbox = mask.getbbox()
     return {
         "protectedPixelsCleared": cleared,
