@@ -51,6 +51,7 @@ jobs:
           EXPECTED_HEAD: ${{ github.sha }}
         run: |
           set -euo pipefail
+          git restore app/reports/default-composed.png
           changed="$(git diff --name-only)"
           unexpected="$(printf '%s\n' "$changed" | grep -Ev '^(app/data/stone-data\.js|reference/baseline-manifest\.json)$' || true)"
           if [ -n "$unexpected" ]; then
