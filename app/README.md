@@ -13,11 +13,13 @@ Não é necessário instalar Node.js, npm ou qualquer biblioteca.
 
 - `data/scene-data.js`: catálogo autoritativo da cena, módulos, ordem, defaults e acabamentos.
 - `data/mask-data.js`: cópia Base64 gerada das máscaras, usada para funcionar diretamente sob `file://`.
+- `data/stone-data.js`: entradas de pedra incorporadas para os quatro estados de visibilidade.
 - `core/state.js`: estado determinístico de visibilidade.
 - `core/visibility.js`: resolução de intenção, hospedagem e substituições.
 - `core/validation.js`: referências, ciclos e invariantes estruturais.
 - `core/fingerprint.js`: identificação reproduzível de cada configuração.
 - `core/finishes.js`: intensidade determinística das sobreposições de cor.
+- `core/stone.js`: recoloração da pedra com textura preservada e proteção dos objetos.
 - `app.js`: montagem da interface e ligação entre dados, estado e DOM.
 - `assets/kitchen`: parede-base, camadas transparentes e máscaras aprovadas.
 - `data/technical-data.json`: hashes e limites alfa congelados do baseline vigente.
@@ -26,9 +28,9 @@ Não é necessário instalar Node.js, npm ou qualquer biblioteca.
 
 ## Estado da migração
 
-Fase 2 concluída: módulos, controles, ordem e defaults vêm dos dados; relações de hospedagem e substituições são resolvidas declarativamente. A Fase 3 começou com a separação determinística das pedras dos módulos 02 e 03. O fogão convencional aprovado agora aparece ao ocultar o módulo 02, usando uma camada RGBA estática. A correção 3.2.2 eliminou os pixels de parede incorporados ao alfa do módulo 02. A correção 3.2.3 consertou branco e preto. A correção 3.2.4 incorporou as máscaras ao JavaScript para permitir a recoloração ao abrir o `index.html` diretamente no Chrome ou Firefox.
+Fases 2 e 3 concluídas: módulos, controles, ordem e defaults vêm dos dados; relações de hospedagem e substituições são resolvidas declarativamente. O fogão convencional e o conjunto aprovado de cuba, cooktop, escorredor removido e torneira acompanham a visibilidade dos módulos correspondentes. A Fase 4 já oferece cores de pedra independentes das frentes, mantendo textura, objetos protegidos e reset exato, inclusive ao abrir o `index.html` diretamente no Chrome ou Firefox.
 
-As próximas fases devem seguir `docs/GUIA-IMPLEMENTACAO-2D-DATA-DRIVEN.md`. O fogão fotográfico foi integrado na R5A; resta a revisão final dos estados estruturais. Máscaras específicas de pedra serão produzidas antes de habilitar seus acabamentos. Veja `../docs/work/STATUS-ATUAL.md` para o ponto de retomada.
+As próximas fases devem seguir `docs/GUIA-IMPLEMENTACAO-2D-DATA-DRIVEN.md`. O runtime da Fase 4 está publicado em <https://mobilipresenter2d.netlify.app/>; o julgamento estético fino dos tons e das bordas permanece registrado separadamente. Veja `../docs/work/STATUS-ATUAL.md` para o ponto de retomada.
 
 ## Validação opcional
 

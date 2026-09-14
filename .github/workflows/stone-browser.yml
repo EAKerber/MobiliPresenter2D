@@ -1,11 +1,22 @@
 name: Stone browser
 on:
+  push:
+    branches: [main]
+    paths:
+      - 'app/**'
+      - 'tests/stone-browser.cjs'
+      - '.github/workflows/stone-browser.yml'
   pull_request:
     paths:
       - 'app/**'
       - 'tests/stone-browser.cjs'
       - '.github/workflows/stone-browser.yml'
   workflow_dispatch:
+    inputs:
+      target_url:
+        description: Optional deployed URL for a production smoke test
+        required: false
+        type: string
 permissions:
   contents: read
 jobs:
@@ -24,6 +35,7 @@ jobs:
       - name: Test actual stone controls and capture desktop/mobile
         env:
           NODE_PATH: /tmp/stone-browser-tools/node_modules
+          STONE_BROWSER_URL: ${{ inputs.target_url }}
         run: node tests/stone-browser.cjs /tmp/stone-browser-review
       - name: Save interface review
         if: always()
