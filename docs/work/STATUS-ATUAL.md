@@ -1,10 +1,18 @@
-# Estado atual — 2026-09-11
+# Estado atual — 2026-09-14
 
 ## Retomada mais recente — R6 cor da pedra
 
 Usuário aprovou o conjunto PR23 e autorizou o controle de cor. `work/r6-stone-color-control` integra os patches aprovados vinculados aos módulos e acrescenta cor independente para pedra, preservando a textura, metais e reset original. Aprovação por hashes, fonte histórica fixada e reprodução em `review-assets/approved/stone-components/`.
 
-Gates: quatro estados neutros exatos; doze combinações de cor/visibilidade sem alterar pixels fora da pedra nem metal opaco. A interação foi validada em Chromium no CI: troca de cores, reset exato, independência de acabamentos e visibilidade. Ajuste de layout mantém a cozinha visível ao alcançar os controles. Próximo passo: julgamento humano das novas cores e bordas de acabamento antes de merge/publicação. Main e produção não alteradas.
+Gates: quatro estados neutros exatos; doze combinações de cor/visibilidade sem alterar pixels fora da pedra nem metal opaco. A interação foi validada em Chromium no CI: troca de cores, reset exato, independência de acabamentos e visibilidade. Ajuste de layout mantém a cozinha visível ao alcançar os controles.
+
+O PR #25 foi integrado na `main` no commit `9ec9cb052c43cccf2ffd5cbb8c1b2c947ef2bc27` e publicado em <https://mobilipresenter2d.netlify.app/>. A publicação foi autorizada depois da revisão funcional. O próximo fechamento é confirmar o smoke da URL pública e registrar o julgamento estético dos tons e das bordas conservadoras.
+
+## Regressão visual encontrada após a publicação
+
+Uma captura do usuário revelou que o acabamento das frentes tingia a cena inteira quando o módulo 02 estava visível e deixava silhuetas claras nas áreas reconstruídas das panelas, escorredor e torneira. A causa era `app/assets/kitchen/masks/02.png` salvo como grayscale opaco, embora o CSS consuma o canal alfa. O hotfix restaura o alfa semântico, atualiza o materializador e o gate, e acrescenta uma regressão para impedir a repetição.
+
+O mesmo hotfix faz as pontes de terminação das pedras dependerem apenas do módulo que termina: a ponta direita da pedra 02 permanece visível quando o módulo 03 é ocultado, e a ponta esquerda da pedra 03 permanece visível quando o módulo 02 é ocultado. A composição default continua pixel a pixel idêntica.
 
 ## Onde estamos (histórico das fases)
 
@@ -48,8 +56,7 @@ Nenhuma geração ocorre no runtime.
 
 ## Git e entrega
 
-Implementação em `work/r5a-approved-range`, sobre `work/r5a-gap-pixel-calibration` (PR #9), que depende de `work/r5a-module02-hidden` (PR #8).
-A main e a publicação do site não foram alteradas. A integração está disponível na branch/PR; ainda não equivale a merge ou deploy.
+O histórico empilhado dos PRs #8–#25 foi integrado na `main`. A entrega funcional mais recente está no commit `9ec9cb052c43cccf2ffd5cbb8c1b2c947ef2bc27` e na publicação de produção do Netlify.
 O guia completo permanece em `app/docs/GUIA-IMPLEMENTACAO-2D-DATA-DRIVEN.md`.
 
 ## Preparação R6 — máscaras de pedra

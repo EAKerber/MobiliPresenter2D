@@ -138,12 +138,12 @@
       ]
     },
     "assets/kitchen/masks/02.png": {
-      "sha256": "bfecd09f46d0566b6d774bdba496d6870972bf4bc785fb5f34281dddfe569b80",
+      "sha256": "af3ba1f2037f38d39008562b68ea77ace791c625a6bcf3e76509438dca88c204",
       "alphaBounds": [
-        0,
-        0,
-        1536,
-        1024
+        498,
+        590,
+        757,
+        856
       ]
     },
     "assets/kitchen/masks/03.png": {
