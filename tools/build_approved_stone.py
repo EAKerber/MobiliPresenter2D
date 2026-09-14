@@ -37,7 +37,7 @@ def build(out):
     allowed = {k:Image.open(out/f'replay/{k}/allowed.png').convert('L') for k in ['sink','cooktop']}
     drainer = load(out/'replay/drainer-removal.png')
     out.mkdir(parents=True,exist_ok=True)
-    for host,mask in [('02',allowed['cooktop']),('03',ImageChops.lighter(allowed['sink'],drainer.getchannel('A')) )]:
+    for host,mask in [('02',allowed['cooktop']),('03',ImageChops.lighter(allowed['sink'],drainer.getchannel('A')))]:
         patch=Image.new('RGBA',SIZE);patch.paste(joint,(0,0),mask);patch.save(out/f'approved-{host}.png')
     bundles={}
     records=[]
