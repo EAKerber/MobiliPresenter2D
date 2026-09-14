@@ -4,6 +4,7 @@ on:
     branches: [fix/module-02-exposed-right-face]
     paths:
       - '.github/workflows/integrate-module02-side-temp.yml'
+      - 'app/tools/update-technical-data.py'
 permissions:
   contents: write
 jobs:
@@ -106,12 +107,7 @@ jobs:
           scene_path.write_text(scene)
           cases_path=Path('reference/variant-cases.json')
           doc=json.loads(cases_path.read_text())
-          reasons={
-            'default':'occluded',
-            'module-02-hidden':'host-hidden',
-            'module-03-hidden':'visible',
-            'modules-02-03-hidden':'host-hidden'
-          }
+          reasons={'default':'occluded','module-02-hidden':'host-hidden','module-03-hidden':'visible','modules-02-03-hidden':'host-hidden'}
           for case in doc['cases']:
               case['expectedVisibilityReasons']['module-02-right-exposed-face']=reasons[case['id']]
           cases_path.write_text(json.dumps(doc,ensure_ascii=False,indent=2)+'\n')
@@ -144,10 +140,7 @@ jobs:
       - name: Run runtime and candidate regression gates
         run: |
           (cd app && npm test)
-          python -m unittest \
-            tests/test_candidate_asset_gates.py \
-            tests/test_candidate_authoring_provenance.py \
-            tests/test_candidate_delta_authoring.py
+          python -m unittest tests/test_candidate_asset_gates.py tests/test_candidate_authoring_provenance.py tests/test_candidate_delta_authoring.py
           mkdir -p /tmp/module02-side-post/variants
           node tools/variant_fidelity_manifest.js --cases reference/variant-cases.json --output /tmp/module02-side-post/manifest.json
           python tools/render_variant_fidelity.py --manifest /tmp/module02-side-post/manifest.json --output-dir /tmp/module02-side-post/variants
@@ -168,18 +161,7 @@ jobs:
           git restore app/reports 2>/dev/null || true
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add \
-            app/data/scene-data.js \
-            app/data/technical-data.json \
-            app/tools/test-core.js \
-            tests/stone-browser.cjs \
-            reference/variant-cases.json \
-            reference/baseline-manifest.json \
-            review-assets/calibration/module-02-right-face-v1/config.json \
-            review-assets/calibration/module-02-right-face-v1/source-variant-manifest.json \
-            review-assets/recipes/module-02-exposed-right-side-v1.json \
-            review-assets/candidates/module-02-exposed-right-side-v1 \
-            app/assets/kitchen/overlays/module-02-right-exposed-face.png
+          git add app/data/scene-data.js app/data/technical-data.json app/tools/test-core.js tests/stone-browser.cjs reference/variant-cases.json reference/baseline-manifest.json review-assets/calibration/module-02-right-face-v1/config.json review-assets/calibration/module-02-right-face-v1/source-variant-manifest.json review-assets/recipes/module-02-exposed-right-side-v1.json review-assets/candidates/module-02-exposed-right-side-v1 app/assets/kitchen/overlays/module-02-right-exposed-face.png
           git rm .github/workflows/integrate-module02-side-temp.yml
           unexpected="$(git status --short | grep -Ev '^(M  |A  |D  )' || true)"
           if [ -n "$unexpected" ]; then echo "UNEXPECTED_STATUS:$unexpected" >&2; exit 2; fi
