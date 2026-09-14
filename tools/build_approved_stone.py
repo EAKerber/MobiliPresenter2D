@@ -22,6 +22,21 @@ def asset_visible_in_case(asset, ids):
     # Visibility must therefore follow that host, matching scene-data hostIds.
     return host_id(asset) in ids
 
+def material_mask(config, ids):
+    mask=Image.new('L',SIZE)
+    for asset in config['assets']:
+        if not asset_visible_in_case(asset, ids): continue
+        alpha=load(ROOT/asset['path']).getchannel('A')
+        for surface,poly in config['groups'][asset['group']]['surfaces'].items():
+            if surface in ['front-edge','plinth']:
+                m=Image.open(ROOT/f"review-assets/stone-masks/generated/{asset['id']}-{surface}.png").convert('L')
+            else:
+                coverage=polygon_mask(SIZE,[poly],config['supersampling'])
+                coverage=ImageChops.darker(coverage,polygon_mask(SIZE,[poly]))
+                m=ImageChops.multiply(coverage,alpha)
+            mask=ImageChops.lighter(mask,m)
+    return mask
+
 def build(out):
     manifest = json.loads((RECORD/'source-manifest.json').read_text())
     review(manifest, out/'replay')
@@ -56,18 +71,7 @@ def build(out):
                 under=Image.composite(original,under,footprint)
                 under=Image.composite(backing,under,removal[key])
                 foreground=Image.alpha_composite(foreground,objects[key])
-        mask=Image.new('L',SIZE)
-        for asset in config['assets']:
-            if not asset_visible_in_case(asset, ids): continue
-            alpha=load(ROOT/asset['path']).getchannel('A')
-            for surface,poly in config['groups'][asset['group']]['surfaces'].items():
-                if surface in ['front-edge','plinth']:
-                    m=Image.open(ROOT/f"review-assets/stone-masks/generated/{asset['id']}-{surface}.png").convert('L')
-                else:
-                    coverage=polygon_mask(SIZE,[poly],config['supersampling'])
-                    coverage=ImageChops.darker(coverage,polygon_mask(SIZE,[poly]))
-                    m=ImageChops.multiply(coverage,alpha)
-                mask=ImageChops.lighter(mask,m)
+        mask=material_mask(config,ids)
         # Save full-frame texture, original composition and unchanged object RGBA.
         # The renderer returns pixels only inside this material mask.
         folder=out/case['id'];folder.mkdir(exist_ok=True)
