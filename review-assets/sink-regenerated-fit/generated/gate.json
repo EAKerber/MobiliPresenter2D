@@ -1,0 +1,20 @@
+{
+  "technicalStatus": "PASS",
+  "semanticReview": "PENDING",
+  "runtimeInstalled": false,
+  "fitXYWH": [
+    936,
+    561,
+    149,
+    12
+  ],
+  "changedPixels": 3332,
+  "outsideReplacementPixels": 0,
+  "approvedFaucetOverlayUnchanged": true,
+  "opaqueSinkChangedByColorProbe": 0,
+  "limitations": [
+    "Local contrast probes only; whole stone mask remains incomplete.",
+    "Donor edge residue may remain visible on enlargement.",
+    "Width and height fit separately; no claim of exact original geometry or human approval."
+  ]
+}
