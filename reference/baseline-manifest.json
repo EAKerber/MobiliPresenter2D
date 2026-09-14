@@ -743,8 +743,8 @@
     },
     {
       "path": "app/data/stone-data.js",
-      "sha256": "0cb1bf8fe435971b92e031943a1d4bea8d61402f73d2c9212648c068a61b5923",
-      "size": 1243135
+      "sha256": "fd5d6d5d09f937155fa1466fa80134412d34c9d1a97df20c457edd73e2aeb0c1",
+      "size": 1248443
     },
     {
       "path": "app/data/technical-data.json",

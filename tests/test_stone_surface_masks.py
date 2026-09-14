@@ -1,10 +1,14 @@
 import copy
 import json
 from pathlib import Path
+import sys
 import tempfile
 import unittest
 from PIL import Image, ImageChops
 from tools.build_stone_surface_masks import build, ROOT, sha
+
+sys.path.insert(0, str(ROOT/'tools'))
+from build_approved_stone import material_mask
 
 class StoneSurfaceMasksTests(unittest.TestCase):
     @classmethod
@@ -37,6 +41,21 @@ class StoneSurfaceMasksTests(unittest.TestCase):
                 self.assertIsNone(ImageChops.subtract(mask,alpha).getbbox())
                 self.assertIsNone(ImageChops.multiply(mask,occupied).getbbox())
                 occupied=ImageChops.lighter(occupied,mask.point(lambda v:255 if v else 0))
+
+    def test_approved_materializer_bridge_visibility_follows_host(self):
+        for asset_id,host,other in [
+            ('stone-02-bridge','module-02','module-03'),
+            ('stone-03-bridge','module-03','module-02'),
+        ]:
+            asset=next(item for item in self.config['assets'] if item['id']==asset_id)
+            bridge_config=copy.deepcopy(self.config)
+            bridge_config['assets']=[asset]
+            own=material_mask(bridge_config,{host})
+            hidden=material_mask(bridge_config,{other})
+            full=material_mask(self.config,{host})
+            self.assertIsNotNone(own.getbbox(),f'{asset_id} must contribute material pixels when its host alone is visible')
+            self.assertIsNone(hidden.getbbox(),f'{asset_id} must not contribute when its host is hidden')
+            self.assertIsNone(ImageChops.subtract(own,full).getbbox(),f'{asset_id} pixels must be included in the host-only material mask')
 
     def test_changed_source_requires_recalibration(self):
         changed=copy.deepcopy(self.config)
