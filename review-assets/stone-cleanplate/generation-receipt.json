@@ -1,0 +1,14 @@
+{
+  "method": "built-in imagegen, precise-object-edit",
+  "firstDonor": {
+    "id": "exec-6da15653-6a79-4776-8e4a-7c7ddaf27a61",
+    "role": "pan removal"
+  },
+  "secondDonor": {
+    "id": "exec-d81419d9-c4dc-4235-9e3d-18bacbd3bd7b",
+    "role": "former drainer footprint only"
+  },
+  "initialGuide": "guides.png",
+  "finalMasks": "config.json",
+  "note": "Initial polygon guide under-covered pot lids. Final support uses finer source-pixel contours. Raw generated surroundings discarded."
+}
