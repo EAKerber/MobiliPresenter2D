@@ -4,16 +4,16 @@ on:
     branches: [fix/module-02-exposed-right-face]
     paths:
       - '.github/workflows/raw-variant-capture-temp.yml'
-      - 'review-assets/recipes/module-02-exposed-right-side-v1.json'
-      - 'tools/materialize_perspective_donor_recipe.py'
 permissions:
-  contents: read
+  contents: write
 jobs:
   capture:
     runs-on: ubuntu-latest
     timeout-minutes: 8
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
@@ -34,29 +34,33 @@ jobs:
             --source-frame /tmp/module02-side-review/variants/module-03-hidden.png \
             --variant-manifest /tmp/module02-side-review/variant-manifest.json \
             --output-dir review-assets/candidates/module-02-exposed-right-side-v1
-      - name: Require zero overlap with protected canonical layers
+      - name: Require pinned geometry and zero protected overlap
         run: |
           python - <<'PY'
           import json
           from pathlib import Path
           from PIL import Image
-          root=Path('.')
+          expected_count=1910
+          expected_bounds=[755,525,764,815]
+          report=json.load(open('review-assets/candidates/module-02-exposed-right-side-v1/extraction-report.json'))
+          if report['changedPixelCount'] != expected_count or report['differenceBounds'] != expected_bounds:
+              raise SystemExit(f"PINNED_DELTA_DRIFT:{report['changedPixelCount']}:{report['differenceBounds']}")
           manifest=json.load(open('/tmp/module02-side-review/variant-manifest.json'))
           case=next(item for item in manifest['cases'] if item['id']=='module-03-hidden')
           entities={item['id']:item for item in case['visibleEntities']}
           candidate=Image.open('review-assets/candidates/module-02-exposed-right-side-v1/candidate.png').convert('RGBA').getchannel('A')
           cp=candidate.load()
-          report={}
+          overlap_report={}
           failures=[]
           for entity_id in ['module-02','stone-02','stone-02-joint-bridge','approved-stone-02']:
-              asset=root/'app'/entities[entity_id]['asset']
+              asset=Path('app')/entities[entity_id]['asset']
               alpha=Image.open(asset).convert('RGBA').getchannel('A')
               ap=alpha.load()
               overlap=sum(1 for y in range(candidate.height) for x in range(candidate.width) if cp[x,y] and ap[x,y])
-              report[entity_id]={'asset':str(asset),'candidateAlphaOverlapPixels':overlap}
+              overlap_report[entity_id]={'asset':str(asset),'candidateAlphaOverlapPixels':overlap}
               if overlap: failures.append(f'{entity_id}:{overlap}')
-          Path('/tmp/module02-side-review/layer-overlap.json').write_text(json.dumps(report,indent=2)+'\n')
-          print(json.dumps(report,sort_keys=True))
+          Path('/tmp/module02-side-review/layer-overlap.json').write_text(json.dumps(overlap_report,indent=2)+'\n')
+          print(json.dumps({'delta':{'count':report['changedPixelCount'],'bounds':report['differenceBounds']},'overlap':overlap_report},sort_keys=True))
           if failures:
               raise SystemExit('PROTECTED_LAYER_OVERLAP:' + ','.join(failures))
           PY
@@ -64,18 +68,47 @@ jobs:
         run: |
           python tools/validate_candidate_assets.py --output /tmp/module02-side-review/intake.json
           python tools/validate_authoring_provenance.py --output /tmp/module02-side-review/provenance.json
-      - name: Render candidate review sheet
+      - name: Materialize runtime overlay bytes
         run: |
-          python tools/render_candidate_review.py \
-            --variant-manifest /tmp/module02-side-review/variant-manifest.json \
-            --variant-render-dir /tmp/module02-side-review/variants \
-            --intake-report /tmp/module02-side-review/intake.json \
-            --output-dir /tmp/module02-side-review/candidates
-          cp -R review-assets/candidates/module-02-exposed-right-side-v1 /tmp/module02-side-review/materialized-candidate
+          cp review-assets/candidates/module-02-exposed-right-side-v1/candidate.png app/assets/kitchen/overlays/module-02-right-exposed-face.png
+          cmp --silent review-assets/candidates/module-02-exposed-right-side-v1/candidate.png app/assets/kitchen/overlays/module-02-right-exposed-face.png
+          sha256sum app/assets/kitchen/overlays/module-02-right-exposed-face.png
+      - name: Commit candidate and runtime overlay with CAS readback
+        shell: bash
+        env:
+          TARGET_BRANCH: fix/module-02-exposed-right-face
+          EXPECTED_HEAD: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add review-assets/candidates/module-02-exposed-right-side-v1 app/assets/kitchen/overlays/module-02-right-exposed-face.png
+          git rm .github/workflows/raw-variant-capture-temp.yml
+          allowed='^(A |M |D  |R  |\?\?) (review-assets/candidates/module-02-exposed-right-side-v1/|app/assets/kitchen/overlays/module-02-right-exposed-face.png|\.github/workflows/raw-variant-capture-temp.yml)'
+          unexpected="$(git status --short | grep -Ev "$allowed" || true)"
+          if [ -n "$unexpected" ]; then
+            echo "UNEXPECTED_WORKTREE_CHANGES" >&2
+            echo "$unexpected" >&2
+            exit 2
+          fi
+          git commit -m 'Asset: materialize protected module-02 exposed side [module02-side-materialized]'
+          candidate_sha="$(git rev-parse HEAD)"
+          remote_before="$(git ls-remote origin "refs/heads/${TARGET_BRANCH}" | cut -f1)"
+          if [ "$remote_before" != "$EXPECTED_HEAD" ]; then
+            echo "TARGET_HEAD_DRIFT:${remote_before}!=${EXPECTED_HEAD}" >&2
+            exit 2
+          fi
+          git push origin "HEAD:refs/heads/${TARGET_BRANCH}"
+          remote_after="$(git ls-remote origin "refs/heads/${TARGET_BRANCH}" | cut -f1)"
+          if [ "$remote_after" != "$candidate_sha" ]; then
+            echo "TARGET_READBACK_FAILED:${remote_after}!=${candidate_sha}" >&2
+            exit 2
+          fi
+          echo "MODULE02_SIDE_MATERIALIZATION_RECEIPT base=${EXPECTED_HEAD} result=${candidate_sha} readback=PASS"
       - name: Upload deterministic review
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: module02-exposed-side-review-${{ github.run_id }}
           path: /tmp/module02-side-review
-          if-no-files-found: error
+          if-no-files-found: ignore
