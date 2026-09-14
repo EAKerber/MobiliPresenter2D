@@ -22,6 +22,27 @@ const {chromium} = require('playwright');
   const waitColor = (x,y) => page.waitForFunction(([x,y]) => document.getElementById('stoneCanvas').getContext('2d').getImageData(x,y,1,1).data[3] > 0, [x,y]);
   const waitEmpty = () => page.waitForFunction(() => !document.getElementById('stoneCanvas').getContext('2d').getImageData(0,0,1536,1024).data.some(value => value !== 0));
   const screenshot = name => page.screenshot({path:path.join(output,name+'.png'),fullPage:true,animations:'disabled'});
+  const bridgeGapPixel = (caseName, entityId) => page.evaluate(async ([caseName, entityId]) => {
+    const entity = window.CASA_EM_MODULOS_SCENE.entities.find(candidate => candidate.id === entityId);
+    const imagePixels = async source => {
+      const image = new Image(); image.src = source; await image.decode();
+      const canvas = document.createElement('canvas'); canvas.width = 1536; canvas.height = 1024;
+      const context = canvas.getContext('2d', {willReadFrequently:true});
+      context.drawImage(image,0,0);
+      return context.getImageData(0,0,1536,1024).data;
+    };
+    const [mask, bridge] = await Promise.all([
+      imagePixels(window.CASA_STONE_DATA[caseName].mask),
+      imagePixels(entity.asset)
+    ]);
+    for (let i = 0; i < bridge.length; i += 4) {
+      if (mask[i] === 0 && bridge[i + 3] > 0) {
+        const pixel = i / 4;
+        return [pixel % 1536, Math.floor(pixel / 1536)];
+      }
+    }
+    return null;
+  }, [caseName, entityId]);
   const neutral = await page.locator('#viewer').screenshot({animations:'disabled'});
   await screenshot('desktop-original');
 
@@ -89,6 +110,7 @@ const {chromium} = require('playwright');
   assert.equal(await page.getByRole('button',{name:'Malha',exact:true}).count(),1,'mobile grid button must keep its accessible name');
   assert.equal(await page.getByRole('button',{name:'Restaurar',exact:true}).count(),1,'mobile restore button must keep its accessible name');
 
+  const bridgeCoverage = {};
   for (const [a,b,id] of [[false,true,'module-02-hidden'],[true,false,'module-03-hidden'],[false,false,'both-hidden'],[true,true,'both-visible']]) {
     await page.getByRole('checkbox',{name:/Inferior do fogão/}).setChecked(a);
     await page.getByRole('checkbox',{name:/Inferior da pia/}).setChecked(b);
@@ -101,6 +123,14 @@ const {chromium} = require('playwright');
     assert.equal(visible['faucet-approved'].visible,b);
     if (!a) assert.equal((await canvasPixel(600,530))[3],0);
     if (!b) assert.equal((await canvasPixel(1100,530))[3],0);
+    if (a !== b) {
+      const bridgeId = a ? 'stone-02-joint-bridge' : 'stone-03-joint-bridge';
+      const gap = await bridgeGapPixel(id, bridgeId);
+      assert(gap,`${id} must expose at least one bridge pixel absent from its legacy material mask`);
+      const pixel = await canvasPixel(gap[0],gap[1]);
+      assert(pixel[3] > 0,`${id} exposed bridge must be recolored at ${gap.join(',')}`);
+      bridgeCoverage[id]={bridgeId,gap,alpha:pixel[3]};
+    }
     await screenshot(id);
   }
   // A pending image decode or color draw must never resurrect a cleared layer.
@@ -119,6 +149,6 @@ const {chromium} = require('playwright');
   }), 'mobile must show the kitchen while choosing stone color');
   await page.screenshot({path:path.join(output,'mobile-viewport.png'),animations:'disabled'});
   assert.deepEqual(errors,[]);
-  fs.writeFileSync(path.join(output,'result.json'),JSON.stringify({status:'PASS',mode,targetUrl,desktop:[1366,768],mobile:[390,844],colors:['#34383d','#d8d8d2','#968371','#825faf'],breakpoints,resetViewerExact:true,independentFinishes:true,visibilityCases:4,pageErrors:errors},null,2));
+  fs.writeFileSync(path.join(output,'result.json'),JSON.stringify({status:'PASS',mode,targetUrl,desktop:[1366,768],mobile:[390,844],colors:['#34383d','#d8d8d2','#968371','#825faf'],breakpoints,resetViewerExact:true,independentFinishes:true,visibilityCases:4,bridgeCoverage,pageErrors:errors},null,2));
   await browser.close();
 })().catch(error => {console.error(error);process.exit(1);});
