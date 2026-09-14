@@ -9,7 +9,7 @@ import json
 from pathlib import Path
 from typing import Any
 
-from PIL import Image, ImageChops, ImageDraw
+from PIL import Image, ImageChops, ImageDraw, ImageOps
 
 from extract_candidate_delta import extract_delta, sha256_file
 
@@ -93,6 +93,20 @@ def polygon_mask(
     return ImageChops.multiply(mask, roi_mask)
 
 
+def build_protected_mask(size: tuple[int, int], asset_paths: list[str]) -> Image.Image:
+    protected = Image.new("L", size, 0)
+    for relative in asset_paths:
+        path = (ROOT / relative).resolve()
+        path.relative_to(ROOT.resolve())
+        with Image.open(path) as opened:
+            layer = opened.convert("RGBA")
+        if layer.size != size:
+            raise RecipeError(f"PROTECTED_ASSET_CANVAS_MISMATCH:{relative}:{layer.size}!={size}")
+        binary = layer.getchannel("A").point(lambda value: 255 if value else 0)
+        protected = ImageChops.lighter(protected, binary)
+    return protected
+
+
 def perspective_copy(
     donor: Image.Image,
     target: Image.Image,
@@ -100,6 +114,7 @@ def perspective_copy(
     target_quad: list[list[float]],
     roi: tuple[int, int, int, int],
     supersampling: int,
+    protected_mask: Image.Image,
 ) -> Image.Image:
     coefficients = perspective_coefficients(target_quad, donor_quad)
     warped = donor.transform(
@@ -109,6 +124,7 @@ def perspective_copy(
         resample=Image.Resampling.BILINEAR,
     )
     mask = polygon_mask(donor.size, target_quad, supersampling, roi)
+    mask = ImageChops.multiply(mask, ImageOps.invert(protected_mask))
     return Image.composite(warped, target, mask)
 
 
@@ -161,6 +177,8 @@ def main() -> int:
             raise RecipeError(f"RECIPE_SOURCE_CANVAS_MISMATCH:{source.size}!={expected_size}")
 
         roi = tuple(role["authorizedRoi"])
+        protected_assets = recipe.get("protectedAssets") or []
+        protected_mask = build_protected_mask(source.size, protected_assets)
         edited = source.copy()
         supersampling = int(recipe.get("supersampling", 4))
         for operation in recipe.get("operations", []):
@@ -173,15 +191,16 @@ def main() -> int:
                 operation["targetQuad"],
                 roi,
                 supersampling,
+                protected_mask,
             )
 
         candidate, report, difference = extract_delta(source, edited, roi)
-        if report["changedPixelCount"] != recipe.get("expectedChangedPixelCount"):
-            raise RecipeError(
-                f"RECIPE_ACTUAL_CHANGE_COUNT:{report['changedPixelCount']}!={recipe.get('expectedChangedPixelCount')}"
-            )
-        if report["differenceBounds"] != recipe.get("expectedPixelBounds"):
-            raise RecipeError(f"RECIPE_DIFF_BOUNDS:{report['differenceBounds']}!={recipe.get('expectedPixelBounds')}")
+        expected_count = recipe.get("expectedChangedPixelCount")
+        if expected_count is not None and report["changedPixelCount"] != expected_count:
+            raise RecipeError(f"RECIPE_ACTUAL_CHANGE_COUNT:{report['changedPixelCount']}!={expected_count}")
+        expected_bounds = recipe.get("expectedPixelBounds")
+        if expected_bounds is not None and report["differenceBounds"] != expected_bounds:
+            raise RecipeError(f"RECIPE_DIFF_BOUNDS:{report['differenceBounds']}!={expected_bounds}")
 
         output_dir.mkdir(parents=True, exist_ok=True)
         candidate_path = output_dir / "candidate.png"
@@ -204,6 +223,7 @@ def main() -> int:
             "candidateSha256": candidate_sha,
             "recipePath": recipe_rel,
             "recipeSha256": recipe_sha,
+            "protectedAssets": protected_assets,
         })
         report_path.write_text(json.dumps(report, indent=2, ensure_ascii=False, sort_keys=True) + "\n", encoding="utf-8")
 
