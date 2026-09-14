@@ -179,6 +179,8 @@ jobs:
         run: python tools/review_object_antialias.py --output-dir /tmp/candidate-review/object-antialias
       - name: Rebuild confined faucet edge donor
         run: python tools/materialize_faucet_edge.py --donor review-assets/faucet-edge-donor/donor-crop.png --output-dir /tmp/candidate-review/faucet-edge-donor
+      - name: Fit regenerated faucet and verify replacement footprint
+        run: python tools/fit_regenerated_faucet.py --output-dir /tmp/candidate-review/faucet-regenerated-fit
       - name: Structural candidate intake
         run: |
           python tools/validate_candidate_assets.py --output /tmp/candidate-review/intake.json

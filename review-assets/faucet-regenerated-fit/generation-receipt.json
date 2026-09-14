@@ -1,0 +1,31 @@
+{
+  "tool": "image_gen.imagegen",
+  "rawName": "exec-5d6cab97-356b-4830-a234-2376a17fd637.png",
+  "rawSha256": "94c3461570f336c62239377d636a925b8b3a602474554ab16d9250ef28f5e228",
+  "rawCanvas": [
+    1122,
+    1402
+  ],
+  "rawAlphaBounds": [
+    49,
+    9,
+    858,
+    1370
+  ],
+  "opaqueCoreBounds": [
+    407,
+    153,
+    741,
+    1286
+  ],
+  "retainedCrop": [
+    399,
+    145,
+    749,
+    1294
+  ],
+  "cropMethod": "Alpha>=128 bounding rectangle +8 source pixels; original alpha retained inside crop. Remote low-alpha noise excluded spatially.",
+  "fit": "35x115 at (991,443), base y558, approximate original height; no warp",
+  "sourceTurn": "Full-object aggressive regeneration requested by user, after PR17.",
+  "reference": "review-assets/faucet-edge-donor/target.png"
+}
