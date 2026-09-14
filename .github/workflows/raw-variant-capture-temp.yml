@@ -9,7 +9,7 @@ permissions:
 jobs:
   capture:
     runs-on: ubuntu-latest
-    timeout-minutes: 6
+    timeout-minutes: 8
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -22,13 +22,34 @@ jobs:
         run: python -m pip install -r tools/requirements.txt
       - name: Render exact deterministic variants
         run: |
-          mkdir -p /tmp/raw-variant-render/views
-          node tools/variant_fidelity_manifest.js --cases reference/variant-cases.json --output /tmp/raw-variant-render/manifest.json
-          python tools/render_variant_fidelity.py --manifest /tmp/raw-variant-render/manifest.json --output-dir /tmp/raw-variant-render/views
-          sha256sum /tmp/raw-variant-render/views/module-03-hidden.png /tmp/raw-variant-render/views/default.png > /tmp/raw-variant-render/sha256.txt
-      - name: Upload deterministic captures
+          mkdir -p /tmp/module02-side-review/variants
+          node tools/variant_fidelity_manifest.js --cases reference/variant-cases.json --output /tmp/module02-side-review/variant-manifest.json
+          python tools/render_variant_fidelity.py --manifest /tmp/module02-side-review/variant-manifest.json --output-dir /tmp/module02-side-review/variants
+      - name: Materialize bounded perspective-donor candidate
+        run: |
+          python tools/materialize_perspective_donor_recipe.py \
+            --recipe review-assets/recipes/module-02-exposed-right-side-v1.json \
+            --source-frame /tmp/module02-side-review/variants/module-03-hidden.png \
+            --variant-manifest /tmp/module02-side-review/variant-manifest.json \
+            --output-dir review-assets/candidates/module-02-exposed-right-side-v1
+      - name: Validate candidate structure and provenance
+        run: |
+          python tools/validate_candidate_assets.py --output /tmp/module02-side-review/intake.json
+          python tools/validate_authoring_provenance.py --output /tmp/module02-side-review/provenance.json
+          cat /tmp/module02-side-review/intake.json
+          cat /tmp/module02-side-review/provenance.json
+      - name: Render candidate review sheet
+        run: |
+          python tools/render_candidate_review.py \
+            --variant-manifest /tmp/module02-side-review/variant-manifest.json \
+            --variant-render-dir /tmp/module02-side-review/variants \
+            --intake-report /tmp/module02-side-review/intake.json \
+            --output-dir /tmp/module02-side-review/candidates
+          cp -R review-assets/candidates/module-02-exposed-right-side-v1 /tmp/module02-side-review/materialized-candidate
+      - name: Upload deterministic review
+        if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: raw-variant-render-${{ github.run_id }}
-          path: /tmp/raw-variant-render
+          name: module02-exposed-side-review-${{ github.run_id }}
+          path: /tmp/module02-side-review
           if-no-files-found: error
