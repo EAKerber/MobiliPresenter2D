@@ -44,8 +44,8 @@ class StoneSurfaceMasksTests(unittest.TestCase):
 
     def test_approved_materializer_bridge_visibility_follows_host(self):
         for asset_id,host,other in [
-            ('stone-02-joint-bridge','module-02','module-03'),
-            ('stone-03-joint-bridge','module-03','module-02'),
+            ('stone-02-bridge','module-02','module-03'),
+            ('stone-03-bridge','module-03','module-02'),
         ]:
             asset=next(item for item in self.config['assets'] if item['id']==asset_id)
             bridge_config=copy.deepcopy(self.config)
