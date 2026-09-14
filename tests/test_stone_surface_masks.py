@@ -1,3 +1,4 @@
+import ast
 import copy
 import json
 from pathlib import Path
@@ -37,6 +38,23 @@ class StoneSurfaceMasksTests(unittest.TestCase):
                 self.assertIsNone(ImageChops.subtract(mask,alpha).getbbox())
                 self.assertIsNone(ImageChops.multiply(mask,occupied).getbbox())
                 occupied=ImageChops.lighter(occupied,mask.point(lambda v:255 if v else 0))
+
+    def test_approved_materializer_bridge_visibility_follows_host(self):
+        source=(ROOT/'tools/build_approved_stone.py').read_text()
+        tree=ast.parse(source)
+        functions={node.name:node for node in tree.body if isinstance(node,ast.FunctionDef)}
+        self.assertIn('asset_visible_in_case',functions)
+        calls=[node for node in ast.walk(functions['build']) if isinstance(node,ast.Call) and isinstance(node.func,ast.Name) and node.func.id=='asset_visible_in_case']
+        self.assertTrue(calls,'approved stone build must use host visibility helper')
+        namespace={}
+        selected=[functions['host_id'],functions['asset_visible_in_case']]
+        exec(compile(ast.Module(body=selected,type_ignores=[]),'build_approved_stone.py','exec'),namespace)
+        visible=namespace['asset_visible_in_case']
+        for asset in self.config['assets']:
+            host='module-'+asset['group'][-2:]
+            other='module-03' if host=='module-02' else 'module-02'
+            self.assertTrue(visible(asset,{host}),asset['id'])
+            self.assertFalse(visible(asset,{other}),asset['id'])
 
     def test_changed_source_requires_recalibration(self):
         changed=copy.deepcopy(self.config)
