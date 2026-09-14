@@ -71,3 +71,8 @@ Reconstrução generativa confinada sob cooktop, cuba e torneira; oito combinaç
 A primeira máscara deixou um segmento da torneira; a inspeção visual identificou o defeito e o contorno foi corrigido antes desta entrega.
 Os patches restauram pixels originais em posição fixa, incluindo contexto local: não são recortes móveis nem máscaras prontas para trocar materiais.
 Próxima etapa: julgar textura e bordas da base reconstruída, refinar máscaras semânticas de material e então integrar componentes vinculados aos módulos. Main, runtime e publicação permanecem sem alterações nesta etapa.
+
+## Contornos finos — revisão seguinte
+
+`work/r6-object-contours`, sobre PR #14: cooktop com contorno mais detalhado e borda da cuba ampliada; torneira conservada para evitar corte de metal por erosão automática. Contraste magenta/ciano/escuro e trimaps de um pixel em `review-assets/object-contours/`.
+O contraste ainda revela franjas claras: máscaras permanecem em REVIEW. Não promover para acabamentos sem revisão semântica; nenhum RGB selecionado é alterado e nenhum asset do runtime é substituído.
