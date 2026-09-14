@@ -71,6 +71,92 @@
       "deltaExtractionRequired": true,
       "deltaMode": "opaque-replacement-pixels",
       "outsideAuthorizedRoiPolicy": "zero-change"
+    },
+    {
+      "id": "module-02-right-exposed-face-edit",
+      "role": "module-02-right-exposed-face",
+      "targetVariant": "module-03-hidden",
+      "targetVariantFingerprint": "scene2d-930c3dc3",
+      "mode": "edit-existing-canonical-frame",
+      "allowedMethods": [
+        "image-edit",
+        "generated-donor-derived",
+        "derived"
+      ],
+      "canonicalBaseAsset": "app/assets/kitchen/base.png",
+      "measuredGeometry": {
+        "frontEdgeX": 744,
+        "cabinetTopY": 589,
+        "wallFloorY": 856,
+        "frontFloorY": 897,
+        "exposedStoneDepthEdge": {
+          "back": [
+            763,
+            521
+          ],
+          "front": [
+            744,
+            588
+          ],
+          "dx": -19,
+          "dy": 67,
+          "interpretation": "real visible stone edge measured on the exact module-03-hidden frame; use as a contextual depth cue, not as automatic proof of the cabinet side back boundary"
+        },
+        "authorizedRoi": [
+          740,
+          585,
+          766,
+          900
+        ],
+        "hypothesisSupportPolygon": [
+          [
+            744,
+            589
+          ],
+          [
+            763,
+            589
+          ],
+          [
+            763,
+            856
+          ],
+          [
+            744,
+            897
+          ]
+        ],
+        "interpretation": "infer only the narrow right carcass/side surface exposed when module 03 is absent; preserve the existing stone termination and front face. The proposed back boundary is a reviewable geometric hypothesis derived from the visible stone depth, not an approved physical measurement."
+      },
+      "materialSemantics": {
+        "surfaceClass": "carcass-side",
+        "frontFinishParticipation": "not-assumed",
+        "stoneFinishParticipation": false,
+        "note": "Do not tint the inferred face as a front finish unless later evidence explicitly classifies it as that material."
+      },
+      "forbiddenAuthoringOutcomes": [
+        "remote-scene-reconstruction",
+        "reimagined-kitchen",
+        "front-face-replacement",
+        "oven-replacement",
+        "stone-reconstruction",
+        "wall-floor-reconstruction",
+        "invented-wide-side-panel",
+        "invented-shadow-outside-roi"
+      ],
+      "requiredSourceReferences": [
+        "app/assets/kitchen/base.png",
+        "variant:module-03-hidden@scene2d-930c3dc3"
+      ],
+      "generatedDonorPolicy": {
+        "allowed": true,
+        "purpose": "Generation may infer missing appearance only as donor material. Final runtime authority must be a deterministic delta extracted from the exact canonical module-03-hidden frame and confined to the authorized ROI.",
+        "outsideAuthorizedRoiPolicy": "zero-change",
+        "directGeneratedScenePromotion": false
+      },
+      "deltaExtractionRequired": true,
+      "deltaMode": "opaque-replacement-pixels",
+      "outsideAuthorizedRoiPolicy": "zero-change"
     }
   ]
 }
