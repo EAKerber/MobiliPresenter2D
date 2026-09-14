@@ -11,7 +11,7 @@
     "variant:module-03-hidden@scene2d-930c3dc3"
   ],
   "expectedSourceFrameSha256": "f502790c76afe612563958ca3acfcc7d653018d718d11d852ed3a45df553ecfa",
-  "intent": "Infer only the missing right carcass side of module 02 and the corresponding side of its front plinth when module 03 is hidden. Reuse real pixels already present in the canonical scene rather than synthesize a remote scene: the visible white right carcass side of module 01 is the side-material donor, and the existing module-02 front plinth is the plinth-material donor. Project both donors into the measured 02↔03 depth envelope, but never overwrite alpha already owned by module 02, its stone, its joint bridge or the approved stone overlay.",
+  "intent": "Infer only the missing right carcass side of module 02 when module 03 is hidden. Reuse a clean white carcass-side material sample already present on module 01 in the canonical scene, excluding its edge marks/hardware, and project it only into the empty pixels revealed beside module 02. Never overwrite alpha already owned by module 02, its stone, its joint bridge or the approved stone overlay.",
   "supersampling": 4,
   "protectedAssets": [
     "app/assets/kitchen/layers/02_inferior_fogao.png",
@@ -33,18 +33,11 @@
   },
   "operations": [
     {
-      "id": "carcass-side-from-module-01",
+      "id": "carcass-side-from-clean-module-01-sample",
       "type": "perspective-copy",
-      "donorQuad": [[354, 59], [382, 79], [382, 299], [354, 282]],
+      "donorQuad": [[360, 110], [378, 110], [378, 250], [360, 250]],
       "targetQuad": [[742, 586], [763, 525], [763, 796], [742, 857]],
-      "semantic": "carcass-side"
-    },
-    {
-      "id": "plinth-side-from-module-02-front",
-      "type": "perspective-copy",
-      "donorQuad": [[620, 857], [700, 857], [700, 898], [620, 898]],
-      "targetQuad": [[742, 857], [763, 796], [763, 837], [742, 898]],
-      "semantic": "plinth-side"
+      "semantic": "carcass-side-clean-sample"
     }
   ],
   "expectedPixelBounds": null,
