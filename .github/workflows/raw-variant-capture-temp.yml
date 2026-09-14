@@ -4,6 +4,8 @@ on:
     branches: [fix/module-02-exposed-right-face]
     paths:
       - '.github/workflows/raw-variant-capture-temp.yml'
+      - 'review-assets/recipes/module-02-exposed-right-side-v1.json'
+      - 'tools/materialize_perspective_donor_recipe.py'
 permissions:
   contents: read
 jobs:
