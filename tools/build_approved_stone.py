@@ -14,6 +14,14 @@ SIZE = (1536, 1024)
 def load(path):
     return Image.open(path).convert('RGBA')
 
+def host_id(asset):
+    return 'module-' + asset['group'][-2:]
+
+def asset_visible_in_case(asset, ids):
+    # Stone variants and their joint bridges are owned by the same host module.
+    # Visibility must therefore follow that host, matching scene-data hostIds.
+    return host_id(asset) in ids
+
 def build(out):
     manifest = json.loads((RECORD/'source-manifest.json').read_text())
     review(manifest, out/'replay')
@@ -29,7 +37,7 @@ def build(out):
     allowed = {k:Image.open(out/f'replay/{k}/allowed.png').convert('L') for k in ['sink','cooktop']}
     drainer = load(out/'replay/drainer-removal.png')
     out.mkdir(parents=True,exist_ok=True)
-    for host,mask in [('02',allowed['cooktop']),('03',ImageChops.lighter(allowed['sink'],drainer.getchannel('A')))]:
+    for host,mask in [('02',allowed['cooktop']),('03',ImageChops.lighter(allowed['sink'],drainer.getchannel('A')) )]:
         patch=Image.new('RGBA',SIZE);patch.paste(joint,(0,0),mask);patch.save(out/f'approved-{host}.png')
     bundles={}
     records=[]
@@ -50,8 +58,7 @@ def build(out):
                 foreground=Image.alpha_composite(foreground,objects[key])
         mask=Image.new('L',SIZE)
         for asset in config['assets']:
-            host='module-'+asset['group'][-2:]
-            if host not in ids or ('bridge' in asset['id'] and not {'module-02','module-03'}<=ids):continue
+            if not asset_visible_in_case(asset, ids): continue
             alpha=load(ROOT/asset['path']).getchannel('A')
             for surface,poly in config['groups'][asset['group']]['surfaces'].items():
                 if surface in ['front-edge','plinth']:
