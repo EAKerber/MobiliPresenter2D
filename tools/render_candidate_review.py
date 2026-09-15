@@ -155,6 +155,8 @@ def historical_baseline(record: dict[str, Any], expected_size: tuple[int, int]) 
         ref for ref in provenance.get("sourceReferences") or []
         if isinstance(ref, str) and ref.endswith(".json")
     ]
+    if not manifest_refs:
+        return None
     for manifest_ref in manifest_refs:
         manifest_path = safe_repo_path(manifest_ref)
         if not manifest_path.exists():
