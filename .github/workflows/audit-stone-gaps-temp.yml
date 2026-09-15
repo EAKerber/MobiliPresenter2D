@@ -1,0 +1,92 @@
+name: Audit stone support gaps temp
+on:
+  push:
+    branches: [audit/module02-finish-mask]
+    paths: ['.github/workflows/audit-stone-gaps-temp.yml']
+permissions:
+  contents: read
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install -r tools/requirements.txt
+      - name: Measure stone-like support outside declared surfaces
+        run: |
+          mkdir -p /tmp/stone-gap-audit
+          python - <<'PY'
+          from pathlib import Path
+          from PIL import Image, ImageChops, ImageDraw
+          import json, math, collections
+          root=Path('.')
+          cfg=json.loads((root/'review-assets/stone-masks/config.json').read_text())
+          size=tuple(cfg['canvas'])
+          def polygon_mask(polys):
+              m=Image.new('L',size,0);d=ImageDraw.Draw(m)
+              for p in polys:d.polygon(p,fill=255)
+              return m
+          def binary(im):return im.point(lambda v:255 if v else 0)
+          def count(im):return sum(1 for v in im.getdata() if v)
+          def comps(mask, image, stone_buckets):
+              p=mask.load(); seen=set(); out=[]; bbox=mask.getbbox(); rgb=image.convert('RGB').load()
+              if not bbox:return out
+              for y in range(bbox[1],bbox[3]):
+                  for x in range(bbox[0],bbox[2]):
+                      if not p[x,y] or (x,y) in seen:continue
+                      stack=[(x,y)];seen.add((x,y));pts=[]
+                      while stack:
+                          q=stack.pop();pts.append(q);qx,qy=q
+                          for nx,ny in ((qx-1,qy),(qx+1,qy),(qx,qy-1),(qx,qy+1)):
+                              if 0<=nx<size[0] and 0<=ny<size[1] and p[nx,ny] and (nx,ny) not in seen:
+                                  seen.add((nx,ny));stack.append((nx,ny))
+                      xs=[a for a,b in pts];ys=[b for a,b in pts]
+                      colors=[rgb[a,b] for a,b in pts]
+                      mean=[round(sum(c[i] for c in colors)/len(colors),1) for i in range(3)]
+                      similar=sum(((c[0]//12,c[1]//12,c[2]//12) in stone_buckets) for c in colors)
+                      out.append({'pixels':len(pts),'bbox':[min(xs),min(ys),max(xs)+1,max(ys)+1],'meanRgb':mean,'stoneBucketMatchPixels':similar,'stoneBucketMatchRatio':round(similar/len(pts),3)})
+              out.sort(key=lambda c:(c['stoneBucketMatchPixels'],c['pixels']),reverse=True)
+              return out
+          report=[]
+          for asset in cfg['assets']:
+              image=Image.open(root/asset['path']).convert('RGBA');alpha=binary(image.getchannel('A'))
+              group=cfg['groups'][asset['group']]
+              surfaces=polygon_mask(group['surfaces'].values())
+              material=ImageChops.multiply(alpha,surfaces)
+              # Quantized stone palette learned only from declared material pixels.
+              rgb=image.convert('RGB'); rp=rgb.load(); mp=material.load(); buckets=set()
+              bb=material.getbbox()
+              if bb:
+                  for y in range(bb[1],bb[3]):
+                      for x in range(bb[0],bb[2]):
+                          if mp[x,y]:
+                              c=rp[x,y]; buckets.add((c[0]//12,c[1]//12,c[2]//12))
+              outside=ImageChops.multiply(alpha,ImageChops.invert(surfaces))
+              inside=ImageChops.multiply(alpha,surfaces)
+              items=comps(outside,image,buckets)
+              # Highlight only outside-surface pixels whose quantized RGB resembles declared stone.
+              suspect=Image.new('L',size,0);sp=suspect.load();op=outside.load()
+              if outside.getbbox():
+                  for y in range(outside.getbbox()[1],outside.getbbox()[3]):
+                      for x in range(outside.getbbox()[0],outside.getbbox()[2]):
+                          if op[x,y]:
+                              c=rp[x,y]
+                              if (c[0]//12,c[1]//12,c[2]//12) in buckets:sp[x,y]=255
+              vis=Image.new('RGBA',size,(255,0,0,0));vis.putalpha(suspect);vis.save(Path('/tmp/stone-gap-audit')/(asset['id']+'-stone-like-outside.png'))
+              report.append({
+                  'id':asset['id'],'group':asset['group'],
+                  'alphaPixels':count(alpha),'insideDeclaredSurfacePixels':count(inside),
+                  'outsideDeclaredSurfacePixels':count(outside),'stoneLikeOutsidePixels':count(suspect),
+                  'stoneLikeOutsideBounds':list(suspect.getbbox()) if suspect.getbbox() else None,
+                  'topOutsideComponents':items[:15],
+              })
+          Path('/tmp/stone-gap-audit/report.json').write_text(json.dumps(report,indent=2)+'\n')
+          print(json.dumps(report,sort_keys=True))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: stone-gap-audit
+          path: /tmp/stone-gap-audit
