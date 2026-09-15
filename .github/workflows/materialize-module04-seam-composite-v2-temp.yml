@@ -23,6 +23,27 @@ jobs:
       - run: python -m pip install -r tools/requirements.txt
       - name: Apply migration and validate
         run: |
+          python - <<'PY'
+          from pathlib import Path
+          p = Path('tools/apply-module04-seam-composite-migration.py')
+          text = p.read_text()
+          old = '''    text = remove_exact(text, '        "module-04-06-finish-bridge",\\n', 1, "default visible bridge")
+    text = remove_exact(text, '          "module-04-06-finish-bridge",\\n', 1, "finish target bridge")'''
+          new = '''    text = replace_once(
+        text,
+        '        "module-04",\\n        "module-04-06-finish-bridge",\\n        "module-05",',
+        '        "module-04",\\n        "module-05",',
+        "default visible bridge",
+    )
+    text = replace_once(
+        text,
+        '          "module-04",\\n          "module-04-06-finish-bridge",\\n          "module-05",',
+        '          "module-04",\\n          "module-05",',
+        "finish target bridge",
+    )'''
+          assert text.count(old) == 1, 'expected old bridge removal block exactly once'
+          p.write_text(text.replace(old, new, 1))
+          PY
           python tools/apply-module04-seam-composite-migration.py
           cd app
           python tools/build-front-seam-masks.py
