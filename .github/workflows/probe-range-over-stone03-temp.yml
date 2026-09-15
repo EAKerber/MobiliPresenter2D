@@ -1,0 +1,67 @@
+name: Probe range over stone03 temp
+
+on:
+  push:
+    branches: [fix/module02-03-geometry-seams]
+    paths: ['.github/workflows/probe-range-over-stone03-temp.yml']
+
+permissions:
+  contents: write
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Patch range stacking only in workspace
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p=Path('app/data/scene-data.js')
+          text=p.read_text()
+          old='''        id: "range-freestanding",\n        alias: "02R",\n        label: "Fogão convencional",\n        kind: "substitution",\n        zIndex: 205,'''
+          new='''        id: "range-freestanding",\n        alias: "02R",\n        label: "Fogão convencional",\n        kind: "substitution",\n        zIndex: 304,'''
+          if text.count(old)!=1:
+              raise SystemExit(f'expected one range z block, got {text.count(old)}')
+          p.write_text(text.replace(old,new))
+          PY
+      - name: Install isolated browser tooling
+        run: |
+          npm install --prefix /tmp/stone-browser-tools --no-audit --no-fund playwright@1.62.1
+          /tmp/stone-browser-tools/node_modules/.bin/playwright install --with-deps chromium
+      - name: Render candidate stacking matrix
+        env:
+          NODE_PATH: /tmp/stone-browser-tools/node_modules
+        run: node tests/stone-browser.cjs /tmp/range-over-stone03-review
+      - name: Upload candidate review
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: range-over-stone03-review
+          path: /tmp/range-over-stone03-review
+          if-no-files-found: error
+      - name: Self-clean workflow with CAS readback
+        if: always()
+        env:
+          TARGET_BRANCH: fix/module02-03-geometry-seams
+          EXPECTED_HEAD: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          git restore app/data/scene-data.js
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git rm .github/workflows/probe-range-over-stone03-temp.yml
+          git commit -m 'Remove temporary range stacking probe'
+          candidate_sha="$(git rev-parse HEAD)"
+          remote_before="$(git ls-remote origin "refs/heads/${TARGET_BRANCH}" | cut -f1)"
+          test "$remote_before" = "$EXPECTED_HEAD" || { echo "TARGET_HEAD_DRIFT:${remote_before}!=${EXPECTED_HEAD}" >&2; exit 2; }
+          git push origin "HEAD:refs/heads/${TARGET_BRANCH}"
+          remote_after="$(git ls-remote origin "refs/heads/${TARGET_BRANCH}" | cut -f1)"
+          test "$remote_after" = "$candidate_sha" || { echo "TARGET_READBACK_FAILED:${remote_after}!=${candidate_sha}" >&2; exit 2; }
+          echo "RANGE_STACK_PROBE_CLEANUP base=${EXPECTED_HEAD} result=${candidate_sha} readback=PASS"
