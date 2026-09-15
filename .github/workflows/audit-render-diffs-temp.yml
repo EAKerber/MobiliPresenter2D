@@ -1,0 +1,157 @@
+name: Audit rendered finish and stone diffs temp
+on:
+  push:
+    branches: [audit/module02-finish-mask]
+    paths: ['.github/workflows/audit-render-diffs-temp.yml']
+permissions:
+  contents: read
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install tooling
+        run: |
+          npm install --prefix /tmp/audit-browser --no-audit --no-fund playwright@1.62.1
+          /tmp/audit-browser/node_modules/.bin/playwright install --with-deps chromium
+          python -m pip install -r tools/requirements.txt
+      - name: Capture isolated viewer states
+        env:
+          NODE_PATH: /tmp/audit-browser/node_modules
+        run: |
+          mkdir -p /tmp/render-diff-audit
+          node - <<'NODE'
+          const fs=require('node:fs');
+          const path=require('node:path');
+          const {pathToFileURL}=require('node:url');
+          const {chromium}=require('playwright');
+          (async()=>{
+            const out='/tmp/render-diff-audit';
+            const browser=await chromium.launch({headless:true});
+            const page=await browser.newPage({viewport:{width:1366,height:768}});
+            await page.goto(pathToFileURL(path.resolve('app/index.html')).href);
+            await page.evaluate(()=>Promise.all(Array.from(document.images,i=>i.decode())));
+            const viewer=page.locator('#viewer');
+            const snap=async name=>viewer.screenshot({path:`${out}/${name}.png`,animations:'disabled'});
+            const box=await viewer.boundingBox();
+            fs.writeFileSync(`${out}/viewer-box.json`,JSON.stringify(box,null,2));
+            await snap('front-original');
+            for (const [name,label] of [
+              ['front-black','Aplicar Preto'],
+              ['front-white','Aplicar Branco TX'],
+              ['front-olive','Aplicar Verde oliva'],
+              ['front-blue','Aplicar Azul petróleo']
+            ]) {
+              await page.getByRole('button',{name:label,exact:true}).click();
+              await snap(name);
+            }
+            await page.getByRole('button',{name:'Voltar ao acabamento original',exact:true}).click();
+            await page.getByRole('button',{name:'Pedra grafite',exact:true}).click();
+            for (const [a,b,id] of [[true,true,'stone-both'],[true,false,'stone-m03-hidden'],[false,true,'stone-m02-hidden'],[false,false,'stone-both-hidden']]) {
+              await page.getByRole('checkbox',{name:/Inferior do fogão/}).setChecked(a);
+              await page.getByRole('checkbox',{name:/Inferior da pia/}).setChecked(b);
+              await page.waitForTimeout(80);
+              await snap(id);
+            }
+            await browser.close();
+          })().catch(e=>{console.error(e);process.exit(1)});
+          NODE
+      - name: Analyze render response and canonical unmasked components
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          from PIL import Image, ImageChops
+          import json, math
+          out=Path('/tmp/render-diff-audit')
+          names=['front-black','front-white','front-olive','front-blue']
+          original=Image.open(out/'front-original.png').convert('RGB')
+          variants=[Image.open(out/f'{n}.png').convert('RGB') for n in names]
+          W,H=original.size
+          def canonical_to_view(box):
+              x0,y0,x1,y1=box
+              return (round(x0*W/1536),round(y0*H/1024),round(x1*W/1536),round(y1*H/1024))
+          mod02_box=canonical_to_view((498,590,757,856))
+          # Per-pixel max response across four strong front colors.
+          response=Image.new('L',(W,H),0); rp=response.load(); op=original.load(); vps=[v.load() for v in variants]
+          for y in range(H):
+              for x in range(W):
+                  base=op[x,y]
+                  best=0
+                  for vp in vps:
+                      p=vp[x,y]
+                      best=max(best,max(abs(p[i]-base[i]) for i in range(3)))
+                  rp[x,y]=best
+          response.save(out/'front-max-response.png')
+          # Canonical module02 alpha minus mask, connected components.
+          layer=Image.open('app/assets/kitchen/layers/02_inferior_fogao.png').convert('RGBA')
+          mask=Image.open('app/assets/kitchen/masks/02.png').convert('RGBA').getchannel('A')
+          alpha=layer.getchannel('A')
+          ub=ImageChops.multiply(alpha.point(lambda v:255 if v else 0), mask.point(lambda v:0 if v else 255))
+          pix=ub.load(); seen=set(); comps=[]
+          bbox=ub.getbbox()
+          if bbox:
+              for y in range(bbox[1],bbox[3]):
+                  for x in range(bbox[0],bbox[2]):
+                      if not pix[x,y] or (x,y) in seen: continue
+                      stack=[(x,y)];seen.add((x,y));pts=[]
+                      while stack:
+                          q=stack.pop();pts.append(q);qx,qy=q
+                          for nx,ny in ((qx-1,qy),(qx+1,qy),(qx,qy-1),(qx,qy+1)):
+                              if 0<=nx<ub.width and 0<=ny<ub.height and pix[nx,ny] and (nx,ny) not in seen:
+                                  seen.add((nx,ny));stack.append((nx,ny))
+                      xs=[p[0] for p in pts];ys=[p[1] for p in pts]
+                      comps.append({'pixels':len(pts),'bbox':[min(xs),min(ys),max(xs)+1,max(ys)+1]})
+          comps.sort(key=lambda c:c['pixels'],reverse=True)
+          # Browser response metrics inside module02 projected mask and projected unmasked support.
+          ma=mask.resize((W,H),Image.Resampling.NEAREST).point(lambda v:255 if v else 0)
+          la=alpha.resize((W,H),Image.Resampling.NEAREST).point(lambda v:255 if v else 0)
+          ua=ImageChops.multiply(la,ImageChops.invert(ma))
+          def stats(support):
+              sp=support.load(); vals=[]
+              for y in range(H):
+                  for x in range(W):
+                      if sp[x,y]: vals.append(rp[x,y])
+              return {
+                  'pixels':len(vals),
+                  'response_gt_8':sum(v>8 for v in vals),
+                  'response_le_2':sum(v<=2 for v in vals),
+                  'mean_response':round(sum(vals)/len(vals),3) if vals else 0,
+                  'max_response':max(vals) if vals else 0,
+              }
+          report={
+              'viewerSize':[W,H],
+              'module02ViewBox':list(mod02_box),
+              'mask02BrowserResponse':stats(ma),
+              'unmaskedModule02BrowserResponse':stats(ua),
+              'unmaskedCanonicalComponents':comps[:20],
+          }
+          # Stone residual: pixels that barely move from front-original after graphite, within broad canonical stone zone.
+          stone_orig=original
+          stone_files=['stone-both','stone-m03-hidden','stone-m02-hidden','stone-both-hidden']
+          stone_zone=canonical_to_view((470,430,1230,610))
+          stone_reports={}
+          for name in stone_files:
+              im=Image.open(out/f'{name}.png').convert('RGB')
+              x0,y0,x1,y1=stone_zone; residual=0; changed=0
+              for y in range(y0,y1):
+                  for x in range(x0,x1):
+                      d=max(abs(im.getpixel((x,y))[i]-stone_orig.getpixel((x,y))[i]) for i in range(3))
+                      if d<=3: residual+=1
+                      if d>12: changed+=1
+              stone_reports[name]={'unchangedPixelsInBroadStoneZone':residual,'changedPixelsInBroadStoneZone':changed}
+          report['stoneBroadZone']=list(stone_zone)
+          report['stoneStateResponse']=stone_reports
+          (out/'report.json').write_text(json.dumps(report,indent=2)+'\n')
+          print(json.dumps(report,sort_keys=True))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: render-diff-audit
+          path: /tmp/render-diff-audit
