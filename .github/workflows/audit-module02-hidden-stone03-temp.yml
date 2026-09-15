@@ -1,0 +1,103 @@
+name: Audit module02-hidden stone03 temp
+
+on:
+  push:
+    branches: [fix/module02-03-geometry-seams]
+    paths: ['.github/workflows/audit-module02-hidden-stone03-temp.yml']
+
+permissions:
+  contents: write
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install Pillow
+        run: python -m pip install pillow
+      - name: Analyze stone03 left termination
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          from PIL import Image, ImageChops, ImageDraw
+          import json
+
+          root=Path('.')
+          out=Path('/tmp/stone03-audit'); out.mkdir(parents=True,exist_ok=True)
+          roi=(720,480,780,630)
+          paths={
+            'variant03':'app/assets/kitchen/variants/stone-03-pia-exposed-left.png',
+            'layer03':'app/assets/kitchen/layers/stone-03-pia.png',
+            'bridge03':'app/assets/kitchen/bridges/stone-03-joint-bridge.png',
+            'approved03':'app/assets/kitchen/overlays/approved-stone-03.png',
+            'range':'app/assets/kitchen/substitutions/range-freestanding.png',
+            'module03':'app/assets/kitchen/layers/03_inferior_pia.png',
+          }
+          ims={k:Image.open(root/v).convert('RGBA') for k,v in paths.items()}
+          def alpha_stats(im):
+            a=im.getchannel('A')
+            hist=a.histogram(); count=sum(hist[1:])
+            return {'alphaPixels':count,'bbox':a.getbbox()}
+          report={'roi':roi,'sources':{k:alpha_stats(v) for k,v in ims.items()}}
+          v=ims['variant03']; l=ims['layer03']
+          vd=ImageChops.difference(v,l)
+          diffmask=vd.convert('RGB').convert('L').point(lambda x:255 if x else 0)
+          report['variantVsLayer']={'diffPixels':sum(1 for x in diffmask.getdata() if x),'bbox':diffmask.getbbox()}
+          va=v.getchannel('A'); la=l.getchannel('A')
+          vonly=ImageChops.subtract(va,la).point(lambda x:255 if x else 0)
+          lonly=ImageChops.subtract(la,va).point(lambda x:255 if x else 0)
+          report['alphaVariantOnly']={'pixels':sum(1 for x in vonly.getdata() if x),'bbox':vonly.getbbox()}
+          report['alphaLayerOnly']={'pixels':sum(1 for x in lonly.getdata() if x),'bbox':lonly.getbbox()}
+          # ROI-specific support and intersections.
+          def roi_mask(a): return a.crop(roi)
+          for k,im in ims.items():
+            a=roi_mask(im.getchannel('A'))
+            report.setdefault('roiSources',{})[k]={'alphaPixels':sum(a.histogram()[1:]),'bboxLocal':a.getbbox()}
+          bv=roi_mask(ims['bridge03'].getchannel('A'))
+          vv=roi_mask(v.getchannel('A'))
+          report['roiBridgeVariantOverlapPixels']=sum(ImageChops.multiply(bv,vv).histogram()[1:])
+          # Save checkerboard visual crops and source ownership overlay.
+          checker=Image.new('RGBA',(roi[2]-roi[0],roi[3]-roi[1]),(235,235,235,255))
+          draw=ImageDraw.Draw(checker)
+          s=10
+          for y in range(0,checker.height,s):
+            for x in range(0,checker.width,s):
+              if (x//s+y//s)%2: draw.rectangle((x,y,x+s-1,y+s-1),fill=(205,205,205,255))
+          for k,im in ims.items():
+            crop=im.crop(roi)
+            vis=checker.copy(); vis.alpha_composite(crop)
+            vis.resize((vis.width*6,vis.height*6),Image.Resampling.NEAREST).save(out/f'{k}-roi-6x.png')
+          own=checker.copy()
+          ov=Image.new('RGBA',own.size,(255,0,0,0)); ov.putalpha(vv.point(lambda x:180 if x else 0)); own.alpha_composite(ov)
+          ob=Image.new('RGBA',own.size,(0,255,255,0)); ob.putalpha(bv.point(lambda x:180 if x else 0)); own.alpha_composite(ob)
+          own.resize((own.width*6,own.height*6),Image.Resampling.NEAREST).save(out/'ownership-variant-red-bridge-cyan-6x.png')
+          (out/'report.json').write_text(json.dumps(report,indent=2,default=list))
+          print(json.dumps(report,indent=2,default=list))
+          PY
+      - name: Upload audit artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: module02-hidden-stone03-audit
+          path: /tmp/stone03-audit
+      - name: Self-clean workflow with CAS readback
+        env:
+          TARGET_BRANCH: fix/module02-03-geometry-seams
+          EXPECTED_HEAD: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git rm .github/workflows/audit-module02-hidden-stone03-temp.yml
+          git commit -m 'Remove temporary stone03 audit workflow'
+          candidate_sha="$(git rev-parse HEAD)"
+          remote_before="$(git ls-remote origin "refs/heads/${TARGET_BRANCH}" | cut -f1)"
+          test "$remote_before" = "$EXPECTED_HEAD" || { echo "TARGET_HEAD_DRIFT:${remote_before}!=${EXPECTED_HEAD}" >&2; exit 2; }
+          git push origin "HEAD:refs/heads/${TARGET_BRANCH}"
+          remote_after="$(git ls-remote origin "refs/heads/${TARGET_BRANCH}" | cut -f1)"
+          test "$remote_after" = "$candidate_sha" || { echo "TARGET_READBACK_FAILED:${remote_after}!=${candidate_sha}" >&2; exit 2; }
+          echo "STONE03_AUDIT_CLEANUP base=${EXPECTED_HEAD} result=${candidate_sha} readback=PASS"
