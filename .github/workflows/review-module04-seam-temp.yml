@@ -11,6 +11,8 @@ jobs:
     timeout-minutes: 8
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
@@ -22,11 +24,12 @@ jobs:
           npm install --prefix /tmp/seam-browser --no-audit --no-fund playwright@1.62.1
           /tmp/seam-browser/node_modules/.bin/playwright install --with-deps chromium
           python -m pip install -r tools/requirements.txt
-      - name: Capture seam visibility states
+      - name: Capture current and pre-29 seam states
         env:
           NODE_PATH: /tmp/seam-browser/node_modules
         run: |
           mkdir -p /tmp/module04-seam-review
+          git worktree add --detach /tmp/pre29 e83d318eab52fdd9c8787d5d5d190205cf960aad
           node - <<'NODE'
           const fs=require('node:fs');
           const path=require('node:path');
@@ -35,63 +38,62 @@ jobs:
           (async()=>{
             const out='/tmp/module04-seam-review';
             const browser=await chromium.launch({headless:true});
-            const page=await browser.newPage({viewport:{width:1366,height:768}});
-            await page.goto(pathToFileURL(path.resolve('app/index.html')).href);
-            await page.evaluate(()=>Promise.all(Array.from(document.images,i=>i.decode())));
-            const viewer=page.locator('#viewer');
-            const bridge=page.locator('.layer-group[data-entity-id="module-04-06-finish-bridge"]');
-            const bridgeFinish=bridge.locator('.finish-layer');
-            const snap=async(name)=>viewer.screenshot({path:`${out}/${name}.png`,animations:'disabled'});
-            const state=async(label)=>({
-              label,
-              bridgeHidden:await bridge.evaluate(el=>el.classList.contains('is-hidden')),
-              bridgeReason:await bridge.getAttribute('data-visibility-reason'),
-              finishOpacity:await bridgeFinish.evaluate(el=>getComputedStyle(el).opacity),
-              maskAsset:await bridgeFinish.getAttribute('data-mask-asset'),
-              module04:await page.locator('[data-module-toggle="module-04"]').isChecked(),
-              module06:await page.locator('[data-module-toggle="module-06"]').isChecked(),
-            });
+            async function open(appRoot){
+              const page=await browser.newPage({viewport:{width:1366,height:768}});
+              await page.goto(pathToFileURL(path.resolve(appRoot,'index.html')).href);
+              await page.evaluate(()=>Promise.all(Array.from(document.images,i=>i.decode()));
+              return page;
+            }
+            async function capture(page,prefix){
+              const viewer=page.locator('#viewer');
+              await page.getByRole('button',{name:'Aplicar Preto',exact:true}).click();
+              await viewer.screenshot({path:`${out}/${prefix}-black.png`,animations:'disabled'});
+              await page.getByRole('button',{name:'Aplicar Branco TX',exact:true}).click();
+              await viewer.screenshot({path:`${out}/${prefix}-white.png`,animations:'disabled'});
+            }
+            const current=await open('app');
+            const bridge=current.locator('.layer-group[data-entity-id="module-04-06-finish-bridge"]');
+            const finish=bridge.locator('.finish-layer');
             const records=[];
-            records.push(await state('original-both')); await snap('original-both');
-            await page.getByRole('button',{name:'Aplicar Preto',exact:true}).click();
-            records.push(await state('black-both')); await snap('black-both');
-            await page.locator('[data-module-toggle="module-06"]').setChecked(false);
-            records.push(await state('black-no06')); await snap('black-no06');
-            await page.locator('[data-module-toggle="module-06"]').setChecked(true);
-            await page.locator('[data-module-toggle="module-04"]').setChecked(false);
-            records.push(await state('black-no04')); await snap('black-no04');
-            await page.locator('[data-module-toggle="module-04"]').setChecked(true);
-            await page.getByRole('button',{name:'Aplicar Branco TX',exact:true}).click();
-            records.push(await state('white-both')); await snap('white-both');
-            fs.writeFileSync(`${out}/browser-state.json`,JSON.stringify(records,null,2));
-            if(records[0].bridgeHidden || records[0].bridgeReason!=='visible' || records[0].finishOpacity!=='0') throw Error('original bridge state invalid');
-            for(const rec of [records[1],records[4]]) if(rec.bridgeHidden || rec.bridgeReason!=='visible' || Number(rec.finishOpacity)<=0) throw Error(`visible bridge state invalid: ${rec.label}`);
-            for(const rec of [records[2],records[3]]) if(!rec.bridgeHidden || rec.bridgeReason!=='host-hidden') throw Error(`hidden bridge state invalid: ${rec.label}`);
-            if(records.some(rec=>rec.maskAsset!=='assets/kitchen/masks/04-06-seam-bridge.png')) throw Error('wrong bridge mask');
+            async function record(label){records.push({label,hidden:await bridge.evaluate(el=>el.classList.contains('is-hidden')),reason:await bridge.getAttribute('data-visibility-reason'),opacity:await finish.evaluate(el=>getComputedStyle(el).opacity)});}
+            await current.getByRole('button',{name:'Aplicar Preto',exact:true}).click(); await record('black-both');
+            await current.locator('[data-module-toggle="module-06"]').setChecked(false); await record('black-no06');
+            await current.locator('[data-module-toggle="module-06"]').setChecked(true);
+            await current.locator('[data-module-toggle="module-04"]').setChecked(false); await record('black-no04');
+            await current.locator('[data-module-toggle="module-04"]').setChecked(true);
+            if(records[0].hidden || records[0].reason!=='visible' || Number(records[0].opacity)<=0) throw Error('bridge not active with both hosts');
+            for(const rec of records.slice(1)) if(!rec.hidden || rec.reason!=='host-hidden') throw Error(`bridge leaked in ${rec.label}`);
+            fs.writeFileSync(`${out}/visibility.json`,JSON.stringify(records,null,2));
+            await current.close();
+            const currentCapture=await open('app'); await capture(currentCapture,'current'); await currentCapture.close();
+            const oldCapture=await open('/tmp/pre29/app'); await capture(oldCapture,'pre29'); await oldCapture.close();
             await browser.close();
           })().catch(e=>{console.error(e);process.exit(1)});
           NODE
-      - name: Crop and enlarge exact seam zone
+      - name: Prove both-host render equivalence
         run: |
           python - <<'PY'
           from pathlib import Path
-          from PIL import Image
+          from PIL import Image, ImageChops
           import json
           out=Path('/tmp/module04-seam-review')
-          canonical=(1536,1024)
-          crop=(1188,34,1252,92)
-          records=[]
-          for name in ['original-both','black-both','white-both','black-no06','black-no04']:
-              im=Image.open(out/f'{name}.png').convert('RGB')
-              w,h=im.size
-              x0=round(crop[0]*w/canonical[0]); y0=round(crop[1]*h/canonical[1]); x1=round(crop[2]*w/canonical[0]); y1=round(crop[3]*h/canonical[1])
-              c=im.crop((x0,y0,x1,y1))
-              c.resize((c.width*12,c.height*12),Image.Resampling.NEAREST).save(out/f'{name}-seam-12x.png')
-              records.append({'name':name,'viewer':[w,h],'crop':[x0,y0,x1,y1]})
-          (out/'crop-meta.json').write_text(json.dumps(records,indent=2)+'\n')
-          print(json.dumps(records))
+          report={}
+          for color in ('black','white'):
+              a=Image.open(out/f'current-{color}.png').convert('RGB')
+              b=Image.open(out/f'pre29-{color}.png').convert('RGB')
+              diff=ImageChops.difference(a,b)
+              bands=diff.split()
+              support=ImageChops.lighter(ImageChops.lighter(bands[0],bands[1]),bands[2])
+              changed=sum(1 for v in support.get_flattened_data() if v)
+              report[color]={'differentPixels':changed,'bounds':list(support.getbbox()) if support.getbbox() else None}
+              assert changed==0, (color,changed,support.getbbox())
+              w,h=a.size
+              crop=(round(1188*w/1536),round(34*h/1024),round(1252*w/1536),round(92*h/1024))
+              a.crop(crop).resize(((crop[2]-crop[0])*12,(crop[3]-crop[1])*12),Image.Resampling.NEAREST).save(out/f'current-{color}-seam-12x.png')
+          (out/'equivalence.json').write_text(json.dumps(report,indent=2)+'\n')
+          print(json.dumps(report,sort_keys=True))
           PY
       - uses: actions/upload-artifact@v4
         with:
-          name: module04-seam-browser-review
+          name: module04-seam-browser-equivalence
           path: /tmp/module04-seam-review
