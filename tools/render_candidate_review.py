@@ -10,7 +10,10 @@ from pathlib import Path
 from typing import Any
 
 from PIL import Image, ImageChops, ImageDraw, ImageFont
-from render_variant_fidelity import render_case
+try:
+    from tools.render_variant_fidelity import render_case
+except ModuleNotFoundError:
+    from render_variant_fidelity import render_case
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 APP_ROOT = REPO_ROOT / "app"
