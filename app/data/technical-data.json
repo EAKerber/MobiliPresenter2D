@@ -298,10 +298,6 @@
         815
       ]
     },
-    "assets/kitchen/bridges/front-04-06-finish-bridge.png": {
-      "sha256": "64085d665f67f408b0cd67f69bebaa5a814b79eeed296c3d952e62988d7a440f",
-      "alphaBounds": null
-    },
     "assets/kitchen/masks/04-06-seam-bridge.png": {
       "sha256": "5fb61a233c9f48f9f4b12d4cc6ecf8adab6810eba410e4e69afc8577a02a4381",
       "alphaBounds": [
@@ -309,6 +305,15 @@
         50,
         1213,
         60
+      ]
+    },
+    "assets/kitchen/masks/04-with-06-seam.png": {
+      "sha256": "64e25ff3dcd38adf0afb0e68bb7d6fd130ab0578f687d2a6d10dc241c4d4e1d9",
+      "alphaBounds": [
+        1209,
+        50,
+        1231,
+        900
       ]
     }
   }

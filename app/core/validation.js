@@ -21,6 +21,21 @@
           errors.push({ code: "occluder-missing", entityId: entity.id, occluderId });
         }
       });
+      (entity.finishMaskVariants || []).forEach((variant, variantIndex) => {
+        if (typeof variant.maskAsset !== "string" || !variant.maskAsset) {
+          errors.push({ code: "finish-mask-variant-missing-asset", entityId: entity.id, variantIndex });
+        }
+        const requiredIds = variant.requiresVisibleIds || [];
+        if (!Array.isArray(requiredIds) || !requiredIds.length) {
+          errors.push({ code: "finish-mask-variant-missing-dependency", entityId: entity.id, variantIndex });
+          return;
+        }
+        requiredIds.forEach((requiredId) => {
+          if (!scene.entities.some((candidate) => candidate.id === requiredId)) {
+            errors.push({ code: "finish-mask-variant-dependency-missing", entityId: entity.id, variantIndex, requiredId });
+          }
+        });
+      });
     });
 
     const defaultIds = new Set();

@@ -16,6 +16,7 @@ MASK_PATHS = (
     "assets/kitchen/masks/03.png",
     "assets/kitchen/masks/04.png",
     "assets/kitchen/masks/04-06-seam-bridge.png",
+    "assets/kitchen/masks/04-with-06-seam.png",
     "assets/kitchen/masks/05.png",
     "assets/kitchen/masks/06.png",
     "assets/kitchen/masks/07.png",

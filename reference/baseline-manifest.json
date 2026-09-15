@@ -17,17 +17,6 @@
       "size": 1954448
     },
     {
-      "alphaBounds": null,
-      "canonicalCanvas": true,
-      "dimensions": [
-        1536,
-        1024
-      ],
-      "path": "app/assets/kitchen/bridges/front-04-06-finish-bridge.png",
-      "sha256": "64085d665f67f408b0cd67f69bebaa5a814b79eeed296c3d952e62988d7a440f",
-      "size": 6177
-    },
-    {
       "alphaBounds": [
         745,
         521,
@@ -298,6 +287,22 @@
       "path": "app/assets/kitchen/masks/04-06-seam-bridge.png",
       "sha256": "5fb61a233c9f48f9f4b12d4cc6ecf8adab6810eba410e4e69afc8577a02a4381",
       "size": 8562
+    },
+    {
+      "alphaBounds": [
+        1209,
+        50,
+        1231,
+        900
+      ],
+      "canonicalCanvas": true,
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "path": "app/assets/kitchen/masks/04-with-06-seam.png",
+      "sha256": "64e25ff3dcd38adf0afb0e68bb7d6fd130ab0578f687d2a6d10dc241c4d4e1d9",
+      "size": 8151
     },
     {
       "alphaBounds": [
@@ -596,18 +601,13 @@
     },
     {
       "path": "app/app.js",
-      "sha256": "d57045b8b9abe54cf2c4b47dc9c3cf9755331375f72a49dea7582a9037ecb00c",
-      "size": 12329
+      "sha256": "13d936a5d24d248f6e509d210ee45648ca6aa596ff1a162891aa334fa13d7c46",
+      "size": 13039
     },
     {
       "path": "app/assets/kitchen/base.png",
       "sha256": "f7e2154187cd74d437035ff8ead2059f3ae842887e96093918475e9616749a70",
       "size": 1954448
-    },
-    {
-      "path": "app/assets/kitchen/bridges/front-04-06-finish-bridge.png",
-      "sha256": "64085d665f67f408b0cd67f69bebaa5a814b79eeed296c3d952e62988d7a440f",
-      "size": 6177
     },
     {
       "path": "app/assets/kitchen/bridges/stone-02-joint-bridge.png",
@@ -695,6 +695,11 @@
       "size": 8562
     },
     {
+      "path": "app/assets/kitchen/masks/04-with-06-seam.png",
+      "sha256": "64e25ff3dcd38adf0afb0e68bb7d6fd130ab0578f687d2a6d10dc241c4d4e1d9",
+      "size": 8151
+    },
+    {
       "path": "app/assets/kitchen/masks/04.png",
       "sha256": "2525bc8969cb9ace372452601266d8c9b6d8f6d0150105268235c442db44e249",
       "size": 8171
@@ -766,8 +771,8 @@
     },
     {
       "path": "app/core/finishes.js",
-      "sha256": "64cbb42d2224a722a71a4fe38b8b2a8b624dd022335bf9859a081f6f23d58d43",
-      "size": 1021
+      "sha256": "796cceea7f30aea2902d3c307015808780cb353e8406823b67692a25b414b7c3",
+      "size": 1441
     },
     {
       "path": "app/core/state.js",
@@ -781,8 +786,8 @@
     },
     {
       "path": "app/core/validation.js",
-      "sha256": "c6fcae9eebfa81222ae9c2f45763fadd8aaac5edcac789d1d57e303eb3616795",
-      "size": 4347
+      "sha256": "6a81a9404d6abe899f0f2abe9b867d67507a678e1596dc86f7e7d3e9877403a5",
+      "size": 5166
     },
     {
       "path": "app/core/visibility.js",
@@ -791,13 +796,13 @@
     },
     {
       "path": "app/data/mask-data.js",
-      "sha256": "f6af7afd8a01167c6e5efb8ad375510d3be576088d7c3bd52630553ccb4eccb7",
-      "size": 76769
+      "sha256": "d2f2aa248af74abeb85e65a29489d4c9230c988361cc32610924be11cfd7e8e0",
+      "size": 87705
     },
     {
       "path": "app/data/scene-data.js",
-      "sha256": "d4ed1ead882e3e64b77dc949dd32e41901fc696259da29f84af31ef179425c02",
-      "size": 11842
+      "sha256": "22370e94681b75f703b5a1e123cf0d9d95ede9012508e0cd0ca79010a1ada56f",
+      "size": 11470
     },
     {
       "path": "app/data/stone-data.js",
@@ -806,8 +811,8 @@
     },
     {
       "path": "app/data/technical-data.json",
-      "sha256": "ccc56b34878da8cd5fae4a4c576c13e568e5b3db05b7607fcac1efc624d761e2",
-      "size": 8291
+      "sha256": "db0c2f8819433218f757d24d0f139dc45c5bd0135b560531022b3a94d6657241",
+      "size": 8336
     },
     {
       "path": "app/docs/CHECKPOINTS.md",
@@ -836,8 +841,8 @@
     },
     {
       "path": "app/package.json",
-      "sha256": "bfe18f506c115472d587c8c5cbca362ef2dc5bd98eea82edb1041dc07b2c859c",
-      "size": 859
+      "sha256": "194d6b9f3e7df62986607e42e2cb30107cbff122c1ff20c622c9071affeaeba3",
+      "size": 966
     },
     {
       "path": "app/scripts/build-static.sh",
@@ -860,9 +865,14 @@
       "size": 6248
     },
     {
+      "path": "app/tools/build-front-seam-masks.py",
+      "sha256": "ddfbcfe03beb73487a8fa6436282f42b78c99c598b276cd528e7df7099cfc42f",
+      "size": 1867
+    },
+    {
       "path": "app/tools/build-inline-masks.py",
-      "sha256": "23d0f67696b1144cf30bc74faa6bcceba95dadffdfb872e61d22ca8fcf067bc5",
-      "size": 1340
+      "sha256": "8f193009577c46b0a8fb9923a68169fec7dcbaaa04b677147463b07a787a5660",
+      "size": 1388
     },
     {
       "path": "app/tools/build-module02-alpha-v2.py",
@@ -921,18 +931,18 @@
     },
     {
       "path": "app/tools/test-core.js",
-      "sha256": "6f9ad93c9ef61c213fb84b3ac8a874ba9ec3414b5a243d2a4eddfd49c2ef2a08",
-      "size": 5715
+      "sha256": "994361fa478110ca030d160f845ed6ee4730f476c789738fc0c4621b0cf0ca85",
+      "size": 6175
     },
     {
       "path": "app/tools/update-technical-data.py",
-      "sha256": "720ed31e80b537e3d5192fd5050acad7777b7a57977d03cc7bc5cb1f13ba7bb3",
-      "size": 2676
+      "sha256": "6ba37d4f6d46b5e56e6fd4b0ad7249caf9c868e6563cf2a0a88d060692d9b788",
+      "size": 2740
     },
     {
       "path": "app/tools/validate-assets.py",
-      "sha256": "1de2112b50f39530bdfd780e22226bdef5bf66c343d620df806116705dc5376d",
-      "size": 6493
+      "sha256": "cbe9e16db85a2f30ec1779e17d8a94d910c0503d8327a5abbd19fdf8757e253f",
+      "size": 7355
     },
     {
       "path": "app/tools/validate-r5a-pixelperfect.py",
