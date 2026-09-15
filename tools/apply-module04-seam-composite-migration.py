@@ -32,18 +32,8 @@ def remove_exact(text: str, value: str, expected: int, label: str) -> str:
 def migrate_scene() -> None:
     rel = "app/data/scene-data.js"
     text = read(rel)
-    text = remove_exact(
-        text,
-        '        "module-04-06-finish-bridge",\n',
-        1,
-        "default visible bridge",
-    )
-    text = remove_exact(
-        text,
-        '          "module-04-06-finish-bridge",\n',
-        1,
-        "finish target bridge",
-    )
+    text = remove_exact(text, '        "module-04-06-finish-bridge",\n', 1, "default visible bridge")
+    text = remove_exact(text, '          "module-04-06-finish-bridge",\n', 1, "finish target bridge")
     bridge_block = '''      {\n        id: "module-04-06-finish-bridge",\n        alias: "04J",\n        label: "Emenda de acabamento 04–06",\n        kind: "finish-bridge",\n        zIndex: 401,\n        asset: "assets/kitchen/bridges/front-04-06-finish-bridge.png",\n        maskAsset: "assets/kitchen/masks/04-06-seam-bridge.png",\n        alphaBounds: null,\n        defaultVisible: true,\n        controllable: false,\n        hostIds: ["module-04", "module-06"],\n        finishGroups: ["fronts-all"],\n        tags: ["finish", "joint", "sink-zone", "refrigerator-zone"]\n      },\n'''
     text = remove_exact(text, bridge_block, 1, "bridge entity")
     old = '''        asset: "assets/kitchen/layers/04_lateral_geladeira.png",\n        maskAsset: "assets/kitchen/masks/04.png",\n        alphaBounds: { x: 1205, y: 44, width: 38, height: 870 },'''
@@ -85,12 +75,7 @@ def migrate_validation() -> None:
 def migrate_test_core() -> None:
     rel = "app/tools/test-core.js"
     text = read(rel)
-    text = replace_once(
-        text,
-        'const fingerprints=sandbox.window.CasaModulesFingerprint;\n',
-        'const fingerprints=sandbox.window.CasaModulesFingerprint;\nconst finishes=sandbox.window.CasaModulesFinishes;\n',
-        "finish core test binding",
-    )
+    text = replace_once(text, 'const fingerprints=sandbox.window.CasaModulesFingerprint;\n', 'const fingerprints=sandbox.window.CasaModulesFingerprint;\nconst finishes=sandbox.window.CasaModulesFinishes;\n', "finish core test binding")
     text = replace_once(text, "assert.equal(scene.entities.length,18);", "assert.equal(scene.entities.length,17);", "entity count")
     old = '''  if(entity.maskAsset){\n    assert.equal(fs.existsSync(path.join(projectRoot,entity.maskAsset)),true);\n    assert.equal(typeof masks[entity.maskAsset],"string");\n  }'''
     new = '''  if(entity.maskAsset){\n    assert.equal(fs.existsSync(path.join(projectRoot,entity.maskAsset)),true);\n    assert.equal(typeof masks[entity.maskAsset],"string");\n  }\n  for (const variant of entity.finishMaskVariants || []) {\n    assert.equal(fs.existsSync(path.join(projectRoot,variant.maskAsset)),true,variant.maskAsset);\n    assert.equal(typeof masks[variant.maskAsset],"string");\n    if (variant.sourceBridgeMaskAsset) {\n      assert.equal(fs.existsSync(path.join(projectRoot,variant.sourceBridgeMaskAsset)),true,variant.sourceBridgeMaskAsset);\n      assert.equal(typeof masks[variant.sourceBridgeMaskAsset],"string");\n    }\n  }'''
@@ -110,42 +95,22 @@ def migrate_test_core() -> None:
 def migrate_build_inline_masks() -> None:
     rel = "app/tools/build-inline-masks.py"
     text = read(rel)
-    text = replace_once(
-        text,
-        '    "assets/kitchen/masks/04-06-seam-bridge.png",\n',
-        '    "assets/kitchen/masks/04-06-seam-bridge.png",\n    "assets/kitchen/masks/04-with-06-seam.png",\n',
-        "inline composite mask",
-    )
+    text = replace_once(text, '    "assets/kitchen/masks/04-06-seam-bridge.png",\n', '    "assets/kitchen/masks/04-06-seam-bridge.png",\n    "assets/kitchen/masks/04-with-06-seam.png",\n', "inline composite mask")
     write(rel, text)
 
 
 def migrate_update_technical_data() -> None:
     rel = "app/tools/update-technical-data.py"
     text = read(rel)
-    text = replace_once(
-        text,
-        '        "assets/kitchen/bridges/front-04-06-finish-bridge.png",\n        "assets/kitchen/masks/04-06-seam-bridge.png",\n',
-        '        "assets/kitchen/masks/04-06-seam-bridge.png",\n        "assets/kitchen/masks/04-with-06-seam.png",\n',
-        "technical seam tracking",
-    )
-    text = replace_once(
-        text,
-        '    files = data.setdefault("files", {})\n',
-        '    files = data.setdefault("files", {})\n    files.pop("assets/kitchen/bridges/front-04-06-finish-bridge.png", None)\n',
-        "technical stale bridge cleanup",
-    )
+    text = replace_once(text, '        "assets/kitchen/bridges/front-04-06-finish-bridge.png",\n        "assets/kitchen/masks/04-06-seam-bridge.png",\n', '        "assets/kitchen/masks/04-06-seam-bridge.png",\n        "assets/kitchen/masks/04-with-06-seam.png",\n', "technical seam tracking")
+    text = replace_once(text, '    files = data.setdefault("files", {})\n', '    files = data.setdefault("files", {})\n    files.pop("assets/kitchen/bridges/front-04-06-finish-bridge.png", None)\n', "technical stale bridge cleanup")
     write(rel, text)
 
 
 def migrate_validate_assets() -> None:
     rel = "app/tools/validate-assets.py"
     text = read(rel)
-    text = replace_once(
-        text,
-        '    "mask": "assets/kitchen/masks/04-06-seam-bridge.png",\n    "hosts": (',
-        '    "mask": "assets/kitchen/masks/04-06-seam-bridge.png",\n    "base": "assets/kitchen/masks/04.png",\n    "composite": "assets/kitchen/masks/04-with-06-seam.png",\n    "hosts": (',
-        "seam composite contract",
-    )
+    text = replace_once(text, '    "mask": "assets/kitchen/masks/04-06-seam-bridge.png",\n    "hosts": (', '    "mask": "assets/kitchen/masks/04-06-seam-bridge.png",\n    "base": "assets/kitchen/masks/04.png",\n    "composite": "assets/kitchen/masks/04-with-06-seam.png",\n    "hosts": (', "seam composite contract")
     old = '''    for host_rel in FRONT_SEAM_BRIDGE["hosts"]:\n        with Image.open(ROOT / host_rel) as host_image:\n            host = binary_support(host_image.convert("RGBA").getchannel("A"))\n        overlap = ImageChops.multiply(mask, host)\n        overlap_pixels = sum(1 for value in overlap.get_flattened_data() if value)\n        if overlap_pixels:\n            errors.append({\n                "path": FRONT_SEAM_BRIDGE["mask"],\n                "host": host_rel,\n                "error": "finish-bridge-overlaps-host-alpha",\n                "pixels": overlap_pixels,\n                "bounds": list(overlap.getbbox()),\n            })\n    return errors'''
     new = '''    for host_rel in FRONT_SEAM_BRIDGE["hosts"]:\n        with Image.open(ROOT / host_rel) as host_image:\n            host = binary_support(host_image.convert("RGBA").getchannel("A"))\n        overlap = ImageChops.multiply(mask, host)\n        overlap_pixels = sum(1 for value in overlap.get_flattened_data() if value)\n        if overlap_pixels:\n            errors.append({\n                "path": FRONT_SEAM_BRIDGE["mask"],\n                "host": host_rel,\n                "error": "finish-bridge-overlaps-host-alpha",\n                "pixels": overlap_pixels,\n                "bounds": list(overlap.getbbox()),\n            })\n    with Image.open(ROOT / FRONT_SEAM_BRIDGE["base"]) as base_image, Image.open(ROOT / FRONT_SEAM_BRIDGE["composite"]) as composite_image:\n        base_alpha = base_image.convert("RGBA").getchannel("A")\n        composite_alpha = composite_image.convert("RGBA").getchannel("A")\n    with Image.open(mask_path) as seam_image:\n        seam_alpha = seam_image.convert("RGBA").getchannel("A")\n    expected_alpha = ImageChops.lighter(base_alpha, seam_alpha)\n    composite_diff = ImageChops.difference(expected_alpha, composite_alpha)\n    if composite_diff.getbbox():\n        errors.append({\n            "path": FRONT_SEAM_BRIDGE["composite"],\n            "error": "finish-bridge-composite-mismatch",\n            "bounds": list(composite_diff.getbbox()),\n        })\n    return errors'''
     write(rel, replace_once(text, old, new, "composite mask validation"))
@@ -154,18 +119,8 @@ def migrate_validate_assets() -> None:
 def migrate_package() -> None:
     rel = "app/package.json"
     text = read(rel)
-    text = replace_once(
-        text,
-        '    "build:normalize-front-masks": "python3 tools/normalize-front-masks.py",\n    "build:inline-masks": "python3 tools/build-inline-masks.py",',
-        '    "build:normalize-front-masks": "python3 tools/normalize-front-masks.py",\n    "build:front-seam-masks": "python3 tools/build-front-seam-masks.py",\n    "build:inline-masks": "python3 tools/build-inline-masks.py",',
-        "package seam build script",
-    )
-    text = replace_once(
-        text,
-        '"build:normalize-front-masks && npm run build:inline-masks',
-        '"build:normalize-front-masks && npm run build:front-seam-masks && npm run build:inline-masks',
-        "package build order",
-    )
+    text = replace_once(text, '    "build:front-masks": "python3 tools/normalize-front-masks.py",\n    "build:inline-masks": "python3 tools/build-inline-masks.py",', '    "build:front-masks": "python3 tools/normalize-front-masks.py",\n    "build:front-seam-masks": "python3 tools/build-front-seam-masks.py",\n    "build:inline-masks": "python3 tools/build-inline-masks.py",', "package seam build script")
+    text = replace_once(text, 'npm run build:front-masks && npm run build:inline-masks', 'npm run build:front-masks && npm run build:front-seam-masks && npm run build:inline-masks', "package build order")
     write(rel, text)
 
 
