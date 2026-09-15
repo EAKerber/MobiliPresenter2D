@@ -17,6 +17,17 @@
       "size": 1954448
     },
     {
+      "alphaBounds": null,
+      "canonicalCanvas": true,
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "path": "app/assets/kitchen/bridges/front-04-06-finish-bridge.png",
+      "sha256": "64085d665f67f408b0cd67f69bebaa5a814b79eeed296c3d952e62988d7a440f",
+      "size": 6177
+    },
+    {
       "alphaBounds": [
         745,
         521,
@@ -271,6 +282,22 @@
       "path": "app/assets/kitchen/masks/03.png",
       "sha256": "ec948e091e98daa90d0ceb56d714e40a75d2e6bb7be6a435ad01bb8b0ffd93cb",
       "size": 6812
+    },
+    {
+      "alphaBounds": [
+        1209,
+        50,
+        1213,
+        60
+      ],
+      "canonicalCanvas": true,
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "path": "app/assets/kitchen/masks/04-06-seam-bridge.png",
+      "sha256": "5fb61a233c9f48f9f4b12d4cc6ecf8adab6810eba410e4e69afc8577a02a4381",
+      "size": 8562
     },
     {
       "alphaBounds": [
@@ -578,6 +605,11 @@
       "size": 1954448
     },
     {
+      "path": "app/assets/kitchen/bridges/front-04-06-finish-bridge.png",
+      "sha256": "64085d665f67f408b0cd67f69bebaa5a814b79eeed296c3d952e62988d7a440f",
+      "size": 6177
+    },
+    {
       "path": "app/assets/kitchen/bridges/stone-02-joint-bridge.png",
       "sha256": "e178e88edf0f412d1f0922bf335e7b524e80e888a3e2189fcd51ccc048a3d108",
       "size": 8225
@@ -656,6 +688,11 @@
       "path": "app/assets/kitchen/masks/03.png",
       "sha256": "ec948e091e98daa90d0ceb56d714e40a75d2e6bb7be6a435ad01bb8b0ffd93cb",
       "size": 6812
+    },
+    {
+      "path": "app/assets/kitchen/masks/04-06-seam-bridge.png",
+      "sha256": "5fb61a233c9f48f9f4b12d4cc6ecf8adab6810eba410e4e69afc8577a02a4381",
+      "size": 8562
     },
     {
       "path": "app/assets/kitchen/masks/04.png",
@@ -754,13 +791,13 @@
     },
     {
       "path": "app/data/mask-data.js",
-      "sha256": "cede3874388f6f39a1f09bacd088d8db01a720144eff7871fc60ceb27b91f099",
-      "size": 65283
+      "sha256": "f6af7afd8a01167c6e5efb8ad375510d3be576088d7c3bd52630553ccb4eccb7",
+      "size": 76769
     },
     {
       "path": "app/data/scene-data.js",
-      "sha256": "f6abcd9def5ccc1c99ecba7845d11df807af21bc6f637ed9181622b558d5a90b",
-      "size": 11211
+      "sha256": "d4ed1ead882e3e64b77dc949dd32e41901fc696259da29f84af31ef179425c02",
+      "size": 11842
     },
     {
       "path": "app/data/stone-data.js",
@@ -769,8 +806,8 @@
     },
     {
       "path": "app/data/technical-data.json",
-      "sha256": "73c7a5ef36e38d7157d822713a760c861ce847c331c119f62239c08b2706ecbc",
-      "size": 7887
+      "sha256": "ccc56b34878da8cd5fae4a4c576c13e568e5b3db05b7607fcac1efc624d761e2",
+      "size": 8291
     },
     {
       "path": "app/docs/CHECKPOINTS.md",
@@ -824,8 +861,8 @@
     },
     {
       "path": "app/tools/build-inline-masks.py",
-      "sha256": "2512e42fe4a1f85f2783ff2af71e65c4a9b5fa4de949b8ccffaf3f39002de8e1",
-      "size": 1290
+      "sha256": "23d0f67696b1144cf30bc74faa6bcceba95dadffdfb872e61d22ca8fcf067bc5",
+      "size": 1340
     },
     {
       "path": "app/tools/build-module02-alpha-v2.py",
@@ -884,18 +921,18 @@
     },
     {
       "path": "app/tools/test-core.js",
-      "sha256": "226f7f5f415800bfc0b50155d5b1efac1b05ec87065c90abb562fd870b6ede77",
-      "size": 5007
+      "sha256": "6f9ad93c9ef61c213fb84b3ac8a874ba9ec3414b5a243d2a4eddfd49c2ef2a08",
+      "size": 5715
     },
     {
       "path": "app/tools/update-technical-data.py",
-      "sha256": "61e8d269555b35f66e0155f3f034325ef331f3d8946aafa1fb366dfc48906f5e",
-      "size": 2558
+      "sha256": "720ed31e80b537e3d5192fd5050acad7777b7a57977d03cc7bc5cb1f13ba7bb3",
+      "size": 2676
     },
     {
       "path": "app/tools/validate-assets.py",
-      "sha256": "c8e8710a2813e013b72e784c6bb0731acc9d02261ae5a97a443a7053f47d2eb4",
-      "size": 4728
+      "sha256": "1de2112b50f39530bdfd780e22226bdef5bf66c343d620df806116705dc5376d",
+      "size": 6493
     },
     {
       "path": "app/tools/validate-r5a-pixelperfect.py",

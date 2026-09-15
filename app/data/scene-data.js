@@ -29,6 +29,7 @@
         "module-02-right-exposed-face",
         "stone-03-joint-bridge",
         "module-04",
+        "module-04-06-finish-bridge",
         "module-05",
         "module-06",
         "module-07",
@@ -185,6 +186,21 @@
         tags: ["tall", "refrigerator-zone"]
       },
       {
+        id: "module-04-06-finish-bridge",
+        alias: "04J",
+        label: "Emenda de acabamento 04–06",
+        kind: "finish-bridge",
+        zIndex: 401,
+        asset: "assets/kitchen/bridges/front-04-06-finish-bridge.png",
+        maskAsset: "assets/kitchen/masks/04-06-seam-bridge.png",
+        alphaBounds: null,
+        defaultVisible: true,
+        controllable: false,
+        hostIds: ["module-04", "module-06"],
+        finishGroups: ["fronts-all"],
+        tags: ["finish", "joint", "sink-zone", "refrigerator-zone"]
+      },
+      {
         id: "module-05",
         alias: "05",
         label: "Aéreo do fogão",
@@ -317,6 +333,7 @@
           "module-02",
           "module-03",
           "module-04",
+          "module-04-06-finish-bridge",
           "module-05",
           "module-06",
           "module-07"

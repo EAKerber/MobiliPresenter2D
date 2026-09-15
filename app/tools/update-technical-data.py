@@ -44,6 +44,8 @@ def main() -> int:
         "assets/kitchen/overlays/approved-stone-02.png",
         "assets/kitchen/overlays/approved-stone-03.png",
         "assets/kitchen/overlays/module-02-right-exposed-face.png",
+        "assets/kitchen/bridges/front-04-06-finish-bridge.png",
+        "assets/kitchen/masks/04-06-seam-bridge.png",
         "assets/kitchen/composicao-completa.png",
     })
     files = data.setdefault("files", {})
