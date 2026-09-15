@@ -42,7 +42,8 @@ class StoneSurfaceMasksTests(unittest.TestCase):
                 self.assertIsNone(ImageChops.multiply(mask,occupied).getbbox())
                 occupied=ImageChops.lighter(occupied,mask.point(lambda v:255 if v else 0))
 
-    def test_approved_materializer_bridge_visibility_follows_host(self):
+    def test_approved_materializer_bridges_require_both_hosts(self):
+        both={'module-02','module-03'}
         for asset_id,host,other in [
             ('stone-02-bridge','module-02','module-03'),
             ('stone-03-bridge','module-03','module-02'),
@@ -50,12 +51,15 @@ class StoneSurfaceMasksTests(unittest.TestCase):
             asset=next(item for item in self.config['assets'] if item['id']==asset_id)
             bridge_config=copy.deepcopy(self.config)
             bridge_config['assets']=[asset]
-            own=material_mask(bridge_config,{host})
-            hidden=material_mask(bridge_config,{other})
-            full=material_mask(self.config,{host})
-            self.assertIsNotNone(own.getbbox(),f'{asset_id} must contribute material pixels when its host alone is visible')
-            self.assertIsNone(hidden.getbbox(),f'{asset_id} must not contribute when its host is hidden')
-            self.assertIsNone(ImageChops.subtract(own,full).getbbox(),f'{asset_id} pixels must be included in the host-only material mask')
+            full=material_mask(bridge_config,both)
+            host_only=material_mask(bridge_config,{host})
+            other_only=material_mask(bridge_config,{other})
+            none=material_mask(bridge_config,set())
+            self.assertEqual(asset.get('requiresVisibleIds'),['module-02','module-03'])
+            self.assertIsNotNone(full.getbbox(),f'{asset_id} must contribute material pixels when both modules are visible')
+            self.assertIsNone(host_only.getbbox(),f'{asset_id} must not survive with only its former owner visible')
+            self.assertIsNone(other_only.getbbox(),f'{asset_id} must not survive with only the neighboring module visible')
+            self.assertIsNone(none.getbbox(),f'{asset_id} must not survive with neither module visible')
 
     def test_changed_source_requires_recalibration(self):
         changed=copy.deepcopy(self.config)
