@@ -24,7 +24,7 @@ jobs:
           node tools/variant_fidelity_manifest.js --cases reference/variant-cases.json --output /tmp/stone-gap-audit/variant-manifest.json
           python tools/render_variant_fidelity.py --manifest /tmp/stone-gap-audit/variant-manifest.json --output-dir /tmp/stone-gap-audit/variants
           python tools/validate_approved_stone.py --manifest /tmp/stone-gap-audit/variant-manifest.json --output-dir /tmp/stone-gap-audit/approved
-      - name: Measure exact original to graphite response on bridge and plinth residues
+      - name: Measure host-only residue under graphite and light stone
         run: |
           python - <<'PY'
           from pathlib import Path
@@ -40,9 +40,9 @@ jobs:
               return m
           def binary(im):return im.point(lambda v:255 if v else 0)
           def count(im):return sum(1 for v in im.getdata() if v)
-          def response(case, support):
+          def response(case, support, color):
               before=Image.open(out/'approved'/f'{case}.png').convert('RGB')
-              after=Image.open(out/'approved'/case/'graphite.png').convert('RGB')
+              after=Image.open(out/'approved'/case/f'{color}.png').convert('RGB')
               bands=ImageChops.difference(before,after).split()
               diff=ImageChops.lighter(ImageChops.lighter(bands[0],bands[1]),bands[2])
               supported=ImageChops.multiply(binary(diff),support)
@@ -52,54 +52,51 @@ jobs:
                       for x in range(bb[0],bb[2]):
                           if sp[x,y]:values.append(dp[x,y])
               return {
-                  'supportPixels':count(support),
-                  'changedPixels':count(supported),
+                  'supportPixels':count(support),'changedPixels':count(supported),
                   'unchangedPixels':count(support)-count(supported),
                   'maxDelta':max(values) if values else 0,
                   'meanDelta':round(sum(values)/len(values),3) if values else 0,
               }
-          assets={a['id']:a for a in cfg['assets']}
           records=[]
           cases={'stone-02':'module-03-hidden','stone-03':'module-02-hidden'}
           for group,case in cases.items():
               surfaces=poly(cfg['groups'][group]['surfaces'].values())
               plinth=poly([cfg['groups'][group]['surfaces']['plinth']])
-              group_alpha=Image.new('L',size,0)
-              bridge=None
+              group_alpha=Image.new('L',size,0); bridge=None
               for asset in cfg['assets']:
                   if asset['group']!=group:continue
                   alpha=binary(Image.open(root/asset['path']).convert('RGBA').getchannel('A'))
                   group_alpha=ImageChops.lighter(group_alpha,alpha)
                   if asset['id'].endswith('bridge'): bridge=alpha
               bridge_residual=ImageChops.multiply(bridge,ImageChops.invert(surfaces))
-              # Pixels of the group's visible stone assets below/around the declared plinth band.
               plinth_envelope=Image.new('L',size,0)
-              x0=480 if group=='stone-02' else 730
-              x1=770 if group=='stone-02' else 1225
+              x0=480 if group=='stone-02' else 730; x1=770 if group=='stone-02' else 1225
               ImageDraw.Draw(plinth_envelope).rectangle((x0,850,x1,915),fill=255)
               plinth_residual=ImageChops.multiply(ImageChops.multiply(group_alpha,plinth_envelope),ImageChops.invert(plinth))
-              rec={
+              records.append({
                   'group':group,'case':case,
                   'bridgeResidualBounds':list(bridge_residual.getbbox()) if bridge_residual.getbbox() else None,
-                  'bridgeResidualResponse':response(case,bridge_residual),
+                  'bridgeGraphite':response(case,bridge_residual,'graphite'),
+                  'bridgeLight':response(case,bridge_residual,'light'),
                   'plinthResidualBounds':list(plinth_residual.getbbox()) if plinth_residual.getbbox() else None,
-                  'plinthResidualResponse':response(case,plinth_residual),
-              }
-              records.append(rec)
-              # Save canonical comparison crop: original | graphite, for visual review.
+                  'plinthGraphite':response(case,plinth_residual,'graphite'),
+                  'plinthLight':response(case,plinth_residual,'light'),
+              })
               before=Image.open(out/'approved'/f'{case}.png').convert('RGB')
-              after=Image.open(out/'approved'/case/'graphite.png').convert('RGB')
+              graphite=Image.open(out/'approved'/case/'graphite.png').convert('RGB')
+              light=Image.open(out/'approved'/case/'light.png').convert('RGB')
               crop=(470,480,780,925) if group=='stone-02' else (720,430,1230,925)
-              a=before.crop(crop); b=after.crop(crop)
-              sheet=Image.new('RGB',(a.width*2,a.height),'white');sheet.paste(a,(0,0));sheet.paste(b,(a.width,0))
-              sheet.save(out/f'{group}-host-only-original-vs-graphite.png')
+              ims=[im.crop(crop) for im in (before,graphite,light)]
+              sheet=Image.new('RGB',(ims[0].width*3,ims[0].height),'white')
+              for i,im in enumerate(ims):sheet.paste(im,(i*ims[0].width,0))
+              sheet.save(out/f'{group}-host-only-original-graphite-light.png')
           (out/'residue-response.json').write_text(json.dumps(records,indent=2)+'\n')
           print(json.dumps(records,sort_keys=True))
           PY
       - uses: actions/upload-artifact@v4
         with:
-          name: stone-residue-response
+          name: stone-residue-light-review
           path: |
             /tmp/stone-gap-audit/residue-response.json
-            /tmp/stone-gap-audit/stone-02-host-only-original-vs-graphite.png
-            /tmp/stone-gap-audit/stone-03-host-only-original-vs-graphite.png
+            /tmp/stone-gap-audit/stone-02-host-only-original-graphite-light.png
+            /tmp/stone-gap-audit/stone-03-host-only-original-graphite-light.png
