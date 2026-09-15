@@ -15,59 +15,66 @@ jobs:
         with:
           python-version: '3.12'
       - run: python -m pip install -r tools/requirements.txt
-      - name: Measure current vs R4 protected region
+      - name: Audit all front masks
         run: |
-          mkdir -p /tmp/module02-mask-audit
+          mkdir -p /tmp/front-mask-audit
           python - <<'PY'
           from pathlib import Path
           import json
           from PIL import Image, ImageChops, ImageDraw
           root=Path('.')
-          layer=Image.open(root/'app/assets/kitchen/layers/02_inferior_fogao.png').convert('RGBA')
-          current=Image.open(root/'app/assets/kitchen/masks/02.png').convert('RGBA').getchannel('A')
-          alpha=layer.getchannel('A')
-          # R4 protected appliance rectangle was x=516..719, y=611..837.
-          r4=alpha.copy(); ImageDraw.Draw(r4).rectangle((516,611,719,837),fill=0)
-          # Current R5A protection is x=516..738, y=609..839.
-          current_expected=alpha.copy(); ImageDraw.Draw(current_expected).rectangle((516,609,738,839),fill=0)
-          assert current.tobytes()==current_expected.tobytes(), 'runtime mask no longer matches documented R5A rectangle'
-          extra=ImageChops.subtract(r4,current)
-          extra_bbox=extra.getbbox()
-          extra_count=sum(1 for v in extra.getdata() if v)
-          # Split added protection into right extension and top/bottom expansion.
-          right=Image.new('L',alpha.size,0); right.paste(extra.crop((720,609,739,840)),(720,609))
-          tb=ImageChops.subtract(extra,right)
-          def count(im): return sum(1 for v in im.getdata() if v)
-          report={
-            'layerAlphaBounds':list(alpha.getbbox()),
-            'currentMaskBounds':list(current.getbbox()),
-            'currentMaskPixels':count(current),
-            'r4HypotheticalMaskPixels':count(r4),
-            'extraProtectedAlphaPixels':extra_count,
-            'extraProtectedBounds':list(extra_bbox) if extra_bbox else None,
-            'rightExtensionAlphaPixels':count(right),
-            'topBottomExpansionAlphaPixels':count(tb),
+          mapping={
+            '01':'01_modulo_lavanderia.png',
+            '02':'02_inferior_fogao.png',
+            '03':'03_inferior_pia.png',
+            '04':'04_lateral_geladeira.png',
+            '05':'05_aereo_fogao.png',
+            '06':'06_aereo_pia.png',
+            '07':'07_aereo_geladeira.png',
           }
-          Path('/tmp/module02-mask-audit/report.json').write_text(json.dumps(report,indent=2)+'\n')
+          def binary(im): return im.point(lambda v:255 if v else 0)
+          def count(im): return sum(1 for v in im.getdata() if v)
+          layers={}; masks={}; records=[]
+          for key,name in mapping.items():
+            layer=Image.open(root/'app/assets/kitchen/layers'/name).convert('RGBA')
+            mask=Image.open(root/'app/assets/kitchen/masks'/f'{key}.png').convert('RGBA').getchannel('A')
+            la=binary(layer.getchannel('A')); ma=binary(mask)
+            layers[key]=la; masks[key]=ma
+            outside=ImageChops.multiply(ma,ImageChops.invert(la))
+            unmasked=ImageChops.multiply(la,ImageChops.invert(ma))
+            records.append({
+              'id':key,'layer':name,
+              'layerAlphaPixels':count(la),'maskPixels':count(ma),
+              'maskOutsideLayerPixels':count(outside),
+              'unmaskedLayerPixels':count(unmasked),
+              'layerBounds':list(la.getbbox()) if la.getbbox() else None,
+              'maskBounds':list(ma.getbbox()) if ma.getbbox() else None,
+              'unmaskedBounds':list(unmasked.getbbox()) if unmasked.getbbox() else None,
+            })
+            # source | green mask | red unmasked support
+            bbox=la.getbbox(); pad=12
+            x0=max(0,bbox[0]-pad);y0=max(0,bbox[1]-pad);x1=min(layer.width,bbox[2]+pad);y1=min(layer.height,bbox[3]+pad)
+            src=layer.crop((x0,y0,x1,y1))
+            def tint(mask,color):
+              t=Image.new('RGBA',src.size,color); mm=mask.crop((x0,y0,x1,y1)); t.putalpha(mm.point(lambda v:145 if v else 0)); return Image.alpha_composite(src,t)
+            pv=Image.new('RGBA',(src.width*3,src.height),(255,255,255,255))
+            pv.alpha_composite(src,(0,0));pv.alpha_composite(tint(ma,(0,255,0,255)),(src.width,0));pv.alpha_composite(tint(unmasked,(255,0,0,255)),(src.width*2,0))
+            pv.save(f'/tmp/front-mask-audit/{key}-source-mask-unmasked.png')
+          overlaps=[]
+          keys=list(mapping)
+          for i,a in enumerate(keys):
+            for b in keys[i+1:]:
+              n=count(ImageChops.multiply(masks[a],masks[b]))
+              if n: overlaps.append({'a':a,'b':b,'maskOverlapPixels':n})
+          # module02 R4 vs current diagnostic retained
+          alpha=layers['02']; current=masks['02']
+          r4=alpha.copy(); ImageDraw.Draw(r4).rectangle((516,611,719,837),fill=0)
+          extra=ImageChops.subtract(r4,current)
+          report={'records':records,'crossMaskOverlaps':overlaps,'module02R4ToCurrentExtraProtectedPixels':count(extra),'module02R4ToCurrentExtraProtectedBounds':list(extra.getbbox()) if extra.getbbox() else None}
+          Path('/tmp/front-mask-audit/report.json').write_text(json.dumps(report,indent=2)+'\n')
           print(json.dumps(report,sort_keys=True))
-          # Visual crop: source | current mask tint | pixels lost since R4 highlighted red.
-          crop=(480,585,765,865)
-          src=layer.crop(crop)
-          def composite_mask(mask,color):
-            base=src.copy()
-            m=mask.crop(crop)
-            tint=Image.new('RGBA',src.size,color)
-            tint.putalpha(m.point(lambda v:150 if v else 0))
-            return Image.alpha_composite(base,tint)
-          current_view=composite_mask(current,(0,255,0,255))
-          extra_view=composite_mask(extra,(255,0,0,255))
-          canvas=Image.new('RGBA',(src.width*3,src.height),(255,255,255,255))
-          canvas.alpha_composite(src,(0,0)); canvas.alpha_composite(current_view,(src.width,0)); canvas.alpha_composite(extra_view,(src.width*2,0))
-          canvas.save('/tmp/module02-mask-audit/source-current-extra.png')
-          extra_rgba=Image.new('RGBA',extra.size,(255,0,0,0)); extra_rgba.putalpha(extra)
-          extra_rgba.save('/tmp/module02-mask-audit/extra-protected-alpha.png')
           PY
       - uses: actions/upload-artifact@v4
         with:
-          name: module02-mask-audit
-          path: /tmp/module02-mask-audit
+          name: front-mask-audit
+          path: /tmp/front-mask-audit
