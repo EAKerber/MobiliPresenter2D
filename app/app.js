@@ -126,6 +126,7 @@
   const moduleToggles = [...document.querySelectorAll("[data-module-toggle]")];
   const layerGroups = [...document.querySelectorAll(".layer-group")];
   const finishLayers = [...document.querySelectorAll(".finish-layer")];
+  const entitiesById = new Map(scene.entities.map((entity) => [entity.id, entity]));
   const swatches = [...document.querySelectorAll("[data-color]")];
 
   const visibleCount = document.getElementById("visibleCount");
@@ -155,9 +156,23 @@
     syncFingerprint();
   }
 
+  function syncFinishMasks(resolved) {
+    finishLayers.forEach((layer) => {
+      const group = layer.closest(".layer-group");
+      const entity = entitiesById.get(group?.dataset.entityId);
+      const maskAsset = finishes.resolveMaskAsset(entity, resolved);
+      if (!maskAsset || layer.dataset.maskAsset === maskAsset) return;
+      const maskSource = inlineMasks[maskAsset];
+      if (!maskSource) throw new Error(`Máscara incorporada ausente: ${maskAsset}`);
+      layer.style.setProperty("--mask-image", `url("${maskSource}")`);
+      layer.dataset.maskAsset = maskAsset;
+    });
+  }
+
   function syncLayerVisibility() {
     renderStone(state);
     const resolved = visibility.resolveVisibility(scene, state);
+    syncFinishMasks(resolved);
     layerGroups.forEach((layer) => {
       const result = resolved[layer.dataset.entityId];
       const isVisible = Boolean(result?.visible);

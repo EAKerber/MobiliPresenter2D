@@ -276,6 +276,38 @@
       "alphaBounds": [
         1209,
         50,
+        1213,
+        60
+      ],
+      "canonicalCanvas": true,
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "path": "app/assets/kitchen/masks/04-06-seam-bridge.png",
+      "sha256": "5fb61a233c9f48f9f4b12d4cc6ecf8adab6810eba410e4e69afc8577a02a4381",
+      "size": 8562
+    },
+    {
+      "alphaBounds": [
+        1209,
+        50,
+        1231,
+        900
+      ],
+      "canonicalCanvas": true,
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "path": "app/assets/kitchen/masks/04-with-06-seam.png",
+      "sha256": "64e25ff3dcd38adf0afb0e68bb7d6fd130ab0578f687d2a6d10dc241c4d4e1d9",
+      "size": 8151
+    },
+    {
+      "alphaBounds": [
+        1209,
+        50,
         1231,
         900
       ],
@@ -569,8 +601,8 @@
     },
     {
       "path": "app/app.js",
-      "sha256": "d57045b8b9abe54cf2c4b47dc9c3cf9755331375f72a49dea7582a9037ecb00c",
-      "size": 12329
+      "sha256": "13d936a5d24d248f6e509d210ee45648ca6aa596ff1a162891aa334fa13d7c46",
+      "size": 13039
     },
     {
       "path": "app/assets/kitchen/base.png",
@@ -658,6 +690,16 @@
       "size": 6812
     },
     {
+      "path": "app/assets/kitchen/masks/04-06-seam-bridge.png",
+      "sha256": "5fb61a233c9f48f9f4b12d4cc6ecf8adab6810eba410e4e69afc8577a02a4381",
+      "size": 8562
+    },
+    {
+      "path": "app/assets/kitchen/masks/04-with-06-seam.png",
+      "sha256": "64e25ff3dcd38adf0afb0e68bb7d6fd130ab0578f687d2a6d10dc241c4d4e1d9",
+      "size": 8151
+    },
+    {
       "path": "app/assets/kitchen/masks/04.png",
       "sha256": "2525bc8969cb9ace372452601266d8c9b6d8f6d0150105268235c442db44e249",
       "size": 8171
@@ -729,8 +771,8 @@
     },
     {
       "path": "app/core/finishes.js",
-      "sha256": "64cbb42d2224a722a71a4fe38b8b2a8b624dd022335bf9859a081f6f23d58d43",
-      "size": 1021
+      "sha256": "796cceea7f30aea2902d3c307015808780cb353e8406823b67692a25b414b7c3",
+      "size": 1441
     },
     {
       "path": "app/core/state.js",
@@ -744,8 +786,8 @@
     },
     {
       "path": "app/core/validation.js",
-      "sha256": "c6fcae9eebfa81222ae9c2f45763fadd8aaac5edcac789d1d57e303eb3616795",
-      "size": 4347
+      "sha256": "6a81a9404d6abe899f0f2abe9b867d67507a678e1596dc86f7e7d3e9877403a5",
+      "size": 5166
     },
     {
       "path": "app/core/visibility.js",
@@ -754,13 +796,13 @@
     },
     {
       "path": "app/data/mask-data.js",
-      "sha256": "cede3874388f6f39a1f09bacd088d8db01a720144eff7871fc60ceb27b91f099",
-      "size": 65283
+      "sha256": "d2f2aa248af74abeb85e65a29489d4c9230c988361cc32610924be11cfd7e8e0",
+      "size": 87705
     },
     {
       "path": "app/data/scene-data.js",
-      "sha256": "f6abcd9def5ccc1c99ecba7845d11df807af21bc6f637ed9181622b558d5a90b",
-      "size": 11211
+      "sha256": "22370e94681b75f703b5a1e123cf0d9d95ede9012508e0cd0ca79010a1ada56f",
+      "size": 11470
     },
     {
       "path": "app/data/stone-data.js",
@@ -769,8 +811,8 @@
     },
     {
       "path": "app/data/technical-data.json",
-      "sha256": "73c7a5ef36e38d7157d822713a760c861ce847c331c119f62239c08b2706ecbc",
-      "size": 7887
+      "sha256": "db0c2f8819433218f757d24d0f139dc45c5bd0135b560531022b3a94d6657241",
+      "size": 8336
     },
     {
       "path": "app/docs/CHECKPOINTS.md",
@@ -799,8 +841,8 @@
     },
     {
       "path": "app/package.json",
-      "sha256": "bfe18f506c115472d587c8c5cbca362ef2dc5bd98eea82edb1041dc07b2c859c",
-      "size": 859
+      "sha256": "194d6b9f3e7df62986607e42e2cb30107cbff122c1ff20c622c9071affeaeba3",
+      "size": 966
     },
     {
       "path": "app/scripts/build-static.sh",
@@ -823,9 +865,14 @@
       "size": 6248
     },
     {
+      "path": "app/tools/build-front-seam-masks.py",
+      "sha256": "ddfbcfe03beb73487a8fa6436282f42b78c99c598b276cd528e7df7099cfc42f",
+      "size": 1867
+    },
+    {
       "path": "app/tools/build-inline-masks.py",
-      "sha256": "2512e42fe4a1f85f2783ff2af71e65c4a9b5fa4de949b8ccffaf3f39002de8e1",
-      "size": 1290
+      "sha256": "8f193009577c46b0a8fb9923a68169fec7dcbaaa04b677147463b07a787a5660",
+      "size": 1388
     },
     {
       "path": "app/tools/build-module02-alpha-v2.py",
@@ -884,18 +931,18 @@
     },
     {
       "path": "app/tools/test-core.js",
-      "sha256": "226f7f5f415800bfc0b50155d5b1efac1b05ec87065c90abb562fd870b6ede77",
-      "size": 5007
+      "sha256": "994361fa478110ca030d160f845ed6ee4730f476c789738fc0c4621b0cf0ca85",
+      "size": 6175
     },
     {
       "path": "app/tools/update-technical-data.py",
-      "sha256": "61e8d269555b35f66e0155f3f034325ef331f3d8946aafa1fb366dfc48906f5e",
-      "size": 2558
+      "sha256": "6ba37d4f6d46b5e56e6fd4b0ad7249caf9c868e6563cf2a0a88d060692d9b788",
+      "size": 2740
     },
     {
       "path": "app/tools/validate-assets.py",
-      "sha256": "c8e8710a2813e013b72e784c6bb0731acc9d02261ae5a97a443a7053f47d2eb4",
-      "size": 4728
+      "sha256": "cbe9e16db85a2f30ec1779e17d8a94d910c0503d8327a5abbd19fdf8757e253f",
+      "size": 7355
     },
     {
       "path": "app/tools/validate-r5a-pixelperfect.py",

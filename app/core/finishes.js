@@ -27,9 +27,21 @@
     return adaptiveOverlayOpacity(color);
   }
 
+  function resolveMaskAsset(entity, resolvedVisibility) {
+    const variants = entity?.finishMaskVariants || [];
+    for (const variant of variants) {
+      const requiredIds = variant.requiresVisibleIds || [];
+      if (requiredIds.length && requiredIds.every((id) => resolvedVisibility?.[id]?.visible)) {
+        return variant.maskAsset;
+      }
+    }
+    return entity?.maskAsset || null;
+  }
+
   global.CasaModulesFinishes = Object.freeze({
     adaptiveOverlayOpacity,
     parseHexColor,
+    resolveMaskAsset,
     resolveOverlayOpacity
   });
 })(window);

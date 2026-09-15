@@ -58,10 +58,66 @@ def front_mask_host_errors() -> list[dict[str, object]]:
         })
     return errors
 
+FRONT_SEAM_BRIDGE = {
+    "mask": "assets/kitchen/masks/04-06-seam-bridge.png",
+    "base": "assets/kitchen/masks/04.png",
+    "composite": "assets/kitchen/masks/04-with-06-seam.png",
+    "hosts": (
+        "assets/kitchen/layers/04_lateral_geladeira.png",
+        "assets/kitchen/layers/06_aereo_pia.png",
+    ),
+    "pixels": 23,
+    "bounds": [1209, 50, 1213, 60],
+}
+
+def front_seam_bridge_errors() -> list[dict[str, object]]:
+    errors: list[dict[str, object]] = []
+    mask_path = ROOT / FRONT_SEAM_BRIDGE["mask"]
+    with Image.open(mask_path) as mask_image:
+        mask = binary_support(mask_image.convert("RGBA").getchannel("A"))
+    support_pixels = sum(1 for value in mask.get_flattened_data() if value)
+    bounds = list(mask.getbbox()) if mask.getbbox() else None
+    if support_pixels != FRONT_SEAM_BRIDGE["pixels"] or bounds != FRONT_SEAM_BRIDGE["bounds"]:
+        errors.append({
+            "path": FRONT_SEAM_BRIDGE["mask"],
+            "error": "finish-bridge-support-mismatch",
+            "pixels": support_pixels,
+            "bounds": bounds,
+            "expectedPixels": FRONT_SEAM_BRIDGE["pixels"],
+            "expectedBounds": FRONT_SEAM_BRIDGE["bounds"],
+        })
+    for host_rel in FRONT_SEAM_BRIDGE["hosts"]:
+        with Image.open(ROOT / host_rel) as host_image:
+            host = binary_support(host_image.convert("RGBA").getchannel("A"))
+        overlap = ImageChops.multiply(mask, host)
+        overlap_pixels = sum(1 for value in overlap.get_flattened_data() if value)
+        if overlap_pixels:
+            errors.append({
+                "path": FRONT_SEAM_BRIDGE["mask"],
+                "host": host_rel,
+                "error": "finish-bridge-overlaps-host-alpha",
+                "pixels": overlap_pixels,
+                "bounds": list(overlap.getbbox()),
+            })
+    with Image.open(ROOT / FRONT_SEAM_BRIDGE["base"]) as base_image, Image.open(ROOT / FRONT_SEAM_BRIDGE["composite"]) as composite_image:
+        base_alpha = base_image.convert("RGBA").getchannel("A")
+        composite_alpha = composite_image.convert("RGBA").getchannel("A")
+    with Image.open(mask_path) as seam_image:
+        seam_alpha = seam_image.convert("RGBA").getchannel("A")
+    expected_alpha = ImageChops.lighter(base_alpha, seam_alpha)
+    composite_diff = ImageChops.difference(expected_alpha, composite_alpha)
+    if composite_diff.getbbox():
+        errors.append({
+            "path": FRONT_SEAM_BRIDGE["composite"],
+            "error": "finish-bridge-composite-mismatch",
+            "bounds": list(composite_diff.getbbox()),
+        })
+    return errors
+
 def main() -> int:
     data = json.loads(TECH.read_text(encoding="utf-8"))
     canvas = (data["canvas"]["width"], data["canvas"]["height"])
-    errors = front_mask_host_errors()
+    errors = front_mask_host_errors() + front_seam_bridge_errors()
     files = {}
     for rel, expected in data["files"].items():
         path = ROOT / rel

@@ -44,9 +44,12 @@ def main() -> int:
         "assets/kitchen/overlays/approved-stone-02.png",
         "assets/kitchen/overlays/approved-stone-03.png",
         "assets/kitchen/overlays/module-02-right-exposed-face.png",
+        "assets/kitchen/masks/04-06-seam-bridge.png",
+        "assets/kitchen/masks/04-with-06-seam.png",
         "assets/kitchen/composicao-completa.png",
     })
     files = data.setdefault("files", {})
+    files.pop("assets/kitchen/bridges/front-04-06-finish-bridge.png", None)
     for rel in sorted(tracked):
         path = ROOT / rel
         if path.suffix.lower() == ".png" and path.is_file(): files[rel] = record(path)

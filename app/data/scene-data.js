@@ -177,6 +177,13 @@
         zIndex: 400,
         asset: "assets/kitchen/layers/04_lateral_geladeira.png",
         maskAsset: "assets/kitchen/masks/04.png",
+        finishMaskVariants: [
+          {
+            requiresVisibleIds: ["module-06"],
+            maskAsset: "assets/kitchen/masks/04-with-06-seam.png",
+            sourceBridgeMaskAsset: "assets/kitchen/masks/04-06-seam-bridge.png"
+          }
+        ],
         alphaBounds: { x: 1205, y: 44, width: 38, height: 870 },
         defaultVisible: true,
         controllable: true,
