@@ -1,4 +1,4 @@
-name: Review module04-06 finish seam temp
+name: Review module04-06 conditional seam temp
 on:
   push:
     branches: [fix/module04-seam-bridge]
@@ -24,45 +24,91 @@ jobs:
           npm install --prefix /tmp/seam-browser --no-audit --no-fund playwright@1.62.1
           /tmp/seam-browser/node_modules/.bin/playwright install --with-deps chromium
           python -m pip install -r tools/requirements.txt
-      - name: Capture historical and stacking variants
+      - name: Capture conditional seam states and references
         env:
           NODE_PATH: /tmp/seam-browser/node_modules
         run: |
           mkdir -p /tmp/module04-seam-review
           git worktree add --detach /tmp/pre29 e83d318eab52fdd9c8787d5d5d190205cf960aad
+          git worktree add --detach /tmp/main d8cb437720d919988d9d2cac43d211aabc006a11
           node - <<'NODE'
+          const fs=require('node:fs');
           const path=require('node:path');
           const {pathToFileURL}=require('node:url');
           const {chromium}=require('playwright');
           (async()=>{
             const out='/tmp/module04-seam-review';
             const browser=await chromium.launch({headless:true});
-            async function open(root){const p=await browser.newPage({viewport:{width:1366,height:768}});await p.goto(pathToFileURL(path.resolve(root,'index.html')).href);await p.evaluate(()=>Promise.all(Array.from(document.images,i=>i.decode())));return p;}
-            async function capture(root,name,mutate){
-              const p=await open(root);await p.getByRole('button',{name:'Aplicar Preto',exact:true}).click();if(mutate)await p.evaluate(mutate);await p.locator('#viewer').screenshot({path:`${out}/${name}.png`,animations:'disabled'});await p.close();
+            async function open(root){
+              const p=await browser.newPage({viewport:{width:1366,height:768}});
+              await p.goto(pathToFileURL(path.resolve(root,'index.html')).href);
+              await p.evaluate(()=>Promise.all(Array.from(document.images,i=>i.decode()));
+              return p;
             }
-            await capture('/tmp/pre29/app','pre29');
-            await capture('app','base');
-            await capture('app','no-isolation',()=>{document.querySelector('.layer-group[data-entity-id="module-04-06-finish-bridge"]').style.isolation='auto';});
-            await capture('app','nested-group',()=>{const b=document.querySelector('.layer-group[data-entity-id="module-04-06-finish-bridge"]');b.style.isolation='auto';document.querySelector('.layer-group[data-entity-id="module-04"]').append(b);});
-            await capture('app','nested-finish',()=>{const b=document.querySelector('.layer-group[data-entity-id="module-04-06-finish-bridge"]');const f=b.querySelector('.finish-layer');document.querySelector('.layer-group[data-entity-id="module-04"]').append(f);});
+            async function shot(page,name){await page.locator('#viewer').screenshot({path:`${out}/${name}.png`,animations:'disabled'});}
+            async function apply(page,label){await page.getByRole('button',{name:label,exact:true}).click();}
+            const cur=await open('app');
+            const finish=cur.locator('.layer-group[data-entity-id="module-04"] .finish-layer');
+            await apply(cur,'Aplicar Preto');
+            const records=[];
+            records.push({state:'black-both',mask:await finish.getAttribute('data-mask-asset')});
+            await shot(cur,'current-black-both');
+            await cur.locator('[data-module-toggle="module-06"]').setChecked(false);
+            records.push({state:'black-no06',mask:await finish.getAttribute('data-mask-asset')});
+            await shot(cur,'current-black-no06');
+            await cur.locator('[data-module-toggle="module-06"]').setChecked(true);
+            records.push({state:'black-restored',mask:await finish.getAttribute('data-mask-asset')});
+            await apply(cur,'Aplicar Branco TX');
+            records.push({state:'white-both',mask:await finish.getAttribute('data-mask-asset')});
+            await shot(cur,'current-white-both');
+            fs.writeFileSync(`${out}/runtime-mask-states.json`,JSON.stringify(records,null,2));
+            if(records[0].mask!=='assets/kitchen/masks/04-with-06-seam.png') throw Error('both-host black did not use composite mask');
+            if(records[1].mask!=='assets/kitchen/masks/04.png') throw Error('module06-hidden did not restore clean mask04');
+            if(records[2].mask!=='assets/kitchen/masks/04-with-06-seam.png' || records[3].mask!=='assets/kitchen/masks/04-with-06-seam.png') throw Error('composite mask did not restore');
+            await cur.close();
+            for(const [root,prefix] of [['/tmp/pre29/app','pre29'],['/tmp/main/app','main']]){
+              const p=await open(root);
+              await apply(p,'Aplicar Preto');
+              await shot(p,`${prefix}-black-both`);
+              await p.locator('[data-module-toggle="module-06"]').setChecked(false);
+              await shot(p,`${prefix}-black-no06`);
+              if(prefix==='pre29'){
+                await p.locator('[data-module-toggle="module-06"]').setChecked(true);
+                await apply(p,'Aplicar Branco TX');
+                await shot(p,'pre29-white-both');
+              }
+              await p.close();
+            }
             await browser.close();
           })().catch(e=>{console.error(e);process.exit(1)});
           NODE
-      - name: Compare stacking variants
+      - name: Prove seamless and hidden-neighbor equivalence
         run: |
           python - <<'PY'
           from pathlib import Path
           from PIL import Image, ImageChops
           import json
-          out=Path('/tmp/module04-seam-review'); ref=Image.open(out/'pre29.png').convert('RGB'); report={}
-          for name in ('base','no-isolation','nested-group','nested-finish'):
-              im=Image.open(out/f'{name}.png').convert('RGB'); diff=ImageChops.difference(im,ref); bands=diff.split(); support=ImageChops.lighter(ImageChops.lighter(bands[0],bands[1]),bands[2]); changed=sum(1 for v in support.get_flattened_data() if v); report[name]={'differentPixels':changed,'bounds':list(support.getbbox()) if support.getbbox() else None}
-          best=min(report,key=lambda k:report[k]['differentPixels']); report['best']=best
-          (out/'stacking-report.json').write_text(json.dumps(report,indent=2)+'\n'); print(json.dumps(report,sort_keys=True))
-          assert report[best]['differentPixels']==0, report
+          out=Path('/tmp/module04-seam-review')
+          pairs={
+              'black-both':('current-black-both.png','pre29-black-both.png'),
+              'white-both':('current-white-both.png','pre29-white-both.png'),
+              'black-no06':('current-black-no06.png','main-black-no06.png'),
+          }
+          report={}
+          for label,(a_name,b_name) in pairs.items():
+              a=Image.open(out/a_name).convert('RGB'); b=Image.open(out/b_name).convert('RGB')
+              diff=ImageChops.difference(a,b); r,g,bl=diff.split(); support=ImageChops.lighter(ImageChops.lighter(r,g),bl)
+              changed=sum(1 for v in support.get_flattened_data() if v)
+              report[label]={'differentPixels':changed,'bounds':list(support.getbbox()) if support.getbbox() else None}
+              assert changed==0,(label,report[label])
+          crop=(690,18,730,50)
+          for name in ('current-black-both','current-white-both','current-black-no06'):
+              im=Image.open(out/f'{name}.png').convert('RGB').crop(crop)
+              im.resize((im.width*12,im.height*12),Image.Resampling.NEAREST).save(out/f'{name}-seam-12x.png')
+          (out/'equivalence.json').write_text(json.dumps(report,indent=2)+'\n')
+          print(json.dumps(report,sort_keys=True))
           PY
       - uses: actions/upload-artifact@v4
         with:
-          name: module04-seam-stacking-probe
+          name: module04-seam-composite-review
           path: /tmp/module04-seam-review
