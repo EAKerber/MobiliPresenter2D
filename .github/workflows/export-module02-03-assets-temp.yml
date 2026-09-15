@@ -1,0 +1,26 @@
+name: Export module02-03 assets temp
+on:
+  push:
+    branches: [fix/module02-03-geometry-seams]
+    paths: ['.github/workflows/export-module02-03-assets-temp.yml']
+permissions:
+  contents: read
+jobs:
+  export:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/upload-artifact@v4
+        with:
+          name: module02-03-canonical-assets
+          path: |
+            app/assets/kitchen/layers/02_inferior_fogao.png
+            app/assets/kitchen/layers/03_inferior_pia.png
+            app/assets/kitchen/masks/02.png
+            app/assets/kitchen/masks/03.png
+            app/assets/kitchen/variants/stone-02-cozinha-exposed-right.png
+            app/assets/kitchen/variants/stone-03-pia-exposed-left.png
+            app/assets/kitchen/bridges/stone-02-joint-bridge.png
+            app/assets/kitchen/bridges/stone-03-joint-bridge.png
+            app/assets/kitchen/overlays/module-02-right-exposed-face.png
+            app/assets/kitchen/base.png
