@@ -97,7 +97,7 @@
       {
         id: "module-01",
         alias: "01",
-        label: "Lavanderia",
+        label: "Aéreo da lavanderia",
         kind: "module",
         zIndex: 100,
         asset: "assets/kitchen/layers/01_modulo_lavanderia.png",
@@ -232,6 +232,7 @@
         alphaBounds: { x: 1232, y: 46, width: 274, height: 185 },
         defaultVisible: true,
         controllable: true,
+        requiresVisibleIds: ["module-04"],
         hostId: null,
         finishGroups: ["fronts-all"],
         tags: ["upper", "refrigerator-zone"]
@@ -247,6 +248,7 @@
         alphaBounds: { x: 715, y: 266, width: 534, height: 113 },
         defaultVisible: true,
         controllable: true,
+        requiresVisibleIds: ["module-04", "module-06"],
         hostId: null,
         finishGroups: [],
         tags: ["lighting"]

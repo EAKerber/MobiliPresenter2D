@@ -46,6 +46,20 @@
       }
 
       if (result.visible) {
+        for (const requirementId of entity.requiresVisibleIds || []) {
+          const requirement = entitiesById.get(requirementId);
+          if (!requirement) {
+            result = { visible: false, reason: "requirement-missing" };
+            break;
+          }
+          if (!resolveEntity(requirement.id).visible) {
+            result = { visible: false, reason: "requirement-hidden" };
+            break;
+          }
+        }
+      }
+
+      if (result.visible) {
         for (const occluderId of entity.occludedByIds || []) {
           const occluder = entitiesById.get(occluderId);
           if (!occluder) {

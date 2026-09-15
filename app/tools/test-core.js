@@ -5,7 +5,7 @@ const vm = require("node:vm");
 const projectRoot = path.resolve(__dirname, "..");
 const sandbox = { window: {} };
 vm.createContext(sandbox);
-for (const relativePath of ["data/scene-data.js","data/mask-data.js","core/state.js","core/visibility.js","core/validation.js","core/fingerprint.js","core/finishes.js"]) {
+for (const relativePath of ["data/scene-data.js","data/catalog-data.js","data/mask-data.js","core/state.js","core/visibility.js","core/validation.js","core/fingerprint.js","core/finishes.js","core/pricing.js"]) {
   vm.runInContext(fs.readFileSync(path.join(projectRoot, relativePath), "utf8"), sandbox, { filename: relativePath });
 }
 const scene=sandbox.window.CASA_EM_MODULOS_SCENE;
@@ -15,9 +15,17 @@ const visibility=sandbox.window.CasaModulesVisibility;
 const validation=sandbox.window.CasaModulesValidation;
 const fingerprints=sandbox.window.CasaModulesFingerprint;
 const finishes=sandbox.window.CasaModulesFinishes;
+const catalog=sandbox.window.CASA_EM_MODULOS_CATALOG;
+const pricing=sandbox.window.CasaModulesPricing;
 const technical=JSON.parse(fs.readFileSync(path.join(projectRoot,"data/technical-data.json"),"utf8"));
 assert.equal(scene.entities.length,17);
 assert.deepEqual(Array.from(validation.validateScene(scene)),[]);
+assert.equal(catalog.modules.length,7);
+for (const product of catalog.modules) {
+  const entity=scene.entities.find((candidate)=>candidate.id===product.entityId);
+  assert.equal(entity?.kind,"module",product.entityId);
+  assert.equal(entity?.controllable,true,product.entityId);
+}
 for (const entity of scene.entities) {
   assert.equal(fs.existsSync(path.join(projectRoot,entity.asset)),true,entity.asset);
   if(entity.maskAsset){
@@ -96,6 +104,11 @@ finishVisibility=visibility.resolveVisibility(scene,initial);
 assert.equal(finishes.resolveMaskAsset(module04,finishVisibility),"assets/kitchen/masks/04.png");
 core.setEntityVisibility(initial,"module-06",true);
 assert.equal(finishes.resolveMaskAsset(module04,visibility.resolveVisibility(scene,initial)),"assets/kitchen/masks/04-with-06-seam.png");
+core.setEntityVisibility(initial,"module-04",false);
+let dependencyVisibility=visibility.resolveVisibility(scene,initial);
+assert.equal(dependencyVisibility["module-07"].reason,"requirement-hidden");
+assert.equal(dependencyVisibility["lighting-08"].reason,"requirement-hidden");
+core.setEntityVisibility(initial,"module-04",true);
 core.setEntityVisibility(initial,"module-03",false);
 let r=visibility.resolveVisibility(scene,initial);
 assert.equal(r["faucet-approved"].reason,"host-hidden");
@@ -113,4 +126,10 @@ assert.equal(r["stone-02-joint-bridge"].reason,"host-hidden");
 assert.equal(r["stone-03-joint-bridge"].reason,"host-hidden");
 assert.equal(r["module-02-right-exposed-face"].reason,"host-hidden");
 assert.equal(visibility.getVisibleEntities(scene,initial).length,11);
+const unavailableEstimate=pricing.calculatePublicEstimate(scene,initial,catalog,visibility.resolveVisibility(scene,initial));
+assert.equal(unavailableEstimate.status,"unavailable");
+const pricedCatalog={...catalog,modules:catalog.modules.map((item)=>({...item,publicPriceCents:10000})),accessories:catalog.accessories.map((item)=>({...item,publicPriceCents:5000}))};
+const pricedEstimate=pricing.calculatePublicEstimate(scene,initial,pricedCatalog,visibility.resolveVisibility(scene,initial));
+assert.equal(pricedEstimate.status,"ready");
+assert.equal(pricedEstimate.totalCents,65000);
 process.stdout.write(`${JSON.stringify({passed:true,initialFingerprint:fp,entities:17,controllableEntities:8})}\n`);

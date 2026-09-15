@@ -21,6 +21,11 @@
           errors.push({ code: "occluder-missing", entityId: entity.id, occluderId });
         }
       });
+      (entity.requiresVisibleIds || []).forEach((requirementId) => {
+        if (!scene.entities.some((candidate) => candidate.id === requirementId)) {
+          errors.push({ code: "requirement-missing", entityId: entity.id, requirementId });
+        }
+      });
       (entity.finishMaskVariants || []).forEach((variant, variantIndex) => {
         if (typeof variant.maskAsset !== "string" || !variant.maskAsset) {
           errors.push({ code: "finish-mask-variant-missing-asset", entityId: entity.id, variantIndex });
@@ -94,6 +99,7 @@
       const dependencyIds = [
         ...(entity.hostIds || (entity.hostId ? [entity.hostId] : [])),
         ...(entity.occludedByIds || []),
+        ...(entity.requiresVisibleIds || []),
         substitutionByReplacement.get(entity.id)
       ].filter(Boolean);
       dependencyIds.forEach((dependencyId) => {

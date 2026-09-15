@@ -8,19 +8,33 @@
   const validation = global.CasaModulesValidation;
   const fingerprint = global.CasaModulesFingerprint;
   const finishes = global.CasaModulesFinishes;
+  const catalog = global.CASA_EM_MODULOS_CATALOG;
+  const pricing = global.CasaModulesPricing;
 
-  if (!scene || !inlineMasks || !core || !visibility || !validation || !fingerprint || !finishes) {
+  if (!scene || !inlineMasks || !core || !visibility || !validation || !fingerprint || !finishes || !catalog || !pricing) {
     throw new Error("Não foi possível carregar os dados da cena 2D.");
   }
   validation.assertValidScene(scene);
 
   let state = core.createInitialState(scene);
   let finishMode = "original";
+  let currentStep = "modules";
 
   const sceneBase = document.getElementById("sceneBase");
   const sceneLayers = document.getElementById("sceneLayers");
   const moduleList = document.getElementById("moduleList");
   const finishSwatches = document.getElementById("finishSwatches");
+  const moduleDetail = document.getElementById("moduleDetail");
+  const selectionFrame = document.getElementById("selectionFrame");
+  const viewerHint = document.getElementById("viewerHint");
+  const summaryContent = document.getElementById("summaryContent");
+  const nextStepButton = document.getElementById("nextStepButton");
+  const modulesPanel = document.getElementById("modulesPanel");
+  const frontFinishPanel = document.getElementById("frontFinishPanel");
+  const stonePanel = document.getElementById("stonePanel");
+  const summaryPanel = document.getElementById("summaryPanel");
+  const lightingToggle = document.getElementById("lightingToggle");
+  const catalogByEntityId = new Map(catalog.modules.map((module) => [module.entityId, module]));
 
   function renderSceneFromData() {
     sceneBase.src = scene.baseAsset;
@@ -64,11 +78,15 @@
 
     scene.entities
       .filter((entity) => entity.controllable)
+      .filter((entity) => entity.kind === "module")
       .sort((left, right) => left.zIndex - right.zIndex || left.id.localeCompare(right.id))
       .forEach((entity) => {
+        const product = catalogByEntityId.get(entity.id);
+        if (!product) return;
         const label = document.createElement("label");
-        label.className = "module-row";
+        label.className = "module-card";
         label.htmlFor = `toggle-${entity.id}`;
+        label.dataset.entityId = entity.id;
 
         const input = document.createElement("input");
         input.id = `toggle-${entity.id}`;
@@ -80,10 +98,22 @@
         number.className = "module-number";
         number.textContent = entity.alias;
 
-        const text = document.createElement("span");
-        text.textContent = entity.label;
+        const copy = document.createElement("span");
+        copy.className = "module-card__copy";
+        const title = document.createElement("strong");
+        title.textContent = product.title;
+        const dimensions = document.createElement("small");
+        dimensions.textContent = product.dimensions;
+        copy.append(title, dimensions);
 
-        label.append(input, number, text);
+        const detail = document.createElement("button");
+        detail.type = "button";
+        detail.className = "module-card__detail";
+        detail.dataset.selectEntity = entity.id;
+        detail.setAttribute("aria-label", `Ver detalhes de ${product.title}`);
+        detail.textContent = "Ver";
+
+        label.append(input, number, copy, detail);
         moduleList.append(label);
       });
   }
@@ -105,18 +135,147 @@
       finishSwatches.append(button);
     });
 
-    const customLabel = document.createElement("label");
-    customLabel.className = "custom-color";
-    customLabel.title = "Escolher outra cor";
+    // Choices shown to buyers are deliberately limited to the published presets.
+  }
 
-    const customMarker = document.createElement("span");
-    const customInput = document.createElement("input");
-    customInput.id = "customColor";
-    customInput.type = "color";
-    customInput.value = "#918981";
-    customInput.setAttribute("aria-label", "Escolher outra cor");
-    customLabel.append(customMarker, customInput);
-    finishSwatches.append(customLabel);
+  function selectionStyle(entity) {
+    const bounds = entity?.alphaBounds;
+    if (!bounds) return null;
+    return {
+      left: `${(bounds.x / scene.canvas.width) * 100}%`,
+      top: `${(bounds.y / scene.canvas.height) * 100}%`,
+      width: `${(bounds.width / scene.canvas.width) * 100}%`,
+      height: `${(bounds.height / scene.canvas.height) * 100}%`
+    };
+  }
+
+  function updateSelection(resolved) {
+    const entity = entitiesById.get(state.selectedEntityId);
+    const product = catalogByEntityId.get(state.selectedEntityId);
+    const isVisible = Boolean(entity && resolved?.[entity.id]?.visible);
+    const style = isVisible ? selectionStyle(entity) : null;
+    selectionFrame.hidden = !style;
+    if (style) Object.assign(selectionFrame.style, style);
+    if (!product) {
+      moduleDetail.replaceChildren();
+      viewerHint.textContent = "Escolha um módulo para ver detalhes";
+      return;
+    }
+
+    viewerHint.textContent = product.title;
+    const eyebrow = document.createElement("p");
+    eyebrow.className = "module-detail__eyebrow";
+    eyebrow.textContent = `${product.category.toUpperCase()} · ${product.sku}`;
+    const title = document.createElement("h3");
+    title.textContent = product.title;
+    const dimensions = document.createElement("p");
+    dimensions.className = "module-detail__dimensions";
+    dimensions.textContent = product.dimensions;
+    const benefitsHeading = document.createElement("h4");
+    benefitsHeading.textContent = "Por que escolher";
+    const benefits = document.createElement("ul");
+    product.benefits.forEach((benefit) => {
+      const item = document.createElement("li");
+      item.textContent = benefit;
+      benefits.append(item);
+    });
+    const requirements = document.createElement("p");
+    requirements.className = "module-detail__requirements";
+    const reason = resolved?.[entity.id]?.reason;
+    if (reason === "requirement-hidden") {
+      requirements.textContent = "Indisponível enquanto o módulo estrutural necessário estiver fora da composição.";
+    } else if (product.requirements.length) {
+      requirements.textContent = product.requirements[0];
+    }
+    moduleDetail.replaceChildren(eyebrow, title, dimensions, benefitsHeading, benefits, requirements);
+  }
+
+  function updateModuleCards(resolved) {
+    document.querySelectorAll(".module-card").forEach((card) => {
+      const entityId = card.dataset.entityId;
+      const entity = entitiesById.get(entityId);
+      const result = resolved?.[entityId];
+      const input = card.querySelector("input");
+      const isVisible = Boolean(result?.visible);
+      const blocked = result?.reason === "requirement-hidden" || result?.reason === "requirement-missing";
+      card.classList.toggle("is-selected", state.selectedEntityId === entityId);
+      card.classList.toggle("is-blocked", blocked);
+      card.classList.toggle("is-included", isVisible);
+      if (input && entity) {
+        input.checked = Boolean(state.visibilityByEntity[entity.id]);
+        input.setAttribute("aria-describedby", blocked ? `blocked-${entity.id}` : "");
+      }
+      let status = card.querySelector(".module-card__status");
+      if (!status) {
+        status = document.createElement("small");
+        status.className = "module-card__status";
+        status.id = `blocked-${entityId}`;
+        card.querySelector(".module-card__copy")?.append(status);
+      }
+      status.textContent = blocked ? "Requer suporte incluído" : isVisible ? "Incluído" : "Não incluído";
+    });
+  }
+
+  function updateAccessoryControls(resolved) {
+    const result = resolved?.["lighting-08"];
+    if (!lightingToggle || !result) return;
+    lightingToggle.checked = Boolean(state.visibilityByEntity["lighting-08"]);
+    lightingToggle.closest(".accessory-toggle")?.classList.toggle(
+      "is-blocked",
+      result.reason === "requirement-hidden" || result.reason === "requirement-missing"
+    );
+  }
+
+  function formatCurrency(cents) {
+    return new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(cents / 100);
+  }
+
+  function renderSummary(resolved) {
+    const estimate = pricing.calculatePublicEstimate(scene, state, catalog, resolved);
+    const included = catalog.modules.filter((module) => resolved?.[module.entityId]?.visible);
+    const list = document.createElement("ul");
+    list.className = "summary-list";
+    included.forEach((module) => {
+      const item = document.createElement("li");
+      item.textContent = `${module.sku} · ${module.title}`;
+      list.append(item);
+    });
+    const finish = document.createElement("p");
+    finish.className = "summary-note";
+    const finishGroup = scene.finishGroups.find((group) => group.id === "fronts-all");
+    const finishPreset = finishGroup?.presets.find((preset) => preset.id === state.frontFinishId);
+    finish.textContent = `Frentes: ${finishPreset?.label || "Original"}. Caixaria: Branco TX.`;
+    const price = document.createElement("div");
+    price.className = "price-state";
+    if (estimate.status === "ready") {
+      price.innerHTML = `<span>Valor estimado</span><strong>${formatCurrency(estimate.totalCents)}</strong>`;
+    } else {
+      price.innerHTML = "<span>Valor do conjunto</span><strong>Em configuração</strong><p>Os valores só aparecem depois que a tabela comercial for publicada.</p>";
+    }
+    const cta = document.createElement("button");
+    cta.type = "button";
+    cta.className = "button button--secondary";
+    cta.disabled = true;
+    cta.title = "A solicitação de orçamento será ativada com o serviço comercial.";
+    cta.textContent = "Solicitar proposta (em breve)";
+    summaryContent.replaceChildren(list, finish, price, cta);
+  }
+
+  function syncStep(resolved) {
+    const isModules = currentStep === "modules";
+    const isFinishes = currentStep === "finishes";
+    modulesPanel.hidden = !isModules;
+    frontFinishPanel.hidden = !isFinishes;
+    stonePanel.hidden = !isFinishes;
+    summaryPanel.hidden = currentStep !== "summary";
+    document.querySelectorAll("[data-step]").forEach((button) => {
+      const active = button.dataset.step === currentStep;
+      button.classList.toggle("is-active", active);
+      button.setAttribute("aria-current", active ? "step" : "false");
+    });
+    const next = currentStep === "modules" ? "finishes" : currentStep === "finishes" ? "summary" : "modules";
+    nextStepButton.textContent = currentStep === "summary" ? "Editar módulos" : `Continuar para ${next === "finishes" ? "acabamentos" : "resumo"} →`;
+    renderSummary(resolved);
   }
 
   renderSceneFromData();
@@ -180,6 +339,10 @@
       layer.setAttribute("aria-hidden", String(!isVisible));
       layer.dataset.visibilityReason = result?.reason || "default-hidden";
     });
+    updateModuleCards(resolved);
+    updateAccessoryControls(resolved);
+    updateSelection(resolved);
+    syncStep(resolved);
   }
 
   function setEntityVisibility(entityId, isVisible) {
@@ -222,10 +385,11 @@
       layer.style.setProperty("--finish-opacity", String(overlayOpacity));
     });
 
-    customColor.value = color;
+    if (customColor) customColor.value = color;
     textureLabel.textContent = "Carregar imagem de amadeirado";
     resetFinishButton.disabled = false;
     syncFingerprint();
+    syncLayerVisibility();
   }
 
   function applyTexture(file) {
@@ -251,6 +415,7 @@
       textureLabel.textContent = file.name;
       resetFinishButton.disabled = false;
       syncFingerprint();
+      syncLayerVisibility();
     });
     reader.readAsDataURL(file);
   }
@@ -271,6 +436,7 @@
     textureInput.value = "";
     resetFinishButton.disabled = true;
     syncFingerprint();
+    syncLayerVisibility();
   }
 
   moduleToggles.forEach((toggle) => {
@@ -280,10 +446,10 @@
     });
   });
 
-  showAllButton.addEventListener("click", () => setAllVisibility(true));
-  hideAllButton.addEventListener("click", () => setAllVisibility(false));
+  if (showAllButton) showAllButton.addEventListener("click", () => setAllVisibility(true));
+  if (hideAllButton) hideAllButton.addEventListener("click", () => setAllVisibility(false));
 
-  gridButton.addEventListener("click", () => {
+  if (gridButton) gridButton.addEventListener("click", () => {
     state.gridVisible = alignmentGrid.classList.toggle("is-visible");
     gridButton.setAttribute("aria-pressed", String(state.gridVisible));
     syncFingerprint();
@@ -293,10 +459,35 @@
     swatch.addEventListener("click", () => applyColor(swatch.dataset.color, swatch));
   });
 
-  customColor.addEventListener("input", () => applyColor(customColor.value));
-  textureButton.addEventListener("click", () => textureInput.click());
-  textureInput.addEventListener("change", () => applyTexture(textureInput.files?.[0]));
+  if (customColor) customColor.addEventListener("input", () => applyColor(customColor.value));
+  if (textureButton) textureButton.addEventListener("click", () => textureInput.click());
+  if (textureInput) textureInput.addEventListener("change", () => applyTexture(textureInput.files?.[0]));
   resetFinishButton.addEventListener("click", resetFinish);
+
+  moduleList.addEventListener("click", (event) => {
+    const button = event.target.closest("[data-select-entity]");
+    if (!button) return;
+    event.preventDefault();
+    state.selectedEntityId = button.dataset.selectEntity;
+    syncLayerVisibility();
+  });
+
+  document.querySelectorAll("[data-step]").forEach((button) => {
+    button.addEventListener("click", () => {
+      currentStep = button.dataset.step;
+      syncLayerVisibility();
+    });
+  });
+
+  nextStepButton.addEventListener("click", () => {
+    currentStep = currentStep === "modules" ? "finishes" : currentStep === "finishes" ? "summary" : "modules";
+    syncLayerVisibility();
+  });
+
+  lightingToggle.addEventListener("change", () => {
+    setEntityVisibility("lighting-08", lightingToggle.checked);
+    updateVisibleCount();
+  });
 
   const stoneColor = document.getElementById("stoneColor");
   const resetStone = document.getElementById("resetStone");
@@ -314,6 +505,7 @@
     document.getElementById("stoneStatus").textContent = "Simulação de cor sobre a textura existente.";
     renderStone(state);
     syncFingerprint();
+    syncLayerVisibility();
   }
   stoneButtons.forEach(button => button.addEventListener("click", () => applyStone(button.dataset.stoneColor)));
   stoneColor.addEventListener("input", () => applyStone(stoneColor.value));
@@ -325,7 +517,7 @@
     resetFinish();
     applyStone(null);
     alignmentGrid.classList.remove("is-visible");
-    gridButton.setAttribute("aria-pressed", "false");
+    if (gridButton) gridButton.setAttribute("aria-pressed", "false");
     syncFingerprint();
   });
 

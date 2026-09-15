@@ -17,18 +17,14 @@
           <span class="brand__mark" aria-hidden="true">▱</span>
           <div>
             <h1>Casa em Módulos</h1>
-            <p>Composição interativa por camadas</p>
+            <p>Monte sua cozinha por módulos</p>
           </div>
         </div>
 
         <div class="topbar__actions">
-          <button class="button button--secondary" id="gridButton" type="button" aria-label="Malha" aria-pressed="false">
-            <span aria-hidden="true">▦</span>
-            <span class="button__wide-label">Malha</span>
-          </button>
           <button class="button button--secondary" id="restoreButton" type="button" aria-label="Restaurar">
             <span aria-hidden="true">↺</span>
-            <span class="button__wide-label">Restaurar</span>
+            <span class="button__wide-label">Recomeçar</span>
           </button>
         </div>
       </div>
@@ -48,39 +44,43 @@
 
           <canvas id="stoneCanvas" class="scene-layer stone-color-layer" width="1536" height="1024" aria-hidden="true"></canvas>
           <div class="alignment-grid" id="alignmentGrid" aria-hidden="true"></div>
+          <div class="selection-frame" id="selectionFrame" aria-hidden="true"></div>
         </div>
 
         <footer class="viewer-card__footer">
           <p class="layer-status" aria-live="polite">
             <span aria-hidden="true"></span>
-            <strong id="visibleCount">8</strong> de <span id="totalCount">8</span> camadas visíveis
+            <strong id="visibleCount">8</strong> de <span id="totalCount">8</span> itens incluídos
           </p>
-          <p>1536 × 1024 px · origem preservada</p>
+          <p id="viewerHint">Escolha um módulo para ver detalhes</p>
         </footer>
       </section>
 
       <aside class="controls">
-        <section class="panel">
+        <nav class="flow-nav" aria-label="Etapas da configuração">
+          <button class="flow-step is-active" type="button" data-step="modules"><span>1</span>Módulos</button>
+          <button class="flow-step" type="button" data-step="finishes"><span>2</span>Acabamentos</button>
+          <button class="flow-step" type="button" data-step="summary"><span>3</span>Resumo</button>
+        </nav>
+
+        <section class="panel" id="modulesPanel">
           <header class="panel__header">
             <div>
               <h2>Módulos</h2>
-              <p>Marque ou desmarque cada camada.</p>
-            </div>
-            <div class="icon-actions">
-              <button id="showAllButton" type="button" title="Mostrar todos" aria-label="Mostrar todos">◉</button>
-              <button id="hideAllButton" type="button" title="Ocultar todos" aria-label="Ocultar todos">○</button>
+              <p>Inclua apenas o que faz sentido para o seu ambiente.</p>
             </div>
           </header>
 
           <div class="module-list" id="moduleList"></div>
+          <section id="moduleDetail" class="module-detail" aria-live="polite"></section>
         </section>
 
-        <section class="panel">
+        <section class="panel" id="frontFinishPanel">
           <header class="finish-heading">
             <span aria-hidden="true">◐</span>
             <div>
-              <h2>Acabamento geral</h2>
-              <p>Todas as frentes da composição</p>
+              <h2>Frentes</h2>
+              <p>Uma escolha global. A caixaria permanece em Branco TX.</p>
             </div>
           </header>
 
@@ -90,7 +90,7 @@
               <div class="swatches" id="finishSwatches"></div>
             </fieldset>
 
-            <fieldset>
+            <fieldset class="internal-control">
               <legend>Textura</legend>
               <input id="textureInput" type="file" accept="image/*" hidden />
               <button class="button button--upload" id="textureButton" type="button">
@@ -105,29 +105,47 @@
             </button>
           </div>
         </section>
-        <section class="panel">
+        <section class="panel" id="stonePanel">
           <header class="finish-heading"><div><h2>Pedra</h2><p>Cor da bancada, revestimento e rodapé</p></div></header>
           <div class="finish-controls">
             <fieldset><legend>Cor da pedra</legend><div class="swatches" id="stoneSwatches">
               <button type="button" class="swatch" data-stone-color="#34383d" style="--swatch:#34383d" aria-label="Pedra grafite" title="Grafite" aria-pressed="false"></button>
               <button type="button" class="swatch" data-stone-color="#d8d8d2" style="--swatch:#d8d8d2" aria-label="Pedra clara" title="Clara" aria-pressed="false"></button>
               <button type="button" class="swatch" data-stone-color="#968371" style="--swatch:#968371" aria-label="Pedra areia" title="Areia" aria-pressed="false"></button>
-              <label class="custom-color" title="Outra cor da pedra"><span></span><input id="stoneColor" type="color" value="#34383d" aria-label="Outra cor da pedra"></label>
+              <label class="custom-color internal-control" title="Outra cor da pedra"><span></span><input id="stoneColor" type="color" value="#34383d" aria-label="Outra cor da pedra"></label>
             </div></fieldset>
             <p id="stoneStatus" aria-live="polite">Simulação de cor sobre a textura existente.</p>
             <button type="button" class="button button--reset" id="resetStone" disabled>Voltar à pedra original</button>
           </div>
+          <label class="accessory-toggle" for="lightingToggle">
+            <input id="lightingToggle" type="checkbox" checked />
+            <span><strong>Iluminação embutida</strong><small>Realça a bancada e requer os módulos estruturais do conjunto.</small></span>
+          </label>
         </section>
+
+        <section class="panel summary-panel" id="summaryPanel" hidden>
+          <header class="finish-heading">
+            <span aria-hidden="true">✓</span>
+            <div><h2>Sua composição</h2><p>Revise antes de solicitar a proposta.</p></div>
+          </header>
+          <div id="summaryContent"></div>
+        </section>
+
+        <footer class="flow-actions">
+          <button id="nextStepButton" class="button button--primary" type="button">Continuar para acabamentos →</button>
+        </footer>
       </aside>
     </main>
 
     <script src="data/scene-data.js"></script>
+    <script src="data/catalog-data.js"></script>
     <script src="data/mask-data.js"></script>
     <script src="core/state.js"></script>
     <script src="core/visibility.js"></script>
     <script src="core/validation.js"></script>
     <script src="core/fingerprint.js"></script>
     <script src="core/finishes.js"></script>
+    <script src="core/pricing.js"></script>
     <script src="data/stone-data.js"></script>
     <script src="core/stone.js"></script>
     <script src="app.js"></script>
