@@ -8,85 +8,98 @@ permissions:
 jobs:
   audit:
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 8
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
       - run: python -m pip install -r tools/requirements.txt
-      - name: Measure stone-like support outside declared surfaces
+      - name: Rebuild canonical approved stone states
         run: |
-          mkdir -p /tmp/stone-gap-audit
+          mkdir -p /tmp/stone-gap-audit/variants /tmp/stone-gap-audit/approved
+          node tools/variant_fidelity_manifest.js --cases reference/variant-cases.json --output /tmp/stone-gap-audit/variant-manifest.json
+          python tools/render_variant_fidelity.py --manifest /tmp/stone-gap-audit/variant-manifest.json --output-dir /tmp/stone-gap-audit/variants
+          python tools/validate_approved_stone.py --manifest /tmp/stone-gap-audit/variant-manifest.json --output-dir /tmp/stone-gap-audit/approved
+      - name: Measure exact original to graphite response on bridge and plinth residues
+        run: |
           python - <<'PY'
           from pathlib import Path
           from PIL import Image, ImageChops, ImageDraw
-          import json, math, collections
+          import json
           root=Path('.')
+          out=Path('/tmp/stone-gap-audit')
           cfg=json.loads((root/'review-assets/stone-masks/config.json').read_text())
           size=tuple(cfg['canvas'])
-          def polygon_mask(polys):
-              m=Image.new('L',size,0);d=ImageDraw.Draw(m)
+          def poly(polys):
+              m=Image.new('L',size,0); d=ImageDraw.Draw(m)
               for p in polys:d.polygon(p,fill=255)
               return m
           def binary(im):return im.point(lambda v:255 if v else 0)
           def count(im):return sum(1 for v in im.getdata() if v)
-          def comps(mask, image, stone_buckets):
-              p=mask.load(); seen=set(); out=[]; bbox=mask.getbbox(); rgb=image.convert('RGB').load()
-              if not bbox:return out
-              for y in range(bbox[1],bbox[3]):
-                  for x in range(bbox[0],bbox[2]):
-                      if not p[x,y] or (x,y) in seen:continue
-                      stack=[(x,y)];seen.add((x,y));pts=[]
-                      while stack:
-                          q=stack.pop();pts.append(q);qx,qy=q
-                          for nx,ny in ((qx-1,qy),(qx+1,qy),(qx,qy-1),(qx,qy+1)):
-                              if 0<=nx<size[0] and 0<=ny<size[1] and p[nx,ny] and (nx,ny) not in seen:
-                                  seen.add((nx,ny));stack.append((nx,ny))
-                      xs=[a for a,b in pts];ys=[b for a,b in pts]
-                      colors=[rgb[a,b] for a,b in pts]
-                      mean=[round(sum(c[i] for c in colors)/len(colors),1) for i in range(3)]
-                      similar=sum(((c[0]//12,c[1]//12,c[2]//12) in stone_buckets) for c in colors)
-                      out.append({'pixels':len(pts),'bbox':[min(xs),min(ys),max(xs)+1,max(ys)+1],'meanRgb':mean,'stoneBucketMatchPixels':similar,'stoneBucketMatchRatio':round(similar/len(pts),3)})
-              out.sort(key=lambda c:(c['stoneBucketMatchPixels'],c['pixels']),reverse=True)
-              return out
-          report=[]
-          for asset in cfg['assets']:
-              image=Image.open(root/asset['path']).convert('RGBA');alpha=binary(image.getchannel('A'))
-              group=cfg['groups'][asset['group']]
-              surfaces=polygon_mask(group['surfaces'].values())
-              material=ImageChops.multiply(alpha,surfaces)
-              # Quantized stone palette learned only from declared material pixels.
-              rgb=image.convert('RGB'); rp=rgb.load(); mp=material.load(); buckets=set()
-              bb=material.getbbox()
+          def response(case, support):
+              before=Image.open(out/'approved'/f'{case}.png').convert('RGB')
+              after=Image.open(out/'approved'/case/'graphite.png').convert('RGB')
+              bands=ImageChops.difference(before,after).split()
+              diff=ImageChops.lighter(ImageChops.lighter(bands[0],bands[1]),bands[2])
+              supported=ImageChops.multiply(binary(diff),support)
+              values=[]; dp=diff.load(); sp=support.load(); bb=support.getbbox()
               if bb:
                   for y in range(bb[1],bb[3]):
                       for x in range(bb[0],bb[2]):
-                          if mp[x,y]:
-                              c=rp[x,y]; buckets.add((c[0]//12,c[1]//12,c[2]//12))
-              outside=ImageChops.multiply(alpha,ImageChops.invert(surfaces))
-              inside=ImageChops.multiply(alpha,surfaces)
-              items=comps(outside,image,buckets)
-              # Highlight only outside-surface pixels whose quantized RGB resembles declared stone.
-              suspect=Image.new('L',size,0);sp=suspect.load();op=outside.load()
-              if outside.getbbox():
-                  for y in range(outside.getbbox()[1],outside.getbbox()[3]):
-                      for x in range(outside.getbbox()[0],outside.getbbox()[2]):
-                          if op[x,y]:
-                              c=rp[x,y]
-                              if (c[0]//12,c[1]//12,c[2]//12) in buckets:sp[x,y]=255
-              vis=Image.new('RGBA',size,(255,0,0,0));vis.putalpha(suspect);vis.save(Path('/tmp/stone-gap-audit')/(asset['id']+'-stone-like-outside.png'))
-              report.append({
-                  'id':asset['id'],'group':asset['group'],
-                  'alphaPixels':count(alpha),'insideDeclaredSurfacePixels':count(inside),
-                  'outsideDeclaredSurfacePixels':count(outside),'stoneLikeOutsidePixels':count(suspect),
-                  'stoneLikeOutsideBounds':list(suspect.getbbox()) if suspect.getbbox() else None,
-                  'topOutsideComponents':items[:15],
-              })
-          Path('/tmp/stone-gap-audit/report.json').write_text(json.dumps(report,indent=2)+'\n')
-          print(json.dumps(report,sort_keys=True))
+                          if sp[x,y]:values.append(dp[x,y])
+              return {
+                  'supportPixels':count(support),
+                  'changedPixels':count(supported),
+                  'unchangedPixels':count(support)-count(supported),
+                  'maxDelta':max(values) if values else 0,
+                  'meanDelta':round(sum(values)/len(values),3) if values else 0,
+              }
+          assets={a['id']:a for a in cfg['assets']}
+          records=[]
+          cases={'stone-02':'module-03-hidden','stone-03':'module-02-hidden'}
+          for group,case in cases.items():
+              surfaces=poly(cfg['groups'][group]['surfaces'].values())
+              plinth=poly([cfg['groups'][group]['surfaces']['plinth']])
+              group_alpha=Image.new('L',size,0)
+              bridge=None
+              for asset in cfg['assets']:
+                  if asset['group']!=group:continue
+                  alpha=binary(Image.open(root/asset['path']).convert('RGBA').getchannel('A'))
+                  group_alpha=ImageChops.lighter(group_alpha,alpha)
+                  if asset['id'].endswith('bridge'): bridge=alpha
+              bridge_residual=ImageChops.multiply(bridge,ImageChops.invert(surfaces))
+              # Pixels of the group's visible stone assets below/around the declared plinth band.
+              plinth_envelope=Image.new('L',size,0)
+              x0=480 if group=='stone-02' else 730
+              x1=770 if group=='stone-02' else 1225
+              ImageDraw.Draw(plinth_envelope).rectangle((x0,850,x1,915),fill=255)
+              plinth_residual=ImageChops.multiply(ImageChops.multiply(group_alpha,plinth_envelope),ImageChops.invert(plinth))
+              rec={
+                  'group':group,'case':case,
+                  'bridgeResidualBounds':list(bridge_residual.getbbox()) if bridge_residual.getbbox() else None,
+                  'bridgeResidualResponse':response(case,bridge_residual),
+                  'plinthResidualBounds':list(plinth_residual.getbbox()) if plinth_residual.getbbox() else None,
+                  'plinthResidualResponse':response(case,plinth_residual),
+              }
+              records.append(rec)
+              # Save canonical comparison crop: original | graphite, for visual review.
+              before=Image.open(out/'approved'/f'{case}.png').convert('RGB')
+              after=Image.open(out/'approved'/case/'graphite.png').convert('RGB')
+              crop=(470,480,780,925) if group=='stone-02' else (720,430,1230,925)
+              a=before.crop(crop); b=after.crop(crop)
+              sheet=Image.new('RGB',(a.width*2,a.height),'white');sheet.paste(a,(0,0));sheet.paste(b,(a.width,0))
+              sheet.save(out/f'{group}-host-only-original-vs-graphite.png')
+          (out/'residue-response.json').write_text(json.dumps(records,indent=2)+'\n')
+          print(json.dumps(records,sort_keys=True))
           PY
       - uses: actions/upload-artifact@v4
         with:
-          name: stone-gap-audit
-          path: /tmp/stone-gap-audit
+          name: stone-residue-response
+          path: |
+            /tmp/stone-gap-audit/residue-response.json
+            /tmp/stone-gap-audit/stone-02-host-only-original-vs-graphite.png
+            /tmp/stone-gap-audit/stone-03-host-only-original-vs-graphite.png
