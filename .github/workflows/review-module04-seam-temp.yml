@@ -42,7 +42,7 @@ jobs:
             async function open(root){
               const p=await browser.newPage({viewport:{width:1366,height:768}});
               await p.goto(pathToFileURL(path.resolve(root,'index.html')).href);
-              await p.evaluate(()=>Promise.all(Array.from(document.images,i=>i.decode()));
+              await p.evaluate(()=>Promise.all(Array.from(document.images,i=>i.decode())));
               return p;
             }
             async function shot(page,name){await page.locator('#viewer').screenshot({path:`${out}/${name}.png`,animations:'disabled'});}
