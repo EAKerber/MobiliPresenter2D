@@ -1,20 +1,30 @@
 #!/usr/bin/env python3
-"""Compose candidate assets over R2 target variants and produce visual review sheets."""
+"""Compose candidate assets over deterministic target variants and produce visual review sheets."""
 from __future__ import annotations
 
 import argparse
+import hashlib
+import io
 import json
 from pathlib import Path
 from typing import Any
 
 from PIL import Image, ImageChops, ImageDraw, ImageFont
+from render_variant_fidelity import render_case
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
+APP_ROOT = REPO_ROOT / "app"
 
 
 def safe_repo_path(relative: str) -> Path:
     candidate = (REPO_ROOT / relative).resolve()
     candidate.relative_to(REPO_ROOT.resolve())
+    return candidate
+
+
+def safe_app_path(relative: str) -> Path:
+    candidate = (APP_ROOT / relative).resolve()
+    candidate.relative_to(APP_ROOT.resolve())
     return candidate
 
 
@@ -111,6 +121,64 @@ def build_review_sheet(
     return sheet.convert("RGB")
 
 
+def png_sha256(image: Image.Image) -> str:
+    buffer = io.BytesIO()
+    image.save(buffer, format="PNG")
+    return hashlib.sha256(buffer.getvalue()).hexdigest()
+
+
+def declared_source_variant(metadata: dict[str, Any], target_variant: str) -> tuple[str, str] | None:
+    provenance = metadata.get("provenance") or {}
+    for reference in provenance.get("sourceReferences") or []:
+        prefix = f"variant:{target_variant}@"
+        if isinstance(reference, str) and reference.startswith(prefix):
+            return target_variant, reference[len(prefix):]
+    return None
+
+
+def historical_baseline(record: dict[str, Any], expected_size: tuple[int, int]) -> tuple[Image.Image, str, str] | None:
+    metadata_path = record.get("metadataPath")
+    if not isinstance(metadata_path, str):
+        return None
+    metadata = json.loads(safe_repo_path(metadata_path).read_text(encoding="utf-8"))
+    target_variant = record["targetVariant"]
+    declared = declared_source_variant(metadata, target_variant)
+    if declared is None:
+        return None
+    _, expected_fingerprint = declared
+    provenance = metadata.get("provenance") or {}
+    expected_source_sha = provenance.get("sourceFrameSha256")
+    manifest_refs = [
+        ref for ref in provenance.get("sourceReferences") or []
+        if isinstance(ref, str) and ref.endswith(".json")
+    ]
+    for manifest_ref in manifest_refs:
+        manifest_path = safe_repo_path(manifest_ref)
+        if not manifest_path.exists():
+            continue
+        manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+        if manifest.get("schemaVersion") != "VariantRenderManifest 0.1":
+            continue
+        if manifest.get("sceneId") != record.get("targetScene"):
+            continue
+        case = next((item for item in manifest.get("cases", []) if item.get("id") == target_variant), None)
+        if case is None or case.get("fingerprint") != expected_fingerprint:
+            continue
+        manifest_size = (manifest["canvas"]["width"], manifest["canvas"]["height"])
+        if manifest_size != expected_size:
+            raise RuntimeError(f"historical source canvas mismatch: {record['id']}")
+        with Image.open(safe_app_path(manifest["baseAsset"])) as source:
+            base = source.convert("RGBA")
+        baseline = render_case(base, case, expected_size)
+        actual_sha = png_sha256(baseline)
+        if expected_source_sha and actual_sha != expected_source_sha:
+            raise RuntimeError(
+                f"historical source frame drift for {record['id']}: {actual_sha} != {expected_source_sha}"
+            )
+        return baseline, expected_fingerprint, manifest_ref
+    raise RuntimeError(f"declared historical source manifest unavailable: {record['id']}")
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--variant-manifest", type=Path, required=True)
@@ -149,8 +217,14 @@ def main() -> int:
         baseline_path = args.variant_render_dir / f"{target_variant}.png"
         if not baseline_path.exists():
             raise RuntimeError(f"missing rendered target variant: {baseline_path}")
-        with Image.open(baseline_path) as source:
-            baseline = source.convert("RGBA")
+        historical = historical_baseline(record, expected_size)
+        if historical is None:
+            with Image.open(baseline_path) as source:
+                baseline = source.convert("RGBA")
+            baseline_fingerprint = cases[target_variant]["fingerprint"]
+            baseline_source = "current-variant-render"
+        else:
+            baseline, baseline_fingerprint, baseline_source = historical
         with Image.open(safe_repo_path(record["imagePath"])) as source:
             candidate = source.convert("RGBA")
         if baseline.size != expected_size or candidate.size != expected_size:
@@ -181,7 +255,9 @@ def main() -> int:
             "id": candidate_id,
             "role": record["role"],
             "targetVariant": target_variant,
-            "targetVariantFingerprint": cases[target_variant]["fingerprint"],
+            "targetVariantFingerprint": baseline_fingerprint,
+            "reviewBaselineSource": baseline_source,
+            "currentTargetVariantFingerprint": cases[target_variant]["fingerprint"],
             "imageSha256": record["imageSha256"],
             "authorizedRoi": record["authorizedRoi"],
             "differenceBounds": list(bounds) if bounds else None,
