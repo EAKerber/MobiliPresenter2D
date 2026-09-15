@@ -1,0 +1,55 @@
+name: Materialize front mask clipping temp
+on:
+  push:
+    branches: [fix/front-mask-host-clipping]
+    paths: ['.github/workflows/materialize-front-mask-temp.yml']
+permissions:
+  contents: write
+jobs:
+  materialize:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: python -m pip install -r tools/requirements.txt
+      - name: Materialize host-clipped masks and derived data
+        run: |
+          cd app
+          python tools/normalize-front-masks.py
+          python tools/build-inline-masks.py
+          python tools/update-technical-data.py
+          npm test
+          cd ..
+          python tools/refresh-baseline-manifest.py
+          python tools/validate-baseline.py
+      - name: Commit generated outputs with CAS readback
+        env:
+          TARGET_BRANCH: fix/front-mask-host-clipping
+          EXPECTED_HEAD: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add \
+            app/assets/kitchen/masks/04.png \
+            app/data/mask-data.js \
+            app/data/technical-data.json \
+            reference/baseline-manifest.json
+          git diff --cached --name-only
+          test "$(git diff --cached --name-only | wc -l)" -eq 4
+          git commit -m 'Clip front masks to host alpha [materialized]'
+          candidate_sha="$(git rev-parse HEAD)"
+          remote_before="$(git ls-remote origin "refs/heads/${TARGET_BRANCH}" | cut -f1)"
+          test "$remote_before" = "$EXPECTED_HEAD"
+          git push origin "HEAD:refs/heads/${TARGET_BRANCH}"
+          remote_after="$(git ls-remote origin "refs/heads/${TARGET_BRANCH}" | cut -f1)"
+          test "$remote_after" = "$candidate_sha"
+          echo "FRONT_MASK_MATERIALIZATION base=${EXPECTED_HEAD} result=${candidate_sha} readback=PASS"
