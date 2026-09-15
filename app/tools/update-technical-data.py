@@ -34,6 +34,7 @@ def main() -> int:
     ]
     tracked = set(data.get("files", {}))
     tracked.update(data["compositionOrder"])
+    # Runtime overlays are source assets too, even when hidden in the default composition.
     tracked.update({
         "assets/kitchen/layers/stone-02-cozinha.png",
         "assets/kitchen/layers/stone-03-pia.png",
