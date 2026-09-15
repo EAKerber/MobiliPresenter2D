@@ -41,7 +41,7 @@ jobs:
             async function open(appRoot){
               const page=await browser.newPage({viewport:{width:1366,height:768}});
               await page.goto(pathToFileURL(path.resolve(appRoot,'index.html')).href);
-              await page.evaluate(()=>Promise.all(Array.from(document.images,i=>i.decode()));
+              await page.evaluate(()=>Promise.all(Array.from(document.images,i=>i.decode())));
               return page;
             }
             async function capture(page,prefix){
