@@ -1,0 +1,53 @@
+name: Cleanup module04 seam temp
+on:
+  push:
+    branches: [fix/module04-seam-bridge]
+    paths: ['.github/workflows/cleanup-module04-seam-temp.yml']
+permissions:
+  contents: write
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: python -m pip install -r tools/requirements.txt
+      - name: Remove temporary scaffolding and restore generated report
+        run: |
+          set -euo pipefail
+          git rm .github/workflows/materialize-module04-seam-composite-v2-temp.yml
+          git rm .github/workflows/review-module04-seam-temp.yml
+          git rm .github/workflows/cleanup-module04-seam-temp.yml
+          git rm tools/apply-module04-seam-composite-migration.py
+          git checkout d8cb437720d919988d9d2cac43d211aabc006a11 -- app/reports/default-composed.png
+          cd app
+          npm test
+          cd ..
+          python tools/refresh-baseline-manifest.py
+          python tools/validate-baseline.py
+      - name: Commit cleanup with CAS readback
+        env:
+          TARGET_BRANCH: fix/module04-seam-bridge
+          EXPECTED_HEAD: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -A
+          git diff --cached --name-only
+          git commit -m 'Clean module04 seam review scaffolding'
+          candidate_sha="$(git rev-parse HEAD)"
+          remote_before="$(git ls-remote origin "refs/heads/${TARGET_BRANCH}" | cut -f1)"
+          test "$remote_before" = "$EXPECTED_HEAD"
+          git push origin "HEAD:refs/heads/${TARGET_BRANCH}"
+          remote_after="$(git ls-remote origin "refs/heads/${TARGET_BRANCH}" | cut -f1)"
+          test "$remote_after" = "$candidate_sha"
+          echo "MODULE04_SEAM_CLEANUP base=${EXPECTED_HEAD} result=${candidate_sha} readback=PASS"
