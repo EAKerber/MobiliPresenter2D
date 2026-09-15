@@ -1,0 +1,144 @@
+name: Materialize module02-03 geometry v2 temp
+
+on:
+  push:
+    branches: [fix/module02-03-geometry-seams]
+    paths: ['.github/workflows/materialize-module02-03-geometry-v2-temp.yml']
+permissions:
+  contents: write
+concurrency:
+  group: materialize-module02-03-geometry-v2-temp
+  cancel-in-progress: false
+jobs:
+  materialize:
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install image and browser tooling
+        run: |
+          python -m pip install -r tools/requirements.txt
+          npm install --prefix /tmp/m23-browser --no-audit --no-fund playwright@1.62.1
+          /tmp/m23-browser/node_modules/.bin/playwright install --with-deps chromium
+      - name: Apply fail-closed 02-03 contract patch
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import json
+          def replace_once(path, old, new):
+              p=Path(path); text=p.read_text(); count=text.count(old)
+              if count != 1: raise SystemExit(f'PATCH_COUNT:{path}:{count}: expected 1 for {old[:80]!r}')
+              p.write_text(text.replace(old,new,1))
+          replace_once('app/data/scene-data.js','hostIds: ["module-02"],\n        finishGroups: [],\n        tags: ["stone", "joint", "cooking-zone", "sink-zone"]','hostIds: ["module-02", "module-03"],\n        finishGroups: [],\n        tags: ["stone", "joint", "cooking-zone", "sink-zone"]')
+          replace_once('app/data/scene-data.js','hostIds: ["module-03"],\n        finishGroups: [],\n        tags: ["stone", "joint", "cooking-zone", "sink-zone"]','hostIds: ["module-02", "module-03"],\n        finishGroups: [],\n        tags: ["stone", "joint", "cooking-zone", "sink-zone"]')
+          replace_once('tools/build_approved_stone.py','''def asset_visible_in_case(asset, ids):\n    # Stone variants and their joint bridges are owned by the same host module.\n    # Visibility must therefore follow that host, matching scene-data hostIds.\n    return host_id(asset) in ids\n''','''def asset_visible_in_case(asset, ids):\n    required = asset.get('requiresVisibleIds')\n    if required:\n        return all(entity_id in ids for entity_id in required)\n    return host_id(asset) in ids\n''')
+          p=Path('review-assets/stone-masks/config.json'); data=json.loads(p.read_text())
+          for asset in data['assets']:
+              if asset['id'] in {'stone-02-bridge','stone-03-bridge'}: asset['requiresVisibleIds']=['module-02','module-03']
+          data['limitations']=['Joint bridge sources are seam-only and require modules 02 and 03 to be visible together.' if x=='Bridge masks follow existing host visibility; do not merge them permanently.' else x for x in data.get('limitations',[])]
+          p.write_text(json.dumps(data,ensure_ascii=False,indent=2)+'\n')
+          p=Path('reference/variant-cases.json'); data=json.loads(p.read_text()); cases={c['id']:c for c in data['cases']}
+          cases['module-02-hidden']['expectedVisibilityReasons']['stone-03-joint-bridge']='host-hidden'
+          cases['module-03-hidden']['expectedVisibilityReasons']['stone-02-joint-bridge']='host-hidden'
+          p.write_text(json.dumps(data,ensure_ascii=False,indent=2)+'\n')
+          replace_once('app/tools/test-core.js','assert.equal(r["stone-02-joint-bridge"].reason,"visible");\nassert.equal(r["stone-03-joint-bridge"].reason,"host-hidden");','assert.equal(r["stone-02-joint-bridge"].reason,"host-hidden");\nassert.equal(r["stone-03-joint-bridge"].reason,"host-hidden");')
+          replace_once('app/tools/test-core.js','assert.equal(visibility.getVisibleEntities(scene,initial).length,11);','assert.equal(visibility.getVisibleEntities(scene,initial).length,10);')
+          replace_once('app/tools/test-core.js','assert.equal(r["stone-03-joint-bridge"].reason,"visible");\nassert.equal(r["module-02-right-exposed-face"].reason,"host-hidden");','assert.equal(r["stone-03-joint-bridge"].reason,"host-hidden");\nassert.equal(r["module-02-right-exposed-face"].reason,"host-hidden");')
+          replace_once('app/tools/test-core.js','assert.equal(visibility.getVisibleEntities(scene,initial).length,12);','assert.equal(visibility.getVisibleEntities(scene,initial).length,11);')
+          anchor='assert.equal(visibility.resolveVisibility(scene,initial)["stone-03-joint-bridge"].visible,true);\n'
+          replace_once('app/tools/test-core.js',anchor,anchor+'assert.deepEqual(Array.from(scene.entities.find((entity)=>entity.id==="stone-02-joint-bridge").hostIds),["module-02","module-03"]);\nassert.deepEqual(Array.from(scene.entities.find((entity)=>entity.id==="stone-03-joint-bridge").hostIds),["module-02","module-03"]);\n')
+          replace_once('app/tools/validate-r5a-pixelperfect.py','from PIL import Image, ImageChops','from PIL import Image, ImageChops, ImageDraw')
+          replace_once('app/tools/validate-r5a-pixelperfect.py','    mp, kp = module.load(), mask.load()\n    outside = protected = nonzero = 0','    mp, kp = module.load(), mask.load()\n    outside = protected = nonzero = ownership = 0')
+          replace_once('app/tools/validate-r5a-pixelperfect.py','                if 516 <= x < 739 and 609 <= y < 840: protected += 1','                if 516 <= x < 720 and 611 <= y < 838: protected += 1\n                if x >= 746: ownership += 1')
+          replace_once('app/tools/validate-r5a-pixelperfect.py','    return {\n        "maskNonTransparentPixels": nonzero,','    expected = module.copy()\n    ImageDraw.Draw(expected).rectangle((516, 611, 719, 837), fill=0)\n    ImageDraw.Draw(expected).rectangle((746, 0, mask.width - 1, mask.height - 1), fill=0)\n    mismatch = ImageChops.difference(expected, mask)\n    mismatch_pixels = sum(1 for value in mismatch.get_flattened_data() if value)\n    return {\n        "maskNonTransparentPixels": nonzero,')
+          replace_once('app/tools/validate-r5a-pixelperfect.py','        "protectedApplianceMaskPixels": protected,\n        "maskBounds":','        "protectedApplianceMaskPixels": protected,\n        "rightOwnershipMaskPixels": ownership,\n        "expectedMaskMismatchPixels": mismatch_pixels,\n        "maskBounds":')
+          replace_once('app/tools/validate-r5a-pixelperfect.py','        and gates["module02FinishMask"]["protectedApplianceMaskPixels"] == 0\n        and gates["module02FinishMask"]["maskNonTransparentPixels"] > 0','        and gates["module02FinishMask"]["protectedApplianceMaskPixels"] == 0\n        and gates["module02FinishMask"]["rightOwnershipMaskPixels"] == 0\n        and gates["module02FinishMask"]["expectedMaskMismatchPixels"] == 0\n        and gates["module02FinishMask"]["maskNonTransparentPixels"] > 0')
+          replace_once('app/tools/validate-assets.py','from PIL import Image, ImageChops','from PIL import Image, ImageChops, ImageDraw')
+          anchor='FRONT_SEAM_BRIDGE = {\n'
+          semantic='''def module02_front_ownership_errors() -> list[dict[str, object]]:\n    mask_path = ROOT / "assets/kitchen/masks/02.png"\n    host_path = ROOT / "assets/kitchen/layers/02_inferior_fogao.png"\n    with Image.open(mask_path) as mask_image, Image.open(host_path) as host_image:\n        mask = mask_image.convert("RGBA").getchannel("A")\n        expected = host_image.convert("RGBA").getchannel("A").copy()\n    ImageDraw.Draw(expected).rectangle((516, 611, 719, 837), fill=0)\n    ImageDraw.Draw(expected).rectangle((746, 0, expected.width - 1, expected.height - 1), fill=0)\n    diff = ImageChops.difference(expected, mask)\n    bbox = diff.getbbox()\n    if bbox is None: return []\n    return [{"path":str(mask_path.relative_to(ROOT)),"host":str(host_path.relative_to(ROOT)),"error":"module02-finish-ownership-mismatch","pixels":sum(1 for value in diff.get_flattened_data() if value),"bounds":list(bbox)}]\n\n'''+anchor
+          replace_once('app/tools/validate-assets.py',anchor,semantic)
+          replace_once('app/tools/validate-assets.py','    errors = front_mask_host_errors() + front_seam_bridge_errors()','    errors = front_mask_host_errors() + module02_front_ownership_errors() + front_seam_bridge_errors()')
+          PY
+      - name: Materialize and run permanent gates
+        run: |
+          cd app
+          npm run build:stone-layers
+          npm run build:r5a-pixelperfect
+          npm run build:front-masks
+          cd ..
+          rm -rf /tmp/m23-stone
+          python tools/build_approved_stone.py --output-dir /tmp/m23-stone
+          cp /tmp/m23-stone/stone-data.js app/data/stone-data.js
+          cd app
+          npm run build:front-seam-masks
+          npm run build:inline-masks
+          npm run build:technical-data
+          npm test
+          cd ..
+          python -m unittest tests/test_stone_surface_masks.py
+          rm -f app/reports/current-asset-validation.json
+          git checkout origin/main -- app/reports/default-composed.png
+          python tools/refresh-baseline-manifest.py
+          python tools/validate-baseline.py
+      - name: Prove variants and stone replay
+        run: |
+          mkdir -p /tmp/m23-final/variants
+          node tools/variant_fidelity_manifest.js --cases reference/variant-cases.json --output /tmp/m23-final/variant-manifest.json
+          python tools/render_variant_fidelity.py --manifest /tmp/m23-final/variant-manifest.json --output-dir /tmp/m23-final/variants
+          python tools/validate_approved_stone.py --manifest /tmp/m23-final/variant-manifest.json --output-dir /tmp/m23-final/approved-stone
+      - name: Browser-review 02-03 visibility and finishes
+        env:
+          NODE_PATH: /tmp/m23-browser/node_modules
+        run: |
+          mkdir -p /tmp/m23-final/browser
+          node - <<'NODE'
+          const fs=require('node:fs'),path=require('node:path'); const {pathToFileURL}=require('node:url'); const {chromium}=require('playwright');
+          (async()=>{const browser=await chromium.launch({headless:true});const states=[['both',true,true],['only02',true,false],['only03',false,true],['none',false,false]];const finishes=[['black','Aplicar Preto'],['white','Aplicar Branco TX'],['olive','Aplicar Verde oliva']];const report={};
+          for(const [state,m2,m3] of states)for(const [finish,label] of finishes){const page=await browser.newPage({viewport:{width:1536,height:1100}});await page.goto(pathToFileURL(path.resolve('app/index.html')).href);await page.evaluate(()=>Promise.all(Array.from(document.images,i=>i.decode())));await page.locator('[data-module-toggle="module-02"]').setChecked(m2);await page.locator('[data-module-toggle="module-03"]').setChecked(m3);await page.getByRole('button',{name:label,exact:true}).click();const layers=await page.evaluate(()=>Object.fromEntries([...document.querySelectorAll('.layer-group')].filter(x=>['stone-02-joint-bridge','stone-03-joint-bridge','module-02-right-exposed-face','module-02','module-03'].includes(x.dataset.entityId)).map(x=>[x.dataset.entityId,{hidden:x.classList.contains('is-hidden'),reason:x.dataset.visibilityReason,mask:x.querySelector('.finish-layer')?.dataset.maskAsset||null}])));if(state==='both'){if(layers['stone-02-joint-bridge'].hidden||layers['stone-03-joint-bridge'].hidden)throw Error('both seam missing');if(!layers['module-02-right-exposed-face'].hidden)throw Error('exposed face leaked');}else if(!layers['stone-02-joint-bridge'].hidden||!layers['stone-03-joint-bridge'].hidden)throw Error(state+': seam leaked');if(state==='only02'&&layers['module-02-right-exposed-face'].hidden)throw Error('only02 exposed face missing');report[`${state}-${finish}`]=layers;await page.locator('#viewer').screenshot({path:`/tmp/m23-final/browser/${state}-${finish}.png`,animations:'disabled'});await page.close();}fs.writeFileSync('/tmp/m23-final/browser/runtime-report.json',JSON.stringify(report,null,2));await browser.close();})().catch(e=>{console.error(e);process.exit(1)});
+          NODE
+          python - <<'PY'
+          from PIL import Image
+          from pathlib import Path
+          out=Path('/tmp/m23-final/browser'); crop=(430,390,850,940)
+          for p in out.glob('*.png'):
+              im=Image.open(p).convert('RGB').crop(crop); im.resize(((crop[2]-crop[0])*2,(crop[3]-crop[1])*2),Image.Resampling.LANCZOS).save(out/(p.stem+'-focus2x.png'))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: module02-03-geometry-final-review
+          path: /tmp/m23-final
+      - name: Remove temporary scaffolding and commit with CAS readback
+        env:
+          TARGET_BRANCH: fix/module02-03-geometry-seams
+          EXPECTED_HEAD: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          git rm -f .github/workflows/diagnose-module02-03-geometry-temp.yml .github/workflows/export-module02-03-assets-temp.yml .github/workflows/materialize-module02-03-geometry-temp.yml .github/workflows/materialize-module02-03-geometry-v2-temp.yml
+          rm -f app/reports/current-asset-validation.json
+          git checkout origin/main -- app/reports/default-composed.png
+          python tools/refresh-baseline-manifest.py
+          python tools/validate-baseline.py
+          git config user.name 'github-actions[bot]'; git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -A
+          python - <<'PY'
+          import subprocess
+          allowed={'app/assets/kitchen/layers/stone-02-cozinha.png','app/assets/kitchen/layers/02_inferior_fogao.png','app/assets/kitchen/variants/stone-02-cozinha-exposed-right.png','app/assets/kitchen/variants/stone-03-pia-exposed-left.png','app/assets/kitchen/bridges/stone-02-joint-bridge.png','app/assets/kitchen/bridges/stone-03-joint-bridge.png','app/assets/kitchen/masks/02.png','app/assets/kitchen/composicao-completa.png','app/data/mask-data.js','app/data/technical-data.json','app/data/stone-data.js','app/data/scene-data.js','app/tools/apply-r5a-pixelperfect-edits.py','app/tools/test-core.js','app/tools/validate-assets.py','app/tools/validate-r5a-pixelperfect.py','app/reports/r5a-pixelperfect-materialization.json','app/reports/r5a-pixelperfect-gate.json','review-assets/stone-masks/config.json','reference/variant-cases.json','reference/baseline-manifest.json','tools/build_approved_stone.py','tests/test_stone_surface_masks.py'}
+          changed=subprocess.check_output(['git','diff','--cached','--name-only'],text=True).splitlines(); bad=[p for p in changed if p not in allowed]
+          if bad: raise SystemExit('UNEXPECTED_STAGED:'+','.join(bad))
+          print('FINAL_STAGED',changed)
+          PY
+          if git diff --cached --quiet; then echo 'MODULE02_03_NO_CHANGE readback=PASS'; exit 0; fi
+          git commit -m 'Fix module 02-03 finish ownership and conditional stone seams'
+          candidate_sha="$(git rev-parse HEAD)"; remote_before="$(git ls-remote origin "refs/heads/${TARGET_BRANCH}" | cut -f1)"
+          if [ "$remote_before" != "$EXPECTED_HEAD" ]; then echo "TARGET_HEAD_DRIFT:${remote_before}!=${EXPECTED_HEAD}" >&2; exit 2; fi
+          git push origin "HEAD:refs/heads/${TARGET_BRANCH}"
+          remote_after="$(git ls-remote origin "refs/heads/${TARGET_BRANCH}" | cut -f1)"; if [ "$remote_after" != "$candidate_sha" ]; then echo "TARGET_READBACK_FAILED:${remote_after}!=${candidate_sha}" >&2; exit 2; fi
+          echo "MODULE02_03_MATERIALIZATION_RECEIPT base=${EXPECTED_HEAD} result=${candidate_sha} readback=PASS"
