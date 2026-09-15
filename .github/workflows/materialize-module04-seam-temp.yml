@@ -1,0 +1,133 @@
+name: Materialize module04-06 finish seam temp
+on:
+  push:
+    branches: [fix/module04-seam-bridge]
+    paths: ['.github/workflows/materialize-module04-seam-temp.yml']
+permissions:
+  contents: write
+jobs:
+  materialize:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: python -m pip install -r tools/requirements.txt
+      - name: Materialize bridge assets and scene contract
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          from PIL import Image
+          import subprocess
+
+          root=Path('.')
+          app=root/'app'
+          canvas=(1536,1024)
+          pre_commit='e83d318eab52fdd9c8787d5d5d190205cf960aad'
+          old_bytes=subprocess.check_output(['git','show',f'{pre_commit}:app/assets/kitchen/masks/04.png'])
+          tmp=Path('/tmp/mask04-pre29.png'); tmp.write_bytes(old_bytes)
+          old=Image.open(tmp).convert('RGBA')
+          cur=Image.open(app/'assets/kitchen/masks/04.png').convert('RGBA')
+          old_a=old.getchannel('A'); cur_a=cur.getchannel('A')
+          bridge=Image.new('RGBA',canvas,(255,255,255,0))
+          bp=bridge.load(); oa=old_a.load(); ca=cur_a.load()
+          xs=[]; ys=[]
+          bbox=old_a.getbbox()
+          for y in range(bbox[1],bbox[3]):
+              for x in range(bbox[0],bbox[2]):
+                  if oa[x,y] and not ca[x,y]:
+                      bp[x,y]=(255,255,255,oa[x,y]); xs.append(x); ys.append(y)
+          bounds=[min(xs),min(ys),max(xs)+1,max(ys)+1]
+          assert len(xs)==23, len(xs)
+          assert bounds==[1209,50,1213,60], bounds
+          mask_path=app/'assets/kitchen/masks/04-06-seam-bridge.png'
+          mask_path.parent.mkdir(parents=True,exist_ok=True); bridge.save(mask_path)
+          blank_path=app/'assets/kitchen/bridges/front-04-06-finish-bridge.png'
+          blank_path.parent.mkdir(parents=True,exist_ok=True)
+          Image.new('RGBA',canvas,(0,0,0,0)).save(blank_path)
+
+          def patch(path, old, new):
+              p=Path(path); text=p.read_text()
+              count=text.count(old)
+              assert count==1, (path,count,old)
+              p.write_text(text.replace(old,new))
+
+          scene=app/'data/scene-data.js'
+          patch(scene,
+              '        "module-04",\n        "module-05",',
+              '        "module-04",\n        "module-04-06-finish-bridge",\n        "module-05",')
+          bridge_entity='''      {\n        id: "module-04-06-finish-bridge",\n        alias: "04J",\n        label: "Emenda de acabamento 04–06",\n        kind: "finish-bridge",\n        zIndex: 401,\n        asset: "assets/kitchen/bridges/front-04-06-finish-bridge.png",\n        maskAsset: "assets/kitchen/masks/04-06-seam-bridge.png",\n        alphaBounds: null,\n        defaultVisible: true,\n        controllable: false,\n        hostIds: ["module-04", "module-06"],\n        finishGroups: ["fronts-all"],\n        tags: ["finish", "joint", "sink-zone", "refrigerator-zone"]\n      },\n'''
+          patch(scene,'      {\n        id: "module-05",',bridge_entity+'      {\n        id: "module-05",')
+          patch(scene,
+              '          "module-04",\n          "module-05",',
+              '          "module-04",\n          "module-04-06-finish-bridge",\n          "module-05",')
+
+          masks=app/'tools/build-inline-masks.py'
+          patch(masks,
+              '    "assets/kitchen/masks/04.png",\n',
+              '    "assets/kitchen/masks/04.png",\n    "assets/kitchen/masks/04-06-seam-bridge.png",\n')
+
+          tech=app/'tools/update-technical-data.py'
+          patch(tech,
+              '        "assets/kitchen/overlays/module-02-right-exposed-face.png",\n',
+              '        "assets/kitchen/overlays/module-02-right-exposed-face.png",\n        "assets/kitchen/bridges/front-04-06-finish-bridge.png",\n        "assets/kitchen/masks/04-06-seam-bridge.png",\n')
+
+          tests=app/'tools/test-core.js'
+          patch(tests,'assert.equal(scene.entities.length,17);','assert.equal(scene.entities.length,18);')
+          patch(tests,'assert.equal(visibility.getVisibleEntities(scene,initial).length,15);','assert.equal(visibility.getVisibleEntities(scene,initial).length,16);')
+          patch(tests,
+              'assert.equal(visibility.resolveVisibility(scene,initial)["module-02-right-exposed-face"].reason,"occluded");\n',
+              'assert.equal(visibility.resolveVisibility(scene,initial)["module-02-right-exposed-face"].reason,"occluded");\nassert.equal(visibility.resolveVisibility(scene,initial)["module-04-06-finish-bridge"].reason,"visible");\ncore.setEntityVisibility(initial,"module-06",false);\nlet seamVisibility=visibility.resolveVisibility(scene,initial);\nassert.equal(seamVisibility["module-04-06-finish-bridge"].reason,"host-hidden");\ncore.setEntityVisibility(initial,"module-06",true);\ncore.setEntityVisibility(initial,"module-04",false);\nseamVisibility=visibility.resolveVisibility(scene,initial);\nassert.equal(seamVisibility["module-04-06-finish-bridge"].reason,"host-hidden");\ncore.setEntityVisibility(initial,"module-04",true);\nassert.equal(visibility.resolveVisibility(scene,initial)["module-04-06-finish-bridge"].reason,"visible");\n')
+          patch(tests,'assert.equal(visibility.getVisibleEntities(scene,initial).length,11);','assert.equal(visibility.getVisibleEntities(scene,initial).length,12);')
+          patch(tests,'assert.equal(visibility.getVisibleEntities(scene,initial).length,12);','assert.equal(visibility.getVisibleEntities(scene,initial).length,13);')
+          patch(tests,'entities:17,controllableEntities:8','entities:18,controllableEntities:8')
+
+          validator=app/'tools/validate-assets.py'
+          bridge_validator='''\nFRONT_SEAM_BRIDGE = {\n    "mask": "assets/kitchen/masks/04-06-seam-bridge.png",\n    "hosts": (\n        "assets/kitchen/layers/04_lateral_geladeira.png",\n        "assets/kitchen/layers/06_aereo_pia.png",\n    ),\n    "pixels": 23,\n    "bounds": [1209, 50, 1213, 60],\n}\n\ndef front_seam_bridge_errors() -> list[dict[str, object]]:\n    errors: list[dict[str, object]] = []\n    mask_path = ROOT / FRONT_SEAM_BRIDGE["mask"]\n    with Image.open(mask_path) as mask_image:\n        mask = binary_support(mask_image.convert("RGBA").getchannel("A"))\n    support_pixels = sum(1 for value in mask.get_flattened_data() if value)\n    bounds = list(mask.getbbox()) if mask.getbbox() else None\n    if support_pixels != FRONT_SEAM_BRIDGE["pixels"] or bounds != FRONT_SEAM_BRIDGE["bounds"]:\n        errors.append({\n            "path": FRONT_SEAM_BRIDGE["mask"],\n            "error": "finish-bridge-support-mismatch",\n            "pixels": support_pixels,\n            "bounds": bounds,\n            "expectedPixels": FRONT_SEAM_BRIDGE["pixels"],\n            "expectedBounds": FRONT_SEAM_BRIDGE["bounds"],\n        })\n    for host_rel in FRONT_SEAM_BRIDGE["hosts"]:\n        with Image.open(ROOT / host_rel) as host_image:\n            host = binary_support(host_image.convert("RGBA").getchannel("A"))\n        overlap = ImageChops.multiply(mask, host)\n        overlap_pixels = sum(1 for value in overlap.get_flattened_data() if value)\n        if overlap_pixels:\n            errors.append({\n                "path": FRONT_SEAM_BRIDGE["mask"],\n                "host": host_rel,\n                "error": "finish-bridge-overlaps-host-alpha",\n                "pixels": overlap_pixels,\n                "bounds": list(overlap.getbbox()),\n            })\n    return errors\n'''
+          patch(validator,'\ndef main() -> int:\n',bridge_validator+'\ndef main() -> int:\n')
+          patch(validator,'    errors = front_mask_host_errors()\n','    errors = front_mask_host_errors() + front_seam_bridge_errors()\n')
+          print({'bridgePixels':len(xs),'bounds':bounds})
+          PY
+          cd app
+          python tools/build-inline-masks.py
+          python tools/update-technical-data.py
+          npm test
+          cd ..
+          python tools/refresh-baseline-manifest.py
+          python tools/validate-baseline.py
+      - name: Commit materialized bridge with CAS readback
+        env:
+          TARGET_BRANCH: fix/module04-seam-bridge
+          EXPECTED_HEAD: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add \
+            app/assets/kitchen/bridges/front-04-06-finish-bridge.png \
+            app/assets/kitchen/masks/04-06-seam-bridge.png \
+            app/data/scene-data.js \
+            app/data/mask-data.js \
+            app/data/technical-data.json \
+            app/tools/build-inline-masks.py \
+            app/tools/update-technical-data.py \
+            app/tools/test-core.js \
+            app/tools/validate-assets.py \
+            reference/baseline-manifest.json
+          git diff --cached --name-only
+          test "$(git diff --cached --name-only | wc -l)" -eq 10
+          git commit -m 'Model module 04-06 finish seam as external bridge'
+          candidate_sha="$(git rev-parse HEAD)"
+          remote_before="$(git ls-remote origin "refs/heads/${TARGET_BRANCH}" | cut -f1)"
+          test "$remote_before" = "$EXPECTED_HEAD"
+          git push origin "HEAD:refs/heads/${TARGET_BRANCH}"
+          remote_after="$(git ls-remote origin "refs/heads/${TARGET_BRANCH}" | cut -f1)"
+          test "$remote_after" = "$candidate_sha"
+          echo "MODULE04_SEAM_MATERIALIZATION base=${EXPECTED_HEAD} result=${candidate_sha} readback=PASS"
