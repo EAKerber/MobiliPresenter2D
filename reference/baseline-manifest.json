@@ -285,8 +285,8 @@
         1024
       ],
       "path": "app/assets/kitchen/masks/04.png",
-      "sha256": "64e25ff3dcd38adf0afb0e68bb7d6fd130ab0578f687d2a6d10dc241c4d4e1d9",
-      "size": 8151
+      "sha256": "2525bc8969cb9ace372452601266d8c9b6d8f6d0150105268235c442db44e249",
+      "size": 8171
     },
     {
       "alphaBounds": [
@@ -659,8 +659,8 @@
     },
     {
       "path": "app/assets/kitchen/masks/04.png",
-      "sha256": "64e25ff3dcd38adf0afb0e68bb7d6fd130ab0578f687d2a6d10dc241c4d4e1d9",
-      "size": 8151
+      "sha256": "2525bc8969cb9ace372452601266d8c9b6d8f6d0150105268235c442db44e249",
+      "size": 8171
     },
     {
       "path": "app/assets/kitchen/masks/05.png",
@@ -754,8 +754,8 @@
     },
     {
       "path": "app/data/mask-data.js",
-      "sha256": "70aaebe577fdcabd9f7d60960023ff9831d0e44b753cb2d364717d96736a4b77",
-      "size": 65255
+      "sha256": "cede3874388f6f39a1f09bacd088d8db01a720144eff7871fc60ceb27b91f099",
+      "size": 65283
     },
     {
       "path": "app/data/scene-data.js",
@@ -769,7 +769,7 @@
     },
     {
       "path": "app/data/technical-data.json",
-      "sha256": "88f7ef28258ba8d3cfab781eb18ccc95d45bfb11201155d4f38ff855583e147f",
+      "sha256": "73c7a5ef36e38d7157d822713a760c861ce847c331c119f62239c08b2706ecbc",
       "size": 7887
     },
     {
@@ -799,8 +799,8 @@
     },
     {
       "path": "app/package.json",
-      "sha256": "5f6482db585594a7376e021a1c8c243345dbb14223825c2ed4f1246366bccb02",
-      "size": 763
+      "sha256": "bfe18f506c115472d587c8c5cbca362ef2dc5bd98eea82edb1041dc07b2c859c",
+      "size": 859
     },
     {
       "path": "app/scripts/build-static.sh",
@@ -858,6 +858,11 @@
       "size": 4347
     },
     {
+      "path": "app/tools/normalize-front-masks.py",
+      "sha256": "ad75ed7c9277769f34034bd4deb37debe67fbabcc2e1fc3a0e075c7dd908532e",
+      "size": 2290
+    },
+    {
       "path": "app/tools/sources/02_inferior_fogao-combined-v2.png",
       "sha256": "c9c031f2a4d37be49d72de293d64ce579f42e56b934342e49017d203085646b0",
       "size": 222284
@@ -889,8 +894,8 @@
     },
     {
       "path": "app/tools/validate-assets.py",
-      "sha256": "dbc77504cd44e3bab74ab99755cd2ba3fe79f044bce11967a1c4debe89647ca7",
-      "size": 3301
+      "sha256": "c8e8710a2813e013b72e784c6bb0731acc9d02261ae5a97a443a7053f47d2eb4",
+      "size": 4728
     },
     {
       "path": "app/tools/validate-r5a-pixelperfect.py",
