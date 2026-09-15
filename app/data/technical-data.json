@@ -288,6 +288,15 @@
         1093,
         575
       ]
+    },
+    "assets/kitchen/overlays/module-02-right-exposed-face.png": {
+      "sha256": "3becbf8a510dd76757593ed5c227482edef7af57c48877e9d2e714398e77fff8",
+      "alphaBounds": [
+        755,
+        525,
+        764,
+        815
+      ]
     }
   }
 }

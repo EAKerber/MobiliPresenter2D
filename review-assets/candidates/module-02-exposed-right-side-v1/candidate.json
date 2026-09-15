@@ -15,12 +15,13 @@
     "extractionReport": "review-assets/candidates/module-02-exposed-right-side-v1/extraction-report.json",
     "method": "derived",
     "recipe": "review-assets/recipes/module-02-exposed-right-side-v1.json",
-    "recipeSha256": "2b187b4c50bebef87871da6e6db57a608b1a34500089da49d42710098e123e83",
+    "recipeSha256": "a4ac0fa6702dc0707dde90dce0447b0e233cd222b9ecb3543be8494f0525d742",
     "sourceFrameSha256": "f502790c76afe612563958ca3acfcc7d653018d718d11d852ed3a45df553ecfa",
     "sourceReferences": [
       "app/assets/kitchen/base.png",
       "app/assets/kitchen/composicao-completa.png",
-      "variant:module-03-hidden@scene2d-930c3dc3"
+      "variant:module-03-hidden@scene2d-930c3dc3",
+      "review-assets/calibration/module-02-right-face-v1/source-variant-manifest.json"
     ]
   },
   "role": "module-02-right-exposed-face",

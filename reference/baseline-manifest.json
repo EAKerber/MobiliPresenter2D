@@ -396,6 +396,22 @@
       "size": 19065
     },
     {
+      "alphaBounds": [
+        755,
+        525,
+        764,
+        815
+      ],
+      "canonicalCanvas": true,
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "path": "app/assets/kitchen/overlays/module-02-right-exposed-face.png",
+      "sha256": "3becbf8a510dd76757593ed5c227482edef7af57c48877e9d2e714398e77fff8",
+      "size": 8465
+    },
+    {
       "alphaBounds": null,
       "canonicalCanvas": true,
       "dimensions": [
@@ -538,8 +554,8 @@
   "files": [
     {
       "path": "app/.gitignore",
-      "sha256": "35d940f5e608b2a4ef2a41ecf7263d2d4e3e18aa8aab9a98a57fa57e5607dfa5",
-      "size": 498
+      "sha256": "14595bcf8c63c7af7bbd89d7fdd8438655a96c47ea7cfa4f6909b5bdd91defff",
+      "size": 569
     },
     {
       "path": "app/.openai/hosting.json",
@@ -682,6 +698,11 @@
       "size": 19065
     },
     {
+      "path": "app/assets/kitchen/overlays/module-02-right-exposed-face.png",
+      "sha256": "3becbf8a510dd76757593ed5c227482edef7af57c48877e9d2e714398e77fff8",
+      "size": 8465
+    },
+    {
       "path": "app/assets/kitchen/substitutions/range-freestanding-placeholder.png",
       "sha256": "64085d665f67f408b0cd67f69bebaa5a814b79eeed296c3d952e62988d7a440f",
       "size": 6177
@@ -723,13 +744,13 @@
     },
     {
       "path": "app/core/validation.js",
-      "sha256": "e8fdfc0a3240c351e6af7a30ee231bd92fbac544d6be5ab1f788ec1789f63efd",
-      "size": 4035
+      "sha256": "c6fcae9eebfa81222ae9c2f45763fadd8aaac5edcac789d1d57e303eb3616795",
+      "size": 4347
     },
     {
       "path": "app/core/visibility.js",
-      "sha256": "4ab544cede221c5b7de1acf43a723c807794b7b7856857a423cd1b1d16ee563c",
-      "size": 2723
+      "sha256": "bffaba889f6142cf1d5bd6b5ffb09966965abc87f9b16a0c5a71dccd4bda4b7f",
+      "size": 3161
     },
     {
       "path": "app/data/mask-data.js",
@@ -738,8 +759,8 @@
     },
     {
       "path": "app/data/scene-data.js",
-      "sha256": "af13d826b1503a9a5599ee40852b771d66e7ff51ced8114ec6da4f2f9c2ff7fc",
-      "size": 10605
+      "sha256": "f6abcd9def5ccc1c99ecba7845d11df807af21bc6f637ed9181622b558d5a90b",
+      "size": 11211
     },
     {
       "path": "app/data/stone-data.js",
@@ -748,8 +769,8 @@
     },
     {
       "path": "app/data/technical-data.json",
-      "sha256": "a41313ad0f936037ffc43501576060b0f9b146aac574fe89e9399fb425aade4d",
-      "size": 7648
+      "sha256": "88f7ef28258ba8d3cfab781eb18ccc95d45bfb11201155d4f38ff855583e147f",
+      "size": 7887
     },
     {
       "path": "app/docs/CHECKPOINTS.md",
@@ -858,13 +879,13 @@
     },
     {
       "path": "app/tools/test-core.js",
-      "sha256": "16be40984e94428019296e4d048f8db8deb2bd0ef84090e8c6c3490c0fccb7ed",
-      "size": 3010
+      "sha256": "226f7f5f415800bfc0b50155d5b1efac1b05ec87065c90abb562fd870b6ede77",
+      "size": 5007
     },
     {
       "path": "app/tools/update-technical-data.py",
-      "sha256": "b8b069d6420bf43b22ba9ca455d33a55fd761830b899be6e247eb5a00556320a",
-      "size": 2399
+      "sha256": "61e8d269555b35f66e0155f3f034325ef331f3d8946aafa1fb366dfc48906f5e",
+      "size": 2558
     },
     {
       "path": "app/tools/validate-assets.py",

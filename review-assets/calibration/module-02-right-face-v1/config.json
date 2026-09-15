@@ -9,7 +9,9 @@
     "size": [
       1536,
       1024
-    ]
+    ],
+    "sourceSnapshotHeadSha": "101cd347f26b5eade39a30cb09c166feb511375c",
+    "variantManifest": "review-assets/calibration/module-02-right-face-v1/source-variant-manifest.json"
   },
   "crop": {
     "bounds": [
@@ -21,46 +23,46 @@
     "sourceSha256": "342368e9662901a95b377e4e6a983f14dc2139760d0fba12901b88080fd743d0"
   },
   "measuredAnchors": {
-    "frontEdgeX": 744,
+    "frontEdgeX": 742,
     "stoneExposedEdge": {
       "back": [
         763,
-        521
+        525
       ],
       "front": [
-        744,
-        588
+        742,
+        586
       ],
-      "dx": -19,
-      "dy": 67
+      "dx": -21,
+      "dy": 61
     },
-    "cabinetTopY": 589,
-    "wallFloorY": 856,
-    "frontFloorY": 897
+    "counterFrontY": 586,
+    "cabinetFrontBottomY": 857,
+    "floorContactY": 898
   },
   "authoring": {
     "authorizedRoi": [
-      740,
-      585,
-      766,
-      900
+      742,
+      520,
+      764,
+      899
     ],
     "hypothesisSupportPolygon": [
       [
-        744,
-        589
+        742,
+        586
       ],
       [
         763,
-        589
+        525
       ],
       [
         763,
-        856
+        796
       ],
       [
-        744,
-        897
+        742,
+        857
       ]
     ],
     "policy": [
@@ -76,7 +78,23 @@
   "evidenceStatus": {
     "frontEdge": "measured-from-visible-pixels",
     "stoneEdge": "measured-from-visible-pixels",
-    "backEdge": "geometric-hypothesis-from-exposed-stone-depth; requires visual validation",
-    "approval": "NOT_APPROVED"
+    "backEdge": "geometric-hypothesis-from-exposed-stone-depth; agent-visual-review-pass; human-review-pending",
+    "approval": "HUMAN_REVIEW_PENDING"
+  },
+  "candidate": {
+    "id": "module-02-exposed-right-side-v1",
+    "imageSha256": "3becbf8a510dd76757593ed5c227482edef7af57c48877e9d2e714398e77fff8",
+    "changedPixelCount": 1910,
+    "differenceBounds": [
+      755,
+      525,
+      764,
+      815
+    ],
+    "protectedLayerOverlapPixels": 0,
+    "outsideAuthorizedRoiChangedPixelCount": 0,
+    "roundtripMismatchPixelCount": 0,
+    "visualReview": "AGENT_PASS",
+    "humanReview": "PENDING"
   }
 }

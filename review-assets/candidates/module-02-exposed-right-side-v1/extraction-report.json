@@ -34,7 +34,7 @@
     "app/assets/kitchen/overlays/approved-stone-02.png"
   ],
   "recipePath": "review-assets/recipes/module-02-exposed-right-side-v1.json",
-  "recipeSha256": "2b187b4c50bebef87871da6e6db57a608b1a34500089da49d42710098e123e83",
+  "recipeSha256": "a4ac0fa6702dc0707dde90dce0447b0e233cd222b9ecb3543be8494f0525d742",
   "role": "module-02-right-exposed-face",
   "roundtripMismatchPixelCount": 0,
   "schemaVersion": "CandidateDeltaExtractionReport 0.1",
