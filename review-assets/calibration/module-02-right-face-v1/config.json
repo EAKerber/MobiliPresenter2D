@@ -10,6 +10,7 @@
       1536,
       1024
     ],
+    "sourceVariantFingerprint": "scene2d-930c3dc3",
     "sourceSnapshotHeadSha": "101cd347f26b5eade39a30cb09c166feb511375c",
     "variantManifest": "review-assets/calibration/module-02-right-face-v1/source-variant-manifest.json"
   },
@@ -94,6 +95,7 @@
     "protectedLayerOverlapPixels": 0,
     "outsideAuthorizedRoiChangedPixelCount": 0,
     "roundtripMismatchPixelCount": 0,
+    "postIntegrationVariantFingerprint": "scene2d-f06e538e",
     "visualReview": "AGENT_PASS",
     "humanReview": "PENDING"
   }
