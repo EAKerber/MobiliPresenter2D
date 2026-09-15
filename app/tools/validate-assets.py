@@ -7,7 +7,7 @@ sources. Those edit-specific invariants live in validate-r5a-pixelperfect.py.
 """
 from __future__ import annotations
 from pathlib import Path
-from PIL import Image, ImageChops
+from PIL import Image, ImageChops, ImageDraw
 import hashlib, json
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -57,6 +57,14 @@ def front_mask_host_errors() -> list[dict[str, object]]:
             "bounds": list(bbox),
         })
     return errors
+
+def module02_front_ownership_errors() -> list[dict[str, object]]:
+    mask_path=ROOT/"assets/kitchen/masks/02.png"; host_path=ROOT/"assets/kitchen/layers/02_inferior_fogao.png"
+    with Image.open(mask_path) as mi, Image.open(host_path) as hi: mask=mi.convert("RGBA").getchannel("A"); expected=hi.convert("RGBA").getchannel("A").copy()
+    ImageDraw.Draw(expected).rectangle((516,611,719,837),fill=0); ImageDraw.Draw(expected).rectangle((746,0,expected.width-1,expected.height-1),fill=0)
+    diff=ImageChops.difference(expected,mask); bbox=diff.getbbox()
+    if bbox is None: return []
+    return [{"path":str(mask_path.relative_to(ROOT)),"host":str(host_path.relative_to(ROOT)),"error":"module02-finish-ownership-mismatch","pixels":sum(1 for v in diff.get_flattened_data() if v),"bounds":list(bbox)}]
 
 FRONT_SEAM_BRIDGE = {
     "mask": "assets/kitchen/masks/04-06-seam-bridge.png",
@@ -117,7 +125,7 @@ def front_seam_bridge_errors() -> list[dict[str, object]]:
 def main() -> int:
     data = json.loads(TECH.read_text(encoding="utf-8"))
     canvas = (data["canvas"]["width"], data["canvas"]["height"])
-    errors = front_mask_host_errors() + front_seam_bridge_errors()
+    errors = front_mask_host_errors() + module02_front_ownership_errors() + front_seam_bridge_errors()
     files = {}
     for rel, expected in data["files"].items():
         path = ROOT / rel

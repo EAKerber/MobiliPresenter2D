@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 from __future__ import annotations
 from pathlib import Path
-from PIL import Image, ImageChops
+from PIL import Image, ImageChops, ImageDraw
 import json
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -38,19 +38,27 @@ def mask_gate() -> dict[str, object]:
     mask_image = Image.open(K / "masks/02.png").convert("RGBA")
     mask = mask_image.getchannel("A")
     mp, kp = module.load(), mask.load()
-    outside = protected = nonzero = 0
+    outside = protected = nonzero = ownership = 0
     for y in range(mask.height):
         for x in range(mask.width):
             if kp[x, y]:
                 nonzero += 1
                 if not mp[x, y]: outside += 1
-                if 516 <= x < 739 and 609 <= y < 840: protected += 1
+                if 516 <= x < 720 and 611 <= y < 838: protected += 1
+                if x >= 746: ownership += 1
+    expected = module.copy()
+    ImageDraw.Draw(expected).rectangle((516, 611, 719, 837), fill=0)
+    ImageDraw.Draw(expected).rectangle((746, 0, mask.width - 1, mask.height - 1), fill=0)
+    mismatch = ImageChops.difference(expected, mask)
+    mismatch_pixels = sum(1 for value in mismatch.get_flattened_data() if value)
     return {
         "maskNonTransparentPixels": nonzero,
         "maskMode": Image.open(K / "masks/02.png").mode,
         "maskHasSemanticAlpha": "A" in Image.open(K / "masks/02.png").getbands(),
         "maskOutsideModuleAlphaPixels": outside,
         "protectedApplianceMaskPixels": protected,
+        "rightOwnershipMaskPixels": ownership,
+        "expectedMaskMismatchPixels": mismatch_pixels,
         "maskBounds": list(mask.getbbox()) if mask.getbbox() else None,
     }
 
@@ -80,6 +88,8 @@ def main() -> int:
         and gates["stone02Bridge"]["variantAlphaIncreasePixels"] == 0 and gates["stone03Bridge"]["variantAlphaIncreasePixels"] == 0
         and gates["module02FinishMask"]["maskOutsideModuleAlphaPixels"] == 0
         and gates["module02FinishMask"]["protectedApplianceMaskPixels"] == 0
+        and gates["module02FinishMask"]["rightOwnershipMaskPixels"] == 0
+        and gates["module02FinishMask"]["expectedMaskMismatchPixels"] == 0
         and gates["module02FinishMask"]["maskNonTransparentPixels"] > 0
         and gates["module02FinishMask"]["maskHasSemanticAlpha"]
         and gates["golden"]["pixelDifferenceCount"] == 0

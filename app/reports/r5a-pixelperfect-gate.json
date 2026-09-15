@@ -25,15 +25,17 @@
       ]
     },
     "module02FinishMask": {
-      "maskNonTransparentPixels": 17381,
+      "maskNonTransparentPixels": 19660,
       "maskMode": "RGBA",
       "maskHasSemanticAlpha": true,
       "maskOutsideModuleAlphaPixels": 0,
       "protectedApplianceMaskPixels": 0,
+      "rightOwnershipMaskPixels": 0,
+      "expectedMaskMismatchPixels": 0,
       "maskBounds": [
         498,
         590,
-        757,
+        746,
         856
       ]
     },

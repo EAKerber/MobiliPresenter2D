@@ -18,8 +18,9 @@ def host_id(asset):
     return 'module-' + asset['group'][-2:]
 
 def asset_visible_in_case(asset, ids):
-    # Stone variants and their joint bridges are owned by the same host module.
-    # Visibility must therefore follow that host, matching scene-data hostIds.
+    required = asset.get('requiresVisibleIds')
+    if required:
+        return all(entity_id in ids for entity_id in required)
     return host_id(asset) in ids
 
 def material_mask(config, ids):

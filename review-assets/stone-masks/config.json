@@ -284,7 +284,11 @@
       "id": "stone-02-bridge",
       "group": "stone-02",
       "path": "app/assets/kitchen/bridges/stone-02-joint-bridge.png",
-      "sha256": "e178e88edf0f412d1f0922bf335e7b524e80e888a3e2189fcd51ccc048a3d108"
+      "sha256": "e178e88edf0f412d1f0922bf335e7b524e80e888a3e2189fcd51ccc048a3d108",
+      "requiresVisibleIds": [
+        "module-02",
+        "module-03"
+      ]
     },
     {
       "id": "stone-03-exposed",
@@ -296,13 +300,17 @@
       "id": "stone-03-bridge",
       "group": "stone-03",
       "path": "app/assets/kitchen/bridges/stone-03-joint-bridge.png",
-      "sha256": "d17fe629516c7aad1d79120c139f15529820a51ad260639ec5ce411e7aa222c3"
+      "sha256": "d17fe629516c7aad1d79120c139f15529820a51ad260639ec5ce411e7aa222c3",
+      "requiresVisibleIds": [
+        "module-02",
+        "module-03"
+      ]
     }
   ],
   "limitations": [
     "Manual conservative regions, not final semantic segmentation.",
     "Stone behind/near protected objects remains unselected intentionally.",
     "Masks are not installed in runtime and do not enable a finish.",
-    "Bridge masks follow existing host visibility; do not merge them permanently."
+    "Joint bridge sources are seam-only and require modules 02 and 03 to be visible together."
   ]
 }

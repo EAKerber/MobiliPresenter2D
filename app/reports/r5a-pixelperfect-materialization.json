@@ -1,17 +1,19 @@
 {
-  "schemaVersion": "R5APixelPerfectMaterialization 0.2",
+  "schemaVersion": "R5APixelPerfectMaterialization 0.3",
   "module02LeftStripAlphaRemoved": 3597,
   "stone02ColumnWedgeAlphaRemoved": 677,
   "stone02ExposedRightAlphaRemoved": 822,
   "stone03ExposedLeftAlphaRemoved": 758,
   "module02FinishMask": {
-    "protectedPixelsCleared": 51513,
+    "protectedPixelsCleared": 46308,
+    "rightOwnershipPixelsCleared": 2926,
+    "frontOwnershipRightEdge": 746,
     "maskBounds": [
       498,
       590,
-      757,
+      746,
       856
     ],
-    "maskNonTransparentPixels": 17381
+    "maskNonTransparentPixels": 19660
   }
 }

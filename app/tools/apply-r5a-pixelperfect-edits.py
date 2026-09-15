@@ -32,7 +32,12 @@ REPORT = ROOT / "reports" / "r5a-pixelperfect-materialization.json"
 STONE02_LEFT_CLEAN_POINTS = ((523, 520), (523, 551), (489, 559))
 STONE02_RIGHT_EDGE_POINTS = ((746, 519), (746, 557), (744, 574), (746, 579), (744, 586), (744, 589))
 STONE03_LEFT_EDGE_POINTS = ((751, 518), (751, 551), (740, 574), (739, 580), (740, 586), (740, 589))
-MODULE02_APPLIANCE_PROTECTED = (516, 609, 739, 840)
+# The oven appliance ends before the right carcass/front rail. R5A previously
+# widened this rectangle to x=739, which removed 5,205 real front pixels.
+MODULE02_APPLIANCE_PROTECTED = (516, 611, 720, 838)
+# x>=746 belongs to the 02↔03 overlap/seam, not to module 02's own front finish.
+# Keeping it in mask02 produced the 2,926-pixel external strip seen in review.
+MODULE02_FINISH_RIGHT_EDGE = 746
 
 COMPOSITION = (
     "layers/01_modulo_lavanderia.png",
@@ -113,12 +118,18 @@ def build_module02_finish_mask() -> dict[str, object]:
     mask = module.getchannel("A").copy()
     mp = mask.load()
     x0, y0, x1, y1 = MODULE02_APPLIANCE_PROTECTED
-    cleared = 0
+    protected_cleared = 0
     for y in range(y0, y1):
         for x in range(x0, x1):
             if mp[x, y]:
                 mp[x, y] = 0
-                cleared += 1
+                protected_cleared += 1
+    ownership_cleared = 0
+    for y in range(mask.height):
+        for x in range(MODULE02_FINISH_RIGHT_EDGE, mask.width):
+            if mp[x, y]:
+                mp[x, y] = 0
+                ownership_cleared += 1
     # CSS consumes the mask through its alpha channel. Keep the luminance
     # support in RGB as well so legacy L-based diagnostics remain meaningful,
     # but never write an opaque grayscale PNG here.
@@ -126,7 +137,9 @@ def build_module02_finish_mask() -> dict[str, object]:
     rgba_mask.save(MASK02)
     bbox = mask.getbbox()
     return {
-        "protectedPixelsCleared": cleared,
+        "protectedPixelsCleared": protected_cleared,
+        "rightOwnershipPixelsCleared": ownership_cleared,
+        "frontOwnershipRightEdge": MODULE02_FINISH_RIGHT_EDGE,
         "maskBounds": list(bbox) if bbox else None,
         "maskNonTransparentPixels": sum(1 for value in mask.getdata() if value),
     }
@@ -141,7 +154,7 @@ def compose_golden() -> None:
 
 def main() -> int:
     result = {
-        "schemaVersion": "R5APixelPerfectMaterialization 0.2",
+        "schemaVersion": "R5APixelPerfectMaterialization 0.3",
         "module02LeftStripAlphaRemoved": clean_module02_left_strip(),
         "stone02ColumnWedgeAlphaRemoved": clean_stone02_left(),
         "stone02ExposedRightAlphaRemoved": clip_and_bridge(STONE02, STONE02_EXPOSED, STONE02_BRIDGE, side="right", points=STONE02_RIGHT_EDGE_POINTS, roi=(738, 518, 765, 590)),
