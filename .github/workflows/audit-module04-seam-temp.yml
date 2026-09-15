@@ -1,0 +1,70 @@
+name: Audit module04 seam ownership temp
+on:
+  push:
+    branches: [fix/module04-seam-bridge]
+    paths: ['.github/workflows/audit-module04-seam-temp.yml']
+permissions:
+  contents: read
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install -r tools/requirements.txt
+      - name: Measure old mask fringe against neighboring module alpha
+        run: |
+          mkdir -p /tmp/module04-seam
+          git show e83d318eab52fdd9c8787d5d5d190205cf960aad:app/assets/kitchen/masks/04.png > /tmp/module04-seam/mask04-pre29.png
+          python - <<'PY'
+          from pathlib import Path
+          from PIL import Image, ImageChops, ImageDraw
+          import json
+          root=Path('.')
+          out=Path('/tmp/module04-seam')
+          old=Image.open(out/'mask04-pre29.png').convert('RGBA').getchannel('A')
+          cur=Image.open(root/'app/assets/kitchen/masks/04.png').convert('RGBA').getchannel('A')
+          fringe=ImageChops.subtract(old,cur).point(lambda v:255 if v else 0)
+          layers={
+            'module-04':'app/assets/kitchen/layers/04_lateral_geladeira.png',
+            'module-05':'app/assets/kitchen/layers/05_aereo_fogao.png',
+            'module-06':'app/assets/kitchen/layers/06_aereo_pia.png',
+            'module-07':'app/assets/kitchen/layers/07_aereo_geladeira.png',
+          }
+          def binary(a): return a.point(lambda v:255 if v else 0)
+          def count(a): return sum(1 for v in a.getdata() if v)
+          rec={'fringePixels':count(fringe),'fringeBounds':list(fringe.getbbox()) if fringe.getbbox() else None,'overlap':{}}
+          union=Image.new('L',old.size,0)
+          for name,path in layers.items():
+            a=binary(Image.open(root/path).convert('RGBA').getchannel('A'))
+            union=ImageChops.lighter(union,a)
+            rec['overlap'][name]=count(ImageChops.multiply(fringe,a))
+          rec['outsideAllFourHosts']=count(ImageChops.multiply(fringe,ImageChops.invert(union)))
+          # Enlarged diagnostic around the exact seam. RGB layers on white + masks colored.
+          crop=(1188,34,1252,92)
+          scale=8
+          canvas=Image.new('RGB',(64,58),'white')
+          for path in layers.values():
+            im=Image.open(root/path).convert('RGBA').crop(crop)
+            canvas=Image.alpha_composite(canvas.convert('RGBA'),im).convert('RGB')
+          diag=canvas.convert('RGBA')
+          overlay=Image.new('RGBA',diag.size,(0,0,0,0)); d=ImageDraw.Draw(overlay)
+          fp=fringe.crop(crop).load(); cp=cur.crop(crop).load()
+          for y in range(diag.height):
+            for x in range(diag.width):
+              if cp[x,y]: d.point((x,y),fill=(0,120,255,150))
+              if fp[x,y]: d.point((x,y),fill=(255,0,0,255))
+          diag=Image.alpha_composite(diag,overlay).resize((diag.width*scale,diag.height*scale),Image.Resampling.NEAREST)
+          diag.save(out/'module04-seam-diagnostic.png')
+          (out/'ownership.json').write_text(json.dumps(rec,indent=2)+'\n')
+          print(json.dumps(rec,sort_keys=True))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: module04-seam-audit
+          path: /tmp/module04-seam
