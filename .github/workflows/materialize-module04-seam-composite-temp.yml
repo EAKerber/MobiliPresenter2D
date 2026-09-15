@@ -1,0 +1,121 @@
+name: Materialize conditional module04 seam mask temp
+on:
+  push:
+    branches: [fix/module04-seam-bridge]
+    paths: ['.github/workflows/materialize-module04-seam-composite-temp.yml']
+permissions:
+  contents: write
+jobs:
+  materialize:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: python -m pip install -r tools/requirements.txt
+      - name: Replace split runtime bridge with conditional composite mask
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          from PIL import Image, ImageChops
+          root=Path('.'); app=root/'app'
+          base=Image.open(app/'assets/kitchen/masks/04.png').convert('RGBA')
+          seam=Image.open(app/'assets/kitchen/masks/04-06-seam-bridge.png').convert('RGBA')
+          combined=base.copy(); combined.putalpha(ImageChops.lighter(base.getchannel('A'),seam.getchannel('A')))
+          combined_path=app/'assets/kitchen/masks/04-with-06-seam.png'; combined.save(combined_path)
+          old=Image.open('/tmp/old.png').convert('RGBA') if Path('/tmp/old.png').exists() else None
+
+          def patch(path, old, new, count=1):
+              p=Path(path); text=p.read_text(); actual=text.count(old)
+              assert actual==count, (path,actual,old)
+              p.write_text(text.replace(old,new,count))
+
+          scene=app/'data/scene-data.js'
+          text=scene.read_text()
+          text=text.replace('        "module-04-06-finish-bridge",\n','')
+          text=text.replace('          "module-04-06-finish-bridge",\n','')
+          bridge_block='''      {\n        id: "module-04-06-finish-bridge",\n        alias: "04J",\n        label: "Emenda de acabamento 04–06",\n        kind: "finish-bridge",\n        zIndex: 401,\n        asset: "assets/kitchen/bridges/front-04-06-finish-bridge.png",\n        maskAsset: "assets/kitchen/masks/04-06-seam-bridge.png",\n        alphaBounds: null,\n        defaultVisible: true,\n        controllable: false,\n        hostIds: ["module-04", "module-06"],\n        finishGroups: ["fronts-all"],\n        tags: ["finish", "joint", "sink-zone", "refrigerator-zone"]\n      },\n'''
+          assert text.count(bridge_block)==1
+          text=text.replace(bridge_block,'')
+          module04_mask='''        maskAsset: "assets/kitchen/masks/04.png",\n        alphaBounds: { x: 1205, y: 44, width: 38, height: 870 },'''
+          module04_variant='''        maskAsset: "assets/kitchen/masks/04.png",\n        finishMaskVariants: [\n          {\n            requiresVisibleIds: ["module-06"],\n            maskAsset: "assets/kitchen/masks/04-with-06-seam.png",\n            sourceBridgeMaskAsset: "assets/kitchen/masks/04-06-seam-bridge.png"\n          }\n        ],\n        alphaBounds: { x: 1205, y: 44, width: 38, height: 870 },'''
+          assert text.count(module04_mask)==1
+          scene.write_text(text.replace(module04_mask,module04_variant))
+
+          finishes=app/'core/finishes.js'
+          patch(finishes,
+'''  function resolveOverlayOpacity(preset, color) {\n    const configured = Number(preset?.overlayOpacity);\n    if (Number.isFinite(configured) && configured >= 0 && configured <= 1) return configured;\n    return adaptiveOverlayOpacity(color);\n  }\n\n  global.CasaModulesFinishes = Object.freeze({\n    adaptiveOverlayOpacity,\n    parseHexColor,\n    resolveOverlayOpacity\n  });''',
+'''  function resolveOverlayOpacity(preset, color) {\n    const configured = Number(preset?.overlayOpacity);\n    if (Number.isFinite(configured) && configured >= 0 && configured <= 1) return configured;\n    return adaptiveOverlayOpacity(color);\n  }\n\n  function resolveMaskAsset(entity, resolvedVisibility) {\n    const variants = entity?.finishMaskVariants || [];\n    for (const variant of variants) {\n      const requiredIds = variant.requiresVisibleIds || [];\n      if (requiredIds.length && requiredIds.every((id) => resolvedVisibility?.[id]?.visible)) {\n        return variant.maskAsset;\n      }\n    }\n    return entity?.maskAsset || null;\n  }\n\n  global.CasaModulesFinishes = Object.freeze({\n    adaptiveOverlayOpacity,\n    parseHexColor,\n    resolveMaskAsset,\n    resolveOverlayOpacity\n  });''')
+
+          appjs=app/'app.js'
+          patch(appjs,
+'''  const finishLayers = [...document.querySelectorAll(".finish-layer")];\n  const swatches = [...document.querySelectorAll("[data-color]")];''',
+'''  const finishLayers = [...document.querySelectorAll(".finish-layer")];\n  const entitiesById = new Map(scene.entities.map((entity) => [entity.id, entity]));\n  const swatches = [...document.querySelectorAll("[data-color]")];''')
+          patch(appjs,
+'''  function syncLayerVisibility() {\n    renderStone(state);\n    const resolved = visibility.resolveVisibility(scene, state);\n    layerGroups.forEach((layer) => {''',
+'''  function syncFinishMasks(resolved) {\n    finishLayers.forEach((layer) => {\n      const group = layer.closest(".layer-group");\n      const entity = entitiesById.get(group?.dataset.entityId);\n      const maskAsset = finishes.resolveMaskAsset(entity, resolved);\n      if (!maskAsset || layer.dataset.maskAsset === maskAsset) return;\n      const maskSource = inlineMasks[maskAsset];\n      if (!maskSource) throw new Error(`Máscara incorporada ausente: ${maskAsset}`);\n      layer.style.setProperty("--mask-image", `url("${maskSource}")`);\n      layer.dataset.maskAsset = maskAsset;\n    });\n  }\n\n  function syncLayerVisibility() {\n    renderStone(state);\n    const resolved = visibility.resolveVisibility(scene, state);\n    syncFinishMasks(resolved);\n    layerGroups.forEach((layer) => {''')
+
+          validation=app/'core/validation.js'
+          patch(validation,
+'''      (entity.occludedByIds || []).forEach((occluderId) => {\n        if (!scene.entities.some((candidate) => candidate.id === occluderId)) {\n          errors.push({ code: "occluder-missing", entityId: entity.id, occluderId });\n        }\n      });''',
+'''      (entity.occludedByIds || []).forEach((occluderId) => {\n        if (!scene.entities.some((candidate) => candidate.id === occluderId)) {\n          errors.push({ code: "occluder-missing", entityId: entity.id, occluderId });\n        }\n      });\n      (entity.finishMaskVariants || []).forEach((variant, variantIndex) => {\n        if (typeof variant.maskAsset !== "string" || !variant.maskAsset) {\n          errors.push({ code: "finish-mask-variant-missing-asset", entityId: entity.id, variantIndex });\n        }\n        const requiredIds = variant.requiresVisibleIds || [];\n        if (!Array.isArray(requiredIds) || !requiredIds.length) {\n          errors.push({ code: "finish-mask-variant-missing-dependency", entityId: entity.id, variantIndex });\n          return;\n        }\n        requiredIds.forEach((requiredId) => {\n          if (!scene.entities.some((candidate) => candidate.id === requiredId)) {\n            errors.push({ code: "finish-mask-variant-dependency-missing", entityId: entity.id, variantIndex, requiredId });\n          }\n        });\n      });''')
+
+          tests=app/'tools/test-core.js'; t=tests.read_text()
+          t=t.replace('const fingerprints=sandbox.window.CasaModulesFingerprint;','const fingerprints=sandbox.window.CasaModulesFingerprint;\nconst finishes=sandbox.window.CasaModulesFinishes;')
+          t=t.replace('assert.equal(scene.entities.length,18);','assert.equal(scene.entities.length,17);')
+          t=t.replace('''  if(entity.maskAsset){\n    assert.equal(fs.existsSync(path.join(projectRoot,entity.maskAsset)),true);\n    assert.equal(typeof masks[entity.maskAsset],"string");\n  }''','''  if(entity.maskAsset){\n    assert.equal(fs.existsSync(path.join(projectRoot,entity.maskAsset)),true);\n    assert.equal(typeof masks[entity.maskAsset],"string");\n  }\n  for (const variant of entity.finishMaskVariants || []) {\n    assert.equal(fs.existsSync(path.join(projectRoot,variant.maskAsset)),true,variant.maskAsset);\n    assert.equal(typeof masks[variant.maskAsset],"string");\n    if (variant.sourceBridgeMaskAsset) {\n      assert.equal(fs.existsSync(path.join(projectRoot,variant.sourceBridgeMaskAsset)),true,variant.sourceBridgeMaskAsset);\n      assert.equal(typeof masks[variant.sourceBridgeMaskAsset],"string");\n    }\n  }''')
+          t=t.replace('assert.equal(visibility.getVisibleEntities(scene,initial).length,16);','assert.equal(visibility.getVisibleEntities(scene,initial).length,15);')
+          seam_test='''assert.equal(visibility.resolveVisibility(scene,initial)["module-04-06-finish-bridge"].reason,"visible");\ncore.setEntityVisibility(initial,"module-06",false);\nlet seamVisibility=visibility.resolveVisibility(scene,initial);\nassert.equal(seamVisibility["module-04-06-finish-bridge"].reason,"host-hidden");\ncore.setEntityVisibility(initial,"module-06",true);\ncore.setEntityVisibility(initial,"module-04",false);\nseamVisibility=visibility.resolveVisibility(scene,initial);\nassert.equal(seamVisibility["module-04-06-finish-bridge"].reason,"host-hidden");\ncore.setEntityVisibility(initial,"module-04",true);\nassert.equal(visibility.resolveVisibility(scene,initial)["module-04-06-finish-bridge"].reason,"visible");\n'''
+          assert t.count(seam_test)==1; t=t.replace(seam_test,'')
+          marker='assert.equal(visibility.resolveVisibility(scene,initial)["module-02-right-exposed-face"].reason,"occluded");\n'
+          variant_test='''const module04=scene.entities.find((entity)=>entity.id==="module-04");\nlet finishVisibility=visibility.resolveVisibility(scene,initial);\nassert.equal(finishes.resolveMaskAsset(module04,finishVisibility),"assets/kitchen/masks/04-with-06-seam.png");\ncore.setEntityVisibility(initial,"module-06",false);\nfinishVisibility=visibility.resolveVisibility(scene,initial);\nassert.equal(finishes.resolveMaskAsset(module04,finishVisibility),"assets/kitchen/masks/04.png");\ncore.setEntityVisibility(initial,"module-06",true);\nassert.equal(finishes.resolveMaskAsset(module04,visibility.resolveVisibility(scene,initial)),"assets/kitchen/masks/04-with-06-seam.png");\n'''
+          assert t.count(marker)==1; t=t.replace(marker,marker+variant_test)
+          t=t.replace('assert.equal(visibility.getVisibleEntities(scene,initial).length,12);','assert.equal(visibility.getVisibleEntities(scene,initial).length,11);')
+          t=t.replace('assert.equal(visibility.getVisibleEntities(scene,initial).length,13);','assert.equal(visibility.getVisibleEntities(scene,initial).length,12);')
+          t=t.replace('entities:18,controllableEntities:8','entities:17,controllableEntities:8')
+          tests.write_text(t)
+
+          masks=app/'tools/build-inline-masks.py'
+          patch(masks,'    "assets/kitchen/masks/04-06-seam-bridge.png",\n','    "assets/kitchen/masks/04-06-seam-bridge.png",\n    "assets/kitchen/masks/04-with-06-seam.png",\n')
+          tech=app/'tools/update-technical-data.py'; tx=tech.read_text(); tx=tx.replace('        "assets/kitchen/bridges/front-04-06-finish-bridge.png",\n','        "assets/kitchen/masks/04-with-06-seam.png",\n'); tech.write_text(tx)
+
+          validator=app/'tools/validate-assets.py'; v=validator.read_text()
+          v=v.replace('''    "mask": "assets/kitchen/masks/04-06-seam-bridge.png",\n    "hosts": (''','''    "mask": "assets/kitchen/masks/04-06-seam-bridge.png",\n    "base": "assets/kitchen/masks/04.png",\n    "composite": "assets/kitchen/masks/04-with-06-seam.png",\n    "hosts": (''')
+          before='''    for host_rel in FRONT_SEAM_BRIDGE["hosts"]:\n        with Image.open(ROOT / host_rel) as host_image:\n            host = binary_support(host_image.convert("RGBA").getchannel("A"))\n        overlap = ImageChops.multiply(mask, host)\n        overlap_pixels = sum(1 for value in overlap.get_flattened_data() if value)\n        if overlap_pixels:\n            errors.append({\n                "path": FRONT_SEAM_BRIDGE["mask"],\n                "host": host_rel,\n                "error": "finish-bridge-overlaps-host-alpha",\n                "pixels": overlap_pixels,\n                "bounds": list(overlap.getbbox()),\n            })\n    return errors'''
+          after='''    for host_rel in FRONT_SEAM_BRIDGE["hosts"]:\n        with Image.open(ROOT / host_rel) as host_image:\n            host = binary_support(host_image.convert("RGBA").getchannel("A"))\n        overlap = ImageChops.multiply(mask, host)\n        overlap_pixels = sum(1 for value in overlap.get_flattened_data() if value)\n        if overlap_pixels:\n            errors.append({\n                "path": FRONT_SEAM_BRIDGE["mask"],\n                "host": host_rel,\n                "error": "finish-bridge-overlaps-host-alpha",\n                "pixels": overlap_pixels,\n                "bounds": list(overlap.getbbox()),\n            })\n    with Image.open(ROOT / FRONT_SEAM_BRIDGE["base"]) as base_image, Image.open(ROOT / FRONT_SEAM_BRIDGE["composite"]) as composite_image:\n        base_alpha = base_image.convert("RGBA").getchannel("A")\n        composite_alpha = composite_image.convert("RGBA").getchannel("A")\n    expected_alpha = ImageChops.lighter(base_alpha, Image.open(mask_path).convert("RGBA").getchannel("A"))\n    composite_diff = ImageChops.difference(expected_alpha, composite_alpha)\n    if composite_diff.getbbox():\n        errors.append({\n            "path": FRONT_SEAM_BRIDGE["composite"],\n            "error": "finish-bridge-composite-mismatch",\n            "bounds": list(composite_diff.getbbox()),\n        })\n    return errors'''
+          assert v.count(before)==1; validator.write_text(v.replace(before,after))
+          print({'status':'prepared-conditional-composite'})
+          PY
+          git rm app/assets/kitchen/bridges/front-04-06-finish-bridge.png
+          cd app
+          python tools/build-inline-masks.py
+          python tools/update-technical-data.py
+          npm test
+          cd ..
+          python tools/refresh-baseline-manifest.py
+          python tools/validate-baseline.py
+      - name: Commit conditional composite implementation with CAS readback
+        env:
+          TARGET_BRANCH: fix/module04-seam-bridge
+          EXPECTED_HEAD: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -A app reference/baseline-manifest.json
+          git diff --cached --name-only
+          git commit -m 'Render external 04-06 seam through conditional composite mask'
+          candidate_sha="$(git rev-parse HEAD)"
+          remote_before="$(git ls-remote origin "refs/heads/${TARGET_BRANCH}" | cut -f1)"
+          test "$remote_before" = "$EXPECTED_HEAD"
+          git push origin "HEAD:refs/heads/${TARGET_BRANCH}"
+          remote_after="$(git ls-remote origin "refs/heads/${TARGET_BRANCH}" | cut -f1)"
+          test "$remote_after" = "$candidate_sha"
+          echo "MODULE04_COMPOSITE_MATERIALIZATION base=${EXPECTED_HEAD} result=${candidate_sha} readback=PASS"
