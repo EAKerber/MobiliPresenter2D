@@ -26,6 +26,7 @@
         "approved-stone-02",
         "approved-stone-03",
         "stone-02-joint-bridge",
+        "module-02-right-exposed-face",
         "stone-03-joint-bridge",
         "module-04",
         "module-05",
@@ -257,6 +258,22 @@
         hostIds: ["module-02"],
         finishGroups: [],
         tags: ["stone", "joint", "cooking-zone", "sink-zone"]
+      },
+      {
+        id: "module-02-right-exposed-face",
+        alias: "02L",
+        label: "Lateral direita exposta do módulo 02",
+        kind: "accessory",
+        zIndex: 203,
+        asset: "assets/kitchen/overlays/module-02-right-exposed-face.png",
+        maskAsset: null,
+        alphaBounds: { x: 755, y: 525, width: 9, height: 290 },
+        defaultVisible: true,
+        controllable: false,
+        hostId: "module-02",
+        occludedByIds: ["module-03"],
+        finishGroups: [],
+        tags: ["exposed-side", "carcass-side", "cooking-zone"]
       },
       {
         id: "stone-03-joint-bridge",

@@ -15,7 +15,7 @@ const visibility=sandbox.window.CasaModulesVisibility;
 const validation=sandbox.window.CasaModulesValidation;
 const fingerprints=sandbox.window.CasaModulesFingerprint;
 const technical=JSON.parse(fs.readFileSync(path.join(projectRoot,"data/technical-data.json"),"utf8"));
-assert.equal(scene.entities.length,16);
+assert.equal(scene.entities.length,17);
 assert.deepEqual(Array.from(validation.validateScene(scene)),[]);
 for (const entity of scene.entities) {
   assert.equal(fs.existsSync(path.join(projectRoot,entity.asset)),true,entity.asset);
@@ -27,19 +27,64 @@ for (const entity of scene.entities) {
   const expected=b?{x:b[0],y:b[1],width:b[2]-b[0],height:b[3]-b[1]}:null;
   assert.equal(JSON.stringify(entity.alphaBounds),JSON.stringify(expected),entity.id);
 }
+const occlusionProbeScene = {
+  entities: [
+    { id: "probe-host", zIndex: 1, asset: "host.png", defaultVisible: true },
+    { id: "probe-occluder", zIndex: 2, asset: "occluder.png", defaultVisible: true },
+    {
+      id: "probe-exposed-face",
+      zIndex: 3,
+      asset: "face.png",
+      defaultVisible: true,
+      hostId: "probe-host",
+      occludedByIds: ["probe-occluder"]
+    }
+  ],
+  defaultConfiguration: { visible: ["probe-host", "probe-occluder", "probe-exposed-face"] },
+  substitutionGroups: [],
+  finishGroups: []
+};
+assert.deepEqual(Array.from(validation.validateScene(occlusionProbeScene)), []);
+const occlusionProbeState = {
+  visibilityByEntity: {
+    "probe-host": true,
+    "probe-occluder": true,
+    "probe-exposed-face": true
+  }
+};
+let probeVisibility = visibility.resolveVisibility(occlusionProbeScene, occlusionProbeState);
+assert.equal(probeVisibility["probe-exposed-face"].reason, "occluded");
+occlusionProbeState.visibilityByEntity["probe-occluder"] = false;
+probeVisibility = visibility.resolveVisibility(occlusionProbeScene, occlusionProbeState);
+assert.equal(probeVisibility["probe-exposed-face"].reason, "visible");
+occlusionProbeState.visibilityByEntity["probe-host"] = false;
+probeVisibility = visibility.resolveVisibility(occlusionProbeScene, occlusionProbeState);
+assert.equal(probeVisibility["probe-exposed-face"].reason, "host-hidden");
+const invalidOcclusionProbeScene = {
+  ...occlusionProbeScene,
+  entities: occlusionProbeScene.entities.map((entity) =>
+    entity.id === "probe-exposed-face" ? { ...entity, occludedByIds: ["missing-neighbor"] } : entity
+  )
+};
+assert.equal(
+  Array.from(validation.validateScene(invalidOcclusionProbeScene)).some((error) => error.code === "occluder-missing"),
+  true
+);
 const initial=core.createInitialState(scene);
 assert.equal(visibility.resolveVisibility(scene,initial)["faucet-approved"].visible,true);
 const fp=fingerprints.computeFingerprint(scene,initial);
 assert.equal(visibility.getVisibleEntities(scene,initial).length,15);
 assert.equal(visibility.resolveVisibility(scene,initial)["stone-02-joint-bridge"].visible,true);
 assert.equal(visibility.resolveVisibility(scene,initial)["stone-03-joint-bridge"].visible,true);
+assert.equal(visibility.resolveVisibility(scene,initial)["module-02-right-exposed-face"].reason,"occluded");
 core.setEntityVisibility(initial,"module-03",false);
 let r=visibility.resolveVisibility(scene,initial);
 assert.equal(r["faucet-approved"].reason,"host-hidden");
 assert.equal(r["stone-03"].reason,"host-hidden");
 assert.equal(r["stone-02-joint-bridge"].reason,"visible");
 assert.equal(r["stone-03-joint-bridge"].reason,"host-hidden");
-assert.equal(visibility.getVisibleEntities(scene,initial).length,10);
+assert.equal(r["module-02-right-exposed-face"].reason,"visible");
+assert.equal(visibility.getVisibleEntities(scene,initial).length,11);
 core.setEntityVisibility(initial,"module-03",true);
 core.setEntityVisibility(initial,"module-02",false);
 r=visibility.resolveVisibility(scene,initial);
@@ -47,5 +92,6 @@ assert.equal(r["stone-02"].reason,"host-hidden");
 assert.equal(r["range-freestanding"].visible,true);
 assert.equal(r["stone-02-joint-bridge"].reason,"host-hidden");
 assert.equal(r["stone-03-joint-bridge"].reason,"visible");
+assert.equal(r["module-02-right-exposed-face"].reason,"host-hidden");
 assert.equal(visibility.getVisibleEntities(scene,initial).length,12);
-process.stdout.write(`${JSON.stringify({passed:true,initialFingerprint:fp,entities:16,controllableEntities:8})}\n`);
+process.stdout.write(`${JSON.stringify({passed:true,initialFingerprint:fp,entities:17,controllableEntities:8})}\n`);

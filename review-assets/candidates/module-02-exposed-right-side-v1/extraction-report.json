@@ -1,0 +1,44 @@
+{
+  "authoringContractId": "module-02-right-exposed-face-edit",
+  "authorizedRoi": [
+    742,
+    520,
+    764,
+    899
+  ],
+  "candidateAlphaBounds": [
+    755,
+    525,
+    764,
+    815
+  ],
+  "candidateSha256": "3becbf8a510dd76757593ed5c227482edef7af57c48877e9d2e714398e77fff8",
+  "canvas": {
+    "height": 1024,
+    "width": 1536
+  },
+  "changedPixelCount": 1910,
+  "deltaMode": "opaque-replacement-pixels",
+  "differenceBounds": [
+    755,
+    525,
+    764,
+    815
+  ],
+  "editedFrameSha256": "dfa445834900d87450392f3ccec827880eade882ca914153110b6f9d3558eca4",
+  "outsideAuthorizedRoiChangedPixelCount": 0,
+  "protectedAssets": [
+    "app/assets/kitchen/layers/02_inferior_fogao.png",
+    "app/assets/kitchen/variants/stone-02-cozinha-exposed-right.png",
+    "app/assets/kitchen/bridges/stone-02-joint-bridge.png",
+    "app/assets/kitchen/overlays/approved-stone-02.png"
+  ],
+  "recipePath": "review-assets/recipes/module-02-exposed-right-side-v1.json",
+  "recipeSha256": "a4ac0fa6702dc0707dde90dce0447b0e233cd222b9ecb3543be8494f0525d742",
+  "role": "module-02-right-exposed-face",
+  "roundtripMismatchPixelCount": 0,
+  "schemaVersion": "CandidateDeltaExtractionReport 0.1",
+  "sourceFrameSha256": "f502790c76afe612563958ca3acfcc7d653018d718d11d852ed3a45df553ecfa",
+  "status": "PASS",
+  "targetVariant": "module-03-hidden"
+}

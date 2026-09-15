@@ -1,0 +1,97 @@
+{
+  "schemaVersion": "PerspectiveDonorRecipe 0.1",
+  "id": "module-02-exposed-right-side-v1",
+  "role": "module-02-right-exposed-face",
+  "targetVariant": "module-03-hidden",
+  "targetVariantFingerprint": "scene2d-930c3dc3",
+  "authoringContractId": "module-02-right-exposed-face-edit",
+  "sourceReferences": [
+    "app/assets/kitchen/base.png",
+    "app/assets/kitchen/composicao-completa.png",
+    "variant:module-03-hidden@scene2d-930c3dc3",
+    "review-assets/calibration/module-02-right-face-v1/source-variant-manifest.json"
+  ],
+  "expectedSourceFrameSha256": "f502790c76afe612563958ca3acfcc7d653018d718d11d852ed3a45df553ecfa",
+  "intent": "Infer only the missing right carcass side of module 02 when module 03 is hidden. Reuse a clean white carcass-side material sample already present on module 01 in the canonical scene, excluding its edge marks/hardware, and project it only into the empty pixels revealed beside module 02. Never overwrite alpha already owned by module 02, its stone, its joint bridge or the approved stone overlay.",
+  "supersampling": 4,
+  "protectedAssets": [
+    "app/assets/kitchen/layers/02_inferior_fogao.png",
+    "app/assets/kitchen/variants/stone-02-cozinha-exposed-right.png",
+    "app/assets/kitchen/bridges/stone-02-joint-bridge.png",
+    "app/assets/kitchen/overlays/approved-stone-02.png"
+  ],
+  "geometry": {
+    "frontEdgeX": 742,
+    "counterFrontY": 586,
+    "cabinetFrontBottomY": 857,
+    "floorContactY": 898,
+    "observedTopDepthReference": {
+      "front": [
+        742,
+        586
+      ],
+      "back": [
+        763,
+        525
+      ],
+      "interpretation": "bounded contextual depth cue measured from the exact deterministic module-03-hidden render; it constrains the donor projection but is not claimed as world-space camera calibration"
+    },
+    "authorizedRoi": [
+      742,
+      520,
+      764,
+      899
+    ]
+  },
+  "operations": [
+    {
+      "id": "carcass-side-from-clean-module-01-sample",
+      "type": "perspective-copy",
+      "donorQuad": [
+        [
+          360,
+          110
+        ],
+        [
+          378,
+          110
+        ],
+        [
+          378,
+          250
+        ],
+        [
+          360,
+          250
+        ]
+      ],
+      "targetQuad": [
+        [
+          742,
+          586
+        ],
+        [
+          763,
+          525
+        ],
+        [
+          763,
+          796
+        ],
+        [
+          742,
+          857
+        ]
+      ],
+      "semantic": "carcass-side-clean-sample"
+    }
+  ],
+  "expectedPixelBounds": [
+    755,
+    525,
+    764,
+    815
+  ],
+  "expectedChangedPixelCount": 1910,
+  "sourceVariantManifest": "review-assets/calibration/module-02-right-face-v1/source-variant-manifest.json"
+}

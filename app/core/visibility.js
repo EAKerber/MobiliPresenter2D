@@ -45,6 +45,20 @@
         }
       }
 
+      if (result.visible) {
+        for (const occluderId of entity.occludedByIds || []) {
+          const occluder = entitiesById.get(occluderId);
+          if (!occluder) {
+            result = { visible: false, reason: "occluder-missing" };
+            break;
+          }
+          if (resolveEntity(occluder.id).visible) {
+            result = { visible: false, reason: "occluded" };
+            break;
+          }
+        }
+      }
+
       resolving.delete(entityId);
       resolved[entityId] = Object.freeze(result);
       return resolved[entityId];
