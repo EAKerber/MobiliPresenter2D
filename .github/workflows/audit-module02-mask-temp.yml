@@ -15,66 +15,24 @@ jobs:
         with:
           python-version: '3.12'
       - run: python -m pip install -r tools/requirements.txt
-      - name: Audit all front masks
+      - name: Locate mask04 leakage
         run: |
-          mkdir -p /tmp/front-mask-audit
           python - <<'PY'
-          from pathlib import Path
           import json
-          from PIL import Image, ImageChops, ImageDraw
-          root=Path('.')
-          mapping={
-            '01':'01_modulo_lavanderia.png',
-            '02':'02_inferior_fogao.png',
-            '03':'03_inferior_pia.png',
-            '04':'04_lateral_geladeira.png',
-            '05':'05_aereo_fogao.png',
-            '06':'06_aereo_pia.png',
-            '07':'07_aereo_geladeira.png',
-          }
-          def binary(im): return im.point(lambda v:255 if v else 0)
-          def count(im): return sum(1 for v in im.getdata() if v)
-          layers={}; masks={}; records=[]
-          for key,name in mapping.items():
-            layer=Image.open(root/'app/assets/kitchen/layers'/name).convert('RGBA')
-            mask=Image.open(root/'app/assets/kitchen/masks'/f'{key}.png').convert('RGBA').getchannel('A')
-            la=binary(layer.getchannel('A')); ma=binary(mask)
-            layers[key]=la; masks[key]=ma
-            outside=ImageChops.multiply(ma,ImageChops.invert(la))
-            unmasked=ImageChops.multiply(la,ImageChops.invert(ma))
-            records.append({
-              'id':key,'layer':name,
-              'layerAlphaPixels':count(la),'maskPixels':count(ma),
-              'maskOutsideLayerPixels':count(outside),
-              'unmaskedLayerPixels':count(unmasked),
-              'layerBounds':list(la.getbbox()) if la.getbbox() else None,
-              'maskBounds':list(ma.getbbox()) if ma.getbbox() else None,
-              'unmaskedBounds':list(unmasked.getbbox()) if unmasked.getbbox() else None,
-            })
-            # source | green mask | red unmasked support
-            bbox=la.getbbox(); pad=12
-            x0=max(0,bbox[0]-pad);y0=max(0,bbox[1]-pad);x1=min(layer.width,bbox[2]+pad);y1=min(layer.height,bbox[3]+pad)
-            src=layer.crop((x0,y0,x1,y1))
-            def tint(mask,color):
-              t=Image.new('RGBA',src.size,color); mm=mask.crop((x0,y0,x1,y1)); t.putalpha(mm.point(lambda v:145 if v else 0)); return Image.alpha_composite(src,t)
-            pv=Image.new('RGBA',(src.width*3,src.height),(255,255,255,255))
-            pv.alpha_composite(src,(0,0));pv.alpha_composite(tint(ma,(0,255,0,255)),(src.width,0));pv.alpha_composite(tint(unmasked,(255,0,0,255)),(src.width*2,0))
-            pv.save(f'/tmp/front-mask-audit/{key}-source-mask-unmasked.png')
-          overlaps=[]
-          keys=list(mapping)
-          for i,a in enumerate(keys):
-            for b in keys[i+1:]:
-              n=count(ImageChops.multiply(masks[a],masks[b]))
-              if n: overlaps.append({'a':a,'b':b,'maskOverlapPixels':n})
-          # module02 R4 vs current diagnostic retained
-          alpha=layers['02']; current=masks['02']
-          r4=alpha.copy(); ImageDraw.Draw(r4).rectangle((516,611,719,837),fill=0)
-          extra=ImageChops.subtract(r4,current)
-          report={'records':records,'crossMaskOverlaps':overlaps,'module02R4ToCurrentExtraProtectedPixels':count(extra),'module02R4ToCurrentExtraProtectedBounds':list(extra.getbbox()) if extra.getbbox() else None}
-          Path('/tmp/front-mask-audit/report.json').write_text(json.dumps(report,indent=2)+'\n')
-          print(json.dumps(report,sort_keys=True))
+          from PIL import Image, ImageChops
+          layer=Image.open('app/assets/kitchen/layers/04_lateral_geladeira.png').convert('RGBA').getchannel('A')
+          mask=Image.open('app/assets/kitchen/masks/04.png').convert('RGBA').getchannel('A')
+          la=layer.point(lambda v:255 if v else 0); ma=mask.point(lambda v:255 if v else 0)
+          outside=ImageChops.multiply(ma,ImageChops.invert(la))
+          coords=[]
+          px=outside.load()
+          bbox=outside.getbbox()
+          if bbox:
+            for y in range(bbox[1],bbox[3]):
+              for x in range(bbox[0],bbox[2]):
+                if px[x,y]: coords.append([x,y])
+          by_x={}; by_y={}
+          for x,y in coords:
+            by_x[str(x)]=by_x.get(str(x),0)+1;by_y[str(y)]=by_y.get(str(y),0)+1
+          print(json.dumps({'outsidePixels':len(coords),'bbox':list(bbox) if bbox else None,'coords':coords,'byX':by_x,'byY':by_y},sort_keys=True))
           PY
-      - uses: actions/upload-artifact@v4
-        with:
-          name: front-mask-audit
-          path: /tmp/front-mask-audit
