@@ -360,6 +360,15 @@ legend { margin-bottom: 9px; color: rgba(255, 255, 255, 0.43); font-size: 12px; 
 .module-detail__technical dl div { display: grid; gap: 3px; padding: 8px; border-radius: 7px; background: rgba(65,56,47,.08); }
 .module-detail__technical dt { color: #74695d; font-size: 10px; text-transform: uppercase; letter-spacing: .06em; }
 .module-detail__technical dd { margin: 0; color: #2d2822; font-size: 12px; font-weight: 750; }
+.module-detail__views { display: grid; gap: 8px; padding: 12px; border: 1px solid rgba(65,56,47,.15); border-radius: 10px; background: rgba(255,255,255,.32); }
+.module-detail__views > p { color: #62594e; font-size: 11px; line-height: 1.35; }
+.module-detail__views-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
+.module-detail__view { display: grid; grid-template-rows: auto 1fr; min-width: 0; margin: 0; padding: 7px 4px 5px; border-radius: 7px; background: rgba(65,56,47,.055); }
+.module-detail__view figcaption { color: #4d463d; font-size: 10px; font-weight: 800; letter-spacing: .07em; text-align: center; text-transform: uppercase; }
+.module-detail__view svg { display: block; width: 100%; height: auto; min-height: 96px; overflow: visible; color: #655d52; }
+.module-detail__view svg text { fill: currentColor; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 7px; font-weight: 700; }
+.module-detail__view-shape { fill: rgba(139,106,64,.08); stroke: currentColor; stroke-width: 1.4; }
+.module-detail__dimension-line { fill: none; stroke: currentColor; stroke-width: .9; }
 .module-detail__section { display: grid; gap: 7px; }
 .module-detail__benefits, .module-detail__components { display: grid; gap: 5px; padding: 0; list-style: none; font-size: 12px; line-height: 1.4; }
 .module-detail__benefits li::before { content: "•"; margin-right: 7px; color: #8b6a40; }
@@ -399,6 +408,8 @@ legend { margin-bottom: 9px; color: rgba(255, 255, 255, 0.43); font-size: 12px; 
   .module-card__copy strong { white-space: normal; line-height: 1.25; }
   .module-detail { padding: 16px; }
   .module-detail h3 { font-size: 22px; }
+  .module-detail__views-grid { gap: 4px; }
+  .module-detail__view { padding-left: 2px; padding-right: 2px; }
   .module-detail__components { grid-template-columns: 1fr; }
   .swatch, .custom-color { width: 44px; height: 44px; }
   .configuration-value { grid-template-columns: 1fr auto; }

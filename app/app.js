@@ -220,6 +220,68 @@
     return fact;
   }
 
+  function createOrientativeView(label, horizontalLabel, horizontalValue, verticalLabel, verticalValue) {
+    const card = document.createElement("figure");
+    card.className = "module-detail__view";
+    const caption = document.createElement("figcaption");
+    caption.textContent = label;
+
+    const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    svg.setAttribute("viewBox", "0 0 180 126");
+    svg.setAttribute("role", "img");
+    svg.setAttribute("aria-label", `${label}: ${horizontalLabel} ${formatDimension(horizontalValue)} milímetros por ${verticalLabel} ${formatDimension(verticalValue)} milímetros`);
+
+    const ratio = horizontalValue / Math.max(verticalValue, 1);
+    const longSide = 88;
+    const shortSide = 42;
+    const drawingWidth = Math.max(shortSide, Math.min(longSide, ratio >= 1 ? longSide : longSide * ratio));
+    const drawingHeight = Math.max(shortSide, Math.min(longSide, ratio >= 1 ? longSide / ratio : longSide));
+    const x = 92 - drawingWidth / 2;
+    const y = 61 - drawingHeight / 2;
+    const make = (name, attributes = {}) => {
+      const node = document.createElementNS("http://www.w3.org/2000/svg", name);
+      Object.entries(attributes).forEach(([key, value]) => node.setAttribute(key, String(value)));
+      return node;
+    };
+    const text = (value, xPosition, yPosition, anchor = "middle") => {
+      const node = make("text", { x: xPosition, y: yPosition, "text-anchor": anchor });
+      node.textContent = value;
+      return node;
+    };
+
+    svg.append(
+      make("line", { x1: x, y1: 17, x2: x + drawingWidth, y2: 17, class: "module-detail__dimension-line" }),
+      make("line", { x1: x, y1: 13, x2: x, y2: 21, class: "module-detail__dimension-line" }),
+      make("line", { x1: x + drawingWidth, y1: 13, x2: x + drawingWidth, y2: 21, class: "module-detail__dimension-line" }),
+      text(`${horizontalLabel} ${formatDimension(horizontalValue)} mm`, 92, 10),
+      make("line", { x1: 26, y1: y, x2: 26, y2: y + drawingHeight, class: "module-detail__dimension-line" }),
+      make("line", { x1: 22, y1: y, x2: 30, y2: y, class: "module-detail__dimension-line" }),
+      make("line", { x1: 22, y1: y + drawingHeight, x2: 30, y2: y + drawingHeight, class: "module-detail__dimension-line" }),
+      make("rect", { x, y, width: drawingWidth, height: drawingHeight, rx: 2, class: "module-detail__view-shape" }),
+      text(`${verticalLabel} ${formatDimension(verticalValue)} mm`, 16, y + drawingHeight / 2 + 3)
+    );
+    card.append(caption, svg);
+    return card;
+  }
+
+  function createOrientativeViews(dimensions) {
+    const section = document.createElement("section");
+    section.className = "module-detail__views";
+    const heading = document.createElement("h4");
+    heading.textContent = "Vistas orientativas";
+    const note = document.createElement("p");
+    note.textContent = "Leitura das medidas nominais; não substitui desenho de instalação.";
+    const grid = document.createElement("div");
+    grid.className = "module-detail__views-grid";
+    grid.append(
+      createOrientativeView("Frontal", "L", dimensions.width, "A", dimensions.height),
+      createOrientativeView("Lateral", "P", dimensions.depth, "A", dimensions.height),
+      createOrientativeView("Planta", "L", dimensions.width, "P", dimensions.depth)
+    );
+    section.append(heading, note, grid);
+    return section;
+  }
+
   function updateSelection(resolved) {
     const entity = entitiesById.get(state.selectedEntityId);
     const product = catalogByEntityId.get(state.selectedEntityId);
@@ -282,6 +344,8 @@
     });
     technical.append(technicalHeading, technicalGrid);
 
+    const orientativeViews = createOrientativeViews(product.dimensions.nominalMm);
+
     const benefitsSection = document.createElement("section");
     benefitsSection.className = "module-detail__section";
     const benefitsHeading = document.createElement("h4");
@@ -304,7 +368,7 @@
     }
     title.id = "moduleDetailTitle";
     moduleDetail.setAttribute("aria-labelledby", title.id);
-    const detailContent = [detailHeader, material, dimensions, technical, benefitsSection, componentsSection];
+    const detailContent = [detailHeader, material, dimensions, technical, orientativeViews, benefitsSection, componentsSection];
     if (requirements.textContent) detailContent.push(requirements);
     moduleDetail.replaceChildren(...detailContent);
   }
