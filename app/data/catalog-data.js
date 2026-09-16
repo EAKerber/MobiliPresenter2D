@@ -53,6 +53,16 @@
       },
       benefits: ["Quatro gavetas com corrediças reforçadas H45", "Duas portas com fechamento amortecido", "Frentes com fita de borda coordenada"],
       components: ["4 corrediças telescópicas H45", "Dobradiças com amortecimento", "MDF 18 mm"],
+      technicalLayout: {
+        internalFront: {
+          source: "technical-sheet:module-03:user-provided-2026-08-10",
+          segments: [
+            { label: "Gavetas", spanMm: 390, subdivisions: 4 },
+            { label: "Porta central", spanMm: 400 },
+            { label: "Porta direita", spanMm: 400 }
+          ]
+        }
+      },
       requirements: ["Verificar os pontos hidráulicos e elétricos previstos para a pia."], publicPriceCents: null
     },
     {

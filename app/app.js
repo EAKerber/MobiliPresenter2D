@@ -264,7 +264,58 @@
     return card;
   }
 
-  function createOrientativeViews(dimensions) {
+  function createOrientativeInternalFront(dimensions, layout) {
+    const card = document.createElement("figure");
+    card.className = "module-detail__view";
+    const caption = document.createElement("figcaption");
+    caption.textContent = "Vista interna";
+
+    const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    svg.setAttribute("viewBox", "0 0 180 126");
+    svg.setAttribute("role", "img");
+    const segmentsLabel = layout.segments.map((segment) => `${segment.label} ${formatDimension(segment.spanMm)} milímetros`).join(", ");
+    svg.setAttribute("aria-label", `Vista interna frontal: ${segmentsLabel}.`);
+    const make = (name, attributes = {}) => {
+      const node = document.createElementNS("http://www.w3.org/2000/svg", name);
+      Object.entries(attributes).forEach(([key, value]) => node.setAttribute(key, String(value)));
+      return node;
+    };
+    const text = (value, xPosition, yPosition) => {
+      const node = make("text", { x: xPosition, y: yPosition, "text-anchor": "middle" });
+      node.textContent = value;
+      return node;
+    };
+    const x = 48, y = 30, width = 94, height = 61;
+    let cursorMm = 0;
+    const diagram = [
+      make("line", { x1: x, y1: 17, x2: x + width, y2: 17, class: "module-detail__dimension-line" }),
+      make("line", { x1: x, y1: 13, x2: x, y2: 21, class: "module-detail__dimension-line" }),
+      make("line", { x1: x + width, y1: 13, x2: x + width, y2: 21, class: "module-detail__dimension-line" }),
+      text(`L ${formatDimension(dimensions.width)} mm`, x + width / 2, 10),
+      make("rect", { x, y, width, height, rx: 2, class: "module-detail__view-shape" })
+    ];
+    layout.segments.forEach((segment, index) => {
+      cursorMm += segment.spanMm;
+      const segmentEnd = x + (cursorMm / dimensions.width) * width;
+      if (index < layout.segments.length - 1) {
+        diagram.push(make("line", { x1: segmentEnd, y1: y, x2: segmentEnd, y2: y + height, class: "module-detail__view-shape" }));
+      }
+      if (segment.subdivisions) {
+        const segmentStartMm = cursorMm - segment.spanMm;
+        const segmentStart = x + (segmentStartMm / dimensions.width) * width;
+        for (let part = 1; part < segment.subdivisions; part += 1) {
+          const divisionY = y + (height / segment.subdivisions) * part;
+          diagram.push(make("line", { x1: segmentStart, y1: divisionY, x2: segmentEnd, y2: divisionY, class: "module-detail__view-shape" }));
+        }
+      }
+    });
+    diagram.push(text(layout.segments.map((segment) => formatDimension(segment.spanMm)).join(" · "), x + width / 2, 108));
+    svg.append(...diagram);
+    card.append(caption, svg);
+    return card;
+  }
+
+  function createOrientativeViews(dimensions, technicalLayout) {
     const section = document.createElement("section");
     section.className = "module-detail__views";
     const heading = document.createElement("h4");
@@ -276,7 +327,9 @@
     grid.append(
       createOrientativeView("Frontal", "L", dimensions.width, "A", dimensions.height),
       createOrientativeView("Lateral", "P", dimensions.depth, "A", dimensions.height),
-      createOrientativeView("Planta", "L", dimensions.width, "P", dimensions.depth)
+      technicalLayout?.internalFront
+        ? createOrientativeInternalFront(dimensions, technicalLayout.internalFront)
+        : createOrientativeView("Planta", "L", dimensions.width, "P", dimensions.depth)
     );
     section.append(heading, note, grid);
     return section;
@@ -344,7 +397,7 @@
     });
     technical.append(technicalHeading, technicalGrid);
 
-    const orientativeViews = createOrientativeViews(product.dimensions.nominalMm);
+    const orientativeViews = createOrientativeViews(product.dimensions.nominalMm, product.technicalLayout);
 
     const benefitsSection = document.createElement("section");
     benefitsSection.className = "module-detail__section";
