@@ -9,6 +9,7 @@
     currency: "BRL",
     label: "Simulação de valor",
     disclaimer: "Valores ilustrativos para testar a composição. Não são orçamento, proposta ou preço comercial.",
+    baseModuleCents: 300000,
     entries: Object.freeze({
       "module-01": 239900,
       "module-02": 349900,
@@ -18,6 +19,12 @@
       "module-06": 319900,
       "module-07": 189900,
       "lighting-08": 89900
+    }),
+    handleEntries: Object.freeze({
+      none: 0,
+      "tango-chrome": 17985,
+      ponto: 14985,
+      "alca-colors": 32850
     })
   });
 

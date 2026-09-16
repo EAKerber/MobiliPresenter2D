@@ -61,7 +61,8 @@
         <nav class="flow-nav" aria-label="Etapas da configuração">
           <button class="flow-step is-active" type="button" data-step="modules" aria-controls="modulesPanel"><span>1</span>Módulos</button>
           <button class="flow-step" type="button" data-step="finishes" aria-controls="frontFinishPanel"><span>2</span>Acabamentos</button>
-          <button class="flow-step" type="button" data-step="summary" aria-controls="summaryPanel"><span>3</span>Resumo</button>
+          <button class="flow-step" type="button" data-step="services" aria-controls="servicesPanel"><span>3</span>Serviços</button>
+          <button class="flow-step" type="button" data-step="summary" aria-controls="summaryPanel"><span>4</span>Resumo</button>
         </nav>
 
         <section class="panel" id="modulesPanel" aria-labelledby="modulesHeading">
@@ -104,10 +105,16 @@
               <span aria-hidden="true">↺</span>
               Voltar ao acabamento original
             </button>
+
+            <fieldset class="handle-fieldset">
+              <legend>Puxadores</legend>
+              <p class="finish-help">A posição será vertical nas portas e horizontal nas gavetas.</p>
+              <div class="handle-options" id="handleOptions"></div>
+            </fieldset>
           </div>
         </section>
         <section class="panel" id="stonePanel" aria-labelledby="stoneHeading">
-          <header class="finish-heading"><div><h2 id="stoneHeading">Pedra</h2><p>Cor da bancada, revestimento e rodapé</p></div></header>
+          <header class="finish-heading"><div><h2 id="stoneHeading">Pedra</h2><p>Escolha o acabamento da pedra do conjunto.</p></div></header>
           <div class="finish-controls">
             <fieldset><legend>Cor da pedra</legend><div class="swatches" id="stoneSwatches">
               <button type="button" class="swatch" data-stone-color="#34383d" style="--swatch:#34383d" aria-label="Pedra grafite" title="Grafite" aria-pressed="false"></button>
@@ -122,6 +129,14 @@
             <input id="lightingToggle" type="checkbox" checked />
             <span><strong>Iluminação embutida</strong><small>Realça a bancada e requer os módulos estruturais do conjunto.</small></span>
           </label>
+        </section>
+
+        <section class="panel services-panel" id="servicesPanel" aria-labelledby="servicesHeading" hidden>
+          <header class="finish-heading">
+            <span aria-hidden="true">✓</span>
+            <div><h2 id="servicesHeading" tabindex="-1">Serviços</h2><p>Conferência do que já acompanha a composição.</p></div>
+          </header>
+          <div id="servicesChecklist" class="services-checklist"></div>
         </section>
 
         <section class="panel summary-panel" id="summaryPanel" aria-labelledby="summaryHeading" hidden>

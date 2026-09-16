@@ -35,10 +35,16 @@
   const modulesPanel = document.getElementById("modulesPanel");
   const frontFinishPanel = document.getElementById("frontFinishPanel");
   const stonePanel = document.getElementById("stonePanel");
+  const servicesPanel = document.getElementById("servicesPanel");
   const summaryPanel = document.getElementById("summaryPanel");
   const lightingToggle = document.getElementById("lightingToggle");
   const configurationAnnouncement = document.getElementById("configurationAnnouncement");
+  const handleOptions = document.getElementById("handleOptions");
+  const servicesChecklist = document.getElementById("servicesChecklist");
   const catalogByEntityId = new Map(catalog.modules.map((module) => [module.entityId, module]));
+  const detailPageByEntity = new Map();
+  const detailInteractionByEntity = new Set();
+  let detailCarouselTimer = null;
 
   function renderSceneFromData() {
     sceneBase.src = scene.baseAsset;
@@ -178,6 +184,63 @@
     // Choices shown to buyers are deliberately limited to the published presets.
   }
 
+  function renderHandleControlsFromData() {
+    if (!handleOptions) return;
+    handleOptions.replaceChildren();
+    catalog.options.handles.forEach((handle) => {
+      const button = document.createElement("button");
+      button.type = "button";
+      button.className = "handle-option";
+      button.dataset.handleId = handle.id;
+      button.setAttribute("aria-pressed", "false");
+      button.setAttribute("aria-label", `Selecionar puxador ${handle.label}`);
+
+      const orientation = document.createElement("span");
+      orientation.className = "handle-option__orientation";
+      orientation.setAttribute("aria-hidden", "true");
+      const door = document.createElement("i");
+      door.className = "handle-option__door";
+      const drawer = document.createElement("i");
+      drawer.className = "handle-option__drawer";
+      orientation.append(door, drawer);
+
+      const copy = document.createElement("span");
+      copy.className = "handle-option__copy";
+      const label = document.createElement("strong");
+      label.textContent = handle.label;
+      const description = document.createElement("small");
+      const value = priceBook.handleEntries?.[handle.id] || 0;
+      description.textContent = value ? `${handle.description} · ${formatCurrency(value)}` : handle.description;
+      copy.append(label, description);
+      button.append(orientation, copy);
+      handleOptions.append(button);
+    });
+  }
+
+  function renderServices() {
+    if (!servicesChecklist) return;
+    servicesChecklist.replaceChildren();
+    catalog.services.forEach((service) => {
+      const card = document.createElement("label");
+      card.className = "service-check";
+      const input = document.createElement("input");
+      input.type = "checkbox";
+      input.checked = service.status === "included";
+      input.disabled = service.status === "included";
+      input.setAttribute("aria-label", `${service.title}: incluída`);
+      const copy = document.createElement("span");
+      const title = document.createElement("strong");
+      title.textContent = service.title;
+      const description = document.createElement("small");
+      description.textContent = service.description;
+      const status = document.createElement("em");
+      status.textContent = "Incluída";
+      copy.append(title, description, status);
+      card.append(input, copy);
+      servicesChecklist.append(card);
+    });
+  }
+
   function selectionStyle(entity) {
     const bounds = entity?.alphaBounds;
     if (!bounds) return null;
@@ -195,6 +258,10 @@
     if (state.frontFinishId === group?.defaultPresetId) return "Cinza Gianduia";
     const preset = group?.presets.find((candidate) => candidate.id === state.frontFinishId);
     return preset?.label || "Acabamento original";
+  }
+
+  function selectedHandle() {
+    return catalog.options.handles.find((handle) => handle.id === state.handlePresetId) || catalog.options.handles[0];
   }
 
   function formatDimension(value) {
@@ -335,6 +402,164 @@
     return section;
   }
 
+  function createCarouselPage(label, content, note) {
+    const page = document.createElement("section");
+    page.className = "module-detail__carousel-page";
+    const heading = document.createElement("h4");
+    heading.textContent = label;
+    const contentArea = document.createElement("div");
+    contentArea.className = "module-detail__carousel-content";
+    contentArea.append(content);
+    page.append(heading, contentArea);
+    if (note) {
+      const description = document.createElement("p");
+      description.className = "module-detail__carousel-note";
+      description.textContent = note;
+      page.append(description);
+    }
+    return page;
+  }
+
+  function createModuleFocus(entity, product) {
+    const bounds = entity.alphaBounds;
+    const focus = document.createElement("div");
+    focus.className = "module-detail__focus";
+    focus.style.setProperty("--focus-ratio", `${bounds.width} / ${bounds.height}`);
+    const image = document.createElement("img");
+    image.src = entity.asset;
+    image.alt = `Recorte isolado de ${product.title}`;
+    image.draggable = false;
+    image.style.width = `${(scene.canvas.width / bounds.width) * 100}%`;
+    image.style.left = `${-(bounds.x / bounds.width) * 100}%`;
+    image.style.top = `${-(bounds.y / bounds.height) * 100}%`;
+    focus.append(image);
+    return focus;
+  }
+
+  function createIsometricView(dimensions) {
+    const figure = document.createElement("figure");
+    figure.className = "module-detail__view module-detail__view--isometric";
+    const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    svg.setAttribute("viewBox", "0 0 180 126");
+    svg.setAttribute("role", "img");
+    svg.setAttribute("aria-label", `Vista isométrica: largura ${formatDimension(dimensions.width)} milímetros, altura ${formatDimension(dimensions.height)} milímetros e profundidade ${formatDimension(dimensions.depth)} milímetros.`);
+    const make = (name, attributes = {}) => {
+      const node = document.createElementNS("http://www.w3.org/2000/svg", name);
+      Object.entries(attributes).forEach(([key, value]) => node.setAttribute(key, String(value)));
+      return node;
+    };
+    const label = (value, x, y, anchor = "middle") => {
+      const node = make("text", { x, y, "text-anchor": anchor });
+      node.textContent = value;
+      return node;
+    };
+    const width = 74;
+    const height = 54;
+    const depthX = 25;
+    const depthY = -16;
+    const left = 39;
+    const top = 44;
+    const right = left + width;
+    const bottom = top + height;
+    svg.append(
+      make("path", { d: `M ${left} ${top} L ${right} ${top} L ${right + depthX} ${top + depthY} L ${left + depthX} ${top + depthY} Z`, class: "module-detail__view-shape" }),
+      make("path", { d: `M ${right} ${top} L ${right + depthX} ${top + depthY} L ${right + depthX} ${bottom + depthY} L ${right} ${bottom} Z`, class: "module-detail__view-shape" }),
+      make("rect", { x: left, y: top, width, height, class: "module-detail__view-shape" }),
+      make("line", { x1: left, y1: bottom + 15, x2: right, y2: bottom + 15, class: "module-detail__dimension-line" }),
+      make("line", { x1: left, y1: bottom + 11, x2: left, y2: bottom + 19, class: "module-detail__dimension-line" }),
+      make("line", { x1: right, y1: bottom + 11, x2: right, y2: bottom + 19, class: "module-detail__dimension-line" }),
+      make("line", { x1: 21, y1: top, x2: 21, y2: bottom, class: "module-detail__dimension-line" }),
+      make("line", { x1: 17, y1: top, x2: 25, y2: top, class: "module-detail__dimension-line" }),
+      make("line", { x1: 17, y1: bottom, x2: 25, y2: bottom, class: "module-detail__dimension-line" }),
+      make("line", { x1: right + 5, y1: top - 7, x2: right + depthX + 5, y2: top + depthY - 7, class: "module-detail__dimension-line" }),
+      label(`L ${formatDimension(dimensions.width)} mm`, left + width / 2, bottom + 27),
+      label(`A ${formatDimension(dimensions.height)} mm`, 13, top + height / 2 + 3),
+      label(`P ${formatDimension(dimensions.depth)} mm`, right + depthX + 18, top + depthY - 9)
+    );
+    figure.append(svg);
+    return figure;
+  }
+
+  function clearDetailCarouselTimer() {
+    if (detailCarouselTimer !== null) {
+      global.clearInterval(detailCarouselTimer);
+      detailCarouselTimer = null;
+    }
+  }
+
+  function createDetailCarousel(entity, product) {
+    clearDetailCarouselTimer();
+    const section = document.createElement("section");
+    section.className = "module-detail__views module-detail__carousel";
+    section.setAttribute("aria-label", "Visualizações do módulo");
+    const heading = document.createElement("h4");
+    heading.textContent = "Visualizações";
+    const note = document.createElement("p");
+    note.textContent = "Navegue pelo foco do módulo e pelas vistas orientativas.";
+    const stage = document.createElement("div");
+    stage.className = "module-detail__carousel-stage";
+    const dots = document.createElement("div");
+    dots.className = "module-detail__carousel-dots";
+    dots.setAttribute("aria-label", "Páginas de visualização");
+
+    const pages = [
+      { label: "Foco no módulo", node: createCarouselPage("Foco no módulo", createModuleFocus(entity, product), "Visual isolado da peça selecionada na cena."), shortLabel: "Foco" },
+      { label: "Vista frontal", node: createCarouselPage("Vista frontal", createOrientativeView("Frontal", "L", product.dimensions.nominalMm.width, "A", product.dimensions.nominalMm.height), "Leitura de largura e altura nominais."), shortLabel: "Frontal" },
+      { label: "Vista lateral", node: createCarouselPage("Vista lateral", createOrientativeView("Lateral", "P", product.dimensions.nominalMm.depth, "A", product.dimensions.nominalMm.height), "Leitura de profundidade e altura nominais."), shortLabel: "Lateral" },
+      ...(product.technicalLayout?.internalFront
+        ? [{ label: "Vista interna", node: createCarouselPage("Vista interna", createOrientativeInternalFront(product.dimensions.nominalMm, product.technicalLayout.internalFront), "Divisões internas disponíveis na ficha do módulo."), shortLabel: "Interna" }]
+        : []),
+      { label: "Vista isométrica", node: createCarouselPage("Vista isométrica", createIsometricView(product.dimensions.nominalMm), "Leitura espacial orientativa da peça."), shortLabel: "Isométrica" }
+    ];
+    let currentPage = Math.min(detailPageByEntity.get(entity.id) || 0, pages.length - 1);
+    let isTransitioning = false;
+
+    const renderPage = (nextPage, interacted) => {
+      if (isTransitioning || nextPage === currentPage) return;
+      if (interacted) {
+        detailInteractionByEntity.add(entity.id);
+        clearDetailCarouselTimer();
+      }
+      isTransitioning = true;
+      stage.classList.add("is-fading");
+      global.setTimeout(() => {
+        currentPage = nextPage;
+        detailPageByEntity.set(entity.id, currentPage);
+        stage.replaceChildren(pages[currentPage].node);
+        dots.querySelectorAll("button").forEach((dot, index) => {
+          const active = index === currentPage;
+          dot.classList.toggle("is-active", active);
+          dot.setAttribute("aria-current", active ? "true" : "false");
+        });
+        stage.classList.remove("is-fading");
+        isTransitioning = false;
+      }, 180);
+    };
+
+    pages.forEach((page, index) => {
+      const dot = document.createElement("button");
+      dot.type = "button";
+      dot.className = "module-detail__carousel-dot";
+      dot.setAttribute("aria-label", `Mostrar ${page.label}, página ${index + 1} de ${pages.length}`);
+      dot.title = page.shortLabel;
+      dot.addEventListener("click", () => renderPage(index, true));
+      dots.append(dot);
+    });
+    stage.replaceChildren(pages[currentPage].node);
+    dots.children[currentPage]?.classList.add("is-active");
+    dots.children[currentPage]?.setAttribute("aria-current", "true");
+    section.append(heading, note, stage, dots);
+
+    section.addEventListener("pointerdown", () => {
+      detailInteractionByEntity.add(entity.id);
+      clearDetailCarouselTimer();
+    }, { once: true });
+    if (!detailInteractionByEntity.has(entity.id) && pages.length > 1) {
+      detailCarouselTimer = global.setInterval(() => renderPage((currentPage + 1) % pages.length, false), 7000);
+    }
+    return section;
+  }
+
   function updateSelection(resolved) {
     const entity = entitiesById.get(state.selectedEntityId);
     const product = catalogByEntityId.get(state.selectedEntityId);
@@ -343,11 +568,14 @@
     selectionFrame.hidden = !style;
     if (style) Object.assign(selectionFrame.style, style);
     if (!product) {
+      clearDetailCarouselTimer();
+      document.body.classList.remove("has-module-detail");
       moduleDetail.replaceChildren();
       viewerHint.textContent = "Selecione um módulo na cena para abrir sua ficha.";
       return;
     }
 
+    document.body.classList.add("has-module-detail");
     viewerHint.textContent = `Ficha selecionada: ${product.title}`;
     moduleDetail.classList.toggle("is-unavailable", !isVisible);
     const detailHeader = document.createElement("header");
@@ -363,7 +591,32 @@
     title.textContent = product.title;
     title.tabIndex = -1;
     headerCopy.append(eyebrow, title);
-    detailHeader.append(moduleNumber, headerCopy);
+    const close = document.createElement("button");
+    close.type = "button";
+    close.className = "module-detail__close";
+    close.dataset.closeModuleDetail = "true";
+    close.setAttribute("aria-label", "Fechar detalhes do módulo");
+    close.textContent = "×";
+    detailHeader.append(moduleNumber, headerCopy, close);
+
+    const itemPricing = pricing.itemEstimate(product, catalog, state, priceBook);
+    const price = document.createElement("section");
+    price.className = "module-detail__price";
+    const priceLabel = document.createElement("span");
+    priceLabel.textContent = "Valor atual na simulação";
+    const priceValue = document.createElement("strong");
+    const priceDescription = document.createElement("p");
+    if (itemPricing.status === "ready") {
+      priceValue.textContent = formatCurrency(itemPricing.totalCents);
+      const handle = selectedHandle();
+      priceDescription.textContent = itemPricing.handleCents
+        ? `Inclui ${handle.label}: +${formatCurrency(itemPricing.handleCents)}.`
+        : `Base de referência do mockup: ${formatCurrency(priceBook.baseModuleCents)}.`;
+    } else {
+      priceValue.textContent = "Em configuração";
+      priceDescription.textContent = "O valor aparece quando a tabela de trabalho estiver completa.";
+    }
+    price.append(priceLabel, priceValue, priceDescription);
 
     const material = document.createElement("div");
     material.className = "module-detail__material";
@@ -397,7 +650,7 @@
     });
     technical.append(technicalHeading, technicalGrid);
 
-    const orientativeViews = createOrientativeViews(product.dimensions.nominalMm, product.technicalLayout);
+    const orientativeViews = createDetailCarousel(entity, product);
 
     const benefitsSection = document.createElement("section");
     benefitsSection.className = "module-detail__section";
@@ -421,7 +674,7 @@
     }
     title.id = "moduleDetailTitle";
     moduleDetail.setAttribute("aria-labelledby", title.id);
-    const detailContent = [detailHeader, material, dimensions, technical, orientativeViews, benefitsSection, componentsSection];
+    const detailContent = [detailHeader, price, material, dimensions, technical, orientativeViews, benefitsSection, componentsSection];
     if (requirements.textContent) detailContent.push(requirements);
     moduleDetail.replaceChildren(...detailContent);
   }
@@ -475,6 +728,14 @@
     );
   }
 
+  function updateHandleControls() {
+    document.querySelectorAll("[data-handle-id]").forEach((button) => {
+      const active = button.dataset.handleId === state.handlePresetId;
+      button.classList.toggle("is-selected", active);
+      button.setAttribute("aria-pressed", String(active));
+    });
+  }
+
   function formatCurrency(cents) {
     return new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(cents / 100);
   }
@@ -509,7 +770,9 @@
     finish.className = "summary-note";
     const finishGroup = scene.finishGroups.find((group) => group.id === "fronts-all");
     const finishPreset = finishGroup?.presets.find((preset) => preset.id === state.frontFinishId);
-    finish.textContent = `Frentes: ${finishPreset?.label || "Original"}. Caixaria: Branco TX.`;
+    const handle = selectedHandle();
+    const includedServices = catalog.services.filter((service) => service.status === "included").map((service) => service.title);
+    finish.textContent = `Frentes: ${finishPreset?.label || selectedFrontFinishLabel()}. Caixaria: Branco TX. Puxador: ${handle.label}. Serviço incluso: ${includedServices.join(", ") || "nenhum"}.`;
     const price = document.createElement("div");
     price.className = "price-state";
     if (estimate.status === "demo") {
@@ -528,14 +791,17 @@
     modulesPanel.hidden = !isModules;
     frontFinishPanel.hidden = !isFinishes;
     stonePanel.hidden = !isFinishes;
+    servicesPanel.hidden = currentStep !== "services";
     summaryPanel.hidden = currentStep !== "summary";
     document.querySelectorAll("[data-step]").forEach((button) => {
       const active = button.dataset.step === currentStep;
       button.classList.toggle("is-active", active);
       button.setAttribute("aria-current", active ? "step" : "false");
     });
-    const next = currentStep === "modules" ? "finishes" : currentStep === "finishes" ? "summary" : "modules";
-    nextStepButton.textContent = currentStep === "summary" ? "Editar módulos" : `Continuar para ${next === "finishes" ? "acabamentos" : "resumo"} →`;
+    const nextByStep = { modules: "finishes", finishes: "services", services: "summary", summary: "modules" };
+    const next = nextByStep[currentStep];
+    const nextLabel = { finishes: "acabamentos", services: "serviços", summary: "resumo" };
+    nextStepButton.textContent = currentStep === "summary" ? "Editar módulos" : `Continuar para ${nextLabel[next]} →`;
     renderSummary(resolved);
   }
 
@@ -548,7 +814,9 @@
       ? modulesPanel
       : currentStep === "finishes"
         ? frontFinishPanel
-        : summaryPanel;
+        : currentStep === "services"
+          ? servicesPanel
+          : summaryPanel;
     const heading = panel.querySelector("h2");
     if (!heading) return;
     heading.focus({ preventScroll: true });
@@ -565,6 +833,8 @@
   renderModuleControlsFromData();
   renderSceneHotspotsFromData();
   renderFinishControlsFromData();
+  renderHandleControlsFromData();
+  renderServices();
 
   const moduleToggles = [...document.querySelectorAll("[data-module-toggle]")];
   const layerGroups = [...document.querySelectorAll(".layer-group")];
@@ -626,6 +896,7 @@
     updateModuleCards(resolved);
     updateSceneHotspots(resolved);
     updateAccessoryControls(resolved);
+    updateHandleControls();
     updateSelection(resolved);
     renderCurrentValue(resolved);
     syncStep(resolved);
@@ -805,6 +1076,14 @@
     selectEntity(button.dataset.selectEntity, "list");
   });
 
+  moduleDetail.addEventListener("click", (event) => {
+    const close = event.target.closest("[data-close-module-detail]");
+    if (!close) return;
+    state.selectedEntityId = null;
+    syncLayerVisibility();
+    announce("Detalhes do módulo fechados.");
+  });
+
   sceneHotspots.addEventListener("click", (event) => {
     const hotspot = event.target.closest("[data-select-scene-entity]");
     if (!hotspot || hotspot.disabled) return;
@@ -818,7 +1097,18 @@
   });
 
   nextStepButton.addEventListener("click", () => {
-    changeStep(currentStep === "modules" ? "finishes" : currentStep === "finishes" ? "summary" : "modules", true);
+    const nextByStep = { modules: "finishes", finishes: "services", services: "summary", summary: "modules" };
+    changeStep(nextByStep[currentStep], true);
+  });
+
+  handleOptions?.addEventListener("click", (event) => {
+    const button = event.target.closest("[data-handle-id]");
+    if (!button) return;
+    state.handlePresetId = button.dataset.handleId;
+    syncFingerprint();
+    syncLayerVisibility();
+    const handle = selectedHandle();
+    announce(handle.id === "none" ? "Puxador será definido depois." : `${handle.label} aplicado à simulação.`);
   });
 
   lightingToggle.addEventListener("change", () => {

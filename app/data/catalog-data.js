@@ -142,13 +142,26 @@
     options: {
       fronts: ["gianduia-color", "white-tx", "black", "olive", "petroleum-blue"],
       stones: ["#34383d", "#d8d8d2", "#968371"],
-      handles: []
+      handles: [
+        { id: "none", label: "Definir depois", description: "Sem adicional na simulação.", orientation: "Portas na vertical · gavetas na horizontal" },
+        { id: "tango-chrome", label: "Tango / Íris", description: "Acabamento cromado.", orientation: "Portas na vertical · gavetas na horizontal" },
+        { id: "ponto", label: "Ponto", description: "Família com variações de cor.", orientation: "Portas na vertical · gavetas na horizontal" },
+        { id: "alca-colors", label: "Alça em cores", description: "Nome comercial em validação.", orientation: "Portas na vertical · gavetas na horizontal" }
+      ]
     },
     accessories: [
       {
         entityId: "lighting-08", sku: "CM-08", title: "Iluminação embutida",
         description: "Luz sob os aéreos para a área de bancada.",
         requirements: ["Requer a lateral da geladeira e o aéreo da pia."], publicPriceCents: null
+      }
+    ],
+    services: [
+      {
+        id: "base-stone",
+        title: "Pedra base",
+        description: "Prevista na composição inicial; a escolha de cor continua em Acabamentos.",
+        status: "included"
       }
     ]
   };
