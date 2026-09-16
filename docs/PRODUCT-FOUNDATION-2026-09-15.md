@@ -60,6 +60,35 @@ regressão.
 - Esquema de estimativa pública preparado, sem preços fabricados. Enquanto não
   existir tabela publicada, o resumo informa que o valor está em configuração.
 
+## Dimensões técnicas importadas
+
+Os sete módulos usam agora os dados derivados e versionados do MobiliPresenter
+no commit `4d46da44c08dcafbb53c52c0375e14651981a93b`. Cada entrada preserva a
+dimensão nominal exibível, a geometria usada para montagem, a entidade de origem
+e as evidências de ficha, propriedade Promob ou DXF.
+
+O aplicativo exibe somente a dimensão nominal. Quando houver diferença — por
+exemplo, a lateral da geladeira tem 600 mm nominais e 610 mm geométricos — a
+geometria continua sendo um dado de composição, não uma troca silenciosa da
+especificação comercial. A cópia atual contém o perfil e hashes dos DXFs, não
+os DXFs brutos; uma reimportação deve exigir que os arquivos recebidos coincidam
+com esses hashes antes de substituir a fonte derivada.
+
+## Derivação mobile
+
+O mobile não tem catálogo, regras, cena ou preço próprios: deriva o mesmo
+estado do desktop nas três etapas (Módulos, Acabamentos e Resumo). Em 360–430
+px, a cena permanece proporcional e contextual no início da jornada; somente a
+barra de progresso fica fixa, evitando competir com a cena pela área útil. Os
+detalhes aparecem imediatamente após o cartão aberto, os controles de
+acabamento têm alvo de toque de 44 px e a barra de próxima etapa respeita a área
+segura do aparelho.
+
+Regras de dependência são aplicadas também à intenção: ativar um dependente
+inclui seu suporte e remover o suporte remove os dependentes, com uma mensagem
+curta para tecnologias assistivas. Assim, a lista não pode afirmar que um
+módulo está incluído quando a cena o oculta por falta de suporte.
+
 ## Inventário pendente, por ordem
 
 1. Conciliar a identidade e as medidas de cada módulo entre ficha técnica,

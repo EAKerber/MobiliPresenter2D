@@ -21,10 +21,13 @@ const technical=JSON.parse(fs.readFileSync(path.join(projectRoot,"data/technical
 assert.equal(scene.entities.length,17);
 assert.deepEqual(Array.from(validation.validateScene(scene)),[]);
 assert.equal(catalog.modules.length,7);
+assert.equal(catalog.technicalSource.rawSourceAvailability,"profile-only-in-this-checkout");
 for (const product of catalog.modules) {
   const entity=scene.entities.find((candidate)=>candidate.id===product.entityId);
   assert.equal(entity?.kind,"module",product.entityId);
   assert.equal(entity?.controllable,true,product.entityId);
+  assert.equal(product.dimensions.displayPolicy,"nominal",product.entityId);
+  assert.equal(product.dimensions.evidence.some((entry)=>entry.source==="promob-dxf" && entry.status==="confirmed"),true,product.entityId);
 }
 for (const entity of scene.entities) {
   assert.equal(fs.existsSync(path.join(projectRoot,entity.asset)),true,entity.asset);

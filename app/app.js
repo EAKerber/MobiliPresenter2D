@@ -34,6 +34,7 @@
   const stonePanel = document.getElementById("stonePanel");
   const summaryPanel = document.getElementById("summaryPanel");
   const lightingToggle = document.getElementById("lightingToggle");
+  const configurationAnnouncement = document.getElementById("configurationAnnouncement");
   const catalogByEntityId = new Map(catalog.modules.map((module) => [module.entityId, module]));
 
   function renderSceneFromData() {
@@ -83,15 +84,19 @@
       .forEach((entity) => {
         const product = catalogByEntityId.get(entity.id);
         if (!product) return;
-        const label = document.createElement("label");
-        label.className = "module-card";
-        label.htmlFor = `toggle-${entity.id}`;
-        label.dataset.entityId = entity.id;
+        const card = document.createElement("article");
+        card.className = "module-card";
+        card.dataset.entityId = entity.id;
+
+        const toggleLabel = document.createElement("label");
+        toggleLabel.className = "module-card__toggle";
+        toggleLabel.htmlFor = `toggle-${entity.id}`;
 
         const input = document.createElement("input");
         input.id = `toggle-${entity.id}`;
         input.type = "checkbox";
         input.dataset.moduleToggle = entity.id;
+        input.setAttribute("aria-label", `Incluir ${product.title}`);
         input.checked = state.visibilityByEntity[entity.id];
 
         const number = document.createElement("span");
@@ -103,18 +108,21 @@
         const title = document.createElement("strong");
         title.textContent = product.title;
         const dimensions = document.createElement("small");
-        dimensions.textContent = product.dimensions;
+        dimensions.textContent = product.dimensions.display;
         copy.append(title, dimensions);
 
         const detail = document.createElement("button");
         detail.type = "button";
         detail.className = "module-card__detail";
         detail.dataset.selectEntity = entity.id;
+        detail.setAttribute("aria-controls", "moduleDetail");
+        detail.setAttribute("aria-expanded", "false");
         detail.setAttribute("aria-label", `Ver detalhes de ${product.title}`);
         detail.textContent = "Ver";
 
-        label.append(input, number, copy, detail);
-        moduleList.append(label);
+        toggleLabel.append(input, number, copy);
+        card.append(toggleLabel, detail);
+        moduleList.append(card);
       });
   }
 
@@ -165,12 +173,12 @@
     viewerHint.textContent = product.title;
     const eyebrow = document.createElement("p");
     eyebrow.className = "module-detail__eyebrow";
-    eyebrow.textContent = `${product.category.toUpperCase()} · ${product.sku}`;
+    eyebrow.textContent = `${product.category.toUpperCase()} · ${product.referenceLabel}`;
     const title = document.createElement("h3");
     title.textContent = product.title;
     const dimensions = document.createElement("p");
     dimensions.className = "module-detail__dimensions";
-    dimensions.textContent = product.dimensions;
+    dimensions.textContent = product.dimensions.display;
     const benefitsHeading = document.createElement("h4");
     benefitsHeading.textContent = "Por que escolher";
     const benefits = document.createElement("ul");
@@ -178,6 +186,14 @@
       const item = document.createElement("li");
       item.textContent = benefit;
       benefits.append(item);
+    });
+    const componentsHeading = document.createElement("h4");
+    componentsHeading.textContent = "Inclusos";
+    const components = document.createElement("ul");
+    product.components.forEach((component) => {
+      const item = document.createElement("li");
+      item.textContent = component;
+      components.append(item);
     });
     const requirements = document.createElement("p");
     requirements.className = "module-detail__requirements";
@@ -187,7 +203,13 @@
     } else if (product.requirements.length) {
       requirements.textContent = product.requirements[0];
     }
-    moduleDetail.replaceChildren(eyebrow, title, dimensions, benefitsHeading, benefits, requirements);
+    title.id = "moduleDetailTitle";
+    moduleDetail.setAttribute("aria-labelledby", title.id);
+    const detailContent = [eyebrow, title, dimensions, benefitsHeading, benefits, componentsHeading, components];
+    if (requirements.textContent) detailContent.push(requirements);
+    moduleDetail.replaceChildren(...detailContent);
+    const selectedCard = moduleList.querySelector(`.module-card[data-entity-id="${entity.id}"]`);
+    if (selectedCard) selectedCard.after(moduleDetail);
   }
 
   function updateModuleCards(resolved) {
@@ -201,6 +223,7 @@
       card.classList.toggle("is-selected", state.selectedEntityId === entityId);
       card.classList.toggle("is-blocked", blocked);
       card.classList.toggle("is-included", isVisible);
+      card.querySelector("[data-select-entity]")?.setAttribute("aria-expanded", String(state.selectedEntityId === entityId));
       if (input && entity) {
         input.checked = Boolean(state.visibilityByEntity[entity.id]);
         input.setAttribute("aria-describedby", blocked ? `blocked-${entity.id}` : "");
@@ -237,7 +260,7 @@
     list.className = "summary-list";
     included.forEach((module) => {
       const item = document.createElement("li");
-      item.textContent = `${module.sku} · ${module.title}`;
+      item.textContent = `${module.referenceLabel} · ${module.title}`;
       list.append(item);
     });
     const finish = document.createElement("p");
@@ -252,13 +275,7 @@
     } else {
       price.innerHTML = "<span>Valor do conjunto</span><strong>Em configuração</strong><p>Os valores só aparecem depois que a tabela comercial for publicada.</p>";
     }
-    const cta = document.createElement("button");
-    cta.type = "button";
-    cta.className = "button button--secondary";
-    cta.disabled = true;
-    cta.title = "A solicitação de orçamento será ativada com o serviço comercial.";
-    cta.textContent = "Solicitar proposta (em breve)";
-    summaryContent.replaceChildren(list, finish, price, cta);
+    summaryContent.replaceChildren(list, finish, price);
   }
 
   function syncStep(resolved) {
@@ -276,6 +293,28 @@
     const next = currentStep === "modules" ? "finishes" : currentStep === "finishes" ? "summary" : "modules";
     nextStepButton.textContent = currentStep === "summary" ? "Editar módulos" : `Continuar para ${next === "finishes" ? "acabamentos" : "resumo"} →`;
     renderSummary(resolved);
+  }
+
+  function announce(message) {
+    if (configurationAnnouncement) configurationAnnouncement.textContent = message;
+  }
+
+  function focusCurrentStep() {
+    const panel = currentStep === "modules"
+      ? modulesPanel
+      : currentStep === "finishes"
+        ? frontFinishPanel
+        : summaryPanel;
+    const heading = panel.querySelector("h2");
+    if (!heading) return;
+    heading.focus({ preventScroll: true });
+    panel.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+
+  function changeStep(nextStep, moveFocus) {
+    currentStep = nextStep;
+    syncLayerVisibility();
+    if (moveFocus) requestAnimationFrame(focusCurrentStep);
   }
 
   renderSceneFromData();
@@ -347,7 +386,33 @@
 
   function setEntityVisibility(entityId, isVisible) {
     if (!core.setEntityVisibility(state, entityId, isVisible)) return;
+    const affected = [];
+    const applyRequirements = (id) => {
+      const entity = entitiesById.get(id);
+      (entity?.requiresVisibleIds || []).forEach((requirementId) => {
+        if (!state.visibilityByEntity[requirementId]) {
+          core.setEntityVisibility(state, requirementId, true);
+          affected.push(requirementId);
+        }
+        applyRequirements(requirementId);
+      });
+    };
+    const removeDependents = (id) => {
+      scene.entities
+        .filter((entity) => (entity.requiresVisibleIds || []).includes(id) && state.visibilityByEntity[entity.id])
+        .forEach((entity) => {
+          core.setEntityVisibility(state, entity.id, false);
+          affected.push(entity.id);
+          removeDependents(entity.id);
+        });
+    };
+    if (isVisible) applyRequirements(entityId);
+    else removeDependents(entityId);
     syncLayerVisibility();
+    if (affected.length) {
+      const names = affected.map((id) => catalogByEntityId.get(id)?.title || catalog.accessories.find((item) => item.entityId === id)?.title || id);
+      announce(isVisible ? `${names.join(", ")} incluído como suporte necessário.` : `${names.join(", ")} removido porque depende deste módulo.`);
+    }
   }
 
   function setAllVisibility(isVisible) {
@@ -360,7 +425,10 @@
   }
 
   function clearSelectedSwatch() {
-    swatches.forEach((swatch) => swatch.classList.remove("is-selected"));
+    swatches.forEach((swatch) => {
+      swatch.classList.remove("is-selected");
+      swatch.setAttribute("aria-pressed", "false");
+    });
   }
 
   function applyColor(color, selectedSwatch) {
@@ -369,7 +437,10 @@
     state.customColor = color;
     state.customTextureKey = null;
     clearSelectedSwatch();
-    if (selectedSwatch) selectedSwatch.classList.add("is-selected");
+    if (selectedSwatch) {
+      selectedSwatch.classList.add("is-selected");
+      selectedSwatch.setAttribute("aria-pressed", "true");
+    }
     const overlayOpacity = finishes.resolveOverlayOpacity(
       selectedSwatch
         ? { overlayOpacity: Number(selectedSwatch.dataset.overlayOpacity) }
@@ -474,14 +545,12 @@
 
   document.querySelectorAll("[data-step]").forEach((button) => {
     button.addEventListener("click", () => {
-      currentStep = button.dataset.step;
-      syncLayerVisibility();
+      changeStep(button.dataset.step, true);
     });
   });
 
   nextStepButton.addEventListener("click", () => {
-    currentStep = currentStep === "modules" ? "finishes" : currentStep === "finishes" ? "summary" : "modules";
-    syncLayerVisibility();
+    changeStep(currentStep === "modules" ? "finishes" : currentStep === "finishes" ? "summary" : "modules", true);
   });
 
   lightingToggle.addEventListener("change", () => {
@@ -512,6 +581,7 @@
   resetStone.addEventListener("click", () => applyStone(null));
 
   restoreButton.addEventListener("click", () => {
+    if (!global.confirm("Recomeçar a configuração? Suas escolhas atuais serão removidas.")) return;
     state = core.createInitialState(scene);
     setAllVisibility(true);
     resetFinish();

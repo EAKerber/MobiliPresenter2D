@@ -74,7 +74,7 @@ h1, h2, p { margin: 0; }
 }
 
 .button:hover:not(:disabled) { transform: translateY(-1px); }
-.button:focus-visible, .swatch:focus-visible, .icon-actions button:focus-visible, input:focus-visible {
+button:focus-visible, input:focus-visible {
   outline: 2px solid var(--accent-strong);
   outline-offset: 2px;
 }
@@ -279,22 +279,24 @@ legend { margin-bottom: 9px; color: rgba(255, 255, 255, 0.43); font-size: 12px; 
 .flow-step span { display: inline-grid; place-items: center; width: 20px; height: 20px; margin-right: 6px; border-radius: 50%; border: 1px solid currentColor; font-size: 11px; }
 .flow-step.is-active { border-color: rgba(203, 188, 170, .7); background: rgba(203, 188, 170, .14); color: var(--text); }
 .internal-control { display: none !important; }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); clip-path: inset(50%); white-space: nowrap; }
 
 .module-list { gap: 8px; }
 .module-card {
-  display: grid; grid-template-columns: 18px 31px minmax(0, 1fr) auto; align-items: center; gap: 10px;
+  display: grid; grid-template-columns: minmax(0, 1fr) 44px; align-items: stretch; gap: 8px;
   min-height: 70px; padding: 10px; border: 1px solid transparent; border-radius: 12px;
-  background: rgba(255, 255, 255, .035); cursor: pointer; transition: border-color 160ms ease, background 160ms ease, opacity 160ms ease;
+  background: rgba(255, 255, 255, .035); transition: border-color 160ms ease, background 160ms ease, opacity 160ms ease;
 }
 .module-card:hover { background: rgba(255, 255, 255, .065); }
 .module-card.is-selected { border-color: var(--accent-strong); background: rgba(203, 188, 170, .1); }
 .module-card.is-blocked { opacity: .62; }
-.module-card input { width: 18px; height: 18px; margin: 0; accent-color: var(--accent); cursor: pointer; }
+.module-card__toggle { display: grid; grid-template-columns: 44px 31px minmax(0, 1fr); align-items: center; gap: 8px; min-width: 0; cursor: pointer; }
+.module-card input { width: 18px; height: 18px; justify-self: center; margin: 0; accent-color: var(--accent); cursor: pointer; }
 .module-card__copy { display: grid; min-width: 0; gap: 2px; }
 .module-card__copy strong { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 13px; }
 .module-card__copy small, .module-card__status { color: var(--muted); font-size: 11px; line-height: 1.3; }
 .module-card__status { color: var(--accent-strong); }
-.module-card__detail { border: 0; border-radius: 8px; padding: 7px 8px; background: rgba(255,255,255,.08); color: var(--text); cursor: pointer; font-size: 12px; }
+.module-card__detail { min-width: 44px; min-height: 44px; align-self: center; border: 0; border-radius: 8px; padding: 7px 8px; background: rgba(255,255,255,.08); color: var(--text); cursor: pointer; font-size: 12px; }
 .module-card__detail:hover { background: rgba(255,255,255,.14); }
 
 .module-detail { display: grid; gap: 9px; margin-top: 14px; padding: 15px; border: 1px solid rgba(203, 188, 170, .25); border-radius: 12px; background: rgba(203, 188, 170, .07); }
@@ -331,9 +333,12 @@ legend { margin-bottom: 9px; color: rgba(255, 255, 255, 0.43); font-size: 12px; 
 @media (max-width: 700px) {
   .flow-nav { position: sticky; top: 6px; z-index: 10; padding: 6px; border: 1px solid var(--border); border-radius: 12px; background: rgba(23,24,22,.95); backdrop-filter: blur(10px); }
   .flow-step { font-size: 11px; }
-  .flow-step span { display: none; }
+  .flow-step span { width: 18px; height: 18px; margin-right: 3px; font-size: 10px; }
   .module-card { min-height: 72px; }
-  .flow-actions { position: sticky; bottom: 8px; z-index: 10; padding: 8px; border-radius: 12px; background: rgba(17,18,16,.92); backdrop-filter: blur(10px); }
+  .swatch, .custom-color { width: 44px; height: 44px; }
+  .flow-actions { position: sticky; bottom: 0; z-index: 10; padding: 8px 8px calc(8px + env(safe-area-inset-bottom)); border-radius: 12px 12px 0 0; background: rgba(17,18,16,.92); backdrop-filter: blur(10px); }
+  .controls { padding-bottom: calc(72px + env(safe-area-inset-bottom)); }
+  .panel h2 { scroll-margin-top: 72px; }
 }
 
 /* Keep the result visible while reaching the finish controls. */
@@ -351,4 +356,7 @@ legend { margin-bottom: 9px; color: rgba(255, 255, 255, 0.43); font-size: 12px; 
     width: min(100%, calc((48dvh - 70px) * 1.5));
     justify-self: center;
   }
+}
+@media (max-width: 700px) {
+  .viewer-card { position: static; width: 100%; }
 }

@@ -58,28 +58,28 @@
 
       <aside class="controls">
         <nav class="flow-nav" aria-label="Etapas da configuração">
-          <button class="flow-step is-active" type="button" data-step="modules"><span>1</span>Módulos</button>
-          <button class="flow-step" type="button" data-step="finishes"><span>2</span>Acabamentos</button>
-          <button class="flow-step" type="button" data-step="summary"><span>3</span>Resumo</button>
+          <button class="flow-step is-active" type="button" data-step="modules" aria-controls="modulesPanel"><span>1</span>Módulos</button>
+          <button class="flow-step" type="button" data-step="finishes" aria-controls="frontFinishPanel"><span>2</span>Acabamentos</button>
+          <button class="flow-step" type="button" data-step="summary" aria-controls="summaryPanel"><span>3</span>Resumo</button>
         </nav>
 
-        <section class="panel" id="modulesPanel">
+        <section class="panel" id="modulesPanel" aria-labelledby="modulesHeading">
           <header class="panel__header">
             <div>
-              <h2>Módulos</h2>
+              <h2 id="modulesHeading" tabindex="-1">Módulos</h2>
               <p>Inclua apenas o que faz sentido para o seu ambiente.</p>
             </div>
           </header>
 
           <div class="module-list" id="moduleList"></div>
-          <section id="moduleDetail" class="module-detail" aria-live="polite"></section>
+          <section id="moduleDetail" class="module-detail" aria-label="Detalhes do módulo"></section>
         </section>
 
-        <section class="panel" id="frontFinishPanel">
+        <section class="panel" id="frontFinishPanel" aria-labelledby="frontFinishHeading">
           <header class="finish-heading">
             <span aria-hidden="true">◐</span>
             <div>
-              <h2>Frentes</h2>
+              <h2 id="frontFinishHeading" tabindex="-1">Frentes</h2>
               <p>Uma escolha global. A caixaria permanece em Branco TX.</p>
             </div>
           </header>
@@ -105,8 +105,8 @@
             </button>
           </div>
         </section>
-        <section class="panel" id="stonePanel">
-          <header class="finish-heading"><div><h2>Pedra</h2><p>Cor da bancada, revestimento e rodapé</p></div></header>
+        <section class="panel" id="stonePanel" aria-labelledby="stoneHeading">
+          <header class="finish-heading"><div><h2 id="stoneHeading">Pedra</h2><p>Cor da bancada, revestimento e rodapé</p></div></header>
           <div class="finish-controls">
             <fieldset><legend>Cor da pedra</legend><div class="swatches" id="stoneSwatches">
               <button type="button" class="swatch" data-stone-color="#34383d" style="--swatch:#34383d" aria-label="Pedra grafite" title="Grafite" aria-pressed="false"></button>
@@ -123,10 +123,10 @@
           </label>
         </section>
 
-        <section class="panel summary-panel" id="summaryPanel" hidden>
+        <section class="panel summary-panel" id="summaryPanel" aria-labelledby="summaryHeading" hidden>
           <header class="finish-heading">
             <span aria-hidden="true">✓</span>
-            <div><h2>Sua composição</h2><p>Revise antes de solicitar a proposta.</p></div>
+            <div><h2 id="summaryHeading" tabindex="-1">Sua composição</h2><p>Revise antes de solicitar a proposta.</p></div>
           </header>
           <div id="summaryContent"></div>
         </section>
@@ -134,6 +134,7 @@
         <footer class="flow-actions">
           <button id="nextStepButton" class="button button--primary" type="button">Continuar para acabamentos →</button>
         </footer>
+        <p class="sr-only" id="configurationAnnouncement" aria-live="polite"></p>
       </aside>
     </main>
 
