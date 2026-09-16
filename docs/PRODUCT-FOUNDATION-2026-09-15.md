@@ -89,6 +89,17 @@ inclui seu suporte e remover o suporte remove os dependentes, com uma mensagem
 curta para tecnologias assistivas. Assim, a lista não pode afirmar que um
 módulo está incluído quando a cena o oculta por falta de suporte.
 
+## Preço de demonstração
+
+Enquanto a autoridade comercial não existe, `data/mock-price-book.js` libera a
+interação de valor por composição. Ele contém apenas preços **ilustrativos**,
+exibidos com o rótulo “Demo” e o aviso de que não são orçamento, proposta nem
+preço comercial. Não contém custos, margens, fornecedores ou vigência.
+
+O adaptador de preço aceita o mesmo contrato para uma tabela publicada no
+futuro. A substituição exige serviço autenticado, histórico de versão e cálculo
+no servidor; nunca uma tela ou arquivo escondido no navegador.
+
 ## Inventário pendente, por ordem
 
 1. Conciliar a identidade e as medidas de cada módulo entre ficha técnica,

@@ -5,7 +5,7 @@ const vm = require("node:vm");
 const projectRoot = path.resolve(__dirname, "..");
 const sandbox = { window: {} };
 vm.createContext(sandbox);
-for (const relativePath of ["data/scene-data.js","data/catalog-data.js","data/mask-data.js","core/state.js","core/visibility.js","core/validation.js","core/fingerprint.js","core/finishes.js","core/pricing.js"]) {
+for (const relativePath of ["data/scene-data.js","data/catalog-data.js","data/mock-price-book.js","data/mask-data.js","core/state.js","core/visibility.js","core/validation.js","core/fingerprint.js","core/finishes.js","core/pricing.js"]) {
   vm.runInContext(fs.readFileSync(path.join(projectRoot, relativePath), "utf8"), sandbox, { filename: relativePath });
 }
 const scene=sandbox.window.CASA_EM_MODULOS_SCENE;
@@ -16,6 +16,7 @@ const validation=sandbox.window.CasaModulesValidation;
 const fingerprints=sandbox.window.CasaModulesFingerprint;
 const finishes=sandbox.window.CasaModulesFinishes;
 const catalog=sandbox.window.CASA_EM_MODULOS_CATALOG;
+const demoPriceBook=sandbox.window.CASA_EM_MODULOS_PRICE_BOOK;
 const pricing=sandbox.window.CasaModulesPricing;
 const technical=JSON.parse(fs.readFileSync(path.join(projectRoot,"data/technical-data.json"),"utf8"));
 assert.equal(scene.entities.length,17);
@@ -131,8 +132,9 @@ assert.equal(r["module-02-right-exposed-face"].reason,"host-hidden");
 assert.equal(visibility.getVisibleEntities(scene,initial).length,11);
 const unavailableEstimate=pricing.calculatePublicEstimate(scene,initial,catalog,visibility.resolveVisibility(scene,initial));
 assert.equal(unavailableEstimate.status,"unavailable");
-const pricedCatalog={...catalog,modules:catalog.modules.map((item)=>({...item,publicPriceCents:10000})),accessories:catalog.accessories.map((item)=>({...item,publicPriceCents:5000}))};
-const pricedEstimate=pricing.calculatePublicEstimate(scene,initial,pricedCatalog,visibility.resolveVisibility(scene,initial));
-assert.equal(pricedEstimate.status,"ready");
-assert.equal(pricedEstimate.totalCents,65000);
+assert.equal(demoPriceBook.mode,"demo");
+assert.equal(Object.keys(demoPriceBook.entries).length,8);
+const pricedEstimate=pricing.calculatePublicEstimate(scene,initial,catalog,visibility.resolveVisibility(scene,initial),demoPriceBook);
+assert.equal(pricedEstimate.status,"demo");
+assert.equal(pricedEstimate.totalCents,1659300);
 process.stdout.write(`${JSON.stringify({passed:true,initialFingerprint:fp,entities:17,controllableEntities:8})}\n`);

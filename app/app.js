@@ -9,9 +9,10 @@
   const fingerprint = global.CasaModulesFingerprint;
   const finishes = global.CasaModulesFinishes;
   const catalog = global.CASA_EM_MODULOS_CATALOG;
+  const priceBook = global.CASA_EM_MODULOS_PRICE_BOOK;
   const pricing = global.CasaModulesPricing;
 
-  if (!scene || !inlineMasks || !core || !visibility || !validation || !fingerprint || !finishes || !catalog || !pricing) {
+  if (!scene || !inlineMasks || !core || !visibility || !validation || !fingerprint || !finishes || !catalog || !priceBook || !pricing) {
     throw new Error("Não foi possível carregar os dados da cena 2D.");
   }
   validation.assertValidScene(scene);
@@ -29,6 +30,7 @@
   const viewerHint = document.getElementById("viewerHint");
   const summaryContent = document.getElementById("summaryContent");
   const nextStepButton = document.getElementById("nextStepButton");
+  const configurationValue = document.getElementById("configurationValue");
   const modulesPanel = document.getElementById("modulesPanel");
   const frontFinishPanel = document.getElementById("frontFinishPanel");
   const stonePanel = document.getElementById("stonePanel");
@@ -253,8 +255,22 @@
     return new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(cents / 100);
   }
 
+  function getEstimate(resolved) {
+    return pricing.calculatePublicEstimate(scene, state, catalog, resolved, priceBook);
+  }
+
+  function renderCurrentValue(resolved) {
+    const estimate = getEstimate(resolved);
+    if (!configurationValue) return;
+    if (estimate.status === "demo") {
+      configurationValue.innerHTML = `<span>${estimate.label}</span><strong>${formatCurrency(estimate.totalCents)}</strong><small>Demo</small>`;
+      return;
+    }
+    configurationValue.innerHTML = "<span>Valor do conjunto</span><strong>Em configuração</strong>";
+  }
+
   function renderSummary(resolved) {
-    const estimate = pricing.calculatePublicEstimate(scene, state, catalog, resolved);
+    const estimate = getEstimate(resolved);
     const included = catalog.modules.filter((module) => resolved?.[module.entityId]?.visible);
     const list = document.createElement("ul");
     list.className = "summary-list";
@@ -270,7 +286,9 @@
     finish.textContent = `Frentes: ${finishPreset?.label || "Original"}. Caixaria: Branco TX.`;
     const price = document.createElement("div");
     price.className = "price-state";
-    if (estimate.status === "ready") {
+    if (estimate.status === "demo") {
+      price.innerHTML = `<span>${estimate.label}</span><strong>${formatCurrency(estimate.totalCents)}</strong><p>${estimate.disclaimer}</p>`;
+    } else if (estimate.status === "ready") {
       price.innerHTML = `<span>Valor estimado</span><strong>${formatCurrency(estimate.totalCents)}</strong>`;
     } else {
       price.innerHTML = "<span>Valor do conjunto</span><strong>Em configuração</strong><p>Os valores só aparecem depois que a tabela comercial for publicada.</p>";
@@ -381,6 +399,7 @@
     updateModuleCards(resolved);
     updateAccessoryControls(resolved);
     updateSelection(resolved);
+    renderCurrentValue(resolved);
     syncStep(resolved);
   }
 
