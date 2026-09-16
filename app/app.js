@@ -23,6 +23,7 @@
 
   const sceneBase = document.getElementById("sceneBase");
   const sceneLayers = document.getElementById("sceneLayers");
+  const sceneHotspots = document.getElementById("sceneHotspots");
   const moduleList = document.getElementById("moduleList");
   const finishSwatches = document.getElementById("finishSwatches");
   const moduleDetail = document.getElementById("moduleDetail");
@@ -128,6 +129,34 @@
       });
   }
 
+  function renderSceneHotspotsFromData() {
+    sceneHotspots.replaceChildren();
+    scene.entities
+      .filter((entity) => entity.controllable && entity.kind === "module" && entity.alphaBounds)
+      .sort((left, right) => left.zIndex - right.zIndex || left.id.localeCompare(right.id))
+      .forEach((entity) => {
+        const product = catalogByEntityId.get(entity.id);
+        if (!product) return;
+        const hotspot = document.createElement("button");
+        hotspot.type = "button";
+        hotspot.className = "scene-hotspot";
+        hotspot.dataset.selectSceneEntity = entity.id;
+        hotspot.dataset.entityId = entity.id;
+        hotspot.setAttribute("aria-label", `Ver ficha de ${product.referenceLabel}, ${product.title}`);
+        hotspot.setAttribute("aria-pressed", "false");
+        hotspot.title = `${product.referenceLabel} · ${product.title}`;
+        hotspot.style.zIndex = String(500 + entity.zIndex);
+        Object.assign(hotspot.style, selectionStyle(entity));
+
+        const tag = document.createElement("span");
+        tag.className = "scene-hotspot__tag";
+        tag.setAttribute("aria-hidden", "true");
+        tag.textContent = entity.alias;
+        hotspot.append(tag);
+        sceneHotspots.append(hotspot);
+      });
+  }
+
   function renderFinishControlsFromData() {
     const finishGroup = scene.finishGroups.find((group) => group.id === "fronts-all");
     finishSwatches.replaceChildren();
@@ -160,6 +189,37 @@
     };
   }
 
+  function selectedFrontFinishLabel() {
+    if (finishMode === "texture") return "Textura personalizada";
+    const group = scene.finishGroups.find((candidate) => candidate.id === "fronts-all");
+    if (state.frontFinishId === group?.defaultPresetId) return "Cinza Gianduia";
+    const preset = group?.presets.find((candidate) => candidate.id === state.frontFinishId);
+    return preset?.label || "Acabamento original";
+  }
+
+  function formatDimension(value) {
+    return new Intl.NumberFormat("pt-BR", { maximumFractionDigits: 1 }).format(value);
+  }
+
+  function createDetailList(items, className) {
+    const list = document.createElement("ul");
+    list.className = className;
+    items.forEach((item) => {
+      const listItem = document.createElement("li");
+      listItem.textContent = item;
+      list.append(listItem);
+    });
+    return list;
+  }
+
+  function createMaterialFact(label, value) {
+    const fact = document.createElement("span");
+    const heading = document.createElement("strong");
+    heading.textContent = label;
+    fact.append(heading, document.createTextNode(value));
+    return fact;
+  }
+
   function updateSelection(resolved) {
     const entity = entitiesById.get(state.selectedEntityId);
     const product = catalogByEntityId.get(state.selectedEntityId);
@@ -169,35 +229,71 @@
     if (style) Object.assign(selectionFrame.style, style);
     if (!product) {
       moduleDetail.replaceChildren();
-      viewerHint.textContent = "Escolha um módulo para ver detalhes";
+      viewerHint.textContent = "Selecione um módulo na cena para abrir sua ficha.";
       return;
     }
 
-    viewerHint.textContent = product.title;
+    viewerHint.textContent = `Ficha selecionada: ${product.title}`;
+    moduleDetail.classList.toggle("is-unavailable", !isVisible);
+    const detailHeader = document.createElement("header");
+    detailHeader.className = "module-detail__header";
+    const moduleNumber = document.createElement("span");
+    moduleNumber.className = "module-detail__number";
+    moduleNumber.textContent = entity.alias;
+    const headerCopy = document.createElement("div");
     const eyebrow = document.createElement("p");
     eyebrow.className = "module-detail__eyebrow";
-    eyebrow.textContent = `${product.category.toUpperCase()} · ${product.referenceLabel}`;
+    eyebrow.textContent = `${product.referenceLabel.toUpperCase()} · ${product.category.toUpperCase()}`;
     const title = document.createElement("h3");
     title.textContent = product.title;
+    title.tabIndex = -1;
+    headerCopy.append(eyebrow, title);
+    detailHeader.append(moduleNumber, headerCopy);
+
+    const material = document.createElement("div");
+    material.className = "module-detail__material";
+    material.append(
+      createMaterialFact("Frentes", selectedFrontFinishLabel()),
+      createMaterialFact("Caixaria", "Branco TX")
+    );
+
     const dimensions = document.createElement("p");
     dimensions.className = "module-detail__dimensions";
-    dimensions.textContent = product.dimensions.display;
+    dimensions.textContent = `Medidas nominais: ${product.dimensions.display}`;
+
+    const technical = document.createElement("section");
+    technical.className = "module-detail__technical";
+    const technicalHeading = document.createElement("h4");
+    technicalHeading.textContent = "Medidas nominais";
+    const technicalGrid = document.createElement("dl");
+    const dimensionsByName = [
+      ["Largura", product.dimensions.nominalMm.width],
+      ["Altura", product.dimensions.nominalMm.height],
+      ["Profundidade", product.dimensions.nominalMm.depth]
+    ];
+    dimensionsByName.forEach(([label, value]) => {
+      const group = document.createElement("div");
+      const term = document.createElement("dt");
+      term.textContent = label;
+      const definition = document.createElement("dd");
+      definition.textContent = `${formatDimension(value)} mm`;
+      group.append(term, definition);
+      technicalGrid.append(group);
+    });
+    technical.append(technicalHeading, technicalGrid);
+
+    const benefitsSection = document.createElement("section");
+    benefitsSection.className = "module-detail__section";
     const benefitsHeading = document.createElement("h4");
-    benefitsHeading.textContent = "Por que escolher";
-    const benefits = document.createElement("ul");
-    product.benefits.forEach((benefit) => {
-      const item = document.createElement("li");
-      item.textContent = benefit;
-      benefits.append(item);
-    });
+    benefitsHeading.textContent = "Destaques";
+    benefitsSection.append(benefitsHeading, createDetailList(product.benefits, "module-detail__benefits"));
+
+    const componentsSection = document.createElement("section");
+    componentsSection.className = "module-detail__section";
     const componentsHeading = document.createElement("h4");
-    componentsHeading.textContent = "Inclusos";
-    const components = document.createElement("ul");
-    product.components.forEach((component) => {
-      const item = document.createElement("li");
-      item.textContent = component;
-      components.append(item);
-    });
+    componentsHeading.textContent = "Componentes inclusos";
+    componentsSection.append(componentsHeading, createDetailList(product.components, "module-detail__components"));
+
     const requirements = document.createElement("p");
     requirements.className = "module-detail__requirements";
     const reason = resolved?.[entity.id]?.reason;
@@ -208,11 +304,9 @@
     }
     title.id = "moduleDetailTitle";
     moduleDetail.setAttribute("aria-labelledby", title.id);
-    const detailContent = [eyebrow, title, dimensions, benefitsHeading, benefits, componentsHeading, components];
+    const detailContent = [detailHeader, material, dimensions, technical, benefitsSection, componentsSection];
     if (requirements.textContent) detailContent.push(requirements);
     moduleDetail.replaceChildren(...detailContent);
-    const selectedCard = moduleList.querySelector(`.module-card[data-entity-id="${entity.id}"]`);
-    if (selectedCard) selectedCard.after(moduleDetail);
   }
 
   function updateModuleCards(resolved) {
@@ -239,6 +333,18 @@
         card.querySelector(".module-card__copy")?.append(status);
       }
       status.textContent = blocked ? "Requer suporte incluído" : isVisible ? "Incluído" : "Não incluído";
+    });
+  }
+
+  function updateSceneHotspots(resolved) {
+    sceneHotspots.querySelectorAll("[data-select-scene-entity]").forEach((hotspot) => {
+      const entityId = hotspot.dataset.entityId;
+      const isVisible = Boolean(resolved?.[entityId]?.visible);
+      const isSelected = state.selectedEntityId === entityId;
+      hotspot.hidden = !isVisible;
+      hotspot.disabled = !isVisible;
+      hotspot.classList.toggle("is-selected", isSelected);
+      hotspot.setAttribute("aria-pressed", String(isSelected));
     });
   }
 
@@ -340,6 +446,7 @@
 
   renderSceneFromData();
   renderModuleControlsFromData();
+  renderSceneHotspotsFromData();
   renderFinishControlsFromData();
 
   const moduleToggles = [...document.querySelectorAll("[data-module-toggle]")];
@@ -400,6 +507,7 @@
       layer.dataset.visibilityReason = result?.reason || "default-hidden";
     });
     updateModuleCards(resolved);
+    updateSceneHotspots(resolved);
     updateAccessoryControls(resolved);
     updateSelection(resolved);
     renderCurrentValue(resolved);
@@ -434,6 +542,21 @@
     if (affected.length) {
       const names = affected.map((id) => catalogByEntityId.get(id)?.title || catalog.accessories.find((item) => item.entityId === id)?.title || id);
       announce(isVisible ? `${names.join(", ")} incluído como suporte necessário.` : `${names.join(", ")} removido porque depende deste módulo.`);
+    }
+  }
+
+  function selectEntity(entityId, source) {
+    const product = catalogByEntityId.get(entityId);
+    if (!product) return;
+    state.selectedEntityId = entityId;
+    if (currentStep !== "modules") currentStep = "modules";
+    syncLayerVisibility();
+    announce(`Ficha de ${product.referenceLabel}, ${product.title}, aberta.`);
+    if (source === "scene") {
+      requestAnimationFrame(() => {
+        moduleDetail.querySelector("h3")?.focus({ preventScroll: true });
+        moduleDetail.scrollIntoView({ behavior: "smooth", block: "nearest" });
+      });
     }
   }
 
@@ -562,8 +685,13 @@
     const button = event.target.closest("[data-select-entity]");
     if (!button) return;
     event.preventDefault();
-    state.selectedEntityId = button.dataset.selectEntity;
-    syncLayerVisibility();
+    selectEntity(button.dataset.selectEntity, "list");
+  });
+
+  sceneHotspots.addEventListener("click", (event) => {
+    const hotspot = event.target.closest("[data-select-scene-entity]");
+    if (!hotspot || hotspot.disabled) return;
+    selectEntity(hotspot.dataset.selectSceneEntity, "scene");
   });
 
   document.querySelectorAll("[data-step]").forEach((button) => {

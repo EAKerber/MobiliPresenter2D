@@ -43,6 +43,7 @@
           <div id="sceneLayers"></div>
 
           <canvas id="stoneCanvas" class="scene-layer stone-color-layer" width="1536" height="1024" aria-hidden="true"></canvas>
+          <div id="sceneHotspots" class="scene-hotspots" aria-label="Módulos selecionáveis na cena"></div>
           <div class="alignment-grid" id="alignmentGrid" aria-hidden="true"></div>
           <div class="selection-frame" id="selectionFrame" aria-hidden="true"></div>
         </div>
@@ -52,7 +53,7 @@
             <span aria-hidden="true"></span>
             <strong id="visibleCount">8</strong> de <span id="totalCount">8</span> itens incluídos
           </p>
-          <p id="viewerHint">Escolha um módulo para ver detalhes</p>
+          <p id="viewerHint">Selecione um módulo na cena para abrir sua ficha.</p>
         </footer>
       </section>
 
@@ -71,8 +72,8 @@
             </div>
           </header>
 
-          <div class="module-list" id="moduleList"></div>
           <section id="moduleDetail" class="module-detail" aria-label="Detalhes do módulo"></section>
+          <div class="module-list" id="moduleList"></div>
         </section>
 
         <section class="panel" id="frontFinishPanel" aria-labelledby="frontFinishHeading">
