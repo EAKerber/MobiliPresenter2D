@@ -142,6 +142,7 @@
       button.style.setProperty("--swatch", preset.color);
       button.title = preset.label;
       button.setAttribute("aria-label", `Aplicar ${preset.label}`);
+      button.setAttribute("aria-pressed", "false");
       finishSwatches.append(button);
     });
 
@@ -263,10 +264,12 @@
     const estimate = getEstimate(resolved);
     if (!configurationValue) return;
     if (estimate.status === "demo") {
-      configurationValue.innerHTML = `<span>${estimate.label}</span><strong>${formatCurrency(estimate.totalCents)}</strong><small>Demo</small>`;
+      configurationValue.innerHTML = `<span>${estimate.label}</span><strong>${formatCurrency(estimate.totalCents)}</strong><small>Demo · não é orçamento</small>`;
+      configurationValue.title = estimate.disclaimer;
       return;
     }
     configurationValue.innerHTML = "<span>Valor do conjunto</span><strong>Em configuração</strong>";
+    configurationValue.removeAttribute("title");
   }
 
   function renderSummary(resolved) {
@@ -480,6 +483,7 @@
     resetFinishButton.disabled = false;
     syncFingerprint();
     syncLayerVisibility();
+    if (selectedSwatch) announce(`Frentes alteradas para ${selectedSwatch.title}.`);
   }
 
   function applyTexture(file) {

@@ -134,7 +134,14 @@ const unavailableEstimate=pricing.calculatePublicEstimate(scene,initial,catalog,
 assert.equal(unavailableEstimate.status,"unavailable");
 assert.equal(demoPriceBook.mode,"demo");
 assert.equal(Object.keys(demoPriceBook.entries).length,8);
+assert.match(demoPriceBook.disclaimer,/Não são orçamento/);
 const pricedEstimate=pricing.calculatePublicEstimate(scene,initial,catalog,visibility.resolveVisibility(scene,initial),demoPriceBook);
 assert.equal(pricedEstimate.status,"demo");
 assert.equal(pricedEstimate.totalCents,1659300);
+const demoInitial=core.createInitialState(scene);
+const demoFullEstimate=pricing.calculatePublicEstimate(scene,demoInitial,catalog,visibility.resolveVisibility(scene,demoInitial),demoPriceBook);
+assert.equal(demoFullEstimate.totalCents,2009200);
+core.setEntityVisibility(demoInitial,"module-01",false);
+const demoWithoutLaundryEstimate=pricing.calculatePublicEstimate(scene,demoInitial,catalog,visibility.resolveVisibility(scene,demoInitial),demoPriceBook);
+assert.equal(demoWithoutLaundryEstimate.totalCents,1769300);
 process.stdout.write(`${JSON.stringify({passed:true,initialFingerprint:fp,entities:17,controllableEntities:8})}\n`);
