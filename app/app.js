@@ -44,7 +44,9 @@
   const catalogByEntityId = new Map(catalog.modules.map((module) => [module.entityId, module]));
   const detailPageByEntity = new Map();
   const detailInteractionByEntity = new Set();
+  const detailViewsCollapsedByEntity = new Set();
   let detailCarouselTimer = null;
+  let lastResolved = null;
 
   function renderSceneFromData() {
     sceneBase.src = scene.baseAsset;
@@ -264,6 +266,11 @@
     return catalog.options.handles.find((handle) => handle.id === state.handlePresetId) || catalog.options.handles[0];
   }
 
+  function selectedStoneLabel() {
+    if (!state.stoneColor) return "Pedra original";
+    return document.querySelector(`[data-stone-color="${state.stoneColor}"]`)?.title || "Cor personalizada";
+  }
+
   function formatDimension(value) {
     return new Intl.NumberFormat("pt-BR", { maximumFractionDigits: 1 }).format(value);
   }
@@ -287,48 +294,49 @@
     return fact;
   }
 
-  function createOrientativeView(label, horizontalLabel, horizontalValue, verticalLabel, verticalValue) {
-    const card = document.createElement("figure");
-    card.className = "module-detail__view";
-    const caption = document.createElement("figcaption");
-    caption.textContent = label;
+  function mockImpactLabel(cents) {
+    if (!cents) return "Sem adicional no mock";
+    return cents > 0 ? `+${formatCurrency(cents)}` : `−${formatCurrency(Math.abs(cents))}`;
+  }
 
-    const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-    svg.setAttribute("viewBox", "0 0 180 126");
-    svg.setAttribute("role", "img");
-    svg.setAttribute("aria-label", `${label}: ${horizontalLabel} ${formatDimension(horizontalValue)} milímetros por ${verticalLabel} ${formatDimension(verticalValue)} milímetros`);
+  function appendPriceBreakdownRow(list, label, value, detail) {
+    const row = document.createElement("div");
+    const term = document.createElement("dt");
+    term.textContent = label;
+    const definition = document.createElement("dd");
+    const amount = document.createElement("strong");
+    amount.textContent = value;
+    definition.append(amount);
+    if (detail) {
+      const note = document.createElement("small");
+      note.textContent = detail;
+      definition.append(note);
+    }
+    row.append(term, definition);
+    list.append(row);
+  }
 
-    const ratio = horizontalValue / Math.max(verticalValue, 1);
-    const longSide = 88;
-    const shortSide = 42;
-    const drawingWidth = Math.max(shortSide, Math.min(longSide, ratio >= 1 ? longSide : longSide * ratio));
-    const drawingHeight = Math.max(shortSide, Math.min(longSide, ratio >= 1 ? longSide / ratio : longSide));
-    const x = 92 - drawingWidth / 2;
-    const y = 61 - drawingHeight / 2;
-    const make = (name, attributes = {}) => {
-      const node = document.createElementNS("http://www.w3.org/2000/svg", name);
-      Object.entries(attributes).forEach(([key, value]) => node.setAttribute(key, String(value)));
-      return node;
-    };
-    const text = (value, xPosition, yPosition, anchor = "middle") => {
-      const node = make("text", { x: xPosition, y: yPosition, "text-anchor": anchor });
-      node.textContent = value;
-      return node;
-    };
-
-    svg.append(
-      make("line", { x1: x, y1: 17, x2: x + drawingWidth, y2: 17, class: "module-detail__dimension-line" }),
-      make("line", { x1: x, y1: 13, x2: x, y2: 21, class: "module-detail__dimension-line" }),
-      make("line", { x1: x + drawingWidth, y1: 13, x2: x + drawingWidth, y2: 21, class: "module-detail__dimension-line" }),
-      text(`${horizontalLabel} ${formatDimension(horizontalValue)} mm`, 92, 10),
-      make("line", { x1: 26, y1: y, x2: 26, y2: y + drawingHeight, class: "module-detail__dimension-line" }),
-      make("line", { x1: 22, y1: y, x2: 30, y2: y, class: "module-detail__dimension-line" }),
-      make("line", { x1: 22, y1: y + drawingHeight, x2: 30, y2: y + drawingHeight, class: "module-detail__dimension-line" }),
-      make("rect", { x, y, width: drawingWidth, height: drawingHeight, rx: 2, class: "module-detail__view-shape" }),
-      text(`${verticalLabel} ${formatDimension(verticalValue)} mm`, 16, y + drawingHeight / 2 + 3)
+  function createItemPriceBreakdown(product, itemPricing) {
+    const breakdown = document.createElement("dl");
+    breakdown.className = "module-detail__price-breakdown";
+    const adjustments = pricing.sharedAdjustments(catalog, state, priceBook);
+    const handle = selectedHandle();
+    const appliesHandle = product.category && product.category !== "Estrutural";
+    const includedServices = catalog.services
+      .filter((service) => service.status === "included")
+      .map((service) => service.title)
+      .join(", ");
+    appendPriceBreakdownRow(breakdown, "Módulo", formatCurrency(itemPricing.baseCents), "Valor do módulo no mock.");
+    appendPriceBreakdownRow(
+      breakdown,
+      "Puxador",
+      appliesHandle ? formatCurrency(itemPricing.handleCents) : "Não aplicável",
+      appliesHandle ? handle.label : "Painel estrutural sem puxador."
     );
-    card.append(caption, svg);
-    return card;
+    appendPriceBreakdownRow(breakdown, "Frentes", formatCurrency(adjustments.frontCents), `${selectedFrontFinishLabel()} · ${mockImpactLabel(adjustments.frontCents)}.`);
+    appendPriceBreakdownRow(breakdown, "Pedra", formatCurrency(adjustments.stoneCents), `${selectedStoneLabel()} · ${mockImpactLabel(adjustments.stoneCents)}.`);
+    appendPriceBreakdownRow(breakdown, "Serviço", formatCurrency(adjustments.serviceCents), `${includedServices || "Nenhum"} · ${mockImpactLabel(adjustments.serviceCents)}.`);
+    return breakdown;
   }
 
   function createOrientativeInternalFront(dimensions, layout) {
@@ -382,26 +390,6 @@
     return card;
   }
 
-  function createOrientativeViews(dimensions, technicalLayout) {
-    const section = document.createElement("section");
-    section.className = "module-detail__views";
-    const heading = document.createElement("h4");
-    heading.textContent = "Vistas orientativas";
-    const note = document.createElement("p");
-    note.textContent = "Leitura das medidas nominais; não substitui desenho de instalação.";
-    const grid = document.createElement("div");
-    grid.className = "module-detail__views-grid";
-    grid.append(
-      createOrientativeView("Frontal", "L", dimensions.width, "A", dimensions.height),
-      createOrientativeView("Lateral", "P", dimensions.depth, "A", dimensions.height),
-      technicalLayout?.internalFront
-        ? createOrientativeInternalFront(dimensions, technicalLayout.internalFront)
-        : createOrientativeView("Planta", "L", dimensions.width, "P", dimensions.depth)
-    );
-    section.append(heading, note, grid);
-    return section;
-  }
-
   function createCarouselPage(label, content, note) {
     const page = document.createElement("section");
     page.className = "module-detail__carousel-page";
@@ -436,48 +424,184 @@
     return focus;
   }
 
-  function createIsometricView(dimensions) {
+  function drawingSpecFor(product) {
+    const nominal = product.dimensions.nominalMm;
+    if (product.drawingSpec?.kind === "panel") {
+      return {
+        kind: "panel",
+        faceWidthMm: product.drawingSpec.faceWidthMm,
+        faceHeightMm: product.drawingSpec.faceHeightMm,
+        extrusionMm: product.drawingSpec.thicknessMm,
+        faceHorizontalLabel: product.drawingSpec.faceHorizontalLabel,
+        extrusionLabel: product.drawingSpec.extrusionLabel
+      };
+    }
+    return {
+      kind: "cabinet",
+      faceWidthMm: nominal.width,
+      faceHeightMm: nominal.height,
+      extrusionMm: nominal.depth,
+      faceHorizontalLabel: "L",
+      extrusionLabel: "P"
+    };
+  }
+
+  function detailDimensionFacts(product) {
+    const dimensions = product.dimensions.nominalMm;
+    if (product.drawingSpec?.kind === "panel") {
+      return [
+        ["Altura", product.drawingSpec.faceHeightMm],
+        ["Profundidade", product.drawingSpec.faceWidthMm],
+        ["Espessura", product.drawingSpec.thicknessMm]
+      ];
+    }
+    return [
+      ["Largura", dimensions.width],
+      ["Altura", dimensions.height],
+      ["Profundidade", dimensions.depth]
+    ];
+  }
+
+  function dimensionSummary(product) {
+    const axes = product.dimensions.displayAxes ? ` (${product.dimensions.displayAxes})` : "";
+    return `Medidas nominais: ${product.dimensions.display}${axes}`;
+  }
+
+  function fitProportionalBox(widthMm, heightMm, maxWidth = 104, maxHeight = 64) {
+    const safeWidth = Math.max(Number(widthMm) || 1, 1);
+    const safeHeight = Math.max(Number(heightMm) || 1, 1);
+    const scale = Math.min(maxWidth / safeWidth, maxHeight / safeHeight);
+    return { width: safeWidth * scale, height: safeHeight * scale, scale };
+  }
+
+  function svgFactory(svg) {
+    return (name, attributes = {}) => {
+      const node = document.createElementNS("http://www.w3.org/2000/svg", name);
+      Object.entries(attributes).forEach(([key, value]) => node.setAttribute(key, String(value)));
+      svg.append(node);
+      return node;
+    };
+  }
+
+  function svgLabel(make, value, x, y, anchor = "middle") {
+    const label = make("text", { x, y, "text-anchor": anchor });
+    label.textContent = value;
+    return label;
+  }
+
+  function appendFrontSegments(make, layout, x, y, width, height, faceWidthMm) {
+    if (!layout?.segments?.length) return;
+    const segmentsWidthMm = layout.innerWidthMm || layout.segments.reduce((total, segment) => total + (segment.spanMm || 0), 0);
+    if (!segmentsWidthMm) return;
+    const visibleWidth = width * Math.min(segmentsWidthMm, faceWidthMm) / faceWidthMm;
+    const startX = x + (width - visibleWidth) / 2;
+    let cursorMm = 0;
+    layout.segments.forEach((segment, index) => {
+      const segmentWidthMm = segment.spanMm || 0;
+      const segmentStart = startX + (cursorMm / segmentsWidthMm) * visibleWidth;
+      cursorMm += segmentWidthMm;
+      const segmentEnd = startX + (cursorMm / segmentsWidthMm) * visibleWidth;
+      if (index < layout.segments.length - 1) {
+        make("line", { x1: segmentEnd, y1: y, x2: segmentEnd, y2: y + height, class: "module-detail__view-shape" });
+      }
+      if (segment.subdivisions) {
+        for (let part = 1; part < segment.subdivisions; part += 1) {
+          const divisionY = y + (height / segment.subdivisions) * part;
+          make("line", { x1: segmentStart, y1: divisionY, x2: segmentEnd, y2: divisionY, class: "module-detail__view-shape" });
+        }
+      }
+    });
+  }
+
+  function createProportionalView(product, type) {
+    const spec = drawingSpecFor(product);
+    const isSide = type === "side";
+    const horizontalMm = isSide ? spec.extrusionMm : spec.faceWidthMm;
+    const horizontalLabel = isSide ? spec.extrusionLabel : spec.faceHorizontalLabel;
+    const fit = fitProportionalBox(horizontalMm, spec.faceHeightMm);
+    const isAmplifiedThickness = spec.kind === "panel" && isSide && fit.width < 2.5;
+    const drawingWidth = isAmplifiedThickness ? 2.5 : fit.width;
+    const drawingHeight = fit.height;
+    const x = 94 - drawingWidth / 2;
+    const y = 62 - drawingHeight / 2;
     const figure = document.createElement("figure");
-    figure.className = "module-detail__view module-detail__view--isometric";
+    figure.className = "module-detail__view module-detail__view--technical";
+    const caption = document.createElement("figcaption");
+    caption.textContent = isSide ? "Vista lateral" : "Vista frontal";
     const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
     svg.setAttribute("viewBox", "0 0 180 126");
     svg.setAttribute("role", "img");
-    svg.setAttribute("aria-label", `Vista isométrica: largura ${formatDimension(dimensions.width)} milímetros, altura ${formatDimension(dimensions.height)} milímetros e profundidade ${formatDimension(dimensions.depth)} milímetros.`);
-    const make = (name, attributes = {}) => {
-      const node = document.createElementNS("http://www.w3.org/2000/svg", name);
-      Object.entries(attributes).forEach(([key, value]) => node.setAttribute(key, String(value)));
-      return node;
-    };
-    const label = (value, x, y, anchor = "middle") => {
-      const node = make("text", { x, y, "text-anchor": anchor });
-      node.textContent = value;
-      return node;
-    };
-    const width = 74;
-    const height = 54;
-    const depthX = 25;
-    const depthY = -16;
-    const left = 39;
-    const top = 44;
+    svg.setAttribute("aria-label", `${caption.textContent}: ${horizontalLabel} ${formatDimension(horizontalMm)} milímetros por A ${formatDimension(spec.faceHeightMm)} milímetros${isAmplifiedThickness ? ". A espessura foi ampliada apenas para legibilidade." : "."}`);
+    const make = svgFactory(svg);
+    make("line", { x1: x, y1: 17, x2: x + drawingWidth, y2: 17, class: "module-detail__dimension-line" });
+    make("line", { x1: x, y1: 13, x2: x, y2: 21, class: "module-detail__dimension-line" });
+    make("line", { x1: x + drawingWidth, y1: 13, x2: x + drawingWidth, y2: 21, class: "module-detail__dimension-line" });
+    svgLabel(make, `${horizontalLabel} ${formatDimension(horizontalMm)} mm`, 94, 10);
+    make("line", { x1: Math.max(14, x - 18), y1: y, x2: Math.max(14, x - 18), y2: y + drawingHeight, class: "module-detail__dimension-line" });
+    make("line", { x1: Math.max(10, x - 22), y1: y, x2: Math.max(18, x - 14), y2: y, class: "module-detail__dimension-line" });
+    make("line", { x1: Math.max(10, x - 22), y1: y + drawingHeight, x2: Math.max(18, x - 14), y2: y + drawingHeight, class: "module-detail__dimension-line" });
+    make("rect", { x, y, width: drawingWidth, height: drawingHeight, rx: 2, class: "module-detail__view-shape" });
+    if (!isSide) appendFrontSegments(make, product.frontLayout, x, y, drawingWidth, drawingHeight, spec.faceWidthMm);
+    svgLabel(make, `A ${formatDimension(spec.faceHeightMm)} mm`, Math.max(8, x - 25), y + drawingHeight / 2 + 3);
+    figure.append(caption, svg);
+    return figure;
+  }
+
+  function createTechnicalIsometricView(product) {
+    const spec = drawingSpecFor(product);
+    const fit = fitProportionalBox(spec.faceWidthMm, spec.faceHeightMm, 86, 58);
+    const rawExtrusion = spec.extrusionMm * fit.scale * 0.68;
+    const isAmplifiedThickness = spec.kind === "panel" && rawExtrusion < 4;
+    const depthX = Math.max(isAmplifiedThickness ? 4 : 6, rawExtrusion);
+    const depthY = -Math.min(18, depthX * 0.62);
+    const width = fit.width;
+    const height = fit.height;
+    const left = 92 - (width + depthX) / 2;
+    const top = 59 - height / 2 - depthY / 2;
     const right = left + width;
     const bottom = top + height;
-    svg.append(
-      make("path", { d: `M ${left} ${top} L ${right} ${top} L ${right + depthX} ${top + depthY} L ${left + depthX} ${top + depthY} Z`, class: "module-detail__view-shape" }),
-      make("path", { d: `M ${right} ${top} L ${right + depthX} ${top + depthY} L ${right + depthX} ${bottom + depthY} L ${right} ${bottom} Z`, class: "module-detail__view-shape" }),
-      make("rect", { x: left, y: top, width, height, class: "module-detail__view-shape" }),
-      make("line", { x1: left, y1: bottom + 15, x2: right, y2: bottom + 15, class: "module-detail__dimension-line" }),
-      make("line", { x1: left, y1: bottom + 11, x2: left, y2: bottom + 19, class: "module-detail__dimension-line" }),
-      make("line", { x1: right, y1: bottom + 11, x2: right, y2: bottom + 19, class: "module-detail__dimension-line" }),
-      make("line", { x1: 21, y1: top, x2: 21, y2: bottom, class: "module-detail__dimension-line" }),
-      make("line", { x1: 17, y1: top, x2: 25, y2: top, class: "module-detail__dimension-line" }),
-      make("line", { x1: 17, y1: bottom, x2: 25, y2: bottom, class: "module-detail__dimension-line" }),
-      make("line", { x1: right + 5, y1: top - 7, x2: right + depthX + 5, y2: top + depthY - 7, class: "module-detail__dimension-line" }),
-      label(`L ${formatDimension(dimensions.width)} mm`, left + width / 2, bottom + 27),
-      label(`A ${formatDimension(dimensions.height)} mm`, 13, top + height / 2 + 3),
-      label(`P ${formatDimension(dimensions.depth)} mm`, right + depthX + 18, top + depthY - 9)
-    );
-    figure.append(svg);
+    const figure = document.createElement("figure");
+    figure.className = "module-detail__view module-detail__view--isometric module-detail__view--technical";
+    const caption = document.createElement("figcaption");
+    caption.textContent = "Vista isométrica";
+    const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    svg.setAttribute("viewBox", "0 0 180 126");
+    svg.setAttribute("role", "img");
+    svg.setAttribute("aria-label", `Vista isométrica: ${spec.faceHorizontalLabel} ${formatDimension(spec.faceWidthMm)} milímetros, A ${formatDimension(spec.faceHeightMm)} milímetros e ${spec.extrusionLabel} ${formatDimension(spec.extrusionMm)} milímetros${isAmplifiedThickness ? ". A espessura foi ampliada apenas para legibilidade." : "."}`);
+    const make = svgFactory(svg);
+    make("path", { d: `M ${left} ${top} L ${right} ${top} L ${right + depthX} ${top + depthY} L ${left + depthX} ${top + depthY} Z`, class: "module-detail__view-shape" });
+    make("path", { d: `M ${right} ${top} L ${right + depthX} ${top + depthY} L ${right + depthX} ${bottom + depthY} L ${right} ${bottom} Z`, class: "module-detail__view-shape" });
+    make("rect", { x: left, y: top, width, height, class: "module-detail__view-shape" });
+    appendFrontSegments(make, product.frontLayout, left, top, width, height, spec.faceWidthMm);
+    make("line", { x1: left, y1: bottom + 14, x2: right, y2: bottom + 14, class: "module-detail__dimension-line" });
+    make("line", { x1: left, y1: bottom + 10, x2: left, y2: bottom + 18, class: "module-detail__dimension-line" });
+    make("line", { x1: right, y1: bottom + 10, x2: right, y2: bottom + 18, class: "module-detail__dimension-line" });
+    make("line", { x1: Math.max(15, left - 19), y1: top, x2: Math.max(15, left - 19), y2: bottom, class: "module-detail__dimension-line" });
+    make("line", { x1: Math.max(11, left - 23), y1: top, x2: Math.max(19, left - 15), y2: top, class: "module-detail__dimension-line" });
+    make("line", { x1: Math.max(11, left - 23), y1: bottom, x2: Math.max(19, left - 15), y2: bottom, class: "module-detail__dimension-line" });
+    make("line", { x1: right + 4, y1: top - 6, x2: right + depthX + 4, y2: top + depthY - 6, class: "module-detail__dimension-line" });
+    svgLabel(make, `${spec.faceHorizontalLabel} ${formatDimension(spec.faceWidthMm)} mm`, left + width / 2, bottom + 27);
+    svgLabel(make, `A ${formatDimension(spec.faceHeightMm)} mm`, Math.max(8, left - 27), top + height / 2 + 3);
+    svgLabel(make, `${spec.extrusionLabel} ${formatDimension(spec.extrusionMm)} mm`, right + depthX + 18, top + depthY - 9);
+    figure.append(caption, svg);
     return figure;
+  }
+
+  function frontViewNote(product) {
+    if (product.frontLayout?.status === "confirmed") {
+      const spans = product.frontLayout.segments.map((segment) => formatDimension(segment.spanMm)).join(" · ");
+      return `Vãos internos confirmados: ${spans} mm; envelope externo: ${formatDimension(product.dimensions.nominalMm.width)} mm.`;
+    }
+    if (product.drawingSpec?.kind === "panel") {
+      return "Elevação proporcional do painel estrutural; a espessura aparece como chamada separada.";
+    }
+    return "Envelope frontal proporcional; detalhamento interno ainda não está confirmado nesta base.";
+  }
+
+  function sideViewNote(product) {
+    return product.drawingSpec?.kind === "panel"
+      ? "Perfil A × E; a espessura é ampliada somente quando necessário para leitura."
+      : "Leitura proporcional de profundidade e altura nominais.";
   }
 
   function clearDetailCarouselTimer() {
@@ -492,34 +616,51 @@
     const section = document.createElement("section");
     section.className = "module-detail__views module-detail__carousel";
     section.setAttribute("aria-label", "Visualizações do módulo");
+    const header = document.createElement("div");
+    header.className = "module-detail__carousel-header";
     const heading = document.createElement("h4");
     heading.textContent = "Visualizações";
+    const collapse = document.createElement("button");
+    collapse.type = "button";
+    collapse.className = "module-detail__collapse";
+    collapse.dataset.toggleDetailViews = "true";
+    collapse.setAttribute("aria-controls", `detailViews-${entity.id}`);
     const note = document.createElement("p");
+    note.className = "module-detail__carousel-intro";
     note.textContent = "Navegue pelo foco do módulo e pelas vistas orientativas.";
     const stage = document.createElement("div");
     stage.className = "module-detail__carousel-stage";
+    stage.id = `detailViews-${entity.id}`;
     const dots = document.createElement("div");
     dots.className = "module-detail__carousel-dots";
     dots.setAttribute("aria-label", "Páginas de visualização");
 
     const pages = [
       { label: "Foco no módulo", node: createCarouselPage("Foco no módulo", createModuleFocus(entity, product), "Visual isolado da peça selecionada na cena."), shortLabel: "Foco" },
-      { label: "Vista frontal", node: createCarouselPage("Vista frontal", createOrientativeView("Frontal", "L", product.dimensions.nominalMm.width, "A", product.dimensions.nominalMm.height), "Leitura de largura e altura nominais."), shortLabel: "Frontal" },
-      { label: "Vista lateral", node: createCarouselPage("Vista lateral", createOrientativeView("Lateral", "P", product.dimensions.nominalMm.depth, "A", product.dimensions.nominalMm.height), "Leitura de profundidade e altura nominais."), shortLabel: "Lateral" },
+      { label: "Vista frontal", node: createCarouselPage("Vista frontal", createProportionalView(product, "front"), frontViewNote(product)), shortLabel: "Frontal" },
+      { label: "Vista lateral", node: createCarouselPage("Vista lateral", createProportionalView(product, "side"), sideViewNote(product)), shortLabel: "Lateral" },
       ...(product.technicalLayout?.internalFront
-        ? [{ label: "Vista interna", node: createCarouselPage("Vista interna", createOrientativeInternalFront(product.dimensions.nominalMm, product.technicalLayout.internalFront), "Divisões internas disponíveis na ficha do módulo."), shortLabel: "Interna" }]
+        ? [{ label: "Vista interna", node: createCarouselPage("Vista interna", createOrientativeInternalFront(product.dimensions.nominalMm, product.technicalLayout.internalFront), "Vãos internos confirmados; não equivalem ao envelope externo do módulo."), shortLabel: "Interna" }]
         : []),
-      { label: "Vista isométrica", node: createCarouselPage("Vista isométrica", createIsometricView(product.dimensions.nominalMm), "Leitura espacial orientativa da peça."), shortLabel: "Isométrica" }
+      { label: "Vista isométrica", node: createCarouselPage("Vista isométrica", createTechnicalIsometricView(product), product.drawingSpec?.kind === "panel" ? "Painel estrutural em proporção; espessura ampliada somente para leitura." : "Projeção proporcional das cotas nominais."), shortLabel: "Isométrica" }
     ];
     let currentPage = Math.min(detailPageByEntity.get(entity.id) || 0, pages.length - 1);
     let isTransitioning = false;
+    const isReducedMotion = global.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
+    const isCollapsed = detailViewsCollapsedByEntity.has(entity.id);
+
+    const stopAutoCycle = () => {
+      detailInteractionByEntity.add(entity.id);
+      clearDetailCarouselTimer();
+    };
+    const startAutoCycle = () => {
+      if (isReducedMotion || detailInteractionByEntity.has(entity.id) || pages.length < 2 || detailViewsCollapsedByEntity.has(entity.id)) return;
+      detailCarouselTimer = global.setInterval(() => renderPage((currentPage + 1) % pages.length, false), 7000);
+    };
 
     const renderPage = (nextPage, interacted) => {
+      if (interacted) stopAutoCycle();
       if (isTransitioning || nextPage === currentPage) return;
-      if (interacted) {
-        detailInteractionByEntity.add(entity.id);
-        clearDetailCarouselTimer();
-      }
       isTransitioning = true;
       stage.classList.add("is-fading");
       global.setTimeout(() => {
@@ -548,16 +689,54 @@
     stage.replaceChildren(pages[currentPage].node);
     dots.children[currentPage]?.classList.add("is-active");
     dots.children[currentPage]?.setAttribute("aria-current", "true");
-    section.append(heading, note, stage, dots);
+    collapse.setAttribute("aria-expanded", String(!isCollapsed));
+    collapse.setAttribute("aria-label", isCollapsed ? "Expandir visualizações" : "Recolher visualizações");
+    collapse.textContent = isCollapsed ? "Mostrar" : "Recolher";
+    header.append(heading, collapse);
+    section.classList.toggle("is-collapsed", isCollapsed);
+    section.append(header, note, stage, dots);
 
-    section.addEventListener("pointerdown", () => {
-      detailInteractionByEntity.add(entity.id);
-      clearDetailCarouselTimer();
-    }, { once: true });
-    if (!detailInteractionByEntity.has(entity.id) && pages.length > 1) {
-      detailCarouselTimer = global.setInterval(() => renderPage((currentPage + 1) % pages.length, false), 7000);
-    }
+    collapse.addEventListener("click", () => {
+      const nextCollapsed = !detailViewsCollapsedByEntity.has(entity.id);
+      if (nextCollapsed) detailViewsCollapsedByEntity.add(entity.id);
+      else detailViewsCollapsedByEntity.delete(entity.id);
+      stopAutoCycle();
+      section.classList.toggle("is-collapsed", nextCollapsed);
+      collapse.setAttribute("aria-expanded", String(!nextCollapsed));
+      collapse.setAttribute("aria-label", nextCollapsed ? "Expandir visualizações" : "Recolher visualizações");
+      collapse.textContent = nextCollapsed ? "Mostrar" : "Recolher";
+    });
+    section.addEventListener("pointerdown", stopAutoCycle, { once: true });
+    section.addEventListener("wheel", stopAutoCycle, { once: true, passive: true });
+    section.addEventListener("focusin", stopAutoCycle, { once: true });
+    startAutoCycle();
     return section;
+  }
+
+  function visibleModuleEntityIds(resolved = lastResolved) {
+    return catalog.modules
+      .filter((product) => resolved?.[product.entityId]?.visible)
+      .map((product) => product.entityId);
+  }
+
+  function adjacentVisibleModuleId(direction) {
+    const ids = visibleModuleEntityIds();
+    if (ids.length < 2) return null;
+    const selectedIndex = ids.indexOf(state.selectedEntityId);
+    const currentIndex = selectedIndex >= 0 ? selectedIndex : direction > 0 ? -1 : 0;
+    return ids[(currentIndex + direction + ids.length) % ids.length];
+  }
+
+  function createModuleNavigationButton(direction, targetProduct) {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "module-detail__navigation";
+    button.dataset.navigateModule = String(direction);
+    const directionLabel = direction < 0 ? "anterior" : "próximo";
+    button.setAttribute("aria-label", `Abrir módulo ${directionLabel}: ${targetProduct.title}`);
+    button.title = `Módulo ${directionLabel}: ${targetProduct.referenceLabel}`;
+    button.textContent = direction < 0 ? "‹" : "›";
+    return button;
   }
 
   function updateSelection(resolved) {
@@ -584,20 +763,29 @@
     moduleNumber.className = "module-detail__number";
     moduleNumber.textContent = entity.alias;
     const headerCopy = document.createElement("div");
+    headerCopy.className = "module-detail__header-copy";
     const eyebrow = document.createElement("p");
     eyebrow.className = "module-detail__eyebrow";
     eyebrow.textContent = `${product.referenceLabel.toUpperCase()} · ${product.category.toUpperCase()}`;
     const title = document.createElement("h3");
     title.textContent = product.title;
-    title.tabIndex = -1;
     headerCopy.append(eyebrow, title);
+    const headerActions = document.createElement("div");
+    headerActions.className = "module-detail__actions";
+    const previousId = adjacentVisibleModuleId(-1);
+    const nextId = adjacentVisibleModuleId(1);
+    const previousProduct = catalogByEntityId.get(previousId);
+    const nextProduct = catalogByEntityId.get(nextId);
+    if (previousProduct) headerActions.append(createModuleNavigationButton(-1, previousProduct));
+    if (nextProduct) headerActions.append(createModuleNavigationButton(1, nextProduct));
     const close = document.createElement("button");
     close.type = "button";
     close.className = "module-detail__close";
     close.dataset.closeModuleDetail = "true";
     close.setAttribute("aria-label", "Fechar detalhes do módulo");
     close.textContent = "×";
-    detailHeader.append(moduleNumber, headerCopy, close);
+    headerActions.append(close);
+    detailHeader.append(moduleNumber, headerCopy, headerActions);
 
     const itemPricing = pricing.itemEstimate(product, catalog, state, priceBook);
     const price = document.createElement("section");
@@ -608,15 +796,15 @@
     const priceDescription = document.createElement("p");
     if (itemPricing.status === "ready") {
       priceValue.textContent = formatCurrency(itemPricing.totalCents);
-      const handle = selectedHandle();
-      priceDescription.textContent = itemPricing.handleCents
-        ? `Inclui ${handle.label}: +${formatCurrency(itemPricing.handleCents)}.`
-        : `Base de referência do mockup: ${formatCurrency(priceBook.baseModuleCents)}.`;
+      priceDescription.textContent = product.category === "Estrutural"
+        ? "Valor do painel estrutural. Frentes, pedra e serviço aparecem abaixo com o impacto atual do mock."
+        : "Módulo e puxador aplicável. Frentes, pedra e serviço aparecem abaixo com o impacto atual do mock.";
+      price.append(priceLabel, priceValue, priceDescription, createItemPriceBreakdown(product, itemPricing));
     } else {
       priceValue.textContent = "Em configuração";
       priceDescription.textContent = "O valor aparece quando a tabela de trabalho estiver completa.";
+      price.append(priceLabel, priceValue, priceDescription);
     }
-    price.append(priceLabel, priceValue, priceDescription);
 
     const material = document.createElement("div");
     material.className = "module-detail__material";
@@ -627,18 +815,14 @@
 
     const dimensions = document.createElement("p");
     dimensions.className = "module-detail__dimensions";
-    dimensions.textContent = `Medidas nominais: ${product.dimensions.display}`;
+    dimensions.textContent = dimensionSummary(product);
 
     const technical = document.createElement("section");
     technical.className = "module-detail__technical";
     const technicalHeading = document.createElement("h4");
     technicalHeading.textContent = "Medidas nominais";
     const technicalGrid = document.createElement("dl");
-    const dimensionsByName = [
-      ["Largura", product.dimensions.nominalMm.width],
-      ["Altura", product.dimensions.nominalMm.height],
-      ["Profundidade", product.dimensions.nominalMm.depth]
-    ];
+    const dimensionsByName = detailDimensionFacts(product);
     dimensionsByName.forEach(([label, value]) => {
       const group = document.createElement("div");
       const term = document.createElement("dt");
@@ -776,7 +960,28 @@
     const price = document.createElement("div");
     price.className = "price-state";
     if (estimate.status === "demo") {
-      price.innerHTML = `<span>${estimate.label}</span><strong>${formatCurrency(estimate.totalCents)}</strong><p>${estimate.disclaimer}</p>`;
+      const label = document.createElement("span");
+      label.textContent = estimate.label;
+      const total = document.createElement("strong");
+      total.textContent = formatCurrency(estimate.totalCents);
+      const composition = document.createElement("dl");
+      composition.className = "price-state__breakdown";
+      const includedHandleCount = included.filter((module) => module.category !== "Estrutural").length;
+      const adjustments = estimate.adjustments;
+      appendPriceBreakdownRow(composition, "Módulos", formatCurrency(estimate.breakdown.moduleCents), `${included.length} incluído(s).`);
+      if (estimate.breakdown.accessoryCents || resolved?.["lighting-08"]?.visible) {
+        appendPriceBreakdownRow(composition, "Iluminação", formatCurrency(estimate.breakdown.accessoryCents), resolved?.["lighting-08"]?.visible ? "Iluminação embutida." : "Não incluída.");
+      }
+      appendPriceBreakdownRow(composition, "Puxadores", formatCurrency(estimate.breakdown.handleCents), `${handle.label} · ${includedHandleCount} módulo(s) aplicável(is).`);
+      appendPriceBreakdownRow(composition, "Frentes", formatCurrency(adjustments.frontCents), `${selectedFrontFinishLabel()} · ${mockImpactLabel(adjustments.frontCents)}.`);
+      appendPriceBreakdownRow(composition, "Pedra", formatCurrency(adjustments.stoneCents), `${selectedStoneLabel()} · ${mockImpactLabel(adjustments.stoneCents)}.`);
+      appendPriceBreakdownRow(composition, "Serviço", formatCurrency(adjustments.serviceCents), `${includedServices.join(", ") || "Nenhum"} · ${mockImpactLabel(adjustments.serviceCents)}.`);
+      const reference = document.createElement("p");
+      reference.className = "price-state__reference";
+      reference.textContent = `Referência de composição do mock: ${formatCurrency(priceBook.compositionBaseReferenceCents)}. Não integra o total.`;
+      const disclaimer = document.createElement("p");
+      disclaimer.textContent = estimate.disclaimer;
+      price.append(label, total, composition, reference, disclaimer);
     } else if (estimate.status === "ready") {
       price.innerHTML = `<span>Valor estimado</span><strong>${formatCurrency(estimate.totalCents)}</strong>`;
     } else {
@@ -885,6 +1090,7 @@
   function syncLayerVisibility() {
     renderStone(state);
     const resolved = visibility.resolveVisibility(scene, state);
+    lastResolved = resolved;
     syncFinishMasks(resolved);
     layerGroups.forEach((layer) => {
       const result = resolved[layer.dataset.entityId];
@@ -942,10 +1148,15 @@
     announce(`Ficha de ${product.referenceLabel}, ${product.title}, aberta.`);
     if (source === "scene") {
       requestAnimationFrame(() => {
-        moduleDetail.querySelector("h3")?.focus({ preventScroll: true });
         moduleDetail.scrollIntoView({ behavior: "smooth", block: "nearest" });
       });
     }
+  }
+
+  function selectAdjacentModule(direction) {
+    const nextEntityId = adjacentVisibleModuleId(direction);
+    if (!nextEntityId) return;
+    selectEntity(nextEntityId, "detail-navigation");
   }
 
   function setAllVisibility(isVisible) {
@@ -1077,6 +1288,11 @@
   });
 
   moduleDetail.addEventListener("click", (event) => {
+    const navigation = event.target.closest("[data-navigate-module]");
+    if (navigation) {
+      selectAdjacentModule(Number(navigation.dataset.navigateModule));
+      return;
+    }
     const close = event.target.closest("[data-close-module-detail]");
     if (!close) return;
     state.selectedEntityId = null;

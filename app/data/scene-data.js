@@ -232,7 +232,6 @@
         alphaBounds: { x: 1232, y: 46, width: 274, height: 185 },
         defaultVisible: true,
         controllable: true,
-        requiresVisibleIds: ["module-04"],
         hostId: null,
         finishGroups: ["fronts-all"],
         tags: ["upper", "refrigerator-zone"]

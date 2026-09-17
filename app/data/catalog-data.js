@@ -63,18 +63,30 @@
           ]
         }
       },
+      frontLayout: {
+        source: "technical-sheet:module-03:user-provided-2026-08-10", status: "confirmed", innerWidthMm: 1190,
+        segments: [
+          { kind: "drawer", spanMm: 390, subdivisions: 4 },
+          { kind: "door", spanMm: 400 },
+          { kind: "door", spanMm: 400 }
+        ]
+      },
       requirements: ["Verificar os pontos hidráulicos e elétricos previstos para a pia."], publicPriceCents: null
     },
     {
       entityId: "module-04", referenceLabel: "Módulo 04", category: "Estrutural", title: "Lateral da geladeira",
       sourceEntityId: "scene/traditional/module/fridge-side",
       dimensions: {
-        display: "2.400 × 600 × 18 mm", displayPolicy: "nominal",
+        display: "2.400 × 600 × 18 mm", displayPolicy: "nominal", displayAxes: "A × P × E",
         nominalMm: { width: 18, height: 2400, depth: 600 }, geometryMm: { width: 18, height: 2400, depth: 610 },
         evidence: [
           { source: "technical-sheet", status: "provided", reference: "module-04-sheet" },
           { source: "promob-dxf", status: "confirmed", reference: "placement:LAYER114" }
         ]
+      },
+      drawingSpec: {
+        kind: "panel", faceWidthMm: 600, faceHeightMm: 2400, thicknessMm: 18,
+        faceHorizontalLabel: "P", extrusionLabel: "E"
       },
       benefits: ["Sustenta o aéreo da geladeira", "Alinha o conjunto pela frente", "Organiza a fiação da iluminação"],
       components: ["Painel MDF 18 mm", "Fita de borda na cor da peça", "Ponto para interruptor de iluminação"],
@@ -125,7 +137,7 @@
       },
       benefits: ["Completa o aproveitamento vertical", "Fechamento amortecido", "Caixaria interna Branco TX"],
       components: ["Dobradiças com amortecimento", "Prateleira fixa", "MDF 18 mm"],
-      requirements: ["Requer a lateral da geladeira para suporte e alinhamento."], publicPriceCents: null
+      requirements: [], publicPriceCents: null
     }
   ];
 

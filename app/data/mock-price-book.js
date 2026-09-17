@@ -9,15 +9,15 @@
     currency: "BRL",
     label: "Simulação de valor",
     disclaimer: "Valores ilustrativos para testar a composição. Não são orçamento, proposta ou preço comercial.",
-    baseModuleCents: 300000,
+    compositionBaseReferenceCents: 300000,
     entries: Object.freeze({
-      "module-01": 239900,
-      "module-02": 349900,
-      "module-03": 429900,
-      "module-04": 119900,
-      "module-05": 269900,
-      "module-06": 319900,
-      "module-07": 189900,
+      "module-01": 47980,
+      "module-02": 69980,
+      "module-03": 85980,
+      "module-04": 23980,
+      "module-05": 53980,
+      "module-06": 63980,
+      "module-07": 37980,
       "lighting-08": 89900
     }),
     handleEntries: Object.freeze({
@@ -25,7 +25,19 @@
       "tango-chrome": 17985,
       ponto: 14985,
       "alca-colors": 32850
-    })
+    }),
+    frontFinishEntries: Object.freeze({
+      "gianduia-original": 0,
+      "gianduia-color": 0,
+      "white-tx": 0,
+      black: 0,
+      olive: 0,
+      "petroleum-blue": 0,
+      "solid-color-custom": 0,
+      "uploaded-texture": 0
+    }),
+    stoneEntries: Object.freeze({ "stone-original": 0, "stone-custom": 0 }),
+    serviceEntries: Object.freeze({ "base-stone": 0 })
   });
 
   global.CASA_EM_MODULOS_PRICE_BOOK = priceBook;
