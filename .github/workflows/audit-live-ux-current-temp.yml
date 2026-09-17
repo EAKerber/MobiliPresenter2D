@@ -1,0 +1,79 @@
+name: Audit live UX current temp
+on:
+  push:
+    branches: [audit/live-state-2026-09-17]
+permissions:
+  contents: write
+jobs:
+  audit:
+    runs-on: ubuntu-24.04
+    env:
+      TARGET_URL: https://6aabc2c4b3a76f8ad67da4f5--mobilipresenter2d.netlify.app/
+      TARGET_BRANCH: audit/live-state-2026-09-17
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
+      - uses: actions/setup-node@v4
+        with: { node-version: 22 }
+      - name: Install Chromium tooling
+        run: |
+          npm install --prefix /tmp/ux-browser --no-audit --no-fund playwright@1.62.1
+          /tmp/ux-browser/node_modules/.bin/playwright install --with-deps chromium
+      - name: Capture current immutable UX matrix
+        env:
+          NODE_PATH: /tmp/ux-browser/node_modules
+        run: |
+          cat > /tmp/audit.cjs <<'NODE'
+          const { chromium } = require('playwright');
+          const fs = require('fs'); const path = require('path');
+          (async()=>{
+            const out='/tmp/ux-current'; fs.mkdirSync(out,{recursive:true});
+            const browser=await chromium.launch({headless:true});
+            const context=await browser.newContext({serviceWorkers:'block'});
+            const page=await context.newPage();
+            const cdp=await context.newCDPSession(page); await cdp.send('Network.enable'); await cdp.send('Network.setCacheDisabled',{cacheDisabled:true});
+            const url=process.env.TARGET_URL;
+            const errors=[]; page.on('pageerror',e=>errors.push('pageerror:'+e.message)); page.on('console',m=>{if(m.type()==='error') errors.push('console:'+m.text())});
+            async function fresh(){await page.goto(url+'?uxaudit='+Date.now(),{waitUntil:'networkidle',timeout:90000}); await page.waitForTimeout(500);}
+            function safe(s){return s.replace(/[^a-z0-9_-]/gi,'-').toLowerCase();}
+            async function collect(label){
+              const data=await page.evaluate((label)=>{
+                const vis=e=>{if(!e)return false;const c=getComputedStyle(e),r=e.getBoundingClientRect();return c.display!=='none'&&c.visibility!=='hidden'&&r.width>0&&r.height>0};
+                const rect=s=>{const e=document.querySelector(s);if(!vis(e))return null;const r=e.getBoundingClientRect(),c=getComputedStyle(e);return{x:+r.x.toFixed(1),y:+r.y.toFixed(1),w:+r.width.toFixed(1),h:+r.height.toFixed(1),bottom:+r.bottom.toFixed(1),position:c.position,overflowX:c.overflowX,overflowY:c.overflowY}};
+                const elems=[...document.querySelectorAll('h1,h2,h3,h4,p,span,strong,small,button,label,li,dt,dd,legend')].filter(vis);
+                const clipped=elems.map(e=>{const r=e.getBoundingClientRect(),c=getComputedStyle(e);return{tag:e.tagName.toLowerCase(),id:e.id||'',cls:typeof e.className==='string'?e.className:'',text:(e.innerText||e.textContent||'').trim().replace(/\s+/g,' ').slice(0,140),cw:e.clientWidth,sw:e.scrollWidth,ch:e.clientHeight,sh:e.scrollHeight,whiteSpace:c.whiteSpace,overflowX:c.overflowX,overflowY:c.overflowY,x:+r.x.toFixed(1),y:+r.y.toFixed(1),w:+r.width.toFixed(1),h:+r.height.toFixed(1)}}).filter(x=>(x.sw>x.cw+1||x.sh>x.ch+1)&&(['hidden','clip'].includes(x.overflowX)||['hidden','clip'].includes(x.overflowY)||x.whiteSpace==='nowrap'));
+                const fixed=[...document.querySelectorAll('*')].filter(e=>vis(e)&&['fixed','sticky'].includes(getComputedStyle(e).position)).map(e=>{const r=e.getBoundingClientRect();return{tag:e.tagName.toLowerCase(),id:e.id||'',cls:typeof e.className==='string'?e.className:'',position:getComputedStyle(e).position,x:+r.x.toFixed(1),y:+r.y.toFixed(1),w:+r.width.toFixed(1),h:+r.height.toFixed(1)}});
+                const buttons=[...document.querySelectorAll('button')].filter(vis).map(e=>{const r=e.getBoundingClientRect();return{text:(e.innerText||'').trim().replace(/\s+/g,' ').slice(0,80),aria:e.getAttribute('aria-label'),w:+r.width.toFixed(1),h:+r.height.toFixed(1),x:+r.x.toFixed(1),y:+r.y.toFixed(1)}});
+                return {label,viewport:{w:innerWidth,h:innerHeight},doc:{sw:document.documentElement.scrollWidth,sh:document.documentElement.scrollHeight},horizontalOverflow:document.documentElement.scrollWidth>innerWidth+1,rects:{topbar:rect('.topbar'),workspace:rect('.workspace'),viewerCard:rect('.viewer-card'),viewer:rect('#viewer'),controls:rect('.controls'),flowNav:rect('.flow-nav'),flowActions:rect('.flow-actions'),moduleList:rect('#moduleList'),moduleDetail:rect('#moduleDetail'),summary:rect('#summaryPanel')},clipped,fixed,buttons,bodyClass:document.body.className,currentStep:[...document.querySelectorAll('[data-step]')].find(e=>e.classList.contains('is-active'))?.dataset.step||null};
+              },label);
+              fs.writeFileSync(path.join(out,safe(label)+'.json'),JSON.stringify(data,null,2));
+              await page.screenshot({path:path.join(out,safe(label)+'.png'),fullPage:true,animations:'disabled'});
+            }
+            const widths=[1440,1180,1051,1050,900,768,701,700,480,390,360];
+            for(const w of widths){await page.setViewportSize({width:w,height:w<=480?844:900});await fresh();await collect(`initial-${w}`);}
+            for(const w of [1440,900,390,360]){
+              await page.setViewportSize({width:w,height:w<=480?844:900}); await fresh();
+              const d=page.locator('[data-select-entity="module-02"]'); if(await d.count()) {await d.first().click(); await page.waitForTimeout(250);} await collect(`detail02-${w}`);
+              const f=page.locator('[data-step="finishes"]'); if(await f.count()){await f.click();await page.waitForTimeout(250);} await collect(`finishes-${w}`);
+              const s=page.locator('[data-step="services"]'); if(await s.count()){await s.click();await page.waitForTimeout(250);} await collect(`services-${w}`);
+              const r=page.locator('[data-step="summary"]'); if(await r.count()){await r.click();await page.waitForTimeout(250);} await collect(`summary-${w}`);
+            }
+            fs.writeFileSync(path.join(out,'errors.json'),JSON.stringify(errors,null,2)); await browser.close();
+          })().catch(e=>{fs.mkdirSync('/tmp/ux-current',{recursive:true});fs.writeFileSync('/tmp/ux-current/fatal.txt',String(e.stack||e));process.exitCode=0;});
+          NODE
+          node /tmp/audit.cjs
+      - name: Upload UX matrix
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: live-ux-current-immutable-2026-09-17
+          path: /tmp/ux-current
+          if-no-files-found: error
+      - name: Self-clean temporary workflow
+        if: always()
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git rm .github/workflows/audit-live-ux-current-temp.yml
+          git commit -m 'Remove temporary current-live UX audit workflow'
+          git push origin HEAD:${TARGET_BRANCH}
