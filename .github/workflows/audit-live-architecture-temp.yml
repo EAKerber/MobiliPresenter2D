@@ -1,0 +1,34 @@
+name: Audit live architecture temp
+on:
+  push:
+    branches: [audit/live-state-2026-09-17]
+permissions:
+  contents: write
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Fetch live architecture files
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/live-arch/data /tmp/live-arch/core
+          curl --fail --silent --show-error --location https://mobilipresenter2d.netlify.app/data/catalog-data.js -o /tmp/live-arch/data/catalog-data.js
+          curl --fail --silent --show-error --location https://mobilipresenter2d.netlify.app/data/mock-price-book.js -o /tmp/live-arch/data/mock-price-book.js
+          curl --fail --silent --show-error --location https://mobilipresenter2d.netlify.app/core/pricing.js -o /tmp/live-arch/core/pricing.js
+          sha256sum /tmp/live-arch/data/catalog-data.js /tmp/live-arch/data/mock-price-book.js /tmp/live-arch/core/pricing.js > /tmp/live-arch/SHA256SUMS.txt
+      - uses: actions/upload-artifact@v4
+        with:
+          name: live-architecture-extra-2026-09-17
+          path: /tmp/live-arch
+      - name: Self-clean temporary workflow
+        if: always()
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git rm .github/workflows/audit-live-architecture-temp.yml
+          git commit -m 'Remove temporary live architecture audit workflow'
+          git push origin HEAD:audit/live-state-2026-09-17
