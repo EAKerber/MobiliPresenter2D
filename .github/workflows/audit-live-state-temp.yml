@@ -1,0 +1,138 @@
+name: Audit live state temp
+
+on:
+  push:
+    branches: [audit/live-state-2026-09-17]
+
+permissions:
+  contents: write
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    env:
+      TARGET_URL: https://mobilipresenter2d.netlify.app
+      TARGET_BRANCH: audit/live-state-2026-09-17
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Compare production runtime bytes with main checkout
+        run: |
+          mkdir -p /tmp/live-audit/bytes /tmp/live-audit/diffs
+          python - <<'PY'
+          import hashlib, json, pathlib, re, urllib.request, difflib
+          root = pathlib.Path('app')
+          base = 'https://mobilipresenter2d.netlify.app/'
+          paths = {'index.html','app.js','styles.css'}
+          for pat in ('core/*.js','data/*.js','data/*.json'):
+              for p in root.glob(pat):
+                  if p.is_file(): paths.add(p.relative_to(root).as_posix())
+          # Discover runtime asset references from authoritative text files.
+          blob=''
+          for rel in list(paths):
+              p=root/rel
+              if p.exists() and p.suffix in {'.js','.json','.html','.css'}:
+                  try: blob += '\n'+p.read_text(encoding='utf-8')
+                  except Exception: pass
+          for m in re.finditer(r'''["'](assets/[^"']+)["']''', blob):
+              paths.add(m.group(1))
+          report=[]
+          for rel in sorted(paths):
+              local=root/rel
+              if not local.exists() or not local.is_file(): continue
+              lb=local.read_bytes()
+              url=base+rel
+              try:
+                  with urllib.request.urlopen(url, timeout=30) as r: rb=r.read(); status=r.status
+              except Exception as e:
+                  report.append({'path':rel,'fetchError':repr(e)}); continue
+              ls=hashlib.sha256(lb).hexdigest(); rs=hashlib.sha256(rb).hexdigest()
+              rec={'path':rel,'status':status,'localBytes':len(lb),'liveBytes':len(rb),'localSha256':ls,'liveSha256':rs,'same':ls==rs}
+              report.append(rec)
+              if ls!=rs and local.suffix in {'.js','.json','.html','.css'}:
+                  try:
+                      a=lb.decode('utf-8').splitlines(True); b=rb.decode('utf-8').splitlines(True)
+                      diff=''.join(difflib.unified_diff(a,b,fromfile='main/'+rel,tofile='live/'+rel,n=3))
+                      pathlib.Path('/tmp/live-audit/diffs',rel.replace('/','__')+'.diff').write_text(diff,encoding='utf-8')
+                  except Exception: pass
+          out={'target':base,'checked':len(report),'different':[r['path'] for r in report if r.get('same') is False], 'fetchErrors':[r['path'] for r in report if 'fetchError' in r], 'files':report}
+          pathlib.Path('/tmp/live-audit/byte-compare.json').write_text(json.dumps(out,indent=2),encoding='utf-8')
+          print(json.dumps({'checked':out['checked'],'different':out['different'],'fetchErrors':out['fetchErrors']},indent=2))
+          PY
+
+      - name: Install isolated Chromium tooling
+        run: |
+          npm install --prefix /tmp/live-browser-tools --no-audit --no-fund playwright@1.62.1
+          /tmp/live-browser-tools/node_modules/.bin/playwright install --with-deps chromium
+
+      - name: Run canonical browser contract against production
+        env:
+          NODE_PATH: /tmp/live-browser-tools/node_modules
+          STONE_BROWSER_URL: https://mobilipresenter2d.netlify.app
+        run: node tests/stone-browser.cjs /tmp/live-audit/stone-browser
+
+      - name: Capture live DOM inventory and full-page views
+        env:
+          NODE_PATH: /tmp/live-browser-tools/node_modules
+        run: |
+          node <<'JS'
+          const { chromium } = require('playwright');
+          const fs=require('fs');
+          (async()=>{
+            const browser=await chromium.launch({headless:true});
+            const out='/tmp/live-audit';
+            const contexts=[
+              {name:'desktop',viewport:{width:1536,height:1000}},
+              {name:'mobile',viewport:{width:390,height:844}}
+            ];
+            let report={url:'https://mobilipresenter2d.netlify.app',captures:{}};
+            for(const cfg of contexts){
+              const page=await browser.newPage({viewport:cfg.viewport});
+              const errors=[]; page.on('pageerror',e=>errors.push(String(e)));
+              await page.goto(report.url,{waitUntil:'networkidle',timeout:120000});
+              const snap=await page.evaluate(()=>({
+                title:document.title,
+                bodyText:document.body.innerText,
+                scrollWidth:document.documentElement.scrollWidth,
+                clientWidth:document.documentElement.clientWidth,
+                scrollHeight:document.documentElement.scrollHeight,
+                buttons:[...document.querySelectorAll('button')].map((e,i)=>({i,text:e.innerText.trim(),title:e.title,aria:e.getAttribute('aria-label'),disabled:e.disabled,classes:e.className})),
+                inputs:[...document.querySelectorAll('input')].map((e,i)=>({i,type:e.type,name:e.name,value:e.value,checked:e.checked,aria:e.getAttribute('aria-label'),id:e.id})),
+                headings:[...document.querySelectorAll('h1,h2,h3')].map(e=>({tag:e.tagName,text:e.innerText.trim()})),
+                fixedSticky:[...document.querySelectorAll('*')].map(e=>{const s=getComputedStyle(e); if(s.position==='fixed'||s.position==='sticky'){const r=e.getBoundingClientRect();return {tag:e.tagName,id:e.id,classes:e.className,position:s.position,top:s.top,bottom:s.bottom,x:r.x,y:r.y,w:r.width,h:r.height,text:(e.innerText||'').trim().slice(0,120)}}}).filter(Boolean)
+              }));
+              report.captures[cfg.name]={...snap,pageErrors:errors};
+              await page.screenshot({path:`${out}/live-${cfg.name}-top.png`,fullPage:false});
+              await page.screenshot({path:`${out}/live-${cfg.name}-full.png`,fullPage:true});
+              await page.close();
+            }
+            fs.writeFileSync(`${out}/dom-inventory.json`,JSON.stringify(report,null,2));
+            await browser.close();
+          })().catch(e=>{console.error(e);process.exit(1)});
+          JS
+
+      - name: Upload live audit artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: live-state-audit-2026-09-17
+          path: /tmp/live-audit
+          if-no-files-found: error
+
+      - name: Self-clean temporary workflow
+        if: always()
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git rm .github/workflows/audit-live-state-temp.yml
+          git commit -m 'Remove temporary live-state audit workflow'
+          git push origin HEAD:${TARGET_BRANCH}
