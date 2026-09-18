@@ -44,9 +44,15 @@
           <div id="sceneLayers"></div>
 
           <canvas id="stoneCanvas" class="scene-layer stone-color-layer" width="1536" height="1024" aria-hidden="true"></canvas>
+          <div id="skirtingSurface" class="skirting-surface" aria-hidden="true"></div>
           <div id="sceneHotspots" class="scene-hotspots" aria-label="Módulos selecionáveis na cena"></div>
           <div class="alignment-grid" id="alignmentGrid" aria-hidden="true"></div>
           <div class="selection-frame" id="selectionFrame" aria-hidden="true"></div>
+          <div class="viewer-pip-controls" aria-label="Controles da mini-cena">
+            <button id="mobileScenePin" class="viewer-pip-control" type="button" aria-pressed="true" aria-label="Liberar mini-cena" title="Fixar ou liberar mini-cena">⌖</button>
+            <button id="mobileSceneOpacity" class="viewer-pip-control" type="button" aria-pressed="false" aria-label="Alternar transparência da mini-cena" title="Transparência">◐</button>
+          </div>
+          <span id="mobileSceneResize" class="viewer-pip-resize" aria-hidden="true"></span>
         </div>
 
         <footer class="viewer-card__footer">
@@ -55,9 +61,6 @@
             <strong id="visibleCount">8</strong> de <span id="totalCount">8</span> itens incluídos
           </p>
           <p id="viewerHint">Selecione um módulo na cena para abrir sua ficha.</p>
-          <button class="button button--secondary viewer-pin" id="mobileScenePin" type="button" aria-pressed="true">
-            Fixar cena
-          </button>
         </footer>
       </section>
       <div class="viewer-pin-sentinel" id="viewerPinSentinel" aria-hidden="true"></div>
@@ -87,35 +90,32 @@
           <header class="finish-heading">
             <span aria-hidden="true">◐</span>
             <div>
-              <h2 id="frontFinishHeading" tabindex="-1">Acabamentos por módulo</h2>
-              <p>Escolha a frente e o puxador da peça selecionada. A caixaria permanece clara.</p>
+              <h2 id="frontFinishHeading" tabindex="-1">Acabamentos do conjunto</h2>
+              <p>Cor e puxador são escolhas globais. A caixaria permanece clara.</p>
             </div>
           </header>
 
           <div class="finish-controls">
-            <label class="finish-target">
-              <span>Aplicar ao módulo</span>
-              <select id="finishTargetSelect" aria-label="Módulo para acabamento"></select>
-            </label>
             <fieldset>
               <legend>Cor das frentes</legend>
               <div class="swatches" id="finishSwatches"></div>
+              <p class="selected-finish"><span>Selecionado</span><strong id="selectedFinishName">Base clara</strong></p>
             </fieldset>
 
             <fieldset class="handle-fieldset">
               <legend>Puxadores</legend>
-              <p class="finish-help" id="handleHelp">O valor é cobrado uma vez pelo módulo e o rateio por frente é apenas explicativo.</p>
+              <p class="finish-help" id="handleHelp">Uma escolha para o conjunto; cada módulo recebe o adicional conforme sua quantidade de frentes.</p>
               <div class="handle-options" id="handleOptions"></div>
             </fieldset>
           </div>
         </section>
         <section class="panel" id="stonePanel" aria-labelledby="stoneHeading">
-          <header class="finish-heading"><div><h2 id="stoneHeading">Pedra do conjunto</h2><p>Uma escolha global, aplicada uma vez à composição.</p></div></header>
+          <header class="finish-heading"><div><h2 id="stoneHeading">Pedras do conjunto</h2><p>Uma escolha global, aplicada uma vez à composição.</p></div></header>
           <div class="finish-controls">
             <fieldset><legend>Pacote de pedra</legend><div class="global-options" id="stonePackageOptions"></div></fieldset>
             <label class="accessory-toggle" for="stoneSkirtingToggle">
               <input id="stoneSkirtingToggle" type="checkbox" />
-              <span><strong>Rodapé de pedra</strong><small>Acabamento global para a composição.</small></span>
+              <span><strong>Rodapé de pedra</strong><small>Opcional. Usa a mesma pedra selecionada; desligado, o rodapé acompanha o MDF.</small></span>
             </label>
           </div>
           <label class="accessory-toggle" for="lightingToggle">
