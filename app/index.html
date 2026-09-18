@@ -44,16 +44,16 @@
           <div id="sceneLayers"></div>
 
           <canvas id="stoneCanvas" class="scene-layer stone-color-layer" width="1536" height="1024" aria-hidden="true"></canvas>
-          <div id="skirtingSurface" class="skirting-surface" aria-hidden="true"></div>
+          <canvas id="plinthCanvas" class="scene-layer stone-color-layer" width="1536" height="1024" aria-hidden="true"></canvas>
           <div id="sceneHotspots" class="scene-hotspots" aria-label="Módulos selecionáveis na cena"></div>
           <div class="alignment-grid" id="alignmentGrid" aria-hidden="true"></div>
           <div class="selection-frame" id="selectionFrame" aria-hidden="true"></div>
-          <div class="viewer-pip-controls" aria-label="Controles da mini-cena">
-            <button id="mobileScenePin" class="viewer-pip-control" type="button" aria-pressed="true" aria-label="Liberar mini-cena" title="Fixar ou liberar mini-cena">⌖</button>
-            <button id="mobileSceneOpacity" class="viewer-pip-control" type="button" aria-pressed="false" aria-label="Alternar transparência da mini-cena" title="Transparência">◐</button>
-          </div>
-          <span id="mobileSceneResize" class="viewer-pip-resize" aria-hidden="true"></span>
         </div>
+        <div class="viewer-pip-controls" aria-label="Controles da mini-cena">
+          <button id="mobileScenePin" class="viewer-pip-control" type="button" aria-pressed="true" aria-label="Liberar mini-cena" title="Fixar ou liberar mini-cena">⌖</button>
+          <button id="mobileSceneOpacity" class="viewer-pip-control" type="button" aria-pressed="false" aria-label="Alternar transparência da mini-cena" title="Transparência">◐</button>
+        </div>
+        <span id="mobileSceneResize" class="viewer-pip-resize" aria-hidden="true"></span>
 
         <footer class="viewer-card__footer">
           <p class="layer-status" aria-live="polite">
@@ -70,7 +70,7 @@
         <nav class="flow-nav" aria-label="Etapas da configuração">
           <button class="flow-step is-active" type="button" data-step="modules" aria-controls="modulesPanel"><span>1</span><span class="flow-step__label" data-mobile-label="Módulos">Módulos</span></button>
           <button class="flow-step" type="button" data-step="finishes" aria-controls="frontFinishPanel"><span>2</span><span class="flow-step__label" data-mobile-label="Acab.">Acabamentos</span></button>
-          <button class="flow-step" type="button" data-step="services" aria-controls="servicesPanel"><span>3</span><span class="flow-step__label" data-mobile-label="Serviços">Serviços</span></button>
+          <button class="flow-step" type="button" data-step="services" aria-controls="servicesPanel"><span>3</span><span class="flow-step__label" data-mobile-label="Serv.">Serviços</span></button>
           <button class="flow-step" type="button" data-step="summary" aria-controls="summaryPanel"><span>4</span><span class="flow-step__label" data-mobile-label="Resumo">Resumo</span></button>
         </nav>
 
