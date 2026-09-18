@@ -637,19 +637,6 @@ legend { margin-bottom: 9px; color: rgba(255, 255, 255, 0.43); font-size: 12px; 
   box-shadow: 0 0 0 2px rgba(255,255,255,.10), inset 0 0 0 1px rgba(0,0,0,.12);
 }
 
-.skirting-surface {
-  position: absolute;
-  left: 4.8%;
-  top: 84.5%;
-  z-index: 450;
-  width: 76.5%;
-  height: 4.5%;
-  pointer-events: none;
-  background-position: center;
-  background-repeat: repeat;
-  clip-path: polygon(0 4%, 100% 0, 99.7% 96%, .3% 100%);
-  box-shadow: inset 0 1px rgba(255,255,255,.10), inset 0 -1px rgba(0,0,0,.18);
-}
 
 .viewer-pip-controls,
 .viewer-pip-resize { display: none; }
@@ -742,16 +729,47 @@ legend { margin-bottom: 9px; color: rgba(255, 255, 255, 0.43); font-size: 12px; 
     border-radius: 0 0 2px;
   }
 
-  body.is-mobile-scene-transparent.is-mobile-scene-pinned :is(
-    #sceneBase,
-    #sceneLayers,
-    #stoneCanvas,
-    #skirtingSurface,
-    .scene-hotspots,
-    .alignment-grid,
-    .selection-frame
-  ) { opacity: .58; }
 
   body.is-mobile-scene-pinned .scene-hotspots { pointer-events: none; }
   body.is-mobile-scene-pinned .scene-hotspot { pointer-events: auto; }
+}
+
+
+/* Source-derived material textures and corrected mobile mini-scene behavior. */
+.finish-layer.is-texture {
+  opacity: var(--finish-opacity, .72);
+  mix-blend-mode: var(--finish-blend, multiply);
+  background-size: var(--finish-size, 160px 160px);
+  background-position: 0 0;
+  background-repeat: repeat;
+}
+.swatch { background-repeat: repeat; }
+.stone-swatch { background-repeat: repeat; }
+
+@media (max-width: 700px) {
+  .flow-step__label,
+  .flow-step__label::after {
+    display: block;
+    min-width: 0;
+    max-width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  body.is-mobile-scene-transparent.is-mobile-scene-pinned .viewer-card {
+    background: rgba(17,18,16,.08);
+    border-color: rgba(255,255,255,.18);
+    box-shadow: 0 6px 18px rgba(0,0,0,.18);
+  }
+
+  body.is-mobile-scene-transparent.is-mobile-scene-pinned .viewer {
+    opacity: .56;
+    background: transparent;
+  }
+
+  body.is-mobile-scene-transparent.is-mobile-scene-pinned .viewer-pip-controls,
+  body.is-mobile-scene-transparent.is-mobile-scene-pinned .viewer-pip-resize {
+    opacity: 1;
+  }
 }
