@@ -46,6 +46,8 @@ assert.deepEqual(Array.from(validation.validateScene(scene)), []);
 assert.equal(catalog.modules.length, 7);
 assert.equal(priceBook.mode, "estimate");
 assert.equal(priceBook.compositionBaseReferenceCents, undefined);
+assert.equal(catalog.options.finishes.every((finish) => finish.textureAsset && finish.textureAsset.startsWith("assets/materials/")), true);
+assert.deepEqual(Array.from(catalog.options.stonePackages.filter((stone) => ["stone-light","stone-green","stone-dark"].includes(stone.id)).map((stone) => Boolean(stone.textureAsset))), [true,true,true]);
 
 const officialModulePrices = [90000, 110000, 150000, 60000, 80000, 110000, 60000];
 catalog.modules.forEach((module, index) => {
