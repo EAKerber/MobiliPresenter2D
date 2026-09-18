@@ -23,12 +23,14 @@ def asset_visible_in_case(asset, ids):
         return all(entity_id in ids for entity_id in required)
     return host_id(asset) in ids
 
-def material_mask(config, ids):
+def material_mask(config, ids, surfaces=None):
     mask=Image.new('L',SIZE)
+    allowed=set(surfaces) if surfaces is not None else None
     for asset in config['assets']:
         if not asset_visible_in_case(asset, ids): continue
         alpha=load(ROOT/asset['path']).getchannel('A')
         for surface,poly in config['groups'][asset['group']]['surfaces'].items():
+            if allowed is not None and surface not in allowed: continue
             if surface in ['front-edge','plinth']:
                 m=Image.open(ROOT/f"review-assets/stone-masks/generated/{asset['id']}-{surface}.png").convert('L')
             else:
@@ -72,17 +74,18 @@ def build(out):
                 under=Image.composite(original,under,footprint)
                 under=Image.composite(backing,under,removal[key])
                 foreground=Image.alpha_composite(foreground,objects[key])
-        mask=material_mask(config,ids)
-        # Save full-frame texture, original composition and unchanged object RGBA.
-        # The renderer returns pixels only inside this material mask.
+        upper_mask=material_mask(config,ids,{'backsplash','top','front-edge'})
+        plinth_mask=material_mask(config,ids,{'plinth'})
+        combined_mask=ImageChops.lighter(upper_mask,plinth_mask)
+        # Upper stone and lower plinth are distinct physical regions.
         folder=out/case['id'];folder.mkdir(exist_ok=True)
-        for name,im in [('under',under),('neutral',neutral),('objects',foreground),('mask',mask)]:
-            # RGB under/neutral only needed in the stone support, reducing embedded size.
+        for name,im in [('under',under),('neutral',neutral),('objects',foreground),('upperMask',upper_mask),('plinthMask',plinth_mask)]:
             if name in ['under','neutral']:
-                clipped=Image.new('RGBA',SIZE);clipped.paste(im,(0,0),mask.point(lambda v:255 if v else 0));im=clipped
+                clipped=Image.new('RGBA',SIZE);clipped.paste(im,(0,0),combined_mask.point(lambda v:255 if v else 0));im=clipped
             im.save(folder/(name+'.png'))
-        bundles[case['id']]={name:'data:image/png;base64,'+base64.b64encode((folder/(name+'.png')).read_bytes()).decode() for name in ['under','neutral','objects','mask']}
-        records.append({'case':case['id'],'materialPixels':sum(mask.histogram()[1:])})
+        bundle_names=['under','neutral','objects','upperMask','plinthMask']
+        bundles[case['id']]={name:'data:image/png;base64,'+base64.b64encode((folder/(name+'.png')).read_bytes()).decode() for name in bundle_names}
+        records.append({'case':case['id'],'upperPixels':sum(upper_mask.histogram()[1:]),'plinthPixels':sum(plinth_mask.histogram()[1:])})
     (out/'stone-data.js').write_text('window.CASA_STONE_DATA = '+json.dumps(bundles,separators=(',',':'))+';\n')
     return records
 
