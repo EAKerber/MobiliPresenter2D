@@ -130,16 +130,16 @@ jobs:
             const assert = (condition, message) => {
               if (!condition) throw new Error(message);
             };
-            const canvasSignature = async id => page.$eval(id, canvas => {
+            const canvasSignature = async (id, y = 820, height = 100) => page.$eval(id, (canvas, args) => {
               const ctx = canvas.getContext("2d");
-              const data = ctx.getImageData(0, 820, canvas.width, 100).data;
+              const data = ctx.getImageData(0, args.y, canvas.width, args.height).data;
               let alpha = 0, sum = 0;
               for (let i=0;i<data.length;i+=4) {
                 if (data[i+3]) alpha += 1;
                 sum = (sum + data[i] * 3 + data[i+1] * 5 + data[i+2] * 7 + data[i+3]) >>> 0;
               }
               return { alpha, sum };
-            });
+            }, { y, height });
 
             assert(await page.locator(".skirting-surface").count() === 0, "fake skirting surface still exists");
             assert(await page.locator("#plinthCanvas").count() === 1, "plinth canvas missing");
@@ -168,7 +168,7 @@ jobs:
               for(let i=3;i<data.length;i+=4) if(data[i]) return true;
               return false;
             });
-            const stoneSig = await canvasSignature("#stoneCanvas");
+            const stoneSig = await canvasSignature("#stoneCanvas", 420, 240);
             assert(stoneSig.alpha > 0, "stone texture canvas did not render");
 
             const plinthOff = await canvasSignature("#plinthCanvas");
