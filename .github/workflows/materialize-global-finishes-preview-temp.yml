@@ -1,0 +1,266 @@
+name: materialize-global-finishes-preview-temp
+
+on:
+  push:
+    branches:
+      - feat/global-finishes-stone-mobile-pip
+    paths:
+      - .github/workflows/materialize-global-finishes-preview-temp.yml
+
+permissions:
+  contents: write
+
+jobs:
+  materialize-and-gate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout exact branch head
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Install Python dependencies
+        run: python -m pip install -r tools/requirements.txt
+
+      - name: Materialize source-derived texture assets
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from pathlib import Path
+          import base64, io, json
+          from PIL import Image
+
+          root=Path("app/assets/materials")
+          root.mkdir(parents=True,exist_ok=True)
+
+          mdf=json.loads(Path("ops/tmp-material-textures-mdf.json").read_text())
+          for name,payload in mdf.items():
+              data=base64.b64decode(payload)
+              Image.open(io.BytesIO(data)).verify()
+              (root/name).write_bytes(data)
+
+          stones={
+              "stone-light.webp": Path("ops/tmp-material-stone-light.b64"),
+              "stone-green.webp": Path("ops/tmp-material-stone-green.b64"),
+              "stone-dark.webp": Path("ops/tmp-material-stone-dark.b64"),
+          }
+          for name,source in stones.items():
+              data=base64.b64decode(source.read_text().strip())
+              Image.open(io.BytesIO(data)).verify()
+              (root/name).write_bytes(data)
+
+          expected={
+              "mdf-base.webp","mdf-warm.webp","mdf-soft.webp","mdf-metal.webp",
+              "mdf-wood.webp","mdf-dark.webp","stone-light.webp","stone-green.webp","stone-dark.webp"
+          }
+          actual={p.name for p in root.glob("*.webp")}
+          if actual != expected:
+              raise SystemExit(f"texture set mismatch: {actual ^ expected}")
+          print({"textures":sorted(actual)})
+          PY
+
+      - name: Build split stone runtime
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf /tmp/global-finish-stone
+          python tools/build_approved_stone.py --output-dir /tmp/global-finish-stone
+          cp /tmp/global-finish-stone/stone-data.js app/data/stone-data.js
+          python - <<'PY'
+          from pathlib import Path
+          text=Path("app/data/stone-data.js").read_text()
+          for key in ["upperMask","plinthMask","neutral","under","objects"]:
+              if f'"{key}"' not in text:
+                  raise SystemExit("missing stone runtime key: "+key)
+          if '"mask"' in text:
+              raise SystemExit("legacy combined mask still present")
+          print("STONE_RUNTIME_SPLIT_PASS")
+          PY
+
+      - name: Core and asset tests
+        working-directory: app
+        run: npm test
+
+      - name: Install Playwright browser gate
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/pw
+          cd /tmp/pw
+          npm init -y >/dev/null 2>&1
+          npm install playwright@1.55.0 >/dev/null
+          npx playwright install --with-deps chromium
+
+      - name: Browser gate
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/review
+          python -m http.server 4173 --directory app >/tmp/mobili-http.log 2>&1 &
+          server_pid=$!
+          trap 'kill "$server_pid" 2>/dev/null || true' EXIT
+          sleep 1
+          cat >/tmp/pw/gate.cjs <<'JS'
+          const { chromium } = require("playwright");
+          const fs = require("fs");
+
+          (async () => {
+            const errors = [];
+            const browser = await chromium.launch({ headless: true });
+            const page = await browser.newPage({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 1 });
+            page.on("pageerror", error => errors.push(String(error)));
+            await page.goto("http://127.0.0.1:4173/", { waitUntil: "networkidle" });
+            await page.evaluate(async () => {
+              await Promise.all([...document.images].map(image => image.decode().catch(() => null)));
+            });
+            await page.waitForTimeout(800);
+
+            const assert = (condition, message) => {
+              if (!condition) throw new Error(message);
+            };
+            const canvasSignature = async id => page.$eval(id, canvas => {
+              const ctx = canvas.getContext("2d");
+              const data = ctx.getImageData(0, 820, canvas.width, 100).data;
+              let alpha = 0, sum = 0;
+              for (let i=0;i<data.length;i+=4) {
+                if (data[i+3]) alpha += 1;
+                sum = (sum + data[i] * 3 + data[i+1] * 5 + data[i+2] * 7 + data[i+3]) >>> 0;
+              }
+              return { alpha, sum };
+            });
+
+            assert(await page.locator(".skirting-surface").count() === 0, "fake skirting surface still exists");
+            assert(await page.locator("#plinthCanvas").count() === 1, "plinth canvas missing");
+            const textureAssets = await page.evaluate(() => window.CASA_EM_MODULOS_CATALOG.options.finishes.map(item => item.textureAsset));
+            assert(textureAssets.every(Boolean), "not every MDF finish has a texture asset");
+
+            await page.waitForFunction(() => {
+              const canvas=document.getElementById("plinthCanvas");
+              const data=canvas.getContext("2d").getImageData(450,840,800,80).data;
+              for(let i=3;i<data.length;i+=4) if(data[i]) return true;
+              return false;
+            });
+            const initialPlinth = await canvasSignature("#plinthCanvas");
+            assert(initialPlinth.alpha > 0, "default MDF plinth did not render");
+
+            await page.locator('[data-step="finishes"]').click();
+            await page.locator('[data-finish-id="tone-25-a"]').click();
+            await page.waitForTimeout(300);
+            const woodBackground = await page.locator(".finish-layer.is-texture").first().evaluate(el => getComputedStyle(el).backgroundImage);
+            assert(woodBackground.includes("mdf-wood.webp"), "wood texture is not applied to finish masks");
+
+            await page.locator('[data-stone-package-id="stone-light"]').click();
+            await page.waitForFunction(() => {
+              const canvas=document.getElementById("stoneCanvas");
+              const data=canvas.getContext("2d").getImageData(450,430,800,190).data;
+              for(let i=3;i<data.length;i+=4) if(data[i]) return true;
+              return false;
+            });
+            const stoneSig = await canvasSignature("#stoneCanvas");
+            assert(stoneSig.alpha > 0, "stone texture canvas did not render");
+
+            const plinthOff = await canvasSignature("#plinthCanvas");
+            await page.locator("#stoneSkirtingToggle").check();
+            await page.waitForTimeout(600);
+            const plinthOn = await canvasSignature("#plinthCanvas");
+            assert(plinthOn.alpha > 0, "stone plinth mask did not render");
+            assert(plinthOn.sum !== plinthOff.sum, "plinth did not change from MDF to selected stone");
+            await page.screenshot({ path: "/tmp/review/materials-and-plinth.png", fullPage: true });
+
+            await page.locator('[data-step="modules"]').click();
+            await page.evaluate(() => window.scrollTo(0, document.querySelector(".flow-nav").getBoundingClientRect().top + window.scrollY + 180));
+            await page.waitForFunction(() => document.body.classList.contains("is-mobile-scene-pinned"));
+            await page.locator('[data-select-scene-entity="module-03"]').click({ force: true });
+            await page.waitForFunction(() => document.querySelector("#moduleDetail h3")?.textContent?.includes("Inferior da pia"));
+            assert(await page.evaluate(() => document.body.classList.contains("is-mobile-scene-pinned")), "PiP stopped after opening module detail");
+
+            await page.locator("#mobileSceneOpacity").click();
+            await page.waitForFunction(() => document.body.classList.contains("is-mobile-scene-transparent"));
+            const opacity = await page.evaluate(() => ({
+              viewer: Number(getComputedStyle(document.querySelector(".viewer")).opacity),
+              base: Number(getComputedStyle(document.getElementById("sceneBase")).opacity),
+              controls: Number(getComputedStyle(document.querySelector(".viewer-pip-controls")).opacity)
+            }));
+            assert(opacity.viewer < 1 && opacity.viewer > 0.3, "PiP transparency did not affect viewer");
+            assert(opacity.base === 1, "PiP transparency still washes individual scene layers");
+            assert(opacity.controls === 1, "PiP controls became transparent");
+
+            const serviceStep = await page.locator('[data-step="services"]').evaluate(el => ({
+              mobile: el.querySelector("[data-mobile-label]").dataset.mobileLabel,
+              title: el.title
+            }));
+            assert(serviceStep.mobile === "Serv.", "mobile Services label was not abbreviated");
+            assert(serviceStep.title === "Serviços", "full Services name missing on hover/title");
+
+            await page.screenshot({ path: "/tmp/review/mobile-pip-detail-transparent.png", fullPage: true });
+
+            if (errors.length) throw new Error("page errors: " + errors.join(" | "));
+            await browser.close();
+            fs.writeFileSync("/tmp/review/gate.json", JSON.stringify({
+              pass:true, initialPlinth, plinthOff, plinthOn, stoneSig, opacity, serviceStep
+            }, null, 2));
+          })().catch(async error => {
+            console.error(error);
+            process.exit(1);
+          });
+          JS
+          cd /tmp/pw
+          node gate.cjs
+
+      - name: Upload visual gate
+        uses: actions/upload-artifact@v4
+        with:
+          name: global-finishes-preview-gate
+          path: /tmp/review
+          if-no-files-found: error
+
+      - name: Commit materialized assets and cleanup one-shot payloads
+        shell: bash
+        env:
+          TARGET_BRANCH: feat/global-finishes-stone-mobile-pip
+          EXPECTED_HEAD: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git rm             ops/tmp-material-textures-mdf.json             ops/tmp-material-stone-light.b64             ops/tmp-material-stone-green.b64             ops/tmp-material-stone-dark.b64             .github/workflows/materialize-global-finishes-preview-temp.yml
+
+          git add app/assets/materials/*.webp app/data/stone-data.js
+
+          changed="$(git diff --cached --name-only)"
+          echo "$changed"
+          while IFS= read -r file; do
+            case "$file" in
+              app/assets/materials/*.webp|app/data/stone-data.js|ops/tmp-material-*|.github/workflows/materialize-global-finishes-preview-temp.yml) ;;
+              *) echo "::error::Unexpected staged path: $file"; exit 3 ;;
+            esac
+          done <<< "$changed"
+
+          remote_before="$(git ls-remote origin "refs/heads/$TARGET_BRANCH" | cut -f1)"
+          if [ "$remote_before" != "$EXPECTED_HEAD" ]; then
+            echo "::error::Branch moved during one-shot materialization: expected $EXPECTED_HEAD got $remote_before"
+            exit 2
+          fi
+
+          git commit -m "feat: materialize source-derived material textures"
+          candidate_sha="$(git rev-parse HEAD)"
+          git push origin "HEAD:refs/heads/$TARGET_BRANCH"
+          remote_after="$(git ls-remote origin "refs/heads/$TARGET_BRANCH" | cut -f1)"
+          if [ "$remote_after" != "$candidate_sha" ]; then
+            echo "::error::Readback mismatch: expected $candidate_sha got $remote_after"
+            exit 2
+          fi
+          echo "PUBLISHED_HEAD=$candidate_sha"
