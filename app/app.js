@@ -23,7 +23,9 @@
   let detailOrigin = null;
   let mobileScenePinEnabled = true;
   let mobileSceneIsMini = false;
+  let mobileSceneTransparent = false;
   let mobileSceneAnchorHeight = 0;
+  let mobilePreviewEntityId = null;
 
   const sceneBase = document.getElementById("sceneBase");
   const sceneLayers = document.getElementById("sceneLayers");
@@ -46,12 +48,17 @@
   const handleOptions = document.getElementById("handleOptions");
   const servicesChecklist = document.getElementById("servicesChecklist");
   const finishTargetSelect = document.getElementById("finishTargetSelect");
+  const selectedFinishName = document.getElementById("selectedFinishName");
   const stonePackageOptions = document.getElementById("stonePackageOptions");
   const stoneSkirtingToggle = document.getElementById("stoneSkirtingToggle");
+  const skirtingSurface = document.getElementById("skirtingSurface");
   const viewerCard = document.getElementById("viewerCard");
   const viewerAnchor = document.getElementById("viewerAnchor");
   const viewerPinSentinel = document.getElementById("viewerPinSentinel");
   const mobileScenePin = document.getElementById("mobileScenePin");
+  const mobileSceneOpacity = document.getElementById("mobileSceneOpacity");
+  const mobileSceneResize = document.getElementById("mobileSceneResize");
+  const flowNav = document.querySelector(".flow-nav");
   const catalogByEntityId = new Map(catalog.modules.map((module) => [module.entityId, module]));
   const detailPageByEntity = new Map();
   const detailInteractionByEntity = new Set();
