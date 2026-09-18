@@ -544,10 +544,11 @@
     }
     if (itemPricing.handleCents) {
       const handle = selectedHandle(product);
-      const allocations = pricing.distributeCents(itemPricing.handleCents, itemPricing.handleFrontCount);
-      const allocationNote = allocations.length
-        ? "Cobrado uma vez; rateio orientativo entre " + allocations.length + " frentes: " + allocations.map(formatCurrency).join(" · ") + "."
-        : "Cobrado uma vez pelo módulo.";
+      const frontCount = itemPricing.handleFrontCount || 0;
+      const perFrontCents = itemPricing.handlePerFrontCents || 0;
+      const allocationNote = frontCount
+        ? frontCount + " frente(s) × " + formatCurrency(perFrontCents) + " por puxador."
+        : "Sem frentes com puxador neste módulo.";
       appendPriceBreakdownRow(breakdown, "Puxador", "+" + formatCurrency(itemPricing.handleCents), handle.label + " · " + allocationNote);
     }
     if (itemPricing.localCents) {
@@ -1126,12 +1127,11 @@
     sceneHotspots.querySelectorAll("[data-select-scene-entity]").forEach((hotspot) => {
       const entityId = hotspot.dataset.entityId;
       const isVisible = Boolean(resolved?.[entityId]?.visible);
-      const isSelected = state.selectedEntityId === entityId;
+      const isSelected = mobileSceneIsMini ? mobilePreviewEntityId === entityId : state.selectedEntityId === entityId;
       hotspot.hidden = !isVisible;
-      const isInertPreview = mobileSceneIsMini;
-      hotspot.disabled = !isVisible || isInertPreview;
-      hotspot.tabIndex = isInertPreview ? -1 : 0;
-      hotspot.setAttribute("aria-disabled", String(!isVisible || isInertPreview));
+      hotspot.disabled = !isVisible;
+      hotspot.tabIndex = isVisible ? 0 : -1;
+      hotspot.setAttribute("aria-disabled", String(!isVisible));
       hotspot.classList.toggle("is-selected", isSelected);
       hotspot.setAttribute("aria-pressed", String(isSelected));
     });
@@ -1264,7 +1264,7 @@
 
     const finish = document.createElement("p");
     finish.className = "summary-note";
-    finish.textContent = "Acabamentos e puxadores são configurados por módulo. Pedra e serviços abaixo impactam o conjunto uma única vez.";
+    finish.textContent = "Cor e puxador são escolhas globais; os acréscimos aparecem distribuídos localmente por módulo. Pedra e serviços impactam o conjunto uma única vez.";
 
     const price = document.createElement("div");
     price.className = "price-state";
@@ -1276,8 +1276,13 @@
       const composition = document.createElement("dl");
       composition.className = "price-state__breakdown";
       appendPriceBreakdownRow(composition, "Módulos", formatCurrency(estimate.breakdown.modulesCents), estimate.moduleEstimates.length + " incluído(s).");
-      if (estimate.breakdown.finishesCents) appendPriceBreakdownRow(composition, "Acabamentos", "+" + formatCurrency(estimate.breakdown.finishesCents), "Aplicados somente aos módulos escolhidos.");
-      if (estimate.breakdown.handlesCents) appendPriceBreakdownRow(composition, "Puxadores", "+" + formatCurrency(estimate.breakdown.handlesCents), "Um valor por módulo aplicável.");
+      if (estimate.breakdown.finishesCents) appendPriceBreakdownRow(composition, "Acabamentos", "+" + formatCurrency(estimate.breakdown.finishesCents), selectedFrontFinishLabel() + " · percentual global aplicado aos módulos elegíveis.");
+      if (estimate.breakdown.handlesCents) {
+        const selected = selectedHandle();
+        const visibleFronts = estimate.moduleEstimates.reduce((total, entry) => total + (entry.estimate.handleFrontCount || 0), 0);
+        const perFront = priceBook.handleEntries?.[selected.id] || 0;
+        appendPriceBreakdownRow(composition, "Puxadores", "+" + formatCurrency(estimate.breakdown.handlesCents), selected.label + " · " + visibleFronts + " frente(s) × " + formatCurrency(perFront) + ".");
+      }
       if (estimate.breakdown.localCents) appendPriceBreakdownRow(composition, "Pedra cooktop", "+" + formatCurrency(estimate.breakdown.localCents), "Inclusa no Módulo 02.");
       if (estimate.breakdown.lightingCents) appendPriceBreakdownRow(composition, "Iluminação", "+" + formatCurrency(estimate.breakdown.lightingCents), "Serviço global com lateral incluída.");
       estimate.global.items.filter((item) => item.cents).forEach((item) => {
@@ -1451,12 +1456,39 @@
       if (!product?.commercial?.finishEligible) return;
       const finishId = selectedModuleFinish(product);
       const finish = catalog.options.finishes.find((item) => item.id === finishId) || catalog.options.finishes[0];
-      layer.classList.remove("is-texture");
-      layer.classList.add("is-color");
-      layer.style.backgroundImage = "none";
+      const hasTexture = Boolean(finish.textureCss);
+      layer.classList.toggle("is-texture", hasTexture);
+      layer.classList.toggle("is-color", !hasTexture);
+      layer.style.backgroundImage = finish.textureCss || "none";
+      layer.style.backgroundSize = finish.textureSize || "auto";
       layer.style.backgroundColor = finish.color;
       layer.style.setProperty("--finish-opacity", String(finishes.resolveOverlayOpacity(finish, finish.color)));
     });
+  }
+
+  function syncSkirtingAppearance() {
+    if (!skirtingSurface) return;
+    const useStone = Boolean(state.globalSelections?.serviceIds?.includes("stone-skirting"));
+    const anchorProduct = catalogByEntityId.get(ensureFinishTarget());
+    const finishId = selectedModuleFinish(anchorProduct);
+    const finish = catalog.options.finishes.find((item) => item.id === finishId) || catalog.options.finishes[0];
+    const stoneId = state.globalSelections?.stonePackageId || "stone-existing";
+    const stone = catalog.options.stonePackages.find((item) => item.id === stoneId) || catalog.options.stonePackages[0];
+    const visual = useStone
+      ? {
+          color: stone.swatchColor || stone.color || "#aaa",
+          textureCss: stone.textureCss || "none",
+          textureSize: stone.textureSize || "auto"
+        }
+      : {
+          color: finish.color,
+          textureCss: finish.textureCss || "none",
+          textureSize: finish.textureSize || "auto"
+        };
+    skirtingSurface.dataset.material = useStone ? "stone" : "mdf";
+    skirtingSurface.style.backgroundColor = visual.color;
+    skirtingSurface.style.backgroundImage = visual.textureCss;
+    skirtingSurface.style.backgroundSize = visual.textureSize;
   }
 
   function syncLayerVisibility() {
@@ -1465,6 +1497,7 @@
     lastResolved = resolved;
     syncFinishMasks(resolved);
     syncFinishAppearance();
+    syncSkirtingAppearance();
     layerGroups.forEach((layer) => {
       const result = resolved[layer.dataset.entityId];
       const isVisible = Boolean(result?.visible);
@@ -1573,7 +1606,6 @@
     if (source !== "detail-navigation") storeDetailOrigin(entityId, source);
     else detailOrigin = { entityId, element: moduleList.querySelector('[data-select-entity="' + entityId + '"]') };
     state.selectedEntityId = entityId;
-    activeFinishModuleId = entityId;
     if (currentStep !== "modules") currentStep = "modules";
     syncLayerVisibility();
     announce("Ficha de " + product.referenceLabel + ", " + product.title + ", aberta.");
@@ -1698,7 +1730,7 @@
     if (!button || !product) return;
     core.setModuleSelection(state, product.entityId, { finishId: button.dataset.finishId });
     syncLayerVisibility();
-    announce("Acabamento de " + product.title + " atualizado.");
+    announce("Acabamento global atualizado para " + selectedFrontFinishLabel(product) + ".");
   });
 
   moduleList.addEventListener("click", (event) => {
@@ -1751,7 +1783,7 @@
     core.setModuleSelection(state, product.entityId, { handleId: button.dataset.handleId });
     syncLayerVisibility();
     const handle = selectedHandle(product);
-    announce(handle.id === "none" ? "Puxador será definido depois." : handle.label + " aplicado a " + product.title + ".");
+    announce(handle.id === "none" ? "Puxador será definido depois." : handle.label + " aplicado ao conjunto.");
   });
 
   lightingToggle.addEventListener("change", () => {
