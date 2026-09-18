@@ -25,7 +25,6 @@
   let mobileSceneIsMini = false;
   let mobileSceneTransparent = false;
   let mobileSceneAnchorHeight = 0;
-  let mobilePreviewEntityId = null;
 
   const sceneBase = document.getElementById("sceneBase");
   const sceneLayers = document.getElementById("sceneLayers");
@@ -51,7 +50,7 @@
   const selectedFinishName = document.getElementById("selectedFinishName");
   const stonePackageOptions = document.getElementById("stonePackageOptions");
   const stoneSkirtingToggle = document.getElementById("stoneSkirtingToggle");
-  const skirtingSurface = document.getElementById("skirtingSurface");
+  const plinthCanvas = document.getElementById("plinthCanvas");
   const viewerCard = document.getElementById("viewerCard");
   const viewerAnchor = document.getElementById("viewerAnchor");
   const viewerPinSentinel = document.getElementById("viewerPinSentinel");
@@ -321,8 +320,8 @@
       button.dataset.finishId = finish.id;
       button.dataset.color = finish.color;
       button.style.setProperty("--swatch", finish.color);
-      button.style.setProperty("--swatch-image", finish.textureCss || "none");
-      button.style.setProperty("--swatch-size", finish.textureSize || "auto");
+      button.style.setProperty("--swatch-image", finish.textureAsset ? `url("${finish.textureAsset}")` : "none");
+      button.style.setProperty("--swatch-size", finish.textureSize || "cover");
       button.title = finish.publicLabel + (finish.adjustmentLabel ? " · " + finish.adjustmentLabel : "");
       button.setAttribute("aria-label", "Aplicar " + finish.publicLabel + " ao conjunto");
       const selected = currentId === finish.id;
@@ -394,8 +393,8 @@
       swatch.className = "stone-swatch";
       swatch.setAttribute("aria-hidden", "true");
       swatch.style.setProperty("--stone-swatch", stone.swatchColor || stone.color || "#aaa");
-      swatch.style.setProperty("--stone-swatch-image", stone.textureCss || "none");
-      swatch.style.setProperty("--stone-swatch-size", stone.textureSize || "auto");
+      swatch.style.setProperty("--stone-swatch-image", stone.textureAsset ? `url("${stone.textureAsset}")` : "none");
+      swatch.style.setProperty("--stone-swatch-size", stone.textureAsset ? "cover" : "auto");
 
       const copy = document.createElement("span");
       copy.className = "global-option__copy";
@@ -1127,7 +1126,7 @@
     sceneHotspots.querySelectorAll("[data-select-scene-entity]").forEach((hotspot) => {
       const entityId = hotspot.dataset.entityId;
       const isVisible = Boolean(resolved?.[entityId]?.visible);
-      const isSelected = mobileSceneIsMini ? mobilePreviewEntityId === entityId : state.selectedEntityId === entityId;
+      const isSelected = state.selectedEntityId === entityId;
       hotspot.hidden = !isVisible;
       hotspot.disabled = !isVisible;
       hotspot.tabIndex = isVisible ? 0 : -1;
@@ -1135,15 +1134,6 @@
       hotspot.classList.toggle("is-selected", isSelected);
       hotspot.setAttribute("aria-pressed", String(isSelected));
     });
-  }
-
-  function syncMobilePreviewSelection() {
-    if (!mobileSceneIsMini || !mobilePreviewEntityId) return;
-    const entity = entitiesById.get(mobilePreviewEntityId);
-    const style = entity ? selectionStyle(entity) : null;
-    if (!style) return;
-    selectionFrame.hidden = false;
-    Object.assign(selectionFrame.style, style);
   }
 
   function updateAccessoryControls(resolved) {
@@ -1381,7 +1371,7 @@
   const textureLabel = document.getElementById("textureLabel");
   const resetFinishButton = document.getElementById("resetFinishButton");
 
-  const renderStone = global.CasaStone.createRenderer(document.getElementById("stoneCanvas"), global.CASA_STONE_DATA);
+  const renderStone = global.CasaStone.createRenderer(document.getElementById("stoneCanvas"), plinthCanvas, global.CASA_STONE_DATA);
 
   function isMobileViewport() {
     return Boolean(global.matchMedia?.("(max-width: 700px)").matches);
@@ -1391,9 +1381,6 @@
     const mobile = isMobileViewport();
     const shouldDock = mobile && mobileScenePinEnabled && mobileSceneIsMini;
     if (!shouldDock && viewerCard) mobileSceneAnchorHeight = Math.ceil(viewerCard.getBoundingClientRect().height);
-    if (shouldDock && !mobilePreviewEntityId) mobilePreviewEntityId = state.selectedEntityId || null;
-    if (!shouldDock) mobilePreviewEntityId = null;
-
     document.body.classList.toggle("has-mobile-scene-pin", mobile && mobileScenePinEnabled);
     document.body.classList.toggle("is-mobile-scene-pinned", shouldDock);
     document.body.classList.toggle("is-mobile-scene-transparent", shouldDock && mobileSceneTransparent);
@@ -1550,48 +1537,29 @@
       if (!product?.commercial?.finishEligible) return;
       const finishId = selectedModuleFinish(product);
       const finish = catalog.options.finishes.find((item) => item.id === finishId) || catalog.options.finishes[0];
-      const hasTexture = Boolean(finish.textureCss);
+      const hasTexture = Boolean(finish.textureAsset);
       layer.classList.toggle("is-texture", hasTexture);
       layer.classList.toggle("is-color", !hasTexture);
-      layer.style.backgroundImage = finish.textureCss || "none";
-      layer.style.backgroundSize = finish.textureSize || "auto";
+      layer.style.backgroundImage = hasTexture ? `url("${finish.textureAsset}")` : "none";
       layer.style.backgroundColor = finish.color;
-      layer.style.setProperty("--finish-opacity", String(finishes.resolveOverlayOpacity(finish, finish.color)));
+      layer.style.setProperty("--finish-size", finish.textureSize || "160px 160px");
+      layer.style.setProperty("--finish-blend", finish.textureBlend || "multiply");
+      layer.style.setProperty("--finish-opacity", String(hasTexture ? finish.textureOpacity : finishes.resolveOverlayOpacity(finish, finish.color)));
     });
   }
 
-  function syncSkirtingAppearance() {
-    if (!skirtingSurface) return;
-    const useStone = Boolean(state.globalSelections?.serviceIds?.includes("stone-skirting"));
+  function syncLayerVisibility() {
     const anchorProduct = catalogByEntityId.get(ensureFinishTarget());
     const finishId = selectedModuleFinish(anchorProduct);
-    const finish = catalog.options.finishes.find((item) => item.id === finishId) || catalog.options.finishes[0];
+    const finishMaterial = catalog.options.finishes.find((item) => item.id === finishId) || catalog.options.finishes[0];
     const stoneId = state.globalSelections?.stonePackageId || "stone-existing";
-    const stone = catalog.options.stonePackages.find((item) => item.id === stoneId) || catalog.options.stonePackages[0];
-    const visual = useStone
-      ? {
-          color: stone.swatchColor || stone.color || "#aaa",
-          textureCss: stone.textureCss || "none",
-          textureSize: stone.textureSize || "auto"
-        }
-      : {
-          color: finish.color,
-          textureCss: finish.textureCss || "none",
-          textureSize: finish.textureSize || "auto"
-        };
-    skirtingSurface.dataset.material = useStone ? "stone" : "mdf";
-    skirtingSurface.style.backgroundColor = visual.color;
-    skirtingSurface.style.backgroundImage = visual.textureCss;
-    skirtingSurface.style.backgroundSize = visual.textureSize;
-  }
-
-  function syncLayerVisibility() {
-    renderStone(state);
+    const stoneMaterial = catalog.options.stonePackages.find((item) => item.id === stoneId) || catalog.options.stonePackages[0];
+    const useStonePlinth = Boolean(state.globalSelections?.serviceIds?.includes("stone-skirting"));
+    renderStone(state, { upper: stoneMaterial, plinth: useStonePlinth ? stoneMaterial : finishMaterial });
     const resolved = visibility.resolveVisibility(scene, state);
     lastResolved = resolved;
     syncFinishMasks(resolved);
     syncFinishAppearance();
-    syncSkirtingAppearance();
     layerGroups.forEach((layer) => {
       const result = resolved[layer.dataset.entityId];
       const isVisible = Boolean(result?.visible);
@@ -1604,7 +1572,6 @@
     updateAccessoryControls(resolved);
     updateHandleControls();
     updateSelection(resolved);
-    syncMobilePreviewSelection();
     renderFinishControlsFromData();
     renderStonePackages();
     renderServices();
@@ -1853,21 +1820,15 @@
   sceneHotspots.addEventListener("click", (event) => {
     const hotspot = event.target.closest("[data-select-scene-entity]");
     if (!hotspot || hotspot.disabled) return;
-    const entityId = hotspot.dataset.selectSceneEntity;
-    if (mobileSceneIsMini && document.body.classList.contains("is-mobile-scene-pinned")) {
-      mobilePreviewEntityId = entityId;
-      syncMobilePreviewSelection();
-      if (lastResolved) updateSceneHotspots(lastResolved);
-      const product = catalogByEntityId.get(entityId);
-      announce(product ? product.title + " destacado apenas na mini-cena." : "Módulo destacado na mini-cena.");
-      return;
-    }
-    selectEntity(entityId, "scene");
+    selectEntity(hotspot.dataset.selectSceneEntity, "scene");
   });
 
   document.querySelectorAll("[data-step]").forEach((button) => {
     const stepName = button.querySelector("[data-mobile-label]")?.textContent?.trim();
-    if (stepName) button.setAttribute("aria-label", stepName);
+    if (stepName) {
+      button.setAttribute("aria-label", stepName);
+      button.title = stepName;
+    }
     button.addEventListener("click", () => {
       changeStep(button.dataset.step, true);
     });
