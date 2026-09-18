@@ -597,3 +597,161 @@ legend { margin-bottom: 9px; color: rgba(255, 255, 255, 0.43); font-size: 12px; 
 @media (min-width: 701px) {
   .viewer-pin { display: none !important; }
 }
+
+
+/* Global finish + stone presentation and mobile mini-scene controls. */
+.swatch {
+  background-color: var(--swatch);
+  background-image: var(--swatch-image, none);
+  background-size: var(--swatch-size, auto);
+  background-position: center;
+}
+.selected-finish {
+  display: flex;
+  align-items: baseline;
+  gap: 7px;
+  margin: 8px 0 0;
+  color: var(--muted);
+  font-size: 11px;
+}
+.selected-finish strong { color: var(--text); font-size: 12px; }
+
+.global-option {
+  grid-template-columns: 40px minmax(0, 1fr);
+  align-items: center;
+}
+.global-option__copy { display: grid; min-width: 0; gap: 3px; }
+.stone-swatch {
+  width: 36px;
+  height: 36px;
+  border: 2px solid rgba(255,255,255,.18);
+  border-radius: 50%;
+  background-color: var(--stone-swatch);
+  background-image: var(--stone-swatch-image, none);
+  background-size: var(--stone-swatch-size, auto);
+  background-position: center;
+  box-shadow: inset 0 0 0 1px rgba(0,0,0,.12);
+}
+.global-option.is-selected .stone-swatch {
+  border-color: #fff;
+  box-shadow: 0 0 0 2px rgba(255,255,255,.10), inset 0 0 0 1px rgba(0,0,0,.12);
+}
+
+.skirting-surface {
+  position: absolute;
+  left: 4.8%;
+  top: 84.5%;
+  z-index: 450;
+  width: 76.5%;
+  height: 4.5%;
+  pointer-events: none;
+  background-position: center;
+  background-repeat: repeat;
+  clip-path: polygon(0 4%, 100% 0, 99.7% 96%, .3% 100%);
+  box-shadow: inset 0 1px rgba(255,255,255,.10), inset 0 -1px rgba(0,0,0,.18);
+}
+
+.viewer-pip-controls,
+.viewer-pip-resize { display: none; }
+
+@media (max-width: 700px) {
+  .flow-nav {
+    top: env(safe-area-inset-top);
+    margin-top: 0;
+    z-index: 60;
+  }
+
+  .viewer-pip-controls {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    z-index: 900;
+    display: flex;
+    gap: 4px;
+  }
+  .viewer-pip-control {
+    display: grid;
+    width: 32px;
+    height: 32px;
+    place-items: center;
+    border: 1px solid rgba(255,255,255,.72);
+    border-radius: 50%;
+    padding: 0;
+    background: rgba(24,24,22,.78);
+    color: #fff;
+    box-shadow: 0 2px 8px rgba(0,0,0,.22);
+    font-size: 17px;
+    line-height: 1;
+    cursor: pointer;
+    touch-action: manipulation;
+  }
+  .viewer-pip-control[aria-pressed="true"] {
+    background: rgba(246,242,233,.94);
+    color: #28241f;
+  }
+
+  body.is-mobile-scene-pinned .viewer-anchor {
+    min-height: var(--mobile-scene-anchor-height, 0px);
+  }
+  body.is-mobile-scene-pinned .viewer-card {
+    position: fixed;
+    top: var(--mobile-pip-top, calc(var(--mobile-flow-nav-bottom, 58px) + 6px));
+    right: var(--mobile-pip-right, 8px);
+    left: var(--mobile-pip-left, auto);
+    z-index: 50;
+    width: var(--mobile-pip-width, clamp(160px, 48vw, 210px));
+    border-radius: 11px;
+    box-shadow: 0 10px 28px rgba(0,0,0,.35);
+  }
+  body.is-mobile-scene-pinned .flow-nav ~ .panel:not([hidden]) {
+    margin-top: calc(var(--mobile-pip-height, 0px) + 8px);
+  }
+  body.is-mobile-scene-pinned .viewer-card__footer {
+    position: absolute;
+    right: 4px;
+    bottom: 4px;
+    z-index: 2;
+    display: block;
+    min-height: 0;
+    padding: 0;
+    border: 0;
+    background: transparent;
+  }
+  body.is-mobile-scene-pinned .viewer-card__footer p { display: none; }
+  body.is-mobile-scene-pinned .viewer { border-radius: 10px; }
+  body.is-mobile-scene-pinned .viewer-pip-resize {
+    position: absolute;
+    right: 2px;
+    bottom: 2px;
+    z-index: 901;
+    display: block;
+    width: 28px;
+    height: 28px;
+    cursor: nwse-resize;
+    touch-action: none;
+  }
+  body.is-mobile-scene-pinned .viewer-pip-resize::after {
+    content: "";
+    position: absolute;
+    right: 6px;
+    bottom: 6px;
+    width: 10px;
+    height: 10px;
+    border-right: 2px solid rgba(255,255,255,.9);
+    border-bottom: 2px solid rgba(255,255,255,.9);
+    border-radius: 0 0 2px;
+  }
+
+  body.is-mobile-scene-transparent.is-mobile-scene-pinned :is(
+    #sceneBase,
+    #sceneLayers,
+    #stoneCanvas,
+    #skirtingSurface,
+    .scene-hotspots,
+    .alignment-grid,
+    .selection-frame
+  ) { opacity: .58; }
+
+  body.is-mobile-scene-pinned .scene-hotspots { pointer-events: none; }
+  body.is-mobile-scene-pinned .scene-hotspot { pointer-events: auto; }
+}
