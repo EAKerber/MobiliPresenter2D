@@ -173,65 +173,49 @@
       finishes: [
         {
           id: "base-light", publicLabel: "Base clara", color: "#eeeae3", status: "published", adjustmentLabel: "normal",
-          textureCss: "linear-gradient(135deg, rgba(255,255,255,.10), rgba(0,0,0,.025)), repeating-linear-gradient(90deg, rgba(255,255,255,.055) 0 1px, transparent 1px 4px)",
-          textureSize: "100% 100%, 10px 10px"
+          textureAsset: "assets/materials/mdf-base.webp", textureSize: "160px 160px", textureOpacity: 0.28, textureBlend: "multiply"
         },
         {
           id: "tone-15-a", publicLabel: "Avelã", color: "#8d8178", status: "published", adjustmentLabel: "+15%",
-          textureCss: "linear-gradient(135deg, rgba(255,255,255,.035), rgba(0,0,0,.045)), repeating-linear-gradient(0deg, rgba(255,255,255,.025) 0 1px, transparent 1px 3px)",
-          textureSize: "100% 100%, 8px 8px"
+          textureAsset: "assets/materials/mdf-warm.webp", textureSize: "160px 160px", textureOpacity: 0.72, textureBlend: "multiply"
         },
         {
           id: "tone-15-b", publicLabel: "Névoa", color: "#d7d5cf", status: "published", adjustmentLabel: "+15%",
-          textureCss: "repeating-linear-gradient(90deg, rgba(90,90,86,.055) 0 1px, transparent 1px 3px), repeating-linear-gradient(0deg, rgba(255,255,255,.11) 0 1px, transparent 1px 4px)",
-          textureSize: "7px 7px, 9px 9px"
+          textureAsset: "assets/materials/mdf-soft.webp", textureSize: "160px 160px", textureOpacity: 0.64, textureBlend: "multiply"
         },
         {
           id: "tone-15-c", publicLabel: "Aço", color: "#777874", status: "published", adjustmentLabel: "+15%",
-          textureCss: "repeating-linear-gradient(90deg, rgba(255,255,255,.055) 0 1px, transparent 1px 3px), repeating-linear-gradient(0deg, rgba(0,0,0,.055) 0 1px, transparent 1px 4px)",
-          textureSize: "7px 7px, 9px 9px"
+          textureAsset: "assets/materials/mdf-metal.webp", textureSize: "160px 160px", textureOpacity: 0.72, textureBlend: "multiply"
         },
         {
           id: "tone-25-a", publicLabel: "Bosque", color: "#92775f", status: "published", adjustmentLabel: "+25%",
-          textureCss: "repeating-linear-gradient(92deg, rgba(79,51,34,.20) 0 2px, rgba(255,255,255,.055) 2px 4px, transparent 4px 10px), linear-gradient(90deg, #88705a, #a1876e 45%, #7f6752 72%, #967b63)",
-          textureSize: "48px 100%, 100% 100%"
+          textureAsset: "assets/materials/mdf-wood.webp", textureSize: "180px 180px", textureOpacity: 0.88, textureBlend: "multiply"
         },
         {
           id: "tone-25-b", publicLabel: "Carvão", color: "#30312f", status: "published", adjustmentLabel: "+25%",
-          textureCss: "radial-gradient(circle at 22% 30%, rgba(255,255,255,.075) 0 1px, transparent 1.4px), radial-gradient(circle at 72% 64%, rgba(255,255,255,.045) 0 1px, transparent 1.3px)",
-          textureSize: "13px 13px, 17px 17px"
+          textureAsset: "assets/materials/mdf-dark.webp", textureSize: "160px 160px", textureOpacity: 0.84, textureBlend: "multiply"
         }
       ],
       stonePackages: [
         {
           id: "stone-existing", label: "Padrão", description: "Mantém a pedra atual do conjunto.", color: null,
-          swatchColor: "#b7b0a7",
-          textureCss: "radial-gradient(circle at 22% 28%, #5b5954 0 1px, transparent 1.3px), radial-gradient(circle at 70% 62%, #8a8278 0 1.2px, transparent 1.6px), linear-gradient(#bbb5ac, #aaa49b)",
-          textureSize: "9px 9px, 13px 13px, 100% 100%"
+          swatchColor: "#b7b0a7"
         },
         {
           id: "stone-standard-sink", label: "Padrão + cuba nova", description: "Pedra padrão com cuba nova.", color: null,
-          swatchColor: "#b7b0a7",
-          textureCss: "radial-gradient(circle at 22% 28%, #5b5954 0 1px, transparent 1.3px), radial-gradient(circle at 70% 62%, #8a8278 0 1.2px, transparent 1.6px), linear-gradient(#bbb5ac, #aaa49b)",
-          textureSize: "9px 9px, 13px 13px, 100% 100%"
+          swatchColor: "#b7b0a7"
         },
         {
           id: "stone-light", label: "Clara mineral", description: "Pedra clara de granulação fina.", color: "#e3ddd2",
-          swatchColor: "#e4ded2",
-          textureCss: "radial-gradient(circle at 18% 28%, #6d6a64 0 1px, transparent 1.3px), radial-gradient(circle at 67% 54%, #a47c66 0 1px, transparent 1.25px), radial-gradient(circle at 42% 78%, #8d8b84 0 .8px, transparent 1.2px), linear-gradient(#eee9df, #d9d2c6)",
-          textureSize: "12px 12px, 17px 17px, 9px 9px, 100% 100%"
+          swatchColor: "#e4ded2", textureAsset: "assets/materials/stone-light.webp", textureScale: 1
         },
         {
           id: "stone-green", label: "Verde profundo", description: "Pedra verde-escura de granulação contrastante.", color: "#1e2a24",
-          swatchColor: "#1f2924",
-          textureCss: "radial-gradient(circle at 25% 32%, #a48b4f 0 1px, transparent 1.4px), radial-gradient(circle at 68% 58%, #56675b 0 1.2px, transparent 1.6px), linear-gradient(135deg, #17201c, #29362f)",
-          textureSize: "13px 13px, 17px 17px, 100% 100%"
+          swatchColor: "#1f2924", textureAsset: "assets/materials/stone-green.webp", textureScale: 1
         },
         {
           id: "stone-dark", label: "Preta mineral", description: "Pedra preta de granulação fina e reflexos discretos.", color: "#171918",
-          swatchColor: "#181a19",
-          textureCss: "radial-gradient(circle at 24% 31%, #7b7e7b 0 .8px, transparent 1.25px), radial-gradient(circle at 73% 66%, #494c49 0 1px, transparent 1.35px), linear-gradient(#171918, #222422)",
-          textureSize: "10px 10px, 14px 14px, 100% 100%"
+          swatchColor: "#181a19", textureAsset: "assets/materials/stone-dark.webp", textureScale: 1
         }
       ],
       handles: [
