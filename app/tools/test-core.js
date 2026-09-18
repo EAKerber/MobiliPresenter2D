@@ -55,8 +55,10 @@ catalog.modules.forEach((module, index) => {
 });
 assert.equal(priceBook.entries["lighting-08"], 60000);
 assert.equal(priceBook.localEntries["module-02:mandatory-cooktop-stone"], 56600);
-assert.equal(priceBook.globalEntries["stone-new-light"], 169900);
-assert.equal(priceBook.globalEntries["stone-new-dark"], 219900);
+assert.equal(priceBook.globalEntries["stone-standard-sink"], 169900);
+assert.equal(priceBook.globalEntries["stone-light"], 219900);
+assert.equal(priceBook.globalEntries["stone-green"], 219900);
+assert.equal(priceBook.globalEntries["stone-dark"], 219900);
 assert.equal(priceBook.globalEntries["stone-skirting"], 18500);
 assert.equal(priceBook.globalEntries["move-stone"], 39900);
 assert.equal(priceBook.globalEntries["tempered-glass"], 39000);
@@ -93,26 +95,35 @@ assert.deepEqual(
   { modules: 660000, local: 56600, lighting: 60000, finishes: 0, handles: 0, global: 0 }
 );
 
+const totalHandleFronts = catalog.modules.reduce((total, module) => total + (module.commercial?.handleFrontCount || 0), 0);
+assert.equal(totalHandleFronts, 15);
+assert.equal(priceBook.handleEntries.ponto, 999);
+
 core.setModuleSelection(state, "module-03", { handleId: "ponto" });
 let estimate = pricing.calculatePublicEstimate(scene, state, catalog, resolved(state), priceBook);
+assert.equal(core.moduleSelection(state, "module-01").handleId, "ponto");
+assert.equal(core.moduleSelection(state, "module-07").handleId, "ponto");
 assert.equal(estimate.breakdown.handlesCents, 14985);
 assert.equal(estimate.totalCents, 791585);
-const handleAllocation = pricing.distributeCents(14985, 6);
-assert.equal(handleAllocation.reduce((total, cents) => total + cents, 0), 14985);
-assert.equal(handleAllocation.length, 6);
+const module03Handle = pricing.itemEstimate(module03, catalog, state, priceBook);
+assert.equal(module03Handle.handlePerFrontCents, 999);
+assert.equal(module03Handle.handleFrontCount, 6);
+assert.equal(module03Handle.handleCents, 5994);
 
 core.setModuleSelection(state, "module-02", { handleId: "ponto" });
 assert.equal(pricing.itemEstimate(catalog.modules[1], catalog, state, priceBook).handleCents, 0);
 core.setModuleSelection(state, "module-04", { finishId: "tone-15-a" });
+assert.equal(core.moduleSelection(state, "module-01").finishId, "tone-15-a");
+assert.equal(core.moduleSelection(state, "module-07").finishId, "tone-15-a");
 estimate = pricing.calculatePublicEstimate(scene, state, catalog, resolved(state), priceBook);
-assert.equal(estimate.breakdown.finishesCents, 9000);
+assert.equal(estimate.breakdown.finishesCents, 99000);
 
-state.globalSelections.stonePackageId = "stone-new-light";
+state.globalSelections.stonePackageId = "stone-light";
 core.setGlobalService(state, "stone-skirting", true);
 core.setGlobalService(state, "move-stone", true);
 core.setGlobalService(state, "tempered-glass", true);
 estimate = pricing.calculatePublicEstimate(scene, state, catalog, resolved(state), priceBook);
-assert.equal(estimate.global.totalCents, 267300);
+assert.equal(estimate.global.totalCents, 317300);
 
 core.setEntityVisibility(state, "module-02", false);
 estimate = pricing.calculatePublicEstimate(scene, state, catalog, resolved(state), priceBook);
