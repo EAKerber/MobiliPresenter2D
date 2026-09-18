@@ -263,20 +263,23 @@
 
   function availableFinishTargetIds() {
     return catalog.modules
+      .filter((product) => product.commercial?.finishEligible)
       .filter((product) => lastResolved?.[product.entityId]?.visible || state.visibilityByEntity[product.entityId])
       .map((product) => product.entityId);
   }
 
   function ensureFinishTarget() {
     const ids = availableFinishTargetIds();
-    if (!ids.includes(activeFinishModuleId)) {
-      activeFinishModuleId = ids.includes(state.selectedEntityId) ? state.selectedEntityId : ids[0] || null;
+    const currentIsEligible = ids.includes(activeFinishModuleId);
+    if (!currentIsEligible) {
+      const handleAnchor = catalog.modules.find((product) => ids.includes(product.entityId) && product.commercial?.handleEligible);
+      activeFinishModuleId = handleAnchor?.entityId || ids[0] || null;
     }
     return activeFinishModuleId;
   }
 
   function selectedModuleFinish(product) {
-    return core.moduleSelection(state, product?.entityId).finishId || core.BASE_FINISH_ID;
+    return core.moduleSelection(state, product?.entityId || ensureFinishTarget()).finishId || core.BASE_FINISH_ID;
   }
 
   function selectedFrontFinishLabel(product) {
@@ -285,7 +288,7 @@
   }
 
   function selectedHandle(product) {
-    const id = core.moduleSelection(state, product?.entityId).handleId || "none";
+    const id = core.moduleSelection(state, product?.entityId || ensureFinishTarget()).handleId || "none";
     return catalog.options.handles.find((handle) => handle.id === id) || catalog.options.handles[0];
   }
 
@@ -310,6 +313,7 @@
     const product = catalogByEntityId.get(targetId);
     renderFinishTargetOptions();
     finishSwatches.replaceChildren();
+    const currentId = selectedModuleFinish(product);
     catalog.options.finishes.filter((finish) => finish.status === "published").forEach((finish) => {
       const button = document.createElement("button");
       button.className = "swatch";
@@ -317,29 +321,29 @@
       button.dataset.finishId = finish.id;
       button.dataset.color = finish.color;
       button.style.setProperty("--swatch", finish.color);
-      button.title = finish.publicLabel;
-      button.setAttribute("aria-label", "Aplicar " + finish.publicLabel + " a " + (product?.title || "módulo"));
-      const selected = Boolean(product && selectedModuleFinish(product) === finish.id);
+      button.style.setProperty("--swatch-image", finish.textureCss || "none");
+      button.style.setProperty("--swatch-size", finish.textureSize || "auto");
+      button.title = finish.publicLabel + (finish.adjustmentLabel ? " · " + finish.adjustmentLabel : "");
+      button.setAttribute("aria-label", "Aplicar " + finish.publicLabel + " ao conjunto");
+      const selected = currentId === finish.id;
       button.classList.toggle("is-selected", selected);
       button.setAttribute("aria-pressed", String(selected));
       finishSwatches.append(button);
     });
+    if (selectedFinishName) selectedFinishName.textContent = selectedFrontFinishLabel(product);
   }
 
   function renderHandleControlsFromData() {
     if (!handleOptions) return;
-    const product = catalogByEntityId.get(ensureFinishTarget());
+    const anchorId = ensureFinishTarget();
+    const product = catalogByEntityId.get(anchorId);
     const help = document.getElementById("handleHelp");
     handleOptions.replaceChildren();
-    if (!product?.commercial?.handleEligible) {
-      const note = document.createElement("p");
-      note.className = "finish-help";
-      note.textContent = product ? "Este módulo não recebe puxador." : "Selecione um módulo incluído para configurar o puxador.";
-      handleOptions.append(note);
-      if (help) help.textContent = "A escolha de puxador é disponibilizada somente nos módulos com frente confirmada.";
+    if (!product) {
+      if (help) help.textContent = "Inclua ao menos um módulo configurável.";
       return;
     }
-    if (help) help.textContent = "Cobrado uma vez por módulo; o rateio por frente é apenas explicativo.";
+    if (help) help.textContent = "Uma escolha para o conjunto; o adicional local usa a quantidade de frentes de cada módulo.";
     const current = selectedHandle(product);
     catalog.options.handles.forEach((handle) => {
       const button = document.createElement("button");
@@ -349,7 +353,7 @@
       const active = handle.id === current.id;
       button.classList.toggle("is-selected", active);
       button.setAttribute("aria-pressed", String(active));
-      button.setAttribute("aria-label", "Selecionar puxador " + handle.label);
+      button.setAttribute("aria-label", "Selecionar puxador " + handle.label + " para o conjunto");
 
       const orientation = document.createElement("span");
       orientation.className = "handle-option__orientation";
@@ -365,8 +369,8 @@
       const label = document.createElement("strong");
       label.textContent = handle.label;
       const description = document.createElement("small");
-      const value = priceBook.handleEntries?.[handle.id] || 0;
-      description.textContent = value ? handle.description + " · " + formatCurrency(value) + " por módulo." : handle.description;
+      const perFront = priceBook.handleEntries?.[handle.id] || 0;
+      description.textContent = perFront ? handle.description + " · " + formatCurrency(perFront) + " por puxador." : handle.description;
       copy.append(label, description);
       button.append(orientation, copy);
       handleOptions.append(button);
@@ -384,12 +388,24 @@
       button.dataset.stonePackageId = stone.id;
       button.classList.toggle("is-selected", stone.id === activeId);
       button.setAttribute("aria-pressed", String(stone.id === activeId));
+      button.setAttribute("aria-label", "Selecionar " + stone.label);
+
+      const swatch = document.createElement("span");
+      swatch.className = "stone-swatch";
+      swatch.setAttribute("aria-hidden", "true");
+      swatch.style.setProperty("--stone-swatch", stone.swatchColor || stone.color || "#aaa");
+      swatch.style.setProperty("--stone-swatch-image", stone.textureCss || "none");
+      swatch.style.setProperty("--stone-swatch-size", stone.textureSize || "auto");
+
+      const copy = document.createElement("span");
+      copy.className = "global-option__copy";
       const title = document.createElement("strong");
       title.textContent = stone.label;
       const description = document.createElement("small");
       const value = priceBook.globalEntries?.[stone.id] || 0;
       description.textContent = stone.description + (value ? " · +" + formatCurrency(value) : " · sem adicional.");
-      button.append(title, description);
+      copy.append(title, description);
+      button.append(swatch, copy);
       stonePackageOptions.append(button);
     });
     if (stoneSkirtingToggle) stoneSkirtingToggle.checked = Boolean(state.globalSelections?.serviceIds?.includes("stone-skirting"));
