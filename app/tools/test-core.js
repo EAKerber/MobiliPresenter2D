@@ -97,7 +97,21 @@ assert.deepEqual(
 
 const totalHandleFronts = catalog.modules.reduce((total, module) => total + (module.commercial?.handleFrontCount || 0), 0);
 assert.equal(totalHandleFronts, 15);
+assert.equal(priceBook.handleEntries["tango-chrome"], 1199);
 assert.equal(priceBook.handleEntries.ponto, 999);
+assert.equal(priceBook.handleEntries["alca-colors"], 2190);
+
+const globalHandleTotals = {
+  "tango-chrome": 17985,
+  ponto: 14985,
+  "alca-colors": 32850
+};
+Object.entries(globalHandleTotals).forEach(([handleId, expectedCents]) => {
+  const probe = core.createInitialState(scene);
+  core.setModuleSelection(probe, "module-01", { handleId });
+  const handleEstimate = pricing.calculatePublicEstimate(scene, probe, catalog, visibility.resolveVisibility(scene, probe), priceBook);
+  assert.equal(handleEstimate.breakdown.handlesCents, expectedCents, handleId);
+});
 
 core.setModuleSelection(state, "module-03", { handleId: "ponto" });
 let estimate = pricing.calculatePublicEstimate(scene, state, catalog, resolved(state), priceBook);
@@ -117,6 +131,9 @@ assert.equal(core.moduleSelection(state, "module-01").finishId, "tone-15-a");
 assert.equal(core.moduleSelection(state, "module-07").finishId, "tone-15-a");
 estimate = pricing.calculatePublicEstimate(scene, state, catalog, resolved(state), priceBook);
 assert.equal(estimate.breakdown.finishesCents, 99000);
+core.setModuleSelection(state, "module-04", { finishId: "tone-25-a" });
+estimate = pricing.calculatePublicEstimate(scene, state, catalog, resolved(state), priceBook);
+assert.equal(estimate.breakdown.finishesCents, 165000);
 
 state.globalSelections.stonePackageId = "stone-light";
 core.setGlobalService(state, "stone-skirting", true);
