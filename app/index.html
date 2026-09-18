@@ -31,7 +31,8 @@
     </header>
 
     <main class="workspace">
-      <section class="viewer-card" aria-label="Visualização da cozinha">
+      <div class="viewer-anchor" id="viewerAnchor">
+      <section class="viewer-card" id="viewerCard" aria-label="Visualização da cozinha">
         <div class="viewer" id="viewer">
           <img
             id="sceneBase"
@@ -54,8 +55,13 @@
             <strong id="visibleCount">8</strong> de <span id="totalCount">8</span> itens incluídos
           </p>
           <p id="viewerHint">Selecione um módulo na cena para abrir sua ficha.</p>
+          <button class="button button--secondary viewer-pin" id="mobileScenePin" type="button" aria-pressed="true">
+            Fixar cena
+          </button>
         </footer>
       </section>
+      <div class="viewer-pin-sentinel" id="viewerPinSentinel" aria-hidden="true"></div>
+      </div>
 
       <aside class="controls">
         <nav class="flow-nav" aria-label="Etapas da configuração">
@@ -81,60 +87,47 @@
           <header class="finish-heading">
             <span aria-hidden="true">◐</span>
             <div>
-              <h2 id="frontFinishHeading" tabindex="-1">Frentes</h2>
-              <p>Uma escolha global. A caixaria permanece em Branco TX.</p>
+              <h2 id="frontFinishHeading" tabindex="-1">Acabamentos por módulo</h2>
+              <p>Escolha a frente e o puxador da peça selecionada. A caixaria permanece clara.</p>
             </div>
           </header>
 
           <div class="finish-controls">
+            <label class="finish-target">
+              <span>Aplicar ao módulo</span>
+              <select id="finishTargetSelect" aria-label="Módulo para acabamento"></select>
+            </label>
             <fieldset>
               <legend>Cor das frentes</legend>
               <div class="swatches" id="finishSwatches"></div>
             </fieldset>
 
-            <fieldset class="internal-control">
-              <legend>Textura</legend>
-              <input id="textureInput" type="file" accept="image/*" hidden />
-              <button class="button button--upload" id="textureButton" type="button">
-                <span aria-hidden="true">▧</span>
-                <span id="textureLabel">Carregar imagem de amadeirado</span>
-              </button>
-            </fieldset>
-
-            <button class="button button--reset" id="resetFinishButton" type="button" disabled>
-              <span aria-hidden="true">↺</span>
-              Voltar ao acabamento original
-            </button>
-
             <fieldset class="handle-fieldset">
               <legend>Puxadores</legend>
-              <p class="finish-help">A posição será vertical nas portas e horizontal nas gavetas.</p>
+              <p class="finish-help" id="handleHelp">O valor é cobrado uma vez pelo módulo e o rateio por frente é apenas explicativo.</p>
               <div class="handle-options" id="handleOptions"></div>
             </fieldset>
           </div>
         </section>
         <section class="panel" id="stonePanel" aria-labelledby="stoneHeading">
-          <header class="finish-heading"><div><h2 id="stoneHeading">Pedra</h2><p>Escolha o acabamento da pedra do conjunto.</p></div></header>
+          <header class="finish-heading"><div><h2 id="stoneHeading">Pedra do conjunto</h2><p>Uma escolha global, aplicada uma vez à composição.</p></div></header>
           <div class="finish-controls">
-            <fieldset><legend>Cor da pedra</legend><div class="swatches" id="stoneSwatches">
-              <button type="button" class="swatch" data-stone-color="#34383d" style="--swatch:#34383d" aria-label="Pedra grafite" title="Grafite" aria-pressed="false"></button>
-              <button type="button" class="swatch" data-stone-color="#d8d8d2" style="--swatch:#d8d8d2" aria-label="Pedra clara" title="Clara" aria-pressed="false"></button>
-              <button type="button" class="swatch" data-stone-color="#968371" style="--swatch:#968371" aria-label="Pedra areia" title="Areia" aria-pressed="false"></button>
-              <label class="custom-color internal-control" title="Outra cor da pedra"><span></span><input id="stoneColor" type="color" value="#34383d" aria-label="Outra cor da pedra"></label>
-            </div></fieldset>
-            <p id="stoneStatus" aria-live="polite">Simulação de cor sobre a textura existente.</p>
-            <button type="button" class="button button--reset" id="resetStone" disabled>Voltar à pedra original</button>
+            <fieldset><legend>Pacote de pedra</legend><div class="global-options" id="stonePackageOptions"></div></fieldset>
+            <label class="accessory-toggle" for="stoneSkirtingToggle">
+              <input id="stoneSkirtingToggle" type="checkbox" />
+              <span><strong>Rodapé de pedra</strong><small>Acabamento global para a composição.</small></span>
+            </label>
           </div>
           <label class="accessory-toggle" for="lightingToggle">
             <input id="lightingToggle" type="checkbox" checked />
-            <span><strong>Iluminação embutida</strong><small>Realça a bancada e requer os módulos estruturais do conjunto.</small></span>
+            <span><strong>Iluminação embutida</strong><small>Realça a bancada e requer a lateral da geladeira.</small></span>
           </label>
         </section>
 
         <section class="panel services-panel" id="servicesPanel" aria-labelledby="servicesHeading" hidden>
           <header class="finish-heading">
             <span aria-hidden="true">✓</span>
-            <div><h2 id="servicesHeading" tabindex="-1">Serviços</h2><p>Conferência do que já acompanha a composição.</p></div>
+            <div><h2 id="servicesHeading" tabindex="-1">Serviços</h2><p>Serviços globais que impactam uma vez o conjunto.</p></div>
           </header>
           <div id="servicesChecklist" class="services-checklist"></div>
         </section>

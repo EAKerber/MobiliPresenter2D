@@ -1,24 +1,24 @@
-(function registerMockPriceBook(global) {
+(function registerPublishedPriceBook(global) {
   "use strict";
 
-  // Demonstration-only prices. This file deliberately contains no cost, margin,
-  // supplier, validity, or commercial approval data.
+  // Public commercial estimate. Amounts are in cents and are sourced from the
+  // approved configurator worksheet. Cost, margin and supplier data do not
+  // belong in this public file.
   const priceBook = Object.freeze({
-    schemaVersion: "DemoPriceBook 0.1",
-    mode: "demo",
+    schemaVersion: "CommercialEstimatePriceBook 1.0",
+    mode: "estimate",
     currency: "BRL",
-    label: "Simulação de valor",
-    disclaimer: "Valores ilustrativos para testar a composição. Não são orçamento, proposta ou preço comercial.",
-    compositionBaseReferenceCents: 300000,
+    label: "Estimativa da composição",
+    disclaimer: "Estimativa comercial sujeita à validação final de medidas, instalação e disponibilidade.",
     entries: Object.freeze({
-      "module-01": 47980,
-      "module-02": 69980,
-      "module-03": 85980,
-      "module-04": 23980,
-      "module-05": 53980,
-      "module-06": 63980,
-      "module-07": 37980,
-      "lighting-08": 89900
+      "module-01": 90000,
+      "module-02": 110000,
+      "module-03": 150000,
+      "module-04": 60000,
+      "module-05": 80000,
+      "module-06": 110000,
+      "module-07": 60000,
+      "lighting-08": 60000
     }),
     handleEntries: Object.freeze({
       none: 0,
@@ -26,18 +26,27 @@
       ponto: 14985,
       "alca-colors": 32850
     }),
-    frontFinishEntries: Object.freeze({
-      "gianduia-original": 0,
-      "gianduia-color": 0,
-      "white-tx": 0,
-      black: 0,
-      olive: 0,
-      "petroleum-blue": 0,
-      "solid-color-custom": 0,
-      "uploaded-texture": 0
+    // These bands are data capabilities only. Until approved swatches arrive,
+    // the public selector exposes the base finish exclusively.
+    frontFinishRatesBps: Object.freeze({
+      "base-light": 0,
+      "tone-15-a": 1500,
+      "tone-15-b": 1500,
+      "tone-15-c": 1500,
+      "tone-25-a": 2500,
+      "tone-25-b": 2500
     }),
-    stoneEntries: Object.freeze({ "stone-original": 0, "stone-custom": 0 }),
-    serviceEntries: Object.freeze({ "base-stone": 0 })
+    localEntries: Object.freeze({
+      "module-02:mandatory-cooktop-stone": 56600
+    }),
+    globalEntries: Object.freeze({
+      "stone-existing": 0,
+      "stone-new-light": 169900,
+      "stone-new-dark": 219900,
+      "stone-skirting": 18500,
+      "move-stone": 39900,
+      "tempered-glass": 39000
+    })
   });
 
   global.CASA_EM_MODULOS_PRICE_BOOK = priceBook;

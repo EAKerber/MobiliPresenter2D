@@ -18,8 +18,12 @@
   validation.assertValidScene(scene);
 
   let state = core.createInitialState(scene);
-  let finishMode = "original";
   let currentStep = "modules";
+  let activeFinishModuleId = null;
+  let detailOrigin = null;
+  let mobileScenePinEnabled = true;
+  let mobileSceneIsMini = false;
+  let mobileSceneAnchorHeight = 0;
 
   const sceneBase = document.getElementById("sceneBase");
   const sceneLayers = document.getElementById("sceneLayers");
@@ -41,6 +45,13 @@
   const configurationAnnouncement = document.getElementById("configurationAnnouncement");
   const handleOptions = document.getElementById("handleOptions");
   const servicesChecklist = document.getElementById("servicesChecklist");
+  const finishTargetSelect = document.getElementById("finishTargetSelect");
+  const stonePackageOptions = document.getElementById("stonePackageOptions");
+  const stoneSkirtingToggle = document.getElementById("stoneSkirtingToggle");
+  const viewerCard = document.getElementById("viewerCard");
+  const viewerAnchor = document.getElementById("viewerAnchor");
+  const viewerPinSentinel = document.getElementById("viewerPinSentinel");
+  const mobileScenePin = document.getElementById("mobileScenePin");
   const catalogByEntityId = new Map(catalog.modules.map((module) => [module.entityId, module]));
   const detailPageByEntity = new Map();
   const detailInteractionByEntity = new Set();
@@ -243,6 +254,164 @@
     });
   }
 
+  function availableFinishTargetIds() {
+    return catalog.modules
+      .filter((product) => lastResolved?.[product.entityId]?.visible || state.visibilityByEntity[product.entityId])
+      .map((product) => product.entityId);
+  }
+
+  function ensureFinishTarget() {
+    const ids = availableFinishTargetIds();
+    if (!ids.includes(activeFinishModuleId)) {
+      activeFinishModuleId = ids.includes(state.selectedEntityId) ? state.selectedEntityId : ids[0] || null;
+    }
+    return activeFinishModuleId;
+  }
+
+  function selectedModuleFinish(product) {
+    return core.moduleSelection(state, product?.entityId).finishId || core.BASE_FINISH_ID;
+  }
+
+  function selectedFrontFinishLabel(product) {
+    const id = selectedModuleFinish(product);
+    return catalog.options.finishes.find((finish) => finish.id === id)?.publicLabel || "Base clara";
+  }
+
+  function selectedHandle(product) {
+    const id = core.moduleSelection(state, product?.entityId).handleId || "none";
+    return catalog.options.handles.find((handle) => handle.id === id) || catalog.options.handles[0];
+  }
+
+  function renderFinishTargetOptions() {
+    if (!finishTargetSelect) return;
+    const targetId = ensureFinishTarget();
+    finishTargetSelect.replaceChildren();
+    availableFinishTargetIds().forEach((entityId) => {
+      const product = catalogByEntityId.get(entityId);
+      if (!product) return;
+      const option = document.createElement("option");
+      option.value = entityId;
+      option.textContent = product.referenceLabel + " · " + product.title;
+      option.selected = entityId === targetId;
+      finishTargetSelect.append(option);
+    });
+    finishTargetSelect.disabled = !targetId;
+  }
+
+  function renderFinishControlsFromData() {
+    const targetId = ensureFinishTarget();
+    const product = catalogByEntityId.get(targetId);
+    renderFinishTargetOptions();
+    finishSwatches.replaceChildren();
+    catalog.options.finishes.filter((finish) => finish.status === "published").forEach((finish) => {
+      const button = document.createElement("button");
+      button.className = "swatch";
+      button.type = "button";
+      button.dataset.finishId = finish.id;
+      button.dataset.color = finish.color;
+      button.style.setProperty("--swatch", finish.color);
+      button.title = finish.publicLabel;
+      button.setAttribute("aria-label", "Aplicar " + finish.publicLabel + " a " + (product?.title || "módulo"));
+      const selected = Boolean(product && selectedModuleFinish(product) === finish.id);
+      button.classList.toggle("is-selected", selected);
+      button.setAttribute("aria-pressed", String(selected));
+      finishSwatches.append(button);
+    });
+  }
+
+  function renderHandleControlsFromData() {
+    if (!handleOptions) return;
+    const product = catalogByEntityId.get(ensureFinishTarget());
+    const help = document.getElementById("handleHelp");
+    handleOptions.replaceChildren();
+    if (!product?.commercial?.handleEligible) {
+      const note = document.createElement("p");
+      note.className = "finish-help";
+      note.textContent = product ? "Este módulo não recebe puxador." : "Selecione um módulo incluído para configurar o puxador.";
+      handleOptions.append(note);
+      if (help) help.textContent = "A escolha de puxador é disponibilizada somente nos módulos com frente confirmada.";
+      return;
+    }
+    if (help) help.textContent = "Cobrado uma vez por módulo; o rateio por frente é apenas explicativo.";
+    const current = selectedHandle(product);
+    catalog.options.handles.forEach((handle) => {
+      const button = document.createElement("button");
+      button.type = "button";
+      button.className = "handle-option";
+      button.dataset.handleId = handle.id;
+      const active = handle.id === current.id;
+      button.classList.toggle("is-selected", active);
+      button.setAttribute("aria-pressed", String(active));
+      button.setAttribute("aria-label", "Selecionar puxador " + handle.label);
+
+      const orientation = document.createElement("span");
+      orientation.className = "handle-option__orientation";
+      orientation.setAttribute("aria-hidden", "true");
+      const door = document.createElement("i");
+      door.className = "handle-option__door";
+      const drawer = document.createElement("i");
+      drawer.className = "handle-option__drawer";
+      orientation.append(door, drawer);
+
+      const copy = document.createElement("span");
+      copy.className = "handle-option__copy";
+      const label = document.createElement("strong");
+      label.textContent = handle.label;
+      const description = document.createElement("small");
+      const value = priceBook.handleEntries?.[handle.id] || 0;
+      description.textContent = value ? handle.description + " · " + formatCurrency(value) + " por módulo." : handle.description;
+      copy.append(label, description);
+      button.append(orientation, copy);
+      handleOptions.append(button);
+    });
+  }
+
+  function renderStonePackages() {
+    if (!stonePackageOptions) return;
+    stonePackageOptions.replaceChildren();
+    const activeId = state.globalSelections?.stonePackageId || "stone-existing";
+    catalog.options.stonePackages.forEach((stone) => {
+      const button = document.createElement("button");
+      button.type = "button";
+      button.className = "global-option";
+      button.dataset.stonePackageId = stone.id;
+      button.classList.toggle("is-selected", stone.id === activeId);
+      button.setAttribute("aria-pressed", String(stone.id === activeId));
+      const title = document.createElement("strong");
+      title.textContent = stone.label;
+      const description = document.createElement("small");
+      const value = priceBook.globalEntries?.[stone.id] || 0;
+      description.textContent = stone.description + (value ? " · +" + formatCurrency(value) : " · sem adicional.");
+      button.append(title, description);
+      stonePackageOptions.append(button);
+    });
+    if (stoneSkirtingToggle) stoneSkirtingToggle.checked = Boolean(state.globalSelections?.serviceIds?.includes("stone-skirting"));
+  }
+
+  function renderServices() {
+    if (!servicesChecklist) return;
+    servicesChecklist.replaceChildren();
+    const selected = new Set(state.globalSelections?.serviceIds || []);
+    catalog.services.forEach((service) => {
+      const card = document.createElement("label");
+      card.className = "service-check";
+      const input = document.createElement("input");
+      input.type = "checkbox";
+      input.dataset.globalServiceId = service.id;
+      input.checked = selected.has(service.id);
+      input.setAttribute("aria-label", service.title);
+      const copy = document.createElement("span");
+      const title = document.createElement("strong");
+      title.textContent = service.title;
+      const description = document.createElement("small");
+      const value = priceBook.globalEntries?.[service.id] || 0;
+      description.textContent = service.description + (value ? " · +" + formatCurrency(value) : "");
+      copy.append(title, description);
+      card.append(input, copy);
+      servicesChecklist.append(card);
+    });
+  }
+
   function selectionStyle(entity) {
     const bounds = entity?.alphaBounds;
     if (!bounds) return null;
@@ -254,21 +423,20 @@
     };
   }
 
-  function selectedFrontFinishLabel() {
-    if (finishMode === "texture") return "Textura personalizada";
-    const group = scene.finishGroups.find((candidate) => candidate.id === "fronts-all");
-    if (state.frontFinishId === group?.defaultPresetId) return "Cinza Gianduia";
-    const preset = group?.presets.find((candidate) => candidate.id === state.frontFinishId);
-    return preset?.label || "Acabamento original";
+  function selectedFrontFinishLabel(product) {
+    const target = product || catalogByEntityId.get(ensureFinishTarget());
+    const id = selectedModuleFinish(target);
+    return catalog.options.finishes.find((finish) => finish.id === id)?.publicLabel || "Base clara";
   }
 
-  function selectedHandle() {
-    return catalog.options.handles.find((handle) => handle.id === state.handlePresetId) || catalog.options.handles[0];
+  function selectedHandle(product) {
+    const id = core.moduleSelection(state, product?.entityId || ensureFinishTarget()).handleId || "none";
+    return catalog.options.handles.find((handle) => handle.id === id) || catalog.options.handles[0];
   }
 
   function selectedStoneLabel() {
-    if (!state.stoneColor) return "Pedra original";
-    return document.querySelector(`[data-stone-color="${state.stoneColor}"]`)?.title || "Cor personalizada";
+    const id = state.globalSelections?.stonePackageId || "stone-existing";
+    return catalog.options.stonePackages.find((stone) => stone.id === id)?.label || "Pedra existente";
   }
 
   function formatDimension(value) {
@@ -294,8 +462,8 @@
     return fact;
   }
 
-  function mockImpactLabel(cents) {
-    if (!cents) return "Sem adicional no mock";
+  function valueImpactLabel(cents) {
+    if (!cents) return "Sem adicional";
     return cents > 0 ? `+${formatCurrency(cents)}` : `−${formatCurrency(Math.abs(cents))}`;
   }
 
@@ -326,16 +494,42 @@
       .filter((service) => service.status === "included")
       .map((service) => service.title)
       .join(", ");
-    appendPriceBreakdownRow(breakdown, "Módulo", formatCurrency(itemPricing.baseCents), "Valor do módulo no mock.");
+    appendPriceBreakdownRow(breakdown, "Módulo", formatCurrency(itemPricing.baseCents), "Valor-base do módulo.");
     appendPriceBreakdownRow(
       breakdown,
       "Puxador",
       appliesHandle ? formatCurrency(itemPricing.handleCents) : "Não aplicável",
       appliesHandle ? handle.label : "Painel estrutural sem puxador."
     );
-    appendPriceBreakdownRow(breakdown, "Frentes", formatCurrency(adjustments.frontCents), `${selectedFrontFinishLabel()} · ${mockImpactLabel(adjustments.frontCents)}.`);
-    appendPriceBreakdownRow(breakdown, "Pedra", formatCurrency(adjustments.stoneCents), `${selectedStoneLabel()} · ${mockImpactLabel(adjustments.stoneCents)}.`);
-    appendPriceBreakdownRow(breakdown, "Serviço", formatCurrency(adjustments.serviceCents), `${includedServices || "Nenhum"} · ${mockImpactLabel(adjustments.serviceCents)}.`);
+    appendPriceBreakdownRow(breakdown, "Frentes", formatCurrency(adjustments.frontCents), `${selectedFrontFinishLabel()} · ${valueImpactLabel(adjustments.frontCents)}.`);
+    appendPriceBreakdownRow(breakdown, "Pedra", formatCurrency(adjustments.stoneCents), `${selectedStoneLabel()} · ${valueImpactLabel(adjustments.stoneCents)}.`);
+    appendPriceBreakdownRow(breakdown, "Serviço", formatCurrency(adjustments.serviceCents), `${includedServices || "Nenhum"} · ${valueImpactLabel(adjustments.serviceCents)}.`);
+    return breakdown;
+  }
+
+  function createCommercialItemPriceBreakdown(product, itemPricing) {
+    const breakdown = document.createElement("dl");
+    breakdown.className = "module-detail__price-breakdown";
+    appendPriceBreakdownRow(breakdown, "Módulo", formatCurrency(itemPricing.baseCents), "Valor-base do módulo.");
+    if (itemPricing.finishCents) {
+      appendPriceBreakdownRow(
+        breakdown,
+        "Acabamento",
+        "+" + formatCurrency(itemPricing.finishCents),
+        selectedFrontFinishLabel(product) + " · adicional percentual do módulo."
+      );
+    }
+    if (itemPricing.handleCents) {
+      const handle = selectedHandle(product);
+      const allocations = pricing.distributeCents(itemPricing.handleCents, itemPricing.handleFrontCount);
+      const allocationNote = allocations.length
+        ? "Cobrado uma vez; rateio orientativo entre " + allocations.length + " frentes: " + allocations.map(formatCurrency).join(" · ") + "."
+        : "Cobrado uma vez pelo módulo.";
+      appendPriceBreakdownRow(breakdown, "Puxador", "+" + formatCurrency(itemPricing.handleCents), handle.label + " · " + allocationNote);
+    }
+    if (itemPricing.localCents) {
+      appendPriceBreakdownRow(breakdown, "Pedra cooktop", "+" + formatCurrency(itemPricing.localCents), "Obrigatória neste módulo.");
+    }
     return breakdown;
   }
 
@@ -490,6 +684,18 @@
   }
 
   function appendFrontSegments(make, layout, x, y, width, height, faceWidthMm) {
+    if (layout?.pattern === "two-doors") {
+      const middle = x + width / 2;
+      make("line", { x1: middle, y1: y, x2: middle, y2: y + height, class: "module-detail__view-shape" });
+      return;
+    }
+    if (layout?.pattern === "two-doors-and-lift") {
+      const liftBottom = y + height * 0.34;
+      const middle = x + width / 2;
+      make("line", { x1: x, y1: liftBottom, x2: x + width, y2: liftBottom, class: "module-detail__view-shape" });
+      make("line", { x1: middle, y1: liftBottom, x2: middle, y2: y + height, class: "module-detail__view-shape" });
+      return;
+    }
     if (!layout?.segments?.length) return;
     const segmentsWidthMm = layout.innerWidthMm || layout.segments.reduce((total, segment) => total + (segment.spanMm || 0), 0);
     if (!segmentsWidthMm) return;
@@ -542,7 +748,7 @@
     make("line", { x1: Math.max(10, x - 22), y1: y + drawingHeight, x2: Math.max(18, x - 14), y2: y + drawingHeight, class: "module-detail__dimension-line" });
     make("rect", { x, y, width: drawingWidth, height: drawingHeight, rx: 2, class: "module-detail__view-shape" });
     if (!isSide) appendFrontSegments(make, product.frontLayout, x, y, drawingWidth, drawingHeight, spec.faceWidthMm);
-    svgLabel(make, `A ${formatDimension(spec.faceHeightMm)} mm`, Math.max(8, x - 25), y + drawingHeight / 2 + 3);
+    svgLabel(make, `A ${formatDimension(spec.faceHeightMm)} mm`, 4, y + drawingHeight / 2 + 3, "start");
     figure.append(caption, svg);
     return figure;
   }
@@ -563,11 +769,11 @@
     const figure = document.createElement("figure");
     figure.className = "module-detail__view module-detail__view--isometric module-detail__view--technical";
     const caption = document.createElement("figcaption");
-    caption.textContent = "Vista isométrica";
+    caption.textContent = "Projeção isométrica";
     const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
     svg.setAttribute("viewBox", "0 0 180 126");
     svg.setAttribute("role", "img");
-    svg.setAttribute("aria-label", `Vista isométrica: ${spec.faceHorizontalLabel} ${formatDimension(spec.faceWidthMm)} milímetros, A ${formatDimension(spec.faceHeightMm)} milímetros e ${spec.extrusionLabel} ${formatDimension(spec.extrusionMm)} milímetros${isAmplifiedThickness ? ". A espessura foi ampliada apenas para legibilidade." : "."}`);
+    svg.setAttribute("aria-label", `Projeção isométrica orientativa: ${spec.faceHorizontalLabel} ${formatDimension(spec.faceWidthMm)} milímetros, A ${formatDimension(spec.faceHeightMm)} milímetros e ${spec.extrusionLabel} ${formatDimension(spec.extrusionMm)} milímetros${isAmplifiedThickness ? ". A espessura foi ampliada apenas para legibilidade." : "."}`);
     const make = svgFactory(svg);
     make("path", { d: `M ${left} ${top} L ${right} ${top} L ${right + depthX} ${top + depthY} L ${left + depthX} ${top + depthY} Z`, class: "module-detail__view-shape" });
     make("path", { d: `M ${right} ${top} L ${right + depthX} ${top + depthY} L ${right + depthX} ${bottom + depthY} L ${right} ${bottom} Z`, class: "module-detail__view-shape" });
@@ -581,8 +787,8 @@
     make("line", { x1: Math.max(11, left - 23), y1: bottom, x2: Math.max(19, left - 15), y2: bottom, class: "module-detail__dimension-line" });
     make("line", { x1: right + 4, y1: top - 6, x2: right + depthX + 4, y2: top + depthY - 6, class: "module-detail__dimension-line" });
     svgLabel(make, `${spec.faceHorizontalLabel} ${formatDimension(spec.faceWidthMm)} mm`, left + width / 2, bottom + 27);
-    svgLabel(make, `A ${formatDimension(spec.faceHeightMm)} mm`, Math.max(8, left - 27), top + height / 2 + 3);
-    svgLabel(make, `${spec.extrusionLabel} ${formatDimension(spec.extrusionMm)} mm`, right + depthX + 18, top + depthY - 9);
+    svgLabel(make, `A ${formatDimension(spec.faceHeightMm)} mm`, 4, top + height / 2 + 3, "start");
+    svgLabel(make, `${spec.extrusionLabel} ${formatDimension(spec.extrusionMm)} mm`, 174, top + depthY - 9, "end");
     figure.append(caption, svg);
     return figure;
   }
@@ -594,6 +800,9 @@
     }
     if (product.drawingSpec?.kind === "panel") {
       return "Elevação proporcional do painel estrutural; a espessura aparece como chamada separada.";
+    }
+    if (product.frontLayout?.status === "count-confirmed") {
+      return "Número de frentes confirmado; as proporções internas são orientativas até a ficha técnica detalhada.";
     }
     return "Envelope frontal proporcional; detalhamento interno ainda não está confirmado nesta base.";
   }
@@ -642,7 +851,7 @@
       ...(product.technicalLayout?.internalFront
         ? [{ label: "Vista interna", node: createCarouselPage("Vista interna", createOrientativeInternalFront(product.dimensions.nominalMm, product.technicalLayout.internalFront), "Vãos internos confirmados; não equivalem ao envelope externo do módulo."), shortLabel: "Interna" }]
         : []),
-      { label: "Vista isométrica", node: createCarouselPage("Vista isométrica", createTechnicalIsometricView(product), product.drawingSpec?.kind === "panel" ? "Painel estrutural em proporção; espessura ampliada somente para leitura." : "Projeção proporcional das cotas nominais."), shortLabel: "Isométrica" }
+      { label: "Projeção isométrica", node: createCarouselPage("Projeção isométrica", createTechnicalIsometricView(product), product.drawingSpec?.kind === "panel" ? "Painel estrutural em proporção; espessura ampliada somente para leitura." : "Projeção isométrica orientativa das cotas nominais."), shortLabel: "Isométrica" }
     ];
     let currentPage = Math.min(detailPageByEntity.get(entity.id) || 0, pages.length - 1);
     let isTransitioning = false;
@@ -797,9 +1006,9 @@
     if (itemPricing.status === "ready") {
       priceValue.textContent = formatCurrency(itemPricing.totalCents);
       priceDescription.textContent = product.category === "Estrutural"
-        ? "Valor do painel estrutural. Frentes, pedra e serviço aparecem abaixo com o impacto atual do mock."
-        : "Módulo e puxador aplicável. Frentes, pedra e serviço aparecem abaixo com o impacto atual do mock.";
-      price.append(priceLabel, priceValue, priceDescription, createItemPriceBreakdown(product, itemPricing));
+        ? "Valor local do painel estrutural. Impactos globais aparecem uma única vez no resumo."
+        : "Valor local do módulo. Impactos globais aparecem uma única vez no resumo.";
+      price.append(priceLabel, priceValue, priceDescription, createCommercialItemPriceBreakdown(product, itemPricing));
     } else {
       priceValue.textContent = "Em configuração";
       priceDescription.textContent = "O valor aparece quando a tabela de trabalho estiver completa.";
@@ -809,8 +1018,8 @@
     const material = document.createElement("div");
     material.className = "module-detail__material";
     material.append(
-      createMaterialFact("Frentes", selectedFrontFinishLabel()),
-      createMaterialFact("Caixaria", "Branco TX")
+      createMaterialFact("Frentes", selectedFrontFinishLabel(product)),
+      createMaterialFact("Caixaria", "Base clara")
     );
 
     const dimensions = document.createElement("p");
@@ -896,7 +1105,10 @@
       const isVisible = Boolean(resolved?.[entityId]?.visible);
       const isSelected = state.selectedEntityId === entityId;
       hotspot.hidden = !isVisible;
-      hotspot.disabled = !isVisible;
+      const isInertPreview = mobileSceneIsMini;
+      hotspot.disabled = !isVisible || isInertPreview;
+      hotspot.tabIndex = isInertPreview ? -1 : 0;
+      hotspot.setAttribute("aria-disabled", String(!isVisible || isInertPreview));
       hotspot.classList.toggle("is-selected", isSelected);
       hotspot.setAttribute("aria-pressed", String(isSelected));
     });
@@ -920,6 +1132,10 @@
     });
   }
 
+  function updateHandleControls() {
+    renderHandleControlsFromData();
+  }
+
   function formatCurrency(cents) {
     return new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(cents / 100);
   }
@@ -931,8 +1147,8 @@
   function renderCurrentValue(resolved) {
     const estimate = getEstimate(resolved);
     if (!configurationValue) return;
-    if (estimate.status === "demo") {
-      configurationValue.innerHTML = `<span>${estimate.label}</span><strong>${formatCurrency(estimate.totalCents)}</strong><small>Demo · não é orçamento</small>`;
+    if (estimate.status === "legacy") {
+      configurationValue.innerHTML = `<span>${estimate.label}</span><strong>${formatCurrency(estimate.totalCents)}</strong><small>Estimativa comercial</small>`;
       configurationValue.title = estimate.disclaimer;
       return;
     }
@@ -956,10 +1172,10 @@
     const finishPreset = finishGroup?.presets.find((preset) => preset.id === state.frontFinishId);
     const handle = selectedHandle();
     const includedServices = catalog.services.filter((service) => service.status === "included").map((service) => service.title);
-    finish.textContent = `Frentes: ${finishPreset?.label || selectedFrontFinishLabel()}. Caixaria: Branco TX. Puxador: ${handle.label}. Serviço incluso: ${includedServices.join(", ") || "nenhum"}.`;
+    finish.textContent = `Frentes: ${finishPreset?.label || selectedFrontFinishLabel()}. Caixaria: clara. Puxador: ${handle.label}. Serviço incluso: ${includedServices.join(", ") || "nenhum"}.`;
     const price = document.createElement("div");
     price.className = "price-state";
-    if (estimate.status === "demo") {
+    if (estimate.status === "legacy") {
       const label = document.createElement("span");
       label.textContent = estimate.label;
       const total = document.createElement("strong");
@@ -973,12 +1189,12 @@
         appendPriceBreakdownRow(composition, "Iluminação", formatCurrency(estimate.breakdown.accessoryCents), resolved?.["lighting-08"]?.visible ? "Iluminação embutida." : "Não incluída.");
       }
       appendPriceBreakdownRow(composition, "Puxadores", formatCurrency(estimate.breakdown.handleCents), `${handle.label} · ${includedHandleCount} módulo(s) aplicável(is).`);
-      appendPriceBreakdownRow(composition, "Frentes", formatCurrency(adjustments.frontCents), `${selectedFrontFinishLabel()} · ${mockImpactLabel(adjustments.frontCents)}.`);
-      appendPriceBreakdownRow(composition, "Pedra", formatCurrency(adjustments.stoneCents), `${selectedStoneLabel()} · ${mockImpactLabel(adjustments.stoneCents)}.`);
-      appendPriceBreakdownRow(composition, "Serviço", formatCurrency(adjustments.serviceCents), `${includedServices.join(", ") || "Nenhum"} · ${mockImpactLabel(adjustments.serviceCents)}.`);
+      appendPriceBreakdownRow(composition, "Frentes", formatCurrency(adjustments.frontCents), `${selectedFrontFinishLabel()} · ${valueImpactLabel(adjustments.frontCents)}.`);
+      appendPriceBreakdownRow(composition, "Pedra", formatCurrency(adjustments.stoneCents), `${selectedStoneLabel()} · ${valueImpactLabel(adjustments.stoneCents)}.`);
+      appendPriceBreakdownRow(composition, "Serviço", formatCurrency(adjustments.serviceCents), `${includedServices.join(", ") || "Nenhum"} · ${valueImpactLabel(adjustments.serviceCents)}.`);
       const reference = document.createElement("p");
       reference.className = "price-state__reference";
-      reference.textContent = `Referência de composição do mock: ${formatCurrency(priceBook.compositionBaseReferenceCents)}. Não integra o total.`;
+      reference.textContent = "Valores estimativos sujeitos à validação final de medidas e instalação.";
       const disclaimer = document.createElement("p");
       disclaimer.textContent = estimate.disclaimer;
       price.append(label, total, composition, reference, disclaimer);
@@ -986,6 +1202,69 @@
       price.innerHTML = `<span>Valor estimado</span><strong>${formatCurrency(estimate.totalCents)}</strong>`;
     } else {
       price.innerHTML = "<span>Valor do conjunto</span><strong>Em configuração</strong><p>Os valores só aparecem depois que a tabela comercial for publicada.</p>";
+    }
+    summaryContent.replaceChildren(list, finish, price);
+  }
+
+  function renderCurrentValue(resolved) {
+    const estimate = getEstimate(resolved);
+    if (!configurationValue) return;
+    if (estimate.status === "estimate") {
+      configurationValue.innerHTML = "<span>" + estimate.label + "</span><strong>" + formatCurrency(estimate.totalCents) + "</strong><small>Estimativa</small>";
+      configurationValue.title = estimate.disclaimer;
+      return;
+    }
+    configurationValue.innerHTML = "<span>Valor do conjunto</span><strong>Em configuração</strong>";
+    configurationValue.removeAttribute("title");
+  }
+
+  function globalItemLabel(id) {
+    const stone = catalog.options.stonePackages.find((item) => item.id === id);
+    if (stone) return stone.label;
+    if (id === "stone-skirting") return "Rodapé de pedra";
+    return catalog.services.find((service) => service.id === id)?.title || id;
+  }
+
+  function renderSummary(resolved) {
+    const estimate = getEstimate(resolved);
+    const list = document.createElement("ul");
+    list.className = "summary-list";
+    estimate.moduleEstimates?.forEach(({ item, estimate: itemEstimate }) => {
+      const itemRow = document.createElement("li");
+      const additions = [];
+      if (itemEstimate.finishCents) additions.push("acabamento +" + formatCurrency(itemEstimate.finishCents));
+      if (itemEstimate.handleCents) additions.push("puxador +" + formatCurrency(itemEstimate.handleCents));
+      if (itemEstimate.localCents) additions.push("pedra de cooktop +" + formatCurrency(itemEstimate.localCents));
+      itemRow.textContent = item.referenceLabel + " · " + item.title + " — " + formatCurrency(itemEstimate.totalCents) + (additions.length ? " (" + additions.join(", ") + ")" : "");
+      list.append(itemRow);
+    });
+
+    const finish = document.createElement("p");
+    finish.className = "summary-note";
+    finish.textContent = "Acabamentos e puxadores são configurados por módulo. Pedra e serviços abaixo impactam o conjunto uma única vez.";
+
+    const price = document.createElement("div");
+    price.className = "price-state";
+    if (estimate.status === "estimate") {
+      const label = document.createElement("span");
+      label.textContent = estimate.label;
+      const total = document.createElement("strong");
+      total.textContent = formatCurrency(estimate.totalCents);
+      const composition = document.createElement("dl");
+      composition.className = "price-state__breakdown";
+      appendPriceBreakdownRow(composition, "Módulos", formatCurrency(estimate.breakdown.modulesCents), estimate.moduleEstimates.length + " incluído(s).");
+      if (estimate.breakdown.finishesCents) appendPriceBreakdownRow(composition, "Acabamentos", "+" + formatCurrency(estimate.breakdown.finishesCents), "Aplicados somente aos módulos escolhidos.");
+      if (estimate.breakdown.handlesCents) appendPriceBreakdownRow(composition, "Puxadores", "+" + formatCurrency(estimate.breakdown.handlesCents), "Um valor por módulo aplicável.");
+      if (estimate.breakdown.localCents) appendPriceBreakdownRow(composition, "Pedra cooktop", "+" + formatCurrency(estimate.breakdown.localCents), "Inclusa no Módulo 02.");
+      if (estimate.breakdown.lightingCents) appendPriceBreakdownRow(composition, "Iluminação", "+" + formatCurrency(estimate.breakdown.lightingCents), "Serviço global com lateral incluída.");
+      estimate.global.items.filter((item) => item.cents).forEach((item) => {
+        appendPriceBreakdownRow(composition, globalItemLabel(item.id), "+" + formatCurrency(item.cents), item.scope === "stone" ? "Impacto global de pedra." : "Serviço global.");
+      });
+      const disclaimer = document.createElement("p");
+      disclaimer.textContent = estimate.disclaimer;
+      price.append(label, total, composition, disclaimer);
+    } else {
+      price.innerHTML = "<span>Valor do conjunto</span><strong>Em configuração</strong>";
     }
     summaryContent.replaceChildren(list, finish, price);
   }
@@ -1014,6 +1293,10 @@
     if (configurationAnnouncement) configurationAnnouncement.textContent = message;
   }
 
+  function shouldReduceMotion() {
+    return Boolean(global.matchMedia?.("(prefers-reduced-motion: reduce)").matches);
+  }
+
   function focusCurrentStep() {
     const panel = currentStep === "modules"
       ? modulesPanel
@@ -1025,7 +1308,7 @@
     const heading = panel.querySelector("h2");
     if (!heading) return;
     heading.focus({ preventScroll: true });
-    panel.scrollIntoView({ behavior: "smooth", block: "start" });
+    panel.scrollIntoView({ behavior: shouldReduceMotion() ? "auto" : "smooth", block: "start" });
   }
 
   function changeStep(nextStep, moveFocus) {
@@ -1039,6 +1322,7 @@
   renderSceneHotspotsFromData();
   renderFinishControlsFromData();
   renderHandleControlsFromData();
+  renderStonePackages();
   renderServices();
 
   const moduleToggles = [...document.querySelectorAll("[data-module-toggle]")];
@@ -1061,6 +1345,56 @@
   const resetFinishButton = document.getElementById("resetFinishButton");
 
   const renderStone = global.CasaStone.createRenderer(document.getElementById("stoneCanvas"), global.CASA_STONE_DATA);
+
+  function isMobileViewport() {
+    return Boolean(global.matchMedia?.("(max-width: 700px)").matches);
+  }
+
+  function syncPinnedSceneUi() {
+    // A mini-scene must never cover the detail header, its navigation or its
+    // close control. It returns as soon as the focused module is closed.
+    const detailIsOpen = Boolean(state.selectedEntityId);
+    const shouldDock = isMobileViewport() && mobileScenePinEnabled && mobileSceneIsMini && !detailIsOpen;
+    if (!shouldDock && viewerCard) mobileSceneAnchorHeight = Math.ceil(viewerCard.getBoundingClientRect().height);
+    document.body.classList.toggle("has-mobile-scene-pin", isMobileViewport() && mobileScenePinEnabled);
+    document.body.classList.toggle("is-mobile-scene-pinned", shouldDock);
+    document.documentElement.style.setProperty("--mobile-scene-anchor-height", shouldDock ? mobileSceneAnchorHeight + "px" : "0px");
+    if (viewerCard) requestAnimationFrame(() => {
+      const height = Math.ceil(viewerCard.getBoundingClientRect().height);
+      document.documentElement.style.setProperty("--mobile-pip-height", shouldDock ? height + "px" : "0px");
+    });
+    if (mobileScenePin) {
+      mobileScenePin.setAttribute("aria-pressed", String(mobileScenePinEnabled));
+      mobileScenePin.textContent = mobileScenePinEnabled ? "Liberar cena" : "Fixar cena";
+    }
+    if (lastResolved) updateSceneHotspots(lastResolved);
+  }
+
+  function setMobileScenePinEnabled(enabled) {
+    mobileScenePinEnabled = Boolean(enabled);
+    if (!mobileScenePinEnabled) mobileSceneIsMini = false;
+    syncPinnedSceneUi();
+    announce(mobileScenePinEnabled ? "Cena fixada para contexto durante a configuração." : "Cena liberada para o fluxo normal.");
+  }
+
+  if (viewerPinSentinel && global.IntersectionObserver) {
+    const pinObserver = new global.IntersectionObserver((entries) => {
+      const entry = entries[0];
+      const passedAnchor = entry && entry.boundingClientRect.top < 0 && !entry.isIntersecting;
+      const nextMini = Boolean(isMobileViewport() && mobileScenePinEnabled && passedAnchor);
+      if (nextMini === mobileSceneIsMini) return;
+      mobileSceneIsMini = nextMini;
+      syncPinnedSceneUi();
+      if (nextMini) announce("Cena reduzida para contexto. Use a lista para selecionar módulos.");
+    }, { threshold: 0 });
+    pinObserver.observe(viewerPinSentinel);
+  }
+
+  if (global.ResizeObserver && viewerCard) {
+    new global.ResizeObserver(() => syncPinnedSceneUi()).observe(viewerCard);
+  }
+
+  global.addEventListener("resize", syncPinnedSceneUi);
 
   function syncFingerprint() {
     const value = fingerprint.computeFingerprint(scene, state);
@@ -1087,11 +1421,27 @@
     });
   }
 
+  function syncFinishAppearance() {
+    finishLayers.forEach((layer) => {
+      const group = layer.closest(".layer-group");
+      const product = catalogByEntityId.get(group?.dataset.entityId);
+      if (!product?.commercial?.finishEligible) return;
+      const finishId = selectedModuleFinish(product);
+      const finish = catalog.options.finishes.find((item) => item.id === finishId) || catalog.options.finishes[0];
+      layer.classList.remove("is-texture");
+      layer.classList.add("is-color");
+      layer.style.backgroundImage = "none";
+      layer.style.backgroundColor = finish.color;
+      layer.style.setProperty("--finish-opacity", String(finishes.resolveOverlayOpacity(finish, finish.color)));
+    });
+  }
+
   function syncLayerVisibility() {
     renderStone(state);
     const resolved = visibility.resolveVisibility(scene, state);
     lastResolved = resolved;
     syncFinishMasks(resolved);
+    syncFinishAppearance();
     layerGroups.forEach((layer) => {
       const result = resolved[layer.dataset.entityId];
       const isVisible = Boolean(result?.visible);
@@ -1104,8 +1454,12 @@
     updateAccessoryControls(resolved);
     updateHandleControls();
     updateSelection(resolved);
+    renderFinishControlsFromData();
+    renderStonePackages();
+    renderServices();
     renderCurrentValue(resolved);
     syncStep(resolved);
+    syncPinnedSceneUi();
   }
 
   function setEntityVisibility(entityId, isVisible) {
@@ -1166,6 +1520,44 @@
     });
     syncLayerVisibility();
     updateVisibleCount();
+  }
+
+  function storeDetailOrigin(entityId, source) {
+    const active = document.activeElement;
+    const fallback = source === "scene"
+      ? sceneHotspots.querySelector('[data-select-scene-entity="' + entityId + '"]')
+      : moduleList.querySelector('[data-select-entity="' + entityId + '"]');
+    detailOrigin = { entityId, element: active instanceof HTMLElement && active.isConnected ? active : fallback };
+  }
+
+  function focusDetailClose() {
+    requestAnimationFrame(() => {
+      moduleDetail.querySelector("[data-close-module-detail]")?.focus({ preventScroll: true });
+    });
+  }
+
+  function restoreDetailOrigin(origin) {
+    requestAnimationFrame(() => {
+      const fallback = moduleList.querySelector('[data-select-entity="' + (origin?.entityId || "") + '"]');
+      const target = origin?.element?.isConnected ? origin.element : fallback || document.getElementById("modulesHeading");
+      target?.focus({ preventScroll: true });
+    });
+  }
+
+  function selectEntity(entityId, source) {
+    const product = catalogByEntityId.get(entityId);
+    if (!product) return;
+    if (source !== "detail-navigation") storeDetailOrigin(entityId, source);
+    else detailOrigin = { entityId, element: moduleList.querySelector('[data-select-entity="' + entityId + '"]') };
+    state.selectedEntityId = entityId;
+    activeFinishModuleId = entityId;
+    if (currentStep !== "modules") currentStep = "modules";
+    syncLayerVisibility();
+    announce("Ficha de " + product.referenceLabel + ", " + product.title + ", aberta.");
+    if (source === "scene") {
+      requestAnimationFrame(() => moduleDetail.scrollIntoView({ behavior: shouldReduceMotion() ? "auto" : "smooth", block: "nearest" }));
+    }
+    focusDetailClose();
   }
 
   function clearSelectedSwatch() {
@@ -1271,14 +1663,20 @@
     syncFingerprint();
   });
 
-  swatches.forEach((swatch) => {
-    swatch.addEventListener("click", () => applyColor(swatch.dataset.color, swatch));
+  finishTargetSelect?.addEventListener("change", () => {
+    activeFinishModuleId = finishTargetSelect.value;
+    renderFinishControlsFromData();
+    renderHandleControlsFromData();
   });
 
-  if (customColor) customColor.addEventListener("input", () => applyColor(customColor.value));
-  if (textureButton) textureButton.addEventListener("click", () => textureInput.click());
-  if (textureInput) textureInput.addEventListener("change", () => applyTexture(textureInput.files?.[0]));
-  resetFinishButton.addEventListener("click", resetFinish);
+  finishSwatches.addEventListener("click", (event) => {
+    const button = event.target.closest("[data-finish-id]");
+    const product = catalogByEntityId.get(ensureFinishTarget());
+    if (!button || !product) return;
+    core.setModuleSelection(state, product.entityId, { finishId: button.dataset.finishId });
+    syncLayerVisibility();
+    announce("Acabamento de " + product.title + " atualizado.");
+  });
 
   moduleList.addEventListener("click", (event) => {
     const button = event.target.closest("[data-select-entity]");
@@ -1295,9 +1693,11 @@
     }
     const close = event.target.closest("[data-close-module-detail]");
     if (!close) return;
+    const origin = detailOrigin;
     state.selectedEntityId = null;
     syncLayerVisibility();
     announce("Detalhes do módulo fechados.");
+    restoreDetailOrigin(origin);
   });
 
   sceneHotspots.addEventListener("click", (event) => {
@@ -1307,10 +1707,14 @@
   });
 
   document.querySelectorAll("[data-step]").forEach((button) => {
+    const stepName = button.querySelector("[data-mobile-label]")?.textContent?.trim();
+    if (stepName) button.setAttribute("aria-label", stepName);
     button.addEventListener("click", () => {
       changeStep(button.dataset.step, true);
     });
   });
+
+  mobileScenePin?.addEventListener("click", () => setMobileScenePinEnabled(!mobileScenePinEnabled));
 
   nextStepButton.addEventListener("click", () => {
     const nextByStep = { modules: "finishes", finishes: "services", services: "summary", summary: "modules" };
@@ -1319,12 +1723,12 @@
 
   handleOptions?.addEventListener("click", (event) => {
     const button = event.target.closest("[data-handle-id]");
-    if (!button) return;
-    state.handlePresetId = button.dataset.handleId;
-    syncFingerprint();
+    const product = catalogByEntityId.get(ensureFinishTarget());
+    if (!button || !product?.commercial?.handleEligible) return;
+    core.setModuleSelection(state, product.entityId, { handleId: button.dataset.handleId });
     syncLayerVisibility();
-    const handle = selectedHandle();
-    announce(handle.id === "none" ? "Puxador será definido depois." : `${handle.label} aplicado à simulação.`);
+    const handle = selectedHandle(product);
+    announce(handle.id === "none" ? "Puxador será definido depois." : handle.label + " aplicado a " + product.title + ".");
   });
 
   lightingToggle.addEventListener("change", () => {
@@ -1332,42 +1736,47 @@
     updateVisibleCount();
   });
 
-  const stoneColor = document.getElementById("stoneColor");
-  const resetStone = document.getElementById("resetStone");
-  const stoneButtons = [...document.querySelectorAll("[data-stone-color]")];
-  function applyStone(color) {
-    state.stoneColor = color;
-    state.stoneFinishId = color ? "stone-custom" : "stone-original";
-    if (color) stoneColor.value = color;
-    resetStone.disabled = !color;
-    stoneButtons.forEach(button => {
-      const selected = button.dataset.stoneColor === color;
-      button.classList.toggle("is-selected", selected);
-      button.setAttribute("aria-pressed", String(selected));
-    });
-    document.getElementById("stoneStatus").textContent = "Simulação de cor sobre a textura existente.";
-    renderStone(state);
-    syncFingerprint();
+  function setStonePackage(stonePackageId) {
+    const stone = catalog.options.stonePackages.find((item) => item.id === stonePackageId);
+    if (!stone) return;
+    state.globalSelections = { ...state.globalSelections, stonePackageId };
+    state.stoneFinishId = stonePackageId;
+    state.stoneColor = stone.color;
     syncLayerVisibility();
+    announce(stone.label + " aplicado ao conjunto.");
   }
-  stoneButtons.forEach(button => button.addEventListener("click", () => applyStone(button.dataset.stoneColor)));
-  stoneColor.addEventListener("input", () => applyStone(stoneColor.value));
-  resetStone.addEventListener("click", () => applyStone(null));
+
+  stonePackageOptions?.addEventListener("click", (event) => {
+    const button = event.target.closest("[data-stone-package-id]");
+    if (button) setStonePackage(button.dataset.stonePackageId);
+  });
+
+  stoneSkirtingToggle?.addEventListener("change", () => {
+    core.setGlobalService(state, "stone-skirting", stoneSkirtingToggle.checked);
+    syncLayerVisibility();
+  });
+
+  servicesChecklist?.addEventListener("change", (event) => {
+    const input = event.target.closest("[data-global-service-id]");
+    if (!input) return;
+    core.setGlobalService(state, input.dataset.globalServiceId, input.checked);
+    syncLayerVisibility();
+  });
 
   restoreButton.addEventListener("click", () => {
     if (!global.confirm("Recomeçar a configuração? Suas escolhas atuais serão removidas.")) return;
     state = core.createInitialState(scene);
     setAllVisibility(true);
-    resetFinish();
-    applyStone(null);
     alignmentGrid.classList.remove("is-visible");
     if (gridButton) gridButton.setAttribute("aria-pressed", "false");
-    syncFingerprint();
+    activeFinishModuleId = null;
+    detailOrigin = null;
+    syncLayerVisibility();
   });
 
-  if (finishMode === "original") resetFinishButton.disabled = true;
   syncLayerVisibility();
   updateVisibleCount();
+  syncPinnedSceneUi();
   global.CASA_EM_MODULOS_DEBUG = Object.freeze({
     getState: () => state,
     getVisibility: () => visibility.resolveVisibility(scene, state),

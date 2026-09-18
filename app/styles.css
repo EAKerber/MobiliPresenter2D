@@ -432,6 +432,16 @@ legend { margin-bottom: 9px; color: rgba(255, 255, 255, 0.43); font-size: 12px; 
 .finish-help { margin: 0; color: var(--muted); font-size: 12px; line-height: 1.4; }
 .handle-fieldset { display: grid; gap: 9px; }
 .handle-options { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 7px; }
+.finish-target { display: grid; gap: 6px; min-width: 0; color: var(--muted); font-size: 12px; }
+.finish-target select { min-width: 0; min-height: 42px; border: 1px solid var(--border); border-radius: 9px; padding: 8px 10px; background: rgba(255,255,255,.035); color: var(--text); }
+.global-options { display: grid; gap: 7px; }
+.global-option { display: grid; min-width: 0; gap: 3px; padding: 10px; border: 1px solid var(--border); border-radius: 9px; background: rgba(255,255,255,.025); color: var(--text); cursor: pointer; text-align: left; }
+.global-option:hover { background: rgba(255,255,255,.07); }
+.global-option.is-selected { border-color: var(--accent-strong); background: rgba(203,188,170,.13); }
+.global-option strong, .global-option small { min-width: 0; overflow-wrap: anywhere; }
+.global-option strong { font-size: 13px; }
+.global-option small { color: var(--muted); font-size: 11px; line-height: 1.35; }
+.viewer-pin { display: none; }
 .handle-option { display: grid; grid-template-columns: 32px minmax(0, 1fr); align-items: center; min-width: 0; gap: 8px; padding: 9px; border: 1px solid var(--border); border-radius: 9px; background: rgba(255,255,255,.025); color: var(--text); text-align: left; cursor: pointer; }
 .handle-option:hover { background: rgba(255,255,255,.07); }
 .handle-option.is-selected { border-color: var(--accent-strong); background: rgba(203,188,170,.13); }
@@ -516,8 +526,12 @@ legend { margin-bottom: 9px; color: rgba(255, 255, 255, 0.43); font-size: 12px; 
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .module-detail__carousel-stage,
-  .module-detail__carousel-dot { transition: none; }
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: .01ms !important;
+  }
 }
 
 /* Keep the result visible while reaching the finish controls. */
@@ -538,5 +552,48 @@ legend { margin-bottom: 9px; color: rgba(255, 255, 255, 0.43); font-size: 12px; 
   }
 }
 @media (max-width: 700px) {
+  .workspace { gap: 8px; }
+  .viewer-anchor { min-width: 0; min-height: 0; }
+  .viewer-pin-sentinel { block-size: 1px; }
   .viewer-card { position: static; width: 100%; }
+  .viewer-pin { display: inline-flex; align-self: flex-start; min-height: 36px; padding: 6px 9px; font-size: 11px; }
+  .flow-nav { top: calc(8px + env(safe-area-inset-top) + var(--mobile-pip-height, 0px)); margin-top: 8px; }
+  .flow-actions { position: static; padding: 0 0 calc(8px + env(safe-area-inset-bottom)); background: transparent; backdrop-filter: none; }
+  .controls { padding-bottom: calc(24px + env(safe-area-inset-bottom)); }
+  .panel h2 { scroll-margin-top: calc(86px + var(--mobile-pip-height, 0px)); }
+  body.is-mobile-scene-pinned .viewer-anchor { min-height: var(--mobile-scene-anchor-height, 0px); }
+  body.is-mobile-scene-pinned .viewer-card {
+    position: fixed;
+    top: calc(8px + env(safe-area-inset-top));
+    right: 8px;
+    z-index: 50;
+    width: clamp(144px, 45vw, 176px);
+    border-radius: 11px;
+    box-shadow: 0 10px 28px rgba(0,0,0,.35);
+  }
+  body.is-mobile-scene-pinned .viewer-card__footer {
+    position: absolute;
+    right: 4px;
+    bottom: 4px;
+    z-index: 2;
+    display: block;
+    min-height: 0;
+    padding: 0;
+    border: 0;
+    background: transparent;
+  }
+  body.is-mobile-scene-pinned .viewer-card__footer p { display: none; }
+  body.is-mobile-scene-pinned .viewer-pin {
+    min-height: 28px;
+    padding: 4px 7px;
+    border-color: rgba(255,255,255,.7);
+    background: rgba(255,255,255,.94);
+    box-shadow: 0 2px 8px rgba(0,0,0,.18);
+  }
+  body.is-mobile-scene-pinned .viewer { border-radius: 10px; }
+  body.is-mobile-scene-pinned .scene-hotspots { pointer-events: none; }
+}
+
+@media (min-width: 701px) {
+  .viewer-pin { display: none !important; }
 }

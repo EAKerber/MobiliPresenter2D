@@ -34,8 +34,8 @@
         "module-07",
         "lighting-08"
       ],
-      frontFinishId: "gianduia-original",
-      stoneFinishId: "stone-original",
+      frontFinishId: "base-light",
+      stoneFinishId: "stone-existing",
       handlePresetId: "none",
       lightingPresetId: "on",
       decorVisible: [],
@@ -247,7 +247,7 @@
         alphaBounds: { x: 715, y: 266, width: 534, height: 113 },
         defaultVisible: true,
         controllable: true,
-        requiresVisibleIds: ["module-04", "module-06"],
+        requiresVisibleIds: ["module-04"],
         hostId: null,
         finishGroups: [],
         tags: ["lighting"]
@@ -318,8 +318,8 @@
     finishGroups: [
       {
         id: "fronts-all",
-        label: "Acabamento geral das frentes",
-        scope: "global",
+        label: "Acabamento das frentes",
+        scope: "module",
         targets: [
           "module-01",
           "module-02",
@@ -329,13 +329,9 @@
           "module-06",
           "module-07"
         ],
-        defaultPresetId: "gianduia-original",
+        defaultPresetId: "base-light",
         presets: [
-          { id: "gianduia-color", label: "Cinza Gianduia", strategy: "masked-overlay", color: "#918981", overlayOpacity: 0.68 },
-          { id: "white-tx", label: "Branco TX", strategy: "masked-overlay", color: "#eeeae3", overlayOpacity: 0.84 },
-          { id: "black", label: "Preto", strategy: "masked-overlay", color: "#252422", overlayOpacity: 0.78 },
-          { id: "olive", label: "Verde oliva", strategy: "masked-overlay", color: "#69705f", overlayOpacity: 0.72 },
-          { id: "petroleum-blue", label: "Azul petróleo", strategy: "masked-overlay", color: "#354f55", overlayOpacity: 0.72 }
+          { id: "base-light", label: "Base clara", strategy: "masked-overlay", color: "#eeeae3", overlayOpacity: 0.84 }
         ]
       },
       {
@@ -343,9 +339,9 @@
         label: "Acabamento geral das pedras",
         scope: "global",
         targets: ["stone-02", "stone-03"],
-        defaultPresetId: "stone-original",
+        defaultPresetId: "stone-existing",
         presets: [
-          { id: "stone-original", label: "Pedra original", strategy: "asset-original" }
+          { id: "stone-existing", label: "Pedra existente", strategy: "asset-original" }
         ]
       }
     ],

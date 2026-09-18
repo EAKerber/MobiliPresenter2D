@@ -21,9 +21,12 @@
           { source: "promob-dxf", status: "confirmed", reference: "placement:LAYER42-57" }
         ]
       },
-      benefits: ["Portas com fechamento amortecido", "Prateleira fixa para organização", "Caixaria interna Branco TX"],
+      benefits: ["Portas com fechamento amortecido", "Prateleira fixa para organização", "Caixaria interna clara"],
       components: ["Dobradiças com amortecimento", "MDF 18 mm", "Fundo 6 mm duplamente melamínico"],
-      requirements: [], publicPriceCents: null
+      frontLayout: { status: "count-confirmed", pattern: "two-doors", frontCount: 2 },
+      requirements: [], publicPriceCents: null,
+      commercial: { finishEligible: true, handleEligible: true, handleFrontCount: 2, mandatoryLocalChargeIds: [] },
+      drawingEvidence: "front-count-confirmed"
     },
     {
       entityId: "module-02", referenceLabel: "Módulo 02", category: "Inferior", title: "Inferior do fogão",
@@ -38,7 +41,9 @@
       },
       benefits: ["Espaço para forno embutido", "Integra cooktop e acabamento da bancada", "Preparo elétrico previsto no módulo"],
       components: ["Cabo PP 4 mm", "2 tomadas de 20 A", "Estrutura em MDF 18 mm"],
-      requirements: ["Prever alimentação do fogão e do forno conforme especificação técnica."], publicPriceCents: null
+      requirements: ["Prever alimentação do fogão e do forno conforme especificação técnica."], publicPriceCents: null,
+      commercial: { finishEligible: true, handleEligible: false, handleFrontCount: 0, mandatoryLocalChargeIds: ["mandatory-cooktop-stone"] },
+      drawingEvidence: "envelope-only"
     },
     {
       entityId: "module-03", referenceLabel: "Módulo 03", category: "Inferior", title: "Inferior da pia",
@@ -71,7 +76,9 @@
           { kind: "door", spanMm: 400 }
         ]
       },
-      requirements: ["Verificar os pontos hidráulicos e elétricos previstos para a pia."], publicPriceCents: null
+      requirements: ["Verificar os pontos hidráulicos e elétricos previstos para a pia."], publicPriceCents: null,
+      commercial: { finishEligible: true, handleEligible: true, handleFrontCount: 6, mandatoryLocalChargeIds: [] },
+      drawingEvidence: "geometry-confirmed"
     },
     {
       entityId: "module-04", referenceLabel: "Módulo 04", category: "Estrutural", title: "Lateral da geladeira",
@@ -88,9 +95,11 @@
         kind: "panel", faceWidthMm: 600, faceHeightMm: 2400, thicknessMm: 18,
         faceHorizontalLabel: "P", extrusionLabel: "E"
       },
-      benefits: ["Sustenta o aéreo da geladeira", "Alinha o conjunto pela frente", "Organiza a fiação da iluminação"],
+      benefits: ["Acabamento lateral para a área da geladeira", "Alinha o conjunto pela frente", "Organiza a fiação da iluminação"],
       components: ["Painel MDF 18 mm", "Fita de borda na cor da peça", "Ponto para interruptor de iluminação"],
-      requirements: ["Necessária para manter o aéreo da geladeira e a iluminação compatíveis."], publicPriceCents: null
+      requirements: ["Ponto estrutural para a instalação da iluminação embutida."], publicPriceCents: null,
+      commercial: { finishEligible: true, handleEligible: false, handleFrontCount: 0, mandatoryLocalChargeIds: [] },
+      drawingEvidence: "geometry-confirmed"
     },
     {
       entityId: "module-05", referenceLabel: "Módulo 05", category: "Aéreo", title: "Aéreo do fogão",
@@ -103,9 +112,12 @@
           { source: "promob-dxf", status: "confirmed", reference: "placement:LAYER60-75" }
         ]
       },
-      benefits: ["Organização acima da área de preparo", "Fechamento amortecido", "Caixaria interna Branco TX"],
+      benefits: ["Organização acima da área de preparo", "Fechamento amortecido", "Caixaria interna clara"],
       components: ["Dobradiças com amortecimento", "Prateleira fixa", "MDF 18 mm"],
-      requirements: [], publicPriceCents: null
+      frontLayout: { status: "count-confirmed", pattern: "two-doors", frontCount: 2 },
+      requirements: [], publicPriceCents: null,
+      commercial: { finishEligible: true, handleEligible: true, handleFrontCount: 2, mandatoryLocalChargeIds: [] },
+      drawingEvidence: "front-count-confirmed"
     },
     {
       entityId: "module-06", referenceLabel: "Módulo 06", category: "Aéreo", title: "Aéreo da pia",
@@ -121,7 +133,10 @@
       },
       benefits: ["Nicho integrado para micro-ondas", "Porta basculante com pistão", "Iluminação embutida compatível"],
       components: ["Dobradiças amortecidas", "Pistão para porta basculante", "Espera para micro-ondas"],
-      requirements: ["Prever tomada para o forno micro-ondas."], publicPriceCents: null
+      frontLayout: { status: "count-confirmed", pattern: "two-doors-and-lift", frontCount: 3 },
+      requirements: ["Prever tomada para o forno micro-ondas."], publicPriceCents: null,
+      commercial: { finishEligible: true, handleEligible: true, handleFrontCount: 3, mandatoryLocalChargeIds: [] },
+      drawingEvidence: "front-count-confirmed"
     },
     {
       entityId: "module-07", referenceLabel: "Módulo 07", category: "Aéreo", title: "Aéreo da geladeira",
@@ -135,25 +150,39 @@
           { source: "promob-dxf", status: "confirmed", reference: "placement:LAYER99-113" }
         ]
       },
-      benefits: ["Completa o aproveitamento vertical", "Fechamento amortecido", "Caixaria interna Branco TX"],
+      benefits: ["Completa o aproveitamento vertical", "Fechamento amortecido", "Caixaria interna clara"],
       components: ["Dobradiças com amortecimento", "Prateleira fixa", "MDF 18 mm"],
-      requirements: [], publicPriceCents: null
+      frontLayout: { status: "count-confirmed", pattern: "two-doors", frontCount: 2 },
+      requirements: [], publicPriceCents: null,
+      commercial: { finishEligible: true, handleEligible: true, handleFrontCount: 2, mandatoryLocalChargeIds: [] },
+      drawingEvidence: "front-count-confirmed"
     }
   ];
 
   const catalog = {
-    schemaVersion: "ProductCatalog2D 0.1",
+    schemaVersion: "ProductCatalog2D 1.0",
     technicalSource: {
       repository: "EAKerber/MobiliPresenter",
       commit: "4d46da44c08dcafbb53c52c0375e14651981a93b",
       profile: "PromobDxfSourceProfile 0.1.0",
       rawSourceAvailability: "profile-only-in-this-checkout"
     },
-    pricingStatus: "awaiting-published-price-book",
+    pricingStatus: "commercial-estimate-published",
     modules,
     options: {
-      fronts: ["gianduia-color", "white-tx", "black", "olive", "petroleum-blue"],
-      stones: ["#34383d", "#d8d8d2", "#968371"],
+      finishes: [
+        { id: "base-light", publicLabel: "Base clara", color: "#eeeae3", status: "published" },
+        { id: "tone-15-a", publicLabel: "Tom especial 01", color: "#918981", status: "pending-assets" },
+        { id: "tone-15-b", publicLabel: "Tom especial 02", color: "#69705f", status: "pending-assets" },
+        { id: "tone-15-c", publicLabel: "Tom especial 03", color: "#354f55", status: "pending-assets" },
+        { id: "tone-25-a", publicLabel: "Tom intenso 01", color: "#252422", status: "pending-assets" },
+        { id: "tone-25-b", publicLabel: "Tom intenso 02", color: "#75675d", status: "pending-assets" }
+      ],
+      stonePackages: [
+        { id: "stone-existing", label: "Pedra existente", description: "Mantém a pedra atual do ambiente.", color: null },
+        { id: "stone-new-light", label: "Pedra nova clara + inox", description: "Impacta todo o conjunto.", color: "#d8d8d2" },
+        { id: "stone-new-dark", label: "Pedra nova escura + inox", description: "Impacta todo o conjunto.", color: "#34383d" }
+      ],
       handles: [
         { id: "none", label: "Definir depois", description: "Sem adicional na simulação.", orientation: "Portas na vertical · gavetas na horizontal" },
         { id: "tango-chrome", label: "Tango / Íris", description: "Acabamento cromado.", orientation: "Portas na vertical · gavetas na horizontal" },
@@ -165,16 +194,12 @@
       {
         entityId: "lighting-08", sku: "CM-08", title: "Iluminação embutida",
         description: "Luz sob os aéreos para a área de bancada.",
-        requirements: ["Requer a lateral da geladeira e o aéreo da pia."], publicPriceCents: null
+        requirements: ["Requer a lateral da geladeira."], publicPriceCents: null
       }
     ],
     services: [
-      {
-        id: "base-stone",
-        title: "Pedra base",
-        description: "Prevista na composição inicial; a escolha de cor continua em Acabamentos.",
-        status: "included"
-      }
+      { id: "move-stone", title: "Mover pedra", description: "Reposicionamento da pedra como serviço global." },
+      { id: "tempered-glass", title: "Vidro temperado 8 mm", description: "Complemento global para a composição." }
     ]
   };
 
