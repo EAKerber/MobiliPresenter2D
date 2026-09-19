@@ -1,6 +1,7 @@
 from pathlib import Path
 from collections import deque
 import json
+import subprocess
 from PIL import Image, ImageFilter
 
 ROOT = Path(".")
@@ -21,123 +22,8 @@ def replace_between(path, start, end, replacement):
     if b < 0: raise SystemExit(f"PATCH_END:{path}:{end}")
     p.write_text(text[:a]+replacement+text[b:])
 
-# --- Derive front geometry guides from the same finish masks that expose the real visual seams.
-EXPECTED = {"01":2, "05":2, "06":3, "07":2}
-
-def components(binary, width, height):
-    visited=bytearray(width*height)
-    found=[]
-    for start,value in enumerate(binary):
-        if not value or visited[start]:
-            continue
-        q=deque([start]); visited[start]=1
-        area=0; minx=width; miny=height; maxx=-1; maxy=-1
-        while q:
-            idx=q.popleft(); area+=1
-            y,x=divmod(idx,width)
-            minx=min(minx,x); maxx=max(maxx,x); miny=min(miny,y); maxy=max(maxy,y)
-            if x>0:
-                n=idx-1
-                if binary[n] and not visited[n]: visited[n]=1; q.append(n)
-            if x+1<width:
-                n=idx+1
-                if binary[n] and not visited[n]: visited[n]=1; q.append(n)
-            if y>0:
-                n=idx-width
-                if binary[n] and not visited[n]: visited[n]=1; q.append(n)
-            if y+1<height:
-                n=idx+width
-                if binary[n] and not visited[n]: visited[n]=1; q.append(n)
-        found.append({"area":area,"bbox":(minx,miny,maxx+1,maxy+1)})
-    return found
-
-def internal_lines(rects):
-    edges=[]
-    tol=0.035
-    for r in rects:
-        x0,y0,x1,y1=r
-        if x0>tol: edges.append(["v",x0,y0,y1])
-        if x1<1-tol: edges.append(["v",x1,y0,y1])
-        if y0>tol: edges.append(["h",y0,x0,x1])
-        if y1<1-tol: edges.append(["h",y1,x0,x1])
-    merged=[]
-    for edge in sorted(edges,key=lambda e:(e[0],e[1],e[2],e[3])):
-        orient,coord,a,b=edge
-        if b-a < .10: continue
-        match=None
-        for existing in merged:
-            if existing[0]!=orient or abs(existing[1]-coord)>.028: continue
-            overlap=max(0,min(existing[3],b)-max(existing[2],a))
-            if overlap >= .35*min(existing[3]-existing[2],b-a):
-                match=existing; break
-        if match:
-            match[1]=(match[1]+coord)/2
-            match[2]=min(match[2],a); match[3]=max(match[3],b)
-        else:
-            merged.append([orient,coord,a,b])
-    lines=[]
-    for orient,coord,a,b in merged:
-        if orient=="v":
-            lines.append({"x1":coord,"y1":a,"x2":coord,"y2":b})
-        else:
-            lines.append({"x1":a,"y1":coord,"x2":b,"y2":coord})
-    return [{k:round(v,4) for k,v in line.items()} for line in lines]
-
-def derive(key, expected):
-    alpha=Image.open(MASK_DIR/f"{key}.png").convert("RGBA").getchannel("A")
-    bbox=alpha.getbbox()
-    if not bbox: raise SystemExit(f"GUIDE_EMPTY:{key}")
-    crop=alpha.crop(bbox)
-    w,h=crop.size
-    chosen=None
-    attempts=[]
-    for erosion in [1,3,5,7,9]:
-        work=crop if erosion==1 else crop.filter(ImageFilter.MinFilter(erosion))
-        raw=work.tobytes()
-        binary=bytearray(1 if value>=96 else 0 for value in raw)
-        active=sum(binary)
-        comps=components(binary,w,h)
-        meaningful=[c for c in comps if c["area"]>=max(40,int(active*.015))]
-        meaningful.sort(key=lambda c:c["area"],reverse=True)
-        selected=meaningful[:expected]
-        coverage=sum(c["area"] for c in selected)/max(active,1)
-        attempts.append({"erosion":erosion,"components":len(meaningful),"coverage":round(coverage,4)})
-        if len(selected)==expected and coverage>=.66:
-            chosen=(erosion,selected,coverage); break
-    if not chosen:
-        raise SystemExit("GUIDE_COMPONENTS:"+key+":"+json.dumps(attempts))
-    erosion,selected,coverage=chosen
-    rects=[]
-    for comp in selected:
-        x0,y0,x1,y1=comp["bbox"]
-        rects.append([round(x0/w,4),round(y0/h,4),round(x1/w,4),round(y1/h,4)])
-    rects.sort(key=lambda r:(r[1],r[0]))
-    lines=internal_lines(rects)
-    vertical=sum(1 for line in lines if abs(line["x1"]-line["x2"])<.001)
-    horizontal=sum(1 for line in lines if abs(line["y1"]-line["y2"])<.001)
-    if vertical<1:
-        raise SystemExit(f"GUIDE_NO_VERTICAL:{key}:{rects}:{lines}")
-    if key=="06" and horizontal<1:
-        raise SystemExit(f"GUIDE_NO_HORIZONTAL:{key}:{rects}:{lines}")
-    return {
-        "source":"finish-mask-components",
-        "sourceMask":f"assets/kitchen/masks/{key}.png",
-        "erosionPx":erosion,
-        "componentCount":expected,
-        "coverage":round(coverage,4),
-        "rects":[{"x":r[0],"y":r[1],"width":round(r[2]-r[0],4),"height":round(r[3]-r[1],4)} for r in rects],
-        "lines":lines,
-        "attempts":attempts,
-    }
-
-guides={f"module-{key}":derive(key,count) for key,count in EXPECTED.items()}
-guide_js='''(function (global) {
-  "use strict";
-  global.CASA_FRONT_GUIDES = Object.freeze(%s);
-})(window);
-''' % json.dumps(guides,ensure_ascii=False,sort_keys=True,indent=2)
-(APP/"data/front-guide-data.js").write_text(guide_js)
-print("FRONT_GUIDES",json.dumps(guides,sort_keys=True))
+# --- Derive front geometry guides from the persistent seam-energy builder.
+subprocess.run(["python", "app/tools/build-front-guides.py"], check=True)
 
 # --- Base white: visibly cleaner/lighter while seams remain independent.
 replace_once(
@@ -409,8 +295,8 @@ addition='''
 - [x] Browser gate cobre drag com pointerup fora do stage e wheel horizontal.
 
 ## B13 — SVG guiado pelas seams reais
-- [x] Derivar componentes das máscaras de acabamento dos módulos com frente count-confirmed.
-- [x] Gerar \`data/front-guide-data.js\` determinístico a partir das máscaras 01/05/06/07.
+- [x] Derivar linhas internas a partir da energia das máscaras estruturais shadow/highlight dos módulos count-confirmed.
+- [x] Gerar \`data/front-guide-data.js\` determinístico a partir das seams medidas em 01/05/06/07.
 - [x] Preservar layout técnico confirmado do Módulo 03 como fonte prioritária.
 - [x] Para layouts apenas count-confirmed, usar linhas internas derivadas dos componentes visuais em vez da heurística fixa 50/50 e 34%.
 - [x] Aplicar os mesmos guides à vista frontal e à face frontal isométrica.
