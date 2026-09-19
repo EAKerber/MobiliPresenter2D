@@ -22,3 +22,33 @@ must precede donor transfer, deterministic rendering or generation.
 
 Only the residual portion that has no valid underlayer should enter
 reconstruction authoring.
+
+
+## Correction after alpha-confidence and RGB identity audits
+
+The original v0.1 interpretation was deliberately conservative but semantically
+too strong.
+
+The current Module 02 layer has a wide low-alpha ramp to the right of x=744.
+Most of that ramp is not opaque hidden-face material:
+
+- x=743..744 is essentially opaque;
+- x=745..751 is primarily alpha 7..19;
+- the low-alpha RGB is a dark shadow/compositing value, not an opaque side-face color.
+
+The opaque x=743..744 strip also tracks the base scene closely and carries
+background-aligned row transitions.
+
+Therefore this document's original shorthand
+
+`occluded canonical underlayer -> C0 reuse`
+
+is superseded by:
+
+`candidate underlayer -> alpha-confidence -> semantic identity -> C0 reuse only if both pass`.
+
+For BMC-01 the opaque strip remains useful as contact evidence, but the full
+hidden-side appearance now prefers the clean Module 01 carcass-side donor.
+
+See:
+`docs/work/bmc-01-appearance-evidence-findings-v0.1.md`.
