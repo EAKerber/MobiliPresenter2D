@@ -1,0 +1,43 @@
+{
+  "schemaVersion": "SceneProjectiveConsistencyProbe 0.1",
+  "sceneId": "cozinha-01",
+  "canvas": [1536, 1024],
+  "thresholds": [32, 64, 128, 192],
+  "frontMasks": [
+    {"id":"module-01","mask":"app/assets/kitchen/masks/01.png"},
+    {"id":"module-02","mask":"app/assets/kitchen/masks/02.png"},
+    {"id":"module-03","mask":"app/assets/kitchen/masks/03.png"},
+    {"id":"module-05","mask":"app/assets/kitchen/masks/05.png"},
+    {"id":"module-06","mask":"app/assets/kitchen/masks/06.png"},
+    {"id":"module-07","mask":"app/assets/kitchen/masks/07.png"}
+  ],
+  "module01SideProbe": {
+    "layer":"app/assets/kitchen/layers/01_modulo_lavanderia.png",
+    "frontMask":"app/assets/kitchen/masks/01.png",
+    "seedQuad":[[360,110],[378,110],[378,250],[360,250]],
+    "semantic":"known-clean-carcass-side donor region",
+    "physicalDepthMm":350.0
+  },
+  "depthObservations": [
+    {
+      "id":"module02-stone-visible-depth",
+      "authority":"measured-from-visible-pixels",
+      "front":[742,586],
+      "back":[763,525],
+      "source":"review-assets/calibration/module-02-right-face-v1/config.json"
+    },
+    {
+      "id":"module03-stone-human-annotation",
+      "authority":"human-calibrated-annotation-only",
+      "front":[742,586],
+      "back":[751,520],
+      "source":"review-assets/perspective-grid.json + review-assets/gap-parallelism-grid.json"
+    }
+  ],
+  "policy": {
+    "promotionEligible": false,
+    "frontMaskBoundaryIsProxy": true,
+    "module01ResidualComponentIsHypothesis": true,
+    "doNotInferSceneInvalidityFromSingleFamily": true
+  }
+}
