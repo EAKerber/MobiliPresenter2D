@@ -1,0 +1,987 @@
+{
+  "depthObservations": [
+    {
+      "angleDeg": -71.00334584451144,
+      "authority": "measured-from-visible-pixels",
+      "back": [
+        763,
+        525
+      ],
+      "dxDy": -0.3442622950819672,
+      "front": [
+        742,
+        586
+      ],
+      "id": "module02-stone-visible-depth",
+      "magnitudePx": 64.51356446515724,
+      "source": "review-assets/calibration/module-02-right-face-v1/config.json",
+      "vector": [
+        21,
+        -61
+      ]
+    },
+    {
+      "angleDeg": -82.23483398157467,
+      "authority": "human-calibrated-annotation-only",
+      "back": [
+        751,
+        520
+      ],
+      "dxDy": -0.13636363636363635,
+      "front": [
+        742,
+        586
+      ],
+      "id": "module03-stone-human-annotation",
+      "magnitudePx": 66.61080993352356,
+      "source": "review-assets/perspective-grid.json + review-assets/gap-parallelism-grid.json",
+      "vector": [
+        9,
+        -66
+      ]
+    }
+  ],
+  "depthOrientationSpread": {
+    "combinedMeasuredPlusModule01Residual": {
+      "maxAbsDeviationDeg": 70.06743112886123,
+      "meanAbsDeviationDeg": 9.830073008525098,
+      "meanAngleDeg": -0.9359147156502189
+    },
+    "measuredOnly": {
+      "maxAbsDeviationDeg": 0.0,
+      "meanAbsDeviationDeg": 0.0,
+      "meanAngleDeg": -71.00334584451144
+    },
+    "module01ResidualOnly": {
+      "maxAbsDeviationDeg": 1.358073863785208,
+      "meanAbsDeviationDeg": 1.358073863785208,
+      "meanAngleDeg": 1.3644885278328616
+    }
+  },
+  "frontMaskBoundaryFits": {
+    "module-01": [
+      {
+        "bottom": {
+          "angleDeg": 0.0,
+          "count": 222,
+          "dyDx": 0.0,
+          "rms": 0.0
+        },
+        "bounds": [
+          132,
+          65,
+          354,
+          281
+        ],
+        "left": {
+          "angleFromVerticalDeg": 0.0,
+          "count": 216,
+          "dxDy": 0.0,
+          "rms": 0.0
+        },
+        "right": {
+          "angleFromVerticalDeg": 0.0,
+          "count": 216,
+          "dxDy": 0.0,
+          "rms": 0.0
+        },
+        "threshold": 32,
+        "top": {
+          "angleDeg": 0.0,
+          "count": 222,
+          "dyDx": 0.0,
+          "rms": 0.0
+        }
+      },
+      {
+        "bottom": {
+          "angleDeg": 0.0,
+          "count": 222,
+          "dyDx": 0.0,
+          "rms": 0.0
+        },
+        "bounds": [
+          132,
+          65,
+          354,
+          281
+        ],
+        "left": {
+          "angleFromVerticalDeg": 0.0,
+          "count": 216,
+          "dxDy": 0.0,
+          "rms": 0.0
+        },
+        "right": {
+          "angleFromVerticalDeg": 0.0,
+          "count": 216,
+          "dxDy": 0.0,
+          "rms": 0.0
+        },
+        "threshold": 64,
+        "top": {
+          "angleDeg": 0.0,
+          "count": 222,
+          "dyDx": 0.0,
+          "rms": 0.0
+        }
+      },
+      {
+        "bottom": {
+          "angleDeg": 0.0,
+          "count": 222,
+          "dyDx": 0.0,
+          "rms": 0.0
+        },
+        "bounds": [
+          132,
+          65,
+          354,
+          281
+        ],
+        "left": {
+          "angleFromVerticalDeg": 0.0,
+          "count": 216,
+          "dxDy": 0.0,
+          "rms": 0.0
+        },
+        "right": {
+          "angleFromVerticalDeg": 0.0,
+          "count": 216,
+          "dxDy": 0.0,
+          "rms": 0.0
+        },
+        "threshold": 128,
+        "top": {
+          "angleDeg": 0.0,
+          "count": 222,
+          "dyDx": 0.0,
+          "rms": 0.0
+        }
+      },
+      {
+        "bottom": {
+          "angleDeg": 0.0,
+          "count": 222,
+          "dyDx": 0.0,
+          "rms": 0.0
+        },
+        "bounds": [
+          132,
+          65,
+          354,
+          281
+        ],
+        "left": {
+          "angleFromVerticalDeg": 0.0,
+          "count": 216,
+          "dxDy": 0.0,
+          "rms": 0.0
+        },
+        "right": {
+          "angleFromVerticalDeg": 0.0,
+          "count": 216,
+          "dxDy": 0.0,
+          "rms": 0.0
+        },
+        "threshold": 192,
+        "top": {
+          "angleDeg": 0.0,
+          "count": 222,
+          "dyDx": 0.0,
+          "rms": 0.0
+        }
+      }
+    ],
+    "module-02": [
+      {
+        "bottom": {
+          "angleDeg": 0.0,
+          "count": 247,
+          "dyDx": 0.0,
+          "rms": 0.0
+        },
+        "bounds": [
+          498,
+          590,
+          745,
+          856
+        ],
+        "left": {
+          "angleFromVerticalDeg": 0.0,
+          "count": 266,
+          "dxDy": 0.0,
+          "rms": 0.0
+        },
+        "right": {
+          "angleFromVerticalDeg": 0.0,
+          "count": 266,
+          "dxDy": 0.0,
+          "rms": 0.0
+        },
+        "threshold": 32,
+        "top": {
+          "angleDeg": 0.0,
+          "count": 247,
+          "dyDx": 0.0,
+          "rms": 0.0
+        }
+      },
+      {
+        "bottom": {
+          "angleDeg": 0.0,
+          "count": 247,
+          "dyDx": 0.0,
+          "rms": 0.0
+        },
+        "bounds": [
+          498,
+          590,
+          745,
+          856
+        ],
+        "left": {
+          "angleFromVerticalDeg": 0.0,
+          "count": 266,
+          "dxDy": 0.0,
+          "rms": 0.0
+        },
+        "right": {
+          "angleFromVerticalDeg": 0.0,
+          "count": 266,
+          "dxDy": 0.0,
+          "rms": 0.0
+        },
+        "threshold": 64,
+        "top": {
+          "angleDeg": 0.0,
+          "count": 247,
+          "dyDx": 0.0,
+          "rms": 0.0
+        }
+      },
+      {
+        "bottom": {
+          "angleDeg": 0.0,
+          "count": 247,
+          "dyDx": 0.0,
+          "rms": 0.0
+        },
+        "bounds": [
+          498,
+          590,
+          745,
+          856
+        ],
+        "left": {
+          "angleFromVerticalDeg": 0.0,
+          "count": 266,
+          "dxDy": 0.0,
+          "rms": 0.0
+        },
+        "right": {
+          "angleFromVerticalDeg": 0.0,
+          "count": 266,
+          "dxDy": 0.0,
+          "rms": 0.0
+        },
+        "threshold": 128,
+        "top": {
+          "angleDeg": 0.0,
+          "count": 247,
+          "dyDx": 0.0,
+          "rms": 0.0
+        }
+      },
+      {
+        "bottom": {
+          "angleDeg": 0.0,
+          "count": 247,
+          "dyDx": 0.0,
+          "rms": 0.0
+        },
+        "bounds": [
+          498,
+          590,
+          745,
+          856
+        ],
+        "left": {
+          "angleFromVerticalDeg": 0.0,
+          "count": 266,
+          "dxDy": 0.0,
+          "rms": 0.0
+        },
+        "right": {
+          "angleFromVerticalDeg": 0.0,
+          "count": 266,
+          "dxDy": 0.0,
+          "rms": 0.0
+        },
+        "threshold": 192,
+        "top": {
+          "angleDeg": 0.0,
+          "count": 247,
+          "dyDx": 0.0,
+          "rms": 0.0
+        }
+      }
+    ],
+    "module-03": [
+      {
+        "bottom": {
+          "angleDeg": 0.0,
+          "count": 458,
+          "dyDx": 0.0,
+          "rms": 0.0
+        },
+        "bounds": [
+          746,
+          590,
+          1204,
+          856
+        ],
+        "left": {
+          "angleFromVerticalDeg": 0.0,
+          "count": 266,
+          "dxDy": 0.0,
+          "rms": 0.0
+        },
+        "right": {
+          "angleFromVerticalDeg": 0.0,
+          "count": 266,
+          "dxDy": 0.0,
+          "rms": 0.0
+        },
+        "threshold": 32,
+        "top": {
+          "angleDeg": 0.0,
+          "count": 458,
+          "dyDx": 0.0,
+          "rms": 0.0
+        }
+      },
+      {
+        "bottom": {
+          "angleDeg": 0.0,
+          "count": 458,
+          "dyDx": 0.0,
+          "rms": 0.0
+        },
+        "bounds": [
+          746,
+          590,
+          1204,
+          856
+        ],
+        "left": {
+          "angleFromVerticalDeg": 0.0,
+          "count": 266,
+          "dxDy": 0.0,
+          "rms": 0.0
+        },
+        "right": {
+          "angleFromVerticalDeg": 0.0,
+          "count": 266,
+          "dxDy": 0.0,
+          "rms": 0.0
+        },
+        "threshold": 64,
+        "top": {
+          "angleDeg": 0.0,
+          "count": 458,
+          "dyDx": 0.0,
+          "rms": 0.0
+        }
+      },
+      {
+        "bottom": {
+          "angleDeg": 0.0,
+          "count": 458,
+          "dyDx": 0.0,
+          "rms": 0.0
+        },
+        "bounds": [
+          746,
+          590,
+          1204,
+          856
+        ],
+        "left": {
+          "angleFromVerticalDeg": 0.0,
+          "count": 266,
+          "dxDy": 0.0,
+          "rms": 0.0
+        },
+        "right": {
+          "angleFromVerticalDeg": 0.0,
+          "count": 266,
+          "dxDy": 0.0,
+          "rms": 0.0
+        },
+        "threshold": 128,
+        "top": {
+          "angleDeg": 0.0,
+          "count": 458,
+          "dyDx": 0.0,
+          "rms": 0.0
+        }
+      },
+      {
+        "bottom": {
+          "angleDeg": 0.0,
+          "count": 458,
+          "dyDx": 0.0,
+          "rms": 0.0
+        },
+        "bounds": [
+          746,
+          590,
+          1204,
+          856
+        ],
+        "left": {
+          "angleFromVerticalDeg": 0.0,
+          "count": 266,
+          "dxDy": 0.0,
+          "rms": 0.0
+        },
+        "right": {
+          "angleFromVerticalDeg": 0.0,
+          "count": 266,
+          "dxDy": 0.0,
+          "rms": 0.0
+        },
+        "threshold": 192,
+        "top": {
+          "angleDeg": 0.0,
+          "count": 458,
+          "dyDx": 0.0,
+          "rms": 0.0
+        }
+      }
+    ],
+    "module-05": [
+      {
+        "bottom": {
+          "angleDeg": 0.0,
+          "count": 245,
+          "dyDx": 0.0,
+          "rms": 0.0
+        },
+        "bounds": [
+          506,
+          65,
+          751,
+          256
+        ],
+        "left": {
+          "angleFromVerticalDeg": 0.0,
+          "count": 191,
+          "dxDy": 0.0,
+          "rms": 0.0
+        },
+        "right": {
+          "angleFromVerticalDeg": 0.0,
+          "count": 191,
+          "dxDy": 0.0,
+          "rms": 0.0
+        },
+        "threshold": 32,
+        "top": {
+          "angleDeg": 0.0,
+          "count": 245,
+          "dyDx": 0.0,
+          "rms": 0.0
+        }
+      },
+      {
+        "bottom": {
+          "angleDeg": 0.0,
+          "count": 245,
+          "dyDx": 0.0,
+          "rms": 0.0
+        },
+        "bounds": [
+          506,
+          65,
+          751,
+          256
+        ],
+        "left": {
+          "angleFromVerticalDeg": 0.0,
+          "count": 191,
+          "dxDy": 0.0,
+          "rms": 0.0
+        },
+        "right": {
+          "angleFromVerticalDeg": 0.0,
+          "count": 191,
+          "dxDy": 0.0,
+          "rms": 0.0
+        },
+        "threshold": 64,
+        "top": {
+          "angleDeg": 0.0,
+          "count": 245,
+          "dyDx": 0.0,
+          "rms": 0.0
+        }
+      },
+      {
+        "bottom": {
+          "angleDeg": 0.0,
+          "count": 245,
+          "dyDx": 0.0,
+          "rms": 0.0
+        },
+        "bounds": [
+          506,
+          65,
+          751,
+          256
+        ],
+        "left": {
+          "angleFromVerticalDeg": 0.0,
+          "count": 191,
+          "dxDy": 0.0,
+          "rms": 0.0
+        },
+        "right": {
+          "angleFromVerticalDeg": 0.0,
+          "count": 191,
+          "dxDy": 0.0,
+          "rms": 0.0
+        },
+        "threshold": 128,
+        "top": {
+          "angleDeg": 0.0,
+          "count": 245,
+          "dyDx": 0.0,
+          "rms": 0.0
+        }
+      },
+      {
+        "bottom": {
+          "angleDeg": 0.0,
+          "count": 245,
+          "dyDx": 0.0,
+          "rms": 0.0
+        },
+        "bounds": [
+          506,
+          65,
+          751,
+          256
+        ],
+        "left": {
+          "angleFromVerticalDeg": 0.0,
+          "count": 191,
+          "dxDy": 0.0,
+          "rms": 0.0
+        },
+        "right": {
+          "angleFromVerticalDeg": 0.0,
+          "count": 191,
+          "dxDy": 0.0,
+          "rms": 0.0
+        },
+        "threshold": 192,
+        "top": {
+          "angleDeg": 0.0,
+          "count": 245,
+          "dyDx": 0.0,
+          "rms": 0.0
+        }
+      }
+    ],
+    "module-06": [
+      {
+        "bottom": {
+          "angleDeg": -22.650375625368486,
+          "count": 454,
+          "dyDx": -0.41729176716055905,
+          "rms": 32.24416378718218
+        },
+        "bounds": [
+          752,
+          65,
+          1207,
+          310
+        ],
+        "left": {
+          "angleFromVerticalDeg": 0.0,
+          "count": 245,
+          "dxDy": 0.0,
+          "rms": 0.0
+        },
+        "right": {
+          "angleFromVerticalDeg": -51.26141062417875,
+          "count": 245,
+          "dxDy": -1.246482631437221,
+          "rms": 51.10112668361303
+        },
+        "threshold": 32,
+        "top": {
+          "angleDeg": 0.0,
+          "count": 454,
+          "dyDx": 0.0,
+          "rms": 0.0
+        }
+      },
+      {
+        "bottom": {
+          "angleDeg": -22.650375625368486,
+          "count": 454,
+          "dyDx": -0.41729176716055905,
+          "rms": 32.24416378718218
+        },
+        "bounds": [
+          752,
+          65,
+          1207,
+          310
+        ],
+        "left": {
+          "angleFromVerticalDeg": 0.0,
+          "count": 245,
+          "dxDy": 0.0,
+          "rms": 0.0
+        },
+        "right": {
+          "angleFromVerticalDeg": -51.26141062417875,
+          "count": 245,
+          "dxDy": -1.246482631437221,
+          "rms": 51.10112668361303
+        },
+        "threshold": 64,
+        "top": {
+          "angleDeg": 0.0,
+          "count": 454,
+          "dyDx": 0.0,
+          "rms": 0.0
+        }
+      },
+      {
+        "bottom": {
+          "angleDeg": -22.650375625368486,
+          "count": 454,
+          "dyDx": -0.41729176716055905,
+          "rms": 32.24416378718218
+        },
+        "bounds": [
+          752,
+          65,
+          1207,
+          310
+        ],
+        "left": {
+          "angleFromVerticalDeg": 0.0,
+          "count": 245,
+          "dxDy": 0.0,
+          "rms": 0.0
+        },
+        "right": {
+          "angleFromVerticalDeg": -51.26141062417875,
+          "count": 245,
+          "dxDy": -1.246482631437221,
+          "rms": 51.10112668361303
+        },
+        "threshold": 128,
+        "top": {
+          "angleDeg": 0.0,
+          "count": 454,
+          "dyDx": 0.0,
+          "rms": 0.0
+        }
+      },
+      {
+        "bottom": {
+          "angleDeg": -22.650375625368486,
+          "count": 454,
+          "dyDx": -0.41729176716055905,
+          "rms": 32.24416378718218
+        },
+        "bounds": [
+          752,
+          65,
+          1207,
+          310
+        ],
+        "left": {
+          "angleFromVerticalDeg": 0.0,
+          "count": 245,
+          "dxDy": 0.0,
+          "rms": 0.0
+        },
+        "right": {
+          "angleFromVerticalDeg": -51.26141062417875,
+          "count": 245,
+          "dxDy": -1.246482631437221,
+          "rms": 51.10112668361303
+        },
+        "threshold": 192,
+        "top": {
+          "angleDeg": 0.0,
+          "count": 454,
+          "dyDx": 0.0,
+          "rms": 0.0
+        }
+      }
+    ],
+    "module-07": [
+      {
+        "bottom": {
+          "angleDeg": 0.0,
+          "count": 249,
+          "dyDx": 0.0,
+          "rms": 0.0
+        },
+        "bounds": [
+          1240,
+          50,
+          1489,
+          205
+        ],
+        "left": {
+          "angleFromVerticalDeg": 0.0,
+          "count": 155,
+          "dxDy": 0.0,
+          "rms": 0.0
+        },
+        "right": {
+          "angleFromVerticalDeg": 0.0,
+          "count": 155,
+          "dxDy": 0.0,
+          "rms": 0.0
+        },
+        "threshold": 32,
+        "top": {
+          "angleDeg": 0.0,
+          "count": 249,
+          "dyDx": 0.0,
+          "rms": 0.0
+        }
+      },
+      {
+        "bottom": {
+          "angleDeg": 0.0,
+          "count": 249,
+          "dyDx": 0.0,
+          "rms": 0.0
+        },
+        "bounds": [
+          1240,
+          50,
+          1489,
+          205
+        ],
+        "left": {
+          "angleFromVerticalDeg": 0.0,
+          "count": 155,
+          "dxDy": 0.0,
+          "rms": 0.0
+        },
+        "right": {
+          "angleFromVerticalDeg": 0.0,
+          "count": 155,
+          "dxDy": 0.0,
+          "rms": 0.0
+        },
+        "threshold": 64,
+        "top": {
+          "angleDeg": 0.0,
+          "count": 249,
+          "dyDx": 0.0,
+          "rms": 0.0
+        }
+      },
+      {
+        "bottom": {
+          "angleDeg": 0.0,
+          "count": 249,
+          "dyDx": 0.0,
+          "rms": 0.0
+        },
+        "bounds": [
+          1240,
+          50,
+          1489,
+          205
+        ],
+        "left": {
+          "angleFromVerticalDeg": 0.0,
+          "count": 155,
+          "dxDy": 0.0,
+          "rms": 0.0
+        },
+        "right": {
+          "angleFromVerticalDeg": 0.0,
+          "count": 155,
+          "dxDy": 0.0,
+          "rms": 0.0
+        },
+        "threshold": 128,
+        "top": {
+          "angleDeg": 0.0,
+          "count": 249,
+          "dyDx": 0.0,
+          "rms": 0.0
+        }
+      },
+      {
+        "bottom": {
+          "angleDeg": 0.0,
+          "count": 249,
+          "dyDx": 0.0,
+          "rms": 0.0
+        },
+        "bounds": [
+          1240,
+          50,
+          1489,
+          205
+        ],
+        "left": {
+          "angleFromVerticalDeg": 0.0,
+          "count": 155,
+          "dxDy": 0.0,
+          "rms": 0.0
+        },
+        "right": {
+          "angleFromVerticalDeg": 0.0,
+          "count": 155,
+          "dxDy": 0.0,
+          "rms": 0.0
+        },
+        "threshold": 192,
+        "top": {
+          "angleDeg": 0.0,
+          "count": 249,
+          "dyDx": 0.0,
+          "rms": 0.0
+        }
+      }
+    ]
+  },
+  "limitations": [
+    "front-mask outer boundaries are proxy evidence, not hand-confirmed physical front corners",
+    "module01 side residual is derived from layer alpha minus finish mask and remains a segmentation hypothesis",
+    "human-calibrated module03 line is reported separately from measured-pixel authority",
+    "this probe cannot by itself classify the whole scene as geometrically valid or invalid"
+  ],
+  "module01SideResidualProbe": [
+    {
+      "bottomDepthEdge": {
+        "angleDeg": 2.7225623916180637,
+        "count": 238,
+        "dyDx": 0.04755347401393691,
+        "rms": 0.32371322969503585
+      },
+      "bounds": [
+        128,
+        58,
+        381,
+        296
+      ],
+      "pixelCount": 10627,
+      "seed": [
+        369,
+        180
+      ],
+      "status": "OK",
+      "threshold": 32,
+      "topDepthEdge": {
+        "angleDeg": 0.0064146640476593665,
+        "count": 231,
+        "dyDx": 0.00011195700850873264,
+        "rms": 0.06522674204232994
+      }
+    },
+    {
+      "bottomDepthEdge": {
+        "angleDeg": 2.7225623916180637,
+        "count": 238,
+        "dyDx": 0.04755347401393691,
+        "rms": 0.32371322969503585
+      },
+      "bounds": [
+        128,
+        58,
+        381,
+        296
+      ],
+      "pixelCount": 10627,
+      "seed": [
+        369,
+        180
+      ],
+      "status": "OK",
+      "threshold": 64,
+      "topDepthEdge": {
+        "angleDeg": 0.0064146640476593665,
+        "count": 231,
+        "dyDx": 0.00011195700850873264,
+        "rms": 0.06522674204232994
+      }
+    },
+    {
+      "bottomDepthEdge": {
+        "angleDeg": 2.7225623916180637,
+        "count": 238,
+        "dyDx": 0.04755347401393691,
+        "rms": 0.32371322969503585
+      },
+      "bounds": [
+        128,
+        58,
+        381,
+        296
+      ],
+      "pixelCount": 10627,
+      "seed": [
+        369,
+        180
+      ],
+      "status": "OK",
+      "threshold": 128,
+      "topDepthEdge": {
+        "angleDeg": 0.0064146640476593665,
+        "count": 231,
+        "dyDx": 0.00011195700850873264,
+        "rms": 0.06522674204232994
+      }
+    },
+    {
+      "bottomDepthEdge": {
+        "angleDeg": 2.7225623916180637,
+        "count": 238,
+        "dyDx": 0.04755347401393691,
+        "rms": 0.32371322969503585
+      },
+      "bounds": [
+        128,
+        58,
+        381,
+        296
+      ],
+      "pixelCount": 10627,
+      "seed": [
+        369,
+        180
+      ],
+      "status": "OK",
+      "threshold": 192,
+      "topDepthEdge": {
+        "angleDeg": 0.0064146640476593665,
+        "count": 231,
+        "dyDx": 0.00011195700850873264,
+        "rms": 0.06522674204232994
+      }
+    }
+  ],
+  "promotionEligible": false,
+  "sceneId": "cozinha-01",
+  "schemaVersion": "SceneProjectiveConsistencyProbeReport 0.1",
+  "status": "DIAGNOSTIC_ONLY"
+}
