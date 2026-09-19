@@ -66,6 +66,87 @@ def promote_soft_host_rgb(clean,missing,host_rgba,host_threshold):
     return out,promoted
 
 
+def smooth_seed_fill(clean,missing,donor_mask,vertical_radius):
+    """Continue a strong same-object edge across missing geometry.
+
+    The first missing column keeps exact same-row donor appearance to preserve
+    contact. Smoothing increases only with distance from that contact, so the
+    rear of the inferred face loses row-to-row striping without altering the
+    authoritative seam.
+    """
+    cp=clean.load(); mp=missing.load(); dp=donor_mask.load()
+    out=Image.new("RGBA",clean.size,(0,0,0,0)); op=out.load()
+    mb=missing.getbbox(); db=donor_mask.getbbox()
+    if not mb or not db:
+        return out,{"filled":0,"verticalRadius":vertical_radius}
+
+    seed={}
+    for y in range(db[1],db[3]):
+        vals=[]
+        for x in range(db[0],db[2]):
+            if dp[x,y]:
+                vals.append(cp[x,y][:3])
+        if vals:
+            seed[y]=tuple(sum(v[i] for v in vals)/len(vals) for i in range(3))
+    if not seed:
+        raise RuntimeError("empty strong seed rows")
+    seed_rows=sorted(seed)
+
+    def nearest_seed_y(y):
+        return min(seed_rows,key=lambda yy:abs(yy-y))
+
+    def smooth_color(y):
+        center=nearest_seed_y(y)
+        rows=[yy for yy in seed_rows if abs(yy-center)<=vertical_radius]
+        if not rows: rows=[center]
+        weighted=[]; total=0.0
+        for yy in rows:
+            w=float(vertical_radius+1-abs(yy-center))
+            if w<=0: continue
+            weighted.append((seed[yy],w)); total+=w
+        return tuple(sum(c[i]*w for c,w in weighted)/total for i in range(3))
+
+    filled=0
+    for y in range(mb[1],mb[3]):
+        xs=[x for x in range(mb[0],mb[2]) if mp[x,y]]
+        if not xs: continue
+        first=min(xs); last=max(xs)
+        sy=nearest_seed_y(y)
+        raw=seed[sy]; smooth=smooth_color(y)
+        span=max(1,last-first)
+        for x in xs:
+            t=(x-first)/span if last>first else 0.0
+            rgb=tuple(round(raw[i]*(1.0-t)+smooth[i]*t) for i in range(3))
+            op[x,y]=(rgb[0],rgb[1],rgb[2],255)
+            filled+=1
+    return out,{"filled":filled,"verticalRadius":vertical_radius,"seedRows":len(seed_rows),"seedYRange":[seed_rows[0],seed_rows[-1]]}
+
+
+def candidate_row_roughness(candidate):
+    a=candidate.getchannel("A")
+    bounds=a.getbbox()
+    if not bounds:
+        return {"pairCount":0,"meanRowMeanAbsDifference":0.0,"p90RowMeanAbsDifference":0.0,"maxRowMeanAbsDifference":0.0}
+    cp=candidate.load(); ap=a.load()
+    row_means=[]
+    for y in range(bounds[1],bounds[3]):
+        vals=[cp[x,y][:3] for x in range(bounds[0],bounds[2]) if ap[x,y]]
+        if vals:
+            row_means.append((y,tuple(sum(v[i] for v in vals)/len(vals) for i in range(3))))
+    diffs=[]
+    for (y0,c0),(y1,c1) in zip(row_means,row_means[1:]):
+        if y1!=y0+1: continue
+        diffs.append(sum(abs(c1[i]-c0[i]) for i in range(3))/3)
+    ordered=sorted(diffs)
+    p90=ordered[round((len(ordered)-1)*.9)] if ordered else 0.0
+    return {
+      "pairCount":len(diffs),
+      "meanRowMeanAbsDifference":sum(diffs)/len(diffs) if diffs else 0.0,
+      "p90RowMeanAbsDifference":p90,
+      "maxRowMeanAbsDifference":max(diffs) if diffs else 0.0
+    }
+
+
 def nearest_fill(clean,missing,donor_mask,max_distance):
     out=Image.new("RGBA",clean.size,(0,0,0,0))
     mp=missing.load(); dp=donor_mask.load(); cp=clean.load(); op=out.load()
@@ -202,7 +283,9 @@ def main():
             for x in range(db[0],min(seam+1,db[2])):
                 dpx[x,y]=0
 
-    appearance_mode=(cfg.get("appearance") or {}).get("softHostRgb","ignore")
+    appearance_cfg=cfg.get("appearance") or {}
+    appearance_mode=appearance_cfg.get("softHostRgb","ignore")
+    continuation_mode=appearance_cfg.get("continuation","nearest")
     promoted_soft=Image.new("RGBA",clean.size,(0,0,0,0))
     promoted_count=0
     residual_missing=missing
@@ -212,8 +295,13 @@ def main():
     elif appearance_mode!="ignore":
         raise ValueError(f"unsupported softHostRgb appearance mode: {appearance_mode}")
 
-    nearest_candidate,fillstats=nearest_fill(clean,residual_missing,donor,float(cfg["donor"]["maxDistancePx"]))
-    candidate=Image.alpha_composite(promoted_soft,nearest_candidate)
+    if continuation_mode=="nearest":
+        continuation,fillstats=nearest_fill(clean,residual_missing,donor,float(cfg["donor"]["maxDistancePx"]))
+    elif continuation_mode=="smooth-strong-seed":
+        continuation,fillstats=smooth_seed_fill(clean,residual_missing,donor,int(appearance_cfg.get("verticalRadius",5)))
+    else:
+        raise ValueError(f"unsupported continuation mode: {continuation_mode}")
+    candidate=Image.alpha_composite(promoted_soft,continuation)
     edited=Image.alpha_composite(clean,candidate)
 
     roi=roi_mask(size,cfg["authorizedRoi"])
@@ -233,12 +321,16 @@ def main():
     comparison_sheet(clean,current,edited).save(args.output_dir/"comparison.png")
 
     report={
-      "schemaVersion":"BMC01MinimalCompletionReport 0.2" if cfg.get("schemaVersion")=="BMC01MinimalCompletion 0.2" else "BMC01MinimalCompletionReport 0.1",
+      "schemaVersion":str(cfg.get("schemaVersion","BMC01MinimalCompletion 0.1")).replace("BMC01MinimalCompletion ","BMC01MinimalCompletionReport "),
       "sceneId":cfg["sceneId"],
       "targetVariant":cfg["targetVariant"],
       "status":"RESEARCH_CANDIDATE",
       "promotionEligible":False,
-      "authoringMethod":"C1 same-object source-RGB promotion + nearest deterministic residual" if appearance_mode=="promote-source-rgb" else "C1 same-object nearest deterministic donor",
+      "authoringMethod":(
+        "C1 same-object source-RGB promotion + deterministic continuation" if appearance_mode=="promote-source-rgb"
+        else "C1 same-object smooth strong-seed continuation" if continuation_mode=="smooth-strong-seed"
+        else "C1 same-object nearest deterministic donor"
+      ),
       "cleanPixelSha256":sha_pixels(clean),
       "candidatePixelSha256":sha_pixels(candidate),
       "editedPixelSha256":sha_pixels(edited),
@@ -257,9 +349,11 @@ def main():
       "historicalOverlayOverlapPixels":count(overlap_hist),
       "donorMaskPixels":count(donor),
       "appearanceMode":appearance_mode,
+      "continuationMode":continuation_mode,
       "promotedSoftHostRgbPixels":promoted_count,
       "nearestFilledResidualPixels":fillstats["filled"],
       "donorDistance":fillstats,
+      "candidateRowRoughness":candidate_row_roughness(candidate),
       "boundaryColorErrorBefore":boundary_color_error(clean,clean,candidate.getchannel("A")),
       "boundaryColorErrorAfter":boundary_color_error(clean,edited,candidate.getchannel("A")),
       "sameObjectContactErrorBefore":same_object_contact_error(clean,clean,candidate.getchannel("A"),donor),
