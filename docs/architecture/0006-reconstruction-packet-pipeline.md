@@ -155,8 +155,21 @@ Optional and only present when a deterministic candidate is insufficient:
 - deterministic neutral render;
 - donor crop(s);
 - residual mask;
+- hard silhouette/footprint mask when object replacement is used;
+- named placement/contact anchors;
+- maximum deterministic post-fit budget;
+- perceptual target(s), explicitly non-authoritative;
 - prompt constraints;
 - forbidden outcomes.
+
+For T6-G bounded appliance replacement, generation may synthesize object-local
+appearance inside a deterministic target footprint. The footprint and host
+plane are inputs to generation, never outputs inferred from the generated
+candidate.
+
+A `perceptual-target` can be used to say “make the replacement read like
+this”, but cannot determine target location, host-plane orientation or physical
+dimensions.
 
 The guide should be a separate input from the clean target. Guide removal
 should not require a second generative pass.
@@ -361,18 +374,29 @@ Try C0/C1/C2 before synthesizing new appearance.
 ### P6 — deterministic synthesis
 Try C3/C4 where geometry and donor evidence are sufficient.
 
-### P7 — generative residual
+### P7 — bounded generation
 Only when deterministic candidates fail appearance requirements and the Edit
 Contract permits generation.
 
-The image model receives:
-- clean canonical crop;
-- guide;
-- neutral expected face when useful;
-- donor(s);
-- strict residual mask.
+Two bounded modes are allowed:
 
-The task is local appearance authoring, not free geometry design.
+1. `residual-completion` — fill only a residual of an otherwise deterministic
+   candidate;
+2. `isolated-object-synthesis` — T6-G exception for an appliance/object whose
+   original raster geometry is itself unsuitable for deterministic reuse.
+
+For isolated-object synthesis, the image model receives:
+- clean canonical crop/background;
+- deterministic host-plane/footprint guide;
+- strict object/edit mask;
+- object/reference donor(s);
+- perceptual target when available.
+
+The generated object must already target the desired scene perspective.
+Post-generation deterministic fitting is a small normalization step, not a
+mechanism for correcting a fundamentally wrong view.
+
+The task is local appearance authoring, not free scene geometry design.
 
 ### P8 — deterministic extraction
 Compare edited and canonical frames and extract only authorized delta pixels.
