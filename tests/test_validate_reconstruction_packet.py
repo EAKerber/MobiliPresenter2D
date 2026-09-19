@@ -64,6 +64,24 @@ class ReconstructionPacketTests(unittest.TestCase):
             root = Path(td)
             self.assertEqual(validate_packet(minimal_packet(root), root), [])
 
+    def test_draft_allows_machine_metrics_to_be_pending(self):
+        with tempfile.TemporaryDirectory() as td:
+            root = Path(td)
+            packet = minimal_packet(root)
+            packet["lifecycle"]["state"] = "DRAFT"
+            packet["acceptance"]["machine"] = {}
+            self.assertEqual(validate_packet(packet, root), [])
+
+    def test_machine_valid_requires_machine_metrics(self):
+        with tempfile.TemporaryDirectory() as td:
+            root = Path(td)
+            packet = minimal_packet(root)
+            packet["lifecycle"]["state"] = "MACHINE_VALID"
+            packet["acceptance"]["machine"] = {}
+            errors = validate_packet(packet, root)
+            self.assertIn("acceptance.machine.outsideAuthorizedRoiPixels", errors)
+            self.assertIn("acceptance.machine.goldenPixelDifferenceCountDefaultRuntime", errors)
+
     def test_rejects_promotion_before_human_approval(self):
         with tempfile.TemporaryDirectory() as td:
             root = Path(td)
