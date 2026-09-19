@@ -1,4 +1,66 @@
 {
+  "commonDepthVanishingFit": [
+    {
+      "fit": {
+        "point": [
+          794.4788724767121,
+          450.6749714275418
+        ],
+        "residualPx": {
+          "module01-side-top": 0.7604982549719352,
+          "module02-stone": 5.570698566065403,
+          "module03-stone-alpha": 5.322117695935958
+        },
+        "rmsPx": 4.469749317324674
+      },
+      "threshold": 32
+    },
+    {
+      "fit": {
+        "point": [
+          794.4788724767121,
+          450.6749714275418
+        ],
+        "residualPx": {
+          "module01-side-top": 0.7604982549719352,
+          "module02-stone": 5.570698566065403,
+          "module03-stone-alpha": 5.322117695935958
+        },
+        "rmsPx": 4.469749317324674
+      },
+      "threshold": 64
+    },
+    {
+      "fit": {
+        "point": [
+          794.4788724767121,
+          450.6749714275418
+        ],
+        "residualPx": {
+          "module01-side-top": 0.7604982549719352,
+          "module02-stone": 5.570698566065403,
+          "module03-stone-alpha": 5.322117695935958
+        },
+        "rmsPx": 4.469749317324674
+      },
+      "threshold": 128
+    },
+    {
+      "fit": {
+        "point": [
+          794.4788724767121,
+          450.6749714275418
+        ],
+        "residualPx": {
+          "module01-side-top": 0.7604982549719352,
+          "module02-stone": 5.570698566065403,
+          "module03-stone-alpha": 5.322117695935958
+        },
+        "rmsPx": 4.469749317324674
+      },
+      "threshold": 192
+    }
+  ],
   "depthObservations": [
     {
       "angleDeg": -71.00334584451144,
@@ -1072,6 +1134,85 @@
         "marginPx": 1,
         "side": "right"
       }
+    }
+  ],
+  "pixelLineObservations": [
+    {
+      "authority": "measured-from-reference-alpha",
+      "config": "review-assets/calibration/gap-pixel-v3/config.json",
+      "id": "module03-stone-reference-alpha-edge",
+      "interceptScene": 1025.7666666666667,
+      "limitation": "local edge segment only; does not alone establish a global vanishing point",
+      "reference": "review-assets/calibration/gap-pixel-v3/reference.png",
+      "rmsPx": 0.24944382578492943,
+      "sceneOffset": [
+        715,
+        515
+      ],
+      "scenePoints": [
+        [
+          749.5,
+          553
+        ],
+        [
+          748.5,
+          554
+        ],
+        [
+          748.5,
+          555
+        ],
+        [
+          747.5,
+          556
+        ],
+        [
+          747.5,
+          557
+        ],
+        [
+          746.5,
+          558
+        ],
+        [
+          746.5,
+          559
+        ],
+        [
+          745.5,
+          560
+        ],
+        [
+          745.5,
+          561
+        ],
+        [
+          744.5,
+          562
+        ],
+        [
+          744.5,
+          563
+        ],
+        [
+          743.5,
+          564
+        ],
+        [
+          743.5,
+          565
+        ],
+        [
+          742.5,
+          566
+        ],
+        [
+          742.5,
+          567
+        ]
+      ],
+      "semantic": "real module-03 stone edge used by gap_pixel_gate.py",
+      "slopeDxDy": -0.5
     }
   ],
   "promotionEligible": false,
