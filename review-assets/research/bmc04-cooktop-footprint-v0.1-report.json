@@ -1,0 +1,126 @@
+{
+  "existingRegeneratedFitComparison": {
+    "cornerDisplacementPx": {
+      "backLeft": 34.30970950761994,
+      "backRight": 12.661722267268285,
+      "frontLeft": 3.6492877522297205,
+      "frontRight": 19.08511405773382
+    },
+    "fitQuadPx": {
+      "backLeft": [
+        520.0,
+        540.0
+      ],
+      "backRight": [
+        734.0,
+        540.0
+      ],
+      "frontLeft": [
+        520.0,
+        572.0
+      ],
+      "frontRight": [
+        734.0,
+        572.0
+      ]
+    },
+    "maxCornerDisplacementPx": 34.30970950761994,
+    "meanCornerDisplacementPx": 17.42645839621294
+  },
+  "host": {
+    "evidence": "review-assets/stone-masks/config.json:groups.stone-02.surfaces.top",
+    "id": "stone-02-top",
+    "physicalSizeMm": [
+      791.01,
+      550.0
+    ],
+    "quadPx": {
+      "backLeft": [
+        524.0,
+        552.0
+      ],
+      "backRight": [
+        762.0,
+        552.0
+      ],
+      "frontLeft": [
+        492.0,
+        574.0
+      ],
+      "frontRight": [
+        745.0,
+        574.0
+      ]
+    },
+    "status": "local-derived"
+  },
+  "legacyProtectedQuadComparison": {
+    "cornerDisplacementPx": {
+      "backLeft": 21.690101128867877,
+      "backRight": 9.825223019285517,
+      "frontLeft": 6.522090014440638,
+      "frontRight": 21.080236291129406
+    },
+    "maxCornerDisplacementPx": 21.690101128867877,
+    "meanCornerDisplacementPx": 14.779412613430859
+  },
+  "limitations": [
+    "host quad is local-derived from the canonical Stone02 surface mask, not a global camera calibration",
+    "cooktop slot dimensions/placement are inferred in Scene Core rather than confirmed product dimensions",
+    "bilinear host-plane mapping is used only inside the bounded Stone02 top surface"
+  ],
+  "operationId": "bmc04-cooktop-footprint-v0.1",
+  "promotionEligible": false,
+  "sceneId": "cozinha-01",
+  "schemaVersion": "PlanarRectProjectionProbeReport 0.1",
+  "status": "RESEARCH_CANDIDATE",
+  "targetEdgesPx": {
+    "backWidth": [
+      180.83899640390712,
+      0.0
+    ],
+    "frontWidth": [
+      191.5962446170662,
+      0.0
+    ],
+    "leftDepth": [
+      28.542260470215865,
+      -20.799999999999955
+    ],
+    "rightDepth": [
+      17.785012257056792,
+      -20.799999999999955
+    ]
+  },
+  "targetQuadPx": {
+    "backLeft": [
+      551.9123199798646,
+      552.6
+    ],
+    "backRight": [
+      732.7513163837717,
+      552.6
+    ],
+    "frontLeft": [
+      523.3700595096487,
+      573.4
+    ],
+    "frontRight": [
+      714.9663041267149,
+      573.4
+    ]
+  },
+  "targetRect": {
+    "evidence": "EAKerber/MobiliPresenter:scene-core/src/fixtures/current-geometry.ts module02 cooktop slot; host Stone02 front starts at module y=-20 and slot starts at y=-5",
+    "id": "module-02-cooktop-slot",
+    "offsetMmFromHostFrontLeft": [
+      95.505,
+      15.0
+    ],
+    "sizeMm": [
+      600.0,
+      520.0
+    ],
+    "status": "inferred"
+  }
+}
