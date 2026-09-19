@@ -35,7 +35,7 @@ const {chromium} = require("playwright");
         if(!plinth && y>=842&&y<899) plinth=[x,y,d[i],d[i+1],d[i+2],a];
       }
     }
-    return {alpha,outside,carcass,plinth,active:c.dataset.active,error:c.dataset.renderError||null};
+    return {alpha,outside,carcass,plinth,active:c.dataset.active,revision:Number(c.dataset.renderRevision||0),error:c.dataset.renderError||null};
   });
 
   assert(await page.locator("#reconstructionCanvas").count()===1,"research canvas not installed");
@@ -59,14 +59,16 @@ const {chromium} = require("playwright");
 
   await page.locator('[data-step="finishes"]').click();
   await page.locator('[data-finish-id="tone-25-b"]').click();
-  await page.waitForTimeout(350);
+  await page.waitForFunction(previous => Number(document.getElementById("reconstructionCanvas").dataset.renderRevision||0) > previous, base.revision);
   const dark=await canvasStats();
   assert.notDeepEqual(dark.carcass.slice(2,5),base.carcass.slice(2,5),"carcass did not react to front finish");
   assert.notDeepEqual(dark.plinth.slice(2,5),base.plinth.slice(2,5),"default plinth did not follow front finish");
 
   await page.locator('[data-stone-package-id="stone-green"]').click();
+  await page.waitForFunction(previous => Number(document.getElementById("reconstructionCanvas").dataset.renderRevision||0) > previous, dark.revision);
+  const stoneSelected=await canvasStats();
   await page.locator("#stoneSkirtingToggle").check();
-  await page.waitForTimeout(350);
+  await page.waitForFunction(previous => Number(document.getElementById("reconstructionCanvas").dataset.renderRevision||0) > previous, stoneSelected.revision);
   const stone=await canvasStats();
   assert.deepEqual(stone.carcass.slice(2,5),dark.carcass.slice(2,5),"stone skirting changed carcass slot");
   assert.notDeepEqual(stone.plinth.slice(2,5),dark.plinth.slice(2,5),"stone skirting did not change plinth slot");
@@ -78,7 +80,7 @@ const {chromium} = require("playwright");
 
   await page.screenshot({path:path.join(output,"research-bmc01.png"),fullPage:true,animations:"disabled"});
   fs.writeFileSync(path.join(output,"result.json"),JSON.stringify({
-    status:"PASS",target,base,dark,stone,pageErrors:errors
+    status:"PASS",target,base,dark,stoneSelected,stone,pageErrors:errors
   },null,2));
   assert.deepEqual(errors,[]);
 
