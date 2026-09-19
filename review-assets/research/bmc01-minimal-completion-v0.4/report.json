@@ -1,0 +1,83 @@
+{
+  "appearanceMode": "ignore",
+  "authoringMethod": "C1 same-object smooth strong-seed continuation",
+  "boundaryColorErrorAfter": {
+    "maxAbsChannelDifference": 31.0,
+    "meanAbsChannelDifference": 6.354094579008073,
+    "pairCount": 578
+  },
+  "boundaryColorErrorBefore": {
+    "maxAbsChannelDifference": 33.333333333333336,
+    "meanAbsChannelDifference": 8.832179930795848,
+    "pairCount": 578
+  },
+  "boundaryColorErrorMeanImprovement": 2.478085351787774,
+  "boundaryColorErrorMeanImprovementRatio": 0.2805746000652955,
+  "candidateChangedPixelCount": 1877,
+  "candidatePixelSha256": "65d75790bd5b243f60119d0bdf83432073039574168a8d77db5dd4503a39f8ea",
+  "candidateRowRoughness": {
+    "maxRowMeanAbsDifference": 12.047619047619046,
+    "meanRowMeanAbsDifference": 0.5791673727616781,
+    "p90RowMeanAbsDifference": 1.0952380952380925,
+    "pairCount": 281
+  },
+  "candidateVsHistoricalChangedPixelRatio": 0.9827225130890053,
+  "cleanPixelSha256": "b769d83f1d83358fa10a19cbb9ade869433d62d0a76e81383177dcd98eb11617",
+  "continuationMode": "smooth-strong-seed",
+  "donorDistance": {
+    "filled": 1877,
+    "seedRows": 265,
+    "seedYRange": [
+      590,
+      854
+    ],
+    "verticalRadius": 5
+  },
+  "donorMaskPixels": 528,
+  "donorMinAlpha": 128,
+  "editMaskBounds": [
+    745,
+    569,
+    752,
+    851
+  ],
+  "editMaskPixels": 1877,
+  "editedPixelSha256": "7d1d1a103e39c34d2645f1b7ffacfcc3bbf59d2d1cfefde7db011ccd463b975f",
+  "historicalOverlayChangedPixelCount": 1910,
+  "historicalOverlayOverlapPixels": 0,
+  "hostOwnershipAlphaThreshold": 128,
+  "limitations": [
+    "source-RGB promotion and nearest-pixel residual fill are deterministic appearance baselines, not final photometric synthesis",
+    "host ownership threshold is research-only and distinguishes solid same-object support from low-alpha compositing fringe",
+    "candidate has not received visual/human approval"
+  ],
+  "localCarcassGeometryPixels": 2682,
+  "nearestFilledResidualPixels": 1877,
+  "outsideAuthorizedRoiPixels": 0,
+  "preExistingOwnerOverlapPixels": 0,
+  "promotedSoftHostRgbPixels": 0,
+  "promotionEligible": false,
+  "reviewFiles": {
+    "candidate": "candidate.png",
+    "comparison": "comparison.png",
+    "editMask": "edit-mask.png",
+    "edited": "edited.png"
+  },
+  "sameObjectContactErrorAfter": {
+    "maxAbsChannelDifference": 4.0,
+    "meanAbsChannelDifference": 2.550446998722861,
+    "pairCount": 261
+  },
+  "sameObjectContactErrorBefore": {
+    "maxAbsChannelDifference": 33.333333333333336,
+    "meanAbsChannelDifference": 16.70625798212005,
+    "pairCount": 261
+  },
+  "sameObjectContactMeanImprovement": 14.155810983397188,
+  "sameObjectContactMeanImprovementRatio": 0.8473358305939912,
+  "sceneId": "cozinha-01",
+  "schemaVersion": "BMC01MinimalCompletionReport 0.4",
+  "softHostFringeOverlapPixels": 1776,
+  "status": "RESEARCH_CANDIDATE",
+  "targetVariant": "module-03-hidden"
+}
