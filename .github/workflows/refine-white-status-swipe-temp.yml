@@ -32,173 +32,7 @@ jobs:
         run: python -m pip install -r tools/requirements.txt
 
       - name: Apply UI refinements
-        shell: bash
-        run: |
-          set -euo pipefail
-          python - <<'PY'
-          from pathlib import Path
-
-          def replace_once(path, old, new):
-              p=Path(path)
-              text=p.read_text()
-              count=text.count(old)
-              if count != 1:
-                  raise SystemExit(f"PATCH_COUNT:{path}:{count}:{old[:120]!r}")
-              p.write_text(text.replace(old,new,1))
-
-          # 1) Modestly separate base white from the very light secondary finish.
-          replace_once(
-              "app/data/catalog-data.js",
-              'id: "base-light", publicLabel: "Base clara", color: "#eeeae3", status: "published", adjustmentLabel: "normal",',
-              'id: "base-light", publicLabel: "Base clara", color: "#f6f5f2", status: "published", adjustmentLabel: "normal",'
-          )
-
-          # 2) Footer count: remove decorative status dot and stop styling totalCount as a dot.
-          replace_once(
-              "app/index.html",
-              '''          <p class="layer-status" aria-live="polite">
-            <span aria-hidden="true"></span>
-            <strong id="visibleCount">8</strong> de <span id="totalCount">8</span> itens incluídos
-          </p>''',
-              '''          <p class="layer-status" aria-live="polite">
-            <strong id="visibleCount">8</strong> de <span id="totalCount">8</span> itens incluídos
-          </p>'''
-          )
-
-          replace_once(
-              "app/styles.css",
-              '.layer-status { display: flex; align-items: center; gap: 6px; color: rgba(255, 255, 255, 0.68); font-size: 14px; }\n.layer-status > span { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 12px var(--accent); }\n.layer-status strong { font-weight: 600; }',
-              '.layer-status { display: inline-flex; align-items: baseline; gap: 6px; color: rgba(255, 255, 255, 0.68); font-size: 14px; line-height: 1; font-variant-numeric: tabular-nums; }\n.layer-status strong, .layer-status #totalCount { display: inline-block; line-height: 1; }\n.layer-status strong { font-weight: 600; }'
-          )
-
-          # 3) Detail visualization pager semantics + horizontal swipe.
-          app=Path("app/app.js")
-          text=app.read_text()
-
-          old='''    const dots = document.createElement("div");
-    dots.className = "module-detail__carousel-dots";
-    dots.setAttribute("aria-label", "Páginas de visualização");
-'''
-          new='''    const dots = document.createElement("div");
-    dots.className = "module-detail__carousel-dots";
-    dots.setAttribute("aria-label", "Visualizações disponíveis");
-    dots.setAttribute("role", "tablist");
-    stage.setAttribute("role", "region");
-    stage.setAttribute("aria-roledescription", "carrossel");
-'''
-          if text.count(old)!=1:
-              raise SystemExit("DOTS_ANCHOR")
-          text=text.replace(old,new,1)
-
-          old='''        dots.querySelectorAll("button").forEach((dot, index) => {
-          const active = index === currentPage;
-          dot.classList.toggle("is-active", active);
-          dot.setAttribute("aria-current", active ? "true" : "false");
-        });
-'''
-          new='''        dots.querySelectorAll("button").forEach((dot, index) => {
-          const active = index === currentPage;
-          dot.classList.toggle("is-active", active);
-          dot.setAttribute("aria-current", active ? "true" : "false");
-          dot.setAttribute("aria-selected", String(active));
-          dot.tabIndex = active ? 0 : -1;
-        });
-'''
-          if text.count(old)!=1:
-              raise SystemExit("RENDER_DOTS_ANCHOR")
-          text=text.replace(old,new,1)
-
-          old='''      dot.className = "module-detail__carousel-dot";
-      dot.setAttribute("aria-label", `Mostrar ${page.label}, página ${index + 1} de ${pages.length}`);
-      dot.title = page.shortLabel;
-      dot.addEventListener("click", () => renderPage(index, true));
-      dots.append(dot);
-'''
-          new='''      dot.className = "module-detail__carousel-dot";
-      dot.setAttribute("role", "tab");
-      dot.setAttribute("aria-controls", stage.id);
-      dot.setAttribute("aria-label", `Mostrar ${page.label}, página ${index + 1} de ${pages.length}`);
-      dot.setAttribute("aria-selected", "false");
-      dot.tabIndex = -1;
-      dot.title = page.shortLabel;
-      dot.addEventListener("click", () => renderPage(index, true));
-      dots.append(dot);
-'''
-          if text.count(old)!=1:
-              raise SystemExit("DOT_CREATE_ANCHOR")
-          text=text.replace(old,new,1)
-
-          old='''    dots.children[currentPage]?.classList.add("is-active");
-    dots.children[currentPage]?.setAttribute("aria-current", "true");
-    collapse.setAttribute("aria-expanded", String(!isCollapsed));
-'''
-          new='''    dots.children[currentPage]?.classList.add("is-active");
-    dots.children[currentPage]?.setAttribute("aria-current", "true");
-    dots.children[currentPage]?.setAttribute("aria-selected", "true");
-    if (dots.children[currentPage]) dots.children[currentPage].tabIndex = 0;
-
-    let swipeStartX = null;
-    let swipeStartY = null;
-    const clearSwipe = () => {
-      swipeStartX = null;
-      swipeStartY = null;
-      stage.classList.remove("is-swiping");
-    };
-    stage.addEventListener("pointerdown", (event) => {
-      if (event.button !== undefined && event.button !== 0) return;
-      swipeStartX = event.clientX;
-      swipeStartY = event.clientY;
-      stage.classList.add("is-swiping");
-      stopAutoCycle();
-    });
-    stage.addEventListener("pointerup", (event) => {
-      if (swipeStartX === null || swipeStartY === null) return;
-      const deltaX = event.clientX - swipeStartX;
-      const deltaY = event.clientY - swipeStartY;
-      clearSwipe();
-      const horizontal = Math.abs(deltaX) >= 42 && Math.abs(deltaX) > Math.abs(deltaY) * 1.15;
-      if (!horizontal) return;
-      if (deltaX < 0 && currentPage < pages.length - 1) renderPage(currentPage + 1, true);
-      if (deltaX > 0 && currentPage > 0) renderPage(currentPage - 1, true);
-    });
-    stage.addEventListener("pointercancel", clearSwipe);
-    stage.addEventListener("lostpointercapture", clearSwipe);
-
-    collapse.setAttribute("aria-expanded", String(!isCollapsed));
-'''
-          if text.count(old)!=1:
-              raise SystemExit("SWIPE_ANCHOR")
-          text=text.replace(old,new,1)
-          app.write_text(text)
-
-          # Keep swipe vertical-scroll friendly and make pager visibly scoped to its carousel.
-          replace_once(
-              "app/styles.css",
-              '.module-detail__carousel-stage { min-height: 278px; position: relative; display: grid; align-items: stretch; opacity: 1; transition: opacity 180ms ease; }',
-              '.module-detail__carousel-stage { min-height: 278px; position: relative; display: grid; align-items: stretch; opacity: 1; transition: opacity 180ms ease; touch-action: pan-y; overscroll-behavior-inline: contain; user-select: none; }'
-          )
-          replace_once(
-              "app/styles.css",
-              '.module-detail__carousel-dots { display: flex; align-items: center; justify-content: center; gap: 7px; min-height: 20px; }',
-              '.module-detail__carousel-dots { display: flex; align-items: center; justify-content: center; gap: 7px; width: fit-content; max-width: 100%; min-height: 20px; margin-inline: auto; padding: 2px 4px; }'
-          )
-
-          backlog=Path("docs/work/global-materials-mobile-pip-backlog.md")
-          body=backlog.read_text()
-          addition='''
-
-## B9 — Refinos visuais e navegação das visualizações
-- [x] Branco base aproximado suavemente de branco puro sem alterar a textura nem a camada estrutural de seams.
-- [x] Indicador decorativo sem semântica removido do contador `8 de 8`.
-- [x] Corrigido o seletor CSS que transformava acidentalmente `#totalCount` em uma bolinha de 8×8 px.
-- [x] Pager de visualizações explicitado semanticamente como tablist e mantido dentro do carousel.
-- [x] Swipe horizontal adicionado às visualizações; gesto vertical continua reservado ao scroll da página.
-- [x] Dots, clique e swipe compartilham o mesmo `detailPageByEntity` e permanecem sincronizados.
-- [ ] Revisão visual do branco e do gesto de swipe no deploy-preview.
-'''
-          if "## B9 — Refinos visuais e navegação das visualizações" not in body:
-              backlog.write_text(body+addition)
-          PY
+        run: python ops/tmp-refine-white-status-swipe.py
 
       - name: Syntax and deterministic gates
         run: |
@@ -208,9 +42,7 @@ jobs:
           npm test
 
       - name: Install Playwright
-        shell: bash
         run: |
-          set -euo pipefail
           mkdir -p /tmp/pw
           cd /tmp/pw
           npm init -y >/dev/null 2>&1
@@ -218,108 +50,13 @@ jobs:
           npx playwright install --with-deps chromium >/dev/null
 
       - name: Browser UI gate
-        shell: bash
         run: |
-          set -euo pipefail
           mkdir -p /tmp/review
-          python -m http.server 4173 --directory "$GITHUB_WORKSPACE/app" >/tmp/mobili-http.log 2>&1 &
+          python -m http.server 4173 --directory app >/tmp/mobili-http.log 2>&1 &
           server_pid=$!
           trap 'kill "$server_pid" 2>/dev/null || true' EXIT
           sleep 1
-
-          cat >/tmp/pw/gate.cjs <<'JS'
-          const { chromium } = require("playwright");
-          const fs = require("fs");
-
-          (async () => {
-            const browser = await chromium.launch({headless:true});
-            const page = await browser.newPage({viewport:{width:390,height:844}});
-            const errors=[];
-            page.on("pageerror", e=>errors.push(String(e)));
-            await page.goto("http://127.0.0.1:4173/",{waitUntil:"networkidle"});
-            const assert=(v,m)=>{if(!v)throw new Error(m)};
-
-            // Footer count: no mystery dot and both 8s share a baseline.
-            const status=await page.locator(".layer-status").evaluate(el=>{
-              const strong=el.querySelector("#visibleCount").getBoundingClientRect();
-              const total=el.querySelector("#totalCount").getBoundingClientRect();
-              return {
-                emptyDecorative:el.querySelector(':scope > span[aria-hidden="true"]')!==null,
-                visibleText:el.textContent.replace(/\s+/g," ").trim(),
-                visibleTop:strong.top,totalTop:total.top,
-                visibleBottom:strong.bottom,totalBottom:total.bottom,
-                totalWidth:total.width,totalHeight:total.height
-              };
-            });
-            assert(!status.emptyDecorative,"decorative status dot still present");
-            assert(status.visibleText.includes("8 de 8 itens incluídos"),"footer count copy changed unexpectedly");
-            assert(Math.abs(status.visibleTop-status.totalTop)<=2 || Math.abs(status.visibleBottom-status.totalBottom)<=2,"footer counts are vertically misaligned");
-            assert(status.totalWidth>5 && status.totalHeight>8,"totalCount is still being rendered as a dot-sized box");
-
-            // Base white: modestly lighter preset and still textured.
-            await page.locator('[data-step="finishes"]').click();
-            await page.locator('[data-finish-id="base-light"]').click();
-            await page.waitForTimeout(120);
-            const base=await page.locator(".finish-layer.is-texture").first().evaluate(el=>({
-              background:getComputedStyle(el).backgroundColor,
-              image:getComputedStyle(el).backgroundImage
-            }));
-            assert(base.background==="rgb(246, 245, 242)","base white color did not move to the intended lighter neutral");
-            assert(base.image!=="none","base white lost its texture");
-
-            // Open a module detail and verify pager semantics/alignment.
-            await page.locator('[data-step="modules"]').click();
-            const firstModule=page.locator("[data-select-entity]").first();
-            await firstModule.click();
-            const carousel=page.locator(".module-detail__carousel");
-            await carousel.scrollIntoViewIfNeeded();
-            const stage=carousel.locator(".module-detail__carousel-stage");
-            const dots=carousel.locator(".module-detail__carousel-dots");
-            const dotCount=await dots.locator("button").count();
-            assert(dotCount>=4,"visualization pager unexpectedly small");
-            const pager=await dots.evaluate(el=>{
-              const r=el.getBoundingClientRect();
-              const parent=el.closest(".module-detail__carousel").getBoundingClientRect();
-              return {
-                role:el.getAttribute("role"),
-                left:r.left,right:r.right,parentLeft:parent.left,parentRight:parent.right
-              };
-            });
-            assert(pager.role==="tablist","visualization dots are not identified as a pager/tablist");
-            assert(pager.left>=pager.parentLeft-1 && pager.right<=pager.parentRight+1,"visualization pager escapes its carousel");
-
-            const initialTitle=await stage.locator(".module-detail__carousel-page > h4").textContent();
-            const box=await stage.boundingBox();
-            assert(box && box.width>100,"carousel stage has no swipeable geometry");
-
-            // Swipe left -> next page.
-            await page.mouse.move(box.x+box.width*0.80, box.y+box.height*0.50);
-            await page.mouse.down();
-            await page.mouse.move(box.x+box.width*0.20, box.y+box.height*0.52,{steps:8});
-            await page.mouse.up();
-            await page.waitForTimeout(260);
-            const afterLeft=await stage.locator(".module-detail__carousel-page > h4").textContent();
-            assert(afterLeft!==initialTitle,"left swipe did not advance visualization");
-            const activeAfterLeft=await dots.locator('button[aria-selected="true"]').count();
-            assert(activeAfterLeft===1,"pager lost a single active state after swipe");
-
-            // Swipe right -> previous page.
-            const box2=await stage.boundingBox();
-            await page.mouse.move(box2.x+box2.width*0.20, box2.y+box2.height*0.50);
-            await page.mouse.down();
-            await page.mouse.move(box2.x+box2.width*0.80, box2.y+box2.height*0.49,{steps:8});
-            await page.mouse.up();
-            await page.waitForTimeout(260);
-            const afterRight=await stage.locator(".module-detail__carousel-page > h4").textContent();
-            assert(afterRight===initialTitle,"right swipe did not return to previous visualization");
-
-            await page.screenshot({path:"/tmp/review/refined-mobile-detail.png",fullPage:true});
-            if(errors.length)throw new Error(errors.join(" | "));
-            fs.writeFileSync("/tmp/review/gate.json",JSON.stringify({pass:true,status,base,pager,dotCount,initialTitle,afterLeft,afterRight},null,2));
-            await browser.close();
-          })().catch(e=>{console.error(e);process.exit(1)});
-          JS
-
+          cp ops/tmp-refine-white-status-swipe-gate.cjs /tmp/pw/gate.cjs
           cd /tmp/pw
           node gate.cjs
 
@@ -340,6 +77,7 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
           git rm .github/workflows/refine-white-status-swipe-temp.yml
+          git rm ops/tmp-refine-white-status-swipe.py ops/tmp-refine-white-status-swipe-gate.cjs
           git add app/data/catalog-data.js app/index.html app/styles.css app/app.js docs/work/global-materials-mobile-pip-backlog.md
 
           remote_before="$(git ls-remote origin "refs/heads/$TARGET_BRANCH" | cut -f1)"
