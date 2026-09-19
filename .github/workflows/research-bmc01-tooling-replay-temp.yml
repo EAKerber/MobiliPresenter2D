@@ -1,0 +1,133 @@
+name: Research BMC01 tooling replay temp
+
+on:
+  push:
+    branches:
+      - research/reconstruction-architecture-v0.1
+    paths:
+      - .github/workflows/research-bmc01-tooling-replay-temp.yml
+
+permissions:
+  contents: write
+
+jobs:
+  validate-replay:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: research/reconstruction-architecture-v0.1
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install image tooling
+        run: python -m pip install -r tools/requirements.txt
+
+      - name: Compile repaired authoring chain
+        run: |
+          python -m py_compile             tools/extract_candidate_delta.py             tools/materialize_perspective_donor_recipe.py             tools/validate_authoring_provenance.py             tools/validate_candidate_assets.py
+
+      - name: Run focused regression tests
+        run: |
+          python -m unittest             tests/test_candidate_delta_authoring.py             tests/test_candidate_authoring_provenance.py             tests/test_perspective_donor_materializer.py             tests/test_gap_pixel_gate.py             tests/test_perspective_editorial_gate.py
+
+      - name: Render exact historical source variant
+        run: |
+          rm -rf /tmp/bmc01-source
+          mkdir -p /tmp/bmc01-source
+          python tools/render_variant_fidelity.py             --manifest review-assets/calibration/module-02-right-face-v1/source-variant-manifest.json             --output-dir /tmp/bmc01-source
+          actual="$(sha256sum /tmp/bmc01-source/module-03-hidden.png | cut -d' ' -f1)"
+          expected="f502790c76afe612563958ca3acfcc7d653018d718d11d852ed3a45df553ecfa"
+          echo "BMC01_SOURCE_SHA=$actual"
+          test "$actual" = "$expected"
+
+      - name: Replay projective donor recipe
+        run: |
+          rm -rf review-assets/benchmarks/_tmp-bmc01-replay
+          mkdir -p review-assets/benchmarks/_tmp-bmc01-replay
+          python tools/materialize_perspective_donor_recipe.py             --recipe review-assets/recipes/module-02-exposed-right-side-v1.json             --source-frame /tmp/bmc01-source/module-03-hidden.png             --variant-manifest review-assets/calibration/module-02-right-face-v1/source-variant-manifest.json             --output-dir review-assets/benchmarks/_tmp-bmc01-replay
+          python - <<'PY'
+          import hashlib, json
+          from pathlib import Path
+
+          root=Path("review-assets/benchmarks/_tmp-bmc01-replay")
+          historical=Path("review-assets/candidates/module-02-exposed-right-side-v1")
+          replay=json.loads((root/"extraction-report.json").read_text())
+          old=json.loads((historical/"extraction-report.json").read_text())
+
+          keys=[
+              "candidateSha256",
+              "sourceFrameSha256",
+              "editedFrameSha256",
+              "changedPixelCount",
+              "differenceBounds",
+              "candidateAlphaBounds",
+              "outsideAuthorizedRoiChangedPixelCount",
+              "roundtripMismatchPixelCount",
+              "recipeSha256",
+          ]
+          mismatches={key:(replay.get(key),old.get(key)) for key in keys if replay.get(key)!=old.get(key)}
+          replay_bytes=(root/"candidate.png").read_bytes()
+          historical_bytes=(historical/"candidate.png").read_bytes()
+          exact_bytes=replay_bytes==historical_bytes
+          print(json.dumps({
+              "status":"PASS" if not mismatches and exact_bytes else "FAIL",
+              "exactCandidateBytes":exact_bytes,
+              "replayCandidateSha256":hashlib.sha256(replay_bytes).hexdigest(),
+              "historicalCandidateSha256":hashlib.sha256(historical_bytes).hexdigest(),
+              "mismatches":mismatches,
+              "replay":{key:replay.get(key) for key in keys},
+          },sort_keys=True))
+          if mismatches or not exact_bytes:
+              raise SystemExit(1)
+          PY
+
+      - name: Validate replay candidate structure and provenance
+        run: |
+          python tools/validate_candidate_assets.py             --candidate-root review-assets/benchmarks/_tmp-bmc01-replay             --output /tmp/bmc01-intake.json || true
+          cat /tmp/bmc01-intake.json
+          # The replay output is outside the canonical candidates inbox and is intentionally
+          # not used for promotion. Historical canonical candidate remains the provenance target.
+          python tools/validate_authoring_provenance.py             --candidate-root review-assets/candidates/module-02-exposed-right-side-v1             --output /tmp/bmc01-historical-provenance.json
+          cat /tmp/bmc01-historical-provenance.json
+
+      - name: Archive replay evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: bmc01-tooling-replay-${{ github.run_id }}
+          path: |
+            /tmp/bmc01-source/summary.json
+            /tmp/bmc01-intake.json
+            /tmp/bmc01-historical-provenance.json
+            review-assets/benchmarks/_tmp-bmc01-replay/extraction-report.json
+            review-assets/benchmarks/_tmp-bmc01-replay/candidate.json
+            review-assets/benchmarks/_tmp-bmc01-replay/candidate.png
+          if-no-files-found: error
+
+      - name: Cleanup temporary replay
+        run: rm -rf review-assets/benchmarks/_tmp-bmc01-replay
+
+      - name: Self-clean workflow with CAS
+        env:
+          TARGET_BRANCH: research/reconstruction-architecture-v0.1
+          EXPECTED_HEAD: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git rm .github/workflows/research-bmc01-tooling-replay-temp.yml
+          remote_before="$(git ls-remote origin "refs/heads/$TARGET_BRANCH" | cut -f1)"
+          if [ "$remote_before" != "$EXPECTED_HEAD" ]; then
+            echo "TARGET_HEAD_DRIFT:$remote_before!=$EXPECTED_HEAD" >&2
+            exit 2
+          fi
+          git commit -m "chore: remove BMC-01 replay workflow"
+          result="$(git rev-parse HEAD)"
+          git push origin "HEAD:refs/heads/$TARGET_BRANCH"
+          remote_after="$(git ls-remote origin "refs/heads/$TARGET_BRANCH" | cut -f1)"
+          test "$remote_after" = "$result"
+          echo "BMC01_REPLAY_WORKFLOW_CLEANUP=$result"
