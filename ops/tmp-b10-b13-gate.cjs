@@ -51,7 +51,8 @@ const fs = require("fs");
   // Seam-derived guide must exist and contain mixed topology for module 06.
   const guide = await page.evaluate(() => window.CASA_FRONT_GUIDES["module-06"]);
   assert(guide && guide.source === "finish-mask-components", "module-06 front guide missing");
-  assert(guide.componentCount === 3, "module-06 guide component count mismatch");
+  assert(guide.frontCount === 3, "module-06 guide front-count metadata mismatch");
+  assert(guide.expectedVerticalSeams === 2 && guide.expectedHorizontalSeams === 1, "module-06 guide seam contract mismatch");
   assert(guide.lines.some(line => Math.abs(line.x1-line.x2) < .001), "module-06 guide has no vertical seam");
   assert(guide.lines.some(line => Math.abs(line.y1-line.y2) < .001), "module-06 guide has no horizontal seam");
 
