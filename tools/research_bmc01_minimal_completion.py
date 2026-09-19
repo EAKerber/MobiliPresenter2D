@@ -76,6 +76,25 @@ def nearest_fill(clean,missing,donor_mask,max_distance):
       "meanDistance":sum(distances)/len(distances) if distances else 0
     }
 
+def same_object_contact_error(clean,image,candidate_mask,donor_mask):
+    ip=image.load(); cp=clean.load(); mp=candidate_mask.load(); dp=donor_mask.load()
+    w,h=clean.size
+    values=[]
+    pairs=0
+    for y in range(h):
+        for x in range(w):
+            if not mp[x,y]: continue
+            for nx,ny in ((x-1,y),(x+1,y),(x,y-1),(x,y+1)):
+                if 0<=nx<w and 0<=ny<h and dp[nx,ny]:
+                    a=ip[x,y][:3]; b=cp[nx,ny][:3]
+                    values.append(sum(abs(a[i]-b[i]) for i in range(3))/3)
+                    pairs+=1
+    return {
+      "pairCount":pairs,
+      "meanAbsChannelDifference":sum(values)/len(values) if values else None,
+      "maxAbsChannelDifference":max(values) if values else None
+    }
+
 def boundary_color_error(clean,edited,candidate_mask):
     cp=clean.load(); ep=edited.load(); mp=candidate_mask.load()
     w,h=clean.size
@@ -168,6 +187,8 @@ def main():
       "donorDistance":fillstats,
       "boundaryColorErrorBefore":boundary_color_error(clean,clean,candidate.getchannel("A")),
       "boundaryColorErrorAfter":boundary_color_error(clean,edited,candidate.getchannel("A")),
+      "sameObjectContactErrorBefore":same_object_contact_error(clean,clean,candidate.getchannel("A"),donor),
+      "sameObjectContactErrorAfter":same_object_contact_error(clean,edited,candidate.getchannel("A"),donor),
       "limitations":[
         "nearest-pixel donor is a deterministic appearance baseline, not final photometric synthesis",
         "edit entitlement currently uses absence of any alpha contribution from current host/stone assets and remains research-only",
@@ -178,6 +199,10 @@ def main():
     after=report["boundaryColorErrorAfter"]["meanAbsChannelDifference"]
     report["boundaryColorErrorMeanImprovement"]=before-after
     report["boundaryColorErrorMeanImprovementRatio"]=(before-after)/before if before else None
+    cb=report["sameObjectContactErrorBefore"]["meanAbsChannelDifference"]
+    ca=report["sameObjectContactErrorAfter"]["meanAbsChannelDifference"]
+    report["sameObjectContactMeanImprovement"]=(cb-ca) if cb is not None and ca is not None else None
+    report["sameObjectContactMeanImprovementRatio"]=((cb-ca)/cb) if cb not in (None,0) and ca is not None else None
     (args.output_dir/"report.json").write_text(json.dumps(report,indent=2,sort_keys=True)+"\n",encoding="utf-8")
     print(json.dumps(report,sort_keys=True))
     return 0
