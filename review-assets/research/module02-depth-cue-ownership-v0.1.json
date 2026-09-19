@@ -1,854 +1,1241 @@
 {
-  "assets": {
-    "approvedStone02": {
-      "alphaBounds": [
-        515,
-        491,
-        739,
-        575
-      ],
-      "alphaGe128Count": 0,
-      "alphaPositiveCount": 0,
-      "maxAlpha": 0,
-      "path": "app/assets/kitchen/overlays/approved-stone-02.png",
-      "sampleCount": 62,
-      "samples": []
-    },
-    "module02": {
-      "alphaBounds": [
-        498,
-        590,
-        757,
-        856
-      ],
-      "alphaGe128Count": 0,
-      "alphaPositiveCount": 0,
-      "maxAlpha": 0,
-      "path": "app/assets/kitchen/layers/02_inferior_fogao.png",
-      "sampleCount": 62,
-      "samples": []
-    },
-    "stone02Bridge": {
-      "alphaBounds": [
-        745,
-        521,
-        764,
-        590
-      ],
-      "alphaGe128Count": 22,
-      "alphaPositiveCount": 43,
-      "maxAlpha": 255,
-      "path": "app/assets/kitchen/bridges/stone-02-joint-bridge.png",
-      "sampleCount": 62,
-      "samples": [
-        {
-          "alpha": 19,
-          "point": [
-            745,
-            576
-          ]
-        },
-        {
-          "alpha": 17,
-          "point": [
-            746,
-            575
-          ]
-        },
-        {
-          "alpha": 17,
-          "point": [
-            746,
-            574
-          ]
-        },
-        {
-          "alpha": 17,
-          "point": [
-            746,
-            573
-          ]
-        },
-        {
-          "alpha": 15,
-          "point": [
-            747,
-            572
-          ]
-        },
-        {
-          "alpha": 15,
-          "point": [
-            747,
-            571
-          ]
-        },
-        {
-          "alpha": 12,
-          "point": [
-            748,
-            570
-          ]
-        },
-        {
-          "alpha": 12,
-          "point": [
-            748,
-            569
-          ]
-        },
-        {
-          "alpha": 12,
-          "point": [
-            748,
-            568
-          ]
-        },
-        {
-          "alpha": 10,
-          "point": [
-            749,
-            567
-          ]
-        },
-        {
-          "alpha": 10,
-          "point": [
-            749,
-            566
-          ]
-        },
-        {
-          "alpha": 10,
-          "point": [
-            749,
-            565
-          ]
-        },
-        {
-          "alpha": 8,
-          "point": [
-            750,
-            564
-          ]
-        },
-        {
-          "alpha": 8,
-          "point": [
-            750,
-            563
-          ]
-        },
-        {
-          "alpha": 8,
-          "point": [
-            750,
-            562
-          ]
-        },
-        {
-          "alpha": 6,
-          "point": [
-            751,
-            561
-          ]
-        },
-        {
-          "alpha": 5,
-          "point": [
-            751,
-            560
-          ]
-        },
-        {
-          "alpha": 5,
-          "point": [
-            751,
-            559
-          ]
-        },
-        {
-          "alpha": 3,
-          "point": [
-            752,
-            558
-          ]
-        },
-        {
-          "alpha": 3,
-          "point": [
-            752,
-            557
-          ]
-        },
-        {
-          "alpha": 2,
-          "point": [
-            752,
-            556
-          ]
-        },
-        {
-          "alpha": 255,
-          "point": [
-            753,
-            555
-          ]
-        },
-        {
-          "alpha": 255,
-          "point": [
-            753,
-            554
-          ]
-        },
-        {
-          "alpha": 255,
-          "point": [
-            753,
-            553
-          ]
-        },
-        {
-          "alpha": 255,
-          "point": [
-            754,
-            552
-          ]
-        },
-        {
-          "alpha": 255,
-          "point": [
-            754,
-            551
-          ]
-        },
-        {
-          "alpha": 255,
-          "point": [
-            754,
-            550
-          ]
-        },
-        {
-          "alpha": 255,
-          "point": [
-            755,
-            549
-          ]
-        },
-        {
-          "alpha": 255,
-          "point": [
-            755,
-            548
-          ]
-        },
-        {
-          "alpha": 255,
-          "point": [
-            755,
-            547
-          ]
-        },
-        {
-          "alpha": 255,
-          "point": [
-            756,
-            546
-          ]
-        },
-        {
-          "alpha": 255,
-          "point": [
-            756,
-            545
-          ]
-        },
-        {
-          "alpha": 255,
-          "point": [
-            756,
-            544
-          ]
-        },
-        {
-          "alpha": 255,
-          "point": [
-            757,
-            543
-          ]
-        },
-        {
-          "alpha": 255,
-          "point": [
-            757,
-            542
-          ]
-        },
-        {
-          "alpha": 255,
-          "point": [
-            757,
-            541
-          ]
-        },
-        {
-          "alpha": 255,
-          "point": [
-            758,
-            540
-          ]
-        },
-        {
-          "alpha": 255,
-          "point": [
-            758,
-            539
-          ]
-        },
-        {
-          "alpha": 255,
-          "point": [
-            759,
-            537
-          ]
-        },
-        {
-          "alpha": 255,
-          "point": [
-            759,
-            536
-          ]
-        },
-        {
-          "alpha": 255,
-          "point": [
-            760,
-            534
-          ]
-        },
-        {
-          "alpha": 255,
-          "point": [
-            760,
-            533
-          ]
-        },
-        {
-          "alpha": 255,
-          "point": [
-            761,
-            530
-          ]
-        }
-      ]
-    },
-    "stone02Original": {
-      "alphaBounds": [
-        484,
-        491,
-        764,
-        912
-      ],
-      "alphaGe128Count": 30,
-      "alphaPositiveCount": 53,
-      "maxAlpha": 255,
-      "path": "app/assets/kitchen/layers/stone-02-cozinha.png",
-      "sampleCount": 62,
-      "samples": [
-        {
-          "alpha": 255,
-          "point": [
-            742,
-            586
-          ]
-        },
-        {
-          "alpha": 255,
-          "point": [
-            742,
-            585
-          ]
-        },
-        {
-          "alpha": 255,
-          "point": [
-            743,
-            584
-          ]
-        },
-        {
-          "alpha": 255,
-          "point": [
-            743,
-            583
-          ]
-        },
-        {
-          "alpha": 255,
-          "point": [
-            743,
-            582
-          ]
-        },
-        {
-          "alpha": 255,
-          "point": [
-            744,
-            581
-          ]
-        },
-        {
-          "alpha": 255,
-          "point": [
-            744,
-            580
-          ]
-        },
-        {
-          "alpha": 255,
-          "point": [
-            744,
-            579
-          ]
-        },
-        {
-          "alpha": 19,
-          "point": [
-            745,
-            578
-          ]
-        },
-        {
-          "alpha": 19,
-          "point": [
-            745,
-            577
-          ]
-        },
-        {
-          "alpha": 19,
-          "point": [
-            745,
-            576
-          ]
-        },
-        {
-          "alpha": 17,
-          "point": [
-            746,
-            575
-          ]
-        },
-        {
-          "alpha": 17,
-          "point": [
-            746,
-            574
-          ]
-        },
-        {
-          "alpha": 17,
-          "point": [
-            746,
-            573
-          ]
-        },
-        {
-          "alpha": 15,
-          "point": [
-            747,
-            572
-          ]
-        },
-        {
-          "alpha": 15,
-          "point": [
-            747,
-            571
-          ]
-        },
-        {
-          "alpha": 12,
-          "point": [
-            748,
-            570
-          ]
-        },
-        {
-          "alpha": 12,
-          "point": [
-            748,
-            569
-          ]
-        },
-        {
-          "alpha": 12,
-          "point": [
-            748,
-            568
-          ]
-        },
-        {
-          "alpha": 10,
-          "point": [
-            749,
-            567
-          ]
-        },
-        {
-          "alpha": 10,
-          "point": [
-            749,
-            566
-          ]
-        },
-        {
-          "alpha": 10,
-          "point": [
-            749,
-            565
-          ]
-        },
-        {
-          "alpha": 8,
-          "point": [
-            750,
-            564
-          ]
-        },
-        {
-          "alpha": 8,
-          "point": [
-            750,
-            563
-          ]
-        },
-        {
-          "alpha": 8,
-          "point": [
-            750,
-            562
-          ]
-        },
-        {
-          "alpha": 6,
-          "point": [
-            751,
-            561
-          ]
-        },
-        {
-          "alpha": 5,
-          "point": [
-            751,
-            560
-          ]
-        },
-        {
-          "alpha": 5,
-          "point": [
-            751,
-            559
-          ]
-        },
-        {
-          "alpha": 3,
-          "point": [
-            752,
-            558
-          ]
-        },
-        {
-          "alpha": 3,
-          "point": [
-            752,
-            557
-          ]
-        },
-        {
-          "alpha": 2,
-          "point": [
-            752,
-            556
-          ]
-        },
-        {
-          "alpha": 255,
-          "point": [
-            753,
-            555
-          ]
-        },
-        {
-          "alpha": 255,
-          "point": [
-            753,
-            554
-          ]
-        },
-        {
-          "alpha": 255,
-          "point": [
-            753,
-            553
-          ]
-        },
-        {
-          "alpha": 255,
-          "point": [
-            754,
-            552
-          ]
-        },
-        {
-          "alpha": 255,
-          "point": [
-            754,
-            551
-          ]
-        },
-        {
-          "alpha": 255,
-          "point": [
-            754,
-            550
-          ]
-        },
-        {
-          "alpha": 255,
-          "point": [
-            755,
-            549
-          ]
-        },
-        {
-          "alpha": 255,
-          "point": [
-            755,
-            548
-          ]
-        },
-        {
-          "alpha": 255,
-          "point": [
-            755,
-            547
-          ]
-        },
-        {
-          "alpha": 255,
-          "point": [
-            756,
-            546
-          ]
-        },
-        {
-          "alpha": 255,
-          "point": [
-            756,
-            545
-          ]
-        },
-        {
-          "alpha": 255,
-          "point": [
-            756,
-            544
-          ]
-        },
-        {
-          "alpha": 255,
-          "point": [
-            757,
-            543
-          ]
-        },
-        {
-          "alpha": 255,
-          "point": [
-            757,
-            542
-          ]
-        },
-        {
-          "alpha": 255,
-          "point": [
-            757,
-            541
-          ]
-        },
-        {
-          "alpha": 255,
-          "point": [
-            758,
-            540
-          ]
-        },
-        {
-          "alpha": 255,
-          "point": [
-            758,
-            539
-          ]
-        },
-        {
-          "alpha": 255,
-          "point": [
-            759,
-            537
-          ]
-        },
-        {
-          "alpha": 255,
-          "point": [
-            759,
-            536
-          ]
-        },
-        {
-          "alpha": 255,
-          "point": [
-            760,
-            534
-          ]
-        },
-        {
-          "alpha": 255,
-          "point": [
-            760,
-            533
-          ]
-        },
-        {
-          "alpha": 255,
-          "point": [
-            761,
-            530
-          ]
-        }
-      ]
-    },
-    "stone02Variant": {
-      "alphaBounds": [
-        484,
-        491,
-        757,
-        912
-      ],
-      "alphaGe128Count": 8,
-      "alphaPositiveCount": 10,
-      "maxAlpha": 255,
-      "path": "app/assets/kitchen/variants/stone-02-cozinha-exposed-right.png",
-      "sampleCount": 62,
-      "samples": [
-        {
-          "alpha": 255,
-          "point": [
-            742,
-            586
-          ]
-        },
-        {
-          "alpha": 255,
-          "point": [
-            742,
-            585
-          ]
-        },
-        {
-          "alpha": 255,
-          "point": [
-            743,
-            584
-          ]
-        },
-        {
-          "alpha": 255,
-          "point": [
-            743,
-            583
-          ]
-        },
-        {
-          "alpha": 255,
-          "point": [
-            743,
-            582
-          ]
-        },
-        {
-          "alpha": 255,
-          "point": [
-            744,
-            581
-          ]
-        },
-        {
-          "alpha": 255,
-          "point": [
-            744,
-            580
-          ]
-        },
-        {
-          "alpha": 255,
-          "point": [
-            744,
-            579
-          ]
-        },
-        {
-          "alpha": 19,
-          "point": [
-            745,
-            578
-          ]
-        },
-        {
-          "alpha": 19,
-          "point": [
-            745,
-            577
-          ]
-        }
-      ]
-    }
-  },
-  "currentModule03HiddenVisibility": {
-    "approvedStone02": {
-      "reason": "visible",
-      "visible": true
-    },
-    "module02": {
-      "reason": "visible",
-      "visible": true
-    },
-    "stone02Bridge": {
-      "reason": "host-hidden",
-      "visible": false
-    },
-    "stone02Variant": {
-      "reason": "visible",
-      "visible": true
-    }
-  },
-  "historicalMeasuredLine": {
-    "back": [
-      763,
-      525
-    ],
-    "front": [
-      742,
-      586
-    ]
-  },
   "interpretation": {
-    "promotionEligible": false,
-    "purpose": "determine whether the historical depth cue is supported by pixels that remain visible in the current module-03-hidden composition"
+    "module02": "The old long M02 cue is mostly conditional joint-bridge support and is not current exposed-side authority.",
+    "module03": "If the reference-alpha points belong to the currently visible stone03 variant with bridge hidden, they are current raster evidence; a separate semantic/topology check is still required before calling them a physical Y-direction edge.",
+    "promotionEligible": false
   },
-  "lineSampleCount": 62,
+  "module02HistoricalCue": {
+    "assets": {
+      "approvedStone02": {
+        "alphaBounds": [
+          515,
+          491,
+          739,
+          575
+        ],
+        "alphaGe128Count": 0,
+        "alphaPositiveCount": 0,
+        "maxAlpha": 0,
+        "path": "app/assets/kitchen/overlays/approved-stone-02.png",
+        "sampleCount": 62,
+        "samples": [],
+        "sha256": "30e5c1a6e79454cc7aa90c51492d45f608ead3e05e5c53e7b15ca0ae7c373553"
+      },
+      "module02": {
+        "alphaBounds": [
+          498,
+          590,
+          757,
+          856
+        ],
+        "alphaGe128Count": 0,
+        "alphaPositiveCount": 0,
+        "maxAlpha": 0,
+        "path": "app/assets/kitchen/layers/02_inferior_fogao.png",
+        "sampleCount": 62,
+        "samples": [],
+        "sha256": "dcda8c31812678db8eb1e4d5fc88d23dfd8cd77e50a8a75d726df62af6075faf"
+      },
+      "stone02Bridge": {
+        "alphaBounds": [
+          745,
+          521,
+          764,
+          590
+        ],
+        "alphaGe128Count": 22,
+        "alphaPositiveCount": 43,
+        "maxAlpha": 255,
+        "path": "app/assets/kitchen/bridges/stone-02-joint-bridge.png",
+        "sampleCount": 62,
+        "samples": [
+          {
+            "alpha": 19,
+            "point": [
+              745,
+              576
+            ]
+          },
+          {
+            "alpha": 17,
+            "point": [
+              746,
+              575
+            ]
+          },
+          {
+            "alpha": 17,
+            "point": [
+              746,
+              574
+            ]
+          },
+          {
+            "alpha": 17,
+            "point": [
+              746,
+              573
+            ]
+          },
+          {
+            "alpha": 15,
+            "point": [
+              747,
+              572
+            ]
+          },
+          {
+            "alpha": 15,
+            "point": [
+              747,
+              571
+            ]
+          },
+          {
+            "alpha": 12,
+            "point": [
+              748,
+              570
+            ]
+          },
+          {
+            "alpha": 12,
+            "point": [
+              748,
+              569
+            ]
+          },
+          {
+            "alpha": 12,
+            "point": [
+              748,
+              568
+            ]
+          },
+          {
+            "alpha": 10,
+            "point": [
+              749,
+              567
+            ]
+          },
+          {
+            "alpha": 10,
+            "point": [
+              749,
+              566
+            ]
+          },
+          {
+            "alpha": 10,
+            "point": [
+              749,
+              565
+            ]
+          },
+          {
+            "alpha": 8,
+            "point": [
+              750,
+              564
+            ]
+          },
+          {
+            "alpha": 8,
+            "point": [
+              750,
+              563
+            ]
+          },
+          {
+            "alpha": 8,
+            "point": [
+              750,
+              562
+            ]
+          },
+          {
+            "alpha": 6,
+            "point": [
+              751,
+              561
+            ]
+          },
+          {
+            "alpha": 5,
+            "point": [
+              751,
+              560
+            ]
+          },
+          {
+            "alpha": 5,
+            "point": [
+              751,
+              559
+            ]
+          },
+          {
+            "alpha": 3,
+            "point": [
+              752,
+              558
+            ]
+          },
+          {
+            "alpha": 3,
+            "point": [
+              752,
+              557
+            ]
+          },
+          {
+            "alpha": 2,
+            "point": [
+              752,
+              556
+            ]
+          },
+          {
+            "alpha": 255,
+            "point": [
+              753,
+              555
+            ]
+          },
+          {
+            "alpha": 255,
+            "point": [
+              753,
+              554
+            ]
+          },
+          {
+            "alpha": 255,
+            "point": [
+              753,
+              553
+            ]
+          },
+          {
+            "alpha": 255,
+            "point": [
+              754,
+              552
+            ]
+          },
+          {
+            "alpha": 255,
+            "point": [
+              754,
+              551
+            ]
+          },
+          {
+            "alpha": 255,
+            "point": [
+              754,
+              550
+            ]
+          },
+          {
+            "alpha": 255,
+            "point": [
+              755,
+              549
+            ]
+          },
+          {
+            "alpha": 255,
+            "point": [
+              755,
+              548
+            ]
+          },
+          {
+            "alpha": 255,
+            "point": [
+              755,
+              547
+            ]
+          },
+          {
+            "alpha": 255,
+            "point": [
+              756,
+              546
+            ]
+          },
+          {
+            "alpha": 255,
+            "point": [
+              756,
+              545
+            ]
+          },
+          {
+            "alpha": 255,
+            "point": [
+              756,
+              544
+            ]
+          },
+          {
+            "alpha": 255,
+            "point": [
+              757,
+              543
+            ]
+          },
+          {
+            "alpha": 255,
+            "point": [
+              757,
+              542
+            ]
+          },
+          {
+            "alpha": 255,
+            "point": [
+              757,
+              541
+            ]
+          },
+          {
+            "alpha": 255,
+            "point": [
+              758,
+              540
+            ]
+          },
+          {
+            "alpha": 255,
+            "point": [
+              758,
+              539
+            ]
+          },
+          {
+            "alpha": 255,
+            "point": [
+              759,
+              537
+            ]
+          },
+          {
+            "alpha": 255,
+            "point": [
+              759,
+              536
+            ]
+          },
+          {
+            "alpha": 255,
+            "point": [
+              760,
+              534
+            ]
+          },
+          {
+            "alpha": 255,
+            "point": [
+              760,
+              533
+            ]
+          },
+          {
+            "alpha": 255,
+            "point": [
+              761,
+              530
+            ]
+          }
+        ],
+        "sha256": "e178e88edf0f412d1f0922bf335e7b524e80e888a3e2189fcd51ccc048a3d108"
+      },
+      "stone02Original": {
+        "alphaBounds": [
+          484,
+          491,
+          764,
+          912
+        ],
+        "alphaGe128Count": 30,
+        "alphaPositiveCount": 53,
+        "maxAlpha": 255,
+        "path": "app/assets/kitchen/layers/stone-02-cozinha.png",
+        "sampleCount": 62,
+        "samples": [
+          {
+            "alpha": 255,
+            "point": [
+              742,
+              586
+            ]
+          },
+          {
+            "alpha": 255,
+            "point": [
+              742,
+              585
+            ]
+          },
+          {
+            "alpha": 255,
+            "point": [
+              743,
+              584
+            ]
+          },
+          {
+            "alpha": 255,
+            "point": [
+              743,
+              583
+            ]
+          },
+          {
+            "alpha": 255,
+            "point": [
+              743,
+              582
+            ]
+          },
+          {
+            "alpha": 255,
+            "point": [
+              744,
+              581
+            ]
+          },
+          {
+            "alpha": 255,
+            "point": [
+              744,
+              580
+            ]
+          },
+          {
+            "alpha": 255,
+            "point": [
+              744,
+              579
+            ]
+          },
+          {
+            "alpha": 19,
+            "point": [
+              745,
+              578
+            ]
+          },
+          {
+            "alpha": 19,
+            "point": [
+              745,
+              577
+            ]
+          },
+          {
+            "alpha": 19,
+            "point": [
+              745,
+              576
+            ]
+          },
+          {
+            "alpha": 17,
+            "point": [
+              746,
+              575
+            ]
+          },
+          {
+            "alpha": 17,
+            "point": [
+              746,
+              574
+            ]
+          },
+          {
+            "alpha": 17,
+            "point": [
+              746,
+              573
+            ]
+          },
+          {
+            "alpha": 15,
+            "point": [
+              747,
+              572
+            ]
+          },
+          {
+            "alpha": 15,
+            "point": [
+              747,
+              571
+            ]
+          },
+          {
+            "alpha": 12,
+            "point": [
+              748,
+              570
+            ]
+          },
+          {
+            "alpha": 12,
+            "point": [
+              748,
+              569
+            ]
+          },
+          {
+            "alpha": 12,
+            "point": [
+              748,
+              568
+            ]
+          },
+          {
+            "alpha": 10,
+            "point": [
+              749,
+              567
+            ]
+          },
+          {
+            "alpha": 10,
+            "point": [
+              749,
+              566
+            ]
+          },
+          {
+            "alpha": 10,
+            "point": [
+              749,
+              565
+            ]
+          },
+          {
+            "alpha": 8,
+            "point": [
+              750,
+              564
+            ]
+          },
+          {
+            "alpha": 8,
+            "point": [
+              750,
+              563
+            ]
+          },
+          {
+            "alpha": 8,
+            "point": [
+              750,
+              562
+            ]
+          },
+          {
+            "alpha": 6,
+            "point": [
+              751,
+              561
+            ]
+          },
+          {
+            "alpha": 5,
+            "point": [
+              751,
+              560
+            ]
+          },
+          {
+            "alpha": 5,
+            "point": [
+              751,
+              559
+            ]
+          },
+          {
+            "alpha": 3,
+            "point": [
+              752,
+              558
+            ]
+          },
+          {
+            "alpha": 3,
+            "point": [
+              752,
+              557
+            ]
+          },
+          {
+            "alpha": 2,
+            "point": [
+              752,
+              556
+            ]
+          },
+          {
+            "alpha": 255,
+            "point": [
+              753,
+              555
+            ]
+          },
+          {
+            "alpha": 255,
+            "point": [
+              753,
+              554
+            ]
+          },
+          {
+            "alpha": 255,
+            "point": [
+              753,
+              553
+            ]
+          },
+          {
+            "alpha": 255,
+            "point": [
+              754,
+              552
+            ]
+          },
+          {
+            "alpha": 255,
+            "point": [
+              754,
+              551
+            ]
+          },
+          {
+            "alpha": 255,
+            "point": [
+              754,
+              550
+            ]
+          },
+          {
+            "alpha": 255,
+            "point": [
+              755,
+              549
+            ]
+          },
+          {
+            "alpha": 255,
+            "point": [
+              755,
+              548
+            ]
+          },
+          {
+            "alpha": 255,
+            "point": [
+              755,
+              547
+            ]
+          },
+          {
+            "alpha": 255,
+            "point": [
+              756,
+              546
+            ]
+          },
+          {
+            "alpha": 255,
+            "point": [
+              756,
+              545
+            ]
+          },
+          {
+            "alpha": 255,
+            "point": [
+              756,
+              544
+            ]
+          },
+          {
+            "alpha": 255,
+            "point": [
+              757,
+              543
+            ]
+          },
+          {
+            "alpha": 255,
+            "point": [
+              757,
+              542
+            ]
+          },
+          {
+            "alpha": 255,
+            "point": [
+              757,
+              541
+            ]
+          },
+          {
+            "alpha": 255,
+            "point": [
+              758,
+              540
+            ]
+          },
+          {
+            "alpha": 255,
+            "point": [
+              758,
+              539
+            ]
+          },
+          {
+            "alpha": 255,
+            "point": [
+              759,
+              537
+            ]
+          },
+          {
+            "alpha": 255,
+            "point": [
+              759,
+              536
+            ]
+          },
+          {
+            "alpha": 255,
+            "point": [
+              760,
+              534
+            ]
+          },
+          {
+            "alpha": 255,
+            "point": [
+              760,
+              533
+            ]
+          },
+          {
+            "alpha": 255,
+            "point": [
+              761,
+              530
+            ]
+          }
+        ],
+        "sha256": "5317874508ac3738dd8aaffb60e1f6db5e623edb2d8261d7674934b3225359dd"
+      },
+      "stone02Variant": {
+        "alphaBounds": [
+          484,
+          491,
+          757,
+          912
+        ],
+        "alphaGe128Count": 8,
+        "alphaPositiveCount": 10,
+        "maxAlpha": 255,
+        "path": "app/assets/kitchen/variants/stone-02-cozinha-exposed-right.png",
+        "sampleCount": 62,
+        "samples": [
+          {
+            "alpha": 255,
+            "point": [
+              742,
+              586
+            ]
+          },
+          {
+            "alpha": 255,
+            "point": [
+              742,
+              585
+            ]
+          },
+          {
+            "alpha": 255,
+            "point": [
+              743,
+              584
+            ]
+          },
+          {
+            "alpha": 255,
+            "point": [
+              743,
+              583
+            ]
+          },
+          {
+            "alpha": 255,
+            "point": [
+              743,
+              582
+            ]
+          },
+          {
+            "alpha": 255,
+            "point": [
+              744,
+              581
+            ]
+          },
+          {
+            "alpha": 255,
+            "point": [
+              744,
+              580
+            ]
+          },
+          {
+            "alpha": 255,
+            "point": [
+              744,
+              579
+            ]
+          },
+          {
+            "alpha": 19,
+            "point": [
+              745,
+              578
+            ]
+          },
+          {
+            "alpha": 19,
+            "point": [
+              745,
+              577
+            ]
+          }
+        ],
+        "sha256": "e1ab1e0134d249104dcf7bf7192922612f5aa72b155811689a997d5d83f1ca11"
+      }
+    },
+    "currentModule03HiddenVisibility": {
+      "approvedStone02": {
+        "reason": "visible",
+        "visible": true
+      },
+      "module02": {
+        "reason": "visible",
+        "visible": true
+      },
+      "stone02Bridge": {
+        "reason": "host-hidden",
+        "visible": false
+      },
+      "stone02Variant": {
+        "reason": "visible",
+        "visible": true
+      }
+    },
+    "finding": "LEGACY_JOINT_CONTAMINATED",
+    "line": {
+      "back": [
+        763,
+        525
+      ],
+      "front": [
+        742,
+        586
+      ]
+    },
+    "lineSampleCount": 62
+  },
+  "module03GapReferenceCue": {
+    "assets": {
+      "approvedStone03": {
+        "alphaBounds": [
+          786,
+          441,
+          1093,
+          575
+        ],
+        "alphaGe128Count": 0,
+        "alphaPositiveCount": 0,
+        "maxAlpha": 0,
+        "path": "app/assets/kitchen/overlays/approved-stone-03.png",
+        "sampleCount": 15,
+        "samples": [],
+        "sha256": "b2304e4c547091c36c368397350bf2759407668f019025b73213e7b84c3cac1c"
+      },
+      "module03": {
+        "alphaBounds": [
+          736,
+          590,
+          1217,
+          856
+        ],
+        "alphaGe128Count": 0,
+        "alphaPositiveCount": 0,
+        "maxAlpha": 0,
+        "path": "app/assets/kitchen/layers/03_inferior_pia.png",
+        "sampleCount": 15,
+        "samples": [],
+        "sha256": "11206a486ffb74938ecde1de1de7972c96f63fb32924d34a385eb70b6c94cca7"
+      },
+      "stone03Bridge": {
+        "alphaBounds": [
+          736,
+          516,
+          751,
+          590
+        ],
+        "alphaGe128Count": 0,
+        "alphaPositiveCount": 0,
+        "maxAlpha": 0,
+        "path": "app/assets/kitchen/bridges/stone-03-joint-bridge.png",
+        "sampleCount": 15,
+        "samples": [],
+        "sha256": "d17fe629516c7aad1d79120c139f15529820a51ad260639ec5ce411e7aa222c3"
+      },
+      "stone03Original": {
+        "alphaBounds": [
+          736,
+          442,
+          1217,
+          912
+        ],
+        "alphaGe128Count": 15,
+        "alphaPositiveCount": 15,
+        "maxAlpha": 255,
+        "path": "app/assets/kitchen/layers/stone-03-pia.png",
+        "sampleCount": 15,
+        "samples": [
+          {
+            "alpha": 255,
+            "point": [
+              750,
+              553
+            ]
+          },
+          {
+            "alpha": 255,
+            "point": [
+              749,
+              554
+            ]
+          },
+          {
+            "alpha": 255,
+            "point": [
+              749,
+              555
+            ]
+          },
+          {
+            "alpha": 255,
+            "point": [
+              748,
+              556
+            ]
+          },
+          {
+            "alpha": 255,
+            "point": [
+              748,
+              557
+            ]
+          },
+          {
+            "alpha": 255,
+            "point": [
+              747,
+              558
+            ]
+          },
+          {
+            "alpha": 255,
+            "point": [
+              747,
+              559
+            ]
+          },
+          {
+            "alpha": 255,
+            "point": [
+              746,
+              560
+            ]
+          },
+          {
+            "alpha": 255,
+            "point": [
+              746,
+              561
+            ]
+          },
+          {
+            "alpha": 255,
+            "point": [
+              745,
+              562
+            ]
+          },
+          {
+            "alpha": 255,
+            "point": [
+              745,
+              563
+            ]
+          },
+          {
+            "alpha": 255,
+            "point": [
+              744,
+              564
+            ]
+          },
+          {
+            "alpha": 255,
+            "point": [
+              744,
+              565
+            ]
+          },
+          {
+            "alpha": 255,
+            "point": [
+              743,
+              566
+            ]
+          },
+          {
+            "alpha": 255,
+            "point": [
+              743,
+              567
+            ]
+          }
+        ],
+        "sha256": "1d1fc7e3f249de8011bc5c736f34aba2025055960aa64fc4f42eee90c46819e9"
+      },
+      "stone03Variant": {
+        "alphaBounds": [
+          736,
+          442,
+          1217,
+          912
+        ],
+        "alphaGe128Count": 15,
+        "alphaPositiveCount": 15,
+        "maxAlpha": 255,
+        "path": "app/assets/kitchen/variants/stone-03-pia-exposed-left.png",
+        "sampleCount": 15,
+        "samples": [
+          {
+            "alpha": 255,
+            "point": [
+              750,
+              553
+            ]
+          },
+          {
+            "alpha": 255,
+            "point": [
+              749,
+              554
+            ]
+          },
+          {
+            "alpha": 255,
+            "point": [
+              749,
+              555
+            ]
+          },
+          {
+            "alpha": 255,
+            "point": [
+              748,
+              556
+            ]
+          },
+          {
+            "alpha": 255,
+            "point": [
+              748,
+              557
+            ]
+          },
+          {
+            "alpha": 255,
+            "point": [
+              747,
+              558
+            ]
+          },
+          {
+            "alpha": 255,
+            "point": [
+              747,
+              559
+            ]
+          },
+          {
+            "alpha": 255,
+            "point": [
+              746,
+              560
+            ]
+          },
+          {
+            "alpha": 255,
+            "point": [
+              746,
+              561
+            ]
+          },
+          {
+            "alpha": 255,
+            "point": [
+              745,
+              562
+            ]
+          },
+          {
+            "alpha": 255,
+            "point": [
+              745,
+              563
+            ]
+          },
+          {
+            "alpha": 255,
+            "point": [
+              744,
+              564
+            ]
+          },
+          {
+            "alpha": 255,
+            "point": [
+              744,
+              565
+            ]
+          },
+          {
+            "alpha": 255,
+            "point": [
+              743,
+              566
+            ]
+          },
+          {
+            "alpha": 255,
+            "point": [
+              743,
+              567
+            ]
+          }
+        ],
+        "sha256": "7f298d33310610831ce1e9d0b095c0a26ffd89b003ac2fcc629ed1e23332e419"
+      }
+    },
+    "config": "review-assets/calibration/gap-pixel-v3/config.json",
+    "currentModule02HiddenVisibility": {
+      "approvedStone03": {
+        "reason": "visible",
+        "visible": true
+      },
+      "module03": {
+        "reason": "visible",
+        "visible": true
+      },
+      "stone03Bridge": {
+        "reason": "host-hidden",
+        "visible": false
+      },
+      "stone03Variant": {
+        "reason": "visible",
+        "visible": true
+      }
+    },
+    "currentStone03VariantSha256": "7f298d33310610831ce1e9d0b095c0a26ffd89b003ac2fcc629ed1e23332e419",
+    "finding": "OWNERSHIP_ONLY_NOT_Y_SEMANTICS",
+    "fullFrameHashMatchesCurrentStone03Variant": true,
+    "historicalReferenceFullFrameSha256": "7f298d33310610831ce1e9d0b095c0a26ffd89b003ac2fcc629ed1e23332e419",
+    "sampleCount": 15,
+    "scenePoints": [
+      [
+        750,
+        553
+      ],
+      [
+        749,
+        554
+      ],
+      [
+        749,
+        555
+      ],
+      [
+        748,
+        556
+      ],
+      [
+        748,
+        557
+      ],
+      [
+        747,
+        558
+      ],
+      [
+        747,
+        559
+      ],
+      [
+        746,
+        560
+      ],
+      [
+        746,
+        561
+      ],
+      [
+        745,
+        562
+      ],
+      [
+        745,
+        563
+      ],
+      [
+        744,
+        564
+      ],
+      [
+        744,
+        565
+      ],
+      [
+        743,
+        566
+      ],
+      [
+        743,
+        567
+      ]
+    ],
+    "source": "review-assets/calibration/gap-pixel-v3/reference.png"
+  },
   "sceneId": "cozinha-01",
-  "schemaVersion": "DepthCueOwnershipAudit 0.1"
+  "schemaVersion": "DepthCueOwnershipAudit 0.2"
 }

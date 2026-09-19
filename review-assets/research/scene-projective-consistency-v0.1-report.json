@@ -1,70 +1,74 @@
 {
-  "commonDepthVanishingFit": [
-    {
-      "fit": {
-        "point": [
-          794.4788724767121,
-          450.6749714275418
-        ],
-        "residualPx": {
-          "module01-side-top": 0.7604982549719352,
-          "module02-stone": 5.570698566065403,
-          "module03-stone-alpha": 5.322117695935958
+  "commonDepthVanishingFit": {
+    "fits": [
+      {
+        "fit": {
+          "point": [
+            794.4788724767121,
+            450.6749714275418
+          ],
+          "residualPx": {
+            "module01-side-top": 0.7604982549719352,
+            "module02-stone": 5.570698566065403,
+            "module03-stone-alpha": 5.322117695935958
+          },
+          "rmsPx": 4.469749317324674
         },
-        "rmsPx": 4.469749317324674
+        "threshold": 32
       },
-      "threshold": 32
-    },
-    {
-      "fit": {
-        "point": [
-          794.4788724767121,
-          450.6749714275418
-        ],
-        "residualPx": {
-          "module01-side-top": 0.7604982549719352,
-          "module02-stone": 5.570698566065403,
-          "module03-stone-alpha": 5.322117695935958
+      {
+        "fit": {
+          "point": [
+            794.4788724767121,
+            450.6749714275418
+          ],
+          "residualPx": {
+            "module01-side-top": 0.7604982549719352,
+            "module02-stone": 5.570698566065403,
+            "module03-stone-alpha": 5.322117695935958
+          },
+          "rmsPx": 4.469749317324674
         },
-        "rmsPx": 4.469749317324674
+        "threshold": 64
       },
-      "threshold": 64
-    },
-    {
-      "fit": {
-        "point": [
-          794.4788724767121,
-          450.6749714275418
-        ],
-        "residualPx": {
-          "module01-side-top": 0.7604982549719352,
-          "module02-stone": 5.570698566065403,
-          "module03-stone-alpha": 5.322117695935958
+      {
+        "fit": {
+          "point": [
+            794.4788724767121,
+            450.6749714275418
+          ],
+          "residualPx": {
+            "module01-side-top": 0.7604982549719352,
+            "module02-stone": 5.570698566065403,
+            "module03-stone-alpha": 5.322117695935958
+          },
+          "rmsPx": 4.469749317324674
         },
-        "rmsPx": 4.469749317324674
+        "threshold": 128
       },
-      "threshold": 128
-    },
-    {
-      "fit": {
-        "point": [
-          794.4788724767121,
-          450.6749714275418
-        ],
-        "residualPx": {
-          "module01-side-top": 0.7604982549719352,
-          "module02-stone": 5.570698566065403,
-          "module03-stone-alpha": 5.322117695935958
+      {
+        "fit": {
+          "point": [
+            794.4788724767121,
+            450.6749714275418
+          ],
+          "residualPx": {
+            "module01-side-top": 0.7604982549719352,
+            "module02-stone": 5.570698566065403,
+            "module03-stone-alpha": 5.322117695935958
+          },
+          "rmsPx": 4.469749317324674
         },
-        "rmsPx": 4.469749317324674
-      },
-      "threshold": 192
-    }
-  ],
+        "threshold": 192
+      }
+    ],
+    "reason": "includes the provenance-contaminated historical Module 02 line; do not use for current scene classification",
+    "status": "LEGACY_DIAGNOSTIC_ONLY"
+  },
   "depthObservations": [
     {
       "angleDeg": -71.00334584451144,
-      "authority": "measured-from-visible-pixels",
+      "authority": "legacy-conditional-joint-contaminated",
       "back": [
         763,
         525
@@ -75,8 +79,9 @@
         586
       ],
       "id": "module02-stone-visible-depth",
+      "limitation": "Most sampled support on the historical line belongs to stone-02-joint-bridge, which is hidden in the current module-03-hidden state; do not use as current Y-direction authority.",
       "magnitudePx": 64.51356446515724,
-      "source": "review-assets/calibration/module-02-right-face-v1/config.json",
+      "source": "review-assets/calibration/module-02-right-face-v1/config.json + review-assets/research/module02-depth-cue-ownership-v0.1.json",
       "vector": [
         21,
         -61
@@ -105,15 +110,11 @@
   ],
   "depthOrientationSpread": {
     "combinedMeasuredPlusModule01Residual": {
-      "maxAbsDeviationDeg": 87.70377838663532,
-      "meanAbsDeviationDeg": 28.32988858716171,
-      "meanAngleDeg": 21.29287576885324
+      "maxAbsDeviationDeg": 20.90815236222751,
+      "meanAbsDeviationDeg": 20.90815236222751,
+      "meanAngleDeg": 20.90815236222751
     },
-    "measuredOnly": {
-      "maxAbsDeviationDeg": 0.0,
-      "meanAbsDeviationDeg": 0.0,
-      "meanAngleDeg": -71.00334584451144
-    },
+    "measuredOnly": null,
     "module01ResidualOnly": {
       "maxAbsDeviationDeg": 20.90815236222751,
       "meanAbsDeviationDeg": 20.90815236222751,
@@ -933,130 +934,134 @@
     "this probe cannot by itself classify the whole scene as geometrically valid or invalid"
   ],
   "module01BottomInternalEdgeTrace": {
-    "angleDeg": 14.923664447681366,
-    "count": 24,
-    "dyDx": 0.2665217391304348,
-    "intercept": 192.66173913043477,
-    "points": [
-      [
+    "diagnostic": {
+      "angleDeg": 14.923664447681366,
+      "count": 24,
+      "dyDx": 0.2665217391304348,
+      "intercept": 192.66173913043477,
+      "points": [
+        [
+          353,
+          280
+        ],
+        [
+          354,
+          281
+        ],
+        [
+          355,
+          282
+        ],
+        [
+          356,
+          285
+        ],
+        [
+          357,
+          287
+        ],
+        [
+          358,
+          288
+        ],
+        [
+          359,
+          288
+        ],
+        [
+          360,
+          289
+        ],
+        [
+          361,
+          289
+        ],
+        [
+          362,
+          289
+        ],
+        [
+          363,
+          289
+        ],
+        [
+          364,
+          290
+        ],
+        [
+          365,
+          290
+        ],
+        [
+          366,
+          290
+        ],
+        [
+          367,
+          291
+        ],
+        [
+          368,
+          291
+        ],
+        [
+          369,
+          291
+        ],
+        [
+          370,
+          291
+        ],
+        [
+          371,
+          292
+        ],
+        [
+          372,
+          292
+        ],
+        [
+          373,
+          293
+        ],
+        [
+          374,
+          293
+        ],
+        [
+          375,
+          293
+        ],
+        [
+          376,
+          293
+        ],
+        [
+          377,
+          293
+        ],
+        [
+          378,
+          293
+        ],
+        [
+          379,
+          293
+        ],
+        [
+          380,
+          293
+        ]
+      ],
+      "rms": 0.45350886414167313,
+      "status": "OK",
+      "xRange": [
         353,
-        280
-      ],
-      [
-        354,
-        281
-      ],
-      [
-        355,
-        282
-      ],
-      [
-        356,
-        285
-      ],
-      [
-        357,
-        287
-      ],
-      [
-        358,
-        288
-      ],
-      [
-        359,
-        288
-      ],
-      [
-        360,
-        289
-      ],
-      [
-        361,
-        289
-      ],
-      [
-        362,
-        289
-      ],
-      [
-        363,
-        289
-      ],
-      [
-        364,
-        290
-      ],
-      [
-        365,
-        290
-      ],
-      [
-        366,
-        290
-      ],
-      [
-        367,
-        291
-      ],
-      [
-        368,
-        291
-      ],
-      [
-        369,
-        291
-      ],
-      [
-        370,
-        291
-      ],
-      [
-        371,
-        292
-      ],
-      [
-        372,
-        292
-      ],
-      [
-        373,
-        293
-      ],
-      [
-        374,
-        293
-      ],
-      [
-        375,
-        293
-      ],
-      [
-        376,
-        293
-      ],
-      [
-        377,
-        293
-      ],
-      [
-        378,
-        293
-      ],
-      [
-        379,
-        293
-      ],
-      [
-        380,
-        293
+        380
       ]
-    ],
-    "rms": 0.45350886414167313,
-    "status": "OK",
-    "xRange": [
-      353,
-      380
-    ]
+    },
+    "reason": "visual/topology review shows this luminance trace is an interior shading transition; the physical bottom depth edge is the outer side-panel boundary",
+    "status": "REJECTED_AS_PHYSICAL_EDGE"
   },
   "module01DepthVanishingHypothesis": [
     {
@@ -1104,6 +1109,13 @@
       "threshold": 192
     }
   ],
+  "module01PhysicalSideEdgeStatus": {
+    "physicalSource": "MobiliPresenter Scene Core module01 right-side: full-height 700 mm x depth 350 mm side panel",
+    "rasterSource": "canonical Module 01 layer alpha residual to the right of the front finish mask",
+    "status": "CONFIRMED_FOR_RESEARCH",
+    "thresholdStability": "same fitted top/bottom support across tested alpha thresholds",
+    "visualReview": "PASS against the isolated Module 01 side screenshot supplied in the project conversation"
+  },
   "module01SideResidualProbe": [
     {
       "bottomDepthEdge": {
@@ -1264,18 +1276,18 @@
   ],
   "module01TwoEdgeVanishingFit": {
     "point": [
-      722.4403620873264,
-      385.2078008519699
+      620.4883920894238,
+      293.99999999999994
     ],
     "residualPx": {
-      "module01-side-bottom": 8.526512829121202e-14,
-      "module01-side-top": 2.2737367544323206e-13
+      "module01-side-bottom": 5.684341886080802e-14,
+      "module01-side-top": 5.684341886080802e-14
     },
-    "rmsPx": 1.7171041084785901e-13
+    "rmsPx": 5.684341886080802e-14
   },
   "module01VanishingResidualToOtherDepthEvidencePx": {
-    "module02-stone-visible-depth": 83.85483176492993,
-    "module03-stone-reference-alpha-edge": 99.03312892764302
+    "module02-stone-visible-depth": 209.94357070225368,
+    "module03-stone-reference-alpha-edge": 231.01111162642837
   },
   "pixelLineObservations": [
     {
@@ -1357,9 +1369,9 @@
     }
   ],
   "preliminaryClassification": {
-    "piecewiseSignal": "STRONG_IF_MODULE01_EDGE_TRACE_IS_CONFIRMED",
-    "reason": "the topology-constrained Module 01 top/bottom depth-edge hypothesis yields a vanishing point far from lower-stone depth lines, but the bottom edge is still an algorithmic luminance trace rather than an authoritative vector trace",
-    "sceneClass": "INSUFFICIENT_EVIDENCE"
+    "nextClassQuestion": "FIND_CURRENT_OWNED_Y_DIRECTION_EDGE",
+    "reason": "Module 01 supplies a strong local Y-direction vanishing point, but the historical Module 02 comparison line is now known to be primarily conditional joint-bridge support and is not visible in the current module-03-hidden state",
+    "sceneClass": "INSUFFICIENT_CURRENT_DEPTH_EVIDENCE"
   },
   "promotionEligible": false,
   "sceneId": "cozinha-01",
