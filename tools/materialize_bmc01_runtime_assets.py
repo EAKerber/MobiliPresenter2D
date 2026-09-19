@@ -3,13 +3,13 @@
 from __future__ import annotations
 
 import argparse
-import hashlib
-import json
+ import json
 from pathlib import Path
 
-from PIL import Image
-
-ROOT = Path(__file__).resolve().parents[1]
+try:
+    from tools.reconstruction_runtime_assets import ROOT, display_path, write_slot
+except ModuleNotFoundError:
+    from reconstruction_runtime_assets import ROOT, display_path, write_slot
 DEFAULT_SOURCE = ROOT / "review-assets/research/bmc01-antialiased-completion-v0.1"
 DEFAULT_OUTPUT = ROOT / "app/assets/kitchen/reconstruction/bmc01"
 SLOTS = {
@@ -18,63 +18,19 @@ SLOTS = {
 }
 
 
-def sha256(path: Path) -> str:
-    h = hashlib.sha256()
-    with path.open("rb") as handle:
-        for block in iter(lambda: handle.read(1024 * 1024), b""):
-            h.update(block)
-    return h.hexdigest()
-
-
-def alpha_mass(mask: Image.Image) -> float:
-    return sum(mask.getdata()) / 255.0
-
-
-def display_path(path: Path) -> str:
-    try:
-        return str(path.relative_to(ROOT))
-    except ValueError:
-        return str(path)
-
 
 def materialize(source_dir: Path, output_dir: Path) -> dict:
     output_dir.mkdir(parents=True, exist_ok=True)
     records = []
 
     for slot, filename in SLOTS.items():
-        source_path = source_dir / filename
-        if not source_path.is_file():
-            raise FileNotFoundError(source_path)
-
-        source = Image.open(source_path).convert("RGBA")
-        mask = source.getchannel("A")
-        binary = mask.point(lambda value: 255 if value else 0)
-
-        # Keep source RGB only where this slot owns at least some alpha. Alpha is
-        # carried separately so material rendering never conflates appearance with
-        # semantic ownership.
-        neutral = Image.new("RGB", source.size, (0, 0, 0))
-        neutral.paste(source.convert("RGB"), (0, 0), binary)
-
-        neutral_path = output_dir / f"{slot}-neutral.png"
-        mask_path = output_dir / f"{slot}-mask.png"
-        neutral.save(neutral_path, optimize=True)
-        mask.save(mask_path, optimize=True)
-
         records.append(
-            {
-                "slot": slot,
-                "source": display_path(source_path),
-                "sourceSha256": sha256(source_path),
-                "size": list(source.size),
-                "nonzeroPixels": sum(1 for value in mask.getdata() if value),
-                "alphaMass": round(alpha_mass(mask), 6),
-                "bounds": list(mask.getbbox()) if mask.getbbox() else None,
-                "neutral": display_path(neutral_path),
-                "neutralSha256": sha256(neutral_path),
-                "mask": display_path(mask_path),
-                "maskSha256": sha256(mask_path),
-            }
+            write_slot(
+                slot=slot,
+                source_path=source_dir / filename,
+                output_dir=output_dir,
+                root=ROOT,
+            )
         )
 
     manifest = {
