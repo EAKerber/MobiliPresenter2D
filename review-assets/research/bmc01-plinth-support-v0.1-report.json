@@ -1,0 +1,131 @@
+{
+  "dominantAlphaOwnerPixels": {
+    "approvedStone02": 0,
+    "module02": 53,
+    "none": 0,
+    "stone02": 256
+  },
+  "dominantAlphaTies": 0,
+  "geometryPixels": 309,
+  "interpretationRules": [
+    "alpha support quantifies compositing contribution, not automatically physical plinth ownership",
+    "RGB similarity to base helps identify background-like support",
+    "plinth must remain separate from carcass because physical depth and likely material/lighting differ"
+  ],
+  "physicalDepthMm": 348.83,
+  "plinthQuad": [
+    [
+      742.0,
+      856.0
+    ],
+    [
+      747.7908537549407,
+      842.0468
+    ],
+    [
+      747.7908537549407,
+      884.0468
+    ],
+    [
+      742.0,
+      898.0
+    ]
+  ],
+  "promotionEligible": false,
+  "sceneId": "cozinha-01",
+  "schemaVersion": "BMC01PlinthSupportAuditReport 0.1",
+  "thresholdSweep": [
+    {
+      "alphaThreshold": 1,
+      "assets": {
+        "approvedStone02": {
+          "meanRgbDifferenceToBase": null,
+          "pixels": 0,
+          "ratio": 0.0
+        },
+        "module02": {
+          "meanRgbDifferenceToBase": 153.65408805031447,
+          "pixels": 53,
+          "ratio": 0.1715210355987055
+        },
+        "stone02": {
+          "meanRgbDifferenceToBase": 133.01953125,
+          "pixels": 256,
+          "ratio": 0.8284789644012945
+        }
+      },
+      "geometryPixels": 309,
+      "unionSupportPixels": 309,
+      "unionSupportRatio": 1.0
+    },
+    {
+      "alphaThreshold": 32,
+      "assets": {
+        "approvedStone02": {
+          "meanRgbDifferenceToBase": null,
+          "pixels": 0,
+          "ratio": 0.0
+        },
+        "module02": {
+          "meanRgbDifferenceToBase": 23.925925925925924,
+          "pixels": 9,
+          "ratio": 0.02912621359223301
+        },
+        "stone02": {
+          "meanRgbDifferenceToBase": 84.75409836065573,
+          "pixels": 122,
+          "ratio": 0.3948220064724919
+        }
+      },
+      "geometryPixels": 309,
+      "unionSupportPixels": 131,
+      "unionSupportRatio": 0.42394822006472493
+    },
+    {
+      "alphaThreshold": 128,
+      "assets": {
+        "approvedStone02": {
+          "meanRgbDifferenceToBase": null,
+          "pixels": 0,
+          "ratio": 0.0
+        },
+        "module02": {
+          "meanRgbDifferenceToBase": 23.925925925925924,
+          "pixels": 9,
+          "ratio": 0.02912621359223301
+        },
+        "stone02": {
+          "meanRgbDifferenceToBase": 84.75409836065573,
+          "pixels": 122,
+          "ratio": 0.3948220064724919
+        }
+      },
+      "geometryPixels": 309,
+      "unionSupportPixels": 131,
+      "unionSupportRatio": 0.42394822006472493
+    },
+    {
+      "alphaThreshold": 224,
+      "assets": {
+        "approvedStone02": {
+          "meanRgbDifferenceToBase": null,
+          "pixels": 0,
+          "ratio": 0.0
+        },
+        "module02": {
+          "meanRgbDifferenceToBase": 23.925925925925924,
+          "pixels": 9,
+          "ratio": 0.02912621359223301
+        },
+        "stone02": {
+          "meanRgbDifferenceToBase": 84.75409836065573,
+          "pixels": 122,
+          "ratio": 0.3948220064724919
+        }
+      },
+      "geometryPixels": 309,
+      "unionSupportPixels": 131,
+      "unionSupportRatio": 0.42394822006472493
+    }
+  ]
+}
