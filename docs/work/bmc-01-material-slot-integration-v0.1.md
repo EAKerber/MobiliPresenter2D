@@ -53,3 +53,25 @@ Next integration gate:
 - plinth follows front finish by default;
 - plinth follows stone package only with `stone-skirting`;
 - restore/default remains pixel-stable outside reconstructed regions.
+
+
+## Runtime proof
+
+The material-slot architecture is now exercised by a query-gated browser
+renderer.
+
+Activation:
+`?reconstruction=bmc01`.
+
+The renderer consumes app-local neutral/mask pairs under
+`app/assets/kitchen/reconstruction/bmc01/`.
+
+All four Module 02 / Module 03 visibility combinations pass, with the
+reconstruction active only when Module 02 is visible and Module 03 is hidden.
+Base-light, Carvão and stone-skirting behavior also pass with zero pixels
+outside the authorized ROI.
+
+The default runtime remains unchanged when the query flag is absent.
+
+Detailed gate:
+`docs/work/bmc-01-runtime-material-gate-v0.1.md`.
