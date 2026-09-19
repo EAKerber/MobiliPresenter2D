@@ -51,7 +51,7 @@ def evaluate(cfg):
     carcass=transfer(reference,target["carcass"])
     plinth=transfer(reference,target["plinth"])
     return {
-      "schemaVersion":"LocalDepthTransferProbeReport 0.1",
+      "schemaVersion":"LocalDepthTransferProbeReport 0.2" if cfg.get("schemaVersion")=="LocalDepthTransferProbe 0.2" else "LocalDepthTransferProbeReport 0.1",
       "sceneId":cfg["sceneId"],
       "status":"RESEARCH_CANDIDATE",
       "promotionEligible":False,
@@ -63,6 +63,7 @@ def evaluate(cfg):
         "physicalDepthMm":reference["physicalDepthMm"],
         "frontToBackVectorPx":vec(reference["frontPx"],reference["backPx"]),
         "status":reference["status"],
+        "sourceAlphaThreshold":reference.get("sourceAlphaThreshold"),
         "evidence":reference["evidence"]
       },
       "target":{
@@ -92,7 +93,7 @@ def main():
     ap.add_argument("--output",type=Path,required=True)
     args=ap.parse_args()
     cfg=json.loads(args.config.read_text(encoding="utf-8"))
-    if cfg.get("schemaVersion")!="LocalDepthTransferProbe 0.1":
+    if cfg.get("schemaVersion") not in {"LocalDepthTransferProbe 0.1","LocalDepthTransferProbe 0.2"}:
         raise SystemExit("unsupported schema")
     report=evaluate(cfg)
     args.output.parent.mkdir(parents=True,exist_ok=True)
