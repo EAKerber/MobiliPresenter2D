@@ -1,7 +1,7 @@
 from __future__ import annotations
 import unittest
 from PIL import Image
-from tools.research_scene_projective_consistency import boundary_fits, residual_component, circular_spread, intersect_yx_lines, least_squares_intersection
+from tools.research_scene_projective_consistency import boundary_fits, residual_component, circular_spread, intersect_yx_lines, least_squares_intersection, trace_internal_luma_edge
 
 class SceneProjectiveConsistencyProbeTests(unittest.TestCase):
     def test_boundary_fit_recovers_axis_aligned_rectangle(self):
@@ -28,6 +28,16 @@ class SceneProjectiveConsistencyProbeTests(unittest.TestCase):
         first={"dyDx":1.0,"intercept":0.0}
         second={"dyDx":-1.0,"intercept":10.0}
         self.assertEqual(intersect_yx_lines(first,second),[5.0,5.0])
+
+    def test_internal_luma_edge_trace_recovers_sloped_seam(self):
+        im=Image.new("RGBA",(30,30),(100,100,100,255))
+        for x in range(4,25):
+            seam=10+(x-4)//3
+            for y in range(seam,29):
+                im.putpixel((x,y),(180,180,180,255))
+        r=trace_internal_luma_edge(im,4,25,13,10,3,1.0,128)
+        self.assertEqual(r["status"],"OK")
+        self.assertGreater(r["dyDx"],0.2)
 
     def test_least_squares_intersection_exact_lines(self):
         lines=[
