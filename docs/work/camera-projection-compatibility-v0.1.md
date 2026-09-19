@@ -300,6 +300,19 @@ The strongest currently justified projection class for BMC-01 remains:
 
 The next investigation should therefore focus on **local/planar projection derived directly from canonical 2D evidence**, while using Promob geometry to constrain physical existence/dimensions rather than to dictate camera projection.
 
+## Provenance correction to the canonical 2D depth probe
+
+A later ownership audit showed that the historical canonical-2D line used in the first camera-transfer probe was mostly carried by `stone-02-joint-bridge`.
+
+That bridge is hidden in the current correct `module-03-hidden` state.
+
+Therefore the earlier `32.22°` disagreement remains evidence that **the Promob camera does not reproduce that historical authored line**, but it should not be used as a clean comparison between the Promob camera and the current exposed Module 02 physical side.
+
+The safe conclusion is narrower:
+
+- direct Promob-camera transfer to current MobiliPresenter2D remains unestablished;
+- the first tested canonical depth correspondence is provenance-contaminated and must be replaced.
+
 ## Open questions
 
 - exact availability of the original Promob calibration image bytes in the current toolchain;
