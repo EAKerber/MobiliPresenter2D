@@ -1,0 +1,38 @@
+{
+  "schemaVersion": "PlanarRectProjectionProbe 0.1",
+  "sceneId": "cozinha-01",
+  "operationId": "bmc04-cooktop-footprint-v0.1",
+  "host": {
+    "id": "stone-02-top",
+    "physicalSizeMm": [791.01, 550.0],
+    "quadPx": {
+      "frontLeft": [492.0, 574.0],
+      "frontRight": [745.0, 574.0],
+      "backRight": [762.0, 552.0],
+      "backLeft": [524.0, 552.0]
+    },
+    "evidence": "review-assets/stone-masks/config.json:groups.stone-02.surfaces.top",
+    "status": "local-derived"
+  },
+  "targetRect": {
+    "id": "module-02-cooktop-slot",
+    "offsetMmFromHostFrontLeft": [95.505, 15.0],
+    "sizeMm": [600.0, 520.0],
+    "evidence": "EAKerber/MobiliPresenter:scene-core/src/fixtures/current-geometry.ts module02 cooktop slot; host Stone02 front starts at module y=-20 and slot starts at y=-5",
+    "status": "inferred"
+  },
+  "legacyComparison": {
+    "protectedCooktopQuadPx": {
+      "frontLeft": [517.0, 572.0],
+      "frontRight": [736.0, 572.0],
+      "backRight": [728.0, 544.0],
+      "backLeft": [532.0, 544.0]
+    },
+    "existingRegeneratedFitXYWH": [520, 540, 214, 32]
+  },
+  "policy": {
+    "promotionEligible": false,
+    "globalCameraClaim": false,
+    "purpose": "derive a deterministic cooktop footprint on the current Stone02 host plane before any bounded generation"
+  }
+}
