@@ -1,0 +1,55 @@
+{
+  "schemaVersion": "BMC01AgentVisualReview 0.1",
+  "sceneId": "cozinha-01",
+  "operationId": "bmc01-module02-right-side",
+  "status": "PASS_WITH_NOTE",
+  "promotionEligible": false,
+  "humanReview": "PENDING",
+  "evidence": {
+    "runtimeMaterialWorkflowRunId": 35474387309,
+    "runtimeMaterialArtifactDigest": "sha256:c734ea6a9532c5213a649cc300f198b85d17c5c9773b8fa0d5d97c779b9c6aa9",
+    "visibilityWorkflowRunId": 35474563155,
+    "visibilityArtifactDigest": "sha256:b9e1e6e6d831814b85463339e31213655544664bc8ea19263d695dd873419e41",
+    "historicalComparisonWorkflowRunId": 35474687787,
+    "historicalComparisonArtifactDigest": "sha256:3c5742f1fb88c0d982c6cdb0c49c34ce4412d732df37aff3d82d683bc9a3578d"
+  },
+  "observations": [
+    {
+      "id": "normal-scale-integration",
+      "result": "PASS",
+      "note": "No gross detached face, overlap, ROI leak or scene-wide edit is visible at normal scene scale."
+    },
+    {
+      "id": "dark-finish-material-response",
+      "result": "PASS",
+      "note": "The reconstructed side follows the dark MDF/front finish while the historical overlay remains visually static."
+    },
+    {
+      "id": "base-light-readability",
+      "result": "PASS_WITH_NOTE",
+      "note": "The base-light side is intentionally subtle because material and wall are both light; the local edge/shadow still preserves separation."
+    },
+    {
+      "id": "carcass-plinth-depth-break",
+      "result": "PASS_WITH_NOTE",
+      "note": "The recessed plinth reads as shallower than the carcass. The junction remains the most visually sensitive location and is the primary human-review focus."
+    },
+    {
+      "id": "stone-skirting-material-response",
+      "result": "PASS",
+      "note": "Stone skirting changes the plinth material without changing the carcass slot."
+    },
+    {
+      "id": "generative-residual-need",
+      "result": "NOT_JUSTIFIED",
+      "note": "The deterministic candidate does not currently exhibit a bounded defect severe enough to justify image generation before human review."
+    }
+  ],
+  "decision": {
+    "machineValid": true,
+    "agentReview": "PASS_WITH_NOTE",
+    "humanReviewRequiredBeforeDefaultPromotion": true,
+    "keepQueryGate": true,
+    "generationAllowedNext": false
+  }
+}
