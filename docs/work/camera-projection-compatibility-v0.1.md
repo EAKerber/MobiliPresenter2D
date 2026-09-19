@@ -79,7 +79,7 @@ The composition may have been rendered from a different camera.
 
 If true:
 - the original calibration remains useful for Scene Core validation;
-- it cannot be promoted to A3 global authority for MobiliPresenter2D.
+- it cannot be treated as global-calibrated transformation evidence for MobiliPresenter2D.
 
 ### H3 — approximately related camera
 
@@ -140,7 +140,7 @@ A plane may support its own homography without global camera equivalence.
 
 ## C5 — classification
 
-Assign the strongest justified A3 level:
+Assign the strongest justified transformation-evidence level:
 - global-calibrated;
 - planar-derived;
 - local-derived;
@@ -215,7 +215,7 @@ A later deterministic investigation should emit:
 - residual tables;
 - visual overlay;
 - per-plane compatibility;
-- final A3 classification;
+- final transformation-evidence classification;
 - no runtime asset changes.
 
 ## Stop conditions
