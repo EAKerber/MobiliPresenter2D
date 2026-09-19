@@ -1,10 +1,17 @@
 {
   "authoringMethod": "C1 same-object nearest deterministic donor",
-  "boundaryColorError": {
+  "boundaryColorErrorAfter": {
     "maxAbsChannelDifference": 35.0,
     "meanAbsChannelDifference": 6.589285714285714,
     "pairCount": 56
   },
+  "boundaryColorErrorBefore": {
+    "maxAbsChannelDifference": 23.333333333333332,
+    "meanAbsChannelDifference": 5.190476190476191,
+    "pairCount": 56
+  },
+  "boundaryColorErrorMeanImprovement": -1.3988095238095237,
+  "boundaryColorErrorMeanImprovementRatio": -0.26949541284403666,
   "candidateChangedPixelCount": 101,
   "candidatePixelSha256": "1020520dd139e95d10e7a8674ff378efe9021b33471f1b00cb9c2997772d9d8c",
   "candidateVsHistoricalChangedPixelRatio": 0.05287958115183246,
