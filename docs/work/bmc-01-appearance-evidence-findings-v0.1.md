@@ -186,3 +186,45 @@ Next:
 - audit the recessed plinth independently instead of inheriting carcass depth
   or appearance;
 - only then decide whether any residual needs generative harmonization.
+
+
+## Antialiased combined candidate
+
+After the v0.6 carcass-only result, the recessed plinth was audited
+independently.
+
+The existing Stone 02 asset has real strong-alpha plinth pixels because the
+runtime already treats this lower strip as a separate material surface. It is
+not valid to infer the plinth from the carcass depth, and it is not valid to
+treat every low-alpha pixel as plinth ownership.
+
+The first nearest-front-plinth continuation was useful but showed stair-stepped
+geometry and over-strong local texture at review zoom.
+
+The current antialiased candidate therefore:
+
+- uses the local carcass quad and the local 348.83 mm plinth quad separately;
+- maps the clean Module 01 carcass-side donor into the carcass quad;
+- maps a clean Stone 02 front-plinth sample into the plinth quad;
+- uses 4x supersampled target coverage;
+- preserves current strong owner pixels;
+- writes zero pixels outside the authorized ROI.
+
+Current report:
+`review-assets/research/bmc01-antialiased-completion-v0.1/report.json`.
+
+Observed:
+- combined changed pixels: 1,869;
+- outside authorized ROI: 0;
+- carcass candidate coverage: ~1,598 equivalent opaque pixels;
+- plinth candidate coverage: ~128 equivalent opaque pixels;
+- the visual staircase at diagonal face edges is materially reduced.
+
+The remaining issue is no longer primarily donor geometry. It is runtime
+material behavior.
+
+The historical exposed-side entity is static RGB and has no finish group.
+The reconstructed side must instead be split into material-responsive slots.
+
+See:
+`docs/work/bmc-01-material-slot-integration-v0.1.md`.
