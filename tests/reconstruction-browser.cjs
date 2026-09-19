@@ -39,19 +39,31 @@ const {chromium} = require("playwright");
   });
 
   assert(await page.locator("#reconstructionCanvas").count()===1,"research canvas not installed");
-  assert.equal((await canvasStats()).alpha,0,"candidate must be hidden while Module 03 occludes it");
   const delegated=page.locator('[data-entity-id="module-02-right-exposed-face"] img');
   assert.equal(await delegated.getAttribute("data-render-delegated"),"bmc01");
 
-  await page.locator("#toggle-module-03").setChecked(false);
-  await page.waitForFunction(() => {
-    const c=document.getElementById("reconstructionCanvas");
-    if(!c) return false;
-    const d=c.getContext("2d").getImageData(742,520,22,379).data;
-    for(let i=3;i<d.length;i+=4) if(d[i]) return true;
-    return false;
-  });
-  const base=await canvasStats();
+  const visibilityCases=[];
+  const recordVisibilityCase = async (id,module02,module03,expectedActive) => {
+    await page.locator("#toggle-module-02").setChecked(module02);
+    await page.locator("#toggle-module-03").setChecked(module03);
+    await page.waitForFunction(expected => {
+      const c=document.getElementById("reconstructionCanvas");
+      if(!c || c.dataset.active !== String(expected)) return false;
+      const d=c.getContext("2d").getImageData(742,520,22,379).data;
+      let any=false;
+      for(let i=3;i<d.length;i+=4){ if(d[i]) { any=true; break; } }
+      return expected ? any : !any;
+    },expectedActive);
+    const stats=await canvasStats();
+    assert.equal(stats.alpha>0,expectedActive,id+" reconstruction visibility mismatch");
+    visibilityCases.push({id,module02,module03,expectedActive,alpha:stats.alpha,outside:stats.outside});
+    return stats;
+  };
+
+  await recordVisibilityCase("both-visible",true,true,false);
+  await recordVisibilityCase("module-02-hidden",false,true,false);
+  await recordVisibilityCase("modules-02-03-hidden",false,false,false);
+  const base=await recordVisibilityCase("module-03-hidden",true,false,true);
   await page.locator("#viewer").screenshot({path:path.join(output,"base-light.png"),animations:"disabled"});
   assert(base.alpha>1000,"expected reconstructed pixels when Module 03 is hidden");
   assert.equal(base.outside,0,"reconstruction escaped authorized ROI");
@@ -84,7 +96,7 @@ const {chromium} = require("playwright");
 
   await page.screenshot({path:path.join(output,"final-hidden.png"),fullPage:true,animations:"disabled"});
   fs.writeFileSync(path.join(output,"result.json"),JSON.stringify({
-    status:"PASS",target,base,dark,stoneSelected,stone,pageErrors:errors
+    status:"PASS",target,visibilityCases,base,dark,stoneSelected,stone,pageErrors:errors
   },null,2));
   assert.deepEqual(errors,[]);
 
