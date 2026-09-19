@@ -80,19 +80,29 @@ def boundary_fits(alpha, threshold):
     }
 
 
-def residual_component(layer_alpha, front_alpha, threshold, seed_quad):
+def residual_component(layer_alpha, front_alpha, threshold, seed_quad, side=None, margin=0):
     if layer_alpha.size != front_alpha.size:
         raise ValueError("module01 alpha/mask size mismatch")
     lp=layer_alpha.load(); fp=front_alpha.load()
+    front_bounds=mask_bounds(front_alpha,threshold)
+    if not front_bounds:
+        return {"status":"BLOCKED","reason":"front mask empty","threshold":threshold}
+    fx0,fy0,fx1,fy1=front_bounds
+    def topology_ok(x,y):
+        if side=="right":
+            return x >= fx1 - int(margin)
+        if side=="left":
+            return x < fx0 + int(margin)
+        return True
     x0=min(p[0] for p in seed_quad); x1=max(p[0] for p in seed_quad)
     y0=min(p[1] for p in seed_quad); y1=max(p[1] for p in seed_quad)
     starts=[]
     for y in range(max(0,y0),min(layer_alpha.height,y1+1)):
         for x in range(max(0,x0),min(layer_alpha.width,x1+1)):
-            if lp[x,y]>=threshold and fp[x,y]<threshold:
+            if topology_ok(x,y) and lp[x,y]>=threshold and fp[x,y]<threshold:
                 starts.append((x,y))
     if not starts:
-        return {"status":"BLOCKED","reason":"seed quad contains no residual support","threshold":threshold}
+        return {"status":"BLOCKED","reason":"seed quad contains no topology-constrained residual support","threshold":threshold}
     seed=starts[len(starts)//2]
     q=deque([seed]); seen={seed}
     while q:
@@ -100,7 +110,7 @@ def residual_component(layer_alpha, front_alpha, threshold, seed_quad):
         for nx,ny in ((x-1,y),(x+1,y),(x,y-1),(x,y+1)):
             if nx<0 or ny<0 or nx>=layer_alpha.width or ny>=layer_alpha.height or (nx,ny) in seen:
                 continue
-            if lp[nx,ny]>=threshold and fp[nx,ny]<threshold:
+            if topology_ok(nx,ny) and lp[nx,ny]>=threshold and fp[nx,ny]<threshold:
                 seen.add((nx,ny)); q.append((nx,ny))
     xs=[p[0] for p in seen]; ys=[p[1] for p in seen]
     bounds=(min(xs),min(ys),max(xs)+1,max(ys)+1)
@@ -112,9 +122,28 @@ def residual_component(layer_alpha, front_alpha, threshold, seed_quad):
     result={"status":"OK","threshold":threshold,"pixelCount":len(seen),"bounds":list(bounds),"seed":list(seed)}
     if len(top)>=4:
         ft=robust_fit(top); fb=robust_fit(bottom)
-        result["topDepthEdge"]={"dyDx":ft["slope"],"angleDeg":math.degrees(math.atan(ft["slope"])),"rms":ft["rms"],"count":ft["count"]}
-        result["bottomDepthEdge"]={"dyDx":fb["slope"],"angleDeg":math.degrees(math.atan(fb["slope"])),"rms":fb["rms"],"count":fb["count"]}
+        result["topDepthEdge"]={"dyDx":ft["slope"],"intercept":ft["intercept"],"angleDeg":math.degrees(math.atan(ft["slope"])),"rms":ft["rms"],"count":ft["count"]}
+        result["bottomDepthEdge"]={"dyDx":fb["slope"],"intercept":fb["intercept"],"angleDeg":math.degrees(math.atan(fb["slope"])),"rms":fb["rms"],"count":fb["count"]}
+    result["frontMaskBounds"]=list(front_bounds)
+    result["topologyConstraint"]={"side":side,"marginPx":margin}
     return result
+
+
+def intersect_yx_lines(first, second):
+    a1,b1=first["dyDx"],first["intercept"]
+    a2,b2=second["dyDx"],second["intercept"]
+    if abs(a1-a2)<1e-9:
+        return None
+    x=(b2-b1)/(a1-a2)
+    return [x,a1*x+b1]
+
+
+def point_line_distance(point, front, back):
+    x0,y0=point; x1,y1=front; x2,y2=back
+    dx=x2-x1; dy=y2-y1
+    den=math.hypot(dx,dy)
+    if den<1e-9: return None
+    return abs(dy*x0-dx*y0+x2*y1-y2*x1)/den
 
 
 def observation_record(item):
@@ -157,8 +186,19 @@ def main():
         fronts[item["id"]]=[boundary_fits(alpha,t) for t in cfg["thresholds"]]
     probe=cfg["module01SideProbe"]
     la=load_alpha(probe["layer"]); fa=load_alpha(probe["frontMask"])
-    side=[residual_component(la,fa,t,probe["seedQuad"]) for t in cfg["thresholds"]]
+    side=[residual_component(la,fa,t,probe["seedQuad"],probe.get("side"),probe.get("frontBoundaryMarginPx",0)) for t in cfg["thresholds"]]
     depth=[observation_record(x) for x in cfg["depthObservations"]]
+    vanishing=[]
+    for item in side:
+        if item.get("status")!="OK" or "topDepthEdge" not in item or "bottomDepthEdge" not in item:
+            continue
+        vp=intersect_yx_lines(item["topDepthEdge"],item["bottomDepthEdge"])
+        record={"threshold":item["threshold"],"point":vp}
+        if vp is not None:
+            record["observationResidualPx"]={
+                obs["id"]:point_line_distance(vp,obs["front"],obs["back"]) for obs in depth
+            }
+        vanishing.append(record)
     # only actual/explicit observations; annotation kept separate in report.
     actual_angles=[x["angleDeg"] for x in depth if x["authority"]=="measured-from-visible-pixels"]
     module01_angles=[]
@@ -173,6 +213,7 @@ def main():
       "promotionEligible":False,
       "frontMaskBoundaryFits":fronts,
       "module01SideResidualProbe":side,
+      "module01DepthVanishingHypothesis":vanishing,
       "depthObservations":depth,
       "depthOrientationSpread":{
         "measuredOnly":circular_spread(actual_angles),
