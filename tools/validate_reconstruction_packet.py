@@ -135,10 +135,14 @@ def validate_packet(packet: dict, root: Path = ROOT) -> list[str]:
                         fail(errors, f"runtime-manifest.{slot}.{key}")
 
     machine = (packet.get("acceptance") or {}).get("machine") or {}
-    if machine.get("outsideAuthorizedRoiPixels") != 0:
-        fail(errors, "acceptance.machine.outsideAuthorizedRoiPixels")
-    if machine.get("goldenPixelDifferenceCountDefaultRuntime") != 0:
-        fail(errors, "acceptance.machine.goldenPixelDifferenceCountDefaultRuntime")
+    lifecycle_state = lifecycle.get("state")
+    machine_required = lifecycle_state in {"MACHINE_VALID", "AGENT_REVIEW", "HUMAN_REVIEW_PENDING", "APPROVED"}
+    for key in ("outsideAuthorizedRoiPixels", "goldenPixelDifferenceCountDefaultRuntime"):
+        if key in machine:
+            if machine.get(key) != 0:
+                fail(errors, f"acceptance.machine.{key}")
+        elif machine_required:
+            fail(errors, f"acceptance.machine.{key}")
 
     return errors
 
