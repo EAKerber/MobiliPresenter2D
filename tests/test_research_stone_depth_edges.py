@@ -13,7 +13,7 @@ class StoneDepthEdgeProbeTests(unittest.TestCase):
         r=trace(im,[20,35],[10,20],128,"right")
         self.assertIsNotNone(r["fit"])
         self.assertLess(r["fit"]["rmsPx"],0.6)
-        self.assertLess(r["frontToBackVectorPx"][0],0) is False
+        self.assertGreater(r["frontToBackVectorPx"][0],0)
 
 if __name__=="__main__":
     unittest.main()
