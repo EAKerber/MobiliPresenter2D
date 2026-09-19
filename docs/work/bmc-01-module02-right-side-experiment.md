@@ -122,6 +122,28 @@ Therefore C-A is now a **reproducible deterministic baseline**, not merely a his
 
 This replay validates the implementation path, not the physical correctness of the inferred rear edge.
 
+## Geometry evidence reassessment after ownership audit
+
+The exact historical C-A raster candidate remains reproducible, but its geometry evidence has been downgraded.
+
+Ownership audit:
+`review-assets/research/module02-depth-cue-ownership-v0.1.json`.
+
+The historical line `[742,586] -> [763,525]` was not purely an exposed Module 02 stone edge in the current sense:
+
+- only the first short front segment remains in the current exposed-right stone variant;
+- most sampled support lies in `stone-02-joint-bridge`;
+- the bridge is now correctly hidden when Module 03 is hidden.
+
+Consequences:
+
+- C-A remains a deterministic **process/appearance baseline**;
+- its target quad must not be treated as projection ground truth;
+- the historical back anchor `[763,525]` is downgraded from measured current evidence to **legacy conditional-joint evidence**;
+- C-B/C-C must not inherit that quad without fresh current projection evidence.
+
+This is a provenance correction, not a claim that the historical candidate is visually bad.
+
 ## Experiment questions
 
 BMC-01 should answer separate questions.
