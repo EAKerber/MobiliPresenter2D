@@ -42,7 +42,7 @@ class BMC01MinimalCompletionTests(unittest.TestCase):
             donor.putpixel((2,y),255)
             clean.putpixel((2,y),(20+y*10,20+y*10,20+y*10,255))
             for x in range(3,6): missing.putpixel((x,y),255)
-        out,stats=smooth_seed_fill(clean,missing,donor,2)
+        out,stats=smooth_seed_fill(clean,missing,donor,2,"rightmost")
         self.assertEqual(stats["filled"],18)
         for y in range(1,7):
             self.assertEqual(out.getpixel((3,y))[:3],clean.getpixel((2,y))[:3])
