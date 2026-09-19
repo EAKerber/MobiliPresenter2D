@@ -142,23 +142,60 @@ That is vastly larger than the sub-pixel line-fit residual on the Module 01 edge
 
 The Module 03 reference-alpha stone line also lies far from the Module 01 VP, but because the Module 02/03 stone observations may represent adjacent/intersecting local termination geometry, Module 03 is retained as supporting context rather than the decisive independent test.
 
-### Current classification
+### Ownership audit invalidates the historical Module 02 depth line as current geometry evidence
 
-The current evidence now supports:
+A dedicated ownership audit was run after the initial classification:
 
-**`GLOBAL_COHERENCE_REJECTED_FOR_TESTED_Y_DIRECTION`**
+- tool: `tools/research_depth_cue_ownership.py`;
+- report: `review-assets/research/module02-depth-cue-ownership-v0.1.json`;
+- workflow: `35460274240` — PASS.
 
-This means:
+The historical line `[742,586] -> [763,525]` contains 62 sampled raster positions.
 
-> the tested canonical pixels cannot all be explained as one exact perspective projection of the unrotated physical Y direction represented in Scene Core.
+Current asset ownership along that line:
 
-It does **not yet** distinguish between:
+- current `stone-02` exposed-right variant: only `10/62` sampled positions carry alpha;
+- `stone-02-joint-bridge`: `43/62` sampled positions carry alpha;
+- approved stone overlay 02: `0/62`;
+- module 02 cabinet layer: `0/62`.
 
-- `PIECEWISE_COHERENT` — different regions were composited/rendered with locally coherent but different projection;
-- `LOCALLY_DISTORTED` — one or more assets were warped internally;
-- a more specific source/version mismatch.
+Most importantly, in the **current** `module-03-hidden` visibility state:
 
-The next audit should therefore test at least one additional physical depth edge within the upper region and one additional edge within the lower region. That will determine whether each region is internally coherent or whether distortion exists inside individual assets.
+- `stone-02`: visible;
+- `stone-02-joint-bridge`: **hidden because module 03 is hidden**.
+
+Therefore the distal/back portion of the historical “measured stone depth edge” was supported primarily by a conditional 02↔03 joint bridge that no longer belongs to the correct exposed-right state.
+
+The historical calibration remains valid provenance for the old frame, but it is **not valid current hidden-face geometry authority**.
+
+### Revised current classification
+
+The earlier research conclusion
+`GLOBAL_COHERENCE_REJECTED_FOR_TESTED_Y_DIRECTION`
+is withdrawn.
+
+That conclusion depended on treating the historical Module 02 line as independent current Y-direction evidence. The ownership audit shows that assumption was wrong.
+
+Current classification returns to:
+
+**`INSUFFICIENT_CURRENT_DEPTH_EVIDENCE`**
+
+What is still established:
+
+- Module 01 visible side geometry is usable as a strong local projective reference;
+- the Promob fixed camera does not directly transfer to the current 2D frame;
+- the historical BMC-01 candidate/delta pipeline is reproducible;
+- the historical BMC-01 target quad is not yet justified as current physical projection.
+
+What is **not** established:
+
+- that the canonical kitchen is globally projectively inconsistent;
+- that the current lower region has a different camera from Module 01;
+- that the historical BMC-01 rear edge is physically correct.
+
+The next valid comparison must use a depth edge that is both:
+1. physically interpretable as Y-direction evidence; and
+2. actually visible/owned in the **current** target variant.
 
 ### Consequence for the current kitchen
 
