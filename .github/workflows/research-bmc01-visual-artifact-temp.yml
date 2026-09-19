@@ -1,0 +1,49 @@
+name: Research BMC01 visual artifact temp
+
+on:
+  push:
+    branches:
+      - research/reconstruction-architecture-v0.1
+    paths:
+      - .github/workflows/research-bmc01-visual-artifact-temp.yml
+
+permissions:
+  contents: write
+
+jobs:
+  package:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: research/reconstruction-architecture-v0.1
+          fetch-depth: 0
+      - name: Package review images
+        run: |
+          mkdir -p /tmp/bmc01-review/v01 /tmp/bmc01-review/v02 /tmp/bmc01-review/guides
+          cp review-assets/research/bmc01-minimal-completion-v0.1/{candidate.png,edited.png,comparison.png,edit-mask.png,report.json} /tmp/bmc01-review/v01/
+          cp review-assets/research/bmc01-minimal-completion-v0.2/{candidate.png,edited.png,comparison.png,edit-mask.png,report.json} /tmp/bmc01-review/v02/
+          cp review-assets/research/bmc01-guide-review-v0.1/contact-sheet.png /tmp/bmc01-review/guides/
+          cp review-assets/research/bmc01-geometry-support-audit-v0.1.png /tmp/bmc01-review/guides/
+      - uses: actions/upload-artifact@v4
+        with:
+          name: bmc01-review-visuals
+          path: /tmp/bmc01-review
+          if-no-files-found: error
+      - name: Self-clean with CAS
+        env:
+          TARGET_BRANCH: research/reconstruction-architecture-v0.1
+          EXPECTED_HEAD: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git rm .github/workflows/research-bmc01-visual-artifact-temp.yml
+          remote_before="$(git ls-remote origin "refs/heads/$TARGET_BRANCH" | cut -f1)"
+          test "$remote_before" = "$EXPECTED_HEAD"
+          git commit -m "chore: self-clean BMC-01 visual artifact workflow"
+          result="$(git rev-parse HEAD)"
+          git push origin "HEAD:refs/heads/$TARGET_BRANCH"
+          remote_after="$(git ls-remote origin "refs/heads/$TARGET_BRANCH" | cut -f1)"
+          test "$remote_after" = "$result"
