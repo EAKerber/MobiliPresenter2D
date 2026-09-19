@@ -103,7 +103,7 @@ Required sequence:
 
 The first deep audit follows the BMC-01 Module 02 right-face chain.
 
-The initial implementation blocker in `tools/extract_candidate_delta.py` was repaired on the research branch, focused donor/delta tests were added, and the exact BMC-01 historical projective-donor candidate was reproduced byte-for-byte. Projection authority remains intentionally unresolved.
+The initial implementation blocker in `tools/extract_candidate_delta.py` was repaired on the research branch, focused donor/delta tests were added, and the exact BMC-01 historical projective-donor candidate was reproduced byte-for-byte. The fixed-camera transfer has now been tested deterministically and is not supported as a global projection authority for the canonical 2D frame; BMC-01 remains local-derived + bounded-inference.
 
 ## Architectural principle
 
