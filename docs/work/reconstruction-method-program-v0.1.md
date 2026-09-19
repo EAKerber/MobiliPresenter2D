@@ -142,11 +142,19 @@ Primary benchmark because the repository already contains:
 - deterministic perspective-copy recipe;
 - delta extraction and pixel gates.
 
-Initial methods:
-1. current projective donor baseline;
-2. deterministic neutral face + donor;
-3. neutral face + local generative harmonization;
-4. guide-first local generative completion.
+Current method ladder:
+1. historical projective-donor baseline, retained only for comparison;
+2. local physical-depth geometry transfer;
+3. alpha-confidence + semantic ownership audit;
+4. deterministic same-object continuation baselines;
+5. clean Module 01 carcass-side donor projected into the local geometry;
+6. generative harmonization only if a bounded residual remains.
+
+Current strongest deterministic appearance hypothesis:
+`BMC-01 minimal completion v0.6`.
+
+Findings:
+`docs/work/bmc-01-appearance-evidence-findings-v0.1.md`.
 
 ### BMC-02 — Module 03 left stone termination
 
@@ -165,10 +173,16 @@ SC-01 — Scene Projective Consistency Audit is now active.
 Document:
 `docs/work/scene-projective-consistency-audit-v0.1.md`.
 
-Current automated classification remains:
-`INSUFFICIENT_EVIDENCE`.
+Current global classification remains intentionally fail-closed:
+`INSUFFICIENT_CURRENT_DEPTH_EVIDENCE`.
 
-A strong piecewise-perspective signal exists if the automatically traced Module 01 side top/bottom edges are confirmed as the physical depth edges. The next geometric authority step is an authoritative one-time vector trace, not further blind mask inference.
+Two earlier apparent contradictions were traced to contaminated evidence:
+- a low-RMS Module 01 luminance line was shading, not a physical edge;
+- the long historical Module 02 depth line was mostly conditional joint-bridge support.
+
+BMC-01 now uses a narrower local lower-region projection derived from the
+current Stone 03 exposed-left edge plus confirmed physical depths. It is a
+local legacy-scene hypothesis, not a recovered global camera.
 
 ## Projection path after fixed-camera rejection
 
