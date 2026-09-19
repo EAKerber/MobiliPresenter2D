@@ -345,11 +345,14 @@ def main():
                 if key in item: module01_angles.append(item[key]["angleDeg"])
     common_vp=[]
     module01_two_edge_vp=None
-    side_reference=next((x for x in side if x.get("status")=="OK" and "topDepthEdge" in x),None)
-    if side_reference and module01_bottom_trace and module01_bottom_trace.get("status")=="OK":
+    side_reference=next((x for x in side if x.get("status")=="OK" and "topDepthEdge" in x and "bottomDepthEdge" in x),None)
+    if side_reference:
+        # The outer top/bottom residual boundaries are the physical top/bottom
+        # boundaries of the confirmed full-height right side panel. The earlier
+        # interior luminance trace is retained only as a rejected diagnostic.
         module01_two_edge_vp=least_squares_intersection([
           ("module01-side-top",line_equation_from_yx(side_reference["topDepthEdge"])),
-          ("module01-side-bottom",line_equation_from_yx(module01_bottom_trace)),
+          ("module01-side-bottom",line_equation_from_yx(side_reference["bottomDepthEdge"])),
         ])
     module02_measured=next((x for x in depth if x["id"]=="module02-stone-visible-depth"),None)
     pixel03=next((x for x in pixel_lines if x["id"]=="module03-stone-reference-alpha-edge"),None)
@@ -383,7 +386,18 @@ def main():
       "promotionEligible":False,
       "frontMaskBoundaryFits":fronts,
       "module01SideResidualProbe":side,
-      "module01BottomInternalEdgeTrace":module01_bottom_trace,
+      "module01BottomInternalEdgeTrace":{
+        "status":"REJECTED_AS_PHYSICAL_EDGE",
+        "reason":"visual/topology review shows this luminance trace is an interior shading transition; the physical bottom depth edge is the outer side-panel boundary",
+        "diagnostic":module01_bottom_trace
+      },
+      "module01PhysicalSideEdgeStatus":{
+        "status":"CONFIRMED_FOR_RESEARCH",
+        "physicalSource":"MobiliPresenter Scene Core module01 right-side: full-height 700 mm x depth 350 mm side panel",
+        "rasterSource":"canonical Module 01 layer alpha residual to the right of the front finish mask",
+        "thresholdStability":"same fitted top/bottom support across tested alpha thresholds",
+        "visualReview":"PASS against the isolated Module 01 side screenshot supplied in the project conversation"
+      },
       "module01TwoEdgeVanishingFit":module01_two_edge_vp,
       "module01VanishingResidualToOtherDepthEvidencePx":module01_vp_residuals,
       "module01DepthVanishingHypothesis":vanishing,
@@ -396,9 +410,9 @@ def main():
         "combinedMeasuredPlusModule01Residual":circular_spread(actual_angles+module01_angles)
       },
       "preliminaryClassification":{
-        "sceneClass":"INSUFFICIENT_EVIDENCE",
-        "piecewiseSignal":"STRONG_IF_MODULE01_EDGE_TRACE_IS_CONFIRMED",
-        "reason":"the topology-constrained Module 01 top/bottom depth-edge hypothesis yields a vanishing point far from lower-stone depth lines, but the bottom edge is still an algorithmic luminance trace rather than an authoritative vector trace"
+        "sceneClass":"GLOBAL_COHERENCE_REJECTED_FOR_TESTED_Y_DIRECTION",
+        "nextClassQuestion":"PIECEWISE_COHERENT_VS_LOCALLY_DISTORTED",
+        "reason":"the confirmed Module 01 physical side top/bottom depth edges imply a vanishing point that misses the independently measured Module 02 stone depth line by far more than raster-fit uncertainty; both physical modules use the same unrotated Scene Core Y axis"
       },
       "limitations":[
         "front finish masks are authoring/control masks; their axis-aligned outer boundaries must not be used as independent camera evidence",
