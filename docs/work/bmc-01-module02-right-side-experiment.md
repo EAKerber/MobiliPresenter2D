@@ -96,6 +96,32 @@ This confirms **existence and physical dimensions** of the side face.
 
 It does not by itself prove the mapping from that physical face into the MobiliPresenter2D canonical frame.
 
+## Historical replay baseline
+
+Before testing new methods, the existing projective-donor candidate was revalidated after a minimal authoring-tool repair.
+
+Research workflow:
+`35453134871`.
+
+Exact replay results:
+- source variant SHA reproduced:
+  `f502790c76afe612563958ca3acfcc7d653018d718d11d852ed3a45df553ecfa`;
+- candidate bytes equal historical bytes: **yes**;
+- candidate SHA:
+  `3becbf8a510dd76757593ed5c227482edef7af57c48877e9d2e714398e77fff8`;
+- changed pixels: `1910`;
+- difference/alpha bounds: `[755,525,764,815]`;
+- outside ROI changes: `0`;
+- round-trip mismatch: `0`;
+- edited frame SHA:
+  `dfa445834900d87450392f3ccec827880eade882ca914153110b6f9d3558eca4`;
+- recipe SHA:
+  `a4ac0fa6702dc0707dde90dce0447b0e233cd222b9ecb3543be8494f0525d742`.
+
+Therefore C-A is now a **reproducible deterministic baseline**, not merely a historical artifact.
+
+This replay validates the implementation path, not the physical correctness of the inferred rear edge.
+
 ## Experiment questions
 
 BMC-01 should answer separate questions.
