@@ -1,13 +1,236 @@
 {
+  "alphaConfidence": {
+    "alphaMassEquivalentOpaquePixels": 616.0941176470589,
+    "alphaPositivePixels": 2304,
+    "alphaPositiveRatio": 0.9544324772162386,
+    "alphaZeroPixels": 110,
+    "columns": [
+      {
+        "alphaMass": 265.0,
+        "alphaPositivePixels": 265,
+        "alphaPositiveRatio": 0.9888059701492538,
+        "alphaSum": 67575,
+        "effectiveOpaqueCoverageRatio": 0.9888059701492538,
+        "geometryPixels": 268,
+        "maxAlpha": 255,
+        "meanAlpha": 252.1455223880597,
+        "solidPixels": 265,
+        "solidRatio": 0.9888059701492538,
+        "strongPixels": 265,
+        "strongRatio": 0.9888059701492538,
+        "x": 743
+      },
+      {
+        "alphaMass": 263.0,
+        "alphaPositivePixels": 263,
+        "alphaPositiveRatio": 0.9813432835820896,
+        "alphaSum": 67065,
+        "effectiveOpaqueCoverageRatio": 0.9813432835820896,
+        "geometryPixels": 268,
+        "maxAlpha": 255,
+        "meanAlpha": 250.24253731343285,
+        "solidPixels": 263,
+        "solidRatio": 0.9813432835820896,
+        "strongPixels": 263,
+        "strongRatio": 0.9813432835820896,
+        "x": 744
+      },
+      {
+        "alphaMass": 19.447058823529364,
+        "alphaPositivePixels": 261,
+        "alphaPositiveRatio": 0.9702602230483272,
+        "alphaSum": 4959,
+        "effectiveOpaqueCoverageRatio": 0.07229389897222811,
+        "geometryPixels": 269,
+        "maxAlpha": 19,
+        "meanAlpha": 18.434944237918216,
+        "solidPixels": 0,
+        "solidRatio": 0.0,
+        "strongPixels": 0,
+        "strongRatio": 0.0,
+        "x": 745
+      },
+      {
+        "alphaMass": 17.19999999999996,
+        "alphaPositivePixels": 258,
+        "alphaPositiveRatio": 0.9626865671641791,
+        "alphaSum": 4386,
+        "effectiveOpaqueCoverageRatio": 0.0641791044776118,
+        "geometryPixels": 268,
+        "maxAlpha": 17,
+        "meanAlpha": 16.365671641791046,
+        "solidPixels": 0,
+        "solidRatio": 0.0,
+        "strongPixels": 0,
+        "strongRatio": 0.0,
+        "x": 746
+      },
+      {
+        "alphaMass": 15.058823529411718,
+        "alphaPositivePixels": 256,
+        "alphaPositiveRatio": 0.9552238805970149,
+        "alphaSum": 3840,
+        "effectiveOpaqueCoverageRatio": 0.05618964003511835,
+        "geometryPixels": 268,
+        "maxAlpha": 15,
+        "meanAlpha": 14.328358208955224,
+        "solidPixels": 0,
+        "solidRatio": 0.0,
+        "strongPixels": 0,
+        "strongRatio": 0.0,
+        "x": 747
+      },
+      {
+        "alphaMass": 11.952941176470555,
+        "alphaPositivePixels": 254,
+        "alphaPositiveRatio": 0.9442379182156134,
+        "alphaSum": 3048,
+        "effectiveOpaqueCoverageRatio": 0.044434725563087564,
+        "geometryPixels": 269,
+        "maxAlpha": 12,
+        "meanAlpha": 11.33085501858736,
+        "solidPixels": 0,
+        "solidRatio": 0.0,
+        "strongPixels": 0,
+        "strongRatio": 0.0,
+        "x": 748
+      },
+      {
+        "alphaMass": 9.843137254901935,
+        "alphaPositivePixels": 251,
+        "alphaPositiveRatio": 0.9365671641791045,
+        "alphaSum": 2510,
+        "effectiveOpaqueCoverageRatio": 0.03672812408545498,
+        "geometryPixels": 268,
+        "maxAlpha": 10,
+        "meanAlpha": 9.365671641791044,
+        "solidPixels": 0,
+        "solidRatio": 0.0,
+        "strongPixels": 0,
+        "strongRatio": 0.0,
+        "x": 749
+      },
+      {
+        "alphaMass": 7.811764705882329,
+        "alphaPositivePixels": 249,
+        "alphaPositiveRatio": 0.9291044776119403,
+        "alphaSum": 1992,
+        "effectiveOpaqueCoverageRatio": 0.029148375768217643,
+        "geometryPixels": 268,
+        "maxAlpha": 8,
+        "meanAlpha": 7.432835820895522,
+        "solidPixels": 0,
+        "solidRatio": 0.0,
+        "strongPixels": 0,
+        "strongRatio": 0.0,
+        "x": 750
+      },
+      {
+        "alphaMass": 6.7803921568627255,
+        "alphaPositivePixels": 247,
+        "alphaPositiveRatio": 0.9216417910447762,
+        "alphaSum": 1729,
+        "effectiveOpaqueCoverageRatio": 0.02529997073456241,
+        "geometryPixels": 268,
+        "maxAlpha": 7,
+        "meanAlpha": 6.451492537313433,
+        "solidPixels": 0,
+        "solidRatio": 0.0,
+        "strongPixels": 0,
+        "strongRatio": 0.0,
+        "x": 751
+      }
+    ],
+    "effectiveOpaqueCoverageRatio": 0.25521711584385204,
+    "geometrySidePixels": 2414,
+    "histogram": [
+      {
+        "maxAlpha": 15,
+        "minAlpha": 1,
+        "pixels": 1257,
+        "ratio": 0.5207125103562552
+      },
+      {
+        "maxAlpha": 31,
+        "minAlpha": 16,
+        "pixels": 519,
+        "ratio": 0.21499585749792874
+      },
+      {
+        "maxAlpha": 63,
+        "minAlpha": 32,
+        "pixels": 0,
+        "ratio": 0.0
+      },
+      {
+        "maxAlpha": 95,
+        "minAlpha": 64,
+        "pixels": 0,
+        "ratio": 0.0
+      },
+      {
+        "maxAlpha": 127,
+        "minAlpha": 96,
+        "pixels": 0,
+        "ratio": 0.0
+      },
+      {
+        "maxAlpha": 159,
+        "minAlpha": 128,
+        "pixels": 0,
+        "ratio": 0.0
+      },
+      {
+        "maxAlpha": 191,
+        "minAlpha": 160,
+        "pixels": 0,
+        "ratio": 0.0
+      },
+      {
+        "maxAlpha": 223,
+        "minAlpha": 192,
+        "pixels": 0,
+        "ratio": 0.0
+      },
+      {
+        "maxAlpha": 254,
+        "minAlpha": 224,
+        "pixels": 0,
+        "ratio": 0.0
+      },
+      {
+        "maxAlpha": 255,
+        "minAlpha": 255,
+        "pixels": 528,
+        "ratio": 0.2187241093620547
+      }
+    ],
+    "meanAlphaAll": 65.08036454018227,
+    "meanAlphaPositive": 68.1875,
+    "nonzeroAlphaQuantiles": {
+      "q10": 7,
+      "q25": 10,
+      "q50": 15,
+      "q75": 19,
+      "q90": 255
+    },
+    "solidPixels": 528,
+    "solidRatio": 0.2187241093620547,
+    "solidThreshold": 128,
+    "strongPixels": 528,
+    "strongRatio": 0.2187241093620547,
+    "strongThreshold": 224
+  },
   "frontSeamX": 742,
   "interpretation": [
     "sameObjectSidePixels are exact current Module 02 layer pixels inside the locally projected side and to the right of the measured front seam",
     "coveredByModule03Pixels quantify how much of that exact side is hidden by current Module 03 body/stone alpha in the default state",
-    "these same-object pixels should be reused as C0 canonical underlayer before any reconstruction method is attempted"
+    "nonzero alpha alone is compositing support, not proof of opaque physical side occupancy",
+    "solid/strong alpha tiers are reported separately so later completion can preserve true same-object face evidence without mistaking soft antialias/shadow support for completed geometry"
   ],
   "promotionEligible": false,
   "sceneId": "cozinha-01",
-  "schemaVersion": "BMC01UnderlayerReuseAuditReport 0.1",
+  "schemaVersion": "BMC01UnderlayerReuseAuditReport 0.2",
   "targetVariantVisibility": {
     "default": {
       "module02": {
@@ -47,7 +270,142 @@
       "sameObjectSidePixels": 2304
     },
     {
+      "alphaThreshold": 8,
+      "coveredByModule03Pixels": 2057,
+      "coveredByModule03Ratio": 1.0,
+      "localGeometryPixels": 2682,
+      "notCoveredByModule03Pixels": 0,
+      "sameObjectSideBounds": [
+        743,
+        590,
+        751,
+        855
+      ],
+      "sameObjectSideGeometryRatio": 0.7669649515287099,
+      "sameObjectSidePixels": 2057
+    },
+    {
+      "alphaThreshold": 16,
+      "coveredByModule03Pixels": 1047,
+      "coveredByModule03Ratio": 1.0,
+      "localGeometryPixels": 2682,
+      "notCoveredByModule03Pixels": 0,
+      "sameObjectSideBounds": [
+        743,
+        590,
+        747,
+        855
+      ],
+      "sameObjectSideGeometryRatio": 0.39038031319910516,
+      "sameObjectSidePixels": 1047
+    },
+    {
+      "alphaThreshold": 32,
+      "coveredByModule03Pixels": 528,
+      "coveredByModule03Ratio": 1.0,
+      "localGeometryPixels": 2682,
+      "notCoveredByModule03Pixels": 0,
+      "sameObjectSideBounds": [
+        743,
+        590,
+        745,
+        855
+      ],
+      "sameObjectSideGeometryRatio": 0.19686800894854586,
+      "sameObjectSidePixels": 528
+    },
+    {
+      "alphaThreshold": 64,
+      "coveredByModule03Pixels": 528,
+      "coveredByModule03Ratio": 1.0,
+      "localGeometryPixels": 2682,
+      "notCoveredByModule03Pixels": 0,
+      "sameObjectSideBounds": [
+        743,
+        590,
+        745,
+        855
+      ],
+      "sameObjectSideGeometryRatio": 0.19686800894854586,
+      "sameObjectSidePixels": 528
+    },
+    {
+      "alphaThreshold": 96,
+      "coveredByModule03Pixels": 528,
+      "coveredByModule03Ratio": 1.0,
+      "localGeometryPixels": 2682,
+      "notCoveredByModule03Pixels": 0,
+      "sameObjectSideBounds": [
+        743,
+        590,
+        745,
+        855
+      ],
+      "sameObjectSideGeometryRatio": 0.19686800894854586,
+      "sameObjectSidePixels": 528
+    },
+    {
       "alphaThreshold": 128,
+      "coveredByModule03Pixels": 528,
+      "coveredByModule03Ratio": 1.0,
+      "localGeometryPixels": 2682,
+      "notCoveredByModule03Pixels": 0,
+      "sameObjectSideBounds": [
+        743,
+        590,
+        745,
+        855
+      ],
+      "sameObjectSideGeometryRatio": 0.19686800894854586,
+      "sameObjectSidePixels": 528
+    },
+    {
+      "alphaThreshold": 160,
+      "coveredByModule03Pixels": 528,
+      "coveredByModule03Ratio": 1.0,
+      "localGeometryPixels": 2682,
+      "notCoveredByModule03Pixels": 0,
+      "sameObjectSideBounds": [
+        743,
+        590,
+        745,
+        855
+      ],
+      "sameObjectSideGeometryRatio": 0.19686800894854586,
+      "sameObjectSidePixels": 528
+    },
+    {
+      "alphaThreshold": 192,
+      "coveredByModule03Pixels": 528,
+      "coveredByModule03Ratio": 1.0,
+      "localGeometryPixels": 2682,
+      "notCoveredByModule03Pixels": 0,
+      "sameObjectSideBounds": [
+        743,
+        590,
+        745,
+        855
+      ],
+      "sameObjectSideGeometryRatio": 0.19686800894854586,
+      "sameObjectSidePixels": 528
+    },
+    {
+      "alphaThreshold": 224,
+      "coveredByModule03Pixels": 528,
+      "coveredByModule03Ratio": 1.0,
+      "localGeometryPixels": 2682,
+      "notCoveredByModule03Pixels": 0,
+      "sameObjectSideBounds": [
+        743,
+        590,
+        745,
+        855
+      ],
+      "sameObjectSideGeometryRatio": 0.19686800894854586,
+      "sameObjectSidePixels": 528
+    },
+    {
+      "alphaThreshold": 248,
       "coveredByModule03Pixels": 528,
       "coveredByModule03Ratio": 1.0,
       "localGeometryPixels": 2682,
