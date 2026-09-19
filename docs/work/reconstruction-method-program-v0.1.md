@@ -103,7 +103,7 @@ Required sequence:
 
 The first deep audit follows the BMC-01 Module 02 right-face chain.
 
-A key implementation finding is already recorded: the reusable delta-extraction algorithm is strong, but the current `tools/extract_candidate_delta.py` CLI source contains invalid Python `true/null` literals and is therefore blocked until a minimal research-branch repair is made.
+The initial implementation blocker in `tools/extract_candidate_delta.py` was repaired on the research branch, focused donor/delta tests were added, and the exact BMC-01 historical projective-donor candidate was reproduced byte-for-byte. Projection authority remains intentionally unresolved.
 
 ## Architectural principle
 
