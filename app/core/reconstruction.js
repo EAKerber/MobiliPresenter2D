@@ -17,6 +17,7 @@
   function createRenderer(canvas, data) {
     const context = canvas.getContext("2d", { willReadFrequently: true });
     const imageCache = new Map();
+    const slotCache = new Map();
     const textureCache = new Map();
     let revision = 0;
 
@@ -31,22 +32,36 @@
           scratch.height = canvas.height;
           const ctx = scratch.getContext("2d", { willReadFrequently: true });
           ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
-          const pixels = ctx.getImageData(0, 0, canvas.width, canvas.height);
+          return ctx.getImageData(0, 0, canvas.width, canvas.height);
+        })());
+      }
+      return imageCache.get(url);
+    }
+
+    async function slotSource(slot) {
+      const key = slot.neutralAsset + "|" + slot.maskAsset;
+      if (!slotCache.has(key)) {
+        slotCache.set(key, (async () => {
+          const [neutral, mask] = await Promise.all([
+            imagePixels(slot.neutralAsset),
+            imagePixels(slot.maskAsset)
+          ]);
           let weightedLuma = 0;
           let alphaMass = 0;
-          for (let i = 0; i < pixels.data.length; i += 4) {
-            const a = pixels.data[i + 3] / 255;
-            if (!a) continue;
-            weightedLuma += luminance([pixels.data[i], pixels.data[i + 1], pixels.data[i + 2]]) * a;
-            alphaMass += a;
+          for (let i = 0; i < neutral.data.length; i += 4) {
+            const alpha = mask.data[i] / 255;
+            if (!alpha) continue;
+            weightedLuma += luminance([neutral.data[i], neutral.data[i + 1], neutral.data[i + 2]]) * alpha;
+            alphaMass += alpha;
           }
           return {
-            pixels,
+            neutral,
+            mask,
             averageLuminance: alphaMass ? weightedLuma / alphaMass : 128
           };
         })());
       }
-      return imageCache.get(url);
+      return slotCache.get(key);
     }
 
     async function texturePixels(url) {
@@ -85,31 +100,31 @@
     }
 
     async function renderSlot(slot, material) {
-      const source = await imagePixels(slot.neutralAsset);
+      const source = await slotSource(slot);
       const texture = await texturePixels(material?.textureAsset);
       const color = parseColor(material?.color);
-      const output = new Uint8ClampedArray(source.pixels.data.length);
+      const output = new Uint8ClampedArray(source.neutral.data.length);
       const textureStrength = Number.isFinite(Number(material?.textureStrength))
         ? Number(material.textureStrength)
         : 0.25;
       const usesOriginal = !color && !texture;
 
-      for (let pixel = 0, i = 0; i < source.pixels.data.length; pixel += 1, i += 4) {
-        const alpha = source.pixels.data[i + 3];
+      for (let pixel = 0, i = 0; i < source.neutral.data.length; pixel += 1, i += 4) {
+        const alpha = source.mask.data[i];
         if (!alpha) continue;
 
         if (usesOriginal) {
-          output[i] = source.pixels.data[i];
-          output[i + 1] = source.pixels.data[i + 1];
-          output[i + 2] = source.pixels.data[i + 2];
+          output[i] = source.neutral.data[i];
+          output[i + 1] = source.neutral.data[i + 1];
+          output[i + 2] = source.neutral.data[i + 2];
           output[i + 3] = alpha;
           continue;
         }
 
         const neutralLuma = luminance([
-          source.pixels.data[i],
-          source.pixels.data[i + 1],
-          source.pixels.data[i + 2]
+          source.neutral.data[i],
+          source.neutral.data[i + 1],
+          source.neutral.data[i + 2]
         ]);
         const sceneShade = clamp(neutralLuma / Math.max(1, source.averageLuminance), 0.76, 1.20);
 
@@ -145,6 +160,7 @@
       const ticket = ++revision;
       context.clearRect(0, 0, canvas.width, canvas.height);
       canvas.dataset.active = String(Boolean(input?.visible));
+      delete canvas.dataset.renderError;
       if (!input?.visible) return;
 
       try {
