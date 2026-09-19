@@ -1,0 +1,127 @@
+{
+  "historicalComparison": {
+    "carcass": {
+      "cornerDisplacementPx": [
+        4.0,
+        44.08076734344333,
+        39.23965358184426,
+        1.0
+      ],
+      "maxCornerDisplacementPx": 44.08076734344333,
+      "meanCornerDisplacementPx": 22.080105231321895
+    },
+    "historicalStatus": "legacy-bounded-hypothesis",
+    "plinth": {
+      "cornerDisplacementPx": [
+        1.0,
+        47.52848286645365,
+        48.4848616669111,
+        0.0
+      ],
+      "maxCornerDisplacementPx": 48.4848616669111,
+      "meanCornerDisplacementPx": 24.253336133341186
+    },
+    "warning": "historical back anchor was derived from a line now known to be primarily conditional joint-bridge support"
+  },
+  "limitations": [
+    "assumes adjacent lower-zone projection can be approximated locally as affine over the transferred depth",
+    "does not establish a global camera or vanishing point",
+    "does not yet model depth-dependent vertical scale at the rear edge",
+    "geometry candidate must be raster-benchmarked against the current composition before promotion"
+  ],
+  "model": "adjacent-lower-region-local-affine",
+  "promotionEligible": false,
+  "reference": {
+    "backPx": [
+      751.0,
+      551.0
+    ],
+    "evidence": [
+      "app/tools/apply-r5a-pixelperfect-edits.py:STONE03_LEFT_EDGE_POINTS",
+      "review-assets/calibration/gap-pixel-v3/reference.png",
+      "review-assets/research/module02-depth-cue-ownership-v0.1.json",
+      "EAKerber/MobiliPresenter:scene-core/src/fixtures/current-scene.ts:STONE03_ID/slab"
+    ],
+    "frontPx": [
+      740.0,
+      574.0
+    ],
+    "frontToBackVectorPx": [
+      11.0,
+      -23.0
+    ],
+    "id": "module03-exposed-left-stone-top-depth",
+    "physicalDepthMm": 550.0,
+    "status": "current-owned-conditional-geometry"
+  },
+  "sceneId": "cozinha-01",
+  "schemaVersion": "LocalDepthTransferProbeReport 0.1",
+  "status": "RESEARCH_CANDIDATE",
+  "target": {
+    "carcass": {
+      "depthRatio": 0.9636363636363636,
+      "physicalDepthMm": 530.0,
+      "quad": [
+        [
+          742.0,
+          590.0
+        ],
+        [
+          752.6,
+          567.8363636363637
+        ],
+        [
+          752.6,
+          833.8363636363637
+        ],
+        [
+          742.0,
+          856.0
+        ]
+      ],
+      "referenceDepthMm": 550.0,
+      "referenceFrontToBackVectorPx": [
+        11.0,
+        -23.0
+      ],
+      "targetFrontToBackVectorPx": [
+        10.6,
+        -22.163636363636364
+      ]
+    },
+    "frontSeamStatus": "measured-current-layer",
+    "frontSeamX": 742.0,
+    "id": "module02-right-side",
+    "plinth": {
+      "depthRatio": 0.6342363636363636,
+      "physicalDepthMm": 348.83,
+      "quad": [
+        [
+          742.0,
+          856.0
+        ],
+        [
+          748.9766,
+          841.4125636363636
+        ],
+        [
+          748.9766,
+          883.4125636363636
+        ],
+        [
+          742.0,
+          898.0
+        ]
+      ],
+      "referenceDepthMm": 550.0,
+      "referenceFrontToBackVectorPx": [
+        11.0,
+        -23.0
+      ],
+      "targetFrontToBackVectorPx": [
+        6.9765999999999995,
+        -14.587436363636362
+      ]
+    }
+  }
+}
