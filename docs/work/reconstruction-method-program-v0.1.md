@@ -45,7 +45,8 @@ Status: v0.1 draft materialized.
 
 Documents:
 - `docs/architecture/0005-reconstruction-authority-contract.md`;
-- `docs/architecture/0006-reconstruction-packet-pipeline.md`.
+- `docs/architecture/0006-reconstruction-packet-pipeline.md`;
+- `docs/architecture/0008-geometry-first-scene-authoring-contract.md`.
 
 Defines:
 - authority ordering;
@@ -156,6 +157,18 @@ Small-return benchmark intended to punish over-generation.
 Presentation benchmark using confirmed Promob-derived divider, shelf and microwave-cavity geometry.
 
 This is a technical-view benchmark, not a scene-raster reconstruction benchmark.
+
+## Scene consistency audit
+
+SC-01 — Scene Projective Consistency Audit is now active.
+
+Document:
+`docs/work/scene-projective-consistency-audit-v0.1.md`.
+
+Current automated classification remains:
+`INSUFFICIENT_EVIDENCE`.
+
+A strong piecewise-perspective signal exists if the automatically traced Module 01 side top/bottom edges are confirmed as the physical depth edges. The next geometric authority step is an authoritative one-time vector trace, not further blind mask inference.
 
 ## Projection path after fixed-camera rejection
 
