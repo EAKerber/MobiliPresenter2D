@@ -66,7 +66,7 @@ def promote_soft_host_rgb(clean,missing,host_rgba,host_threshold):
     return out,promoted
 
 
-def smooth_seed_fill(clean,missing,donor_mask,vertical_radius):
+def smooth_seed_fill(clean,missing,donor_mask,vertical_radius,contact_source="average"):
     """Continue a strong same-object edge across missing geometry.
 
     The first missing column keeps exact same-row donor appearance to preserve
@@ -81,13 +81,22 @@ def smooth_seed_fill(clean,missing,donor_mask,vertical_radius):
         return out,{"filled":0,"verticalRadius":vertical_radius}
 
     seed={}
+    contact_seed={}
     for y in range(db[1],db[3]):
         vals=[]
+        coords=[]
         for x in range(db[0],db[2]):
             if dp[x,y]:
                 vals.append(cp[x,y][:3])
+                coords.append((x,cp[x,y][:3]))
         if vals:
             seed[y]=tuple(sum(v[i] for v in vals)/len(vals) for i in range(3))
+            if contact_source=="rightmost":
+                contact_seed[y]=max(coords,key=lambda item:item[0])[1]
+            elif contact_source=="average":
+                contact_seed[y]=seed[y]
+            else:
+                raise ValueError(f"unsupported contact source: {contact_source}")
     if not seed:
         raise RuntimeError("empty strong seed rows")
     seed_rows=sorted(seed)
@@ -112,14 +121,14 @@ def smooth_seed_fill(clean,missing,donor_mask,vertical_radius):
         if not xs: continue
         first=min(xs); last=max(xs)
         sy=nearest_seed_y(y)
-        raw=seed[sy]; smooth=smooth_color(y)
+        raw=contact_seed[sy]; smooth=smooth_color(y)
         span=max(1,last-first)
         for x in xs:
             t=(x-first)/span if last>first else 0.0
             rgb=tuple(round(raw[i]*(1.0-t)+smooth[i]*t) for i in range(3))
             op[x,y]=(rgb[0],rgb[1],rgb[2],255)
             filled+=1
-    return out,{"filled":filled,"verticalRadius":vertical_radius,"seedRows":len(seed_rows),"seedYRange":[seed_rows[0],seed_rows[-1]]}
+    return out,{"filled":filled,"verticalRadius":vertical_radius,"contactSource":contact_source,"seedRows":len(seed_rows),"seedYRange":[seed_rows[0],seed_rows[-1]]}
 
 
 def candidate_row_roughness(candidate):
@@ -298,7 +307,11 @@ def main():
     if continuation_mode=="nearest":
         continuation,fillstats=nearest_fill(clean,residual_missing,donor,float(cfg["donor"]["maxDistancePx"]))
     elif continuation_mode=="smooth-strong-seed":
-        continuation,fillstats=smooth_seed_fill(clean,residual_missing,donor,int(appearance_cfg.get("verticalRadius",5)))
+        continuation,fillstats=smooth_seed_fill(
+          clean,residual_missing,donor,
+          int(appearance_cfg.get("verticalRadius",5)),
+          str(appearance_cfg.get("contactSource","average"))
+        )
     else:
         raise ValueError(f"unsupported continuation mode: {continuation_mode}")
     candidate=Image.alpha_composite(promoted_soft,continuation)
@@ -359,7 +372,7 @@ def main():
       "sameObjectContactErrorBefore":same_object_contact_error(clean,clean,candidate.getchannel("A"),donor),
       "sameObjectContactErrorAfter":same_object_contact_error(clean,edited,candidate.getchannel("A"),donor),
       "limitations":[
-        "source-RGB promotion and nearest-pixel residual fill are deterministic appearance baselines, not final photometric synthesis",
+        "deterministic same-object continuation is an appearance baseline, not final photometric synthesis",
         "host ownership threshold is research-only and distinguishes solid same-object support from low-alpha compositing fringe",
         "candidate has not received visual/human approval"
       ]
