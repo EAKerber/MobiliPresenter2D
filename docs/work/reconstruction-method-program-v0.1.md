@@ -220,7 +220,7 @@ Design:
 - no commitment to a single reconstruction method;
 - no claim that the current fixed-camera calibration automatically applies to every 2D source frame;
 - no final thresholds before benchmark measurements;
-- no runtime implementation on this research branch yet.
+- no default-runtime promotion from this research branch; query-gated runtime proof is allowed and now exists for BMC-01.
 
 ## Expected outputs of this research branch
 
@@ -237,3 +237,31 @@ Next research outputs:
 8. calibration-compatibility investigation between the Promob fixed camera and the MobiliPresenter2D canonical frame;
 9. deterministic helper specifications before helper implementation;
 10. tooling implementation conformance audits before any existing helper is promoted.
+
+
+### BMC-01 implementation checkpoint
+
+BMC-01 has now crossed the implementation-conformance gate without being
+promoted by default.
+
+Materialized:
+- app-local neutral/mask material slots;
+- query-gated runtime renderer;
+- four-state visibility/material browser contract;
+- historical-vs-reconstructed evidence;
+- agent visual review;
+- first concrete Reconstruction Packet;
+- fail-closed packet validator.
+
+Packet:
+`review-assets/research/bmc01-reconstruction-packet-v0.1.json`.
+
+Packet validation run:
+`35475061682` — PASS, with 98 Python tests passing.
+
+The current lifecycle is:
+`AGENT_REVIEW`.
+
+Human review remains pending, so `defaultPromotionAllowed=false`.
+
+No generative residual is currently justified.
