@@ -1,8 +1,16 @@
 {
-  "schemaVersion": "BMC01GeometrySupportAudit 0.1",
+  "schemaVersion": "BMC01GeometrySupportAudit 0.2",
   "sceneId": "cozinha-01",
-  "canvas": [1536, 1024],
-  "authorizedRoi": [742, 520, 764, 899],
+  "canvas": [
+    1536,
+    1024
+  ],
+  "authorizedRoi": [
+    742,
+    520,
+    764,
+    899
+  ],
   "inputs": {
     "localTransferReport": "review-assets/research/bmc01-local-depth-transfer-v0.1-report.json",
     "module02Layer": "app/assets/kitchen/layers/02_inferior_fogao.png",
@@ -11,12 +19,51 @@
     "historicalOverlay": "app/assets/kitchen/overlays/module-02-right-exposed-face.png"
   },
   "historical": {
-    "carcassQuad": [[742,586],[763,525],[763,796],[742,857]],
-    "plinthQuad": [[742,857],[763,796],[763,837],[742,898]]
+    "carcassQuad": [
+      [
+        742,
+        586
+      ],
+      [
+        763,
+        525
+      ],
+      [
+        763,
+        796
+      ],
+      [
+        742,
+        857
+      ]
+    ],
+    "plinthQuad": [
+      [
+        742,
+        857
+      ],
+      [
+        763,
+        796
+      ],
+      [
+        763,
+        837
+      ],
+      [
+        742,
+        898
+      ]
+    ]
   },
   "policy": {
     "evaluatePreOverlaySupport": true,
     "historicalOverlayIsComparisonOnly": true,
-    "promotionEligible": false
-  }
+    "promotionEligible": false,
+    "binaryMaskRequired": true
+  },
+  "alphaThresholds": [
+    1,
+    128
+  ]
 }
