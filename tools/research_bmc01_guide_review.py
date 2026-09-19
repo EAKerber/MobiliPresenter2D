@@ -9,15 +9,15 @@ from __future__ import annotations
 import argparse, copy, hashlib, json
 from pathlib import Path
 from PIL import Image, ImageChops, ImageDraw
-from render_variant_fidelity import render_case, safe_app_path
+try:
+    from tools.render_variant_fidelity import render_case, safe_app_path
+except ModuleNotFoundError:
+    from render_variant_fidelity import render_case, safe_app_path
 
 ROOT=Path(__file__).resolve().parents[1]
 
 def sha_bytes(im):
     return hashlib.sha256(im.tobytes()).hexdigest()
-
-def count_nonzero(im):
-    return sum(1 for p in im.getdata() if any(p) if isinstance(p,tuple)) if im.mode!="L" else sum(1 for p in im.getdata() if p)
 
 def mask(size,quad):
     im=Image.new("L",size,0)
