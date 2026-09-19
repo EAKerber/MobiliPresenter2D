@@ -354,7 +354,7 @@ Compare:
 - optional cosmetic generative polish.
 
 Blocking rule:
-all methods must preserve the same A1-confirmed divider/shelf/cavity geometry.
+all methods must preserve the same physically confirmed divider/shelf/cavity geometry.
 
 Generative polish is never allowed to improve geometry score.
 
