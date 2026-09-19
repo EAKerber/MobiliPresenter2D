@@ -1,0 +1,63 @@
+name: Research BMC01 historical compare temp
+
+on:
+  push:
+    branches:
+      - research/reconstruction-architecture-v0.1
+    paths:
+      - .github/workflows/research-bmc01-historical-compare-temp.yml
+
+permissions:
+  contents: write
+
+jobs:
+  browser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: research/reconstruction-architecture-v0.1
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Syntax smoke
+        run: node --check tests/reconstruction-browser.cjs
+      - name: Install isolated browser tooling
+        run: |
+          npm install --prefix /tmp/bmc01-browser --no-audit --no-fund playwright@1.62.1
+          /tmp/bmc01-browser/node_modules/.bin/playwright install --with-deps chromium
+      - name: Capture historical and reconstructed states
+        env:
+          NODE_PATH: /tmp/bmc01-browser/node_modules
+          BMC01_BROWSER_URL: http://127.0.0.1:4173/index.html
+        run: |
+          set -euo pipefail
+          python -m http.server 4173 --directory app >/tmp/bmc01-http.log 2>&1 &
+          server_pid=$!
+          trap 'kill "$server_pid" 2>/dev/null || true' EXIT
+          sleep 1
+          node tests/reconstruction-browser.cjs /tmp/bmc01-historical-compare
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: bmc01-historical-compare
+          path: /tmp/bmc01-historical-compare
+          if-no-files-found: ignore
+      - name: Self-clean with CAS
+        env:
+          TARGET_BRANCH: research/reconstruction-architecture-v0.1
+          EXPECTED_HEAD: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git rm .github/workflows/research-bmc01-historical-compare-temp.yml
+          remote_before="$(git ls-remote origin "refs/heads/$TARGET_BRANCH" | cut -f1)"
+          test "$remote_before" = "$EXPECTED_HEAD"
+          git commit -m "chore: self-clean BMC-01 historical compare"
+          result="$(git rev-parse HEAD)"
+          git push origin "HEAD:refs/heads/$TARGET_BRANCH"
+          remote_after="$(git ls-remote origin "refs/heads/$TARGET_BRANCH" | cut -f1)"
+          test "$remote_after" = "$result"
