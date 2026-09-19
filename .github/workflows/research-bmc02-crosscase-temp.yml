@@ -1,0 +1,149 @@
+name: Research BMC02 cross-case gate temp
+
+on:
+  push:
+    branches:
+      - research/reconstruction-architecture-v0.1
+    paths:
+      - .github/workflows/research-bmc02-crosscase-temp.yml
+
+permissions:
+  contents: write
+
+jobs:
+  materialize-and-gate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: research/reconstruction-architecture-v0.1
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Install Python image tooling
+        run: python -m pip install -r tools/requirements.txt
+
+      - name: Compile cross-case reconstruction tooling
+        run: |
+          python -m py_compile             tools/reconstruction_runtime_assets.py             tools/materialize_bmc01_runtime_assets.py             tools/materialize_bmc02_runtime_assets.py             tools/research_bmc02_termination_ownership.py
+          node --check app/core/reconstruction.js
+          node --check app/data/reconstruction-data.js
+          node --check app/app.js
+          node --check tests/reconstruction-browser.cjs
+          node --check tests/reconstruction-bmc02-browser.cjs
+
+      - name: Rematerialize BMC-01 and prove byte stability
+        run: |
+          set -euo pipefail
+          python tools/materialize_bmc01_runtime_assets.py             --output-dir app/assets/kitchen/reconstruction/bmc01
+          git diff --exit-code -- app/assets/kitchen/reconstruction/bmc01
+
+      - name: Materialize BMC-02 app-local assets
+        run: |
+          set -euo pipefail
+          rm -rf app/assets/kitchen/reconstruction/bmc02
+          python tools/materialize_bmc02_runtime_assets.py             --output-dir app/assets/kitchen/reconstruction/bmc02
+          cat app/assets/kitchen/reconstruction/bmc02/manifest.json
+
+      - name: Run Python regression suite
+        run: python -m unittest discover -s tests -p 'test_*.py'
+
+      - name: Run app deterministic gates
+        working-directory: app
+        run: npm test
+
+      - name: Static build smoke
+        run: |
+          bash app/scripts/build-static.sh
+          test -f app/dist/core/reconstruction.js
+          test -f app/dist/data/reconstruction-data.js
+          test -f app/dist/assets/kitchen/reconstruction/bmc01/carcass-mask.png
+          test -f app/dist/assets/kitchen/reconstruction/bmc02/termination-neutral.png
+          test -f app/dist/assets/kitchen/reconstruction/bmc02/termination-mask.png
+          test -f app/dist/assets/kitchen/reconstruction/bmc02/manifest.json
+
+      - name: Install isolated browser tooling
+        run: |
+          npm install --prefix /tmp/reconstruction-browser --no-audit --no-fund playwright@1.62.1
+          /tmp/reconstruction-browser/node_modules/.bin/playwright install --with-deps chromium
+
+      - name: Run BMC-01 browser regression
+        env:
+          NODE_PATH: /tmp/reconstruction-browser/node_modules
+          BMC01_BROWSER_URL: http://127.0.0.1:4173/index.html
+        run: |
+          set -euo pipefail
+          python -m http.server 4173 --directory app >/tmp/reconstruction-http.log 2>&1 &
+          server_pid=$!
+          trap 'kill "$server_pid" 2>/dev/null || true' EXIT
+          sleep 1
+          node tests/reconstruction-browser.cjs /tmp/reconstruction-review/bmc01
+
+      - name: Run BMC-02 browser contract
+        env:
+          NODE_PATH: /tmp/reconstruction-browser/node_modules
+          BMC02_BROWSER_URL: http://127.0.0.1:4174/index.html
+        run: |
+          set -euo pipefail
+          python -m http.server 4174 --directory app >/tmp/reconstruction-http-bmc02.log 2>&1 &
+          server_pid=$!
+          trap 'kill "$server_pid" 2>/dev/null || true' EXIT
+          sleep 1
+          node tests/reconstruction-bmc02-browser.cjs /tmp/reconstruction-review/bmc02
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: bmc02-crosscase-review
+          path: /tmp/reconstruction-review
+          if-no-files-found: ignore
+
+      - name: Commit BMC-02 assets and self-clean with CAS
+        env:
+          TARGET_BRANCH: research/reconstruction-architecture-v0.1
+          EXPECTED_HEAD: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          rm -rf app/dist
+          git rm .github/workflows/research-bmc02-crosscase-temp.yml
+          git add app/assets/kitchen/reconstruction/bmc02
+
+          python - <<'PY'
+          import subprocess
+          paths=subprocess.check_output(["git","diff","--cached","--name-only"],text=True).splitlines()
+          allowed=[
+            ".github/workflows/research-bmc02-crosscase-temp.yml",
+            "app/assets/kitchen/reconstruction/bmc02/",
+          ]
+          bad=[p for p in paths if not any(p==a or p.startswith(a) for a in allowed)]
+          if bad:
+              raise SystemExit("UNEXPECTED_STAGED:"+",".join(bad))
+          required=[
+            "app/assets/kitchen/reconstruction/bmc02/termination-neutral.png",
+            "app/assets/kitchen/reconstruction/bmc02/termination-mask.png",
+            "app/assets/kitchen/reconstruction/bmc02/manifest.json",
+          ]
+          missing=[p for p in required if p not in paths]
+          if missing:
+              raise SystemExit("EXPECTED_ASSET_MISSING:"+",".join(missing))
+          print("STAGED",paths)
+          PY
+
+          remote_before="$(git ls-remote origin "refs/heads/$TARGET_BRANCH" | cut -f1)"
+          test "$remote_before" = "$EXPECTED_HEAD"
+          git commit -m "research: materialize BMC-02 stone termination runtime assets"
+          result="$(git rev-parse HEAD)"
+          git push origin "HEAD:refs/heads/$TARGET_BRANCH"
+          remote_after="$(git ls-remote origin "refs/heads/$TARGET_BRANCH" | cut -f1)"
+          test "$remote_after" = "$result"
