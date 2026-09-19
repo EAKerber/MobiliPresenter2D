@@ -932,6 +932,132 @@
     "human-calibrated module03 line is reported separately from measured-pixel authority",
     "this probe cannot by itself classify the whole scene as geometrically valid or invalid"
   ],
+  "module01BottomInternalEdgeTrace": {
+    "angleDeg": 14.923664447681366,
+    "count": 24,
+    "dyDx": 0.2665217391304348,
+    "intercept": 192.66173913043477,
+    "points": [
+      [
+        353,
+        280
+      ],
+      [
+        354,
+        281
+      ],
+      [
+        355,
+        282
+      ],
+      [
+        356,
+        285
+      ],
+      [
+        357,
+        287
+      ],
+      [
+        358,
+        288
+      ],
+      [
+        359,
+        288
+      ],
+      [
+        360,
+        289
+      ],
+      [
+        361,
+        289
+      ],
+      [
+        362,
+        289
+      ],
+      [
+        363,
+        289
+      ],
+      [
+        364,
+        290
+      ],
+      [
+        365,
+        290
+      ],
+      [
+        366,
+        290
+      ],
+      [
+        367,
+        291
+      ],
+      [
+        368,
+        291
+      ],
+      [
+        369,
+        291
+      ],
+      [
+        370,
+        291
+      ],
+      [
+        371,
+        292
+      ],
+      [
+        372,
+        292
+      ],
+      [
+        373,
+        293
+      ],
+      [
+        374,
+        293
+      ],
+      [
+        375,
+        293
+      ],
+      [
+        376,
+        293
+      ],
+      [
+        377,
+        293
+      ],
+      [
+        378,
+        293
+      ],
+      [
+        379,
+        293
+      ],
+      [
+        380,
+        293
+      ]
+    ],
+    "rms": 0.45350886414167313,
+    "status": "OK",
+    "xRange": [
+      353,
+      380
+    ]
+  },
   "module01DepthVanishingHypothesis": [
     {
       "observationResidualPx": {
@@ -1136,6 +1262,17 @@
       }
     }
   ],
+  "module01TwoEdgeVanishingFit": {
+    "point": [
+      722.4403620873264,
+      385.2078008519699
+    ],
+    "residualPx": {
+      "module01-side-bottom": 8.526512829121202e-14,
+      "module01-side-top": 2.2737367544323206e-13
+    },
+    "rmsPx": 1.7171041084785901e-13
+  },
   "pixelLineObservations": [
     {
       "authority": "measured-from-reference-alpha",
