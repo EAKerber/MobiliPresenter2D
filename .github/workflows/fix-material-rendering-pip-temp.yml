@@ -35,6 +35,9 @@ jobs:
       - name: Apply diagnosed fixes
         run: python ops/tmp-fix-material-rendering-pip.py
 
+      - name: Syntax gate
+        run: node --check app/app.js && node --check app/core/stone.js
+
       - name: Core and asset tests
         working-directory: app
         run: npm test
