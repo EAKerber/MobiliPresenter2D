@@ -1,0 +1,23 @@
+{
+  "cleanRenderPixelSha256": "b769d83f1d83358fa10a19cbb9ade869433d62d0a76e81383177dcd98eb11617",
+  "contactSheet": "contact-sheet.png",
+  "currentRenderPixelSha256": "380be1776b0c9806efab0a543b12d789b852d2124b14ba26fd6907f986ae752c",
+  "geometryIntersectionPixels": 2965,
+  "geometryIoU": 0.4274181923021479,
+  "geometryUnionPixels": 6937,
+  "historicalGeometryPixels": 6926,
+  "historicalOverlayChangedPixelCount": 1910,
+  "historicalOverlayDifferenceBounds": [
+    755,
+    525,
+    764,
+    815
+  ],
+  "localGeometryPixels": 2976,
+  "localTransferReport": "review-assets/research/bmc01-local-depth-transfer-v0.1-report.json",
+  "promotionEligible": false,
+  "reviewOnly": true,
+  "sceneId": "cozinha-01",
+  "schemaVersion": "BMC01GuideReviewReport 0.1",
+  "targetVariant": "module-03-hidden"
+}
