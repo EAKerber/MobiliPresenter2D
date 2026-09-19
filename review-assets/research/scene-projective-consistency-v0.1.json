@@ -96,5 +96,15 @@
     "frontMaskBoundaryIsProxy": true,
     "module01ResidualComponentIsHypothesis": true,
     "doNotInferSceneInvalidityFromSingleFamily": true
-  }
+  },
+  "pixelLineObservations": [
+    {
+      "id": "module03-stone-reference-alpha-edge",
+      "authority": "measured-from-reference-alpha",
+      "reference": "review-assets/calibration/gap-pixel-v3/reference.png",
+      "config": "review-assets/calibration/gap-pixel-v3/config.json",
+      "semantic": "real module-03 stone edge used by gap_pixel_gate.py",
+      "limitation": "local edge segment only; does not alone establish a global vanishing point"
+    }
+  ]
 }
