@@ -1,0 +1,69 @@
+{
+  "depthProbe": {
+    "angleDifferenceDeg": 32.22164535300743,
+    "id": "module02-right-side-full-depth",
+    "observedAngleDeg": -71.00334584451144,
+    "observedDxDy": -0.3442622950819672,
+    "observedMagnitudePx": 64.51356446515724,
+    "observedStatus": "measured-from-visible-pixels",
+    "observedVectorPx2D": [
+      21.0,
+      -61.0
+    ],
+    "physicalStatus": "confirmed",
+    "predictedAngleDeg": -38.781700491504026,
+    "predictedBackPxCalibrationFrame": [
+      776.1079547685106,
+      541.5254453954257
+    ],
+    "predictedDxDy": -1.2445629344623734,
+    "predictedFrontPxCalibrationFrame": [
+      764.9251584679212,
+      550.5107654551301
+    ],
+    "predictedMagnitudePx": 14.345414238557343,
+    "predictedVectorPx": [
+      11.182796300589416,
+      -8.985320059704463
+    ],
+    "requiredAnisotropyXOverY": 0.2766130065015006
+  },
+  "frontEnvelopeSamples": [
+    {
+      "calibrationPxPerMm": 0.29667076386729946,
+      "effectiveAnisotropyXOverY": 1.1295393804159475,
+      "effectiveScaleX": 1.332584235777329,
+      "effectiveScaleY": 1.1797589874968424,
+      "id": "module03-front-envelope",
+      "limitation": "alphaBounds are a coarse module-layer envelope, not a hand-confirmed set of front-plane corners",
+      "observedHeightPx": 266.0,
+      "observedWidthPx": 481.0,
+      "predictedHeightPx": 225.4697805391476,
+      "predictedWidthPx": 360.9527916405382,
+      "status": "coarse-envelope-proxy"
+    },
+    {
+      "calibrationPxPerMm": 0.28635438995368767,
+      "effectiveAnisotropyXOverY": 1.1510791366906472,
+      "effectiveScaleX": 1.3968705004476876,
+      "effectiveScaleY": 1.2135312472639288,
+      "id": "module06-front-envelope",
+      "limitation": "alphaBounds are a coarse module-layer envelope, not a hand-confirmed set of front-plane corners",
+      "observedHeightPx": 278.0,
+      "observedWidthPx": 480.0,
+      "predictedHeightPx": 229.08351196295013,
+      "predictedWidthPx": 343.6252679444252,
+      "status": "coarse-envelope-proxy"
+    }
+  ],
+  "interpretation": {
+    "anisotropicScaleCheck": "COMPARE_REQUIRED_RATIO_WITH_COARSE_FRONT_ENVELOPES",
+    "reason": "translation + uniform scale cannot change vector direction",
+    "similarityTransformExactTransfer": "REJECTED_FOR_TESTED_PROBE",
+    "warning": "front alphaBounds are coarse proxies, so they support rejection diagnostics but are not sufficient to establish a final affine mapping"
+  },
+  "promotionEligible": false,
+  "sceneId": "cozinha-01",
+  "schemaVersion": "ProjectionCompatibilityProbeReport 0.1",
+  "status": "DIAGNOSTIC_ONLY"
+}
