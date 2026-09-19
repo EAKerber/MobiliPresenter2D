@@ -172,7 +172,7 @@
     options: {
       finishes: [
         {
-          id: "base-light", publicLabel: "Base clara", color: "#eeeae3", status: "published", adjustmentLabel: "normal",
+          id: "base-light", publicLabel: "Base clara", color: "#f6f5f2", status: "published", adjustmentLabel: "normal",
           materialType: "mdf", textureAsset: "assets/materials/mdf-base.webp", textureSize: "160px 160px", textureStrength: 0.18, textureLuminance: 0.9242
         },
         {

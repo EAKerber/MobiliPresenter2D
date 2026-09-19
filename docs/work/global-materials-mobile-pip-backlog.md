@@ -71,3 +71,13 @@ Estado: implementação em preview; nenhuma promoção para `main`.
 - [x] Ocultar Módulo 06 torna a iluminação indisponível por `requirement-hidden`, assim como já ocorria com Módulo 04.
 - [x] Copy comercial/UX atualizado para refletir ambos os requisitos.
 - [x] Cobertura adicionada ao teste determinístico do grafo.
+
+
+## B9 — Refinos visuais e navegação das visualizações
+- [x] Branco base aproximado suavemente de branco puro sem alterar a textura nem a camada estrutural de seams.
+- [x] Indicador decorativo sem semântica removido do contador `8 de 8`.
+- [x] Corrigido o seletor CSS que transformava acidentalmente `#totalCount` em uma bolinha de 8×8 px.
+- [x] Pager de visualizações explicitado semanticamente como tablist e mantido dentro do carousel.
+- [x] Swipe horizontal adicionado às visualizações; gesto vertical continua reservado ao scroll da página.
+- [x] Dots, clique e swipe compartilham o mesmo `detailPageByEntity` e permanecem sincronizados.
+- [ ] Revisão visual do branco e do gesto de swipe no deploy-preview.

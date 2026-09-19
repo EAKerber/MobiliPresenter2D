@@ -879,7 +879,10 @@
     stage.id = `detailViews-${entity.id}`;
     const dots = document.createElement("div");
     dots.className = "module-detail__carousel-dots";
-    dots.setAttribute("aria-label", "Páginas de visualização");
+    dots.setAttribute("aria-label", "Visualizações disponíveis");
+    dots.setAttribute("role", "tablist");
+    stage.setAttribute("role", "region");
+    stage.setAttribute("aria-roledescription", "carrossel");
 
     const pages = [
       { label: "Foco no módulo", node: createCarouselPage("Foco no módulo", createModuleFocus(entity, product), "Visual isolado da peça selecionada na cena."), shortLabel: "Foco" },
@@ -917,6 +920,8 @@
           const active = index === currentPage;
           dot.classList.toggle("is-active", active);
           dot.setAttribute("aria-current", active ? "true" : "false");
+          dot.setAttribute("aria-selected", String(active));
+          dot.tabIndex = active ? 0 : -1;
         });
         stage.classList.remove("is-fading");
         isTransitioning = false;
@@ -927,7 +932,11 @@
       const dot = document.createElement("button");
       dot.type = "button";
       dot.className = "module-detail__carousel-dot";
+      dot.setAttribute("role", "tab");
+      dot.setAttribute("aria-controls", stage.id);
       dot.setAttribute("aria-label", `Mostrar ${page.label}, página ${index + 1} de ${pages.length}`);
+      dot.setAttribute("aria-selected", "false");
+      dot.tabIndex = -1;
       dot.title = page.shortLabel;
       dot.addEventListener("click", () => renderPage(index, true));
       dots.append(dot);
@@ -935,6 +944,36 @@
     stage.replaceChildren(pages[currentPage].node);
     dots.children[currentPage]?.classList.add("is-active");
     dots.children[currentPage]?.setAttribute("aria-current", "true");
+    dots.children[currentPage]?.setAttribute("aria-selected", "true");
+    if (dots.children[currentPage]) dots.children[currentPage].tabIndex = 0;
+
+    let swipeStartX = null;
+    let swipeStartY = null;
+    const clearSwipe = () => {
+      swipeStartX = null;
+      swipeStartY = null;
+      stage.classList.remove("is-swiping");
+    };
+    stage.addEventListener("pointerdown", (event) => {
+      if (event.button !== undefined && event.button !== 0) return;
+      swipeStartX = event.clientX;
+      swipeStartY = event.clientY;
+      stage.classList.add("is-swiping");
+      stopAutoCycle();
+    });
+    stage.addEventListener("pointerup", (event) => {
+      if (swipeStartX === null || swipeStartY === null) return;
+      const deltaX = event.clientX - swipeStartX;
+      const deltaY = event.clientY - swipeStartY;
+      clearSwipe();
+      const horizontal = Math.abs(deltaX) >= 42 && Math.abs(deltaX) > Math.abs(deltaY) * 1.15;
+      if (!horizontal) return;
+      if (deltaX < 0 && currentPage < pages.length - 1) renderPage(currentPage + 1, true);
+      if (deltaX > 0 && currentPage > 0) renderPage(currentPage - 1, true);
+    });
+    stage.addEventListener("pointercancel", clearSwipe);
+    stage.addEventListener("lostpointercapture", clearSwipe);
+
     collapse.setAttribute("aria-expanded", String(!isCollapsed));
     collapse.setAttribute("aria-label", isCollapsed ? "Expandir visualizações" : "Recolher visualizações");
     collapse.textContent = isCollapsed ? "Mostrar" : "Recolher";
