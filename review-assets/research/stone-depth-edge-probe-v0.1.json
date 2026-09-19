@@ -1,0 +1,31 @@
+{
+  "schemaVersion": "StoneDepthEdgeProbe 0.1",
+  "sceneId": "cozinha-01",
+  "surfaceConfig": "review-assets/stone-masks/config.json",
+  "physicalSource": "EAKerber/MobiliPresenter scene-core/src/fixtures/current-scene.ts",
+  "physicalSlabDepthMm": 550,
+  "yRange": [552, 574],
+  "alphaThresholds": [1, 32, 64, 128, 192],
+  "edges": [
+    {
+      "id": "stone02-exposed-right-top-depth",
+      "asset": "app/assets/kitchen/variants/stone-02-cozinha-exposed-right.png",
+      "searchX": [735, 765],
+      "extreme": "right",
+      "surfacePolygonGroup": "stone-02"
+    },
+    {
+      "id": "stone03-exposed-left-top-depth",
+      "asset": "app/assets/kitchen/variants/stone-03-pia-exposed-left.png",
+      "searchX": [730, 765],
+      "extreme": "left",
+      "surfacePolygonGroup": "stone-03"
+    }
+  ],
+  "policy": {
+    "researchOnly": true,
+    "promotionEligible": false,
+    "requireThresholdStability": true,
+    "semanticClaim": "top-surface termination over the conservative stone top band, not a global camera line"
+  }
+}
