@@ -118,3 +118,30 @@ Before changing runtime:
 7. only after that consider replacing the historical exposed-side overlay.
 
 No generative residual is justified yet.
+
+
+## Runtime gate completed
+
+The previously listed implementation gate is now substantially complete in a
+research-only path.
+
+Completed:
+- neutral appearance and alpha ownership are separate app-local assets;
+- carcass and plinth are separate material slots;
+- visibility is conditional on Module 02 visible + Module 03 hidden;
+- published MDF finishes recolor the carcass side;
+- plinth follows MDF by default;
+- plinth follows stone only with `stone-skirting`;
+- all four Module 02 / Module 03 visibility combinations pass;
+- zero reconstruction pixels escape the authorized ROI;
+- 95 Python tests and current app deterministic gates pass;
+- current golden remains at zero pixel difference in the default runtime.
+
+The reconstruction is still query-gated and is not promoted by default.
+
+Next decision gate is visual rather than architectural:
+historical-vs-reconstructed comparison at normal scale and magnified seam scale,
+with special attention to the carcass/plinth junction.
+
+See:
+`docs/work/bmc-01-runtime-material-gate-v0.1.md`.
