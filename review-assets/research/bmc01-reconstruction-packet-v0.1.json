@@ -1,0 +1,221 @@
+{
+  "schemaVersion": "ReconstructionPacket 0.1",
+  "identity": {
+    "operationId": "bmc01-module02-right-side-v0.1",
+    "sceneId": "cozinha-01",
+    "targetVariant": "module-03-hidden",
+    "targetVariantFingerprint": "scene2d-930c3dc3",
+    "targetModuleId": "module-02",
+    "operationRole": "right-side-plus-recessed-plinth",
+    "caseClasses": ["T1-hidden-structural-side-face", "T2-hidden-plinth-side"],
+    "baseProductCommit": "73e7cf24f7d260f38f408e1817b7d8dbb33802c5",
+    "researchEvidenceCommit": "b4af1219ea9e",
+    "physicalSource": {
+      "repository": "EAKerber/MobiliPresenter",
+      "commit": "a2fc5af9407f0dab9924323c6184aab994ed431a"
+    }
+  },
+  "confidence": {
+    "G": "confirmed",
+    "P": "derived",
+    "A": "derived",
+    "O": "confirmed"
+  },
+  "claims": [
+    {
+      "id": "module02-right-side-exists",
+      "domain": "D1",
+      "subject": "module-02/right-side",
+      "property": "physical-face",
+      "value": {"exists": true, "widthMm": 18, "heightMm": 742, "depthMm": 530},
+      "status": "confirmed",
+      "source": "EAKerber/MobiliPresenter:scene-core/src/fixtures/current-geometry.ts",
+      "validFor": "module-02 physical model"
+    },
+    {
+      "id": "module02-plinth-depth",
+      "domain": "D1",
+      "subject": "module-02/plinth",
+      "property": "depthMm",
+      "value": 348.83,
+      "status": "confirmed",
+      "source": "EAKerber/MobiliPresenter:scene-core/src/fixtures/current-scene.ts",
+      "validFor": "module-02 stove plinth"
+    },
+    {
+      "id": "module02-front-side-seam",
+      "domain": "D2",
+      "subject": "module-02/right-side",
+      "property": "frontSeamX",
+      "value": 742,
+      "unit": "px",
+      "status": "derived",
+      "source": "review-assets/research/scene-projective-consistency-v0.1-report.json:module02FrontSideSeamProbe",
+      "validFor": "canonical 1536x1024 frame"
+    },
+    {
+      "id": "stone03-local-depth-vector",
+      "domain": "D2",
+      "subject": "stone-03/exposed-left-top-depth",
+      "property": "frontToBackVectorPx",
+      "value": [9.130434782608631, -22.0],
+      "status": "derived",
+      "source": "review-assets/research/bmc01-local-depth-transfer-v0.1-report.json",
+      "validFor": "adjacent lower-zone local transfer"
+    },
+    {
+      "id": "historical-module02-long-depth-line",
+      "domain": "D2",
+      "subject": "module-02/historical-right-depth",
+      "property": "current-geometry-authority",
+      "value": false,
+      "status": "blocked",
+      "source": "review-assets/research/module02-depth-cue-ownership-v0.1.json",
+      "validFor": "current module-03-hidden target state",
+      "reason": "historical distal support is primarily conditional stone-02-joint-bridge"
+    }
+  ],
+  "physicalGeometry": {
+    "carcassRightSide": {
+      "role": "side",
+      "widthMm": 18,
+      "heightMm": 742,
+      "depthMm": 530,
+      "status": "confirmed"
+    },
+    "recessedPlinth": {
+      "depthMm": 348.83,
+      "status": "confirmed"
+    }
+  },
+  "ownership": {
+    "activation": {
+      "module02Visible": true,
+      "module03Visible": false
+    },
+    "inactiveCases": [
+      {"module02Visible": true, "module03Visible": true},
+      {"module02Visible": false, "module03Visible": true},
+      {"module02Visible": false, "module03Visible": false}
+    ],
+    "historicalOverlayEntity": "module-02-right-exposed-face",
+    "historicalOverlayDelegatedOnlyInResearchMode": true,
+    "conditionalJointBridge": {
+      "entity": "stone-02-joint-bridge",
+      "visibleWhenModule03Hidden": false
+    },
+    "status": "confirmed"
+  },
+  "transformationEvidence": {
+    "method": "adjacent-lower-region-local-affine",
+    "confidence": "local-derived",
+    "globalCameraClaim": false,
+    "reference": {
+      "id": "module03-exposed-left-stone-top-depth",
+      "physicalDepthMm": 550,
+      "frontPx": [740.5652173913044, 574],
+      "backPx": [749.695652173913, 552],
+      "frontToBackVectorPx": [9.130434782608631, -22.0],
+      "status": "derived"
+    },
+    "targets": {
+      "carcass": {
+        "physicalDepthMm": 530,
+        "targetVectorPx": [8.798418972331953, -21.2],
+        "quad": [[742,590],[750.798418972332,568.8],[750.798418972332,834.8],[742,856]]
+      },
+      "plinth": {
+        "physicalDepthMm": 348.83,
+        "targetVectorPx": [5.79085375494067, -13.953199999999999],
+        "quad": [[742,856],[747.7908537549407,842.0468],[747.7908537549407,884.0468],[742,898]]
+      }
+    },
+    "limitations": [
+      "local affine approximation only",
+      "not a recovered global camera",
+      "rear vertical-scale convergence is not modeled independently"
+    ]
+  },
+  "visualEvidence": {
+    "carcassDonor": {
+      "methodClass": "C2-same-material-donor",
+      "source": "clean canonical module-01 visible carcass side",
+      "donorQuad": [[360,110],[378,110],[378,250],[360,250]]
+    },
+    "plinthDonor": {
+      "methodClass": "C1-same-object-donor",
+      "source": "clean visible stone-02/front-plinth sample",
+      "donorQuad": [[720,858],[738,858],[738,893],[720,893]]
+    },
+    "softAlphaPolicy": "compositing-support-is-not-semantic-face-ownership",
+    "generationUsed": false
+  },
+  "editContract": {
+    "sourceFrameSha256": "f502790c76afe612563958ca3acfcc7d653018d718d11d852ed3a45df553ecfa",
+    "authorizedRoi": [742,520,764,899],
+    "zeroChangeOutsideRoi": true,
+    "defaultRuntimeMustRemainUnchanged": true,
+    "activation": "?reconstruction=bmc01",
+    "materialSlots": ["carcass","plinth"]
+  },
+  "authoringPlan": {
+    "candidateLadderReached": "C2-same-material-donor",
+    "deterministicOnly": true,
+    "generation": {
+      "allowed": false,
+      "reason": "agent visual review found no bounded residual severe enough to justify generation before human review"
+    },
+    "runtimeRepresentation": "neutral-rgb-plus-alpha-mask-per-material-slot"
+  },
+  "acceptance": {
+    "machine": {
+      "pythonTests": 95,
+      "appDeterministicGate": "PASS",
+      "goldenPixelDifferenceCountDefaultRuntime": 0,
+      "visibilityMatrix": "PASS",
+      "materialResponse": "PASS",
+      "outsideAuthorizedRoiPixels": 0,
+      "pageErrors": 0
+    },
+    "agentReview": {
+      "status": "PASS_WITH_NOTE",
+      "evidence": "review-assets/research/bmc01-agent-visual-review-v0.1.json"
+    },
+    "humanReview": {
+      "status": "PENDING",
+      "focus": "right-side appearance and carcass/plinth junction"
+    }
+  },
+  "lifecycle": {
+    "state": "AGENT_REVIEW",
+    "defaultPromotionAllowed": false
+  },
+  "provenance": {
+    "requiredPaths": [
+      "review-assets/research/bmc01-local-depth-transfer-v0.1-report.json",
+      "review-assets/research/module02-depth-cue-ownership-v0.1.json",
+      "review-assets/research/bmc01-antialiased-completion-v0.1/report.json",
+      "review-assets/research/bmc01-agent-visual-review-v0.1.json",
+      "app/assets/kitchen/reconstruction/bmc01/manifest.json",
+      "docs/work/bmc-01-runtime-material-gate-v0.1.md"
+    ],
+    "runtimeAssetsManifest": "app/assets/kitchen/reconstruction/bmc01/manifest.json",
+    "workflowEvidence": [
+      {
+        "runId": 35474387309,
+        "purpose": "app-local materialization and regression gate",
+        "artifactDigest": "sha256:c734ea6a9532c5213a649cc300f198b85d17c5c9773b8fa0d5d97c779b9c6aa9"
+      },
+      {
+        "runId": 35474563155,
+        "purpose": "four-case visibility and material matrix",
+        "artifactDigest": "sha256:b9e1e6e6d831814b85463339e31213655544664bc8ea19263d695dd873419e41"
+      },
+      {
+        "runId": 35474687787,
+        "purpose": "historical-vs-reconstructed comparison",
+        "artifactDigest": "sha256:3c5742f1fb88c0d982c6cdb0c49c34ce4412d732df37aff3d82d683bc9a3578d"
+      }
+    ]
+  }
+}
