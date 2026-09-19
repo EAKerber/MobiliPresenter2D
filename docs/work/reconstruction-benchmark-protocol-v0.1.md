@@ -358,6 +358,80 @@ all methods must preserve the same physically confirmed divider/shelf/cavity geo
 
 Generative polish is never allowed to improve geometry score.
 
+## BMC-04 — Cooktop bounded generative replacement
+
+Taxonomy:
+`T6-G bounded generative appliance replacement`.
+
+Purpose:
+test the edge case where the appliance raster itself appears geometrically
+incompatible with the host plane and a large deterministic warp would damage
+fine object structure.
+
+Authority split:
+- deterministic: host plane, footprint, placement, contact, ROI, protection;
+- generative: object-local grates/burners/knobs/reflections/shading only.
+
+Current precedent:
+`tools/fit_regenerated_cooktop.py` and
+`review-assets/cooktop-regenerated-fit/`.
+
+The precedent is **not** geometry ground truth because its current 214 x 32
+independent fit is explicitly not a perspective proof.
+
+### Candidate families
+
+#### BMC-04-A — existing regenerated donor + bounded normalization
+
+Use the current transparent donor.
+
+Pass only if it can satisfy the deterministic footprint with a small fit budget.
+
+Purpose:
+test whether the existing donor is already close enough that regeneration is
+unnecessary.
+
+#### BMC-04-B — guided isolated-object generation
+
+Inputs:
+- clean cooktop-free crop;
+- deterministic host-plane footprint guide;
+- existing/reference cooktop;
+- optional human-designated perceptual target.
+
+Output:
+isolated transparent cooktop already authored for the target perspective.
+
+Large corrective warping after generation is a failure, not a normal step.
+
+#### BMC-04-C — contextual local generation
+
+Only if isolated-object generation cannot integrate at the contact/fringe.
+
+The Edit Contract must remain the same; a larger context input does not grant a
+larger output edit entitlement.
+
+### Blocking gates
+
+- deterministic footprint exists before generation;
+- source/guide hashes;
+- zero changed pixels outside cooktop ROI;
+- zero front-edge/body changes at y >= 575;
+- zero sink/faucet/drainer changes;
+- target footprint/host-plane tolerance;
+- contact/no-floating;
+- transparent-alpha validity;
+- exact deterministic delta/round trip;
+- no duplicated cooktop remnants.
+
+### Perceptual target policy
+
+A visually excellent generated reference may be benchmarked as
+`perceptual-target`.
+
+It contributes to appearance review only. It never contributes to geometry or
+projection score.
+
 ## Benchmark matrix
 
 Each benchmark report should include a table with columns:
