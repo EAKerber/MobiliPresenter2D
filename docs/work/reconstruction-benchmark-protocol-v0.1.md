@@ -306,7 +306,7 @@ test whether stronger deterministic structure improves edge/shading consistency.
 Use B as expected-neutral input and allow generation only inside the residual mask.
 
 Purpose:
-test whether A5 improves integration without changing geometry.
+test whether generative authoring improves integration without changing geometry, ownership or edit entitlement.
 
 #### BMC-01-D — guide-first local generation
 Provide:
