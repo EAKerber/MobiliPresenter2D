@@ -11,6 +11,7 @@ vm.createContext(sandbox);
   "data/catalog-data.js",
   "data/mock-price-book.js",
   "data/mask-data.js",
+  "data/front-guide-data.js",
   "core/state.js",
   "core/visibility.js",
   "core/validation.js",
@@ -29,6 +30,7 @@ const scene = sandbox.window.CASA_EM_MODULOS_SCENE;
 const catalog = sandbox.window.CASA_EM_MODULOS_CATALOG;
 const priceBook = sandbox.window.CASA_EM_MODULOS_PRICE_BOOK;
 const masks = sandbox.window.CASA_EM_MODULOS_MASK_DATA;
+const frontGuides = sandbox.window.CASA_FRONT_GUIDES;
 const core = sandbox.window.CasaModulesCore;
 const visibility = sandbox.window.CasaModulesVisibility;
 const validation = sandbox.window.CasaModulesValidation;
@@ -48,7 +50,11 @@ assert.equal(priceBook.mode, "estimate");
 assert.equal(priceBook.compositionBaseReferenceCents, undefined);
 assert.equal(catalog.options.finishes.every((finish) => finish.materialType === "mdf" && finish.textureAsset && finish.textureAsset.startsWith("assets/materials/")), true);
 assert.deepEqual(Array.from(catalog.options.stonePackages.filter((stone) => ["stone-light","stone-green","stone-dark"].includes(stone.id)).map((stone) => stone.materialType === "stone" && Boolean(stone.textureAsset))), [true,true,true]);
-assert.equal(finishes.resolveOverlayOpacity(catalog.options.finishes[0], catalog.options.finishes[0].color), 0.84);
+assert.equal(finishes.resolveOverlayOpacity(catalog.options.finishes[0], catalog.options.finishes[0].color), 0.90);
+assert.equal(catalog.options.finishes[0].textureBrightness, 1.05);
+assert.deepEqual(Object.keys(frontGuides).sort(), ["module-01","module-05","module-06","module-07"]);
+assert.equal(frontGuides["module-06"].lines.some((line) => Math.abs(line.x1-line.x2) < 0.001), true);
+assert.equal(frontGuides["module-06"].lines.some((line) => Math.abs(line.y1-line.y2) < 0.001), true);
 const brightStructure = finishes.resolveStructureStrength(catalog.options.finishes[0], catalog.options.finishes[0].color);
 const midStructure = finishes.resolveStructureStrength(catalog.options.finishes[1], catalog.options.finishes[1].color);
 const darkStructure = finishes.resolveStructureStrength(catalog.options.finishes[5], catalog.options.finishes[5].color);

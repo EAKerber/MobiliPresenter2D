@@ -9,6 +9,7 @@
   const fingerprint = global.CasaModulesFingerprint;
   const finishes = global.CasaModulesFinishes;
   const catalog = global.CASA_EM_MODULOS_CATALOG;
+  const frontGuides = global.CASA_FRONT_GUIDES || {};
   const priceBook = global.CASA_EM_MODULOS_PRICE_BOOK;
   const pricing = global.CasaModulesPricing;
 
@@ -189,6 +190,7 @@
 
         const tag = document.createElement("span");
         tag.className = "scene-hotspot__tag";
+        if (entity.alphaBounds.y < scene.canvas.height * 0.12) tag.classList.add("scene-hotspot__tag--below");
         tag.setAttribute("aria-hidden", "true");
         tag.textContent = entity.alias;
         hotspot.append(tag);
@@ -720,7 +722,50 @@
     return label;
   }
 
-  function appendFrontSegments(make, layout, x, y, width, height, faceWidthMm) {
+  function appendGuideLines(make, guide, x, y, width, height) {
+    (guide?.lines || []).forEach((line) => {
+      make("line", {
+        x1: x + line.x1 * width,
+        y1: y + line.y1 * height,
+        x2: x + line.x2 * width,
+        y2: y + line.y2 * height,
+        class: "module-detail__view-shape module-detail__view-guide-line"
+      });
+    });
+  }
+
+  function appendFrontSegments(make, product, x, y, width, height, faceWidthMm) {
+    const layout = product?.frontLayout;
+    if (layout?.status === "confirmed" && layout?.segments?.length) {
+      const segmentsWidthMm = layout.innerWidthMm || layout.segments.reduce((total, segment) => total + (segment.spanMm || 0), 0);
+      if (!segmentsWidthMm) return;
+      const visibleWidth = width * Math.min(segmentsWidthMm, faceWidthMm) / faceWidthMm;
+      const startX = x + (width - visibleWidth) / 2;
+      let cursorMm = 0;
+      layout.segments.forEach((segment, index) => {
+        const segmentWidthMm = segment.spanMm || 0;
+        const segmentStart = startX + (cursorMm / segmentsWidthMm) * visibleWidth;
+        cursorMm += segmentWidthMm;
+        const segmentEnd = startX + (cursorMm / segmentsWidthMm) * visibleWidth;
+        if (index < layout.segments.length - 1) {
+          make("line", { x1: segmentEnd, y1: y, x2: segmentEnd, y2: y + height, class: "module-detail__view-shape" });
+        }
+        if (segment.subdivisions) {
+          for (let part = 1; part < segment.subdivisions; part += 1) {
+            const divisionY = y + (height / segment.subdivisions) * part;
+            make("line", { x1: segmentStart, y1: divisionY, x2: segmentEnd, y2: divisionY, class: "module-detail__view-shape" });
+          }
+        }
+      });
+      return;
+    }
+
+    const guide = frontGuides[product?.entityId];
+    if (guide?.lines?.length) {
+      appendGuideLines(make, guide, x, y, width, height);
+      return;
+    }
+
     if (layout?.pattern === "two-doors") {
       const middle = x + width / 2;
       make("line", { x1: middle, y1: y, x2: middle, y2: y + height, class: "module-detail__view-shape" });
@@ -731,29 +776,7 @@
       const middle = x + width / 2;
       make("line", { x1: x, y1: liftBottom, x2: x + width, y2: liftBottom, class: "module-detail__view-shape" });
       make("line", { x1: middle, y1: liftBottom, x2: middle, y2: y + height, class: "module-detail__view-shape" });
-      return;
     }
-    if (!layout?.segments?.length) return;
-    const segmentsWidthMm = layout.innerWidthMm || layout.segments.reduce((total, segment) => total + (segment.spanMm || 0), 0);
-    if (!segmentsWidthMm) return;
-    const visibleWidth = width * Math.min(segmentsWidthMm, faceWidthMm) / faceWidthMm;
-    const startX = x + (width - visibleWidth) / 2;
-    let cursorMm = 0;
-    layout.segments.forEach((segment, index) => {
-      const segmentWidthMm = segment.spanMm || 0;
-      const segmentStart = startX + (cursorMm / segmentsWidthMm) * visibleWidth;
-      cursorMm += segmentWidthMm;
-      const segmentEnd = startX + (cursorMm / segmentsWidthMm) * visibleWidth;
-      if (index < layout.segments.length - 1) {
-        make("line", { x1: segmentEnd, y1: y, x2: segmentEnd, y2: y + height, class: "module-detail__view-shape" });
-      }
-      if (segment.subdivisions) {
-        for (let part = 1; part < segment.subdivisions; part += 1) {
-          const divisionY = y + (height / segment.subdivisions) * part;
-          make("line", { x1: segmentStart, y1: divisionY, x2: segmentEnd, y2: divisionY, class: "module-detail__view-shape" });
-        }
-      }
-    });
   }
 
   function createProportionalView(product, type) {
@@ -784,7 +807,7 @@
     make("line", { x1: Math.max(10, x - 22), y1: y, x2: Math.max(18, x - 14), y2: y, class: "module-detail__dimension-line" });
     make("line", { x1: Math.max(10, x - 22), y1: y + drawingHeight, x2: Math.max(18, x - 14), y2: y + drawingHeight, class: "module-detail__dimension-line" });
     make("rect", { x, y, width: drawingWidth, height: drawingHeight, rx: 2, class: "module-detail__view-shape" });
-    if (!isSide) appendFrontSegments(make, product.frontLayout, x, y, drawingWidth, drawingHeight, spec.faceWidthMm);
+    if (!isSide) appendFrontSegments(make, product, x, y, drawingWidth, drawingHeight, spec.faceWidthMm);
     svgLabel(make, `A ${formatDimension(spec.faceHeightMm)} mm`, 4, y + drawingHeight / 2 + 3, "start");
     figure.append(caption, svg);
     return figure;
@@ -815,7 +838,7 @@
     make("path", { d: `M ${left} ${top} L ${right} ${top} L ${right + depthX} ${top + depthY} L ${left + depthX} ${top + depthY} Z`, class: "module-detail__view-shape" });
     make("path", { d: `M ${right} ${top} L ${right + depthX} ${top + depthY} L ${right + depthX} ${bottom + depthY} L ${right} ${bottom} Z`, class: "module-detail__view-shape" });
     make("rect", { x: left, y: top, width, height, class: "module-detail__view-shape" });
-    appendFrontSegments(make, product.frontLayout, left, top, width, height, spec.faceWidthMm);
+    appendFrontSegments(make, product, left, top, width, height, spec.faceWidthMm);
     make("line", { x1: left, y1: bottom + 14, x2: right, y2: bottom + 14, class: "module-detail__dimension-line" });
     make("line", { x1: left, y1: bottom + 10, x2: left, y2: bottom + 18, class: "module-detail__dimension-line" });
     make("line", { x1: right, y1: bottom + 10, x2: right, y2: bottom + 18, class: "module-detail__dimension-line" });
@@ -839,6 +862,9 @@
       return "Elevação proporcional do painel estrutural; a espessura aparece como chamada separada.";
     }
     if (product.frontLayout?.status === "count-confirmed") {
+      if (frontGuides[product.entityId]?.lines?.length) {
+        return "Número de frentes confirmado; proporções internas guiadas pelas linhas de divisão visuais do recorte e ainda orientativas.";
+      }
       return "Número de frentes confirmado; as proporções internas são orientativas até a ficha técnica detalhada.";
     }
     return "Envelope frontal proporcional; detalhamento interno ainda não está confirmado nesta base.";
@@ -949,30 +975,65 @@
 
     let swipeStartX = null;
     let swipeStartY = null;
+    let swipePointerId = null;
+    let wheelAccumX = 0;
+    let wheelResetTimer = null;
+
     const clearSwipe = () => {
       swipeStartX = null;
       swipeStartY = null;
-      stage.classList.remove("is-swiping");
+      swipePointerId = null;
+      stage.classList.remove("is-swiping", "is-dragging");
     };
-    stage.addEventListener("pointerdown", (event) => {
-      if (event.button !== undefined && event.button !== 0) return;
-      swipeStartX = event.clientX;
-      swipeStartY = event.clientY;
-      stage.classList.add("is-swiping");
-      stopAutoCycle();
-    });
-    stage.addEventListener("pointerup", (event) => {
+
+    const finishSwipe = (event) => {
       if (swipeStartX === null || swipeStartY === null) return;
       const deltaX = event.clientX - swipeStartX;
       const deltaY = event.clientY - swipeStartY;
+      const pointerId = swipePointerId;
       clearSwipe();
+      try {
+        if (pointerId !== null && stage.hasPointerCapture?.(pointerId)) stage.releasePointerCapture(pointerId);
+      } catch (_) {}
       const horizontal = Math.abs(deltaX) >= 42 && Math.abs(deltaX) > Math.abs(deltaY) * 1.15;
       if (!horizontal) return;
       if (deltaX < 0 && currentPage < pages.length - 1) renderPage(currentPage + 1, true);
       if (deltaX > 0 && currentPage > 0) renderPage(currentPage - 1, true);
+    };
+
+    stage.addEventListener("pointerdown", (event) => {
+      if (event.button !== undefined && event.button !== 0) return;
+      swipeStartX = event.clientX;
+      swipeStartY = event.clientY;
+      swipePointerId = event.pointerId;
+      stage.classList.add("is-swiping");
+      try { stage.setPointerCapture?.(event.pointerId); } catch (_) {}
+      stopAutoCycle();
     });
+    stage.addEventListener("pointermove", (event) => {
+      if (swipePointerId === null || event.pointerId !== swipePointerId || swipeStartX === null) return;
+      const deltaX = event.clientX - swipeStartX;
+      const deltaY = event.clientY - swipeStartY;
+      if (Math.abs(deltaX) > 8 && Math.abs(deltaX) > Math.abs(deltaY)) stage.classList.add("is-dragging");
+    });
+    stage.addEventListener("pointerup", finishSwipe);
     stage.addEventListener("pointercancel", clearSwipe);
-    stage.addEventListener("lostpointercapture", clearSwipe);
+    stage.addEventListener("lostpointercapture", () => {
+      if (swipeStartX !== null) clearSwipe();
+    });
+    stage.addEventListener("wheel", (event) => {
+      if (Math.abs(event.deltaX) < 4 || Math.abs(event.deltaX) <= Math.abs(event.deltaY) * 1.15) return;
+      event.preventDefault();
+      stopAutoCycle();
+      wheelAccumX += event.deltaX;
+      global.clearTimeout(wheelResetTimer);
+      wheelResetTimer = global.setTimeout(() => { wheelAccumX = 0; }, 140);
+      if (Math.abs(wheelAccumX) < 55) return;
+      const direction = wheelAccumX > 0 ? 1 : -1;
+      wheelAccumX = 0;
+      const target = clamp(currentPage + direction, 0, pages.length - 1);
+      if (target !== currentPage) renderPage(target, true);
+    }, { passive: false });
 
     collapse.setAttribute("aria-expanded", String(!isCollapsed));
     collapse.setAttribute("aria-label", isCollapsed ? "Expandir visualizações" : "Recolher visualizações");
@@ -1618,6 +1679,7 @@
       layer.style.setProperty("--finish-size", finish.textureSize || "160px 160px");
       layer.style.setProperty("--finish-background-blend", hasTexture ? "luminosity" : "normal");
       layer.style.setProperty("--finish-opacity", String(finishes.resolveOverlayOpacity(finish, finish.color)));
+      layer.style.setProperty("--finish-brightness", String(finish.textureBrightness || 1));
       const structure = finishes.resolveStructureStrength(finish, finish.color);
       group.style.setProperty("--structure-shadow-opacity", String(structure.shadowOpacity));
       group.style.setProperty("--structure-highlight-opacity", String(structure.highlightOpacity));

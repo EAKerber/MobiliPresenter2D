@@ -162,6 +162,7 @@ button:focus-visible, input:focus-visible {
   transition: opacity 160ms ease;
 }
 .scene-hotspot:hover .scene-hotspot__tag, .scene-hotspot:focus-visible .scene-hotspot__tag { opacity: 1; }
+.scene-hotspot__tag--below { top: auto; bottom: -8px; transform: translate(-50%, 100%); }
 
 .finish-layer {
   opacity: 0;
@@ -397,7 +398,8 @@ legend { margin-bottom: 9px; color: rgba(255, 255, 255, 0.43); font-size: 12px; 
 .module-detail__collapse { min-height: 32px; border: 1px solid rgba(65,56,47,.2); border-radius: 999px; padding: 5px 9px; background: rgba(255,255,255,.42); color: #4d463d; cursor: pointer; font-size: 11px; font-weight: 750; }
 .module-detail__collapse:hover { background: rgba(255,255,255,.74); }
 .module-detail__carousel-intro { color: #62594e; font-size: 11px; line-height: 1.35; }
-.module-detail__carousel-stage { display: grid; block-size: 252px; min-block-size: 252px; overflow: hidden; transition: opacity 180ms ease; touch-action: pan-y; overscroll-behavior-inline: contain; user-select: none; }
+.module-detail__carousel-stage { display: grid; block-size: 252px; min-block-size: 252px; overflow: hidden; transition: opacity 180ms ease; touch-action: pan-y; overscroll-behavior-inline: contain; user-select: none; cursor: grab; }
+.module-detail__carousel-stage.is-dragging { cursor: grabbing; }
 .module-detail__carousel-stage.is-fading { opacity: 0; }
 .module-detail__carousel-page { display: grid; grid-template-rows: auto minmax(0, 1fr) auto; gap: 8px; min-width: 0; min-height: 0; overflow: hidden; }
 .module-detail__carousel-content { display: grid; min-width: 0; min-height: 0; place-items: center; overflow: hidden; }
@@ -679,6 +681,7 @@ legend { margin-bottom: 9px; color: rgba(255, 255, 255, 0.43); font-size: 12px; 
   background-size: var(--finish-size, 160px 160px);
   background-position: 0 0;
   background-repeat: repeat;
+  filter: brightness(var(--finish-brightness, 1));
 }
 .swatch {
   background-color: var(--swatch);

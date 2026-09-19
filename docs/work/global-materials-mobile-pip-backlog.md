@@ -81,3 +81,30 @@ Estado: implementação em preview; nenhuma promoção para `main`.
 - [x] Swipe horizontal adicionado às visualizações; gesto vertical continua reservado ao scroll da página.
 - [x] Dots, clique e swipe compartilham o mesmo `detailPageByEntity` e permanecem sincronizados.
 - [ ] Revisão visual do branco e do gesto de swipe no deploy-preview.
+
+
+## B10 — Branco-base: alvo visual mais limpo
+- [x] Clarear moderadamente o branco sem alterar as seams estruturais.
+- [x] Aumentar a dominância do material branco com \`overlayOpacity=0.90\`.
+- [x] Aplicar ganho de luminância restrito ao material (\`textureBrightness=1.05\`), preservando a textura.
+- [ ] Revisão visual do alvo branco no preview.
+
+## B11 — Tags dos módulos superiores
+- [x] Detectar hotspots próximos ao topo pelo \`alphaBounds\`.
+- [x] Posicionar a tag numérica abaixo dos módulos superiores em vez de deixá-la escapar pelo topo da cena.
+- [x] Gate garante tag do Módulo 06 dentro do viewer.
+
+## B12 — Swipe desktop completo
+- [x] Pointer capture para drag de mouse continuar mesmo quando o cursor sai do stage.
+- [x] \`pointermove\` diferencia drag horizontal de movimento vertical.
+- [x] Suporte a gesto horizontal de trackpad via \`wheel.deltaX\`.
+- [x] Clique nos dots, drag e trackpad compartilham \`detailPageByEntity\`.
+- [x] Browser gate cobre drag com pointerup fora do stage e wheel horizontal.
+
+## B13 — SVG guiado pelas seams reais
+- [x] Derivar linhas internas a partir da energia das máscaras estruturais shadow/highlight dos módulos count-confirmed.
+- [x] Gerar \`data/front-guide-data.js\` determinístico a partir das seams medidas em 01/05/06/07.
+- [x] Preservar layout técnico confirmado do Módulo 03 como fonte prioritária.
+- [x] Para layouts apenas count-confirmed, usar linhas internas derivadas dos componentes visuais em vez da heurística fixa 50/50 e 34%.
+- [x] Aplicar os mesmos guides à vista frontal e à face frontal isométrica.
+- [ ] Revisão visual dos quatro módulos guiados.
