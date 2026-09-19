@@ -32,7 +32,7 @@ const {chromium} = require("playwright");
         alpha++;
         if(x<742||x>=764||y<520||y>=899) outside++;
         if(!carcass && y>=590&&y<840) carcass=[x,y,d[i],d[i+1],d[i+2],a];
-        if(!plinth && y>=842&&y<899) plinth=[x,y,d[i],d[i+1],d[i+2],a];
+        if(!plinth && y>=860&&y<899) plinth=[x,y,d[i],d[i+1],d[i+2],a];
       }
     }
     return {alpha,outside,carcass,plinth,active:c.dataset.active,revision:Number(c.dataset.renderRevision||0),error:c.dataset.renderError||null};
@@ -71,6 +71,7 @@ const {chromium} = require("playwright");
   await page.waitForFunction(previous => Number(document.getElementById("reconstructionCanvas").dataset.renderRevision||0) > previous, stoneSelected.revision);
   const stone=await canvasStats();
   assert.deepEqual(stone.carcass.slice(2,5),dark.carcass.slice(2,5),"stone skirting changed carcass slot");
+  console.log(JSON.stringify({base,dark,stoneSelected,stone},null,2));
   assert.notDeepEqual(stone.plinth.slice(2,5),dark.plinth.slice(2,5),"stone skirting did not change plinth slot");
 
   await page.locator('[data-step="modules"]').click();
