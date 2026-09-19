@@ -12,7 +12,7 @@
   },
   "confidence": {
     "G": "inferred",
-    "P": "blocked",
+    "P": "derived",
     "A": "derived",
     "O": "confirmed"
   },
@@ -33,7 +33,11 @@
       "subject": "scene/traditional/module/lower-stove/slot/cooktop",
       "property": "slot-envelope",
       "value": {
-        "localTransformMm": [95.505, -5, 796],
+        "localTransformMm": [
+          95.505,
+          -5,
+          796
+        ],
         "widthMm": 600,
         "heightMm": 60,
         "depthMm": 520
@@ -60,7 +64,12 @@
       "subject": "cooktop",
       "property": "authorized-removal-support",
       "value": {
-        "boundsPx": [515, 536, 739, 575],
+        "boundsPx": [
+          515,
+          536,
+          739,
+          575
+        ],
         "protectedFrontEdgeY": 575
       },
       "status": "confirmed",
@@ -94,24 +103,73 @@
   },
   "ownership": {
     "hostModule": "module-02",
-    "authorizedRemovalRegionPx": [515, 536, 739, 575],
+    "authorizedRemovalRegionPx": [
+      515,
+      536,
+      739,
+      575
+    ],
     "protectedFrontEdgeY": 575,
     "protectedOutsideRegion": true,
     "status": "confirmed"
   },
   "transformationEvidence": {
-    "method": "host-plane-footprint-guide",
-    "confidence": "blocked",
+    "method": "local-planar-bilinear-host-quad",
+    "confidence": "local-derived",
     "sourceFrame": "canonical 1536x1024",
-    "requiredBeforeGeneration": [
-      "current Stone02 top-plane width axis",
-      "current lower-zone depth axis",
-      "deterministic cooktop footprint quad",
-      "named front/rear/left/right footprint edges",
-      "fit budget in pixels"
-    ],
     "globalCameraClaim": false,
-    "reason": "host-plane direction can be constrained locally, but the corrected cooktop footprint quad has not yet been materialized"
+    "hostPlane": {
+      "id": "stone-02-top",
+      "physicalSizeMm": [
+        791.01,
+        550
+      ],
+      "quadPx": {
+        "frontLeft": [
+          492,
+          574
+        ],
+        "frontRight": [
+          745,
+          574
+        ],
+        "backRight": [
+          762,
+          552
+        ],
+        "backLeft": [
+          524,
+          552
+        ]
+      },
+      "source": "review-assets/stone-masks/config.json:groups.stone-02.surfaces.top"
+    },
+    "targetFootprint": {
+      "status": "derived",
+      "source": "review-assets/research/bmc04-cooktop-footprint-v0.1-report.json",
+      "quadPx": {
+        "frontLeft": [
+          523.3700595096487,
+          573.4
+        ],
+        "frontRight": [
+          714.9663041267149,
+          573.4
+        ],
+        "backRight": [
+          732.7513163837717,
+          552.6
+        ],
+        "backLeft": [
+          551.9123199798646,
+          552.6
+        ]
+      }
+    },
+    "limitations": [
+      "host quad is local-derived rather than globally calibrated",
+      "cooktop slot dimensions/placement are inferred rather than confirmed product dimensions"
+    ]
   },
   "visualEvidence": {
     "existingCanonicalObject": "current cooktop pixels inside stone-backing cooktop support",
@@ -125,7 +183,12 @@
   },
   "editContract": {
     "canonicalSourceFrameHash": "f502790c76afe612563958ca3acfcc7d653018d718d11d852ed3a45df553ecfa",
-    "authorizedRoi": [515, 536, 739, 575],
+    "authorizedRoi": [
+      515,
+      536,
+      739,
+      575
+    ],
     "zeroChangeOutsideRoi": true,
     "defaultRuntimeMustRemainUnchanged": true,
     "protectedRegions": [
@@ -144,8 +207,15 @@
       "mode": "isolated-object-synthesis",
       "reason": "the current cooktop raster appears misaligned with the host-plane perspective and a large deterministic warp is expected to degrade grates, burners and knobs"
     },
-    "preGenerationStopCondition": "do not call generation until the deterministic footprint guide and fit budget are materialized",
-    "postGenerationPolicy": "reject/regenerate if a candidate requires a large warp; only small placement/scale/alpha normalization is allowed"
+    "preGenerationStopCondition": "RESOLVED: deterministic local footprint is materialized; generation input assembly may proceed",
+    "postGenerationPolicy": "reject/regenerate if a candidate requires a large warp; only small placement/scale/alpha normalization is allowed",
+    "existingDonorFitAssessment": {
+      "status": "REGENERATION_JUSTIFIED",
+      "source": "review-assets/research/bmc04-cooktop-footprint-v0.1-report.json",
+      "maxCornerDisplacementPx": 34.30970950761994,
+      "meanCornerDisplacementPx": 17.42645839621294,
+      "reason": "existing regenerated donor is an axis-aligned 214x32 fit while the corrected host-plane target is a trapezoid with slanted depth edges; satisfying it would require a substantial projective warp of fine appliance detail"
+    }
   },
   "generationGuide": {
     "cleanReferenceRequired": true,
@@ -166,7 +236,25 @@
       "changing scene camera",
       "editing outside cooktop ROI",
       "inventing a larger appliance footprint than the deterministic guide"
-    ]
+    ],
+    "hardFootprintQuadPx": {
+      "frontLeft": [
+        523.3700595096487,
+        573.4
+      ],
+      "frontRight": [
+        714.9663041267149,
+        573.4
+      ],
+      "backRight": [
+        732.7513163837717,
+        552.6
+      ],
+      "backLeft": [
+        551.9123199798646,
+        552.6
+      ]
+    }
   },
   "acceptance": {
     "requiredGates": [
@@ -194,7 +282,8 @@
       "review-assets/cooktop-regenerated-fit/generated/gate.json",
       "review-assets/stone-backing/config.json",
       "tools/fit_regenerated_cooktop.py",
-      "docs/work/bmc-04-cooktop-bounded-generation-v0.1.md"
+      "docs/work/bmc-04-cooktop-bounded-generation-v0.1.md",
+      "review-assets/research/bmc04-cooktop-footprint-v0.1-report.json"
     ]
   }
 }
