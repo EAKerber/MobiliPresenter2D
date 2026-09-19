@@ -11,7 +11,10 @@ from typing import Any
 
 from PIL import Image, ImageChops, ImageDraw, ImageOps
 
-from extract_candidate_delta import extract_delta, sha256_file
+try:
+    from tools.extract_candidate_delta import extract_delta, sha256_file
+except ModuleNotFoundError:
+    from extract_candidate_delta import extract_delta, sha256_file
 
 ROOT = Path(__file__).resolve().parents[1]
 
