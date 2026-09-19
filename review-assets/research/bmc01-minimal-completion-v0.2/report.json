@@ -1,0 +1,69 @@
+{
+  "authoringMethod": "C1 same-object nearest deterministic donor",
+  "boundaryColorErrorAfter": {
+    "maxAbsChannelDifference": 31.0,
+    "meanAbsChannelDifference": 4.427335640138408,
+    "pairCount": 578
+  },
+  "boundaryColorErrorBefore": {
+    "maxAbsChannelDifference": 33.333333333333336,
+    "meanAbsChannelDifference": 8.832179930795848,
+    "pairCount": 578
+  },
+  "boundaryColorErrorMeanImprovement": 4.404844290657439,
+  "boundaryColorErrorMeanImprovementRatio": 0.4987267384916748,
+  "candidateChangedPixelCount": 1877,
+  "candidatePixelSha256": "155b422512b26cbf0cb18039c41518bad5eab8a7888deb8a9848b3bc6745b126",
+  "candidateVsHistoricalChangedPixelRatio": 0.9827225130890053,
+  "cleanPixelSha256": "b769d83f1d83358fa10a19cbb9ade869433d62d0a76e81383177dcd98eb11617",
+  "donorDistance": {
+    "filled": 1877,
+    "maxDistance": 22.135943621178654,
+    "meanDistance": 4.289195338813054
+  },
+  "donorMaskPixels": 528,
+  "donorMinAlpha": 128,
+  "editMaskBounds": [
+    745,
+    569,
+    752,
+    851
+  ],
+  "editMaskPixels": 1877,
+  "editedPixelSha256": "f413cec68ef9aa528b211ada2b837ce01acb53f305da90382a8407216e04eb9f",
+  "historicalOverlayChangedPixelCount": 1910,
+  "historicalOverlayOverlapPixels": 0,
+  "hostOwnershipAlphaThreshold": 128,
+  "limitations": [
+    "nearest-pixel donor is a deterministic appearance baseline, not final photometric synthesis",
+    "host ownership threshold is research-only and distinguishes solid same-object support from low-alpha compositing fringe",
+    "candidate has not received visual/human approval"
+  ],
+  "localCarcassGeometryPixels": 2682,
+  "outsideAuthorizedRoiPixels": 0,
+  "preExistingOwnerOverlapPixels": 0,
+  "promotionEligible": false,
+  "reviewFiles": {
+    "candidate": "candidate.png",
+    "comparison": "comparison.png",
+    "editMask": "edit-mask.png",
+    "edited": "edited.png"
+  },
+  "sameObjectContactErrorAfter": {
+    "maxAbsChannelDifference": 0.0,
+    "meanAbsChannelDifference": 0.0,
+    "pairCount": 261
+  },
+  "sameObjectContactErrorBefore": {
+    "maxAbsChannelDifference": 33.333333333333336,
+    "meanAbsChannelDifference": 16.70625798212005,
+    "pairCount": 261
+  },
+  "sameObjectContactMeanImprovement": 16.70625798212005,
+  "sameObjectContactMeanImprovementRatio": 1.0,
+  "sceneId": "cozinha-01",
+  "schemaVersion": "BMC01MinimalCompletionReport 0.2",
+  "softHostFringeOverlapPixels": 1776,
+  "status": "RESEARCH_CANDIDATE",
+  "targetVariant": "module-03-hidden"
+}
