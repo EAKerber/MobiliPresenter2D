@@ -43,6 +43,29 @@ def roi_mask(size,roi):
 def sha_pixels(im):
     return hashlib.sha256(im.tobytes()).hexdigest()
 
+def promote_soft_host_rgb(clean,missing,host_rgba,host_threshold):
+    """Use source-layer RGB as appearance evidence where host alpha is soft.
+
+    Soft alpha is *not* promoted to geometry authority. Geometry entitlement
+    still comes from the local projected polygon. This helper only decides
+    appearance inside already-authorized missing geometry.
+    """
+    out=Image.new("RGBA",clean.size,(0,0,0,0))
+    mp=missing.load(); hp=host_rgba.load(); op=out.load()
+    bounds=missing.getbbox()
+    promoted=0
+    if bounds:
+        for y in range(bounds[1],bounds[3]):
+            for x in range(bounds[0],bounds[2]):
+                if not mp[x,y]:
+                    continue
+                r,g,b,a=hp[x,y]
+                if 0 < a < host_threshold:
+                    op[x,y]=(r,g,b,255)
+                    promoted+=1
+    return out,promoted
+
+
 def nearest_fill(clean,missing,donor_mask,max_distance):
     out=Image.new("RGBA",clean.size,(0,0,0,0))
     mp=missing.load(); dp=donor_mask.load(); cp=clean.load(); op=out.load()
@@ -159,8 +182,9 @@ def main():
     host_threshold=int(policy.get("hostOwnershipAlphaThreshold",1))
     donor_threshold=int((cfg.get("donor") or {}).get("minAlpha",host_threshold))
 
-    host_any=binary_alpha(cfg["module02Layer"],1)
-    host_owner=binary_alpha(cfg["module02Layer"],host_threshold)
+    host_rgba=Image.open(ROOT/cfg["module02Layer"]).convert("RGBA")
+    host_any=host_rgba.getchannel("A").point(lambda v:255 if v>=1 else 0)
+    host_owner=host_rgba.getchannel("A").point(lambda v:255 if v>=host_threshold else 0)
     host_soft=ImageChops.multiply(host_any,ImageChops.invert(host_owner))
     stone=binary_alpha(cfg["stone02Variant"],1)
     approved=binary_alpha(cfg["approvedStone02"],1)
@@ -178,7 +202,18 @@ def main():
             for x in range(db[0],min(seam+1,db[2])):
                 dpx[x,y]=0
 
-    candidate,fillstats=nearest_fill(clean,missing,donor,float(cfg["donor"]["maxDistancePx"]))
+    appearance_mode=(cfg.get("appearance") or {}).get("softHostRgb","ignore")
+    promoted_soft=Image.new("RGBA",clean.size,(0,0,0,0))
+    promoted_count=0
+    residual_missing=missing
+    if appearance_mode=="promote-source-rgb":
+        promoted_soft,promoted_count=promote_soft_host_rgb(clean,missing,host_rgba,host_threshold)
+        residual_missing=ImageChops.multiply(missing,ImageChops.invert(promoted_soft.getchannel("A")))
+    elif appearance_mode!="ignore":
+        raise ValueError(f"unsupported softHostRgb appearance mode: {appearance_mode}")
+
+    nearest_candidate,fillstats=nearest_fill(clean,residual_missing,donor,float(cfg["donor"]["maxDistancePx"]))
+    candidate=Image.alpha_composite(promoted_soft,nearest_candidate)
     edited=Image.alpha_composite(clean,candidate)
 
     roi=roi_mask(size,cfg["authorizedRoi"])
@@ -203,7 +238,7 @@ def main():
       "targetVariant":cfg["targetVariant"],
       "status":"RESEARCH_CANDIDATE",
       "promotionEligible":False,
-      "authoringMethod":"C1 same-object nearest deterministic donor",
+      "authoringMethod":"C1 same-object source-RGB promotion + nearest deterministic residual" if appearance_mode=="promote-source-rgb" else "C1 same-object nearest deterministic donor",
       "cleanPixelSha256":sha_pixels(clean),
       "candidatePixelSha256":sha_pixels(candidate),
       "editedPixelSha256":sha_pixels(edited),
@@ -221,13 +256,16 @@ def main():
       "donorMinAlpha":donor_threshold,
       "historicalOverlayOverlapPixels":count(overlap_hist),
       "donorMaskPixels":count(donor),
+      "appearanceMode":appearance_mode,
+      "promotedSoftHostRgbPixels":promoted_count,
+      "nearestFilledResidualPixels":fillstats["filled"],
       "donorDistance":fillstats,
       "boundaryColorErrorBefore":boundary_color_error(clean,clean,candidate.getchannel("A")),
       "boundaryColorErrorAfter":boundary_color_error(clean,edited,candidate.getchannel("A")),
       "sameObjectContactErrorBefore":same_object_contact_error(clean,clean,candidate.getchannel("A"),donor),
       "sameObjectContactErrorAfter":same_object_contact_error(clean,edited,candidate.getchannel("A"),donor),
       "limitations":[
-        "nearest-pixel donor is a deterministic appearance baseline, not final photometric synthesis",
+        "source-RGB promotion and nearest-pixel residual fill are deterministic appearance baselines, not final photometric synthesis",
         "host ownership threshold is research-only and distinguishes solid same-object support from low-alpha compositing fringe",
         "candidate has not received visual/human approval"
       ]
