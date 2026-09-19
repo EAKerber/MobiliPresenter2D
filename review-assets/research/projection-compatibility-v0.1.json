@@ -1,0 +1,56 @@
+{
+  "schemaVersion": "ProjectionCompatibilityProbe 0.1",
+  "sceneId": "cozinha-01",
+  "sourceCalibration": {
+    "repository": "EAKerber/MobiliPresenter",
+    "path": "scene-source/current/fixed-camera-calibration.json",
+    "schemaVersion": "FixedCameraCalibration 0.1.0",
+    "assumption": "camera optical axis parallel to +Y, image axes parallel to project X/Z",
+    "imageSize": [1865, 967],
+    "cameraProjectPositionMm": [4195.34622668872, 3994.363841842559, 1126.2401832635298],
+    "principalPointPx": [863.1665758956676, 471.57428526002843],
+    "focalLengthPx": 1218.7460918656088
+  },
+  "depthProbe": {
+    "id": "module02-right-side-full-depth",
+    "physicalStatus": "confirmed",
+    "physicalSource": "EAKerber/MobiliPresenter:scene-core/src/fixtures/current-geometry.ts",
+    "physicalFrontMm": [3862.749, 8120.44, 859.0],
+    "physicalBackMm": [3862.749, 8650.44, 859.0],
+    "physicalInterpretation": "outer top edge of Module 02 right side panel; back point differs by confirmed 530 mm side depth",
+    "observedStatus": "measured-from-visible-pixels",
+    "observedSource": "review-assets/calibration/module-02-right-face-v1/config.json",
+    "observedFrontPx": [742.0, 586.0],
+    "observedBackPx": [763.0, 525.0],
+    "observedInterpretation": "visible local stone depth cue used by the current bounded side-face hypothesis"
+  },
+  "frontEnvelopeSamples": [
+    {
+      "id": "module03-front-envelope",
+      "status": "coarse-envelope-proxy",
+      "physicalWidthMm": 1216.678,
+      "physicalHeightMm": 760.0,
+      "frontPlaneYmm": 8102.44,
+      "observedWidthPx": 481.0,
+      "observedHeightPx": 266.0,
+      "observedSource": "app/data/scene-data.js alphaBounds for module-03",
+      "limitation": "alphaBounds are a coarse module-layer envelope, not a hand-confirmed set of front-plane corners"
+    },
+    {
+      "id": "module06-front-envelope",
+      "status": "coarse-envelope-proxy",
+      "physicalWidthMm": 1200.0,
+      "physicalHeightMm": 800.0,
+      "frontPlaneYmm": 8250.44,
+      "observedWidthPx": 480.0,
+      "observedHeightPx": 278.0,
+      "observedSource": "app/data/scene-data.js alphaBounds for module-06",
+      "limitation": "alphaBounds are a coarse module-layer envelope, not a hand-confirmed set of front-plane corners"
+    }
+  ],
+  "interpretationPolicy": {
+    "similarityTransform": "vector direction is invariant under translation + uniform scale; a large angle difference rejects exact crop/uniform-scale transfer for the tested correspondence",
+    "anisotropicScale": "compare the sx/sy required by the depth vector with coarse sx/sy estimates from independent front envelopes; this is diagnostic, not a final affine fit",
+    "promotionEligible": false
+  }
+}
