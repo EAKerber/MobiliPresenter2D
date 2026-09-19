@@ -1,7 +1,7 @@
 from __future__ import annotations
 import unittest
 from PIL import Image
-from tools.research_scene_projective_consistency import boundary_fits, residual_component, circular_spread, intersect_yx_lines, least_squares_intersection, trace_internal_luma_edge
+from tools.research_scene_projective_consistency import boundary_fits, residual_component, circular_spread, intersect_yx_lines, least_squares_intersection, trace_internal_luma_edge, vertical_internal_seam_probe
 
 class SceneProjectiveConsistencyProbeTests(unittest.TestCase):
     def test_boundary_fit_recovers_axis_aligned_rectangle(self):
@@ -30,6 +30,17 @@ class SceneProjectiveConsistencyProbeTests(unittest.TestCase):
         first={"dyDx":1.0,"intercept":0.0}
         second={"dyDx":-1.0,"intercept":10.0}
         self.assertEqual(intersect_yx_lines(first,second),[5.0,5.0])
+
+    def test_vertical_internal_seam_probe_ignores_outer_alpha_edge(self):
+        im=Image.new("RGBA",(20,20),(0,0,0,0))
+        for y in range(2,18):
+            for x in range(3,17):
+                value=40 if x<10 else 210
+                im.putpixel((x,y),(value,value,value,255))
+        r=vertical_internal_seam_probe(im,[7,17],[3,16],128,0.5)
+        self.assertEqual(r["status"],"OK")
+        self.assertIn(r["best"]["x"],[9,10])
+        self.assertNotEqual(r["best"]["x"],16)
 
     def test_internal_luma_edge_trace_recovers_sloped_seam(self):
         im=Image.new("RGBA",(30,30),(100,100,100,255))
