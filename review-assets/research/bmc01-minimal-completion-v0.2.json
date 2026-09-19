@@ -1,0 +1,29 @@
+{
+  "schemaVersion": "BMC01MinimalCompletion 0.2",
+  "sceneId": "cozinha-01",
+  "targetVariant": "module-03-hidden",
+  "excludeEntityForClean": "module-02-right-exposed-face",
+  "localTransferReport": "review-assets/research/bmc01-local-depth-transfer-v0.1-report.json",
+  "underlayerAuditReport": "review-assets/research/bmc01-underlayer-reuse-v0.1-report.json",
+  "module02Layer": "app/assets/kitchen/layers/02_inferior_fogao.png",
+  "stone02Variant": "app/assets/kitchen/variants/stone-02-cozinha-exposed-right.png",
+  "approvedStone02": "app/assets/kitchen/overlays/approved-stone-02.png",
+  "historicalOverlay": "app/assets/kitchen/overlays/module-02-right-exposed-face.png",
+  "authorizedRoi": [742, 520, 764, 899],
+  "frontSeamX": 742,
+  "donor": {
+    "source": "clean-composited-target",
+    "eligibility": "module02-alpha>=128 and x>frontSeamX and inside local carcass geometry",
+    "method": "nearest-euclidean-pixel",
+    "minAlpha": 128,
+    "maxDistancePx": 48
+  },
+  "policy": {
+    "researchOnly": true,
+    "promotionEligible": false,
+    "hostOwnershipAlphaThreshold": 128,
+    "preserveSolidHostAndAnyStoneContribution": true,
+    "softHostAlphaIsCompositingFringeNotProtectedGeometry": true,
+    "generationAllowed": false
+  }
+}
