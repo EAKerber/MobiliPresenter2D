@@ -1,0 +1,64 @@
+name: Research BMC01 underlayer confidence temp
+
+on:
+  push:
+    branches:
+      - research/reconstruction-architecture-v0.1
+    paths:
+      - .github/workflows/research-bmc01-underlayer-confidence-temp.yml
+
+permissions:
+  contents: write
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: research/reconstruction-architecture-v0.1
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install image tooling
+        run: python -m pip install -r tools/requirements.txt
+      - name: Build current variant manifest
+        run: node tools/variant_fidelity_manifest.js --cases reference/variant-cases.json --output /tmp/current-variants.json
+      - name: Test and run underlayer confidence audit
+        run: |
+          python -m py_compile tools/research_bmc01_underlayer_reuse.py
+          python -m unittest tests/test_research_bmc01_underlayer_reuse.py
+          python tools/research_bmc01_underlayer_reuse.py             --config review-assets/research/bmc01-underlayer-reuse-v0.1.json             --variant-manifest /tmp/current-variants.json             --output review-assets/research/bmc01-underlayer-reuse-v0.1-report.json
+          python - <<'PY'
+          import json
+          d=json.load(open("review-assets/research/bmc01-underlayer-reuse-v0.1-report.json"))
+          c=d["alphaConfidence"]
+          print(json.dumps({
+            "schemaVersion":d["schemaVersion"],
+            "effectiveOpaqueCoverageRatio":c["effectiveOpaqueCoverageRatio"],
+            "alphaPositiveRatio":c["alphaPositiveRatio"],
+            "solidRatio":c["solidRatio"],
+            "strongRatio":c["strongRatio"],
+            "quantiles":c["nonzeroAlphaQuantiles"],
+            "columns":c["columns"],
+          },sort_keys=True))
+          PY
+      - name: Commit report and self-clean with CAS
+        env:
+          TARGET_BRANCH: research/reconstruction-architecture-v0.1
+          EXPECTED_HEAD: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git rm .github/workflows/research-bmc01-underlayer-confidence-temp.yml
+          git add review-assets/research/bmc01-underlayer-reuse-v0.1-report.json
+          remote_before="$(git ls-remote origin "refs/heads/$TARGET_BRANCH" | cut -f1)"
+          test "$remote_before" = "$EXPECTED_HEAD"
+          git commit -m "research: materialize BMC-01 underlayer alpha confidence"
+          result="$(git rev-parse HEAD)"
+          git push origin "HEAD:refs/heads/$TARGET_BRANCH"
+          remote_after="$(git ls-remote origin "refs/heads/$TARGET_BRANCH" | cut -f1)"
+          test "$remote_after" = "$result"
