@@ -198,13 +198,13 @@ def main() -> int:
                 "sourceReferences": args.source_reference,
                 "sourceFrameSha256": source_sha,
                 "editedFrameSha256": edited_sha,
-                "deltaExtractionRequired": true,
+                "deltaExtractionRequired": True,
                 "extractionReport": report_rel
             },
             "humanReview": {
                 "status": "PENDING",
-                "reviewer": null,
-                "reviewedAt": null,
+                "reviewer": None,
+                "reviewedAt": None,
                 "checklist": {}
             }
         }
