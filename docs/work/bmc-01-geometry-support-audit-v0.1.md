@@ -27,6 +27,22 @@ Pre-overlay support is the union of:
 The existing `module-02-right-exposed-face.png` overlay is kept separate and
 used only to ask how the historical candidate intersects each geometry.
 
+## Correction after first execution
+
+The first materialized report exposed a tooling bug before its numbers were
+accepted: raw 8-bit alpha values were being multiplied and inverted directly,
+so anti-aliased pixels could be counted in both "existing" and "missing".
+That violates set partitioning.
+
+The audit was corrected to binarize every support/overlay mask first and to run
+an alpha-threshold sweep at `1` and `128`. It now hard-fails unless:
+
+`totalPixels = existingSupportPixels + missingPixels`
+
+for every geometry and threshold.
+
+The superseded first report must not be interpreted.
+
 ## Gate interpretation
 
 A future neutral-face or donor candidate should be authored from the **missing
