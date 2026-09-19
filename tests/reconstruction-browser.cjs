@@ -52,6 +52,7 @@ const {chromium} = require("playwright");
     return false;
   });
   const base=await canvasStats();
+  await page.locator("#viewer").screenshot({path:path.join(output,"base-light.png"),animations:"disabled"});
   assert(base.alpha>1000,"expected reconstructed pixels when Module 03 is hidden");
   assert.equal(base.outside,0,"reconstruction escaped authorized ROI");
   assert(base.carcass && base.plinth,"both material slots must render");
@@ -61,6 +62,7 @@ const {chromium} = require("playwright");
   await page.locator('[data-finish-id="tone-25-b"]').click();
   await page.waitForFunction(previous => Number(document.getElementById("reconstructionCanvas").dataset.renderRevision||0) > previous, base.revision);
   const dark=await canvasStats();
+  await page.locator("#viewer").screenshot({path:path.join(output,"front-dark.png"),animations:"disabled"});
   assert.notDeepEqual(dark.carcass.slice(2,5),base.carcass.slice(2,5),"carcass did not react to front finish");
   assert.notDeepEqual(dark.plinth.slice(2,5),base.plinth.slice(2,5),"default plinth did not follow front finish");
 
@@ -70,6 +72,7 @@ const {chromium} = require("playwright");
   await page.locator("#stoneSkirtingToggle").check();
   await page.waitForFunction(previous => Number(document.getElementById("reconstructionCanvas").dataset.renderRevision||0) > previous, stoneSelected.revision);
   const stone=await canvasStats();
+  await page.locator("#viewer").screenshot({path:path.join(output,"stone-skirting-green.png"),animations:"disabled"});
   assert.deepEqual(stone.carcass.slice(2,5),dark.carcass.slice(2,5),"stone skirting changed carcass slot");
   console.log(JSON.stringify({base,dark,stoneSelected,stone},null,2));
   assert.notDeepEqual(stone.plinth.slice(2,5),dark.plinth.slice(2,5),"stone skirting did not change plinth slot");
@@ -79,7 +82,7 @@ const {chromium} = require("playwright");
   await page.waitForFunction(() => document.getElementById("reconstructionCanvas").dataset.active==="false");
   assert.equal((await canvasStats()).alpha,0,"reconstruction must clear when Module 02 is hidden");
 
-  await page.screenshot({path:path.join(output,"research-bmc01.png"),fullPage:true,animations:"disabled"});
+  await page.screenshot({path:path.join(output,"final-hidden.png"),fullPage:true,animations:"disabled"});
   fs.writeFileSync(path.join(output,"result.json"),JSON.stringify({
     status:"PASS",target,base,dark,stoneSelected,stone,pageErrors:errors
   },null,2));
