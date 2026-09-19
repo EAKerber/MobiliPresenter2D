@@ -130,10 +130,18 @@ BMC-01 should answer separate questions.
 
 Can the target side polygon be derived more strongly than the current bounded local hypothesis?
 
-Subquestions:
-- can the Promob fixed-camera calibration be related to this 2D frame?
-- can front-edge and stone-depth evidence constrain a planar homography?
-- does physical depth 530 mm produce a rear boundary compatible with the measured stone cue?
+Current result:
+- exact Promob fixed-camera transfer to the MobiliPresenter2D frame is **not supported**;
+- tested full-depth direction differs by `32.22°`;
+- the simple crop/uniform-scale hypothesis is rejected;
+- coarse front-envelope anisotropy is also inconsistent with the ratio needed to explain the observed depth cue.
+
+Therefore BMC-01 should not use the Promob fixed camera as global pixel authority.
+
+Remaining subquestions:
+- can front-edge + visible stone-depth evidence define a stronger local planar model?
+- can confirmed physical depth constrain that local model without forcing the source camera?
+- can another visible side face, especially Module 01, provide an empirical projective donor geometry prior?
 
 ### Q2 — deterministic donor quality
 
@@ -256,7 +264,7 @@ measure whether the neutral deterministic render meaningfully reduces generative
 1. Re-verify exact source hashes.
 2. Re-materialize current C-A from recipe.
 3. Build Reconstruction Packet for BMC-01.
-4. Investigate projection compatibility before changing target geometry.
+4. Projection compatibility probe completed: global fixed-camera transfer rejected for the tested correspondence; continue with local/planar evidence.
 5. Produce C-B deterministically.
 6. Run G0-G4 on A/B.
 7. Only if B still has meaningful appearance deficit, generate C-C/C-D.
