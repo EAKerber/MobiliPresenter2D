@@ -61,7 +61,16 @@
     "semantic": "known-clean-carcass-side donor region",
     "physicalDepthMm": 350,
     "side": "right",
-    "frontBoundaryMarginPx": 1
+    "frontBoundaryMarginPx": 1,
+    "rgbEdgeTrace": {
+      "bottom": {
+        "anchor": "front-mask-bottom",
+        "searchRadiusPx": 28,
+        "maxStepPx": 3,
+        "smoothnessPenalty": 5,
+        "minInteriorAlpha": 128
+      }
+    }
   },
   "depthObservations": [
     {
