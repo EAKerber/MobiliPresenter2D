@@ -1,0 +1,55 @@
+{
+  "contract": {
+    "activation": "?reconstruction=bmc01",
+    "appearanceAndOwnershipSeparated": true,
+    "defaultRuntimeEnabled": false,
+    "publishedByNetlifyAppRoot": true
+  },
+  "schemaVersion": "BMC01RuntimeAssets 0.1",
+  "slots": [
+    {
+      "alphaMass": 1597.964706,
+      "bounds": [
+        745,
+        566,
+        754,
+        855
+      ],
+      "mask": "app/assets/kitchen/reconstruction/bmc01/carcass-mask.png",
+      "maskSha256": "a5b3823cab741e0b5e58a2dd91a25af520ccdf1077e51daeffbec258583708c8",
+      "neutral": "app/assets/kitchen/reconstruction/bmc01/carcass-neutral.png",
+      "neutralSha256": "61b7eb8411704eea827c2485b0e344044d35cd17f95ac5e0220f18ea8811945f",
+      "nonzeroPixels": 2188,
+      "size": [
+        1536,
+        1024
+      ],
+      "slot": "carcass",
+      "source": "review-assets/research/bmc01-antialiased-completion-v0.1/carcass-candidate.png",
+      "sourceSha256": "9bcd4087a26be09a7516071298dc2f36fa77d8da54fbb072d4596d7843aa117b"
+    },
+    {
+      "alphaMass": 128.12549,
+      "bounds": [
+        742,
+        841,
+        751,
+        899
+      ],
+      "mask": "app/assets/kitchen/reconstruction/bmc01/plinth-mask.png",
+      "maskSha256": "6594699d07b59a243d94900e02cf84ba2bbb97336f15cd550a6a5a6cd537dd47",
+      "neutral": "app/assets/kitchen/reconstruction/bmc01/plinth-neutral.png",
+      "neutralSha256": "80a31b14dca43e11dcc5e81e18083dedbcd7ae71bda96aa35dd374661d2991b4",
+      "nonzeroPixels": 246,
+      "size": [
+        1536,
+        1024
+      ],
+      "slot": "plinth",
+      "source": "review-assets/research/bmc01-antialiased-completion-v0.1/plinth-candidate.png",
+      "sourceSha256": "fc2c7f056449ac230c545d83e3a677e6a3ce88356f4eff34596c296b9486b135"
+    }
+  ],
+  "sourceCandidate": "review-assets/research/bmc01-antialiased-completion-v0.1",
+  "status": "RESEARCH_ONLY"
+}
