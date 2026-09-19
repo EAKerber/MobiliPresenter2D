@@ -1,0 +1,42 @@
+{
+  "contract": {
+    "activation": "?reconstruction=bmc02",
+    "appearanceAndOwnershipSeparated": true,
+    "authorizedRoi": [
+      720,
+      510,
+      755,
+      600
+    ],
+    "defaultRuntimeEnabled": false,
+    "materialPolicy": "stone-upper",
+    "publishedByNetlifyAppRoot": true
+  },
+  "operationId": "bmc02-module03-left-stone-termination",
+  "schemaVersion": "BMC02RuntimeAssets 0.1",
+  "slots": [
+    {
+      "alphaMass": 80.0,
+      "bounds": [
+        727,
+        569,
+        736,
+        589
+      ],
+      "mask": "app/assets/kitchen/reconstruction/bmc02/termination-mask.png",
+      "maskSha256": "82edfa623ec92d9afafa992e7a569a0de8cc8b06ec3d75b62668ee211c1a997f",
+      "neutral": "app/assets/kitchen/reconstruction/bmc02/termination-neutral.png",
+      "neutralSha256": "01599630eaefde17e7a19005468e6d06691a6f5d75668316bca90c88670180d3",
+      "nonzeroPixels": 80,
+      "size": [
+        1536,
+        1024
+      ],
+      "slot": "termination",
+      "source": "review-assets/candidates/module-03-left-termination-e-rounded-9px/candidate.png",
+      "sourceSha256": "cd853fa75eaf10735a08d54af942fa50a5c6edf51549af3c96170e1fcaff4dec"
+    }
+  ],
+  "sourceCandidate": "review-assets/candidates/module-03-left-termination-e-rounded-9px/candidate.png",
+  "status": "RESEARCH_ONLY"
+}
