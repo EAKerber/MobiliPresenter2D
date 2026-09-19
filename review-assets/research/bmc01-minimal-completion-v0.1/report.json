@@ -1,0 +1,41 @@
+{
+  "authoringMethod": "C1 same-object nearest deterministic donor",
+  "boundaryColorError": {
+    "maxAbsChannelDifference": 35.0,
+    "meanAbsChannelDifference": 6.589285714285714,
+    "pairCount": 56
+  },
+  "candidateChangedPixelCount": 101,
+  "candidatePixelSha256": "1020520dd139e95d10e7a8674ff378efe9021b33471f1b00cb9c2997772d9d8c",
+  "candidateVsHistoricalChangedPixelRatio": 0.05287958115183246,
+  "cleanPixelSha256": "b769d83f1d83358fa10a19cbb9ade869433d62d0a76e81383177dcd98eb11617",
+  "donorDistance": {
+    "filled": 101,
+    "maxDistance": 21.0,
+    "meanDistance": 8.465346534653465
+  },
+  "donorMaskPixels": 2304,
+  "editMaskBounds": [
+    745,
+    569,
+    752,
+    590
+  ],
+  "editMaskPixels": 101,
+  "editedPixelSha256": "3a11971768d21dbb3792a7cb025f8cc5c18f272582e577c19963f49678a3bbad",
+  "historicalOverlayChangedPixelCount": 1910,
+  "historicalOverlayOverlapPixels": 0,
+  "limitations": [
+    "nearest-pixel donor is a deterministic appearance baseline, not final photometric synthesis",
+    "edit entitlement currently uses absence of any alpha contribution from current host/stone assets and remains research-only",
+    "candidate has not received visual/human approval"
+  ],
+  "localCarcassGeometryPixels": 2682,
+  "outsideAuthorizedRoiPixels": 0,
+  "preExistingOwnerOverlapPixels": 0,
+  "promotionEligible": false,
+  "sceneId": "cozinha-01",
+  "schemaVersion": "BMC01MinimalCompletionReport 0.1",
+  "status": "RESEARCH_CANDIDATE",
+  "targetVariant": "module-03-hidden"
+}
