@@ -128,6 +128,7 @@
           "angleDeg": 0.0,
           "count": 222,
           "dyDx": 0.0,
+          "intercept": 280.0,
           "rms": 0.0
         },
         "bounds": [
@@ -153,6 +154,7 @@
           "angleDeg": 0.0,
           "count": 222,
           "dyDx": 0.0,
+          "intercept": 65.0,
           "rms": 0.0
         }
       },
@@ -161,6 +163,7 @@
           "angleDeg": 0.0,
           "count": 222,
           "dyDx": 0.0,
+          "intercept": 280.0,
           "rms": 0.0
         },
         "bounds": [
@@ -186,6 +189,7 @@
           "angleDeg": 0.0,
           "count": 222,
           "dyDx": 0.0,
+          "intercept": 65.0,
           "rms": 0.0
         }
       },
@@ -194,6 +198,7 @@
           "angleDeg": 0.0,
           "count": 222,
           "dyDx": 0.0,
+          "intercept": 280.0,
           "rms": 0.0
         },
         "bounds": [
@@ -219,6 +224,7 @@
           "angleDeg": 0.0,
           "count": 222,
           "dyDx": 0.0,
+          "intercept": 65.0,
           "rms": 0.0
         }
       },
@@ -227,6 +233,7 @@
           "angleDeg": 0.0,
           "count": 222,
           "dyDx": 0.0,
+          "intercept": 280.0,
           "rms": 0.0
         },
         "bounds": [
@@ -252,6 +259,7 @@
           "angleDeg": 0.0,
           "count": 222,
           "dyDx": 0.0,
+          "intercept": 65.0,
           "rms": 0.0
         }
       }
@@ -262,6 +270,7 @@
           "angleDeg": 0.0,
           "count": 247,
           "dyDx": 0.0,
+          "intercept": 855.0,
           "rms": 0.0
         },
         "bounds": [
@@ -287,6 +296,7 @@
           "angleDeg": 0.0,
           "count": 247,
           "dyDx": 0.0,
+          "intercept": 590.0,
           "rms": 0.0
         }
       },
@@ -295,6 +305,7 @@
           "angleDeg": 0.0,
           "count": 247,
           "dyDx": 0.0,
+          "intercept": 855.0,
           "rms": 0.0
         },
         "bounds": [
@@ -320,6 +331,7 @@
           "angleDeg": 0.0,
           "count": 247,
           "dyDx": 0.0,
+          "intercept": 590.0,
           "rms": 0.0
         }
       },
@@ -328,6 +340,7 @@
           "angleDeg": 0.0,
           "count": 247,
           "dyDx": 0.0,
+          "intercept": 855.0,
           "rms": 0.0
         },
         "bounds": [
@@ -353,6 +366,7 @@
           "angleDeg": 0.0,
           "count": 247,
           "dyDx": 0.0,
+          "intercept": 590.0,
           "rms": 0.0
         }
       },
@@ -361,6 +375,7 @@
           "angleDeg": 0.0,
           "count": 247,
           "dyDx": 0.0,
+          "intercept": 855.0,
           "rms": 0.0
         },
         "bounds": [
@@ -386,6 +401,7 @@
           "angleDeg": 0.0,
           "count": 247,
           "dyDx": 0.0,
+          "intercept": 590.0,
           "rms": 0.0
         }
       }
@@ -396,6 +412,7 @@
           "angleDeg": 0.0,
           "count": 458,
           "dyDx": 0.0,
+          "intercept": 855.0,
           "rms": 0.0
         },
         "bounds": [
@@ -421,6 +438,7 @@
           "angleDeg": 0.0,
           "count": 458,
           "dyDx": 0.0,
+          "intercept": 590.0,
           "rms": 0.0
         }
       },
@@ -429,6 +447,7 @@
           "angleDeg": 0.0,
           "count": 458,
           "dyDx": 0.0,
+          "intercept": 855.0,
           "rms": 0.0
         },
         "bounds": [
@@ -454,6 +473,7 @@
           "angleDeg": 0.0,
           "count": 458,
           "dyDx": 0.0,
+          "intercept": 590.0,
           "rms": 0.0
         }
       },
@@ -462,6 +482,7 @@
           "angleDeg": 0.0,
           "count": 458,
           "dyDx": 0.0,
+          "intercept": 855.0,
           "rms": 0.0
         },
         "bounds": [
@@ -487,6 +508,7 @@
           "angleDeg": 0.0,
           "count": 458,
           "dyDx": 0.0,
+          "intercept": 590.0,
           "rms": 0.0
         }
       },
@@ -495,6 +517,7 @@
           "angleDeg": 0.0,
           "count": 458,
           "dyDx": 0.0,
+          "intercept": 855.0,
           "rms": 0.0
         },
         "bounds": [
@@ -520,6 +543,7 @@
           "angleDeg": 0.0,
           "count": 458,
           "dyDx": 0.0,
+          "intercept": 590.0,
           "rms": 0.0
         }
       }
@@ -530,6 +554,7 @@
           "angleDeg": 0.0,
           "count": 245,
           "dyDx": 0.0,
+          "intercept": 255.0,
           "rms": 0.0
         },
         "bounds": [
@@ -555,6 +580,7 @@
           "angleDeg": 0.0,
           "count": 245,
           "dyDx": 0.0,
+          "intercept": 65.0,
           "rms": 0.0
         }
       },
@@ -563,6 +589,7 @@
           "angleDeg": 0.0,
           "count": 245,
           "dyDx": 0.0,
+          "intercept": 255.0,
           "rms": 0.0
         },
         "bounds": [
@@ -588,6 +615,7 @@
           "angleDeg": 0.0,
           "count": 245,
           "dyDx": 0.0,
+          "intercept": 65.0,
           "rms": 0.0
         }
       },
@@ -596,6 +624,7 @@
           "angleDeg": 0.0,
           "count": 245,
           "dyDx": 0.0,
+          "intercept": 255.0,
           "rms": 0.0
         },
         "bounds": [
@@ -621,6 +650,7 @@
           "angleDeg": 0.0,
           "count": 245,
           "dyDx": 0.0,
+          "intercept": 65.0,
           "rms": 0.0
         }
       },
@@ -629,6 +659,7 @@
           "angleDeg": 0.0,
           "count": 245,
           "dyDx": 0.0,
+          "intercept": 255.0,
           "rms": 0.0
         },
         "bounds": [
@@ -654,6 +685,7 @@
           "angleDeg": 0.0,
           "count": 245,
           "dyDx": 0.0,
+          "intercept": 65.0,
           "rms": 0.0
         }
       }
@@ -664,6 +696,7 @@
           "angleDeg": -22.650375625368486,
           "count": 454,
           "dyDx": -0.41729176716055905,
+          "intercept": 660.2731003972978,
           "rms": 32.24416378718218
         },
         "bounds": [
@@ -689,6 +722,7 @@
           "angleDeg": 0.0,
           "count": 454,
           "dyDx": 0.0,
+          "intercept": 65.0,
           "rms": 0.0
         }
       },
@@ -697,6 +731,7 @@
           "angleDeg": -22.650375625368486,
           "count": 454,
           "dyDx": -0.41729176716055905,
+          "intercept": 660.2731003972978,
           "rms": 32.24416378718218
         },
         "bounds": [
@@ -722,6 +757,7 @@
           "angleDeg": 0.0,
           "count": 454,
           "dyDx": 0.0,
+          "intercept": 65.0,
           "rms": 0.0
         }
       },
@@ -730,6 +766,7 @@
           "angleDeg": -22.650375625368486,
           "count": 454,
           "dyDx": -0.41729176716055905,
+          "intercept": 660.2731003972978,
           "rms": 32.24416378718218
         },
         "bounds": [
@@ -755,6 +792,7 @@
           "angleDeg": 0.0,
           "count": 454,
           "dyDx": 0.0,
+          "intercept": 65.0,
           "rms": 0.0
         }
       },
@@ -763,6 +801,7 @@
           "angleDeg": -22.650375625368486,
           "count": 454,
           "dyDx": -0.41729176716055905,
+          "intercept": 660.2731003972978,
           "rms": 32.24416378718218
         },
         "bounds": [
@@ -788,6 +827,7 @@
           "angleDeg": 0.0,
           "count": 454,
           "dyDx": 0.0,
+          "intercept": 65.0,
           "rms": 0.0
         }
       }
@@ -798,6 +838,7 @@
           "angleDeg": 0.0,
           "count": 249,
           "dyDx": 0.0,
+          "intercept": 204.0,
           "rms": 0.0
         },
         "bounds": [
@@ -823,6 +864,7 @@
           "angleDeg": 0.0,
           "count": 249,
           "dyDx": 0.0,
+          "intercept": 50.0,
           "rms": 0.0
         }
       },
@@ -831,6 +873,7 @@
           "angleDeg": 0.0,
           "count": 249,
           "dyDx": 0.0,
+          "intercept": 204.0,
           "rms": 0.0
         },
         "bounds": [
@@ -856,6 +899,7 @@
           "angleDeg": 0.0,
           "count": 249,
           "dyDx": 0.0,
+          "intercept": 50.0,
           "rms": 0.0
         }
       },
@@ -864,6 +908,7 @@
           "angleDeg": 0.0,
           "count": 249,
           "dyDx": 0.0,
+          "intercept": 204.0,
           "rms": 0.0
         },
         "bounds": [
@@ -889,6 +934,7 @@
           "angleDeg": 0.0,
           "count": 249,
           "dyDx": 0.0,
+          "intercept": 50.0,
           "rms": 0.0
         }
       },
@@ -897,6 +943,7 @@
           "angleDeg": 0.0,
           "count": 249,
           "dyDx": 0.0,
+          "intercept": 204.0,
           "rms": 0.0
         },
         "bounds": [
@@ -922,6 +969,7 @@
           "angleDeg": 0.0,
           "count": 249,
           "dyDx": 0.0,
+          "intercept": 50.0,
           "rms": 0.0
         }
       }
@@ -1369,12 +1417,227 @@
     }
   ],
   "preliminaryClassification": {
-    "nextClassQuestion": "FIND_CURRENT_OWNED_Y_DIRECTION_EDGE",
-    "reason": "Module 01 supplies a strong local Y-direction vanishing point, but the historical Module 02 comparison line is now known to be primarily conditional joint-bridge support and is not visible in the current module-03-hidden state",
+    "nextClassQuestion": "COMPARE_MODULE01_AND_MODULE04_BASE_SIDE_VANISHING",
+    "reason": "Module 01 supplies a strong local Y-direction vanishing point; the stale Module 02 cue is excluded and Module 04 is now probed as a second base-layer physical side panel",
     "sceneClass": "INSUFFICIENT_CURRENT_DEPTH_EVIDENCE"
   },
   "promotionEligible": false,
   "sceneId": "cozinha-01",
   "schemaVersion": "SceneProjectiveConsistencyProbeReport 0.1",
+  "sideLayerProbes": {
+    "module-04-fridge-side": {
+      "evidence": {
+        "caveat": "layer alpha may include antialias/shadow support; threshold stability and fit residuals are mandatory",
+        "id": "module-04-fridge-side",
+        "layer": "app/assets/kitchen/layers/04_lateral_geladeira.png",
+        "physicalDimensionsMm": {
+          "depth": 610,
+          "height": 2400,
+          "width": 18
+        },
+        "physicalSource": "MobiliPresenter scene-core/src/fixtures/current-context.ts module04",
+        "physicalStatus": "confirmed",
+        "semantic": "single physical side panel; top and bottom outer silhouette edges are Y/depth direction candidates"
+      },
+      "thresholdSweep": [
+        {
+          "boundary": {
+            "bottom": {
+              "angleDeg": 0.0,
+              "count": 20,
+              "dyDx": 0.0,
+              "intercept": 901.0,
+              "rms": 0.0
+            },
+            "bounds": [
+              1211,
+              49,
+              1231,
+              902
+            ],
+            "left": {
+              "angleFromVerticalDeg": 0.0,
+              "count": 831,
+              "dxDy": 0.0,
+              "rms": 0.0
+            },
+            "right": {
+              "angleFromVerticalDeg": 0.0,
+              "count": 853,
+              "dxDy": 0.0,
+              "rms": 0.0
+            },
+            "threshold": 32,
+            "top": {
+              "angleDeg": -43.90251394661947,
+              "count": 20,
+              "dyDx": -0.9624060150375939,
+              "intercept": 1227.8165413533834,
+              "rms": 4.214618312350123
+            }
+          },
+          "threshold": 32,
+          "vanishingFit": {
+            "point": [
+              339.58281250000005,
+              901.0000000000001
+            ],
+            "residualPx": {
+              "bottom": 1.1368683772161603e-13,
+              "top": 1.1368683772161603e-13
+            },
+            "rmsPx": 1.1368683772161603e-13
+          }
+        },
+        {
+          "boundary": {
+            "bottom": {
+              "angleDeg": 0.0,
+              "count": 20,
+              "dyDx": 0.0,
+              "intercept": 901.0,
+              "rms": 0.0
+            },
+            "bounds": [
+              1211,
+              49,
+              1231,
+              902
+            ],
+            "left": {
+              "angleFromVerticalDeg": 0.0,
+              "count": 831,
+              "dxDy": 0.0,
+              "rms": 0.0
+            },
+            "right": {
+              "angleFromVerticalDeg": 0.0,
+              "count": 853,
+              "dxDy": 0.0,
+              "rms": 0.0
+            },
+            "threshold": 64,
+            "top": {
+              "angleDeg": -43.90251394661947,
+              "count": 20,
+              "dyDx": -0.9624060150375939,
+              "intercept": 1227.8165413533834,
+              "rms": 4.214618312350123
+            }
+          },
+          "threshold": 64,
+          "vanishingFit": {
+            "point": [
+              339.58281250000005,
+              901.0000000000001
+            ],
+            "residualPx": {
+              "bottom": 1.1368683772161603e-13,
+              "top": 1.1368683772161603e-13
+            },
+            "rmsPx": 1.1368683772161603e-13
+          }
+        },
+        {
+          "boundary": {
+            "bottom": {
+              "angleDeg": 0.0,
+              "count": 20,
+              "dyDx": 0.0,
+              "intercept": 901.0,
+              "rms": 0.0
+            },
+            "bounds": [
+              1211,
+              49,
+              1231,
+              902
+            ],
+            "left": {
+              "angleFromVerticalDeg": 0.0,
+              "count": 831,
+              "dxDy": 0.0,
+              "rms": 0.0
+            },
+            "right": {
+              "angleFromVerticalDeg": 0.0,
+              "count": 853,
+              "dxDy": 0.0,
+              "rms": 0.0
+            },
+            "threshold": 128,
+            "top": {
+              "angleDeg": -43.90251394661947,
+              "count": 20,
+              "dyDx": -0.9624060150375939,
+              "intercept": 1227.8165413533834,
+              "rms": 4.214618312350123
+            }
+          },
+          "threshold": 128,
+          "vanishingFit": {
+            "point": [
+              339.58281250000005,
+              901.0000000000001
+            ],
+            "residualPx": {
+              "bottom": 1.1368683772161603e-13,
+              "top": 1.1368683772161603e-13
+            },
+            "rmsPx": 1.1368683772161603e-13
+          }
+        },
+        {
+          "boundary": {
+            "bottom": {
+              "angleDeg": 0.0,
+              "count": 20,
+              "dyDx": 0.0,
+              "intercept": 901.0,
+              "rms": 0.0
+            },
+            "bounds": [
+              1211,
+              49,
+              1231,
+              902
+            ],
+            "left": {
+              "angleFromVerticalDeg": 0.0,
+              "count": 831,
+              "dxDy": 0.0,
+              "rms": 0.0
+            },
+            "right": {
+              "angleFromVerticalDeg": 0.0,
+              "count": 853,
+              "dxDy": 0.0,
+              "rms": 0.0
+            },
+            "threshold": 192,
+            "top": {
+              "angleDeg": -43.90251394661947,
+              "count": 20,
+              "dyDx": -0.9624060150375939,
+              "intercept": 1227.8165413533834,
+              "rms": 4.214618312350123
+            }
+          },
+          "threshold": 192,
+          "vanishingFit": {
+            "point": [
+              339.58281250000005,
+              901.0000000000001
+            ],
+            "residualPx": {
+              "bottom": 1.1368683772161603e-13,
+              "top": 1.1368683772161603e-13
+            },
+            "rmsPx": 1.1368683772161603e-13
+          }
+        }
+      ]
+    }
+  },
   "status": "DIAGNOSTIC_ONLY"
 }
