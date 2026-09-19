@@ -94,81 +94,81 @@ The first automated probe remains `DIAGNOSTIC_ONLY`; final classification requir
 
 ## Current SC-01 findings
 
-The first deterministic probes are now materialized in:
-`review-assets/research/scene-projective-consistency-v0.1-report.json`.
+The earlier uncertainty around the Module 01 lower side edge is now resolved.
 
-### Negative finding: front finish masks are not camera evidence
+### The 14.92° luminance trace was a false semantic edge
 
-Modules 01, 02, 03, 05 and 07 expose perfectly axis-aligned rectangular finish-mask bounds across all tested alpha thresholds.
+The automatic luminance tracer found a mathematically clean line inside the white side face. Visual inspection of the isolated Module 01 side screenshot shows that this line is a shading/appearance transition, not the physical lower boundary of the side panel.
 
-This is a property of the current authoring masks, not independent proof that the photographed/rendered fronts obey an exact orthographic X/Z projection.
+It is retained in the report as:
+`REJECTED_AS_PHYSICAL_EDGE`.
 
-Module 06 demonstrates why generic outer-mask fitting is unsafe: its nonrectangular mask support produces meaningless outer-boundary fits because the mask encodes front topology rather than one physical rectangle.
+This is a useful failure case for the future method: a low-RMS image edge is not automatically a geometric edge.
 
-Therefore:
-**front finish masks are removed from the list of authoritative scene-camera observations.**
+### Physical Module 01 side boundaries
 
-They remain useful for:
-- ownership;
-- material application;
-- seam extraction;
-- topology constraints.
+Three sources now agree on the physical interpretation:
 
-### Module 01 side topology probe
+1. Scene Core/Promob confirms a full-height right side panel, `700 mm` high and `350 mm` deep, with no bottom setback that would justify the interior luminance trace.
+2. The canonical Module 01 layer, constrained to the region right of the front finish mask, gives threshold-stable outer top and bottom boundaries.
+3. The isolated Module 01 side screenshot supplied in the project conversation visually confirms that the white side face terminates on that outer bottom silhouette.
 
-Using the known clean carcass-side donor as a seed and restricting the residual to the right of the front mask produces a stable side-region hypothesis across alpha thresholds:
+The canonical fits are approximately:
 
-- bounds: approximately `[353,58,381,296]`;
-- threshold-stable support;
-- top outer edge fit:
-  - angle ≈ `41.82°`;
-  - RMS ≈ `0.30 px`.
+- top depth edge: angle `41.82°`, RMS `0.30 px`;
+- bottom depth edge: essentially horizontal in the canonical layer residual.
 
-The raw residual bottom silhouette is not accepted as a physical depth edge because it follows the outer alpha boundary.
+Those two physical Y-direction edges imply:
 
-A separate interior luminance-edge trace near the front bottom finds:
+`VP_M01 ≈ [620.49, 294.00]`.
 
-- angle ≈ `14.92°`;
-- RMS ≈ `0.45 px`;
-- continuous support from x≈353 to 380.
+### Independent lower-zone Y-direction evidence
 
-If those two traces are the actual parallel top/bottom depth edges of the physical Module 01 side, they intersect at approximately:
+The Module 02 visible stone depth cue is measured as:
 
-`VP_module01 ≈ [722.44, 385.21]`.
-
-### Lower stone pixel evidence
-
-The actual reference-alpha stone edge used by `gap_pixel_gate.py` was measured directly rather than via the historical annotation:
-
-- local points run approximately from `[749.5,553]` to `[742.5,567]`;
-- fit `dx/dy = -0.5`;
-- RMS ≈ `0.25 px`.
-
-The earlier Module 02 measured stone cue remains:
 `[742,586] -> [763,525]`.
 
-These lower-zone observations are spatially close and may describe the same/adjacent joint geometry. They must **not** be treated as independent parallel lines merely to manufacture a global vanishing point.
+Scene Core confirms Module 01 and Module 02 use the same unrotated physical axes, so their cabinet-depth edges are parallel in world Y.
 
-### Provisional inconsistency signal
+If the canonical image were one exact perspective projection, the Module 02 depth line would pass through the same Y vanishing point as the Module 01 side.
 
-If the Module 01 top + internal-bottom traces are confirmed as physical Y-direction edges, their vanishing point misses the lower-zone depth evidence by a large amount:
+It does not.
 
-- Module 02 measured stone line: roughly `84 px` perpendicular residual;
-- Module 03 reference-alpha stone line: roughly `99 px` residual.
+Perpendicular distance from `VP_M01` to the measured Module 02 stone depth line is approximately:
 
-That would be strong evidence for a piecewise/projectively inconsistent scene.
+`210 px`.
 
-However, one of the two lines defining `VP_module01` is still an automatically traced luminance edge.
+That is vastly larger than the sub-pixel line-fit residual on the Module 01 edge and any reasonable raster-edge uncertainty.
 
-Therefore the current scene classification is deliberately:
+The Module 03 reference-alpha stone line also lies far from the Module 01 VP, but because the Module 02/03 stone observations may represent adjacent/intersecting local termination geometry, Module 03 is retained as supporting context rather than the decisive independent test.
 
-**`INSUFFICIENT_EVIDENCE`**
+### Current classification
 
-with:
+The current evidence now supports:
 
-**`piecewiseSignal = STRONG_IF_MODULE01_EDGE_TRACE_IS_CONFIRMED`**.
+**`GLOBAL_COHERENCE_REJECTED_FOR_TESTED_Y_DIRECTION`**
 
-The next useful action is not another automatic fit. It is to validate/replace the Module 01 top and bottom side edges with an authoritative one-time vector trace against the canonical pixels, then rerun the residual test.
+This means:
+
+> the tested canonical pixels cannot all be explained as one exact perspective projection of the unrotated physical Y direction represented in Scene Core.
+
+It does **not yet** distinguish between:
+
+- `PIECEWISE_COHERENT` — different regions were composited/rendered with locally coherent but different projection;
+- `LOCALLY_DISTORTED` — one or more assets were warped internally;
+- a more specific source/version mismatch.
+
+The next audit should therefore test at least one additional physical depth edge within the upper region and one additional edge within the lower region. That will determine whether each region is internally coherent or whether distortion exists inside individual assets.
+
+### Consequence for the current kitchen
+
+This result still does not justify rebuilding the scene.
+
+The visible product scene remains editorially convincing. Until a specific inconsistency causes visible configuration failure, the default remediation remains:
+
+- preserve canonical base;
+- use local/regional projection for hidden-face authoring;
+- correct only variants/overlays whose exposed geometry makes the inconsistency visible.
 
 ## Relationship to future furniture
 
