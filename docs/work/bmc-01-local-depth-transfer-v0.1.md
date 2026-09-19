@@ -20,6 +20,27 @@ is therefore used as a **local conditional depth projection**.
 
 It is not promoted to a global camera.
 
+## Reference correction after current-edge probe
+
+A later threshold-sweep measured the current exposed stone variants inside the
+existing semantic top-surface band y=552..574.
+
+Stone 03 is the useful reference:
+
+- alpha 32/64/128/192 produce the same fitted edge;
+- front approximately `[740.565,574]`;
+- back approximately `[749.696,552]`;
+- front→back vector approximately `[+9.130,-22]`;
+- fit RMS approximately `0.60 px`.
+
+Stone 02 is **not** used as a camera/depth reference. Its current exposed-right
+termination is intentionally clipped by the authored termination recipe and the
+measured edge is approximately `[+1.65,-22]`, inconsistent with treating it as
+an untouched physical Y-direction edge.
+
+The local transfer input is therefore updated to the stable Stone 03 measured
+edge instead of the earlier hand-selected `[+11,-23]` segment.
+
 ## Module 02 front seam
 
 A new RGB/alpha interior-boundary probe on `02_inferior_fogao.png` independently re-finds:
