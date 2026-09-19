@@ -1,0 +1,17 @@
+{
+  "schemaVersion": "BMC01UnderlayerIdentityAudit 0.1",
+  "sceneId": "cozinha-01",
+  "localTransferReport": "review-assets/research/bmc01-local-depth-transfer-v0.1-report.json",
+  "baseAsset": "app/assets/kitchen/base.png",
+  "module02Layer": "app/assets/kitchen/layers/02_inferior_fogao.png",
+  "frontSeamX": 742,
+  "bands": [
+    {"id":"strong","minAlpha":128,"maxAlpha":255},
+    {"id":"soft","minAlpha":1,"maxAlpha":127}
+  ],
+  "policy": {
+    "researchOnly": true,
+    "promotionEligible": false,
+    "question": "do the alpha-positive pixels currently treated as hidden Module 02 underlayer carry object-specific RGB, or are they primarily copied/background scene pixels?"
+  }
+}
