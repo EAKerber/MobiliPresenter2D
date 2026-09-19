@@ -1,0 +1,83 @@
+{
+  "cropGlobal": [
+    500,
+    525,
+    750,
+    585
+  ],
+  "files": {
+    "clean-cooktop-free.png": {
+      "sha256": "ce0c187aec746d4f8a2444efcd568ff6cf15fdd174d4637d0360a37a3612de2e",
+      "sizeBytes": 38534
+    },
+    "existing-generated-donor.png": {
+      "sha256": "427d504658e61134aede5e73748bf5681e900127766b61d12396c25f448030ec",
+      "sizeBytes": 685392
+    },
+    "footprint-guide.png": {
+      "sha256": "39e7f0478783b06617a3ef3d24ce3dbc60d06ac123926a2556dbecac980f9ac2",
+      "sizeBytes": 32935
+    },
+    "footprint-max-support.png": {
+      "sha256": "6c6afdbfa653c2e914900c3d1fc402a710ed81668da48d6e329fdb270c976323",
+      "sizeBytes": 224
+    },
+    "reference-current.png": {
+      "sha256": "ddefbb1c89ff2f69947e9974d16c20d97ac92fa13faa5749cf52727adf029274",
+      "sizeBytes": 36589
+    }
+  },
+  "generationContract": {
+    "cleanReference": "clean-cooktop-free.png",
+    "currentReference": "reference-current.png",
+    "desiredOutput": "isolated transparent cooktop already matching the target footprint/perspective",
+    "existingGeneratedDonor": "existing-generated-donor.png",
+    "forbidden": "scene/background/stone/cabinet edits",
+    "hardGuide": "footprint-guide.png",
+    "maximumSupportMask": "footprint-max-support.png"
+  },
+  "perceptualTarget": {
+    "geometryAuthority": false,
+    "status": "PENDING_MATERIALIZATION"
+  },
+  "promotionEligible": false,
+  "sceneId": "cozinha-01",
+  "schemaVersion": "BMC04GenerationInputReceipt 0.1",
+  "status": "READY_FOR_BOUNDED_GENERATION",
+  "targetFootprintCropPx": {
+    "backLeft": [
+      51.912319979864606,
+      27.600000000000023
+    ],
+    "backRight": [
+      232.75131638377172,
+      27.600000000000023
+    ],
+    "frontLeft": [
+      23.37005950964874,
+      48.39999999999998
+    ],
+    "frontRight": [
+      214.96630412671493,
+      48.39999999999998
+    ]
+  },
+  "targetFootprintGlobalPx": {
+    "backLeft": [
+      551.9123199798646,
+      552.6
+    ],
+    "backRight": [
+      732.7513163837717,
+      552.6
+    ],
+    "frontLeft": [
+      523.3700595096487,
+      573.4
+    ],
+    "frontRight": [
+      714.9663041267149,
+      573.4
+    ]
+  }
+}
