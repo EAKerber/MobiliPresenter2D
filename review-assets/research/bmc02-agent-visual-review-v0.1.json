@@ -1,0 +1,53 @@
+{
+  "schemaVersion": "BMC02AgentVisualReview 0.1",
+  "sceneId": "cozinha-01",
+  "operationId": "bmc02-module03-left-stone-termination",
+  "status": "PASS_WITH_NOTE",
+  "promotionEligible": false,
+  "humanReview": "PENDING",
+  "evidence": {
+    "crossCaseWorkflowRunId": 35475546474,
+    "artifactDigest": "sha256:50c4d235b43af226b5a7b21d812581f3849d80288a9415a6d98eac08b47086bf",
+    "ownershipAuditWorkflowRunId": 35475290898
+  },
+  "observations": [
+    {
+      "id": "bounded-shape",
+      "result": "PASS",
+      "note": "The active patch remains the exact 80-pixel historical termination support at bounds [727,569,736,589]; it does not invent a full-height panel."
+    },
+    {
+      "id": "normal-scale-integration",
+      "result": "PASS",
+      "note": "At normal scene scale the return reads as a small countertop termination and does not create a gross detached object or remote scene change."
+    },
+    {
+      "id": "stone-material-response",
+      "result": "PASS",
+      "note": "The same bounded support changes from the neutral stone sample to the selected green stone material while preserving alpha support."
+    },
+    {
+      "id": "front-finish-isolation",
+      "result": "PASS",
+      "note": "Changing the MDF/front finish after selecting green stone leaves the BMC-02 stone-only return unchanged."
+    },
+    {
+      "id": "magnified-edge",
+      "result": "PASS_WITH_NOTE",
+      "note": "The exact historical 80-pixel geometry has a visibly stepped boundary under strong magnification. At scene scale this is minor; human review should decide whether antialiased coverage is desirable before any default promotion."
+    },
+    {
+      "id": "generative-residual-need",
+      "result": "NOT_JUSTIFIED",
+      "note": "No appearance defect currently warrants image generation; if the edge needs refinement, deterministic antialiasing should be tested first."
+    }
+  ],
+  "decision": {
+    "machineValid": true,
+    "agentReview": "PASS_WITH_NOTE",
+    "humanReviewRequiredBeforeDefaultPromotion": true,
+    "keepQueryGate": true,
+    "generationAllowedNext": false,
+    "deterministicNextIfRejected": "supersampled/antialiased coverage only"
+  }
+}
