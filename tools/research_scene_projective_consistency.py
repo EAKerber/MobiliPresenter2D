@@ -303,6 +303,18 @@ def main():
         alpha=load_alpha(item["mask"])
         fronts[item["id"]]=[boundary_fits(alpha,t) for t in cfg["thresholds"]]
 
+    residual_side_probes={}
+    for item in cfg.get("residualSideProbes",[]):
+        la=load_alpha(item["layer"])
+        fa=load_alpha(item["frontMask"])
+        residual_side_probes[item["id"]]={
+          "evidence":item,
+          "thresholdSweep":[
+            residual_component(la,fa,t,item["seedQuad"],item.get("side"),item.get("frontBoundaryMarginPx",0))
+            for t in cfg["thresholds"]
+          ]
+        }
+
     side_layers={}
     for item in cfg.get("sideLayerProbes",[]):
         alpha=load_alpha(item["layer"])
@@ -399,6 +411,7 @@ def main():
       "promotionEligible":False,
       "frontMaskBoundaryFits":fronts,
       "sideLayerProbes":side_layers,
+      "residualSideProbes":residual_side_probes,
       "module01SideResidualProbe":side,
       "module01BottomInternalEdgeTrace":{
         "status":"REJECTED_AS_PHYSICAL_EDGE",
