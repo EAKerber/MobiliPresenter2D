@@ -1,0 +1,113 @@
+{
+  "appearanceMode": "ignore",
+  "authoringMethod": "C2 canonical M01 carcass-side projective donor",
+  "boundaryColorErrorAfter": {
+    "maxAbsChannelDifference": 32.666666666666664,
+    "meanAbsChannelDifference": 5.320069204152249,
+    "pairCount": 578
+  },
+  "boundaryColorErrorBefore": {
+    "maxAbsChannelDifference": 33.333333333333336,
+    "meanAbsChannelDifference": 8.832179930795848,
+    "pairCount": 578
+  },
+  "boundaryColorErrorMeanImprovement": 3.5121107266435985,
+  "boundaryColorErrorMeanImprovementRatio": 0.39764936336924583,
+  "candidateChangedPixelCount": 1877,
+  "candidatePixelSha256": "51a8adbf3507b8e40fdd10bf2d7aed4bbe403d0ebace7baeaf04b5ba1a00fc32",
+  "candidateRowRoughness": {
+    "maxRowMeanAbsDifference": 4.0,
+    "meanRowMeanAbsDifference": 0.0983731570920196,
+    "p90RowMeanAbsDifference": 0.16666666666668561,
+    "pairCount": 281
+  },
+  "candidateVsHistoricalChangedPixelRatio": 0.9827225130890053,
+  "cleanPixelSha256": "b769d83f1d83358fa10a19cbb9ade869433d62d0a76e81383177dcd98eb11617",
+  "continuationMode": "projective-donor",
+  "donorDistance": {
+    "donorQuad": [
+      [
+        360,
+        110
+      ],
+      [
+        378,
+        110
+      ],
+      [
+        378,
+        250
+      ],
+      [
+        360,
+        250
+      ]
+    ],
+    "filled": 1877,
+    "targetQuad": [
+      [
+        742.0,
+        590.0
+      ],
+      [
+        750.798418972332,
+        568.8
+      ],
+      [
+        750.798418972332,
+        834.8
+      ],
+      [
+        742.0,
+        856.0
+      ]
+    ]
+  },
+  "donorMaskPixels": 528,
+  "donorMinAlpha": 128,
+  "editMaskBounds": [
+    745,
+    569,
+    752,
+    851
+  ],
+  "editMaskPixels": 1877,
+  "editedPixelSha256": "ed1285e2438dc52835fda00fe7a0022753a826cb3a4891c7138a2710fe3b48c4",
+  "historicalOverlayChangedPixelCount": 1910,
+  "historicalOverlayOverlapPixels": 0,
+  "hostOwnershipAlphaThreshold": 128,
+  "limitations": [
+    "deterministic same-object continuation is an appearance baseline, not final photometric synthesis",
+    "host ownership threshold is research-only and distinguishes solid same-object support from low-alpha compositing fringe",
+    "candidate has not received visual/human approval"
+  ],
+  "localCarcassGeometryPixels": 2682,
+  "nearestFilledResidualPixels": 1877,
+  "outsideAuthorizedRoiPixels": 0,
+  "preExistingOwnerOverlapPixels": 0,
+  "promotedSoftHostRgbPixels": 0,
+  "promotionEligible": false,
+  "reviewFiles": {
+    "candidate": "candidate.png",
+    "comparison": "comparison.png",
+    "editMask": "edit-mask.png",
+    "edited": "edited.png"
+  },
+  "sameObjectContactErrorAfter": {
+    "maxAbsChannelDifference": 24.0,
+    "meanAbsChannelDifference": 4.8084291187739465,
+    "pairCount": 261
+  },
+  "sameObjectContactErrorBefore": {
+    "maxAbsChannelDifference": 33.333333333333336,
+    "meanAbsChannelDifference": 16.70625798212005,
+    "pairCount": 261
+  },
+  "sameObjectContactMeanImprovement": 11.897828863346103,
+  "sameObjectContactMeanImprovementRatio": 0.7121779680452563,
+  "sceneId": "cozinha-01",
+  "schemaVersion": "BMC01MinimalCompletionReport 0.6",
+  "softHostFringeOverlapPixels": 1776,
+  "status": "RESEARCH_CANDIDATE",
+  "targetVariant": "module-03-hidden"
+}
