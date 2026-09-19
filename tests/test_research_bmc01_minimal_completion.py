@@ -1,9 +1,22 @@
 from __future__ import annotations
 import unittest
 from PIL import Image
-from tools.research_bmc01_minimal_completion import nearest_fill
+from tools.research_bmc01_minimal_completion import nearest_fill, binary_alpha
 
 class BMC01MinimalCompletionTests(unittest.TestCase):
+    def test_binary_alpha_respects_threshold(self):
+        import tempfile
+        from pathlib import Path
+        from unittest.mock import patch
+        with tempfile.TemporaryDirectory() as td:
+            root=Path(td)
+            im=Image.new("RGBA",(3,1))
+            im.putdata([(0,0,0,0),(0,0,0,19),(0,0,0,255)])
+            (root/"a.png").parent.mkdir(parents=True,exist_ok=True)
+            im.save(root/"a.png")
+            with patch("tools.research_bmc01_minimal_completion.ROOT",root):
+                self.assertEqual(list(binary_alpha("a.png",128).getdata()),[0,0,255])
+
     def test_nearest_fill_uses_only_donor(self):
         clean=Image.new("RGBA",(10,10),(10,20,30,255))
         clean.putpixel((5,5),(200,100,50,255))
