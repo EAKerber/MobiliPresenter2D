@@ -30,6 +30,13 @@ def alpha_mass(mask: Image.Image) -> float:
     return sum(mask.getdata()) / 255.0
 
 
+def display_path(path: Path) -> str:
+    try:
+        return str(path.relative_to(ROOT))
+    except ValueError:
+        return str(path)
+
+
 def materialize(source_dir: Path, output_dir: Path) -> dict:
     output_dir.mkdir(parents=True, exist_ok=True)
     records = []
@@ -57,15 +64,15 @@ def materialize(source_dir: Path, output_dir: Path) -> dict:
         records.append(
             {
                 "slot": slot,
-                "source": str(source_path.relative_to(ROOT)),
+                "source": display_path(source_path),
                 "sourceSha256": sha256(source_path),
                 "size": list(source.size),
                 "nonzeroPixels": sum(1 for value in mask.getdata() if value),
                 "alphaMass": round(alpha_mass(mask), 6),
                 "bounds": list(mask.getbbox()) if mask.getbbox() else None,
-                "neutral": str(neutral_path.relative_to(ROOT)),
+                "neutral": display_path(neutral_path),
                 "neutralSha256": sha256(neutral_path),
-                "mask": str(mask_path.relative_to(ROOT)),
+                "mask": display_path(mask_path),
                 "maskSha256": sha256(mask_path),
             }
         )
@@ -73,7 +80,7 @@ def materialize(source_dir: Path, output_dir: Path) -> dict:
     manifest = {
         "schemaVersion": "BMC01RuntimeAssets 0.1",
         "status": "RESEARCH_ONLY",
-        "sourceCandidate": str(source_dir.relative_to(ROOT)),
+        "sourceCandidate": display_path(source_dir),
         "slots": records,
         "contract": {
             "appearanceAndOwnershipSeparated": True,
