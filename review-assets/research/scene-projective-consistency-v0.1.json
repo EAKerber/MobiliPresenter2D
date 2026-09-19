@@ -116,5 +116,20 @@
       "semantic": "real module-03 stone edge used by gap_pixel_gate.py",
       "limitation": "local edge segment only; does not alone establish a global vanishing point"
     }
+  ],
+  "sideLayerProbes": [
+    {
+      "id": "module-04-fridge-side",
+      "layer": "app/assets/kitchen/layers/04_lateral_geladeira.png",
+      "physicalStatus": "confirmed",
+      "physicalSource": "MobiliPresenter scene-core/src/fixtures/current-context.ts module04",
+      "physicalDimensionsMm": {
+        "width": 18,
+        "height": 2400,
+        "depth": 610
+      },
+      "semantic": "single physical side panel; top and bottom outer silhouette edges are Y/depth direction candidates",
+      "caveat": "layer alpha may include antialias/shadow support; threshold stability and fit residuals are mandatory"
+    }
   ]
 }
