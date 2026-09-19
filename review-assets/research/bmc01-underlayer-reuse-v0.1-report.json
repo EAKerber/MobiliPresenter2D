@@ -1,0 +1,65 @@
+{
+  "frontSeamX": 742,
+  "interpretation": [
+    "sameObjectSidePixels are exact current Module 02 layer pixels inside the locally projected side and to the right of the measured front seam",
+    "coveredByModule03Pixels quantify how much of that exact side is hidden by current Module 03 body/stone alpha in the default state",
+    "these same-object pixels should be reused as C0 canonical underlayer before any reconstruction method is attempted"
+  ],
+  "promotionEligible": false,
+  "sceneId": "cozinha-01",
+  "schemaVersion": "BMC01UnderlayerReuseAuditReport 0.1",
+  "targetVariantVisibility": {
+    "default": {
+      "module02": {
+        "reason": "visible",
+        "visible": true
+      },
+      "module03": {
+        "reason": "visible",
+        "visible": true
+      }
+    },
+    "module03Hidden": {
+      "module02": {
+        "reason": "visible",
+        "visible": true
+      },
+      "module03": {
+        "reason": "intent-off",
+        "visible": false
+      }
+    }
+  },
+  "thresholdSweep": [
+    {
+      "alphaThreshold": 1,
+      "coveredByModule03Pixels": 2304,
+      "coveredByModule03Ratio": 1.0,
+      "localGeometryPixels": 2682,
+      "notCoveredByModule03Pixels": 0,
+      "sameObjectSideBounds": [
+        743,
+        590,
+        752,
+        855
+      ],
+      "sameObjectSideGeometryRatio": 0.8590604026845637,
+      "sameObjectSidePixels": 2304
+    },
+    {
+      "alphaThreshold": 128,
+      "coveredByModule03Pixels": 528,
+      "coveredByModule03Ratio": 1.0,
+      "localGeometryPixels": 2682,
+      "notCoveredByModule03Pixels": 0,
+      "sameObjectSideBounds": [
+        743,
+        590,
+        745,
+        855
+      ],
+      "sameObjectSideGeometryRatio": 0.19686800894854586,
+      "sameObjectSidePixels": 528
+    }
+  ]
+}
