@@ -1,12 +1,31 @@
-# Reconstruction Packet and Authoring Pipeline v0.1
+# ADR 0006 — Reconstruction Packet and Authoring Pipeline v0.2
 
 Status: exploratory / proposed
 
-## 1. Reconstruction Packet
+Depends on:
+- ADR 0005 Reconstruction Authority Contract;
+- ADR 0007 Reconstruction Case Taxonomy.
 
-The Reconstruction Packet is the canonical intermediate contract for a single reconstruction operation.
+## 1. Purpose
 
-It should be serializable and reproducible from source evidence.
+The Reconstruction Packet is the canonical intermediate contract for one
+reconstruction operation.
+
+It should be serializable, reproducible and auditable from exact source
+evidence.
+
+The packet deliberately separates:
+- truth claims;
+- transformation evidence;
+- visibility/ownership;
+- edit authorization;
+- authoring method;
+- acceptance/review.
+
+That separation prevents a generated image, a local line fit or an approved
+candidate from silently becoming geometry authority.
+
+## 2. Packet sections
 
 ### identity
 
@@ -17,40 +36,83 @@ Suggested fields:
 - `targetVariantFingerprint`;
 - `targetModuleId`;
 - `faceRole` / `operationRole`;
+- `caseClass`;
 - source commit and source hashes.
+
+### claims
+
+A list of claim records from ADR 0005.
+
+Each important claim should declare:
+- subject;
+- domain (D1/D2/D3/D4);
+- property;
+- value;
+- unit/frame;
+- source ref/hash;
+- status: confirmed/derived/inferred/blocked;
+- derivation;
+- valid-for scope;
+- uncertainty;
+- supersession links when applicable.
+
+Examples:
+- D1: right side exists, depth=530 mm;
+- D2: front/side seam x=742 in exact target frame;
+- D4: joint bridge is hidden when Module 03 is hidden.
 
 ### physicalGeometry
 
-Contains only physical or explicitly sourced geometry:
+Convenience materialization of relevant D1/D3 claims:
 - dimensions in mm;
 - local face plane;
 - face normal;
 - envelope;
 - adjacency;
-- related shelves/dividers/openings;
+- shelves/dividers/openings;
 - source bindings;
 - epistemic status.
 
-### projection
+It must not contain unsourced geometry disguised as confirmed physical data.
 
-Contains the 3D/mm -> pixel relationship:
+### ownership
+
+Contains target-state visibility/ownership:
+- host/occluder graph;
+- visible/hidden entities;
+- source-layer ownership;
+- conditional bridges;
+- exact variant manifest/fingerprint;
+- ownership uncertainties.
+
+This section is required when an observed raster edge may change ownership
+between variants.
+
+### transformationEvidence
+
+Contains the 3D/mm -> pixel or pixel -> pixel relationship:
 - method;
-- confidence;
+- confidence level from ADR 0005;
+- source and target frames;
 - image size;
-- named anchors;
+- named anchors/correspondences;
 - target polygon/quad;
 - named projected edges;
 - local depth vectors;
 - pixel/mm information where valid;
+- residuals;
+- valid region/plane;
 - residual hypotheses.
 
-The packet must distinguish a local projective constraint from full camera calibration.
+A local projective constraint must remain distinct from full camera
+calibration.
 
 ### visualEvidence
 
-Contains photographic evidence:
+Contains D2 appearance evidence:
 - canonical crop;
-- equivalent in-scene donors;
+- same-surface/same-object donors;
+- same-material donors;
 - donor polygons;
 - material samples;
 - local luminance/chroma;
@@ -58,15 +120,32 @@ Contains photographic evidence:
 - edge/seam evidence;
 - lighting/shadow observations.
 
-### protection
+### editContract
 
-Contains edit ownership:
+Contains edit entitlement:
+- canonical source frame hash;
+- target variant fingerprint;
 - authorized ROI;
-- exact edit mask;
-- protected regions;
-- protected assets;
+- exact edit mask when known;
+- protected regions/assets;
 - zero-change zones;
-- alpha ownership constraints.
+- alpha/compositing ownership constraints;
+- allowed authoring methods;
+- direct generated-promotion policy;
+- deterministic delta requirement.
+
+Knowledge of a larger physical face does not widen this contract.
+
+### authoringPlan
+
+Declares:
+- candidate-ladder starting point;
+- deterministic helpers;
+- donor strategy;
+- whether generation is allowed;
+- residual-only requirement;
+- guide products;
+- fallback/stop conditions.
 
 ### generationGuide
 
@@ -79,39 +158,76 @@ Optional and only present when a deterministic candidate is insufficient:
 - prompt constraints;
 - forbidden outcomes.
 
+The guide should be a separate input from the clean target. Guide removal
+should not require a second generative pass.
+
 ### acceptance
 
-Contains the measurable contract:
-- pixel invariants;
+Contains measurable gates:
+- exact source fingerprint;
+- ownership validity;
+- transformation residuals;
 - geometry tolerances;
-- edge/slopes;
+- protected overlap;
+- pixel invariants;
 - round-trip rule;
 - outside-ROI rule;
-- material continuity thresholds;
-- human review requirement.
+- material continuity;
+- seam/edge continuity;
+- artifact checks;
+- required review level.
+
+### lifecycle
+
+Contains candidate review state:
+- DRAFT;
+- MACHINE_VALID;
+- AGENT_REVIEW;
+- HUMAN_REVIEW_PENDING;
+- APPROVED;
+- REJECTED;
+- SUPERSEDED.
 
 ### provenance
 
 Records:
-- all source refs;
-- hashes;
+- all source refs/hashes;
 - deterministic transforms;
 - candidate lineage;
 - generation receipt when applicable;
 - gate results;
-- final approval.
+- superseded evidence;
+- approval receipt.
 
-## 2. Guide products
+## 3. Confidence vector
 
-A Reconstruction Packet may materialize four separate guide families.
+In addition to transformation confidence, the packet should expose:
+
+- `G`: geometry/topology certainty;
+- `P`: projection/transform certainty;
+- `A`: appearance evidence certainty;
+- `O`: ownership/occlusion certainty.
+
+Each is:
+- confirmed;
+- derived;
+- inferred;
+- blocked.
+
+This vector is more useful than one scalar reconstruction confidence.
+
+## 4. Guide products
+
+A packet may materialize four separate guide families.
 
 ### geometry guide
-SVG or JSON:
+SVG/JSON/raster review overlay:
 - face polygon;
 - named corners;
 - expected seams;
 - projected thickness;
-- contact lines.
+- contact lines;
+- explicit inferred edges.
 
 ### appearance guide
 Raster/statistics:
@@ -124,33 +240,41 @@ Raster/statistics:
 Raster/vector:
 - editable mask;
 - protected zones;
-- alpha ownership.
+- owner assets;
+- zero-change regions.
 
 ### generation guide
-A visual composite for the image model.
+Visual composite for an image model.
 
-Important: the generation guide should preferably be a separate image from the clean target so guide removal is not itself a required generative operation.
+Guide pixels are never candidate pixels merely because they look plausible.
 
-## 3. Deterministic helper families
+## 5. Deterministic helper families
 
 ### geometry helpers
-- extract face planes from Scene Core;
+- extract physical faces from Scene Core;
 - resolve adjacency;
 - resolve newly exposed faces;
 - internal shelf/divider model;
 - physical bounds.
 
-### projection helpers
+### ownership helpers
+- exact variant visibility;
+- host/occluder reasoning;
+- conditional bridge ownership;
+- source-layer pixel contribution audit;
+- provenance contamination detection.
+
+### transformation helpers
+- exact canonical coordinate reuse;
 - calibrated camera projection;
 - local homography;
 - quad fitting;
 - line/edge intersection;
-- local pixel/mm measurement;
-- projection-confidence classification.
+- local physical-depth transfer;
+- transformation-confidence classification.
 
 ### raster helpers
 - mask materialization;
-- alpha ownership;
 - protected-region composition;
 - donor extraction;
 - affine/perspective warp;
@@ -175,147 +299,162 @@ Important: the generation guide should preferably be a separate image from the c
 - exact diff;
 - ROI diff;
 - round-trip verification;
-- projection error;
+- transformation error;
 - edge continuity;
 - protected overlap;
-- seam/material continuity.
+- seam/material continuity;
+- ownership validation.
 
-## 4. Candidate ladder
+## 6. Candidate ladder
 
-Methods must be attempted from least imaginative to most imaginative unless an operation contract justifies skipping a level.
+Attempt the lowest-entropy method that can satisfy the packet. Escalation is
+allowed only when the previous level is insufficient or explicitly inapplicable.
 
 - `C0 existing-canonical` — exact approved pixels already exist;
-- `C1 same-object-donor` — another view/state exposes the same physical surface;
-- `C2 same-material-donor` — equivalent material exists elsewhere in the scene;
-- `C3 deterministic-render` — geometry and material are enough for a synthetic but deterministic patch;
-- `C4 deterministic-render-plus-donor` — projected neutral face receives donor texture/shading;
-- `C5 local-generative-completion` — IA completes only the constrained residual;
-- `C6 contextual-generative-edit` — larger context only when C5 cannot integrate plausibly.
+- `C1 same-object-donor` — same physical object/surface has usable pixels;
+- `C2 same-material-donor` — equivalent material exists in-scene;
+- `C3 deterministic-render` — geometry/material produce deterministic patch;
+- `C4 deterministic-render-plus-donor` — projected neutral face + donor;
+- `C5 local-generative-completion` — generation only for constrained residual;
+- `C6 contextual-generative-edit` — larger context only when C5 cannot
+  integrate plausibly.
 
-A method may be accepted early when it satisfies all required gates.
+These are authoring methods, not authority levels.
 
-## 5. Authoring pipeline
+## 7. Authoring pipeline
 
 ### P0 — source resolution
-Resolve exact assets, hashes and variant fingerprints.
+Resolve exact assets, hashes, source commits and target variant fingerprint.
 
-### P1 — physical reconstruction
-Resolve topology, face existence and internal geometry from A1/A4.
+### P1 — claim resolution
+Resolve D1/D2/D3/D4 claims and mark confirmed/derived/inferred/blocked.
 
-### P2 — occlusion reasoning
+### P2 — ownership/occlusion reasoning
 Determine:
 - occluder;
 - newly exposed physical faces;
+- current target-state owner assets;
+- conditional bridges;
 - newly exposed pixel region;
 - unresolved residual.
 
-### P3 — projection
-Select the strongest valid projection method and emit confidence.
+Fail closed if a key geometric raster cue belongs to the wrong target-state
+owner.
+
+### P3 — transformation selection
+Select the strongest valid transformation evidence for the exact target region.
+
+Do not prefer a global model merely because one exists elsewhere.
 
 ### P4 — deterministic guide/base
 Produce:
 - target polygon;
-- neutral render;
-- expected seams;
-- optional contact shadow;
+- named edges;
+- clean target;
+- optional neutral render;
+- expected seams/contact lines;
 - protection masks.
 
-### P5 — donor synthesis
-Try deterministic donor transfer/warp.
+### P5 — canonical/donor attempt
+Try C0/C1/C2 before synthesizing new appearance.
 
-### P6 — generative residual
-Only if prior candidate levels fail appearance gates.
+### P6 — deterministic synthesis
+Try C3/C4 where geometry and donor evidence are sufficient.
+
+### P7 — generative residual
+Only when deterministic candidates fail appearance requirements and the Edit
+Contract permits generation.
 
 The image model receives:
 - clean canonical crop;
-- guided crop;
-- neutral expected face;
+- guide;
+- neutral expected face when useful;
 - donor(s);
-- strict edit mask.
+- strict residual mask.
 
-The requested task is local photographic completion, not free scene generation.
+The task is local appearance authoring, not free geometry design.
 
-### P7 — deterministic extraction
-Compare edited and canonical frames and extract only the authorized delta.
+### P8 — deterministic extraction
+Compare edited and canonical frames and extract only authorized delta pixels.
 
-### P8 — fail-fast gates
+### P9 — fail-fast gates
 Recommended order:
 1. source fingerprint;
-2. authority resolution;
-3. projection validity;
-4. ROI/mask validity;
-5. protected overlap;
-6. geometry;
-7. alpha ownership;
-8. exact pixel invariants;
-9. material continuity;
-10. seam/edge continuity;
-11. perceptual review;
-12. human approval when required.
+2. claim/domain consistency;
+3. target-state ownership;
+4. transformation validity;
+5. ROI/edit-mask validity;
+6. protected overlap;
+7. geometry;
+8. compositing/alpha invariants;
+9. exact pixel/round-trip invariants;
+10. material continuity;
+11. seam/edge continuity;
+12. artifact/perceptual review;
+13. required human approval.
 
-### P9 — approval and runtime materialization
-Only approved deterministic assets enter runtime.
+### P10 — approval/runtime materialization
+Only approved deterministic runtime assets are promoted.
 
-No runtime image generation is required.
+Runtime image generation is not required.
 
-## 6. Technical/internal module views
+## 8. Technical/internal module views
 
-Technical views use the same A1/A4 physical information but skip the photographic reconstruction ladder.
+Technical views primarily consume:
+- D1 physical/topology claims;
+- D3 sourced technical/editorial claims;
+- deterministic presentation transforms.
 
-Preferred pipeline:
+Preferred backend:
 - physical primitives;
 - authored technical-only facts where sourced;
 - deterministic orthographic/isometric projection;
 - semantic edge graph;
 - dimensions;
-- optional deterministic neutral material/shading.
+- optional deterministic neutral shading.
 
-Generative polish, if ever used, must be optional and must not redefine geometry.
+Generative polish, if used, cannot redefine geometry.
 
-## 7. Track B — case taxonomy hook
+## 9. Taxonomy hook
 
-Each packet should eventually carry a `caseClass`.
+Each packet carries `caseClass` from ADR 0007 plus modifiers.
 
-The taxonomy remains open during v0.1. Early candidates:
-- hidden-side;
-- hidden-plinth-side;
-- countertop-return;
-- corner-termination;
-- seam-bridge;
-- object-removal;
-- appliance-replacement;
-- internal-view;
-- wall-floor-continuation.
-
-The case class may select:
-- candidate ladder defaults;
-- required guide types;
+The class may select:
+- default candidate ladder;
+- mandatory guide types;
 - mandatory gates;
-- allowed projection confidence.
+- allowed transformation confidence;
+- generation policy;
+- review requirement.
 
-## 8. Track C — benchmark hook
+## 10. Benchmark hook
 
-Each candidate should record:
-- method level;
+Each candidate records:
+- authoring method;
 - deterministic inputs;
 - changed pixel count;
-- geometry error;
+- geometry/transform error;
+- ownership status;
 - protected overlap;
 - round-trip mismatch;
 - appearance metrics;
 - artifact flags;
-- human evaluation.
+- lifecycle state;
+- human evaluation when required.
 
-The first recommended benchmark remains Module 02 exposed right face, using the already-existing canonical contract, target quad and Module 01 donor.
+The first benchmark remains BMC-01 Module 02 exposed right face, but its
+historical target quad is now baseline evidence only, not ground truth.
 
-## 9. Open questions
+## 11. Open questions
 
-Do not freeze these in v0.1:
+Do not freeze these in v0.2:
 
-- whether the fixed-camera calibration from MobiliPresenter can be mapped exactly onto the MobiliPresenter2D canonical frame;
-- how much deterministic shading is sufficient before C5 is needed;
-- which texture/material metrics correlate with human judgments;
-- whether a single occlusion graph should serve runtime and authoring or whether authoring needs richer face-level metadata;
-- whether internal technical views should reuse Scene Core directly or consume a compact exported physical model;
-- final case taxonomy;
-- final benchmark weights.
+- final regional/local projection model for the legacy kitchen;
+- how to define visible-defect edit masks when legacy layers use
+  semi-transparent decomposition;
+- how much deterministic shading is sufficient before C5;
+- which appearance metrics correlate with human review;
+- whether runtime and authoring should share one occlusion graph;
+- whether technical views should consume Scene Core directly or a compact
+  exported physical model;
+- final benchmark thresholds and promotion policy.
