@@ -77,9 +77,11 @@ Promotion requires:
 | local physical-depth transfer | `tools/research_local_depth_transfer.py` | EXPERIMENT_ONLY / REUSABLE_CORE | scales a current owned local depth vector by confirmed physical depth ratios and emits separate carcass/plinth quads | correctly refuses a global-camera claim; current implementation is adjacent-lower-zone specific |
 | cue ownership audit | `tools/research_depth_cue_ownership.py` | CONFORMANT_WITH_LIMITS / REUSABLE_CORE | tests which current assets actually own historical depth-cue pixels and whether those owners are visible in the target state | case paths/asset names are BMC-specific; the ownership-before-geometry rule is reusable |
 | BMC-01 antialiased completion | `tools/research_bmc01_antialiased_completion.py` | EXPERIMENT_ONLY | projects canonical donors into independently derived carcass/plinth geometry using supersampled coverage | case-specific candidate builder; must not become a generic reconstruction API unchanged |
-| runtime asset materializer | `tools/materialize_bmc01_runtime_assets.py` | CONFORMANT_WITH_LIMITS | deterministically separates neutral RGB appearance from alpha ownership masks and writes app-local runtime assets plus manifest | hard-coded BMC-01 slot/file vocabulary; pattern is reusable, implementation is not yet generic |
-| reconstruction material renderer | `app/core/reconstruction.js` | REUSABLE_CORE / CONFORMANT_WITH_LIMITS | renders neutral+mask slots with current finish/stone material inputs and async revision protection | research-only, full-canvas and current two-slot integration; not packet-driven yet |
-| reconstruction browser contract | `tests/reconstruction-browser.cjs` | CONFORMANT_WITH_LIMITS | verifies all four M02/M03 visibility states, finish response, stone-skirting split, zero ROI escape and unchanged default mode | selectors and expected states are BMC-01-specific |
+| shared runtime slot materializer | `tools/reconstruction_runtime_assets.py` | REUSABLE_CORE / CONFORMANT_WITH_LIMITS | splits deterministic RGBA candidates into neutral RGB + semantic alpha masks and emits hashed slot records | now used by BMC-01 and BMC-02; still candidate-to-runtime materialization, not a physical NeutralFaceRenderer |
+| BMC runtime asset materializers | `tools/materialize_bmc01_runtime_assets.py`, `materialize_bmc02_runtime_assets.py` | CONFORMANT_WITH_LIMITS | bind case-specific source candidates and material policies to the shared slot primitive | operation-specific wrappers remain intentionally narrow |
+| reconstruction operation registry | `app/data/reconstruction-data.js` | REUSABLE_CORE / CONFORMANT_WITH_LIMITS | declares operation visibility requirements, delegated entities, ROI, material slots and policies for BMC-01/BMC-02 | still authored JS rather than packet-derived runtime data |
+| reconstruction material renderer | `app/core/reconstruction.js` | REUSABLE_CORE / CONFORMANT_WITH_LIMITS | iterates arbitrary material slots, consumes neutral+mask pairs, applies finish/stone materials and async revision protection | now proven across BMC-01 two-slot and BMC-02 one-slot cases; full-canvas and research-only |
+| reconstruction browser contracts | `tests/reconstruction-browser.cjs`, `tests/reconstruction-bmc02-browser.cjs` | CONFORMANT_WITH_LIMITS | verify two distinct case classes, visibility rules, material isolation, ROI confinement and unchanged default mode | expected selectors/states remain case-specific |
 | Reconstruction Packet validator | `tools/validate_reconstruction_packet.py` | CONFORMANT_WITH_LIMITS | fail-closed validation of required packet sections, claim/confidence vocabulary, edit contract, lifecycle/promotion rule, runtime manifest and required paths | first minimal validator; does not yet validate every ADR 0006 field or claim-level source hashes |
 
 ## Capability gaps
@@ -108,13 +110,19 @@ A1 data exists in MobiliPresenter, but no reconstruction-facing export/API curre
 - source bindings;
 - status.
 
-### OcclusionResolver — MISSING
+### OcclusionResolver — PARTIAL runtime rule layer, MISSING physical resolver
 
-No current helper appears to answer at face level:
+The research operation registry now expresses simple runtime requirements:
 
-`configuration change -> newly exposed physical face(s) -> expected exposure region`.
+- `requiresVisibleIds`;
+- `requiresHiddenIds`;
+- per-operation delegated legacy entities.
 
-Current scene variants encode outcomes rather than this general reasoning.
+This is enough to drive BMC-01 and BMC-02 visibility correctly.
+
+It is **not** yet the architectural OcclusionResolver because it does not derive
+newly exposed physical faces from adjacency/topology. The rules are authored
+from already-known case semantics.
 
 ### ProjectionResolver — MISSING
 
@@ -195,13 +203,22 @@ Missing:
 
 Many good gates exist, but orchestration is workflow-specific. No packet-driven runner selects mandatory gates from case class and projection confidence.
 
-### BenchmarkHarness — PARTIAL / case-specific
+### BenchmarkHarness — PARTIAL / cross-case evidence, not yet packet-driven
 
-BMC-01 now preserves historical, local-transfer, ownership, donor,
-antialiased, runtime-material and browser evidence under one case lineage.
+BMC-01 and BMC-02 now run through the same runtime slot/registry layer while
+keeping different case-specific authoring evidence.
+
+BMC-02 additionally forces a materially different case:
+- exact tiny stone termination;
+- no hidden carcass reconstruction;
+- one stone-only slot;
+- no legacy overlay delegation.
+
+Cross-case run `35475546474` proves BMC-01 remains byte-stable while BMC-02
+passes its own material/visibility contract.
 
 There is still no generic packet-driven harness that enumerates methods and
-applies the protocol automatically.
+selects gates automatically.
 
 ## Existing pipeline reality
 
@@ -287,3 +304,36 @@ The current architecture/code fit is:
 
 The remaining abstraction work should be driven by BMC-02/BMC-03 rather than
 generalizing BMC-01-specific scripts prematurely.
+
+
+## Cross-case proof after BMC-02
+
+BMC-02 was chosen specifically to challenge abstractions extracted from
+BMC-01.
+
+Observed:
+
+- current Stone 03 implementation owns none of the historical 80 termination
+  pixels;
+- all 80 are left of the measured cabinet edge;
+- the residual is stone-only and must follow stone material;
+- the same neutral/mask runtime representation works without BMC-01's carcass
+  or plinth assumptions;
+- the generalized renderer handles one-slot and two-slot operations;
+- declarative visibility rules handle both cases;
+- BMC-01 rematerializes byte-for-byte after the shared helper extraction;
+- BMC-01 browser behavior still passes;
+- BMC-02 browser behavior passes;
+- both Reconstruction Packets pass the same validator.
+
+This changes two classifications materially:
+
+1. **neutral RGB + alpha ownership slot** is no longer merely a BMC-01 pattern;
+   it is a reusable runtime primitive.
+2. **operation registry + slot renderer** is now supported across at least two
+   different reconstruction case classes.
+
+Do not generalize further from these two cases alone.
+
+The next diversity test should be BMC-03, a technical/internal view driven by
+A1 physical geometry rather than photographic hidden-surface completion.
