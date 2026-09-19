@@ -12,8 +12,10 @@ from pathlib import Path
 from PIL import Image, ImageChops, ImageDraw
 try:
     from tools.render_variant_fidelity import render_case, safe_app_path
+    from tools.materialize_perspective_donor_recipe import perspective_coefficients
 except ModuleNotFoundError:
     from render_variant_fidelity import render_case, safe_app_path
+    from materialize_perspective_donor_recipe import perspective_coefficients
 
 ROOT=Path(__file__).resolve().parents[1]
 
@@ -64,6 +66,20 @@ def promote_soft_host_rgb(clean,missing,host_rgba,host_threshold):
                     op[x,y]=(r,g,b,255)
                     promoted+=1
     return out,promoted
+
+
+def projective_donor_fill(clean,missing,donor_quad,target_quad):
+    """Warp an already-visible canonical material sample into entitled geometry."""
+    coeffs=perspective_coefficients(target_quad,donor_quad)
+    warped=clean.transform(
+        clean.size,
+        Image.Transform.PERSPECTIVE,
+        coeffs,
+        resample=Image.Resampling.BILINEAR,
+    )
+    out=Image.new("RGBA",clean.size,(0,0,0,0))
+    out.paste(warped,(0,0),missing)
+    return out,{"filled":count(missing),"donorQuad":donor_quad,"targetQuad":target_quad}
 
 
 def smooth_seed_fill(clean,missing,donor_mask,vertical_radius,contact_source="average"):
@@ -306,6 +322,11 @@ def main():
 
     if continuation_mode=="nearest":
         continuation,fillstats=nearest_fill(clean,residual_missing,donor,float(cfg["donor"]["maxDistancePx"]))
+    elif continuation_mode=="projective-donor":
+        donor_quad=(cfg.get("donor") or {}).get("donorQuad")
+        if not donor_quad:
+            raise ValueError("projective-donor requires donorQuad")
+        continuation,fillstats=projective_donor_fill(clean,residual_missing,donor_quad,local["target"]["carcass"]["quad"])
     elif continuation_mode=="smooth-strong-seed":
         continuation,fillstats=smooth_seed_fill(
           clean,residual_missing,donor,
@@ -341,6 +362,7 @@ def main():
       "promotionEligible":False,
       "authoringMethod":(
         "C1 same-object source-RGB promotion + deterministic continuation" if appearance_mode=="promote-source-rgb"
+        else "C2 canonical M01 carcass-side projective donor" if continuation_mode=="projective-donor"
         else "C1 same-object smooth strong-seed continuation" if continuation_mode=="smooth-strong-seed"
         else "C1 same-object nearest deterministic donor"
       ),
