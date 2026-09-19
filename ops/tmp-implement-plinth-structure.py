@@ -15,8 +15,8 @@ def replace_once(path, old, new):
 # 1. Expand plinth polygons to the exact owner-alpha support measured in discovery.
 config_path=ROOT/"review-assets/stone-masks/config.json"
 config=json.loads(config_path.read_text())
-config["groups"]["stone-02"]["surfaces"]["plinth"]=[[485,858],[756,858],[756,893],[485,893]]
-config["groups"]["stone-03"]["surfaces"]["plinth"]=[[736,858],[1216,858],[1216,893],[736,893]]
+config["groups"]["stone-02"]["surfaces"]["plinth"]=[[485,858],[756,858],[756,894],[485,894]]
+config["groups"]["stone-03"]["surfaces"]["plinth"]=[[736,858],[1216,858],[1216,894],[736,894]]
 config_path.write_text(json.dumps(config,indent=2)+"\n")
 
 # 2. Add a low-frequency neutral luminance plate for MDF plinth shading.
