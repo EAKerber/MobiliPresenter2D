@@ -241,18 +241,25 @@ Existing implementation should be audited before writing each helper.
 The first automatic scene-consistency probe exposed two important constraints:
 
 1. front finish masks are authoring masks, not independent camera observations;
-2. Module 01 side extraction needs an authoritative edge trace before it can serve as projective ground truth.
+2. a mathematically clean luminance edge can still be semantically wrong.
 
-SC-01 currently carries a strong piecewise-perspective signal **conditional on** confirming the Module 01 side top/bottom physical edges.
+The Module 01 side edge semantics have now been cross-checked against:
+- Scene Core topology;
+- canonical outer alpha support;
+- the isolated Module 01 side screenshot.
 
-Therefore PM-01 should begin with a one-time canonical vector trace of that visible side, not another mask-derived guess.
+The outer top/bottom boundaries are accepted as the physical side depth edges for research. The previous 14.92° interior luminance trace is explicitly rejected.
+
+Their vanishing point is incompatible with the independently measured Module 02 depth line, so a single global perspective is rejected for the tested Y direction.
+
+PM-01 therefore changes purpose again: it should no longer try to discover one global camera. It should test **regional coherence** and determine the smallest stable projection regions needed by the legacy kitchen.
 
 ## First experiment
 
 ### PM-01 — Module 01 visible-side validation
 
 Goal:
-determine whether canonical-frame evidence can predict the already-visible Module 01 side geometry with useful accuracy.
+determine whether locally/regional calibrated canonical-frame evidence can predict visible hold-out geometry with useful accuracy after global Y-direction coherence has been rejected.
 
 Phases:
 1. derive or authoritatively annotate Module 01 side polygon;
