@@ -606,3 +606,224 @@ It is:
 - extract narrowly reusable primitives;
 - keep diagnostics/experiments explicitly non-authoritative;
 - let BMC-01 prove which abstractions deserve to become stable code.
+
+
+## F-11 — Local depth transfer implementation
+
+File:
+`tools/research_local_depth_transfer.py`
+
+Classification:
+**EXPERIMENT_ONLY / REUSABLE_CORE**
+
+The implementation correctly separates:
+- physical depth from Scene Core;
+- current raster projection evidence;
+- local transfer;
+- historical comparison.
+
+It scales the current Stone 03 local depth vector independently for:
+- 530 mm carcass;
+- 348.83 mm recessed plinth.
+
+It explicitly refuses:
+- global camera authority;
+- promotion eligibility;
+- unqualified reuse of the historical BMC-01 quad.
+
+That behavior matches ADR 0005/0006.
+
+The limitation is architectural scope: it is a local affine hypothesis for the
+legacy lower-kitchen zone, not a general ProjectionResolver.
+
+## F-12 — Ownership and underlayer audits
+
+Files include:
+- `tools/research_depth_cue_ownership.py`;
+- `tools/research_bmc01_underlayer_reuse.py`;
+- `tools/research_bmc01_underlayer_identity.py`;
+- `tools/research_bmc01_plinth_identity.py`.
+
+Classification:
+**CONFORMANT_WITH_LIMITS** as evidence helpers.
+
+These tools materially changed the result rather than merely confirming it.
+
+They rejected two attractive but false shortcuts:
+
+1. the historical long Module 02 depth line was mostly conditional bridge
+   support;
+2. nonzero Module 02 alpha to the right of the seam was mostly compositing
+   support and could not be promoted to opaque hidden-face appearance.
+
+This is strong conformance with the architecture's ownership-before-geometry
+rule.
+
+The implementations remain case-bound and should not be promoted by filename.
+
+## F-13 — Antialiased deterministic completion
+
+File:
+`tools/research_bmc01_antialiased_completion.py`
+
+Classification:
+**EXPERIMENT_ONLY**
+
+The implementation is appropriate as a BMC-01 authoring experiment:
+
+- separate carcass/plinth target geometry;
+- separate donors;
+- supersampled target coverage;
+- strong existing owner protection;
+- no generative synthesis;
+- explicit ROI.
+
+It should not become the generic deterministic renderer.
+
+Its target quads and donor choices are supplied by BMC-01 research evidence,
+and its material appearance remains donor-based.
+
+## F-14 — Runtime asset materializer
+
+File:
+`tools/materialize_bmc01_runtime_assets.py`
+
+Classification:
+**CONFORMANT_WITH_LIMITS**
+
+This implementation repaired an important conceptual weakness in the first
+runtime prototype.
+
+The research candidate is no longer consumed as one RGBA image that implicitly
+mixes:
+- appearance RGB;
+- alpha coverage;
+- semantic ownership.
+
+The materializer creates separate:
+- neutral RGB;
+- alpha ownership mask;
+
+for carcass and plinth and emits a provenance manifest.
+
+The outputs live inside `app/assets/`, so they are valid for the actual Netlify
+publish root rather than depending on repository-parent paths.
+
+The implementation remains BMC-01-specific because slot names and source
+filenames are hard-coded.
+
+## F-15 — Runtime reconstruction renderer
+
+File:
+`app/core/reconstruction.js`
+
+Classification:
+**REUSABLE_CORE / CONFORMANT_WITH_LIMITS**
+
+Conforming behavior:
+- consumes neutral+mask pairs;
+- applies current material color/texture;
+- preserves source luminance as bounded shading evidence;
+- keeps carcass/plinth independent;
+- async render revisions prevent stale material state from winning;
+- query gate keeps default runtime untouched.
+
+Observed browser proof:
+- four visibility states: PASS;
+- MDF response: PASS;
+- stone-skirting split: PASS;
+- outside authorized ROI: 0;
+- page errors: 0;
+- default runtime remains historical without query flag.
+
+Limitations:
+- current integration assumes full-scene canvas assets;
+- only BMC-01 supplies data;
+- slot material policy is still wired by app code rather than resolved from a
+  packet/material policy engine;
+- it is not a NeutralFaceRenderer.
+
+## F-16 — Browser behavior gate
+
+File:
+`tests/reconstruction-browser.cjs`
+
+Classification:
+**CONFORMANT_WITH_LIMITS**
+
+This is now a real behavior contract rather than a screenshot-only smoke test.
+
+It covers:
+- both modules visible -> no reconstruction;
+- Module 02 hidden -> no reconstruction;
+- both hidden -> no reconstruction;
+- only Module 03 hidden -> reconstruction active;
+- base-light material;
+- dark MDF;
+- stone package selected but skirting off;
+- stone skirting on;
+- Module 02 hidden after edits;
+- default query-less app does not delegate the historical overlay.
+
+This is strong evidence for the current case while remaining intentionally
+case-specific.
+
+## F-17 — Reconstruction Packet validator
+
+Files:
+- `review-assets/research/bmc01-reconstruction-packet-v0.1.json`;
+- `tools/validate_reconstruction_packet.py`;
+- `tests/test_validate_reconstruction_packet.py`.
+
+Classification:
+**CONFORMANT_WITH_LIMITS**
+
+Research run:
+`35475061682`.
+
+Observed:
+- packet validation: PASS;
+- Python regression suite: 98 tests, PASS.
+
+The validator enforces the most important first-order boundaries:
+- required packet sections;
+- claim and confidence vocabulary;
+- transformation-confidence vocabulary;
+- valid ROI;
+- zero-change/default-runtime invariants;
+- no default promotion before human approval;
+- required evidence paths;
+- runtime material-slot manifest;
+- separated neutral/mask assets.
+
+It deliberately does not yet claim complete ADR 0006 coverage.
+
+Missing before general promotion:
+- versioned formal schema/migrations;
+- claim-source hash resolution;
+- per-claim uncertainty/residual validation;
+- automatic gate selection from case class;
+- generic packet serialization.
+
+## Updated disposition
+
+The correct next abstraction step is **not** a framework rewrite.
+
+BMC-01 has now demonstrated enough implementation to extract stable concepts,
+but not enough diversity to freeze all APIs.
+
+Promote conceptually now:
+- Reconstruction Packet vocabulary;
+- appearance/ownership separation;
+- material-slot runtime representation;
+- fail-closed lifecycle rule;
+- ownership audit before geometric inference.
+
+Keep case-specific until BMC-02/BMC-03:
+- local depth transfer;
+- BMC-01 donor selection;
+- BMC-01 neutral/mask materializer;
+- BMC-01 browser selectors.
+
+A second scene/case should now be used to determine which interfaces are
+actually generic.
