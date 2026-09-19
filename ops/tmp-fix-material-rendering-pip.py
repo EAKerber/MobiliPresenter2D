@@ -21,12 +21,12 @@ def replace_between(path, start, end, replacement):
 
 backlog = """# Backlog — materiais, rodapé, navegação e PiP
 
-Branch: \`feat/global-finishes-stone-mobile-pip\`  
+Branch: `feat/global-finishes-stone-mobile-pip`  
 PR: #32 (draft)  
-Estado: implementação em preview; nenhuma promoção para \`main\`.
+Estado: implementação em preview; nenhuma promoção para `main`.
 
 ## B1 — Rodapé com semântica de material
-- [x] Manter um único \`plinthMask\` físico.
+- [x] Manter um único `plinthMask` físico.
 - [x] Rodapé OFF usa material MDF global e não herda luminância/granulação da pedra original.
 - [x] Rodapé ON usa a pedra global selecionada.
 - [x] Mudança de pedra não altera o rodapé quando OFF.
@@ -34,20 +34,20 @@ Estado: implementação em preview; nenhuma promoção para \`main\`.
 - [ ] Revisão visual pelo usuário no deploy-preview.
 
 ## B2 — MDF: cor autoritativa + textura tonal
-- [x] Recuperar o comportamento cromático validado da \`main\` como camada primária.
-- [x] Usar a imagem fornecida apenas como variação tonal/detalhe, sem \`multiply\` RGB sobre a cor antiga da cena.
+- [x] Recuperar o comportamento cromático validado da `main` como camada primária.
+- [x] Usar a imagem fornecida apenas como variação tonal/detalhe, sem `multiply` RGB sobre a cor antiga da cena.
 - [x] Aplicar a mesma semântica aos swatches.
 - [x] Branco base volta a usar opacidade 0,84 do preset validado.
 - [ ] Revisão visual de claros, madeira e escuros no preview.
 
 ## B3 — Navegação sem overflow
 - [x] Compactar rótulos pela largura real do container, não pela largura da viewport.
-- [x] Preservar nome completo em \`title\` e \`aria-label\`.
+- [x] Preservar nome completo em `title` e `aria-label`.
 - [x] Impedir overflow mesmo fora do modo compacto.
 - [x] Gate em painel estreito de desktop e mobile.
 
 ## B4 — PiP
-- [x] \`viewerCard\` continua sendo o containing block dos controles ao voltar ao modo normal.
+- [x] `viewerCard` continua sendo o containing block dos controles ao voltar ao modo normal.
 - [x] Fora do PiP, somente o controle de pin permanece visível.
 - [x] Transparência e resize aparecem apenas quando pinned.
 - [x] Posição/tamanho personalizados são reclampados após resize/orientação.
@@ -55,9 +55,9 @@ Estado: implementação em preview; nenhuma promoção para \`main\`.
 - [ ] Revisão visual do usuário.
 
 ## Gates
-- [x] \`npm test\`.
+- [x] `npm test`.
 - [x] Browser gate: matriz MDF/pedra do rodapé.
-- [x] Browser gate: composição tonal de MDF sem \`mix-blend-mode:multiply\`.
+- [x] Browser gate: composição tonal de MDF sem `mix-blend-mode:multiply`.
 - [x] Browser gate: ausência de overflow nas etapas.
 - [x] Browser gate: afiliação/visibilidade/reclamp dos controles PiP.
 """
@@ -134,7 +134,7 @@ replace_between(
       const hasTexture = Boolean(finish.textureAsset);
       layer.classList.add("is-color");
       layer.classList.toggle("is-texture", hasTexture);
-      layer.style.backgroundImage = hasTexture ? \`url("\${finish.textureAsset}")\` : "none";
+      layer.style.backgroundImage = hasTexture ? `url("${finish.textureAsset}")` : "none";
       layer.style.backgroundColor = finish.color;
       layer.style.setProperty("--finish-size", finish.textureSize || "160px 160px");
       layer.style.setProperty("--finish-background-blend", hasTexture ? "luminosity" : "normal");
