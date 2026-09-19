@@ -1,5 +1,5 @@
 name: Implement measured plinth and adaptive seams temp
-# retry: full final plinth alpha row
+# retry: scoped browser seam selector
 
 on:
   push:
