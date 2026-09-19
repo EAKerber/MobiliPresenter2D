@@ -25,7 +25,7 @@ def summarize_alpha_rgb(im,base,geom,threshold):
                 if not gp[x,y]: continue
                 r,g,bb,a=ip[x,y]
                 if a<threshold: continue
-                br,bg,bbb=bp[x,y]
+                br,bg,bbb=bp[x,y][:3]
                 d=(abs(r-br)+abs(g-bg)+abs(bb-bbb))/3
                 vals.append(d); alphas.append(a)
                 if len(points)<40:
