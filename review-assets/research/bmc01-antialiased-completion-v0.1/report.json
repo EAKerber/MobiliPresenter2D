@@ -1,0 +1,109 @@
+{
+  "carcass": {
+    "boundaryColorErrorAfter": {
+      "maxAbsChannelDifference": 139.33333333333334,
+      "meanAbsChannelDifference": 5.296734234234234,
+      "pairCount": 1184
+    },
+    "coverageAlphaMass": 1597.964705882353,
+    "coverageNonzeroPixels": 2188,
+    "donorQuad": [
+      [
+        360,
+        110
+      ],
+      [
+        378,
+        110
+      ],
+      [
+        378,
+        250
+      ],
+      [
+        360,
+        250
+      ]
+    ],
+    "targetQuad": [
+      [
+        742.0,
+        590.0
+      ],
+      [
+        750.798418972332,
+        568.8
+      ],
+      [
+        750.798418972332,
+        834.8
+      ],
+      [
+        742.0,
+        856.0
+      ]
+    ]
+  },
+  "combined": {
+    "candidatePixelSha256": "316401378b55b9741d0ffab51bae8895e7f1f5d7fe6ae755cfd041d3af2918ca",
+    "changedPixelCount": 1869,
+    "editedPixelSha256": "0ce9d6367f64fc39bc8d29464e7885c474f33be4b4310df307b8d3f664b11d89",
+    "outsideAuthorizedRoiNonzeroPixels": 0
+  },
+  "limitations": [
+    "carcass and plinth donors are canonical appearance references, not direct photos of the newly exposed faces",
+    "local geometry remains derived rather than globally calibrated",
+    "plinth donor preserves front-surface lighting and may still require bounded orientation harmonization"
+  ],
+  "plinth": {
+    "boundaryColorErrorAfter": {
+      "maxAbsChannelDifference": 139.0,
+      "meanAbsChannelDifference": 13.240740740740742,
+      "pairCount": 234
+    },
+    "coverageAlphaMass": 128.12549019607843,
+    "coverageNonzeroPixels": 246,
+    "donorQuad": [
+      [
+        720,
+        858
+      ],
+      [
+        738,
+        858
+      ],
+      [
+        738,
+        893
+      ],
+      [
+        720,
+        893
+      ]
+    ],
+    "targetQuad": [
+      [
+        742.0,
+        856.0
+      ],
+      [
+        747.7908537549407,
+        842.0468
+      ],
+      [
+        747.7908537549407,
+        884.0468
+      ],
+      [
+        742.0,
+        898.0
+      ]
+    ]
+  },
+  "promotionEligible": false,
+  "sceneId": "cozinha-01",
+  "schemaVersion": "BMC01AntialiasedCompletionReport 0.1",
+  "status": "RESEARCH_CANDIDATE",
+  "supersampling": 4,
+  "targetVariant": "module-03-hidden"
+}
