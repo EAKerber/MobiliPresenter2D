@@ -1,4 +1,5 @@
 name: Research BMC04 footprint temp
+# retry after lifecycle-aware packet gate
 
 on:
   push:
