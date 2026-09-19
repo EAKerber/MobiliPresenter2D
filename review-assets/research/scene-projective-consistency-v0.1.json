@@ -75,7 +75,7 @@
   "depthObservations": [
     {
       "id": "module02-stone-visible-depth",
-      "authority": "measured-from-visible-pixels",
+      "authority": "legacy-conditional-joint-contaminated",
       "front": [
         742,
         586
@@ -84,7 +84,8 @@
         763,
         525
       ],
-      "source": "review-assets/calibration/module-02-right-face-v1/config.json"
+      "source": "review-assets/calibration/module-02-right-face-v1/config.json + review-assets/research/module02-depth-cue-ownership-v0.1.json",
+      "limitation": "Most sampled support on the historical line belongs to stone-02-joint-bridge, which is hidden in the current module-03-hidden state; do not use as current Y-direction authority."
     },
     {
       "id": "module03-stone-human-annotation",
