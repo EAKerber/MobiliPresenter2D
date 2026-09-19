@@ -265,3 +265,50 @@ The current lifecycle is:
 Human review remains pending, so `defaultPromotionAllowed=false`.
 
 No generative residual is currently justified.
+
+
+### BMC-02 — runtime/packet checkpoint
+
+BMC-02 has now been exercised as a second, materially different case.
+
+Ownership audit:
+`UNOWNED_MATERIAL_RESIDUAL`.
+
+The exact historical termination support is:
+- 80 pixels;
+- bounds `[727,569,736,589]`;
+- entirely left of the measured cabinet edge;
+- absent from current Stone 03 exposed/bridge/module/approved assets and
+  upper-stone semantic masks.
+
+Research runtime:
+`?reconstruction=bmc02`.
+
+Cross-case workflow:
+`35475546474` — PASS.
+
+Observed:
+- 101 Python tests: PASS;
+- BMC-01 app-local assets rematerialize byte-stably;
+- BMC-01 browser regression: PASS;
+- BMC-02 browser contract: PASS;
+- default golden difference: 0;
+- BMC-02 active support: exactly 80 pixels;
+- outside ROI: 0;
+- selected stone recolors the termination;
+- MDF/front finish does not.
+
+BMC-02 packet:
+`review-assets/research/bmc02-reconstruction-packet-v0.1.json`.
+
+Packet workflow:
+`35475751682` — both BMC-01 and BMC-02 packets PASS under the same validator.
+
+Agent review:
+`PASS_WITH_NOTE`.
+
+The second case supports promoting **slot-based neutral/mask runtime
+representation** as a reusable concept, while keeping case-specific authoring
+and physical/projection logic narrow.
+
+The next diversity benchmark should be BMC-03 technical/internal view.
