@@ -150,11 +150,22 @@ Current method ladder:
 5. clean Module 01 carcass-side donor projected into the local geometry;
 6. generative harmonization only if a bounded residual remains.
 
-Current strongest deterministic appearance hypothesis:
-`BMC-01 minimal completion v0.6`.
+Current strongest deterministic geometry/appearance hypothesis:
+`BMC-01 antialiased completion v0.1`.
+
+It keeps the local physical-depth geometry, uses the clean Module 01 carcass-side
+sample for the exposed carcass, uses a separate front-plinth donor for the
+recessed plinth, and supersamples both target faces.
+
+A second result is architectural rather than cosmetic: the replacement cannot
+remain one static RGB overlay. The current historical entity has
+`finishGroups: []`, which explains why an exposed piece can stay at the old
+color while Module 02 changes finish. The research candidate now carries
+separate carcass/plinth masks and a diagnostic material-slot preview.
 
 Findings:
-`docs/work/bmc-01-appearance-evidence-findings-v0.1.md`.
+- `docs/work/bmc-01-appearance-evidence-findings-v0.1.md`;
+- `docs/work/bmc-01-material-slot-integration-v0.1.md`.
 
 ### BMC-02 — Module 03 left stone termination
 
