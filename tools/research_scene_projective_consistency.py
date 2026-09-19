@@ -403,16 +403,20 @@ def main():
       "module01DepthVanishingHypothesis":vanishing,
       "depthObservations":depth,
       "pixelLineObservations":pixel_lines,
-      "commonDepthVanishingFit":common_vp,
+      "commonDepthVanishingFit":{
+        "status":"LEGACY_DIAGNOSTIC_ONLY",
+        "reason":"includes the provenance-contaminated historical Module 02 line; do not use for current scene classification",
+        "fits":common_vp
+      },
       "depthOrientationSpread":{
         "measuredOnly":circular_spread(actual_angles),
         "module01ResidualOnly":circular_spread(module01_angles),
         "combinedMeasuredPlusModule01Residual":circular_spread(actual_angles+module01_angles)
       },
       "preliminaryClassification":{
-        "sceneClass":"GLOBAL_COHERENCE_REJECTED_FOR_TESTED_Y_DIRECTION",
-        "nextClassQuestion":"PIECEWISE_COHERENT_VS_LOCALLY_DISTORTED",
-        "reason":"the confirmed Module 01 physical side top/bottom depth edges imply a vanishing point that misses the independently measured Module 02 stone depth line by far more than raster-fit uncertainty; both physical modules use the same unrotated Scene Core Y axis"
+        "sceneClass":"INSUFFICIENT_CURRENT_DEPTH_EVIDENCE",
+        "nextClassQuestion":"FIND_CURRENT_OWNED_Y_DIRECTION_EDGE",
+        "reason":"Module 01 supplies a strong local Y-direction vanishing point, but the historical Module 02 comparison line is now known to be primarily conditional joint-bridge support and is not visible in the current module-03-hidden state"
       },
       "limitations":[
         "front finish masks are authoring/control masks; their axis-aligned outer boundaries must not be used as independent camera evidence",
