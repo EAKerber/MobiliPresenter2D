@@ -1337,6 +1337,189 @@
     "module02-stone-visible-depth": 209.94357070225368,
     "module03-stone-reference-alpha-edge": 231.01111162642837
   },
+  "module02FrontSideSeamProbe": {
+    "allColumns": [
+      {
+        "coverage": 1.0,
+        "meanGradient": 2.345528455284553,
+        "score": 3.0,
+        "x": 735
+      },
+      {
+        "coverage": 1.0,
+        "meanGradient": 2.5,
+        "score": 3.0,
+        "x": 736
+      },
+      {
+        "coverage": 1.0,
+        "meanGradient": 2.3495934959349594,
+        "score": 3.0,
+        "x": 737
+      },
+      {
+        "coverage": 1.0,
+        "meanGradient": 3.186991869918699,
+        "score": 4.0,
+        "x": 738
+      },
+      {
+        "coverage": 1.0,
+        "meanGradient": 20.03252032520325,
+        "score": 21.0,
+        "x": 739
+      },
+      {
+        "coverage": 1.0,
+        "meanGradient": 53.44308943089431,
+        "score": 54.0,
+        "x": 740
+      },
+      {
+        "coverage": 1.0,
+        "meanGradient": 71.84146341463415,
+        "score": 75.0,
+        "x": 741
+      },
+      {
+        "coverage": 1.0,
+        "meanGradient": 150.90243902439025,
+        "score": 153.0,
+        "x": 742
+      },
+      {
+        "coverage": 1.0,
+        "meanGradient": 7.735772357723577,
+        "score": 8.0,
+        "x": 743
+      },
+      {
+        "coverage": 0.0,
+        "meanGradient": 0.0,
+        "score": 0.0,
+        "x": 744
+      },
+      {
+        "coverage": 0.0,
+        "meanGradient": 0.0,
+        "score": 0.0,
+        "x": 745
+      },
+      {
+        "coverage": 0.0,
+        "meanGradient": 0.0,
+        "score": 0.0,
+        "x": 746
+      },
+      {
+        "coverage": 0.0,
+        "meanGradient": 0.0,
+        "score": 0.0,
+        "x": 747
+      },
+      {
+        "coverage": 0.0,
+        "meanGradient": 0.0,
+        "score": 0.0,
+        "x": 748
+      },
+      {
+        "coverage": 0.0,
+        "meanGradient": 0.0,
+        "score": 0.0,
+        "x": 749
+      },
+      {
+        "coverage": 0.0,
+        "meanGradient": 0.0,
+        "score": 0.0,
+        "x": 750
+      },
+      {
+        "coverage": 0.0,
+        "meanGradient": 0.0,
+        "score": 0.0,
+        "x": 751
+      },
+      {
+        "coverage": 0.0,
+        "meanGradient": 0.0,
+        "score": 0.0,
+        "x": 752
+      },
+      {
+        "coverage": 0.0,
+        "meanGradient": 0.0,
+        "score": 0.0,
+        "x": 753
+      },
+      {
+        "coverage": 0.0,
+        "meanGradient": 0.0,
+        "score": 0.0,
+        "x": 754
+      },
+      {
+        "coverage": 0.0,
+        "meanGradient": 0.0,
+        "score": 0.0,
+        "x": 755
+      },
+      {
+        "coverage": 0.0,
+        "meanGradient": 0.0,
+        "score": 0.0,
+        "x": 756
+      }
+    ],
+    "best": {
+      "coverage": 1.0,
+      "meanGradient": 150.90243902439025,
+      "score": 153.0,
+      "x": 742
+    },
+    "historicalAnchorX": 742,
+    "semantic": "interior vertical boundary between front-facing content and the light right-side strip; outer alpha silhouette is excluded by requiring opaque pixels on both sides",
+    "status": "OK",
+    "topCandidates": [
+      {
+        "coverage": 1.0,
+        "meanGradient": 150.90243902439025,
+        "score": 153.0,
+        "x": 742
+      },
+      {
+        "coverage": 1.0,
+        "meanGradient": 71.84146341463415,
+        "score": 75.0,
+        "x": 741
+      },
+      {
+        "coverage": 1.0,
+        "meanGradient": 53.44308943089431,
+        "score": 54.0,
+        "x": 740
+      },
+      {
+        "coverage": 1.0,
+        "meanGradient": 20.03252032520325,
+        "score": 21.0,
+        "x": 739
+      },
+      {
+        "coverage": 1.0,
+        "meanGradient": 7.735772357723577,
+        "score": 8.0,
+        "x": 743
+      },
+      {
+        "coverage": 1.0,
+        "meanGradient": 3.186991869918699,
+        "score": 4.0,
+        "x": 738
+      }
+    ]
+  },
   "pixelLineObservations": [
     {
       "authority": "measured-from-reference-alpha",
