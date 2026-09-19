@@ -16,10 +16,12 @@
     });
 
     return {
-      schemaVersion: "ViewerState2D 2.0",
+      schemaVersion: "ViewerState2D 2.1",
       visibilityByEntity,
       moduleSelections,
       globalSelections: {
+        finishId: BASE_FINISH_ID,
+        handleId: "none",
         stonePackageId: "stone-existing",
         serviceIds: []
       },
@@ -31,12 +33,23 @@
   }
 
   function moduleSelection(state, entityId) {
-    return state.moduleSelections?.[entityId] || { finishId: BASE_FINISH_ID, handleId: "none" };
+    const local = state.moduleSelections?.[entityId] || {};
+    const selected = state.globalSelections || {};
+    return {
+      finishId: selected.finishId || local.finishId || BASE_FINISH_ID,
+      handleId: selected.handleId || local.handleId || "none"
+    };
   }
 
   function setModuleSelection(state, entityId, patch) {
     if (!state.moduleSelections || !Object.prototype.hasOwnProperty.call(state.moduleSelections, entityId)) return false;
-    state.moduleSelections[entityId] = { ...state.moduleSelections[entityId], ...patch };
+    const globalPatch = {};
+    if (Object.prototype.hasOwnProperty.call(patch, "finishId")) globalPatch.finishId = patch.finishId;
+    if (Object.prototype.hasOwnProperty.call(patch, "handleId")) globalPatch.handleId = patch.handleId;
+    state.globalSelections = { ...state.globalSelections, ...globalPatch };
+    Object.keys(state.moduleSelections).forEach((id) => {
+      state.moduleSelections[id] = { ...state.moduleSelections[id], ...globalPatch };
+    });
     return true;
   }
 

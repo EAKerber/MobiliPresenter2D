@@ -247,7 +247,7 @@
         alphaBounds: { x: 715, y: 266, width: 534, height: 113 },
         defaultVisible: true,
         controllable: true,
-        requiresVisibleIds: ["module-04"],
+        requiresVisibleIds: ["module-04", "module-06"],
         hostId: null,
         finishGroups: [],
         tags: ["lighting"]

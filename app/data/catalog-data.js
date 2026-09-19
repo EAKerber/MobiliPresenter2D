@@ -171,17 +171,52 @@
     modules,
     options: {
       finishes: [
-        { id: "base-light", publicLabel: "Base clara", color: "#eeeae3", status: "published" },
-        { id: "tone-15-a", publicLabel: "Tom especial 01", color: "#918981", status: "pending-assets" },
-        { id: "tone-15-b", publicLabel: "Tom especial 02", color: "#69705f", status: "pending-assets" },
-        { id: "tone-15-c", publicLabel: "Tom especial 03", color: "#354f55", status: "pending-assets" },
-        { id: "tone-25-a", publicLabel: "Tom intenso 01", color: "#252422", status: "pending-assets" },
-        { id: "tone-25-b", publicLabel: "Tom intenso 02", color: "#75675d", status: "pending-assets" }
+        {
+          id: "base-light", publicLabel: "Base clara", color: "#faf9f6", status: "published", adjustmentLabel: "normal",
+          materialType: "mdf", textureAsset: "assets/materials/mdf-base.webp", textureSize: "160px 160px", textureStrength: 0.14, textureLuminance: 0.9242, overlayOpacity: 0.90, textureBrightness: 1.05
+        },
+        {
+          id: "tone-15-a", publicLabel: "Avelã", color: "#8d8178", status: "published", adjustmentLabel: "+15%",
+          materialType: "mdf", textureAsset: "assets/materials/mdf-warm.webp", textureSize: "160px 160px", textureStrength: 0.24, textureLuminance: 0.5259
+        },
+        {
+          id: "tone-15-b", publicLabel: "Névoa", color: "#d7d5cf", status: "published", adjustmentLabel: "+15%",
+          materialType: "mdf", textureAsset: "assets/materials/mdf-soft.webp", textureSize: "160px 160px", textureStrength: 0.16, textureLuminance: 0.9216
+        },
+        {
+          id: "tone-15-c", publicLabel: "Aço", color: "#777874", status: "published", adjustmentLabel: "+15%",
+          materialType: "mdf", textureAsset: "assets/materials/mdf-metal.webp", textureSize: "160px 160px", textureStrength: 0.22, textureLuminance: 0.7679
+        },
+        {
+          id: "tone-25-a", publicLabel: "Bosque", color: "#92775f", status: "published", adjustmentLabel: "+25%",
+          materialType: "mdf", textureAsset: "assets/materials/mdf-wood.webp", textureSize: "180px 180px", textureStrength: 0.58, textureLuminance: 0.7988
+        },
+        {
+          id: "tone-25-b", publicLabel: "Carvão", color: "#30312f", status: "published", adjustmentLabel: "+25%",
+          materialType: "mdf", textureAsset: "assets/materials/mdf-dark.webp", textureSize: "160px 160px", textureStrength: 0.28, textureLuminance: 0.1647
+        }
       ],
       stonePackages: [
-        { id: "stone-existing", label: "Pedra existente", description: "Mantém a pedra atual do ambiente.", color: null },
-        { id: "stone-new-light", label: "Pedra nova clara + inox", description: "Impacta todo o conjunto.", color: "#d8d8d2" },
-        { id: "stone-new-dark", label: "Pedra nova escura + inox", description: "Impacta todo o conjunto.", color: "#34383d" }
+        {
+          id: "stone-existing", label: "Padrão", description: "Mantém a pedra atual do conjunto.", color: null,
+          materialType: "stone", swatchColor: "#b7b0a7"
+        },
+        {
+          id: "stone-standard-sink", label: "Padrão + cuba nova", description: "Pedra padrão com cuba nova.", color: null,
+          materialType: "stone", swatchColor: "#b7b0a7"
+        },
+        {
+          id: "stone-light", label: "Clara mineral", description: "Pedra clara de granulação fina.", color: "#e3ddd2",
+          materialType: "stone", swatchColor: "#e4ded2", textureAsset: "assets/materials/stone-light.webp", textureScale: 1
+        },
+        {
+          id: "stone-green", label: "Verde profundo", description: "Pedra verde-escura de granulação contrastante.", color: "#1e2a24",
+          materialType: "stone", swatchColor: "#1f2924", textureAsset: "assets/materials/stone-green.webp", textureScale: 1
+        },
+        {
+          id: "stone-dark", label: "Preta mineral", description: "Pedra preta de granulação fina e reflexos discretos.", color: "#171918",
+          materialType: "stone", swatchColor: "#181a19", textureAsset: "assets/materials/stone-dark.webp", textureScale: 1
+        }
       ],
       handles: [
         { id: "none", label: "Definir depois", description: "Sem adicional na simulação.", orientation: "Portas na vertical · gavetas na horizontal" },
@@ -194,7 +229,7 @@
       {
         entityId: "lighting-08", sku: "CM-08", title: "Iluminação embutida",
         description: "Luz sob os aéreos para a área de bancada.",
-        requirements: ["Requer a lateral da geladeira."], publicPriceCents: null
+        requirements: ["Requer a lateral da geladeira.", "Requer o aéreo da pia (Módulo 06)."], publicPriceCents: null
       }
     ],
     services: [

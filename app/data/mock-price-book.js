@@ -21,10 +21,12 @@
       "lighting-08": 60000
     }),
     handleEntries: Object.freeze({
+      // Per-front values. The supplied whole-set references divide exactly
+      // across the 15 confirmed fronts: 179,85 / 15; 149,85 / 15; 328,50 / 15.
       none: 0,
-      "tango-chrome": 17985,
-      ponto: 14985,
-      "alca-colors": 32850
+      "tango-chrome": 1199,
+      ponto: 999,
+      "alca-colors": 2190
     }),
     // These bands are data capabilities only. Until approved swatches arrive,
     // the public selector exposes the base finish exclusively.
@@ -41,8 +43,10 @@
     }),
     globalEntries: Object.freeze({
       "stone-existing": 0,
-      "stone-new-light": 169900,
-      "stone-new-dark": 219900,
+      "stone-standard-sink": 169900,
+      "stone-light": 219900,
+      "stone-green": 219900,
+      "stone-dark": 219900,
       "stone-skirting": 18500,
       "move-stone": 39900,
       "tempered-glass": 39000

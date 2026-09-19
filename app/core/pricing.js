@@ -7,16 +7,24 @@
   }
 
   function moduleSelection(state, entityId) {
-    return state.moduleSelections?.[entityId] || { finishId: "base-light", handleId: "none" };
+    const local = state.moduleSelections?.[entityId] || {};
+    const selected = state.globalSelections || {};
+    return {
+      finishId: selected.finishId || local.finishId || "base-light",
+      handleId: selected.handleId || local.handleId || "none"
+    };
   }
 
   function handleForItem(item, state, priceBook) {
-    if (!item.commercial?.handleEligible) return { id: "none", cents: 0, frontCount: 0 };
+    if (!item.commercial?.handleEligible) return { id: "none", cents: 0, perFrontCents: 0, frontCount: 0 };
     const id = moduleSelection(state, item.entityId).handleId || "none";
+    const frontCount = Number.isInteger(item.commercial?.handleFrontCount) ? item.commercial.handleFrontCount : 0;
+    const perFrontCents = safeEntry(priceBook?.handleEntries, id);
     return {
       id,
-      cents: safeEntry(priceBook?.handleEntries, id),
-      frontCount: Number.isInteger(item.commercial?.handleFrontCount) ? item.commercial.handleFrontCount : 0
+      cents: perFrontCents * frontCount,
+      perFrontCents,
+      frontCount
     };
   }
 
@@ -43,6 +51,7 @@
       finishCents,
       handleId: handle.id,
       handleCents: handle.cents,
+      handlePerFrontCents: handle.perFrontCents,
       handleFrontCount: handle.frontCount,
       localCents,
       localChargeIds: Object.freeze([...localIds]),

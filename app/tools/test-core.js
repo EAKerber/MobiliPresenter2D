@@ -11,6 +11,7 @@ vm.createContext(sandbox);
   "data/catalog-data.js",
   "data/mock-price-book.js",
   "data/mask-data.js",
+  "data/front-guide-data.js",
   "core/state.js",
   "core/visibility.js",
   "core/validation.js",
@@ -29,6 +30,7 @@ const scene = sandbox.window.CASA_EM_MODULOS_SCENE;
 const catalog = sandbox.window.CASA_EM_MODULOS_CATALOG;
 const priceBook = sandbox.window.CASA_EM_MODULOS_PRICE_BOOK;
 const masks = sandbox.window.CASA_EM_MODULOS_MASK_DATA;
+const frontGuides = sandbox.window.CASA_FRONT_GUIDES;
 const core = sandbox.window.CasaModulesCore;
 const visibility = sandbox.window.CasaModulesVisibility;
 const validation = sandbox.window.CasaModulesValidation;
@@ -46,6 +48,20 @@ assert.deepEqual(Array.from(validation.validateScene(scene)), []);
 assert.equal(catalog.modules.length, 7);
 assert.equal(priceBook.mode, "estimate");
 assert.equal(priceBook.compositionBaseReferenceCents, undefined);
+assert.equal(catalog.options.finishes.every((finish) => finish.materialType === "mdf" && finish.textureAsset && finish.textureAsset.startsWith("assets/materials/")), true);
+assert.deepEqual(Array.from(catalog.options.stonePackages.filter((stone) => ["stone-light","stone-green","stone-dark"].includes(stone.id)).map((stone) => stone.materialType === "stone" && Boolean(stone.textureAsset))), [true,true,true]);
+assert.equal(finishes.resolveOverlayOpacity(catalog.options.finishes[0], catalog.options.finishes[0].color), 0.90);
+assert.equal(catalog.options.finishes[0].textureBrightness, 1.05);
+assert.deepEqual(Object.keys(frontGuides).sort(), ["module-01","module-05","module-06","module-07"]);
+assert.equal(frontGuides["module-06"].lines.some((line) => Math.abs(line.x1-line.x2) < 0.001), true);
+assert.equal(frontGuides["module-06"].lines.some((line) => Math.abs(line.y1-line.y2) < 0.001), true);
+const brightStructure = finishes.resolveStructureStrength(catalog.options.finishes[0], catalog.options.finishes[0].color);
+const midStructure = finishes.resolveStructureStrength(catalog.options.finishes[1], catalog.options.finishes[1].color);
+const darkStructure = finishes.resolveStructureStrength(catalog.options.finishes[5], catalog.options.finishes[5].color);
+assert.equal(brightStructure.luminance > 0.9, true);
+assert.equal(brightStructure.shadowOpacity > midStructure.shadowOpacity, true);
+assert.equal(darkStructure.shadowOpacity < midStructure.shadowOpacity, true);
+assert.equal(darkStructure.highlightOpacity > 0.05, true);
 
 const officialModulePrices = [90000, 110000, 150000, 60000, 80000, 110000, 60000];
 catalog.modules.forEach((module, index) => {
@@ -55,8 +71,10 @@ catalog.modules.forEach((module, index) => {
 });
 assert.equal(priceBook.entries["lighting-08"], 60000);
 assert.equal(priceBook.localEntries["module-02:mandatory-cooktop-stone"], 56600);
-assert.equal(priceBook.globalEntries["stone-new-light"], 169900);
-assert.equal(priceBook.globalEntries["stone-new-dark"], 219900);
+assert.equal(priceBook.globalEntries["stone-standard-sink"], 169900);
+assert.equal(priceBook.globalEntries["stone-light"], 219900);
+assert.equal(priceBook.globalEntries["stone-green"], 219900);
+assert.equal(priceBook.globalEntries["stone-dark"], 219900);
 assert.equal(priceBook.globalEntries["stone-skirting"], 18500);
 assert.equal(priceBook.globalEntries["move-stone"], 39900);
 assert.equal(priceBook.globalEntries["tempered-glass"], 39000);
@@ -93,26 +111,52 @@ assert.deepEqual(
   { modules: 660000, local: 56600, lighting: 60000, finishes: 0, handles: 0, global: 0 }
 );
 
+const totalHandleFronts = catalog.modules.reduce((total, module) => total + (module.commercial?.handleFrontCount || 0), 0);
+assert.equal(totalHandleFronts, 15);
+assert.equal(priceBook.handleEntries["tango-chrome"], 1199);
+assert.equal(priceBook.handleEntries.ponto, 999);
+assert.equal(priceBook.handleEntries["alca-colors"], 2190);
+
+const globalHandleTotals = {
+  "tango-chrome": 17985,
+  ponto: 14985,
+  "alca-colors": 32850
+};
+Object.entries(globalHandleTotals).forEach(([handleId, expectedCents]) => {
+  const probe = core.createInitialState(scene);
+  core.setModuleSelection(probe, "module-01", { handleId });
+  const handleEstimate = pricing.calculatePublicEstimate(scene, probe, catalog, visibility.resolveVisibility(scene, probe), priceBook);
+  assert.equal(handleEstimate.breakdown.handlesCents, expectedCents, handleId);
+});
+
 core.setModuleSelection(state, "module-03", { handleId: "ponto" });
 let estimate = pricing.calculatePublicEstimate(scene, state, catalog, resolved(state), priceBook);
+assert.equal(core.moduleSelection(state, "module-01").handleId, "ponto");
+assert.equal(core.moduleSelection(state, "module-07").handleId, "ponto");
 assert.equal(estimate.breakdown.handlesCents, 14985);
 assert.equal(estimate.totalCents, 791585);
-const handleAllocation = pricing.distributeCents(14985, 6);
-assert.equal(handleAllocation.reduce((total, cents) => total + cents, 0), 14985);
-assert.equal(handleAllocation.length, 6);
+const module03Handle = pricing.itemEstimate(module03, catalog, state, priceBook);
+assert.equal(module03Handle.handlePerFrontCents, 999);
+assert.equal(module03Handle.handleFrontCount, 6);
+assert.equal(module03Handle.handleCents, 5994);
 
 core.setModuleSelection(state, "module-02", { handleId: "ponto" });
 assert.equal(pricing.itemEstimate(catalog.modules[1], catalog, state, priceBook).handleCents, 0);
 core.setModuleSelection(state, "module-04", { finishId: "tone-15-a" });
+assert.equal(core.moduleSelection(state, "module-01").finishId, "tone-15-a");
+assert.equal(core.moduleSelection(state, "module-07").finishId, "tone-15-a");
 estimate = pricing.calculatePublicEstimate(scene, state, catalog, resolved(state), priceBook);
-assert.equal(estimate.breakdown.finishesCents, 9000);
+assert.equal(estimate.breakdown.finishesCents, 99000);
+core.setModuleSelection(state, "module-04", { finishId: "tone-25-a" });
+estimate = pricing.calculatePublicEstimate(scene, state, catalog, resolved(state), priceBook);
+assert.equal(estimate.breakdown.finishesCents, 165000);
 
-state.globalSelections.stonePackageId = "stone-new-light";
+state.globalSelections.stonePackageId = "stone-light";
 core.setGlobalService(state, "stone-skirting", true);
 core.setGlobalService(state, "move-stone", true);
 core.setGlobalService(state, "tempered-glass", true);
 estimate = pricing.calculatePublicEstimate(scene, state, catalog, resolved(state), priceBook);
-assert.equal(estimate.global.totalCents, 267300);
+assert.equal(estimate.global.totalCents, 317300);
 
 core.setEntityVisibility(state, "module-02", false);
 estimate = pricing.calculatePublicEstimate(scene, state, catalog, resolved(state), priceBook);
@@ -129,6 +173,25 @@ const fingerprintBeforeUi = fingerprints.computeFingerprint(scene, state);
 state.selectedEntityId = "module-03";
 assert.equal(fingerprints.computeFingerprint(scene, state), fingerprintBeforeUi);
 assert.equal(initialFingerprint.startsWith("scene2d-"), true);
+
+const lightingEntity = scene.entities.find((entity) => entity.id === "lighting-08");
+assert.deepEqual(Array.from(lightingEntity.requiresVisibleIds), ["module-04", "module-06"]);
+
+const noModule06Probe = core.createInitialState(scene);
+core.setEntityVisibility(noModule06Probe, "module-06", false);
+const noModule06 = resolved(noModule06Probe);
+assert.equal(noModule06["module-04"].visible, true);
+assert.equal(noModule06["module-06"].visible, false);
+assert.equal(noModule06["lighting-08"].visible, false);
+assert.equal(noModule06["lighting-08"].reason, "requirement-hidden");
+
+const lightingOffProbe = core.createInitialState(scene);
+core.setEntityVisibility(lightingOffProbe, "lighting-08", false);
+const lightingOff = resolved(lightingOffProbe);
+assert.equal(lightingOff["module-04"].visible, true);
+assert.equal(lightingOff["module-06"].visible, true);
+assert.equal(lightingOff["lighting-08"].visible, false);
+assert.equal(lightingOff["lighting-08"].reason, "intent-off");
 
 const module04Entity = scene.entities.find((entity) => entity.id === "module-04");
 let visibilityState = resolved(core.createInitialState(scene));
