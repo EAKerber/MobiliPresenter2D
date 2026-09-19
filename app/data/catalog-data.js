@@ -173,27 +173,27 @@
       finishes: [
         {
           id: "base-light", publicLabel: "Base clara", color: "#eeeae3", status: "published", adjustmentLabel: "normal",
-          materialType: "mdf", textureAsset: "assets/materials/mdf-base.webp", textureSize: "160px 160px", textureStrength: 0.18
+          materialType: "mdf", textureAsset: "assets/materials/mdf-base.webp", textureSize: "160px 160px", textureStrength: 0.18, textureLuminance: 0.9242
         },
         {
           id: "tone-15-a", publicLabel: "Avelã", color: "#8d8178", status: "published", adjustmentLabel: "+15%",
-          materialType: "mdf", textureAsset: "assets/materials/mdf-warm.webp", textureSize: "160px 160px", textureStrength: 0.24
+          materialType: "mdf", textureAsset: "assets/materials/mdf-warm.webp", textureSize: "160px 160px", textureStrength: 0.24, textureLuminance: 0.5259
         },
         {
           id: "tone-15-b", publicLabel: "Névoa", color: "#d7d5cf", status: "published", adjustmentLabel: "+15%",
-          materialType: "mdf", textureAsset: "assets/materials/mdf-soft.webp", textureSize: "160px 160px", textureStrength: 0.16
+          materialType: "mdf", textureAsset: "assets/materials/mdf-soft.webp", textureSize: "160px 160px", textureStrength: 0.16, textureLuminance: 0.9216
         },
         {
           id: "tone-15-c", publicLabel: "Aço", color: "#777874", status: "published", adjustmentLabel: "+15%",
-          materialType: "mdf", textureAsset: "assets/materials/mdf-metal.webp", textureSize: "160px 160px", textureStrength: 0.22
+          materialType: "mdf", textureAsset: "assets/materials/mdf-metal.webp", textureSize: "160px 160px", textureStrength: 0.22, textureLuminance: 0.7679
         },
         {
           id: "tone-25-a", publicLabel: "Bosque", color: "#92775f", status: "published", adjustmentLabel: "+25%",
-          materialType: "mdf", textureAsset: "assets/materials/mdf-wood.webp", textureSize: "180px 180px", textureStrength: 0.58
+          materialType: "mdf", textureAsset: "assets/materials/mdf-wood.webp", textureSize: "180px 180px", textureStrength: 0.58, textureLuminance: 0.7988
         },
         {
           id: "tone-25-b", publicLabel: "Carvão", color: "#30312f", status: "published", adjustmentLabel: "+25%",
-          materialType: "mdf", textureAsset: "assets/materials/mdf-dark.webp", textureSize: "160px 160px", textureStrength: 0.28
+          materialType: "mdf", textureAsset: "assets/materials/mdf-dark.webp", textureSize: "160px 160px", textureStrength: 0.28, textureLuminance: 0.1647
         }
       ],
       stonePackages: [

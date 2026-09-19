@@ -39,3 +39,27 @@ Estado: implementação em preview; nenhuma promoção para `main`.
 - [x] Browser gate: composição tonal de MDF sem `mix-blend-mode:multiply`.
 - [x] Browser gate: ausência de overflow nas etapas.
 - [x] Browser gate: afiliação/visibilidade/reclamp dos controles PiP.
+
+## B5 — Discovery e correção geométrica do rodapé
+- [x] Hipótese CONFIRMADA: o plinthMask era horizontalmente conservador demais.
+- [x] Medição stone-02: máscara 503..744 versus owner alpha 485..756 no band 858..893.
+- [x] Medição stone-03: máscara 744..1203 versus owner alpha 736..1216 no band 858..893.
+- [x] Expandir somente até o suporte alpha medido; o gerador continua clipando pelo owner alpha.
+- [x] Bridges não possuem suporte alpha de rodapé e permanecem vazios.
+- [ ] Revisão visual da pequena lateral esquerda e das duas extremidades.
+
+## B6 — Coerência tonal do rodapé MDF
+- [x] Hipótese CONFIRMADA: frentes e rodapé MDF usam pipelines estruturalmente diferentes.
+- [x] Hipótese REFUTADA como necessidade imediata: não criar um donor plate manual novo.
+- [x] Gerar plate neutro de baixa frequência a partir da iluminação do caso, removendo granulação da pedra.
+- [x] Normalizar o plate para média 1,0 e limitar ganho a 0,86..1,10 no runtime.
+- [ ] Revisão visual de branco, claro médio e carvão.
+
+## B7 — Seams adaptativas
+- [x] Hipótese CONFIRMADA: não existia camada estrutural dedicada sobre o material.
+- [x] Extrair máscaras shadow/highlight por contraste local, sempre dentro da máscara de acabamento e com erosão de 1 px para não criar outline externo.
+- [x] Medir luminância das texturas reais; valores observados: 0,9242 / 0,5259 / 0,9216 / 0,7679 / 0,7988 / 0,1647.
+- [x] Bounds adaptativos: escuro 0,12..0,25; claro 0,78..0,94; interpolação smoothstep sem saltos.
+- [x] Claros recebem shadow progressivo; escuros recebem shadow reduzido + highlight sutil.
+- [x] Validador falha se a luminância configurada divergir do asset em mais de 0,015.
+- [ ] Revisão visual de seams em branco, Névoa, madeira e carvão.

@@ -3,7 +3,7 @@
   "status": "PASS",
   "semanticApproval": "PENDING",
   "runtimeInstalled": false,
-  "configSha256": "40d3c2a237c51455ad39a2410c3d66690b1281854a4fc2f4e89e5218709a6c36",
+  "configSha256": "3db160e9a99bfb4b96c55fbd6ca580de195aa6c8fe51e250d0cc70ec1d3174b9",
   "records": [
     {
       "asset": "stone-02-exposed",
@@ -54,12 +54,12 @@
       "asset": "stone-02-exposed",
       "surface": "plinth",
       "file": "stone-02-exposed-plinth.png",
-      "sha256": "b753f8cd81a329c2164b9b9a15372372da1503a4fcf7ca81b1dd67dd9ca6f390",
-      "nonzeroPixels": 8712,
+      "sha256": "c5bc9065c53cdf9871f9e8eaab084f62e002f6e3460816af2723392df7fbe0ce",
+      "nonzeroPixels": 9708,
       "bounds": [
-        503,
+        486,
         858,
-        745,
+        756,
         894
       ],
       "outsideOwnerAlphaPixels": 0,
@@ -169,12 +169,12 @@
       "asset": "stone-03-exposed",
       "surface": "plinth",
       "file": "stone-03-exposed-plinth.png",
-      "sha256": "8c4da733bc3c5262ee88f3413e38ec17b60f05ba728ec58bfc1933f1f87f95b3",
-      "nonzeroPixels": 16560,
+      "sha256": "15a260136ff7f59ac176ff2a095dd3c03edca1593d383581e87d18c14eff31ea",
+      "nonzeroPixels": 17232,
       "bounds": [
-        744,
+        737,
         858,
-        1204,
+        1216,
         894
       ],
       "outsideOwnerAlphaPixels": 0,

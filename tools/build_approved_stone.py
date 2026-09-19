@@ -2,7 +2,7 @@
 """Replay approved PR23 and build finish inputs; original assets stay immutable."""
 import argparse, base64, hashlib, json
 from pathlib import Path
-from PIL import Image, ImageChops, ImageDraw
+from PIL import Image, ImageChops, ImageDraw, ImageFilter, ImageStat
 from review_drainer_clean import run as review
 from render_variant_fidelity import render_case
 from build_stone_surface_masks import polygon_mask
@@ -22,6 +22,16 @@ def asset_visible_in_case(asset, ids):
     if required:
         return all(entity_id in ids for entity_id in required)
     return host_id(asset) in ids
+
+def plinth_shade(under, mask):
+    """Encode low-frequency scene lighting without preserving stone granulation."""
+    gray=under.convert('L')
+    mean=max(1.0,ImageStat.Stat(gray,mask=mask).mean[0])
+    fill=Image.new('L',SIZE,round(mean))
+    isolated=Image.composite(gray,fill,mask)
+    low=isolated.filter(ImageFilter.GaussianBlur(8))
+    encoded=low.point(lambda v:max(112,min(140,round(128*v/mean))))
+    return Image.composite(encoded,Image.new('L',SIZE,128),mask)
 
 def material_mask(config, ids, surfaces=None):
     mask=Image.new('L',SIZE)
@@ -76,14 +86,15 @@ def build(out):
                 foreground=Image.alpha_composite(foreground,objects[key])
         upper_mask=material_mask(config,ids,{'backsplash','top','front-edge'})
         plinth_mask=material_mask(config,ids,{'plinth'})
+        plinth_shading=plinth_shade(under,plinth_mask)
         combined_mask=ImageChops.lighter(upper_mask,plinth_mask)
         # Upper stone and lower plinth are distinct physical regions.
         folder=out/case['id'];folder.mkdir(exist_ok=True)
-        for name,im in [('under',under),('neutral',neutral),('objects',foreground),('upperMask',upper_mask),('plinthMask',plinth_mask)]:
+        for name,im in [('under',under),('neutral',neutral),('objects',foreground),('upperMask',upper_mask),('plinthMask',plinth_mask),('plinthShade',plinth_shading)]:
             if name in ['under','neutral']:
                 clipped=Image.new('RGBA',SIZE);clipped.paste(im,(0,0),combined_mask.point(lambda v:255 if v else 0));im=clipped
             im.save(folder/(name+'.png'))
-        bundle_names=['under','neutral','objects','upperMask','plinthMask']
+        bundle_names=['under','neutral','objects','upperMask','plinthMask','plinthShade']
         bundles[case['id']]={name:'data:image/png;base64,'+base64.b64encode((folder/(name+'.png')).read_bytes()).decode() for name in bundle_names}
         records.append({'case':case['id'],'upperPixels':sum(upper_mask.histogram()[1:]),'plinthPixels':sum(plinth_mask.histogram()[1:])})
     (out/'stone-data.js').write_text('window.CASA_STONE_DATA = '+json.dumps(bundles,separators=(',',':'))+';\n')

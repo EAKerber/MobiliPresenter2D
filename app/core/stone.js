@@ -132,7 +132,7 @@
       return new ImageData(result, width, height);
     }
 
-    function composeMdf(mask, source) {
+    function composeMdf(mask, source, shade) {
       const result = new Uint8ClampedArray(width * height * 4);
       if (!source?.rgb) return new ImageData(result, width, height);
 
@@ -146,8 +146,9 @@
           const delta = (luminance - source.texture.averageLuminance) / 255;
           detail = Math.min(1.22, Math.max(0.78, 1 + delta * source.textureStrength));
         }
+        const sceneShade = shade ? Math.min(1.10, Math.max(0.86, shade[index] / 128)) : 1;
         for (let channel = 0; channel < 3; channel += 1) {
-          result[index + channel] = Math.round(Math.min(255, source.rgb[channel] * detail));
+          result[index + channel] = Math.round(Math.min(255, source.rgb[channel] * detail * sceneShade));
         }
         result[index + 3] = Math.round(255 * coverage);
       }
@@ -159,7 +160,7 @@
         inputCache.set(
           id,
           Promise.all(
-            ["neutral", "under", "objects", "upperMask", "plinthMask"]
+            ["neutral", "under", "objects", "upperMask", "plinthMask", "plinthShade"]
               .map((key) => fullCanvasPixels(data[id][key]))
           )
         );
@@ -171,11 +172,11 @@
       const key = id + "|" + maskName + "|" + materialKey(material);
       if (!renderCache.has(key)) {
         renderCache.set(key, (async () => {
-          const [neutral, under, objects, upperMask, plinthMask] = await caseInputs(id);
+          const [neutral, under, objects, upperMask, plinthMask, plinthShade] = await caseInputs(id);
           const mask = maskName === "plinth" ? plinthMask : upperMask;
           const source = await materialSource(material);
           return source?.materialType === "mdf"
-            ? composeMdf(mask, source)
+            ? composeMdf(mask, source, plinthShade)
             : composeStone(neutral, under, objects, mask, source);
         })());
       }

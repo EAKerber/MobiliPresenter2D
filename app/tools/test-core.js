@@ -49,6 +49,13 @@ assert.equal(priceBook.compositionBaseReferenceCents, undefined);
 assert.equal(catalog.options.finishes.every((finish) => finish.materialType === "mdf" && finish.textureAsset && finish.textureAsset.startsWith("assets/materials/")), true);
 assert.deepEqual(Array.from(catalog.options.stonePackages.filter((stone) => ["stone-light","stone-green","stone-dark"].includes(stone.id)).map((stone) => stone.materialType === "stone" && Boolean(stone.textureAsset))), [true,true,true]);
 assert.equal(finishes.resolveOverlayOpacity(catalog.options.finishes[0], catalog.options.finishes[0].color), 0.84);
+const brightStructure = finishes.resolveStructureStrength(catalog.options.finishes[0], catalog.options.finishes[0].color);
+const midStructure = finishes.resolveStructureStrength(catalog.options.finishes[1], catalog.options.finishes[1].color);
+const darkStructure = finishes.resolveStructureStrength(catalog.options.finishes[5], catalog.options.finishes[5].color);
+assert.equal(brightStructure.luminance > 0.9, true);
+assert.equal(brightStructure.shadowOpacity > midStructure.shadowOpacity, true);
+assert.equal(darkStructure.shadowOpacity < midStructure.shadowOpacity, true);
+assert.equal(darkStructure.highlightOpacity > 0.05, true);
 
 const officialModulePrices = [90000, 110000, 150000, 60000, 80000, 110000, 60000];
 catalog.modules.forEach((module, index) => {
