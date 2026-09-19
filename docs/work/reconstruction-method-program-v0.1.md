@@ -88,6 +88,23 @@ The benchmark protocol separates:
 
 It explicitly avoids one aggregate numeric score in v0.1.
 
+### Track D — Tooling implementation conformance
+
+Status: v0.1 static/deep audit materialized.
+
+Documents:
+- `docs/work/reconstruction-tooling-map-v0.1.md`;
+- `docs/work/bmc-01-tooling-conformance-audit-v0.1.md`.
+
+Track D is a gate between architecture and helper promotion.
+
+Required sequence:
+`tool inventory -> source implementation audit -> test/evidence audit -> CONFORMANT/REUSABLE/EXPERIMENT/MISMATCH decision -> only then promotion/refactor/replacement`.
+
+The first deep audit follows the BMC-01 Module 02 right-face chain.
+
+A key implementation finding is already recorded: the reusable delta-extraction algorithm is strong, but the current `tools/extract_candidate_delta.py` CLI source contains invalid Python `true/null` literals and is therefore blocked until a minimal research-branch repair is made.
+
 ## Architectural principle
 
 Reconstruction is treated as compilation first and image generation second.
@@ -163,4 +180,5 @@ Next research outputs:
 6. benchmark packet templates;
 7. Module 02 BMC-01 experiment design without image generation;
 8. calibration-compatibility investigation between the Promob fixed camera and the MobiliPresenter2D canonical frame;
-9. deterministic helper specifications before helper implementation.
+9. deterministic helper specifications before helper implementation;
+10. tooling implementation conformance audits before any existing helper is promoted.
