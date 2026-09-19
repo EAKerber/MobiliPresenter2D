@@ -41,6 +41,12 @@
   "outsideAuthorizedRoiPixels": 0,
   "preExistingOwnerOverlapPixels": 0,
   "promotionEligible": false,
+  "reviewFiles": {
+    "candidate": "candidate.png",
+    "comparison": "comparison.png",
+    "editMask": "edit-mask.png",
+    "edited": "edited.png"
+  },
   "sameObjectContactErrorAfter": {
     "maxAbsChannelDifference": 0.0,
     "meanAbsChannelDifference": 0.0,
