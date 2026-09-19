@@ -146,6 +146,71 @@ def point_line_distance(point, front, back):
     return abs(dy*x0-dx*y0+x2*y1-y2*x1)/den
 
 
+def fit_reference_alpha_observation(item):
+    cfg=json.loads((ROOT/item["config"]).read_text(encoding="utf-8"))
+    alpha=load_alpha(item["reference"])
+    x0,x1=cfg["searchX"]; y0,y1=cfg["evaluationRows"]
+    threshold=cfg["alphaThreshold"]
+    points=[]
+    for y in range(y0,y1+1):
+        hits=[x for x in range(x0,x1+1) if alpha.getpixel((x,y))>=threshold]
+        if not hits or hits[0]==x0:
+            raise ValueError(f"reference alpha edge missing/clipped for {item['id']} row {y}")
+        points.append((y,hits[0]-.5))
+    fit=robust_fit(points)
+    ox,oy=cfg.get("sceneOffset",[0,0])
+    # crop line x_crop = m*y_crop+b -> scene x = m*scene_y + (b+ox-m*oy)
+    m=fit["slope"]; b_scene=fit["intercept"]+ox-m*oy
+    scene_points=[[x+ox,y+oy] for y,x in points]
+    return {
+      **item,
+      "slopeDxDy":m,
+      "interceptScene":b_scene,
+      "rmsPx":fit["rms"],
+      "scenePoints":scene_points,
+      "sceneOffset":[ox,oy]
+    }
+
+
+def line_equation_from_points(front, back):
+    x1,y1=front; x2,y2=back
+    a=y1-y2; b=x2-x1; c=x1*y2-x2*y1
+    norm=math.hypot(a,b)
+    if norm<1e-9: raise ValueError("degenerate line")
+    return [a/norm,b/norm,c/norm]
+
+
+def line_equation_from_yx(edge):
+    # y = m*x+b
+    m=edge["dyDx"]; b=edge["intercept"]
+    a=-m; bb=1.0; c=-b
+    norm=math.hypot(a,bb)
+    return [a/norm,bb/norm,c/norm]
+
+
+def line_equation_from_xy_slope(obs):
+    # x = m*y+b
+    m=obs["slopeDxDy"]; b=obs["interceptScene"]
+    a=1.0; bb=-m; c=-b
+    norm=math.hypot(a,bb)
+    return [a/norm,bb/norm,c/norm]
+
+
+def least_squares_intersection(named_lines):
+    # Minimize sum (a*x+b*y+c)^2 for normalized lines.
+    saa=sum(line[1][0]**2 for line in named_lines)
+    sab=sum(line[1][0]*line[1][1] for line in named_lines)
+    sbb=sum(line[1][1]**2 for line in named_lines)
+    sac=sum(line[1][0]*line[1][2] for line in named_lines)
+    sbc=sum(line[1][1]*line[1][2] for line in named_lines)
+    det=saa*sbb-sab*sab
+    if abs(det)<1e-9: return None
+    x=(-sac*sbb+sab*sbc)/det
+    y=(-saa*sbc+sab*sac)/det
+    residuals={name:abs(a*x+b*y+c) for name,(a,b,c) in named_lines}
+    return {"point":[x,y],"residualPx":residuals,"rmsPx":math.sqrt(sum(v*v for v in residuals.values())/len(residuals))}
+
+
 def observation_record(item):
     fx,fy=item["front"]; bx,by=item["back"]
     dx=bx-fx; dy=by-fy
@@ -188,6 +253,7 @@ def main():
     la=load_alpha(probe["layer"]); fa=load_alpha(probe["frontMask"])
     side=[residual_component(la,fa,t,probe["seedQuad"],probe.get("side"),probe.get("frontBoundaryMarginPx",0)) for t in cfg["thresholds"]]
     depth=[observation_record(x) for x in cfg["depthObservations"]]
+    pixel_lines=[fit_reference_alpha_observation(x) for x in cfg.get("pixelLineObservations",[])]
     vanishing=[]
     for item in side:
         if item.get("status")!="OK" or "topDepthEdge" not in item or "bottomDepthEdge" not in item:
@@ -206,6 +272,20 @@ def main():
         if item.get("status")=="OK":
             for key in ("topDepthEdge","bottomDepthEdge"):
                 if key in item: module01_angles.append(item[key]["angleDeg"])
+    common_vp=[]
+    module02_measured=next((x for x in depth if x["id"]=="module02-stone-visible-depth"),None)
+    pixel03=next((x for x in pixel_lines if x["id"]=="module03-stone-reference-alpha-edge"),None)
+    for item in side:
+        if item.get("status")!="OK" or "topDepthEdge" not in item or not module02_measured or not pixel03:
+            continue
+        lines=[
+          ("module01-side-top",line_equation_from_yx(item["topDepthEdge"])),
+          ("module02-stone",line_equation_from_points(module02_measured["front"],module02_measured["back"])),
+          ("module03-stone-alpha",line_equation_from_xy_slope(pixel03)),
+        ]
+        fit=least_squares_intersection(lines)
+        common_vp.append({"threshold":item["threshold"],"fit":fit})
+
     report={
       "schemaVersion":"SceneProjectiveConsistencyProbeReport 0.1",
       "sceneId":cfg["sceneId"],
@@ -215,6 +295,8 @@ def main():
       "module01SideResidualProbe":side,
       "module01DepthVanishingHypothesis":vanishing,
       "depthObservations":depth,
+      "pixelLineObservations":pixel_lines,
+      "commonDepthVanishingFit":common_vp,
       "depthOrientationSpread":{
         "measuredOnly":circular_spread(actual_angles),
         "module01ResidualOnly":circular_spread(module01_angles),
