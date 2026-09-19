@@ -102,12 +102,51 @@ const {chromium} = require("playwright");
 
   const ordinary=await browser.newPage({viewport:{width:1366,height:768}});
   await ordinary.goto(defaultUrl);
+  await ordinary.evaluate(() => Promise.all([...document.images].map(img=>img.decode().catch(()=>null))));
   assert.equal(await ordinary.locator("#reconstructionCanvas").count(),0,"default app unexpectedly enabled research reconstruction");
+  const ordinaryHistorical=ordinary.locator('[data-entity-id="module-02-right-exposed-face"] img');
   assert.notEqual(
-    await ordinary.locator('[data-entity-id="module-02-right-exposed-face"] img').getAttribute("data-render-delegated"),
+    await ordinaryHistorical.getAttribute("data-render-delegated"),
     "bmc01",
     "default app delegated the historical overlay"
   );
+
+  const historicalOverlaySample = () => ordinary.evaluate(() => {
+    const image=document.querySelector('[data-entity-id="module-02-right-exposed-face"] img');
+    const canvas=document.createElement("canvas");
+    canvas.width=1536;canvas.height=1024;
+    const ctx=canvas.getContext("2d",{willReadFrequently:true});
+    ctx.drawImage(image,0,0,1536,1024);
+    const block=ctx.getImageData(755,525,9,290).data;
+    for(let py=0;py<290;py++){
+      for(let px=0;px<9;px++){
+        const i=(py*9+px)*4;
+        if(block[i+3]>=128) return [755+px,525+py,block[i],block[i+1],block[i+2],block[i+3]];
+      }
+    }
+    return null;
+  });
+
+  await ordinary.locator("#toggle-module-03").setChecked(false);
+  const historicalBase=await historicalOverlaySample();
+  assert(historicalBase,"historical overlay has no strong-alpha sample");
+  await ordinary.locator("#viewer").screenshot({path:path.join(output,"historical-base-light.png"),animations:"disabled"});
+
+  await ordinary.locator('[data-step="finishes"]').click();
+  await ordinary.locator('[data-finish-id="tone-25-b"]').click();
+  const historicalDark=await historicalOverlaySample();
+  assert.deepEqual(
+    historicalDark,
+    historicalBase,
+    "historical static RGB overlay unexpectedly changed with the front finish"
+  );
+  await ordinary.locator("#viewer").screenshot({path:path.join(output,"historical-front-dark.png"),animations:"disabled"});
+
+  const resultPath=path.join(output,"result.json");
+  const result=JSON.parse(fs.readFileSync(resultPath,"utf8"));
+  result.historical={base:historicalBase,dark:historicalDark,staticAcrossFinish:true};
+  fs.writeFileSync(resultPath,JSON.stringify(result,null,2));
+
   await ordinary.close();
   await browser.close();
 })().catch(error=>{console.error(error);process.exit(1);});
