@@ -41,7 +41,13 @@ MobiliPresenter:
 
 ### Track A — Architecture and contracts
 
-Primary workstream. Defines:
+Status: v0.1 draft materialized.
+
+Documents:
+- `docs/architecture/0005-reconstruction-authority-contract.md`;
+- `docs/architecture/0006-reconstruction-packet-pipeline.md`.
+
+Defines:
 - authority ordering;
 - reconstruction statuses;
 - canonical intermediate artifacts;
@@ -53,38 +59,34 @@ Primary workstream. Defines:
 
 ### Track B — Case taxonomy
 
-Not deferred or excluded. It classifies reconstruction operations so the architecture can choose different methods for different cases.
+Status: v0.1 draft materialized.
 
-Initial candidate classes:
-- hidden cabinet side;
-- exposed plinth side;
-- countertop return;
-- seam bridge;
-- object removal;
-- appliance substitution;
-- internal shelf/divider view;
-- appliance cavity view;
-- wall/floor continuation;
-- material transfer;
-- small termination/corner completion.
+Document:
+- `docs/architecture/0007-reconstruction-case-taxonomy.md`.
 
-The taxonomy is expected to evolve from concrete cases rather than be frozen upfront.
+The taxonomy is intentionally two-level:
+- independent classification axes;
+- concrete case classes such as hidden side, stone return, seam bridge, appliance replacement and technical internal view.
+
+New classes should be created only when they require materially different authorities, candidate ladders, gates, generation policy or runtime materialization.
 
 ### Track C — Method benchmark
 
-Also mandatory. Candidate methods should be compared on real project cases, not ranked only by theory.
+Status: v0.1 protocol materialized.
 
-Initial method families:
-- canonical-pixel reuse;
-- same-object donor;
-- same-material donor;
-- affine/perspective donor warp;
-- deterministic neutral render;
-- deterministic render + donor material;
-- local guided generative completion;
-- larger contextual generative edit.
+Document:
+- `docs/work/reconstruction-benchmark-protocol-v0.1.md`.
 
-Metrics should include geometry fidelity, appearance fidelity, edit locality, reproducibility, artifact rate, operational cost and generative drift.
+The benchmark protocol separates:
+- source integrity;
+- edit authorization;
+- geometry fidelity;
+- round-trip/composition integrity;
+- material/appearance metrics;
+- artifact detection;
+- agent/human review.
+
+It explicitly avoids one aggregate numeric score in v0.1.
 
 ## Architectural principle
 
@@ -107,23 +109,36 @@ No generative output should become runtime authority directly.
 - Runtime should consume approved, deterministic assets; generation belongs to authoring/build time.
 - A failed deterministic gate is evidence, not something to be hidden by raster clipping.
 
-## Initial benchmark case
+## Initial benchmark cases
 
-The exposed right side of Module 02 when Module 03 is hidden is the preferred first benchmark because the repository already contains:
+### BMC-01 — Module 02 exposed right face
+
+Primary benchmark because the repository already contains:
 - exact target variant fingerprint;
 - measured front edge;
 - local depth cue from stone;
 - authorized ROI;
 - target quad;
 - protected assets;
-- a real Module 01 carcass-side donor;
+- real Module 01 carcass-side donor;
 - deterministic perspective-copy recipe;
 - delta extraction and pixel gates.
 
-It can support comparisons between:
-1. donor warp;
-2. neutral render + donor;
-3. neutral render + local generative harmonization.
+Initial methods:
+1. current projective donor baseline;
+2. deterministic neutral face + donor;
+3. neutral face + local generative harmonization;
+4. guide-first local generative completion.
+
+### BMC-02 — Module 03 left stone termination
+
+Small-return benchmark intended to punish over-generation.
+
+### BMC-03 — Module 06 internal technical view
+
+Presentation benchmark using confirmed Promob-derived divider, shelf and microwave-cavity geometry.
+
+This is a technical-view benchmark, not a scene-raster reconstruction benchmark.
 
 ## Non-goals for v0.1
 
@@ -132,13 +147,20 @@ It can support comparisons between:
 - no replacement of the current preview branch;
 - no commitment to a single reconstruction method;
 - no claim that the current fixed-camera calibration automatically applies to every 2D source frame;
-- no final thresholds before benchmark measurements.
+- no final thresholds before benchmark measurements;
+- no runtime implementation on this research branch yet.
 
 ## Expected outputs of this research branch
 
+Completed v0.1 drafts:
 1. Reconstruction Authority Contract;
 2. Reconstruction Packet specification;
 3. Authoring Pipeline and Gate specification;
 4. evolving case taxonomy;
-5. method benchmark protocol;
-6. later, deterministic helpers only after the contracts stabilize.
+5. method benchmark protocol.
+
+Next research outputs:
+6. benchmark packet templates;
+7. Module 02 BMC-01 experiment design without image generation;
+8. calibration-compatibility investigation between the Promob fixed camera and the MobiliPresenter2D canonical frame;
+9. deterministic helper specifications before helper implementation.
