@@ -1,0 +1,31 @@
+{
+  "schemaVersion": "BMC01MaterialSlotPreview 0.1",
+  "sceneId": "cozinha-01",
+  "targetVariant": "module-03-hidden",
+  "candidateDir": "review-assets/research/bmc01-antialiased-completion-v0.1",
+  "diagnostics": [
+    {
+      "id": "base-light",
+      "front": {"label":"Base clara","color":"#faf9f6"},
+      "plinthPolicy": "front",
+      "stone": null
+    },
+    {
+      "id": "carvao",
+      "front": {"label":"Carvão","color":"#30312f"},
+      "plinthPolicy": "front",
+      "stone": null
+    },
+    {
+      "id": "avela-stone-green",
+      "front": {"label":"Avelã","color":"#8d8178"},
+      "plinthPolicy": "stone",
+      "stone": {"label":"Verde profundo","color":"#1e2a24"}
+    }
+  ],
+  "policy": {
+    "researchOnly": true,
+    "promotionEligible": false,
+    "purpose": "prove that reconstructed carcass and plinth are separate material slots instead of one static RGB overlay"
+  }
+}
