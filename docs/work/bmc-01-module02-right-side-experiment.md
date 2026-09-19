@@ -124,25 +124,93 @@ This replay validates the implementation path, not the physical correctness of t
 
 ## Geometry evidence reassessment after ownership audit
 
-The exact historical C-A raster candidate remains reproducible, but its geometry evidence has been downgraded.
+The historical C-A raster candidate remains reproducible, but its original
+geometry argument is superseded.
+
+### Historical long depth line is not current exposed-state authority
 
 Ownership audit:
 `review-assets/research/module02-depth-cue-ownership-v0.1.json`.
 
-The historical line `[742,586] -> [763,525]` was not purely an exposed Module 02 stone edge in the current sense:
+The old line `[742,586] -> [763,525]` was mostly supported by
+`stone-02-joint-bridge`. That bridge is correctly hidden when Module 03 is
+hidden.
 
-- only the first short front segment remains in the current exposed-right stone variant;
-- most sampled support lies in `stone-02-joint-bridge`;
-- the bridge is now correctly hidden when Module 03 is hidden.
+Therefore:
+- C-A remains a deterministic process/appearance baseline;
+- its old target quad is not projection ground truth;
+- the old back anchor is legacy conditional-joint evidence.
 
-Consequences:
+### Current stable local depth reference
 
-- C-A remains a deterministic **process/appearance baseline**;
-- its target quad must not be treated as projection ground truth;
-- the historical back anchor `[763,525]` is downgraded from measured current evidence to **legacy conditional-joint evidence**;
-- C-B/C-C must not inherit that quad without fresh current projection evidence.
+`review-assets/research/stone-depth-edge-probe-v0.1-report.json` measures the
+current exposed Stone 03 top termination across alpha thresholds.
 
-This is a provenance correction, not a claim that the historical candidate is visually bad.
+At thresholds 32/64/128/192 the fitted edge is stable:
+
+- front ≈ `[740.565,574]`;
+- back ≈ `[749.696,552]`;
+- front→back ≈ `[+9.130,-22]`;
+- RMS ≈ `0.60 px`.
+
+Scene Core defines the associated slab depth as `550 mm`.
+
+Stone 02's current exposed-right edge is excluded from projection authority:
+its termination is deliberately clipped by the existing authored recipe and
+measures only about `[+1.65,-22]` over the same band.
+
+### Local physical-depth transfer v0.2
+
+Using the stable Stone 03 vector and confirmed physical depths gives:
+
+Carcass side, 530 mm:
+- vector ≈ `[+8.798,-21.2]`;
+- quad ≈ `[[742,590],[750.798,568.8],[750.798,834.8],[742,856]]`.
+
+Plinth, 348.83 mm:
+- vector ≈ `[+5.791,-13.953]`;
+- quad ≈ `[[742,856],[747.791,842.047],[747.791,884.047],[742,898]]`.
+
+This remains a bounded local-affine hypothesis. It does not establish a global
+camera and currently keeps the same projected depth vector at the top and
+bottom of each face.
+
+### Geometry-support audit
+
+The binary support audit runs at alpha thresholds 1 and 128 because the legacy
+layer decomposition contains meaningful semi-transparent contributions.
+
+At alpha > 0:
+- local carcass: 96.2% of the proposed polygon already has canonical host/stone
+  contribution; 101 pixels have none;
+- local plinth: 100% already has canonical contribution;
+- the historical exposed-side overlay has **0 pixels inside either local
+  polygon**.
+
+At alpha >= 128:
+- local carcass support falls to about 30%;
+- local plinth support falls to about 42%.
+
+This threshold sensitivity means layer alpha must **not** be treated as physical
+occupancy. It is decomposition/appearance evidence, not a face-existence mask.
+
+The strong result is different: the local geometry and the historical overlay
+describe almost disjoint regions. Therefore the historical overlay cannot be
+used as an appearance implementation of the new local geometry without a new
+benchmark.
+
+### Current policy
+
+Do not author the next candidate by filling either alpha-defined "missing"
+set.
+
+Instead:
+1. render the exact current target variant without the historical exposed-side
+   overlay;
+2. overlay deterministic geometry guides only;
+3. review local geometry against canonical pixels;
+4. only then define an edit mask from visible defects, preserving canonical
+   pixels by default.
 
 ## Experiment questions
 
