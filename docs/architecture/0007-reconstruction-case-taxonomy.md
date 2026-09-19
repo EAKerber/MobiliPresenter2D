@@ -1,30 +1,33 @@
-# ADR 0007 — Reconstruction Case Taxonomy v0.1
+# ADR 0007 — Reconstruction Case Taxonomy v0.2
 
 Status: exploratory / proposed
 
+Depends on:
+- ADR 0005 Reconstruction Authority Contract;
+- ADR 0006 Reconstruction Packet and Authoring Pipeline.
+
 ## Purpose
 
-Classify reconstruction operations by **what is physically missing, what evidence exists, and what kind of transformation is required**.
+Classify reconstruction operations by:
+- what physical/presentation target is involved;
+- why it is unavailable;
+- what truth/evidence exists;
+- what transformation evidence exists;
+- who owns the target pixels in the requested state;
+- how local the edit can remain;
+- what runtime product is needed.
 
-The taxonomy is not a list of UI features. It exists so the authoring system can choose:
-- the right authority sources;
-- the lowest-entropy candidate ladder;
-- the correct projection method;
-- mandatory guide products;
-- required gates;
-- whether generative completion is allowed at all.
+The taxonomy exists so the authoring system can choose the lowest-entropy
+method, correct guides, mandatory gates and generation policy.
 
-The taxonomy is intentionally provisional. New classes should be added only when real project cases cannot be represented cleanly by an existing class.
+It is not a list of UI features.
 
 ## Classification axes
 
-A case should be classified along six independent axes before assigning a concrete case class.
+Classify the axes independently before assigning a core class.
 
-### X1 — physical target
+### X1 — target kind
 
-What physical thing is being reconstructed?
-
-Values:
 - `face`;
 - `edge-or-seam`;
 - `termination`;
@@ -34,11 +37,8 @@ Values:
 - `internal-geometry`;
 - `presentation-only`.
 
-### X2 — visibility state
+### X2 — availability / visibility state
 
-Why is the target unavailable?
-
-Values:
 - `already-visible`;
 - `partially-visible`;
 - `occluded-by-entity`;
@@ -47,21 +47,34 @@ Values:
 - `removed-by-configuration`;
 - `technical-only`.
 
-### X3 — geometry authority
+### X3 — geometry/topology evidence
 
-Strongest available geometry source:
+Strongest relevant source/status:
 
-- `A1-physical-confirmed`;
-- `A4-authored-technical`;
-- `A3-planar-derived`;
-- `A3-local-derived`;
-- `bounded-inference`;
+- `D1-physical-confirmed`;
+- `D3-authored-technical`;
+- `derived-from-D1`;
+- `bounded-geometry-inference`;
+- `blocked`;
 - `none`.
 
-### X4 — appearance evidence
+Projection is not listed here. A physically confirmed side can exist while its
+pixel polygon remains inferred.
 
-Strongest available appearance source:
+### X4 — transformation evidence
 
+Use ADR 0005 levels:
+
+- `exact-canonical`;
+- `global-calibrated`;
+- `planar-derived`;
+- `local-derived`;
+- `bounded-inference`;
+- `blocked`.
+
+### X5 — appearance evidence
+
+- `same-surface-canonical`;
 - `same-object-canonical`;
 - `same-material-canonical`;
 - `same-scene-analog`;
@@ -69,9 +82,19 @@ Strongest available appearance source:
 - `material-only`;
 - `none`.
 
-### X5 — edit locality
+### X6 — ownership/occlusion evidence
 
-How local can the operation remain?
+- `D4-exact-target-variant`;
+- `D4-derived-host-occluder`;
+- `layer-contribution-only`;
+- `ownership-inferred`;
+- `ownership-conflicted`;
+- `blocked`.
+
+A raster cue with wrong target-state ownership cannot be used as hidden-face
+geometry evidence.
+
+### X7 — edit locality
 
 - `exact-existing-pixels`;
 - `single-face`;
@@ -80,11 +103,9 @@ How local can the operation remain?
 - `contextual-region`;
 - `whole-scene`.
 
-Whole-scene authoring should be exceptional and normally donor-only.
+Whole-scene authoring is exceptional and normally donor-only.
 
-### X6 — runtime role
-
-What does the final asset do?
+### X8 — runtime role
 
 - `configuration-variant`;
 - `conditional-overlay`;
@@ -98,233 +119,240 @@ What does the final asset do?
 ## T1 — Hidden structural side face
 
 Definition:
-A cabinet/module side physically exists but is occluded in the canonical scene and becomes visible when a neighboring entity is removed.
+A cabinet/module side physically exists but is occluded in the canonical scene
+and becomes visible when a neighboring entity is removed.
 
 Examples:
-- Module 02 right side when Module 03 is hidden.
-- Other neighboring cabinet sides expected to appear when a foreground/z-order neighbor disappears.
+- Module 02 right side when Module 03 is hidden;
+- neighboring cabinet sides revealed by configuration.
 
-Typical authorities:
-- A1 physical side geometry when available;
-- A2 neighboring visible surfaces and same-material donors;
-- A3 local/projective calibration.
+Required evidence:
+- D1 side existence/dimensions when available;
+- D4 exact target-state ownership/occluder reasoning;
+- strongest valid transformation evidence;
+- D2 same-object/same-material appearance donors.
 
-Preferred candidate ladder:
-`C0 -> C1 -> C2 -> C3/C4 -> C5`
+Preferred ladder:
+`C0 -> C1 -> C2 -> C3/C4 -> C5`.
 
 Mandatory guides:
 - face polygon;
 - named front/rear/top/bottom edges;
-- donor region when available;
-- protection mask;
+- inferred-edge labeling;
+- donor region;
+- edit/protection mask;
 - contact lines.
 
 Mandatory gates:
 - front-edge alignment;
-- rear-edge/projection tolerance;
+- rear-edge/transform residual;
+- ownership validity;
 - zero protected overlap;
 - material continuity;
 - floor/plinth/counter contact;
 - outside-ROI policy.
 
-Generative policy:
-Allowed only for residual appearance after geometry is fixed.
+Generation:
+local appearance residual only after geometry and edit entitlement are fixed.
 
-Reference case:
+Reference:
 `module-02-right-exposed-face-edit`.
 
 ## T2 — Hidden plinth / toe-kick side
 
 Definition:
-A lower plinth or toe-kick side becomes visible when an adjacent module is removed.
+A lower plinth/toe-kick side becomes visible after an adjacent module is
+removed.
 
-Typical difference from T1:
+Differences from T1:
+- separate physical depth may differ from cabinet depth;
+- strong floor/contact-shadow sensitivity;
 - narrow geometry;
-- strong floor contact;
-- high sensitivity to shadow and perspective;
-- may be physically separate from the cabinet side.
+- may be stone/other material instead of carcass.
 
-Preferred candidate ladder:
-`C0 -> C1 -> C2 -> C4 -> C5`
+Preferred ladder:
+`C0 -> C1 -> C2 -> C4 -> C5`.
 
 Mandatory gates:
+- physical depth source;
 - floor contact;
-- vertical alignment with host;
+- host alignment;
 - material class;
 - no floating pixels;
-- no overlap with cabinet/front/stone.
+- no overlap with protected front/stone.
+
+BMC-01 already demonstrates why the plinth must not inherit the cabinet depth
+vector by default.
 
 ## T3 — Countertop / stone return
 
 Definition:
-A stone or countertop face/return becomes newly exposed at a module termination.
+A countertop/stone termination becomes newly exposed.
 
 Examples:
-- small left termination/rounded stone return of Module 03 when Module 02 is hidden.
+- Module 03 left termination when Module 02 is hidden.
 
-Typical authorities:
-- A2 canonical stone pixels;
-- A3 measured stone edge;
-- A1 physical support when available.
+Required evidence:
+- D2 current stone pixels;
+- D4 target-state ownership;
+- D1 physical stone support when available;
+- bounded transformation evidence.
 
-Preferred candidate ladder:
-`C0 -> C1 -> C2 -> C4 -> C5`
+Preferred ladder:
+`C0 -> C1 -> C2 -> C4 -> C5`.
 
 Forbidden default:
-Inventing a large full-height divider or side face when only a small return is evidenced.
-
-Reference:
-`module-03-left-termination-edit`.
+inventing a full-height divider/side when only a small termination is
+supported.
 
 ## T4 — Joint / seam bridge
 
 Definition:
-A small raster or vector bridge exists only when two neighboring entities coexist and visually closes their junction.
+A small raster/vector bridge exists only while two neighboring hosts coexist.
 
 Examples:
 - `stone-02-joint-bridge`;
 - `stone-03-joint-bridge`.
 
-This is not a hidden-face reconstruction. It is a conditional compositing case.
+This is conditional compositing, not hidden-face reconstruction.
 
-Preferred candidate ladder:
-`C0 -> deterministic-derived`
+Preferred ladder:
+`C0 -> deterministic-derived`.
 
-Generative policy:
-Normally prohibited.
+Generation:
+normally forbidden.
 
 Mandatory gates:
 - exact visibility truth table;
+- D4 ownership;
 - zero residual pixels when either host is hidden;
-- alpha ownership;
+- alpha/compositing round trip;
 - seam continuity.
+
+A bridge must never be reused as evidence for the exposed state in which that
+bridge is hidden.
 
 ## T5 — Object removal / background continuation
 
 Definition:
-A foreground object is removed and the scene behind it must be reconstructed.
+A foreground object is removed and missing background must be reconstructed.
 
 Subclasses:
 - `T5a wall-continuation`;
 - `T5b floor-continuation`;
 - `T5c mixed-wall-floor`.
 
-Preferred candidate ladder:
-`C0 -> same-background donor -> deterministic texture continuation -> C5 -> C6`
+Preferred ladder:
+`C0 -> same-background donor -> deterministic texture continuation -> C5 -> C6`.
 
-Geometry requirement:
-Often lower than T1, but protection and perspective repetition may be critical.
-
-Generative policy:
-More permissive than T1, because the missing appearance may have no direct physical donor, but the edit must remain local.
+Generation may be more useful than in T1, but geometry/repetition/perspective
+constraints remain explicit.
 
 ## T6 — Appliance replacement
 
 Definition:
-An appliance or commercial object is replaced while the host geometry and surrounding scene must remain canonical.
+An appliance/commercial object is replaced while host geometry and the
+surrounding canonical scene remain fixed.
 
 Examples:
 - range replacement;
 - microwave/oven substitution.
 
-Preferred candidate ladder:
-`existing approved object -> exact donor -> isolated generated donor -> deterministic composition`
+Preferred ladder:
+`existing approved object -> exact donor -> isolated generated donor -> deterministic composition`.
 
-The final runtime asset should remain a deterministic composite/delta over the canonical frame.
+A full generated scene may be donor material only when the Edit Contract
+allows it.
 
-Important:
-A full generated scene may be used only as donor when the authoring contract allows it.
+Final runtime output remains deterministic.
 
 ## T7 — Material transfer
 
 Definition:
-Geometry remains unchanged and only material appearance is transferred/recolored/textured.
+Geometry stays fixed and only material appearance changes.
 
 Examples:
 - MDF finish;
 - stone finish;
-- carcass-side donor material.
+- carcass-side material harmonization.
 
-Preferred candidate ladder:
-`deterministic material pipeline -> donor transfer -> local generative residual`
-
-Generative policy:
-Normally unnecessary for uniform MDF; may be useful for irregular stone or photographic harmonization.
+Preferred ladder:
+`deterministic material pipeline -> donor transfer -> local generative residual`.
 
 Mandatory gates:
-- alpha ownership;
+- D4 ownership;
+- protected objects;
 - seam preservation;
 - luminance/texture bounds;
-- no protected-object contamination.
+- exact reset/round trip when applicable.
 
 ## T8 — Corner / termination completion
 
 Definition:
-A small corner, cap, rounded return or termination is required to make a known geometry visually complete.
+A small cap/corner/rounded return is required for a known geometry.
 
-This class should remain small by definition.
+Preferred ladder:
+`C0 -> local donor -> deterministic construction -> C5`.
 
-Preferred candidate ladder:
-`C0 -> local donor -> deterministic construction -> C5`
-
-Escalation warning:
-If the required area becomes structurally large, reclassify as T1/T3 instead of stretching T8.
+If the area becomes structurally large, reclassify as T1/T3.
 
 ## T9 — Internal technical view
 
 Definition:
-A technical/presentation view exposes shelves, dividers, cavities or internal layout that are not part of the fixed photographic scene.
+A technical view exposes shelves, dividers, cavities or internal layout that
+are not part of the fixed photographic scene.
 
-This is **not** a raster reconstruction case.
+Not a raster reconstruction case.
 
-Authority order:
-1. A1 Scene Core / Promob-derived geometry;
-2. A4 authored technical layout;
-3. deterministic technical projection;
-4. `external-required` when unsupported.
+Source order:
+1. D1 Scene Core / Promob-derived geometry;
+2. D3 explicitly authored technical facts;
+3. deterministic presentation transform;
+4. `external-required` / blocked when unsupported.
 
 Examples:
-- Module 06 divider + left/right shelves + microwave cavity;
+- Module 06 divider + shelves + microwave cavity;
 - Module 01 shelf;
 - Module 05 shelf;
-- Module 03 authored internal layout where supplied.
+- Module 03 authored internal layout when supplied.
 
 Preferred backend:
-deterministic SVG/vector or deterministic neutral raster render.
+deterministic SVG/vector or neutral raster.
 
-Generative policy:
-Optional cosmetic polish only; never geometry authority.
+Generation:
+optional cosmetic method only; never geometry source.
 
 ## T10 — External technical/presentation-only diagram
 
 Definition:
-A diagram communicates dimensions, envelopes, openings or assembly facts without corresponding directly to scene pixels.
+A diagram communicates dimensions, envelopes, openings or assembly facts
+without corresponding directly to canonical scene pixels.
 
 Examples:
 - frontal/lateral/isometric technical view;
 - simplified exploded view;
-- dimensioned neutral cabinet illustration.
+- dimensioned neutral illustration.
 
-This class consumes A1/A4 and does not enter the scene-reconstruction candidate ladder.
+Consumes D1/D3 plus deterministic presentation transforms and does not enter
+the photographic candidate ladder.
 
 ## T11 — Occluded internal/secondary face in scene
 
 Definition:
-A physically internal or secondary face becomes visible due to configuration, but is not a simple exterior cabinet side.
+A physically internal/secondary face becomes visible due to configuration but
+is not a simple exterior side.
 
-Examples could include:
-- shelf edge exposed after opening/removing a front;
+Examples:
+- shelf edge;
 - divider edge;
 - appliance cavity lining.
 
-This class is intentionally separate from T1 because appearance evidence and contact-shadow behavior are different.
+Separate from T1 because appearance donors and contact-shadow behavior differ.
 
 Status:
 provisional; no canonical MobiliPresenter2D benchmark yet.
 
 ## Case modifiers
-
-Any core class may carry modifiers.
 
 ### M1 — donor quality
 - `exact-same-surface`;
@@ -333,8 +361,8 @@ Any core class may carry modifiers.
 - `same-material-external`;
 - `none`.
 
-### M2 — projection confidence
-Use the projection confidence vocabulary from ADR 0005.
+### M2 — transformation confidence
+Use ADR 0005 transformation vocabulary.
 
 ### M3 — hypothesis burden
 - `none`;
@@ -355,59 +383,84 @@ Use the projection confidence vocabulary from ADR 0005.
 - `agent-review`;
 - `human-review-required`.
 
+### M6 — legacy-layer quality
+- `semantic-owner-layer`;
+- `semi-transparent-decomposition`;
+- `mixed-owner-layer`;
+- `unknown`.
+
+This modifier exists because alpha contribution is not always physical
+occupancy in the legacy scene.
+
+## Confidence vector
+
+Each case should publish ADR 0005's vector:
+- G geometry/topology;
+- P projection/transform;
+- A appearance;
+- O ownership/occlusion.
+
 ## Classification examples
 
-### Module 02 right side
+### Module 02 right side — current research state
 
 - class: T1 hidden structural side face;
 - target: face;
 - visibility: occluded-by-entity;
-- geometry: local-derived + bounded rear-edge inference;
-- appearance: same-material-canonical donor from Module 01;
+- geometry/topology: D1 confirmed side, 530 mm depth;
+- transformation: local-derived + bounded inference;
+- appearance: same-material/same-scene donor available;
+- ownership: D4 exact target variant, with historical bridge cue superseded;
 - locality: small-roi;
-- runtime role: conditional-overlay;
-- generation: local-residual allowed, donor-only preferred;
-- approval: human-review-required while rear boundary remains inferred.
+- runtime: conditional-overlay;
+- generation: local residual allowed only after deterministic candidate;
+- approval: human review required while rear projection remains bounded.
+- confidence: G mixed confirmed/inferred; P local-derived; A derived; O derived/confirmed.
 
 ### Module 03 left stone termination
 
-- class: T3 countertop/stone return;
-- visibility: occluded-by-entity;
-- geometry: measured visible edge + bounded small-return interpretation;
+- class: T3;
+- D1 stone slab exists;
+- D2 current exposed pixels available;
+- D4 target-state owner verified;
+- transformation: local-derived;
 - locality: small-roi;
-- generation: local-residual allowed;
-- explicit forbidden outcome: full-height divider.
+- forbidden: full-height divider.
 
 ### Module 02↔03 stone bridge
 
-- class: T4 joint/seam bridge;
-- geometry: deterministic;
+- class: T4;
+- deterministic;
+- D4 predicate: both hosts visible;
 - generation: forbidden;
-- runtime role: conditional-overlay;
-- visibility predicate: both hosts visible.
+- runtime: conditional-overlay.
 
 ### Module 06 internal view
 
-- class: T9 internal technical view;
-- geometry: A1 confirmed from Promob-derived primitives;
-- presentation: deterministic technical projection;
+- class: T9;
+- geometry: D1 confirmed from Promob-derived primitives;
+- technical facts: D3 where explicitly authored;
+- presentation: deterministic transform;
 - generation: geometry-forbidden / cosmetic optional.
 
 ## Taxonomy evolution rule
 
-A new core class is justified only when at least one of the following is true:
+Add a new core class only when at least one is materially different:
 
-1. it requires a different authority ordering;
-2. it requires a materially different candidate ladder;
-3. it requires different mandatory gates;
-4. it permits/prohibits generation differently;
-5. it has a different runtime materialization strategy.
+1. truth/evidence domain pattern;
+2. ownership/occlusion semantics;
+3. transformation model;
+4. candidate ladder;
+5. mandatory gates;
+6. generation policy;
+7. runtime materialization strategy.
 
-Otherwise use a modifier on an existing class.
+Otherwise use modifiers.
 
 ## Open questions
 
-- Whether wall and floor continuation should remain subclasses of T5 or split because their perspective/texture models differ.
-- Whether stone returns deserve a material-specific class or remain T3 with material modifiers.
-- Whether hidden internal faces in runtime will become a real product requirement.
-- Whether technical neutral renders and photographic reconstruction should share a single packet schema or sibling packet schemas.
+- whether wall/floor continuation should split beyond T5 subclasses;
+- whether stone returns deserve another modifier rather than a separate class;
+- whether hidden internal faces become a runtime product requirement;
+- whether technical and photographic packets remain one schema family;
+- final confidence-vector thresholds for automatic escalation.
