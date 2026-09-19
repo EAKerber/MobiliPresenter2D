@@ -1422,6 +1422,61 @@
     "sceneClass": "INSUFFICIENT_CURRENT_DEPTH_EVIDENCE"
   },
   "promotionEligible": false,
+  "residualSideProbes": {
+    "module-02-existing-right-side": {
+      "evidence": {
+        "frontBoundaryMarginPx": 1,
+        "frontMask": "app/assets/kitchen/masks/02.png",
+        "id": "module-02-existing-right-side",
+        "layer": "app/assets/kitchen/layers/02_inferior_fogao.png",
+        "physicalDepthMm": 530,
+        "physicalSource": "MobiliPresenter scene-core module02 right-side",
+        "physicalStatus": "confirmed-side-exists-partial-raster-support-unknown",
+        "purpose": "measure any same-object right-side pixels already present before synthesizing missing exposure",
+        "seedQuad": [
+          [
+            745,
+            600
+          ],
+          [
+            756,
+            600
+          ],
+          [
+            756,
+            840
+          ],
+          [
+            745,
+            840
+          ]
+        ],
+        "side": "right"
+      },
+      "thresholdSweep": [
+        {
+          "reason": "seed quad contains no topology-constrained residual support",
+          "status": "BLOCKED",
+          "threshold": 32
+        },
+        {
+          "reason": "seed quad contains no topology-constrained residual support",
+          "status": "BLOCKED",
+          "threshold": 64
+        },
+        {
+          "reason": "seed quad contains no topology-constrained residual support",
+          "status": "BLOCKED",
+          "threshold": 128
+        },
+        {
+          "reason": "seed quad contains no topology-constrained residual support",
+          "status": "BLOCKED",
+          "threshold": 192
+        }
+      ]
+    }
+  },
   "sceneId": "cozinha-01",
   "schemaVersion": "SceneProjectiveConsistencyProbeReport 0.1",
   "sideLayerProbes": {
