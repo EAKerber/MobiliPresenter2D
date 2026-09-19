@@ -1,7 +1,7 @@
 from __future__ import annotations
 import unittest
 from PIL import Image
-from tools.research_bmc01_minimal_completion import nearest_fill, binary_alpha
+from tools.research_bmc01_minimal_completion import nearest_fill, binary_alpha, promote_soft_host_rgb
 
 class BMC01MinimalCompletionTests(unittest.TestCase):
     def test_binary_alpha_respects_threshold(self):
@@ -16,6 +16,23 @@ class BMC01MinimalCompletionTests(unittest.TestCase):
             im.save(root/"a.png")
             with patch("tools.research_bmc01_minimal_completion.ROOT",root):
                 self.assertEqual(list(binary_alpha("a.png",128).getdata()),[0,0,255])
+
+    def test_promote_soft_host_rgb_only_inside_missing_and_below_threshold(self):
+        clean=Image.new("RGBA",(4,1),(1,2,3,255))
+        host=Image.new("RGBA",(4,1))
+        host.putdata([
+            (10,20,30,0),
+            (40,50,60,19),
+            (70,80,90,127),
+            (100,110,120,255),
+        ])
+        missing=Image.new("L",(4,1),255)
+        out,n=promote_soft_host_rgb(clean,missing,host,128)
+        self.assertEqual(n,2)
+        self.assertEqual(out.getpixel((0,0))[3],0)
+        self.assertEqual(out.getpixel((1,0)),(40,50,60,255))
+        self.assertEqual(out.getpixel((2,0)),(70,80,90,255))
+        self.assertEqual(out.getpixel((3,0))[3],0)
 
     def test_nearest_fill_uses_only_donor(self):
         clean=Image.new("RGBA",(10,10),(10,20,30,255))
