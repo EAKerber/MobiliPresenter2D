@@ -1,152 +1,164 @@
 #!/usr/bin/env python3
-"""Derive orientative technical front guides from the approved front finish masks.
+"""Derive orientative technical front guides from approved structural seam masks.
 
-Confirmed technical layouts remain authoritative. These guides are only for modules
-whose front count is confirmed but whose internal proportions are otherwise orientative.
+Confirmed technical layouts remain authoritative. These guides are used only for
+modules whose front count is confirmed while internal proportions remain orientative.
 """
 from __future__ import annotations
 
-from collections import deque
 from pathlib import Path
 import json
-from PIL import Image, ImageFilter
+from PIL import Image, ImageChops
 
 ROOT = Path(__file__).resolve().parent.parent
 MASK_DIR = ROOT / "assets/kitchen/masks"
 OUTPUT = ROOT / "data/front-guide-data.js"
-EXPECTED = {"01": 2, "05": 2, "06": 3, "07": 2}
+
+SPECS = {
+    "01": {"frontCount": 2, "vertical": 1, "horizontal": 0},
+    "05": {"frontCount": 2, "vertical": 1, "horizontal": 0},
+    "06": {"frontCount": 3, "vertical": 2, "horizontal": 1},
+    "07": {"frontCount": 2, "vertical": 1, "horizontal": 0},
+}
 
 
-def connected_components(binary: bytearray, width: int, height: int):
-    visited = bytearray(width * height)
-    found = []
-    for start, value in enumerate(binary):
-        if not value or visited[start]:
-            continue
-        queue = deque([start])
-        visited[start] = 1
-        area = 0
-        min_x, min_y, max_x, max_y = width, height, -1, -1
-        while queue:
-            index = queue.popleft()
-            area += 1
-            y, x = divmod(index, width)
-            min_x, max_x = min(min_x, x), max(max_x, x)
-            min_y, max_y = min(min_y, y), max(max_y, y)
-            for neighbor in (
-                index - 1 if x > 0 else -1,
-                index + 1 if x + 1 < width else -1,
-                index - width if y > 0 else -1,
-                index + width if y + 1 < height else -1,
-            ):
-                if neighbor >= 0 and binary[neighbor] and not visited[neighbor]:
-                    visited[neighbor] = 1
-                    queue.append(neighbor)
-        found.append({"area": area, "bbox": (min_x, min_y, max_x + 1, max_y + 1)})
-    return found
+def cluster_peaks(scores, count, threshold_ratio=0.15):
+    if count == 0:
+        return []
+    maximum = max(scores) if scores else 0
+    if maximum <= 0:
+        raise RuntimeError("empty seam signal")
+    threshold = maximum * threshold_ratio
+    clusters = []
+    current = []
+    for index, score in enumerate(scores):
+        if score >= threshold:
+            current.append((index, score))
+        elif current:
+            clusters.append(current)
+            current = []
+    if current:
+        clusters.append(current)
+
+    ranked = []
+    for cluster in clusters:
+        strength = sum(score for _, score in cluster)
+        coordinate = sum(index * score for index, score in cluster) / max(strength, 1e-9)
+        ranked.append({"coordinate": coordinate, "strength": strength, "indices": [index for index, _ in cluster]})
+    ranked.sort(key=lambda item: item["strength"], reverse=True)
+    selected = ranked[:count]
+    if len(selected) != count:
+        raise RuntimeError(f"expected {count} seam clusters, found {len(selected)} from {ranked}")
+    selected.sort(key=lambda item: item["coordinate"])
+    return selected
 
 
-def internal_lines(rects):
-    edges = []
-    outer_tolerance = 0.035
-    for x0, y0, x1, y1 in rects:
-        if x0 > outer_tolerance:
-            edges.append(["v", x0, y0, y1])
-        if x1 < 1 - outer_tolerance:
-            edges.append(["v", x1, y0, y1])
-        if y0 > outer_tolerance:
-            edges.append(["h", y0, x0, x1])
-        if y1 < 1 - outer_tolerance:
-            edges.append(["h", y1, x0, x1])
-
-    merged = []
-    for edge in sorted(edges, key=lambda value: (value[0], value[1], value[2], value[3])):
-        orientation, coordinate, start, end = edge
-        if end - start < 0.10:
-            continue
-        match = None
-        for existing in merged:
-            if existing[0] != orientation or abs(existing[1] - coordinate) > 0.028:
-                continue
-            overlap = max(0, min(existing[3], end) - max(existing[2], start))
-            if overlap >= 0.35 * min(existing[3] - existing[2], end - start):
-                match = existing
-                break
-        if match:
-            match[1] = (match[1] + coordinate) / 2
-            match[2] = min(match[2], start)
-            match[3] = max(match[3], end)
-        else:
-            merged.append([orientation, coordinate, start, end])
-
-    lines = []
-    for orientation, coordinate, start, end in merged:
-        if orientation == "v":
-            line = {"x1": coordinate, "y1": start, "x2": coordinate, "y2": end}
-        else:
-            line = {"x1": start, "y1": coordinate, "x2": end, "y2": coordinate}
-        lines.append({key: round(value, 4) for key, value in line.items()})
-    return lines
-
-
-def derive(key: str, expected_count: int):
-    alpha = Image.open(MASK_DIR / f"{key}.png").convert("RGBA").getchannel("A")
-    bounds = alpha.getbbox()
+def derive(key: str, spec: dict):
+    finish = Image.open(MASK_DIR / f"{key}.png").convert("RGBA").getchannel("A")
+    shadow = Image.open(MASK_DIR / f"structure-{key}-shadow.png").convert("RGBA").getchannel("A")
+    highlight = Image.open(MASK_DIR / f"structure-{key}-highlight.png").convert("RGBA").getchannel("A")
+    energy = ImageChops.lighter(shadow, highlight)
+    bounds = finish.getbbox()
     if not bounds:
         raise RuntimeError(f"empty finish mask: {key}")
 
-    crop = alpha.crop(bounds)
-    width, height = crop.size
-    chosen = None
-    attempts = []
-    for erosion in [1, 3, 5, 7, 9]:
-        work = crop if erosion == 1 else crop.filter(ImageFilter.MinFilter(erosion))
-        binary = bytearray(1 if value >= 96 else 0 for value in work.tobytes())
-        active = sum(binary)
-        found = connected_components(binary, width, height)
-        meaningful = [item for item in found if item["area"] >= max(40, int(active * 0.015))]
-        meaningful.sort(key=lambda item: item["area"], reverse=True)
-        selected = meaningful[:expected_count]
-        coverage = sum(item["area"] for item in selected) / max(active, 1)
-        attempts.append({"erosion": erosion, "components": len(meaningful), "coverage": round(coverage, 4)})
-        if len(selected) == expected_count and coverage >= 0.66:
-            chosen = (erosion, selected, coverage)
-            break
+    finish = finish.crop(bounds)
+    energy = energy.crop(bounds)
+    width, height = finish.size
+    finish_pixels = list(finish.getdata())
+    energy_pixels = list(energy.getdata())
 
-    if not chosen:
-        raise RuntimeError(f"could not derive {key}: {attempts}")
+    column_scores = []
+    for x in range(width):
+        values = [energy_pixels[y * width + x] for y in range(height) if finish_pixels[y * width + x] >= 64]
+        strong = sum(1 for value in values if value >= 32)
+        mean = sum(values) / max(1, len(values))
+        coverage = strong / max(1, len(values))
+        column_scores.append(mean * coverage)
 
-    erosion, selected, coverage = chosen
-    rects = []
-    for item in selected:
-        x0, y0, x1, y1 = item["bbox"]
-        rects.append([round(x0 / width, 4), round(y0 / height, 4), round(x1 / width, 4), round(y1 / height, 4)])
-    rects.sort(key=lambda item: (item[1], item[0]))
-    lines = internal_lines(rects)
-    vertical = sum(1 for line in lines if abs(line["x1"] - line["x2"]) < 0.001)
-    horizontal = sum(1 for line in lines if abs(line["y1"] - line["y2"]) < 0.001)
-    if vertical < 1:
-        raise RuntimeError(f"no vertical guide for {key}: {rects} {lines}")
-    if key == "06" and horizontal < 1:
-        raise RuntimeError(f"no horizontal guide for {key}: {rects} {lines}")
+    row_scores = []
+    for y in range(height):
+        values = [energy_pixels[y * width + x] for x in range(width) if finish_pixels[y * width + x] >= 64]
+        strong = sum(1 for value in values if value >= 32)
+        mean = sum(values) / max(1, len(values))
+        coverage = strong / max(1, len(values))
+        row_scores.append(mean * coverage)
+
+    margin_x = max(1, round(width * 0.04))
+    margin_y = max(1, round(height * 0.04))
+    masked_columns = [0.0 if x < margin_x or x > width - margin_x - 1 else value for x, value in enumerate(column_scores)]
+    masked_rows = [0.0 if y < margin_y or y > height - margin_y - 1 else value for y, value in enumerate(row_scores)]
+
+    vertical = cluster_peaks(masked_columns, spec["vertical"])
+    horizontal = cluster_peaks(masked_rows, spec["horizontal"])
+
+    lines = []
+    diagnostics = {"vertical": [], "horizontal": []}
+
+    for peak in vertical:
+        indices = peak["indices"]
+        strong_pixels = []
+        for x in indices:
+            for y in range(height):
+                index = y * width + x
+                if finish_pixels[index] >= 64 and energy_pixels[index] >= 32:
+                    strong_pixels.append((x, y))
+        if not strong_pixels:
+            raise RuntimeError(f"vertical seam without support: {key} {peak}")
+        y0 = min(y for _, y in strong_pixels)
+        y1 = max(y for _, y in strong_pixels) + 1
+        coordinate = peak["coordinate"] / width
+        line = {
+            "x1": round(coordinate, 4), "y1": round(y0 / height, 4),
+            "x2": round(coordinate, 4), "y2": round(y1 / height, 4)
+        }
+        lines.append(line)
+        diagnostics["vertical"].append({
+            "position": round(coordinate, 4),
+            "strength": round(peak["strength"], 3),
+            "coverageSpan": round((y1 - y0) / height, 4),
+        })
+
+    for peak in horizontal:
+        indices = peak["indices"]
+        strong_pixels = []
+        for y in indices:
+            for x in range(width):
+                index = y * width + x
+                if finish_pixels[index] >= 64 and energy_pixels[index] >= 32:
+                    strong_pixels.append((x, y))
+        if not strong_pixels:
+            raise RuntimeError(f"horizontal seam without support: {key} {peak}")
+        x0 = min(x for x, _ in strong_pixels)
+        x1 = max(x for x, _ in strong_pixels) + 1
+        coordinate = peak["coordinate"] / height
+        line = {
+            "x1": round(x0 / width, 4), "y1": round(coordinate, 4),
+            "x2": round(x1 / width, 4), "y2": round(coordinate, 4)
+        }
+        lines.append(line)
+        diagnostics["horizontal"].append({
+            "position": round(coordinate, 4),
+            "strength": round(peak["strength"], 3),
+            "coverageSpan": round((x1 - x0) / width, 4),
+        })
 
     return {
-        "source": "finish-mask-components",
-        "sourceMask": f"assets/kitchen/masks/{key}.png",
-        "erosionPx": erosion,
-        "componentCount": expected_count,
-        "coverage": round(coverage, 4),
-        "rects": [
-            {"x": item[0], "y": item[1], "width": round(item[2] - item[0], 4), "height": round(item[3] - item[1], 4)}
-            for item in rects
+        "source": "structure-mask-seam-energy",
+        "sourceMasks": [
+            f"assets/kitchen/masks/structure-{key}-shadow.png",
+            f"assets/kitchen/masks/structure-{key}-highlight.png",
         ],
+        "frontCount": spec["frontCount"],
+        "expectedVerticalSeams": spec["vertical"],
+        "expectedHorizontalSeams": spec["horizontal"],
         "lines": lines,
-        "attempts": attempts,
+        "diagnostics": diagnostics,
     }
 
 
 def main() -> int:
-    guides = {f"module-{key}": derive(key, count) for key, count in EXPECTED.items()}
+    guides = {f"module-{key}": derive(key, spec) for key, spec in SPECS.items()}
     output = '''(function (global) {
   "use strict";
   global.CASA_FRONT_GUIDES = Object.freeze(%s);
