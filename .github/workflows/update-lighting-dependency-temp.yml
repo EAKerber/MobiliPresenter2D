@@ -1,0 +1,212 @@
+name: Update lighting dependency temp
+
+on:
+  push:
+    branches:
+      - feat/global-finishes-stone-mobile-pip
+    paths:
+      - .github/workflows/update-lighting-dependency-temp.yml
+
+permissions:
+  contents: write
+
+jobs:
+  patch-and-gate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: feat/global-finishes-stone-mobile-pip
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install Python dependencies
+        run: python -m pip install -r tools/requirements.txt
+
+      - name: Patch dependency graph and copy
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from pathlib import Path
+
+          def replace_once(path, old, new):
+              p=Path(path)
+              text=p.read_text()
+              count=text.count(old)
+              if count != 1:
+                  raise SystemExit(f"PATCH_COUNT:{path}:{count}:{old!r}")
+              p.write_text(text.replace(old,new,1))
+
+          replace_once(
+              "app/data/scene-data.js",
+              'requiresVisibleIds: ["module-04"],',
+              'requiresVisibleIds: ["module-04", "module-06"],'
+          )
+
+          replace_once(
+              "app/data/catalog-data.js",
+              'requirements: ["Requer a lateral da geladeira."], publicPriceCents: null',
+              'requirements: ["Requer a lateral da geladeira.", "Requer o aéreo da pia (Módulo 06)."], publicPriceCents: null'
+          )
+
+          replace_once(
+              "app/index.html",
+              '<span><strong>Iluminação embutida</strong><small>Realça a bancada e requer a lateral da geladeira.</small></span>',
+              '<span><strong>Iluminação embutida</strong><small>Realça a bancada e requer a lateral da geladeira e o aéreo da pia.</small></span>'
+          )
+
+          test_path=Path("app/tools/test-core.js")
+          text=test_path.read_text()
+          anchor='''const module04Entity = scene.entities.find((entity) => entity.id === "module-04");
+          let visibilityState = resolved(core.createInitialState(scene));
+          '''
+          insert='''const lightingEntity = scene.entities.find((entity) => entity.id === "lighting-08");
+          assert.deepEqual(Array.from(lightingEntity.requiresVisibleIds), ["module-04", "module-06"]);
+
+          const noModule06Probe = core.createInitialState(scene);
+          core.setEntityVisibility(noModule06Probe, "module-06", false);
+          const noModule06 = resolved(noModule06Probe);
+          assert.equal(noModule06["module-04"].visible, true);
+          assert.equal(noModule06["module-06"].visible, false);
+          assert.equal(noModule06["lighting-08"].visible, false);
+          assert.equal(noModule06["lighting-08"].reason, "requirement-hidden");
+
+          const lightingOffProbe = core.createInitialState(scene);
+          core.setEntityVisibility(lightingOffProbe, "lighting-08", false);
+          const lightingOff = resolved(lightingOffProbe);
+          assert.equal(lightingOff["module-04"].visible, true);
+          assert.equal(lightingOff["module-06"].visible, true);
+          assert.equal(lightingOff["lighting-08"].visible, false);
+          assert.equal(lightingOff["lighting-08"].reason, "intent-off");
+
+          const module04Entity = scene.entities.find((entity) => entity.id === "module-04");
+          let visibilityState = resolved(core.createInitialState(scene));
+          '''
+          if text.count(anchor)!=1:
+              raise SystemExit("TEST_ANCHOR")
+          test_path.write_text(text.replace(anchor,insert,1))
+
+          backlog=Path("docs/work/global-materials-mobile-pip-backlog.md")
+          body=backlog.read_text()
+          addition='''
+
+          ## B8 — Correção do grafo de dependências da iluminação
+          - [x] Iluminação 08 requer simultaneamente Módulo 04 e Módulo 06.
+          - [x] Dependência não recíproca: desligar a iluminação não oculta Módulo 04 nem Módulo 06.
+          - [x] Ocultar Módulo 06 torna a iluminação indisponível por `requirement-hidden`, assim como já ocorria com Módulo 04.
+          - [x] Copy comercial/UX atualizado para refletir ambos os requisitos.
+          - [x] Cobertura adicionada ao teste determinístico do grafo.
+          '''
+          if "## B8 — Correção do grafo de dependências da iluminação" not in body:
+              backlog.write_text(body + addition)
+          PY
+
+      - name: Syntax and deterministic tests
+        run: |
+          node --check app/data/scene-data.js
+          node --check app/data/catalog-data.js
+          cd app
+          npm test
+
+      - name: Browser dependency gate
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/pw
+          cd /tmp/pw
+          npm init -y >/dev/null 2>&1
+          npm install playwright@1.55.0 >/dev/null
+          npx playwright install --with-deps chromium >/dev/null
+
+          python -m http.server 4173 --directory "$GITHUB_WORKSPACE/app" >/tmp/mobili-http.log 2>&1 &
+          server_pid=$!
+          trap 'kill "$server_pid" 2>/dev/null || true' EXIT
+          sleep 1
+
+          cat >gate.cjs <<'JS'
+          const { chromium } = require("playwright");
+          (async () => {
+            const browser = await chromium.launch({headless:true});
+            const page = await browser.newPage({viewport:{width:1366,height:768}});
+            const errors=[];
+            page.on("pageerror", e=>errors.push(String(e)));
+            await page.goto("http://127.0.0.1:4173/",{waitUntil:"networkidle"});
+            const assert=(v,m)=>{if(!v)throw new Error(m)};
+
+            const reqs=await page.evaluate(() =>
+              window.CASA_EM_MODULOS_SCENE.entities.find(e=>e.id==="lighting-08").requiresVisibleIds
+            );
+            assert(JSON.stringify(reqs)===JSON.stringify(["module-04","module-06"]),"lighting dependency graph mismatch");
+
+            await page.evaluate(() => {
+              const toggle=[...document.querySelectorAll('[data-module-toggle]')].find(x=>x.dataset.moduleToggle==="module-06");
+              if (!toggle) throw new Error("module-06 toggle missing");
+              toggle.click();
+            });
+            await page.waitForTimeout(150);
+            const after06=await page.evaluate(() => {
+              const state=window.CASA_EM_MODULOS_DEBUG.getState();
+              const vis=window.CASA_EM_MODULOS_DEBUG.getVisibility();
+              return {
+                m04:vis["module-04"],
+                m06:vis["module-06"],
+                light:vis["lighting-08"],
+                lightIntent:state.visibilityByEntity["lighting-08"]
+              };
+            });
+            assert(after06.m04.visible===true,"module-04 changed when module-06 was hidden");
+            assert(after06.m06.visible===false,"module-06 did not hide");
+            assert(after06.light.visible===false,"lighting remained visible without module-06");
+            assert(after06.light.reason==="requirement-hidden" || after06.light.reason==="intent-off","lighting did not become unavailable");
+
+            await page.reload({waitUntil:"networkidle"});
+            await page.locator("#lightingToggle").uncheck();
+            await page.waitForTimeout(100);
+            const inverse=await page.evaluate(() => {
+              const vis=window.CASA_EM_MODULOS_DEBUG.getVisibility();
+              return {m04:vis["module-04"].visible,m06:vis["module-06"].visible,light:vis["lighting-08"]};
+            });
+            assert(inverse.m04===true && inverse.m06===true,"lighting dependency became reciprocal");
+            assert(inverse.light.visible===false,"lighting toggle did not turn off lighting");
+
+            const copy=await page.locator('label[for="lightingToggle"] small').textContent();
+            assert(copy.includes("lateral da geladeira") && copy.includes("aéreo da pia"),"lighting requirement copy incomplete");
+            if(errors.length)throw new Error(errors.join(" | "));
+            await browser.close();
+          })().catch(e=>{console.error(e);process.exit(1)});
+          JS
+          node gate.cjs
+
+      - name: Commit with CAS and remove temporary workflow
+        env:
+          TARGET_BRANCH: feat/global-finishes-stone-mobile-pip
+          EXPECTED_HEAD: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git rm .github/workflows/update-lighting-dependency-temp.yml
+          git add app/data/scene-data.js app/data/catalog-data.js app/index.html app/tools/test-core.js docs/work/global-materials-mobile-pip-backlog.md
+
+          remote_before="$(git ls-remote origin "refs/heads/$TARGET_BRANCH" | cut -f1)"
+          if [ "$remote_before" != "$EXPECTED_HEAD" ]; then
+            echo "TARGET_HEAD_DRIFT:$remote_before!=$EXPECTED_HEAD" >&2
+            exit 2
+          fi
+
+          git commit -m "fix: require module 06 for embedded lighting"
+          result="$(git rev-parse HEAD)"
+          git push origin "HEAD:refs/heads/$TARGET_BRANCH"
+          remote_after="$(git ls-remote origin "refs/heads/$TARGET_BRANCH" | cut -f1)"
+          test "$remote_after" = "$result"
+          echo "LIGHTING_DEPENDENCY_RESULT=$result"
