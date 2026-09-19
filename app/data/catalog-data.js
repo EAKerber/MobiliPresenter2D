@@ -173,49 +173,49 @@
       finishes: [
         {
           id: "base-light", publicLabel: "Base clara", color: "#eeeae3", status: "published", adjustmentLabel: "normal",
-          textureAsset: "assets/materials/mdf-base.webp", textureSize: "160px 160px", textureOpacity: 0.28, textureBlend: "multiply"
+          materialType: "mdf", textureAsset: "assets/materials/mdf-base.webp", textureSize: "160px 160px", textureStrength: 0.18
         },
         {
           id: "tone-15-a", publicLabel: "Avelã", color: "#8d8178", status: "published", adjustmentLabel: "+15%",
-          textureAsset: "assets/materials/mdf-warm.webp", textureSize: "160px 160px", textureOpacity: 0.72, textureBlend: "multiply"
+          materialType: "mdf", textureAsset: "assets/materials/mdf-warm.webp", textureSize: "160px 160px", textureStrength: 0.24
         },
         {
           id: "tone-15-b", publicLabel: "Névoa", color: "#d7d5cf", status: "published", adjustmentLabel: "+15%",
-          textureAsset: "assets/materials/mdf-soft.webp", textureSize: "160px 160px", textureOpacity: 0.64, textureBlend: "multiply"
+          materialType: "mdf", textureAsset: "assets/materials/mdf-soft.webp", textureSize: "160px 160px", textureStrength: 0.16
         },
         {
           id: "tone-15-c", publicLabel: "Aço", color: "#777874", status: "published", adjustmentLabel: "+15%",
-          textureAsset: "assets/materials/mdf-metal.webp", textureSize: "160px 160px", textureOpacity: 0.72, textureBlend: "multiply"
+          materialType: "mdf", textureAsset: "assets/materials/mdf-metal.webp", textureSize: "160px 160px", textureStrength: 0.22
         },
         {
           id: "tone-25-a", publicLabel: "Bosque", color: "#92775f", status: "published", adjustmentLabel: "+25%",
-          textureAsset: "assets/materials/mdf-wood.webp", textureSize: "180px 180px", textureOpacity: 0.88, textureBlend: "multiply"
+          materialType: "mdf", textureAsset: "assets/materials/mdf-wood.webp", textureSize: "180px 180px", textureStrength: 0.58
         },
         {
           id: "tone-25-b", publicLabel: "Carvão", color: "#30312f", status: "published", adjustmentLabel: "+25%",
-          textureAsset: "assets/materials/mdf-dark.webp", textureSize: "160px 160px", textureOpacity: 0.84, textureBlend: "multiply"
+          materialType: "mdf", textureAsset: "assets/materials/mdf-dark.webp", textureSize: "160px 160px", textureStrength: 0.28
         }
       ],
       stonePackages: [
         {
           id: "stone-existing", label: "Padrão", description: "Mantém a pedra atual do conjunto.", color: null,
-          swatchColor: "#b7b0a7"
+          materialType: "stone", swatchColor: "#b7b0a7"
         },
         {
           id: "stone-standard-sink", label: "Padrão + cuba nova", description: "Pedra padrão com cuba nova.", color: null,
-          swatchColor: "#b7b0a7"
+          materialType: "stone", swatchColor: "#b7b0a7"
         },
         {
           id: "stone-light", label: "Clara mineral", description: "Pedra clara de granulação fina.", color: "#e3ddd2",
-          swatchColor: "#e4ded2", textureAsset: "assets/materials/stone-light.webp", textureScale: 1
+          materialType: "stone", swatchColor: "#e4ded2", textureAsset: "assets/materials/stone-light.webp", textureScale: 1
         },
         {
           id: "stone-green", label: "Verde profundo", description: "Pedra verde-escura de granulação contrastante.", color: "#1e2a24",
-          swatchColor: "#1f2924", textureAsset: "assets/materials/stone-green.webp", textureScale: 1
+          materialType: "stone", swatchColor: "#1f2924", textureAsset: "assets/materials/stone-green.webp", textureScale: 1
         },
         {
           id: "stone-dark", label: "Preta mineral", description: "Pedra preta de granulação fina e reflexos discretos.", color: "#171918",
-          swatchColor: "#181a19", textureAsset: "assets/materials/stone-dark.webp", textureScale: 1
+          materialType: "stone", swatchColor: "#181a19", textureAsset: "assets/materials/stone-dark.webp", textureScale: 1
         }
       ],
       handles: [

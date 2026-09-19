@@ -1377,6 +1377,24 @@
     return Boolean(global.matchMedia?.("(max-width: 700px)").matches);
   }
 
+  function reclampPinnedScene() {
+    if (!viewerCard || !document.body.classList.contains("is-mobile-scene-pinned")) return;
+    const rect = viewerCard.getBoundingClientRect();
+    const maxWidth = Math.max(140, global.innerWidth - 16);
+    if (rect.width > maxWidth) {
+      document.documentElement.style.setProperty("--mobile-pip-width", maxWidth + "px");
+      requestAnimationFrame(reclampPinnedScene);
+      return;
+    }
+    if (viewerCard.dataset.pipPositioned !== "true") return;
+    const current = viewerCard.getBoundingClientRect();
+    const left = clamp(current.left, 8, Math.max(8, global.innerWidth - current.width - 8));
+    const top = clamp(current.top, 8, Math.max(8, global.innerHeight - current.height - 8));
+    document.documentElement.style.setProperty("--mobile-pip-left", left + "px");
+    document.documentElement.style.setProperty("--mobile-pip-top", top + "px");
+    document.documentElement.style.setProperty("--mobile-pip-right", "auto");
+  }
+
   function syncPinnedSceneUi() {
     const mobile = isMobileViewport();
     const shouldDock = mobile && mobileScenePinEnabled && mobileSceneIsMini;
@@ -1393,6 +1411,7 @@
     if (viewerCard) requestAnimationFrame(() => {
       const height = Math.ceil(viewerCard.getBoundingClientRect().height);
       document.documentElement.style.setProperty("--mobile-pip-height", shouldDock ? height + "px" : "0px");
+      if (shouldDock) reclampPinnedScene();
     });
     if (mobileScenePin) {
       mobileScenePin.setAttribute("aria-pressed", String(mobileScenePinEnabled));
@@ -1411,6 +1430,7 @@
       mobileSceneIsMini = viewerPinSentinel.getBoundingClientRect().top < 0;
     } else if (!mobileScenePinEnabled) {
       mobileSceneIsMini = false;
+      mobileSceneTransparent = false;
     }
     syncPinnedSceneUi();
     announce(mobileScenePinEnabled ? "Mini-cena fixada para contexto durante a configuração." : "Mini-cena liberada para o fluxo normal.");
@@ -1493,7 +1513,7 @@
       if (nextMini === mobileSceneIsMini) return;
       mobileSceneIsMini = nextMini;
       syncPinnedSceneUi();
-      if (nextMini) announce("Mini-cena disponível abaixo das etapas; toque em um módulo apenas para destacá-lo.");
+      if (nextMini) announce("Mini-cena disponível abaixo das etapas; toque em um módulo para abrir sua ficha.");
     }, { threshold: 0 });
     pinObserver.observe(viewerPinSentinel);
   }
@@ -1538,13 +1558,13 @@
       const finishId = selectedModuleFinish(product);
       const finish = catalog.options.finishes.find((item) => item.id === finishId) || catalog.options.finishes[0];
       const hasTexture = Boolean(finish.textureAsset);
+      layer.classList.add("is-color");
       layer.classList.toggle("is-texture", hasTexture);
-      layer.classList.toggle("is-color", !hasTexture);
       layer.style.backgroundImage = hasTexture ? `url("${finish.textureAsset}")` : "none";
       layer.style.backgroundColor = finish.color;
       layer.style.setProperty("--finish-size", finish.textureSize || "160px 160px");
-      layer.style.setProperty("--finish-blend", finish.textureBlend || "multiply");
-      layer.style.setProperty("--finish-opacity", String(hasTexture ? finish.textureOpacity : finishes.resolveOverlayOpacity(finish, finish.color)));
+      layer.style.setProperty("--finish-background-blend", hasTexture ? "luminosity" : "normal");
+      layer.style.setProperty("--finish-opacity", String(finishes.resolveOverlayOpacity(finish, finish.color)));
     });
   }
 
@@ -1824,7 +1844,7 @@
   });
 
   document.querySelectorAll("[data-step]").forEach((button) => {
-    const stepName = button.querySelector("[data-mobile-label]")?.textContent?.trim();
+    const stepName = button.querySelector("[data-compact-label]")?.textContent?.trim();
     if (stepName) {
       button.setAttribute("aria-label", stepName);
       button.title = stepName;
