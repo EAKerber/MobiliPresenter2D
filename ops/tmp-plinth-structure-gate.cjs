@@ -54,7 +54,7 @@ const fs = require("fs");
     await page.locator('[data-step="finishes"]').click();
     await page.locator('[data-finish-id="'+id+'"]').click();
     await page.waitForTimeout(180);
-    return page.locator('[data-entity-id="module-03"]').evaluate(group => {
+    return page.locator('.layer-group[data-entity-id="module-03"]').evaluate(group => {
       const shadow=group.querySelector(".structure-layer--shadow");
       const highlight=group.querySelector(".structure-layer--highlight");
       return {
