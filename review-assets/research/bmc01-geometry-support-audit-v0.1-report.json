@@ -102,45 +102,45 @@
         {
           "bounds": [
             742,
-            568,
-            754,
+            569,
+            752,
             857
           ],
           "historicalOverlayInsideGeometryPixels": 0,
           "historicalOverlayOutsideGeometryPixels": 1910,
           "id": "local-carcass",
           "missingCoveredByHistoricalOverlayPixels": 0,
-          "missingUncoveredByHistoricalOverlayPixels": 126,
+          "missingUncoveredByHistoricalOverlayPixels": 101,
           "outsideAuthorizedRoiPixels": 0,
-          "preOverlayExistingSupportPixels": 3078,
-          "preOverlayExistingSupportRatio": 0.9606741573033708,
-          "preOverlayMissingPixels": 126,
-          "preOverlayMissingRatio": 0.03932584269662921,
+          "preOverlayExistingSupportPixels": 2581,
+          "preOverlayExistingSupportRatio": 0.9623415361670395,
+          "preOverlayMissingPixels": 101,
+          "preOverlayMissingRatio": 0.037658463832960475,
           "quad": [
             [
               742.0,
               590.0
             ],
             [
-              752.6,
-              567.8363636363637
+              750.798418972332,
+              568.8
             ],
             [
-              752.6,
-              833.8363636363637
+              750.798418972332,
+              834.8
             ],
             [
               742.0,
               856.0
             ]
           ],
-          "totalPixels": 3204
+          "totalPixels": 2682
         },
         {
           "bounds": [
             742,
-            841,
-            750,
+            842,
+            749,
             899
           ],
           "historicalOverlayInsideGeometryPixels": 0,
@@ -149,7 +149,7 @@
           "missingCoveredByHistoricalOverlayPixels": 0,
           "missingUncoveredByHistoricalOverlayPixels": 0,
           "outsideAuthorizedRoiPixels": 0,
-          "preOverlayExistingSupportPixels": 352,
+          "preOverlayExistingSupportPixels": 309,
           "preOverlayExistingSupportRatio": 1.0,
           "preOverlayMissingPixels": 0,
           "preOverlayMissingRatio": 0.0,
@@ -159,19 +159,19 @@
               856.0
             ],
             [
-              748.9766,
-              841.4125636363636
+              747.7908537549407,
+              842.0468
             ],
             [
-              748.9766,
-              883.4125636363636
+              747.7908537549407,
+              884.0468
             ],
             [
               742.0,
               898.0
             ]
           ],
-          "totalPixels": 352
+          "totalPixels": 309
         }
       ]
     },
@@ -255,76 +255,76 @@
         {
           "bounds": [
             742,
-            568,
-            754,
+            569,
+            752,
             857
           ],
           "historicalOverlayInsideGeometryPixels": 0,
           "historicalOverlayOutsideGeometryPixels": 1910,
           "id": "local-carcass",
           "missingCoveredByHistoricalOverlayPixels": 0,
-          "missingUncoveredByHistoricalOverlayPixels": 2403,
+          "missingUncoveredByHistoricalOverlayPixels": 1878,
           "outsideAuthorizedRoiPixels": 0,
-          "preOverlayExistingSupportPixels": 801,
-          "preOverlayExistingSupportRatio": 0.25,
-          "preOverlayMissingPixels": 2403,
-          "preOverlayMissingRatio": 0.75,
+          "preOverlayExistingSupportPixels": 804,
+          "preOverlayExistingSupportRatio": 0.29977628635346754,
+          "preOverlayMissingPixels": 1878,
+          "preOverlayMissingRatio": 0.7002237136465325,
           "quad": [
             [
               742.0,
               590.0
             ],
             [
-              752.6,
-              567.8363636363637
+              750.798418972332,
+              568.8
             ],
             [
-              752.6,
-              833.8363636363637
+              750.798418972332,
+              834.8
             ],
             [
               742.0,
               856.0
             ]
           ],
-          "totalPixels": 3204
+          "totalPixels": 2682
         },
         {
           "bounds": [
             742,
-            841,
-            750,
+            842,
+            749,
             899
           ],
           "historicalOverlayInsideGeometryPixels": 0,
           "historicalOverlayOutsideGeometryPixels": 1910,
           "id": "local-plinth",
           "missingCoveredByHistoricalOverlayPixels": 0,
-          "missingUncoveredByHistoricalOverlayPixels": 221,
+          "missingUncoveredByHistoricalOverlayPixels": 178,
           "outsideAuthorizedRoiPixels": 0,
           "preOverlayExistingSupportPixels": 131,
-          "preOverlayExistingSupportRatio": 0.3721590909090909,
-          "preOverlayMissingPixels": 221,
-          "preOverlayMissingRatio": 0.6278409090909091,
+          "preOverlayExistingSupportRatio": 0.42394822006472493,
+          "preOverlayMissingPixels": 178,
+          "preOverlayMissingRatio": 0.5760517799352751,
           "quad": [
             [
               742.0,
               856.0
             ],
             [
-              748.9766,
-              841.4125636363636
+              747.7908537549407,
+              842.0468
             ],
             [
-              748.9766,
-              883.4125636363636
+              747.7908537549407,
+              884.0468
             ],
             [
               742.0,
               898.0
             ]
           ],
-          "totalPixels": 352
+          "totalPixels": 309
         }
       ]
     }

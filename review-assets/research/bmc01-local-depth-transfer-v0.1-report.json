@@ -3,23 +3,23 @@
     "carcass": {
       "cornerDisplacementPx": [
         4.0,
-        44.08076734344333,
-        39.23965358184426,
+        45.4677751773137,
+        40.6733153255884,
         1.0
       ],
-      "maxCornerDisplacementPx": 44.08076734344333,
-      "meanCornerDisplacementPx": 22.080105231321895
+      "maxCornerDisplacementPx": 45.4677751773137,
+      "meanCornerDisplacementPx": 22.785272625725526
     },
     "historicalStatus": "legacy-bounded-hypothesis",
     "plinth": {
       "cornerDisplacementPx": [
         1.0,
-        47.52848286645365,
-        48.4848616669111,
+        48.493565756124774,
+        49.444105004981104,
         0.0
       ],
-      "maxCornerDisplacementPx": 48.4848616669111,
-      "meanCornerDisplacementPx": 24.253336133341186
+      "maxCornerDisplacementPx": 49.444105004981104,
+      "meanCornerDisplacementPx": 24.73441769027647
     },
     "warning": "historical back anchor was derived from a line now known to be primarily conditional joint-bridge support"
   },
@@ -33,29 +33,30 @@
   "promotionEligible": false,
   "reference": {
     "backPx": [
-      751.0,
-      551.0
+      749.695652173913,
+      552
     ],
     "evidence": [
-      "app/tools/apply-r5a-pixelperfect-edits.py:STONE03_LEFT_EDGE_POINTS",
-      "review-assets/calibration/gap-pixel-v3/reference.png",
+      "review-assets/research/stone-depth-edge-probe-v0.1-report.json:stone03-exposed-left-top-depth@alpha128",
+      "review-assets/stone-masks/config.json:stone-03.top",
       "review-assets/research/module02-depth-cue-ownership-v0.1.json",
       "EAKerber/MobiliPresenter:scene-core/src/fixtures/current-scene.ts:STONE03_ID/slab"
     ],
     "frontPx": [
-      740.0,
-      574.0
+      740.5652173913044,
+      574
     ],
     "frontToBackVectorPx": [
-      11.0,
-      -23.0
+      9.130434782608631,
+      -22.0
     ],
     "id": "module03-exposed-left-stone-top-depth",
-    "physicalDepthMm": 550.0,
-    "status": "current-owned-conditional-geometry"
+    "physicalDepthMm": 550,
+    "sourceAlphaThreshold": 128,
+    "status": "current-owned-stable-alpha-edge"
   },
   "sceneId": "cozinha-01",
-  "schemaVersion": "LocalDepthTransferProbeReport 0.1",
+  "schemaVersion": "LocalDepthTransferProbeReport 0.2",
   "status": "RESEARCH_CANDIDATE",
   "target": {
     "carcass": {
@@ -67,12 +68,12 @@
           590.0
         ],
         [
-          752.6,
-          567.8363636363637
+          750.798418972332,
+          568.8
         ],
         [
-          752.6,
-          833.8363636363637
+          750.798418972332,
+          834.8
         ],
         [
           742.0,
@@ -81,16 +82,16 @@
       ],
       "referenceDepthMm": 550.0,
       "referenceFrontToBackVectorPx": [
-        11.0,
-        -23.0
+        9.130434782608631,
+        -22.0
       ],
       "targetFrontToBackVectorPx": [
-        10.6,
-        -22.163636363636364
+        8.798418972331953,
+        -21.2
       ]
     },
     "frontSeamStatus": "measured-current-layer",
-    "frontSeamX": 742.0,
+    "frontSeamX": 742,
     "id": "module02-right-side",
     "plinth": {
       "depthRatio": 0.6342363636363636,
@@ -101,12 +102,12 @@
           856.0
         ],
         [
-          748.9766,
-          841.4125636363636
+          747.7908537549407,
+          842.0468
         ],
         [
-          748.9766,
-          883.4125636363636
+          747.7908537549407,
+          884.0468
         ],
         [
           742.0,
@@ -115,12 +116,12 @@
       ],
       "referenceDepthMm": 550.0,
       "referenceFrontToBackVectorPx": [
-        11.0,
-        -23.0
+        9.130434782608631,
+        -22.0
       ],
       "targetFrontToBackVectorPx": [
-        6.9765999999999995,
-        -14.587436363636362
+        5.79085375494067,
+        -13.953199999999999
       ]
     }
   }
