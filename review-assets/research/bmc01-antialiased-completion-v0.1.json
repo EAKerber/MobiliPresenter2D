@@ -1,0 +1,29 @@
+{
+  "schemaVersion": "BMC01AntialiasedCompletion 0.1",
+  "sceneId": "cozinha-01",
+  "targetVariant": "module-03-hidden",
+  "excludeEntityForClean": "module-02-right-exposed-face",
+  "localTransferReport": "review-assets/research/bmc01-local-depth-transfer-v0.1-report.json",
+  "module02Layer": "app/assets/kitchen/layers/02_inferior_fogao.png",
+  "stone02Variant": "app/assets/kitchen/variants/stone-02-cozinha-exposed-right.png",
+  "approvedStone02": "app/assets/kitchen/overlays/approved-stone-02.png",
+  "authorizedRoi": [742, 520, 764, 899],
+  "supersampling": 4,
+  "carcass": {
+    "hostOwnershipAlphaThreshold": 128,
+    "donorQuad": [[360,110],[378,110],[378,250],[360,250]],
+    "donorSemantic": "clean visible Module01 carcass-side sample"
+  },
+  "plinth": {
+    "ownershipAlphaThreshold": 128,
+    "donorQuad": [[720,858],[738,858],[738,893],[720,893]],
+    "donorSemantic": "clean visible Stone02 front-plinth sample"
+  },
+  "policy": {
+    "researchOnly": true,
+    "promotionEligible": false,
+    "generationAllowed": false,
+    "geometry": "local physical-depth transfer",
+    "appearance": "projective canonical donors with supersampled target coverage"
+  }
+}
