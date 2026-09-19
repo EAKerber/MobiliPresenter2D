@@ -1,0 +1,70 @@
+{
+  "carcass": {
+    "changedPixels": 1877,
+    "method": "C2 canonical M01 carcass-side projective donor",
+    "sourceCandidate": "review-assets/research/bmc01-minimal-completion-v0.6/candidate.png",
+    "sourceReport": "review-assets/research/bmc01-minimal-completion-v0.6/report.json"
+  },
+  "combined": {
+    "candidatePixelSha256": "4e028fe93d3dd6cebd0f70d88ad977d003530cdf82345f76fe070f5ff3008982",
+    "changedPixelCount": 2046,
+    "editedPixelSha256": "0a5962adc043339b4da1416081ed72acb2fe032416319fc3a9dbca0ad8e412ca",
+    "outsideAuthorizedRoiPixels": 0
+  },
+  "limitations": [
+    "plinth donor is same-object front-plinth appearance, not an independently photographed right-side plinth",
+    "local plinth geometry remains derived from adjacent Stone03 projection plus physical depth",
+    "candidate requires visual review before any promotion"
+  ],
+  "plinth": {
+    "boundaryColorErrorAfter": {
+      "maxAbsChannelDifference": 137.33333333333334,
+      "meanAbsChannelDifference": 76.5233918128655,
+      "pairCount": 114
+    },
+    "boundaryColorErrorBefore": {
+      "maxAbsChannelDifference": 118.0,
+      "meanAbsChannelDifference": 25.713450292397663,
+      "pairCount": 114
+    },
+    "boundaryMeanImprovement": -50.80994152046783,
+    "donorContactErrorAfter": {
+      "maxAbsChannelDifference": null,
+      "meanAbsChannelDifference": null,
+      "pairCount": 0
+    },
+    "donorContactErrorBefore": {
+      "maxAbsChannelDifference": null,
+      "meanAbsChannelDifference": null,
+      "pairCount": 0
+    },
+    "donorMaskPixels": 9036,
+    "editMaskBounds": [
+      742,
+      842,
+      749,
+      899
+    ],
+    "editMaskPixels": 178,
+    "fillStats": {
+      "filled": 178,
+      "maxDistance": 17.46424919657298,
+      "meanDistance": 6.612114198787827
+    },
+    "geometryPixels": 309,
+    "historicalOverlayOverlapPixels": 0,
+    "physicalDepthMm": 348.83,
+    "protectedOwnerOverlapPixels": 0,
+    "rowRoughness": {
+      "maxRowMeanAbsDifference": 59.0,
+      "meanRowMeanAbsDifference": 9.926666666666666,
+      "p90RowMeanAbsDifference": 23.333333333333332,
+      "pairCount": 50
+    }
+  },
+  "promotionEligible": false,
+  "sceneId": "cozinha-01",
+  "schemaVersion": "BMC01CombinedCompletionReport 0.1",
+  "status": "RESEARCH_CANDIDATE",
+  "targetVariant": "module-03-hidden"
+}
