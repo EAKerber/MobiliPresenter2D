@@ -1,0 +1,207 @@
+{
+  "schemaVersion": "ReconstructionPacket 0.1",
+  "identity": {
+    "operationId": "bmc02-module03-left-stone-termination-v0.1",
+    "sceneId": "cozinha-01",
+    "targetVariant": "module-02-hidden",
+    "targetVariantFingerprint": "scene2d-e990f538",
+    "targetModuleId": "module-03",
+    "operationRole": "left-stone-termination",
+    "caseClasses": ["T8-corner-termination-completion"],
+    "baseProductCommit": "73e7cf24f7d260f38f408e1817b7d8dbb33802c5"
+  },
+  "confidence": {
+    "G": "derived",
+    "P": "inferred",
+    "A": "derived",
+    "O": "confirmed"
+  },
+  "claims": [
+    {
+      "id": "module03-left-edge",
+      "domain": "D2",
+      "subject": "module-03/left-edge",
+      "property": "x",
+      "value": 736,
+      "unit": "px",
+      "status": "derived",
+      "source": "review-assets/authoring-contracts.json:module-03-left-termination-edit",
+      "validFor": "canonical 1536x1024 frame"
+    },
+    {
+      "id": "termination-bounded-support",
+      "domain": "D2",
+      "subject": "module-03/left-stone-termination",
+      "property": "pixel-support",
+      "value": {
+        "pixelCount": 80,
+        "bounds": [727, 569, 736, 589]
+      },
+      "status": "derived",
+      "source": "review-assets/candidates/module-03-left-termination-e-rounded-9px/extraction-report.json",
+      "validFor": "variant module-02-hidden@scene2d-e990f538"
+    },
+    {
+      "id": "termination-current-owner",
+      "domain": "D2",
+      "subject": "module-03/left-stone-termination",
+      "property": "current-owned-pixels",
+      "value": 0,
+      "unit": "px",
+      "status": "derived",
+      "source": "review-assets/research/bmc02-termination-ownership-v0.1-report.json",
+      "validFor": "current module-02-hidden target state"
+    },
+    {
+      "id": "termination-material-role",
+      "domain": "D4",
+      "subject": "module-03/left-stone-termination",
+      "property": "material-role",
+      "value": "stone",
+      "status": "derived",
+      "source": "review-assets/authoring-contracts.json:module-03-left-termination-edit",
+      "validFor": "BMC-02 bounded termination"
+    },
+    {
+      "id": "no-full-height-panel",
+      "domain": "D4",
+      "subject": "module-03/left-stone-termination",
+      "property": "forbidden-outcome",
+      "value": "invented-full-height-divider",
+      "status": "confirmed",
+      "source": "review-assets/authoring-contracts.json:module-03-left-termination-edit",
+      "validFor": "BMC-02 authoring"
+    }
+  ],
+  "physicalGeometry": {
+    "status": "not-required-for-current-raster-support",
+    "note": "BMC-02 uses a bounded canonical-frame termination support. No unsourced world-space side-panel geometry is promoted."
+  },
+  "ownership": {
+    "activation": {
+      "module02Visible": false,
+      "module03Visible": true
+    },
+    "inactiveCases": [
+      {"module02Visible": true, "module03Visible": true},
+      {"module02Visible": false, "module03Visible": false},
+      {"module02Visible": true, "module03Visible": false}
+    ],
+    "currentOwnerAudit": {
+      "stone03ExposedHits": 0,
+      "stone03BridgeHits": 0,
+      "module03Hits": 0,
+      "approvedStone03Hits": 0,
+      "semanticStoneUpperHits": 0,
+      "samplePixels": 80,
+      "finding": "UNOWNED_MATERIAL_RESIDUAL"
+    },
+    "status": "confirmed"
+  },
+  "transformationEvidence": {
+    "method": "canonical-frame-bounded-pixel-support",
+    "confidence": "bounded-inference",
+    "globalCameraClaim": false,
+    "sourceFrame": {
+      "sha256": "e4ad40325d2f86943bfe5e44bd9b15884510093b38fd7a24f89f4fc0bc112f04",
+      "variant": "module-02-hidden",
+      "fingerprint": "scene2d-e990f538"
+    },
+    "targetSupport": {
+      "pixelCount": 80,
+      "bounds": [727, 569, 736, 589],
+      "measuredCabinetEdgeX": 736,
+      "leftOfCabinetEdgePixels": 80,
+      "atOrRightOfCabinetEdgePixels": 0
+    },
+    "limitations": [
+      "the exact pixel support is authored/derived canonical-frame evidence, not recovered world-space geometry",
+      "the current mask is binary/opaque and has not yet been supersampled for antialiasing"
+    ]
+  },
+  "visualEvidence": {
+    "neutralSource": {
+      "methodClass": "C0-existing-canonical-derived",
+      "source": "review-assets/candidates/module-03-left-termination-e-rounded-9px/candidate.png",
+      "sourceSha256": "cd853fa75eaf10735a08d54af942fa50a5c6edf51549af3c96170e1fcaff4dec"
+    },
+    "runtimeMaterialBehavior": {
+      "policy": "stone-upper",
+      "neutralSample": [233, 225, 222],
+      "greenStoneSample": [36, 51, 43],
+      "frontFinishAfterGreenSample": [36, 51, 43]
+    },
+    "generationUsed": false
+  },
+  "editContract": {
+    "sourceFrameSha256": "e4ad40325d2f86943bfe5e44bd9b15884510093b38fd7a24f89f4fc0bc112f04",
+    "authorizedRoi": [720, 510, 755, 600],
+    "zeroChangeOutsideRoi": true,
+    "defaultRuntimeMustRemainUnchanged": true,
+    "activation": "?reconstruction=bmc02",
+    "materialSlots": ["termination"],
+    "forbiddenOutcomes": [
+      "invented-full-height-divider",
+      "forced-side-panel",
+      "remote-scene-reconstruction"
+    ]
+  },
+  "authoringPlan": {
+    "candidateLadderReached": "C0-existing-canonical-derived",
+    "deterministicOnly": true,
+    "generation": {
+      "allowed": false,
+      "reason": "machine and agent review show a bounded deterministic result; edge refinement, if needed, should first use deterministic supersampled coverage"
+    },
+    "runtimeRepresentation": "neutral-rgb-plus-alpha-mask-stone-slot"
+  },
+  "acceptance": {
+    "machine": {
+      "pythonTests": 101,
+      "appDeterministicGate": "PASS",
+      "bmc01CrossCaseRegression": "PASS",
+      "bmc02VisibilityMatrix": "PASS",
+      "activePixelCount": 80,
+      "outsideAuthorizedRoiPixels": 0,
+      "goldenPixelDifferenceCountDefaultRuntime": 0,
+      "stoneMaterialResponse": "PASS",
+      "frontFinishIsolation": "PASS",
+      "pageErrors": 0
+    },
+    "agentReview": {
+      "status": "PASS_WITH_NOTE",
+      "evidence": "review-assets/research/bmc02-agent-visual-review-v0.1.json"
+    },
+    "humanReview": {
+      "status": "PENDING",
+      "focus": "magnified termination edge / whether deterministic antialiasing is desirable"
+    }
+  },
+  "lifecycle": {
+    "state": "AGENT_REVIEW",
+    "defaultPromotionAllowed": false
+  },
+  "provenance": {
+    "requiredPaths": [
+      "review-assets/authoring-contracts.json",
+      "review-assets/candidates/module-03-left-termination-e-rounded-9px/candidate.json",
+      "review-assets/candidates/module-03-left-termination-e-rounded-9px/extraction-report.json",
+      "review-assets/research/bmc02-termination-ownership-v0.1-report.json",
+      "review-assets/research/bmc02-agent-visual-review-v0.1.json",
+      "app/assets/kitchen/reconstruction/bmc02/manifest.json",
+      "docs/work/bmc-02-termination-audit-v0.1.md"
+    ],
+    "runtimeAssetsManifest": "app/assets/kitchen/reconstruction/bmc02/manifest.json",
+    "workflowEvidence": [
+      {
+        "runId": 35475290898,
+        "purpose": "current ownership/material coverage audit"
+      },
+      {
+        "runId": 35475546474,
+        "purpose": "cross-case materialization, BMC-01 regression and BMC-02 browser contract",
+        "artifactDigest": "sha256:50c4d235b43af226b5a7b21d812581f3849d80288a9415a6d98eac08b47086bf"
+      }
+    ]
+  }
+}
