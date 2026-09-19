@@ -1,4 +1,5 @@
-name: Implement measured plinth and adaptive seams temp\n# retry: full final plinth alpha row
+name: Implement measured plinth and adaptive seams temp
+# retry: full final plinth alpha row
 
 on:
   push:
