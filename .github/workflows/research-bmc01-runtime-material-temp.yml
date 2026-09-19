@@ -1,5 +1,5 @@
 name: Research BMC01 runtime material gate temp
-# retry after async render revision gate
+# retry after plinth sampling correction
 
 on:
   push:
