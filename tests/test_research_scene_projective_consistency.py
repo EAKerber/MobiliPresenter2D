@@ -11,6 +11,8 @@ class SceneProjectiveConsistencyProbeTests(unittest.TestCase):
         r=boundary_fits(im,128)
         self.assertAlmostEqual(r["top"]["angleDeg"],0,places=6)
         self.assertAlmostEqual(r["bottom"]["angleDeg"],0,places=6)
+        self.assertIn("intercept",r["top"])
+        self.assertIn("intercept",r["bottom"])
         self.assertAlmostEqual(r["left"]["angleFromVerticalDeg"],0,places=6)
         self.assertAlmostEqual(r["right"]["angleFromVerticalDeg"],0,places=6)
 
