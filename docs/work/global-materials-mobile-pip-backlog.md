@@ -63,3 +63,11 @@ Estado: implementação em preview; nenhuma promoção para `main`.
 - [x] Claros recebem shadow progressivo; escuros recebem shadow reduzido + highlight sutil.
 - [x] Validador falha se a luminância configurada divergir do asset em mais de 0,015.
 - [ ] Revisão visual de seams em branco, Névoa, madeira e carvão.
+
+
+## B8 — Correção do grafo de dependências da iluminação
+- [x] Iluminação 08 requer simultaneamente Módulo 04 e Módulo 06.
+- [x] Dependência não recíproca: desligar a iluminação não oculta Módulo 04 nem Módulo 06.
+- [x] Ocultar Módulo 06 torna a iluminação indisponível por `requirement-hidden`, assim como já ocorria com Módulo 04.
+- [x] Copy comercial/UX atualizado para refletir ambos os requisitos.
+- [x] Cobertura adicionada ao teste determinístico do grafo.

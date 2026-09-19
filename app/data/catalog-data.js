@@ -229,7 +229,7 @@
       {
         entityId: "lighting-08", sku: "CM-08", title: "Iluminação embutida",
         description: "Luz sob os aéreos para a área de bancada.",
-        requirements: ["Requer a lateral da geladeira."], publicPriceCents: null
+        requirements: ["Requer a lateral da geladeira.", "Requer o aéreo da pia (Módulo 06)."], publicPriceCents: null
       }
     ],
     services: [

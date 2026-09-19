@@ -168,6 +168,25 @@ state.selectedEntityId = "module-03";
 assert.equal(fingerprints.computeFingerprint(scene, state), fingerprintBeforeUi);
 assert.equal(initialFingerprint.startsWith("scene2d-"), true);
 
+const lightingEntity = scene.entities.find((entity) => entity.id === "lighting-08");
+assert.deepEqual(Array.from(lightingEntity.requiresVisibleIds), ["module-04", "module-06"]);
+
+const noModule06Probe = core.createInitialState(scene);
+core.setEntityVisibility(noModule06Probe, "module-06", false);
+const noModule06 = resolved(noModule06Probe);
+assert.equal(noModule06["module-04"].visible, true);
+assert.equal(noModule06["module-06"].visible, false);
+assert.equal(noModule06["lighting-08"].visible, false);
+assert.equal(noModule06["lighting-08"].reason, "requirement-hidden");
+
+const lightingOffProbe = core.createInitialState(scene);
+core.setEntityVisibility(lightingOffProbe, "lighting-08", false);
+const lightingOff = resolved(lightingOffProbe);
+assert.equal(lightingOff["module-04"].visible, true);
+assert.equal(lightingOff["module-06"].visible, true);
+assert.equal(lightingOff["lighting-08"].visible, false);
+assert.equal(lightingOff["lighting-08"].reason, "intent-off");
+
 const module04Entity = scene.entities.find((entity) => entity.id === "module-04");
 let visibilityState = resolved(core.createInitialState(scene));
 assert.equal(finishes.resolveMaskAsset(module04Entity, visibilityState), "assets/kitchen/masks/04-with-06-seam.png");
