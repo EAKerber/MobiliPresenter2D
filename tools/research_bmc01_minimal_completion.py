@@ -22,9 +22,10 @@ def pmask(size,quad):
     ImageDraw.Draw(im).polygon([(round(x),round(y)) for x,y in quad],fill=255)
     return im
 
-def binalpha(path):
+def binary_alpha(path,threshold=1):
     a=Image.open(ROOT/path).convert("RGBA").getchannel("A")
-    return a.point(lambda v:255 if v else 0)
+    t=int(threshold)
+    return a.point(lambda v:255 if v>=t else 0)
 
 def count(mask):
     return sum(1 for v in mask.getdata() if v)
@@ -154,12 +155,21 @@ def main():
     current=render_case(base,case,size)
 
     carcass=pmask(size,local["target"]["carcass"]["quad"])
-    host=binalpha(cfg["module02Layer"])
-    support=ImageChops.lighter(host,binalpha(cfg["stone02Variant"]))
-    support=ImageChops.lighter(support,binalpha(cfg["approvedStone02"]))
+    policy=cfg.get("policy") or {}
+    host_threshold=int(policy.get("hostOwnershipAlphaThreshold",1))
+    donor_threshold=int((cfg.get("donor") or {}).get("minAlpha",host_threshold))
+
+    host_any=binary_alpha(cfg["module02Layer"],1)
+    host_owner=binary_alpha(cfg["module02Layer"],host_threshold)
+    host_soft=ImageChops.multiply(host_any,ImageChops.invert(host_owner))
+    stone=binary_alpha(cfg["stone02Variant"],1)
+    approved=binary_alpha(cfg["approvedStone02"],1)
+
+    support=ImageChops.lighter(host_owner,stone)
+    support=ImageChops.lighter(support,approved)
     missing=ImageChops.multiply(carcass,ImageChops.invert(support))
 
-    donor=ImageChops.multiply(carcass,host)
+    donor=ImageChops.multiply(carcass,binary_alpha(cfg["module02Layer"],donor_threshold))
     seam=int(cfg["frontSeamX"])
     dpx=donor.load()
     db=donor.getbbox()
@@ -174,7 +184,8 @@ def main():
     roi=roi_mask(size,cfg["authorizedRoi"])
     outside=ImageChops.multiply(candidate.getchannel("A"),ImageChops.invert(roi))
     protected_overlap=ImageChops.multiply(candidate.getchannel("A"),support)
-    hist=binalpha(cfg["historicalOverlay"])
+    soft_host_overlap=ImageChops.multiply(candidate.getchannel("A"),host_soft)
+    hist=binary_alpha(cfg["historicalOverlay"],1)
     overlap_hist=ImageChops.multiply(candidate.getchannel("A"),hist)
 
     historical_changed=sum(1 for a,b in zip(current.getdata(),clean.getdata()) if a!=b)
@@ -187,7 +198,7 @@ def main():
     comparison_sheet(clean,current,edited).save(args.output_dir/"comparison.png")
 
     report={
-      "schemaVersion":"BMC01MinimalCompletionReport 0.1",
+      "schemaVersion":"BMC01MinimalCompletionReport 0.2" if cfg.get("schemaVersion")=="BMC01MinimalCompletion 0.2" else "BMC01MinimalCompletionReport 0.1",
       "sceneId":cfg["sceneId"],
       "targetVariant":cfg["targetVariant"],
       "status":"RESEARCH_CANDIDATE",
@@ -205,6 +216,9 @@ def main():
       "candidateVsHistoricalChangedPixelRatio":edited_changed/historical_changed if historical_changed else None,
       "outsideAuthorizedRoiPixels":count(outside),
       "preExistingOwnerOverlapPixels":count(protected_overlap),
+      "softHostFringeOverlapPixels":count(soft_host_overlap),
+      "hostOwnershipAlphaThreshold":host_threshold,
+      "donorMinAlpha":donor_threshold,
       "historicalOverlayOverlapPixels":count(overlap_hist),
       "donorMaskPixels":count(donor),
       "donorDistance":fillstats,
@@ -214,7 +228,7 @@ def main():
       "sameObjectContactErrorAfter":same_object_contact_error(clean,edited,candidate.getchannel("A"),donor),
       "limitations":[
         "nearest-pixel donor is a deterministic appearance baseline, not final photometric synthesis",
-        "edit entitlement currently uses absence of any alpha contribution from current host/stone assets and remains research-only",
+        "host ownership threshold is research-only and distinguishes solid same-object support from low-alpha compositing fringe",
         "candidate has not received visual/human approval"
       ]
     }
