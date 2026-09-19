@@ -364,6 +364,18 @@ def main():
         fit=least_squares_intersection(lines)
         common_vp.append({"threshold":item["threshold"],"fit":fit})
 
+    module01_vp_residuals=None
+    if module01_two_edge_vp and module01_two_edge_vp.get("point"):
+        vp=module01_two_edge_vp["point"]
+        module01_vp_residuals={
+          "module02-stone-visible-depth": point_line_distance(vp,module02_measured["front"],module02_measured["back"]) if module02_measured else None,
+          "module03-stone-reference-alpha-edge": abs(
+              line_equation_from_xy_slope(pixel03)[0]*vp[0]
+              + line_equation_from_xy_slope(pixel03)[1]*vp[1]
+              + line_equation_from_xy_slope(pixel03)[2]
+          ) if pixel03 else None,
+        }
+
     report={
       "schemaVersion":"SceneProjectiveConsistencyProbeReport 0.1",
       "sceneId":cfg["sceneId"],
@@ -373,6 +385,7 @@ def main():
       "module01SideResidualProbe":side,
       "module01BottomInternalEdgeTrace":module01_bottom_trace,
       "module01TwoEdgeVanishingFit":module01_two_edge_vp,
+      "module01VanishingResidualToOtherDepthEvidencePx":module01_vp_residuals,
       "module01DepthVanishingHypothesis":vanishing,
       "depthObservations":depth,
       "pixelLineObservations":pixel_lines,
@@ -382,8 +395,13 @@ def main():
         "module01ResidualOnly":circular_spread(module01_angles),
         "combinedMeasuredPlusModule01Residual":circular_spread(actual_angles+module01_angles)
       },
+      "preliminaryClassification":{
+        "sceneClass":"INSUFFICIENT_EVIDENCE",
+        "piecewiseSignal":"STRONG_IF_MODULE01_EDGE_TRACE_IS_CONFIRMED",
+        "reason":"the topology-constrained Module 01 top/bottom depth-edge hypothesis yields a vanishing point far from lower-stone depth lines, but the bottom edge is still an algorithmic luminance trace rather than an authoritative vector trace"
+      },
       "limitations":[
-        "front-mask outer boundaries are proxy evidence, not hand-confirmed physical front corners",
+        "front finish masks are authoring/control masks; their axis-aligned outer boundaries must not be used as independent camera evidence",
         "module01 side residual is derived from layer alpha minus finish mask and remains a segmentation hypothesis",
         "human-calibrated module03 line is reported separately from measured-pixel authority",
         "this probe cannot by itself classify the whole scene as geometrically valid or invalid"
