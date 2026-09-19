@@ -166,13 +166,18 @@ def main():
       "historicalOverlayOverlapPixels":count(overlap_hist),
       "donorMaskPixels":count(donor),
       "donorDistance":fillstats,
-      "boundaryColorError":boundary_color_error(clean,edited,candidate.getchannel("A")),
+      "boundaryColorErrorBefore":boundary_color_error(clean,clean,candidate.getchannel("A")),
+      "boundaryColorErrorAfter":boundary_color_error(clean,edited,candidate.getchannel("A")),
       "limitations":[
         "nearest-pixel donor is a deterministic appearance baseline, not final photometric synthesis",
         "edit entitlement currently uses absence of any alpha contribution from current host/stone assets and remains research-only",
         "candidate has not received visual/human approval"
       ]
     }
+    before=report["boundaryColorErrorBefore"]["meanAbsChannelDifference"]
+    after=report["boundaryColorErrorAfter"]["meanAbsChannelDifference"]
+    report["boundaryColorErrorMeanImprovement"]=before-after
+    report["boundaryColorErrorMeanImprovementRatio"]=(before-after)/before if before else None
     (args.output_dir/"report.json").write_text(json.dumps(report,indent=2,sort_keys=True)+"\n",encoding="utf-8")
     print(json.dumps(report,sort_keys=True))
     return 0
