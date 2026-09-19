@@ -41,6 +41,18 @@
   "outsideAuthorizedRoiPixels": 0,
   "preExistingOwnerOverlapPixels": 0,
   "promotionEligible": false,
+  "sameObjectContactErrorAfter": {
+    "maxAbsChannelDifference": 0.0,
+    "meanAbsChannelDifference": 0.0,
+    "pairCount": 7
+  },
+  "sameObjectContactErrorBefore": {
+    "maxAbsChannelDifference": 15.333333333333334,
+    "meanAbsChannelDifference": 9.761904761904761,
+    "pairCount": 7
+  },
+  "sameObjectContactMeanImprovement": 9.761904761904761,
+  "sameObjectContactMeanImprovementRatio": 1.0,
   "sceneId": "cozinha-01",
   "schemaVersion": "BMC01MinimalCompletionReport 0.1",
   "status": "RESEARCH_CANDIDATE",
