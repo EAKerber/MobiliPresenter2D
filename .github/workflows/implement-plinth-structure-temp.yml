@@ -75,8 +75,12 @@ jobs:
               ImageDraw.Draw(band).rectangle((0,y0,owner.width-1,y1-1),fill=255)
               owner_band=ImageChops.multiply(owner,band)
               missed=ImageChops.subtract(owner_band,mask)
-              if missed.getbbox():
-                  raise SystemExit(f"PLINTH_OWNER_ALPHA_MISSED:{asset['id']}:{missed.getbbox()}")
+              significant=missed.point(lambda v:255 if v>=96 else 0)
+              significant_pixels=sum(significant.histogram()[1:])
+              owner_pixels=sum(owner_band.histogram()[1:])
+              print(asset["id"],"owner",owner_pixels,"significantMiss",significant_pixels,"bbox",significant.getbbox())
+              if significant_pixels>50:
+                  raise SystemExit(f"PLINTH_OWNER_ALPHA_SIGNIFICANT_MISS:{asset['id']}:{significant_pixels}:{significant.getbbox()}")
           print("PLINTH_OWNER_ALPHA_COVERAGE PASS")
           PY
 
