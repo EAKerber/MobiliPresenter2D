@@ -236,6 +236,17 @@ Do not freeze APIs yet, but likely reusable primitives are:
 
 Existing implementation should be audited before writing each helper.
 
+## SC-01 changed PM-01
+
+The first automatic scene-consistency probe exposed two important constraints:
+
+1. front finish masks are authoring masks, not independent camera observations;
+2. Module 01 side extraction needs an authoritative edge trace before it can serve as projective ground truth.
+
+SC-01 currently carries a strong piecewise-perspective signal **conditional on** confirming the Module 01 side top/bottom physical edges.
+
+Therefore PM-01 should begin with a one-time canonical vector trace of that visible side, not another mask-derived guess.
+
 ## First experiment
 
 ### PM-01 — Module 01 visible-side validation
