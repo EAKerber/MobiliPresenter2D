@@ -19,7 +19,12 @@
     const imageCache = new Map();
     const slotCache = new Map();
     const textureCache = new Map();
+    const slotEntries = Object.entries(data?.slots || {});
     let revision = 0;
+
+    if (!slotEntries.length) {
+      throw new Error("Reconstruction renderer requires at least one material slot.");
+    }
 
     async function imagePixels(url) {
       if (!imageCache.has(url)) {
@@ -164,14 +169,15 @@
       if (!input?.visible) return;
 
       try {
-        const [carcass, plinth] = await Promise.all([
-          renderSlot(data.slots.carcass, input.carcassMaterial),
-          renderSlot(data.slots.plinth, input.plinthMaterial)
-        ]);
+        const renderedSlots = await Promise.all(
+          slotEntries.map(async ([slotId, slot]) => [
+            slotId,
+            await renderSlot(slot, input?.materials?.[slotId] ?? input?.[slotId + "Material"])
+          ])
+        );
         if (ticket !== revision) return;
         context.clearRect(0, 0, canvas.width, canvas.height);
-        drawImageData(carcass);
-        drawImageData(plinth);
+        renderedSlots.forEach(([, image]) => drawImageData(image));
         canvas.dataset.renderRevision = String(ticket);
       } catch (error) {
         if (ticket === revision) {
