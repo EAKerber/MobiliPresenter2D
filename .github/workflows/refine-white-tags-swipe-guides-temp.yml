@@ -1,5 +1,6 @@
 name: Refine white tags swipe and front guides temp
 # retry: use structural seam-energy guides
+# retry2: browser gate source aligned
 
 on:
   push:
