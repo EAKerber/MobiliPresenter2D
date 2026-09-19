@@ -1,42 +1,95 @@
 {
-  "schemaVersion": "LocalDepthTransferProbe 0.1",
+  "schemaVersion": "LocalDepthTransferProbe 0.2",
   "sceneId": "cozinha-01",
   "reference": {
     "id": "module03-exposed-left-stone-top-depth",
-    "frontPx": [740.0, 574.0],
-    "backPx": [751.0, 551.0],
-    "physicalDepthMm": 550.0,
-    "status": "current-owned-conditional-geometry",
+    "frontPx": [
+      740.5652173913044,
+      574
+    ],
+    "backPx": [
+      749.695652173913,
+      552
+    ],
+    "physicalDepthMm": 550,
+    "status": "current-owned-stable-alpha-edge",
     "evidence": [
-      "app/tools/apply-r5a-pixelperfect-edits.py:STONE03_LEFT_EDGE_POINTS",
-      "review-assets/calibration/gap-pixel-v3/reference.png",
+      "review-assets/research/stone-depth-edge-probe-v0.1-report.json:stone03-exposed-left-top-depth@alpha128",
+      "review-assets/stone-masks/config.json:stone-03.top",
       "review-assets/research/module02-depth-cue-ownership-v0.1.json",
       "EAKerber/MobiliPresenter:scene-core/src/fixtures/current-scene.ts:STONE03_ID/slab"
     ],
-    "note": "The diagonal between the rear upstand base and front stone-thickness transition is treated as the local 550 mm slab-depth projection. Current variant hash matches the historical full-frame reference and the conditional bridge is hidden when Module 02 is hidden."
+    "note": "Current stone03 exposed-left top-surface edge is stable at alpha thresholds 32..192 (vector about [+9.13,-22] px). Stone02 exposed-right edge is deliberately clipped/termination-authored and is excluded as projection evidence.",
+    "sourceAlphaThreshold": 128
   },
   "target": {
     "id": "module02-right-side",
-    "frontSeamX": 742.0,
+    "frontSeamX": 742,
     "frontSeamStatus": "measured-current-layer",
     "frontSeamEvidence": "review-assets/research/scene-projective-consistency-v0.1-report.json:module02FrontSideSeamProbe",
     "carcass": {
-      "physicalDepthMm": 530.0,
-      "frontTopPx": [742.0, 590.0],
-      "frontBottomPx": [742.0, 856.0],
+      "physicalDepthMm": 530,
+      "frontTopPx": [
+        742,
+        590
+      ],
+      "frontBottomPx": [
+        742,
+        856
+      ],
       "physicalEvidence": "MobiliPresenter Scene Core module02 right-side depth 530 mm",
       "rasterEvidence": "module02 layer/mask bounds y=590..856"
     },
     "plinth": {
       "physicalDepthMm": 348.83,
-      "frontTopPx": [742.0, 856.0],
-      "frontBottomPx": [742.0, 898.0],
+      "frontTopPx": [
+        742,
+        856
+      ],
+      "frontBottomPx": [
+        742,
+        898
+      ],
       "physicalEvidence": "MobiliPresenter current-scene stove-plinth depth 348.83 mm"
     }
   },
   "historical": {
-    "sidePanelQuad": [[742.0,586.0],[763.0,525.0],[763.0,796.0],[742.0,857.0]],
-    "plinthQuad": [[742.0,857.0],[763.0,796.0],[763.0,837.0],[742.0,898.0]],
+    "sidePanelQuad": [
+      [
+        742,
+        586
+      ],
+      [
+        763,
+        525
+      ],
+      [
+        763,
+        796
+      ],
+      [
+        742,
+        857
+      ]
+    ],
+    "plinthQuad": [
+      [
+        742,
+        857
+      ],
+      [
+        763,
+        796
+      ],
+      [
+        763,
+        837
+      ],
+      [
+        742,
+        898
+      ]
+    ],
     "status": "legacy-bounded-hypothesis",
     "warning": "historical back anchor was derived from a line now known to be primarily conditional joint-bridge support"
   },
