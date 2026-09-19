@@ -1,0 +1,40 @@
+{
+  "carcassMaskNonzeroPixels": 2188,
+  "finding": "reconstruction can be material-responsive only when carcass and plinth remain distinct masks/slots; a single static RGB exposed-side overlay cannot satisfy published finish behavior",
+  "plinthMaskNonzeroPixels": 246,
+  "promotionEligible": false,
+  "results": [
+    {
+      "front": {
+        "color": "#faf9f6",
+        "label": "Base clara"
+      },
+      "id": "base-light",
+      "outsideMaterialSlotChangedPixels": 0,
+      "plinthColor": "#faf9f6",
+      "plinthPolicy": "front"
+    },
+    {
+      "front": {
+        "color": "#30312f",
+        "label": "Carv\u00e3o"
+      },
+      "id": "carvao",
+      "outsideMaterialSlotChangedPixels": 0,
+      "plinthColor": "#30312f",
+      "plinthPolicy": "front"
+    },
+    {
+      "front": {
+        "color": "#8d8178",
+        "label": "Avel\u00e3"
+      },
+      "id": "avela-stone-green",
+      "outsideMaterialSlotChangedPixels": 0,
+      "plinthColor": "#1e2a24",
+      "plinthPolicy": "stone"
+    }
+  ],
+  "sceneId": "cozinha-01",
+  "schemaVersion": "BMC01MaterialSlotPreviewReport 0.1"
+}
