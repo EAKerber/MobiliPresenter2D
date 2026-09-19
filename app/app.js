@@ -12,6 +12,10 @@
   const frontGuides = global.CASA_FRONT_GUIDES || {};
   const priceBook = global.CASA_EM_MODULOS_PRICE_BOOK;
   const pricing = global.CasaModulesPricing;
+  const reconstruction = global.CasaReconstruction;
+  const reconstructionData = global.CASA_BMC01_RECONSTRUCTION_DATA;
+  const reconstructionMode = new URLSearchParams(global.location.search).get("reconstruction");
+  const reconstructionEnabled = reconstructionMode === "bmc01" && Boolean(reconstruction && reconstructionData);
 
   if (!scene || !inlineMasks || !core || !visibility || !validation || !fingerprint || !finishes || !catalog || !priceBook || !pricing) {
     throw new Error("Não foi possível carregar os dados da cena 2D.");
@@ -30,6 +34,7 @@
   const sceneBase = document.getElementById("sceneBase");
   const sceneLayers = document.getElementById("sceneLayers");
   const sceneHotspots = document.getElementById("sceneHotspots");
+  const viewer = document.getElementById("viewer");
   const moduleList = document.getElementById("moduleList");
   const finishSwatches = document.getElementById("finishSwatches");
   const moduleDetail = document.getElementById("moduleDetail");
@@ -65,6 +70,20 @@
   const detailViewsCollapsedByEntity = new Set();
   let detailCarouselTimer = null;
   let lastResolved = null;
+  let reconstructionCanvas = null;
+  let renderReconstruction = null;
+
+  if (reconstructionEnabled) {
+    reconstructionCanvas = document.createElement("canvas");
+    reconstructionCanvas.id = "reconstructionCanvas";
+    reconstructionCanvas.className = "scene-layer reconstruction-layer";
+    reconstructionCanvas.width = scene.canvas.width;
+    reconstructionCanvas.height = scene.canvas.height;
+    reconstructionCanvas.setAttribute("aria-hidden", "true");
+    reconstructionCanvas.dataset.researchOnly = "true";
+    viewer.insertBefore(reconstructionCanvas, sceneHotspots);
+    renderReconstruction = reconstruction.createRenderer(reconstructionCanvas, reconstructionData);
+  }
 
   function renderSceneFromData() {
     sceneBase.src = scene.baseAsset;
@@ -87,6 +106,10 @@
         image.draggable = false;
         image.width = scene.canvas.width;
         image.height = scene.canvas.height;
+        if (reconstructionEnabled && entity.id === reconstructionData.visibilityEntityId) {
+          image.style.visibility = "hidden";
+          image.dataset.renderDelegated = "bmc01";
+        }
         group.append(image);
 
         if (entity.maskAsset) {
@@ -1696,6 +1719,13 @@
     const useStonePlinth = Boolean(state.globalSelections?.serviceIds?.includes("stone-skirting"));
     renderStone(state, { upper: stoneMaterial, plinth: useStonePlinth ? stoneMaterial : finishMaterial });
     const resolved = visibility.resolveVisibility(scene, state);
+    if (renderReconstruction) {
+      renderReconstruction({
+        visible: Boolean(resolved[reconstructionData.visibilityEntityId]?.visible),
+        carcassMaterial: finishMaterial,
+        plinthMaterial: useStonePlinth ? stoneMaterial : finishMaterial
+      });
+    }
     lastResolved = resolved;
     syncFinishMasks(resolved);
     syncFinishAppearance();
@@ -2040,6 +2070,11 @@
   global.CASA_EM_MODULOS_DEBUG = Object.freeze({
     getState: () => state,
     getVisibility: () => visibility.resolveVisibility(scene, state),
+    reconstruction: {
+      enabled: reconstructionEnabled,
+      mode: reconstructionMode,
+      canvas: () => reconstructionCanvas
+    },
     scene
   });
 })(window);
