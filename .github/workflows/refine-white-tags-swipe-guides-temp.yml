@@ -34,6 +34,9 @@ jobs:
       - name: Materialize persistent front-guide builder
         run: cp ops/tmp-build-front-guides.py app/tools/build-front-guides.py
 
+      - name: Diagnose front guide signal
+        run: python ops/tmp-front-guide-diagnostics.py
+
       - name: Apply refinements and derive guides
         run: python ops/tmp-b10-b13.py
 
@@ -88,7 +91,7 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
           git rm .github/workflows/refine-white-tags-swipe-guides-temp.yml
-          git rm ops/tmp-b10-b13.py ops/tmp-b10-b13-gate.cjs ops/tmp-build-front-guides.py
+          git rm ops/tmp-b10-b13.py ops/tmp-b10-b13-gate.cjs ops/tmp-build-front-guides.py ops/tmp-front-guide-diagnostics.py
           git add             app/app.js             app/styles.css             app/data/catalog-data.js             app/data/front-guide-data.js             app/index.html             app/tools/build-front-guides.py             app/tools/test-core.js             docs/work/global-materials-mobile-pip-backlog.md
 
           remote_before="$(git ls-remote origin "refs/heads/$TARGET_BRANCH" | cut -f1)"
