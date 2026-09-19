@@ -1,6 +1,6 @@
 # BMC-04 — Cooktop bounded generative replacement v0.1
 
-Status: **DRAFT / geometry guide blocked**  
+Status: **DRAFT / deterministic footprint resolved; generation input assembly next**  
 Runtime promotion: **forbidden**  
 Generation: **allowed only after deterministic footprint materialization**
 
@@ -239,14 +239,72 @@ objects such as:
 when the scene knows the object's placement/footprint but lacks a satisfactory
 view of the object.
 
+## Deterministic footprint result
+
+The blocked geometry step has now been executed by:
+
+`tools/research_project_rect_on_host_quad.py`.
+
+Inputs:
+
+- Stone 02 top host quad:
+  - front-left `[492,574]`;
+  - front-right `[745,574]`;
+  - back-right `[762,552]`;
+  - back-left `[524,552]`;
+- physical Stone 02 top: `791.01 x 550 mm`;
+- cooktop slot:
+  - left offset: `95.505 mm`;
+  - front offset inside Stone 02: `15 mm`;
+  - inferred size: `600 x 520 mm`.
+
+The resulting local-derived footprint is approximately:
+
+- front-left: `[523.37,573.40]`;
+- front-right: `[714.97,573.40]`;
+- back-right: `[732.75,552.60]`;
+- back-left: `[551.91,552.60]`.
+
+This is a host-plane trapezoid, not an axis-aligned rectangle.
+
+Report:
+`review-assets/research/bmc04-cooktop-footprint-v0.1-report.json`.
+
+### Existing regenerated donor comparison
+
+The existing regenerated fit is the rectangle:
+
+`[520,540,214,32]`.
+
+Relative to the new target footprint:
+
+- max corner displacement: about `34.31 px`;
+- mean corner displacement: about `17.43 px`.
+
+More importantly, the difference is structural rather than a simple translation:
+the existing fit has vertical depth edges while the host-plane footprint has
+slanted, converging depth edges.
+
+Therefore a “fix it with a deterministic warp” path would indeed require a
+substantial projective deformation of grates/burners/knobs.
+
+This is sufficient evidence to move BMC-04 to:
+
+**`REGENERATION_JUSTIFIED` for object-local appearance.**
+
+It does not make generation geometry authority. The deterministic footprint
+above remains the hard guide.
+
 ## Current stop condition
 
-BMC-04 is intentionally blocked before generation.
+Geometry is no longer the blocker.
 
-Next deterministic task:
+Next step:
 
-**derive and review the corrected cooktop footprint quad on the Stone 02 host
-plane.**
-
-Only then should we test the existing regenerated donor versus a new bounded
-generation.
+1. materialize a clean cooktop-free reference crop;
+2. materialize a separate hard-footprint guide;
+3. surface the current cooktop/reference donor;
+4. materialize/hash the user-designated perceptual target if available;
+5. call generation for an isolated cooktop already authored in the target
+   perspective;
+6. reject any result that needs another large projective correction.
