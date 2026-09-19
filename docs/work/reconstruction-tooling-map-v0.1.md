@@ -59,9 +59,9 @@ Promotion requires:
 | variant rendering | `tools/render_variant_fidelity.py` | CONFORMANT_WITH_LIMITS | materializes target variants deterministically | scene-specific composition backend |
 | candidate structural intake | `tools/validate_candidate_assets.py` | CONFORMANT_WITH_LIMITS | checks candidate schema, canvas, alpha bounds/ROI, hash and human-review state | intentionally does not prove authoring lineage or geometry |
 | authoring provenance | `tools/validate_authoring_provenance.py` | CONFORMANT_WITH_LIMITS | binds candidate to contract, source refs, frame hashes, extraction report and recipe hash for `derived` method | method-specific lineage rules are not yet unified under Reconstruction Packet |
-| exact delta extraction | `tools/extract_candidate_delta.py::extract_delta` | REUSABLE_CORE | RGB diff, zero-change outside ROI, full-canvas opaque replacement delta, exact round-trip verification | current file has a concrete CLI syntax blocker; algorithm supports only `opaque-replacement-pixels` |
+| exact delta extraction | `tools/extract_candidate_delta.py::extract_delta` | CONFORMANT_WITH_LIMITS | RGB diff, zero-change outside ROI, full-canvas opaque replacement delta, exact round-trip verification | syntax blocker repaired on the research branch; deliberately limited to `opaque-replacement-pixels` |
 | exact pixel recipe | `tools/materialize_candidate_recipe.py` | CONFORMANT_WITH_LIMITS | replays explicit RGB pixels inside ROI and extracts deterministic delta | low-level historical recipe format, not a general reconstruction method |
-| projective donor materialization | `tools/materialize_perspective_donor_recipe.py` | REUSABLE_CORE / currently BLOCKED transitively | validates recipe/contract/source/fingerprint, performs 4-point perspective copy, protects alpha-owned assets, extracts delta | geometry is recipe-authored; no projection-confidence model; imports currently blocked extractor |
+| projective donor materialization | `tools/materialize_perspective_donor_recipe.py` | CONFORMANT_WITH_LIMITS / REUSABLE_CORE | validates recipe/contract/source/fingerprint, performs 4-point perspective copy, protects alpha-owned assets, extracts delta | exact historical replay now passes byte-for-byte; geometry is still recipe-authored and therefore this is not a ProjectionResolver |
 | local pixel edge measurement | `tools/gap_pixel_gate.py` | CONFORMANT_WITH_LIMITS | measures actual candidate delta support against actual reference alpha edge across threshold sweep | specifically a horizontal visible-gap gate, not a generic geometry evaluator |
 | human-calibrated line comparison | `tools/gap_parallelism_gate.py` | EXPERIMENT_ONLY / CONFORMANT_WITH_LIMITS | compares declared candidate line to human-calibrated reference and preserves direction/gap constraints | measurement is annotation-based, explicitly not pixel-edge authority |
 | editorial perspective diagnostics | `tools/perspective_editorial_gate.py` | EXPERIMENT_ONLY | evaluates declared geometry, direction, alignment and correction vectors | explicitly reports `pixelEdgeVerification=NOT_EVALUATED` and `promotionEligible=false` |
@@ -178,6 +178,27 @@ The current candidate workflow already expresses a useful ordering:
 11. review artifact upload.
 
 This is valuable evidence for the new pipeline, but it is not yet packet-driven and contains historical role-specific steps.
+
+## Replay evidence after v0.1 audit
+
+Research run `35453134871` revalidated the repaired chain.
+
+Observed:
+- 29 focused tests: PASS;
+- historical `module-03-hidden` source frame SHA reproduced exactly:
+  `f502790c76afe612563958ca3acfcc7d653018d718d11d852ed3a45df553ecfa`;
+- projective donor recipe replay candidate SHA reproduced exactly:
+  `3becbf8a510dd76757593ed5c227482edef7af57c48877e9d2e714398e77fff8`;
+- candidate bytes: exact match to historical candidate;
+- changed pixels: `1910`;
+- difference/alpha bounds: `[755,525,764,815]`;
+- edited frame SHA reproduced exactly:
+  `dfa445834900d87450392f3ccec827880eade882ca914153110b6f9d3558eca4`;
+- outside authorized ROI changed pixels: `0`;
+- round-trip mismatch pixels: `0`;
+- historical authoring provenance: PASS.
+
+This upgrades confidence in the deterministic donor/delta/provenance chain while leaving projection authority explicitly unresolved.
 
 ## Near-term audit priority
 
