@@ -114,6 +114,26 @@ def boundary_color_error(clean,edited,candidate_mask):
       "maxAbsChannelDifference":max(values) if values else 0
     }
 
+def comparison_sheet(clean,current,edited,crop=(720,510,785,915),scale=3):
+    panels=[]
+    for image,label in (
+      (clean,"A clean - historical overlay removed"),
+      (current,"B current - historical overlay"),
+      (edited,"C minimal deterministic completion")
+    ):
+        c=image.crop(crop).convert("RGB")
+        c=c.resize((c.width*scale,c.height*scale),Image.Resampling.NEAREST)
+        panel=Image.new("RGB",(c.width,c.height+24),"white")
+        panel.paste(c,(0,24))
+        ImageDraw.Draw(panel).text((6,6),label,fill="black")
+        panels.append(panel)
+    w=max(p.width for p in panels); h=sum(p.height for p in panels)
+    sheet=Image.new("RGB",(w,h),"white")
+    y=0
+    for p in panels:
+        sheet.paste(p,(0,y)); y+=p.height
+    return sheet
+
 def main():
     ap=argparse.ArgumentParser()
     ap.add_argument("--config",type=Path,required=True)
@@ -163,6 +183,8 @@ def main():
     args.output_dir.mkdir(parents=True,exist_ok=True)
     candidate.save(args.output_dir/"candidate.png")
     missing.save(args.output_dir/"edit-mask.png")
+    edited.save(args.output_dir/"edited.png")
+    comparison_sheet(clean,current,edited).save(args.output_dir/"comparison.png")
 
     report={
       "schemaVersion":"BMC01MinimalCompletionReport 0.1",
@@ -174,6 +196,7 @@ def main():
       "cleanPixelSha256":sha_pixels(clean),
       "candidatePixelSha256":sha_pixels(candidate),
       "editedPixelSha256":sha_pixels(edited),
+      "reviewFiles":{"candidate":"candidate.png","editMask":"edit-mask.png","edited":"edited.png","comparison":"comparison.png"},
       "localCarcassGeometryPixels":count(carcass),
       "editMaskPixels":count(missing),
       "editMaskBounds":bbox(missing),
