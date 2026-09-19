@@ -1,7 +1,7 @@
 from __future__ import annotations
 import unittest
 from PIL import Image
-from tools.research_bmc01_minimal_completion import nearest_fill, binary_alpha, promote_soft_host_rgb, smooth_seed_fill, candidate_row_roughness
+from tools.research_bmc01_minimal_completion import nearest_fill, binary_alpha, promote_soft_host_rgb, smooth_seed_fill, candidate_row_roughness, projective_donor_fill
 
 class BMC01MinimalCompletionTests(unittest.TestCase):
     def test_binary_alpha_respects_threshold(self):
@@ -33,6 +33,23 @@ class BMC01MinimalCompletionTests(unittest.TestCase):
         self.assertEqual(out.getpixel((1,0)),(40,50,60,255))
         self.assertEqual(out.getpixel((2,0)),(70,80,90,255))
         self.assertEqual(out.getpixel((3,0))[3],0)
+
+    def test_projective_donor_fill_changes_only_missing_mask(self):
+        clean=Image.new("RGBA",(12,12),(20,40,60,255))
+        for y in range(2,10):
+            for x in range(2,6):
+                clean.putpixel((x,y),(100+x,120+y,140,255))
+        missing=Image.new("L",(12,12),0)
+        for y in range(3,9):
+            for x in range(7,10): missing.putpixel((x,y),255)
+        out,stats=projective_donor_fill(
+            clean,missing,
+            [[2,2],[5,2],[5,9],[2,9]],
+            [[7,3],[9,3],[9,8],[7,8]],
+        )
+        self.assertEqual(stats["filled"],18)
+        self.assertEqual(out.getpixel((0,0))[3],0)
+        self.assertEqual(out.getpixel((8,5))[3],255)
 
     def test_smooth_seed_fill_preserves_contact_column(self):
         clean=Image.new("RGBA",(8,8),(0,0,0,255))
