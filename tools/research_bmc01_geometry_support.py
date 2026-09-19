@@ -17,8 +17,11 @@ ROOT=Path(__file__).resolve().parents[1]
 def full(path):
     return ROOT/path
 
-def alpha(path):
+def alpha_raw(path):
     return Image.open(full(path)).convert("RGBA").getchannel("A")
+
+def binary(mask,threshold):
+    return mask.point(lambda v: 255 if v >= threshold else 0)
 
 def polygon_mask(size,quad):
     im=Image.new("L",size,0)
@@ -110,25 +113,41 @@ def main():
     cfg=json.loads(args.config.read_text(encoding="utf-8"))
     local=json.loads(full(cfg["inputs"]["localTransferReport"]).read_text(encoding="utf-8"))
     size=tuple(cfg["canvas"])
-    support=logical_or(
-      alpha(cfg["inputs"]["module02Layer"]),
-      alpha(cfg["inputs"]["stone02Variant"]),
-      alpha(cfg["inputs"]["approvedStone02"])
-    )
-    overlay=alpha(cfg["inputs"]["historicalOverlay"])
+    thresholds=[int(x) for x in cfg.get("alphaThresholds",[1,128])]
     roi=roi_mask(size,cfg["authorizedRoi"])
 
-    cases=[]
-    cases.append(audit_geometry("historical-carcass",cfg["historical"]["carcassQuad"],support,overlay,roi))
-    cases.append(audit_geometry("historical-plinth",cfg["historical"]["plinthQuad"],support,overlay,roi))
-    cases.append(audit_geometry("local-carcass",local["target"]["carcass"]["quad"],support,overlay,roi))
-    cases.append(audit_geometry("local-plinth",local["target"]["plinth"]["quad"],support,overlay,roi))
+    raw_support=[
+      alpha_raw(cfg["inputs"]["module02Layer"]),
+      alpha_raw(cfg["inputs"]["stone02Variant"]),
+      alpha_raw(cfg["inputs"]["approvedStone02"])
+    ]
+    raw_overlay=alpha_raw(cfg["inputs"]["historicalOverlay"])
 
-    if args.review_image:
-        save_review(size,cases,overlay,args.review_image)
+    sweeps=[]
+    review_records=None
+    review_overlay=None
+    for threshold in thresholds:
+        support=logical_or(*(binary(x,threshold) for x in raw_support))
+        overlay=binary(raw_overlay,threshold)
+        cases=[
+          audit_geometry("historical-carcass",cfg["historical"]["carcassQuad"],support,overlay,roi),
+          audit_geometry("historical-plinth",cfg["historical"]["plinthQuad"],support,overlay,roi),
+          audit_geometry("local-carcass",local["target"]["carcass"]["quad"],support,overlay,roi),
+          audit_geometry("local-plinth",local["target"]["plinth"]["quad"],support,overlay,roi),
+        ]
+        for rec in cases:
+            if rec["totalPixels"] != rec["preOverlayExistingSupportPixels"] + rec["preOverlayMissingPixels"]:
+                raise RuntimeError(f"non-partitioned binary support at threshold {threshold}: {rec['id']}")
+        sweeps.append({"alphaThreshold":threshold,"cases":[clean(x) for x in cases]})
+        if threshold==thresholds[0]:
+            review_records=cases
+            review_overlay=overlay
+
+    if args.review_image and review_records is not None:
+        save_review(size,review_records,review_overlay,args.review_image)
 
     report={
-      "schemaVersion":"BMC01GeometrySupportAuditReport 0.1",
+      "schemaVersion":"BMC01GeometrySupportAuditReport 0.2",
       "sceneId":cfg["sceneId"],
       "promotionEligible":False,
       "authorizedRoi":cfg["authorizedRoi"],
@@ -138,8 +157,9 @@ def main():
         cfg["inputs"]["approvedStone02"]
       ],
       "historicalOverlay":cfg["inputs"]["historicalOverlay"],
-      "cases":[clean(x) for x in cases],
+      "thresholdSweep":sweeps,
       "interpretationRules":[
+        "all geometry masks and support masks are binary before set arithmetic",
         "high preOverlayExistingSupportRatio means the proposed face mostly re-describes pixels already owned by current canonical assets",
         "preOverlayMissingPixels are the only geometry area that could justify new raster support under this model",
         "historical overlay is comparison-only and is never counted as pre-overlay support",
@@ -149,12 +169,14 @@ def main():
     args.output.parent.mkdir(parents=True,exist_ok=True)
     args.output.write_text(json.dumps(report,indent=2,sort_keys=True)+"\n",encoding="utf-8")
     print(json.dumps({
-      x["id"]:{
-        "existingRatio":round(x["preOverlayExistingSupportRatio"],4),
-        "missing":x["preOverlayMissingPixels"],
-        "missingCoveredByOldOverlay":x["missingCoveredByHistoricalOverlayPixels"],
-        "outsideRoi":x["outsideAuthorizedRoiPixels"]
-      } for x in cases
+      str(sweep["alphaThreshold"]):{
+        case["id"]:{
+          "existingRatio":round(case["preOverlayExistingSupportRatio"],4),
+          "missing":case["preOverlayMissingPixels"],
+          "missingCoveredByOldOverlay":case["missingCoveredByHistoricalOverlayPixels"],
+          "outsideRoi":case["outsideAuthorizedRoiPixels"]
+        } for case in sweep["cases"]
+      } for sweep in report["thresholdSweep"]
     },sort_keys=True))
     return 0
 
