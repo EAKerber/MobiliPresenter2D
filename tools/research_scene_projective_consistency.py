@@ -77,8 +77,8 @@ def boundary_fits(alpha, threshold):
     return {
       "threshold":threshold,
       "bounds":list(bounds),
-      "top":{"dyDx":ft["slope"],"angleDeg":math.degrees(math.atan(ft["slope"])),"rms":ft["rms"],"count":ft["count"]},
-      "bottom":{"dyDx":fb["slope"],"angleDeg":math.degrees(math.atan(fb["slope"])),"rms":fb["rms"],"count":fb["count"]},
+      "top":{"dyDx":ft["slope"],"intercept":ft["intercept"],"angleDeg":math.degrees(math.atan(ft["slope"])),"rms":ft["rms"],"count":ft["count"]},
+      "bottom":{"dyDx":fb["slope"],"intercept":fb["intercept"],"angleDeg":math.degrees(math.atan(fb["slope"])),"rms":fb["rms"],"count":fb["count"]},
       "left":{"dxDy":fl["slope"],"angleFromVerticalDeg":math.degrees(math.atan(fl["slope"])),"rms":fl["rms"],"count":fl["count"]},
       "right":{"dxDy":fr["slope"],"angleFromVerticalDeg":math.degrees(math.atan(fr["slope"])),"rms":fr["rms"],"count":fr["count"]}
     }
@@ -302,6 +302,19 @@ def main():
     for item in cfg["frontMasks"]:
         alpha=load_alpha(item["mask"])
         fronts[item["id"]]=[boundary_fits(alpha,t) for t in cfg["thresholds"]]
+
+    side_layers={}
+    for item in cfg.get("sideLayerProbes",[]):
+        alpha=load_alpha(item["layer"])
+        records=[]
+        for t in cfg["thresholds"]:
+            fit=boundary_fits(alpha,t)
+            vp=least_squares_intersection([
+              ("top",line_equation_from_yx(fit["top"])),
+              ("bottom",line_equation_from_yx(fit["bottom"])),
+            ])
+            records.append({"threshold":t,"boundary":fit,"vanishingFit":vp})
+        side_layers[item["id"]]={"evidence":item,"thresholdSweep":records}
     probe=cfg["module01SideProbe"]
     layer_rgba=load_rgba(probe["layer"]); la=layer_rgba.getchannel("A"); fa=load_alpha(probe["frontMask"])
     side=[residual_component(la,fa,t,probe["seedQuad"],probe.get("side"),probe.get("frontBoundaryMarginPx",0)) for t in cfg["thresholds"]]
@@ -385,6 +398,7 @@ def main():
       "status":"DIAGNOSTIC_ONLY",
       "promotionEligible":False,
       "frontMaskBoundaryFits":fronts,
+      "sideLayerProbes":side_layers,
       "module01SideResidualProbe":side,
       "module01BottomInternalEdgeTrace":{
         "status":"REJECTED_AS_PHYSICAL_EDGE",
@@ -415,8 +429,8 @@ def main():
       },
       "preliminaryClassification":{
         "sceneClass":"INSUFFICIENT_CURRENT_DEPTH_EVIDENCE",
-        "nextClassQuestion":"FIND_CURRENT_OWNED_Y_DIRECTION_EDGE",
-        "reason":"Module 01 supplies a strong local Y-direction vanishing point, but the historical Module 02 comparison line is now known to be primarily conditional joint-bridge support and is not visible in the current module-03-hidden state"
+        "nextClassQuestion":"COMPARE_MODULE01_AND_MODULE04_BASE_SIDE_VANISHING",
+        "reason":"Module 01 supplies a strong local Y-direction vanishing point; the stale Module 02 cue is excluded and Module 04 is now probed as a second base-layer physical side panel"
       },
       "limitations":[
         "front finish masks are authoring/control masks; their axis-aligned outer boundaries must not be used as independent camera evidence",
