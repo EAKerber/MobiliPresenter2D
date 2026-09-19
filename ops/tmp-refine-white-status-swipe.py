@@ -115,8 +115,8 @@ if text.count(old)!=1: raise SystemExit("SWIPE_ANCHOR")
 text=text.replace(old,new,1); app.write_text(text)
 
 replace_once("app/styles.css",
-'.module-detail__carousel-stage { min-height: 278px; position: relative; display: grid; align-items: stretch; opacity: 1; transition: opacity 180ms ease; }',
-'.module-detail__carousel-stage { min-height: 278px; position: relative; display: grid; align-items: stretch; opacity: 1; transition: opacity 180ms ease; touch-action: pan-y; overscroll-behavior-inline: contain; user-select: none; }')
+'.module-detail__carousel-stage { display: grid; block-size: 252px; min-block-size: 252px; overflow: hidden; transition: opacity 180ms ease; }',
+'.module-detail__carousel-stage { display: grid; block-size: 252px; min-block-size: 252px; overflow: hidden; transition: opacity 180ms ease; touch-action: pan-y; overscroll-behavior-inline: contain; user-select: none; }')
 replace_once("app/styles.css",
 '.module-detail__carousel-dots { display: flex; align-items: center; justify-content: center; gap: 7px; min-height: 20px; }',
 '.module-detail__carousel-dots { display: flex; align-items: center; justify-content: center; gap: 7px; width: fit-content; max-width: 100%; min-height: 20px; margin-inline: auto; padding: 2px 4px; }')
