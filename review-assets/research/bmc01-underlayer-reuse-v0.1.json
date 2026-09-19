@@ -1,15 +1,73 @@
 {
-  "schemaVersion": "BMC01UnderlayerReuseAudit 0.1",
+  "schemaVersion": "BMC01UnderlayerReuseAudit 0.2",
   "sceneId": "cozinha-01",
   "frontSeamX": 742,
   "localTransferReport": "review-assets/research/bmc01-local-depth-transfer-v0.1-report.json",
   "module02Layer": "app/assets/kitchen/layers/02_inferior_fogao.png",
   "module03Layer": "app/assets/kitchen/layers/03_inferior_pia.png",
   "stone03Variant": "app/assets/kitchen/variants/stone-03-pia-exposed-left.png",
-  "alphaThresholds": [1, 128],
+  "alphaThresholds": [
+    1,
+    8,
+    16,
+    32,
+    64,
+    96,
+    128,
+    160,
+    192,
+    224,
+    248
+  ],
   "policy": {
     "researchOnly": true,
     "promotionEligible": false,
-    "question": "how much of the locally projected Module 02 side already exists as exact same-object pixels beneath Module 03"
+    "question": "how much of the locally projected Module 02 side exists as exact same-object alpha support, and how much of that support is solid face evidence versus soft compositing fringe/shadow"
+  },
+  "alphaConfidence": {
+    "solidThreshold": 128,
+    "strongThreshold": 224,
+    "bins": [
+      [
+        1,
+        15
+      ],
+      [
+        16,
+        31
+      ],
+      [
+        32,
+        63
+      ],
+      [
+        64,
+        95
+      ],
+      [
+        96,
+        127
+      ],
+      [
+        128,
+        159
+      ],
+      [
+        160,
+        191
+      ],
+      [
+        192,
+        223
+      ],
+      [
+        224,
+        254
+      ],
+      [
+        255,
+        255
+      ]
+    ]
   }
 }
