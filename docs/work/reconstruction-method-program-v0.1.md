@@ -157,6 +157,23 @@ Presentation benchmark using confirmed Promob-derived divider, shelf and microwa
 
 This is a technical-view benchmark, not a scene-raster reconstruction benchmark.
 
+## Projection path after fixed-camera rejection
+
+The source Promob fixed camera is no longer treated as a likely global transfer for the canonical 2D frame.
+
+Next projection experiment:
+**PM-01 — Module 01 visible-side validation**.
+
+Plan:
+- extract/annotate the real visible Module 01 side;
+- derive canonical-frame depth direction from independent cues;
+- predict the visible side with held-out evidence;
+- measure residuals;
+- only then use the method to strengthen Module 02 hidden-side geometry.
+
+Design:
+`docs/work/canonical-frame-projective-metrology-v0.1.md`.
+
 ## Non-goals for v0.1
 
 - no runtime generation;
