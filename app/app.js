@@ -13,9 +13,15 @@
   const priceBook = global.CASA_EM_MODULOS_PRICE_BOOK;
   const pricing = global.CasaModulesPricing;
   const reconstruction = global.CasaReconstruction;
-  const reconstructionData = global.CASA_BMC01_RECONSTRUCTION_DATA;
+  const reconstructionRegistry = global.CASA_RECONSTRUCTION_DATA || {};
   const reconstructionMode = new URLSearchParams(global.location.search).get("reconstruction");
-  const reconstructionEnabled = reconstructionMode === "bmc01" && Boolean(reconstruction && reconstructionData);
+  const reconstructionKeys = reconstructionMode === "all"
+    ? Object.keys(reconstructionRegistry)
+    : String(reconstructionMode || "")
+        .split(",")
+        .map((value) => value.trim())
+        .filter((value) => Boolean(reconstructionRegistry[value]));
+  const reconstructionEnabled = Boolean(reconstruction && reconstructionKeys.length);
 
   if (!scene || !inlineMasks || !core || !visibility || !validation || !fingerprint || !finishes || !catalog || !priceBook || !pricing) {
     throw new Error("Não foi possível carregar os dados da cena 2D.");
@@ -70,19 +76,44 @@
   const detailViewsCollapsedByEntity = new Set();
   let detailCarouselTimer = null;
   let lastResolved = null;
-  let reconstructionCanvas = null;
-  let renderReconstruction = null;
+  const reconstructionControllers = [];
 
   if (reconstructionEnabled) {
-    reconstructionCanvas = document.createElement("canvas");
-    reconstructionCanvas.id = "reconstructionCanvas";
-    reconstructionCanvas.className = "scene-layer reconstruction-layer";
-    reconstructionCanvas.width = scene.canvas.width;
-    reconstructionCanvas.height = scene.canvas.height;
-    reconstructionCanvas.setAttribute("aria-hidden", "true");
-    reconstructionCanvas.dataset.researchOnly = "true";
-    viewer.insertBefore(reconstructionCanvas, sceneHotspots);
-    renderReconstruction = reconstruction.createRenderer(reconstructionCanvas, reconstructionData);
+    reconstructionKeys.forEach((key) => {
+      const data = reconstructionRegistry[key];
+      const canvas = document.createElement("canvas");
+      canvas.id = "reconstructionCanvas-" + key;
+      canvas.className = "scene-layer reconstruction-layer";
+      canvas.width = scene.canvas.width;
+      canvas.height = scene.canvas.height;
+      canvas.setAttribute("aria-hidden", "true");
+      canvas.dataset.researchOnly = "true";
+      canvas.dataset.reconstructionKey = key;
+      viewer.insertBefore(canvas, sceneHotspots);
+      reconstructionControllers.push({
+        key,
+        data,
+        canvas,
+        render: reconstruction.createRenderer(canvas, data)
+      });
+    });
+  }
+
+  function reconstructionVisible(data, resolved) {
+    const rule = data.visibility || {};
+    const requiresVisible = rule.requiresVisibleIds || [];
+    const requiresHidden = rule.requiresHiddenIds || [];
+    return requiresVisible.every((id) => Boolean(resolved[id]?.visible))
+      && requiresHidden.every((id) => !Boolean(resolved[id]?.visible));
+  }
+
+  function reconstructionMaterial(policy, finishMaterial, stoneMaterial, useStonePlinth) {
+    if (policy === "front-finish") return finishMaterial;
+    if (policy === "front-finish-unless-stone-skirting") {
+      return useStonePlinth ? stoneMaterial : finishMaterial;
+    }
+    if (policy === "stone-upper") return stoneMaterial;
+    throw new Error("Política de material de reconstrução desconhecida: " + policy);
   }
 
   function renderSceneFromData() {
@@ -106,9 +137,12 @@
         image.draggable = false;
         image.width = scene.canvas.width;
         image.height = scene.canvas.height;
-        if (reconstructionEnabled && entity.id === reconstructionData.visibilityEntityId) {
+        const delegatingReconstruction = reconstructionControllers.find(
+          (controller) => (controller.data.delegateEntityIds || []).includes(entity.id)
+        );
+        if (delegatingReconstruction) {
           image.style.visibility = "hidden";
-          image.dataset.renderDelegated = "bmc01";
+          image.dataset.renderDelegated = delegatingReconstruction.key;
         }
         group.append(image);
 
@@ -1719,13 +1753,21 @@
     const useStonePlinth = Boolean(state.globalSelections?.serviceIds?.includes("stone-skirting"));
     renderStone(state, { upper: stoneMaterial, plinth: useStonePlinth ? stoneMaterial : finishMaterial });
     const resolved = visibility.resolveVisibility(scene, state);
-    if (renderReconstruction) {
-      renderReconstruction({
-        visible: Boolean(resolved[reconstructionData.visibilityEntityId]?.visible),
-        carcassMaterial: finishMaterial,
-        plinthMaterial: useStonePlinth ? stoneMaterial : finishMaterial
+    reconstructionControllers.forEach((controller) => {
+      const materials = {};
+      Object.entries(controller.data.slots || {}).forEach(([slotId, slot]) => {
+        materials[slotId] = reconstructionMaterial(
+          slot.materialPolicy,
+          finishMaterial,
+          stoneMaterial,
+          useStonePlinth
+        );
       });
-    }
+      controller.render({
+        visible: reconstructionVisible(controller.data, resolved),
+        materials
+      });
+    });
     lastResolved = resolved;
     syncFinishMasks(resolved);
     syncFinishAppearance();
@@ -2073,7 +2115,9 @@
     reconstruction: {
       enabled: reconstructionEnabled,
       mode: reconstructionMode,
-      canvas: () => reconstructionCanvas
+      keys: reconstructionKeys.slice(),
+      canvas: (key = reconstructionKeys[0]) => reconstructionControllers.find((item) => item.key === key)?.canvas || null,
+      canvases: () => Object.fromEntries(reconstructionControllers.map((item) => [item.key, item.canvas]))
     },
     scene
   });
