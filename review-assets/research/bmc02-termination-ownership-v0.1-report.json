@@ -1,0 +1,191 @@
+{
+  "assets": {
+    "approvedStone03": {
+      "alpha128": {
+        "hitBounds": null,
+        "hitPixels": 0,
+        "ratio": 0.0,
+        "samplePixels": 80,
+        "threshold": 128
+      },
+      "alphaBounds": [
+        786,
+        441,
+        1093,
+        575
+      ],
+      "alphaPositive": {
+        "hitBounds": null,
+        "hitPixels": 0,
+        "ratio": 0.0,
+        "samplePixels": 80,
+        "threshold": 1
+      }
+    },
+    "module03": {
+      "alpha128": {
+        "hitBounds": null,
+        "hitPixels": 0,
+        "ratio": 0.0,
+        "samplePixels": 80,
+        "threshold": 128
+      },
+      "alphaBounds": [
+        736,
+        590,
+        1217,
+        856
+      ],
+      "alphaPositive": {
+        "hitBounds": null,
+        "hitPixels": 0,
+        "ratio": 0.0,
+        "samplePixels": 80,
+        "threshold": 1
+      }
+    },
+    "stone03Bridge": {
+      "alpha128": {
+        "hitBounds": null,
+        "hitPixels": 0,
+        "ratio": 0.0,
+        "samplePixels": 80,
+        "threshold": 128
+      },
+      "alphaBounds": [
+        736,
+        516,
+        751,
+        590
+      ],
+      "alphaPositive": {
+        "hitBounds": null,
+        "hitPixels": 0,
+        "ratio": 0.0,
+        "samplePixels": 80,
+        "threshold": 1
+      }
+    },
+    "stone03Exposed": {
+      "alpha128": {
+        "hitBounds": null,
+        "hitPixels": 0,
+        "ratio": 0.0,
+        "samplePixels": 80,
+        "threshold": 128
+      },
+      "alphaBounds": [
+        736,
+        442,
+        1217,
+        912
+      ],
+      "alphaPositive": {
+        "hitBounds": null,
+        "hitPixels": 0,
+        "ratio": 0.0,
+        "samplePixels": 80,
+        "threshold": 1
+      }
+    }
+  },
+  "finding": "UNOWNED_MATERIAL_RESIDUAL",
+  "historicalCandidate": {
+    "atOrRightOfMeasuredCabinetEdgePixels": 0,
+    "authorizedRoi": [
+      720,
+      510,
+      755,
+      600
+    ],
+    "bounds": [
+      727,
+      569,
+      736,
+      589
+    ],
+    "leftOfMeasuredCabinetEdgePixels": 80,
+    "path": "review-assets/candidates/module-03-left-termination-e-rounded-9px/candidate.png",
+    "pixels": 80
+  },
+  "interpretation": [
+    "candidate pixels left of x=736 are a bounded stone termination/overhang residual, not evidence for a full-height cabinet side panel",
+    "current asset alpha and semantic material masks are audited separately",
+    "a static exact-pixel recipe may be valid geometry/neutral evidence without being a material-responsive runtime representation"
+  ],
+  "operationId": "bmc02-module03-left-stone-termination",
+  "promotionEligible": false,
+  "sceneId": "cozinha-01",
+  "schemaVersion": "BMC02TerminationOwnershipAuditReport 0.1",
+  "semanticMasks": {
+    "stone03BridgeFrontEdge": {
+      "bounds": [
+        738,
+        575,
+        740,
+        587
+      ],
+      "positive": {
+        "hitBounds": null,
+        "hitPixels": 0,
+        "ratio": 0.0,
+        "samplePixels": 80,
+        "threshold": 1
+      }
+    },
+    "stone03BridgeTop": {
+      "bounds": [
+        738,
+        552,
+        750,
+        574
+      ],
+      "positive": {
+        "hitBounds": null,
+        "hitPixels": 0,
+        "ratio": 0.0,
+        "samplePixels": 80,
+        "threshold": 1
+      }
+    },
+    "stone03ExposedFrontEdge": {
+      "bounds": [
+        739,
+        575,
+        1204,
+        588
+      ],
+      "positive": {
+        "hitBounds": null,
+        "hitPixels": 0,
+        "ratio": 0.0,
+        "samplePixels": 80,
+        "threshold": 1
+      }
+    },
+    "stone03ExposedTop": {
+      "bounds": [
+        740,
+        552,
+        1204,
+        575
+      ],
+      "positive": {
+        "hitBounds": null,
+        "hitPixels": 0,
+        "ratio": 0.0,
+        "samplePixels": 80,
+        "threshold": 1
+      }
+    }
+  },
+  "stone03ExposedUpperSemanticUnion": {
+    "hitBounds": null,
+    "hitPixels": 0,
+    "ratio": 0.0,
+    "samplePixels": 80,
+    "threshold": 1
+  },
+  "targetVariant": "module-02-hidden",
+  "targetVariantFingerprint": "scene2d-e990f538"
+}
