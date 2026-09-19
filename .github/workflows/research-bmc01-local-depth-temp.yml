@@ -1,0 +1,47 @@
+name: Research BMC01 local depth transfer temp
+
+on:
+  push:
+    branches:
+      - research/reconstruction-architecture-v0.1
+    paths:
+      - .github/workflows/research-bmc01-local-depth-temp.yml
+
+permissions:
+  contents: write
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: research/reconstruction-architecture-v0.1
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Run local depth transfer
+        run: |
+          python -m py_compile tools/research_local_depth_transfer.py
+          python -m unittest tests/test_research_local_depth_transfer.py
+          python tools/research_local_depth_transfer.py             --config review-assets/research/bmc01-local-depth-transfer-v0.1.json             --output review-assets/research/bmc01-local-depth-transfer-v0.1-report.json
+          cat review-assets/research/bmc01-local-depth-transfer-v0.1-report.json
+      - name: Commit report and self-clean with CAS
+        env:
+          TARGET_BRANCH: research/reconstruction-architecture-v0.1
+          EXPECTED_HEAD: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git rm .github/workflows/research-bmc01-local-depth-temp.yml
+          git add review-assets/research/bmc01-local-depth-transfer-v0.1-report.json
+          remote_before="$(git ls-remote origin "refs/heads/$TARGET_BRANCH" | cut -f1)"
+          test "$remote_before" = "$EXPECTED_HEAD"
+          git commit -m "research: materialize BMC-01 local depth transfer"
+          result="$(git rev-parse HEAD)"
+          git push origin "HEAD:refs/heads/$TARGET_BRANCH"
+          remote_after="$(git ls-remote origin "refs/heads/$TARGET_BRANCH" | cut -f1)"
+          test "$remote_after" = "$result"
