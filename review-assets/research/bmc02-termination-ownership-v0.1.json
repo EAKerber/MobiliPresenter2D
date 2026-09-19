@@ -1,0 +1,27 @@
+{
+  "schemaVersion": "BMC02TerminationOwnershipAudit 0.1",
+  "sceneId": "cozinha-01",
+  "operationId": "bmc02-module03-left-stone-termination",
+  "targetVariant": "module-02-hidden",
+  "targetVariantFingerprint": "scene2d-e990f538",
+  "historicalCandidate": "review-assets/candidates/module-03-left-termination-e-rounded-9px/candidate.png",
+  "authorizedRoi": [720,510,755,600],
+  "measuredCabinetLeftEdgeX": 736,
+  "assets": {
+    "stone03Exposed": "app/assets/kitchen/variants/stone-03-pia-exposed-left.png",
+    "stone03Bridge": "app/assets/kitchen/bridges/stone-03-joint-bridge.png",
+    "module03": "app/assets/kitchen/layers/03_inferior_pia.png",
+    "approvedStone03": "app/assets/kitchen/overlays/approved-stone-03.png"
+  },
+  "semanticMasks": {
+    "stone03ExposedTop": "review-assets/stone-masks/generated/stone-03-exposed-top.png",
+    "stone03ExposedFrontEdge": "review-assets/stone-masks/generated/stone-03-exposed-front-edge.png",
+    "stone03BridgeTop": "review-assets/stone-masks/generated/stone-03-bridge-top.png",
+    "stone03BridgeFrontEdge": "review-assets/stone-masks/generated/stone-03-bridge-front-edge.png"
+  },
+  "policy": {
+    "researchOnly": true,
+    "promotionEligible": false,
+    "question": "are the historical 80 termination pixels already owned and material-covered by the current module-02-hidden Stone03 implementation?"
+  }
+}
