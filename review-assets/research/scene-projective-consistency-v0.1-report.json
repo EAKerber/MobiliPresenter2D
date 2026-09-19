@@ -927,7 +927,7 @@
     ]
   },
   "limitations": [
-    "front-mask outer boundaries are proxy evidence, not hand-confirmed physical front corners",
+    "front finish masks are authoring/control masks; their axis-aligned outer boundaries must not be used as independent camera evidence",
     "module01 side residual is derived from layer alpha minus finish mask and remains a segmentation hypothesis",
     "human-calibrated module03 line is reported separately from measured-pixel authority",
     "this probe cannot by itself classify the whole scene as geometrically valid or invalid"
@@ -1273,6 +1273,10 @@
     },
     "rmsPx": 1.7171041084785901e-13
   },
+  "module01VanishingResidualToOtherDepthEvidencePx": {
+    "module02-stone-visible-depth": 83.85483176492993,
+    "module03-stone-reference-alpha-edge": 99.03312892764302
+  },
   "pixelLineObservations": [
     {
       "authority": "measured-from-reference-alpha",
@@ -1352,6 +1356,11 @@
       "slopeDxDy": -0.5
     }
   ],
+  "preliminaryClassification": {
+    "piecewiseSignal": "STRONG_IF_MODULE01_EDGE_TRACE_IS_CONFIRMED",
+    "reason": "the topology-constrained Module 01 top/bottom depth-edge hypothesis yields a vanishing point far from lower-stone depth lines, but the bottom edge is still an algorithmic luminance trace rather than an authoritative vector trace",
+    "sceneClass": "INSUFFICIENT_EVIDENCE"
+  },
   "promotionEligible": false,
   "sceneId": "cozinha-01",
   "schemaVersion": "SceneProjectiveConsistencyProbeReport 0.1",
