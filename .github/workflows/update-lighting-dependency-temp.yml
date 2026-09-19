@@ -169,7 +169,11 @@ jobs:
             assert(after06.light.reason==="requirement-hidden" || after06.light.reason==="intent-off","lighting did not become unavailable");
 
             await page.reload({waitUntil:"networkidle"});
-            await page.locator("#lightingToggle").uncheck();
+            await page.evaluate(() => {
+              const input=document.getElementById("lightingToggle");
+              input.checked=false;
+              input.dispatchEvent(new Event("change",{bubbles:true}));
+            });
             await page.waitForTimeout(100);
             const inverse=await page.evaluate(() => {
               const vis=window.CASA_EM_MODULOS_DEBUG.getVisibility();
