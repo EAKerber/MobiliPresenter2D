@@ -1,0 +1,200 @@
+{
+  "schemaVersion": "ReconstructionPacket 0.1",
+  "identity": {
+    "operationId": "bmc04-cooktop-bounded-generation-v0.1",
+    "sceneId": "cozinha-01",
+    "targetVariant": "default",
+    "targetVariantFingerprint": "scene2d-930c3dc3",
+    "targetModuleId": "module-02",
+    "operationRole": "cooktop-perspective-replacement",
+    "caseClass": "T6-G-bounded-generative-appliance-replacement",
+    "baseProductCommit": "73e7cf24f7d260f38f408e1817b7d8dbb33802c5"
+  },
+  "confidence": {
+    "G": "inferred",
+    "P": "blocked",
+    "A": "derived",
+    "O": "confirmed"
+  },
+  "claims": [
+    {
+      "id": "cooktop-hosted-by-module02",
+      "domain": "D1",
+      "subject": "scene/traditional/appliance/cooktop",
+      "property": "host",
+      "value": "module-02",
+      "status": "confirmed",
+      "source": "EAKerber/MobiliPresenter:scene-core/src/fixtures/current-scene.ts",
+      "validFor": "traditional scene"
+    },
+    {
+      "id": "cooktop-slot-envelope",
+      "domain": "D1",
+      "subject": "scene/traditional/module/lower-stove/slot/cooktop",
+      "property": "slot-envelope",
+      "value": {
+        "localTransformMm": [95.505, -5, 796],
+        "widthMm": 600,
+        "heightMm": 60,
+        "depthMm": 520
+      },
+      "status": "inferred",
+      "source": "EAKerber/MobiliPresenter:scene-core/src/fixtures/current-geometry.ts",
+      "validFor": "module-02 cooktop slot",
+      "derivation": "style-anchor target render + Promob countertop layer"
+    },
+    {
+      "id": "stone02-host-plane-depth",
+      "domain": "D1",
+      "subject": "stone-02/slab",
+      "property": "depthMm",
+      "value": 550,
+      "unit": "mm",
+      "status": "confirmed",
+      "source": "EAKerber/MobiliPresenter:scene-core/src/fixtures/current-scene.ts",
+      "validFor": "stone-02 slab"
+    },
+    {
+      "id": "legacy-cooktop-removal-region",
+      "domain": "D4",
+      "subject": "cooktop",
+      "property": "authorized-removal-support",
+      "value": {
+        "boundsPx": [515, 536, 739, 575],
+        "protectedFrontEdgeY": 575
+      },
+      "status": "confirmed",
+      "source": "review-assets/stone-backing/config.json",
+      "validFor": "canonical 1536x1024 frame"
+    },
+    {
+      "id": "existing-regenerated-fit-not-perspective-authority",
+      "domain": "D2",
+      "subject": "review-assets/cooktop-regenerated-fit",
+      "property": "geometry-authority",
+      "value": false,
+      "status": "blocked",
+      "source": "review-assets/cooktop-regenerated-fit/generated/gate.json",
+      "validFor": "BMC-04 target footprint",
+      "reason": "existing 214x32 independent width/height fit is explicitly not a perspective proof"
+    }
+  ],
+  "physicalGeometry": {
+    "host": "module-02 + stone-02 slab",
+    "slotEnvelope": {
+      "widthMm": 600,
+      "heightMm": 60,
+      "depthMm": 520,
+      "status": "inferred"
+    },
+    "hostPlane": {
+      "stoneDepthMm": 550,
+      "status": "confirmed"
+    }
+  },
+  "ownership": {
+    "hostModule": "module-02",
+    "authorizedRemovalRegionPx": [515, 536, 739, 575],
+    "protectedFrontEdgeY": 575,
+    "protectedOutsideRegion": true,
+    "status": "confirmed"
+  },
+  "transformationEvidence": {
+    "method": "host-plane-footprint-guide",
+    "confidence": "blocked",
+    "sourceFrame": "canonical 1536x1024",
+    "requiredBeforeGeneration": [
+      "current Stone02 top-plane width axis",
+      "current lower-zone depth axis",
+      "deterministic cooktop footprint quad",
+      "named front/rear/left/right footprint edges",
+      "fit budget in pixels"
+    ],
+    "globalCameraClaim": false,
+    "reason": "host-plane direction can be constrained locally, but the corrected cooktop footprint quad has not yet been materialized"
+  },
+  "visualEvidence": {
+    "existingCanonicalObject": "current cooktop pixels inside stone-backing cooktop support",
+    "existingGeneratedDonor": "review-assets/cooktop-regenerated-fit/donor.png",
+    "perceptualTarget": {
+      "status": "human-designated-unmaterialized",
+      "authority": "appearance-only",
+      "description": "accidental ImageGen frame designated by the user as a visually excellent golden target",
+      "geometryAuthority": false
+    }
+  },
+  "editContract": {
+    "canonicalSourceFrameHash": "f502790c76afe612563958ca3acfcc7d653018d718d11d852ed3a45df553ecfa",
+    "authorizedRoi": [515, 536, 739, 575],
+    "zeroChangeOutsideRoi": true,
+    "defaultRuntimeMustRemainUnchanged": true,
+    "protectedRegions": [
+      "y>=575 front stone edge/body",
+      "sink/faucet/drainer region",
+      "module-02 cabinet body outside cooktop support"
+    ],
+    "directGeneratedPromotionAllowed": false,
+    "deterministicDeltaRequired": true,
+    "materialSlots": []
+  },
+  "authoringPlan": {
+    "candidateLadderStartingPoint": "existing-regenerated-donor-as-appearance-reference-only",
+    "generation": {
+      "allowed": true,
+      "mode": "isolated-object-synthesis",
+      "reason": "the current cooktop raster appears misaligned with the host-plane perspective and a large deterministic warp is expected to degrade grates, burners and knobs"
+    },
+    "preGenerationStopCondition": "do not call generation until the deterministic footprint guide and fit budget are materialized",
+    "postGenerationPolicy": "reject/regenerate if a candidate requires a large warp; only small placement/scale/alpha normalization is allowed"
+  },
+  "generationGuide": {
+    "cleanReferenceRequired": true,
+    "hardFootprintGuideRequired": true,
+    "transparentObjectPreferred": true,
+    "perceptualTargetAllowed": true,
+    "perceptualTargetAuthority": "appearance-only",
+    "mayAuthor": [
+      "grate appearance",
+      "burners",
+      "knobs",
+      "reflections",
+      "object-local shading"
+    ],
+    "forbiddenOutcomes": [
+      "moving or reshaping stone",
+      "changing module geometry",
+      "changing scene camera",
+      "editing outside cooktop ROI",
+      "inventing a larger appliance footprint than the deterministic guide"
+    ]
+  },
+  "acceptance": {
+    "requiredGates": [
+      "source fingerprint",
+      "footprint guide validity",
+      "generated alpha/silhouette validity",
+      "zero outside ROI",
+      "zero protected front/body changes",
+      "host-plane edge alignment",
+      "contact/no-floating check",
+      "artifact review of grates/burners/knobs",
+      "human visual review"
+    ],
+    "humanReview": {
+      "status": "PENDING"
+    }
+  },
+  "lifecycle": {
+    "state": "DRAFT",
+    "defaultPromotionAllowed": false
+  },
+  "provenance": {
+    "requiredPaths": [
+      "review-assets/cooktop-regenerated-fit/config.json",
+      "review-assets/cooktop-regenerated-fit/generated/gate.json",
+      "review-assets/stone-backing/config.json",
+      "tools/fit_regenerated_cooktop.py",
+      "docs/work/bmc-04-cooktop-bounded-generation-v0.1.md"
+    ]
+  }
+}
