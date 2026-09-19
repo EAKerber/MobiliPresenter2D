@@ -1,6 +1,6 @@
 # BMC-01 Tooling Implementation Conformance Audit v0.1
 
-Status: static/deep source audit complete; execution revalidation partially blocked  
+Status: static/deep source audit complete; deterministic historical replay revalidated  
 Target: Module 02 exposed right face  
 Research branch: `research/reconstruction-architecture-v0.1`
 
@@ -60,7 +60,7 @@ File:
 `tools/materialize_perspective_donor_recipe.py`
 
 Classification:
-**REUSABLE_CORE**, currently **BLOCKED transitively** by F-02.
+**CONFORMANT_WITH_LIMITS** as a donor materializer; **REUSABLE_CORE** internally.
 
 ### What conforms
 
@@ -134,14 +134,13 @@ Limitations:
 Recommended disposition:
 **extract/generalize the projective-copy and protected-mask cores; do not promote the whole script unchanged.**
 
-## Finding F-02 — Delta extractor has a current syntax blocker
+## Finding F-02 — Delta extractor syntax blocker found and repaired on research branch
 
 File:
 `tools/extract_candidate_delta.py`
 
 Classification:
-algorithm: **REUSABLE_CORE**  
-current file/CLI: **CONTRACT_MISMATCH / BLOCKED**
+algorithm/file: **CONFORMANT_WITH_LIMITS** for `opaque-replacement-pixels`
 
 ### Strong algorithmic behavior
 
@@ -172,17 +171,16 @@ The CLI metadata dictionary currently contains JavaScript/JSON literals in Pytho
 - `true`;
 - `null`.
 
-These appear in:
+These appeared in:
 - `provenance.deltaExtractionRequired`;
 - `humanReview.reviewer`;
 - `humanReview.reviewedAt`.
 
-They are invalid Python syntax.
+They were invalid Python syntax and were repaired minimally on the research branch:
+- `true -> True`;
+- `null -> None`.
 
-Consequence:
-the module cannot be parsed/imported in its current form, and `materialize_perspective_donor_recipe.py` imports from this module.
-
-Therefore the current BMC-01 materialization chain is **not currently executable from this head as written**.
+A second implementation issue surfaced immediately under focused unit import: the perspective donor script used a script-local import that failed when imported as `tools.materialize_perspective_donor_recipe`. It now follows the repository's existing dual import pattern and supports both package import and direct script execution.
 
 This is a real implementation-conformance finding, not an architectural objection.
 
@@ -508,7 +506,7 @@ before promoting projective donor code, add focused tests in the research implem
 | donor perspective warp | perspective donor materializer | REUSABLE_CORE |
 | protected asset masking | perspective donor materializer | REUSABLE_CORE |
 | deterministic delta | extractor algorithm | REUSABLE_CORE |
-| current extractor module execution | `extract_candidate_delta.py` | BLOCKED by invalid Python literals |
+| current extractor module execution | `extract_candidate_delta.py` | CONFORMANT_WITH_LIMITS after research repair |
 | structural intake | candidate validator | CONFORMANT_WITH_LIMITS |
 | authoring lineage | provenance validator | CONFORMANT_WITH_LIMITS |
 | review rendering | candidate review | REUSABLE_CORE |
@@ -550,25 +548,49 @@ before promoting projective donor code, add focused tests in the research implem
 
 Those require the pending camera/projection and benchmark work.
 
-## Immediate blocker before BMC-01 execution
+## D-001 resolution and exact replay
 
-**D-001: repair and regression-test `tools/extract_candidate_delta.py` syntax.**
+D-001 is resolved **only on the research branch**.
 
-This should be a minimal implementation change on the research branch when implementation work begins.
+Changes:
+- repaired Python literals in `extract_candidate_delta.py`;
+- made the perspective donor materializer importable both as a package module and as a direct script;
+- added focused unit coverage for projective coefficient mapping, singular geometry rejection, ROI masking, protected-pixel behavior and deterministic replay of the warp primitive.
 
-It should not be backported to the stable preview branch as part of this research unless separately requested, because:
-- the preview runtime does not depend on this authoring CLI;
-- the user explicitly wants the preview branch preserved as a mergeable stable baseline.
+Research workflow run:
+`35453134871`.
+
+Results:
+- compile gate: PASS;
+- focused tests: `29/29 PASS`;
+- historical source variant exact SHA: PASS;
+- projective donor recipe: PASS;
+- historical candidate byte-for-byte reproduction: PASS;
+- candidate SHA:
+  `3becbf8a510dd76757593ed5c227482edef7af57c48877e9d2e714398e77fff8`;
+- changed pixels: `1910`;
+- difference bounds: `[755,525,764,815]`;
+- outside ROI changes: `0`;
+- round-trip mismatch: `0`;
+- edited frame SHA reproduced:
+  `dfa445834900d87450392f3ccec827880eade882ca914153110b6f9d3558eca4`;
+- canonical historical provenance validation: PASS.
+
+The temporary workflow self-removed after success.
+
+This is strong evidence that **the donor materialization + delta extraction + provenance chain is deterministically reproducible** for BMC-01.
+
+It does **not** validate the target quad as physical ground truth; that remains a projection-authority question.
 
 ## Recommended next implementation-aware sequence
 
-1. record this audit;
-2. add Track D to the research program;
-3. perform the camera/projection compatibility investigation;
-4. before executing BMC-01, create a minimal research-only repair for D-001 plus focused perspective-donor tests;
-5. rerun the existing BMC-01 recipe from exact sources;
-6. compare reproduced hashes/report against historical candidate;
-7. only then extract generalized primitives.
+1. record this audit — DONE;
+2. add Track D — DONE;
+3. repair D-001 and add focused perspective-donor tests — DONE;
+4. rerun exact BMC-01 historical recipe — DONE, byte-for-byte match;
+5. perform the camera/projection compatibility investigation — NEXT;
+6. use that result to decide whether the current authored target quad remains only bounded inference or can be strengthened;
+7. only then extract/generalize ProjectionResolver-adjacent primitives.
 
 ## Architectural conclusion
 
