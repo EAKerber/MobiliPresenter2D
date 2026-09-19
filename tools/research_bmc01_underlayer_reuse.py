@@ -30,6 +30,72 @@ def bbox(m):
     b=m.getbbox()
     return list(b) if b else None
 
+def alpha_confidence(raw,geom,seam,bins,solid_threshold,strong_threshold):
+    rp=raw.load(); gp=geom.load()
+    gb=geom.getbbox()
+    values=[]
+    by_x={}
+    if gb:
+        for y in range(gb[1],gb[3]):
+            for x in range(max(gb[0],int(seam)+1),gb[2]):
+                if not gp[x,y]:
+                    continue
+                a=int(rp[x,y])
+                values.append(a)
+                rec=by_x.setdefault(x,{"geometryPixels":0,"alphaPositivePixels":0,"solidPixels":0,"strongPixels":0,"alphaMass":0.0,"alphaSum":0,"maxAlpha":0})
+                rec["geometryPixels"]+=1
+                rec["alphaSum"]+=a
+                rec["alphaMass"]+=a/255.0
+                rec["maxAlpha"]=max(rec["maxAlpha"],a)
+                if a>0: rec["alphaPositivePixels"]+=1
+                if a>=solid_threshold: rec["solidPixels"]+=1
+                if a>=strong_threshold: rec["strongPixels"]+=1
+    hist=[]
+    for lo,hi in bins:
+        n=sum(1 for v in values if lo<=v<=hi)
+        hist.append({"minAlpha":lo,"maxAlpha":hi,"pixels":n,"ratio":n/len(values) if values else 0})
+    columns=[]
+    for x in sorted(by_x):
+        r=by_x[x]
+        g=r["geometryPixels"]
+        columns.append({
+          "x":x,
+          **r,
+          "meanAlpha":r["alphaSum"]/g if g else 0,
+          "effectiveOpaqueCoverageRatio":r["alphaMass"]/g if g else 0,
+          "alphaPositiveRatio":r["alphaPositivePixels"]/g if g else 0,
+          "solidRatio":r["solidPixels"]/g if g else 0,
+          "strongRatio":r["strongPixels"]/g if g else 0
+        })
+    n=len(values)
+    nonzero=[v for v in values if v>0]
+    solid=sum(v>=solid_threshold for v in values)
+    strong=sum(v>=strong_threshold for v in values)
+    mass=sum(values)/255.0
+    sorted_nonzero=sorted(nonzero)
+    def q(frac):
+        if not sorted_nonzero: return None
+        return sorted_nonzero[round((len(sorted_nonzero)-1)*frac)]
+    return {
+      "geometrySidePixels":n,
+      "alphaZeroPixels":sum(v==0 for v in values),
+      "alphaPositivePixels":len(nonzero),
+      "alphaPositiveRatio":len(nonzero)/n if n else 0,
+      "solidThreshold":solid_threshold,
+      "solidPixels":solid,
+      "solidRatio":solid/n if n else 0,
+      "strongThreshold":strong_threshold,
+      "strongPixels":strong,
+      "strongRatio":strong/n if n else 0,
+      "alphaMassEquivalentOpaquePixels":mass,
+      "effectiveOpaqueCoverageRatio":mass/n if n else 0,
+      "meanAlphaAll":sum(values)/n if n else 0,
+      "meanAlphaPositive":sum(nonzero)/len(nonzero) if nonzero else 0,
+      "nonzeroAlphaQuantiles":{"q10":q(.10),"q25":q(.25),"q50":q(.50),"q75":q(.75),"q90":q(.90)},
+      "histogram":hist,
+      "columns":columns
+    }
+
 def main():
     ap=argparse.ArgumentParser()
     ap.add_argument("--config",type=Path,required=True)
@@ -78,8 +144,15 @@ def main():
           "sameObjectSideBounds":bbox(owner)
         })
 
+    confidence_cfg=cfg.get("alphaConfidence") or {}
+    confidence=alpha_confidence(
+      m02,geom,cfg["frontSeamX"],
+      confidence_cfg.get("bins",[[1,127],[128,254],[255,255]]),
+      int(confidence_cfg.get("solidThreshold",128)),
+      int(confidence_cfg.get("strongThreshold",224))
+    )
     report={
-      "schemaVersion":"BMC01UnderlayerReuseAuditReport 0.1",
+      "schemaVersion":"BMC01UnderlayerReuseAuditReport 0.2",
       "sceneId":cfg["sceneId"],
       "promotionEligible":False,
       "frontSeamX":cfg["frontSeamX"],
@@ -94,10 +167,12 @@ def main():
         }
       },
       "thresholdSweep":sweeps,
+      "alphaConfidence":confidence,
       "interpretation":[
         "sameObjectSidePixels are exact current Module 02 layer pixels inside the locally projected side and to the right of the measured front seam",
         "coveredByModule03Pixels quantify how much of that exact side is hidden by current Module 03 body/stone alpha in the default state",
-        "these same-object pixels should be reused as C0 canonical underlayer before any reconstruction method is attempted"
+        "nonzero alpha alone is compositing support, not proof of opaque physical side occupancy",
+        "solid/strong alpha tiers are reported separately so later completion can preserve true same-object face evidence without mistaking soft antialias/shadow support for completed geometry"
       ]
     }
     args.output.parent.mkdir(parents=True,exist_ok=True)
