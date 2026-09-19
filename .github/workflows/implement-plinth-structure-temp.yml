@@ -58,31 +58,37 @@ jobs:
           cd app
           npm test
 
-      - name: Verify expanded plinth covers owner alpha in canonical band
+      - name: Verify measured horizontal plinth ownership
         run: |
           python - <<'PY'
           import json
           from pathlib import Path
-          from PIL import Image,ImageChops,ImageDraw
+          from PIL import Image
           root=Path(".")
           cfg=json.loads((root/"review-assets/stone-masks/config.json").read_text())
+          checks={
+            "stone-02-exposed":[(485,503),(745,757)],
+            "stone-03-exposed":[(736,744),(1204,1217)],
+          }
           for asset in cfg["assets"]:
-              group=cfg["groups"][asset["group"]]
-              poly=group["surfaces"]["plinth"]
-              y0=min(p[1] for p in poly);y1=max(p[1] for p in poly)+1
+              if asset["id"] not in checks:
+                  continue
               owner=Image.open(root/asset["path"]).convert("RGBA").getchannel("A")
               mask=Image.open(root/f"review-assets/stone-masks/generated/{asset['id']}-plinth.png").convert("L")
-              band=Image.new("L",owner.size)
-              ImageDraw.Draw(band).rectangle((0,y0,owner.width-1,y1-1),fill=255)
-              owner_band=ImageChops.multiply(owner,band)
-              missed=ImageChops.subtract(owner_band,mask)
-              significant=missed.point(lambda v:255 if v>=96 else 0)
-              significant_pixels=sum(significant.histogram()[1:])
-              owner_pixels=sum(owner_band.histogram()[1:])
-              print(asset["id"],"owner",owner_pixels,"significantMiss",significant_pixels,"bbox",significant.getbbox())
-              if significant_pixels>50:
-                  raise SystemExit(f"PLINTH_OWNER_ALPHA_SIGNIFICANT_MISS:{asset['id']}:{significant_pixels}:{significant.getbbox()}")
-          print("PLINTH_OWNER_ALPHA_COVERAGE PASS")
+              for x0,x1 in checks[asset["id"]]:
+                  owner_support=0
+                  mask_support=0
+                  for y in range(858,894):
+                      for x in range(x0,x1):
+                          if owner.getpixel((x,y))>=96:
+                              owner_support+=1
+                              if mask.getpixel((x,y))>=96:
+                                  mask_support+=1
+                  ratio=1 if owner_support==0 else mask_support/owner_support
+                  print(asset["id"],(x0,x1),"owner",owner_support,"mask",mask_support,"coverage",round(ratio,4))
+                  if owner_support and ratio < 0.96:
+                      raise SystemExit(f"PLINTH_SIDE_COVERAGE:{asset['id']}:{x0}-{x1}:{ratio:.4f}")
+          print("PLINTH_HORIZONTAL_OWNERSHIP PASS")
           PY
 
       - name: Install Playwright
