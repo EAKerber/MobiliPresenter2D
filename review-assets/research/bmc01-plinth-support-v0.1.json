@@ -1,0 +1,17 @@
+{
+  "schemaVersion": "BMC01PlinthSupportAudit 0.1",
+  "sceneId": "cozinha-01",
+  "localTransferReport": "review-assets/research/bmc01-local-depth-transfer-v0.1-report.json",
+  "baseAsset": "app/assets/kitchen/base.png",
+  "assets": [
+    {"id":"module02","path":"app/assets/kitchen/layers/02_inferior_fogao.png"},
+    {"id":"stone02","path":"app/assets/kitchen/variants/stone-02-cozinha-exposed-right.png"},
+    {"id":"approvedStone02","path":"app/assets/kitchen/overlays/approved-stone-02.png"}
+  ],
+  "alphaThresholds": [1,32,128,224],
+  "policy": {
+    "researchOnly": true,
+    "promotionEligible": false,
+    "question": "does the locally projected recessed Module 02 plinth already have semantically useful current support, and which asset owns it?"
+  }
+}
