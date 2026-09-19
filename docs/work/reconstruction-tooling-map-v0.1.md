@@ -73,6 +73,7 @@ Promotion requires:
 | Scene Core physical geometry | source repo `scene-core/src/fixtures/current-geometry.ts` | CONFORMANT for A1 source | explicit physical primitives, dimensions, roles and source bindings | not yet exposed to MobiliPresenter2D through a reconstruction packet/export |
 | Promob source validation | source repo `scene-core/tools/dxf_inventory.py`, `validate_promob_profile.py` | CONFORMANT_WITH_LIMITS | inventories/validates Promob-derived source profile | source ingestion, not 2D projection |
 | technical view projection | source repo technical drawing/isometric system | CONFORMANT_WITH_LIMITS | deterministic physical/technical projection with provenance | separate presentation backend; not photographic completion |
+| research projection compatibility probe | `tools/research_projection_compatibility.py` | EXPERIMENT_ONLY | projects confirmed physical probes through the source fixed camera and compares direction/scale against canonical 2D measurements | diagnostic only; explicitly `promotionEligible=false`; current result rejects exact global transfer for BMC-01 |
 
 ## Capability gaps
 
