@@ -53,6 +53,18 @@ def cluster_peaks(scores, count, threshold_ratio=0.15):
     return selected
 
 
+def longest_run(flags):
+    best_start = best_end = current_start = None
+    for index, active in enumerate(flags + [False]):
+        if active and current_start is None:
+            current_start = index
+        elif not active and current_start is not None:
+            if best_start is None or index - current_start > best_end - best_start:
+                best_start, best_end = current_start, index
+            current_start = None
+    return (best_start, best_end) if best_start is not None else (0, 0)
+
+
 def derive(key: str, spec: dict):
     finish = Image.open(MASK_DIR / f"{key}.png").convert("RGBA").getchannel("A")
     shadow = Image.open(MASK_DIR / f"structure-{key}-shadow.png").convert("RGBA").getchannel("A")
@@ -65,8 +77,8 @@ def derive(key: str, spec: dict):
     finish = finish.crop(bounds)
     energy = energy.crop(bounds)
     width, height = finish.size
-    finish_pixels = list(finish.getdata())
-    energy_pixels = list(energy.getdata())
+    finish_pixels = list(finish.get_flattened_data())
+    energy_pixels = list(energy.get_flattened_data())
 
     column_scores = []
     for x in range(width):
@@ -97,16 +109,15 @@ def derive(key: str, spec: dict):
 
     for peak in vertical:
         indices = peak["indices"]
-        strong_pixels = []
-        for x in indices:
-            for y in range(height):
-                index = y * width + x
-                if finish_pixels[index] >= 64 and energy_pixels[index] >= 32:
-                    strong_pixels.append((x, y))
-        if not strong_pixels:
+        support = []
+        for y in range(height):
+            support.append(any(
+                finish_pixels[y * width + x] >= 64 and energy_pixels[y * width + x] >= 32
+                for x in indices
+            ))
+        y0, y1 = longest_run(support)
+        if y1 <= y0:
             raise RuntimeError(f"vertical seam without support: {key} {peak}")
-        y0 = min(y for _, y in strong_pixels)
-        y1 = max(y for _, y in strong_pixels) + 1
         coordinate = peak["coordinate"] / width
         line = {
             "x1": round(coordinate, 4), "y1": round(y0 / height, 4),
@@ -121,16 +132,15 @@ def derive(key: str, spec: dict):
 
     for peak in horizontal:
         indices = peak["indices"]
-        strong_pixels = []
-        for y in indices:
-            for x in range(width):
-                index = y * width + x
-                if finish_pixels[index] >= 64 and energy_pixels[index] >= 32:
-                    strong_pixels.append((x, y))
-        if not strong_pixels:
+        support = []
+        for x in range(width):
+            support.append(any(
+                finish_pixels[y * width + x] >= 64 and energy_pixels[y * width + x] >= 32
+                for y in indices
+            ))
+        x0, x1 = longest_run(support)
+        if x1 <= x0:
             raise RuntimeError(f"horizontal seam without support: {key} {peak}")
-        x0 = min(x for x, _ in strong_pixels)
-        x1 = max(x for x, _ in strong_pixels) + 1
         coordinate = peak["coordinate"] / height
         line = {
             "x1": round(x0 / width, 4), "y1": round(coordinate, 4),
