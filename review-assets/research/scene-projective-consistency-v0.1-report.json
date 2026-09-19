@@ -43,9 +43,9 @@
   ],
   "depthOrientationSpread": {
     "combinedMeasuredPlusModule01Residual": {
-      "maxAbsDeviationDeg": 70.06743112886123,
-      "meanAbsDeviationDeg": 9.830073008525098,
-      "meanAngleDeg": -0.9359147156502189
+      "maxAbsDeviationDeg": 87.70377838663532,
+      "meanAbsDeviationDeg": 28.32988858716171,
+      "meanAngleDeg": 21.29287576885324
     },
     "measuredOnly": {
       "maxAbsDeviationDeg": 0.0,
@@ -53,9 +53,9 @@
       "meanAngleDeg": -71.00334584451144
     },
     "module01ResidualOnly": {
-      "maxAbsDeviationDeg": 1.358073863785208,
-      "meanAbsDeviationDeg": 1.358073863785208,
-      "meanAngleDeg": 1.3644885278328616
+      "maxAbsDeviationDeg": 20.90815236222751,
+      "meanAbsDeviationDeg": 20.90815236222751,
+      "meanAngleDeg": 20.90815236222751
     }
   },
   "frontMaskBoundaryFits": {
@@ -870,21 +870,74 @@
     "human-calibrated module03 line is reported separately from measured-pixel authority",
     "this probe cannot by itself classify the whole scene as geometrically valid or invalid"
   ],
+  "module01DepthVanishingHypothesis": [
+    {
+      "observationResidualPx": {
+        "module02-stone-visible-depth": 209.94357070225368,
+        "module03-stone-human-annotation": 159.85042266749662
+      },
+      "point": [
+        620.488392089424,
+        294.00000000000006
+      ],
+      "threshold": 32
+    },
+    {
+      "observationResidualPx": {
+        "module02-stone-visible-depth": 209.94357070225368,
+        "module03-stone-human-annotation": 159.85042266749662
+      },
+      "point": [
+        620.488392089424,
+        294.00000000000006
+      ],
+      "threshold": 64
+    },
+    {
+      "observationResidualPx": {
+        "module02-stone-visible-depth": 209.94357070225368,
+        "module03-stone-human-annotation": 159.85042266749662
+      },
+      "point": [
+        620.488392089424,
+        294.00000000000006
+      ],
+      "threshold": 128
+    },
+    {
+      "observationResidualPx": {
+        "module02-stone-visible-depth": 209.94357070225368,
+        "module03-stone-human-annotation": 159.85042266749662
+      },
+      "point": [
+        620.488392089424,
+        294.00000000000006
+      ],
+      "threshold": 192
+    }
+  ],
   "module01SideResidualProbe": [
     {
       "bottomDepthEdge": {
-        "angleDeg": 2.7225623916180637,
-        "count": 238,
-        "dyDx": 0.04755347401393691,
-        "rms": 0.32371322969503585
+        "angleDeg": 0.0,
+        "count": 27,
+        "dyDx": 0.0,
+        "intercept": 294.0,
+        "rms": 0.0
       },
       "bounds": [
-        128,
+        353,
         58,
         381,
         296
       ],
-      "pixelCount": 10627,
+      "frontMaskBounds": [
+        132,
+        65,
+        354,
+        281
+      ],
+      "pixelCount": 6168,
       "seed": [
         369,
         180
@@ -892,26 +945,38 @@
       "status": "OK",
       "threshold": 32,
       "topDepthEdge": {
-        "angleDeg": 0.0064146640476593665,
-        "count": 231,
-        "dyDx": 0.00011195700850873264,
-        "rms": 0.06522674204232994
+        "angleDeg": 41.81630472445502,
+        "count": 25,
+        "dyDx": 0.8946153846153846,
+        "intercept": -261.09846153846155,
+        "rms": 0.29680348328870754
+      },
+      "topologyConstraint": {
+        "marginPx": 1,
+        "side": "right"
       }
     },
     {
       "bottomDepthEdge": {
-        "angleDeg": 2.7225623916180637,
-        "count": 238,
-        "dyDx": 0.04755347401393691,
-        "rms": 0.32371322969503585
+        "angleDeg": 0.0,
+        "count": 27,
+        "dyDx": 0.0,
+        "intercept": 294.0,
+        "rms": 0.0
       },
       "bounds": [
-        128,
+        353,
         58,
         381,
         296
       ],
-      "pixelCount": 10627,
+      "frontMaskBounds": [
+        132,
+        65,
+        354,
+        281
+      ],
+      "pixelCount": 6168,
       "seed": [
         369,
         180
@@ -919,26 +984,38 @@
       "status": "OK",
       "threshold": 64,
       "topDepthEdge": {
-        "angleDeg": 0.0064146640476593665,
-        "count": 231,
-        "dyDx": 0.00011195700850873264,
-        "rms": 0.06522674204232994
+        "angleDeg": 41.81630472445502,
+        "count": 25,
+        "dyDx": 0.8946153846153846,
+        "intercept": -261.09846153846155,
+        "rms": 0.29680348328870754
+      },
+      "topologyConstraint": {
+        "marginPx": 1,
+        "side": "right"
       }
     },
     {
       "bottomDepthEdge": {
-        "angleDeg": 2.7225623916180637,
-        "count": 238,
-        "dyDx": 0.04755347401393691,
-        "rms": 0.32371322969503585
+        "angleDeg": 0.0,
+        "count": 27,
+        "dyDx": 0.0,
+        "intercept": 294.0,
+        "rms": 0.0
       },
       "bounds": [
-        128,
+        353,
         58,
         381,
         296
       ],
-      "pixelCount": 10627,
+      "frontMaskBounds": [
+        132,
+        65,
+        354,
+        281
+      ],
+      "pixelCount": 6168,
       "seed": [
         369,
         180
@@ -946,26 +1023,38 @@
       "status": "OK",
       "threshold": 128,
       "topDepthEdge": {
-        "angleDeg": 0.0064146640476593665,
-        "count": 231,
-        "dyDx": 0.00011195700850873264,
-        "rms": 0.06522674204232994
+        "angleDeg": 41.81630472445502,
+        "count": 25,
+        "dyDx": 0.8946153846153846,
+        "intercept": -261.09846153846155,
+        "rms": 0.29680348328870754
+      },
+      "topologyConstraint": {
+        "marginPx": 1,
+        "side": "right"
       }
     },
     {
       "bottomDepthEdge": {
-        "angleDeg": 2.7225623916180637,
-        "count": 238,
-        "dyDx": 0.04755347401393691,
-        "rms": 0.32371322969503585
+        "angleDeg": 0.0,
+        "count": 27,
+        "dyDx": 0.0,
+        "intercept": 294.0,
+        "rms": 0.0
       },
       "bounds": [
-        128,
+        353,
         58,
         381,
         296
       ],
-      "pixelCount": 10627,
+      "frontMaskBounds": [
+        132,
+        65,
+        354,
+        281
+      ],
+      "pixelCount": 6168,
       "seed": [
         369,
         180
@@ -973,10 +1062,15 @@
       "status": "OK",
       "threshold": 192,
       "topDepthEdge": {
-        "angleDeg": 0.0064146640476593665,
-        "count": 231,
-        "dyDx": 0.00011195700850873264,
-        "rms": 0.06522674204232994
+        "angleDeg": 41.81630472445502,
+        "count": 25,
+        "dyDx": 0.8946153846153846,
+        "intercept": -261.09846153846155,
+        "rms": 0.29680348328870754
+      },
+      "topologyConstraint": {
+        "marginPx": 1,
+        "side": "right"
       }
     }
   ],
