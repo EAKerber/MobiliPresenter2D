@@ -74,6 +74,13 @@ Promotion requires:
 | Promob source validation | source repo `scene-core/tools/dxf_inventory.py`, `validate_promob_profile.py` | CONFORMANT_WITH_LIMITS | inventories/validates Promob-derived source profile | source ingestion, not 2D projection |
 | technical view projection | source repo technical drawing/isometric system | CONFORMANT_WITH_LIMITS | deterministic physical/technical projection with provenance | separate presentation backend; not photographic completion |
 | research projection compatibility probe | `tools/research_projection_compatibility.py` | EXPERIMENT_ONLY | projects confirmed physical probes through the source fixed camera and compares direction/scale against canonical 2D measurements | diagnostic only; explicitly `promotionEligible=false`; current result rejects exact global transfer for BMC-01 |
+| local physical-depth transfer | `tools/research_local_depth_transfer.py` | EXPERIMENT_ONLY / REUSABLE_CORE | scales a current owned local depth vector by confirmed physical depth ratios and emits separate carcass/plinth quads | correctly refuses a global-camera claim; current implementation is adjacent-lower-zone specific |
+| cue ownership audit | `tools/research_depth_cue_ownership.py` | CONFORMANT_WITH_LIMITS / REUSABLE_CORE | tests which current assets actually own historical depth-cue pixels and whether those owners are visible in the target state | case paths/asset names are BMC-specific; the ownership-before-geometry rule is reusable |
+| BMC-01 antialiased completion | `tools/research_bmc01_antialiased_completion.py` | EXPERIMENT_ONLY | projects canonical donors into independently derived carcass/plinth geometry using supersampled coverage | case-specific candidate builder; must not become a generic reconstruction API unchanged |
+| runtime asset materializer | `tools/materialize_bmc01_runtime_assets.py` | CONFORMANT_WITH_LIMITS | deterministically separates neutral RGB appearance from alpha ownership masks and writes app-local runtime assets plus manifest | hard-coded BMC-01 slot/file vocabulary; pattern is reusable, implementation is not yet generic |
+| reconstruction material renderer | `app/core/reconstruction.js` | REUSABLE_CORE / CONFORMANT_WITH_LIMITS | renders neutral+mask slots with current finish/stone material inputs and async revision protection | research-only, full-canvas and current two-slot integration; not packet-driven yet |
+| reconstruction browser contract | `tests/reconstruction-browser.cjs` | CONFORMANT_WITH_LIMITS | verifies all four M02/M03 visibility states, finish response, stone-skirting split, zero ROI escape and unchanged default mode | selectors and expected states are BMC-01-specific |
+| Reconstruction Packet validator | `tools/validate_reconstruction_packet.py` | CONFORMANT_WITH_LIMITS | fail-closed validation of required packet sections, claim/confidence vocabulary, edit contract, lifecycle/promotion rule, runtime manifest and required paths | first minimal validator; does not yet validate every ADR 0006 field or claim-level source hashes |
 
 ## Capability gaps
 
@@ -124,16 +131,46 @@ There is no implementation that selects and reports:
 - bounded-inference;
 - blocked.
 
-### ReconstructionPacket serializer/validator — MISSING
+### ReconstructionPacket serializer/validator — PARTIAL
 
-The information exists in recipes, contracts, manifests and calibration documents, but is not unified.
+A first concrete packet now exists:
 
-### NeutralFaceRenderer — MISSING
+`review-assets/research/bmc01-reconstruction-packet-v0.1.json`.
 
-No general deterministic helper currently materializes a physical face into a neutral, locally shaded expected raster for use as:
-- candidate;
-- guide;
-- generative conditioning input.
+`tools/validate_reconstruction_packet.py` validates the packet fail-closed,
+including:
+- required architecture sections;
+- epistemic/confidence vocabulary;
+- ROI and zero-change contract;
+- lifecycle/default-promotion rule;
+- required evidence paths;
+- runtime neutral/mask material-slot manifest;
+- zero default-runtime golden difference.
+
+Research run `35475061682`:
+- packet validation: PASS;
+- Python regression suite: 98 tests, PASS.
+
+Still missing before this becomes a stable general serializer/validator:
+- formal schema file/version migration;
+- claim-level source hash verification;
+- uncertainty/residual schema validation;
+- packet-driven gate selection;
+- generic packet writer rather than authored JSON.
+
+### NeutralFaceRenderer — MISSING as a physical renderer
+
+The research branch now has a **runtime material-slot renderer** and a
+**candidate-to-neutral/mask materializer**, but neither solves this capability.
+
+`materialize_bmc01_runtime_assets.py` separates appearance from ownership only
+after a deterministic candidate already exists.
+
+`app/core/reconstruction.js` recolors/shades those neutral assets at runtime.
+
+A true NeutralFaceRenderer must still start from physical face + projection +
+lighting/material evidence and create the expected raster without depending on
+a previously authored candidate.
 
 ### Generic DonorResolver — MISSING
 
@@ -158,9 +195,13 @@ Missing:
 
 Many good gates exist, but orchestration is workflow-specific. No packet-driven runner selects mandatory gates from case class and projection confidence.
 
-### BenchmarkHarness — MISSING
+### BenchmarkHarness — PARTIAL / case-specific
 
-The protocol now exists, but no implementation compares candidates under one fixed packet while preserving all outputs.
+BMC-01 now preserves historical, local-transfer, ownership, donor,
+antialiased, runtime-material and browser evidence under one case lineage.
+
+There is still no generic packet-driven harness that enumerates methods and
+applies the protocol automatically.
 
 ## Existing pipeline reality
 
@@ -216,3 +257,33 @@ Deep implementation audit should follow BMC-01 dependency order:
 9. `experiment_gap_local_warp.py`.
 
 The purpose is not to rewrite them immediately. It is to decide which implementation pieces deserve promotion, extraction, containment or retirement.
+
+
+## Post-BMC-01 implementation checkpoint
+
+The implementation check has now reached the stage originally intended by this
+tool map: code was not merely catalogued; the candidate primitives were run,
+allowed to fail, corrected when the implementation contradicted the method,
+and reclassified.
+
+Important implementation findings:
+
+- historical bridge pixels were incorrectly usable as a geometric cue until an
+  ownership audit rejected them;
+- low alpha in a source layer was initially tempting as hidden-face support,
+  but alpha-confidence/RGB identity tests showed it was mostly compositing
+  support rather than face ownership;
+- a static RGB exposed-side asset cannot satisfy finish behavior;
+- neutral RGB and ownership alpha need separate runtime assets;
+- the query-gated material renderer passes the four-state visibility matrix and
+  material behavior while leaving the default runtime pixel-identical;
+- the first concrete Reconstruction Packet validates successfully.
+
+This means the research is now beyond a shallow map.
+
+The current architecture/code fit is:
+
+`physical truth -> local transformation evidence -> ownership audit -> donor authoring -> neutral/mask materialization -> material-responsive runtime -> packet/gates`.
+
+The remaining abstraction work should be driven by BMC-02/BMC-03 rather than
+generalizing BMC-01-specific scripts prematurely.
