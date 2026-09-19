@@ -1,0 +1,1043 @@
+{
+  "bands": [
+    {
+      "alphaRange": [
+        128,
+        255
+      ],
+      "byColumn": [
+        {
+          "max": 42.666666666666664,
+          "meanAbsChannelDifference": 9.279245283018868,
+          "pixels": 265,
+          "q10": 5.666666666666667,
+          "q25": 7.0,
+          "q50": 8.666666666666666,
+          "q75": 11.0,
+          "q90": 13.333333333333334,
+          "x": 743
+        },
+        {
+          "max": 21.0,
+          "meanAbsChannelDifference": 5.079847908745247,
+          "pixels": 263,
+          "q10": 2.3333333333333335,
+          "q25": 3.0,
+          "q50": 3.6666666666666665,
+          "q75": 6.333333333333333,
+          "q90": 8.666666666666666,
+          "x": 744
+        }
+      ],
+      "exactBaseMatchPixels": 0,
+      "exactBaseMatchRatio": 0.0,
+      "id": "strong",
+      "max": 42.666666666666664,
+      "meanAbsChannelDifference": 7.1875,
+      "pixels": 528,
+      "q10": 3.0,
+      "q25": 3.6666666666666665,
+      "q50": 7.0,
+      "q75": 9.333333333333334,
+      "q90": 12.333333333333334,
+      "samples": [
+        {
+          "alpha": 255,
+          "baseRgb": [
+            235,
+            228,
+            222
+          ],
+          "layerRgb": [
+            218,
+            217,
+            212
+          ],
+          "meanAbsDiff": 12.666666666666666,
+          "point": [
+            743,
+            590
+          ]
+        },
+        {
+          "alpha": 255,
+          "baseRgb": [
+            233,
+            227,
+            221
+          ],
+          "layerRgb": [
+            218,
+            217,
+            212
+          ],
+          "meanAbsDiff": 11.333333333333334,
+          "point": [
+            744,
+            590
+          ]
+        },
+        {
+          "alpha": 255,
+          "baseRgb": [
+            235,
+            228,
+            222
+          ],
+          "layerRgb": [
+            218,
+            217,
+            212
+          ],
+          "meanAbsDiff": 12.666666666666666,
+          "point": [
+            743,
+            591
+          ]
+        },
+        {
+          "alpha": 255,
+          "baseRgb": [
+            234,
+            227,
+            221
+          ],
+          "layerRgb": [
+            218,
+            217,
+            212
+          ],
+          "meanAbsDiff": 11.666666666666666,
+          "point": [
+            744,
+            591
+          ]
+        },
+        {
+          "alpha": 255,
+          "baseRgb": [
+            234,
+            227,
+            221
+          ],
+          "layerRgb": [
+            217,
+            216,
+            211
+          ],
+          "meanAbsDiff": 12.666666666666666,
+          "point": [
+            743,
+            592
+          ]
+        },
+        {
+          "alpha": 255,
+          "baseRgb": [
+            235,
+            228,
+            223
+          ],
+          "layerRgb": [
+            218,
+            217,
+            212
+          ],
+          "meanAbsDiff": 13.0,
+          "point": [
+            744,
+            592
+          ]
+        },
+        {
+          "alpha": 255,
+          "baseRgb": [
+            234,
+            227,
+            222
+          ],
+          "layerRgb": [
+            213,
+            212,
+            207
+          ],
+          "meanAbsDiff": 17.0,
+          "point": [
+            743,
+            593
+          ]
+        },
+        {
+          "alpha": 255,
+          "baseRgb": [
+            235,
+            228,
+            223
+          ],
+          "layerRgb": [
+            213,
+            212,
+            207
+          ],
+          "meanAbsDiff": 18.0,
+          "point": [
+            744,
+            593
+          ]
+        },
+        {
+          "alpha": 255,
+          "baseRgb": [
+            235,
+            228,
+            223
+          ],
+          "layerRgb": [
+            233,
+            232,
+            227
+          ],
+          "meanAbsDiff": 3.3333333333333335,
+          "point": [
+            743,
+            594
+          ]
+        },
+        {
+          "alpha": 255,
+          "baseRgb": [
+            236,
+            229,
+            225
+          ],
+          "layerRgb": [
+            229,
+            228,
+            223
+          ],
+          "meanAbsDiff": 3.3333333333333335,
+          "point": [
+            744,
+            594
+          ]
+        },
+        {
+          "alpha": 255,
+          "baseRgb": [
+            234,
+            228,
+            223
+          ],
+          "layerRgb": [
+            239,
+            238,
+            233
+          ],
+          "meanAbsDiff": 8.333333333333334,
+          "point": [
+            743,
+            595
+          ]
+        },
+        {
+          "alpha": 255,
+          "baseRgb": [
+            235,
+            228,
+            224
+          ],
+          "layerRgb": [
+            232,
+            231,
+            226
+          ],
+          "meanAbsDiff": 2.6666666666666665,
+          "point": [
+            744,
+            595
+          ]
+        },
+        {
+          "alpha": 255,
+          "baseRgb": [
+            234,
+            228,
+            223
+          ],
+          "layerRgb": [
+            236,
+            235,
+            230
+          ],
+          "meanAbsDiff": 5.333333333333333,
+          "point": [
+            743,
+            596
+          ]
+        },
+        {
+          "alpha": 255,
+          "baseRgb": [
+            236,
+            230,
+            225
+          ],
+          "layerRgb": [
+            230,
+            229,
+            224
+          ],
+          "meanAbsDiff": 2.6666666666666665,
+          "point": [
+            744,
+            596
+          ]
+        },
+        {
+          "alpha": 255,
+          "baseRgb": [
+            236,
+            229,
+            224
+          ],
+          "layerRgb": [
+            237,
+            236,
+            231
+          ],
+          "meanAbsDiff": 5.0,
+          "point": [
+            743,
+            597
+          ]
+        },
+        {
+          "alpha": 255,
+          "baseRgb": [
+            236,
+            230,
+            225
+          ],
+          "layerRgb": [
+            230,
+            229,
+            224
+          ],
+          "meanAbsDiff": 2.6666666666666665,
+          "point": [
+            744,
+            597
+          ]
+        },
+        {
+          "alpha": 255,
+          "baseRgb": [
+            237,
+            230,
+            224
+          ],
+          "layerRgb": [
+            237,
+            236,
+            231
+          ],
+          "meanAbsDiff": 4.333333333333333,
+          "point": [
+            743,
+            598
+          ]
+        },
+        {
+          "alpha": 255,
+          "baseRgb": [
+            236,
+            229,
+            224
+          ],
+          "layerRgb": [
+            231,
+            230,
+            225
+          ],
+          "meanAbsDiff": 2.3333333333333335,
+          "point": [
+            744,
+            598
+          ]
+        },
+        {
+          "alpha": 255,
+          "baseRgb": [
+            234,
+            227,
+            223
+          ],
+          "layerRgb": [
+            237,
+            236,
+            231
+          ],
+          "meanAbsDiff": 6.666666666666667,
+          "point": [
+            743,
+            599
+          ]
+        },
+        {
+          "alpha": 255,
+          "baseRgb": [
+            236,
+            229,
+            225
+          ],
+          "layerRgb": [
+            231,
+            230,
+            225
+          ],
+          "meanAbsDiff": 2.0,
+          "point": [
+            744,
+            599
+          ]
+        },
+        {
+          "alpha": 255,
+          "baseRgb": [
+            235,
+            228,
+            223
+          ],
+          "layerRgb": [
+            237,
+            236,
+            231
+          ],
+          "meanAbsDiff": 6.0,
+          "point": [
+            743,
+            600
+          ]
+        },
+        {
+          "alpha": 255,
+          "baseRgb": [
+            237,
+            230,
+            225
+          ],
+          "layerRgb": [
+            231,
+            230,
+            225
+          ],
+          "meanAbsDiff": 2.0,
+          "point": [
+            744,
+            600
+          ]
+        },
+        {
+          "alpha": 255,
+          "baseRgb": [
+            232,
+            225,
+            220
+          ],
+          "layerRgb": [
+            237,
+            236,
+            231
+          ],
+          "meanAbsDiff": 9.0,
+          "point": [
+            743,
+            601
+          ]
+        },
+        {
+          "alpha": 255,
+          "baseRgb": [
+            233,
+            226,
+            221
+          ],
+          "layerRgb": [
+            230,
+            229,
+            224
+          ],
+          "meanAbsDiff": 3.0,
+          "point": [
+            744,
+            601
+          ]
+        }
+      ],
+      "within10Ratio": 0.803030303030303,
+      "within2Ratio": 0.03977272727272727,
+      "within5Ratio": 0.36363636363636365
+    },
+    {
+      "alphaRange": [
+        1,
+        127
+      ],
+      "byColumn": [
+        {
+          "max": 200.33333333333334,
+          "meanAbsChannelDifference": 193.03575989782888,
+          "pixels": 261,
+          "q10": 188.0,
+          "q25": 190.66666666666666,
+          "q50": 194.0,
+          "q75": 196.0,
+          "q90": 197.33333333333334,
+          "x": 745
+        },
+        {
+          "max": 201.33333333333334,
+          "meanAbsChannelDifference": 193.78165374677002,
+          "pixels": 258,
+          "q10": 188.66666666666666,
+          "q25": 191.66666666666666,
+          "q50": 194.33333333333334,
+          "q75": 196.33333333333334,
+          "q90": 198.0,
+          "x": 746
+        },
+        {
+          "max": 200.0,
+          "meanAbsChannelDifference": 193.15104166666666,
+          "pixels": 256,
+          "q10": 187.66666666666666,
+          "q25": 191.0,
+          "q50": 194.0,
+          "q75": 195.33333333333334,
+          "q90": 197.33333333333334,
+          "x": 747
+        },
+        {
+          "max": 200.33333333333334,
+          "meanAbsChannelDifference": 193.5551181102362,
+          "pixels": 254,
+          "q10": 188.0,
+          "q25": 191.33333333333334,
+          "q50": 194.33333333333334,
+          "q75": 196.33333333333334,
+          "q90": 198.0,
+          "x": 748
+        },
+        {
+          "max": 199.0,
+          "meanAbsChannelDifference": 193.23638778220453,
+          "pixels": 251,
+          "q10": 188.33333333333334,
+          "q25": 191.33333333333334,
+          "q50": 194.0,
+          "q75": 195.66666666666666,
+          "q90": 197.33333333333334,
+          "x": 749
+        },
+        {
+          "max": 200.66666666666666,
+          "meanAbsChannelDifference": 193.95046854082997,
+          "pixels": 249,
+          "q10": 188.66666666666666,
+          "q25": 192.33333333333334,
+          "q50": 194.66666666666666,
+          "q75": 196.33333333333334,
+          "q90": 198.0,
+          "x": 750
+        },
+        {
+          "max": 199.66666666666666,
+          "meanAbsChannelDifference": 193.70175438596493,
+          "pixels": 247,
+          "q10": 188.66666666666666,
+          "q25": 192.0,
+          "q50": 194.33333333333334,
+          "q75": 196.0,
+          "q90": 197.33333333333334,
+          "x": 751
+        }
+      ],
+      "exactBaseMatchPixels": 0,
+      "exactBaseMatchRatio": 0.0,
+      "id": "soft",
+      "max": 201.33333333333334,
+      "meanAbsChannelDifference": 193.48423423423424,
+      "pixels": 1776,
+      "q10": 188.0,
+      "q25": 191.33333333333334,
+      "q50": 194.33333333333334,
+      "q75": 196.0,
+      "q90": 197.66666666666666,
+      "samples": [
+        {
+          "alpha": 19,
+          "baseRgb": [
+            232,
+            226,
+            220
+          ],
+          "layerRgb": [
+            38,
+            31,
+            27
+          ],
+          "meanAbsDiff": 194.0,
+          "point": [
+            745,
+            590
+          ]
+        },
+        {
+          "alpha": 17,
+          "baseRgb": [
+            232,
+            225,
+            220
+          ],
+          "layerRgb": [
+            38,
+            31,
+            27
+          ],
+          "meanAbsDiff": 193.66666666666666,
+          "point": [
+            746,
+            590
+          ]
+        },
+        {
+          "alpha": 15,
+          "baseRgb": [
+            236,
+            230,
+            224
+          ],
+          "layerRgb": [
+            38,
+            31,
+            27
+          ],
+          "meanAbsDiff": 198.0,
+          "point": [
+            747,
+            590
+          ]
+        },
+        {
+          "alpha": 12,
+          "baseRgb": [
+            236,
+            229,
+            224
+          ],
+          "layerRgb": [
+            38,
+            31,
+            27
+          ],
+          "meanAbsDiff": 197.66666666666666,
+          "point": [
+            748,
+            590
+          ]
+        },
+        {
+          "alpha": 10,
+          "baseRgb": [
+            235,
+            228,
+            223
+          ],
+          "layerRgb": [
+            38,
+            31,
+            27
+          ],
+          "meanAbsDiff": 196.66666666666666,
+          "point": [
+            749,
+            590
+          ]
+        },
+        {
+          "alpha": 8,
+          "baseRgb": [
+            235,
+            229,
+            223
+          ],
+          "layerRgb": [
+            38,
+            31,
+            27
+          ],
+          "meanAbsDiff": 197.0,
+          "point": [
+            750,
+            590
+          ]
+        },
+        {
+          "alpha": 7,
+          "baseRgb": [
+            235,
+            229,
+            223
+          ],
+          "layerRgb": [
+            38,
+            31,
+            27
+          ],
+          "meanAbsDiff": 197.0,
+          "point": [
+            751,
+            590
+          ]
+        },
+        {
+          "alpha": 19,
+          "baseRgb": [
+            232,
+            225,
+            220
+          ],
+          "layerRgb": [
+            38,
+            31,
+            27
+          ],
+          "meanAbsDiff": 193.66666666666666,
+          "point": [
+            745,
+            591
+          ]
+        },
+        {
+          "alpha": 17,
+          "baseRgb": [
+            234,
+            227,
+            223
+          ],
+          "layerRgb": [
+            38,
+            31,
+            27
+          ],
+          "meanAbsDiff": 196.0,
+          "point": [
+            746,
+            591
+          ]
+        },
+        {
+          "alpha": 15,
+          "baseRgb": [
+            235,
+            228,
+            224
+          ],
+          "layerRgb": [
+            38,
+            31,
+            27
+          ],
+          "meanAbsDiff": 197.0,
+          "point": [
+            747,
+            591
+          ]
+        },
+        {
+          "alpha": 12,
+          "baseRgb": [
+            235,
+            229,
+            224
+          ],
+          "layerRgb": [
+            38,
+            31,
+            27
+          ],
+          "meanAbsDiff": 197.33333333333334,
+          "point": [
+            748,
+            591
+          ]
+        },
+        {
+          "alpha": 10,
+          "baseRgb": [
+            235,
+            230,
+            224
+          ],
+          "layerRgb": [
+            38,
+            31,
+            27
+          ],
+          "meanAbsDiff": 197.66666666666666,
+          "point": [
+            749,
+            591
+          ]
+        },
+        {
+          "alpha": 8,
+          "baseRgb": [
+            235,
+            229,
+            224
+          ],
+          "layerRgb": [
+            38,
+            31,
+            27
+          ],
+          "meanAbsDiff": 197.33333333333334,
+          "point": [
+            750,
+            591
+          ]
+        },
+        {
+          "alpha": 7,
+          "baseRgb": [
+            234,
+            227,
+            223
+          ],
+          "layerRgb": [
+            38,
+            31,
+            27
+          ],
+          "meanAbsDiff": 196.0,
+          "point": [
+            751,
+            591
+          ]
+        },
+        {
+          "alpha": 19,
+          "baseRgb": [
+            235,
+            228,
+            223
+          ],
+          "layerRgb": [
+            38,
+            31,
+            27
+          ],
+          "meanAbsDiff": 196.66666666666666,
+          "point": [
+            745,
+            592
+          ]
+        },
+        {
+          "alpha": 17,
+          "baseRgb": [
+            237,
+            230,
+            225
+          ],
+          "layerRgb": [
+            38,
+            31,
+            27
+          ],
+          "meanAbsDiff": 198.66666666666666,
+          "point": [
+            746,
+            592
+          ]
+        },
+        {
+          "alpha": 15,
+          "baseRgb": [
+            236,
+            229,
+            225
+          ],
+          "layerRgb": [
+            38,
+            31,
+            27
+          ],
+          "meanAbsDiff": 198.0,
+          "point": [
+            747,
+            592
+          ]
+        },
+        {
+          "alpha": 12,
+          "baseRgb": [
+            236,
+            230,
+            225
+          ],
+          "layerRgb": [
+            38,
+            31,
+            27
+          ],
+          "meanAbsDiff": 198.33333333333334,
+          "point": [
+            748,
+            592
+          ]
+        },
+        {
+          "alpha": 10,
+          "baseRgb": [
+            236,
+            230,
+            225
+          ],
+          "layerRgb": [
+            38,
+            31,
+            27
+          ],
+          "meanAbsDiff": 198.33333333333334,
+          "point": [
+            749,
+            592
+          ]
+        },
+        {
+          "alpha": 8,
+          "baseRgb": [
+            236,
+            230,
+            225
+          ],
+          "layerRgb": [
+            38,
+            31,
+            27
+          ],
+          "meanAbsDiff": 198.33333333333334,
+          "point": [
+            750,
+            592
+          ]
+        },
+        {
+          "alpha": 7,
+          "baseRgb": [
+            235,
+            228,
+            224
+          ],
+          "layerRgb": [
+            38,
+            31,
+            27
+          ],
+          "meanAbsDiff": 197.0,
+          "point": [
+            751,
+            592
+          ]
+        },
+        {
+          "alpha": 19,
+          "baseRgb": [
+            234,
+            227,
+            223
+          ],
+          "layerRgb": [
+            38,
+            31,
+            27
+          ],
+          "meanAbsDiff": 196.0,
+          "point": [
+            745,
+            593
+          ]
+        },
+        {
+          "alpha": 17,
+          "baseRgb": [
+            235,
+            228,
+            223
+          ],
+          "layerRgb": [
+            38,
+            31,
+            27
+          ],
+          "meanAbsDiff": 196.66666666666666,
+          "point": [
+            746,
+            593
+          ]
+        },
+        {
+          "alpha": 15,
+          "baseRgb": [
+            235,
+            227,
+            223
+          ],
+          "layerRgb": [
+            38,
+            31,
+            27
+          ],
+          "meanAbsDiff": 196.33333333333334,
+          "point": [
+            747,
+            593
+          ]
+        }
+      ],
+      "within10Ratio": 0.0,
+      "within2Ratio": 0.0,
+      "within5Ratio": 0.0
+    }
+  ],
+  "baseAsset": "app/assets/kitchen/base.png",
+  "interpretationRules": [
+    "low RGB difference to base means the layer pixel carries little object-specific appearance evidence at that coordinate",
+    "alpha magnitude alone does not establish semantic ownership",
+    "high difference to base is necessary but not sufficient for calling a pixel physical side-face appearance"
+  ],
+  "localCarcassQuad": [
+    [
+      742.0,
+      590.0
+    ],
+    [
+      750.798418972332,
+      568.8
+    ],
+    [
+      750.798418972332,
+      834.8
+    ],
+    [
+      742.0,
+      856.0
+    ]
+  ],
+  "module02Layer": "app/assets/kitchen/layers/02_inferior_fogao.png",
+  "promotionEligible": false,
+  "sceneId": "cozinha-01",
+  "schemaVersion": "BMC01UnderlayerIdentityAuditReport 0.1"
+}
