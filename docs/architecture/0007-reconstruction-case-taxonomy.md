@@ -259,7 +259,54 @@ Examples:
 - microwave/oven substitution.
 
 Preferred ladder:
-`existing approved object -> exact donor -> isolated generated donor -> deterministic composition`.
+`existing approved object -> exact donor -> deterministic object reconstruction -> isolated generated donor -> deterministic composition`.
+
+### T6-G — bounded generative appliance replacement
+
+Use this modifier when the canonical appliance itself is visually useful but
+geometrically inconsistent with the host plane and a large deterministic warp
+would visibly degrade the object.
+
+Generation is then allowed to solve **object-local appearance**, not scene
+geometry.
+
+Before generation, the packet must deterministically fix:
+- host plane;
+- target footprint/silhouette envelope;
+- center/placement;
+- projected orientation;
+- contact region;
+- edit/protection mask;
+- maximum post-generation fit budget.
+
+The image model may author:
+- grate/burner/knob appearance;
+- reflections;
+- local object shading;
+- small object-internal perspective cues.
+
+The image model may not decide:
+- host-plane orientation;
+- target location;
+- scene camera;
+- stone/cabinet geometry;
+- a larger edit region;
+- surrounding background.
+
+Preferred generative form:
+an isolated transparent object generated **for the target perspective**, guided
+by the deterministic footprint. Do not generate a convenient orthographic
+object and then rely on a large deterministic distortion to force it into the
+scene.
+
+Post-generation normalization is limited to small deterministic placement,
+scale/alpha cleanup within the packet's fit budget. If a candidate requires a
+large warp to satisfy the target footprint, reject/regenerate instead of
+distorting it until it passes.
+
+A perceptually excellent generated reference may be recorded as a
+`perceptual-target`, but it is D2 appearance evidence only and never upgrades
+geometry/projection authority.
 
 A full generated scene may be donor material only when the Edit Contract
 allows it.
@@ -375,6 +422,7 @@ Use ADR 0005 transformation vocabulary.
 ### M4 — generation allowance
 - `forbidden`;
 - `donor-only`;
+- `isolated-object-synthesis`;
 - `local-residual`;
 - `contextual-residual`.
 
