@@ -1,0 +1,23 @@
+{
+  "schemaVersion": "StoneAcceptedSurfaceLineage 0.1",
+  "status": "RESEARCH_GOVERNANCE_FIX",
+  "historicalAcceptanceCommit": "3aacb831800b",
+  "historicalAcceptanceRecord": "review-assets/stone-cleanplate/accepted-surfaces.json",
+  "intentionalExpansionCommit": "0dae185a072e",
+  "reason": "The later plinth implementation deliberately expanded the Stone 02 and Stone 03 plinth masks to measured owner-alpha support. The user-approved historical hashes remain immutable evidence; the expanded pixels are technical/current support and are not retroactively labeled human-approved.",
+  "historicalPlinthPolygons": {
+    "stone-02": [[503,858],[744,858],[744,893],[503,893]],
+    "stone-03": [[744,858],[1203,858],[1203,893],[744,893]]
+  },
+  "currentPlinthPolygons": {
+    "stone-02": [[485,858],[756,858],[756,893],[485,893]],
+    "stone-03": [[736,858],[1216,858],[1216,893],[736,893]]
+  },
+  "continuityContract": {
+    "frontEdgeMasks": "exact historical accepted hash",
+    "bridgePlinthMasks": "exact historical accepted hash",
+    "exposedPlinthHistoricalReconstruction": "must reproduce the historical accepted hash exactly",
+    "expandedExposedPlinth": "must be a pixelwise superset of the reconstructed historical accepted mask",
+    "expandedPixelsHumanApproval": "pending"
+  }
+}
