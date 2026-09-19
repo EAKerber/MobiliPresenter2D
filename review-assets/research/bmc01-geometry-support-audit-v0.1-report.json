@@ -5,158 +5,9 @@
     764,
     899
   ],
-  "cases": [
-    {
-      "bounds": [
-        742,
-        525,
-        764,
-        858
-      ],
-      "historicalOverlayInsideGeometryPixels": 1910,
-      "historicalOverlayOutsideGeometryPixels": 0,
-      "id": "historical-carcass",
-      "missingCoveredByHistoricalOverlayPixels": 1910,
-      "missingUncoveredByHistoricalOverlayPixels": 3293,
-      "outsideAuthorizedRoiPixels": 0,
-      "preOverlayExistingSupportPixels": 3759,
-      "preOverlayExistingSupportRatio": 0.624003984063745,
-      "preOverlayMissingPixels": 5203,
-      "preOverlayMissingRatio": 0.8637118193891102,
-      "quad": [
-        [
-          742.0,
-          586.0
-        ],
-        [
-          763.0,
-          525.0
-        ],
-        [
-          763.0,
-          796.0
-        ],
-        [
-          742.0,
-          857.0
-        ]
-      ],
-      "totalPixels": 6024
-    },
-    {
-      "bounds": [
-        742,
-        796,
-        764,
-        899
-      ],
-      "historicalOverlayInsideGeometryPixels": 14,
-      "historicalOverlayOutsideGeometryPixels": 1896,
-      "id": "historical-plinth",
-      "missingCoveredByHistoricalOverlayPixels": 14,
-      "missingUncoveredByHistoricalOverlayPixels": 820,
-      "outsideAuthorizedRoiPixels": 0,
-      "preOverlayExistingSupportPixels": 658,
-      "preOverlayExistingSupportRatio": 0.6825726141078838,
-      "preOverlayMissingPixels": 834,
-      "preOverlayMissingRatio": 0.8651452282157677,
-      "quad": [
-        [
-          742.0,
-          857.0
-        ],
-        [
-          763.0,
-          796.0
-        ],
-        [
-          763.0,
-          837.0
-        ],
-        [
-          742.0,
-          898.0
-        ]
-      ],
-      "totalPixels": 964
-    },
-    {
-      "bounds": [
-        742,
-        568,
-        754,
-        857
-      ],
-      "historicalOverlayInsideGeometryPixels": 0,
-      "historicalOverlayOutsideGeometryPixels": 1910,
-      "id": "local-carcass",
-      "missingCoveredByHistoricalOverlayPixels": 0,
-      "missingUncoveredByHistoricalOverlayPixels": 2403,
-      "outsideAuthorizedRoiPixels": 0,
-      "preOverlayExistingSupportPixels": 3078,
-      "preOverlayExistingSupportRatio": 0.9606741573033708,
-      "preOverlayMissingPixels": 2403,
-      "preOverlayMissingRatio": 0.75,
-      "quad": [
-        [
-          742.0,
-          590.0
-        ],
-        [
-          752.6,
-          567.8363636363637
-        ],
-        [
-          752.6,
-          833.8363636363637
-        ],
-        [
-          742.0,
-          856.0
-        ]
-      ],
-      "totalPixels": 3204
-    },
-    {
-      "bounds": [
-        742,
-        841,
-        750,
-        899
-      ],
-      "historicalOverlayInsideGeometryPixels": 0,
-      "historicalOverlayOutsideGeometryPixels": 1910,
-      "id": "local-plinth",
-      "missingCoveredByHistoricalOverlayPixels": 0,
-      "missingUncoveredByHistoricalOverlayPixels": 221,
-      "outsideAuthorizedRoiPixels": 0,
-      "preOverlayExistingSupportPixels": 352,
-      "preOverlayExistingSupportRatio": 1.0,
-      "preOverlayMissingPixels": 221,
-      "preOverlayMissingRatio": 0.6278409090909091,
-      "quad": [
-        [
-          742.0,
-          856.0
-        ],
-        [
-          748.9766,
-          841.4125636363636
-        ],
-        [
-          748.9766,
-          883.4125636363636
-        ],
-        [
-          742.0,
-          898.0
-        ]
-      ],
-      "totalPixels": 352
-    }
-  ],
   "historicalOverlay": "app/assets/kitchen/overlays/module-02-right-exposed-face.png",
   "interpretationRules": [
+    "all geometry masks and support masks are binary before set arithmetic",
     "high preOverlayExistingSupportRatio means the proposed face mostly re-describes pixels already owned by current canonical assets",
     "preOverlayMissingPixels are the only geometry area that could justify new raster support under this model",
     "historical overlay is comparison-only and is never counted as pre-overlay support",
@@ -164,10 +15,318 @@
   ],
   "promotionEligible": false,
   "sceneId": "cozinha-01",
-  "schemaVersion": "BMC01GeometrySupportAuditReport 0.1",
+  "schemaVersion": "BMC01GeometrySupportAuditReport 0.2",
   "supportDefinition": [
     "app/assets/kitchen/layers/02_inferior_fogao.png",
     "app/assets/kitchen/variants/stone-02-cozinha-exposed-right.png",
     "app/assets/kitchen/overlays/approved-stone-02.png"
+  ],
+  "thresholdSweep": [
+    {
+      "alphaThreshold": 1,
+      "cases": [
+        {
+          "bounds": [
+            742,
+            525,
+            764,
+            858
+          ],
+          "historicalOverlayInsideGeometryPixels": 1910,
+          "historicalOverlayOutsideGeometryPixels": 0,
+          "id": "historical-carcass",
+          "missingCoveredByHistoricalOverlayPixels": 1910,
+          "missingUncoveredByHistoricalOverlayPixels": 355,
+          "outsideAuthorizedRoiPixels": 0,
+          "preOverlayExistingSupportPixels": 3759,
+          "preOverlayExistingSupportRatio": 0.624003984063745,
+          "preOverlayMissingPixels": 2265,
+          "preOverlayMissingRatio": 0.375996015936255,
+          "quad": [
+            [
+              742.0,
+              586.0
+            ],
+            [
+              763.0,
+              525.0
+            ],
+            [
+              763.0,
+              796.0
+            ],
+            [
+              742.0,
+              857.0
+            ]
+          ],
+          "totalPixels": 6024
+        },
+        {
+          "bounds": [
+            742,
+            796,
+            764,
+            899
+          ],
+          "historicalOverlayInsideGeometryPixels": 14,
+          "historicalOverlayOutsideGeometryPixels": 1896,
+          "id": "historical-plinth",
+          "missingCoveredByHistoricalOverlayPixels": 14,
+          "missingUncoveredByHistoricalOverlayPixels": 292,
+          "outsideAuthorizedRoiPixels": 0,
+          "preOverlayExistingSupportPixels": 658,
+          "preOverlayExistingSupportRatio": 0.6825726141078838,
+          "preOverlayMissingPixels": 306,
+          "preOverlayMissingRatio": 0.31742738589211617,
+          "quad": [
+            [
+              742.0,
+              857.0
+            ],
+            [
+              763.0,
+              796.0
+            ],
+            [
+              763.0,
+              837.0
+            ],
+            [
+              742.0,
+              898.0
+            ]
+          ],
+          "totalPixels": 964
+        },
+        {
+          "bounds": [
+            742,
+            568,
+            754,
+            857
+          ],
+          "historicalOverlayInsideGeometryPixels": 0,
+          "historicalOverlayOutsideGeometryPixels": 1910,
+          "id": "local-carcass",
+          "missingCoveredByHistoricalOverlayPixels": 0,
+          "missingUncoveredByHistoricalOverlayPixels": 126,
+          "outsideAuthorizedRoiPixels": 0,
+          "preOverlayExistingSupportPixels": 3078,
+          "preOverlayExistingSupportRatio": 0.9606741573033708,
+          "preOverlayMissingPixels": 126,
+          "preOverlayMissingRatio": 0.03932584269662921,
+          "quad": [
+            [
+              742.0,
+              590.0
+            ],
+            [
+              752.6,
+              567.8363636363637
+            ],
+            [
+              752.6,
+              833.8363636363637
+            ],
+            [
+              742.0,
+              856.0
+            ]
+          ],
+          "totalPixels": 3204
+        },
+        {
+          "bounds": [
+            742,
+            841,
+            750,
+            899
+          ],
+          "historicalOverlayInsideGeometryPixels": 0,
+          "historicalOverlayOutsideGeometryPixels": 1910,
+          "id": "local-plinth",
+          "missingCoveredByHistoricalOverlayPixels": 0,
+          "missingUncoveredByHistoricalOverlayPixels": 0,
+          "outsideAuthorizedRoiPixels": 0,
+          "preOverlayExistingSupportPixels": 352,
+          "preOverlayExistingSupportRatio": 1.0,
+          "preOverlayMissingPixels": 0,
+          "preOverlayMissingRatio": 0.0,
+          "quad": [
+            [
+              742.0,
+              856.0
+            ],
+            [
+              748.9766,
+              841.4125636363636
+            ],
+            [
+              748.9766,
+              883.4125636363636
+            ],
+            [
+              742.0,
+              898.0
+            ]
+          ],
+          "totalPixels": 352
+        }
+      ]
+    },
+    {
+      "alphaThreshold": 128,
+      "cases": [
+        {
+          "bounds": [
+            742,
+            525,
+            764,
+            858
+          ],
+          "historicalOverlayInsideGeometryPixels": 1910,
+          "historicalOverlayOutsideGeometryPixels": 0,
+          "id": "historical-carcass",
+          "missingCoveredByHistoricalOverlayPixels": 1910,
+          "missingUncoveredByHistoricalOverlayPixels": 3293,
+          "outsideAuthorizedRoiPixels": 0,
+          "preOverlayExistingSupportPixels": 821,
+          "preOverlayExistingSupportRatio": 0.13628818061088976,
+          "preOverlayMissingPixels": 5203,
+          "preOverlayMissingRatio": 0.8637118193891102,
+          "quad": [
+            [
+              742.0,
+              586.0
+            ],
+            [
+              763.0,
+              525.0
+            ],
+            [
+              763.0,
+              796.0
+            ],
+            [
+              742.0,
+              857.0
+            ]
+          ],
+          "totalPixels": 6024
+        },
+        {
+          "bounds": [
+            742,
+            796,
+            764,
+            899
+          ],
+          "historicalOverlayInsideGeometryPixels": 14,
+          "historicalOverlayOutsideGeometryPixels": 1896,
+          "id": "historical-plinth",
+          "missingCoveredByHistoricalOverlayPixels": 14,
+          "missingUncoveredByHistoricalOverlayPixels": 820,
+          "outsideAuthorizedRoiPixels": 0,
+          "preOverlayExistingSupportPixels": 130,
+          "preOverlayExistingSupportRatio": 0.13485477178423236,
+          "preOverlayMissingPixels": 834,
+          "preOverlayMissingRatio": 0.8651452282157677,
+          "quad": [
+            [
+              742.0,
+              857.0
+            ],
+            [
+              763.0,
+              796.0
+            ],
+            [
+              763.0,
+              837.0
+            ],
+            [
+              742.0,
+              898.0
+            ]
+          ],
+          "totalPixels": 964
+        },
+        {
+          "bounds": [
+            742,
+            568,
+            754,
+            857
+          ],
+          "historicalOverlayInsideGeometryPixels": 0,
+          "historicalOverlayOutsideGeometryPixels": 1910,
+          "id": "local-carcass",
+          "missingCoveredByHistoricalOverlayPixels": 0,
+          "missingUncoveredByHistoricalOverlayPixels": 2403,
+          "outsideAuthorizedRoiPixels": 0,
+          "preOverlayExistingSupportPixels": 801,
+          "preOverlayExistingSupportRatio": 0.25,
+          "preOverlayMissingPixels": 2403,
+          "preOverlayMissingRatio": 0.75,
+          "quad": [
+            [
+              742.0,
+              590.0
+            ],
+            [
+              752.6,
+              567.8363636363637
+            ],
+            [
+              752.6,
+              833.8363636363637
+            ],
+            [
+              742.0,
+              856.0
+            ]
+          ],
+          "totalPixels": 3204
+        },
+        {
+          "bounds": [
+            742,
+            841,
+            750,
+            899
+          ],
+          "historicalOverlayInsideGeometryPixels": 0,
+          "historicalOverlayOutsideGeometryPixels": 1910,
+          "id": "local-plinth",
+          "missingCoveredByHistoricalOverlayPixels": 0,
+          "missingUncoveredByHistoricalOverlayPixels": 221,
+          "outsideAuthorizedRoiPixels": 0,
+          "preOverlayExistingSupportPixels": 131,
+          "preOverlayExistingSupportRatio": 0.3721590909090909,
+          "preOverlayMissingPixels": 221,
+          "preOverlayMissingRatio": 0.6278409090909091,
+          "quad": [
+            [
+              742.0,
+              856.0
+            ],
+            [
+              748.9766,
+              841.4125636363636
+            ],
+            [
+              748.9766,
+              883.4125636363636
+            ],
+            [
+              742.0,
+              898.0
+            ]
+          ],
+          "totalPixels": 352
+        }
+      ]
+    }
   ]
 }
