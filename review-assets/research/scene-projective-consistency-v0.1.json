@@ -162,5 +162,20 @@
       "physicalSource": "MobiliPresenter scene-core module02 right-side",
       "purpose": "measure any same-object right-side pixels already present before synthesizing missing exposure"
     }
-  ]
+  ],
+  "module02FrontSideSeamProbe": {
+    "layer": "app/assets/kitchen/layers/02_inferior_fogao.png",
+    "xRange": [
+      735,
+      756
+    ],
+    "yRange": [
+      600,
+      845
+    ],
+    "alphaThreshold": 128,
+    "minCoverageRatio": 0.55,
+    "semantic": "interior vertical boundary between front-facing content and the light right-side strip; outer alpha silhouette is excluded by requiring opaque pixels on both sides",
+    "historicalAnchorX": 742
+  }
 }
