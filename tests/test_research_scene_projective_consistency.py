@@ -1,7 +1,7 @@
 from __future__ import annotations
 import unittest
 from PIL import Image
-from tools.research_scene_projective_consistency import boundary_fits, residual_component, circular_spread, intersect_yx_lines
+from tools.research_scene_projective_consistency import boundary_fits, residual_component, circular_spread, intersect_yx_lines, least_squares_intersection
 
 class SceneProjectiveConsistencyProbeTests(unittest.TestCase):
     def test_boundary_fit_recovers_axis_aligned_rectangle(self):
@@ -28,6 +28,16 @@ class SceneProjectiveConsistencyProbeTests(unittest.TestCase):
         first={"dyDx":1.0,"intercept":0.0}
         second={"dyDx":-1.0,"intercept":10.0}
         self.assertEqual(intersect_yx_lines(first,second),[5.0,5.0])
+
+    def test_least_squares_intersection_exact_lines(self):
+        lines=[
+            ("x", [1.0,0.0,-5.0]),
+            ("y", [0.0,1.0,-7.0]),
+        ]
+        fit=least_squares_intersection(lines)
+        self.assertAlmostEqual(fit["point"][0],5.0)
+        self.assertAlmostEqual(fit["point"][1],7.0)
+        self.assertAlmostEqual(fit["rmsPx"],0.0)
 
     def test_orientation_spread_is_modulo_180(self):
         r=circular_spread([1.0,179.0,0.0])
