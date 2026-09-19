@@ -1,7 +1,7 @@
 from __future__ import annotations
 import unittest
 from PIL import Image
-from tools.research_bmc01_minimal_completion import nearest_fill, binary_alpha, promote_soft_host_rgb
+from tools.research_bmc01_minimal_completion import nearest_fill, binary_alpha, promote_soft_host_rgb, smooth_seed_fill, candidate_row_roughness
 
 class BMC01MinimalCompletionTests(unittest.TestCase):
     def test_binary_alpha_respects_threshold(self):
@@ -33,6 +33,20 @@ class BMC01MinimalCompletionTests(unittest.TestCase):
         self.assertEqual(out.getpixel((1,0)),(40,50,60,255))
         self.assertEqual(out.getpixel((2,0)),(70,80,90,255))
         self.assertEqual(out.getpixel((3,0))[3],0)
+
+    def test_smooth_seed_fill_preserves_contact_column(self):
+        clean=Image.new("RGBA",(8,8),(0,0,0,255))
+        donor=Image.new("L",(8,8),0)
+        missing=Image.new("L",(8,8),0)
+        for y in range(1,7):
+            donor.putpixel((2,y),255)
+            clean.putpixel((2,y),(20+y*10,20+y*10,20+y*10,255))
+            for x in range(3,6): missing.putpixel((x,y),255)
+        out,stats=smooth_seed_fill(clean,missing,donor,2)
+        self.assertEqual(stats["filled"],18)
+        for y in range(1,7):
+            self.assertEqual(out.getpixel((3,y))[:3],clean.getpixel((2,y))[:3])
+        self.assertGreater(candidate_row_roughness(out)["pairCount"],0)
 
     def test_nearest_fill_uses_only_donor(self):
         clean=Image.new("RGBA",(10,10),(10,20,30,255))
