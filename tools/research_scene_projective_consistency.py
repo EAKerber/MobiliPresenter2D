@@ -84,6 +84,41 @@ def boundary_fits(alpha, threshold):
     }
 
 
+def vertical_internal_seam_probe(layer_rgba, x_range, y_range, alpha_threshold, min_coverage_ratio):
+    rgb=layer_rgba.convert("RGB")
+    alpha=layer_rgba.getchannel("A")
+    x0,x1=map(int,x_range); y0,y1=map(int,y_range)
+    rows=max(1,y1-y0+1)
+    records=[]
+    for x in range(max(1,x0),min(layer_rgba.width-1,x1+1)):
+        values=[]
+        for y in range(max(0,y0),min(layer_rgba.height,y1+1)):
+            if alpha.getpixel((x-1,y))<alpha_threshold or alpha.getpixel((x+1,y))<alpha_threshold:
+                continue
+            a=rgb.getpixel((x-1,y)); b=rgb.getpixel((x+1,y))
+            # Max channel difference is deliberately simple and deterministic.
+            values.append(max(abs(a[i]-b[i]) for i in range(3)))
+        coverage=len(values)/rows
+        if not values:
+            score=0.0
+            mean=0.0
+        else:
+            ordered=sorted(values)
+            # Prefer a boundary persistent across many rows rather than a few bright pixels.
+            q=ordered[max(0,round((len(ordered)-1)*0.65))]
+            mean=sum(values)/len(values)
+            score=q*coverage
+        records.append({"x":x,"coverage":coverage,"meanGradient":mean,"score":score})
+    eligible=[r for r in records if r["coverage"]>=min_coverage_ratio]
+    ranked=sorted(eligible,key=lambda r:r["score"],reverse=True)
+    return {
+      "status":"OK" if ranked else "BLOCKED",
+      "best":ranked[0] if ranked else None,
+      "topCandidates":ranked[:6],
+      "allColumns":records
+    }
+
+
 def trace_internal_luma_edge(layer_rgba, x0, x1, anchor_y, search_radius, max_step, smoothness_penalty, min_alpha):
     gray=layer_rgba.convert("RGB").convert("L")
     alpha=layer_rgba.getchannel("A")
@@ -327,6 +362,20 @@ def main():
             ])
             records.append({"threshold":t,"boundary":fit,"vanishingFit":vp})
         side_layers[item["id"]]={"evidence":item,"thresholdSweep":records}
+    seam_cfg=cfg.get("module02FrontSideSeamProbe")
+    module02_seam=None
+    if seam_cfg:
+        module02_layer=load_rgba(seam_cfg["layer"])
+        module02_seam=vertical_internal_seam_probe(
+          module02_layer,
+          seam_cfg["xRange"],
+          seam_cfg["yRange"],
+          int(seam_cfg["alphaThreshold"]),
+          float(seam_cfg["minCoverageRatio"])
+        )
+        module02_seam["historicalAnchorX"]=seam_cfg.get("historicalAnchorX")
+        module02_seam["semantic"]=seam_cfg.get("semantic")
+
     probe=cfg["module01SideProbe"]
     layer_rgba=load_rgba(probe["layer"]); la=layer_rgba.getchannel("A"); fa=load_alpha(probe["frontMask"])
     side=[residual_component(la,fa,t,probe["seedQuad"],probe.get("side"),probe.get("frontBoundaryMarginPx",0)) for t in cfg["thresholds"]]
@@ -412,6 +461,7 @@ def main():
       "frontMaskBoundaryFits":fronts,
       "sideLayerProbes":side_layers,
       "residualSideProbes":residual_side_probes,
+      "module02FrontSideSeamProbe":module02_seam,
       "module01SideResidualProbe":side,
       "module01BottomInternalEdgeTrace":{
         "status":"REJECTED_AS_PHYSICAL_EDGE",
