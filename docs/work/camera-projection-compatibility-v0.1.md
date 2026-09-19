@@ -228,6 +228,78 @@ Reject global-camera transfer if:
 
 A useful negative result is acceptable.
 
+## v0.1 measured result
+
+A deterministic research probe was materialized from:
+- the MobiliPresenter fixed-camera calibration;
+- confirmed Module 02 physical side geometry;
+- the measured MobiliPresenter2D stone depth cue;
+- coarse Module 03/06 front alpha envelopes.
+
+Research tool:
+`tools/research_projection_compatibility.py`.
+
+Input:
+`review-assets/research/projection-compatibility-v0.1.json`.
+
+Report:
+`review-assets/research/projection-compatibility-v0.1-report.json`.
+
+Workflow:
+`35453406048` — PASS.
+
+### Module 02 depth probe
+
+Promob fixed-camera projection of the confirmed 530 mm right-side depth predicts:
+
+- front: approximately `[764.93, 550.51]`;
+- back: approximately `[776.11, 541.53]`;
+- vector: approximately `[+11.18, -8.99]`;
+- magnitude: `14.35 px`;
+- direction: `-38.78°`.
+
+The canonical 2D scene measures:
+
+- front: `[742,586]`;
+- back: `[763,525]`;
+- vector: `[+21,-61]`;
+- magnitude: `64.51 px`;
+- direction: `-71.00°`.
+
+Direction difference:
+`32.22°`.
+
+A translation + uniform scale cannot change vector direction. Therefore the hypothesis **same camera with only crop/uniform resize** is rejected for this tested correspondence.
+
+### Coarse anisotropic check
+
+The anisotropy `sx/sy` required to map the Promob depth-vector slope to the observed 2D slope is approximately:
+
+`0.2766`.
+
+Independent coarse front-envelope proxies give:
+
+- Module 03: `sx/sy ≈ 1.1295`;
+- Module 06: `sx/sy ≈ 1.1511`.
+
+These front-envelope values are not precise corner correspondences and therefore do not establish a final affine model. They are nevertheless far from the `0.2766` ratio required by the depth vector.
+
+This makes a simple global anisotropic resize/affine explanation implausible.
+
+## v0.1 classification
+
+For MobiliPresenter2D reconstruction work, the source MobiliPresenter fixed camera is now classified as:
+
+- valid authority for its own calibrated Promob source frame;
+- useful physical/contextual evidence;
+- **not established as `global-calibrated` authority for the canonical MobiliPresenter2D frame**.
+
+The strongest currently justified projection class for BMC-01 remains:
+
+`local-derived + bounded-inference`.
+
+The next investigation should therefore focus on **local/planar projection derived directly from canonical 2D evidence**, while using Promob geometry to constrain physical existence/dimensions rather than to dictate camera projection.
+
 ## Open questions
 
 - exact availability of the original Promob calibration image bytes in the current toolchain;
