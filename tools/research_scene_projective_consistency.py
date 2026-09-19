@@ -13,8 +13,12 @@ from PIL import Image
 ROOT = Path(__file__).resolve().parents[1]
 
 
+def load_rgba(path):
+    return Image.open(ROOT / path).convert("RGBA")
+
+
 def load_alpha(path):
-    return Image.open(ROOT / path).convert("RGBA").getchannel("A")
+    return load_rgba(path).getchannel("A")
 
 
 def fit_xy(points):
@@ -77,6 +81,55 @@ def boundary_fits(alpha, threshold):
       "bottom":{"dyDx":fb["slope"],"angleDeg":math.degrees(math.atan(fb["slope"])),"rms":fb["rms"],"count":fb["count"]},
       "left":{"dxDy":fl["slope"],"angleFromVerticalDeg":math.degrees(math.atan(fl["slope"])),"rms":fl["rms"],"count":fl["count"]},
       "right":{"dxDy":fr["slope"],"angleFromVerticalDeg":math.degrees(math.atan(fr["slope"])),"rms":fr["rms"],"count":fr["count"]}
+    }
+
+
+def trace_internal_luma_edge(layer_rgba, x0, x1, anchor_y, search_radius, max_step, smoothness_penalty, min_alpha):
+    gray=layer_rgba.convert("RGB").convert("L")
+    alpha=layer_rgba.getchannel("A")
+    candidates={}
+    for x in range(max(1,x0),min(layer_rgba.width-1,x1)):
+        rows=[]
+        for y in range(max(1,anchor_y-search_radius),min(layer_rgba.height-1,anchor_y+search_radius+1)):
+            if alpha.getpixel((x,y-1))<min_alpha or alpha.getpixel((x,y+1))<min_alpha:
+                continue
+            score=abs(gray.getpixel((x,y+1))-gray.getpixel((x,y-1)))
+            rows.append((y,float(score)))
+        if rows: candidates[x]=rows
+    xs=sorted(candidates)
+    if len(xs)<4:
+        return {"status":"BLOCKED","reason":"insufficient interior gradient support"}
+    # Dynamic programming: maximize edge energy while preferring a continuous path.
+    states={}
+    first=xs[0]
+    for y,score in candidates[first]:
+        states[y]=(score-smoothness_penalty*abs(y-anchor_y),[y])
+    for x in xs[1:]:
+        nxt={}
+        for y,score in candidates[x]:
+            best=None
+            for py,(prev_score,path) in states.items():
+                step=abs(y-py)
+                if step>max_step: continue
+                value=prev_score+score-smoothness_penalty*step
+                if best is None or value>best[0]:
+                    best=(value,path+[y])
+            if best is not None: nxt[y]=best
+        if not nxt:
+            return {"status":"BLOCKED","reason":f"edge trace continuity lost at x={x}"}
+        states=nxt
+    _,path=max(states.values(),key=lambda item:item[0])
+    points=list(zip(xs,path))
+    fit=robust_fit(points)
+    return {
+      "status":"OK",
+      "points":[list(p) for p in points],
+      "dyDx":fit["slope"],
+      "intercept":fit["intercept"],
+      "angleDeg":math.degrees(math.atan(fit["slope"])),
+      "rms":fit["rms"],
+      "count":fit["count"],
+      "xRange":[xs[0],xs[-1]]
     }
 
 
@@ -250,8 +303,26 @@ def main():
         alpha=load_alpha(item["mask"])
         fronts[item["id"]]=[boundary_fits(alpha,t) for t in cfg["thresholds"]]
     probe=cfg["module01SideProbe"]
-    la=load_alpha(probe["layer"]); fa=load_alpha(probe["frontMask"])
+    layer_rgba=load_rgba(probe["layer"]); la=layer_rgba.getchannel("A"); fa=load_alpha(probe["frontMask"])
     side=[residual_component(la,fa,t,probe["seedQuad"],probe.get("side"),probe.get("frontBoundaryMarginPx",0)) for t in cfg["thresholds"]]
+    trace_cfg=probe.get("rgbEdgeTrace",{}).get("bottom")
+    module01_bottom_trace=None
+    if trace_cfg:
+        fb=mask_bounds(fa,128)
+        if fb:
+            fx0,fy0,fx1,fy1=fb
+            side_bound=next((x.get("bounds") for x in side if x.get("status")=="OK"),None)
+            if side_bound:
+                module01_bottom_trace=trace_internal_luma_edge(
+                    layer_rgba,
+                    fx1-1,
+                    side_bound[2],
+                    fy1-1,
+                    int(trace_cfg["searchRadiusPx"]),
+                    int(trace_cfg["maxStepPx"]),
+                    float(trace_cfg["smoothnessPenalty"]),
+                    int(trace_cfg["minInteriorAlpha"]),
+                )
     depth=[observation_record(x) for x in cfg["depthObservations"]]
     pixel_lines=[fit_reference_alpha_observation(x) for x in cfg.get("pixelLineObservations",[])]
     vanishing=[]
@@ -273,6 +344,13 @@ def main():
             for key in ("topDepthEdge","bottomDepthEdge"):
                 if key in item: module01_angles.append(item[key]["angleDeg"])
     common_vp=[]
+    module01_two_edge_vp=None
+    side_reference=next((x for x in side if x.get("status")=="OK" and "topDepthEdge" in x),None)
+    if side_reference and module01_bottom_trace and module01_bottom_trace.get("status")=="OK":
+        module01_two_edge_vp=least_squares_intersection([
+          ("module01-side-top",line_equation_from_yx(side_reference["topDepthEdge"])),
+          ("module01-side-bottom",line_equation_from_yx(module01_bottom_trace)),
+        ])
     module02_measured=next((x for x in depth if x["id"]=="module02-stone-visible-depth"),None)
     pixel03=next((x for x in pixel_lines if x["id"]=="module03-stone-reference-alpha-edge"),None)
     for item in side:
@@ -293,6 +371,8 @@ def main():
       "promotionEligible":False,
       "frontMaskBoundaryFits":fronts,
       "module01SideResidualProbe":side,
+      "module01BottomInternalEdgeTrace":module01_bottom_trace,
+      "module01TwoEdgeVanishingFit":module01_two_edge_vp,
       "module01DepthVanishingHypothesis":vanishing,
       "depthObservations":depth,
       "pixelLineObservations":pixel_lines,
