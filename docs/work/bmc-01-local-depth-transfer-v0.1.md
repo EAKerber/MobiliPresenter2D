@@ -63,7 +63,7 @@ The attempt to recover a complete side by `layer alpha - finish mask` correctly 
 
 Reference stone depth:
 
-`550 mm -> vector front→back [+11,-23] px`
+`550 mm -> measured vector front→back approximately [+9.130,-22] px`
 
 Confirmed target depths:
 - Module 02 carcass side: `530 mm`;
