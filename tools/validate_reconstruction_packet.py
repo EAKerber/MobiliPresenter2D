@@ -132,6 +132,47 @@ def validate_packet(packet: dict, root: Path = ROOT) -> list[str]:
             if perceptual not in (None, "appearance-only"):
                 fail(errors, "generationGuide.perceptualTargetAuthority")
 
+    if identity.get("caseClass") == "T6-G-bounded-generative-appliance-replacement":
+        if generation.get("allowed") is not True:
+            fail(errors, "T6-G.generation.allowed")
+        if generation.get("mode") != "isolated-object-synthesis":
+            fail(errors, "T6-G.generation.mode")
+        if edit.get("directGeneratedPromotionAllowed") is not False:
+            fail(errors, "T6-G.editContract.directGeneratedPromotionAllowed")
+
+        guide = packet.get("generationGuide") or {}
+        footprint = guide.get("hardFootprintQuadPx")
+        expected_corners = {"frontLeft", "frontRight", "backRight", "backLeft"}
+        if not isinstance(footprint, dict) or set(footprint) != expected_corners:
+            fail(errors, "T6-G.generationGuide.hardFootprintQuadPx")
+        else:
+            for name in sorted(expected_corners):
+                point = footprint.get(name)
+                if (
+                    not isinstance(point, list)
+                    or len(point) != 2
+                    or not all(isinstance(value, (int, float)) for value in point)
+                ):
+                    fail(errors, f"T6-G.generationGuide.hardFootprintQuadPx.{name}")
+
+        budget = guide.get("postFitBudget") or {}
+        for key in ("translationPx", "uniformScalePercent", "rotationDeg"):
+            value = budget.get(key)
+            if not isinstance(value, (int, float)) or value < 0:
+                fail(errors, f"T6-G.generationGuide.postFitBudget.{key}")
+        if budget.get("projectiveWarpAllowed") is not False:
+            fail(errors, "T6-G.generationGuide.postFitBudget.projectiveWarpAllowed")
+
+        forbidden = set(guide.get("forbiddenOutcomes") or [])
+        required_forbidden = {
+            "moving or reshaping stone",
+            "changing module geometry",
+            "changing scene camera",
+            "editing outside cooktop ROI",
+        }
+        if not required_forbidden.issubset(forbidden):
+            fail(errors, "T6-G.generationGuide.forbiddenOutcomes")
+
     lifecycle = packet.get("lifecycle") or {}
     if lifecycle.get("state") not in LIFECYCLE:
         fail(errors, "lifecycle.state")
