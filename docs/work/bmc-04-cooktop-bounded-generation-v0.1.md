@@ -308,3 +308,68 @@ Next step:
 5. call generation for an isolated cooktop already authored in the target
    perspective;
 6. reject any result that needs another large projective correction.
+
+
+## Reproducible generation input v0.2
+
+The generation-input assembly has now been turned into a deterministic tool:
+
+- `tools/research_bmc04_generation_input.py`;
+- config: `review-assets/research/bmc04-generation-input-v0.2.json`;
+- outputs: `review-assets/research/bmc04-generation-input-v0.2/`.
+
+Workflow run:
+`35489950911` — PASS.
+
+The v0.2 materializer reproduced the v0.1 clean reference, current reference
+and hard footprint support **pixel-for-pixel**, then added:
+
+- a protection mask;
+- a hash receipt;
+- a precommitted post-fit budget.
+
+Post-fit budget:
+
+- translation: ±3 px;
+- uniform scale correction: ±3%;
+- rotation: ±1.5°;
+- projective warp: **forbidden**.
+
+This budget is an engineering guardrail, not a quality threshold tuned to a
+candidate. Its purpose is to prevent a generated cooktop with the wrong view
+from being distorted until it happens to fit.
+
+The generation request is now explicit:
+
+`review-assets/research/bmc04-generation-request-v0.1.json`.
+
+It asks for an isolated transparent cooktop already authored in the
+deterministic trapezoidal target perspective. The clean scene, current object,
+existing donor, footprint guide, maximum support and protection mask are
+separate inputs with separate authority roles.
+
+The accidental ImageGen result remains:
+
+`human-designated perceptual target / appearance-only / unmaterialized`.
+
+Its absence does not block a first bounded-generation experiment; it only
+prevents reproducible perceptual-target comparison until the image itself is
+materialized.
+
+## Updated stop condition
+
+BMC-04 is now **ready for an actual bounded generation attempt**, but the
+generation must occur in an execution context where the prepared PNG inputs
+are surfaced to the image model as real image references.
+
+A text-only recreation of those inputs is not acceptable.
+
+After generation, the candidate must return to the deterministic pipeline for:
+
+1. alpha/silhouette extraction;
+2. maximum-support containment;
+3. small normalization within the fixed budget;
+4. exact ROI/protected-pixel delta;
+5. contact/no-floating review;
+6. grate/burner/knob artifact review;
+7. human review before any default promotion.
