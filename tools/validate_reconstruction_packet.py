@@ -19,6 +19,10 @@ LIFECYCLE = {
     "REJECTED",
     "SUPERSEDED",
 }
+GENERATION_MODES = {
+    "residual-completion",
+    "isolated-object-synthesis",
+}
 
 
 def fail(errors: list[str], message: str) -> None:
@@ -95,8 +99,38 @@ def validate_packet(packet: dict, root: Path = ROOT) -> list[str]:
 
     plan = packet.get("authoringPlan") or {}
     generation = plan.get("generation") or {}
-    if generation.get("allowed") is True and not generation.get("reason"):
-        fail(errors, "authoringPlan.generation.reason")
+    if generation.get("allowed") is True:
+        if not generation.get("reason"):
+            fail(errors, "authoringPlan.generation.reason")
+        if generation.get("mode") not in GENERATION_MODES:
+            fail(errors, "authoringPlan.generation.mode")
+
+        guide = packet.get("generationGuide")
+        if not isinstance(guide, dict):
+            fail(errors, "generationGuide")
+        else:
+            if not guide.get("inputReceipt"):
+                fail(errors, "generationGuide.inputReceipt")
+            else:
+                receipt_path = root / guide["inputReceipt"]
+                if not receipt_path.exists():
+                    fail(errors, "generationGuide.inputReceipt.missing")
+                else:
+                    receipt = json.loads(receipt_path.read_text(encoding="utf-8"))
+                    if receipt.get("status") != "READY_FOR_BOUNDED_GENERATION":
+                        fail(errors, "generationGuide.inputReceipt.status")
+                    contract = receipt.get("generationContract") or {}
+                    if contract.get("directGeneratedPromotionAllowed") is not False:
+                        fail(errors, "generationGuide.directGeneratedPromotionAllowed")
+                    if contract.get("largePostGenerationWarpAllowed") is not False:
+                        fail(errors, "generationGuide.largePostGenerationWarpAllowed")
+                    budget = receipt.get("postFitBudget") or {}
+                    if budget.get("projectiveWarpAllowed") is not False:
+                        fail(errors, "generationGuide.postFitBudget.projectiveWarpAllowed")
+
+            perceptual = guide.get("perceptualTargetAuthority")
+            if perceptual not in (None, "appearance-only"):
+                fail(errors, "generationGuide.perceptualTargetAuthority")
 
     lifecycle = packet.get("lifecycle") or {}
     if lifecycle.get("state") not in LIFECYCLE:
