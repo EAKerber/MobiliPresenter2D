@@ -131,5 +131,65 @@ class ReconstructionPacketTests(unittest.TestCase):
             )
 
 
+    def test_t6g_requires_hard_footprint_forbidden_scene_edits_and_no_direct_promotion(self):
+        with tempfile.TemporaryDirectory() as td:
+            root = Path(td)
+            packet = minimal_packet(root)
+            receipt = {
+                "status": "READY_FOR_BOUNDED_GENERATION",
+                "generationContract": {
+                    "directGeneratedPromotionAllowed": False,
+                    "largePostGenerationWarpAllowed": False,
+                },
+                "postFitBudget": {"projectiveWarpAllowed": False},
+            }
+            (root / "generation-receipt.json").write_text(json.dumps(receipt))
+            packet["identity"]["caseClass"] = "T6-G-bounded-generative-appliance-replacement"
+            packet["authoringPlan"]["generation"] = {
+                "allowed": True,
+                "mode": "isolated-object-synthesis",
+                "reason": "large deterministic warp would damage grate/burner geometry",
+            }
+            packet["editContract"]["directGeneratedPromotionAllowed"] = False
+            packet["generationGuide"] = {
+                "inputReceipt": "generation-receipt.json",
+                "perceptualTargetAuthority": "appearance-only",
+                "hardFootprintQuadPx": {
+                    "frontLeft": [1.0, 9.0],
+                    "frontRight": [9.0, 9.0],
+                    "backRight": [8.0, 2.0],
+                    "backLeft": [2.0, 2.0],
+                },
+                "postFitBudget": {
+                    "translationPx": 3,
+                    "uniformScalePercent": 3,
+                    "rotationDeg": 1.5,
+                    "projectiveWarpAllowed": False,
+                },
+                "forbiddenOutcomes": [
+                    "moving or reshaping stone",
+                    "changing module geometry",
+                    "changing scene camera",
+                    "editing outside cooktop ROI",
+                ],
+            }
+            self.assertEqual(validate_packet(packet, root), [])
+
+            packet["generationGuide"]["postFitBudget"]["projectiveWarpAllowed"] = True
+            errors = validate_packet(packet, root)
+            self.assertIn(
+                "T6-G.generationGuide.postFitBudget.projectiveWarpAllowed",
+                errors,
+            )
+
+            packet["generationGuide"]["postFitBudget"]["projectiveWarpAllowed"] = False
+            packet["editContract"]["directGeneratedPromotionAllowed"] = True
+            errors = validate_packet(packet, root)
+            self.assertIn(
+                "T6-G.editContract.directGeneratedPromotionAllowed",
+                errors,
+            )
+
+
 if __name__ == "__main__":
     unittest.main()
