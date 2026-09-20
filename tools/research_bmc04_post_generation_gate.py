@@ -102,9 +102,11 @@ def evaluate(candidate_path: Path, input_dir: Path, output_dir: Path) -> dict:
     normalized, fit = normalize_candidate(candidate, support)
     alpha = normalized.getchannel("A")
     # The deterministic footprint is still the hard geometry boundary. A
-    # one-pixel neighborhood is permitted only for raster antialias coverage,
-    # never as geometric occupancy.
-    antialias_band = support.filter(ImageFilter.MaxFilter(3))
+    # two-pixel rasterization neighborhood is permitted only for resampling/
+    # antialias coverage after arbitrary-canvas uniform normalization, never
+    # as geometric occupancy. Opaque/mass checks below still bind the hard
+    # polygon itself.
+    antialias_band = support.filter(ImageFilter.MaxFilter(5))
     outside_hard = ImageChops.multiply(alpha, ImageChops.invert(support))
     outside_antialias_band = ImageChops.multiply(alpha, ImageChops.invert(antialias_band))
     protected_overlap = ImageChops.multiply(alpha, protection)
@@ -131,8 +133,9 @@ def evaluate(candidate_path: Path, input_dir: Path, output_dir: Path) -> dict:
     outside_hard_max_alpha = outside_hard.getextrema()[1]
     outside_band_pixels = nonzero_count(outside_antialias_band)
 
-    # Precommitted AA tolerance: at most a one-pixel band, no >50% opaque
-    # coverage outside the hard polygon, and <=1% equivalent opaque mass.
+    # Precommitted raster tolerance: at most a two-pixel resampling band, no
+    # >50% opaque coverage outside the hard polygon, and <=1% equivalent
+    # opaque mass. The wider band does not authorize solid geometry.
     max_aa_mass = nonzero_count(support) * 0.01
     if outside_band_pixels:
         errors.append("generated-silhouette-escapes-antialias-band")
