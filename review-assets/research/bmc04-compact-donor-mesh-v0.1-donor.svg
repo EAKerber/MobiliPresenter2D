@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 565 460" width="1130" height="920">
+
+<rect width="100%" height="100%" fill="#121417"/>
+<rect x="0" y="0" width="565" height="460" fill="#20242a" stroke="#d8dee9" stroke-width="2"/>
+<g stroke="#58616b" stroke-width="1" opacity="0.55">
+<line x1="113.000" y1="0" x2="113.000" y2="460"/>
+<line x1="0" y1="92.000" x2="565" y2="92.000"/>
+<line x1="226.000" y1="0" x2="226.000" y2="460"/>
+<line x1="0" y1="184.000" x2="565" y2="184.000"/>
+<line x1="339.000" y1="0" x2="339.000" y2="460"/>
+<line x1="0" y1="276.000" x2="565" y2="276.000"/>
+<line x1="452.000" y1="0" x2="452.000" y2="460"/>
+<line x1="0" y1="368.000" x2="565" y2="368.000"/>
+</g>
+<circle cx="110.489" cy="108.235" r="67.800" fill="none" stroke="#66e3ff" stroke-width="3"/>
+<circle cx="110.489" cy="108.235" r="3" fill="#66e3ff"/>
+<text x="115.489" y="103.235" font-size="12" fill="#66e3ff" font-family="monospace">burner_rear_left</text>
+<circle cx="350.928" cy="108.235" r="67.800" fill="none" stroke="#66e3ff" stroke-width="3"/>
+<circle cx="350.928" cy="108.235" r="3" fill="#66e3ff"/>
+<text x="355.928" y="103.235" font-size="12" fill="#66e3ff" font-family="monospace">burner_rear_right</text>
+<circle cx="110.489" cy="346.101" r="67.800" fill="none" stroke="#66e3ff" stroke-width="3"/>
+<circle cx="110.489" cy="346.101" r="3" fill="#66e3ff"/>
+<text x="115.489" y="341.101" font-size="12" fill="#66e3ff" font-family="monospace">burner_front_left</text>
+<circle cx="350.928" cy="346.101" r="67.800" fill="none" stroke="#66e3ff" stroke-width="3"/>
+<circle cx="350.928" cy="346.101" r="3" fill="#66e3ff"/>
+<text x="355.928" y="341.101" font-size="12" fill="#66e3ff" font-family="monospace">burner_front_right</text>
+<circle cx="509.128" cy="108.235" r="16.950" fill="none" stroke="#ffd166" stroke-width="3"/>
+<circle cx="509.128" cy="108.235" r="3" fill="#ffd166"/>
+<text x="514.128" y="103.235" font-size="12" fill="#ffd166" font-family="monospace">knob_1</text>
+<circle cx="509.128" cy="179.343" r="16.950" fill="none" stroke="#ffd166" stroke-width="3"/>
+<circle cx="509.128" cy="179.343" r="3" fill="#ffd166"/>
+<text x="514.128" y="174.343" font-size="12" fill="#ffd166" font-family="monospace">knob_2</text>
+<circle cx="509.128" cy="281.286" r="16.950" fill="none" stroke="#ffd166" stroke-width="3"/>
+<circle cx="509.128" cy="281.286" r="3" fill="#ffd166"/>
+<text x="514.128" y="276.286" font-size="12" fill="#ffd166" font-family="monospace">knob_3</text>
+<circle cx="509.128" cy="352.394" r="16.950" fill="none" stroke="#ffd166" stroke-width="3"/>
+<circle cx="509.128" cy="352.394" r="3" fill="#ffd166"/>
+<text x="514.128" y="347.394" font-size="12" fill="#ffd166" font-family="monospace">knob_4</text>
+<line x1="20" y1="440" x2="545" y2="440" stroke="#ff7b72" stroke-width="3" marker-end="url(#a)"/>
+<line x1="20" y1="440" x2="20" y2="20" stroke="#a5d6ff" stroke-width="3" marker-end="url(#a)"/>
+<defs><marker id="a" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L6,3 z" fill="context-stroke"/></marker></defs>
+<text x="22" y="455" font-size="13" fill="#ff7b72" font-family="monospace">width / left→right</text>
+<text x="25" y="34" font-size="13" fill="#a5d6ff" font-family="monospace">depth / front→back</text>
+<text x="12" y="18" font-size="14" fill="#ffffff" font-family="monospace">Consul CD060BE semantic donor mesh — 565 × 460 mm</text>
+</svg>
