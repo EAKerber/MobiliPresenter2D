@@ -1,0 +1,47 @@
+name: Research BMC04 post-generation gate temp
+
+on:
+  push:
+    branches:
+      - research/reconstruction-architecture-v0.1
+    paths:
+      - .github/workflows/research-bmc04-postgen-temp.yml
+
+permissions:
+  contents: write
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: research/reconstruction-architecture-v0.1
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install image tooling
+        run: python -m pip install -r tools/requirements.txt
+      - name: Run BMC-04 bounded-generation gates
+        run: |
+          python -m py_compile             tools/research_bmc04_post_generation_gate.py             tools/validate_reconstruction_packet.py
+          python -m unittest             tests/test_research_bmc04_post_generation_gate.py             tests/test_validate_reconstruction_packet.py             tests/test_research_bmc04_generation_input.py
+          python tools/validate_reconstruction_packet.py             review-assets/research/bmc04-cooktop-bounded-generation-v0.1.json
+      - name: Self-clean with CAS
+        env:
+          TARGET_BRANCH: research/reconstruction-architecture-v0.1
+          EXPECTED_HEAD: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git rm .github/workflows/research-bmc04-postgen-temp.yml
+          remote_before="$(git ls-remote origin "refs/heads/$TARGET_BRANCH" | cut -f1)"
+          test "$remote_before" = "$EXPECTED_HEAD"
+          git commit -m "chore: self-clean BMC-04 post-generation gate"
+          result="$(git rev-parse HEAD)"
+          git push origin "HEAD:refs/heads/$TARGET_BRANCH"
+          remote_after="$(git ls-remote origin "refs/heads/$TARGET_BRANCH" | cut -f1)"
+          test "$remote_after" = "$result"
