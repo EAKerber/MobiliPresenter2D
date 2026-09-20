@@ -255,8 +255,16 @@
         552.6
       ]
     },
-    "inputReceipt": "review-assets/research/bmc04-generation-input-v0.1/receipt.json",
-    "status": "READY_FOR_BOUNDED_GENERATION"
+    "inputReceipt": "review-assets/research/bmc04-generation-input-v0.2/receipt.json",
+    "status": "READY_FOR_BOUNDED_GENERATION",
+    "inputConfig": "review-assets/research/bmc04-generation-input-v0.2.json",
+    "postFitBudget": {
+      "translationPx": 3,
+      "uniformScalePercent": 3,
+      "rotationDeg": 1.5,
+      "projectiveWarpAllowed": false,
+      "status": "precommitted-engineering-budget"
+    }
   },
   "acceptance": {
     "requiredGates": [
@@ -286,7 +294,10 @@
       "tools/fit_regenerated_cooktop.py",
       "docs/work/bmc-04-cooktop-bounded-generation-v0.1.md",
       "review-assets/research/bmc04-cooktop-footprint-v0.1-report.json",
-      "review-assets/research/bmc04-generation-input-v0.1/receipt.json"
+      "review-assets/research/bmc04-generation-input-v0.2.json",
+      "review-assets/research/bmc04-generation-input-v0.2/receipt.json",
+      "tools/research_bmc04_generation_input.py",
+      "tests/test_research_bmc04_generation_input.py"
     ]
   }
 }
