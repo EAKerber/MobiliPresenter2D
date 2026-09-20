@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="500 540 250 45" width="1250" height="300">
+
+<rect x="500" y="540" width="250" height="45" fill="#11161c"/>
+<polygon points="492.000,574.000 745.000,574.000 762.000,552.000 524.000,552.000" fill="none" stroke="#687684" stroke-width="0.8"/>
+<polygon points="523.370,573.400 714.966,573.400 732.751,552.600 551.912,552.600" fill="none" stroke="#ff7b72" stroke-width="0.7" stroke-dasharray="3,2" opacity="0.8"/>
+<polygon points="530.587,572.200 710.422,572.200 726.433,553.800 555.558,553.800" fill="#66e3ff" fill-opacity="0.08" stroke="#66e3ff" stroke-width="1.1"/>
+<line x1="575.546" y1="572.200" x2="598.277" y2="553.800" stroke="#3b8da4" stroke-width="0.45"/>
+<line x1="620.505" y1="572.200" x2="640.995" y2="553.800" stroke="#3b8da4" stroke-width="0.45"/>
+<line x1="665.463" y1="572.200" x2="683.714" y2="553.800" stroke="#3b8da4" stroke-width="0.45"/>
+<line x1="536.830" y1="567.600" x2="714.425" y2="567.600" stroke="#3b8da4" stroke-width="0.45"/>
+<line x1="543.073" y1="563.000" x2="718.427" y2="563.000" stroke="#3b8da4" stroke-width="0.45"/>
+<line x1="549.315" y1="558.400" x2="722.430" y2="558.400" stroke="#3b8da4" stroke-width="0.45"/>
+<line x1="530.587" y1="572.200" x2="555.558" y2="553.800" stroke="#a5d6ff" stroke-width="0.9"/>
+<line x1="710.422" y1="572.200" x2="726.433" y2="553.800" stroke="#a5d6ff" stroke-width="0.9"/>
+<circle cx="583.510" cy="558.129" r="1.25" fill="#7ee787" stroke="#0d1117" stroke-width="0.25"/>
+<text x="585.310" y="556.829" font-size="2.5" fill="#7ee787" font-family="monospace">burner_rear_left</text>
+<circle cx="657.124" cy="558.129" r="1.25" fill="#7ee787" stroke="#0d1117" stroke-width="0.25"/>
+<text x="658.924" y="556.829" font-size="2.5" fill="#7ee787" font-family="monospace">burner_rear_right</text>
+<circle cx="571.504" cy="567.644" r="1.25" fill="#7ee787" stroke="#0d1117" stroke-width="0.25"/>
+<text x="573.304" y="566.344" font-size="2.5" fill="#7ee787" font-family="monospace">burner_front_left</text>
+<circle cx="647.090" cy="567.644" r="1.25" fill="#7ee787" stroke="#0d1117" stroke-width="0.25"/>
+<text x="648.890" y="566.344" font-size="2.5" fill="#7ee787" font-family="monospace">burner_front_right</text>
+<circle cx="705.559" cy="558.129" r="1.25" fill="#ffd166" stroke="#0d1117" stroke-width="0.25"/>
+<text x="707.359" y="556.829" font-size="2.5" fill="#ffd166" font-family="monospace">knob_1</text>
+<circle cx="702.948" cy="560.974" r="1.25" fill="#ffd166" stroke="#0d1117" stroke-width="0.25"/>
+<text x="704.748" y="559.674" font-size="2.5" fill="#ffd166" font-family="monospace">knob_2</text>
+<circle cx="699.203" cy="565.051" r="1.25" fill="#ffd166" stroke="#0d1117" stroke-width="0.25"/>
+<text x="701.003" y="563.751" font-size="2.5" fill="#ffd166" font-family="monospace">knob_3</text>
+<circle cx="696.591" cy="567.896" r="1.25" fill="#ffd166" stroke="#0d1117" stroke-width="0.25"/>
+<text x="698.391" y="566.596" font-size="2.5" fill="#ffd166" font-family="monospace">knob_4</text>
+<text x="502" y="544" font-size="3" fill="#ffffff" font-family="monospace">BMC-04 target: compact real-donor calibration</text>
+<text x="502" y="547.5" font-size="2.6" fill="#ff7b72" font-family="monospace">dashed red = legacy 600×520 inferred footprint</text>
+<text x="502" y="551" font-size="2.6" fill="#66e3ff" font-family="monospace">cyan = centered 565×460 donor-calibrated footprint</text>
+<text x="502" y="554.5" font-size="2.6" fill="#ffd166" font-family="monospace">yellow = 4 control anchors; green = 4 burner anchors</text>
+</svg>
