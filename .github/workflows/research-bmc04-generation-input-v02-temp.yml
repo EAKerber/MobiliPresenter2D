@@ -1,0 +1,88 @@
+name: Research BMC04 generation input v02 temp
+
+on:
+  push:
+    branches:
+      - research/reconstruction-architecture-v0.1
+    paths:
+      - .github/workflows/research-bmc04-generation-input-v02-temp.yml
+
+permissions:
+  contents: write
+
+jobs:
+  materialize:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: research/reconstruction-architecture-v0.1
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install image tooling
+        run: python -m pip install -r tools/requirements.txt
+      - name: Build current variant manifest
+        run: node tools/variant_fidelity_manifest.js --cases reference/variant-cases.json --output /tmp/current-variants.json
+      - name: Test and materialize v0.2 pack
+        run: |
+          set -euo pipefail
+          python -m py_compile tools/research_bmc04_generation_input.py
+          python -m unittest tests/test_research_bmc04_generation_input.py
+          rm -rf review-assets/research/bmc04-generation-input-v0.2
+          python tools/research_bmc04_generation_input.py             --config review-assets/research/bmc04-generation-input-v0.2.json             --variant-manifest /tmp/current-variants.json             --output-dir review-assets/research/bmc04-generation-input-v0.2
+      - name: Verify v0.1 continuity
+        run: |
+          python - <<'PY'
+          from PIL import Image, ImageChops
+          from pathlib import Path
+          import json
+          old=Path("review-assets/research/bmc04-generation-input-v0.1")
+          new=Path("review-assets/research/bmc04-generation-input-v0.2")
+          pairs=[
+            ("clean-cooktop-free.png","clean-cooktop-free.png"),
+            ("reference-current.png","reference-current.png"),
+            ("footprint-max-support.png","footprint-max-support.png"),
+          ]
+          for a,b in pairs:
+              ia=Image.open(old/a).convert("RGBA")
+              ib=Image.open(new/b).convert("RGBA")
+              diff=ImageChops.difference(ia,ib)
+              if diff.getbbox():
+                  raise SystemExit(f"PIXEL_DRIFT:{a}:{b}")
+          receipt=json.loads((new/"receipt.json").read_text())
+          assert receipt["status"]=="READY_FOR_BOUNDED_GENERATION"
+          assert receipt["generationExecuted"] is False
+          assert receipt["generationContract"]["largePostGenerationWarpAllowed"] is False
+          assert receipt["postFitBudget"]["projectiveWarpAllowed"] is False
+          print(json.dumps({
+            "status":receipt["status"],
+            "footprintPixels":receipt["footprintPixels"],
+            "postFitBudget":receipt["postFitBudget"],
+            "perceptualTarget":receipt["perceptualTarget"]
+          },sort_keys=True))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: bmc04-generation-input-v02
+          path: review-assets/research/bmc04-generation-input-v0.2
+          if-no-files-found: error
+      - name: Commit outputs and self-clean with CAS
+        env:
+          TARGET_BRANCH: research/reconstruction-architecture-v0.1
+          EXPECTED_HEAD: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git rm .github/workflows/research-bmc04-generation-input-v02-temp.yml
+          git add review-assets/research/bmc04-generation-input-v0.2
+          remote_before="$(git ls-remote origin "refs/heads/$TARGET_BRANCH" | cut -f1)"
+          test "$remote_before" = "$EXPECTED_HEAD"
+          git commit -m "research: materialize reproducible BMC-04 generation inputs"
+          result="$(git rev-parse HEAD)"
+          git push origin "HEAD:refs/heads/$TARGET_BRANCH"
+          remote_after="$(git ls-remote origin "refs/heads/$TARGET_BRANCH" | cut -f1)"
+          test "$remote_after" = "$result"
