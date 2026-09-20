@@ -265,7 +265,17 @@
       "projectiveWarpAllowed": false,
       "status": "precommitted-engineering-budget"
     },
-    "generationRequest": "review-assets/research/bmc04-generation-request-v0.1.json"
+    "generationRequest": "review-assets/research/bmc04-generation-request-v0.1.json",
+    "postGenerationGate": "tools/research_bmc04_post_generation_gate.py",
+    "postGenerationGatePolicy": {
+      "canvasNormalization": "alpha-crop + uniform width fit + translation",
+      "projectiveWarpAllowed": false,
+      "hardSupport": "footprint-max-support.png",
+      "resamplingBandPx": 2,
+      "maxOutsideHardAlpha": 128,
+      "maxOutsideHardAlphaMassRatio": 0.01,
+      "failureAction": "reject-and-regenerate"
+    }
   },
   "acceptance": {
     "requiredGates": [
@@ -300,7 +310,9 @@
       "tools/research_bmc04_generation_input.py",
       "tests/test_research_bmc04_generation_input.py",
       "review-assets/research/bmc04-generation-request-v0.1.json",
-      "tools/validate_reconstruction_packet.py"
+      "tools/validate_reconstruction_packet.py",
+      "tools/research_bmc04_post_generation_gate.py",
+      "tests/test_research_bmc04_post_generation_gate.py"
     ]
   }
 }
