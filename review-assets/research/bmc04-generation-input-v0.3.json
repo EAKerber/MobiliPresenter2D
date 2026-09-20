@@ -1,0 +1,59 @@
+{
+  "schemaVersion": "BMC04GenerationInput 0.3",
+  "sceneId": "cozinha-01",
+  "operationId": "bmc04-cooktop-bounded-generation-v0.2",
+  "targetVariant": "default",
+  "footprintReport": "review-assets/research/bmc04-compact-footprint-v0.2-report.json",
+  "semanticMesh": "review-assets/research/bmc04-compact-donor-mesh-v0.1-report.json",
+  "semanticDonorGuide": "review-assets/research/bmc04-compact-donor-mesh-v0.1-donor.svg",
+  "semanticTargetGuide": "review-assets/research/bmc04-compact-donor-mesh-v0.1-target.svg",
+  "crop": [500, 525, 750, 585],
+  "canonicalSourceHash": "f502790c76afe612563958ca3acfcc7d653018d718d11d852ed3a45df553ecfa",
+  "existingGeneratedDonor": "review-assets/cooktop-regenerated-fit/donor.png",
+  "stoneCleanplateConfig": "review-assets/stone-cleanplate/config.json",
+  "stoneCleanplateComposed": "review-assets/stone-cleanplate/generated/composed.png",
+  "cooktopRemovalMask": "review-assets/stone-backing/generated/cooktop-mask.png",
+  "stoneBacking": "review-assets/stone-backing/generated/backing.png",
+  "guide": {
+    "lineWidthPx": 2,
+    "anchorRadiusPx": 3,
+    "footprintFillAlpha": 52
+  },
+  "postFitBudget": {
+    "translationPx": 3,
+    "uniformScalePercent": 3,
+    "rotationDeg": 1.5,
+    "projectiveWarpAllowed": false,
+    "status": "precommitted-engineering-budget",
+    "reason": "normalization may correct small placement/scale drift only; it must not repair a wrong generated perspective"
+  },
+  "perceptualTarget": {
+    "status": "human-designated-library-available",
+    "requiredForGeneration": false,
+    "authority": "appearance-only",
+    "fileId": "file_000000003660820e9f2fec3f3c631237",
+    "sha256": "a4cce486da0660ff1faecd0ec826a78039650cb0e525f213bd93bf2e11ec5b89"
+  },
+  "realProductDonor": {
+    "brand": "Consul",
+    "model": "CD060BE",
+    "officialProductUrl": "https://www.consul.com.br/cooktop-consul-4-bocas-vidro-temperado-com-grades-firmes/p",
+    "officialImageUrl": "https://consul.vtexassets.com/arquivos/ids/278003-1440-auto/01_Consul_Cooktop_CD060BE_Imagem_Frontal_8.webp?quality=80&v=639180924903830000",
+    "authority": "semantic-layout-and-real-product-reference",
+    "mustNotExposeBrandingInGeneratedAsset": true
+  },
+  "policy": {
+    "researchOnly": true,
+    "promotionEligible": false,
+    "guideIsNotCandidate": true,
+    "footprintMaskMeaning": "maximum allowed object support, not required opaque fill",
+    "generationOutputPreference": "isolated transparent generic black-glass four-burner cooktop already in target perspective",
+    "surroundingSceneMayChange": false,
+    "directGeneratedPromotionAllowed": false,
+    "semanticCountsLocked": {
+      "burners": 4,
+      "controls": 4
+    },
+    "semanticTopologyLocked": true
+  }
+}
