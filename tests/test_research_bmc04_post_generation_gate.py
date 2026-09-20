@@ -47,7 +47,11 @@ class BMC04PostGenerationGateTests(unittest.TestCase):
             candidate.save(path)
             result = evaluate(path, inp, root / "out")
             self.assertEqual(result["status"], "PASS")
-            self.assertEqual(result["gates"]["outsideMaximumSupportPixels"], 0)
+            self.assertEqual(result["gates"]["outsideAntialiasBandPixels"], 0)
+            self.assertLessEqual(
+                result["gates"]["outsideHardSupportMaxAlpha"],
+                128,
+            )
 
     def test_axis_aligned_rectangle_is_rejected_by_support(self):
         with tempfile.TemporaryDirectory() as td:
@@ -60,7 +64,7 @@ class BMC04PostGenerationGateTests(unittest.TestCase):
             result = evaluate(path, inp, root / "out")
             self.assertEqual(result["status"], "FAIL")
             self.assertIn(
-                "generated-silhouette-escapes-maximum-support",
+                "generated-silhouette-has-opaque-support-outside-footprint",
                 result["errors"],
             )
 
