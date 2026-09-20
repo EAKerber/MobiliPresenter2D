@@ -1,0 +1,103 @@
+{
+  "cropGlobal": [
+    500,
+    525,
+    750,
+    585
+  ],
+  "files": {
+    "clean-cooktop-free.png": {
+      "sha256": "e257a09099cd6d7a7593014aaed7c5304dca8a46918925267485e39f49f4e9f0",
+      "sizeBytes": 38130
+    },
+    "existing-generated-donor.png": {
+      "sha256": "427d504658e61134aede5e73748bf5681e900127766b61d12396c25f448030ec",
+      "sizeBytes": 685392
+    },
+    "footprint-guide.png": {
+      "sha256": "1cffb56ccb11e5f31aefbf96a49519a48b3b9b61e1c29edc68b3a33aac9af439",
+      "sizeBytes": 36446
+    },
+    "footprint-max-support.png": {
+      "sha256": "0ba4d434b68692805e73f76fb2645c0cc849a4906ac0bd393cf3b59ab695bc0c",
+      "sizeBytes": 206
+    },
+    "protection-mask.png": {
+      "sha256": "f0f1545b12d5e27fce6ec6896592a88965a9a608cf545024675bf4bc2331dd9f",
+      "sizeBytes": 245
+    },
+    "reference-current.png": {
+      "sha256": "bb284224df337ff63fc2d3453a7ff85f801b84e6977d6077a64bdf2a145b7b59",
+      "sizeBytes": 36311
+    }
+  },
+  "footprintPixels": 3936,
+  "generationContract": {
+    "cleanReference": "clean-cooktop-free.png",
+    "currentReference": "reference-current.png",
+    "desiredOutput": "isolated transparent cooktop already matching target footprint/perspective",
+    "directGeneratedPromotionAllowed": false,
+    "existingGeneratedDonor": "existing-generated-donor.png",
+    "forbidden": "scene/background/stone/cabinet edits",
+    "hardGuide": "footprint-guide.png",
+    "largePostGenerationWarpAllowed": false,
+    "maximumSupportMask": "footprint-max-support.png",
+    "protectionMask": "protection-mask.png"
+  },
+  "generationExecuted": false,
+  "operationId": "bmc04-cooktop-bounded-generation-v0.1",
+  "perceptualTarget": {
+    "authority": "appearance-only",
+    "note": "accidental ImageGen result was designated visually excellent but is not yet stored as a reproducible file",
+    "requiredForGeneration": false,
+    "status": "human-designated-unmaterialized"
+  },
+  "postFitBudget": {
+    "projectiveWarpAllowed": false,
+    "reason": "normalization may correct small placement/scale drift only; it must not repair a wrong generated perspective",
+    "rotationDeg": 1.5,
+    "status": "precommitted-engineering-budget",
+    "translationPx": 3,
+    "uniformScalePercent": 3
+  },
+  "promotionEligible": false,
+  "sceneId": "cozinha-01",
+  "schemaVersion": "BMC04GenerationInputReceipt 0.2",
+  "status": "READY_FOR_BOUNDED_GENERATION",
+  "targetFootprintCropPx": {
+    "backLeft": [
+      51.912319979864606,
+      27.600000000000023
+    ],
+    "backRight": [
+      232.75131638377172,
+      27.600000000000023
+    ],
+    "frontLeft": [
+      23.37005950964874,
+      48.39999999999998
+    ],
+    "frontRight": [
+      214.96630412671493,
+      48.39999999999998
+    ]
+  },
+  "targetFootprintGlobalPx": {
+    "backLeft": [
+      551.9123199798646,
+      552.6
+    ],
+    "backRight": [
+      732.7513163837717,
+      552.6
+    ],
+    "frontLeft": [
+      523.3700595096487,
+      573.4
+    ],
+    "frontRight": [
+      714.9663041267149,
+      573.4
+    ]
+  }
+}
