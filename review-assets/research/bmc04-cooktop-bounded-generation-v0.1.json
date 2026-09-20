@@ -264,7 +264,8 @@
       "rotationDeg": 1.5,
       "projectiveWarpAllowed": false,
       "status": "precommitted-engineering-budget"
-    }
+    },
+    "generationRequest": "review-assets/research/bmc04-generation-request-v0.1.json"
   },
   "acceptance": {
     "requiredGates": [
@@ -297,7 +298,9 @@
       "review-assets/research/bmc04-generation-input-v0.2.json",
       "review-assets/research/bmc04-generation-input-v0.2/receipt.json",
       "tools/research_bmc04_generation_input.py",
-      "tests/test_research_bmc04_generation_input.py"
+      "tests/test_research_bmc04_generation_input.py",
+      "review-assets/research/bmc04-generation-request-v0.1.json",
+      "tools/validate_reconstruction_packet.py"
     ]
   }
 }
