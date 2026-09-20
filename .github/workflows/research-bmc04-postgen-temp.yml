@@ -1,4 +1,5 @@
 name: Research BMC04 post-generation gate temp
+# retry after explicit antialias-band semantics
 
 on:
   push:
