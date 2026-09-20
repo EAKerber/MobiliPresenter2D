@@ -1,0 +1,54 @@
+{
+  "schemaVersion": "PlanarRectProjectionProbeReport 0.2",
+  "sceneId": "cozinha-01",
+  "operationId": "bmc04-compact-footprint-v0.2",
+  "status": "RESEARCH_CANDIDATE",
+  "promotionEligible": false,
+  "sourceSemanticMesh": "review-assets/research/bmc04-compact-donor-mesh-v0.1-report.json",
+  "host": {
+    "id": "stone-02-top",
+    "physicalSizeMm": [791.01, 550.0],
+    "quadPx": {
+      "frontLeft": [492.0, 574.0],
+      "frontRight": [745.0, 574.0],
+      "backRight": [762.0, 552.0],
+      "backLeft": [524.0, 552.0]
+    },
+    "status": "local-derived"
+  },
+  "targetRect": {
+    "id": "module-02-cooktop-compact-real-donor-calibration",
+    "offsetMmFromHostFrontLeft": [113.005, 45.0],
+    "sizeMm": [565.0, 460.0],
+    "status": "derived-real-donor-calibration",
+    "placementPolicy": "preserve legacy inferred footprint center; replace envelope only"
+  },
+  "targetQuadPx": {
+    "frontLeft": [530.5868510454413, 572.2],
+    "frontRight": [710.4222398636496, 572.2],
+    "backRight": [726.4326861170586, 553.8],
+    "backLeft": [555.5582229738505, 553.8]
+  },
+  "targetEdgesPx": {
+    "frontWidth": [179.83538881820823, 0.0],
+    "backWidth": [170.874463143208, 0.0],
+    "leftDepth": [24.971371928409212, -18.40000000000009],
+    "rightDepth": [16.010446253408986, -18.40000000000009]
+  },
+  "legacyComparison": {
+    "previousInferredSizeMm": [600.0, 520.0],
+    "previousInferredOffsetMm": [95.505, 15.0],
+    "previousTargetQuadPx": {
+      "frontLeft": [523.3700595096487, 573.4],
+      "frontRight": [714.9663041267149, 573.4],
+      "backRight": [732.7513163837717, 552.6],
+      "backLeft": [551.9123199798646, 552.6]
+    }
+  },
+  "limitations": [
+    "565 x 460 mm envelope is manufacturer-confirmed for the donor product family, but its placement in this legacy scene remains derived",
+    "semantic component anchors are inferred from an official product raster, not CAD",
+    "host projection is local-derived rather than a global camera calibration",
+    "this footprint constrains generation and does not promote generated appearance to geometry authority"
+  ]
+}
