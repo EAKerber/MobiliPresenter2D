@@ -254,7 +254,9 @@
         551.9123199798646,
         552.6
       ]
-    }
+    },
+    "inputReceipt": "review-assets/research/bmc04-generation-input-v0.1/receipt.json",
+    "status": "READY_FOR_BOUNDED_GENERATION"
   },
   "acceptance": {
     "requiredGates": [
@@ -283,7 +285,8 @@
       "review-assets/stone-backing/config.json",
       "tools/fit_regenerated_cooktop.py",
       "docs/work/bmc-04-cooktop-bounded-generation-v0.1.md",
-      "review-assets/research/bmc04-cooktop-footprint-v0.1-report.json"
+      "review-assets/research/bmc04-cooktop-footprint-v0.1-report.json",
+      "review-assets/research/bmc04-generation-input-v0.1/receipt.json"
     ]
   }
 }
