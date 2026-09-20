@@ -373,3 +373,73 @@ After generation, the candidate must return to the deterministic pipeline for:
 5. contact/no-floating review;
 6. grate/burner/knob artifact review;
 7. human review before any default promotion.
+
+
+## Post-generation gate implemented
+
+The workflow now has a deterministic gate on **both sides** of generation.
+
+Before generation:
+
+- the host plane and target trapezoid are fixed;
+- clean reference/current reference/donor/footprint/protection inputs are hashed;
+- the post-fit budget is precommitted;
+- projective post-warp is forbidden.
+
+After generation:
+
+`tools/research_bmc04_post_generation_gate.py`
+
+accepts an isolated transparent candidate and performs only:
+
+1. alpha-bounds crop;
+2. uniform canvas normalization by the deterministic target width;
+3. translation to the target support/front edge.
+
+It does **not** apply:
+- anisotropic scale;
+- perspective correction;
+- scene warp.
+
+The candidate then fails closed if:
+
+- its generated aspect/perspective is outside the precommitted ±3% ratio budget;
+- opaque support escapes the deterministic footprint;
+- antialias mass outside the hard polygon exceeds 1% equivalent opaque area;
+- any raster support leaves the bounded two-pixel resampling neighborhood;
+- protected pixels would be occupied;
+- composition changes pixels beyond that bounded support.
+
+The two-pixel neighborhood is rasterization tolerance only. It is not new
+geometric entitlement: pixels outside the hard footprint may not exceed 50%
+alpha and their total equivalent opaque mass remains capped.
+
+Synthetic gate tests include:
+
+- a correctly perspective-shaped trapezoid -> PASS;
+- an axis-aligned rectangle with the same outer width/height -> FAIL.
+
+Workflow run:
+`35490704208` — PASS.
+
+Observed:
+- 11 focused tests: PASS;
+- BMC-04 Reconstruction Packet: PASS under the strengthened T6-G validator.
+
+This is the key workflow answer for this edge case:
+
+> **Image generation is permitted to create a better appliance view, but it is
+> not permitted to repair its own geometry afterwards. A wrong generated view
+> is regenerated, not distorted until it fits.**
+
+## Current state
+
+BMC-04 is now:
+
+`DETERMINISTIC_GEOMETRY_READY -> GENERATION_INPUT_READY -> POSTGEN_GATE_READY`.
+
+The remaining unexecuted step is the actual isolated-object ImageGen call.
+
+The accidental image remains an excellent human-designated perceptual target,
+but until it is materialized into a reproducible asset it remains review
+context rather than packet input.
