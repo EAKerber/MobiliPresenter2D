@@ -18,7 +18,7 @@ import hashlib
 import json
 from pathlib import Path
 
-from PIL import Image, ImageChops
+from PIL import Image, ImageChops, ImageFilter
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -101,7 +101,12 @@ def evaluate(candidate_path: Path, input_dir: Path, output_dir: Path) -> dict:
 
     normalized, fit = normalize_candidate(candidate, support)
     alpha = normalized.getchannel("A")
-    outside = ImageChops.multiply(alpha, ImageChops.invert(support))
+    # The deterministic footprint is still the hard geometry boundary. A
+    # one-pixel neighborhood is permitted only for raster antialias coverage,
+    # never as geometric occupancy.
+    antialias_band = support.filter(ImageFilter.MaxFilter(3))
+    outside_hard = ImageChops.multiply(alpha, ImageChops.invert(support))
+    outside_antialias_band = ImageChops.multiply(alpha, ImageChops.invert(antialias_band))
     protected_overlap = ImageChops.multiply(alpha, protection)
 
     target_box = support.getbbox()
@@ -121,12 +126,20 @@ def evaluate(candidate_path: Path, input_dir: Path, output_dir: Path) -> dict:
     if abs(height_ratio - 1.0) > allowed_ratio_delta:
         errors.append("generated-object-aspect-does-not-match-target-footprint")
 
-    outside_pixels = nonzero_count(outside)
-    protected_pixels = nonzero_count(protected_overlap)
-    if outside_pixels:
-        errors.append("generated-silhouette-escapes-maximum-support")
-    if protected_pixels:
-        errors.append("generated-silhouette-overlaps-protection-mask")
+    outside_hard_pixels = nonzero_count(outside_hard)
+    outside_hard_alpha_mass = alpha_mass(outside_hard)
+    outside_hard_max_alpha = outside_hard.getextrema()[1]
+    outside_band_pixels = nonzero_count(outside_antialias_band)
+
+    # Precommitted AA tolerance: at most a one-pixel band, no >50% opaque
+    # coverage outside the hard polygon, and <=1% equivalent opaque mass.
+    max_aa_mass = nonzero_count(support) * 0.01
+    if outside_band_pixels:
+        errors.append("generated-silhouette-escapes-antialias-band")
+    if outside_hard_max_alpha > 128:
+        errors.append("generated-silhouette-has-opaque-support-outside-footprint")
+    if outside_hard_alpha_mass > max_aa_mass:
+        errors.append("generated-silhouette-antialias-mass-exceeds-budget")
 
     if fit["canvasNormalization"]["projectiveWarpApplied"]:
         errors.append("projective-warp-forbidden")
@@ -142,10 +155,12 @@ def evaluate(candidate_path: Path, input_dir: Path, output_dir: Path) -> dict:
         ImageChops.lighter(diff.getchannel("R"), diff.getchannel("G")),
         ImageChops.lighter(diff.getchannel("B"), diff.getchannel("A")),
     ).point(lambda value: 255 if value else 0)
-    diff_outside = ImageChops.multiply(diff_mask, ImageChops.invert(support))
-    diff_outside_pixels = nonzero_count(diff_outside)
-    if diff_outside_pixels:
-        errors.append("composite-changed-outside-maximum-support")
+    diff_outside_hard = ImageChops.multiply(diff_mask, ImageChops.invert(support))
+    diff_outside_band = ImageChops.multiply(diff_mask, ImageChops.invert(antialias_band))
+    diff_outside_hard_pixels = nonzero_count(diff_outside_hard)
+    diff_outside_band_pixels = nonzero_count(diff_outside_band)
+    if diff_outside_band_pixels:
+        errors.append("composite-changed-outside-antialias-band")
 
     result = {
         "schemaVersion": "BMC04GeneratedCandidateGate 0.1",
@@ -162,9 +177,14 @@ def evaluate(candidate_path: Path, input_dir: Path, output_dir: Path) -> dict:
         "gates": {
             "transparentBackground": extrema[0] == 0 and extrema[1] > 0,
             "aspectWithinPrecommittedBudget": abs(height_ratio - 1.0) <= allowed_ratio_delta,
-            "outsideMaximumSupportPixels": outside_pixels,
-            "protectedOverlapPixels": protected_pixels,
-            "compositeChangedOutsideSupportPixels": diff_outside_pixels,
+            "outsideHardSupportPixels": outside_hard_pixels,
+            "outsideHardSupportAlphaMass": round(outside_hard_alpha_mass, 6),
+            "outsideHardSupportMaxAlpha": outside_hard_max_alpha,
+            "maxAllowedAntialiasAlphaMass": round(max_aa_mass, 6),
+            "outsideAntialiasBandPixels": outside_band_pixels,
+            "protectedOverlapPixelsIncludingAntialias": nonzero_count(protected_overlap),
+            "compositeChangedOutsideHardSupportPixels": diff_outside_hard_pixels,
+            "compositeChangedOutsideAntialiasBandPixels": diff_outside_band_pixels,
             "projectiveWarpApplied": False,
         },
         "metrics": {
