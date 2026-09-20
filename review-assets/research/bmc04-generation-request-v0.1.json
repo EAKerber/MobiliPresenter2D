@@ -1,0 +1,67 @@
+{
+  "schemaVersion": "BMC04GenerationRequest 0.1",
+  "sceneId": "cozinha-01",
+  "operationId": "bmc04-cooktop-bounded-generation-v0.1",
+  "mode": "isolated-object-synthesis",
+  "inputReceipt": "review-assets/research/bmc04-generation-input-v0.2/receipt.json",
+  "inputs": {
+    "cleanReference": "review-assets/research/bmc04-generation-input-v0.2/clean-cooktop-free.png",
+    "currentReference": "review-assets/research/bmc04-generation-input-v0.2/reference-current.png",
+    "existingGeneratedDonor": "review-assets/research/bmc04-generation-input-v0.2/existing-generated-donor.png",
+    "hardFootprintGuide": "review-assets/research/bmc04-generation-input-v0.2/footprint-guide.png",
+    "maximumSupportMask": "review-assets/research/bmc04-generation-input-v0.2/footprint-max-support.png",
+    "protectionMask": "review-assets/research/bmc04-generation-input-v0.2/protection-mask.png",
+    "perceptualTarget": null
+  },
+  "promptIntent": {
+    "primary": "Create only a realistic isolated black-glass cooktop that already matches the target perspective and footprint shown by the hard guide. Preserve the surrounding countertop, cabinet and scene completely; they are reference/protection context only.",
+    "appearance": [
+      "modern black glass cooktop",
+      "metal grate/burner hardware consistent with the current reference",
+      "realistic reflections and object-local shading",
+      "mechanically plausible burner and knob geometry"
+    ],
+    "geometryConstraints": [
+      "fit inside the hard footprint",
+      "front edge follows the guide front edge",
+      "rear edge follows the guide rear edge",
+      "left and right depth edges follow the slanted guide edges",
+      "do not make the appliance axis-aligned if the guide is trapezoidal"
+    ],
+    "forbidden": [
+      "editing stone",
+      "editing cabinet",
+      "editing sink/faucet/drainer",
+      "changing camera",
+      "changing countertop geometry",
+      "adding props",
+      "adding text",
+      "adding background rectangle or checkerboard",
+      "inventing a footprint larger than the hard guide"
+    ],
+    "outputPreference": "isolated cooktop with transparent background; no surrounding scene pixels"
+  },
+  "normalizationPolicy": {
+    "canvasNormalization": "uniform object scaling and translation from generated canvas space into the target crop are allowed as coordinate normalization",
+    "residualPostFitBudget": {
+      "translationPx": 3,
+      "uniformScalePercent": 3,
+      "rotationDeg": 1.5,
+      "projectiveWarpAllowed": false
+    },
+    "rejectIf": [
+      "anisotropic scaling is needed",
+      "projective warp is needed",
+      "object silhouette escapes maximum support after residual budget",
+      "object visually floats above the stone",
+      "generated background must be retained to make the object look correct"
+    ]
+  },
+  "provenancePolicy": {
+    "recordEveryCandidate": true,
+    "recordGenerationReceipt": true,
+    "directGeneratedPromotionAllowed": false,
+    "perceptualTargetAuthority": "appearance-only"
+  },
+  "status": "READY"
+}
