@@ -1,0 +1,42 @@
+{
+  "schemaVersion": "BMC04GenerationInput 0.2",
+  "sceneId": "cozinha-01",
+  "operationId": "bmc04-cooktop-bounded-generation-v0.1",
+  "targetVariant": "default",
+  "footprintReport": "review-assets/research/bmc04-cooktop-footprint-v0.1-report.json",
+  "crop": [500, 525, 750, 585],
+  "canonicalSourceHash": "f502790c76afe612563958ca3acfcc7d653018d718d11d852ed3a45df553ecfa",
+  "existingGeneratedDonor": "review-assets/cooktop-regenerated-fit/donor.png",
+  "stoneCleanplateConfig": "review-assets/stone-cleanplate/config.json",
+  "stoneCleanplateComposed": "review-assets/stone-cleanplate/generated/composed.png",
+  "cooktopRemovalMask": "review-assets/stone-backing/generated/cooktop-mask.png",
+  "stoneBacking": "review-assets/stone-backing/generated/backing.png",
+  "guide": {
+    "lineWidthPx": 2,
+    "anchorRadiusPx": 3,
+    "footprintFillAlpha": 52
+  },
+  "postFitBudget": {
+    "translationPx": 3,
+    "uniformScalePercent": 3,
+    "rotationDeg": 1.5,
+    "projectiveWarpAllowed": false,
+    "status": "precommitted-engineering-budget",
+    "reason": "normalization may correct small placement/scale drift only; it must not repair a wrong generated perspective"
+  },
+  "perceptualTarget": {
+    "status": "human-designated-unmaterialized",
+    "requiredForGeneration": false,
+    "authority": "appearance-only",
+    "note": "accidental ImageGen result was designated visually excellent but is not yet stored as a reproducible file"
+  },
+  "policy": {
+    "researchOnly": true,
+    "promotionEligible": false,
+    "guideIsNotCandidate": true,
+    "footprintMaskMeaning": "maximum allowed object support, not required opaque fill",
+    "generationOutputPreference": "isolated transparent cooktop already in target perspective",
+    "surroundingSceneMayChange": false,
+    "directGeneratedPromotionAllowed": false
+  }
+}
