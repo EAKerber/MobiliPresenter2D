@@ -1,5 +1,5 @@
 name: Research BMC04 post-generation gate temp
-# retry after explicit antialias-band semantics
+# retry after bounded two-pixel resampling-band semantics
 
 on:
   push:
