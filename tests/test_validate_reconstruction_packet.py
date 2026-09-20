@@ -99,6 +99,37 @@ class ReconstructionPacketTests(unittest.TestCase):
             self.assertIn("editContract.authorizedRoi", errors)
             self.assertIn("claims[0].status", errors)
 
+    def test_bounded_generation_requires_ready_receipt_and_no_projective_postfit(self):
+        with tempfile.TemporaryDirectory() as td:
+            root = Path(td)
+            packet = minimal_packet(root)
+            receipt = {
+                "status": "READY_FOR_BOUNDED_GENERATION",
+                "generationContract": {
+                    "directGeneratedPromotionAllowed": False,
+                    "largePostGenerationWarpAllowed": False,
+                },
+                "postFitBudget": {"projectiveWarpAllowed": False},
+            }
+            (root / "generation-receipt.json").write_text(json.dumps(receipt))
+            packet["authoringPlan"]["generation"] = {
+                "allowed": True,
+                "mode": "isolated-object-synthesis",
+                "reason": "deterministic warp would damage detailed object appearance",
+            }
+            packet["generationGuide"] = {
+                "inputReceipt": "generation-receipt.json",
+                "perceptualTargetAuthority": "appearance-only",
+            }
+            self.assertEqual(validate_packet(packet, root), [])
+
+            receipt["postFitBudget"]["projectiveWarpAllowed"] = True
+            (root / "generation-receipt.json").write_text(json.dumps(receipt))
+            self.assertIn(
+                "generationGuide.postFitBudget.projectiveWarpAllowed",
+                validate_packet(packet, root),
+            )
+
 
 if __name__ == "__main__":
     unittest.main()
