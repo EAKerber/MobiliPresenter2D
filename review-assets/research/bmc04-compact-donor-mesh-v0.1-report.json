@@ -1,0 +1,322 @@
+{
+  "compactFootprint": {
+    "edgesPx": {
+      "backWidth": [
+        170.874463143208,
+        0.0
+      ],
+      "frontWidth": [
+        179.83538881820823,
+        0.0
+      ],
+      "leftDepth": [
+        24.971371928409212,
+        -18.40000000000009
+      ],
+      "rightDepth": [
+        16.010446253408986,
+        -18.40000000000009
+      ]
+    },
+    "offsetMm": [
+      113.005,
+      45.0
+    ],
+    "placementPolicy": "preserve legacy footprint center while replacing envelope with manufacturer-confirmed donor dimensions",
+    "quadPx": {
+      "backLeft": [
+        555.5582229738505,
+        553.8
+      ],
+      "backRight": [
+        726.4326861170586,
+        553.8
+      ],
+      "frontLeft": [
+        530.5868510454413,
+        572.2
+      ],
+      "frontRight": [
+        710.4222398636496,
+        572.2
+      ]
+    },
+    "sizeMm": [
+      565.0,
+      460.0
+    ]
+  },
+  "donorRasterMeasurement": {
+    "imageFramePx": [
+      1000,
+      1000
+    ],
+    "note": "Anchor measurements are visual/raster evidence, not product CAD or D1 geometry. They are used to constrain semantic layout, not to claim manufacturer-exact component coordinates.",
+    "orientationMapping": "official raster top = physical rear; raster bottom = physical front; physical depth v=0 at front and v=1 at back",
+    "plateBoundsPx": [
+      50,
+      135,
+      950,
+      866
+    ],
+    "status": "inferred-from-official-product-raster",
+    "uncertaintyPx": 8
+  },
+  "host": {
+    "globalCameraClaim": false,
+    "id": "stone-02-top",
+    "physicalSizeMm": [
+      791.01,
+      550.0
+    ],
+    "quadPx": {
+      "backLeft": [
+        524.0,
+        552.0
+      ],
+      "backRight": [
+        762.0,
+        552.0
+      ],
+      "frontLeft": [
+        492.0,
+        574.0
+      ],
+      "frontRight": [
+        745.0,
+        574.0
+      ]
+    },
+    "status": "local-derived"
+  },
+  "legacyFootprint": {
+    "offsetMm": [
+      95.505,
+      15.0
+    ],
+    "quadPx": {
+      "backLeft": [
+        551.9123199798646,
+        552.6
+      ],
+      "backRight": [
+        732.7513163837717,
+        552.6
+      ],
+      "frontLeft": [
+        523.3700595096487,
+        573.4
+      ],
+      "frontRight": [
+        714.9663041267149,
+        573.4
+      ]
+    },
+    "sizeMm": [
+      600.0,
+      520.0
+    ]
+  },
+  "limitations": [
+    "Consul envelope/topology are real-product evidence, but component anchor coordinates are inferred from an official product raster, not CAD",
+    "placement in the legacy kitchen is center-preserving local-planar derivation, not confirmed appliance installation geometry",
+    "Stone02 mapping remains local-derived and is not a global camera calibration",
+    "guide geometry constrains generation; generation remains appearance authoring only"
+  ],
+  "operationId": "bmc04-compact-donor-mesh-v0.1",
+  "promotionEligible": false,
+  "sceneId": "cozinha-01",
+  "schemaVersion": "BMC04CompactDonorMeshReport 0.1",
+  "semanticAnchors": {
+    "burner_front_left": {
+      "kind": "burner-center",
+      "localMm": [
+        223.49388891399997,
+        158.89876883200003
+      ],
+      "normalizedPhysical": [
+        0.1955555556,
+        0.24760601920000003
+      ],
+      "normalizedRaster": [
+        0.1955555556,
+        0.7523939808
+      ],
+      "targetPx": [
+        571.5038278330376,
+        567.64404924672
+      ]
+    },
+    "burner_front_right": {
+      "kind": "burner-center",
+      "localMm": [
+        463.93277777149996,
+        158.89876883200003
+      ],
+      "normalizedPhysical": [
+        0.6211111111,
+        0.24760601920000003
+      ],
+      "normalizedRaster": [
+        0.6211111111,
+        0.7523939808
+      ],
+      "targetPx": [
+        647.0895628329152,
+        567.64404924672
+      ]
+    },
+    "burner_rear_left": {
+      "kind": "burner-center",
+      "localMm": [
+        223.49388891399997,
+        396.76470590400004
+      ],
+      "normalizedPhysical": [
+        0.1955555556,
+        0.7647058824
+      ],
+      "normalizedRaster": [
+        0.1955555556,
+        0.2352941176
+      ],
+      "targetPx": [
+        583.5103763458604,
+        558.12941176384
+      ]
+    },
+    "burner_rear_right": {
+      "kind": "burner-center",
+      "localMm": [
+        463.93277777149996,
+        396.76470590400004
+      ],
+      "normalizedPhysical": [
+        0.6211111111,
+        0.7647058824
+      ],
+      "normalizedRaster": [
+        0.6211111111,
+        0.2352941176
+      ],
+      "targetPx": [
+        657.1242173595695,
+        558.12941176384
+      ]
+    },
+    "knob_1": {
+      "kind": "control-center",
+      "localMm": [
+        622.1327777715001,
+        396.76470590400004
+      ],
+      "normalizedPhysical": [
+        0.9011111111,
+        0.7647058824
+      ],
+      "normalizedRaster": [
+        0.9011111111,
+        0.2352941176
+      ],
+      "targetPx": [
+        705.5594339075496,
+        558.12941176384
+      ]
+    },
+    "knob_2": {
+      "kind": "control-center",
+      "localMm": [
+        622.1327777715001,
+        325.65663474
+      ],
+      "normalizedPhysical": [
+        0.9011111111,
+        0.610123119
+      ],
+      "normalizedRaster": [
+        0.9011111111,
+        0.389876881
+      ],
+      "targetPx": [
+        702.9475135333504,
+        560.9737346104
+      ]
+    },
+    "knob_3": {
+      "kind": "control-center",
+      "localMm": [
+        622.1327777715001,
+        223.71409027400003
+      ],
+      "normalizedPhysical": [
+        0.9011111111,
+        0.38850889190000004
+      ],
+      "normalizedRaster": [
+        0.9011111111,
+        0.6114911081
+      ],
+      "targetPx": [
+        699.2029905202826,
+        565.05143638904
+      ]
+    },
+    "knob_4": {
+      "kind": "control-center",
+      "localMm": [
+        622.1327777715001,
+        152.60601915599997
+      ],
+      "normalizedPhysical": [
+        0.9011111111,
+        0.23392612859999995
+      ],
+      "normalizedRaster": [
+        0.9011111111,
+        0.7660738714
+      ],
+      "targetPx": [
+        696.591070147773,
+        567.89575923376
+      ]
+    }
+  },
+  "semanticRules": {
+    "anchorToleranceNormalized": 0.025,
+    "burnerGuideRadiusNormalizedWidth": 0.12,
+    "burnerTopology": "2x2-compact",
+    "controlColumnToleranceNormalizedX": 0.02,
+    "controlGuideRadiusNormalizedWidth": 0.03,
+    "controlTopology": "single-right-column",
+    "exactCounts": {
+      "burners": 4,
+      "controls": 4
+    },
+    "requiredRelations": [
+      "burner_rear_left and burner_rear_right share the rear row within tolerance",
+      "burner_front_left and burner_front_right share the front row within tolerance",
+      "left burner column remains left of right burner column",
+      "all four controls remain in one right-side column and preserve source depth order",
+      "grate geometry must remain mechanically plausible around each burner",
+      "the generated object may change appearance but may not change semantic counts or topology"
+    ]
+  },
+  "sourceProduct": {
+    "brand": "Consul",
+    "model": "CD060BE",
+    "officialImageUrl": "https://consul.vtexassets.com/arquivos/ids/278003-1440-auto/01_Consul_Cooktop_CD060BE_Imagem_Frontal_8.webp?quality=80&v=639180924903830000",
+    "officialProductUrl": "https://www.consul.com.br/cooktop-consul-4-bocas-vidro-temperado-com-grades-firmes/p",
+    "physicalSizeMm": [
+      565.0,
+      460.0
+    ],
+    "physicalSizeStatus": "confirmed-from-manufacturer",
+    "role": "real-product semantic donor / compact-envelope calibration",
+    "topology": {
+      "burnerCount": 4,
+      "mounting": "built-in",
+      "tableMaterial": "glass"
+    }
+  },
+  "status": "RESEARCH_CANDIDATE"
+}
