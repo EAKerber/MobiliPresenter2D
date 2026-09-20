@@ -1,0 +1,96 @@
+{
+  "schemaVersion": "BMC04GenerationRequest 0.2",
+  "sceneId": "cozinha-01",
+  "operationId": "bmc04-cooktop-bounded-generation-v0.2",
+  "mode": "isolated-object-synthesis-with-semantic-mesh",
+  "inputConfig": "review-assets/research/bmc04-generation-input-v0.3.json",
+  "inputs": {
+    "cleanReference": "review-assets/research/bmc04-generation-input-v0.2/clean-cooktop-free.png",
+    "currentReference": "review-assets/research/bmc04-generation-input-v0.2/reference-current.png",
+    "existingGeneratedDonor": "review-assets/research/bmc04-generation-input-v0.2/existing-generated-donor.png",
+    "compactFootprintReport": "review-assets/research/bmc04-compact-footprint-v0.2-report.json",
+    "semanticMeshReport": "review-assets/research/bmc04-compact-donor-mesh-v0.1-report.json",
+    "semanticDonorGuide": "review-assets/research/bmc04-compact-donor-mesh-v0.1-donor.svg",
+    "semanticTargetGuide": "review-assets/research/bmc04-compact-donor-mesh-v0.1-target.svg",
+    "realProductDonor": {
+      "brand": "Consul",
+      "model": "CD060BE",
+      "officialImageUrl": "https://consul.vtexassets.com/arquivos/ids/278003-1440-auto/01_Consul_Cooktop_CD060BE_Imagem_Frontal_8.webp?quality=80&v=639180924903830000",
+      "use": "semantic/topological reference and real-product plausibility; do not reproduce branding"
+    },
+    "perceptualTarget": {
+      "fileId": "file_000000003660820e9f2fec3f3c631237",
+      "authority": "appearance-only"
+    }
+  },
+  "promptIntent": {
+    "primary": "Create only one realistic isolated generic black-glass built-in gas cooktop already authored in the BMC-04 compact target perspective. Geometry and semantic placement are supplied by the deterministic footprint and semantic mesh; do not invent a different appliance layout.",
+    "semanticLocks": [
+      "exactly four burners",
+      "compact 2x2 burner topology",
+      "exactly four control knobs",
+      "all four knobs form one coherent right-side column",
+      "each grate must be mechanically plausible around its burner",
+      "burner and control ordering follows the semantic target guide"
+    ],
+    "appearance": [
+      "premium black glass surface",
+      "dark mechanically plausible grate hardware",
+      "realistic gas burner hardware",
+      "coherent four-knob controls",
+      "natural object-local reflections and shading",
+      "no logo or manufacturer branding"
+    ],
+    "geometryConstraints": [
+      "fit inside the compact hard footprint",
+      "front edge follows the compact guide front edge",
+      "rear edge follows the compact guide rear edge",
+      "both depth edges drift right toward the rear according to the Stone02 local plane",
+      "do not recenter into a symmetric catalog-product yaw",
+      "do not enlarge back to the superseded 600 x 520 inferred envelope",
+      "do not change semantic anchor counts or topology"
+    ],
+    "forbidden": [
+      "editing stone",
+      "editing cabinet",
+      "editing sink/faucet/drainer",
+      "changing scene camera",
+      "changing countertop geometry",
+      "adding props",
+      "adding text or logo",
+      "missing or duplicate control knobs",
+      "missing or duplicate burners",
+      "nonsensical or disconnected grate geometry",
+      "stretching or bending the glass top",
+      "adding background rectangle or checkerboard",
+      "inventing a footprint larger than the compact guide"
+    ],
+    "outputPreference": "isolated transparent cooktop only; no surrounding scene pixels"
+  },
+  "normalizationPolicy": {
+    "residualPostFitBudget": {
+      "translationPx": 3,
+      "uniformScalePercent": 3,
+      "rotationDeg": 1.5,
+      "projectiveWarpAllowed": false
+    },
+    "rejectIf": [
+      "anisotropic scaling is needed",
+      "projective warp is needed",
+      "semantic burner/control counts differ",
+      "control column is incoherent",
+      "grate hardware is mechanically implausible",
+      "object silhouette escapes compact maximum support",
+      "object visually floats above the stone",
+      "generated background must be retained to make the object look correct"
+    ]
+  },
+  "provenancePolicy": {
+    "recordEveryCandidate": true,
+    "recordGenerationReceipt": true,
+    "directGeneratedPromotionAllowed": false,
+    "perceptualTargetAuthority": "appearance-only",
+    "realProductDonorAuthority": "semantic-layout-and-plausibility-reference"
+  },
+  "status": "READY_FOR_INPUT_MATERIALIZATION"
+}
