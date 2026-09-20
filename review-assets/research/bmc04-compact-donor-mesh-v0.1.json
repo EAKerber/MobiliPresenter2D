@@ -1,0 +1,205 @@
+{
+  "schemaVersion": "BMC04CompactDonorMesh 0.1",
+  "sceneId": "cozinha-01",
+  "operationId": "bmc04-compact-donor-mesh-v0.1",
+  "status": "RESEARCH_CANDIDATE",
+  "promotionEligible": false,
+  "sourceProduct": {
+    "brand": "Consul",
+    "model": "CD060BE",
+    "role": "real-product semantic donor / compact-envelope calibration",
+    "officialProductUrl": "https://www.consul.com.br/cooktop-consul-4-bocas-vidro-temperado-com-grades-firmes/p",
+    "officialImageUrl": "https://consul.vtexassets.com/arquivos/ids/278003-1440-auto/01_Consul_Cooktop_CD060BE_Imagem_Frontal_8.webp?quality=80&v=639180924903830000",
+    "physicalSizeMm": [
+      565.0,
+      460.0
+    ],
+    "physicalSizeStatus": "confirmed-from-manufacturer",
+    "topology": {
+      "burnerCount": 4,
+      "mounting": "built-in",
+      "tableMaterial": "glass"
+    }
+  },
+  "donorRasterMeasurement": {
+    "imageFramePx": [
+      1000,
+      1000
+    ],
+    "plateBoundsPx": [
+      50,
+      135,
+      950,
+      866
+    ],
+    "status": "inferred-from-official-product-raster",
+    "uncertaintyPx": 8,
+    "note": "Anchor measurements are visual/raster evidence, not product CAD or D1 geometry. They are used to constrain semantic layout, not to claim manufacturer-exact component coordinates.",
+    "orientationMapping": "official raster top = physical rear; raster bottom = physical front; physical depth v=0 at front and v=1 at back"
+  },
+  "semanticAnchors": {
+    "burner_rear_left": {
+      "kind": "burner-center",
+      "normalizedRaster": [
+        0.1955555556,
+        0.2352941176
+      ],
+      "normalizedPhysical": [
+        0.1955555556,
+        0.7647058824
+      ]
+    },
+    "burner_rear_right": {
+      "kind": "burner-center",
+      "normalizedRaster": [
+        0.6211111111,
+        0.2352941176
+      ],
+      "normalizedPhysical": [
+        0.6211111111,
+        0.7647058824
+      ]
+    },
+    "burner_front_left": {
+      "kind": "burner-center",
+      "normalizedRaster": [
+        0.1955555556,
+        0.7523939808
+      ],
+      "normalizedPhysical": [
+        0.1955555556,
+        0.24760601920000003
+      ]
+    },
+    "burner_front_right": {
+      "kind": "burner-center",
+      "normalizedRaster": [
+        0.6211111111,
+        0.7523939808
+      ],
+      "normalizedPhysical": [
+        0.6211111111,
+        0.24760601920000003
+      ]
+    },
+    "knob_1": {
+      "kind": "control-center",
+      "normalizedRaster": [
+        0.9011111111,
+        0.2352941176
+      ],
+      "normalizedPhysical": [
+        0.9011111111,
+        0.7647058824
+      ]
+    },
+    "knob_2": {
+      "kind": "control-center",
+      "normalizedRaster": [
+        0.9011111111,
+        0.389876881
+      ],
+      "normalizedPhysical": [
+        0.9011111111,
+        0.610123119
+      ]
+    },
+    "knob_3": {
+      "kind": "control-center",
+      "normalizedRaster": [
+        0.9011111111,
+        0.6114911081
+      ],
+      "normalizedPhysical": [
+        0.9011111111,
+        0.38850889190000004
+      ]
+    },
+    "knob_4": {
+      "kind": "control-center",
+      "normalizedRaster": [
+        0.9011111111,
+        0.7660738714
+      ],
+      "normalizedPhysical": [
+        0.9011111111,
+        0.23392612859999995
+      ]
+    }
+  },
+  "semanticRules": {
+    "exactCounts": {
+      "burners": 4,
+      "controls": 4
+    },
+    "burnerTopology": "2x2-compact",
+    "controlTopology": "single-right-column",
+    "controlColumnToleranceNormalizedX": 0.02,
+    "anchorToleranceNormalized": 0.025,
+    "burnerGuideRadiusNormalizedWidth": 0.12,
+    "controlGuideRadiusNormalizedWidth": 0.03,
+    "requiredRelations": [
+      "burner_rear_left and burner_rear_right share the rear row within tolerance",
+      "burner_front_left and burner_front_right share the front row within tolerance",
+      "left burner column remains left of right burner column",
+      "all four controls remain in one right-side column and preserve source depth order",
+      "grate geometry must remain mechanically plausible around each burner",
+      "the generated object may change appearance but may not change semantic counts or topology"
+    ]
+  },
+  "host": {
+    "id": "stone-02-top",
+    "physicalSizeMm": [
+      791.01,
+      550.0
+    ],
+    "quadPx": {
+      "frontLeft": [
+        492.0,
+        574.0
+      ],
+      "frontRight": [
+        745.0,
+        574.0
+      ],
+      "backRight": [
+        762.0,
+        552.0
+      ],
+      "backLeft": [
+        524.0,
+        552.0
+      ]
+    },
+    "status": "local-derived",
+    "globalCameraClaim": false
+  },
+  "legacyInferredFootprint": {
+    "offsetMmFromHostFrontLeft": [
+      95.505,
+      15.0
+    ],
+    "sizeMm": [
+      600.0,
+      520.0
+    ],
+    "status": "inferred",
+    "note": "Existing BMC-04 slot hypothesis; retained only for comparison."
+  },
+  "compactCalibration": {
+    "placementPolicy": "preserve legacy footprint center while replacing envelope with manufacturer-confirmed donor dimensions",
+    "sizeMm": [
+      565.0,
+      460.0
+    ],
+    "status": "derived-real-donor-calibration",
+    "epistemicNote": "The donor envelope is real-product evidence; its placement in this legacy scene remains a derived hypothesis on the local Stone02 host plane."
+  },
+  "policy": {
+    "researchOnly": true,
+    "generationGeometryAuthority": false,
+    "guideIsNotCandidate": true,
+    "projectiveRepairOfGeneratedCandidateAllowed": false,
+    "nextGenerationMustRespectSemanticMesh": true
+  }
+}
