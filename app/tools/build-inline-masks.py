@@ -20,6 +20,10 @@ MASK_PATHS = (
     "assets/kitchen/masks/05.png",
     "assets/kitchen/masks/06.png",
     "assets/kitchen/masks/07.png",
+) + tuple(
+    f"assets/kitchen/masks/structure-{key}-{kind}.png"
+    for key in ("01", "02", "03", "04", "05", "06", "07")
+    for kind in ("shadow", "highlight")
 )
 
 

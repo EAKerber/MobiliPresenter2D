@@ -27,6 +27,32 @@
     return adaptiveOverlayOpacity(color);
   }
 
+  function smoothstep(edge0, edge1, value) {
+    const t = Math.min(1, Math.max(0, (value - edge0) / (edge1 - edge0)));
+    return t * t * (3 - 2 * t);
+  }
+
+  // Bright finishes need a semantic edge shadow to preserve door and drawer
+  // readability after the finish overlay is applied. The strength is derived
+  // from the catalogued luminance so all published finishes stay consistent.
+  function resolveStructureStrength(preset, color) {
+    const configured = Number(preset?.textureLuminance);
+    const parsed = parseHexColor(color);
+    const colorLuminance = parsed
+      ? (0.2126 * parsed.red + 0.7152 * parsed.green + 0.0722 * parsed.blue) / 255
+      : 0.5;
+    const luminance = Number.isFinite(configured) && configured >= 0 && configured <= 1
+      ? configured
+      : colorLuminance;
+    const bright = smoothstep(0.78, 0.94, luminance);
+    const dark = 1 - smoothstep(0.12, 0.25, luminance);
+    return {
+      luminance,
+      shadowOpacity: Math.min(0.42, Math.max(0.08, 0.16 + 0.24 * bright - 0.06 * dark)),
+      highlightOpacity: Math.min(0.10, Math.max(0, 0.10 * dark))
+    };
+  }
+
   function resolveMaskAsset(entity, resolvedVisibility) {
     const variants = entity?.finishMaskVariants || [];
     for (const variant of variants) {
@@ -42,6 +68,7 @@
     adaptiveOverlayOpacity,
     parseHexColor,
     resolveMaskAsset,
-    resolveOverlayOpacity
+    resolveOverlayOpacity,
+    resolveStructureStrength
   });
 })(window);

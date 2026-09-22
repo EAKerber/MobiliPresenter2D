@@ -88,6 +88,14 @@ Object.entries(skirtingMasks).forEach(([name, expectedPath]) => {
   assert.match(contents, /viewBox="0 0 1536 1024"/, name + " viewBox");
   assert.equal(contents.includes(expectedPath), true, name + " geometry");
 });
+const structureMaskPaths = ["01", "02", "03", "04", "05", "06", "07"].flatMap((key) => [
+  `assets/kitchen/masks/structure-${key}-shadow.png`,
+  `assets/kitchen/masks/structure-${key}-highlight.png`
+]);
+structureMaskPaths.forEach((asset) => {
+  assert.equal(fs.statSync(path.join(projectRoot, asset)).size > 0, true, asset);
+  assert.equal(typeof masks[asset], "string", asset + " inline source");
+});
 
 const publishedMaterials = [
   ["base-light", "Base clara", "assets/materials/mdf-base.webp"],
@@ -118,6 +126,10 @@ stoneMaterials.forEach(([id, label, asset]) => {
 const standardSink = catalog.options.stonePackages.find((entry) => entry.id === "stone-light-sink");
 assert.equal(standardSink?.label, "Padrão + cuba nova");
 assert.equal(standardSink?.color, null, "standard sink keeps the scene's current stone");
+const baseStructure = finishes.resolveStructureStrength(catalog.options.finishes[0], catalog.options.finishes[0].color);
+assert.equal(baseStructure.luminance, 0.9242);
+assert.equal(Math.abs(baseStructure.shadowOpacity - 0.3934410990625) < 0.000001, true, "base finish seam shadow");
+assert.equal(baseStructure.highlightOpacity, 0);
 
 const state = core.createInitialState(scene);
 assert.equal(state.moduleSelections, undefined);
@@ -234,13 +246,15 @@ assert.equal(indexHtml.includes("Acabamentos por módulo"), false);
 assert.equal(indexHtml.includes("finishTargetSelect"), false);
 assert.equal(indexHtml.includes('data-compact-label="Acab."'), true);
 assert.equal(indexHtml.includes('data-compact-label="Serv."'), true);
-const materialScriptRevisions = [
+const runtimeScriptRevisions = [
+  /data\/mask-data\.js\?v=([^\"]+)/,
+  /core\/finishes\.js\?v=([^\"]+)/,
   /data\/stone-data\.js\?v=([^\"]+)/,
   /core\/stone\.js\?v=([^\"]+)/,
   /app\.js\?v=([^\"]+)/
 ].map((pattern) => indexHtml.match(pattern)?.[1]);
-assert.equal(materialScriptRevisions.every(Boolean), true, "material scripts require an explicit shared revision");
-assert.equal(new Set(materialScriptRevisions).size, 1, "material data, renderer and app must update together");
+assert.equal(runtimeScriptRevisions.every(Boolean), true, "scene runtime scripts require an explicit shared revision");
+assert.equal(new Set(runtimeScriptRevisions).size, 1, "mask data, material data, renderer and app must update together");
 assert.equal(appJs.includes("setModuleSelection"), false);
 assert.equal(appJs.includes("refreshMobileSceneDock"), true);
 assert.equal(appJs.includes("mobileSceneTransparency"), true);
@@ -250,6 +264,7 @@ assert.equal(appJs.includes("const pipBottom = Math.max(navBottom, mobilePipPosi
 assert.equal(/state = core\.createInitialState\(scene\);\s*setAllVisibility\(true\);/.test(appJs), false, "restoring must preserve optional defaults");
 assert.equal(appJs.includes("const requirementHidden = (entitiesById.get(\"lighting-08\")?.requiresVisibleIds || [])"), true);
 assert.equal(appJs.includes("lightingToggle.disabled = blocked"), true);
+assert.equal(appJs.includes("structure-layer--${kind}"), true, "scene creates semantic seam layers");
 assert.equal(styles.includes("--mobile-pip-height"), false);
 assert.equal(styles.includes("body.is-mobile-scene-pinned .scene-hotspots { pointer-events: auto; }"), true);
 assert.equal(styles.includes("top: env(safe-area-inset-top); margin-top: 0;"), true);
@@ -260,6 +275,8 @@ assert.equal(styles.includes(".flow-nav__scene-pin { display: none; }"), true);
 assert.equal(styles.includes("grid-column: 1 / -1;"), true);
 assert.equal(styles.includes("container-name: flow-steps;"), true);
 assert.equal(styles.includes("@container flow-steps (max-width: 500px)"), true);
+assert.equal(styles.includes(".structure-layer--shadow"), true);
+assert.equal(styles.includes("background-position: 0 0"), true, "texture origin follows the preview reference");
 const publicNames = [
   ...catalog.options.finishes.map((entry) => entry.publicLabel),
   ...catalog.options.stonePackages.map((entry) => entry.label)

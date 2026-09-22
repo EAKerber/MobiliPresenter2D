@@ -100,6 +100,20 @@
           finishLayer.style.setProperty("--mask-image", `url("${maskSource}")`);
           finishLayer.dataset.maskAsset = entity.maskAsset;
           group.append(finishLayer);
+
+          const moduleKey = /^module-(\d{2})$/.exec(entity.id)?.[1];
+          if (moduleKey) {
+            ["shadow", "highlight"].forEach((kind) => {
+              const structureAsset = `assets/kitchen/masks/structure-${moduleKey}-${kind}.png`;
+              const structureMask = inlineMasks[structureAsset];
+              if (!structureMask) throw new Error(`Máscara estrutural incorporada ausente: ${structureAsset}`);
+              const structureLayer = document.createElement("div");
+              structureLayer.className = `structure-layer structure-layer--${kind}`;
+              structureLayer.style.setProperty("--structure-mask-image", `url("${structureMask}")`);
+              structureLayer.dataset.structureAsset = structureAsset;
+              group.append(structureLayer);
+            });
+          }
         }
 
         sceneLayers.append(group);
@@ -1477,6 +1491,10 @@
       layer.style.backgroundSize = finish.textureSize || "160px 160px";
       layer.style.setProperty("--finish-brightness", String(finish.textureBrightness || 1));
       layer.style.setProperty("--finish-opacity", String(finishes.resolveOverlayOpacity(finish, finish.color)));
+      const structure = finishes.resolveStructureStrength(finish, finish.color);
+      group.style.setProperty("--structure-shadow-opacity", String(structure.shadowOpacity));
+      group.style.setProperty("--structure-highlight-opacity", String(structure.highlightOpacity));
+      group.dataset.structureLuminance = structure.luminance.toFixed(4);
     });
   }
 
