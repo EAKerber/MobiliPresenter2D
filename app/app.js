@@ -19,11 +19,13 @@
 
   let state = core.createInitialState(scene);
   let currentStep = "modules";
-  let activeFinishModuleId = null;
   let detailOrigin = null;
   let mobileScenePinEnabled = true;
   let mobileSceneIsMini = false;
   let mobileSceneAnchorHeight = 0;
+  let mobileSceneTransparent = false;
+  let mobilePipSizeIndex = 1;
+  let mobilePipPosition = null;
 
   const sceneBase = document.getElementById("sceneBase");
   const sceneLayers = document.getElementById("sceneLayers");
@@ -45,13 +47,21 @@
   const configurationAnnouncement = document.getElementById("configurationAnnouncement");
   const handleOptions = document.getElementById("handleOptions");
   const servicesChecklist = document.getElementById("servicesChecklist");
-  const finishTargetSelect = document.getElementById("finishTargetSelect");
   const stonePackageOptions = document.getElementById("stonePackageOptions");
   const stoneSkirtingToggle = document.getElementById("stoneSkirtingToggle");
   const viewerCard = document.getElementById("viewerCard");
   const viewerAnchor = document.getElementById("viewerAnchor");
   const viewerPinSentinel = document.getElementById("viewerPinSentinel");
   const mobileScenePin = document.getElementById("mobileScenePin");
+  const mobileSceneTransparency = document.getElementById("mobileSceneTransparency");
+  const mobileSceneResize = document.getElementById("mobileSceneResize");
+  const mobileSceneRepin = document.getElementById("mobileSceneRepin");
+  const flowNav = document.querySelector(".flow-nav");
+  const skirtingOverlays = [
+    { entityId: "module-02", element: document.getElementById("skirtingOverlay02") },
+    { entityId: "module-03", element: document.getElementById("skirtingOverlay03") }
+  ];
+  const selectedFinishDescription = document.getElementById("selectedFinishDescription");
   const catalogByEntityId = new Map(catalog.modules.map((module) => [module.entityId, module]));
   const detailPageByEntity = new Map();
   const detailInteractionByEntity = new Set();
@@ -254,54 +264,21 @@
     });
   }
 
-  function availableFinishTargetIds() {
-    return catalog.modules
-      .filter((product) => lastResolved?.[product.entityId]?.visible || state.visibilityByEntity[product.entityId])
-      .map((product) => product.entityId);
+  function selectedModuleFinish() {
+    return core.globalFinishId(state);
   }
 
-  function ensureFinishTarget() {
-    const ids = availableFinishTargetIds();
-    if (!ids.includes(activeFinishModuleId)) {
-      activeFinishModuleId = ids.includes(state.selectedEntityId) ? state.selectedEntityId : ids[0] || null;
-    }
-    return activeFinishModuleId;
-  }
-
-  function selectedModuleFinish(product) {
-    return core.moduleSelection(state, product?.entityId).finishId || core.BASE_FINISH_ID;
-  }
-
-  function selectedFrontFinishLabel(product) {
-    const id = selectedModuleFinish(product);
+  function selectedFrontFinishLabel() {
+    const id = selectedModuleFinish();
     return catalog.options.finishes.find((finish) => finish.id === id)?.publicLabel || "Base clara";
   }
 
-  function selectedHandle(product) {
-    const id = core.moduleSelection(state, product?.entityId).handleId || "none";
+  function selectedHandle() {
+    const id = core.globalHandleId(state);
     return catalog.options.handles.find((handle) => handle.id === id) || catalog.options.handles[0];
   }
 
-  function renderFinishTargetOptions() {
-    if (!finishTargetSelect) return;
-    const targetId = ensureFinishTarget();
-    finishTargetSelect.replaceChildren();
-    availableFinishTargetIds().forEach((entityId) => {
-      const product = catalogByEntityId.get(entityId);
-      if (!product) return;
-      const option = document.createElement("option");
-      option.value = entityId;
-      option.textContent = product.referenceLabel + " · " + product.title;
-      option.selected = entityId === targetId;
-      finishTargetSelect.append(option);
-    });
-    finishTargetSelect.disabled = !targetId;
-  }
-
   function renderFinishControlsFromData() {
-    const targetId = ensureFinishTarget();
-    const product = catalogByEntityId.get(targetId);
-    renderFinishTargetOptions();
     finishSwatches.replaceChildren();
     catalog.options.finishes.filter((finish) => finish.status === "published").forEach((finish) => {
       const button = document.createElement("button");
@@ -310,30 +287,26 @@
       button.dataset.finishId = finish.id;
       button.dataset.color = finish.color;
       button.style.setProperty("--swatch", finish.color);
+      button.style.setProperty("--swatch-texture", finish.textureCss || "none");
       button.title = finish.publicLabel;
-      button.setAttribute("aria-label", "Aplicar " + finish.publicLabel + " a " + (product?.title || "módulo"));
-      const selected = Boolean(product && selectedModuleFinish(product) === finish.id);
+      button.setAttribute("aria-label", "Aplicar " + finish.publicLabel + " ao conjunto");
+      const selected = selectedModuleFinish() === finish.id;
       button.classList.toggle("is-selected", selected);
       button.setAttribute("aria-pressed", String(selected));
       finishSwatches.append(button);
     });
+    if (selectedFinishDescription) {
+      const finish = catalog.options.finishes.find((item) => item.id === selectedModuleFinish());
+      selectedFinishDescription.textContent = finish ? "Selecionada: " + finish.publicLabel + "." : "";
+    }
   }
 
   function renderHandleControlsFromData() {
     if (!handleOptions) return;
-    const product = catalogByEntityId.get(ensureFinishTarget());
     const help = document.getElementById("handleHelp");
     handleOptions.replaceChildren();
-    if (!product?.commercial?.handleEligible) {
-      const note = document.createElement("p");
-      note.className = "finish-help";
-      note.textContent = product ? "Este módulo não recebe puxador." : "Selecione um módulo incluído para configurar o puxador.";
-      handleOptions.append(note);
-      if (help) help.textContent = "A escolha de puxador é disponibilizada somente nos módulos com frente confirmada.";
-      return;
-    }
-    if (help) help.textContent = "Cobrado uma vez por módulo; o rateio por frente é apenas explicativo.";
-    const current = selectedHandle(product);
+    if (help) help.textContent = "Escolha global; o total é distribuído pelas 14 frentes aplicáveis. A basculante não entra no rateio.";
+    const current = selectedHandle();
     catalog.options.handles.forEach((handle) => {
       const button = document.createElement("button");
       button.type = "button";
@@ -359,7 +332,10 @@
       label.textContent = handle.label;
       const description = document.createElement("small");
       const value = priceBook.handleEntries?.[handle.id] || 0;
-      description.textContent = value ? handle.description + " · " + formatCurrency(value) + " por módulo." : handle.description;
+      const perFront = value ? formatCurrency(Math.round(value / priceBook.handleFrontTotal)) : "";
+      description.textContent = value
+        ? handle.description + " · " + perFront + " por frente; " + formatCurrency(value) + " no conjunto completo."
+        : handle.description;
       copy.append(label, description);
       button.append(orientation, copy);
       handleOptions.append(button);
@@ -377,12 +353,18 @@
       button.dataset.stonePackageId = stone.id;
       button.classList.toggle("is-selected", stone.id === activeId);
       button.setAttribute("aria-pressed", String(stone.id === activeId));
+      button.setAttribute("aria-label", "Selecionar pedra " + stone.label);
+      const swatch = document.createElement("span");
+      swatch.className = "global-option__swatch";
+      swatch.setAttribute("aria-hidden", "true");
+      swatch.style.backgroundColor = stone.color || "#938d84";
+      swatch.style.backgroundImage = stone.textureCss || "none";
       const title = document.createElement("strong");
       title.textContent = stone.label;
       const description = document.createElement("small");
       const value = priceBook.globalEntries?.[stone.id] || 0;
       description.textContent = stone.description + (value ? " · +" + formatCurrency(value) : " · sem adicional.");
-      button.append(title, description);
+      button.append(swatch, title, description);
       stonePackageOptions.append(button);
     });
     if (stoneSkirtingToggle) stoneSkirtingToggle.checked = Boolean(state.globalSelections?.serviceIds?.includes("stone-skirting"));
@@ -423,20 +405,23 @@
     };
   }
 
-  function selectedFrontFinishLabel(product) {
-    const target = product || catalogByEntityId.get(ensureFinishTarget());
-    const id = selectedModuleFinish(target);
+  function selectedFrontFinishLabel() {
+    const id = selectedModuleFinish();
     return catalog.options.finishes.find((finish) => finish.id === id)?.publicLabel || "Base clara";
   }
 
-  function selectedHandle(product) {
-    const id = core.moduleSelection(state, product?.entityId || ensureFinishTarget()).handleId || "none";
+  function selectedHandle() {
+    const id = core.globalHandleId(state);
     return catalog.options.handles.find((handle) => handle.id === id) || catalog.options.handles[0];
   }
 
   function selectedStoneLabel() {
+    return selectedStonePackage().label;
+  }
+
+  function selectedStonePackage() {
     const id = state.globalSelections?.stonePackageId || "stone-existing";
-    return catalog.options.stonePackages.find((stone) => stone.id === id)?.label || "Pedra existente";
+    return catalog.options.stonePackages.find((stone) => stone.id === id) || catalog.options.stonePackages[0];
   }
 
   function formatDimension(value) {
@@ -520,15 +505,23 @@
       );
     }
     if (itemPricing.handleCents) {
-      const handle = selectedHandle(product);
+      const handle = selectedHandle();
       const allocations = pricing.distributeCents(itemPricing.handleCents, itemPricing.handleFrontCount);
       const allocationNote = allocations.length
-        ? "Cobrado uma vez; rateio orientativo entre " + allocations.length + " frentes: " + allocations.map(formatCurrency).join(" · ") + "."
-        : "Cobrado uma vez pelo módulo.";
+        ? "Cota de " + allocations.length + " frentes: " + allocations.map(formatCurrency).join(" · ") + "."
+        : "Sem frentes aplicáveis.";
       appendPriceBreakdownRow(breakdown, "Puxador", "+" + formatCurrency(itemPricing.handleCents), handle.label + " · " + allocationNote);
     }
     if (itemPricing.localCents) {
       appendPriceBreakdownRow(breakdown, "Pedra cooktop", "+" + formatCurrency(itemPricing.localCents), "Obrigatória neste módulo.");
+    }
+    if (itemPricing.globalShareCents) {
+      appendPriceBreakdownRow(
+        breakdown,
+        "Impactos globais",
+        "+" + formatCurrency(itemPricing.globalShareCents),
+        "Cota do módulo em pedra e serviços do conjunto; não é cobrada novamente."
+      );
     }
     return breakdown;
   }
@@ -996,7 +989,9 @@
     headerActions.append(close);
     detailHeader.append(moduleNumber, headerCopy, headerActions);
 
-    const itemPricing = pricing.itemEstimate(product, catalog, state, priceBook);
+    const compositionEstimate = getEstimate(resolved);
+    const itemPricing = compositionEstimate.moduleEstimates?.find((entry) => entry.item.entityId === product.entityId)?.estimate
+      || pricing.itemEstimate(product, catalog, state, priceBook);
     const price = document.createElement("section");
     price.className = "module-detail__price";
     const priceLabel = document.createElement("span");
@@ -1006,8 +1001,8 @@
     if (itemPricing.status === "ready") {
       priceValue.textContent = formatCurrency(itemPricing.totalCents);
       priceDescription.textContent = product.category === "Estrutural"
-        ? "Valor local do painel estrutural. Impactos globais aparecem uma única vez no resumo."
-        : "Valor local do módulo. Impactos globais aparecem uma única vez no resumo.";
+        ? "Estimativa do painel, incluindo sua cota nos impactos globais selecionados."
+        : "Estimativa do módulo, incluindo sua cota nos impactos globais selecionados.";
       price.append(priceLabel, priceValue, priceDescription, createCommercialItemPriceBreakdown(product, itemPricing));
     } else {
       priceValue.textContent = "Em configuração";
@@ -1105,10 +1100,9 @@
       const isVisible = Boolean(resolved?.[entityId]?.visible);
       const isSelected = state.selectedEntityId === entityId;
       hotspot.hidden = !isVisible;
-      const isInertPreview = mobileSceneIsMini;
-      hotspot.disabled = !isVisible || isInertPreview;
-      hotspot.tabIndex = isInertPreview ? -1 : 0;
-      hotspot.setAttribute("aria-disabled", String(!isVisible || isInertPreview));
+      hotspot.disabled = !isVisible;
+      hotspot.tabIndex = isVisible ? 0 : -1;
+      hotspot.setAttribute("aria-disabled", String(!isVisible));
       hotspot.classList.toggle("is-selected", isSelected);
       hotspot.setAttribute("aria-pressed", String(isSelected));
     });
@@ -1117,19 +1111,16 @@
   function updateAccessoryControls(resolved) {
     const result = resolved?.["lighting-08"];
     if (!lightingToggle || !result) return;
+    const requirementHidden = (entitiesById.get("lighting-08")?.requiresVisibleIds || [])
+      .some((entityId) => !resolved?.[entityId]?.visible);
+    const blocked = requirementHidden || result.reason === "requirement-hidden" || result.reason === "requirement-missing";
     lightingToggle.checked = Boolean(state.visibilityByEntity["lighting-08"]);
+    lightingToggle.disabled = blocked;
+    lightingToggle.title = blocked ? "Inclua a lateral da geladeira para habilitar a iluminação." : "";
     lightingToggle.closest(".accessory-toggle")?.classList.toggle(
       "is-blocked",
-      result.reason === "requirement-hidden" || result.reason === "requirement-missing"
+      blocked
     );
-  }
-
-  function updateHandleControls() {
-    document.querySelectorAll("[data-handle-id]").forEach((button) => {
-      const active = button.dataset.handleId === state.handlePresetId;
-      button.classList.toggle("is-selected", active);
-      button.setAttribute("aria-pressed", String(active));
-    });
   }
 
   function updateHandleControls() {
@@ -1222,6 +1213,7 @@
     const stone = catalog.options.stonePackages.find((item) => item.id === id);
     if (stone) return stone.label;
     if (id === "stone-skirting") return "Rodapé de pedra";
+    if (id === "lighting-08") return catalog.accessories.find((item) => item.entityId === id)?.title || "Iluminação";
     return catalog.services.find((service) => service.id === id)?.title || id;
   }
 
@@ -1233,15 +1225,21 @@
       const itemRow = document.createElement("li");
       const additions = [];
       if (itemEstimate.finishCents) additions.push("acabamento +" + formatCurrency(itemEstimate.finishCents));
-      if (itemEstimate.handleCents) additions.push("puxador +" + formatCurrency(itemEstimate.handleCents));
+      if (itemEstimate.handleCents) additions.push("puxador rateado +" + formatCurrency(itemEstimate.handleCents));
       if (itemEstimate.localCents) additions.push("pedra de cooktop +" + formatCurrency(itemEstimate.localCents));
+      if (itemEstimate.globalShareCents) additions.push("cota global +" + formatCurrency(itemEstimate.globalShareCents));
       itemRow.textContent = item.referenceLabel + " · " + item.title + " — " + formatCurrency(itemEstimate.totalCents) + (additions.length ? " (" + additions.join(", ") + ")" : "");
       list.append(itemRow);
     });
+    if (!estimate.moduleEstimates?.length) {
+      const empty = document.createElement("li");
+      empty.textContent = "Nenhum módulo incluído.";
+      list.append(empty);
+    }
 
     const finish = document.createElement("p");
     finish.className = "summary-note";
-    finish.textContent = "Acabamentos e puxadores são configurados por módulo. Pedra e serviços abaixo impactam o conjunto uma única vez.";
+    finish.textContent = "Cor e puxador são escolhas globais. Pedra e serviços entram uma única vez no conjunto; a ficha de cada módulo mostra apenas sua cota explicativa.";
 
     const price = document.createElement("div");
     price.className = "price-state";
@@ -1253,12 +1251,14 @@
       const composition = document.createElement("dl");
       composition.className = "price-state__breakdown";
       appendPriceBreakdownRow(composition, "Módulos", formatCurrency(estimate.breakdown.modulesCents), estimate.moduleEstimates.length + " incluído(s).");
-      if (estimate.breakdown.finishesCents) appendPriceBreakdownRow(composition, "Acabamentos", "+" + formatCurrency(estimate.breakdown.finishesCents), "Aplicados somente aos módulos escolhidos.");
-      if (estimate.breakdown.handlesCents) appendPriceBreakdownRow(composition, "Puxadores", "+" + formatCurrency(estimate.breakdown.handlesCents), "Um valor por módulo aplicável.");
+      if (estimate.breakdown.finishesCents) appendPriceBreakdownRow(composition, "Cor global", "+" + formatCurrency(estimate.breakdown.finishesCents), selectedFrontFinishLabel() + " aplicada aos módulos elegíveis.");
+      if (estimate.breakdown.handlesCents) appendPriceBreakdownRow(composition, "Puxador global", "+" + formatCurrency(estimate.breakdown.handlesCents), selectedHandle().label + " rateado nas frentes dos módulos incluídos.");
       if (estimate.breakdown.localCents) appendPriceBreakdownRow(composition, "Pedra cooktop", "+" + formatCurrency(estimate.breakdown.localCents), "Inclusa no Módulo 02.");
-      if (estimate.breakdown.lightingCents) appendPriceBreakdownRow(composition, "Iluminação", "+" + formatCurrency(estimate.breakdown.lightingCents), "Serviço global com lateral incluída.");
+      const globalRateio = estimate.breakdown.unallocatedGlobalCents
+        ? "Impacto global preservado no total; inclua um módulo para ver o rateio."
+        : "Impacto global, já rateado nas fichas.";
       estimate.global.items.filter((item) => item.cents).forEach((item) => {
-        appendPriceBreakdownRow(composition, globalItemLabel(item.id), "+" + formatCurrency(item.cents), item.scope === "stone" ? "Impacto global de pedra." : "Serviço global.");
+        appendPriceBreakdownRow(composition, globalItemLabel(item.id), "+" + formatCurrency(item.cents), globalRateio);
       });
       const disclaimer = document.createElement("p");
       disclaimer.textContent = estimate.disclaimer;
@@ -1351,22 +1351,39 @@
   }
 
   function syncPinnedSceneUi() {
-    // A mini-scene must never cover the detail header, its navigation or its
-    // close control. It returns as soon as the focused module is closed.
     const detailIsOpen = Boolean(state.selectedEntityId);
     const shouldDock = isMobileViewport() && mobileScenePinEnabled && mobileSceneIsMini && !detailIsOpen;
     if (!shouldDock && viewerCard) mobileSceneAnchorHeight = Math.ceil(viewerCard.getBoundingClientRect().height);
     document.body.classList.toggle("has-mobile-scene-pin", isMobileViewport() && mobileScenePinEnabled);
     document.body.classList.toggle("is-mobile-scene-pinned", shouldDock);
+    document.body.classList.toggle("is-mobile-scene-transparent", shouldDock && mobileSceneTransparent);
     document.documentElement.style.setProperty("--mobile-scene-anchor-height", shouldDock ? mobileSceneAnchorHeight + "px" : "0px");
-    if (viewerCard) requestAnimationFrame(() => {
-      const height = Math.ceil(viewerCard.getBoundingClientRect().height);
-      document.documentElement.style.setProperty("--mobile-pip-height", shouldDock ? height + "px" : "0px");
-    });
+    const navBounds = flowNav?.getBoundingClientRect();
+    const navHeight = Math.ceil(navBounds?.height || 0);
+    const navBottom = Math.ceil(navBounds?.bottom || 0);
+    const pipWidth = Math.min([176, 208, 240][mobilePipSizeIndex], Math.max(0, global.innerWidth - 16));
+    const pipHeight = Math.ceil((pipWidth * 2) / 3) + 2;
+    const pipBottom = Math.max(navBottom, mobilePipPosition?.top || 0) + pipHeight;
+    const contentClearance = shouldDock ? pipBottom + 16 : navBottom + 12;
+    document.documentElement.style.setProperty("--mobile-flow-nav-height", navHeight + "px");
+    document.documentElement.style.setProperty("--mobile-pip-width", pipWidth + "px");
+    document.documentElement.style.setProperty("--mobile-content-clearance", contentClearance + "px");
+    if (mobilePipPosition) {
+      document.documentElement.style.setProperty("--mobile-pip-left", mobilePipPosition.left + "px");
+      document.documentElement.style.setProperty("--mobile-pip-top", mobilePipPosition.top + "px");
+    } else {
+      document.documentElement.style.removeProperty("--mobile-pip-left");
+      document.documentElement.style.removeProperty("--mobile-pip-top");
+    }
     if (mobileScenePin) {
       mobileScenePin.setAttribute("aria-pressed", String(mobileScenePinEnabled));
-      mobileScenePin.textContent = mobileScenePinEnabled ? "Liberar cena" : "Fixar cena";
+      mobileScenePin.setAttribute("aria-label", mobileScenePinEnabled ? "Liberar cena" : "Fixar cena");
+      mobileScenePin.title = mobileScenePinEnabled ? "Liberar cena" : "Fixar cena";
     }
+    if (mobileSceneTransparency) {
+      mobileSceneTransparency.setAttribute("aria-pressed", String(mobileSceneTransparent));
+    }
+    if (mobileSceneRepin) mobileSceneRepin.hidden = mobileScenePinEnabled;
     if (lastResolved) updateSceneHotspots(lastResolved);
   }
 
@@ -1377,6 +1394,15 @@
     announce(mobileScenePinEnabled ? "Cena fixada para contexto durante a configuração." : "Cena liberada para o fluxo normal.");
   }
 
+  function refreshMobileSceneDock() {
+    const passedAnchor = Boolean(viewerAnchor && viewerAnchor.getBoundingClientRect().bottom < 0);
+    const nextMini = Boolean(isMobileViewport() && mobileScenePinEnabled && passedAnchor);
+    if (nextMini === mobileSceneIsMini) return;
+    mobileSceneIsMini = nextMini;
+    syncPinnedSceneUi();
+    if (nextMini) announce("Mini-cena disponível abaixo das etapas. Selecione um módulo diretamente na cena.");
+  }
+
   if (viewerPinSentinel && global.IntersectionObserver) {
     const pinObserver = new global.IntersectionObserver((entries) => {
       const entry = entries[0];
@@ -1385,7 +1411,7 @@
       if (nextMini === mobileSceneIsMini) return;
       mobileSceneIsMini = nextMini;
       syncPinnedSceneUi();
-      if (nextMini) announce("Cena reduzida para contexto. Use a lista para selecionar módulos.");
+      if (nextMini) announce("Mini-cena disponível abaixo das etapas. Selecione um módulo diretamente na cena.");
     }, { threshold: 0 });
     pinObserver.observe(viewerPinSentinel);
   }
@@ -1394,7 +1420,12 @@
     new global.ResizeObserver(() => syncPinnedSceneUi()).observe(viewerCard);
   }
 
-  global.addEventListener("resize", syncPinnedSceneUi);
+  global.addEventListener("resize", () => {
+    if (mobilePipPosition) mobilePipPosition = null;
+    refreshMobileSceneDock();
+    syncPinnedSceneUi();
+  });
+  global.addEventListener("scroll", refreshMobileSceneDock, { passive: true });
 
   function syncFingerprint() {
     const value = fingerprint.computeFingerprint(scene, state);
@@ -1422,26 +1453,38 @@
   }
 
   function syncFinishAppearance() {
+    const finishId = selectedModuleFinish();
+    const finish = catalog.options.finishes.find((item) => item.id === finishId) || catalog.options.finishes[0];
     finishLayers.forEach((layer) => {
       const group = layer.closest(".layer-group");
       const product = catalogByEntityId.get(group?.dataset.entityId);
       if (!product?.commercial?.finishEligible) return;
-      const finishId = selectedModuleFinish(product);
-      const finish = catalog.options.finishes.find((item) => item.id === finishId) || catalog.options.finishes[0];
       layer.classList.remove("is-texture");
       layer.classList.add("is-color");
-      layer.style.backgroundImage = "none";
+      layer.style.backgroundImage = finish.textureCss || "none";
       layer.style.backgroundColor = finish.color;
       layer.style.setProperty("--finish-opacity", String(finishes.resolveOverlayOpacity(finish, finish.color)));
     });
   }
 
+  function syncSkirtingAppearance(resolved) {
+    const hasStoneSkirting = Boolean(state.globalSelections?.serviceIds?.includes("stone-skirting"));
+    const finish = catalog.options.finishes.find((item) => item.id === selectedModuleFinish()) || catalog.options.finishes[0];
+    skirtingOverlays.forEach(({ entityId, element }) => {
+      if (!element) return;
+      element.style.setProperty("--skirting-color", finish.color);
+      element.style.setProperty("--skirting-texture", finish.textureCss || "none");
+      element.classList.toggle("is-mdf", !hasStoneSkirting && Boolean(resolved?.[entityId]?.visible));
+    });
+  }
+
   function syncLayerVisibility() {
-    renderStone(state);
     const resolved = visibility.resolveVisibility(scene, state);
     lastResolved = resolved;
+    renderStone(state, selectedStonePackage().color || null);
     syncFinishMasks(resolved);
     syncFinishAppearance();
+    syncSkirtingAppearance(resolved);
     layerGroups.forEach((layer) => {
       const result = resolved[layer.dataset.entityId];
       const isVisible = Boolean(result?.visible);
@@ -1550,7 +1593,6 @@
     if (source !== "detail-navigation") storeDetailOrigin(entityId, source);
     else detailOrigin = { entityId, element: moduleList.querySelector('[data-select-entity="' + entityId + '"]') };
     state.selectedEntityId = entityId;
-    activeFinishModuleId = entityId;
     if (currentStep !== "modules") currentStep = "modules";
     syncLayerVisibility();
     announce("Ficha de " + product.referenceLabel + ", " + product.title + ", aberta.");
@@ -1663,19 +1705,12 @@
     syncFingerprint();
   });
 
-  finishTargetSelect?.addEventListener("change", () => {
-    activeFinishModuleId = finishTargetSelect.value;
-    renderFinishControlsFromData();
-    renderHandleControlsFromData();
-  });
-
   finishSwatches.addEventListener("click", (event) => {
     const button = event.target.closest("[data-finish-id]");
-    const product = catalogByEntityId.get(ensureFinishTarget());
-    if (!button || !product) return;
-    core.setModuleSelection(state, product.entityId, { finishId: button.dataset.finishId });
+    if (!button) return;
+    core.setGlobalSelection(state, { finishId: button.dataset.finishId });
     syncLayerVisibility();
-    announce("Acabamento de " + product.title + " atualizado.");
+    announce("Cor das frentes atualizada para o conjunto.");
   });
 
   moduleList.addEventListener("click", (event) => {
@@ -1715,6 +1750,40 @@
   });
 
   mobileScenePin?.addEventListener("click", () => setMobileScenePinEnabled(!mobileScenePinEnabled));
+  mobileSceneRepin?.addEventListener("click", () => setMobileScenePinEnabled(true));
+  mobileSceneTransparency?.addEventListener("click", () => {
+    mobileSceneTransparent = !mobileSceneTransparent;
+    syncPinnedSceneUi();
+    announce(mobileSceneTransparent ? "Mini-cena com transparência ativada." : "Mini-cena opaca.");
+  });
+  mobileSceneResize?.addEventListener("click", () => {
+    mobilePipSizeIndex = (mobilePipSizeIndex + 1) % 3;
+    mobilePipPosition = null;
+    syncPinnedSceneUi();
+    announce(["Mini-cena pequena.", "Mini-cena média.", "Mini-cena grande."][mobilePipSizeIndex]);
+  });
+
+  let pipDrag = null;
+  viewerCard?.addEventListener("pointerdown", (event) => {
+    if (!document.body.classList.contains("is-mobile-scene-pinned")) return;
+    if (event.target.closest("button, .scene-hotspot")) return;
+    const rect = viewerCard.getBoundingClientRect();
+    pipDrag = { pointerId: event.pointerId, originX: event.clientX, originY: event.clientY, left: rect.left, top: rect.top, width: rect.width };
+    viewerCard.setPointerCapture?.(event.pointerId);
+  });
+  viewerCard?.addEventListener("pointermove", (event) => {
+    if (!pipDrag || event.pointerId !== pipDrag.pointerId) return;
+    const minTop = Math.ceil(flowNav?.getBoundingClientRect().bottom || 0) + 8;
+    const maxLeft = Math.max(8, global.innerWidth - pipDrag.width - 8);
+    const maxTop = Math.max(minTop, global.innerHeight - viewerCard.getBoundingClientRect().height - 8);
+    mobilePipPosition = {
+      left: Math.min(maxLeft, Math.max(8, Math.round(pipDrag.left + event.clientX - pipDrag.originX))),
+      top: Math.min(maxTop, Math.max(minTop, Math.round(pipDrag.top + event.clientY - pipDrag.originY)))
+    };
+    syncPinnedSceneUi();
+  });
+  viewerCard?.addEventListener("pointerup", () => { pipDrag = null; });
+  viewerCard?.addEventListener("pointercancel", () => { pipDrag = null; });
 
   nextStepButton.addEventListener("click", () => {
     const nextByStep = { modules: "finishes", finishes: "services", services: "summary", summary: "modules" };
@@ -1723,12 +1792,11 @@
 
   handleOptions?.addEventListener("click", (event) => {
     const button = event.target.closest("[data-handle-id]");
-    const product = catalogByEntityId.get(ensureFinishTarget());
-    if (!button || !product?.commercial?.handleEligible) return;
-    core.setModuleSelection(state, product.entityId, { handleId: button.dataset.handleId });
+    if (!button) return;
+    core.setGlobalSelection(state, { handleId: button.dataset.handleId });
     syncLayerVisibility();
-    const handle = selectedHandle(product);
-    announce(handle.id === "none" ? "Puxador será definido depois." : handle.label + " aplicado a " + product.title + ".");
+    const handle = selectedHandle();
+    announce(handle.id === "none" ? "Puxador será definido depois." : handle.label + " aplicado ao conjunto.");
   });
 
   lightingToggle.addEventListener("change", () => {
@@ -1739,9 +1807,7 @@
   function setStonePackage(stonePackageId) {
     const stone = catalog.options.stonePackages.find((item) => item.id === stonePackageId);
     if (!stone) return;
-    state.globalSelections = { ...state.globalSelections, stonePackageId };
-    state.stoneFinishId = stonePackageId;
-    state.stoneColor = stone.color;
+    core.setGlobalSelection(state, { stonePackageId });
     syncLayerVisibility();
     announce(stone.label + " aplicado ao conjunto.");
   }
@@ -1769,7 +1835,6 @@
     setAllVisibility(true);
     alignmentGrid.classList.remove("is-visible");
     if (gridButton) gridButton.setAttribute("aria-pressed", "false");
-    activeFinishModuleId = null;
     detailOrigin = null;
     syncLayerVisibility();
   });

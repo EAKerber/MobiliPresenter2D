@@ -31,13 +31,8 @@
         "module-04",
         "module-05",
         "module-06",
-        "module-07",
-        "lighting-08"
+        "module-07"
       ],
-      frontFinishId: "base-light",
-      stoneFinishId: "stone-existing",
-      handlePresetId: "none",
-      lightingPresetId: "on",
       decorVisible: [],
       gridVisible: false
     },

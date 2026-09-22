@@ -135,7 +135,7 @@
       components: ["Dobradiças amortecidas", "Pistão para porta basculante", "Espera para micro-ondas"],
       frontLayout: { status: "count-confirmed", pattern: "two-doors-and-lift", frontCount: 3 },
       requirements: ["Prever tomada para o forno micro-ondas."], publicPriceCents: null,
-      commercial: { finishEligible: true, handleEligible: true, handleFrontCount: 3, mandatoryLocalChargeIds: [] },
+      commercial: { finishEligible: true, handleEligible: true, handleFrontCount: 2, mandatoryLocalChargeIds: [] },
       drawingEvidence: "front-count-confirmed"
     },
     {
@@ -171,17 +171,19 @@
     modules,
     options: {
       finishes: [
-        { id: "base-light", publicLabel: "Base clara", color: "#eeeae3", status: "published" },
-        { id: "tone-15-a", publicLabel: "Tom especial 01", color: "#918981", status: "pending-assets" },
-        { id: "tone-15-b", publicLabel: "Tom especial 02", color: "#69705f", status: "pending-assets" },
-        { id: "tone-15-c", publicLabel: "Tom especial 03", color: "#354f55", status: "pending-assets" },
-        { id: "tone-25-a", publicLabel: "Tom intenso 01", color: "#252422", status: "pending-assets" },
-        { id: "tone-25-b", publicLabel: "Tom intenso 02", color: "#75675d", status: "pending-assets" }
+        { id: "base-light", publicLabel: "Clara", color: "#eeeae3", textureCss: "linear-gradient(135deg, rgba(255,255,255,.32), rgba(113,103,91,.05))", status: "published" },
+        { id: "cocoa", publicLabel: "Cacau", color: "#77685b", textureCss: "repeating-linear-gradient(0deg, rgba(255,255,255,.08) 0 1px, transparent 1px 5px), repeating-linear-gradient(90deg, rgba(45,34,27,.13) 0 1px, transparent 1px 6px)", status: "published" },
+        { id: "mist", publicLabel: "Névoa", color: "#a9aaa5", textureCss: "repeating-linear-gradient(155deg, rgba(255,255,255,.24) 0 2px, rgba(80,83,81,.05) 2px 6px)", status: "published" },
+        { id: "steel", publicLabel: "Aço", color: "#7f7d79", textureCss: "repeating-linear-gradient(45deg, rgba(255,255,255,.11) 0 1px, rgba(32,33,34,.08) 1px 5px)", status: "published" },
+        { id: "fiber", publicLabel: "Fibra", color: "#9a704b", textureCss: "repeating-linear-gradient(88deg, rgba(68,40,19,.22) 0 1px, rgba(244,208,156,.12) 1px 4px, transparent 4px 10px)", status: "published" },
+        { id: "shadow", publicLabel: "Sombra", color: "#303332", textureCss: "linear-gradient(120deg, rgba(255,255,255,.08), transparent 42%), repeating-linear-gradient(12deg, rgba(255,255,255,.035) 0 1px, transparent 1px 5px)", status: "published" }
       ],
       stonePackages: [
-        { id: "stone-existing", label: "Pedra existente", description: "Mantém a pedra atual do ambiente.", color: null },
-        { id: "stone-new-light", label: "Pedra nova clara + inox", description: "Impacta todo o conjunto.", color: "#d8d8d2" },
-        { id: "stone-new-dark", label: "Pedra nova escura + inox", description: "Impacta todo o conjunto.", color: "#34383d" }
+        { id: "stone-existing", label: "Original", description: "Mantém a pedra atual do ambiente.", color: null, textureCss: "linear-gradient(135deg, #b7b3aa, #6e6a65 44%, #b9b4aa)" },
+        { id: "stone-light-sink", label: "Clara", description: "Inclui cuba nova e acabamento inox.", color: "#d8d8d2", textureCss: "radial-gradient(circle at 18% 42%, #a9a8a3 0 1px, transparent 2px), linear-gradient(135deg, #f1f0ea, #aeadab)" },
+        { id: "stone-cloud", label: "Nuvem", description: "Pedra clara com acabamento inox.", color: "#e2ded7", textureCss: "radial-gradient(circle at 24% 34%, #9b9894 0 1px, transparent 2px), radial-gradient(circle at 75% 62%, #c4aead 0 1px, transparent 2px), linear-gradient(135deg, #eeece6, #b4b1ad)" },
+        { id: "stone-grove", label: "Bosque", description: "Pedra escura com acabamento inox.", color: "#48524b", textureCss: "radial-gradient(circle at 30% 48%, #a6b39a 0 1px, transparent 2px), radial-gradient(circle at 68% 28%, #1c261f 0 2px, transparent 3px), linear-gradient(135deg, #253028, #687568)" },
+        { id: "stone-night", label: "Noite", description: "Pedra escura com acabamento inox.", color: "#333638", textureCss: "radial-gradient(circle at 27% 38%, #c4c3bd 0 1px, transparent 2px), radial-gradient(circle at 76% 62%, #6f7471 0 1px, transparent 2px), linear-gradient(135deg, #1c1d1f, #4d5051)" }
       ],
       handles: [
         { id: "none", label: "Definir depois", description: "Sem adicional na simulação.", orientation: "Portas na vertical · gavetas na horizontal" },

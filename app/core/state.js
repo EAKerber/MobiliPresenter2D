@@ -2,41 +2,44 @@
   "use strict";
 
   const BASE_FINISH_ID = "base-light";
+  const BASE_HANDLE_ID = "none";
 
   function createInitialState(scene) {
     const visibleDefaults = new Set(scene.defaultConfiguration.visible);
     const visibilityByEntity = {};
-    const moduleSelections = {};
-
     scene.entities.forEach((entity) => {
       visibilityByEntity[entity.id] = visibleDefaults.has(entity.id);
-      if (entity.kind === "module" && entity.controllable) {
-        moduleSelections[entity.id] = { finishId: BASE_FINISH_ID, handleId: "none" };
-      }
     });
 
     return {
-      schemaVersion: "ViewerState2D 2.0",
+      schemaVersion: "ViewerState2D 2.2",
       visibilityByEntity,
-      moduleSelections,
       globalSelections: {
+        finishId: BASE_FINISH_ID,
+        handleId: BASE_HANDLE_ID,
         stonePackageId: "stone-existing",
         serviceIds: []
       },
-      stoneFinishId: "stone-existing",
-      stoneColor: null,
       selectedEntityId: null,
       gridVisible: scene.defaultConfiguration.gridVisible
     };
   }
 
-  function moduleSelection(state, entityId) {
-    return state.moduleSelections?.[entityId] || { finishId: BASE_FINISH_ID, handleId: "none" };
+  function globalFinishId(state) {
+    return state.globalSelections?.finishId || BASE_FINISH_ID;
   }
 
-  function setModuleSelection(state, entityId, patch) {
-    if (!state.moduleSelections || !Object.prototype.hasOwnProperty.call(state.moduleSelections, entityId)) return false;
-    state.moduleSelections[entityId] = { ...state.moduleSelections[entityId], ...patch };
+  function globalHandleId(state) {
+    return state.globalSelections?.handleId || BASE_HANDLE_ID;
+  }
+
+  // Compatibility reader: choices are global; no per-module choice is stored.
+  function moduleSelection(state) {
+    return { finishId: globalFinishId(state), handleId: globalHandleId(state) };
+  }
+
+  function setGlobalSelection(state, patch) {
+    state.globalSelections = { ...state.globalSelections, ...patch };
     return true;
   }
 
@@ -44,7 +47,7 @@
     const services = new Set(state.globalSelections?.serviceIds || []);
     if (isSelected) services.add(serviceId);
     else services.delete(serviceId);
-    state.globalSelections = { ...state.globalSelections, serviceIds: [...services].sort() };
+    setGlobalSelection(state, { serviceIds: [...services].sort() });
   }
 
   function setEntityVisibility(state, entityId, isVisible) {
@@ -59,11 +62,14 @@
 
   global.CasaModulesCore = Object.freeze({
     BASE_FINISH_ID,
+    BASE_HANDLE_ID,
     createInitialState,
+    globalFinishId,
+    globalHandleId,
     moduleSelection,
     setAllControllableVisibility,
     setEntityVisibility,
-    setGlobalService,
-    setModuleSelection
+    setGlobalSelection,
+    setGlobalService
   });
 })(window);

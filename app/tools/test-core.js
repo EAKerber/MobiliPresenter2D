@@ -18,11 +18,7 @@ vm.createContext(sandbox);
   "core/finishes.js",
   "core/pricing.js"
 ].forEach((relativePath) => {
-  vm.runInContext(
-    fs.readFileSync(path.join(projectRoot, relativePath), "utf8"),
-    sandbox,
-    { filename: relativePath }
-  );
+  vm.runInContext(fs.readFileSync(path.join(projectRoot, relativePath), "utf8"), sandbox, { filename: relativePath });
 });
 
 const scene = sandbox.window.CASA_EM_MODULOS_SCENE;
@@ -55,11 +51,19 @@ catalog.modules.forEach((module, index) => {
 });
 assert.equal(priceBook.entries["lighting-08"], 60000);
 assert.equal(priceBook.localEntries["module-02:mandatory-cooktop-stone"], 56600);
-assert.equal(priceBook.globalEntries["stone-new-light"], 169900);
-assert.equal(priceBook.globalEntries["stone-new-dark"], 219900);
+assert.equal(priceBook.globalEntries["stone-light-sink"], 169900);
+assert.equal(priceBook.globalEntries["stone-cloud"], 219900);
+assert.equal(priceBook.globalEntries["stone-grove"], 219900);
+assert.equal(priceBook.globalEntries["stone-night"], 219900);
 assert.equal(priceBook.globalEntries["stone-skirting"], 18500);
 assert.equal(priceBook.globalEntries["move-stone"], 39900);
 assert.equal(priceBook.globalEntries["tempered-glass"], 39000);
+
+const chargeableFronts = catalog.modules
+  .filter((module) => module.commercial.handleEligible)
+  .reduce((total, module) => total + module.commercial.handleFrontCount, 0);
+assert.equal(chargeableFronts, 14);
+assert.equal(priceBook.handleFrontTotal, chargeableFronts);
 
 const module03 = catalog.modules.find((module) => module.entityId === "module-03");
 const module04 = catalog.modules.find((module) => module.entityId === "module-04");
@@ -75,55 +79,110 @@ scene.entities.forEach((entity) => {
   const expected = bounds ? { x: bounds[0], y: bounds[1], width: bounds[2] - bounds[0], height: bounds[3] - bounds[1] } : null;
   assert.equal(JSON.stringify(entity.alphaBounds), JSON.stringify(expected), entity.id);
 });
+const skirtingMasks = {
+  "skirting-02.svg": "M496 856H744V899H496Z",
+  "skirting-03.svg": "M745 856H1205V899H745Z"
+};
+Object.entries(skirtingMasks).forEach(([name, expectedPath]) => {
+  const contents = fs.readFileSync(path.join(projectRoot, "assets/kitchen/masks", name), "utf8");
+  assert.match(contents, /viewBox="0 0 1536 1024"/, name + " viewBox");
+  assert.equal(contents.includes(expectedPath), true, name + " geometry");
+});
 
 const state = core.createInitialState(scene);
+assert.equal(state.moduleSelections, undefined);
+assert.equal(Object.hasOwn(state, "stoneColor"), false);
+assert.equal(Object.hasOwn(state, "stoneFinishId"), false);
+assert.equal(core.globalFinishId(state), "base-light");
+assert.equal(core.globalHandleId(state), "none");
+assert.equal(resolved(state)["lighting-08"].visible, false);
 const initialFingerprint = fingerprints.computeFingerprint(scene, state);
-const fullEstimate = pricing.calculatePublicEstimate(scene, state, catalog, resolved(state), priceBook);
-assert.equal(fullEstimate.status, "estimate");
-assert.equal(fullEstimate.totalCents, 776600);
+let estimate = pricing.calculatePublicEstimate(scene, state, catalog, resolved(state), priceBook);
+assert.equal(estimate.status, "estimate");
+assert.equal(estimate.totalCents, 716600);
 assert.deepEqual(
   {
-    modules: fullEstimate.breakdown.modulesCents,
-    local: fullEstimate.breakdown.localCents,
-    lighting: fullEstimate.breakdown.lightingCents,
-    finishes: fullEstimate.breakdown.finishesCents,
-    handles: fullEstimate.breakdown.handlesCents,
-    global: fullEstimate.global.totalCents
+    modules: estimate.breakdown.modulesCents,
+    local: estimate.breakdown.localCents,
+    finishes: estimate.breakdown.finishesCents,
+    handles: estimate.breakdown.handlesCents,
+    global: estimate.global.totalCents
   },
-  { modules: 660000, local: 56600, lighting: 60000, finishes: 0, handles: 0, global: 0 }
+  { modules: 660000, local: 56600, finishes: 0, handles: 0, global: 0 }
 );
 
-core.setModuleSelection(state, "module-03", { handleId: "ponto" });
-let estimate = pricing.calculatePublicEstimate(scene, state, catalog, resolved(state), priceBook);
-assert.equal(estimate.breakdown.handlesCents, 14985);
-assert.equal(estimate.totalCents, 791585);
-const handleAllocation = pricing.distributeCents(14985, 6);
-assert.equal(handleAllocation.reduce((total, cents) => total + cents, 0), 14985);
-assert.equal(handleAllocation.length, 6);
-
-core.setModuleSelection(state, "module-02", { handleId: "ponto" });
-assert.equal(pricing.itemEstimate(catalog.modules[1], catalog, state, priceBook).handleCents, 0);
-core.setModuleSelection(state, "module-04", { finishId: "tone-15-a" });
+core.setGlobalSelection(state, { finishId: "cocoa" });
 estimate = pricing.calculatePublicEstimate(scene, state, catalog, resolved(state), priceBook);
-assert.equal(estimate.breakdown.finishesCents, 9000);
+assert.equal(estimate.breakdown.finishesCents, 99000);
+assert.equal(estimate.totalCents, 815600);
 
-state.globalSelections.stonePackageId = "stone-new-light";
+core.setGlobalSelection(state, { handleId: "tango-chrome" });
+estimate = pricing.calculatePublicEstimate(scene, state, catalog, resolved(state), priceBook);
+assert.equal(estimate.breakdown.handlesCents, 17985);
+assert.equal(estimate.moduleEstimates.reduce((sum, entry) => sum + entry.estimate.handleCents, 0), 17985);
+assert.equal(estimate.moduleEstimates.find((entry) => entry.item.entityId === "module-02").estimate.handleCents, 0);
+assert.equal(estimate.totalCents, 833585);
+
+core.setEntityVisibility(state, "module-01", false);
+estimate = pricing.calculatePublicEstimate(scene, state, catalog, resolved(state), priceBook);
+assert.equal(estimate.breakdown.handlesCents, 15415);
+assert.equal(estimate.totalCents, 727515);
+
+const withoutModule03 = core.createInitialState(scene);
+core.setGlobalSelection(withoutModule03, { handleId: "tango-chrome" });
+core.setEntityVisibility(withoutModule03, "module-03", false);
+estimate = pricing.calculatePublicEstimate(scene, withoutModule03, catalog, resolved(withoutModule03), priceBook);
+assert.equal(estimate.breakdown.handlesCents, 10275);
+
+const withoutModule06 = core.createInitialState(scene);
+core.setGlobalSelection(withoutModule06, { handleId: "tango-chrome" });
+core.setEntityVisibility(withoutModule06, "module-06", false);
+estimate = pricing.calculatePublicEstimate(scene, withoutModule06, catalog, resolved(withoutModule06), priceBook);
+assert.equal(estimate.breakdown.handlesCents, 15417);
+
+core.setEntityVisibility(state, "module-01", true);
+core.setGlobalSelection(state, { finishId: "shadow", handleId: "none", stonePackageId: "stone-light-sink" });
 core.setGlobalService(state, "stone-skirting", true);
 core.setGlobalService(state, "move-stone", true);
 core.setGlobalService(state, "tempered-glass", true);
+core.setEntityVisibility(state, "lighting-08", true);
 estimate = pricing.calculatePublicEstimate(scene, state, catalog, resolved(state), priceBook);
-assert.equal(estimate.global.totalCents, 267300);
+assert.equal(estimate.breakdown.finishesCents, 165000);
+assert.equal(estimate.global.totalCents, 327300);
+assert.equal(estimate.moduleEstimates.reduce((sum, entry) => sum + entry.estimate.globalShareCents, 0), 327300);
+assert.equal(estimate.totalCents, 1208900);
 
 core.setEntityVisibility(state, "module-02", false);
 estimate = pricing.calculatePublicEstimate(scene, state, catalog, resolved(state), priceBook);
 assert.equal(estimate.breakdown.localCents, 0);
 assert.equal(estimate.breakdown.modulesCents, 550000);
+assert.equal(estimate.totalCents, 1014800);
 
 core.setEntityVisibility(state, "module-04", false);
 const noModule04 = resolved(state);
 assert.equal(noModule04["module-06"].visible, true);
 assert.equal(noModule04["module-07"].visible, true);
 assert.equal(noModule04["lighting-08"].reason, "requirement-hidden");
+
+const zeroModuleState = core.createInitialState(scene);
+core.setGlobalSelection(zeroModuleState, { stonePackageId: "stone-light-sink" });
+core.setGlobalService(zeroModuleState, "move-stone", true);
+core.setAllControllableVisibility(scene, zeroModuleState, false);
+estimate = pricing.calculatePublicEstimate(scene, zeroModuleState, catalog, resolved(zeroModuleState), priceBook);
+assert.equal(estimate.breakdown.globalCents, 209800);
+assert.equal(estimate.breakdown.allocatedGlobalCents, 0);
+assert.equal(estimate.breakdown.unallocatedGlobalCents, 209800);
+assert.equal(estimate.totalCents, 209800);
+
+const oneModuleState = core.createInitialState(scene);
+core.setGlobalSelection(oneModuleState, { stonePackageId: "stone-light-sink" });
+core.setGlobalService(oneModuleState, "move-stone", true);
+core.setAllControllableVisibility(scene, oneModuleState, false);
+core.setEntityVisibility(oneModuleState, "module-03", true);
+estimate = pricing.calculatePublicEstimate(scene, oneModuleState, catalog, resolved(oneModuleState), priceBook);
+assert.equal(estimate.moduleEstimates.reduce((sum, entry) => sum + entry.estimate.globalShareCents, 0), 209800);
+assert.equal(estimate.breakdown.unallocatedGlobalCents, 0);
+assert.equal(estimate.totalCents, 359800);
 
 const fingerprintBeforeUi = fingerprints.computeFingerprint(scene, state);
 state.selectedEntityId = "module-03";
@@ -137,6 +196,35 @@ const visibilityProbe = core.createInitialState(scene);
 core.setEntityVisibility(visibilityProbe, "module-06", false);
 visibilityState = resolved(visibilityProbe);
 assert.equal(finishes.resolveMaskAsset(module04Entity, visibilityState), "assets/kitchen/masks/04.png");
+
+const indexHtml = fs.readFileSync(path.join(projectRoot, "index.html"), "utf8");
+const appJs = fs.readFileSync(path.join(projectRoot, "app.js"), "utf8");
+const styles = fs.readFileSync(path.join(projectRoot, "styles.css"), "utf8");
+assert.equal(indexHtml.includes("Acabamentos por módulo"), false);
+assert.equal(indexHtml.includes("finishTargetSelect"), false);
+assert.equal(appJs.includes("setModuleSelection"), false);
+assert.equal(appJs.includes("refreshMobileSceneDock"), true);
+assert.equal(appJs.includes("mobileSceneTransparency"), true);
+assert.equal(appJs.includes("mobileSceneRepin"), true);
+assert.equal(appJs.includes("getBoundingClientRect().bottom || 0"), true);
+assert.equal(appJs.includes("const pipBottom = Math.max(navBottom, mobilePipPosition?.top || 0) + pipHeight;"), true);
+assert.equal(appJs.includes("const requirementHidden = (entitiesById.get(\"lighting-08\")?.requiresVisibleIds || [])"), true);
+assert.equal(appJs.includes("lightingToggle.disabled = blocked"), true);
+assert.equal(styles.includes("--mobile-pip-height"), false);
+assert.equal(styles.includes("body.is-mobile-scene-pinned .scene-hotspots { pointer-events: auto; }"), true);
+assert.equal(styles.includes("top: env(safe-area-inset-top); margin-top: 0;"), true);
+assert.equal(styles.includes("width: 44px; height: 44px;"), true);
+assert.equal(styles.includes(".panel h2 { scroll-margin-top: 72px; }"), false);
+assert.equal(styles.includes(".panel { scroll-margin-top: var(--mobile-content-clearance, 72px); }"), true);
+assert.equal(styles.includes(".flow-nav__scene-pin { display: none; }"), true);
+assert.equal(styles.includes("grid-column: 1 / -1;"), true);
+const publicNames = [
+  ...catalog.options.finishes.map((entry) => entry.publicLabel),
+  ...catalog.options.stonePackages.map((entry) => entry.label)
+].join(" ");
+["Gianduia", "Aurora", "Titânio", "Eucalipto", "Grafite", "Siena", "Ubatuba", "Gabriel"].forEach((term) => {
+  assert.equal(publicNames.includes(term), false, term);
+});
 
 process.stdout.write(JSON.stringify({
   passed: true,

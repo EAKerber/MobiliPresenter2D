@@ -33,6 +33,11 @@
     <main class="workspace">
       <div class="viewer-anchor" id="viewerAnchor">
       <section class="viewer-card" id="viewerCard" aria-label="Visualização da cozinha">
+        <div class="viewer-pip-controls" aria-label="Controles da mini-cena">
+          <button class="viewer-pip-control" id="mobileScenePin" type="button" aria-pressed="true" aria-label="Liberar cena" title="Liberar cena">⌖</button>
+          <button class="viewer-pip-control" id="mobileSceneTransparency" type="button" aria-pressed="false" aria-label="Alternar transparência" title="Alternar transparência">◐</button>
+          <button class="viewer-pip-control" id="mobileSceneResize" type="button" aria-label="Alterar tamanho da mini-cena" title="Alterar tamanho">⤢</button>
+        </div>
         <div class="viewer" id="viewer">
           <img
             id="sceneBase"
@@ -44,6 +49,8 @@
           <div id="sceneLayers"></div>
 
           <canvas id="stoneCanvas" class="scene-layer stone-color-layer" width="1536" height="1024" aria-hidden="true"></canvas>
+          <div id="skirtingOverlay02" class="scene-skirting scene-skirting--02" aria-hidden="true"></div>
+          <div id="skirtingOverlay03" class="scene-skirting scene-skirting--03" aria-hidden="true"></div>
           <div id="sceneHotspots" class="scene-hotspots" aria-label="Módulos selecionáveis na cena"></div>
           <div class="alignment-grid" id="alignmentGrid" aria-hidden="true"></div>
           <div class="selection-frame" id="selectionFrame" aria-hidden="true"></div>
@@ -55,9 +62,6 @@
             <strong id="visibleCount">8</strong> de <span id="totalCount">8</span> itens incluídos
           </p>
           <p id="viewerHint">Selecione um módulo na cena para abrir sua ficha.</p>
-          <button class="button button--secondary viewer-pin" id="mobileScenePin" type="button" aria-pressed="true">
-            Fixar cena
-          </button>
         </footer>
       </section>
       <div class="viewer-pin-sentinel" id="viewerPinSentinel" aria-hidden="true"></div>
@@ -69,6 +73,7 @@
           <button class="flow-step" type="button" data-step="finishes" aria-controls="frontFinishPanel"><span>2</span><span class="flow-step__label" data-mobile-label="Acab.">Acabamentos</span></button>
           <button class="flow-step" type="button" data-step="services" aria-controls="servicesPanel"><span>3</span><span class="flow-step__label" data-mobile-label="Serviços">Serviços</span></button>
           <button class="flow-step" type="button" data-step="summary" aria-controls="summaryPanel"><span>4</span><span class="flow-step__label" data-mobile-label="Resumo">Resumo</span></button>
+          <button class="flow-nav__scene-pin" id="mobileSceneRepin" type="button" hidden aria-label="Fixar cena durante a configuração">⌖ Fixar cena</button>
         </nav>
 
         <section class="panel" id="modulesPanel" aria-labelledby="modulesHeading">
@@ -87,24 +92,21 @@
           <header class="finish-heading">
             <span aria-hidden="true">◐</span>
             <div>
-              <h2 id="frontFinishHeading" tabindex="-1">Acabamentos por módulo</h2>
-              <p>Escolha a frente e o puxador da peça selecionada. A caixaria permanece clara.</p>
+              <h2 id="frontFinishHeading" tabindex="-1">Acabamentos do conjunto</h2>
+              <p>Uma cor e um puxador para a composição. A caixaria permanece clara.</p>
             </div>
           </header>
 
           <div class="finish-controls">
-            <label class="finish-target">
-              <span>Aplicar ao módulo</span>
-              <select id="finishTargetSelect" aria-label="Módulo para acabamento"></select>
-            </label>
             <fieldset>
               <legend>Cor das frentes</legend>
               <div class="swatches" id="finishSwatches"></div>
+              <p class="finish-help" id="selectedFinishDescription"></p>
             </fieldset>
 
             <fieldset class="handle-fieldset">
               <legend>Puxadores</legend>
-              <p class="finish-help" id="handleHelp">O valor é cobrado uma vez pelo módulo e o rateio por frente é apenas explicativo.</p>
+              <p class="finish-help" id="handleHelp">Escolha global; o valor é rateado somente nas frentes aplicáveis de cada módulo.</p>
               <div class="handle-options" id="handleOptions"></div>
             </fieldset>
           </div>
@@ -118,10 +120,6 @@
               <span><strong>Rodapé de pedra</strong><small>Acabamento global para a composição.</small></span>
             </label>
           </div>
-          <label class="accessory-toggle" for="lightingToggle">
-            <input id="lightingToggle" type="checkbox" checked />
-            <span><strong>Iluminação embutida</strong><small>Realça a bancada e requer a lateral da geladeira.</small></span>
-          </label>
         </section>
 
         <section class="panel services-panel" id="servicesPanel" aria-labelledby="servicesHeading" hidden>
@@ -129,6 +127,10 @@
             <span aria-hidden="true">✓</span>
             <div><h2 id="servicesHeading" tabindex="-1">Serviços</h2><p>Serviços globais que impactam uma vez o conjunto.</p></div>
           </header>
+          <label class="accessory-toggle" for="lightingToggle">
+            <input id="lightingToggle" type="checkbox" />
+            <span><strong>Iluminação embutida</strong><small>Serviço global que realça a bancada e requer a lateral da geladeira.</small></span>
+          </label>
           <div id="servicesChecklist" class="services-checklist"></div>
         </section>
 

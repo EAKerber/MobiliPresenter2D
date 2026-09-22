@@ -8,10 +8,7 @@
       sceneId: scene.id,
       manifestVersion: scene.manifestVersion,
       visibleEntityIds: global.CasaModulesVisibility.getVisibleEntities(scene, state).map((entity) => entity.id),
-      moduleSelections: state.moduleSelections,
       globalSelections: state.globalSelections,
-      stoneFinishId: state.stoneFinishId,
-      stoneColor: state.stoneColor || null,
       gridVisible: state.gridVisible
     };
   }

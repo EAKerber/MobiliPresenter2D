@@ -37,11 +37,11 @@
       ctx.drawImage(image, 0, 0);
       return ctx.getImageData(0, 0, width, height).data;
     }
-    return async function render(state) {
+    return async function render(state, stoneColor) {
       const ticket = ++revision;
       context.clearRect(0, 0, width, height);
-      if (!state.stoneColor) return;
-      const id = caseId(state), color = state.stoneColor;
+      if (!stoneColor) return;
+      const id = caseId(state), color = stoneColor;
       if (!cache.has(id)) cache.set(id, Promise.all(['neutral','under','objects','mask'].map(k => pixels(data[id][k]))));
       try {
         const inputs = await cache.get(id);

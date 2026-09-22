@@ -5,7 +5,7 @@
   // approved configurator worksheet. Cost, margin and supplier data do not
   // belong in this public file.
   const priceBook = Object.freeze({
-    schemaVersion: "CommercialEstimatePriceBook 1.0",
+    schemaVersion: "CommercialEstimatePriceBook 1.1",
     mode: "estimate",
     currency: "BRL",
     label: "Estimativa da composição",
@@ -26,23 +26,26 @@
       ponto: 14985,
       "alca-colors": 32850
     }),
-    // These bands are data capabilities only. Until approved swatches arrive,
-    // the public selector exposes the base finish exclusively.
+    // Values are totals for the fourteen chargeable fronts in the full
+    // composition. The product UI distributes this only for explanation.
+    handleFrontTotal: 14,
     frontFinishRatesBps: Object.freeze({
       "base-light": 0,
-      "tone-15-a": 1500,
-      "tone-15-b": 1500,
-      "tone-15-c": 1500,
-      "tone-25-a": 2500,
-      "tone-25-b": 2500
+      cocoa: 1500,
+      mist: 1500,
+      steel: 1500,
+      fiber: 2500,
+      shadow: 2500
     }),
     localEntries: Object.freeze({
       "module-02:mandatory-cooktop-stone": 56600
     }),
     globalEntries: Object.freeze({
       "stone-existing": 0,
-      "stone-new-light": 169900,
-      "stone-new-dark": 219900,
+      "stone-light-sink": 169900,
+      "stone-cloud": 219900,
+      "stone-grove": 219900,
+      "stone-night": 219900,
       "stone-skirting": 18500,
       "move-stone": 39900,
       "tempered-glass": 39000
