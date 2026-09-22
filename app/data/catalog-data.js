@@ -171,19 +171,19 @@
     modules,
     options: {
       finishes: [
-        { id: "base-light", publicLabel: "Clara", color: "#eeeae3", textureCss: "linear-gradient(135deg, rgba(255,255,255,.32), rgba(113,103,91,.05))", status: "published" },
-        { id: "cocoa", publicLabel: "Cacau", color: "#77685b", textureCss: "repeating-linear-gradient(0deg, rgba(255,255,255,.08) 0 1px, transparent 1px 5px), repeating-linear-gradient(90deg, rgba(45,34,27,.13) 0 1px, transparent 1px 6px)", status: "published" },
-        { id: "mist", publicLabel: "Névoa", color: "#a9aaa5", textureCss: "repeating-linear-gradient(155deg, rgba(255,255,255,.24) 0 2px, rgba(80,83,81,.05) 2px 6px)", status: "published" },
-        { id: "steel", publicLabel: "Aço", color: "#7f7d79", textureCss: "repeating-linear-gradient(45deg, rgba(255,255,255,.11) 0 1px, rgba(32,33,34,.08) 1px 5px)", status: "published" },
-        { id: "fiber", publicLabel: "Fibra", color: "#9a704b", textureCss: "repeating-linear-gradient(88deg, rgba(68,40,19,.22) 0 1px, rgba(244,208,156,.12) 1px 4px, transparent 4px 10px)", status: "published" },
-        { id: "shadow", publicLabel: "Sombra", color: "#303332", textureCss: "linear-gradient(120deg, rgba(255,255,255,.08), transparent 42%), repeating-linear-gradient(12deg, rgba(255,255,255,.035) 0 1px, transparent 1px 5px)", status: "published" }
+        { id: "base-light", publicLabel: "Base clara", color: "#faf9f6", textureAsset: "assets/materials/mdf-base.webp", textureSize: "160px 160px", textureLuminance: 0.9242, overlayOpacity: 0.90, textureBrightness: 1.05, status: "published" },
+        { id: "cocoa", publicLabel: "Avelã", color: "#8d8178", textureAsset: "assets/materials/mdf-warm.webp", textureSize: "160px 160px", textureLuminance: 0.5259, status: "published" },
+        { id: "mist", publicLabel: "Névoa", color: "#d7d5cf", textureAsset: "assets/materials/mdf-soft.webp", textureSize: "160px 160px", textureLuminance: 0.9216, status: "published" },
+        { id: "steel", publicLabel: "Aço", color: "#777874", textureAsset: "assets/materials/mdf-metal.webp", textureSize: "160px 160px", textureLuminance: 0.7679, status: "published" },
+        { id: "fiber", publicLabel: "Bosque", color: "#92775f", textureAsset: "assets/materials/mdf-wood.webp", textureSize: "180px 180px", textureLuminance: 0.7988, status: "published" },
+        { id: "shadow", publicLabel: "Carvão", color: "#30312f", textureAsset: "assets/materials/mdf-dark.webp", textureSize: "160px 160px", textureLuminance: 0.1647, status: "published" }
       ],
       stonePackages: [
-        { id: "stone-existing", label: "Original", description: "Mantém a pedra atual do ambiente.", color: null, textureCss: "linear-gradient(135deg, #b7b3aa, #6e6a65 44%, #b9b4aa)" },
-        { id: "stone-light-sink", label: "Clara", description: "Inclui cuba nova e acabamento inox.", color: "#d8d8d2", textureCss: "radial-gradient(circle at 18% 42%, #a9a8a3 0 1px, transparent 2px), linear-gradient(135deg, #f1f0ea, #aeadab)" },
-        { id: "stone-cloud", label: "Nuvem", description: "Pedra clara com acabamento inox.", color: "#e2ded7", textureCss: "radial-gradient(circle at 24% 34%, #9b9894 0 1px, transparent 2px), radial-gradient(circle at 75% 62%, #c4aead 0 1px, transparent 2px), linear-gradient(135deg, #eeece6, #b4b1ad)" },
-        { id: "stone-grove", label: "Bosque", description: "Pedra escura com acabamento inox.", color: "#48524b", textureCss: "radial-gradient(circle at 30% 48%, #a6b39a 0 1px, transparent 2px), radial-gradient(circle at 68% 28%, #1c261f 0 2px, transparent 3px), linear-gradient(135deg, #253028, #687568)" },
-        { id: "stone-night", label: "Noite", description: "Pedra escura com acabamento inox.", color: "#333638", textureCss: "radial-gradient(circle at 27% 38%, #c4c3bd 0 1px, transparent 2px), radial-gradient(circle at 76% 62%, #6f7471 0 1px, transparent 2px), linear-gradient(135deg, #1c1d1f, #4d5051)" }
+        { id: "stone-existing", label: "Padrão", description: "Mantém a pedra atual do conjunto.", color: null, swatchColor: "#b7b0a7" },
+        { id: "stone-light-sink", label: "Padrão + cuba nova", description: "Mantém a pedra padrão e inclui cuba nova.", color: null, swatchColor: "#b7b0a7" },
+        { id: "stone-cloud", label: "Clara mineral", description: "Pedra clara de granulação fina.", color: "#e3ddd2", swatchColor: "#e4ded2", textureAsset: "assets/materials/stone-light.webp", textureScale: 1 },
+        { id: "stone-grove", label: "Verde profundo", description: "Pedra verde-escura de granulação contrastante.", color: "#1e2a24", swatchColor: "#1f2924", textureAsset: "assets/materials/stone-green.webp", textureScale: 1 },
+        { id: "stone-night", label: "Preta mineral", description: "Pedra preta de granulação fina e reflexos discretos.", color: "#171918", swatchColor: "#181a19", textureAsset: "assets/materials/stone-dark.webp", textureScale: 1 }
       ],
       handles: [
         { id: "none", label: "Definir depois", description: "Sem adicional na simulação.", orientation: "Portas na vertical · gavetas na horizontal" },

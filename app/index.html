@@ -49,6 +49,7 @@
           <div id="sceneLayers"></div>
 
           <canvas id="stoneCanvas" class="scene-layer stone-color-layer" width="1536" height="1024" aria-hidden="true"></canvas>
+          <canvas id="plinthCanvas" class="scene-layer stone-color-layer" width="1536" height="1024" aria-hidden="true"></canvas>
           <div id="skirtingOverlay02" class="scene-skirting scene-skirting--02" aria-hidden="true"></div>
           <div id="skirtingOverlay03" class="scene-skirting scene-skirting--03" aria-hidden="true"></div>
           <div id="sceneHotspots" class="scene-hotspots" aria-label="Módulos selecionáveis na cena"></div>
@@ -69,10 +70,10 @@
 
       <aside class="controls">
         <nav class="flow-nav" aria-label="Etapas da configuração">
-          <button class="flow-step is-active" type="button" data-step="modules" aria-controls="modulesPanel"><span>1</span><span class="flow-step__label" data-mobile-label="Módulos">Módulos</span></button>
-          <button class="flow-step" type="button" data-step="finishes" aria-controls="frontFinishPanel"><span>2</span><span class="flow-step__label" data-mobile-label="Acab.">Acabamentos</span></button>
-          <button class="flow-step" type="button" data-step="services" aria-controls="servicesPanel"><span>3</span><span class="flow-step__label" data-mobile-label="Serviços">Serviços</span></button>
-          <button class="flow-step" type="button" data-step="summary" aria-controls="summaryPanel"><span>4</span><span class="flow-step__label" data-mobile-label="Resumo">Resumo</span></button>
+          <button class="flow-step is-active" type="button" data-step="modules" aria-controls="modulesPanel"><span>1</span><span class="flow-step__label" data-compact-label="Módulos">Módulos</span></button>
+          <button class="flow-step" type="button" data-step="finishes" aria-controls="frontFinishPanel"><span>2</span><span class="flow-step__label" data-compact-label="Acab.">Acabamentos</span></button>
+          <button class="flow-step" type="button" data-step="services" aria-controls="servicesPanel"><span>3</span><span class="flow-step__label" data-compact-label="Serv.">Serviços</span></button>
+          <button class="flow-step" type="button" data-step="summary" aria-controls="summaryPanel"><span>4</span><span class="flow-step__label" data-compact-label="Resumo">Resumo</span></button>
           <button class="flow-nav__scene-pin" id="mobileSceneRepin" type="button" hidden aria-label="Fixar cena durante a configuração">⌖ Fixar cena</button>
         </nav>
 
@@ -160,8 +161,8 @@
     <script src="core/fingerprint.js"></script>
     <script src="core/finishes.js"></script>
     <script src="core/pricing.js"></script>
-    <script src="data/stone-data.js"></script>
-    <script src="core/stone.js"></script>
-    <script src="app.js"></script>
+    <script src="data/stone-data.js?v=preview32-materials-r2"></script>
+    <script src="core/stone.js?v=preview32-materials-r2"></script>
+    <script src="app.js?v=preview32-materials-r2"></script>
   </body>
 </html>

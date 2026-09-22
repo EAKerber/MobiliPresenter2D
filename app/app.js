@@ -278,6 +278,10 @@
     return catalog.options.handles.find((handle) => handle.id === id) || catalog.options.handles[0];
   }
 
+  function materialBackground(material) {
+    return material?.textureAsset ? `url("${material.textureAsset}")` : material?.textureCss || "none";
+  }
+
   function renderFinishControlsFromData() {
     finishSwatches.replaceChildren();
     catalog.options.finishes.filter((finish) => finish.status === "published").forEach((finish) => {
@@ -287,7 +291,8 @@
       button.dataset.finishId = finish.id;
       button.dataset.color = finish.color;
       button.style.setProperty("--swatch", finish.color);
-      button.style.setProperty("--swatch-texture", finish.textureCss || "none");
+      button.style.setProperty("--swatch-texture", materialBackground(finish));
+      button.style.setProperty("--swatch-size", finish.textureSize || "cover");
       button.title = finish.publicLabel;
       button.setAttribute("aria-label", "Aplicar " + finish.publicLabel + " ao conjunto");
       const selected = selectedModuleFinish() === finish.id;
@@ -357,8 +362,9 @@
       const swatch = document.createElement("span");
       swatch.className = "global-option__swatch";
       swatch.setAttribute("aria-hidden", "true");
-      swatch.style.backgroundColor = stone.color || "#938d84";
-      swatch.style.backgroundImage = stone.textureCss || "none";
+      swatch.style.backgroundColor = stone.swatchColor || stone.color || "#938d84";
+      swatch.style.backgroundImage = materialBackground(stone);
+      swatch.style.backgroundSize = stone.textureAsset ? "cover" : "16px 16px";
       const title = document.createElement("strong");
       title.textContent = stone.label;
       const description = document.createElement("small");
@@ -1344,7 +1350,11 @@
   const textureLabel = document.getElementById("textureLabel");
   const resetFinishButton = document.getElementById("resetFinishButton");
 
-  const renderStone = global.CasaStone.createRenderer(document.getElementById("stoneCanvas"), global.CASA_STONE_DATA);
+  const renderStone = global.CasaStone.createRenderer(
+    document.getElementById("stoneCanvas"),
+    document.getElementById("plinthCanvas"),
+    global.CASA_STONE_DATA
+  );
 
   function isMobileViewport() {
     return Boolean(global.matchMedia?.("(max-width: 700px)").matches);
@@ -1459,32 +1469,57 @@
       const group = layer.closest(".layer-group");
       const product = catalogByEntityId.get(group?.dataset.entityId);
       if (!product?.commercial?.finishEligible) return;
-      layer.classList.remove("is-texture");
+      const hasTexture = Boolean(finish.textureAsset);
+      layer.classList.toggle("is-texture", hasTexture);
       layer.classList.add("is-color");
-      layer.style.backgroundImage = finish.textureCss || "none";
+      layer.style.backgroundImage = materialBackground(finish);
       layer.style.backgroundColor = finish.color;
+      layer.style.backgroundSize = finish.textureSize || "160px 160px";
+      layer.style.setProperty("--finish-brightness", String(finish.textureBrightness || 1));
       layer.style.setProperty("--finish-opacity", String(finishes.resolveOverlayOpacity(finish, finish.color)));
     });
   }
 
-  function syncSkirtingAppearance(resolved) {
-    const hasStoneSkirting = Boolean(state.globalSelections?.serviceIds?.includes("stone-skirting"));
-    const finish = catalog.options.finishes.find((item) => item.id === selectedModuleFinish()) || catalog.options.finishes[0];
+  function syncSkirtingAppearance() {
+    // The semantic canvas owns both stone and MDF plinths. These legacy SVG
+    // overlays remain in the DOM for now to avoid breaking older deep links,
+    // but must never paint a second material over the canvas.
     skirtingOverlays.forEach(({ entityId, element }) => {
       if (!element) return;
-      element.style.setProperty("--skirting-color", finish.color);
-      element.style.setProperty("--skirting-texture", finish.textureCss || "none");
-      element.classList.toggle("is-mdf", !hasStoneSkirting && Boolean(resolved?.[entityId]?.visible));
+      element.classList.remove("is-mdf");
+      element.setAttribute("aria-hidden", "true");
     });
+  }
+
+  function materialDescriptor(material, fallbackType) {
+    if (!material?.color && !material?.textureAsset) return null;
+    return {
+      materialType: material.materialType || fallbackType,
+      color: material.color || null,
+      textureAsset: material.textureAsset || null,
+      textureStrength: Number.isFinite(Number(material.textureStrength)) ? Number(material.textureStrength) : 0.35
+    };
+  }
+
+  function sceneMaterials() {
+    const finish = catalog.options.finishes.find((item) => item.id === selectedModuleFinish()) || catalog.options.finishes[0];
+    const stone = selectedStonePackage();
+    const hasStoneSkirting = Boolean(state.globalSelections?.serviceIds?.includes("stone-skirting"));
+    const stoneMaterial = materialDescriptor(stone, "stone");
+    const mdfMaterial = materialDescriptor(finish, "mdf");
+    return {
+      upper: stoneMaterial,
+      plinth: hasStoneSkirting ? stoneMaterial : mdfMaterial
+    };
   }
 
   function syncLayerVisibility() {
     const resolved = visibility.resolveVisibility(scene, state);
     lastResolved = resolved;
-    renderStone(state, selectedStonePackage().color || null);
+    renderStone(state, sceneMaterials());
     syncFinishMasks(resolved);
     syncFinishAppearance();
-    syncSkirtingAppearance(resolved);
+    syncSkirtingAppearance();
     layerGroups.forEach((layer) => {
       const result = resolved[layer.dataset.entityId];
       const isVisible = Boolean(result?.visible);
@@ -1832,7 +1867,6 @@
   restoreButton.addEventListener("click", () => {
     if (!global.confirm("Recomeçar a configuração? Suas escolhas atuais serão removidas.")) return;
     state = core.createInitialState(scene);
-    setAllVisibility(true);
     alignmentGrid.classList.remove("is-visible");
     if (gridButton) gridButton.setAttribute("aria-pressed", "false");
     detailOrigin = null;

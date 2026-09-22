@@ -89,6 +89,36 @@ Object.entries(skirtingMasks).forEach(([name, expectedPath]) => {
   assert.equal(contents.includes(expectedPath), true, name + " geometry");
 });
 
+const publishedMaterials = [
+  ["base-light", "Base clara", "assets/materials/mdf-base.webp"],
+  ["cocoa", "Avelã", "assets/materials/mdf-warm.webp"],
+  ["mist", "Névoa", "assets/materials/mdf-soft.webp"],
+  ["steel", "Aço", "assets/materials/mdf-metal.webp"],
+  ["fiber", "Bosque", "assets/materials/mdf-wood.webp"],
+  ["shadow", "Carvão", "assets/materials/mdf-dark.webp"]
+];
+publishedMaterials.forEach(([id, label, asset]) => {
+  const finish = catalog.options.finishes.find((entry) => entry.id === id);
+  assert.equal(finish?.publicLabel, label, id + " public label");
+  assert.equal(finish?.textureAsset, asset, id + " material source");
+  assert.equal(fs.statSync(path.join(projectRoot, asset)).size > 0, true, asset);
+});
+
+const stoneMaterials = [
+  ["stone-cloud", "Clara mineral", "assets/materials/stone-light.webp"],
+  ["stone-grove", "Verde profundo", "assets/materials/stone-green.webp"],
+  ["stone-night", "Preta mineral", "assets/materials/stone-dark.webp"]
+];
+stoneMaterials.forEach(([id, label, asset]) => {
+  const stone = catalog.options.stonePackages.find((entry) => entry.id === id);
+  assert.equal(stone?.label, label, id + " public label");
+  assert.equal(stone?.textureAsset, asset, id + " material source");
+  assert.equal(fs.statSync(path.join(projectRoot, asset)).size > 0, true, asset);
+});
+const standardSink = catalog.options.stonePackages.find((entry) => entry.id === "stone-light-sink");
+assert.equal(standardSink?.label, "Padrão + cuba nova");
+assert.equal(standardSink?.color, null, "standard sink keeps the scene's current stone");
+
 const state = core.createInitialState(scene);
 assert.equal(state.moduleSelections, undefined);
 assert.equal(Object.hasOwn(state, "stoneColor"), false);
@@ -202,12 +232,22 @@ const appJs = fs.readFileSync(path.join(projectRoot, "app.js"), "utf8");
 const styles = fs.readFileSync(path.join(projectRoot, "styles.css"), "utf8");
 assert.equal(indexHtml.includes("Acabamentos por módulo"), false);
 assert.equal(indexHtml.includes("finishTargetSelect"), false);
+assert.equal(indexHtml.includes('data-compact-label="Acab."'), true);
+assert.equal(indexHtml.includes('data-compact-label="Serv."'), true);
+const materialScriptRevisions = [
+  /data\/stone-data\.js\?v=([^\"]+)/,
+  /core\/stone\.js\?v=([^\"]+)/,
+  /app\.js\?v=([^\"]+)/
+].map((pattern) => indexHtml.match(pattern)?.[1]);
+assert.equal(materialScriptRevisions.every(Boolean), true, "material scripts require an explicit shared revision");
+assert.equal(new Set(materialScriptRevisions).size, 1, "material data, renderer and app must update together");
 assert.equal(appJs.includes("setModuleSelection"), false);
 assert.equal(appJs.includes("refreshMobileSceneDock"), true);
 assert.equal(appJs.includes("mobileSceneTransparency"), true);
 assert.equal(appJs.includes("mobileSceneRepin"), true);
 assert.equal(appJs.includes("getBoundingClientRect().bottom || 0"), true);
 assert.equal(appJs.includes("const pipBottom = Math.max(navBottom, mobilePipPosition?.top || 0) + pipHeight;"), true);
+assert.equal(/state = core\.createInitialState\(scene\);\s*setAllVisibility\(true\);/.test(appJs), false, "restoring must preserve optional defaults");
 assert.equal(appJs.includes("const requirementHidden = (entitiesById.get(\"lighting-08\")?.requiresVisibleIds || [])"), true);
 assert.equal(appJs.includes("lightingToggle.disabled = blocked"), true);
 assert.equal(styles.includes("--mobile-pip-height"), false);
@@ -218,6 +258,8 @@ assert.equal(styles.includes(".panel h2 { scroll-margin-top: 72px; }"), false);
 assert.equal(styles.includes(".panel { scroll-margin-top: var(--mobile-content-clearance, 72px); }"), true);
 assert.equal(styles.includes(".flow-nav__scene-pin { display: none; }"), true);
 assert.equal(styles.includes("grid-column: 1 / -1;"), true);
+assert.equal(styles.includes("container-name: flow-steps;"), true);
+assert.equal(styles.includes("@container flow-steps (max-width: 500px)"), true);
 const publicNames = [
   ...catalog.options.finishes.map((entry) => entry.publicLabel),
   ...catalog.options.stonePackages.map((entry) => entry.label)
