@@ -13,20 +13,6 @@
     return Object.freeze(Array.from({ length: count }, (_, index) => base + (index < remainder ? 1 : 0)));
   }
 
-  function distributeByBase(totalCents, entries) {
-    if (!totalCents || !entries.length) return new Map(entries.map(({ item }) => [item.entityId, 0]));
-    const totalBase = entries.reduce((sum, { estimate }) => sum + estimate.baseCents, 0);
-    if (!totalBase) return new Map(entries.map(({ item }) => [item.entityId, 0]));
-    const provisional = entries.map(({ item, estimate }, index) => {
-      const exact = (totalCents * estimate.baseCents) / totalBase;
-      return { id: item.entityId, index, cents: Math.floor(exact), fraction: exact - Math.floor(exact) };
-    });
-    const remainder = totalCents - provisional.reduce((sum, entry) => sum + entry.cents, 0);
-    provisional.slice().sort((left, right) => right.fraction - left.fraction || left.index - right.index)
-      .slice(0, remainder).forEach((entry) => { provisional[entry.index].cents += 1; });
-    return new Map(provisional.map((entry) => [entry.id, entry.cents]));
-  }
-
   function globalFinishId(state) {
     return state.globalSelections?.finishId || "base-light";
   }
@@ -56,7 +42,6 @@
       handleFrontCount: Number.isInteger(item.commercial?.handleFrontCount) ? item.commercial.handleFrontCount : 0,
       localCents,
       localChargeIds: Object.freeze([...localIds]),
-      globalShareCents: 0,
       totalCents: baseCents + finishCents + localCents
     });
   }
@@ -95,17 +80,15 @@
 
     const global = globalAdjustments(state, priceBook, Boolean(resolvedVisibility?.["lighting-08"]?.visible));
     const handlesByItem = handleAllocations(catalog, state, priceBook);
-    const globalShareByItem = distributeByBase(global.totalCents, moduleEntries);
     const moduleEstimates = moduleEntries.map(({ item, estimate }) => {
       const handleCents = handlesByItem.get(item.entityId) || 0;
-      const globalShareCents = globalShareByItem.get(item.entityId) || 0;
       return Object.freeze({
         item,
         estimate: Object.freeze({
           ...estimate,
           handleCents,
-          globalShareCents,
-          totalCents: estimate.baseCents + estimate.finishCents + estimate.localCents + handleCents + globalShareCents
+          // Global choices belong to the composition, never to a module.
+          totalCents: estimate.baseCents + estimate.finishCents + estimate.localCents + handleCents
         })
       });
     });
@@ -113,11 +96,6 @@
     const finishesCents = moduleEstimates.reduce((total, entry) => total + entry.estimate.finishCents, 0);
     const handlesCents = moduleEstimates.reduce((total, entry) => total + entry.estimate.handleCents, 0);
     const localCents = moduleEstimates.reduce((total, entry) => total + entry.estimate.localCents, 0);
-    const allocatedGlobalCents = moduleEstimates.reduce((total, entry) => total + entry.estimate.globalShareCents, 0);
-    const unallocatedGlobalCents = global.totalCents - allocatedGlobalCents;
-    // A configuration with no modules is unusual, but it must never silently
-    // drop global choices that are still selected. With modules present this is
-    // zero because every global impact is allocated exactly once.
     const totalCents = modulesCents + finishesCents + handlesCents + localCents + global.totalCents;
 
     return Object.freeze({
@@ -133,9 +111,7 @@
         finishesCents,
         handlesCents,
         localCents,
-        globalCents: global.totalCents,
-        allocatedGlobalCents,
-        unallocatedGlobalCents
+        globalCents: global.totalCents
       })
     });
   }

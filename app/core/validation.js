@@ -30,14 +30,14 @@
         if (typeof variant.maskAsset !== "string" || !variant.maskAsset) {
           errors.push({ code: "finish-mask-variant-missing-asset", entityId: entity.id, variantIndex });
         }
-        const requiredIds = variant.requiresVisibleIds || [];
-        if (!Array.isArray(requiredIds) || !requiredIds.length) {
-          errors.push({ code: "finish-mask-variant-missing-dependency", entityId: entity.id, variantIndex });
+        const visibleWithIds = variant.visibleWithIds || [];
+        if (!Array.isArray(visibleWithIds) || !visibleWithIds.length) {
+          errors.push({ code: "finish-mask-variant-missing-visibility-condition", entityId: entity.id, variantIndex });
           return;
         }
-        requiredIds.forEach((requiredId) => {
-          if (!scene.entities.some((candidate) => candidate.id === requiredId)) {
-            errors.push({ code: "finish-mask-variant-dependency-missing", entityId: entity.id, variantIndex, requiredId });
+        visibleWithIds.forEach((visibleId) => {
+          if (!scene.entities.some((candidate) => candidate.id === visibleId)) {
+            errors.push({ code: "finish-mask-variant-visible-entity-missing", entityId: entity.id, variantIndex, visibleId });
           }
         });
       });

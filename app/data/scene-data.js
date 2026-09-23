@@ -31,7 +31,8 @@
         "module-04",
         "module-05",
         "module-06",
-        "module-07"
+        "module-07",
+        "lighting-08"
       ],
       decorVisible: [],
       gridVisible: false
@@ -174,7 +175,9 @@
         maskAsset: "assets/kitchen/masks/04.png",
         finishMaskVariants: [
           {
-            requiresVisibleIds: ["module-06"],
+            // This only changes the paint mask at the visual overlap. It is
+            // not a configuration dependency between modules 04 and 06.
+            visibleWithIds: ["module-06"],
             maskAsset: "assets/kitchen/masks/04-with-06-seam.png",
             sourceBridgeMaskAsset: "assets/kitchen/masks/04-06-seam-bridge.png"
           }
@@ -242,7 +245,9 @@
         alphaBounds: { x: 715, y: 266, width: 534, height: 113 },
         defaultVisible: true,
         controllable: true,
-        requiresVisibleIds: ["module-04"],
+        // Lighting is a global option, not a relation between the side panel
+        // and the upper sink cabinet. Both independent supports are required.
+        requiresVisibleIds: ["module-04", "module-06"],
         hostId: null,
         finishGroups: [],
         tags: ["lighting"]

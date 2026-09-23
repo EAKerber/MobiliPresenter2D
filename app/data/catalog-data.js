@@ -133,7 +133,7 @@
       },
       benefits: ["Nicho integrado para micro-ondas", "Porta basculante com pistão", "Iluminação embutida compatível"],
       components: ["Dobradiças amortecidas", "Pistão para porta basculante", "Espera para micro-ondas"],
-      frontLayout: { status: "count-confirmed", pattern: "two-doors-and-lift", frontCount: 3 },
+      frontLayout: { status: "count-confirmed", pattern: "two-doors-and-microwave", frontCount: 3 },
       requirements: ["Prever tomada para o forno micro-ondas."], publicPriceCents: null,
       commercial: { finishEligible: true, handleEligible: true, handleFrontCount: 2, mandatoryLocalChargeIds: [] },
       drawingEvidence: "front-count-confirmed"
@@ -196,7 +196,7 @@
       {
         entityId: "lighting-08", sku: "CM-08", title: "Iluminação embutida",
         description: "Luz sob os aéreos para a área de bancada.",
-        requirements: ["Requer a lateral da geladeira."], publicPriceCents: null
+        requirements: ["Requer a lateral da geladeira e o aéreo da pia."], publicPriceCents: null
       }
     ],
     services: [

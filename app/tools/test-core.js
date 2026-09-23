@@ -131,17 +131,22 @@ assert.equal(baseStructure.luminance, 0.9242);
 assert.equal(Math.abs(baseStructure.shadowOpacity - 0.3934410990625) < 0.000001, true, "base finish seam shadow");
 assert.equal(baseStructure.highlightOpacity, 0);
 
-const state = core.createInitialState(scene);
-assert.equal(state.moduleSelections, undefined);
-assert.equal(Object.hasOwn(state, "stoneColor"), false);
-assert.equal(Object.hasOwn(state, "stoneFinishId"), false);
-assert.equal(core.globalFinishId(state), "base-light");
-assert.equal(core.globalHandleId(state), "none");
-assert.equal(resolved(state)["lighting-08"].visible, false);
-const initialFingerprint = fingerprints.computeFingerprint(scene, state);
-let estimate = pricing.calculatePublicEstimate(scene, state, catalog, resolved(state), priceBook);
+const defaultState = core.createInitialState(scene);
+assert.equal(defaultState.moduleSelections, undefined);
+assert.equal(Object.hasOwn(defaultState, "stoneColor"), false);
+assert.equal(Object.hasOwn(defaultState, "stoneFinishId"), false);
+assert.equal(core.globalFinishId(defaultState), "base-light");
+assert.equal(core.globalHandleId(defaultState), "none");
+assert.deepEqual(Array.from(defaultState.globalSelections.serviceIds), ["move-stone", "stone-skirting", "tempered-glass"]);
+assert.equal(resolved(defaultState)["lighting-08"].visible, true);
+assert.deepEqual(Array.from(scene.entities.find((entity) => entity.id === "lighting-08").requiresVisibleIds), ["module-04", "module-06"]);
+const module04Entity = scene.entities.find((entity) => entity.id === "module-04");
+assert.equal(module04Entity.finishMaskVariants[0].requiresVisibleIds, undefined, "M04/M06 is not a configuration dependency");
+assert.deepEqual(Array.from(module04Entity.finishMaskVariants[0].visibleWithIds), ["module-06"], "M04 mask changes only at the visual overlap");
+const initialFingerprint = fingerprints.computeFingerprint(scene, defaultState);
+let estimate = pricing.calculatePublicEstimate(scene, defaultState, catalog, resolved(defaultState), priceBook);
 assert.equal(estimate.status, "estimate");
-assert.equal(estimate.totalCents, 716600);
+assert.equal(estimate.totalCents, 874000);
 assert.deepEqual(
   {
     modules: estimate.breakdown.modulesCents,
@@ -150,8 +155,21 @@ assert.deepEqual(
     handles: estimate.breakdown.handlesCents,
     global: estimate.global.totalCents
   },
-  { modules: 660000, local: 56600, finishes: 0, handles: 0, global: 0 }
+  { modules: 660000, local: 56600, finishes: 0, handles: 0, global: 157400 }
 );
+assert.equal(
+  estimate.moduleEstimates.find((entry) => entry.item.entityId === "module-06").estimate.totalCents,
+  110000,
+  "module price excludes global stone and service choices"
+);
+
+// The remaining price assertions isolate the default opt-in package so their
+// totals remain a gate for each commercial rule rather than UI defaults.
+const state = core.createInitialState(scene);
+core.setGlobalSelection(state, { serviceIds: [] });
+core.setEntityVisibility(state, "lighting-08", false);
+estimate = pricing.calculatePublicEstimate(scene, state, catalog, resolved(state), priceBook);
+assert.equal(estimate.totalCents, 716600);
 
 core.setGlobalSelection(state, { finishId: "cocoa" });
 estimate = pricing.calculatePublicEstimate(scene, state, catalog, resolved(state), priceBook);
@@ -191,7 +209,6 @@ core.setEntityVisibility(state, "lighting-08", true);
 estimate = pricing.calculatePublicEstimate(scene, state, catalog, resolved(state), priceBook);
 assert.equal(estimate.breakdown.finishesCents, 165000);
 assert.equal(estimate.global.totalCents, 327300);
-assert.equal(estimate.moduleEstimates.reduce((sum, entry) => sum + entry.estimate.globalShareCents, 0), 327300);
 assert.equal(estimate.totalCents, 1208900);
 
 core.setEntityVisibility(state, "module-02", false);
@@ -206,24 +223,27 @@ assert.equal(noModule04["module-06"].visible, true);
 assert.equal(noModule04["module-07"].visible, true);
 assert.equal(noModule04["lighting-08"].reason, "requirement-hidden");
 
+const withoutModule06Requirement = core.createInitialState(scene);
+core.setEntityVisibility(withoutModule06Requirement, "module-06", false);
+const noModule06 = resolved(withoutModule06Requirement);
+assert.equal(noModule06["module-04"].visible, true);
+assert.equal(noModule06["module-07"].visible, true);
+assert.equal(noModule06["lighting-08"].reason, "requirement-hidden");
+
 const zeroModuleState = core.createInitialState(scene);
-core.setGlobalSelection(zeroModuleState, { stonePackageId: "stone-light-sink" });
+core.setGlobalSelection(zeroModuleState, { stonePackageId: "stone-light-sink", serviceIds: [] });
 core.setGlobalService(zeroModuleState, "move-stone", true);
 core.setAllControllableVisibility(scene, zeroModuleState, false);
 estimate = pricing.calculatePublicEstimate(scene, zeroModuleState, catalog, resolved(zeroModuleState), priceBook);
 assert.equal(estimate.breakdown.globalCents, 209800);
-assert.equal(estimate.breakdown.allocatedGlobalCents, 0);
-assert.equal(estimate.breakdown.unallocatedGlobalCents, 209800);
 assert.equal(estimate.totalCents, 209800);
 
 const oneModuleState = core.createInitialState(scene);
-core.setGlobalSelection(oneModuleState, { stonePackageId: "stone-light-sink" });
+core.setGlobalSelection(oneModuleState, { stonePackageId: "stone-light-sink", serviceIds: [] });
 core.setGlobalService(oneModuleState, "move-stone", true);
 core.setAllControllableVisibility(scene, oneModuleState, false);
 core.setEntityVisibility(oneModuleState, "module-03", true);
 estimate = pricing.calculatePublicEstimate(scene, oneModuleState, catalog, resolved(oneModuleState), priceBook);
-assert.equal(estimate.moduleEstimates.reduce((sum, entry) => sum + entry.estimate.globalShareCents, 0), 209800);
-assert.equal(estimate.breakdown.unallocatedGlobalCents, 0);
 assert.equal(estimate.totalCents, 359800);
 
 const fingerprintBeforeUi = fingerprints.computeFingerprint(scene, state);
@@ -231,7 +251,6 @@ state.selectedEntityId = "module-03";
 assert.equal(fingerprints.computeFingerprint(scene, state), fingerprintBeforeUi);
 assert.equal(initialFingerprint.startsWith("scene2d-"), true);
 
-const module04Entity = scene.entities.find((entity) => entity.id === "module-04");
 let visibilityState = resolved(core.createInitialState(scene));
 assert.equal(finishes.resolveMaskAsset(module04Entity, visibilityState), "assets/kitchen/masks/04-with-06-seam.png");
 const visibilityProbe = core.createInitialState(scene);
@@ -247,8 +266,16 @@ assert.equal(indexHtml.includes("finishTargetSelect"), false);
 assert.equal(indexHtml.includes('data-compact-label="Acab."'), true);
 assert.equal(indexHtml.includes('data-compact-label="Serv."'), true);
 const runtimeScriptRevisions = [
+  /data\/scene-data\.js\?v=([^\"]+)/,
+  /data\/catalog-data\.js\?v=([^\"]+)/,
+  /data\/mock-price-book\.js\?v=([^\"]+)/,
   /data\/mask-data\.js\?v=([^\"]+)/,
+  /core\/state\.js\?v=([^\"]+)/,
+  /core\/visibility\.js\?v=([^\"]+)/,
+  /core\/validation\.js\?v=([^\"]+)/,
+  /core\/fingerprint\.js\?v=([^\"]+)/,
   /core\/finishes\.js\?v=([^\"]+)/,
+  /core\/pricing\.js\?v=([^\"]+)/,
   /data\/stone-data\.js\?v=([^\"]+)/,
   /core\/stone\.js\?v=([^\"]+)/,
   /app\.js\?v=([^\"]+)/
@@ -264,6 +291,12 @@ assert.equal(appJs.includes("const pipBottom = Math.max(navBottom, mobilePipPosi
 assert.equal(/state = core\.createInitialState\(scene\);\s*setAllVisibility\(true\);/.test(appJs), false, "restoring must preserve optional defaults");
 assert.equal(appJs.includes("const requirementHidden = (entitiesById.get(\"lighting-08\")?.requiresVisibleIds || [])"), true);
 assert.equal(appJs.includes("lightingToggle.disabled = blocked"), true);
+assert.equal(appJs.includes("function moduleEntityIds()"), true, "detail navigation must include modules outside the composition");
+assert.equal(appJs.includes("function createModuleSelectionControl"), true, "detail keeps a selection control for hidden modules");
+assert.equal(appJs.includes("Cota do módulo em pedra e serviços do conjunto"), false, "global totals do not appear in individual module cards");
+assert.equal(appJs.includes("two-doors-and-microwave"), true, "M06 has a dedicated orientative front pattern");
+assert.equal(appJs.includes("depthDimensionStart"), true, "isometric depth dimension has endpoint ticks");
+assert.equal(appJs.includes("module-detail__focus-finish"), true, "focus uses the live masked finish layer");
 assert.equal(appJs.includes("structure-layer--${kind}"), true, "scene creates semantic seam layers");
 assert.equal(styles.includes("--mobile-pip-height"), false);
 assert.equal(styles.includes("body.is-mobile-scene-pinned .scene-hotspots { pointer-events: auto; }"), true);
@@ -277,6 +310,8 @@ assert.equal(styles.includes("container-name: flow-steps;"), true);
 assert.equal(styles.includes("@container flow-steps (max-width: 500px)"), true);
 assert.equal(styles.includes(".structure-layer--shadow"), true);
 assert.equal(styles.includes("background-position: 0 0"), true, "texture origin follows the preview reference");
+assert.equal(styles.includes(".module-detail__selection-toggle.is-selected"), true, "selected detail control is visibly distinct");
+assert.equal(styles.includes("Módulo fora da composição"), true, "hidden module views receive an unavailable state");
 const publicNames = [
   ...catalog.options.finishes.map((entry) => entry.publicLabel),
   ...catalog.options.stonePackages.map((entry) => entry.label)

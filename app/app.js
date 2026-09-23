@@ -66,6 +66,7 @@
   const detailPageByEntity = new Map();
   const detailInteractionByEntity = new Set();
   const detailViewsCollapsedByEntity = new Set();
+  const detailSelectionPulseByEntity = new Set();
   let detailCarouselTimer = null;
   let lastResolved = null;
 
@@ -535,14 +536,6 @@
     if (itemPricing.localCents) {
       appendPriceBreakdownRow(breakdown, "Pedra cooktop", "+" + formatCurrency(itemPricing.localCents), "Obrigatória neste módulo.");
     }
-    if (itemPricing.globalShareCents) {
-      appendPriceBreakdownRow(
-        breakdown,
-        "Impactos globais",
-        "+" + formatCurrency(itemPricing.globalShareCents),
-        "Cota do módulo em pedra e serviços do conjunto; não é cobrada novamente."
-      );
-    }
     return breakdown;
   }
 
@@ -621,13 +614,32 @@
     focus.className = "module-detail__focus";
     focus.style.setProperty("--focus-ratio", `${bounds.width} / ${bounds.height}`);
     const image = document.createElement("img");
+    image.className = "module-detail__focus-image";
     image.src = entity.asset;
     image.alt = `Recorte isolado de ${product.title}`;
     image.draggable = false;
     image.style.width = `${(scene.canvas.width / bounds.width) * 100}%`;
     image.style.left = `${-(bounds.x / bounds.width) * 100}%`;
     image.style.top = `${-(bounds.y / bounds.height) * 100}%`;
+    const maskAsset = finishes.resolveMaskAsset(entity, lastResolved);
+    const maskSource = inlineMasks[maskAsset];
+    let finishLayer = null;
+    if (maskSource) {
+      const finish = catalog.options.finishes.find((item) => item.id === selectedModuleFinish()) || catalog.options.finishes[0];
+      finishLayer = document.createElement("span");
+      finishLayer.className = "module-detail__focus-finish";
+      finishLayer.setAttribute("aria-hidden", "true");
+      finishLayer.style.width = image.style.width;
+      finishLayer.style.left = image.style.left;
+      finishLayer.style.top = image.style.top;
+      finishLayer.style.backgroundImage = materialBackground(finish);
+      finishLayer.style.backgroundColor = finish.color;
+      finishLayer.style.backgroundSize = finish.textureSize || "160px 160px";
+      finishLayer.style.setProperty("--focus-mask-image", `url("${maskSource}")`);
+      finishLayer.style.setProperty("--focus-finish-opacity", String(finishes.resolveOverlayOpacity(finish, finish.color)));
+    }
     focus.append(image);
+    if (finishLayer) focus.append(finishLayer);
     return focus;
   }
 
@@ -707,6 +719,26 @@
       const middle = x + width / 2;
       make("line", { x1: x, y1: liftBottom, x2: x + width, y2: liftBottom, class: "module-detail__view-shape" });
       make("line", { x1: middle, y1: liftBottom, x2: middle, y2: y + height, class: "module-detail__view-shape" });
+      return;
+    }
+    if (layout?.pattern === "two-doors-and-microwave") {
+      // M06 has two doors beside a microwave niche and a lift front above it.
+      // Exact opening spans are not yet published, so this remains orientative.
+      const leftZoneEnd = x + width * 0.54;
+      const leftDoorSplit = x + width * 0.27;
+      const liftBottom = y + height * 0.42;
+      const nicheInset = Math.max(2, width * 0.035);
+      make("line", { x1: leftDoorSplit, y1: y, x2: leftDoorSplit, y2: y + height, class: "module-detail__view-shape" });
+      make("line", { x1: leftZoneEnd, y1: y, x2: leftZoneEnd, y2: y + height, class: "module-detail__view-shape" });
+      make("line", { x1: leftZoneEnd, y1: liftBottom, x2: x + width, y2: liftBottom, class: "module-detail__view-shape" });
+      make("rect", {
+        x: leftZoneEnd + nicheInset,
+        y: liftBottom + nicheInset,
+        width: Math.max(4, width * 0.46 - nicheInset * 2),
+        height: Math.max(4, height * 0.58 - nicheInset * 2),
+        rx: 1.5,
+        class: "module-detail__view-shape"
+      });
       return;
     }
     if (!layout?.segments?.length) return;
@@ -798,10 +830,26 @@
     make("line", { x1: Math.max(15, left - 19), y1: top, x2: Math.max(15, left - 19), y2: bottom, class: "module-detail__dimension-line" });
     make("line", { x1: Math.max(11, left - 23), y1: top, x2: Math.max(19, left - 15), y2: top, class: "module-detail__dimension-line" });
     make("line", { x1: Math.max(11, left - 23), y1: bottom, x2: Math.max(19, left - 15), y2: bottom, class: "module-detail__dimension-line" });
-    make("line", { x1: right + 4, y1: top - 6, x2: right + depthX + 4, y2: top + depthY - 6, class: "module-detail__dimension-line" });
+    const depthDimensionStart = { x: right + 4, y: top - 6 };
+    const depthDimensionEnd = { x: right + depthX + 4, y: top + depthY - 6 };
+    const depthLength = Math.hypot(depthDimensionEnd.x - depthDimensionStart.x, depthDimensionEnd.y - depthDimensionStart.y) || 1;
+    const depthTick = {
+      x: (-(depthDimensionEnd.y - depthDimensionStart.y) / depthLength) * 4,
+      y: ((depthDimensionEnd.x - depthDimensionStart.x) / depthLength) * 4
+    };
+    make("line", { x1: depthDimensionStart.x, y1: depthDimensionStart.y, x2: depthDimensionEnd.x, y2: depthDimensionEnd.y, class: "module-detail__dimension-line" });
+    [depthDimensionStart, depthDimensionEnd].forEach((point) => {
+      make("line", {
+        x1: point.x - depthTick.x,
+        y1: point.y - depthTick.y,
+        x2: point.x + depthTick.x,
+        y2: point.y + depthTick.y,
+        class: "module-detail__dimension-line"
+      });
+    });
     svgLabel(make, `${spec.faceHorizontalLabel} ${formatDimension(spec.faceWidthMm)} mm`, left + width / 2, bottom + 27);
     svgLabel(make, `A ${formatDimension(spec.faceHeightMm)} mm`, 4, top + height / 2 + 3, "start");
-    svgLabel(make, `${spec.extrusionLabel} ${formatDimension(spec.extrusionMm)} mm`, 174, top + depthY - 9, "end");
+    svgLabel(make, `${spec.extrusionLabel} ${formatDimension(spec.extrusionMm)} mm`, Math.min(171, right + depthX + 9), Math.max(13, top + depthY - 8), "end");
     figure.append(caption, svg);
     return figure;
   }
@@ -935,14 +983,12 @@
     return section;
   }
 
-  function visibleModuleEntityIds(resolved = lastResolved) {
-    return catalog.modules
-      .filter((product) => resolved?.[product.entityId]?.visible)
-      .map((product) => product.entityId);
+  function moduleEntityIds() {
+    return catalog.modules.map((product) => product.entityId);
   }
 
-  function adjacentVisibleModuleId(direction) {
-    const ids = visibleModuleEntityIds();
+  function adjacentModuleId(direction) {
+    const ids = moduleEntityIds();
     if (ids.length < 2) return null;
     const selectedIndex = ids.indexOf(state.selectedEntityId);
     const currentIndex = selectedIndex >= 0 ? selectedIndex : direction > 0 ? -1 : 0;
@@ -959,6 +1005,25 @@
     button.title = `Módulo ${directionLabel}: ${targetProduct.referenceLabel}`;
     button.textContent = direction < 0 ? "‹" : "›";
     return button;
+  }
+
+  function createModuleSelectionControl(entity, isVisible) {
+    const control = document.createElement("label");
+    control.className = "module-detail__selection-toggle";
+    control.classList.toggle("is-selected", isVisible);
+    if (isVisible && detailSelectionPulseByEntity.has(entity.id)) {
+      control.classList.add("is-just-selected");
+      global.setTimeout(() => detailSelectionPulseByEntity.delete(entity.id), 460);
+    }
+    const input = document.createElement("input");
+    input.type = "checkbox";
+    input.checked = isVisible;
+    input.dataset.detailVisibility = entity.id;
+    input.setAttribute("aria-label", `${isVisible ? "Desselecionar" : "Selecionar"} ${entity.label}`);
+    const copy = document.createElement("span");
+    copy.textContent = isVisible ? "Selecionado" : "Selecionar";
+    control.append(input, copy);
+    return control;
   }
 
   function updateSelection(resolved) {
@@ -994,8 +1059,8 @@
     headerCopy.append(eyebrow, title);
     const headerActions = document.createElement("div");
     headerActions.className = "module-detail__actions";
-    const previousId = adjacentVisibleModuleId(-1);
-    const nextId = adjacentVisibleModuleId(1);
+    const previousId = adjacentModuleId(-1);
+    const nextId = adjacentModuleId(1);
     const previousProduct = catalogByEntityId.get(previousId);
     const nextProduct = catalogByEntityId.get(nextId);
     if (previousProduct) headerActions.append(createModuleNavigationButton(-1, previousProduct));
@@ -1007,7 +1072,7 @@
     close.setAttribute("aria-label", "Fechar detalhes do módulo");
     close.textContent = "×";
     headerActions.append(close);
-    detailHeader.append(moduleNumber, headerCopy, headerActions);
+    detailHeader.append(moduleNumber, headerCopy, headerActions, createModuleSelectionControl(entity, isVisible));
 
     const compositionEstimate = getEstimate(resolved);
     const itemPricing = compositionEstimate.moduleEstimates?.find((entry) => entry.item.entityId === product.entityId)?.estimate
@@ -1021,8 +1086,8 @@
     if (itemPricing.status === "ready") {
       priceValue.textContent = formatCurrency(itemPricing.totalCents);
       priceDescription.textContent = product.category === "Estrutural"
-        ? "Estimativa do painel, incluindo sua cota nos impactos globais selecionados."
-        : "Estimativa do módulo, incluindo sua cota nos impactos globais selecionados.";
+        ? "Valor local do painel. Pedra e serviços aparecem uma única vez no resumo."
+        : "Valor local do módulo. Pedra e serviços aparecem uma única vez no resumo.";
       price.append(priceLabel, priceValue, priceDescription, createCommercialItemPriceBreakdown(product, itemPricing));
     } else {
       priceValue.textContent = "Em configuração";
@@ -1136,7 +1201,7 @@
     const blocked = requirementHidden || result.reason === "requirement-hidden" || result.reason === "requirement-missing";
     lightingToggle.checked = Boolean(state.visibilityByEntity["lighting-08"]);
     lightingToggle.disabled = blocked;
-    lightingToggle.title = blocked ? "Inclua a lateral da geladeira para habilitar a iluminação." : "";
+    lightingToggle.title = blocked ? "Inclua a lateral da geladeira e o aéreo da pia para habilitar a iluminação." : "";
     lightingToggle.closest(".accessory-toggle")?.classList.toggle(
       "is-blocked",
       blocked
@@ -1247,7 +1312,6 @@
       if (itemEstimate.finishCents) additions.push("acabamento +" + formatCurrency(itemEstimate.finishCents));
       if (itemEstimate.handleCents) additions.push("puxador rateado +" + formatCurrency(itemEstimate.handleCents));
       if (itemEstimate.localCents) additions.push("pedra de cooktop +" + formatCurrency(itemEstimate.localCents));
-      if (itemEstimate.globalShareCents) additions.push("cota global +" + formatCurrency(itemEstimate.globalShareCents));
       itemRow.textContent = item.referenceLabel + " · " + item.title + " — " + formatCurrency(itemEstimate.totalCents) + (additions.length ? " (" + additions.join(", ") + ")" : "");
       list.append(itemRow);
     });
@@ -1259,7 +1323,7 @@
 
     const finish = document.createElement("p");
     finish.className = "summary-note";
-    finish.textContent = "Cor e puxador são escolhas globais. Pedra e serviços entram uma única vez no conjunto; a ficha de cada módulo mostra apenas sua cota explicativa.";
+    finish.textContent = "Cor e puxador são escolhas globais. Pedra e serviços entram uma única vez no conjunto; cada ficha mostra somente o valor local do módulo.";
 
     const price = document.createElement("div");
     price.className = "price-state";
@@ -1274,11 +1338,8 @@
       if (estimate.breakdown.finishesCents) appendPriceBreakdownRow(composition, "Cor global", "+" + formatCurrency(estimate.breakdown.finishesCents), selectedFrontFinishLabel() + " aplicada aos módulos elegíveis.");
       if (estimate.breakdown.handlesCents) appendPriceBreakdownRow(composition, "Puxador global", "+" + formatCurrency(estimate.breakdown.handlesCents), selectedHandle().label + " rateado nas frentes dos módulos incluídos.");
       if (estimate.breakdown.localCents) appendPriceBreakdownRow(composition, "Pedra cooktop", "+" + formatCurrency(estimate.breakdown.localCents), "Inclusa no Módulo 02.");
-      const globalRateio = estimate.breakdown.unallocatedGlobalCents
-        ? "Impacto global preservado no total; inclua um módulo para ver o rateio."
-        : "Impacto global, já rateado nas fichas.";
       estimate.global.items.filter((item) => item.cents).forEach((item) => {
-        appendPriceBreakdownRow(composition, globalItemLabel(item.id), "+" + formatCurrency(item.cents), globalRateio);
+        appendPriceBreakdownRow(composition, globalItemLabel(item.id), "+" + formatCurrency(item.cents), "Impacto global aplicado uma única vez à composição.");
       });
       const disclaimer = document.createElement("p");
       disclaimer.textContent = estimate.disclaimer;
@@ -1604,7 +1665,7 @@
   }
 
   function selectAdjacentModule(direction) {
-    const nextEntityId = adjacentVisibleModuleId(direction);
+    const nextEntityId = adjacentModuleId(direction);
     if (!nextEntityId) return;
     selectEntity(nextEntityId, "detail-navigation");
   }
@@ -1786,6 +1847,14 @@
     syncLayerVisibility();
     announce("Detalhes do módulo fechados.");
     restoreDetailOrigin(origin);
+  });
+
+  moduleDetail.addEventListener("change", (event) => {
+    const input = event.target.closest("[data-detail-visibility]");
+    if (!input) return;
+    if (input.checked) detailSelectionPulseByEntity.add(input.dataset.detailVisibility);
+    setEntityVisibility(input.dataset.detailVisibility, input.checked);
+    updateVisibleCount();
   });
 
   sceneHotspots.addEventListener("click", (event) => {

@@ -18,7 +18,9 @@
         finishId: BASE_FINISH_ID,
         handleId: BASE_HANDLE_ID,
         stonePackageId: "stone-existing",
-        serviceIds: []
+        // Optional, quoted components start selected so the first estimate
+        // represents the complete package. They can always be opted out.
+        serviceIds: ["move-stone", "stone-skirting", "tempered-glass"]
       },
       selectedEntityId: null,
       gridVisible: scene.defaultConfiguration.gridVisible

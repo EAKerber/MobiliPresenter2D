@@ -56,8 +56,8 @@
   function resolveMaskAsset(entity, resolvedVisibility) {
     const variants = entity?.finishMaskVariants || [];
     for (const variant of variants) {
-      const requiredIds = variant.requiresVisibleIds || [];
-      if (requiredIds.length && requiredIds.every((id) => resolvedVisibility?.[id]?.visible)) {
+      const visibleWithIds = variant.visibleWithIds || [];
+      if (visibleWithIds.length && visibleWithIds.every((id) => resolvedVisibility?.[id]?.visible)) {
         return variant.maskAsset;
       }
     }
