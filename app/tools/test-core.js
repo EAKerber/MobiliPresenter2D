@@ -293,6 +293,8 @@ assert.equal(appJs.includes("const requirementHidden = (entitiesById.get(\"light
 assert.equal(appJs.includes("lightingToggle.disabled = blocked"), true);
 assert.equal(appJs.includes("function moduleEntityIds()"), true, "detail navigation must include modules outside the composition");
 assert.equal(appJs.includes("function createModuleSelectionControl"), true, "detail keeps a selection control for hidden modules");
+assert.equal(appJs.includes("scene-hotspot--aerial"), true, "aerial module labels have a safe placement variant");
+assert.equal(appJs.includes("detailNavigationAttentionByEntity"), true, "navigating to an excluded module calls attention to selection");
 assert.equal(appJs.includes("Cota do módulo em pedra e serviços do conjunto"), false, "global totals do not appear in individual module cards");
 assert.equal(appJs.includes("two-doors-and-microwave"), true, "M06 has a dedicated orientative front pattern");
 assert.equal(appJs.includes("depthDimensionStart"), true, "isometric depth dimension has endpoint ticks");
@@ -311,6 +313,10 @@ assert.equal(styles.includes("@container flow-steps (max-width: 500px)"), true);
 assert.equal(styles.includes(".structure-layer--shadow"), true);
 assert.equal(styles.includes("background-position: 0 0"), true, "texture origin follows the preview reference");
 assert.equal(styles.includes(".module-detail__selection-toggle.is-selected"), true, "selected detail control is visibly distinct");
+assert.equal(styles.includes(".scene-hotspot--aerial .scene-hotspot__tag"), true, "aerial labels render below their modules");
+assert.equal(styles.includes("module-detail-selection-trace"), true, "excluded modules receive the gold selection trace");
+assert.equal(styles.includes(".module-detail.is-unavailable > :not(.module-detail__header)"), true, "excluded detail content is softened without dimming the selection control");
+assert.equal(styles.includes(".module-detail__focus { position: relative; justify-self: center; width: auto; max-width: 100%; height: min(100%, 174px); aspect-ratio: var(--focus-ratio); overflow: hidden; }"), true, "isolated focus has no decorative container");
 assert.equal(styles.includes("Módulo fora da composição"), true, "hidden module views receive an unavailable state");
 const publicNames = [
   ...catalog.options.finishes.map((entry) => entry.publicLabel),

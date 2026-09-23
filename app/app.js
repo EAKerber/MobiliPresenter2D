@@ -67,6 +67,7 @@
   const detailInteractionByEntity = new Set();
   const detailViewsCollapsedByEntity = new Set();
   const detailSelectionPulseByEntity = new Set();
+  const detailNavigationAttentionByEntity = new Set();
   let detailCarouselTimer = null;
   let lastResolved = null;
 
@@ -184,6 +185,7 @@
         const hotspot = document.createElement("button");
         hotspot.type = "button";
         hotspot.className = "scene-hotspot";
+        hotspot.classList.toggle("scene-hotspot--aerial", product.category === "Aéreo");
         hotspot.dataset.selectSceneEntity = entity.id;
         hotspot.dataset.entityId = entity.id;
         hotspot.setAttribute("aria-label", `Ver ficha de ${product.referenceLabel}, ${product.title}`);
@@ -1011,6 +1013,10 @@
     const control = document.createElement("label");
     control.className = "module-detail__selection-toggle";
     control.classList.toggle("is-selected", isVisible);
+    if (!isVisible && detailNavigationAttentionByEntity.has(entity.id)) {
+      control.classList.add("is-navigation-attention");
+      global.setTimeout(() => detailNavigationAttentionByEntity.delete(entity.id), 1000);
+    }
     if (isVisible && detailSelectionPulseByEntity.has(entity.id)) {
       control.classList.add("is-just-selected");
       global.setTimeout(() => detailSelectionPulseByEntity.delete(entity.id), 460);
@@ -1667,6 +1673,7 @@
   function selectAdjacentModule(direction) {
     const nextEntityId = adjacentModuleId(direction);
     if (!nextEntityId) return;
+    if (!lastResolved?.[nextEntityId]?.visible) detailNavigationAttentionByEntity.add(nextEntityId);
     selectEntity(nextEntityId, "detail-navigation");
   }
 
