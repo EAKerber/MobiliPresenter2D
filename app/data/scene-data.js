@@ -183,6 +183,9 @@
           }
         ],
         alphaBounds: { x: 1205, y: 44, width: 38, height: 870 },
+        // The usual tag position is inferred from the module category. This
+        // panel is the exception: its label belongs beside the thin face.
+        markerPlacement: { side: "right" },
         defaultVisible: true,
         controllable: true,
         hostId: null,

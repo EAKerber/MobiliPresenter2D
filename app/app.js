@@ -188,6 +188,7 @@
         hotspot.classList.toggle("scene-hotspot--aerial", product.category === "Aéreo");
         hotspot.dataset.selectSceneEntity = entity.id;
         hotspot.dataset.entityId = entity.id;
+        hotspot.dataset.markerSide = resolveMarkerPlacement(entity, product).side;
         hotspot.setAttribute("aria-label", `Ver ficha de ${product.referenceLabel}, ${product.title}`);
         hotspot.setAttribute("aria-pressed", "false");
         hotspot.title = `${product.referenceLabel} · ${product.title}`;
@@ -425,6 +426,14 @@
       top: `${(bounds.y / scene.canvas.height) * 100}%`,
       width: `${(bounds.width / scene.canvas.width) * 100}%`,
       height: `${(bounds.height / scene.canvas.height) * 100}%`
+    };
+  }
+
+  function resolveMarkerPlacement(entity, product) {
+    const inferredSide = product?.category === "Aéreo" ? "bottom" : "top";
+    const preferredSide = entity?.markerPlacement?.side;
+    return {
+      side: ["top", "right", "bottom", "left"].includes(preferredSide) ? preferredSide : inferredSide
     };
   }
 
@@ -920,6 +929,27 @@
     let isTransitioning = false;
     const isReducedMotion = global.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
     const isCollapsed = detailViewsCollapsedByEntity.has(entity.id);
+    const navigation = document.createElement("div");
+    navigation.className = "module-detail__carousel-navigation";
+    const controls = document.createElement("div");
+    controls.className = "module-detail__carousel-controls";
+    const previous = document.createElement("button");
+    previous.type = "button";
+    previous.className = "module-detail__carousel-arrow";
+    previous.textContent = "←";
+    const next = document.createElement("button");
+    next.type = "button";
+    next.className = "module-detail__carousel-arrow";
+    next.textContent = "→";
+
+    const updateNavigationLabels = () => {
+      const previousPage = pages[(currentPage - 1 + pages.length) % pages.length];
+      const nextPage = pages[(currentPage + 1) % pages.length];
+      previous.setAttribute("aria-label", `Mostrar ${previousPage.label}`);
+      previous.title = `Anterior: ${previousPage.shortLabel}`;
+      next.setAttribute("aria-label", `Mostrar ${nextPage.label}`);
+      next.title = `Próxima: ${nextPage.shortLabel}`;
+    };
 
     const stopAutoCycle = () => {
       detailInteractionByEntity.add(entity.id);
@@ -944,6 +974,7 @@
           dot.classList.toggle("is-active", active);
           dot.setAttribute("aria-current", active ? "true" : "false");
         });
+        updateNavigationLabels();
         stage.classList.remove("is-fading");
         isTransitioning = false;
       }, 180);
@@ -958,15 +989,20 @@
       dot.addEventListener("click", () => renderPage(index, true));
       dots.append(dot);
     });
+    previous.addEventListener("click", () => renderPage((currentPage - 1 + pages.length) % pages.length, true));
+    next.addEventListener("click", () => renderPage((currentPage + 1) % pages.length, true));
     stage.replaceChildren(pages[currentPage].node);
     dots.children[currentPage]?.classList.add("is-active");
     dots.children[currentPage]?.setAttribute("aria-current", "true");
+    updateNavigationLabels();
     collapse.setAttribute("aria-expanded", String(!isCollapsed));
     collapse.setAttribute("aria-label", isCollapsed ? "Expandir visualizações" : "Recolher visualizações");
     collapse.textContent = isCollapsed ? "Mostrar" : "Recolher";
     header.append(heading, collapse);
     section.classList.toggle("is-collapsed", isCollapsed);
-    section.append(header, note, stage, dots);
+    controls.append(previous, next);
+    navigation.append(dots, controls);
+    section.append(header, note, stage, navigation);
 
     collapse.addEventListener("click", () => {
       const nextCollapsed = !detailViewsCollapsedByEntity.has(entity.id);
