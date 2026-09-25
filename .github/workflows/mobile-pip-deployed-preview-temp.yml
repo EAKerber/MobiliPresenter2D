@@ -1,0 +1,55 @@
+name: Mobile PiP deployed preview temp
+
+on:
+  push:
+    branches:
+      - feat/global-finishes-stone-mobile-pip
+    paths:
+      - .github/workflows/mobile-pip-deployed-preview-temp.yml
+
+permissions:
+  contents: write
+
+jobs:
+  gate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: feat/global-finishes-stone-mobile-pip
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Install isolated browser tooling
+        run: |
+          npm install --prefix /tmp/mobile-browser --no-audit --no-fund playwright@1.62.1
+          /tmp/mobile-browser/node_modules/.bin/playwright install --with-deps chromium
+      - name: Run deployed-preview real-touch gate
+        env:
+          NODE_PATH: /tmp/mobile-browser/node_modules
+          MOBILE_INTERACTIONS_URL: https://deploy-preview-32--mobilipresenter2d.netlify.app
+        run: node tests/mobile-pip-interactions-browser.cjs /tmp/mobile-pip-deployed-review
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: mobile-pip-deployed-preview-review
+          path: /tmp/mobile-pip-deployed-review
+          if-no-files-found: ignore
+      - name: Self-clean with CAS
+        env:
+          TARGET_BRANCH: feat/global-finishes-stone-mobile-pip
+          EXPECTED_HEAD: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git rm .github/workflows/mobile-pip-deployed-preview-temp.yml
+          remote_before="$(git ls-remote origin "refs/heads/$TARGET_BRANCH" | cut -f1)"
+          test "$remote_before" = "$EXPECTED_HEAD"
+          git commit -m "chore: self-clean deployed mobile PiP gate"
+          result="$(git rev-parse HEAD)"
+          git push origin "HEAD:refs/heads/$TARGET_BRANCH"
+          remote_after="$(git ls-remote origin "refs/heads/$TARGET_BRANCH" | cut -f1)"
+          test "$remote_after" = "$result"
