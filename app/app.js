@@ -995,7 +995,7 @@
       try {
         if (pointerId !== null && stage.hasPointerCapture?.(pointerId)) stage.releasePointerCapture(pointerId);
       } catch (_) {}
-      const horizontal = Math.abs(deltaX) >= 42 && Math.abs(deltaX) > Math.abs(deltaY) * 1.15;
+      const horizontal = Math.abs(deltaX) >= 32 && Math.abs(deltaX) > Math.abs(deltaY) * 1.15;
       if (!horizontal) return;
       if (deltaX < 0 && currentPage < pages.length - 1) renderPage(currentPage + 1, true);
       if (deltaX > 0 && currentPage > 0) renderPage(currentPage - 1, true);
@@ -1014,7 +1014,10 @@
       if (swipePointerId === null || event.pointerId !== swipePointerId || swipeStartX === null) return;
       const deltaX = event.clientX - swipeStartX;
       const deltaY = event.clientY - swipeStartY;
-      if (Math.abs(deltaX) > 8 && Math.abs(deltaX) > Math.abs(deltaY)) stage.classList.add("is-dragging");
+      if (Math.abs(deltaX) > 8 && Math.abs(deltaX) > Math.abs(deltaY)) {
+        stage.classList.add("is-dragging");
+        if (event.cancelable) event.preventDefault();
+      }
     });
     stage.addEventListener("pointerup", finishSwipe);
     stage.addEventListener("pointercancel", clearSwipe);
@@ -1563,6 +1566,12 @@
   function installMobilePreviewGestures() {
     if (!viewerCard) return;
 
+    [mobileScenePin, mobileSceneOpacity, mobileSceneResize].filter(Boolean).forEach((control) => {
+      ["pointerdown", "pointerup", "click"].forEach((eventName) => {
+        control.addEventListener(eventName, (event) => event.stopPropagation());
+      });
+    });
+
     viewerCard.addEventListener("pointerdown", (event) => {
       if (!document.body.classList.contains("is-mobile-scene-pinned")) return;
       if (event.button !== 0 || !event.target.closest(".viewer")) return;
@@ -1596,7 +1605,9 @@
 
     mobileSceneResize?.addEventListener("pointerdown", (event) => {
       if (!document.body.classList.contains("is-mobile-scene-pinned")) return;
-      const startWidth = viewerCard.getBoundingClientRect().width;
+      const startRect = viewerCard.getBoundingClientRect();
+      const startWidth = startRect.width;
+      const startRight = startRect.right;
       const startX = event.clientX;
       mobileSceneResize.setPointerCapture?.(event.pointerId);
       event.preventDefault();
@@ -1604,8 +1615,12 @@
 
       const move = (moveEvent) => {
         const maxWidth = Math.max(150, Math.min(global.innerWidth - 16, 360));
-        const width = clamp(startWidth + moveEvent.clientX - startX, 140, maxWidth);
+        const width = clamp(startWidth - (moveEvent.clientX - startX), 140, maxWidth);
+        const left = clamp(startRight - width, 8, Math.max(8, global.innerWidth - width - 8));
         document.documentElement.style.setProperty("--mobile-pip-width", width + "px");
+        document.documentElement.style.setProperty("--mobile-pip-left", left + "px");
+        document.documentElement.style.setProperty("--mobile-pip-right", "auto");
+        viewerCard.dataset.pipPositioned = "true";
       };
       const endResize = () => {
         global.removeEventListener("pointermove", move);
@@ -1804,14 +1819,20 @@
   function selectEntity(entityId, source) {
     const product = catalogByEntityId.get(entityId);
     if (!product) return;
+    const preservePinnedScene = source === "scene" && document.body.classList.contains("is-mobile-scene-pinned");
     if (source !== "detail-navigation") storeDetailOrigin(entityId, source);
     else detailOrigin = { entityId, element: moduleList.querySelector('[data-select-entity="' + entityId + '"]') };
     state.selectedEntityId = entityId;
     if (currentStep !== "modules") currentStep = "modules";
     syncLayerVisibility();
     announce("Ficha de " + product.referenceLabel + ", " + product.title + ", aberta.");
-    if (source === "scene") {
+    if (source === "scene" && !preservePinnedScene) {
       requestAnimationFrame(() => moduleDetail.scrollIntoView({ behavior: shouldReduceMotion() ? "auto" : "smooth", block: "nearest" }));
+    } else if (preservePinnedScene) {
+      requestAnimationFrame(() => {
+        mobileSceneIsMini = true;
+        syncPinnedSceneUi();
+      });
     }
     focusDetailClose();
   }
