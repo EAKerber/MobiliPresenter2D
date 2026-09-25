@@ -461,7 +461,8 @@ legend { margin-bottom: 9px; color: rgba(255, 255, 255, 0.43); font-size: 12px; 
 .module-detail__collapse { min-height: 32px; border: 1px solid rgba(65,56,47,.2); border-radius: 999px; padding: 5px 9px; background: rgba(255,255,255,.42); color: #4d463d; cursor: pointer; font-size: 11px; font-weight: 750; }
 .module-detail__collapse:hover { background: rgba(255,255,255,.74); }
 .module-detail__carousel-intro { color: #62594e; font-size: 11px; line-height: 1.35; }
-.module-detail__carousel-stage { position: relative; display: grid; block-size: 252px; min-block-size: 252px; overflow: hidden; transition: opacity 180ms ease; }
+.module-detail__carousel-stage { position: relative; display: grid; block-size: 252px; min-block-size: 252px; overflow: hidden; transition: opacity 180ms ease; touch-action: pan-y; overscroll-behavior-inline: contain; user-select: none; cursor: grab; }
+.module-detail__carousel-stage.is-dragging { cursor: grabbing; }
 .module-detail__carousel-stage.is-fading { opacity: 0; }
 .module-detail__carousel-page { display: grid; grid-template-rows: auto minmax(0, 1fr) auto; gap: 8px; min-width: 0; min-height: 0; overflow: hidden; }
 .module-detail__carousel-content { display: grid; min-width: 0; min-height: 0; place-items: center; overflow: hidden; }
@@ -517,7 +518,7 @@ legend { margin-bottom: 9px; color: rgba(255, 255, 255, 0.43); font-size: 12px; 
 .global-option strong { font-size: 13px; }
 .global-option small { color: var(--muted); font-size: 11px; line-height: 1.35; }
 .global-option__swatch { grid-row: 1 / span 2; width: 36px; height: 36px; align-self: center; border: 1px solid rgba(255,255,255,.26); border-radius: 50%; background-repeat: repeat; background-size: 16px 16px; box-shadow: inset 0 0 0 2px rgba(0,0,0,.08); }
-.viewer-pip-controls { display: none; }
+.viewer-pip-controls, .viewer-pip-resize-handle { display: none; }
 .handle-option { display: grid; grid-template-columns: 32px minmax(0, 1fr); align-items: center; min-width: 0; gap: 8px; padding: 9px; border: 1px solid var(--border); border-radius: 9px; background: rgba(255,255,255,.025); color: var(--text); text-align: left; cursor: pointer; }
 .handle-option:hover { background: rgba(255,255,255,.07); }
 .handle-option.is-selected { border-color: var(--accent-strong); background: rgba(203,188,170,.13); }
@@ -663,20 +664,44 @@ legend { margin-bottom: 9px; color: rgba(255, 255, 255, 0.43); font-size: 12px; 
     left: var(--mobile-pip-left, auto);
     right: var(--mobile-pip-right, 8px);
     z-index: 50;
+    isolation: isolate;
     width: min(var(--mobile-pip-width, 172px), calc(100vw - 16px));
     border-radius: 11px;
     box-shadow: 0 10px 28px rgba(0,0,0,.35);
     touch-action: none;
   }
-  .viewer-pip-controls { display: none; }
-  body.is-mobile-scene-pinned .viewer-pip-controls { position: absolute; top: 5px; right: 5px; z-index: 3; display: flex; gap: 4px; }
+  .viewer-pip-controls, .viewer-pip-resize-handle { display: none; }
+  body.is-mobile-scene-pinned .viewer-pip-controls { position: absolute; top: 5px; right: 5px; z-index: 2000; display: flex; gap: 4px; pointer-events: auto; }
   .viewer-pip-control { display: grid; width: 44px; height: 44px; place-items: center; padding: 0; border: 1px solid rgba(255,255,255,.72); border-radius: 50%; background: rgba(24,24,22,.78); color: #fff; cursor: pointer; font-size: 16px; }
   .viewer-pip-control[aria-pressed="true"] { border-color: #e2c991; background: rgba(81,67,47,.92); }
   .viewer-pip-control:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
   body.is-mobile-scene-pinned .viewer-card__footer {
     display: none;
   }
-  body.is-mobile-scene-pinned .viewer { border-radius: 10px; }
+  body.is-mobile-scene-pinned .viewer { z-index: 0; border-radius: 10px; }
+  body.is-mobile-scene-pinned .viewer-pip-resize-handle {
+    position: absolute;
+    left: 2px;
+    bottom: 2px;
+    z-index: 2001;
+    display: block;
+    width: 36px;
+    height: 36px;
+    cursor: nesw-resize;
+    touch-action: none;
+    pointer-events: auto;
+  }
+  body.is-mobile-scene-pinned .viewer-pip-resize-handle::after {
+    content: "";
+    position: absolute;
+    left: 7px;
+    bottom: 7px;
+    width: 11px;
+    height: 11px;
+    border-left: 2px solid rgba(255,255,255,.92);
+    border-bottom: 2px solid rgba(255,255,255,.92);
+    border-radius: 0 0 0 2px;
+  }
   body.is-mobile-scene-pinned .scene-hotspots { pointer-events: auto; }
   body.is-mobile-scene-transparent .viewer { opacity: .58; }
 }
