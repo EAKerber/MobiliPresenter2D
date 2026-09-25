@@ -773,6 +773,7 @@ legend { margin-bottom: 9px; color: rgba(255, 255, 255, 0.43); font-size: 12px; 
     right: var(--mobile-pip-right, 8px);
     left: var(--mobile-pip-left, auto);
     z-index: 50;
+    isolation: isolate;
     width: min(var(--mobile-pip-width, clamp(160px, 48vw, 210px)), calc(100vw - 16px));
     border-radius: 11px;
     box-shadow: 0 10px 28px rgba(0,0,0,.35);
@@ -793,7 +794,7 @@ legend { margin-bottom: 9px; color: rgba(255, 255, 255, 0.43); font-size: 12px; 
     background: transparent;
   }
   body.is-mobile-scene-pinned .viewer-card__footer p { display: none; }
-  body.is-mobile-scene-pinned .viewer { border-radius: 10px; }
+  body.is-mobile-scene-pinned .viewer { z-index: 0; border-radius: 10px; }
   body.is-mobile-scene-pinned .viewer-pip-resize {
     position: absolute;
     left: 2px;
