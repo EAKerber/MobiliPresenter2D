@@ -25,7 +25,7 @@ const { chromium } = require("playwright");
   const targetUrl = process.env.MOBILE_INTERACTIONS_URL ||
     pathToFileURL(path.resolve(__dirname, "../app/index.html")).href;
   await page.goto(targetUrl);
-  await page.evaluate(() => Promise.all(Array.from(document.images, image => image.decode()));
+  await page.evaluate(() => Promise.all(Array.from(document.images, image => image.decode())));
 
   await page.evaluate(() => {
     const sentinel = document.getElementById("viewerPinSentinel");
