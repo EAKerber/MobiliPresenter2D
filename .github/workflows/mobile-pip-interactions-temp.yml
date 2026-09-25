@@ -1,0 +1,66 @@
+name: Mobile PiP interactions temp
+
+on:
+  push:
+    branches:
+      - feat/global-finishes-stone-mobile-pip
+    paths:
+      - .github/workflows/mobile-pip-interactions-temp.yml
+
+permissions:
+  contents: write
+
+jobs:
+  gate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: feat/global-finishes-stone-mobile-pip
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Syntax and core smoke
+        run: |
+          node --check app/app.js
+          node --check tests/mobile-pip-interactions-browser.cjs
+          node app/tools/test-core.js
+      - name: Install isolated browser tooling
+        run: |
+          npm install --prefix /tmp/mobile-browser --no-audit --no-fund playwright@1.62.1
+          /tmp/mobile-browser/node_modules/.bin/playwright install --with-deps chromium
+      - name: Run real-touch mobile interaction gate
+        env:
+          NODE_PATH: /tmp/mobile-browser/node_modules
+          MOBILE_INTERACTIONS_URL: http://127.0.0.1:4173/index.html
+        run: |
+          set -euo pipefail
+          python -m http.server 4173 --directory app >/tmp/mobile-http.log 2>&1 &
+          server_pid=$!
+          trap 'kill "$server_pid" 2>/dev/null || true' EXIT
+          sleep 1
+          node tests/mobile-pip-interactions-browser.cjs /tmp/mobile-pip-review
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: mobile-pip-interactions-review
+          path: /tmp/mobile-pip-review
+          if-no-files-found: ignore
+      - name: Self-clean with CAS
+        env:
+          TARGET_BRANCH: feat/global-finishes-stone-mobile-pip
+          EXPECTED_HEAD: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git rm .github/workflows/mobile-pip-interactions-temp.yml
+          remote_before="$(git ls-remote origin "refs/heads/$TARGET_BRANCH" | cut -f1)"
+          test "$remote_before" = "$EXPECTED_HEAD"
+          git commit -m "chore: self-clean mobile PiP interaction gate"
+          result="$(git rev-parse HEAD)"
+          git push origin "HEAD:refs/heads/$TARGET_BRANCH"
+          remote_after="$(git ls-remote origin "refs/heads/$TARGET_BRANCH" | cut -f1)"
+          test "$remote_after" = "$result"
