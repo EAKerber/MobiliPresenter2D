@@ -738,9 +738,10 @@ legend { margin-bottom: 9px; color: rgba(255, 255, 255, 0.43); font-size: 12px; 
     position: absolute;
     top: 6px;
     right: 6px;
-    z-index: 900;
+    z-index: 2000;
     display: flex;
     gap: 4px;
+    pointer-events: auto;
   }
   .viewer-pip-control {
     display: grid;
@@ -795,25 +796,27 @@ legend { margin-bottom: 9px; color: rgba(255, 255, 255, 0.43); font-size: 12px; 
   body.is-mobile-scene-pinned .viewer { border-radius: 10px; }
   body.is-mobile-scene-pinned .viewer-pip-resize {
     position: absolute;
-    right: 2px;
+    left: 2px;
+    right: auto;
     bottom: 2px;
-    z-index: 901;
+    z-index: 2001;
     display: block;
-    width: 28px;
-    height: 28px;
-    cursor: nwse-resize;
+    width: 32px;
+    height: 32px;
+    cursor: nesw-resize;
     touch-action: none;
+    pointer-events: auto;
   }
   body.is-mobile-scene-pinned .viewer-pip-resize::after {
     content: "";
     position: absolute;
-    right: 6px;
+    left: 6px;
     bottom: 6px;
     width: 10px;
     height: 10px;
-    border-right: 2px solid rgba(255,255,255,.9);
+    border-left: 2px solid rgba(255,255,255,.9);
     border-bottom: 2px solid rgba(255,255,255,.9);
-    border-radius: 0 0 2px;
+    border-radius: 0 0 0 2px;
   }
   body.is-mobile-scene-pinned .scene-hotspots { pointer-events: none; }
   body.is-mobile-scene-pinned .scene-hotspot { pointer-events: auto; }
