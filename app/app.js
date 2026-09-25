@@ -26,6 +26,7 @@
   let mobileSceneTransparent = false;
   let mobilePipSizeIndex = 1;
   let mobilePipPosition = null;
+  let mobilePipWidth = null;
 
   const sceneBase = document.getElementById("sceneBase");
   const sceneLayers = document.getElementById("sceneLayers");
@@ -55,6 +56,7 @@
   const mobileScenePin = document.getElementById("mobileScenePin");
   const mobileSceneTransparency = document.getElementById("mobileSceneTransparency");
   const mobileSceneResize = document.getElementById("mobileSceneResize");
+  const mobileSceneResizeHandle = document.getElementById("mobileSceneResizeHandle");
   const mobileSceneRepin = document.getElementById("mobileSceneRepin");
   const flowNav = document.querySelector(".flow-nav");
   const skirtingOverlays = [
@@ -995,6 +997,54 @@
     dots.children[currentPage]?.classList.add("is-active");
     dots.children[currentPage]?.setAttribute("aria-current", "true");
     updateNavigationLabels();
+
+    let swipeStartX = null;
+    let swipeStartY = null;
+    let swipePointerId = null;
+    const clearSwipe = () => {
+      swipeStartX = null;
+      swipeStartY = null;
+      swipePointerId = null;
+      stage.classList.remove("is-swiping", "is-dragging");
+    };
+    const finishSwipe = (event) => {
+      if (swipeStartX === null || swipeStartY === null) return;
+      const deltaX = event.clientX - swipeStartX;
+      const deltaY = event.clientY - swipeStartY;
+      const pointerId = swipePointerId;
+      clearSwipe();
+      try {
+        if (pointerId !== null && stage.hasPointerCapture?.(pointerId)) stage.releasePointerCapture(pointerId);
+      } catch (_) {}
+      const horizontal = Math.abs(deltaX) >= 32 && Math.abs(deltaX) > Math.abs(deltaY) * 1.15;
+      if (!horizontal) return;
+      if (deltaX < 0 && currentPage < pages.length - 1) renderPage(currentPage + 1, true);
+      if (deltaX > 0 && currentPage > 0) renderPage(currentPage - 1, true);
+    };
+    stage.addEventListener("pointerdown", (event) => {
+      if (event.button !== undefined && event.button !== 0) return;
+      swipeStartX = event.clientX;
+      swipeStartY = event.clientY;
+      swipePointerId = event.pointerId;
+      stage.classList.add("is-swiping");
+      try { stage.setPointerCapture?.(event.pointerId); } catch (_) {}
+      stopAutoCycle();
+    });
+    stage.addEventListener("pointermove", (event) => {
+      if (swipePointerId === null || event.pointerId !== swipePointerId || swipeStartX === null) return;
+      const deltaX = event.clientX - swipeStartX;
+      const deltaY = event.clientY - swipeStartY;
+      if (Math.abs(deltaX) > 8 && Math.abs(deltaX) > Math.abs(deltaY)) {
+        stage.classList.add("is-dragging");
+        if (event.cancelable) event.preventDefault();
+      }
+    });
+    stage.addEventListener("pointerup", finishSwipe);
+    stage.addEventListener("pointercancel", clearSwipe);
+    stage.addEventListener("lostpointercapture", () => {
+      if (swipeStartX !== null) clearSwipe();
+    });
+
     collapse.setAttribute("aria-expanded", String(!isCollapsed));
     collapse.setAttribute("aria-label", isCollapsed ? "Expandir visualizações" : "Recolher visualizações");
     collapse.textContent = isCollapsed ? "Mostrar" : "Recolher";
@@ -1478,8 +1528,7 @@
   }
 
   function syncPinnedSceneUi() {
-    const detailIsOpen = Boolean(state.selectedEntityId);
-    const shouldDock = isMobileViewport() && mobileScenePinEnabled && mobileSceneIsMini && !detailIsOpen;
+    const shouldDock = isMobileViewport() && mobileScenePinEnabled && mobileSceneIsMini;
     if (!shouldDock && viewerCard) mobileSceneAnchorHeight = Math.ceil(viewerCard.getBoundingClientRect().height);
     document.body.classList.toggle("has-mobile-scene-pin", isMobileViewport() && mobileScenePinEnabled);
     document.body.classList.toggle("is-mobile-scene-pinned", shouldDock);
@@ -1488,7 +1537,7 @@
     const navBounds = flowNav?.getBoundingClientRect();
     const navHeight = Math.ceil(navBounds?.height || 0);
     const navBottom = Math.ceil(navBounds?.bottom || 0);
-    const pipWidth = Math.min([176, 208, 240][mobilePipSizeIndex], Math.max(0, global.innerWidth - 16));
+    const pipWidth = Math.min(mobilePipWidth ?? [176, 208, 240][mobilePipSizeIndex], Math.max(0, global.innerWidth - 16));
     const pipHeight = Math.ceil((pipWidth * 2) / 3) + 2;
     const pipBottom = Math.max(navBottom, mobilePipPosition?.top || 0) + pipHeight;
     const contentClearance = shouldDock ? pipBottom + 16 : navBottom + 12;
@@ -1747,14 +1796,20 @@
   function selectEntity(entityId, source) {
     const product = catalogByEntityId.get(entityId);
     if (!product) return;
+    const preservePinnedScene = source === "scene" && document.body.classList.contains("is-mobile-scene-pinned");
     if (source !== "detail-navigation") storeDetailOrigin(entityId, source);
     else detailOrigin = { entityId, element: moduleList.querySelector('[data-select-entity="' + entityId + '"]') };
     state.selectedEntityId = entityId;
     if (currentStep !== "modules") currentStep = "modules";
     syncLayerVisibility();
     announce("Ficha de " + product.referenceLabel + ", " + product.title + ", aberta.");
-    if (source === "scene") {
+    if (source === "scene" && !preservePinnedScene) {
       requestAnimationFrame(() => moduleDetail.scrollIntoView({ behavior: shouldReduceMotion() ? "auto" : "smooth", block: "nearest" }));
+    } else if (preservePinnedScene) {
+      requestAnimationFrame(() => {
+        mobileSceneIsMini = true;
+        syncPinnedSceneUi();
+      });
     }
     focusDetailClose();
   }
@@ -1914,6 +1969,12 @@
     });
   });
 
+  [mobileScenePin, mobileSceneTransparency, mobileSceneResize, mobileSceneResizeHandle].filter(Boolean).forEach((control) => {
+    ["pointerdown", "pointerup", "click"].forEach((eventName) => {
+      control.addEventListener(eventName, (event) => event.stopPropagation());
+    });
+  });
+
   mobileScenePin?.addEventListener("click", () => setMobileScenePinEnabled(!mobileScenePinEnabled));
   mobileSceneRepin?.addEventListener("click", () => setMobileScenePinEnabled(true));
   mobileSceneTransparency?.addEventListener("click", () => {
@@ -1924,8 +1985,42 @@
   mobileSceneResize?.addEventListener("click", () => {
     mobilePipSizeIndex = (mobilePipSizeIndex + 1) % 3;
     mobilePipPosition = null;
+    mobilePipWidth = null;
     syncPinnedSceneUi();
     announce(["Mini-cena pequena.", "Mini-cena média.", "Mini-cena grande."][mobilePipSizeIndex]);
+  });
+
+  mobileSceneResizeHandle?.addEventListener("pointerdown", (event) => {
+    if (!document.body.classList.contains("is-mobile-scene-pinned")) return;
+    const startRect = viewerCard.getBoundingClientRect();
+    const startWidth = startRect.width;
+    const startX = event.clientX;
+    const startRight = startRect.right;
+    const startTop = startRect.top;
+    mobileSceneResizeHandle.setPointerCapture?.(event.pointerId);
+    event.preventDefault();
+    event.stopPropagation();
+
+    const move = (moveEvent) => {
+      const maxWidth = Math.max(150, Math.min(global.innerWidth - 16, 360));
+      mobilePipWidth = Math.min(maxWidth, Math.max(140, startWidth - (moveEvent.clientX - startX)));
+      if (mobilePipPosition) {
+        mobilePipPosition = {
+          left: Math.min(Math.max(8, global.innerWidth - mobilePipWidth - 8), Math.max(8, startRight - mobilePipWidth)),
+          top: mobilePipPosition.top ?? startTop
+        };
+      }
+      syncPinnedSceneUi();
+    };
+    const endResize = () => {
+      global.removeEventListener("pointermove", move);
+      global.removeEventListener("pointerup", endResize);
+      global.removeEventListener("pointercancel", endResize);
+      syncPinnedSceneUi();
+    };
+    global.addEventListener("pointermove", move);
+    global.addEventListener("pointerup", endResize);
+    global.addEventListener("pointercancel", endResize);
   });
 
   let pipDrag = null;
