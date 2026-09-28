@@ -9,6 +9,18 @@
     />
     <title>Casa em Módulos — Configurador</title>
     <link rel="stylesheet" href="styles.css?v=scene-marker-r5" />
+    <style>
+      @media (max-width: 700px) {
+        body.is-mobile-scene-pinned.is-mobile-scene-transparent .viewer-card {
+          background: transparent;
+          box-shadow: none;
+        }
+        body.is-mobile-scene-pinned.is-mobile-scene-transparent .viewer {
+          background: transparent;
+          opacity: .58;
+        }
+      }
+    </style>
   </head>
   <body>
     <header class="topbar">
@@ -165,5 +177,58 @@
     <script src="data/stone-data.js?v=scene-marker-r5"></script>
     <script src="core/stone.js?v=scene-marker-r5"></script>
     <script src="app.js?v=scene-marker-r5"></script>
+    <script>
+      (() => {
+        const resizeHandle = document.getElementById("mobileSceneResizeHandle");
+        if (!resizeHandle) return;
+
+        let resizeSession = null;
+        let committingResize = false;
+
+        resizeHandle.addEventListener("pointerdown", (event) => {
+          if (!document.body.classList.contains("is-mobile-scene-pinned")) return;
+          resizeSession = {
+            pointerId: event.pointerId,
+            pointerType: event.pointerType,
+            clientX: event.clientX,
+            clientY: event.clientY
+          };
+        }, true);
+
+        window.addEventListener("pointermove", (event) => {
+          if (!resizeSession || event.pointerId !== resizeSession.pointerId || committingResize) return;
+          resizeSession.clientX = event.clientX;
+          resizeSession.clientY = event.clientY;
+          event.stopImmediatePropagation();
+        }, true);
+
+        window.addEventListener("pointerup", (event) => {
+          if (!resizeSession || event.pointerId !== resizeSession.pointerId) return;
+
+          committingResize = true;
+          window.dispatchEvent(new PointerEvent("pointermove", {
+            bubbles: true,
+            pointerId: resizeSession.pointerId,
+            pointerType: resizeSession.pointerType,
+            clientX: resizeSession.clientX,
+            clientY: resizeSession.clientY
+          }));
+          window.dispatchEvent(new PointerEvent("pointercancel", {
+            bubbles: true,
+            pointerId: resizeSession.pointerId,
+            pointerType: resizeSession.pointerType,
+            clientX: resizeSession.clientX,
+            clientY: resizeSession.clientY
+          }));
+          committingResize = false;
+          resizeSession = null;
+        }, true);
+
+        window.addEventListener("pointercancel", (event) => {
+          if (committingResize) return;
+          if (resizeSession && event.pointerId === resizeSession.pointerId) resizeSession = null;
+        }, true);
+      })();
+    </script>
   </body>
 </html>
