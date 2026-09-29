@@ -1,9 +1,9 @@
 {
   "schemaVersion": "R5APixelPerfectMaterialization 0.3",
-  "module02LeftStripAlphaRemoved": 3597,
-  "stone02ColumnWedgeAlphaRemoved": 677,
-  "stone02ExposedRightAlphaRemoved": 822,
-  "stone03ExposedLeftAlphaRemoved": 758,
+  "module02LeftStripAlphaRemoved": 0,
+  "stone02ColumnWedgeAlphaRemoved": 0,
+  "stone02ExposedRightAlphaRemoved": 919,
+  "stone03ExposedLeftAlphaRemoved": 635,
   "module02FinishMask": {
     "protectedPixelsCleared": 46308,
     "rightOwnershipPixelsCleared": 2926,

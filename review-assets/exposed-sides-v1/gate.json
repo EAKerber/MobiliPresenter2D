@@ -33,15 +33,15 @@
     {
       "id": "module-07-left-return",
       "asset": "assets/kitchen/overlays/module-07-left-return.png",
-      "sha256": "c85b47732f1a981b328f0e6efa4d64948089d54cf77b45c5e0f1b280a32772c9",
+      "sha256": "74f55ae3d1ee91bb9146894b521a77f024169b1b62ba61a6485288b2eeb80f23",
       "donorSha256": "6a51f8b5438e596bbf5318d7fa477e88dce40b7a5dffd80efcd86bf6f2f2d70e",
       "alphaBounds": [
-        1225,
+        1223,
         50,
         1238,
         213
       ],
-      "changedPixels": 2017,
+      "changedPixels": 2325,
       "outsideRoiPixels": 0
     }
   ]

@@ -77,16 +77,24 @@ def run(manifest,out):
         assert stone_actual.tobytes()==expected.tobytes(),'runtime stone slice differs from approved composition'
 
         visible_stone_support=Image.new('L',SIZE)
+        visible_stone_z=[]
         for entity in case['visibleEntities']:
             tags=set(entity.get('tags',[]))
             if 'stone' in tags or entity['id'].startswith('approved-stone-'):
                 visible_stone_support=ImageChops.lighter(visible_stone_support,entity_alpha(entity))
+                visible_stone_z.append(entity['zIndex'])
         independent_records=[]
         for entity in independent:
             overlap=ImageChops.multiply(entity_alpha(entity),visible_stone_support)
             overlap_pixels=sum(overlap.histogram()[1:])
-            assert overlap_pixels==0, f"independent overlay overlaps visible stone: {entity['id']} ({overlap_pixels} px)"
-            independent_records.append({'id':entity['id'],'stoneOverlapPixels':0})
+            behind_stone=bool(visible_stone_z and entity['zIndex']<max(visible_stone_z))
+            if overlap_pixels and not behind_stone:
+                raise AssertionError(f"independent overlay overlaps front stone: {entity['id']} ({overlap_pixels} px)")
+            independent_records.append({
+                'id':entity['id'],
+                'stoneOverlapPixels':overlap_pixels,
+                'compositedBehindStone':behind_stone and overlap_pixels>0
+            })
 
         rgb=ImageChops.difference(stone_actual.convert('RGB'),before.convert('RGB')).split()
         diff=ImageChops.lighter(ImageChops.lighter(rgb[0],rgb[1]),rgb[2]).point(lambda v:255 if v else 0)

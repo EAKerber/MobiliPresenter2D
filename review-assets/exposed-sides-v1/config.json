@@ -6,6 +6,6 @@
   "faces": [
     {"id":"module-05-right-return","host":"module-05","occluders":["module-06"],"zIndex":499,"donor":"donor-left.png","crop":[743,80,7,168],"quad":[[751,65],[765,77],[765,268],[751,258]]},
     {"id":"module-06-left-return","host":"module-06","occluders":["module-05"],"zIndex":599,"donor":"donor-upper-sink.png","crop":[738,80,12,221],"quad":[[737,70],[751,65],[751,313],[737,309]]},
-    {"id":"module-07-left-return","host":"module-07","occluders":["module-04"],"zIndex":699,"donor":"donor-upper-sink.png","crop":[738,80,12,221],"quad":[[1225,62],[1238,50],[1238,206],[1225,213]]}
+    {"id":"module-07-left-return","host":"module-07","occluders":["module-04"],"zIndex":699,"donor":"donor-upper-sink.png","crop":[738,80,12,221],"quad":[[1223,62],[1238,50],[1238,206],[1223,213]]}
   ]
 }

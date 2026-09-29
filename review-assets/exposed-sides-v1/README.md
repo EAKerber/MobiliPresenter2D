@@ -28,18 +28,20 @@ O vidro é uma geometria vetorial fixa, rasterizada para compatibilidade com o c
 | 03 | Sem nova lateral direita: inferência retirada após revisão de perspectiva. A posição à esquerda é ocupada pelo fogão substituto quando 02 sai. |
 | 04 | Painel original preservado. |
 | 05 | Nova continuação direita, visível somente sem 06. |
-| 06 | Nova continuação esquerda, visível somente sem 05. |
-| 07 | Nova continuação esquerda, visível somente sem 04. |
+| 06 | Sem lateral na cena nesta câmera. O render esquerdo gerado permanece apenas na imagem principal do painel de especificações. |
+| 07 | Nova continuação esquerda, visível somente sem 04; a projeção da face se estende para igualar 400 mm aos demais aéreos quando 04 sai. |
 
 **Correção do usuário:** a geração do aéreo 06 mostrava duas laterais externas incompatíveis. Somente o material da esquerda foi aproveitado. A face direita dessa geração não participa de nenhum asset final. A geometria dos retornos continua sendo inferência local revisável, não medição 3D certificada.
 
 ## Vidro
 
-`tempered-glass` lê diretamente `globalSelections.serviceIds`. Não tem host, exigência de módulos, hotspot, item no catálogo nem participação nos acabamentos. A opção existente é a única fonte de estado e preço. Reset conserva o padrão já existente de serviço selecionado. A camada fica acima dos acabamentos da pedra/rodapé e não intercepta cliques.
+`tempered-glass` lê diretamente `globalSelections.serviceIds`. Não tem host, exigência de módulos, hotspot, item no catálogo nem participação nos acabamentos. A opção existente é a única fonte de estado e preço. Reset conserva o padrão já existente de serviço selecionado. A camada encontra a coluna/parede ao fundo e fica atrás das camadas de módulos.
+
+A junta de pedra entre 02 e 03 usa agora um único perfil projetado. O pixel de encontro pertence à pedra 02; a pedra 03 começa imediatamente após ele, evitando a cunha sobreposta que vinha das duas bordas incompatíveis.
 
 ## Validação e limites
 
-- Núcleo do app: PASS; 21 entidades, 8 controláveis, 7 módulos na lista.
+- Núcleo do app após a correção de perspectiva: 20 entidades de cena, 7 módulos na lista; M06 permanece apenas como sobreposição da imagem de especificação.
 - 256 estados de módulos/vidro: PASS, incluindo independência do vidro e exclusão de duas continuações externas no mesmo módulo.
 - Navegador Edge: carregamento, toggle, reset, desktop/mobile e ausência de erros verificados.
 - Assets: 38 imagens verificadas; baseline histórico sem diferenças de pixels.

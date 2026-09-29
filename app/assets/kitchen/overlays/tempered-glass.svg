@@ -12,11 +12,10 @@
       <stop offset="1" stop-color="#fff" stop-opacity="0"/>
     </linearGradient>
   </defs>
-  <!-- Fixed scene projection: back edge at the column/wall, front at counter depth.
-       The ceiling lies outside the source frame; the pane continues beyond its top. -->
-  <path d="M492 0H518V855L492 899Z" fill="url(#smoke)"/>
-  <path d="M493 0H517V854L493 897Z" fill="url(#reflection)"/>
-  <path d="M492 0V899L518 855V0" fill="none" stroke="#202729" stroke-opacity=".68" stroke-width="1.4"/>
-  <path d="M493.4 0V896" fill="none" stroke="#ebf2ef" stroke-opacity=".65" stroke-width=".8"/>
-  <path d="M494 897L517 859" fill="none" stroke="#171b1d" stroke-opacity=".8" stroke-width="2.4"/>
+  <!-- The rear edge meets the wall/column at x=496; the front edge reaches the stove counter. -->
+  <path d="M496 0H522V855L496 899Z" fill="url(#smoke)"/>
+  <path d="M497 0H521V854L497 897Z" fill="url(#reflection)"/>
+  <path d="M496 0V899L522 855V0" fill="none" stroke="#202729" stroke-opacity=".68" stroke-width="1.4"/>
+  <path d="M497.4 0V896" fill="none" stroke="#ebf2ef" stroke-opacity=".65" stroke-width=".8"/>
+  <path d="M498 897L521 859" fill="none" stroke="#171b1d" stroke-opacity=".8" stroke-width="2.4"/>
 </svg>

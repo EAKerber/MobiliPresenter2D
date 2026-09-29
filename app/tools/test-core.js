@@ -37,7 +37,7 @@ function resolved(state) {
   return visibility.resolveVisibility(scene, state);
 }
 
-assert.equal(scene.entities.length, 21);
+assert.equal(scene.entities.length, 20);
 const glassState = core.createInitialState(scene);
 assert.equal(resolved(glassState)["tempered-glass"].visible, true);
 core.setAllControllableVisibility(scene, glassState, false);

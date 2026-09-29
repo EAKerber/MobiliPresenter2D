@@ -30,7 +30,7 @@
       ]
     },
     "assets/kitchen/composicao-completa.png": {
-      "sha256": "79ef8138e6011f52ac000982ae5855a7ac14c74e75f3fcd2a62d614cd29e9ba0",
+      "sha256": "95c4a45c92e31b4f3bdca8804e9434b572185c8aa8590a7bdf098ed1c0013589",
       "alphaBounds": [
         0,
         0,
@@ -48,7 +48,7 @@
       ]
     },
     "assets/kitchen/layers/02_inferior_fogao.png": {
-      "sha256": "dcda8c31812678db8eb1e4d5fc88d23dfd8cd77e50a8a75d726df62af6075faf",
+      "sha256": "9c7972df6765c6bf071be03f791b74a0c97661b343324193b8de6ada39c4f3f9",
       "alphaBounds": [
         498,
         590,
@@ -57,7 +57,7 @@
       ]
     },
     "assets/kitchen/layers/stone-02-cozinha.png": {
-      "sha256": "5317874508ac3738dd8aaffb60e1f6db5e623edb2d8261d7674934b3225359dd",
+      "sha256": "7b5f3a57a46c75390e3f7262fd9e9169f11164c513cd0a246c0ee28eaf2dfb03",
       "alphaBounds": [
         484,
         491,
@@ -138,7 +138,7 @@
       ]
     },
     "assets/kitchen/masks/02.png": {
-      "sha256": "88b54bfbb77a14a8c62473ac07f1670d39d31c5140668e4af8569125d390df90",
+      "sha256": "1411baabde53eeb7b97d733cb79ab5de7fe86c375c94d806a46f3662b67cee30",
       "alphaBounds": [
         498,
         590,
@@ -218,25 +218,25 @@
       ]
     },
     "assets/kitchen/bridges/stone-02-joint-bridge.png": {
-      "sha256": "e178e88edf0f412d1f0922bf335e7b524e80e888a3e2189fcd51ccc048a3d108",
+      "sha256": "e60a18a1cb9e0913bcb94d31923ab9212c66071319563c59cd2b550db46028db",
       "alphaBounds": [
-        745,
+        741,
         521,
         764,
         590
       ]
     },
     "assets/kitchen/bridges/stone-03-joint-bridge.png": {
-      "sha256": "d17fe629516c7aad1d79120c139f15529820a51ad260639ec5ce411e7aa222c3",
+      "sha256": "7de97e7387077757a8e44a90ea78dec5abaabe508fb3ef00ac52d8c00bd954fb",
       "alphaBounds": [
         736,
         516,
-        751,
+        747,
         590
       ]
     },
     "assets/kitchen/variants/stone-02-cozinha-exposed-right.png": {
-      "sha256": "e1ab1e0134d249104dcf7bf7192922612f5aa72b155811689a997d5d83f1ca11",
+      "sha256": "56886b109c2bd23c6da024443153e2f94582e73be1847878a1654f6f0b3d26dc",
       "alphaBounds": [
         484,
         491,
@@ -245,7 +245,7 @@
       ]
     },
     "assets/kitchen/variants/stone-03-pia-exposed-left.png": {
-      "sha256": "7f298d33310610831ce1e9d0b095c0a26ffd89b003ac2fcc629ed1e23332e419",
+      "sha256": "5f9c700f41883d577f07ad7995bdbb65aab0b0e7732a30af972293240ce7971f",
       "alphaBounds": [
         736,
         442,
@@ -335,20 +335,20 @@
       ]
     },
     "assets/kitchen/overlays/module-07-left-return.png": {
-      "sha256": "c85b47732f1a981b328f0e6efa4d64948089d54cf77b45c5e0f1b280a32772c9",
+      "sha256": "74f55ae3d1ee91bb9146894b521a77f024169b1b62ba61a6485288b2eeb80f23",
       "alphaBounds": [
-        1225,
+        1223,
         50,
         1238,
         213
       ]
     },
     "assets/kitchen/overlays/tempered-glass.png": {
-      "sha256": "48a1a499e03780696295710538f2be7e3944f0f773c70fa05276e832fb929f79",
+      "sha256": "b7148f26d5fddf0ae0c23a6f1081fc28d77f993da06b2de419e4792ffdcc7de4",
       "alphaBounds": [
-        491,
+        495,
         0,
-        519,
+        523,
         902
       ]
     }
