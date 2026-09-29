@@ -47,6 +47,7 @@ jobs:
           path: /tmp/stone-browser-review
           if-no-files-found: ignore
       - name: Test glass and exposed side combinations
+        if: always()
         env:
           NODE_PATH: /tmp/stone-browser-tools/node_modules
         run: node tests/exposed-sides-glass.cjs /tmp/exposed-sides-review
