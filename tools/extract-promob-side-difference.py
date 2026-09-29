@@ -62,7 +62,7 @@ def extract(with_side: Path, without_side: Path, output: Path,
         "withSide": {"file": with_side.name, "sha256": sha256(with_side)},
         "withoutSide": {"file": without_side.name, "sha256": sha256(without_side)},
     }
-    (output / "extraction.json").write_text(json.dumps(result, indent=2) + "\n", encoding="utf-8")
+    (output / "extraction.json").write_text(json.dumps(result, indent=2) + "\n", encoding="utf-8", newline="\n")
     return result
 
 
