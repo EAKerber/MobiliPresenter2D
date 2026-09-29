@@ -1,0 +1,36 @@
+{
+  "module-02-right-face.webp": {
+    "tool": "OpenAI ImageGen",
+    "prompt": "Using the attached cabinet close-up and Promob reference as visual guidance, create only the narrow exposed RIGHT side panel of the upper/side cabinet module 02, viewed from the exact same nearly frontal camera as the website image. The cabinet front is on the left of the side face; show a slim pale off-white MDF carcass cheek attached flush along the cabinet's right vertical edge, with realistic laminate texture, subtle edge shading, and a slight perspective return. The side starts exactly at the cabinet body below the stone countertop and ends at the cabinet base. Transparent background, isolated side panel only, no front door, no countertop, no wall, no detached pieces, no text, no extra objects. Keep the shape a single continuous quadrilateral.",
+    "originalGeneratedOutput": "exec-a5d5584e-2fde-4f9e-9f91-ba7bec8a7be8.png",
+    "originalGeneratedSha256": "843acf20fae37f84b9df4cbbbd9e65f6737ad96e1b721485c568562725f7bfb9",
+    "storedDonorCropBounds": [
+      72,
+      22,
+      938,
+      1504
+    ],
+    "storedDonorSize": [
+      299,
+      512
+    ],
+    "storedDonorFile": "module-02-right-face.webp"
+  },
+  "range-metal-side.webp": {
+    "tool": "OpenAI ImageGen",
+    "prompt": "Using the attached freestanding cooker close-up as a visual reference, create only the exposed RIGHT side of a freestanding stainless-steel kitchen range viewed from the same near-frontal angle. Show a narrow but clearly dimensional brushed-metal side plane attached flush to the right edge of the appliance front, with a softly rounded front seam, subtle vertical brushed grain, natural grey reflections, and perspective taper. Transparent background, isolated appliance side only, no front face, no oven door, no knobs, no floor, no wall, no text, no green fringe, no detached parts.",
+    "originalGeneratedOutput": "exec-c2671d61-6188-47e9-a3e7-4ec7b0bf0534.png",
+    "originalGeneratedSha256": "ed979f1e97d73dccc7c954feaec9bfb7a2cb4675faa81334f36d7a63d9f7f8e3",
+    "storedDonorCropBounds": [
+      207,
+      72,
+      750,
+      1694
+    ],
+    "storedDonorSize": [
+      171,
+      512
+    ],
+    "storedDonorFile": "range-metal-side.webp"
+  }
+}

@@ -46,6 +46,7 @@ def main() -> int:
         "assets/kitchen/overlays/approved-stone-02.png",
         "assets/kitchen/overlays/approved-stone-03.png",
         "assets/kitchen/overlays/module-02-right-exposed-face.png",
+        "assets/kitchen/overlays/range-freestanding-right-side.png",
         "assets/kitchen/masks/04-06-seam-bridge.png",
         "assets/kitchen/masks/04-with-06-seam.png",
         "assets/kitchen/composicao-completa.png",

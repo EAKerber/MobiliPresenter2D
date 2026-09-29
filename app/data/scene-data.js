@@ -34,6 +34,7 @@
         "module-05",
         "module-06",
         "module-07",
+        "range-freestanding-right-side",
         "lighting-08"
       ],
       decorVisible: [],
@@ -42,7 +43,7 @@
     entities: [
       ...[
         ["module-05-right-return", "module-05", "module-06", 499, 751, 65, 14, 203],
-        ["module-07-left-return", "module-07", "module-04", 699, 1223, 50, 15, 163]
+        ["module-07-left-return", "module-07", "module-04", 699, 1223, 51, 15, 159]
       ].map(([id, hostId, occluder, zIndex, x, y, width, height]) => ({
         id, alias: id, label: "Continuação da caixaria",
         kind: "accessory", zIndex,
@@ -285,7 +286,7 @@
         zIndex: 202,
         asset: "assets/kitchen/bridges/stone-02-joint-bridge.png",
         maskAsset: null,
-        alphaBounds: { x: 745, y: 521, width: 19, height: 69 },
+        alphaBounds: { x: 741, y: 521, width: 23, height: 69 },
         defaultVisible: true,
         controllable: false,
         hostIds: ["module-02", "module-03"],
@@ -300,7 +301,7 @@
         zIndex: 203,
         asset: "assets/kitchen/overlays/module-02-right-exposed-face.png",
         maskAsset: null,
-        alphaBounds: { x: 755, y: 525, width: 9, height: 290 },
+        alphaBounds: { x: 748, y: 590, width: 8, height: 265 },
         defaultVisible: true,
         controllable: false,
         hostId: "module-02",
@@ -316,7 +317,7 @@
         zIndex: 302,
         asset: "assets/kitchen/bridges/stone-03-joint-bridge.png",
         maskAsset: null,
-        alphaBounds: { x: 736, y: 516, width: 15, height: 74 },
+        alphaBounds: { x: 736, y: 516, width: 11, height: 74 },
         defaultVisible: true,
         controllable: false,
         hostIds: ["module-02", "module-03"],
@@ -328,7 +329,7 @@
         alias: "02R",
         label: "Fogão convencional",
         kind: "substitution",
-        zIndex: 205,
+        zIndex: 305,
         asset: "assets/kitchen/substitutions/range-freestanding.png",
         maskAsset: null,
         alphaBounds: { x: 494, y: 531, width: 257, height: 355 },
@@ -338,6 +339,21 @@
         hostId: null,
         finishGroups: [],
         tags: ["replacement", "cooking-zone"]
+      },
+      {
+        id: "range-freestanding-right-side",
+        alias: "02R-lateral",
+        label: "Lateral metálica do fogão convencional",
+        kind: "accessory",
+        zIndex: 304,
+        asset: "assets/kitchen/overlays/range-freestanding-right-side.png",
+        maskAsset: null,
+        alphaBounds: { x: 743, y: 533, width: 20, height: 349 },
+        defaultVisible: true,
+        controllable: false,
+        hostId: "range-freestanding",
+        finishGroups: [],
+        tags: ["replacement-side", "metal", "cooking-zone"]
       }
     ],
     finishGroups: [

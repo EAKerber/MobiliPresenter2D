@@ -93,6 +93,7 @@
         group.className = "layer-group";
         group.dataset.entityId = entity.id;
         group.dataset.module = entity.alias;
+        group.style.zIndex = String(entity.zIndex);
 
         const image = document.createElement("img");
         image.src = entity.asset;

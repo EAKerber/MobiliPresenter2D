@@ -30,7 +30,7 @@
       ]
     },
     "assets/kitchen/composicao-completa.png": {
-      "sha256": "95c4a45c92e31b4f3bdca8804e9434b572185c8aa8590a7bdf098ed1c0013589",
+      "sha256": "79ef8138e6011f52ac000982ae5855a7ac14c74e75f3fcd2a62d614cd29e9ba0",
       "alphaBounds": [
         0,
         0,
@@ -48,7 +48,7 @@
       ]
     },
     "assets/kitchen/layers/02_inferior_fogao.png": {
-      "sha256": "9c7972df6765c6bf071be03f791b74a0c97661b343324193b8de6ada39c4f3f9",
+      "sha256": "dcda8c31812678db8eb1e4d5fc88d23dfd8cd77e50a8a75d726df62af6075faf",
       "alphaBounds": [
         498,
         590,
@@ -57,7 +57,7 @@
       ]
     },
     "assets/kitchen/layers/stone-02-cozinha.png": {
-      "sha256": "7b5f3a57a46c75390e3f7262fd9e9169f11164c513cd0a246c0ee28eaf2dfb03",
+      "sha256": "5317874508ac3738dd8aaffb60e1f6db5e623edb2d8261d7674934b3225359dd",
       "alphaBounds": [
         484,
         491,
@@ -138,7 +138,7 @@
       ]
     },
     "assets/kitchen/masks/02.png": {
-      "sha256": "1411baabde53eeb7b97d733cb79ab5de7fe86c375c94d806a46f3662b67cee30",
+      "sha256": "88b54bfbb77a14a8c62473ac07f1670d39d31c5140668e4af8569125d390df90",
       "alphaBounds": [
         498,
         590,
@@ -290,12 +290,12 @@
       ]
     },
     "assets/kitchen/overlays/module-02-right-exposed-face.png": {
-      "sha256": "3becbf8a510dd76757593ed5c227482edef7af57c48877e9d2e714398e77fff8",
+      "sha256": "c333da0b6dcd5a342089f2adba63ae160daedb3b9be099db68e0335632d58e2c",
       "alphaBounds": [
-        755,
-        525,
-        764,
-        815
+        748,
+        590,
+        756,
+        855
       ]
     },
     "assets/kitchen/masks/04-06-seam-bridge.png": {
@@ -335,12 +335,12 @@
       ]
     },
     "assets/kitchen/overlays/module-07-left-return.png": {
-      "sha256": "74f55ae3d1ee91bb9146894b521a77f024169b1b62ba61a6485288b2eeb80f23",
+      "sha256": "4911d9391bae31e0d31f7d3ff4b4129c0ff8af1ae3d10f26f47d738c1ffaeaf9",
       "alphaBounds": [
         1223,
-        50,
+        51,
         1238,
-        213
+        210
       ]
     },
     "assets/kitchen/overlays/tempered-glass.png": {
@@ -350,6 +350,15 @@
         0,
         523,
         902
+      ]
+    },
+    "assets/kitchen/overlays/range-freestanding-right-side.png": {
+      "sha256": "1d64db814d5568fcb68a1c459afa9be0c60bffaa525d2cb89402c450a8fc6328",
+      "alphaBounds": [
+        743,
+        533,
+        763,
+        882
       ]
     }
   }

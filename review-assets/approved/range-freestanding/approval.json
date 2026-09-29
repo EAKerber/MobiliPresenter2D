@@ -5,7 +5,9 @@
   "mask": "review-assets/approved/range-freestanding/mask.png",
   "maskSha256": "28f6df8b59eea9e0e3e20511b6651f3044d89ae5f2b712ee823707077b8c5fd7",
   "sourceImageSha256": "5b427a6c07861f99cb8fbaf99afdcb14d2251ff254f20c185e9cd0ccf4a499ec",
-  "cleanFrameSha256": "3bebae52fc781ed0bf391cf6ef82c62f7caa810551dc261481f51976c2de7a85",
+  "cleanFrameSha256": "76af917c4dc4aaa05d726340ee0e1162e546b477e1a441b131da9b80d30b560a",
+  "cleanFrameSupersedesSha256": "3bebae52fc781ed0bf391cf6ef82c62f7caa810551dc261481f51976c2de7a85",
+  "cleanFrameUpdateReason": "M07 lower-left return corner trimmed and replacement range side modeled as a separate host-bound overlay.",
   "authorizedRoi": [
     460,
     430,
