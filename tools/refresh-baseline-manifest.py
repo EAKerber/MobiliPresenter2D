@@ -70,6 +70,7 @@ def main() -> int:
     MANIFEST.write_text(
         json.dumps(manifest, ensure_ascii=False, indent=2, sort_keys=True) + "\n",
         encoding="utf-8",
+        newline="\n",
     )
     print(
         json.dumps(

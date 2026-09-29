@@ -37,7 +37,16 @@ function resolved(state) {
   return visibility.resolveVisibility(scene, state);
 }
 
-assert.equal(scene.entities.length, 17);
+assert.equal(scene.entities.length, 21);
+const glassState = core.createInitialState(scene);
+assert.equal(resolved(glassState)["tempered-glass"].visible, true);
+core.setAllControllableVisibility(scene, glassState, false);
+assert.equal(resolved(glassState)["tempered-glass"].visible, true, "glass has no module dependency");
+core.setGlobalService(glassState, "tempered-glass", false);
+assert.equal(resolved(glassState)["tempered-glass"].visible, false);
+core.setGlobalService(glassState, "tempered-glass", true);
+assert.equal(resolved(glassState)["tempered-glass"].visible, true);
+assert.equal(scene.entities.find(e => e.id === "tempered-glass").controllable, false);
 assert.deepEqual(Array.from(validation.validateScene(scene)), []);
 assert.equal(catalog.modules.length, 7);
 assert.equal(priceBook.mode, "estimate");

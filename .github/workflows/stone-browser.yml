@@ -5,11 +5,13 @@ on:
     paths:
       - 'app/**'
       - 'tests/stone-browser.cjs'
+      - 'tests/exposed-sides-glass.cjs'
       - '.github/workflows/stone-browser.yml'
   pull_request:
     paths:
       - 'app/**'
       - 'tests/stone-browser.cjs'
+      - 'tests/exposed-sides-glass.cjs'
       - '.github/workflows/stone-browser.yml'
   workflow_dispatch:
     inputs:
@@ -43,4 +45,15 @@ jobs:
         with:
           name: stone-browser-${{ github.run_id }}
           path: /tmp/stone-browser-review
+          if-no-files-found: ignore
+      - name: Test glass and exposed side combinations
+        env:
+          NODE_PATH: /tmp/stone-browser-tools/node_modules
+        run: node tests/exposed-sides-glass.cjs /tmp/exposed-sides-review
+      - name: Save glass and sides review
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: exposed-sides-${{ github.run_id }}
+          path: /tmp/exposed-sides-review
           if-no-files-found: ignore

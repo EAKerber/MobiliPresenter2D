@@ -1,0 +1,17 @@
+{
+  "tool": "built-in image_gen",
+  "generations": [
+    {
+      "input": "input-left.png",
+      "output": "donor-left.png",
+      "prompt": "Precise architectural photo edit. Input is the authoritative fixed 1536x1024 kitchen application scene. Keep camera, dimensions, framing, all furniture fronts, appliances, walls and floor EXACTLY unchanged. Complete ONLY the missing narrow WHITE melamine carcass RIGHT SIDES of the stove base cabinet and the upper cabinet directly above the hood. They terminate abruptly because their right neighbors were removed. The upper cabinet front ends x751, y65..257; complete a narrow plausible white return to its wall, not a wider cabinet, maximum x771. Lower front right edge x744 y588..856; retain existing narrow side and improve realistic connection to back near x764 y530..815. Match the existing white side of the laundry wall cabinet at x355..380 as the material and lighting reference. No handles, no new objects, no changed doors, do not change the stone, no text. Return entire scene at same framing. Only these small missing side regions should change; do not restyle the photo.",
+      "review": "Full scene rejected: front width drift. Only the narrow upper white material is extracted and fitted."
+    },
+    {
+      "input": "input-upper-sink.png",
+      "output": "donor-upper-sink.png",
+      "prompt": "Architectural precise-object-edit of this fixed kitchen scene. Preserve the entire 1536x1024 composition, camera and all original front pixels. Complete only missing white melamine carcass on the exposed sides of the isolated upper sink/microwave cabinet. Front extends from pixel x751 to1208, y65 to312. Add a narrow white left side return immediately OUTSIDE left front edge (x735..750), with back upper corner near (738,77), back bottom corner near (738,303). Add narrow white right return OUTSIDE right front edge x1209..1222, top back y77 and bottom back y304. Keep original door faces and microwave EXACTLY same width and position. White satin melamine side material matching laundry cabinet white side in left of scene. Subtle contact shadow and edge thickness; no extra cabinets, no handles, no text. Do not replace or move any fronts. Small bounded infill only.",
+      "review": "Prompt incorrectly requested contradictory external sides. User corrected this. Full scene rejected; only left side material retained. Never reuse right side geometry."
+    }
+  ]
+}

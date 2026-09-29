@@ -84,6 +84,11 @@ def main() -> int:
             ids = {e['id'] for e in case['visibleEntities']}
             for entity_id, patch in approved_patches().items():
                 if entity_id in ids: approved = Image.alpha_composite(approved, patch)
+            # The service now has a visual layer. Preserve the historical golden,
+            # and account explicitly for the requested optional glass addition.
+            if 'tempered-glass' in ids:
+                with Image.open(safe_app_path('assets/kitchen/overlays/tempered-glass.png')) as glass:
+                    approved = Image.alpha_composite(approved, glass.convert('RGBA'))
             assert rendered.tobytes() == approved.tobytes(), 'default differs from approved composition'
             original_diff = ImageChops.difference(rendered.convert("RGB"), golden.convert("RGB"))
             record["approvedChangePixelCount"] = nonzero_pixel_count(original_diff)

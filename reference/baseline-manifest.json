@@ -381,6 +381,230 @@
     },
     {
       "alphaBounds": [
+        147,
+        66,
+        352,
+        280
+      ],
+      "canonicalCanvas": true,
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "path": "app/assets/kitchen/masks/structure-01-highlight.png",
+      "sha256": "299f34c690d097cdd6f5ef9c230b3a6853b6b6208f20888ea46d5ff30dd21bcc",
+      "size": 12721
+    },
+    {
+      "alphaBounds": [
+        133,
+        66,
+        353,
+        280
+      ],
+      "canonicalCanvas": true,
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "path": "app/assets/kitchen/masks/structure-01-shadow.png",
+      "sha256": "bd3a72fa217dfde518f0152a49a1b0dce254e95ac5ff55f760540358c9c2ac72",
+      "size": 11811
+    },
+    {
+      "alphaBounds": [
+        500,
+        591,
+        744,
+        855
+      ],
+      "canonicalCanvas": true,
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "path": "app/assets/kitchen/masks/structure-02-highlight.png",
+      "sha256": "dd128fca74cc8547eef90b63b752057acf53df855eb4c3d97914063d35b7bffc",
+      "size": 9901
+    },
+    {
+      "alphaBounds": [
+        499,
+        591,
+        742,
+        855
+      ],
+      "canonicalCanvas": true,
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "path": "app/assets/kitchen/masks/structure-02-shadow.png",
+      "sha256": "c7c2c5b55b5321fbe1ff0c6bc4a380b254d63c652fa57f81dc8159cc919b9bbe",
+      "size": 9702
+    },
+    {
+      "alphaBounds": [
+        747,
+        591,
+        1203,
+        855
+      ],
+      "canonicalCanvas": true,
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "path": "app/assets/kitchen/masks/structure-03-highlight.png",
+      "sha256": "8a1c5d5e147a571d930df97a3602c7fb63054db626bedabd6261ab6c8704d421",
+      "size": 15873
+    },
+    {
+      "alphaBounds": [
+        747,
+        591,
+        1202,
+        855
+      ],
+      "canonicalCanvas": true,
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "path": "app/assets/kitchen/masks/structure-03-shadow.png",
+      "sha256": "f14f678d68a2d4f416fac8d2ae0c4fbae256ee846f45ec4893a75aa48e2525eb",
+      "size": 15735
+    },
+    {
+      "alphaBounds": [
+        1211,
+        51,
+        1219,
+        899
+      ],
+      "canonicalCanvas": true,
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "path": "app/assets/kitchen/masks/structure-04-highlight.png",
+      "sha256": "decd60ed354a7328cdb87b5934643da9ca5815ac0088eb7bff4db5151a4443c1",
+      "size": 8672
+    },
+    {
+      "alphaBounds": [
+        1211,
+        53,
+        1217,
+        71
+      ],
+      "canonicalCanvas": true,
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "path": "app/assets/kitchen/masks/structure-04-shadow.png",
+      "sha256": "6f10cb2cb0365681c69c46fb5e665b4306885771ed4e757acbe55f6043792579",
+      "size": 8575
+    },
+    {
+      "alphaBounds": [
+        510,
+        67,
+        750,
+        255
+      ],
+      "canonicalCanvas": true,
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "path": "app/assets/kitchen/masks/structure-05-highlight.png",
+      "sha256": "ace252e6f540ffc54da2a93733c28d5ca41cb726136e8cb96e2f93374c6c077a",
+      "size": 11626
+    },
+    {
+      "alphaBounds": [
+        507,
+        66,
+        749,
+        255
+      ],
+      "canonicalCanvas": true,
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "path": "app/assets/kitchen/masks/structure-05-shadow.png",
+      "sha256": "8de788260b15c53f47064a21d4b0865b8203cf8f7bebf9c50fd9eeb91a1ae409",
+      "size": 11017
+    },
+    {
+      "alphaBounds": [
+        753,
+        67,
+        1206,
+        309
+      ],
+      "canonicalCanvas": true,
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "path": "app/assets/kitchen/masks/structure-06-highlight.png",
+      "sha256": "87e2f94afaba6c8fe0e4c21719fb0f31b45f7b571c33c3b4b04f095c880b2211",
+      "size": 15291
+    },
+    {
+      "alphaBounds": [
+        753,
+        66,
+        1206,
+        309
+      ],
+      "canonicalCanvas": true,
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "path": "app/assets/kitchen/masks/structure-06-shadow.png",
+      "sha256": "f12d62736ee5396fed1a134614fb3866f0b5d6197bb0550b08ce9701653a2261",
+      "size": 12730
+    },
+    {
+      "alphaBounds": [
+        1241,
+        53,
+        1486,
+        204
+      ],
+      "canonicalCanvas": true,
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "path": "app/assets/kitchen/masks/structure-07-highlight.png",
+      "sha256": "8c06a009d3a5e3737147bf4b8f583f06109fd7ea0f1d884f982d32d45e48897b",
+      "size": 11196
+    },
+    {
+      "alphaBounds": [
+        1241,
+        51,
+        1488,
+        204
+      ],
+      "canonicalCanvas": true,
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "path": "app/assets/kitchen/masks/structure-07-shadow.png",
+      "sha256": "1898103e38c9d8c376f69d0a1c0cf83672fe97a35bbb196e986bd4fd308deef0",
+      "size": 10844
+    },
+    {
+      "alphaBounds": [
         515,
         491,
         739,
@@ -442,6 +666,70 @@
       "path": "app/assets/kitchen/overlays/module-02-right-exposed-face.png",
       "sha256": "3becbf8a510dd76757593ed5c227482edef7af57c48877e9d2e714398e77fff8",
       "size": 8465
+    },
+    {
+      "alphaBounds": [
+        751,
+        65,
+        765,
+        268
+      ],
+      "canonicalCanvas": true,
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "path": "app/assets/kitchen/overlays/module-05-right-return.png",
+      "sha256": "c9d08c26220e9ed7909c292074060ed02a6b0a25f2614c74781f4a57c7388039",
+      "size": 9053
+    },
+    {
+      "alphaBounds": [
+        737,
+        65,
+        751,
+        313
+      ],
+      "canonicalCanvas": true,
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "path": "app/assets/kitchen/overlays/module-06-left-return.png",
+      "sha256": "c078094ab8b4724a5e809a1f235f63f7c1aa576861da730419279ff02a48fd82",
+      "size": 10122
+    },
+    {
+      "alphaBounds": [
+        1225,
+        50,
+        1238,
+        213
+      ],
+      "canonicalCanvas": true,
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "path": "app/assets/kitchen/overlays/module-07-left-return.png",
+      "sha256": "c85b47732f1a981b328f0e6efa4d64948089d54cf77b45c5e0f1b280a32772c9",
+      "size": 9423
+    },
+    {
+      "alphaBounds": [
+        491,
+        0,
+        519,
+        902
+      ],
+      "canonicalCanvas": true,
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "path": "app/assets/kitchen/overlays/tempered-glass.png",
+      "sha256": "48a1a499e03780696295710538f2be7e3944f0f773c70fa05276e832fb929f79",
+      "size": 16385
     },
     {
       "alphaBounds": null,
@@ -595,14 +883,9 @@
       "size": 134
     },
     {
-      "path": "app/README.md",
-      "sha256": "7009b9b114a0ff4be8b283c75140f4a38b4cfd5f891339c58ebaef9c00677d91",
-      "size": 2439
-    },
-    {
       "path": "app/app.js",
-      "sha256": "13d936a5d24d248f6e509d210ee45648ca6aa596ff1a162891aa334fa13d7c46",
-      "size": 13039
+      "sha256": "d31b234636c11ff0cd2b18a80cce8ecd426193efeacba5adb5d140f3853f4ec5",
+      "size": 100589
     },
     {
       "path": "app/assets/kitchen/base.png",
@@ -725,6 +1008,86 @@
       "size": 6177
     },
     {
+      "path": "app/assets/kitchen/masks/skirting-02.svg",
+      "sha256": "4c6d8afaadbb72706eb53f4b6e576010683c105542c903c72c56b6592d9b5a04",
+      "size": 147
+    },
+    {
+      "path": "app/assets/kitchen/masks/skirting-03.svg",
+      "sha256": "aed6eb5099ba849b241101d666f0acb6036e903a8488141d845a0dde00ca79c1",
+      "size": 148
+    },
+    {
+      "path": "app/assets/kitchen/masks/structure-01-highlight.png",
+      "sha256": "299f34c690d097cdd6f5ef9c230b3a6853b6b6208f20888ea46d5ff30dd21bcc",
+      "size": 12721
+    },
+    {
+      "path": "app/assets/kitchen/masks/structure-01-shadow.png",
+      "sha256": "bd3a72fa217dfde518f0152a49a1b0dce254e95ac5ff55f760540358c9c2ac72",
+      "size": 11811
+    },
+    {
+      "path": "app/assets/kitchen/masks/structure-02-highlight.png",
+      "sha256": "dd128fca74cc8547eef90b63b752057acf53df855eb4c3d97914063d35b7bffc",
+      "size": 9901
+    },
+    {
+      "path": "app/assets/kitchen/masks/structure-02-shadow.png",
+      "sha256": "c7c2c5b55b5321fbe1ff0c6bc4a380b254d63c652fa57f81dc8159cc919b9bbe",
+      "size": 9702
+    },
+    {
+      "path": "app/assets/kitchen/masks/structure-03-highlight.png",
+      "sha256": "8a1c5d5e147a571d930df97a3602c7fb63054db626bedabd6261ab6c8704d421",
+      "size": 15873
+    },
+    {
+      "path": "app/assets/kitchen/masks/structure-03-shadow.png",
+      "sha256": "f14f678d68a2d4f416fac8d2ae0c4fbae256ee846f45ec4893a75aa48e2525eb",
+      "size": 15735
+    },
+    {
+      "path": "app/assets/kitchen/masks/structure-04-highlight.png",
+      "sha256": "decd60ed354a7328cdb87b5934643da9ca5815ac0088eb7bff4db5151a4443c1",
+      "size": 8672
+    },
+    {
+      "path": "app/assets/kitchen/masks/structure-04-shadow.png",
+      "sha256": "6f10cb2cb0365681c69c46fb5e665b4306885771ed4e757acbe55f6043792579",
+      "size": 8575
+    },
+    {
+      "path": "app/assets/kitchen/masks/structure-05-highlight.png",
+      "sha256": "ace252e6f540ffc54da2a93733c28d5ca41cb726136e8cb96e2f93374c6c077a",
+      "size": 11626
+    },
+    {
+      "path": "app/assets/kitchen/masks/structure-05-shadow.png",
+      "sha256": "8de788260b15c53f47064a21d4b0865b8203cf8f7bebf9c50fd9eeb91a1ae409",
+      "size": 11017
+    },
+    {
+      "path": "app/assets/kitchen/masks/structure-06-highlight.png",
+      "sha256": "87e2f94afaba6c8fe0e4c21719fb0f31b45f7b571c33c3b4b04f095c880b2211",
+      "size": 15291
+    },
+    {
+      "path": "app/assets/kitchen/masks/structure-06-shadow.png",
+      "sha256": "f12d62736ee5396fed1a134614fb3866f0b5d6197bb0550b08ce9701653a2261",
+      "size": 12730
+    },
+    {
+      "path": "app/assets/kitchen/masks/structure-07-highlight.png",
+      "sha256": "8c06a009d3a5e3737147bf4b8f583f06109fd7ea0f1d884f982d32d45e48897b",
+      "size": 11196
+    },
+    {
+      "path": "app/assets/kitchen/masks/structure-07-shadow.png",
+      "sha256": "1898103e38c9d8c376f69d0a1c0cf83672fe97a35bbb196e986bd4fd308deef0",
+      "size": 10844
+    },
+    {
       "path": "app/assets/kitchen/overlays/approved-stone-02.png",
       "sha256": "30e5c1a6e79454cc7aa90c51492d45f608ead3e05e5c53e7b15ca0ae7c373553",
       "size": 43315
@@ -743,6 +1106,31 @@
       "path": "app/assets/kitchen/overlays/module-02-right-exposed-face.png",
       "sha256": "3becbf8a510dd76757593ed5c227482edef7af57c48877e9d2e714398e77fff8",
       "size": 8465
+    },
+    {
+      "path": "app/assets/kitchen/overlays/module-05-right-return.png",
+      "sha256": "c9d08c26220e9ed7909c292074060ed02a6b0a25f2614c74781f4a57c7388039",
+      "size": 9053
+    },
+    {
+      "path": "app/assets/kitchen/overlays/module-06-left-return.png",
+      "sha256": "c078094ab8b4724a5e809a1f235f63f7c1aa576861da730419279ff02a48fd82",
+      "size": 10122
+    },
+    {
+      "path": "app/assets/kitchen/overlays/module-07-left-return.png",
+      "sha256": "c85b47732f1a981b328f0e6efa4d64948089d54cf77b45c5e0f1b280a32772c9",
+      "size": 9423
+    },
+    {
+      "path": "app/assets/kitchen/overlays/tempered-glass.png",
+      "sha256": "48a1a499e03780696295710538f2be7e3944f0f773c70fa05276e832fb929f79",
+      "size": 16385
+    },
+    {
+      "path": "app/assets/kitchen/overlays/tempered-glass.svg",
+      "sha256": "8e129bb4104d280d07347580a7dbc4995e8b0deeb57b237918367fd6a897fe3e",
+      "size": 1291
     },
     {
       "path": "app/assets/kitchen/substitutions/range-freestanding-placeholder.png",
@@ -765,54 +1153,114 @@
       "size": 166647
     },
     {
+      "path": "app/assets/materials/mdf-base.webp",
+      "sha256": "706155fddc36b483a84bf68cc9e4b285902d3920a50008e637b8be5a1d8b2b04",
+      "size": 276
+    },
+    {
+      "path": "app/assets/materials/mdf-dark.webp",
+      "sha256": "d39b47e1cd2b21b725466a2dd236487256f6e76cb90a3f9d8533198627d12169",
+      "size": 222
+    },
+    {
+      "path": "app/assets/materials/mdf-metal.webp",
+      "sha256": "6d44f21b1ae543e2f0348fd7bf5d96baf9f26949ecb21497c80b8ffc35543b43",
+      "size": 180
+    },
+    {
+      "path": "app/assets/materials/mdf-soft.webp",
+      "sha256": "c86b03962fc3cb6236f0e05eadcf839c7b59c405819854867ec51fabfd3662ba",
+      "size": 130
+    },
+    {
+      "path": "app/assets/materials/mdf-warm.webp",
+      "sha256": "1e0e30301b3ea792c0a44bc778367cb96725bf2b02a4f1fe852d8157e2f3975b",
+      "size": 186
+    },
+    {
+      "path": "app/assets/materials/mdf-wood.webp",
+      "sha256": "1e8dfd8b88ffd5ce58b4a72834b0868292cd17cbf30759a750587990d6a06b2c",
+      "size": 2098
+    },
+    {
+      "path": "app/assets/materials/stone-dark.webp",
+      "sha256": "eb982eabadde5715010288ff87e3871cde0a75d465efe91a81909c5e2b603fcb",
+      "size": 442
+    },
+    {
+      "path": "app/assets/materials/stone-green.webp",
+      "sha256": "d20d1326687dc776bf6eca6c81f3e51bdad6c91d6025c19453443d946245f5a8",
+      "size": 8142
+    },
+    {
+      "path": "app/assets/materials/stone-light.webp",
+      "sha256": "7cda794d88934292d109d8e2fe6fb2bcd26e02235e9addd21ab2385b381aef9d",
+      "size": 6920
+    },
+    {
       "path": "app/core/fingerprint.js",
-      "sha256": "b7bdb99a5fc97772016f4cb36fc2c18dc55bf14a0dc6894d7bfa83829164ff52",
-      "size": 1734
+      "sha256": "b5c756f8dc26949e6bf7a23be7666b12baba96cec75ca7f29a050532dfb25990",
+      "size": 1332
     },
     {
       "path": "app/core/finishes.js",
-      "sha256": "796cceea7f30aea2902d3c307015808780cb353e8406823b67692a25b414b7c3",
-      "size": 1441
+      "sha256": "16845646d17383cfb2c49b5aff78e7e5dfc8ab17f7b3f40c3494aca1ab8b4ae3",
+      "size": 2584
+    },
+    {
+      "path": "app/core/pricing.js",
+      "sha256": "1b6c395c5faa665371fe8875a6058632aa64789fa27891bb4622833fef45e89b",
+      "size": 5725
     },
     {
       "path": "app/core/state.js",
-      "sha256": "17b8df1554f7adf5efee8382a5fc0434e020db2b2f2c78a547bf750e4c5f4620",
-      "size": 1470
+      "sha256": "f208c4210cd5d486d63c1b4cc57a729d214328b64496fb45592cd516843db2b9",
+      "size": 2508
     },
     {
       "path": "app/core/stone.js",
-      "sha256": "583ded730d3801ab3d09020e14a69e291abcef8a63c8c4ba7b1a601e4877054a",
-      "size": 2704
+      "sha256": "041474529a95aaa471b60c53d9963ea7af1f4c3f8073e1c3227772cd84e605b5",
+      "size": 8355
     },
     {
       "path": "app/core/validation.js",
-      "sha256": "6a81a9404d6abe899f0f2abe9b867d67507a678e1596dc86f7e7d3e9877403a5",
-      "size": 5166
+      "sha256": "a8072ac07c7bebf7859a038d6b4c2ebdb9a17d9abc9d7ea193796f84311c64e2",
+      "size": 5495
     },
     {
       "path": "app/core/visibility.js",
-      "sha256": "bffaba889f6142cf1d5bd6b5ffb09966965abc87f9b16a0c5a71dccd4bda4b7f",
-      "size": 3161
+      "sha256": "438265b9f289f3200fa945d60b09abf362e65ab4a54e167d3d5aa58c20dfc02f",
+      "size": 3852
+    },
+    {
+      "path": "app/data/catalog-data.js",
+      "sha256": "d970879dedd50a9a207cede1e060b0ac440b87aabd8fb0d36f1aa9757e6f8c66",
+      "size": 13325
     },
     {
       "path": "app/data/mask-data.js",
-      "sha256": "3f239f2599d15289ace3351247f00de702a44499f17b70a38ac1639e6feb1167",
-      "size": 87637
+      "sha256": "715fc286bd3acf995eb7d23d473498362e329380119d0bb1742249b0baa5a88e",
+      "size": 309610
+    },
+    {
+      "path": "app/data/mock-price-book.js",
+      "sha256": "3a1432e838e9fbd4cf5b302f29a918afeb8e3f8357ed760164f31f0919f1cfe1",
+      "size": 1697
     },
     {
       "path": "app/data/scene-data.js",
-      "sha256": "a853787cdd972c8cc25f7ffd8926672163329a0c431906c2afc06abb0d461e71",
-      "size": 11496
+      "sha256": "a95c9e0f0db0426e5ab8adc0b3432028f042808a6c8d4ac51b20491cc3535bc4",
+      "size": 12696
     },
     {
       "path": "app/data/stone-data.js",
-      "sha256": "0cb1bf8fe435971b92e031943a1d4bea8d61402f73d2c9212648c068a61b5923",
-      "size": 1243135
+      "sha256": "d8c4ce38bb8da1bab8becedd55266bdacaf732a170ea7af454f7523a119fd379",
+      "size": 1298115
     },
     {
       "path": "app/data/technical-data.json",
-      "sha256": "d15930d45678fa70b6ec28f9c8ffa696092ed03d3470d3ab9afa269d9c8d1422",
-      "size": 8336
+      "sha256": "3fd6452a1fa9b9ed0d9744104116f1d5e0261933db961db47c25f8e7040daaa6",
+      "size": 9255
     },
     {
       "path": "app/docs/CHECKPOINTS.md",
@@ -836,13 +1284,18 @@
     },
     {
       "path": "app/index.html",
-      "sha256": "a68d5db7de5af31345275f36c81f2c9ba2f38c45d48ba61ada38cf81586c286d",
-      "size": 5743
+      "sha256": "3db4e2a2fec352dba74c718efc545ec062f3415cf7e982981c1fec4de5e96091",
+      "size": 11569
     },
     {
       "path": "app/package.json",
       "sha256": "194d6b9f3e7df62986607e42e2cb30107cbff122c1ff20c622c9071affeaeba3",
       "size": 966
+    },
+    {
+      "path": "app/README.md",
+      "sha256": "7009b9b114a0ff4be8b283c75140f4a38b4cfd5f891339c58ebaef9c00677d91",
+      "size": 2439
     },
     {
       "path": "app/scripts/build-static.sh",
@@ -851,8 +1304,8 @@
     },
     {
       "path": "app/styles.css",
-      "sha256": "a5725f28c17106deca913dd9d0d602aae652731ec81d887dc8f30cc8bd0881db",
-      "size": 9418
+      "sha256": "9301c281a11f87beea7256ffca598d22a70b750637f3aa7998fc7f3bc67a1dc2",
+      "size": 41085
     },
     {
       "path": "app/tools/apply-r4-module02-fidelity.py",
@@ -871,8 +1324,8 @@
     },
     {
       "path": "app/tools/build-inline-masks.py",
-      "sha256": "8f193009577c46b0a8fb9923a68169fec7dcbaaa04b677147463b07a787a5660",
-      "size": 1388
+      "sha256": "09ca1b90d67a445d2a0af85e3182866b33014c745b75bca2f8577c4257a8b07f",
+      "size": 1552
     },
     {
       "path": "app/tools/build-module02-alpha-v2.py",
@@ -931,13 +1384,13 @@
     },
     {
       "path": "app/tools/test-core.js",
-      "sha256": "73cb517a2d132c3373f432a8cc5016441ba1ca6d6cc526b2a3345098ac331325",
-      "size": 6447
+      "sha256": "9b4d61c8fe136351af10917f14dd42deb87fe42d64df7c88a8cdf985d6b32fbc",
+      "size": 21088
     },
     {
       "path": "app/tools/update-technical-data.py",
-      "sha256": "6ba37d4f6d46b5e56e6fd4b0ad7249caf9c868e6563cf2a0a88d060692d9b788",
-      "size": 2740
+      "sha256": "a6d1564a268fec42aa3788d3f0443b73efdf1758ffea4bb8b421c1a20d03d725",
+      "size": 2952
     },
     {
       "path": "app/tools/validate-assets.py",

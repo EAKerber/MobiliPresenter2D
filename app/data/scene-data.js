@@ -9,7 +9,7 @@
 
   const scene = {
     schemaVersion: "Scene2D 1.0",
-    manifestVersion: "cozinha-01@r6-stone-color",
+    manifestVersion: "cozinha-01@glass-exposed-sides-v1",
     id: "cozinha-01",
     label: "Cozinha Casa em Módulos",
     canvas: { width: 1536, height: 1024 },
@@ -17,6 +17,9 @@
     goldenAsset: "assets/kitchen/composicao-completa.png",
     defaultConfiguration: {
       visible: [
+        "module-05-right-return",
+        "module-06-left-return",
+        "module-07-left-return",
         "module-01",
         "module-02",
         "stone-02",
@@ -38,6 +41,27 @@
       gridVisible: false
     },
     entities: [
+      ...[
+        ["module-05-right-return", "module-05", "module-06", 499, 751, 65, 14, 203],
+        ["module-06-left-return", "module-06", "module-05", 599, 737, 65, 14, 248],
+        ["module-07-left-return", "module-07", "module-04", 699, 1225, 50, 13, 163]
+      ].map(([id, hostId, occluder, zIndex, x, y, width, height]) => ({
+        id, alias: id, label: "Continuação da caixaria",
+        kind: "accessory", zIndex,
+        asset: `assets/kitchen/overlays/${id}.png`, maskAsset: null,
+        alphaBounds: { x, y, width, height },
+        defaultVisible: true, controllable: false, hostId,
+        occludedByIds: [occluder], finishGroups: [], tags: ["exposed-side", "carcass-side"]
+      })),
+      {
+        id: "tempered-glass", alias: "glass", label: "Vidro temperado",
+        kind: "accessory", zIndex: 900,
+        asset: "assets/kitchen/overlays/tempered-glass.png", maskAsset: null,
+        alphaBounds: { x: 491, y: 0, width: 28, height: 902 },
+        defaultVisible: false, controllable: false,
+        serviceId: "tempered-glass", hostId: null, requiresVisibleIds: [],
+        finishGroups: [], tags: ["glass", "global-option"]
+      },
       {
         "id": "approved-stone-02",
         "alias": "02A",
