@@ -28,6 +28,12 @@ donor_face(
     "app/assets/kitchen/overlays/module-02-right-exposed-face.png",
 )
 
+# The narrow exposed side follows the selected cabinet finish. Keep a small
+# perimeter outside the texture mask so the source shading remains as its edge.
+side_mask = Image.new("RGBA", SIZE, (255, 255, 255, 0))
+ImageDraw.Draw(side_mask).polygon([(748, 596), (755, 600), (755, 850), (748, 854)], fill=(255, 255, 255, 255))
+side_mask.save(ROOT / "app/assets/kitchen/masks/module-02-right-exposed-face.png", optimize=True)
+
 # The cooker metal return sits behind its approved front layer (z 305).
 donor_face(
     "range-metal-side.webp", (29, 10, 130, 500),

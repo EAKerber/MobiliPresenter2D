@@ -29,12 +29,19 @@ const {pathToFileURL}=require('node:url');
   });
   assert.equal(await page.locator('.module-card').count(),7);
   assert.equal(await page.locator('[data-select-scene-entity="tempered-glass"]').count(),0);
-  const states={complete:['01','02','03','04','05','06','07'],left:['01','02','05'],right:['01','03','06','07'],upper05:['05'],upper06:['06'],upper07:['07']};
+  const states={complete:['01','02','03','04','05','06','07'],left:['01','02','05'],right:['01','03','06','07'],upper05:['05'],upper06:['06'],upper07:['07'],module04off:['01','02','03','05','06','07'],module06off:['01','02','03','04','05','07'],module02off:['01','03','04','05','06','07']};
   for(const [name,ids] of Object.entries(states)){
     await page.evaluate(ids=>{const state=window.CASA_EM_MODULOS_DEBUG.getState();
       for(const e of window.CASA_EM_MODULOS_SCENE.entities.filter(e=>e.kind==='module'))state.visibilityByEntity[e.id]=ids.includes(e.id.slice(-2));
-      state.globalSelections.finishId='shadow';
+      state.globalSelections.finishId='fiber';
       const box=document.querySelector('[data-global-service-id="tempered-glass"]');box.checked=false;box.dispatchEvent(new Event('change',{bubbles:true}));
+    },ids);
+    await page.locator('#viewer').screenshot({path:path.join(output,name+'.png'),animations:'disabled'});
+  }
+  for(const [name,ids] of Object.entries({glassComplete:['01','02','03','04','05','06','07'],glassModule02off:['01','03','04','05','06','07']})){
+    await page.evaluate(ids=>{const state=window.CASA_EM_MODULOS_DEBUG.getState();
+      for(const e of window.CASA_EM_MODULOS_SCENE.entities.filter(e=>e.kind==='module'))state.visibilityByEntity[e.id]=ids.includes(e.id.slice(-2));
+      const box=document.querySelector('[data-global-service-id="tempered-glass"]');box.checked=true;box.dispatchEvent(new Event('change',{bubbles:true}));
     },ids);
     await page.locator('#viewer').screenshot({path:path.join(output,name+'.png'),animations:'disabled'});
   }

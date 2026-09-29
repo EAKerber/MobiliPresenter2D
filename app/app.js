@@ -1679,7 +1679,8 @@
     finishLayers.forEach((layer) => {
       const group = layer.closest(".layer-group");
       const product = catalogByEntityId.get(group?.dataset.entityId);
-      if (!product?.commercial?.finishEligible) return;
+      const entity = entitiesById.get(group?.dataset.entityId);
+      if (!product?.commercial?.finishEligible && !entity?.tags?.includes("finish-matched-side")) return;
       const hasTexture = Boolean(finish.textureAsset);
       layer.classList.toggle("is-texture", hasTexture);
       layer.classList.add("is-color");

@@ -344,7 +344,7 @@
       ]
     },
     "assets/kitchen/overlays/tempered-glass.png": {
-      "sha256": "b7148f26d5fddf0ae0c23a6f1081fc28d77f993da06b2de419e4792ffdcc7de4",
+      "sha256": "7ff22f1d19bcb5f8eb54daf1fa859986ff92b41ba43fa9cb91b4a6729819c167",
       "alphaBounds": [
         495,
         0,
@@ -359,6 +359,15 @@
         543,
         762,
         872
+      ]
+    },
+    "assets/kitchen/masks/module-02-right-exposed-face.png": {
+      "sha256": "260f40e61075826b169c9ce7f225854390a8ef91a88b190eb975bfca5e454ab7",
+      "alphaBounds": [
+        748,
+        596,
+        756,
+        855
       ]
     }
   }

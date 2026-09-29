@@ -47,9 +47,26 @@ assert.equal(resolved(glassState)["tempered-glass"].visible, false);
 core.setGlobalService(glassState, "tempered-glass", true);
 assert.equal(resolved(glassState)["tempered-glass"].visible, true);
 assert.equal(scene.entities.find(e => e.id === "tempered-glass").controllable, false);
+const module02Side = scene.entities.find(e => e.id === "module-02-right-exposed-face");
+assert.equal(module02Side.maskAsset, "assets/kitchen/masks/module-02-right-exposed-face.png");
+assert.ok(module02Side.tags.includes("finish-matched-side"));
 for (const id of ["module-02-right-exposed-face", "module-05-right-return", "module-07-left-return"]) {
   assert.equal(scene.entities.find(e => e.id === id).controllable, false, `${id} remains an internal visual accessory`);
 }
+const sideDefaults = resolved(core.createInitialState(scene));
+assert.equal(sideDefaults["module-05-right-return"].visible, true, "M05 return remains available; M06 masks its geometric overlap by z-order");
+assert.equal(sideDefaults["module-07-left-return"].visible, false, "M07 return stays behind M04 when both are present");
+for (const [sideId, occluderId] of [["module-07-left-return", "module-04"]]) {
+  const side = scene.entities.find(e => e.id === sideId);
+  assert.deepEqual(Array.from(side.occludedByIds), [occluderId]);
+  assert.ok(side.zIndex < scene.entities.find(e => e.id === occluderId).zIndex, `${sideId} paints behind ${occluderId}`);
+}
+const sideWithoutOccluders = core.createInitialState(scene);
+core.setEntityVisibility(sideWithoutOccluders, "module-04", false);
+core.setEntityVisibility(sideWithoutOccluders, "module-06", false);
+const unoccludedSides = resolved(sideWithoutOccluders);
+assert.equal(unoccludedSides["module-05-right-return"].visible, true);
+assert.equal(unoccludedSides["module-07-left-return"].visible, true);
 assert.equal(scene.entities.some(e => e.id === "module-01-right-return" || e.id === "module-06-left-return"), false, "modules 01 and 06 need no extra side overlay in the canonical scene");
 const rangeSide = scene.entities.find(e => e.id === "range-freestanding-right-side");
 assert.equal(rangeSide.hostId, "range-freestanding");
