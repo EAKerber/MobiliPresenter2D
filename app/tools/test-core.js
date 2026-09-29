@@ -47,6 +47,10 @@ assert.equal(resolved(glassState)["tempered-glass"].visible, false);
 core.setGlobalService(glassState, "tempered-glass", true);
 assert.equal(resolved(glassState)["tempered-glass"].visible, true);
 assert.equal(scene.entities.find(e => e.id === "tempered-glass").controllable, false);
+for (const id of ["module-02-right-exposed-face", "module-05-right-return", "module-07-left-return"]) {
+  assert.equal(scene.entities.find(e => e.id === id).controllable, false, `${id} remains an internal visual accessory`);
+}
+assert.equal(scene.entities.some(e => e.id === "module-01-right-return" || e.id === "module-06-left-return"), false, "modules 01 and 06 need no extra side overlay in the canonical scene");
 const rangeSide = scene.entities.find(e => e.id === "range-freestanding-right-side");
 assert.equal(rangeSide.hostId, "range-freestanding");
 assert.equal(rangeSide.controllable, false);

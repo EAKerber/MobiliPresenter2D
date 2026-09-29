@@ -9,7 +9,7 @@
 
   const scene = {
     schemaVersion: "Scene2D 1.0",
-    manifestVersion: "cozinha-01@glass-exposed-sides-v2",
+    manifestVersion: "cozinha-01@glass-exposed-sides-v3",
     id: "cozinha-01",
     label: "Cozinha Casa em Módulos",
     canvas: { width: 1536, height: 1024 },
@@ -17,8 +17,6 @@
     goldenAsset: "assets/kitchen/composicao-completa.png",
     defaultConfiguration: {
       visible: [
-        "module-05-right-return",
-        "module-07-left-return",
         "module-01",
         "module-02",
         "stone-02",
@@ -28,12 +26,14 @@
         "approved-stone-02",
         "approved-stone-03",
         "stone-02-joint-bridge",
-        "module-02-right-exposed-face",
         "stone-03-joint-bridge",
         "module-04",
         "module-05",
+        "module-05-right-return",
         "module-06",
         "module-07",
+        "module-07-left-return",
+        "module-02-right-exposed-face",
         "range-freestanding-right-side",
         "lighting-08"
       ],
@@ -42,7 +42,7 @@
     },
     entities: [
       ...[
-        ["module-05-right-return", "module-05", "module-06", 499, 751, 65, 14, 203],
+        ["module-05-right-return", "module-05", "module-06", 601, 751, 65, 14, 203],
         ["module-07-left-return", "module-07", "module-04", 699, 1223, 51, 15, 159]
       ].map(([id, hostId, occluder, zIndex, x, y, width, height]) => ({
         id, alias: id, label: "Continuação da caixaria",
@@ -50,11 +50,11 @@
         asset: `assets/kitchen/overlays/${id}.png`, maskAsset: null,
         alphaBounds: { x, y, width, height },
         defaultVisible: true, controllable: false, hostId,
-        occludedByIds: [occluder], finishGroups: [], tags: ["exposed-side", "carcass-side"]
+        occludedByIds: [], finishGroups: [], tags: ["exposed-side", "carcass-side"]
       })),
       {
         id: "tempered-glass", alias: "glass", label: "Vidro temperado",
-        kind: "accessory", zIndex: 50,
+        kind: "accessory", zIndex: 90,
         asset: "assets/kitchen/overlays/tempered-glass.png", maskAsset: null,
         alphaBounds: { x: 495, y: 0, width: 28, height: 902 },
         defaultVisible: false, controllable: false,
@@ -298,14 +298,13 @@
         alias: "02L",
         label: "Lateral direita exposta do módulo 02",
         kind: "accessory",
-        zIndex: 203,
+        zIndex: 303,
         asset: "assets/kitchen/overlays/module-02-right-exposed-face.png",
         maskAsset: null,
-        alphaBounds: { x: 748, y: 590, width: 8, height: 265 },
+        alphaBounds: { x: 747, y: 594, width: 9, height: 260 },
         defaultVisible: true,
         controllable: false,
         hostId: "module-02",
-        occludedByIds: ["module-03"],
         finishGroups: [],
         tags: ["exposed-side", "carcass-side", "cooking-zone"]
       },
@@ -348,7 +347,7 @@
         zIndex: 304,
         asset: "assets/kitchen/overlays/range-freestanding-right-side.png",
         maskAsset: null,
-        alphaBounds: { x: 743, y: 533, width: 20, height: 349 },
+        alphaBounds: { x: 743, y: 543, width: 19, height: 329 },
         defaultVisible: true,
         controllable: false,
         hostId: "range-freestanding",

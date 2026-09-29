@@ -68,7 +68,6 @@
   const detailReturnRefsByEntity = new Map([
     ["module-02", "module-02-right-exposed-face"],
     ["module-05", "module-05-right-return"],
-    ["module-06", "module-06-left-return"],
     ["module-07", "module-07-left-return"]
   ]);
   const detailPageByEntity = new Map();
@@ -645,9 +644,7 @@
 
   function createModuleFocus(entity, product) {
     const returnId = detailReturnRefsByEntity.get(entity.id);
-    const returnEntity = returnId === "module-06-left-return"
-      ? { id: returnId, asset: "assets/kitchen/overlays/module-06-left-return.png", alphaBounds: { x: 737, y: 65, width: 14, height: 248 } }
-      : entitiesById.get(returnId);
+    const returnEntity = entitiesById.get(returnId);
     const bounds = [entity.alphaBounds, returnEntity?.alphaBounds].filter(Boolean).reduce((box, item) => {
       const x = Math.min(box.x, item.x), y = Math.min(box.y, item.y);
       const right = Math.max(box.x + box.width, item.x + item.width);
