@@ -1,0 +1,29 @@
+name: Stone data audit
+
+on:
+  push:
+    branches:
+      - audit/boundary-forensics
+    paths:
+      - 'tools/audit-stone-data.py'
+      - '.github/workflows/stone-data-audit.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install pillow numpy
+      - run: python tools/audit-stone-data.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: stone-data-audit
+          path: stone-data-audit-output/
+          if-no-files-found: error
