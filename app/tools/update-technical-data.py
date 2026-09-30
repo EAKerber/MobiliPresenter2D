@@ -33,6 +33,7 @@ def main() -> int:
         "assets/kitchen/layers/08_iluminacao.png",
     ]
     tracked = set(data.get("files", {}))
+    tracked.discard("assets/kitchen/overlays/module-06-left-return.png")
     tracked.update(str(p.relative_to(ROOT)).replace("\\", "/") for p in (ROOT / "assets/kitchen/overlays").glob("module-*-return.png"))
     tracked.add("assets/kitchen/overlays/tempered-glass.png")
     tracked.update(data["compositionOrder"])
@@ -47,6 +48,7 @@ def main() -> int:
         "assets/kitchen/overlays/approved-stone-03.png",
         "assets/kitchen/overlays/module-02-right-exposed-face.png",
         "assets/kitchen/masks/module-02-right-exposed-face.png",
+        "assets/kitchen/overlays/module-07-floor-side-bridge.png",
         "assets/kitchen/overlays/range-freestanding-right-side.png",
         "assets/kitchen/masks/04-06-seam-bridge.png",
         "assets/kitchen/masks/04-with-06-seam.png",
@@ -54,6 +56,7 @@ def main() -> int:
     })
     files = data.setdefault("files", {})
     files.pop("assets/kitchen/bridges/front-04-06-finish-bridge.png", None)
+    files.pop("assets/kitchen/overlays/module-06-left-return.png", None)
     for rel in sorted(tracked):
         path = ROOT / rel
         if path.suffix.lower() == ".png" and path.is_file(): files[rel] = record(path)

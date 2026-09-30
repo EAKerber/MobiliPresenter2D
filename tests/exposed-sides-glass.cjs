@@ -21,6 +21,9 @@ const {pathToFileURL}=require('node:url');
         const expected=r[e.hostId].visible && !(e.occludedByIds||[]).some(id=>r[id].visible);
         if(r[e.id].visible!==expected)throw Error('Side visibility: '+e.id);
       }
+      const floorBridge=r['module-07-floor-side-bridge'];
+      const expectedBridge=r['module-07'].visible&&!r['module-04'].visible;
+      if(floorBridge.visible!==expectedBridge)throw Error('M07 floor joint visibility');
       for(const host of modules){
         const exposed=scene.entities.filter(e=>e.hostId===host.id && e.tags.includes('exposed-side') && r[e.id].visible);
         if(exposed.length>1)throw Error('Contradictory external sides: '+host.id);
@@ -79,6 +82,30 @@ const {pathToFileURL}=require('node:url');
   await page.locator('#viewer').screenshot({path:path.join(output,'m07-side-base.png'),animations:'disabled'});
   await page.evaluate(()=>{window.CASA_EM_MODULOS_DEBUG.getState().visibilityByEntity['module-07-left-return']=true;const box=document.querySelector('[data-global-service-id="tempered-glass"]');box.dispatchEvent(new Event('change',{bubbles:true}));});
   await page.locator('#viewer').screenshot({path:path.join(output,'m07-side-enabled.png'),animations:'disabled'});
+  await page.evaluate(()=>{
+    const state=window.CASA_EM_MODULOS_DEBUG.getState();
+    for(const e of window.CASA_EM_MODULOS_SCENE.entities.filter(e=>e.kind==='module'))state.visibilityByEntity[e.id]=e.id==='module-07';
+    state.visibilityByEntity['module-07-floor-side-bridge']=false;
+    const box=document.querySelector('[data-global-service-id="tempered-glass"]');box.dispatchEvent(new Event('change',{bubbles:true}));
+  });
+  await page.locator('#viewer').screenshot({path:path.join(output,'m07-floor-joint-base.png'),animations:'disabled'});
+  await page.evaluate(()=>{window.CASA_EM_MODULOS_DEBUG.getState().visibilityByEntity['module-07-floor-side-bridge']=true;const box=document.querySelector('[data-global-service-id="tempered-glass"]');box.dispatchEvent(new Event('change',{bubbles:true}));});
+  await page.locator('#viewer').screenshot({path:path.join(output,'m07-floor-joint-enabled.png'),animations:'disabled'});
+  await page.evaluate(()=>{
+    const state=window.CASA_EM_MODULOS_DEBUG.getState();
+    for(const e of window.CASA_EM_MODULOS_SCENE.entities.filter(e=>e.kind==='module'))state.visibilityByEntity[e.id]=['module-04','module-07'].includes(e.id);
+    state.visibilityByEntity['module-07-floor-side-bridge']=true;
+    const box=document.querySelector('[data-global-service-id="tempered-glass"]');box.dispatchEvent(new Event('change',{bubbles:true}));
+  });
+  await page.locator('#viewer').screenshot({path:path.join(output,'m07-floor-m04-on.png'),animations:'disabled'});
+  assert.equal(await page.locator('[data-entity-id="module-07-floor-side-bridge"]').getAttribute('aria-hidden'),'true');
+  await page.evaluate(()=>{
+    const state=window.CASA_EM_MODULOS_DEBUG.getState();
+    for(const e of window.CASA_EM_MODULOS_SCENE.entities.filter(e=>e.kind==='module'))state.visibilityByEntity[e.id]=e.id==='module-07';
+    const box=document.querySelector('[data-global-service-id="tempered-glass"]');box.dispatchEvent(new Event('change',{bubbles:true}));
+  });
+  await page.locator('#viewer').screenshot({path:path.join(output,'m07-floor-m04-off.png'),animations:'disabled'});
+  assert.equal(await page.locator('[data-entity-id="module-07-floor-side-bridge"]').getAttribute('aria-hidden'),'false');
   for(const [name,ids] of Object.entries({glassComplete:['01','02','03','04','05','06','07'],glassModule02off:['01','03','04','05','06','07']})){
     await page.evaluate(ids=>{const state=window.CASA_EM_MODULOS_DEBUG.getState();
       for(const e of window.CASA_EM_MODULOS_SCENE.entities.filter(e=>e.kind==='module'))state.visibilityByEntity[e.id]=ids.includes(e.id.slice(-2));

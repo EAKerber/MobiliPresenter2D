@@ -290,12 +290,12 @@
       ]
     },
     "assets/kitchen/overlays/module-02-right-exposed-face.png": {
-      "sha256": "979e3de414046fe62bf23d76923e015f5fc67d48f5c50ceccf633d86905378bc",
+      "sha256": "cc0534d147b78200fb5a9bbec693ee2aa875b11fdbdce65036eccc119b70506c",
       "alphaBounds": [
         739,
-        552,
-        757,
-        853
+        590,
+        758,
+        900
       ]
     },
     "assets/kitchen/masks/04-06-seam-bridge.png": {
@@ -325,17 +325,8 @@
         268
       ]
     },
-    "assets/kitchen/overlays/module-06-left-return.png": {
-      "sha256": "c078094ab8b4724a5e809a1f235f63f7c1aa576861da730419279ff02a48fd82",
-      "alphaBounds": [
-        737,
-        65,
-        751,
-        313
-      ]
-    },
     "assets/kitchen/overlays/module-07-left-return.png": {
-      "sha256": "1af52f533830703ef8dc22ef70031cc9f8834a1319779f54f749252cecf34875",
+      "sha256": "d51875192785e48446717ecc5d9a7c9a754eb43112c05c8f35b11a697696ab1a",
       "alphaBounds": [
         1223,
         51,
@@ -362,12 +353,21 @@
       ]
     },
     "assets/kitchen/masks/module-02-right-exposed-face.png": {
-      "sha256": "8c1e3b7f45798f8907067da2214894d086b52305c99529fa029cd508325bc9c9",
+      "sha256": "013974115750b8317bd01d0662e4f00046966bb687670c84399498e3d50afc01",
       "alphaBounds": [
         739,
-        552,
-        757,
-        853
+        590,
+        758,
+        900
+      ]
+    },
+    "assets/kitchen/overlays/module-07-floor-side-bridge.png": {
+      "sha256": "ceb3d3d1d53d66d4557fa40c09a2e35636111b5173f86f173edbfe7f14bfadff",
+      "alphaBounds": [
+        1226,
+        204,
+        1248,
+        231
       ]
     }
   }
