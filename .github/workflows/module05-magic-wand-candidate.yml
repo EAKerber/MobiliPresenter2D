@@ -1,0 +1,27 @@
+name: Module05 magic wand candidate
+
+on:
+  push:
+    branches:
+      - audit/boundary-forensics
+    paths:
+      - 'tools/build-module05-magic-wand-candidate.py'
+      - '.github/workflows/module05-magic-wand-candidate.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install pillow numpy
+      - run: python tools/build-module05-magic-wand-candidate.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: module05-magic-wand-candidate
+          path: module05-magic-wand-candidate/
+          if-no-files-found: error
