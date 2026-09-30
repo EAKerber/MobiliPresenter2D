@@ -18,7 +18,6 @@ ROI=np.zeros((H,W),bool);ROI[250:325,492:526]=1
 SEED=np.zeros((H,W),bool)
 SEED[255:271,496:504]=1
 SEED[311:322,496:504]=1
-# Safe wall samples only: keep bright beige pixels, excluding metal crossing the seed rectangles.
 LUMA=RGB.mean(axis=2)
 SEED &= (A>=8)&(LUMA>190)
 seed_colors=RGB[SEED]
@@ -43,6 +42,37 @@ def flood(threshold:float):
 def apply(mask):
     out=M.copy();out[mask,:3]=0;out[mask,3]=0;return out
 
+def dilate1(mask):
+    out=mask.copy()
+    for dy in (-1,0,1):
+        for dx in (-1,0,1):
+            if dx==0 and dy==0: continue
+            shifted=np.zeros_like(mask)
+            y0=max(0,dy);y1=H+min(0,dy);x0=max(0,dx);x1=W+min(0,dx)
+            shifted[y0:y1,x0:x1]=mask[y0-dy:y1-dy,x0-dx:x1-dx]
+            out|=shifted
+    return out
+
+def soft_unmatte(mask):
+    out=apply(mask)
+    ring=dilate1(mask)&~mask&(A>=8)&ROI
+    dist=np.linalg.norm(RGB-wall,axis=2)
+    # Only the first kept pixel ring is softened. Dark/metal pixels remain fully opaque.
+    factor=np.clip((dist-18.0)/(75.0-18.0),0.0,1.0)
+    soften=ring&(factor<0.999)
+    for y,x in zip(*np.nonzero(soften)):
+        f=float(factor[y,x])
+        if f<=0.12:
+            out[y,x,:3]=0;out[y,x,3]=0
+            continue
+        new_alpha=min(int(A[y,x]),int(round(A[y,x]*f)))
+        # Unmatte against the measured wall background so the antialiased edge does not keep beige spill.
+        c=RGB[y,x]
+        fg=(c-(1.0-f)*wall)/f
+        out[y,x,:3]=np.clip(np.rint(fg),0,255).astype(np.uint8)
+        out[y,x,3]=np.uint8(max(0,min(255,new_alpha)))
+    return out,soften
+
 def alpha_over(bottom,top):
     b=bottom.astype(np.float32)/255;t=top.astype(np.float32)/255
     ta=t[...,3:4];ba=b[...,3:4];oa=ta+ba*(1-ta)
@@ -62,22 +92,22 @@ for threshold in (15,20,25,30,35):
     mask=flood(threshold);out=apply(mask);Image.fromarray(out,'RGBA').save(OUT/f'module05-t{threshold}.png',optimize=True)
     records[str(threshold)]={'removedPixels':int(mask.sum()),'bbox':bb(mask)}
     crop=Image.fromarray(checker(out),'RGB').crop((488,245,530,330)).resize((420,850),Image.Resampling.NEAREST);ImageDraw.Draw(crop).text((8,8),f't{threshold}',fill='red');panels.append(crop)
-# Chosen review candidate: middle of the stable interval, still review-only.
-chosen=flood(25);candidate=apply(chosen);Image.fromarray(candidate,'RGBA').save(OUT/'module05-candidate.png',optimize=True)
-# Show actual scene behavior: glass behind module, current vs candidate.
+chosen=flood(25)
+hard=apply(chosen)
+soft,softened=soft_unmatte(chosen)
+Image.fromarray(hard,'RGBA').save(OUT/'module05-candidate-hard.png',optimize=True)
+Image.fromarray(soft,'RGBA').save(OUT/'module05-candidate-soft.png',optimize=True)
 back=alpha_over(BASE,GLASS)
-cur_scene=alpha_over(back,M);new_scene=alpha_over(back,candidate)
-scene_sheet=Image.new('RGB',(800,850),'white')
-for i,(label,a) in enumerate((('current',cur_scene),('candidate',new_scene))):
+cur_scene=alpha_over(back,M);hard_scene=alpha_over(back,hard);soft_scene=alpha_over(back,soft)
+scene_sheet=Image.new('RGB',(1200,850),'white')
+for i,(label,a) in enumerate((('current',cur_scene),('hard',hard_scene),('soft-unmatte',soft_scene))):
     crop=Image.fromarray(a,'RGBA').convert('RGB').crop((485,240,565,325)).resize((400,850),Image.Resampling.NEAREST);ImageDraw.Draw(crop).text((8,8),label,fill='red');scene_sheet.paste(crop,(i*400,0))
-scene_sheet.save(OUT/'scene-current-vs-candidate.png',optimize=True)
-# Stability sheet.
+scene_sheet.save(OUT/'scene-current-vs-hard-vs-soft.png',optimize=True)
 sheet=Image.new('RGB',(420*len(panels),850),'white')
 for i,p in enumerate(panels):sheet.paste(p,(i*420,0))
 sheet.save(OUT/'threshold-stability.png',optimize=True)
-# Removal map on original.
-vis=M.copy();vis[chosen,:3]=[255,0,255];vis[chosen,3]=255
-Image.fromarray(vis,'RGBA').crop((488,245,530,330)).resize((840,1700),Image.Resampling.NEAREST).save(OUT/'removed-pixels-overlay.png',optimize=True)
-report={'status':'REVIEW','wallMedianRgb':[round(float(v),2) for v in wall],'chosenThreshold':25,'chosen':records['25'],'thresholds':records,'note':'Diagnostic candidate only; original RGB pixels outside removed alpha are byte-identical.'}
+vis=M.copy();vis[chosen,:3]=[255,0,255];vis[chosen,3]=255;vis[softened,:3]=[0,255,255];vis[softened,3]=255
+Image.fromarray(vis,'RGBA').crop((488,245,530,330)).resize((840,1700),Image.Resampling.NEAREST).save(OUT/'removed-and-softened-overlay.png',optimize=True)
+report={'status':'REVIEW','wallMedianRgb':[round(float(v),2) for v in wall],'chosenThreshold':25,'chosen':records['25'],'softenedEdgePixels':int(softened.sum()),'thresholds':records,'note':'Review candidate only. Hard removal uses connected wall-color flood; soft candidate additionally unmattes only the adjacent 1px kept ring.'}
 (OUT/'report.json').write_text(json.dumps(report,indent=2),encoding='utf-8')
 print(json.dumps(report))
