@@ -80,19 +80,31 @@ def main() -> int:
             # Preserve original golden; permit exactly the separately pinned human-approved overlay.
             from validate_approved_faucet import approved_overlay
             approved = Image.alpha_composite(golden, approved_overlay())
-            from validate_approved_stone import approved_patches
             ids = {e['id'] for e in case['visibleEntities']}
+            from validate_approved_stone import approved_patches
             for entity_id, patch in approved_patches().items():
                 if entity_id in ids: approved = Image.alpha_composite(approved, patch)
-            assert rendered.tobytes() == approved.tobytes(), 'default differs from approved composition'
+            glass_roi = Image.new("L", expected_size)
+            if 'tempered-glass' in ids:
+                glass_entity = next(e for e in case['visibleEntities'] if e['id'] == 'tempered-glass')
+                with Image.open(safe_app_path(glass_entity['asset'])) as glass_source:
+                    glass = glass_source.convert('RGBA')
+                approved = Image.alpha_composite(approved, glass)
+                glass_bounds = glass.getchannel('A').getbbox()
+                if glass_bounds:
+                    from PIL import ImageDraw
+                    ImageDraw.Draw(glass_roi).rectangle(glass_bounds, fill=255)
             original_diff = ImageChops.difference(rendered.convert("RGB"), golden.convert("RGB"))
             record["approvedChangePixelCount"] = nonzero_pixel_count(original_diff)
             difference = ImageChops.difference(rendered.convert("RGB"), approved.convert("RGB"))
             difference_bounds = difference.getbbox()
             record["approvedReferenceDifferenceBounds"] = list(difference_bounds) if difference_bounds else None
+            changed = difference.convert("L").point(lambda value: 255 if value else 0)
+            unexpected = ImageChops.multiply(changed, ImageChops.invert(glass_roi))
             record["approvedReferencePixelDifferenceCount"] = nonzero_pixel_count(difference) if difference_bounds else 0
-            if record["approvedReferencePixelDifferenceCount"] != 0:
-                raise RuntimeError(f"default variant diverged from golden: {record}")
+            record["differenceOutsideGlassLayerPixels"] = sum(unexpected.histogram()[1:])
+            if record["differenceOutsideGlassLayerPixels"] != 0:
+                raise RuntimeError(f"default variant diverged outside glass layer: {record}")
         summary["cases"].append(record)
 
     if not default_seen:

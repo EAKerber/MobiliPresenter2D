@@ -59,6 +59,24 @@
       }
     },
     {
+      "id": "module-04-hidden",
+      "label": "Módulo 04 oculto / lateral esquerda do módulo 07",
+      "actions": [
+        {
+          "type": "set-visibility",
+          "entityId": "module-04",
+          "visible": false
+        }
+      ],
+      "expectedVisualStatus": "validated",
+      "expectedDebtCodes": [],
+      "expectedVisibilityReasons": {
+        "module-04": "intent-off",
+        "module-07": "visible",
+        "module-07-left-return": "visible"
+      }
+    },
+    {
       "id": "modules-02-03-hidden",
       "label": "Módulos 02 e 03 ocultos / fogão isolado",
       "actions": [

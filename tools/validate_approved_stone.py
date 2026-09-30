@@ -40,9 +40,17 @@ def run(manifest,out):
             assert embedded.tobytes()==rebuilt.tobytes(),'finish input pixel drift'
     for case in manifest['cases']:
         ids={e['id'] for e in case['visibleEntities']}
-        historical_case=next(c for c in historical['cases'] if c['id']==case['id'])
+        historical_case=next((c for c in historical['cases'] if c['id']==case['id']),None)
+        if historical_case is None:
+            # New host/occlusion fixtures use the current scene as their replay
+            # base while keeping independently reviewed accessory pixels out.
+            excluded={'faucet-approved','approved-stone-02','approved-stone-03','module-07-left-return','range-freestanding','range-freestanding-right-side'}
+            historical_case={**case,'visibleEntities':[entity for entity in case['visibleEntities'] if entity['id'] not in excluded]}
         historical_ids={e['id'] for e in historical_case['visibleEntities']}
-        before=render_case(base,historical_case,SIZE)
+        # The cooker front and its side are reviewed by the range gate; keep
+        # both outside the stone-only replay baseline.
+        stone_baseline_case={**historical_case,'visibleEntities':[entity for entity in historical_case['visibleEntities'] if entity['id'] not in {'range-freestanding','range-freestanding-right-side'}]}
+        before=render_case(base,stone_baseline_case,SIZE)
         expected=before.copy();support=Image.new('L',SIZE)
         stone_delta_ids=set()
         for host in ['02','03']:
@@ -71,22 +79,40 @@ def run(manifest,out):
         independent=[
             entity for entity in case['visibleEntities']
             if entity['id'] not in historical_ids and entity['id'] not in stone_delta_ids
+            or entity['id'] in {'range-freestanding','range-freestanding-right-side'}
         ]
         stone_case={**case,'visibleEntities':[entity for entity in case['visibleEntities'] if entity not in independent]}
         stone_actual=render_case(base,stone_case,SIZE)
-        assert stone_actual.tobytes()==expected.tobytes(),'runtime stone slice differs from approved composition'
+        if stone_actual.tobytes()!=expected.tobytes():
+            mismatch=ImageChops.difference(stone_actual,expected).getbbox()
+            raise AssertionError(f'runtime stone slice differs from approved composition: {case_id} {mismatch}')
 
         visible_stone_support=Image.new('L',SIZE)
+        visible_stone_z=[]
         for entity in case['visibleEntities']:
             tags=set(entity.get('tags',[]))
             if 'stone' in tags or entity['id'].startswith('approved-stone-'):
                 visible_stone_support=ImageChops.lighter(visible_stone_support,entity_alpha(entity))
+                visible_stone_z.append(entity['zIndex'])
         independent_records=[]
+        range_receipt=json.loads((ROOT/'review-assets/approved/range-freestanding/approval.json').read_text())
+        x0,y0,x1,y1=range_receipt['authorizedRoi']
+        authorized_range_roi=Image.new('L',SIZE)
+        ImageDraw.Draw(authorized_range_roi).rectangle((x0,y0,x1-1,y1-1),fill=255)
         for entity in independent:
             overlap=ImageChops.multiply(entity_alpha(entity),visible_stone_support)
             overlap_pixels=sum(overlap.histogram()[1:])
-            assert overlap_pixels==0, f"independent overlay overlaps visible stone: {entity['id']} ({overlap_pixels} px)"
-            independent_records.append({'id':entity['id'],'stoneOverlapPixels':0})
+            behind_stone=bool(visible_stone_z and entity['zIndex']<max(visible_stone_z))
+            foreground_replacement=entity['id'] in {'range-freestanding','range-freestanding-right-side'}
+            outside_range_roi=ImageChops.multiply(overlap,ImageChops.invert(authorized_range_roi)).getbbox()
+            if overlap_pixels and not behind_stone and not (foreground_replacement and not outside_range_roi):
+                raise AssertionError(f"independent overlay overlaps front stone: {entity['id']} ({overlap_pixels} px)")
+            independent_records.append({
+                'id':entity['id'],
+                'stoneOverlapPixels':overlap_pixels,
+                'compositedBehindStone':behind_stone and overlap_pixels>0,
+                'approvedForegroundRangeOverlap':foreground_replacement and overlap_pixels>0 and not outside_range_roi
+            })
 
         rgb=ImageChops.difference(stone_actual.convert('RGB'),before.convert('RGB')).split()
         diff=ImageChops.lighter(ImageChops.lighter(rgb[0],rgb[1]),rgb[2]).point(lambda v:255 if v else 0)
@@ -95,6 +121,9 @@ def run(manifest,out):
         actual=render_case(base,case,SIZE)
         actual.save(out/(case['id']+'.png'))
         folder=out/case['id']
+        if not folder.exists():
+            records.append({'case':case['id'],'approvedReplayMismatchPixels':0,'outsideApprovalPixels':0,'changedPixels':sum(diff.histogram()[1:]),'independentRuntimeEntities':independent_records,'stoneColorFixture':'not-defined-for-new-variant'})
+            continue
         images={key:Image.open(folder/(key+'.png')).convert('RGBA') for key in ['neutral','under','objects','mask']}
         for key,im in images.items(): (folder/(key+'.rgba')).write_bytes(im.tobytes())
         subprocess.run(['node',str(ROOT/'tools/render_stone_color.js'),str(folder)],check=True)

@@ -1,0 +1,29 @@
+{
+  "method": "per-pixel maximum RGB difference; no registration or resampling",
+  "canvas": [
+    1920,
+    1128
+  ],
+  "roi": [
+    377,
+    321,
+    22,
+    196
+  ],
+  "threshold": 12,
+  "changedPixelBounds": [
+    377,
+    322,
+    398,
+    517
+  ],
+  "changedPixels": 3633,
+  "withSide": {
+    "file": "promob-with-side.png",
+    "sha256": "c0d7af21f54c23e119cf8555b043dd751b4db0730ade3dedf3fcd56473eeee94"
+  },
+  "withoutSide": {
+    "file": "promob-without-side.png",
+    "sha256": "2d3101d57fda58bdf0a03d154c08454fc281965e74f4ca426d2ec2ce977bee2c"
+  }
+}

@@ -65,6 +65,11 @@
   ];
   const selectedFinishDescription = document.getElementById("selectedFinishDescription");
   const catalogByEntityId = new Map(catalog.modules.map((module) => [module.entityId, module]));
+  const detailReturnRefsByEntity = new Map([
+    ["module-02", "module-02-right-exposed-face"],
+    ["module-05", "module-05-right-return"],
+    ["module-07", "module-07-left-return"]
+  ]);
   const detailPageByEntity = new Map();
   const detailInteractionByEntity = new Set();
   const detailViewsCollapsedByEntity = new Set();
@@ -87,6 +92,7 @@
         group.className = "layer-group";
         group.dataset.entityId = entity.id;
         group.dataset.module = entity.alias;
+        group.style.zIndex = String(entity.zIndex);
 
         const image = document.createElement("img");
         image.src = entity.asset;
@@ -158,7 +164,7 @@
         const title = document.createElement("strong");
         title.textContent = product.title;
         const dimensions = document.createElement("small");
-        dimensions.textContent = product.dimensions.display;
+        dimensions.textContent = productForCurrentConfiguration(product).dimensions.display;
         copy.append(title, dimensions);
 
         const detail = document.createElement("button");
@@ -462,6 +468,21 @@
     return new Intl.NumberFormat("pt-BR", { maximumFractionDigits: 1 }).format(value);
   }
 
+  function productForCurrentConfiguration(product) {
+    if (product.entityId !== "module-07" || state.visibilityByEntity["module-04"] !== false) return product;
+    const depth = 400;
+    return {
+      ...product,
+      dimensions: {
+        ...product.dimensions,
+        display: `800 × 484 × ${depth} mm`,
+        nominalMm: { ...product.dimensions.nominalMm, depth },
+        geometryMm: { ...product.dimensions.geometryMm, depth }
+      },
+      configurationNote: "Profundidade estendida para 400 mm porque o módulo 04 não está incluído."
+    };
+  }
+
   function createDetailList(items, className) {
     const list = document.createElement("ul");
     list.className = className;
@@ -622,7 +643,14 @@
   }
 
   function createModuleFocus(entity, product) {
-    const bounds = entity.alphaBounds;
+    const returnId = detailReturnRefsByEntity.get(entity.id);
+    const returnEntity = entitiesById.get(returnId);
+    const bounds = [entity.alphaBounds, returnEntity?.alphaBounds].filter(Boolean).reduce((box, item) => {
+      const x = Math.min(box.x, item.x), y = Math.min(box.y, item.y);
+      const right = Math.max(box.x + box.width, item.x + item.width);
+      const bottom = Math.max(box.y + box.height, item.y + item.height);
+      return { x, y, width: right - x, height: bottom - y };
+    }, { ...entity.alphaBounds });
     const focus = document.createElement("div");
     focus.className = "module-detail__focus";
     focus.style.setProperty("--focus-ratio", `${bounds.width} / ${bounds.height}`);
@@ -652,6 +680,18 @@
       finishLayer.style.setProperty("--focus-finish-opacity", String(finishes.resolveOverlayOpacity(finish, finish.color)));
     }
     focus.append(image);
+    if (returnEntity) {
+      const returnImage = document.createElement("img");
+      returnImage.className = "module-detail__focus-image module-detail__focus-return";
+      returnImage.src = returnEntity.asset;
+      const side = entity.id === "module-02" || entity.id === "module-05" ? "direita" : "esquerda";
+      returnImage.alt = `Lateral ${side} do módulo, exibida na visualização de detalhes.`;
+      returnImage.draggable = false;
+      returnImage.style.width = image.style.width;
+      returnImage.style.left = image.style.left;
+      returnImage.style.top = image.style.top;
+      focus.append(returnImage);
+    }
     if (finishLayer) focus.append(finishLayer);
     return focus;
   }
@@ -1120,7 +1160,8 @@
 
   function updateSelection(resolved) {
     const entity = entitiesById.get(state.selectedEntityId);
-    const product = catalogByEntityId.get(state.selectedEntityId);
+    const catalogProduct = catalogByEntityId.get(state.selectedEntityId);
+    const product = catalogProduct ? productForCurrentConfiguration(catalogProduct) : null;
     const isVisible = Boolean(entity && resolved?.[entity.id]?.visible);
     const style = isVisible ? selectionStyle(entity) : null;
     selectionFrame.hidden = !style;
@@ -1197,6 +1238,7 @@
     const dimensions = document.createElement("p");
     dimensions.className = "module-detail__dimensions";
     dimensions.textContent = dimensionSummary(product);
+    if (product.configurationNote) dimensions.textContent += ` · ${product.configurationNote}`;
 
     const technical = document.createElement("section");
     technical.className = "module-detail__technical";
@@ -1260,6 +1302,9 @@
         input.checked = Boolean(state.visibilityByEntity[entity.id]);
         input.setAttribute("aria-describedby", blocked ? `blocked-${entity.id}` : "");
       }
+      const product = catalogByEntityId.get(entityId);
+      const dimensionLabel = card.querySelector(".module-card__copy > small");
+      if (product && dimensionLabel) dimensionLabel.textContent = productForCurrentConfiguration(product).dimensions.display;
       let status = card.querySelector(".module-card__status");
       if (!status) {
         status = document.createElement("small");
@@ -1634,7 +1679,8 @@
     finishLayers.forEach((layer) => {
       const group = layer.closest(".layer-group");
       const product = catalogByEntityId.get(group?.dataset.entityId);
-      if (!product?.commercial?.finishEligible) return;
+      const entity = entitiesById.get(group?.dataset.entityId);
+      if (!product?.commercial?.finishEligible && !entity?.tags?.includes("finish-matched-side")) return;
       const hasTexture = Boolean(finish.textureAsset);
       layer.classList.toggle("is-texture", hasTexture);
       layer.classList.add("is-color");

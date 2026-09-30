@@ -121,7 +121,6 @@ button:focus-visible, input:focus-visible {
 
 .layer-group { pointer-events: none; opacity: 1; isolation: isolate; transition: opacity 180ms ease; }
 .layer-group.is-hidden { opacity: 0; }
-
 .scene-hotspots { z-index: 500; pointer-events: none; }
 .scene-hotspot {
   position: absolute;

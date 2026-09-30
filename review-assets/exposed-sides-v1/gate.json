@@ -1,0 +1,48 @@
+{
+  "status": "PASS",
+  "visualApproval": "PENDING",
+  "records": [
+    {
+      "id": "module-05-right-return",
+      "asset": "assets/kitchen/overlays/module-05-right-return.png",
+      "sha256": "c9d08c26220e9ed7909c292074060ed02a6b0a25f2614c74781f4a57c7388039",
+      "donorSha256": "69affe44f414c291a93252e1d02cd523f34f4900f4a84ae0578c213c8eaa7e16",
+      "alphaBounds": [
+        751,
+        65,
+        765,
+        268
+      ],
+      "changedPixels": 2711,
+      "outsideRoiPixels": 0
+    },
+    {
+      "id": "module-06-left-return",
+      "asset": "assets/kitchen/overlays/module-06-left-return.png",
+      "sha256": "c078094ab8b4724a5e809a1f235f63f7c1aa576861da730419279ff02a48fd82",
+      "donorSha256": "6a51f8b5438e596bbf5318d7fa477e88dce40b7a5dffd80efcd86bf6f2f2d70e",
+      "alphaBounds": [
+        737,
+        65,
+        751,
+        313
+      ],
+      "changedPixels": 3426,
+      "outsideRoiPixels": 0
+    },
+    {
+      "id": "module-07-left-return",
+      "asset": "assets/kitchen/overlays/module-07-left-return.png",
+      "sha256": "74f55ae3d1ee91bb9146894b521a77f024169b1b62ba61a6485288b2eeb80f23",
+      "donorSha256": "6a51f8b5438e596bbf5318d7fa477e88dce40b7a5dffd80efcd86bf6f2f2d70e",
+      "alphaBounds": [
+        1223,
+        50,
+        1238,
+        213
+      ],
+      "changedPixels": 2325,
+      "outsideRoiPixels": 0
+    }
+  ]
+}

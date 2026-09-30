@@ -14,6 +14,39 @@
     return [1, 3, 5].map((index) => Number.parseInt(color.slice(index, index + 2), 16));
   }
 
+  function textureRgb(source, pixel) {
+    if (!source.texture) return source.rgb;
+    const x = pixel % width;
+    const y = Math.floor(pixel / width);
+    const index = ((y % source.texture.height) * source.texture.width + (x % source.texture.width)) * 4;
+    return [source.texture.data[index], source.texture.data[index + 1], source.texture.data[index + 2]];
+  }
+
+  function composeStonePixels(neutral, under, objects, mask, source) {
+    const result = new Uint8ClampedArray(neutral.length);
+    if (!source) return result;
+    for (let pixel = 0, index = 0; pixel < width * height; pixel += 1, index += 4) {
+      const coverage = mask[index] / 255;
+      if (!coverage) continue;
+      const background = 1 - objects[index + 3] / 255;
+      const luminance = (under[index] * 0.2126 + under[index + 1] * 0.7152 + under[index + 2] * 0.0722) / 180;
+      const shade = Math.min(1.35, Math.max(0.35, luminance));
+      const rgb = textureRgb(source, pixel) || source.rgb;
+      if (!rgb) continue;
+      for (let channel = 0; channel < 3; channel += 1) {
+        const target = Math.min(255, rgb[channel] * shade);
+        result[index + channel] = Math.round(neutral[index + channel] + (target - under[index + channel]) * background * coverage);
+      }
+      result[index + 3] = Math.round(255 * coverage);
+    }
+    return result;
+  }
+
+  function recolor(neutral, under, objects, mask, color) {
+    const rgb = parseColor(color);
+    return composeStonePixels(neutral, under, objects, mask, rgb ? { rgb, texture: null } : null);
+  }
+
   function materialKey(material) {
     if (!material) return "original";
     const hasTexture = Boolean(material.textureAsset);
@@ -92,44 +125,8 @@
       };
     }
 
-    function textureRgb(source, pixel) {
-      if (!source.texture) return source.rgb;
-      const x = pixel % width;
-      const y = Math.floor(pixel / width);
-      const index = ((y % source.texture.height) * source.texture.width + (x % source.texture.width)) * 4;
-      return [
-        source.texture.data[index],
-        source.texture.data[index + 1],
-        source.texture.data[index + 2]
-      ];
-    }
-
     function composeStone(neutral, under, objects, mask, source) {
-      const result = new Uint8ClampedArray(neutral.length);
-      if (!source) return new ImageData(result, width, height);
-
-      for (let pixel = 0, index = 0; pixel < width * height; pixel += 1, index += 4) {
-        const coverage = mask[index] / 255;
-        if (!coverage) continue;
-        const background = 1 - objects[index + 3] / 255;
-        const luminance = (
-          under[index] * 0.2126 +
-          under[index + 1] * 0.7152 +
-          under[index + 2] * 0.0722
-        ) / 180;
-        const shade = Math.min(1.35, Math.max(0.35, luminance));
-        const rgb = textureRgb(source, pixel) || source.rgb;
-        if (!rgb) continue;
-        for (let channel = 0; channel < 3; channel += 1) {
-          const target = Math.min(255, rgb[channel] * shade);
-          result[index + channel] = Math.round(
-            neutral[index + channel] +
-            (target - under[index + channel]) * background * coverage
-          );
-        }
-        result[index + 3] = Math.round(255 * coverage);
-      }
-      return new ImageData(result, width, height);
+      return new ImageData(composeStonePixels(neutral, under, objects, mask, source), width, height);
     }
 
     function composeMdf(mask, source, shade) {
@@ -210,5 +207,5 @@
     };
   }
 
-  global.CasaStone = Object.freeze({ caseId, createRenderer, materialKey });
+  global.CasaStone = Object.freeze({ caseId, createRenderer, materialKey, recolor });
 })(window);

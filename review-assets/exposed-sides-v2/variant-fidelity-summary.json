@@ -1,0 +1,55 @@
+{
+  "cases": [
+    {
+      "approvedChangePixelCount": 42383,
+      "approvedReferenceDifferenceBounds": [
+        495,
+        60,
+        523,
+        902
+      ],
+      "approvedReferencePixelDifferenceCount": 14801,
+      "differenceOutsideGlassLayerPixels": 0,
+      "expectedDebtCodes": [],
+      "expectedVisualStatus": "golden",
+      "fingerprint": "scene2d-a9b02b23",
+      "humanReviewRequired": false,
+      "id": "default",
+      "image": "default.png"
+    },
+    {
+      "expectedDebtCodes": [],
+      "expectedVisualStatus": "validated",
+      "fingerprint": "scene2d-a8557a1c",
+      "humanReviewRequired": false,
+      "id": "module-02-hidden",
+      "image": "module-02-hidden.png"
+    },
+    {
+      "expectedDebtCodes": [],
+      "expectedVisualStatus": "validated",
+      "fingerprint": "scene2d-53dc1a63",
+      "humanReviewRequired": false,
+      "id": "module-03-hidden",
+      "image": "module-03-hidden.png"
+    },
+    {
+      "expectedDebtCodes": [],
+      "expectedVisualStatus": "validated",
+      "fingerprint": "scene2d-42df453c",
+      "humanReviewRequired": false,
+      "id": "module-04-hidden",
+      "image": "module-04-hidden.png"
+    },
+    {
+      "expectedDebtCodes": [],
+      "expectedVisualStatus": "review",
+      "fingerprint": "scene2d-a74b816a",
+      "humanReviewRequired": false,
+      "id": "modules-02-03-hidden",
+      "image": "modules-02-03-hidden.png"
+    }
+  ],
+  "sceneId": "cozinha-01",
+  "schemaVersion": "VariantFidelitySummary 0.1"
+}
