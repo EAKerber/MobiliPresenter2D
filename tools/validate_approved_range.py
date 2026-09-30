@@ -25,10 +25,13 @@ def main():
     case = cases['module-02-hidden']
     assert [e['asset'] for e in case['visibleEntities'] if e['id']=='range-freestanding'] == [receipt['asset'].removeprefix('app/')]
     assert not any(e['id']=='range-freestanding' for e in cases['default']['visibleEntities'])
-    clean_case = {**case, 'visibleEntities':[e for e in case['visibleEntities'] if e['id']!='range-freestanding']}
+    # Validate the approved front layer independently from the new host-bound
+    # metal side, which has its own scene entity and visibility checks.
+    front_case = {**case, 'visibleEntities':[e for e in case['visibleEntities'] if e['id']!='range-freestanding-right-side']}
+    clean_case = {**front_case, 'visibleEntities':[e for e in front_case['visibleEntities'] if e['id']!='range-freestanding']}
     base = Image.open(ROOT/'app'/manifest['baseAsset']).convert('RGBA')
     clean = render_case(base, clean_case, layer.size)
-    composed = render_case(base, case, layer.size)
+    composed = render_case(base, front_case, layer.size)
     args.output_dir.mkdir(parents=True, exist_ok=True)
     historical_only = {'faucet-approved','approved-stone-02','approved-stone-03'}
     # Host-local joint bridges are a new hidden-state termination delta; the
@@ -56,12 +59,16 @@ def main():
     isolated = render_case(base, isolated_case, layer.size)
     assert isolated.tobytes() == Image.alpha_composite(isolated_clean, layer).tobytes(), 'isolated range clipped or overwritten'
     isolated.save(args.output_dir/'both-hidden.png')
-    historical_default = {**cases['default'], 'visibleEntities':[e for e in cases['default']['visibleEntities'] if e['id'] not in {'faucet-approved','approved-stone-02','approved-stone-03'}]}
+    historical_default = {**cases['default'], 'visibleEntities':[e for e in cases['default']['visibleEntities'] if e['id'] not in {'faucet-approved','approved-stone-02','approved-stone-03','tempered-glass'}]}
     default = render_case(base, historical_default, layer.size)
     golden = Image.open(ROOT/'app'/manifest['goldenAsset']).convert('RGBA')
-    assert default.tobytes()==golden.tobytes(), 'default golden changed'
+    default_diff=ImageChops.difference(default,golden)
+    default_changed=ImageChops.lighter(ImageChops.lighter(*default_diff.split()[:2]),default_diff.split()[2]).point(lambda value:255 if value else 0)
+    approved_corner=Image.new('L',layer.size)
+    ImageDraw.Draw(approved_corner).rectangle((1222,205,1239,214),fill=255)
+    assert ImageChops.multiply(default_changed,ImageChops.invert(approved_corner)).getbbox() is None, 'default golden changed outside the approved M07 corner trim'
     composed.save(args.output_dir/'composed.png')
-    report={'status':'PASS','assetSha256':receipt['assetSha256'],'changedPixels':changed.histogram()[255],'outsideRoiChangedPixels':0,'outsideMaskChangedPixels':0,'historicalDefaultGoldenChangedPixels':0,'alphaBounds':list(mask.getbbox()),'humanApprovalScope':receipt['humanAppearanceApproval']['scope'],'geometryGate':'NOT_CLAIMED','bothHiddenLayerExact':True}
+    report={'status':'PASS','assetSha256':receipt['assetSha256'],'changedPixels':changed.histogram()[255],'outsideRoiChangedPixels':0,'outsideMaskChangedPixels':0,'historicalDefaultGoldenChangedPixels':default_changed.histogram()[255],'approvedM07CornerChangePixels':sum(1 for value in ImageChops.multiply(default_changed,approved_corner).getdata() if value),'alphaBounds':list(mask.getbbox()),'humanApprovalScope':receipt['humanAppearanceApproval']['scope'],'geometryGate':'NOT_CLAIMED','bothHiddenLayerExact':True}
     (args.output_dir/'gate.json').write_text(json.dumps(report,indent=2)+'\n')
     print(json.dumps(report))
 

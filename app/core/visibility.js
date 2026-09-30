@@ -19,7 +19,10 @@
 
       let result;
       const substitution = substitutionsByReplacement.get(entityId);
-      if (substitution) {
+      if (entity.serviceId) {
+        const selected = (state.globalSelections?.serviceIds || []).includes(entity.serviceId);
+        result = { visible: selected, reason: selected ? "visible" : "service-off" };
+      } else if (substitution) {
         const primary = resolveEntity(substitution.primaryEntityId);
         result = primary.visible
           ? { visible: false, reason: "substitution-primary-visible" }

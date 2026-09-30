@@ -30,8 +30,10 @@ GOLDEN = KITCHEN / "composicao-completa.png"
 REPORT = ROOT / "reports" / "r5a-pixelperfect-materialization.json"
 
 STONE02_LEFT_CLEAN_POINTS = ((523, 520), (523, 551), (489, 559))
-STONE02_RIGHT_EDGE_POINTS = ((746, 519), (746, 557), (744, 574), (746, 579), (744, 586), (744, 589))
-STONE03_LEFT_EDGE_POINTS = ((751, 518), (751, 551), (740, 574), (739, 580), (740, 586), (740, 589))
+# Keep one gently sloped, shared cut through the site camera's raster projection.
+STONE_JOINT_POINTS = ((746, 519), (746, 551), (743, 566), (740, 589))
+STONE02_RIGHT_EDGE_POINTS = STONE_JOINT_POINTS
+STONE03_LEFT_EDGE_POINTS = STONE_JOINT_POINTS
 # The oven appliance ends before the right carcass/front rail. R5A previously
 # widened this rectangle to x=739, which removed 5,205 real front pixels.
 MODULE02_APPLIANCE_PROTECTED = (516, 611, 720, 838)
@@ -100,7 +102,8 @@ def clip_and_bridge(source, variant_path, bridge_path, *, side, points, roi) -> 
     removed = 0
     for y in range(y0, y1):
         boundary = lerp_boundary(points, y)
-        xs = range(max(int(boundary) + 1, x0), x1) if side == "right" else range(x0, min(int(boundary), x1))
+        # Module 02 owns the shared seam pixel; module 03 begins immediately after it.
+        xs = range(max(int(boundary) + 1, x0), x1) if side == "right" else range(x0, min(int(boundary) + 1, x1))
         for x in xs:
             pixel = op[x, y]
             if pixel[3]:

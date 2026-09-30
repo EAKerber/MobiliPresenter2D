@@ -9,7 +9,7 @@
 
   const scene = {
     schemaVersion: "Scene2D 1.0",
-    manifestVersion: "cozinha-01@r6-stone-color",
+    manifestVersion: "cozinha-01@glass-exposed-sides-v5",
     id: "cozinha-01",
     label: "Cozinha Casa em Módulos",
     canvas: { width: 1536, height: 1024 },
@@ -26,18 +26,41 @@
         "approved-stone-02",
         "approved-stone-03",
         "stone-02-joint-bridge",
-        "module-02-right-exposed-face",
         "stone-03-joint-bridge",
         "module-04",
         "module-05",
+        "module-05-right-return",
         "module-06",
         "module-07",
+        "module-07-left-return",
+        "module-02-right-exposed-face",
+        "range-freestanding-right-side",
         "lighting-08"
       ],
       decorVisible: [],
       gridVisible: false
     },
     entities: [
+      ...[
+        ["module-05-right-return", "module-05", "module-06", 499, 751, 65, 14, 203],
+        ["module-07-left-return", "module-07", "module-04", 399, 1223, 51, 15, 155]
+      ].map(([id, hostId, occluder, zIndex, x, y, width, height]) => ({
+        id, alias: id, label: "Continuação da caixaria",
+        kind: "accessory", zIndex,
+        asset: `assets/kitchen/overlays/${id}.png`, maskAsset: null,
+        alphaBounds: { x, y, width, height },
+        defaultVisible: true, controllable: false, hostId,
+        occludedByIds: occluder ? [occluder] : [], finishGroups: [], tags: ["exposed-side", "carcass-side"]
+      })),
+      {
+        id: "tempered-glass", alias: "glass", label: "Vidro temperado",
+        kind: "accessory", zIndex: 90,
+        asset: "assets/kitchen/overlays/tempered-glass.png", maskAsset: null,
+        alphaBounds: { x: 495, y: 0, width: 28, height: 902 },
+        defaultVisible: false, controllable: false,
+        serviceId: "tempered-glass", hostId: null, requiresVisibleIds: [],
+        finishGroups: [], tags: ["glass", "global-option"]
+      },
       {
         "id": "approved-stone-02",
         "alias": "02A",
@@ -263,7 +286,7 @@
         zIndex: 202,
         asset: "assets/kitchen/bridges/stone-02-joint-bridge.png",
         maskAsset: null,
-        alphaBounds: { x: 745, y: 521, width: 19, height: 69 },
+        alphaBounds: { x: 741, y: 521, width: 23, height: 69 },
         defaultVisible: true,
         controllable: false,
         hostIds: ["module-02", "module-03"],
@@ -275,16 +298,18 @@
         alias: "02L",
         label: "Lateral direita exposta do módulo 02",
         kind: "accessory",
+        // The solid-color guide defines the exact exposed face. The module 03
+        // occlusion rule prevents this face from painting over the sink unit.
         zIndex: 203,
         asset: "assets/kitchen/overlays/module-02-right-exposed-face.png",
-        maskAsset: null,
-        alphaBounds: { x: 755, y: 525, width: 9, height: 290 },
+        maskAsset: "assets/kitchen/masks/module-02-right-exposed-face.png",
+        alphaBounds: { x: 739, y: 552, width: 18, height: 301 },
         defaultVisible: true,
         controllable: false,
         hostId: "module-02",
         occludedByIds: ["module-03"],
         finishGroups: [],
-        tags: ["exposed-side", "carcass-side", "cooking-zone"]
+        tags: ["exposed-side", "carcass-side", "finish-matched-side", "cooking-zone"]
       },
       {
         id: "stone-03-joint-bridge",
@@ -294,7 +319,7 @@
         zIndex: 302,
         asset: "assets/kitchen/bridges/stone-03-joint-bridge.png",
         maskAsset: null,
-        alphaBounds: { x: 736, y: 516, width: 15, height: 74 },
+        alphaBounds: { x: 736, y: 516, width: 11, height: 74 },
         defaultVisible: true,
         controllable: false,
         hostIds: ["module-02", "module-03"],
@@ -306,7 +331,7 @@
         alias: "02R",
         label: "Fogão convencional",
         kind: "substitution",
-        zIndex: 205,
+        zIndex: 305,
         asset: "assets/kitchen/substitutions/range-freestanding.png",
         maskAsset: null,
         alphaBounds: { x: 494, y: 531, width: 257, height: 355 },
@@ -316,6 +341,21 @@
         hostId: null,
         finishGroups: [],
         tags: ["replacement", "cooking-zone"]
+      },
+      {
+        id: "range-freestanding-right-side",
+        alias: "02R-lateral",
+        label: "Lateral metálica do fogão convencional",
+        kind: "accessory",
+        zIndex: 304,
+        asset: "assets/kitchen/overlays/range-freestanding-right-side.png",
+        maskAsset: null,
+          alphaBounds: { x: 743, y: 543, width: 19, height: 319 },
+        defaultVisible: true,
+        controllable: false,
+        hostId: "range-freestanding",
+        finishGroups: [],
+        tags: ["replacement-side", "metal", "cooking-zone"]
       }
     ],
     finishGroups: [

@@ -33,6 +33,8 @@ def main() -> int:
         "assets/kitchen/layers/08_iluminacao.png",
     ]
     tracked = set(data.get("files", {}))
+    tracked.update(str(p.relative_to(ROOT)).replace("\\", "/") for p in (ROOT / "assets/kitchen/overlays").glob("module-*-return.png"))
+    tracked.add("assets/kitchen/overlays/tempered-glass.png")
     tracked.update(data["compositionOrder"])
     # Runtime overlays are source assets too, even when hidden in the default composition.
     tracked.update({
@@ -44,6 +46,8 @@ def main() -> int:
         "assets/kitchen/overlays/approved-stone-02.png",
         "assets/kitchen/overlays/approved-stone-03.png",
         "assets/kitchen/overlays/module-02-right-exposed-face.png",
+        "assets/kitchen/masks/module-02-right-exposed-face.png",
+        "assets/kitchen/overlays/range-freestanding-right-side.png",
         "assets/kitchen/masks/04-06-seam-bridge.png",
         "assets/kitchen/masks/04-with-06-seam.png",
         "assets/kitchen/composicao-completa.png",
@@ -53,7 +57,7 @@ def main() -> int:
     for rel in sorted(tracked):
         path = ROOT / rel
         if path.suffix.lower() == ".png" and path.is_file(): files[rel] = record(path)
-    PATH.write_text(json.dumps(data, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    PATH.write_text(json.dumps(data, ensure_ascii=False, indent=2) + "\n", encoding="utf-8", newline="\n")
     print(json.dumps({"status": "PASS", "baselineId": data["baselineId"], "trackedImages": len(files)}, sort_keys=True))
     return 0
 
