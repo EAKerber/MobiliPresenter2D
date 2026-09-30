@@ -9,7 +9,7 @@
 
   const scene = {
     schemaVersion: "Scene2D 1.0",
-    manifestVersion: "cozinha-01@glass-occlusion-v8",
+    manifestVersion: "cozinha-01@glass-occlusion-v9",
     id: "cozinha-01",
     label: "Cozinha Casa em Módulos",
     canvas: { width: 1536, height: 1024 },
@@ -55,7 +55,7 @@
         id: "tempered-glass", alias: "glass", label: "Vidro temperado",
         kind: "accessory", zIndex: 90,
         asset: "assets/kitchen/overlays/tempered-glass.png", maskAsset: null,
-        alphaBounds: { x: 495, y: 0, width: 28, height: 902 },
+        alphaBounds: { x: 495, y: 0, width: 92, height: 900 },
         defaultVisible: false, controllable: false,
         serviceId: "tempered-glass", hostId: null, requiresVisibleIds: [],
         finishGroups: [], tags: ["glass", "global-option"]

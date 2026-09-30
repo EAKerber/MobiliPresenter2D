@@ -326,12 +326,12 @@
       ]
     },
     "assets/kitchen/overlays/tempered-glass.png": {
-      "sha256": "7ff22f1d19bcb5f8eb54daf1fa859986ff92b41ba43fa9cb91b4a6729819c167",
+      "sha256": "fdaa6890ad27679591471635f6e4dc2acde25f3e6a4801bc8160b9bf1f831d91",
       "alphaBounds": [
         495,
         0,
-        523,
-        902
+        587,
+        900
       ]
     },
     "assets/kitchen/overlays/range-freestanding-right-side.png": {
