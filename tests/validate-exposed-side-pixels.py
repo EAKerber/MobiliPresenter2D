@@ -9,22 +9,23 @@ ASSETS = ROOT / "app/assets/kitchen"
 glass = Image.open(ASSETS / "overlays/tempered-glass.png").convert("RGBA").getchannel("A")
 m05 = Image.open(ASSETS / "layers/05_aereo_fogao.png").convert("RGBA").getchannel("A")
 m02 = Image.open(ASSETS / "layers/02_inferior_fogao.png").convert("RGBA").getchannel("A")
+stone02 = Image.open(ASSETS / "variants/stone-02-cozinha-exposed-right.png").convert("RGBA").getchannel("A")
 
-# The pane remains present through the matte gaps. The cabinet body and hood
-# stay opaque to preserve their front edges in front of the glass.
-for point in ((500, 200), (500, 280)):
-    assert glass.getpixel(point) > 0, ("glass must continue behind the negative space", point)
-    assert m05.getpixel(point) == 0, ("module 05 matte still covers the glass opening", point, m05.getpixel(point))
+# Module 05's source alpha already follows the cabinet and hood silhouettes.
+# Keep the actual metal face and fixing opaque; only the near-transparent matte
+# outside the cabinet stays open so the glass can show through.
+assert glass.getpixel((500, 200)) > 0
+assert m05.getpixel((500, 200)) <= 1, ("wall beside the cabinet must not hide the glass", m05.getpixel((500, 200)))
 assert m05.getpixel((520, 200)) > 200, "module 05 cabinet edge must remain in front of the pane"
-assert m05.getpixel((515, 280)) > 200, "hood's sloped face must remain in front of the pane"
-assert m05.getpixel((500, 308)) > 200, "hood fixing must remain in front of the pane"
-assert m05.getpixel((500, 315)) == 0, "the wall matte below the hood fixing still hides the glass"
-assert m05.getpixel((510, 315)) > 200, "the hood underside must stay in front of the pane"
+for point in ((500, 280), (515, 280), (500, 315), (510, 315)):
+    assert m05.getpixel(point) > 200, ("real hood metal/support must stay in front of the pane", point, m05.getpixel(point))
+assert glass.getpixel((500, 340)) > 0 and m05.getpixel((500, 340)) == 0
 
-# The module 02 body starts at its real projected left edge; the adjacent strip
-# remains exposed, while stone is kept in its own foreground layer.
+# The glass asset remains continuous behind the true foreground stone and body.
+# This verifies source coverage separately from the visible occlusion order.
+assert glass.getpixel((500, 560)) > 0 and stone02.getpixel((500, 560)) > 200
 assert glass.getpixel((500, 600)) > 0
 assert m02.getpixel((497, 600)) == 0
 assert m02.getpixel((500, 600)) > 200
 
-print({"passed": True, "glassBounds": glass.getbbox(), "module05Openings": [(500, 200), (500, 280)], "module02LeftEdge": (497, 600)})
+print({"passed": True, "glassBounds": glass.getbbox(), "module05Silhouette": [(500, 280), (500, 315)], "stone02Occlusion": (500, 560), "module02LeftEdge": (497, 600)})
