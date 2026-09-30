@@ -1,0 +1,29 @@
+name: Module05 contour candidates
+
+on:
+  push:
+    branches:
+      - audit/boundary-forensics
+    paths:
+      - 'tools/build-module05-contour-candidates.py'
+      - '.github/workflows/module05-contour-candidates.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install pillow numpy
+      - run: python tools/build-module05-contour-candidates.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: module05-contour-candidates
+          path: module05-contour-candidates/
+          if-no-files-found: error
