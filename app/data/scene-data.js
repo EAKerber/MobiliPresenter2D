@@ -9,7 +9,7 @@
 
   const scene = {
     schemaVersion: "Scene2D 1.0",
-    manifestVersion: "cozinha-01@glass-exposed-sides-v6",
+    manifestVersion: "cozinha-01@glass-occlusion-v7",
     id: "cozinha-01",
     label: "Cozinha Casa em Módulos",
     canvas: { width: 1536, height: 1024 },
@@ -26,7 +26,6 @@
         "approved-stone-02",
         "approved-stone-03",
         "stone-02-joint-bridge",
-        "module-07-floor-side-bridge",
         "stone-03-joint-bridge",
         "module-04",
         "module-05",
@@ -34,7 +33,6 @@
         "module-06",
         "module-07",
         "module-07-left-return",
-        "module-02-right-exposed-face",
         "range-freestanding-right-side",
         "lighting-08"
       ],
@@ -293,41 +291,6 @@
         hostIds: ["module-02", "module-03"],
         finishGroups: [],
         tags: ["stone", "joint", "cooking-zone", "sink-zone"]
-      },
-      {
-        id: "module-02-right-exposed-face",
-        alias: "02L",
-        label: "Lateral direita exposta do módulo 02",
-        kind: "accessory",
-        // The solid-color guide anchors the exposed side. The upper edge is
-        // tucked beneath the counter stone and its lower edge continues behind
-        // the plinth so both stone joints read as one white MDF plane.
-        zIndex: 201,
-        asset: "assets/kitchen/overlays/module-02-right-exposed-face.png",
-        maskAsset: "assets/kitchen/masks/module-02-right-exposed-face.png",
-        alphaBounds: { x: 739, y: 590, width: 19, height: 310 },
-        defaultVisible: true,
-        controllable: false,
-        hostId: "module-02",
-        occludedByIds: ["module-03"],
-        finishGroups: [],
-        tags: ["exposed-side", "carcass-side", "white-mdf-side", "cooking-zone"]
-      },
-      {
-        id: "module-07-floor-side-bridge",
-        alias: "07LB",
-        label: "Fechamento do fundo com lateral 07",
-        kind: "accessory",
-        zIndex: 701,
-        asset: "assets/kitchen/overlays/module-07-floor-side-bridge.png",
-        maskAsset: null,
-        alphaBounds: { x: 1226, y: 204, width: 22, height: 27 },
-        defaultVisible: true,
-        controllable: false,
-        hostId: "module-07",
-        occludedByIds: ["module-04"],
-        finishGroups: [],
-        tags: ["carcass-joint", "white-mdf-side", "refrigerator-zone"]
       },
       {
         id: "stone-03-joint-bridge",
