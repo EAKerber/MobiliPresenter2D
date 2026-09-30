@@ -66,7 +66,6 @@
   const selectedFinishDescription = document.getElementById("selectedFinishDescription");
   const catalogByEntityId = new Map(catalog.modules.map((module) => [module.entityId, module]));
   const detailReturnRefsByEntity = new Map([
-    ["module-02", "module-02-right-exposed-face"],
     ["module-05", "module-05-right-return"],
     ["module-07", "module-07-left-return"]
   ]);

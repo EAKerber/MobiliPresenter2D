@@ -37,7 +37,7 @@ function resolved(state) {
   return visibility.resolveVisibility(scene, state);
 }
 
-assert.equal(scene.entities.length, 22);
+assert.equal(scene.entities.length, 20);
 const glassState = core.createInitialState(scene);
 assert.equal(resolved(glassState)["tempered-glass"].visible, true);
 core.setAllControllableVisibility(scene, glassState, false);
@@ -47,26 +47,14 @@ assert.equal(resolved(glassState)["tempered-glass"].visible, false);
 core.setGlobalService(glassState, "tempered-glass", true);
 assert.equal(resolved(glassState)["tempered-glass"].visible, true);
 assert.equal(scene.entities.find(e => e.id === "tempered-glass").controllable, false);
-const module02Side = scene.entities.find(e => e.id === "module-02-right-exposed-face");
-assert.equal(module02Side.maskAsset, "assets/kitchen/masks/module-02-right-exposed-face.png");
-assert.ok(module02Side.tags.includes("white-mdf-side"));
-assert.equal(module02Side.tags.includes("finish-matched-side"), false, "M02 exposed side stays white when the front finish changes");
-assert.equal(module02Side.zIndex, scene.entities.find(e => e.id === "stone-02").zIndex, "the counter and plinth stones draw over the MDF side");
-assert.ok(module02Side.id.localeCompare("stone-02") < 0, "stone-02 wins equal-z side pixels in paint order");
-const module07FloorBridge = scene.entities.find(e => e.id === "module-07-floor-side-bridge");
-assert.equal(module07FloorBridge.hostId, "module-07");
-assert.deepEqual(Array.from(module07FloorBridge.occludedByIds), ["module-04"]);
-assert.ok(module07FloorBridge.zIndex > scene.entities.find(e => e.id === "module-07").zIndex);
-for (const id of ["module-02-right-exposed-face", "module-05-right-return", "module-07-left-return"]) {
+assert.equal(scene.entities.some(e => e.id === "module-02-right-exposed-face" || e.id === "module-07-floor-side-bridge"), false, "rejected added sides stay out of the scene");
+for (const id of ["module-05-right-return", "module-07-left-return"]) {
   assert.equal(scene.entities.find(e => e.id === id).controllable, false, `${id} remains an internal visual accessory`);
 }
 const sideDefaults = resolved(core.createInitialState(scene));
-assert.equal(sideDefaults["module-02-right-exposed-face"].visible, false, "M02 return is hidden behind M03 in the full scene");
-assert.ok(module02Side.zIndex > scene.entities.find(e => e.id === "module-02").zIndex, "M02 side follows the pixel guide across its exposed edge");
 assert.equal(sideDefaults["module-05-right-return"].visible, false, "M05 return is hidden behind M06 in the full scene");
 assert.equal(sideDefaults["module-07-left-return"].visible, false, "M07 return stays behind M04 when both are present");
-assert.equal(sideDefaults["module-07-floor-side-bridge"].visible, false, "M07 floor joint stays behind M04 when both are present");
-for (const [sideId, occluderId] of [["module-02-right-exposed-face", "module-03"], ["module-05-right-return", "module-06"], ["module-07-left-return", "module-04"]]) {
+for (const [sideId, occluderId] of [["module-05-right-return", "module-06"], ["module-07-left-return", "module-04"]]) {
   const side = scene.entities.find(e => e.id === sideId);
   assert.deepEqual(Array.from(side.occludedByIds), [occluderId]);
   assert.ok(side.zIndex < scene.entities.find(e => e.id === occluderId).zIndex, `${sideId} paints behind ${occluderId}`);
@@ -76,10 +64,8 @@ core.setEntityVisibility(sideWithoutOccluders, "module-03", false);
 core.setEntityVisibility(sideWithoutOccluders, "module-04", false);
 core.setEntityVisibility(sideWithoutOccluders, "module-06", false);
 const unoccludedSides = resolved(sideWithoutOccluders);
-assert.equal(unoccludedSides["module-02-right-exposed-face"].visible, true);
 assert.equal(unoccludedSides["module-05-right-return"].visible, true);
 assert.equal(unoccludedSides["module-07-left-return"].visible, true);
-assert.equal(resolved(sideWithoutOccluders)["module-07-floor-side-bridge"].visible, true);
 assert.equal(scene.entities.some(e => e.id === "module-01-right-return" || e.id === "module-06-left-return"), false, "modules 01 and 06 need no extra side overlay in the canonical scene");
 const rangeSide = scene.entities.find(e => e.id === "range-freestanding-right-side");
 assert.equal(rangeSide.hostId, "range-freestanding");
