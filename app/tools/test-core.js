@@ -54,17 +54,21 @@ for (const id of ["module-02-right-exposed-face", "module-05-right-return", "mod
   assert.equal(scene.entities.find(e => e.id === id).controllable, false, `${id} remains an internal visual accessory`);
 }
 const sideDefaults = resolved(core.createInitialState(scene));
-assert.equal(sideDefaults["module-05-right-return"].visible, true, "M05 return remains available; M06 masks its geometric overlap by z-order");
+assert.equal(sideDefaults["module-02-right-exposed-face"].visible, false, "M02 return is hidden behind M03 in the full scene");
+assert.ok(module02Side.zIndex < scene.entities.find(e => e.id === "module-02").zIndex, "M02 side tucks behind its front to hide the join");
+assert.equal(sideDefaults["module-05-right-return"].visible, false, "M05 return is hidden behind M06 in the full scene");
 assert.equal(sideDefaults["module-07-left-return"].visible, false, "M07 return stays behind M04 when both are present");
-for (const [sideId, occluderId] of [["module-07-left-return", "module-04"]]) {
+for (const [sideId, occluderId] of [["module-02-right-exposed-face", "module-03"], ["module-05-right-return", "module-06"], ["module-07-left-return", "module-04"]]) {
   const side = scene.entities.find(e => e.id === sideId);
   assert.deepEqual(Array.from(side.occludedByIds), [occluderId]);
   assert.ok(side.zIndex < scene.entities.find(e => e.id === occluderId).zIndex, `${sideId} paints behind ${occluderId}`);
 }
 const sideWithoutOccluders = core.createInitialState(scene);
+core.setEntityVisibility(sideWithoutOccluders, "module-03", false);
 core.setEntityVisibility(sideWithoutOccluders, "module-04", false);
 core.setEntityVisibility(sideWithoutOccluders, "module-06", false);
 const unoccludedSides = resolved(sideWithoutOccluders);
+assert.equal(unoccludedSides["module-02-right-exposed-face"].visible, true);
 assert.equal(unoccludedSides["module-05-right-return"].visible, true);
 assert.equal(unoccludedSides["module-07-left-return"].visible, true);
 assert.equal(scene.entities.some(e => e.id === "module-01-right-return" || e.id === "module-06-left-return"), false, "modules 01 and 06 need no extra side overlay in the canonical scene");

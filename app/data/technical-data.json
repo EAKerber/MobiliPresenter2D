@@ -290,12 +290,12 @@
       ]
     },
     "assets/kitchen/overlays/module-02-right-exposed-face.png": {
-      "sha256": "797140d815be7dd5e66188a726253fff885ffc1785fbf4198deb59b408443db9",
+      "sha256": "fb4b5305599de0d0e2d081a34984defb5e52ed4edad855d0fb4a208e3ecd0f78",
       "alphaBounds": [
-        747,
+        746,
         594,
-        756,
-        854
+        766,
+        856
       ]
     },
     "assets/kitchen/masks/04-06-seam-bridge.png": {
@@ -335,12 +335,12 @@
       ]
     },
     "assets/kitchen/overlays/module-07-left-return.png": {
-      "sha256": "7a33c6b396086c010f313feb23f9327b9538ff5e96522c7667b3b811705b18b6",
+      "sha256": "1af52f533830703ef8dc22ef70031cc9f8834a1319779f54f749252cecf34875",
       "alphaBounds": [
         1223,
         51,
         1238,
-        210
+        206
       ]
     },
     "assets/kitchen/overlays/tempered-glass.png": {
@@ -353,12 +353,12 @@
       ]
     },
     "assets/kitchen/overlays/range-freestanding-right-side.png": {
-      "sha256": "ede64feaf2cca5e349d7c0505f9ebc2604f28d96bcc43e45dd78f15b80a80015",
+      "sha256": "834d249b9631c6da0afde6ad93e6e29f23501457a6f05f07919a61c818262f45",
       "alphaBounds": [
         743,
         543,
         762,
-        872
+        862
       ]
     },
     "assets/kitchen/masks/module-02-right-exposed-face.png": {

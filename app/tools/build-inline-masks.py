@@ -41,7 +41,7 @@ def main() -> int:
         f"  global.CASA_EM_MODULOS_MASK_DATA = Object.freeze({payload});\n"
         "})(window);\n"
     )
-    OUTPUT_PATH.write_text(source, encoding="utf-8")
+    OUTPUT_PATH.write_text(source, encoding="utf-8", newline="\n")
     print({"output": str(OUTPUT_PATH.relative_to(PROJECT_ROOT)), "maskCount": len(encoded)})
     return 0
 

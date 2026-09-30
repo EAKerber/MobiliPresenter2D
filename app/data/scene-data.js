@@ -42,8 +42,8 @@
     },
     entities: [
       ...[
-        ["module-05-right-return", "module-05", null, 601, 751, 65, 14, 203],
-        ["module-07-left-return", "module-07", "module-04", 399, 1223, 51, 15, 159]
+        ["module-05-right-return", "module-05", "module-06", 499, 751, 65, 14, 203],
+        ["module-07-left-return", "module-07", "module-04", 399, 1223, 51, 15, 155]
       ].map(([id, hostId, occluder, zIndex, x, y, width, height]) => ({
         id, alias: id, label: "Continuação da caixaria",
         kind: "accessory", zIndex,
@@ -298,13 +298,16 @@
         alias: "02L",
         label: "Lateral direita exposta do módulo 02",
         kind: "accessory",
-        zIndex: 303,
+        // The side tucks behind the module front. The front masks its seam,
+        // leaving only the depth face visible beyond the cabinet edge.
+        zIndex: 199,
         asset: "assets/kitchen/overlays/module-02-right-exposed-face.png",
         maskAsset: "assets/kitchen/masks/module-02-right-exposed-face.png",
-        alphaBounds: { x: 747, y: 594, width: 9, height: 260 },
+        alphaBounds: { x: 746, y: 594, width: 20, height: 262 },
         defaultVisible: true,
         controllable: false,
         hostId: "module-02",
+        occludedByIds: ["module-03"],
         finishGroups: [],
         tags: ["exposed-side", "carcass-side", "finish-matched-side", "cooking-zone"]
       },
@@ -347,7 +350,7 @@
         zIndex: 304,
         asset: "assets/kitchen/overlays/range-freestanding-right-side.png",
         maskAsset: null,
-        alphaBounds: { x: 743, y: 543, width: 19, height: 329 },
+          alphaBounds: { x: 743, y: 543, width: 19, height: 319 },
         defaultVisible: true,
         controllable: false,
         hostId: "range-freestanding",

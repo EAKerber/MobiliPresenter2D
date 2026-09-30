@@ -38,6 +38,47 @@ const {pathToFileURL}=require('node:url');
     },ids);
     await page.locator('#viewer').screenshot({path:path.join(output,name+'.png'),animations:'disabled'});
   }
+  await page.evaluate(()=>{
+    const state=window.CASA_EM_MODULOS_DEBUG.getState();
+    state.visibilityByEntity['module-02-right-exposed-face']=false;
+    const box=document.querySelector('[data-global-service-id="tempered-glass"]');box.dispatchEvent(new Event('change',{bubbles:true}));
+  });
+  await page.locator('#viewer').screenshot({path:path.join(output,'full-side-base.png'),animations:'disabled'});
+  await page.evaluate(()=>{
+    const state=window.CASA_EM_MODULOS_DEBUG.getState();
+    state.visibilityByEntity['module-02-right-exposed-face']=true;
+    const box=document.querySelector('[data-global-service-id="tempered-glass"]');box.dispatchEvent(new Event('change',{bubbles:true}));
+  });
+  await page.locator('#viewer').screenshot({path:path.join(output,'full-side-forced.png'),animations:'disabled'});
+  // Canonical-camera clean plate for the explicitly requested side-mask workflow:
+  // same module set as the valid M02 exposed-side state, with only its side layer removed.
+  await page.evaluate(()=>{
+    const state=window.CASA_EM_MODULOS_DEBUG.getState();
+    for(const e of window.CASA_EM_MODULOS_SCENE.entities.filter(e=>e.kind==='module'))state.visibilityByEntity[e.id]=['01','02','05'].includes(e.id.slice(-2));
+    state.visibilityByEntity['module-02-right-exposed-face']=false;
+    const box=document.querySelector('[data-global-service-id="tempered-glass"]');box.checked=false;box.dispatchEvent(new Event('change',{bubbles:true}));
+  });
+  await page.locator('#viewer').screenshot({path:path.join(output,'m02-side-base.png'),animations:'disabled'});
+  await page.evaluate(()=>{window.CASA_EM_MODULOS_DEBUG.getState().visibilityByEntity['module-02-right-exposed-face']=true;const box=document.querySelector('[data-global-service-id="tempered-glass"]');box.dispatchEvent(new Event('change',{bubbles:true}));});
+  await page.locator('#viewer').screenshot({path:path.join(output,'m02-side-enabled.png'),animations:'disabled'});
+  await page.evaluate(()=>{
+    const state=window.CASA_EM_MODULOS_DEBUG.getState();
+    for(const e of window.CASA_EM_MODULOS_SCENE.entities.filter(e=>e.kind==='module'))state.visibilityByEntity[e.id]=!['module-02'].includes(e.id);
+    state.visibilityByEntity['range-freestanding-right-side']=false;
+    const box=document.querySelector('[data-global-service-id="tempered-glass"]');box.checked=false;box.dispatchEvent(new Event('change',{bubbles:true}));
+  });
+  await page.locator('#viewer').screenshot({path:path.join(output,'range-side-base.png'),animations:'disabled'});
+  await page.evaluate(()=>{window.CASA_EM_MODULOS_DEBUG.getState().visibilityByEntity['range-freestanding-right-side']=true;const box=document.querySelector('[data-global-service-id="tempered-glass"]');box.dispatchEvent(new Event('change',{bubbles:true}));});
+  await page.locator('#viewer').screenshot({path:path.join(output,'range-side-enabled.png'),animations:'disabled'});
+  await page.evaluate(()=>{
+    const state=window.CASA_EM_MODULOS_DEBUG.getState();
+    for(const e of window.CASA_EM_MODULOS_SCENE.entities.filter(e=>e.kind==='module'))state.visibilityByEntity[e.id]=!['module-04'].includes(e.id);
+    state.visibilityByEntity['module-07-left-return']=false;
+    const box=document.querySelector('[data-global-service-id="tempered-glass"]');box.dispatchEvent(new Event('change',{bubbles:true}));
+  });
+  await page.locator('#viewer').screenshot({path:path.join(output,'m07-side-base.png'),animations:'disabled'});
+  await page.evaluate(()=>{window.CASA_EM_MODULOS_DEBUG.getState().visibilityByEntity['module-07-left-return']=true;const box=document.querySelector('[data-global-service-id="tempered-glass"]');box.dispatchEvent(new Event('change',{bubbles:true}));});
+  await page.locator('#viewer').screenshot({path:path.join(output,'m07-side-enabled.png'),animations:'disabled'});
   for(const [name,ids] of Object.entries({glassComplete:['01','02','03','04','05','06','07'],glassModule02off:['01','03','04','05','06','07']})){
     await page.evaluate(ids=>{const state=window.CASA_EM_MODULOS_DEBUG.getState();
       for(const e of window.CASA_EM_MODULOS_SCENE.entities.filter(e=>e.kind==='module'))state.visibilityByEntity[e.id]=ids.includes(e.id.slice(-2));
