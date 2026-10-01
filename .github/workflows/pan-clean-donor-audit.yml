@@ -1,0 +1,36 @@
+name: Pan clean donor audit
+
+on:
+  push:
+    branches: [audit/boundary-forensics]
+    paths:
+      - '.github/workflows/pan-clean-donor-audit.yml'
+      - 'tools/build_approved_stone.py'
+      - 'tools/review_drainer_clean.py'
+      - 'tools/render_variant_fidelity.py'
+      - 'review-assets/**'
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install pillow numpy
+      - name: Rebuild approved stone donors
+        run: python tools/build_approved_stone.py --output-dir pan-clean-donor-output
+      - name: Collect focused donor artifacts
+        run: |
+          mkdir -p pan-clean-donor-artifact
+          cp pan-clean-donor-output/default/under.png pan-clean-donor-artifact/default-under.png
+          cp pan-clean-donor-output/default/neutral.png pan-clean-donor-artifact/default-neutral.png
+          cp pan-clean-donor-output/default/objects.png pan-clean-donor-artifact/default-objects.png
+          cp pan-clean-donor-output/default/mask.png pan-clean-donor-artifact/default-mask.png
+          cp pan-clean-donor-output/approved-02.png pan-clean-donor-artifact/approved-02.png
+          cp app/assets/kitchen/variants/stone-02-cozinha-exposed-right.png pan-clean-donor-artifact/stone02-owner.png
+      - uses: actions/upload-artifact@v4
+        with:
+          name: pan-clean-donor-audit
+          path: pan-clean-donor-artifact
