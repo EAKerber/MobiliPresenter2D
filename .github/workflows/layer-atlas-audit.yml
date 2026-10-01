@@ -1,0 +1,24 @@
+name: Layer atlas audit
+
+on:
+  push:
+    branches: [audit/boundary-forensics]
+    paths:
+      - '.github/workflows/layer-atlas-audit.yml'
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Collect kitchen layer atlas inputs
+        run: |
+          mkdir -p layer-atlas/layers layer-atlas/masks layer-atlas/overlays layer-atlas/variants
+          cp app/assets/kitchen/layers/*.png layer-atlas/layers/
+          cp app/assets/kitchen/masks/*.png layer-atlas/masks/ || true
+          cp app/assets/kitchen/overlays/*.png layer-atlas/overlays/ || true
+          cp app/assets/kitchen/variants/*.png layer-atlas/variants/ || true
+      - uses: actions/upload-artifact@v4
+        with:
+          name: layer-atlas-audit
+          path: layer-atlas
