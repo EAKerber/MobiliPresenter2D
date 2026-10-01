@@ -1,0 +1,29 @@
+name: Object edge audit
+
+on:
+  push:
+    branches: [audit/boundary-forensics]
+    paths:
+      - '.github/workflows/object-edge-audit.yml'
+      - 'tools/review_object_contours.py'
+      - 'tools/review_object_antialias.py'
+      - 'review-assets/object-contours/**'
+      - 'review-assets/stone-backing/**'
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install pillow numpy
+      - run: python tools/review_object_contours.py --output-dir /tmp/object-contours
+      - run: python tools/review_object_antialias.py --output-dir /tmp/object-antialias
+      - uses: actions/upload-artifact@v4
+        with:
+          name: object-edge-audit
+          path: |
+            /tmp/object-contours
+            /tmp/object-antialias
