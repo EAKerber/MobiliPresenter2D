@@ -1,0 +1,17 @@
+name: App snapshot audit
+
+on:
+  push:
+    branches: [audit/boundary-forensics]
+    paths:
+      - '.github/workflows/app-snapshot-audit.yml'
+
+jobs:
+  snapshot:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/upload-artifact@v4
+        with:
+          name: app-snapshot-audit
+          path: app
