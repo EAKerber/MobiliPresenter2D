@@ -96,7 +96,7 @@ def main() -> int:
     )
     payload = {"schemaVersion": "R5APixelPerfectGate 0.2", "status": "PASS" if passed else "FAIL", "gates": gates}
     OUT.parent.mkdir(parents=True, exist_ok=True)
-    OUT.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    OUT.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8", newline="\n")
     print(json.dumps(payload, ensure_ascii=False, sort_keys=True))
     return 0 if passed else 1
 

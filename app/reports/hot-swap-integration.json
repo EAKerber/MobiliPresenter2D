@@ -1,0 +1,7 @@
+{
+  "sourcePackage": "MobiliPresenter2D_hot_swap_FINAL.zip",
+  "sourcePackageSha256": "c4d2219a3095eef138945a93a00d5fac7280575b4f1ccce75bc81df226e2382c",
+  "baselineId": "cozinha-01-r6-clean-ghosts-mirrored-cooktop",
+  "stoneDataSha256": "bbe6e540a275aefdef24c55545fc24c30205095435f16adb8ab9dd25a98f397e",
+  "scope": "Replaces the previous M02 cooktop and stone-color inputs with the user-provided hot swap; its exact original approval record remains historical."
+}

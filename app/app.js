@@ -87,6 +87,7 @@
         group.className = "layer-group";
         group.dataset.entityId = entity.id;
         group.dataset.module = entity.alias;
+        group.style.zIndex = String(entity.zIndex);
 
         const image = document.createElement("img");
         image.src = entity.asset;
@@ -158,7 +159,7 @@
         const title = document.createElement("strong");
         title.textContent = product.title;
         const dimensions = document.createElement("small");
-        dimensions.textContent = product.dimensions.display;
+        dimensions.textContent = productForCurrentConfiguration(product).dimensions.display;
         copy.append(title, dimensions);
 
         const detail = document.createElement("button");
@@ -460,6 +461,21 @@
 
   function formatDimension(value) {
     return new Intl.NumberFormat("pt-BR", { maximumFractionDigits: 1 }).format(value);
+  }
+
+  function productForCurrentConfiguration(product) {
+    if (product.entityId !== "module-07" || state.visibilityByEntity["module-04"] !== false) return product;
+    const depth = 400;
+    return {
+      ...product,
+      dimensions: {
+        ...product.dimensions,
+        display: `800 × 484 × ${depth} mm`,
+        nominalMm: { ...product.dimensions.nominalMm, depth },
+        geometryMm: { ...product.dimensions.geometryMm, depth }
+      },
+      configurationNote: "Profundidade estendida para 400 mm porque o módulo 04 não está incluído."
+    };
   }
 
   function createDetailList(items, className) {
@@ -1120,7 +1136,8 @@
 
   function updateSelection(resolved) {
     const entity = entitiesById.get(state.selectedEntityId);
-    const product = catalogByEntityId.get(state.selectedEntityId);
+    const catalogProduct = catalogByEntityId.get(state.selectedEntityId);
+    const product = catalogProduct ? productForCurrentConfiguration(catalogProduct) : null;
     const isVisible = Boolean(entity && resolved?.[entity.id]?.visible);
     const style = isVisible ? selectionStyle(entity) : null;
     selectionFrame.hidden = !style;
@@ -1197,6 +1214,7 @@
     const dimensions = document.createElement("p");
     dimensions.className = "module-detail__dimensions";
     dimensions.textContent = dimensionSummary(product);
+    if (product.configurationNote) dimensions.textContent += ` · ${product.configurationNote}`;
 
     const technical = document.createElement("section");
     technical.className = "module-detail__technical";
@@ -1260,6 +1278,9 @@
         input.checked = Boolean(state.visibilityByEntity[entity.id]);
         input.setAttribute("aria-describedby", blocked ? `blocked-${entity.id}` : "");
       }
+      const product = catalogByEntityId.get(entityId);
+      const dimensionLabel = card.querySelector(".module-card__copy > small");
+      if (product && dimensionLabel) dimensionLabel.textContent = productForCurrentConfiguration(product).dimensions.display;
       let status = card.querySelector(".module-card__status");
       if (!status) {
         status = document.createElement("small");
@@ -1634,7 +1655,8 @@
     finishLayers.forEach((layer) => {
       const group = layer.closest(".layer-group");
       const product = catalogByEntityId.get(group?.dataset.entityId);
-      if (!product?.commercial?.finishEligible) return;
+      const entity = entitiesById.get(group?.dataset.entityId);
+      if (!product?.commercial?.finishEligible && !entity?.tags?.includes("finish-matched-side")) return;
       const hasTexture = Boolean(finish.textureAsset);
       layer.classList.toggle("is-texture", hasTexture);
       layer.classList.add("is-color");

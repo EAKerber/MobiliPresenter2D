@@ -38,6 +38,25 @@ function resolved(state) {
 }
 
 assert.equal(scene.entities.length, 17);
+const glassState = core.createInitialState(scene);
+assert.equal(resolved(glassState)["tempered-glass"].visible, true);
+core.setAllControllableVisibility(scene, glassState, false);
+assert.equal(resolved(glassState)["tempered-glass"].visible, true, "glass has no module dependency");
+core.setGlobalService(glassState, "tempered-glass", false);
+assert.equal(resolved(glassState)["tempered-glass"].visible, false);
+core.setGlobalService(glassState, "tempered-glass", true);
+assert.equal(resolved(glassState)["tempered-glass"].visible, true);
+assert.equal(scene.entities.find(e => e.id === "tempered-glass").controllable, false);
+assert.equal(scene.entities.some(e => /(?:right-return|left-return|right-side|exposed-face|floor-side-bridge)$/.test(e.id)), false, "experimental furniture side overlays stay out of the canonical scene");
+const appSource = fs.readFileSync(path.join(projectRoot, "app.js"), "utf8");
+const styleSource = fs.readFileSync(path.join(projectRoot, "styles.css"), "utf8");
+assert.match(appSource, /group\.style\.zIndex = String\(entity\.zIndex\)/);
+assert.doesNotMatch(styleSource, /data-entity-id="tempered-glass"\]\s*\{\s*z-index/);
+const stoveDisabledState = core.createInitialState(scene);
+core.setEntityVisibility(stoveDisabledState, "module-02", false);
+assert.equal(resolved(stoveDisabledState)["range-freestanding"].visible, true);
+core.setEntityVisibility(stoveDisabledState, "module-02", true);
+assert.equal(resolved(stoveDisabledState)["range-freestanding"].visible, false);
 assert.deepEqual(Array.from(validation.validateScene(scene)), []);
 assert.equal(catalog.modules.length, 7);
 assert.equal(priceBook.mode, "estimate");

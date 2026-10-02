@@ -26,7 +26,6 @@
         "approved-stone-02",
         "approved-stone-03",
         "stone-02-joint-bridge",
-        "module-02-right-exposed-face",
         "stone-03-joint-bridge",
         "module-04",
         "module-05",
@@ -39,6 +38,15 @@
     },
     entities: [
       {
+        id: "tempered-glass", alias: "glass", label: "Vidro temperado",
+        kind: "accessory", zIndex: 90,
+        asset: "assets/kitchen/overlays/tempered-glass.png", maskAsset: null,
+        alphaBounds: { x: 495, y: 266, width: 28, height: 634 },
+        defaultVisible: false, controllable: false,
+        serviceId: "tempered-glass", hostId: null, requiresVisibleIds: [],
+        finishGroups: [], tags: ["glass", "global-option"]
+      },
+      {
         "id": "approved-stone-02",
         "alias": "02A",
         "label": "Componentes aprovados 02",
@@ -47,10 +55,10 @@
         "asset": "assets/kitchen/overlays/approved-stone-02.png",
         "maskAsset": null,
         "alphaBounds": {
-          "x": 515,
-          "y": 491,
-          "width": 224,
-          "height": 84
+          "x": 520,
+          "y": 540,
+          "width": 214,
+          "height": 32
         },
         "defaultVisible": true,
         "controllable": false,
@@ -269,22 +277,6 @@
         hostIds: ["module-02", "module-03"],
         finishGroups: [],
         tags: ["stone", "joint", "cooking-zone", "sink-zone"]
-      },
-      {
-        id: "module-02-right-exposed-face",
-        alias: "02L",
-        label: "Lateral direita exposta do módulo 02",
-        kind: "accessory",
-        zIndex: 203,
-        asset: "assets/kitchen/overlays/module-02-right-exposed-face.png",
-        maskAsset: null,
-        alphaBounds: { x: 755, y: 525, width: 9, height: 290 },
-        defaultVisible: true,
-        controllable: false,
-        hostId: "module-02",
-        occludedByIds: ["module-03"],
-        finishGroups: [],
-        tags: ["exposed-side", "carcass-side", "cooking-zone"]
       },
       {
         id: "stone-03-joint-bridge",

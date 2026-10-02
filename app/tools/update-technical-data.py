@@ -17,7 +17,7 @@ def record(path: Path) -> dict[str, object]:
 
 def main() -> int:
     data = json.loads(PATH.read_text(encoding="utf-8"))
-    data["baselineId"] = "cozinha-01-r5a-pixelperfect-bridges1"
+    data["baselineId"] = "cozinha-01-r6-clean-ghosts-mirrored-cooktop"
     data["compositionOrder"] = [
         "assets/kitchen/layers/01_modulo_lavanderia.png",
         "assets/kitchen/layers/02_inferior_fogao.png",
@@ -33,6 +33,8 @@ def main() -> int:
         "assets/kitchen/layers/08_iluminacao.png",
     ]
     tracked = set(data.get("files", {}))
+    tracked.discard("assets/kitchen/overlays/module-06-left-return.png")
+    tracked.add("assets/kitchen/overlays/tempered-glass.png")
     tracked.update(data["compositionOrder"])
     # Runtime overlays are source assets too, even when hidden in the default composition.
     tracked.update({
@@ -43,17 +45,27 @@ def main() -> int:
         "assets/kitchen/overlays/faucet-approved.png",
         "assets/kitchen/overlays/approved-stone-02.png",
         "assets/kitchen/overlays/approved-stone-03.png",
-        "assets/kitchen/overlays/module-02-right-exposed-face.png",
         "assets/kitchen/masks/04-06-seam-bridge.png",
         "assets/kitchen/masks/04-with-06-seam.png",
         "assets/kitchen/composicao-completa.png",
     })
     files = data.setdefault("files", {})
     files.pop("assets/kitchen/bridges/front-04-06-finish-bridge.png", None)
+    files.pop("assets/kitchen/overlays/module-06-left-return.png", None)
+    for side_asset in (
+        "assets/kitchen/overlays/module-05-right-return.png",
+        "assets/kitchen/overlays/module-07-left-return.png",
+        "assets/kitchen/overlays/range-freestanding-right-side.png",
+    ):
+        tracked.discard(side_asset)
+        files.pop(side_asset, None)
+    files.pop("assets/kitchen/overlays/module-02-right-exposed-face.png", None)
+    files.pop("assets/kitchen/masks/module-02-right-exposed-face.png", None)
+    files.pop("assets/kitchen/overlays/module-07-floor-side-bridge.png", None)
     for rel in sorted(tracked):
         path = ROOT / rel
         if path.suffix.lower() == ".png" and path.is_file(): files[rel] = record(path)
-    PATH.write_text(json.dumps(data, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    PATH.write_text(json.dumps(data, ensure_ascii=False, indent=2) + "\n", encoding="utf-8", newline="\n")
     print(json.dumps({"status": "PASS", "baselineId": data["baselineId"], "trackedImages": len(files)}, sort_keys=True))
     return 0
 
