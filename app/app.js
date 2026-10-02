@@ -65,10 +65,6 @@
   ];
   const selectedFinishDescription = document.getElementById("selectedFinishDescription");
   const catalogByEntityId = new Map(catalog.modules.map((module) => [module.entityId, module]));
-  const detailReturnRefsByEntity = new Map([
-    ["module-05", "module-05-right-return"],
-    ["module-07", "module-07-left-return"]
-  ]);
   const detailPageByEntity = new Map();
   const detailInteractionByEntity = new Set();
   const detailViewsCollapsedByEntity = new Set();
@@ -642,14 +638,7 @@
   }
 
   function createModuleFocus(entity, product) {
-    const returnId = detailReturnRefsByEntity.get(entity.id);
-    const returnEntity = entitiesById.get(returnId);
-    const bounds = [entity.alphaBounds, returnEntity?.alphaBounds].filter(Boolean).reduce((box, item) => {
-      const x = Math.min(box.x, item.x), y = Math.min(box.y, item.y);
-      const right = Math.max(box.x + box.width, item.x + item.width);
-      const bottom = Math.max(box.y + box.height, item.y + item.height);
-      return { x, y, width: right - x, height: bottom - y };
-    }, { ...entity.alphaBounds });
+    const bounds = entity.alphaBounds;
     const focus = document.createElement("div");
     focus.className = "module-detail__focus";
     focus.style.setProperty("--focus-ratio", `${bounds.width} / ${bounds.height}`);
@@ -679,18 +668,6 @@
       finishLayer.style.setProperty("--focus-finish-opacity", String(finishes.resolveOverlayOpacity(finish, finish.color)));
     }
     focus.append(image);
-    if (returnEntity) {
-      const returnImage = document.createElement("img");
-      returnImage.className = "module-detail__focus-image module-detail__focus-return";
-      returnImage.src = returnEntity.asset;
-      const side = entity.id === "module-02" || entity.id === "module-05" ? "direita" : "esquerda";
-      returnImage.alt = `Lateral ${side} do módulo, exibida na visualização de detalhes.`;
-      returnImage.draggable = false;
-      returnImage.style.width = image.style.width;
-      returnImage.style.left = image.style.left;
-      returnImage.style.top = image.style.top;
-      focus.append(returnImage);
-    }
     if (finishLayer) focus.append(finishLayer);
     return focus;
   }

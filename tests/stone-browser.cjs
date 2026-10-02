@@ -99,6 +99,7 @@ const {chromium} = require('playwright');
     assert.equal(visible['stone-02-joint-bridge'].visible,a && b);
     assert.equal(visible['stone-03-joint-bridge'].visible,a && b);
     assert.equal(await page.locator('[data-entity-id="module-02-right-exposed-face"]').count(),0);
+    assert.equal(await page.locator('[data-entity-id="range-freestanding-right-side"]').count(),0);
     assert.equal(visible['faucet-approved'].visible,b);
     if (!a) assert.equal((await canvasPixel(600,530))[3],0);
     if (!b) assert.equal((await canvasPixel(1100,530))[3],0);

@@ -37,7 +37,7 @@ function resolved(state) {
   return visibility.resolveVisibility(scene, state);
 }
 
-assert.equal(scene.entities.length, 20);
+assert.equal(scene.entities.length, 17);
 const glassState = core.createInitialState(scene);
 assert.equal(resolved(glassState)["tempered-glass"].visible, true);
 core.setAllControllableVisibility(scene, glassState, false);
@@ -47,31 +47,7 @@ assert.equal(resolved(glassState)["tempered-glass"].visible, false);
 core.setGlobalService(glassState, "tempered-glass", true);
 assert.equal(resolved(glassState)["tempered-glass"].visible, true);
 assert.equal(scene.entities.find(e => e.id === "tempered-glass").controllable, false);
-assert.equal(scene.entities.some(e => e.id === "module-02-right-exposed-face" || e.id === "module-07-floor-side-bridge"), false, "rejected added sides stay out of the scene");
-for (const id of ["module-05-right-return", "module-07-left-return"]) {
-  assert.equal(scene.entities.find(e => e.id === id).controllable, false, `${id} remains an internal visual accessory`);
-}
-const sideDefaults = resolved(core.createInitialState(scene));
-assert.equal(sideDefaults["module-05-right-return"].visible, false, "M05 return is hidden behind M06 in the full scene");
-assert.equal(sideDefaults["module-07-left-return"].visible, false, "M07 return stays behind M04 when both are present");
-for (const [sideId, occluderId] of [["module-05-right-return", "module-06"], ["module-07-left-return", "module-04"]]) {
-  const side = scene.entities.find(e => e.id === sideId);
-  assert.deepEqual(Array.from(side.occludedByIds), [occluderId]);
-  assert.ok(side.zIndex < scene.entities.find(e => e.id === occluderId).zIndex, `${sideId} paints behind ${occluderId}`);
-}
-const sideWithoutOccluders = core.createInitialState(scene);
-core.setEntityVisibility(sideWithoutOccluders, "module-03", false);
-core.setEntityVisibility(sideWithoutOccluders, "module-04", false);
-core.setEntityVisibility(sideWithoutOccluders, "module-06", false);
-const unoccludedSides = resolved(sideWithoutOccluders);
-assert.equal(unoccludedSides["module-05-right-return"].visible, true);
-assert.equal(unoccludedSides["module-07-left-return"].visible, true);
-assert.equal(scene.entities.some(e => e.id === "module-01-right-return" || e.id === "module-06-left-return"), false, "modules 01 and 06 need no extra side overlay in the canonical scene");
-const rangeSide = scene.entities.find(e => e.id === "range-freestanding-right-side");
-assert.equal(rangeSide.hostId, "range-freestanding");
-assert.equal(rangeSide.controllable, false);
-assert.ok(rangeSide.zIndex > scene.entities.find(e => e.id === "module-03").zIndex);
-assert.ok(rangeSide.zIndex < scene.entities.find(e => e.id === "range-freestanding").zIndex);
+assert.equal(scene.entities.some(e => /(?:right-return|left-return|right-side|exposed-face|floor-side-bridge)$/.test(e.id)), false, "experimental furniture side overlays stay out of the canonical scene");
 const appSource = fs.readFileSync(path.join(projectRoot, "app.js"), "utf8");
 const styleSource = fs.readFileSync(path.join(projectRoot, "styles.css"), "utf8");
 assert.match(appSource, /group\.style\.zIndex = String\(entity\.zIndex\)/);
@@ -79,10 +55,8 @@ assert.doesNotMatch(styleSource, /data-entity-id="tempered-glass"\]\s*\{\s*z-ind
 const stoveDisabledState = core.createInitialState(scene);
 core.setEntityVisibility(stoveDisabledState, "module-02", false);
 assert.equal(resolved(stoveDisabledState)["range-freestanding"].visible, true);
-assert.equal(resolved(stoveDisabledState)["range-freestanding-right-side"].visible, true);
 core.setEntityVisibility(stoveDisabledState, "module-02", true);
 assert.equal(resolved(stoveDisabledState)["range-freestanding"].visible, false);
-assert.equal(resolved(stoveDisabledState)["range-freestanding-right-side"].visible, false);
 assert.deepEqual(Array.from(validation.validateScene(scene)), []);
 assert.equal(catalog.modules.length, 7);
 assert.equal(priceBook.mode, "estimate");
@@ -267,7 +241,6 @@ core.setEntityVisibility(state, "module-04", false);
 const noModule04 = resolved(state);
 assert.equal(noModule04["module-06"].visible, true);
 assert.equal(noModule04["module-07"].visible, true);
-assert.equal(noModule04["module-07-left-return"].visible, true);
 assert.equal(noModule04["lighting-08"].reason, "requirement-hidden");
 
 const withoutModule06Requirement = core.createInitialState(scene);

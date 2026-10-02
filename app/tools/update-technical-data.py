@@ -17,7 +17,7 @@ def record(path: Path) -> dict[str, object]:
 
 def main() -> int:
     data = json.loads(PATH.read_text(encoding="utf-8"))
-    data["baselineId"] = "cozinha-01-r5a-pixelperfect-bridges1"
+    data["baselineId"] = "cozinha-01-r6-clean-ghosts-mirrored-cooktop"
     data["compositionOrder"] = [
         "assets/kitchen/layers/01_modulo_lavanderia.png",
         "assets/kitchen/layers/02_inferior_fogao.png",
@@ -34,7 +34,6 @@ def main() -> int:
     ]
     tracked = set(data.get("files", {}))
     tracked.discard("assets/kitchen/overlays/module-06-left-return.png")
-    tracked.update(str(p.relative_to(ROOT)).replace("\\", "/") for p in (ROOT / "assets/kitchen/overlays").glob("module-*-return.png"))
     tracked.add("assets/kitchen/overlays/tempered-glass.png")
     tracked.update(data["compositionOrder"])
     # Runtime overlays are source assets too, even when hidden in the default composition.
@@ -46,7 +45,6 @@ def main() -> int:
         "assets/kitchen/overlays/faucet-approved.png",
         "assets/kitchen/overlays/approved-stone-02.png",
         "assets/kitchen/overlays/approved-stone-03.png",
-        "assets/kitchen/overlays/range-freestanding-right-side.png",
         "assets/kitchen/masks/04-06-seam-bridge.png",
         "assets/kitchen/masks/04-with-06-seam.png",
         "assets/kitchen/composicao-completa.png",
@@ -54,6 +52,13 @@ def main() -> int:
     files = data.setdefault("files", {})
     files.pop("assets/kitchen/bridges/front-04-06-finish-bridge.png", None)
     files.pop("assets/kitchen/overlays/module-06-left-return.png", None)
+    for side_asset in (
+        "assets/kitchen/overlays/module-05-right-return.png",
+        "assets/kitchen/overlays/module-07-left-return.png",
+        "assets/kitchen/overlays/range-freestanding-right-side.png",
+    ):
+        tracked.discard(side_asset)
+        files.pop(side_asset, None)
     files.pop("assets/kitchen/overlays/module-02-right-exposed-face.png", None)
     files.pop("assets/kitchen/masks/module-02-right-exposed-face.png", None)
     files.pop("assets/kitchen/overlays/module-07-floor-side-bridge.png", None)

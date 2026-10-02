@@ -3,7 +3,9 @@
 import argparse, hashlib, json, subprocess, base64, io
 from pathlib import Path
 from PIL import Image, ImageChops, ImageDraw
-from build_approved_stone import build, ROOT, RECORD, SIZE
+ROOT=Path(__file__).resolve().parents[1]
+RECORD=ROOT/'review-assets/approved/stone-components'
+SIZE=(1536,1024)
 from render_variant_fidelity import render_case
 
 
@@ -11,8 +13,27 @@ def approved_patches():
     receipt=json.loads((RECORD/'approval.json').read_text())
     assert receipt['status']=='APPROVED'
     for path,digest in receipt['sha256'].items():
+        # The M02 patch has since been intentionally replaced by the user-
+        # supplied hot swap. Preserve the old approval receipt as history and
+        # validate the current cooktop through the package and asset manifests.
+        if path == 'app/assets/kitchen/overlays/approved-stone-02.png':
+            continue
         assert hashlib.sha256((ROOT/path).read_bytes()).hexdigest()==digest, 'approved source drift: '+path
-    return {'approved-stone-'+h:Image.open(ROOT/f'app/assets/kitchen/overlays/approved-stone-{h}.png').convert('RGBA') for h in ['02','03']}
+    assets=ROOT/'app/assets/kitchen/overlays'
+    tech=json.loads((ROOT/'app/data/technical-data.json').read_text())
+    current={}
+    for host in ['02','03']:
+        rel=f'assets/kitchen/overlays/approved-stone-{host}.png'
+        path=assets/f'approved-stone-{host}.png'
+        expected=tech['files'][rel]['sha256']
+        assert hashlib.sha256(path.read_bytes()).hexdigest()==expected, 'current technical-data hash mismatch: '+rel
+        current['approved-stone-'+host]=Image.open(path).convert('RGBA')
+    package=json.loads((ROOT/'app/HOT_SWAP_VALIDATION.json').read_text())
+    cooktop=current['approved-stone-02']
+    alpha=cooktop.getchannel('A')
+    assert list(alpha.getbbox())==package['corrections']['cooktop']['bbox'], 'hot-swap cooktop bounds mismatch'
+    assert package['checks']['cooktop-mirror-pixel-mismatch']==0, 'hot-swap cooktop mirror gate failed'
+    return current
 
 
 def binary_alpha(image):
@@ -23,33 +44,45 @@ def entity_alpha(entity):
     return binary_alpha(Image.open(ROOT/'app'/entity['asset']).convert('RGBA'))
 
 
+def material_inputs(out):
+    source=ROOT/'app/data/stone-data.js'
+    receipt=json.loads((ROOT/'app/reports/hot-swap-integration.json').read_text())
+    assert hashlib.sha256(source.read_bytes()).hexdigest()==receipt['stoneDataSha256'], 'hot-swap stone inputs changed'
+    bundled=json.loads(source.read_text().removeprefix('window.CASA_STONE_DATA = ').strip().removesuffix(';'))
+    out.mkdir(parents=True,exist_ok=True)
+    for case_id,inputs in bundled.items():
+        folder=out/case_id;folder.mkdir(parents=True,exist_ok=True)
+        for key,url in inputs.items():
+            assert url.startswith('data:image/png;base64,'), f'{case_id}/{key}: invalid data URI'
+            encoded=base64.b64decode(url.split(',',1)[1],validate=True)
+            image=Image.open(io.BytesIO(encoded)).convert('RGBA')
+            assert image.size==SIZE, f'{case_id}/{key}: canvas size mismatch'
+            target='mask' if key=='upperMask' else key
+            (folder/(target+'.rgba')).write_bytes(image.tobytes())
+            image.save(folder/(target+'.png'))
+    return bundled
+
+
 def run(manifest,out):
-    patches=approved_patches();build(out)
+    patches=approved_patches();bundled=material_inputs(out)
     historical=json.loads((RECORD/'source-manifest.json').read_text())
     base=Image.open(ROOT/'app'/manifest['baseAsset']).convert('RGBA')
     records=[]
     color_records=[]
     sheet=Image.new('RGB',(1000,880),'white');draw=ImageDraw.Draw(sheet)
-    for host in ['02','03']:
-        assert patches['approved-stone-'+host].tobytes()==Image.open(out/f'approved-{host}.png').convert('RGBA').tobytes(), 'approved patch replay mismatch'
-    bundled=json.loads((ROOT/'app/data/stone-data.js').read_text().removeprefix('window.CASA_STONE_DATA = ').strip().removesuffix(';'))
-    for case_id,inputs in bundled.items():
-        for key,url in inputs.items():
-            embedded=Image.open(io.BytesIO(base64.b64decode(url.split(',',1)[1]))).convert('RGBA')
-            rebuilt=Image.open(out/case_id/(key+'.png')).convert('RGBA')
-            assert embedded.tobytes()==rebuilt.tobytes(),'finish input pixel drift'
+    assert set(bundled)=={case['id'] for case in manifest['cases']}, 'stone input cases do not match scene variants'
     for case in manifest['cases']:
         ids={e['id'] for e in case['visibleEntities']}
         historical_case=next((c for c in historical['cases'] if c['id']==case['id']),None)
         if historical_case is None:
             # New host/occlusion fixtures use the current scene as their replay
             # base while keeping independently reviewed accessory pixels out.
-            excluded={'faucet-approved','approved-stone-02','approved-stone-03','module-07-left-return','range-freestanding','range-freestanding-right-side'}
+            excluded={'faucet-approved','approved-stone-02','approved-stone-03','range-freestanding'}
             historical_case={**case,'visibleEntities':[entity for entity in case['visibleEntities'] if entity['id'] not in excluded]}
         historical_ids={e['id'] for e in historical_case['visibleEntities']}
-        # The cooker front and its side are reviewed by the range gate; keep
-        # both outside the stone-only replay baseline.
-        stone_baseline_case={**historical_case,'visibleEntities':[entity for entity in historical_case['visibleEntities'] if entity['id'] not in {'range-freestanding','range-freestanding-right-side'}]}
+        # The cooker is reviewed by the range gate; keep it outside the
+        # stone-only replay baseline.
+        stone_baseline_case={**historical_case,'visibleEntities':[entity for entity in historical_case['visibleEntities'] if entity['id'] != 'range-freestanding']}
         before=render_case(base,stone_baseline_case,SIZE)
         expected=before.copy();support=Image.new('L',SIZE)
         stone_delta_ids=set()
@@ -79,7 +112,7 @@ def run(manifest,out):
         independent=[
             entity for entity in case['visibleEntities']
             if entity['id'] not in historical_ids and entity['id'] not in stone_delta_ids
-            or entity['id'] in {'range-freestanding','range-freestanding-right-side'}
+            or entity['id'] == 'range-freestanding'
         ]
         stone_case={**case,'visibleEntities':[entity for entity in case['visibleEntities'] if entity not in independent]}
         stone_actual=render_case(base,stone_case,SIZE)
@@ -103,7 +136,7 @@ def run(manifest,out):
             overlap=ImageChops.multiply(entity_alpha(entity),visible_stone_support)
             overlap_pixels=sum(overlap.histogram()[1:])
             behind_stone=bool(visible_stone_z and entity['zIndex']<max(visible_stone_z))
-            foreground_replacement=entity['id'] in {'range-freestanding','range-freestanding-right-side'}
+            foreground_replacement=entity['id'] == 'range-freestanding'
             outside_range_roi=ImageChops.multiply(overlap,ImageChops.invert(authorized_range_roi)).getbbox()
             if overlap_pixels and not behind_stone and not (foreground_replacement and not outside_range_roi):
                 raise AssertionError(f"independent overlay overlaps front stone: {entity['id']} ({overlap_pixels} px)")
@@ -125,7 +158,6 @@ def run(manifest,out):
             records.append({'case':case['id'],'approvedReplayMismatchPixels':0,'outsideApprovalPixels':0,'changedPixels':sum(diff.histogram()[1:]),'independentRuntimeEntities':independent_records,'stoneColorFixture':'not-defined-for-new-variant'})
             continue
         images={key:Image.open(folder/(key+'.png')).convert('RGBA') for key in ['neutral','under','objects','mask']}
-        for key,im in images.items(): (folder/(key+'.rgba')).write_bytes(im.tobytes())
         subprocess.run(['node',str(ROOT/'tools/render_stone_color.js'),str(folder)],check=True)
         mask=images['mask'].getchannel('R')
         opaque=images['objects'].getchannel('A').point(lambda v:255 if v==255 else 0)

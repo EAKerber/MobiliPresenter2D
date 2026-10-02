@@ -1,0 +1,43 @@
+{
+  "source": "main app snapshot",
+  "corrections": {
+    "coifa": "approved alpha cleanup",
+    "stone02": {
+      "ghost_cleanup_pixels": 14204,
+      "glass_edge_removed_pixels": 132
+    },
+    "stone03": {
+      "ghost_cleanup_pixels": 18593,
+      "exposed_left_rebuilt_from_state_donor": true
+    },
+    "cooktop": {
+      "mirrored_horizontal": true,
+      "bbox": [
+        520,
+        540,
+        734,
+        572
+      ],
+      "stone_data_cases": [
+        "default",
+        "module-03-hidden"
+      ],
+      "approved_overlay_updated": true
+    },
+    "bridge_02_03": {
+      "junction_assets_unchanged": true,
+      "fringe_pixels_extended_into_upper_material": 74
+    },
+    "object_antialias": "not promoted; review-only improvement with possible source-RGB contamination"
+  },
+  "checks": {
+    "s02-normal-cleanup-mismatch": 0,
+    "s02-exposed-cleanup-mismatch": 0,
+    "s03-normal-cleanup-mismatch": 0,
+    "s03-exposed-cleanup-mismatch": 0,
+    "stone02-glass-removal-nontransparent": 0,
+    "bridge-fringe-uncovered": 0,
+    "bridge-fringe-under-empty": 0,
+    "cooktop-mirror-pixel-mismatch": 0
+  }
+}

@@ -12,10 +12,9 @@
       <stop offset="1" stop-color="#fff" stop-opacity="0"/>
     </linearGradient>
   </defs>
-  <!-- The rear edge meets the wall/column at x=496; the front edge reaches the stove counter. -->
-  <path d="M496 0H522V855L496 899Z" fill="url(#smoke)"/>
-  <path d="M497 0H521V854L497 897Z" fill="url(#reflection)"/>
-  <path d="M496 0V899L522 855V0" fill="none" stroke="#202729" stroke-opacity=".68" stroke-width="1.4"/>
+  <!-- The continuous pane widens below the hood and reaches the counter at its exposed edge. -->
+  <path d="M496 0H522V260L586 320V855L496 899Z" fill="url(#smoke)"/>
+  <path d="M496 0V899L586 855V320L522 260V0" fill="none" stroke="#202729" stroke-opacity=".68" stroke-width="1.4"/>
   <path d="M497.4 0V896" fill="none" stroke="#ebf2ef" stroke-opacity=".65" stroke-width=".8"/>
-  <path d="M498 897L521 859" fill="none" stroke="#171b1d" stroke-opacity=".8" stroke-width="2.4"/>
+  <path d="M498 897L585 859" fill="none" stroke="#171b1d" stroke-opacity=".8" stroke-width="2.4"/>
 </svg>
