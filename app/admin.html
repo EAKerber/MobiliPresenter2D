@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Administração — Casa em Módulos</title>
+    <link rel="stylesheet" href="admin/admin.css?v=admin-config-v1" />
+  </head>
+  <body>
+    <header class="admin-topbar">
+      <a class="brand" href="index.html"><span aria-hidden="true">▱</span><span><strong>Casa em Módulos</strong><small>Administração</small></span></a>
+      <div class="admin-topbar__actions">
+        <a class="button button--secondary" href="index.html">Voltar ao configurador</a>
+        <button id="logoutButton" class="button button--secondary" type="button" hidden>Sair</button>
+      </div>
+    </header>
+    <main class="admin-main">
+      <section id="loginPanel" class="admin-card auth-card">
+        <p class="eyebrow">Acesso restrito</p>
+        <h1>Painel administrativo</h1>
+        <p class="intro">Entre com uma conta administrativa convidada para editar as etapas e os itens disponíveis no configurador.</p>
+        <form id="loginForm" class="admin-form">
+          <label>E-mail<input id="emailInput" name="email" type="email" autocomplete="username" required /></label>
+          <label>Senha<input id="passwordInput" name="password" type="password" autocomplete="current-password" required /></label>
+          <div class="auth-actions"><button class="button button--primary" type="submit">Entrar</button><button id="recoveryButton" class="text-button" type="button">Esqueci minha senha</button></div>
+        </form>
+        <form id="passwordActionForm" class="admin-form" hidden>
+          <p id="passwordActionTitle" class="intro"></p>
+          <label>Nova senha<input id="newPasswordInput" type="password" autocomplete="new-password" minlength="8" required /></label>
+          <button id="passwordActionButton" class="button button--primary" type="submit">Salvar senha</button>
+        </form>
+        <p id="loginMessage" class="message" aria-live="polite"></p>
+      </section>
+
+      <section id="deniedPanel" class="admin-card" hidden>
+        <p class="eyebrow">Acesso restrito</p><h1>Esta conta não é administradora</h1>
+        <p class="intro">Peça a um responsável para adicionar o papel <code>admin</code> à sua conta no Netlify Identity.</p>
+      </section>
+
+      <section id="editorPanel" hidden>
+        <div class="admin-heading">
+          <div><p class="eyebrow">Configurador público</p><h1>Etapas e itens</h1><p class="intro">Reordene o fluxo, ajuste os nomes e escolha o que aparece em cada etapa.</p></div>
+          <div class="admin-heading__meta"><span id="revisionLabel">Versão —</span><span id="userLabel"></span></div>
+        </div>
+        <div id="stagesList" class="stages-list"></div>
+        <div class="editor-actions"><p id="saveMessage" class="message" aria-live="polite"></p><button id="saveButton" class="button button--primary" type="button">Publicar configuração</button></div>
+      </section>
+    </main>
+    <script src="data/configurator-settings.js?v=admin-config-v1"></script>
+    <script src="data/catalog-data.js?v=scene-marker-r5"></script>
+    <script type="module" src="admin/admin.bundle.js?v=admin-config-v1"></script>
+  </body>
+</html>

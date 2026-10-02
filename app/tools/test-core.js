@@ -31,6 +31,8 @@ const validation = sandbox.window.CasaModulesValidation;
 const fingerprints = sandbox.window.CasaModulesFingerprint;
 const finishes = sandbox.window.CasaModulesFinishes;
 const pricing = sandbox.window.CasaModulesPricing;
+const settingsCore = require(path.join(projectRoot, "core/configuration.js"));
+const defaultSettings = require(path.join(projectRoot, "data/configurator-settings.js"));
 const technical = JSON.parse(fs.readFileSync(path.join(projectRoot, "data/technical-data.json"), "utf8"));
 
 function resolved(state) {
@@ -61,6 +63,21 @@ assert.deepEqual(Array.from(validation.validateScene(scene)), []);
 assert.equal(catalog.modules.length, 7);
 assert.equal(priceBook.mode, "estimate");
 assert.equal(priceBook.compositionBaseReferenceCents, undefined);
+
+assert.deepEqual(settingsCore.validateConfiguratorSettings(defaultSettings, catalog), []);
+const reorderedSettings = structuredClone(defaultSettings);
+reorderedSettings.stages.reverse();
+reorderedSettings.stages.find((stage) => stage.id === "finishes").items = ["fronts-all", "handles-all"];
+assert.deepEqual(settingsCore.validateConfiguratorSettings(reorderedSettings, catalog), [], "stage order and item selection are configurable");
+const invalidSettings = structuredClone(defaultSettings);
+invalidSettings.stages.find((stage) => stage.id === "summary").enabled = false;
+assert.equal(settingsCore.validateConfiguratorSettings(invalidSettings, catalog).includes("summary stage must remain enabled"), true);
+const unknownItemSettings = structuredClone(defaultSettings);
+unknownItemSettings.stages.find((stage) => stage.id === "services").items.push("module-99");
+assert.equal(settingsCore.validateConfiguratorSettings(unknownItemSettings, catalog).some((error) => error.includes("unknown services item")), true);
+const orphanedSkirtingSettings = structuredClone(defaultSettings);
+orphanedSkirtingSettings.stages.find((stage) => stage.id === "finishes").items = ["stone-skirting"];
+assert.equal(settingsCore.validateConfiguratorSettings(orphanedSkirtingSettings, catalog).includes("stone skirting requires the stone item"), true);
 
 const officialModulePrices = [90000, 110000, 150000, 60000, 80000, 110000, 60000];
 catalog.modules.forEach((module, index) => {

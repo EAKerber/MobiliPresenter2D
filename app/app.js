@@ -9,10 +9,12 @@
   const fingerprint = global.CasaModulesFingerprint;
   const finishes = global.CasaModulesFinishes;
   const catalog = global.CASA_EM_MODULOS_CATALOG;
+  const configurationCore = global.CasaModulesConfiguration;
   const priceBook = global.CASA_EM_MODULOS_PRICE_BOOK;
   const pricing = global.CasaModulesPricing;
+  let configuratorSettings = global.CASA_EM_MODULOS_CONFIGURATOR_DEFAULTS;
 
-  if (!scene || !inlineMasks || !core || !visibility || !validation || !fingerprint || !finishes || !catalog || !priceBook || !pricing) {
+  if (!scene || !inlineMasks || !core || !visibility || !validation || !fingerprint || !finishes || !catalog || !priceBook || !pricing || !configurationCore || !configuratorSettings) {
     throw new Error("Não foi possível carregar os dados da cena 2D.");
   }
   validation.assertValidScene(scene);
@@ -59,12 +61,20 @@
   const mobileSceneResizeHandle = document.getElementById("mobileSceneResizeHandle");
   const mobileSceneRepin = document.getElementById("mobileSceneRepin");
   const flowNav = document.querySelector(".flow-nav");
+  const stagePanels = new Map([
+    ["modules", modulesPanel], ["finishes", frontFinishPanel], ["services", servicesPanel], ["summary", summaryPanel]
+  ]);
   const skirtingOverlays = [
     { entityId: "module-02", element: document.getElementById("skirtingOverlay02") },
     { entityId: "module-03", element: document.getElementById("skirtingOverlay03") }
   ];
   const selectedFinishDescription = document.getElementById("selectedFinishDescription");
   const catalogByEntityId = new Map(catalog.modules.map((module) => [module.entityId, module]));
+  const stageConfig = (id) => configuratorSettings.stages.find((stage) => stage.id === id);
+  const stageItems = (id) => new Set(stageConfig(id)?.items || []);
+  const stageHas = (stageId, itemId) => Boolean(stageConfig(stageId)?.enabled && stageItems(stageId).has(itemId));
+  const enabledStages = () => configuratorSettings.stages.filter((stage) => stage.enabled);
+  const configuredModuleIds = () => stageItems("modules");
   const detailPageByEntity = new Map();
   const detailInteractionByEntity = new Set();
   const detailViewsCollapsedByEntity = new Set();
@@ -130,7 +140,7 @@
 
     scene.entities
       .filter((entity) => entity.controllable)
-      .filter((entity) => entity.kind === "module")
+      .filter((entity) => entity.kind === "module" && configuredModuleIds().has(entity.id))
       .sort((left, right) => left.zIndex - right.zIndex || left.id.localeCompare(right.id))
       .forEach((entity) => {
         const product = catalogByEntityId.get(entity.id);
@@ -180,7 +190,7 @@
   function renderSceneHotspotsFromData() {
     sceneHotspots.replaceChildren();
     scene.entities
-      .filter((entity) => entity.controllable && entity.kind === "module" && entity.alphaBounds)
+      .filter((entity) => entity.controllable && entity.kind === "module" && entity.alphaBounds && configuredModuleIds().has(entity.id))
       .sort((left, right) => left.zIndex - right.zIndex || left.id.localeCompare(right.id))
       .forEach((entity) => {
         const product = catalogByEntityId.get(entity.id);
@@ -264,7 +274,7 @@
   function renderServices() {
     if (!servicesChecklist) return;
     servicesChecklist.replaceChildren();
-    catalog.services.forEach((service) => {
+    catalog.services.filter((service) => stageItems("services").has(service.id)).forEach((service) => {
       const card = document.createElement("label");
       card.className = "service-check";
       const input = document.createElement("input");
@@ -401,7 +411,7 @@
     if (!servicesChecklist) return;
     servicesChecklist.replaceChildren();
     const selected = new Set(state.globalSelections?.serviceIds || []);
-    catalog.services.forEach((service) => {
+    catalog.services.filter((service) => stageItems("services").has(service.id)).forEach((service) => {
       const card = document.createElement("label");
       card.className = "service-check";
       const input = document.createElement("input");
@@ -526,6 +536,7 @@
     const handle = selectedHandle();
     const appliesHandle = product.category && product.category !== "Estrutural";
     const includedServices = catalog.services
+      .filter((service) => stageHas("services", service.id))
       .filter((service) => service.status === "included")
       .map((service) => service.title)
       .join(", ");
@@ -1088,7 +1099,7 @@
   }
 
   function moduleEntityIds() {
-    return catalog.modules.map((product) => product.entityId);
+    return catalog.modules.map((product) => product.entityId).filter((id) => configuredModuleIds().has(id));
   }
 
   function adjacentModuleId(direction) {
@@ -1330,7 +1341,25 @@
   }
 
   function getEstimate(resolved) {
-    return pricing.calculatePublicEstimate(scene, state, catalog, resolved, priceBook);
+    const activeState = {
+      ...state,
+      globalSelections: {
+        ...state.globalSelections,
+        finishId: stageHas("finishes", "fronts-all") ? state.globalSelections.finishId : "base-light",
+        handleId: stageHas("finishes", "handles-all") ? state.globalSelections.handleId : "none",
+        stonePackageId: stageHas("finishes", "stone-all") ? state.globalSelections.stonePackageId : "stone-existing",
+        serviceIds: (state.globalSelections?.serviceIds || []).filter((id) =>
+          id === "stone-skirting" ? stageHas("finishes", id) && stageHas("finishes", "stone-all") : stageHas("services", id)
+        )
+      }
+    };
+    const configuredVisibility = { ...resolved };
+    scene.entities.forEach((entity) => {
+      const moduleOmitted = entity.kind === "module" && !configuredModuleIds().has(entity.id);
+      const serviceOmitted = (entity.id === "tempered-glass" || entity.id === "lighting-08") && !stageHas("services", entity.id);
+      if (moduleOmitted || serviceOmitted) configuredVisibility[entity.id] = { visible: false, reason: "not-configured" };
+    });
+    return pricing.calculatePublicEstimate(scene, activeState, catalog, configuredVisibility, priceBook);
   }
 
   function renderCurrentValue(resolved) {
@@ -1347,7 +1376,7 @@
 
   function renderSummary(resolved) {
     const estimate = getEstimate(resolved);
-    const included = catalog.modules.filter((module) => resolved?.[module.entityId]?.visible);
+    const included = catalog.modules.filter((module) => configuredModuleIds().has(module.entityId) && resolved?.[module.entityId]?.visible);
     const list = document.createElement("ul");
     list.className = "summary-list";
     included.forEach((module) => {
@@ -1360,8 +1389,13 @@
     const finishGroup = scene.finishGroups.find((group) => group.id === "fronts-all");
     const finishPreset = finishGroup?.presets.find((preset) => preset.id === state.frontFinishId);
     const handle = selectedHandle();
-    const includedServices = catalog.services.filter((service) => service.status === "included").map((service) => service.title);
-    finish.textContent = `Frentes: ${finishPreset?.label || selectedFrontFinishLabel()}. Caixaria: clara. Puxador: ${handle.label}. Serviço incluso: ${includedServices.join(", ") || "nenhum"}.`;
+    const includedServices = catalog.services.filter((service) => stageHas("services", service.id) && service.status === "included").map((service) => service.title);
+    const finishNotes = [];
+    if (stageHas("finishes", "fronts-all")) finishNotes.push(`Frentes: ${finishPreset?.label || selectedFrontFinishLabel()}`);
+    finishNotes.push("Caixaria: clara");
+    if (stageHas("finishes", "handles-all")) finishNotes.push(`Puxador: ${handle.label}`);
+    if (includedServices.length) finishNotes.push(`Serviço incluso: ${includedServices.join(", ")}`);
+    finish.textContent = finishNotes.join(". ") + ".";
     const price = document.createElement("div");
     price.className = "price-state";
     if (estimate.status === "legacy") {
@@ -1463,23 +1497,72 @@
     summaryContent.replaceChildren(list, finish, price);
   }
 
+  function renderStageNavigation() {
+    const repin = mobileSceneRepin;
+    flowNav.querySelectorAll("[data-step]").forEach((button) => button.remove());
+    const stages = enabledStages();
+    flowNav.style.gridTemplateColumns = `repeat(${stages.length}, minmax(0, 1fr))`;
+    stages.forEach((stage, index) => {
+      const button = document.createElement("button");
+      button.type = "button";
+      button.className = "flow-step";
+      button.dataset.step = stage.id;
+      button.setAttribute("aria-controls", stagePanels.get(stage.id).id);
+      const number = document.createElement("span");
+      number.textContent = String(index + 1);
+      const label = document.createElement("span");
+      label.className = "flow-step__label";
+      label.dataset.compactLabel = ({ modules: "Módulos", finishes: "Acab.", services: "Serv.", summary: "Resumo" })[stage.id];
+      label.textContent = stage.label;
+      button.setAttribute("aria-label", stage.label);
+      button.append(number, label);
+      flowNav.insertBefore(button, repin);
+    });
+  }
+
+  function applyConfiguratorSettings(value) {
+    configuratorSettings = configurationCore.normalizeConfiguratorSettings(value, catalog);
+    const enabled = enabledStages();
+    if (!enabled.some((stage) => stage.id === currentStep)) currentStep = enabled[0].id;
+    renderModuleControlsFromData();
+    renderSceneHotspotsFromData();
+    moduleToggles = [...moduleList.querySelectorAll("[data-module-toggle]")];
+    renderStageNavigation();
+    document.querySelectorAll("[data-configurable-item]").forEach((element) => {
+      const itemId = element.dataset.configurableItem;
+      const visible = configuratorSettings.stages.some((stage) => stage.enabled && stage.items.includes(itemId));
+      element.hidden = !visible;
+    });
+    layerGroups.forEach((layer) => {
+      const id = layer.dataset.entityId;
+      const entity = entitiesById.get(id);
+      const shouldConfigure = entity?.kind === "module"
+        ? configuredModuleIds().has(id)
+        : id === "tempered-glass"
+          ? stageHas("services", id)
+          : id === "lighting-08"
+            ? stageHas("services", id)
+            : true;
+      layer.hidden = !shouldConfigure;
+    });
+    syncLayerVisibility();
+  }
+
   function syncStep(resolved) {
-    const isModules = currentStep === "modules";
-    const isFinishes = currentStep === "finishes";
-    modulesPanel.hidden = !isModules;
-    frontFinishPanel.hidden = !isFinishes;
-    stonePanel.hidden = !isFinishes;
-    servicesPanel.hidden = currentStep !== "services";
-    summaryPanel.hidden = currentStep !== "summary";
+    const activeStage = stageConfig(currentStep);
+    stagePanels.forEach((panel, id) => {
+      panel.hidden = id !== currentStep || !activeStage?.enabled;
+    });
+    stonePanel.hidden = currentStep !== "finishes" || !stageHas("finishes", "stone-all");
     document.querySelectorAll("[data-step]").forEach((button) => {
       const active = button.dataset.step === currentStep;
       button.classList.toggle("is-active", active);
       button.setAttribute("aria-current", active ? "step" : "false");
     });
-    const nextByStep = { modules: "finishes", finishes: "services", services: "summary", summary: "modules" };
-    const next = nextByStep[currentStep];
-    const nextLabel = { finishes: "acabamentos", services: "serviços", summary: "resumo" };
-    nextStepButton.textContent = currentStep === "summary" ? "Editar módulos" : `Continuar para ${nextLabel[next]} →`;
+    const stages = enabledStages();
+    const index = stages.findIndex((stage) => stage.id === currentStep);
+    const next = stages[(index + 1) % stages.length];
+    nextStepButton.textContent = currentStep === "summary" ? `Editar ${stages[0].label.toLocaleLowerCase("pt-BR")}` : `Continuar para ${next.label.toLocaleLowerCase("pt-BR")} →`;
     renderSummary(resolved);
   }
 
@@ -1492,13 +1575,7 @@
   }
 
   function focusCurrentStep() {
-    const panel = currentStep === "modules"
-      ? modulesPanel
-      : currentStep === "finishes"
-        ? frontFinishPanel
-        : currentStep === "services"
-          ? servicesPanel
-          : summaryPanel;
+    const panel = stagePanels.get(currentStep);
     const heading = panel.querySelector("h2");
     if (!heading) return;
     heading.focus({ preventScroll: true });
@@ -1506,6 +1583,7 @@
   }
 
   function changeStep(nextStep, moveFocus) {
+    if (!enabledStages().some((stage) => stage.id === nextStep)) return;
     currentStep = nextStep;
     syncLayerVisibility();
     if (moveFocus) requestAnimationFrame(focusCurrentStep);
@@ -1519,7 +1597,7 @@
   renderStonePackages();
   renderServices();
 
-  const moduleToggles = [...document.querySelectorAll("[data-module-toggle]")];
+  let moduleToggles = [...document.querySelectorAll("[data-module-toggle]")];
   const layerGroups = [...document.querySelectorAll(".layer-group")];
   const finishLayers = [...document.querySelectorAll(".finish-layer")];
   const entitiesById = new Map(scene.entities.map((entity) => [entity.id, entity]));
@@ -1631,8 +1709,10 @@
   }
 
   function updateVisibleCount() {
-    visibleCount.textContent = String(visibility.getVisibleControllableEntities(scene, state).length);
-    totalCount.textContent = String(scene.entities.filter((entity) => entity.controllable).length);
+    const configured = new Set([...configuredModuleIds(), ...(stageHas("services", "lighting-08") ? ["lighting-08"] : [])]);
+    const visible = visibility.getVisibleControllableEntities(scene, state).filter((entity) => configured.has(entity.id));
+    visibleCount.textContent = String(visible.length);
+    totalCount.textContent = String(scene.entities.filter((entity) => entity.controllable && configured.has(entity.id)).length);
     syncFingerprint();
   }
 
@@ -1696,7 +1776,7 @@
   function sceneMaterials() {
     const finish = catalog.options.finishes.find((item) => item.id === selectedModuleFinish()) || catalog.options.finishes[0];
     const stone = selectedStonePackage();
-    const hasStoneSkirting = Boolean(state.globalSelections?.serviceIds?.includes("stone-skirting"));
+    const hasStoneSkirting = stageHas("finishes", "stone-skirting") && stageHas("finishes", "stone-all") && Boolean(state.globalSelections?.serviceIds?.includes("stone-skirting"));
     const stoneMaterial = materialDescriptor(stone, "stone");
     const mdfMaterial = materialDescriptor(finish, "mdf");
     return {
@@ -1714,8 +1794,17 @@
     syncSkirtingAppearance();
     layerGroups.forEach((layer) => {
       const result = resolved[layer.dataset.entityId];
-      const isVisible = Boolean(result?.visible);
+      const entity = entitiesById.get(layer.dataset.entityId);
+      const configured = entity?.kind === "module"
+        ? configuredModuleIds().has(entity.id)
+        : entity?.id === "tempered-glass"
+          ? stageHas("services", entity.id)
+          : entity?.id === "lighting-08"
+            ? stageHas("services", entity.id)
+            : true;
+      const isVisible = configured && Boolean(result?.visible);
       layer.classList.toggle("is-hidden", !isVisible);
+      layer.hidden = !configured;
       layer.setAttribute("aria-hidden", String(!isVisible));
       layer.dataset.visibilityReason = result?.reason || "default-hidden";
     });
@@ -1923,11 +2012,11 @@
     syncLayerVisibility();
   }
 
-  moduleToggles.forEach((toggle) => {
-    toggle.addEventListener("change", () => {
-      setEntityVisibility(toggle.dataset.moduleToggle, toggle.checked);
-      updateVisibleCount();
-    });
+  moduleList.addEventListener("change", (event) => {
+    const toggle = event.target.closest("[data-module-toggle]");
+    if (!toggle) return;
+    setEntityVisibility(toggle.dataset.moduleToggle, toggle.checked);
+    updateVisibleCount();
   });
 
   if (showAllButton) showAllButton.addEventListener("click", () => setAllVisibility(true));
@@ -1983,12 +2072,9 @@
     selectEntity(hotspot.dataset.selectSceneEntity, "scene");
   });
 
-  document.querySelectorAll("[data-step]").forEach((button) => {
-    const stepName = button.querySelector("[data-mobile-label]")?.textContent?.trim();
-    if (stepName) button.setAttribute("aria-label", stepName);
-    button.addEventListener("click", () => {
-      changeStep(button.dataset.step, true);
-    });
+  flowNav.addEventListener("click", (event) => {
+    const button = event.target.closest("[data-step]");
+    if (button) changeStep(button.dataset.step, true);
   });
 
   [mobileScenePin, mobileSceneTransparency, mobileSceneResize, mobileSceneResizeHandle].filter(Boolean).forEach((control) => {
@@ -2068,8 +2154,9 @@
   viewerCard?.addEventListener("pointercancel", () => { pipDrag = null; });
 
   nextStepButton.addEventListener("click", () => {
-    const nextByStep = { modules: "finishes", finishes: "services", services: "summary", summary: "modules" };
-    changeStep(nextByStep[currentStep], true);
+    const stages = enabledStages();
+    const index = stages.findIndex((stage) => stage.id === currentStep);
+    changeStep(stages[(index + 1) % stages.length].id, true);
   });
 
   handleOptions?.addEventListener("click", (event) => {
@@ -2119,6 +2206,13 @@
     detailOrigin = null;
     syncLayerVisibility();
   });
+
+  if (global.location?.protocol === "https:" || global.location?.protocol === "http:") {
+    fetch("/api/configuration", { credentials: "same-origin", cache: "no-store" })
+      .then((response) => response.ok ? response.json() : null)
+      .then((settings) => { if (settings) applyConfiguratorSettings(settings); })
+      .catch(() => {});
+  }
 
   syncLayerVisibility();
   updateVisibleCount();
