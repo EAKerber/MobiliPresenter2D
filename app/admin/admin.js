@@ -259,9 +259,27 @@ function renderObjects() {
     makeField("Destaques (um por linha)", data.benefits, "objectBenefits", true),
     makeField("Componentes (um por linha)", data.components, "objectComponents", true),
     makeField("Requisitos (um por linha)", data.requirements, "objectRequirements", true));
+  const handleProduct = model.handleProducts.find((item) => item.priceEntryId === id);
+  if (handleProduct) renderHandleColors(card, handleProduct);
   card.dataset.objectId = id;
   objectsList.append(card);
   renderObjectAssets(id, label);
+}
+
+function renderHandleColors(card, product) {
+  const section = document.createElement("section"); section.className = "handle-colors"; section.dataset.handleProductId = product.id;
+  const heading = document.createElement("h3"); heading.textContent = "Cores do puxador"; section.append(heading);
+  const note = document.createElement("p"); note.className = "admin-note"; note.textContent = "Estas cores pertencem ao modelo de puxador e não podem ser usadas como cores de MDF."; section.append(note);
+  product.colors.forEach((entry) => {
+    const row = document.createElement("div"); row.className = "handle-color-row"; row.dataset.handleColorId = entry.id;
+    row.append(makeField("Nome da cor", entry.label, "handleColorLabel"));
+    const swatchLabel = document.createElement("label"); swatchLabel.className = "data-field"; swatchLabel.append(document.createTextNode("Cor"));
+    const swatch = document.createElement("input"); swatch.type = "color"; swatch.value = entry.color; swatch.dataset.handleColorValue = "true"; swatchLabel.append(swatch); row.append(swatchLabel);
+    const remove = document.createElement("button"); remove.type = "button"; remove.className = "button button--secondary"; remove.textContent = "Remover cor"; remove.dataset.removeHandleColor = entry.id; row.append(remove);
+    section.append(row);
+  });
+  const add = document.createElement("button"); add.type = "button"; add.className = "button button--secondary"; add.textContent = "Adicionar cor ao puxador"; add.dataset.addHandleColor = product.id; section.append(add);
+  card.append(section);
 }
 
 function renderObjectAssets(id, label) {
@@ -364,7 +382,7 @@ function renderMaterials() {
     materialAssetChoices().forEach((path) => { const option = document.createElement("option"); option.value = path; option.textContent = path; assetSelect.append(option); });
     assetSelect.value = material.textureAsset || ""; assetLabel.append(assetSelect); card.append(assetLabel);
     const groupChoices = document.createElement("div"); groupChoices.className = "finish-module-options material-group-choices";
-    model.materialGroups.forEach((group) => {
+    model.materialGroups.filter((group) => group.id !== "handles-all").forEach((group) => {
       const optionLabel = document.createElement("label"); const input = document.createElement("input"); input.type = "checkbox"; input.checked = group.materialIds.includes(material.id); input.dataset.materialGroupMembership = `${material.id}:${group.id}`;
       optionLabel.append(input, document.createTextNode(group.label)); groupChoices.append(optionLabel);
     });
@@ -381,13 +399,13 @@ function renderMaterialGroups() {
     const card = document.createElement("article"); card.className = "editor-card"; card.dataset.materialGroupId = group.id;
     const heading = document.createElement("h2"); heading.textContent = group.label; card.append(heading);
     card.append(makeField("Nome do acabamento", group.label, "materialGroupLabel"));
-    const choices = makeRuleSelect("Materiais disponíveis para clientes", group.materialIds, "groupMaterials", model.materials.map((item) => [item.id, item.label]), true);
+    const choices = makeRuleSelect(group.id === "handles-all" ? "Modelos disponíveis para clientes" : "Materiais disponíveis para clientes", group.materialIds, "groupMaterials", group.id === "handles-all" ? model.handleProducts.map((item) => [item.id, item.label]) : model.materials.map((item) => [item.id, item.label]), true);
     choices.classList.add("rule-wide"); card.append(choices);
     if (group.id === "fronts-all") {
       const available = model.finishes.filter((finish) => finish.enabled && finish.scope === "global" && group.materialIds.includes(finish.id));
       card.append(makeRuleSelect("Cor selecionada inicialmente", model.initialState.finishId, "initialFinish", available.map((finish) => [finish.id, model.materials.find((item) => item.id === finish.id)?.label || finish.id])));
     }
-    if (group.id === "handles-all") card.append(makeRuleSelect("Puxador selecionado inicialmente", model.initialState.handleId, "initialHandle", [["none", "Definir depois"], ...group.materialIds.map((id) => [id, model.materials.find((item) => item.id === id)?.label || id])]));
+    if (group.id === "handles-all") card.append(makeRuleSelect("Puxador selecionado inicialmente", model.initialState.handleId, "initialHandle", [["none", "Definir depois"], ...group.materialIds.map((id) => { const item = model.handleProducts.find((product) => product.id === id); return [item?.priceEntryId || "", item?.label || id]; })]));
     if (group.id === "stone-all") card.append(makeRuleSelect("Pedra selecionada inicialmente", model.initialState.stonePackageId, "initialStone", group.materialIds.map((id) => [id, model.materials.find((item) => item.id === id)?.label || id])));
     if (group.id === "stone-all") { const note = document.createElement("p"); note.className = "admin-note"; note.textContent = "A mesma pedra escolhida atende bancada e rodapé."; card.append(note); }
     materialGroupsList.append(card);
@@ -400,7 +418,7 @@ function reconcileInitialMaterials() {
   if (!globalFinishes.has(model.initialState.finishId)) model.initialState.finishId = [...globalFinishes][0] || "";
 
   const handles = model.materialGroups.find((group) => group.id === "handles-all");
-  if (model.initialState.handleId !== "none" && !handles?.materialIds.includes(model.initialState.handleId)) model.initialState.handleId = "none";
+  if (model.initialState.handleId !== "none" && !model.handleProducts.some((item) => item.priceEntryId === model.initialState.handleId && handles?.materialIds.includes(item.id))) model.initialState.handleId = "none";
 
   const stones = model.materialGroups.find((group) => group.id === "stone-all");
   if (!stones?.materialIds.includes(model.initialState.stonePackageId)) model.initialState.stonePackageId = stones?.materialIds[0] || "";
@@ -515,6 +533,13 @@ document.querySelector(".admin-tabs").addEventListener("click", (event) => {
 });
 
 objectsList.addEventListener("input", (event) => {
+  const handleCard = event.target.closest("[data-handle-product-id]");
+  if (handleCard) {
+    const product = model.handleProducts.find((item) => item.id === handleCard.dataset.handleProductId);
+    const color = product?.colors.find((item) => item.id === event.target.closest("[data-handle-color-id]")?.dataset.handleColorId);
+    if (color && event.target.matches("[data-handle-color-label]")) color.label = event.target.value;
+    return;
+  }
   const input = event.target;
   const card = input.closest("[data-object-id]");
   if (!card) return;
@@ -524,6 +549,31 @@ objectsList.addEventListener("input", (event) => {
   else if (input.matches("[data-object-benefits]")) data.benefits = input.value.split("\n");
   else if (input.matches("[data-object-components]")) data.components = input.value.split("\n");
   else if (input.matches("[data-object-requirements]")) data.requirements = input.value.split("\n");
+});
+
+objectsList.addEventListener("change", (event) => {
+  const card = event.target.closest("[data-handle-product-id]");
+  if (!card || !event.target.matches("[data-handle-color-value]")) return;
+  const product = model.handleProducts.find((item) => item.id === card.dataset.handleProductId);
+  const color = product?.colors.find((item) => item.id === event.target.closest("[data-handle-color-id]")?.dataset.handleColorId);
+  if (color) color.color = event.target.value;
+});
+
+objectsList.addEventListener("click", (event) => {
+  const add = event.target.closest("[data-add-handle-color]");
+  const remove = event.target.closest("[data-remove-handle-color]");
+  if (!add && !remove) return;
+  const card = event.target.closest("[data-handle-product-id]");
+  const product = model.handleProducts.find((item) => item.id === card?.dataset.handleProductId);
+  if (!product) return;
+  if (add) {
+    if (product.colors.length >= 30) return setMessage(saveMessage, "Cada puxador pode ter até 30 cores cadastradas.", "error");
+    const label = window.prompt("Nome da cor do puxador", "Nova cor"); if (!label?.trim()) return;
+    let id = label.trim().toLocaleLowerCase("pt-BR").normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").slice(0, 30) || "cor";
+    const base = id; let suffix = 2; while (product.colors.some((item) => item.id === id)) id = `${base}-${suffix++}`;
+    product.colors.push({ id, label: label.trim().slice(0, 40), color: "#b7b0a7" });
+  } else product.colors = product.colors.filter((item) => item.id !== remove.dataset.removeHandleColor);
+  renderObjects();
 });
 
 objectAssetsList.addEventListener("change", (event) => {
@@ -625,8 +675,9 @@ materialGroupsList.addEventListener("change", (event) => {
       group.materialIds.forEach((id) => { if (!model.finishes.some((finish) => finish.id === id)) model.finishes.push({ id, enabled: false, scope: "global", moduleIds: catalog.modules.map((item) => item.entityId) }); });
     }
     if (group.id === "handles-all") {
-      group.materialIds.forEach((id) => { model.pricing.handleEntries[id] ??= 0; });
-      Object.keys(model.pricing.handleEntries).forEach((id) => { if (!Object.hasOwn(priceBook.handleEntries, id) && !group.materialIds.includes(id)) delete model.pricing.handleEntries[id]; });
+      const priceIds = group.materialIds.map((id) => model.handleProducts.find((item) => item.id === id)?.priceEntryId).filter(Boolean);
+      priceIds.forEach((id) => { model.pricing.handleEntries[id] ??= 0; });
+      Object.keys(model.pricing.handleEntries).forEach((id) => { if (!Object.hasOwn(priceBook.handleEntries, id) && !priceIds.includes(id)) delete model.pricing.handleEntries[id]; });
     }
     if (group.id === "stone-all") {
       group.materialIds.forEach((id) => { model.pricing.globalEntries[id] ??= 0; });

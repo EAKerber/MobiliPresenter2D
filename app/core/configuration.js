@@ -29,11 +29,17 @@
       id: item.id, label: item.label, kind: "texture", color: item.color || item.swatchColor || "#b7b0a7",
       textureAsset: item.textureAsset || "", textureSize: "cover", groupIds: ["stone-all"], locked: true
     }));
-    catalog.options.handles.filter((item) => item.id !== "none").forEach((item) => records.push({
-      id: item.id, label: item.label, kind: "color", color: item.color || "#b7b0a7", textureAsset: "", textureSize: "cover",
-      groupIds: ["handles-all"], locked: true
-    }));
     return records;
+  }
+
+  function defaultHandleProducts(catalog) {
+    return catalog.options.handles.filter((item) => item.id !== "none").map((item) => ({
+      id: item.id === "tango-chrome" ? "tango-iris" : item.id,
+      label: item.label,
+      description: item.description || "",
+      priceEntryId: item.id,
+      colors: item.id === "tango-chrome" ? [{ id: "chrome", label: "Cromado", color: item.color || item.swatchColor || "#b7b0a7" }] : []
+    }));
   }
 
   function createDefaultAdministration(settings, catalog, priceBook, scene) {
@@ -68,9 +74,10 @@
       materials: defaultMaterials(catalog),
       materialGroups: [
         { id: "fronts-all", label: "Frentes", materialIds: catalog.options.finishes.map((item) => item.id), mode: "finish", scope: "global", moduleIds: [...moduleIds] },
-        { id: "handles-all", label: "Puxadores", materialIds: catalog.options.handles.filter((item) => item.id !== "none").map((item) => item.id), mode: "handle", scope: "global", moduleIds: [...moduleIds] },
+        { id: "handles-all", label: "Modelos de puxador", materialIds: defaultHandleProducts(catalog).map((item) => item.id), mode: "handle", scope: "global", moduleIds: [...moduleIds] },
         { id: "stone-all", label: "Pedra e rodapé", materialIds: catalog.options.stonePackages.map((item) => item.id), mode: "stone", linkedItemIds: ["stone-skirting"] }
       ],
+      handleProducts: defaultHandleProducts(catalog),
       finishes: catalog.options.finishes.map((item) => ({ id: item.id, enabled: item.status === "published", scope: "global", moduleIds: [...moduleIds] })),
       dependencies: [{ id: "lighting-requires-supports", dependentId: "lighting-08", requires: ["module-04", "module-06"] }],
       events: [{ id: "module-07-depth-without-fridge-side", triggerId: "module-04", when: "disabled", action: "set-depth", targetId: "module-07", valueMm: 400 }],
@@ -92,6 +99,26 @@
       finishes: base.finishes.map((finish) => ({ ...finish, ...(value.finishes || []).find((item) => item.id === finish.id) })),
       pricing: { ...base.pricing, ...(value.pricing || {}), ...Object.fromEntries(sections.map((key) => [key, { ...base.pricing[key], ...(value.pricing?.[key] || {}) }])) }
     };
+  }
+
+  function migrateCurrentHandleModel(value, catalog) {
+    if (!value || value.schemaVersion !== SCHEMA || Array.isArray(value.handleProducts)) return value;
+    const handleProducts = defaultHandleProducts(catalog);
+    const productByPriceId = new Map(handleProducts.map((item) => [item.priceEntryId, item]));
+    const oldHandles = value.materialGroups?.find((group) => group.id === "handles-all");
+    const oldMaterials = value.materials || [];
+    const availableProducts = oldHandles?.materialIds?.map((id) => productByPriceId.get(id)?.id).filter(Boolean);
+    const materials = oldMaterials
+      .filter((item) => !productByPriceId.has(item.id) && !item.groupIds?.includes("handles-all"))
+      .map((item) => ({ ...item, groupIds: (item.groupIds || []).filter((id) => id !== "handles-all") }));
+    const materialGroups = (value.materialGroups || []).map((group) => group.id === "handles-all"
+      ? { ...group, label: "Modelos de puxador", materialIds: availableProducts?.length ? availableProducts : handleProducts.map((item) => item.id) }
+      : group);
+    const initialHandle = value.initialState?.handleId;
+    const migratedInitialHandle = initialHandle === "none" ? "none" : productByPriceId.get(initialHandle)?.priceEntryId || "none";
+    const validPriceIds = new Set(["none", ...handleProducts.map((item) => item.priceEntryId)]);
+    const handleEntries = Object.fromEntries(Object.entries(value.pricing?.handleEntries || {}).filter(([id]) => validPriceIds.has(id)));
+    return { ...value, materials, materialGroups, handleProducts, pricing: { ...value.pricing, handleEntries }, initialState: { ...value.initialState, handleId: migratedInitialHandle } };
   }
 
   function validateConfiguratorSettings(value, catalog, priceBook, scene) {
@@ -167,6 +194,23 @@
       for (const field of ["imageAsset", "detailImageAsset", "maskAsset"]) if (typeof assets[field] !== "string" || (assets[field] && !validAssetPath(assets[field]))) errors.push(`invalid asset path: ${id}.${field}`);
     });
 
+    const handleProductIds = new Set((value.handleProducts || []).map((item) => item.id));
+    if (!Array.isArray(value.handleProducts) || value.handleProducts.length !== catalog.options.handles.filter((item) => item.id !== "none").length) errors.push("handle products must match the catalog");
+    else {
+      const ids = new Set(); const priceIds = new Set();
+      value.handleProducts.forEach((product) => {
+        if (!product || !/^[a-z][a-z0-9-]{1,39}$/.test(product.id) || ids.has(product.id) || !/^[a-z][a-z0-9-]{1,39}$/.test(product.priceEntryId) || priceIds.has(product.priceEntryId)) { errors.push("invalid or duplicate handle product"); return; }
+        ids.add(product.id); priceIds.add(product.priceEntryId);
+        if (!catalog.options.handles.some((item) => item.id === product.priceEntryId) || typeof product.label !== "string" || !product.label.trim() || product.label.length > 60 || typeof product.description !== "string" || product.description.length > 180) errors.push(`invalid handle product data: ${product.id}`);
+        if (!Array.isArray(product.colors) || product.colors.length > 30) { errors.push(`invalid handle colors: ${product.id}`); return; }
+        const colorIds = new Set();
+        product.colors.forEach((color) => {
+          if (!color || !/^[a-z][a-z0-9-]{1,39}$/.test(color.id) || colorIds.has(color.id) || typeof color.label !== "string" || !color.label.trim() || color.label.length > 40 || !/^(#[0-9a-fA-F]{6})$/.test(color.color || "")) errors.push(`invalid handle color: ${product.id}`);
+          else colorIds.add(color.id);
+        });
+      });
+    }
+
     if (!Array.isArray(value.materials) || value.materials.length < 1 || value.materials.length > 100) errors.push("material library must contain 1 to 100 entries");
     else {
       const ids = new Set();
@@ -178,7 +222,7 @@
         if (!/^(#[0-9a-fA-F]{6})$/.test(material.color || "")) errors.push(`invalid material color: ${material.id}`);
         if (typeof material.textureAsset !== "string" || (material.textureAsset && !validAssetPath(material.textureAsset))) errors.push(`invalid material texture: ${material.id}`);
         if (typeof material.textureSize !== "string" || !["cover", "contain"].includes(material.textureSize) && !/^\d{2,3}px \d{2,3}px$/.test(material.textureSize)) errors.push(`invalid material texture size: ${material.id}`);
-        if (!Array.isArray(material.groupIds) || material.groupIds.some((group) => !["fronts-all", "handles-all", "stone-all"].includes(group))) errors.push(`invalid material groups: ${material.id}`);
+        if (!Array.isArray(material.groupIds) || material.groupIds.some((group) => !["fronts-all", "stone-all"].includes(group))) errors.push(`invalid material groups: ${material.id}`);
       });
     }
     const materialIds = new Set((value.materials || []).map((item) => item.id));
@@ -188,7 +232,8 @@
       if (!group || !["fronts-all", "handles-all", "stone-all"].includes(group.id) || groups.has(group.id)) { errors.push("invalid material group"); return; }
       groups.add(group.id);
       if (typeof group.label !== "string" || !group.label.trim() || group.label.length > 60) errors.push(`invalid material group label: ${group.id}`);
-      if (!Array.isArray(group.materialIds) || group.materialIds.length < 1 || group.materialIds.length > 100 || group.materialIds.some((id) => !materialIds.has(id)) || new Set(group.materialIds).size !== group.materialIds.length) errors.push(`invalid group materials: ${group.id}`);
+      const validIds = group.id === "handles-all" ? handleProductIds : materialIds;
+      if (!Array.isArray(group.materialIds) || group.materialIds.length < 1 || group.materialIds.length > 100 || group.materialIds.some((id) => !validIds.has(id)) || new Set(group.materialIds).size !== group.materialIds.length) errors.push(`invalid group materials: ${group.id}`);
       if (group.id === "fronts-all" && (! ["global", "local"].includes(group.scope) || !Array.isArray(group.moduleIds) || group.moduleIds.some((id) => !moduleIds.has(id)))) errors.push("invalid front finish scope");
     });
     const groupById = new Map((value.materialGroups || []).map((group) => [group.id, group]));
@@ -199,7 +244,7 @@
     const frontsGroup = groupById.get("fronts-all");
     if (!Array.isArray(value.finishes) || value.finishes.some((item) => !frontsGroup?.materialIds.includes(item.id) || typeof item.enabled !== "boolean" || !["global", "local"].includes(item.scope) || !Array.isArray(item.moduleIds) || item.moduleIds.some((id) => !moduleIds.has(id))) || new Set((value.finishes || []).map((item) => item.id)).size !== (value.finishes || []).length || frontsGroup?.materialIds.some((id) => !value.finishes.some((item) => item.id === id))) errors.push("invalid finish availability");
     else if (!value.finishes.some((item) => item.enabled && item.scope === "global" && frontsGroup?.materialIds.includes(item.id))) errors.push("at least one global front finish must remain available");
-    if (defaults && (!value.finishes?.some((item) => item.id === defaults.finishId && item.enabled && item.scope === "global") || !groupById.get("handles-all")?.materialIds.includes(defaults.handleId) && defaults.handleId !== "none" || !groupById.get("stone-all")?.materialIds.includes(defaults.stonePackageId))) errors.push("invalid initial material selection");
+    if (defaults && (!value.finishes?.some((item) => item.id === defaults.finishId && item.enabled && item.scope === "global") || !value.handleProducts?.some((item) => item.priceEntryId === defaults.handleId && groupById.get("handles-all")?.materialIds.includes(item.id)) && defaults.handleId !== "none" || !groupById.get("stone-all")?.materialIds.includes(defaults.stonePackageId))) errors.push("invalid initial material selection");
 
     const dependencyIds = new Set();
     if (!Array.isArray(value.dependencies) || value.dependencies.length > 80) errors.push("invalid dependency list");
@@ -236,7 +281,8 @@
       const submitted = value.pricing[section];
       if (!submitted || typeof submitted !== "object" || Array.isArray(submitted)) { errors.push(`invalid pricing section: ${section}`); return; }
       const dynamicGroup = section === "frontFinishRatesBps" ? "fronts-all" : section === "handleEntries" ? "handles-all" : section === "globalEntries" ? "stone-all" : null;
-      if (Object.keys(submitted).some((id) => !allowedIds.includes(id) && !(dynamicGroup && groupById.get(dynamicGroup)?.materialIds.includes(id))) || allowedIds.some((id) => !Object.hasOwn(submitted, id))) errors.push(`pricing identifiers must match: ${section}`);
+      const dynamicIds = dynamicGroup === "handles-all" ? (value.handleProducts || []).filter((item) => groupById.get(dynamicGroup)?.materialIds.includes(item.id)).map((item) => item.priceEntryId) : groupById.get(dynamicGroup)?.materialIds || [];
+      if (Object.keys(submitted).some((id) => !allowedIds.includes(id) && !dynamicIds.includes(id)) || allowedIds.some((id) => !Object.hasOwn(submitted, id))) errors.push(`pricing identifiers must match: ${section}`);
       Object.entries(submitted).forEach(([id, amount]) => {
         const maximum = section === "frontFinishRatesBps" ? 10000 : 100000000;
         if (!Number.isSafeInteger(amount) || amount < 0 || amount > maximum) errors.push(`invalid price value: ${section}.${id}`);
@@ -247,7 +293,7 @@
   }
 
   function normalizeConfiguratorSettings(input, catalog, priceBook, scene) {
-    const value = input?.schemaVersion === LEGACY_SCHEMA ? migrateLegacy(input, catalog, priceBook, scene) : input;
+    const value = input?.schemaVersion === LEGACY_SCHEMA ? migrateLegacy(input, catalog, priceBook, scene) : migrateCurrentHandleModel(input, catalog);
     const errors = validateConfiguratorSettings(value, catalog, priceBook, scene);
     if (errors.length) throw new TypeError(errors.join("; "));
     return {
@@ -258,6 +304,7 @@
       objectAssets: Object.fromEntries(Object.entries(value.objectAssets).map(([id, assets]) => [id, { imageAsset: assets.imageAsset, detailImageAsset: assets.detailImageAsset || assets.imageAsset, maskAsset: assets.maskAsset }])),
       initialState: { entities: { ...value.initialState.entities }, services: [...value.initialState.services], finishId: value.initialState.finishId, handleId: value.initialState.handleId, stonePackageId: value.initialState.stonePackageId },
       materials: value.materials.map((item) => ({ id: item.id, label: item.label.trim(), kind: item.kind === "texture" ? "texture" : "color", color: item.color, textureAsset: item.textureAsset, textureSize: item.textureSize || "cover", groupIds: [...item.groupIds], locked: Boolean(item.locked) })),
+      handleProducts: value.handleProducts.map((item) => ({ id: item.id, label: item.label.trim(), description: item.description.trim(), priceEntryId: item.priceEntryId, colors: item.colors.map((color) => ({ id: color.id, label: color.label.trim(), color: color.color })) })),
       materialGroups: value.materialGroups.map((group) => ({ ...group, materialIds: [...group.materialIds], ...(group.moduleIds ? { moduleIds: [...group.moduleIds] } : {}), ...(group.linkedItemIds ? { linkedItemIds: [...group.linkedItemIds] } : {}) })),
       finishes: value.finishes.map((item) => ({ id: item.id, enabled: item.enabled, scope: item.scope, moduleIds: [...item.moduleIds] })),
       dependencies: value.dependencies.map((item) => ({ id: item.id, dependentId: item.dependentId, requires: [...item.requires] })),
