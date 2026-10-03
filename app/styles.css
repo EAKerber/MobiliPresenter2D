@@ -525,7 +525,7 @@ legend { margin-bottom: 9px; color: rgba(255, 255, 255, 0.43); font-size: 12px; 
 .handle-option:hover { background: rgba(255,255,255,.07); }
 .handle-option.is-selected { border-color: var(--accent-strong); background: rgba(203,188,170,.13); }
 .handle-option__orientation { position: relative; display: block; width: 32px; height: 32px; border: 1px solid rgba(255,255,255,.2); border-radius: 5px; }
-.handle-option__door, .handle-option__drawer { position: absolute; display: block; border-radius: 99px; background: var(--accent-strong); }
+.handle-option__door, .handle-option__drawer { position: absolute; display: block; border-radius: 99px; background: var(--handle-swatch, var(--accent-strong)); }
 .handle-option__door { top: 7px; right: 6px; width: 3px; height: 17px; }
 .handle-option__drawer { right: 7px; bottom: 6px; width: 17px; height: 3px; }
 .handle-option__copy { display: grid; min-width: 0; gap: 2px; }

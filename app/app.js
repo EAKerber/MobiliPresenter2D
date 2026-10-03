@@ -1,1463 +1,4 @@
-(function startConfigurator(global) {
-  "use strict";
-
-  const scene = global.CASA_EM_MODULOS_SCENE;
-  const inlineMasks = global.CASA_EM_MODULOS_MASK_DATA;
-  const core = global.CasaModulesCore;
-  const visibility = global.CasaModulesVisibility;
-  const validation = global.CasaModulesValidation;
-  const fingerprint = global.CasaModulesFingerprint;
-  const finishes = global.CasaModulesFinishes;
-  let catalog = structuredClone(global.CASA_EM_MODULOS_CATALOG);
-  const configurationCore = global.CasaModulesConfiguration;
-  let priceBook = structuredClone(global.CASA_EM_MODULOS_PRICE_BOOK);
-  const pricing = global.CasaModulesPricing;
-  let configuratorSettings = global.CASA_EM_MODULOS_CONFIGURATOR_DEFAULTS;
-  let finishSettings = new Map(catalog.options.finishes.map((finish) => [finish.id, { scope: "global", enabled: finish.status === "published", moduleIds: catalog.modules.map((module) => module.entityId) }]));
-
-  if (!scene || !inlineMasks || !core || !visibility || !validation || !fingerprint || !finishes || !catalog || !priceBook || !pricing || !configurationCore || !configuratorSettings) {
-    throw new Error("NÃ£o foi possÃ­vel carregar os dados da cena 2D.");
-  }
-  validation.assertValidScene(scene);
-
-  let state = core.createInitialState(scene);
-  let currentStep = "modules";
-  let detailOrigin = null;
-  let mobileScenePinEnabled = true;
-  let mobileSceneIsMini = false;
-  let mobileSceneAnchorHeight = 0;
-  let mobileSceneTransparent = false;
-  let mobilePipSizeIndex = 1;
-  let mobilePipPosition = null;
-  let mobilePipWidth = null;
-
-  const sceneBase = document.getElementById("sceneBase");
-  const sceneLayers = document.getElementById("sceneLayers");
-  const sceneHotspots = document.getElementById("sceneHotspots");
-  const moduleList = document.getElementById("moduleList");
-  const finishSwatches = document.getElementById("finishSwatches");
-  const moduleDetail = document.getElementById("moduleDetail");
-  const selectionFrame = document.getElementById("selectionFrame");
-  const viewerHint = document.getElementById("viewerHint");
-  const summaryContent = document.getElementById("summaryContent");
-  const nextStepButton = document.getElementById("nextStepButton");
-  const configurationValue = document.getElementById("configurationValue");
-  const modulesPanel = document.getElementById("modulesPanel");
-  const frontFinishPanel = document.getElementById("frontFinishPanel");
-  const stonePanel = document.getElementById("stonePanel");
-  const servicesPanel = document.getElementById("servicesPanel");
-  const summaryPanel = document.getElementById("summaryPanel");
-  const lightingToggle = document.getElementById("lightingToggle");
-  const configurationAnnouncement = document.getElementById("configurationAnnouncement");
-  const handleOptions = document.getElementById("handleOptions");
-  const servicesChecklist = document.getElementById("servicesChecklist");
-  const stonePackageOptions = document.getElementById("stonePackageOptions");
-  const stoneSkirtingToggle = document.getElementById("stoneSkirtingToggle");
-  const viewerCard = document.getElementById("viewerCard");
-  const viewerAnchor = document.getElementById("viewerAnchor");
-  const viewerPinSentinel = document.getElementById("viewerPinSentinel");
-  const mobileScenePin = document.getElementById("mobileScenePin");
-  const mobileSceneTransparency = document.getElementById("mobileSceneTransparency");
-  const mobileSceneResize = document.getElementById("mobileSceneResize");
-  const mobileSceneResizeHandle = document.getElementById("mobileSceneResizeHandle");
-  const mobileSceneRepin = document.getElementById("mobileSceneRepin");
-  const flowNav = document.querySelector(".flow-nav");
-  const stagePanels = new Map([
-    ["modules", modulesPanel], ["finishes", frontFinishPanel], ["services", servicesPanel], ["summary", summaryPanel]
-  ]);
-  const skirtingOverlays = [
-    { entityId: "module-02", element: document.getElementById("skirtingOverlay02") },
-    { entityId: "module-03", element: document.getElementById("skirtingOverlay03") }
-  ];
-  const selectedFinishDescription = document.getElementById("selectedFinishDescription");
-  const catalogByEntityId = new Map(catalog.modules.map((module) => [module.entityId, module]));
-  const stageConfig = (id) => configuratorSettings.stages.find((stage) => stage.id === id);
-  const stageItems = (id) => new Set(stageConfig(id)?.items || []);
-  const stageHas = (stageId, itemId) => Boolean(stageConfig(stageId)?.enabled && stageItems(stageId).has(itemId));
-  const enabledStages = () => configuratorSettings.stages.filter((stage) => stage.enabled);
-  const configuredModuleIds = () => stageItems("modules");
-  const detailPageByEntity = new Map();
-  const detailInteractionByEntity = new Set();
-  const detailViewsCollapsedByEntity = new Set();
-  const detailSelectionPulseByEntity = new Set();
-  const detailNavigationAttentionByEntity = new Set();
-  let detailCarouselTimer = null;
-  let lastResolved = null;
-
-  function renderSceneFromData() {
-    sceneBase.src = scene.baseAsset;
-    sceneBase.width = scene.canvas.width;
-    sceneBase.height = scene.canvas.height;
-    sceneLayers.replaceChildren();
-
-    scene.entities
-      .slice()
-      .sort((left, right) => left.zIndex - right.zIndex || left.id.localeCompare(right.id))
-      .forEach((entity) => {
-        const group = document.createElement("div");
-        group.className = "layer-group";
-        group.dataset.entityId = entity.id;
-        group.dataset.module = entity.alias;
-        group.style.zIndex = String(entity.zIndex);
-
-        const image = document.createElement("img");
-        image.src = entity.asset;
-        image.alt = "";
-        image.draggable = false;
-        image.width = scene.canvas.width;
-        image.height = scene.canvas.height;
-        group.append(image);
-
-        if (entity.maskAsset) {
-          const maskSource = inlineMasks[entity.maskAsset];
-          if (!maskSource) throw new Error(`MÃ¡scara incorporada ausente: ${entity.maskAsset}`);
-          const finishLayer = document.createElement("div");
-          finishLayer.className = "finish-layer";
-          finishLayer.style.setProperty("--mask-image", `url("${maskSource}")`);
-          finishLayer.dataset.maskAsset = entity.maskAsset;
-          group.append(finishLayer);
-
-          const moduleKey = /^module-(\d{2})$/.exec(entity.id)?.[1];
-          if (moduleKey) {
-            ["shadow", "highlight"].forEach((kind) => {
-              const structureAsset = `assets/kitchen/masks/structure-${moduleKey}-${kind}.png`;
-              const structureMask = inlineMasks[structureAsset];
-              if (!structureMask) throw new Error(`MÃ¡scara estrutural incorporada ausente: ${structureAsset}`);
-              const structureLayer = document.createElement("div");
-              structureLayer.className = `structure-layer structure-layer--${kind}`;
-              structureLayer.style.setProperty("--structure-mask-image", `url("${structureMask}")`);
-              structureLayer.dataset.structureAsset = structureAsset;
-              group.append(structureLayer);
-            });
-          }
-        }
-
-        sceneLayers.append(group);
-      });
-  }
-
-  function renderModuleControlsFromData() {
-    moduleList.replaceChildren();
-
-    scene.entities
-      .filter((entity) => entity.controllable)
-      .filter((entity) => entity.kind === "module" && configuredModuleIds().has(entity.id))
-      .sort((left, right) => left.zIndex - right.zIndex || left.id.localeCompare(right.id))
-      .forEach((entity) => {
-        const product = catalogByEntityId.get(entity.id);
-        if (!product) return;
-        const card = document.createElement("article");
-        card.className = "module-card";
-        card.dataset.entityId = entity.id;
-
-        const toggleLabel = document.createElement("label");
-        toggleLabel.className = "module-card__toggle";
-        toggleLabel.htmlFor = `toggle-${entity.id}`;
-
-        const input = document.createElement("input");
-        input.id = `toggle-${entity.id}`;
-        input.type = "checkbox";
-        input.dataset.moduleToggle = entity.id;
-        input.setAttribute("aria-label", `Incluir ${product.title}`);
-        input.checked = state.visibilityByEntity[entity.id];
-
-        const number = document.createElement("span");
-        number.className = "module-number";
-        number.textContent = entity.alias;
-
-        const copy = document.createElement("span");
-        copy.className = "module-card__copy";
-        const title = document.createElement("strong");
-        title.textContent = product.title;
-        const dimensions = document.createElement("small");
-        dimensions.textContent = productForCurrentConfiguration(product).dimensions.display;
-        copy.append(title, dimensions);
-
-        const detail = document.createElement("button");
-        detail.type = "button";
-        detail.className = "module-card__detail";
-        detail.dataset.selectEntity = entity.id;
-        detail.setAttribute("aria-controls", "moduleDetail");
-        detail.setAttribute("aria-expanded", "false");
-        detail.setAttribute("aria-label", `Ver detalhes de ${product.title}`);
-        detail.textContent = "Ver";
-
-        toggleLabel.append(input, number, copy);
-        card.append(toggleLabel, detail);
-        moduleList.append(card);
-      });
-  }
-
-  function renderSceneHotspotsFromData() {
-    sceneHotspots.replaceChildren();
-    scene.entities
-      .filter((entity) => entity.controllable && entity.kind === "module" && entity.alphaBounds && configuredModuleIds().has(entity.id))
-      .sort((left, right) => left.zIndex - right.zIndex || left.id.localeCompare(right.id))
-      .forEach((entity) => {
-        const product = catalogByEntityId.get(entity.id);
-        if (!product) return;
-        const hotspot = document.createElement("button");
-        hotspot.type = "button";
-        hotspot.className = "scene-hotspot";
-        hotspot.classList.toggle("scene-hotspot--aerial", product.category === "AÃ©reo");
-        hotspot.dataset.selectSceneEntity = entity.id;
-        hotspot.dataset.entityId = entity.id;
-        hotspot.dataset.markerSide = resolveMarkerPlacement(entity, product).side;
-        hotspot.setAttribute("aria-label", `Ver ficha de ${product.referenceLabel}, ${product.title}`);
-        hotspot.setAttribute("aria-pressed", "false");
-        hotspot.title = `${product.referenceLabel} Â· ${product.title}`;
-        hotspot.style.zIndex = String(500 + entity.zIndex);
-        Object.assign(hotspot.style, selectionStyle(entity));
-
-        const tag = document.createElement("span");
-        tag.className = "scene-hotspot__tag";
-        tag.setAttribute("aria-hidden", "true");
-        tag.textContent = entity.alias;
-        hotspot.append(tag);
-        sceneHotspots.append(hotspot);
-      });
-  }
-
-  function renderFinishControlsFromData() {
-    const finishGroup = scene.finishGroups.find((group) => group.id === "fronts-all");
-    finishSwatches.replaceChildren();
-
-    finishGroup.presets.forEach((preset) => {
-      const button = document.createElement("button");
-      button.className = "swatch";
-      button.type = "button";
-      button.dataset.finishId = preset.id;
-      button.dataset.color = preset.color;
-      button.dataset.overlayOpacity = String(finishes.resolveOverlayOpacity(preset, preset.color));
-      button.style.setProperty("--swatch", preset.color);
-      button.title = preset.label;
-      button.setAttribute("aria-label", `Aplicar ${preset.label}`);
-      button.setAttribute("aria-pressed", "false");
-      finishSwatches.append(button);
-    });
-
-    // Choices shown to buyers are deliberately limited to the published presets.
-  }
-
-  function renderHandleControlsFromData() {
-    if (!handleOptions) return;
-    handleOptions.replaceChildren();
-    catalog.options.handles.forEach((handle) => {
-      const button = document.createElement("button");
-      button.type = "button";
-      button.className = "handle-option";
-      button.dataset.handleId = handle.id;
-      button.setAttribute("aria-pressed", "false");
-      button.setAttribute("aria-label", `Selecionar puxador ${handle.label}`);
-
-      const orientation = document.createElement("span");
-      orientation.className = "handle-option__orientation";
-      orientation.setAttribute("aria-hidden", "true");
-      const door = document.createElement("i");
-      door.className = "handle-option__door";
-      const drawer = document.createElement("i");
-      drawer.className = "handle-option__drawer";
-      orientation.append(door, drawer);
-
-      const copy = document.createElement("span");
-      copy.className = "handle-option__copy";
-      const label = document.createElement("strong");
-      label.textContent = handle.label;
-      const description = document.createElement("small");
-      const value = priceBook.handleEntries?.[handle.id] || 0;
-      description.textContent = value ? `${handle.description} Â· ${formatCurrency(value)}` : handle.description;
-      copy.append(label, description);
-      button.append(orientation, copy);
-      handleOptions.append(button);
-    });
-  }
-
-  function renderServices() {
-    if (!servicesChecklist) return;
-    servicesChecklist.replaceChildren();
-    catalog.services.filter((service) => stageItems("services").has(service.id)).forEach((service) => {
-      const card = document.createElement("label");
-      card.className = "service-check";
-      const input = document.createElement("input");
-      input.type = "checkbox";
-      input.checked = service.status === "included";
-      input.disabled = service.status === "included";
-      input.setAttribute("aria-label", `${service.title}: incluÃ­da`);
-      const copy = document.createElement("span");
-      const title = document.createElement("strong");
-      title.textContent = service.title;
-      const description = document.createElement("small");
-      description.textContent = service.description;
-      const status = document.createElement("em");
-      status.textContent = "IncluÃ­da";
-      copy.append(title, description, status);
-      card.append(input, copy);
-      servicesChecklist.append(card);
-    });
-  }
-
-  function selectedModuleFinish(entityId = state.selectedEntityId) {
-    return core.finishForEntity(state, entityId);
-  }
-
-  function selectedHandle() {
-    const id = core.globalHandleId(state);
-    return catalog.options.handles.find((handle) => handle.id === id) || catalog.options.handles[0];
-  }
-
-  function materialBackground(material) {
-    return material?.textureAsset ? `url("${material.textureAsset}")` : material?.textureCss || "none";
-  }
-
-  function renderFinishControlsFromData() {
-    finishSwatches.replaceChildren();
-    catalog.options.finishes.filter((finish) => finish.status === "published" && finishSettings.get(finish.id)?.enabled && finishSettings.get(finish.id)?.scope === "global").forEach((finish) => {
-      const button = document.createElement("button");
-      button.className = "swatch";
-      button.type = "button";
-      button.dataset.finishId = finish.id;
-      button.dataset.color = finish.color;
-      button.style.setProperty("--swatch", finish.color);
-      button.style.setProperty("--swatch-texture", materialBackground(finish));
-      button.style.setProperty("--swatch-size", finish.textureSize || "cover");
-      button.title = finish.publicLabel;
-      button.setAttribute("aria-label", "Aplicar " + finish.publicLabel + " ao conjunto");
-      const selected = core.globalFinishId(state) === finish.id;
-      button.classList.toggle("is-selected", selected);
-      button.setAttribute("aria-pressed", String(selected));
-      finishSwatches.append(button);
-    });
-    if (selectedFinishDescription) {
-      const finish = catalog.options.finishes.find((item) => item.id === core.globalFinishId(state));
-      selectedFinishDescription.textContent = finish ? "Selecionada: " + finish.publicLabel + "." : "";
-    }
-  }
-
-  function renderHandleControlsFromData() {
-    if (!handleOptions) return;
-    const help = document.getElementById("handleHelp");
-    handleOptions.replaceChildren();
-    if (help) help.textContent = "Escolha global; o total Ã© distribuÃ­do pelas 14 frentes aplicÃ¡veis. A basculante nÃ£o entra no rateio.";
-    const current = selectedHandle();
-    catalog.options.handles.forEach((handle) => {
-      const button = document.createElement("button");
-      button.type = "button";
-      button.className = "handle-option";
-      button.dataset.handleId = handle.id;
-      const active = handle.id === current.id;
-      button.classList.toggle("is-selected", active);
-      button.setAttribute("aria-pressed", String(active));
-      button.setAttribute("aria-label", "Selecionar puxador " + handle.label);
-
-      const orientation = document.createElement("span");
-      orientation.className = "handle-option__orientation";
-      orientation.setAttribute("aria-hidden", "true");
-      const door = document.createElement("i");
-      door.className = "handle-option__door";
-      const drawer = document.createElement("i");
-      drawer.className = "handle-option__drawer";
-      orientation.append(door, drawer);
-
-      const copy = document.createElement("span");
-      copy.className = "handle-option__copy";
-      const label = document.createElement("strong");
-      label.textContent = handle.label;
-      const description = document.createElement("small");
-      const value = priceBook.handleEntries?.[handle.id] || 0;
-      const perFront = value ? formatCurrency(Math.round(value / priceBook.handleFrontTotal)) : "";
-      description.textContent = value
-        ? handle.description + " Â· " + perFront + " por frente; " + formatCurrency(value) + " no conjunto completo."
-        : handle.description;
-      copy.append(label, description);
-      button.append(orientation, copy);
-      handleOptions.append(button);
-    });
-  }
-
-  function renderStonePackages() {
-    if (!stonePackageOptions) return;
-    stonePackageOptions.replaceChildren();
-    const activeId = state.globalSelections?.stonePackageId || "stone-existing";
-    catalog.options.stonePackages.forEach((stone) => {
-      const button = document.createElement("button");
-      button.type = "button";
-      button.className = "global-option";
-      button.dataset.stonePackageId = stone.id;
-      button.classList.toggle("is-selected", stone.id === activeId);
-      button.setAttribute("aria-pressed", String(stone.id === activeId));
-      button.setAttribute("aria-label", "Selecionar pedra " + stone.label);
-      const swatch = document.createElement("span");
-      swatch.className = "global-option__swatch";
-      swatch.setAttribute("aria-hidden", "true");
-      swatch.style.backgroundColor = stone.swatchColor || stone.color || "#938d84";
-      swatch.style.backgroundImage = materialBackground(stone);
-      swatch.style.backgroundSize = stone.textureAsset ? "cover" : "16px 16px";
-      const title = document.createElement("strong");
-      title.textContent = stone.label;
-      const description = document.createElement("small");
-      const value = priceBook.globalEntries?.[stone.id] || 0;
-      description.textContent = stone.description + (value ? " Â· +" + formatCurrency(value) : " Â· sem adicional.");
-      button.append(swatch, title, description);
-      stonePackageOptions.append(button);
-    });
-    if (stoneSkirtingToggle) stoneSkirtingToggle.checked = Boolean(state.globalSelections?.serviceIds?.includes("stone-skirting"));
-  }
-
-  function renderServices() {
-    if (!servicesChecklist) return;
-    servicesChecklist.replaceChildren();
-    const selected = new Set(state.globalSelections?.serviceIds || []);
-    catalog.services.filter((service) => stageItems("services").has(service.id)).forEach((service) => {
-      const card = document.createElement("label");
-      card.className = "service-check";
-      const input = document.createElement("input");
-      input.type = "checkbox";
-      input.dataset.globalServiceId = service.id;
-      input.checked = selected.has(service.id);
-      input.setAttribute("aria-label", service.title);
-      const copy = document.createElement("span");
-      const title = document.createElement("strong");
-      title.textContent = service.title;
-      const description = document.createElement("small");
-      const value = priceBook.globalEntries?.[service.id] || 0;
-      description.textContent = service.description + (value ? " Â· +" + formatCurrency(value) : "");
-      copy.append(title, description);
-      card.append(input, copy);
-      servicesChecklist.append(card);
-    });
-  }
-
-  function selectionStyle(entity) {
-    const bounds = entity?.alphaBounds;
-    if (!bounds) return null;
-    return {
-      left: `${(bounds.x / scene.canvas.width) * 100}%`,
-      top: `${(bounds.y / scene.canvas.height) * 100}%`,
-      width: `${(bounds.width / scene.canvas.width) * 100}%`,
-      height: `${(bounds.height / scene.canvas.height) * 100}%`
-    };
-  }
-
-  function resolveMarkerPlacement(entity, product) {
-    const inferredSide = product?.category === "AÃ©reo" ? "bottom" : "top";
-    const preferredSide = entity?.markerPlacement?.side;
-    return {
-      side: ["top", "right", "bottom", "left"].includes(preferredSide) ? preferredSide : inferredSide
-    };
-  }
-
-  function selectedFrontFinishLabel(product) {
-    const id = product ? selectedModuleFinish(product.entityId) : core.globalFinishId(state);
-    return catalog.options.finishes.find((finish) => finish.id === id)?.publicLabel || "Base clara";
-  }
-
-  function selectedHandle() {
-    const id = core.globalHandleId(state);
-    return catalog.options.handles.find((handle) => handle.id === id) || catalog.options.handles[0];
-  }
-
-  function selectedStoneLabel() {
-    return selectedStonePackage().label;
-  }
-
-  function selectedStonePackage() {
-    const id = state.globalSelections?.stonePackageId || "stone-existing";
-    return catalog.options.stonePackages.find((stone) => stone.id === id) || catalog.options.stonePackages[0];
-  }
-
-  function formatDimension(value) {
-    return new Intl.NumberFormat("pt-BR", { maximumFractionDigits: 1 }).format(value);
-  }
-
-  function productForCurrentConfiguration(product) {
-    if (product.entityId !== "module-07" || state.visibilityByEntity["module-04"] !== false) return product;
-    const depth = 400;
-    return {
-      ...product,
-      dimensions: {
-        ...product.dimensions,
-        display: `800 Ã— 484 Ã— ${depth} mm`,
-        nominalMm: { ...product.dimensions.nominalMm, depth },
-        geometryMm: { ...product.dimensions.geometryMm, depth }
-      },
-      configurationNote: "Profundidade estendida para 400 mm porque o mÃ³dulo 04 nÃ£o estÃ¡ incluÃ­do."
-    };
-  }
-
-  function createDetailList(items, className) {
-    const list = document.createElement("ul");
-    list.className = className;
-    items.forEach((item) => {
-      const listItem = document.createElement("li");
-      listItem.textContent = item;
-      list.append(listItem);
-    });
-    return list;
-  }
-
-  function createMaterialFact(label, value) {
-    const fact = document.createElement("span");
-    const heading = document.createElement("strong");
-    heading.textContent = label;
-    fact.append(heading, document.createTextNode(value));
-    return fact;
-  }
-
-  function valueImpactLabel(cents) {
-    if (!cents) return "Sem adicional";
-    return cents > 0 ? `+${formatCurrency(cents)}` : `âˆ’${formatCurrency(Math.abs(cents))}`;
-  }
-
-  function appendPriceBreakdownRow(list, label, value, detail) {
-    const row = document.createElement("div");
-    const term = document.createElement("dt");
-    term.textContent = label;
-    const definition = document.createElement("dd");
-    const amount = document.createElement("strong");
-    amount.textContent = value;
-    definition.append(amount);
-    if (detail) {
-      const note = document.createElement("small");
-      note.textContent = detail;
-      definition.append(note);
-    }
-    row.append(term, definition);
-    list.append(row);
-  }
-
-  function createItemPriceBreakdown(product, itemPricing) {
-    const breakdown = document.createElement("dl");
-    breakdown.className = "module-detail__price-breakdown";
-    const adjustments = pricing.sharedAdjustments(catalog, state, priceBook);
-    const handle = selectedHandle();
-    const appliesHandle = product.category && product.category !== "Estrutural";
-    const includedServices = catalog.services
-      .filter((service) => stageHas("services", service.id))
-      .filter((service) => service.status === "included")
-      .map((service) => service.title)
-      .join(", ");
-    appendPriceBreakdownRow(breakdown, "MÃ³dulo", formatCurrency(itemPricing.baseCents), "Valor-base do mÃ³dulo.");
-    appendPriceBreakdownRow(
-      breakdown,
-      "Puxador",
-      appliesHandle ? formatCurrency(itemPricing.handleCents) : "NÃ£o aplicÃ¡vel",
-      appliesHandle ? handle.label : "Painel estrutural sem puxador."
-    );
-    appendPriceBreakdownRow(breakdown, "Frentes", formatCurrency(adjustments.frontCents), `${selectedFrontFinishLabel()} Â· ${valueImpactLabel(adjustments.frontCents)}.`);
-    appendPriceBreakdownRow(breakdown, "Pedra", formatCurrency(adjustments.stoneCents), `${selectedStoneLabel()} Â· ${valueImpactLabel(adjustments.stoneCents)}.`);
-    appendPriceBreakdownRow(breakdown, "ServiÃ§o", formatCurrency(adjustments.serviceCents), `${includedServices || "Nenhum"} Â· ${valueImpactLabel(adjustments.serviceCents)}.`);
-    return breakdown;
-  }
-
-  function createCommercialItemPriceBreakdown(product, itemPricing) {
-    const breakdown = document.createElement("dl");
-    breakdown.className = "module-detail__price-breakdown";
-    appendPriceBreakdownRow(breakdown, "MÃ³dulo", formatCurrency(itemPricing.baseCents), "Valor-base do mÃ³dulo.");
-    if (itemPricing.finishCents) {
-      appendPriceBreakdownRow(
-        breakdown,
-        "Acabamento",
-        "+" + formatCurrency(itemPricing.finishCents),
-        selectedFrontFinishLabel(product) + " Â· adicional percentual do mÃ³dulo."
-      );
-    }
-    if (itemPricing.handleCents) {
-      const handle = selectedHandle();
-      const allocations = pricing.distributeCents(itemPricing.handleCents, itemPricing.handleFrontCount);
-      const allocationNote = allocations.length
-        ? "Cota de " + allocations.length + " frentes: " + allocations.map(formatCurrency).join(" Â· ") + "."
-        : "Sem frentes aplicÃ¡veis.";
-      appendPriceBreakdownRow(breakdown, "Puxador", "+" + formatCurrency(itemPricing.handleCents), handle.label + " Â· " + allocationNote);
-    }
-    if (itemPricing.localCents) {
-      appendPriceBreakdownRow(breakdown, "Pedra cooktop", "+" + formatCurrency(itemPricing.localCents), "ObrigatÃ³ria neste mÃ³dulo.");
-    }
-    return breakdown;
-  }
-
-  function createOrientativeInternalFront(dimensions, layout) {
-    const card = document.createElement("figure");
-    card.className = "module-detail__view";
-    const caption = document.createElement("figcaption");
-    caption.textContent = "Vista interna";
-
-    const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-    svg.setAttribute("viewBox", "0 0 180 126");
-    svg.setAttribute("role", "img");
-    const segmentsLabel = layout.segments.map((segment) => `${segment.label} ${formatDimension(segment.spanMm)} milÃ­metros`).join(", ");
-    svg.setAttribute("aria-label", `Vista interna frontal: ${segmentsLabel}.`);
-    const make = (name, attributes = {}) => {
-      const node = document.createElementNS("http://www.w3.org/2000/svg", name);
-      Object.entries(attributes).forEach(([key, value]) => node.setAttribute(key, String(value)));
-      return node;
-    };
-    const text = (value, xPosition, yPosition) => {
-      const node = make("text", { x: xPosition, y: yPosition, "text-anchor": "middle" });
-      node.textContent = value;
-      return node;
-    };
-    const x = 48, y = 30, width = 94, height = 61;
-    let cursorMm = 0;
-    const diagram = [
-      make("line", { x1: x, y1: 17, x2: x + width, y2: 17, class: "module-detail__dimension-line" }),
-      make("line", { x1: x, y1: 13, x2: x, y2: 21, class: "module-detail__dimension-line" }),
-      make("line", { x1: x + width, y1: 13, x2: x + width, y2: 21, class: "module-detail__dimension-line" }),
-      text(`L ${formatDimension(dimensions.width)} mm`, x + width / 2, 10),
-      make("rect", { x, y, width, height, rx: 2, class: "module-detail__view-shape" })
-    ];
-    layout.segments.forEach((segment, index) => {
-      cursorMm += segment.spanMm;
-      const segmentEnd = x + (cursorMm / dimensions.width) * width;
-      if (index < layout.segments.length - 1) {
-        diagram.push(make("line", { x1: segmentEnd, y1: y, x2: segmentEnd, y2: y + height, class: "module-detail__view-shape" }));
-      }
-      if (segment.subdivisions) {
-        const segmentStartMm = cursorMm - segment.spanMm;
-        const segmentStart = x + (segmentStartMm / dimensions.width) * width;
-        for (let part = 1; part < segment.subdivisions; part += 1) {
-          const divisionY = y + (height / segment.subdivisions) * part;
-          diagram.push(make("line", { x1: segmentStart, y1: divisionY, x2: segmentEnd, y2: divisionY, class: "module-detail__view-shape" }));
-        }
-      }
-    });
-    diagram.push(text(layout.segments.map((segment) => formatDimension(segment.spanMm)).join(" Â· "), x + width / 2, 108));
-    svg.append(...diagram);
-    card.append(caption, svg);
-    return card;
-  }
-
-  function createCarouselPage(label, content, note) {
-    const page = document.createElement("section");
-    page.className = "module-detail__carousel-page";
-    const heading = document.createElement("h4");
-    heading.textContent = label;
-    const contentArea = document.createElement("div");
-    contentArea.className = "module-detail__carousel-content";
-    contentArea.append(content);
-    page.append(heading, contentArea);
-    if (note) {
-      const description = document.createElement("p");
-      description.className = "module-detail__carousel-note";
-      description.textContent = note;
-      page.append(description);
-    }
-    return page;
-  }
-
-  function createModuleFocus(entity, product) {
-    const bounds = entity.alphaBounds;
-    const focus = document.createElement("div");
-    focus.className = "module-detail__focus";
-    focus.style.setProperty("--focus-ratio", `${bounds.width} / ${bounds.height}`);
-    const image = document.createElement("img");
-    image.className = "module-detail__focus-image";
-    image.src = entity.asset;
-    image.alt = `Recorte isolado de ${product.title}`;
-    image.draggable = false;
-    image.style.width = `${(scene.canvas.width / bounds.width) * 100}%`;
-    image.style.left = `${-(bounds.x / bounds.width) * 100}%`;
-    image.style.top = `${-(bounds.y / bounds.height) * 100}%`;
-    const maskAsset = finishes.resolveMaskAsset(entity, lastResolved);
-    const maskSource = inlineMasks[maskAsset];
-    let finishLayer = null;
-    if (maskSource) {
-      const finish = catalog.options.finishes.find((item) => item.id === selectedModuleFinish(entity.id)) || catalog.options.finishes[0];
-      finishLayer = document.createElement("span");
-      finishLayer.className = "module-detail__focus-finish";
-      finishLayer.setAttribute("aria-hidden", "true");
-      finishLayer.style.width = image.style.width;
-      finishLayer.style.left = image.style.left;
-      finishLayer.style.top = image.style.top;
-      finishLayer.style.backgroundImage = materialBackground(finish);
-      finishLayer.style.backgroundColor = finish.color;
-      finishLayer.style.backgroundSize = finish.textureSize || "160px 160px";
-      finishLayer.style.setProperty("--focus-mask-image", `url("${maskSource}")`);
-      finishLayer.style.setProperty("--focus-finish-opacity", String(finishes.resolveOverlayOpacity(finish, finish.color)));
-    }
-    focus.append(image);
-    if (finishLayer) focus.append(finishLayer);
-    return focus;
-  }
-
-  function drawingSpecFor(product) {
-    const nominal = product.dimensions.nominalMm;
-    if (product.drawingSpec?.kind === "panel") {
-      return {
-        kind: "panel",
-        faceWidthMm: product.drawingSpec.faceWidthMm,
-        faceHeightMm: product.drawingSpec.faceHeightMm,
-        extrusionMm: product.drawingSpec.thicknessMm,
-        faceHorizontalLabel: product.drawingSpec.faceHorizontalLabel,
-        extrusionLabel: product.drawingSpec.extrusionLabel
-      };
-    }
-    return {
-      kind: "cabinet",
-      faceWidthMm: nominal.width,
-      faceHeightMm: nominal.height,
-      extrusionMm: nominal.depth,
-      faceHorizontalLabel: "L",
-      extrusionLabel: "P"
-    };
-  }
-
-  function detailDimensionFacts(product) {
-    const dimensions = product.dimensions.nominalMm;
-    if (product.drawingSpec?.kind === "panel") {
-      return [
-        ["Altura", product.drawingSpec.faceHeightMm],
-        ["Profundidade", product.drawingSpec.faceWidthMm],
-        ["Espessura", product.drawingSpec.thicknessMm]
-      ];
-    }
-    return [
-      ["Largura", dimensions.width],
-      ["Altura", dimensions.height],
-      ["Profundidade", dimensions.depth]
-    ];
-  }
-
-  function dimensionSummary(product) {
-    const axes = product.dimensions.displayAxes ? ` (${product.dimensions.displayAxes})` : "";
-    return `Medidas nominais: ${product.dimensions.display}${axes}`;
-  }
-
-  function fitProportionalBox(widthMm, heightMm, maxWidth = 104, maxHeight = 64) {
-    const safeWidth = Math.max(Number(widthMm) || 1, 1);
-    const safeHeight = Math.max(Number(heightMm) || 1, 1);
-    const scale = Math.min(maxWidth / safeWidth, maxHeight / safeHeight);
-    return { width: safeWidth * scale, height: safeHeight * scale, scale };
-  }
-
-  function svgFactory(svg) {
-    return (name, attributes = {}) => {
-      const node = document.createElementNS("http://www.w3.org/2000/svg", name);
-      Object.entries(attributes).forEach(([key, value]) => node.setAttribute(key, String(value)));
-      svg.append(node);
-      return node;
-    };
-  }
-
-  function svgLabel(make, value, x, y, anchor = "middle") {
-    const label = make("text", { x, y, "text-anchor": anchor });
-    label.textContent = value;
-    return label;
-  }
-
-  function appendFrontSegments(make, layout, x, y, width, height, faceWidthMm) {
-    if (layout?.pattern === "two-doors") {
-      const middle = x + width / 2;
-      make("line", { x1: middle, y1: y, x2: middle, y2: y + height, class: "module-detail__view-shape" });
-      return;
-    }
-    if (layout?.pattern === "two-doors-and-lift") {
-      const liftBottom = y + height * 0.34;
-      const middle = x + width / 2;
-      make("line", { x1: x, y1: liftBottom, x2: x + width, y2: liftBottom, class: "module-detail__view-shape" });
-      make("line", { x1: middle, y1: liftBottom, x2: middle, y2: y + height, class: "module-detail__view-shape" });
-      return;
-    }
-    if (layout?.pattern === "two-doors-and-microwave") {
-      // M06 has two doors beside a microwave niche and a lift front above it.
-      // Exact opening spans are not yet published, so this remains orientative.
-      const leftZoneEnd = x + width * 0.54;
-      const leftDoorSplit = x + width * 0.27;
-      const liftBottom = y + height * 0.42;
-      const nicheInset = Math.max(2, width * 0.035);
-      make("line", { x1: leftDoorSplit, y1: y, x2: leftDoorSplit, y2: y + height, class: "module-detail__view-shape" });
-      make("line", { x1: leftZoneEnd, y1: y, x2: leftZoneEnd, y2: y + height, class: "module-detail__view-shape" });
-      make("line", { x1: leftZoneEnd, y1: liftBottom, x2: x + width, y2: liftBottom, class: "module-detail__view-shape" });
-      make("rect", {
-        x: leftZoneEnd + nicheInset,
-        y: liftBottom + nicheInset,
-        width: Math.max(4, width * 0.46 - nicheInset * 2),
-        height: Math.max(4, height * 0.58 - nicheInset * 2),
-        rx: 1.5,
-        class: "module-detail__view-shape"
-      });
-      return;
-    }
-    if (!layout?.segments?.length) return;
-    const segmentsWidthMm = layout.innerWidthMm || layout.segments.reduce((total, segment) => total + (segment.spanMm || 0), 0);
-    if (!segmentsWidthMm) return;
-    const visibleWidth = width * Math.min(segmentsWidthMm, faceWidthMm) / faceWidthMm;
-    const startX = x + (width - visibleWidth) / 2;
-    let cursorMm = 0;
-    layout.segments.forEach((segment, index) => {
-      const segmentWidthMm = segment.spanMm || 0;
-      const segmentStart = startX + (cursorMm / segmentsWidthMm) * visibleWidth;
-      cursorMm += segmentWidthMm;
-      const segmentEnd = startX + (cursorMm / segmentsWidthMm) * visibleWidth;
-      if (index < layout.segments.length - 1) {
-        make("line", { x1: segmentEnd, y1: y, x2: segmentEnd, y2: y + height, class: "module-detail__view-shape" });
-      }
-      if (segment.subdivisions) {
-        for (let part = 1; part < segment.subdivisions; part += 1) {
-          const divisionY = y + (height / segment.subdivisions) * part;
-          make("line", { x1: segmentStart, y1: divisionY, x2: segmentEnd, y2: divisionY, class: "module-detail__view-shape" });
-        }
-      }
-    });
-  }
-
-  function createProportionalView(product, type) {
-    const spec = drawingSpecFor(product);
-    const isSide = type === "side";
-    const horizontalMm = isSide ? spec.extrusionMm : spec.faceWidthMm;
-    const horizontalLabel = isSide ? spec.extrusionLabel : spec.faceHorizontalLabel;
-    const fit = fitProportionalBox(horizontalMm, spec.faceHeightMm);
-    const isAmplifiedThickness = spec.kind === "panel" && isSide && fit.width < 2.5;
-    const drawingWidth = isAmplifiedThickness ? 2.5 : fit.width;
-    const drawingHeight = fit.height;
-    const x = 94 - drawingWidth / 2;
-    const y = 62 - drawingHeight / 2;
-    const figure = document.createElement("figure");
-    figure.className = "module-detail__view module-detail__view--technical";
-    const caption = document.createElement("figcaption");
-    caption.textContent = isSide ? "Vista lateral" : "Vista frontal";
-    const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-    svg.setAttribute("viewBox", "0 0 180 126");
-    svg.setAttribute("role", "img");
-    svg.setAttribute("aria-label", `${caption.textContent}: ${horizontalLabel} ${formatDimension(horizontalMm)} milÃ­metros por A ${formatDimension(spec.faceHeightMm)} milÃ­metros${isAmplifiedThickness ? ". A espessura foi ampliada apenas para legibilidade." : "."}`);
-    const make = svgFactory(svg);
-    make("line", { x1: x, y1: 17, x2: x + drawingWidth, y2: 17, class: "module-detail__dimension-line" });
-    make("line", { x1: x, y1: 13, x2: x, y2: 21, class: "module-detail__dimension-line" });
-    make("line", { x1: x + drawingWidth, y1: 13, x2: x + drawingWidth, y2: 21, class: "module-detail__dimension-line" });
-    svgLabel(make, `${horizontalLabel} ${formatDimension(horizontalMm)} mm`, 94, 10);
-    make("line", { x1: Math.max(14, x - 18), y1: y, x2: Math.max(14, x - 18), y2: y + drawingHeight, class: "module-detail__dimension-line" });
-    make("line", { x1: Math.max(10, x - 22), y1: y, x2: Math.max(18, x - 14), y2: y, class: "module-detail__dimension-line" });
-    make("line", { x1: Math.max(10, x - 22), y1: y + drawingHeight, x2: Math.max(18, x - 14), y2: y + drawingHeight, class: "module-detail__dimension-line" });
-    make("rect", { x, y, width: drawingWidth, height: drawingHeight, rx: 2, class: "module-detail__view-shape" });
-    if (!isSide) appendFrontSegments(make, product.frontLayout, x, y, drawingWidth, drawingHeight, spec.faceWidthMm);
-    svgLabel(make, `A ${formatDimension(spec.faceHeightMm)} mm`, 4, y + drawingHeight / 2 + 3, "start");
-    figure.append(caption, svg);
-    return figure;
-  }
-
-  function createTechnicalIsometricView(product) {
-    const spec = drawingSpecFor(product);
-    const fit = fitProportionalBox(spec.faceWidthMm, spec.faceHeightMm, 86, 58);
-    const rawExtrusion = spec.extrusionMm * fit.scale * 0.68;
-    const isAmplifiedThickness = spec.kind === "panel" && rawExtrusion < 4;
-    const depthX = Math.max(isAmplifiedThickness ? 4 : 6, rawExtrusion);
-    const depthY = -Math.min(18, depthX * 0.62);
-    const width = fit.width;
-    const height = fit.height;
-    const left = 92 - (width + depthX) / 2;
-    const top = 59 - height / 2 - depthY / 2;
-    const right = left + width;
-    const bottom = top + height;
-    const figure = document.createElement("figure");
-    figure.className = "module-detail__view module-detail__view--isometric module-detail__view--technical";
-    const caption = document.createElement("figcaption");
-    caption.textContent = "ProjeÃ§Ã£o isomÃ©trica";
-    const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-    svg.setAttribute("viewBox", "0 0 180 126");
-    svg.setAttribute("role", "img");
-    svg.setAttribute("aria-label", `ProjeÃ§Ã£o isomÃ©trica orientativa: ${spec.faceHorizontalLabel} ${formatDimension(spec.faceWidthMm)} milÃ­metros, A ${formatDimension(spec.faceHeightMm)} milÃ­metros e ${spec.extrusionLabel} ${formatDimension(spec.extrusionMm)} milÃ­metros${isAmplifiedThickness ? ". A espessura foi ampliada apenas para legibilidade." : "."}`);
-    const make = svgFactory(svg);
-    make("path", { d: `M ${left} ${top} L ${right} ${top} L ${right + depthX} ${top + depthY} L ${left + depthX} ${top + depthY} Z`, class: "module-detail__view-shape" });
-    make("path", { d: `M ${right} ${top} L ${right + depthX} ${top + depthY} L ${right + depthX} ${bottom + depthY} L ${right} ${bottom} Z`, class: "module-detail__view-shape" });
-    make("rect", { x: left, y: top, width, height, class: "module-detail__view-shape" });
-    appendFrontSegments(make, product.frontLayout, left, top, width, height, spec.faceWidthMm);
-    make("line", { x1: left, y1: bottom + 14, x2: right, y2: bottom + 14, class: "module-detail__dimension-line" });
-    make("line", { x1: left, y1: bottom + 10, x2: left, y2: bottom + 18, class: "module-detail__dimension-line" });
-    make("line", { x1: right, y1: bottom + 10, x2: right, y2: bottom + 18, class: "module-detail__dimension-line" });
-    make("line", { x1: Math.max(15, left - 19), y1: top, x2: Math.max(15, left - 19), y2: bottom, class: "module-detail__dimension-line" });
-    make("line", { x1: Math.max(11, left - 23), y1: top, x2: Math.max(19, left - 15), y2: top, class: "module-detail__dimension-line" });
-    make("line", { x1: Math.max(11, left - 23), y1: bottom, x2: Math.max(19, left - 15), y2: bottom, class: "module-detail__dimension-line" });
-    const depthDimensionStart = { x: right + 4, y: top - 6 };
-    const depthDimensionEnd = { x: right + depthX + 4, y: top + depthY - 6 };
-    const depthLength = Math.hypot(depthDimensionEnd.x - depthDimensionStart.x, depthDimensionEnd.y - depthDimensionStart.y) || 1;
-    const depthTick = {
-      x: (-(depthDimensionEnd.y - depthDimensionStart.y) / depthLength) * 4,
-      y: ((depthDimensionEnd.x - depthDimensionStart.x) / depthLength) * 4
-    };
-    make("line", { x1: depthDimensionStart.x, y1: depthDimensionStart.y, x2: depthDimensionEnd.x, y2: depthDimensionEnd.y, class: "module-detail__dimension-line" });
-    [depthDimensionStart, depthDimensionEnd].forEach((point) => {
-      make("line", {
-        x1: point.x - depthTick.x,
-        y1: point.y - depthTick.y,
-        x2: point.x + depthTick.x,
-        y2: point.y + depthTick.y,
-        class: "module-detail__dimension-line"
-      });
-    });
-    svgLabel(make, `${spec.faceHorizontalLabel} ${formatDimension(spec.faceWidthMm)} mm`, left + width / 2, bottom + 27);
-    svgLabel(make, `A ${formatDimension(spec.faceHeightMm)} mm`, 4, top + height / 2 + 3, "start");
-    svgLabel(make, `${spec.extrusionLabel} ${formatDimension(spec.extrusionMm)} mm`, Math.min(171, right + depthX + 9), Math.max(13, top + depthY - 8), "end");
-    figure.append(caption, svg);
-    return figure;
-  }
-
-  function frontViewNote(product) {
-    if (product.frontLayout?.status === "confirmed") {
-      const spans = product.frontLayout.segments.map((segment) => formatDimension(segment.spanMm)).join(" Â· ");
-      return `VÃ£os internos confirmados: ${spans} mm; envelope externo: ${formatDimension(product.dimensions.nominalMm.width)} mm.`;
-    }
-    if (product.drawingSpec?.kind === "panel") {
-      return "ElevaÃ§Ã£o proporcional do painel estrutural; a espessura aparece como chamada separada.";
-    }
-    if (product.frontLayout?.status === "count-confirmed") {
-      return "NÃºmero de frentes confirmado; as proporÃ§Ãµes internas sÃ£o orientativas atÃ© a ficha tÃ©cnica detalhada.";
-    }
-    return "Envelope frontal proporcional; detalhamento interno ainda nÃ£o estÃ¡ confirmado nesta base.";
-  }
-
-  function sideViewNote(product) {
-    return product.drawingSpec?.kind === "panel"
-      ? "Perfil A Ã— E; a espessura Ã© ampliada somente quando necessÃ¡rio para leitura."
-      : "Leitura proporcional de profundidade e altura nominais.";
-  }
-
-  function clearDetailCarouselTimer() {
-    if (detailCarouselTimer !== null) {
-      global.clearInterval(detailCarouselTimer);
-      detailCarouselTimer = null;
-    }
-  }
-
-  function createDetailCarousel(entity, product) {
-    clearDetailCarouselTimer();
-    const section = document.createElement("section");
-    section.className = "module-detail__views module-detail__carousel";
-    section.setAttribute("aria-label", "VisualizaÃ§Ãµes do mÃ³dulo");
-    const header = document.createElement("div");
-    header.className = "module-detail__carousel-header";
-    const heading = document.createElement("h4");
-    heading.textContent = "VisualizaÃ§Ãµes";
-    const collapse = document.createElement("button");
-    collapse.type = "button";
-    collapse.className = "module-detail__collapse";
-    collapse.dataset.toggleDetailViews = "true";
-    collapse.setAttribute("aria-controls", `detailViews-${entity.id}`);
-    const note = document.createElement("p");
-    note.className = "module-detail__carousel-intro";
-    note.textContent = "Navegue pelo foco do mÃ³dulo e pelas vistas orientativas.";
-    const stage = document.createElement("div");
-    stage.className = "module-detail__carousel-stage";
-    stage.id = `detailViews-${entity.id}`;
-    const dots = document.createElement("div");
-    dots.className = "module-detail__carousel-dots";
-    dots.setAttribute("aria-label", "PÃ¡ginas de visualizaÃ§Ã£o");
-
-    const pages = [
-      { label: "Foco no mÃ³dulo", node: createCarouselPage("Foco no mÃ³dulo", createModuleFocus(entity, product), "Visual isolado da peÃ§a selecionada na cena."), shortLabel: "Foco" },
-      { label: "Vista frontal", node: createCarouselPage("Vista frontal", createProportionalView(product, "front"), frontViewNote(product)), shortLabel: "Frontal" },
-      { label: "Vista lateral", node: createCarouselPage("Vista lateral", createProportionalView(product, "side"), sideViewNote(product)), shortLabel: "Lateral" },
-      ...(product.technicalLayout?.internalFront
-        ? [{ label: "Vista interna", node: createCarouselPage("Vista interna", createOrientativeInternalFront(product.dimensions.nominalMm, product.technicalLayout.internalFront), "VÃ£os internos confirmados; nÃ£o equivalem ao envelope externo do mÃ³dulo."), shortLabel: "Interna" }]
-        : []),
-      { label: "ProjeÃ§Ã£o isomÃ©trica", node: createCarouselPage("ProjeÃ§Ã£o isomÃ©trica", createTechnicalIsometricView(product), product.drawingSpec?.kind === "panel" ? "Painel estrutural em proporÃ§Ã£o; espessura ampliada somente para leitura." : "ProjeÃ§Ã£o isomÃ©trica orientativa das cotas nominais."), shortLabel: "IsomÃ©trica" }
-    ];
-    let currentPage = Math.min(detailPageByEntity.get(entity.id) || 0, pages.length - 1);
-    let isTransitioning = false;
-    const isReducedMotion = global.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
-    const isCollapsed = detailViewsCollapsedByEntity.has(entity.id);
-    const navigation = document.createElement("div");
-    navigation.className = "module-detail__carousel-navigation";
-    const controls = document.createElement("div");
-    controls.className = "module-detail__carousel-controls";
-    const previous = document.createElement("button");
-    previous.type = "button";
-    previous.className = "module-detail__carousel-arrow";
-    previous.textContent = "â†";
-    const next = document.createElement("button");
-    next.type = "button";
-    next.className = "module-detail__carousel-arrow";
-    next.textContent = "â†’";
-
-    const updateNavigationLabels = () => {
-      const previousPage = pages[(currentPage - 1 + pages.length) % pages.length];
-      const nextPage = pages[(currentPage + 1) % pages.length];
-      previous.setAttribute("aria-label", `Mostrar ${previousPage.label}`);
-      previous.title = `Anterior: ${previousPage.shortLabel}`;
-      next.setAttribute("aria-label", `Mostrar ${nextPage.label}`);
-      next.title = `PrÃ³xima: ${nextPage.shortLabel}`;
-    };
-
-    const stopAutoCycle = () => {
-      detailInteractionByEntity.add(entity.id);
-      clearDetailCarouselTimer();
-    };
-    const startAutoCycle = () => {
-      if (isReducedMotion || detailInteractionByEntity.has(entity.id) || pages.length < 2 || detailViewsCollapsedByEntity.has(entity.id)) return;
-      detailCarouselTimer = global.setInterval(() => renderPage((currentPage + 1) % pages.length, false), 7000);
-    };
-
-    const renderPage = (nextPage, interacted) => {
-      if (interacted) stopAutoCycle();
-      if (isTransitioning || nextPage === currentPage) return;
-      isTransitioning = true;
-      stage.classList.add("is-fading");
-      global.setTimeout(() => {
-        currentPage = nextPage;
-        detailPageByEntity.set(entity.id, currentPage);
-        stage.replaceChildren(pages[currentPage].node);
-        dots.querySelectorAll("button").forEach((dot, index) => {
-          const active = index === currentPage;
-          dot.classList.toggle("is-active", active);
-          dot.setAttribute("aria-current", active ? "true" : "false");
-        });
-        updateNavigationLabels();
-        stage.classList.remove("is-fading");
-        isTransitioning = false;
-      }, 180);
-    };
-
-    pages.forEach((page, index) => {
-      const dot = document.createElement("button");
-      dot.type = "button";
-      dot.className = "module-detail__carousel-dot";
-      dot.setAttribute("aria-label", `Mostrar ${page.label}, pÃ¡gina ${index + 1} de ${pages.length}`);
-      dot.title = page.shortLabel;
-      dot.addEventListener("click", () => renderPage(index, true));
-      dots.append(dot);
-    });
-    previous.addEventListener("click", () => renderPage((currentPage - 1 + pages.length) % pages.length, true));
-    next.addEventListener("click", () => renderPage((currentPage + 1) % pages.length, true));
-    stage.replaceChildren(pages[currentPage].node);
-    dots.children[currentPage]?.classList.add("is-active");
-    dots.children[currentPage]?.setAttribute("aria-current", "true");
-    updateNavigationLabels();
-
-    let swipeStartX = null;
-    let swipeStartY = null;
-    let swipePointerId = null;
-    const clearSwipe = () => {
-      swipeStartX = null;
-      swipeStartY = null;
-      swipePointerId = null;
-      stage.classList.remove("is-swiping", "is-dragging");
-    };
-    const finishSwipe = (event) => {
-      if (swipeStartX === null || swipeStartY === null) return;
-      const deltaX = event.clientX - swipeStartX;
-      const deltaY = event.clientY - swipeStartY;
-      const pointerId = swipePointerId;
-      clearSwipe();
-      try {
-        if (pointerId !== null && stage.hasPointerCapture?.(pointerId)) stage.releasePointerCapture(pointerId);
-      } catch (_) {}
-      const horizontal = Math.abs(deltaX) >= 32 && Math.abs(deltaX) > Math.abs(deltaY) * 1.15;
-      if (!horizontal) return;
-      if (deltaX < 0 && currentPage < pages.length - 1) renderPage(currentPage + 1, true);
-      if (deltaX > 0 && currentPage > 0) renderPage(currentPage - 1, true);
-    };
-    stage.addEventListener("pointerdown", (event) => {
-      if (event.button !== undefined && event.button !== 0) return;
-      swipeStartX = event.clientX;
-      swipeStartY = event.clientY;
-      swipePointerId = event.pointerId;
-      stage.classList.add("is-swiping");
-      try { stage.setPointerCapture?.(event.pointerId); } catch (_) {}
-      stopAutoCycle();
-    });
-    stage.addEventListener("pointermove", (event) => {
-      if (swipePointerId === null || event.pointerId !== swipePointerId || swipeStartX === null) return;
-      const deltaX = event.clientX - swipeStartX;
-      const deltaY = event.clientY - swipeStartY;
-      if (Math.abs(deltaX) > 8 && Math.abs(deltaX) > Math.abs(deltaY)) {
-        stage.classList.add("is-dragging");
-        if (event.cancelable) event.preventDefault();
-      }
-    });
-    stage.addEventListener("pointerup", finishSwipe);
-    stage.addEventListener("pointercancel", clearSwipe);
-    stage.addEventListener("lostpointercapture", () => {
-      if (swipeStartX !== null) clearSwipe();
-    });
-
-    collapse.setAttribute("aria-expanded", String(!isCollapsed));
-    collapse.setAttribute("aria-label", isCollapsed ? "Expandir visualizaÃ§Ãµes" : "Recolher visualizaÃ§Ãµes");
-    collapse.textContent = isCollapsed ? "Mostrar" : "Recolher";
-    header.append(heading, collapse);
-    section.classList.toggle("is-collapsed", isCollapsed);
-    controls.append(previous, next);
-    navigation.append(dots, controls);
-    section.append(header, note, stage, navigation);
-
-    collapse.addEventListener("click", () => {
-      const nextCollapsed = !detailViewsCollapsedByEntity.has(entity.id);
-      if (nextCollapsed) detailViewsCollapsedByEntity.add(entity.id);
-      else detailViewsCollapsedByEntity.delete(entity.id);
-      stopAutoCycle();
-      section.classList.toggle("is-collapsed", nextCollapsed);
-      collapse.setAttribute("aria-expanded", String(!nextCollapsed));
-      collapse.setAttribute("aria-label", nextCollapsed ? "Expandir visualizaÃ§Ãµes" : "Recolher visualizaÃ§Ãµes");
-      collapse.textContent = nextCollapsed ? "Mostrar" : "Recolher";
-    });
-    section.addEventListener("pointerdown", stopAutoCycle, { once: true });
-    section.addEventListener("wheel", stopAutoCycle, { once: true, passive: true });
-    section.addEventListener("focusin", stopAutoCycle, { once: true });
-    startAutoCycle();
-    return section;
-  }
-
-  function moduleEntityIds() {
-    return catalog.modules.map((product) => product.entityId).filter((id) => configuredModuleIds().has(id));
-  }
-
-  function adjacentModuleId(direction) {
-    const ids = moduleEntityIds();
-    if (ids.length < 2) return null;
-    const selectedIndex = ids.indexOf(state.selectedEntityId);
-    const currentIndex = selectedIndex >= 0 ? selectedIndex : direction > 0 ? -1 : 0;
-    return ids[(currentIndex + direction + ids.length) % ids.length];
-  }
-
-  function createModuleNavigationButton(direction, targetProduct) {
-    const button = document.createElement("button");
-    button.type = "button";
-    button.className = "module-detail__navigation";
-    button.dataset.navigateModule = String(direction);
-    const directionLabel = direction < 0 ? "anterior" : "prÃ³ximo";
-    button.setAttribute("aria-label", `Abrir mÃ³dulo ${directionLabel}: ${targetProduct.title}`);
-    button.title = `MÃ³dulo ${directionLabel}: ${targetProduct.referenceLabel}`;
-    button.textContent = direction < 0 ? "â€¹" : "â€º";
-    return button;
-  }
-
-  function createModuleSelectionControl(entity, isVisible) {
-    const control = document.createElement("label");
-    control.className = "module-detail__selection-toggle";
-    control.classList.toggle("is-selected", isVisible);
-    if (!isVisible && detailNavigationAttentionByEntity.has(entity.id)) {
-      control.classList.add("is-navigation-attention");
-      global.setTimeout(() => detailNavigationAttentionByEntity.delete(entity.id), 1000);
-    }
-    if (isVisible && detailSelectionPulseByEntity.has(entity.id)) {
-      control.classList.add("is-just-selected");
-      global.setTimeout(() => detailSelectionPulseByEntity.delete(entity.id), 460);
-    }
-    const input = document.createElement("input");
-    input.type = "checkbox";
-    input.checked = isVisible;
-    input.dataset.detailVisibility = entity.id;
-    input.setAttribute("aria-label", `${isVisible ? "Desselecionar" : "Selecionar"} ${entity.label}`);
-    const copy = document.createElement("span");
-    copy.textContent = isVisible ? "Selecionado" : "Selecionar";
-    control.append(input, copy);
-    return control;
-  }
-
-  function createLocalFinishControl(product) {
-    const options = catalog.options.finishes.filter((finish) => {
-      const settings = finishSettings.get(finish.id);
-      return finish.status === "published" && settings?.enabled && settings.scope === "local" && settings.moduleIds.includes(product.entityId);
-    });
-    if (!options.length) return null;
-    const fieldset = document.createElement("fieldset");
-    fieldset.className = "module-detail__local-finish";
-    const legend = document.createElement("legend");
-    legend.textContent = "Acabamento deste mÃ³dulo";
-    const choices = document.createElement("div");
-    choices.className = "module-detail__local-finish-options";
-    options.forEach((finish) => {
-      const button = document.createElement("button");
-      button.type = "button";
-      button.className = "swatch";
-      button.dataset.localFinishId = finish.id;
-      button.dataset.localFinishModule = product.entityId;
-      button.style.setProperty("--swatch", finish.color);
-      button.style.setProperty("--swatch-texture", materialBackground(finish));
-      button.style.setProperty("--swatch-size", finish.textureSize || "cover");
-      button.title = finish.publicLabel;
-      button.setAttribute("aria-label", `Aplicar ${finish.publicLabel} somente em ${product.title}`);
-      const selected = selectedModuleFinish(product.entityId) === finish.id;
-      button.classList.toggle("is-selected", selected);
-      button.setAttribute("aria-pressed", String(selected));
-      choices.append(button);
-    });
-    fieldset.append(legend, choices);
-    return fieldset;
-  }
-
-  function updateSelection(resolved) {
-    const entity = entitiesById.get(state.selectedEntityId);
-    const catalogProduct = catalogByEntityId.get(state.selectedEntityId);
-    const product = catalogProduct ? productForCurrentConfiguration(catalogProduct) : null;
-    const isVisible = Boolean(entity && resolved?.[entity.id]?.visible);
-    const style = isVisible ? selectionStyle(entity) : null;
-    selectionFrame.hidden = !style;
-    if (style) Object.assign(selectionFrame.style, style);
-    if (!product) {
-      clearDetailCarouselTimer();
-      document.body.classList.remove("has-module-detail");
-      moduleDetail.replaceChildren();
-      viewerHint.textContent = "Selecione um mÃ³dulo na cena para abrir sua ficha.";
-      return;
-    }
-
-    document.body.classList.add("has-module-detail");
-    viewerHint.textContent = `Ficha selecionada: ${product.title}`;
-    moduleDetail.classList.toggle("is-unavailable", !isVisible);
-    const detailHeader = document.createElement("header");
-    detailHeader.className = "module-detail__header";
-    const moduleNumber = document.createElement("span");
-    moduleNumber.className = "module-detail__number";
-    moduleNumber.textContent = entity.alias;
-    const headerCopy = document.createElement("div");
-    headerCopy.className = "module-detail__header-copy";
-    const eyebrow = document.createElement("p");
-    eyebrow.className = "module-detail__eyebrow";
-    eyebrow.textContent = `${product.referenceLabel.toUpperCase()} Â· ${product.category.toUpperCase()}`;
-    const title = document.createElement("h3");
-    title.textContent = product.title;
-    headerCopy.append(eyebrow, title);
-    const headerActions = document.createElement("div");
-    headerActions.className = "module-detail__actions";
-    const previousId = adjacentModuleId(-1);
-    const nextId = adjacentModuleId(1);
-    const previousProduct = catalogByEntityId.get(previousId);
-    const nextProduct = catalogByEntityId.get(nextId);
-    if (previousProduct) headerActions.append(createModuleNavigationButton(-1, previousProduct));
-    if (nextProduct) headerActions.append(createModuleNavigationButton(1, nextProduct));
-    const close = document.createElement("button");
-    close.type = "button";
-    close.className = "module-detail__close";
-    close.dataset.closeModuleDetail = "true";
-    close.setAttribute("aria-label", "Fechar detalhes do mÃ³dulo");
-    close.textContent = "Ã—";
-    headerActions.append(close);
-    detailHeader.append(moduleNumber, headerCopy, headerActions, createModuleSelectionControl(entity, isVisible));
-
-    const compositionEstimate = getEstimate(resolved);
-    const itemPricing = compositionEstimate.moduleEstimates?.find((entry) => entry.item.entityId === product.entityId)?.estimate
-      || pricing.itemEstimate(product, catalog, state, priceBook);
-    const price = document.createElement("section");
-    price.className = "module-detail__price";
-    const priceLabel = document.createElement("span");
-    priceLabel.textContent = "Valor atual na simulaÃ§Ã£o";
-    const priceValue = document.createElement("strong");
-    const priceDescription = document.createElement("p");
-    if (itemPricing.status === "ready") {
-      priceValue.textContent = formatCurrency(itemPricing.totalCents);
-      priceDescription.textContent = product.category === "Estrutural"
-        ? "Valor local do painel. Pedra e serviÃ§os aparecem uma Ãºnica vez no resumo."
-        : "Valor local do mÃ³dulo. Pedra e serviÃ§os aparecem uma Ãºnica vez no resumo.";
-      price.append(priceLabel, priceValue, priceDescription, createCommercialItemPriceBreakdown(product, itemPricing));
-    } else {
-      priceValue.textContent = "Em configuraÃ§Ã£o";
-      priceDescription.textContent = "O valor aparece quando a tabela de trabalho estiver completa.";
-      price.append(priceLabel, priceValue, priceDescription);
-    }
-
-    const material = document.createElement("div");
-    material.className = "module-detail__material";
-    material.append(
-      createMaterialFact("Frentes", selectedFrontFinishLabel(product)),
-      createMaterialFact("Caixaria", "Base clara")
-    );
-    const localFinishControl = createLocalFinishControl(product);
-
-    const dimensions = document.createElement("p");
-    dimensions.className = "module-detail__dimensions";
-    dimensions.textContent = dimensionSummary(product);
-    if (product.configurationNote) dimensions.textContent += ` Â· ${product.configurationNote}`;
-
-    const technical = document.createElement("section");
-    technical.className = "module-detail__technical";
-    const technicalHeading = document.createElement("h4");
-    technicalHeading.textContent = "Medidas nominais";
-    const technicalGrid = document.createElement("dl");
-    const dimensionsByName = detailDimensionFacts(product);
-    dimensionsByName.forEach(([label, value]) => {
-      const group = document.createElement("div");
-      const term = document.createElement("dt");
-      term.textContent = label;
-      const definition = document.createElement("dd");
-      definition.textContent = `${formatDimension(value)} mm`;
-      group.append(term, definition);
-      technicalGrid.append(group);
-    });
-    technical.append(technicalHeading, technicalGrid);
-
-    const orientativeViews = createDetailCarousel(entity, product);
-
-    const benefitsSection = document.createElement("section");
-    benefitsSection.className = "module-detail__section";
-    const benefitsHeading = document.createElement("h4");
-    benefitsHeading.textContent = "Destaques";
-    benefitsSection.append(benefitsHeading, createDetailList(product.benefits, "module-detail__benefits"));
-
-    const componentsSection = document.createElement("section");
-    componentsSection.className = "module-detail__section";
-    const componentsHeading = document.createElement("h4");
-    componentsHeading.textContent = "Componentes inclusos";
-    componentsSection.append(componentsHeading, createDetailList(product.components, "module-detail__components"));
-
-    const requirements = document.createElement("p");
-    requirements.className = "module-detail__requirements";
-    const reason = resolved?.[entity.id]?.reason;
-    if (reason === "requirement-hidden") {
-      requirements.textContent = "IndisponÃ­vel enquanto o mÃ³dulo estrutural necessÃ¡rio estiver fora da composiÃ§Ã£o.";
-    } else if (product.requirements.length) {
-      requirements.textContent = product.requirements[0];
-    }
-    title.id = "moduleDetailTitle";
-    moduleDetail.setAttribute("aria-labelledby", title.id);
-    const detailContent = [detailHeader, price, material];
-    if (product.description) {
-      const description = document.createElement("p");
-      description.className = "module-detail__dimensions";
-      description.textContent = product.description;
-      detailContent.push(description);
-    }
-    if (localFinishControl) detailContent.push(localFinishControl);
-    detailContent.push(dimensions, technical, orientativeViews, benefitsSection, componentsSection);
-    if (requirements.textContent) detailContent.push(requirements);
-    moduleDetail.replaceChildren(...detailContent);
-  }
-
-  function updateModuleCards(resolved) {
-    document.querySelectorAll(".module-card").forEach((card) => {
-      const entityId = card.dataset.entityId;
-      const entity = entitiesById.get(entityId);
-      const result = resolved?.[entityId];
-      const input = card.querySelector("input");
-      const isVisible = Boolean(result?.visible);
-      const blocked = result?.reason === "requirement-hidden" || result?.reason === "requirement-missing";
-      card.classList.toggle("is-selected", state.selectedEntityId === entityId);
-      card.classList.toggle("is-blocked", blocked);
-      card.classList.toggle("is-included", isVisible);
-      card.querySelector("[data-select-entity]")?.setAttribute("aria-expanded", String(state.selectedEntityId === entityId));
-      if (input && entity) {
-        input.checked = Boolean(state.visibilityByEntity[entity.id]);
-        input.setAttribute("aria-describedby", blocked ? `blocked-${entity.id}` : "");
-      }
-      const product = catalogByEntityId.get(entityId);
-      const dimensionLabel = card.querySelector(".module-card__copy > small");
-      if (product && dimensionLabel) dimensionLabel.textContent = productForCurrentConfiguration(product).dimensions.display;
-      let status = card.querySelector(".module-card__status");
-      if (!status) {
-        status = document.createElement("small");
-        status.className = "module-card__status";
-        status.id = `blocked-${entityId}`;
-        card.querySelector(".module-card__copy")?.append(status);
-      }
-      status.textContent = blocked ? "Requer suporte incluÃ­do" : isVisible ? "IncluÃ­do" : "NÃ£o incluÃ­do";
-    });
-  }
-
-  function updateSceneHotspots(resolved) {
-    sceneHotspots.querySelectorAll("[data-select-scene-entity]").forEach((hotspot) => {
-      const entityId = hotspot.dataset.entityId;
-      const isVisible = Boolean(resolved?.[entityId]?.visible);
-      const isSelected = state.selectedEntityId === entityId;
-      hotspot.hidden = !isVisible;
-      hotspot.disabled = !isVisible;
-      hotspot.tabIndex = isVisible ? 0 : -1;
-      hotspot.setAttribute("aria-disabled", String(!isVisible));
-      hotspot.classList.toggle("is-selected", isSelected);
-      hotspot.setAttribute("aria-pressed", String(isSelected));
-    });
-  }
-
-  function updateAccessoryControls(resolved) {
-    const result = resolved?.["lighting-08"];
-    if (!lightingToggle || !result) return;
-    const requirementHidden = (entitiesById.get("lighting-08")?.requiresVisibleIds || [])
-      .some((entityId) => !resolved?.[entityId]?.visible);
-    const blocked = requirementHidden || result.reason === "requirement-hidden" || result.reason === "requirement-missing";
-    lightingToggle.checked = Boolean(state.visibilityByEntity["lighting-08"]);
-    lightingToggle.disabled = blocked;
-    lightingToggle.title = blocked ? "Inclua a lateral da geladeira e o aÃ©reo da pia para habilitar a iluminaÃ§Ã£o." : "";
-    lightingToggle.closest(".accessory-toggle")?.classList.toggle(
-      "is-blocked",
-      blocked
-    );
-  }
-
-  function updateHandleControls() {
-    renderHandleControlsFromData();
-  }
-
-  function formatCurrency(cents) {
-    return new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(cents / 100);
-  }
-
-  function getEstimate(resolved) {
-    const activeState = {
-      ...state,
-      globalSelections: {
-        ...state.globalSelections,
-        finishId: stageHas("finishes", "fronts-all") ? state.globalSelections.finishId : "base-light",
-        handleId: stageHas("finishes", "handles-all") ? state.globalSelections.handleId : "none",
-        stonePackageId: stageHas("finishes", "stone-all") ? state.globalSelections.stonePackageId : "stone-existing",
-        serviceIds: (state.globalSelections?.serviceIds || []).filter((id) =>
-          id === "stone-skirting" ? stageHas("finishes", id) && stageHas("finishes", "stone-all") : stageHas("services", id)
-        )
-      }
-    };
-    const configuredVisibility = { ...resolved };
-    scene.entities.forEach((entity) => {
-      const moduleOmitted = entity.kind === "module" && !configuredModuleIds().has(entity.id);
-      const serviceOmitted = (entity.id === "tempered-glass" || entity.id === "lighting-08") && !stageHas("services", entity.id);
-      if (moduleOmitted || serviceOmitted) configuredVisibility[entity.id] = { visible: false, reason: "not-configured" };
-    });
-    return pricing.calculatePublicEstimate(scene, activeState, catalog, configuredVisibility, priceBook);
-  }
-
-  function renderCurrentValue(resolved) {
-    const estimate = getEstimate(resolved);
-    if (!configurationValue) return;
-    if (estimate.status === "legacy") {
-      configurationValue.innerHTML = `<span>${estimate.label}</span><strong>${formatCurrency(estimate.totalCents)}</strong><small>Estimativa comercial</small>`;
-      configurationValue.title = estimate.disclaimer;
-      return;
-    }
-    configurationValue.innerHTML = "<span>Valor do conjunto</span><strong>Em configuraÃ§Ã£o</strong>";
-    configurationValue.removeAttribute("title");
-  }
-
-  function renderSummary(resolved) {
-    const estimate = getEstimate(resolved);
-    const included = catalog.modules.filter((module) => configuredModuleIds().has(module.entityId) && resolved?.[module.entityId]?.visible);
-    const list = document.createElement("ul");
-    list.className = "summary-list";
-    included.forEach((module) => {
-      const item = document.createElement("li");
-      item.textContent = `${module.referenceLabel} Â· ${module.title}`;
-      list.append(item);
-    });
-    const finish = document.createElement("p");
-    finish.className = "summary-note";
-    const finishGroup = scene.finishGroups.find((group) => group.id === "fronts-all");
-    const finishPreset = finishGroup?.presets.find((preset) => preset.id === state.frontFinishId);
-    const handle = selectedHandle();
-    const includedServices = catalog.services.filter((service) => stageHas("services", service.id) && service.status === "included").map((service) => service.title);
-    const finishNotes = [];
-    if (stageHas("finishes", "fronts-all")) finishNotes.push(`Frentes: ${finishPreset?.label || selectedFrontFinishLabel()}`);
-    finishNotes.push("Caixaria: clara");
-    if (stageHas("finishes", "handles-all")) finishNotes.push(`Puxador: ${handle.label}`);
-    if (includedServices.length) finishNotes.push(`ServiÃ§o incluso: ${includedServices.join(", ")}`);
-    finish.textContent = finishNotes.join(". ") + ".";
-    const price = document.createElement("div");
-    price.className = "price-state";
-    if (estimate.status === "legacy") {
-      const label = document.createElement("span");
-      label.textContent = estimate.label;
-      const total = document.createElement("strong");
-      total.textContent = formatCurrency(estimate.totalCents);
-      const composition = document.createElement("dl");
-      composition.className = "price-state__breakdown";
-      const includedHandleCount = included.filter((module) => module.category !== "Estrutural").length;
-      const adjustments = estimate.adjustments;
-      appendPriceBreakdownRow(composition, "MÃ³dulos", formatCurrency(estimate.breakdown.moduleCents), `${included.length} incluÃ­do(s).`);
-      if (estimate.breakdown.accessoryCents || resolved?.["lighting-08"]?.visible) {
-        appendPriceBreakdownRow(composition, "IluminaÃ§Ã£o", formatCurrency(estimate.breakdown.accessoryCents), resolved?.["lighting-08"]?.visible ? "IluminaÃ§Ã£o embutida." : "NÃ£o incluÃ­da.");
-      }
-      appendPriceBreakdownRow(composition, "Puxadores", formatCurrency(estimate.breakdown.handleCents), `${handle.label} Â· ${includedHandleCount} mÃ³dulo(s) aplicÃ¡vel(is).`);
-      appendPriceBreakdownRow(composition, "Frentes", formatCurrency(adjustments.frontCents), `${selectedFrontFinishLabel()} Â· ${valueImpactLabel(adjustments.frontCents)}.`);
-      appendPriceBreakdownRow(composition, "Pedra", formatCurrency(adjustments.stoneCents), `${selectedStoneLabel()} Â· ${valueImpactLabel(adjustments.stoneCents)}.`);
-      appendPriceBreakdownRow(composition, "ServiÃ§o", formatCurrency(adjustments.serviceCents), `${includedServices.join(", ") || "Nenhum"} Â· ${valueImpactLabel(adjustments.serviceCents)}.`);
-      const reference = document.createElement("p");
-      reference.className = "price-state__reference";
-      reference.textContent = "Valores estimativos sujeitos Ã  validaÃ§Ã£o final de medidas e instalaÃ§Ã£o.";
-      const disclaimer = document.createElement("p");
-      disclaimer.textContent = estimate.disclaimer;
-      price.append(label, total, composition, reference, disclaimer);
+YªçŠx-®éÜj×¢ëiºÚ+Š§j[h‘éÜ¢éíãN:Ù:-jZ.¶›­–)Ş³R†gVæ7F–öâ7F'D6öæf–wW&F÷"†vÆö&Â’°¢'W6R7G&–7B#° ¢ÆWB66VæRÒ7G'V7GW&VD6ÆöæR†vÆö&Âä44ôTÕôÔôETÄõ5õ44TäR“°¢6öç7B–æÆ–æTÖ6·2ÒvÆö&Âä44ôTÕôÔôETÄõ5ôÔ4µôDD°¢6öç7B6÷&RÒvÆö&Âä66ÖöGVÆW46÷&S°¢6öç7Bf—6–&–Æ—G’ÒvÆö&Âä66ÖöGVÆW5f—6–&–Æ—G“°¢6öç7BfÆ–FF–öâÒvÆö&Âä66ÖöGVÆW5fÆ–FF–öã°¢6öç7Bf–ævW'&–çBÒvÆö&Âä66ÖöGVÆW4f–ævW'&–çC°¢6öç7Bf–æ—6†W2ÒvÆö&Âä66ÖöGVÆW4f–æ—6†W3°¢ÆWB6FÆörÒ7G'V7GW&VD6ÆöæR†vÆö&Âä44ôTÕôÔôETÄõ5ô4DÄôr“°¢6öç7B6öæf–wW&F–öä6÷&RÒvÆö&Âä66ÖöGVÆW46öæf–wW&F–öã°¢ÆWB&–6T&öö²Ò7G'V7GW&VD6ÆöæR†vÆö&Âä44ôTÕôÔôETÄõ5õ$”4Uô$ôô²“°¢6öç7B&–6–ærÒvÆö&Âä66ÖöGVÆW5&–6–æs°¢ÆWB6öæf–wW&F÷%6WGF–æw2ÒvÆö&Âä44ôTÕôÔôETÄõ5ô4ôäd”uU$Dõ%ôDTdTÅE3°¢ÆWBf–æ—6…6WGF–æw2ÒæWrÖ†6FÆöræ÷F–öç2æf–æ—6†W2æÖ‚†f–æ—6‚’Óâ¶f–æ—6‚æ–BÂ²66÷S¢&vÆö&Â"ÂVæ&ÆVC¢f–æ—6‚ç7FGW2ÓÓÒ'V&Æ—6†VB"ÂÖöGVÆT–G3¢6FÆöræÖöGVÆW2æÖ‚†ÖöGVÆR’ÓâÖöGVÆRæVçF—G”–B’ÕÒ’“°¢ÆWBG–æÖ–4FWVæFVæ6–W2ÒµÓ°¢ÆWBG–æÖ–4WfVçG2ÒµÓ°¢ÆWB6öæf–wW&VDö&¦V7D76WG2Ò·Ó°¢ÆWB–æ—F–Å7FFTÆ–VBÒfÇ6S° ¢–b‚66VæRÇÂ–æÆ–æTÖ6·2ÇÂ6÷&RÇÂf—6–&–Æ—G’ÇÂfÆ–FF–öâÇÂf–ævW'&–çBÇÂf–æ—6†W2ÇÂ6FÆörÇÂ&–6T&öö²ÇÂ&–6–ærÇÂ6öæf–wW&F–öä6÷&RÇÂ6öæf–wW&F÷%6WGF–æw2’°¢F‡&÷ræWrW'&÷"‚$ì:6òfö’÷7<:×fVÂ6'&Vv"÷2FF÷2F6Væ$Bâ"“°¢Ğ¢fÆ–FF–öâæ76W'EfÆ–E66VæR‡66VæR“° ¢6öç7B–æ—F–ÄFÖ–æ—7G&F–öâÒ6öæf–wW&F–öä6÷&Ræ7&VFTFVfVÇDFÖ–æ—7G&F–öâ†6öæf–wW&F÷%6WGF–æw2Â6FÆörÂ&–6T&öö²Â66VæR“°¢G–æÖ–4FWVæFVæ6–W2Ò–æ—F–ÄFÖ–æ—7G&F–öâæFWVæFVæ6–W3°¢G–æÖ–4WfVçG2Ò–æ—F–ÄFÖ–æ—7G&F–öâæWfVçG3°¢6öæf–wW&VDö&¦V7D76WG2Ò–æ—F–ÄFÖ–æ—7G&F–öâæö&¦V7D76WG3° ¢ÆWB7FFRÒ6÷&Ræ7&VFT–æ—F–Å7FFR‡66VæR“°¢ÆWB7W'&VçE7FWÒ&ÖöGVÆW2#°¢ÆWBFWF–Ä÷&–v–âÒçVÆÃ°¢ÆWBÖö&–ÆU66VæU–äVæ&ÆVBÒG'VS°¢ÆWBÖö&–ÆU66VæT—4Ö–æ’ÒfÇ6S°¢ÆWBÖö&–ÆU66VæTæ6†÷$†V–v‡BÒ°¢ÆWBÖö&–ÆU66VæUG&ç7&VçBÒfÇ6S°¢ÆWBÖö&–ÆU—6—¦T–æFW‚Ò°¢ÆWBÖö&–ÆU—÷6—F–öâÒçVÆÃ°¢ÆWBÖö&–ÆU—v–GF‚ÒçVÆÃ° ¢6öç7B66VæT&6RÒFö7VÖVçBævWDVÆVÖVçD'”–B‚'66VæT&6R"“°¢6öç7B66VæTÆ–W'2ÒFö7VÖVçBævWDVÆVÖVçD'”–B‚'66VæTÆ–W'2"“°¢6öç7B66VæT†÷G7÷G2ÒFö7VÖVçBævWDVÆVÖVçD'”–B‚'66VæT†÷G7÷G2"“°¢6öç7BÖöGVÆTÆ—7BÒFö7VÖVçBævWDVÆVÖVçD'”–B‚&ÖöGVÆTÆ—7B"“°¢6öç7Bf–æ—6…7vF6†W2ÒFö7VÖVçBævWDVÆVÖVçD'”–B‚&f–æ—6…7vF6†W2"“°¢6öç7BÖöGVÆTFWF–ÂÒFö7VÖVçBævWDVÆVÖVçD'”–B‚&ÖöGVÆTFWF–Â"“°¢6öç7B6VÆV7F–öäg&ÖRÒFö7VÖVçBævWDVÆVÖVçD'”–B‚'6VÆV7F–öäg&ÖR"“°¢6öç7Bf–WvW$†–çBÒFö7VÖVçBævWDVÆVÖVçD'”–B‚'f–WvW$†–çB"“°¢6öç7B7VÖÖ'”6öçFVçBÒFö7VÖVçBævWDVÆVÖVçD'”–B‚'7VÖÖ'”6öçFVçB"“°¢6öç7BæW‡E7FW'WGFöâÒFö7VÖVçBævWDVÆVÖVçD'”–B‚&æW‡E7FW'WGFöâ"“°¢6öç7B6öæf–wW&F–öåfÇVRÒFö7VÖVçBævWDVÆVÖVçD'”–B‚&6öæf–wW&F–öåfÇVR"“°¢6öç7BÖöGVÆW5æVÂÒFö7VÖVçBævWDVÆVÖVçD'”–B‚&ÖöGVÆW5æVÂ"“°¢6öç7Bg&öçDf–æ—6…æVÂÒFö7VÖVçBævWDVÆVÖVçD'”–B‚&g&öçDf–æ—6…æVÂ"“°¢6öç7B7FöæUæVÂÒFö7VÖVçBævWDVÆVÖVçD'”–B‚'7FöæUæVÂ"“°¢6öç7B6W'f–6W5æVÂÒFö7VÖVçBævWDVÆVÖVçD'”–B‚'6W'f–6W5æVÂ"“°¢6öç7B7VÖÖ'•æVÂÒFö7VÖVçBævWDVÆVÖVçD'”–B‚'7VÖÖ'•æVÂ"“°¢6öç7BÆ–v‡F–æuFövvÆRÒFö7VÖVçBævWDVÆVÖVçD'”–B‚&Æ–v‡F–æuFövvÆR"“°¢6öç7B6öæf–wW&F–öäææ÷Væ6VÖVçBÒFö7VÖVçBævWDVÆVÖVçD'”–B‚&6öæf–wW&F–öäææ÷Væ6VÖVçB"“°¢6öç7B†æFÆT÷F–öç2ÒFö7VÖVçBævWDVÆVÖVçD'”–B‚&†æFÆT÷F–öç2"“°¢6öç7B6W'f–6W46†V6¶Æ—7BÒFö7VÖVçBævWDVÆVÖVçD'”–B‚'6W'f–6W46†V6¶Æ—7B"“°¢6öç7B7FöæU6¶vT÷F–öç2ÒFö7VÖVçBævWDVÆVÖVçD'”–B‚'7FöæU6¶vT÷F–öç2"“°¢6öç7B7FöæU6¶—'F–æuFövvÆRÒFö7VÖVçBævWDVÆVÖVçD'”–B‚'7FöæU6¶—'F–æuFövvÆR"“°¢6öç7Bf–WvW$6&BÒFö7VÖVçBævWDVÆVÖVçD'”–B‚'f–WvW$6&B"“°¢6öç7Bf–WvW$æ6†÷"ÒFö7VÖVçBævWDVÆVÖVçD'”–B‚'f–WvW$æ6†÷""“°¢6öç7Bf–WvW%–å6VçF–æVÂÒFö7VÖVçBævWDVÆVÖVçD'”–B‚'f–WvW%–å6VçF–æVÂ"“°¢6öç7BÖö&–ÆU66VæU–âÒFö7VÖVçBævWDVÆVÖVçD'”–B‚&Öö&–ÆU66VæU–â"“°¢6öç7BÖö&–ÆU66VæUG&ç7&Væ7’ÒFö7VÖVçBævWDVÆVÖVçD'”–B‚&Öö&–ÆU66VæUG&ç7&Væ7’"“°¢6öç7BÖö&–ÆU66VæU&W6—¦RÒFö7VÖVçBævWDVÆVÖVçD'”–B‚&Öö&–ÆU66VæU&W6—¦R"“°¢6öç7BÖö&–ÆU66VæU&W6—¦T†æFÆRÒFö7VÖVçBævWDVÆVÖVçD'”–B‚&Öö&–ÆU66VæU&W6—¦T†æFÆR"“°¢6öç7BÖö&–ÆU66VæU&W–âÒFö7VÖVçBævWDVÆVÖVçD'”–B‚&Öö&–ÆU66VæU&W–â"“°¢6öç7BfÆ÷tæbÒFö7VÖVçBçVW'•6VÆV7F÷"‚"æfÆ÷rÖæb"“°¢6öç7B7FvUæVÇ2ÒæWrÖ…°¢²&ÖöGVÆW2"ÂÖöGVÆW5æVÅÒÂ²&f–æ—6†W2"Âg&öçDf–æ—6…æVÅÒÂ²'6W'f–6W2"Â6W'f–6W5æVÅÒÂ²'7VÖÖ'’"Â7VÖÖ'•æVÅĞ¢Ò“°¢6öç7B6¶—'F–æt÷fW&Æ—2Ò°¢²VçF—G”–C¢&ÖöGVÆRÓ""ÂVÆVÖVçC¢Fö7VÖVçBævWDVÆVÖVçD'”–B‚'6¶—'F–æt÷fW&Æ“""’ÒÀ¢²VçF—G”–C¢&ÖöGVÆRÓ2"ÂVÆVÖVçC¢Fö7VÖVçBævWDVÆVÖVçD'”–B‚'6¶—'F–æt÷fW&Æ“2"’Ğ¢Ó°¢6öç7B6VÆV7FVDf–æ—6„FW67&—F–öâÒFö7VÖVçBævWDVÆVÖVçD'”–B‚'6VÆV7FVDf–æ—6„FW67&—F–öâ"“°¢6öç7B6FÆöt'”VçF—G”–BÒæWrÖ†6FÆöræÖöGVÆW2æÖ‚†ÖöGVÆR’Óâ¶ÖöGVÆRæVçF—G”–BÂÖöGVÆUÒ’“°¢6öç7B7FvT6öæf–rÒ†–B’Óâ6öæf–wW&F÷%6WGF–æw2ç7FvW2æf–æB‚‡7FvR’Óâ7FvRæ–BÓÓÒ–B“°¢6öç7B7FvT¶–æBÒ‡7FvR’Óâ7FvSòæ¶–æBÇÂ7FvSòæ–C°¢6öç7B7FvT—FV×2Ò†¶–æB’ÓâæWr6WB†6öæf–wW&F÷%6WGF–æw2ç7FvW2æf–ÇFW"‚‡7FvR’Óâ7FvRæVæ&ÆVBbb7FvT¶–æB‡7FvR’ÓÓÒ¶–æB’æfÆDÖ‚‡7FvR’Óâ7FvRæ—FV×2’“°¢6öç7B7FvT†2Ò…÷7FvT–BÂ—FVÔ–B’Óâ6öæf–wW&F÷%6WGF–æw2ç7FvW2ç6öÖR‚‡7FvR’Óâ7FvRæVæ&ÆVBbb7FvRæ—FV×2æ–æ6ÇVFW2†—FVÔ–B’“°¢6öç7BVæ&ÆVE7FvW2Ò‚’Óâ6öæf–wW&F÷%6WGF–æw2ç7FvW2æf–ÇFW"‚‡7FvR’Óâ7FvRæVæ&ÆVB“°¢6öç7BÖöGVÆT–E6WBÒæWr6WB†6FÆöræÖöGVÆW2æÖ‚†—FVÒ’Óâ—FVÒæVçF—G”–B’“°¢6öç7B6öæf–wW&VDÖöGVÆT–G2Ò‚’ÓâæWr6WB†Væ&ÆVE7FvW2‚’æfÆDÖ‚‡7FvR’Óâ7FvRæ—FV×2’æf–ÇFW"‚†–B’ÓâÖöGVÆT–E6WBæ†2†–B’’“°¢6öç7B&WV—&VÖVçG4f÷$VçF—G’Ò†VçF—G”–B’Óâ²ââææWr6WB…°¢âââ‡66VæRæVçF—F–W2æf–æB‚†VçF—G’’ÓâVçF—G’æ–BÓÓÒVçF—G”–B“òç&WV—&W5f—6–&ÆT–G2ÇÂµÒ’À¢ââæG–æÖ–4FWVæFVæ6–W2æf–ÇFW"‚‡'VÆR’Óâ'VÆRæFWVæFVçD–BÓÓÒVçF—G”–B’æfÆDÖ‚‡'VÆR’Óâ'VÆRç&WV—&W2¢Ò•Ó°¢6öç7B6VÆV7F–öä—47F—fRÒ†–B’Óâö&¦V7Bæ†4÷vâ‡7FFRçf—6–&–Æ—G”'”VçF—G’Â–B’ò&ööÆVâ‡7FFRçf—6–&–Æ—G”'”VçF—G•¶–EÒ’¢&ööÆVâ‡7FFRævÆö&Å6VÆV7F–öç3òç6W'f–6T–G3òæ–æ6ÇVFW2†–B’“°¢6öç7BFWF–ÅvT'”VçF—G’ÒæWrÖ‚“°¢6öç7BFWF–Ä–çFW&7F–öä'”VçF—G’ÒæWr6WB‚“°¢6öç7BFWF–Åf–Ww46öÆÆ6VD'”VçF—G’ÒæWr6WB‚“°¢6öç7BFWF–Å6VÆV7F–öåVÇ6T'”VçF—G’ÒæWr6WB‚“°¢6öç7BFWF–Äæf–vF–öäGFVçF–öä'”VçF—G’ÒæWr6WB‚“°¢ÆWBFWF–Ä6&÷W6VÅF–ÖW"ÒçVÆÃ°¢ÆWBÆ7E&W6öÇfVBÒçVÆÃ°¢6öç7B7W7FöÕ7FvUæVÇ2ÒæWrÖ‚“°¢6öç7B÷&–v–æÅ66VæTVçF—F–W2ÒæWrÖ‡66VæRæVçF—F–W2æÖ‚†VçF—G’’Óâ¶VçF—G’æ–BÂ7G'V7GW&VD6ÆöæR†VçF—G’•Ò’“° ¢gVæ7F–öâ6öæf–wW&VDVçF—G’†VçF—G’’°¢6öç7B76WG2Ò6öæf–wW&VDö&¦V7D76WG5¶VçF—G’æ–EÓ°¢&WGW&â76WG2ò²ââæVçF—G’Â76WC¢76WG2æ–ÖvT76WBÇÂ÷&–v–æÅ66VæTVçF—F–W2ævWB†VçF—G’æ–B“òæ76WBÇÂVçF—G’æ76WBÂÖ6´76WC¢76WG2æÖ6´76WBÇÂ÷&–v–æÅ66VæTVçF—F–W2ævWB†VçF—G’æ–B“òæÖ6´76WBÇÂVçF—G’æÖ6´76WBÒ¢VçF—G“°¢Ğ ¢gVæ7F–öâ7FvUæVÄf÷"‡7FvR’°¢6öç7B¶–æBÒ7FvT¶–æB‡7FvR“°¢–b‡7FvUæVÇ2æ†2†¶–æB’’&WGW&â7FvUæVÇ2ævWB†¶–æB“°¢ÆWBæVÂÒ7W7FöÕ7FvUæVÇ2ævWB‡7FvRæ–B“°¢–b‚æVÂ’°¢æVÂÒFö7VÖVçBæ7&VFTVÆVÖVçB‚'6V7F–öâ"“°¢æVÂæ6Æ74æÖRÒ'æVÂ7W7FöÒ×7FvR×æVÂ#°¢æVÂæ–BÒ7W7FöÕ7FvRÒG·7FvRæ–GÖ°¢æVÂç6WDGG&–'WFR‚&&–ÖÆ&VÆÆVF'’"ÂG·æVÂæ–GÒÖ†VF–æv“°¢Fö7VÖVçBçVW'•6VÆV7F÷"‚"æ6öçG&öÇ2"’æ–ç6W'D&Vf÷&R‡æVÂÂFö7VÖVçBçVW'•6VÆV7F÷"‚"æfÆ÷rÖ7F–öç2"’“°¢7W7FöÕ7FvUæVÇ2ç6WB‡7FvRæ–BÂæVÂ“°¢Ğ¢&WGW&âæVÃ°¢Ğ ¢gVæ7F–öâ&VæFW%66VæTg&öÔFF‚’°¢66VæT&6Rç7&2Ò66VæRæ&6T76WC°¢66VæT&6Rçv–GF‚Ò66VæRæ6çf2çv–GFƒ°¢66VæT&6Ræ†V–v‡BÒ66VæRæ6çf2æ†V–v‡C°¢66VæTÆ–W'2ç&WÆ6T6†–ÆG&Vâ‚“° ¢66VæRæVçF—F–W0¢ç6Æ–6R‚¢ç6÷'B‚†ÆVgBÂ&–v‡B’ÓâÆVgBç¤–æFW‚Ò&–v‡Bç¤–æFW‚ÇÂÆVgBæ–BæÆö6ÆT6ö×&R‡&–v‡Bæ–B’¢æf÷$V6‚‚‡&tVçF—G’’Óâ°¢6öç7BVçF—G’Ò6öæf–wW&VDVçF—G’‡&tVçF—G’“°¢6öç7Bw&÷WÒFö7VÖVçBæ7&VFTVÆVÖVçB‚&F—b"“°¢w&÷Wæ6Æ74æÖRÒ&Æ–W"Öw&÷W#°¢w&÷WæFF6WBæVçF—G”–BÒVçF—G’æ–C°¢w&÷WæFF6WBæÖöGVÆRÒVçF—G’æÆ–3°¢w&÷Wç7G–ÆRç¤–æFW‚Ò7G&–ær†VçF—G’ç¤–æFW‚“° ¢6öç7B–ÖvRÒFö7VÖVçBæ7&VFTVÆVÖVçB‚&–Ör"“°¢–ÖvRç7&2ÒVçF—G’æ76WC°¢–ÖvRæÇBÒ"#°¢–ÖvRæG&vv&ÆRÒfÇ6S°¢–ÖvRçv–GF‚Ò66VæRæ6çf2çv–GFƒ°¢–ÖvRæ†V–v‡BÒ66VæRæ6çf2æ†V–v‡C°¢w&÷WæVæB†–ÖvR“° ¢–b†VçF—G’æÖ6´76WB’°¢6öç7BÖ6µ6÷W&6RÒ–æÆ–æTÖ6·5¶VçF—G’æÖ6´76WEÓ°¢–b‚Ö6µ6÷W&6R’F‡&÷ræWrW'&÷"†Ü:66&–æ6÷'÷&FW6VçFS¢G¶VçF—G’æÖ6´76WGÖ“°¢6öç7Bf–æ—6„Æ–W"ÒFö7VÖVçBæ7&VFTVÆVÖVçB‚&F—b"“°¢f–æ—6„Æ–W"æ6Æ74æÖRÒ&f–æ—6‚ÖÆ–W"#°¢f–æ—6„Æ–W"ç7G–ÆRç6WE&÷W'G’‚"ÒÖÖ6²Ö–ÖvR"ÂW&Â‚"G¶Ö6µ6÷W&6WÒ"–“°¢f–æ—6„Æ–W"æFF6WBæÖ6´76WBÒVçF—G’æÖ6´76WC°¢w&÷WæVæB†f–æ—6„Æ–W"“° ¢6öç7BÖöGVÆT¶W’ÒõæÖöGVÆRÒ…ÆG³'Ò’BòæW†V2†VçF—G’æ–B“òå³Ó°¢–b†ÖöGVÆT¶W’’°¢²'6†F÷r"Â&†–v†Æ–v‡B%Òæf÷$V6‚‚†¶–æB’Óâ°¢6öç7B7G'V7GW&T76WBÒ76WG2ö¶—F6†VâöÖ6·2÷7G'V7GW&RÒG¶ÖöGVÆT¶W—ÒÒG¶¶–æGÒçæv°¢6öç7B7G'V7GW&TÖ6²Ò–æÆ–æTÖ6·5·7G'V7GW&T76WEÓ°¢–b‚7G'V7GW&TÖ6²’F‡&÷ræWrW'&÷"†Ü:66&W7G'WGW&Â–æ6÷'÷&FW6VçFS¢G·7G'V7GW&T76WGÖ“°¢6öç7B7G'V7GW&TÆ–W"ÒFö7VÖVçBæ7&VFTVÆVÖVçB‚&F—b"“°¢7G'V7GW&TÆ–W"æ6Æ74æÖRÒ7G'V7GW&RÖÆ–W"7G'V7GW&RÖÆ–W"ÒÒG¶¶–æGÖ°¢7G'V7GW&TÆ–W"ç7G–ÆRç6WE&÷W'G’‚"Ò×7G'V7GW&RÖÖ6²Ö–ÖvR"ÂW&Â‚"G·7G'V7GW&TÖ6·Ò"–“°¢7G'V7GW&TÆ–W"æFF6WBç7G'V7GW&T76WBÒ7G'V7GW&T76WC°¢w&÷WæVæB‡7G'V7GW&TÆ–W"“°¢Ò“°¢Ğ¢Ğ ¢66VæTÆ–W'2æVæB†w&÷W“°¢Ò“°¢Ğ ¢gVæ7F–öâ&VæFW$ÖöGVÆT6öçG&öÇ4g&öÔFF‚’°¢ÖöGVÆTÆ—7Bç&WÆ6T6†–ÆG&Vâ‚“° ¢66VæRæVçF—F–W0¢æf–ÇFW"‚†VçF—G’’ÓâVçF—G’æ6öçG&öÆÆ&ÆR¢æf–ÇFW"‚†VçF—G’’ÓâVçF—G’æ¶–æBÓÓÒ&ÖöGVÆR"bb6öæf–wW&VDÖöGVÆT–G2‚’æ†2†VçF—G’æ–B’¢ç6÷'B‚†ÆVgBÂ&–v‡B’ÓâÆVgBç¤–æFW‚Ò&–v‡Bç¤–æFW‚ÇÂÆVgBæ–BæÆö6ÆT6ö×&R‡&–v‡Bæ–B’¢æf÷$V6‚‚†VçF—G’’Óâ°¢6öç7B&öGV7BÒ6FÆöt'”VçF—G”–BævWB†VçF—G’æ–B“°¢–b‚&öGV7B’&WGW&ã°¢6öç7B6&BÒFö7VÖVçBæ7&VFTVÆVÖVçB‚&'F–6ÆR"“°¢6&Bæ6Æ74æÖRÒ&ÖöGVÆRÖ6&B#°¢6&BæFF6WBæVçF—G”–BÒVçF—G’æ–C° ¢6öç7BFövvÆTÆ&VÂÒFö7VÖVçBæ7&VFTVÆVÖVçB‚&Æ&VÂ"“°¢FövvÆTÆ&VÂæ6Æ74æÖRÒ&ÖöGVÆRÖ6&Eõ÷FövvÆR#°¢FövvÆTÆ&VÂæ‡FÖÄf÷"ÒFövvÆRÒG¶VçF—G’æ–GÖ° ¢6öç7B–çWBÒFö7VÖVçBæ7&VFTVÆVÖVçB‚&–çWB"“°¢–çWBæ–BÒFövvÆRÒG¶VçF—G’æ–GÖ°¢–çWBçG—RÒ&6†V6¶&÷‚#°¢–çWBæFF6WBæÖöGVÆUFövvÆRÒVçF—G’æ–C°¢–çWBç6WDGG&–'WFR‚&&–ÖÆ&VÂ"Â–æ6ÇV—"G·&öGV7BçF—FÆWÖ“°¢–çWBæ6†V6¶VBÒ7FFRçf—6–&–Æ—G”'”VçF—G•¶VçF—G’æ–EÓ° ¢6öç7BçVÖ&W"ÒFö7VÖVçBæ7&VFTVÆVÖVçB‚'7â"“°¢çVÖ&W"æ6Æ74æÖRÒ&ÖöGVÆRÖçVÖ&W"#°¢çVÖ&W"çFW‡D6öçFVçBÒVçF—G’æÆ–3° ¢6öç7B6÷’ÒFö7VÖVçBæ7&VFTVÆVÖVçB‚'7â"“°¢6÷’æ6Æ74æÖRÒ&ÖöGVÆRÖ6&Eõö6÷’#°¢6öç7BF—FÆRÒFö7VÖVçBæ7&VFTVÆVÖVçB‚'7G&öær"“°¢F—FÆRçFW‡D6öçFVçBÒ&öGV7BçF—FÆS°¢6öç7BF–ÖVç6–öç2ÒFö7VÖVçBæ7&VFTVÆVÖVçB‚'6ÖÆÂ"“°¢F–ÖVç6–öç2çFW‡D6öçFVçBÒ&öGV7Df÷$7W'&VçD6öæf–wW&F–öâ‡&öGV7B’æF–ÖVç6–öç2æF—7Æ“°¢6÷’æVæB‡F—FÆRÂF–ÖVç6–öç2“° ¢6öç7BFWF–ÂÒFö7VÖVçBæ7&VFTVÆVÖVçB‚&'WGFöâ"“°¢FWF–ÂçG—RÒ&'WGFöâ#°¢FWF–Âæ6Æ74æÖRÒ&ÖöGVÆRÖ6&EõöFWF–Â#°¢FWF–ÂæFF6WBç6VÆV7DVçF—G’ÒVçF—G’æ–C°¢FWF–Âç6WDGG&–'WFR‚&&–Ö6öçG&öÇ2"Â&ÖöGVÆTFWF–Â"“°¢FWF–Âç6WDGG&–'WFR‚&&–ÖW‡æFVB"Â&fÇ6R"“°¢FWF–Âç6WDGG&–'WFR‚&&–ÖÆ&VÂ"ÂfW"FWFÆ†W2FRG·&öGV7BçF—FÆWÖ“°¢FWF–ÂçFW‡D6öçFVçBÒ%fW"#° ¢FövvÆTÆ&VÂæVæB†–çWBÂçVÖ&W"Â6÷’“°¢6&BæVæB‡FövvÆTÆ&VÂÂFWF–Â“°¢ÖöGVÆTÆ—7BæVæB†6&B“°¢Ò“°¢Ğ ¢gVæ7F–öâ&VæFW%66VæT†÷G7÷G4g&öÔFF‚’°¢66VæT†÷G7÷G2ç&WÆ6T6†–ÆG&Vâ‚“°¢66VæRæVçF—F–W0¢æf–ÇFW"‚†VçF—G’’ÓâVçF—G’æ6öçG&öÆÆ&ÆRbbVçF—G’æ¶–æBÓÓÒ&ÖöGVÆR"bbVçF—G’æÇ†&÷VæG2bb6öæf–wW&VDÖöGVÆT–G2‚’æ†2†VçF—G’æ–B’¢ç6÷'B‚†ÆVgBÂ&–v‡B’ÓâÆVgBç¤–æFW‚Ò&–v‡Bç¤–æFW‚ÇÂÆVgBæ–BæÆö6ÆT6ö×&R‡&–v‡Bæ–B’¢æf÷$V6‚‚†VçF—G’’Óâ°¢6öç7B&öGV7BÒ6FÆöt'”VçF—G”–BævWB†VçF—G’æ–B“°¢–b‚&öGV7B’&WGW&ã°¢6öç7B†÷G7÷BÒFö7VÖVçBæ7&VFTVÆVÖVçB‚&'WGFöâ"“°¢†÷G7÷BçG—RÒ&'WGFöâ#°¢†÷G7÷Bæ6Æ74æÖRÒ'66VæRÖ†÷G7÷B#°¢†÷G7÷Bæ6Æ74Æ—7BçFövvÆR‚'66VæRÖ†÷G7÷BÒÖW&–Â"Â&öGV7Bæ6FVv÷'’ÓÓÒ$:—&Vò"“°¢†÷G7÷BæFF6WBç6VÆV7E66VæTVçF—G’ÒVçF—G’æ–C°¢†÷G7÷BæFF6WBæVçF—G”–BÒVçF—G’æ–C°¢†÷G7÷BæFF6WBæÖ&¶W%6–FRÒ&W6öÇfTÖ&¶W%Æ6VÖVçB†VçF—G’Â&öGV7B’ç6–FS°¢†÷G7÷Bç6WDGG&–'WFR‚&&–ÖÆ&VÂ"ÂfW"f–6†FRG·&öGV7Bç&VfW&Væ6TÆ&VÇÒÂG·&öGV7BçF—FÆWÖ“°¢†÷G7÷Bç6WDGG&–'WFR‚&&–×&W76VB"Â&fÇ6R"“°¢†÷G7÷BçF—FÆRÒG·&öGV7Bç&VfW&Væ6TÆ&VÇÒ+rG·&öGV7BçF—FÆWÖ°¢†÷G7÷Bç7G–ÆRç¤–æFW‚Ò7G&–ærƒS²VçF—G’ç¤–æFW‚“°¢ö&¦V7Bæ76–vâ††÷G7÷Bç7G–ÆRÂ6VÆV7F–öå7G–ÆR†VçF—G’’“° ¢6öç7BFrÒFö7VÖVçBæ7&VFTVÆVÖVçB‚'7â"“°¢Fræ6Æ74æÖRÒ'66VæRÖ†÷G7÷Eõ÷Fr#°¢Frç6WDGG&–'WFR‚&&–Ö†–FFVâ"Â'G'VR"“°¢FrçFW‡D6öçFVçBÒVçF—G’æÆ–3°¢†÷G7÷BæVæB‡Fr“°¢66VæT†÷G7÷G2æVæB††÷G7÷B“°¢Ò“°¢Ğ ¢gVæ7F–öâ&VæFW$f–æ—6„6öçG&öÇ4g&öÔFF‚’°¢6öç7Bf–æ—6„w&÷WÒ66VæRæf–æ—6„w&÷W2æf–æB‚†w&÷W’Óâw&÷Wæ–BÓÓÒ&g&öçG2ÖÆÂ"“°¢f–æ—6…7vF6†W2ç&WÆ6T6†–ÆG&Vâ‚“° ¢f–æ—6„w&÷Wç&W6WG2æf÷$V6‚‚‡&W6WB’Óâ°¢6öç7B'WGFöâÒFö7VÖVçBæ7&VFTVÆVÖVçB‚&'WGFöâ"“°¢'WGFöâæ6Æ74æÖRÒ'7vF6‚#°¢'WGFöâçG—RÒ&'WGFöâ#°¢'WGFöâæFF6WBæf–æ—6„–BÒ&W6WBæ–C°¢'WGFöâæFF6WBæ6öÆ÷"Ò&W6WBæ6öÆ÷#°¢'WGFöâæFF6WBæ÷fW&Æ”÷6—G’Ò7G&–ær†f–æ—6†W2ç&W6öÇfT÷fW&Æ”÷6—G’‡&W6WBÂ&W6WBæ6öÆ÷"’“°¢'WGFöâç7G–ÆRç6WE&÷W'G’‚"Ò×7vF6‚"Â&W6WBæ6öÆ÷"“°¢'WGFöâçF—FÆRÒ&W6WBæÆ&VÃ°¢'WGFöâç6WDGG&–'WFR‚&&–ÖÆ&VÂ"ÂÆ–6"G·&W6WBæÆ&VÇÖ“°¢'WGFöâç6WDGG&–'WFR‚&&–×&W76VB"Â&fÇ6R"“°¢f–æ—6…7vF6†W2æVæB†'WGFöâ“°¢Ò“° ¢òò6†ö–6W26†÷vâFò'W–W'2&RFVÆ–&W&FVÇ’Æ–Ö—FVBFòF†RV&Æ—6†VB&W6WG2à¢Ğ ¢gVæ7F–öâ&VæFW$†æFÆT6öçG&öÇ4g&öÔFF‚’°¢–b‚†æFÆT÷F–öç2’&WGW&ã°¢†æFÆT÷F–öç2ç&WÆ6T6†–ÆG&Vâ‚“°¢6FÆöræ÷F–öç2æ†æFÆW2æf÷$V6‚‚††æFÆR’Óâ°¢6öç7B'WGFöâÒFö7VÖVçBæ7&VFTVÆVÖVçB‚&'WGFöâ"“°¢'WGFöâçG—RÒ&'WGFöâ#°¢'WGFöâæ6Æ74æÖRÒ&†æFÆRÖ÷F–öâ#°¢'WGFöâæFF6WBæ†æFÆT–BÒ†æFÆRæ–C°¢'WGFöâç6WDGG&–'WFR‚&&–×&W76VB"Â&fÇ6R"“°¢'WGFöâç6WDGG&–'WFR‚&&–ÖÆ&VÂ"Â6VÆV6–öæ"W†F÷"G¶†æFÆRæÆ&VÇÖ“° ¢6öç7B÷&–VçFF–öâÒFö7VÖVçBæ7&VFTVÆVÖVçB‚'7â"“°¢÷&–VçFF–öâæ6Æ74æÖRÒ&†æFÆRÖ÷F–öåõö÷&–VçFF–öâ#°¢÷&–VçFF–öâç7G–ÆRç6WE&÷W'G’‚"ÒÖ†æFÆR×7vF6‚"Â†æFÆRæ6öÆ÷"ÇÂ"3ƒv3s2"“°¢÷&–VçFF–öâç6WDGG&–'WFR‚&&–Ö†–FFVâ"Â'G'VR"“°¢6öç7BFö÷"ÒFö7VÖVçBæ7&VFTVÆVÖVçB‚&’"“°¢Fö÷"æ6Æ74æÖRÒ&†æFÆRÖ÷F–öåõöFö÷"#°¢6öç7BG&vW"ÒFö7VÖVçBæ7&VFTVÆVÖVçB‚&’"“°¢G&vW"æ6Æ74æÖRÒ&†æFÆRÖ÷F–öåõöG&vW"#°¢÷&–VçFF–öâæVæB†Fö÷"ÂG&vW"“° ¢6öç7B6÷’ÒFö7VÖVçBæ7&VFTVÆVÖVçB‚'7â"“°¢6÷’æ6Æ74æÖRÒ&†æFÆRÖ÷F–öåõö6÷’#°¢6öç7BÆ&VÂÒFö7VÖVçBæ7&VFTVÆVÖVçB‚'7G&öær"“°¢Æ&VÂçFW‡D6öçFVçBÒ†æFÆRæÆ&VÃ°¢6öç7BFW67&—F–öâÒFö7VÖVçBæ7&VFTVÆVÖVçB‚'6ÖÆÂ"“°¢6öç7BfÇVRÒ&–6T&öö²æ†æFÆTVçG&–W3òå¶†æFÆRæ–EÒÇÂ°¢FW67&—F–öâçFW‡D6öçFVçBÒfÇVRòG¶†æFÆRæFW67&—F–öçÒ+rG¶f÷&ÖD7W'&Væ7’‡fÇVR—Ö¢†æFÆRæFW67&—F–öã°¢6÷’æVæB†Æ&VÂÂFW67&—F–öâ“°¢'WGFöâæVæB†÷&–VçFF–öâÂ6÷’“°¢†æFÆT÷F–öç2æVæB†'WGFöâ“°¢Ò“°¢Ğ ¢gVæ7F–öâ&VæFW%6W'f–6W2‚’°¢–b‚6W'f–6W46†V6¶Æ—7B’&WGW&ã°¢6W'f–6W46†V6¶Æ—7Bç&WÆ6T6†–ÆG&Vâ‚“°¢6FÆörç6W'f–6W2æf–ÇFW"‚‡6W'f–6R’Óâ7FvT—FV×2‚'6W'f–6W2"’æ†2‡6W'f–6Ræ–B’’æf÷$V6‚‚‡6W'f–6R’Óâ°¢6öç7B6&BÒFö7VÖVçBæ7&VFTVÆVÖVçB‚&Æ&VÂ"“°¢6&Bæ6Æ74æÖRÒ'6W'f–6RÖ6†V6²#°¢6öç7B–çWBÒFö7VÖVçBæ7&VFTVÆVÖVçB‚&–çWB"“°¢–çWBçG—RÒ&6†V6¶&÷‚#°¢–çWBæ6†V6¶VBÒ6W'f–6Rç7FGW2ÓÓÒ&–æ6ÇVFVB#°¢–çWBæF—6&ÆVBÒ6W'f–6Rç7FGW2ÓÓÒ&–æ6ÇVFVB#°¢–çWBç6WDGG&–'WFR‚&&–ÖÆ&VÂ"ÂG·6W'f–6RçF—FÆWÓ¢–æ6Ç\:ÖF“°¢6öç7B6÷’ÒFö7VÖVçBæ7&VFTVÆVÖVçB‚'7â"“°¢6öç7BF—FÆRÒFö7VÖVçBæ7&VFTVÆVÖVçB‚'7G&öær"“°¢F—FÆRçFW‡D6öçFVçBÒ6W'f–6RçF—FÆS°¢6öç7BFW67&—F–öâÒFö7VÖVçBæ7&VFTVÆVÖVçB‚'6ÖÆÂ"“°¢FW67&—F–öâçFW‡D6öçFVçBÒ6W'f–6RæFW67&—F–öã°¢6öç7B7FGW2ÒFö7VÖVçBæ7&VFTVÆVÖVçB‚&VÒ"“°¢7FGW2çFW‡D6öçFVçBÒ$–æ6Ç\:ÖF#°¢6÷’æVæB‡F—FÆRÂFW67&—F–öâÂ7FGW2“°¢6&BæVæB†–çWBÂ6÷’“°¢6W'f–6W46†V6¶Æ—7BæVæB†6&B“°¢Ò“°¢Ğ ¢gVæ7F–öâ6VÆV7FVDÖöGVÆTf–æ—6‚†VçF—G”–BÒ7FFRç6VÆV7FVDVçF—G”–B’°¢&WGW&â6÷&Ræf–æ—6„f÷$VçF—G’‡7FFRÂVçF—G”–B“°¢Ğ ¢gVæ7F–öâ6VÆV7FVD†æFÆR‚’°¢6öç7B–BÒ6÷&RævÆö&Ä†æFÆT–B‡7FFR“°¢&WGW&â6FÆöræ÷F–öç2æ†æFÆW2æf–æB‚††æFÆR’Óâ†æFÆRæ–BÓÓÒ–B’ÇÂ6FÆöræ÷F–öç2æ†æFÆW5³Ó°¢Ğ ¢gVæ7F–öâÖFW&–Ä&6¶w&÷VæB†ÖFW&–Â’°¢&WGW&âÖFW&–ÃòçFW‡GW&T76WBòW&Â‚"G¶ÖFW&–ÂçFW‡GW&T76WGÒ"–¢ÖFW&–ÃòçFW‡GW&T772ÇÂ&æöæR#°¢Ğ ¢gVæ7F–öâ&VæFW$f–æ—6„6öçG&öÇ4g&öÔFF‚’°¢f–æ—6…7vF6†W2ç&WÆ6T6†–ÆG&Vâ‚“°¢6FÆöræ÷F–öç2æf–æ—6†W2æf–ÇFW"‚†f–æ—6‚’Óâf–æ—6‚ç7FGW2ÓÓÒ'V&Æ—6†VB"bbf–æ—6…6WGF–æw2ævWB†f–æ—6‚æ–B“òæVæ&ÆVBbbf–æ—6…6WGF–æw2ævWB†f–æ—6‚æ–B“òç66÷RÓÓÒ&vÆö&Â"’æf÷$V6‚‚†f–æ—6‚’Óâ°¢6öç7B'WGFöâÒFö7VÖVçBæ7&VFTVÆVÖVçB‚&'WGFöâ"“°¢'WGFöâæ6Æ74æÖRÒ'7vF6‚#°¢'WGFöâçG—RÒ&'WGFöâ#°¢'WGFöâæFF6WBæf–æ—6„–BÒf–æ—6‚æ–C°¢'WGFöâæFF6WBæ6öÆ÷"Òf–æ—6‚æ6öÆ÷#°¢'WGFöâç7G–ÆRç6WE&÷W'G’‚"Ò×7vF6‚"Âf–æ—6‚æ6öÆ÷"“°¢'WGFöâç7G–ÆRç6WE&÷W'G’‚"Ò×7vF6‚×FW‡GW&R"ÂÖFW&–Ä&6¶w&÷VæB†f–æ—6‚’“°¢'WGFöâç7G–ÆRç6WE&÷W'G’‚"Ò×7vF6‚×6—¦R"Âf–æ—6‚çFW‡GW&U6—¦RÇÂ&6÷fW""“°¢'WGFöâçF—FÆRÒf–æ—6‚çV&Æ–4Æ&VÃ°¢'WGFöâç6WDGG&–'WFR‚&&–ÖÆ&VÂ"Â$Æ–6""²f–æ—6‚çV&Æ–4Æ&VÂ²"ò6öæ§VçFò"“°¢6öç7B6VÆV7FVBÒ6÷&RævÆö&Äf–æ—6„–B‡7FFR’ÓÓÒf–æ—6‚æ–C°¢'WGFöâæ6Æ74Æ—7BçFövvÆR‚&—2×6VÆV7FVB"Â6VÆV7FVB“°¢'WGFöâç6WDGG&–'WFR‚&&–×&W76VB"Â7G&–ær‡6VÆV7FVB’“°¢f–æ—6…7vF6†W2æVæB†'WGFöâ“°¢Ò“°¢–b‡6VÆV7FVDf–æ—6„FW67&—F–öâ’°¢6öç7Bf–æ—6‚Ò6FÆöræ÷F–öç2æf–æ—6†W2æf–æB‚†—FVÒ’Óâ—FVÒæ–BÓÓÒ6÷&RævÆö&Äf–æ—6„–B‡7FFR’“°¢6VÆV7FVDf–æ—6„FW67&—F–öâçFW‡D6öçFVçBÒf–æ—6‚ò%6VÆV6–öæF¢"²f–æ—6‚çV&Æ–4Æ&VÂ²"â"¢"#°¢Ğ¢Ğ ¢gVæ7F–öâ&VæFW$†æFÆT6öçG&öÇ4g&öÔFF‚’°¢–b‚†æFÆT÷F–öç2’&WGW&ã°¢6öç7B†VÇÒFö7VÖVçBævWDVÆVÖVçD'”–B‚&†æFÆT†VÇ"“°¢†æFÆT÷F–öç2ç&WÆ6T6†–ÆG&Vâ‚“°¢–b††VÇ’†VÇçFW‡D6öçFVçBÒ$W66öÆ†vÆö&Ã²òF÷FÂ:’F—7G&–'\:ÖFòVÆ2Bg&VçFW2Æ–<:fV—2â&67VÆçFRì:6òVçG&æò&FV–òâ#°¢6öç7B7W'&VçBÒ6VÆV7FVD†æFÆR‚“°¢6FÆöræ÷F–öç2æ†æFÆW2æf÷$V6‚‚††æFÆR’Óâ°¢6öç7B'WGFöâÒFö7VÖVçBæ7&VFTVÆVÖVçB‚&'WGFöâ"“°¢'WGFöâçG—RÒ&'WGFöâ#°¢'WGFöâæ6Æ74æÖRÒ&†æFÆRÖ÷F–öâ#°¢'WGFöâæFF6WBæ†æFÆT–BÒ†æFÆRæ–C°¢6öç7B7F—fRÒ†æFÆRæ–BÓÓÒ7W'&VçBæ–C°¢'WGFöâæ6Æ74Æ—7BçFövvÆR‚&—2×6VÆV7FVB"Â7F—fR“°¢'WGFöâç6WDGG&–'WFR‚&&–×&W76VB"Â7G&–ær†7F—fR’“°¢'WGFöâç6WDGG&–'WFR‚&&–ÖÆ&VÂ"Â%6VÆV6–öæ"W†F÷""²†æFÆRæÆ&VÂ“° ¢6öç7B÷&–VçFF–öâÒFö7VÖVçBæ7&VFTVÆVÖVçB‚'7â"“°¢÷&–VçFF–öâæ6Æ74æÖRÒ&†æFÆRÖ÷F–öåõö÷&–VçFF–öâ#°¢÷&–VçFF–öâç6WDGG&–'WFR‚&&–Ö†–FFVâ"Â'G'VR"“°¢÷&–VçFF–öâç7G–ÆRç6WE&÷W'G’‚"ÒÖ†æFÆR×7vF6‚"Â†æFÆRæ6öÆ÷"ÇÂ"3ƒv3s2"“°¢6öç7BFö÷"ÒFö7VÖVçBæ7&VFTVÆVÖVçB‚&’"“°¢Fö÷"æ6Æ74æÖRÒ&†æFÆRÖ÷F–öåõöFö÷"#°¢6öç7BG&vW"ÒFö7VÖVçBæ7&VFTVÆVÖVçB‚&’"“°¢G&vW"æ6Æ74æÖRÒ&†æFÆRÖ÷F–öåõöG&vW"#°¢÷&–VçFF–öâæVæB†Fö÷"ÂG&vW"“° ¢6öç7B6÷’ÒFö7VÖVçBæ7&VFTVÆVÖVçB‚'7â"“°¢6÷’æ6Æ74æÖRÒ&†æFÆRÖ÷F–öåõö6÷’#°¢6öç7BÆ&VÂÒFö7VÖVçBæ7&VFTVÆVÖVçB‚'7G&öær"“°¢Æ&VÂçFW‡D6öçFVçBÒ†æFÆRæÆ&VÃ°¢6öç7BFW67&—F–öâÒFö7VÖVçBæ7&VFTVÆVÖVçB‚'6ÖÆÂ"“°¢6öç7BfÇVRÒ&–6T&öö²æ†æFÆTVçG&–W3òå¶†æFÆRæ–EÒÇÂ°¢6öç7BW$g&öçBÒfÇVRòf÷&ÖD7W'&Væ7’„ÖF‚ç&÷VæB‡fÇVRò&–6T&öö²æ†æFÆTg&öçEF÷FÂ’’¢"#°¢FW67&—F–öâçFW‡D6öçFVçBÒfÇVP¢ò†æFÆRæFW67&—F–öâ²"+r"²W$g&öçB²"÷"g&VçFS²"²f÷&ÖD7W'&Væ7’‡fÇVR’²"æò6öæ§VçFò6ö×ÆWFòâ ¢¢†æFÆRæFW67&—F–öã°¢6÷’æVæB†Æ&VÂÂFW67&—F–öâ“°¢'WGFöâæVæB†÷&–VçFF–öâÂ6÷’“°¢†æFÆT÷F–öç2æVæB†'WGFöâ“°¢Ò“°¢Ğ ¢gVæ7F–öâ&VæFW%7FöæU6¶vW2‚’°¢–b‚7FöæU6¶vT÷F–öç2’&WGW&ã°¢7FöæU6¶vT÷F–öç2ç&WÆ6T6†–ÆG&Vâ‚“°¢6öç7B7F—fT–BÒ7FFRævÆö&Å6VÆV7F–öç3òç7FöæU6¶vT–BÇÂ'7FöæRÖW†—7F–ær#°¢6FÆöræ÷F–öç2ç7FöæU6¶vW2æf÷$V6‚‚‡7FöæR’Óâ°¢6öç7B'WGFöâÒFö7VÖVçBæ7&VFTVÆVÖVçB‚&'WGFöâ"“°¢'WGFöâçG—RÒ&'WGFöâ#°¢'WGFöâæ6Æ74æÖRÒ&vÆö&ÂÖ÷F–öâ#°¢'WGFöâæFF6WBç7FöæU6¶vT–BÒ7FöæRæ–C°¢'WGFöâæ6Æ74Æ—7BçFövvÆR‚&—2×6VÆV7FVB"Â7FöæRæ–BÓÓÒ7F—fT–B“°¢'WGFöâç6WDGG&–'WFR‚&&–×&W76VB"Â7G&–ær‡7FöæRæ–BÓÓÒ7F—fT–B’“°¢'WGFöâç6WDGG&–'WFR‚&&–ÖÆ&VÂ"Â%6VÆV6–öæ"VG&"²7FöæRæÆ&VÂ“°¢6öç7B7vF6‚ÒFö7VÖVçBæ7&VFTVÆVÖVçB‚'7â"“°¢7vF6‚æ6Æ74æÖRÒ&vÆö&ÂÖ÷F–öåõ÷7vF6‚#°¢7vF6‚ç6WDGG&–'WFR‚&&–Ö†–FFVâ"Â'G'VR"“°¢7vF6‚ç7G–ÆRæ&6¶w&÷VæD6öÆ÷"Ò7FöæRç7vF6„6öÆ÷"ÇÂ7FöæRæ6öÆ÷"ÇÂ"3“3†CƒB#°¢7vF6‚ç7G–ÆRæ&6¶w&÷VæD–ÖvRÒÖFW&–Ä&6¶w&÷VæB‡7FöæR“°¢7vF6‚ç7G–ÆRæ&6¶w&÷VæE6—¦RÒ7FöæRçFW‡GW&T76WBò&6÷fW""¢#g‚g‚#°¢6öç7BF—FÆRÒFö7VÖVçBæ7&VFTVÆVÖVçB‚'7G&öær"“°¢F—FÆRçFW‡D6öçFVçBÒ7FöæRæÆ&VÃ°¢6öç7BFW67&—F–öâÒFö7VÖVçBæ7&VFTVÆVÖVçB‚'6ÖÆÂ"“°¢6öç7BfÇVRÒ&–6T&öö²ævÆö&ÄVçG&–W3òå·7FöæRæ–EÒÇÂ°¢FW67&—F–öâçFW‡D6öçFVçBÒ7FöæRæFW67&—F–öâ²‡fÇVRò"+r²"²f÷&ÖD7W'&Væ7’‡fÇVR’¢"+r6VÒF–6–öæÂâ"“°¢'WGFöâæVæB‡7vF6‚ÂF—FÆRÂFW67&—F–öâ“°¢7FöæU6¶vT÷F–öç2æVæB†'WGFöâ“°¢Ò“°¢–b‡7FöæU6¶—'F–æuFövvÆR’7FöæU6¶—'F–æuFövvÆRæ6†V6¶VBÒ&ööÆVâ‡7FFRævÆö&Å6VÆV7F–öç3òç6W'f–6T–G3òæ–æ6ÇVFW2‚'7FöæR×6¶—'F–ær"’“°¢Ğ ¢gVæ7F–öâ&VæFW%6W'f–6W2‚’°¢–b‚6W'f–6W46†V6¶Æ—7B’&WGW&ã°¢6W'f–6W46†V6¶Æ—7Bç&WÆ6T6†–ÆG&Vâ‚“°¢6öç7B6VÆV7FVBÒæWr6WB‡7FFRævÆö&Å6VÆV7F–öç3òç6W'f–6T–G2ÇÂµÒ“°¢6FÆörç6W'f–6W2æf–ÇFW"‚‡6W'f–6R’Óâ7FvT—FV×2‚'6W'f–6W2"’æ†2‡6W'f–6Ræ–B’’æf÷$V6‚‚‡6W'f–6R’Óâ°¢6öç7B6&BÒFö7VÖVçBæ7&VFTVÆVÖVçB‚&Æ&VÂ"“°¢6&Bæ6Æ74æÖRÒ'6W'f–6RÖ6†V6²#°¢6öç7B–çWBÒFö7VÖVçBæ7&VFTVÆVÖVçB‚&–çWB"“°¢–çWBçG—RÒ&6†V6¶&÷‚#°¢–çWBæFF6WBævÆö&Å6W'f–6T–BÒ6W'f–6Ræ–C°¢–çWBæ6†V6¶VBÒ6VÆV7FVBæ†2‡6W'f–6Ræ–B“°¢–çWBç6WDGG&–'WFR‚&&–ÖÆ&VÂ"Â6W'f–6RçF—FÆR“°¢6öç7B6÷’ÒFö7VÖVçBæ7&VFTVÆVÖVçB‚'7â"“°¢6öç7BF—FÆRÒFö7VÖVçBæ7&VFTVÆVÖVçB‚'7G&öær"“°¢F—FÆRçFW‡D6öçFVçBÒ6W'f–6RçF—FÆS°¢6öç7BFW67&—F–öâÒFö7VÖVçBæ7&VFTVÆVÖVçB‚'6ÖÆÂ"“°¢6öç7BfÇVRÒ&–6T&öö²ævÆö&ÄVçG&–W3òå·6W'f–6Ræ–EÒÇÂ°¢FW67&—F–öâçFW‡D6öçFVçBÒ6W'f–6RæFW67&—F–öâ²‡fÇVRò"+r²"²f÷&ÖD7W'&Væ7’‡fÇVR’¢""“°¢6÷’æVæB‡F—FÆRÂFW67&—F–öâ“°¢6&BæVæB†–çWBÂ6÷’“°¢6W'f–6W46†V6¶Æ—7BæVæB†6&B“°¢Ò“°¢Ğ ¢gVæ7F–öâ6VÆV7F–öå7G–ÆR†VçF—G’’°¢6öç7B&÷VæG2ÒVçF—G“òæÇ†&÷VæG3°¢–b‚&÷VæG2’&WGW&âçVÆÃ°¢&WGW&â°¢ÆVgC¢G²†&÷VæG2ç‚ò66VæRæ6çf2çv–GF‚’¢ÒVÀ¢F÷¢G²†&÷VæG2ç’ò66VæRæ6çf2æ†V–v‡B’¢ÒVÀ¢v–GFƒ¢G²†&÷VæG2çv–GF‚ò66VæRæ6çf2çv–GF‚’¢ÒVÀ¢†V–v‡C¢G²†&÷VæG2æ†V–v‡Bò66VæRæ6çf2æ†V–v‡B’¢ÒV ¢Ó°¢Ğ ¢gVæ7F–öâ&W6öÇfTÖ&¶W%Æ6VÖVçB†VçF—G’Â&öGV7B’°¢6öç7B–æfW'&VE6–FRÒ&öGV7Còæ6FVv÷'’ÓÓÒ$:—&Vò"ò&&÷GFöÒ"¢'F÷#°¢6öç7B&VfW'&VE6–FRÒVçF—G“òæÖ&¶W%Æ6VÖVçCòç6–FS°¢&WGW&â°¢6–FS¢²'F÷"Â'&–v‡B"Â&&÷GFöÒ"Â&ÆVgB%Òæ–æ6ÇVFW2‡&VfW'&VE6–FR’ò&VfW'&VE6–FR¢–æfW'&VE6–FP¢Ó°¢Ğ ¢gVæ7F–öâ6VÆV7FVDg&öçDf–æ—6„Æ&VÂ‡&öGV7B’°¢6öç7B–BÒ&öGV7Bò6VÆV7FVDÖöGVÆTf–æ—6‚‡&öGV7BæVçF—G”–B’¢6÷&RævÆö&Äf–æ—6„–B‡7FFR“°¢&WGW&â6FÆöræ÷F–öç2æf–æ—6†W2æf–æB‚†f–æ—6‚’Óâf–æ—6‚æ–BÓÓÒ–B“òçV&Æ–4Æ&VÂÇÂ$&6R6Æ&#°¢Ğ ¢gVæ7F–öâ6VÆV7FVD†æFÆR‚’°¢6öç7B–BÒ6÷&RævÆö&Ä†æFÆT–B‡7FFR“°¢&WGW&â6FÆöræ÷F–öç2æ†æFÆW2æf–æB‚††æFÆR’Óâ†æFÆRæ–BÓÓÒ–B’ÇÂ6FÆöræ÷F–öç2æ†æFÆW5³Ó°¢Ğ ¢gVæ7F–öâ6VÆV7FVE7FöæTÆ&VÂ‚’°¢&WGW&â6VÆV7FVE7FöæU6¶vR‚’æÆ&VÃ°¢Ğ ¢gVæ7F–öâ6VÆV7FVE7FöæU6¶vR‚’°¢6öç7B–BÒ7FFRævÆö&Å6VÆV7F–öç3òç7FöæU6¶vT–BÇÂ'7FöæRÖW†—7F–ær#°¢&WGW&â6FÆöræ÷F–öç2ç7FöæU6¶vW2æf–æB‚‡7FöæR’Óâ7FöæRæ–BÓÓÒ–B’ÇÂ6FÆöræ÷F–öç2ç7FöæU6¶vW5³Ó°¢Ğ ¢gVæ7F–öâf÷&ÖDF–ÖVç6–öâ‡fÇVR’°¢&WGW&âæWr–çFÂäçVÖ&W$f÷&ÖB‚'BÔ%""Â²Ö†–×VÔg&7F–öäF–v—G3¢Ò’æf÷&ÖB‡fÇVR“°¢Ğ ¢gVæ7F–öâ&öGV7Df÷$7W'&VçD6öæf–wW&F–öâ‡&öGV7B’°¢–b‡&öGV7BæVçF—G”–BÓÒ&ÖöGVÆRÓr"’&WGW&â&öGV7C°¢6öç7BWfVçBÒG–æÖ–4WfVçG2æf–æB‚‡'VÆR’Óâ'VÆRçF&vWD–BÓÓÒ&ÖöGVÆRÓr"bb'VÆRæ7F–öâÓÓÒ'6WBÖFWF‚"bb6VÆV7F–öä—47F—fR‡'VÆRçG&–vvW$–B’ÓÓÒ‡'VÆRçv†VâÓÓÒ&Væ&ÆVB"’“°¢–b‚WfVçB’&WGW&â&öGV7C°¢6öç7BFWF‚ÒWfVçBçfÇVTÖÓ°¢&WGW&â°¢ââç&öGV7BÀ¢F–ÖVç6–öç3¢°¢ââç&öGV7BæF–ÖVç6–öç2À¢F—7Æ“¢ƒ9rCƒB9rG¶FWF‡ÒÖÖÀ¢æöÖ–æÄÖÓ¢²ââç&öGV7BæF–ÖVç6–öç2ææöÖ–æÄÖÒÂFWF‚ÒÀ¢vVöÖWG'”ÖÓ¢²ââç&öGV7BæF–ÖVç6–öç2ævVöÖWG'”ÖÒÂFWF‚Ğ¢ÒÀ¢6öæf–wW&F–öäæ÷FS¢&ögVæF–FFR§W7FF&G¶FWF‡ÒÖÒVÆ&Vw&FR6öæf–wW&:|:6òæ ¢Ó°¢Ğ ¢gVæ7F–öâ7&VFTFWF–ÄÆ—7B†—FV×2Â6Æ74æÖR’°¢6öç7BÆ—7BÒFö7VÖVçBæ7&VFTVÆVÖVçB‚'VÂ"“°¢Æ—7Bæ6Æ74æÖRÒ6Æ74æÖS°¢—FV×2æf÷$V6‚‚†—FVÒ’Óâ°¢6öç7BÆ—7D—FVÒÒFö7VÖVçBæ7&VFTVÆVÖVçB‚&Æ’"“°¢Æ—7D—FVÒçFW‡D6öçFVçBÒ—FVÓ°¢Æ—7BæVæB†Æ—7D—FVÒ“°¢Ò“°¢&WGW&âÆ—7C°¢Ğ ¢gVæ7F–öâ7&VFTÖFW&–Äf7B†Æ&VÂÂfÇVR’°¢6öç7Bf7BÒFö7VÖVçBæ7&VFTVÆVÖVçB‚'7â"“°¢6öç7B†VF–ærÒFö7VÖVçBæ7&VFTVÆVÖVçB‚'7G&öær"“°¢†VF–ærçFW‡D6öçFVçBÒÆ&VÃ°¢f7BæVæB††VF–ærÂFö7VÖVçBæ7&VFUFW‡DæöFR‡fÇVR’“°¢&WGW&âf7C°¢Ğ ¢gVæ7F–öâfÇVT–×7DÆ&VÂ†6VçG2’°¢–b‚6VçG2’&WGW&â%6VÒF–6–öæÂ#°¢&WGW&â6VçG2âò²G¶f÷&ÖD7W'&Væ7’†6VçG2—Ö¢(‰"G¶f÷&ÖD7W'&Væ7’„ÖF‚æ'2†6VçG2’—Ö°¢Ğ ¢gVæ7F–öâVæE&–6T'&V¶F÷vå&÷r†Æ—7BÂÆ&VÂÂfÇVRÂFWF–Â’°¢6öç7B&÷rÒFö7VÖVçBæ7&VFTVÆVÖVçB‚&F—b"“°¢6öç7BFW&ÒÒFö7VÖVçBæ7&VFTVÆVÖVçB‚&GB"“°¢FW&ÒçFW‡D6öçFVçBÒÆ&VÃ°¢6öç7BFVf–æ—F–öâÒFö7VÖVçBæ7&VFTVÆVÖVçB‚&FB"“°¢6öç7BÖ÷VçBÒFö7VÖVçBæ7&VFTVÆVÖVçB‚'7G&öær"“°¢Ö÷VçBçFW‡D6öçFVçBÒfÇVS°¢FVf–æ—F–öâæVæB†Ö÷VçB“°¢–b†FWF–Â’°¢6öç7Bæ÷FRÒFö7VÖVçBæ7&VFTVÆVÖVçB‚'6ÖÆÂ"“°¢æ÷FRçFW‡D6öçFVçBÒFWF–Ã°¢FVf–æ—F–öâæVæB†æ÷FR“°¢Ğ¢&÷ræVæB‡FW&ÒÂFVf–æ—F–öâ“°¢Æ—7BæVæB‡&÷r“°¢Ğ ¢gVæ7F–öâ7&VFT—FVÕ&–6T'&V¶F÷vâ‡&öGV7BÂ—FVÕ&–6–ær’°¢6öç7B'&V¶F÷vâÒFö7VÖVçBæ7&VFTVÆVÖVçB‚&FÂ"“°¢'&V¶F÷vâæ6Æ74æÖRÒ&ÖöGVÆRÖFWF–Åõ÷&–6RÖ'&V¶F÷vâ#°¢6öç7BF§W7FÖVçG2Ò&–6–ærç6†&VDF§W7FÖVçG2†6FÆörÂ7FFRÂ&–6T&öö²“°¢6öç7B†æFÆRÒ6VÆV7FVD†æFÆR‚“°¢6öç7BÆ–W4†æFÆRÒ&öGV7Bæ6FVv÷'’bb&öGV7Bæ6FVv÷'’ÓÒ$W7G'WGW&Â#°¢6öç7B–æ6ÇVFVE6W'f–6W2Ò6FÆörç6W'f–6W0¢æf–ÇFW"‚‡6W'f–6R’Óâ7FvT†2‚'6W'f–6W2"Â6W'f–6Ræ–B’¢æf–ÇFW"‚‡6W'f–6R’Óâ6W'f–6Rç7FGW2ÓÓÒ&–æ6ÇVFVB"¢æÖ‚‡6W'f–6R’Óâ6W'f–6RçF—FÆR¢æ¦ö–â‚"Â"“°¢VæE&–6T'&V¶F÷vå&÷r†'&V¶F÷vâÂ$Ü;6GVÆò"Âf÷&ÖD7W'&Væ7’†—FVÕ&–6–æræ&6T6VçG2’Â%fÆ÷"Ö&6RFòÜ;6GVÆòâ"“°¢VæE&–6T'&V¶F÷vå&÷r€¢'&V¶F÷vâÀ¢%W†F÷""À¢Æ–W4†æFÆRòf÷&ÖD7W'&Væ7’†—FVÕ&–6–æræ†æFÆT6VçG2’¢$ì:6òÆ–<:fVÂ"À¢Æ–W4†æFÆRò†æFÆRæÆ&VÂ¢%–æVÂW7G'WGW&Â6VÒW†F÷"â ¢“°¢VæE&–6T'&V¶F÷vå&÷r†'&V¶F÷vâÂ$g&VçFW2"Âf÷&ÖD7W'&Væ7’†F§W7FÖVçG2æg&öçD6VçG2’ÂG·6VÆV7FVDg&öçDf–æ—6„Æ&VÂ‚—Ò+rG·fÇVT–×7DÆ&VÂ†F§W7FÖVçG2æg&öçD6VçG2—Òæ“°¢VæE&–6T'&V¶F÷vå&÷r†'&V¶F÷vâÂ%VG&"Âf÷&ÖD7W'&Væ7’†F§W7FÖVçG2ç7FöæT6VçG2’ÂG·6VÆV7FVE7FöæTÆ&VÂ‚—Ò+rG·fÇVT–×7DÆ&VÂ†F§W7FÖVçG2ç7FöæT6VçG2—Òæ“°¢VæE&–6T'&V¶F÷vå&÷r†'&V¶F÷vâÂ%6W'fœ:vò"Âf÷&ÖD7W'&Væ7’†F§W7FÖVçG2ç6W'f–6T6VçG2’ÂG¶–æ6ÇVFVE6W'f–6W2ÇÂ$æVæ‡VÒ'Ò+rG·fÇVT–×7DÆ&VÂ†F§W7FÖVçG2ç6W'f–6T6VçG2—Òæ“°¢&WGW&â'&V¶F÷vã°¢Ğ ¢gVæ7F–öâ7&VFT6öÖÖW&6–Ä—FVÕ&–6T'&V¶F÷vâ‡&öGV7BÂ—FVÕ&–6–ær’°¢6öç7B'&V¶F÷vâÒFö7VÖVçBæ7&VFTVÆVÖVçB‚&FÂ"“°¢'&V¶F÷vâæ6Æ74æÖRÒ&ÖöGVÆRÖFWF–Åõ÷&–6RÖ'&V¶F÷vâ#°¢VæE&–6T'&V¶F÷vå&÷r†'&V¶F÷vâÂ$Ü;6GVÆò"Âf÷&ÖD7W'&Væ7’†—FVÕ&–6–æræ&6T6VçG2’Â%fÆ÷"Ö&6RFòÜ;6GVÆòâ"“°¢–b†—FVÕ&–6–æræf–æ—6„6VçG2’°¢VæE&–6T'&V¶F÷vå&÷r€¢'&V¶F÷vâÀ¢$6&ÖVçFò"À¢"²"²f÷&ÖD7W'&Væ7’†—FVÕ&–6–æræf–æ—6„6VçG2’À¢6VÆV7FVDg&öçDf–æ—6„Æ&VÂ‡&öGV7B’²"+rF–6–öæÂW&6VçGVÂFòÜ;6GVÆòâ ¢“°¢Ğ¢–b†—FVÕ&–6–æræ†æFÆT6VçG2’°¢6öç7B†æFÆRÒ6VÆV7FVD†æFÆR‚“°¢6öç7BÆÆö6F–öç2Ò&–6–æræF—7G&–'WFT6VçG2†—FVÕ&–6–æræ†æFÆT6VçG2Â—FVÕ&–6–æræ†æFÆTg&öçD6÷VçB“°¢6öç7BÆÆö6F–öäæ÷FRÒÆÆö6F–öç2æÆVæwF€¢ò$6÷FFR"²ÆÆö6F–öç2æÆVæwF‚²"g&VçFW3¢"²ÆÆö6F–öç2æÖ†f÷&ÖD7W'&Væ7’’æ¦ö–â‚"+r"’²"â ¢¢%6VÒg&VçFW2Æ–<:fV—2â#°¢VæE&–6T'&V¶F÷vå&÷r†'&V¶F÷vâÂ%W†F÷""Â"²"²f÷&ÖD7W'&Væ7’†—FVÕ&–6–æræ†æFÆT6VçG2’Â†æFÆRæÆ&VÂ²"+r"²ÆÆö6F–öäæ÷FR“°¢Ğ¢–b†—FVÕ&–6–æræÆö6Ä6VçG2’°¢VæE&–6T'&V¶F÷vå&÷r†'&V¶F÷vâÂ%VG&6öö·F÷"Â"²"²f÷&ÖD7W'&Væ7’†—FVÕ&–6–æræÆö6Ä6VçG2’Â$ö'&–vL;7&–æW7FRÜ;6GVÆòâ"“°¢Ğ¢&WGW&â'&V¶F÷vã°¢Ğ ¢gVæ7F–öâ7&VFT÷&–VçFF—fT–çFW&æÄg&öçB†F–ÖVç6–öç2ÂÆ–÷WB’°¢6öç7B6&BÒFö7VÖVçBæ7&VFTVÆVÖVçB‚&f–wW&R"“°¢6&Bæ6Æ74æÖRÒ&ÖöGVÆRÖFWF–Åõ÷f–Wr#°¢6öç7B6F–öâÒFö7VÖVçBæ7&VFTVÆVÖVçB‚&f–v6F–öâ"“°¢6F–öâçFW‡D6öçFVçBÒ%f—7F–çFW&æ#° ¢6öç7B7frÒFö7VÖVçBæ7&VFTVÆVÖVçDå2‚&‡GG¢ò÷wwrçs2æ÷&ró#÷7fr"Â'7fr"“°¢7frç6WDGG&–'WFR‚'f–Wt&÷‚"Â#ƒ#b"“°¢7frç6WDGG&–'WFR‚'&öÆR"Â&–Ör"“°¢6öç7B6VvÖVçG4Æ&VÂÒÆ–÷WBç6VvÖVçG2æÖ‚‡6VvÖVçB’ÓâG·6VvÖVçBæÆ&VÇÒG¶f÷&ÖDF–ÖVç6–öâ‡6VvÖVçBç7äÖÒ—ÒÖ–Ì:ÖÖWG&÷6’æ¦ö–â‚"Â"“°¢7frç6WDGG&–'WFR‚&&–ÖÆ&VÂ"Âf—7F–çFW&æg&öçFÃ¢G·6VvÖVçG4Æ&VÇÒæ“°¢6öç7BÖ¶RÒ†æÖRÂGG&–'WFW2Ò·Ò’Óâ°¢6öç7BæöFRÒFö7VÖVçBæ7&VFTVÆVÖVçDå2‚&‡GG¢ò÷wwrçs2æ÷&ró#÷7fr"ÂæÖR“°¢ö&¦V7BæVçG&–W2†GG&–'WFW2’æf÷$V6‚‚…¶¶W’ÂfÇVUÒ’ÓâæöFRç6WDGG&–'WFR†¶W’Â7G&–ær‡fÇVR’’“°¢&WGW&âæöFS°¢Ó°¢6öç7BFW‡BÒ‡fÇVRÂ…÷6—F–öâÂ•÷6—F–öâ’Óâ°¢6öç7BæöFRÒÖ¶R‚'FW‡B"Â²ƒ¢…÷6—F–öâÂ“¢•÷6—F–öâÂ'FW‡BÖæ6†÷"#¢&Ö–FFÆR"Ò“°¢æöFRçFW‡D6öçFVçBÒfÇVS°¢&WGW&âæöFS°¢Ó°¢6öç7B‚ÒC‚Â’Ò3Âv–GF‚Ò“BÂ†V–v‡BÒc°¢ÆWB7W'6÷$ÖÒÒ°¢6öç7BF–w&ÒÒ°¢Ö¶R‚&Æ–æR"Â²ƒ¢‚Â“¢rÂƒ#¢‚²v–GF‚Â“#¢rÂ6Æ73¢&ÖöGVÆRÖFWF–ÅõöF–ÖVç6–öâÖÆ–æR"Ò’À¢Ö¶R‚&Æ–æR"Â²ƒ¢‚Â“¢2Âƒ#¢‚Â“#¢#Â6Æ73¢&ÖöGVÆRÖFWF–ÅõöF–ÖVç6–öâÖÆ–æR"Ò’À¢Ö¶R‚&Æ–æR"Â²ƒ¢‚²v–GF‚Â“¢2Âƒ#¢‚²v–GF‚Â“#¢#Â6Æ73¢&ÖöGVÆRÖFWF–ÅõöF–ÖVç6–öâÖÆ–æR"Ò’À¢FW‡B†ÂG¶f÷&ÖDF–ÖVç6–öâ†F–ÖVç6–öç2çv–GF‚—ÒÖÖÂ‚²v–GF‚ò"Â’À¢Ö¶R‚'&V7B"Â²‚Â’Âv–GF‚Â†V–v‡BÂ'ƒ¢"Â6Æ73¢&ÖöGVÆRÖFWF–Åõ÷f–Wr×6†R"Ò¢Ó°¢Æ–÷WBç6VvÖVçG2æf÷$V6‚‚‡6VvÖVçBÂ–æFW‚’Óâ°¢7W'6÷$ÖÒ³Ò6VvÖVçBç7äÖÓ°¢6öç7B6VvÖVçDVæBÒ‚²†7W'6÷$ÖÒòF–ÖVç6–öç2çv–GF‚’¢v–GFƒ°¢–b†–æFW‚ÂÆ–÷WBç6VvÖVçG2æÆVæwF‚Ò’°¢F–w&ÒçW6‚†Ö¶R‚&Æ–æR"Â²ƒ¢6VvÖVçDVæBÂ“¢’Âƒ#¢6VvÖVçDVæBÂ“#¢’²†V–v‡BÂ6Æ73¢&ÖöGVÆRÖFWF–Åõ÷f–Wr×6†R"Ò’“°¢Ğ¢–b‡6VvÖVçBç7V&F—f—6–öç2’°¢6öç7B6VvÖVçE7F'DÖÒÒ7W'6÷$ÖÒÒ6VvÖVçBç7äÖÓ°¢6öç7B6VvÖVçE7F'BÒ‚²‡6VvÖVçE7F'DÖÒòF–ÖVç6–öç2çv–GF‚’¢v–GFƒ°¢f÷"†ÆWB'BÒ²'BÂ6VvÖVçBç7V&F—f—6–öç3²'B³Ò’°¢6öç7BF—f—6–öå’Ò’²††V–v‡Bò6VvÖVçBç7V&F—f—6–öç2’¢'C°¢F–w&ÒçW6‚†Ö¶R‚&Æ–æR"Â²ƒ¢6VvÖVçE7F'BÂ“¢F—f—6–öå’Âƒ#¢6VvÖVçDVæBÂ“#¢F—f—6–öå’Â6Æ73¢&ÖöGVÆRÖFWF–Åõ÷f–Wr×6†R"Ò’“°¢Ğ¢Ğ¢Ò“°¢F–w&ÒçW6‚‡FW‡B†Æ–÷WBç6VvÖVçG2æÖ‚‡6VvÖVçB’Óâf÷&ÖDF–ÖVç6–öâ‡6VvÖVçBç7äÖÒ’’æ¦ö–â‚"+r"’Â‚²v–GF‚ò"Â‚’“°¢7fræVæB‚ââæF–w&Ò“°¢6&BæVæB†6F–öâÂ7fr“°¢&WGW&â6&C°¢Ğ ¢gVæ7F–öâ7&VFT6&÷W6VÅvR†Æ&VÂÂ6öçFVçBÂæ÷FR’°¢6öç7BvRÒFö7VÖVçBæ7&VFTVÆVÖVçB‚'6V7F–öâ"“°¢vRæ6Æ74æÖRÒ&ÖöGVÆRÖFWF–Åõö6&÷W6VÂ×vR#°¢6öç7B†VF–ærÒFö7VÖVçBæ7&VFTVÆVÖVçB‚&ƒB"“°¢†VF–ærçFW‡D6öçFVçBÒÆ&VÃ°¢6öç7B6öçFVçD&VÒFö7VÖVçBæ7&VFTVÆVÖVçB‚&F—b"“°¢6öçFVçD&Væ6Æ74æÖRÒ&ÖöGVÆRÖFWF–Åõö6&÷W6VÂÖ6öçFVçB#°¢6öçFVçD&VæVæB†6öçFVçB“°¢vRæVæB††VF–ærÂ6öçFVçD&V“°¢–b†æ÷FR’°¢6öç7BFW67&—F–öâÒFö7VÖVçBæ7&VFTVÆVÖVçB‚'"“°¢FW67&—F–öâæ6Æ74æÖRÒ&ÖöGVÆRÖFWF–Åõö6&÷W6VÂÖæ÷FR#°¢FW67&—F–öâçFW‡D6öçFVçBÒæ÷FS°¢vRæVæB†FW67&—F–öâ“°¢Ğ¢&WGW&âvS°¢Ğ ¢gVæ7F–öâ7&VFTÖöGVÆTfö7W2†VçF—G’Â&öGV7B’°¢VçF—G’Ò6öæf–wW&VDVçF—G’†VçF—G’“°¢6öç7B&÷VæG2ÒVçF—G’æÇ†&÷VæG3°¢6öç7Bfö7W2ÒFö7VÖVçBæ7&VFTVÆVÖVçB‚&F—b"“°¢fö7W2æ6Æ74æÖRÒ&ÖöGVÆRÖFWF–Åõöfö7W2#°¢fö7W2ç7G–ÆRç6WE&÷W'G’‚"ÒÖfö7W2×&F–ò"ÂG¶&÷VæG2çv–GF‡ÒòG¶&÷VæG2æ†V–v‡GÖ“°¢6öç7B–ÖvRÒFö7VÖVçBæ7&VFTVÆVÖVçB‚&–Ör"“°¢–ÖvRæ6Æ74æÖRÒ&ÖöGVÆRÖFWF–Åõöfö7W2Ö–ÖvR#°¢–ÖvRç7&2Ò6öæf–wW&VDö&¦V7D76WG5¶VçF—G’æ–EÓòæFWF–Ä–ÖvT76WBÇÂVçF—G’æ76WC°¢–ÖvRæÇBÒ&V6÷'FR—6öÆFòFRG·&öGV7BçF—FÆWÖ°¢–ÖvRæG&vv&ÆRÒfÇ6S°¢–ÖvRç7G–ÆRçv–GF‚ÒG²‡66VæRæ6çf2çv–GF‚ò&÷VæG2çv–GF‚’¢ÒV°¢–ÖvRç7G–ÆRæÆVgBÒG²Ò†&÷VæG2ç‚ò&÷VæG2çv–GF‚’¢ÒV°¢–ÖvRç7G–ÆRçF÷ÒG²Ò†&÷VæG2ç’ò&÷VæG2æ†V–v‡B’¢ÒV°¢6öç7BÖ6´76WBÒf–æ—6†W2ç&W6öÇfTÖ6´76WB†VçF—G’ÂÆ7E&W6öÇfVB“°¢6öç7BÖ6µ6÷W&6RÒ–æÆ–æTÖ6·5¶Ö6´76WEÓ°¢ÆWBf–æ—6„Æ–W"ÒçVÆÃ°¢–b†Ö6µ6÷W&6R’°¢6öç7Bf–æ—6‚Ò6FÆöræ÷F–öç2æf–æ—6†W2æf–æB‚†—FVÒ’Óâ—FVÒæ–BÓÓÒ6VÆV7FVDÖöGVÆTf–æ—6‚†VçF—G’æ–B’’ÇÂ6FÆöræ÷F–öç2æf–æ—6†W5³Ó°¢f–æ—6„Æ–W"ÒFö7VÖVçBæ7&VFTVÆVÖVçB‚'7â"“°¢f–æ—6„Æ–W"æ6Æ74æÖRÒ&ÖöGVÆRÖFWF–Åõöfö7W2Öf–æ—6‚#°¢f–æ—6„Æ–W"ç6WDGG&–'WFR‚&&–Ö†–FFVâ"Â'G'VR"“°¢f–æ—6„Æ–W"ç7G–ÆRçv–GF‚Ò–ÖvRç7G–ÆRçv–GFƒ°¢f–æ—6„Æ–W"ç7G–ÆRæÆVgBÒ–ÖvRç7G–ÆRæÆVgC°¢f–æ—6„Æ–W"ç7G–ÆRçF÷Ò–ÖvRç7G–ÆRçF÷°¢f–æ—6„Æ–W"ç7G–ÆRæ&6¶w&÷VæD–ÖvRÒÖFW&–Ä&6¶w&÷VæB†f–æ—6‚“°¢f–æ—6„Æ–W"ç7G–ÆRæ&6¶w&÷VæD6öÆ÷"Òf–æ—6‚æ6öÆ÷#°¢f–æ—6„Æ–W"ç7G–ÆRæ&6¶w&÷VæE6—¦RÒf–æ—6‚çFW‡GW&U6—¦RÇÂ#c‚c‚#°¢f–æ—6„Æ–W"ç7G–ÆRç6WE&÷W'G’‚"ÒÖfö7W2ÖÖ6²Ö–ÖvR"ÂW&Â‚"G¶Ö6µ6÷W&6WÒ"–“°¢f–æ—6„Æ–W"ç7G–ÆRç6WE&÷W'G’‚"ÒÖfö7W2Öf–æ—6‚Ö÷6—G’"Â7G&–ær†f–æ—6†W2ç&W6öÇfT÷fW&Æ”÷6—G’†f–æ—6‚Âf–æ—6‚æ6öÆ÷"’’“°¢Ğ¢fö7W2æVæB†–ÖvR“°¢–b†f–æ—6„Æ–W"’fö7W2æVæB†f–æ—6„Æ–W"“°¢&WGW&âfö7W3°¢Ğ ¢gVæ7F–öâG&v–æu7V4f÷"‡&öGV7B’°¢6öç7BæöÖ–æÂÒ&öGV7BæF–ÖVç6–öç2ææöÖ–æÄÖÓ°¢–b‡&öGV7BæG&v–æu7V3òæ¶–æBÓÓÒ'æVÂ"’°¢&WGW&â°¢¶–æC¢'æVÂ"À¢f6Uv–GF„ÖÓ¢&öGV7BæG&v–æu7V2æf6Uv–GF„ÖÒÀ¢f6T†V–v‡DÖÓ¢&öGV7BæG&v–æu7V2æf6T†V–v‡DÖÒÀ¢W‡G'W6–öäÖÓ¢&öGV7BæG&v–æu7V2çF†–6¶æW74ÖÒÀ¢f6T†÷&—¦öçFÄÆ&VÃ¢&öGV7BæG&v–æu7V2æf6T†÷&—¦öçFÄÆ&VÂÀ¢W‡G'W6–öäÆ&VÃ¢&öGV7BæG&v–æu7V2æW‡G'W6–öäÆ&VÀ¢Ó°¢Ğ¢&WGW&â°¢¶–æC¢&6&–æWB"À¢f6Uv–GF„ÖÓ¢æöÖ–æÂçv–GF‚À¢f6T†V–v‡DÖÓ¢æöÖ–æÂæ†V–v‡BÀ¢W‡G'W6–öäÖÓ¢æöÖ–æÂæFWF‚À¢f6T†÷&—¦öçFÄÆ&VÃ¢$Â"À¢W‡G'W6–öäÆ&VÃ¢% ¢Ó°¢Ğ ¢gVæ7F–öâFWF–ÄF–ÖVç6–öäf7G2‡&öGV7B’°¢6öç7BF–ÖVç6–öç2Ò&öGV7BæF–ÖVç6–öç2ææöÖ–æÄÖÓ°¢–b‡&öGV7BæG&v–æu7V3òæ¶–æBÓÓÒ'æVÂ"’°¢&WGW&â°¢²$ÇGW&"Â&öGV7BæG&v–æu7V2æf6T†V–v‡DÖÕÒÀ¢²%&ögVæF–FFR"Â&öGV7BæG&v–æu7V2æf6Uv–GF„ÖÕÒÀ¢²$W7W77W&"Â&öGV7BæG&v–æu7V2çF†–6¶æW74ÖÕĞ¢Ó°¢Ğ¢&WGW&â°¢²$Æ&wW&"ÂF–ÖVç6–öç2çv–GF…ÒÀ¢²$ÇGW&"ÂF–ÖVç6–öç2æ†V–v‡EÒÀ¢²%&ögVæF–FFR"ÂF–ÖVç6–öç2æFWF…Ğ¢Ó°¢Ğ ¢gVæ7F–öâF–ÖVç6–öå7VÖÖ'’‡&öGV7B’°¢6öç7B†W2Ò&öGV7BæF–ÖVç6–öç2æF—7Æ”†W2ò‚G·&öGV7BæF–ÖVç6–öç2æF—7Æ”†W7Ò–¢"#°¢&WGW&âÖVF–F2æöÖ–æ—3¢G·&öGV7BæF–ÖVç6–öç2æF—7Æ—ÒG¶†W7Ö°¢Ğ ¢gVæ7F–öâf—E&÷÷'F–öæÄ&÷‚‡v–GF„ÖÒÂ†V–v‡DÖÒÂÖ…v–GF‚ÒBÂÖ„†V–v‡BÒcB’°¢6öç7B6fUv–GF‚ÒÖF‚æÖ‚„çVÖ&W"‡v–GF„ÖÒ’ÇÂÂ“°¢6öç7B6fT†V–v‡BÒÖF‚æÖ‚„çVÖ&W"††V–v‡DÖÒ’ÇÂÂ“°¢6öç7B66ÆRÒÖF‚æÖ–â†Ö…v–GF‚ò6fUv–GF‚ÂÖ„†V–v‡Bò6fT†V–v‡B“°¢&WGW&â²v–GFƒ¢6fUv–GF‚¢66ÆRÂ†V–v‡C¢6fT†V–v‡B¢66ÆRÂ66ÆRÓ°¢Ğ ¢gVæ7F–öâ7ftf7F÷'’‡7fr’°¢&WGW&â†æÖRÂGG&–'WFW2Ò·Ò’Óâ°¢6öç7BæöFRÒFö7VÖVçBæ7&VFTVÆVÖVçDå2‚&‡GG¢ò÷wwrçs2æ÷&ró#÷7fr"ÂæÖR“°¢ö&¦V7BæVçG&–W2†GG&–'WFW2’æf÷$V6‚‚…¶¶W’ÂfÇVUÒ’ÓâæöFRç6WDGG&–'WFR†¶W’Â7G&–ær‡fÇVR’’“°¢7fræVæB†æöFR“°¢&WGW&âæöFS°¢Ó°¢Ğ ¢gVæ7F–öâ7ftÆ&VÂ†Ö¶RÂfÇVRÂ‚Â’Âæ6†÷"Ò&Ö–FFÆR"’°¢6öç7BÆ&VÂÒÖ¶R‚'FW‡B"Â²‚Â’Â'FW‡BÖæ6†÷"#¢æ6†÷"Ò“°¢Æ&VÂçFW‡D6öçFVçBÒfÇVS°¢&WGW&âÆ&VÃ°¢Ğ ¢gVæ7F–öâVæDg&öçE6VvÖVçG2†Ö¶RÂÆ–÷WBÂ‚Â’Âv–GF‚Â†V–v‡BÂf6Uv–GF„ÖÒ’°¢–b†Æ–÷WCòçGFW&âÓÓÒ'GvòÖFö÷'2"’°¢6öç7BÖ–FFÆRÒ‚²v–GF‚ò#°¢Ö¶R‚&Æ–æR"Â²ƒ¢Ö–FFÆRÂ“¢’Âƒ#¢Ö–FFÆRÂ“#¢’²†V–v‡BÂ6Æ73¢&ÖöGVÆRÖFWF–Åõ÷f–Wr×6†R"Ò“°¢&WGW&ã°¢Ğ¢–b†Æ–÷WCòçGFW&âÓÓÒ'GvòÖFö÷'2ÖæBÖÆ–gB"’°¢6öç7BÆ–gD&÷GFöÒÒ’²†V–v‡B¢ã3C°¢6öç7BÖ–FFÆRÒ‚²v–GF‚ò#°¢Ö¶R‚&Æ–æR"Â²ƒ¢‚Â“¢Æ–gD&÷GFöÒÂƒ#¢‚²v–GF‚Â“#¢Æ–gD&÷GFöÒÂ6Æ73¢&ÖöGVÆRÖFWF–Åõ÷f–Wr×6†R"Ò“°¢Ö¶R‚&Æ–æR"Â²ƒ¢Ö–FFÆRÂ“¢Æ–gD&÷GFöÒÂƒ#¢Ö–FFÆRÂ“#¢’²†V–v‡BÂ6Æ73¢&ÖöGVÆRÖFWF–Åõ÷f–Wr×6†R"Ò“°¢&WGW&ã°¢Ğ¢–b†Æ–÷WCòçGFW&âÓÓÒ'GvòÖFö÷'2ÖæBÖÖ–7&÷vfR"’°¢òòÓb†2GvòFö÷'2&W6–FRÖ–7&÷vfRæ–6†RæBÆ–gBg&öçB&÷fR—Bà¢òòW†7B÷Væ–ær7ç2&Ræ÷B–WBV&Æ—6†VBÂ6òF†—2&VÖ–ç2÷&–VçFF—fRà¢6öç7BÆVgE¦öæTVæBÒ‚²v–GF‚¢ãSC°¢6öç7BÆVgDFö÷%7Æ—BÒ‚²v–GF‚¢ã#s°¢6öç7BÆ–gD&÷GFöÒÒ’²†V–v‡B¢ãC#°¢6öç7Bæ–6†T–ç6WBÒÖF‚æÖ‚ƒ"Âv–GF‚¢ã3R“°¢Ö¶R‚&Æ–æR"Â²ƒ¢ÆVgDFö÷%7Æ—BÂ“¢’Âƒ#¢ÆVgDFö÷%7Æ—BÂ“#¢’²†V–v‡BÂ6Æ73¢&ÖöGVÆRÖFWF–Åõ÷f–Wr×6†R"Ò“°¢Ö¶R‚&Æ–æR"Â²ƒ¢ÆVgE¦öæTVæBÂ“¢’Âƒ#¢ÆVgE¦öæTVæBÂ“#¢’²†V–v‡BÂ6Æ73¢&ÖöGVÆRÖFWF–Åõ÷f–Wr×6†R"Ò“°¢Ö¶R‚&Æ–æR"Â²ƒ¢ÆVgE¦öæTVæBÂ“¢Æ–gD&÷GFöÒÂƒ#¢‚²v–GF‚Â“#¢Æ–gD&÷GFöÒÂ6Æ73¢&ÖöGVÆRÖFWF–Åõ÷f–Wr×6†R"Ò“°¢Ö¶R‚'&V7B"Â°¢ƒ¢ÆVgE¦öæTVæB²æ–6†T–ç6WBÀ¢“¢Æ–gD&÷GFöÒ²æ–6†T–ç6WBÀ¢v–GFƒ¢ÖF‚æÖ‚ƒBÂv–GF‚¢ãCbÒæ–6†T–ç6WB¢"’À¢†V–v‡C¢ÖF‚æÖ‚ƒBÂ†V–v‡B¢ãS‚Òæ–6†T–ç6WB¢"’À¢'ƒ¢ãRÀ¢6Æ73¢&ÖöGVÆRÖFWF–Åõ÷f–Wr×6†R ¢Ò“°¢&WGW&ã°¢Ğ¢–b‚Æ–÷WCòç6VvÖVçG3òæÆVæwF‚’&WGW&ã°¢6öç7B6VvÖVçG5v–GF„ÖÒÒÆ–÷WBæ–ææW%v–GF„ÖÒÇÂÆ–÷WBç6VvÖVçG2ç&VGV6R‚‡F÷FÂÂ6VvÖVçB’ÓâF÷FÂ²‡6VvÖVçBç7äÖÒÇÂ’Â“°¢–b‚6VvÖVçG5v–GF„ÖÒ’&WGW&ã°¢6öç7Bf—6–&ÆUv–GF‚Òv–GF‚¢ÖF‚æÖ–â‡6VvÖVçG5v–GF„ÖÒÂf6Uv–GF„ÖÒ’òf6Uv–GF„ÖÓ°¢6öç7B7F'E‚Ò‚²‡v–GF‚Òf—6–&ÆUv–GF‚’ò#°¢ÆWB7W'6÷$ÖÒÒ°¢Æ–÷WBç6VvÖVçG2æf÷$V6‚‚‡6VvÖVçBÂ–æFW‚’Óâ°¢6öç7B6VvÖVçEv–GF„ÖÒÒ6VvÖVçBç7äÖÒÇÂ°¢6öç7B6VvÖVçE7F'BÒ7F'E‚²†7W'6÷$ÖÒò6VvÖVçG5v–GF„ÖÒ’¢f—6–&ÆUv–GFƒ°¢7W'6÷$ÖÒ³Ò6VvÖVçEv–GF„ÖÓ°¢6öç7B6VvÖVçDVæBÒ7F'E‚²†7W'6÷$ÖÒò6VvÖVçG5v–GF„ÖÒ’¢f—6–&ÆUv–GFƒ°¢–b†–æFW‚ÂÆ–÷WBç6VvÖVçG2æÆVæwF‚Ò’°¢Ö¶R‚&Æ–æR"Â²ƒ¢6VvÖVçDVæBÂ“¢’Âƒ#¢6VvÖVçDVæBÂ“#¢’²†V–v‡BÂ6Æ73¢&ÖöGVÆRÖFWF–Åõ÷f–Wr×6†R"Ò“°¢Ğ¢–b‡6VvÖVçBç7V&F—f—6–öç2’°¢f÷"†ÆWB'BÒ²'BÂ6VvÖVçBç7V&F—f—6–öç3²'B³Ò’°¢6öç7BF—f—6–öå’Ò’²††V–v‡Bò6VvÖVçBç7V&F—f—6–öç2’¢'C°¢Ö¶R‚&Æ–æR"Â²ƒ¢6VvÖVçE7F'BÂ“¢F—f—6–öå’Âƒ#¢6VvÖVçDVæBÂ“#¢F—f—6–öå’Â6Æ73¢&ÖöGVÆRÖFWF–Åõ÷f–Wr×6†R"Ò“°¢Ğ¢Ğ¢Ò“°¢Ğ ¢gVæ7F–öâ7&VFU&÷÷'F–öæÅf–Wr‡&öGV7BÂG—R’°¢6öç7B7V2ÒG&v–æu7V4f÷"‡&öGV7B“°¢6öç7B—56–FRÒG—RÓÓÒ'6–FR#°¢6öç7B†÷&—¦öçFÄÖÒÒ—56–FRò7V2æW‡G'W6–öäÖÒ¢7V2æf6Uv–GF„ÖÓ°¢6öç7B†÷&—¦öçFÄÆ&VÂÒ—56–FRò7V2æW‡G'W6–öäÆ&VÂ¢7V2æf6T†÷&—¦öçFÄÆ&VÃ°¢6öç7Bf—BÒf—E&÷÷'F–öæÄ&÷‚††÷&—¦öçFÄÖÒÂ7V2æf6T†V–v‡DÖÒ“°¢6öç7B—4×Æ–f–VEF†–6¶æW72Ò7V2æ¶–æBÓÓÒ'æVÂ"bb—56–FRbbf—Bçv–GF‚Â"ãS°¢6öç7BG&v–æuv–GF‚Ò—4×Æ–f–VEF†–6¶æW72ò"ãR¢f—Bçv–GFƒ°¢6öç7BG&v–æt†V–v‡BÒf—Bæ†V–v‡C°¢6öç7B‚Ò“BÒG&v–æuv–GF‚ò#°¢6öç7B’Òc"ÒG&v–æt†V–v‡Bò#°¢6öç7Bf–wW&RÒFö7VÖVçBæ7&VFTVÆVÖVçB‚&f–wW&R"“°¢f–wW&Ræ6Æ74æÖRÒ&ÖöGVÆRÖFWF–Åõ÷f–WrÖöGVÆRÖFWF–Åõ÷f–WrÒ×FV6†æ–6Â#°¢6öç7B6F–öâÒFö7VÖVçBæ7&VFTVÆVÖVçB‚&f–v6F–öâ"“°¢6F–öâçFW‡D6öçFVçBÒ—56–FRò%f—7FÆFW&Â"¢%f—7Fg&öçFÂ#°¢6öç7B7frÒFö7VÖVçBæ7&VFTVÆVÖVçDå2‚&‡GG¢ò÷wwrçs2æ÷&ró#÷7fr"Â'7fr"“°¢7frç6WDGG&–'WFR‚'f–Wt&÷‚"Â#ƒ#b"“°¢7frç6WDGG&–'WFR‚'&öÆR"Â&–Ör"“°¢7frç6WDGG&–'WFR‚&&–ÖÆ&VÂ"ÂG¶6F–öâçFW‡D6öçFVçGÓ¢G¶†÷&—¦öçFÄÆ&VÇÒG¶f÷&ÖDF–ÖVç6–öâ††÷&—¦öçFÄÖÒ—ÒÖ–Ì:ÖÖWG&÷2÷"G¶f÷&ÖDF–ÖVç6–öâ‡7V2æf6T†V–v‡DÖÒ—ÒÖ–Ì:ÖÖWG&÷2G¶—4×Æ–f–VEF†–6¶æW72ò"âW7W77W&fö’×Æ–FVæ2&ÆVv–&–Æ–FFRâ"¢"â'Ö“°¢6öç7BÖ¶RÒ7ftf7F÷'’‡7fr“°¢Ö¶R‚&Æ–æR"Â²ƒ¢‚Â“¢rÂƒ#¢‚²G&v–æuv–GF‚Â“#¢rÂ6Æ73¢&ÖöGVÆRÖFWF–ÅõöF–ÖVç6–öâÖÆ–æR"Ò“°¢Ö¶R‚&Æ–æR"Â²ƒ¢‚Â“¢2Âƒ#¢‚Â“#¢#Â6Æ73¢&ÖöGVÆRÖFWF–ÅõöF–ÖVç6–öâÖÆ–æR"Ò“°¢Ö¶R‚&Æ–æR"Â²ƒ¢‚²G&v–æuv–GF‚Â“¢2Âƒ#¢‚²G&v–æuv–GF‚Â“#¢#Â6Æ73¢&ÖöGVÆRÖFWF–ÅõöF–ÖVç6–öâÖÆ–æR"Ò“°¢7ftÆ&VÂ†Ö¶RÂG¶†÷&—¦öçFÄÆ&VÇÒG¶f÷&ÖDF–ÖVç6–öâ††÷&—¦öçFÄÖÒ—ÒÖÖÂ“BÂ“°¢Ö¶R‚&Æ–æR"Â²ƒ¢ÖF‚æÖ‚ƒBÂ‚Ò‚’Â“¢’Âƒ#¢ÖF‚æÖ‚ƒBÂ‚Ò‚’Â“#¢’²G&v–æt†V–v‡BÂ6Æ73¢&ÖöGVÆRÖFWF–ÅõöF–ÖVç6–öâÖÆ–æR"Ò“°¢Ö¶R‚&Æ–æR"Â²ƒ¢ÖF‚æÖ‚ƒÂ‚Ò#"’Â“¢’Âƒ#¢ÖF‚æÖ‚ƒ‚Â‚ÒB’Â“#¢’Â6Æ73¢&ÖöGVÆRÖFWF–ÅõöF–ÖVç6–öâÖÆ–æR"Ò“°¢Ö¶R‚&Æ–æR"Â²ƒ¢ÖF‚æÖ‚ƒÂ‚Ò#"’Â“¢’²G&v–æt†V–v‡BÂƒ#¢ÖF‚æÖ‚ƒ‚Â‚ÒB’Â“#¢’²G&v–æt†V–v‡BÂ6Æ73¢&ÖöGVÆRÖFWF–ÅõöF–ÖVç6–öâÖÆ–æR"Ò“°¢Ö¶R‚'&V7B"Â²‚Â’Âv–GFƒ¢G&v–æuv–GF‚Â†V–v‡C¢G&v–æt†V–v‡BÂ'ƒ¢"Â6Æ73¢&ÖöGVÆRÖFWF–Åõ÷f–Wr×6†R"Ò“°¢–b‚—56–FR’VæDg&öçE6VvÖVçG2†Ö¶RÂ&öGV7Bæg&öçDÆ–÷WBÂ‚Â’ÂG&v–æuv–GF‚ÂG&v–æt†V–v‡BÂ7V2æf6Uv–GF„ÖÒ“°¢7ftÆ&VÂ†Ö¶RÂG¶f÷&ÖDF–ÖVç6–öâ‡7V2æf6T†V–v‡DÖÒ—ÒÖÖÂBÂ’²G&v–æt†V–v‡Bò"²2Â'7F'B"“°¢f–wW&RæVæB†6F–öâÂ7fr“°¢&WGW&âf–wW&S°¢Ğ ¢gVæ7F–öâ7&VFUFV6†æ–6Ä—6öÖWG&–5f–Wr‡&öGV7B’°¢6öç7B7V2ÒG&v–æu7V4f÷"‡&öGV7B“°¢6öç7Bf—BÒf—E&÷÷'F–öæÄ&÷‚‡7V2æf6Uv–GF„ÖÒÂ7V2æf6T†V–v‡DÖÒÂƒbÂS‚“°¢6öç7B&tW‡G'W6–öâÒ7V2æW‡G'W6–öäÖÒ¢f—Bç66ÆR¢ãcƒ°¢6öç7B—4×Æ–f–VEF†–6¶æW72Ò7V2æ¶–æBÓÓÒ'æVÂ"bb&tW‡G'W6–öâÂC°¢6öç7BFWF…‚ÒÖF‚æÖ‚†—4×Æ–f–VEF†–6¶æW72òB¢bÂ&tW‡G'W6–öâ“°¢6öç7BFWF…’ÒÔÖF‚æÖ–âƒ‚ÂFWF…‚¢ãc"“°¢6öç7Bv–GF‚Òf—Bçv–GFƒ°¢6öç7B†V–v‡BÒf—Bæ†V–v‡C°¢6öç7BÆVgBÒ“"Ò‡v–GF‚²FWF…‚’ò#°¢6öç7BF÷ÒS’Ò†V–v‡Bò"ÒFWF…’ò#°¢6öç7B&–v‡BÒÆVgB²v–GFƒ°¢6öç7B&÷GFöÒÒF÷²†V–v‡C°¢6öç7Bf–wW&RÒFö7VÖVçBæ7&VFTVÆVÖVçB‚&f–wW&R"“°¢f–wW&Ræ6Æ74æÖRÒ&ÖöGVÆRÖFWF–Åõ÷f–WrÖöGVÆRÖFWF–Åõ÷f–WrÒÖ—6öÖWG&–2ÖöGVÆRÖFWF–Åõ÷f–WrÒ×FV6†æ–6Â#°¢6öç7B6F–öâÒFö7VÖVçBæ7&VFTVÆVÖVçB‚&f–v6F–öâ"“°¢6F–öâçFW‡D6öçFVçBÒ%&ö¦\:|:6ò—6öÜ:—G&–6#°¢6öç7B7frÒFö7VÖVçBæ7&VFTVÆVÖVçDå2‚&‡GG¢ò÷wwrçs2æ÷&ró#÷7fr"Â'7fr"“°¢7frç6WDGG&–'WFR‚'f–Wt&÷‚"Â#ƒ#b"“°¢7frç6WDGG&–'WFR‚'&öÆR"Â&–Ör"“°¢7frç6WDGG&–'WFR‚&&–ÖÆ&VÂ"Â&ö¦\:|:6ò—6öÜ:—G&–6÷&–VçFF—f¢G·7V2æf6T†÷&—¦öçFÄÆ&VÇÒG¶f÷&ÖDF–ÖVç6–öâ‡7V2æf6Uv–GF„ÖÒ—ÒÖ–Ì:ÖÖWG&÷2ÂG¶f÷&ÖDF–ÖVç6–öâ‡7V2æf6T†V–v‡DÖÒ—ÒÖ–Ì:ÖÖWG&÷2RG·7V2æW‡G'W6–öäÆ&VÇÒG¶f÷&ÖDF–ÖVç6–öâ‡7V2æW‡G'W6–öäÖÒ—ÒÖ–Ì:ÖÖWG&÷2G¶—4×Æ–f–VEF†–6¶æW72ò"âW7W77W&fö’×Æ–FVæ2&ÆVv–&–Æ–FFRâ"¢"â'Ö“°¢6öç7BÖ¶RÒ7ftf7F÷'’‡7fr“°¢Ö¶R‚'F‚"Â²C¢ÒG¶ÆVgGÒG·F÷ÒÂG·&–v‡GÒG·F÷ÒÂG·&–v‡B²FWF…‡ÒG·F÷²FWF…—ÒÂG¶ÆVgB²FWF…‡ÒG·F÷²FWF…—Ò¦Â6Æ73¢&ÖöGVÆRÖFWF–Åõ÷f–Wr×6†R"Ò“°¢Ö¶R‚'F‚"Â²C¢ÒG·&–v‡GÒG·F÷ÒÂG·&–v‡B²FWF…‡ÒG·F÷²FWF…—ÒÂG·&–v‡B²FWF…‡ÒG¶&÷GFöÒ²FWF…—ÒÂG·&–v‡GÒG¶&÷GFö×Ò¦Â6Æ73¢&ÖöGVÆRÖFWF–Åõ÷f–Wr×6†R"Ò“°¢Ö¶R‚'&V7B"Â²ƒ¢ÆVgBÂ“¢F÷Âv–GF‚Â†V–v‡BÂ6Æ73¢&ÖöGVÆRÖFWF–Åõ÷f–Wr×6†R"Ò“°¢VæDg&öçE6VvÖVçG2†Ö¶RÂ&öGV7Bæg&öçDÆ–÷WBÂÆVgBÂF÷Âv–GF‚Â†V–v‡BÂ7V2æf6Uv–GF„ÖÒ“°¢Ö¶R‚&Æ–æR"Â²ƒ¢ÆVgBÂ“¢&÷GFöÒ²BÂƒ#¢&–v‡BÂ“#¢&÷GFöÒ²BÂ6Æ73¢&ÖöGVÆRÖFWF–ÅõöF–ÖVç6–öâÖÆ–æR"Ò“°¢Ö¶R‚&Æ–æR"Â²ƒ¢ÆVgBÂ“¢&÷GFöÒ²Âƒ#¢ÆVgBÂ“#¢&÷GFöÒ²‚Â6Æ73¢&ÖöGVÆRÖFWF–ÅõöF–ÖVç6–öâÖÆ–æR"Ò“°¢Ö¶R‚&Æ–æR"Â²ƒ¢&–v‡BÂ“¢&÷GFöÒ²Âƒ#¢&–v‡BÂ“#¢&÷GFöÒ²‚Â6Æ73¢&ÖöGVÆRÖFWF–ÅõöF–ÖVç6–öâÖÆ–æR"Ò“°¢Ö¶R‚&Æ–æR"Â²ƒ¢ÖF‚æÖ‚ƒRÂÆVgBÒ’’Â“¢F÷Âƒ#¢ÖF‚æÖ‚ƒRÂÆVgBÒ’’Â“#¢&÷GFöÒÂ6Æ73¢&ÖöGVÆRÖFWF–ÅõöF–ÖVç6–öâÖÆ–æR"Ò“°¢Ö¶R‚&Æ–æR"Â²ƒ¢ÖF‚æÖ‚ƒÂÆVgBÒ#2’Â“¢F÷Âƒ#¢ÖF‚æÖ‚ƒ’ÂÆVgBÒR’Â“#¢F÷Â6Æ73¢&ÖöGVÆRÖFWF–ÅõöF–İtã­­¢G§²ÚîÆ­yÑimer);
     } else if (estimate.status === "ready") {
       price.innerHTML = `<span>Valor estimado</span><strong>${formatCurrency(estimate.totalCents)}</strong>`;
     } else {
@@ -1534,6 +75,73 @@
     summaryContent.replaceChildren(list, finish, price);
   }
 
+  function customStageItemLabel(id) {
+    return catalog.modules.find((item) => item.entityId === id)?.title
+      || catalog.accessories.find((item) => item.entityId === id)?.title
+      || catalog.services.find((item) => item.id === id)?.title
+      || id;
+  }
+
+  function renderCustomStage(stage) {
+    const panel = stagePanelFor(stage);
+    panel.replaceChildren();
+    const heading = document.createElement("header"); heading.className = "finish-heading";
+    const title = document.createElement("h2"); title.id = `${panel.id}-heading`; title.tabIndex = -1; title.textContent = stage.label;
+    const description = document.createElement("p"); description.textContent = "Escolha os itens desta etapa.";
+    const copy = document.createElement("div"); copy.append(title, description); heading.append(copy);
+    const list = document.createElement("div"); list.className = "custom-stage-options";
+    stage.items.forEach((id) => {
+      const item = document.createElement("label"); item.className = "accessory-toggle custom-stage-option";
+      const input = document.createElement("input"); input.type = "checkbox"; input.dataset.customStageItem = id;
+      if (Object.hasOwn(state.visibilityByEntity, id)) input.checked = Boolean(state.visibilityByEntity[id]);
+      else input.checked = Boolean(state.globalSelections?.serviceIds?.includes(id));
+      input.setAttribute("aria-label", customStageItemLabel(id));
+      const label = document.createElement("span"); const strong = document.createElement("strong"); strong.textContent = customStageItemLabel(id); const small = document.createElement("small"); small.textContent = catalog.modules.some((module) => module.entityId === id) ? "MÃ³dulo" : "Item opcional"; label.append(strong, small);
+      item.append(input, label); list.append(item);
+    });
+    if (!stage.items.length) { const note = document.createElement("p"); note.className = "admin-note"; note.textContent = "Inclua itens na administraÃ§Ã£o para preencher esta etapa."; list.append(note); }
+    panel.append(heading, list);
+    if (!panel.dataset.eventsBound) {
+      panel.addEventListener("change", (event) => {
+        const input = event.target.closest("[data-custom-stage-item]"); if (!input) return;
+        const id = input.dataset.customStageItem;
+        if (Object.hasOwn(state.visibilityByEntity, id)) setEntityVisibility(id, input.checked);
+        else { core.setGlobalService(state, id, input.checked); syncLayerVisibility(); }
+      });
+      panel.dataset.eventsBound = "true";
+    }
+    return panel;
+  }
+
+  function applyMaterialLibrary(settings) {
+    const materials = new Map(settings.materials.map((item) => [item.id, item]));
+    const finishSettingsById = new Map(settings.finishes.map((item) => [item.id, item]));
+    const previousFinishes = new Map(catalog.options.finishes.map((item) => [item.id, item]));
+    const previousHandles = new Map(catalog.options.handles.map((item) => [item.id, item]));
+    const previousStone = new Map(catalog.options.stonePackages.map((item) => [item.id, item]));
+    const fronts = settings.materialGroups.find((item) => item.id === "fronts-all");
+    const handles = settings.materialGroups.find((item) => item.id === "handles-all");
+    const stone = settings.materialGroups.find((item) => item.id === "stone-all");
+    catalog.options.finishes = fronts.materialIds.map((id) => {
+      const material = materials.get(id); const old = previousFinishes.get(id); const available = finishSettingsById.get(id);
+      return { ...old, id, publicLabel: material.label, label: material.label, color: material.color, textureAsset: material.textureAsset || null, textureSize: material.textureSize || "cover", status: available?.enabled ? "published" : "draft" };
+    });
+    catalog.options.handles = [previousHandles.get("none") || { id: "none", label: "Definir depois", description: "Sem adicional na simulaÃ§Ã£o." }, ...handles.materialIds.map((id) => {
+      const material = materials.get(id); const old = previousHandles.get(id);
+      if (!priceBook.handleEntries[id]) priceBook.handleEntries[id] = 0;
+      return { ...old, id, label: material.label, description: old?.description || "Acabamento selecionÃ¡vel.", color: material.color, swatchColor: material.color, textureAsset: material.textureAsset || null };
+    })];
+    catalog.options.stonePackages = stone.materialIds.map((id) => {
+      const material = materials.get(id); const old = previousStone.get(id);
+      return { ...old, id, label: material.label, description: old?.description || "Acabamento compartilhado entre bancada e rodapÃ©.", color: material.color, swatchColor: material.color, textureAsset: material.textureAsset || null, textureScale: 1 };
+    });
+    const frontGroup = scene.finishGroups.find((item) => item.id === "fronts-all");
+    if (frontGroup) {
+      frontGroup.presets = catalog.options.finishes.map((item) => ({ id: item.id, label: item.publicLabel, strategy: "masked-overlay", color: item.color, overlayOpacity: item.overlayOpacity || 0.84 }));
+      frontGroup.defaultPresetId = catalog.options.finishes.find((item) => item.status === "published")?.id || catalog.options.finishes[0]?.id;
+    }
+  }
+
   function renderStageNavigation() {
     const repin = mobileSceneRepin;
     flowNav.querySelectorAll("[data-step]").forEach((button) => button.remove());
@@ -1544,12 +152,13 @@
       button.type = "button";
       button.className = "flow-step";
       button.dataset.step = stage.id;
-      button.setAttribute("aria-controls", stagePanels.get(stage.id).id);
+      const panel = stagePanelFor(stage);
+      button.setAttribute("aria-controls", panel.id);
       const number = document.createElement("span");
       number.textContent = String(index + 1);
       const label = document.createElement("span");
       label.className = "flow-step__label";
-      label.dataset.compactLabel = ({ modules: "MÃ³dulos", finishes: "Acab.", services: "Serv.", summary: "Resumo" })[stage.id];
+      label.dataset.compactLabel = ({ modules: "MÃ³dulos", finishes: "Acab.", services: "Serv.", summary: "Resumo", custom: stage.label })[stageKind(stage)];
       label.textContent = stage.label;
       button.setAttribute("aria-label", stage.label);
       button.append(number, label);
@@ -1558,8 +167,11 @@
   }
 
   function applyConfiguratorSettings(value) {
-    const normalized = configurationCore.normalizeConfiguratorSettings(value, catalog, priceBook);
-    configuratorSettings = { revision: normalized.revision, stages: normalized.stages };
+    const normalized = configurationCore.normalizeConfiguratorSettings(value, catalog, priceBook, scene);
+    configuratorSettings = normalized;
+    dynamicDependencies = normalized.dependencies;
+    dynamicEvents = normalized.events;
+    configuredObjectAssets = normalized.objectAssets;
     Object.entries(normalized.objects).forEach(([id, data]) => {
       const object = catalog.modules.find((item) => item.entityId === id)
         || catalog.accessories.find((item) => item.entityId === id)
@@ -1571,12 +183,20 @@
         if (Object.hasOwn(object, "label")) object.label = data.title;
       }
     });
-    finishSettings = new Map(normalized.finishes.map((item) => [item.id, item]));
-    normalized.finishes.forEach((settings) => {
-      const finish = catalog.options.finishes.find((item) => item.id === settings.id);
-      if (finish) finish.status = settings.enabled ? "published" : "draft";
-    });
     priceBook = { ...priceBook, ...normalized.pricing };
+    finishSettings = new Map(normalized.finishes.map((item) => [item.id, item]));
+    applyMaterialLibrary(normalized);
+    scene.entities.forEach((entity) => {
+      const original = originalSceneEntities.get(entity.id) || entity;
+      const assets = normalized.objectAssets[entity.id];
+      entity.asset = assets?.imageAsset || original.asset;
+      entity.maskAsset = assets?.maskAsset || original.maskAsset;
+    });
+    if (!initialStateApplied) {
+      Object.entries(normalized.initialState.entities).forEach(([id, enabled]) => { if (Object.hasOwn(state.visibilityByEntity, id)) state.visibilityByEntity[id] = enabled; });
+      core.setGlobalSelection(state, { serviceIds: [...normalized.initialState.services], finishId: normalized.initialState.finishId, handleId: normalized.initialState.handleId, stonePackageId: normalized.initialState.stonePackageId });
+      initialStateApplied = true;
+    }
     const globalFinishIds = normalized.finishes.filter((item) => item.enabled && item.scope === "global").map((item) => item.id);
     if (!globalFinishIds.includes(core.globalFinishId(state))) core.setGlobalSelection(state, { finishId: globalFinishIds[0] });
     Object.entries(state.localSelections?.finishByEntityId || {}).forEach(([entityId, finishId]) => {
@@ -1585,16 +205,22 @@
     });
     const enabled = enabledStages();
     if (!enabled.some((stage) => stage.id === currentStep)) currentStep = enabled[0].id;
+    renderSceneFromData();
+    layerGroups = [...document.querySelectorAll(".layer-group")];
+    finishLayers = [...document.querySelectorAll(".finish-layer")];
+    entitiesById = new Map(scene.entities.map((entity) => [entity.id, entity]));
     renderModuleControlsFromData();
     renderFinishControlsFromData();
     renderSceneHotspotsFromData();
     moduleToggles = [...moduleList.querySelectorAll("[data-module-toggle]")];
     renderStageNavigation();
+    enabled.filter((stage) => stageKind(stage) === "custom").forEach(renderCustomStage);
     document.querySelectorAll("[data-configurable-item]").forEach((element) => {
       const itemId = element.dataset.configurableItem;
       const visible = configuratorSettings.stages.some((stage) => stage.enabled && stage.items.includes(itemId));
       element.hidden = !visible;
     });
+    customStagePanels.forEach((panel, id) => { if (!enabled.some((stage) => stage.id === id)) panel.hidden = true; });
     layerGroups.forEach((layer) => {
       const id = layer.dataset.entityId;
       const entity = entitiesById.get(id);
@@ -1612,10 +238,12 @@
 
   function syncStep(resolved) {
     const activeStage = stageConfig(currentStep);
-    stagePanels.forEach((panel, id) => {
-      panel.hidden = id !== currentStep || !activeStage?.enabled;
+    const activeKind = stageKind(activeStage);
+    stagePanels.forEach((panel, kind) => {
+      panel.hidden = kind !== activeKind || !activeStage?.enabled;
     });
-    stonePanel.hidden = currentStep !== "finishes" || !stageHas("finishes", "stone-all");
+    customStagePanels.forEach((panel, id) => { panel.hidden = id !== currentStep || !activeStage?.enabled; });
+    stonePanel.hidden = activeKind !== "finishes" || !activeStage?.items.includes("stone-all");
     document.querySelectorAll("[data-step]").forEach((button) => {
       const active = button.dataset.step === currentStep;
       button.classList.toggle("is-active", active);
@@ -1624,7 +252,7 @@
     const stages = enabledStages();
     const index = stages.findIndex((stage) => stage.id === currentStep);
     const next = stages[(index + 1) % stages.length];
-    nextStepButton.textContent = currentStep === "summary" ? `Editar ${stages[0].label.toLocaleLowerCase("pt-BR")}` : `Continuar para ${next.label.toLocaleLowerCase("pt-BR")} â†’`;
+    nextStepButton.textContent = activeKind === "summary" ? `Editar ${stages[0].label.toLocaleLowerCase("pt-BR")}` : `Continuar para ${next.label.toLocaleLowerCase("pt-BR")} â†’`;
     renderSummary(resolved);
   }
 
@@ -1637,7 +265,7 @@
   }
 
   function focusCurrentStep() {
-    const panel = stagePanels.get(currentStep);
+    const panel = stagePanelFor(stageConfig(currentStep));
     const heading = panel.querySelector("h2");
     if (!heading) return;
     heading.focus({ preventScroll: true });
@@ -1660,9 +288,9 @@
   renderServices();
 
   let moduleToggles = [...document.querySelectorAll("[data-module-toggle]")];
-  const layerGroups = [...document.querySelectorAll(".layer-group")];
-  const finishLayers = [...document.querySelectorAll(".finish-layer")];
-  const entitiesById = new Map(scene.entities.map((entity) => [entity.id, entity]));
+  let layerGroups = [...document.querySelectorAll(".layer-group")];
+  let finishLayers = [...document.querySelectorAll(".finish-layer")];
+  let entitiesById = new Map(scene.entities.map((entity) => [entity.id, entity]));
   const swatches = [...document.querySelectorAll("[data-color]")];
 
   const visibleCount = document.getElementById("visibleCount");
@@ -1849,6 +477,10 @@
 
   function syncLayerVisibility() {
     const resolved = visibility.resolveVisibility(scene, state);
+    scene.entities.forEach((entity) => {
+      const missing = requirementsForEntity(entity.id).some((id) => !selectionIsActive(id));
+      if (missing && resolved[entity.id]?.visible) resolved[entity.id] = { ...resolved[entity.id], visible: false, reason: "requirement-hidden" };
+    });
     lastResolved = resolved;
     renderStone(state, sceneMaterials());
     syncFinishMasks(resolved);
@@ -1887,8 +519,7 @@
     if (!core.setEntityVisibility(state, entityId, isVisible)) return;
     const affected = [];
     const applyRequirements = (id) => {
-      const entity = entitiesById.get(id);
-      (entity?.requiresVisibleIds || []).forEach((requirementId) => {
+      requirementsForEntity(id).forEach((requirementId) => {
         if (!state.visibilityByEntity[requirementId]) {
           core.setEntityVisibility(state, requirementId, true);
           affected.push(requirementId);
@@ -1898,7 +529,7 @@
     };
     const removeDependents = (id) => {
       scene.entities
-        .filter((entity) => (entity.requiresVisibleIds || []).includes(id) && state.visibilityByEntity[entity.id])
+        .filter((entity) => requirementsForEntity(entity.id).includes(id) && state.visibilityByEntity[entity.id])
         .forEach((entity) => {
           core.setEntityVisibility(state, entity.id, false);
           affected.push(entity.id);
