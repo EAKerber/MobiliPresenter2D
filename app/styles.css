@@ -440,6 +440,9 @@ legend { margin-bottom: 9px; color: rgba(255, 255, 255, 0.43); font-size: 12px; 
 .module-detail__material { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; padding: 10px 0; border-top: 1px solid rgba(51,45,37,.18); border-bottom: 1px solid rgba(51,45,37,.18); }
 .module-detail__material span { display: grid; gap: 2px; color: #4d463d; font-size: 12px; }
 .module-detail__material strong { color: #74695d; font-size: 10px; letter-spacing: .09em; text-transform: uppercase; }
+.module-detail__local-finish { display:grid; gap:8px; margin:0; padding:10px 0; border:0; border-bottom:1px solid rgba(51,45,37,.18); }
+.module-detail__local-finish legend { padding:0; color:#74695d; font-size:10px; font-weight:700; letter-spacing:.09em; text-transform:uppercase; }
+.module-detail__local-finish-options { display:flex; flex-wrap:wrap; gap:8px; }
 .module-detail__dimensions { color: #62594e; font-size: 12px; }
 .module-detail__technical { display: grid; gap: 9px; }
 .module-detail__technical dl { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; margin: 0; }

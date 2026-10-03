@@ -32,7 +32,8 @@ const fingerprints = sandbox.window.CasaModulesFingerprint;
 const finishes = sandbox.window.CasaModulesFinishes;
 const pricing = sandbox.window.CasaModulesPricing;
 const settingsCore = require(path.join(projectRoot, "core/configuration.js"));
-const defaultSettings = require(path.join(projectRoot, "data/configurator-settings.js"));
+const settingsDefaults = require(path.join(projectRoot, "data/configurator-settings.js"));
+const defaultSettings = settingsCore.createDefaultAdministration(settingsDefaults, catalog, priceBook);
 const technical = JSON.parse(fs.readFileSync(path.join(projectRoot, "data/technical-data.json"), "utf8"));
 
 function resolved(state) {
@@ -64,20 +65,29 @@ assert.equal(catalog.modules.length, 7);
 assert.equal(priceBook.mode, "estimate");
 assert.equal(priceBook.compositionBaseReferenceCents, undefined);
 
-assert.deepEqual(settingsCore.validateConfiguratorSettings(defaultSettings, catalog), []);
+assert.deepEqual(settingsCore.validateConfiguratorSettings(defaultSettings, catalog, priceBook), []);
 const reorderedSettings = structuredClone(defaultSettings);
 reorderedSettings.stages.reverse();
 reorderedSettings.stages.find((stage) => stage.id === "finishes").items = ["fronts-all", "handles-all"];
-assert.deepEqual(settingsCore.validateConfiguratorSettings(reorderedSettings, catalog), [], "stage order and item selection are configurable");
+assert.deepEqual(settingsCore.validateConfiguratorSettings(reorderedSettings, catalog, priceBook), [], "stage order and item selection are configurable");
 const invalidSettings = structuredClone(defaultSettings);
 invalidSettings.stages.find((stage) => stage.id === "summary").enabled = false;
-assert.equal(settingsCore.validateConfiguratorSettings(invalidSettings, catalog).includes("summary stage must remain enabled"), true);
+assert.equal(settingsCore.validateConfiguratorSettings(invalidSettings, catalog, priceBook).includes("summary stage must remain enabled"), true);
 const unknownItemSettings = structuredClone(defaultSettings);
 unknownItemSettings.stages.find((stage) => stage.id === "services").items.push("module-99");
-assert.equal(settingsCore.validateConfiguratorSettings(unknownItemSettings, catalog).some((error) => error.includes("unknown services item")), true);
+assert.equal(settingsCore.validateConfiguratorSettings(unknownItemSettings, catalog, priceBook).some((error) => error.includes("unknown services item")), true);
 const orphanedSkirtingSettings = structuredClone(defaultSettings);
 orphanedSkirtingSettings.stages.find((stage) => stage.id === "finishes").items = ["stone-skirting"];
-assert.equal(settingsCore.validateConfiguratorSettings(orphanedSkirtingSettings, catalog).includes("stone skirting requires the stone item"), true);
+assert.equal(settingsCore.validateConfiguratorSettings(orphanedSkirtingSettings, catalog, priceBook).includes("stone skirting requires the stone item"), true);
+const normalizedDefaults = settingsCore.normalizeConfiguratorSettings(defaultSettings, catalog, priceBook);
+assert.equal(normalizedDefaults.schemaVersion, "ConfiguratorAdministration2D 1.0");
+const scopedFinishSettings = structuredClone(defaultSettings);
+scopedFinishSettings.finishes.find((finish) => finish.id === "cocoa").scope = "local";
+scopedFinishSettings.finishes.find((finish) => finish.id === "cocoa").moduleIds = ["module-05"];
+assert.deepEqual(settingsCore.validateConfiguratorSettings(scopedFinishSettings, catalog, priceBook), [], "local finish scope is restricted to selected modules");
+const invalidPricingSettings = structuredClone(defaultSettings);
+invalidPricingSettings.pricing.entries["unreviewed-module"] = 100;
+assert.equal(settingsCore.validateConfiguratorSettings(invalidPricingSettings, catalog, priceBook).includes("pricing identifiers must match: entries"), true);
 
 const officialModulePrices = [90000, 110000, 150000, 60000, 80000, 110000, 60000];
 catalog.modules.forEach((module, index) => {
@@ -212,6 +222,12 @@ core.setGlobalSelection(state, { finishId: "cocoa" });
 estimate = pricing.calculatePublicEstimate(scene, state, catalog, resolved(state), priceBook);
 assert.equal(estimate.breakdown.finishesCents, 99000);
 assert.equal(estimate.totalCents, 815600);
+const localFinishState = structuredClone(state);
+core.setLocalFinish(localFinishState, "module-05", "fiber");
+const localFinishEstimate = pricing.calculatePublicEstimate(scene, localFinishState, catalog, resolved(localFinishState), priceBook);
+assert.equal(localFinishEstimate.moduleEstimates.find((entry) => entry.item.entityId === "module-05").estimate.finishId, "fiber");
+assert.equal(localFinishEstimate.moduleEstimates.find((entry) => entry.item.entityId === "module-05").estimate.finishCents, 20000);
+assert.equal(localFinishEstimate.moduleEstimates.find((entry) => entry.item.entityId === "module-03").estimate.finishId, "cocoa", "global finish remains active on modules without a local override");
 
 core.setGlobalSelection(state, { handleId: "tango-chrome" });
 estimate = pricing.calculatePublicEstimate(scene, state, catalog, resolved(state), priceBook);

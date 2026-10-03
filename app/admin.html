@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="robots" content="noindex, nofollow" />
     <title>Administração — Casa em Módulos</title>
-    <link rel="stylesheet" href="admin/admin.css?v=admin-config-v1" />
+    <link rel="stylesheet" href="admin/admin.css?v=admin-data-v1" />
   </head>
   <body>
     <header class="admin-topbar">
@@ -40,15 +40,26 @@
 
       <section id="editorPanel" hidden>
         <div class="admin-heading">
-          <div><p class="eyebrow">Configurador público</p><h1>Etapas e itens</h1><p class="intro">Reordene o fluxo, ajuste os nomes e escolha o que aparece em cada etapa.</p></div>
+          <div><p class="eyebrow">Configurador público</p><h1>Administração do catálogo</h1><p class="intro">Configure etapas, conteúdo dos objetos, acabamentos e valores publicados.</p></div>
           <div class="admin-heading__meta"><span id="revisionLabel">Versão —</span><span id="userLabel"></span></div>
         </div>
-        <div id="stagesList" class="stages-list"></div>
+        <nav class="admin-tabs" role="tablist" aria-label="Áreas de administração">
+          <button class="admin-tab is-active" type="button" role="tab" aria-selected="true" data-admin-tab="stages">Etapas</button>
+          <button class="admin-tab" type="button" role="tab" aria-selected="false" data-admin-tab="objects">Dados dos objetos</button>
+          <button class="admin-tab" type="button" role="tab" aria-selected="false" data-admin-tab="finishes">Cores e acabamentos</button>
+          <button class="admin-tab" type="button" role="tab" aria-selected="false" data-admin-tab="pricing">Preços</button>
+        </nav>
+        <section class="admin-tab-panel" role="tabpanel" data-admin-panel="stages"><div id="stagesList" class="stages-list"></div></section>
+        <section class="admin-tab-panel" role="tabpanel" data-admin-panel="objects" hidden><div id="objectsList" class="editor-grid"></div></section>
+        <section class="admin-tab-panel" role="tabpanel" data-admin-panel="finishes" hidden><div id="finishesList" class="editor-grid"></div></section>
+        <section class="admin-tab-panel" role="tabpanel" data-admin-panel="pricing" hidden><div id="pricingList" class="editor-grid"></div></section>
         <div class="editor-actions"><p id="saveMessage" class="message" aria-live="polite"></p><button id="saveButton" class="button button--primary" type="button">Publicar configuração</button></div>
       </section>
     </main>
-    <script src="data/configurator-settings.js?v=admin-config-v1"></script>
+    <script src="data/configurator-settings.js?v=admin-data-v1"></script>
     <script src="data/catalog-data.js?v=scene-marker-r5"></script>
-    <script type="module" src="admin/admin.bundle.js?v=admin-config-v1"></script>
+    <script src="data/mock-price-book.js?v=admin-data-v1"></script>
+    <script src="core/configuration.js?v=admin-config-v2"></script>
+    <script type="module" src="admin/admin.bundle.js?v=admin-data-v1"></script>
   </body>
 </html>

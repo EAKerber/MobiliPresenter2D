@@ -8,11 +8,12 @@
   const validation = global.CasaModulesValidation;
   const fingerprint = global.CasaModulesFingerprint;
   const finishes = global.CasaModulesFinishes;
-  const catalog = global.CASA_EM_MODULOS_CATALOG;
+  let catalog = structuredClone(global.CASA_EM_MODULOS_CATALOG);
   const configurationCore = global.CasaModulesConfiguration;
-  const priceBook = global.CASA_EM_MODULOS_PRICE_BOOK;
+  let priceBook = structuredClone(global.CASA_EM_MODULOS_PRICE_BOOK);
   const pricing = global.CasaModulesPricing;
   let configuratorSettings = global.CASA_EM_MODULOS_CONFIGURATOR_DEFAULTS;
+  let finishSettings = new Map(catalog.options.finishes.map((finish) => [finish.id, { scope: "global", enabled: finish.status === "published", moduleIds: catalog.modules.map((module) => module.entityId) }]));
 
   if (!scene || !inlineMasks || !core || !visibility || !validation || !fingerprint || !finishes || !catalog || !priceBook || !pricing || !configurationCore || !configuratorSettings) {
     throw new Error("Não foi possível carregar os dados da cena 2D.");
@@ -295,13 +296,8 @@
     });
   }
 
-  function selectedModuleFinish() {
-    return core.globalFinishId(state);
-  }
-
-  function selectedFrontFinishLabel() {
-    const id = selectedModuleFinish();
-    return catalog.options.finishes.find((finish) => finish.id === id)?.publicLabel || "Base clara";
+  function selectedModuleFinish(entityId = state.selectedEntityId) {
+    return core.finishForEntity(state, entityId);
   }
 
   function selectedHandle() {
@@ -315,7 +311,7 @@
 
   function renderFinishControlsFromData() {
     finishSwatches.replaceChildren();
-    catalog.options.finishes.filter((finish) => finish.status === "published").forEach((finish) => {
+    catalog.options.finishes.filter((finish) => finish.status === "published" && finishSettings.get(finish.id)?.enabled && finishSettings.get(finish.id)?.scope === "global").forEach((finish) => {
       const button = document.createElement("button");
       button.className = "swatch";
       button.type = "button";
@@ -326,13 +322,13 @@
       button.style.setProperty("--swatch-size", finish.textureSize || "cover");
       button.title = finish.publicLabel;
       button.setAttribute("aria-label", "Aplicar " + finish.publicLabel + " ao conjunto");
-      const selected = selectedModuleFinish() === finish.id;
+      const selected = core.globalFinishId(state) === finish.id;
       button.classList.toggle("is-selected", selected);
       button.setAttribute("aria-pressed", String(selected));
       finishSwatches.append(button);
     });
     if (selectedFinishDescription) {
-      const finish = catalog.options.finishes.find((item) => item.id === selectedModuleFinish());
+      const finish = catalog.options.finishes.find((item) => item.id === core.globalFinishId(state));
       selectedFinishDescription.textContent = finish ? "Selecionada: " + finish.publicLabel + "." : "";
     }
   }
@@ -450,8 +446,8 @@
     };
   }
 
-  function selectedFrontFinishLabel() {
-    const id = selectedModuleFinish();
+  function selectedFrontFinishLabel(product) {
+    const id = product ? selectedModuleFinish(product.entityId) : core.globalFinishId(state);
     return catalog.options.finishes.find((finish) => finish.id === id)?.publicLabel || "Base clara";
   }
 
@@ -665,7 +661,7 @@
     const maskSource = inlineMasks[maskAsset];
     let finishLayer = null;
     if (maskSource) {
-      const finish = catalog.options.finishes.find((item) => item.id === selectedModuleFinish()) || catalog.options.finishes[0];
+      const finish = catalog.options.finishes.find((item) => item.id === selectedModuleFinish(entity.id)) || catalog.options.finishes[0];
       finishLayer = document.createElement("span");
       finishLayer.className = "module-detail__focus-finish";
       finishLayer.setAttribute("aria-hidden", "true");
@@ -1145,6 +1141,38 @@
     return control;
   }
 
+  function createLocalFinishControl(product) {
+    const options = catalog.options.finishes.filter((finish) => {
+      const settings = finishSettings.get(finish.id);
+      return finish.status === "published" && settings?.enabled && settings.scope === "local" && settings.moduleIds.includes(product.entityId);
+    });
+    if (!options.length) return null;
+    const fieldset = document.createElement("fieldset");
+    fieldset.className = "module-detail__local-finish";
+    const legend = document.createElement("legend");
+    legend.textContent = "Acabamento deste módulo";
+    const choices = document.createElement("div");
+    choices.className = "module-detail__local-finish-options";
+    options.forEach((finish) => {
+      const button = document.createElement("button");
+      button.type = "button";
+      button.className = "swatch";
+      button.dataset.localFinishId = finish.id;
+      button.dataset.localFinishModule = product.entityId;
+      button.style.setProperty("--swatch", finish.color);
+      button.style.setProperty("--swatch-texture", materialBackground(finish));
+      button.style.setProperty("--swatch-size", finish.textureSize || "cover");
+      button.title = finish.publicLabel;
+      button.setAttribute("aria-label", `Aplicar ${finish.publicLabel} somente em ${product.title}`);
+      const selected = selectedModuleFinish(product.entityId) === finish.id;
+      button.classList.toggle("is-selected", selected);
+      button.setAttribute("aria-pressed", String(selected));
+      choices.append(button);
+    });
+    fieldset.append(legend, choices);
+    return fieldset;
+  }
+
   function updateSelection(resolved) {
     const entity = entitiesById.get(state.selectedEntityId);
     const catalogProduct = catalogByEntityId.get(state.selectedEntityId);
@@ -1221,6 +1249,7 @@
       createMaterialFact("Frentes", selectedFrontFinishLabel(product)),
       createMaterialFact("Caixaria", "Base clara")
     );
+    const localFinishControl = createLocalFinishControl(product);
 
     const dimensions = document.createElement("p");
     dimensions.className = "module-detail__dimensions";
@@ -1268,7 +1297,15 @@
     }
     title.id = "moduleDetailTitle";
     moduleDetail.setAttribute("aria-labelledby", title.id);
-    const detailContent = [detailHeader, price, material, dimensions, technical, orientativeViews, benefitsSection, componentsSection];
+    const detailContent = [detailHeader, price, material];
+    if (product.description) {
+      const description = document.createElement("p");
+      description.className = "module-detail__dimensions";
+      description.textContent = product.description;
+      detailContent.push(description);
+    }
+    if (localFinishControl) detailContent.push(localFinishControl);
+    detailContent.push(dimensions, technical, orientativeViews, benefitsSection, componentsSection);
     if (requirements.textContent) detailContent.push(requirements);
     moduleDetail.replaceChildren(...detailContent);
   }
@@ -1470,7 +1507,7 @@
 
     const finish = document.createElement("p");
     finish.className = "summary-note";
-    finish.textContent = "Cor e puxador são escolhas globais. Pedra e serviços entram uma única vez no conjunto; cada ficha mostra somente o valor local do módulo.";
+    finish.textContent = "As cores podem ser globais ou escolhidas por módulo, conforme as opções publicadas. Pedra e serviços entram uma única vez no conjunto; cada ficha mostra somente o valor local do módulo.";
 
     const price = document.createElement("div");
     price.className = "price-state";
@@ -1521,10 +1558,35 @@
   }
 
   function applyConfiguratorSettings(value) {
-    configuratorSettings = configurationCore.normalizeConfiguratorSettings(value, catalog);
+    const normalized = configurationCore.normalizeConfiguratorSettings(value, catalog, priceBook);
+    configuratorSettings = { revision: normalized.revision, stages: normalized.stages };
+    Object.entries(normalized.objects).forEach(([id, data]) => {
+      const object = catalog.modules.find((item) => item.entityId === id)
+        || catalog.accessories.find((item) => item.entityId === id)
+        || catalog.services.find((item) => item.id === id)
+        || catalog.options.handles.find((item) => item.id === id)
+        || catalog.options.stonePackages.find((item) => item.id === id);
+      if (object) {
+        Object.assign(object, data);
+        if (Object.hasOwn(object, "label")) object.label = data.title;
+      }
+    });
+    finishSettings = new Map(normalized.finishes.map((item) => [item.id, item]));
+    normalized.finishes.forEach((settings) => {
+      const finish = catalog.options.finishes.find((item) => item.id === settings.id);
+      if (finish) finish.status = settings.enabled ? "published" : "draft";
+    });
+    priceBook = { ...priceBook, ...normalized.pricing };
+    const globalFinishIds = normalized.finishes.filter((item) => item.enabled && item.scope === "global").map((item) => item.id);
+    if (!globalFinishIds.includes(core.globalFinishId(state))) core.setGlobalSelection(state, { finishId: globalFinishIds[0] });
+    Object.entries(state.localSelections?.finishByEntityId || {}).forEach(([entityId, finishId]) => {
+      const settings = finishSettings.get(finishId);
+      if (!settings?.enabled || settings.scope !== "local" || !settings.moduleIds.includes(entityId)) delete state.localSelections.finishByEntityId[entityId];
+    });
     const enabled = enabledStages();
     if (!enabled.some((stage) => stage.id === currentStep)) currentStep = enabled[0].id;
     renderModuleControlsFromData();
+    renderFinishControlsFromData();
     renderSceneHotspotsFromData();
     moduleToggles = [...moduleList.querySelectorAll("[data-module-toggle]")];
     renderStageNavigation();
@@ -1730,13 +1792,13 @@
   }
 
   function syncFinishAppearance() {
-    const finishId = selectedModuleFinish();
-    const finish = catalog.options.finishes.find((item) => item.id === finishId) || catalog.options.finishes[0];
     finishLayers.forEach((layer) => {
       const group = layer.closest(".layer-group");
       const product = catalogByEntityId.get(group?.dataset.entityId);
       const entity = entitiesById.get(group?.dataset.entityId);
       if (!product?.commercial?.finishEligible && !entity?.tags?.includes("finish-matched-side")) return;
+      const finishId = selectedModuleFinish(entity.id);
+      const finish = catalog.options.finishes.find((item) => item.id === finishId) || catalog.options.finishes[0];
       const hasTexture = Boolean(finish.textureAsset);
       layer.classList.toggle("is-texture", hasTexture);
       layer.classList.add("is-color");
@@ -1774,7 +1836,7 @@
   }
 
   function sceneMaterials() {
-    const finish = catalog.options.finishes.find((item) => item.id === selectedModuleFinish()) || catalog.options.finishes[0];
+    const finish = catalog.options.finishes.find((item) => item.id === core.globalFinishId(state)) || catalog.options.finishes[0];
     const stone = selectedStonePackage();
     const hasStoneSkirting = stageHas("finishes", "stone-skirting") && stageHas("finishes", "stone-all") && Boolean(state.globalSelections?.serviceIds?.includes("stone-skirting"));
     const stoneMaterial = materialDescriptor(stone, "stone");
@@ -2034,6 +2096,16 @@
     core.setGlobalSelection(state, { finishId: button.dataset.finishId });
     syncLayerVisibility();
     announce("Cor das frentes atualizada para o conjunto.");
+  });
+
+  moduleDetail.addEventListener("click", (event) => {
+    const button = event.target.closest("[data-local-finish-id]");
+    if (!button) return;
+    const settings = finishSettings.get(button.dataset.localFinishId);
+    if (!settings?.enabled || settings.scope !== "local" || !settings.moduleIds.includes(button.dataset.localFinishModule)) return;
+    core.setLocalFinish(state, button.dataset.localFinishModule, button.dataset.localFinishId);
+    syncLayerVisibility();
+    announce("Acabamento aplicado somente ao módulo selecionado.");
   });
 
   moduleList.addEventListener("click", (event) => {

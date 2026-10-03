@@ -2,6 +2,8 @@ import { getStore } from "@netlify/blobs";
 import { getUser } from "@netlify/identity";
 import configCore from "../../app/core/configuration.js";
 import defaults from "../../app/data/configurator-settings.js";
+import catalog from "../../app/data/catalog-data.js";
+import priceBook from "../../app/data/mock-price-book.js";
 
 const cacheHeaders = {
   "Cache-Control": "no-store, max-age=0",
@@ -9,13 +11,17 @@ const cacheHeaders = {
   "X-Content-Type-Options": "nosniff"
 };
 const store = getStore({ name: "configurator-settings", consistency: "strong" });
-const catalog = {
-  modules: defaults.stages.find((stage) => stage.id === "modules").items.map((entityId) => ({ entityId }))
-};
 const respond = (body, status = 200) => new Response(JSON.stringify(body), { status, headers: cacheHeaders });
 
 async function readPublished() {
-  return await store.get("published", { type: "json" }) || defaults;
+  const base = configCore.createDefaultAdministration(defaults, catalog, priceBook);
+  const published = await store.get("published", { type: "json" });
+  if (!published) return base;
+  const candidate = published.schemaVersion === "ConfiguratorAdministration2D 1.0"
+    ? published
+    : { ...base, revision: published.revision || base.revision, stages: published.stages || base.stages };
+  try { return configCore.normalizeConfiguratorSettings(candidate, catalog, priceBook); }
+  catch { return base; }
 }
 
 export default async (request) => {
@@ -46,7 +52,7 @@ export default async (request) => {
   if (payload?.revision !== current.revision) return respond({ error: "revision_conflict", currentRevision: current.revision }, 409);
 
   try {
-    const normalized = configCore.normalizeConfiguratorSettings(payload, catalog);
+    const normalized = configCore.normalizeConfiguratorSettings(payload, catalog, priceBook);
     normalized.revision = current.revision + 1;
     await store.setJSON("published", normalized);
     return respond(normalized);
