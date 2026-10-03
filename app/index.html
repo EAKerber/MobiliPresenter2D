@@ -3,12 +3,17 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script>
+      if (/(?:^|[&#])(?:invite_token|recovery_token|confirmation_token|email_change_token|access_token)=/.test(window.location.hash)) {
+        window.location.replace(`/admin.html${window.location.hash}`);
+      }
+    </script>
     <meta
       name="description"
       content="Visualizador interativo dos módulos da cozinha Casa em Módulos."
     />
     <title>Casa em Módulos — Configurador</title>
-    <link rel="stylesheet" href="styles.css?v=scene-marker-r5" />
+    <link rel="stylesheet" href="styles.css?v=admin-data-v1" />
     <style>
       @media (max-width: 700px) {
         body.is-mobile-scene-pinned.is-mobile-scene-transparent .viewer-card {
@@ -34,6 +39,7 @@
         </div>
 
         <div class="topbar__actions">
+          <a class="button button--secondary" href="admin.html">Administração</a>
           <button class="button button--secondary" id="restoreButton" type="button" aria-label="Restaurar">
             <span aria-hidden="true">↺</span>
             <span class="button__wide-label">Recomeçar</span>
@@ -112,24 +118,24 @@
           </header>
 
           <div class="finish-controls">
-            <fieldset>
+            <fieldset data-configurable-item="fronts-all">
               <legend>Cor das frentes</legend>
               <div class="swatches" id="finishSwatches"></div>
               <p class="finish-help" id="selectedFinishDescription"></p>
             </fieldset>
 
-            <fieldset class="handle-fieldset">
+            <fieldset class="handle-fieldset" data-configurable-item="handles-all">
               <legend>Puxadores</legend>
               <p class="finish-help" id="handleHelp">Escolha global; o valor é rateado somente nas frentes aplicáveis de cada módulo.</p>
               <div class="handle-options" id="handleOptions"></div>
             </fieldset>
           </div>
         </section>
-        <section class="panel" id="stonePanel" aria-labelledby="stoneHeading">
+        <section class="panel" id="stonePanel" aria-labelledby="stoneHeading" data-configurable-item="stone-all">
           <header class="finish-heading"><div><h2 id="stoneHeading">Pedra do conjunto</h2><p>Uma escolha global, aplicada uma vez à composição.</p></div></header>
           <div class="finish-controls">
             <fieldset><legend>Pacote de pedra</legend><div class="global-options" id="stonePackageOptions"></div></fieldset>
-            <label class="accessory-toggle" for="stoneSkirtingToggle">
+            <label class="accessory-toggle" for="stoneSkirtingToggle" data-configurable-item="stone-skirting">
               <input id="stoneSkirtingToggle" type="checkbox" />
               <span><strong>Rodapé de pedra</strong><small>Acabamento global para a composição.</small></span>
             </label>
@@ -141,7 +147,7 @@
             <span aria-hidden="true">✓</span>
             <div><h2 id="servicesHeading" tabindex="-1">Serviços</h2><p>Serviços globais que impactam uma vez o conjunto.</p></div>
           </header>
-          <label class="accessory-toggle" for="lightingToggle">
+          <label class="accessory-toggle" for="lightingToggle" data-configurable-item="lighting-08">
             <input id="lightingToggle" type="checkbox" />
             <span><strong>Iluminação embutida</strong><small>Serviço global que realça a bancada e requer a lateral da geladeira e o aéreo da pia.</small></span>
           </label>
@@ -164,19 +170,21 @@
       </aside>
     </main>
 
-    <script src="data/scene-data.js?v=scene-marker-r5"></script>
-    <script src="data/catalog-data.js?v=scene-marker-r5"></script>
-    <script src="data/mock-price-book.js?v=scene-marker-r5"></script>
-    <script src="data/mask-data.js?v=scene-marker-r5"></script>
-    <script src="core/state.js?v=scene-marker-r5"></script>
-    <script src="core/visibility.js?v=scene-marker-r5"></script>
-    <script src="core/validation.js?v=scene-marker-r5"></script>
-    <script src="core/fingerprint.js?v=scene-marker-r5"></script>
-    <script src="core/finishes.js?v=scene-marker-r5"></script>
-    <script src="core/pricing.js?v=scene-marker-r5"></script>
-    <script src="data/stone-data.js?v=scene-marker-r5"></script>
-    <script src="core/stone.js?v=scene-marker-r5"></script>
-    <script src="app.js?v=scene-marker-r5"></script>
+    <script src="data/scene-data.js?v=admin-data-v1"></script>
+    <script src="data/catalog-data.js?v=admin-data-v1"></script>
+    <script src="data/configurator-settings.js?v=admin-config-v1"></script>
+    <script src="data/mock-price-book.js?v=admin-data-v1"></script>
+    <script src="data/mask-data.js?v=admin-data-v1"></script>
+    <script src="core/state.js?v=admin-data-v1"></script>
+    <script src="core/visibility.js?v=admin-data-v1"></script>
+    <script src="core/validation.js?v=admin-data-v1"></script>
+    <script src="core/fingerprint.js?v=admin-data-v1"></script>
+    <script src="core/finishes.js?v=admin-data-v1"></script>
+    <script src="core/pricing.js?v=admin-data-v1"></script>
+    <script src="core/configuration.js?v=admin-config-v2"></script>
+    <script src="data/stone-data.js?v=admin-data-v1"></script>
+    <script src="core/stone.js?v=admin-data-v1"></script>
+    <script src="app.js?v=admin-data-v1"></script>
     <script>
       (() => {
         const resizeHandle = document.getElementById("mobileSceneResizeHandle");

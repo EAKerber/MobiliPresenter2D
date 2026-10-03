@@ -1,2 +1,10 @@
 [build]
   publish = "app"
+  command = "npm run build"
+  functions = "netlify/functions"
+
+[[redirects]]
+  from = "/api/configuration"
+  to = "/.netlify/functions/configuration"
+  status = 200
+  force = true

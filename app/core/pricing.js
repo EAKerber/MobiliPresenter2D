@@ -6,6 +6,10 @@
     return Number.isSafeInteger(value) ? value : 0;
   }
 
+  function hasEntry(entries, id) {
+    return Boolean(entries && Object.prototype.hasOwnProperty.call(entries, id) && Number.isSafeInteger(entries[id]));
+  }
+
   function distributeCents(totalCents, count) {
     if (!Number.isSafeInteger(totalCents) || !Number.isInteger(count) || count < 1) return Object.freeze([]);
     const base = Math.trunc(totalCents / count);
@@ -23,10 +27,10 @@
 
   function itemEstimate(item, catalog, state, priceBook) {
     const baseCents = safeEntry(priceBook?.entries, item.entityId);
-    if (!baseCents) {
+    if (!hasEntry(priceBook?.entries, item.entityId)) {
       return Object.freeze({ status: "unavailable", totalCents: null, baseCents: null, handleCents: 0, finishCents: 0, localCents: 0 });
     }
-    const finishId = globalFinishId(state);
+    const finishId = state.localSelections?.finishByEntityId?.[item.entityId] || globalFinishId(state);
     const finishRateBps = item.commercial?.finishEligible ? safeEntry(priceBook?.frontFinishRatesBps, finishId) : 0;
     const finishCents = Math.round((baseCents * finishRateBps) / 10000);
     const localIds = item.commercial?.mandatoryLocalChargeIds || [];

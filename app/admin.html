@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Administração — Casa em Módulos</title>
+    <link rel="stylesheet" href="admin/admin.css?v=admin-data-v2" />
+  </head>
+  <body>
+    <header class="admin-topbar">
+      <a class="brand" href="index.html"><span aria-hidden="true">▱</span><span><strong>Casa em Módulos</strong><small>Administração</small></span></a>
+      <div class="admin-topbar__actions">
+        <a class="button button--secondary" href="index.html">Voltar ao configurador</a>
+        <button id="logoutButton" class="button button--secondary" type="button" hidden>Sair</button>
+      </div>
+    </header>
+    <main class="admin-main">
+      <section id="loginPanel" class="admin-card auth-card">
+        <p class="eyebrow">Acesso restrito</p>
+        <h1>Painel administrativo</h1>
+        <p class="intro">Entre com uma conta administrativa convidada para editar as etapas e os itens disponíveis no configurador.</p>
+        <form id="loginForm" class="admin-form">
+          <label>E-mail<input id="emailInput" name="email" type="email" autocomplete="username" required /></label>
+          <label>Senha<input id="passwordInput" name="password" type="password" autocomplete="current-password" required /></label>
+          <div class="auth-actions"><button class="button button--primary" type="submit">Entrar</button><button id="recoveryButton" class="text-button" type="button">Esqueci minha senha</button></div>
+        </form>
+        <form id="passwordActionForm" class="admin-form" hidden>
+          <p id="passwordActionTitle" class="intro"></p>
+          <label>Nova senha<input id="newPasswordInput" type="password" autocomplete="new-password" minlength="8" required /></label>
+          <button id="passwordActionButton" class="button button--primary" type="submit">Salvar senha</button>
+        </form>
+        <p id="loginMessage" class="message" aria-live="polite"></p>
+      </section>
+
+      <section id="deniedPanel" class="admin-card" hidden>
+        <p class="eyebrow">Acesso restrito</p><h1>Esta conta não é administradora</h1>
+        <p class="intro">Peça a um responsável para adicionar o papel <code>admin</code> à sua conta no Netlify Identity.</p>
+      </section>
+
+      <section id="editorPanel" hidden>
+        <div class="admin-heading">
+          <div><p class="eyebrow">Configurador público</p><h1>Administração do catálogo</h1><p class="intro">Configure etapas, conteúdo dos objetos, acabamentos e valores publicados.</p></div>
+          <div class="admin-heading__meta"><span id="revisionLabel">Versão —</span><span id="userLabel"></span></div>
+        </div>
+        <nav class="admin-tabs" role="tablist" aria-label="Áreas de administração">
+          <button class="admin-tab is-active" type="button" role="tab" aria-selected="true" data-admin-tab="stages">Etapas</button>
+          <button class="admin-tab" type="button" role="tab" aria-selected="false" data-admin-tab="objects">Dados dos objetos</button>
+          <button class="admin-tab" type="button" role="tab" aria-selected="false" data-admin-tab="finishes">Cores e acabamentos</button>
+          <button class="admin-tab" type="button" role="tab" aria-selected="false" data-admin-tab="rules">Dependências e eventos</button>
+          <button class="admin-tab" type="button" role="tab" aria-selected="false" data-admin-tab="pricing">Preços</button>
+        </nav>
+        <section class="admin-tab-panel" role="tabpanel" data-admin-panel="stages"><div class="panel-toolbar"><p class="admin-note">Etapas de módulos e resumo são essenciais. As demais podem ser adicionadas ou removidas.</p><div class="stage-add-tools"><select id="stageKindInput" aria-label="Tipo da nova etapa"><option value="custom">Personalizada</option><option value="finishes">Acabamentos</option><option value="services">Serviços</option></select><button id="addStageButton" class="button button--secondary" type="button">Adicionar etapa</button></div></div><div id="stagesList" class="stages-list"></div></section>
+        <section class="admin-tab-panel" role="tabpanel" data-admin-panel="objects" hidden>
+          <div class="object-pager"><button id="objectPrevious" class="button button--secondary" type="button">← Anterior</button><label class="data-field">Objeto<select id="objectSelector"></select></label><button id="objectNext" class="button button--secondary" type="button">Próximo →</button></div>
+          <nav class="admin-tabs admin-tabs--nested" role="tablist" aria-label="Dados do objeto"><button class="admin-tab is-active" type="button" role="tab" aria-selected="true" data-object-tab="content">Conteúdo</button><button class="admin-tab" type="button" role="tab" aria-selected="false" data-object-tab="assets">Imagens e máscaras</button></nav>
+          <section class="object-tab-panel" data-object-panel="content"><div id="objectsList" class="editor-grid"></div></section>
+          <section class="object-tab-panel" data-object-panel="assets" hidden><div id="objectAssetsList" class="editor-grid"></div></section>
+        </section>
+        <section class="admin-tab-panel" role="tabpanel" data-admin-panel="finishes" hidden><div class="library-section"><div class="panel-toolbar"><div><h2>Biblioteca de cores e texturas</h2><p class="admin-note">Cadastre o material uma vez e escolha em quais acabamentos ele aparece.</p></div><button id="addMaterialButton" class="button button--secondary" type="button">Adicionar material</button></div><div id="materialsList" class="editor-grid"></div></div><div class="library-section"><h2>Opções por acabamento</h2><p class="admin-note">Pedra e rodapé compartilham o mesmo grupo e a mesma escolha.</p><div id="materialGroupsList" class="editor-grid"></div></div><div class="library-section"><h2>Disponibilidade das cores de MDF</h2><div id="finishesList" class="editor-grid"></div></div></section>
+        <section class="admin-tab-panel" role="tabpanel" data-admin-panel="rules" hidden><div class="panel-toolbar"><div><h2>Regras de dependência</h2><p class="admin-note">Um objeto pode exigir outros módulos ou itens visíveis para ser habilitado.</p></div><button id="addDependencyButton" class="button button--secondary" type="button">Adicionar dependência</button></div><div id="dependenciesList" class="editor-grid"></div><div class="panel-toolbar library-section"><div><h2>Eventos de configuração</h2><p class="admin-note">Eventos disponíveis alteram a profundidade do Módulo 07 quando outro item é ligado ou desligado.</p></div><button id="addEventButton" class="button button--secondary" type="button">Adicionar evento</button></div><div id="eventsList" class="editor-grid"></div></section>
+        <section class="admin-tab-panel" role="tabpanel" data-admin-panel="pricing" hidden><div id="pricingList" class="editor-grid"></div></section>
+        <div class="editor-actions"><p id="saveMessage" class="message" aria-live="polite"></p><button id="saveButton" class="button button--primary" type="button">Publicar configuração</button></div>
+      </section>
+    </main>
+    <script src="data/configurator-settings.js?v=admin-data-v2"></script>
+    <script src="data/catalog-data.js?v=scene-marker-r5"></script>
+    <script src="data/scene-data.js?v=admin-data-v2"></script>
+    <script src="data/mock-price-book.js?v=admin-data-v2"></script>
+    <script src="core/configuration.js?v=admin-config-v3"></script>
+    <script type="module" src="admin/admin.bundle.js?v=admin-data-v2"></script>
+  </body>
+</html>

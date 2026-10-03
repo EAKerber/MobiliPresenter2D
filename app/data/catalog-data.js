@@ -206,4 +206,5 @@
   };
 
   global.CASA_EM_MODULOS_CATALOG = deepFreeze(catalog);
-})(window);
+  if (typeof module !== "undefined" && module.exports) module.exports = catalog;
+})(typeof window === "undefined" ? globalThis : window);

@@ -256,9 +256,7 @@
         alphaBounds: { x: 715, y: 266, width: 534, height: 113 },
         defaultVisible: true,
         controllable: true,
-        // Lighting is a global option, not a relation between the side panel
-        // and the upper sink cabinet. Both independent supports are required.
-        requiresVisibleIds: ["module-04", "module-06"],
+        requiresVisibleIds: [],
         hostId: null,
         finishGroups: [],
         tags: ["lighting"]
