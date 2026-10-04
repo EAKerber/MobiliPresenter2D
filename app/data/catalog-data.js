@@ -186,7 +186,7 @@
         { id: "stone-night", label: "Preta mineral", description: "Pedra preta de granulação fina e reflexos discretos.", color: "#171918", swatchColor: "#181a19", textureAsset: "assets/materials/stone-dark.webp", textureScale: 1 }
       ],
       handles: [
-        { id: "none", label: "Definir depois", description: "Sem adicional na simulação.", orientation: "Portas na vertical · gavetas na horizontal" },
+        { id: "none", label: "Definir depois", description: "Sem adicional na simulação.", orientation: "Portas na vertical · gavetas na horizontal", isAbsence: true },
         { id: "tango-chrome", label: "Tango / Íris", description: "Acabamento cromado.", orientation: "Portas na vertical · gavetas na horizontal" },
         { id: "ponto", label: "Ponto", description: "Família com variações de cor.", orientation: "Portas na vertical · gavetas na horizontal" },
         { id: "alca-colors", label: "Alça em cores", description: "Nome comercial em validação.", orientation: "Portas na vertical · gavetas na horizontal" }
@@ -206,4 +206,5 @@
   };
 
   global.CASA_EM_MODULOS_CATALOG = deepFreeze(catalog);
-})(window);
+  if (typeof module !== "undefined" && module.exports) module.exports = catalog;
+})(typeof window === "undefined" ? globalThis : window);

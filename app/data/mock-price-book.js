@@ -53,4 +53,5 @@
   });
 
   global.CASA_EM_MODULOS_PRICE_BOOK = priceBook;
-})(window);
+  if (typeof module !== "undefined" && module.exports) module.exports = priceBook;
+})(typeof window === "undefined" ? globalThis : window);

@@ -22,6 +22,7 @@
         // represents the complete package. They can always be opted out.
         serviceIds: ["move-stone", "stone-skirting", "tempered-glass"]
       },
+      localSelections: { finishByEntityId: {} },
       selectedEntityId: null,
       gridVisible: scene.defaultConfiguration.gridVisible
     };
@@ -33,6 +34,17 @@
 
   function globalHandleId(state) {
     return state.globalSelections?.handleId || BASE_HANDLE_ID;
+  }
+
+  function finishForEntity(state, entityId) {
+    return state.localSelections?.finishByEntityId?.[entityId] || globalFinishId(state);
+  }
+
+  function setLocalFinish(state, entityId, finishId) {
+    state.localSelections ||= { finishByEntityId: {} };
+    state.localSelections.finishByEntityId ||= {};
+    state.localSelections.finishByEntityId[entityId] = finishId;
+    return true;
   }
 
   // Compatibility reader: choices are global; no per-module choice is stored.
@@ -68,10 +80,12 @@
     createInitialState,
     globalFinishId,
     globalHandleId,
+    finishForEntity,
     moduleSelection,
     setAllControllableVisibility,
     setEntityVisibility,
     setGlobalSelection,
-    setGlobalService
+    setGlobalService,
+    setLocalFinish
   });
 })(window);

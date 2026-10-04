@@ -1,0 +1,13 @@
+{
+  "name": "mobilipresenter2d-admin",
+  "private": true,
+  "engines": { "node": ">=20" },
+  "scripts": {
+    "build": "esbuild app/admin/admin.js --bundle --format=esm --target=es2022 --outfile=app/admin/admin.bundle.js"
+  },
+  "dependencies": {
+    "@netlify/blobs": "^11.1.1",
+    "@netlify/identity": "^2.0.0",
+    "esbuild": "^0.28.2"
+  }
+}
