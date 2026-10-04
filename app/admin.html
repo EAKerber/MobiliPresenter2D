@@ -57,17 +57,21 @@
           <section class="object-tab-panel" data-object-panel="content"><div id="objectsList" class="editor-grid"></div></section>
           <section class="object-tab-panel" data-object-panel="assets" hidden><div id="objectAssetsList" class="editor-grid"></div></section>
         </section>
-        <section class="admin-tab-panel" role="tabpanel" data-admin-panel="finishes" hidden><div class="library-section"><div class="panel-toolbar"><div><h2>Biblioteca de cores e texturas</h2><p class="admin-note">Cadastre o material uma vez e escolha em quais acabamentos ele aparece.</p></div><button id="addMaterialButton" class="button button--secondary" type="button">Adicionar material</button></div><div id="materialsList" class="editor-grid"></div></div><div class="library-section"><h2>Opções por acabamento</h2><p class="admin-note">Pedra e rodapé compartilham o mesmo grupo e a mesma escolha.</p><div id="materialGroupsList" class="editor-grid"></div></div><div class="library-section"><h2>Disponibilidade das cores de MDF</h2><div id="finishesList" class="editor-grid"></div></div></section>
+        <section class="admin-tab-panel" role="tabpanel" data-admin-panel="finishes" hidden>
+          <div class="library-section"><div class="panel-toolbar"><div><h2>Biblioteca de cores e texturas</h2><p class="admin-note">A mesma biblioteca pode abastecer frentes, pedras e modelos de puxador.</p></div><button id="addMaterialButton" class="button button--secondary" type="button">Adicionar material</button></div><div id="materialPager" class="library-pager"></div><div id="materialsList" class="editor-grid"></div></div>
+          <div class="library-section"><div class="panel-toolbar"><div><h2>Opções e disponibilidade por acabamento</h2><p class="admin-note">Cada puxador tem sua própria lista de materiais. Pedra e rodapé compartilham a escolha; a disponibilidade do serviço de rodapé continua independente.</p></div></div><div id="materialTargetPager" class="library-pager"></div><div id="materialGroupsList" class="editor-grid"></div></div>
+          <div class="library-section"><div class="panel-toolbar"><div><h2>Disponibilidade das cores de MDF</h2><p class="admin-note">Definir depois representa ausência de puxador e não recebe materiais.</p></div></div><div id="finishAvailabilityPager" class="library-pager"></div><div id="finishesList" class="editor-grid"></div></div>
+        </section>
         <section class="admin-tab-panel" role="tabpanel" data-admin-panel="rules" hidden><div class="panel-toolbar"><div><h2>Regras de dependência</h2><p class="admin-note">Um objeto pode exigir outros módulos ou itens visíveis para ser habilitado.</p></div><button id="addDependencyButton" class="button button--secondary" type="button">Adicionar dependência</button></div><div id="dependenciesList" class="editor-grid"></div><div class="panel-toolbar library-section"><div><h2>Eventos de configuração</h2><p class="admin-note">Eventos disponíveis alteram a profundidade do Módulo 07 quando outro item é ligado ou desligado.</p></div><button id="addEventButton" class="button button--secondary" type="button">Adicionar evento</button></div><div id="eventsList" class="editor-grid"></div></section>
         <section class="admin-tab-panel" role="tabpanel" data-admin-panel="pricing" hidden><div id="pricingList" class="editor-grid"></div></section>
         <div class="editor-actions"><p id="saveMessage" class="message" aria-live="polite"></p><button id="saveButton" class="button button--primary" type="button">Publicar configuração</button></div>
       </section>
     </main>
-    <script src="data/configurator-settings.js?v=admin-data-v2"></script>
-    <script src="data/catalog-data.js?v=scene-marker-r5"></script>
-    <script src="data/scene-data.js?v=admin-data-v2"></script>
-    <script src="data/mock-price-book.js?v=admin-data-v2"></script>
-    <script src="core/configuration.js?v=admin-config-v3"></script>
-    <script type="module" src="admin/admin.bundle.js?v=admin-data-v2"></script>
+    <script src="data/configurator-settings.js?v=admin-data-v3"></script>
+    <script src="data/catalog-data.js?v=catalog-handles-v2"></script>
+    <script src="data/scene-data.js?v=admin-data-v3"></script>
+    <script src="data/mock-price-book.js?v=admin-data-v3"></script>
+    <script src="core/configuration.js?v=admin-config-v4"></script>
+    <script type="module" src="admin/admin.bundle.js?v=admin-data-v3"></script>
   </body>
 </html>

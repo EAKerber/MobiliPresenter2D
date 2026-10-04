@@ -1,7 +1,8 @@
 (function registerConfiguratorSettingsCore(global) {
   "use strict";
 
-  const SCHEMA = "ConfiguratorAdministration2D 2.0";
+  const SCHEMA = "ConfiguratorAdministration2D 3.0";
+  const PREVIOUS_SCHEMA = "ConfiguratorAdministration2D 2.0";
   const LEGACY_SCHEMA = "ConfiguratorAdministration2D 1.0";
   const CORE_STAGES = Object.freeze(["modules", "summary"]);
   const STAGE_KINDS = new Set(["modules", "finishes", "services", "summary", "custom"]);
@@ -29,16 +30,17 @@
       id: item.id, label: item.label, kind: "texture", color: item.color || item.swatchColor || "#b7b0a7",
       textureAsset: item.textureAsset || "", textureSize: "cover", groupIds: ["stone-all"], locked: true
     }));
+    records.push({ id: "handle-chrome", label: "Cromado", kind: "color", color: "#b7b0a7", textureAsset: "", textureSize: "cover", groupIds: [], locked: true });
     return records;
   }
 
   function defaultHandleProducts(catalog) {
-    return catalog.options.handles.filter((item) => item.id !== "none").map((item) => ({
+    return catalog.options.handles.filter((item) => item.id !== "none" && !item.isAbsence).map((item) => ({
       id: item.id === "tango-chrome" ? "tango-iris" : item.id,
       label: item.label,
       description: item.description || "",
       priceEntryId: item.id,
-      colors: item.id === "tango-chrome" ? [{ id: "chrome", label: "Cromado", color: item.color || item.swatchColor || "#b7b0a7" }] : []
+      materialIds: item.id === "tango-chrome" ? ["handle-chrome"] : []
     }));
   }
 
@@ -101,24 +103,50 @@
     };
   }
 
-  function migrateCurrentHandleModel(value, catalog) {
-    if (!value || value.schemaVersion !== SCHEMA || Array.isArray(value.handleProducts)) return value;
-    const handleProducts = defaultHandleProducts(catalog);
+  function migrateCurrentHandleModel(value, catalog, priceBook, scene) {
+    if (!value || value.schemaVersion === SCHEMA) return value;
+    if (![PREVIOUS_SCHEMA, LEGACY_SCHEMA].includes(value.schemaVersion)) return value;
+    if (value.schemaVersion === LEGACY_SCHEMA) return migrateLegacy(value, catalog, priceBook, scene);
+    const base = createDefaultAdministration({ stages: value.stages || [] }, catalog, priceBook, scene);
+    const previousProducts = value.handleProducts || [];
+    const handleProducts = defaultHandleProducts(catalog).map((item) => {
+      const previous = previousProducts.find((product) => product.priceEntryId === item.priceEntryId);
+      return { ...item, label: previous?.label || item.label, description: previous?.description || item.description, materialIds: [...item.materialIds] };
+    });
     const productByPriceId = new Map(handleProducts.map((item) => [item.priceEntryId, item]));
     const oldHandles = value.materialGroups?.find((group) => group.id === "handles-all");
-    const oldMaterials = value.materials || [];
-    const availableProducts = oldHandles?.materialIds?.map((id) => productByPriceId.get(id)?.id).filter(Boolean);
-    const materials = oldMaterials
-      .filter((item) => !productByPriceId.has(item.id) && !item.groupIds?.includes("handles-all"))
-      .map((item) => ({ ...item, groupIds: (item.groupIds || []).filter((id) => id !== "handles-all") }));
-    const materialGroups = (value.materialGroups || []).map((group) => group.id === "handles-all"
-      ? { ...group, label: "Modelos de puxador", materialIds: availableProducts?.length ? availableProducts : handleProducts.map((item) => item.id) }
-      : group);
+    const oldMaterials = value.materials || base.materials;
+    const materials = oldMaterials.filter((item) => !item.groupIds?.includes("handles-all") && !productByPriceId.has(item.id)).map((item) => ({ ...item, groupIds: (item.groupIds || []).filter((id) => ["fronts-all", "stone-all"].includes(id)) }));
+    const materialById = new Map(materials.map((item) => [item.id, item]));
+    handleProducts.forEach((product) => {
+      const previous = previousProducts.find((item) => item.priceEntryId === product.priceEntryId);
+      const fromOldColors = (previous?.colors || []).map((color) => ({ id: `handle-${product.id}-${color.id}`.slice(0, 40), label: color.label, kind: "color", color: color.color, textureAsset: "", textureSize: "cover", groupIds: [], locked: false }));
+      fromOldColors.forEach((material) => { if (!materialById.has(material.id)) { materials.push(material); materialById.set(material.id, material); } });
+      product.materialIds = [...new Set([...(previous?.materialIds || []), ...fromOldColors.map((item) => item.id)])].filter((id) => materialById.has(id));
+      if (product.priceEntryId === "tango-chrome" && materialById.has("handle-chrome")) product.materialIds = [...new Set(["handle-chrome", ...product.materialIds])];
+    });
+    const materialGroups = base.materialGroups.map((group) => {
+      const oldGroup = value.materialGroups?.find((item) => item.id === group.id);
+      if (!oldGroup) return group;
+      const ids = group.id === "handles-all"
+        ? oldGroup.materialIds.map((id) => productByPriceId.get(id)?.id || handleProducts.find((item) => item.id === id)?.id).filter(Boolean)
+        : oldGroup.materialIds.filter((id) => materialById.has(id));
+      return { ...group, ...oldGroup, materialIds: ids.length ? ids : [...group.materialIds] };
+    });
     const initialHandle = value.initialState?.handleId;
     const migratedInitialHandle = initialHandle === "none" ? "none" : productByPriceId.get(initialHandle)?.priceEntryId || "none";
     const validPriceIds = new Set(["none", ...handleProducts.map((item) => item.priceEntryId)]);
     const handleEntries = Object.fromEntries(Object.entries(value.pricing?.handleEntries || {}).filter(([id]) => validPriceIds.has(id)));
-    return { ...value, materials, materialGroups, handleProducts, pricing: { ...value.pricing, handleEntries }, initialState: { ...value.initialState, handleId: migratedInitialHandle } };
+    return {
+      ...base, ...value, schemaVersion: SCHEMA,
+      stages: (value.stages || base.stages).map((stage) => ({ ...stage, kind: stage.kind || stage.id })),
+      objects: { ...base.objects, ...(value.objects || {}) }, objectAssets: { ...base.objectAssets, ...(value.objectAssets || {}) },
+      materials, materialGroups, handleProducts,
+      initialState: { ...base.initialState, ...(value.initialState || {}), handleId: migratedInitialHandle },
+      finishes: base.finishes.map((finish) => ({ ...finish, ...(value.finishes || []).find((item) => item.id === finish.id) })).filter((finish) => materialGroups.find((item) => item.id === "fronts-all")?.materialIds.includes(finish.id)),
+      pricing: { ...base.pricing, ...(value.pricing || {}), handleEntries, frontFinishRatesBps: { ...base.pricing.frontFinishRatesBps, ...(value.pricing?.frontFinishRatesBps || {}) }, localEntries: { ...base.pricing.localEntries, ...(value.pricing?.localEntries || {}) }, globalEntries: { ...base.pricing.globalEntries, ...(value.pricing?.globalEntries || {}) } },
+      dependencies: value.dependencies || base.dependencies, events: value.events || base.events
+    };
   }
 
   function validateConfiguratorSettings(value, catalog, priceBook, scene) {
@@ -194,20 +222,16 @@
       for (const field of ["imageAsset", "detailImageAsset", "maskAsset"]) if (typeof assets[field] !== "string" || (assets[field] && !validAssetPath(assets[field]))) errors.push(`invalid asset path: ${id}.${field}`);
     });
 
+    const materialIds = new Set((value.materials || []).map((item) => item.id));
     const handleProductIds = new Set((value.handleProducts || []).map((item) => item.id));
-    if (!Array.isArray(value.handleProducts) || value.handleProducts.length !== catalog.options.handles.filter((item) => item.id !== "none").length) errors.push("handle products must match the catalog");
+    if (!Array.isArray(value.handleProducts) || value.handleProducts.length !== catalog.options.handles.filter((item) => item.id !== "none" && !item.isAbsence).length) errors.push("handle products must match the catalog");
     else {
       const ids = new Set(); const priceIds = new Set();
       value.handleProducts.forEach((product) => {
         if (!product || !/^[a-z][a-z0-9-]{1,39}$/.test(product.id) || ids.has(product.id) || !/^[a-z][a-z0-9-]{1,39}$/.test(product.priceEntryId) || priceIds.has(product.priceEntryId)) { errors.push("invalid or duplicate handle product"); return; }
         ids.add(product.id); priceIds.add(product.priceEntryId);
-        if (!catalog.options.handles.some((item) => item.id === product.priceEntryId) || typeof product.label !== "string" || !product.label.trim() || product.label.length > 60 || typeof product.description !== "string" || product.description.length > 180) errors.push(`invalid handle product data: ${product.id}`);
-        if (!Array.isArray(product.colors) || product.colors.length > 30) { errors.push(`invalid handle colors: ${product.id}`); return; }
-        const colorIds = new Set();
-        product.colors.forEach((color) => {
-          if (!color || !/^[a-z][a-z0-9-]{1,39}$/.test(color.id) || colorIds.has(color.id) || typeof color.label !== "string" || !color.label.trim() || color.label.length > 40 || !/^(#[0-9a-fA-F]{6})$/.test(color.color || "")) errors.push(`invalid handle color: ${product.id}`);
-          else colorIds.add(color.id);
-        });
+        if (!catalog.options.handles.some((item) => item.id === product.priceEntryId && !item.isAbsence && item.id !== "none") || typeof product.label !== "string" || !product.label.trim() || product.label.length > 60 || typeof product.description !== "string" || product.description.length > 180) errors.push(`invalid handle product data: ${product.id}`);
+        if (!Array.isArray(product.materialIds) || product.materialIds.length > 100 || product.materialIds.some((id) => !materialIds.has(id)) || new Set(product.materialIds).size !== product.materialIds.length) errors.push(`invalid handle materials: ${product.id}`);
       });
     }
 
@@ -225,7 +249,6 @@
         if (!Array.isArray(material.groupIds) || material.groupIds.some((group) => !["fronts-all", "stone-all"].includes(group))) errors.push(`invalid material groups: ${material.id}`);
       });
     }
-    const materialIds = new Set((value.materials || []).map((item) => item.id));
     const groups = new Set();
     if (!Array.isArray(value.materialGroups) || value.materialGroups.length !== 3) errors.push("three material groups are required");
     else value.materialGroups.forEach((group) => {
@@ -293,7 +316,7 @@
   }
 
   function normalizeConfiguratorSettings(input, catalog, priceBook, scene) {
-    const value = input?.schemaVersion === LEGACY_SCHEMA ? migrateLegacy(input, catalog, priceBook, scene) : migrateCurrentHandleModel(input, catalog);
+    const value = migrateCurrentHandleModel(input, catalog, priceBook, scene);
     const errors = validateConfiguratorSettings(value, catalog, priceBook, scene);
     if (errors.length) throw new TypeError(errors.join("; "));
     return {
@@ -304,7 +327,7 @@
       objectAssets: Object.fromEntries(Object.entries(value.objectAssets).map(([id, assets]) => [id, { imageAsset: assets.imageAsset, detailImageAsset: assets.detailImageAsset || assets.imageAsset, maskAsset: assets.maskAsset }])),
       initialState: { entities: { ...value.initialState.entities }, services: [...value.initialState.services], finishId: value.initialState.finishId, handleId: value.initialState.handleId, stonePackageId: value.initialState.stonePackageId },
       materials: value.materials.map((item) => ({ id: item.id, label: item.label.trim(), kind: item.kind === "texture" ? "texture" : "color", color: item.color, textureAsset: item.textureAsset, textureSize: item.textureSize || "cover", groupIds: [...item.groupIds], locked: Boolean(item.locked) })),
-      handleProducts: value.handleProducts.map((item) => ({ id: item.id, label: item.label.trim(), description: item.description.trim(), priceEntryId: item.priceEntryId, colors: item.colors.map((color) => ({ id: color.id, label: color.label.trim(), color: color.color })) })),
+      handleProducts: value.handleProducts.map((item) => ({ id: item.id, label: item.label.trim(), description: item.description.trim(), priceEntryId: item.priceEntryId, materialIds: [...item.materialIds] })),
       materialGroups: value.materialGroups.map((group) => ({ ...group, materialIds: [...group.materialIds], ...(group.moduleIds ? { moduleIds: [...group.moduleIds] } : {}), ...(group.linkedItemIds ? { linkedItemIds: [...group.linkedItemIds] } : {}) })),
       finishes: value.finishes.map((item) => ({ id: item.id, enabled: item.enabled, scope: item.scope, moduleIds: [...item.moduleIds] })),
       dependencies: value.dependencies.map((item) => ({ id: item.id, dependentId: item.dependentId, requires: [...item.requires] })),

@@ -1629,10 +1629,10 @@
       const material = materials.get(id); const old = previousFinishes.get(id); const available = finishSettingsById.get(id);
       return { ...old, id, publicLabel: material.label, label: material.label, color: material.color, textureAsset: material.textureAsset || null, textureSize: material.textureSize || "cover", status: available?.enabled ? "published" : "draft" };
     });
-    catalog.options.handles = [previousHandles.get("none") || { id: "none", label: "Definir depois", description: "Sem adicional na simulação." }, ...handles.materialIds.map((id) => {
+    catalog.options.handles = [{ ...(previousHandles.get("none") || { id: "none", label: "Definir depois", description: "Sem adicional na simulação.", isAbsence: true }), isAbsence: true, validMaterialIds: [], validMaterials: [] }, ...handles.materialIds.map((id) => {
       const product = handleProducts.get(id); const old = previousHandles.get(product.priceEntryId);
       if (priceBook.handleEntries[product.priceEntryId] == null) priceBook.handleEntries[product.priceEntryId] = 0;
-      return { ...old, id: product.priceEntryId, label: product.label, description: product.description || old?.description || "Puxador selecionável.", colors: product.colors.map((color) => ({ ...color })) };
+      return { ...old, id: product.priceEntryId, label: product.label, description: product.description || old?.description || "Puxador selecionável.", isAbsence: false, validMaterialIds: [...product.materialIds], validMaterials: product.materialIds.map((materialId) => materials.get(materialId)).filter(Boolean).map((material) => ({ ...material })) };
     })];
     catalog.options.stonePackages = stone.materialIds.map((id) => {
       const material = materials.get(id); const old = previousStone.get(id);

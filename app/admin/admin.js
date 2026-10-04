@@ -37,6 +37,11 @@ let model = structuredClone(defaults);
 let inviteToken = null;
 let selectedObjectIndex = 0;
 let selectedObjectTab = "content";
+let materialPageIndex = 0;
+let materialTargetPageIndex = 0;
+let finishAvailabilityPage = 0;
+let selectedMaterialTarget = "fronts-all";
+const MATERIALS_PER_PAGE = 4;
 
 const labels = {
   "fronts-all": "Cor das frentes",
@@ -70,18 +75,17 @@ function isAdmin(user) {
 function getItemOptions(stageId) {
   const stage = model.stages.find((item) => item.id === stageId);
   const kind = stage?.kind || stage?.id;
-  if (kind === "modules") return catalog.modules.map(({ entityId, referenceLabel, title }) => ({ id: entityId, label: `${referenceLabel} · ${model.objects[entityId]?.title || title}` }));
-  if (kind === "finishes") return ["fronts-all", "handles-all", "stone-all", "stone-skirting"].map((id) => ({ id, label: labels[id] }));
-  if (kind === "custom") return [
-    ...catalog.modules.map((item) => ({ id: item.entityId, label: `${item.referenceLabel} · ${model.objects[item.entityId]?.title || item.title}` })),
-    ...catalog.accessories.map((item) => ({ id: item.entityId, label: model.objects[item.entityId]?.title || item.title })),
-    ...catalog.services.map((item) => ({ id: item.id, label: model.objects[item.id]?.title || item.title }))
-  ];
-  if (kind === "services") return [
-    ...catalog.services.map((service) => ({ id: service.id, label: model.objects[service.id]?.title || service.title })),
-    ...catalog.accessories.map((item) => ({ id: item.entityId, label: model.objects[item.entityId]?.title || item.title }))
-  ];
-  return [{ id: "summary", label: labels.summary }];
+  const registry = window.CasaModulesConfiguration.itemRegistry(catalog);
+  const allowed = kind === "modules" ? new Set(["module"])
+    : kind === "finishes" ? new Set(["finish-group"])
+      : kind === "services" ? new Set(["service", "object"])
+        : kind === "custom" ? new Set(["module", "object", "service"])
+          : kind === "summary" ? new Set(["summary"]) : new Set();
+  return [...registry].filter(([id, type]) => allowed.has(type) || kind === "finishes" && id === "stone-skirting").map(([id]) => {
+    const module = catalog.modules.find((item) => item.entityId === id);
+    const entry = [...catalog.accessories, ...catalog.services].find((item) => item.entityId === id || item.id === id);
+    return { id, label: module ? `${module.referenceLabel} · ${model.objects[id]?.title || module.title}` : model.objects[id]?.title || entry?.title || labels[id] || id };
+  });
 }
 
 function renderStages() {
@@ -180,12 +184,15 @@ function renderStages() {
     addRow.className = "stage-add-item";
     const addSelect = document.createElement("select");
     addSelect.dataset.addItemSelect = stage.id;
-    const usedElsewhere = new Set(model.stages.filter((item) => item.id !== stage.id).flatMap((item) => item.items));
-    const choices = getItemOptions(stage.id).filter((item) => !stage.items.includes(item.id) && !usedElsewhere.has(item.id));
-    const placeholder = document.createElement("option"); placeholder.value = ""; placeholder.textContent = choices.length ? "Escolha um item para incluir" : "Todos os itens disponíveis já estão nesta etapa";
+    const choices = getItemOptions(stage.id).filter((item) => !stage.items.includes(item.id));
+    const placeholder = document.createElement("option"); placeholder.value = ""; placeholder.textContent = choices.length ? "Escolha um item para incluir ou mover" : "Todos os itens compatíveis já estão nesta etapa";
     addSelect.append(placeholder);
-    choices.forEach((item) => { const option = document.createElement("option"); option.value = item.id; option.textContent = item.label; addSelect.append(option); });
-    const addItem = document.createElement("button"); addItem.type = "button"; addItem.className = "button button--secondary"; addItem.textContent = "Incluir item"; addItem.dataset.addStageItem = stage.id; addItem.disabled = choices.length === 0;
+    choices.forEach((item) => {
+      const option = document.createElement("option"); option.value = item.id;
+      const owner = model.stages.find((entry) => entry.id !== stage.id && entry.items.includes(item.id));
+      option.textContent = owner ? `${item.label} · mover de ${owner.label}` : item.label; addSelect.append(option);
+    });
+    const addItem = document.createElement("button"); addItem.type = "button"; addItem.className = "button button--secondary"; addItem.textContent = "Incluir / mover item"; addItem.dataset.addStageItem = stage.id; addItem.disabled = choices.length === 0;
     addRow.append(addSelect, addItem);
     items.append(addRow);
     card.append(items);
@@ -260,26 +267,16 @@ function renderObjects() {
     makeField("Componentes (um por linha)", data.components, "objectComponents", true),
     makeField("Requisitos (um por linha)", data.requirements, "objectRequirements", true));
   const handleProduct = model.handleProducts.find((item) => item.priceEntryId === id);
-  if (handleProduct) renderHandleColors(card, handleProduct);
+  if (handleProduct) {
+    const section = document.createElement("section"); section.className = "handle-colors";
+    const title = document.createElement("h3"); title.textContent = "Materiais deste puxador";
+    const note = document.createElement("p"); note.className = "admin-note";
+    note.textContent = handleProduct.materialIds.map((materialId) => model.materials.find((item) => item.id === materialId)?.label).filter(Boolean).join(" · ") || "Nenhum material associado. Configure a lista na aba Cores e acabamentos.";
+    section.append(title, note); card.append(section);
+  }
   card.dataset.objectId = id;
   objectsList.append(card);
   renderObjectAssets(id, label);
-}
-
-function renderHandleColors(card, product) {
-  const section = document.createElement("section"); section.className = "handle-colors"; section.dataset.handleProductId = product.id;
-  const heading = document.createElement("h3"); heading.textContent = "Cores do puxador"; section.append(heading);
-  const note = document.createElement("p"); note.className = "admin-note"; note.textContent = "Estas cores pertencem ao modelo de puxador e não podem ser usadas como cores de MDF."; section.append(note);
-  product.colors.forEach((entry) => {
-    const row = document.createElement("div"); row.className = "handle-color-row"; row.dataset.handleColorId = entry.id;
-    row.append(makeField("Nome da cor", entry.label, "handleColorLabel"));
-    const swatchLabel = document.createElement("label"); swatchLabel.className = "data-field"; swatchLabel.append(document.createTextNode("Cor"));
-    const swatch = document.createElement("input"); swatch.type = "color"; swatch.value = entry.color; swatch.dataset.handleColorValue = "true"; swatchLabel.append(swatch); row.append(swatchLabel);
-    const remove = document.createElement("button"); remove.type = "button"; remove.className = "button button--secondary"; remove.textContent = "Remover cor"; remove.dataset.removeHandleColor = entry.id; row.append(remove);
-    section.append(row);
-  });
-  const add = document.createElement("button"); add.type = "button"; add.className = "button button--secondary"; add.textContent = "Adicionar cor ao puxador"; add.dataset.addHandleColor = product.id; section.append(add);
-  card.append(section);
 }
 
 function renderObjectAssets(id, label) {
@@ -294,7 +291,14 @@ function renderObjectAssets(id, label) {
     const select = document.createElement("select"); select.dataset.objectAsset = field;
     const empty = document.createElement("option"); empty.value = ""; empty.textContent = "Usar o padrão / sem máscara"; select.append(empty);
     choices.forEach((path) => { const option = document.createElement("option"); option.value = path; option.textContent = path; select.append(option); });
-    select.value = assets[field] || ""; select.disabled = !hasSceneEntity; labelNode.append(select); card.append(labelNode);
+    select.value = assets[field] || ""; select.disabled = !hasSceneEntity; labelNode.append(select);
+    const previewPath = assets[field] || (field !== "maskAsset" ? scene.entities.find((entity) => entity.id === id)?.asset || "" : "");
+    const preview = document.createElement("div"); preview.className = `asset-preview${field === "maskAsset" ? " asset-preview--mask" : ""}`;
+    if (previewPath) {
+      const image = document.createElement("img"); image.src = previewPath; image.alt = `${title} · ${label}`; image.loading = "lazy"; image.decoding = "async";
+      image.addEventListener("error", () => { preview.textContent = "Prévia indisponível"; }, { once: true }); preview.append(image);
+    } else { const empty = document.createElement("span"); empty.textContent = "Sem máscara · usar o recorte padrão"; preview.append(empty); }
+    labelNode.append(preview); card.append(labelNode);
   });
   const note = document.createElement("p"); note.className = "admin-note"; note.textContent = hasSceneEntity ? "A lista contém apenas arquivos já presentes na cena. O painel não carrega arquivos novos nem permite caminhos externos." : "Este item não possui camada visual própria na cena. Configure cores e texturas na biblioteca de materiais.";
   card.append(note); objectAssetsList.append(card);
@@ -303,7 +307,10 @@ function renderObjectAssets(id, label) {
 function renderFinishes() {
   finishesList.replaceChildren();
   const globalOptions = model.finishes.filter((item) => item.scope === "global" && item.enabled).length;
-  model.finishes.forEach((finish) => {
+  const pages = Math.max(1, Math.ceil(model.finishes.length / MATERIALS_PER_PAGE));
+  finishAvailabilityPage = Math.min(finishAvailabilityPage, pages - 1);
+  const page = model.finishes.slice(finishAvailabilityPage * MATERIALS_PER_PAGE, (finishAvailabilityPage + 1) * MATERIALS_PER_PAGE);
+  page.forEach((finish) => {
     const source = model.materials.find((item) => item.id === finish.id);
     if (!source || !model.materialGroups.find((group) => group.id === "fronts-all")?.materialIds.includes(finish.id)) return;
     const card = document.createElement("article");
@@ -353,6 +360,46 @@ function renderFinishes() {
     }
     finishesList.append(card);
   });
+  renderPager(byId("finishAvailabilityPager"), finishAvailabilityPage, pages, (index) => { finishAvailabilityPage = index; renderFinishes(); });
+}
+
+function renderPager(container, index, pages, onPage) {
+  if (!container) return;
+  container.replaceChildren();
+  const previous = document.createElement("button"); previous.type = "button"; previous.className = "button button--secondary"; previous.textContent = "← Anterior"; previous.disabled = index <= 0;
+  previous.addEventListener("click", () => onPage(index - 1));
+  const status = document.createElement("span"); status.textContent = `${index + 1} / ${pages}`; status.setAttribute("aria-live", "polite");
+  const next = document.createElement("button"); next.type = "button"; next.className = "button button--secondary"; next.textContent = "Próxima →"; next.disabled = index >= pages - 1;
+  next.addEventListener("click", () => onPage(index + 1)); container.append(previous, status, next);
+}
+
+function materialTargetOptions() {
+  return [
+    ["fronts-all", "Frentes"], ["stone-all", "Pedra e rodapé"],
+    ...model.handleProducts.map((item) => [`handle:${item.id}`, `Puxador · ${item.label}`])
+  ];
+}
+
+function setMaterialTarget(materialId, targetId, enabled) {
+  const material = model.materials.find((item) => item.id === materialId); if (!material) return;
+  if (targetId.startsWith("handle:")) {
+    const product = model.handleProducts.find((item) => item.id === targetId.slice(7)); if (!product) return;
+    product.materialIds = enabled ? [...new Set([...product.materialIds, materialId])] : product.materialIds.filter((id) => id !== materialId);
+    return;
+  }
+  const group = model.materialGroups.find((item) => item.id === targetId); if (!group) return;
+  if (!enabled && group.materialIds.length === 1) return setMessage(saveMessage, "Mantenha pelo menos um material nesta opção.", "error");
+  group.materialIds = enabled ? [...new Set([...group.materialIds, materialId])] : group.materialIds.filter((id) => id !== materialId);
+  material.groupIds = model.materialGroups.filter((item) => ["fronts-all", "stone-all"].includes(item.id) && item.materialIds.includes(materialId)).map((item) => item.id);
+  if (targetId === "fronts-all") {
+    if (enabled && !model.finishes.some((item) => item.id === materialId)) model.finishes.push({ id: materialId, enabled: false, scope: "global", moduleIds: catalog.modules.map((item) => item.entityId) });
+    if (!enabled) model.finishes = model.finishes.filter((item) => item.id !== materialId);
+  }
+  const priceSection = targetId === "fronts-all" ? "frontFinishRatesBps" : "globalEntries";
+  const catalogPrices = priceBook[priceSection] || {};
+  if (targetId === "stone-all") { if (enabled) model.pricing.globalEntries[materialId] ??= 0; else if (!Object.hasOwn(catalogPrices, materialId)) delete model.pricing.globalEntries[materialId]; }
+  if (targetId === "fronts-all") { if (enabled) model.pricing.frontFinishRatesBps[materialId] ??= 0; else if (!Object.hasOwn(catalogPrices, materialId)) delete model.pricing.frontFinishRatesBps[materialId]; }
+  reconcileInitialMaterials();
 }
 
 function makeRuleSelect(labelText, value, name, options, multiple = false) {
@@ -365,7 +412,9 @@ function makeRuleSelect(labelText, value, name, options, multiple = false) {
 
 function renderMaterials() {
   materialsList.replaceChildren();
-  model.materials.forEach((material) => {
+  const pages = Math.max(1, Math.ceil(model.materials.length / MATERIALS_PER_PAGE));
+  materialPageIndex = Math.min(materialPageIndex, pages - 1);
+  model.materials.slice(materialPageIndex * MATERIALS_PER_PAGE, (materialPageIndex + 1) * MATERIALS_PER_PAGE).forEach((material) => {
     const card = document.createElement("article"); card.className = "editor-card material-editor-card"; card.dataset.materialId = material.id;
     const chip = document.createElement("span"); chip.className = "material-chip"; chip.style.backgroundColor = material.color; if (material.textureAsset) chip.style.backgroundImage = `url("${material.textureAsset}")`;
     const title = document.createElement("h2"); title.textContent = material.label;
@@ -381,35 +430,70 @@ function renderMaterials() {
     const noTexture = document.createElement("option"); noTexture.value = ""; noTexture.textContent = "Somente cor"; assetSelect.append(noTexture);
     materialAssetChoices().forEach((path) => { const option = document.createElement("option"); option.value = path; option.textContent = path; assetSelect.append(option); });
     assetSelect.value = material.textureAsset || ""; assetLabel.append(assetSelect); card.append(assetLabel);
-    const groupChoices = document.createElement("div"); groupChoices.className = "finish-module-options material-group-choices";
-    model.materialGroups.filter((group) => group.id !== "handles-all").forEach((group) => {
-      const optionLabel = document.createElement("label"); const input = document.createElement("input"); input.type = "checkbox"; input.checked = group.materialIds.includes(material.id); input.dataset.materialGroupMembership = `${material.id}:${group.id}`;
-      optionLabel.append(input, document.createTextNode(group.label)); groupChoices.append(optionLabel);
+    if (material.textureAsset) { const thumb = document.createElement("img"); thumb.className = "material-texture-preview"; thumb.src = material.textureAsset; thumb.alt = `Textura ${material.label}`; thumb.loading = "lazy"; card.append(thumb); }
+    const targetSelect = document.createElement("details"); targetSelect.className = "material-targets";
+    const summary = document.createElement("summary"); summary.textContent = "Válido para…"; targetSelect.append(summary);
+    const targetList = document.createElement("div"); targetList.className = "material-targets__list";
+    materialTargetOptions().forEach(([id, label]) => {
+      const selected = id.startsWith("handle:")
+        ? Boolean(model.handleProducts.find((item) => item.id === id.slice(7))?.materialIds.includes(material.id))
+        : Boolean(model.materialGroups.find((item) => item.id === id)?.materialIds.includes(material.id));
+      const optionLabel = document.createElement("label"); const input = document.createElement("input"); input.type = "checkbox"; input.checked = selected; input.dataset.materialTarget = id; input.dataset.materialTargetId = material.id;
+      optionLabel.append(input, document.createTextNode(label)); targetList.append(optionLabel);
     });
-    card.append(groupChoices);
+    targetSelect.append(targetList); card.append(targetSelect);
     const remove = document.createElement("button"); remove.type = "button"; remove.className = "button button--secondary rule-remove"; remove.textContent = "Remover material"; remove.dataset.removeMaterial = material.id;
     remove.disabled = (material.locked && ["base-light", "stone-existing", "none"].includes(material.id)) || material.groupIds.some((id) => model.materialGroups.find((group) => group.id === id)?.materialIds.length <= 1);
     card.append(remove); materialsList.append(card);
   });
+  renderPager(byId("materialPager"), materialPageIndex, pages, (index) => { materialPageIndex = index; renderMaterials(); });
 }
 
 function renderMaterialGroups() {
   materialGroupsList.replaceChildren();
-  model.materialGroups.forEach((group) => {
-    const card = document.createElement("article"); card.className = "editor-card"; card.dataset.materialGroupId = group.id;
-    const heading = document.createElement("h2"); heading.textContent = group.label; card.append(heading);
-    card.append(makeField("Nome do acabamento", group.label, "materialGroupLabel"));
-    const choices = makeRuleSelect(group.id === "handles-all" ? "Modelos disponíveis para clientes" : "Materiais disponíveis para clientes", group.materialIds, "groupMaterials", group.id === "handles-all" ? model.handleProducts.map((item) => [item.id, item.label]) : model.materials.map((item) => [item.id, item.label]), true);
-    choices.classList.add("rule-wide"); card.append(choices);
-    if (group.id === "fronts-all") {
+  const pages = materialTargetOptions();
+  materialTargetPageIndex = Math.min(materialTargetPageIndex, pages.length - 1);
+  const [targetId, title] = pages[materialTargetPageIndex] || pages[0];
+  selectedMaterialTarget = targetId;
+  const card = document.createElement("article"); card.className = "editor-card material-target-page";
+  if (!targetId.startsWith("handle:")) card.dataset.materialGroupId = targetId;
+  const heading = document.createElement("h2"); heading.textContent = `${title} · opções válidas`; card.append(heading);
+  if (targetId.startsWith("handle:")) {
+    const product = model.handleProducts.find((item) => item.id === targetId.slice(7));
+    const handles = model.materialGroups.find((item) => item.id === "handles-all");
+    const available = document.createElement("label"); available.className = "switch material-availability";
+    const toggle = document.createElement("input"); toggle.type = "checkbox"; toggle.checked = handles.materialIds.includes(product.id); toggle.dataset.handleAvailability = product.id;
+    available.append(toggle, document.createTextNode("Disponível para clientes")); card.append(available);
+    const note = document.createElement("p"); note.className = "admin-note"; note.textContent = "Definir depois não é um puxador e não recebe materiais."; card.append(note);
+    card.append(makeMaterialCheckboxDropdown("Materiais válidos para este modelo", model.materials.map((item) => [item.id, item.label, item.color, item.textureAsset]), product.materialIds, `handle:${product.id}`));
+    card.append(makeRuleSelect("Puxador selecionado inicialmente", model.initialState.handleId, "initialHandle", [["none", "Definir depois"], ...handles.materialIds.map((id) => { const item = model.handleProducts.find((entry) => entry.id === id); return [item?.priceEntryId || "", item?.label || id]; })]));
+  } else {
+    const group = model.materialGroups.find((item) => item.id === targetId);
+    card.append(makeField("Nome da opção", group.label, "materialGroupLabel"));
+    card.append(makeMaterialCheckboxDropdown(targetId === "stone-all" ? "Pedras válidas para bancada e rodapé" : "Materiais válidos para frentes", model.materials.map((item) => [item.id, item.label, item.color, item.textureAsset]), group.materialIds, targetId));
+    if (targetId === "fronts-all") {
       const available = model.finishes.filter((finish) => finish.enabled && finish.scope === "global" && group.materialIds.includes(finish.id));
       card.append(makeRuleSelect("Cor selecionada inicialmente", model.initialState.finishId, "initialFinish", available.map((finish) => [finish.id, model.materials.find((item) => item.id === finish.id)?.label || finish.id])));
+    } else {
+      card.append(makeRuleSelect("Pedra selecionada inicialmente", model.initialState.stonePackageId, "initialStone", group.materialIds.map((id) => [id, model.materials.find((item) => item.id === id)?.label || id])));
+      const note = document.createElement("p"); note.className = "admin-note"; note.textContent = "A disponibilidade do serviço de rodapé é controlada separadamente na etapa. A escolha de pedra é compartilhada."; card.append(note);
     }
-    if (group.id === "handles-all") card.append(makeRuleSelect("Puxador selecionado inicialmente", model.initialState.handleId, "initialHandle", [["none", "Definir depois"], ...group.materialIds.map((id) => { const item = model.handleProducts.find((product) => product.id === id); return [item?.priceEntryId || "", item?.label || id]; })]));
-    if (group.id === "stone-all") card.append(makeRuleSelect("Pedra selecionada inicialmente", model.initialState.stonePackageId, "initialStone", group.materialIds.map((id) => [id, model.materials.find((item) => item.id === id)?.label || id])));
-    if (group.id === "stone-all") { const note = document.createElement("p"); note.className = "admin-note"; note.textContent = "A mesma pedra escolhida atende bancada e rodapé."; card.append(note); }
-    materialGroupsList.append(card);
+  }
+  materialGroupsList.append(card);
+  renderPager(byId("materialTargetPager"), materialTargetPageIndex, pages.length, (index) => { materialTargetPageIndex = index; renderMaterialGroups(); });
+}
+
+function makeMaterialCheckboxDropdown(label, options, selectedIds, targetId) {
+  const details = document.createElement("details"); details.className = "multi-picker";
+  const summary = document.createElement("summary"); summary.textContent = `${label} · ${selectedIds.length} selecionado(s)`; details.append(summary);
+  const list = document.createElement("div"); list.className = "multi-picker__list";
+  options.forEach(([id, name, color, texture]) => {
+    const option = document.createElement("label"); option.className = "multi-picker__option";
+    const input = document.createElement("input"); input.type = "checkbox"; input.checked = selectedIds.includes(id); input.dataset.targetMaterial = targetId; input.dataset.materialId = id;
+    const swatch = document.createElement("span"); swatch.className = "material-mini-swatch"; swatch.style.backgroundColor = color; if (texture) swatch.style.backgroundImage = `url("${texture}")`;
+    option.append(input, swatch, document.createTextNode(name)); list.append(option);
   });
+  details.append(list); return details;
 }
 
 function reconcileInitialMaterials() {
@@ -533,13 +617,6 @@ document.querySelector(".admin-tabs").addEventListener("click", (event) => {
 });
 
 objectsList.addEventListener("input", (event) => {
-  const handleCard = event.target.closest("[data-handle-product-id]");
-  if (handleCard) {
-    const product = model.handleProducts.find((item) => item.id === handleCard.dataset.handleProductId);
-    const color = product?.colors.find((item) => item.id === event.target.closest("[data-handle-color-id]")?.dataset.handleColorId);
-    if (color && event.target.matches("[data-handle-color-label]")) color.label = event.target.value;
-    return;
-  }
   const input = event.target;
   const card = input.closest("[data-object-id]");
   if (!card) return;
@@ -552,28 +629,6 @@ objectsList.addEventListener("input", (event) => {
 });
 
 objectsList.addEventListener("change", (event) => {
-  const card = event.target.closest("[data-handle-product-id]");
-  if (!card || !event.target.matches("[data-handle-color-value]")) return;
-  const product = model.handleProducts.find((item) => item.id === card.dataset.handleProductId);
-  const color = product?.colors.find((item) => item.id === event.target.closest("[data-handle-color-id]")?.dataset.handleColorId);
-  if (color) color.color = event.target.value;
-});
-
-objectsList.addEventListener("click", (event) => {
-  const add = event.target.closest("[data-add-handle-color]");
-  const remove = event.target.closest("[data-remove-handle-color]");
-  if (!add && !remove) return;
-  const card = event.target.closest("[data-handle-product-id]");
-  const product = model.handleProducts.find((item) => item.id === card?.dataset.handleProductId);
-  if (!product) return;
-  if (add) {
-    if (product.colors.length >= 30) return setMessage(saveMessage, "Cada puxador pode ter até 30 cores cadastradas.", "error");
-    const label = window.prompt("Nome da cor do puxador", "Nova cor"); if (!label?.trim()) return;
-    let id = label.trim().toLocaleLowerCase("pt-BR").normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").slice(0, 30) || "cor";
-    const base = id; let suffix = 2; while (product.colors.some((item) => item.id === id)) id = `${base}-${suffix++}`;
-    product.colors.push({ id, label: label.trim().slice(0, 40), color: "#b7b0a7" });
-  } else product.colors = product.colors.filter((item) => item.id !== remove.dataset.removeHandleColor);
-  renderObjects();
 });
 
 objectAssetsList.addEventListener("change", (event) => {
@@ -581,6 +636,8 @@ objectAssetsList.addEventListener("change", (event) => {
   const card = select?.closest("[data-asset-object-id]");
   if (!select || !card) return;
   model.objectAssets[card.dataset.assetObjectId][select.dataset.objectAsset] = select.value;
+  const object = catalogObjects().find((item) => item.id === card.dataset.assetObjectId);
+  renderObjectAssets(card.dataset.assetObjectId, object?.label || card.dataset.assetObjectId);
 });
 
 byId("objectSelector").addEventListener("change", (event) => { selectedObjectIndex = Number(event.target.value) || 0; renderObjects(); });
@@ -623,30 +680,7 @@ materialsList.addEventListener("change", (event) => {
   const material = model.materials.find((item) => item.id === card.dataset.materialId); if (!material) return;
   if (event.target.matches("[data-material-texture]")) material.textureAsset = event.target.value;
   if (event.target.matches("[data-material-kind]")) material.kind = event.target.value;
-  if (event.target.matches("[data-material-group-membership]")) {
-    const [materialId, groupId] = event.target.dataset.materialGroupMembership.split(":");
-    const group = model.materialGroups.find((item) => item.id === groupId);
-    if (!group) return;
-    if (!event.target.checked && group.materialIds.length === 1) {
-      event.target.checked = true;
-      return setMessage(saveMessage, "Cada lista de acabamento precisa manter pelo menos um material.", "error");
-    }
-    group.materialIds = event.target.checked ? [...new Set([...group.materialIds, materialId])] : group.materialIds.filter((id) => id !== materialId);
-    material.groupIds = model.materialGroups.filter((item) => item.materialIds.includes(materialId)).map((item) => item.id);
-    if (groupId === "fronts-all") {
-      if (event.target.checked && !model.finishes.some((finish) => finish.id === materialId)) model.finishes.push({ id: materialId, enabled: false, scope: "global", moduleIds: catalog.modules.map((item) => item.entityId) });
-      if (!event.target.checked) model.finishes = model.finishes.filter((finish) => finish.id !== materialId);
-    }
-    if (groupId === "handles-all") {
-      if (event.target.checked) model.pricing.handleEntries[materialId] ??= 0;
-      else if (!Object.hasOwn(priceBook.handleEntries, materialId)) delete model.pricing.handleEntries[materialId];
-    }
-    if (groupId === "stone-all") {
-      if (event.target.checked) model.pricing.globalEntries[materialId] ??= 0;
-      else if (!Object.hasOwn(priceBook.globalEntries, materialId)) delete model.pricing.globalEntries[materialId];
-    }
-    reconcileInitialMaterials();
-  }
+  if (event.target.matches("[data-material-target]")) setMaterialTarget(event.target.dataset.materialTargetId, event.target.dataset.materialTarget, event.target.checked);
   renderFinishes(); renderMaterials(); renderMaterialGroups(); renderPricing();
 });
 
@@ -656,35 +690,16 @@ materialGroupsList.addEventListener("input", (event) => {
   if (event.target.matches("[data-material-group-label]")) group.label = event.target.value;
 });
 materialGroupsList.addEventListener("change", (event) => {
-  const card = event.target.closest("[data-material-group-id]"); if (!card) return;
-  const group = model.materialGroups.find((item) => item.id === card.dataset.materialGroupId); if (!group) return;
-  if (event.target.matches("[data-group-materials]")) {
-    const nextIds = [...event.target.selectedOptions].map((option) => option.value);
-    if (!nextIds.length) {
-      event.target.value = group.materialIds[0] || "";
-      return setMessage(saveMessage, "Cada lista de acabamento precisa manter pelo menos um material.", "error");
-    }
-    if (group.id === "fronts-all" && !model.finishes.some((finish) => nextIds.includes(finish.id) && finish.enabled && finish.scope === "global")) {
-      [...event.target.options].forEach((option) => { option.selected = group.materialIds.includes(option.value); });
-      return setMessage(saveMessage, "Mantenha ao menos uma cor global disponível para selecionar o padrão.", "error");
-    }
-    group.materialIds = nextIds;
-    model.materials.forEach((material) => { material.groupIds = model.materialGroups.filter((entry) => entry.materialIds.includes(material.id)).map((entry) => entry.id); });
-    if (group.id === "fronts-all") {
-      model.finishes = model.finishes.filter((finish) => group.materialIds.includes(finish.id));
-      group.materialIds.forEach((id) => { if (!model.finishes.some((finish) => finish.id === id)) model.finishes.push({ id, enabled: false, scope: "global", moduleIds: catalog.modules.map((item) => item.entityId) }); });
-    }
-    if (group.id === "handles-all") {
-      const priceIds = group.materialIds.map((id) => model.handleProducts.find((item) => item.id === id)?.priceEntryId).filter(Boolean);
-      priceIds.forEach((id) => { model.pricing.handleEntries[id] ??= 0; });
-      Object.keys(model.pricing.handleEntries).forEach((id) => { if (!Object.hasOwn(priceBook.handleEntries, id) && !priceIds.includes(id)) delete model.pricing.handleEntries[id]; });
-    }
-    if (group.id === "stone-all") {
-      group.materialIds.forEach((id) => { model.pricing.globalEntries[id] ??= 0; });
-      Object.keys(model.pricing.globalEntries).forEach((id) => { if (!Object.hasOwn(priceBook.globalEntries, id) && !group.materialIds.includes(id) && !catalog.services.some((service) => service.id === id)) delete model.pricing.globalEntries[id]; });
-    }
+  const card = event.target.closest("[data-material-group-id]");
+  const group = model.materialGroups.find((item) => item.id === card?.dataset.materialGroupId);
+  if (event.target.matches("[data-target-material]")) setMaterialTarget(event.target.dataset.materialId, event.target.dataset.targetMaterial, event.target.checked);
+  if (event.target.matches("[data-handle-availability]")) {
+    const handles = model.materialGroups.find((item) => item.id === "handles-all"); const id = event.target.dataset.handleAvailability;
+    if (!event.target.checked && handles.materialIds.length === 1) { event.target.checked = true; return setMessage(saveMessage, "Mantenha pelo menos um puxador disponível.", "error"); }
+    handles.materialIds = event.target.checked ? [...new Set([...handles.materialIds, id])] : handles.materialIds.filter((item) => item !== id);
     reconcileInitialMaterials();
   }
+  if (!card && !event.target.matches("[data-target-material],[data-handle-availability],[data-initial-finish],[data-initial-handle],[data-initial-stone]")) return;
   if (event.target.matches("[data-initial-finish]")) model.initialState.finishId = event.target.value;
   if (event.target.matches("[data-initial-handle]")) model.initialState.handleId = event.target.value;
   if (event.target.matches("[data-initial-stone]")) model.initialState.stonePackageId = event.target.value;
@@ -729,6 +744,7 @@ byId("addMaterialButton").addEventListener("click", () => {
   model.materialGroups.find((group) => group.id === "fronts-all").materialIds.push(id);
   model.finishes.push({ id, enabled: false, scope: "global", moduleIds: catalog.modules.map((item) => item.entityId) });
   model.pricing.frontFinishRatesBps[id] = 0;
+  materialPageIndex = Math.floor((model.materials.length - 1) / MATERIALS_PER_PAGE);
   renderFinishes(); renderMaterials(); renderMaterialGroups(); renderPricing();
 });
 
@@ -737,6 +753,7 @@ materialsList.addEventListener("click", (event) => {
   const id = button.dataset.removeMaterial;
   model.materials = model.materials.filter((item) => item.id !== id);
   model.materialGroups.forEach((group) => { group.materialIds = group.materialIds.filter((itemId) => itemId !== id); });
+  model.handleProducts.forEach((product) => { product.materialIds = product.materialIds.filter((itemId) => itemId !== id); });
   model.materials.forEach((material) => { material.groupIds = model.materialGroups.filter((group) => group.materialIds.includes(material.id)).map((group) => group.id); });
   model.finishes = model.finishes.filter((finish) => finish.id !== id);
   if (!Object.hasOwn(priceBook.frontFinishRatesBps, id)) delete model.pricing.frontFinishRatesBps[id];
@@ -861,7 +878,13 @@ stagesList.addEventListener("change", (event) => {
   if (!item) return;
   const stage = model.stages.find((entry) => entry.id === item.dataset.stageItem);
   if (!stage) return;
-  stage.items = item.checked ? [...stage.items, item.value] : stage.items.filter((id) => id !== item.value);
+  const owner = item.checked ? model.stages.find((entry) => entry.id !== stage.id && entry.items.includes(item.value)) : null;
+  if (owner && owner.enabled && owner.items.length === 1) {
+    item.checked = false;
+    return setMessage(saveMessage, `Inclua outro item em “${owner.label}” antes de mover o último item da etapa.`, "error");
+  }
+  if (owner) owner.items = owner.items.filter((id) => id !== item.value);
+  stage.items = item.checked ? [...new Set([...stage.items, item.value])] : stage.items.filter((id) => id !== item.value);
   if ((stage.kind || stage.id) === "finishes" && item.value === "stone-all" && !item.checked) {
     stage.items = stage.items.filter((id) => id !== "stone-skirting");
   }
@@ -884,7 +907,12 @@ stagesList.addEventListener("click", (event) => {
   if (addItem) {
     const stage = model.stages.find((item) => item.id === addItem.dataset.addStageItem);
     const select = stagesList.querySelector(`[data-add-item-select="${CSS.escape(addItem.dataset.addStageItem)}"]`);
-    if (stage && select?.value && !stage.items.includes(select.value)) stage.items.push(select.value);
+    if (stage && select?.value && !stage.items.includes(select.value)) {
+      const owner = model.stages.find((item) => item.id !== stage.id && item.items.includes(select.value));
+      if (owner?.enabled && owner.items.length === 1) return setMessage(saveMessage, `Inclua outro item em “${owner.label}” antes de mover o último item da etapa.`, "error");
+      if (owner) owner.items = owner.items.filter((id) => id !== select.value);
+      stage.items.push(select.value);
+    }
     renderStages(); return;
   }
   const button = event.target.closest("[data-move-stage]");
