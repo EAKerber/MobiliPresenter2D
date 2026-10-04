@@ -131,6 +131,25 @@ dimensionEventSettings.events = [{ id: "module-width-change", triggerId: "module
 assert.deepEqual(settingsCore.validateConfiguratorSettings(dimensionEventSettings, catalog, priceBook, scene), [], "events may adjust supported dimensions on any catalog module");
 dimensionEventSettings.events[0].dimension = "opacity";
 assert.equal(settingsCore.validateConfiguratorSettings(dimensionEventSettings, catalog, priceBook, scene).some((error) => error.includes("invalid event")), true, "events reject unsupported module properties");
+const itemStateEventSettings = structuredClone(defaultSettings);
+itemStateEventSettings.events = [{ id: "disable-fridge-side", triggerId: "move-stone", when: "enabled", action: "set-enabled", targetId: "module-04", enabled: false }];
+assert.deepEqual(settingsCore.validateConfiguratorSettings(itemStateEventSettings, catalog, priceBook, scene), [], "events may set module or service visibility from another item's state");
+itemStateEventSettings.events[0].targetId = "not-a-catalog-item";
+assert.equal(settingsCore.validateConfiguratorSettings(itemStateEventSettings, catalog, priceBook, scene).some((error) => error.includes("invalid event")), true, "events reject targets outside the catalog");
+itemStateEventSettings.events = [
+  { id: "disable-fridge-side", triggerId: "move-stone", when: "enabled", action: "set-enabled", targetId: "module-04", enabled: false },
+  { id: "enable-fridge-side", triggerId: "tempered-glass", when: "disabled", action: "set-enabled", targetId: "module-04", enabled: true }
+];
+assert.equal(settingsCore.validateConfiguratorSettings(itemStateEventSettings, catalog, priceBook, scene).some((error) => error.includes("conflicting event target")), true, "events reject ambiguous state overrides");
+const eventSourceState = core.createInitialState(scene);
+const eventResult = settingsCore.resolveEventState(scene, eventSourceState, [{ triggerId: "move-stone", when: "enabled", action: "set-enabled", targetId: "module-04", enabled: false }], defaultSettings.dependencies);
+assert.equal(eventResult.visibilityByEntity["module-04"], false, "active events override the module state at runtime");
+assert.equal(eventSourceState.visibilityByEntity["module-04"], true, "event overrides leave the user's saved module selection untouched");
+const serviceEventResult = settingsCore.resolveEventState(scene, eventSourceState, [{ triggerId: "module-04", when: "enabled", action: "set-enabled", targetId: "move-stone", enabled: false }], defaultSettings.dependencies);
+assert.equal(serviceEventResult.globalSelections.serviceIds.includes("move-stone"), false, "active events can enable or disable services at runtime");
+const dependencyEventResult = settingsCore.resolveEventState(scene, eventSourceState, [{ triggerId: "move-stone", when: "enabled", action: "set-enabled", targetId: "lighting-08", enabled: true }], defaultSettings.dependencies);
+assert.equal(dependencyEventResult.visibilityByEntity["module-04"], true, "event activation selects required modules");
+assert.equal(dependencyEventResult.visibilityByEntity["module-06"], true, "event activation selects all required modules");
 const dependencyCycleSettings = structuredClone(defaultSettings);
 dependencyCycleSettings.dependencies.push({ id: "side-requires-lighting", dependentId: "module-04", requires: ["lighting-08"] });
 assert.equal(settingsCore.validateConfiguratorSettings(dependencyCycleSettings, catalog, priceBook, scene).includes("dependency cycle is not allowed"), true);

@@ -614,14 +614,18 @@ function renderEvents() {
   model.events.forEach((rule) => {
     const card = document.createElement("article"); card.className = "editor-card material-rule-card"; card.dataset.eventId = rule.id;
     const legacyDepth = rule.action === "set-depth";
-    const heading = document.createElement("h2"); heading.textContent = legacyDepth ? "Ajuste legado de profundidade" : "Ajuste de dimensão";
+    const stateChange = rule.action === "set-enabled";
+    const heading = document.createElement("h2"); heading.textContent = legacyDepth ? "Ajuste legado de profundidade" : stateChange ? "Ativar ou desativar item" : "Ajuste de dimensão";
     card.append(heading,
-      makeRuleSelect("Ação", rule.action || "set-dimension", "eventAction", [["set-dimension", "Alterar dimensão de módulo"], ["set-depth", "Profundidade fixa do Módulo 07"]]),
+      makeRuleSelect("Ação", rule.action || "set-dimension", "eventAction", [["set-dimension", "Alterar dimensão de módulo"], ["set-enabled", "Ativar ou desativar módulo ou serviço"], ["set-depth", "Profundidade fixa do Módulo 07"]]),
       makeRuleSelect("Quando este item", rule.triggerId, "eventTrigger", entities),
       makeRuleSelect("Estiver", rule.when, "eventWhen", [["enabled", "Ativado"], ["disabled", "Desativado"]]));
     if (legacyDepth) {
       const target = document.createElement("label"); target.className = "rule-field"; target.append(document.createTextNode("Aplicar ao Módulo 07 · Profundidade em mm"));
       const value = document.createElement("input"); value.type = "number"; value.min = "300"; value.max = "700"; value.step = "1"; value.value = String(rule.valueMm); value.dataset.eventDepth = "true"; target.append(value); card.append(target);
+    } else if (stateChange) {
+      card.append(makeRuleSelect("Aplicar a", rule.targetId || "module-07", "eventTarget", entities));
+      card.append(makeRuleSelect("Definir estado", String(Boolean(rule.enabled)), "eventEnabled", [["true", "Ativado"], ["false", "Desativado"]]));
     } else {
       const modules = catalog.modules.map((item) => [item.entityId, `${item.referenceLabel} · ${model.objects[item.entityId]?.title || item.title}`]);
       card.append(makeRuleSelect("Aplicar ao módulo", rule.targetId || "module-07", "eventTarget", modules));
@@ -809,13 +813,15 @@ eventsList.addEventListener("change", (event) => {
   if (event.target.matches("[data-event-action]")) {
     rule.action = event.target.value;
     if (rule.action === "set-dimension") { rule.targetId = "module-07"; rule.dimension = "depth"; }
-    else { rule.targetId = "module-07"; delete rule.dimension; }
+    else if (rule.action === "set-enabled") { rule.targetId = "module-07"; rule.enabled = false; delete rule.dimension; delete rule.valueMm; }
+    else { rule.targetId = "module-07"; delete rule.dimension; delete rule.enabled; }
     renderEvents(); return;
   }
   if (event.target.matches("[data-event-trigger]")) rule.triggerId = event.target.value;
   if (event.target.matches("[data-event-when]")) rule.when = event.target.value;
   if (event.target.matches("[data-event-depth]")) rule.valueMm = Number(event.target.value);
   if (event.target.matches("[data-event-target]")) rule.targetId = event.target.value;
+  if (event.target.matches("[data-event-enabled]")) rule.enabled = event.target.value === "true";
   if (event.target.matches("[data-event-dimension]")) rule.dimension = event.target.value;
   if (event.target.matches("[data-event-value]")) rule.valueMm = Number(event.target.value);
 });

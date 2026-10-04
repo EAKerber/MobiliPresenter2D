@@ -90,6 +90,58 @@
     };
   }
 
+  function resolveEventState(scene, state, events = [], dependencies = []) {
+    const effective = {
+      ...state,
+      visibilityByEntity: { ...state.visibilityByEntity },
+      globalSelections: { ...state.globalSelections, serviceIds: [...(state.globalSelections?.serviceIds || [])] }
+    };
+    const rawIsActive = (id) => Object.hasOwn(state.visibilityByEntity, id) ? Boolean(state.visibilityByEntity[id]) : Boolean(state.globalSelections?.serviceIds?.includes(id));
+    const requirements = (id) => [...new Set([
+      ...(scene.entities.find((entity) => entity.id === id)?.requiresVisibleIds || []),
+      ...dependencies.filter((rule) => rule.dependentId === id).flatMap((rule) => rule.requires)
+    ])];
+    const forcedOff = new Set();
+    const forcedOn = new Set();
+    events.filter((rule) => rule.action === "set-enabled" && rawIsActive(rule.triggerId) === (rule.when === "enabled")).forEach((rule) => {
+      if (Object.hasOwn(effective.visibilityByEntity, rule.targetId)) effective.visibilityByEntity[rule.targetId] = rule.enabled;
+      else {
+        const services = new Set(effective.globalSelections.serviceIds);
+        if (rule.enabled) services.add(rule.targetId);
+        else services.delete(rule.targetId);
+        effective.globalSelections.serviceIds = [...services];
+      }
+      (rule.enabled ? forcedOn : forcedOff).add(rule.targetId);
+    });
+    const setSelected = (id, enabled) => {
+      if (Object.hasOwn(effective.visibilityByEntity, id)) effective.visibilityByEntity[id] = enabled;
+      else {
+        const services = new Set(effective.globalSelections.serviceIds);
+        if (enabled) services.add(id);
+        else services.delete(id);
+        effective.globalSelections.serviceIds = [...services];
+      }
+    };
+    const visiting = new Set();
+    const enableRequirements = (id) => {
+      if (visiting.has(id)) return;
+      visiting.add(id);
+      requirements(id).forEach((required) => { setSelected(required, true); enableRequirements(required); });
+      visiting.delete(id);
+    };
+    forcedOn.forEach(enableRequirements);
+    const disableDependents = (id, visited = new Set()) => {
+      if (visited.has(id)) return;
+      visited.add(id);
+      scene.entities.filter((entity) => requirements(entity.id).includes(id)).forEach((entity) => {
+        if (rawIsActive(entity.id) || forcedOn.has(entity.id)) setSelected(entity.id, false);
+        disableDependents(entity.id, visited);
+      });
+    };
+    forcedOff.forEach((id) => disableDependents(id));
+    return effective;
+  }
+
   function migrateLegacy(value, catalog, priceBook, scene) {
     const base = createDefaultAdministration({ stages: value.stages || [] }, catalog, priceBook, scene);
     const sections = ["entries", "handleEntries", "frontFinishRatesBps", "localEntries", "globalEntries"];
@@ -291,6 +343,7 @@
     }
     const eventIds = new Set();
     const eventDimensionTargets = new Set();
+    const eventStateTargets = new Set();
     if (!Array.isArray(value.events) || value.events.length > 40) errors.push("invalid event list");
     else value.events.forEach((rule) => {
       if (!rule || !/^[a-z][a-z0-9-]{1,39}$/.test(rule.id) || eventIds.has(rule.id)) { errors.push("invalid event id"); return; }
@@ -302,11 +355,18 @@
       const dimension = rule.action === "set-dimension" && targetModule && dimensions.includes(rule.dimension)
         && Number.isFinite(targetModule.dimensions?.nominalMm?.[rule.dimension])
         && Number.isInteger(rule.valueMm) && rule.valueMm >= 1 && rule.valueMm <= 5000;
-      if (!validTrigger || !(legacyDepth || dimension)) errors.push(`invalid event: ${rule.id}`);
+      const stateChange = rule.action === "set-enabled" && eventTriggerIds.has(rule.targetId)
+        && rule.targetId !== rule.triggerId && typeof rule.enabled === "boolean";
+      if (!validTrigger || !(legacyDepth || dimension || stateChange)) errors.push(`invalid event: ${rule.id}`);
       else {
-        const key = `${rule.targetId}:${legacyDepth ? "depth" : rule.dimension}`;
-        if (eventDimensionTargets.has(key)) errors.push(`conflicting event target: ${rule.id}`);
-        eventDimensionTargets.add(key);
+        if (stateChange) {
+          if (eventStateTargets.has(rule.targetId)) errors.push(`conflicting event target: ${rule.id}`);
+          eventStateTargets.add(rule.targetId);
+        } else {
+          const key = `${rule.targetId}:${legacyDepth ? "depth" : rule.dimension}`;
+          if (eventDimensionTargets.has(key)) errors.push(`conflicting event target: ${rule.id}`);
+          eventDimensionTargets.add(key);
+        }
       }
     });
 
@@ -349,7 +409,7 @@
     };
   }
 
-  const api = Object.freeze({ createDefaultAdministration, validateConfiguratorSettings, normalizeConfiguratorSettings, itemRegistry, SCHEMA });
+  const api = Object.freeze({ createDefaultAdministration, validateConfiguratorSettings, normalizeConfiguratorSettings, resolveEventState, itemRegistry, SCHEMA });
   if (typeof module !== "undefined" && module.exports) module.exports = api;
   if (global && typeof global === "object") global.CasaModulesConfiguration = api;
 })(typeof globalThis === "undefined" ? this : globalThis);

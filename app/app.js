@@ -91,7 +91,14 @@
     ...(scene.entities.find((entity) => entity.id === entityId)?.requiresVisibleIds || []),
     ...dynamicDependencies.filter((rule) => rule.dependentId === entityId).flatMap((rule) => rule.requires)
   ])];
-  const selectionIsActive = (id) => Object.hasOwn(state.visibilityByEntity, id) ? Boolean(state.visibilityByEntity[id]) : Boolean(state.globalSelections?.serviceIds?.includes(id));
+  const rawSelectionIsActive = (id) => Object.hasOwn(state.visibilityByEntity, id) ? Boolean(state.visibilityByEntity[id]) : Boolean(state.globalSelections?.serviceIds?.includes(id));
+  const eventIsActive = (rule) => rawSelectionIsActive(rule.triggerId) === (rule.when === "enabled");
+  const eventOverrideForTarget = (id) => dynamicEvents.find((rule) => rule.action === "set-enabled" && rule.targetId === id && eventIsActive(rule));
+  const eventAdjustedState = () => configurationCore.resolveEventState(scene, state, dynamicEvents, dynamicDependencies);
+  const selectionIsActive = (id) => {
+    const effective = eventAdjustedState();
+    return Object.hasOwn(effective.visibilityByEntity, id) ? Boolean(effective.visibilityByEntity[id]) : Boolean(effective.globalSelections?.serviceIds?.includes(id));
+  };
   const detailPageByEntity = new Map();
   const detailInteractionByEntity = new Set();
   const detailViewsCollapsedByEntity = new Set();
@@ -198,7 +205,10 @@
         input.type = "checkbox";
         input.dataset.moduleToggle = entity.id;
         input.setAttribute("aria-label", `Incluir ${product.title}`);
-        input.checked = state.visibilityByEntity[entity.id];
+        input.checked = eventAdjustedState().visibilityByEntity[entity.id];
+        const override = eventOverrideForTarget(entity.id);
+        input.disabled = Boolean(override);
+        input.title = override ? "Controlado por um evento da configuração." : "";
 
         const number = document.createElement("span");
         number.className = "module-number";
@@ -441,13 +451,18 @@
       button.append(swatch, title, description);
       stonePackageOptions.append(button);
     });
-    if (stoneSkirtingToggle) stoneSkirtingToggle.checked = Boolean(state.globalSelections?.serviceIds?.includes("stone-skirting"));
+    if (stoneSkirtingToggle) {
+      stoneSkirtingToggle.checked = Boolean(eventAdjustedState().globalSelections?.serviceIds?.includes("stone-skirting"));
+      const override = eventOverrideForTarget("stone-skirting");
+      stoneSkirtingToggle.disabled = Boolean(override);
+      stoneSkirtingToggle.title = override ? "Controlado por um evento da configuração." : "";
+    }
   }
 
   function renderServices() {
     if (!servicesChecklist) return;
     servicesChecklist.replaceChildren();
-    const selected = new Set(state.globalSelections?.serviceIds || []);
+    const selected = new Set(eventAdjustedState().globalSelections?.serviceIds || []);
     catalog.services.filter((service) => stageItems("services").has(service.id)).forEach((service) => {
       const card = document.createElement("label");
       card.className = "service-check";
@@ -455,6 +470,9 @@
       input.type = "checkbox";
       input.dataset.globalServiceId = service.id;
       input.checked = selected.has(service.id);
+      const override = eventOverrideForTarget(service.id);
+      input.disabled = Boolean(override) || service.status === "included";
+      input.title = override ? "Controlado por um evento da configuração." : "";
       input.setAttribute("aria-label", service.title);
       const copy = document.createElement("span");
       const title = document.createElement("strong");
@@ -513,7 +531,7 @@
   function productForCurrentConfiguration(product) {
     if (!product.dimensions?.nominalMm || !product.dimensions?.geometryMm) return product;
     const events = dynamicEvents.filter((rule) => rule.targetId === product.entityId
-      && selectionIsActive(rule.triggerId) === (rule.when === "enabled")
+      && eventIsActive(rule)
       && (rule.action === "set-dimension" || rule.action === "set-depth" && product.entityId === "module-07"));
     if (!events.length) return product;
     const nominalMm = { ...product.dimensions.nominalMm };
@@ -1382,7 +1400,10 @@
       card.classList.toggle("is-included", isVisible);
       card.querySelector("[data-select-entity]")?.setAttribute("aria-expanded", String(state.selectedEntityId === entityId));
       if (input && entity) {
-        input.checked = Boolean(state.visibilityByEntity[entity.id]);
+        input.checked = Boolean(eventAdjustedState().visibilityByEntity[entity.id]);
+        const override = eventOverrideForTarget(entity.id);
+        input.disabled = Boolean(override);
+        input.title = override ? "Controlado por um evento da configuração." : "";
         input.setAttribute("aria-describedby", blocked ? `blocked-${entity.id}` : "");
       }
       const product = catalogByEntityId.get(entityId);
@@ -1418,9 +1439,10 @@
     if (!lightingToggle || !result) return;
     const requirementHidden = requirementsForEntity("lighting-08").some((entityId) => !selectionIsActive(entityId));
     const blocked = requirementHidden || result.reason === "requirement-hidden" || result.reason === "requirement-missing";
-    lightingToggle.checked = Boolean(state.visibilityByEntity["lighting-08"]);
-    lightingToggle.disabled = blocked;
-    lightingToggle.title = blocked ? "Inclua a lateral da geladeira e o aéreo da pia para habilitar a iluminação." : "";
+    lightingToggle.checked = Boolean(eventAdjustedState().visibilityByEntity["lighting-08"]);
+    const override = eventOverrideForTarget("lighting-08");
+    lightingToggle.disabled = blocked || Boolean(override);
+    lightingToggle.title = override ? "Controlado por um evento da configuração." : blocked ? "Inclua a lateral da geladeira e o aéreo da pia para habilitar a iluminação." : "";
     lightingToggle.closest(".accessory-toggle")?.classList.toggle(
       "is-blocked",
       blocked
@@ -1436,14 +1458,15 @@
   }
 
   function getEstimate(resolved) {
+    const effectiveState = eventAdjustedState();
     const activeState = {
-      ...state,
+      ...effectiveState,
       globalSelections: {
-        ...state.globalSelections,
-        finishId: stageHas("finishes", "fronts-all") ? state.globalSelections.finishId : "base-light",
-        handleId: stageHas("finishes", "handles-all") ? state.globalSelections.handleId : "none",
-        stonePackageId: stageHas("finishes", "stone-all") ? state.globalSelections.stonePackageId : "stone-existing",
-        serviceIds: (state.globalSelections?.serviceIds || []).filter((id) =>
+        ...effectiveState.globalSelections,
+        finishId: stageHas("finishes", "fronts-all") ? effectiveState.globalSelections.finishId : "base-light",
+        handleId: stageHas("finishes", "handles-all") ? effectiveState.globalSelections.handleId : "none",
+        stonePackageId: stageHas("finishes", "stone-all") ? effectiveState.globalSelections.stonePackageId : "stone-existing",
+        serviceIds: (effectiveState.globalSelections?.serviceIds || []).filter((id) =>
           id === "stone-skirting" ? stageHas("finishes", id) && stageHas("finishes", "stone-all") : stageHas("services", id)
         )
       }
@@ -1610,8 +1633,12 @@
     stage.items.forEach((id) => {
       const item = document.createElement("label"); item.className = "accessory-toggle custom-stage-option";
       const input = document.createElement("input"); input.type = "checkbox"; input.dataset.customStageItem = id;
-      if (Object.hasOwn(state.visibilityByEntity, id)) input.checked = Boolean(state.visibilityByEntity[id]);
-      else input.checked = Boolean(state.globalSelections?.serviceIds?.includes(id));
+      const effective = eventAdjustedState();
+      if (Object.hasOwn(effective.visibilityByEntity, id)) input.checked = Boolean(effective.visibilityByEntity[id]);
+      else input.checked = Boolean(effective.globalSelections?.serviceIds?.includes(id));
+      const override = eventOverrideForTarget(id);
+      input.disabled = Boolean(override);
+      input.title = override ? "Controlado por um evento da configuração." : "";
       input.setAttribute("aria-label", customStageItemLabel(id));
       const label = document.createElement("span"); const strong = document.createElement("strong"); strong.textContent = customStageItemLabel(id); const small = document.createElement("small"); small.textContent = catalog.modules.some((module) => module.entityId === id) ? "Módulo" : "Item opcional"; label.append(strong, small);
       item.append(input, label); list.append(item);
@@ -1982,9 +2009,10 @@
   }
 
   function sceneMaterials() {
-    const finish = catalog.options.finishes.find((item) => item.id === core.globalFinishId(state)) || catalog.options.finishes[0];
+    const effectiveState = eventAdjustedState();
+    const finish = catalog.options.finishes.find((item) => item.id === core.globalFinishId(effectiveState)) || catalog.options.finishes[0];
     const stone = selectedStonePackage();
-    const hasStoneSkirting = stageHas("finishes", "stone-skirting") && stageHas("finishes", "stone-all") && Boolean(state.globalSelections?.serviceIds?.includes("stone-skirting"));
+    const hasStoneSkirting = stageHas("finishes", "stone-skirting") && stageHas("finishes", "stone-all") && Boolean(effectiveState.globalSelections?.serviceIds?.includes("stone-skirting"));
     const stoneMaterial = materialDescriptor(stone, "stone");
     const mdfMaterial = materialDescriptor(finish, "mdf");
     return {
@@ -1994,13 +2022,14 @@
   }
 
   function syncLayerVisibility() {
-    const resolved = visibility.resolveVisibility(scene, state);
+    const effectiveState = eventAdjustedState();
+    const resolved = visibility.resolveVisibility(scene, effectiveState);
     scene.entities.forEach((entity) => {
       const missing = requirementsForEntity(entity.id).some((id) => !selectionIsActive(id));
       if (missing && resolved[entity.id]?.visible) resolved[entity.id] = { ...resolved[entity.id], visible: false, reason: "requirement-hidden" };
     });
     lastResolved = resolved;
-    renderStone(state, sceneMaterials());
+    renderStone(effectiveState, sceneMaterials());
     syncFinishMasks(resolved);
     syncFinishAppearance();
     syncSkirtingAppearance();
@@ -2440,7 +2469,7 @@
   syncPinnedSceneUi();
   global.CASA_EM_MODULOS_DEBUG = Object.freeze({
     getState: () => state,
-    getVisibility: () => visibility.resolveVisibility(scene, state),
+    getVisibility: () => visibility.resolveVisibility(scene, eventAdjustedState()),
     scene
   });
 })(window);
