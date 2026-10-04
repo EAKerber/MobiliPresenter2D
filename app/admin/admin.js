@@ -6,6 +6,7 @@ import {
   logout,
   onAuthChange,
   requestPasswordRecovery,
+  recoverPassword,
   updateUser
 } from "@netlify/identity";
 
@@ -35,6 +36,7 @@ const saveMessage = byId("saveMessage");
 const logoutButton = byId("logoutButton");
 let model = structuredClone(defaults);
 let inviteToken = null;
+let recoveryToken = null;
 let selectedObjectIndex = 0;
 let selectedObjectTab = "content";
 let materialPageIndex = 0;
@@ -908,7 +910,8 @@ async function showUser(user) {
 }
 
 function showPasswordAction(type, token) {
-  inviteToken = token || null;
+  inviteToken = type === "invite" ? token || null : null;
+  recoveryToken = type === "recovery" ? token || null : null;
   loginForm.hidden = true;
   passwordActionForm.hidden = false;
   byId("passwordActionTitle").textContent = type === "invite"
@@ -949,6 +952,7 @@ passwordActionForm.addEventListener("submit", async (event) => {
   const password = byId("newPasswordInput").value;
   try {
     if (inviteToken) await acceptInvite(inviteToken, password);
+    else if (recoveryToken) await recoverPassword(recoveryToken, password);
     else await updateUser({ password });
     window.location.hash = "";
     window.location.reload();
@@ -1075,9 +1079,14 @@ logoutButton.addEventListener("click", async () => {
 onAuthChange((_event, user) => { void showUser(user); });
 
 try {
-  const callback = await handleAuthCallback();
-  if (callback?.type === "invite" || callback?.type === "recovery") showPasswordAction(callback.type, callback.token);
-  else await showUser(await getUser());
+  const hash = new URLSearchParams(window.location.hash.slice(1));
+  const recovery = hash.get("recovery_token");
+  if (recovery) showPasswordAction("recovery", recovery);
+  else {
+    const callback = await handleAuthCallback();
+    if (callback?.type === "invite") showPasswordAction(callback.type, callback.token);
+    else await showUser(await getUser());
+  }
 } catch (error) {
   setMessage(loginMessage, error.message || "Não foi possível concluir o acesso.", "error");
   await showUser(await getUser());
