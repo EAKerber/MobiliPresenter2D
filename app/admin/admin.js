@@ -40,6 +40,7 @@ let selectedObjectTab = "content";
 let materialPageIndex = 0;
 let materialTargetPageIndex = 0;
 let finishAvailabilityPage = 0;
+let materialAvailabilityPage = 0;
 let selectedMaterialTarget = "fronts-all";
 const MATERIALS_PER_PAGE = 4;
 
@@ -88,8 +89,72 @@ function getItemOptions(stageId) {
   });
 }
 
+function moveStageItem(itemId, destinationId) {
+  const destination = destinationId ? model.stages.find((stage) => stage.id === destinationId) : null;
+  const source = model.stages.find((stage) => stage.items.includes(itemId));
+  if (destinationId && !destination) return;
+  if (source?.id === destination?.id) return;
+
+  const movingIds = [itemId];
+  if (itemId === "stone-all" && model.stages.some((stage) => stage.enabled && stage.items.includes("stone-skirting"))) movingIds.push("stone-skirting");
+  if (itemId === "stone-skirting" && !model.stages.some((stage) => stage.enabled && stage.items.includes("stone-all"))) {
+    return setMessage(saveMessage, "Inclua a pedra antes de adicionar o rodapé.", "error");
+  }
+  if (destination && movingIds.some((id) => !getItemOptions(destination.id).some((item) => item.id === id))) {
+    return setMessage(saveMessage, "Esta etapa não aceita todos os itens selecionados para mover.", "error");
+  }
+
+  const sourceCounts = new Map();
+  movingIds.forEach((id) => {
+    const owner = model.stages.find((stage) => stage.items.includes(id));
+    if (owner) sourceCounts.set(owner, (sourceCounts.get(owner) || 0) + 1);
+  });
+  const emptied = [...sourceCounts].find(([stage, count]) => stage.enabled && stage.items.length <= count);
+  if (emptied) return setMessage(saveMessage, `A etapa “${emptied[0].label}” precisa manter ao menos um item enquanto estiver ativa.`, "error");
+
+  movingIds.forEach((id) => {
+    model.stages.forEach((stage) => { stage.items = stage.items.filter((item) => item !== id); });
+    if (destination) destination.items.push(id);
+  });
+  renderStages();
+}
+
 function renderStages() {
   stagesList.replaceChildren();
+  const assigned = new Set(model.stages.flatMap((stage) => stage.items));
+  const availableById = new Map();
+  model.stages.forEach((stage) => getItemOptions(stage.id).forEach((item) => {
+    if (!assigned.has(item.id)) {
+      const entry = availableById.get(item.id) || { ...item, stageIds: [] };
+      entry.stageIds.push(stage.id);
+      availableById.set(item.id, entry);
+    }
+  }));
+  const availableItems = document.createElement("section");
+  availableItems.className = "stage-unassigned";
+  availableItems.setAttribute("aria-label", "Itens do catálogo sem etapa");
+  const availableHeading = document.createElement("h2");
+  availableHeading.textContent = "Itens disponíveis";
+  const availableHint = document.createElement("p");
+  availableHint.className = "admin-note";
+  availableHint.textContent = "Arraste um item para uma etapa compatível. Arraste itens entre etapas para movê-los.";
+  const availableGrid = document.createElement("div");
+  availableGrid.className = "stage-unassigned__items";
+  availableById.forEach((item) => {
+    const chip = document.createElement("div");
+    chip.className = "stage-pool-item";
+    chip.draggable = true;
+    chip.dataset.dragStageItem = item.id;
+    chip.dataset.allowedStageIds = item.stageIds.join(" ");
+    chip.title = "Arraste para uma etapa compatível";
+    chip.textContent = item.label;
+    availableGrid.append(chip);
+  });
+  if (!availableById.size) {
+    const empty = document.createElement("span"); empty.className = "admin-note"; empty.textContent = "Todos os itens compatíveis já estão em etapas."; availableGrid.append(empty);
+  }
+  availableItems.append(availableHeading, availableHint, availableGrid);
+  stagesList.append(availableItems);
   model.stages.forEach((stage, index) => {
     const card = document.createElement("article");
     card.className = "stage-card";
@@ -154,15 +219,19 @@ function renderStages() {
     const items = document.createElement("div");
     items.className = "stage-items";
     items.setAttribute("aria-label", `Itens da etapa ${stage.label}`);
-    getItemOptions(stage.id).forEach((item) => {
+    items.dataset.stageDrop = stage.id;
+    stage.items.map((id) => getItemOptions(stage.id).find((item) => item.id === id)).filter(Boolean).forEach((item) => {
       const option = document.createElement("div");
       option.className = "item-option";
+      option.draggable = true;
+      option.dataset.dragStageItem = item.id;
+      option.title = "Arraste para outra etapa compatível";
       const input = document.createElement("input");
       input.type = "checkbox";
-      input.checked = stage.items.includes(item.id);
+      input.checked = true;
       input.dataset.stageItem = stage.id;
       input.value = item.id;
-      input.disabled = stage.enabled && stage.items.length === 1 && input.checked;
+      input.disabled = stage.enabled && stage.items.length === 1;
       input.setAttribute("aria-label", item.label);
       const itemLabel = document.createElement("label"); itemLabel.append(input, document.createTextNode(item.label));
       option.append(itemLabel);
@@ -180,21 +249,9 @@ function renderStages() {
       }
       items.append(option);
     });
-    const addRow = document.createElement("div");
-    addRow.className = "stage-add-item";
-    const addSelect = document.createElement("select");
-    addSelect.dataset.addItemSelect = stage.id;
-    const choices = getItemOptions(stage.id).filter((item) => !stage.items.includes(item.id));
-    const placeholder = document.createElement("option"); placeholder.value = ""; placeholder.textContent = choices.length ? "Escolha um item para incluir ou mover" : "Todos os itens compatíveis já estão nesta etapa";
-    addSelect.append(placeholder);
-    choices.forEach((item) => {
-      const option = document.createElement("option"); option.value = item.id;
-      const owner = model.stages.find((entry) => entry.id !== stage.id && entry.items.includes(item.id));
-      option.textContent = owner ? `${item.label} · mover de ${owner.label}` : item.label; addSelect.append(option);
-    });
-    const addItem = document.createElement("button"); addItem.type = "button"; addItem.className = "button button--secondary"; addItem.textContent = "Incluir / mover item"; addItem.dataset.addStageItem = stage.id; addItem.disabled = choices.length === 0;
-    addRow.append(addSelect, addItem);
-    items.append(addRow);
+    if (!stage.items.length) {
+      const dropHint = document.createElement("p"); dropHint.className = "stage-drop-hint"; dropHint.textContent = "Solte aqui um item disponível."; items.append(dropHint);
+    }
     card.append(items);
     stagesList.append(card);
   });
@@ -454,6 +511,7 @@ function renderMaterialGroups() {
   const pages = materialTargetOptions();
   materialTargetPageIndex = Math.min(materialTargetPageIndex, pages.length - 1);
   const [targetId, title] = pages[materialTargetPageIndex] || pages[0];
+  if (targetId !== selectedMaterialTarget) materialAvailabilityPage = 0;
   selectedMaterialTarget = targetId;
   const card = document.createElement("article"); card.className = "editor-card material-target-page";
   if (!targetId.startsWith("handle:")) card.dataset.materialGroupId = targetId;
@@ -465,22 +523,43 @@ function renderMaterialGroups() {
     const toggle = document.createElement("input"); toggle.type = "checkbox"; toggle.checked = handles.materialIds.includes(product.id); toggle.dataset.handleAvailability = product.id;
     available.append(toggle, document.createTextNode("Disponível para clientes")); card.append(available);
     const note = document.createElement("p"); note.className = "admin-note"; note.textContent = "Definir depois não é um puxador e não recebe materiais."; card.append(note);
-    card.append(makeMaterialCheckboxDropdown("Materiais válidos para este modelo", model.materials.map((item) => [item.id, item.label, item.color, item.textureAsset]), product.materialIds, `handle:${product.id}`));
+    appendMaterialAvailabilityList(card, "Cores e materiais deste puxador", model.materials, product.materialIds, `handle:${product.id}`);
     card.append(makeRuleSelect("Puxador selecionado inicialmente", model.initialState.handleId, "initialHandle", [["none", "Definir depois"], ...handles.materialIds.map((id) => { const item = model.handleProducts.find((entry) => entry.id === id); return [item?.priceEntryId || "", item?.label || id]; })]));
   } else {
     const group = model.materialGroups.find((item) => item.id === targetId);
     card.append(makeField("Nome da opção", group.label, "materialGroupLabel"));
-    card.append(makeMaterialCheckboxDropdown(targetId === "stone-all" ? "Pedras válidas para bancada e rodapé" : "Materiais válidos para frentes", model.materials.map((item) => [item.id, item.label, item.color, item.textureAsset]), group.materialIds, targetId));
+    if (targetId === "stone-all") appendMaterialAvailabilityList(card, "Pedras e texturas disponíveis para bancada e rodapé", model.materials, group.materialIds, targetId);
+    else card.append(makeMaterialCheckboxDropdown("Materiais válidos para frentes", model.materials.map((item) => [item.id, item.label, item.color, item.textureAsset]), group.materialIds, targetId));
     if (targetId === "fronts-all") {
       const available = model.finishes.filter((finish) => finish.enabled && finish.scope === "global" && group.materialIds.includes(finish.id));
       card.append(makeRuleSelect("Cor selecionada inicialmente", model.initialState.finishId, "initialFinish", available.map((finish) => [finish.id, model.materials.find((item) => item.id === finish.id)?.label || finish.id])));
     } else {
       card.append(makeRuleSelect("Pedra selecionada inicialmente", model.initialState.stonePackageId, "initialStone", group.materialIds.map((id) => [id, model.materials.find((item) => item.id === id)?.label || id])));
-      const note = document.createElement("p"); note.className = "admin-note"; note.textContent = "A disponibilidade do serviço de rodapé é controlada separadamente na etapa. A escolha de pedra é compartilhada."; card.append(note);
+      const note = document.createElement("p"); note.className = "admin-note"; note.textContent = "A disponibilidade do serviço de rodapé é controlada separadamente na etapa; pedra e rodapé compartilham o material escolhido."; card.append(note);
     }
   }
   materialGroupsList.append(card);
   renderPager(byId("materialTargetPager"), materialTargetPageIndex, pages.length, (index) => { materialTargetPageIndex = index; renderMaterialGroups(); });
+}
+
+function appendMaterialAvailabilityList(container, label, materials, selectedIds, targetId) {
+  const section = document.createElement("section"); section.className = "material-availability-list";
+  const heading = document.createElement("h3"); heading.textContent = `${label} · ${selectedIds.length} disponível(is)`;
+  const options = materials.slice().sort((left, right) => left.label.localeCompare(right.label, "pt-BR"));
+  const pages = Math.max(1, Math.ceil(options.length / MATERIALS_PER_PAGE));
+  materialAvailabilityPage = Math.min(materialAvailabilityPage, pages - 1);
+  const start = materialAvailabilityPage * MATERIALS_PER_PAGE;
+  const list = document.createElement("div"); list.className = "material-availability-list__items";
+  options.slice(start, start + MATERIALS_PER_PAGE).forEach((material) => {
+    const option = document.createElement("label"); option.className = "material-availability-option";
+    const input = document.createElement("input"); input.type = "checkbox"; input.checked = selectedIds.includes(material.id); input.dataset.targetMaterial = targetId; input.dataset.materialId = material.id;
+    const swatch = document.createElement("span"); swatch.className = "material-mini-swatch"; swatch.style.backgroundColor = material.color; if (material.textureAsset) swatch.style.backgroundImage = `url("${material.textureAsset}")`;
+    const copy = document.createElement("span"); copy.textContent = material.label;
+    option.append(input, swatch, copy); list.append(option);
+  });
+  const pager = document.createElement("div"); pager.className = "library-pager";
+  renderPager(pager, materialAvailabilityPage, pages, (index) => { materialAvailabilityPage = index; renderMaterialGroups(); });
+  section.append(heading, pager, list); container.append(section);
 }
 
 function makeMaterialCheckboxDropdown(label, options, selectedIds, targetId) {
@@ -534,10 +613,22 @@ function renderEvents() {
   const entities = eventTriggerOptions();
   model.events.forEach((rule) => {
     const card = document.createElement("article"); card.className = "editor-card material-rule-card"; card.dataset.eventId = rule.id;
-    const heading = document.createElement("h2"); heading.textContent = "Alteração de profundidade";
-    card.append(heading, makeRuleSelect("Quando este item", rule.triggerId, "eventTrigger", entities), makeRuleSelect("Estiver", rule.when, "eventWhen", [["enabled", "Ativado"], ["disabled", "Desativado"]]));
-    const target = document.createElement("label"); target.className = "rule-field"; target.append(document.createTextNode("Aplicar ao Módulo 07 · Profundidade em mm"));
-    const value = document.createElement("input"); value.type = "number"; value.min = "300"; value.max = "700"; value.step = "1"; value.value = String(rule.valueMm); value.dataset.eventDepth = "true"; target.append(value); card.append(target);
+    const legacyDepth = rule.action === "set-depth";
+    const heading = document.createElement("h2"); heading.textContent = legacyDepth ? "Ajuste legado de profundidade" : "Ajuste de dimensão";
+    card.append(heading,
+      makeRuleSelect("Ação", rule.action || "set-dimension", "eventAction", [["set-dimension", "Alterar dimensão de módulo"], ["set-depth", "Profundidade fixa do Módulo 07"]]),
+      makeRuleSelect("Quando este item", rule.triggerId, "eventTrigger", entities),
+      makeRuleSelect("Estiver", rule.when, "eventWhen", [["enabled", "Ativado"], ["disabled", "Desativado"]]));
+    if (legacyDepth) {
+      const target = document.createElement("label"); target.className = "rule-field"; target.append(document.createTextNode("Aplicar ao Módulo 07 · Profundidade em mm"));
+      const value = document.createElement("input"); value.type = "number"; value.min = "300"; value.max = "700"; value.step = "1"; value.value = String(rule.valueMm); value.dataset.eventDepth = "true"; target.append(value); card.append(target);
+    } else {
+      const modules = catalog.modules.map((item) => [item.entityId, `${item.referenceLabel} · ${model.objects[item.entityId]?.title || item.title}`]);
+      card.append(makeRuleSelect("Aplicar ao módulo", rule.targetId || "module-07", "eventTarget", modules));
+      card.append(makeRuleSelect("Dimensão", rule.dimension || "depth", "eventDimension", [["width", "Largura"], ["height", "Altura"], ["depth", "Profundidade"]]));
+      const target = document.createElement("label"); target.className = "rule-field"; target.append(document.createTextNode("Valor em mm"));
+      const value = document.createElement("input"); value.type = "number"; value.min = "1"; value.max = "5000"; value.step = "1"; value.value = String(rule.valueMm); value.dataset.eventValue = "true"; target.append(value); card.append(target);
+    }
     const remove = document.createElement("button"); remove.type = "button"; remove.className = "button button--secondary rule-remove"; remove.textContent = "Remover evento"; remove.dataset.removeEvent = rule.id; card.append(remove);
     eventsList.append(card);
   });
@@ -715,9 +806,18 @@ dependenciesList.addEventListener("change", (event) => {
 eventsList.addEventListener("change", (event) => {
   const card = event.target.closest("[data-event-id]"); if (!card) return;
   const rule = model.events.find((item) => item.id === card.dataset.eventId); if (!rule) return;
+  if (event.target.matches("[data-event-action]")) {
+    rule.action = event.target.value;
+    if (rule.action === "set-dimension") { rule.targetId = "module-07"; rule.dimension = "depth"; }
+    else { rule.targetId = "module-07"; delete rule.dimension; }
+    renderEvents(); return;
+  }
   if (event.target.matches("[data-event-trigger]")) rule.triggerId = event.target.value;
   if (event.target.matches("[data-event-when]")) rule.when = event.target.value;
   if (event.target.matches("[data-event-depth]")) rule.valueMm = Number(event.target.value);
+  if (event.target.matches("[data-event-target]")) rule.targetId = event.target.value;
+  if (event.target.matches("[data-event-dimension]")) rule.dimension = event.target.value;
+  if (event.target.matches("[data-event-value]")) rule.valueMm = Number(event.target.value);
 });
 
 function newRuleId(prefix, records) {
@@ -767,7 +867,7 @@ byId("addDependencyButton").addEventListener("click", () => {
   model.dependencies.push({ id: newRuleId("dependency", model.dependencies), dependentId: "lighting-08", requires: ["module-04"] }); renderDependencies();
 });
 byId("addEventButton").addEventListener("click", () => {
-  model.events.push({ id: newRuleId("event", model.events), triggerId: "module-04", when: "disabled", action: "set-depth", targetId: "module-07", valueMm: 400 }); renderEvents();
+  model.events.push({ id: newRuleId("event", model.events), triggerId: "module-04", when: "disabled", action: "set-dimension", targetId: "module-07", dimension: "depth", valueMm: 400 }); renderEvents();
 });
 document.querySelector("[data-admin-panel=rules]").addEventListener("click", (event) => {
   const dependency = event.target.closest("[data-remove-dependency]"); if (dependency) { model.dependencies = model.dependencies.filter((item) => item.id !== dependency.dataset.removeDependency); renderDependencies(); }
@@ -878,20 +978,44 @@ stagesList.addEventListener("change", (event) => {
   if (!item) return;
   const stage = model.stages.find((entry) => entry.id === item.dataset.stageItem);
   if (!stage) return;
-  const owner = item.checked ? model.stages.find((entry) => entry.id !== stage.id && entry.items.includes(item.value)) : null;
-  if (owner && owner.enabled && owner.items.length === 1) {
-    item.checked = false;
-    return setMessage(saveMessage, `Inclua outro item em “${owner.label}” antes de mover o último item da etapa.`, "error");
-  }
-  if (owner) owner.items = owner.items.filter((id) => id !== item.value);
-  stage.items = item.checked ? [...new Set([...stage.items, item.value])] : stage.items.filter((id) => id !== item.value);
-  if ((stage.kind || stage.id) === "finishes" && item.value === "stone-all" && !item.checked) {
-    stage.items = stage.items.filter((id) => id !== "stone-skirting");
-  }
-  if ((stage.kind || stage.id) === "finishes" && item.value === "stone-skirting" && item.checked && !stage.items.includes("stone-all")) {
-    stage.items.push("stone-all");
-  }
-  renderStages();
+  if (item.checked) return;
+  moveStageItem(item.value, null);
+});
+
+stagesList.addEventListener("dragstart", (event) => {
+  const item = event.target.closest("[data-drag-stage-item]");
+  if (!item || !event.dataTransfer) return;
+  event.dataTransfer.setData("text/plain", item.dataset.dragStageItem);
+  event.dataTransfer.effectAllowed = "move";
+  requestAnimationFrame(() => item.classList.add("is-dragging"));
+});
+
+stagesList.addEventListener("dragend", () => {
+  stagesList.querySelectorAll(".is-dragging,.is-drop-target").forEach((item) => item.classList.remove("is-dragging", "is-drop-target"));
+});
+
+stagesList.addEventListener("dragover", (event) => {
+  const target = event.target.closest("[data-stage-drop]");
+  if (!target || !event.dataTransfer) return;
+  const id = event.dataTransfer.getData("text/plain");
+  if (id && !getItemOptions(target.dataset.stageDrop).some((item) => item.id === id)) return;
+  event.preventDefault();
+  event.dataTransfer.dropEffect = "move";
+  target.classList.add("is-drop-target");
+});
+
+stagesList.addEventListener("dragleave", (event) => {
+  const target = event.target.closest("[data-stage-drop]");
+  if (target && !target.contains(event.relatedTarget)) target.classList.remove("is-drop-target");
+});
+
+stagesList.addEventListener("drop", (event) => {
+  const target = event.target.closest("[data-stage-drop]");
+  const itemId = event.dataTransfer?.getData("text/plain");
+  if (!target || !itemId) return;
+  event.preventDefault();
+  target.classList.remove("is-drop-target");
+  moveStageItem(itemId, target.dataset.stageDrop);
 });
 
 stagesList.addEventListener("click", (event) => {
@@ -901,18 +1025,6 @@ stagesList.addEventListener("click", (event) => {
     if (!target) return;
     model.stages = model.stages.filter((stage) => stage !== target);
     if (target.kind === "custom") target.items.forEach((id) => { if (!model.stages.some((stage) => stage.items.includes(id))) return; });
-    renderStages(); return;
-  }
-  const addItem = event.target.closest("[data-add-stage-item]");
-  if (addItem) {
-    const stage = model.stages.find((item) => item.id === addItem.dataset.addStageItem);
-    const select = stagesList.querySelector(`[data-add-item-select="${CSS.escape(addItem.dataset.addStageItem)}"]`);
-    if (stage && select?.value && !stage.items.includes(select.value)) {
-      const owner = model.stages.find((item) => item.id !== stage.id && item.items.includes(select.value));
-      if (owner?.enabled && owner.items.length === 1) return setMessage(saveMessage, `Inclua outro item em “${owner.label}” antes de mover o último item da etapa.`, "error");
-      if (owner) owner.items = owner.items.filter((id) => id !== select.value);
-      stage.items.push(select.value);
-    }
     renderStages(); return;
   }
   const button = event.target.closest("[data-move-stage]");

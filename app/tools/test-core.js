@@ -126,6 +126,11 @@ assert.equal(settingsCore.validateConfiguratorSettings(invalidExternalAsset, cat
 const eventSettings = structuredClone(defaultSettings);
 eventSettings.events[0] = { ...eventSettings.events[0], triggerId: "lighting-08", when: "enabled", valueMm: 425 };
 assert.deepEqual(settingsCore.validateConfiguratorSettings(eventSettings, catalog, priceBook, scene), [], "event rules support activation-based depth changes");
+const dimensionEventSettings = structuredClone(defaultSettings);
+dimensionEventSettings.events = [{ id: "module-width-change", triggerId: "module-04", when: "enabled", action: "set-dimension", targetId: "module-03", dimension: "width", valueMm: 1100 }];
+assert.deepEqual(settingsCore.validateConfiguratorSettings(dimensionEventSettings, catalog, priceBook, scene), [], "events may adjust supported dimensions on any catalog module");
+dimensionEventSettings.events[0].dimension = "opacity";
+assert.equal(settingsCore.validateConfiguratorSettings(dimensionEventSettings, catalog, priceBook, scene).some((error) => error.includes("invalid event")), true, "events reject unsupported module properties");
 const dependencyCycleSettings = structuredClone(defaultSettings);
 dependencyCycleSettings.dependencies.push({ id: "side-requires-lighting", dependentId: "module-04", requires: ["lighting-08"] });
 assert.equal(settingsCore.validateConfiguratorSettings(dependencyCycleSettings, catalog, priceBook, scene).includes("dependency cycle is not allowed"), true);

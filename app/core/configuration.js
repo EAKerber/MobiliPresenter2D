@@ -290,11 +290,24 @@
       if ([...graph.keys()].some(hasCycle)) errors.push("dependency cycle is not allowed");
     }
     const eventIds = new Set();
+    const eventDimensionTargets = new Set();
     if (!Array.isArray(value.events) || value.events.length > 40) errors.push("invalid event list");
     else value.events.forEach((rule) => {
       if (!rule || !/^[a-z][a-z0-9-]{1,39}$/.test(rule.id) || eventIds.has(rule.id)) { errors.push("invalid event id"); return; }
       eventIds.add(rule.id);
-      if (!eventTriggerIds.has(rule.triggerId) || !["enabled", "disabled"].includes(rule.when) || rule.action !== "set-depth" || rule.targetId !== "module-07" || !Number.isInteger(rule.valueMm) || rule.valueMm < 300 || rule.valueMm > 700) errors.push(`invalid event: ${rule.id}`);
+      const validTrigger = eventTriggerIds.has(rule.triggerId) && ["enabled", "disabled"].includes(rule.when);
+      const legacyDepth = rule.action === "set-depth" && rule.targetId === "module-07" && Number.isInteger(rule.valueMm) && rule.valueMm >= 300 && rule.valueMm <= 700;
+      const targetModule = catalog.modules.find((item) => item.entityId === rule.targetId);
+      const dimensions = ["width", "height", "depth"];
+      const dimension = rule.action === "set-dimension" && targetModule && dimensions.includes(rule.dimension)
+        && Number.isFinite(targetModule.dimensions?.nominalMm?.[rule.dimension])
+        && Number.isInteger(rule.valueMm) && rule.valueMm >= 1 && rule.valueMm <= 5000;
+      if (!validTrigger || !(legacyDepth || dimension)) errors.push(`invalid event: ${rule.id}`);
+      else {
+        const key = `${rule.targetId}:${legacyDepth ? "depth" : rule.dimension}`;
+        if (eventDimensionTargets.has(key)) errors.push(`conflicting event target: ${rule.id}`);
+        eventDimensionTargets.add(key);
+      }
     });
 
     const priceSections = ["entries", "handleEntries", "frontFinishRatesBps", "localEntries", "globalEntries"];

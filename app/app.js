@@ -1,3 +1,6 @@
+Warning: truncated output (original token count: 30703)
+Total output lines: 2448
+
 (function startConfigurator(global) {
   "use strict";
 
@@ -511,19 +514,35 @@
   }
 
   function productForCurrentConfiguration(product) {
-    if (product.entityId !== "module-07") return product;
-    const event = dynamicEvents.find((rule) => rule.targetId === "module-07" && rule.action === "set-depth" && selectionIsActive(rule.triggerId) === (rule.when === "enabled"));
-    if (!event) return product;
-    const depth = event.valueMm;
+    if (!product.dimensions?.nominalMm || !product.dimensions?.geometryMm) return product;
+    const events = dynamicEvents.filter((rule) => rule.targetId === product.entityId
+      && selectionIsActive(rule.triggerId) === (rule.when === "enabled")
+      && (rule.action === "set-dimension" || rule.action === "set-depth" && product.entityId === "module-07"));
+    if (!events.length) return product;
+    const nominalMm = { ...product.dimensions.nominalMm };
+    const geometryMm = { ...product.dimensions.geometryMm };
+    const applied = [];
+    events.forEach((event) => {
+      const dimension = event.action === "set-depth" ? "depth" : event.dimension;
+      if (!["width", "height", "depth"].includes(dimension) || !Number.isFinite(nominalMm[dimension])) return;
+      nominalMm[dimension] = event.valueMm;
+      geometryMm[dimension] = event.valueMm;
+      applied.push({ dimension, valueMm: event.valueMm });
+    });
+    if (!applied.length) return product;
+    const displayOrder = product.dimensions.displayAxes === "A × P × E" ? ["height", "depth", "width"] : ["width", "height", "depth"];
+    const display = `${displayOrder.map((dimension) => formatDimension(nominalMm[dimension])).join(" × ")} mm`;
+    const labels = { width: "largura", height: "altura", depth: "profundidade" };
+    const changes = applied.map(({ dimension, valueMm }) => `${labels[dimension]} ajustada para ${formatDimension(valueMm)} mm`).join("; ");
     return {
       ...product,
       dimensions: {
         ...product.dimensions,
-        display: `800 × 484 × ${depth} mm`,
-        nominalMm: { ...product.dimensions.nominalMm, depth },
-        geometryMm: { ...product.dimensions.geometryMm, depth }
+        display,
+        nominalMm,
+        geometryMm
       },
-      configurationNote: `Profundidade ajustada para ${depth} mm pela regra de configuração.`
+      configurationNote: `${changes[0].toLocaleUpperCase("pt-BR")}${changes.slice(1)} pela regra de configuração.`
     };
   }
 
@@ -1179,66 +1198,7 @@
     input.checked = isVisible;
     input.dataset.detailVisibility = entity.id;
     input.setAttribute("aria-label", `${isVisible ? "Desselecionar" : "Selecionar"} ${entity.label}`);
-    const copy = document.createElement("span");
-    copy.textContent = isVisible ? "Selecionado" : "Selecionar";
-    control.append(input, copy);
-    return control;
-  }
-
-  function createLocalFinishControl(product) {
-    const options = catalog.options.finishes.filter((finish) => {
-      const settings = finishSettings.get(finish.id);
-      return finish.status === "published" && settings?.enabled && settings.scope === "local" && settings.moduleIds.includes(product.entityId);
-    });
-    if (!options.length) return null;
-    const fieldset = document.createElement("fieldset");
-    fieldset.className = "module-detail__local-finish";
-    const legend = document.createElement("legend");
-    legend.textContent = "Acabamento deste módulo";
-    const choices = document.createElement("div");
-    choices.className = "module-detail__local-finish-options";
-    options.forEach((finish) => {
-      const button = document.createElement("button");
-      button.type = "button";
-      button.className = "swatch";
-      button.dataset.localFinishId = finish.id;
-      button.dataset.localFinishModule = product.entityId;
-      button.style.setProperty("--swatch", finish.color);
-      button.style.setProperty("--swatch-texture", materialBackground(finish));
-      button.style.setProperty("--swatch-size", finish.textureSize || "cover");
-      button.title = finish.publicLabel;
-      button.setAttribute("aria-label", `Aplicar ${finish.publicLabel} somente em ${product.title}`);
-      const selected = selectedModuleFinish(product.entityId) === finish.id;
-      button.classList.toggle("is-selected", selected);
-      button.setAttribute("aria-pressed", String(selected));
-      choices.append(button);
-    });
-    fieldset.append(legend, choices);
-    return fieldset;
-  }
-
-  function updateSelection(resolved) {
-    const entity = entitiesById.get(state.selectedEntityId);
-    const catalogProduct = catalogByEntityId.get(state.selectedEntityId);
-    const product = catalogProduct ? productForCurrentConfiguration(catalogProduct) : null;
-    const isVisible = Boolean(entity && resolved?.[entity.id]?.visible);
-    const style = isVisible ? selectionStyle(entity) : null;
-    selectionFrame.hidden = !style;
-    if (style) Object.assign(selectionFrame.style, style);
-    if (!product) {
-      clearDetailCarouselTimer();
-      document.body.classList.remove("has-module-detail");
-      moduleDetail.replaceChildren();
-      viewerHint.textContent = "Selecione um módulo na cena para abrir sua ficha.";
-      return;
-    }
-
-    document.body.classList.add("has-module-detail");
-    viewerHint.textContent = `Ficha selecionada: ${product.title}`;
-    moduleDetail.classList.toggle("is-unavailable", !isVisible);
-    const detailHeader = document.createElement("header");
-    detailHeader.className = "module-detail__header";
-    const moduleNumber = document.createElement("span");
+    const copy = document.createElement("span…703 tokens truncated… document.createElement("span");
     moduleNumber.className = "module-detail__number";
     moduleNumber.textContent = entity.alias;
     const headerCopy = document.createElement("div");
