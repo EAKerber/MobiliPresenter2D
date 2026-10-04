@@ -21,17 +21,7 @@ async function readPublished(store) {
   const base = configCore.createDefaultAdministration(defaults, catalog, priceBook);
   const published = await store.get("published", { type: "json" });
   if (!published) return base;
-  const candidate = published.schemaVersion === configCore.SCHEMA
-    ? published
-    : {
-      ...base,
-      revision: published.revision || base.revision,
-      stages: (published.stages || base.stages).map((stage) => ({ ...stage, kind: stage.kind || stage.id })),
-      objects: { ...base.objects, ...(published.objects || {}) },
-      finishes: base.finishes.map((finish) => ({ ...finish, ...(published.finishes || []).find((item) => item.id === finish.id) })),
-      pricing: { ...base.pricing, ...(published.pricing || {}), entries: { ...base.pricing.entries, ...(published.pricing?.entries || {}) }, handleEntries: { ...base.pricing.handleEntries, ...(published.pricing?.handleEntries || {}) }, frontFinishRatesBps: { ...base.pricing.frontFinishRatesBps, ...(published.pricing?.frontFinishRatesBps || {}) }, localEntries: { ...base.pricing.localEntries, ...(published.pricing?.localEntries || {}) }, globalEntries: { ...base.pricing.globalEntries, ...(published.pricing?.globalEntries || {}) } }
-    };
-  try { return configCore.normalizeConfiguratorSettings(candidate, catalog, priceBook); }
+  try { return configCore.normalizeConfiguratorSettings(published, catalog, priceBook); }
   catch { return base; }
 }
 
