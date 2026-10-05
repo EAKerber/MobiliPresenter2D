@@ -87,22 +87,33 @@ const { chromium } = require("playwright");
     Array.from(dot.parentElement.children).indexOf(dot)
   );
   const beforeSwipe = await activeIndex();
+  assert.equal(await stage.evaluate(element => getComputedStyle(element).touchAction), "pan-y",
+    "carousel stage must reserve vertical panning while exposing horizontal pointer swipes");
   const swipeStart = { x: stageBox.x + stageBox.width * 0.78, y: stageBox.y + stageBox.height * 0.5 };
   const swipeEnd = { x: stageBox.x + stageBox.width * 0.22, y: swipeStart.y };
-  await client.send("Input.dispatchTouchEvent", {
-    type: "touchStart",
-    touchPoints: [{ x: swipeStart.x, y: swipeStart.y, radiusX: 2, radiusY: 2, force: 1 }]
-  });
-  await client.send("Input.dispatchTouchEvent", {
-    type: "touchMove",
-    touchPoints: [{ x: (swipeStart.x + swipeEnd.x) / 2, y: swipeStart.y, radiusX: 2, radiusY: 2, force: 1 }]
-  });
-  await client.send("Input.dispatchTouchEvent", {
-    type: "touchMove",
-    touchPoints: [{ x: swipeEnd.x, y: swipeEnd.y, radiusX: 2, radiusY: 2, force: 1 }]
-  });
-  await client.send("Input.dispatchTouchEvent", { type: "touchEnd", touchPoints: [] });
-  await page.waitForTimeout(260);
+  await stage.evaluate((element, points) => {
+    const pointerId = 41;
+    const dispatch = (type, x, y, buttons) => element.dispatchEvent(new PointerEvent(type, {
+      bubbles: true,
+      cancelable: true,
+      composed: true,
+      pointerId,
+      pointerType: "touch",
+      isPrimary: true,
+      clientX: x,
+      clientY: y,
+      button: 0,
+      buttons
+    }));
+    dispatch("pointerdown", points.start.x, points.start.y, 1);
+    dispatch("pointermove", (points.start.x + points.end.x) / 2, points.start.y, 1);
+    dispatch("pointermove", points.end.x, points.end.y, 1);
+    dispatch("pointerup", points.end.x, points.end.y, 0);
+  }, { start: swipeStart, end: swipeEnd });
+  await page.waitForFunction((previousIndex) => {
+    const dot = document.querySelector(".module-detail__carousel-dot.is-active");
+    return dot && Array.from(dot.parentElement.children).indexOf(dot) !== previousIndex;
+  }, beforeSwipe, { timeout: 1500 });
   const afterSwipe = await activeIndex();
   assert.notEqual(afterSwipe, beforeSwipe, "horizontal touch swipe must change the module-detail carousel page");
   assert(await page.evaluate(() => document.body.classList.contains("is-mobile-scene-pinned")),
