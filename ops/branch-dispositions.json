@@ -6,26 +6,35 @@
   ],
   "terminalBranches": [
     {
-      "branch": "housekeeping/refresh-final-backlog",
-      "sha": "37d14ee7cd80619a8c51e63e241125ca068e3853",
+      "branch": "housekeeping/remove-obsolete-baseline-writers",
+      "sha": "2cba4ee2afee592bfe3186edb7693b84785e68cb",
       "reason": "merged-housekeeping-head",
       "allowDelete": true,
       "evidence": {
-        "pullRequest": 72,
-        "mergedMainSha": "fe82609e5ede29fc67919685060ede3332cf5ceb"
+        "pullRequest": 73,
+        "mergedMainSha": "b969bb471831d405fd6e1c9c15bf761176885cdd"
       },
-      "note": "PR #72 merged after branch-hygiene passed. Exact-SHA fail-closed deletion only."
+      "note": "PR #73 merged after branch-hygiene and current asset gates passed. Exact-SHA fail-closed deletion only."
     },
     {
-      "branch": "audit/tooling-reachability",
-      "sha": "e2de805f28b2ca5a9a912c3ac977879eea4c1910",
-      "reason": "completed-audit",
+      "branch": "audit/official-candidate-gates",
+      "sha": "deb1db447f491134beb11d08d5b087900cfaca0d",
+      "reason": "completed-candidate-audit",
       "allowDelete": true,
       "evidence": {
-        "workflowRun": 37386711799,
-        "artifact": 11379276206
+        "pullRequest": 74,
+        "candidateMainSha": "b969bb471831d405fd6e1c9c15bf761176885cdd",
+        "workflowRuns": [
+          37387413443,
+          37387413328,
+          37387413524,
+          37387413334,
+          37387413530,
+          37387413487,
+          37387413833
+        ]
       },
-      "note": "Temporary read-only tooling reachability audit. Its durable conclusion is consumed by the obsolete-writer cleanup; the audit branch itself is terminal."
+      "note": "Temporary audit PR closed without merge after every current candidate gate passed. Branch contains only inert/test-only trigger changes."
     }
   ]
 }
