@@ -6,6 +6,7 @@
   const HANDLE_GROUP_ID = "handles-all";
   const FRONT_GROUP_ID = "fronts-all";
   const STACK_STYLE_ID = "runtime-scene-stack-contracts";
+  const KEYBOARD_SCRIPT_ID = "keyboard-shortcuts-runtime";
 
   function clone(value) {
     return typeof structuredClone === "function"
@@ -66,6 +67,15 @@
     document.head.append(style);
   }
 
+  function installKeyboardShortcuts() {
+    if (!global.document || document.getElementById(KEYBOARD_SCRIPT_ID)) return;
+    const script = document.createElement("script");
+    script.id = KEYBOARD_SCRIPT_ID;
+    script.src = "core/keyboard-shortcuts.js?v=keyboard-v1";
+    script.async = false;
+    document.head.append(script);
+  }
+
   const configuration = global.CasaModulesConfiguration;
   if (configuration) {
     global.CasaModulesConfiguration = Object.freeze({
@@ -80,10 +90,12 @@
   }
 
   installSceneStackContracts();
+  installKeyboardShortcuts();
 
   global.CASA_RUNTIME_CONTRACTS = Object.freeze({
     repairDefaultStageSettings,
     repairSkirtingStageContract,
-    installSceneStackContracts
+    installSceneStackContracts,
+    installKeyboardShortcuts
   });
 })(typeof window === "undefined" ? globalThis : window);
