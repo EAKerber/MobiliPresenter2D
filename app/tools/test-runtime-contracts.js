@@ -4,15 +4,16 @@ const path = require("node:path");
 const vm = require("node:vm");
 
 const projectRoot = path.resolve(__dirname, "..");
+const baseConfiguration = Object.freeze({
+  createDefaultAdministration(settings) { return structuredClone(settings); },
+  normalizeConfiguratorSettings(settings) { return structuredClone(settings); },
+  validateConfiguratorSettings() { return []; },
+  resolveEventState() { return null; }
+});
 const sandbox = {
   structuredClone,
   console,
-  CasaModulesConfiguration: Object.freeze({
-    createDefaultAdministration(settings) { return structuredClone(settings); },
-    normalizeConfiguratorSettings(settings) { return structuredClone(settings); },
-    validateConfiguratorSettings() { return []; },
-    resolveEventState() { return null; }
-  })
+  CasaModulesConfiguration: baseConfiguration
 };
 vm.createContext(sandbox);
 vm.runInContext(
@@ -23,20 +24,18 @@ vm.runInContext(
 
 const contracts = sandbox.CASA_RUNTIME_CONTRACTS;
 assert(contracts, "runtime contracts must register");
-
-const defaultStages = {
-  stages: [
-    { id: "finishes", enabled: true, items: ["fronts-all", "stone-all"] },
-    { id: "services", enabled: true, items: ["move-stone"] }
-  ]
-};
-const repairedDefaults = contracts.repairDefaultStageSettings(defaultStages);
-assert.deepEqual(
-  Array.from(repairedDefaults.stages[0].items),
-  ["fronts-all", "stone-all", "handles-all", "stone-skirting"],
-  "canonical defaults expose handles and skirting beside finishes"
+assert.equal(contracts.repairDefaultStageSettings, undefined, "canonical defaults no longer require a runtime repair");
+assert.equal(
+  sandbox.CasaModulesConfiguration.createDefaultAdministration,
+  baseConfiguration.createDefaultAdministration,
+  "runtime shim must not wrap canonical default administration"
 );
-assert.deepEqual(Array.from(defaultStages.stages[0].items), ["fronts-all", "stone-all"], "repairs do not mutate callers");
+
+const staticDefaults = require("../data/configurator-settings.js");
+const finishesStage = staticDefaults.stages.find((stage) => stage.id === "finishes");
+assert(finishesStage, "canonical defaults must include finishes stage");
+assert.equal(finishesStage.items.includes("handles-all"), true, "canonical defaults expose handles directly");
+assert.equal(finishesStage.items.includes("stone-skirting"), true, "canonical defaults expose skirting directly");
 
 const publishedLegacy = {
   schemaVersion: "ConfiguratorAdministration2D 3.0",
@@ -69,16 +68,13 @@ const preservedAssignment = contracts.repairSkirtingStageContract(alreadyAssigne
 assert.equal(preservedAssignment.stages[0].items.includes("stone-skirting"), false, "existing admin placement is not moved");
 assert.equal(preservedAssignment.stages[1].items.filter((id) => id === "stone-skirting").length, 1, "skirting is never duplicated");
 
-const wrappedDefault = sandbox.CasaModulesConfiguration.createDefaultAdministration(defaultStages);
-assert.equal(wrappedDefault.stages[0].items.includes("handles-all"), true);
-assert.equal(wrappedDefault.stages[0].items.includes("stone-skirting"), true);
 const wrappedPublished = sandbox.CasaModulesConfiguration.normalizeConfiguratorSettings(publishedLegacy);
 assert.equal(wrappedPublished.stages[0].items.includes("stone-skirting"), true, "the public normalization path self-heals the legacy published shape");
-
 
 const runtimeContractsSource = fs.readFileSync(path.join(projectRoot, "core/runtime-contracts.js"), "utf8");
 const indexHtml = fs.readFileSync(path.join(projectRoot, "index.html"), "utf8");
 const stylesCss = fs.readFileSync(path.join(projectRoot, "styles.css"), "utf8");
+assert.equal(runtimeContractsSource.includes("repairDefaultStageSettings"), false, "migration shim must not carry obsolete default repair");
 assert.equal(runtimeContractsSource.includes("installSceneStackContracts"), false, "migration shim must not own presentation stacking");
 assert.equal(runtimeContractsSource.includes("installKeyboardShortcuts"), false, "migration shim must not own script loading");
 assert.equal(runtimeContractsSource.includes("createElement(\"style\")"), false, "migration shim must not inject CSS");
