@@ -6,15 +6,15 @@
   ],
   "terminalBranches": [
     {
-      "branch": "housekeeping/prune-current-build-branch",
-      "sha": "f80a74e6a0ec566191493a5b209a9813834c0dc3",
-      "reason": "merged-branch-hygiene-carrier",
+      "branch": "housekeeping/remove-shadowed-runtime-functions",
+      "sha": "c9f4c41e718ac63f2d52f49000b36ddebd7fc0a9",
+      "reason": "merged-housekeeping-head",
       "allowDelete": true,
       "evidence": {
-        "pullRequest": 66,
-        "mergedMainSha": "bae2304ab8e9bb8e3d03c9c0397564d9bccf7750"
+        "pullRequest": 67,
+        "mergedMainSha": "34df46e29ea3885217d5c684a250d1fb0b266f23"
       },
-      "note": "PR #66 merged after branch-hygiene dry-run and successfully pruned the completed PR #65 branch. This carrier branch is now terminal; deletion remains exact-SHA fail-closed."
+      "note": "PR #67 merged after all current browser, asset, variant and build-purity gates passed. The source branch is now terminal and deletion remains exact-SHA fail-closed."
     }
   ]
 }
