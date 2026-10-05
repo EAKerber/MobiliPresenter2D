@@ -38,7 +38,12 @@ function parseBrl(text) {
   }
   if (lastError) throw lastError;
 
-  const currentTotal = async () => parseBrl(await page.locator('#configurationValue strong').textContent());
+  const valueText = () => page.locator('#configurationValue strong').textContent();
+  const currentTotal = async () => parseBrl(await valueText());
+  const waitTotalChange = before => page.waitForFunction(previous => {
+    const text = document.querySelector('#configurationValue strong')?.textContent || '';
+    return /R\$/.test(text) && text !== previous;
+  }, before);
   const go = async stage => {
     await page.locator(`.flow-nav [data-step="${stage}"]`).click();
     await page.waitForFunction(id => document.querySelector(`.flow-nav [data-step="${id}"]`)?.getAttribute('aria-current') === 'step', stage);
@@ -75,13 +80,14 @@ function parseBrl(text) {
   await skirting.waitFor({ state: 'visible' });
   const initiallyChecked = await skirting.isChecked();
   if (!initiallyChecked) {
+    const before = await valueText();
     await skirting.click();
-    await page.waitForTimeout(250);
+    await waitTotalChange(before);
   }
   const totalWithSkirting = await currentTotal();
 
   await go('summary');
-  let withSkirting = await summarySnapshot();
+  const withSkirting = await summarySnapshot();
   const skirtingRows = withSkirting.rows.filter(row => row.label === 'Rodapé de pedra');
   assert.equal(skirtingRows.length, 1, 'stone skirting appears exactly once in the global breakdown');
   const skirtingCents = parseBrl(skirtingRows[0].amount);
@@ -89,11 +95,9 @@ function parseBrl(text) {
   assert.equal(parseBrl(withSkirting.totalText), totalWithSkirting, 'summary and persistent total remain synchronized with skirting on');
 
   await go('finishes');
+  const beforeSkirtingOff = await valueText();
   await skirting.click();
-  await page.waitForFunction(before => {
-    const text = document.querySelector('#configurationValue strong')?.textContent || '';
-    return /R\$/.test(text) && text !== before;
-  }, await page.locator('#configurationValue strong').textContent());
+  await waitTotalChange(beforeSkirtingOff);
   const totalWithoutSkirting = await currentTotal();
   assert.equal(totalWithSkirting - totalWithoutSkirting, skirtingCents, 'removing skirting subtracts exactly its single global breakdown row');
 
