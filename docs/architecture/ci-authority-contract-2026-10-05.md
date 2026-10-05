@@ -24,14 +24,15 @@ It deliberately does **not** require all current app bytes to match `reference/b
 Automatic PR/main validation keeps the contracts that still describe current product authority:
 
 - candidate intake/schema checks;
-- authoring provenance checks;
-- perspective/gap editorial contracts;
+- candidate authoring provenance checks;
+- perspective/gap contract unit tests;
 - current app asset/runtime validation;
 - current variant rendering;
-- approved stone, faucet and range runtime integration;
-- current visual candidate/set review.
+- approved stone, faucet and range runtime integration.
 
 Historical stone-authoring replay tests whose source SHA contracts predate the accepted hot-swap and subsequent stone cleanup are no longer automatic blockers. Their source records and tools remain in Git history/repository evidence and can be replayed deliberately when investigating that lineage.
+
+The same boundary applies to `render_candidate_review.py` and the stacked candidate-set compositor for the retained pre-hot-swap review candidates: those tools intentionally verify a frozen historical source-frame hash. Their structural intake and provenance contracts still run automatically, but exact historical candidate compositing is not a current-product blocker after the source frame was intentionally replaced.
 
 ## Historical replay gates
 
@@ -44,6 +45,10 @@ Historical stone-authoring replay tests whose source SHA contracts predate the a
 `Historical R4 module 02 replay` is manual and requires an explicit historical `target_ref`. It retains the fixed parent evidence and bounded R4 transition validator.
 
 The historical R4 transition runs only when the selected manifest identifies an R4 checkpoint; otherwise the workflow records that the transition is not applicable.
+
+### Retained authoring evidence
+
+Exact R5A/stone/candidate authoring replays remain recoverable from their historical refs and tooling. They are evidence about how an earlier accepted state was produced, not an assertion that every later approved source frame must retain the same hash.
 
 ## Retired write automations
 
@@ -68,8 +73,8 @@ Before merge:
 
 1. current app tests pass;
 2. current variant fidelity reaches and completes variant rendering;
-3. current asset gates reach current runtime/approved-component validation instead of stopping on historical source hashes;
-4. Stone browser and Keyboard browser remain green when triggered;
+3. current asset gates pass current runtime, current variants, approved stone/faucet/range, candidate intake and candidate provenance;
+4. no automatic gate fails solely because a historical source-frame hash differs from the intentionally evolved product;
 5. no production asset, schema, renderer or UX file changes in this slice.
 
 ## Non-goals
