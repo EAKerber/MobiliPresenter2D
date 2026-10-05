@@ -52,6 +52,10 @@ const {chromium} = require('playwright');
     const selected = Array.from(document.querySelectorAll(css)).find(item => item.getAttribute('aria-pressed') === 'true');
     return selected?.dataset.finishId || selected?.dataset.handleId || selected?.dataset.stonePackageId || selected?.id || null;
   }, selector);
+  const serviceChecked = descriptor => page.evaluate(({id, serviceId}) => {
+    const control = id ? document.getElementById(id) : document.querySelector(`[data-global-service-id="${serviceId}"]`);
+    return control?.checked ?? null;
+  }, descriptor);
 
   // Modules own their unmodified arrows, space and numeric shortcuts.
   await page.keyboard.press('ArrowRight');
@@ -83,9 +87,11 @@ const {chromium} = require('playwright');
   await page.waitForFunction(() => document.querySelector('.flow-nav [data-step][aria-current="step"]')?.dataset.step === 'finishes');
   assert.equal(await currentStage(), 'finishes', 'Ctrl+ArrowRight advances one stage');
 
+  // A Ctrl chord must not arm the fallback numeric buffer. Plain digits still belong to the active stage.
   const selectedBeforeForeignDigit = await selectedNumber();
   await page.keyboard.press('4');
-  assert.equal(await currentStage(), 'finishes', 'unmodified digits do not leave non-module stages');
+  await page.waitForTimeout(650);
+  assert.equal(await currentStage(), 'finishes', 'unmodified digits do not leave non-module stages after a Ctrl chord');
   assert.equal(await selectedNumber(), selectedBeforeForeignDigit, 'unmodified digits outside Modules do not change the selected module');
 
   // Finishes are discovered from visible configurable groups rather than hard-coded option IDs.
@@ -126,6 +132,8 @@ const {chromium} = require('playwright');
   const focusedService = await page.evaluate(() => ({
     tag: document.activeElement?.tagName,
     type: document.activeElement?.type || null,
+    id: document.activeElement?.id || null,
+    serviceId: document.activeElement?.dataset?.globalServiceId || null,
     checked: document.activeElement?.checked ?? null,
     disabled: document.activeElement?.disabled ?? null
   }));
@@ -133,9 +141,9 @@ const {chromium} = require('playwright');
   assert.equal(focusedService.type, 'checkbox', 'service item is represented as a binary control');
   assert.equal(focusedService.disabled, false, 'disabled controls are omitted from keyboard navigation');
   await page.keyboard.press('Space');
-  assert.equal(await page.evaluate(() => document.activeElement?.checked ?? null), !focusedService.checked, 'Space toggles the focused service item');
+  assert.equal(await serviceChecked(focusedService), !focusedService.checked, 'Space toggles the focused service item across redraws');
   await page.keyboard.press('Space');
-  assert.equal(await page.evaluate(() => document.activeElement?.checked ?? null), focusedService.checked, 'Space can restore the focused service item');
+  assert.equal(await serviceChecked(focusedService), focusedService.checked, 'Space can restore the focused service item across redraws');
 
   // Summary currently has no required local action. Inject one declarative section to prove a
   // future stage gains Enter behavior from DOM data without another controller branch.
@@ -151,7 +159,7 @@ const {chromium} = require('playwright');
     section.append(button);
     document.getElementById('summaryPanel').append(section);
   });
-  await page.keyboard.press('ArrowDown');
+  await moveToSection('future-summary-action');
   assert.equal(await activeSection(), 'future-summary-action', 'a future declarative section is discovered automatically');
   await page.keyboard.press('Enter');
   assert.equal(await page.evaluate(() => window.__KEYBOARD_FUTURE_ACTION__ === true), true, 'Enter executes an action item in a data-driven section');
