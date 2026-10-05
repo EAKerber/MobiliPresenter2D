@@ -200,8 +200,9 @@
       }
     ],
     services: [
-      { id: "move-stone", title: "Mover pedra", description: "Reposicionamento da pedra como serviço global." },
-      { id: "tempered-glass", title: "Vidro temperado 8 mm", description: "Complemento global para a composição." }
+      { id: "move-stone", title: "Mover pedra", description: "Reposicionamento da pedra como serviço global.", defaultSelected: true },
+      { id: "stone-skirting", title: "Rodapé de pedra", description: "Acabamento global de pedra para o rodapé da composição.", defaultSelected: true, stageKinds: ["finishes", "services", "custom"] },
+      { id: "tempered-glass", title: "Vidro temperado 8 mm", description: "Complemento global para a composição.", defaultSelected: true }
     ]
   };
 

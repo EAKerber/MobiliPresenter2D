@@ -12,7 +12,7 @@
       ...catalog.modules.map((item) => [item.entityId, "module"]),
       ...catalog.accessories.map((item) => [item.entityId, "object"]),
       ...catalog.services.map((item) => [item.id, "service"]),
-      ["fronts-all", "finish-group"], ["handles-all", "finish-group"], ["stone-all", "finish-group"], ["stone-skirting", "service"], ["summary", "summary"],
+      ["fronts-all", "finish-group"], ["handles-all", "finish-group"], ["stone-all", "finish-group"], ["summary", "summary"],
       ...catalog.options.handles.map((item) => [item.id, "handle"]),
       ...catalog.options.stonePackages.map((item) => [item.id, "stone"]),
       ...catalog.options.finishes.map((item) => [item.id, "finish"])
@@ -68,7 +68,7 @@
       objectAssets,
       initialState: {
         entities: Object.fromEntries([...moduleIds, ...catalog.accessories.map((item) => item.entityId)].map((id) => [id, true])),
-        services: ["move-stone", "stone-skirting", "tempered-glass"],
+        services: catalog.services.filter((item) => item.defaultSelected).map((item) => item.id),
         finishId: catalog.options.finishes[0]?.id || "base-light",
         handleId: "none",
         stonePackageId: "stone-existing"
@@ -156,7 +156,15 @@
   }
 
   function migrateCurrentHandleModel(value, catalog, priceBook, scene) {
-    if (!value || value.schemaVersion === SCHEMA) return value;
+    if (!value) return value;
+    if (value.schemaVersion === SCHEMA) {
+      const base = createDefaultAdministration({ stages: value.stages || [] }, catalog, priceBook, scene);
+      return {
+        ...value,
+        objects: { ...base.objects, ...(value.objects || {}) },
+        objectAssets: { ...base.objectAssets, ...(value.objectAssets || {}) }
+      };
+    }
     if (![PREVIOUS_SCHEMA, LEGACY_SCHEMA].includes(value.schemaVersion)) return value;
     if (value.schemaVersion === LEGACY_SCHEMA) return migrateLegacy(value, catalog, priceBook, scene);
     const base = createDefaultAdministration({ stages: value.stages || [] }, catalog, priceBook, scene);
@@ -211,7 +219,7 @@
       ...catalog.accessories.map((item) => item.entityId),
       "tempered-glass", "lighting-08"
     ]);
-    const eventTriggerIds = new Set([...entityIds, ...catalog.services.map((item) => item.id), "stone-skirting"]);
+    const eventTriggerIds = new Set([...entityIds, ...catalog.services.map((item) => item.id)]);
     const stageIds = new Set();
     const stageKinds = new Set();
     const assignedItems = new Set();
@@ -251,7 +259,9 @@
     if (!defaults || typeof defaults !== "object") errors.push("initial state is required");
     else {
       if (!defaults.entities || Object.keys(defaults.entities).some((id) => !entityIds.has(id)) || Object.values(defaults.entities).some((enabled) => typeof enabled !== "boolean")) errors.push("invalid initial entity state");
-      const allowedServices = new Set(["move-stone", "stone-skirting", "tempered-glass", "lighting-08"]);
+      // lighting-08 is retained here only for backwards-compatible published states;
+      // canonical service identifiers come from the public catalog.
+      const allowedServices = new Set([...catalog.services.map((item) => item.id), "lighting-08"]);
       if (!Array.isArray(defaults.services) || defaults.services.some((id) => !allowedServices.has(id)) || new Set(defaults.services).size !== defaults.services.length) errors.push("invalid initial services");
     }
 

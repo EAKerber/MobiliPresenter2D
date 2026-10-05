@@ -86,7 +86,7 @@ assert.equal(runtimeContractsSource.includes("createElement(\"script\")"), false
 assert.equal((indexHtml.match(/core\/keyboard-shortcuts\.js/g) || []).length, 1, "keyboard script is loaded explicitly exactly once");
 const runtimeContractIndex = indexHtml.indexOf("core/runtime-contracts.js?v=runtime-contracts-v2");
 const keyboardIndex = indexHtml.indexOf("core/keyboard-shortcuts.js?v=keyboard-v2");
-const appIndex = indexHtml.indexOf("app.js?v=runtime-v7");
+const appIndex = indexHtml.indexOf("app.js?v=runtime-v8");
 assert.equal(runtimeContractIndex >= 0 && keyboardIndex > runtimeContractIndex && appIndex > keyboardIndex, true, "runtime migration, keyboard behavior and app load in explicit order");
 assert.match(stylesCss, /#alignmentGrid\s*\{\s*z-index:\s*840;\s*\}/, "alignment grid stack contract lives in CSS");
 assert.match(stylesCss, /#sceneHotspots\s*\{\s*z-index:\s*860;\s*\}/, "hotspot stack contract lives in CSS");
