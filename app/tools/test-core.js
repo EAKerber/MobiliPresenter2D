@@ -52,6 +52,15 @@ assert.equal(resolved(glassState)["tempered-glass"].visible, true);
 assert.equal(scene.entities.find(e => e.id === "tempered-glass").controllable, false);
 assert.equal(scene.entities.some(e => /(?:right-return|left-return|right-side|exposed-face|floor-side-bridge)$/.test(e.id)), false, "experimental furniture side overlays stay out of the canonical scene");
 const appSource = fs.readFileSync(path.join(projectRoot, "app.js"), "utf8");
+const namedFunctionCounts = new Map();
+for (const match of appSource.matchAll(/\bfunction\s+([A-Za-z_$][\w$]*)\s*\(/g)) {
+  namedFunctionCounts.set(match[1], (namedFunctionCounts.get(match[1]) || 0) + 1);
+}
+const duplicateNamedFunctions = [...namedFunctionCounts.entries()]
+  .filter(([, count]) => count > 1)
+  .map(([name]) => name)
+  .sort();
+assert.deepEqual(duplicateNamedFunctions, [], "app.js must not contain shadowed duplicate named function declarations");
 const styleSource = fs.readFileSync(path.join(projectRoot, "styles.css"), "utf8");
 assert.match(appSource, /group\.style\.zIndex = String\(entity\.zIndex\)/);
 assert.doesNotMatch(styleSource, /data-entity-id="tempered-glass"\]\s*\{\s*z-index/);
