@@ -1,0 +1,60 @@
+name: Mobile browser
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'app/**'
+      - 'tests/mobile-pip-main-browser.cjs'
+      - '.github/workflows/mobile-browser.yml'
+  pull_request:
+    paths:
+      - 'app/**'
+      - 'tests/mobile-pip-main-browser.cjs'
+      - '.github/workflows/mobile-browser.yml'
+  workflow_dispatch:
+    inputs:
+      target_url:
+        description: Optional deployed URL for a mobile smoke test
+        required: false
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  browser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Resolve browser target
+        shell: bash
+        run: |
+          if [ -n "${{ inputs.target_url }}" ]; then
+            target="${{ inputs.target_url }}"
+          elif [ "${{ github.event_name }}" = "pull_request" ]; then
+            target="https://deploy-preview-${{ github.event.pull_request.number }}--mobilipresenter2d.netlify.app/"
+          else
+            target="https://mobilipresenter2d.netlify.app/"
+          fi
+          echo "MOBILE_INTERACTIONS_URL=$target" >> "$GITHUB_ENV"
+          echo "Browser target: $target"
+      - name: Install isolated browser test tooling
+        run: |
+          npm install --prefix /tmp/mobile-browser-tools --no-audit --no-fund playwright@1.62.1
+          /tmp/mobile-browser-tools/node_modules/.bin/playwright install --with-deps chromium
+      - name: Test mobile PiP and touch interactions
+        env:
+          NODE_PATH: /tmp/mobile-browser-tools/node_modules
+        run: node tests/mobile-pip-main-browser.cjs /tmp/mobile-browser-review
+      - name: Save mobile review
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: mobile-browser-${{ github.run_id }}
+          path: /tmp/mobile-browser-review
+          if-no-files-found: ignore
