@@ -13,8 +13,19 @@ const {chromium} = require('playwright');
   page.on('pageerror', error => errors.push(error.message));
   page.on('console', message => { if (message.type() === 'error') errors.push(message.text()); });
 
-  await page.goto(targetUrl, {waitUntil: 'domcontentloaded'});
-  await page.waitForFunction(() => window.CASA_KEYBOARD_SHORTCUTS && document.querySelectorAll('#moduleList [data-select-entity]').length > 1, null, {timeout: 20000});
+  let lastError;
+  for (let attempt = 0; attempt < 18; attempt += 1) {
+    try {
+      await page.goto(targetUrl, {waitUntil: 'domcontentloaded', timeout: 15000});
+      await page.waitForFunction(() => window.CASA_KEYBOARD_SHORTCUTS && document.querySelectorAll('#moduleList [data-select-entity]').length > 1, null, {timeout: 5000});
+      lastError = null;
+      break;
+    } catch (error) {
+      lastError = error;
+      await page.waitForTimeout(3000);
+    }
+  }
+  if (lastError) throw lastError;
 
   const selectedNumber = () => page.evaluate(() => {
     const card = document.querySelector('#moduleList .module-card.is-selected');
