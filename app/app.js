@@ -427,10 +427,6 @@
     return catalog.options.handles.find((handle) => handle.id === id) || catalog.options.handles[0];
   }
 
-  function selectedStoneLabel() {
-    return selectedStonePackage().label;
-  }
-
   function selectedStonePackage() {
     const id = state.globalSelections?.stonePackageId || "stone-existing";
     return catalog.options.stonePackages.find((stone) => stone.id === id) || catalog.options.stonePackages[0];
@@ -491,11 +487,6 @@
     return fact;
   }
 
-  function valueImpactLabel(cents) {
-    if (!cents) return "Sem adicional";
-    return cents > 0 ? `+${formatCurrency(cents)}` : `−${formatCurrency(Math.abs(cents))}`;
-  }
-
   function appendPriceBreakdownRow(list, label, value, detail) {
     const row = document.createElement("div");
     const term = document.createElement("dt");
@@ -511,30 +502,6 @@
     }
     row.append(term, definition);
     list.append(row);
-  }
-
-  function createItemPriceBreakdown(product, itemPricing) {
-    const breakdown = document.createElement("dl");
-    breakdown.className = "module-detail__price-breakdown";
-    const adjustments = pricing.sharedAdjustments(catalog, state, priceBook);
-    const handle = selectedHandle();
-    const appliesHandle = product.category && product.category !== "Estrutural";
-    const includedServices = catalog.services
-      .filter((service) => stageHas("services", service.id))
-      .filter((service) => service.status === "included")
-      .map((service) => service.title)
-      .join(", ");
-    appendPriceBreakdownRow(breakdown, "Módulo", formatCurrency(itemPricing.baseCents), "Valor-base do módulo.");
-    appendPriceBreakdownRow(
-      breakdown,
-      "Puxador",
-      appliesHandle ? formatCurrency(itemPricing.handleCents) : "Não aplicável",
-      appliesHandle ? handle.label : "Painel estrutural sem puxador."
-    );
-    appendPriceBreakdownRow(breakdown, "Frentes", formatCurrency(adjustments.frontCents), `${selectedFrontFinishLabel()} · ${valueImpactLabel(adjustments.frontCents)}.`);
-    appendPriceBreakdownRow(breakdown, "Pedra", formatCurrency(adjustments.stoneCents), `${selectedStoneLabel()} · ${valueImpactLabel(adjustments.stoneCents)}.`);
-    appendPriceBreakdownRow(breakdown, "Serviço", formatCurrency(adjustments.serviceCents), `${includedServices || "Nenhum"} · ${valueImpactLabel(adjustments.serviceCents)}.`);
-    return breakdown;
   }
 
   function createCommercialItemPriceBreakdown(product, itemPricing) {
