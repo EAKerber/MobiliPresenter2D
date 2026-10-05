@@ -5,8 +5,6 @@
   const STONE_GROUP_ID = "stone-all";
   const HANDLE_GROUP_ID = "handles-all";
   const FRONT_GROUP_ID = "fronts-all";
-  const STACK_STYLE_ID = "runtime-scene-stack-contracts";
-  const KEYBOARD_SCRIPT_ID = "keyboard-shortcuts-runtime";
 
   function clone(value) {
     return typeof structuredClone === "function"
@@ -27,8 +25,8 @@
     stage.items.push(itemId);
   }
 
-  // Canonical static defaults always expose the handle selector beside fronts and
-  // the skirting toggle beside the stone package selector.
+  // Compatibility for static/default settings created before handles and
+  // semantic skirting were both assigned to the finishes stage.
   function repairDefaultStageSettings(input) {
     if (!input || !Array.isArray(input.stages)) return input;
     const value = clone(input);
@@ -55,27 +53,6 @@
     return value;
   }
 
-  function installSceneStackContracts() {
-    if (!global.document || document.getElementById(STACK_STYLE_ID)) return;
-    const style = document.createElement("style");
-    style.id = STACK_STYLE_ID;
-    style.textContent = `
-      #alignmentGrid { z-index: 840; }
-      #sceneHotspots { z-index: 860; }
-      #selectionFrame { z-index: 900; }
-    `;
-    document.head.append(style);
-  }
-
-  function installKeyboardShortcuts() {
-    if (!global.document || document.getElementById(KEYBOARD_SCRIPT_ID)) return;
-    const script = document.createElement("script");
-    script.id = KEYBOARD_SCRIPT_ID;
-    script.src = "core/keyboard-shortcuts.js?v=keyboard-v2";
-    script.async = false;
-    document.head.append(script);
-  }
-
   const configuration = global.CasaModulesConfiguration;
   if (configuration) {
     global.CasaModulesConfiguration = Object.freeze({
@@ -89,13 +66,8 @@
     });
   }
 
-  installSceneStackContracts();
-  installKeyboardShortcuts();
-
   global.CASA_RUNTIME_CONTRACTS = Object.freeze({
     repairDefaultStageSettings,
-    repairSkirtingStageContract,
-    installSceneStackContracts,
-    installKeyboardShortcuts
+    repairSkirtingStageContract
   });
 })(typeof window === "undefined" ? globalThis : window);

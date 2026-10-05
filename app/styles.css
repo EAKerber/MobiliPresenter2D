@@ -122,6 +122,9 @@ button:focus-visible, input:focus-visible {
 .layer-group { pointer-events: none; opacity: 1; isolation: isolate; transition: opacity 180ms ease; }
 .layer-group.is-hidden { opacity: 0; }
 .scene-hotspots { z-index: 500; pointer-events: none; }
+#alignmentGrid { z-index: 840; }
+#sceneHotspots { z-index: 860; }
+#selectionFrame { z-index: 900; }
 .scene-hotspot {
   position: absolute;
   min-width: 28px;
