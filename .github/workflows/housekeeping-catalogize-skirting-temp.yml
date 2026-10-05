@@ -146,8 +146,8 @@ jobs:
           set -euo pipefail
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git rm .github/workflows/housekeeping-catalogize-skirting-temp.yml
-          git add app/data/catalog-data.js app/core/configuration.js app/admin/admin.js app/admin/admin.bundle.js app/app.js app/tools/test-core.js app/tools/test-runtime-contracts.js app/index.html app/admin.html
+          git rm .github/workflows/housekeeping-catalogize-skirting-temp.yml .github/workflows/housekeeping-fix-skirting-materializer-temp.yml
+          git add app/data/catalog-data.js app/core/configuration.js app/admin/admin.js app/app.js app/tools/test-core.js app/tools/test-runtime-contracts.js app/index.html app/admin.html
           git commit -m 'Canonicalize stone skirting catalog contract'
           remote_before="$(git ls-remote origin "refs/heads/$TARGET_BRANCH" | cut -f1)"
           test "$remote_before" = "$EXPECTED_HEAD"
