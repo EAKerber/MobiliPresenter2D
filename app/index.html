@@ -13,7 +13,7 @@
       content="Visualizador interativo dos módulos da cozinha Casa em Módulos."
     />
     <title>Casa em Módulos — Configurador</title>
-    <link rel="stylesheet" href="styles.css?v=admin-data-v2" />
+    <link rel="stylesheet" href="styles.css?v=runtime-v6" />
     <style>
       @media (max-width: 700px) {
         body.is-mobile-scene-pinned.is-mobile-scene-transparent .viewer-card {
@@ -68,8 +68,6 @@
 
           <canvas id="stoneCanvas" class="scene-layer stone-color-layer" width="1536" height="1024" aria-hidden="true"></canvas>
           <canvas id="plinthCanvas" class="scene-layer stone-color-layer" width="1536" height="1024" aria-hidden="true"></canvas>
-          <div id="skirtingOverlay02" class="scene-skirting scene-skirting--02" aria-hidden="true"></div>
-          <div id="skirtingOverlay03" class="scene-skirting scene-skirting--03" aria-hidden="true"></div>
           <div id="sceneHotspots" class="scene-hotspots" aria-label="Módulos selecionáveis na cena"></div>
           <div class="alignment-grid" id="alignmentGrid" aria-hidden="true"></div>
           <div class="selection-frame" id="selectionFrame" aria-hidden="true"></div>
@@ -169,22 +167,22 @@
       </aside>
     </main>
 
-    <script src="data/scene-data.js?v=admin-data-v2"></script>
-    <script src="data/catalog-data.js?v=admin-data-v2"></script>
+    <script src="data/scene-data.js?v=runtime-v6"></script>
+    <script src="data/catalog-data.js?v=runtime-v6"></script>
     <script src="data/configurator-settings.js?v=admin-config-v2"></script>
-    <script src="data/mock-price-book.js?v=admin-data-v2"></script>
-    <script src="data/mask-data.js?v=admin-data-v2"></script>
-    <script src="core/state.js?v=admin-data-v2"></script>
-    <script src="core/visibility.js?v=admin-data-v2"></script>
-    <script src="core/validation.js?v=admin-data-v2"></script>
-    <script src="core/fingerprint.js?v=admin-data-v2"></script>
-    <script src="core/finishes.js?v=admin-data-v2"></script>
-    <script src="core/pricing.js?v=admin-data-v2"></script>
+    <script src="data/mock-price-book.js?v=runtime-v6"></script>
+    <script src="data/mask-data.js?v=runtime-v6"></script>
+    <script src="core/state.js?v=runtime-v6"></script>
+    <script src="core/visibility.js?v=runtime-v6"></script>
+    <script src="core/validation.js?v=runtime-v6"></script>
+    <script src="core/fingerprint.js?v=runtime-v6"></script>
+    <script src="core/finishes.js?v=runtime-v6"></script>
+    <script src="core/pricing.js?v=runtime-v6"></script>
     <script src="core/configuration.js?v=admin-config-v3"></script>
     <script src="core/runtime-contracts.js?v=runtime-contracts-v1"></script>
-    <script src="data/stone-data.js?v=admin-data-v2"></script>
-    <script src="core/stone.js?v=admin-data-v2"></script>
-    <script src="app.js?v=admin-data-v5"></script>
+    <script src="data/stone-data.js?v=runtime-v6"></script>
+    <script src="core/stone.js?v=runtime-v6"></script>
+    <script src="app.js?v=runtime-v6"></script>
     <script>
       (() => {
         const resizeHandle = document.getElementById("mobileSceneResizeHandle");
