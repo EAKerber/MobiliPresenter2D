@@ -6,15 +6,15 @@
   ],
   "terminalBranches": [
     {
-      "branch": "housekeeping/remove-orphaned-ui-hooks",
-      "sha": "327341555f90d8fb016c6f2d8d88b7589e521a15",
+      "branch": "housekeeping/remove-unreferenced-pricing-helper",
+      "sha": "d0334ee11c580f76cc96da8671ddfdaa6586a5d0",
       "reason": "merged-housekeeping-head",
       "allowDelete": true,
       "evidence": {
-        "pullRequest": 69,
-        "mergedMainSha": "45b638e82a24a27f71f18686cda0542c856013b8"
+        "pullRequest": 70,
+        "mergedMainSha": "27fa29973586601bee8c9ba78f4a19224c0f47e5"
       },
-      "note": "PR #69 merged after all current browser, asset, variant and build-purity gates passed. The source branch is terminal; deletion remains exact-SHA fail-closed."
+      "note": "PR #70 merged after all current browser, asset, variant and build-purity gates passed. The source branch is terminal; deletion remains exact-SHA fail-closed."
     }
   ]
 }
