@@ -44,6 +44,15 @@ These are not current product bugs. Prefer evidence from a second furniture fami
   - Current product-specific global pricing works and is tested.
   - Promote it to catalog/price-book metadata only after repeated cases justify the abstraction.
 
+## P2 — build / replay boundary
+
+- **Remove historical R5A materialization from the default build/test path only after an equivalence proof**
+  - `app/package.json` still runs `tools/apply-r5a-pixelperfect-edits.py` during ordinary build and `tools/validate-r5a-pixelperfect.py` during ordinary test.
+  - These scripts are therefore active consumers, not dead code.
+  - Test whether the already materialized current assets can become the normal build input while R5A replay moves behind an explicit historical command.
+  - Promotion requires byte/render equivalence for the current product and preserved deliberate replay of the historical lineage.
+  - Evidence: `docs/architecture/js-authority-audit-2026-10-05.md` and `docs/architecture/ci-authority-contract-2026-10-05.md`.
+
 ## P2 — UI/runtime infrastructure
 
 - **Centralize scene z-index contract if the scene range grows**
@@ -51,8 +60,8 @@ These are not current product bugs. Prefer evidence from a second furniture fami
   - Introduce shared/derived tokens before adding scene entities above the current ceiling.
 
 - **Broaden browser regression coverage incrementally**
-  - Current gates cover stone/skirting/visibility/stacking and keyboard navigation.
-  - Add responsive/mobile, admin-published configuration and summary/pricing flows as independent tests rather than coupling them to stone gates.
+  - Current gates cover stone/skirting/visibility/stacking, keyboard navigation and the principal mobile/PiP flow.
+  - Add admin-published configuration and summary/pricing flows as independent tests rather than coupling them to stone gates.
 
 ## Completed / no longer backlog
 
@@ -64,3 +73,5 @@ These are not current product bugs. Prefer evidence from a second furniture fami
 - The obsolete default-stage repair was removed after proving canonical defaults are already correct; only published-record compatibility remains.
 - Reconstruction research architecture harvested into ADRs 0005–0008 before research pruning.
 - Historical R0/R4/R5A replay authority separated from current automatic CI; current variant and asset gates pass without rewriting historical manifests. See `docs/architecture/ci-authority-contract-2026-10-05.md`.
+- Mobile/PiP browser regression gate restored and passing on `main`.
+- JavaScript/tooling authority audited: no duplicate product runtime exists outside `app/`; remaining overlap is role separation or explicit historical replay.
