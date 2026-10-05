@@ -28,11 +28,13 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
+      - name: Test runtime configuration contracts
+        run: node app/tools/test-runtime-contracts.js
       - name: Install isolated browser test tooling
         run: |
           npm install --prefix /tmp/stone-browser-tools --no-audit --no-fund playwright@1.62.1
           /tmp/stone-browser-tools/node_modules/.bin/playwright install --with-deps chromium
-      - name: Test actual stone controls and capture desktop/mobile
+      - name: Test current stone and skirting controls
         env:
           NODE_PATH: /tmp/stone-browser-tools/node_modules
           STONE_BROWSER_URL: ${{ inputs.target_url }}
