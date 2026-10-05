@@ -6,19 +6,17 @@
   ],
   "terminalBranches": [
     {
-      "branch": "housekeeping/summary-pricing-gate",
-      "sha": "ffc85d3f1ac4d014ec54ba581ebdd9f224c47029",
-      "reason": "merged-housekeeping-head",
+      "branch": "housekeeping/current-app-build-authority",
+      "sha": "62c8ffe84450d71cec797b5cf7ae6dfc826aeaa8",
+      "reason": "merged-tree-identical-housekeeping-head",
       "allowDelete": true,
-      "evidence": { "pullRequest": 64 },
-      "note": "PR #64 was squash-merged after Summary/Pricing, Stone, Mobile, current asset, current variant and branch-hygiene gates passed."
-    },
-    {
-      "branch": "audit/r5a-default-build-equivalence",
-      "sha": "43d1807ef3858065fd1fb1186e5b30c11a93bfed",
-      "reason": "completed-build-authority-audit",
-      "allowDelete": true,
-      "note": "Clean-worktree audit proved current npm test passes without R5A rematerialization and the historical default app build drifts 98,478 PNG pixels / 26,726 alpha pixels. Findings are incorporated into the current build-authority contract; audit workflow is not production code."
+      "evidence": {
+        "pullRequest": 65,
+        "mergedMainSha": "ffe0b97bfa81d67a2ab16494e8d1a35ec1cd9b47",
+        "branchTreeSha": "4abe7e2bd29ba76b58e1139d09c808d60a490042",
+        "mergedMainTreeSha": "4abe7e2bd29ba76b58e1139d09c808d60a490042"
+      },
+      "note": "PR #65 is merged. The current remote branch head was reobserved exactly and its Git tree is byte-for-byte identical to current main. Deletion remains bound to this exact branch SHA."
     }
   ]
 }
