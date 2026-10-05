@@ -6,12 +6,19 @@
   ],
   "terminalBranches": [
     {
-      "branch": "housekeeping/prune-js-audit",
-      "sha": "688592cd4a14977e5f6c9c798d9567f2d7682dc0",
+      "branch": "housekeeping/summary-pricing-gate",
+      "sha": "ffc85d3f1ac4d014ec54ba581ebdd9f224c47029",
       "reason": "merged-housekeeping-head",
       "allowDelete": true,
-      "evidence": { "pullRequest": 63 },
-      "note": "PR #63 was merged after a successful exact-SHA branch-hygiene dry-run. Its audit target has already been deleted; this records the merged PR head for final branch cleanup."
+      "evidence": { "pullRequest": 64 },
+      "note": "PR #64 was squash-merged after Summary/Pricing, Stone, Mobile, current asset, current variant and branch-hygiene gates passed."
+    },
+    {
+      "branch": "audit/r5a-default-build-equivalence",
+      "sha": "43d1807ef3858065fd1fb1186e5b30c11a93bfed",
+      "reason": "completed-build-authority-audit",
+      "allowDelete": true,
+      "note": "Clean-worktree audit proved current npm test passes without R5A rematerialization and the historical default app build drifts 98,478 PNG pixels / 26,726 alpha pixels. Findings are incorporated into the current build-authority contract; audit workflow is not production code."
     }
   ]
 }
