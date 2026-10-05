@@ -215,6 +215,8 @@ const {chromium} = require('playwright');
   assert.notEqual(onAfterMdf.plinth.hash, onAfterStone.plinth.hash, 'ON + stone change must recolor the plinth');
   await screenshot('02-skirting-on-stone');
 
+  await page.locator('[data-step="modules"]').click();
+  await settle();
   const visibilityCases = [];
   for (const [module02, module03, label] of [
     [true, true, 'both-visible'],
