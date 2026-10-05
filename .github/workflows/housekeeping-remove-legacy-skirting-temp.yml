@@ -66,6 +66,30 @@ jobs:
               "",
               re.S
           )
+
+          revision = "runtime-v6"
+          coordinated = [
+              "styles.css",
+              "data/scene-data.js",
+              "data/catalog-data.js",
+              "data/mock-price-book.js",
+              "data/mask-data.js",
+              "core/state.js",
+              "core/visibility.js",
+              "core/validation.js",
+              "core/fingerprint.js",
+              "core/finishes.js",
+              "core/pricing.js",
+              "data/stone-data.js",
+              "core/stone.js",
+              "app.js",
+          ]
+          for asset in coordinated:
+              sub_once(
+                  "app/index.html",
+                  re.escape(asset) + r'\?v=[^\"]+',
+                  f"{asset}?v={revision}"
+              )
           PY
           rm app/assets/kitchen/masks/skirting-02.svg app/assets/kitchen/masks/skirting-03.svg
       - name: Static contract gate
@@ -81,6 +105,7 @@ jobs:
           grep -q 'globalEntries\["stone-skirting"\]' app/tools/test-core.js
           grep -q 'renderStone(effectiveState, sceneMaterials())' app/app.js
           grep -q 'id="plinthCanvas"' app/index.html
+          grep -q 'app.js?v=runtime-v6' app/index.html
           node --check app/app.js
           node app/tools/test-core.js
           node app/tools/test-runtime-contracts.js
