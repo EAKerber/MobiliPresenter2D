@@ -2,22 +2,17 @@
   "schemaVersion": "BranchDispositionSet 0.1",
   "controlBranch": "main",
   "preserveBranches": [
-    "feat/exposed-sides-and-glass"
+    "feat/exposed-sides-and-glass",
+    "audit/boundary-forensics",
+    "research/bmc04-compact-donor-calibration-v0.1"
   ],
   "terminalBranches": [
     {
-      "branch": "audit/live-state-2026-09-17",
-      "sha": "317ef5fcff89a47b72448e911f20933eb0256799",
-      "reason": "completed-self-cleaning-audit-zero-file-diff",
+      "branch": "research/reconstruction-architecture-v0.1",
+      "sha": "945c68253598ae00f3958445bbcec20c6149affc",
+      "reason": "strict-ancestor-of-preserved-research-branch",
       "allowDelete": true,
-      "note": "Temporary live UX/CSS audit lineage. The workflows self-cleaned and comparison with current main reports zero changed files. Exact current SHA required."
-    },
-    {
-      "branch": "audit/module02-finish-mask",
-      "sha": "1523428897bdbe797cdf3999f9cc8c18f35503cd",
-      "reason": "completed-self-cleaning-audit-zero-file-diff",
-      "allowDelete": true,
-      "note": "Temporary stone support/mask audit lineage. The workflow self-cleaned and comparison with current main reports zero changed files. Exact current SHA required."
+      "note": "research/bmc04-compact-donor-calibration-v0.1 is exactly 10 commits ahead and 0 behind this head. Every commit remains reachable from the preserved descendant branch; deletion is exact-SHA fail-closed."
     }
   ]
 }
