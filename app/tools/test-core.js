@@ -202,15 +202,6 @@ scene.entities.forEach((entity) => {
   const expected = bounds ? { x: bounds[0], y: bounds[1], width: bounds[2] - bounds[0], height: bounds[3] - bounds[1] } : null;
   assert.equal(JSON.stringify(entity.alphaBounds), JSON.stringify(expected), entity.id);
 });
-const skirtingMasks = {
-  "skirting-02.svg": "M496 856H744V899H496Z",
-  "skirting-03.svg": "M745 856H1205V899H745Z"
-};
-Object.entries(skirtingMasks).forEach(([name, expectedPath]) => {
-  const contents = fs.readFileSync(path.join(projectRoot, "assets/kitchen/masks", name), "utf8");
-  assert.match(contents, /viewBox="0 0 1536 1024"/, name + " viewBox");
-  assert.equal(contents.includes(expectedPath), true, name + " geometry");
-});
 const structureMaskPaths = ["01", "02", "03", "04", "05", "06", "07"].flatMap((key) => [
   `assets/kitchen/masks/structure-${key}-shadow.png`,
   `assets/kitchen/masks/structure-${key}-highlight.png`

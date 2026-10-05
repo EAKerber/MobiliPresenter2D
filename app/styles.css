@@ -110,7 +110,7 @@ button:focus-visible, input:focus-visible {
   background: #e8e4dd;
 }
 
-.scene-layer, .layer-group, .layer-group img, .finish-layer, .alignment-grid, .scene-hotspots, .scene-skirting {
+.scene-layer, .layer-group, .layer-group img, .finish-layer, .alignment-grid, .scene-hotspots {
   position: absolute;
   inset: 0;
   width: 100%;
@@ -212,20 +212,6 @@ button:focus-visible, input:focus-visible {
   opacity: var(--structure-highlight-opacity, 0);
   mix-blend-mode: screen;
 }
-.scene-skirting {
-  z-index: 450;
-  display: none;
-  pointer-events: none;
-  background-color: var(--skirting-color, #eeeae3);
-  background-image: var(--skirting-texture, none);
-  background-repeat: repeat;
-  background-size: 12% auto;
-  -webkit-mask: var(--skirting-mask) center / contain no-repeat;
-  mask: var(--skirting-mask) center / contain no-repeat;
-}
-.scene-skirting.is-mdf { display: block; }
-.scene-skirting--02 { --skirting-mask: url("assets/kitchen/masks/skirting-02.svg"); }
-.scene-skirting--03 { --skirting-mask: url("assets/kitchen/masks/skirting-03.svg"); }
 
 .alignment-grid {
   display: none;

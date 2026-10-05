@@ -74,10 +74,6 @@
   const stagePanels = new Map([
     ["modules", modulesPanel], ["finishes", frontFinishPanel], ["services", servicesPanel], ["summary", summaryPanel]
   ]);
-  const skirtingOverlays = [
-    { entityId: "module-02", element: document.getElementById("skirtingOverlay02") },
-    { entityId: "module-03", element: document.getElementById("skirtingOverlay03") }
-  ];
   const selectedFinishDescription = document.getElementById("selectedFinishDescription");
   const catalogByEntityId = new Map(catalog.modules.map((module) => [module.entityId, module]));
   const stageConfig = (id) => configuratorSettings.stages.find((stage) => stage.id === id);
@@ -1987,16 +1983,6 @@
     });
   }
 
-  function syncSkirtingAppearance() {
-    // The semantic canvas owns both stone and MDF plinths. These legacy SVG
-    // overlays remain in the DOM for now to avoid breaking older deep links,
-    // but must never paint a second material over the canvas.
-    skirtingOverlays.forEach(({ entityId, element }) => {
-      if (!element) return;
-      element.classList.remove("is-mdf");
-      element.setAttribute("aria-hidden", "true");
-    });
-  }
 
   function materialDescriptor(material, fallbackType) {
     if (!material?.color && !material?.textureAsset) return null;
@@ -2032,7 +2018,6 @@
     renderStone(effectiveState, sceneMaterials());
     syncFinishMasks(resolved);
     syncFinishAppearance();
-    syncSkirtingAppearance();
     layerGroups.forEach((layer) => {
       const result = resolved[layer.dataset.entityId];
       const entity = entitiesById.get(layer.dataset.entityId);
