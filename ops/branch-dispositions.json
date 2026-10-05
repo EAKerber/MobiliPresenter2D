@@ -6,35 +6,15 @@
   ],
   "terminalBranches": [
     {
-      "branch": "housekeeping/remove-obsolete-baseline-writers",
-      "sha": "2cba4ee2afee592bfe3186edb7693b84785e68cb",
-      "reason": "merged-housekeeping-head",
+      "branch": "housekeeping/finalize-official-candidate",
+      "sha": "ffcd476adb5f0a3175f009c089410053bde0c970",
+      "reason": "merged-final-bookkeeping-head",
       "allowDelete": true,
       "evidence": {
-        "pullRequest": 73,
-        "mergedMainSha": "b969bb471831d405fd6e1c9c15bf761176885cdd"
+        "pullRequest": 75,
+        "mergedMainSha": "55076d11be17ad3a3d1843e09a5bdeb9e0a04629"
       },
-      "note": "PR #73 merged after branch-hygiene and current asset gates passed. Exact-SHA fail-closed deletion only."
-    },
-    {
-      "branch": "audit/official-candidate-gates",
-      "sha": "deb1db447f491134beb11d08d5b087900cfaca0d",
-      "reason": "completed-candidate-audit",
-      "allowDelete": true,
-      "evidence": {
-        "pullRequest": 74,
-        "candidateMainSha": "b969bb471831d405fd6e1c9c15bf761176885cdd",
-        "workflowRuns": [
-          37387413443,
-          37387413328,
-          37387413524,
-          37387413334,
-          37387413530,
-          37387413487,
-          37387413833
-        ]
-      },
-      "note": "Temporary audit PR closed without merge after every current candidate gate passed. Branch contains only inert/test-only trigger changes."
+      "note": "Final housekeeping bookkeeping branch. PR #75 merged after branch-hygiene passed; deletion remains exact-SHA fail-closed."
     }
   ]
 }
