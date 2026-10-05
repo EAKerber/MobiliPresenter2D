@@ -6,15 +6,26 @@
   ],
   "terminalBranches": [
     {
-      "branch": "housekeeping/remove-unreachable-css",
-      "sha": "969a0df8cf6375a234853f8c34ec397539f36d91",
+      "branch": "housekeeping/refresh-final-backlog",
+      "sha": "37d14ee7cd80619a8c51e63e241125ca068e3853",
       "reason": "merged-housekeeping-head",
       "allowDelete": true,
       "evidence": {
-        "pullRequest": 71,
-        "mergedMainSha": "e71fc270cf55decbc08f40f86ea36074771abf87"
+        "pullRequest": 72,
+        "mergedMainSha": "fe82609e5ede29fc67919685060ede3332cf5ceb"
       },
-      "note": "PR #71 merged after current asset/variant, build-purity and browser gates passed. Exact-SHA fail-closed deletion only."
+      "note": "PR #72 merged after branch-hygiene passed. Exact-SHA fail-closed deletion only."
+    },
+    {
+      "branch": "audit/tooling-reachability",
+      "sha": "e2de805f28b2ca5a9a912c3ac977879eea4c1910",
+      "reason": "completed-audit",
+      "allowDelete": true,
+      "evidence": {
+        "workflowRun": 37386711799,
+        "artifact": 11379276206
+      },
+      "note": "Temporary read-only tooling reachability audit. Its durable conclusion is consumed by the obsolete-writer cleanup; the audit branch itself is terminal."
     }
   ]
 }
