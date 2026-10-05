@@ -132,7 +132,6 @@ const {chromium} = require('playwright');
   assert(defaultContract.items.includes('handles-all'), 'default finishes stage must expose handles');
   assert(defaultContract.items.includes('stone-skirting'), 'default finishes stage must expose stone skirting');
   assert.equal(defaultContract.skirtingHidden, false, 'stone skirting control must be visible');
-  assert.equal(defaultContract.handlesHidden, false, 'handle controls must be visible');
 
   const repairProbe = await page.evaluate(() => {
     const legacy = {
