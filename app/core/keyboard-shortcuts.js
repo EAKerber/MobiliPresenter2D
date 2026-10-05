@@ -16,6 +16,7 @@
   let numericBuffer = "";
   let numericTimer = null;
   let multiDigitArmedUntil = 0;
+  let controlChordUsed = false;
   const sectionCursorByStage = new Map();
   const itemCursorBySection = new Map();
 
@@ -319,6 +320,12 @@
       return;
     }
 
+    if (event.key === "Control") {
+      controlChordUsed = false;
+      return;
+    }
+    if (event.ctrlKey) controlChordUsed = true;
+
     if (isTextEntryTarget(event.target)) return;
 
     if (event.ctrlKey && (event.key === "ArrowLeft" || event.key === "ArrowRight")) {
@@ -385,12 +392,19 @@
 
   document.addEventListener("keyup", (event) => {
     if (event.key !== "Control") return;
-    if (numericBuffer) {
-      resolveNumericBuffer();
+    if (isTextEntryTarget(event.target)) {
+      controlChordUsed = false;
       multiDigitArmedUntil = 0;
       return;
     }
-    multiDigitArmedUntil = Date.now() + MULTI_DIGIT_ARM_MS;
+    if (numericBuffer) {
+      resolveNumericBuffer();
+      controlChordUsed = false;
+      multiDigitArmedUntil = 0;
+      return;
+    }
+    multiDigitArmedUntil = controlChordUsed ? 0 : Date.now() + MULTI_DIGIT_ARM_MS;
+    controlChordUsed = false;
   }, true);
 
   global.CASA_KEYBOARD_SHORTCUTS = Object.freeze({
