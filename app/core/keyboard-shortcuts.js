@@ -76,8 +76,11 @@
   }
 
   function closeModuleDetail() {
+    if (activeStageId() !== "modules" || !document.body.classList.contains("has-module-detail")) return false;
+    const panel = document.getElementById("modulesPanel");
+    if (panel && !isVisible(panel)) return false;
     const close = document.querySelector("#moduleDetail [data-close-module-detail]");
-    if (!close) return false;
+    if (!close || !isVisible(close)) return false;
     close.click();
     return true;
   }
