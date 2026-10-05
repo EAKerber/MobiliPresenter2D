@@ -93,6 +93,9 @@ const {chromium} = require('playwright');
   await page.waitForTimeout(650);
   assert.equal(await currentStage(), 'finishes', 'unmodified digits do not leave non-module stages after a Ctrl chord');
   assert.equal(await selectedNumber(), selectedBeforeForeignDigit, 'unmodified digits outside Modules do not change the selected module');
+  await page.keyboard.press('Escape');
+  assert.equal(await currentStage(), 'finishes', 'Escape remains local to visible module details');
+  assert.equal(await selectedNumber(), selectedBeforeForeignDigit, 'Escape outside Modules preserves the latent module selection');
 
   // Finishes are discovered from visible configurable groups rather than hard-coded option IDs.
   const finishSections = await sectionSnapshot();
