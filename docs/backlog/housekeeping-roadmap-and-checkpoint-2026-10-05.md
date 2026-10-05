@@ -19,7 +19,7 @@ Do not use “checkpoint” to mean an arbitrary intermediate commit.
 ## Current stable authority
 
 - Product authority: `main`.
-- Current repository head after the 2026-10-05 housekeeping pass: `55076d11be17ad3a3d1843e09a5bdeb9e0a04629`.
+- Current repository head after the 2026-10-05 housekeeping pass: `42f55917961cc8957974bb50b589945b36f00055`.
 - Exact near-official product candidate proven by the full gate fan-out: `b969bb471831d405fd6e1c9c15bf761176885cdd`.
 - PR #75 added only final bookkeeping/documentation and branch disposition after that candidate; it did not change runtime, schema, assets, CSS, pricing or UX.
 - Branch inventory is intentionally narrow:
