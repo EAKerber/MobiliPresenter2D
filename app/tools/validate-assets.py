@@ -8,7 +8,7 @@ sources. Those edit-specific invariants live in validate-r5a-pixelperfect.py.
 from __future__ import annotations
 from pathlib import Path
 from PIL import Image, ImageChops, ImageDraw
-import hashlib, json
+import hashlib, json, os
 
 ROOT = Path(__file__).resolve().parent.parent
 TECH = ROOT / "data" / "technical-data.json"
@@ -149,8 +149,14 @@ def main() -> int:
     golden = Image.open(ROOT / "assets/kitchen/composicao-completa.png").convert("RGBA")
     different = sum(1 for a, b in zip(composed.get_flattened_data(), golden.get_flattened_data()) if a != b)
     if different: errors.append({"error": "golden-difference", "differentPixels": different})
-    COMPOSED.parent.mkdir(parents=True, exist_ok=True)
-    composed.save(COMPOSED)
+
+    # The composed PNG is diagnostic evidence, not an input to the verdict. Rewriting
+    # a tracked PNG on every validation made `npm test` dirty a clean checkout merely
+    # because Pillow serialized the same pixels differently. Keep regeneration explicit.
+    if os.environ.get("MOBILI_WRITE_VALIDATION_COMPOSED") == "1":
+        COMPOSED.parent.mkdir(parents=True, exist_ok=True)
+        composed.save(COMPOSED)
+
     report = {
         "schemaVersion": "FidelityReport2D 2.0",
         "baselineId": data["baselineId"],
