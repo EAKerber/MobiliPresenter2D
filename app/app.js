@@ -263,92 +263,8 @@
       });
   }
 
-  function renderFinishControlsFromData() {
-    const finishGroup = scene.finishGroups.find((group) => group.id === "fronts-all");
-    finishSwatches.replaceChildren();
-
-    finishGroup.presets.forEach((preset) => {
-      const button = document.createElement("button");
-      button.className = "swatch";
-      button.type = "button";
-      button.dataset.finishId = preset.id;
-      button.dataset.color = preset.color;
-      button.dataset.overlayOpacity = String(finishes.resolveOverlayOpacity(preset, preset.color));
-      button.style.setProperty("--swatch", preset.color);
-      button.title = preset.label;
-      button.setAttribute("aria-label", `Aplicar ${preset.label}`);
-      button.setAttribute("aria-pressed", "false");
-      finishSwatches.append(button);
-    });
-
-    // Choices shown to buyers are deliberately limited to the published presets.
-  }
-
-  function renderHandleControlsFromData() {
-    if (!handleOptions) return;
-    handleOptions.replaceChildren();
-    catalog.options.handles.forEach((handle) => {
-      const button = document.createElement("button");
-      button.type = "button";
-      button.className = "handle-option";
-      button.dataset.handleId = handle.id;
-      button.setAttribute("aria-pressed", "false");
-      button.setAttribute("aria-label", `Selecionar puxador ${handle.label}`);
-
-      const orientation = document.createElement("span");
-      orientation.className = "handle-option__orientation";
-      orientation.style.setProperty("--handle-swatch", handle.color || "#817c73");
-      orientation.setAttribute("aria-hidden", "true");
-      const door = document.createElement("i");
-      door.className = "handle-option__door";
-      const drawer = document.createElement("i");
-      drawer.className = "handle-option__drawer";
-      orientation.append(door, drawer);
-
-      const copy = document.createElement("span");
-      copy.className = "handle-option__copy";
-      const label = document.createElement("strong");
-      label.textContent = handle.label;
-      const description = document.createElement("small");
-      const value = priceBook.handleEntries?.[handle.id] || 0;
-      description.textContent = value ? `${handle.description} · ${formatCurrency(value)}` : handle.description;
-      copy.append(label, description);
-      button.append(orientation, copy);
-      handleOptions.append(button);
-    });
-  }
-
-  function renderServices() {
-    if (!servicesChecklist) return;
-    servicesChecklist.replaceChildren();
-    catalog.services.filter((service) => stageItems("services").has(service.id)).forEach((service) => {
-      const card = document.createElement("label");
-      card.className = "service-check";
-      const input = document.createElement("input");
-      input.type = "checkbox";
-      input.checked = service.status === "included";
-      input.disabled = service.status === "included";
-      input.setAttribute("aria-label", `${service.title}: incluída`);
-      const copy = document.createElement("span");
-      const title = document.createElement("strong");
-      title.textContent = service.title;
-      const description = document.createElement("small");
-      description.textContent = service.description;
-      const status = document.createElement("em");
-      status.textContent = "Incluída";
-      copy.append(title, description, status);
-      card.append(input, copy);
-      servicesChecklist.append(card);
-    });
-  }
-
   function selectedModuleFinish(entityId = state.selectedEntityId) {
     return core.finishForEntity(state, entityId);
-  }
-
-  function selectedHandle() {
-    const id = core.globalHandleId(state);
-    return catalog.options.handles.find((handle) => handle.id === id) || catalog.options.handles[0];
   }
 
   function materialBackground(material) {
@@ -2006,20 +1922,6 @@
     if (affected.length) {
       const names = affected.map((id) => catalogByEntityId.get(id)?.title || catalog.accessories.find((item) => item.entityId === id)?.title || id);
       announce(isVisible ? `${names.join(", ")} incluído como suporte necessário.` : `${names.join(", ")} removido porque depende deste módulo.`);
-    }
-  }
-
-  function selectEntity(entityId, source) {
-    const product = catalogByEntityId.get(entityId);
-    if (!product) return;
-    state.selectedEntityId = entityId;
-    if (currentStep !== "modules") currentStep = "modules";
-    syncLayerVisibility();
-    announce(`Ficha de ${product.referenceLabel}, ${product.title}, aberta.`);
-    if (source === "scene") {
-      requestAnimationFrame(() => {
-        moduleDetail.scrollIntoView({ behavior: "smooth", block: "nearest" });
-      });
     }
   }
 
