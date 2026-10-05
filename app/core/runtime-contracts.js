@@ -3,8 +3,6 @@
 
   const SKIRTING_ID = "stone-skirting";
   const STONE_GROUP_ID = "stone-all";
-  const HANDLE_GROUP_ID = "handles-all";
-  const FRONT_GROUP_ID = "fronts-all";
 
   function clone(value) {
     return typeof structuredClone === "function"
@@ -23,19 +21,6 @@
   function appendOnce(stage, itemId) {
     if (!stage || !Array.isArray(stage.items) || stage.items.includes(itemId)) return;
     stage.items.push(itemId);
-  }
-
-  // Compatibility for static/default settings created before handles and
-  // semantic skirting were both assigned to the finishes stage.
-  function repairDefaultStageSettings(input) {
-    if (!input || !Array.isArray(input.stages)) return input;
-    const value = clone(input);
-    const finishes = stageContaining(value.stages, STONE_GROUP_ID)
-      || stageContaining(value.stages, FRONT_GROUP_ID);
-    if (!finishes) return value;
-    if (!itemIsAssigned(value.stages, HANDLE_GROUP_ID)) appendOnce(finishes, HANDLE_GROUP_ID);
-    if (!itemIsAssigned(value.stages, SKIRTING_ID)) appendOnce(finishes, SKIRTING_ID);
-    return value;
   }
 
   // Published configurations created before the skirting control became a
@@ -57,9 +42,6 @@
   if (configuration) {
     global.CasaModulesConfiguration = Object.freeze({
       ...configuration,
-      createDefaultAdministration(settings, ...args) {
-        return configuration.createDefaultAdministration(repairDefaultStageSettings(settings), ...args);
-      },
       normalizeConfiguratorSettings(input, ...args) {
         return configuration.normalizeConfiguratorSettings(repairSkirtingStageContract(input), ...args);
       }
@@ -67,7 +49,6 @@
   }
 
   global.CASA_RUNTIME_CONTRACTS = Object.freeze({
-    repairDefaultStageSettings,
     repairSkirtingStageContract
   });
 })(typeof window === "undefined" ? globalThis : window);
