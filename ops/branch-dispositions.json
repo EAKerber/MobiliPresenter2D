@@ -1,7 +1,9 @@
 {
   "schemaVersion": "BranchDispositionSet 0.1",
   "controlBranch": "main",
-  "preserveBranches": [],
+  "preserveBranches": [
+    "feat/exposed-sides-and-glass"
+  ],
   "terminalBranches": [
     {
       "branch": "work/r0-baseline-freeze-check",
@@ -33,6 +35,102 @@
         "pullRequest": 6
       },
       "note": "PR #6 was squash-merged. Branch and merged main have the exact same Git tree; deletion remains bound to this exact branch SHA."
+    },
+    {
+      "branch": "feat/keyboard-shortcuts",
+      "sha": "0072a4570895479dda00c465c900af5112ecd1f3",
+      "reason": "merged-pr-head-superseded-by-main",
+      "allowDelete": true,
+      "evidence": { "pullRequest": 44 },
+      "note": "Current remote branch head was revalidated as exactly this PR head before recording the disposition. PR #45 subsequently generalized the keyboard contract on main."
+    },
+    {
+      "branch": "fix/stone-browser-published-admin-contract",
+      "sha": "94c99054730debbaefae052cc2dd14a5b2ebd4d9",
+      "reason": "merged-test-followup",
+      "allowDelete": true,
+      "evidence": { "pullRequest": 42 },
+      "note": "Current remote branch head exactly matches the merged PR #42 head. The accidental placeholder PR #43 used the same head and was closed without merge."
+    },
+    {
+      "branch": "fix/skirting-config-stack-contracts",
+      "sha": "2f21d6bee9ecfe2fd9ba181674fad002a19e42b8",
+      "reason": "merged-pr-head",
+      "allowDelete": true,
+      "evidence": { "pullRequest": 41 },
+      "note": "Current remote branch head exactly matches the merged PR #41 head."
+    },
+    {
+      "branch": "audit/runtime-toggle-stack",
+      "sha": "4d12dbc561f22dfe05e063c4e1d33075439fbe12",
+      "reason": "closed-audit-superseded",
+      "allowDelete": true,
+      "evidence": { "pullRequests": [39, 40] },
+      "note": "Audit-only branch. Findings were implemented by PR #41; both audit PRs are closed. Current remote branch head was revalidated exactly."
+    },
+    {
+      "branch": "fix/stone-color-glass-consistency",
+      "sha": "cdcd30b32fe53b560232bced6e1fbc1ffe889c15",
+      "reason": "merged-pr-head",
+      "allowDelete": true,
+      "evidence": { "pullRequest": 38 },
+      "note": "Current remote branch head exactly matches the merged PR #38 head."
+    },
+    {
+      "branch": "fix/identity-password-recovery",
+      "sha": "2de987e1ae834e2b05b5ceff64ce6dfb4b2a95a0",
+      "reason": "merged-pr-head",
+      "allowDelete": true,
+      "evidence": { "pullRequest": 37 },
+      "note": "Current remote branch head exactly matches the merged PR #37 head."
+    },
+    {
+      "branch": "feat/admin-stage-config",
+      "sha": "542204807858f0c915e8722379dd637f898e7de4",
+      "reason": "merged-pr-head",
+      "allowDelete": true,
+      "evidence": { "pullRequest": 36 },
+      "note": "Current remote branch head exactly matches the merged PR #36 head."
+    },
+    {
+      "branch": "fix/clean-glass-side-preview",
+      "sha": "21712a6d163f99771e33fcbea4b835df9c2fe634",
+      "reason": "merged-pr-head",
+      "allowDelete": true,
+      "evidence": { "pullRequest": 35 },
+      "note": "Current remote branch head exactly matches the merged PR #35 head."
+    },
+    {
+      "branch": "fix/mobile-pip-main-publish-20260925",
+      "sha": "39226ad1fadf95e70760a33f1e87611d22ad159c",
+      "reason": "merged-pr-head",
+      "allowDelete": true,
+      "evidence": { "pullRequest": 33 },
+      "note": "Current remote branch head exactly matches the merged PR #33 head."
+    },
+    {
+      "branch": "fix/front-mask-host-clipping",
+      "sha": "874c9daed786653af445628b1c3e03ce68788560",
+      "reason": "merged-pr-head",
+      "allowDelete": true,
+      "evidence": { "pullRequest": 29 },
+      "note": "Current remote branch head exactly matches the merged PR #29 head."
+    },
+    {
+      "branch": "fix/module-02-exposed-right-face",
+      "sha": "3280fc54fb9c14bdb7bfd4abe2d47fb3a958edbd",
+      "reason": "merged-pr-head",
+      "allowDelete": true,
+      "evidence": { "pullRequest": 28 },
+      "note": "Current remote branch head exactly matches the merged PR #28 head."
+    },
+    {
+      "branch": "feat/global-finishes-stone-mobile-pip",
+      "sha": "df03f49b344153b262d27087c3cdbd159e4edc95",
+      "reason": "archived-pr-user-approved-delete",
+      "allowDelete": true,
+      "evidence": { "pullRequest": 32 },
+      "note": "PR #32 was explicitly archived/closed without merge and the user approved excluding it. Current remote branch head exactly matches the recorded PR head."
     }
   ]
 }
