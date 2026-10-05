@@ -73,11 +73,17 @@ const {chromium} = require('playwright');
     const width = x1 - x0;
     const height = y1 - y0;
     const data = ctx.getImageData(x0, y0, width, height).data;
+    let bestPixel = -1;
+    let bestAlpha = -1;
     for (let pixel = 0, index = 0; pixel < width * height; pixel += 1, index += 4) {
-      if (!data[index + 3]) continue;
-      return [x0 + (pixel % width), y0 + Math.floor(pixel / width)];
+      const alpha = data[index + 3];
+      if (alpha <= bestAlpha) continue;
+      bestAlpha = alpha;
+      bestPixel = pixel;
+      if (alpha === 255) break;
     }
-    return null;
+    if (bestPixel < 0 || bestAlpha <= 0) return null;
+    return [x0 + (bestPixel % width), y0 + Math.floor(bestPixel / width), bestAlpha];
   }, [id, bounds]);
   const waitCanvasPixelChange = (id, x, y, before) => page.waitForFunction(([canvasId, px, py, previous]) => {
     const canvas = document.getElementById(canvasId);
