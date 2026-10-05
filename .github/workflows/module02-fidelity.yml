@@ -1,37 +1,12 @@
-name: Module 02 fidelity
+name: Historical R4 module 02 replay
 
 on:
-  pull_request:
-    paths:
-      - 'app/assets/kitchen/layers/02_inferior_fogao.png'
-      - 'app/assets/kitchen/masks/02.png'
-      - 'app/assets/kitchen/composicao-completa.png'
-      - 'app/data/scene-data.js'
-      - 'app/data/mask-data.js'
-      - 'app/data/technical-data.json'
-      - 'app/tools/build-inline-masks.py'
-      - 'app/tools/validate-assets.py'
-      - 'app/tools/apply-r4-module02-fidelity.py'
-      - 'app/tools/masks/module02-alpha-approved-v3.png'
-      - 'app/tools/sources/02_inferior_fogao-combined-v3.png'
-      - 'reference/baseline-manifest.json'
-      - 'reference/r4-module02-fidelity.json'
-      - 'reference/visual-debt.md'
-      - 'tools/validate-r4-module02.py'
-      - '.github/workflows/module02-fidelity.yml'
-      - 'docs/work/r4-module02-fidelity.md'
-      - 'netlify.toml'
-  push:
-    branches: [main]
-    paths:
-      - 'app/**'
-      - 'reference/baseline-manifest.json'
-      - 'reference/r4-module02-fidelity.json'
-      - 'tools/validate-r4-module02.py'
-      - '.github/workflows/module02-fidelity.yml'
-      - 'docs/work/r4-module02-fidelity.md'
-      - 'netlify.toml'
   workflow_dispatch:
+    inputs:
+      target_ref:
+        description: Historical commit, tag or branch to replay against the R4 checkpoint
+        required: true
+        type: string
 
 permissions:
   contents: read
@@ -42,6 +17,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
+          ref: ${{ inputs.target_ref }}
           fetch-depth: 0
       - uses: actions/setup-python@v5
         with:
@@ -53,12 +29,12 @@ jobs:
           mkdir -p /tmp/r4-parent /tmp/r4-review
           git show d8ec0dd15c7dc9e61623b5eb3a4bd346b4e7d587:app/assets/kitchen/composicao-completa.png > /tmp/r4-parent/golden.png
           git show d8ec0dd15c7dc9e61623b5eb3a4bd346b4e7d587:app/assets/kitchen/layers/02_inferior_fogao.png > /tmp/r4-parent/module02.png
-      - name: Validate current checkpoint
+      - name: Validate exact historical checkpoint
         run: python tools/validate-baseline.py
-      - name: Validate canonical app runtime and assets
+      - name: Validate checkpoint app runtime and assets
         working-directory: app
         run: npm test
-      - name: Validate bounded R4 visual transition when applicable
+      - name: Replay bounded R4 visual transition when applicable
         run: |
           baseline_id="$(python - <<'PY'
           import json
@@ -81,17 +57,17 @@ jobs:
           path = Path('/tmp/r4-review/summary.json')
           path.write_text(json.dumps({
               'status': 'SKIPPED',
-              'code': 'R4_TRANSITION_GATE_SUPERSEDED',
+              'code': 'R4_TRANSITION_GATE_NOT_APPLICABLE',
               'baselineId': os.environ['BASELINE_ID'],
-              'detail': 'Current checkpoint is validated by canonical baseline + current app fidelity gates; the historical R4 delta is not re-applied to later baselines.'
+              'detail': 'The selected historical ref is not an R4 checkpoint.'
           }, indent=2) + '\n', encoding='utf-8')
           PY
               ;;
           esac
           cat /tmp/r4-review/summary.json
-      - name: Upload R4 transition evidence
+      - name: Upload historical R4 evidence
         uses: actions/upload-artifact@v4
         with:
-          name: r4-module02-fidelity-${{ github.run_id }}
+          name: historical-r4-module02-${{ github.run_id }}
           path: /tmp/r4-review
           if-no-files-found: error

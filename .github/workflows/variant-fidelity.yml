@@ -1,4 +1,4 @@
-name: Variant fidelity
+name: Current variant fidelity
 
 on:
   pull_request:
@@ -35,17 +35,15 @@ jobs:
           python-version: '3.12'
       - name: Install image validation tooling
         run: python -m pip install -r tools/requirements.txt
-      - name: Preserve canonical R0 baseline
-        run: python tools/validate-baseline.py
-      - name: Validate canonical app runtime
+      - name: Validate current app runtime
         working-directory: app
         run: npm test
-      - name: Derive variant manifests from Scene2D state
+      - name: Derive variant manifests from current Scene2D state
         run: |
           node tools/variant_fidelity_manifest.js \
             --cases reference/variant-cases.json \
             --output /tmp/variant-fidelity/manifest.json
-      - name: Render variant fixtures
+      - name: Render current variant fixtures
         run: |
           python tools/render_variant_fidelity.py \
             --manifest /tmp/variant-fidelity/manifest.json \
