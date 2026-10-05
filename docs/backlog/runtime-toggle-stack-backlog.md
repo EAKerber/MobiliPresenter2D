@@ -1,91 +1,66 @@
-# Housekeeping backlog — runtime, assets and repository hygiene
+# Housekeeping backlog — near-official candidate
 
-Items intentionally deferred from feature work. Completed cleanup is recorded only where it affects the remaining plan.
-
-## P0 — CI maintenance
-
-- **Rebaseline historical asset/fidelity gates**
-  - `Candidate asset gates`, `Variant fidelity` and parts of `Module 02 fidelity` still contain source hashes/checkpoints from an older R0/R5/R6 lineage.
-  - Current known failures include `source hash drift`, `canonical source drift` and `source components drift` for stone authoring inputs.
-  - Rebaseline in a dedicated maintenance change after establishing which historical fixtures should remain replayable versus archival.
-  - Do not refresh a baseline merely to make a red check green; preserve old evidence and make the authority transition explicit.
-
-## P1 — asset / mask cleanup
-
-- **Finish current reachability audit**
-  - No visible stone/glass artifact currently requires another repair pass.
-  - Inventory current `app/assets/kitchen/**` reachability, alpha occupancy and duplicate blobs.
-  - Treat `technical-data.json`, generated inline mirrors and review docs as evidence, not automatic runtime reachability.
-  - Remove only files proven unreachable/redundant and run browser composition gates afterwards.
-
-- **Reconcile `audit/boundary-forensics`**
-  - The branch still contains historical boundary/legacy diagnostic scripts.
-  - Promote only a diagnostic that remains generally useful after the current reachability review; otherwise record the conclusion and prune the branch.
-
-## P1 — repository / research hygiene
-
-- **PR #34 deferred for product review**
-  - Keep `feat/exposed-sides-and-glass` available.
-  - The concept proved complex relative to general usability gain; do not promote it until product value is reconsidered.
-
-- **Dispose remaining BMC04 research lineage**
-  - Durable architecture knowledge has already been harvested to ADRs 0005–0008 on `main`.
-  - Inspect the remaining branch for genuinely reusable generic tooling/evidence.
-  - If no reusable implementation remains, prune/archive the branch rather than carrying a parallel experimental product tree.
-
-- **Delete transient housekeeping/audit branches after readback**
-  - Keep branch hygiene exact-SHA/fail-closed.
-  - The earlier broad stale-branch backlog is mostly complete; only active/deferred/evidence-bearing branches should remain.
+Remaining work after the 2026-10-05 cleanup. Completed historical cleanup is summarized at the end so active backlog stays small.
 
 ## P1 — published administration compatibility
 
-- **Persist normalized legacy administration**
-  - `runtime-contracts.js` now serves only as a compatibility/migration shim for old stage/default records.
-  - Perform a one-time server-side normalization with readback once the currently published records and migration behavior are fully verified.
-  - Remove the shim only after supported storage no longer depends on either repair path.
+- **Persist normalized `stone-skirting` stage assignment**
+  - Production is `ConfiguratorAdministration2D 3.0`, revision 3.
+  - `stone-all` is assigned to `finishes` and `stone-skirting` is selected by default, but the published stage list still omits `stone-skirting`.
+  - Current runtime repair therefore still mutates the published record in memory.
+  - Perform one authenticated admin PUT that adds only `stone-skirting` beside `stone-all`, preserving all other administration choices and respecting revision conflict protection.
+  - Read back production and prove the repair becomes a no-op before removing the remaining compatibility shim.
+  - Do **not** auto-add `handles-all`; its absence may be an intentional administration choice.
+  - Evidence: `docs/architecture/published-config-compat-audit-2026-10-05.md`.
+
+## P1 — deferred product branch
+
+- **PR #34 product review**
+  - Keep `feat/exposed-sides-and-glass` available.
+  - The exposed-side/glass concept proved complex relative to its general usability gain.
+  - Do not promote or delete it until product value is reconsidered.
 
 ## P2 — schema / runtime generalization candidates
 
 These are not current product bugs. Prefer evidence from a second furniture family before widening the schema.
 
 - **Clarify stage availability semantics**
-  - `stageHas(stageId,itemId)` currently ignores `stageId` and answers whether the item exists in any enabled stage.
-  - Decide whether this should be explicitly named `itemIsConfigured`, with a separate stage-scoped predicate where placement matters.
-  - Do not make it stage-scoped in place: services can intentionally live outside the Services stage.
+  - `stageHas(stageId,itemId)` currently behaves as an item-configured predicate rather than a truly stage-scoped predicate.
+  - Rename/split only when a second use case requires the distinction; do not silently change current semantics.
 
 - **Generalize linked-item validation only if reused**
-  - `materialGroups[].linkedItemIds` is generic data, but the current validation rule is still specifically `stone-skirting` requires `stone-all`.
-  - If another linked item appears, derive validation from the group relation rather than adding another ID exception.
+  - `materialGroups[].linkedItemIds` is generic data, but current behavior is proven mainly by `stone-all -> stone-skirting`.
+  - Derive generic validation from the relation when another linked item appears instead of adding another ID exception.
 
-- **Review fixed three-group material schema before the second furniture family**
-  - Current admin intentionally requires `fronts-all`, `handles-all` and `stone-all`.
-  - This is a valid kitchen invariant, not automatically a defect.
-  - Generalize only when another furniture family needs a different topology.
+- **Review fixed material-group topology before a second furniture family**
+  - `fronts-all`, `handles-all` and `stone-all` are valid kitchen invariants today.
+  - Generalize when another furniture family demonstrates a different topology.
 
 - **Define declarative scene-bound service ownership**
-  - Runtime has product-specific handling for scene-affecting options such as `tempered-glass` and `lighting-08`.
-  - Before introducing more scene-bound services, define one catalog/service -> scene entity -> stage availability contract.
+  - Scene-affecting options such as tempered glass and lighting still have product-specific ownership semantics.
+  - Before adding more such services, define a catalog/service -> scene entity -> stage availability contract.
 
-- **Move pricing scope metadata out of ID checks if a second case appears**
-  - `stone-skirting` and lighting currently have product-specific global pricing semantics.
-  - Prefer catalog/price-book metadata when multiple services share the pattern; do not refactor solely to remove a string comparison.
+- **Move pricing scope metadata out of ID checks when a second case appears**
+  - Current product-specific global pricing works and is tested.
+  - Promote it to catalog/price-book metadata only after repeated cases justify the abstraction.
 
 ## P2 — UI/runtime infrastructure
 
-- **Centralize scene z-index contract if scene range grows**
-  - Scene entities use `scene-data.js`; UI overlays use CSS values (`grid=840`, `hotspots=860`, `selection=900`).
-  - Browser tests protect the current ordering.
-  - Introduce shared tokens/derived values before adding scene entities that can exceed the current `z=800` ceiling.
+- **Centralize scene z-index contract if the scene range grows**
+  - Scene entities and UI overlays currently have separate authorities; browser tests protect `scene < grid < hotspots < selection`.
+  - Introduce shared/derived tokens before adding scene entities above the current ceiling.
 
-- **Broaden browser regression coverage**
+- **Broaden browser regression coverage incrementally**
   - Current gates cover stone/skirting/visibility/stacking and keyboard navigation.
-  - Incrementally recover responsive/mobile, stage navigation, admin-published configuration and summary/pricing flows in dedicated tests rather than coupling all behavior to the stone gate.
+  - Add responsive/mobile, admin-published configuration and summary/pricing flows as independent tests rather than coupling them to stone gates.
 
 ## Completed / no longer backlog
 
-- PR #32 was archived/closed without merge.
-- Large stale branch families were pruned using exact-SHA dispositions.
-- Legacy `#skirtingOverlay02/#skirtingOverlay03` painter and its SVG masks were removed after proving `plinthCanvas` ownership.
-- `stone-skirting` was canonicalized as a real catalog service with default/stage metadata.
-- Permanent stack CSS and keyboard loading were moved out of `runtime-contracts.js`.
-- Reconstruction architecture ADRs 0005–0008 were preserved on `main` before research pruning.
+- PR #32 archived/closed without merge.
+- Large stale branch families, research and completed audit branches pruned using exact-SHA fail-closed dispositions; PR #34 remains intentionally preserved.
+- Legacy skirting painter/SVGs and unreachable/empty asset artifacts removed after reachability proof.
+- `stone-skirting` canonicalized as a real catalog service.
+- Permanent stack CSS and keyboard loading moved out of the migration shim.
+- The obsolete default-stage repair was removed after proving canonical defaults are already correct; only published-record compatibility remains.
+- Reconstruction research architecture harvested into ADRs 0005–0008 before research pruning.
+- Historical R0/R4/R5A replay authority separated from current automatic CI; current variant and asset gates pass without rewriting historical manifests. See `docs/architecture/ci-authority-contract-2026-10-05.md`.
