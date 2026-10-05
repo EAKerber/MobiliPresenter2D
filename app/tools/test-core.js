@@ -62,6 +62,13 @@ core.setEntityVisibility(stoveDisabledState, "module-02", true);
 assert.equal(resolved(stoveDisabledState)["range-freestanding"].visible, false);
 assert.deepEqual(Array.from(validation.validateScene(scene)), []);
 assert.equal(catalog.modules.length, 7);
+const skirtingService = catalog.services.find((item) => item.id === "stone-skirting");
+assert.equal(skirtingService?.title, "Rodapé de pedra");
+assert.equal(skirtingService?.defaultSelected, true);
+assert.deepEqual(Array.from(skirtingService?.stageKinds || []), ["finishes", "services", "custom"]);
+assert.equal(settingsCore.itemRegistry(catalog).get("stone-skirting"), "service");
+assert.equal(defaultSettings.objects["stone-skirting"]?.title, "Rodapé de pedra");
+assert.equal(defaultSettings.initialState.services.includes("stone-skirting"), true);
 assert.equal(priceBook.mode, "estimate");
 assert.equal(priceBook.compositionBaseReferenceCents, undefined);
 
@@ -88,6 +95,14 @@ removableStageSettings.stages = removableStageSettings.stages.filter((stage) => 
 assert.deepEqual(settingsCore.validateConfiguratorSettings(removableStageSettings, catalog, priceBook, scene), [], "optional stages can be removed while core flow remains");
 const normalizedDefaults = settingsCore.normalizeConfiguratorSettings(defaultSettings, catalog, priceBook, scene);
 assert.equal(normalizedDefaults.schemaVersion, "ConfiguratorAdministration2D 3.0");
+const preCatalogSkirtingSettings = structuredClone(defaultSettings);
+delete preCatalogSkirtingSettings.objects["stone-skirting"];
+delete preCatalogSkirtingSettings.objectAssets["stone-skirting"];
+preCatalogSkirtingSettings.objects["move-stone"].title = "Mover pedra personalizado";
+const hydratedCurrentSettings = settingsCore.normalizeConfiguratorSettings(preCatalogSkirtingSettings, catalog, priceBook, scene);
+assert.equal(hydratedCurrentSettings.objects["stone-skirting"]?.title, "Rodapé de pedra", "current-schema publications hydrate newly catalogued objects");
+assert.equal(Object.hasOwn(hydratedCurrentSettings.objectAssets, "stone-skirting"), true, "current-schema publications hydrate new object asset slots");
+assert.equal(hydratedCurrentSettings.objects["move-stone"].title, "Mover pedra personalizado", "catalog hydration never overwrites published content");
 assert.equal(normalizedDefaults.materialGroups.find((group) => group.id === "stone-all").linkedItemIds.includes("stone-skirting"), true);
 const newMaterialSettings = structuredClone(defaultSettings);
 newMaterialSettings.materials.push({ id: "stone-rose", label: "Rosa mineral", kind: "texture", color: "#c59f92", textureAsset: "assets/materials/stone-light.webp", textureSize: "cover", groupIds: ["stone-all"], locked: false });

@@ -50,7 +50,6 @@ const labels = {
   "fronts-all": "Cor das frentes",
   "handles-all": "Puxadores",
   "stone-all": "Pacote de pedra",
-  "stone-skirting": "Rodapé de pedra",
   "lighting-08": "Iluminação embutida",
   "move-stone": "Mover pedra",
   "tempered-glass": "Vidro temperado",
@@ -84,7 +83,10 @@ function getItemOptions(stageId) {
       : kind === "services" ? new Set(["service", "object"])
         : kind === "custom" ? new Set(["module", "object", "service"])
           : kind === "summary" ? new Set(["summary"]) : new Set();
-  return [...registry].filter(([id, type]) => allowed.has(type) || kind === "finishes" && id === "stone-skirting").map(([id]) => {
+  return [...registry].filter(([id, type]) => {
+    const service = catalog.services.find((item) => item.id === id);
+    return Array.isArray(service?.stageKinds) ? service.stageKinds.includes(kind) : allowed.has(type);
+  }).map(([id]) => {
     const module = catalog.modules.find((item) => item.entityId === id);
     const entry = [...catalog.accessories, ...catalog.services].find((item) => item.entityId === id || item.id === id);
     return { id, label: module ? `${module.referenceLabel} · ${model.objects[id]?.title || module.title}` : model.objects[id]?.title || entry?.title || labels[id] || id };

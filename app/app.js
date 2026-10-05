@@ -1558,7 +1558,6 @@
   function globalItemLabel(id) {
     const stone = catalog.options.stonePackages.find((item) => item.id === id);
     if (stone) return stone.label;
-    if (id === "stone-skirting") return "Rodapé de pedra";
     if (id === "lighting-08") return catalog.accessories.find((item) => item.entityId === id)?.title || "Iluminação";
     return catalog.services.find((service) => service.id === id)?.title || id;
   }
