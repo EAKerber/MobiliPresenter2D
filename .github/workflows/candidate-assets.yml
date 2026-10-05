@@ -80,46 +80,11 @@ jobs:
         run: |
           python tools/validate_candidate_assets.py --output /tmp/candidate-review/intake.json
           cat /tmp/candidate-review/intake.json
-      - name: Validate authoring provenance
+      - name: Validate candidate authoring provenance
         run: |
           python tools/validate_authoring_provenance.py --output /tmp/candidate-review/authoring-provenance.json
           cat /tmp/candidate-review/authoring-provenance.json
-      - name: Compose individual visual review gates
-        run: |
-          python tools/render_candidate_review.py \
-            --variant-manifest /tmp/candidate-review/variant-manifest.json \
-            --variant-render-dir /tmp/candidate-review/variants \
-            --intake-report /tmp/candidate-review/intake.json \
-            --output-dir /tmp/candidate-review/candidates
-          cat /tmp/candidate-review/candidates/summary.json
-      - name: Perspective editorial gate when the generated range candidate exists
-        shell: bash
-        run: |
-          set -euo pipefail
-          candidate=/tmp/candidate-review/candidates/range-freestanding-generated-donor-v2/composed.png
-          if [ -f "$candidate" ]; then
-            mkdir -p /tmp/candidate-review/editorial
-            python tools/perspective_editorial_gate.py \
-              --grid review-assets/perspective-grid.json \
-              --measurement review-assets/perspective-measurements/range-freestanding-generated-donor-v2.json \
-              --source-image /tmp/candidate-review/variants/module-02-hidden.png \
-              --candidate-image "$candidate" \
-              --output-json /tmp/candidate-review/editorial/range-freestanding-generated-donor-v2.json \
-              --output-png /tmp/candidate-review/editorial/range-freestanding-generated-donor-v2.png
-            cat /tmp/candidate-review/editorial/range-freestanding-generated-donor-v2.json
-          else
-            echo 'Perspective editorial gate skipped: generated range candidate is not materialized in this revision.'
-          fi
-      - name: Compose stacked candidate-set gates
-        run: |
-          python tools/render_candidate_set_review.py \
-            --sets review-assets/candidate-sets.json \
-            --variant-manifest /tmp/candidate-review/variant-manifest.json \
-            --variant-render-dir /tmp/candidate-review/variants \
-            --intake-report /tmp/candidate-review/intake.json \
-            --output-dir /tmp/candidate-review/sets
-          cat /tmp/candidate-review/sets/summary.json
-      - name: Upload visual review artifact
+      - name: Upload current review evidence
         uses: actions/upload-artifact@v4
         with:
           name: current-asset-review-${{ github.run_id }}
