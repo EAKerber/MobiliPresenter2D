@@ -44,13 +44,12 @@ These are not current product bugs. Prefer evidence from a second furniture fami
   - Current product-specific global pricing works and is tested.
   - Promote it to catalog/price-book metadata only after repeated cases justify the abstraction.
 
-## P2 — build / replay boundary
+## P2 — build / replay naming cleanup
 
-- **Remove historical R5A materialization from the default build/test path only after an equivalence proof**
-  - `app/package.json` still runs `tools/apply-r5a-pixelperfect-edits.py` during ordinary build and `tools/validate-r5a-pixelperfect.py` during ordinary test.
-  - These scripts are therefore active consumers, not dead code.
-  - Test whether the already materialized current assets can become the normal build input while R5A replay moves behind an explicit historical command.
-  - Promotion requires byte/render equivalence for the current product and preserved deliberate replay of the historical lineage.
+- **Rename/generalize the R5A-named live validator only if its ownership becomes confusing**
+  - `validate-r5a-pixelperfect.py` passes directly on the approved current assets and still checks useful live invariants: bridge reconstruction, module-02 finish-mask ownership and golden recomposition.
+  - Keep the coverage. A future rename/generalization should migrate those assertions without weakening them.
+  - Historical R5A materialization itself is now explicit replay and is no longer part of the ordinary app build.
   - Evidence: `docs/architecture/js-authority-audit-2026-10-05.md` and `docs/architecture/ci-authority-contract-2026-10-05.md`.
 
 ## P2 — UI/runtime infrastructure
@@ -72,8 +71,9 @@ These are not current product bugs. Prefer evidence from a second furniture fami
 - Permanent stack CSS and keyboard loading moved out of the migration shim.
 - The obsolete default-stage repair was removed after proving canonical defaults are already correct; only published-record compatibility remains.
 - Reconstruction research architecture harvested into ADRs 0005–0008 before research pruning.
-- Historical R0/R4/R5A replay authority separated from current automatic CI; current variant and asset gates pass without rewriting historical manifests. See `docs/architecture/ci-authority-contract-2026-10-05.md`.
+- Historical R0/R4/R5A replay authority separated from current automatic CI; current variant and asset gates pass without rewriting historical manifests.
 - Mobile/PiP browser regression gate restored and passing on `main`.
-- JavaScript/tooling authority audited: no duplicate product runtime exists outside `app/`; remaining overlap is role separation or explicit historical replay.
+- JavaScript/tooling authority audited: no duplicate product runtime exists outside `app/`.
 - Shadowed `legacy` summary/pricing implementation removed from `app.js`; static ownership now requires exactly one `renderCurrentValue()` and one `renderSummary()`.
 - Summary/Pricing browser regression added: persistent and summary totals stay synchronized, global stone/skirting charges appear exactly once, toggling skirting subtracts/restores exactly its own charge, and console remains clean.
+- App build authority corrected after a clean-worktree audit proved the historical R5A materializer changed 98,478 current PNG pixels / 26,726 alpha pixels. Ordinary `app/npm run build` now packages the approved current assets and is guarded by a tracked-tree purity gate; historical R5A remains available only through explicit replay commands.
