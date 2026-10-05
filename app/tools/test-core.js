@@ -52,6 +52,12 @@ assert.equal(resolved(glassState)["tempered-glass"].visible, true);
 assert.equal(scene.entities.find(e => e.id === "tempered-glass").controllable, false);
 assert.equal(scene.entities.some(e => /(?:right-return|left-return|right-side|exposed-face|floor-side-bridge)$/.test(e.id)), false, "experimental furniture side overlays stay out of the canonical scene");
 const appSource = fs.readFileSync(path.join(projectRoot, "app.js"), "utf8");
+const indexSource = fs.readFileSync(path.join(projectRoot, "index.html"), "utf8");
+const staticHtmlIds = new Set([...indexSource.matchAll(/\bid="([^"]+)"/g)].map((match) => match[1]));
+const orphanedStaticDomIds = [...new Set(
+  [...appSource.matchAll(/document\.getElementById\("([^"]+)"\)/g)].map((match) => match[1])
+)].filter((id) => !staticHtmlIds.has(id)).sort();
+assert.deepEqual(orphanedStaticDomIds, [], "literal app.js getElementById references must exist in index.html");
 const namedFunctionCounts = new Map();
 for (const match of appSource.matchAll(/\bfunction\s+([A-Za-z_$][\w$]*)\s*\(/g)) {
   namedFunctionCounts.set(match[1], (namedFunctionCounts.get(match[1]) || 0) + 1);
