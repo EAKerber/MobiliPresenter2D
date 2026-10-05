@@ -20,6 +20,16 @@ The current repository separates code by authority:
 
 Similar names across these areas do not currently represent two competing production implementations.
 
+## In-file shadowed legacy found
+
+The authority pass did find one genuine duplicate inside the production runtime itself: `app/app.js` contained two declarations of both `renderCurrentValue()` and `renderSummary()` in the same function scope.
+
+- the earlier pair expected the superseded pricing contract `estimate.status === "legacy"`;
+- the later pair expected the current `estimate.status === "estimate"` contract;
+- normal JavaScript function-declaration semantics made the later pair authoritative, so the earlier pair was unreachable/shadowed rather than a second active behavior.
+
+The shadowed pair was removed in the summary/pricing housekeeping slice. Static gates now require exactly one declaration of each function and reject the old `legacy` status branch. A browser gate independently checks total/summary synchronization and single ownership of global charges.
+
 ## Build/replay seam still worth reviewing
 
 `app/package.json` still makes the historical R5A materialization part of the ordinary app build/test path:
@@ -39,13 +49,13 @@ Repeated Git blob SHAs inside review evidence are not repository-storage duplica
 
 ## Branch conclusion
 
-`audit/top-level-js-duplicates` points exactly to the observed `main` SHA `7ebc17b734467d3029703555dcf73ee66a33803d` and contains no audit-only diff. It can be deleted after this report is merged.
+`audit/top-level-js-duplicates` pointed exactly to the observed `main` SHA `7ebc17b734467d3029703555dcf73ee66a33803d`, contained no audit-only diff and was deleted after this report was merged.
 
 `feat/exposed-sides-and-glass` / PR #34 remains explicitly preserved and is outside this audit.
 
 ## Follow-up classification
 
-- **Remove now:** only the zero-diff audit branch after exact-SHA revalidation.
+- **Removed:** zero-diff audit branch and the shadowed legacy summary/pricing implementation.
 - **Keep current:** runtime/admin/serverless code and all scripts explicitly consumed by current build/test/CI.
 - **Keep historical:** replay/evidence called out by the CI authority contract.
 - **Backlog:** prove whether R5A materialization can be removed from the default build/test path without changing current output; do not delete replay capability.
