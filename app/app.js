@@ -1680,20 +1680,11 @@
   let layerGroups = [...document.querySelectorAll(".layer-group")];
   let finishLayers = [...document.querySelectorAll(".finish-layer")];
   let entitiesById = new Map(scene.entities.map((entity) => [entity.id, entity]));
-  const swatches = [...document.querySelectorAll("[data-color]")];
 
   const visibleCount = document.getElementById("visibleCount");
   const totalCount = document.getElementById("totalCount");
-  const showAllButton = document.getElementById("showAllButton");
-  const hideAllButton = document.getElementById("hideAllButton");
-  const gridButton = document.getElementById("gridButton");
   const alignmentGrid = document.getElementById("alignmentGrid");
   const restoreButton = document.getElementById("restoreButton");
-  const customColor = document.getElementById("customColor");
-  const textureInput = document.getElementById("textureInput");
-  const textureButton = document.getElementById("textureButton");
-  const textureLabel = document.getElementById("textureLabel");
-  const resetFinishButton = document.getElementById("resetFinishButton");
 
   const renderStone = global.CasaStone.createRenderer(
     document.getElementById("stoneCanvas"),
@@ -1932,15 +1923,6 @@
     selectEntity(nextEntityId, "detail-navigation");
   }
 
-  function setAllVisibility(isVisible) {
-    core.setAllControllableVisibility(scene, state, isVisible);
-    moduleToggles.forEach((toggle) => {
-      toggle.checked = isVisible;
-    });
-    syncLayerVisibility();
-    updateVisibleCount();
-  }
-
   function storeDetailOrigin(entityId, source) {
     const active = document.activeElement;
     const fallback = source === "scene"
@@ -1984,107 +1966,11 @@
     focusDetailClose();
   }
 
-  function clearSelectedSwatch() {
-    swatches.forEach((swatch) => {
-      swatch.classList.remove("is-selected");
-      swatch.setAttribute("aria-pressed", "false");
-    });
-  }
-
-  function applyColor(color, selectedSwatch) {
-    finishMode = "color";
-    state.frontFinishId = selectedSwatch?.dataset.finishId || "solid-color-custom";
-    state.customColor = color;
-    state.customTextureKey = null;
-    clearSelectedSwatch();
-    if (selectedSwatch) {
-      selectedSwatch.classList.add("is-selected");
-      selectedSwatch.setAttribute("aria-pressed", "true");
-    }
-    const overlayOpacity = finishes.resolveOverlayOpacity(
-      selectedSwatch
-        ? { overlayOpacity: Number(selectedSwatch.dataset.overlayOpacity) }
-        : null,
-      color
-    );
-
-    finishLayers.forEach((layer) => {
-      layer.classList.remove("is-texture");
-      layer.classList.add("is-color");
-      layer.style.backgroundImage = "none";
-      layer.style.backgroundColor = color;
-      layer.style.setProperty("--finish-opacity", String(overlayOpacity));
-    });
-
-    if (customColor) customColor.value = color;
-    textureLabel.textContent = "Carregar imagem de amadeirado";
-    resetFinishButton.disabled = false;
-    syncFingerprint();
-    syncLayerVisibility();
-    if (selectedSwatch) announce(`Frentes alteradas para ${selectedSwatch.title}.`);
-  }
-
-  function applyTexture(file) {
-    if (!file) return;
-
-    const reader = new FileReader();
-    reader.addEventListener("load", () => {
-      if (typeof reader.result !== "string") return;
-      finishMode = "texture";
-      state.frontFinishId = "uploaded-texture";
-      state.customColor = null;
-      state.customTextureKey = `${file.name}:${file.size}:${file.lastModified}`;
-      clearSelectedSwatch();
-
-      finishLayers.forEach((layer) => {
-        layer.classList.remove("is-color");
-        layer.classList.add("is-texture");
-      layer.style.backgroundColor = "transparent";
-      layer.style.backgroundImage = `url("${reader.result}")`;
-      layer.style.removeProperty("--finish-opacity");
-      });
-
-      textureLabel.textContent = file.name;
-      resetFinishButton.disabled = false;
-      syncFingerprint();
-      syncLayerVisibility();
-    });
-    reader.readAsDataURL(file);
-  }
-
-  function resetFinish() {
-    finishMode = "original";
-    state.frontFinishId = scene.defaultConfiguration.frontFinishId;
-    state.customColor = null;
-    state.customTextureKey = null;
-    clearSelectedSwatch();
-    finishLayers.forEach((layer) => {
-      layer.classList.remove("is-color", "is-texture");
-      layer.style.backgroundColor = "transparent";
-      layer.style.backgroundImage = "none";
-      layer.style.removeProperty("--finish-opacity");
-    });
-    textureLabel.textContent = "Carregar imagem de amadeirado";
-    textureInput.value = "";
-    resetFinishButton.disabled = true;
-    syncFingerprint();
-    syncLayerVisibility();
-  }
-
   moduleList.addEventListener("change", (event) => {
     const toggle = event.target.closest("[data-module-toggle]");
     if (!toggle) return;
     setEntityVisibility(toggle.dataset.moduleToggle, toggle.checked);
     updateVisibleCount();
-  });
-
-  if (showAllButton) showAllButton.addEventListener("click", () => setAllVisibility(true));
-  if (hideAllButton) hideAllButton.addEventListener("click", () => setAllVisibility(false));
-
-  if (gridButton) gridButton.addEventListener("click", () => {
-    state.gridVisible = alignmentGrid.classList.toggle("is-visible");
-    gridButton.setAttribute("aria-pressed", String(state.gridVisible));
-    syncFingerprint();
   });
 
   finishSwatches.addEventListener("click", (event) => {
@@ -2271,7 +2157,6 @@
     if (!global.confirm("Recomeçar a configuração? Suas escolhas atuais serão removidas.")) return;
     state = core.createInitialState(scene);
     alignmentGrid.classList.remove("is-visible");
-    if (gridButton) gridButton.setAttribute("aria-pressed", "false");
     detailOrigin = null;
     syncLayerVisibility();
   });
