@@ -91,6 +91,12 @@ jobs:
           insert = '''const normalizedDefaults = settingsCore.normalizeConfiguratorSettings(defaultSettings, catalog, priceBook, scene);\nassert.equal(normalizedDefaults.schemaVersion, "ConfiguratorAdministration2D 3.0");\nconst preCatalogSkirtingSettings = structuredClone(defaultSettings);\ndelete preCatalogSkirtingSettings.objects["stone-skirting"];\ndelete preCatalogSkirtingSettings.objectAssets["stone-skirting"];\npreCatalogSkirtingSettings.objects["move-stone"].title = "Mover pedra personalizado";\nconst hydratedCurrentSettings = settingsCore.normalizeConfiguratorSettings(preCatalogSkirtingSettings, catalog, priceBook, scene);\nassert.equal(hydratedCurrentSettings.objects["stone-skirting"]?.title, "Rodapé de pedra", "current-schema publications hydrate newly catalogued objects");\nassert.equal(Object.hasOwn(hydratedCurrentSettings.objectAssets, "stone-skirting"), true, "current-schema publications hydrate new object asset slots");\nassert.equal(hydratedCurrentSettings.objects["move-stone"].title, "Mover pedra personalizado", "catalog hydration never overwrites published content");'''
           replace_once("app/tools/test-core.js", marker, insert)
 
+          replace_once(
+              "app/tools/test-runtime-contracts.js",
+              '''const appIndex = indexHtml.indexOf("app.js?v=runtime-v7");''',
+              '''const appIndex = indexHtml.indexOf("app.js?v=runtime-v8");'''
+          )
+
           index = Path("app/index.html")
           text = index.read_text()
           if "runtime-v7" not in text:
@@ -141,7 +147,7 @@ jobs:
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git rm .github/workflows/housekeeping-catalogize-skirting-temp.yml
-          git add app/data/catalog-data.js app/core/configuration.js app/admin/admin.js app/admin/admin.bundle.js app/app.js app/tools/test-core.js app/index.html app/admin.html
+          git add app/data/catalog-data.js app/core/configuration.js app/admin/admin.js app/admin/admin.bundle.js app/app.js app/tools/test-core.js app/tools/test-runtime-contracts.js app/index.html app/admin.html
           git commit -m 'Canonicalize stone skirting catalog contract'
           remote_before="$(git ls-remote origin "refs/heads/$TARGET_BRANCH" | cut -f1)"
           test "$remote_before" = "$EXPECTED_HEAD"
