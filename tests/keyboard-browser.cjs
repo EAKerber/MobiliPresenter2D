@@ -206,3 +206,5 @@ const {chromium} = require('playwright');
   console.error(error);
   process.exit(1);
 });
+
+// near-official candidate gate trigger; audit branch only
