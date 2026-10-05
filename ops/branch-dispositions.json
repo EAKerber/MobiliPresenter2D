@@ -6,15 +6,15 @@
   ],
   "terminalBranches": [
     {
-      "branch": "housekeeping/harden-mobile-swipe-gate",
-      "sha": "632e850d64a63efdd496928af167a45beb4b1db9",
-      "reason": "merged-test-hardening-head",
+      "branch": "housekeeping/remove-orphaned-ui-hooks",
+      "sha": "327341555f90d8fb016c6f2d8d88b7589e521a15",
+      "reason": "merged-housekeeping-head",
       "allowDelete": true,
       "evidence": {
-        "pullRequest": 68,
-        "mergedMainSha": "6051d4805c970d0516b8c361902971efdf0ec2ff"
+        "pullRequest": 69,
+        "mergedMainSha": "45b638e82a24a27f71f18686cda0542c856013b8"
       },
-      "note": "PR #68 merged after mobile, current-asset and branch-hygiene gates passed. The source branch is terminal; deletion remains exact-SHA fail-closed."
+      "note": "PR #69 merged after all current browser, asset, variant and build-purity gates passed. The source branch is terminal; deletion remains exact-SHA fail-closed."
     }
   ]
 }
