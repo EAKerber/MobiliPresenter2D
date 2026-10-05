@@ -6,15 +6,15 @@
   ],
   "terminalBranches": [
     {
-      "branch": "housekeeping/remove-shadowed-runtime-functions",
-      "sha": "c9f4c41e718ac63f2d52f49000b36ddebd7fc0a9",
-      "reason": "merged-housekeeping-head",
+      "branch": "housekeeping/harden-mobile-swipe-gate",
+      "sha": "632e850d64a63efdd496928af167a45beb4b1db9",
+      "reason": "merged-test-hardening-head",
       "allowDelete": true,
       "evidence": {
-        "pullRequest": 67,
-        "mergedMainSha": "34df46e29ea3885217d5c684a250d1fb0b266f23"
+        "pullRequest": 68,
+        "mergedMainSha": "6051d4805c970d0516b8c361902971efdf0ec2ff"
       },
-      "note": "PR #67 merged after all current browser, asset, variant and build-purity gates passed. The source branch is now terminal and deletion remains exact-SHA fail-closed."
+      "note": "PR #68 merged after mobile, current-asset and branch-hygiene gates passed. The source branch is terminal; deletion remains exact-SHA fail-closed."
     }
   ]
 }
