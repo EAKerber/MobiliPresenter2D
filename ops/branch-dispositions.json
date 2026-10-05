@@ -6,19 +6,11 @@
   ],
   "terminalBranches": [
     {
-      "branch": "audit/published-config-compat",
-      "sha": "73f9e9bf8c28a7876a789e19761128abb7c458bb",
-      "reason": "completed-published-configuration-audit",
+      "branch": "audit/top-level-js-duplicates",
+      "sha": "7ebc17b734467d3029703555dcf73ee66a33803d",
+      "reason": "zero-diff-js-authority-audit",
       "allowDelete": true,
-      "note": "Production ConfiguratorAdministration2D 3.0 revision 3 was read successfully. Current core normalization passes; the published record still selects stone-skirting while omitting its stage item, so runtime compatibility repair remains required until an authenticated one-time publish persists that item. handles-all remains omitted and is not auto-migrated because that may be intentional administration."
-    },
-    {
-      "branch": "housekeeping/published-config-audit-close",
-      "sha": "c4d1466d0d6fd060fa07474b8798ebaa4ace45a4",
-      "reason": "superseded-housekeeping-pr-head",
-      "allowDelete": true,
-      "evidence": { "pullRequest": 59 },
-      "note": "PR #59 carried the same audit closeout but diverged only because main advanced while its branch-hygiene dry-run waited. The closeout was reapplied from current main in the replacement housekeeping branch."
+      "note": "The audit branch points exactly at the current observed main head and carries no branch-only files. The authority review found no duplicate product runtime at repository root; remaining tool overlap is role separation or explicit historical replay and is documented separately."
     }
   ]
 }
