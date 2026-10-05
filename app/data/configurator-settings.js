@@ -6,7 +6,7 @@
     revision: 1,
     stages: [
       { id: "modules", label: "Módulos", enabled: true, items: ["module-01", "module-02", "module-03", "module-04", "module-05", "module-06", "module-07"] },
-      { id: "finishes", label: "Acabamentos", enabled: true, items: ["fronts-all", "stone-all"] },
+      { id: "finishes", label: "Acabamentos", enabled: true, items: ["fronts-all", "handles-all", "stone-all", "stone-skirting"] },
       { id: "services", label: "Serviços", enabled: true, items: ["move-stone", "tempered-glass", "lighting-08"] },
       { id: "summary", label: "Resumo", enabled: true, items: ["summary"] }
     ]
