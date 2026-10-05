@@ -1,0 +1,59 @@
+name: Keyboard browser
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'app/core/keyboard-shortcuts.js'
+      - 'app/core/runtime-contracts.js'
+      - 'tests/keyboard-browser.cjs'
+      - '.github/workflows/keyboard-browser.yml'
+  pull_request:
+    paths:
+      - 'app/core/keyboard-shortcuts.js'
+      - 'app/core/runtime-contracts.js'
+      - 'tests/keyboard-browser.cjs'
+      - '.github/workflows/keyboard-browser.yml'
+  workflow_dispatch:
+    inputs:
+      target_url:
+        description: Optional deployed URL for a smoke test
+        required: false
+        type: string
+permissions:
+  contents: read
+jobs:
+  browser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Resolve browser target
+        shell: bash
+        run: |
+          if [ -n "${{ inputs.target_url }}" ]; then
+            target="${{ inputs.target_url }}"
+          elif [ "${{ github.event_name }}" = "pull_request" ]; then
+            target="https://deploy-preview-${{ github.event.pull_request.number }}--mobilipresenter2d.netlify.app/"
+          else
+            target="https://mobilipresenter2d.netlify.app/"
+          fi
+          echo "KEYBOARD_BROWSER_URL=$target" >> "$GITHUB_ENV"
+          echo "Browser target: $target"
+      - name: Install browser test tooling
+        run: |
+          npm install --prefix /tmp/keyboard-browser-tools --no-audit --no-fund playwright@1.62.1
+          /tmp/keyboard-browser-tools/node_modules/.bin/playwright install --with-deps chromium
+      - name: Test keyboard shortcuts
+        env:
+          NODE_PATH: /tmp/keyboard-browser-tools/node_modules
+        run: node tests/keyboard-browser.cjs /tmp/keyboard-browser-review
+      - name: Save keyboard review
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: keyboard-browser-${{ github.run_id }}
+          path: /tmp/keyboard-browser-review
+          if-no-files-found: ignore
