@@ -6,11 +6,12 @@
   ],
   "terminalBranches": [
     {
-      "branch": "audit/top-level-js-duplicates",
-      "sha": "7ebc17b734467d3029703555dcf73ee66a33803d",
-      "reason": "zero-diff-js-authority-audit",
+      "branch": "housekeeping/prune-js-audit",
+      "sha": "688592cd4a14977e5f6c9c798d9567f2d7682dc0",
+      "reason": "merged-housekeeping-head",
       "allowDelete": true,
-      "note": "The audit branch points exactly at the current observed main head and carries no branch-only files. The authority review found no duplicate product runtime at repository root; remaining tool overlap is role separation or explicit historical replay and is documented separately."
+      "evidence": { "pullRequest": 63 },
+      "note": "PR #63 was merged after a successful exact-SHA branch-hygiene dry-run. Its audit target has already been deleted; this records the merged PR head for final branch cleanup."
     }
   ]
 }

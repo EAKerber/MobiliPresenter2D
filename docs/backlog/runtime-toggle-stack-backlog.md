@@ -60,8 +60,8 @@ These are not current product bugs. Prefer evidence from a second furniture fami
   - Introduce shared/derived tokens before adding scene entities above the current ceiling.
 
 - **Broaden browser regression coverage incrementally**
-  - Current gates cover stone/skirting/visibility/stacking, keyboard navigation and the principal mobile/PiP flow.
-  - Add admin-published configuration and summary/pricing flows as independent tests rather than coupling them to stone gates.
+  - Current gates cover stone/skirting/visibility/stacking, keyboard navigation, principal mobile/PiP flow and summary/pricing ownership.
+  - Add the authenticated admin-published configuration lifecycle as an independent gate when a test identity/session is available; do not couple it to buyer-side gates.
 
 ## Completed / no longer backlog
 
@@ -75,3 +75,5 @@ These are not current product bugs. Prefer evidence from a second furniture fami
 - Historical R0/R4/R5A replay authority separated from current automatic CI; current variant and asset gates pass without rewriting historical manifests. See `docs/architecture/ci-authority-contract-2026-10-05.md`.
 - Mobile/PiP browser regression gate restored and passing on `main`.
 - JavaScript/tooling authority audited: no duplicate product runtime exists outside `app/`; remaining overlap is role separation or explicit historical replay.
+- Shadowed `legacy` summary/pricing implementation removed from `app.js`; static ownership now requires exactly one `renderCurrentValue()` and one `renderSummary()`.
+- Summary/Pricing browser regression added: persistent and summary totals stay synchronized, global stone/skirting charges appear exactly once, toggling skirting subtracts/restores exactly its own charge, and console remains clean.
