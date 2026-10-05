@@ -71,7 +71,7 @@
     if (!global.document || document.getElementById(KEYBOARD_SCRIPT_ID)) return;
     const script = document.createElement("script");
     script.id = KEYBOARD_SCRIPT_ID;
-    script.src = "core/keyboard-shortcuts.js?v=keyboard-v1";
+    script.src = "core/keyboard-shortcuts.js?v=keyboard-v2";
     script.async = false;
     document.head.append(script);
   }
