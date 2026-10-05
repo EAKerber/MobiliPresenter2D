@@ -19,9 +19,27 @@ const {chromium} = require('playwright');
   await page.evaluate(() => Promise.all(Array.from(document.images, image => image.decode().catch(() => {}))));
   await page.waitForFunction(() => Boolean(window.CASA_EM_MODULOS_DEBUG && window.CASA_RUNTIME_CONTRACTS));
 
-  const settle = () => page.waitForTimeout(650);
+  const settle = () => page.waitForTimeout(300);
   const screenshot = name => page.screenshot({path: path.join(output, `${name}.png`), fullPage: true, animations: 'disabled'});
   const state = () => page.evaluate(() => structuredClone(window.CASA_EM_MODULOS_DEBUG.getState()));
+  const waitState = predicateSource => page.waitForFunction(source => {
+    const current = window.CASA_EM_MODULOS_DEBUG.getState();
+    return Function('state', `return (${source})(state)`)(current);
+  }, predicateSource);
+  const canvasPixel = (id, x, y) => page.evaluate(([canvasId, px, py]) => {
+    const canvas = document.getElementById(canvasId);
+    return Array.from(canvas.getContext('2d').getImageData(px, py, 1, 1).data);
+  }, [id, x, y]);
+  const waitCanvasAlpha = (id, x, y, visible = true) => page.waitForFunction(([canvasId, px, py, expected]) => {
+    const canvas = document.getElementById(canvasId);
+    const alpha = canvas.getContext('2d').getImageData(px, py, 1, 1).data[3];
+    return expected ? alpha > 0 : alpha === 0;
+  }, [id, x, y, visible]);
+  const waitCanvasPixelChange = (id, x, y, before) => page.waitForFunction(([canvasId, px, py, previous]) => {
+    const canvas = document.getElementById(canvasId);
+    const pixel = Array.from(canvas.getContext('2d').getImageData(px, py, 1, 1).data);
+    return pixel.some((value, index) => value !== previous[index]);
+  }, [id, x, y, before]);
   const canvasStats = id => page.evaluate(canvasId => {
     const canvas = document.getElementById(canvasId);
     const data = canvas.getContext('2d').getImageData(0, 0, canvas.width, canvas.height).data;
@@ -95,36 +113,46 @@ const {chromium} = require('playwright');
 
   const toggle = page.locator('#stoneSkirtingToggle');
   await toggle.setChecked(false);
+  await waitState("state => !state.globalSelections.serviceIds.includes('stone-skirting')");
   await page.locator('[data-stone-package-id="stone-cloud"]').click();
-  await settle();
+  await waitState("state => state.globalSelections.stonePackageId === 'stone-cloud'");
+  await waitCanvasAlpha('plinthCanvas', 600, 870, true);
   const offBase = {state: await state(), plinth: await canvasStats('plinthCanvas')};
   assert.equal(offBase.state.globalSelections.serviceIds.includes('stone-skirting'), false);
   assert(offBase.plinth.nonzero > 0, 'OFF uses the MDF material canvas');
 
   await page.locator('[data-stone-package-id="stone-grove"]').click();
+  await waitState("state => state.globalSelections.stonePackageId === 'stone-grove'");
   await settle();
   const offAfterStone = {state: await state(), plinth: await canvasStats('plinthCanvas')};
   assert.equal(offBase.plinth.hash, offAfterStone.plinth.hash, 'OFF + stone change must leave the plinth unchanged');
 
+  const beforeMdf = await canvasPixel('plinthCanvas', 600, 870);
   await page.locator('[data-finish-id="cocoa"]').click();
-  await settle();
+  await waitState("state => state.globalSelections.finishId === 'cocoa'");
+  await waitCanvasPixelChange('plinthCanvas', 600, 870, beforeMdf);
   const offAfterMdf = {state: await state(), plinth: await canvasStats('plinthCanvas')};
   assert.notEqual(offAfterStone.plinth.hash, offAfterMdf.plinth.hash, 'OFF + MDF change must recolor the plinth');
   await screenshot('01-skirting-off-mdf');
 
+  const beforeToggleOn = await canvasPixel('plinthCanvas', 600, 870);
   await toggle.setChecked(true);
-  await settle();
+  await waitState("state => state.globalSelections.serviceIds.includes('stone-skirting')");
+  await waitCanvasPixelChange('plinthCanvas', 600, 870, beforeToggleOn);
   const onBase = {state: await state(), plinth: await canvasStats('plinthCanvas')};
   assert.equal(onBase.state.globalSelections.serviceIds.includes('stone-skirting'), true);
   assert.notEqual(onBase.plinth.hash, offAfterMdf.plinth.hash, 'ON must switch the plinth from MDF to stone');
 
   await page.locator('[data-finish-id="mist"]').click();
+  await waitState("state => state.globalSelections.finishId === 'mist'");
   await settle();
   const onAfterMdf = {state: await state(), plinth: await canvasStats('plinthCanvas')};
   assert.equal(onBase.plinth.hash, onAfterMdf.plinth.hash, 'ON + MDF change must leave the stone plinth unchanged');
 
+  const beforeStone = await canvasPixel('plinthCanvas', 600, 870);
   await page.locator('[data-stone-package-id="stone-night"]').click();
-  await settle();
+  await waitState("state => state.globalSelections.stonePackageId === 'stone-night'");
+  await waitCanvasPixelChange('plinthCanvas', 600, 870, beforeStone);
   const onAfterStone = {state: await state(), plinth: await canvasStats('plinthCanvas')};
   assert.notEqual(onAfterMdf.plinth.hash, onAfterStone.plinth.hash, 'ON + stone change must recolor the plinth');
   await screenshot('02-skirting-on-stone');
@@ -138,7 +166,11 @@ const {chromium} = require('playwright');
   ]) {
     await page.locator('[data-module-toggle="module-02"]').setChecked(module02);
     await page.locator('[data-module-toggle="module-03"]').setChecked(module03);
-    await settle();
+    await waitState(`state => state.visibilityByEntity['module-02'] === ${module02} && state.visibilityByEntity['module-03'] === ${module03}`);
+    if (module02) await waitCanvasAlpha('plinthCanvas', 600, 870, true);
+    else await waitCanvasAlpha('plinthCanvas', 600, 870, false);
+    if (module03) await waitCanvasAlpha('plinthCanvas', 1100, 870, true);
+    else await waitCanvasAlpha('plinthCanvas', 1100, 870, false);
     const plinth = await canvasStats('plinthCanvas');
     if (module02 && module03) {
       assert(plinth.nonzero > 0 && plinth.bbox[0] < 700 && plinth.bbox[2] > 900, 'both visible must render both plinth territories');
