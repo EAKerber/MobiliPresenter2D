@@ -1,0 +1,67 @@
+name: App build purity
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'app/**'
+      - '.github/workflows/app-build-purity.yml'
+  pull_request:
+    paths:
+      - 'app/**'
+      - '.github/workflows/app-build-purity.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  current-build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install image tooling
+        run: python -m pip install --disable-pip-version-check pillow
+      - name: Build current app from approved assets
+        working-directory: app
+        run: npm run build
+      - name: Verify build does not rewrite tracked app sources
+        run: |
+          set -euo pipefail
+          status="$(git status --porcelain --untracked-files=no -- app)"
+          if [ -n "$status" ]; then
+            echo 'Current app build modified tracked files:' >&2
+            printf '%s\n' "$status" >&2
+            git diff -- app >&2 || true
+            exit 1
+          fi
+      - name: Test current app without historical rematerialization
+        working-directory: app
+        run: npm test
+      - name: Verify tests do not rewrite tracked app sources
+        run: |
+          set -euo pipefail
+          status="$(git status --porcelain --untracked-files=no -- app)"
+          if [ -n "$status" ]; then
+            echo 'Current app tests modified tracked files:' >&2
+            printf '%s\n' "$status" >&2
+            git diff -- app >&2 || true
+            exit 1
+          fi
+      - name: Verify explicit historical replay remains available
+        run: |
+          node - <<'NODE'
+          const pkg = require('./app/package.json');
+          const scripts = pkg.scripts || {};
+          if (scripts.build !== 'npm run build:current') throw new Error('default build must delegate to build:current');
+          if (!scripts['replay:r5a']?.includes('build:stone-layers') || !scripts['replay:r5a']?.includes('build:r5a-pixelperfect')) {
+            throw new Error('historical R5A replay must remain explicit');
+          }
+          if (!scripts['build:historical-r5a']?.includes('replay:r5a')) throw new Error('historical R5A build wrapper is missing');
+          NODE
