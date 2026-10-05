@@ -62,6 +62,13 @@ def main() -> int:
     files.pop("assets/kitchen/overlays/module-02-right-exposed-face.png", None)
     files.pop("assets/kitchen/masks/module-02-right-exposed-face.png", None)
     files.pop("assets/kitchen/overlays/module-07-floor-side-bridge.png", None)
+    # technical-data is an inventory of real files, not a tombstone ledger.
+    # Drop missing tracked PNGs so deleting a proven-orphan asset cannot leave a stale record behind.
+    for rel in list(files):
+        path = ROOT / rel
+        if path.suffix.lower() == ".png" and not path.is_file():
+            files.pop(rel, None)
+            tracked.discard(rel)
     for rel in sorted(tracked):
         path = ROOT / rel
         if path.suffix.lower() == ".png" and path.is_file(): files[rel] = record(path)

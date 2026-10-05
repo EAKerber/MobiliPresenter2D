@@ -191,14 +191,6 @@
         205
       ]
     },
-    "assets/kitchen/masks/08.png": {
-      "sha256": "64085d665f67f408b0cd67f69bebaa5a814b79eeed296c3d952e62988d7a440f",
-      "alphaBounds": null
-    },
-    "assets/kitchen/substitutions/range-freestanding-placeholder.png": {
-      "sha256": "64085d665f67f408b0cd67f69bebaa5a814b79eeed296c3d952e62988d7a440f",
-      "alphaBounds": null
-    },
     "tools/sources/03_inferior_pia-combined-v1.png": {
       "sha256": "32f2b66f9dbf3d911b739ae080fe2f352e2015ac2f24bddd51984b8ff384cd66",
       "alphaBounds": [
