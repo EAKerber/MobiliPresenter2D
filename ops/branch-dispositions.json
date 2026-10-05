@@ -6,39 +6,19 @@
   ],
   "terminalBranches": [
     {
-      "branch": "audit/boundary-forensics",
-      "sha": "33a526beba586072c13373f2de5094805419f050",
-      "reason": "completed-kitchen-specific-forensics",
+      "branch": "audit/published-config-compat",
+      "sha": "73f9e9bf8c28a7876a789e19761128abb7c458bb",
+      "reason": "completed-published-configuration-audit",
       "allowDelete": true,
-      "note": "Boundary/pan/module05/stone diagnostics are tied to this kitchen's 1536x1024 assets, fixed pixel ROIs and historical commit comparisons. The current reachability audit found no active artifact requiring those tools, so no generic product tooling is being discarded."
+      "note": "Production ConfiguratorAdministration2D 3.0 revision 3 was read successfully. Current core normalization passes; the published record still selects stone-skirting while omitting its stage item, so runtime compatibility repair remains required until an authenticated one-time publish persists that item. handles-all remains omitted and is not auto-migrated because that may be intentional administration."
     },
     {
-      "branch": "audit/current-asset-reachability",
-      "sha": "5f3609da4cf6bc141a18d693fbef2a897e334d9c",
-      "reason": "completed-temporary-asset-audit",
+      "branch": "housekeeping/published-config-audit-close",
+      "sha": "c4d1466d0d6fd060fa07474b8798ebaa4ace45a4",
+      "reason": "superseded-housekeeping-pr-head",
       "allowDelete": true,
-      "note": "One-shot audit branch. Its artifact classified 49 kitchen assets, rejected 14 dynamically-referenced structure masks as false orphan positives, confirmed the two empty PNGs removed by PR #53, and identified the legacy tempered-glass SVG handled separately by PR #56."
-    },
-    {
-      "branch": "research/bmc04-compact-donor-calibration-v0.1",
-      "sha": "a03c0966e3abd57218117ed6acb2532d6b8cd47e",
-      "reason": "research-lineage-harvested",
-      "allowDelete": true,
-      "note": "Durable reconstruction architecture was harvested byte-for-byte into ADRs 0005-0008 by PR #54. Remaining BMC01/BMC02/BMC04 scripts are research-only and/or scene/case-specific; representative validators still encode T6-G/cooktop or Module01-04 semantics. Production/general tooling already present on main is retained there."
-    },
-    {
-      "branch": "housekeeping/refresh-contract-map",
-      "sha": "38c0ef70fa7592f7b4891e6e3ffba56f9e4bf706",
-      "reason": "merged-pr-head",
-      "allowDelete": true,
-      "evidence": { "pullRequest": 55 }
-    },
-    {
-      "branch": "housekeeping/remove-empty-orphan-assets",
-      "sha": "ffa9cffc0fbe3b8e6d66b9bce405ef660eb1862f",
-      "reason": "merged-pr-head",
-      "allowDelete": true,
-      "evidence": { "pullRequest": 53 }
+      "evidence": { "pullRequest": 59 },
+      "note": "PR #59 carried the same audit closeout but diverged only because main advanced while its branch-hygiene dry-run waited. The closeout was reapplied from current main in the replacement housekeeping branch."
     }
   ]
 }
