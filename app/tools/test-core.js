@@ -67,6 +67,11 @@ const duplicateNamedFunctions = [...namedFunctionCounts.entries()]
   .map(([name]) => name)
   .sort();
 assert.deepEqual(duplicateNamedFunctions, [], "app.js must not contain shadowed duplicate named function declarations");
+const unreferencedNamedFunctions = [...namedFunctionCounts.keys()]
+  .filter((name) => name !== "startConfigurator")
+  .filter((name) => [...appSource.matchAll(new RegExp("\\b" + name + "\\b", "g"))].length === 1)
+  .sort();
+assert.deepEqual(unreferencedNamedFunctions, [], "app.js named helpers must have at least one reference");
 const styleSource = fs.readFileSync(path.join(projectRoot, "styles.css"), "utf8");
 assert.match(appSource, /group\.style\.zIndex = String\(entity\.zIndex\)/);
 assert.doesNotMatch(styleSource, /data-entity-id="tempered-glass"\]\s*\{\s*z-index/);
