@@ -6,15 +6,15 @@
   ],
   "terminalBranches": [
     {
-      "branch": "housekeeping/remove-unreferenced-pricing-helper",
-      "sha": "d0334ee11c580f76cc96da8671ddfdaa6586a5d0",
+      "branch": "housekeeping/remove-unreachable-css",
+      "sha": "969a0df8cf6375a234853f8c34ec397539f36d91",
       "reason": "merged-housekeeping-head",
       "allowDelete": true,
       "evidence": {
-        "pullRequest": 70,
-        "mergedMainSha": "27fa29973586601bee8c9ba78f4a19224c0f47e5"
+        "pullRequest": 71,
+        "mergedMainSha": "e71fc270cf55decbc08f40f86ea36074771abf87"
       },
-      "note": "PR #70 merged after all current browser, asset, variant and build-purity gates passed. The source branch is terminal; deletion remains exact-SHA fail-closed."
+      "note": "PR #71 merged after current asset/variant, build-purity and browser gates passed. Exact-SHA fail-closed deletion only."
     }
   ]
 }
