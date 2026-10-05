@@ -1,0 +1,152 @@
+name: Housekeeping catalogize stone skirting temp
+
+on:
+  push:
+    branches: [housekeeping/catalogize-stone-skirting]
+    paths:
+      - '.github/workflows/housekeeping-catalogize-skirting-temp.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  materialize:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: housekeeping/catalogize-stone-skirting
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Canonicalize skirting catalog contract
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          def replace_once(path, old, new):
+              p = Path(path)
+              text = p.read_text()
+              count = text.count(old)
+              if count != 1:
+                  raise SystemExit(f"expected one match in {path}, got {count}: {old[:100]!r}")
+              p.write_text(text.replace(old, new, 1))
+
+          replace_once(
+              "app/data/catalog-data.js",
+              '''    services: [\n      { id: "move-stone", title: "Mover pedra", description: "Reposicionamento da pedra como serviço global." },\n      { id: "tempered-glass", title: "Vidro temperado 8 mm", description: "Complemento global para a composição." }\n    ]''',
+              '''    services: [\n      { id: "move-stone", title: "Mover pedra", description: "Reposicionamento da pedra como serviço global.", defaultSelected: true },\n      { id: "stone-skirting", title: "Rodapé de pedra", description: "Acabamento global de pedra para o rodapé da composição.", defaultSelected: true, stageKinds: ["finishes", "services", "custom"] },\n      { id: "tempered-glass", title: "Vidro temperado 8 mm", description: "Complemento global para a composição.", defaultSelected: true }\n    ]'''
+          )
+
+          replace_once(
+              "app/core/configuration.js",
+              '''      ["fronts-all", "finish-group"], ["handles-all", "finish-group"], ["stone-all", "finish-group"], ["stone-skirting", "service"], ["summary", "summary"],''',
+              '''      ["fronts-all", "finish-group"], ["handles-all", "finish-group"], ["stone-all", "finish-group"], ["summary", "summary"],'''
+          )
+          replace_once(
+              "app/core/configuration.js",
+              '''        services: ["move-stone", "stone-skirting", "tempered-glass"],''',
+              '''        services: catalog.services.filter((item) => item.defaultSelected).map((item) => item.id),'''
+          )
+          replace_once(
+              "app/core/configuration.js",
+              '''  function migrateCurrentHandleModel(value, catalog, priceBook, scene) {\n    if (!value || value.schemaVersion === SCHEMA) return value;\n    if (![PREVIOUS_SCHEMA, LEGACY_SCHEMA].includes(value.schemaVersion)) return value;''',
+              '''  function migrateCurrentHandleModel(value, catalog, priceBook, scene) {\n    if (!value) return value;\n    if (value.schemaVersion === SCHEMA) {\n      const base = createDefaultAdministration({ stages: value.stages || [] }, catalog, priceBook, scene);\n      return {\n        ...value,\n        objects: { ...base.objects, ...(value.objects || {}) },\n        objectAssets: { ...base.objectAssets, ...(value.objectAssets || {}) }\n      };\n    }\n    if (![PREVIOUS_SCHEMA, LEGACY_SCHEMA].includes(value.schemaVersion)) return value;'''
+          )
+          replace_once(
+              "app/core/configuration.js",
+              '''    const eventTriggerIds = new Set([...entityIds, ...catalog.services.map((item) => item.id), "stone-skirting"]);''',
+              '''    const eventTriggerIds = new Set([...entityIds, ...catalog.services.map((item) => item.id)]);'''
+          )
+          replace_once(
+              "app/core/configuration.js",
+              '''      const allowedServices = new Set(["move-stone", "stone-skirting", "tempered-glass", "lighting-08"]);''',
+              '''      // lighting-08 is retained here only for backwards-compatible published states;\n      // canonical service identifiers come from the public catalog.\n      const allowedServices = new Set([...catalog.services.map((item) => item.id), "lighting-08"]);'''
+          )
+
+          replace_once(
+              "app/admin/admin.js",
+              '''  "stone-all": "Pacote de pedra",\n  "stone-skirting": "Rodapé de pedra",\n  "lighting-08": "Iluminação embutida",''',
+              '''  "stone-all": "Pacote de pedra",\n  "lighting-08": "Iluminação embutida",'''
+          )
+          replace_once(
+              "app/admin/admin.js",
+              '''  return [...registry].filter(([id, type]) => allowed.has(type) || kind === "finishes" && id === "stone-skirting").map(([id]) => {''',
+              '''  return [...registry].filter(([id, type]) => {\n    const service = catalog.services.find((item) => item.id === id);\n    return Array.isArray(service?.stageKinds) ? service.stageKinds.includes(kind) : allowed.has(type);\n  }).map(([id]) => {'''
+          )
+
+          replace_once(
+              "app/app.js",
+              '''    if (id === "stone-skirting") return "Rodapé de pedra";\n    if (id === "lighting-08")''',
+              '''    if (id === "lighting-08")'''
+          )
+
+          marker = '''assert.equal(catalog.modules.length, 7);\nassert.equal(priceBook.mode, "estimate");'''
+          insert = '''assert.equal(catalog.modules.length, 7);\nconst skirtingService = catalog.services.find((item) => item.id === "stone-skirting");\nassert.equal(skirtingService?.title, "Rodapé de pedra");\nassert.equal(skirtingService?.defaultSelected, true);\nassert.deepEqual(Array.from(skirtingService?.stageKinds || []), ["finishes", "services", "custom"]);\nassert.equal(settingsCore.itemRegistry(catalog).get("stone-skirting"), "service");\nassert.equal(defaultSettings.objects["stone-skirting"]?.title, "Rodapé de pedra");\nassert.equal(defaultSettings.initialState.services.includes("stone-skirting"), true);\nassert.equal(priceBook.mode, "estimate");'''
+          replace_once("app/tools/test-core.js", marker, insert)
+
+          marker = '''const normalizedDefaults = settingsCore.normalizeConfiguratorSettings(defaultSettings, catalog, priceBook, scene);\nassert.equal(normalizedDefaults.schemaVersion, "ConfiguratorAdministration2D 3.0");'''
+          insert = '''const normalizedDefaults = settingsCore.normalizeConfiguratorSettings(defaultSettings, catalog, priceBook, scene);\nassert.equal(normalizedDefaults.schemaVersion, "ConfiguratorAdministration2D 3.0");\nconst preCatalogSkirtingSettings = structuredClone(defaultSettings);\ndelete preCatalogSkirtingSettings.objects["stone-skirting"];\ndelete preCatalogSkirtingSettings.objectAssets["stone-skirting"];\npreCatalogSkirtingSettings.objects["move-stone"].title = "Mover pedra personalizado";\nconst hydratedCurrentSettings = settingsCore.normalizeConfiguratorSettings(preCatalogSkirtingSettings, catalog, priceBook, scene);\nassert.equal(hydratedCurrentSettings.objects["stone-skirting"]?.title, "Rodapé de pedra", "current-schema publications hydrate newly catalogued objects");\nassert.equal(Object.hasOwn(hydratedCurrentSettings.objectAssets, "stone-skirting"), true, "current-schema publications hydrate new object asset slots");\nassert.equal(hydratedCurrentSettings.objects["move-stone"].title, "Mover pedra personalizado", "catalog hydration never overwrites published content");'''
+          replace_once("app/tools/test-core.js", marker, insert)
+
+          index = Path("app/index.html")
+          text = index.read_text()
+          if "runtime-v7" not in text:
+              raise SystemExit("runtime-v7 cache token missing")
+          text = text.replace("runtime-v7", "runtime-v8")
+          text = text.replace('core/configuration.js?v=admin-config-v3', 'core/configuration.js?v=admin-config-v5')
+          index.write_text(text)
+
+          admin = Path("app/admin.html")
+          text = admin.read_text()
+          replacements = {
+              'data/catalog-data.js?v=catalog-handles-v2': 'data/catalog-data.js?v=catalog-services-v1',
+              'core/configuration.js?v=admin-config-v4': 'core/configuration.js?v=admin-config-v5',
+              'core/runtime-contracts.js?v=runtime-contracts-v1': 'core/runtime-contracts.js?v=runtime-contracts-v2',
+              'admin/admin.bundle.js?v=admin-data-v5': 'admin/admin.bundle.js?v=admin-data-v6'
+          }
+          for old, new in replacements.items():
+              if text.count(old) != 1:
+                  raise SystemExit(f"admin cache token mismatch: {old}")
+              text = text.replace(old, new, 1)
+          admin.write_text(text)
+          PY
+      - name: Build admin bundle
+        run: |
+          npm install --no-audit --no-fund
+          npm run build
+      - name: Contract gates
+        run: |
+          set -euo pipefail
+          node --check app/app.js
+          node --check app/core/configuration.js
+          node app/tools/test-core.js
+          node app/tools/test-runtime-contracts.js
+          grep -q 'id: "stone-skirting", title: "Rodapé de pedra"' app/data/catalog-data.js
+          ! grep -q '\["stone-skirting", "service"\]' app/core/configuration.js
+          ! grep -q 'id === "stone-skirting") return "Rodapé de pedra"' app/app.js
+          ! grep -q 'kind === "finishes" && id === "stone-skirting"' app/admin/admin.js
+          grep -q 'catalog.services.map((item) => item.id)' app/core/configuration.js
+          grep -q 'runtime-v8' app/index.html
+          grep -q 'catalog-services-v1' app/admin.html
+          git diff --check
+      - name: Commit materialized cleanup and self-remove
+        env:
+          TARGET_BRANCH: housekeeping/catalogize-stone-skirting
+          EXPECTED_HEAD: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git rm .github/workflows/housekeeping-catalogize-skirting-temp.yml
+          git add app/data/catalog-data.js app/core/configuration.js app/admin/admin.js app/admin/admin.bundle.js app/app.js app/tools/test-core.js app/index.html app/admin.html
+          git commit -m 'Canonicalize stone skirting catalog contract'
+          remote_before="$(git ls-remote origin "refs/heads/$TARGET_BRANCH" | cut -f1)"
+          test "$remote_before" = "$EXPECTED_HEAD"
+          git push origin "HEAD:refs/heads/$TARGET_BRANCH"
+          result="$(git rev-parse HEAD)"
+          remote_after="$(git ls-remote origin "refs/heads/$TARGET_BRANCH" | cut -f1)"
+          test "$remote_after" = "$result"
+          echo "RESULT_HEAD=$result"
