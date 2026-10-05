@@ -1,0 +1,43 @@
+name: Fix skirting materializer temp
+
+on:
+  push:
+    branches: [housekeeping/catalogize-stone-skirting]
+    paths:
+      - '.github/workflows/housekeeping-fix-skirting-materializer-temp.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  fix:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: housekeeping/catalogize-stone-skirting
+          fetch-depth: 0
+      - name: Keep generated admin bundle out of Git
+        env:
+          TARGET_BRANCH: housekeeping/catalogize-stone-skirting
+          EXPECTED_HEAD: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from pathlib import Path
+          p = Path('.github/workflows/housekeeping-catalogize-skirting-temp.yml')
+          text = p.read_text()
+          old = 'git add app/data/catalog-data.js app/core/configuration.js app/admin/admin.js app/admin/admin.bundle.js app/app.js app/tools/test-core.js app/tools/test-runtime-contracts.js app/index.html app/admin.html'
+          new = 'git add app/data/catalog-data.js app/core/configuration.js app/admin/admin.js app/app.js app/tools/test-core.js app/tools/test-runtime-contracts.js app/index.html app/admin.html'
+          if text.count(old) != 1:
+              raise SystemExit('materializer git-add line mismatch')
+          p.write_text(text.replace(old, new, 1))
+          PY
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git rm .github/workflows/housekeeping-fix-skirting-materializer-temp.yml
+          git add .github/workflows/housekeeping-catalogize-skirting-temp.yml
+          git commit -m 'Keep generated admin bundle out of housekeeping commit'
+          remote_before="$(git ls-remote origin "refs/heads/$TARGET_BRANCH" | cut -f1)"
+          test "$remote_before" = "$EXPECTED_HEAD"
+          git push origin "HEAD:refs/heads/$TARGET_BRANCH"
