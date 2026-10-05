@@ -2,6 +2,34 @@
   "use strict";
 
   const width = 1536, height = 1024;
+  const ADMIN_ORIGINAL_STONE_SWATCH = "#b7b0a7";
+  const STONE_LAYER_FIX_STYLE_ID = "stone-layer-geometry-fixes";
+
+  function installStoneLayerGeometryFixes() {
+    if (!global.document || document.getElementById(STONE_LAYER_FIX_STYLE_ID)) return;
+    const style = document.createElement("style");
+    style.id = STONE_LAYER_FIX_STYLE_ID;
+    style.textContent = `
+      #stoneCanvas, #plinthCanvas {
+        z-index: 302;
+      }
+      .layer-group[data-entity-id="approved-stone-03"] > img {
+        -webkit-mask: url("assets/kitchen/masks/approved-stone-03-object-only.svg") center / contain no-repeat;
+        mask: url("assets/kitchen/masks/approved-stone-03-object-only.svg") center / contain no-repeat;
+        -webkit-mask-mode: alpha;
+        mask-mode: alpha;
+      }
+      .layer-group[data-entity-id="faucet-approved"] > img {
+        -webkit-mask: url("assets/kitchen/masks/faucet-approved-object-only.svg") center / contain no-repeat;
+        mask: url("assets/kitchen/masks/faucet-approved-object-only.svg") center / contain no-repeat;
+        -webkit-mask-mode: alpha;
+        mask-mode: alpha;
+      }
+    `;
+    document.head.append(style);
+  }
+
+  installStoneLayerGeometryFixes();
 
   function caseId(state) {
     const a = state.visibilityByEntity["module-02"];
@@ -12,6 +40,13 @@
   function parseColor(color) {
     if (!/^#[0-9a-f]{6}$/i.test(color || "")) return null;
     return [1, 3, 5].map((index) => Number.parseInt(color.slice(index, index + 2), 16));
+  }
+
+  function isOriginalMaterial(material) {
+    if (!material) return true;
+    if (material.materialType === "original") return true;
+    const color = String(material.color || "").toLowerCase();
+    return material.materialType === "stone" && !material.textureAsset && color === ADMIN_ORIGINAL_STONE_SWATCH;
   }
 
   function textureRgb(source, pixel) {
@@ -48,7 +83,7 @@
   }
 
   function materialKey(material) {
-    if (!material) return "original";
+    if (isOriginalMaterial(material)) return "original";
     const hasTexture = Boolean(material.textureAsset);
     const color = parseColor(material.color);
     if (!hasTexture && !color) return "original";
@@ -113,6 +148,7 @@
     }
 
     async function materialSource(material) {
+      if (isOriginalMaterial(material)) return null;
       const materialType = material?.materialType || "stone";
       const color = parseColor(material?.color);
       const texture = material?.textureAsset ? await texturePixels(material.textureAsset) : null;
@@ -207,5 +243,5 @@
     };
   }
 
-  global.CasaStone = Object.freeze({ caseId, createRenderer, materialKey, recolor });
+  global.CasaStone = Object.freeze({ caseId, createRenderer, isOriginalMaterial, materialKey, recolor });
 })(window);
