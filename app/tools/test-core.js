@@ -73,6 +73,16 @@ const unreferencedNamedFunctions = [...namedFunctionCounts.keys()]
   .sort();
 assert.deepEqual(unreferencedNamedFunctions, [], "app.js named helpers must have at least one reference");
 const styleSource = fs.readFileSync(path.join(projectRoot, "styles.css"), "utf8");
+const keyboardSource = fs.readFileSync(path.join(projectRoot, "core/keyboard-shortcuts.js"), "utf8");
+const cssSelectorText = [...styleSource.matchAll(/([^{}]+)\{/g)].map((match) => match[1]).join("\n");
+const cssClassNames = [...new Set([...cssSelectorText.matchAll(/\.([A-Za-z_-][A-Za-z0-9_-]*)/g)].map((match) => match[1]))];
+const dynamicCssClasses = new Set(["structure-layer--shadow", "structure-layer--highlight"]);
+const cssReachabilityCorpus = indexSource + "\n" + appSource + "\n" + keyboardSource;
+const unreachableCssClasses = cssClassNames.filter((name) => !dynamicCssClasses.has(name) && !cssReachabilityCorpus.includes(name)).sort();
+assert.deepEqual(unreachableCssClasses, [], "public styles.css classes must be reachable from public markup/runtime or explicitly dynamic");
+const cssIdNames = [...new Set([...cssSelectorText.matchAll(/#([A-Za-z_-][A-Za-z0-9_-]*)/g)].map((match) => match[1]))];
+const unreachableCssIds = cssIdNames.filter((id) => !staticHtmlIds.has(id)).sort();
+assert.deepEqual(unreachableCssIds, [], "public styles.css id selectors must exist in index.html");
 assert.match(appSource, /group\.style\.zIndex = String\(entity\.zIndex\)/);
 assert.doesNotMatch(styleSource, /data-entity-id="tempered-glass"\]\s*\{\s*z-index/);
 const stoveDisabledState = core.createInitialState(scene);
