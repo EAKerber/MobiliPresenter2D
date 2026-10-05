@@ -6,17 +6,15 @@
   ],
   "terminalBranches": [
     {
-      "branch": "housekeeping/current-app-build-authority",
-      "sha": "62c8ffe84450d71cec797b5cf7ae6dfc826aeaa8",
-      "reason": "merged-tree-identical-housekeeping-head",
+      "branch": "housekeeping/prune-current-build-branch",
+      "sha": "f80a74e6a0ec566191493a5b209a9813834c0dc3",
+      "reason": "merged-branch-hygiene-carrier",
       "allowDelete": true,
       "evidence": {
-        "pullRequest": 65,
-        "mergedMainSha": "ffe0b97bfa81d67a2ab16494e8d1a35ec1cd9b47",
-        "branchTreeSha": "4abe7e2bd29ba76b58e1139d09c808d60a490042",
-        "mergedMainTreeSha": "4abe7e2bd29ba76b58e1139d09c808d60a490042"
+        "pullRequest": 66,
+        "mergedMainSha": "bae2304ab8e9bb8e3d03c9c0397564d9bccf7750"
       },
-      "note": "PR #65 is merged. The current remote branch head was reobserved exactly and its Git tree is byte-for-byte identical to current main. Deletion remains bound to this exact branch SHA."
+      "note": "PR #66 merged after branch-hygiene dry-run and successfully pruned the completed PR #65 branch. This carrier branch is now terminal; deletion remains exact-SHA fail-closed."
     }
   ]
 }
