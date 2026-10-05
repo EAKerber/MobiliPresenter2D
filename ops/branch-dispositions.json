@@ -131,6 +131,134 @@
       "allowDelete": true,
       "evidence": { "pullRequest": 32 },
       "note": "PR #32 was explicitly archived/closed without merge and the user approved excluding it. Current remote branch head exactly matches the recorded PR head."
+    },
+    {
+      "branch": "work/r5a-module02-hidden",
+      "sha": "62a7053339d65f603594fcbe9ef8be340de1b47a",
+      "reason": "completed-stacked-r5a-lineage",
+      "allowDelete": true,
+      "evidence": { "pullRequests": [8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25] },
+      "note": "Historical R5A/R6 stacked authoring lineage. The promoted materialized result was subsequently integrated to main by PR #25; deletion remains exact-SHA fail-closed."
+    },
+    {
+      "branch": "work/r5a-gap-pixel-calibration",
+      "sha": "49b5f3e3dfeb65883ed369529f09e396c7761edf",
+      "reason": "completed-stacked-r5a-lineage",
+      "allowDelete": true,
+      "evidence": { "pullRequests": [9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25] }
+    },
+    {
+      "branch": "work/r5a-approved-range",
+      "sha": "a3b7e5b72fcfd286ff0c93ca31de408782362a26",
+      "reason": "completed-stacked-r5a-lineage",
+      "allowDelete": true,
+      "evidence": { "pullRequests": [10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25] }
+    },
+    {
+      "branch": "work/r6-stone-surface-masks",
+      "sha": "e527241c78c35d9adcaa907c91e3aa2edada79c9",
+      "reason": "completed-stacked-r6-lineage",
+      "allowDelete": true,
+      "evidence": { "pullRequests": [11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25] }
+    },
+    {
+      "branch": "work/r6-stone-cleanplate",
+      "sha": "bc4e9ee9213b9caf6e5dd01fa2d23e2a48a8d3c9",
+      "reason": "completed-stacked-r6-lineage",
+      "allowDelete": true,
+      "evidence": { "pullRequests": [12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25] }
+    },
+    {
+      "branch": "work/r6-stone-components",
+      "sha": "f1114a0a0aba2f03b4d009c52682289de4cc3653",
+      "reason": "completed-stacked-r6-lineage",
+      "allowDelete": true,
+      "evidence": { "pullRequests": [13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25] }
+    },
+    {
+      "branch": "work/r6-stone-backing",
+      "sha": "bf4c32fac757f3f96bb7b68309748d10c8d03615",
+      "reason": "completed-stacked-r6-lineage",
+      "allowDelete": true,
+      "evidence": { "pullRequests": [14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25] }
+    },
+    {
+      "branch": "work/r6-object-contours",
+      "sha": "199f9919d39005f125775004def236c82ae1e74b",
+      "reason": "completed-stacked-r6-lineage",
+      "allowDelete": true,
+      "evidence": { "pullRequests": [15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25] }
+    },
+    {
+      "branch": "work/r6-object-antialias",
+      "sha": "d10ca6abf5c45a6b321e417ca824ceb91cfa9089",
+      "reason": "completed-stacked-r6-lineage",
+      "allowDelete": true,
+      "evidence": { "pullRequests": [16, 17, 18, 19, 20, 21, 22, 23, 24, 25] }
+    },
+    {
+      "branch": "work/r6-faucet-edge-donor",
+      "sha": "ac0f80a66cd54d780939f15615c82e352ffd766f",
+      "reason": "completed-stacked-r6-lineage",
+      "allowDelete": true,
+      "evidence": { "pullRequests": [17, 18, 19, 20, 21, 22, 23, 24, 25] }
+    },
+    {
+      "branch": "work/r6-faucet-regenerated-fit",
+      "sha": "c542dbdf7c67fd6fda43329606e10bf7c0c0e2bf",
+      "reason": "completed-stacked-r6-lineage",
+      "allowDelete": true,
+      "evidence": { "pullRequests": [18, 19, 20, 21, 22, 23, 24, 25] }
+    },
+    {
+      "branch": "work/r6-approved-faucet",
+      "sha": "423d227e1221faee0f9f2d806e483aef2a4728c6",
+      "reason": "completed-stacked-r6-lineage",
+      "allowDelete": true,
+      "evidence": { "pullRequests": [19, 20, 21, 22, 23, 24, 25] }
+    },
+    {
+      "branch": "work/r6-stone-finish-preview",
+      "sha": "6d6b3cc6b700063d59a4e7c1062d2dfa0529f73a",
+      "reason": "completed-stacked-r6-lineage",
+      "allowDelete": true,
+      "evidence": { "pullRequests": [20, 21, 22, 23, 24, 25] }
+    },
+    {
+      "branch": "work/r6-sink-regenerated-fit",
+      "sha": "868eab8e254908c58db984806c5b42635199f82e",
+      "reason": "completed-stacked-r6-lineage",
+      "allowDelete": true,
+      "evidence": { "pullRequests": [21, 22, 23, 24, 25] }
+    },
+    {
+      "branch": "work/r6-cooktop-regenerated-fit",
+      "sha": "e5af75527ff60d615ace7031b859fd303bb42384",
+      "reason": "completed-stacked-r6-lineage",
+      "allowDelete": true,
+      "evidence": { "pullRequests": [22, 23, 24, 25] }
+    },
+    {
+      "branch": "work/r6-drainer-clean-review",
+      "sha": "11e47306cd82442b07764129afd6e00a6f836dab",
+      "reason": "completed-stacked-r6-lineage",
+      "allowDelete": true,
+      "evidence": { "pullRequests": [23, 24, 25] }
+    },
+    {
+      "branch": "work/r6-approved-components",
+      "sha": "8a3726179146ed37197fe03d43965ae0c1a9204a",
+      "reason": "completed-stacked-r6-lineage",
+      "allowDelete": true,
+      "evidence": { "pullRequests": [24, 25] }
+    },
+    {
+      "branch": "work/r6-stone-color-control",
+      "sha": "90243c36477916fa7e5fd883f3d0f9f805e2a526",
+      "reason": "merged-final-r6-lineage",
+      "allowDelete": true,
+      "evidence": { "pullRequest": 25 },
+      "note": "PR #25 promoted the approved R6 material/component lineage onto main. Current remote branch head is the recorded PR #25 head."
     }
   ]
 }
