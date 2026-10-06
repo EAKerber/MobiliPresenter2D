@@ -1,6 +1,6 @@
 # Housekeeping roadmap, backlog and next checkpoint — 2026-10-05
 
-Status: canonical continuation document for the near-official MobiliPresenter2D candidate. Repository UX/hierarchy work is complete through CP-UX-04.3 / PR #95, with CP-UX-04.4 active in PR #97 for pane-scroll/workspace alignment. Remaining production-state work is the authenticated published-v3 consistency boundary, an explicit Puxadores stage-assignment product write if still required, then schema-v4 publication and legacy retirement.
+Status: canonical continuation document for the current MobiliPresenter2D baseline. Repository UX/hierarchy work is complete through CP-UX-04.4 / PR #97. Remaining production-state work is the authenticated published-v3 consistency boundary, an explicit Puxadores stage-assignment product write if still required, then schema-v4 publication and legacy retirement.
 
 ## Checkpoint definition
 
@@ -19,8 +19,8 @@ Do not use “checkpoint” to mean an arbitrary intermediate commit.
 ## Current stable authority
 
 - Product authority: `main`.
-- Current `main` after the accepted preview #95: `cbf41d29e636fa1a80bc13c1d457837cb737c57b`.
-- CP-UX-04.2 centralized legacy-v3 Stage -> Group -> Section semantics in `app/data/hierarchy-defaults.js`; CP-UX-04.3 then aligned finish breakpoints, direct Frentes -> Puxadores traversal and runtime/admin cache revisions without changing schema or production administration.
+- Current `main` after the accepted preview #97: `6985100edc0012b87f9a01a627a415b39454a699`.
+- CP-UX-04.2 centralized legacy-v3 Stage -> Group -> Section semantics in `app/data/hierarchy-defaults.js`; CP-UX-04.3 aligned finish breakpoints/direct Frentes -> Puxadores traversal; CP-UX-04.4 then aligned stage-internal columns with workspace mode, added independent stacked-Modules pane scrollers and contained module vertical arrows without changing schema or production administration.
 - Repository housekeeping authority immediately before this documentation checkpoint: `42f55917961cc8957974bb50b589945b36f00055`.
 - Documentation checkpoint PR #76 merged as `4284ad052c7d7fff108dc752ef0306edeb227ede`; later bookkeeping commits may advance `main` without changing product/runtime authority.
 - Exact near-official product candidate proven by the full gate fan-out: `b969bb471831d405fd6e1c9c15bf761176885cdd`.
@@ -62,7 +62,7 @@ The current codebase has already removed or resolved the main accidental legacy 
 
 ## Backlog
 
-### P1 — buyer UX navigation and flow hierarchy — COMPLETE THROUGH CP-UX-04.3; CP-UX-04.4 ACTIVE
+### P1 — buyer UX navigation and flow hierarchy — COMPLETE THROUGH CP-UX-04.4
 
 The repository-side UX/hierarchy track is no longer an open housekeeping blocker.
 
@@ -80,7 +80,7 @@ Completed work now includes:
 
 Canonical history and gate evidence remain in `docs/backlog/ux-navigation-hierarchy-roadmap-2026-10-05.md`.
 
-One final renderer follow-up is active as **CP-UX-04.4 / PR #97**: side-rail Modules/Services collapse to one internal column, stacked Modules gains independent pane scrollers, and module ArrowUp/ArrowDown is contained inside the pane instead of scrolling the page. After that, the next checkpoint is **CP-UX-05**, which crosses the authenticated production schema boundary.
+**CP-UX-04.4 / PR #97 is complete and merged**: side-rail Modules/Services use one internal column, stacked Modules has independent pane scrollers, and module ArrowUp/ArrowDown is contained inside the pane instead of scrolling the page. Deploy preview #97 was manually accepted and promoted unchanged. The next checkpoint is **CP-UX-05**, which crosses the authenticated production schema boundary.
 
 ### P1 — published administration compatibility and schema migration
 
@@ -100,7 +100,7 @@ Two independent authenticated concerns remain and must be kept explicit.
 - legacy-v3 hierarchy semantics are centralized in `app/data/hierarchy-defaults.js`;
 - `netlify/functions/configuration.mjs` still rejects direct `ConfiguratorAdministration2D 4.0` publication with `hierarchy_publication_required`;
 - `app/core/runtime-contracts.js` still contains the temporary `stone-skirting` repair;
-- PR #95 changed none of those production boundaries.
+- PR #97 and the CP-UX-04 follow-ups changed none of those production boundaries.
 
 **Preferred remaining order:**
 
@@ -184,7 +184,7 @@ Checkpoint status:
 6. **CP-UX-04.1 — COMPLETE** — Puxadores active-state + earlier finish split.
 7. **CP-UX-04.2 — COMPLETE** — one shared legacy-v3 hierarchy authority.
 8. **CP-UX-04.3 — COMPLETE** — PR #95 breakpoint alignment, direct Frentes -> Puxadores gate and cache hardening.
-9. **CP-UX-04.4 — ACTIVE / PR #97** — workspace-mode pane columns, independent stacked Modules scrollers and vertical-arrow containment.
+9. **CP-UX-04.4 — COMPLETE** — PR #97 merged at `6985100edc0012b87f9a01a627a415b39454a699`; workspace-mode pane columns, independent stacked Modules scrollers and vertical-arrow containment were manually accepted in preview #97.
 10. **CP-UX-05 — NEXT / AUTHENTICATED BOUNDARY** — authenticated v3 consistency/product assignment, production v4 publication and legacy retirement.
 
 The UX track now depends on the same authenticated production boundary as housekeeping. Repository-only work should not invent another compatibility layer while that boundary is pending.
