@@ -6,15 +6,26 @@
   ],
   "terminalBranches": [
     {
-      "branch": "housekeeping/finalize-official-candidate",
-      "sha": "ffcd476adb5f0a3175f009c089410053bde0c970",
-      "reason": "merged-final-bookkeeping-head",
+      "branch": "docs/fix-housekeeping-checkpoint-reference",
+      "sha": "85e1f45d1ae34ec764e04f23d738be0eaa3c4809",
+      "reason": "merged-documentation-head",
       "allowDelete": true,
       "evidence": {
-        "pullRequest": 75,
-        "mergedMainSha": "55076d11be17ad3a3d1843e09a5bdeb9e0a04629"
+        "pullRequest": 77,
+        "mergedMainSha": "f8514a05f8fb5036aea17a57e5b39ae3934d882c"
       },
-      "note": "Final housekeeping bookkeeping branch. PR #75 merged after branch-hygiene passed; deletion remains exact-SHA fail-closed."
+      "note": "Documentation correction already merged to main. Branch head was reobserved exactly before disposition."
+    },
+    {
+      "branch": "docs/housekeeping-checkpoint-plan-2026-10-05",
+      "sha": "dcbc0f1aba5037c96ee9c5f2b337863def9fdf8d",
+      "reason": "merged-documentation-head",
+      "allowDelete": true,
+      "evidence": {
+        "pullRequest": 76,
+        "mergedMainSha": "4284ad052c7d7fff108dc752ef0306edeb227ede"
+      },
+      "note": "Canonical checkpoint document is already present on main and subsequently corrected by PR #77. Branch head was reobserved exactly before disposition."
     }
   ]
 }
