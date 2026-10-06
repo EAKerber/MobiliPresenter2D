@@ -1,6 +1,6 @@
 # UX navigation and configurator hierarchy roadmap — 2026-10-05
 
-Status: canonical plan for the buyer-navigation and configurator-structure work. CP-UX-00, CP-UX-01 and CP-UX-02 are complete; CP-UX-03 is the next implementation checkpoint.
+Status: canonical plan for the buyer-navigation and configurator-structure work. CP-UX-00, CP-UX-01 and CP-UX-02 are complete; CP-UX-03 is implemented and in its final merge gate; CP-UX-04 is the next implementation checkpoint after CP-UX-03 merges.
 
 This roadmap is independent from the authenticated `stone-skirting` published-administration migration. The existing production compatibility cleanup remains valid and must not be bypassed or mixed into this work.
 
@@ -380,7 +380,7 @@ No production administration write, schema migration, pricing change, catalog ch
 
 Merge result: PASS. PR #83 merged to `main` at `f6ffa6bcfb06b12a76170933cb952bce869fd28b` after final reviewed head `bcf99e66e66d9394047873a8b68766cb191b3c99` passed the full required gate set and Netlify deploy preview. CP-UX-03 may begin from live `main` after this documentation closeout merges.
 
-### CP-UX-03 — administration schema/editor for groups and sections — NEXT
+### CP-UX-03 — administration schema/editor for groups and sections — IMPLEMENTED / MERGE GATE
 
 **Goal:** make the hierarchy explicitly editable in the admin while preserving the current production v3 record and preventing an accidental hierarchy publication before the authenticated migration checkpoint.
 
@@ -623,6 +623,269 @@ Any production-write behavior test must use isolated mocks/deploy-preview storag
 If safe coexistence of v3 production writes and v4 hierarchy drafts cannot be proven, do not merge a production-enabled v4 writer.
 
 The acceptable checkpoint fallback is a fully tested/readable v4 core + admin editor behind a non-production/disabled publication gate, with the exact remaining publication boundary documented for CP-UX-05. Do not silently persist lossy flattened hierarchy.
+
+### CP-UX-04 — hierarchy-driven buyer layout and Modules two-pane composition — NEXT AFTER CP-UX-03 MERGE
+
+**Goal:** make the buyer-facing composition consume the normalized flow hierarchy for stage/group/section placement, while keeping the current production v3 record fully compatible and avoiding duplicate semantic ownership.
+
+This checkpoint is a renderer/layout migration, not a schema-publication checkpoint.
+
+A key distinction is deliberate:
+
+- Stage -> Group -> Section -> Item remains the **configuration/semantic ownership hierarchy**;
+- the same semantic item may have multiple **views** of its state without acquiring multiple hierarchy owners.
+
+That matters for Modules: the selected-module detail and the module list are two views of the same module-selection domain, not two independent configurable owners. CP-UX-04 must therefore create a two-pane view without duplicating module item ownership in the flow model.
+
+#### Scope
+
+Expected files:
+
+- one narrow buyer layout adapter such as `app/core/flow-layout.js`;
+- `app/app.js` for mounting existing stage content into hierarchy-driven group/section shells;
+- `app/index.html` only for stable renderer/view hooks;
+- `app/styles.css`;
+- `app/core/flow-model.js` only if small presentation metadata is required, without changing persisted v3/v4 hierarchy semantics;
+- focused layout unit tests;
+- a new browser screenshot/layout gate;
+- existing Keyboard/Mobile/Stone/Summary gates;
+- this roadmap and `CURRENT_STATE.md` at checkpoint close.
+
+No intended changes:
+
+- production administration data;
+- v3/v4 publication boundary;
+- catalog/product/pricing data;
+- scene/masks/assets;
+- buyer selection state shape;
+- keyboard grammar;
+- hierarchy ownership rules established in CP-UX-02/03.
+
+#### 1. Introduce one buyer flow-layout adapter
+
+Create one pure/narrow adapter that receives normalized flow and returns the ordered visual composition required for the current stage.
+
+For ordinary stages it should expose:
+
+- ordered groups from normalized flow;
+- each group's span/presentation metadata;
+- ordered sections;
+- stable section ids used to locate or create rendered section shells.
+
+The adapter must not inspect arbitrary DOM to infer hierarchy.
+
+The DOM remains a render target.
+
+#### 2. Reuse controls instead of rewriting product behavior
+
+Do not rebuild finish, handle, stone or service controls in this checkpoint.
+
+Use stable hooks to mount/reorder the existing working section elements into group containers generated from normalized flow.
+
+Preferred model:
+
+```text
+normalized flow
+      |
+      v
+flow-layout adapter
+      |
+      v
+stage group shells
+      |
+      +--> existing section/control DOM
+```
+
+The controls keep their current event/state/pricing logic; only composition ownership changes.
+
+If a modeled section has no renderer hook or a renderer hook appears under the wrong modeled stage, surface a deterministic invariant failure in tests/development rather than silently falling back to source DOM order.
+
+#### 3. Acabamentos becomes hierarchy-driven
+
+Desktop should express the already-modeled two-group structure explicitly:
+
+- `cabinet-finishes`
+  - Cor das frentes
+  - Puxadores
+- `stone`
+  - Pacote de pedra
+  - Rodapé de pedra
+
+Group order and span come from normalized flow rather than the hard-coded two-column page structure.
+
+The current visual result may remain close to the existing desktop design; the important change is authority.
+
+Responsive rule:
+
+- wide viewport: group grid honors current span/available columns;
+- narrow viewport: groups collapse to one column in semantic order;
+- section keyboard order remains normalized-flow order, independent of visual columns.
+
+#### 4. Serviços becomes hierarchy-driven
+
+Mount the current `lighting` and `additional-services` sections through the same group/section layout adapter.
+
+Do not introduce another Services-specific layout algorithm.
+
+This proves the adapter is not merely an Acabamentos special case.
+
+#### 5. Modules uses one semantic owner and two view panes
+
+Keep the normalized Modules semantic hierarchy single-owned.
+
+Render two desktop panes from that same state:
+
+- **detail pane** — selected-module visual/details/context;
+- **list pane** — ordered module list and selection controls.
+
+These are presentation panes, not new configurable groups or duplicate item owners.
+
+Use explicit view-level hooks such as `data-stage-pane="detail"` and `data-stage-pane="list"` or an equally narrow renderer contract.
+
+Rules:
+
+- selecting from either scene/list updates the same existing selected-module state;
+- hidden/included state remains the same authority;
+- detail pane follows selection;
+- no module id appears twice in semantic flow ownership;
+- desktop uses both available regions intentionally instead of leaving a conceptual empty column;
+- mobile collapses to one column with a deliberate order, preferably detail then list unless browser review shows list-first is materially better.
+
+Do not add persisted schema fields solely to encode these two views. A second real product case is required before promoting view-pane composition into the administration schema.
+
+#### 6. Group grid geometry
+
+Introduce one responsive group grid.
+
+Preferred properties:
+
+- 2-column desktop baseline for current composition width;
+- `columnSpan: 1` occupies one column;
+- `columnSpan: 2` spans full row;
+- auto-collapse at a content-driven breakpoint rather than assuming exactly one device width;
+- consistent inter-group vertical/horizontal gap;
+- section scroll targets remain correct after remounting;
+- sticky flow nav offsets from CP-UX-01 remain authoritative.
+
+Do not encode absolute coordinates in flow/admin data.
+
+#### 7. Section and focus preservation during remount
+
+Hierarchy-driven mounting must not reset buyer state or keyboard cursor.
+
+Prove:
+
+- existing selected finish/handle/stone/service remains selected after layout render;
+- changing stage and returning does not duplicate controls;
+- section ids remain stable;
+- `data-keyboard-active-section` remains attached to the correct semantic section;
+- focus remains or is deterministically restored when layout rerenders;
+- moving from desktop to narrow viewport changes layout only, not semantic navigation order.
+
+#### 8. Layout/browser gate
+
+Add a dedicated browser gate with screenshots at minimum:
+
+Desktop:
+- Modules: detail pane + list pane both occupy the stage composition;
+- Acabamentos: two explicit group regions in normalized order;
+- Serviços: hierarchy group/section shells are present;
+- no orphan/duplicate controls;
+- no horizontal overflow.
+
+Narrow/mobile:
+- all groups/panes collapse cleanly;
+- no control is lost;
+- semantic order remains deterministic;
+- sticky navigation and section scroll targets remain valid.
+
+Assertions should compare semantic ids/geometry, not fragile pixel-perfect CSS values.
+
+Save review screenshots as artifacts.
+
+#### 9. Existing regression gates
+
+Required before merge:
+
+- flow-layout unit suite;
+- buyer layout browser/screenshot gate;
+- Keyboard browser;
+- Mobile/PiP browser;
+- Stone browser;
+- Summary/Pricing browser;
+- App build purity;
+- Current asset gates;
+- Current variant fidelity;
+- Admin hierarchy browser;
+- Netlify deploy preview.
+
+Reason: CP-UX-04 changes buyer composition authority while intentionally leaving all product semantics untouched.
+
+#### 10. Acceptance criteria
+
+- Acabamentos and Serviços visual group/section placement is driven by normalized flow;
+- existing controls/state logic are reused rather than duplicated;
+- Modules intentionally uses two desktop view panes without duplicate flow ownership;
+- responsive layout does not change semantic section/item order;
+- no production v4 hierarchy publication occurs;
+- current production v3 still renders through the normalized-flow adapter;
+- all required gates green on the exact reviewed head;
+- screenshot artifacts make desktop/mobile composition reviewable;
+- roadmap and `CURRENT_STATE.md` updated before CP-UX-05 begins.
+
+#### 11. Fail-closed rule
+
+If hierarchy-driven remounting requires duplicating item ownership or adding product meaning to CSS/DOM discovery, stop.
+
+Do not solve the Modules two-pane requirement by assigning the same module ids to two semantic sections/groups.
+
+If a generic view-pane schema would materially complicate CP-UX-04, keep Modules panes as a narrow renderer projection of one semantic module group and record the abstraction opportunity. Promote it only after another real furniture/stage case demonstrates the same need.
+
+not a second runtime hierarchy authority;
+- fail-closed `hierarchy_requires_publication` result when a hierarchy edit cannot be represented by the current v3 production record;
+- server-side rejection of direct v4 writes before the authenticated hierarchy-publication checkpoint;
+- buyer runtime flow can normalize either current v3 or hierarchy v4 without changing keyboard semantics;
+- nested admin editor that visibly exposes Stage -> Group -> Section -> Item ancestry;
+- accessible up/down and explicit move controls for stages, groups, sections and items;
+- section movement between groups, group/section split and merge, item reorder/move/unassignment/reassignment, and empty-stage initial placement;
+- hierarchy-changing drafts are blocked before the production PUT;
+- legacy-equivalent edits such as stage-label changes are projected to v3 and remain publishable through the existing guarded endpoint;
+- dedicated unit coverage for hierarchy schema/projection and pure editor operations;
+- dedicated Playwright admin-hierarchy browser gate with screenshot evidence.
+
+The first CI iterations exposed checkpoint-boundary issues rather than product regressions:
+
+- the initial projector changed the historical flat order of service ids even when hierarchy was unchanged; compatibility metadata was narrowed to preserve that original v3 order only for structurally unchanged stages;
+- the first browser harness upload was truncated and was replaced with a complete isolated harness;
+- one editor test encoded the wrong expectation for a valid section-to-new-group operation and was corrected.
+
+Gate evidence on `535e089425406fe54e0dcd9f50951394a38fd5bb`:
+
+- hierarchy migration/projection unit suite — PASS;
+- hierarchy editor unit suite — PASS;
+- App build purity — PASS;
+- Current variant fidelity — PASS;
+- Current asset gates — PASS;
+- Keyboard browser — PASS;
+- Mobile browser — PASS;
+- Stone browser — PASS;
+- Summary/Pricing browser — PASS;
+- Admin hierarchy browser — PASS;
+- Netlify deploy preview — PASS.
+
+The admin browser proof additionally confirmed:
+
+- Acabamentos opens as explicit `cabinet-finishes` + `stone` groups;
+- Serviços exposes `lighting` + `additional-services` sections;
+- Modules is represented by hierarchy rather than a flat stage list;
+- hierarchy reorder/move operations update the v4 draft;
+- hierarchy-changing save performs zero production PUTs;
+- an unrelated legacy-equivalent edit emits one `ConfiguratorAdministration2D 3.0` PUT and preserves the original v3 service-item order;
+- browser console/page errors remain empty.
+
+No production hierarchy was written.
+
+Merge rule: this documentation closeout creates a new final PR head. Rerun the same required gates on that exact head. Merge PR #85 only if it remains green, then record the resulting `main` SHA before beginning CP-UX-04.
 
 ### CP-UX-04 — hierarchy-driven layout and Modules two-region composition
 

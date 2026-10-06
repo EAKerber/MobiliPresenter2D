@@ -1,0 +1,52 @@
+name: Admin hierarchy browser
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'app/admin.html'
+      - 'app/admin/**'
+      - 'app/core/configuration.js'
+      - 'app/core/flow-model.js'
+      - 'app/core/hierarchy-administration.js'
+      - 'app/core/hierarchy-editor.js'
+      - 'netlify/functions/configuration.mjs'
+      - 'tests/admin-hierarchy-browser.cjs'
+      - '.github/workflows/admin-hierarchy-browser.yml'
+  pull_request:
+    paths:
+      - 'app/admin.html'
+      - 'app/admin/**'
+      - 'app/core/configuration.js'
+      - 'app/core/flow-model.js'
+      - 'app/core/hierarchy-administration.js'
+      - 'app/core/hierarchy-editor.js'
+      - 'netlify/functions/configuration.mjs'
+      - 'tests/admin-hierarchy-browser.cjs'
+      - '.github/workflows/admin-hierarchy-browser.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  browser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install browser test tooling
+        run: |
+          npm install --prefix /tmp/admin-hierarchy-tools --no-audit --no-fund playwright@1.62.1
+          /tmp/admin-hierarchy-tools/node_modules/.bin/playwright install --with-deps chromium
+      - name: Test hierarchy administration
+        env:
+          NODE_PATH: /tmp/admin-hierarchy-tools/node_modules
+        run: node tests/admin-hierarchy-browser.cjs /tmp/admin-hierarchy-review
+      - name: Save admin hierarchy review
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: admin-hierarchy-browser-${{ github.run_id }}
+          path: /tmp/admin-hierarchy-review
+          if-no-files-found: ignore
