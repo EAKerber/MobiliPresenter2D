@@ -52,6 +52,12 @@ export default async (request, context) => {
 
   const current = await readPublished(store);
   if (payload?.revision !== current.revision) return respond({ error: "revision_conflict", currentRevision: current.revision }, 409);
+  if (payload?.schemaVersion === "ConfiguratorAdministration2D 4.0") {
+    return respond({
+      error: "hierarchy_publication_required",
+      message: "Hierarchy publication is disabled until the authenticated hierarchy migration checkpoint."
+    }, 422);
+  }
 
   try {
     const normalized = configCore.normalizeConfiguratorSettings(payload, catalog, priceBook);
