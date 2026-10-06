@@ -11,6 +11,7 @@
   let catalog = structuredClone(global.CASA_EM_MODULOS_CATALOG);
   const configurationCore = global.CasaModulesConfiguration;
   const flowCore = global.CasaModulesFlow;
+  const flowLayout = global.CasaModulesFlowLayout;
   let priceBook = structuredClone(global.CASA_EM_MODULOS_PRICE_BOOK);
   const pricing = global.CasaModulesPricing;
   let configuratorSettings = global.CASA_EM_MODULOS_CONFIGURATOR_DEFAULTS;
@@ -19,9 +20,10 @@
   let dynamicEvents = [];
   let configuredObjectAssets = {};
   let normalizedFlow = null;
+  let flowLayoutErrors = [];
   let initialStateApplied = false;
 
-  if (!scene || !inlineMasks || !core || !visibility || !validation || !fingerprint || !finishes || !catalog || !priceBook || !pricing || !configurationCore || !flowCore || !configuratorSettings) {
+  if (!scene || !inlineMasks || !core || !visibility || !validation || !fingerprint || !finishes || !catalog || !priceBook || !pricing || !configurationCore || !flowCore || !flowLayout || !configuratorSettings) {
     throw new Error("Não foi possível carregar os dados da cena 2D.");
   }
   validation.assertValidScene(scene);
@@ -62,6 +64,8 @@
   const nextStepButton = document.getElementById("nextStepButton");
   const configurationValue = document.getElementById("configurationValue");
   const modulesPanel = document.getElementById("modulesPanel");
+  const moduleDetailPlaceholder = document.getElementById("moduleDetailPlaceholder");
+  const finishesStagePanel = document.getElementById("finishesStagePanel");
   const frontFinishPanel = document.getElementById("frontFinishPanel");
   const stonePanel = document.getElementById("stonePanel");
   const servicesPanel = document.getElementById("servicesPanel");
@@ -82,7 +86,7 @@
   const mobileSceneRepin = document.getElementById("mobileSceneRepin");
   const flowNav = document.querySelector(".flow-nav");
   const stagePanels = new Map([
-    ["modules", modulesPanel], ["finishes", frontFinishPanel], ["services", servicesPanel], ["summary", summaryPanel]
+    ["modules", modulesPanel], ["finishes", finishesStagePanel], ["services", servicesPanel], ["summary", summaryPanel]
   ]);
   const selectedFinishDescription = document.getElementById("selectedFinishDescription");
   const catalogByEntityId = new Map(catalog.modules.map((module) => [module.entityId, module]));
@@ -118,6 +122,108 @@
   function configuredEntity(entity) {
     const assets = configuredObjectAssets[entity.id];
     return assets ? { ...entity, asset: assets.imageAsset || originalSceneEntities.get(entity.id)?.asset || entity.asset, maskAsset: assets.maskAsset || originalSceneEntities.get(entity.id)?.maskAsset || entity.maskAsset } : entity;
+  }
+
+  function setFlowLayoutErrors(errors) {
+    flowLayoutErrors = errors;
+    global.CASA_FLOW_LAYOUT_ERRORS = flowLayoutErrors.map((error) => ({ ...error }));
+    if (errors.length) console.error("Flow layout invariant failure", errors);
+  }
+
+  function mountStageGroups(stageId, stageRoot) {
+    const plan = flowLayout.stageLayout(normalizedFlow, stageId);
+    if (!plan || !stageRoot) return [];
+    const grid = stageRoot.querySelector(`[data-flow-group-grid="${stageId}"]`);
+    if (!grid) return [{ code: "missing-group-grid", stageId, message: `missing group grid for ${stageId}` }];
+
+    const errors = [];
+    const shells = [...grid.querySelectorAll(":scope > [data-flow-group-shell]")];
+    const shellById = new Map(shells.map((shell) => [shell.dataset.flowGroupShell, shell]));
+    const expectedGroupIds = new Set(plan.groups.map((group) => group.id));
+
+    shells.forEach((shell) => {
+      shell.hidden = !expectedGroupIds.has(shell.dataset.flowGroupShell);
+    });
+
+    plan.groups.forEach((group) => {
+      const shell = shellById.get(group.id);
+      if (!shell) {
+        errors.push({ code: "missing-group-binding", stageId, groupId: group.id, message: `missing renderer group: ${stageId}/${group.id}` });
+        return;
+      }
+
+      shell.hidden = false;
+      shell.dataset.flowGroup = group.id;
+      shell.dataset.flowSpan = String(group.span);
+      grid.append(shell);
+
+      const expectedSectionIds = new Set(group.sections.map((section) => section.id));
+      const candidateSections = [...shell.querySelectorAll("[data-keyboard-section]")]
+        .filter((element) => element.closest("[data-flow-group-shell]") === shell);
+      candidateSections.forEach((element) => {
+        element.hidden = !expectedSectionIds.has(element.dataset.keyboardSection);
+      });
+
+      const ordered = [];
+      group.sections.forEach((section) => {
+        const matches = candidateSections.filter((element) => element.dataset.keyboardSection === section.id);
+        if (matches.length !== 1) {
+          errors.push({
+            code: matches.length ? "duplicate-section-binding" : "missing-section-binding",
+            stageId,
+            groupId: group.id,
+            sectionId: section.id,
+            message: matches.length
+              ? `multiple renderer sections: ${stageId}/${group.id}/${section.id}`
+              : `missing renderer section: ${stageId}/${group.id}/${section.id}`
+          });
+          return;
+        }
+        const element = matches[0];
+        element.dataset.flowSection = section.id;
+        element.dataset.flowPresentation = section.presentation || "auto";
+        ordered.push(element);
+      });
+
+      const parents = new Set(ordered.map((element) => element.parentElement));
+      if (ordered.length && parents.size !== 1) {
+        errors.push({ code: "split-section-host", stageId, groupId: group.id, message: `sections for ${stageId}/${group.id} do not share one renderer host` });
+      } else if (ordered.length) {
+        const host = ordered[0].parentElement;
+        ordered.forEach((element) => host.append(element));
+      }
+    });
+
+    return errors;
+  }
+
+  function mountModuleViewPanes() {
+    const plan = flowLayout.moduleViewLayout(normalizedFlow);
+    const container = modulesPanel?.querySelector("[data-stage-view-layout='modules']");
+    if (!plan || !container) return [{ code: "missing-module-view-layout", message: "modules view layout is missing" }];
+    if (plan.error) return [{ code: plan.error, message: plan.error }];
+    const panes = new Map([...container.querySelectorAll(":scope > [data-stage-pane]")].map((pane) => [pane.dataset.stagePane, pane]));
+    const errors = [];
+    plan.panes.forEach((panePlan) => {
+      const pane = panes.get(panePlan.id);
+      if (!pane) {
+        errors.push({ code: "missing-module-pane", paneId: panePlan.id, message: `missing module pane: ${panePlan.id}` });
+        return;
+      }
+      pane.dataset.sourceSection = panePlan.sourceSectionId;
+      container.append(pane);
+    });
+    return errors;
+  }
+
+  function applyBuyerFlowLayout() {
+    const errors = [
+      ...mountStageGroups("finishes", finishesStagePanel),
+      ...mountStageGroups("services", servicesPanel),
+      ...mountModuleViewPanes()
+    ];
+    setFlowLayoutErrors(errors);
+    return errors;
   }
 
   function stagePanelFor(stage) {
@@ -1152,11 +1258,13 @@
       clearDetailCarouselTimer();
       document.body.classList.remove("has-module-detail");
       moduleDetail.replaceChildren();
+      if (moduleDetailPlaceholder) moduleDetailPlaceholder.hidden = false;
       viewerHint.textContent = "Selecione um módulo na cena para abrir sua ficha.";
       return;
     }
 
     document.body.classList.add("has-module-detail");
+    if (moduleDetailPlaceholder) moduleDetailPlaceholder.hidden = true;
     viewerHint.textContent = `Ficha selecionada: ${product.title}`;
     moduleDetail.classList.toggle("is-unavailable", !isVisible);
     const detailHeader = document.createElement("header");
@@ -1590,6 +1698,7 @@
       const visible = configuratorSettings.stages.some((stage) => stage.enabled && stage.items.includes(itemId));
       element.hidden = !visible;
     });
+    applyBuyerFlowLayout();
     customStagePanels.forEach((panel, id) => { if (!enabled.some((stage) => stage.id === id)) panel.hidden = true; });
     layerGroups.forEach((layer) => {
       const id = layer.dataset.entityId;
@@ -1613,7 +1722,6 @@
       panel.hidden = kind !== activeKind || !activeStage?.enabled;
     });
     customStagePanels.forEach((panel, id) => { panel.hidden = id !== currentStep || !activeStage?.enabled; });
-    stonePanel.hidden = activeKind !== "finishes" || !activeStage?.items.includes("stone-all");
     document.querySelectorAll("[data-step]").forEach((button) => {
       const active = button.dataset.step === currentStep;
       button.classList.toggle("is-active", active);
@@ -2156,12 +2264,15 @@
       .catch(() => {});
   }
 
+  applyBuyerFlowLayout();
   syncLayerVisibility();
   updateVisibleCount();
   syncPinnedSceneUi();
   global.CASA_EM_MODULOS_DEBUG = Object.freeze({
     getState: () => state,
     getVisibility: () => visibility.resolveVisibility(scene, eventAdjustedState()),
+    getFlowLayoutErrors: () => flowLayoutErrors.map((error) => ({ ...error })),
+    getNormalizedFlow: () => normalizedFlow,
     scene
   });
 })(window);
