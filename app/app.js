@@ -1960,8 +1960,6 @@
     if (nextMini) announce("Mini-cena disponível abaixo das etapas. Selecione um módulo diretamente na cena.");
   }
 
-  global.addEventListener("resize", syncLayoutProfileMarker, { passive: true });
-
   if (viewerPinSentinel && global.IntersectionObserver) {
     const pinObserver = new global.IntersectionObserver((entries) => {
       const entry = entries[0];
@@ -1980,6 +1978,7 @@
   }
 
   global.addEventListener("resize", () => {
+    syncLayoutProfileMarker();
     if (mobilePipPosition) mobilePipPosition = null;
     refreshMobileSceneDock();
     syncPinnedSceneUi();
