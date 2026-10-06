@@ -89,6 +89,13 @@ const { chromium } = require("playwright");
   }));
   assert.ok(handleGeometry.every((entry) => entry.width >= 190 && entry.copyWidth >= 125), "Puxadores keeps readable card/copy width inside a split finish group");
   assert.equal(await noOverflow("#finishesStagePanel"), true, "desktop Acabamentos does not overflow horizontally");
+  await page.setViewportSize({ width: 1050, height: 900 });
+  await page.waitForTimeout(80);
+  const cabinetMedium = await rect('[data-flow-group-shell="cabinet-finishes"]');
+  const stoneMedium = await rect('[data-flow-group-shell="stone"]');
+  assert.ok(Math.abs(cabinetMedium.top - stoneMedium.top) < 4, "Acabamentos keeps two columns at a medium desktop width");
+  assert.ok(cabinetMedium.right <= stoneMedium.left + 4, "medium desktop groups remain separated horizontally");
+  await page.setViewportSize({ width: 1366, height: 900 });
   assert.deepEqual(await page.evaluate(() => window.CASA_EM_MODULOS_DEBUG.getFlowLayoutErrors()), [], "finish layout has no renderer invariant errors");
   await page.screenshot({ path: path.join(output, "finishes-desktop.png"), fullPage: true });
 
