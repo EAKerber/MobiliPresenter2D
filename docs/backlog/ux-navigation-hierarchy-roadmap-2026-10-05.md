@@ -902,6 +902,60 @@ No production hierarchy/configuration, catalog, pricing, scene, mask or buyer-st
 
 Merge result: PASS. PR #87 merged to `main` at `e11a5c7c377246f1343b79ff04c1f94b587e1c7f` after final reviewed head `b9f9565360f91cbd228481f4bdc150382d8c4d9d` passed the required CP-UX-04 gates and Netlify deploy preview. CP-UX-05 repository preparation may begin from live `main`; production publication still requires the authenticated boundary.
 
+### CP-UX-04.1 — buyer review follow-up for Puxadores and finish breakpoint — IMPLEMENTED / MERGE GATE
+
+**Origin:** direct production review after CP-UX-04 merge showed two residual buyer-facing issues:
+
+- selecting a handle did not reliably leave `Puxadores` visibly active as the current section after its buttons were redrawn;
+- the two-column Acabamentos composition appeared only at unnecessarily wide horizontal space.
+
+This checkpoint is intentionally narrow and remains inside the CP-UX-04 buyer-layout boundary.
+
+Implementation branch: `fix/cp-ux-04-1-buyer-review`.
+
+Functional head proven before documentation closeout:
+
+- `a9cb29871058704f615f08d154eb0aa3af7c2c07`.
+
+Implemented:
+
+- added a small keyboard/navigation API to reactivate a modeled section and retain its item cursor without requiring DOM focus;
+- handle selection now redraws controls, then synchronously reactivates the `handles` section against the newly rendered controls;
+- no forced post-redraw focus is used, avoiding a new focus-stealing behavior while preserving keyboard continuation;
+- reduced the flow-stage collapse threshold from 520 px to 300 px so the two finish groups can remain side-by-side at medium desktop/tablet widths;
+- added an explicit `max-width: 700px` mobile override so small screens remain single-column regardless of the lower container threshold;
+- strengthened Keyboard browser coverage so `Puxadores` must remain the active semantic/visual section after a handle redraw;
+- strengthened Flow layout browser coverage so Acabamentos must remain two-column at a 1050 px viewport while still collapsing to one column at mobile width.
+
+Visual review of the final functional artifact confirmed:
+
+- at 1366 px, `cabinet-finishes` and `stone` remain side-by-side;
+- Frentes and Puxadores retain readable card widths inside the left group;
+- mobile Acabamentos remains one-column in semantic order;
+- section shells remain visually consistent with the CP-UX-04 result.
+
+Gate evidence on `a9cb29871058704f615f08d154eb0aa3af7c2c07`:
+
+- Keyboard browser — PASS;
+- Flow layout browser/screenshots — PASS;
+- Mobile browser — PASS;
+- Stone browser — PASS;
+- Summary/Pricing browser — PASS;
+- App build purity — PASS;
+- Current asset gates — PASS;
+- Current variant fidelity — PASS;
+- Netlify deploy preview — PASS.
+
+Intentionally unchanged:
+
+- administration schema/publication;
+- hierarchy ownership;
+- catalog/pricing/scene/assets;
+- buyer state schema;
+- CP-UX-05 authenticated migration plan.
+
+Merge rule: rerun the applicable gates on the exact documentation head and merge PR #90 only if it remains green. CP-UX-05 remains the next checkpoint after this follow-up closes.
+
 ### CP-UX-05 — authenticated hierarchy publication and legacy-boundary retirement — NEXT
 
 **Goal:** make the explicit hierarchy the production administration authority without combining unrelated migrations, then simplify the runtime so legacy v3 is an import/migration boundary rather than the normal production source.

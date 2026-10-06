@@ -584,7 +584,7 @@ legend { margin-bottom: 9px; color: rgba(255, 255, 255, 0.43); font-size: 12px; 
   .handle-options { grid-template-columns: 1fr; }
 }
 
-@container flow-stage (max-width: 520px) {
+@container flow-stage (max-width: 300px) {
   .flow-group-grid { grid-template-columns: 1fr; }
   .flow-group-shell[data-flow-span] { grid-column: 1 / -1; }
   .flow-group-grid--embedded .flow-group-shell--embedded { grid-template-columns: 1fr; }
@@ -594,6 +594,9 @@ legend { margin-bottom: 9px; color: rgba(255, 255, 255, 0.43); font-size: 12px; 
 }
 
 @media (max-width: 700px) {
+  .flow-group-grid { grid-template-columns: 1fr; }
+  .flow-group-shell[data-flow-span] { grid-column: 1 / -1; }
+  .flow-group-grid--embedded .flow-group-shell--embedded { grid-template-columns: 1fr; }
   .flow-nav { top: env(safe-area-inset-top); }
   .module-card { min-height: 80px; }
   .module-card__copy strong { white-space: normal; line-height: 1.25; }

@@ -163,7 +163,10 @@ const {chromium} = require('playwright');
   const handleOrder = await page.locator('[data-handle-id]').evaluateAll(items => items.map(item => item.dataset.handleId));
   assert.ok(handleOrder.length >= 3, 'handle grid exposes enough options to cross a visual row boundary');
   await page.locator(`[data-handle-id="${handleOrder[0]}"]`).click();
-  assert.equal(await activeSection(), 'handles', 'click/focus on a handle marks Puxadores as the active section');
+  await page.waitForFunction(() =>
+    document.querySelector('[data-keyboard-section="handles"]')?.dataset.keyboardActiveSection === "true"
+  );
+  assert.equal(await activeSection(), 'handles', 'Puxadores remains active after the handle controls redraw');
   await moveToSection('handles');
   assert.equal(await activeSection(), 'handles', 'Puxadores is a first-class keyboard section');
   await page.keyboard.press('ArrowRight');

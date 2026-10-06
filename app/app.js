@@ -2235,8 +2235,11 @@
   handleOptions?.addEventListener("click", (event) => {
     const button = event.target.closest("[data-handle-id]");
     if (!button) return;
-    core.setGlobalSelection(state, { handleId: button.dataset.handleId });
+    const handleId = button.dataset.handleId;
+    const handleIndex = Math.max(0, catalog.options.handles.findIndex((handle) => handle.id === handleId));
+    core.setGlobalSelection(state, { handleId });
     syncLayerVisibility();
+    global.CASA_KEYBOARD_SHORTCUTS?.activateSection?.("handles", handleIndex, false);
     const handle = selectedHandle();
     announce(handle.id === "none" ? "Puxador será definido depois." : handle.label + " aplicado ao conjunto.");
   });
