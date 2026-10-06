@@ -45,11 +45,14 @@ New product requirements discovered during guided review must be designed before
 
 Canonical plan:
 - `docs/backlog/schema-driven-ui-consolidation-roadmap-2026-10-06.md`
-- immediate checkpoint: `docs/backlog/schema-driven-ui-cp-sd-00-audit-plan-2026-10-06.md`
+- completed audit: `docs/architecture/schema-ui-authority-audit-2026-10-06.md`
+- immediate checkpoint: `docs/backlog/schema-driven-ui-cp-sd-01-contract-plan-2026-10-06.md`
 
-**CP-SD-00 — NEXT / DOCUMENTATION-ONLY AUDIT.** No runtime/schema/production write belongs to this checkpoint.
+**CP-SD-00 — COMPLETE / PASS.** The audit found no critical unknowns. The main publication blocker is now explicit: v4 persists section presentation metadata, but that metadata is not yet the executable buyer-renderer authority.
 
-The isolated authenticated CP-UX-05A0 v3 Puxadores repair remains valid and independent. The broader v3 -> production hierarchy publication is intentionally held until CP-SD-01 freezes the schema/presentation contract, avoiding publication of a schema already known to need extension.
+**CP-SD-01 — NEXT.** Freeze the semantic/presentation contract, consolidate item behavior/stage policy, separate item availability from stage ownership, define the companion relation and named layout profiles, and settle material null/default semantics. No production publication in this checkpoint.
+
+The isolated authenticated CP-UX-05A0 v3 Puxadores repair remains valid and independent. The broader production hierarchy publication is intentionally held until CP-SD-01 freezes the schema/presentation contract. The final migration may target a consolidated version after the unpublished v4 milestone rather than publishing v4 and immediately migrating again.
 
 ## Current P1 — published administration compatibility
 
@@ -167,12 +170,14 @@ The new CP-UX track may proceed independently because it is supported by concret
 
 Read, in order:
 1. `docs/backlog/schema-driven-ui-consolidation-roadmap-2026-10-06.md`
-2. `docs/backlog/schema-driven-ui-cp-sd-00-audit-plan-2026-10-06.md`
-3. `docs/backlog/ux-navigation-hierarchy-roadmap-2026-10-05.md`
-4. `docs/backlog/housekeeping-roadmap-and-checkpoint-2026-10-05.md`
-5. `docs/architecture/official-candidate-gate-2026-10-05.md`
-6. `docs/architecture/runtime-contract-map-2026-10-05.md`
-7. `docs/architecture/published-config-compat-audit-2026-10-05.md`
+2. `docs/architecture/schema-ui-authority-audit-2026-10-06.md`
+3. `docs/backlog/schema-driven-ui-cp-sd-01-contract-plan-2026-10-06.md`
+4. `docs/backlog/schema-driven-ui-cp-sd-00-audit-plan-2026-10-06.md`
+5. `docs/backlog/ux-navigation-hierarchy-roadmap-2026-10-05.md`
+6. `docs/backlog/housekeeping-roadmap-and-checkpoint-2026-10-05.md`
+7. `docs/architecture/official-candidate-gate-2026-10-05.md`
+8. `docs/architecture/runtime-contract-map-2026-10-05.md`
+9. `docs/architecture/published-config-compat-audit-2026-10-05.md`
 
 The schema-driven UI roadmap is the immediate sequencing authority before broader v4 publication. The UX roadmap remains authority for the completed navigation/hierarchy history and authenticated CP-UX-05 safety boundary. The housekeeping roadmap remains authority for the independent published-configuration compatibility cleanup.
 
