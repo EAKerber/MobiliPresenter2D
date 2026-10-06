@@ -14,6 +14,6 @@
     "build:current": "npm run build:front-masks && npm run build:front-seam-masks && npm run build:inline-masks && npm run build:technical-data && bash scripts/build-static.sh",
     "build:historical-r5a": "npm run replay:r5a && npm run build:current",
     "build": "npm run build:current",
-    "test": "node tools/test-item-capabilities.js && node tools/test-presentation-contract.js && node tools/test-flow-model.js && node tools/test-legacy-stage-repair.js && node tools/test-flow-layout.js && node tools/test-hierarchy-administration.js && node tools/test-hierarchy-editor.js && node tools/test-core.js && python3 tools/validate-assets.py && python3 tools/validate-r5a-pixelperfect.py"
+    "test": "node tools/test-item-capabilities.js && node tools/test-layout-profiles.js && node tools/test-presentation-contract.js && node tools/test-flow-model.js && node tools/test-legacy-stage-repair.js && node tools/test-flow-layout.js && node tools/test-hierarchy-administration.js && node tools/test-hierarchy-editor.js && node tools/test-core.js && python3 tools/validate-assets.py && python3 tools/validate-r5a-pixelperfect.py"
   }
 }
