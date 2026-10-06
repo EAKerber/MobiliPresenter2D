@@ -158,7 +158,8 @@ assert.deepEqual(
 );
 
 const endpointSource = fs.readFileSync(path.resolve(projectRoot, "../netlify/functions/configuration.mjs"), "utf8");
-assert.equal(endpointSource.includes('payload?.schemaVersion === "ConfiguratorAdministration2D 4.0"'), true, "server recognizes hierarchy payloads explicitly");
+assert.equal(endpointSource.includes("payload?.schemaVersion === V4_SCHEMA"), true, "server recognizes hierarchy payloads through the shared v4 schema constant");
+assert.equal(endpointSource.includes("validateHierarchyCandidateForSource"), true, "server validates hierarchy candidates before the publication gate");
 assert.equal(endpointSource.includes('error: "hierarchy_publication_required"'), true, "server fails closed before hierarchy publication is authorized");
 
 console.log("hierarchy administration: PASS");
