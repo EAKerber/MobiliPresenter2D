@@ -1,6 +1,6 @@
 # UX navigation and configurator hierarchy roadmap — 2026-10-05
 
-Status: canonical plan for the buyer-navigation and configurator-structure work. CP-UX-00 is complete; CP-UX-01 implementation is complete and gated on its implementation head; CP-UX-02 is the next implementation checkpoint after CP-UX-01 merges.
+Status: canonical plan for the buyer-navigation and configurator-structure work. CP-UX-00 and CP-UX-01 are complete; CP-UX-02 is the next implementation checkpoint.
 
 This roadmap is independent from the authenticated `stone-skirting` published-administration migration. The existing production compatibility cleanup remains valid and must not be bypassed or mixed into this work.
 
@@ -153,7 +153,7 @@ Deliverables:
 
 Result: PASS. Documentation-only PR #79 merged to `main` at `7e728d0f15e445fbb8a1625e2757ad40495fc97d`; no runtime/product behavior changed.
 
-### CP-UX-01 — explicit section navigation and immediate friction repair — IMPLEMENTED / MERGE GATE
+### CP-UX-01 — explicit section navigation and immediate friction repair — COMPLETE
 
 **Goal:** fix the observed navigation/visual-friction bugs without changing the published administration schema.
 
@@ -161,7 +161,7 @@ This is intentionally a product-safe compatibility checkpoint. It should improve
 
 Detailed implementation is defined below.
 
-### CP-UX-02 — introduce an explicit internal flow model — NEXT AFTER CP-UX-01 MERGE
+### CP-UX-02 — introduce an explicit internal flow model — NEXT
 
 **Goal:** stop treating markup/DOM ownership as the semantic source of groups/sections while preserving the current published administration contract and the CP-UX-01 buyer experience.
 
@@ -639,7 +639,7 @@ Keyboard artifact result confirms the normalized current section surface for thi
 - Serviços: `lighting`, `additional-services`;
 - handles expose four ordered options and additional services expose `move-stone` and `tempered-glass`.
 
-Merge rule: after this documentation closeout creates the final PR head, rerun the same required gates. Merge PR #81 only if the final exact head is green. Then record the merged `main` SHA before beginning CP-UX-02.
+Merge result: PASS. PR #81 merged to `main` at `91973ebc056be58b62440ed48ad6f473bb9f26b9` after the final exact head `ede50780b3f48ea62fd078a34a9610018ccc24b1` passed the full required gate set and Netlify deploy preview. CP-UX-02 may begin from live `main` after this closeout is merged.
 
 ## Relationship to existing P1 work
 
