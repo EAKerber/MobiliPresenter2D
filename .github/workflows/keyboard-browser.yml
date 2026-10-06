@@ -5,7 +5,9 @@ on:
     paths:
       - 'app/data/hierarchy-defaults.js'
       - 'app/core/flow-model.js'
+      - 'app/core/layout-profiles.js'
       - 'app/core/presentation-contract.js'
+      - 'app/data/presentation-policy-defaults.js'
       - 'app/core/keyboard-shortcuts.js'
       - 'app/core/runtime-contracts.js'
       - 'app/app.js'
@@ -16,7 +18,9 @@ on:
     paths:
       - 'app/data/hierarchy-defaults.js'
       - 'app/core/flow-model.js'
+      - 'app/core/layout-profiles.js'
       - 'app/core/presentation-contract.js'
+      - 'app/data/presentation-policy-defaults.js'
       - 'app/core/keyboard-shortcuts.js'
       - 'app/core/runtime-contracts.js'
       - 'app/app.js'
