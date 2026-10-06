@@ -1,11 +1,25 @@
 const assert = require("node:assert/strict");
+const fs = require("node:fs");
+const path = require("node:path");
+const vm = require("node:vm");
 
-const catalog = require("../data/catalog-data.js");
-const defaults = require("../data/configurator-settings.js");
-const priceBook = require("../data/mock-price-book.js");
-const scene = require("../data/scene-data.js");
-const configuration = require("../core/configuration.js");
-const flowCore = require("../core/flow-model.js");
+const projectRoot = path.resolve(__dirname, "..");
+const sandbox = { window: {} };
+vm.createContext(sandbox);
+[
+  "data/scene-data.js",
+  "data/catalog-data.js",
+  "data/mock-price-book.js"
+].forEach((relativePath) => {
+  vm.runInContext(fs.readFileSync(path.join(projectRoot, relativePath), "utf8"), sandbox, { filename: relativePath });
+});
+
+const catalog = sandbox.window.CASA_EM_MODULOS_CATALOG;
+const priceBook = sandbox.window.CASA_EM_MODULOS_PRICE_BOOK;
+const scene = sandbox.window.CASA_EM_MODULOS_SCENE;
+const defaults = require(path.join(projectRoot, "data/configurator-settings.js"));
+const configuration = require(path.join(projectRoot, "core/configuration.js"));
+const flowCore = require(path.join(projectRoot, "core/flow-model.js"));
 
 const administration = configuration.createDefaultAdministration(defaults, catalog, priceBook, scene);
 const registry = configuration.itemRegistry(catalog);
