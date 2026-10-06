@@ -1,6 +1,6 @@
 # UX navigation and configurator hierarchy roadmap — 2026-10-05
 
-Status: canonical plan for the buyer-navigation and configurator-structure work. CP-UX-00 through CP-UX-03 are complete; CP-UX-04 is implemented and in its final merge gate; CP-UX-05 is the next checkpoint and crosses the authenticated production boundary.
+Status: canonical plan for the buyer-navigation and configurator-structure work. CP-UX-00 through CP-UX-04 are complete; CP-UX-05 is the next checkpoint and crosses the authenticated production boundary.
 
 This roadmap is independent from the authenticated `stone-skirting` published-administration migration. The existing production compatibility cleanup remains valid and must not be bypassed or mixed into this work.
 
@@ -624,7 +624,7 @@ If safe coexistence of v3 production writes and v4 hierarchy drafts cannot be pr
 
 The acceptable checkpoint fallback is a fully tested/readable v4 core + admin editor behind a non-production/disabled publication gate, with the exact remaining publication boundary documented for CP-UX-05. Do not silently persist lossy flattened hierarchy.
 
-### CP-UX-04 — hierarchy-driven buyer layout and Modules two-pane composition — IMPLEMENTED / MERGE GATE
+### CP-UX-04 — hierarchy-driven buyer layout and Modules two-pane composition — COMPLETE
 
 **Goal:** make the buyer-facing composition consume the normalized flow hierarchy for stage/group/section placement, while keeping the current production v3 record fully compatible and avoiding duplicate semantic ownership.
 
@@ -900,9 +900,9 @@ Gate evidence on `2f7480ed045bb611170e50c264a09c14033ff94f`:
 
 No production hierarchy/configuration, catalog, pricing, scene, mask or buyer-state data was written.
 
-Merge rule: this documentation closeout creates a new final PR head. Rerun the required CP-UX-04 gates on that exact head. Merge PR #87 only if the final head remains green, then record the resulting `main` SHA before crossing into CP-UX-05.
+Merge result: PASS. PR #87 merged to `main` at `e11a5c7c377246f1343b79ff04c1f94b587e1c7f` after final reviewed head `b9f9565360f91cbd228481f4bdc150382d8c4d9d` passed the required CP-UX-04 gates and Netlify deploy preview. CP-UX-05 repository preparation may begin from live `main`; production publication still requires the authenticated boundary.
 
-### CP-UX-05 — authenticated hierarchy publication and legacy-boundary retirement — NEXT AFTER CP-UX-04 MERGE
+### CP-UX-05 — authenticated hierarchy publication and legacy-boundary retirement — NEXT
 
 **Goal:** make the explicit hierarchy the production administration authority without combining unrelated migrations, then simplify the runtime so legacy v3 is an import/migration boundary rather than the normal production source.
 
