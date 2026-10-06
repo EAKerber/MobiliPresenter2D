@@ -18,12 +18,13 @@ const catalog = sandbox.window.CASA_EM_MODULOS_CATALOG;
 const priceBook = sandbox.window.CASA_EM_MODULOS_PRICE_BOOK;
 const scene = sandbox.window.CASA_EM_MODULOS_SCENE;
 const defaults = require(path.join(projectRoot, "data/configurator-settings.js"));
+const hierarchyDefaults = require(path.join(projectRoot, "data/hierarchy-defaults.js"));
 const configuration = require(path.join(projectRoot, "core/configuration.js"));
 const flowCore = require(path.join(projectRoot, "core/flow-model.js"));
 const layout = require(path.join(projectRoot, "core/flow-layout.js"));
 
 const administration = configuration.createDefaultAdministration(defaults, catalog, priceBook, scene);
-const flow = flowCore.normalizeFlow(administration, configuration.itemRegistry(catalog));
+const flow = flowCore.normalizeFlow(administration, configuration.itemRegistry(catalog), hierarchyDefaults);
 
 const finishes = layout.stageLayout(flow, "finishes");
 assert.deepEqual(finishes.groups.map((group) => ({ id: group.id, span: group.span })), [

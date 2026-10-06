@@ -3,6 +3,7 @@ on:
   push:
     branches: [main]
     paths:
+      - 'app/data/hierarchy-defaults.js'
       - 'app/core/flow-model.js'
       - 'app/core/keyboard-shortcuts.js'
       - 'app/core/runtime-contracts.js'
@@ -12,6 +13,7 @@ on:
       - '.github/workflows/keyboard-browser.yml'
   pull_request:
     paths:
+      - 'app/data/hierarchy-defaults.js'
       - 'app/core/flow-model.js'
       - 'app/core/keyboard-shortcuts.js'
       - 'app/core/runtime-contracts.js'

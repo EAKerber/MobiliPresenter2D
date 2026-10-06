@@ -17,6 +17,17 @@ Etapa
 
 O upgrade v3 -> v4 acontece somente em memória ao abrir o painel. Ele não migra o registro publicado.
 
+Enquanto a produção ainda estiver em v3, a estrutura explícita usada para esse upgrade vem de `app/data/hierarchy-defaults.js`. Esse arquivo é a única configuração de compatibilidade que define:
+
+- grupos e sua ordem/span;
+- seções e sua ordem;
+- labels/apresentação de seção;
+- quais itens/tipos do estágio legado pertencem a cada seção;
+- políticas de itens disponíveis no editor;
+- a fonte das opções agregadas de Frentes, Puxadores e Pedra.
+
+`flow-model.js` não deve conhecer IDs como `cabinet-finishes`, `handles` ou `additional-services`; `hierarchy-administration.js` não deve manter um mapa paralelo de nomes/apresentação. O HTML pode manter IDs equivalentes apenas como hooks de renderer, validados contra o fluxo normalizado.
+
 Responsabilidades:
 
 - catálogo/dados definem quais itens e opções existem e seus dados comerciais;

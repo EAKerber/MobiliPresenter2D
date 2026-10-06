@@ -18,12 +18,13 @@ const catalog = sandbox.window.CASA_EM_MODULOS_CATALOG;
 const priceBook = sandbox.window.CASA_EM_MODULOS_PRICE_BOOK;
 const scene = sandbox.window.CASA_EM_MODULOS_SCENE;
 const defaults = require(path.join(projectRoot, "data/configurator-settings.js"));
+const hierarchyDefaults = require(path.join(projectRoot, "data/hierarchy-defaults.js"));
 const configuration = require(path.join(projectRoot, "core/configuration.js"));
 const flowCore = require(path.join(projectRoot, "core/flow-model.js"));
 
 const administration = configuration.createDefaultAdministration(defaults, catalog, priceBook, scene);
 const registry = configuration.itemRegistry(catalog);
-const flow = flowCore.normalizeFlow(administration, registry);
+const flow = flowCore.normalizeFlow(administration, registry, hierarchyDefaults);
 
 assert.equal(flow.schemaVersion, "NormalizedConfiguratorFlow 1.0");
 assert.deepEqual(flow.stages.map((stage) => stage.id), ["modules", "finishes", "services", "summary"]);
@@ -80,7 +81,7 @@ assert.deepEqual(sections("summary").map((entry) => ({
 
 assert.equal(Object.isFrozen(flow), true, "normalized flow is immutable");
 assert.equal(Object.isFrozen(stage("finishes").groups[0].sections[0].itemIds), true, "nested normalized flow data is immutable");
-assert.equal(JSON.stringify(flowCore.normalizeFlow(administration, registry)), JSON.stringify(flow), "normalization is deterministic");
+assert.equal(JSON.stringify(flowCore.normalizeFlow(administration, registry, hierarchyDefaults)), JSON.stringify(flow), "normalization is deterministic");
 
 const allowedKeys = new Set([
   "schemaVersion", "source", "revision", "stages",
@@ -105,7 +106,7 @@ assert.equal(JSON.stringify(flow).includes('"materials"'), false);
 const unknown = structuredClone(administration);
 unknown.stages.find((entry) => entry.id === "services").items.push("unknown-service");
 assert.throws(
-  () => flowCore.normalizeFlow(unknown, registry),
+  () => flowCore.normalizeFlow(unknown, registry, hierarchyDefaults),
   (error) => error.name === "FlowModelValidationError"
     && error.validationErrors.some((entry) => entry.code === "unknown-source-item"),
   "unknown v3 items fail closed"
@@ -116,7 +117,7 @@ unsupported.stages.find((entry) => entry.id === "modules").items =
   unsupported.stages.find((entry) => entry.id === "modules").items.filter((id) => id !== "module-01");
 unsupported.stages.find((entry) => entry.id === "services").items.push("module-01");
 assert.throws(
-  () => flowCore.normalizeFlow(unsupported, registry),
+  () => flowCore.normalizeFlow(unsupported, registry, hierarchyDefaults),
   (error) => error.name === "FlowModelValidationError"
     && error.validationErrors.some((entry) => entry.code === "unsupported-stage-item"),
   "known but semantically unsupported v3 placement fails closed instead of guessing"
@@ -125,7 +126,7 @@ assert.throws(
 const duplicateStage = structuredClone(administration);
 duplicateStage.stages.push(structuredClone(duplicateStage.stages[0]));
 assert.throws(
-  () => flowCore.normalizeFlow(duplicateStage, registry),
+  () => flowCore.normalizeFlow(duplicateStage, registry, hierarchyDefaults),
   (error) => error.name === "FlowModelValidationError"
     && error.validationErrors.some((entry) => entry.code === "duplicate-source-stage"),
   "duplicate source stages are rejected"
@@ -172,11 +173,28 @@ custom.stages.splice(3, 0, {
   enabled: true,
   items: ["move-stone"]
 });
-const customFlow = flowCore.normalizeFlow(custom, registry);
+const customFlow = flowCore.normalizeFlow(custom, registry, hierarchyDefaults);
 assert.deepEqual(
   customFlow.stages.find((entry) => entry.id === "installation").groups[0].sections[0],
-  { id: "items", order: 0, behavior: "toggle", keyboard: true, itemIds: ["move-stone"] },
-  "custom v3 stages normalize deterministically without product-data duplication"
+  {
+    id: "items",
+    label: "Opções",
+    order: 0,
+    behavior: "toggle",
+    keyboard: true,
+    presentation: "list",
+    itemIds: ["move-stone"]
+  },
+  "custom v3 stages normalize deterministically from hierarchy defaults"
+);
+
+const alternateDefaults = structuredClone(hierarchyDefaults);
+alternateDefaults.stages.finishes.groups[0].sections.reverse();
+const alternateFlow = flowCore.normalizeFlow(administration, registry, alternateDefaults);
+assert.deepEqual(
+  alternateFlow.stages.find((entry) => entry.id === "finishes").groups[0].sections.map((entry) => entry.id),
+  ["handles", "fronts"],
+  "legacy section order is controlled by hierarchy defaults"
 );
 
 console.log("flow model: PASS");
