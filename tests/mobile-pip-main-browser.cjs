@@ -26,6 +26,12 @@ const { chromium } = require("playwright");
     pathToFileURL(path.resolve(__dirname, "../app/index.html")).href;
   await page.goto(targetUrl);
   await page.evaluate(() => Promise.all(Array.from(document.images, image => image.decode())));
+  assert.equal(await page.evaluate(() => window.CASA_EM_MODULOS_DEBUG.getLayoutProfile()), "compact",
+    "mobile viewport resolves through the canonical compact profile");
+  assert.equal(await page.evaluate(() => document.documentElement.dataset.layoutProfile), "compact",
+    "mobile viewport exposes the compact profile marker");
+  assert.equal(await page.evaluate(() => window.CASA_EM_MODULOS_DEBUG.getPresentationPolicy().scene.pip.activationByProfile.compact), "auto-after-anchor",
+    "current compact PiP behavior is represented by the presentation policy");
 
   await page.evaluate(() => {
     const sentinel = document.getElementById("viewerPinSentinel");

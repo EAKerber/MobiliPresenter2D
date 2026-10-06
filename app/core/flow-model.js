@@ -302,6 +302,24 @@
     return errors;
   }
 
+  function stageOwns(flow, stageId, itemId) {
+    const stage = flow?.stages?.find((entry) => entry.id === stageId);
+    if (!stage || !itemId) return false;
+    return stage.groups.some((group) =>
+      group.sections.some((section) => section.itemIds.includes(itemId))
+    );
+  }
+
+  function itemAvailable(flow, itemId) {
+    if (!itemId) return false;
+    return Boolean(flow?.stages?.some((stage) =>
+      stage.enabled
+      && stage.groups.some((group) =>
+        group.sections.some((section) => section.itemIds.includes(itemId))
+      )
+    ));
+  }
+
   function normalizeFlow(settings, registryInput, hierarchyDefaultsInput = null) {
     const registry = asRegistry(registryInput);
     const hierarchyDefaults = hierarchyDefaultsInput || global?.CASA_EM_MODULOS_HIERARCHY_DEFAULTS || null;
@@ -358,7 +376,7 @@
     return deepFreeze(flow);
   }
 
-  const api = Object.freeze({ SCHEMA, normalizeFlow, validateFlow, validateSourceCoverage });
+  const api = Object.freeze({ SCHEMA, normalizeFlow, validateFlow, validateSourceCoverage, stageOwns, itemAvailable });
   if (typeof module !== "undefined" && module.exports) module.exports = api;
   if (global && typeof global === "object") global.CasaModulesFlow = api;
 })(typeof globalThis === "undefined" ? this : globalThis);

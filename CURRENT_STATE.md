@@ -50,7 +50,7 @@ Canonical plan:
 
 **CP-SD-00 — COMPLETE / PASS.** The audit found no critical unknowns. The main publication blocker is now explicit: v4 persists section presentation metadata, but that metadata is not yet the executable buyer-renderer authority.
 
-**CP-SD-01 — IN PROGRESS.** **CP-SD-01A COMPLETE / PASS** established one item capability authority. **CP-SD-01B COMPLETE / PASS** on functional head `6ff1cc74c488e5c3ed8b0fb168dfded94fd01bb0`: presentation now resolves to closed executable components and buyer bindings fail closed on missing/mismatched components; all applicable app/browser/asset/variant gates and deploy preview #105 passed. **CP-SD-01C is NEXT**: freeze companion/master-detail, named layout-profile and shell-dock contracts plus material authored/default semantics. No production publication in this checkpoint.
+**CP-SD-01 — IN PROGRESS.** **CP-SD-01A COMPLETE / PASS** established one item capability authority. **CP-SD-01B COMPLETE / PASS** established closed executable presentation bindings. **CP-SD-01C1 COMPLETE / PASS** on functional head `b7716089175e2d7e324c95c8447be631cf5964de`: ownership vs availability, named layout profiles and validated companion/PiP/bottom-dock policy are now explicit with all current gates green. **CP-SD-01C2 is NEXT**: make authored material color semantics explicit (`hex | null`) without changing existing visuals. CP-SD-01C3 then freezes the consolidated unpublished administration candidate. No production publication in this checkpoint.
 
 The isolated authenticated CP-UX-05A0 v3 Puxadores repair remains valid and independent. The broader production hierarchy publication is intentionally held until CP-SD-01 freezes the schema/presentation contract. The final migration may target a consolidated version after the unpublished v4 milestone rather than publishing v4 and immediately migrating again.
 
@@ -172,12 +172,13 @@ Read, in order:
 1. `docs/backlog/schema-driven-ui-consolidation-roadmap-2026-10-06.md`
 2. `docs/architecture/schema-ui-authority-audit-2026-10-06.md`
 3. `docs/backlog/schema-driven-ui-cp-sd-01-contract-plan-2026-10-06.md`
-4. `docs/backlog/schema-driven-ui-cp-sd-00-audit-plan-2026-10-06.md`
-5. `docs/backlog/ux-navigation-hierarchy-roadmap-2026-10-05.md`
-6. `docs/backlog/housekeeping-roadmap-and-checkpoint-2026-10-05.md`
-7. `docs/architecture/official-candidate-gate-2026-10-05.md`
-8. `docs/architecture/runtime-contract-map-2026-10-05.md`
-9. `docs/architecture/published-config-compat-audit-2026-10-05.md`
+4. `docs/backlog/schema-driven-ui-cp-sd-01c-contract-plan-2026-10-06.md`
+5. `docs/backlog/schema-driven-ui-cp-sd-00-audit-plan-2026-10-06.md`
+6. `docs/backlog/ux-navigation-hierarchy-roadmap-2026-10-05.md`
+7. `docs/backlog/housekeeping-roadmap-and-checkpoint-2026-10-05.md`
+8. `docs/architecture/official-candidate-gate-2026-10-05.md`
+9. `docs/architecture/runtime-contract-map-2026-10-05.md`
+10. `docs/architecture/published-config-compat-audit-2026-10-05.md`
 
 The schema-driven UI roadmap is the immediate sequencing authority before broader v4 publication. The UX roadmap remains authority for the completed navigation/hierarchy history and authenticated CP-UX-05 safety boundary. The housekeeping roadmap remains authority for the independent published-configuration compatibility cleanup.
 

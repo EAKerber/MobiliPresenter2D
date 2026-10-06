@@ -91,7 +91,12 @@ Purpose: replace inert/descriptive section presentation with a closed component 
 
 CP-SD-01B result: PASS on functional head `6ff1cc74c488e5c3ed8b0fb168dfded94fd01bb0`; executable presentation bindings are now closed and fail-closed. Detailed record: `docs/backlog/schema-driven-ui-cp-sd-01b-presentation-plan-2026-10-06.md`.
 
-### CP-SD-01C — view/profile/shell contract — NEXT
+### CP-SD-01C — view/profile/shell contract — IN PROGRESS
+
+Detailed implementation/gates:
+- `docs/backlog/schema-driven-ui-cp-sd-01c-contract-plan-2026-10-06.md`.
+
+CP-SD-01C1 result: PASS on functional head `b7716089175e2d7e324c95c8447be631cf5964de`. **CP-SD-01C2 — authored material semantics is NEXT**, followed by CP-SD-01C3 consolidated unpublished administration candidate.
 
 Purpose: add the minimum companion relation, named topology profiles, PiP capability policy, bottom-dock capability and chosen material null/default semantics, then freeze CP-SD-01.
 
