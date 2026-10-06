@@ -1175,7 +1175,7 @@ Preferred sequence:
 5. freshly re-read production again;
 6. if `handles-all` is still unassigned, execute CP-UX-05A0 as a **separate explicit product-configuration write** assigning it to Acabamentos/finishes; prove buyer Puxadores + admin hierarchy and no unrelated semantic delta;
 
-**Repository preparation:** PR #99 implements this exact A0 operation without enabling v4 publication. The admin action is shown only when the loaded published v3 lacks `handles-all`; it re-reads production immediately before writing, refuses to discard local edits, and the server independently verifies that the candidate differs from current v3 only by the canonical `handles-all` insertion. Success requires immediate exact readback. Until an authenticated admin executes that action against production, CP-UX-05A0 remains execution-pending rather than complete.
+**Repository preparation:** COMPLETE. PR #99 merged to `main` at `cca8b6f2a51033cfc8830243511be58617fc24b9`. The admin action is shown only when the loaded published v3 lacks `handles-all`; it re-reads production immediately before writing, refuses to discard local edits, and the server independently verifies that the candidate differs from current v3 only by the canonical `handles-all` insertion. Success requires immediate exact readback. Until an authenticated admin executes that action against production, CP-UX-05A0 remains execution-pending rather than complete.
 7. freshly re-read production again;
 8. only then start the v3 -> v4 schema migration transaction.
 
