@@ -18,12 +18,13 @@ const catalog = sandbox.window.CASA_EM_MODULOS_CATALOG;
 const priceBook = sandbox.window.CASA_EM_MODULOS_PRICE_BOOK;
 const scene = sandbox.window.CASA_EM_MODULOS_SCENE;
 const defaults = require(path.join(projectRoot, "data/configurator-settings.js"));
+const hierarchyDefaults = require(path.join(projectRoot, "data/hierarchy-defaults.js"));
 const configuration = require(path.join(projectRoot, "core/configuration.js"));
 const flow = require(path.join(projectRoot, "core/flow-model.js"));
 const hierarchy = require(path.join(projectRoot, "core/hierarchy-administration.js"));
 
 const v3 = configuration.createDefaultAdministration(defaults, catalog, priceBook, scene);
-const v4 = hierarchy.upgradeToHierarchy(v3, configuration, flow, catalog, priceBook, scene);
+const v4 = hierarchy.upgradeToHierarchy(v3, configuration, flow, catalog, priceBook, scene, hierarchyDefaults);
 
 assert.equal(v4.schemaVersion, "ConfiguratorAdministration2D 4.0");
 assert.equal(v4.stages.some((stage) => Object.hasOwn(stage, "items")), false, "v4 has no parallel flat stage.items authority");
@@ -50,13 +51,13 @@ assert.deepEqual(services.groups[0].sections.map((section) => ({
 assert.deepEqual(hierarchy.validateHierarchyAdministration(v4, configuration, catalog, priceBook, scene), []);
 assert.equal(
   hierarchy.hierarchySignature(
-    hierarchy.upgradeToHierarchy(v3, configuration, flow, catalog, priceBook, scene)
+    hierarchy.upgradeToHierarchy(v3, configuration, flow, catalog, priceBook, scene, hierarchyDefaults)
   ),
   hierarchy.hierarchySignature(v4),
   "v3 migration is deterministic"
 );
 
-const projected = hierarchy.projectHierarchyToLegacy(v4, configuration, flow, catalog, priceBook, scene);
+const projected = hierarchy.projectHierarchyToLegacy(v4, configuration, flow, catalog, priceBook, scene, hierarchyDefaults);
 assert.equal(projected.ok, true);
 assert.equal(projected.value.schemaVersion, configuration.SCHEMA);
 assert.deepEqual(projected.value.stages, v3.stages, "legacy-equivalent hierarchy projects to the same stage model");
@@ -64,7 +65,7 @@ assert.deepEqual(projected.value.stages, v3.stages, "legacy-equivalent hierarchy
 const unrelated = structuredClone(v4);
 unrelated.objects["module-01"].title = "Título de teste";
 unrelated.pricing.entries["module-01"] += 100;
-const unrelatedProjection = hierarchy.projectHierarchyToLegacy(unrelated, configuration, flow, catalog, priceBook, scene);
+const unrelatedProjection = hierarchy.projectHierarchyToLegacy(unrelated, configuration, flow, catalog, priceBook, scene, hierarchyDefaults);
 assert.equal(unrelatedProjection.ok, true, "unrelated administration edits remain projectable to v3");
 assert.equal(unrelatedProjection.value.objects["module-01"].title, "Título de teste");
 assert.equal(unrelatedProjection.value.pricing.entries["module-01"], v3.pricing.entries["module-01"] + 100);
@@ -72,7 +73,7 @@ assert.equal(unrelatedProjection.value.pricing.entries["module-01"], v3.pricing.
 const reorderedGroups = structuredClone(v4);
 reorderedGroups.stages.find((stage) => stage.id === "finishes").groups.reverse();
 assert.equal(
-  hierarchy.projectHierarchyToLegacy(reorderedGroups, configuration, flow, catalog, priceBook, scene).code,
+  hierarchy.projectHierarchyToLegacy(reorderedGroups, configuration, flow, catalog, priceBook, scene, hierarchyDefaults).code,
   "hierarchy_requires_publication",
   "group reorder cannot be silently flattened to v3"
 );
@@ -82,7 +83,7 @@ const movedFinishes = movedSection.stages.find((stage) => stage.id === "finishes
 const handles = movedFinishes.groups[0].sections.pop();
 movedFinishes.groups[1].sections.unshift(handles);
 assert.equal(
-  hierarchy.projectHierarchyToLegacy(movedSection, configuration, flow, catalog, priceBook, scene).code,
+  hierarchy.projectHierarchyToLegacy(movedSection, configuration, flow, catalog, priceBook, scene, hierarchyDefaults).code,
   "hierarchy_requires_publication",
   "section movement cannot be silently flattened to v3"
 );
@@ -90,7 +91,7 @@ assert.equal(
 const changedPresentation = structuredClone(v4);
 changedPresentation.stages.find((stage) => stage.id === "finishes").groups[0].sections[1].presentation = "list";
 assert.equal(
-  hierarchy.projectHierarchyToLegacy(changedPresentation, configuration, flow, catalog, priceBook, scene).code,
+  hierarchy.projectHierarchyToLegacy(changedPresentation, configuration, flow, catalog, priceBook, scene, hierarchyDefaults).code,
   "hierarchy_requires_publication",
   "presentation changes require hierarchy publication"
 );
@@ -98,11 +99,11 @@ assert.equal(
 const reorderedServices = structuredClone(v4);
 reorderedServices.stages.find((stage) => stage.id === "services").groups[0].sections
   .find((section) => section.id === "additional-services").itemIds.reverse();
-const serviceProjection = hierarchy.projectHierarchyToLegacy(reorderedServices, configuration, flow, catalog, priceBook, scene);
+const serviceProjection = hierarchy.projectHierarchyToLegacy(reorderedServices, configuration, flow, catalog, priceBook, scene, hierarchyDefaults);
 assert.equal(serviceProjection.ok, true, "item order that v3 can represent projects losslessly");
 const serviceStage = serviceProjection.value.stages.find((stage) => stage.id === "services");
 assert.deepEqual(serviceStage.items, ["lighting-08", "tempered-glass", "move-stone"]);
-const serviceRoundTrip = hierarchy.upgradeToHierarchy(serviceProjection.value, configuration, flow, catalog, priceBook, scene);
+const serviceRoundTrip = hierarchy.upgradeToHierarchy(serviceProjection.value, configuration, flow, catalog, priceBook, scene, hierarchyDefaults);
 assert.deepEqual(
   serviceRoundTrip.stages.find((stage) => stage.id === "services").groups[0].sections
     .find((section) => section.id === "additional-services").itemIds,
@@ -138,7 +139,7 @@ assert.equal(embeddedData.includes('"price"'), false);
 assert.equal(embeddedData.includes('"description"'), false);
 assert.equal(embeddedData.includes('"textureAsset"'), false);
 
-const runtimeFlow = flow.normalizeFlow(v4, configuration.itemRegistry(catalog));
+const runtimeFlow = flow.normalizeFlow(v4, configuration.itemRegistry(catalog), hierarchyDefaults);
 assert.deepEqual(
   runtimeFlow.stages.find((stage) => stage.id === "finishes").groups.map((group) => group.id),
   ["cabinet-finishes", "stone"],
