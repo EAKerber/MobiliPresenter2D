@@ -131,6 +131,74 @@
     if (errors.length) console.error("Flow layout invariant failure", errors);
   }
 
+  function validateRendererComponentBinding(stageId, section, element, context = {}) {
+    const expected = section?.component;
+    const bound = element?.dataset?.renderComponent || "";
+    if (!bound) {
+      return [{
+        code: "missing-component-binding",
+        stageId,
+        sectionId: section?.id,
+        component: expected,
+        ...context,
+        message: `missing renderer component: ${stageId}/${section?.id}`
+      }];
+    }
+    if (bound !== expected) {
+      return [{
+        code: "component-binding-mismatch",
+        stageId,
+        sectionId: section?.id,
+        component: expected,
+        boundComponent: bound,
+        ...context,
+        message: `renderer component mismatch: ${stageId}/${section?.id} expected ${expected} but found ${bound}`
+      }];
+    }
+    element.dataset.flowComponent = expected;
+    return [];
+  }
+
+  function validateSingleSectionStageBinding(stageId, stageRoot) {
+    const plan = flowLayout.stageLayout(normalizedFlow, stageId);
+    if (!plan || !stageRoot) return [];
+    const sections = plan.groups.flatMap((group) => group.sections);
+    if (sections.length !== 1) {
+      return [{ code: "single-section-binding-required", stageId, message: `expected one semantic section for ${stageId}` }];
+    }
+    return validateRendererComponentBinding(stageId, sections[0], stageRoot);
+  }
+
+  function validateCustomStageBindings() {
+    const errors = [];
+    (normalizedFlow?.stages || []).filter((stage) => stage.kind === "custom" && stage.enabled).forEach((stage) => {
+      const plan = flowLayout.stageLayout(normalizedFlow, stage.id);
+      const panel = customStagePanels.get(stage.id);
+      if (!plan || !panel) {
+        errors.push({ code: "missing-custom-stage-binding", stageId: stage.id, message: `missing custom stage renderer: ${stage.id}` });
+        return;
+      }
+      const sections = plan.groups.flatMap((group) => group.sections);
+      sections.forEach((section) => {
+        const matches = [...panel.querySelectorAll("[data-keyboard-section]")]
+          .filter((element) => element.dataset.keyboardSection === section.id);
+        if (matches.length !== 1) {
+          errors.push({
+            code: matches.length ? "duplicate-section-binding" : "missing-section-binding",
+            stageId: stage.id,
+            sectionId: section.id,
+            message: matches.length
+              ? `multiple renderer sections: ${stage.id}/${section.id}`
+              : `missing renderer section: ${stage.id}/${section.id}`
+          });
+          return;
+        }
+        errors.push(...validateRendererComponentBinding(stage.id, section, matches[0]));
+      });
+    });
+    return errors;
+  }
+
   function mountStageGroups(stageId, stageRoot) {
     const plan = flowLayout.stageLayout(normalizedFlow, stageId);
     if (!plan || !stageRoot) return [];
@@ -181,6 +249,7 @@
           return;
         }
         const element = matches[0];
+        errors.push(...validateRendererComponentBinding(stageId, section, element, { groupId: group.id }));
         element.dataset.flowSection = section.id;
         element.dataset.flowPresentation = section.presentation || "auto";
         ordered.push(element);
@@ -212,6 +281,12 @@
         return;
       }
       pane.dataset.sourceSection = panePlan.sourceSectionId;
+      if (panePlan.component) {
+        const sourceSection = flowLayout.stageLayout(normalizedFlow, "modules")
+          ?.groups.flatMap((group) => group.sections)
+          .find((section) => section.id === panePlan.sourceSectionId);
+        if (sourceSection) errors.push(...validateRendererComponentBinding("modules", sourceSection, pane, { paneId: panePlan.id }));
+      }
       container.append(pane);
     });
     return errors;
@@ -221,7 +296,9 @@
     const errors = [
       ...mountStageGroups("finishes", finishesStagePanel),
       ...mountStageGroups("services", servicesPanel),
-      ...mountModuleViewPanes()
+      ...mountModuleViewPanes(),
+      ...validateSingleSectionStageBinding("summary", summaryPanel),
+      ...validateCustomStageBindings()
     ];
     setFlowLayoutErrors(errors);
     return errors;
@@ -1563,6 +1640,7 @@
     const list = document.createElement("div"); list.className = "custom-stage-options";
     list.dataset.keyboardSection = "items";
     list.dataset.keyboardBehavior = "toggle";
+    list.dataset.renderComponent = "toggle-list";
     stage.items.forEach((id) => {
       const item = document.createElement("label"); item.className = "accessory-toggle custom-stage-option";
       const input = document.createElement("input"); input.type = "checkbox"; input.dataset.customStageItem = id; input.dataset.flowItemId = id;
