@@ -41,7 +41,7 @@ Gate this decision at the start of implementation. If a simpler versioning strat
 
 ## Implementation slices
 
-### CP-SD-01A — capability authority — IN PROGRESS
+### CP-SD-01A — capability authority — COMPLETE
 
 Purpose: remove the already-proven duplicate semantic policy before changing the persisted presentation schema.
 
@@ -61,7 +61,31 @@ Gate:
 - existing flow/keyboard/mobile/summary gates remain green where triggered;
 - current default hierarchy normalizes identically.
 
-### CP-SD-01B — executable presentation contract
+Result: PASS on functional head `b91b9c088e921386f4deee90215bfd8d70af628d`.
+
+Implemented:
+- `app/core/item-capabilities.js` is the single browser/server-safe authority for item interaction behavior and stage placement;
+- explicit catalog `stageKinds` remains the item-level override mechanism (including `stone-skirting`);
+- aggregate option-source metadata moved out of hierarchy defaults into item capability descriptors;
+- v3 configuration validation, hierarchy validation, flow normalization and admin placement now consume the same capability policy;
+- hierarchy defaults now contain hierarchy templates rather than stage compatibility/option-source metadata;
+- focused capability tests were added to the normal app test suite.
+
+Gates on the functional head:
+- App build purity — PASS;
+- Current variant fidelity — PASS;
+- Current asset gates — PASS;
+- Admin hierarchy browser — PASS;
+- Flow layout browser — PASS;
+- Keyboard browser — PASS;
+- Mobile browser — PASS;
+- Stone browser — PASS;
+- Summary/Pricing browser — PASS;
+- Netlify deploy preview #104 — PASS.
+
+No production configuration write.
+
+### CP-SD-01B — executable presentation contract — NEXT
 
 Purpose: replace inert/descriptive section presentation with a closed component registry and deterministic v3/v4 -> current presentation migration.
 
