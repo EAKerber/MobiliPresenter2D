@@ -37,11 +37,11 @@
     return { id, order, behavior, keyboard, itemIds: [...itemIds] };
   }
 
-  function group(id, sections, order) {
+  function group(id, sections, order, span = 1) {
     return {
       id,
       order,
-      presentation: { layout: "stack", span: 1 },
+      presentation: { layout: "stack", span },
       sections: sections.map((entry, index) => ({ ...entry, order: index }))
     };
   }
@@ -91,7 +91,7 @@
     const sections = [];
     if (hasLighting) sections.push(section("lighting", "toggle", ["lighting-08"], 0));
     if (serviceItems.length) sections.push(section("additional-services", "toggle", serviceItems, 0));
-    return sections.length ? [group("services", sections, 0)] : [];
+    return sections.length ? [group("services", sections, 0, 2)] : [];
   }
 
   function deriveStage(stage, stageOrder, registry, errors) {
@@ -100,7 +100,7 @@
 
     if (kind === "modules") {
       groups = stage.items.length
-        ? [group("modules-main", [section("modules", "selection", stage.items, 0, false)], 0)]
+        ? [group("modules-main", [section("modules", "selection", stage.items, 0, false)], 0, 2)]
         : [];
     } else if (kind === "finishes") {
       groups = finishGroups(stage, errors);
@@ -108,7 +108,7 @@
       groups = serviceGroups(stage, registry, errors);
     } else if (kind === "summary") {
       groups = stage.items.length
-        ? [group("summary-main", [section("summary", "action", stage.items, 0, false)], 0)]
+        ? [group("summary-main", [section("summary", "action", stage.items, 0, false)], 0, 2)]
         : [];
     } else if (kind === "custom") {
       const behaviors = new Set(stage.items.map((id) => itemBehavior(registry.get(id))));
@@ -120,7 +120,7 @@
         ));
       }
       groups = stage.items.length
-        ? [group("custom-content", [section("items", behaviors.values().next().value || "toggle", stage.items, 0, true)], 0)]
+        ? [group("custom-content", [section("items", behaviors.values().next().value || "toggle", stage.items, 0, true)], 0, 2)]
         : [];
     } else {
       errors.push(validationError("unsupported-stage-kind", `stages.${stage.id}.kind`, `unsupported stage kind: ${kind}`));

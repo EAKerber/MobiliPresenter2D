@@ -1,6 +1,6 @@
 # UX navigation and configurator hierarchy roadmap — 2026-10-05
 
-Status: canonical plan for the buyer-navigation and configurator-structure work. CP-UX-00 through CP-UX-03 are complete; CP-UX-04 is the next implementation checkpoint.
+Status: canonical plan for the buyer-navigation and configurator-structure work. CP-UX-00 through CP-UX-03 are complete; CP-UX-04 is implemented and in its final merge gate; CP-UX-05 is the next checkpoint and crosses the authenticated production boundary.
 
 This roadmap is independent from the authenticated `stone-skirting` published-administration migration. The existing production compatibility cleanup remains valid and must not be bypassed or mixed into this work.
 
@@ -624,7 +624,7 @@ If safe coexistence of v3 production writes and v4 hierarchy drafts cannot be pr
 
 The acceptable checkpoint fallback is a fully tested/readable v4 core + admin editor behind a non-production/disabled publication gate, with the exact remaining publication boundary documented for CP-UX-05. Do not silently persist lossy flattened hierarchy.
 
-### CP-UX-04 — hierarchy-driven buyer layout and Modules two-pane composition — NEXT
+### CP-UX-04 — hierarchy-driven buyer layout and Modules two-pane composition — IMPLEMENTED / MERGE GATE
 
 **Goal:** make the buyer-facing composition consume the normalized flow hierarchy for stage/group/section placement, while keeping the current production v3 record fully compatible and avoiding duplicate semantic ownership.
 
@@ -841,84 +841,267 @@ Do not solve the Modules two-pane requirement by assigning the same module ids t
 
 If a generic view-pane schema would materially complicate CP-UX-04, keep Modules panes as a narrow renderer projection of one semantic module group and record the abstraction opportunity. Promote it only after another real furniture/stage case demonstrates the same need.
 
-not a second runtime hierarchy authority;
-- fail-closed `hierarchy_requires_publication` result when a hierarchy edit cannot be represented by the current v3 production record;
-- server-side rejection of direct v4 writes before the authenticated hierarchy-publication checkpoint;
-- buyer runtime flow can normalize either current v3 or hierarchy v4 without changing keyboard semantics;
-- nested admin editor that visibly exposes Stage -> Group -> Section -> Item ancestry;
-- accessible up/down and explicit move controls for stages, groups, sections and items;
-- section movement between groups, group/section split and merge, item reorder/move/unassignment/reassignment, and empty-stage initial placement;
-- hierarchy-changing drafts are blocked before the production PUT;
-- legacy-equivalent edits such as stage-label changes are projected to v3 and remain publishable through the existing guarded endpoint;
-- dedicated unit coverage for hierarchy schema/projection and pure editor operations;
-- dedicated Playwright admin-hierarchy browser gate with screenshot evidence.
+#### CP-UX-04 implementation result
 
-The first CI iterations exposed checkpoint-boundary issues rather than product regressions:
+Implementation branch: `feat/cp-ux-04-hierarchy-layout`.
 
-- the initial projector changed the historical flat order of service ids even when hierarchy was unchanged; compatibility metadata was narrowed to preserve that original v3 order only for structurally unchanged stages;
-- the first browser harness upload was truncated and was replaced with a complete isolated harness;
-- one editor test encoded the wrong expectation for a valid section-to-new-group operation and was corrected.
+Functional head proven before documentation closeout:
 
-Gate evidence on `535e089425406fe54e0dcd9f50951394a38fd5bb`:
+- `2f7480ed045bb611170e50c264a09c14033ff94f`.
 
-- hierarchy migration/projection unit suite — PASS;
-- hierarchy editor unit suite — PASS;
-- App build purity — PASS;
-- Current variant fidelity — PASS;
-- Current asset gates — PASS;
-- Keyboard browser — PASS;
+Implemented:
+
+- pure `flow-layout` adapter that projects normalized flow into ordered buyer group/section layout without using DOM order as semantic authority;
+- Acabamentos now mounts `cabinet-finishes` and `stone` from normalized group order/span;
+- Serviços uses the same group/section mounting contract rather than a stage-specific layout algorithm;
+- existing controls/state/pricing code is reused; layout remounting does not clone product controls;
+- Modules uses two view panes — selected-module detail and module list — over one semantic module section, so module ids remain single-owned;
+- responsive group grid collapses by content/container width while semantic order remains unchanged;
+- section renderer invariants are surfaced through the debug/test contract instead of silently falling back to arbitrary DOM order;
+- the keyboard stage root resolves from the active flow step's `aria-controls`, so wrapper/layout changes do not orphan navigation;
+- stage/section scrolling now targets the actual scrollable `.controls` container rather than assuming `window` is the scroller;
+- stage entry and first/middle/last section positioning preserve sticky-nav clearance and reduced-motion behavior inside that real scroller;
+- mouse/pointer/focus interaction synchronizes active-section state, so Puxadores is visibly the active section when a handle is clicked/focused rather than only after keyboard section traversal;
+- Frentes, Puxadores, Pacote de pedra, Rodapé de pedra and Serviços use one `config-section` shell instead of mixing fieldset/legend geometry with service shells;
+- Puxadores switches to a one-column card grid when its finish group is too narrow for readable two-column cards, without changing canonical item order;
+- the admin hierarchy item for Puxadores now exposes Tango/Íris, Ponto, Alça em cores and Definir depois as option inventory, while `handles-all` remains the single hierarchy owner;
+- the same option-inventory pattern is exposed for Cor das frentes and Pacote de pedra, preserving the separation between hierarchy items and their catalog/material options.
+
+Buyer feedback caught three issues that the initial structural gate did not fully represent:
+
+1. section scroll appeared absent because the implementation scrolled `window` while desktop interaction scrolls `.controls`;
+2. Puxadores could be interacted with without becoming the visibly active section;
+3. native `fieldset/legend` geometry made Acabamentos active-section framing visibly worse than Serviços.
+
+All three were repaired and converted into regression assertions.
+
+Manual screenshot review of the final functional head confirmed:
+
+- desktop Acabamentos keeps the two normalized groups side-by-side while handle cards remain readable;
+- narrow/mobile Acabamentos collapses groups in semantic order;
+- Services retains the preferred section-shell geometry;
+- Modules detail/list panes occupy distinct desktop regions and collapse intentionally on mobile;
+- no duplicate buyer controls are created;
+- the admin hierarchy visibly lists concrete Puxadores options beneath the semantic `handles-all` item.
+
+Gate evidence on `2f7480ed045bb611170e50c264a09c14033ff94f`:
+
+- flow-layout unit suite — PASS;
+- Flow layout browser + screenshot artifacts — PASS;
+- Keyboard browser, including real-scroller alignment, active Puxadores and section-shell parity — PASS;
 - Mobile browser — PASS;
 - Stone browser — PASS;
 - Summary/Pricing browser — PASS;
-- Admin hierarchy browser — PASS;
+- Admin hierarchy browser, including option-inventory assertions — PASS;
+- App build purity — PASS;
+- Current asset gates — PASS;
+- Current variant fidelity — PASS;
 - Netlify deploy preview — PASS.
 
-The admin browser proof additionally confirmed:
+No production hierarchy/configuration, catalog, pricing, scene, mask or buyer-state data was written.
 
-- Acabamentos opens as explicit `cabinet-finishes` + `stone` groups;
-- Serviços exposes `lighting` + `additional-services` sections;
-- Modules is represented by hierarchy rather than a flat stage list;
-- hierarchy reorder/move operations update the v4 draft;
-- hierarchy-changing save performs zero production PUTs;
-- an unrelated legacy-equivalent edit emits one `ConfiguratorAdministration2D 3.0` PUT and preserves the original v3 service-item order;
-- browser console/page errors remain empty.
+Merge rule: this documentation closeout creates a new final PR head. Rerun the required CP-UX-04 gates on that exact head. Merge PR #87 only if the final head remains green, then record the resulting `main` SHA before crossing into CP-UX-05.
 
-No production hierarchy was written.
+### CP-UX-05 — authenticated hierarchy publication and legacy-boundary retirement — NEXT AFTER CP-UX-04 MERGE
 
-Merge result: PASS. PR #85 merged to `main` at `d02867fa4db940f40e208183e756a146ef5f73b3` after final reviewed head `54736248ce9b16422026addcdcd89aface2ba6ec` passed the full required gate set and Netlify deploy preview. CP-UX-04 may begin from live `main` after this documentation closeout merges.
+**Goal:** make the explicit hierarchy the production administration authority without combining unrelated migrations, then simplify the runtime so legacy v3 is an import/migration boundary rather than the normal production source.
 
-### CP-UX-04 — hierarchy-driven layout and Modules two-region composition
+This checkpoint crosses an authenticated production write boundary. Repository work may prepare and prove the migration path, but the actual production transition must happen only in an authenticated admin browser session after a fresh production read.
 
-**Goal:** make the buyer UI layout consume groups/sections rather than fixed page-specific markup.
+CP-UX-05 is intentionally split into two independently stoppable sub-checkpoints so no half-migrated state is left behind.
 
-Plan:
+#### CP-UX-05A — prepare and execute the authenticated v3 -> v4 publication
 
-- render stage groups through a responsive group grid;
-- permit Acabamentos to express the current cabinet-finish and stone regions explicitly;
-- give Modules a deliberate two-region desktop composition:
-  - contextual selected-module detail;
-  - module list;
-- collapse naturally on narrower layouts;
-- retain row-major section/item navigation independent of visual column count;
-- keep summary semantics and pricing unchanged.
+##### 1. Re-read production immediately before migration
 
-This is a visible layout checkpoint and therefore requires screenshot/browser review in addition to functional gates.
+In the authenticated admin session:
 
-### CP-UX-05 — authenticated hierarchy publication and legacy retirement
+- GET the current published administration;
+- capture schema version, revision and a deterministic semantic digest;
+- require the source to be the schema/revision/content that the migration code was tested against;
+- abort if any unexpected production change occurred.
 
-**Goal:** publish the explicit hierarchy only after its runtime/admin support is proven.
+Do not use a stale repository fixture as migration authority.
 
-Precondition: authenticated admin session and an immediately re-read current production administration.
+##### 2. Keep `stone-skirting` migration separate
 
-Procedure:
+The independent housekeeping compatibility migration remains separate by default.
 
-1. fail closed if production revision/content differs from expected migration input;
-2. publish the new hierarchy with no unrelated semantic changes;
-3. read back and prove exact semantic preservation outside hierarchy;
-4. run production navigation, Stone, Keyboard, Mobile and Summary/Pricing smokes;
-5. only then retire legacy flow derivation / DOM-semantic fallback in a dedicated repository PR.
+If the current production v3 does not contain `stone-skirting`, CP-UX-05 must migrate exactly that current item set into v4; it must not opportunistically add `stone-skirting`.
 
-This checkpoint must remain separate from the one-time `stone-skirting` compatibility migration unless a later explicit plan proves combining them is safer. Default rule: do not combine them.
+Only combine those operations if a new explicit plan demonstrates that one combined transaction is safer and easier to validate than two isolated transactions.
+
+##### 3. Add server-side v4 validation before enabling publication
+
+The current endpoint deliberately rejects `ConfiguratorAdministration2D 4.0`.
+
+Before production migration, add a repository change that:
+
+- validates v4 server-side with the same closed hierarchy rules as the admin/core;
+- validates catalog/item references against server-known allowed ids;
+- preserves revision conflict protection;
+- rejects mixed/unknown schemas fail-closed;
+- never trusts client-side validation alone;
+- returns structured validation errors suitable for the admin.
+
+Prefer one shared/pure hierarchy validator or a server-safe adapter rather than copying a second drifting hierarchy implementation.
+
+##### 4. Expose an explicit publication action
+
+Do not make every ordinary Save silently migrate production.
+
+Provide a deliberate authenticated action such as **Publicar hierarquia** that is available only when:
+
+- the loaded source is current v3;
+- the local v4 draft validates;
+- the source revision/digest still matches the fresh production read;
+- unrelated semantic differences are zero.
+
+The action must make the schema transition obvious to the administrator.
+
+Ordinary v3-compatible Save may remain available before the migration transaction.
+
+##### 5. Define the migration equivalence proof
+
+Before the PUT, compare source v3 and candidate v4 through a canonical semantic projector.
+
+Allowed differences:
+
+- `schemaVersion`;
+- explicit group/section labels/presentation/span derived deterministically from the already-proven compatibility mapping;
+- compatibility metadata required only for a safe boundary transition, if still needed.
+
+Forbidden differences:
+
+- stage enabled state or stage/item membership;
+- product/catalog data;
+- object copy/assets;
+- materials/material groups;
+- handle products;
+- finishes;
+- dependencies/events;
+- initial buyer state;
+- pricing;
+- scene/mask/stone data.
+
+Any forbidden delta aborts publication.
+
+##### 6. Production write transaction
+
+With a fresh authenticated source:
+
+1. send the validated v4 candidate with the expected current revision/digest;
+2. require the server to reject stale revision/content;
+3. read the published record back immediately with no cache;
+4. require schema v4 and the expected new revision;
+5. compare readback semantically to the exact candidate;
+6. compare all non-hierarchy fields to the pre-migration source;
+7. persist the before/after digests and migration evidence without credentials/secrets.
+
+If readback/equivalence fails, stop. Do not continue to cleanup.
+
+##### 7. Production smoke after publication
+
+Against the real published v4 record, run:
+
+- buyer load with zero flow-layout invariant errors;
+- Modules detail/list selection;
+- Acabamentos group/section order;
+- Puxadores selection and active-section state;
+- Services;
+- Stone;
+- Summary/Pricing;
+- mobile/narrow layout;
+- admin readback/edit-open;
+- one read-only hierarchy inspection proving group/section/item ownership.
+
+Do not perform unrelated product edits during the smoke.
+
+##### 8. CP-UX-05A completion criterion
+
+CP-UX-05A is complete only when production is durably v4, semantic preservation is proven, and production smokes pass.
+
+If authenticated access is unavailable, CP-UX-05A remains explicitly BLOCKED; do not simulate success with deploy-preview/local storage.
+
+#### CP-UX-05B — retire legacy as a normal runtime authority
+
+Start only after CP-UX-05A production proof is complete.
+
+##### 1. Normalize at the load boundary
+
+Change the normal production pipeline so the application/admin operate on v4 after configuration load.
+
+Legacy v3 support may remain only as an explicit migration/import adapter for:
+
+- older exports/snapshots;
+- recovery fixtures;
+- regression tests.
+
+Do not keep two normal runtime authorities.
+
+##### 2. Remove obsolete production fallback
+
+Remove or isolate code whose only purpose was to derive production group/section semantics repeatedly from a v3 flat stage at runtime.
+
+Keep deterministic v3 -> v4 migration tests as backward-compatibility evidence.
+
+Do not remove migration support merely to reduce code size.
+
+##### 3. Revisit compatibility metadata
+
+If production is v4 and no normal save path down-projects to v3, remove compatibility metadata from ordinary v4 runtime/admin state unless another supported round-trip genuinely requires it.
+
+If retained for import/export, document exactly why and keep it non-authoritative.
+
+##### 4. Keep renderer invariants
+
+Do not reintroduce DOM-derived semantics during cleanup.
+
+Normalized hierarchy remains authority for:
+
+- group order/span;
+- section order/presentation;
+- item ownership;
+- keyboard section semantics.
+
+Modules detail/list remains a view projection over one semantic owner unless another real use case justifies a generic pane schema.
+
+##### 5. Gates before CP-UX-05B merge
+
+Required:
+
+- v4 configuration/validation unit suite;
+- legacy v3 migration/import suite;
+- hierarchy admin browser;
+- flow-layout browser/screenshots;
+- Keyboard browser;
+- Mobile browser;
+- Stone browser;
+- Summary/Pricing browser;
+- App build purity;
+- Current asset gates;
+- Current variant fidelity;
+- Netlify deploy preview;
+- production read-only smoke against the already-migrated v4 record.
+
+##### 6. Fail-closed rule
+
+Do not merge legacy-retirement cleanup while production is still v3.
+
+Do not delete v3 migration capability until supported old snapshots/exports have an explicit replacement path.
+
+Do not combine CP-UX-05B with product/catalog/pricing/scene changes.
+
+#### CP-UX-05 final acceptance criteria
+
+- production administration is v4 and was migrated from an immediately re-read authenticated source;
+- non-hierarchy semantics are proven unchanged;
+- production buyer/admin smokes pass;
+- runtime/admin use one explicit hierarchy authority in normal operation;
+- v3 survives only as a clearly named migration/import compatibility boundary where still required;
+- no unrelated `stone-skirting` or product migration was smuggled into the transaction;
+- migration and cleanup each leave a self-contained recoverable checkpoint;
+- roadmap and `CURRENT_STATE.md` record the exact production revision/digests and repository merge SHAs.
 
 ## CP-UX-01 detailed implementation plan
 

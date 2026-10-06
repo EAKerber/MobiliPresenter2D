@@ -56,6 +56,13 @@ textarea { min-height:76px; resize:vertical; line-height:1.45; }
 .hierarchy-item__heading strong { min-width:0; font-size:12px; line-height:1.35; overflow-wrap:anywhere; }
 .hierarchy-move select,.hierarchy-field select { min-height:36px; }
 .hierarchy-item__actions,.hierarchy-section__actions { display:flex; flex-wrap:wrap; gap:6px; }
+.hierarchy-choice-options { min-width:0; border:1px solid rgba(255,255,255,.08); border-radius:8px; background:rgba(0,0,0,.14); }
+.hierarchy-choice-options summary { padding:8px 10px; cursor:pointer; color:#ddd8d0; font-size:11px; font-weight:750; }
+.hierarchy-choice-options__note { margin:0; padding:0 10px 8px; }
+.hierarchy-choice-options__list { display:grid; gap:5px; padding:0 8px 8px; }
+.hierarchy-choice-option { display:flex; align-items:center; justify-content:space-between; gap:10px; min-height:30px; padding:6px 8px; border:1px solid rgba(255,255,255,.06); border-radius:7px; background:rgba(255,255,255,.025); color:#ddd8d0; font-size:11px; }
+.hierarchy-choice-option small { color:var(--muted); font-size:10px; white-space:nowrap; }
+.hierarchy-choice-option[data-available="false"] { opacity:.52; }
 .hierarchy-group__merge { justify-self:start; }
 .button--compact { min-height:32px; padding:6px 9px; font-size:11px; }
 .hierarchy-pool-item { display:grid; gap:7px; min-width:min(100%,260px); cursor:default; }

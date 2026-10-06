@@ -1,0 +1,65 @@
+name: Flow layout browser
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'app/core/flow-model.js'
+      - 'app/core/flow-layout.js'
+      - 'app/app.js'
+      - 'app/index.html'
+      - 'app/styles.css'
+      - 'tests/flow-layout-browser.cjs'
+      - '.github/workflows/flow-layout-browser.yml'
+  pull_request:
+    paths:
+      - 'app/core/flow-model.js'
+      - 'app/core/flow-layout.js'
+      - 'app/app.js'
+      - 'app/index.html'
+      - 'app/styles.css'
+      - 'tests/flow-layout-browser.cjs'
+      - '.github/workflows/flow-layout-browser.yml'
+  workflow_dispatch:
+    inputs:
+      target_url:
+        description: Optional deployed URL for a smoke test
+        required: false
+        type: string
+permissions:
+  contents: read
+jobs:
+  browser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Resolve browser target
+        shell: bash
+        run: |
+          if [ -n "${{ inputs.target_url }}" ]; then
+            target="${{ inputs.target_url }}"
+          elif [ "${{ github.event_name }}" = "pull_request" ]; then
+            target="https://deploy-preview-${{ github.event.pull_request.number }}--mobilipresenter2d.netlify.app/"
+          else
+            target="https://mobilipresenter2d.netlify.app/"
+          fi
+          echo "FLOW_LAYOUT_URL=$target" >> "$GITHUB_ENV"
+          echo "Browser target: $target"
+      - name: Install browser test tooling
+        run: |
+          npm install --prefix /tmp/flow-layout-tools --no-audit --no-fund playwright@1.62.1
+          /tmp/flow-layout-tools/node_modules/.bin/playwright install --with-deps chromium
+      - name: Test hierarchy-driven buyer layout
+        env:
+          NODE_PATH: /tmp/flow-layout-tools/node_modules
+        run: node tests/flow-layout-browser.cjs /tmp/flow-layout-review
+      - name: Save flow layout review
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: flow-layout-browser-${{ github.run_id }}
+          path: /tmp/flow-layout-review
+          if-no-files-found: ignore

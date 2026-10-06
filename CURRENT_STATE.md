@@ -83,7 +83,8 @@ Current UX checkpoint:
 - **CP-UX-01 — COMPLETE** — PR #81 merged to `main` at `91973ebc056be58b62440ed48ad6f473bb9f26b9`. Final reviewed head `ede50780b3f48ea62fd078a34a9610018ccc24b1` passed App build purity, Current variant fidelity, Summary/Pricing browser, Stone browser, Mobile browser, Keyboard browser, Current asset gates and Netlify deploy preview.
 - **CP-UX-02 — COMPLETE** — PR #83 merged to `main` at `f6ffa6bcfb06b12a76170933cb952bce869fd28b`. Final reviewed head `bcf99e66e66d9394047873a8b68766cb191b3c99` passed the flow-model unit suite, App build purity, Current variant fidelity, Keyboard browser, Stone browser, Summary/Pricing browser, Mobile browser, Current asset gates and Netlify deploy preview.
 - **CP-UX-03 — COMPLETE** — PR #85 merged to `main` at `d02867fa4db940f40e208183e756a146ef5f73b3`. Final reviewed head `54736248ce9b16422026addcdcd89aface2ba6ec` passed hierarchy migration/projection tests, hierarchy editor tests, App build purity, Current variant fidelity, Current asset gates, Keyboard, Mobile, Stone, Summary/Pricing, Admin hierarchy browser and Netlify deploy preview.
-- **CP-UX-04 — NEXT** — make buyer layout consume normalized flow groups/sections, reuse current controls, and give Modules a two-pane detail/list view without duplicating semantic item ownership.
+- **CP-UX-04 — IMPLEMENTED / FINAL MERGE GATE** — functional head `2f7480ed045bb611170e50c264a09c14033ff94f` passed flow-layout unit/browser review, Keyboard, Mobile, Stone, Summary/Pricing, Admin hierarchy, App build purity, Current asset gates, Current variant fidelity and Netlify deploy preview. Buyer feedback on scroll targeting, Puxadores active-section state and Acabamentos section framing was incorporated before this closeout. Rerun required gates on the final documentation head before merging PR #87.
+- **CP-UX-05 — NEXT AFTER CP-UX-04 MERGE / AUTHENTICATED BOUNDARY** — publish the explicit hierarchy only from a freshly re-read authenticated production v3 source, prove non-hierarchy semantic identity, then retire v3 as a normal production authority in a separate cleanup checkpoint.
 
 This track is independent from the authenticated `stone-skirting` migration and must not be mixed into it by default.
 
@@ -93,7 +94,9 @@ CP-UX-02 now provides one immutable normalized flow model and makes keyboard sec
 
 CP-UX-03 is durably closed on `main`. It provides a hierarchy-capable v4 editor while keeping the current production record on v3. Hierarchy-changing drafts are blocked before a production PUT; legacy-equivalent edits may down-project safely to v3; the server independently rejects direct v4 publication.
 
-The detailed CP-UX-04 implementation plan is persisted in the canonical UX roadmap and may begin from live `main`. Its key boundary is that configuration hierarchy owns semantics while buyer view panes may project the same semantic state without duplicating item ownership. CP-UX-04 must not publish v4 or mix with the independent authenticated `stone-skirting` migration.
+CP-UX-04 now makes buyer composition consume normalized flow layout for Acabamentos and Serviços and gives Modules two renderer views over one semantic owner. The final functional head also fixes the real desktop controls scroller, synchronizes active Puxadores state on pointer/focus interaction, unifies finish/service section shells, keeps narrow handle cards readable and exposes concrete option inventories in the admin without promoting those options into hierarchy owners.
+
+The detailed CP-UX-05 plan is persisted in the canonical UX roadmap. CP-UX-05 crosses the authenticated production boundary and is split into an authenticated v3 -> v4 publication checkpoint followed by a separate legacy-boundary cleanup. It must not be combined with the independent `stone-skirting` housekeeping migration by default.
 
 ## Active authorization boundary
 
@@ -105,7 +108,7 @@ The public Netlify site is not protected by site-level password or SSO. The admi
 
 Current chat sessions can inspect repository/Netlify project state but do not provide an interactive authenticated browser session. To cross this boundary safely, use ChatGPT Work / Cloud Browser for this project, open the production admin page, and enter the admin credentials yourself in the browser session when prompted. Do not paste the password into chat.
 
-Once authenticated, the published-config operation remains fail-closed: read live config, verify revision/content, add only `stone-skirting` beside `stone-all`, publish, read back, prove unrelated fields unchanged, then retire the runtime compatibility shim in a separate repository change.
+For CP-UX-05, authentication is required only when the hierarchy migration is actually executed: re-read the live published administration, verify schema/revision/content digest, derive the v4 candidate from that exact source, prove all non-hierarchy semantics unchanged, publish with revision/content guards, read back and run production smokes. The independent `stone-skirting` housekeeping migration remains a separate transaction unless a later explicit plan proves combining them is safer.
 
 ## If authenticated admin access is unavailable
 

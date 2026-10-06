@@ -233,6 +233,84 @@ function makeOrderButtons(upData, downData, index, length, label) {
   return controls;
 }
 
+function hierarchyChoiceOptions(itemId) {
+  if (itemId === "handles-all") {
+    const available = new Set(model.materialGroups.find((entry) => entry.id === "handles-all")?.materialIds || []);
+    return catalog.options.handles.map((handle) => {
+      const product = model.handleProducts.find((entry) => entry.priceEntryId === handle.id || entry.id === handle.id);
+      const alwaysAvailable = handle.id === "none" || handle.isAbsence;
+      return {
+        id: handle.id,
+        label: handle.label,
+        available: alwaysAvailable || Boolean(product && available.has(product.id))
+      };
+    });
+  }
+
+  if (itemId === "fronts-all") {
+    const group = model.materialGroups.find((entry) => entry.id === "fronts-all");
+    const allowed = new Set(group?.materialIds || []);
+    return catalog.options.finishes.map((finish) => {
+      const settings = model.finishes.find((entry) => entry.id === finish.id);
+      return {
+        id: finish.id,
+        label: finish.publicLabel || finish.label || finish.id,
+        available: allowed.has(finish.id) && Boolean(settings?.enabled) && settings?.scope === "global"
+      };
+    });
+  }
+
+  if (itemId === "stone-all") {
+    const group = model.materialGroups.find((entry) => entry.id === "stone-all");
+    const allowed = new Set(group?.materialIds || []);
+    return catalog.options.stonePackages.map((stone) => ({
+      id: stone.id,
+      label: stone.label,
+      available: !group || allowed.has(stone.id)
+    }));
+  }
+
+  return [];
+}
+
+function appendHierarchyChoiceOptions(container, itemId) {
+  const choices = hierarchyChoiceOptions(itemId);
+  if (!choices.length) return;
+
+  const details = document.createElement("details");
+  details.className = "hierarchy-choice-options";
+  details.dataset.hierarchyChoiceList = itemId;
+  if (itemId === "handles-all") details.open = true;
+
+  const summary = document.createElement("summary");
+  const availableCount = choices.filter((choice) => choice.available).length;
+  summary.textContent = `Opções do item · ${availableCount} disponível(is)`;
+
+  const note = document.createElement("p");
+  note.className = "admin-note hierarchy-choice-options__note";
+  note.textContent = "Estas são opções do item, não itens hierárquicos independentes. Disponibilidade e dados comerciais continuam nas abas próprias.";
+
+  const list = document.createElement("div");
+  list.className = "hierarchy-choice-options__list";
+  choices.forEach((choice) => {
+    const row = document.createElement("div");
+    row.className = "hierarchy-choice-option";
+    row.dataset.hierarchyChoiceOption = choice.id;
+    row.dataset.available = String(choice.available);
+
+    const label = document.createElement("span");
+    label.textContent = choice.label;
+
+    const status = document.createElement("small");
+    status.textContent = choice.available ? "Disponível" : "Indisponível";
+    row.append(label, status);
+    list.append(row);
+  });
+
+  details.append(summary, note, list);
+  container.append(details);
+}
+
 function renderItem(stage, group, section, itemId, itemIndex) {
   const item = { id: itemId, label: itemLabel(stage.id, itemId) };
   const option = document.createElement("article");
@@ -254,6 +332,7 @@ function renderItem(stage, group, section, itemId, itemIndex) {
   option.append(heading);
 
   appendInitialStateControl(option, itemId, item);
+  appendHierarchyChoiceOptions(option, itemId);
 
   const moveLabel = document.createElement("label");
   moveLabel.className = "hierarchy-move";

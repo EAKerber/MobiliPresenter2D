@@ -163,6 +163,7 @@ const {chromium} = require('playwright');
   const handleOrder = await page.locator('[data-handle-id]').evaluateAll(items => items.map(item => item.dataset.handleId));
   assert.ok(handleOrder.length >= 3, 'handle grid exposes enough options to cross a visual row boundary');
   await page.locator(`[data-handle-id="${handleOrder[0]}"]`).click();
+  assert.equal(await activeSection(), 'handles', 'click/focus on a handle marks Puxadores as the active section');
   await moveToSection('handles');
   assert.equal(await activeSection(), 'handles', 'Puxadores is a first-class keyboard section');
   await page.keyboard.press('ArrowRight');
@@ -219,6 +220,19 @@ const {chromium} = require('playwright');
   assert.equal(serviceCardContract.lightingWidth, serviceCardContract.additionalWidth, 'service checkboxes share one width');
   assert.equal(serviceCardContract.lightingHeight, serviceCardContract.additionalHeight, 'service checkboxes share one height');
 
+  const sectionShellContract = await page.evaluate(() => {
+    const fronts = getComputedStyle(document.querySelector('[data-keyboard-section="fronts"]'));
+    const handles = getComputedStyle(document.querySelector('[data-keyboard-section="handles"]'));
+    const lighting = getComputedStyle(document.querySelector('[data-keyboard-section="lighting"]'));
+    return {
+      fronts: { padding: fronts.paddingTop, borderRadius: fronts.borderTopLeftRadius, borderWidth: fronts.borderTopWidth },
+      handles: { padding: handles.paddingTop, borderRadius: handles.borderTopLeftRadius, borderWidth: handles.borderTopWidth },
+      lighting: { padding: lighting.paddingTop, borderRadius: lighting.borderTopLeftRadius, borderWidth: lighting.borderTopWidth }
+    };
+  });
+  assert.deepEqual(sectionShellContract.fronts, sectionShellContract.lighting, 'front finishes use the same section shell geometry as Services');
+  assert.deepEqual(sectionShellContract.handles, sectionShellContract.lighting, 'Puxadores uses the same section shell geometry as Services');
+
   await page.keyboard.press('ArrowDown');
   assert.equal(await activeSection(), 'lighting', 'first service section is lighting');
   const focusedService = await page.evaluate(() => ({
@@ -241,16 +255,20 @@ const {chromium} = require('playwright');
   // above the viewport end. Section navigation must still establish an intentional end position.
   const beforeLastSection = await page.evaluate(() => {
     const element = document.querySelector('[data-keyboard-section="additional-services"]');
+    const scroller = document.querySelector('.controls');
+    const bounds = scroller.getBoundingClientRect();
     const rect = element.getBoundingClientRect();
-    const maxScroll = Math.max(0, document.documentElement.scrollHeight - innerHeight);
-    const desired = Math.min(maxScroll, Math.max(0, scrollY + rect.bottom - (innerHeight - 140)));
-    scrollTo(0, desired);
+    const maxScroll = Math.max(0, scroller.scrollHeight - scroller.clientHeight);
+    const targetBottom = bounds.bottom - 140;
+    scroller.scrollTop = Math.max(0, Math.min(maxScroll, scroller.scrollTop + rect.bottom - targetBottom));
     const positioned = element.getBoundingClientRect();
+    const navBottom = document.querySelector('.flow-nav').getBoundingClientRect().bottom;
     return {
       top: positioned.top,
       bottom: positioned.bottom,
-      viewportHeight: innerHeight,
-      fullyVisible: positioned.top >= 0 && positioned.bottom <= innerHeight
+      viewportTop: navBottom + 12,
+      viewportBottom: bounds.bottom - 16,
+      fullyVisible: positioned.top >= navBottom + 12 && positioned.bottom <= bounds.bottom - 16
     };
   });
   assert.equal(beforeLastSection.fullyVisible, true, 'test setup keeps the final service section fully visible before section navigation');
@@ -259,11 +277,14 @@ const {chromium} = require('playwright');
   assert.equal(await activeSection(), 'additional-services', 'ArrowDown moves the active section marker to additional services');
   await page.waitForTimeout(450);
   const lastSectionGeometry = await page.evaluate(() => {
-    const rect = document.querySelector('[data-keyboard-section="additional-services"]').getBoundingClientRect();
-    const maxScroll = Math.max(0, document.documentElement.scrollHeight - innerHeight);
+    const element = document.querySelector('[data-keyboard-section="additional-services"]');
+    const scroller = document.querySelector('.controls');
+    const rect = element.getBoundingClientRect();
+    const bounds = scroller.getBoundingClientRect();
+    const maxScroll = Math.max(0, scroller.scrollHeight - scroller.clientHeight);
     return {
-      bottomGap: (innerHeight - 16) - rect.bottom,
-      atDocumentEnd: Math.abs(scrollY - maxScroll) < 3
+      bottomGap: (bounds.bottom - 16) - rect.bottom,
+      atDocumentEnd: Math.abs(scroller.scrollTop - maxScroll) < 3
     };
   });
   assert.ok(Math.abs(lastSectionGeometry.bottomGap) < 42 || lastSectionGeometry.atDocumentEnd, 'last-section navigation aligns the final section with the usable viewport end');
@@ -285,18 +306,23 @@ const {chromium} = require('playwright');
   await page.emulateMedia({reducedMotion: 'reduce'});
   await page.evaluate(() => {
     const element = document.querySelector('[data-keyboard-section="additional-services"]');
+    const scroller = document.querySelector('.controls');
+    const bounds = scroller.getBoundingClientRect();
     const rect = element.getBoundingClientRect();
-    const maxScroll = Math.max(0, document.documentElement.scrollHeight - innerHeight);
-    scrollTo(0, Math.min(maxScroll, Math.max(0, scrollY + rect.bottom - (innerHeight - 140))));
+    const maxScroll = Math.max(0, scroller.scrollHeight - scroller.clientHeight);
+    scroller.scrollTop = Math.max(0, Math.min(maxScroll, scroller.scrollTop + rect.bottom - (bounds.bottom - 140)));
   });
   await page.keyboard.press('ArrowDown');
   await page.waitForTimeout(30);
   const reducedMotionGeometry = await page.evaluate(() => {
-    const rect = document.querySelector('[data-keyboard-section="additional-services"]').getBoundingClientRect();
-    const maxScroll = Math.max(0, document.documentElement.scrollHeight - innerHeight);
+    const element = document.querySelector('[data-keyboard-section="additional-services"]');
+    const scroller = document.querySelector('.controls');
+    const rect = element.getBoundingClientRect();
+    const bounds = scroller.getBoundingClientRect();
+    const maxScroll = Math.max(0, scroller.scrollHeight - scroller.clientHeight);
     return {
-      bottomGap: (innerHeight - 16) - rect.bottom,
-      atDocumentEnd: Math.abs(scrollY - maxScroll) < 3
+      bottomGap: (bounds.bottom - 16) - rect.bottom,
+      atDocumentEnd: Math.abs(scroller.scrollTop - maxScroll) < 3
     };
   });
   assert.ok(Math.abs(reducedMotionGeometry.bottomGap) < 42 || reducedMotionGeometry.atDocumentEnd, 'reduced motion reaches the same final section geometry without relying on animation');
