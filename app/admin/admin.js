@@ -1453,21 +1453,48 @@ stagesList.addEventListener("click", (event) => {
 
 saveButton.addEventListener("click", async () => {
   saveButton.disabled = true;
-  setMessage(saveMessage, "Publicando…");
   try {
+    const hierarchyValidation = hierarchyErrors(model);
+    if (hierarchyValidation.length) throw new Error(hierarchyValidation[0]);
+
+    const projection = hierarchyCore.projectHierarchyToLegacy(
+      model,
+      configurationCore,
+      flowCore,
+      catalog,
+      priceBook,
+      scene
+    );
+    if (!projection.ok) {
+      if (projection.code === "hierarchy_requires_publication") {
+        setMessage(
+          saveMessage,
+          "A hierarquia foi alterada. Este rascunho não será achatado no schema publicado; publique a hierarquia apenas no checkpoint autenticado.",
+          "error"
+        );
+        return;
+      }
+      throw new Error(projection.errors?.[0] || "A hierarquia não pode ser publicada com segurança.");
+    }
+
+    setMessage(saveMessage, "Publicando configuração compatível…");
     const response = await fetch("/api/configuration", {
       method: "PUT",
       credentials: "same-origin",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(model)
+      body: JSON.stringify(projection.value)
     });
     if (response.status === 401 || response.status === 403) throw new Error("Sua sessão não tem permissão para publicar esta configuração.");
     if (response.status === 409) throw new Error("A configuração mudou em outra sessão. Recarregue o painel antes de salvar.");
-    if (!response.ok) throw new Error("A configuração não foi aceita. Confira nomes e itens selecionados.");
-    model = await response.json();
-    byId("revisionLabel").textContent = `Versão ${model.revision}`;
-    setMessage(saveMessage, "Configuração publicada e aplicada ao configurador.", "success");
-    renderStages();
+    const payload = await response.json().catch(() => null);
+    if (!response.ok) {
+      if (payload?.error === "hierarchy_publication_required") throw new Error("A API bloqueou uma publicação hierárquica antes do checkpoint autorizado.");
+      throw new Error(payload?.message || "A configuração não foi aceita. Confira nomes e itens selecionados.");
+    }
+    model = hierarchyCore.upgradeToHierarchy(payload, configurationCore, flowCore, catalog, priceBook, scene);
+    byId("revisionLabel").textContent = `Versão ${model.revision} · editor hierárquico`;
+    setMessage(saveMessage, "Configuração compatível publicada. A hierarquia estrutural continua protegida contra publicação prematura.", "success");
+    renderAdminTabs();
   } catch (error) {
     setMessage(saveMessage, error.message || "Falha ao publicar a configuração.", "error");
   } finally {
