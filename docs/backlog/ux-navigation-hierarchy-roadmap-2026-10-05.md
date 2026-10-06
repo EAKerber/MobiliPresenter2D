@@ -902,7 +902,7 @@ No production hierarchy/configuration, catalog, pricing, scene, mask or buyer-st
 
 Merge result: PASS. PR #87 merged to `main` at `e11a5c7c377246f1343b79ff04c1f94b587e1c7f` after final reviewed head `b9f9565360f91cbd228481f4bdc150382d8c4d9d` passed the required CP-UX-04 gates and Netlify deploy preview. CP-UX-05 repository preparation may begin from live `main`; production publication still requires the authenticated boundary.
 
-### CP-UX-04.1 — buyer review follow-up for Puxadores and finish breakpoint — IMPLEMENTED / MERGE GATE
+### CP-UX-04.1 — buyer review follow-up for Puxadores and finish breakpoint — COMPLETE
 
 **Origin:** direct production review after CP-UX-04 merge showed two residual buyer-facing issues:
 
@@ -954,7 +954,7 @@ Intentionally unchanged:
 - buyer state schema;
 - CP-UX-05 authenticated migration plan.
 
-Merge rule: rerun the applicable gates on the exact documentation head and merge PR #90 only if it remains green. CP-UX-05 remains the next checkpoint after this follow-up closes.
+Merge result: PASS. PR #90 merged to `main` at `a7294f8dd4f8209de1e39ccdcdc0902cb84beab0` after final reviewed head `490ebda8ab56fa7c31411f1b5a6761a114d37cce` passed the applicable gate set and Netlify deploy preview. CP-UX-05 remains the next checkpoint.
 
 ### CP-UX-05 — authenticated hierarchy publication and legacy-boundary retirement — NEXT
 
