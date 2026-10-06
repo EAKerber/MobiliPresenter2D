@@ -1,7 +1,7 @@
 (function registerKeyboardShortcuts(global) {
   "use strict";
 
-  // CP-UX-01 explicit section navigation.
+  // CP-UX-02: semantic section order/ownership comes from the normalized flow model.
 
   const MULTI_DIGIT_ARM_MS = 900;
   const MULTI_DIGIT_GAP_MS = 500;
@@ -20,6 +20,8 @@
   let numericTimer = null;
   let multiDigitArmedUntil = 0;
   let controlChordUsed = false;
+  let flowModel = null;
+  let lastInvariantErrors = [];
   const sectionCursorByStage = new Map();
   const itemCursorBySection = new Map();
 
@@ -127,51 +129,135 @@
       .filter((panel) => isVisible(panel));
   }
 
-  function sectionInteractiveItems(section) {
-    return Array.from(section.querySelectorAll(INTERACTIVE_SELECTOR)).filter((item) => {
-      if (!isUsable(item)) return false;
-      return item.closest("[data-keyboard-section]") === section;
+  function setFlow(nextFlow) {
+    flowModel = nextFlow && Array.isArray(nextFlow.stages) ? nextFlow : null;
+    sectionCursorByStage.clear();
+    itemCursorBySection.clear();
+    lastInvariantErrors = [];
+    markActiveSection(null);
+    return flowModel;
+  }
+
+  function navigationInvariantErrors() {
+    return lastInvariantErrors.map((item) => ({ ...item }));
+  }
+
+  function activeFlowStage() {
+    const stageId = activeStageId();
+    return flowModel?.stages?.find((stage) => stage.id === stageId && stage.enabled) || null;
+  }
+
+  function sectionElementsFor(sectionId, roots) {
+    const matches = [];
+    roots.forEach((root) => {
+      if (root.matches("[data-keyboard-section]") && root.dataset.keyboardSection === sectionId) matches.push(root);
+      root.querySelectorAll("[data-keyboard-section]").forEach((element) => {
+        if (element.dataset.keyboardSection === sectionId) matches.push(element);
+      });
     });
+    return matches.filter((element) => isVisible(element));
   }
 
-  function sectionKey(element) {
-    return `section:${element.dataset.keyboardSection}`;
+  function sectionInteractiveCandidates(section) {
+    return Array.from(section.querySelectorAll(INTERACTIVE_SELECTOR))
+      .filter((item) => item.closest("[data-keyboard-section]") === section);
   }
 
-  function documentOrder(left, right) {
-    if (left.element === right.element) return 0;
-    const position = left.element.compareDocumentPosition(right.element);
-    if (position & Node.DOCUMENT_POSITION_FOLLOWING) return -1;
-    if (position & Node.DOCUMENT_POSITION_PRECEDING) return 1;
-    return 0;
+  function flowItemIdFor(item, section) {
+    const owner = item.closest("[data-flow-item-id]");
+    if (!owner) return null;
+    if (owner !== section && !section.contains(owner)) return null;
+    return owner.dataset.flowItemId || null;
   }
 
-  function classifySection(items, element) {
-    const explicit = element.dataset?.keyboardBehavior;
-    if (["selection", "toggle", "action"].includes(explicit)) return explicit;
-    if (items.length && items.every((item) => item.matches("input[type='checkbox'], [role='switch']"))) return "toggle";
-    if (items.length && items.every((item) => item.matches("input[type='radio']"))) return "selection";
-    if (items.length > 1 && items.every((item) => item.matches("button") && item.hasAttribute("aria-pressed"))) return "selection";
-    return "action";
+  function resolveModelSection(stageId, modelSection, roots, errors) {
+    const elements = sectionElementsFor(modelSection.id, roots);
+    if (elements.length !== 1) {
+      errors.push({
+        code: elements.length ? "duplicate-section-element" : "missing-section-element",
+        stageId,
+        sectionId: modelSection.id,
+        message: elements.length
+          ? `multiple rendered elements own section ${modelSection.id}`
+          : `missing rendered element for section ${modelSection.id}`
+      });
+      return null;
+    }
+
+    const element = elements[0];
+    const modelItems = new Set(modelSection.itemIds);
+    const candidates = sectionInteractiveCandidates(element);
+    const candidateIds = candidates.map((item) => flowItemIdFor(item, element));
+
+    candidates.forEach((item, index) => {
+      const itemId = candidateIds[index];
+      if (!itemId) {
+        errors.push({
+          code: "unowned-section-control",
+          stageId,
+          sectionId: modelSection.id,
+          message: `interactive control in section ${modelSection.id} has no flow item owner`
+        });
+      } else if (!modelItems.has(itemId)) {
+        errors.push({
+          code: "unexpected-flow-item",
+          stageId,
+          sectionId: modelSection.id,
+          itemId,
+          message: `rendered flow item ${itemId} is not owned by section ${modelSection.id}`
+        });
+      }
+    });
+
+    modelSection.itemIds.forEach((itemId) => {
+      if (!candidateIds.includes(itemId)) {
+        errors.push({
+          code: "missing-flow-item",
+          stageId,
+          sectionId: modelSection.id,
+          itemId,
+          message: `modeled flow item ${itemId} is not represented in section ${modelSection.id}`
+        });
+      }
+    });
+
+    const items = candidates.filter((item, index) => modelItems.has(candidateIds[index]) && isUsable(item));
+    return {
+      id: `section:${modelSection.id}`,
+      modelId: modelSection.id,
+      element,
+      items,
+      itemIds: [...modelSection.itemIds],
+      behavior: modelSection.behavior
+    };
   }
 
   function discoverStageSections() {
-    if (activeStageId() === "modules") return [];
-    const roots = visibleStageRoots();
-    const elements = roots.flatMap((root) => [
-      ...(root.matches("[data-keyboard-section]") ? [root] : []),
-      ...root.querySelectorAll("[data-keyboard-section]")
-    ]).filter((element) => isVisible(element) && element.dataset.keyboardSection);
+    const stageId = activeStageId();
+    const errors = [];
+    if (!flowModel) {
+      lastInvariantErrors = [{ code: "missing-flow-model", stageId, message: "normalized flow model is not installed" }];
+      return [];
+    }
 
-    return elements.map((element) => {
-      const items = sectionInteractiveItems(element);
-      return {
-        id: sectionKey(element),
-        element,
-        items,
-        behavior: classifySection(items, element)
-      };
-    }).filter((section) => section.items.length).sort(documentOrder);
+    const stage = activeFlowStage();
+    if (!stage) {
+      lastInvariantErrors = [{ code: "missing-flow-stage", stageId, message: `active stage is absent from normalized flow: ${stageId}` }];
+      return [];
+    }
+
+    const roots = visibleStageRoots();
+    const modeledSections = stage.groups
+      .flatMap((group) => group.sections)
+      .filter((section) => section.keyboard);
+
+    const sections = modeledSections
+      .map((modelSection) => resolveModelSection(stageId, modelSection, roots, errors))
+      .filter(Boolean)
+      .filter((section) => section.items.length);
+
+    lastInvariantErrors = errors;
+    return sections;
   }
 
   function itemCursorKey(stageId, sectionId) {
@@ -444,6 +530,8 @@
     closeModuleDetail,
     changeStage,
     clearNumericBuffer,
+    setFlow,
+    navigationInvariantErrors,
     resetStageNavigation,
     scrollSectionIntoView
   });
