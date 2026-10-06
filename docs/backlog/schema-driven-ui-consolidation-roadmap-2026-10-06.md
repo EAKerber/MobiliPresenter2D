@@ -84,7 +84,7 @@ Result: PASS. The concrete inventory is persisted in `docs/architecture/schema-u
 
 ### CP-SD-01 — freeze the current schema/presentation contract — IN PROGRESS
 
-Progress: CP-SD-01A capability authority is complete and proven on PR #104 functional head `b91b9c088e921386f4deee90215bfd8d70af628d`. CP-SD-01B executable presentation is next.
+Progress: CP-SD-01A capability authority is complete. CP-SD-01B executable presentation is complete and proven on functional head `6ff1cc74c488e5c3ed8b0fb168dfded94fd01bb0`. CP-SD-01C view/profile/shell contract is next.
 
 Detailed plan:
 - `docs/backlog/schema-driven-ui-cp-sd-01-contract-plan-2026-10-06.md`.
