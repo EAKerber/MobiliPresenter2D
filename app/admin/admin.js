@@ -98,39 +98,346 @@ function getItemOptions(stageId) {
   });
 }
 
-function moveStageItem(itemId, destinationId) {
-  const destination = destinationId ? model.stages.find((stage) => stage.id === destinationId) : null;
-  const source = model.stages.find((stage) => stage.items.includes(itemId));
-  if (destinationId && !destination) return;
-  if (source?.id === destination?.id) return;
+function stageItemIds(stage) {
+  return hierarchyEditor.itemIds(stage);
+}
 
-  const movingIds = [itemId];
-  if (itemId === "stone-all" && model.stages.some((stage) => stage.enabled && stage.items.includes("stone-skirting"))) movingIds.push("stone-skirting");
-  if (itemId === "stone-skirting" && !model.stages.some((stage) => stage.enabled && stage.items.includes("stone-all"))) {
-    return setMessage(saveMessage, "Inclua a pedra antes de adicionar o rodapé.", "error");
+function itemBehavior(itemId) {
+  const kind = configurationCore.itemRegistry(catalog).get(itemId);
+  if (["finish-group", "handle", "stone", "finish"].includes(kind)) return "selection";
+  if (["module", "object", "service"].includes(kind)) return "toggle";
+  return kind === "summary" ? "action" : null;
+}
+
+function sectionBehavior(section) {
+  return itemBehavior(section?.itemIds?.[0]);
+}
+
+function itemLabel(stageId, itemId) {
+  return getItemOptions(stageId).find((item) => item.id === itemId)?.label || model.objects[itemId]?.title || labels[itemId] || itemId;
+}
+
+function hierarchyErrors(candidate) {
+  return hierarchyCore.validateHierarchyAdministration(candidate, configurationCore, catalog, priceBook, scene);
+}
+
+function commitHierarchy(candidate, successMessage = "") {
+  if (candidate === model) return false;
+  const errors = hierarchyErrors(candidate);
+  if (errors.length) {
+    setMessage(saveMessage, errors[0], "error");
+    return false;
   }
-  if (destination && movingIds.some((id) => !getItemOptions(destination.id).some((item) => item.id === id))) {
-    return setMessage(saveMessage, "Esta etapa não aceita todos os itens selecionados para mover.", "error");
-  }
-
-  const sourceCounts = new Map();
-  movingIds.forEach((id) => {
-    const owner = model.stages.find((stage) => stage.items.includes(id));
-    if (owner) sourceCounts.set(owner, (sourceCounts.get(owner) || 0) + 1);
-  });
-  const emptied = [...sourceCounts].find(([stage, count]) => stage.enabled && stage.items.length <= count);
-  if (emptied) return setMessage(saveMessage, `A etapa “${emptied[0].label}” precisa manter ao menos um item enquanto estiver ativa.`, "error");
-
-  movingIds.forEach((id) => {
-    model.stages.forEach((stage) => { stage.items = stage.items.filter((item) => item !== id); });
-    if (destination) destination.items.push(id);
-  });
+  model = candidate;
+  if (successMessage) setMessage(saveMessage, successMessage, "success");
   renderStages();
+  return true;
+}
+
+function defaultEmptyPlacement(stage, itemId) {
+  const behavior = itemBehavior(itemId);
+  const groupLabel = stage.kind === "modules" ? "Módulos"
+    : stage.kind === "finishes" ? "Acabamentos"
+      : stage.kind === "services" ? "Serviços"
+        : stage.kind === "summary" ? "Resumo" : stage.label;
+  const sectionLabel = itemLabel(stage.id, itemId);
+  return {
+    groupId: hierarchyEditor.uniqueId(new Set(), `${stage.id}-group`, "group"),
+    groupLabel,
+    sectionId: hierarchyEditor.uniqueId(new Set(), `${stage.id}-items`, "items"),
+    sectionLabel,
+    presentation: behavior === "selection" ? "cards" : "list",
+    columnSpan: 2
+  };
+}
+
+function compatibleDestinationOptions(itemId) {
+  const behavior = itemBehavior(itemId);
+  const options = [];
+  model.stages.forEach((stage) => {
+    if (!getItemOptions(stage.id).some((item) => item.id === itemId)) return;
+    if (!stage.groups.length) {
+      options.push({
+        value: `${stage.id}||`,
+        label: `${stage.label} · criar grupo/seção inicial`
+      });
+      return;
+    }
+    stage.groups.forEach((group) => group.sections.forEach((section) => {
+      if (sectionBehavior(section) !== behavior) return;
+      options.push({
+        value: `${stage.id}|${group.id}|${section.id}`,
+        label: `${stage.label} › ${group.label} › ${section.label}`
+      });
+    }));
+  });
+  return options;
+}
+
+function placeItemAtTarget(itemId, targetValue) {
+  const [stageId, groupId, sectionId] = targetValue.split("|");
+  const stage = model.stages.find((entry) => entry.id === stageId);
+  if (!stage) return;
+  let candidate;
+  if (!groupId || !sectionId) {
+    candidate = hierarchyEditor.placeItemInEmptyStage(model, itemId, stageId, defaultEmptyPlacement(stage, itemId));
+  } else {
+    candidate = hierarchyEditor.moveItem(model, itemId, { stageId, groupId, sectionId });
+  }
+  commitHierarchy(candidate);
+}
+
+function appendInitialStateControl(option, itemId, item) {
+  const kind = configurationCore.itemRegistry(catalog).get(itemId);
+  if (["module", "object"].includes(kind)) {
+    const initial = document.createElement("input");
+    initial.type = "checkbox";
+    initial.checked = Boolean(model.initialState.entities[itemId]);
+    initial.dataset.initialEntity = itemId;
+    initial.setAttribute("aria-label", `${item.label}: ativo inicialmente`);
+    const label = document.createElement("label");
+    label.className = "initial-state-option";
+    label.append(initial, document.createTextNode("Iniciar ativo"));
+    option.append(label);
+  } else if (kind === "service") {
+    const initial = document.createElement("input");
+    initial.type = "checkbox";
+    initial.checked = model.initialState.services.includes(itemId);
+    initial.dataset.initialService = itemId;
+    initial.setAttribute("aria-label", `${item.label}: ativo inicialmente`);
+    const label = document.createElement("label");
+    label.className = "initial-state-option";
+    label.append(initial, document.createTextNode("Iniciar ativo"));
+    option.append(label);
+  }
+}
+
+function makeOrderButtons(upData, downData, index, length, label) {
+  const controls = document.createElement("div");
+  controls.className = "hierarchy-order";
+  const up = document.createElement("button");
+  up.type = "button";
+  up.textContent = "↑";
+  up.title = `Mover ${label} para cima`;
+  up.setAttribute("aria-label", up.title);
+  up.disabled = index === 0;
+  Object.entries(upData).forEach(([key, value]) => { up.dataset[key] = value; });
+  const down = document.createElement("button");
+  down.type = "button";
+  down.textContent = "↓";
+  down.title = `Mover ${label} para baixo`;
+  down.setAttribute("aria-label", down.title);
+  down.disabled = index === length - 1;
+  Object.entries(downData).forEach(([key, value]) => { down.dataset[key] = value; });
+  controls.append(up, down);
+  return controls;
+}
+
+function renderItem(stage, group, section, itemId, itemIndex) {
+  const item = { id: itemId, label: itemLabel(stage.id, itemId) };
+  const option = document.createElement("article");
+  option.className = "hierarchy-item";
+  option.dataset.hierarchyItem = itemId;
+
+  const heading = document.createElement("div");
+  heading.className = "hierarchy-item__heading";
+  const label = document.createElement("strong");
+  label.textContent = item.label;
+  const order = makeOrderButtons(
+    { moveHierarchyItem: `${itemId}:-1` },
+    { moveHierarchyItem: `${itemId}:1` },
+    itemIndex,
+    section.itemIds.length,
+    item.label
+  );
+  heading.append(label, order);
+  option.append(heading);
+
+  appendInitialStateControl(option, itemId, item);
+
+  const moveLabel = document.createElement("label");
+  moveLabel.className = "hierarchy-move";
+  moveLabel.append(document.createTextNode("Mover para"));
+  const move = document.createElement("select");
+  move.dataset.moveHierarchyItemTarget = itemId;
+  const current = `${stage.id}|${group.id}|${section.id}`;
+  compatibleDestinationOptions(itemId).forEach((destination) => {
+    const choice = document.createElement("option");
+    choice.value = destination.value;
+    choice.textContent = destination.label;
+    choice.selected = destination.value === current;
+    move.append(choice);
+  });
+  moveLabel.append(move);
+  option.append(moveLabel);
+
+  const actions = document.createElement("div");
+  actions.className = "hierarchy-item__actions";
+  if (section.itemIds.length > 1) {
+    const split = document.createElement("button");
+    split.type = "button";
+    split.className = "button button--secondary button--compact";
+    split.textContent = "Nova seção";
+    split.dataset.splitHierarchyItem = itemId;
+    split.dataset.stageId = stage.id;
+    split.dataset.groupId = group.id;
+    split.dataset.sectionId = section.id;
+    actions.append(split);
+  }
+  const remove = document.createElement("button");
+  remove.type = "button";
+  remove.className = "button button--secondary button--compact";
+  remove.textContent = "Retirar";
+  remove.dataset.removeHierarchyItem = itemId;
+  actions.append(remove);
+  option.append(actions);
+  return option;
+}
+
+function renderSection(stage, group, section, sectionIndex) {
+  const card = document.createElement("section");
+  card.className = "hierarchy-section";
+  card.dataset.hierarchySection = section.id;
+
+  const header = document.createElement("div");
+  header.className = "hierarchy-section__header";
+  const name = document.createElement("label");
+  name.className = "hierarchy-name";
+  name.append(document.createTextNode("Seção"));
+  const input = document.createElement("input");
+  input.type = "text";
+  input.value = section.label;
+  input.maxLength = 40;
+  input.dataset.sectionLabel = `${stage.id}|${group.id}|${section.id}`;
+  name.append(input);
+
+  const presentation = document.createElement("label");
+  presentation.className = "hierarchy-field";
+  presentation.append(document.createTextNode("Apresentação"));
+  const select = document.createElement("select");
+  select.dataset.sectionPresentation = `${stage.id}|${group.id}|${section.id}`;
+  hierarchyCore.PRESENTATIONS.forEach((value) => {
+    const option = document.createElement("option");
+    option.value = value;
+    option.textContent = value;
+    option.selected = value === section.presentation;
+    select.append(option);
+  });
+  presentation.append(select);
+
+  const order = makeOrderButtons(
+    { moveHierarchySection: `${stage.id}|${group.id}|${section.id}|-1` },
+    { moveHierarchySection: `${stage.id}|${group.id}|${section.id}|1` },
+    sectionIndex,
+    group.sections.length,
+    section.label
+  );
+  header.append(name, presentation, order);
+  card.append(header);
+
+  if (stage.groups.length > 1) {
+    const moveGroupLabel = document.createElement("label");
+    moveGroupLabel.className = "hierarchy-move";
+    moveGroupLabel.append(document.createTextNode("Mover seção para grupo"));
+    const moveGroup = document.createElement("select");
+    moveGroup.dataset.moveSectionGroup = `${stage.id}|${group.id}|${section.id}`;
+    stage.groups.forEach((candidate) => {
+      const option = document.createElement("option");
+      option.value = candidate.id;
+      option.textContent = candidate.label;
+      option.selected = candidate.id === group.id;
+      moveGroup.append(option);
+    });
+    moveGroupLabel.append(moveGroup);
+    card.append(moveGroupLabel);
+  }
+
+  const items = document.createElement("div");
+  items.className = "hierarchy-items";
+  section.itemIds.forEach((itemId, index) => items.append(renderItem(stage, group, section, itemId, index)));
+  card.append(items);
+
+  const actions = document.createElement("div");
+  actions.className = "hierarchy-section__actions";
+  if (group.sections.length > 1) {
+    const split = document.createElement("button");
+    split.type = "button";
+    split.className = "button button--secondary button--compact";
+    split.textContent = "Mover para novo grupo";
+    split.dataset.splitHierarchySection = `${stage.id}|${group.id}|${section.id}`;
+    actions.append(split);
+
+    const merge = document.createElement("button");
+    merge.type = "button";
+    merge.className = "button button--secondary button--compact";
+    merge.textContent = "Remover seção e unir";
+    merge.dataset.mergeHierarchySection = `${stage.id}|${group.id}|${section.id}|${sectionIndex === 0 ? "next" : "previous"}`;
+    actions.append(merge);
+  }
+  card.append(actions);
+  return card;
+}
+
+function renderGroup(stage, group, groupIndex) {
+  const card = document.createElement("section");
+  card.className = "hierarchy-group";
+  card.dataset.hierarchyGroup = group.id;
+
+  const header = document.createElement("div");
+  header.className = "hierarchy-group__header";
+  const name = document.createElement("label");
+  name.className = "hierarchy-name";
+  name.append(document.createTextNode("Grupo"));
+  const input = document.createElement("input");
+  input.type = "text";
+  input.value = group.label;
+  input.maxLength = 40;
+  input.dataset.groupLabel = `${stage.id}|${group.id}`;
+  name.append(input);
+
+  const span = document.createElement("label");
+  span.className = "hierarchy-field";
+  span.append(document.createTextNode("Largura"));
+  const select = document.createElement("select");
+  select.dataset.groupSpan = `${stage.id}|${group.id}`;
+  hierarchyCore.COLUMN_SPANS.forEach((value) => {
+    const option = document.createElement("option");
+    option.value = String(value);
+    option.textContent = value === 2 ? "2 colunas" : "1 coluna";
+    option.selected = value === group.columnSpan;
+    select.append(option);
+  });
+  span.append(select);
+
+  const order = makeOrderButtons(
+    { moveHierarchyGroup: `${stage.id}|${group.id}|-1` },
+    { moveHierarchyGroup: `${stage.id}|${group.id}|1` },
+    groupIndex,
+    stage.groups.length,
+    group.label
+  );
+  header.append(name, span, order);
+  card.append(header);
+
+  const sections = document.createElement("div");
+  sections.className = "hierarchy-sections";
+  group.sections.forEach((section, index) => sections.append(renderSection(stage, group, section, index)));
+  card.append(sections);
+
+  if (stage.groups.length > 1) {
+    const merge = document.createElement("button");
+    merge.type = "button";
+    merge.className = "button button--secondary button--compact hierarchy-group__merge";
+    merge.textContent = "Remover grupo e unir conteúdo";
+    merge.dataset.mergeHierarchyGroup = `${stage.id}|${group.id}|${groupIndex === 0 ? "next" : "previous"}`;
+    card.append(merge);
+  }
+  return card;
 }
 
 function renderStages() {
   stagesList.replaceChildren();
-  const assigned = new Set(model.stages.flatMap((stage) => stage.items));
+  const assigned = new Set(model.stages.flatMap(stageItemIds));
   const availableById = new Map();
   model.stages.forEach((stage) => getItemOptions(stage.id).forEach((item) => {
     if (!assigned.has(item.id)) {
@@ -139,34 +446,53 @@ function renderStages() {
       availableById.set(item.id, entry);
     }
   }));
+
   const availableItems = document.createElement("section");
   availableItems.className = "stage-unassigned";
-  availableItems.setAttribute("aria-label", "Itens do catálogo sem etapa");
+  availableItems.setAttribute("aria-label", "Itens do catálogo sem seção");
   const availableHeading = document.createElement("h2");
   availableHeading.textContent = "Itens disponíveis";
   const availableHint = document.createElement("p");
   availableHint.className = "admin-note";
-  availableHint.textContent = "Arraste um item para uma etapa compatível. Arraste itens entre etapas para movê-los.";
+  availableHint.textContent = "Itens pertencem a seções explícitas. Escolha uma seção compatível ou crie a estrutura inicial de uma etapa vazia.";
   const availableGrid = document.createElement("div");
   availableGrid.className = "stage-unassigned__items";
+
   availableById.forEach((item) => {
-    const chip = document.createElement("div");
-    chip.className = "stage-pool-item";
-    chip.draggable = true;
-    chip.dataset.dragStageItem = item.id;
-    chip.dataset.allowedStageIds = item.stageIds.join(" ");
-    chip.title = "Arraste para uma etapa compatível";
-    chip.textContent = item.label;
+    const chip = document.createElement("article");
+    chip.className = "stage-pool-item hierarchy-pool-item";
+    const title = document.createElement("strong");
+    title.textContent = item.label;
+    const select = document.createElement("select");
+    select.dataset.placeHierarchyItemTarget = item.id;
+    compatibleDestinationOptions(item.id).forEach((destination) => {
+      const option = document.createElement("option");
+      option.value = destination.value;
+      option.textContent = destination.label;
+      select.append(option);
+    });
+    const add = document.createElement("button");
+    add.type = "button";
+    add.className = "button button--secondary button--compact";
+    add.textContent = "Adicionar";
+    add.dataset.placeHierarchyItem = item.id;
+    add.disabled = !select.options.length;
+    chip.append(title, select, add);
     availableGrid.append(chip);
   });
   if (!availableById.size) {
-    const empty = document.createElement("span"); empty.className = "admin-note"; empty.textContent = "Todos os itens compatíveis já estão em etapas."; availableGrid.append(empty);
+    const empty = document.createElement("span");
+    empty.className = "admin-note";
+    empty.textContent = "Todos os itens compatíveis já pertencem a uma seção.";
+    availableGrid.append(empty);
   }
   availableItems.append(availableHeading, availableHint, availableGrid);
   stagesList.append(availableItems);
+
   model.stages.forEach((stage, index) => {
     const card = document.createElement("article");
     card.className = "stage-card";
+    card.dataset.hierarchyStage = stage.id;
 
     const top = document.createElement("div");
     top.className = "stage-card__top";
@@ -179,29 +505,19 @@ function renderStages() {
     nameLabel.append(document.createTextNode("Nome da etapa"));
     const nameInput = document.createElement("input");
     nameInput.type = "text";
-    nameInput.maxLength = 32;
+    nameInput.maxLength = 40;
     nameInput.value = stage.label;
     nameInput.dataset.stageLabel = stage.id;
     nameInput.setAttribute("aria-label", `Nome da etapa ${stage.label}`);
     nameLabel.append(nameInput);
 
-    const order = document.createElement("div");
-    order.className = "stage-order";
-    const up = document.createElement("button");
-    up.type = "button";
-    up.textContent = "↑";
-    up.title = "Mover etapa para cima";
-    up.setAttribute("aria-label", `Mover ${stage.label} para cima`);
-    up.disabled = index === 0;
-    up.dataset.moveStage = `${stage.id}:-1`;
-    const down = document.createElement("button");
-    down.type = "button";
-    down.textContent = "↓";
-    down.title = "Mover etapa para baixo";
-    down.setAttribute("aria-label", `Mover ${stage.label} para baixo`);
-    down.disabled = index === model.stages.length - 1;
-    down.dataset.moveStage = `${stage.id}:1`;
-    order.append(up, down);
+    const order = makeOrderButtons(
+      { moveStage: `${stage.id}:-1` },
+      { moveStage: `${stage.id}:1` },
+      index,
+      model.stages.length,
+      stage.label
+    );
 
     const actions = document.createElement("div");
     actions.className = "stage-card__actions";
@@ -219,51 +535,26 @@ function renderStages() {
     enabledInput.type = "checkbox";
     enabledInput.checked = stage.enabled;
     enabledInput.dataset.stageEnabled = stage.id;
-    enabledInput.disabled = stage.id === "modules" || stage.id === "summary" || stage.items.length === 0;
+    enabledInput.disabled = stage.id === "modules" || stage.id === "summary" || stageItemIds(stage).length === 0;
     enabledInput.setAttribute("aria-label", `Ativar etapa ${stage.label}`);
     enabledLabel.append(enabledInput, document.createTextNode(stage.enabled ? "Ativa" : "Inativa"));
     top.append(number, nameLabel, order, actions, enabledLabel);
     card.append(top);
 
-    const items = document.createElement("div");
-    items.className = "stage-items";
-    items.setAttribute("aria-label", `Itens da etapa ${stage.label}`);
-    items.dataset.stageDrop = stage.id;
-    stage.items.map((id) => getItemOptions(stage.id).find((item) => item.id === id)).filter(Boolean).forEach((item) => {
-      const option = document.createElement("div");
-      option.className = "item-option";
-      option.draggable = true;
-      option.dataset.dragStageItem = item.id;
-      option.title = "Arraste para outra etapa compatível";
-      const input = document.createElement("input");
-      input.type = "checkbox";
-      input.checked = true;
-      input.dataset.stageItem = stage.id;
-      input.value = item.id;
-      input.disabled = stage.enabled && stage.items.length === 1;
-      input.setAttribute("aria-label", item.label);
-      const itemLabel = document.createElement("label"); itemLabel.append(input, document.createTextNode(item.label));
-      option.append(itemLabel);
-      if (["module", "object"].includes(window.CasaModulesConfiguration.itemRegistry(catalog).get(item.id))) {
-        const initial = document.createElement("input");
-        initial.type = "checkbox";
-        initial.checked = Boolean(model.initialState.entities[item.id]);
-        initial.dataset.initialEntity = item.id;
-        initial.setAttribute("aria-label", `${item.label}: ativo inicialmente`);
-        const initialLabel = document.createElement("label"); initialLabel.className = "initial-state-option"; initialLabel.append(initial, document.createTextNode("Iniciar ativo"));
-        option.append(initialLabel);
-      } else if (["service"].includes(window.CasaModulesConfiguration.itemRegistry(catalog).get(item.id))) {
-        const initial = document.createElement("input"); initial.type = "checkbox"; initial.checked = model.initialState.services.includes(item.id); initial.dataset.initialService = item.id;
-        const initialLabel = document.createElement("label"); initialLabel.className = "initial-state-option"; initialLabel.append(initial, document.createTextNode("Iniciar ativo")); option.append(initialLabel);
-      }
-      items.append(option);
-    });
-    if (!stage.items.length) {
-      const dropHint = document.createElement("p"); dropHint.className = "stage-drop-hint"; dropHint.textContent = "Solte aqui um item disponível."; items.append(dropHint);
+    const hierarchy = document.createElement("div");
+    hierarchy.className = "stage-hierarchy";
+    if (stage.groups.length) {
+      stage.groups.forEach((group, groupIndex) => hierarchy.append(renderGroup(stage, group, groupIndex)));
+    } else {
+      const empty = document.createElement("p");
+      empty.className = "stage-drop-hint";
+      empty.textContent = "Etapa vazia. Adicione um item disponível para criar o primeiro grupo e seção.";
+      hierarchy.append(empty);
     }
-    card.append(items);
+    card.append(hierarchy);
     stagesList.append(card);
   });
+
   const stageKindInput = byId("stageKindInput");
   [...stageKindInput.options].forEach((option) => {
     option.disabled = option.value !== "custom" && model.stages.some((stage) => (stage.kind || stage.id) === option.value);
