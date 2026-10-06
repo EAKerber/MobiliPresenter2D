@@ -2239,9 +2239,7 @@
     const handleIndex = Math.max(0, catalog.options.handles.findIndex((handle) => handle.id === handleId));
     core.setGlobalSelection(state, { handleId });
     syncLayerVisibility();
-    requestAnimationFrame(() => {
-      global.CASA_KEYBOARD_SHORTCUTS?.activateSection?.("handles", handleIndex, true);
-    });
+    global.CASA_KEYBOARD_SHORTCUTS?.activateSection?.("handles", handleIndex, false);
     const handle = selectedHandle();
     announce(handle.id === "none" ? "Puxador será definido depois." : handle.label + " aplicado ao conjunto.");
   });
