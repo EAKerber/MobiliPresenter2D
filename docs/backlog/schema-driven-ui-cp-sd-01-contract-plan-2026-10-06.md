@@ -85,11 +85,13 @@ Gates on the functional head:
 
 No production configuration write.
 
-### CP-SD-01B — executable presentation contract — NEXT
+### CP-SD-01B — executable presentation contract — COMPLETE
 
 Purpose: replace inert/descriptive section presentation with a closed component registry and deterministic v3/v4 -> current presentation migration.
 
-### CP-SD-01C — view/profile/shell contract
+CP-SD-01B result: PASS on functional head `6ff1cc74c488e5c3ed8b0fb168dfded94fd01bb0`; executable presentation bindings are now closed and fail-closed. Detailed record: `docs/backlog/schema-driven-ui-cp-sd-01b-presentation-plan-2026-10-06.md`.
+
+### CP-SD-01C — view/profile/shell contract — NEXT
 
 Purpose: add the minimum companion relation, named topology profiles, PiP capability policy, bottom-dock capability and chosen material null/default semantics, then freeze CP-SD-01.
 
