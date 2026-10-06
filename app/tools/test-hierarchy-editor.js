@@ -153,6 +153,9 @@ assert.equal(editor.uniqueId(existing, "Nova seção", "secao"), "nova-secao-3")
 assert.equal(editor.moveGroup(base, "finishes", "cabinet-finishes", -1), base, "invalid boundary move returns original model");
 assert.equal(editor.moveSection(base, "finishes", "cabinet-finishes", "fronts", -1), base, "invalid section boundary move returns original model");
 assert.equal(editor.splitItemToSection(base, "fronts-all", { sectionId: "x", label: "X" }), base, "single-item section cannot be split");
-assert.equal(editor.splitSectionToGroup(base, "finishes", "stone", "stone-packages", { groupId: "x", label: "X" }), base, "split keeps source group nonempty");
+const stoneSplit = editor.splitSectionToGroup(base, "finishes", "stone", "stone-packages", { groupId: "x", label: "X" });
+assert.deepEqual(stoneSplit.stages.find(stage => stage.id === "finishes").groups.map(group => group.id), ["cabinet-finishes", "stone", "x"], "section split creates a peer group when the source remains nonempty");
+assert.deepEqual(stoneSplit.stages.find(stage => stage.id === "finishes").groups.find(group => group.id === "stone").sections.map(section => section.id), ["stone-skirting"]);
+assert.deepEqual(stoneSplit.stages.find(stage => stage.id === "finishes").groups.find(group => group.id === "x").sections.map(section => section.id), ["stone-packages"]);
 
 console.log("hierarchy editor: PASS");
