@@ -67,6 +67,12 @@ const changedCopyResult = validateHierarchyCandidateForSource(source, changedCop
 assert.equal(changedCopyResult.ok, false);
 assert.equal(changedCopyResult.code, "semantic_mismatch", "non-hierarchy mutation is rejected");
 
+const extraMetadata = structuredClone(first.candidate);
+extraMetadata.migrationNote = "not part of deterministic migration";
+const extraMetadataResult = validateHierarchyCandidateForSource(source, extraMetadata, catalog, priceBook);
+assert.equal(extraMetadataResult.ok, false);
+assert.equal(extraMetadataResult.code, "non_deterministic_candidate", "extra candidate data outside the deterministic migration is rejected");
+
 const changedHierarchy = structuredClone(first.candidate);
 changedHierarchy.stages.find((stage) => stage.id === "finishes").groups.reverse();
 const changedHierarchyResult = validateHierarchyCandidateForSource(source, changedHierarchy, catalog, priceBook);
@@ -110,6 +116,11 @@ assert.equal(
   functionSource.slice(postStart, putBodyStart).includes("store.setJSON"),
   false,
   "hierarchy preparation branch performs no storage write"
+);
+assert.equal(
+  functionSource.slice(postStart, putBodyStart).includes("readStoredOrDefault(store)"),
+  true,
+  "hierarchy preparation reads the stored source without the public-read fallback"
 );
 const v4Guard = functionSource.indexOf("payload?.schemaVersion === V4_SCHEMA");
 const writeSite = functionSource.indexOf('await store.setJSON("published"');
