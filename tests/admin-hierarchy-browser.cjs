@@ -163,6 +163,8 @@ async function sectionItemIds(page, stageId, groupId, sectionId) {
   assert.ok(frontChoices > 1, "front finish options are exposed consistently");
   assert.ok(stoneChoices > 1, "stone package options are exposed consistently");
 
+  await page.locator('[data-admin-tab="finishes"]').click();
+  await page.waitForSelector('[data-admin-panel="finishes"]:not([hidden])');
   await page.locator("#materialPager button").nth(1).click();
   await page.waitForSelector('[data-material-id="stone-existing"]');
   let stoneMaterialCard = page.locator('[data-material-id="stone-existing"]');
@@ -186,6 +188,8 @@ async function sectionItemIds(page, stageId, groupId, sectionId) {
   assert.equal(await noColorToggle.isChecked(), true, "material can return to explicit null without retaining editor fallback as authored data");
   assert.equal(await stoneColorInput.isDisabled(), true);
 
+  await page.locator('[data-admin-tab="stages"]').click();
+  await page.waitForSelector('[data-admin-panel="stages"]:not([hidden])');
   await page.locator('[data-move-hierarchy-group="finishes|stone|-1"]').click();
   assert.deepEqual(await stageGroupIds(page, "finishes"), ["stone", "cabinet-finishes"], "group reorder updates the in-memory hierarchy and rendered ancestry");
 
