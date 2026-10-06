@@ -258,6 +258,7 @@ button:focus-visible, input:focus-visible {
   gap: 16px;
   min-width: 0;
 }
+#finishesStagePanel .flow-group-grid { grid-template-columns: 1fr; }
 .flow-group-shell { min-width: 0; }
 .flow-group-shell[data-flow-group="cabinet-finishes"] { container: cabinet-finishes / inline-size; }
 .flow-group-shell[data-flow-span="2"] { grid-column: span 2; }
@@ -351,12 +352,14 @@ legend { margin-bottom: 9px; color: rgba(255, 255, 255, 0.43); font-size: 12px; 
   .workspace { grid-template-columns: 1fr; }
   .controls { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: start; }
   .flow-nav, .flow-actions, #modulesPanel, #finishesStagePanel, #servicesPanel, #summaryPanel, .custom-stage-panel { grid-column: 1 / -1; }
+  #finishesStagePanel .flow-group-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 
 @media (max-width: 700px) {
   .topbar { padding: 10px 14px; }
   .workspace { gap: 14px; padding: 14px; }
   .controls { grid-template-columns: 1fr; }
+  #finishesStagePanel .flow-group-grid { grid-template-columns: 1fr; }
   .brand h1 { font-size: 16px; }
   .brand p { font-size: 12px; }
   .button__wide-label { display: none; }
