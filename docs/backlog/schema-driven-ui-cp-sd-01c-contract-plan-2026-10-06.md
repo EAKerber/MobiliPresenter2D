@@ -122,7 +122,10 @@ Gates:
 
 No production write.
 
-## CP-SD-01C2 — authored material semantics — NEXT
+## CP-SD-01C2 — authored material semantics — IN PROGRESS
+
+Detailed plan:
+- `docs/backlog/schema-driven-ui-cp-sd-01c2-material-semantics-plan-2026-10-06.md`.
 
 Purpose: make authored absence explicit instead of silently synthesizing a color.
 
