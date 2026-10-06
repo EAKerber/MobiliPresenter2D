@@ -23,10 +23,14 @@ function getConfigurationStore(context) {
   return context?.deploy?.context === "production" ? getStore(options) : getDeployStore(options);
 }
 
+async function readStoredOrDefault(store) {
+  const published = await store.get("published", { type: "json" });
+  return published || configCore.createDefaultAdministration(defaults, catalog, priceBook);
+}
+
 async function readPublished(store) {
   const base = configCore.createDefaultAdministration(defaults, catalog, priceBook);
-  const published = await store.get("published", { type: "json" });
-  if (!published) return base;
+  const published = await readStoredOrDefault(store);
   try { return configCore.normalizeConfiguratorSettings(published, catalog, priceBook); }
   catch { return base; }
 }
@@ -47,7 +51,7 @@ export default async (request, context) => {
   if (request.method === "POST") {
     const action = new URL(request.url).searchParams.get("action");
     if (action !== "prepare-hierarchy") return respond({ error: "unsupported_action" }, 400);
-    const current = await readPublished(store);
+    const current = await readStoredOrDefault(store);
     const plan = prepareHierarchyPublication(current, catalog, priceBook);
     const summary = publicationPlanSummary(plan);
     return respond(summary, plan.ok ? 200 : 422);
