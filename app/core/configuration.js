@@ -32,7 +32,7 @@
       locked: true
     }));
     catalog.options.stonePackages.forEach((item) => records.push({
-      id: item.id, label: item.label, kind: "texture", color: item.color || item.swatchColor || "#b7b0a7",
+      id: item.id, label: item.label, kind: "texture", color: item.color ?? null,
       textureAsset: item.textureAsset || "", textureSize: "cover", groupIds: ["stone-all"], locked: true
     }));
     records.push({ id: "handle-chrome", label: "Cromado", kind: "color", color: "#b7b0a7", textureAsset: "", textureSize: "cover", groupIds: [], locked: true });
@@ -308,7 +308,9 @@
         ids.add(material.id);
         if (typeof material.label !== "string" || !material.label.trim() || material.label.length > 60) errors.push(`invalid material label: ${material.id}`);
         if (!["color", "texture"].includes(material.kind)) errors.push(`invalid material type: ${material.id}`);
-        if (!/^(#[0-9a-fA-F]{6})$/.test(material.color || "")) errors.push(`invalid material color: ${material.id}`);
+        const hasAuthoredColor = Object.hasOwn(material, "color");
+        const validAuthoredColor = material.color === null || /^(#[0-9a-fA-F]{6})$/.test(material.color || "");
+        if (!hasAuthoredColor || !validAuthoredColor || (material.kind === "color" && material.color === null)) errors.push(`invalid material color: ${material.id}`);
         if (typeof material.textureAsset !== "string" || (material.textureAsset && !validAssetPath(material.textureAsset))) errors.push(`invalid material texture: ${material.id}`);
         if (typeof material.textureSize !== "string" || !["cover", "contain"].includes(material.textureSize) && !/^\d{2,3}px \d{2,3}px$/.test(material.textureSize)) errors.push(`invalid material texture size: ${material.id}`);
         if (!Array.isArray(material.groupIds) || material.groupIds.some((group) => !["fronts-all", "stone-all"].includes(group))) errors.push(`invalid material groups: ${material.id}`);
