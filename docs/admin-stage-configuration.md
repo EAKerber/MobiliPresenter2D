@@ -41,7 +41,10 @@ Na aba de etapas é possível:
 - mover itens entre seções compatíveis;
 - separar um item em uma nova seção;
 - retirar um item e recolocá-lo a partir da lista de itens disponíveis;
-- configurar o estado inicial dos itens que já possuíam esse contrato.
+- configurar o estado inicial dos itens que já possuíam esse contrato;
+- inspecionar, dentro de itens agregadores como `Puxadores`, `Cor das frentes` e `Pacote de pedra`, quais opções concretas estão disponíveis.
+
+As opções concretas continuam sendo dados/opções do item, não novos donos hierárquicos. Por exemplo, `handles-all` continua sendo o único item da seção Puxadores; Tango/Íris, Ponto, Alça em cores e Definir depois aparecem como inventário de opções e continuam configurados comercialmente nas abas apropriadas.
 
 Os controles de mover para cima/baixo e os seletores de destino são a base acessível. Drag-and-drop não é requisito para operar a hierarquia.
 
