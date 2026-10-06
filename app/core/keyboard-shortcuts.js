@@ -1,6 +1,8 @@
 (function registerKeyboardShortcuts(global) {
   "use strict";
 
+  // CP-UX-01 explicit section navigation.
+
   const MULTI_DIGIT_ARM_MS = 900;
   const MULTI_DIGIT_GAP_MS = 500;
   const INTERACTIVE_SELECTOR = [
