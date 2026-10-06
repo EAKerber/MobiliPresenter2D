@@ -57,6 +57,28 @@ assert.equal(
   "v3 migration is deterministic"
 );
 
+const alternateHierarchyDefaults = structuredClone(hierarchyDefaults);
+const alternateHandleSection = alternateHierarchyDefaults.stages.finishes.groups[0].sections[1];
+alternateHandleSection.id = "hardware";
+alternateHandleSection.label = "Ferragens";
+const alternateV4 = hierarchy.upgradeToHierarchy(
+  v3,
+  configuration,
+  flow,
+  catalog,
+  priceBook,
+  scene,
+  alternateHierarchyDefaults
+);
+assert.deepEqual(
+  alternateV4.stages.find((stage) => stage.id === "finishes").groups[0].sections.map((section) => ({ id: section.id, label: section.label })),
+  [
+    { id: "fronts", label: "Cor das frentes" },
+    { id: "hardware", label: "Ferragens" }
+  ],
+  "v3 -> v4 migration takes section identity/copy from hierarchy defaults rather than core constants"
+);
+
 const projected = hierarchy.projectHierarchyToLegacy(v4, configuration, flow, catalog, priceBook, scene, hierarchyDefaults);
 assert.equal(projected.ok, true);
 assert.equal(projected.value.schemaVersion, configuration.SCHEMA);
