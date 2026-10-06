@@ -1,11 +1,16 @@
 (function registerConfiguratorSettingsCore(global) {
   "use strict";
 
+  const itemCapabilities = typeof module !== "undefined" && module.exports && typeof require === "function"
+    ? require("./item-capabilities.js")
+    : global?.CasaModulesItemCapabilities;
+  if (!itemCapabilities) throw new Error("Item capability registry is required.");
+
   const SCHEMA = "ConfiguratorAdministration2D 3.0";
   const PREVIOUS_SCHEMA = "ConfiguratorAdministration2D 2.0";
   const LEGACY_SCHEMA = "ConfiguratorAdministration2D 1.0";
-  const CORE_STAGES = Object.freeze(["modules", "summary"]);
-  const STAGE_KINDS = new Set(["modules", "finishes", "services", "summary", "custom"]);
+  const CORE_STAGES = Object.freeze([...itemCapabilities.CORE_STAGE_KINDS]);
+  const STAGE_KINDS = new Set(itemCapabilities.STAGE_KINDS);
 
   function itemRegistry(catalog) {
     return new Map([
@@ -242,9 +247,7 @@
       for (const id of stage.items) {
         const itemKind = registry.get(id);
         if (!itemKind) errors.push(`unknown stage item: ${id}`);
-        else if (kind === "modules" && itemKind !== "module") errors.push(`invalid modules item: ${id}`);
-        else if (kind === "summary" && (itemKind !== "summary" || id !== "summary")) errors.push(`invalid summary item: ${id}`);
-        else if (kind === "custom" && !["module", "object", "service"].includes(itemKind)) errors.push(`invalid custom-stage item: ${id}`);
+        else if (!itemCapabilities.stageAllowsItem(kind, id, itemKind, catalog)) errors.push(`invalid ${kind} item: ${id}`);
         if (assignedItems.has(id)) errors.push(`item assigned more than once: ${id}`);
         assignedItems.add(id);
       }

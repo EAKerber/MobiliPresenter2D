@@ -82,7 +82,9 @@ Gate:
 
 Result: PASS. The concrete inventory is persisted in `docs/architecture/schema-ui-authority-audit-2026-10-06.md`. The audit found no critical unknowns and identified the main blocker before publication: v4 section `presentation` is persisted/validated but is not yet an executable buyer-renderer authority.
 
-### CP-SD-01 — freeze the current schema/presentation contract — NEXT
+### CP-SD-01 — freeze the current schema/presentation contract — IN PROGRESS
+
+Progress: CP-SD-01A capability authority is complete and proven on PR #104 functional head `b91b9c088e921386f4deee90215bfd8d70af628d`. CP-SD-01B executable presentation is next.
 
 Detailed plan:
 - `docs/backlog/schema-driven-ui-cp-sd-01-contract-plan-2026-10-06.md`.

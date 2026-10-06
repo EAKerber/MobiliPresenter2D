@@ -1,6 +1,6 @@
 # CP-SD-01 — schema and presentation contract freeze — 2026-10-06
 
-Status: **NEXT**.
+Status: **IN PROGRESS**.
 
 Parent:
 - `docs/backlog/schema-driven-ui-consolidation-roadmap-2026-10-06.md`
@@ -38,6 +38,60 @@ Reason:
 - production can migrate directly v3 -> v5 after the final authenticated gate; v4 remains a known intermediate repository format if backward import is still useful.
 
 Gate this decision at the start of implementation. If a simpler versioning strategy is proven safer, document the reason before changing code.
+
+## Implementation slices
+
+### CP-SD-01A — capability authority — COMPLETE
+
+Purpose: remove the already-proven duplicate semantic policy before changing the persisted presentation schema.
+
+Scope:
+- one pure/server-safe item capability registry;
+- canonical kind -> interaction behavior;
+- canonical allowed stage kinds, honoring explicit catalog `stageKinds`;
+- move aggregate option-source metadata out of hierarchy defaults;
+- make v3 validation, hierarchy validation, flow normalization and admin placement consume the same policy;
+- focused unit coverage.
+
+No buyer visual change, no schema-version change and no production write.
+
+Gate:
+- app unit suite green;
+- admin hierarchy browser green;
+- existing flow/keyboard/mobile/summary gates remain green where triggered;
+- current default hierarchy normalizes identically.
+
+Result: PASS on functional head `b91b9c088e921386f4deee90215bfd8d70af628d`.
+
+Implemented:
+- `app/core/item-capabilities.js` is the single browser/server-safe authority for item interaction behavior and stage placement;
+- explicit catalog `stageKinds` remains the item-level override mechanism (including `stone-skirting`);
+- aggregate option-source metadata moved out of hierarchy defaults into item capability descriptors;
+- v3 configuration validation, hierarchy validation, flow normalization and admin placement now consume the same capability policy;
+- hierarchy defaults now contain hierarchy templates rather than stage compatibility/option-source metadata;
+- focused capability tests were added to the normal app test suite.
+
+Gates on the functional head:
+- App build purity — PASS;
+- Current variant fidelity — PASS;
+- Current asset gates — PASS;
+- Admin hierarchy browser — PASS;
+- Flow layout browser — PASS;
+- Keyboard browser — PASS;
+- Mobile browser — PASS;
+- Stone browser — PASS;
+- Summary/Pricing browser — PASS;
+- Netlify deploy preview #104 — PASS.
+
+No production configuration write.
+
+### CP-SD-01B — executable presentation contract — NEXT
+
+Purpose: replace inert/descriptive section presentation with a closed component registry and deterministic v3/v4 -> current presentation migration.
+
+### CP-SD-01C — view/profile/shell contract
+
+Purpose: add the minimum companion relation, named topology profiles, PiP capability policy, bottom-dock capability and chosen material null/default semantics, then freeze CP-SD-01.
 
 ## Contract boundaries
 
