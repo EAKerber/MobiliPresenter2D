@@ -125,6 +125,55 @@ removableStageSettings.stages = removableStageSettings.stages.filter((stage) => 
 assert.deepEqual(settingsCore.validateConfiguratorSettings(removableStageSettings, catalog, priceBook, scene), [], "optional stages can be removed while core flow remains");
 const normalizedDefaults = settingsCore.normalizeConfiguratorSettings(defaultSettings, catalog, priceBook, scene);
 assert.equal(normalizedDefaults.schemaVersion, "ConfiguratorAdministration2D 3.0");
+
+const stoneExistingMaterial = defaultSettings.materials.find((item) => item.id === "stone-existing");
+const stoneSinkMaterial = defaultSettings.materials.find((item) => item.id === "stone-light-sink");
+assert.equal(stoneExistingMaterial.color, null, "default stone-existing preserves source absence instead of copying swatch color");
+assert.equal(stoneSinkMaterial.color, null, "default stone-light-sink preserves source absence instead of copying swatch color");
+assert.notEqual(catalog.options.stonePackages.find((item) => item.id === "stone-existing").swatchColor, null, "stone-existing still has display-only swatch metadata");
+
+const nullTextureSettings = structuredClone(defaultSettings);
+nullTextureSettings.materials.find((item) => item.id === "stone-cloud").color = null;
+assert.deepEqual(settingsCore.validateConfiguratorSettings(nullTextureSettings, catalog, priceBook, scene), [], "texture material may explicitly omit authored tint");
+const normalizedNullTexture = settingsCore.normalizeConfiguratorSettings(nullTextureSettings, catalog, priceBook, scene);
+assert.equal(normalizedNullTexture.materials.find((item) => item.id === "stone-cloud").color, null, "explicit null survives normalization");
+assert.equal(
+  settingsCore.normalizeConfiguratorSettings(normalizedNullTexture, catalog, priceBook, scene).materials.find((item) => item.id === "stone-cloud").color,
+  null,
+  "explicit null survives repeated normalization"
+);
+
+const missingMaterialColor = structuredClone(defaultSettings);
+delete missingMaterialColor.materials.find((item) => item.id === "stone-cloud").color;
+assert.equal(
+  settingsCore.validateConfiguratorSettings(missingMaterialColor, catalog, priceBook, scene).some((error) => error.includes("invalid material color: stone-cloud")),
+  true,
+  "material color field absence fails closed"
+);
+
+const invalidMaterialColor = structuredClone(defaultSettings);
+invalidMaterialColor.materials.find((item) => item.id === "stone-cloud").color = "transparent";
+assert.equal(
+  settingsCore.validateConfiguratorSettings(invalidMaterialColor, catalog, priceBook, scene).some((error) => error.includes("invalid material color: stone-cloud")),
+  true,
+  "invalid authored color string fails closed"
+);
+
+const nullSolidColor = structuredClone(defaultSettings);
+nullSolidColor.materials.find((item) => item.id === "base-light").color = null;
+assert.equal(
+  settingsCore.validateConfiguratorSettings(nullSolidColor, catalog, priceBook, scene).some((error) => error.includes("invalid material color: base-light")),
+  true,
+  "solid-color materials still require an authored hex color"
+);
+
+const preservedAuthoredStoneColor = structuredClone(defaultSettings);
+preservedAuthoredStoneColor.materials.find((item) => item.id === "stone-existing").color = "#a1b2c3";
+assert.equal(
+  settingsCore.normalizeConfiguratorSettings(preservedAuthoredStoneColor, catalog, priceBook, scene).materials.find((item) => item.id === "stone-existing").color,
+  "#a1b2c3",
+  "existing authored current-schema colors are never rewritten to null"
+);
 const preCatalogSkirtingSettings = structuredClone(defaultSettings);
 delete preCatalogSkirtingSettings.objects["stone-skirting"];
 delete preCatalogSkirtingSettings.objectAssets["stone-skirting"];
