@@ -50,7 +50,7 @@ Canonical plan:
 
 **CP-SD-00 — COMPLETE / PASS.** The audit found no critical unknowns. The main publication blocker is now explicit: v4 persists section presentation metadata, but that metadata is not yet the executable buyer-renderer authority.
 
-**CP-SD-01 — NEXT.** Freeze the semantic/presentation contract, consolidate item behavior/stage policy, separate item availability from stage ownership, define the companion relation and named layout profiles, and settle material null/default semantics. No production publication in this checkpoint.
+**CP-SD-01 — IN PROGRESS.** CP-SD-01A is the first implementation slice: centralize item behavior, stage compatibility and aggregate option-source capability in one server-safe authority with no visual/schema-version change. CP-SD-01B/01C then freeze executable presentation, companion/profile/shell policy and material null/default semantics. No production publication in this checkpoint.
 
 The isolated authenticated CP-UX-05A0 v3 Puxadores repair remains valid and independent. The broader production hierarchy publication is intentionally held until CP-SD-01 freezes the schema/presentation contract. The final migration may target a consolidated version after the unpublished v4 milestone rather than publishing v4 and immediately migrating again.
 
