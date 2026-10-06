@@ -151,6 +151,18 @@ async function sectionItemIds(page, stageId, groupId, sectionId) {
   assert.deepEqual(await groupSectionIds(page, "services", "services"), ["lighting", "additional-services"], "Services exposes lighting and additional-services sections");
   assert.deepEqual(await stageGroupIds(page, "modules"), ["modules-main"], "Modules is represented by a real hierarchy instead of a flat item list");
 
+  const handleChoices = await page.locator('[data-hierarchy-item="handles-all"] [data-hierarchy-choice-option]').evaluateAll((nodes) =>
+    nodes.map((node) => ({ id: node.dataset.hierarchyChoiceOption, label: node.querySelector("span")?.textContent?.trim(), available: node.dataset.available }))
+  );
+  assert.ok(handleChoices.length >= 4, "Puxadores exposes its concrete options inside the hierarchy item");
+  assert.ok(handleChoices.some((choice) => /Tango|Íris/i.test(choice.label || "")), "Tango / Íris is visible in the hierarchy option inventory");
+  assert.ok(handleChoices.some((choice) => /Ponto/i.test(choice.label || "")), "Ponto is visible in the hierarchy option inventory");
+
+  const frontChoices = await page.locator('[data-hierarchy-item="fronts-all"] [data-hierarchy-choice-option]').count();
+  const stoneChoices = await page.locator('[data-hierarchy-item="stone-all"] [data-hierarchy-choice-option]').count();
+  assert.ok(frontChoices > 1, "front finish options are exposed consistently");
+  assert.ok(stoneChoices > 1, "stone package options are exposed consistently");
+
   await page.locator('[data-move-hierarchy-group="finishes|stone|-1"]').click();
   assert.deepEqual(await stageGroupIds(page, "finishes"), ["stone", "cabinet-finishes"], "group reorder updates the in-memory hierarchy and rendered ancestry");
 
