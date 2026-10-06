@@ -437,6 +437,7 @@ assert.equal(indexHtml.includes('data-flow-item-id="fronts-all"'), true, "front 
 assert.equal(indexHtml.includes('data-flow-item-id="handles-all"'), true, "handle section exposes stable flow ownership");
 assert.equal(indexHtml.includes('data-flow-item-id="stone-all"'), true, "stone section exposes stable flow ownership");
 assert.equal(indexHtml.includes('data-flow-item-id="lighting-08"'), true, "lighting section exposes stable flow ownership");
+assert.equal(indexHtml.includes("data/hierarchy-defaults.js?v=hierarchy-defaults-v1"), true, "legacy hierarchy semantics load from explicit configuration data");
 assert.equal(appJs.includes("publishNormalizedFlow"), true, "app publishes one normalized flow contract to navigation");
 assert.equal(appJs.includes("applyBuyerFlowLayout"), true, "buyer composition is mounted from normalized flow layout");
 assert.equal(indexHtml.includes('data-stage-view-layout="modules"'), true, "modules expose a view-level two-pane renderer contract");
