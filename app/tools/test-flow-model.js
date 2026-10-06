@@ -83,6 +83,11 @@ assert.equal(Object.isFrozen(flow), true, "normalized flow is immutable");
 assert.equal(Object.isFrozen(stage("finishes").groups[0].sections[0].itemIds), true, "nested normalized flow data is immutable");
 assert.equal(JSON.stringify(flowCore.normalizeFlow(administration, registry, hierarchyDefaults)), JSON.stringify(flow), "normalization is deterministic");
 
+assert.equal(flowCore.itemAvailable(flow, "handles-all"), true, "enabled semantic items are available");
+assert.equal(flowCore.stageOwns(flow, "finishes", "handles-all"), true, "stage ownership is structural");
+assert.equal(flowCore.stageOwns(flow, "services", "handles-all"), false, "stage ownership respects the owning stage");
+assert.equal(flowCore.itemAvailable(flow, "not-a-real-item"), false, "unknown items are unavailable");
+
 const allowedKeys = new Set([
   "schemaVersion", "source", "revision", "stages",
   "id", "kind", "label", "enabled", "order", "groups",
@@ -174,6 +179,16 @@ custom.stages.splice(3, 0, {
   items: ["move-stone"]
 });
 const customFlow = flowCore.normalizeFlow(custom, registry, hierarchyDefaults);
+
+assert.equal(flowCore.itemAvailable(customFlow, "move-stone"), true, "moving an item between enabled stages preserves availability");
+assert.equal(flowCore.stageOwns(customFlow, "services", "move-stone"), false, "moved item no longer belongs to its former stage");
+assert.equal(flowCore.stageOwns(customFlow, "installation", "move-stone"), true, "moved item belongs to its new custom stage");
+
+const disabledCustom = structuredClone(custom);
+disabledCustom.stages.find((entry) => entry.id === "installation").enabled = false;
+const disabledCustomFlow = flowCore.normalizeFlow(disabledCustom, registry, hierarchyDefaults);
+assert.equal(flowCore.stageOwns(disabledCustomFlow, "installation", "move-stone"), true, "disabled stages retain structural ownership");
+assert.equal(flowCore.itemAvailable(disabledCustomFlow, "move-stone"), false, "disabled stage ownership does not imply runtime availability");
 assert.deepEqual(
   customFlow.stages.find((entry) => entry.id === "installation").groups[0].sections[0],
   {
