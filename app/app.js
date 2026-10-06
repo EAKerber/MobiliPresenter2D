@@ -12,6 +12,7 @@
   const configurationCore = global.CasaModulesConfiguration;
   const flowCore = global.CasaModulesFlow;
   const flowLayout = global.CasaModulesFlowLayout;
+  const hierarchyDefaults = global.CASA_EM_MODULOS_HIERARCHY_DEFAULTS;
   let priceBook = structuredClone(global.CASA_EM_MODULOS_PRICE_BOOK);
   const pricing = global.CasaModulesPricing;
   let configuratorSettings = global.CASA_EM_MODULOS_CONFIGURATOR_DEFAULTS;
@@ -23,13 +24,13 @@
   let flowLayoutErrors = [];
   let initialStateApplied = false;
 
-  if (!scene || !inlineMasks || !core || !visibility || !validation || !fingerprint || !finishes || !catalog || !priceBook || !pricing || !configurationCore || !flowCore || !flowLayout || !configuratorSettings) {
+  if (!scene || !inlineMasks || !core || !visibility || !validation || !fingerprint || !finishes || !catalog || !priceBook || !pricing || !configurationCore || !flowCore || !flowLayout || !hierarchyDefaults || !configuratorSettings) {
     throw new Error("Não foi possível carregar os dados da cena 2D.");
   }
   validation.assertValidScene(scene);
 
   function publishNormalizedFlow(settings) {
-    normalizedFlow = flowCore.normalizeFlow(settings, configurationCore.itemRegistry(catalog));
+    normalizedFlow = flowCore.normalizeFlow(settings, configurationCore.itemRegistry(catalog), hierarchyDefaults);
     global.CASA_NORMALIZED_FLOW = normalizedFlow;
     global.CASA_KEYBOARD_SHORTCUTS?.setFlow?.(normalizedFlow);
     return normalizedFlow;
