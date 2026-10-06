@@ -1694,7 +1694,7 @@
     })];
     catalog.options.stonePackages = stone.materialIds.map((id) => {
       const material = materials.get(id); const old = previousStone.get(id);
-      return { ...old, id, label: material.label, description: old?.description || "Acabamento compartilhado entre bancada e rodapé.", color: material.color, swatchColor: material.color, textureAsset: material.textureAsset || null, textureScale: 1 };
+      return { ...old, id, label: material.label, description: old?.description || "Acabamento compartilhado entre bancada e rodapé.", color: material.color, swatchColor: material.color ?? old?.swatchColor ?? null, textureAsset: material.textureAsset || null, textureScale: 1 };
     });
     const frontGroup = scene.finishGroups.find((item) => item.id === "fronts-all");
     if (frontGroup) {
