@@ -1,6 +1,6 @@
 # Housekeeping roadmap, backlog and next checkpoint — 2026-10-05
 
-Status: canonical continuation document for the near-official MobiliPresenter2D candidate.
+Status: canonical continuation document for the near-official MobiliPresenter2D candidate. Repository UX/hierarchy work is complete through CP-UX-04.3 / PR #95; the remaining P1 work is the authenticated published-v3 housekeeping boundary followed by authenticated schema-v4 publication and legacy retirement.
 
 ## Checkpoint definition
 
@@ -19,6 +19,8 @@ Do not use “checkpoint” to mean an arbitrary intermediate commit.
 ## Current stable authority
 
 - Product authority: `main`.
+- Current `main` after the accepted preview #95: `cbf41d29e636fa1a80bc13c1d457837cb737c57b`.
+- CP-UX-04.2 centralized legacy-v3 Stage -> Group -> Section semantics in `app/data/hierarchy-defaults.js`; CP-UX-04.3 then aligned finish breakpoints, direct Frentes -> Puxadores traversal and runtime/admin cache revisions without changing schema or production administration.
 - Repository housekeeping authority immediately before this documentation checkpoint: `42f55917961cc8957974bb50b589945b36f00055`.
 - Documentation checkpoint PR #76 merged as `4284ad052c7d7fff108dc752ef0306edeb227ede`; later bookkeeping commits may advance `main` without changing product/runtime authority.
 - Exact near-official product candidate proven by the full gate fan-out: `b969bb471831d405fd6e1c9c15bf761176885cdd`.
@@ -60,59 +62,68 @@ The current codebase has already removed or resolved the main accidental legacy 
 
 ## Backlog
 
-### P1 — buyer UX navigation and flow hierarchy (new evidence)
+### P1 — buyer UX navigation and flow hierarchy — COMPLETE THROUGH CP-UX-04.3
 
-New visual review exposed concrete buyer-facing friction that was not known when this housekeeping roadmap declared the published-administration migration as the only remaining P1 architecture cleanup.
+The repository-side UX/hierarchy track is no longer an open housekeeping blocker.
 
-The new UX track is intentionally independent from housekeeping:
+Completed work now includes:
 
-- stage changes do not always establish a clear top-of-stage visual context;
-- keyboard section ownership is inferred from DOM shape;
-- Services has unclear/accidental section boundaries and inconsistent toggle-card presentation;
-- Puxadores lacks explicit browser coverage as a horizontally navigable selection section;
-- active-section focus/scroll behavior is visually weak;
-- the admin structure is effectively `stage -> items[]` and cannot express groups/sections/order/layout.
+- deterministic stage/section scrolling against the real controls scroller;
+- explicit keyboard section ownership and direct Frentes -> Puxadores traversal;
+- one normalized Stage -> Group -> Section -> Item flow model;
+- hierarchy-capable admin editor;
+- hierarchy-driven buyer layout;
+- one shared legacy-v3 hierarchy authority in `app/data/hierarchy-defaults.js`;
+- admin option inventory for aggregate items such as Puxadores without turning options into hierarchy owners;
+- breakpoint behavior aligned with the actual workspace side-by-side/stacked transition;
+- cache-revision hardening so stale hierarchy/keyboard assets do not masquerade as current behavior.
 
-Target hierarchy:
+Canonical history and gate evidence remain in `docs/backlog/ux-navigation-hierarchy-roadmap-2026-10-05.md`.
 
-```text
-Stage -> Group -> Section -> Item -> Option(s)
-```
+The next UX checkpoint is not another renderer fix. It is **CP-UX-05**, which crosses the authenticated production schema boundary.
 
-Canonical plan: `docs/backlog/ux-navigation-hierarchy-roadmap-2026-10-05.md`.
+### P1 — published administration compatibility and schema migration
 
-Next safe repository checkpoint: **CP-UX-01**, which repairs explicit section ownership, Services/Puxadores keyboard behavior, active-section hierarchy and deterministic scroll/focus without changing `ConfiguratorAdministration2D 3.0` or production configuration.
+Two independent authenticated concerns remain and must be kept explicit.
 
-This work may proceed while the authenticated published-config migration is blocked because it is independently evidenced and does not cross the admin write boundary.
+**Last-known housekeeping audit, not a live production read:**
 
-### P1 — published administration compatibility
+- production was `ConfiguratorAdministration2D 3.0`;
+- `stone-all` was assigned to `finishes`;
+- `stone-skirting` was selected in `initialState.services`;
+- `stone-skirting` was missing from published stage assignment;
+- buyer runtime repaired that contradiction in memory through `repairSkirtingStageContract()`.
 
-This is the only remaining architecture cleanup that affects current production behavior, although the buyer runtime is already safe.
+**Repository state now:**
 
-Production currently has:
+- v4 hierarchy support/editor already exists;
+- legacy-v3 hierarchy semantics are centralized in `app/data/hierarchy-defaults.js`;
+- `netlify/functions/configuration.mjs` still rejects direct `ConfiguratorAdministration2D 4.0` publication with `hierarchy_publication_required`;
+- `app/core/runtime-contracts.js` still contains the temporary `stone-skirting` repair;
+- PR #95 changed none of those production boundaries.
 
-- schema `ConfiguratorAdministration2D 3.0`;
-- revision 3 in the last compatibility audit;
-- `stone-all` assigned to `finishes`;
-- `stone-skirting` selected in `initialState.services`;
-- `stone-skirting` missing from every published stage.
+**Preferred remaining order:**
 
-The current buyer runtime repairs this contradiction in memory through `repairSkirtingStageContract()`.
+1. **CP-HK-01A — fresh authenticated v3 consistency check/write.**
+   - Re-read production immediately before mutation.
+   - If and only if the live record is still v3 and still has the audited `stone-skirting` contradiction, add exactly that missing stage assignment.
+   - Read back and prove all unrelated semantics unchanged and the repair becomes a no-op.
+   - If the live record differs, abort the old plan and replan from observed state.
+2. **CP-HK-01B — retire the temporary runtime repair.**
+   - After CP-HK-01A readback proves no repair is needed, remove/isolate `runtime-contracts.js` compatibility logic in a narrow repository PR and rerun current product gates.
+3. **CP-UX-05A — authenticated v3 -> v4 schema publication.**
+   - Freshly re-read the now-self-consistent production record.
+   - Enable server-side v4 validation/publication through an explicit migration action.
+   - Prove non-hierarchy semantic identity before PUT and after readback.
+4. **CP-UX-05B — retire v3 as a normal production authority.**
+   - Only after production is durably v4.
+   - Keep v3 solely as an explicit import/migration compatibility path where required.
 
-Required cleanup:
+Do not combine the `stone-skirting` repair and v4 schema migration into one write merely to save a transaction.
 
-1. authenticate through the real admin boundary;
-2. read the current published record again;
-3. abort if the observed revision/content no longer matches the migration assumptions;
-4. persist a new revision that differs only by adding `stone-skirting` beside `stone-all`;
-5. preserve every other administration choice byte-for-semantics;
-6. read back the published record;
-7. prove the compatibility repair becomes a no-op;
-8. only then remove the compatibility shim in a dedicated repository PR.
+Do **not** auto-add `handles-all`; its absence from a legacy stage can be intentional and hierarchy defaults are not permission to mutate production choices.
 
-Do **not** auto-add `handles-all`. Its absence can be intentional.
-
-This work is blocked only by authenticated admin identity/session. Repository or deploy automation must not bypass that authorization boundary.
+All production mutations remain blocked on a real authenticated admin session. Repository/deploy automation must not bypass that boundary.
 
 ### P1 — deferred product decision: PR #34
 
@@ -157,18 +168,19 @@ Revisit only with evidence from a second furniture family or a concrete limitati
 
 ### Parallel product track — UX navigation/hierarchy
 
-This track does not alter the Stage 3/4 published-configuration cleanup sequence.
+Checkpoint status:
 
-Checkpoint order:
+1. **CP-UX-00 — COMPLETE** — plan persisted.
+2. **CP-UX-01 — COMPLETE** — explicit section navigation and scroll/focus repair.
+3. **CP-UX-02 — COMPLETE** — normalized internal flow model.
+4. **CP-UX-03 — COMPLETE** — hierarchy-capable admin representation/editor with fail-closed publication.
+5. **CP-UX-04 — COMPLETE** — hierarchy-driven buyer layout.
+6. **CP-UX-04.1 — COMPLETE** — Puxadores active-state + earlier finish split.
+7. **CP-UX-04.2 — COMPLETE** — one shared legacy-v3 hierarchy authority.
+8. **CP-UX-04.3 — COMPLETE** — PR #95 breakpoint alignment, direct Frentes -> Puxadores gate and cache hardening.
+9. **CP-UX-05 — NEXT / AUTHENTICATED BOUNDARY** — production v4 publication and legacy retirement.
 
-1. **CP-UX-00 — documentation/plan**: persist the recovered UX findings and implementation plan.
-2. **CP-UX-01 — immediate friction repair**: explicit navigation sections, Services/Puxadores fixes, active-section styling and deterministic stage/section scrolling; no administration schema change.
-3. **CP-UX-02 — internal normalized flow model**: Stage -> Group -> Section -> Item references, derived from current v3 configuration; no production write.
-4. **CP-UX-03 — versioned admin hierarchy/editor**: backward-compatible schema/editor support for groups and sections.
-5. **CP-UX-04 — hierarchy-driven runtime layout**: responsive group layout, including deliberate two-region Modules composition.
-6. **CP-UX-05 — authenticated hierarchy publication + legacy fallback retirement** after readback and production gates.
-
-Every checkpoint must update `CURRENT_STATE.md` and the UX roadmap before the next implementation begins.
+The UX track now depends on the same authenticated production boundary as housekeeping. Repository-only work should not invent another compatibility layer while that boundary is pending.
 
 ## Plan by stages
 
@@ -211,37 +223,39 @@ Exit condition: every remaining compatibility path has an explicit retirement co
 
 Result: PASS. `runtime-contracts.js` is now the last compatibility-only shim.
 
-### Stage 3 — persist the published administration migration — NEXT EXTERNAL STEP
+### Stage 3 — CP-HK-01A: persist published-v3 consistency — NEXT EXTERNAL STEP
 
-This step crosses the authenticated admin boundary and should not be simulated by repository automation.
+This step crosses the authenticated admin boundary and must not be simulated by repository automation.
 
 Procedure:
 
-1. GET/read the production administration while authenticated.
-2. Verify schema, revision and stage assignment against the expected precondition.
-3. Create the minimal next revision:
-   - add exactly one `stone-skirting` assignment;
+1. GET/read production administration while authenticated.
+2. Record schema, revision and semantic digest before mutation.
+3. If the source is no longer v3 or no longer matches the audited `stone-skirting` contradiction, stop and replan.
+4. Otherwise create the minimal next v3 revision:
+   - add exactly one `stone-skirting` stage assignment;
    - place it in the same enabled stage as `stone-all`;
    - change nothing else.
-4. PUT using the normal revision/conflict contract.
-5. GET/read back.
-6. Verify:
-   - revision incremented exactly as expected;
+5. PUT using the normal revision/conflict contract.
+6. GET/read back without cache.
+7. Verify:
+   - revision changed exactly as expected;
    - `stone-skirting` appears exactly once;
-   - all unrelated fields are unchanged;
-   - `repairSkirtingStageContract()` returns an equivalent record.
-7. Run production Stone and Keyboard browser smokes immediately.
+   - all unrelated fields are semantically identical;
+   - `repairSkirtingStageContract()` is a no-op.
+8. Run production Stone and Keyboard browser smokes immediately.
+9. Persist before/after revision + digest evidence, excluding secrets.
 
 Stop/fail closed if any precondition, revision or unrelated field differs.
 
-### Stage 4 — retire the compatibility shim — NEXT REPOSITORY CHECKPOINT
+### Stage 4 — CP-HK-01B: retire the compatibility shim — AFTER STAGE 3
 
-After Stage 3 succeeds:
+After Stage 3 succeeds and readback proves the repair is unnecessary:
 
 1. branch directly from current `main`;
-2. remove `app/core/runtime-contracts.js` if it has no remaining responsibility;
+2. remove `app/core/runtime-contracts.js` if it has no remaining responsibility, or isolate/remove only its compatibility behavior if another permanent contract is discovered;
 3. remove its script include/import and compatibility-only tests;
-4. add/adjust a regression assertion proving the published/current contract no longer requires repair;
+4. add a regression assertion proving the published/current v3 contract no longer needs repair;
 5. run:
    - unit/core tests;
    - App build purity;
@@ -249,6 +263,8 @@ After Stage 3 succeeds:
    - Current variant fidelity;
    - Stone browser;
    - Keyboard browser;
+   - Flow layout browser;
+   - Admin hierarchy browser;
    - Mobile/PiP browser;
    - Summary/Pricing browser;
 6. inspect the PR diff path-by-path;
@@ -256,7 +272,9 @@ After Stage 3 succeeds:
 8. rerun production browser smokes;
 9. prune the transient branch through normal branch hygiene.
 
-This should be a small repository-only PR with no visual asset, geometry, pricing or product behavior change.
+This remains a narrow repository-only cleanup and should preferably complete **before CP-UX-05A**, so the v4 migration starts from a self-consistent production source without a hidden runtime repair layer.
+
+Do not remove the shim merely because v4 support exists in code. Removal requires the Stage 3 production proof.
 
 ### Stage 5 — declare the official-use baseline
 
@@ -288,45 +306,66 @@ For every proposed abstraction, ask:
 
 ## Next checkpoint plan
 
-### Checkpoint CP-HK-01 — persisted published contract + compatibility shim retirement
+### Checkpoint CP-HK-01 — two-phase published-contract cleanup
 
-**Goal:** eliminate the final runtime migration shim without changing buyer-visible behavior.
+**Goal:** make the published v3 source internally consistent, then remove the temporary runtime repair without changing buyer-visible behavior.
 
-**Preferred checkpoint form:** mergeable PR to `main`.
+**External prerequisite:** authenticated production admin session.
 
-**External prerequisite:** authenticated production admin session capable of reading and publishing the configuration through the existing admin API/UI.
+#### CP-HK-01A — authenticated production consistency write
 
-**Preconditions:**
+Preconditions must be re-read live. The old revision-3 audit is evidence, not authorization to assume the current record is unchanged.
 
-- current production record is re-read immediately before mutation;
-- schema is still `ConfiguratorAdministration2D 3.0`;
-- `stone-all` is still in an enabled stage;
-- `stone-skirting` is still selected but unassigned;
-- no concurrent admin revision has invalidated the expected revision.
+Deliverables:
 
-**Checkpoint deliverables:**
+1. fresh pre-write schema/revision/digest;
+2. at most one intended semantic change: assign `stone-skirting` beside `stone-all` if the contradiction still exists;
+3. conflict-guarded PUT;
+4. immediate readback;
+5. proof unrelated fields are unchanged;
+6. proof `repairSkirtingStageContract()` becomes a no-op;
+7. production Stone + Keyboard smoke PASS.
 
-1. production configuration revision with only the missing stage assignment persisted;
-2. readback evidence that the runtime repair is a no-op;
-3. dedicated PR removing the compatibility shim;
-4. all current product gates green;
-5. production Stone + Keyboard smoke PASS after merge;
-6. transient branch pruned;
-7. updated official-candidate/release record.
+If the live state differs, CP-HK-01A becomes BLOCKED/PENDING REPLAN rather than guessing.
 
-**Acceptance criteria:**
+#### CP-HK-01B — repository shim retirement
 
-- no in-memory mutation is needed to make the production configuration self-consistent;
-- buyer behavior remains unchanged;
-- no unrelated admin choice changes;
-- `runtime-contracts.js` no longer exists or no longer contains compatibility logic;
-- no asset, stone, glass, mask, pricing or geometry bytes change;
-- current-product gates remain green;
-- historical replay remains intact.
+Start only after CP-HK-01A PASS.
 
-**Fail-closed rule:** if authenticated migration cannot be performed safely, do not remove the shim.
+Deliverables:
 
-**Stable fallback checkpoint:** the current `main` remains a valid near-official stable point. Do not create speculative runtime changes merely to “make progress” while the authenticated migration is unavailable.
+1. remove/isolate the temporary runtime compatibility repair;
+2. prove no current production load needs it;
+3. all current product/layout/admin gates green;
+4. production smoke PASS after merge;
+5. branch hygiene complete.
+
+#### Relationship to CP-UX-05
+
+Preferred sequence:
+
+```text
+fresh production read
+        |
+        v
+CP-HK-01A  v3 consistency write
+        |
+        v
+CP-HK-01B  runtime shim retirement
+        |
+        v
+fresh production read
+        |
+        v
+CP-UX-05A  explicit v3 -> v4 publication
+        |
+        v
+CP-UX-05B  retire v3 as normal authority
+```
+
+The hierarchy schema migration and the `stone-skirting` consistency repair remain separate authenticated transactions.
+
+**Stable fallback checkpoint:** current `main` remains safe while authenticated work is unavailable. Do not create speculative compatibility code simply to manufacture repository progress.
 
 ## Promotion discipline for future checkpoints
 
@@ -355,9 +394,11 @@ If work resumes with no additional context:
 5. read `docs/architecture/runtime-contract-map-2026-10-05.md`;
 6. read `docs/architecture/published-config-compat-audit-2026-10-05.md`;
 7. inspect live `main`;
-8. for repository work, continue the next incomplete CP-UX checkpoint;
-9. for the external compatibility track, check whether production administration has been migrated since revision 3;
-10. if not, Stage 3 remains the next authenticated external action;
-11. if yes and the repair is already a no-op, start Stage 4 on a fresh branch from `main`.
+8. confirm CP-UX-04.3 / PR #95 remains present on live `main`;
+9. for authenticated work, re-read production rather than assuming the old revision-3 audit is still current;
+10. if the v3 `stone-skirting` contradiction still exists, execute CP-HK-01A first;
+11. after CP-HK-01A proves the repair is a no-op, execute CP-HK-01B;
+12. then continue CP-UX-05A from a fresh authenticated production read;
+13. start CP-UX-05B only after production v4 readback and smoke tests pass.
 
 Do not reopen already-completed legacy cleanup without new evidence. The newly observed UX findings are such new evidence and are governed by the separate UX roadmap.
