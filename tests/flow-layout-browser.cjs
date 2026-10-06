@@ -80,21 +80,22 @@ const { chromium } = require("playwright");
   assert.deepEqual(await renderedSectionOrder("stone"), await modelSectionOrder("finishes", "stone"), "stone section order follows normalized flow");
   const cabinet = await rect('[data-flow-group-shell="cabinet-finishes"]');
   const stone = await rect('[data-flow-group-shell="stone"]');
-  assert.ok(Math.abs(cabinet.top - stone.top) < 4, "wide Acabamentos renders peer groups on one row");
-  assert.ok(cabinet.right <= stone.left + 4, "Acabamentos groups occupy separate desktop columns");
+  assert.ok(stone.top >= cabinet.bottom - 2, "while controls are beside the scene, Acabamentos remains one column");
+  assert.equal(await noOverflow("#finishesStagePanel"), true, "desktop side-panel Acabamentos does not overflow horizontally");
+
+  await page.setViewportSize({ width: 1050, height: 900 });
+  await page.waitForTimeout(80);
+  const cabinetMedium = await rect('[data-flow-group-shell="cabinet-finishes"]');
+  const stoneMedium = await rect('[data-flow-group-shell="stone"]');
+  assert.ok(Math.abs(cabinetMedium.top - stoneMedium.top) < 4, "when controls move below the scene, Acabamentos switches to two columns");
+  assert.ok(cabinetMedium.right <= stoneMedium.left + 4, "stacked workspace groups occupy separate columns");
   const handleGeometry = await page.locator('[data-handle-id]').evaluateAll((nodes) => nodes.map((node) => {
     const box = node.getBoundingClientRect();
     const copy = node.querySelector(".handle-option__copy")?.getBoundingClientRect();
     return { width: box.width, copyWidth: copy?.width || 0 };
   }));
-  assert.ok(handleGeometry.every((entry) => entry.width >= 190 && entry.copyWidth >= 125), "Puxadores keeps readable card/copy width inside a split finish group");
-  assert.equal(await noOverflow("#finishesStagePanel"), true, "desktop Acabamentos does not overflow horizontally");
-  await page.setViewportSize({ width: 1050, height: 900 });
-  await page.waitForTimeout(80);
-  const cabinetMedium = await rect('[data-flow-group-shell="cabinet-finishes"]');
-  const stoneMedium = await rect('[data-flow-group-shell="stone"]');
-  assert.ok(Math.abs(cabinetMedium.top - stoneMedium.top) < 4, "Acabamentos keeps two columns at a medium desktop width");
-  assert.ok(cabinetMedium.right <= stoneMedium.left + 4, "medium desktop groups remain separated horizontally");
+  assert.ok(handleGeometry.every((entry) => entry.width >= 190 && entry.copyWidth >= 125), "Puxadores stays readable in the two-column stacked-workspace layout");
+
   await page.setViewportSize({ width: 1366, height: 900 });
   assert.deepEqual(await page.evaluate(() => window.CASA_EM_MODULOS_DEBUG.getFlowLayoutErrors()), [], "finish layout has no renderer invariant errors");
   await page.screenshot({ path: path.join(output, "finishes-desktop.png"), fullPage: true });
