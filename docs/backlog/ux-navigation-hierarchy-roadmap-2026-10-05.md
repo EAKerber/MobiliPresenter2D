@@ -1,6 +1,6 @@
 # UX navigation and configurator hierarchy roadmap — 2026-10-05
 
-Status: canonical plan for the buyer-navigation and configurator-structure work. CP-UX-00 through CP-UX-04.1 are complete; CP-UX-04.2 is implemented and in its final merge gate; CP-UX-05 remains the next checkpoint and crosses the authenticated production boundary.
+Status: canonical plan for the buyer-navigation and configurator-structure work. CP-UX-00 through CP-UX-04.2 are complete; CP-UX-05 is the next checkpoint and crosses the authenticated production boundary.
 
 This roadmap is independent from the authenticated `stone-skirting` published-administration migration. The existing production compatibility cleanup remains valid and must not be bypassed or mixed into this work.
 
@@ -956,7 +956,7 @@ Intentionally unchanged:
 
 Merge result: PASS. PR #90 merged to `main` at `a7294f8dd4f8209de1e39ccdcdc0902cb84beab0` after final reviewed head `490ebda8ab56fa7c31411f1b5a6761a114d37cce` passed the applicable gate set and Netlify deploy preview. CP-UX-05 remains the next checkpoint.
 
-### CP-UX-04.2 — single hierarchy authority for legacy compatibility — IMPLEMENTED / MERGE GATE
+### CP-UX-04.2 — single hierarchy authority for legacy compatibility — COMPLETE
 
 **Origin:** direct admin/buyer review raised the hypothesis that `Puxadores` was behaving inconsistently because its section identity might be hard-coded rather than coming from the hierarchy data. The audit confirmed a broader authority duplication rather than an isolated Puxadores bug.
 
@@ -1054,7 +1054,7 @@ If a future legacy item cannot be assigned by the explicit hierarchy defaults, n
 
 #### Merge rule
 
-This documentation closeout changes the exact PR head. Rerun the applicable CP-UX-04.2 gates on that final head and merge PR #92 only if it remains green, then record the resulting `main` SHA before beginning the authenticated CP-UX-05 production migration.
+Merge result: PASS. PR #92 merged to `main` at `006128343e09388676640d0ac33970ae928c6e8d` after exact reviewed head `6c4b9e4308315a7039846306f4ebd0f863f60dd3` passed the full applicable gate set and Netlify deploy preview. CP-UX-05 may now begin from live `main` for repository preparation; production publication still requires the authenticated boundary.
 
 ### CP-UX-05 — authenticated hierarchy publication and legacy-boundary retirement — NEXT
 
