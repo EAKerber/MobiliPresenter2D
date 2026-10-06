@@ -201,6 +201,43 @@
     if (section?.element) section.element.dataset.keyboardActiveSection = "true";
   }
 
+  function resetStageNavigation(stageId = activeStageId()) {
+    sectionCursorByStage.delete(stageId);
+    markActiveSection(null);
+  }
+
+  function stickyTopClearance() {
+    const nav = document.querySelector(".flow-nav");
+    if (!nav || !isVisible(nav)) return 12;
+    const position = getComputedStyle(nav).position;
+    if (position !== "sticky" && position !== "fixed") return 12;
+    const rect = nav.getBoundingClientRect();
+    if (rect.top > 16 || rect.bottom <= 0) return 12;
+    return Math.min(Math.max(12, rect.bottom + 12), Math.max(12, window.innerHeight * 0.4));
+  }
+
+  function scrollSectionIntoView(section, sectionIndex, sectionCount) {
+    if (!section?.element || sectionIndex < 0 || !sectionCount) return;
+    const rect = section.element.getBoundingClientRect();
+    const viewportTop = stickyTopClearance();
+    const viewportBottom = Math.max(viewportTop + 1, window.innerHeight - 16);
+    const availableHeight = viewportBottom - viewportTop;
+    let targetTop = viewportTop;
+
+    if (rect.height < availableHeight) {
+      if (sectionIndex === sectionCount - 1) targetTop = viewportBottom - rect.height;
+      else if (sectionIndex > 0) targetTop = viewportTop + (availableHeight - rect.height) / 2;
+    }
+
+    const delta = rect.top - targetTop;
+    if (Math.abs(delta) < 2) return;
+    window.scrollBy({
+      top: delta,
+      left: 0,
+      behavior: global.matchMedia?.("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth"
+    });
+  }
+
   function focusSectionItem(stageId, section, index) {
     if (!section?.items?.length) return false;
     const normalizedIndex = ((index % section.items.length) + section.items.length) % section.items.length;
@@ -209,7 +246,6 @@
     itemCursorBySection.set(itemCursorKey(stageId, section.id), normalizedIndex);
     markActiveSection(section);
     item.focus({ preventScroll: true });
-    item.scrollIntoView?.({ block: "nearest", inline: "nearest" });
     return true;
   }
 
@@ -222,7 +258,9 @@
       ? (direction < 0 ? sections.length - 1 : 0)
       : (currentIndex + direction + sections.length) % sections.length;
     const target = sections[targetIndex];
-    return focusSectionItem(stageId, target, preferredItemIndex(stageId, target));
+    const focused = focusSectionItem(stageId, target, preferredItemIndex(stageId, target));
+    if (focused) scrollSectionIntoView(target, targetIndex, sections.length);
+    return focused;
   }
 
   function moveItem(direction) {
@@ -405,6 +443,8 @@
     toggleSelectedModule,
     closeModuleDetail,
     changeStage,
-    clearNumericBuffer
+    clearNumericBuffer,
+    resetStageNavigation,
+    scrollSectionIntoView
   });
 })(typeof window === "undefined" ? globalThis : window);
