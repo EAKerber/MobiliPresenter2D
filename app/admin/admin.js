@@ -1262,89 +1262,193 @@ passwordActionForm.addEventListener("submit", async (event) => {
 });
 
 stagesList.addEventListener("input", (event) => {
-  const input = event.target.closest("[data-stage-label]");
-  if (!input) return;
-  const stage = model.stages.find((item) => item.id === input.dataset.stageLabel);
-  if (stage) stage.label = input.value;
+  const stageInput = event.target.closest("[data-stage-label]");
+  if (stageInput) {
+    const stage = model.stages.find((item) => item.id === stageInput.dataset.stageLabel);
+    if (stage) stage.label = stageInput.value;
+    return;
+  }
+  const groupInput = event.target.closest("[data-group-label]");
+  if (groupInput) {
+    const [stageId, groupId] = groupInput.dataset.groupLabel.split("|");
+    const group = model.stages.find((stage) => stage.id === stageId)?.groups.find((entry) => entry.id === groupId);
+    if (group) group.label = groupInput.value;
+    return;
+  }
+  const sectionInput = event.target.closest("[data-section-label]");
+  if (sectionInput) {
+    const [stageId, groupId, sectionId] = sectionInput.dataset.sectionLabel.split("|");
+    const group = model.stages.find((stage) => stage.id === stageId)?.groups.find((entry) => entry.id === groupId);
+    const section = group?.sections.find((entry) => entry.id === sectionId);
+    if (section) section.label = sectionInput.value;
+  }
 });
 
 stagesList.addEventListener("change", (event) => {
   const enabled = event.target.closest("[data-stage-enabled]");
   if (enabled) {
-    const stage = model.stages.find((item) => item.id === enabled.dataset.stageEnabled);
+    const candidate = structuredClone(model);
+    const stage = candidate.stages.find((item) => item.id === enabled.dataset.stageEnabled);
     if (stage) stage.enabled = enabled.checked;
+    commitHierarchy(candidate);
     renderAdminTabs();
     return;
   }
+
+  const groupSpan = event.target.closest("[data-group-span]");
+  if (groupSpan) {
+    const [stageId, groupId] = groupSpan.dataset.groupSpan.split("|");
+    const candidate = structuredClone(model);
+    const group = candidate.stages.find((stage) => stage.id === stageId)?.groups.find((entry) => entry.id === groupId);
+    if (group) group.columnSpan = Number(groupSpan.value);
+    commitHierarchy(candidate);
+    return;
+  }
+
+  const sectionPresentation = event.target.closest("[data-section-presentation]");
+  if (sectionPresentation) {
+    const [stageId, groupId, sectionId] = sectionPresentation.dataset.sectionPresentation.split("|");
+    const candidate = structuredClone(model);
+    const group = candidate.stages.find((stage) => stage.id === stageId)?.groups.find((entry) => entry.id === groupId);
+    const section = group?.sections.find((entry) => entry.id === sectionId);
+    if (section) section.presentation = sectionPresentation.value;
+    commitHierarchy(candidate);
+    return;
+  }
+
+  const sectionGroup = event.target.closest("[data-move-section-group]");
+  if (sectionGroup) {
+    const [stageId, sourceGroupId, sectionId] = sectionGroup.dataset.moveSectionGroup.split("|");
+    const candidate = hierarchyEditor.moveSectionToGroup(model, stageId, sourceGroupId, sectionId, sectionGroup.value);
+    commitHierarchy(candidate);
+    return;
+  }
+
+  const itemTarget = event.target.closest("[data-move-hierarchy-item-target]");
+  if (itemTarget) {
+    placeItemAtTarget(itemTarget.dataset.moveHierarchyItemTarget, itemTarget.value);
+    return;
+  }
+
   const initialEntity = event.target.closest("[data-initial-entity]");
-  if (initialEntity) { model.initialState.entities[initialEntity.dataset.initialEntity] = initialEntity.checked; return; }
+  if (initialEntity) {
+    model.initialState.entities[initialEntity.dataset.initialEntity] = initialEntity.checked;
+    return;
+  }
   const initialService = event.target.closest("[data-initial-service]");
   if (initialService) {
     const services = new Set(model.initialState.services);
-    if (initialService.checked) services.add(initialService.dataset.initialService); else services.delete(initialService.dataset.initialService);
-    model.initialState.services = [...services]; return;
+    if (initialService.checked) services.add(initialService.dataset.initialService);
+    else services.delete(initialService.dataset.initialService);
+    model.initialState.services = [...services];
   }
-  const item = event.target.closest("[data-stage-item]");
-  if (!item) return;
-  const stage = model.stages.find((entry) => entry.id === item.dataset.stageItem);
-  if (!stage) return;
-  if (item.checked) return;
-  moveStageItem(item.value, null);
-});
-
-stagesList.addEventListener("dragstart", (event) => {
-  const item = event.target.closest("[data-drag-stage-item]");
-  if (!item || !event.dataTransfer) return;
-  event.dataTransfer.setData("text/plain", item.dataset.dragStageItem);
-  event.dataTransfer.effectAllowed = "move";
-  requestAnimationFrame(() => item.classList.add("is-dragging"));
-});
-
-stagesList.addEventListener("dragend", () => {
-  stagesList.querySelectorAll(".is-dragging,.is-drop-target").forEach((item) => item.classList.remove("is-dragging", "is-drop-target"));
-});
-
-stagesList.addEventListener("dragover", (event) => {
-  const target = event.target.closest("[data-stage-drop]");
-  if (!target || !event.dataTransfer) return;
-  const id = event.dataTransfer.getData("text/plain");
-  if (id && !getItemOptions(target.dataset.stageDrop).some((item) => item.id === id)) return;
-  event.preventDefault();
-  event.dataTransfer.dropEffect = "move";
-  target.classList.add("is-drop-target");
-});
-
-stagesList.addEventListener("dragleave", (event) => {
-  const target = event.target.closest("[data-stage-drop]");
-  if (target && !target.contains(event.relatedTarget)) target.classList.remove("is-drop-target");
-});
-
-stagesList.addEventListener("drop", (event) => {
-  const target = event.target.closest("[data-stage-drop]");
-  const itemId = event.dataTransfer?.getData("text/plain");
-  if (!target || !itemId) return;
-  event.preventDefault();
-  target.classList.remove("is-drop-target");
-  moveStageItem(itemId, target.dataset.stageDrop);
 });
 
 stagesList.addEventListener("click", (event) => {
-  const remove = event.target.closest("[data-remove-stage]");
-  if (remove && !remove.disabled) {
-    const target = model.stages.find((stage) => stage.id === remove.dataset.removeStage);
+  const removeStage = event.target.closest("[data-remove-stage]");
+  if (removeStage && !removeStage.disabled) {
+    const candidate = structuredClone(model);
+    const target = candidate.stages.find((stage) => stage.id === removeStage.dataset.removeStage);
     if (!target) return;
-    model.stages = model.stages.filter((stage) => stage !== target);
-    if (target.kind === "custom") target.items.forEach((id) => { if (!model.stages.some((stage) => stage.items.includes(id))) return; });
-    renderStages(); return;
+    candidate.stages = candidate.stages.filter((stage) => stage !== target);
+    commitHierarchy(candidate);
+    return;
   }
-  const button = event.target.closest("[data-move-stage]");
-  if (!button) return;
-  const [id, direction] = button.dataset.moveStage.split(":");
-  const index = model.stages.findIndex((stage) => stage.id === id);
-  const target = index + Number(direction);
-  if (index < 0 || target < 0 || target >= model.stages.length) return;
-  [model.stages[index], model.stages[target]] = [model.stages[target], model.stages[index]];
-  renderStages();
+
+  const moveStage = event.target.closest("[data-move-stage]");
+  if (moveStage) {
+    const [stageId, direction] = moveStage.dataset.moveStage.split(":");
+    commitHierarchy(hierarchyEditor.moveStage(model, stageId, Number(direction)));
+    return;
+  }
+
+  const moveGroup = event.target.closest("[data-move-hierarchy-group]");
+  if (moveGroup) {
+    const [stageId, groupId, direction] = moveGroup.dataset.moveHierarchyGroup.split("|");
+    commitHierarchy(hierarchyEditor.moveGroup(model, stageId, groupId, Number(direction)));
+    return;
+  }
+
+  const moveSection = event.target.closest("[data-move-hierarchy-section]");
+  if (moveSection) {
+    const [stageId, groupId, sectionId, direction] = moveSection.dataset.moveHierarchySection.split("|");
+    commitHierarchy(hierarchyEditor.moveSection(model, stageId, groupId, sectionId, Number(direction)));
+    return;
+  }
+
+  const moveItem = event.target.closest("[data-move-hierarchy-item]");
+  if (moveItem) {
+    const [itemId, direction] = moveItem.dataset.moveHierarchyItem.split(":");
+    commitHierarchy(hierarchyEditor.reorderItem(model, itemId, Number(direction)));
+    return;
+  }
+
+  const placeItem = event.target.closest("[data-place-hierarchy-item]");
+  if (placeItem) {
+    const itemId = placeItem.dataset.placeHierarchyItem;
+    const select = placeItem.closest(".hierarchy-pool-item")?.querySelector("[data-place-hierarchy-item-target]");
+    if (select?.value) placeItemAtTarget(itemId, select.value);
+    return;
+  }
+
+  const splitItem = event.target.closest("[data-split-hierarchy-item]");
+  if (splitItem) {
+    const label = window.prompt("Nome da nova seção", itemLabel(splitItem.dataset.stageId, splitItem.dataset.splitHierarchyItem));
+    if (!label?.trim()) return;
+    const stage = model.stages.find((entry) => entry.id === splitItem.dataset.stageId);
+    const sectionIds = new Set((stage?.groups || []).flatMap((group) => group.sections.map((section) => section.id)));
+    const sectionId = hierarchyEditor.uniqueId(sectionIds, label, "secao");
+    const candidate = hierarchyEditor.splitItemToSection(model, splitItem.dataset.splitHierarchyItem, {
+      sectionId,
+      label: label.trim().slice(0, 40),
+      presentation: "auto"
+    });
+    commitHierarchy(candidate);
+    return;
+  }
+
+  const splitSection = event.target.closest("[data-split-hierarchy-section]");
+  if (splitSection) {
+    const [stageId, groupId, sectionId] = splitSection.dataset.splitHierarchySection.split("|");
+    const stage = model.stages.find((entry) => entry.id === stageId);
+    const section = stage?.groups.find((group) => group.id === groupId)?.sections.find((entry) => entry.id === sectionId);
+    const label = window.prompt("Nome do novo grupo", section?.label || "Novo grupo");
+    if (!label?.trim()) return;
+    const groupIds = new Set((stage?.groups || []).map((group) => group.id));
+    const nextGroupId = hierarchyEditor.uniqueId(groupIds, label, "grupo");
+    const candidate = hierarchyEditor.splitSectionToGroup(model, stageId, groupId, sectionId, {
+      groupId: nextGroupId,
+      label: label.trim().slice(0, 40),
+      columnSpan: 1
+    });
+    commitHierarchy(candidate);
+    return;
+  }
+
+  const mergeSection = event.target.closest("[data-merge-hierarchy-section]");
+  if (mergeSection) {
+    const [stageId, groupId, sectionId, direction] = mergeSection.dataset.mergeHierarchySection.split("|");
+    const candidate = direction === "next"
+      ? hierarchyEditor.mergeSectionIntoNext(model, stageId, groupId, sectionId)
+      : hierarchyEditor.mergeSectionIntoPrevious(model, stageId, groupId, sectionId);
+    commitHierarchy(candidate);
+    return;
+  }
+
+  const mergeGroup = event.target.closest("[data-merge-hierarchy-group]");
+  if (mergeGroup) {
+    const [stageId, groupId, direction] = mergeGroup.dataset.mergeHierarchyGroup.split("|");
+    const candidate = direction === "next"
+      ? hierarchyEditor.mergeGroupIntoNext(model, stageId, groupId)
+      : hierarchyEditor.mergeGroupIntoPrevious(model, stageId, groupId);
+    commitHierarchy(candidate);
+    return;
+  }
+
+  const removeItem = event.target.closest("[data-remove-hierarchy-item]");
+  if (removeItem) {
+    commitHierarchy(hierarchyEditor.removeItem(model, removeItem.dataset.removeHierarchyItem));
+  }
 });
 
 saveButton.addEventListener("click", async () => {
