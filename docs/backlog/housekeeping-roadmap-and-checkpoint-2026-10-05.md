@@ -60,6 +60,31 @@ The current codebase has already removed or resolved the main accidental legacy 
 
 ## Backlog
 
+### P1 — buyer UX navigation and flow hierarchy (new evidence)
+
+New visual review exposed concrete buyer-facing friction that was not known when this housekeeping roadmap declared the published-administration migration as the only remaining P1 architecture cleanup.
+
+The new UX track is intentionally independent from housekeeping:
+
+- stage changes do not always establish a clear top-of-stage visual context;
+- keyboard section ownership is inferred from DOM shape;
+- Services has unclear/accidental section boundaries and inconsistent toggle-card presentation;
+- Puxadores lacks explicit browser coverage as a horizontally navigable selection section;
+- active-section focus/scroll behavior is visually weak;
+- the admin structure is effectively `stage -> items[]` and cannot express groups/sections/order/layout.
+
+Target hierarchy:
+
+```text
+Stage -> Group -> Section -> Item -> Option(s)
+```
+
+Canonical plan: `docs/backlog/ux-navigation-hierarchy-roadmap-2026-10-05.md`.
+
+Next safe repository checkpoint: **CP-UX-01**, which repairs explicit section ownership, Services/Puxadores keyboard behavior, active-section hierarchy and deterministic scroll/focus without changing `ConfiguratorAdministration2D 3.0` or production configuration.
+
+This work may proceed while the authenticated published-config migration is blocked because it is independently evidenced and does not cross the admin write boundary.
+
 ### P1 — published administration compatibility
 
 This is the only remaining architecture cleanup that affects current production behavior, although the buyer runtime is already safe.
@@ -129,6 +154,21 @@ Revisit only with evidence from a second furniture family or a concrete limitati
 - Do not refresh historical baselines merely to make a later product byte-identical to an old checkpoint.
 - Prefer one ownership/contract cleanup per PR.
 - Require evidence before deleting assets, code paths or compatibility behavior.
+
+### Parallel product track — UX navigation/hierarchy
+
+This track does not alter the Stage 3/4 published-configuration cleanup sequence.
+
+Checkpoint order:
+
+1. **CP-UX-00 — documentation/plan**: persist the recovered UX findings and implementation plan.
+2. **CP-UX-01 — immediate friction repair**: explicit navigation sections, Services/Puxadores fixes, active-section styling and deterministic stage/section scrolling; no administration schema change.
+3. **CP-UX-02 — internal normalized flow model**: Stage -> Group -> Section -> Item references, derived from current v3 configuration; no production write.
+4. **CP-UX-03 — versioned admin hierarchy/editor**: backward-compatible schema/editor support for groups and sections.
+5. **CP-UX-04 — hierarchy-driven runtime layout**: responsive group layout, including deliberate two-region Modules composition.
+6. **CP-UX-05 — authenticated hierarchy publication + legacy fallback retirement** after readback and production gates.
+
+Every checkpoint must update `CURRENT_STATE.md` and the UX roadmap before the next implementation begins.
 
 ## Plan by stages
 
@@ -308,12 +348,16 @@ A contextually stable development checkpoint is acceptable only when promotion w
 
 If work resumes with no additional context:
 
-1. read this document;
-2. read `docs/architecture/official-candidate-gate-2026-10-05.md`;
-3. read `docs/architecture/runtime-contract-map-2026-10-05.md`;
-4. read `docs/architecture/published-config-compat-audit-2026-10-05.md`;
-5. check whether production administration has been migrated since revision 3;
-6. if not, Stage 3 is the next action;
-7. if yes and the repair is already a no-op, start Stage 4 on a fresh branch from `main`.
+1. read `CURRENT_STATE.md`;
+2. read `docs/backlog/ux-navigation-hierarchy-roadmap-2026-10-05.md`;
+3. read this document;
+4. read `docs/architecture/official-candidate-gate-2026-10-05.md`;
+5. read `docs/architecture/runtime-contract-map-2026-10-05.md`;
+6. read `docs/architecture/published-config-compat-audit-2026-10-05.md`;
+7. inspect live `main`;
+8. for repository work, continue the next incomplete CP-UX checkpoint;
+9. for the external compatibility track, check whether production administration has been migrated since revision 3;
+10. if not, Stage 3 remains the next authenticated external action;
+11. if yes and the repair is already a no-op, start Stage 4 on a fresh branch from `main`.
 
-Do not reopen already-completed legacy cleanup without new evidence.
+Do not reopen already-completed legacy cleanup without new evidence. The newly observed UX findings are such new evidence and are governed by the separate UX roadmap.
