@@ -1,6 +1,6 @@
 # UX navigation and configurator hierarchy roadmap — 2026-10-05
 
-Status: canonical plan for the buyer-navigation and configurator-structure work. CP-UX-00 through CP-UX-04.3 are complete; CP-UX-04.4 is active in PR #97; CP-UX-05 follows and crosses the authenticated production boundary.
+Status: canonical plan for the buyer-navigation and configurator-structure work. CP-UX-00 through CP-UX-04.4 are complete; CP-UX-05 is next and crosses the authenticated production boundary.
 
 This roadmap is independent from the authenticated `stone-skirting` published-administration migration. The existing production compatibility cleanup remains valid and must not be bypassed or mixed into this work.
 
@@ -1111,7 +1111,7 @@ What remains is not another renderer/navigation fix:
 
 The preferred order is to repair the known `stone-skirting` published-v3 inconsistency first **if and only if** the live record still matches the last audit, then migrate that self-consistent v3 record to v4. The two writes remain separate transactions with separate readback/equivalence proofs.
 
-### CP-UX-04.4 — workspace-mode pane scroll and final production-layout follow-up — ACTIVE / PR #97
+### CP-UX-04.4 — workspace-mode pane scroll and final production-layout follow-up — COMPLETE
 
 **Origin:** production review after PR #95 showed three remaining presentation/runtime delivery issues that are independent from schema publication:
 
@@ -1149,6 +1149,8 @@ CP-UX-04.4 does not mutate production or add another runtime repair. The authent
 - Admin hierarchy browser;
 - Netlify deploy preview;
 - manual review of the PR preview at side-rail and stacked-workspace widths.
+
+**Result:** PASS. Final reviewed head `97e7f6b4f035df44953c1a91a37a933b65afff79` passed the automated gate set and deploy preview. Preview #97 was manually reviewed and accepted, then PR #97 was squash-merged unchanged to `main` at `6985100edc0012b87f9a01a627a415b39454a699`. No production administration/schema write occurred.
 
 ### CP-UX-05 — authenticated hierarchy publication and legacy-boundary retirement — NEXT
 
