@@ -137,9 +137,23 @@ const server = http.createServer(async (request, response) => {
   assert.match(await page.locator("#saveMessage").textContent(), /Puxadores ainda não está atribuído/);
   assert.equal(await page.locator('[data-hierarchy-section="handles"]').count(), 0, "unpublished v3 does not pretend Puxadores is already a persisted section");
 
+  await page.locator('[data-stage-label="finishes"]').fill("Acabamentos rascunho");
+  page.once("dialog", async (dialog) => {
+    assert.match(dialog.message(), /publicará somente Puxadores no schema v3/);
+    await dialog.dismiss();
+  });
+  await page.locator("#persistHandlesButton").click();
+  await page.waitForFunction(() => document.getElementById("saveMessage").textContent.includes("cancelada"));
+  assert.equal(putCount, 0, "canceling the local-draft warning performs no PUT");
+  assert.equal(await page.locator('[data-stage-label="finishes"]').inputValue(), "Acabamentos rascunho", "cancel keeps the local draft untouched");
+
+  page.once("dialog", async (dialog) => {
+    assert.match(dialog.message(), /outras alterações locais não serão publicadas/i);
+    await dialog.accept();
+  });
   await page.locator("#persistHandlesButton").click();
   await page.waitForFunction(() => document.getElementById("saveMessage").textContent.includes("Puxadores foi persistido"));
-  assert.equal(putCount, 1, "one isolated PUT is performed");
+  assert.equal(putCount, 1, "confirming performs one isolated handles PUT");
   assert.equal(operationSeen, "persist-handles-all", "dedicated operation header is required");
   assert.equal(lastPut.schemaVersion, "ConfiguratorAdministration2D 3.0");
   assert.deepEqual(lastPut.stages.find((stage) => (stage.kind || stage.id) === "finishes").items, ["fronts-all", "handles-all", "stone-all", "stone-skirting"]);
@@ -153,6 +167,8 @@ const server = http.createServer(async (request, response) => {
     sourceComparable.stages.find((stage) => (stage.kind || stage.id) === "finishes").items.filter((id) => id !== "handles-all");
   assert.equal(await page.locator("#persistHandlesButton").isHidden(), true, "repair action disappears after readback");
   assert.equal(await page.locator('[data-hierarchy-section="handles"]').count(), 1, "readback now materializes Puxadores from the published v3 assignment");
+  assert.equal(await page.locator('[data-stage-label="finishes"]').inputValue(), "Acabamentos", "confirmed isolated repair reloads the panel from published state instead of silently keeping unrelated local edits");
+  assert.match(await page.locator("#saveMessage").textContent(), /outras alterações locais não foram enviadas/i);
 
   assert.deepEqual(errors, []);
   await browser.close();
