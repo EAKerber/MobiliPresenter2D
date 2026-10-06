@@ -116,7 +116,7 @@ const groupMergedNext = editor.mergeGroupIntoNext(splitGroup, "finishes", "cabin
 assert.deepEqual(groupMergedNext.stages.find(stage => stage.id === "finishes").groups.map(group => group.id), ["handles-group", "stone"]);
 assert.deepEqual(groupMergedNext.stages.find(stage => stage.id === "finishes").groups[0].sections.map(section => section.id), ["fronts", "handles"]);
 
-const emptyCustom = structuredClone(base);
+const emptyCustom = editor.removeItem(base, "move-stone");
 emptyCustom.stages.splice(3, 0, { id: "installation", kind: "custom", label: "Instalação", enabled: false, groups: [] });
 const placedInEmpty = editor.placeItemInEmptyStage(emptyCustom, "move-stone", "installation", {
   groupId: "installation-main",
