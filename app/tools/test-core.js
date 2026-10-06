@@ -438,6 +438,11 @@ assert.equal(indexHtml.includes('data-flow-item-id="handles-all"'), true, "handl
 assert.equal(indexHtml.includes('data-flow-item-id="stone-all"'), true, "stone section exposes stable flow ownership");
 assert.equal(indexHtml.includes('data-flow-item-id="lighting-08"'), true, "lighting section exposes stable flow ownership");
 assert.equal(appJs.includes("publishNormalizedFlow"), true, "app publishes one normalized flow contract to navigation");
+assert.equal(appJs.includes("applyBuyerFlowLayout"), true, "buyer composition is mounted from normalized flow layout");
+assert.equal(indexHtml.includes('data-stage-view-layout="modules"'), true, "modules expose a view-level two-pane renderer contract");
+assert.equal(indexHtml.includes('data-flow-group-shell="cabinet-finishes"'), true, "finish renderer exposes cabinet group shell");
+assert.equal(indexHtml.includes('data-flow-group-shell="stone"'), true, "finish renderer exposes stone group shell");
+assert.equal(indexHtml.includes('data-flow-group-shell="services"'), true, "services renderer exposes a normalized group shell");
 const runtimeScriptRevisions = [
   /data\/scene-data\.js\?v=([^\"]+)/,
   /data\/catalog-data\.js\?v=([^\"]+)/,
@@ -450,6 +455,7 @@ const runtimeScriptRevisions = [
   /core\/finishes\.js\?v=([^\"]+)/,
   /core\/pricing\.js\?v=([^\"]+)/,
   /core\/flow-model\.js\?v=([^\"]+)/,
+  /core\/flow-layout\.js\?v=([^\"]+)/,
   /data\/stone-data\.js\?v=([^\"]+)/,
   /core\/stone\.js\?v=([^\"]+)/,
   /app\.js\?v=([^\"]+)/
