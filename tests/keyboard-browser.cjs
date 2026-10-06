@@ -17,7 +17,7 @@ const {chromium} = require('playwright');
   for (let attempt = 0; attempt < 18; attempt += 1) {
     try {
       await page.goto(targetUrl, {waitUntil: 'domcontentloaded', timeout: 15000});
-      await page.waitForFunction(() => window.CASA_KEYBOARD_SHORTCUTS?.discoverStageSections && document.querySelectorAll('#moduleList [data-select-entity]').length > 1, null, {timeout: 5000});
+      await page.waitForFunction(() => window.CASA_KEYBOARD_SHORTCUTS?.discoverStageSections && window.CASA_KEYBOARD_SHORTCUTS?.navigationInvariantErrors && window.CASA_NORMALIZED_FLOW?.stages?.length && document.querySelectorAll('#moduleList [data-select-entity]').length > 1, null, {timeout: 5000});
       lastError = null;
       break;
     } catch (error) {
@@ -41,8 +41,14 @@ const {chromium} = require('playwright');
     keyboardSection: section.element.dataset.keyboardSection || null,
     behavior: section.behavior,
     itemCount: section.items.length,
+    modeledItemIds: [...section.itemIds],
     itemIds: section.items.map(item => item.id || item.dataset.handleId || item.dataset.finishId || item.dataset.stonePackageId || item.dataset.globalServiceId || item.tagName)
   })));
+  const modeledSectionIds = stageId => page.evaluate((id) => {
+    const stage = window.CASA_NORMALIZED_FLOW.stages.find(entry => entry.id === id);
+    return stage ? stage.groups.flatMap(group => group.sections).filter(section => section.keyboard).map(section => section.id) : [];
+  }, stageId);
+  const navigationErrors = () => page.evaluate(() => window.CASA_KEYBOARD_SHORTCUTS.navigationInvariantErrors());
   const moveToSection = async (id) => {
     for (let index = 0; index < 12; index += 1) {
       if (await activeSection() === id) return;
@@ -118,6 +124,35 @@ const {chromium} = require('playwright');
   assert.ok(finishSections.some(section => section.id === 'section:handles' && section.behavior === 'selection'), 'handles expose a selection section');
   assert.ok(finishSections.some(section => section.id === 'section:stone-packages' && section.behavior === 'selection'), 'stone packages expose a selection section');
   assert.ok(finishSections.some(section => section.id === 'section:stone-skirting' && section.behavior === 'toggle'), 'stone skirting exposes a toggle section');
+  const finishModelOrder = await modeledSectionIds('finishes');
+  assert.deepEqual(finishSections.map(section => section.keyboardSection), finishModelOrder, 'rendered finish navigation follows normalized flow order');
+  assert.deepEqual(await navigationErrors(), [], 'finish renderer satisfies normalized flow invariants');
+
+  await page.evaluate(() => {
+    const fronts = document.querySelector('[data-keyboard-section="fronts"]');
+    const handles = document.querySelector('[data-keyboard-section="handles"]');
+    handles.parentElement.insertBefore(handles, fronts);
+  });
+  const reorderedFinishSections = await sectionSnapshot();
+  assert.deepEqual(reorderedFinishSections.map(section => section.keyboardSection), finishModelOrder, 'DOM reorder cannot change semantic section order');
+  await page.evaluate(() => {
+    const fronts = document.querySelector('[data-keyboard-section="fronts"]');
+    const handles = document.querySelector('[data-keyboard-section="handles"]');
+    fronts.parentElement.insertBefore(fronts, handles);
+    handles.dataset.keyboardBehavior = 'toggle';
+  });
+  const behaviorOverrideAttempt = await sectionSnapshot();
+  assert.equal(behaviorOverrideAttempt.find(section => section.keyboardSection === 'handles').behavior, 'selection', 'DOM behavior hints cannot override the normalized flow model');
+  await page.evaluate(() => { document.querySelector('[data-keyboard-section="handles"]').dataset.keyboardBehavior = 'selection'; });
+
+  await page.evaluate(() => { document.querySelector('[data-keyboard-section="fronts"]').removeAttribute('data-flow-item-id'); });
+  window.__placeholder = undefined;
+  await sectionSnapshot();
+  const missingOwnerErrors = await navigationErrors();
+  assert.ok(missingOwnerErrors.some(entry => entry.code === 'missing-flow-item' && entry.itemId === 'fronts-all'), 'missing rendered model ownership is surfaced as an invariant error');
+  await page.evaluate(() => { document.querySelector('[data-keyboard-section="fronts"]').dataset.flowItemId = 'fronts-all'; });
+  await sectionSnapshot();
+  assert.deepEqual(await navigationErrors(), [], 'restoring the flow ownership bridge clears invariant errors');
 
   await page.keyboard.press('ArrowDown');
   assert.equal(await activeSection(), 'fronts', 'ArrowDown enters the first visible finish section');
