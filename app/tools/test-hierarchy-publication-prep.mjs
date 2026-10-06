@@ -89,4 +89,35 @@ const unsupportedSource = prepareHierarchyPublication(first.candidate, catalog, 
 assert.equal(unsupportedSource.ok, false);
 assert.equal(unsupportedSource.code, "unsupported_source_schema");
 
+const functionSource = await (await import("node:fs/promises")).readFile(
+  new URL("../../netlify/functions/configuration.mjs", import.meta.url),
+  "utf8"
+);
+assert.equal(
+  functionSource.includes('request.method === "POST"') && functionSource.includes('"prepare-hierarchy"'),
+  true,
+  "configuration endpoint exposes an explicit authenticated read-only hierarchy preparation action"
+);
+assert.equal(
+  (functionSource.match(/store\.setJSON\(/g) || []).length,
+  1,
+  "configuration endpoint has exactly one storage write site"
+);
+const postStart = functionSource.indexOf('if (request.method === "POST")');
+const putBodyStart = functionSource.indexOf('const declaredLength', postStart);
+assert.ok(postStart >= 0 && putBodyStart > postStart, "POST preparation branch is structurally isolated");
+assert.equal(
+  functionSource.slice(postStart, putBodyStart).includes("store.setJSON"),
+  false,
+  "hierarchy preparation branch performs no storage write"
+);
+const v4Guard = functionSource.indexOf("payload?.schemaVersion === V4_SCHEMA");
+const writeSite = functionSource.indexOf('await store.setJSON("published"');
+assert.ok(v4Guard >= 0 && writeSite > v4Guard, "v4 validation gate precedes the only write site");
+assert.equal(
+  functionSource.slice(v4Guard, writeSite).includes('error: "hierarchy_publication_required"'),
+  true,
+  "valid v4 candidates remain publication-blocked before the write site"
+);
+
 console.log("hierarchy publication prep: PASS");
