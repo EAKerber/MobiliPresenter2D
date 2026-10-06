@@ -995,8 +995,10 @@ function materialAssetChoices() {
 async function loadSettings() {
   const response = await fetch("/api/configuration", { credentials: "same-origin", cache: "no-store" });
   if (!response.ok) throw new Error(response.status === 404 ? "A API de configuração ainda não foi publicada." : "Não foi possível carregar a configuração.");
-  model = await response.json();
-  byId("revisionLabel").textContent = `Versão ${model.revision || 1}`;
+  const published = await response.json();
+  model = hierarchyCore.upgradeToHierarchy(published, configurationCore, flowCore, catalog, priceBook, scene);
+  byId("revisionLabel").textContent = `Versão ${model.revision || 1} · editor hierárquico`;
+  setMessage(saveMessage, "Hierarquia carregada. Alterações estruturais permanecem em rascunho até a publicação hierárquica ser habilitada.");
   renderAdminTabs();
 }
 
@@ -1138,7 +1140,7 @@ byId("addStageButton").addEventListener("click", () => {
   if (!label?.trim()) return;
   let id = `stage-${label.trim().toLocaleLowerCase("pt-BR").normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").slice(0, 28) || "extra"}`;
   const base = id; let suffix = 2; while (model.stages.some((stage) => stage.id === id)) id = `${base}-${suffix++}`;
-  model.stages.splice(Math.max(1, model.stages.length - 1), 0, { id, kind, label: label.trim().slice(0, 40), enabled: false, items: [] });
+  model.stages.splice(Math.max(1, model.stages.length - 1), 0, { id, kind, label: label.trim().slice(0, 40), enabled: false, groups: [] });
   renderStages();
 });
 byId("addMaterialButton").addEventListener("click", () => {
