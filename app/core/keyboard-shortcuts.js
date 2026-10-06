@@ -296,37 +296,86 @@
     markActiveSection(null);
   }
 
-  function stickyTopClearance() {
+  function scrollContainerFor(element) {
+    let node = element?.parentElement || null;
+    while (node && node !== document.body && node !== document.documentElement) {
+      const style = getComputedStyle(node);
+      const overflowY = style.overflowY;
+      if (/(auto|scroll|overlay)/.test(overflowY) && node.scrollHeight > node.clientHeight + 2) return node;
+      node = node.parentElement;
+    }
+    return null;
+  }
+
+  function scrollViewport(sectionElement) {
+    const scroller = scrollContainerFor(sectionElement);
     const nav = document.querySelector(".flow-nav");
-    if (!nav || !isVisible(nav)) return 12;
-    const position = getComputedStyle(nav).position;
-    if (position !== "sticky" && position !== "fixed") return 12;
-    const rect = nav.getBoundingClientRect();
-    if (rect.top > 16 || rect.bottom <= 0) return 12;
-    return Math.min(Math.max(12, rect.bottom + 12), Math.max(12, window.innerHeight * 0.4));
+    const navRect = nav && isVisible(nav) ? nav.getBoundingClientRect() : null;
+
+    if (scroller) {
+      const bounds = scroller.getBoundingClientRect();
+      const navInsideScroller = nav && scroller.contains(nav);
+      const top = navInsideScroller && navRect
+        ? Math.max(bounds.top + 12, navRect.bottom + 12)
+        : bounds.top + 12;
+      return {
+        scroller,
+        top,
+        bottom: Math.max(top + 1, bounds.bottom - 16)
+      };
+    }
+
+    const top = navRect ? Math.max(12, navRect.bottom + 12) : 12;
+    return {
+      scroller: null,
+      top,
+      bottom: Math.max(top + 1, window.innerHeight - 16)
+    };
   }
 
   function scrollSectionIntoView(section, sectionIndex, sectionCount) {
     if (!section?.element || sectionIndex < 0 || !sectionCount) return;
     const rect = section.element.getBoundingClientRect();
-    const viewportTop = stickyTopClearance();
-    const viewportBottom = Math.max(viewportTop + 1, window.innerHeight - 16);
-    const availableHeight = viewportBottom - viewportTop;
-    let targetTop = viewportTop;
+    const viewport = scrollViewport(section.element);
+    const availableHeight = viewport.bottom - viewport.top;
+    let targetTop = viewport.top;
 
     if (rect.height < availableHeight) {
-      if (sectionIndex === sectionCount - 1) targetTop = viewportBottom - rect.height;
-      else if (sectionIndex > 0) targetTop = viewportTop + (availableHeight - rect.height) / 2;
+      if (sectionIndex === sectionCount - 1) targetTop = viewport.bottom - rect.height;
+      else if (sectionIndex > 0) targetTop = viewport.top + (availableHeight - rect.height) / 2;
     }
 
     const delta = rect.top - targetTop;
     if (Math.abs(delta) < 2) return;
-    window.scrollBy({
+    const options = {
       top: delta,
       left: 0,
       behavior: global.matchMedia?.("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth"
-    });
+    };
+    if (viewport.scroller) viewport.scroller.scrollBy(options);
+    else window.scrollBy(options);
   }
+
+  function syncActiveSectionFromTarget(target) {
+    if (!(target instanceof Element)) return false;
+    const sections = discoverStageSections();
+    const section = sections.find((entry) => entry.element === target || entry.element.contains(target));
+    if (!section) return false;
+    const stageId = activeStageId();
+    const itemIndex = section.items.findIndex((item) => item === target || item.contains?.(target));
+    sectionCursorByStage.set(stageId, section.id);
+    if (itemIndex >= 0) itemCursorBySection.set(itemCursorKey(stageId, section.id), itemIndex);
+    markActiveSection(section);
+    return true;
+  }
+
+  document.addEventListener("focusin", (event) => {
+    syncActiveSectionFromTarget(event.target);
+  });
+
+  document.addEventListener("pointerdown", (event) => {
+    syncActiveSectionFromTarget(event.target);
+  });
 
   function focusSectionItem(stageId, section, index) {
     if (!section?.items?.length) return false;
@@ -537,6 +586,7 @@
     setFlow,
     navigationInvariantErrors,
     resetStageNavigation,
+    scrollContainerFor,
     scrollSectionIntoView
   });
 })(typeof window === "undefined" ? globalThis : window);
