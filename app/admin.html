@@ -64,7 +64,7 @@
         </section>
         <section class="admin-tab-panel" role="tabpanel" data-admin-panel="rules" hidden><div class="panel-toolbar"><div><h2>Regras de dependência</h2><p class="admin-note">Um objeto pode exigir outros módulos ou itens visíveis para ser habilitado.</p></div><button id="addDependencyButton" class="button button--secondary" type="button">Adicionar dependência</button></div><div id="dependenciesList" class="editor-grid"></div><div class="panel-toolbar library-section"><div><h2>Eventos de configuração</h2><p class="admin-note">Altere dimensões ou ative/desative um módulo ou serviço quando outro item for ligado ou desligado.</p></div><button id="addEventButton" class="button button--secondary" type="button">Adicionar evento</button></div><div id="eventsList" class="editor-grid"></div></section>
         <section class="admin-tab-panel" role="tabpanel" data-admin-panel="pricing" hidden><div id="pricingList" class="editor-grid"></div></section>
-        <div class="editor-actions"><p id="saveMessage" class="message" aria-live="polite"></p><button id="saveButton" class="button button--primary" type="button">Publicar configuração</button></div>
+        <div class="editor-actions"><p id="saveMessage" class="message" aria-live="polite"></p><div class="editor-actions__buttons"><button id="persistHandlesButton" class="button button--secondary" type="button" hidden>Persistir Puxadores no v3</button><button id="saveButton" class="button button--primary" type="button">Publicar configuração</button></div></div>
       </section>
     </main>
     <script src="data/configurator-settings.js?v=admin-config-v2"></script>
@@ -76,7 +76,8 @@
     <script src="core/flow-model.js?v=runtime-v9"></script>
     <script src="core/hierarchy-administration.js?v=hierarchy-v2"></script>
     <script src="core/hierarchy-editor.js?v=hierarchy-v2"></script>
+    <script src="core/legacy-stage-repair.js?v=cp-ux-05a0-v1"></script>
     <script src="core/runtime-contracts.js?v=runtime-contracts-v2"></script>
-    <script type="module" src="admin/admin.bundle.js?v=admin-hierarchy-v2"></script>
+    <script type="module" src="admin/admin.bundle.js?v=admin-hierarchy-v3"></script>
   </body>
 </html>
