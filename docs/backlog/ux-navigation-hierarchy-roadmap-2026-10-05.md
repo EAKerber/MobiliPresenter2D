@@ -1,6 +1,8 @@
 # UX navigation and configurator hierarchy roadmap — 2026-10-05
 
-Status: canonical plan for the buyer-navigation and configurator-structure work. CP-UX-00 through CP-UX-04.4 are complete; CP-UX-05 is next and crosses the authenticated production boundary.
+Status: canonical history and authenticated-publication safety plan for the buyer-navigation/configurator-structure work. CP-UX-00 through CP-UX-04.4 are complete; CP-UX-05A0 remains authenticated-execution pending. The broader v3 -> production hierarchy publication is gated by the schema-driven UI consolidation track before it proceeds.
+
+Before broader CP-UX-05 v3 -> v4 publication, follow `docs/backlog/schema-driven-ui-consolidation-roadmap-2026-10-06.md`. This does not invalidate the isolated CP-UX-05A0 v3 Puxadores repair; it prevents prematurely publishing a hierarchy schema already known to need presentation-contract review.
 
 This roadmap is independent from the authenticated `stone-skirting` published-administration migration. The existing production compatibility cleanup remains valid and must not be bypassed or mixed into this work.
 
@@ -1152,7 +1154,7 @@ CP-UX-04.4 does not mutate production or add another runtime repair. The authent
 
 **Result:** PASS. Final reviewed head `97e7f6b4f035df44953c1a91a37a933b65afff79` passed the automated gate set and deploy preview. Preview #97 was manually reviewed and accepted, then PR #97 was squash-merged unchanged to `main` at `6985100edc0012b87f9a01a627a415b39454a699`. No production administration/schema write occurred.
 
-### CP-UX-05 — authenticated hierarchy publication and legacy-boundary retirement — NEXT
+### CP-UX-05 — authenticated hierarchy publication and legacy-boundary retirement — GATED BY CP-SD-01
 
 **Goal:** make the explicit hierarchy the production administration authority without combining unrelated migrations, then simplify the runtime so legacy v3 is an import/migration boundary rather than the normal production source.
 
