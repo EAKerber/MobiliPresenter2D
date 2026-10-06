@@ -1,6 +1,11 @@
 (function registerFlowLayout(global) {
   "use strict";
 
+  const presentationCore = typeof module !== "undefined" && module.exports && typeof require === "function"
+    ? require("./presentation-contract.js")
+    : global?.CasaModulesPresentation;
+  if (!presentationCore) throw new Error("Presentation contract is required.");
+
   function stageLayout(flow, stageId) {
     const stage = flow?.stages?.find((entry) => entry.id === stageId);
     if (!stage) return null;
@@ -15,7 +20,8 @@
           itemIds: [...section.itemIds],
           keyboard: Boolean(section.keyboard),
           behavior: section.behavior,
-          presentation: section.presentation || "auto"
+          presentation: section.presentation || "auto",
+          component: presentationCore.resolveSectionComponent(section)
         }))
       }))
     };
@@ -38,6 +44,9 @@
     const errors = [];
     const groupIds = new Set(binding?.groupIds || []);
     const sectionIds = new Set(binding?.sectionIds || []);
+    const sectionComponents = binding?.sectionComponents instanceof Map
+      ? binding.sectionComponents
+      : new Map(Object.entries(binding?.sectionComponents || {}));
 
     layout.groups.forEach((group) => {
       if (!groupIds.has(group.id)) {
@@ -46,6 +55,14 @@
       group.sections.forEach((section) => {
         if (!sectionIds.has(section.id)) {
           errors.push({ code: "missing-section-binding", groupId: group.id, sectionId: section.id, message: `missing renderer section: ${layout.id}/${section.id}` });
+        }
+        if (binding && Object.hasOwn(binding, "sectionComponents")) {
+          const boundComponent = sectionComponents.get(section.id);
+          if (!boundComponent) {
+            errors.push({ code: "missing-component-binding", groupId: group.id, sectionId: section.id, component: section.component, message: `missing renderer component: ${layout.id}/${section.id}` });
+          } else if (boundComponent !== section.component) {
+            errors.push({ code: "component-binding-mismatch", groupId: group.id, sectionId: section.id, component: section.component, boundComponent, message: `renderer component mismatch: ${layout.id}/${section.id} expected ${section.component} but found ${boundComponent}` });
+          }
         }
       });
     });
@@ -82,7 +99,7 @@
       itemIds: [...sections[0].itemIds],
       panes: [
         { id: "detail", role: "context", sourceSectionId: sections[0].id },
-        { id: "list", role: "items", sourceSectionId: sections[0].id }
+        { id: "list", role: "items", sourceSectionId: sections[0].id, component: sections[0].component }
       ],
       error: null
     };
