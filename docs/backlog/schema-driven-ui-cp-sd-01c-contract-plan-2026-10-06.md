@@ -24,7 +24,7 @@ CP-SD-01C must establish, without yet performing the visual redesign:
 
 The checkpoint is split so each change remains reviewable.
 
-## CP-SD-01C1 — semantic queries + topology/presentation policy — NEXT
+## CP-SD-01C1 — semantic queries + topology/presentation policy — COMPLETE / PASS
 
 This is the immediate slice.
 
@@ -94,7 +94,35 @@ This is the immediate slice.
 
 If a presentation policy requires CSS values, coordinates, transient scroll state or duplicated module ownership, stop and shrink the contract.
 
-## CP-SD-01C2 — authored material semantics
+### C1 completion record
+
+Result: PASS on functional head `b7716089175e2d7e324c95c8447be631cf5964de`.
+
+Implemented:
+- normalized flow now exposes separate `stageOwns(flow, stageId, itemId)` and `itemAvailable(flow, itemId)` queries;
+- buyer runtime removed the ambiguous `stageHas(_stageId, itemId)` helper and now uses normalized-flow availability for the prior runtime decisions;
+- `ConfiguratorLayoutProfiles2D 1.0` is the named topology authority for `side-rail`, `stacked`, and `compact`;
+- current 1050/700 CSS projections are pinned by tests to those canonical thresholds until CP-SD-03 replaces the legacy media-query topology implementation;
+- `ConfiguratorPresentation2D 1.1` now validates stage views, companion relations, per-profile projection, PiP profile/activation policy and shell dock slots;
+- default policy represents Modules list/detail as two views over one semantic section, stacked+compact PiP capability, and a persistent estimate/primary-action dock;
+- buyer startup/reload validates policy against the normalized flow and exposes current profile/policy/semantic queries for regression inspection;
+- no visual behavior, administration schema version or production configuration changed.
+
+Gates:
+- App build purity — PASS;
+- Current variant fidelity — PASS;
+- Current asset gates — PASS;
+- Admin hierarchy browser — PASS;
+- Flow layout browser — PASS;
+- Keyboard browser — PASS;
+- Mobile browser — PASS;
+- Stone browser — PASS;
+- Summary/Pricing browser — PASS;
+- Netlify deploy preview #106 — PASS.
+
+No production write.
+
+## CP-SD-01C2 — authored material semantics — NEXT
 
 Purpose: make authored absence explicit instead of silently synthesizing a color.
 
