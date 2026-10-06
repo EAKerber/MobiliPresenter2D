@@ -1,6 +1,7 @@
 import { getDeployStore, getStore } from "@netlify/blobs";
 import { getUser } from "@netlify/identity";
 import configCore from "../../app/core/configuration.js";
+import legacyStageRepair from "../../app/core/legacy-stage-repair.js";
 import defaults from "../../app/data/configurator-settings.js";
 import catalog from "../../app/data/catalog-data.js";
 import priceBook from "../../app/data/mock-price-book.js";
@@ -52,6 +53,21 @@ export default async (request, context) => {
 
   const current = await readPublished(store);
   if (payload?.revision !== current.revision) return respond({ error: "revision_conflict", currentRevision: current.revision }, 409);
+
+  const operation = request.headers.get("x-configuration-operation") || "";
+  if (operation === "persist-handles-all") {
+    const delta = legacyStageRepair.verifyHandlesOnlyDelta(current, payload, configCore.SCHEMA);
+    if (!delta.ok) {
+      return respond({
+        error: "invalid_handles_assignment",
+        code: delta.code,
+        message: delta.message || "Only the handles-all assignment to finishes is allowed for this operation."
+      }, 422);
+    }
+  } else if (operation) {
+    return respond({ error: "unsupported_configuration_operation" }, 422);
+  }
+
   if (payload?.schemaVersion === "ConfiguratorAdministration2D 4.0") {
     return respond({
       error: "hierarchy_publication_required",

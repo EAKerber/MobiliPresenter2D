@@ -139,3 +139,5 @@ code { padding:2px 5px; border-radius:4px; background:#111; }
 @media(max-width:650px) { .panel-toolbar { align-items:flex-start; flex-direction:column; }.stage-add-tools { width:100%; }.stage-add-tools>* { flex:1; }.object-pager { grid-template-columns:1fr 1fr; }.object-pager .data-field { grid-column:1 / -1; grid-row:1; }.material-rule-card { grid-template-columns:1fr; }.material-rule-card h2,.material-rule-card .rule-wide { grid-column:auto; }.handle-color-row { grid-template-columns:1fr 70px; }.handle-color-row .button { grid-column:1 / -1; justify-self:end; } }
 
 @media(max-width:650px) { .stage-hierarchy { margin-left:0; }.hierarchy-group__header,.hierarchy-section__header { grid-template-columns:1fr; }.hierarchy-order { justify-self:start; }.hierarchy-sections,.hierarchy-items { padding-left:8px; } }
+
+.editor-actions__buttons { display:flex; flex-wrap:wrap; justify-content:flex-end; gap:8px; }
