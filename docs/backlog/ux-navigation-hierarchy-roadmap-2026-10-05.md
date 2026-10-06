@@ -1,6 +1,6 @@
 # UX navigation and configurator hierarchy roadmap — 2026-10-05
 
-Status: canonical plan for the buyer-navigation and configurator-structure work. CP-UX-00, CP-UX-01 and CP-UX-02 are complete; CP-UX-03 is implemented and in its final merge gate; CP-UX-04 is the next implementation checkpoint after CP-UX-03 merges.
+Status: canonical plan for the buyer-navigation and configurator-structure work. CP-UX-00 through CP-UX-03 are complete; CP-UX-04 is the next implementation checkpoint.
 
 This roadmap is independent from the authenticated `stone-skirting` published-administration migration. The existing production compatibility cleanup remains valid and must not be bypassed or mixed into this work.
 
@@ -380,7 +380,7 @@ No production administration write, schema migration, pricing change, catalog ch
 
 Merge result: PASS. PR #83 merged to `main` at `f6ffa6bcfb06b12a76170933cb952bce869fd28b` after final reviewed head `bcf99e66e66d9394047873a8b68766cb191b3c99` passed the full required gate set and Netlify deploy preview. CP-UX-03 may begin from live `main` after this documentation closeout merges.
 
-### CP-UX-03 — administration schema/editor for groups and sections — IMPLEMENTED / MERGE GATE
+### CP-UX-03 — administration schema/editor for groups and sections — COMPLETE
 
 **Goal:** make the hierarchy explicitly editable in the admin while preserving the current production v3 record and preventing an accidental hierarchy publication before the authenticated migration checkpoint.
 
@@ -624,7 +624,7 @@ If safe coexistence of v3 production writes and v4 hierarchy drafts cannot be pr
 
 The acceptable checkpoint fallback is a fully tested/readable v4 core + admin editor behind a non-production/disabled publication gate, with the exact remaining publication boundary documented for CP-UX-05. Do not silently persist lossy flattened hierarchy.
 
-### CP-UX-04 — hierarchy-driven buyer layout and Modules two-pane composition — NEXT AFTER CP-UX-03 MERGE
+### CP-UX-04 — hierarchy-driven buyer layout and Modules two-pane composition — NEXT
 
 **Goal:** make the buyer-facing composition consume the normalized flow hierarchy for stage/group/section placement, while keeping the current production v3 record fully compatible and avoiding duplicate semantic ownership.
 
@@ -885,7 +885,7 @@ The admin browser proof additionally confirmed:
 
 No production hierarchy was written.
 
-Merge rule: this documentation closeout creates a new final PR head. Rerun the same required gates on that exact head. Merge PR #85 only if it remains green, then record the resulting `main` SHA before beginning CP-UX-04.
+Merge result: PASS. PR #85 merged to `main` at `d02867fa4db940f40e208183e756a146ef5f73b3` after final reviewed head `54736248ce9b16422026addcdcd89aface2ba6ec` passed the full required gate set and Netlify deploy preview. CP-UX-04 may begin from live `main` after this documentation closeout merges.
 
 ### CP-UX-04 — hierarchy-driven layout and Modules two-region composition
 
