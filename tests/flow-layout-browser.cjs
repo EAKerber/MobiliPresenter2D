@@ -65,6 +65,9 @@ const { chromium } = require("playwright");
   const noOverflow = (selector) => page.locator(selector).evaluate((element) => element.scrollWidth <= element.clientWidth + 2);
 
   assert.deepEqual(await page.evaluate(() => window.CASA_EM_MODULOS_DEBUG.getFlowLayoutErrors()), [], "initial flow layout has no renderer invariant errors");
+  assert.equal(await page.evaluate(() => window.CASA_EM_MODULOS_DEBUG.getLayoutProfile()), "side-rail", "1366px resolves to side-rail");
+  assert.equal(await page.evaluate(() => document.documentElement.dataset.layoutProfile), "side-rail", "resolved profile is exposed on the document");
+  assert.equal(await page.evaluate(() => window.CASA_EM_MODULOS_DEBUG.getPresentationPolicy().stageViews.modules.views.find((view) => view.id === "modules-detail").relation.of), "modules-list", "buyer exposes the validated module companion policy");
   assert.equal(await page.locator('[data-stage-pane="detail"]').count(), 1);
   assert.equal(await page.locator('[data-stage-pane="list"]').count(), 1);
   assert.equal(await page.locator("#moduleDetailPlaceholder").isVisible(), true, "modules detail pane has an intentional empty-state view");
@@ -100,6 +103,8 @@ const { chromium } = require("playwright");
 
   await page.setViewportSize({ width: 1050, height: 900 });
   await page.waitForTimeout(80);
+  assert.equal(await page.evaluate(() => window.CASA_EM_MODULOS_DEBUG.getLayoutProfile()), "stacked", "1050px resolves to stacked");
+  assert.equal(await page.evaluate(() => document.documentElement.dataset.layoutProfile), "stacked", "stacked profile marker follows viewport");
   const cabinetMedium = await rect('[data-flow-group-shell="cabinet-finishes"]');
   const stoneMedium = await rect('[data-flow-group-shell="stone"]');
   assert.ok(Math.abs(cabinetMedium.top - stoneMedium.top) < 4, "when controls move below the scene, Acabamentos switches to two columns");
@@ -150,6 +155,9 @@ const { chromium } = require("playwright");
   assert.deepEqual(await page.evaluate(() => window.CASA_EM_MODULOS_DEBUG.getFlowLayoutErrors()), [], "service layout has no renderer invariant errors");
 
   await page.setViewportSize({ width: 390, height: 844 });
+  await page.waitForTimeout(80);
+  assert.equal(await page.evaluate(() => window.CASA_EM_MODULOS_DEBUG.getLayoutProfile()), "compact", "390px resolves to compact");
+  assert.equal(await page.evaluate(() => document.documentElement.dataset.layoutProfile), "compact", "compact profile marker follows viewport");
   await page.locator('.flow-nav [data-step="modules"]').click();
   await page.waitForFunction(() => !document.getElementById("modulesPanel").hidden);
   const detailMobile = await rect('[data-stage-pane="detail"]');
