@@ -136,6 +136,54 @@
     };
   }
 
+  function sourceStageItems(stage) {
+    if (Array.isArray(stage?.items)) return [...stage.items];
+    if (!Array.isArray(stage?.groups)) return null;
+    return stage.groups.flatMap((groupEntry) =>
+      Array.isArray(groupEntry?.sections)
+        ? groupEntry.sections.flatMap((sectionEntry) => Array.isArray(sectionEntry?.itemIds) ? sectionEntry.itemIds : [])
+        : []
+    );
+  }
+
+  function deriveHierarchyStage(stage, stageOrder, registry, errors) {
+    const kind = stage.kind || stage.id;
+    const groups = (stage.groups || []).map((groupEntry, groupIndex) => ({
+      id: groupEntry.id,
+      label: groupEntry.label,
+      order: groupIndex,
+      presentation: { layout: "stack", span: groupEntry.columnSpan || 1 },
+      sections: (groupEntry.sections || []).map((sectionEntry, sectionIndex) => {
+        const behaviors = new Set((sectionEntry.itemIds || []).map((id) => itemBehavior(registry.get(id))));
+        if (behaviors.size > 1) {
+          errors.push(validationError(
+            "mixed-section-behavior",
+            `stages.${stage.id}.groups.${groupEntry.id}.sections.${sectionEntry.id}`,
+            `hierarchy section mixes incompatible interaction behaviors: ${stage.id}/${sectionEntry.id}`
+          ));
+        }
+        return {
+          id: sectionEntry.id,
+          label: sectionEntry.label,
+          order: sectionIndex,
+          behavior: behaviors.values().next().value || "action",
+          keyboard: !["modules", "summary"].includes(kind),
+          presentation: sectionEntry.presentation || "auto",
+          itemIds: [...(sectionEntry.itemIds || [])]
+        };
+      })
+    }));
+
+    return {
+      id: stage.id,
+      kind,
+      label: stage.label,
+      enabled: Boolean(stage.enabled),
+      order: stageOrder,
+      groups
+    };
+  }
+
   function validateFlow(flow, registryInput) {
     const registry = asRegistry(registryInput);
     const errors = [];
@@ -199,7 +247,7 @@
         return;
       }
       const actual = stage.groups.flatMap((groupEntry) => groupEntry.sections.flatMap((sectionEntry) => sectionEntry.itemIds));
-      const expected = [...sourceStage.items];
+      const expected = sourceStageItems(sourceStage) || [];
       const actualSet = new Set(actual);
       const expectedSet = new Set(expected);
       expected.forEach((id) => {
@@ -217,16 +265,22 @@
     const errors = [];
     if (!settings || !Array.isArray(settings.stages)) throwValidation([validationError("invalid-settings", "settings", "settings with stages are required")]);
 
+    const hierarchySource = settings.stages.some((stage) => Array.isArray(stage?.groups));
+    if (hierarchySource && settings.stages.some((stage) => !Array.isArray(stage?.groups) || Object.hasOwn(stage, "items"))) {
+      throwValidation([validationError("mixed-source-shape", "settings.stages", "flow source cannot mix flat items with hierarchy groups")]);
+    }
+
     const sourceStageIds = new Set();
     const sourceItems = new Set();
     settings.stages.forEach((stage, index) => {
-      if (!stage || typeof stage.id !== "string" || !Array.isArray(stage.items)) {
+      const items = sourceStageItems(stage);
+      if (!stage || typeof stage.id !== "string" || !items) {
         errors.push(validationError("invalid-source-stage", `stages.${index}`, `invalid source stage at index ${index}`));
         return;
       }
       if (sourceStageIds.has(stage.id)) errors.push(validationError("duplicate-source-stage", `stages.${stage.id}`, `duplicate source stage: ${stage.id}`));
       sourceStageIds.add(stage.id);
-      stage.items.forEach((id) => {
+      items.forEach((id) => {
         if (!registry.has(id)) errors.push(validationError("unknown-source-item", `stages.${stage.id}.items.${id}`, `unknown source item: ${id}`));
         if (sourceItems.has(id)) errors.push(validationError("duplicate-source-item", `stages.${stage.id}.items.${id}`, `source item assigned more than once: ${id}`));
         sourceItems.add(id);
@@ -241,7 +295,11 @@
         schemaVersion: settings.schemaVersion || null,
         revision: Number.isSafeInteger(settings.revision) ? settings.revision : null
       },
-      stages: settings.stages.map((stage, index) => deriveStage(stage, index, registry, deriveErrors))
+      stages: settings.stages.map((stage, index) =>
+        hierarchySource
+          ? deriveHierarchyStage(stage, index, registry, deriveErrors)
+          : deriveStage(stage, index, registry, deriveErrors)
+      )
     };
 
     const validationErrors = [...deriveErrors, ...validateFlow(flow, registry), ...validateSourceCoverage(flow, settings)];
