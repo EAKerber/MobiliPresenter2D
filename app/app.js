@@ -1322,7 +1322,7 @@
     const override = eventOverrideForTarget("lighting-08");
     lightingToggle.disabled = blocked || Boolean(override);
     lightingToggle.title = override ? "Controlado por um evento da configuração." : blocked ? "Inclua a lateral da geladeira e o aéreo da pia para habilitar a iluminação." : "";
-    lightingToggle.closest(".accessory-toggle")?.classList.toggle(
+    lightingToggle.closest(".service-check, .accessory-toggle")?.classList.toggle(
       "is-blocked",
       blocked
     );
@@ -1625,12 +1625,19 @@
     const heading = panel.querySelector("h2");
     if (!heading) return;
     heading.focus({ preventScroll: true });
-    panel.scrollIntoView({ behavior: shouldReduceMotion() ? "auto" : "smooth", block: "start" });
+    const navHeight = flowNav?.getBoundingClientRect().height || 0;
+    const panelTop = global.scrollY + panel.getBoundingClientRect().top;
+    global.scrollTo({
+      top: Math.max(0, panelTop - navHeight - 12),
+      left: 0,
+      behavior: shouldReduceMotion() ? "auto" : "smooth"
+    });
   }
 
   function changeStep(nextStep, moveFocus) {
     if (!enabledStages().some((stage) => stage.id === nextStep)) return;
     currentStep = nextStep;
+    global.CASA_KEYBOARD_SHORTCUTS?.resetStageNavigation?.(currentStep);
     syncLayerVisibility();
     if (moveFocus) requestAnimationFrame(focusCurrentStep);
   }
