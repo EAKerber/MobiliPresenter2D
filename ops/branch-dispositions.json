@@ -26,6 +26,17 @@
         "mergedMainSha": "4284ad052c7d7fff108dc752ef0306edeb227ede"
       },
       "note": "Canonical checkpoint document is already present on main and subsequently corrected by PR #77. Branch head was reobserved exactly before disposition."
+    },
+    {
+      "branch": "docs/current-state-pointer",
+      "sha": "739bf62c2812ebbe6d27c0980bdc6ec20a1b5c4e",
+      "reason": "merged-documentation-head",
+      "allowDelete": true,
+      "evidence": {
+        "pullRequest": 78,
+        "mergedMainSha": "f5739f1eaf787e0842d776320fb3dd0f5d4cc0b0"
+      },
+      "note": "Stable CURRENT_STATE.md pointer is merged to main; branch head was reobserved exactly via PR metadata before disposition."
     }
   ]
 }
