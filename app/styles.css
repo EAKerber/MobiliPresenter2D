@@ -259,6 +259,7 @@ button:focus-visible, input:focus-visible {
   min-width: 0;
 }
 .flow-group-shell { min-width: 0; }
+.flow-group-shell[data-flow-group="cabinet-finishes"] { container: cabinet-finishes / inline-size; }
 .flow-group-shell[data-flow-span="2"] { grid-column: span 2; }
 .flow-group-shell--embedded {
   display: grid;
@@ -578,6 +579,10 @@ legend { margin-bottom: 9px; color: rgba(255, 255, 255, 0.43); font-size: 12px; 
 .configuration-value small { padding: 2px 5px; border: 1px solid rgba(203,188,170,.35); border-radius: 999px; color: var(--accent-strong); font-size: 10px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; }
 .button--primary { width: 100%; background: var(--accent-strong); color: #24211d; font-weight: 750; }
 .button--primary:hover { background: #ead9bd; }
+
+@container cabinet-finishes (max-width: 430px) {
+  .handle-options { grid-template-columns: 1fr; }
+}
 
 @container flow-stage (max-width: 520px) {
   .flow-group-grid { grid-template-columns: 1fr; }
