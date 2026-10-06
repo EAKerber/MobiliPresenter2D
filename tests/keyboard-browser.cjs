@@ -34,12 +34,14 @@ const {chromium} = require('playwright');
   const currentStage = () => page.evaluate(() => document.querySelector('.flow-nav [data-step][aria-current="step"]')?.dataset.step || null);
   const activeSection = () => page.evaluate(() => {
     const element = document.querySelector('[data-keyboard-active-section="true"]');
-    return element?.dataset.configurableItem || element?.id || null;
+    return element?.dataset.keyboardSection || null;
   });
   const sectionSnapshot = () => page.evaluate(() => window.CASA_KEYBOARD_SHORTCUTS.discoverStageSections().map(section => ({
     id: section.id,
+    keyboardSection: section.element.dataset.keyboardSection || null,
     behavior: section.behavior,
-    itemCount: section.items.length
+    itemCount: section.items.length,
+    itemIds: section.items.map(item => item.id || item.dataset.handleId || item.dataset.finishId || item.dataset.stonePackageId || item.dataset.globalServiceId || item.tagName)
   })));
   const moveToSection = async (id) => {
     for (let index = 0; index < 12; index += 1) {
