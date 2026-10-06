@@ -89,7 +89,7 @@ const {chromium} = require('playwright');
   await page.keyboard.press('3');
   assert.equal(await selectedNumber(), 3, 'single digit belongs to the Modules stage');
 
-  await page.setViewportSize({width: 1050, height: 900});
+  await page.setViewportSize({width: 1050, height: 650});
   await page.waitForTimeout(80);
   await page.locator('#moduleList .module-card.is-selected [data-module-toggle]').focus();
   const moduleScrollBefore = await page.evaluate(() => {
