@@ -1,6 +1,6 @@
 # UX navigation and configurator hierarchy roadmap — 2026-10-05
 
-Status: canonical plan for the buyer-navigation and configurator-structure work. CP-UX-00 through CP-UX-04 are complete; CP-UX-05 is the next checkpoint and crosses the authenticated production boundary.
+Status: canonical plan for the buyer-navigation and configurator-structure work. CP-UX-00 through CP-UX-04.1 are complete; CP-UX-04.2 is implemented and in its final merge gate; CP-UX-05 remains the next checkpoint and crosses the authenticated production boundary.
 
 This roadmap is independent from the authenticated `stone-skirting` published-administration migration. The existing production compatibility cleanup remains valid and must not be bypassed or mixed into this work.
 
@@ -902,7 +902,7 @@ No production hierarchy/configuration, catalog, pricing, scene, mask or buyer-st
 
 Merge result: PASS. PR #87 merged to `main` at `e11a5c7c377246f1343b79ff04c1f94b587e1c7f` after final reviewed head `b9f9565360f91cbd228481f4bdc150382d8c4d9d` passed the required CP-UX-04 gates and Netlify deploy preview. CP-UX-05 repository preparation may begin from live `main`; production publication still requires the authenticated boundary.
 
-### CP-UX-04.1 — buyer review follow-up for Puxadores and finish breakpoint — IMPLEMENTED / MERGE GATE
+### CP-UX-04.1 — buyer review follow-up for Puxadores and finish breakpoint — COMPLETE
 
 **Origin:** direct production review after CP-UX-04 merge showed two residual buyer-facing issues:
 
@@ -954,7 +954,107 @@ Intentionally unchanged:
 - buyer state schema;
 - CP-UX-05 authenticated migration plan.
 
-Merge rule: rerun the applicable gates on the exact documentation head and merge PR #90 only if it remains green. CP-UX-05 remains the next checkpoint after this follow-up closes.
+Merge result: PASS. PR #90 merged to `main` at `a7294f8dd4f8209de1e39ccdcdc0902cb84beab0` after final reviewed head `490ebda8ab56fa7c31411f1b5a6761a114d37cce` passed the applicable gate set and Netlify deploy preview. CP-UX-05 remains the next checkpoint.
+
+### CP-UX-04.2 — single hierarchy authority for legacy compatibility — IMPLEMENTED / MERGE GATE
+
+**Origin:** direct admin/buyer review raised the hypothesis that `Puxadores` was behaving inconsistently because its section identity might be hard-coded rather than coming from the hierarchy data. The audit confirmed a broader authority duplication rather than an isolated Puxadores bug.
+
+Implementation branch: `fix/cp-ux-04-2-hierarchy-authority`.
+
+Functional head proven before documentation closeout:
+
+- `f7cc49b8396facac82a278bbffe4009d86717779`.
+
+#### Audit findings
+
+The same Stage -> Group -> Section semantics were being encoded in more than one place:
+
+- `app/core/flow-model.js` contained explicit compatibility mappings for `cabinet-finishes`, `fronts`, `handles`, `stone-packages`, `stone-skirting`, `lighting`, `additional-services`, `modules-main`, `summary-main` and the custom-stage fallback;
+- `app/core/hierarchy-administration.js` contained a separate `COPY` map for hierarchy ids, labels, spans and section presentations;
+- `app/admin/admin.js` independently encoded which item kinds each stage accepted and which catalog source supplied aggregate options such as Puxadores;
+- HTML contained corresponding ids as renderer hooks.
+
+The first three were semantic-authority duplication and were removed. HTML ids remain only as renderer bindings: normalized flow validates that the required group/section renderer exists, so HTML does not define hierarchy ownership.
+
+Separate domain identifiers in `configuration.js` such as `fronts-all`, `handles-all`, `stone-all` and `stone-skirting` remain legitimate where they validate product/material contracts. They do not define Stage -> Group -> Section placement.
+
+The Modules detail/list two-pane projection also remains intentionally renderer-level. It projects one semantic module owner into two views and is not a second hierarchy definition.
+
+#### Implementation
+
+Added one explicit compatibility data authority:
+
+- `app/data/hierarchy-defaults.js`;
+- schema `ConfiguratorHierarchyDefaults2D 1.0`.
+
+It owns, for the legacy v3 compatibility boundary:
+
+- core stage group definitions;
+- group order, labels and spans;
+- section ids, order, labels, presentation and keyboard participation;
+- explicit item ids and/or allowed item kinds used to place flat v3 items into sections;
+- custom-stage fallback structure;
+- admin allowed-item policies;
+- aggregate option-source mapping for Frentes, Puxadores and Pedra.
+
+`flow-model.js` now derives flat-v3 hierarchy only from those defaults. It fails closed with `missing-legacy-hierarchy-template` if a flat legacy configuration is normalized without an explicit template.
+
+`hierarchy-administration.js` no longer maintains the duplicate `COPY` map. The v3 -> v4 migration consumes the normalized flow labels/spans/presentations that came from the shared hierarchy defaults.
+
+Buyer and admin bootstraps both load and pass the same defaults explicitly.
+
+Admin item availability and aggregate option inventory now consume the same configuration instead of hard-coded stage switches/source ids.
+
+Relevant workflow path filters include `app/data/hierarchy-defaults.js`, so changing hierarchy compatibility data alone triggers Flow layout, Keyboard and Admin hierarchy browser gates.
+
+#### Proof that the structure is data-driven
+
+New regression proofs include:
+
+- reversing the Frentes/Puxadores section order in a cloned hierarchy-default configuration changes normalized flow order to `handles -> fronts` without editing `flow-model.js`;
+- changing the Puxadores section id/label in a cloned template to `hardware / Ferragens` changes the v3 -> v4 migration result without editing `hierarchy-administration.js`;
+- buyer/runtime load order proves hierarchy defaults are available before flow normalization;
+- the browser gates continue to prove normalized-flow/renderer agreement.
+
+This is deliberately stronger than testing the current ids only: it proves the core no longer owns those ids.
+
+#### Interaction follow-up retained
+
+CP-UX-04.1 remains intact:
+
+- the finish-group collapse threshold is 300 px rather than 520 px, with an explicit mobile one-column override;
+- Puxadores active state survives handle redraw;
+- keyboard/browser coverage proves direct section navigation rather than relying on a preceding pointer click.
+
+#### Functional gate evidence
+
+On `f7cc49b8396facac82a278bbffe4009d86717779`:
+
+- App build purity — PASS;
+- Current variant fidelity — PASS;
+- Current asset gates — PASS;
+- Keyboard browser — PASS;
+- Flow layout browser — PASS;
+- Mobile browser — PASS;
+- Stone browser — PASS;
+- Summary/Pricing browser — PASS;
+- Admin hierarchy browser — PASS;
+- Netlify deploy preview — PASS.
+
+No production configuration/schema, catalog, pricing, scene, mask, asset or buyer-state write occurred.
+
+#### Fail-closed boundary
+
+This checkpoint does not publish v4.
+
+The current production record remains v3 and the server-side `hierarchy_publication_required` barrier remains in force.
+
+If a future legacy item cannot be assigned by the explicit hierarchy defaults, normalization must fail instead of inventing a group/section from code or DOM structure.
+
+#### Merge rule
+
+This documentation closeout changes the exact PR head. Rerun the applicable CP-UX-04.2 gates on that final head and merge PR #92 only if it remains green, then record the resulting `main` SHA before beginning the authenticated CP-UX-05 production migration.
 
 ### CP-UX-05 — authenticated hierarchy publication and legacy-boundary retirement — NEXT
 
