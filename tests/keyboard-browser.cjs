@@ -88,6 +88,19 @@ const {chromium} = require('playwright');
   await page.keyboard.press('Control+ArrowRight');
   await page.waitForFunction(() => document.querySelector('.flow-nav [data-step][aria-current="step"]')?.dataset.step === 'finishes');
   assert.equal(await currentStage(), 'finishes', 'Ctrl+ArrowRight advances one stage');
+  await page.waitForTimeout(450);
+  const finishStageGeometry = await page.evaluate(() => {
+    const nav = document.querySelector('.flow-nav').getBoundingClientRect();
+    const panel = document.getElementById('frontFinishPanel').getBoundingClientRect();
+    const heading = document.getElementById('frontFinishHeading');
+    return {
+      panelTop: panel.top,
+      expectedTop: nav.bottom + 12,
+      headingOutline: getComputedStyle(heading).outlineStyle
+    };
+  });
+  assert.ok(Math.abs(finishStageGeometry.panelTop - finishStageGeometry.expectedTop) < 36, 'stage entry establishes a predictable top context below the sticky step rail');
+  assert.equal(finishStageGeometry.headingOutline, 'none', 'programmatic stage heading focus does not look like an option selection');
 
   // A Ctrl chord must not arm the fallback numeric buffer. Plain digits still belong to the active stage.
   const selectedBeforeForeignDigit = await selectedNumber();
@@ -99,20 +112,33 @@ const {chromium} = require('playwright');
   assert.equal(await currentStage(), 'finishes', 'Escape remains local to visible module details');
   assert.equal(await selectedNumber(), selectedBeforeForeignDigit, 'Escape outside Modules preserves the latent module selection');
 
-  // Finishes are discovered from visible configurable groups rather than hard-coded option IDs.
+  // Finishes expose explicit semantic sections; layout does not define ownership.
   const finishSections = await sectionSnapshot();
-  assert.ok(finishSections.some(section => section.id === 'item:fronts-all' && section.behavior === 'selection'), 'front finishes expose a selection section');
-  assert.ok(finishSections.some(section => section.id === 'item:stone-all' && section.behavior === 'selection'), 'stone packages expose a selection section');
-  assert.ok(finishSections.some(section => section.id === 'item:stone-skirting' && section.behavior === 'toggle'), 'stone skirting exposes a toggle section');
+  assert.ok(finishSections.some(section => section.id === 'section:fronts' && section.behavior === 'selection'), 'front finishes expose a selection section');
+  assert.ok(finishSections.some(section => section.id === 'section:handles' && section.behavior === 'selection'), 'handles expose a selection section');
+  assert.ok(finishSections.some(section => section.id === 'section:stone-packages' && section.behavior === 'selection'), 'stone packages expose a selection section');
+  assert.ok(finishSections.some(section => section.id === 'section:stone-skirting' && section.behavior === 'toggle'), 'stone skirting exposes a toggle section');
 
   await page.keyboard.press('ArrowDown');
-  assert.equal(await activeSection(), 'fronts-all', 'ArrowDown enters the first visible finish section');
+  assert.equal(await activeSection(), 'fronts', 'ArrowDown enters the first visible finish section');
   const finishBefore = await pressedId('[data-finish-id]');
   await page.keyboard.press('ArrowRight');
   const finishAfter = await pressedId('[data-finish-id]');
   assert.notEqual(finishAfter, finishBefore, 'ArrowRight selects the next item in a selection section');
 
-  await moveToSection('stone-all');
+  const handleOrder = await page.locator('[data-handle-id]').evaluateAll(items => items.map(item => item.dataset.handleId));
+  assert.ok(handleOrder.length >= 3, 'handle grid exposes enough options to cross a visual row boundary');
+  await page.locator(`[data-handle-id="${handleOrder[0]}"]`).click();
+  await moveToSection('handles');
+  assert.equal(await activeSection(), 'handles', 'Puxadores is a first-class keyboard section');
+  await page.keyboard.press('ArrowRight');
+  assert.equal(await pressedId('[data-handle-id]'), handleOrder[1], 'first horizontal handle move follows canonical data order');
+  await page.keyboard.press('ArrowRight');
+  assert.equal(await pressedId('[data-handle-id]'), handleOrder[2], 'handle traversal crosses the two-column row boundary in row-major order');
+  await page.keyboard.press('ArrowLeft');
+  assert.equal(await pressedId('[data-handle-id]'), handleOrder[1], 'Left is the inverse row-major handle traversal');
+
+  await moveToSection('stone-packages');
   const stoneBefore = await pressedId('[data-stone-package-id]');
   await page.keyboard.press('ArrowRight');
   const stoneAfter = await pressedId('[data-stone-package-id]');
@@ -125,7 +151,7 @@ const {chromium} = require('playwright');
   await page.keyboard.press('Space');
   assert.equal(await page.locator('#stoneSkirtingToggle').isChecked(), skirtingBefore, 'Space restores the binary section');
   await page.keyboard.press('ArrowUp');
-  assert.equal(await activeSection(), 'stone-all', 'ArrowUp returns to the previous section');
+  assert.equal(await activeSection(), 'stone-packages', 'ArrowUp returns to the previous section');
 
   // Services use the same generic section/item mechanism. Published configuration may choose
   // which specific controls are visible, so assert behavior from the discovered contract.
