@@ -112,6 +112,41 @@
     };
   }
 
+  function canonicalize(value) {
+    if (Array.isArray(value)) return value.map(canonicalize);
+    if (!value || typeof value !== "object") return value;
+    return Object.fromEntries(Object.keys(value).sort().map((key) => [key, canonicalize(value[key])]));
+  }
+
+  function canonicalStringify(value) {
+    return JSON.stringify(canonicalize(value));
+  }
+
+  function normalizePublishedAdministration(value, configurationCore, catalog, priceBook, scene) {
+    if (value?.schemaVersion === SCHEMA) {
+      const errors = validateHierarchyAdministration(value, configurationCore, catalog, priceBook, scene);
+      if (errors.length) throw new TypeError(errors.join("; "));
+      return normalizeHierarchyAdministration(value);
+    }
+    return configurationCore.normalizeConfiguratorSettings(value, catalog, priceBook, scene);
+  }
+
+  function migrationSemanticSignature(value) {
+    const rest = clone(value);
+    delete rest.schemaVersion;
+    delete rest.revision;
+    delete rest.compatibility;
+    const stages = (rest.stages || []).map((stage) => ({
+      id: stage.id,
+      kind: stage.kind || stage.id,
+      label: stage.label,
+      enabled: Boolean(stage.enabled),
+      itemIds: [...flattenStageItems(stage)].sort()
+    }));
+    delete rest.stages;
+    return canonicalStringify({ stages, administration: rest });
+  }
+
   function normalizeHierarchyAdministration(value) {
     return {
       ...clone(value),
@@ -287,6 +322,9 @@
     COLUMN_SPANS: Object.freeze([...COLUMN_SPANS]),
     flattenStageItems,
     stageHierarchySignature,
+    canonicalStringify,
+    migrationSemanticSignature,
+    normalizePublishedAdministration,
     upgradeToHierarchy,
     normalizeHierarchyAdministration,
     validateHierarchyAdministration,
