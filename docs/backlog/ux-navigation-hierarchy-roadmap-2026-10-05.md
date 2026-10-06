@@ -1,6 +1,6 @@
 # UX navigation and configurator hierarchy roadmap — 2026-10-05
 
-Status: canonical plan for the buyer-navigation and configurator-structure work. CP-UX-00 and CP-UX-01 are complete; CP-UX-02 is implemented and in its final merge gate; CP-UX-03 is the next implementation checkpoint after CP-UX-02 merges.
+Status: canonical plan for the buyer-navigation and configurator-structure work. CP-UX-00, CP-UX-01 and CP-UX-02 are complete; CP-UX-03 is the next implementation checkpoint.
 
 This roadmap is independent from the authenticated `stone-skirting` published-administration migration. The existing production compatibility cleanup remains valid and must not be bypassed or mixed into this work.
 
@@ -161,7 +161,7 @@ This is intentionally a product-safe compatibility checkpoint. It should improve
 
 Detailed implementation is defined below.
 
-### CP-UX-02 — introduce an explicit internal flow model — IMPLEMENTED / MERGE GATE
+### CP-UX-02 — introduce an explicit internal flow model — COMPLETE
 
 **Goal:** stop treating markup/DOM ownership as the semantic source of groups/sections while preserving the current published administration contract and the CP-UX-01 buyer experience.
 
@@ -378,9 +378,9 @@ Gate evidence on `2bd8eaadbcd7d4ee52751c8fdba8f36388222547`:
 
 No production administration write, schema migration, pricing change, catalog change, scene change or asset change occurred.
 
-Merge rule: this documentation update creates a new final PR head. Rerun the same required gates on that exact head. Merge PR #83 only if it remains green, then record the resulting `main` SHA before beginning CP-UX-03.
+Merge result: PASS. PR #83 merged to `main` at `f6ffa6bcfb06b12a76170933cb952bce869fd28b` after final reviewed head `bcf99e66e66d9394047873a8b68766cb191b3c99` passed the full required gate set and Netlify deploy preview. CP-UX-03 may begin from live `main` after this documentation closeout merges.
 
-### CP-UX-03 — administration schema/editor for groups and sections — NEXT AFTER CP-UX-02 MERGE
+### CP-UX-03 — administration schema/editor for groups and sections — NEXT
 
 **Goal:** make the hierarchy explicitly editable in the admin while preserving the current production v3 record and preventing an accidental hierarchy publication before the authenticated migration checkpoint.
 

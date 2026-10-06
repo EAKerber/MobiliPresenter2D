@@ -81,8 +81,8 @@ The canonical plan is:
 Current UX checkpoint:
 - **CP-UX-00 — COMPLETE** — documentation plan merged via PR #79 at `7e728d0f15e445fbb8a1625e2757ad40495fc97d`.
 - **CP-UX-01 — COMPLETE** — PR #81 merged to `main` at `91973ebc056be58b62440ed48ad6f473bb9f26b9`. Final reviewed head `ede50780b3f48ea62fd078a34a9610018ccc24b1` passed App build purity, Current variant fidelity, Summary/Pricing browser, Stone browser, Mobile browser, Keyboard browser, Current asset gates and Netlify deploy preview.
-- **CP-UX-02 — IMPLEMENTED / FINAL MERGE GATE** — implementation head `2bd8eaadbcd7d4ee52751c8fdba8f36388222547` passed the flow-model unit suite, App build purity, Current variant fidelity, Keyboard browser, Stone browser, Summary/Pricing browser, Mobile browser, Current asset gates and Netlify deploy preview. The branch now contains checkpoint documentation; rerun the same gates on the final exact PR head before merging PR #83.
-- **CP-UX-03 — NEXT AFTER CP-UX-02 MERGE** — add a hierarchy-capable administration representation/editor for `Stage -> Group -> Section -> Item`, deterministic v3 migration, lossless legacy-equivalence projection and a fail-closed production publication boundary.
+- **CP-UX-02 — COMPLETE** — PR #83 merged to `main` at `f6ffa6bcfb06b12a76170933cb952bce869fd28b`. Final reviewed head `bcf99e66e66d9394047873a8b68766cb191b3c99` passed the flow-model unit suite, App build purity, Current variant fidelity, Keyboard browser, Stone browser, Summary/Pricing browser, Mobile browser, Current asset gates and Netlify deploy preview.
+- **CP-UX-03 — NEXT** — add a hierarchy-capable administration representation/editor for `Stage -> Group -> Section -> Item`, deterministic v3 migration, lossless legacy-equivalence projection and a fail-closed production publication boundary.
 
 This track is independent from the authenticated `stone-skirting` migration and must not be mixed into it by default.
 
@@ -90,7 +90,7 @@ CP-UX-01 changed no catalog, pricing, scene, asset, buyer-state or published-adm
 
 CP-UX-02 now provides one immutable normalized flow model and makes keyboard section order/behavior/membership consume that model rather than arbitrary DOM structure. It does not change the published v3 administration schema.
 
-The detailed CP-UX-03 implementation plan is persisted in the canonical UX roadmap. The key safety rule is that hierarchy-changing v4 edits must not silently flatten into or publish over the current production v3 record before the authenticated publication checkpoint.
+The detailed CP-UX-03 implementation plan is persisted in the canonical UX roadmap. CP-UX-02 is durably closed and CP-UX-03 may begin from live `main`. The key safety rule remains: hierarchy-changing v4 edits must not silently flatten into or publish over the current production v3 record before the authenticated publication checkpoint.
 
 ## Active authorization boundary
 
