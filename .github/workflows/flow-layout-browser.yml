@@ -5,6 +5,7 @@ on:
     paths:
       - 'app/data/hierarchy-defaults.js'
       - 'app/core/flow-model.js'
+      - 'app/core/presentation-contract.js'
       - 'app/core/flow-layout.js'
       - 'app/app.js'
       - 'app/index.html'
@@ -15,6 +16,7 @@ on:
     paths:
       - 'app/data/hierarchy-defaults.js'
       - 'app/core/flow-model.js'
+      - 'app/core/presentation-contract.js'
       - 'app/core/flow-layout.js'
       - 'app/app.js'
       - 'app/index.html'
