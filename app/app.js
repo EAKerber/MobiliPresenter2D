@@ -1864,10 +1864,17 @@
 
   function changeStep(nextStep, moveFocus) {
     if (!enabledStages().some((stage) => stage.id === nextStep)) return;
+    const focusOrigin = document.activeElement;
     currentStep = nextStep;
+    const focusStep = currentStep;
     global.CASA_KEYBOARD_SHORTCUTS?.resetStageNavigation?.(currentStep);
     syncLayerVisibility();
-    if (moveFocus) requestAnimationFrame(focusCurrentStep);
+    if (moveFocus) requestAnimationFrame(() => {
+      if (currentStep !== focusStep) return;
+      const active = document.activeElement;
+      if (active && active !== focusOrigin && !flowNav?.contains(active)) return;
+      focusCurrentStep();
+    });
   }
 
   renderSceneFromData();
