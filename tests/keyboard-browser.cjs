@@ -89,6 +89,35 @@ const {chromium} = require('playwright');
   await page.keyboard.press('3');
   assert.equal(await selectedNumber(), 3, 'single digit belongs to the Modules stage');
 
+  await page.setViewportSize({width: 1050, height: 900});
+  await page.waitForTimeout(80);
+  await page.locator('#moduleList .module-card.is-selected [data-module-toggle]').focus();
+  const moduleScrollBefore = await page.evaluate(() => {
+    const pane = document.querySelector('[data-stage-pane="list"]');
+    window.scrollTo(0, Math.min(160, Math.max(0, document.documentElement.scrollHeight - innerHeight)));
+    pane.scrollTop = 0;
+    return {windowY: window.scrollY, paneTop: pane.scrollTop, paneMax: Math.max(0, pane.scrollHeight - pane.clientHeight)};
+  });
+  assert.ok(moduleScrollBefore.paneMax > 0, 'stacked Modules list exposes an independent vertical scroller');
+  await page.keyboard.press('ArrowDown');
+  await page.waitForTimeout(260);
+  const moduleScrollAfterDown = await page.evaluate(() => ({
+    windowY: window.scrollY,
+    paneTop: document.querySelector('[data-stage-pane="list"]').scrollTop
+  }));
+  assert.ok(Math.abs(moduleScrollAfterDown.windowY - moduleScrollBefore.windowY) < 2, 'ArrowDown in Modules does not scroll the window');
+  assert.ok(moduleScrollAfterDown.paneTop > moduleScrollBefore.paneTop, 'ArrowDown scrolls the focused Modules column instead');
+  await page.keyboard.press('ArrowUp');
+  await page.waitForTimeout(260);
+  const moduleScrollAfterUp = await page.evaluate(() => ({
+    windowY: window.scrollY,
+    paneTop: document.querySelector('[data-stage-pane="list"]').scrollTop
+  }));
+  assert.ok(Math.abs(moduleScrollAfterUp.windowY - moduleScrollBefore.windowY) < 2, 'ArrowUp in Modules does not scroll the window');
+  assert.ok(moduleScrollAfterUp.paneTop < moduleScrollAfterDown.paneTop, 'ArrowUp reverses the focused Modules column scroll');
+  await page.setViewportSize({width: 1366, height: 900});
+  await page.waitForTimeout(80);
+
   // Ctrl shortcuts are global and move between stages.
   assert.equal(await currentStage(), 'modules');
   await page.keyboard.press('Control+ArrowRight');
