@@ -146,7 +146,6 @@ const {chromium} = require('playwright');
   await page.evaluate(() => { document.querySelector('[data-keyboard-section="handles"]').dataset.keyboardBehavior = 'selection'; });
 
   await page.evaluate(() => { document.querySelector('[data-keyboard-section="fronts"]').removeAttribute('data-flow-item-id'); });
-  window.__placeholder = undefined;
   await sectionSnapshot();
   const missingOwnerErrors = await navigationErrors();
   assert.ok(missingOwnerErrors.some(entry => entry.code === 'missing-flow-item' && entry.itemId === 'fronts-all'), 'missing rendered model ownership is surfaced as an invariant error');
