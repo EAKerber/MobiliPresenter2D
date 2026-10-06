@@ -1,6 +1,11 @@
 (function registerHierarchyAdministration(global) {
   "use strict";
 
+  const itemCapabilities = typeof module !== "undefined" && module.exports && typeof require === "function"
+    ? require("./item-capabilities.js")
+    : global?.CasaModulesItemCapabilities;
+  if (!itemCapabilities) throw new Error("Item capability registry is required.");
+
   const SCHEMA = "ConfiguratorAdministration2D 4.0";
   const ID_PATTERN = /^[a-z][a-z0-9-]{1,39}$/;
   const PRESENTATIONS = new Set(["auto", "swatches", "cards", "list", "grid"]);
@@ -11,10 +16,7 @@
   }
 
   function itemBehavior(kind) {
-    if (["finish-group", "handle", "stone", "finish"].includes(kind)) return "selection";
-    if (["module", "object", "service"].includes(kind)) return "toggle";
-    if (kind === "summary") return "action";
-    return null;
+    return itemCapabilities.behaviorForKind(kind);
   }
 
   function flattenStageItems(stage) {
@@ -154,7 +156,7 @@
       if (stageIds.has(stage.id)) errors.push(`duplicate stage: ${stage.id}`);
       stageIds.add(stage.id);
       const kind = stage.kind || stage.id;
-      if (!["modules", "finishes", "services", "summary", "custom"].includes(kind)) errors.push(`invalid stage type: ${stage.id}`);
+      if (!itemCapabilities.STAGE_KINDS.includes(kind)) errors.push(`invalid stage type: ${stage.id}`);
       if (kind !== "custom") {
         if (coreKinds.has(kind)) errors.push(`duplicate stage type: ${kind}`);
         coreKinds.add(kind);
@@ -192,11 +194,7 @@
             else {
               const behavior = itemBehavior(kindForItem);
               if (behavior) behaviors.add(behavior);
-              if (kind === "modules" && kindForItem !== "module") errors.push(`invalid modules item: ${id}`);
-              if (kind === "summary" && (kindForItem !== "summary" || id !== "summary")) errors.push(`invalid summary item: ${id}`);
-              if (kind === "custom" && !["module", "object", "service"].includes(kindForItem)) errors.push(`invalid custom-stage item: ${id}`);
-              if (kind === "finishes" && kindForItem !== "finish-group" && id !== "stone-skirting") errors.push(`invalid finishes item: ${id}`);
-              if (kind === "services" && !["service", "object"].includes(kindForItem)) errors.push(`invalid services item: ${id}`);
+              if (!itemCapabilities.stageAllowsItem(kind, id, kindForItem, catalog)) errors.push(`invalid ${kind} item: ${id}`);
             }
             if (ownedItems.has(id)) errors.push(`item assigned more than once: ${id}`);
             ownedItems.add(id);
