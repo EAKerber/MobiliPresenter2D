@@ -160,6 +160,11 @@ const {chromium} = require('playwright');
   const finishAfter = await pressedId('[data-finish-id]');
   assert.notEqual(finishAfter, finishBefore, 'ArrowRight selects the next item in a selection section');
 
+  await page.keyboard.press('ArrowDown');
+  assert.equal(await activeSection(), 'handles', 'one ArrowDown from Frentes selects Puxadores as the next modeled section');
+  await page.keyboard.press('ArrowUp');
+  assert.equal(await activeSection(), 'fronts', 'one ArrowUp from Puxadores returns to Frentes');
+
   const handleOrder = await page.locator('[data-handle-id]').evaluateAll(items => items.map(item => item.dataset.handleId));
   assert.ok(handleOrder.length >= 3, 'handle grid exposes enough options to cross a visual row boundary');
   await page.locator(`[data-handle-id="${handleOrder[0]}"]`).click();
