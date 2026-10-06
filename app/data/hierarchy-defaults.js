@@ -14,6 +14,7 @@
             label: "Lista de módulos",
             presentation: "list",
             keyboard: false,
+            behavior: "selection",
             itemKinds: ["module"]
           }]
         }]
@@ -100,6 +101,20 @@
             itemKinds: ["summary"]
           }]
         }]
+      }
+    },
+    customStage: {
+      group: {
+        id: "custom-content",
+        labelFromStage: true,
+        columnSpan: 2
+      },
+      section: {
+        id: "items",
+        label: "Opções",
+        presentation: "list",
+        keyboard: true,
+        itemMode: "all"
       }
     },
     aggregateOptions: {
