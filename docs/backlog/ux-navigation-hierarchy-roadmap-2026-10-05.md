@@ -1130,11 +1130,13 @@ Preferred sequence:
 1. freshly re-read the production record while authenticated;
 2. if it is still v3 and still contains the audited contradiction where `stone-skirting` is selected but unassigned, execute CP-HK-01A as a **separate** minimal v3 consistency write;
 3. read back and prove the runtime repair becomes a no-op;
-4. only then freshly re-read again and start the v3 -> v4 migration transaction.
+4. complete CP-HK-01B as a narrow repository cleanup that removes/isolate the now-obsolete runtime repair, with production smoke after merge;
+5. freshly re-read production again;
+6. only then start the v3 -> v4 schema migration transaction.
 
 If the live record no longer matches that housekeeping precondition, do not replay the old migration plan. Record the new state and replan from the observed production record.
 
-Do not combine the `stone-skirting` consistency write and schema-v4 publication into one PUT merely to reduce transaction count.
+Do not combine the `stone-skirting` consistency write and schema-v4 publication into one PUT merely to reduce transaction count. The preferred migration source is a self-consistent v3 record that no longer depends on an in-memory repair.
 
 ##### 1. Re-read production immediately before migration
 
