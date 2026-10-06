@@ -18,8 +18,9 @@ const configurationCore = window.CasaModulesConfiguration;
 const flowCore = window.CasaModulesFlow;
 const hierarchyCore = window.CasaModulesHierarchyAdministration;
 const hierarchyEditor = window.CasaModulesHierarchyEditor;
+const hierarchyDefaults = window.CASA_EM_MODULOS_HIERARCHY_DEFAULTS;
 const legacyDefaults = configurationCore.createDefaultAdministration(settingsDefaults, catalog, priceBook, scene);
-const defaults = hierarchyCore.upgradeToHierarchy(legacyDefaults, configurationCore, flowCore, catalog, priceBook, scene);
+const defaults = hierarchyCore.upgradeToHierarchy(legacyDefaults, configurationCore, flowCore, catalog, priceBook, scene, hierarchyDefaults);
 const byId = (id) => document.getElementById(id);
 const loginPanel = byId("loginPanel");
 const deniedPanel = byId("deniedPanel");
@@ -51,15 +52,19 @@ let materialAvailabilityPage = 0;
 let selectedMaterialTarget = "fronts-all";
 const MATERIALS_PER_PAGE = 4;
 
-const labels = {
-  "fronts-all": "Cor das frentes",
-  "handles-all": "Puxadores",
-  "stone-all": "Pacote de pedra",
-  "lighting-08": "Iluminação embutida",
-  "move-stone": "Mover pedra",
-  "tempered-glass": "Vidro temperado",
-  summary: "Resumo da composição"
-};
+function configuredHierarchyItemLabel(itemId) {
+  for (const stage of Object.values(hierarchyDefaults?.stages || {})) {
+    for (const group of stage.groups || []) {
+      for (const section of group.sections || []) {
+        if ((section.itemIds || []).includes(itemId)) return section.label || itemId;
+      }
+    }
+  }
+  if (hierarchyDefaults?.customStage?.section?.itemIds?.includes?.(itemId)) {
+    return hierarchyDefaults.customStage.section.label || itemId;
+  }
+  return null;
+}
 
 const priceSections = [
   ["entries", "Valores de módulos e acessórios", "item"],
@@ -83,18 +88,20 @@ function getItemOptions(stageId) {
   const stage = model.stages.find((item) => item.id === stageId);
   const kind = stage?.kind || stage?.id;
   const registry = window.CasaModulesConfiguration.itemRegistry(catalog);
-  const allowed = kind === "modules" ? new Set(["module"])
-    : kind === "finishes" ? new Set(["finish-group"])
-      : kind === "services" ? new Set(["service", "object"])
-        : kind === "custom" ? new Set(["module", "object", "service"])
-          : kind === "summary" ? new Set(["summary"]) : new Set();
+  const policy = kind === "custom" ? hierarchyDefaults?.customStage : hierarchyDefaults?.stages?.[kind];
+  const allowed = new Set(policy?.allowedItemKinds || []);
   return [...registry].filter(([id, type]) => {
     const service = catalog.services.find((item) => item.id === id);
     return Array.isArray(service?.stageKinds) ? service.stageKinds.includes(kind) : allowed.has(type);
   }).map(([id]) => {
     const module = catalog.modules.find((item) => item.entityId === id);
     const entry = [...catalog.accessories, ...catalog.services].find((item) => item.entityId === id || item.id === id);
-    return { id, label: module ? `${module.referenceLabel} · ${model.objects[id]?.title || module.title}` : model.objects[id]?.title || entry?.title || labels[id] || id };
+    return {
+      id,
+      label: module
+        ? `${module.referenceLabel} · ${model.objects[id]?.title || module.title}`
+        : model.objects[id]?.title || entry?.title || configuredHierarchyItemLabel(id) || id
+    };
   });
 }
 
@@ -114,7 +121,10 @@ function sectionBehavior(section) {
 }
 
 function itemLabel(stageId, itemId) {
-  return getItemOptions(stageId).find((item) => item.id === itemId)?.label || model.objects[itemId]?.title || labels[itemId] || itemId;
+  return getItemOptions(stageId).find((item) => item.id === itemId)?.label
+    || model.objects[itemId]?.title
+    || configuredHierarchyItemLabel(itemId)
+    || itemId;
 }
 
 function hierarchyErrors(candidate) {
@@ -136,14 +146,10 @@ function commitHierarchy(candidate, successMessage = "") {
 
 function defaultEmptyPlacement(stage, itemId) {
   const behavior = itemBehavior(itemId);
-  const groupLabel = stage.kind === "modules" ? "Módulos"
-    : stage.kind === "finishes" ? "Acabamentos"
-      : stage.kind === "services" ? "Serviços"
-        : stage.kind === "summary" ? "Resumo" : stage.label;
   const sectionLabel = itemLabel(stage.id, itemId);
   return {
     groupId: hierarchyEditor.uniqueId(new Set(), `${stage.id}-group`, "group"),
-    groupLabel,
+    groupLabel: stage.label || "Grupo",
     sectionId: hierarchyEditor.uniqueId(new Set(), `${stage.id}-items`, "items"),
     sectionLabel,
     presentation: behavior === "selection" ? "cards" : "list",
@@ -234,8 +240,11 @@ function makeOrderButtons(upData, downData, index, length, label) {
 }
 
 function hierarchyChoiceOptions(itemId) {
-  if (itemId === "handles-all") {
-    const available = new Set(model.materialGroups.find((entry) => entry.id === "handles-all")?.materialIds || []);
+  const source = hierarchyDefaults?.aggregateOptions?.[itemId]?.source;
+  if (!source) return [];
+
+  if (source === "handles") {
+    const available = new Set(model.materialGroups.find((entry) => entry.id === itemId)?.materialIds || []);
     return catalog.options.handles.map((handle) => {
       const product = model.handleProducts.find((entry) => entry.priceEntryId === handle.id || entry.id === handle.id);
       const alwaysAvailable = handle.id === "none" || handle.isAbsence;
@@ -247,8 +256,8 @@ function hierarchyChoiceOptions(itemId) {
     });
   }
 
-  if (itemId === "fronts-all") {
-    const group = model.materialGroups.find((entry) => entry.id === "fronts-all");
+  if (source === "finishes") {
+    const group = model.materialGroups.find((entry) => entry.id === itemId);
     const allowed = new Set(group?.materialIds || []);
     return catalog.options.finishes.map((finish) => {
       const settings = model.finishes.find((entry) => entry.id === finish.id);
@@ -260,8 +269,8 @@ function hierarchyChoiceOptions(itemId) {
     });
   }
 
-  if (itemId === "stone-all") {
-    const group = model.materialGroups.find((entry) => entry.id === "stone-all");
+  if (source === "stonePackages") {
+    const group = model.materialGroups.find((entry) => entry.id === itemId);
     const allowed = new Set(group?.materialIds || []);
     return catalog.options.stonePackages.map((stone) => ({
       id: stone.id,
@@ -280,7 +289,7 @@ function appendHierarchyChoiceOptions(container, itemId) {
   const details = document.createElement("details");
   details.className = "hierarchy-choice-options";
   details.dataset.hierarchyChoiceList = itemId;
-  if (itemId === "handles-all") details.open = true;
+  details.open = Boolean(hierarchyDefaults?.aggregateOptions?.[itemId]?.openByDefault);
 
   const summary = document.createElement("summary");
   const availableCount = choices.filter((choice) => choice.available).length;
@@ -1075,7 +1084,7 @@ async function loadSettings() {
   const response = await fetch("/api/configuration", { credentials: "same-origin", cache: "no-store" });
   if (!response.ok) throw new Error(response.status === 404 ? "A API de configuração ainda não foi publicada." : "Não foi possível carregar a configuração.");
   const published = await response.json();
-  model = hierarchyCore.upgradeToHierarchy(published, configurationCore, flowCore, catalog, priceBook, scene);
+  model = hierarchyCore.upgradeToHierarchy(published, configurationCore, flowCore, catalog, priceBook, scene, hierarchyDefaults);
   byId("revisionLabel").textContent = `Versão ${model.revision || 1} · editor hierárquico`;
   setMessage(saveMessage, "Hierarquia carregada. Alterações estruturais permanecem em rascunho até a publicação hierárquica ser habilitada.");
   renderAdminTabs();
@@ -1542,7 +1551,8 @@ saveButton.addEventListener("click", async () => {
       flowCore,
       catalog,
       priceBook,
-      scene
+      scene,
+      hierarchyDefaults
     );
     if (!projection.ok) {
       if (projection.code === "hierarchy_requires_publication") {
@@ -1570,7 +1580,7 @@ saveButton.addEventListener("click", async () => {
       if (payload?.error === "hierarchy_publication_required") throw new Error("A API bloqueou uma publicação hierárquica antes do checkpoint autorizado.");
       throw new Error(payload?.message || "A configuração não foi aceita. Confira nomes e itens selecionados.");
     }
-    model = hierarchyCore.upgradeToHierarchy(payload, configurationCore, flowCore, catalog, priceBook, scene);
+    model = hierarchyCore.upgradeToHierarchy(payload, configurationCore, flowCore, catalog, priceBook, scene, hierarchyDefaults);
     byId("revisionLabel").textContent = `Versão ${model.revision} · editor hierárquico`;
     setMessage(saveMessage, "Configuração compatível publicada. A hierarquia estrutural continua protegida contra publicação prematura.", "success");
     renderAdminTabs();
