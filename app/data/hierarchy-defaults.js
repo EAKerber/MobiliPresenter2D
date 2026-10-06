@@ -5,6 +5,7 @@
     schemaVersion: "ConfiguratorHierarchyDefaults2D 1.0",
     stages: {
       modules: {
+        allowedItemKinds: ["module"],
         groups: [{
           id: "modules-main",
           label: "Módulos",
@@ -20,6 +21,7 @@
         }]
       },
       finishes: {
+        allowedItemKinds: ["finish-group"],
         groups: [
           {
             id: "cabinet-finishes",
@@ -66,6 +68,7 @@
         ]
       },
       services: {
+        allowedItemKinds: ["service", "object"],
         groups: [{
           id: "services",
           label: "Serviços",
@@ -89,6 +92,7 @@
         }]
       },
       summary: {
+        allowedItemKinds: ["summary"],
         groups: [{
           id: "summary-main",
           label: "Resumo",
@@ -104,6 +108,7 @@
       }
     },
     customStage: {
+      allowedItemKinds: ["module", "object", "service"],
       group: {
         id: "custom-content",
         labelFromStage: true,
@@ -119,7 +124,7 @@
     },
     aggregateOptions: {
       "fronts-all": { source: "finishes" },
-      "handles-all": { source: "handles" },
+      "handles-all": { source: "handles", openByDefault: true },
       "stone-all": { source: "stonePackages" }
     }
   };
