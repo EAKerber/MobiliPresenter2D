@@ -1747,13 +1747,35 @@
     const heading = panel.querySelector("h2");
     if (!heading) return;
     heading.focus({ preventScroll: true });
-    const navHeight = flowNav?.getBoundingClientRect().height || 0;
-    const panelTop = global.scrollY + panel.getBoundingClientRect().top;
-    global.scrollTo({
-      top: Math.max(0, panelTop - navHeight - 12),
-      left: 0,
-      behavior: shouldReduceMotion() ? "auto" : "smooth"
-    });
+
+    const scroller = global.CASA_KEYBOARD_SHORTCUTS?.scrollContainerFor?.(panel) || null;
+    const panelRect = panel.getBoundingClientRect();
+    const navRect = flowNav?.getBoundingClientRect();
+    if (scroller) {
+      const bounds = scroller.getBoundingClientRect();
+      const targetTop = flowNav && scroller.contains(flowNav) && navRect
+        ? Math.max(bounds.top + 12, navRect.bottom + 12)
+        : bounds.top + 12;
+      const delta = panelRect.top - targetTop;
+      if (Math.abs(delta) >= 2) {
+        scroller.scrollBy({
+          top: delta,
+          left: 0,
+          behavior: shouldReduceMotion() ? "auto" : "smooth"
+        });
+      }
+      return;
+    }
+
+    const targetTop = navRect ? Math.max(12, navRect.bottom + 12) : 12;
+    const delta = panelRect.top - targetTop;
+    if (Math.abs(delta) >= 2) {
+      global.scrollBy({
+        top: delta,
+        left: 0,
+        behavior: shouldReduceMotion() ? "auto" : "smooth"
+      });
+    }
   }
 
   function changeStep(nextStep, moveFocus) {
