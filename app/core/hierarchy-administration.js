@@ -58,6 +58,32 @@
     };
   }
 
+  function stageHierarchySignature(stage) {
+    return JSON.stringify({
+      id: stage.id,
+      kind: stage.kind || stage.id,
+      groups: (stage.groups || []).map((group) => ({
+        id: group.id,
+        label: group.label,
+        columnSpan: group.columnSpan,
+        sections: (group.sections || []).map((section) => ({
+          id: section.id,
+          label: section.label,
+          presentation: section.presentation,
+          itemIds: [...(section.itemIds || [])]
+        }))
+      }))
+    });
+  }
+
+  function compatibilityMetadata(legacy, hierarchyStages) {
+    return {
+      sourceSchemaVersion: legacy.schemaVersion || null,
+      legacyStageItems: Object.fromEntries((legacy.stages || []).map((stage) => [stage.id, [...(stage.items || [])]])),
+      legacyStageStructures: Object.fromEntries(hierarchyStages.map((stage) => [stage.id, stageHierarchySignature(stage)]))
+    };
+  }
+
   function upgradeToHierarchy(value, configurationCore, flowCore, catalog, priceBook, scene) {
     if (!value) throw new TypeError("configuration is required");
     if (value.schemaVersion === SCHEMA) {
@@ -68,19 +94,21 @@
 
     const legacy = configurationCore.normalizeConfiguratorSettings(value, catalog, priceBook, scene);
     const flow = flowCore.normalizeFlow(legacy, configurationCore.itemRegistry(catalog));
+    const hierarchyStages = flow.stages.map((flowStage) => {
+      const source = legacy.stages.find((stage) => stage.id === flowStage.id);
+      return {
+        id: flowStage.id,
+        kind: flowStage.kind,
+        label: source?.label || flowStage.label,
+        enabled: Boolean(flowStage.enabled),
+        groups: flowStage.groups.map((group) => defaultGroupCopy(group, source || flowStage))
+      };
+    });
     return {
       ...clone(legacy),
       schemaVersion: SCHEMA,
-      stages: flow.stages.map((flowStage) => {
-        const source = legacy.stages.find((stage) => stage.id === flowStage.id);
-        return {
-          id: flowStage.id,
-          kind: flowStage.kind,
-          label: source?.label || flowStage.label,
-          enabled: Boolean(flowStage.enabled),
-          groups: flowStage.groups.map((group) => defaultGroupCopy(group, source || flowStage))
-        };
-      })
+      stages: hierarchyStages,
+      compatibility: compatibilityMetadata(legacy, hierarchyStages)
     };
   }
 
@@ -110,16 +138,22 @@
   }
 
   function hierarchyToLegacyCandidate(value, configurationCore) {
+    const compatibility = value.compatibility || {};
     return {
       ...clone(value),
       schemaVersion: configurationCore.SCHEMA,
-      stages: value.stages.map((stage) => ({
-        id: stage.id,
-        kind: stage.kind || stage.id,
-        label: stage.label,
-        enabled: Boolean(stage.enabled),
-        items: flattenStageItems(stage)
-      }))
+      stages: value.stages.map((stage) => {
+        const baselineStructure = compatibility.legacyStageStructures?.[stage.id];
+        const baselineItems = compatibility.legacyStageItems?.[stage.id];
+        const structureUnchanged = baselineStructure && baselineStructure === stageHierarchySignature(stage);
+        return {
+          id: stage.id,
+          kind: stage.kind || stage.id,
+          label: stage.label,
+          enabled: Boolean(stage.enabled),
+          items: structureUnchanged && Array.isArray(baselineItems) ? [...baselineItems] : flattenStageItems(stage)
+        };
+      })
     };
   }
 
@@ -252,6 +286,7 @@
     PRESENTATIONS: Object.freeze([...PRESENTATIONS]),
     COLUMN_SPANS: Object.freeze([...COLUMN_SPANS]),
     flattenStageItems,
+    stageHierarchySignature,
     upgradeToHierarchy,
     normalizeHierarchyAdministration,
     validateHierarchyAdministration,
