@@ -154,6 +154,69 @@
     });
   }
 
+  function moveSectionToGroup(model, stageId, sourceGroupId, sectionId, destinationGroupId, index = null) {
+    return update(model, (next) => {
+      const stage = findStage(next, stageId);
+      const sourceGroup = findGroup(stage, sourceGroupId);
+      const destinationGroup = findGroup(stage, destinationGroupId);
+      const section = findSection(sourceGroup, sectionId);
+      if (!stage || !sourceGroup || !destinationGroup || !section || sourceGroup === destinationGroup) return false;
+      sourceGroup.sections = sourceGroup.sections.filter((entry) => entry !== section);
+      const targetIndex = Number.isInteger(index)
+        ? Math.max(0, Math.min(index, destinationGroup.sections.length))
+        : destinationGroup.sections.length;
+      destinationGroup.sections.splice(targetIndex, 0, section);
+      if (!sourceGroup.sections.length) stage.groups = stage.groups.filter((entry) => entry !== sourceGroup);
+      return true;
+    });
+  }
+
+  function mergeSectionIntoNext(model, stageId, groupId, sectionId) {
+    return update(model, (next) => {
+      const group = findGroup(findStage(next, stageId), groupId);
+      if (!group) return false;
+      const index = group.sections.findIndex((section) => section.id === sectionId);
+      if (index < 0 || index >= group.sections.length - 1) return false;
+      const source = group.sections[index];
+      const target = group.sections[index + 1];
+      target.itemIds.unshift(...source.itemIds);
+      group.sections.splice(index, 1);
+      return true;
+    });
+  }
+
+  function mergeGroupIntoNext(model, stageId, groupId) {
+    return update(model, (next) => {
+      const stage = findStage(next, stageId);
+      if (!stage) return false;
+      const index = stage.groups.findIndex((group) => group.id === groupId);
+      if (index < 0 || index >= stage.groups.length - 1) return false;
+      const source = stage.groups[index];
+      stage.groups[index + 1].sections.unshift(...source.sections);
+      stage.groups.splice(index, 1);
+      return true;
+    });
+  }
+
+  function placeItemInEmptyStage(model, itemId, stageId, { groupId, groupLabel, sectionId, sectionLabel, presentation = "auto", columnSpan = 2 } = {}) {
+    return update(model, (next) => {
+      const stage = findStage(next, stageId);
+      if (!stage || stage.groups.length || findItemOwner(next, itemId)) return false;
+      stage.groups.push({
+        id: groupId || uniqueId(new Set(), `${stage.id}-group`, "group"),
+        label: groupLabel || stage.label || "Grupo",
+        columnSpan,
+        sections: [{
+          id: sectionId || uniqueId(new Set(), `${stage.id}-items`, "items"),
+          label: sectionLabel || "Itens",
+          presentation,
+          itemIds: [itemId]
+        }]
+      });
+      return true;
+    });
+  }
+
   function removeItem(model, itemId) {
     return update(model, (next) => {
       const owner = findItemOwner(next, itemId);
@@ -206,8 +269,12 @@
     reorderItem,
     splitItemToSection,
     splitSectionToGroup,
+    moveSectionToGroup,
     mergeSectionIntoPrevious,
+    mergeSectionIntoNext,
     mergeGroupIntoPrevious,
+    mergeGroupIntoNext,
+    placeItemInEmptyStage,
     removeItem
   });
 
