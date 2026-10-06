@@ -34,12 +34,14 @@ const {chromium} = require('playwright');
   const currentStage = () => page.evaluate(() => document.querySelector('.flow-nav [data-step][aria-current="step"]')?.dataset.step || null);
   const activeSection = () => page.evaluate(() => {
     const element = document.querySelector('[data-keyboard-active-section="true"]');
-    return element?.dataset.configurableItem || element?.id || null;
+    return element?.dataset.keyboardSection || null;
   });
   const sectionSnapshot = () => page.evaluate(() => window.CASA_KEYBOARD_SHORTCUTS.discoverStageSections().map(section => ({
     id: section.id,
+    keyboardSection: section.element.dataset.keyboardSection || null,
     behavior: section.behavior,
-    itemCount: section.items.length
+    itemCount: section.items.length,
+    itemIds: section.items.map(item => item.id || item.dataset.handleId || item.dataset.finishId || item.dataset.stonePackageId || item.dataset.globalServiceId || item.tagName)
   })));
   const moveToSection = async (id) => {
     for (let index = 0; index < 12; index += 1) {
@@ -86,6 +88,19 @@ const {chromium} = require('playwright');
   await page.keyboard.press('Control+ArrowRight');
   await page.waitForFunction(() => document.querySelector('.flow-nav [data-step][aria-current="step"]')?.dataset.step === 'finishes');
   assert.equal(await currentStage(), 'finishes', 'Ctrl+ArrowRight advances one stage');
+  await page.waitForTimeout(450);
+  const finishStageGeometry = await page.evaluate(() => {
+    const nav = document.querySelector('.flow-nav').getBoundingClientRect();
+    const panel = document.getElementById('frontFinishPanel').getBoundingClientRect();
+    const heading = document.getElementById('frontFinishHeading');
+    return {
+      panelTop: panel.top,
+      expectedTop: nav.bottom + 12,
+      headingOutline: getComputedStyle(heading).outlineStyle
+    };
+  });
+  assert.ok(Math.abs(finishStageGeometry.panelTop - finishStageGeometry.expectedTop) < 36, 'stage entry establishes a predictable top context below the sticky step rail');
+  assert.equal(finishStageGeometry.headingOutline, 'none', 'programmatic stage heading focus does not look like an option selection');
 
   // A Ctrl chord must not arm the fallback numeric buffer. Plain digits still belong to the active stage.
   const selectedBeforeForeignDigit = await selectedNumber();
@@ -97,20 +112,33 @@ const {chromium} = require('playwright');
   assert.equal(await currentStage(), 'finishes', 'Escape remains local to visible module details');
   assert.equal(await selectedNumber(), selectedBeforeForeignDigit, 'Escape outside Modules preserves the latent module selection');
 
-  // Finishes are discovered from visible configurable groups rather than hard-coded option IDs.
+  // Finishes expose explicit semantic sections; layout does not define ownership.
   const finishSections = await sectionSnapshot();
-  assert.ok(finishSections.some(section => section.id === 'item:fronts-all' && section.behavior === 'selection'), 'front finishes expose a selection section');
-  assert.ok(finishSections.some(section => section.id === 'item:stone-all' && section.behavior === 'selection'), 'stone packages expose a selection section');
-  assert.ok(finishSections.some(section => section.id === 'item:stone-skirting' && section.behavior === 'toggle'), 'stone skirting exposes a toggle section');
+  assert.ok(finishSections.some(section => section.id === 'section:fronts' && section.behavior === 'selection'), 'front finishes expose a selection section');
+  assert.ok(finishSections.some(section => section.id === 'section:handles' && section.behavior === 'selection'), 'handles expose a selection section');
+  assert.ok(finishSections.some(section => section.id === 'section:stone-packages' && section.behavior === 'selection'), 'stone packages expose a selection section');
+  assert.ok(finishSections.some(section => section.id === 'section:stone-skirting' && section.behavior === 'toggle'), 'stone skirting exposes a toggle section');
 
   await page.keyboard.press('ArrowDown');
-  assert.equal(await activeSection(), 'fronts-all', 'ArrowDown enters the first visible finish section');
+  assert.equal(await activeSection(), 'fronts', 'ArrowDown enters the first visible finish section');
   const finishBefore = await pressedId('[data-finish-id]');
   await page.keyboard.press('ArrowRight');
   const finishAfter = await pressedId('[data-finish-id]');
   assert.notEqual(finishAfter, finishBefore, 'ArrowRight selects the next item in a selection section');
 
-  await moveToSection('stone-all');
+  const handleOrder = await page.locator('[data-handle-id]').evaluateAll(items => items.map(item => item.dataset.handleId));
+  assert.ok(handleOrder.length >= 3, 'handle grid exposes enough options to cross a visual row boundary');
+  await page.locator(`[data-handle-id="${handleOrder[0]}"]`).click();
+  await moveToSection('handles');
+  assert.equal(await activeSection(), 'handles', 'Puxadores is a first-class keyboard section');
+  await page.keyboard.press('ArrowRight');
+  assert.equal(await pressedId('[data-handle-id]'), handleOrder[1], 'first horizontal handle move follows canonical data order');
+  await page.keyboard.press('ArrowRight');
+  assert.equal(await pressedId('[data-handle-id]'), handleOrder[2], 'handle traversal crosses the two-column row boundary in row-major order');
+  await page.keyboard.press('ArrowLeft');
+  assert.equal(await pressedId('[data-handle-id]'), handleOrder[1], 'Left is the inverse row-major handle traversal');
+
+  await moveToSection('stone-packages');
   const stoneBefore = await pressedId('[data-stone-package-id]');
   await page.keyboard.press('ArrowRight');
   const stoneAfter = await pressedId('[data-stone-package-id]');
@@ -123,15 +151,37 @@ const {chromium} = require('playwright');
   await page.keyboard.press('Space');
   assert.equal(await page.locator('#stoneSkirtingToggle').isChecked(), skirtingBefore, 'Space restores the binary section');
   await page.keyboard.press('ArrowUp');
-  assert.equal(await activeSection(), 'stone-all', 'ArrowUp returns to the previous section');
+  assert.equal(await activeSection(), 'stone-packages', 'ArrowUp returns to the previous section');
 
-  // Services use the same generic section/item mechanism. Published configuration may choose
-  // which specific controls are visible, so assert behavior from the discovered contract.
+  // Services own two explicit peer sections instead of inferring semantics from the panel DOM.
   await page.keyboard.press('Control+ArrowRight');
   await page.waitForFunction(() => document.querySelector('.flow-nav [data-step][aria-current="step"]')?.dataset.step === 'services');
   const serviceSections = await sectionSnapshot();
-  assert.ok(serviceSections.length >= 1, 'Services expose at least one keyboard section');
+  assert.ok(serviceSections.some(section => section.id === 'section:lighting' && section.behavior === 'toggle'), 'lighting is an explicit toggle section');
+  assert.ok(serviceSections.some(section => section.id === 'section:additional-services' && section.behavior === 'toggle'), 'additional services are an explicit toggle section');
+  assert.equal(serviceSections.some(section => section.itemIds.includes('servicesHeading')), false, 'the stage heading is never discovered as a section item');
+
+  const serviceCardContract = await page.evaluate(() => {
+    const lighting = document.getElementById('lightingToggle');
+    const additional = document.querySelector('[data-global-service-id]');
+    const lightingStyle = getComputedStyle(lighting);
+    const additionalStyle = getComputedStyle(additional);
+    return {
+      lightingCard: lighting.closest('.service-check')?.classList.contains('service-check') || false,
+      additionalCard: additional?.closest('.service-check')?.classList.contains('service-check') || false,
+      lightingWidth: lightingStyle.width,
+      lightingHeight: lightingStyle.height,
+      additionalWidth: additionalStyle.width,
+      additionalHeight: additionalStyle.height
+    };
+  });
+  assert.equal(serviceCardContract.lightingCard, true, 'lighting uses the shared service card contract');
+  assert.equal(serviceCardContract.additionalCard, true, 'additional services use the shared service card contract');
+  assert.equal(serviceCardContract.lightingWidth, serviceCardContract.additionalWidth, 'service checkboxes share one width');
+  assert.equal(serviceCardContract.lightingHeight, serviceCardContract.additionalHeight, 'service checkboxes share one height');
+
   await page.keyboard.press('ArrowDown');
+  assert.equal(await activeSection(), 'lighting', 'first service section is lighting');
   const focusedService = await page.evaluate(() => ({
     tag: document.activeElement?.tagName,
     type: document.activeElement?.type || null,
@@ -148,13 +198,79 @@ const {chromium} = require('playwright');
   await page.keyboard.press('Space');
   assert.equal(await serviceChecked(focusedService), focusedService.checked, 'Space can restore the focused service item across redraws');
 
+  // Reproduce the reported friction: the final section already fits, but is visually stranded
+  // above the viewport end. Section navigation must still establish an intentional end position.
+  const beforeLastSection = await page.evaluate(() => {
+    const element = document.querySelector('[data-keyboard-section="additional-services"]');
+    const rect = element.getBoundingClientRect();
+    const maxScroll = Math.max(0, document.documentElement.scrollHeight - innerHeight);
+    const desired = Math.min(maxScroll, Math.max(0, scrollY + rect.bottom - (innerHeight - 140)));
+    scrollTo(0, desired);
+    const positioned = element.getBoundingClientRect();
+    return {
+      top: positioned.top,
+      bottom: positioned.bottom,
+      viewportHeight: innerHeight,
+      fullyVisible: positioned.top >= 0 && positioned.bottom <= innerHeight
+    };
+  });
+  assert.equal(beforeLastSection.fullyVisible, true, 'test setup keeps the final service section fully visible before section navigation');
+
+  await page.keyboard.press('ArrowDown');
+  assert.equal(await activeSection(), 'additional-services', 'ArrowDown moves the active section marker to additional services');
+  await page.waitForTimeout(450);
+  const lastSectionGeometry = await page.evaluate(() => {
+    const rect = document.querySelector('[data-keyboard-section="additional-services"]').getBoundingClientRect();
+    const maxScroll = Math.max(0, document.documentElement.scrollHeight - innerHeight);
+    return {
+      bottomGap: (innerHeight - 16) - rect.bottom,
+      atDocumentEnd: Math.abs(scrollY - maxScroll) < 3
+    };
+  });
+  assert.ok(Math.abs(lastSectionGeometry.bottomGap) < 42 || lastSectionGeometry.atDocumentEnd, 'last-section navigation aligns the final section with the usable viewport end');
+
+  const focusedAdditionalService = await page.evaluate(() => ({
+    id: document.activeElement?.id || null,
+    serviceId: document.activeElement?.dataset?.globalServiceId || null,
+    checked: document.activeElement?.checked ?? null,
+    disabled: document.activeElement?.disabled ?? null
+  }));
+  assert.equal(focusedAdditionalService.disabled, false, 'additional service navigation lands on an enabled control');
+  await page.keyboard.press('Space');
+  assert.equal(await serviceChecked(focusedAdditionalService), !focusedAdditionalService.checked, 'Space toggles an additional service');
+  await page.keyboard.press('Space');
+  assert.equal(await serviceChecked(focusedAdditionalService), focusedAdditionalService.checked, 'Space restores an additional service');
+
+  await page.keyboard.press('ArrowUp');
+  assert.equal(await activeSection(), 'lighting', 'ArrowUp restores the previous explicit service section');
+  await page.emulateMedia({reducedMotion: 'reduce'});
+  await page.evaluate(() => {
+    const element = document.querySelector('[data-keyboard-section="additional-services"]');
+    const rect = element.getBoundingClientRect();
+    const maxScroll = Math.max(0, document.documentElement.scrollHeight - innerHeight);
+    scrollTo(0, Math.min(maxScroll, Math.max(0, scrollY + rect.bottom - (innerHeight - 140))));
+  });
+  await page.keyboard.press('ArrowDown');
+  await page.waitForTimeout(30);
+  const reducedMotionGeometry = await page.evaluate(() => {
+    const rect = document.querySelector('[data-keyboard-section="additional-services"]').getBoundingClientRect();
+    const maxScroll = Math.max(0, document.documentElement.scrollHeight - innerHeight);
+    return {
+      bottomGap: (innerHeight - 16) - rect.bottom,
+      atDocumentEnd: Math.abs(scrollY - maxScroll) < 3
+    };
+  });
+  assert.ok(Math.abs(reducedMotionGeometry.bottomGap) < 42 || reducedMotionGeometry.atDocumentEnd, 'reduced motion reaches the same final section geometry without relying on animation');
+  await page.emulateMedia({reducedMotion: 'no-preference'});
+
   // Summary currently has no required local action. Inject one declarative section to prove a
   // future stage gains Enter behavior from DOM data without another controller branch.
   await page.keyboard.press('Control+ArrowRight');
   await page.waitForFunction(() => document.querySelector('.flow-nav [data-step][aria-current="step"]')?.dataset.step === 'summary');
   await page.evaluate(() => {
     const section = document.createElement('div');
-    section.dataset.configurableItem = 'future-summary-action';
+    section.dataset.keyboardSection = 'future-summary-action';
+    section.dataset.keyboardBehavior = 'action';
     const button = document.createElement('button');
     button.type = 'button';
     button.textContent = 'Future action';

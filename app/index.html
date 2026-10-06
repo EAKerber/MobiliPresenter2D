@@ -115,13 +115,13 @@
           </header>
 
           <div class="finish-controls">
-            <fieldset data-configurable-item="fronts-all">
+            <fieldset data-configurable-item="fronts-all" data-keyboard-section="fronts" data-keyboard-behavior="selection">
               <legend>Cor das frentes</legend>
               <div class="swatches" id="finishSwatches"></div>
               <p class="finish-help" id="selectedFinishDescription"></p>
             </fieldset>
 
-            <fieldset class="handle-fieldset" data-configurable-item="handles-all">
+            <fieldset class="handle-fieldset" data-configurable-item="handles-all" data-keyboard-section="handles" data-keyboard-behavior="selection">
               <legend>Puxadores</legend>
               <p class="finish-help" id="handleHelp">Escolha global; o valor é rateado somente nas frentes aplicáveis de cada módulo.</p>
               <div class="handle-options" id="handleOptions"></div>
@@ -131,8 +131,8 @@
         <section class="panel" id="stonePanel" aria-labelledby="stoneHeading" data-configurable-item="stone-all">
           <header class="finish-heading"><div><h2 id="stoneHeading">Pedra do conjunto</h2><p>Uma escolha global, aplicada uma vez à composição.</p></div></header>
           <div class="finish-controls">
-            <fieldset><legend>Pacote de pedra</legend><div class="global-options" id="stonePackageOptions"></div></fieldset>
-            <label class="accessory-toggle" for="stoneSkirtingToggle" data-configurable-item="stone-skirting">
+            <fieldset data-keyboard-section="stone-packages" data-keyboard-behavior="selection"><legend>Pacote de pedra</legend><div class="global-options" id="stonePackageOptions"></div></fieldset>
+            <label class="accessory-toggle" for="stoneSkirtingToggle" data-configurable-item="stone-skirting" data-keyboard-section="stone-skirting" data-keyboard-behavior="toggle">
               <input id="stoneSkirtingToggle" type="checkbox" />
               <span><strong>Rodapé de pedra</strong><small>Acabamento global para a composição.</small></span>
             </label>
@@ -144,11 +144,17 @@
             <span aria-hidden="true">✓</span>
             <div><h2 id="servicesHeading" tabindex="-1">Serviços</h2><p>Serviços globais que impactam uma vez o conjunto.</p></div>
           </header>
-          <label class="accessory-toggle" for="lightingToggle" data-configurable-item="lighting-08">
-            <input id="lightingToggle" type="checkbox" />
-            <span><strong>Iluminação embutida</strong><small>Serviço global que realça a bancada e requer a lateral da geladeira e o aéreo da pia.</small></span>
-          </label>
-          <div id="servicesChecklist" class="services-checklist"></div>
+          <section class="service-section" data-keyboard-section="lighting" data-keyboard-behavior="toggle" aria-labelledby="lightingSectionHeading">
+            <h3 id="lightingSectionHeading">Iluminação</h3>
+            <label class="service-check" for="lightingToggle" data-configurable-item="lighting-08">
+              <input id="lightingToggle" type="checkbox" />
+              <span><strong>Iluminação embutida</strong><small>Serviço global que realça a bancada e requer a lateral da geladeira e o aéreo da pia.</small></span>
+            </label>
+          </section>
+          <section class="service-section" data-keyboard-section="additional-services" data-keyboard-behavior="toggle" aria-labelledby="additionalServicesHeading">
+            <h3 id="additionalServicesHeading">Serviços adicionais</h3>
+            <div id="servicesChecklist" class="services-checklist"></div>
+          </section>
         </section>
 
         <section class="panel summary-panel" id="summaryPanel" aria-labelledby="summaryHeading" hidden>

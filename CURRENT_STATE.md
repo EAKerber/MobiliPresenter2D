@@ -80,9 +80,14 @@ The canonical plan is:
 
 Current UX checkpoint:
 - **CP-UX-00 — COMPLETE** — documentation plan merged via PR #79 at `7e728d0f15e445fbb8a1625e2757ad40495fc97d`.
-- **CP-UX-01 — NEXT** — explicit section ownership, Services/Puxadores navigation repair, active-section hierarchy and deterministic stage/section scrolling, without changing the published administration schema.
+- **CP-UX-01 — IMPLEMENTED / FINAL MERGE GATE** — implementation head `f524a3f43f851f1eabe6d0d4cfcb53b60f115197` passed App build purity, Current variant fidelity, Summary/Pricing browser, Stone browser, Mobile browser, Keyboard browser, Current asset gates and Netlify deploy preview. The branch now contains documentation closeout; rerun the same gates on the final exact PR head before merging PR #81.
+- **CP-UX-02 — NEXT AFTER CP-UX-01 MERGE** — introduce an explicit normalized internal flow model (`Stage -> Group -> Section -> Item references`) derived compatibly from v3, then make keyboard semantics consume that model without changing the persisted administration schema.
 
 This track is independent from the authenticated `stone-skirting` migration and must not be mixed into it by default.
+
+CP-UX-01 changed no catalog, pricing, scene, asset, buyer-state or published-administration semantics. It made current navigation ownership explicit in the rendered contract, repaired Services/Puxadores friction, separated section-active styling from item focus and replaced `block: nearest` with deterministic stage/section positioning.
+
+The detailed CP-UX-02 implementation plan is already persisted in the canonical UX roadmap. Do not start CP-UX-02 until PR #81 is merged and this file records the resulting `main` SHA.
 
 ## Active authorization boundary
 
