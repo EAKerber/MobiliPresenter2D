@@ -79,8 +79,8 @@ The canonical plan is:
 - `docs/backlog/ux-navigation-hierarchy-roadmap-2026-10-05.md`.
 
 Current UX checkpoint:
-- **CP-UX-00** — persist plan: documentation checkpoint.
-- **CP-UX-01** — next repository implementation: explicit section ownership, Services/Puxadores navigation repair, active-section hierarchy and deterministic stage/section scrolling, without changing the published administration schema.
+- **CP-UX-00 — COMPLETE** — documentation plan merged via PR #79 at `7e728d0f15e445fbb8a1625e2757ad40495fc97d`.
+- **CP-UX-01 — NEXT** — explicit section ownership, Services/Puxadores navigation repair, active-section hierarchy and deterministic stage/section scrolling, without changing the published administration schema.
 
 This track is independent from the authenticated `stone-skirting` migration and must not be mixed into it by default.
 
