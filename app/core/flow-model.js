@@ -1,6 +1,11 @@
 (function registerConfiguratorFlowModel(global) {
   "use strict";
 
+  const itemCapabilities = typeof module !== "undefined" && module.exports && typeof require === "function"
+    ? require("./item-capabilities.js")
+    : global?.CasaModulesItemCapabilities;
+  if (!itemCapabilities) throw new Error("Item capability registry is required.");
+
   const SCHEMA = "NormalizedConfiguratorFlow 1.0";
   const BEHAVIORS = new Set(["selection", "toggle", "action"]);
 
@@ -28,9 +33,7 @@
   }
 
   function itemBehavior(kind) {
-    if (["finish-group", "handle", "stone", "finish"].includes(kind)) return "selection";
-    if (["module", "object", "service"].includes(kind)) return "toggle";
-    return "action";
+    return itemCapabilities.behaviorForKind(kind) || "action";
   }
 
   function sectionFromTemplate(spec, itemIds, order, registry) {
