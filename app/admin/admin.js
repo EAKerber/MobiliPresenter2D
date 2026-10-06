@@ -18,6 +18,7 @@ const configurationCore = window.CasaModulesConfiguration;
 const flowCore = window.CasaModulesFlow;
 const hierarchyCore = window.CasaModulesHierarchyAdministration;
 const hierarchyEditor = window.CasaModulesHierarchyEditor;
+const legacyStageRepair = window.CasaModulesLegacyStageRepair;
 const hierarchyDefaults = window.CASA_EM_MODULOS_HIERARCHY_DEFAULTS;
 const legacyDefaults = configurationCore.createDefaultAdministration(settingsDefaults, catalog, priceBook, scene);
 const defaults = hierarchyCore.upgradeToHierarchy(legacyDefaults, configurationCore, flowCore, catalog, priceBook, scene, hierarchyDefaults);
@@ -38,9 +39,11 @@ const materialGroupsList = byId("materialGroupsList");
 const dependenciesList = byId("dependenciesList");
 const eventsList = byId("eventsList");
 const saveButton = byId("saveButton");
+const persistHandlesButton = byId("persistHandlesButton");
 const saveMessage = byId("saveMessage");
 const logoutButton = byId("logoutButton");
 let model = structuredClone(defaults);
+let publishedSource = null;
 let inviteToken = null;
 let recoveryToken = null;
 let selectedObjectIndex = 0;
@@ -1080,13 +1083,37 @@ function materialAssetChoices() {
   ].filter(Boolean))].sort();
 }
 
+function baselineHierarchyFor(source) {
+  return hierarchyCore.upgradeToHierarchy(source, configurationCore, flowCore, catalog, priceBook, scene, hierarchyDefaults);
+}
+
+function handlesRepairPlan(source = publishedSource) {
+  if (!source || !legacyStageRepair) return null;
+  return legacyStageRepair.planHandlesAssignment(source, configurationCore.SCHEMA);
+}
+
+function refreshHandlesRepairState() {
+  const plan = handlesRepairPlan();
+  const needed = Boolean(plan?.ok && plan.needed);
+  persistHandlesButton.hidden = !needed;
+  persistHandlesButton.disabled = false;
+  return plan;
+}
+
 async function loadSettings() {
   const response = await fetch("/api/configuration", { credentials: "same-origin", cache: "no-store" });
   if (!response.ok) throw new Error(response.status === 404 ? "A API de configuração ainda não foi publicada." : "Não foi possível carregar a configuração.");
   const published = await response.json();
-  model = hierarchyCore.upgradeToHierarchy(published, configurationCore, flowCore, catalog, priceBook, scene, hierarchyDefaults);
+  publishedSource = structuredClone(published);
+  model = baselineHierarchyFor(published);
   byId("revisionLabel").textContent = `Versão ${model.revision || 1} · editor hierárquico`;
-  setMessage(saveMessage, "Hierarquia carregada. Alterações estruturais permanecem em rascunho até a publicação hierárquica ser habilitada.");
+  const repair = refreshHandlesRepairState();
+  setMessage(
+    saveMessage,
+    repair?.ok && repair.needed
+      ? "Puxadores ainda não está atribuído no v3 publicado. Persista Puxadores no v3 antes da futura publicação hierárquica."
+      : "Hierarquia carregada. Alterações estruturais permanecem em rascunho até a publicação hierárquica ser habilitada."
+  );
   renderAdminTabs();
 }
 
@@ -1536,6 +1563,88 @@ stagesList.addEventListener("click", (event) => {
   const removeItem = event.target.closest("[data-remove-hierarchy-item]");
   if (removeItem) {
     commitHierarchy(hierarchyEditor.removeItem(model, removeItem.dataset.removeHierarchyItem));
+  }
+});
+
+persistHandlesButton.addEventListener("click", async () => {
+  persistHandlesButton.disabled = true;
+  saveButton.disabled = true;
+  try {
+    if (!publishedSource) throw new Error("A configuração publicada ainda não foi carregada.");
+    const baseline = baselineHierarchyFor(publishedSource);
+    if (JSON.stringify(model) !== JSON.stringify(baseline)) {
+      throw new Error("Há alterações locais no painel. Recarregue ou publique essas alterações antes de persistir Puxadores.");
+    }
+
+    setMessage(saveMessage, "Relendo a configuração publicada antes de persistir Puxadores…");
+    const freshResponse = await fetch("/api/configuration", { credentials: "same-origin", cache: "no-store" });
+    if (!freshResponse.ok) throw new Error("Não foi possível reler a configuração publicada.");
+    const fresh = await freshResponse.json();
+
+    if (JSON.stringify(fresh) !== JSON.stringify(publishedSource)) {
+      publishedSource = structuredClone(fresh);
+      model = baselineHierarchyFor(fresh);
+      refreshHandlesRepairState();
+      renderAdminTabs();
+      throw new Error("A configuração mudou desde que o painel foi aberto. O painel foi recarregado; revise o estado antes de tentar novamente.");
+    }
+
+    const plan = handlesRepairPlan(fresh);
+    if (!plan?.ok) throw new Error(plan?.message || "Não foi possível preparar a atribuição de Puxadores.");
+    if (!plan.needed) {
+      publishedSource = structuredClone(fresh);
+      model = baselineHierarchyFor(fresh);
+      refreshHandlesRepairState();
+      renderAdminTabs();
+      setMessage(saveMessage, "Puxadores já está persistido em Acabamentos.", "success");
+      return;
+    }
+
+    const delta = legacyStageRepair.verifyHandlesOnlyDelta(fresh, plan.candidate, configurationCore.SCHEMA);
+    if (!delta.ok) throw new Error(delta.message || "A alteração proposta não é exclusivamente a atribuição de Puxadores.");
+
+    const validationErrors = configurationCore.validateConfiguratorSettings(plan.candidate, catalog, priceBook, scene);
+    if (validationErrors.length) throw new Error(validationErrors[0]);
+
+    setMessage(saveMessage, "Persistindo apenas Puxadores em Acabamentos no schema v3…");
+    const response = await fetch("/api/configuration", {
+      method: "PUT",
+      credentials: "same-origin",
+      headers: {
+        "Content-Type": "application/json",
+        "X-Configuration-Operation": "persist-handles-all"
+      },
+      body: JSON.stringify(plan.candidate)
+    });
+    const payload = await response.json().catch(() => null);
+    if (response.status === 401 || response.status === 403) throw new Error("Sua sessão não tem permissão para persistir Puxadores.");
+    if (response.status === 409) throw new Error("A configuração mudou durante a gravação. Recarregue o painel antes de tentar novamente.");
+    if (!response.ok) throw new Error(payload?.message || "A API recusou a gravação isolada de Puxadores.");
+
+    const expected = configurationCore.normalizeConfiguratorSettings(plan.candidate, catalog, priceBook, scene);
+    expected.revision = fresh.revision + 1;
+    if (JSON.stringify(payload) !== JSON.stringify(expected)) {
+      throw new Error("A resposta da gravação não corresponde ao candidato v3 esperado.");
+    }
+
+    const readbackResponse = await fetch("/api/configuration", { credentials: "same-origin", cache: "no-store" });
+    if (!readbackResponse.ok) throw new Error("Puxadores foi gravado, mas a releitura de confirmação falhou.");
+    const readback = await readbackResponse.json();
+    if (JSON.stringify(readback) !== JSON.stringify(expected)) {
+      throw new Error("A releitura não corresponde exatamente ao v3 esperado após persistir Puxadores.");
+    }
+
+    publishedSource = structuredClone(readback);
+    model = baselineHierarchyFor(readback);
+    byId("revisionLabel").textContent = `Versão ${model.revision} · editor hierárquico`;
+    refreshHandlesRepairState();
+    renderAdminTabs();
+    setMessage(saveMessage, "Puxadores foi persistido em Acabamentos no v3 publicado. A publicação hierárquica v4 continua bloqueada.", "success");
+  } catch (error) {
+    setMessage(saveMessage, error.message || "Falha ao persistir Puxadores.", "error");
+  } finally {
+    saveButton.disabled = false;
+    if (!persistHandlesButton.hidden) persistHandlesButton.disabled = false;
   }
 });
 
