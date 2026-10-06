@@ -1,6 +1,6 @@
 # UX navigation and configurator hierarchy roadmap — 2026-10-05
 
-Status: canonical plan for the buyer-navigation and configurator-structure work. CP-UX-00 is complete; CP-UX-01 is the next implementation checkpoint.
+Status: canonical plan for the buyer-navigation and configurator-structure work. CP-UX-00 is complete; CP-UX-01 implementation is complete and gated on its implementation head; CP-UX-02 is the next implementation checkpoint after CP-UX-01 merges.
 
 This roadmap is independent from the authenticated `stone-skirting` published-administration migration. The existing production compatibility cleanup remains valid and must not be bypassed or mixed into this work.
 
@@ -153,7 +153,7 @@ Deliverables:
 
 Result: PASS. Documentation-only PR #79 merged to `main` at `7e728d0f15e445fbb8a1625e2757ad40495fc97d`; no runtime/product behavior changed.
 
-### CP-UX-01 — explicit section navigation and immediate friction repair — NEXT
+### CP-UX-01 — explicit section navigation and immediate friction repair — IMPLEMENTED / MERGE GATE
 
 **Goal:** fix the observed navigation/visual-friction bugs without changing the published administration schema.
 
@@ -161,34 +161,184 @@ This is intentionally a product-safe compatibility checkpoint. It should improve
 
 Detailed implementation is defined below.
 
-### CP-UX-02 — introduce an explicit internal flow model
+### CP-UX-02 — introduce an explicit internal flow model — NEXT AFTER CP-UX-01 MERGE
 
-**Goal:** stop treating DOM structure as the semantic source of groups/sections while preserving current published administration compatibility.
+**Goal:** stop treating markup/DOM ownership as the semantic source of groups/sections while preserving the current published administration contract and the CP-UX-01 buyer experience.
 
-Plan:
+This checkpoint is deliberately internal-first. It must create one normalized source of truth for stage/group/section/item structure without yet making that hierarchy administrable in production.
 
-1. Introduce one internal normalized flow representation:
-   - stage;
-   - group;
-   - section;
-   - item references;
-   - section interaction/presentation metadata.
-2. Derive the normalized model from current v3 administration plus current known layout contracts.
-3. Make keyboard/navigation consume this normalized model instead of scanning arbitrary visible DOM for semantic ownership.
-4. Keep rendering output equivalent to CP-UX-01.
-5. Add model validation:
-   - unique group/section ids within appropriate scopes;
-   - item references must exist;
-   - one item cannot appear in contradictory ownership positions;
-   - section order and item order are deterministic.
-6. Do not publish a new administration schema yet.
+#### Scope
 
-Exit criteria:
+Expected files:
 
-- same buyer-visible structure as CP-UX-01;
-- keyboard browser proves navigation from the normalized model;
-- no production configuration mutation;
-- current product gates green.
+- new `app/core/flow-model.js` or equivalently narrow flow-normalization module;
+- `app/core/keyboard-shortcuts.js`;
+- `app/app.js` only where current rendering needs normalized stage/group/section metadata;
+- `app/core/configuration.js` only for pure read/normalize helpers if unavoidable; do not change the published schema/version;
+- focused unit tests for normalization/validation;
+- `tests/keyboard-browser.cjs`;
+- this roadmap and `CURRENT_STATE.md` at checkpoint close.
+
+No intended changes:
+
+- `ConfiguratorAdministration2D 3.0` wire/storage schema;
+- production administration data;
+- catalog/product/pricing records;
+- scene assets/masks;
+- buyer selection state shape;
+- visible layout beyond differences required to preserve CP-UX-01 semantics.
+
+#### 1. Define the normalized flow representation
+
+Use one explicit in-memory model, conceptually:
+
+```text
+NormalizedFlow
+└── stages[]
+    ├── id
+    ├── label
+    ├── enabled
+    └── groups[]
+        ├── id
+        ├── order
+        ├── presentation metadata
+        └── sections[]
+            ├── id
+            ├── behavior
+            ├── order
+            └── itemIds[]
+```
+
+Options remain owned by catalog/item data and are not copied into the flow tree.
+
+The normalized model must be plain data, deterministic and serializable for tests, but it is not yet a persisted production schema.
+
+#### 2. Derive current hierarchy deterministically
+
+Build the normalized flow from:
+
+- current v3 stage enable/order/item assignments;
+- a small explicit compatibility map that describes the current known group/section composition.
+
+The compatibility map is temporary and must be isolated in the flow-normalization layer, not scattered through renderer/keyboard code.
+
+Minimum current mapping:
+
+- Acabamentos:
+  - group for cabinet/front finish:
+    - fronts section -> `fronts-all`;
+    - handles section -> `handles-all`;
+  - group for stone:
+    - stone packages -> `stone-all`;
+    - skirting -> `stone-skirting`.
+- Serviços:
+  - lighting section -> `lighting-08`;
+  - additional services section -> the remaining configured global service items in deterministic configured/catalog order.
+- Módulos and Resumo may use simple one-group structures until CP-UX-04 gives them richer composition.
+
+Unknown future configured items must fail closed or enter an explicitly named compatibility section according to one documented rule; do not silently infer semantic ownership from DOM structure.
+
+#### 3. Validation contract
+
+Normalization must return either a valid flow or structured validation errors.
+
+Validate at least:
+
+- unique stage ids;
+- unique group ids inside a stage;
+- unique section ids inside a stage/group scope;
+- deterministic order;
+- every item reference resolves to a known configurable item;
+- no item is owned by multiple sections unless an explicit future duplication rule exists;
+- enabled stage references remain valid;
+- section behavior is from a closed vocabulary such as `selection | toggle | action`;
+- empty sections are either rejected or removed by one documented rule;
+- an unknown v3 item cannot disappear silently.
+
+Unit tests must cover valid current production-like input plus malformed duplicates, missing references and unknown-item compatibility behavior.
+
+#### 4. Keyboard consumes the normalized flow
+
+Replace semantic discovery based on `[data-keyboard-section]` enumeration as the authority.
+
+The DOM may retain `data-keyboard-section` as a renderer/focus hook, but:
+
+- section order comes from the normalized model;
+- section behavior comes from the normalized model;
+- item membership comes from normalized item ids;
+- keyboard resolves the corresponding rendered controls by stable item/option hooks;
+- missing rendered controls for a modeled visible item produce a detectable invariant violation in test/development rather than changing semantic ownership.
+
+Keep the CP-UX-01 grammar unchanged:
+`Ctrl+Left/Right` stage, `Up/Down` section, `Left/Right` item/option, `Space/Enter` activation.
+
+#### 5. Renderer bridge
+
+Do not rewrite the entire page in CP-UX-02.
+
+Add the smallest bridge needed so rendered sections declare their normalized section ids and item ids consistently.
+
+The visual output should remain equivalent to CP-UX-01. Layout migration belongs to CP-UX-04.
+
+#### 6. Compatibility and migration boundary
+
+CP-UX-02 must read current v3 records without writing or upgrading them.
+
+No authenticated admin access is required.
+
+Do not introduce a v4 persisted schema in this checkpoint. That belongs to CP-UX-03 after the internal representation is proven.
+
+The existing independent `stone-skirting` runtime compatibility migration remains untouched.
+
+#### 7. Tests
+
+Add unit tests for:
+
+- deterministic normalized flow from current default/v3 settings;
+- stage/group/section/item order;
+- unknown configured item behavior;
+- duplicates/missing item references;
+- semantic equivalence across repeated normalization;
+- no product/catalog data duplication in the flow result.
+
+Extend browser coverage to prove:
+
+- discovered/navigable section sequence equals normalized model sequence;
+- Puxadores remains row-major;
+- Services remains exactly lighting + additional-services under current data;
+- DOM reorder alone cannot change semantic section order;
+- a modeled item missing from DOM is surfaced as an invariant failure in the test harness;
+- existing stage/focus/scroll behavior remains unchanged.
+
+#### 8. Gates
+
+Required before merge:
+
+- new flow-model unit suite;
+- current core/unit tests;
+- Keyboard browser;
+- Mobile/PiP browser;
+- Stone browser;
+- Summary/Pricing browser;
+- App build purity;
+- Current asset gates;
+- Current variant fidelity.
+
+#### 9. Acceptance criteria
+
+- one explicit normalized flow model exists;
+- current v3 production-like configuration deterministically produces it;
+- keyboard semantics consume that model rather than deriving ownership/order from arbitrary DOM;
+- the buyer-visible CP-UX-01 experience remains unchanged;
+- no persisted schema or production configuration mutation;
+- all required gates green on the exact reviewed head;
+- roadmap and `CURRENT_STATE.md` updated before CP-UX-03 begins.
+
+#### 10. Fail-closed rule
+
+If a faithful normalized model cannot be derived from v3 without guessing product meaning, stop and document the unresolved mapping.
+
+Do not solve that by silently changing the published schema or by moving CP-UX-03 work into this checkpoint.
 
 ### CP-UX-03 — administration schema/editor for groups and sections
 
@@ -449,6 +599,47 @@ Keep the development branch with:
 - updated roadmap explaining why CP-UX-01 cannot merge.
 
 Do not quietly expand CP-UX-01 into CP-UX-02.
+
+
+## CP-UX-01 implementation result
+
+Implementation branch: `feat/cp-ux-01-navigation-friction`.
+
+Implementation head proven by the full gate fan-out:
+
+- `f524a3f43f851f1eabe6d0d4cfcb53b60f115197`.
+
+Implemented:
+
+- explicit semantic section ownership for fronts, handles, stone packages, stone skirting, lighting and additional services;
+- keyboard discovery no longer treats negative-tabindex stage headings as actionable items;
+- Services is visibly split into peer sections and lighting uses the same service-card/check contract as the other global services;
+- Puxadores is a first-class selection section with row-major horizontal traversal independent of CSS column count;
+- active section state has its own visual shell treatment, distinct from item focus/selection;
+- stage changes reset section navigation and establish a deterministic top context;
+- section changes use deterministic start/center/end geometry rather than `block: nearest`;
+- final-section positioning and `prefers-reduced-motion` behavior are browser-tested.
+
+Gate evidence on the implementation head:
+
+- App build purity — PASS;
+- Current variant fidelity — PASS;
+- Summary pricing browser — PASS;
+- Stone browser — PASS;
+- Mobile browser — PASS;
+- Keyboard browser — PASS;
+- Current asset gates — PASS;
+- Netlify deploy preview — PASS.
+
+The first PR fan-out on `3846eeba4f8256461cf841ad13864ebd99c4dd6f` intentionally exposed a pre-existing cache-revision contract: temporary CP-UX cache query tokens caused core/runtime-contract tests to fail. The fix was to preserve the shared `runtime-v8` and existing keyboard script revision tokens because CP-UX-01 does not require a cache-contract migration. No product/runtime workaround was added.
+
+Keyboard artifact result confirms the normalized current section surface for this checkpoint:
+
+- Acabamentos: `fronts`, `handles`, `stone-packages`, `stone-skirting`;
+- Serviços: `lighting`, `additional-services`;
+- handles expose four ordered options and additional services expose `move-stone` and `tempered-glass`.
+
+Merge rule: after this documentation closeout creates the final PR head, rerun the same required gates. Merge PR #81 only if the final exact head is green. Then record the merged `main` SHA before beginning CP-UX-02.
 
 ## Relationship to existing P1 work
 
