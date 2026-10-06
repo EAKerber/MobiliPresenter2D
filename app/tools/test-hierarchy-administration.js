@@ -138,4 +138,27 @@ assert.equal(embeddedData.includes('"price"'), false);
 assert.equal(embeddedData.includes('"description"'), false);
 assert.equal(embeddedData.includes('"textureAsset"'), false);
 
+const runtimeFlow = flow.normalizeFlow(v4, configuration.itemRegistry(catalog));
+assert.deepEqual(
+  runtimeFlow.stages.find((stage) => stage.id === "finishes").groups.map((group) => group.id),
+  ["cabinet-finishes", "stone"],
+  "runtime flow consumes v4 group order directly"
+);
+assert.deepEqual(
+  runtimeFlow.stages.find((stage) => stage.id === "services").groups[0].sections.map((section) => ({
+    id: section.id,
+    presentation: section.presentation,
+    itemIds: section.itemIds
+  })),
+  [
+    { id: "lighting", presentation: "list", itemIds: ["lighting-08"] },
+    { id: "additional-services", presentation: "list", itemIds: ["move-stone", "tempered-glass"] }
+  ],
+  "runtime flow consumes v4 section hierarchy without re-deriving DOM semantics"
+);
+
+const endpointSource = fs.readFileSync(path.resolve(projectRoot, "../netlify/functions/configuration.mjs"), "utf8");
+assert.equal(endpointSource.includes('payload?.schemaVersion === "ConfiguratorAdministration2D 4.0"'), true, "server recognizes hierarchy payloads explicitly");
+assert.equal(endpointSource.includes('error: "hierarchy_publication_required"'), true, "server fails closed before hierarchy publication is authorized");
+
 console.log("hierarchy administration: PASS");
