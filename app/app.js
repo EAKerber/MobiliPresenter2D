@@ -11,6 +11,9 @@
   let catalog = structuredClone(global.CASA_EM_MODULOS_CATALOG);
   const configurationCore = global.CasaModulesConfiguration;
   const flowCore = global.CasaModulesFlow;
+  const layoutProfiles = global.CasaModulesLayoutProfiles;
+  const presentationCore = global.CasaModulesPresentation;
+  const presentationPolicy = global.CASA_EM_MODULOS_PRESENTATION_POLICY;
   const flowLayout = global.CasaModulesFlowLayout;
   const hierarchyDefaults = global.CASA_EM_MODULOS_HIERARCHY_DEFAULTS;
   let priceBook = structuredClone(global.CASA_EM_MODULOS_PRICE_BOOK);
@@ -24,13 +27,14 @@
   let flowLayoutErrors = [];
   let initialStateApplied = false;
 
-  if (!scene || !inlineMasks || !core || !visibility || !validation || !fingerprint || !finishes || !catalog || !priceBook || !pricing || !configurationCore || !flowCore || !flowLayout || !hierarchyDefaults || !configuratorSettings) {
+  if (!scene || !inlineMasks || !core || !visibility || !validation || !fingerprint || !finishes || !catalog || !priceBook || !pricing || !configurationCore || !flowCore || !layoutProfiles || !presentationCore || !presentationPolicy || !flowLayout || !hierarchyDefaults || !configuratorSettings) {
     throw new Error("Não foi possível carregar os dados da cena 2D.");
   }
   validation.assertValidScene(scene);
 
   function publishNormalizedFlow(settings) {
     normalizedFlow = flowCore.normalizeFlow(settings, configurationCore.itemRegistry(catalog), hierarchyDefaults);
+    presentationCore.assertValidPolicy(presentationPolicy, layoutProfiles.PROFILES, normalizedFlow);
     global.CASA_NORMALIZED_FLOW = normalizedFlow;
     global.CASA_KEYBOARD_SHORTCUTS?.setFlow?.(normalizedFlow);
     return normalizedFlow;
@@ -94,7 +98,8 @@
   const stageConfig = (id) => configuratorSettings.stages.find((stage) => stage.id === id);
   const stageKind = (stage) => stage?.kind || stage?.id;
   const stageItems = (kind) => new Set(configuratorSettings.stages.filter((stage) => stage.enabled && stageKind(stage) === kind).flatMap((stage) => stage.items));
-  const stageHas = (_stageId, itemId) => configuratorSettings.stages.some((stage) => stage.enabled && stage.items.includes(itemId));
+  const itemAvailable = (itemId) => flowCore.itemAvailable(normalizedFlow, itemId);
+  const stageOwns = (stageId, itemId) => flowCore.stageOwns(normalizedFlow, stageId, itemId);
   const enabledStages = () => configuratorSettings.stages.filter((stage) => stage.enabled);
   const moduleIdSet = new Set(catalog.modules.map((item) => item.entityId));
   const configuredModuleIds = () => new Set(enabledStages().flatMap((stage) => stage.items).filter((id) => moduleIdSet.has(id)));
@@ -1539,18 +1544,18 @@
       ...effectiveState,
       globalSelections: {
         ...effectiveState.globalSelections,
-        finishId: stageHas("finishes", "fronts-all") ? effectiveState.globalSelections.finishId : "base-light",
-        handleId: stageHas("finishes", "handles-all") ? effectiveState.globalSelections.handleId : "none",
-        stonePackageId: stageHas("finishes", "stone-all") ? effectiveState.globalSelections.stonePackageId : "stone-existing",
+        finishId: itemAvailable("fronts-all") ? effectiveState.globalSelections.finishId : "base-light",
+        handleId: itemAvailable("handles-all") ? effectiveState.globalSelections.handleId : "none",
+        stonePackageId: itemAvailable("stone-all") ? effectiveState.globalSelections.stonePackageId : "stone-existing",
         serviceIds: (effectiveState.globalSelections?.serviceIds || []).filter((id) =>
-          id === "stone-skirting" ? stageHas("finishes", id) && stageHas("finishes", "stone-all") : stageHas("services", id)
+          id === "stone-skirting" ? itemAvailable(id) && itemAvailable("stone-all") : itemAvailable(id)
         )
       }
     };
     const configuredVisibility = { ...resolved };
     scene.entities.forEach((entity) => {
       const moduleOmitted = entity.kind === "module" && !configuredModuleIds().has(entity.id);
-      const serviceOmitted = (entity.id === "tempered-glass" || entity.id === "lighting-08") && !stageHas("services", entity.id);
+      const serviceOmitted = (entity.id === "tempered-glass" || entity.id === "lighting-08") && !itemAvailable(entity.id);
       if (moduleOmitted || serviceOmitted) configuredVisibility[entity.id] = { visible: false, reason: "not-configured" };
     });
     return pricing.calculatePublicEstimate(scene, activeState, catalog, configuredVisibility, priceBook);
@@ -1785,9 +1790,9 @@
       const shouldConfigure = entity?.kind === "module"
         ? configuredModuleIds().has(id)
         : id === "tempered-glass"
-          ? stageHas("services", id)
+          ? itemAvailable(id)
           : id === "lighting-08"
-            ? stageHas("services", id)
+            ? itemAvailable(id)
             : true;
       layer.hidden = !shouldConfigure;
     });
@@ -1889,8 +1894,18 @@
     global.CASA_STONE_DATA
   );
 
+  function currentLayoutProfile() {
+    return layoutProfiles.profileForWidth(global.innerWidth);
+  }
+
+  function syncLayoutProfileMarker() {
+    const profile = currentLayoutProfile();
+    document.documentElement.dataset.layoutProfile = profile;
+    return profile;
+  }
+
   function isMobileViewport() {
-    return Boolean(global.matchMedia?.("(max-width: 700px)").matches);
+    return currentLayoutProfile() === "compact";
   }
 
   function syncPinnedSceneUi() {
@@ -1945,6 +1960,8 @@
     if (nextMini) announce("Mini-cena disponível abaixo das etapas. Selecione um módulo diretamente na cena.");
   }
 
+  global.addEventListener("resize", syncLayoutProfileMarker, { passive: true });
+
   if (viewerPinSentinel && global.IntersectionObserver) {
     const pinObserver = new global.IntersectionObserver((entries) => {
       const entry = entries[0];
@@ -1976,7 +1993,7 @@
   }
 
   function updateVisibleCount() {
-    const configured = new Set([...configuredModuleIds(), ...(stageHas("services", "lighting-08") ? ["lighting-08"] : [])]);
+    const configured = new Set([...configuredModuleIds(), ...(itemAvailable("lighting-08") ? ["lighting-08"] : [])]);
     const visible = visibility.getVisibleControllableEntities(scene, state).filter((entity) => configured.has(entity.id));
     visibleCount.textContent = String(visible.length);
     totalCount.textContent = String(scene.entities.filter((entity) => entity.controllable && configured.has(entity.id)).length);
@@ -2034,7 +2051,7 @@
     const effectiveState = eventAdjustedState();
     const finish = catalog.options.finishes.find((item) => item.id === core.globalFinishId(effectiveState)) || catalog.options.finishes[0];
     const stone = selectedStonePackage();
-    const hasStoneSkirting = stageHas("finishes", "stone-skirting") && stageHas("finishes", "stone-all") && Boolean(effectiveState.globalSelections?.serviceIds?.includes("stone-skirting"));
+    const hasStoneSkirting = itemAvailable("stone-skirting") && itemAvailable("stone-all") && Boolean(effectiveState.globalSelections?.serviceIds?.includes("stone-skirting"));
     const stoneMaterial = materialDescriptor(stone, "stone");
     const mdfMaterial = materialDescriptor(finish, "mdf");
     return {
@@ -2060,9 +2077,9 @@
       const configured = entity?.kind === "module"
         ? configuredModuleIds().has(entity.id)
         : entity?.id === "tempered-glass"
-          ? stageHas("services", entity.id)
+          ? itemAvailable(entity.id)
           : entity?.id === "lighting-08"
-            ? stageHas("services", entity.id)
+            ? itemAvailable(entity.id)
             : true;
       const isVisible = configured && Boolean(result?.visible);
       layer.classList.toggle("is-hidden", !isVisible);
@@ -2371,12 +2388,17 @@
   applyBuyerFlowLayout();
   syncLayerVisibility();
   updateVisibleCount();
+  syncLayoutProfileMarker();
   syncPinnedSceneUi();
   global.CASA_EM_MODULOS_DEBUG = Object.freeze({
     getState: () => state,
     getVisibility: () => visibility.resolveVisibility(scene, eventAdjustedState()),
     getFlowLayoutErrors: () => flowLayoutErrors.map((error) => ({ ...error })),
     getNormalizedFlow: () => normalizedFlow,
+    getLayoutProfile: () => currentLayoutProfile(),
+    getPresentationPolicy: () => presentationPolicy,
+    itemAvailable: (itemId) => itemAvailable(itemId),
+    stageOwns: (stageId, itemId) => stageOwns(stageId, itemId),
     scene
   });
 })(window);
