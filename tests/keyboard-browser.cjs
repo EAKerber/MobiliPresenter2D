@@ -194,6 +194,11 @@ const {chromium} = require('playwright');
   assert.ok(serviceSections.some(section => section.id === 'section:lighting' && section.behavior === 'toggle'), 'lighting is an explicit toggle section');
   assert.ok(serviceSections.some(section => section.id === 'section:additional-services' && section.behavior === 'toggle'), 'additional services are an explicit toggle section');
   assert.equal(serviceSections.some(section => section.itemIds.includes('servicesHeading')), false, 'the stage heading is never discovered as a section item');
+  const serviceModelOrder = await modeledSectionIds('services');
+  assert.deepEqual(serviceSections.map(section => section.keyboardSection), serviceModelOrder, 'rendered service navigation follows normalized flow order');
+  assert.deepEqual(serviceSections.find(section => section.keyboardSection === 'lighting').modeledItemIds, ['lighting-08'], 'lighting section ownership comes from normalized flow');
+  assert.deepEqual(serviceSections.find(section => section.keyboardSection === 'additional-services').modeledItemIds, ['move-stone', 'tempered-glass'], 'additional-service membership comes from normalized flow');
+  assert.deepEqual(await navigationErrors(), [], 'services renderer satisfies normalized flow invariants');
 
   const serviceCardContract = await page.evaluate(() => {
     const lighting = document.getElementById('lightingToggle');
@@ -297,14 +302,16 @@ const {chromium} = require('playwright');
   assert.ok(Math.abs(reducedMotionGeometry.bottomGap) < 42 || reducedMotionGeometry.atDocumentEnd, 'reduced motion reaches the same final section geometry without relying on animation');
   await page.emulateMedia({reducedMotion: 'no-preference'});
 
-  // Summary currently has no required local action. Inject one declarative section to prove a
-  // future stage gains Enter behavior from DOM data without another controller branch.
+  // DOM structure is now a rendering bridge, not semantic authority. A rogue section cannot
+  // create new keyboard semantics unless it exists in the normalized flow model.
   await page.keyboard.press('Control+ArrowRight');
   await page.waitForFunction(() => document.querySelector('.flow-nav [data-step][aria-current="step"]')?.dataset.step === 'summary');
+  assert.deepEqual(await modeledSectionIds('summary'), [], 'summary has no keyboard-managed section in the normalized flow');
   await page.evaluate(() => {
     const section = document.createElement('div');
     section.dataset.keyboardSection = 'future-summary-action';
     section.dataset.keyboardBehavior = 'action';
+    section.dataset.flowItemId = 'summary';
     const button = document.createElement('button');
     button.type = 'button';
     button.textContent = 'Future action';
@@ -312,10 +319,11 @@ const {chromium} = require('playwright');
     section.append(button);
     document.getElementById('summaryPanel').append(section);
   });
-  await moveToSection('future-summary-action');
-  assert.equal(await activeSection(), 'future-summary-action', 'a future declarative section is discovered automatically');
+  assert.deepEqual(await sectionSnapshot(), [], 'DOM-only sections do not enter keyboard navigation without normalized-flow ownership');
+  assert.deepEqual(await navigationErrors(), [], 'unmodeled DOM sections are ignored rather than changing semantic ownership');
   await page.keyboard.press('Enter');
-  assert.equal(await page.evaluate(() => window.__KEYBOARD_FUTURE_ACTION__ === true), true, 'Enter executes an action item in a data-driven section');
+  assert.equal(await page.evaluate(() => window.__KEYBOARD_FUTURE_ACTION__ === true), false, 'Enter cannot activate an unmodeled DOM-only section');
+  await page.evaluate(() => document.querySelector('[data-keyboard-section="future-summary-action"]')?.remove());
 
   // A quick Ctrl tap arms the global numeric buffer; this avoids browser-reserved Ctrl+digit
   // combinations while preserving the Ctrl scope of global module access.
