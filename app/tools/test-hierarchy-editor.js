@@ -18,13 +18,14 @@ const catalog = sandbox.window.CASA_EM_MODULOS_CATALOG;
 const priceBook = sandbox.window.CASA_EM_MODULOS_PRICE_BOOK;
 const scene = sandbox.window.CASA_EM_MODULOS_SCENE;
 const defaults = require(path.join(projectRoot, "data/configurator-settings.js"));
+const hierarchyDefaults = require(path.join(projectRoot, "data/hierarchy-defaults.js"));
 const configuration = require(path.join(projectRoot, "core/configuration.js"));
 const flow = require(path.join(projectRoot, "core/flow-model.js"));
 const hierarchy = require(path.join(projectRoot, "core/hierarchy-administration.js"));
 const editor = require(path.join(projectRoot, "core/hierarchy-editor.js"));
 
 const v3 = configuration.createDefaultAdministration(defaults, catalog, priceBook, scene);
-const base = hierarchy.upgradeToHierarchy(v3, configuration, flow, catalog, priceBook, scene);
+const base = hierarchy.upgradeToHierarchy(v3, configuration, flow, catalog, priceBook, scene, hierarchyDefaults);
 const originalSignature = hierarchy.hierarchySignature(base);
 
 const movedGroup = editor.moveGroup(base, "finishes", "stone", -1);
