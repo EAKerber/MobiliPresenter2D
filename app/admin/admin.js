@@ -1572,8 +1572,15 @@ persistHandlesButton.addEventListener("click", async () => {
   try {
     if (!publishedSource) throw new Error("A configuração publicada ainda não foi carregada.");
     const baseline = baselineHierarchyFor(publishedSource);
-    if (JSON.stringify(model) !== JSON.stringify(baseline)) {
-      throw new Error("Há alterações locais no painel. Recarregue ou publique essas alterações antes de persistir Puxadores.");
+    const hasLocalDraft = JSON.stringify(model) !== JSON.stringify(baseline);
+    if (hasLocalDraft) {
+      const confirmed = window.confirm(
+        "Há alterações locais no painel. Esta operação publicará somente Puxadores no schema v3 e recarregará o painel; outras alterações locais não serão publicadas. Continuar?"
+      );
+      if (!confirmed) {
+        setMessage(saveMessage, "Persistência de Puxadores cancelada; nenhuma alteração foi publicada.");
+        return;
+      }
     }
 
     setMessage(saveMessage, "Relendo a configuração publicada antes de persistir Puxadores…");
@@ -1639,7 +1646,13 @@ persistHandlesButton.addEventListener("click", async () => {
     byId("revisionLabel").textContent = `Versão ${model.revision} · editor hierárquico`;
     refreshHandlesRepairState();
     renderAdminTabs();
-    setMessage(saveMessage, "Puxadores foi persistido em Acabamentos no v3 publicado. A publicação hierárquica v4 continua bloqueada.", "success");
+    setMessage(
+      saveMessage,
+      hasLocalDraft
+        ? "Puxadores foi persistido em Acabamentos no v3 publicado. O painel foi recarregado a partir do publicado; outras alterações locais não foram enviadas."
+        : "Puxadores foi persistido em Acabamentos no v3 publicado. A publicação hierárquica v4 continua bloqueada.",
+      "success"
+    );
   } catch (error) {
     setMessage(saveMessage, error.message || "Falha ao persistir Puxadores.", "error");
   } finally {
