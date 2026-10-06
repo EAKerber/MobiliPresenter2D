@@ -1064,118 +1064,94 @@ This checkpoint crosses an authenticated production write boundary. Repository w
 
 CP-UX-05 is intentionally split into two independently stoppable sub-checkpoints so no half-migrated state is left behind.
 
-#### CP-UX-05A — prepare and execute the authenticated v3 -> v4 publication
+#### CP-UX-05A-prep — server-safe hierarchy publication preparation — NEXT
 
-##### 1. Re-read production immediately before migration
+**Goal:** make the server capable of validating and proving a candidate v4 migration without enabling a production v4 write.
 
-In the authenticated admin session:
+This is a repository-only checkpoint and must be safe to merge independently. It must consume `app/data/hierarchy-defaults.js` as the single legacy-v3 hierarchy authority established by CP-UX-04.2.
 
-- GET the current published administration;
-- capture schema version, revision and a deterministic semantic digest;
-- require the source to be the schema/revision/content that the migration code was tested against;
-- abort if any unexpected production change occurred.
+Scope:
 
-Do not use a stale repository fixture as migration authority.
+- deterministic canonical digest of the current v3 source and deterministic v3 -> v4 candidate;
+- deterministic candidate generation through the shared hierarchy defaults, not a new migration map;
+- server-side v4 validation using the same hierarchy rules already proven in the admin/core;
+- explicit semantic-equivalence proof between the immediately supplied v3 source and its deterministic v4 upgrade;
+- structured validation/plan result suitable for a later authenticated admin action;
+- existing `PUT /api/configuration` continues to reject v4 with `hierarchy_publication_required`;
+- no production blob write, migration, schema switch or `stone-skirting` mutation.
 
-##### 2. Keep `stone-skirting` migration separate
+Required preparation result:
 
-The independent housekeeping compatibility migration remains separate by default.
+```text
+server-read current v3
+        |
+        +--> canonical source digest
+        |
+        v
+hierarchy-defaults + upgradeToHierarchy
+        |
+        +--> closed v4 validation
+        +--> exact deterministic-candidate proof
+        +--> non-hierarchy equivalence proof
+        +--> candidate digest
+        |
+        v
+read-only publication plan
+```
 
-If the current production v3 does not contain `stone-skirting`, CP-UX-05 must migrate exactly that current item set into v4; it must not opportunistically add `stone-skirting`.
+Fail closed when the source is not supported v3, the candidate is not v4, hierarchy defaults are unavailable, validation fails, any non-hierarchy field differs, or the candidate differs from the exact deterministic migration.
 
-Only combine those operations if a new explicit plan demonstrates that one combined transaction is safer and easier to validate than two isolated transactions.
+##### CP-UX-05A-prep implementation checkpoints
 
-##### 3. Add server-side v4 validation before enabling publication
+1. **Pure publication planner**
+   - canonical/stable serialization;
+   - SHA-256 digests;
+   - candidate creation from the supplied v3 source using the CP-UX-04.2 hierarchy authority;
+   - exact deterministic-candidate and semantic-equivalence checks;
+   - structured `ok/code/errors` result.
 
-The current endpoint deliberately rejects `ConfiguratorAdministration2D 4.0`.
+2. **Server validation integration**
+   - import the shared hierarchy defaults and hierarchy core into the Netlify server layer;
+   - validate v4 before returning the publication-disabled response;
+   - preserve revision conflict protection and admin authentication;
+   - never write v4 in this checkpoint.
 
-Before production migration, add a repository change that:
+3. **Read-only preparation endpoint**
+   - authenticated `POST ?action=prepare-hierarchy`;
+   - server reads the current stored source itself; the client cannot substitute another source;
+   - response includes source schema/revision/digest, candidate schema/digest and equivalence result;
+   - preparation path performs zero store writes.
 
-- validates v4 server-side with the same closed hierarchy rules as the admin/core;
-- validates catalog/item references against server-known allowed ids;
-- preserves revision conflict protection;
-- rejects mixed/unknown schemas fail-closed;
-- never trusts client-side validation alone;
-- returns structured validation errors suitable for the admin.
+4. **Tests**
+   - digest stable across object-key insertion order;
+   - current v3 -> deterministic v4 PASS;
+   - mutation of non-hierarchy semantics FAIL;
+   - hierarchy mutation FAIL;
+   - extra candidate metadata FAIL;
+   - stale/mismatched source FAIL;
+   - direct v4 PUT remains blocked;
+   - preparation path contains no write;
+   - changing hierarchy defaults changes the deterministic migration rather than requiring planner changes.
 
-Prefer one shared/pure hierarchy validator or a server-safe adapter rather than copying a second drifting hierarchy implementation.
+5. **Checkpoint closeout**
+   - current app/admin regressions green;
+   - Netlify deploy preview green;
+   - roadmap and `CURRENT_STATE.md` updated;
+   - merge only while production v4 publication remains disabled.
 
-##### 4. Expose an explicit publication action
+#### CP-UX-05A-exec — authenticated v3 -> v4 publication — BLOCKED UNTIL PREP MERGES + AUTHENTICATED SESSION
 
-Do not make every ordinary Save silently migrate production.
+**Goal:** execute exactly one guarded production schema transition using the preparation machinery proven in CP-UX-05A-prep.
 
-Provide a deliberate authenticated action such as **Publicar hierarquia** that is available only when:
+1. Re-read production in the authenticated admin session and capture server-computed schema/revision/digest.
+2. Keep the independent `stone-skirting` migration separate by default.
+3. Enable a deliberate **Publicar hierarquia** action only when source revision/digest and deterministic candidate still match the server plan.
+4. Write once with revision + source-digest guards.
+5. Read back immediately and prove exact candidate plus unchanged non-hierarchy semantics.
+6. Run production buyer/admin smokes.
+7. Persist before/after revision/digests and evidence without secrets.
 
-- the loaded source is current v3;
-- the local v4 draft validates;
-- the source revision/digest still matches the fresh production read;
-- unrelated semantic differences are zero.
-
-The action must make the schema transition obvious to the administrator.
-
-Ordinary v3-compatible Save may remain available before the migration transaction.
-
-##### 5. Define the migration equivalence proof
-
-Before the PUT, compare source v3 and candidate v4 through a canonical semantic projector.
-
-Allowed differences:
-
-- `schemaVersion`;
-- explicit group/section labels/presentation/span derived deterministically from the already-proven compatibility mapping;
-- compatibility metadata required only for a safe boundary transition, if still needed.
-
-Forbidden differences:
-
-- stage enabled state or stage/item membership;
-- product/catalog data;
-- object copy/assets;
-- materials/material groups;
-- handle products;
-- finishes;
-- dependencies/events;
-- initial buyer state;
-- pricing;
-- scene/mask/stone data.
-
-Any forbidden delta aborts publication.
-
-##### 6. Production write transaction
-
-With a fresh authenticated source:
-
-1. send the validated v4 candidate with the expected current revision/digest;
-2. require the server to reject stale revision/content;
-3. read the published record back immediately with no cache;
-4. require schema v4 and the expected new revision;
-5. compare readback semantically to the exact candidate;
-6. compare all non-hierarchy fields to the pre-migration source;
-7. persist the before/after digests and migration evidence without credentials/secrets.
-
-If readback/equivalence fails, stop. Do not continue to cleanup.
-
-##### 7. Production smoke after publication
-
-Against the real published v4 record, run:
-
-- buyer load with zero flow-layout invariant errors;
-- Modules detail/list selection;
-- Acabamentos group/section order;
-- Puxadores selection and active-section state;
-- Services;
-- Stone;
-- Summary/Pricing;
-- mobile/narrow layout;
-- admin readback/edit-open;
-- one read-only hierarchy inspection proving group/section/item ownership.
-
-Do not perform unrelated product edits during the smoke.
-
-##### 8. CP-UX-05A completion criterion
-
-CP-UX-05A is complete only when production is durably v4, semantic preservation is proven, and production smokes pass.
-
-If authenticated access is unavailable, CP-UX-05A remains explicitly BLOCKED; do not simulate success with deploy-preview/local storage.
+If authenticated access is unavailable, CP-UX-05A-exec remains BLOCKED. Deploy-preview/local validation does not count as production migration.
 
 #### CP-UX-05B — retire legacy as a normal runtime authority
 
