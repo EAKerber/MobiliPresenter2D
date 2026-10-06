@@ -104,7 +104,7 @@ export function prepareHierarchyPublication(source, catalog, priceBook) {
     sourceRevision: normalizedSource.revision,
     sourceDigest,
     candidateSchemaVersion: candidate.schemaVersion,
-    candidateDigest: canonicalDigest(candidate),
+    candidateDigest,
     hierarchySignature: hierarchyCore.hierarchySignature(candidate),
     projectedDigest
   };
@@ -154,6 +154,7 @@ export function validateHierarchyCandidateForSource(source, candidate, catalog, 
     });
   }
 
+  const candidateDigest = canonicalDigest(candidate);
   const projectedDigest = canonicalDigest(projection.value);
   if (projectedDigest !== plan.sourceDigest) {
     return failure("semantic_mismatch", [
@@ -161,7 +162,17 @@ export function validateHierarchyCandidateForSource(source, candidate, catalog, 
     ], {
       sourceDigest: plan.sourceDigest,
       projectedDigest,
-      candidateDigest: canonicalDigest(candidate)
+      candidateDigest
+    });
+  }
+
+  if (candidateDigest !== plan.candidateDigest) {
+    return failure("non_deterministic_candidate", [
+      "Hierarchy candidate contains data outside the exact deterministic migration of the current v3 source."
+    ], {
+      sourceDigest: plan.sourceDigest,
+      expectedCandidateDigest: plan.candidateDigest,
+      candidateDigest
     });
   }
 
