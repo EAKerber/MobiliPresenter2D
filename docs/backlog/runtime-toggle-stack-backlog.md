@@ -1,5 +1,9 @@
 # Housekeeping backlog — near-official candidate
 
+> New buyer-navigation and hierarchy work is tracked canonically in
+> `docs/backlog/ux-navigation-hierarchy-roadmap-2026-10-05.md`.
+> Do not use this older housekeeping list as the authority for section/navigation schema work.
+
 Remaining work after the 2026-10-05 cleanup. The repository is now intentionally narrow: `main` is product authority, PR #34 remains deferred for product review, and transient housekeeping branches should be deleted after merge.
 
 ## P1 — published administration compatibility
@@ -51,6 +55,19 @@ These are not current product bugs. Prefer evidence from a second furniture fami
   - `validate-r5a-pixelperfect.py` still checks useful current invariants.
   - Historical R5A materialization is explicit replay and no longer participates in the ordinary build.
   - Preserve coverage if renamed.
+
+## P1 — buyer navigation friction (moved to dedicated roadmap)
+
+Concrete review findings now have their own checkpointed plan:
+
+- stage-entry scroll/focus is not deterministic;
+- Services section ownership is ambiguous and one heading can be discovered as an interactive keyboard item;
+- service toggle cards are visually inconsistent;
+- Puxadores needs explicit horizontal-navigation coverage;
+- active section styling is insufficient;
+- the flat `stage -> items[]` admin model cannot express groups/sections/layout.
+
+Next repository implementation: **CP-UX-01** in `ux-navigation-hierarchy-roadmap-2026-10-05.md`.
 
 ## P2 — UI/runtime infrastructure
 
