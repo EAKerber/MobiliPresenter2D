@@ -12,7 +12,8 @@
     "textarea",
     "[role='button']",
     "[role='switch']",
-    "[tabindex]"
+    "[role='radio']",
+    "[tabindex]:not([tabindex='-1'])"
   ].join(",");
 
   let numericBuffer = "";
@@ -126,21 +127,15 @@
       .filter((panel) => isVisible(panel));
   }
 
-  function directInteractiveItems(container) {
-    const containerIsConfigured = container.matches?.("[data-configurable-item]");
-    return Array.from(container.querySelectorAll(INTERACTIVE_SELECTOR)).filter((item) => {
+  function sectionInteractiveItems(section) {
+    return Array.from(section.querySelectorAll(INTERACTIVE_SELECTOR)).filter((item) => {
       if (!isUsable(item)) return false;
-      const owner = item.closest("[data-configurable-item]");
-      if (containerIsConfigured) return owner === container;
-      return !owner || !container.contains(owner);
+      return item.closest("[data-keyboard-section]") === section;
     });
   }
 
-  function sectionKey(element, syntheticIndex) {
-    const configuredId = element.dataset?.configurableItem;
-    if (configuredId) return `item:${configuredId}`;
-    if (element.id) return `root:${element.id}`;
-    return `root:${syntheticIndex}`;
+  function sectionKey(element) {
+    return `section:${element.dataset.keyboardSection}`;
   }
 
   function documentOrder(left, right) {
@@ -163,34 +158,20 @@
   function discoverStageSections() {
     if (activeStageId() === "modules") return [];
     const roots = visibleStageRoots();
-    const configured = roots.flatMap((root) => Array.from(root.querySelectorAll("[data-configurable-item]")))
-      .filter((element) => isVisible(element));
-    const sections = [];
-    let syntheticIndex = 0;
+    const elements = roots.flatMap((root) => [
+      ...(root.matches("[data-keyboard-section]") ? [root] : []),
+      ...root.querySelectorAll("[data-keyboard-section]")
+    ]).filter((element) => isVisible(element) && element.dataset.keyboardSection);
 
-    configured.forEach((element) => {
-      const items = directInteractiveItems(element);
-      if (!items.length) return;
-      sections.push({
-        id: sectionKey(element, syntheticIndex++),
+    return elements.map((element) => {
+      const items = sectionInteractiveItems(element);
+      return {
+        id: sectionKey(element),
         element,
         items,
         behavior: classifySection(items, element)
-      });
-    });
-
-    roots.forEach((root) => {
-      const items = directInteractiveItems(root);
-      if (!items.length) return;
-      sections.push({
-        id: sectionKey(root, syntheticIndex++),
-        element: root,
-        items,
-        behavior: classifySection(items, root)
-      });
-    });
-
-    return sections.sort(documentOrder);
+      };
+    }).filter((section) => section.items.length).sort(documentOrder);
   }
 
   function itemCursorKey(stageId, sectionId) {
