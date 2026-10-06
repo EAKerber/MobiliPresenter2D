@@ -98,6 +98,41 @@ const mergedGroup = editor.mergeGroupIntoPrevious(splitGroup, "finishes", "handl
 assert.deepEqual(mergedGroup.stages.find(stage => stage.id === "finishes").groups.map(group => group.id), ["cabinet-finishes", "stone"]);
 assert.deepEqual(mergedGroup.stages.find(stage => stage.id === "finishes").groups[0].sections.map(section => section.id), ["fronts", "handles"]);
 
+const movedSectionAcrossGroups = editor.moveSectionToGroup(base, "finishes", "cabinet-finishes", "handles", "stone");
+assert.deepEqual(movedSectionAcrossGroups.stages.find(stage => stage.id === "finishes").groups[0].sections.map(section => section.id), ["fronts"]);
+assert.deepEqual(movedSectionAcrossGroups.stages.find(stage => stage.id === "finishes").groups[1].sections.map(section => section.id), ["stone-packages", "stone-skirting", "handles"]);
+
+const mergedNext = editor.mergeSectionIntoNext(split, "services", "services", "lighting");
+assert.deepEqual(
+  mergedNext.stages.find(stage => stage.id === "services").groups[0].sections.map(section => section.id),
+  ["additional-services", "glass-service"]
+);
+assert.deepEqual(
+  mergedNext.stages.find(stage => stage.id === "services").groups[0].sections[0].itemIds,
+  ["lighting-08", "move-stone"]
+);
+
+const groupMergedNext = editor.mergeGroupIntoNext(splitGroup, "finishes", "cabinet-finishes");
+assert.deepEqual(groupMergedNext.stages.find(stage => stage.id === "finishes").groups.map(group => group.id), ["handles-group", "stone"]);
+assert.deepEqual(groupMergedNext.stages.find(stage => stage.id === "finishes").groups[0].sections.map(section => section.id), ["fronts", "handles"]);
+
+const emptyCustom = structuredClone(base);
+emptyCustom.stages.splice(3, 0, { id: "installation", kind: "custom", label: "Instalação", enabled: false, groups: [] });
+const placedInEmpty = editor.placeItemInEmptyStage(emptyCustom, "move-stone", "installation", {
+  groupId: "installation-main",
+  groupLabel: "Instalação",
+  sectionId: "services",
+  sectionLabel: "Serviços",
+  presentation: "list",
+  columnSpan: 2
+});
+assert.deepEqual(placedInEmpty.stages.find(stage => stage.id === "installation").groups, [{
+  id: "installation-main",
+  label: "Instalação",
+  columnSpan: 2,
+  sections: [{ id: "services", label: "Serviços", presentation: "list", itemIds: ["move-stone"] }]
+}]);
+
 const removed = editor.removeItem(base, "tempered-glass");
 assert.deepEqual(
   removed.stages.find(stage => stage.id === "services").groups[0].sections
