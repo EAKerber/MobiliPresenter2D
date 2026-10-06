@@ -82,7 +82,8 @@ Current UX checkpoint:
 - **CP-UX-00 — COMPLETE** — documentation plan merged via PR #79 at `7e728d0f15e445fbb8a1625e2757ad40495fc97d`.
 - **CP-UX-01 — COMPLETE** — PR #81 merged to `main` at `91973ebc056be58b62440ed48ad6f473bb9f26b9`. Final reviewed head `ede50780b3f48ea62fd078a34a9610018ccc24b1` passed App build purity, Current variant fidelity, Summary/Pricing browser, Stone browser, Mobile browser, Keyboard browser, Current asset gates and Netlify deploy preview.
 - **CP-UX-02 — COMPLETE** — PR #83 merged to `main` at `f6ffa6bcfb06b12a76170933cb952bce869fd28b`. Final reviewed head `bcf99e66e66d9394047873a8b68766cb191b3c99` passed the flow-model unit suite, App build purity, Current variant fidelity, Keyboard browser, Stone browser, Summary/Pricing browser, Mobile browser, Current asset gates and Netlify deploy preview.
-- **CP-UX-03 — NEXT** — add a hierarchy-capable administration representation/editor for `Stage -> Group -> Section -> Item`, deterministic v3 migration, lossless legacy-equivalence projection and a fail-closed production publication boundary.
+- **CP-UX-03 — IMPLEMENTED / FINAL MERGE GATE** — implementation head `535e089425406fe54e0dcd9f50951394a38fd5bb` passed hierarchy migration/projection tests, hierarchy editor tests, App build purity, Current variant fidelity, Current asset gates, Keyboard, Mobile, Stone, Summary/Pricing, Admin hierarchy browser and Netlify deploy preview. The branch now contains checkpoint documentation; rerun the same gates on the final exact PR head before merging PR #85.
+- **CP-UX-04 — NEXT AFTER CP-UX-03 MERGE** — make buyer layout consume normalized flow groups/sections, reuse current controls, and give Modules a two-pane detail/list view without duplicating semantic item ownership.
 
 This track is independent from the authenticated `stone-skirting` migration and must not be mixed into it by default.
 
@@ -90,7 +91,9 @@ CP-UX-01 changed no catalog, pricing, scene, asset, buyer-state or published-adm
 
 CP-UX-02 now provides one immutable normalized flow model and makes keyboard section order/behavior/membership consume that model rather than arbitrary DOM structure. It does not change the published v3 administration schema.
 
-The detailed CP-UX-03 implementation plan is persisted in the canonical UX roadmap. CP-UX-02 is durably closed and CP-UX-03 may begin from live `main`. The key safety rule remains: hierarchy-changing v4 edits must not silently flatten into or publish over the current production v3 record before the authenticated publication checkpoint.
+CP-UX-03 now provides a hierarchy-capable v4 editor while keeping the current production record on v3. Hierarchy-changing drafts are blocked before a production PUT; legacy-equivalent edits may down-project safely to v3; the server independently rejects direct v4 publication.
+
+The detailed CP-UX-04 implementation plan is persisted in the canonical UX roadmap. Its key boundary is that configuration hierarchy owns semantics while buyer view panes may project the same semantic state without duplicating item ownership. CP-UX-04 must not publish v4 or mix with the independent authenticated `stone-skirting` migration.
 
 ## Active authorization boundary
 
