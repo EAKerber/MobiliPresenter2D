@@ -115,13 +115,13 @@
           </header>
 
           <div class="finish-controls">
-            <fieldset data-configurable-item="fronts-all" data-keyboard-section="fronts" data-keyboard-behavior="selection">
+            <fieldset data-configurable-item="fronts-all" data-keyboard-section="fronts" data-keyboard-behavior="selection" data-flow-item-id="fronts-all">
               <legend>Cor das frentes</legend>
               <div class="swatches" id="finishSwatches"></div>
               <p class="finish-help" id="selectedFinishDescription"></p>
             </fieldset>
 
-            <fieldset class="handle-fieldset" data-configurable-item="handles-all" data-keyboard-section="handles" data-keyboard-behavior="selection">
+            <fieldset class="handle-fieldset" data-configurable-item="handles-all" data-keyboard-section="handles" data-keyboard-behavior="selection" data-flow-item-id="handles-all">
               <legend>Puxadores</legend>
               <p class="finish-help" id="handleHelp">Escolha global; o valor é rateado somente nas frentes aplicáveis de cada módulo.</p>
               <div class="handle-options" id="handleOptions"></div>
@@ -131,8 +131,8 @@
         <section class="panel" id="stonePanel" aria-labelledby="stoneHeading" data-configurable-item="stone-all">
           <header class="finish-heading"><div><h2 id="stoneHeading">Pedra do conjunto</h2><p>Uma escolha global, aplicada uma vez à composição.</p></div></header>
           <div class="finish-controls">
-            <fieldset data-keyboard-section="stone-packages" data-keyboard-behavior="selection"><legend>Pacote de pedra</legend><div class="global-options" id="stonePackageOptions"></div></fieldset>
-            <label class="accessory-toggle" for="stoneSkirtingToggle" data-configurable-item="stone-skirting" data-keyboard-section="stone-skirting" data-keyboard-behavior="toggle">
+            <fieldset data-keyboard-section="stone-packages" data-keyboard-behavior="selection" data-flow-item-id="stone-all"><legend>Pacote de pedra</legend><div class="global-options" id="stonePackageOptions"></div></fieldset>
+            <label class="accessory-toggle" for="stoneSkirtingToggle" data-configurable-item="stone-skirting" data-keyboard-section="stone-skirting" data-keyboard-behavior="toggle" data-flow-item-id="stone-skirting">
               <input id="stoneSkirtingToggle" type="checkbox" />
               <span><strong>Rodapé de pedra</strong><small>Acabamento global para a composição.</small></span>
             </label>
@@ -144,7 +144,7 @@
             <span aria-hidden="true">✓</span>
             <div><h2 id="servicesHeading" tabindex="-1">Serviços</h2><p>Serviços globais que impactam uma vez o conjunto.</p></div>
           </header>
-          <section class="service-section" data-keyboard-section="lighting" data-keyboard-behavior="toggle" aria-labelledby="lightingSectionHeading">
+          <section class="service-section" data-keyboard-section="lighting" data-keyboard-behavior="toggle" data-flow-item-id="lighting-08" aria-labelledby="lightingSectionHeading">
             <h3 id="lightingSectionHeading">Iluminação</h3>
             <label class="service-check" for="lightingToggle" data-configurable-item="lighting-08">
               <input id="lightingToggle" type="checkbox" />
@@ -185,6 +185,7 @@
     <script src="core/finishes.js?v=runtime-v8"></script>
     <script src="core/pricing.js?v=runtime-v8"></script>
     <script src="core/configuration.js?v=admin-config-v5"></script>
+    <script src="core/flow-model.js?v=runtime-v8"></script>
     <script src="core/runtime-contracts.js?v=runtime-contracts-v2"></script>
     <script src="core/keyboard-shortcuts.js?v=keyboard-v2"></script>
     <script src="data/stone-data.js?v=runtime-v8"></script>
