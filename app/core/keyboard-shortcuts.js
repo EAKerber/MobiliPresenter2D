@@ -377,6 +377,21 @@
     syncActiveSectionFromTarget(event.target);
   });
 
+  function activateSection(sectionId, itemIndex = null, focus = false) {
+    const stageId = activeStageId();
+    const sections = discoverStageSections();
+    const section = sections.find((entry) => entry.id === sectionId);
+    if (!section) return false;
+    const index = Number.isInteger(itemIndex)
+      ? Math.max(0, Math.min(itemIndex, section.items.length - 1))
+      : preferredItemIndex(stageId, section);
+    sectionCursorByStage.set(stageId, section.id);
+    if (section.items.length) itemCursorBySection.set(itemCursorKey(stageId, section.id), index);
+    markActiveSection(section);
+    if (focus && section.items[index]) section.items[index].focus({ preventScroll: true });
+    return true;
+  }
+
   function focusSectionItem(stageId, section, index) {
     if (!section?.items?.length) return false;
     const normalizedIndex = ((index % section.items.length) + section.items.length) % section.items.length;
@@ -586,6 +601,7 @@
     setFlow,
     navigationInvariantErrors,
     resetStageNavigation,
+    activateSection,
     scrollContainerFor,
     scrollSectionIntoView
   });
