@@ -81,20 +81,22 @@ assert.equal(runtimeContractsSource.includes("createElement(\"style\")"), false,
 assert.equal(runtimeContractsSource.includes("createElement(\"script\")"), false, "migration shim must not inject scripts");
 assert.equal((indexHtml.match(/core\/keyboard-shortcuts\.js/g) || []).length, 1, "keyboard script is loaded explicitly exactly once");
 const hierarchyDefaultsIndex = indexHtml.indexOf("data/hierarchy-defaults.js?v=hierarchy-defaults-v2");
-const flowModelIndex = indexHtml.indexOf("core/flow-model.js?v=runtime-v10");
-const flowLayoutIndex = indexHtml.indexOf("core/flow-layout.js?v=runtime-v10");
+const flowModelIndex = indexHtml.indexOf("core/flow-model.js?v=runtime-v11");
+const presentationIndex = indexHtml.indexOf("core/presentation-contract.js?v=cp-sd-01b-v1");
+const flowLayoutIndex = indexHtml.indexOf("core/flow-layout.js?v=runtime-v11");
 const runtimeContractIndex = indexHtml.indexOf("core/runtime-contracts.js?v=runtime-contracts-v2");
 const keyboardIndex = indexHtml.indexOf("core/keyboard-shortcuts.js?v=keyboard-v4");
-const appIndex = indexHtml.indexOf("app.js?v=runtime-v10");
+const appIndex = indexHtml.indexOf("app.js?v=runtime-v11");
 assert.equal(
   hierarchyDefaultsIndex >= 0
     && flowModelIndex > hierarchyDefaultsIndex
-    && flowLayoutIndex > flowModelIndex
+    && presentationIndex > flowModelIndex
+    && flowLayoutIndex > presentationIndex
     && runtimeContractIndex > flowLayoutIndex
     && keyboardIndex > runtimeContractIndex
     && appIndex > keyboardIndex,
   true,
-  "hierarchy defaults, flow normalization, flow layout, runtime migration, keyboard behavior and app load in explicit order"
+  "hierarchy defaults, flow normalization, presentation contract, flow layout, runtime migration, keyboard behavior and app load in explicit order"
 );
 assert.match(stylesCss, /#alignmentGrid\s*\{\s*z-index:\s*840;\s*\}/, "alignment grid stack contract lives in CSS");
 assert.match(stylesCss, /#sceneHotspots\s*\{\s*z-index:\s*860;\s*\}/, "hotspot stack contract lives in CSS");
