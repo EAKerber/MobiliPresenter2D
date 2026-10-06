@@ -33,98 +33,137 @@
     return "action";
   }
 
-  function section(id, behavior, itemIds, order, keyboard = true) {
-    return { id, order, behavior, keyboard, itemIds: [...itemIds] };
+  function sectionFromTemplate(spec, itemIds, order, registry) {
+    const behaviors = new Set(itemIds.map((id) => itemBehavior(registry.get(id))));
+    const behavior = spec.behavior || behaviors.values().next().value || "action";
+    return {
+      id: spec.id,
+      label: spec.label || spec.id,
+      order,
+      behavior,
+      keyboard: spec.keyboard !== false,
+      presentation: spec.presentation || "auto",
+      itemIds: [...itemIds]
+    };
   }
 
-  function group(id, sections, order, span = 1) {
+  function groupFromTemplate(spec, sections, order, stage) {
     return {
-      id,
+      id: spec.id,
+      label: spec.labelFromStage ? stage.label : (spec.label || stage.label || spec.id),
       order,
-      presentation: { layout: "stack", span },
+      presentation: { layout: "stack", span: spec.columnSpan || 1 },
       sections: sections.map((entry, index) => ({ ...entry, order: index }))
     };
   }
 
-  function finishGroups(stage, errors) {
-    const allowed = new Set(["fronts-all", "handles-all", "stone-all", "stone-skirting"]);
-    const unsupported = stage.items.filter((id) => !allowed.has(id));
-    unsupported.forEach((id) => errors.push(validationError(
-      "unsupported-stage-item",
-      `stages.${stage.id}.items.${id}`,
-      `unsupported finishes item in normalized v3 compatibility mapping: ${id}`
-    )));
-
-    const cabinet = [];
-    const stone = [];
-    if (stage.items.includes("fronts-all")) cabinet.push(section("fronts", "selection", ["fronts-all"], 0));
-    if (stage.items.includes("handles-all")) cabinet.push(section("handles", "selection", ["handles-all"], 0));
-    if (stage.items.includes("stone-all")) stone.push(section("stone-packages", "selection", ["stone-all"], 0));
-    if (stage.items.includes("stone-skirting")) stone.push(section("stone-skirting", "toggle", ["stone-skirting"], 0));
-
-    const groups = [];
-    if (cabinet.length) groups.push(group("cabinet-finishes", cabinet, groups.length));
-    if (stone.length) groups.push(group("stone", stone, groups.length));
-    return groups;
+  function templateSectionItems(stage, sectionSpec, registry) {
+    if (sectionSpec.itemMode === "all") return [...stage.items];
+    const explicit = new Set(sectionSpec.itemIds || []);
+    const kinds = new Set(sectionSpec.itemKinds || []);
+    return stage.items.filter((id) => explicit.has(id) || kinds.has(registry.get(id)));
   }
 
-  function serviceGroups(stage, registry, errors) {
-    const serviceItems = [];
-    let hasLighting = false;
-
-    stage.items.forEach((id) => {
-      if (id === "lighting-08") {
-        hasLighting = true;
-        return;
-      }
-      if (registry.get(id) === "service") {
-        serviceItems.push(id);
-        return;
-      }
+  function deriveCustomStage(stage, stageOrder, registry, errors, hierarchyDefaults) {
+    const custom = hierarchyDefaults?.customStage;
+    if (!custom?.group || !custom?.section) {
       errors.push(validationError(
-        "unsupported-stage-item",
-        `stages.${stage.id}.items.${id}`,
-        `unsupported services item in normalized v3 compatibility mapping: ${id}`
+        "missing-custom-hierarchy-default",
+        `stages.${stage.id}`,
+        `custom stage hierarchy defaults are missing: ${stage.id}`
       ));
+      return {
+        id: stage.id,
+        kind: "custom",
+        label: stage.label,
+        enabled: Boolean(stage.enabled),
+        order: stageOrder,
+        groups: []
+      };
+    }
+
+    const behaviors = new Set(stage.items.map((id) => itemBehavior(registry.get(id))));
+    if (behaviors.size > 1) {
+      errors.push(validationError(
+        "mixed-custom-behavior",
+        `stages.${stage.id}.items`,
+        `custom stage mixes incompatible interaction behaviors: ${stage.id}`
+      ));
+    }
+
+    const section = sectionFromTemplate(
+      custom.section,
+      [...stage.items],
+      0,
+      registry
+    );
+    if (!custom.section.behavior) section.behavior = behaviors.values().next().value || "toggle";
+    const groups = stage.items.length
+      ? [groupFromTemplate(custom.group, [section], 0, stage)]
+      : [];
+
+    return {
+      id: stage.id,
+      kind: "custom",
+      label: stage.label,
+      enabled: Boolean(stage.enabled),
+      order: stageOrder,
+      groups
+    };
+  }
+
+  function deriveStage(stage, stageOrder, registry, errors, hierarchyDefaults) {
+    const kind = stage.kind || stage.id;
+    if (kind === "custom") return deriveCustomStage(stage, stageOrder, registry, errors, hierarchyDefaults);
+
+    const template = hierarchyDefaults?.stages?.[stage.id] || hierarchyDefaults?.stages?.[kind];
+    if (!template || !Array.isArray(template.groups)) {
+      errors.push(validationError(
+        "missing-legacy-hierarchy-template",
+        `stages.${stage.id}`,
+        `legacy hierarchy template is missing for stage: ${stage.id}`
+      ));
+      return {
+        id: stage.id,
+        kind,
+        label: stage.label,
+        enabled: Boolean(stage.enabled),
+        order: stageOrder,
+        groups: []
+      };
+    }
+
+    const matchedItems = new Set();
+    const groups = [];
+    template.groups.forEach((groupSpec) => {
+      const sections = [];
+      (groupSpec.sections || []).forEach((sectionSpec) => {
+        const itemIds = templateSectionItems(stage, sectionSpec, registry);
+        itemIds.forEach((id) => matchedItems.add(id));
+        if (!itemIds.length) return;
+
+        const behaviors = new Set(itemIds.map((id) => itemBehavior(registry.get(id))));
+        if (!sectionSpec.behavior && behaviors.size > 1) {
+          errors.push(validationError(
+            "mixed-template-section-behavior",
+            `stages.${stage.id}.groups.${groupSpec.id}.sections.${sectionSpec.id}`,
+            `legacy hierarchy template mixes incompatible interaction behaviors: ${stage.id}/${sectionSpec.id}`
+          ));
+        }
+        sections.push(sectionFromTemplate(sectionSpec, itemIds, sections.length, registry));
+      });
+      if (sections.length) groups.push(groupFromTemplate(groupSpec, sections, groups.length, stage));
     });
 
-    const sections = [];
-    if (hasLighting) sections.push(section("lighting", "toggle", ["lighting-08"], 0));
-    if (serviceItems.length) sections.push(section("additional-services", "toggle", serviceItems, 0));
-    return sections.length ? [group("services", sections, 0, 2)] : [];
-  }
-
-  function deriveStage(stage, stageOrder, registry, errors) {
-    const kind = stage.kind || stage.id;
-    let groups = [];
-
-    if (kind === "modules") {
-      groups = stage.items.length
-        ? [group("modules-main", [section("modules", "selection", stage.items, 0, false)], 0, 2)]
-        : [];
-    } else if (kind === "finishes") {
-      groups = finishGroups(stage, errors);
-    } else if (kind === "services") {
-      groups = serviceGroups(stage, registry, errors);
-    } else if (kind === "summary") {
-      groups = stage.items.length
-        ? [group("summary-main", [section("summary", "action", stage.items, 0, false)], 0, 2)]
-        : [];
-    } else if (kind === "custom") {
-      const behaviors = new Set(stage.items.map((id) => itemBehavior(registry.get(id))));
-      if (behaviors.size > 1) {
+    stage.items.forEach((id) => {
+      if (!matchedItems.has(id)) {
         errors.push(validationError(
-          "mixed-custom-behavior",
-          `stages.${stage.id}.items`,
-          `custom stage mixes incompatible interaction behaviors: ${stage.id}`
+          "unsupported-stage-item",
+          `stages.${stage.id}.items.${id}`,
+          `legacy hierarchy template does not assign source item: ${stage.id}/${id}`
         ));
       }
-      groups = stage.items.length
-        ? [group("custom-content", [section("items", behaviors.values().next().value || "toggle", stage.items, 0, true)], 0, 2)]
-        : [];
-    } else {
-      errors.push(validationError("unsupported-stage-kind", `stages.${stage.id}.kind`, `unsupported stage kind: ${kind}`));
-    }
+    });
 
     return {
       id: stage.id,
@@ -132,7 +171,7 @@
       label: stage.label,
       enabled: Boolean(stage.enabled),
       order: stageOrder,
-      groups: groups.map((entry, index) => ({ ...entry, order: index }))
+      groups
     };
   }
 
@@ -260,8 +299,9 @@
     return errors;
   }
 
-  function normalizeFlow(settings, registryInput) {
+  function normalizeFlow(settings, registryInput, hierarchyDefaultsInput = null) {
     const registry = asRegistry(registryInput);
+    const hierarchyDefaults = hierarchyDefaultsInput || global?.CASA_EM_MODULOS_HIERARCHY_DEFAULTS || null;
     const errors = [];
     if (!settings || !Array.isArray(settings.stages)) throwValidation([validationError("invalid-settings", "settings", "settings with stages are required")]);
 
@@ -288,6 +328,14 @@
     });
     if (errors.length) throwValidation(errors);
 
+    if (!hierarchySource && !hierarchyDefaults) {
+      throwValidation([validationError(
+        "missing-legacy-hierarchy-template",
+        "settings.stages",
+        "flat legacy settings require explicit hierarchy defaults"
+      )]);
+    }
+
     const deriveErrors = [];
     const flow = {
       schemaVersion: SCHEMA,
@@ -298,7 +346,7 @@
       stages: settings.stages.map((stage, index) =>
         hierarchySource
           ? deriveHierarchyStage(stage, index, registry, deriveErrors)
-          : deriveStage(stage, index, registry, deriveErrors)
+          : deriveStage(stage, index, registry, deriveErrors, hierarchyDefaults)
       )
     };
 
