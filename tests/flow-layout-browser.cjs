@@ -52,6 +52,12 @@ const { chromium } = require("playwright");
     const group = stage?.groups.find((entry) => entry.id === gid);
     return group ? group.sections.map((section) => section.id) : [];
   }, { stageId, groupId });
+  const renderedComponents = () => page.evaluate(() => Object.fromEntries(
+    [...document.querySelectorAll("[data-flow-component]")].map((node) => [
+      node.dataset.keyboardSection || node.dataset.stagePane || node.id,
+      node.dataset.flowComponent
+    ])
+  ));
   const rect = (selector) => page.locator(selector).evaluate((element) => {
     const box = element.getBoundingClientRect();
     return { left: box.left, right: box.right, top: box.top, bottom: box.bottom, width: box.width, height: box.height };
@@ -62,6 +68,16 @@ const { chromium } = require("playwright");
   assert.equal(await page.locator('[data-stage-pane="detail"]').count(), 1);
   assert.equal(await page.locator('[data-stage-pane="list"]').count(), 1);
   assert.equal(await page.locator("#moduleDetailPlaceholder").isVisible(), true, "modules detail pane has an intentional empty-state view");
+  assert.deepEqual(await renderedComponents(), {
+    list: "selection-list",
+    fronts: "choice-swatches",
+    handles: "choice-grid",
+    "stone-packages": "choice-cards",
+    "stone-skirting": "toggle-list",
+    lighting: "toggle-list",
+    "additional-services": "toggle-list",
+    summaryPanel: "action-list"
+  }, "buyer renderer bindings expose the executable presentation contract");
 
   await page.locator("#moduleList [data-select-entity]").first().click();
   await page.waitForFunction(() => document.body.classList.contains("has-module-detail"));
