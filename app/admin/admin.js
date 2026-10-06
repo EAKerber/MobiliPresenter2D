@@ -15,6 +15,7 @@ const catalog = window.CASA_EM_MODULOS_CATALOG;
 const priceBook = window.CASA_EM_MODULOS_PRICE_BOOK;
 const scene = window.CASA_EM_MODULOS_SCENE;
 const configurationCore = window.CasaModulesConfiguration;
+const capabilityCore = window.CasaModulesItemCapabilities;
 const flowCore = window.CasaModulesFlow;
 const hierarchyCore = window.CasaModulesHierarchyAdministration;
 const hierarchyEditor = window.CasaModulesHierarchyEditor;
@@ -90,13 +91,10 @@ function isAdmin(user) {
 function getItemOptions(stageId) {
   const stage = model.stages.find((item) => item.id === stageId);
   const kind = stage?.kind || stage?.id;
-  const registry = window.CasaModulesConfiguration.itemRegistry(catalog);
-  const policy = kind === "custom" ? hierarchyDefaults?.customStage : hierarchyDefaults?.stages?.[kind];
-  const allowed = new Set(policy?.allowedItemKinds || []);
-  return [...registry].filter(([id, type]) => {
-    const service = catalog.services.find((item) => item.id === id);
-    return Array.isArray(service?.stageKinds) ? service.stageKinds.includes(kind) : allowed.has(type);
-  }).map(([id]) => {
+  const registry = configurationCore.itemRegistry(catalog);
+  return [...registry].filter(([id, type]) =>
+    capabilityCore.stageAllowsItem(kind, id, type, catalog)
+  ).map(([id]) => {
     const module = catalog.modules.find((item) => item.entityId === id);
     const entry = [...catalog.accessories, ...catalog.services].find((item) => item.entityId === id || item.id === id);
     return {
@@ -114,9 +112,7 @@ function stageItemIds(stage) {
 
 function itemBehavior(itemId) {
   const kind = configurationCore.itemRegistry(catalog).get(itemId);
-  if (["finish-group", "handle", "stone", "finish"].includes(kind)) return "selection";
-  if (["module", "object", "service"].includes(kind)) return "toggle";
-  return kind === "summary" ? "action" : null;
+  return capabilityCore.behaviorForKind(kind);
 }
 
 function sectionBehavior(section) {
@@ -243,7 +239,8 @@ function makeOrderButtons(upData, downData, index, length, label) {
 }
 
 function hierarchyChoiceOptions(itemId) {
-  const source = hierarchyDefaults?.aggregateOptions?.[itemId]?.source;
+  const kind = configurationCore.itemRegistry(catalog).get(itemId);
+  const source = capabilityCore.itemCapabilities(itemId, kind, catalog).optionSource;
   if (!source) return [];
 
   if (source === "handles") {
@@ -292,7 +289,8 @@ function appendHierarchyChoiceOptions(container, itemId) {
   const details = document.createElement("details");
   details.className = "hierarchy-choice-options";
   details.dataset.hierarchyChoiceList = itemId;
-  details.open = Boolean(hierarchyDefaults?.aggregateOptions?.[itemId]?.openByDefault);
+  const kind = configurationCore.itemRegistry(catalog).get(itemId);
+  details.open = capabilityCore.itemCapabilities(itemId, kind, catalog).optionsOpenByDefault;
 
   const summary = document.createElement("summary");
   const availableCount = choices.filter((choice) => choice.available).length;
