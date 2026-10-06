@@ -1,6 +1,6 @@
 # UX navigation and configurator hierarchy roadmap — 2026-10-05
 
-Status: canonical plan for the newly evidenced buyer-navigation and configurator-structure work.
+Status: canonical plan for the buyer-navigation and configurator-structure work. CP-UX-00 is complete; CP-UX-01 is the next implementation checkpoint.
 
 This roadmap is independent from the authenticated `stone-skirting` published-administration migration. The existing production compatibility cleanup remains valid and must not be bypassed or mixed into this work.
 
@@ -140,7 +140,7 @@ Before starting the next implementation checkpoint, update this roadmap and `CUR
 
 ## Checkpoint plan
 
-### CP-UX-00 — persist the UX/hierarchy plan — CURRENT
+### CP-UX-00 — persist the UX/hierarchy plan — COMPLETE
 
 **Goal:** make the recovered discussion durable before touching runtime behavior.
 
@@ -151,9 +151,9 @@ Deliverables:
 - explicit separation from the authenticated published-config migration;
 - exact CP-UX-01 implementation plan.
 
-Promotion: documentation-only PR, safe to merge if the diff contains no runtime/product changes.
+Result: PASS. Documentation-only PR #79 merged to `main` at `7e728d0f15e445fbb8a1625e2757ad40495fc97d`; no runtime/product behavior changed.
 
-### CP-UX-01 — explicit section navigation and immediate friction repair — NEXT IMPLEMENTATION CHECKPOINT
+### CP-UX-01 — explicit section navigation and immediate friction repair — NEXT
 
 **Goal:** fix the observed navigation/visual-friction bugs without changing the published administration schema.
 
