@@ -18,8 +18,9 @@ const configurationCore = window.CasaModulesConfiguration;
 const flowCore = window.CasaModulesFlow;
 const hierarchyCore = window.CasaModulesHierarchyAdministration;
 const hierarchyEditor = window.CasaModulesHierarchyEditor;
+const hierarchyDefaults = window.CASA_EM_MODULOS_HIERARCHY_DEFAULTS;
 const legacyDefaults = configurationCore.createDefaultAdministration(settingsDefaults, catalog, priceBook, scene);
-const defaults = hierarchyCore.upgradeToHierarchy(legacyDefaults, configurationCore, flowCore, catalog, priceBook, scene);
+const defaults = hierarchyCore.upgradeToHierarchy(legacyDefaults, configurationCore, flowCore, catalog, priceBook, scene, hierarchyDefaults);
 const byId = (id) => document.getElementById(id);
 const loginPanel = byId("loginPanel");
 const deniedPanel = byId("deniedPanel");
@@ -1075,7 +1076,7 @@ async function loadSettings() {
   const response = await fetch("/api/configuration", { credentials: "same-origin", cache: "no-store" });
   if (!response.ok) throw new Error(response.status === 404 ? "A API de configuração ainda não foi publicada." : "Não foi possível carregar a configuração.");
   const published = await response.json();
-  model = hierarchyCore.upgradeToHierarchy(published, configurationCore, flowCore, catalog, priceBook, scene);
+  model = hierarchyCore.upgradeToHierarchy(published, configurationCore, flowCore, catalog, priceBook, scene, hierarchyDefaults);
   byId("revisionLabel").textContent = `Versão ${model.revision || 1} · editor hierárquico`;
   setMessage(saveMessage, "Hierarquia carregada. Alterações estruturais permanecem em rascunho até a publicação hierárquica ser habilitada.");
   renderAdminTabs();
@@ -1542,7 +1543,8 @@ saveButton.addEventListener("click", async () => {
       flowCore,
       catalog,
       priceBook,
-      scene
+      scene,
+      hierarchyDefaults
     );
     if (!projection.ok) {
       if (projection.code === "hierarchy_requires_publication") {
@@ -1570,7 +1572,7 @@ saveButton.addEventListener("click", async () => {
       if (payload?.error === "hierarchy_publication_required") throw new Error("A API bloqueou uma publicação hierárquica antes do checkpoint autorizado.");
       throw new Error(payload?.message || "A configuração não foi aceita. Confira nomes e itens selecionados.");
     }
-    model = hierarchyCore.upgradeToHierarchy(payload, configurationCore, flowCore, catalog, priceBook, scene);
+    model = hierarchyCore.upgradeToHierarchy(payload, configurationCore, flowCore, catalog, priceBook, scene, hierarchyDefaults);
     byId("revisionLabel").textContent = `Versão ${model.revision} · editor hierárquico`;
     setMessage(saveMessage, "Configuração compatível publicada. A hierarquia estrutural continua protegida contra publicação prematura.", "success");
     renderAdminTabs();
