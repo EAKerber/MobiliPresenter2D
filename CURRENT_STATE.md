@@ -1,6 +1,6 @@
 # CURRENT_STATE — MobiliPresenter2D
 
-Updated: 2026-10-05
+Updated: 2026-10-06
 Authority: live `main` plus the canonical roadmaps linked below.
 
 ## Purpose
@@ -28,6 +28,31 @@ Completed and merged:
 
 Deferred intentionally:
 - PR #34 / `feat/exposed-sides-and-glass`: product-value decision, not housekeeping debt.
+
+## Current planning gate — schema-driven UI consolidation
+
+The accepted PR #97 buyer/runtime behavior is the visual/interaction baseline while the next schema boundary is consolidated.
+
+New product requirements discovered during guided review must be designed before the broader v3 -> v4 production publication:
+
+- normalized data/schema must be the authority for whether semantic UI exists; missing semantic data must not be recreated by hard-coded renderer fallback;
+- Modules needs an explicit single-owner list/detail presentation relation that can project to an expandable lateral companion instead of forcing two cramped permanent columns;
+- scene/PiP availability must consume the same named responsive layout authority used by the stacked-workspace transition;
+- estimate + primary CTA should become a persistent shell/dock region rather than merely the end of the scroll flow;
+- price authoring must distinguish absolute amount from percentage with an explicit calculation basis;
+- module-card inspect vs selection-toggle behavior and password reveal are component/interaction concerns unless the audit proves otherwise;
+- all current semantic redundancies, fallbacks and couplings must be inventoried before implementation.
+
+Canonical plan:
+- `docs/backlog/schema-driven-ui-consolidation-roadmap-2026-10-06.md`
+- completed audit: `docs/architecture/schema-ui-authority-audit-2026-10-06.md`
+- immediate checkpoint: `docs/backlog/schema-driven-ui-cp-sd-01-contract-plan-2026-10-06.md`
+
+**CP-SD-00 — COMPLETE / PASS.** The audit found no critical unknowns. The main publication blocker is now explicit: v4 persists section presentation metadata, but that metadata is not yet the executable buyer-renderer authority.
+
+**CP-SD-01 — NEXT.** Freeze the semantic/presentation contract, consolidate item behavior/stage policy, separate item availability from stage ownership, define the companion relation and named layout profiles, and settle material null/default semantics. No production publication in this checkpoint.
+
+The isolated authenticated CP-UX-05A0 v3 Puxadores repair remains valid and independent. The broader production hierarchy publication is intentionally held until CP-SD-01 freezes the schema/presentation contract. The final migration may target a consolidated version after the unpublished v4 milestone rather than publishing v4 and immediately migrating again.
 
 ## Current P1 — published administration compatibility
 
@@ -144,13 +169,17 @@ The new CP-UX track may proceed independently because it is supported by concret
 ## Canonical detail
 
 Read, in order:
-1. `docs/backlog/ux-navigation-hierarchy-roadmap-2026-10-05.md`
-2. `docs/backlog/housekeeping-roadmap-and-checkpoint-2026-10-05.md`
-3. `docs/architecture/official-candidate-gate-2026-10-05.md`
-4. `docs/architecture/runtime-contract-map-2026-10-05.md`
-5. `docs/architecture/published-config-compat-audit-2026-10-05.md`
+1. `docs/backlog/schema-driven-ui-consolidation-roadmap-2026-10-06.md`
+2. `docs/architecture/schema-ui-authority-audit-2026-10-06.md`
+3. `docs/backlog/schema-driven-ui-cp-sd-01-contract-plan-2026-10-06.md`
+4. `docs/backlog/schema-driven-ui-cp-sd-00-audit-plan-2026-10-06.md`
+5. `docs/backlog/ux-navigation-hierarchy-roadmap-2026-10-05.md`
+6. `docs/backlog/housekeeping-roadmap-and-checkpoint-2026-10-05.md`
+7. `docs/architecture/official-candidate-gate-2026-10-05.md`
+8. `docs/architecture/runtime-contract-map-2026-10-05.md`
+9. `docs/architecture/published-config-compat-audit-2026-10-05.md`
 
-The UX roadmap is authority for the navigation/hierarchy track. The housekeeping roadmap remains authority for the independent published-configuration compatibility cleanup.
+The schema-driven UI roadmap is the immediate sequencing authority before broader v4 publication. The UX roadmap remains authority for the completed navigation/hierarchy history and authenticated CP-UX-05 safety boundary. The housekeeping roadmap remains authority for the independent published-configuration compatibility cleanup.
 
 ## Persistence rule
 
