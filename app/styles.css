@@ -563,7 +563,7 @@ legend { margin-bottom: 9px; color: rgba(255, 255, 255, 0.43); font-size: 12px; 
 .button--primary { width: 100%; background: var(--accent-strong); color: #24211d; font-weight: 750; }
 .button--primary:hover { background: #ead9bd; }
 
-@container flow-stage (max-width: 620px) {
+@container flow-stage (max-width: 520px) {
   .flow-group-grid { grid-template-columns: 1fr; }
   .flow-group-shell[data-flow-span] { grid-column: 1 / -1; }
   .flow-group-grid--embedded .flow-group-shell--embedded { grid-template-columns: 1fr; }
@@ -648,7 +648,7 @@ legend { margin-bottom: 9px; color: rgba(255, 255, 255, 0.43); font-size: 12px; 
   body.has-module-detail .workspace { grid-template-columns: minmax(0, 1fr) minmax(460px, 595px); }
   .viewer-card { width: min(100%, calc((100dvh - 164px) * 1.5)); justify-self: center; }
   .controls { max-height: calc(100dvh - 112px); overflow-y: auto; scrollbar-gutter: stable; }
-  .controls > .panel { flex-shrink: 0; }
+  .controls > .panel, .controls > .flow-stage-layout { flex-shrink: 0; }
 }
 @media (max-width: 1050px) {
   .viewer-card {
