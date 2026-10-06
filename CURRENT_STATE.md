@@ -53,6 +53,18 @@ Next safe checkpoint:
 
 Do not auto-add `handles-all`.
 
+## Active authorization boundary
+
+The public Netlify site is not protected by site-level password or SSO. The admin boundary is application-level Netlify Identity:
+- `admin.html` logs in with `@netlify/identity`;
+- the account must include role `admin`;
+- `PUT /api/configuration` independently re-checks the authenticated user and admin role server-side before writing the strong-consistency Blobs store;
+- the write is revision-guarded and returns 409 on concurrent change.
+
+Current chat sessions can inspect repository/Netlify project state but do not provide an interactive authenticated browser session. To cross this boundary safely, use ChatGPT Work / Cloud Browser for this project, open the production admin page, and enter the admin credentials yourself in the browser session when prompted. Do not paste the password into chat.
+
+Once authenticated, the next operation remains fail-closed: read live config, verify revision/content, add only `stone-skirting` beside `stone-all`, publish, read back, prove unrelated fields unchanged, then retire the runtime compatibility shim in a separate repository change.
+
 ## If authenticated admin access is unavailable
 
 Stop at the current stable product state. Do not invent repository-side progress that bypasses the authorization boundary.
