@@ -26,7 +26,7 @@ assert.equal(repair.verifyHandlesOnlyDelta(source, unrelated).code, "unexpected_
 
 const reordered = structuredClone(plan.candidate);
 reordered.stages[1].items = ["handles-all", "fronts-all", "stone-all", "stone-skirting"];
-assert.equal(repair.verifyHandlesOnlyDelta(source, reordered).code, "unexpected_delta");
+assert.equal(repair.verifyHandlesOnlyDelta(source, reordered).code, "unexpected_item_order");
 
 const wrongOwner = structuredClone(source);
 wrongOwner.stages[0].items.push("handles-all");
