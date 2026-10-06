@@ -1,6 +1,6 @@
 # Schema-driven UI consolidation roadmap — 2026-10-06
 
-Status: canonical planning track for consolidating schema ownership before production hierarchy v4 publication.
+Status: canonical planning track for consolidating schema ownership before production hierarchy publication. CP-SD-00 is complete; CP-SD-01 is next.
 
 This track starts from the manually accepted PR #97 buyer baseline and the current repository state after the isolated Puxadores persistence hotfix. It is intentionally documentation-first: no runtime, schema-version, pricing, catalog, scene, asset or production-configuration behavior changes are part of CP-SD-00.
 
@@ -62,7 +62,7 @@ A renderer/runtime behavior that invents semantic structure when normalized data
 
 ## Checkpoint sequence
 
-### CP-SD-00 — authority, redundancy and coupling audit — NEXT
+### CP-SD-00 — authority, redundancy and coupling audit — COMPLETE
 
 Goal: map the current implementation before changing behavior, so consolidation removes real duplicate authority rather than replacing working code speculatively.
 
@@ -80,16 +80,21 @@ Gate:
 - current PR #97 behavior remains the reference baseline;
 - audit results are persisted before CP-SD-01 starts.
 
-### CP-SD-01 — freeze the current schema/presentation contract
+Result: PASS. The concrete inventory is persisted in `docs/architecture/schema-ui-authority-audit-2026-10-06.md`. The audit found no critical unknowns and identified the main blocker before publication: v4 section `presentation` is persisted/validated but is not yet an executable buyer-renderer authority.
+
+### CP-SD-01 — freeze the current schema/presentation contract — NEXT
+
+Detailed plan:
+- `docs/backlog/schema-driven-ui-cp-sd-01-contract-plan-2026-10-06.md`.
 
 Goal: define the smallest schema additions/refinements required by the audited product requirements before any large renderer rewrite.
 
 Expected decisions:
-- whether presentation metadata stays inside hierarchy v4 or becomes a separately versioned presentation contract referenced by hierarchy;
+- version boundary for the unpublished v4 milestone versus the consolidated current candidate (preferred: preserve v4 history and introduce a new current administration version with a separately versioned presentation contract);
 - generic representation for a companion/detail relationship without turning it into a second semantic owner;
 - named layout profiles and scene/PiP capability policy;
 - persistent bottom action/value dock as shell presentation rather than scroll content;
-- typed pricing adjustment representation capable of absolute amount or percentage with an explicit basis;
+- pricing boundary remains separate from hierarchy; typed amount/percentage rules are designed in CP-SD-05 with an explicit basis;
 - exact null/absent/default/inherited semantics where current data needs the distinction;
 - explicit migration and validation behavior.
 
@@ -194,4 +199,4 @@ The consolidation track is complete when all of the following are true:
 
 Do not publish the current hierarchy v4 to production merely to retire v3 before this consolidation decides whether v4 needs presentation-contract changes. Publishing a schema already known to be incomplete would create avoidable migration debt.
 
-CP-UX-05A0 may still be executed as the isolated v3 Puxadores repair because it changes only the intended current production assignment and is independently guarded. The broader v3 -> v4 publication waits for CP-SD-01.
+CP-UX-05A0 may still be executed as the isolated v3 Puxadores repair because it changes only the intended current production assignment and is independently guarded. The broader production hierarchy publication waits for CP-SD-01; the final migration target may supersede the unpublished v4 intermediate rather than publishing it first.
