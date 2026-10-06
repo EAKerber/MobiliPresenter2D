@@ -183,7 +183,7 @@ export function validateHierarchyCandidateForSource(source, candidate, catalog, 
     sourceRevision: plan.sourceRevision,
     sourceDigest: plan.sourceDigest,
     candidateSchemaVersion: V4_SCHEMA,
-    candidateDigest: canonicalDigest(candidate),
+    candidateDigest,
     hierarchySignature: candidateSignature,
     projectedDigest
   };
