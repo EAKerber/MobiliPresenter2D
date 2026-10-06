@@ -1,6 +1,6 @@
 # UX navigation and configurator hierarchy roadmap — 2026-10-05
 
-Status: canonical plan for the buyer-navigation and configurator-structure work. CP-UX-00 through CP-UX-04.3 are complete; CP-UX-05 is the next checkpoint and crosses the authenticated production boundary.
+Status: canonical plan for the buyer-navigation and configurator-structure work. CP-UX-00 through CP-UX-04.3 are complete; CP-UX-04.4 is active in PR #97; CP-UX-05 follows and crosses the authenticated production boundary.
 
 This roadmap is independent from the authenticated `stone-skirting` published-administration migration. The existing production compatibility cleanup remains valid and must not be bypassed or mixed into this work.
 
@@ -1111,6 +1111,45 @@ What remains is not another renderer/navigation fix:
 
 The preferred order is to repair the known `stone-skirting` published-v3 inconsistency first **if and only if** the live record still matches the last audit, then migrate that self-consistent v3 record to v4. The two writes remain separate transactions with separate readback/equivalence proofs.
 
+### CP-UX-04.4 — workspace-mode pane scroll and final production-layout follow-up — ACTIVE / PR #97
+
+**Origin:** production review after PR #95 showed three remaining presentation/runtime delivery issues that are independent from schema publication:
+
+- when the workspace is side-by-side, Modules and Services still keep internal two-column layouts even though Acabamentos correctly collapses to one column;
+- when the workspace stacks below the scene, Modules benefits from two columns but each pane needs its own vertical scroll so the page itself does not become the column scroller;
+- unmodified `ArrowUp/ArrowDown` in Modules is not semantically assigned and can fall through to browser/window scrolling.
+
+**Scope:**
+
+- side-rail mode `> 1050 px`: Modules detail/list and Services sections render one internal column;
+- stacked workspace `701–1050 px`: Modules detail/list remain two peer columns with independent `overflow-y:auto` scrollers;
+- mobile `<= 700 px`: remains one column;
+- unmodified module `ArrowUp/ArrowDown` is always prevented from scrolling the window and scrolls the focused module pane when that pane is independently scrollable;
+- cache revisions advance for CSS/keyboard assets;
+- Flow layout + Keyboard browser gates prove side-rail, stacked and mobile behavior.
+
+**Production-configuration finding discovered during the same review:**
+
+The last audited v3 production record omitted `handles-all` from every stage. Repository hierarchy defaults already model `handles-all` as the `handles` section, so the admin/normalized flow correctly omit that section when the published configuration does not own it. Buyer renderer markup can still make Puxadores appear, which is a compatibility symptom rather than a valid long-term authority.
+
+Product review on 2026-10-06 establishes a new requirement: **Puxadores must be a first-class Acabamentos section in production configuration**.
+
+CP-UX-04.4 does not mutate production or add another runtime repair. The authenticated backlog is updated so a missing `handles-all` assignment is repaired deliberately as its own product-configuration transaction before v4 publication.
+
+**Merge gate:**
+
+- App build purity;
+- Current variant fidelity;
+- Current asset gates;
+- Flow layout browser;
+- Keyboard browser;
+- Mobile browser;
+- Stone browser;
+- Summary/Pricing browser;
+- Admin hierarchy browser;
+- Netlify deploy preview;
+- manual review of the PR preview at side-rail and stacked-workspace widths.
+
 ### CP-UX-05 — authenticated hierarchy publication and legacy-boundary retirement — NEXT
 
 **Goal:** make the explicit hierarchy the production administration authority without combining unrelated migrations, then simplify the runtime so legacy v3 is an import/migration boundary rather than the normal production source.
@@ -1132,11 +1171,13 @@ Preferred sequence:
 3. read back and prove the runtime repair becomes a no-op;
 4. complete CP-HK-01B as a narrow repository cleanup that removes/isolate the now-obsolete runtime repair, with production smoke after merge;
 5. freshly re-read production again;
-6. only then start the v3 -> v4 schema migration transaction.
+6. if `handles-all` is still unassigned, execute CP-UX-05A0 as a **separate explicit product-configuration write** assigning it to Acabamentos/finishes; prove buyer Puxadores + admin hierarchy and no unrelated semantic delta;
+7. freshly re-read production again;
+8. only then start the v3 -> v4 schema migration transaction.
 
 If the live record no longer matches that housekeeping precondition, do not replay the old migration plan. Record the new state and replan from the observed production record.
 
-Do not combine the `stone-skirting` consistency write and schema-v4 publication into one PUT merely to reduce transaction count. The preferred migration source is a self-consistent v3 record that no longer depends on an in-memory repair.
+Do not combine the `stone-skirting` consistency write, the explicit `handles-all` assignment and schema-v4 publication into one PUT merely to reduce transaction count. The preferred migration source is a self-consistent v3 record that no longer depends on an in-memory repair and already reflects the intended first-class Puxadores section.
 
 ##### 1. Re-read production immediately before migration
 

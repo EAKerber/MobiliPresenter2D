@@ -676,6 +676,8 @@ legend { margin-bottom: 9px; color: rgba(255, 255, 255, 0.43); font-size: 12px; 
   .viewer-card { width: min(100%, calc((100dvh - 164px) * 1.5)); justify-self: center; }
   .controls { max-height: calc(100dvh - 112px); overflow-y: auto; scrollbar-gutter: stable; }
   .controls > .panel, .controls > .flow-stage-layout { flex-shrink: 0; }
+  #modulesPanel .module-stage-panes { grid-template-columns: 1fr; }
+  #servicesPanel .flow-group-shell--embedded { grid-template-columns: 1fr; }
 }
 @media (max-width: 1050px) {
   .viewer-card {
@@ -685,6 +687,22 @@ legend { margin-bottom: 9px; color: rgba(255, 255, 255, 0.43); font-size: 12px; 
     width: min(100%, calc((48dvh - 70px) * 1.5));
     justify-self: center;
   }
+}
+
+@media (min-width: 701px) and (max-width: 1050px) {
+  #modulesPanel .module-stage-panes {
+    grid-template-columns: minmax(0, 1.05fr) minmax(240px, .95fr);
+    align-items: stretch;
+    block-size: clamp(420px, 62dvh, 680px);
+  }
+  #modulesPanel .module-stage-pane {
+    min-height: 0;
+    max-height: 100%;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    scrollbar-gutter: stable;
+  }
+  #modulesPanel .module-stage-pane--detail { min-height: 0; }
 }
 @media (max-width: 700px) {
   .workspace { gap: 8px; }

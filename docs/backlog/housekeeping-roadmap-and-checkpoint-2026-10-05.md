@@ -1,6 +1,6 @@
 # Housekeeping roadmap, backlog and next checkpoint — 2026-10-05
 
-Status: canonical continuation document for the near-official MobiliPresenter2D candidate. Repository UX/hierarchy work is complete through CP-UX-04.3 / PR #95; the remaining P1 work is the authenticated published-v3 housekeeping boundary followed by authenticated schema-v4 publication and legacy retirement.
+Status: canonical continuation document for the near-official MobiliPresenter2D candidate. Repository UX/hierarchy work is complete through CP-UX-04.3 / PR #95, with CP-UX-04.4 active in PR #97 for pane-scroll/workspace alignment. Remaining production-state work is the authenticated published-v3 consistency boundary, an explicit Puxadores stage-assignment product write if still required, then schema-v4 publication and legacy retirement.
 
 ## Checkpoint definition
 
@@ -62,7 +62,7 @@ The current codebase has already removed or resolved the main accidental legacy 
 
 ## Backlog
 
-### P1 — buyer UX navigation and flow hierarchy — COMPLETE THROUGH CP-UX-04.3
+### P1 — buyer UX navigation and flow hierarchy — COMPLETE THROUGH CP-UX-04.3; CP-UX-04.4 ACTIVE
 
 The repository-side UX/hierarchy track is no longer an open housekeeping blocker.
 
@@ -80,7 +80,7 @@ Completed work now includes:
 
 Canonical history and gate evidence remain in `docs/backlog/ux-navigation-hierarchy-roadmap-2026-10-05.md`.
 
-The next UX checkpoint is not another renderer fix. It is **CP-UX-05**, which crosses the authenticated production schema boundary.
+One final renderer follow-up is active as **CP-UX-04.4 / PR #97**: side-rail Modules/Services collapse to one internal column, stacked Modules gains independent pane scrollers, and module ArrowUp/ArrowDown is contained inside the pane instead of scrolling the page. After that, the next checkpoint is **CP-UX-05**, which crosses the authenticated production schema boundary.
 
 ### P1 — published administration compatibility and schema migration
 
@@ -111,17 +111,23 @@ Two independent authenticated concerns remain and must be kept explicit.
    - If the live record differs, abort the old plan and replan from observed state.
 2. **CP-HK-01B — retire the temporary runtime repair.**
    - After CP-HK-01A readback proves no repair is needed, remove/isolate `runtime-contracts.js` compatibility logic in a narrow repository PR and rerun current product gates.
-3. **CP-UX-05A — authenticated v3 -> v4 schema publication.**
+3. **CP-UX-05A0 — explicit Puxadores stage assignment, if still absent.**
+   - Freshly re-read production after CP-HK-01B.
+   - Buyer/admin review on 2026-10-06 established that `handles-all` is now a required first-class Acabamentos section.
+   - If it is still unassigned, add exactly that stage assignment in a separate authenticated product-configuration write.
+   - Read back and prove no unrelated semantic change; smoke buyer Puxadores navigation and the admin hierarchy.
+   - Do not inject it through runtime compatibility code.
+4. **CP-UX-05A — authenticated v3 -> v4 schema publication.**
    - Freshly re-read the now-self-consistent production record.
    - Enable server-side v4 validation/publication through an explicit migration action.
    - Prove non-hierarchy semantic identity before PUT and after readback.
-4. **CP-UX-05B — retire v3 as a normal production authority.**
+5. **CP-UX-05B — retire v3 as a normal production authority.**
    - Only after production is durably v4.
    - Keep v3 solely as an explicit import/migration compatibility path where required.
 
-Do not combine the `stone-skirting` repair and v4 schema migration into one write merely to save a transaction.
+Do not combine the `stone-skirting` repair, the explicit `handles-all` product assignment, and the v4 schema migration into one write merely to save transactions.
 
-Do **not** auto-add `handles-all`; its absence from a legacy stage can be intentional and hierarchy defaults are not permission to mutate production choices.
+Do **not** auto-add `handles-all` implicitly. Its assignment is now an explicit product requirement, but it must cross the authenticated configuration boundary as its own reviewed semantic change.
 
 All production mutations remain blocked on a real authenticated admin session. Repository/deploy automation must not bypass that boundary.
 
@@ -178,7 +184,8 @@ Checkpoint status:
 6. **CP-UX-04.1 — COMPLETE** — Puxadores active-state + earlier finish split.
 7. **CP-UX-04.2 — COMPLETE** — one shared legacy-v3 hierarchy authority.
 8. **CP-UX-04.3 — COMPLETE** — PR #95 breakpoint alignment, direct Frentes -> Puxadores gate and cache hardening.
-9. **CP-UX-05 — NEXT / AUTHENTICATED BOUNDARY** — production v4 publication and legacy retirement.
+9. **CP-UX-04.4 — ACTIVE / PR #97** — workspace-mode pane columns, independent stacked Modules scrollers and vertical-arrow containment.
+10. **CP-UX-05 — NEXT / AUTHENTICATED BOUNDARY** — authenticated v3 consistency/product assignment, production v4 publication and legacy retirement.
 
 The UX track now depends on the same authenticated production boundary as housekeeping. Repository-only work should not invent another compatibility layer while that boundary is pending.
 

@@ -403,6 +403,22 @@
     return true;
   }
 
+  function scrollModulePane(direction) {
+    const active = document.activeElement;
+    const focusedPane = active instanceof Element ? active.closest("[data-stage-pane]") : null;
+    const pane = focusedPane || document.querySelector('[data-stage-pane="list"]') || document.querySelector('[data-stage-pane="detail"]');
+    if (!pane) return false;
+    const maxScroll = Math.max(0, pane.scrollHeight - pane.clientHeight);
+    if (maxScroll <= 1) return false;
+    const step = Math.max(72, Math.round(pane.clientHeight * 0.18));
+    pane.scrollBy({
+      top: direction * step,
+      left: 0,
+      behavior: global.matchMedia?.("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth"
+    });
+    return true;
+  }
+
   function moveSection(direction) {
     const stageId = activeStageId();
     const sections = discoverStageSections();
@@ -528,6 +544,13 @@
       return;
     }
 
+    if (stageId === "modules" && !event.ctrlKey && (event.key === "ArrowUp" || event.key === "ArrowDown")) {
+      clearNumericBuffer();
+      event.preventDefault();
+      scrollModulePane(event.key === "ArrowDown" ? 1 : -1);
+      return;
+    }
+
     if (stageId !== "modules" && !event.ctrlKey && (event.key === "ArrowUp" || event.key === "ArrowDown")) {
       clearNumericBuffer();
       event.preventDefault();
@@ -593,6 +616,7 @@
     activateSpace,
     activateEnter,
     openAdjacentModule,
+    scrollModulePane,
     openModuleNumber,
     toggleSelectedModule,
     closeModuleDetail,

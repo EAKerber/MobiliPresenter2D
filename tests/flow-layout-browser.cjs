@@ -67,10 +67,9 @@ const { chromium } = require("playwright");
   await page.waitForFunction(() => document.body.classList.contains("has-module-detail"));
   const detailDesktop = await rect('[data-stage-pane="detail"]');
   const listDesktop = await rect('[data-stage-pane="list"]');
-  assert.ok(Math.abs(detailDesktop.top - listDesktop.top) < 4, "desktop module detail and list start on the same row");
-  assert.ok(detailDesktop.right <= listDesktop.left + 4, "desktop Modules uses side-by-side detail and list panes");
+  assert.ok(listDesktop.top >= detailDesktop.bottom - 2, "while controls are beside the scene, Modules uses one internal column");
   assert.equal(await page.locator("#moduleDetailPlaceholder").isHidden(), true, "selected module replaces the detail placeholder");
-  assert.equal(await noOverflow("#modulesPanel"), true, "desktop Modules does not overflow horizontally");
+  assert.equal(await noOverflow("#modulesPanel"), true, "desktop side-panel Modules does not overflow horizontally");
   await page.screenshot({ path: path.join(output, "modules-desktop.png"), fullPage: true });
 
   await page.locator('.flow-nav [data-step="finishes"]').click();
@@ -96,6 +95,24 @@ const { chromium } = require("playwright");
   }));
   assert.ok(handleGeometry.every((entry) => entry.width >= 190 && entry.copyWidth >= 125), "Puxadores stays readable in the two-column stacked-workspace layout");
 
+  await page.locator('.flow-nav [data-step="modules"]').click();
+  await page.waitForFunction(() => !document.getElementById("modulesPanel").hidden);
+  await page.locator("#moduleList [data-select-entity]").first().click();
+  await page.waitForFunction(() => document.body.classList.contains("has-module-detail"));
+  const detailStacked = await rect('[data-stage-pane="detail"]');
+  const listStacked = await rect('[data-stage-pane="list"]');
+  assert.ok(Math.abs(detailStacked.top - listStacked.top) < 4, "stacked workspace gives Modules two peer columns");
+  assert.ok(detailStacked.right <= listStacked.left + 4, "stacked Modules columns remain visually separate");
+  const paneScrollContract = await page.locator('[data-stage-pane]').evaluateAll((panes) => panes.map((pane) => ({
+    id: pane.dataset.stagePane,
+    overflowY: getComputedStyle(pane).overflowY,
+    clientHeight: pane.clientHeight,
+    scrollHeight: pane.scrollHeight
+  })));
+  assert.ok(paneScrollContract.every((pane) => pane.overflowY === "auto"), "each stacked Modules column owns its vertical scroller");
+  assert.ok(paneScrollContract.some((pane) => pane.scrollHeight > pane.clientHeight + 2), "at least one stacked Modules column has independent scrollable content");
+  await page.screenshot({ path: path.join(output, "modules-stacked.png"), fullPage: true });
+
   await page.setViewportSize({ width: 1366, height: 900 });
   assert.deepEqual(await page.evaluate(() => window.CASA_EM_MODULOS_DEBUG.getFlowLayoutErrors()), [], "finish layout has no renderer invariant errors");
   await page.screenshot({ path: path.join(output, "finishes-desktop.png"), fullPage: true });
@@ -106,8 +123,14 @@ const { chromium } = require("playwright");
   assert.deepEqual(await renderedSectionOrder("services"), await modelSectionOrder("services", "services"), "Services section order follows normalized flow");
   const lighting = await rect('[data-keyboard-section="lighting"]');
   const additional = await rect('[data-keyboard-section="additional-services"]');
-  assert.ok(Math.abs(lighting.top - additional.top) < 4, "wide Services renders peer sections on one row");
-  assert.ok(lighting.right <= additional.left + 4, "Services sections occupy distinct desktop columns");
+  assert.ok(additional.top >= lighting.bottom - 2, "while controls are beside the scene, Services uses one internal column");
+
+  await page.setViewportSize({ width: 1050, height: 900 });
+  await page.waitForTimeout(80);
+  const lightingStacked = await rect('[data-keyboard-section="lighting"]');
+  const additionalStacked = await rect('[data-keyboard-section="additional-services"]');
+  assert.ok(Math.abs(lightingStacked.top - additionalStacked.top) < 4, "stacked workspace restores the two-column Services composition");
+  assert.ok(lightingStacked.right <= additionalStacked.left + 4, "stacked Services sections occupy separate columns");
   assert.deepEqual(await page.evaluate(() => window.CASA_EM_MODULOS_DEBUG.getFlowLayoutErrors()), [], "service layout has no renderer invariant errors");
 
   await page.setViewportSize({ width: 390, height: 844 });
