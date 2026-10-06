@@ -6,24 +6,6 @@
   const PRESENTATIONS = new Set(["auto", "swatches", "cards", "list", "grid"]);
   const COLUMN_SPANS = new Set([1, 2]);
 
-  const COPY = Object.freeze({
-    "modules-main": { label: "Módulos", columnSpan: 2 },
-    modules: { label: "Lista de módulos", presentation: "list" },
-    "cabinet-finishes": { label: "Acabamentos do conjunto", columnSpan: 1 },
-    fronts: { label: "Cor das frentes", presentation: "swatches" },
-    handles: { label: "Puxadores", presentation: "grid" },
-    stone: { label: "Pedra do conjunto", columnSpan: 1 },
-    "stone-packages": { label: "Pacote de pedra", presentation: "cards" },
-    "stone-skirting": { label: "Rodapé de pedra", presentation: "list" },
-    services: { label: "Serviços", columnSpan: 2 },
-    lighting: { label: "Iluminação", presentation: "list" },
-    "additional-services": { label: "Serviços adicionais", presentation: "list" },
-    "summary-main": { label: "Resumo", columnSpan: 2 },
-    summary: { label: "Resumo", presentation: "list" },
-    "custom-content": { label: "Conteúdo", columnSpan: 2 },
-    items: { label: "Opções", presentation: "list" }
-  });
-
   function clone(value) {
     return structuredClone(value);
   }
@@ -41,20 +23,16 @@
   }
 
   function defaultGroupCopy(group, stage) {
-    const known = COPY[group.id] || {};
     return {
       id: group.id,
-      label: known.label || stage.label || group.id,
-      columnSpan: known.columnSpan || 1,
-      sections: (group.sections || []).map((section) => {
-        const sectionCopy = COPY[section.id] || {};
-        return {
-          id: section.id,
-          label: sectionCopy.label || section.id,
-          presentation: sectionCopy.presentation || "auto",
-          itemIds: [...section.itemIds]
-        };
-      })
+      label: group.label || stage.label || group.id,
+      columnSpan: group.presentation?.span || 1,
+      sections: (group.sections || []).map((section) => ({
+        id: section.id,
+        label: section.label || section.id,
+        presentation: section.presentation || "auto",
+        itemIds: [...section.itemIds]
+      }))
     };
   }
 
@@ -84,7 +62,7 @@
     };
   }
 
-  function upgradeToHierarchy(value, configurationCore, flowCore, catalog, priceBook, scene) {
+  function upgradeToHierarchy(value, configurationCore, flowCore, catalog, priceBook, scene, hierarchyDefaultsInput = null) {
     if (!value) throw new TypeError("configuration is required");
     if (value.schemaVersion === SCHEMA) {
       const errors = validateHierarchyAdministration(value, configurationCore, catalog, priceBook, scene);
@@ -93,7 +71,8 @@
     }
 
     const legacy = configurationCore.normalizeConfiguratorSettings(value, catalog, priceBook, scene);
-    const flow = flowCore.normalizeFlow(legacy, configurationCore.itemRegistry(catalog));
+    const hierarchyDefaults = hierarchyDefaultsInput || global?.CASA_EM_MODULOS_HIERARCHY_DEFAULTS || null;
+    const flow = flowCore.normalizeFlow(legacy, configurationCore.itemRegistry(catalog), hierarchyDefaults);
     const hierarchyStages = flow.stages.map((flowStage) => {
       const source = legacy.stages.find((stage) => stage.id === flowStage.id);
       return {
@@ -258,7 +237,7 @@
     })));
   }
 
-  function projectHierarchyToLegacy(value, configurationCore, flowCore, catalog, priceBook, scene) {
+  function projectHierarchyToLegacy(value, configurationCore, flowCore, catalog, priceBook, scene, hierarchyDefaultsInput = null) {
     const errors = validateHierarchyAdministration(value, configurationCore, catalog, priceBook, scene);
     if (errors.length) return { ok: false, code: "invalid_hierarchy", errors };
 
@@ -270,7 +249,7 @@
       return { ok: false, code: "invalid_legacy_projection", errors: [error.message] };
     }
 
-    const roundTrip = upgradeToHierarchy(normalizedLegacy, configurationCore, flowCore, catalog, priceBook, scene);
+    const roundTrip = upgradeToHierarchy(normalizedLegacy, configurationCore, flowCore, catalog, priceBook, scene, hierarchyDefaultsInput);
     if (hierarchySignature(roundTrip) !== hierarchySignature(normalizeHierarchyAdministration(value))) {
       return {
         ok: false,
