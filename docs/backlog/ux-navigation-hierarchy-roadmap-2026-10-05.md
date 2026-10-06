@@ -1,6 +1,6 @@
 # UX navigation and configurator hierarchy roadmap — 2026-10-05
 
-Status: canonical plan for the buyer-navigation and configurator-structure work. CP-UX-00 through CP-UX-04.2 are complete; CP-UX-05 is the next checkpoint and crosses the authenticated production boundary.
+Status: canonical plan for the buyer-navigation and configurator-structure work. CP-UX-00 through CP-UX-04.3 are complete; CP-UX-05 is the next checkpoint and crosses the authenticated production boundary.
 
 This roadmap is independent from the authenticated `stone-skirting` published-administration migration. The existing production compatibility cleanup remains valid and must not be bypassed or mixed into this work.
 
@@ -1056,6 +1056,61 @@ If a future legacy item cannot be assigned by the explicit hierarchy defaults, n
 
 Merge result: PASS. PR #92 merged to `main` at `006128343e09388676640d0ac33970ae928c6e8d` after exact reviewed head `6c4b9e4308315a7039846306f4ebd0f863f60dd3` passed the full applicable gate set and Netlify deploy preview. CP-UX-05 may now begin from live `main` for repository preparation; production publication still requires the authenticated boundary.
 
+### CP-UX-04.3 — post-merge breakpoint, direct section traversal and cache-hardening follow-up — COMPLETE
+
+**Origin:** final production/deploy-preview review after CP-UX-04.2 showed that the semantic hierarchy was correct, but two presentation/runtime delivery details still obscured the intended result:
+
+- Acabamentos switched to two columns at a container threshold that did not match the workspace breakpoint where controls move below the scene;
+- browser caches could retain earlier hierarchy/keyboard assets long enough to make already-correct navigation appear stale.
+
+Implementation branch: `fix/cp-ux-04-postmerge`.
+
+Final reviewed head:
+
+- `b1d8b70d5ac478c494bd420133108e6855921c93`.
+
+Merged:
+
+- PR #95 -> `main` at `cbf41d29e636fa1a80bc13c1d457837cb737c57b`.
+
+Implemented:
+
+- Acabamentos remains one-column while the control rail is beside the scene;
+- the two-column Acabamentos layout activates at the same `<= 1050 px` workspace breakpoint that moves controls below the scene;
+- mobile `<= 700 px` remains one-column;
+- Keyboard browser now proves one direct `ArrowDown` transition from Frentes selects Puxadores, without requiring a preceding pointer interaction;
+- Flow layout browser now covers side-panel, stacked-workspace and mobile geometry explicitly;
+- buyer/admin hierarchy, keyboard and shared runtime asset revisions were advanced so stale pre-fix JS/CSS is not silently reused after deploy;
+- no hierarchy semantics were moved back into buyer/admin code: `app/data/hierarchy-defaults.js` remains the single legacy-v3 compatibility authority established by CP-UX-04.2.
+
+Gate evidence on the final PR head:
+
+- App build purity — PASS;
+- Current variant fidelity — PASS;
+- Current asset gates — PASS;
+- Keyboard browser — PASS;
+- Flow layout browser — PASS;
+- Mobile browser — PASS;
+- Stone browser — PASS;
+- Summary/Pricing browser — PASS;
+- Admin hierarchy browser — PASS;
+- Netlify deploy preview — PASS;
+- deploy preview #95 was manually reviewed and accepted before publication.
+
+No production administration/schema, catalog, pricing, scene, mask, asset or buyer-state data was written by this checkpoint.
+
+#### Boundary after CP-UX-04.3
+
+The repository-side hierarchy/UX work is now considered complete enough to stop adding compatibility behavior under CP-UX-04.
+
+What remains is not another renderer/navigation fix:
+
+1. reconcile the last published-v3 housekeeping inconsistency if it still exists on a fresh authenticated read;
+2. publish the explicit hierarchy as schema v4 through the authenticated CP-UX-05 boundary;
+3. retire v3 as a normal production authority and remove now-obsolete compatibility/shim code only after the production readback proves those paths are unnecessary.
+
+The preferred order is to repair the known `stone-skirting` published-v3 inconsistency first **if and only if** the live record still matches the last audit, then migrate that self-consistent v3 record to v4. The two writes remain separate transactions with separate readback/equivalence proofs.
+
 ### CP-UX-05 — authenticated hierarchy publication and legacy-boundary retirement — NEXT
 
 **Goal:** make the explicit hierarchy the production administration authority without combining unrelated migrations, then simplify the runtime so legacy v3 is an import/migration boundary rather than the normal production source.
@@ -1065,6 +1120,21 @@ This checkpoint crosses an authenticated production write boundary. Repository w
 CP-UX-05 is intentionally split into two independently stoppable sub-checkpoints so no half-migrated state is left behind.
 
 #### CP-UX-05A — prepare and execute the authenticated v3 -> v4 publication
+
+##### 0. Resolve the independent published-v3 housekeeping precondition
+
+Before the schema migration, consult `docs/backlog/housekeeping-roadmap-and-checkpoint-2026-10-05.md`.
+
+Preferred sequence:
+
+1. freshly re-read the production record while authenticated;
+2. if it is still v3 and still contains the audited contradiction where `stone-skirting` is selected but unassigned, execute CP-HK-01A as a **separate** minimal v3 consistency write;
+3. read back and prove the runtime repair becomes a no-op;
+4. only then freshly re-read again and start the v3 -> v4 migration transaction.
+
+If the live record no longer matches that housekeeping precondition, do not replay the old migration plan. Record the new state and replan from the observed production record.
+
+Do not combine the `stone-skirting` consistency write and schema-v4 publication into one PUT merely to reduce transaction count.
 
 ##### 1. Re-read production immediately before migration
 
