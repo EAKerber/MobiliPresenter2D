@@ -176,8 +176,25 @@ custom.stages.splice(3, 0, {
 const customFlow = flowCore.normalizeFlow(custom, registry, hierarchyDefaults);
 assert.deepEqual(
   customFlow.stages.find((entry) => entry.id === "installation").groups[0].sections[0],
-  { id: "items", order: 0, behavior: "toggle", keyboard: true, itemIds: ["move-stone"] },
-  "custom v3 stages normalize deterministically without product-data duplication"
+  {
+    id: "items",
+    label: "Opções",
+    order: 0,
+    behavior: "toggle",
+    keyboard: true,
+    presentation: "list",
+    itemIds: ["move-stone"]
+  },
+  "custom v3 stages normalize deterministically from hierarchy defaults"
+);
+
+const alternateDefaults = structuredClone(hierarchyDefaults);
+alternateDefaults.stages.finishes.groups[0].sections.reverse();
+const alternateFlow = flowCore.normalizeFlow(administration, registry, alternateDefaults);
+assert.deepEqual(
+  alternateFlow.stages.find((entry) => entry.id === "finishes").groups[0].sections.map((entry) => entry.id),
+  ["handles", "fronts"],
+  "legacy section order is controlled by hierarchy defaults"
 );
 
 console.log("flow model: PASS");
