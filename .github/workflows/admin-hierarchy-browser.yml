@@ -10,8 +10,10 @@ on:
       - 'app/core/flow-model.js'
       - 'app/core/hierarchy-administration.js'
       - 'app/core/hierarchy-editor.js'
+      - 'app/core/legacy-stage-repair.js'
       - 'netlify/functions/configuration.mjs'
       - 'tests/admin-hierarchy-browser.cjs'
+      - 'tests/admin-handles-persistence-browser.cjs'
       - '.github/workflows/admin-hierarchy-browser.yml'
   pull_request:
     paths:
@@ -22,8 +24,10 @@ on:
       - 'app/core/flow-model.js'
       - 'app/core/hierarchy-administration.js'
       - 'app/core/hierarchy-editor.js'
+      - 'app/core/legacy-stage-repair.js'
       - 'netlify/functions/configuration.mjs'
       - 'tests/admin-hierarchy-browser.cjs'
+      - 'tests/admin-handles-persistence-browser.cjs'
       - '.github/workflows/admin-hierarchy-browser.yml'
   workflow_dispatch:
 permissions:
@@ -45,6 +49,10 @@ jobs:
         env:
           NODE_PATH: /tmp/admin-hierarchy-tools/node_modules
         run: node tests/admin-hierarchy-browser.cjs /tmp/admin-hierarchy-review
+      - name: Test isolated Puxadores persistence
+        env:
+          NODE_PATH: /tmp/admin-hierarchy-tools/node_modules
+        run: node tests/admin-handles-persistence-browser.cjs
       - name: Save admin hierarchy review
         if: always()
         uses: actions/upload-artifact@v4
