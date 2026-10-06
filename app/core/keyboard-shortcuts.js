@@ -125,7 +125,11 @@
   }
 
   function visibleStageRoots() {
-    return Array.from(document.querySelectorAll(".controls > .panel, .controls > section.panel"))
+    const activeStep = document.querySelector(".flow-nav [data-step][aria-current='step']");
+    const controlledId = activeStep?.getAttribute("aria-controls");
+    const controlled = controlledId ? document.getElementById(controlledId) : null;
+    if (controlled && isVisible(controlled)) return [controlled];
+    return Array.from(document.querySelectorAll(".controls > .panel, .controls > .flow-stage-layout"))
       .filter((panel) => isVisible(panel));
   }
 
