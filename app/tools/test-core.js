@@ -433,6 +433,11 @@ assert.equal(indexHtml.includes("Acabamentos por módulo"), false);
 assert.equal(indexHtml.includes("finishTargetSelect"), false);
 assert.equal(indexHtml.includes('data-compact-label="Acab."'), true);
 assert.equal(indexHtml.includes('data-compact-label="Serv."'), true);
+assert.equal(indexHtml.includes('data-flow-item-id="fronts-all"'), true, "front section exposes stable flow ownership");
+assert.equal(indexHtml.includes('data-flow-item-id="handles-all"'), true, "handle section exposes stable flow ownership");
+assert.equal(indexHtml.includes('data-flow-item-id="stone-all"'), true, "stone section exposes stable flow ownership");
+assert.equal(indexHtml.includes('data-flow-item-id="lighting-08"'), true, "lighting section exposes stable flow ownership");
+assert.equal(appJs.includes("publishNormalizedFlow"), true, "app publishes one normalized flow contract to navigation");
 const runtimeScriptRevisions = [
   /data\/scene-data\.js\?v=([^\"]+)/,
   /data\/catalog-data\.js\?v=([^\"]+)/,
@@ -444,6 +449,7 @@ const runtimeScriptRevisions = [
   /core\/fingerprint\.js\?v=([^\"]+)/,
   /core\/finishes\.js\?v=([^\"]+)/,
   /core\/pricing\.js\?v=([^\"]+)/,
+  /core\/flow-model\.js\?v=([^\"]+)/,
   /data\/stone-data\.js\?v=([^\"]+)/,
   /core\/stone\.js\?v=([^\"]+)/,
   /app\.js\?v=([^\"]+)/

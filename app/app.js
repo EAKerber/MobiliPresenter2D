@@ -10,6 +10,7 @@
   const finishes = global.CasaModulesFinishes;
   let catalog = structuredClone(global.CASA_EM_MODULOS_CATALOG);
   const configurationCore = global.CasaModulesConfiguration;
+  const flowCore = global.CasaModulesFlow;
   let priceBook = structuredClone(global.CASA_EM_MODULOS_PRICE_BOOK);
   const pricing = global.CasaModulesPricing;
   let configuratorSettings = global.CASA_EM_MODULOS_CONFIGURATOR_DEFAULTS;
@@ -17,17 +18,26 @@
   let dynamicDependencies = [];
   let dynamicEvents = [];
   let configuredObjectAssets = {};
+  let normalizedFlow = null;
   let initialStateApplied = false;
 
-  if (!scene || !inlineMasks || !core || !visibility || !validation || !fingerprint || !finishes || !catalog || !priceBook || !pricing || !configurationCore || !configuratorSettings) {
+  if (!scene || !inlineMasks || !core || !visibility || !validation || !fingerprint || !finishes || !catalog || !priceBook || !pricing || !configurationCore || !flowCore || !configuratorSettings) {
     throw new Error("Não foi possível carregar os dados da cena 2D.");
   }
   validation.assertValidScene(scene);
+
+  function publishNormalizedFlow(settings) {
+    normalizedFlow = flowCore.normalizeFlow(settings, configurationCore.itemRegistry(catalog));
+    global.CASA_NORMALIZED_FLOW = normalizedFlow;
+    global.CASA_KEYBOARD_SHORTCUTS?.setFlow?.(normalizedFlow);
+    return normalizedFlow;
+  }
 
   const initialAdministration = configurationCore.createDefaultAdministration(configuratorSettings, catalog, priceBook, scene);
   dynamicDependencies = initialAdministration.dependencies;
   dynamicEvents = initialAdministration.events;
   configuredObjectAssets = initialAdministration.objectAssets;
+  publishNormalizedFlow(initialAdministration);
 
   let state = core.createInitialState(scene);
   let currentStep = "modules";
@@ -381,6 +391,7 @@
       const input = document.createElement("input");
       input.type = "checkbox";
       input.dataset.globalServiceId = service.id;
+      input.dataset.flowItemId = service.id;
       input.checked = selected.has(service.id);
       const override = eventOverrideForTarget(service.id);
       input.disabled = Boolean(override) || service.status === "included";
@@ -1441,9 +1452,11 @@
     const description = document.createElement("p"); description.textContent = "Escolha os itens desta etapa.";
     const copy = document.createElement("div"); copy.append(title, description); heading.append(copy);
     const list = document.createElement("div"); list.className = "custom-stage-options";
+    list.dataset.keyboardSection = "items";
+    list.dataset.keyboardBehavior = "toggle";
     stage.items.forEach((id) => {
       const item = document.createElement("label"); item.className = "accessory-toggle custom-stage-option";
-      const input = document.createElement("input"); input.type = "checkbox"; input.dataset.customStageItem = id;
+      const input = document.createElement("input"); input.type = "checkbox"; input.dataset.customStageItem = id; input.dataset.flowItemId = id;
       const effective = eventAdjustedState();
       if (Object.hasOwn(effective.visibilityByEntity, id)) input.checked = Boolean(effective.visibilityByEntity[id]);
       else input.checked = Boolean(effective.globalSelections?.serviceIds?.includes(id));
@@ -1542,6 +1555,7 @@
     priceBook = { ...priceBook, ...normalized.pricing };
     finishSettings = new Map(normalized.finishes.map((item) => [item.id, item]));
     applyMaterialLibrary(normalized);
+    publishNormalizedFlow(normalized);
     scene.entities.forEach((entity) => {
       const original = originalSceneEntities.get(entity.id) || entity;
       const assets = normalized.objectAssets[entity.id];

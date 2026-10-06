@@ -80,10 +80,15 @@ assert.equal(runtimeContractsSource.includes("installKeyboardShortcuts"), false,
 assert.equal(runtimeContractsSource.includes("createElement(\"style\")"), false, "migration shim must not inject CSS");
 assert.equal(runtimeContractsSource.includes("createElement(\"script\")"), false, "migration shim must not inject scripts");
 assert.equal((indexHtml.match(/core\/keyboard-shortcuts\.js/g) || []).length, 1, "keyboard script is loaded explicitly exactly once");
+const flowModelIndex = indexHtml.indexOf("core/flow-model.js?v=runtime-v8");
 const runtimeContractIndex = indexHtml.indexOf("core/runtime-contracts.js?v=runtime-contracts-v2");
 const keyboardIndex = indexHtml.indexOf("core/keyboard-shortcuts.js?v=keyboard-v2");
 const appIndex = indexHtml.indexOf("app.js?v=runtime-v8");
-assert.equal(runtimeContractIndex >= 0 && keyboardIndex > runtimeContractIndex && appIndex > keyboardIndex, true, "runtime migration, keyboard behavior and app load in explicit order");
+assert.equal(
+  flowModelIndex >= 0 && runtimeContractIndex > flowModelIndex && keyboardIndex > runtimeContractIndex && appIndex > keyboardIndex,
+  true,
+  "flow normalization, runtime migration, keyboard behavior and app load in explicit order"
+);
 assert.match(stylesCss, /#alignmentGrid\s*\{\s*z-index:\s*840;\s*\}/, "alignment grid stack contract lives in CSS");
 assert.match(stylesCss, /#sceneHotspots\s*\{\s*z-index:\s*860;\s*\}/, "hotspot stack contract lives in CSS");
 assert.match(stylesCss, /#selectionFrame\s*\{\s*z-index:\s*900;\s*\}/, "selection stack contract lives in CSS");

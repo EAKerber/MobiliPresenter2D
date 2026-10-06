@@ -17,7 +17,7 @@ const {chromium} = require('playwright');
   for (let attempt = 0; attempt < 18; attempt += 1) {
     try {
       await page.goto(targetUrl, {waitUntil: 'domcontentloaded', timeout: 15000});
-      await page.waitForFunction(() => window.CASA_KEYBOARD_SHORTCUTS?.discoverStageSections && document.querySelectorAll('#moduleList [data-select-entity]').length > 1, null, {timeout: 5000});
+      await page.waitForFunction(() => window.CASA_KEYBOARD_SHORTCUTS?.discoverStageSections && window.CASA_KEYBOARD_SHORTCUTS?.navigationInvariantErrors && window.CASA_NORMALIZED_FLOW?.stages?.length && document.querySelectorAll('#moduleList [data-select-entity]').length > 1, null, {timeout: 5000});
       lastError = null;
       break;
     } catch (error) {
@@ -41,8 +41,14 @@ const {chromium} = require('playwright');
     keyboardSection: section.element.dataset.keyboardSection || null,
     behavior: section.behavior,
     itemCount: section.items.length,
+    modeledItemIds: [...section.itemIds],
     itemIds: section.items.map(item => item.id || item.dataset.handleId || item.dataset.finishId || item.dataset.stonePackageId || item.dataset.globalServiceId || item.tagName)
   })));
+  const modeledSectionIds = stageId => page.evaluate((id) => {
+    const stage = window.CASA_NORMALIZED_FLOW.stages.find(entry => entry.id === id);
+    return stage ? stage.groups.flatMap(group => group.sections).filter(section => section.keyboard).map(section => section.id) : [];
+  }, stageId);
+  const navigationErrors = () => page.evaluate(() => window.CASA_KEYBOARD_SHORTCUTS.navigationInvariantErrors());
   const moveToSection = async (id) => {
     for (let index = 0; index < 12; index += 1) {
       if (await activeSection() === id) return;
@@ -118,6 +124,34 @@ const {chromium} = require('playwright');
   assert.ok(finishSections.some(section => section.id === 'section:handles' && section.behavior === 'selection'), 'handles expose a selection section');
   assert.ok(finishSections.some(section => section.id === 'section:stone-packages' && section.behavior === 'selection'), 'stone packages expose a selection section');
   assert.ok(finishSections.some(section => section.id === 'section:stone-skirting' && section.behavior === 'toggle'), 'stone skirting exposes a toggle section');
+  const finishModelOrder = await modeledSectionIds('finishes');
+  assert.deepEqual(finishSections.map(section => section.keyboardSection), finishModelOrder, 'rendered finish navigation follows normalized flow order');
+  assert.deepEqual(await navigationErrors(), [], 'finish renderer satisfies normalized flow invariants');
+
+  await page.evaluate(() => {
+    const fronts = document.querySelector('[data-keyboard-section="fronts"]');
+    const handles = document.querySelector('[data-keyboard-section="handles"]');
+    handles.parentElement.insertBefore(handles, fronts);
+  });
+  const reorderedFinishSections = await sectionSnapshot();
+  assert.deepEqual(reorderedFinishSections.map(section => section.keyboardSection), finishModelOrder, 'DOM reorder cannot change semantic section order');
+  await page.evaluate(() => {
+    const fronts = document.querySelector('[data-keyboard-section="fronts"]');
+    const handles = document.querySelector('[data-keyboard-section="handles"]');
+    fronts.parentElement.insertBefore(fronts, handles);
+    handles.dataset.keyboardBehavior = 'toggle';
+  });
+  const behaviorOverrideAttempt = await sectionSnapshot();
+  assert.equal(behaviorOverrideAttempt.find(section => section.keyboardSection === 'handles').behavior, 'selection', 'DOM behavior hints cannot override the normalized flow model');
+  await page.evaluate(() => { document.querySelector('[data-keyboard-section="handles"]').dataset.keyboardBehavior = 'selection'; });
+
+  await page.evaluate(() => { document.querySelector('[data-keyboard-section="fronts"]').removeAttribute('data-flow-item-id'); });
+  await sectionSnapshot();
+  const missingOwnerErrors = await navigationErrors();
+  assert.ok(missingOwnerErrors.some(entry => entry.code === 'missing-flow-item' && entry.itemId === 'fronts-all'), 'missing rendered model ownership is surfaced as an invariant error');
+  await page.evaluate(() => { document.querySelector('[data-keyboard-section="fronts"]').dataset.flowItemId = 'fronts-all'; });
+  await sectionSnapshot();
+  assert.deepEqual(await navigationErrors(), [], 'restoring the flow ownership bridge clears invariant errors');
 
   await page.keyboard.press('ArrowDown');
   assert.equal(await activeSection(), 'fronts', 'ArrowDown enters the first visible finish section');
@@ -160,6 +194,11 @@ const {chromium} = require('playwright');
   assert.ok(serviceSections.some(section => section.id === 'section:lighting' && section.behavior === 'toggle'), 'lighting is an explicit toggle section');
   assert.ok(serviceSections.some(section => section.id === 'section:additional-services' && section.behavior === 'toggle'), 'additional services are an explicit toggle section');
   assert.equal(serviceSections.some(section => section.itemIds.includes('servicesHeading')), false, 'the stage heading is never discovered as a section item');
+  const serviceModelOrder = await modeledSectionIds('services');
+  assert.deepEqual(serviceSections.map(section => section.keyboardSection), serviceModelOrder, 'rendered service navigation follows normalized flow order');
+  assert.deepEqual(serviceSections.find(section => section.keyboardSection === 'lighting').modeledItemIds, ['lighting-08'], 'lighting section ownership comes from normalized flow');
+  assert.deepEqual(serviceSections.find(section => section.keyboardSection === 'additional-services').modeledItemIds, ['move-stone', 'tempered-glass'], 'additional-service membership comes from normalized flow');
+  assert.deepEqual(await navigationErrors(), [], 'services renderer satisfies normalized flow invariants');
 
   const serviceCardContract = await page.evaluate(() => {
     const lighting = document.getElementById('lightingToggle');
@@ -263,14 +302,16 @@ const {chromium} = require('playwright');
   assert.ok(Math.abs(reducedMotionGeometry.bottomGap) < 42 || reducedMotionGeometry.atDocumentEnd, 'reduced motion reaches the same final section geometry without relying on animation');
   await page.emulateMedia({reducedMotion: 'no-preference'});
 
-  // Summary currently has no required local action. Inject one declarative section to prove a
-  // future stage gains Enter behavior from DOM data without another controller branch.
+  // DOM structure is now a rendering bridge, not semantic authority. A rogue section cannot
+  // create new keyboard semantics unless it exists in the normalized flow model.
   await page.keyboard.press('Control+ArrowRight');
   await page.waitForFunction(() => document.querySelector('.flow-nav [data-step][aria-current="step"]')?.dataset.step === 'summary');
+  assert.deepEqual(await modeledSectionIds('summary'), [], 'summary has no keyboard-managed section in the normalized flow');
   await page.evaluate(() => {
     const section = document.createElement('div');
     section.dataset.keyboardSection = 'future-summary-action';
     section.dataset.keyboardBehavior = 'action';
+    section.dataset.flowItemId = 'summary';
     const button = document.createElement('button');
     button.type = 'button';
     button.textContent = 'Future action';
@@ -278,10 +319,11 @@ const {chromium} = require('playwright');
     section.append(button);
     document.getElementById('summaryPanel').append(section);
   });
-  await moveToSection('future-summary-action');
-  assert.equal(await activeSection(), 'future-summary-action', 'a future declarative section is discovered automatically');
+  assert.deepEqual(await sectionSnapshot(), [], 'DOM-only sections do not enter keyboard navigation without normalized-flow ownership');
+  assert.deepEqual(await navigationErrors(), [], 'unmodeled DOM sections are ignored rather than changing semantic ownership');
   await page.keyboard.press('Enter');
-  assert.equal(await page.evaluate(() => window.__KEYBOARD_FUTURE_ACTION__ === true), true, 'Enter executes an action item in a data-driven section');
+  assert.equal(await page.evaluate(() => window.__KEYBOARD_FUTURE_ACTION__ === true), false, 'Enter cannot activate an unmodeled DOM-only section');
+  await page.evaluate(() => document.querySelector('[data-keyboard-section="future-summary-action"]')?.remove());
 
   // A quick Ctrl tap arms the global numeric buffer; this avoids browser-reserved Ctrl+digit
   // combinations while preserving the Ctrl scope of global module access.
