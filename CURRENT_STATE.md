@@ -31,27 +31,37 @@ Deferred intentionally:
 
 ## Current P1 — published administration compatibility
 
-The remaining architecture cleanup that affects current production configuration is the published-administration compatibility migration.
+The remaining architecture cleanup that affects current production configuration is the published-administration consistency + hierarchy migration boundary.
 
-Production historically contained:
+Last audited production v3 state (2026-10-05) contained:
+
 - `ConfiguratorAdministration2D 3.0`;
 - `stone-all` assigned to an enabled stage;
 - `stone-skirting` selected in `initialState.services`;
-- `stone-skirting` missing from published stage assignment.
+- `stone-skirting` missing from published stage assignment;
+- `handles-all` missing from published stage assignment.
 
-Buyer runtime is safe because `repairSkirtingStageContract()` repairs that contradiction in memory.
+The two omissions no longer have the same status:
 
-Next safe external checkpoint:
-1. authenticate through the real admin boundary;
-2. re-read the live published administration;
-3. fail closed if revision/content no longer matches assumptions;
-4. persist exactly one semantic change: assign `stone-skirting` beside `stone-all`;
-5. read back and prove every unrelated field is unchanged;
-6. prove the runtime repair becomes a no-op;
-7. only then remove the compatibility shim in a dedicated repository PR;
-8. rerun current product gates and production Stone + Keyboard smokes.
+- `stone-skirting` is a housekeeping consistency defect because the service is selected but unreachable; the runtime currently repairs it in memory through `repairSkirtingStageContract()`;
+- `handles-all` was historically treated as an intentional optional omission, but buyer/admin review on 2026-10-06 established a new product requirement: **Puxadores must be a first-class section under Acabamentos and must be visible/configurable in the admin hierarchy**.
 
-Do not auto-add `handles-all`.
+Do not solve the Puxadores requirement with another runtime/DOM compatibility hardcode. The published configuration must explicitly own it.
+
+Next safe authenticated sequence:
+
+1. authenticate through the real admin boundary and freshly re-read production;
+2. if the audited `stone-skirting` contradiction still exists, execute CP-HK-01A as a separate minimal v3 consistency write;
+3. read back, prove unrelated fields unchanged and prove `repairSkirtingStageContract()` becomes a no-op;
+4. remove/isolate that obsolete runtime repair in CP-HK-01B and rerun production Stone + Keyboard smoke;
+5. freshly re-read production again;
+6. if `handles-all` is still absent, execute a **separate explicit product-configuration write** assigning it to Acabamentos/finishes; this is not housekeeping and must not be inferred automatically;
+7. read back and prove the only intended semantic difference is the `handles-all` stage assignment, then smoke both buyer Puxadores navigation and the admin hierarchy;
+8. freshly re-read production again;
+9. only then execute the v3 -> v4 hierarchy publication from that self-consistent source;
+10. after v4 readback/equivalence proof, retire v3 as a normal production authority in a separate cleanup checkpoint.
+
+If the live record differs from the last audit, stop and replan from the observed state rather than replaying these writes mechanically.
 
 ## New product UX track — navigation, sections and hierarchy
 
@@ -86,6 +96,8 @@ Current UX checkpoint:
 - **CP-UX-04 — COMPLETE** — PR #87 merged to `main` at `e11a5c7c377246f1343b79ff04c1f94b587e1c7f`. Final reviewed head `b9f9565360f91cbd228481f4bdc150382d8c4d9d` passed Flow layout browser/screenshots, Keyboard, Mobile, Stone, Summary/Pricing, Admin hierarchy, App build purity, Current asset gates, Current variant fidelity and Netlify deploy preview.
 - **CP-UX-04.1 — COMPLETE** — PR #90 merged to `main` at `a7294f8dd4f8209de1e39ccdcdc0902cb84beab0`. Final reviewed head `490ebda8ab56fa7c31411f1b5a6761a114d37cce` kept Puxadores active after handle redraw, lowered the finish two-column container threshold from 520 px to 300 px while preserving a one-column mobile override, and passed Keyboard, Flow layout, Mobile, Stone, Summary/Pricing, App build purity, Current asset gates, Current variant fidelity and Netlify deploy preview.
 - **CP-UX-04.2 — COMPLETE** — PR #92 merged to `main` at `006128343e09388676640d0ac33970ae928c6e8d`. Final reviewed head `6c4b9e4308315a7039846306f4ebd0f863f60dd3` centralized the legacy v3 hierarchy template in `app/data/hierarchy-defaults.js`, removed duplicate group/section maps from `flow-model.js` and `hierarchy-administration.js`, moved admin stage/item policies to the same configuration authority, and passed App build purity, Current variant fidelity, Current asset gates, Keyboard, Flow layout, Mobile, Stone, Summary/Pricing, Admin hierarchy and Netlify deploy preview.
+- **CP-UX-04.3 — COMPLETE** — PR #95 merged to `main` at `cbf41d29e636fa1a80bc13c1d457837cb737c57b`. It aligned Acabamentos two-column layout with the workspace breakpoint, proved direct Frentes -> Puxadores traversal and advanced hierarchy/keyboard cache revisions; deploy preview #95 was manually accepted.
+- **CP-UX-04.4 — ACTIVE / PR #97** — align all stage-internal columns with workspace mode, give stacked Modules independent detail/list scrollers, and prevent unmodified module ArrowUp/ArrowDown from leaking into window scroll. No production configuration write.
 - **CP-UX-05 — NEXT / AUTHENTICATED BOUNDARY** — prepare server-safe v4 publication support in-repository; execute the production migration only from a freshly re-read authenticated production v3 source, prove non-hierarchy semantic identity, then retire v3 as a normal production authority in a separate cleanup checkpoint.
 
 This track is independent from the authenticated `stone-skirting` migration and must not be mixed into it by default.
@@ -101,6 +113,10 @@ CP-UX-04 now makes buyer composition consume normalized flow layout for Acabamen
 CP-UX-04.1 closes the post-merge buyer review: handle redraws explicitly restore the `handles` section cursor/active state without forcing focus, and Acabamentos keeps two columns at substantially narrower desktop widths while mobile remains single-column.
 
 CP-UX-04.2 closes the hierarchy-authority defect exposed by admin review: legacy v3 Stage -> Group -> Section semantics now live once in `app/data/hierarchy-defaults.js`. Buyer flow normalization and v3 -> v4 admin migration consume that same configuration. HTML still contains explicit renderer hooks and `flow-layout` keeps the intentionally view-specific Modules two-pane projection, but neither is allowed to become a second semantic hierarchy authority. Domain validation IDs in `configuration.js` remain domain rules rather than layout ownership.
+
+CP-UX-04.3 aligned Acabamentos with the scene/control workspace breakpoint and hardened direct section traversal/cache delivery. CP-UX-04.4 is a final layout follow-up from production review: side-rail Modules/Services should be one-column, stacked Modules should use two independently scrollable panes, and module vertical arrows must stay inside that pane contract rather than scrolling the page.
+
+The Puxadores production discrepancy is now explicitly understood: repository hierarchy defaults already model `handles-all` as the `handles` section, but the last audited published v3 record omitted `handles-all` from every stage. The renderer must not be the long-term semantic substitute for that missing production assignment.
 
 The detailed CP-UX-05 plan is persisted in the canonical UX roadmap and may begin from live `main` for repository preparation. The actual production v3 -> v4 publication remains blocked until an authenticated admin session can re-read and verify the live source. CP-UX-05 is split into publication and legacy-boundary cleanup, and must not be combined with the independent `stone-skirting` housekeeping migration by default.
 
