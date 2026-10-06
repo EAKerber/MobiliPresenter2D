@@ -25,6 +25,47 @@ const hierarchy = require(path.join(projectRoot, "core/hierarchy-administration.
 const v3 = configuration.createDefaultAdministration(defaults, catalog, priceBook, scene);
 const v4 = hierarchy.upgradeToHierarchy(v3, configuration, flow, catalog, priceBook, scene);
 
+assert.equal(
+  hierarchy.normalizePublishedAdministration(v3, configuration, catalog, priceBook, scene).schemaVersion,
+  configuration.SCHEMA,
+  "dual-schema publication normalizer preserves valid v3"
+);
+assert.equal(
+  hierarchy.normalizePublishedAdministration(v4, configuration, catalog, priceBook, scene).schemaVersion,
+  hierarchy.SCHEMA,
+  "dual-schema publication normalizer accepts validated v4"
+);
+assert.equal(
+  hierarchy.migrationSemanticSignature(v3),
+  hierarchy.migrationSemanticSignature(v4),
+  "deterministic v3 -> v4 upgrade preserves migration semantics"
+);
+
+const hierarchyOnlyChange = structuredClone(v4);
+hierarchyOnlyChange.stages.find((stage) => stage.id === "finishes").groups.reverse();
+assert.equal(
+  hierarchy.migrationSemanticSignature(v3),
+  hierarchy.migrationSemanticSignature(hierarchyOnlyChange),
+  "group structure itself is excluded from migration semantic identity"
+);
+
+const semanticPriceChange = structuredClone(v4);
+semanticPriceChange.pricing.entries["module-01"] += 1;
+assert.notEqual(
+  hierarchy.migrationSemanticSignature(v3),
+  hierarchy.migrationSemanticSignature(semanticPriceChange),
+  "pricing changes are detected by migration semantic identity"
+);
+
+const semanticMembershipChange = structuredClone(v4);
+const serviceSection = semanticMembershipChange.stages.find((stage) => stage.id === "services").groups[0].sections.find((section) => section.id === "additional-services");
+serviceSection.itemIds = serviceSection.itemIds.filter((id) => id !== "move-stone");
+assert.notEqual(
+  hierarchy.migrationSemanticSignature(v3),
+  hierarchy.migrationSemanticSignature(semanticMembershipChange),
+  "stage item membership changes are detected by migration semantic identity"
+);
+
 assert.equal(v4.schemaVersion, "ConfiguratorAdministration2D 4.0");
 assert.equal(v4.stages.some((stage) => Object.hasOwn(stage, "items")), false, "v4 has no parallel flat stage.items authority");
 assert.deepEqual(v4.stages.map((stage) => stage.id), ["modules", "finishes", "services", "summary"]);
