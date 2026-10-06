@@ -1,6 +1,6 @@
 # CP-SD-01B — executable presentation contract — 2026-10-06
 
-Status: **NEXT / immediate implementation slice**.
+Status: **COMPLETE / PASS**.
 
 Parent:
 - `docs/backlog/schema-driven-ui-cp-sd-01-contract-plan-2026-10-06.md`
@@ -194,3 +194,33 @@ Then CP-SD-01C can safely add:
 - bottom-dock shell capability;
 - final material null/default semantics;
 - final persisted administration version candidate.
+
+
+## Completion record
+
+Result: PASS on functional head `6ff1cc74c488e5c3ed8b0fb168dfded94fd01bb0`.
+
+Implemented:
+- `ConfiguratorPresentation2D 1.0` as a pure closed presentation contract;
+- deterministic legacy `auto/swatches/cards/list/grid` -> executable component resolution;
+- layout plans now expose one concrete component per semantic section;
+- buyer bindings explicitly declare their renderer component;
+- missing and mismatched component bindings fail closed;
+- current Modules list, Acabamentos, Serviços, Resumo and custom toggle-stage bindings are covered;
+- shared runtime cache revision advanced coherently to `runtime-v11`;
+- runtime load-order contract now includes presentation normalization before flow layout.
+
+Gate evidence:
+- App build purity — PASS;
+- Current variant fidelity — PASS;
+- Current asset gates — PASS;
+- Flow layout browser — PASS;
+- Keyboard browser — PASS;
+- Mobile browser — PASS;
+- Stone browser — PASS;
+- Summary/Pricing browser — PASS;
+- Netlify deploy preview #105 — PASS.
+
+No production configuration write and no persisted administration schema-version change.
+
+Next: **CP-SD-01C — view/profile/shell contract and material authored/default semantics**.
