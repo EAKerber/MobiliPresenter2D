@@ -163,6 +163,29 @@ async function sectionItemIds(page, stageId, groupId, sectionId) {
   assert.ok(frontChoices > 1, "front finish options are exposed consistently");
   assert.ok(stoneChoices > 1, "stone package options are exposed consistently");
 
+  await page.locator("#materialPager button").nth(1).click();
+  await page.waitForSelector('[data-material-id="stone-existing"]');
+  let stoneMaterialCard = page.locator('[data-material-id="stone-existing"]');
+  let noColorToggle = stoneMaterialCard.locator('[data-material-no-color]');
+  let stoneColorInput = stoneMaterialCard.locator('[data-material-color]');
+  assert.equal(await noColorToggle.isChecked(), true, "stone-existing exposes explicit no-authored-color state");
+  assert.equal(await stoneColorInput.isDisabled(), true, "color input is disabled while authored color is null");
+
+  await noColorToggle.uncheck();
+  stoneMaterialCard = page.locator('[data-material-id="stone-existing"]');
+  noColorToggle = stoneMaterialCard.locator('[data-material-no-color]');
+  stoneColorInput = stoneMaterialCard.locator('[data-material-color]');
+  assert.equal(await noColorToggle.isChecked(), false, "clearing no-color creates an explicit authored color");
+  assert.equal(await stoneColorInput.isEnabled(), true, "authored color input becomes editable");
+  assert.match(await stoneColorInput.inputValue(), /^#[0-9a-f]{6}$/i, "editor supplies a deterministic authored color choice");
+
+  await noColorToggle.check();
+  stoneMaterialCard = page.locator('[data-material-id="stone-existing"]');
+  noColorToggle = stoneMaterialCard.locator('[data-material-no-color]');
+  stoneColorInput = stoneMaterialCard.locator('[data-material-color]');
+  assert.equal(await noColorToggle.isChecked(), true, "material can return to explicit null without retaining editor fallback as authored data");
+  assert.equal(await stoneColorInput.isDisabled(), true);
+
   await page.locator('[data-move-hierarchy-group="finishes|stone|-1"]').click();
   assert.deepEqual(await stageGroupIds(page, "finishes"), ["stone", "cabinet-finishes"], "group reorder updates the in-memory hierarchy and rendered ancestry");
 
@@ -209,6 +232,7 @@ async function sectionItemIds(page, stageId, groupId, sectionId) {
   assert.equal(putCount, 1, "legacy-equivalent edit performs one production-compatible PUT");
   assert.equal(lastPut.schemaVersion, "ConfiguratorAdministration2D 3.0", "admin never sends v4 to the current production endpoint");
   assert.equal(lastPut.stages.find((stage) => stage.id === "finishes").label, "Acabamentos teste", "representable stage edit survives safe v4 -> v3 projection");
+  assert.equal(lastPut.materials.find((material) => material.id === "stone-existing").color, null, "explicit null material color survives safe admin save projection");
   assert.deepEqual(
     lastPut.stages.find((stage) => stage.id === "services").items,
     ["move-stone", "tempered-glass", "lighting-08"],
