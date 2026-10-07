@@ -72,6 +72,7 @@ const { chromium } = require("playwright");
   assert.equal(await page.locator('[data-stage-pane="list"]').count(), 1);
   assert.equal(await page.locator("#moduleDetailPlaceholder").isVisible(), true, "modules detail pane has an intentional empty-state view");
   assert.deepEqual(await renderedComponents(), {
+    detail: "detail-panel",
     list: "selection-list",
     fronts: "choice-swatches",
     handles: "choice-grid",
