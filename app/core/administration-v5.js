@@ -40,6 +40,19 @@
     return behaviors.size === 1 ? [...behaviors][0] : null;
   }
 
+  function migrationBehavior(stage, section, registry, hierarchyDefaults) {
+    const kind = stage.kind || stage.id;
+    const template = hierarchyDefaults?.stages?.[stage.id] || hierarchyDefaults?.stages?.[kind];
+    const templateSection = template?.groups
+      ?.flatMap((group) => group.sections || [])
+      .find((entry) => entry.id === section.id);
+    if (templateSection?.behavior) return templateSection.behavior;
+    if (kind === "custom" && hierarchyDefaults?.customStage?.section?.behavior) {
+      return hierarchyDefaults.customStage.section.behavior;
+    }
+    return sectionBehavior(section, registry);
+  }
+
   function stageToV4(stage) {
     return {
       id: stage.id,
@@ -60,7 +73,7 @@
     };
   }
 
-  function currentStageFromV4(stage, registry) {
+  function currentStageFromV4(stage, registry, hierarchyDefaults) {
     return {
       id: stage.id,
       kind: stage.kind || stage.id,
@@ -71,11 +84,12 @@
         label: group.label,
         columnSpan: group.columnSpan,
         sections: (group.sections || []).map((section) => {
-          const behavior = sectionBehavior(section, registry);
+          const behavior = migrationBehavior(stage, section, registry, hierarchyDefaults);
           if (!behavior) throw new TypeError(`cannot resolve section behavior: ${stage.id}/${section.id}`);
           return {
             id: section.id,
             label: section.label,
+            behavior,
             component: presentationCore.resolveSectionComponent({
               presentation: section.presentation,
               behavior
