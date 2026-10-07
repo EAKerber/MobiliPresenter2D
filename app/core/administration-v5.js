@@ -201,17 +201,6 @@
     }
     if (!value.presentationPolicy) errors.push("presentation policy is required");
 
-    let v4;
-    try {
-      v4 = toV4(value);
-    } catch (error) {
-      errors.push(error.message);
-      return [...new Set(errors)];
-    }
-
-    hierarchyV4.validateHierarchyAdministration(v4, configurationCore, catalog, priceBook, scene)
-      .forEach((error) => errors.push(`v4-compatible validation: ${error}`));
-
     const registry = configurationCore.itemRegistry(catalog);
     value.stages.forEach((stage) => {
       (stage.groups || []).forEach((group) => {
@@ -238,6 +227,16 @@
     if (value.presentationPolicy) {
       presentationCore.validatePolicy(value.presentationPolicy, layoutProfiles.PROFILES, flowShape(value))
         .forEach((error) => errors.push(`presentation policy: ${error.path}: ${error.message}`));
+    }
+
+    if (!errors.some((error) => error.startsWith("invalid section component:"))) {
+      try {
+        const v4 = toV4(value);
+        hierarchyV4.validateHierarchyAdministration(v4, configurationCore, catalog, priceBook, scene)
+          .forEach((error) => errors.push(`v4-compatible validation: ${error}`));
+      } catch (error) {
+        errors.push(error.message);
+      }
     }
     return [...new Set(errors)];
   }
