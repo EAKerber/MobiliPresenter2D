@@ -114,3 +114,27 @@ Focused proof:
 Runtime cache revision after the reconciliation fix: `runtime-v18`.
 
 Next mini-checkpoint: **A2b.2 — regression-only gate pass.** No new functionality should be added there.
+
+
+## Mini-checkpoint A2b.2 — regression-only gate — PASS
+
+Regression head observed: `b6cfaf13927f67455c8bb65bfdbe31ccac8709b0`.
+
+No runtime, schema, HTML or test behavior changed in this mini-checkpoint.
+
+All repository gates are green on the current PR head:
+- App build purity — PASS;
+- Current variant fidelity — PASS;
+- Current asset gates — PASS;
+- Flow layout browser — PASS;
+- Keyboard browser — PASS;
+- Mobile browser — PASS;
+- Stone browser — PASS;
+- Summary/Pricing browser — PASS.
+
+The functional code head `5cd392f1d24d4cbc013d11f9841706825881cb89` also has all eight gates green and Netlify deploy preview #112 PASS.
+
+A2b.2 conclusion:
+- no regression was found;
+- no corrective implementation is required;
+- the next mini-checkpoint is **A2b.3 — close documentation + merge PR #112 only**.
