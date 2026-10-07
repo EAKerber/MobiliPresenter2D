@@ -272,6 +272,15 @@ const { chromium } = require("playwright");
     "Serviços adicionais",
     "generated section heading comes from normalized flow label"
   );
+  const defaultAdditionalServiceOrder = await page.locator("#servicesChecklist [data-global-service-id]").evaluateAll((nodes) =>
+    nodes.map((node) => node.dataset.globalServiceId)
+  );
+  const defaultModeledAdditionalServiceOrder = await page.evaluate(() => {
+    const stage = window.CASA_NORMALIZED_FLOW.stages.find((entry) => entry.id === "services");
+    return stage?.groups.flatMap((group) => group.sections).find((section) => section.id === "additional-services")?.itemIds || [];
+  });
+  assert.deepEqual(defaultAdditionalServiceOrder, defaultModeledAdditionalServiceOrder, "generic service cards follow their bound normalized section membership/order");
+  assert.deepEqual(defaultAdditionalServiceOrder, ["move-stone", "tempered-glass"], "default generic service order remains unchanged");
   const lighting = await rect('[data-keyboard-section="lighting"]');
   const additional = await rect('[data-keyboard-section="additional-services"]');
   assert.ok(additional.top >= lighting.bottom - 2, "while controls are beside the scene, Services uses one internal column");
@@ -320,6 +329,65 @@ const { chromium } = require("playwright");
     if (!response.ok) throw new Error("failed to load configuration fixture");
     return response.json();
   });
+  const reorderedServices = structuredClone(sourceConfiguration);
+  const reorderedServicesStage = reorderedServices.stages.find((stage) => (stage.kind || stage.id) === "services");
+  assert.ok(reorderedServicesStage, "Services order fixture has Services stage");
+  const reorderedGenericServiceIds = ["tempered-glass", "move-stone"];
+  reorderedServicesStage.items = [
+    ...reorderedGenericServiceIds,
+    ...reorderedServicesStage.items.filter((id) => !reorderedGenericServiceIds.includes(id))
+  ];
+
+  const reorderErrors = [];
+  const reorderPage = await browser.newPage({ viewport: { width: 1366, height: 900 } });
+  reorderPage.on("pageerror", (error) => reorderErrors.push(error.message));
+  reorderPage.on("console", (message) => { if (message.type() === "error") reorderErrors.push(message.text()); });
+  await reorderPage.route("**/api/configuration", async (route) => {
+    if (route.request().method() !== "GET") return route.continue();
+    await route.fulfill({
+      status: 200,
+      contentType: "application/json",
+      body: JSON.stringify(reorderedServices)
+    });
+  });
+  await reorderPage.goto(targetUrl, { waitUntil: "domcontentloaded", timeout: 15000 });
+  await reorderPage.waitForFunction(() => {
+    const stage = window.CASA_NORMALIZED_FLOW?.stages?.find((entry) => entry.id === "services");
+    const section = stage?.groups?.flatMap((group) => group.sections).find((entry) => entry.id === "additional-services");
+    return section
+      && section.itemIds[0] === "tempered-glass"
+      && section.itemIds[1] === "move-stone"
+      && window.CASA_EM_MODULOS_DEBUG?.getFlowLayoutErrors;
+  }, null, { timeout: 10000 });
+
+  await reorderPage.locator('.flow-nav [data-step="services"]').click();
+  await reorderPage.waitForFunction(() => !document.getElementById("servicesPanel").hidden);
+  const modeledReorderedServices = await reorderPage.evaluate(() => {
+    const stage = window.CASA_NORMALIZED_FLOW.stages.find((entry) => entry.id === "services");
+    return stage.groups.flatMap((group) => group.sections).find((section) => section.id === "additional-services").itemIds;
+  });
+  const renderedReorderedServices = await reorderPage.locator("#servicesChecklist [data-global-service-id]").evaluateAll((nodes) =>
+    nodes.map((node) => node.dataset.globalServiceId)
+  );
+  assert.deepEqual(modeledReorderedServices, ["tempered-glass", "move-stone"], "normalized Additional Services preserves configured item order");
+  assert.deepEqual(renderedReorderedServices, modeledReorderedServices, "generic service cards render in normalized section item order instead of catalog order");
+  const firstReorderedService = reorderPage.locator("#servicesChecklist [data-global-service-id]").first();
+  const firstReorderedChecked = await firstReorderedService.isChecked();
+  await firstReorderedService.click();
+  await reorderPage.waitForFunction(
+    ({ id, before }) => document.querySelector(`[data-global-service-id="${id}"]`)?.checked !== before,
+    { id: modeledReorderedServices[0], before: firstReorderedChecked }
+  );
+  assert.equal(await reorderPage.locator(`[data-global-service-id="${modeledReorderedServices[0]}"]`).isChecked(), !firstReorderedChecked, "reordered service retains generic state toggle behavior");
+  await reorderPage.locator(`[data-global-service-id="${modeledReorderedServices[0]}"]`).click();
+  await reorderPage.waitForFunction(
+    ({ id, before }) => document.querySelector(`[data-global-service-id="${id}"]`)?.checked === before,
+    { id: modeledReorderedServices[0], before: firstReorderedChecked }
+  );
+  assert.deepEqual(await reorderPage.evaluate(() => window.CASA_EM_MODULOS_DEBUG.getFlowLayoutErrors()), [], "reordered service membership creates no renderer invariant errors");
+  assert.deepEqual(reorderErrors, [], "Services order fixture has no console/page errors");
+  await reorderPage.close();
+
   const withoutAdditionalServices = structuredClone(sourceConfiguration);
   const servicesStage = withoutAdditionalServices.stages.find((stage) => (stage.kind || stage.id) === "services");
   assert.ok(servicesStage, "negative fixture has Services stage");
@@ -354,6 +422,11 @@ const { chromium } = require("playwright");
     await negativePage.locator("#servicesChecklist").isHidden(),
     true,
     "unclaimed neutral renderer slot stays hidden"
+  );
+  assert.equal(
+    await negativePage.locator("#servicesChecklist [data-global-service-id]").count(),
+    0,
+    "absent Additional Services section leaves no generic service cards behind"
   );
   assert.deepEqual(
     await negativePage.evaluate(() => window.CASA_EM_MODULOS_DEBUG.getFlowLayoutErrors()),
@@ -787,7 +860,7 @@ const { chromium } = require("playwright");
   assert.deepEqual(skirtingNegativeErrors, [], "Stone Skirting absence fixture has no console/page errors");
   await skirtingNegativePage.close();
 
-  fs.writeFileSync(path.join(output, "result.json"), JSON.stringify({ targetUrl, uniqueness, errors, negativeErrors, lightingNegativeErrors, frontsNegativeErrors, handlesNegativeErrors, cabinetNegativeErrors, stoneNegativeErrors, skirtingNegativeErrors }, null, 2));
+  fs.writeFileSync(path.join(output, "result.json"), JSON.stringify({ targetUrl, uniqueness, errors, reorderErrors, negativeErrors, lightingNegativeErrors, frontsNegativeErrors, handlesNegativeErrors, cabinetNegativeErrors, stoneNegativeErrors, skirtingNegativeErrors }, null, 2));
   await browser.close();
   console.log("flow layout browser: PASS");
 })().catch((error) => {

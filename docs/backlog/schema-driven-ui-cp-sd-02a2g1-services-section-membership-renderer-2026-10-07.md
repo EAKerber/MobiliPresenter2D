@@ -1,6 +1,6 @@
 # CP-SD-02A2g1 — bound-section Services checklist renderer — 2026-10-07
 
-Status: **READY / NEXT**.
+Status: **IN PROGRESS — IMPLEMENTATION CANDIDATE**.
 
 Parent:
 - CP-SD-02A2g0 Services item-renderer discovery — PASS.
@@ -111,3 +111,29 @@ Stop and split if this requires:
 - publishing hierarchy/configuration.
 
 No production configuration write.
+
+
+## Implementation candidate
+
+Applied only the generic Services checklist membership seam:
+- removed `stageItems()`, whose sole runtime consumer was the Services checklist;
+- added a generic local `boundFlowSectionFor(element)` lookup using the element's nearest flow group grid + generated semantic section;
+- added a service id -> catalog record map for metadata lookup;
+- narrowed `renderServices()` to `renderServiceChecklist()`;
+- checklist membership/order now follows the bound normalized `section.itemIds` exactly;
+- catalog service order no longer acts as renderer semantic authority;
+- service-card DOM, checked/disabled/title/copy/pricing display and change handler are unchanged;
+- Lighting specialized adapter/state/dependencies/scene path are untouched;
+- shared runtime cache revision advances v28 -> v29.
+
+Proof added:
+- source asserts `stageItems(` is absent and the renderer maps `section.itemIds`;
+- default browser cards equal normalized bound-section item ids and remain `move-stone, tempered-glass`;
+- valid v3 reorder fixture produces normalized `["tempered-glass", "move-stone"]` and requires the DOM to match;
+- reordered first service still toggles state and redraws correctly;
+- existing Additional Services absence fixture now also requires zero stale `data-global-service-id` cards;
+- existing Lighting absence and keyboard/service-card contracts remain unchanged.
+
+No section-shell, Lighting, pricing, state, event/dependency, custom-stage, responsive or production-configuration behavior is changed.
+
+Gate pending: all eight repository workflows + Netlify preview.

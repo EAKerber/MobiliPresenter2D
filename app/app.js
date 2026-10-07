@@ -95,9 +95,17 @@
   ]);
   const selectedFinishDescription = document.getElementById("selectedFinishDescription");
   const catalogByEntityId = new Map(catalog.modules.map((module) => [module.entityId, module]));
+  const serviceById = new Map(catalog.services.map((service) => [service.id, service]));
   const stageConfig = (id) => configuratorSettings.stages.find((stage) => stage.id === id);
   const stageKind = (stage) => stage?.kind || stage?.id;
-  const stageItems = (kind) => new Set(configuratorSettings.stages.filter((stage) => stage.enabled && stageKind(stage) === kind).flatMap((stage) => stage.items));
+  const boundFlowSectionFor = (element) => {
+    if (!element) return null;
+    const stageId = element.closest("[data-flow-group-grid]")?.dataset.flowGroupGrid;
+    const sectionId = element.closest("[data-keyboard-section]")?.dataset.keyboardSection;
+    if (!stageId || !sectionId) return null;
+    const stage = normalizedFlow?.stages?.find((entry) => entry.id === stageId);
+    return stage?.groups.flatMap((group) => group.sections).find((section) => section.id === sectionId) || null;
+  };
   const itemAvailable = (itemId) => flowCore.itemAvailable(normalizedFlow, itemId);
   const stageOwns = (stageId, itemId) => flowCore.stageOwns(normalizedFlow, stageId, itemId);
   const enabledStages = () => configuratorSettings.stages.filter((stage) => stage.enabled);
@@ -712,11 +720,13 @@
     }
   }
 
-  function renderServices() {
+  function renderServiceChecklist() {
     if (!servicesChecklist) return;
     servicesChecklist.replaceChildren();
+    const section = boundFlowSectionFor(servicesChecklist);
+    if (!section) return;
     const selected = new Set(eventAdjustedState().globalSelections?.serviceIds || []);
-    catalog.services.filter((service) => stageItems("services").has(service.id)).forEach((service) => {
+    section.itemIds.map((id) => serviceById.get(id)).filter(Boolean).forEach((service) => {
       const card = document.createElement("label");
       card.className = "service-check";
       const input = document.createElement("input");
@@ -2025,7 +2035,7 @@
   renderFinishControlsFromData();
   renderHandleControlsFromData();
   renderStonePackages();
-  renderServices();
+  renderServiceChecklist();
 
   let moduleToggles = [...document.querySelectorAll("[data-module-toggle]")];
   let layerGroups = [...document.querySelectorAll(".layer-group")];
@@ -2242,7 +2252,7 @@
     updateSelection(resolved);
     renderFinishControlsFromData();
     renderStonePackages();
-    renderServices();
+    renderServiceChecklist();
     renderCurrentValue(resolved);
     syncStep(resolved);
     syncPinnedSceneUi();
