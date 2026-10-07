@@ -1,6 +1,6 @@
 # CP-SD-02A2d3 — Stone Packages section shell — 2026-10-07
 
-Status: **IN PROGRESS — A2d3.0 REVISED PASS; A2d3.1 FALSIFIED/REVERTED; A2d3.2 NEXT**.
+Status: **IN PROGRESS — A2d3.0 REVISED PASS; A2d3.1 FALSIFIED/REVERTED; A2d3.2 CANDIDATE**.
 
 Parent:
 - CP-SD-02A2d0 Acabamentos family discovery;
@@ -81,3 +81,18 @@ Stop and split if Stone Packages shell generation requires:
 - changing production configuration.
 
 No production configuration write.
+
+
+## A2d3.2 implementation candidate
+
+Applied only the Stone Packages shell seam:
+- static `stone-packages` section id/heading/behavior/component removed from HTML;
+- outer neutral slot carries `choice-cards` + `stone-all` affinity and stays hidden until normalized flow claims it;
+- inner `data-flow-item-id="stone-all"` adapter preserves `#stonePackageOptions`;
+- `#stonePanel[data-configurable-item="stone-all"]` remains unchanged;
+- static `stone-skirting` section remains unchanged;
+- `renderStonePackages()` and all stone state/pricing/material/mask logic remain unchanged;
+- source and Flow-layout positive proof added;
+- shared runtime cache revision advanced from v21 to v22.
+
+A2d3.3 remains a separate schema-valid absence proof.

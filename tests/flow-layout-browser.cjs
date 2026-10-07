@@ -134,6 +134,20 @@ const { chromium } = require("playwright");
     1,
     "Handles options adapter remains owned by the generated semantic section"
   );
+  const generatedStonePackages = page.locator('[data-keyboard-section="stone-packages"]');
+  assert.equal(
+    await generatedStonePackages.getAttribute("data-flow-generated-section"),
+    "true",
+    "Stone Packages section shell is created from normalized flow"
+  );
+  assert.equal(await generatedStonePackages.getAttribute("data-keyboard-behavior"), "selection", "generated Stone Packages behavior comes from normalized flow");
+  assert.equal(await generatedStonePackages.getAttribute("data-render-component"), "choice-cards", "generated Stone Packages component comes from normalized flow");
+  assert.equal(await generatedStonePackages.locator("h3").textContent(), "Pacote de pedra", "generated Stone Packages heading comes from normalized flow label");
+  assert.equal(
+    await generatedStonePackages.locator('[data-flow-item-id="stone-all"] #stonePackageOptions').count(),
+    1,
+    "Stone Packages options adapter remains owned by the generated semantic section"
+  );
   const cabinet = await rect('[data-flow-group-shell="cabinet-finishes"]');
   const stone = await rect('[data-flow-group-shell="stone"]');
   assert.ok(stone.top >= cabinet.bottom - 2, "while controls are beside the scene, Acabamentos remains one column");
