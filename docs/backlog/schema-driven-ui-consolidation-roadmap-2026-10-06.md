@@ -190,7 +190,7 @@ Gate:
 
 ### CP-SD-05 — typed pricing authoring
 
-Status: **IN PROGRESS**. CP-SD-05A0 discovery, CP-SD-05A1 typed contract/migration and CP-SD-05A2 typed buyer runtime are COMPLETE / PASS. Immediate checkpoint: `docs/backlog/schema-driven-ui-cp-sd-05a3a-v5-typed-pricing-ownership-execution-2026-10-07.md`; amount/percentage UI authoring follows separately in A3b.
+Status: **IN PROGRESS**. CP-SD-05A0 discovery, A1 contract/migration, A2 buyer runtime and A3a v5/admin typed ownership are COMPLETE / PASS. Immediate checkpoint: `docs/backlog/schema-driven-ui-cp-sd-05a3b-admin-pricing-type-authoring-execution-2026-10-07.md`.
 
 Goal: let admin price adjustments choose absolute amount or percentage without ambiguous numeric meaning.
 
