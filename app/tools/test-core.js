@@ -529,7 +529,7 @@ assert.equal(appJs.includes("publishNormalizedFlow"), true, "app publishes one n
 assert.equal(appJs.includes("applyBuyerFlowLayout"), true, "buyer composition is mounted from normalized flow layout");
 assert.equal((indexHtml.match(/core\/layout-profiles\.js/g) || []).length, 1, "layout profile resolver loads exactly once");
 assert.equal(
-  indexHtml.indexOf("core/layout-profiles.js?v=cp-sd-01c1-v1") < indexHtml.indexOf("styles.css?v=runtime-v35"),
+  indexHtml.indexOf("core/layout-profiles.js?v=cp-sd-01c1-v1") < indexHtml.indexOf("styles.css?v=runtime-v36"),
   true,
   "canonical layout profile resolves before public topology CSS to avoid first-paint profile drift"
 );
@@ -611,6 +611,12 @@ assert.equal(appJs.includes("function isMobileViewport()"), false, "PiP availabi
 assert.equal(styles.includes('html:is([data-layout-profile="stacked"], [data-layout-profile="compact"]) body.is-mobile-scene-pinned .viewer-card'), true, "fixed PiP presentation consumes canonical layout profiles");
 assert.equal(styles.includes('@media (max-width: 700px) {\n  body.is-mobile-scene-pinned .viewer-anchor'), false, "PiP presentation is not owned by the compact numeric breakpoint");
 assert.equal(indexHtml.includes('@media (max-width: 700px) {\n        body.is-mobile-scene-pinned.is-mobile-scene-transparent'), false, "inline PiP transparency follows layout profiles rather than a numeric breakpoint");
+assert.equal(appJs.includes('inspect.className = "module-card__inspect"'), true, "module card visible body is the native inspection button");
+assert.equal(appJs.includes("toggleLabel.append(input);"), true, "module checkbox label owns only the inclusion control");
+assert.equal(appJs.includes("inspect.append(number, copy, inspectAffordance);"), true, "module number and copy belong to the inspection body");
+assert.equal(appJs.includes('detail.textContent = "Ver"'), false, "legacy standalone Ver affordance is retired");
+assert.equal(styles.includes(".module-card.is-blocked .module-card__toggle"), true, "blocked inclusion attenuates only the checkbox hit area");
+assert.equal(styles.includes(".module-card__inspect"), true, "inspection body has a dedicated native button presentation");
 assert.equal(appJs.includes("function bottomDockPolicy()"), true, "bottom dock runtime consumes the presentation policy");
 assert.equal(appJs.includes('["estimate", configurationValue]'), true, "bottom dock estimate slot reuses the stable estimate adapter");
 assert.equal(appJs.includes('["primary-action", nextStepButton]'), true, "bottom dock primary-action slot reuses the stable CTA adapter");
