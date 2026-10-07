@@ -1,6 +1,6 @@
 # CP-SD-03A5 — stacked PiP discovery — 2026-10-07
 
-Status: **READY / NEXT — DISCOVERY ONLY**.
+Status: **COMPLETE / PASS**.
 
 Parent:
 - CP-SD-03A4 compact Modules `replace` projection — COMPLETE / PASS.
@@ -83,3 +83,10 @@ Stop if the smallest coherent implementation requires:
 - production configuration writes.
 
 No production configuration write.
+
+
+## Result
+
+Discovery completed without runtime changes. The existing PiP DOM and transient state are sufficient; the gap is policy consumption plus compact-only CSS/launcher gating. Canonical result: `docs/architecture/schema-driven-ui-cp-sd-03a5-stacked-pip-discovery-result-2026-10-07.md`.
+
+Next checkpoint: `docs/backlog/schema-driven-ui-cp-sd-03a6-stacked-pip-execution-2026-10-07.md`.
