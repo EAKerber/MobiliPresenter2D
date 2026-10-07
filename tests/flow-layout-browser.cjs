@@ -310,7 +310,7 @@ const { chromium } = require("playwright");
   await page.evaluate(() => window.scrollTo(0, Math.min(320, Math.max(0, document.scrollingElement.scrollHeight - window.innerHeight))));
   await page.waitForTimeout(30);
   const dockStacked = await bottomDockState();
-  assert.equal(dockStacked.position, "sticky", "stacked profile keeps the same sticky dock adapter");
+  assert.equal(dockStacked.position, "fixed", "stacked document-scroll profile keeps the same footer persistently fixed to the viewport");
   assert.ok(dockStacked.dock.bottom <= dockStacked.viewportHeight + 2 && dockStacked.dock.bottom >= dockStacked.viewportHeight - 4,
     "stacked dock remains pinned to the document viewport bottom while controls content scrolls");
   const cabinetMedium = await rect('[data-flow-group-shell="cabinet-finishes"]');
@@ -454,7 +454,7 @@ const { chromium } = require("playwright");
   await page.evaluate(() => window.scrollTo(0, Math.min(320, Math.max(0, document.scrollingElement.scrollHeight - window.innerHeight))));
   await page.waitForTimeout(30);
   const dockCompact = await bottomDockState();
-  assert.equal(dockCompact.position, "sticky", "compact profile keeps the same sticky dock adapter");
+  assert.equal(dockCompact.position, "fixed", "compact document-scroll profile keeps the same footer persistently fixed to the viewport");
   assert.ok(dockCompact.dock.bottom <= dockCompact.viewportHeight + 2 && dockCompact.dock.bottom >= dockCompact.viewportHeight - 4,
     "compact dock remains pinned to the document viewport bottom");
   assert.ok(dockCompact.clearance >= dockCompact.dock.height - 2, "compact safe-area-aware dock keeps live clearance synchronized");
