@@ -1,6 +1,6 @@
 # CP-SD-05A4 — PriceBook 2.0 + residual legacy pricing retirement — 2026-10-07
 
-Status: **READY / NEXT**.
+Status: **IN PROGRESS / FUNCTIONAL PATCH COMPLETE; ADMIN BROWSER RETRY REQUIRED**.
 
 Parent:
 - CP-SD-05A0 discovery — COMPLETE / PASS.
@@ -193,3 +193,36 @@ Do not write production configuration.
 ## Completion / next
 
 When PriceBook 2.0 is canonical, buyer/admin runtime no longer uses legacy buckets outside v3 compatibility seams, and all gates pass, CP-SD-05 can be closed. CP-SD-06 remains the later authenticated production v5 publication/legacy-retirement checkpoint.
+
+
+## Implementation checkpoint
+
+Functional A4 patch on PR #150, head `bd7846f0adb55dfcc90c67961a7bdbe18334ccb9`:
+
+- public source is now `CommercialEstimatePriceBook 2.0` with nested `CommercialPricingRules 1.0`;
+- no top-level PriceBook 1.1 pricing buckets are published;
+- current values and `handleFrontTotal=14` are preserved exactly and the typed source projects to the historical v3 pricing object without value changes;
+- `configuration.js` owns the explicit typed -> legacy projection seam required by `ConfiguratorAdministration2D 3.0`, and fails closed if the typed source cannot be represented;
+- buyer initial pricing comes directly from `priceBook.pricing`; published v3 pricing still migrates once through the named compatibility seam;
+- buyer handle/stone/service display prices now read typed roles;
+- the module-detail fallback now passes `pricingRules` to `pricing.itemEstimate()`;
+- the buyer no longer overlays legacy pricing buckets back into a mutable PriceBook;
+- admin initializes catalog pricing directly from `priceBook.pricing`;
+- shared buyer runtime cache advanced to `runtime-v38`, v3 configuration cache to `admin-config-v8`, PriceBook admin cache to `admin-data-v4`, and admin bundle cache to `admin-pricing-v3`.
+
+The first functional head exposed only stale runtime-v37 static gate expectations; those snapshots were advanced to v38 without runtime compensation.
+
+On corrected head `bd7846f0adb55dfcc90c67961a7bdbe18334ccb9`:
+
+- PASS: Current variant fidelity;
+- PASS: App build purity, including the complete current app test suite;
+- PASS: Flow layout browser;
+- PASS: Keyboard browser;
+- PASS: Mobile browser;
+- PASS: Summary pricing browser;
+- PASS: Stone browser;
+- PASS: Current asset gates;
+- PASS: Netlify deploy preview #150;
+- Admin hierarchy browser remained blocked in Playwright installation and had not executed either hierarchy administration or isolated Puxadores tests.
+
+This checkpoint intentionally creates a fresh PR head for a clean Admin browser attempt. Do not mark A4 or CP-SD-05 COMPLETE until Admin hierarchy and isolated Puxadores execute successfully.
