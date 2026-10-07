@@ -286,6 +286,10 @@ assert.equal(preflight.source.schemaVersion, configuration.SCHEMA);
 assert.equal(preflight.source.revision, v3.revision);
 assert.equal(preflight.source.digest, publicationPreflight.digestJson(v3), "source digest covers the exact canonical v3 object");
 assert.deepEqual(preflight.source.handlesOwners, ["finishes"], "preflight records the one safe Puxadores owner");
+assert.deepEqual(preflight.source.stoneOwners, ["finishes"], "preflight records the stone group owner");
+assert.deepEqual(preflight.source.skirtingOwners, ["finishes"], "preflight records the skirting control owner");
+assert.equal(preflight.source.skirtingSelected, true, "preflight records skirting initial selection state");
+
 assert.deepEqual(preflight.candidatePayload, v5, "preflight derives the same deterministic v5 candidate as the canonical upgrade");
 assert.equal(preflight.candidate.schemaVersion, v5Core.SCHEMA);
 assert.equal(preflight.candidate.digest, publicationPreflight.digestJson(v5));
@@ -317,6 +321,26 @@ assert.equal(
   publicationPreflight.verifyReadback(preflight, staleReadback).code,
   "unexpected_revision",
   "readback must advance from the exact source revision"
+);
+
+const skirtingContradiction = structuredClone(v3);
+skirtingContradiction.stages.find((stage) => (stage.kind || stage.id) === "finishes").items =
+  skirtingContradiction.stages.find((stage) => (stage.kind || stage.id) === "finishes").items.filter((id) => id !== "stone-skirting");
+const skirtingBlocked = publicationPreflight.createPreflight(skirtingContradiction);
+assert.equal(skirtingBlocked.ok, false);
+assert.equal(
+  skirtingBlocked.code,
+  "skirting_repair_required",
+  "selected stone-skirting without a stage owner blocks v5 publication before Puxadores checks"
+);
+
+const intentionalSkirtingOmission = structuredClone(skirtingContradiction);
+intentionalSkirtingOmission.initialState.services =
+  intentionalSkirtingOmission.initialState.services.filter((id) => id !== "stone-skirting");
+assert.equal(
+  publicationPreflight.createPreflight(intentionalSkirtingOmission).ok,
+  true,
+  "removing both skirting selection and control remains a valid explicit administration choice"
 );
 
 const sourceWithoutHandles = structuredClone(v3);
