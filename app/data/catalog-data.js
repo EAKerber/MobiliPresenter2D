@@ -12,6 +12,7 @@
   const modules = [
     {
       entityId: "module-01", referenceLabel: "Módulo 01", category: "Aéreo", title: "Aéreo da lavanderia",
+      publicPresentation: { description: "Armário aéreo para ampliar a organização da lavanderia.", carcass: "Caixaria interna clara" },
       sourceEntityId: "scene/traditional/module/upper-laundry",
       dimensions: {
         display: "763,3 × 700 × 350 mm", displayPolicy: "nominal",
@@ -30,6 +31,7 @@
     },
     {
       entityId: "module-02", referenceLabel: "Módulo 02", category: "Inferior", title: "Inferior do fogão",
+      publicPresentation: { description: "Módulo inferior com espaço para forno e preparo para cooktop." },
       sourceEntityId: "scene/traditional/module/lower-stove",
       dimensions: {
         display: "790 × 760 × 530 mm", displayPolicy: "nominal",
@@ -47,6 +49,7 @@
     },
     {
       entityId: "module-03", referenceLabel: "Módulo 03", category: "Inferior", title: "Inferior da pia",
+      publicPresentation: { description: "Módulo de pia com gavetas e portas para organizar os itens do dia a dia." },
       sourceEntityId: "scene/traditional/module/lower-sink",
       dimensions: {
         display: "1.200 × 760 × 530 mm", displayPolicy: "nominal",
@@ -82,6 +85,7 @@
     },
     {
       entityId: "module-04", referenceLabel: "Módulo 04", category: "Estrutural", title: "Lateral da geladeira",
+      publicPresentation: { description: "Painel estrutural que alinha o conjunto junto à geladeira." },
       sourceEntityId: "scene/traditional/module/fridge-side",
       dimensions: {
         display: "2.400 × 600 × 18 mm", displayPolicy: "nominal", displayAxes: "A × P × E",
@@ -103,6 +107,7 @@
     },
     {
       entityId: "module-05", referenceLabel: "Módulo 05", category: "Aéreo", title: "Aéreo do fogão",
+      publicPresentation: { description: "Armário aéreo para organização acima da área de preparo.", carcass: "Caixaria interna clara" },
       sourceEntityId: "scene/traditional/module/upper-stove",
       dimensions: {
         display: "800 × 700 × 400 mm", displayPolicy: "nominal",
@@ -121,6 +126,7 @@
     },
     {
       entityId: "module-06", referenceLabel: "Módulo 06", category: "Aéreo", title: "Aéreo da pia",
+      publicPresentation: { description: "Armário aéreo com nicho para micro-ondas e iluminação compatível." },
       sourceEntityId: "scene/traditional/module/upper-sink-microwave",
       dimensions: {
         display: "1.200 × 800 × 400 mm", displayPolicy: "nominal",
@@ -140,6 +146,7 @@
     },
     {
       entityId: "module-07", referenceLabel: "Módulo 07", category: "Aéreo", title: "Aéreo da geladeira",
+      publicPresentation: { description: "Módulo aéreo com duas portas de abrir e uma prateleira fixa.", carcass: "Caixaria branca" },
       sourceEntityId: "scene/traditional/module/upper-fridge",
       dimensions: {
         display: "800 × 484 × 350 mm", displayPolicy: "nominal",
@@ -160,7 +167,7 @@
   ];
 
   const catalog = {
-    schemaVersion: "ProductCatalog2D 1.0",
+    schemaVersion: "ProductCatalog2D 1.1",
     technicalSource: {
       repository: "EAKerber/MobiliPresenter",
       commit: "4d46da44c08dcafbb53c52c0375e14651981a93b",
