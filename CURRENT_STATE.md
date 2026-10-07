@@ -48,7 +48,7 @@ Canonical plan:
 - completed audit: `docs/architecture/schema-ui-authority-audit-2026-10-06.md`
 - completed contract checkpoint: `docs/backlog/schema-driven-ui-cp-sd-01-contract-plan-2026-10-06.md`
 - next track: CP-SD-05 typed pricing, executed discovery-first as small self-contained contract/runtime/admin slices
-- next checkpoint: `docs/backlog/schema-driven-ui-cp-sd-05a0-typed-pricing-contract-discovery-2026-10-07.md`
+- next checkpoint: `docs/backlog/schema-driven-ui-cp-sd-05a1-typed-pricing-contract-execution-2026-10-07.md`
 
 **CP-SD-00 — COMPLETE / PASS.** The audit found no critical unknowns. The main publication blocker is now explicit: v4 persists section presentation metadata, but that metadata is not yet the executable buyer-renderer authority.
 
@@ -218,3 +218,6 @@ A4 gate correction: the first Flow run falsified the assumption that stable pane
 
 
 **CP-SD-04A0 — COMPLETE / PASS.** Discovery freezes the non-nested module-card pattern and inventories the two live admin password fields. Result: `docs/architecture/schema-driven-ui-cp-sd-04a0-interaction-affordance-discovery-result-2026-10-07.md`. **CP-SD-04A1 — COMPLETE / PASS.** Module cards now separate inclusion (checkbox-only 44px hit area) from inspection (sibling native body button), retire the visible “Ver” button treatment, preserve blocked-module inspection and existing detail/focus owners, and advance runtime cache v35 -> v36. Functional head `746e36d1eeb54a78849a3672d9bda22ea0506178` passed all eight workflows plus Netlify preview #143. **CP-SD-04A2 — COMPLETE / PASS.** The two live admin password fields now use adjacent accessible reveal controls backed by one admin-local helper; values, autocomplete/minlength, form submission and Netlify Identity/auth semantics are unchanged. Final functional head `77776f504147f0f9ed8718adbe3f41a5a77e61e9` passed all eight repository workflows plus Netlify preview #144. **CP-SD-04 — COMPLETE / PASS. CP-SD-05A0 is NEXT**: discovery-only typed pricing contract, migration boundary and supported percentage bases.
+
+
+**CP-SD-05A0 — COMPLETE / PASS.** Pricing discovery freezes an independent `CommercialPricingRules 1.0` contract. Legacy bucket names become migration/projection compatibility only. The only initial percentage basis is `eligible-module-base`, preserving per-module rounding before summation. `frontFinishAdjustment` is the only dual-type role initially: fixed amount per finish-eligible module or percentage of that module's base. Item base, handle-choice total, local adjustment and global adjustment remain amount-only. `handleFrontTotal` remains allocation metadata. Legacy v3/v4 projection must fail closed for a non-representable typed rule instead of coercing it. Result: `docs/architecture/schema-driven-ui-cp-sd-05a0-typed-pricing-contract-discovery-result-2026-10-07.md`. **CP-SD-05A1 is NEXT**: pure typed pricing contract + exact legacy migration/projection gates; no buyer/admin/runtime behavior change and no production write.

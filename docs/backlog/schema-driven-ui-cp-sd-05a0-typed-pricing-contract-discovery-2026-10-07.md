@@ -1,6 +1,6 @@
 # CP-SD-05A0 — typed pricing contract discovery — 2026-10-07
 
-Status: **READY / NEXT — DISCOVERY ONLY**.
+Status: **COMPLETE / PASS**.
 
 Parent:
 - CP-SD-04 interaction affordance cleanup — COMPLETE / PASS.
@@ -149,3 +149,22 @@ Do not:
 - mix this work with the independent authenticated Puxadores or stone-skirting production transactions.
 
 If discovery finds that a proposed percentage type lacks a concrete calculation basis, keep that role amount-only and record the limitation rather than generalizing by guess.
+
+
+## Result
+
+Discovery closed in:
+- `docs/architecture/schema-driven-ui-cp-sd-05a0-typed-pricing-contract-discovery-result-2026-10-07.md`.
+
+Frozen outcome:
+
+- dedicated nested `CommercialPricingRules 1.0`;
+- explicit amount vs percentage rule shapes;
+- only `frontFinishAdjustment` supports both types initially;
+- only percentage basis is `eligible-module-base`;
+- handle distribution remains allocation metadata;
+- legacy v3/v4 pricing remains an explicit migration/projection boundary;
+- non-representable typed pricing fails closed instead of coercing;
+- static price book advances to 2.0 only when typed data becomes its canonical source.
+
+Next: `docs/backlog/schema-driven-ui-cp-sd-05a1-typed-pricing-contract-execution-2026-10-07.md`.
