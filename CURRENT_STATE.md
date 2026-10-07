@@ -48,7 +48,7 @@ Canonical plan:
 - completed audit: `docs/architecture/schema-ui-authority-audit-2026-10-06.md`
 - completed contract checkpoint: `docs/backlog/schema-driven-ui-cp-sd-01-contract-plan-2026-10-06.md`
 - next track: CP-SD-05 typed pricing, executed discovery-first as small self-contained contract/runtime/admin slices
-- next checkpoint: `docs/backlog/schema-driven-ui-cp-sd-05a1-typed-pricing-contract-execution-2026-10-07.md`
+- next checkpoint: `docs/backlog/schema-driven-ui-cp-sd-05a2-typed-pricing-runtime-execution-2026-10-07.md`
 
 **CP-SD-00 — COMPLETE / PASS.** The audit found no critical unknowns. The main publication blocker is now explicit: v4 persists section presentation metadata, but that metadata is not yet the executable buyer-renderer authority.
 
@@ -221,3 +221,6 @@ A4 gate correction: the first Flow run falsified the assumption that stable pane
 
 
 **CP-SD-05A0 — COMPLETE / PASS.** Pricing discovery freezes an independent `CommercialPricingRules 1.0` contract. Legacy bucket names become migration/projection compatibility only. The only initial percentage basis is `eligible-module-base`, preserving per-module rounding before summation. `frontFinishAdjustment` is the only dual-type role initially: fixed amount per finish-eligible module or percentage of that module's base. Item base, handle-choice total, local adjustment and global adjustment remain amount-only. `handleFrontTotal` remains allocation metadata. Legacy v3/v4 projection must fail closed for a non-representable typed rule instead of coercing it. Result: `docs/architecture/schema-driven-ui-cp-sd-05a0-typed-pricing-contract-discovery-result-2026-10-07.md`. **CP-SD-05A1 is NEXT**: pure typed pricing contract + exact legacy migration/projection gates; no buyer/admin/runtime behavior change and no production write.
+
+
+**CP-SD-05A1 — COMPLETE / PASS.** A pure `CommercialPricingRules 1.0` core now owns typed role capabilities, strict validation, exact legacy bucket migration and fail-closed legacy projection. Front-finish amount is valid typed state but intentionally cannot project to v3/v4. Current buyer/admin/runtime behavior is untouched because the new core is not yet loaded by either surface. Functional head `1650debf4727acde900f72ac58ab0456fd36dfd3` passed all six path-triggered workflows plus Netlify preview #146. **CP-SD-05A2 is NEXT**: migrate buyer calculation authority to typed rules while retaining v3 buckets only as compatibility input.
