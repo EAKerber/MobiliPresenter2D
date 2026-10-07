@@ -1,6 +1,6 @@
 # CP-SD-06A0 — production v5 publication preflight — 2026-10-07
 
-Status: **READY / NEXT — PREFLIGHT ONLY**.
+Status: **COMPLETE / PASS**.
 
 Parent:
 - CP-SD-00 through CP-SD-05 — COMPLETE / PASS.
@@ -86,3 +86,66 @@ The isolated `persist-handles-all` v3 repair remains a separate guarded operatio
 A0 passes when repository-side publication readiness is deterministic and reviewable, while production remains unchanged.
 
 The next slice after A0 may cross the authenticated boundary only with an interactive authenticated session and a fresh live read.
+
+
+## Implementation checkpoint
+
+Repository-only A0 work is implemented on branch `docs/cp-sd-06a0-production-v5-preflight`.
+
+Outputs:
+
+- offline tool: `app/tools/v5-publication-preflight.js`;
+- v5/admin test coverage for deterministic migration, digest/readback verification, skirting consistency and Puxadores preconditions;
+- architecture result: `docs/architecture/schema-driven-ui-cp-sd-06a0-production-v5-preflight-result-2026-10-07.md`.
+
+Important result: the initial v5 migration is now defined as a pure schema migration from a freshly read, self-consistent, canonical v3 source. It must not combine skirting repair, Puxadores repair or arbitrary admin draft edits.
+
+The production endpoint remains unchanged in A0 and v5 publication remains blocked.
+
+
+## Gate retry checkpoint
+
+Functional/preflight head `d59afbccf53566d895478c2f97cbb1184f72e5b4` passed:
+
+- App build purity;
+- Current asset gates, including the new v5 publication preflight tests;
+- Current variant fidelity;
+- Summary pricing browser;
+- Mobile browser;
+- Netlify deploy preview #151.
+
+Stone browser did not reach its functional test and remained blocked in isolated browser-tool installation. No Stone/runtime assertion failed.
+
+This documentation-only checkpoint creates a fresh head so Stone can execute on a clean runner. A0 remains IN PROGRESS until Stone browser completes successfully.
+
+
+## Final result
+
+CP-SD-06A0 is COMPLETE / PASS.
+
+Repository-side publication readiness is now deterministic and fail-closed:
+
+- offline preflight accepts only canonical current v3 input;
+- contradictory selected-but-unowned `stone-skirting` blocks publication;
+- unresolved/missing Puxadores ownership blocks publication;
+- v3 -> v5 migration is deterministic and validated;
+- derived v5 must project exactly back to the source v3;
+- source/candidate/readback SHA-256 digests are explicit;
+- expected readback revision is source revision + 1;
+- readback verifier checks revision, full canonical digest and publication-signature digest;
+- server migration contract is frozen around raw read + ETag + conditional write;
+- normal GET fallback behavior is explicitly disqualified as migration evidence because it may substitute defaults;
+- production endpoint behavior is unchanged in A0;
+- no production configuration write occurred.
+
+Gate evidence:
+
+- functional head `d59afbccf53566d895478c2f97cbb1184f72e5b4`: App build purity, Current asset gates, Current variant fidelity, Summary/Pricing, Mobile and Netlify PASS;
+- documentation-only retry head `dc0b8cb6ddc22e83ab23c54c9e5d23940a2652b4`: App build purity, Current asset gates, Current variant fidelity, Summary/Pricing, Stone and Netlify PASS; Mobile was still in browser-tool installation when this closeout was written;
+- the two heads are runtime-identical; `dc0b8cb6...` differs only by the gate-retry documentation checkpoint.
+
+Result document:
+`docs/architecture/schema-driven-ui-cp-sd-06a0-production-v5-preflight-result-2026-10-07.md`.
+
+Next:
+`docs/backlog/schema-driven-ui-cp-sd-06a1-server-v5-read-migration-support-2026-10-07.md`.

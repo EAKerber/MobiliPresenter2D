@@ -1,6 +1,6 @@
 # Schema-driven UI consolidation roadmap — 2026-10-06
 
-Status: canonical planning track for consolidating schema ownership before production hierarchy publication. CP-SD-00 through CP-SD-05 are COMPLETE / PASS; CP-SD-06 is next at repository/authentication preflight.
+Status: canonical planning track for consolidating schema ownership before production hierarchy publication. CP-SD-00 through CP-SD-05 are COMPLETE / PASS; CP-SD-06 is IN PROGRESS with A0 preflight complete and A1 server support next.
 
 This track starts from the manually accepted PR #97 buyer baseline and the current repository state after the isolated Puxadores persistence hotfix. It is intentionally documentation-first: no runtime, schema-version, pricing, catalog, scene, asset or production-configuration behavior changes are part of CP-SD-00.
 
@@ -208,7 +208,7 @@ Gate:
 
 ### CP-SD-06 — production schema publication and legacy retirement
 
-Status: **READY / NEXT — PREFLIGHT FIRST**. Immediate checkpoint: `docs/backlog/schema-driven-ui-cp-sd-06a0-production-v5-publication-preflight-2026-10-07.md`. A0 is repository/readiness work only; no production write is authorized without a fresh interactive authenticated session.
+Status: **IN PROGRESS**. CP-SD-06A0 repository publication preflight is COMPLETE / PASS. Immediate checkpoint: `docs/backlog/schema-driven-ui-cp-sd-06a1-server-v5-read-migration-support-2026-10-07.md`. A1 remains repository-only; no production write is authorized.
 
 Goal: hand the consolidated contract back into the authenticated CP-UX-05 publication boundary.
 

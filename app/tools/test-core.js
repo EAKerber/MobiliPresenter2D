@@ -956,6 +956,7 @@ const publicNames = [
   assert.equal(publicNames.includes(term), false, term);
 });
 
+
 process.stdout.write(JSON.stringify({
   passed: true,
   initialFingerprint,
