@@ -68,7 +68,57 @@ assert.deepEqual(modules.groups.map((group) => ({ id: group.id, span: group.span
   { id: "modules-main", span: 2 }
 ]);
 assert.equal(modules.groups[0].sections[0].component, "selection-list");
-assert.equal(layout.stageLayout(flow, "summary").groups[0].sections[0].component, "action-list");
+const summary = layout.stageLayout(flow, "summary");
+assert.deepEqual(summary.groups.map((group) => ({ id: group.id, span: group.span })), [
+  { id: "summary-main", span: 2 }
+]);
+assert.deepEqual(layout.semanticSectionIds(summary), ["summary"]);
+assert.deepEqual(layout.semanticItemIds(summary), ["summary"]);
+assert.equal(summary.groups[0].sections[0].behavior, "action");
+assert.equal(summary.groups[0].sections[0].keyboard, false);
+assert.equal(summary.groups[0].sections[0].component, "action-list");
+
+assert.deepEqual(
+  layout.validateBindings(summary, {
+    groupIds: ["summary-main"],
+    sectionIds: ["summary"],
+    sectionComponents: { summary: "action-list" }
+  }),
+  [],
+  "complete Summary binding satisfies the normalized layout"
+);
+assert.ok(
+  layout.validateBindings(summary, {
+    groupIds: [],
+    sectionIds: ["summary"],
+    sectionComponents: { summary: "action-list" }
+  }).some((error) => error.code === "missing-group-binding" && error.groupId === "summary-main"),
+  "missing Summary group binding fails closed"
+);
+assert.ok(
+  layout.validateBindings(summary, {
+    groupIds: ["summary-main"],
+    sectionIds: [],
+    sectionComponents: { summary: "action-list" }
+  }).some((error) => error.code === "missing-section-binding" && error.sectionId === "summary"),
+  "missing Summary section binding fails closed"
+);
+assert.ok(
+  layout.validateBindings(summary, {
+    groupIds: ["summary-main"],
+    sectionIds: ["summary"],
+    sectionComponents: {}
+  }).some((error) => error.code === "missing-component-binding" && error.sectionId === "summary"),
+  "missing Summary component binding fails closed"
+);
+assert.ok(
+  layout.validateBindings(summary, {
+    groupIds: ["summary-main"],
+    sectionIds: ["summary"],
+    sectionComponents: { summary: "toggle-list" }
+  }).some((error) => error.code === "component-binding-mismatch" && error.sectionId === "summary"),
+  "wrong Summary component binding fails closed"
+);
 
 const moduleViews = layout.moduleViewLayout(flow);
 assert.equal(moduleViews.error, null);
