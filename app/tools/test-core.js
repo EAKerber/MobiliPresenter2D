@@ -505,6 +505,13 @@ assert.equal(indexHtml.includes('data-keyboard-section="stone-skirting"'), false
 assert.equal(indexHtml.includes('id="stoneSkirtingSectionHeading"'), false, "Stone Skirting heading identity is no longer static");
 assert.equal(indexHtml.includes(">Rodapé de pedra</h3>"), false, "Stone Skirting section heading copy comes from normalized data");
 assert.equal(indexHtml.includes('data-flow-slot-item="stone-skirting"'), true, "Stone Skirting neutral slot declares item affinity without owning the section");
+assert.equal(/id="summaryPanel"[^>]*data-render-component="action-list"/.test(indexHtml), false, "Summary stage root no longer owns the action-list binding");
+assert.equal(indexHtml.includes('data-flow-group-grid="summary"'), true, "Summary stage exposes a normalized-flow group grid");
+assert.equal(indexHtml.includes('data-flow-slot-item="summary"'), true, "Summary neutral slot declares summary item affinity");
+assert.equal(indexHtml.includes('data-flow-section-heading-class="sr-only"'), true, "Summary semantic heading remains accessible without duplicate visible copy");
+assert.equal((indexHtml.match(/id="summaryContent"/g) || []).length, 1, "Summary domain content host remains unique");
+assert.equal(appJs.includes("validateSingleSectionStageBinding"), false, "Summary special-case single-section binding helper is retired");
+assert.equal(appJs.includes("flowSectionHeadingClass"), true, "section shell builder supports a generic optional heading class hook");
 assert.equal(indexHtml.includes('data-flow-item-id="lighting-08"'), true, "specialized Lighting item adapter exposes stable flow ownership");
 assert.equal(indexHtml.includes('data-keyboard-section="lighting"'), false, "Lighting semantic section is no longer pre-authored in static HTML");
 assert.equal(indexHtml.includes('id="lightingSectionHeading"'), false, "Lighting heading identity is no longer static");

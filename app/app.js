@@ -164,16 +164,6 @@
     return [];
   }
 
-  function validateSingleSectionStageBinding(stageId, stageRoot) {
-    const plan = flowLayout.stageLayout(normalizedFlow, stageId);
-    if (!plan || !stageRoot) return [];
-    const sections = plan.groups.flatMap((group) => group.sections);
-    if (sections.length !== 1) {
-      return [{ code: "single-section-binding-required", stageId, message: `expected one semantic section for ${stageId}` }];
-    }
-    return validateRendererComponentBinding(stageId, sections[0], stageRoot);
-  }
-
   function validateCustomStageBindings() {
     const errors = [];
     (normalizedFlow?.stages || []).filter((stage) => stage.kind === "custom" && stage.enabled).forEach((stage) => {
@@ -300,6 +290,8 @@
       element.dataset.flowGeneratedSection = "true";
       const heading = document.createElement("h3");
       heading.id = `flowSectionHeading-${stageId}-${section.id}`;
+      const headingClassName = String(slot.dataset.flowSectionHeadingClass || "").trim();
+      if (headingClassName) heading.className = headingClassName;
       heading.textContent = section.label;
       element.setAttribute("aria-labelledby", heading.id);
       slot.hidden = false;
@@ -389,7 +381,7 @@
       ...mountStageGroups("finishes", finishesStagePanel),
       ...mountStageGroups("services", servicesPanel),
       ...mountModuleViewPanes(),
-      ...validateSingleSectionStageBinding("summary", summaryPanel),
+      ...mountStageGroups("summary", summaryPanel),
       ...validateCustomStageBindings()
     ];
     setFlowLayoutErrors(errors);

@@ -79,8 +79,24 @@ const { chromium } = require("playwright");
     "stone-skirting": "toggle-list",
     lighting: "toggle-list",
     "additional-services": "toggle-list",
-    summaryPanel: "action-list"
+    summary: "action-list"
   }, "buyer renderer bindings expose the executable presentation contract");
+
+  const generatedSummary = page.locator('[data-keyboard-section="summary"]');
+  assert.equal(
+    await generatedSummary.getAttribute("data-flow-generated-section"),
+    "true",
+    "Summary semantic section shell is created from normalized flow"
+  );
+  assert.equal(await generatedSummary.getAttribute("data-keyboard-behavior"), "action", "generated Summary behavior comes from normalized flow");
+  assert.equal(await generatedSummary.getAttribute("data-render-component"), "action-list", "generated Summary component comes from normalized flow");
+  assert.equal(await generatedSummary.locator("h3").textContent(), "Resumo", "generated Summary semantic heading comes from normalized flow label");
+  assert.equal(await generatedSummary.locator("h3").getAttribute("class"), "sr-only", "Summary semantic heading is accessible without duplicating visible stage copy");
+  assert.equal(await generatedSummary.locator("#summaryContent").count(), 1, "Summary domain content host belongs to the generated semantic section");
+  assert.equal(await page.locator("#summaryContent").count(), 1, "Summary domain content host remains unique");
+  assert.equal(await page.locator("#summaryHeading").textContent(), "Sua composição", "accepted visible Summary stage heading is preserved");
+  assert.deepEqual(await stageGroupOrder("summary"), await modelGroupOrder("summary"), "Summary group order comes from normalized flow");
+  assert.deepEqual(await renderedSectionOrder("summary-main"), await modelSectionOrder("summary", "summary-main"), "Summary section order follows normalized flow");
 
   await page.locator("#moduleList [data-select-entity]").first().click();
   await page.waitForFunction(() => document.body.classList.contains("has-module-detail"));
