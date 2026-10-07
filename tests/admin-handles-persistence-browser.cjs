@@ -51,8 +51,8 @@ function type(filePath) {
 
 function adminHarness() {
   const source = fs.readFileSync(path.join(appRoot, "admin.html"), "utf8");
-  const moduleTag = '<script type="module" src="admin/admin.bundle.js?v=admin-hierarchy-v7"></script>';
-  assert.equal(source.includes(moduleTag), true);
+  const moduleTag = '<script type="module" src="admin/admin.bundle.js?v=admin-affordance-v1"></script>';
+  assert.equal(source.includes(moduleTag), true, "Puxadores harness expects the current admin bundle revision");
   return source.replace(
     moduleTag,
     '<script type="importmap">{"imports":{"@netlify/identity":"/__identity_stub__.js"}}</script><script type="module" src="admin/admin.js"></script>'

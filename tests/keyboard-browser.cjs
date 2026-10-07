@@ -490,9 +490,56 @@ const {chromium} = require('playwright');
 
   assert.deepEqual(errors, [], 'browser console must remain clean');
   await page.screenshot({path: path.join(output, 'keyboard-stage-navigation.png'), fullPage: true, animations: 'disabled'});
+
+  const adminPage = await browser.newPage({viewport: {width: 760, height: 760}});
+  const adminErrors = [];
+  adminPage.on('pageerror', error => adminErrors.push(error.message));
+  adminPage.on('console', message => { if (message.type() === 'error') adminErrors.push(message.text()); });
+  const adminUrl = new URL('admin.html', targetUrl).href;
+  await adminPage.goto(adminUrl, {waitUntil: 'domcontentloaded'});
+  await adminPage.waitForSelector('[data-password-reveal="passwordInput"]');
+
+  const assertRevealRoundTrip = async (inputSelector, buttonSelector, value) => {
+    const input = adminPage.locator(inputSelector);
+    const button = adminPage.locator(buttonSelector);
+    await input.fill(value);
+    assert.equal(await input.getAttribute('type'), 'password', 'password field starts concealed');
+    assert.equal(await button.getAttribute('aria-pressed'), 'false', 'reveal control starts unpressed');
+    await button.focus();
+    await adminPage.keyboard.press('Enter');
+    assert.equal(await input.getAttribute('type'), 'text', 'Enter reveals the password field');
+    assert.equal(await input.inputValue(), value, 'revealing preserves the password value');
+    assert.equal(await button.getAttribute('aria-pressed'), 'true', 'reveal control reports the visible state');
+    assert.equal(await button.getAttribute('aria-label'), 'Ocultar senha', 'revealed state exposes the hide action');
+    await adminPage.keyboard.press('Space');
+    assert.equal(await input.getAttribute('type'), 'password', 'Space conceals the password field again');
+    assert.equal(await input.inputValue(), value, 'concealing preserves the password value');
+    assert.equal(await button.getAttribute('aria-pressed'), 'false', 'reveal control returns to unpressed');
+    assert.equal(await button.getAttribute('aria-label'), 'Mostrar senha', 'concealed state exposes the reveal action');
+  };
+
+  await assertRevealRoundTrip('#passwordInput', '[data-password-reveal="passwordInput"]', 'senha-login-teste');
+  await adminPage.evaluate(() => {
+    document.getElementById('loginForm').hidden = true;
+    document.getElementById('passwordActionForm').hidden = false;
+  });
+  await assertRevealRoundTrip('#newPasswordInput', '[data-password-reveal="newPasswordInput"]', 'senha-nova-teste');
+  assert.equal(await adminPage.locator('#passwordInput').getAttribute('autocomplete'), 'current-password',
+    'login password autocomplete remains unchanged');
+  assert.equal(await adminPage.locator('#newPasswordInput').getAttribute('autocomplete'), 'new-password',
+    'new password autocomplete remains unchanged');
+  assert.equal(await adminPage.locator('#newPasswordInput').getAttribute('minlength'), '8',
+    'new password minimum length remains unchanged');
+
+  await adminPage.screenshot({path: path.join(output, 'admin-password-reveal.png'), fullPage: true, animations: 'disabled'});
+  assert.deepEqual(adminErrors, [], 'admin password reveal page remains console-clean without authenticating');
+  await adminPage.close();
+
   fs.writeFileSync(path.join(output, 'result.json'), JSON.stringify({
     status: 'PASS',
     targetUrl,
+    adminUrl,
+    passwordReveal: true,
     finishSections,
     serviceSections
   }, null, 2));

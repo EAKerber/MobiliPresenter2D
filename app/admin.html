@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="robots" content="noindex, nofollow" />
     <title>Administração — Casa em Módulos</title>
-    <link rel="stylesheet" href="admin/admin.css?v=admin-hierarchy-v2" />
+    <link rel="stylesheet" href="admin/admin.css?v=admin-affordance-v1" />
   </head>
   <body>
     <header class="admin-topbar">
@@ -22,12 +22,24 @@
         <p class="intro">Entre com uma conta administrativa convidada para editar as etapas e os itens disponíveis no configurador.</p>
         <form id="loginForm" class="admin-form">
           <label>E-mail<input id="emailInput" name="email" type="email" autocomplete="username" required /></label>
-          <label>Senha<input id="passwordInput" name="password" type="password" autocomplete="current-password" required /></label>
+          <div class="admin-field">
+            <label for="passwordInput">Senha</label>
+            <div class="password-field">
+              <input id="passwordInput" name="password" type="password" autocomplete="current-password" required />
+              <button class="password-reveal" type="button" data-password-reveal="passwordInput" aria-controls="passwordInput" aria-pressed="false" aria-label="Mostrar senha" title="Mostrar senha">Mostrar</button>
+            </div>
+          </div>
           <div class="auth-actions"><button class="button button--primary" type="submit">Entrar</button><button id="recoveryButton" class="text-button" type="button">Esqueci minha senha</button></div>
         </form>
         <form id="passwordActionForm" class="admin-form" hidden>
           <p id="passwordActionTitle" class="intro"></p>
-          <label>Nova senha<input id="newPasswordInput" type="password" autocomplete="new-password" minlength="8" required /></label>
+          <div class="admin-field">
+            <label for="newPasswordInput">Nova senha</label>
+            <div class="password-field">
+              <input id="newPasswordInput" type="password" autocomplete="new-password" minlength="8" required />
+              <button class="password-reveal" type="button" data-password-reveal="newPasswordInput" aria-controls="newPasswordInput" aria-pressed="false" aria-label="Mostrar senha" title="Mostrar senha">Mostrar</button>
+            </div>
+          </div>
           <button id="passwordActionButton" class="button button--primary" type="submit">Salvar senha</button>
         </form>
         <p id="loginMessage" class="message" aria-live="polite"></p>
@@ -83,6 +95,6 @@
     <script src="core/hierarchy-editor.js?v=hierarchy-v3"></script>
     <script src="core/legacy-stage-repair.js?v=cp-ux-05a0-v1"></script>
     <script src="core/runtime-contracts.js?v=runtime-contracts-v2"></script>
-    <script type="module" src="admin/admin.bundle.js?v=admin-hierarchy-v7"></script>
+    <script type="module" src="admin/admin.bundle.js?v=admin-affordance-v1"></script>
   </body>
 </html>
