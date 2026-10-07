@@ -9,6 +9,109 @@ const { chromium } = require("playwright");
   fs.mkdirSync(output, { recursive: true });
 
   const browser = await chromium.launch({ headless: true });
+  const targetUrl = process.env.MOBILE_INTERACTIONS_URL ||
+    pathToFileURL(path.resolve(__dirname, "../app/index.html")).href;
+
+  const stackedContext = await browser.newContext({
+    viewport: { width: 1050, height: 900 },
+    deviceScaleFactor: 1
+  });
+  const stackedPage = await stackedContext.newPage();
+  const stackedErrors = [];
+  stackedPage.on("pageerror", error => stackedErrors.push(error.message));
+  stackedPage.on("console", message => {
+    if (message.type() === "error") stackedErrors.push(message.text());
+  });
+  await stackedPage.goto(targetUrl);
+  await stackedPage.evaluate(() => Promise.all(Array.from(document.images, image => image.decode())));
+  assert.equal(await stackedPage.evaluate(() => window.CASA_EM_MODULOS_DEBUG.getLayoutProfile()), "stacked",
+    "1050px resolves through the canonical stacked profile");
+  assert.equal(await stackedPage.evaluate(() => document.documentElement.dataset.layoutProfile), "stacked",
+    "stacked viewport exposes the canonical profile marker");
+  assert.equal(await stackedPage.evaluate(() => window.CASA_EM_MODULOS_DEBUG.getPresentationPolicy().scene.pip.activationByProfile.stacked), "manual",
+    "stacked PiP activation is owned by the presentation policy");
+
+  await stackedPage.evaluate(() => {
+    const sentinel = document.getElementById("viewerPinSentinel");
+    window.scrollTo(0, sentinel.getBoundingClientRect().top + window.scrollY + 180);
+  });
+  await stackedPage.waitForTimeout(80);
+  assert.equal(await stackedPage.evaluate(() => document.body.classList.contains("is-mobile-scene-pinned")), false,
+    "stacked manual PiP does not auto-open after the scene anchor is passed");
+
+  const stackedLauncher = stackedPage.locator("#mobileSceneRepin");
+  assert.equal(await stackedLauncher.isVisible(), true,
+    "stacked manual PiP exposes the existing Fixar cena launcher while closed");
+  await stackedLauncher.focus();
+  await stackedLauncher.click();
+  await stackedPage.waitForFunction(() =>
+    document.body.classList.contains("is-mobile-scene-pinned")
+    && document.activeElement?.id === "mobileScenePin"
+  );
+  assert.equal(await stackedPage.locator("#viewerCard").evaluate(element => getComputedStyle(element).position), "fixed",
+    "stacked manual activation projects the existing viewer as fixed PiP");
+  assert.equal(await stackedPage.locator("#mobileSceneTransparency").isVisible(), true,
+    "stacked PiP reuses the transparency control");
+  assert.equal(await stackedPage.locator("#mobileSceneResizeHandle").isVisible(), true,
+    "stacked PiP reuses the resize handle");
+
+  const stackedCard = stackedPage.locator("#viewerCard");
+  const stackedWidthBefore = (await stackedCard.boundingBox()).width;
+  await stackedPage.locator("#mobileSceneResize").click();
+  await stackedPage.waitForTimeout(50);
+  const stackedWidthAfter = (await stackedCard.boundingBox()).width;
+  assert(stackedWidthAfter > stackedWidthBefore + 20,
+    "stacked PiP reuses the existing size control");
+  await stackedPage.locator("#mobileSceneTransparency").click();
+  assert.equal(await stackedPage.evaluate(() => document.body.classList.contains("is-mobile-scene-transparent")), true,
+    "stacked PiP reuses the transparency state");
+
+  await stackedPage.locator('[data-select-scene-entity="module-03"]').click();
+  await stackedPage.waitForFunction(() => window.CASA_EM_MODULOS_DEBUG.getState().selectedEntityId === "module-03");
+  assert.equal(await stackedPage.evaluate(() => document.body.classList.contains("is-mobile-scene-pinned")), true,
+    "stacked PiP scene hotspots keep the PiP open");
+  await stackedPage.locator("[data-close-module-detail]").click();
+  await stackedPage.waitForFunction(() => window.CASA_EM_MODULOS_DEBUG.getState().selectedEntityId === null);
+  await stackedPage.locator("#mobileScenePin").focus();
+  await stackedPage.locator("#mobileScenePin").click();
+  await stackedPage.waitForFunction(() =>
+    !document.body.classList.contains("is-mobile-scene-pinned")
+    && !document.getElementById("mobileSceneRepin").hidden
+    && document.activeElement?.id === "mobileSceneRepin"
+  );
+
+  await stackedLauncher.click();
+  await stackedPage.waitForFunction(() =>
+    document.body.classList.contains("is-mobile-scene-pinned")
+    && document.activeElement?.id === "mobileScenePin"
+  );
+  await stackedPage.setViewportSize({ width: 390, height: 844 });
+  await stackedPage.waitForFunction(() =>
+    document.documentElement.dataset.layoutProfile === "compact"
+    && document.body.classList.contains("is-mobile-scene-pinned")
+  );
+  await stackedPage.setViewportSize({ width: 1050, height: 900 });
+  await stackedPage.waitForFunction(() =>
+    document.documentElement.dataset.layoutProfile === "stacked"
+    && document.body.classList.contains("is-mobile-scene-pinned")
+  );
+  await stackedPage.locator("#mobileScenePin").focus();
+  await stackedPage.setViewportSize({ width: 1366, height: 900 });
+  await stackedPage.waitForFunction(() =>
+    document.documentElement.dataset.layoutProfile === "side-rail"
+    && !document.body.classList.contains("is-mobile-scene-pinned")
+    && document.activeElement?.matches?.(".flow-nav [data-step]")
+  );
+  await stackedPage.setViewportSize({ width: 1050, height: 900 });
+  await stackedPage.waitForFunction(() =>
+    document.documentElement.dataset.layoutProfile === "stacked"
+    && !document.body.classList.contains("is-mobile-scene-pinned")
+    && !document.getElementById("mobileSceneRepin").hidden
+  );
+  await stackedPage.screenshot({ path: path.join(output, "stacked-pip.png"), fullPage: true, animations: "disabled" });
+  assert.deepEqual(stackedErrors, []);
+  await stackedContext.close();
+
   const context = await browser.newContext({
     viewport: { width: 390, height: 844 },
     isMobile: true,
@@ -22,8 +125,6 @@ const { chromium } = require("playwright");
     if (message.type() === "error") errors.push(message.text());
   });
 
-  const targetUrl = process.env.MOBILE_INTERACTIONS_URL ||
-    pathToFileURL(path.resolve(__dirname, "../app/index.html")).href;
   await page.goto(targetUrl);
   await page.evaluate(() => Promise.all(Array.from(document.images, image => image.decode())));
   assert.equal(await page.evaluate(() => window.CASA_EM_MODULOS_DEBUG.getLayoutProfile()), "compact",
@@ -143,6 +244,15 @@ const { chromium } = require("playwright");
     selectedAfterControl: afterControlSelection,
     selectedAfterHotspot: "module-03",
     pipPinnedAfterDetail: true,
+    stacked: {
+      manualActivation: true,
+      noAnchorAutoOpen: true,
+      supportedProfileRoundTrip: true,
+      closesOnSideRail: true,
+      widthBefore: stackedWidthBefore,
+      widthAfter: stackedWidthAfter,
+      pageErrors: stackedErrors
+    },
     resize: {
       beforeWidth: beforeResize.width,
       afterWidth: afterResize.width,

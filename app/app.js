@@ -2199,14 +2199,22 @@
     return profile;
   }
 
-  function isMobileViewport() {
-    return currentLayoutProfile() === "compact";
+  function scenePipMode(profile = currentLayoutProfile()) {
+    const pip = presentationPolicy.scene?.pip;
+    const available = Boolean(pip?.availableProfiles?.includes(profile));
+    return {
+      profile,
+      available,
+      activation: available ? pip.activationByProfile?.[profile] || null : null
+    };
   }
 
   function syncPinnedSceneUi() {
-    const shouldDock = isMobileViewport() && mobileScenePinEnabled && mobileSceneIsMini;
+    const mode = scenePipMode();
+    const shouldDock = mode.available && mobileScenePinEnabled && mobileSceneIsMini;
+    const focusedPipControl = document.activeElement?.closest?.(".viewer-pip-controls");
     if (!shouldDock && viewerCard) mobileSceneAnchorHeight = Math.ceil(viewerCard.getBoundingClientRect().height);
-    document.body.classList.toggle("has-mobile-scene-pin", isMobileViewport() && mobileScenePinEnabled);
+    document.body.classList.toggle("has-mobile-scene-pin", mode.available && mobileScenePinEnabled);
     document.body.classList.toggle("is-mobile-scene-pinned", shouldDock);
     document.body.classList.toggle("is-mobile-scene-transparent", shouldDock && mobileSceneTransparent);
     document.documentElement.style.setProperty("--mobile-scene-anchor-height", shouldDock ? mobileSceneAnchorHeight + "px" : "0px");
@@ -2235,7 +2243,17 @@
     if (mobileSceneTransparency) {
       mobileSceneTransparency.setAttribute("aria-pressed", String(mobileSceneTransparent));
     }
-    if (mobileSceneRepin) mobileSceneRepin.hidden = mobileScenePinEnabled;
+    if (mobileSceneRepin) {
+      const manualLauncherVisible = mode.available && mode.activation === "manual" && !shouldDock;
+      const autoRepinVisible = mode.available && mode.activation === "auto-after-anchor" && !mobileScenePinEnabled;
+      mobileSceneRepin.hidden = !(manualLauncherVisible || autoRepinVisible);
+    }
+    if (!shouldDock && focusedPipControl) {
+      requestAnimationFrame(() => {
+        if (mobileSceneRepin && !mobileSceneRepin.hidden) mobileSceneRepin.focus();
+        else flowNav?.querySelector(`[data-step="${currentStep}"]`)?.focus();
+      });
+    }
     if (lastResolved) updateSceneHotspots(lastResolved);
   }
 
@@ -2246,20 +2264,39 @@
     announce(mobileScenePinEnabled ? "Cena fixada para contexto durante a configuração." : "Cena liberada para o fluxo normal.");
   }
 
-  function refreshMobileSceneDock() {
+  function refreshMobileSceneDock(profile = currentLayoutProfile()) {
+    const mode = scenePipMode(profile);
+    if (!mode.available || mode.activation !== "auto-after-anchor") return;
     const passedAnchor = Boolean(viewerAnchor && viewerAnchor.getBoundingClientRect().bottom < 0);
-    const nextMini = Boolean(isMobileViewport() && mobileScenePinEnabled && passedAnchor);
+    const nextMini = Boolean(mobileScenePinEnabled && passedAnchor);
     if (nextMini === mobileSceneIsMini) return;
     mobileSceneIsMini = nextMini;
     syncPinnedSceneUi();
     if (nextMini) announce("Mini-cena disponível abaixo das etapas. Selecione um módulo diretamente na cena.");
   }
 
+  function activateScenePipFromLauncher() {
+    const mode = scenePipMode();
+    if (!mode.available) return;
+    mobileScenePinEnabled = true;
+    if (mode.activation === "manual") {
+      mobileSceneIsMini = true;
+      syncPinnedSceneUi();
+      requestAnimationFrame(() => mobileScenePin?.focus());
+      announce("Mini-cena fixada para contexto durante a configuração.");
+      return;
+    }
+    refreshMobileSceneDock(mode.profile);
+    syncPinnedSceneUi();
+  }
+
   if (viewerPinSentinel && global.IntersectionObserver) {
     const pinObserver = new global.IntersectionObserver((entries) => {
+      const mode = scenePipMode();
+      if (!mode.available || mode.activation !== "auto-after-anchor") return;
       const entry = entries[0];
       const passedAnchor = entry && entry.boundingClientRect.top < 0 && !entry.isIntersecting;
-      const nextMini = Boolean(isMobileViewport() && mobileScenePinEnabled && passedAnchor);
+      const nextMini = Boolean(mobileScenePinEnabled && passedAnchor);
       if (nextMini === mobileSceneIsMini) return;
       mobileSceneIsMini = nextMini;
       syncPinnedSceneUi();
@@ -2273,9 +2310,17 @@
   }
 
   global.addEventListener("resize", () => {
-    syncLayoutProfileMarker();
+    const previousProfile = document.documentElement.dataset.layoutProfile || currentLayoutProfile();
+    const previousMode = scenePipMode(previousProfile);
+    const wasOpen = previousMode.available && mobileSceneIsMini;
+    const profile = syncLayoutProfileMarker();
+    const nextMode = scenePipMode(profile);
+    const profileChanged = profile !== previousProfile;
     if (mobilePipPosition) mobilePipPosition = null;
-    refreshMobileSceneDock();
+    if (!nextMode.available) mobileSceneIsMini = false;
+    else if (profileChanged && previousMode.available && wasOpen) mobileSceneIsMini = true;
+    else if (nextMode.activation === "auto-after-anchor") refreshMobileSceneDock(profile);
+    else if (profileChanged && !previousMode.available) mobileSceneIsMini = false;
     syncPinnedSceneUi();
   });
   global.addEventListener("scroll", refreshMobileSceneDock, { passive: true });
@@ -2547,7 +2592,7 @@
   });
 
   mobileScenePin?.addEventListener("click", () => setMobileScenePinEnabled(!mobileScenePinEnabled));
-  mobileSceneRepin?.addEventListener("click", () => setMobileScenePinEnabled(true));
+  mobileSceneRepin?.addEventListener("click", activateScenePipFromLauncher);
   mobileSceneTransparency?.addEventListener("click", () => {
     mobileSceneTransparent = !mobileSceneTransparent;
     syncPinnedSceneUi();
