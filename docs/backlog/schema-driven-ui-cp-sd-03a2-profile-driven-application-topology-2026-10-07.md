@@ -1,6 +1,6 @@
 # CP-SD-03A2 — profile-driven application topology — 2026-10-07
 
-Status: **IN PROGRESS — IMPLEMENTATION CANDIDATE**.
+Status: **COMPLETE / PASS**.
 
 Parent:
 - CP-SD-03A0 responsive presentation discovery — PASS;
@@ -202,4 +202,17 @@ Additional proof:
 
 No production configuration write.
 
-Gate pending: all eight repository workflows + Netlify preview.
+Gate result:
+- App build purity — PASS;
+- Current variant fidelity — PASS;
+- Current asset gates — PASS;
+- Flow layout browser — PASS;
+- Keyboard browser — PASS;
+- Mobile browser — PASS;
+- Stone browser — PASS;
+- Summary/Pricing browser — PASS;
+- Netlify deploy preview #133 — PASS.
+
+Functional head: `538860e1b0a3f6905c48ffbe950284746ff28c72`.
+
+Decision: A2 passes. The canonical layout-profile marker is now the sole owner of application-level side-rail / stacked / compact topology decisions. PiP fixed-state behavior, persistent dock behavior and local component-fit queries remain deliberately separate. No production configuration write.
