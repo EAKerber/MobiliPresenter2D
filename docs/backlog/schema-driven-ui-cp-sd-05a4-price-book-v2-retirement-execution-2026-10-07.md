@@ -1,6 +1,6 @@
 # CP-SD-05A4 — PriceBook 2.0 + residual legacy pricing retirement — 2026-10-07
 
-Status: **IN PROGRESS / FUNCTIONAL PATCH COMPLETE; ADMIN BROWSER RETRY REQUIRED**.
+Status: **COMPLETE / PASS**.
 
 Parent:
 - CP-SD-05A0 discovery — COMPLETE / PASS.
@@ -226,3 +226,46 @@ On corrected head `bd7846f0adb55dfcc90c67961a7bdbe18334ccb9`:
 - Admin hierarchy browser remained blocked in Playwright installation and had not executed either hierarchy administration or isolated Puxadores tests.
 
 This checkpoint intentionally creates a fresh PR head for a clean Admin browser attempt. Do not mark A4 or CP-SD-05 COMPLETE until Admin hierarchy and isolated Puxadores execute successfully.
+
+
+## Final result
+
+CP-SD-05A4 is COMPLETE / PASS.
+
+Canonical pricing authority after A4:
+
+- public price source: `CommercialEstimatePriceBook 2.0`;
+- numeric rule contract: `CommercialPricingRules 1.0`;
+- buyer runtime: typed roles + allocation only;
+- unpublished v5/admin model: typed pricing only;
+- current v3 pricing buckets: explicit compatibility payload inside `configuration.js`, published-v3 migration/projection seams and compatibility tests only.
+
+Implementation result:
+
+- PriceBook 2.0 carries the exact historical commercial values under typed roles and no parallel top-level legacy buckets;
+- projecting its typed pricing produces the historical PriceBook 1.1/v3 pricing object exactly;
+- current v3 defaults generated from PriceBook 2.0 are value-identical to the previous defaults;
+- a non-v3-representable typed price source fails closed in the v3 compatibility core;
+- buyer handle, stone and service price copy reads typed roles;
+- module-detail fallback now calls `pricing.itemEstimate(..., pricingRules)`;
+- buyer no longer overlays published legacy pricing back into a mutable PriceBook;
+- admin initializes catalog pricing directly from `priceBook.pricing`;
+- current published v3 documents still migrate exactly through the named compatibility seam;
+- no calculator formula, rounding rule, commercial default, handle allocation, hierarchy or presentation behavior changed.
+
+Cache revisions:
+
+- buyer runtime: `runtime-v38`;
+- v3 configuration core: `admin-config-v8`;
+- admin PriceBook source: `admin-data-v4`;
+- admin bundle: `admin-pricing-v3`.
+
+Gate history:
+
+- the first functional head exposed stale static `runtime-v37` expectations in runtime/test gates; only those expectations were advanced to v38;
+- corrected functional head `bd7846f0adb55dfcc90c67961a7bdbe18334ccb9` passed eight of nine workflows plus Netlify; Admin remained blocked before tests during Playwright installation;
+- documentation retry head `104d3c6893223383602736ccf882cd0e09816fac` changed no runtime and passed all nine workflows plus Netlify deploy preview #150, including Admin hierarchy and isolated Puxadores persistence.
+
+No production configuration write and no v5 publication occurred.
+
+With A4 complete, **CP-SD-05 typed pricing is COMPLETE / PASS**. Next: CP-SD-06A0 repository/authentication preflight only.
