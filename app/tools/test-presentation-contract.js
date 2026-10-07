@@ -25,6 +25,12 @@ assert.equal(presentation.resolveSectionComponent({ presentation: "list", behavi
 assert.equal(presentation.resolveSectionComponent({ presentation: "list", behavior: "toggle" }), "toggle-list");
 assert.equal(presentation.resolveSectionComponent({ presentation: "auto", behavior: "action" }), "action-list");
 assert.equal(presentation.resolveSectionComponent({ component: "choice-grid", presentation: "raw-css", behavior: "selection" }), "choice-grid");
+assert.equal(presentation.componentBehavior("choice-grid"), "selection");
+assert.equal(presentation.componentBehavior("toggle-list"), "toggle");
+assert.equal(presentation.componentSupportsBehavior("action-list", "action"), true);
+assert.equal(presentation.componentSupportsBehavior("choice-cards", "toggle"), false);
+assert.equal(presentation.legacyPresentationForComponent("choice-swatches"), "swatches");
+assert.equal(presentation.legacyPresentationForComponent("selection-list"), "list");
 
 assert.throws(
   () => presentation.resolveSectionComponent({ presentation: "raw-css", behavior: "selection" }),
