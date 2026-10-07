@@ -99,12 +99,10 @@
       if (!owner || owner.section.itemIds.length <= 1 || owner.group.sections.some((section) => section.id === sectionId)) return false;
       owner.section.itemIds.splice(owner.itemIndex, 1);
       const sourceIndex = owner.group.sections.indexOf(owner.section);
-      owner.group.sections.splice(sourceIndex + 1, 0, {
-        id: sectionId,
-        label,
-        presentation,
-        itemIds: [itemId]
-      });
+      const nextSection = { id: sectionId, label, itemIds: [itemId] };
+      if (component) nextSection.component = component;
+      else nextSection.presentation = presentation;
+      owner.group.sections.splice(sourceIndex + 1, 0, nextSection);
       return true;
     });
   }
