@@ -610,7 +610,74 @@ const { chromium } = require("playwright");
   assert.deepEqual(stoneNegativeErrors, [], "Stone absence fixture has no console/page errors");
   await stoneNegativePage.close();
 
-  fs.writeFileSync(path.join(output, "result.json"), JSON.stringify({ targetUrl, uniqueness, errors, negativeErrors, lightingNegativeErrors, frontsNegativeErrors, handlesNegativeErrors, stoneNegativeErrors }, null, 2));
+  const withoutSkirting = structuredClone(sourceConfiguration);
+  const skirtingFinishesStage = withoutSkirting.stages.find((stage) => (stage.kind || stage.id) === "finishes");
+  assert.ok(skirtingFinishesStage, "Stone Skirting absence fixture has Acabamentos stage");
+  skirtingFinishesStage.items = skirtingFinishesStage.items.filter((id) => id !== "stone-skirting");
+  if (Array.isArray(withoutSkirting.initialState?.services)) {
+    withoutSkirting.initialState.services = withoutSkirting.initialState.services.filter((id) => id !== "stone-skirting");
+  }
+
+  const skirtingNegativeErrors = [];
+  const skirtingNegativePage = await browser.newPage({ viewport: { width: 1366, height: 900 } });
+  skirtingNegativePage.on("pageerror", (error) => skirtingNegativeErrors.push(error.message));
+  skirtingNegativePage.on("console", (message) => { if (message.type() === "error") skirtingNegativeErrors.push(message.text()); });
+  await skirtingNegativePage.route("**/api/configuration", async (route) => {
+    if (route.request().method() !== "GET") return route.continue();
+    await route.fulfill({
+      status: 200,
+      contentType: "application/json",
+      body: JSON.stringify(withoutSkirting)
+    });
+  });
+  await skirtingNegativePage.goto(targetUrl, { waitUntil: "domcontentloaded", timeout: 15000 });
+  await skirtingNegativePage.waitForFunction(() => {
+    const finishes = window.CASA_NORMALIZED_FLOW?.stages?.find((stage) => stage.id === "finishes");
+    const stone = finishes?.groups?.find((group) => group.id === "stone");
+    const sectionIds = stone?.sections?.map((section) => section.id) || [];
+    return stone
+      && sectionIds.includes("stone-packages")
+      && !sectionIds.includes("stone-skirting")
+      && window.CASA_EM_MODULOS_DEBUG?.getFlowLayoutErrors;
+  }, null, { timeout: 10000 });
+
+  await skirtingNegativePage.locator('.flow-nav [data-step="finishes"]').click();
+  await skirtingNegativePage.waitForFunction(() => !document.getElementById("finishesStagePanel").hidden);
+
+  assert.equal(
+    await skirtingNegativePage.locator('[data-keyboard-section="stone-packages"]').count(),
+    1,
+    "Stone Packages remains materialized when Stone Skirting is omitted"
+  );
+  assert.equal(
+    await skirtingNegativePage.locator('[data-keyboard-section="stone-packages"]').isVisible(),
+    true,
+    "Stone Packages remains visible when Stone Skirting is omitted"
+  );
+  assert.equal(
+    await skirtingNegativePage.locator('[data-keyboard-section="stone-skirting"]').count(),
+    0,
+    "omitted Stone Skirting data creates no semantic Stone Skirting section shell"
+  );
+  assert.equal(
+    await skirtingNegativePage.locator('[data-flow-section-slot][data-flow-slot-item="stone-skirting"]').isHidden(),
+    true,
+    "unclaimed Stone Skirting item-affinity slot stays hidden"
+  );
+  assert.equal(
+    await skirtingNegativePage.locator("#stonePanel").isVisible(),
+    true,
+    "Stone group remains visible while stone-all / Stone Packages remain modeled"
+  );
+  assert.deepEqual(
+    await skirtingNegativePage.evaluate(() => window.CASA_EM_MODULOS_DEBUG.getFlowLayoutErrors()),
+    [],
+    "intentional Stone Skirting absence creates no renderer fallback"
+  );
+  assert.deepEqual(skirtingNegativeErrors, [], "Stone Skirting absence fixture has no console/page errors");
+  await skirtingNegativePage.close();
+
+  fs.writeFileSync(path.join(output, "result.json"), JSON.stringify({ targetUrl, uniqueness, errors, negativeErrors, lightingNegativeErrors, frontsNegativeErrors, handlesNegativeErrors, stoneNegativeErrors, skirtingNegativeErrors }, null, 2));
   await browser.close();
   console.log("flow layout browser: PASS");
 })().catch((error) => {

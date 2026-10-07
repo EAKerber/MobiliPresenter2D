@@ -1,6 +1,6 @@
 # CP-SD-02A2d4 — Stone Skirting section shell — 2026-10-07
 
-Status: **IN PROGRESS — A2d4.1 PASS; A2d4.2 NEXT**.
+Status: **IN PROGRESS — A2d4.1 PASS; A2d4.2 CANDIDATE**.
 
 Parent:
 - CP-SD-02A2d0 Acabamentos family discovery;
@@ -158,3 +158,22 @@ Gate:
 - Netlify deploy preview #121 — PASS.
 
 A2d4.2 remains a separate schema-valid absence proof.
+
+
+## A2d4.2 absence-proof candidate
+
+Test-only fixture:
+- keep `stone-all` in Acabamentos;
+- remove `stone-skirting` from Acabamentos stage items;
+- remove `stone-skirting` from `initialState.services`, making the absence intentional so `repairSkirtingStageContract()` must not restore it;
+- leave Stone material authority/catalog/pricing unchanged.
+
+Prove:
+- normalized Stone group remains present;
+- generated Stone Packages remains present and visible;
+- normalized Stone group has no `stone-skirting` section;
+- no semantic Stone Skirting shell exists;
+- the unclaimed Stone Skirting neutral slot remains hidden;
+- no renderer invariant/fallback/page errors occur.
+
+This proves section/UI absence independently from Stone material availability without introducing material independence.
