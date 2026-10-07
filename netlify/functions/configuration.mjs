@@ -3,11 +3,17 @@ import { getUser } from "@netlify/identity";
 import configCore from "../../app/core/configuration.js";
 import administrationV5 from "../../app/core/administration-v5.js";
 import publishedReader from "../../app/core/published-configuration.js";
+import v5Migration from "../../app/core/v5-publication-migration.js";
+import flow from "../../app/core/flow-model.js";
+import hierarchyDefaults from "../../app/data/hierarchy-defaults.js";
 import legacyStageRepair from "../../app/core/legacy-stage-repair.js";
 import defaults from "../../app/data/configurator-settings.js";
 import catalog from "../../app/data/catalog-data.js";
 import priceBook from "../../app/data/mock-price-book.js";
 import scene from "../../app/data/scene-data.js";
+
+// Explicit repository activation boundary. Never enable as part of A1b.
+const V5_MIGRATION_ENABLED = false;
 
 const cacheHeaders = {
   "Cache-Control": "no-store, max-age=0",
@@ -68,6 +74,18 @@ export default async (request, context) => {
     return respond({ error: "invalid_json" }, 400);
   }
 
+  const operation = request.headers.get("x-configuration-operation") || "";
+  if (operation === "publish-v5-migration") {
+    if (!V5_MIGRATION_ENABLED) return respond({ error: "v5_migration_disabled" }, 403);
+    const result = await v5Migration.publishV5Migration({
+      store, payload,
+      sourceDigest: request.headers.get("x-configuration-source-digest"),
+      runtime: { configuration: configCore, v5Core: administrationV5, flow, catalog, priceBook, scene, hierarchyDefaults, legacyStageRepair }
+    });
+    if (!result.ok) return respond({ error: result.code }, result.status);
+    return respond(result);
+  }
+
   const currentRead = await readPublished(store);
   if (currentRead.kind === "invalid") {
     return respond({ error: "stored_configuration_invalid", code: currentRead.code }, 409);
@@ -80,7 +98,6 @@ export default async (request, context) => {
   const current = currentRead.value;
   if (payload?.revision !== current.revision) return respond({ error: "revision_conflict", currentRevision: current.revision }, 409);
 
-  const operation = request.headers.get("x-configuration-operation") || "";
   if (operation === "persist-handles-all") {
     const delta = legacyStageRepair.verifyHandlesOnlyDelta(current, payload, configCore.SCHEMA);
     if (!delta.ok) {
