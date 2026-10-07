@@ -51,7 +51,7 @@ function type(filePath) {
 
 function adminHarness() {
   const source = fs.readFileSync(path.join(appRoot, "admin.html"), "utf8");
-  const moduleTag = '<script type="module" src="admin/admin.bundle.js?v=admin-hierarchy-v4"></script>';
+  const moduleTag = '<script type="module" src="admin/admin.bundle.js?v=admin-hierarchy-v5"></script>';
   assert.equal(source.includes(moduleTag), true);
   return source.replace(
     moduleTag,

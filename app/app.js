@@ -1694,7 +1694,7 @@
     })];
     catalog.options.stonePackages = stone.materialIds.map((id) => {
       const material = materials.get(id); const old = previousStone.get(id);
-      return { ...old, id, label: material.label, description: old?.description || "Acabamento compartilhado entre bancada e rodapé.", color: material.color, swatchColor: material.color, textureAsset: material.textureAsset || null, textureScale: 1 };
+      return { ...old, id, label: material.label, description: old?.description || "Acabamento compartilhado entre bancada e rodapé.", color: material.color, swatchColor: material.color ?? old?.swatchColor ?? null, textureAsset: material.textureAsset || null, textureScale: 1 };
     });
     const frontGroup = scene.finishGroups.find((item) => item.id === "fronts-all");
     if (frontGroup) {
@@ -1864,10 +1864,17 @@
 
   function changeStep(nextStep, moveFocus) {
     if (!enabledStages().some((stage) => stage.id === nextStep)) return;
+    const focusOrigin = document.activeElement;
     currentStep = nextStep;
+    const focusStep = currentStep;
     global.CASA_KEYBOARD_SHORTCUTS?.resetStageNavigation?.(currentStep);
     syncLayerVisibility();
-    if (moveFocus) requestAnimationFrame(focusCurrentStep);
+    if (moveFocus) requestAnimationFrame(() => {
+      if (currentStep !== focusStep) return;
+      const active = document.activeElement;
+      if (active && active !== focusOrigin && !flowNav?.contains(active)) return;
+      focusCurrentStep();
+    });
   }
 
   renderSceneFromData();

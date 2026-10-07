@@ -862,11 +862,14 @@ function renderMaterials() {
   materialPageIndex = Math.min(materialPageIndex, pages - 1);
   model.materials.slice(materialPageIndex * MATERIALS_PER_PAGE, (materialPageIndex + 1) * MATERIALS_PER_PAGE).forEach((material) => {
     const card = document.createElement("article"); card.className = "editor-card material-editor-card"; card.dataset.materialId = material.id;
-    const chip = document.createElement("span"); chip.className = "material-chip"; chip.style.backgroundColor = material.color; if (material.textureAsset) chip.style.backgroundImage = `url("${material.textureAsset}")`;
+    const chip = document.createElement("span"); chip.className = "material-chip"; chip.style.backgroundColor = material.color || "transparent"; if (material.textureAsset) chip.style.backgroundImage = `url("${material.textureAsset}")`;
     const title = document.createElement("h2"); title.textContent = material.label;
     card.append(chip, title, makeField("Nome", material.label, "materialLabel"));
     const colorLabel = document.createElement("label"); colorLabel.className = "data-field"; colorLabel.append(document.createTextNode("Cor base"));
-    const color = document.createElement("input"); color.type = "color"; color.value = material.color; color.dataset.materialColor = "true"; colorLabel.append(color); card.append(colorLabel);
+    const color = document.createElement("input"); color.type = "color"; color.value = material.color || "#b7b0a7"; color.disabled = material.color === null; color.dataset.materialColor = "true"; colorLabel.append(color); card.append(colorLabel);
+    const noColorLabel = document.createElement("label"); noColorLabel.className = "data-field";
+    const noColor = document.createElement("input"); noColor.type = "checkbox"; noColor.checked = material.color === null; noColor.disabled = material.kind !== "texture"; noColor.dataset.materialNoColor = "true";
+    noColorLabel.append(noColor, document.createTextNode(" Sem cor/tinta base")); card.append(noColorLabel);
     const kindLabel = document.createElement("label"); kindLabel.className = "data-field"; kindLabel.append(document.createTextNode("Tipo de material"));
     const kind = document.createElement("select"); kind.dataset.materialKind = "true";
     [["color", "Cor sólida"], ["texture", "Textura"]].forEach(([value, text]) => { const option = document.createElement("option"); option.value = value; option.textContent = text; kind.append(option); });
@@ -1189,7 +1192,14 @@ materialsList.addEventListener("change", (event) => {
   const card = event.target.closest("[data-material-id]"); if (!card) return;
   const material = model.materials.find((item) => item.id === card.dataset.materialId); if (!material) return;
   if (event.target.matches("[data-material-texture]")) material.textureAsset = event.target.value;
-  if (event.target.matches("[data-material-kind]")) material.kind = event.target.value;
+  if (event.target.matches("[data-material-no-color]")) {
+    const colorInput = card.querySelector("[data-material-color]");
+    material.color = event.target.checked ? null : (colorInput?.value || "#b7b0a7");
+  }
+  if (event.target.matches("[data-material-kind]")) {
+    material.kind = event.target.value;
+    if (material.kind === "color" && material.color === null) material.color = "#b7b0a7";
+  }
   if (event.target.matches("[data-material-target]")) setMaterialTarget(event.target.dataset.materialTargetId, event.target.dataset.materialTarget, event.target.checked);
   renderFinishes(); renderMaterials(); renderMaterialGroups(); renderPricing();
 });

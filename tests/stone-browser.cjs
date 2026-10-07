@@ -133,6 +133,13 @@ const {chromium} = require('playwright');
   assert(defaultContract.items.includes('stone-skirting'), 'default finishes stage must expose stone skirting');
   assert.equal(defaultContract.skirtingHidden, false, 'stone skirting control must be visible');
 
+  const stoneExistingSwatch = await page.locator('[data-stone-package-id="stone-existing"] .global-option__swatch').evaluate(element => ({
+    backgroundColor: getComputedStyle(element).backgroundColor,
+    backgroundImage: getComputedStyle(element).backgroundImage
+  }));
+  assert.equal(stoneExistingSwatch.backgroundColor, 'rgb(183, 176, 167)',
+    'null authored stone color keeps the catalog swatch fallback as display-only metadata');
+
   const repairProbe = await page.evaluate(() => {
     const legacy = {
       stages: [
