@@ -1,6 +1,6 @@
 # CP-SD-02A2d1 — generated Fronts section shell — 2026-10-07
 
-Status: **READY / NEXT**.
+Status: **IN PROGRESS — A2d1.1 implementation candidate**.
 
 Parent discovery:
 - `docs/architecture/schema-driven-ui-cp-sd-02a2d0-finishes-family-discovery-result-2026-10-07.md`.
@@ -29,6 +29,19 @@ Gate:
 - existing swatches and selected-description host remain under the generated section;
 - Handles/Stone unchanged;
 - no renderer errors.
+
+#### A2d1.1 candidate
+
+Implemented as a deliberately narrow shell migration:
+- static Fronts section id/heading/behavior/component ownership removed from HTML;
+- one neutral `choice-swatches` slot now carries only item affinity `fronts-all`;
+- the existing swatch and selected-description hosts remain intact inside a bounded `data-flow-item-id="fronts-all"` adapter;
+- a generic `flow-item-stack` presentation class preserves the previous internal 8px stack spacing;
+- normalized flow is expected to materialize the semantic Fronts shell;
+- source and Flow-layout positive proof were added;
+- shared runtime cache revision advanced from v19 to v20.
+
+Focused CI/deploy proof is pending. A2d1.2 must remain a separate negative-fixture commit.
 
 ### A2d1.2 — negative Fronts absence proof
 

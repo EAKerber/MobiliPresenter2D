@@ -96,6 +96,25 @@ const { chromium } = require("playwright");
   assert.deepEqual(await stageGroupOrder("finishes"), await modelGroupOrder("finishes"), "Acabamentos group order comes from normalized flow");
   assert.deepEqual(await renderedSectionOrder("cabinet-finishes"), await modelSectionOrder("finishes", "cabinet-finishes"), "cabinet section order follows normalized flow");
   assert.deepEqual(await renderedSectionOrder("stone"), await modelSectionOrder("finishes", "stone"), "stone section order follows normalized flow");
+  const generatedFronts = page.locator('[data-keyboard-section="fronts"]');
+  assert.equal(
+    await generatedFronts.getAttribute("data-flow-generated-section"),
+    "true",
+    "Fronts section shell is created from normalized flow"
+  );
+  assert.equal(await generatedFronts.getAttribute("data-keyboard-behavior"), "selection", "generated Fronts behavior comes from normalized flow");
+  assert.equal(await generatedFronts.getAttribute("data-render-component"), "choice-swatches", "generated Fronts component comes from normalized flow");
+  assert.equal(await generatedFronts.locator("h3").textContent(), "Cor das frentes", "generated Fronts heading comes from normalized flow label");
+  assert.equal(
+    await generatedFronts.locator('[data-flow-item-id="fronts-all"] #finishSwatches').count(),
+    1,
+    "Fronts swatch adapter remains owned by the generated semantic section"
+  );
+  assert.equal(
+    await generatedFronts.locator('[data-flow-item-id="fronts-all"] #selectedFinishDescription').count(),
+    1,
+    "Fronts selected-description adapter remains owned by the generated semantic section"
+  );
   const cabinet = await rect('[data-flow-group-shell="cabinet-finishes"]');
   const stone = await rect('[data-flow-group-shell="stone"]');
   assert.ok(stone.top >= cabinet.bottom - 2, "while controls are beside the scene, Acabamentos remains one column");
