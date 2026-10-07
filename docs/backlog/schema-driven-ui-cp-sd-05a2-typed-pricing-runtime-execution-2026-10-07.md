@@ -1,6 +1,6 @@
 # CP-SD-05A2 — typed pricing runtime execution — 2026-10-07
 
-Status: **READY / NEXT**.
+Status: **COMPLETE / PASS**.
 
 Parent:
 - CP-SD-05A0 typed pricing discovery — COMPLETE / PASS.
@@ -191,3 +191,32 @@ If buyer typed migration requires changing the admin persistence model, stop and
 If a legacy value cannot migrate exactly, stop rather than compensating in calculator code.
 
 If a current total changes, treat it as a regression unless the old result is proven incorrect by an existing product rule; no such correction is authorized in A2.
+
+
+## Result
+
+Implemented on PR #147:
+
+- buyer now loads `CommercialPricingRules 1.0` before the calculator;
+- initial and published legacy v3 pricing are migrated once through `pricingContract.upgradeLegacy()`;
+- `app/core/pricing.js` consumes only typed roles + allocation metadata for numeric calculation;
+- legacy bucket names no longer encode numeric meaning inside the calculator;
+- estimate label/disclaimer remain metadata outside the typed numeric contract;
+- front-finish amount rules and percentage rules are both executable;
+- percentage keeps `eligible-module-base` and per-module `Math.round` before summation;
+- current handle remainder allocation is preserved exactly;
+- shared buyer runtime cache advanced coherently to `runtime-v37`.
+
+Gate corrections were compatibility-test maintenance, not commercial behavior changes:
+
+- the shared runtime cache gate required all buyer runtime assets to advance together to v37;
+- the bootstrap-order gate was updated to declare `pricing-contract.js` before `pricing.js`;
+- one residual source assertion was updated from runtime-v36 to runtime-v37.
+
+Final head `22516cd3f4d5e8e3ace93c08eede780598ad3a65` passed all eight repository workflows plus Netlify deploy preview #147.
+
+Pinned compatibility includes the 874000-cent default, 99000-cent cocoa finish total, exact 17985-cent Tango distribution, local/global charges, summary/current-value synchronization, synthetic per-module percentage rounding (4 cents rather than subtotal 3) and fixed finish amount once per eligible visible module.
+
+No admin authoring shape, persisted production configuration or publication policy changed in A2.
+
+Next: `docs/backlog/schema-driven-ui-cp-sd-05a3a-v5-typed-pricing-ownership-execution-2026-10-07.md`.

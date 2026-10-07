@@ -17,7 +17,9 @@
   const flowLayout = global.CasaModulesFlowLayout;
   const hierarchyDefaults = global.CASA_EM_MODULOS_HIERARCHY_DEFAULTS;
   let priceBook = structuredClone(global.CASA_EM_MODULOS_PRICE_BOOK);
+  const pricingContract = global.CasaModulesPricingContract;
   const pricing = global.CasaModulesPricing;
+  let pricingRules = null;
   let configuratorSettings = global.CASA_EM_MODULOS_CONFIGURATOR_DEFAULTS;
   let finishSettings = new Map(catalog.options.finishes.map((finish) => [finish.id, { scope: "global", enabled: finish.status === "published", moduleIds: catalog.modules.map((module) => module.entityId) }]));
   let dynamicDependencies = [];
@@ -27,7 +29,7 @@
   let flowLayoutErrors = [];
   let initialStateApplied = false;
 
-  if (!scene || !inlineMasks || !core || !visibility || !validation || !fingerprint || !finishes || !catalog || !priceBook || !pricing || !configurationCore || !flowCore || !layoutProfiles || !presentationCore || !presentationPolicy || !flowLayout || !hierarchyDefaults || !configuratorSettings) {
+  if (!scene || !inlineMasks || !core || !visibility || !validation || !fingerprint || !finishes || !catalog || !priceBook || !pricingContract || !pricing || !configurationCore || !flowCore || !layoutProfiles || !presentationCore || !presentationPolicy || !flowLayout || !hierarchyDefaults || !configuratorSettings) {
     throw new Error("Não foi possível carregar os dados da cena 2D.");
   }
   validation.assertValidScene(scene);
@@ -41,6 +43,7 @@
   }
 
   const initialAdministration = configurationCore.createDefaultAdministration(configuratorSettings, catalog, priceBook, scene);
+  pricingRules = pricingContract.upgradeLegacy(initialAdministration.pricing);
   dynamicDependencies = initialAdministration.dependencies;
   dynamicEvents = initialAdministration.events;
   configuredObjectAssets = initialAdministration.objectAssets;
@@ -1847,7 +1850,10 @@
       const serviceOmitted = (entity.id === "tempered-glass" || entity.id === "lighting-08") && !itemAvailable(entity.id);
       if (moduleOmitted || serviceOmitted) configuredVisibility[entity.id] = { visible: false, reason: "not-configured" };
     });
-    return pricing.calculatePublicEstimate(scene, activeState, catalog, configuredVisibility, priceBook);
+    return pricing.calculatePublicEstimate(scene, activeState, catalog, configuredVisibility, pricingRules, {
+      label: priceBook.label,
+      disclaimer: priceBook.disclaimer
+    });
   }
 
   function renderCurrentValue(resolved) {
@@ -2033,6 +2039,7 @@
         if (Object.hasOwn(object, "label")) object.label = data.title;
       }
     });
+    pricingRules = pricingContract.upgradeLegacy(normalized.pricing);
     priceBook = { ...priceBook, ...normalized.pricing };
     finishSettings = new Map(normalized.finishes.map((item) => [item.id, item]));
     applyMaterialLibrary(normalized);

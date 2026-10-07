@@ -48,7 +48,7 @@ Canonical plan:
 - completed audit: `docs/architecture/schema-ui-authority-audit-2026-10-06.md`
 - completed contract checkpoint: `docs/backlog/schema-driven-ui-cp-sd-01-contract-plan-2026-10-06.md`
 - next track: CP-SD-05 typed pricing, executed discovery-first as small self-contained contract/runtime/admin slices
-- next checkpoint: `docs/backlog/schema-driven-ui-cp-sd-05a2-typed-pricing-runtime-execution-2026-10-07.md`
+- next checkpoint: `docs/backlog/schema-driven-ui-cp-sd-05a3a-v5-typed-pricing-ownership-execution-2026-10-07.md`
 
 **CP-SD-00 — COMPLETE / PASS.** The audit found no critical unknowns. The main publication blocker is now explicit: v4 persists section presentation metadata, but that metadata is not yet the executable buyer-renderer authority.
 
@@ -224,3 +224,6 @@ A4 gate correction: the first Flow run falsified the assumption that stable pane
 
 
 **CP-SD-05A1 — COMPLETE / PASS.** A pure `CommercialPricingRules 1.0` core now owns typed role capabilities, strict validation, exact legacy bucket migration and fail-closed legacy projection. Front-finish amount is valid typed state but intentionally cannot project to v3/v4. Current buyer/admin/runtime behavior is untouched because the new core is not yet loaded by either surface. Functional head `1650debf4727acde900f72ac58ab0456fd36dfd3` passed all six path-triggered workflows plus Netlify preview #146. **CP-SD-05A2 is NEXT**: migrate buyer calculation authority to typed rules while retaining v3 buckets only as compatibility input.
+
+
+**CP-SD-05A2 — COMPLETE / PASS.** Buyer numeric pricing authority now consumes `CommercialPricingRules 1.0`; legacy v3 buckets remain only the configuration compatibility input and estimate metadata carrier. The calculator no longer reads legacy bucket names, executes both finish amount and percentage rules, preserves per-module percentage rounding and exact handle allocation, and keeps summary/current value unchanged. Shared buyer runtime cache is `runtime-v37`. Final head `22516cd3f4d5e8e3ace93c08eede780598ad3a65` passed all eight workflows plus Netlify preview #147. **CP-SD-05A3a is NEXT**: move the live v5/admin model to typed pricing ownership while preserving the current admin UI behavior; the amount/percentage selector is split into A3b.
