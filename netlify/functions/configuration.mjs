@@ -1,10 +1,32 @@
 import { getDeployStore, getStore } from "@netlify/blobs";
 import { getUser } from "@netlify/identity";
 import configCore from "../../app/core/configuration.js";
+import flowCore from "../../app/core/flow-model.js";
+import v5Core from "../../app/core/administration-v5.js";
 import legacyStageRepair from "../../app/core/legacy-stage-repair.js";
 import defaults from "../../app/data/configurator-settings.js";
+import hierarchyDefaults from "../../app/data/hierarchy-defaults.js";
 import catalog from "../../app/data/catalog-data.js";
 import priceBook from "../../app/data/mock-price-book.js";
+import scene from "../../app/data/scene-data.js";
+import {
+  executeV5Migration,
+  readPublishedForGet
+} from "../lib/configuration-publication.mjs";
+
+const V5_MIGRATION_ENABLED = false;
+
+const publicationDeps = Object.freeze({
+  configCore,
+  flowCore,
+  v5Core,
+  legacyStageRepair,
+  defaults,
+  hierarchyDefaults,
+  catalog,
+  priceBook,
+  scene
+});
 
 const cacheHeaders = {
   "Cache-Control": "no-store, max-age=0",
@@ -19,11 +41,7 @@ function getConfigurationStore(context) {
 }
 
 async function readPublished(store) {
-  const base = configCore.createDefaultAdministration(defaults, catalog, priceBook);
-  const published = await store.get("published", { type: "json" });
-  if (!published) return base;
-  try { return configCore.normalizeConfiguratorSettings(published, catalog, priceBook); }
-  catch { return base; }
+  return (await readPublishedForGet(store, publicationDeps)).value;
 }
 
 export default async (request, context) => {
@@ -32,7 +50,16 @@ export default async (request, context) => {
   }
 
   const store = getConfigurationStore(context);
-  if (request.method === "GET") return respond(await readPublished(store));
+  if (request.method === "GET") {
+    try {
+      return respond(await readPublished(store));
+    } catch (error) {
+      return respond({
+        error: "invalid_stored_configuration",
+        message: error instanceof TypeError ? error.message : "Stored configuration is invalid"
+      }, 500);
+    }
+  }
 
   const user = await getUser();
   const roles = [...(user?.roles || []), ...(user?.app_metadata?.roles || [])];
@@ -51,10 +78,35 @@ export default async (request, context) => {
     return respond({ error: "invalid_json" }, 400);
   }
 
+  const operation = request.headers.get("x-configuration-operation") || "";
+  if (operation === "publish-v5-migration") {
+    const result = await executeV5Migration({
+      store,
+      payload,
+      sourceDigest: request.headers.get("x-configuration-source-digest") || "",
+      enabled: V5_MIGRATION_ENABLED,
+      deps: publicationDeps
+    });
+    if (!result.ok) {
+      return respond({
+        error: result.code,
+        message: result.message,
+        ...(result.currentRevision == null ? {} : { currentRevision: result.currentRevision }),
+        ...(result.currentDigest == null ? {} : { currentDigest: result.currentDigest })
+      }, result.status || 422);
+    }
+    return respond({ configuration: result.value, evidence: result.evidence });
+  }
+
   const current = await readPublished(store);
+  if (current?.schemaVersion === v5Core.SCHEMA) {
+    return respond({
+      error: "v5_normal_publication_disabled",
+      message: "Stored v5 is read-only until the normal v5 publication checkpoint is activated."
+    }, 422);
+  }
   if (payload?.revision !== current.revision) return respond({ error: "revision_conflict", currentRevision: current.revision }, 409);
 
-  const operation = request.headers.get("x-configuration-operation") || "";
   if (operation === "persist-handles-all") {
     const delta = legacyStageRepair.verifyHandlesOnlyDelta(current, payload, configCore.SCHEMA);
     if (!delta.ok) {
