@@ -1,6 +1,6 @@
 # CP-SD-02A0 — residual semantic-renderer inventory — 2026-10-07
 
-Status: **IN PROGRESS**.
+Status: **COMPLETE / PASS**.
 
 Parent:
 - `docs/backlog/schema-driven-ui-consolidation-roadmap-2026-10-06.md`
@@ -77,3 +77,11 @@ Candidate selection is made from A0 evidence, favoring the smallest family with:
 - a negative fixture can prove “missing data = no UI”.
 
 Do not combine Modules companion, PiP, bottom dock, pricing or interaction polish into CP-SD-02A1.
+
+
+## Completion record
+
+PASS. The concrete matrix is persisted in:
+- `docs/architecture/schema-driven-ui-cp-sd-02a0-renderer-inventory-2026-10-07.md`.
+
+The audit selected **CP-SD-02A1 — stage navigation source cleanup** as the next smallest code checkpoint.
