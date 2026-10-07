@@ -40,17 +40,38 @@
     return behaviors.size === 1 ? [...behaviors][0] : null;
   }
 
-  function migrationBehavior(stage, section, registry, hierarchyDefaults) {
+  function templateSectionForItem(stage, itemId, itemKind, hierarchyDefaults) {
     const kind = stage.kind || stage.id;
+    if (kind === "custom") return hierarchyDefaults?.customStage?.section || null;
     const template = hierarchyDefaults?.stages?.[stage.id] || hierarchyDefaults?.stages?.[kind];
-    const templateSection = template?.groups
+    return template?.groups
       ?.flatMap((group) => group.sections || [])
+      .find((section) =>
+        section.itemMode === "all"
+        || (section.itemIds || []).includes(itemId)
+        || (section.itemKinds || []).includes(itemKind)
+      ) || null;
+  }
+
+  function defaultSectionBehavior(stage, itemId, configurationCore, catalog, hierarchyDefaults) {
+    const registry = configurationCore.itemRegistry(catalog);
+    const itemKind = registry.get(itemId);
+    const templateSection = templateSectionForItem(stage, itemId, itemKind, hierarchyDefaults);
+    return templateSection?.behavior || itemCapabilities.behaviorForKind(itemKind);
+  }
+
+  function migrationBehavior(stage, section, registry, hierarchyDefaults) {
+    const explicitTemplate = (hierarchyDefaults?.stages?.[stage.id] || hierarchyDefaults?.stages?.[stage.kind || stage.id])
+      ?.groups?.flatMap((group) => group.sections || [])
       .find((entry) => entry.id === section.id);
-    if (templateSection?.behavior) return templateSection.behavior;
-    if (kind === "custom" && hierarchyDefaults?.customStage?.section?.behavior) {
-      return hierarchyDefaults.customStage.section.behavior;
-    }
-    return sectionBehavior(section, registry);
+    if (explicitTemplate?.behavior) return explicitTemplate.behavior;
+
+    const behaviors = new Set((section?.itemIds || []).map((itemId) => {
+      const itemKind = registry.get(itemId);
+      const templateSection = templateSectionForItem(stage, itemId, itemKind, hierarchyDefaults);
+      return templateSection?.behavior || itemCapabilities.behaviorForKind(itemKind);
+    }).filter(Boolean));
+    return behaviors.size === 1 ? [...behaviors][0] : null;
   }
 
   function stageToV4(stage) {
@@ -295,7 +316,8 @@
     validate,
     toV4,
     projectToLegacy,
-    publicationSignature
+    publicationSignature,
+    defaultSectionBehavior
   });
 
   if (typeof module !== "undefined" && module.exports) module.exports = api;
