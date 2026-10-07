@@ -197,15 +197,17 @@
         (group.sections || []).forEach((section) => {
           const path = `${stage.id}.${section.id}`;
           if (Object.hasOwn(section, "presentation")) errors.push(`legacy section presentation is not allowed: ${path}`);
+          if (!["selection", "toggle", "action"].includes(section.behavior)) {
+            errors.push(`invalid section behavior: ${path}`);
+          }
           try {
             presentationCore.assertComponent(section.component);
           } catch {
             errors.push(`invalid section component: ${path}`);
             return;
           }
-          const behavior = sectionBehavior(section, registry);
-          if (!behavior) return;
-          if (!presentationCore.componentSupportsBehavior(section.component, behavior)) {
+          if (["selection", "toggle", "action"].includes(section.behavior)
+            && !presentationCore.componentSupportsBehavior(section.component, section.behavior)) {
             errors.push(`component behavior mismatch: ${path}`);
           }
         });
@@ -219,14 +221,14 @@
     return [...new Set(errors)];
   }
 
-  function fromV4(value, configurationCore, catalog, priceBook, scene) {
+  function fromV4(value, configurationCore, catalog, priceBook, scene, hierarchyDefaults = null) {
     const v4Errors = hierarchyV4.validateHierarchyAdministration(value, configurationCore, catalog, priceBook, scene);
     if (v4Errors.length) throw new TypeError(v4Errors.join("; "));
     const registry = configurationCore.itemRegistry(catalog);
     const candidate = {
       ...clone(value),
       schemaVersion: SCHEMA,
-      stages: value.stages.map((stage) => currentStageFromV4(stage, registry)),
+      stages: value.stages.map((stage) => currentStageFromV4(stage, registry, hierarchyDefaults)),
       presentationPolicy: clone(defaultPresentationPolicy)
     };
     const errors = validate(candidate, configurationCore, catalog, priceBook, scene);
@@ -244,7 +246,7 @@
     const v4 = value.schemaVersion === PREVIOUS_SCHEMA
       ? value
       : hierarchyV4.upgradeToHierarchy(value, configurationCore, flowCore, catalog, priceBook, scene, hierarchyDefaults);
-    return fromV4(v4, configurationCore, catalog, priceBook, scene);
+    return fromV4(v4, configurationCore, catalog, priceBook, scene, hierarchyDefaults);
   }
 
   function projectToLegacy(value, configurationCore, flowCore, catalog, priceBook, scene, hierarchyDefaults = null) {
