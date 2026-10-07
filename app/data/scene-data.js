@@ -349,4 +349,5 @@
   };
 
   global.CASA_EM_MODULOS_SCENE = deepFreeze(scene);
-})(window);
+  if (typeof module !== "undefined" && module.exports) module.exports = scene;
+})(typeof window === "undefined" ? globalThis : window);
