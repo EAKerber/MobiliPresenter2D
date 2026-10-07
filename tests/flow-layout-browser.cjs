@@ -115,6 +115,25 @@ const { chromium } = require("playwright");
     1,
     "Fronts selected-description adapter remains owned by the generated semantic section"
   );
+  const generatedHandles = page.locator('[data-keyboard-section="handles"]');
+  assert.equal(
+    await generatedHandles.getAttribute("data-flow-generated-section"),
+    "true",
+    "Handles section shell is created from normalized flow"
+  );
+  assert.equal(await generatedHandles.getAttribute("data-keyboard-behavior"), "selection", "generated Handles behavior comes from normalized flow");
+  assert.equal(await generatedHandles.getAttribute("data-render-component"), "choice-grid", "generated Handles component comes from normalized flow");
+  assert.equal(await generatedHandles.locator("h3").textContent(), "Puxadores", "generated Handles heading comes from normalized flow label");
+  assert.equal(
+    await generatedHandles.locator('[data-flow-item-id="handles-all"] #handleHelp').count(),
+    1,
+    "Handles help adapter remains owned by the generated semantic section"
+  );
+  assert.equal(
+    await generatedHandles.locator('[data-flow-item-id="handles-all"] #handleOptions').count(),
+    1,
+    "Handles options adapter remains owned by the generated semantic section"
+  );
   const cabinet = await rect('[data-flow-group-shell="cabinet-finishes"]');
   const stone = await rect('[data-flow-group-shell="stone"]');
   assert.ok(stone.top >= cabinet.bottom - 2, "while controls are beside the scene, Acabamentos remains one column");

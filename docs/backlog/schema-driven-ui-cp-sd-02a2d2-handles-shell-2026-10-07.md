@@ -1,6 +1,6 @@
 # CP-SD-02A2d2 — generated Handles section shell — 2026-10-07
 
-Status: **IN PROGRESS — A2d2.0 PASS; A2d2.1 NEXT**.
+Status: **IN PROGRESS — A2d2.0 PASS; A2d2.1 CANDIDATE**.
 
 Parent:
 - `docs/architecture/schema-driven-ui-cp-sd-02a2d0-finishes-family-discovery-result-2026-10-07.md`;
@@ -55,3 +55,19 @@ A2d2.1 exact boundary:
 - preserve `#handleHelp` and `#handleOptions`;
 - normalized flow owns section id, heading, behavior and component;
 - add positive source/Flow-layout proof only; absence fixture remains A2d2.2.
+
+
+## A2d2.1 implementation candidate
+
+Applied only the shell seam:
+- static Handles section id/heading/behavior/component removed from HTML;
+- outer neutral slot carries `choice-grid` + `handles-all` affinity and remains presentation-free/hidden until claimed;
+- inner `.handle-fieldset[data-flow-item-id="handles-all"]` preserves the 9px content rhythm, `#handleHelp` and `#handleOptions`;
+- normalized flow is expected to materialize the semantic Handles shell;
+- source and Flow-layout positive proof added;
+- obsolete `.finish-section.handle-fieldset` shell-specific gap rule removed because the rhythm now belongs to the inner adapter;
+- shared runtime cache revision advanced from v20 to v21.
+
+No changes to `app.js`, handle catalog, `handleId` state, pricing/rateio, scene, masks, Fronts or Stone semantics.
+
+A2d2.2 absence proof remains a separate checkpoint after A2d2.1 gates pass.
