@@ -1,6 +1,6 @@
 # CP-SD-05A3a — v5 typed pricing ownership execution — 2026-10-07
 
-Status: **READY / NEXT**.
+Status: **COMPLETE / PASS**.
 
 Parent:
 - CP-SD-05A0 typed pricing discovery — COMPLETE / PASS.
@@ -152,3 +152,28 @@ Current save behavior may continue to publish only when the complete v5 model is
 ## Next slice
 
 **CP-SD-05A3b** — expose the amount/percentage selector only for `frontFinishAdjustment`, derive allowed choices from `ROLE_CAPABILITIES`, show the explicit basis for percentage, and switch type without implicit numeric-unit conversion.
+
+
+## Result
+
+Implemented on PR #148:
+
+- unpublished `ConfiguratorAdministration2D 5.0` now owns `CommercialPricingRules 1.0` in its canonical `pricing` field;
+- v3/v4 imports migrate legacy buckets exactly through `pricingContract.upgradeLegacy()`;
+- v5 normalization validates/normalizes typed pricing;
+- v5 structural/catalog validation keeps existing identifier gates through a validation-only legacy-shaped surrogate, never used for calculation or publication;
+- v5 publication projects pricing through `pricingContract.projectToLegacy()` before the existing hierarchy/presentation losslessness proof;
+- valid front-finish amount rules are accepted by v5 but return `pricing_requires_publication` instead of being coerced to BPS;
+- typed pricing participates in the v5 publication signature;
+- admin pricing rows now render/edit typed role maps and derive BRL/% from each rule's own `type`;
+- material add/remove reconciliation writes typed rules;
+- no legacy bucket-name/type convention remains in the live admin model;
+- current admin UI intentionally has no type selector yet.
+
+The production build still generates `admin/admin.bundle.js` from `admin/admin.js` through the root esbuild command; no generated bundle is committed.
+
+Functional head `a39e416dfcdbe6ac0f137a92fad8aca562333d42` passed all seven path-triggered repository workflows plus Netlify deploy preview #148. Admin hierarchy browser also proved exact current typed amount/percentage edits project to v3 and the isolated Puxadores persistence path remains green.
+
+No v5 production publication or production configuration write was added.
+
+Next: `docs/backlog/schema-driven-ui-cp-sd-05a3b-admin-pricing-type-authoring-execution-2026-10-07.md`.
