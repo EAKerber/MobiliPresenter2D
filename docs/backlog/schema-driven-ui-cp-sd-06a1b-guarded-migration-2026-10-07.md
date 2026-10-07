@@ -1,6 +1,6 @@
 # CP-SD-06A1b — guarded v5 migration operation — 2026-10-07
 
-Status: **IMPLEMENTED IN DRAFT PR #154 / GATE PENDING — ACTIVATION OFF**.
+Status: **COMPLETE / PASS IN PR #154 — ACTIVATION OFF**.
 
 Parent: CP-SD-06A1a COMPLETE/PASS, merged PR #153.
 
@@ -45,7 +45,7 @@ Provider concern: a conditional-write acknowledgement may be unreliable under tr
 
 ## Gates
 
-Mark COMPLETE/PASS only after mocked-store unit tests, browser regression suites and deployment preview pass. **Do not activate or execute migration in A1b.**
+Gate PASS: functional commit `de50eea39ef9f3932ca6cf81a664583a6b939258` passed all 7 path-triggered GitHub workflows including App build purity with simulated migration cases. Netlify deploy preview #154 passed. Later commits only changed documentation. No production configuration was read or mutated; the activation flag remains false.
 
 ## After A1b
 
