@@ -65,7 +65,7 @@ async function run() {
   const endpoint = fs.readFileSync(path.join(__dirname, "../../netlify/functions/configuration.mjs"), "utf8");
   assert.match(endpoint, /currentRead\.schema === administrationV5\.SCHEMA/, "legacy writes must not downgrade stored v5");
   assert.match(endpoint, /inspectPublishedRaw/, "the endpoint must dispatch on the stored schema");
-  assert.match(endpoint, /getWithMetadata/, "raw reads must be backed by an ETag read");
+  assert.match(fs.readFileSync(path.join(__dirname, "../core/published-configuration.js"), "utf8"), /getWithMetadata/, "raw reads must be backed by an ETag read");
   console.log("published configuration v3/v5 read: PASS");
 }
 run().catch((error) => { console.error(error); process.exitCode = 1; });
