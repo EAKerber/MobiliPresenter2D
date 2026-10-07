@@ -174,11 +174,11 @@ const {chromium} = require('playwright');
   assert.equal(behaviorOverrideAttempt.find(section => section.keyboardSection === 'handles').behavior, 'selection', 'DOM behavior hints cannot override the normalized flow model');
   await page.evaluate(() => { document.querySelector('[data-keyboard-section="handles"]').dataset.keyboardBehavior = 'selection'; });
 
-  await page.evaluate(() => { document.querySelector('[data-keyboard-section="fronts"]').removeAttribute('data-flow-item-id'); });
+  await page.evaluate(() => { document.querySelector('[data-keyboard-section="fronts"] [data-flow-item-id="fronts-all"]').removeAttribute('data-flow-item-id'); });
   await sectionSnapshot();
   const missingOwnerErrors = await navigationErrors();
   assert.ok(missingOwnerErrors.some(entry => entry.code === 'missing-flow-item' && entry.itemId === 'fronts-all'), 'missing rendered model ownership is surfaced as an invariant error');
-  await page.evaluate(() => { document.querySelector('[data-keyboard-section="fronts"]').dataset.flowItemId = 'fronts-all'; });
+  await page.evaluate(() => { document.querySelector('[data-keyboard-section="fronts"] [data-flow-slot-item="fronts-all"]').dataset.flowItemId = 'fronts-all'; });
   await sectionSnapshot();
   assert.deepEqual(await navigationErrors(), [], 'restoring the flow ownership bridge clears invariant errors');
 

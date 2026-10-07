@@ -41,7 +41,13 @@ Implemented as a deliberately narrow shell migration:
 - source and Flow-layout positive proof were added;
 - shared runtime cache revision advanced from v19 to v20.
 
-Focused CI/deploy proof is pending. A2d1.2 must remain a separate negative-fixture commit.
+Focused gate progress:
+- App build purity, Current variant fidelity, Current asset gates, Flow layout, Mobile, Stone and Summary/Pricing passed on the A2d1.1 candidate;
+- the first Netlify preview failed operationally, then a no-tree-change retry succeeded;
+- Keyboard exposed a test-only stale assumption: its negative ownership mutation removed `data-flow-item-id` from the semantic section, but A2d1.1 intentionally moved ownership to the bounded Fronts item adapter;
+- the Keyboard fixture now removes/restores ownership on that actual adapter. Production code is unchanged by this correction.
+
+A2d1.1 remains pending the rerun of the corrected Keyboard/full gate. A2d1.2 must remain a separate negative-fixture commit.
 
 ### A2d1.2 — negative Fronts absence proof
 
