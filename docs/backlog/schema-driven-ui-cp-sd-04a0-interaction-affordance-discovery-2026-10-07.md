@@ -1,6 +1,6 @@
 # CP-SD-04A0 — interaction affordance discovery — 2026-10-07
 
-Status: **READY / NEXT — DISCOVERY ONLY**.
+Status: **COMPLETE / PASS**.
 
 Parent:
 - CP-SD-03 responsive presentation primitives — COMPLETE / PASS.
@@ -103,3 +103,18 @@ Split rather than expand if the smallest coherent change requires:
 - production configuration writes.
 
 No production configuration write.
+
+
+## Result
+
+Discovery completed without runtime changes.
+
+- Modules card: split into checkbox-only inclusion hit area + sibling inspection button occupying the visible body; preserve existing state/event/focus owners.
+- Password inventory: two live admin fields exist (`#passwordInput`, `#newPasswordInput`) and should use one admin-local accessible reveal pattern.
+- The two concerns are independent execution slices.
+
+Canonical result:
+- `docs/architecture/schema-driven-ui-cp-sd-04a0-interaction-affordance-discovery-result-2026-10-07.md`.
+
+Next:
+- `docs/backlog/schema-driven-ui-cp-sd-04a1-module-card-affordance-execution-2026-10-07.md`.
