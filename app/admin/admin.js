@@ -1174,6 +1174,7 @@ function baselineHierarchyFor(source) {
 
 function handlesRepairPlan(source = publishedSource) {
   if (!source || !legacyStageRepair) return null;
+  if (source.schemaVersion === hierarchyCore.SCHEMA) return { ok: true, needed: false };
   return legacyStageRepair.planHandlesAssignment(source, configurationCore.SCHEMA);
 }
 
@@ -1783,6 +1784,15 @@ persistHandlesButton.addEventListener("click", async () => {
 saveButton.addEventListener("click", async () => {
   saveButton.disabled = true;
   try {
+    if (publishedSource?.schemaVersion === hierarchyCore.SCHEMA) {
+      setMessage(
+        saveMessage,
+        "A configuração publicada já está em v5. Edição normal de v5 permanece bloqueada até o checkpoint de publicação contínua.",
+        "error"
+      );
+      return;
+    }
+
     const hierarchyValidation = hierarchyErrors(model);
     if (hierarchyValidation.length) throw new Error(hierarchyValidation[0]);
 
