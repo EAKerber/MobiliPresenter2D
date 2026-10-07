@@ -528,6 +528,12 @@ assert.equal(indexHtml.includes("data/hierarchy-defaults.js?v=hierarchy-defaults
 assert.equal(appJs.includes("publishNormalizedFlow"), true, "app publishes one normalized flow contract to navigation");
 assert.equal(appJs.includes("applyBuyerFlowLayout"), true, "buyer composition is mounted from normalized flow layout");
 assert.equal(indexHtml.includes('data-stage-view-layout="modules"'), true, "modules expose a view-level two-pane renderer contract");
+assert.equal((indexHtml.match(/data-stage-view-id="modules-list"/g) || []).length, 1, "Modules list has exactly one policy view adapter");
+assert.equal((indexHtml.match(/data-stage-view-id="modules-detail"/g) || []).length, 1, "Modules detail has exactly one policy view adapter");
+assert.equal(indexHtml.includes('data-stage-pane="list"'), true, "legacy Modules list pane hook remains during projection migration");
+assert.equal(indexHtml.includes('data-stage-pane="detail"'), true, "legacy Modules detail pane hook remains during projection migration");
+assert.equal(appJs.includes("applyModuleViewMarkers"), true, "Modules policy view records are projected onto stable pane adapters");
+assert.equal(appJs.includes("container.append(pane)"), false, "policy view binding does not reorder physical Modules panes or reset pane scroll");
 assert.equal(indexHtml.includes('data-flow-group-shell="cabinet-finishes"'), false, "Cabinet Finishes group identity is no longer pre-authored in static HTML");
 assert.equal(indexHtml.includes('data-flow-group-slot="cabinet-finishes"'), true, "Cabinet Finishes keeps only a hidden neutral group renderer slot");
 assert.equal(indexHtml.includes('data-flow-group-label'), true, "Cabinet Finishes visible group label has a normalized-flow population hook");

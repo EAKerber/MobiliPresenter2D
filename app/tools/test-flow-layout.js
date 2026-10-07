@@ -22,6 +22,9 @@ const hierarchyDefaults = require(path.join(projectRoot, "data/hierarchy-default
 const configuration = require(path.join(projectRoot, "core/configuration.js"));
 const flowCore = require(path.join(projectRoot, "core/flow-model.js"));
 const layout = require(path.join(projectRoot, "core/flow-layout.js"));
+const presentation = require(path.join(projectRoot, "core/presentation-contract.js"));
+const layoutProfiles = require(path.join(projectRoot, "core/layout-profiles.js"));
+const presentationPolicy = require(path.join(projectRoot, "data/presentation-policy-defaults.js"));
 
 const administration = configuration.createDefaultAdministration(defaults, catalog, priceBook, scene);
 const flow = flowCore.normalizeFlow(administration, configuration.itemRegistry(catalog), hierarchyDefaults);
@@ -120,15 +123,44 @@ assert.ok(
   "wrong Summary component binding fails closed"
 );
 
-const moduleViews = layout.moduleViewLayout(flow);
-assert.equal(moduleViews.error, null);
-assert.deepEqual(moduleViews.semanticSectionIds, ["modules"]);
-assert.deepEqual(moduleViews.panes, [
-  { id: "detail", role: "context", sourceSectionId: "modules" },
-  { id: "list", role: "items", sourceSectionId: "modules", component: "selection-list" }
-]);
-assert.equal(new Set(moduleViews.itemIds).size, moduleViews.itemIds.length, "module semantic ownership remains unique");
-assert.equal(moduleViews.panes.every((pane) => pane.sourceSectionId === "modules"), true, "two views project one semantic section instead of duplicating ownership");
+const expectedProjectionByProfile = {
+  "side-rail": "side-panel",
+  stacked: "side-panel",
+  compact: "replace"
+};
+layoutProfiles.PROFILES.forEach((profile) => {
+  const moduleViews = layout.moduleViewLayout(flow, presentationPolicy, profile);
+  assert.equal(moduleViews.error, null);
+  assert.deepEqual(moduleViews.semanticSectionIds, ["modules"]);
+  assert.deepEqual(moduleViews.views, [
+    {
+      id: "modules-list",
+      sourceSectionId: "modules",
+      component: "selection-list",
+      role: "primary",
+      relation: null,
+      projection: null
+    },
+    {
+      id: "modules-detail",
+      sourceSectionId: "modules",
+      component: "detail-panel",
+      role: "companion",
+      relation: { kind: "companion", of: "modules-list" },
+      projection: expectedProjectionByProfile[profile]
+    }
+  ], `Modules view plan comes from presentation policy for ${profile}`);
+  assert.equal(new Set(moduleViews.itemIds).size, moduleViews.itemIds.length, "module semantic ownership remains unique");
+  assert.equal(moduleViews.views.every((view) => view.sourceSectionId === "modules"), true, "policy views project one semantic section instead of duplicating ownership");
+});
+
+const missingSourcePolicy = structuredClone(presentationPolicy);
+missingSourcePolicy.stageViews.modules.views[1].sourceSectionId = "missing-modules-section";
+assert.ok(
+  presentation.validatePolicy(missingSourcePolicy, layoutProfiles.PROFILES, flow)
+    .some((error) => error.code === "unknown-view-source"),
+  "missing Modules policy view source fails at the presentation/flow validation boundary"
+);
 
 assert.deepEqual(
   layout.validateBindings(finishes, {
