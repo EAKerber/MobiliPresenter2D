@@ -82,7 +82,7 @@ assert.equal(runtimeContractsSource.includes("createElement(\"script\")"), false
 assert.equal((indexHtml.match(/core\/keyboard-shortcuts\.js/g) || []).length, 1, "keyboard script is loaded explicitly exactly once");
 assert.equal((indexHtml.match(/data-step="/g) || []).length, 0, "static buyer stage buttons are absent; runtime normalized flow owns navigation");
 const hierarchyDefaultsIndex = indexHtml.indexOf("data/hierarchy-defaults.js?v=hierarchy-defaults-v2");
-const flowModelIndex = indexHtml.indexOf("core/flow-model.js?v=runtime-v14");
+const flowModelIndex = indexHtml.indexOf("core/flow-model.js?v=runtime-v15");
 const layoutProfilesIndex = indexHtml.indexOf("core/layout-profiles.js?v=cp-sd-01c1-v1");
 const presentationIndex = indexHtml.indexOf("core/presentation-contract.js?v=cp-sd-01c1-v1");
 const presentationPolicyIndex = indexHtml.indexOf("data/presentation-policy-defaults.js?v=cp-sd-01c1-v1");
