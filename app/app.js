@@ -451,6 +451,32 @@
     });
   }
 
+  function syncModuleViewVisibility(plan, adapters) {
+    if (!plan || !Array.isArray(plan.views)) return;
+    const primaryView = plan.views.find((view) => view.role === "primary");
+    const companionView = plan.views.find((view) => view.relation?.kind === "companion" || view.role === "companion");
+    if (!primaryView || !companionView) return;
+    const primary = adapters.find((adapter) => adapter.dataset.stageViewId === primaryView.id);
+    const companion = adapters.find((adapter) => adapter.dataset.stageViewId === companionView.id);
+    if (!primary || !companion) return;
+
+    const replace = companionView.projection === "replace";
+    const detailOpen = Boolean(state.selectedEntityId) && document.body.classList.contains("has-module-detail");
+    const primaryWillHide = replace && detailOpen;
+    const companionWillHide = replace && !detailOpen;
+    const active = document.activeElement;
+    const activeInPrimary = active instanceof Element && primary.contains(active);
+    const activeInCompanion = active instanceof Element && companion.contains(active);
+
+    primary.hidden = primaryWillHide;
+    companion.hidden = companionWillHide;
+    primary.dataset.viewVisible = String(!primaryWillHide);
+    companion.dataset.viewVisible = String(!companionWillHide);
+
+    if (primaryWillHide && activeInPrimary) focusDetailClose();
+    else if (companionWillHide && activeInCompanion) restoreDetailOrigin(detailOrigin);
+  }
+
   function mountModuleViewPanes(profile = currentLayoutProfile()) {
     const plan = flowLayout.moduleViewLayout(normalizedFlow, presentationPolicy, profile);
     const container = modulesPanel?.querySelector("[data-stage-view-layout='modules']");
@@ -503,6 +529,7 @@
     });
 
     applyModuleViewMarkers(plan, adapters);
+    syncModuleViewVisibility(plan, adapters);
     return errors;
   }
 
@@ -510,7 +537,9 @@
     const plan = flowLayout.moduleViewLayout(normalizedFlow, presentationPolicy, profile);
     const container = modulesPanel?.querySelector("[data-stage-view-layout='modules']");
     if (!plan || plan.error || !container) return;
-    applyModuleViewMarkers(plan, [...container.querySelectorAll(":scope > [data-stage-view-id]")]);
+    const adapters = [...container.querySelectorAll(":scope > [data-stage-view-id]")];
+    applyModuleViewMarkers(plan, adapters);
+    syncModuleViewVisibility(plan, adapters);
   }
 
   function applyBuyerFlowLayout() {
@@ -1574,6 +1603,7 @@
       moduleDetail.replaceChildren();
       if (moduleDetailPlaceholder) moduleDetailPlaceholder.hidden = false;
       viewerHint.textContent = "Selecione um módulo na cena para abrir sua ficha.";
+      syncModuleViewProjection();
       return;
     }
 
@@ -1697,6 +1727,7 @@
     detailContent.push(dimensions, technical, orientativeViews, benefitsSection, componentsSection);
     if (requirements.textContent) detailContent.push(requirements);
     moduleDetail.replaceChildren(...detailContent);
+    syncModuleViewProjection();
   }
 
   function updateModuleCards(resolved) {

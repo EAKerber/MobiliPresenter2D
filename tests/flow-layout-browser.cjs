@@ -63,6 +63,19 @@ const { chromium } = require("playwright");
     return { left: box.left, right: box.right, top: box.top, bottom: box.bottom, width: box.width, height: box.height };
   });
   const noOverflow = (selector) => page.locator(selector).evaluate((element) => element.scrollWidth <= element.clientWidth + 2);
+  const modulePaneState = () => page.evaluate(() => {
+    const list = document.querySelector('[data-stage-view-id="modules-list"]');
+    const detail = document.querySelector('[data-stage-view-id="modules-detail"]');
+    const activeView = document.activeElement?.closest?.("[data-stage-view-id]")?.dataset.stageViewId || null;
+    return {
+      listHidden: Boolean(list?.hidden),
+      detailHidden: Boolean(detail?.hidden),
+      listScrollTop: list?.scrollTop || 0,
+      detailScrollTop: detail?.scrollTop || 0,
+      activeView,
+      activeClose: Boolean(document.activeElement?.matches?.("[data-close-module-detail]"))
+    };
+  });
 
   assert.deepEqual(await page.evaluate(() => window.CASA_EM_MODULOS_DEBUG.getFlowLayoutErrors()), [], "initial flow layout has no renderer invariant errors");
   assert.equal(await page.evaluate(() => window.CASA_EM_MODULOS_DEBUG.getLayoutProfile()), "side-rail", "1366px resolves to side-rail");
@@ -71,6 +84,11 @@ const { chromium } = require("playwright");
   assert.equal(await page.locator('[data-stage-pane="detail"]').count(), 1);
   assert.equal(await page.locator('[data-stage-pane="list"]').count(), 1);
   assert.equal(await page.locator("#moduleDetailPlaceholder").isVisible(), true, "modules detail pane has an intentional empty-state view");
+  assert.deepEqual(
+    { listHidden: (await modulePaneState()).listHidden, detailHidden: (await modulePaneState()).detailHidden },
+    { listHidden: false, detailHidden: false },
+    "side-rail keeps both stable Modules panes visible with no detail open"
+  );
   assert.deepEqual(await renderedComponents(), {
     detail: "detail-panel",
     list: "selection-list",
@@ -270,6 +288,37 @@ const { chromium } = require("playwright");
   })));
   assert.ok(paneScrollContract.every((pane) => pane.overflowY === "auto"), "each stacked Modules column owns its vertical scroller");
   assert.ok(paneScrollContract.some((pane) => pane.scrollHeight > pane.clientHeight + 2), "at least one stacked Modules column has independent scrollable content");
+  const paneScrollBeforeReplace = await page.evaluate(() => {
+    const list = document.querySelector('[data-stage-view-id="modules-list"]');
+    const detail = document.querySelector('[data-stage-view-id="modules-detail"]');
+    list.scrollTop = Math.min(96, Math.max(0, list.scrollHeight - list.clientHeight));
+    detail.scrollTop = Math.min(72, Math.max(0, detail.scrollHeight - detail.clientHeight));
+    return { list: list.scrollTop, detail: detail.scrollTop };
+  });
+  await page.locator('#moduleList .module-card.is-selected [data-select-entity]').focus();
+  assert.equal((await modulePaneState()).activeView, "modules-list", "stacked focus hazard fixture starts inside the primary list pane");
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.waitForFunction(() =>
+    document.documentElement.dataset.layoutProfile === "compact"
+    && document.querySelector('[data-stage-view-id="modules-list"]').hidden
+    && !document.querySelector('[data-stage-view-id="modules-detail"]').hidden
+  );
+  await page.waitForTimeout(30);
+  const compactFocusedReplace = await modulePaneState();
+  assert.equal(compactFocusedReplace.listHidden, true, "compact replace hides the primary list while detail is open");
+  assert.equal(compactFocusedReplace.detailHidden, false, "compact replace keeps the companion detail visible while detail is open");
+  assert.equal(compactFocusedReplace.activeClose, true, "entering compact replace moves focus out of the newly hidden list to the detail close action");
+  assert.equal(compactFocusedReplace.listScrollTop, paneScrollBeforeReplace.list, "hiding the primary pane preserves its scroll position");
+  assert.equal(compactFocusedReplace.detailScrollTop, paneScrollBeforeReplace.detail, "visible companion pane preserves its scroll position");
+  await page.setViewportSize({ width: 1050, height: 900 });
+  await page.waitForFunction(() =>
+    document.documentElement.dataset.layoutProfile === "stacked"
+    && !document.querySelector('[data-stage-view-id="modules-list"]').hidden
+    && !document.querySelector('[data-stage-view-id="modules-detail"]').hidden
+  );
+  const stackedAfterReplaceRoundTrip = await modulePaneState();
+  assert.equal(stackedAfterReplaceRoundTrip.listScrollTop, paneScrollBeforeReplace.list, "stacked return restores the same primary pane scroll position");
+  assert.equal(stackedAfterReplaceRoundTrip.detailScrollTop, paneScrollBeforeReplace.detail, "stacked return restores the same companion pane scroll position");
   await page.screenshot({ path: path.join(output, "modules-stacked.png"), fullPage: true });
 
   await page.setViewportSize({ width: 1366, height: 900 });
@@ -353,10 +402,31 @@ const { chromium } = require("playwright");
   assert.equal(await page.evaluate(() => document.documentElement.dataset.layoutProfile), "compact", "compact profile marker follows viewport");
   await page.locator('.flow-nav [data-step="modules"]').click();
   await page.waitForFunction(() => !document.getElementById("modulesPanel").hidden);
-  const detailMobile = await rect('[data-stage-pane="detail"]');
-  const listMobile = await rect('[data-stage-pane="list"]');
-  assert.ok(listMobile.top >= detailMobile.bottom - 2, "narrow Modules collapses detail then list vertically");
+  const compactOpenPanes = await modulePaneState();
+  assert.equal(compactOpenPanes.listHidden, true, "compact replace hides Modules list while a detail is open");
+  assert.equal(compactOpenPanes.detailHidden, false, "compact replace shows Modules detail while a detail is open");
   assert.equal(await noOverflow("#modulesPanel"), true, "narrow Modules does not overflow horizontally");
+
+  await page.keyboard.press("Escape");
+  await page.waitForFunction(() =>
+    !document.body.classList.contains("has-module-detail")
+    && !document.querySelector('[data-stage-view-id="modules-list"]').hidden
+    && document.querySelector('[data-stage-view-id="modules-detail"]').hidden
+  );
+  await page.waitForTimeout(30);
+  const compactClosedPanes = await modulePaneState();
+  assert.equal(compactClosedPanes.listHidden, false, "compact replace shows the primary list after detail closes");
+  assert.equal(compactClosedPanes.detailHidden, true, "compact replace hides the companion detail after detail closes");
+  assert.equal(compactClosedPanes.activeView, "modules-list", "Escape restores focus into the newly visible primary list");
+  assert.equal(await page.evaluate(() => window.CASA_EM_MODULOS_DEBUG.getState().selectedEntityId), null, "compact Escape clears only detail inspection");
+
+  await page.locator(`#moduleList [data-select-entity="${selectedModuleBeforeProfileChanges}"]`).click();
+  await page.waitForFunction((entityId) =>
+    window.CASA_EM_MODULOS_DEBUG.getState().selectedEntityId === entityId
+    && document.querySelector('[data-stage-view-id="modules-list"]').hidden
+    && !document.querySelector('[data-stage-view-id="modules-detail"]').hidden,
+    selectedModuleBeforeProfileChanges
+  );
   await page.screenshot({ path: path.join(output, "modules-mobile.png"), fullPage: true });
 
   await page.locator('.flow-nav [data-step="finishes"]').click();

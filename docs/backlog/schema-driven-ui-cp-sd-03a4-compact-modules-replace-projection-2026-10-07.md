@@ -1,6 +1,6 @@
 # CP-SD-03A4 — compact Modules replace projection execution — 2026-10-07
 
-Status: **READY / NEXT**.
+Status: **IN PROGRESS — IMPLEMENTATION CANDIDATE**.
 
 Parent:
 - CP-SD-03A3 Modules companion projection discovery — PASS.
@@ -122,3 +122,26 @@ Stop and split if this requires:
 - presentation schema changes.
 
 No production configuration write.
+
+
+## Implementation candidate
+
+Candidate boundary:
+- added one `syncModuleViewVisibility(plan, adapters)` helper;
+- `replace` comes only from the policy-authored companion view projection;
+- detail-open state remains existing inspection state / `has-module-detail`;
+- stable pane adapters are hidden/shown in place; no DOM movement;
+- side-rail/stacked keep both panes visible;
+- compact closed = list visible/detail hidden;
+- compact open = list hidden/detail visible;
+- if a newly hidden pane contains focus, focus moves to the visible counterpart using existing detail close/origin helpers;
+- no pane `scrollTop` writes;
+- no keyboard-core, state, pricing, scene, PiP or schema changes;
+- runtime cache v32 -> v33.
+
+Proof added:
+- source gates pin the single visibility synchronizer and reject reparenting;
+- Flow verifies stacked -> compact focus repair, pane scroll preservation, compact Escape/return and round-trip;
+- Mobile PiP verifies a hotspot-opened detail keeps PiP pinned while compact replace hides the list and focuses close.
+
+Gate pending: all eight repository workflows + Netlify preview.
