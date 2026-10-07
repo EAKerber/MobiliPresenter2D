@@ -1,6 +1,6 @@
 # CP-SD-02A2d4 — Stone Skirting section shell — 2026-10-07
 
-Status: **IN PROGRESS — A2d4.0 PASS; A2d4.1 CANDIDATE**.
+Status: **IN PROGRESS — A2d4.1 PASS; A2d4.2 NEXT**.
 
 Parent:
 - CP-SD-02A2d0 Acabamentos family discovery;
@@ -128,3 +128,33 @@ Explicitly unchanged:
 - production configuration.
 
 A2d4.2 remains a separate absence proof.
+
+
+## A2d4.1 result — PASS
+
+PASS on PR #121 head `64c516e1adae37dbaa71e96ce40b0ac6da522dae`.
+
+Proven:
+- normalized flow materializes Stone Skirting section id/label/behavior/component;
+- static HTML no longer owns Stone Skirting section semantics;
+- `#stoneSkirtingToggle` remains inside the generated section through the bounded `stone-skirting` adapter;
+- keyboard toggle/section traversal remains intact;
+- Stone browser confirms the existing material behavior is unchanged:
+  - ON -> selected Stone material;
+  - OFF -> MDF/front-finish path;
+  - Stone changes do not recolor the plinth while OFF;
+  - Stone changes do recolor the plinth while ON;
+- no new material authority, admin linking/unlinking option or separate Skirting material was introduced.
+
+Gate:
+- App build purity — PASS;
+- Current variant fidelity — PASS;
+- Current asset gates — PASS;
+- Flow layout browser — PASS;
+- Keyboard browser — PASS;
+- Mobile browser — PASS;
+- Stone browser — PASS;
+- Summary/Pricing browser — PASS;
+- Netlify deploy preview #121 — PASS.
+
+A2d4.2 remains a separate schema-valid absence proof.
