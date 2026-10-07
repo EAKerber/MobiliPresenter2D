@@ -408,7 +408,7 @@ function renderSection(stage, group, section, sectionIndex) {
   presentation.append(document.createTextNode("Componente"));
   const select = document.createElement("select");
   select.dataset.sectionComponent = `${stage.id}|${group.id}|${section.id}`;
-  hierarchyCore.COMPONENTS.forEach((value) => {
+  hierarchyCore.COMPONENTS.filter((value) => presentationCore.componentSupportsBehavior(value, section.behavior)).forEach((value) => {
     const option = document.createElement("option");
     option.value = value;
     option.textContent = value;
