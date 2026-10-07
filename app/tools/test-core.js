@@ -956,6 +956,8 @@ const publicNames = [
   assert.equal(publicNames.includes(term), false, term);
 });
 
+require("./test-administration-v5.js");
+
 process.stdout.write(JSON.stringify({
   passed: true,
   initialFingerprint,
