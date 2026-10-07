@@ -51,6 +51,8 @@ Canonical plan:
 
 **CP-SD-00 — COMPLETE / PASS.** The audit found no critical unknowns. The main publication blocker is now explicit: v4 persists section presentation metadata, but that metadata is not yet the executable buyer-renderer authority.
 
+**CP-SD-02A0 — COMPLETE / PASS.** Residual buyer semantic-renderer authority is inventoried in `docs/architecture/schema-driven-ui-cp-sd-02a0-renderer-inventory-2026-10-07.md`. The buyer is already fail-closed for missing known bindings, but core stages still depend on static domain-specific DOM shells. Work is now split into smaller checkpoints. **CP-SD-02A1 is NEXT**: remove the four static initial stage-navigation buttons so normalized enabled stages are the sole buyer navigation source. No section renderer changes in A1.
+
 **CP-SD-01 — COMPLETE / PASS.** CP-SD-01A established one item capability authority; CP-SD-01B established closed executable presentation bindings; CP-SD-01C froze ownership/availability semantics, named layout profiles, companion/PiP/bottom-dock policy, authored material `hex | null` semantics and the unpublished `ConfiguratorAdministration2D 5.0` candidate. PR #108 passed all current app/browser/asset/variant gates and Netlify preview; direct v4/v5 publication remains server-blocked and production was not written. **CP-SD-02 is NEXT**, but will be split into smaller reviewable checkpoints rather than one broad renderer rewrite.
 
 The isolated authenticated CP-UX-05A0 v3 Puxadores repair remains valid and independent. The schema/presentation contract is now frozen; any later authenticated hierarchy publication should target the consolidated v5 candidate directly rather than publishing the historical v4 intermediate first.
