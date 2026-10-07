@@ -197,7 +197,7 @@
     });
   }
 
-  function placeItemInEmptyStage(model, itemId, stageId, { groupId, groupLabel, sectionId, sectionLabel, presentation = "auto", component = null, columnSpan = 2 } = {}) {
+  function placeItemInEmptyStage(model, itemId, stageId, { groupId, groupLabel, sectionId, sectionLabel, presentation = "auto", behavior = null, component = null, columnSpan = 2 } = {}) {
     return update(model, (next) => {
       const stage = findStage(next, stageId);
       if (!stage || stage.groups.length || findItemOwner(next, itemId)) return false;
