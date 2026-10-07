@@ -10,7 +10,7 @@ Goal:
 
 ## Mini-checkpoints
 
-### A2c1.1 — shell generation + item-affinity slot — ACTIVE
+### A2c1.1 — shell generation + item-affinity slot — PASS
 
 Only:
 - replace the static Lighting section wrapper/heading with a hidden neutral slot;
@@ -24,6 +24,22 @@ Only:
 - prove default Lighting section is generated with normalized id/label/behavior/component and current keyboard/card behavior remains intact.
 
 No absence fixture yet.
+
+#### A2c1.1 result
+
+PASS on code head `8ddb538d34b75aa5b634a400f15412dc40001994`.
+
+Focused gate:
+- Flow layout browser run `37562199112` — PASS.
+
+Proven:
+- static HTML no longer owns Lighting section id/heading/behavior/component;
+- normalized flow creates the Lighting section shell and heading;
+- item-affinity slot matching selects the specialized `lighting-08` host without confusing it with the generic Additional Services toggle-list slot;
+- `#lightingToggle` remains inside the generated section under explicit `data-flow-item-id="lighting-08"`;
+- existing specialized Lighting state/dependency adapter was not changed.
+
+
 
 ### A2c1.2 — negative Lighting absence proof
 
