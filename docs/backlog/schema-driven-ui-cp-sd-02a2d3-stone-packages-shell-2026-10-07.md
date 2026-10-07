@@ -1,6 +1,6 @@
 # CP-SD-02A2d3 — Stone Packages section shell — 2026-10-07
 
-Status: **IN PROGRESS — A2d3.0 REVISED PASS; A2d3.1 FALSIFIED/REVERTED; A2d3.2 CANDIDATE**.
+Status: **IN PROGRESS — A2d3.2 PASS; A2d3.3 NEXT**.
 
 Parent:
 - CP-SD-02A2d0 Acabamentos family discovery;
@@ -94,5 +94,31 @@ Applied only the Stone Packages shell seam:
 - `renderStonePackages()` and all stone state/pricing/material/mask logic remain unchanged;
 - source and Flow-layout positive proof added;
 - shared runtime cache revision advanced from v21 to v22.
+
+A2d3.3 remains a separate schema-valid absence proof.
+
+
+## A2d3.2 result — PASS
+
+PASS on PR #119 head `6bd26a83ba9497f666f7a0ed7a4c67fd268efd7c`.
+
+Proven:
+- normalized flow materializes Stone Packages section id/label/behavior/component;
+- static HTML no longer owns `stone-packages` section semantics;
+- `#stonePackageOptions` remains inside the generated section through the bounded `stone-all` adapter;
+- static `stone-skirting` remains unchanged;
+- `#stonePanel[data-configurable-item="stone-all"]` remains unchanged;
+- `renderStonePackages()`, state, pricing, materials/masks and compatibility repair remain unchanged.
+
+Gate:
+- App build purity — PASS;
+- Current variant fidelity — PASS;
+- Current asset gates — PASS;
+- Flow layout browser — PASS;
+- Keyboard browser — PASS;
+- Mobile browser — PASS;
+- Stone browser — PASS;
+- Summary/Pricing browser — PASS;
+- Netlify deploy preview #119 — PASS.
 
 A2d3.3 remains a separate schema-valid absence proof.
