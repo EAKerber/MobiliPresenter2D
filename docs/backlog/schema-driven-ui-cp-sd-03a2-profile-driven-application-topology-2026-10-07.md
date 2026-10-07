@@ -1,6 +1,6 @@
 # CP-SD-03A2 — profile-driven application topology — 2026-10-07
 
-Status: **READY / NEXT**.
+Status: **COMPLETE / PASS**.
 
 Parent:
 - CP-SD-03A0 responsive presentation discovery — PASS;
@@ -178,3 +178,41 @@ Stop and split if preserving geometry requires:
 - replacing local component container queries.
 
 No production configuration write.
+
+
+## Implementation candidate
+
+The candidate keeps the A2 boundary narrow:
+- the canonical `layout-profiles.js` is loaded exactly once, synchronously before public CSS;
+- the initial root `data-layout-profile` marker is resolved from `profileForWidth(window.innerWidth)` before the stylesheet, avoiding a stacked/compact first-paint flash without copying thresholds;
+- the late duplicate layout-profile script load is removed;
+- application-level side-rail / stacked / compact workspace, control-grid, stage-grid, viewer baseline and Modules pane topology now use root profile selectors;
+- all `@media` ownership of 1050 / 1051 / 701–1050 application thresholds is removed;
+- compact 700px media blocks remain only for local component readability and compact PiP-specific behavior;
+- protected container queries are unchanged;
+- existing compact PiP activation/fixed geometry and bottom-dock behavior are unchanged;
+- A1 view relation/projection markers remain policy-driven;
+- runtime cache revision advances v31 -> v32.
+
+Additional proof:
+- source gates require the profile resolver to load exactly once and before CSS;
+- source gates reject the old 1050/1051/701–1050 application media queries;
+- source gates preserve all named local container-fit queries;
+- browser profile round trip now explicitly covers 1366 -> 1050 -> 1366 and 1050 -> 390 -> 1366 while preserving module selection and A1 projection markers.
+
+No production configuration write.
+
+Gate result:
+- App build purity — PASS;
+- Current variant fidelity — PASS;
+- Current asset gates — PASS;
+- Flow layout browser — PASS;
+- Keyboard browser — PASS;
+- Mobile browser — PASS;
+- Stone browser — PASS;
+- Summary/Pricing browser — PASS;
+- Netlify deploy preview #133 — PASS.
+
+Functional head: `538860e1b0a3f6905c48ffbe950284746ff28c72`.
+
+Decision: A2 passes. The canonical layout-profile marker is now the sole owner of application-level side-rail / stacked / compact topology decisions. PiP fixed-state behavior, persistent dock behavior and local component-fit queries remain deliberately separate. No production configuration write.

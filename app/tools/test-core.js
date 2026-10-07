@@ -527,6 +527,23 @@ assert.equal(indexHtml.includes('data-flow-slot-item="lighting-08"'), true, "Lig
 assert.equal(indexHtml.includes("data/hierarchy-defaults.js?v=hierarchy-defaults-v2"), true, "legacy hierarchy semantics load from explicit configuration data");
 assert.equal(appJs.includes("publishNormalizedFlow"), true, "app publishes one normalized flow contract to navigation");
 assert.equal(appJs.includes("applyBuyerFlowLayout"), true, "buyer composition is mounted from normalized flow layout");
+assert.equal((indexHtml.match(/core\/layout-profiles\.js/g) || []).length, 1, "layout profile resolver loads exactly once");
+assert.equal(
+  indexHtml.indexOf("core/layout-profiles.js?v=cp-sd-01c1-v1") < indexHtml.indexOf("styles.css?v=runtime-v32"),
+  true,
+  "canonical layout profile resolves before public topology CSS to avoid first-paint profile drift"
+);
+assert.equal(indexHtml.includes("window.CasaModulesLayoutProfiles.profileForWidth(window.innerWidth)"), true, "initial root profile marker consumes the canonical resolver");
+assert.equal(styles.includes("@media (max-width: 1050px)"), false, "application topology no longer owns the stacked breakpoint in CSS");
+assert.equal(styles.includes("@media (min-width: 1051px)"), false, "application topology no longer owns the side-rail breakpoint in CSS");
+assert.equal(styles.includes("@media (min-width: 701px) and (max-width: 1050px)"), false, "stacked topology no longer duplicates canonical profile thresholds");
+assert.equal(styles.includes('html[data-layout-profile="side-rail"]'), true, "side-rail topology consumes the canonical profile marker");
+assert.equal(styles.includes('html[data-layout-profile="stacked"]'), true, "stacked topology consumes the canonical profile marker");
+assert.equal(styles.includes('html[data-layout-profile="compact"]'), true, "compact topology consumes the canonical profile marker");
+assert.equal(styles.includes("@container modules-stage (max-width: 520px)"), true, "Modules local content-fit query remains container-owned");
+assert.equal(styles.includes("@container cabinet-finishes (max-width: 430px)"), true, "Cabinet Finishes local content-fit query remains container-owned");
+assert.equal(styles.includes("@container flow-stage (max-width: 300px)"), true, "flow-stage local content-fit query remains container-owned");
+assert.equal(styles.includes("@container flow-steps (max-width: 500px)"), true, "navigation compact-label fit remains container-owned");
 assert.equal(indexHtml.includes('data-stage-view-layout="modules"'), true, "modules expose a view-level two-pane renderer contract");
 assert.equal((indexHtml.match(/data-stage-view-id="modules-list"/g) || []).length, 1, "Modules list has exactly one policy view adapter");
 assert.equal((indexHtml.match(/data-stage-view-id="modules-detail"/g) || []).length, 1, "Modules detail has exactly one policy view adapter");
@@ -601,7 +618,7 @@ assert.equal(styles.includes("body.is-mobile-scene-pinned .scene-hotspots { poin
 assert.equal(styles.includes("top: env(safe-area-inset-top); margin-top: 0;"), true);
 assert.equal(styles.includes("width: 44px; height: 44px;"), true);
 assert.equal(styles.includes(".panel h2 { scroll-margin-top: 72px; }"), false);
-assert.equal(styles.includes(".panel { scroll-margin-top: var(--mobile-content-clearance, 72px); }"), true);
+assert.equal(styles.includes('html[data-layout-profile="compact"] .panel,'), true, "compact panel scroll clearance is profile-owned");
 assert.equal(styles.includes(".flow-nav__scene-pin { display: none; }"), true);
 assert.equal(styles.includes("grid-column: 1 / -1;"), true);
 assert.equal(styles.includes("container-name: flow-steps;"), true);
