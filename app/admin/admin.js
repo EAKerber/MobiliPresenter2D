@@ -1430,13 +1430,13 @@ stagesList.addEventListener("change", (event) => {
     return;
   }
 
-  const sectionPresentation = event.target.closest("[data-section-presentation]");
-  if (sectionPresentation) {
-    const [stageId, groupId, sectionId] = sectionPresentation.dataset.sectionPresentation.split("|");
+  const sectionComponent = event.target.closest("[data-section-component]");
+  if (sectionComponent) {
+    const [stageId, groupId, sectionId] = sectionComponent.dataset.sectionComponent.split("|");
     const candidate = structuredClone(model);
     const group = candidate.stages.find((stage) => stage.id === stageId)?.groups.find((entry) => entry.id === groupId);
     const section = group?.sections.find((entry) => entry.id === sectionId);
-    if (section) section.presentation = sectionPresentation.value;
+    if (section) section.component = sectionComponent.value;
     commitHierarchy(candidate);
     return;
   }
