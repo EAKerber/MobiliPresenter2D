@@ -84,3 +84,33 @@ Ambiguous or missing slots remain fail-closed renderer errors.
 
 Definition of done:
 - `additional-services` exists in buyer DOM only because normalized flow materialized it.
+
+
+## Mini-checkpoint A2b.1 — negative absence proof — PASS
+
+Code head tested: `5cd392f1d24d4cbc013d11f9841706825881cb89`.
+
+Purpose:
+- prove the requested fail-closed rule directly: if normalized data does not contain `additional-services`, buyer UI must not invent it.
+
+The first negative run exposed a real reconciliation residue:
+- bootstrap default data created the generated section shell;
+- the later fetched configuration correctly removed the section from normalized flow;
+- the generated DOM shell was only hidden, not removed.
+
+Correction kept intentionally narrow:
+- generated section shells omitted by the new normalized flow are removed;
+- their neutral renderer slot is returned to the grid and kept hidden for future reuse;
+- static legacy section shells retain the prior hide-only behavior;
+- failed browser assertions now terminate the harness immediately instead of leaving Chromium alive until workflow timeout.
+
+Focused proof:
+- `Flow layout browser` run `37561244998` — **PASS**;
+- omitted normalized section creates zero `[data-keyboard-section="additional-services"]` nodes;
+- `#servicesChecklist` remains hidden while unclaimed;
+- renderer invariant errors remain empty;
+- negative fixture has no browser console/page errors.
+
+Runtime cache revision after the reconciliation fix: `runtime-v18`.
+
+Next mini-checkpoint: **A2b.2 — regression-only gate pass.** No new functionality should be added there.
