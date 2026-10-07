@@ -143,7 +143,7 @@ Current CP-SD-02 progress:
 
 ### CP-SD-03 — responsive presentation primitives
 
-Status: **IN PROGRESS**. CP-SD-03A0 responsive-presentation discovery, CP-SD-03A1 executable Modules view binding and CP-SD-03A2 profile-driven application topology are complete. Immediate checkpoint: `docs/backlog/schema-driven-ui-cp-sd-03a3-modules-companion-projection-discovery-2026-10-07.md`.
+Status: **IN PROGRESS**. CP-SD-03A0 responsive-presentation discovery, CP-SD-03A1 executable Modules view binding, CP-SD-03A2 profile-driven application topology and CP-SD-03A3 Modules companion projection discovery are complete. Immediate checkpoint: `docs/backlog/schema-driven-ui-cp-sd-03a4-compact-modules-replace-projection-2026-10-07.md`.
 
 Goal: implement audited presentation behavior from one responsive authority.
 
@@ -158,8 +158,9 @@ Current CP-SD-03 sequence:
 - CP-SD-03A0: responsive presentation discovery — complete;
 - CP-SD-03A1: executable Modules view plan/binding, no pixel change — complete;
 - CP-SD-03A2: profile-driven application topology, preserving current geometry — complete;
-- CP-SD-03A3: Modules companion visual projection discovery — next;
-- later slices: companion visual projection implementation, stacked/compact PiP execution, persistent bottom dock + scroll clearance. Exact later split remains gate-driven.
+- CP-SD-03A3: Modules companion visual projection discovery — complete;
+- CP-SD-03A4: compact Modules `replace` projection execution — next;
+- later slices: stacked PiP execution, persistent bottom dock + scroll clearance. Exact later split remains gate-driven.
 
 Gate:
 - wide, stacked-workspace and compact browser geometry tests;
