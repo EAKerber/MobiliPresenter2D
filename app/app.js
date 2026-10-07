@@ -216,9 +216,14 @@
     const expectedGroupIds = new Set(plan.groups.map((group) => group.id));
     const expectedSectionIds = new Set(plan.groups.flatMap((group) => group.sections.map((section) => section.id)));
     const allSectionElements = [...grid.querySelectorAll("[data-keyboard-section]")];
+    const sectionSlots = [...grid.querySelectorAll("[data-flow-section-slot]")];
 
     allSectionElements.forEach((element) => {
       element.hidden = !expectedSectionIds.has(element.dataset.keyboardSection);
+    });
+    sectionSlots.forEach((slot) => {
+      const owner = slot.closest("[data-keyboard-section]");
+      slot.hidden = !owner || !expectedSectionIds.has(owner.dataset.keyboardSection);
     });
 
     shells.forEach((shell) => {
@@ -237,6 +242,57 @@
       return shell;
     };
 
+    const createSectionShell = (section) => {
+      const compatibleSlots = sectionSlots.filter((slot) =>
+        !slot.closest("[data-keyboard-section]")
+        && slot.dataset.renderComponent === section.component
+      );
+      if (compatibleSlots.length !== 1) {
+        return {
+          element: null,
+          error: {
+            code: compatibleSlots.length ? "ambiguous-section-slot" : "missing-section-binding",
+            stageId,
+            sectionId: section.id,
+            component: section.component,
+            message: compatibleSlots.length
+              ? `multiple neutral renderer slots match ${stageId}/${section.id}`
+              : `missing renderer section: ${stageId}/${section.id}`
+          }
+        };
+      }
+
+      const slot = compatibleSlots[0];
+      const sectionClassName = String(slot.dataset.flowSectionClass || "").trim();
+      if (!sectionClassName) {
+        return {
+          element: null,
+          error: {
+            code: "missing-section-class",
+            stageId,
+            sectionId: section.id,
+            component: section.component,
+            message: `missing visual section class for ${stageId}/${section.id}`
+          }
+        };
+      }
+
+      const element = document.createElement("section");
+      element.className = sectionClassName;
+      element.dataset.keyboardSection = section.id;
+      element.dataset.keyboardBehavior = section.behavior;
+      element.dataset.renderComponent = section.component;
+      element.dataset.flowGeneratedSection = "true";
+      const heading = document.createElement("h3");
+      heading.id = `flowSectionHeading-${stageId}-${section.id}`;
+      heading.textContent = section.label;
+      element.setAttribute("aria-labelledby", heading.id);
+      slot.hidden = false;
+      element.append(heading, slot);
+      allSectionElements.push(element);
+      return { element, error: null };
+    };
+
     plan.groups.forEach((group) => {
       const shell = shellById.get(group.id) || createGroupShell(group.id);
       if (!shell) {
@@ -249,23 +305,28 @@
       shell.dataset.flowSpan = String(group.span);
       grid.append(shell);
 
-      const candidateSections = allSectionElements.filter((element) => {
-        const owner = element.closest("[data-flow-group-shell]");
-        return owner === shell || owner == null;
-      });
-
       const ordered = [];
       group.sections.forEach((section) => {
-        const matches = candidateSections.filter((element) => element.dataset.keyboardSection === section.id);
+        const candidateSections = allSectionElements.filter((element) => {
+          const owner = element.closest("[data-flow-group-shell]");
+          return owner === shell || owner == null;
+        });
+        let matches = candidateSections.filter((element) => element.dataset.keyboardSection === section.id);
+        if (!matches.length) {
+          const generated = createSectionShell(section);
+          if (generated.element) matches = [generated.element];
+          else if (generated.error) {
+            errors.push({ ...generated.error, groupId: group.id });
+            return;
+          }
+        }
         if (matches.length !== 1) {
           errors.push({
-            code: matches.length ? "duplicate-section-binding" : "missing-section-binding",
+            code: "duplicate-section-binding",
             stageId,
             groupId: group.id,
             sectionId: section.id,
-            message: matches.length
-              ? `multiple renderer sections: ${stageId}/${group.id}/${section.id}`
-              : `missing renderer section: ${stageId}/${group.id}/${section.id}`
+            message: `multiple renderer sections: ${stageId}/${group.id}/${section.id}`
           });
           return;
         }
