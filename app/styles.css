@@ -553,7 +553,6 @@ legend { margin-bottom: 9px; color: rgba(255, 255, 255, 0.43); font-size: 12px; 
   text-transform: uppercase;
 }
 .finish-section .finish-help { margin: 0; }
-.finish-section.handle-fieldset { gap: 9px; }
 .services-checklist { display: grid; gap: 8px; }
 .service-check { display: grid; grid-template-columns: 20px minmax(0, 1fr); align-items: start; gap: 10px; padding: 12px; border: 1px solid var(--border); border-radius: 10px; background: rgba(255,255,255,.025); cursor: pointer; }
 .service-check input { width: 18px; height: 18px; margin: 1px 0 0; accent-color: var(--accent); opacity: 1; }
