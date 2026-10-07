@@ -143,7 +143,7 @@ Current CP-SD-02 progress:
 
 ### CP-SD-03 — responsive presentation primitives
 
-Status: **NEXT**. Immediate checkpoint: `docs/backlog/schema-driven-ui-cp-sd-03a0-responsive-presentation-discovery-2026-10-07.md`.
+Status: **IN PROGRESS**. CP-SD-03A0 responsive-presentation discovery — complete. Immediate checkpoint: `docs/backlog/schema-driven-ui-cp-sd-03a1-executable-modules-view-plan-2026-10-07.md`.
 
 Goal: implement audited presentation behavior from one responsive authority.
 
@@ -153,6 +153,11 @@ Scope expected:
 - PiP availability under the same layout profile that stacks the scene above content;
 - persistent estimate + primary CTA dock that remains visible while stage content scrolls;
 - no window-scroll leakage from pane navigation.
+
+Current CP-SD-03 sequence:
+- CP-SD-03A0: responsive presentation discovery — complete;
+- CP-SD-03A1: executable Modules view plan/binding, no pixel change — next;
+- later slices: profile-driven application topology, companion visual projection, stacked/compact PiP execution, persistent bottom dock + scroll clearance. Exact later split remains gate-driven.
 
 Gate:
 - wide, stacked-workspace and compact browser geometry tests;
