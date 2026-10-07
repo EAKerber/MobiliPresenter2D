@@ -54,3 +54,13 @@ Also prove that when both Stone items are absent, normalized flow removes the St
 - no production configuration write.
 
 If A2d3.1 passes, proceed to A2d3.2 generated Stone Packages shell.
+
+
+## Compatibility-shim nuance discovered by the first A2d3.1 gate
+
+The audited legacy v3 source may omit `stone-skirting` from stage assignment while keeping it active in initial state. `repairSkirtingStageContract()` currently repairs that contradiction by finding the stage containing `stone-all`. Therefore a synthetic fixture that simply removes `stone-all` from that legacy source also removes the shim's placement anchor.
+
+This does **not** change the group-ownership decision:
+- normalized flow can model a Stone group with only `stone-skirting` when that item is explicitly assigned;
+- A2d3.1 must test that self-consistent input directly;
+- changing the legacy repair algorithm remains part of the separate published-administration/housekeeping boundary.

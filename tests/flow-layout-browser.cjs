@@ -517,6 +517,7 @@ const { chromium } = require("playwright");
   const stoneStage = withoutStonePackages.stages.find((stage) => (stage.kind || stage.id) === "finishes");
   assert.ok(stoneStage, "Stone prerequisite fixture has Acabamentos stage");
   stoneStage.items = stoneStage.items.filter((id) => id !== "stone-all");
+  if (!stoneStage.items.includes("stone-skirting")) stoneStage.items.push("stone-skirting");
 
   const stoneGroupErrors = [];
   const stoneGroupPage = await browser.newPage({ viewport: { width: 1366, height: 900 } });

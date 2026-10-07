@@ -91,3 +91,16 @@ Proof:
 - no renderer fallback/invariant/page error.
 
 No `renderStonePackages()`, state, pricing, material/mask, compatibility or production write changes.
+
+
+### A2d3.1 first gate correction
+
+The first focused Flow-layout run timed out before the group assertions because the fetched source can still represent the audited legacy v3 contradiction: `stone-skirting` is active in `initialState.services` but absent from stage assignment. The compatibility shim repairs that state by locating the stage that contains `stone-all`; once the fixture removed `stone-all`, the shim intentionally had no anchor.
+
+That is a separate published-v3 compatibility boundary, not evidence that normalized Stone-group ownership requires `stone-all`.
+
+Correction:
+- the A2d3.1 fixture now explicitly assigns `stone-skirting` to Acabamentos if the source does not already assign it;
+- it then removes only `stone-all`;
+- this constructs the self-consistent semantic input A2d3.1 is meant to test;
+- the production compatibility shim remains unchanged and will not be broadened inside CP-SD-02.
