@@ -93,7 +93,7 @@
     });
   }
 
-  function splitItemToSection(model, itemId, { sectionId, label, presentation = "auto" }) {
+  function splitItemToSection(model, itemId, { sectionId, label, presentation = "auto", component = null }) {
     return update(model, (next) => {
       const owner = findItemOwner(next, itemId);
       if (!owner || owner.section.itemIds.length <= 1 || owner.group.sections.some((section) => section.id === sectionId)) return false;
