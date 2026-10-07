@@ -810,7 +810,7 @@ assert.equal(appJs.includes("publishNormalizedFlow"), true, "app publishes one n
 assert.equal(appJs.includes("applyBuyerFlowLayout"), true, "buyer composition is mounted from normalized flow layout");
 assert.equal((indexHtml.match(/core\/layout-profiles\.js/g) || []).length, 1, "layout profile resolver loads exactly once");
 assert.equal(
-  indexHtml.indexOf("core/layout-profiles.js?v=cp-sd-01c1-v1") < indexHtml.indexOf("styles.css?v=runtime-v37"),
+  indexHtml.indexOf("core/layout-profiles.js?v=cp-sd-01c1-v1") < indexHtml.indexOf("styles.css?v=runtime-v38"),
   true,
   "canonical layout profile resolves before public topology CSS to avoid first-paint profile drift"
 );
