@@ -4,13 +4,40 @@
   const itemCapabilities = typeof module !== "undefined" && module.exports && typeof require === "function"
     ? require("./item-capabilities.js")
     : global?.CasaModulesItemCapabilities;
+  const pricingContract = typeof module !== "undefined" && module.exports && typeof require === "function"
+    ? require("./pricing-contract.js")
+    : global?.CasaModulesPricingContract;
   if (!itemCapabilities) throw new Error("Item capability registry is required.");
+  if (!pricingContract) throw new Error("Typed pricing contract is required.");
 
   const SCHEMA = "ConfiguratorAdministration2D 3.0";
   const PREVIOUS_SCHEMA = "ConfiguratorAdministration2D 2.0";
   const LEGACY_SCHEMA = "ConfiguratorAdministration2D 1.0";
   const CORE_STAGES = Object.freeze([...itemCapabilities.CORE_STAGE_KINDS]);
   const STAGE_KINDS = new Set(itemCapabilities.STAGE_KINDS);
+
+  function legacyPriceBookPricing(priceBook) {
+    if (priceBook?.pricing) {
+      const projected = pricingContract.projectToLegacy(priceBook.pricing);
+      if (!projected.ok) {
+        throw new TypeError(`price book pricing is not v3-compatible: ${projected.errors?.[0] || projected.code}`);
+      }
+      return projected.value;
+    }
+
+    // Historical PriceBook 1.x input remains accepted only at this v3
+    // compatibility boundary so old fixtures/imports can still be normalized.
+    const legacy = {
+      entries: { ...(priceBook?.entries || {}) },
+      handleEntries: { ...(priceBook?.handleEntries || {}) },
+      frontFinishRatesBps: { ...(priceBook?.frontFinishRatesBps || {}) },
+      localEntries: { ...(priceBook?.localEntries || {}) },
+      globalEntries: { ...(priceBook?.globalEntries || {}) },
+      handleFrontTotal: priceBook?.handleFrontTotal
+    };
+    pricingContract.upgradeLegacy(legacy);
+    return legacy;
+  }
 
   function itemRegistry(catalog) {
     return new Map([
@@ -50,6 +77,7 @@
   }
 
   function createDefaultAdministration(settings, catalog, priceBook, scene) {
+    const legacyPricing = legacyPriceBookPricing(priceBook);
     const objects = {};
     [...catalog.modules, ...catalog.accessories].forEach((item) => {
       objects[item.entityId] = { title: item.title, description: item.description || "", benefits: [...(item.benefits || [])], components: [...(item.components || [])], requirements: [...(item.requirements || [])] };
@@ -89,8 +117,12 @@
       dependencies: [{ id: "lighting-requires-supports", dependentId: "lighting-08", requires: ["module-04", "module-06"] }],
       events: [{ id: "module-07-depth-without-fridge-side", triggerId: "module-04", when: "disabled", action: "set-depth", targetId: "module-07", valueMm: 400 }],
       pricing: {
-        entries: { ...priceBook.entries }, handleEntries: { ...priceBook.handleEntries }, frontFinishRatesBps: { ...priceBook.frontFinishRatesBps },
-        localEntries: { ...priceBook.localEntries }, globalEntries: { ...priceBook.globalEntries }, handleFrontTotal: priceBook.handleFrontTotal
+        entries: { ...legacyPricing.entries },
+        handleEntries: { ...legacyPricing.handleEntries },
+        frontFinishRatesBps: { ...legacyPricing.frontFinishRatesBps },
+        localEntries: { ...legacyPricing.localEntries },
+        globalEntries: { ...legacyPricing.globalEntries },
+        handleFrontTotal: legacyPricing.handleFrontTotal
       }
     };
   }
@@ -216,6 +248,12 @@
 
   function validateConfiguratorSettings(value, catalog, priceBook, scene) {
     const errors = [];
+    let legacyPriceBook;
+    try {
+      legacyPriceBook = legacyPriceBookPricing(priceBook);
+    } catch (error) {
+      return [error.message || "price book pricing is not v3-compatible"];
+    }
     if (!value || ![SCHEMA, LEGACY_SCHEMA].includes(value.schemaVersion) || !Array.isArray(value.stages)) return ["unsupported settings schema"];
     const registry = itemRegistry(catalog);
     const moduleIds = new Set(catalog.modules.map((item) => item.entityId));
@@ -388,7 +426,7 @@
     const priceSections = ["entries", "handleEntries", "frontFinishRatesBps", "localEntries", "globalEntries"];
     if (!value.pricing || typeof value.pricing !== "object") errors.push("pricing is required");
     else priceSections.forEach((section) => {
-      const allowedIds = Object.keys(priceBook?.[section] || {});
+      const allowedIds = Object.keys(legacyPriceBook[section] || {});
       const submitted = value.pricing[section];
       if (!submitted || typeof submitted !== "object" || Array.isArray(submitted)) { errors.push(`invalid pricing section: ${section}`); return; }
       const dynamicGroup = section === "frontFinishRatesBps" ? "fronts-all" : section === "handleEntries" ? "handles-all" : section === "globalEntries" ? "stone-all" : null;
@@ -399,7 +437,7 @@
         if (!Number.isSafeInteger(amount) || amount < 0 || amount > maximum) errors.push(`invalid price value: ${section}.${id}`);
       });
     });
-    if (value.pricing?.handleFrontTotal !== priceBook.handleFrontTotal) errors.push("handle front total is fixed");
+    if (value.pricing?.handleFrontTotal !== legacyPriceBook.handleFrontTotal) errors.push("handle front total is fixed");
     return errors;
   }
 
