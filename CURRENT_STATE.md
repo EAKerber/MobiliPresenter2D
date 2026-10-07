@@ -51,6 +51,7 @@ Canonical plan:
 - active track: CP-SD-06 production v5 publication / legacy retirement
 - completed checkpoint: CP-SD-06A0 repository/authentication preflight — COMPLETE / PASS
 - next checkpoint: `docs/backlog/schema-driven-ui-cp-sd-06a1-server-v5-read-migration-support-2026-10-07.md`
+- current handoff: `docs/handoffs/schema-driven-ui-current-handoff-2026-10-07.md`
 
 **CP-SD-00 — COMPLETE / PASS.** The audit found no critical unknowns. The main publication blocker is now explicit: v4 persists section presentation metadata, but that metadata is not yet the executable buyer-renderer authority.
 
