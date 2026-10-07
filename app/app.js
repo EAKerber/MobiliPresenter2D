@@ -10,6 +10,7 @@
   const finishes = global.CasaModulesFinishes;
   let catalog = structuredClone(global.CASA_EM_MODULOS_CATALOG);
   const configurationCore = global.CasaModulesConfiguration;
+  const administrationV5 = global.CasaModulesAdministrationV5;
   const flowCore = global.CasaModulesFlow;
   const layoutProfiles = global.CasaModulesLayoutProfiles;
   const presentationCore = global.CasaModulesPresentation;
@@ -40,7 +41,7 @@
       : 0;
   }
 
-  if (!scene || !inlineMasks || !core || !visibility || !validation || !fingerprint || !finishes || !catalog || !priceBook || !pricingContract || !pricing || !configurationCore || !flowCore || !layoutProfiles || !presentationCore || !presentationPolicy || !flowLayout || !hierarchyDefaults || !configuratorSettings) {
+  if (!scene || !inlineMasks || !core || !visibility || !validation || !fingerprint || !finishes || !catalog || !priceBook || !pricingContract || !pricing || !configurationCore || !administrationV5 || !flowCore || !layoutProfiles || !presentationCore || !presentationPolicy || !flowLayout || !hierarchyDefaults || !configuratorSettings) {
     throw new Error("Não foi possível carregar os dados da cena 2D.");
   }
   validation.assertValidScene(scene);
@@ -51,6 +52,34 @@
     global.CASA_NORMALIZED_FLOW = normalizedFlow;
     global.CASA_KEYBOARD_SHORTCUTS?.setFlow?.(normalizedFlow);
     return normalizedFlow;
+  }
+
+  function normalizeAdministration(value) {
+    if (value?.schemaVersion === administrationV5.SCHEMA) {
+      return administrationV5.upgrade(
+        value,
+        configurationCore,
+        flowCore,
+        catalog,
+        priceBook,
+        scene,
+        hierarchyDefaults
+      );
+    }
+    return configurationCore.normalizeConfiguratorSettings(value, catalog, priceBook, scene);
+  }
+
+  function pricingRulesForAdministration(value) {
+    return value?.schemaVersion === administrationV5.SCHEMA
+      ? pricingContract.normalize(value.pricing)
+      : pricingContract.upgradeLegacy(value.pricing);
+  }
+
+  function flowStageItemIds(stageId) {
+    const stage = normalizedFlow?.stages?.find((entry) => entry.id === stageId);
+    return stage
+      ? stage.groups.flatMap((group) => group.sections.flatMap((section) => section.itemIds || []))
+      : [];
   }
 
   const initialAdministration = configurationCore.createDefaultAdministration(configuratorSettings, catalog, priceBook, scene);
@@ -126,7 +155,7 @@
   const stageOwns = (stageId, itemId) => flowCore.stageOwns(normalizedFlow, stageId, itemId);
   const enabledStages = () => configuratorSettings.stages.filter((stage) => stage.enabled);
   const moduleIdSet = new Set(catalog.modules.map((item) => item.entityId));
-  const configuredModuleIds = () => new Set(enabledStages().flatMap((stage) => stage.items).filter((id) => moduleIdSet.has(id)));
+  const configuredModuleIds = () => new Set(enabledStages().flatMap((stage) => flowStageItemIds(stage.id)).filter((id) => moduleIdSet.has(id)));
   const requirementsForEntity = (entityId) => [...new Set([
     ...(scene.entities.find((entity) => entity.id === entityId)?.requiresVisibleIds || []),
     ...dynamicDependencies.filter((rule) => rule.dependentId === entityId).flatMap((rule) => rule.requires)
@@ -1953,7 +1982,8 @@
     list.dataset.keyboardSection = "items";
     list.dataset.keyboardBehavior = "toggle";
     list.dataset.renderComponent = "toggle-list";
-    stage.items.forEach((id) => {
+    const stageItems = flowStageItemIds(stage.id);
+    stageItems.forEach((id) => {
       const item = document.createElement("label"); item.className = "accessory-toggle custom-stage-option";
       const input = document.createElement("input"); input.type = "checkbox"; input.dataset.customStageItem = id; input.dataset.flowItemId = id;
       const effective = eventAdjustedState();
@@ -1966,7 +1996,7 @@
       const label = document.createElement("span"); const strong = document.createElement("strong"); strong.textContent = customStageItemLabel(id); const small = document.createElement("small"); small.textContent = catalog.modules.some((module) => module.entityId === id) ? "Módulo" : "Item opcional"; label.append(strong, small);
       item.append(input, label); list.append(item);
     });
-    if (!stage.items.length) { const note = document.createElement("p"); note.className = "admin-note"; note.textContent = "Inclua itens na administração para preencher esta etapa."; list.append(note); }
+    if (!stageItems.length) { const note = document.createElement("p"); note.className = "admin-note"; note.textContent = "Inclua itens na administração para preencher esta etapa."; list.append(note); }
     panel.append(heading, list);
     if (!panel.dataset.eventsBound) {
       panel.addEventListener("change", (event) => {
@@ -2035,7 +2065,7 @@
   }
 
   function applyConfiguratorSettings(value) {
-    const normalized = configurationCore.normalizeConfiguratorSettings(value, catalog, priceBook, scene);
+    const normalized = normalizeAdministration(value);
     configuratorSettings = normalized;
     dynamicDependencies = normalized.dependencies;
     dynamicEvents = normalized.events;
@@ -2051,7 +2081,7 @@
         if (Object.hasOwn(object, "label")) object.label = data.title;
       }
     });
-    pricingRules = pricingContract.upgradeLegacy(normalized.pricing);
+    pricingRules = pricingRulesForAdministration(normalized);
     finishSettings = new Map(normalized.finishes.map((item) => [item.id, item]));
     applyMaterialLibrary(normalized);
     publishNormalizedFlow(normalized);
@@ -2086,7 +2116,7 @@
     enabled.filter((stage) => stageKind(stage) === "custom").forEach(renderCustomStage);
     document.querySelectorAll("[data-configurable-item]").forEach((element) => {
       const itemId = element.dataset.configurableItem;
-      const visible = configuratorSettings.stages.some((stage) => stage.enabled && stage.items.includes(itemId));
+      const visible = itemAvailable(itemId);
       element.hidden = !visible;
     });
     applyBuyerFlowLayout();
