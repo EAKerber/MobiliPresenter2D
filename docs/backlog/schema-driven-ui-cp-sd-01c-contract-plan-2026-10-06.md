@@ -1,6 +1,6 @@
 # CP-SD-01C — view/profile/shell contract freeze — 2026-10-06
 
-Status: **IN PROGRESS**.
+Status: **COMPLETE / PASS**.
 
 Parent:
 - `docs/backlog/schema-driven-ui-cp-sd-01-contract-plan-2026-10-06.md`
@@ -151,7 +151,7 @@ Result: PASS via PR #107 merged at `c9df1a6fd8094cf9893b89f9e5b46c7134de1eab`.
 
 Authored material color is now explicit `hex | null`; source null is preserved, UI swatch fallback stays display-only, safe admin v3 projection round-trips null, and all current app/browser/asset/variant gates plus Netlify preview #107 passed.
 
-## CP-SD-01C3 — consolidated unpublished administration candidate — IN PROGRESS
+## CP-SD-01C3 — consolidated unpublished administration candidate — COMPLETE / PASS
 
 Detailed plan:
 - `docs/backlog/schema-driven-ui-cp-sd-01c3-v5-candidate-plan-2026-10-06.md`.
@@ -184,6 +184,12 @@ Down-projection:
 Server:
 - continues to reject direct v5 publication until CP-SD-06 authenticated migration support is deliberately enabled.
 
+### C3 completion record
+
+Result: PASS in PR #108 on reviewed head `7ff4746cfb60acaada1c91bf87fc54958bc957cf`.
+
+The frozen unpublished candidate is `ConfiguratorAdministration2D 5.0`. v3 remains production legacy, v4 remains historical deterministic import, v5 persists explicit section behavior + executable component + validated presentation policy, and direct v5 publication remains server-blocked. The gate-discovered Modules behavior distinction was incorporated into the contract rather than hidden by an item-kind fallback. All current app/browser/asset/variant gates and deploy preview #108 passed. No production write.
+
 ## CP-SD-01C completion gate
 
 PASS when:
@@ -198,4 +204,4 @@ PASS when:
 - current buyer behavior is still representable and all gates remain green;
 - no production configuration is written.
 
-Then CP-SD-02 may remove static semantic UI fallback surfaces against a stable contract.
+**Gate result: PASS.** CP-SD-02 may now remove static semantic UI fallback surfaces against the frozen contract.
