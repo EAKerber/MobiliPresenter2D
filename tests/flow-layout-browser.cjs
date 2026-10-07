@@ -147,6 +147,20 @@ const { chromium } = require("playwright");
     "Services group shell is created at runtime from normalized flow"
   );
   assert.deepEqual(await renderedSectionOrder("services"), await modelSectionOrder("services", "services"), "Services section order follows normalized flow");
+  const generatedLighting = page.locator('[data-keyboard-section="lighting"]');
+  assert.equal(
+    await generatedLighting.getAttribute("data-flow-generated-section"),
+    "true",
+    "Lighting section shell is created from normalized flow"
+  );
+  assert.equal(await generatedLighting.getAttribute("data-keyboard-behavior"), "toggle", "generated Lighting behavior comes from normalized flow");
+  assert.equal(await generatedLighting.getAttribute("data-render-component"), "toggle-list", "generated Lighting component comes from normalized flow");
+  assert.equal(await generatedLighting.locator("h3").textContent(), "Iluminação", "generated Lighting heading comes from normalized flow label");
+  assert.equal(
+    await generatedLighting.locator('[data-flow-item-id="lighting-08"] #lightingToggle').count(),
+    1,
+    "specialized Lighting item adapter remains owned by the generated semantic section"
+  );
   const generatedAdditionalServices = page.locator('[data-keyboard-section="additional-services"]');
   assert.equal(
     await generatedAdditionalServices.getAttribute("data-flow-generated-section"),
