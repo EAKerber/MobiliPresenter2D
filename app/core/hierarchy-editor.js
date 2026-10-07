@@ -93,18 +93,17 @@
     });
   }
 
-  function splitItemToSection(model, itemId, { sectionId, label, presentation = "auto" }) {
+  function splitItemToSection(model, itemId, { sectionId, label, presentation = "auto", behavior = null, component = null }) {
     return update(model, (next) => {
       const owner = findItemOwner(next, itemId);
       if (!owner || owner.section.itemIds.length <= 1 || owner.group.sections.some((section) => section.id === sectionId)) return false;
       owner.section.itemIds.splice(owner.itemIndex, 1);
       const sourceIndex = owner.group.sections.indexOf(owner.section);
-      owner.group.sections.splice(sourceIndex + 1, 0, {
-        id: sectionId,
-        label,
-        presentation,
-        itemIds: [itemId]
-      });
+      const nextSection = { id: sectionId, label, itemIds: [itemId] };
+      if (behavior) nextSection.behavior = behavior;
+      if (component) nextSection.component = component;
+      else nextSection.presentation = presentation;
+      owner.group.sections.splice(sourceIndex + 1, 0, nextSection);
       return true;
     });
   }
@@ -198,7 +197,7 @@
     });
   }
 
-  function placeItemInEmptyStage(model, itemId, stageId, { groupId, groupLabel, sectionId, sectionLabel, presentation = "auto", columnSpan = 2 } = {}) {
+  function placeItemInEmptyStage(model, itemId, stageId, { groupId, groupLabel, sectionId, sectionLabel, presentation = "auto", behavior = null, component = null, columnSpan = 2 } = {}) {
     return update(model, (next) => {
       const stage = findStage(next, stageId);
       if (!stage || stage.groups.length || findItemOwner(next, itemId)) return false;
@@ -209,7 +208,8 @@
         sections: [{
           id: sectionId || uniqueId(new Set(), `${stage.id}-items`, "items"),
           label: sectionLabel || "Itens",
-          presentation,
+          ...(behavior ? { behavior } : {}),
+          ...(component ? { component } : { presentation }),
           itemIds: [itemId]
         }]
       });

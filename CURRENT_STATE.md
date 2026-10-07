@@ -46,13 +46,14 @@ New product requirements discovered during guided review must be designed before
 Canonical plan:
 - `docs/backlog/schema-driven-ui-consolidation-roadmap-2026-10-06.md`
 - completed audit: `docs/architecture/schema-ui-authority-audit-2026-10-06.md`
-- immediate checkpoint: `docs/backlog/schema-driven-ui-cp-sd-01-contract-plan-2026-10-06.md`
+- completed contract checkpoint: `docs/backlog/schema-driven-ui-cp-sd-01-contract-plan-2026-10-06.md`
+- next track: CP-SD-02, to be executed as smaller slices beginning with a focused semantic-renderer inventory/removal checkpoint
 
 **CP-SD-00 — COMPLETE / PASS.** The audit found no critical unknowns. The main publication blocker is now explicit: v4 persists section presentation metadata, but that metadata is not yet the executable buyer-renderer authority.
 
-**CP-SD-01 — IN PROGRESS.** **CP-SD-01A COMPLETE / PASS** established one item capability authority. **CP-SD-01B COMPLETE / PASS** established closed executable presentation bindings. **CP-SD-01C1 COMPLETE / PASS** on functional head `b7716089175e2d7e324c95c8447be631cf5964de`: ownership vs availability, named layout profiles and validated companion/PiP/bottom-dock policy are now explicit with all current gates green. **CP-SD-01C2 is IN PROGRESS**: make authored material color semantics explicit (`hex | null`) without changing existing visuals. Detailed plan: `docs/backlog/schema-driven-ui-cp-sd-01c2-material-semantics-plan-2026-10-06.md`. CP-SD-01C3 then freezes the consolidated unpublished administration candidate. No production publication in this checkpoint.
+**CP-SD-01 — COMPLETE / PASS.** CP-SD-01A established one item capability authority; CP-SD-01B established closed executable presentation bindings; CP-SD-01C froze ownership/availability semantics, named layout profiles, companion/PiP/bottom-dock policy, authored material `hex | null` semantics and the unpublished `ConfiguratorAdministration2D 5.0` candidate. PR #108 passed all current app/browser/asset/variant gates and Netlify preview; direct v4/v5 publication remains server-blocked and production was not written. **CP-SD-02 is NEXT**, but will be split into smaller reviewable checkpoints rather than one broad renderer rewrite.
 
-The isolated authenticated CP-UX-05A0 v3 Puxadores repair remains valid and independent. The broader production hierarchy publication is intentionally held until CP-SD-01 freezes the schema/presentation contract. The final migration may target a consolidated version after the unpublished v4 milestone rather than publishing v4 and immediately migrating again.
+The isolated authenticated CP-UX-05A0 v3 Puxadores repair remains valid and independent. The schema/presentation contract is now frozen; any later authenticated hierarchy publication should target the consolidated v5 candidate directly rather than publishing the historical v4 intermediate first.
 
 ## Current P1 — published administration compatibility
 
@@ -173,12 +174,13 @@ Read, in order:
 2. `docs/architecture/schema-ui-authority-audit-2026-10-06.md`
 3. `docs/backlog/schema-driven-ui-cp-sd-01-contract-plan-2026-10-06.md`
 4. `docs/backlog/schema-driven-ui-cp-sd-01c-contract-plan-2026-10-06.md`
-5. `docs/backlog/schema-driven-ui-cp-sd-00-audit-plan-2026-10-06.md`
-6. `docs/backlog/ux-navigation-hierarchy-roadmap-2026-10-05.md`
-7. `docs/backlog/housekeeping-roadmap-and-checkpoint-2026-10-05.md`
-8. `docs/architecture/official-candidate-gate-2026-10-05.md`
-9. `docs/architecture/runtime-contract-map-2026-10-05.md`
-10. `docs/architecture/published-config-compat-audit-2026-10-05.md`
+5. `docs/backlog/schema-driven-ui-cp-sd-01c3-v5-candidate-plan-2026-10-06.md`
+6. `docs/backlog/schema-driven-ui-cp-sd-00-audit-plan-2026-10-06.md`
+7. `docs/backlog/ux-navigation-hierarchy-roadmap-2026-10-05.md`
+8. `docs/backlog/housekeeping-roadmap-and-checkpoint-2026-10-05.md`
+9. `docs/architecture/official-candidate-gate-2026-10-05.md`
+10. `docs/architecture/runtime-contract-map-2026-10-05.md`
+11. `docs/architecture/published-config-compat-audit-2026-10-05.md`
 
 The schema-driven UI roadmap is the immediate sequencing authority before broader v4 publication. The UX roadmap remains authority for the completed navigation/hierarchy history and authenticated CP-UX-05 safety boundary. The housekeeping roadmap remains authority for the independent published-configuration compatibility cleanup.
 

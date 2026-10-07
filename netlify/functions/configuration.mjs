@@ -68,7 +68,7 @@ export default async (request, context) => {
     return respond({ error: "unsupported_configuration_operation" }, 422);
   }
 
-  if (payload?.schemaVersion === "ConfiguratorAdministration2D 4.0") {
+  if (["ConfiguratorAdministration2D 4.0", "ConfiguratorAdministration2D 5.0"].includes(payload?.schemaVersion)) {
     return respond({
       error: "hierarchy_publication_required",
       message: "Hierarchy publication is disabled until the authenticated hierarchy migration checkpoint."

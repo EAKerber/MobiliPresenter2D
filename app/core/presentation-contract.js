@@ -32,6 +32,24 @@
     action: "action-list"
   });
 
+  const BEHAVIOR_BY_COMPONENT = Object.freeze({
+    "choice-swatches": "selection",
+    "choice-grid": "selection",
+    "choice-cards": "selection",
+    "selection-list": "selection",
+    "toggle-list": "toggle",
+    "action-list": "action"
+  });
+
+  const LEGACY_PRESENTATION_BY_COMPONENT = Object.freeze({
+    "choice-swatches": "swatches",
+    "choice-grid": "grid",
+    "choice-cards": "cards",
+    "selection-list": "list",
+    "toggle-list": "list",
+    "action-list": "list"
+  });
+
   function assertComponent(component) {
     if (!COMPONENT_SET.has(component)) {
       throw new TypeError(`unsupported presentation component: ${component || "(empty)"}`);
@@ -43,6 +61,20 @@
     const component = LIST_COMPONENT_BY_BEHAVIOR[behavior];
     if (!component) throw new TypeError(`unsupported presentation behavior: ${behavior || "(empty)"}`);
     return component;
+  }
+
+  function componentBehavior(component) {
+    assertComponent(component);
+    return BEHAVIOR_BY_COMPONENT[component];
+  }
+
+  function componentSupportsBehavior(component, behavior) {
+    return componentBehavior(component) === behavior;
+  }
+
+  function legacyPresentationForComponent(component) {
+    assertComponent(component);
+    return LEGACY_PRESENTATION_BY_COMPONENT[component];
   }
 
   function resolveSectionComponent(section) {
@@ -204,6 +236,9 @@
     LEGACY_PRESENTATIONS,
     assertComponent,
     componentForBehavior,
+    componentBehavior,
+    componentSupportsBehavior,
+    legacyPresentationForComponent,
     resolveSectionComponent,
     normalizeSectionPresentation,
     validatePolicy,

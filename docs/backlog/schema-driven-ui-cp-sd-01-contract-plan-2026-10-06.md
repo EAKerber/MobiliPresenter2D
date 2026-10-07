@@ -1,6 +1,6 @@
 # CP-SD-01 — schema and presentation contract freeze — 2026-10-06
 
-Status: **IN PROGRESS**.
+Status: **COMPLETE / PASS**.
 
 Parent:
 - `docs/backlog/schema-driven-ui-consolidation-roadmap-2026-10-06.md`
@@ -91,7 +91,7 @@ Purpose: replace inert/descriptive section presentation with a closed component 
 
 CP-SD-01B result: PASS on functional head `6ff1cc74c488e5c3ed8b0fb168dfded94fd01bb0`; executable presentation bindings are now closed and fail-closed. Detailed record: `docs/backlog/schema-driven-ui-cp-sd-01b-presentation-plan-2026-10-06.md`.
 
-### CP-SD-01C — view/profile/shell contract — IN PROGRESS
+### CP-SD-01C — view/profile/shell contract — COMPLETE / PASS
 
 Detailed implementation/gates:
 - `docs/backlog/schema-driven-ui-cp-sd-01c-contract-plan-2026-10-06.md`.
@@ -414,3 +414,25 @@ Stop rather than expand the schema if:
 - server-safe validation would require importing DOM/browser code.
 
 The checkpoint should shrink the number of authorities, not create a framework.
+
+
+## CP-SD-01 completion record
+
+Result: **COMPLETE / PASS** after CP-SD-01A/B/C, finalized by PR #108 reviewed head `7ff4746cfb60acaada1c91bf87fc54958bc957cf`.
+
+Frozen contract:
+- Stage -> Group -> Section -> Item remains the semantic hierarchy;
+- one server-safe item capability authority;
+- explicit section behavior remains separate from item capability;
+- one closed executable section-component vocabulary;
+- named layout profiles;
+- validated companion/PiP/shell presentation policy;
+- authored material color `hex | null`;
+- `ConfiguratorAdministration2D 5.0` is the unpublished current repository candidate;
+- v3/v4 upgrade deterministically to v5;
+- v5 projects to production v3 only when the publication signature round-trips exactly;
+- direct v4/v5 publication remains fail-closed.
+
+No production configuration was written during CP-SD-01.
+
+Next: **CP-SD-02 — make buyer composition fully schema/data-driven and remove residual static semantic fallback surfaces while preserving the accepted PR #97 visual/interaction baseline.**

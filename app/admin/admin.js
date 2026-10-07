@@ -16,13 +16,15 @@ const priceBook = window.CASA_EM_MODULOS_PRICE_BOOK;
 const scene = window.CASA_EM_MODULOS_SCENE;
 const configurationCore = window.CasaModulesConfiguration;
 const capabilityCore = window.CasaModulesItemCapabilities;
+const presentationCore = window.CasaModulesPresentation;
 const flowCore = window.CasaModulesFlow;
-const hierarchyCore = window.CasaModulesHierarchyAdministration;
+const hierarchyV4Core = window.CasaModulesHierarchyAdministration;
+const hierarchyCore = window.CasaModulesAdministrationV5;
 const hierarchyEditor = window.CasaModulesHierarchyEditor;
 const legacyStageRepair = window.CasaModulesLegacyStageRepair;
 const hierarchyDefaults = window.CASA_EM_MODULOS_HIERARCHY_DEFAULTS;
 const legacyDefaults = configurationCore.createDefaultAdministration(settingsDefaults, catalog, priceBook, scene);
-const defaults = hierarchyCore.upgradeToHierarchy(legacyDefaults, configurationCore, flowCore, catalog, priceBook, scene, hierarchyDefaults);
+const defaults = hierarchyCore.upgrade(legacyDefaults, configurationCore, flowCore, catalog, priceBook, scene, hierarchyDefaults);
 const byId = (id) => document.getElementById(id);
 const loginPanel = byId("loginPanel");
 const deniedPanel = byId("deniedPanel");
@@ -116,7 +118,7 @@ function itemBehavior(itemId) {
 }
 
 function sectionBehavior(section) {
-  return itemBehavior(section?.itemIds?.[0]);
+  return section?.behavior || itemBehavior(section?.itemIds?.[0]);
 }
 
 function itemLabel(stageId, itemId) {
@@ -127,7 +129,7 @@ function itemLabel(stageId, itemId) {
 }
 
 function hierarchyErrors(candidate) {
-  return hierarchyCore.validateHierarchyAdministration(candidate, configurationCore, catalog, priceBook, scene);
+  return hierarchyCore.validate(candidate, configurationCore, catalog, priceBook, scene);
 }
 
 function commitHierarchy(candidate, successMessage = "") {
@@ -144,23 +146,24 @@ function commitHierarchy(candidate, successMessage = "") {
 }
 
 function defaultEmptyPlacement(stage, itemId) {
-  const behavior = itemBehavior(itemId);
+  const behavior = hierarchyCore.defaultSectionBehavior(stage, itemId, configurationCore, catalog, hierarchyDefaults) || itemBehavior(itemId);
   const sectionLabel = itemLabel(stage.id, itemId);
   return {
     groupId: hierarchyEditor.uniqueId(new Set(), `${stage.id}-group`, "group"),
     groupLabel: stage.label || "Grupo",
     sectionId: hierarchyEditor.uniqueId(new Set(), `${stage.id}-items`, "items"),
     sectionLabel,
-    presentation: behavior === "selection" ? "cards" : "list",
+    behavior,
+    component: presentationCore.componentForBehavior(behavior),
     columnSpan: 2
   };
 }
 
 function compatibleDestinationOptions(itemId) {
-  const behavior = itemBehavior(itemId);
   const options = [];
   model.stages.forEach((stage) => {
     if (!getItemOptions(stage.id).some((item) => item.id === itemId)) return;
+    const behavior = hierarchyCore.defaultSectionBehavior(stage, itemId, configurationCore, catalog, hierarchyDefaults) || itemBehavior(itemId);
     if (!stage.groups.length) {
       options.push({
         value: `${stage.id}||`,
@@ -402,14 +405,14 @@ function renderSection(stage, group, section, sectionIndex) {
 
   const presentation = document.createElement("label");
   presentation.className = "hierarchy-field";
-  presentation.append(document.createTextNode("Apresentação"));
+  presentation.append(document.createTextNode("Componente"));
   const select = document.createElement("select");
-  select.dataset.sectionPresentation = `${stage.id}|${group.id}|${section.id}`;
-  hierarchyCore.PRESENTATIONS.forEach((value) => {
+  select.dataset.sectionComponent = `${stage.id}|${group.id}|${section.id}`;
+  hierarchyCore.COMPONENTS.filter((value) => presentationCore.componentSupportsBehavior(value, section.behavior)).forEach((value) => {
     const option = document.createElement("option");
     option.value = value;
     option.textContent = value;
-    option.selected = value === section.presentation;
+    option.selected = value === section.component;
     select.append(option);
   });
   presentation.append(select);
@@ -1085,7 +1088,7 @@ function materialAssetChoices() {
 }
 
 function baselineHierarchyFor(source) {
-  return hierarchyCore.upgradeToHierarchy(source, configurationCore, flowCore, catalog, priceBook, scene, hierarchyDefaults);
+  return hierarchyCore.upgrade(source, configurationCore, flowCore, catalog, priceBook, scene, hierarchyDefaults);
 }
 
 function handlesRepairPlan(source = publishedSource) {
@@ -1428,13 +1431,13 @@ stagesList.addEventListener("change", (event) => {
     return;
   }
 
-  const sectionPresentation = event.target.closest("[data-section-presentation]");
-  if (sectionPresentation) {
-    const [stageId, groupId, sectionId] = sectionPresentation.dataset.sectionPresentation.split("|");
+  const sectionComponent = event.target.closest("[data-section-component]");
+  if (sectionComponent) {
+    const [stageId, groupId, sectionId] = sectionComponent.dataset.sectionComponent.split("|");
     const candidate = structuredClone(model);
     const group = candidate.stages.find((stage) => stage.id === stageId)?.groups.find((entry) => entry.id === groupId);
     const section = group?.sections.find((entry) => entry.id === sectionId);
-    if (section) section.presentation = sectionPresentation.value;
+    if (section) section.component = sectionComponent.value;
     commitHierarchy(candidate);
     return;
   }
@@ -1521,10 +1524,13 @@ stagesList.addEventListener("click", (event) => {
     const stage = model.stages.find((entry) => entry.id === splitItem.dataset.stageId);
     const sectionIds = new Set((stage?.groups || []).flatMap((group) => group.sections.map((section) => section.id)));
     const sectionId = hierarchyEditor.uniqueId(sectionIds, label, "secao");
-    const candidate = hierarchyEditor.splitItemToSection(model, splitItem.dataset.splitHierarchyItem, {
+    const itemId = splitItem.dataset.splitHierarchyItem;
+    const behavior = hierarchyCore.defaultSectionBehavior(stage, itemId, configurationCore, catalog, hierarchyDefaults) || itemBehavior(itemId);
+    const candidate = hierarchyEditor.splitItemToSection(model, itemId, {
       sectionId,
       label: label.trim().slice(0, 40),
-      presentation: "auto"
+      behavior,
+      component: presentationCore.componentForBehavior(behavior)
     });
     commitHierarchy(candidate);
     return;
@@ -1658,7 +1664,7 @@ persistHandlesButton.addEventListener("click", async () => {
       saveMessage,
       hasLocalDraft
         ? "Puxadores foi persistido em Acabamentos no v3 publicado. O painel foi recarregado a partir do publicado; outras alterações locais não foram enviadas."
-        : "Puxadores foi persistido em Acabamentos no v3 publicado. A publicação hierárquica v4 continua bloqueada.",
+        : "Puxadores foi persistido em Acabamentos no v3 publicado. A publicação hierárquica v5 continua bloqueada.",
       "success"
     );
   } catch (error) {
@@ -1675,7 +1681,7 @@ saveButton.addEventListener("click", async () => {
     const hierarchyValidation = hierarchyErrors(model);
     if (hierarchyValidation.length) throw new Error(hierarchyValidation[0]);
 
-    const projection = hierarchyCore.projectHierarchyToLegacy(
+    const projection = hierarchyCore.projectToLegacy(
       model,
       configurationCore,
       flowCore,
@@ -1710,7 +1716,7 @@ saveButton.addEventListener("click", async () => {
       if (payload?.error === "hierarchy_publication_required") throw new Error("A API bloqueou uma publicação hierárquica antes do checkpoint autorizado.");
       throw new Error(payload?.message || "A configuração não foi aceita. Confira nomes e itens selecionados.");
     }
-    model = hierarchyCore.upgradeToHierarchy(payload, configurationCore, flowCore, catalog, priceBook, scene, hierarchyDefaults);
+    model = hierarchyCore.upgrade(payload, configurationCore, flowCore, catalog, priceBook, scene, hierarchyDefaults);
     byId("revisionLabel").textContent = `Versão ${model.revision} · editor hierárquico`;
     setMessage(saveMessage, "Configuração compatível publicada. A hierarquia estrutural continua protegida contra publicação prematura.", "success");
     renderAdminTabs();

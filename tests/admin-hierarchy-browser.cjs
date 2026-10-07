@@ -52,7 +52,7 @@ function contentType(filePath) {
 
 function adminHarness() {
   const source = fs.readFileSync(path.join(appRoot, "admin.html"), "utf8");
-  const moduleTag = '<script type="module" src="admin/admin.bundle.js?v=admin-hierarchy-v5"></script>';
+  const moduleTag = '<script type="module" src="admin/admin.bundle.js?v=admin-hierarchy-v6"></script>';
   assert.equal(source.includes(moduleTag), true, "admin harness expects the hierarchy bundle revision");
   return source.replace(
     moduleTag,
@@ -151,6 +151,19 @@ async function sectionItemIds(page, stageId, groupId, sectionId) {
   assert.deepEqual(await groupSectionIds(page, "services", "services"), ["lighting", "additional-services"], "Services exposes lighting and additional-services sections");
   assert.deepEqual(await stageGroupIds(page, "modules"), ["modules-main"], "Modules is represented by a real hierarchy instead of a flat item list");
 
+  const handleComponent = page.locator('[data-section-component="finishes|cabinet-finishes|handles"]');
+  assert.equal(await handleComponent.inputValue(), "choice-grid", "admin loads the v3 source as an explicit v5 component");
+  assert.deepEqual(
+    await handleComponent.locator("option").evaluateAll((options) => options.map((option) => option.value)),
+    ["choice-swatches", "choice-grid", "choice-cards", "selection-list"],
+    "section editor exposes executable component ids only"
+  );
+  assert.equal(
+    await handleComponent.locator('option[value="auto"]').count(),
+    0,
+    "legacy auto presentation is not an authored v5 choice"
+  );
+
   const handleChoices = await page.locator('[data-hierarchy-item="handles-all"] [data-hierarchy-choice-option]').evaluateAll((nodes) =>
     nodes.map((node) => ({ id: node.dataset.hierarchyChoiceOption, label: node.querySelector("span")?.textContent?.trim(), available: node.dataset.available }))
   );
@@ -200,6 +213,15 @@ async function sectionItemIds(page, stageId, groupId, sectionId) {
   await page.reload({ waitUntil: "networkidle" });
   await page.waitForSelector('[data-hierarchy-stage="finishes"] [data-hierarchy-group="cabinet-finishes"]');
 
+  const handlesComponentDraft = page.locator('[data-section-component="finishes|cabinet-finishes|handles"]');
+  await handlesComponentDraft.selectOption("selection-list");
+  await page.locator("#saveButton").click();
+  await page.waitForFunction(() => document.getElementById("saveMessage").textContent.includes("rascunho"));
+  assert.equal(putCount, 0, "v5 component change is blocked instead of flattening to v3");
+
+  await page.reload({ waitUntil: "networkidle" });
+  await page.waitForSelector('[data-hierarchy-stage="finishes"] [data-hierarchy-group="cabinet-finishes"]');
+
   const moveHandles = page.locator('[data-move-section-group="finishes|cabinet-finishes|handles"]');
   await moveHandles.selectOption("stone");
   assert.deepEqual(await groupSectionIds(page, "finishes", "cabinet-finishes"), ["fronts"], "section can move out of its source group");
@@ -234,8 +256,8 @@ async function sectionItemIds(page, stageId, groupId, sectionId) {
   await page.locator("#saveButton").click();
   await page.waitForFunction(() => document.getElementById("saveMessage").textContent.includes("Configuração compatível publicada"));
   assert.equal(putCount, 1, "legacy-equivalent edit performs one production-compatible PUT");
-  assert.equal(lastPut.schemaVersion, "ConfiguratorAdministration2D 3.0", "admin never sends v4 to the current production endpoint");
-  assert.equal(lastPut.stages.find((stage) => stage.id === "finishes").label, "Acabamentos teste", "representable stage edit survives safe v4 -> v3 projection");
+  assert.equal(lastPut.schemaVersion, "ConfiguratorAdministration2D 3.0", "admin never sends v5 to the current production endpoint");
+  assert.equal(lastPut.stages.find((stage) => stage.id === "finishes").label, "Acabamentos teste", "representable stage edit survives safe v5 -> v3 projection");
   assert.equal(lastPut.materials.find((material) => material.id === "stone-existing").color, null, "explicit null material color survives safe admin save projection");
   assert.deepEqual(
     lastPut.stages.find((stage) => stage.id === "services").items,
