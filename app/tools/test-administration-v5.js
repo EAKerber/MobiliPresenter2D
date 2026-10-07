@@ -25,6 +25,7 @@ const flow = require(path.join(projectRoot, "core/flow-model.js"));
 const hierarchyV4 = require(path.join(projectRoot, "core/hierarchy-administration.js"));
 const pricingContract = require(path.join(projectRoot, "core/pricing-contract.js"));
 const v5Core = require(path.join(projectRoot, "core/administration-v5.js"));
+const publicationPreflight = require(path.join(projectRoot, "tools/v5-publication-preflight.js"));
 
 const v3 = configuration.createDefaultAdministration(defaults, catalog, priceBook, scene);
 const v4 = hierarchyV4.upgradeToHierarchy(v3, configuration, flow, catalog, priceBook, scene, hierarchyDefaults);
@@ -277,5 +278,107 @@ const endpointSource = fs.readFileSync(path.resolve(projectRoot, "../netlify/fun
 assert.equal(endpointSource.includes('"ConfiguratorAdministration2D 4.0", "ConfiguratorAdministration2D 5.0"'), true, "server explicitly recognizes both blocked hierarchy schemas");
 assert.equal(endpointSource.includes('error: "hierarchy_publication_required"'), true, "server keeps hierarchy publication fail-closed");
 assert.equal(endpointSource.includes('operation === "persist-handles-all"'), true, "isolated v3 Puxadores repair remains available");
+
+const preflight = publicationPreflight.createPreflight(v3);
+assert.equal(preflight.ok, true, "canonical repaired v3 source is ready for offline v5 publication preflight");
+assert.equal(preflight.code, "ready");
+assert.equal(preflight.source.schemaVersion, configuration.SCHEMA);
+assert.equal(preflight.source.revision, v3.revision);
+assert.equal(preflight.source.digest, publicationPreflight.digestJson(v3), "source digest covers the exact canonical v3 object");
+assert.deepEqual(preflight.source.handlesOwners, ["finishes"], "preflight records the one safe Puxadores owner");
+assert.deepEqual(preflight.candidatePayload, v5, "preflight derives the same deterministic v5 candidate as the canonical upgrade");
+assert.equal(preflight.candidate.schemaVersion, v5Core.SCHEMA);
+assert.equal(preflight.candidate.digest, publicationPreflight.digestJson(v5));
+assert.equal(preflight.expectedReadback.revision, v3.revision + 1, "server readback must advance exactly one revision");
+
+const expectedReadback = v5Core.normalize({ ...structuredClone(preflight.candidatePayload), revision: v3.revision + 1 });
+assert.deepEqual(
+  publicationPreflight.verifyReadback(preflight, expectedReadback),
+  {
+    ok: true,
+    code: "verified",
+    digest: preflight.expectedReadback.digest,
+    signatureDigest: preflight.expectedReadback.publicationSignatureDigest
+  },
+  "exact v5 readback verifies against revision, digest and publication signature"
+);
+
+const tamperedReadback = structuredClone(expectedReadback);
+tamperedReadback.pricing.roles.itemBase["module-01"].cents += 1;
+assert.equal(
+  publicationPreflight.verifyReadback(preflight, tamperedReadback).code,
+  "readback_digest_mismatch",
+  "valid-but-different readback is rejected"
+);
+
+const staleReadback = structuredClone(expectedReadback);
+staleReadback.revision = v3.revision;
+assert.equal(
+  publicationPreflight.verifyReadback(preflight, staleReadback).code,
+  "unexpected_revision",
+  "readback must advance from the exact source revision"
+);
+
+const sourceWithoutHandles = structuredClone(v3);
+sourceWithoutHandles.stages.find((stage) => (stage.kind || stage.id) === "finishes").items =
+  sourceWithoutHandles.stages.find((stage) => (stage.kind || stage.id) === "finishes").items.filter((id) => id !== "handles-all");
+const v5WithoutHandles = v5Core.upgrade(
+  sourceWithoutHandles,
+  configuration,
+  flow,
+  catalog,
+  priceBook,
+  scene,
+  hierarchyDefaults
+);
+assert.equal(
+  v5WithoutHandles.stages
+    .find((stage) => stage.id === "finishes")
+    .groups.flatMap((group) => group.sections)
+    .some((section) => section.itemIds.includes("handles-all")),
+  false,
+  "v3 -> v5 migration does not invent a missing handles-all assignment"
+);
+const missingHandlesPreflight = publicationPreflight.createPreflight(sourceWithoutHandles);
+assert.equal(missingHandlesPreflight.ok, false);
+assert.equal(
+  missingHandlesPreflight.code,
+  "handles_repair_required",
+  "production v5 publication stops until the isolated v3 Puxadores repair is complete"
+);
+assert.deepEqual(
+  missingHandlesPreflight.handlesRepair.beforeItems,
+  ["fronts-all", "stone-all", "stone-skirting"],
+  "preflight records the exact live Acabamentos ownership before repair"
+);
+assert.deepEqual(
+  missingHandlesPreflight.handlesRepair.afterItems,
+  ["fronts-all", "handles-all", "stone-all", "stone-skirting"],
+  "preflight shows the already-approved isolated v3 repair without applying it"
+);
+
+const wrongOwnerSource = structuredClone(sourceWithoutHandles);
+wrongOwnerSource.stages.find((stage) => (stage.kind || stage.id) === "services").items.push("handles-all");
+assert.equal(
+  publicationPreflight.createPreflight(wrongOwnerSource).code,
+  "handles_wrong_owner",
+  "preflight never moves Puxadores from a conflicting owner automatically"
+);
+
+const nonCanonicalSource = structuredClone(v3);
+delete nonCanonicalSource.stages[0].kind;
+assert.equal(
+  publicationPreflight.createPreflight(nonCanonicalSource).code,
+  "source_not_canonical",
+  "fresh source must already be canonical instead of changing silently during migration"
+);
+
+const unexpectedSchemaSource = structuredClone(v3);
+unexpectedSchemaSource.schemaVersion = "ConfiguratorAdministration2D 2.0";
+assert.equal(
+  publicationPreflight.createPreflight(unexpectedSchemaSource).code,
+  "unexpected_source_schema",
+  "initial v5 publication accepts only the exact current production v3 schema"
+);
 
 console.log("administration v5: PASS");
