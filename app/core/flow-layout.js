@@ -17,6 +17,7 @@
         span: Math.max(1, Math.min(2, Number(group.presentation?.span) || 1)),
         sections: group.sections.map((section) => ({
           id: section.id,
+          label: section.label,
           itemIds: [...section.itemIds],
           keyboard: Boolean(section.keyboard),
           behavior: section.behavior,
