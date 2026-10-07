@@ -1,6 +1,6 @@
 # CP-SD-06A1a — safe v5 server read — 2026-10-07
 
-Status: **IMPLEMENTED IN PR #153 / GATE PENDING**. This is a subdivision of CP-SD-06A1, not an authorization to activate a migration.
+Status: **COMPLETE / PASS IN PR #153**. This is a subdivision of CP-SD-06A1, not an authorization to activate a migration.
 
 ## Scope and authority
 
@@ -31,7 +31,7 @@ Required:
 7. Netlify deploy preview builds; no production data is read/written.
 8. Roadmap, current-state and handoff remain synchronized.
 
-Implementation awaits external CI and review; **do not mark COMPLETE/PASS without green gates**.
+Gate evidence: functional commit 265b1d50d3861a746bfc6f862830644c3419a5e9 passed 7/7 path-triggered workflows plus Netlify preview #153. Subsequent changes were documentation only.
 
 ## Out of scope
 
