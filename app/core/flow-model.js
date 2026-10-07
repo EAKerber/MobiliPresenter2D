@@ -210,6 +210,7 @@
           order: sectionIndex,
           behavior: behaviors.values().next().value || "action",
           keyboard: !["modules", "summary"].includes(kind),
+          component: sectionEntry.component || null,
           presentation: sectionEntry.presentation || "auto",
           itemIds: [...(sectionEntry.itemIds || [])]
         };
