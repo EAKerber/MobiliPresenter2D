@@ -202,6 +202,7 @@
 
     const errors = [];
     const shells = [...grid.querySelectorAll(":scope > [data-flow-group-shell]")];
+    const groupSlots = [...grid.querySelectorAll(":scope > [data-flow-group-slot]")];
     const shellById = new Map(shells.map((shell) => [shell.dataset.flowGroupShell, shell]));
     const expectedGroupIds = new Set(plan.groups.map((group) => group.id));
     const expectedSectionIds = new Set(plan.groups.flatMap((group) => group.sections.map((section) => section.id)));
@@ -226,19 +227,76 @@
     });
 
     shells.forEach((shell) => {
-      shell.hidden = !expectedGroupIds.has(shell.dataset.flowGroupShell);
+      const groupId = shell.dataset.flowGroupShell;
+      const expected = expectedGroupIds.has(groupId);
+      const claimedNeutralSlot = shell.dataset.flowGeneratedGroup === "true" && Boolean(shell.dataset.flowGroupSlot);
+      if (!expected && claimedNeutralSlot) {
+        shell.hidden = true;
+        shell.querySelectorAll("[data-flow-group-label]").forEach((label) => {
+          label.textContent = "";
+        });
+        delete shell.dataset.flowGroupShell;
+        delete shell.dataset.flowGeneratedGroup;
+        delete shell.dataset.flowGroup;
+        delete shell.dataset.flowSpan;
+        shellById.delete(groupId);
+        return;
+      }
+      shell.hidden = !expected;
+    });
+    groupSlots.forEach((slot) => {
+      if (!slot.dataset.flowGroupShell) slot.hidden = true;
     });
 
     const shellClassName = String(grid.dataset.flowGroupClass || "").trim();
-    const createGroupShell = (groupId) => {
-      if (!shellClassName) return null;
+    const syncGroupLabel = (shell, group) => {
+      shell.querySelectorAll("[data-flow-group-label]").forEach((label) => {
+        label.textContent = group.label;
+      });
+    };
+    const createGroupShell = (group) => {
+      const affinitySlots = groupSlots.filter((slot) =>
+        !slot.dataset.flowGroupShell
+        && slot.dataset.flowGroupSlot === group.id
+      );
+      if (affinitySlots.length > 1) {
+        return {
+          element: null,
+          error: {
+            code: "ambiguous-group-slot",
+            stageId,
+            groupId: group.id,
+            message: `multiple neutral renderer group slots match ${stageId}/${group.id}`
+          }
+        };
+      }
+      if (affinitySlots.length === 1) {
+        const shell = affinitySlots[0];
+        shell.dataset.flowGroupShell = group.id;
+        shell.dataset.flowGeneratedGroup = "true";
+        shell.hidden = false;
+        syncGroupLabel(shell, group);
+        shellById.set(group.id, shell);
+        return { element: shell, error: null };
+      }
+      if (!shellClassName) {
+        return {
+          element: null,
+          error: {
+            code: "missing-group-binding",
+            stageId,
+            groupId: group.id,
+            message: `missing renderer group: ${stageId}/${group.id}`
+          }
+        };
+      }
       const shell = document.createElement("div");
       shell.className = shellClassName;
-      shell.dataset.flowGroupShell = groupId;
+      shell.dataset.flowGroupShell = group.id;
       shell.dataset.flowGeneratedGroup = "true";
       grid.append(shell);
-      shellById.set(groupId, shell);
-      return shell;
+      shellById.set(group.id, shell);
+      return { element: shell, error: null };
     };
 
     const createSectionShell = (section) => {
@@ -301,13 +359,18 @@
     };
 
     plan.groups.forEach((group) => {
-      const shell = shellById.get(group.id) || createGroupShell(group.id);
+      let shell = shellById.get(group.id);
       if (!shell) {
-        errors.push({ code: "missing-group-binding", stageId, groupId: group.id, message: `missing renderer group: ${stageId}/${group.id}` });
-        return;
+        const generated = createGroupShell(group);
+        if (generated.error) {
+          errors.push(generated.error);
+          return;
+        }
+        shell = generated.element;
       }
 
       shell.hidden = false;
+      syncGroupLabel(shell, group);
       shell.dataset.flowGroup = group.id;
       shell.dataset.flowSpan = String(group.span);
       grid.append(shell);
@@ -1907,7 +1970,7 @@
 
   function focusCurrentStep() {
     const panel = stagePanelFor(stageConfig(currentStep));
-    const heading = panel.querySelector("h2");
+    const heading = [...panel.querySelectorAll("h2")].find((candidate) => !candidate.closest("[hidden]"));
     if (!heading) return;
     heading.focus({ preventScroll: true });
 

@@ -1,6 +1,6 @@
 # CP-SD-02A2f1 — generated Cabinet Finishes group shell — 2026-10-07
 
-Status: **READY / NEXT**.
+Status: **COMPLETE / PASS**.
 
 Parent:
 - CP-SD-02A2f0 group-shell discovery — PASS.
@@ -98,5 +98,119 @@ Stop and split if cabinet group generation requires:
 - material/state/pricing changes;
 - broad stage-root generation;
 - production writes.
+
+No production configuration write.
+
+
+## Implementation candidate
+
+Applied only the Cabinet group seam:
+- added a generic direct-child `data-flow-group-slot` binding path to `mountStageGroups()`;
+- group-slot affinity is exact `group.id`; ambiguous matches fail closed as `ambiguous-group-slot`;
+- a claimed slot receives `data-flow-group-shell`, `data-flow-generated-group="true"`, normalized label text, span/order and is unhidden in place;
+- the existing class-based group-shell fallback remains unchanged for Services/Summary;
+- converted only `#frontFinishPanel` to hidden `data-flow-group-slot="cabinet-finishes"`;
+- removed static `data-flow-group-shell="cabinet-finishes"`;
+- `frontFinishHeading` is now populated from normalized `group.label`;
+- the icon, explanatory paragraph, ids, Fronts/Handles section slots and item adapters are unchanged;
+- `focusCurrentStep()` now chooses the first `h2` without a `[hidden]` ancestor;
+- added normal generated-group proof and a valid Cabinet-absent fixture;
+- shared runtime cache revision advanced v24 -> v25.
+
+Valid Cabinet-absent fixture:
+- removes `fronts-all` and `handles-all`;
+- retains Stone;
+- proves no semantic cabinet group shell is fabricated;
+- proves the neutral Cabinet slot stays hidden;
+- proves Stone remains visible;
+- Ctrl+ArrowRight into Acabamentos focuses `stoneHeading`, not the hidden Cabinet heading;
+- renderer/page errors remain empty.
+
+Explicitly unchanged:
+- `#stonePanel[data-flow-group-shell="stone"][data-configurable-item="stone-all"]`;
+- all four generated Acabamentos section shells;
+- finish/handle/stone state, pricing and materials;
+- `renderStonePackages()`;
+- Stone/Skirting dependency/material semantics;
+- Modules/PiP/dock;
+- production configuration.
+
+Gate pending: eight repository workflows + Netlify preview.
+
+
+### First Flow-layout gate correction
+
+The first browser gate failed only on:
+
+`Cabinet Finishes visible group heading comes from normalized group label`
+
+The group slot itself was claimed successfully. Root cause: `flow-layout.stageLayout()` did not project normalized `group.label`; it exposed only group id/span/sections.
+
+Correction is generic:
+- add `label: group.label` to the group layout projection;
+- unit-test normalized labels for Cabinet, Stone and Services;
+- keep the group-slot renderer free of group-name branches;
+- advance shared cache revision v25 -> v26 so the revised flow-layout contract cannot reuse the failed preview cache key.
+
+No Cabinet visual adapter, section/item, Stone, material, state or pricing behavior changes are added by this correction.
+
+
+### Second Flow-layout gate correction
+
+The second browser gate advanced past label generation and failed only on the valid Cabinet-absence assertion:
+
+`omitted Cabinet Finishes data creates no semantic cabinet group shell`
+
+Cause:
+- the app initially mounts canonical defaults, where Cabinet exists, so the neutral slot becomes a generated group shell;
+- the routed configuration is then normalized without Cabinet;
+- reconciliation hid the old generated shell but left its runtime `data-flow-group-shell` ownership in place.
+
+That violates the fail-closed rule even though the UI was hidden.
+
+Correction is generic for **claimed neutral group slots**:
+- when their group is no longer expected, hide the slot;
+- clear normalized group-label text;
+- remove `data-flow-group-shell`, `data-flow-generated-group`, `data-flow-group` and `data-flow-span`;
+- remove the stale shell from the current id map;
+- keep `data-flow-group-slot` so a later valid configuration can reclaim the same visual adapter.
+
+Existing class-created generic group shells are not broadened in this checkpoint.
+
+Shared cache revision advances v26 -> v27.
+
+The valid Cabinet-absence fixture remains unchanged and now tests both UI absence and runtime semantic ownership absence.
+
+
+## Final result — PASS
+
+Final functional head:
+`0a26025476583e6898dbcf844022e73fd7b43502`.
+
+Proven:
+- `cabinet-finishes` has no static semantic group-shell identity in HTML;
+- the hidden neutral Cabinet group slot is claimed only when normalized flow contains the group;
+- normalized group label populates `frontFinishHeading`;
+- group order/span/container-query behavior remain driven by normalized flow;
+- Fronts and Handles generated sections/adapters remain unchanged;
+- valid Cabinet absence removes runtime semantic group ownership completely, not merely visually;
+- the neutral group slot remains reusable after unclaim;
+- stage-entry focus skips hidden adapters and focuses `stoneHeading` when Cabinet is intentionally absent;
+- Stone group markup/domain behavior remains unchanged.
+
+The two failed intermediate Flow gates were productive:
+1. completed the generic flow-layout group-label projection;
+2. completed generic claimed-neutral-group reconciliation semantics.
+
+Final gate:
+- App build purity — PASS;
+- Current variant fidelity — PASS;
+- Current asset gates — PASS;
+- Flow layout browser — PASS;
+- Keyboard browser — PASS;
+- Mobile browser — PASS;
+- Stone browser — PASS;
+- Summary/Pricing browser — PASS;
+- Netlify deploy preview #125 — PASS.
 
 No production configuration write.
