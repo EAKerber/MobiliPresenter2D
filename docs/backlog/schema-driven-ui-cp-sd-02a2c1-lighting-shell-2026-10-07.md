@@ -41,7 +41,7 @@ Proven:
 
 
 
-### A2c1.2 — negative Lighting absence proof
+### A2c1.2 — negative Lighting absence proof — PASS
 
 Configuration keeps Services but omits `lighting-08`.
 
@@ -54,6 +54,24 @@ Prove:
 - no renderer fallback/invariant error.
 
 No new feature implementation beyond a correction directly exposed by this proof.
+
+#### A2c1.2 result
+
+PASS on code head `0891e00ca2a11be79c607e4ee47923c656441782`.
+
+Focused gate:
+- Flow layout browser run `37562335555` — PASS.
+
+Proven with Services still present but `lighting-08` omitted:
+- normalized flow contains no `lighting` section;
+- zero semantic Lighting section shells exist;
+- the specialized item-affinity slot remains hidden/unclaimed;
+- Additional Services remains generated and visible;
+- the `lighting-08` scene layer is not configurable/visible;
+- renderer invariant errors remain empty;
+- no page/console errors.
+
+
 
 ### A2c1.3 — regression only
 
