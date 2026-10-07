@@ -1706,7 +1706,7 @@
   function renderStageNavigation() {
     const repin = mobileSceneRepin;
     flowNav.querySelectorAll("[data-step]").forEach((button) => button.remove());
-    const stages = enabledStages();
+    const stages = flowLayout.stageNavigation(normalizedFlow);
     flowNav.style.gridTemplateColumns = `repeat(${stages.length}, minmax(0, 1fr))`;
     stages.forEach((stage, index) => {
       const button = document.createElement("button");
@@ -2391,6 +2391,7 @@
       .catch(() => {});
   }
 
+  renderStageNavigation();
   applyBuyerFlowLayout();
   syncLayerVisibility();
   updateVisibleCount();
