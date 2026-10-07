@@ -1,6 +1,6 @@
 # CP-SD-03A7 — persistent bottom dock discovery — 2026-10-07
 
-Status: **READY / NEXT — DISCOVERY ONLY**.
+Status: **COMPLETE / PASS**.
 
 Parent:
 - CP-SD-03A6 stacked PiP execution — COMPLETE / PASS.
@@ -94,3 +94,14 @@ Stop and split rather than expand if the smallest coherent solution requires:
 - production configuration writes.
 
 No production configuration write.
+
+
+## Result
+
+Discovery completed without runtime changes. The existing `.flow-actions` footer already provides the two frozen slot adapters in policy order. The execution seam is limited to policy projection, sticky presentation, live dock geometry, keyboard bottom clearance and the existing PiP vertical clamp.
+
+Canonical result:
+- `docs/architecture/schema-driven-ui-cp-sd-03a7-bottom-dock-discovery-result-2026-10-07.md`.
+
+Next checkpoint:
+- `docs/backlog/schema-driven-ui-cp-sd-03a8-bottom-dock-execution-2026-10-07.md`.
