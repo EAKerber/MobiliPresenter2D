@@ -551,6 +551,8 @@ assert.equal(indexHtml.includes('data-stage-pane="list"'), true, "legacy Modules
 assert.equal(indexHtml.includes('data-stage-pane="detail"'), true, "legacy Modules detail pane hook remains during projection migration");
 assert.equal(appJs.includes("applyModuleViewMarkers"), true, "Modules policy view records are projected onto stable pane adapters");
 assert.equal(appJs.includes("syncModuleViewVisibility"), true, "Modules compact replace has one runtime pane-visibility synchronizer");
+assert.equal(appJs.includes("rememberModuleViewScrollPositions"), true, "stacked Modules pane scroll positions are remembered before profile topology changes");
+assert.equal(appJs.includes("restoreModuleViewScrollPositions"), true, "remembered stacked Modules pane scroll positions are restored when stacked topology returns");
 assert.equal(appJs.includes('companionView.projection === "replace"'), true, "Modules pane visibility consumes the policy projection marker");
 assert.equal(appJs.includes("primary.hidden = primaryWillHide"), true, "primary pane visibility is synchronized without DOM reparenting");
 assert.equal(appJs.includes("companion.hidden = companionWillHide"), true, "companion pane visibility is synchronized without DOM reparenting");

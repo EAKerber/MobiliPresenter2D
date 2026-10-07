@@ -206,3 +206,6 @@ For historical evidence, use normal docs/ADRs/PRs; for the current continuation 
 
 
 **CP-SD-03A4 — IMPLEMENTATION CANDIDATE.** Compact `replace` now executes on the stable Modules view adapters without reparenting: the primary list is visible only when no detail is open, while the companion detail is visible when inspection is active; side-rail and stacked continue showing both panes. One `syncModuleViewVisibility()` helper owns the state machine, preserves pane scroll positions, and moves focus only when a profile transition would hide the pane containing the active element. Existing open/close origin restoration, selection/inclusion semantics and PiP behavior remain unchanged. Shared runtime cache advances v32 -> v33. Gates pending.
+
+
+A4 gate correction: the first Flow run falsified the assumption that stable pane DOM alone preserves `scrollTop` across stacked -> compact. Compact removes the fixed pane scroller, so the browser legitimately clamps the detail pane to 0. The candidate now snapshots pane scroll offsets only when leaving `stacked` and restores them when `stacked` returns; it does not force an artificial pane scroll position while compact is active. The failed run otherwise reached and passed the compact focus/visibility assertions before this scroll expectation. Mobile and Keyboard passed on the same first head.

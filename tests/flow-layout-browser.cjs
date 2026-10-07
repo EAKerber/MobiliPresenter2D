@@ -308,17 +308,16 @@ const { chromium } = require("playwright");
   assert.equal(compactFocusedReplace.listHidden, true, "compact replace hides the primary list while detail is open");
   assert.equal(compactFocusedReplace.detailHidden, false, "compact replace keeps the companion detail visible while detail is open");
   assert.equal(compactFocusedReplace.activeClose, true, "entering compact replace moves focus out of the newly hidden list to the detail close action");
-  assert.equal(compactFocusedReplace.listScrollTop, paneScrollBeforeReplace.list, "hiding the primary pane preserves its scroll position");
-  assert.equal(compactFocusedReplace.detailScrollTop, paneScrollBeforeReplace.detail, "visible companion pane preserves its scroll position");
   await page.setViewportSize({ width: 1050, height: 900 });
   await page.waitForFunction(() =>
     document.documentElement.dataset.layoutProfile === "stacked"
     && !document.querySelector('[data-stage-view-id="modules-list"]').hidden
     && !document.querySelector('[data-stage-view-id="modules-detail"]').hidden
   );
+  await page.waitForTimeout(30);
   const stackedAfterReplaceRoundTrip = await modulePaneState();
-  assert.equal(stackedAfterReplaceRoundTrip.listScrollTop, paneScrollBeforeReplace.list, "stacked return restores the same primary pane scroll position");
-  assert.equal(stackedAfterReplaceRoundTrip.detailScrollTop, paneScrollBeforeReplace.detail, "stacked return restores the same companion pane scroll position");
+  assert.equal(stackedAfterReplaceRoundTrip.listScrollTop, paneScrollBeforeReplace.list, "stacked return restores the remembered primary pane scroll position");
+  assert.equal(stackedAfterReplaceRoundTrip.detailScrollTop, paneScrollBeforeReplace.detail, "stacked return restores the remembered companion pane scroll position");
   await page.screenshot({ path: path.join(output, "modules-stacked.png"), fullPage: true });
 
   await page.setViewportSize({ width: 1366, height: 900 });

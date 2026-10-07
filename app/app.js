@@ -49,6 +49,7 @@
   let state = core.createInitialState(scene);
   let currentStep = "modules";
   let detailOrigin = null;
+  const moduleViewScrollTopById = new Map();
   let mobileScenePinEnabled = true;
   let mobileSceneIsMini = false;
   let mobileSceneAnchorHeight = 0;
@@ -448,6 +449,27 @@
       }
       if (view.projection) adapter.dataset.viewProjection = view.projection;
       else delete adapter.dataset.viewProjection;
+    });
+  }
+
+  function rememberModuleViewScrollPositions(profile = document.documentElement.dataset.layoutProfile) {
+    if (profile !== "stacked") return;
+    const container = modulesPanel?.querySelector("[data-stage-view-layout='modules']");
+    if (!container) return;
+    container.querySelectorAll(":scope > [data-stage-view-id]").forEach((adapter) => {
+      moduleViewScrollTopById.set(adapter.dataset.stageViewId, adapter.scrollTop);
+    });
+  }
+
+  function restoreModuleViewScrollPositions(profile) {
+    if (profile !== "stacked" || !moduleViewScrollTopById.size) return;
+    requestAnimationFrame(() => {
+      const container = modulesPanel?.querySelector("[data-stage-view-layout='modules']");
+      if (!container || document.documentElement.dataset.layoutProfile !== "stacked") return;
+      container.querySelectorAll(":scope > [data-stage-view-id]").forEach((adapter) => {
+        const stored = moduleViewScrollTopById.get(adapter.dataset.stageViewId);
+        if (stored != null) adapter.scrollTop = stored;
+      });
     });
   }
 
@@ -2168,9 +2190,12 @@
   }
 
   function syncLayoutProfileMarker() {
+    const previousProfile = document.documentElement.dataset.layoutProfile || null;
     const profile = currentLayoutProfile();
+    if (profile !== previousProfile) rememberModuleViewScrollPositions(previousProfile);
     document.documentElement.dataset.layoutProfile = profile;
     syncModuleViewProjection(profile);
+    if (profile !== previousProfile) restoreModuleViewScrollPositions(profile);
     return profile;
   }
 
