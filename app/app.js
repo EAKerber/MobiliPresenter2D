@@ -698,17 +698,21 @@
         dimensions.textContent = productForCurrentConfiguration(product).dimensions.display;
         copy.append(title, dimensions);
 
-        const detail = document.createElement("button");
-        detail.type = "button";
-        detail.className = "module-card__detail";
-        detail.dataset.selectEntity = entity.id;
-        detail.setAttribute("aria-controls", "moduleDetail");
-        detail.setAttribute("aria-expanded", "false");
-        detail.setAttribute("aria-label", `Ver detalhes de ${product.title}`);
-        detail.textContent = "Ver";
+        const inspect = document.createElement("button");
+        inspect.type = "button";
+        inspect.className = "module-card__inspect";
+        inspect.dataset.selectEntity = entity.id;
+        inspect.setAttribute("aria-controls", "moduleDetail");
+        inspect.setAttribute("aria-expanded", "false");
+        inspect.setAttribute("aria-label", `Ver detalhes de ${product.title}`);
+        const inspectAffordance = document.createElement("span");
+        inspectAffordance.className = "module-card__inspect-affordance";
+        inspectAffordance.setAttribute("aria-hidden", "true");
+        inspectAffordance.textContent = "›";
 
-        toggleLabel.append(input, number, copy);
-        card.append(toggleLabel, detail);
+        toggleLabel.append(input);
+        inspect.append(number, copy, inspectAffordance);
+        card.append(toggleLabel, inspect);
         moduleList.append(card);
       });
   }
