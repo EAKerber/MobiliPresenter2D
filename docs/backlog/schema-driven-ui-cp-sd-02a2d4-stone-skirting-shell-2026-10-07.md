@@ -1,6 +1,6 @@
 # CP-SD-02A2d4 — Stone Skirting section shell — 2026-10-07
 
-Status: **IN PROGRESS — A2d4.0 PASS; A2d4.1 NEXT**.
+Status: **COMPLETE / PASS**.
 
 Parent:
 - CP-SD-02A2d0 Acabamentos family discovery;
@@ -104,3 +104,115 @@ A2d4.1 must not:
 - change `repairSkirtingStageContract()`;
 - change `stone-skirting requires stone-all`;
 - write production configuration.
+
+
+## A2d4.1 implementation candidate
+
+Applied only the semantic shell seam:
+- static `stone-skirting` section id/heading/behavior/component removed from HTML;
+- outer neutral slot carries `toggle-list` + `stone-skirting` affinity and remains presentation-free/hidden until claimed;
+- inner adapter retains `data-configurable-item="stone-skirting"`, `data-flow-item-id="stone-skirting"` and `#stoneSkirtingToggle`;
+- normalized flow supplies section id, label, behavior and component;
+- source and Flow-layout positive proof added;
+- shared runtime cache revision advanced from v22 to v23.
+
+Explicitly unchanged:
+- `renderStonePackages()`;
+- toggle change handler / `setGlobalService()`;
+- `stone-all` material group and `linkedItemIds`;
+- ON = selected Stone material, OFF = MDF/front-finish path;
+- `stone-skirting requires stone-all`;
+- pricing;
+- material/mask rendering;
+- `repairSkirtingStageContract()`;
+- production configuration.
+
+A2d4.2 remains a separate absence proof.
+
+
+## A2d4.1 result — PASS
+
+PASS on PR #121 head `64c516e1adae37dbaa71e96ce40b0ac6da522dae`.
+
+Proven:
+- normalized flow materializes Stone Skirting section id/label/behavior/component;
+- static HTML no longer owns Stone Skirting section semantics;
+- `#stoneSkirtingToggle` remains inside the generated section through the bounded `stone-skirting` adapter;
+- keyboard toggle/section traversal remains intact;
+- Stone browser confirms the existing material behavior is unchanged:
+  - ON -> selected Stone material;
+  - OFF -> MDF/front-finish path;
+  - Stone changes do not recolor the plinth while OFF;
+  - Stone changes do recolor the plinth while ON;
+- no new material authority, admin linking/unlinking option or separate Skirting material was introduced.
+
+Gate:
+- App build purity — PASS;
+- Current variant fidelity — PASS;
+- Current asset gates — PASS;
+- Flow layout browser — PASS;
+- Keyboard browser — PASS;
+- Mobile browser — PASS;
+- Stone browser — PASS;
+- Summary/Pricing browser — PASS;
+- Netlify deploy preview #121 — PASS.
+
+A2d4.2 remains a separate schema-valid absence proof.
+
+
+## A2d4.2 absence-proof candidate
+
+Test-only fixture:
+- keep `stone-all` in Acabamentos;
+- remove `stone-skirting` from Acabamentos stage items;
+- remove `stone-skirting` from `initialState.services`, making the absence intentional so `repairSkirtingStageContract()` must not restore it;
+- leave Stone material authority/catalog/pricing unchanged.
+
+Prove:
+- normalized Stone group remains present;
+- generated Stone Packages remains present and visible;
+- normalized Stone group has no `stone-skirting` section;
+- no semantic Stone Skirting shell exists;
+- the unclaimed Stone Skirting neutral slot remains hidden;
+- no renderer invariant/fallback/page errors occur.
+
+This proves section/UI absence independently from Stone material availability without introducing material independence.
+
+
+## A2d4.2 result — PASS
+
+PASS on PR #121 head `5b669edf855886ce834acd65d465944b6f2ef32b`.
+
+Proven with an intentional, schema-valid Stone Skirting absence fixture:
+- `stone-all` remains assigned;
+- `stone-skirting` is absent from stage assignment;
+- `stone-skirting` is absent from `initialState.services`, so the legacy repair correctly treats the omission as intentional;
+- normalized Stone group remains present;
+- generated Stone Packages remains present and visible;
+- normalized Stone group contains no Stone Skirting section;
+- no semantic Stone Skirting shell exists;
+- the unclaimed Stone Skirting neutral slot remains hidden;
+- no renderer invariant/fallback/page errors occur.
+
+No runtime implementation change was required by A2d4.2.
+
+## A2d4.3 regression + closure — PASS
+
+The final A2d4 head ran:
+- App build purity — PASS;
+- Current variant fidelity — PASS;
+- Current asset gates — PASS;
+- Flow layout browser — PASS;
+- Keyboard browser — PASS;
+- Mobile browser — PASS;
+- Stone browser — PASS;
+- Summary/Pricing browser — PASS;
+- Netlify deploy preview #121 — PASS.
+
+Final authority:
+- normalized flow owns Stone Skirting section id/label/behavior/component;
+- static HTML retains only a neutral `toggle-list` affinity slot and bounded `stone-skirting` adapter;
+- Stone Skirting remains separately toggleable as service state;
+- Stone material remains shared through `stone-all`;
+- independent Stone/Skirting materials and admin linking/unlinking remain intentionally deferred;
+- no pricing/material/schema/compatibility/production write occurred.

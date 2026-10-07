@@ -129,7 +129,8 @@ Current CP-SD-02 progress:
 - CP-SD-02A2d1: generated Fronts section shell + absence proof — complete;
 - CP-SD-02A2d2: generated Handles section shell + absence proof — complete;
 - CP-SD-02A2d3: Stone Packages discovery + generated shell + schema-valid absence proof — complete;
-- CP-SD-02A2d4: Stone Skirting boundary discovery + generated shell — next.
+- CP-SD-02A2d4: Stone Skirting discovery + generated shell + intentional absence proof — complete;
+- CP-SD-02A2e0: Summary stage/single-section boundary discovery — next.
 
 ### CP-SD-03 — responsive presentation primitives
 
