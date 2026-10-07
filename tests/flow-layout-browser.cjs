@@ -211,7 +211,55 @@ const { chromium } = require("playwright");
   assert.deepEqual(uniqueness, { moduleDetail: 1, moduleList: 1, fronts: 1, handles: 1, lighting: 1 }, "layout remounting reuses controls instead of duplicating them");
   assert.deepEqual(errors, [], "flow layout browser run has no console/page errors");
 
-  fs.writeFileSync(path.join(output, "result.json"), JSON.stringify({ targetUrl, uniqueness, errors }, null, 2));
+  const sourceConfiguration = await page.evaluate(async () => {
+    const response = await fetch("/api/configuration", { cache: "no-store" });
+    if (!response.ok) throw new Error("failed to load configuration fixture");
+    return response.json();
+  });
+  const withoutAdditionalServices = structuredClone(sourceConfiguration);
+  const servicesStage = withoutAdditionalServices.stages.find((stage) => (stage.kind || stage.id) === "services");
+  assert.ok(servicesStage, "negative fixture has Services stage");
+  servicesStage.items = servicesStage.items.filter((id) => id === "lighting-08");
+
+  const negativeErrors = [];
+  const negativePage = await browser.newPage({ viewport: { width: 1366, height: 900 } });
+  negativePage.on("pageerror", (error) => negativeErrors.push(error.message));
+  negativePage.on("console", (message) => { if (message.type() === "error") negativeErrors.push(message.text()); });
+  await negativePage.route("**/api/configuration", async (route) => {
+    if (route.request().method() !== "GET") return route.continue();
+    await route.fulfill({
+      status: 200,
+      contentType: "application/json",
+      body: JSON.stringify(withoutAdditionalServices)
+    });
+  });
+  await negativePage.goto(targetUrl, { waitUntil: "domcontentloaded", timeout: 15000 });
+  await negativePage.waitForFunction(() => {
+    const services = window.CASA_NORMALIZED_FLOW?.stages?.find((stage) => stage.id === "services");
+    return services
+      && services.groups.flatMap((group) => group.sections).every((section) => section.id !== "additional-services")
+      && window.CASA_EM_MODULOS_DEBUG?.getFlowLayoutErrors;
+  }, null, { timeout: 10000 });
+
+  assert.equal(
+    await negativePage.locator('[data-keyboard-section="additional-services"]').count(),
+    0,
+    "omitted normalized section creates no semantic section shell"
+  );
+  assert.equal(
+    await negativePage.locator("#servicesChecklist").isHidden(),
+    true,
+    "unclaimed neutral renderer slot stays hidden"
+  );
+  assert.deepEqual(
+    await negativePage.evaluate(() => window.CASA_EM_MODULOS_DEBUG.getFlowLayoutErrors()),
+    [],
+    "omitted normalized section does not trigger a fabricated fallback binding"
+  );
+  assert.deepEqual(negativeErrors, [], "negative section-absence fixture has no console/page errors");
+  await negativePage.close();
+
+  fs.writeFileSync(path.join(output, "result.json"), JSON.stringify({ targetUrl, uniqueness, errors, negativeErrors }, null, 2));
   await browser.close();
   console.log("flow layout browser: PASS");
 })().catch((error) => {
