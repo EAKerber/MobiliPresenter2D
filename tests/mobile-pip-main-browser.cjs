@@ -78,28 +78,14 @@ const { chromium } = require("playwright");
   assert(stackedAfterResize.y + stackedAfterResize.height <= stackedDockAfterResize.y - 6,
     "stacked PiP resize remains above the persistent dock");
 
-  await stackedCard.evaluate((element, points) => {
-    const pointerId = 77;
-    const fire = (type, x, y, buttons) => element.dispatchEvent(new PointerEvent(type, {
-      bubbles: true,
-      cancelable: true,
-      composed: true,
-      pointerId,
-      pointerType: "mouse",
-      isPrimary: true,
-      clientX: x,
-      clientY: y,
-      button: 0,
-      buttons
-    }));
-    fire("pointerdown", points.x, points.startY, 1);
-    fire("pointermove", points.x, points.endY, 1);
-    fire("pointerup", points.x, points.endY, 0);
-  }, {
-    x: stackedAfterResize.x + stackedAfterResize.width * 0.5,
-    startY: stackedAfterResize.y + stackedAfterResize.height * 0.7,
-    endY: 890
-  });
+  const stackedDragStart = {
+    x: stackedAfterResize.x + 8,
+    y: stackedAfterResize.y + stackedAfterResize.height * 0.55
+  };
+  await stackedPage.mouse.move(stackedDragStart.x, stackedDragStart.y);
+  await stackedPage.mouse.down();
+  await stackedPage.mouse.move(stackedDragStart.x, 890, { steps: 5 });
+  await stackedPage.mouse.up();
   await stackedPage.waitForTimeout(50);
   const stackedAfterDrag = await stackedCard.boundingBox();
   const stackedDockAfterDrag = await stackedDock.boundingBox();
@@ -247,28 +233,14 @@ const { chromium } = require("playwright");
   assert(afterResize.y + afterResize.height <= compactDockAfterResize.y - 6,
     "compact PiP resize remains above the persistent dock");
 
-  await card.evaluate((element, points) => {
-    const pointerId = 78;
-    const fire = (type, x, y, buttons) => element.dispatchEvent(new PointerEvent(type, {
-      bubbles: true,
-      cancelable: true,
-      composed: true,
-      pointerId,
-      pointerType: "touch",
-      isPrimary: true,
-      clientX: x,
-      clientY: y,
-      button: 0,
-      buttons
-    }));
-    fire("pointerdown", points.x, points.startY, 1);
-    fire("pointermove", points.x, points.endY, 1);
-    fire("pointerup", points.x, points.endY, 0);
-  }, {
-    x: afterResize.x + afterResize.width * 0.5,
-    startY: afterResize.y + afterResize.height * 0.7,
-    endY: 834
-  });
+  const compactDragStart = {
+    x: afterResize.x + 8,
+    y: afterResize.y + afterResize.height * 0.55
+  };
+  await page.mouse.move(compactDragStart.x, compactDragStart.y);
+  await page.mouse.down();
+  await page.mouse.move(compactDragStart.x, 834, { steps: 5 });
+  await page.mouse.up();
   await page.waitForTimeout(50);
   const compactAfterDrag = await card.boundingBox();
   const compactDockAfterDrag = await page.locator(".flow-actions").boundingBox();
