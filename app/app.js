@@ -13,7 +13,9 @@
   const flowCore = global.CasaModulesFlow;
   const layoutProfiles = global.CasaModulesLayoutProfiles;
   const presentationCore = global.CasaModulesPresentation;
-  const presentationPolicy = global.CASA_EM_MODULOS_PRESENTATION_POLICY;
+  let presentationPolicy = global.CASA_EM_MODULOS_PRESENTATION_POLICY;
+  const administrationV5 = global.CasaModulesAdministrationV5;
+  const buyerProjection = global.CasaModulesPublishedBuyerProjection;
   const flowLayout = global.CasaModulesFlowLayout;
   const hierarchyDefaults = global.CASA_EM_MODULOS_HIERARCHY_DEFAULTS;
   const priceBook = structuredClone(global.CASA_EM_MODULOS_PRICE_BOOK);
@@ -40,7 +42,7 @@
       : 0;
   }
 
-  if (!scene || !inlineMasks || !core || !visibility || !validation || !fingerprint || !finishes || !catalog || !priceBook || !pricingContract || !pricing || !configurationCore || !flowCore || !layoutProfiles || !presentationCore || !presentationPolicy || !flowLayout || !hierarchyDefaults || !configuratorSettings) {
+  if (!scene || !inlineMasks || !core || !visibility || !validation || !fingerprint || !finishes || !catalog || !priceBook || !pricingContract || !pricing || !configurationCore || !flowCore || !layoutProfiles || !presentationCore || !presentationPolicy || !flowLayout || !hierarchyDefaults || !configuratorSettings || !administrationV5 || !buyerProjection) {
     throw new Error("Não foi possível carregar os dados da cena 2D.");
   }
   validation.assertValidScene(scene);
@@ -2035,7 +2037,18 @@
   }
 
   function applyConfiguratorSettings(value) {
-    const normalized = configurationCore.normalizeConfiguratorSettings(value, catalog, priceBook, scene);
+    const prepared = buyerProjection.prepare(value, {
+      configuration: configurationCore,
+      administrationV5,
+      flow: flowCore,
+      catalog,
+      priceBook,
+      scene,
+      hierarchyDefaults,
+      pricingContract,
+      defaultPresentationPolicy: global.CASA_EM_MODULOS_PRESENTATION_POLICY
+    });
+    const normalized = prepared.displaySettings;
     configuratorSettings = normalized;
     dynamicDependencies = normalized.dependencies;
     dynamicEvents = normalized.events;
@@ -2051,10 +2064,11 @@
         if (Object.hasOwn(object, "label")) object.label = data.title;
       }
     });
-    pricingRules = pricingContract.upgradeLegacy(normalized.pricing);
+    pricingRules = prepared.pricingRules;
+    presentationPolicy = prepared.presentationPolicy;
     finishSettings = new Map(normalized.finishes.map((item) => [item.id, item]));
     applyMaterialLibrary(normalized);
-    publishNormalizedFlow(normalized);
+    publishNormalizedFlow(prepared.source);
     scene.entities.forEach((entity) => {
       const original = originalSceneEntities.get(entity.id) || entity;
       const assets = normalized.objectAssets[entity.id];
@@ -2801,11 +2815,38 @@
     syncLayerVisibility();
   });
 
+  function failClosedPublishedConfiguration(error) {
+    console.error("Configuração publicada inválida:", error);
+    document.documentElement.dataset.publishedConfigurationStatus = "invalid";
+    const message = document.createElement("p");
+    message.className = "published-config-error";
+    message.setAttribute("role", "alert");
+    message.textContent = "Não foi possível validar a configuração publicada. O configurador está temporariamente indisponível.";
+    const header = document.querySelector(".topbar");
+    if (header) header.after(message);
+    else document.body.prepend(message);
+    const workspace = document.querySelector(".workspace");
+    if (workspace) {
+      workspace.inert = true;
+      workspace.hidden = true;
+      workspace.style.display = "none";
+    }
+  }
+
   if (global.location?.protocol === "https:" || global.location?.protocol === "http:") {
     fetch("/api/configuration", { credentials: "same-origin", cache: "no-store" })
-      .then((response) => response.ok ? response.json() : null)
-      .then((settings) => { if (settings) applyConfiguratorSettings(settings); })
-      .catch(() => {});
+      .then((response) => {
+        if (response.ok) return response.json();
+        if (response.status === 422) throw new TypeError("invalid published configuration returned by the server");
+        return null; // Continue legacy offline/empty-server resilience for non-schema errors.
+      })
+      .then((settings) => {
+        if (settings) {
+          applyConfiguratorSettings(settings);
+          document.documentElement.dataset.publishedConfigurationStatus = "validated";
+        }
+      })
+      .catch(failClosedPublishedConfiguration);
   }
 
   renderStageNavigation();
