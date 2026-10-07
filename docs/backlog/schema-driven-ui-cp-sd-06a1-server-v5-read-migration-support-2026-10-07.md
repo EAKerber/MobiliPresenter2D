@@ -1,6 +1,6 @@
 # CP-SD-06A1 — server v5 read + guarded migration support — 2026-10-07
 
-Status: **SPLIT INTO A1a / A1b — REPOSITORY ONLY**. A1a COMPLETE / PASS in PR #153. A1b is implemented in draft PR #154 with gates pending and production activation disabled. Its execution checklist is `docs/backlog/schema-driven-ui-cp-sd-06a1b-guarded-migration-2026-10-07.md`.
+Status: **SPLIT INTO A1a / A1b — REPOSITORY ONLY**. A1a COMPLETE / PASS in PR #153. A1b COMPLETE / PASS in PR #154 with production activation disabled; next is the separately approved live execution boundary in CP-SD-06A2. Its execution checklist is `docs/backlog/schema-driven-ui-cp-sd-06a1b-guarded-migration-2026-10-07.md`.
 
 A1a execution/gate document: `docs/backlog/schema-driven-ui-cp-sd-06a1a-safe-v5-read-2026-10-07.md`.
 
