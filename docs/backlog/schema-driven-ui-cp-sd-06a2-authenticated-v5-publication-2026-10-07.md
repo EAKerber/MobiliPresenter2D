@@ -1,6 +1,8 @@
 # CP-SD-06A2 — authenticated v5 activation and publication — 2026-10-07
 
-Status: **PLANNED / LIVE EXECUTION NOT AUTHORIZED**.
+Status: **PLANNED / LIVE EXECUTION NOT AUTHORIZED — CONSUMER READINESS BLOCKED**.
+
+**New mandatory prerequisite (CP-SD-06A2A0):** `docs/architecture/schema-driven-ui-cp-sd-06a2a0-consumer-readiness-audit-2026-10-07.md`. The public buyer still consumes v3 only, normal admin Save projects to v3, and normal server PUT refuses stored v5. Finish A2A1 buyer v5, A2A2 admin/server v5 and A2A3 offline rehearsal before any activation.
 
 Prerequisites:
 - CP-SD-06A0 offline canonical preflight COMPLETE/PASS.

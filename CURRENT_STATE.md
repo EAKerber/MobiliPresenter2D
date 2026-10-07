@@ -54,6 +54,7 @@ Canonical plan:
 - A1a checkpoint/gates: `docs/backlog/schema-driven-ui-cp-sd-06a1a-safe-v5-read-2026-10-07.md`
 - A1b checkpoint/gates: `docs/backlog/schema-driven-ui-cp-sd-06a1b-guarded-migration-2026-10-07.md`
 - next production gate: `docs/backlog/schema-driven-ui-cp-sd-06a2-authenticated-v5-publication-2026-10-07.md` (planning only; not authorized to execute)
+- new prerequisite CP-SD-06A2A0: `docs/architecture/schema-driven-ui-cp-sd-06a2a0-consumer-readiness-audit-2026-10-07.md` — buyer v5 dispatch and normal post-v5 admin Save/server PUT are NOT yet ready; implement A2A1/A2A2/A2A3 before live activation.
 - current handoff: `docs/handoffs/schema-driven-ui-current-handoff-2026-10-07.md`
 
 **CP-SD-00 — COMPLETE / PASS.** The audit found no critical unknowns. The main publication blocker is now explicit: v4 persists section presentation metadata, but that metadata is not yet the executable buyer-renderer authority.
