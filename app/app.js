@@ -91,6 +91,7 @@
   const mobileSceneResizeHandle = document.getElementById("mobileSceneResizeHandle");
   const mobileSceneRepin = document.getElementById("mobileSceneRepin");
   const flowNav = document.querySelector(".flow-nav");
+  const flowActions = document.querySelector(".flow-actions");
   const stagePanels = new Map([
     ["modules", modulesPanel], ["finishes", finishesStagePanel], ["services", servicesPanel], ["summary", summaryPanel]
   ]);
@@ -2199,6 +2200,48 @@
     return profile;
   }
 
+  function bottomDockPolicy() {
+    return presentationPolicy.shell?.bottomDock || { enabled: false, slots: [] };
+  }
+
+  function bottomDockViewportRect() {
+    if (!flowActions || flowActions.hidden || flowActions.dataset.bottomDockEnabled !== "true") return null;
+    const rect = flowActions.getBoundingClientRect();
+    if (rect.height <= 0 || rect.bottom <= 0 || rect.top >= global.innerHeight) return null;
+    return rect;
+  }
+
+  function syncBottomDockClearance() {
+    const rect = bottomDockViewportRect();
+    const clearance = rect ? Math.ceil(rect.height) : 0;
+    document.documentElement.style.setProperty("--bottom-dock-clearance", clearance + "px");
+    if (rect && document.body.classList.contains("is-mobile-scene-pinned") && mobilePipPosition) {
+      syncPinnedSceneUi();
+    }
+    return clearance;
+  }
+
+  function syncBottomDockUi() {
+    if (!flowActions) return;
+    const policy = bottomDockPolicy();
+    const slotNodes = new Map([
+      ["estimate", configurationValue],
+      ["primary-action", nextStepButton]
+    ]);
+    const slots = policy.enabled ? policy.slots.filter((slot) => slotNodes.has(slot)) : [];
+    slotNodes.forEach((node, slot) => {
+      if (node) node.hidden = !slots.includes(slot);
+    });
+    slots.forEach((slot) => {
+      const node = slotNodes.get(slot);
+      if (node) flowActions.append(node);
+    });
+    flowActions.hidden = !policy.enabled;
+    flowActions.dataset.bottomDockEnabled = String(Boolean(policy.enabled));
+    flowActions.dataset.bottomDockSlots = slots.join(" ");
+    syncBottomDockClearance();
+  }
+
   function scenePipMode(profile = currentLayoutProfile()) {
     const pip = presentationPolicy.scene?.pip;
     const available = Boolean(pip?.availableProfiles?.includes(profile));
@@ -2223,6 +2266,17 @@
     const navBottom = Math.ceil(navBounds?.bottom || 0);
     const pipWidth = Math.min(mobilePipWidth ?? [176, 208, 240][mobilePipSizeIndex], Math.max(0, global.innerWidth - 16));
     const pipHeight = Math.ceil((pipWidth * 2) / 3) + 2;
+    if (shouldDock && mobilePipPosition) {
+      const minTop = navBottom + 8;
+      const viewportMaxTop = Math.max(minTop, global.innerHeight - pipHeight - 8);
+      const dockTop = bottomDockViewportRect()?.top;
+      const dockMaxTop = Number.isFinite(dockTop) ? Math.max(minTop, dockTop - pipHeight - 8) : viewportMaxTop;
+      const maxTop = Math.min(viewportMaxTop, dockMaxTop);
+      mobilePipPosition = {
+        ...mobilePipPosition,
+        top: Math.min(maxTop, Math.max(minTop, mobilePipPosition.top))
+      };
+    }
     const pipBottom = Math.max(navBottom, mobilePipPosition?.top || 0) + pipHeight;
     const contentClearance = shouldDock ? pipBottom + 16 : navBottom + 12;
     document.documentElement.style.setProperty("--mobile-flow-nav-height", navHeight + "px");
@@ -2307,6 +2361,9 @@
 
   if (global.ResizeObserver && viewerCard) {
     new global.ResizeObserver(() => syncPinnedSceneUi()).observe(viewerCard);
+  }
+  if (global.ResizeObserver && flowActions) {
+    new global.ResizeObserver(() => syncBottomDockClearance()).observe(flowActions);
   }
 
   global.addEventListener("resize", () => {
@@ -2651,7 +2708,11 @@
     if (!pipDrag || event.pointerId !== pipDrag.pointerId) return;
     const minTop = Math.ceil(flowNav?.getBoundingClientRect().bottom || 0) + 8;
     const maxLeft = Math.max(8, global.innerWidth - pipDrag.width - 8);
-    const maxTop = Math.max(minTop, global.innerHeight - viewerCard.getBoundingClientRect().height - 8);
+    const pipHeight = viewerCard.getBoundingClientRect().height;
+    const viewportMaxTop = Math.max(minTop, global.innerHeight - pipHeight - 8);
+    const dockTop = bottomDockViewportRect()?.top;
+    const dockMaxTop = Number.isFinite(dockTop) ? Math.max(minTop, dockTop - pipHeight - 8) : viewportMaxTop;
+    const maxTop = Math.min(viewportMaxTop, dockMaxTop);
     mobilePipPosition = {
       left: Math.min(maxLeft, Math.max(8, Math.round(pipDrag.left + event.clientX - pipDrag.originX))),
       top: Math.min(maxTop, Math.max(minTop, Math.round(pipDrag.top + event.clientY - pipDrag.originY)))
@@ -2729,6 +2790,7 @@
   syncLayerVisibility();
   updateVisibleCount();
   syncLayoutProfileMarker();
+  syncBottomDockUi();
   syncPinnedSceneUi();
   global.CASA_EM_MODULOS_DEBUG = Object.freeze({
     getState: () => state,
@@ -2737,6 +2799,11 @@
     getNormalizedFlow: () => normalizedFlow,
     getLayoutProfile: () => currentLayoutProfile(),
     getPresentationPolicy: () => presentationPolicy,
+    getBottomDock: () => ({
+      enabled: flowActions?.dataset.bottomDockEnabled === "true",
+      slots: flowActions?.dataset.bottomDockSlots?.split(/\s+/).filter(Boolean) || [],
+      clearance: Number.parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--bottom-dock-clearance")) || 0
+    }),
     itemAvailable: (itemId) => itemAvailable(itemId),
     stageOwns: (stageId, itemId) => stageOwns(stageId, itemId),
     scene
