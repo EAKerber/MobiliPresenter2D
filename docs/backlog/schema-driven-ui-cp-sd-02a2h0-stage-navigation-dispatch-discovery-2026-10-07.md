@@ -1,6 +1,6 @@
 # CP-SD-02A2h0 — stage navigation / core-dispatch residual discovery — 2026-10-07
 
-Status: **READY / NEXT — discovery only**.
+Status: **COMPLETE / PASS**.
 
 Parent:
 - CP-SD-02A0 residual renderer inventory;
@@ -79,3 +79,93 @@ Produce:
 - explicit stop condition for declaring CP-SD-02 complete.
 
 No runtime change, no production write.
+
+
+## Discovery result — PASS
+
+Baseline:
+- `main = 27bdc6b3926d34ac56f7283682ca64838c3fceac`;
+- CP-SD-02A2g1 merged;
+- no runtime or production write in A2h0.
+
+### Residual classification
+
+| Residual | Classification | Decision |
+| --- | --- | --- |
+| navigation `data-compact-label` map | responsive presentation copy | keep for now; exact `Acab.` / `Serv.` values are test-pinned; revisit with CP-SD-03 or an explicit presentation-copy contract |
+| `stagePanels` kind -> DOM root map | renderer registry / visual adapter | keep; it maps normalized stage kind to a stable visual root but does not own order, availability or hierarchy |
+| literal `mountStageGroups("finishes" ...)` | duplicate semantic stage-id authority | remove in A2h1 |
+| literal `mountStageGroups("services" ...)` | duplicate semantic stage-id authority | remove in A2h1 |
+| literal `mountStageGroups("summary" ...)` | duplicate semantic stage-id authority | remove in A2h1 |
+| static `data-flow-group-grid="finishes/services/summary"` | duplicate semantic stage-id authority at renderer binding | neutralize/claim from actual normalized stage id in A2h1 |
+| `moduleViewLayout(... "modules")`, Modules pane identity | presentation topology adapter | defer to CP-SD-03; the current presentation policy is itself keyed by `stageViews.modules` |
+| `currentStep = "modules"` / module selection jump | coupled to the same Modules presentation identity | defer with Modules stage identity/topology to CP-SD-03 rather than partially generalizing it here |
+| scene branches for Lighting / tempered glass | domain/scene adapter | outside CP-SD-02 |
+| material group ids | domain/material adapter | outside CP-SD-02 |
+
+### Why the generic dispatcher is a real authority leak
+
+Current configuration validation and normalization distinguish:
+- `stage.id`: document identity;
+- `stage.kind`: semantic stage type.
+
+For non-custom stages:
+- duplicate **kinds** are rejected;
+- ids only need to be unique/valid;
+- legacy hierarchy lookup already tries `hierarchyDefaults.stages[stage.id] || hierarchyDefaults.stages[kind]`.
+
+Therefore a valid Finishes, Services or Summary stage can retain its semantic kind while using a different id.
+
+The buyer already supports this distinction in:
+- `stagePanelFor(stage)`, which resolves core visual roots by `stage.kind`;
+- `syncStep()`, which hides/shows core panels by active kind;
+- navigation, which uses normalized `stage.id` for the step identity and normalized label/order for copy/order.
+
+The remaining incompatibility is the group mount binding:
+- `applyBuyerFlowLayout()` requests historical ids directly;
+- `mountStageGroups(stageId, root)` searches a group grid with exactly that id;
+- static markup pre-authors the same historical id in `data-flow-group-grid`.
+
+That is the last non-Modules stage-level hierarchy identity duplicated in renderer code/markup.
+
+### Modules boundary
+
+Do not use A2h1 to partially generalize Modules.
+
+Reasons:
+- `ConfiguratorPresentation2D 1.1` currently keys the companion policy at `stageViews.modules`;
+- `moduleViewLayout()` still embodies the accepted list/detail projection;
+- CP-SD-03 explicitly owns master/detail companion projection, PiP and responsive shell behavior.
+
+A later CP-SD-03 slice can decide whether Modules stage identity remains a reserved presentation-stage id or whether policy references move to kind/id-neutral binding.
+
+### A2h1 proof strategy
+
+Use a browser fixture with valid non-Modules core stage ids changed while preserving kinds:
+- e.g. `finishes-layout` / kind `finishes`;
+- `services-layout` / kind `services`;
+- `review-layout` / kind `summary`;
+- leave Modules id unchanged because its presentation policy is intentionally deferred.
+
+Expected:
+- normalized flow preserves the renamed ids and original kinds;
+- navigation uses renamed ids;
+- stable visual roots remain `#finishesStagePanel`, `#servicesPanel`, `#summaryPanel`;
+- each neutral group grid is claimed with the actual normalized stage id;
+- group/section/component bindings materialize normally;
+- Summary remains mandatory/enabled by kind;
+- no flow-layout/keyboard/page errors;
+- current default ids remain visually and behaviorally unchanged.
+
+## CP-SD-02 stop condition
+
+After A2h1 passes:
+- stage navigation source/order/labels are normalized-flow-owned;
+- generic non-Modules core stages mount by normalized stage identity + kind registry rather than historical ids;
+- group/section/item membership for Finishes/Services/Summary is normalized-flow-owned;
+- missing/incompatible bindings fail closed;
+- remaining Modules view topology/id coupling is explicitly presentation-policy work in CP-SD-03;
+- remaining compact labels are responsive copy, not semantic hierarchy;
+- remaining Lighting/material/pricing special cases are domain concerns in their own tracks.
+
+At that point CP-SD-02 can be declared complete without generalizing product/domain adapters.
