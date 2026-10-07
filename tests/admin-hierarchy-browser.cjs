@@ -176,6 +176,33 @@ async function sectionItemIds(page, stageId, groupId, sectionId) {
   assert.ok(frontChoices > 1, "front finish options are exposed consistently");
   assert.ok(stoneChoices > 1, "stone package options are exposed consistently");
 
+  await page.locator('[data-admin-tab="pricing"]').click();
+  await page.waitForSelector('[data-admin-panel="pricing"]:not([hidden])');
+  const module01Price = page.locator('[data-price-role="itemBase"][data-price-id="module-01"]');
+  const cocoaPrice = page.locator('[data-price-role="frontFinishAdjustment"][data-price-id="cocoa"]');
+  assert.equal(await module01Price.inputValue(), "900.00", "typed amount row preserves the current BRL value");
+  assert.equal(await module01Price.locator("xpath=..").locator("small").textContent(), "R$", "amount rule renders as BRL from its rule type");
+  assert.equal(await cocoaPrice.inputValue(), "15.00", "typed percentage row preserves the current BPS value");
+  assert.equal(await cocoaPrice.locator("xpath=..").locator("small").textContent(), "%", "percentage rule renders as percent from its rule type");
+  assert.equal(await page.locator("#pricingList select").count(), 0, "A3a keeps current pricing UI without a type selector");
+
+  await module01Price.fill("901.00");
+  await module01Price.press("Tab");
+  await cocoaPrice.fill("15.25");
+  await cocoaPrice.press("Tab");
+  await page.locator("#saveButton").click();
+  await page.waitForFunction(() => document.getElementById("saveMessage").textContent.includes("Configuração compatível publicada"));
+  assert.equal(putCount, 1, "representable typed pricing edit performs one v3-compatible PUT");
+  assert.equal(lastPut.schemaVersion, "ConfiguratorAdministration2D 3.0", "typed admin pricing still publishes only the current v3 schema");
+  assert.equal(lastPut.pricing.entries["module-01"], 90100, "typed amount edit projects back to exact cents");
+  assert.equal(lastPut.pricing.frontFinishRatesBps.cocoa, 1525, "typed percentage edit projects back to exact basis points");
+
+  current = configuration.createDefaultAdministration(defaults, catalog, priceBook, scene);
+  putCount = 0;
+  lastPut = null;
+  await page.reload({ waitUntil: "networkidle" });
+  await page.waitForSelector('[data-hierarchy-stage="finishes"] [data-hierarchy-group="cabinet-finishes"]');
+
   await page.locator('[data-admin-tab="finishes"]').click();
   await page.waitForSelector('[data-admin-panel="finishes"]:not([hidden])');
   await page.locator("#materialPager button").nth(1).click();
