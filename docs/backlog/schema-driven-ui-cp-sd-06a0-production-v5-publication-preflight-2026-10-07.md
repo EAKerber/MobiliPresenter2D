@@ -1,6 +1,6 @@
 # CP-SD-06A0 — production v5 publication preflight — 2026-10-07
 
-Status: **IN PROGRESS / REPOSITORY PREFLIGHT IMPLEMENTED; GATE PENDING**.
+Status: **COMPLETE / PASS**.
 
 Parent:
 - CP-SD-00 through CP-SD-05 — COMPLETE / PASS.
@@ -117,3 +117,35 @@ Functional/preflight head `d59afbccf53566d895478c2f97cbb1184f72e5b4` passed:
 Stone browser did not reach its functional test and remained blocked in isolated browser-tool installation. No Stone/runtime assertion failed.
 
 This documentation-only checkpoint creates a fresh head so Stone can execute on a clean runner. A0 remains IN PROGRESS until Stone browser completes successfully.
+
+
+## Final result
+
+CP-SD-06A0 is COMPLETE / PASS.
+
+Repository-side publication readiness is now deterministic and fail-closed:
+
+- offline preflight accepts only canonical current v3 input;
+- contradictory selected-but-unowned `stone-skirting` blocks publication;
+- unresolved/missing Puxadores ownership blocks publication;
+- v3 -> v5 migration is deterministic and validated;
+- derived v5 must project exactly back to the source v3;
+- source/candidate/readback SHA-256 digests are explicit;
+- expected readback revision is source revision + 1;
+- readback verifier checks revision, full canonical digest and publication-signature digest;
+- server migration contract is frozen around raw read + ETag + conditional write;
+- normal GET fallback behavior is explicitly disqualified as migration evidence because it may substitute defaults;
+- production endpoint behavior is unchanged in A0;
+- no production configuration write occurred.
+
+Gate evidence:
+
+- functional head `d59afbccf53566d895478c2f97cbb1184f72e5b4`: App build purity, Current asset gates, Current variant fidelity, Summary/Pricing, Mobile and Netlify PASS;
+- documentation-only retry head `dc0b8cb6ddc22e83ab23c54c9e5d23940a2652b4`: App build purity, Current asset gates, Current variant fidelity, Summary/Pricing, Stone and Netlify PASS; Mobile was still in browser-tool installation when this closeout was written;
+- the two heads are runtime-identical; `dc0b8cb6...` differs only by the gate-retry documentation checkpoint.
+
+Result document:
+`docs/architecture/schema-driven-ui-cp-sd-06a0-production-v5-preflight-result-2026-10-07.md`.
+
+Next:
+`docs/backlog/schema-driven-ui-cp-sd-06a1-server-v5-read-migration-support-2026-10-07.md`.
