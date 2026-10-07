@@ -1,6 +1,6 @@
 # CP-SD-06A2A1a — v5 buyer input projection contract — 2026-10-07
 
-Status: IMPLEMENTED / GATE PENDING in PR #156; not wired into buyer runtime.
+Status: COMPLETE / PASS in PR #156; pure contract only, not yet wired into buyer runtime.
 
 Parent: CP-SD-06A2A0 critical buyer/admin readiness audit (PR #155).
 
@@ -21,7 +21,7 @@ Parent: CP-SD-06A2A0 critical buyer/admin readiness audit (PR #155).
 
 ## Gate
 
-Current app test/build gate green; compare a v3 and its deterministic v5 migration, typed amount case and rejection fixtures. Then update docs and close only when green CI is observed.
+Gate evidence: functional PR #156 head 663261d3816fa9c99617f5560436d45ec419cb03 passed 6/6 path-triggered workflows including App build purity and the new projection tests; Netlify preview #156 passed. A canonical v3 and deterministic v5 share flow items; typed amounts remain typed; invalid v5 fails closed. All later modifications were documentation-only.
 
 ## Next
 
