@@ -115,6 +115,10 @@ const { chromium } = require("playwright");
   assert.equal(await generatedCabinetGroup.getAttribute("id"), "frontFinishPanel", "Cabinet Finishes keeps the accepted stable visual adapter id");
   assert.equal(await page.locator("#frontFinishHeading").textContent(), "Acabamentos do conjunto", "Cabinet Finishes visible group heading comes from normalized group label");
   assert.deepEqual(await renderedSectionOrder("cabinet-finishes"), await modelSectionOrder("finishes", "cabinet-finishes"), "cabinet section order follows normalized flow");
+  const generatedStoneGroup = page.locator('[data-flow-group-shell="stone"]');
+  assert.equal(await generatedStoneGroup.getAttribute("data-flow-generated-group"), "true", "Stone group shell is claimed from normalized flow");
+  assert.equal(await generatedStoneGroup.getAttribute("id"), "stonePanel", "Stone keeps the accepted stable visual adapter id");
+  assert.equal(await page.locator("#stoneHeading").textContent(), "Pedra do conjunto", "Stone visible group heading comes from normalized group label");
   assert.deepEqual(await renderedSectionOrder("stone"), await modelSectionOrder("finishes", "stone"), "stone section order follows normalized flow");
   const generatedFronts = page.locator('[data-keyboard-section="fronts"]');
   assert.equal(
@@ -660,9 +664,29 @@ const { chromium } = require("playwright");
       && window.CASA_EM_MODULOS_DEBUG?.getFlowLayoutErrors;
   }, null, { timeout: 10000 });
 
-  await stoneNegativePage.locator('.flow-nav [data-step="finishes"]').click();
-  await stoneNegativePage.waitForFunction(() => !document.getElementById("finishesStagePanel").hidden);
+  await stoneNegativePage.keyboard.press("Control+ArrowRight");
+  await stoneNegativePage.waitForFunction(() =>
+    document.querySelector('.flow-nav [data-step="finishes"]')?.getAttribute("aria-current") === "step"
+    && document.activeElement?.id === "frontFinishHeading",
+    null,
+    { timeout: 10000 }
+  );
 
+  assert.equal(
+    await stoneNegativePage.locator('[data-flow-group-shell="stone"]').count(),
+    0,
+    "omitted Stone data leaves no runtime semantic Stone group shell"
+  );
+  assert.equal(
+    await stoneNegativePage.locator('[data-flow-group-slot="stone"]').isHidden(),
+    true,
+    "unclaimed Stone neutral group slot stays hidden"
+  );
+  assert.equal(
+    await stoneNegativePage.evaluate(() => document.activeElement?.id),
+    "frontFinishHeading",
+    "Stone absence keeps stage-entry focus on the visible Cabinet heading"
+  );
   assert.equal(
     await stoneNegativePage.locator('[data-keyboard-section="stone-packages"]').count(),
     0,
