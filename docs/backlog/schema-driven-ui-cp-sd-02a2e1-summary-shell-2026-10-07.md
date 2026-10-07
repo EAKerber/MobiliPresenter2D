@@ -1,6 +1,6 @@
 # CP-SD-02A2e1 — generated Summary semantic shell — 2026-10-07
 
-Status: **IN PROGRESS — IMPLEMENTATION CANDIDATE**.
+Status: **COMPLETE / PASS**.
 
 Parent:
 - CP-SD-02A2e0 Summary discovery — PASS.
@@ -123,3 +123,31 @@ Explicitly unchanged:
 - production configuration.
 
 Gate pending: all eight repository workflows + Netlify preview.
+
+
+## Result — PASS
+
+PASS on PR #123 head `23324b19018b6a680631c771bc59fd31c948aa05`.
+
+Proven:
+- `#summaryPanel` is no longer the semantic `action-list` binding;
+- normalized flow materializes `summary-main -> summary -> action-list`;
+- `#summaryContent` remains unique and owned by the generated Summary semantic section;
+- the normalized section label remains accessible through an `sr-only` generated heading while the accepted visible “Sua composição” stage header remains unchanged;
+- `validateSingleSectionStageBinding()` is retired;
+- Summary binding failures are covered for missing group, missing section, missing component and component mismatch;
+- `renderSummary()` remains unchanged;
+- Summary/Pricing totals, rows, skirting charge, stone charge and persistent-value synchronization remain unchanged.
+
+Gate:
+- App build purity — PASS;
+- Current variant fidelity — PASS;
+- Current asset gates — PASS;
+- Flow layout browser — PASS;
+- Keyboard browser — PASS;
+- Mobile browser — PASS;
+- Stone browser — PASS;
+- Summary/Pricing browser — PASS;
+- Netlify deploy preview #123 — PASS.
+
+No production configuration write.
