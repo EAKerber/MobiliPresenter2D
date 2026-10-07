@@ -1,6 +1,6 @@
 # Schema-driven UI consolidation roadmap — 2026-10-06
 
-Status: canonical planning track for consolidating schema ownership before production hierarchy publication. CP-SD-00 is complete; CP-SD-01 is next.
+Status: canonical planning track for consolidating schema ownership before production hierarchy publication. CP-SD-00 and CP-SD-01 are complete; CP-SD-02 is next.
 
 This track starts from the manually accepted PR #97 buyer baseline and the current repository state after the isolated Puxadores persistence hotfix. It is intentionally documentation-first: no runtime, schema-version, pricing, catalog, scene, asset or production-configuration behavior changes are part of CP-SD-00.
 
@@ -82,9 +82,9 @@ Gate:
 
 Result: PASS. The concrete inventory is persisted in `docs/architecture/schema-ui-authority-audit-2026-10-06.md`. The audit found no critical unknowns and identified the main blocker before publication: v4 section `presentation` is persisted/validated but is not yet an executable buyer-renderer authority.
 
-### CP-SD-01 — freeze the current schema/presentation contract — IN PROGRESS
+### CP-SD-01 — freeze the current schema/presentation contract — COMPLETE / PASS
 
-Progress: CP-SD-01A capability authority is complete. CP-SD-01B executable presentation is complete and proven on functional head `6ff1cc74c488e5c3ed8b0fb168dfded94fd01bb0`. CP-SD-01C view/profile/shell contract is next.
+Result: PASS. CP-SD-01A centralized item capabilities; CP-SD-01B made presentation executable; CP-SD-01C froze topology policy, material `hex | null` semantics and the unpublished `ConfiguratorAdministration2D 5.0` candidate. Final reviewed PR #108 head: `7ff4746cfb60acaada1c91bf87fc54958bc957cf`.
 
 Detailed plan:
 - `docs/backlog/schema-driven-ui-cp-sd-01-contract-plan-2026-10-06.md`.
@@ -106,7 +106,7 @@ Gate:
 - a negative fixture proves missing semantic data does not get recreated by a renderer fallback;
 - no production v4 publication yet.
 
-### CP-SD-02 — make buyer composition fail-closed and fully data-driven
+### CP-SD-02 — make buyer composition fail-closed and fully data-driven — NEXT
 
 Goal: remove semantic UI fallbacks/hard-coded ownership that remain after CP-SD-01 while preserving the accepted product appearance and behavior.
 
@@ -174,7 +174,7 @@ Goal: hand the consolidated contract back into the authenticated CP-UX-05 public
 
 This checkpoint does not replace the safety rules already documented in CP-UX-05. It updates the candidate schema to the final consolidated contract, then uses the same fresh-read, revision/digest, server-validation, equivalence, readback and production-smoke discipline.
 
-The isolated v3 Puxadores repair (CP-UX-05A0) and independent stone-skirting housekeeping transaction remain valid and separate. Only the **v3 -> production hierarchy publication** is held until CP-SD-01 has frozen the schema/presentation contract.
+The isolated v3 Puxadores repair (CP-UX-05A0) and independent stone-skirting housekeeping transaction remain valid and separate. Only the **v3 -> production v5 hierarchy/presentation publication** remains held for the later authenticated publication checkpoint.
 
 Gate:
 - production uses one normal current schema authority;
@@ -201,4 +201,4 @@ The consolidation track is complete when all of the following are true:
 
 Do not publish the current hierarchy v4 to production merely to retire v3 before this consolidation decides whether v4 needs presentation-contract changes. Publishing a schema already known to be incomplete would create avoidable migration debt.
 
-CP-UX-05A0 may still be executed as the isolated v3 Puxadores repair because it changes only the intended current production assignment and is independently guarded. The broader production hierarchy publication waits for CP-SD-01; the final migration target may supersede the unpublished v4 intermediate rather than publishing it first.
+CP-UX-05A0 may still be executed as the isolated v3 Puxadores repair because it changes only the intended current production assignment and is independently guarded. CP-SD-01 is now frozen: the broader production hierarchy publication should target the consolidated v5 candidate directly rather than publishing the historical v4 intermediate first.
