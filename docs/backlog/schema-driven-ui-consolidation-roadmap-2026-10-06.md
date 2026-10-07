@@ -1,6 +1,6 @@
 # Schema-driven UI consolidation roadmap — 2026-10-06
 
-Status: canonical planning track for consolidating schema ownership before production hierarchy publication. CP-SD-00 through CP-SD-04 are complete; CP-SD-05 is in progress through discovery-first typed-pricing slices.
+Status: canonical planning track for consolidating schema ownership before production hierarchy publication. CP-SD-00 through CP-SD-05 are COMPLETE / PASS; CP-SD-06 is next at repository/authentication preflight.
 
 This track starts from the manually accepted PR #97 buyer baseline and the current repository state after the isolated Puxadores persistence hotfix. It is intentionally documentation-first: no runtime, schema-version, pricing, catalog, scene, asset or production-configuration behavior changes are part of CP-SD-00.
 
@@ -190,7 +190,7 @@ Gate:
 
 ### CP-SD-05 — typed pricing authoring
 
-Status: **IN PROGRESS**. CP-SD-05A0 discovery, A1 contract/migration, A2 buyer runtime, A3a v5/admin typed ownership and A3b explicit type authoring are COMPLETE / PASS. Immediate checkpoint: `docs/backlog/schema-driven-ui-cp-sd-05a4-price-book-v2-retirement-execution-2026-10-07.md`.
+Status: **COMPLETE / PASS**. CP-SD-05A0 through A4 are complete. `CommercialEstimatePriceBook 2.0` now carries `CommercialPricingRules 1.0`; buyer and unpublished v5/admin consume typed rules, while v3 buckets survive only in named compatibility migration/projection seams. Closure: `docs/architecture/schema-driven-ui-cp-sd-05-typed-pricing-closure-2026-10-07.md`.
 
 Goal: let admin price adjustments choose absolute amount or percentage without ambiguous numeric meaning.
 
@@ -207,6 +207,8 @@ Gate:
 - unsupported bases fail validation.
 
 ### CP-SD-06 — production schema publication and legacy retirement
+
+Status: **READY / NEXT — PREFLIGHT FIRST**. Immediate checkpoint: `docs/backlog/schema-driven-ui-cp-sd-06a0-production-v5-publication-preflight-2026-10-07.md`. A0 is repository/readiness work only; no production write is authorized without a fresh interactive authenticated session.
 
 Goal: hand the consolidated contract back into the authenticated CP-UX-05 publication boundary.
 
