@@ -1,6 +1,6 @@
 # CP-SD-03A4 — compact Modules replace projection execution — 2026-10-07
 
-Status: **IN PROGRESS — IMPLEMENTATION CANDIDATE**.
+Status: **COMPLETE / PASS**.
 
 Parent:
 - CP-SD-03A3 Modules companion projection discovery — PASS.
@@ -145,7 +145,7 @@ Proof added:
 - Flow verifies stacked -> compact focus repair, pane scroll preservation, compact Escape/return and round-trip;
 - Mobile PiP verifies a hotspot-opened detail keeps PiP pinned while compact replace hides the list and focuses close.
 
-Gate pending: all eight repository workflows + Netlify preview.
+Final functional head `43d6148514c6afaabe10dbd7033f7e81e5f564f9` passed all eight repository workflows plus Netlify deploy preview #135. The documentation closeout that follows does not change runtime behavior.
 
 
 ### Gate-driven correction
@@ -168,3 +168,10 @@ Correction:
 - test the round-trip contract, not an invalid compact intermediate offset.
 
 This remains inside the A4 scroll-preservation goal and does not alter compact scrolling ownership.
+
+
+## Closeout
+
+CP-SD-03A4 is complete. Compact Modules now executes the policy-owned `replace` projection with stable pane adapters, deterministic focus repair and stacked scroll round-trip preservation. No schema, pricing, scene-state, keyboard-core, module inclusion semantics or production configuration changed.
+
+Next checkpoint: `docs/backlog/schema-driven-ui-cp-sd-03a5-stacked-pip-discovery-2026-10-07.md`.
