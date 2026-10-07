@@ -181,7 +181,7 @@ assert.deepEqual(
 );
 
 const endpointSource = fs.readFileSync(path.resolve(projectRoot, "../netlify/functions/configuration.mjs"), "utf8");
-assert.equal(endpointSource.includes('payload?.schemaVersion === "ConfiguratorAdministration2D 4.0"'), true, "server recognizes hierarchy payloads explicitly");
+assert.equal(endpointSource.includes('"ConfiguratorAdministration2D 4.0", "ConfiguratorAdministration2D 5.0"'), true, "server recognizes blocked v4/v5 hierarchy payloads explicitly");
 assert.equal(endpointSource.includes('error: "hierarchy_publication_required"'), true, "server fails closed before hierarchy publication is authorized");
 assert.equal(endpointSource.includes('operation === "persist-handles-all"'), true, "server exposes one explicit handles-only v3 repair operation");
 assert.equal(endpointSource.includes("legacyStageRepair.verifyHandlesOnlyDelta"), true, "server verifies the handles-only delta against the live v3 source");
