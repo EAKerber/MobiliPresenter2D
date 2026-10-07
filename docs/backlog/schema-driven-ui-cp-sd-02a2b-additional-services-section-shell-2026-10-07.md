@@ -1,6 +1,6 @@
 # CP-SD-02A2b — Additional Services section shell from normalized flow — 2026-10-07
 
-Status: **IN PROGRESS**.
+Status: **COMPLETE / PASS**.
 
 Parent:
 - `docs/backlog/schema-driven-ui-cp-sd-02a2a-services-group-shell-2026-10-07.md`
@@ -138,3 +138,32 @@ A2b.2 conclusion:
 - no regression was found;
 - no corrective implementation is required;
 - the next mini-checkpoint is **A2b.3 — close documentation + merge PR #112 only**.
+
+
+## Mini-checkpoint A2b.3 — closure — PASS
+
+Closure head before this documentation commit: `601ebc1c0565eaba45d0bddcd0d66917352653a7`.
+
+Final verification on the current PR #112 line:
+- App build purity — PASS;
+- Current variant fidelity — PASS;
+- Current asset gates — PASS;
+- Flow layout browser — PASS;
+- Keyboard browser — PASS;
+- Mobile browser — PASS;
+- Stone browser — PASS;
+- Summary/Pricing browser — PASS;
+- Netlify deploy preview #112 — PASS.
+
+A2b final result:
+- `additional-services` semantic shell is no longer authored statically;
+- normalized flow materializes id, label, behavior and component into a runtime section shell;
+- omitting the section from normalized flow creates no semantic section node and no fallback UI;
+- stale generated section shells are removed on configuration reconciliation;
+- existing service-card content rendering and Lighting specialization remain unchanged;
+- no production configuration write.
+
+CP-SD-02A2b is complete.
+
+Next checkpoint is documentation/discovery only:
+**CP-SD-02A2c0 — Lighting specialization discovery**.
