@@ -432,29 +432,85 @@
     return errors;
   }
 
-  function mountModuleViewPanes() {
-    const plan = flowLayout.moduleViewLayout(normalizedFlow);
+  function applyModuleViewMarkers(plan, adapters) {
+    plan.views.forEach((view) => {
+      const matches = adapters.filter((adapter) => adapter.dataset.stageViewId === view.id);
+      if (matches.length !== 1) return;
+      const adapter = matches[0];
+      adapter.dataset.sourceSection = view.sourceSectionId;
+      adapter.dataset.viewRole = view.role;
+      if (view.relation) {
+        adapter.dataset.viewRelation = view.relation.kind;
+        adapter.dataset.viewRelationOf = view.relation.of;
+      } else {
+        delete adapter.dataset.viewRelation;
+        delete adapter.dataset.viewRelationOf;
+      }
+      if (view.projection) adapter.dataset.viewProjection = view.projection;
+      else delete adapter.dataset.viewProjection;
+    });
+  }
+
+  function mountModuleViewPanes(profile = currentLayoutProfile()) {
+    const plan = flowLayout.moduleViewLayout(normalizedFlow, presentationPolicy, profile);
     const container = modulesPanel?.querySelector("[data-stage-view-layout='modules']");
     if (!plan || !container) return [{ code: "missing-module-view-layout", message: "modules view layout is missing" }];
-    if (plan.error) return [{ code: plan.error, message: plan.error }];
-    const panes = new Map([...container.querySelectorAll(":scope > [data-stage-pane]")].map((pane) => [pane.dataset.stagePane, pane]));
+    if (plan.error) return [{ code: plan.error, stageId: "modules", message: plan.error }];
+    const adapters = [...container.querySelectorAll(":scope > [data-stage-view-id]")];
+    const expectedIds = new Set(plan.views.map((view) => view.id));
     const errors = [];
-    plan.panes.forEach((panePlan) => {
-      const pane = panes.get(panePlan.id);
-      if (!pane) {
-        errors.push({ code: "missing-module-pane", paneId: panePlan.id, message: `missing module pane: ${panePlan.id}` });
+
+    plan.views.forEach((view) => {
+      const matches = adapters.filter((adapter) => adapter.dataset.stageViewId === view.id);
+      if (matches.length !== 1) {
+        errors.push({
+          code: matches.length ? "duplicate-view-binding" : "missing-view-binding",
+          stageId: "modules",
+          viewId: view.id,
+          message: matches.length
+            ? `multiple Modules view adapters: ${view.id}`
+            : `missing Modules view adapter: ${view.id}`
+        });
         return;
       }
-      pane.dataset.sourceSection = panePlan.sourceSectionId;
-      if (panePlan.component) {
-        const sourceSection = flowLayout.stageLayout(normalizedFlow, "modules")
-          ?.groups.flatMap((group) => group.sections)
-          .find((section) => section.id === panePlan.sourceSectionId);
-        if (sourceSection) errors.push(...validateRendererComponentBinding("modules", sourceSection, pane, { paneId: panePlan.id }));
+      const adapter = matches[0];
+      const boundComponent = adapter.dataset.renderComponent || "";
+      if (!boundComponent) {
+        errors.push({ code: "missing-view-component-binding", stageId: "modules", viewId: view.id, component: view.component, message: `missing Modules view component: ${view.id}` });
+      } else if (boundComponent !== view.component) {
+        errors.push({
+          code: "view-component-binding-mismatch",
+          stageId: "modules",
+          viewId: view.id,
+          component: view.component,
+          boundComponent,
+          message: `Modules view component mismatch: ${view.id} expected ${view.component} but found ${boundComponent}`
+        });
+      } else {
+        adapter.dataset.flowComponent = view.component;
       }
-      container.append(pane);
     });
+
+    adapters.forEach((adapter) => {
+      if (!expectedIds.has(adapter.dataset.stageViewId)) {
+        errors.push({
+          code: "unexpected-view-binding",
+          stageId: "modules",
+          viewId: adapter.dataset.stageViewId,
+          message: `unexpected Modules view adapter: ${adapter.dataset.stageViewId}`
+        });
+      }
+    });
+
+    applyModuleViewMarkers(plan, adapters);
     return errors;
+  }
+
+  function syncModuleViewProjection(profile = currentLayoutProfile()) {
+    const plan = flowLayout.moduleViewLayout(normalizedFlow, presentationPolicy, profile);
+    const container = modulesPanel?.querySelector("[data-stage-view-layout='modules']");
+    if (!plan || plan.error || !container) return;
+    applyModuleViewMarkers(plan, [...container.querySelectorAll(":scope > [data-stage-view-id]")]);
   }
 
   function applyBuyerFlowLayout() {
@@ -2083,6 +2139,7 @@
   function syncLayoutProfileMarker() {
     const profile = currentLayoutProfile();
     document.documentElement.dataset.layoutProfile = profile;
+    syncModuleViewProjection(profile);
     return profile;
   }
 

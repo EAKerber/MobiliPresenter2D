@@ -72,6 +72,7 @@ const { chromium } = require("playwright");
   assert.equal(await page.locator('[data-stage-pane="list"]').count(), 1);
   assert.equal(await page.locator("#moduleDetailPlaceholder").isVisible(), true, "modules detail pane has an intentional empty-state view");
   assert.deepEqual(await renderedComponents(), {
+    detail: "detail-panel",
     list: "selection-list",
     fronts: "choice-swatches",
     handles: "choice-grid",
@@ -98,8 +99,53 @@ const { chromium } = require("playwright");
   assert.deepEqual(await stageGroupOrder("summary"), await modelGroupOrder("summary"), "Summary group order comes from normalized flow");
   assert.deepEqual(await renderedSectionOrder("summary-main"), await modelSectionOrder("summary", "summary-main"), "Summary section order follows normalized flow");
 
+  const modulesViewContract = async () => page.evaluate(() => {
+    const list = document.querySelector('[data-stage-view-id="modules-list"]');
+    const detail = document.querySelector('[data-stage-view-id="modules-detail"]');
+    return {
+      profile: document.documentElement.dataset.layoutProfile,
+      selectedEntityId: window.CASA_EM_MODULOS_DEBUG.getState().selectedEntityId,
+      list: {
+        pane: list?.dataset.stagePane || null,
+        role: list?.dataset.viewRole || null,
+        source: list?.dataset.sourceSection || null,
+        component: list?.dataset.flowComponent || null,
+        projection: list?.dataset.viewProjection || null
+      },
+      detail: {
+        pane: detail?.dataset.stagePane || null,
+        role: detail?.dataset.viewRole || null,
+        source: detail?.dataset.sourceSection || null,
+        component: detail?.dataset.flowComponent || null,
+        relation: detail?.dataset.viewRelation || null,
+        relationOf: detail?.dataset.viewRelationOf || null,
+        projection: detail?.dataset.viewProjection || null
+      }
+    };
+  });
+
+  const initialModulesContract = await modulesViewContract();
+  assert.equal(initialModulesContract.profile, "side-rail", "Modules view plan starts on the canonical side-rail profile");
+  assert.deepEqual(initialModulesContract.list, {
+    pane: "list",
+    role: "primary",
+    source: "modules",
+    component: "selection-list",
+    projection: null
+  }, "Modules primary list adapter is bound from presentation policy");
+  assert.deepEqual(initialModulesContract.detail, {
+    pane: "detail",
+    role: "companion",
+    source: "modules",
+    component: "detail-panel",
+    relation: "companion",
+    relationOf: "modules-list",
+    projection: "side-panel"
+  }, "Modules companion adapter exposes the policy relation and side-rail projection");
+
   await page.locator("#moduleList [data-select-entity]").first().click();
   await page.waitForFunction(() => document.body.classList.contains("has-module-detail"));
+  const selectedModuleBeforeProfileChanges = await page.evaluate(() => window.CASA_EM_MODULOS_DEBUG.getState().selectedEntityId);
   const detailDesktop = await rect('[data-stage-pane="detail"]');
   const listDesktop = await rect('[data-stage-pane="list"]');
   assert.ok(listDesktop.top >= detailDesktop.bottom - 2, "while controls are beside the scene, Modules uses one internal column");
@@ -194,6 +240,8 @@ const { chromium } = require("playwright");
   await page.setViewportSize({ width: 1050, height: 900 });
   await page.waitForTimeout(80);
   assert.equal(await page.evaluate(() => window.CASA_EM_MODULOS_DEBUG.getLayoutProfile()), "stacked", "1050px resolves to stacked");
+  assert.equal((await modulesViewContract()).detail.projection, "side-panel", "stacked profile updates Modules companion projection marker from policy");
+  assert.equal((await modulesViewContract()).selectedEntityId, selectedModuleBeforeProfileChanges, "selected module survives side-rail -> stacked profile marker update");
   assert.equal(await page.evaluate(() => document.documentElement.dataset.layoutProfile), "stacked", "stacked profile marker follows viewport");
   const cabinetMedium = await rect('[data-flow-group-shell="cabinet-finishes"]');
   const stoneMedium = await rect('[data-flow-group-shell="stone"]');
@@ -296,6 +344,8 @@ const { chromium } = require("playwright");
   await page.setViewportSize({ width: 390, height: 844 });
   await page.waitForTimeout(80);
   assert.equal(await page.evaluate(() => window.CASA_EM_MODULOS_DEBUG.getLayoutProfile()), "compact", "390px resolves to compact");
+  assert.equal((await modulesViewContract()).detail.projection, "replace", "compact profile updates Modules companion projection marker from policy");
+  assert.equal((await modulesViewContract()).selectedEntityId, selectedModuleBeforeProfileChanges, "selected module survives stacked -> compact profile marker update");
   assert.equal(await page.evaluate(() => document.documentElement.dataset.layoutProfile), "compact", "compact profile marker follows viewport");
   await page.locator('.flow-nav [data-step="modules"]').click();
   await page.waitForFunction(() => !document.getElementById("modulesPanel").hidden);

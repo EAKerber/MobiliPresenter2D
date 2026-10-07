@@ -93,7 +93,7 @@
     return errors;
   }
 
-  function moduleViewLayout(flow) {
+  function moduleViewLayout(flow, presentationPolicy, profile) {
     const layout = stageLayout(flow, "modules");
     if (!layout) return null;
     const sections = layout.groups.flatMap((group) => group.sections);
@@ -102,18 +102,48 @@
         stageId: "modules",
         semanticSectionIds: sections.map((section) => section.id),
         itemIds: semanticItemIds(layout),
-        panes: [],
+        views: [],
         error: "modules-view-requires-one-semantic-section"
       };
     }
+
+    const stagePolicy = presentationPolicy?.stageViews?.modules;
+    const authoredViews = Array.isArray(stagePolicy?.views) ? stagePolicy.views : [];
+    if (!authoredViews.length) {
+      return {
+        stageId: "modules",
+        semanticSectionIds: [sections[0].id],
+        itemIds: [...sections[0].itemIds],
+        views: [],
+        error: "modules-view-policy-missing"
+      };
+    }
+
+    const sourceSections = new Map(sections.map((section) => [section.id, section]));
+    const views = authoredViews.map((view) => ({
+      id: view.id,
+      sourceSectionId: view.sourceSectionId,
+      component: view.component,
+      role: view.role,
+      relation: view.relation ? { ...view.relation } : null,
+      projection: view.projectionByProfile?.[profile] || null
+    }));
+    const missingSource = views.find((view) => !sourceSections.has(view.sourceSectionId));
+    if (missingSource) {
+      return {
+        stageId: "modules",
+        semanticSectionIds: [sections[0].id],
+        itemIds: [...sections[0].itemIds],
+        views,
+        error: "modules-view-source-missing"
+      };
+    }
+
     return {
       stageId: "modules",
       semanticSectionIds: [sections[0].id],
       itemIds: [...sections[0].itemIds],
-      panes: [
-        { id: "detail", role: "context", sourceSectionId: sections[0].id },
-        { id: "list", role: "items", sourceSectionId: sections[0].id, component: sections[0].component }
-      ],
+      views,
       error: null
     };
   }
