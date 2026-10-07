@@ -52,7 +52,7 @@ function contentType(filePath) {
 
 function adminHarness() {
   const source = fs.readFileSync(path.join(appRoot, "admin.html"), "utf8");
-  const moduleTag = '<script type="module" src="admin/admin.bundle.js?v=admin-affordance-v1"></script>';
+  const moduleTag = '<script type="module" src="admin/admin.bundle.js?v=admin-pricing-v1"></script>';
   assert.equal(source.includes(moduleTag), true, "admin harness expects the current admin bundle revision");
   return source.replace(
     moduleTag,
