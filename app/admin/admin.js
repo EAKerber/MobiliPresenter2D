@@ -153,7 +153,7 @@ function defaultEmptyPlacement(stage, itemId) {
     groupLabel: stage.label || "Grupo",
     sectionId: hierarchyEditor.uniqueId(new Set(), `${stage.id}-items`, "items"),
     sectionLabel,
-    presentation: behavior === "selection" ? "cards" : "list",
+    component: presentationCore.componentForBehavior(behavior),
     columnSpan: 2
   };
 }
