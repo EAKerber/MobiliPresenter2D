@@ -178,7 +178,7 @@ const {chromium} = require('playwright');
   await sectionSnapshot();
   const missingOwnerErrors = await navigationErrors();
   assert.ok(missingOwnerErrors.some(entry => entry.code === 'missing-flow-item' && entry.itemId === 'fronts-all'), 'missing rendered model ownership is surfaced as an invariant error');
-  await page.evaluate(() => { document.querySelector('[data-keyboard-section="fronts"] [data-flow-slot-item="fronts-all"]').dataset.flowItemId = 'fronts-all'; });
+  await page.evaluate(() => { document.querySelector('[data-keyboard-section="fronts"] [data-configurable-item="fronts-all"]').dataset.flowItemId = 'fronts-all'; });
   await sectionSnapshot();
   assert.deepEqual(await navigationErrors(), [], 'restoring the flow ownership bridge clears invariant errors');
 

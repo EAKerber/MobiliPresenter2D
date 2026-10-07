@@ -76,7 +76,7 @@ A2d1.2 remains a separate negative-fixture commit.
 
 Fixture keeps Acabamentos but omits `fronts-all`.
 
-Candidate proof is intentionally test-only: production/runtime code remains identical to the A2d1.1 PASS head.
+Candidate proof initially exposed one directly related shell bug: the generic `flow-item-stack` display style had been placed on the neutral slot itself, which could override the slot's `hidden` state when Fronts was omitted. The correction keeps the neutral slot presentation-free and moves the stack/layout plus `fronts-all` ownership onto an inner item-adapter wrapper. No material/state/pricing/mask/scene semantics change.
 
 Prove:
 - no normalized `fronts` section;
