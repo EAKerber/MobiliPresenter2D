@@ -1,6 +1,6 @@
 # CP-SD-02A2d3 — Stone Packages section shell — 2026-10-07
 
-Status: **IN PROGRESS — A2d3.0 PASS; A2d3.1 CANDIDATE**.
+Status: **IN PROGRESS — A2d3.0 REVISED PASS; A2d3.1 FALSIFIED/REVERTED; A2d3.2 NEXT**.
 
 Parent:
 - CP-SD-02A2d0 Acabamentos family discovery;
@@ -8,99 +8,76 @@ Parent:
 - CP-SD-02A2d2 Handles shell.
 
 Goal:
-- move `stone-packages` / `choice-cards` semantic section ownership to normalized flow without changing stone selection, rendering, pricing or the independent `stone-skirting` service.
+- move `stone-packages` / `choice-cards` semantic section ownership to normalized flow without changing stone selection, rendering, pricing, masks/materials or the current `stone-skirting` dependency contract.
 
-## A2d3.0 — boundary discovery
-
-This discovery is required before implementation because `renderStonePackages()` currently serves two sibling concerns:
-- populates `#stonePackageOptions` from stone package catalog/state/pricing;
-- synchronizes `#stoneSkirtingToggle`, override/disabled state and title.
-
-Confirm:
-- Stone Packages shell can migrate while preserving the shared function unchanged;
-- `#stonePackageOptions` is a sufficient bounded item adapter for `stone-all`;
-- `stone-skirting` remains a separate semantic owner and does not need to migrate in the same checkpoint;
-- keyboard/selection behavior addresses `stone-packages` by semantic id rather than requiring a static wrapper;
-- neutral-slot `hidden` remains presentation-authoritative;
-- absence of only `stone-all` can be tested without fabricating removal of `stone-skirting`.
-
-Stop and split if removing the static Stone Packages wrapper requires:
-- changing stone state representation;
-- changing pricing;
-- changing mask/material rendering;
-- changing the stone-skirting compatibility/publication boundary;
-- moving both stone sibling sections together.
-
-## Expected A2d3.1 if discovery passes
-
-Only:
-- neutral `choice-cards` slot with item affinity `stone-all`;
-- inner bounded adapter owning `stone-all` and preserving `#stonePackageOptions`;
-- normalized flow supplies section id/label/behavior/component;
-- positive source/Flow-layout proof.
-
-A2d3.2 remains a separate absence proof.
-
-No production configuration write.
-
-
-## A2d3.0 discovery result — PASS WITH PREREQUISITE
+## A2d3.0 — boundary discovery — PASS / REVISED
 
 Observed on `main` at `208980ac0a7a4c941549d41ce1ebc4a8ed92a6a9`.
 
-The Stone Packages section itself remains a good candidate for a generated `choice-cards` shell:
-- package controls are concentrated in `#stonePackageOptions`;
-- package selection uses `stonePackageId` and existing catalog/pricing data;
-- keyboard navigation addresses the semantic `stone-packages` section;
-- the separate `stone-skirting` control has its own item id, section id and toggle handler.
+Confirmed:
+- `#stonePackageOptions` is the bounded package adapter;
+- package state is `stonePackageId`;
+- package pricing/material behavior is independent from static section identity;
+- keyboard navigation addresses semantic section id `stone-packages`;
+- `renderStonePackages()` also synchronizes the separate `#stoneSkirtingToggle`, but that shared render function does not require the two section shells to migrate together.
 
-However, one legacy ownership hook blocks a correct absence proof:
+## A2d3.1 — group-independence prerequisite — FALSIFIED / REVERTED
 
-```html
-<section id="stonePanel"
-         data-flow-group-shell="stone"
-         data-configurable-item="stone-all">
-```
+Hypothesis:
+- remove `data-configurable-item="stone-all"` from `#stonePanel`;
+- allow a normalized Stone group containing only `stone-skirting`.
 
-During configuration reconciliation, the generic `[data-configurable-item]` pass hides that whole group whenever `stone-all` is absent. This suppresses `stone-skirting` even when normalized flow still models it.
+The gate falsified this hypothesis for the current schema.
 
-That group-level item ownership is not needed:
-- `mountStageGroups()` already computes expected group ids from normalized flow;
-- it sets each `[data-flow-group-shell]` hidden state from whether the group exists;
-- therefore the Stone group can remain when only skirting exists and disappear when the normalized Stone group is empty.
+Canonical configuration validation contains the invariant:
+
+> `stone-skirting` requires `stone-all`.
+
+The first fixture also intersected the legacy v3 repair shim, but even after explicitly assigning `stone-skirting`, the target input remained invalid under the canonical configuration contract. Therefore “Stone group with only skirting” is not a supported semantic state and must not be used as a CP-SD-02 proof.
 
 Decision:
-- do **not** migrate the Stone Packages shell yet;
-- first execute A2d3.1 as a smaller prerequisite cleanup;
-- remove only `data-configurable-item="stone-all"` from `#stonePanel`;
-- prove normalized flow, not `stone-all`, owns Stone-group existence.
+- restore `data-configurable-item="stone-all"` on `#stonePanel`;
+- remove the invalid group-independence fixtures;
+- do not alter configuration validation or the legacy skirting repair in this track;
+- retain the current Stone-group dependency exactly as-is.
 
-No change to `renderStonePackages()`, stone state, pricing, materials/masks, skirting compatibility repair or production configuration in A2d3.1.
+## A2d3.2 — generated Stone Packages shell — NEXT
 
+Allowed:
+- replace only the static `stone-packages` semantic section wrapper/heading with a neutral `choice-cards` slot;
+- slot affinity remains `stone-all`;
+- preserve `#stonePackageOptions` in a bounded `data-flow-item-id="stone-all"` adapter;
+- normalized flow supplies section id, label, behavior and component;
+- keep `#stonePanel[data-configurable-item="stone-all"]` unchanged;
+- keep the static `stone-skirting` section unchanged;
+- keep `renderStonePackages()`, state, pricing, materials/masks and compatibility repair unchanged;
+- add positive source/Flow-layout proof.
 
-## A2d3.1 prerequisite candidate
+## A2d3.3 — valid absence proof
 
-Only:
-- remove `data-configurable-item="stone-all"` from `#stonePanel`;
-- keep `data-flow-group-shell="stone"` unchanged;
-- do not change either Stone section shell.
+The negative fixture must remain schema-valid.
 
-Proof:
-- with only `stone-all` omitted, normalized Stone group remains with `stone-skirting`, `#stonePanel` stays visible, Stone Packages is hidden and skirting remains visible;
-- with both Stone items omitted, normalized Stone group is absent and flow layout hides `#stonePanel`;
-- no renderer fallback/invariant/page error.
+Use Acabamentos with both:
+- `stone-all` omitted;
+- `stone-skirting` omitted.
 
-No `renderStonePackages()`, state, pricing, material/mask, compatibility or production write changes.
+Prove:
+- normalized flow contains no Stone group;
+- zero generated `stone-packages` semantic shells exist;
+- neutral Stone Packages slot remains hidden;
+- `#stonePanel` is hidden;
+- Fronts and Handles remain independently rendered;
+- no renderer invariant/fallback/page errors.
 
+Do **not** use a skirting-only configuration unless the schema contract is changed in a separate, explicitly approved checkpoint.
 
-### A2d3.1 first gate correction
+## Stop rule
 
-The first focused Flow-layout run timed out before the group assertions because the fetched source can still represent the audited legacy v3 contradiction: `stone-skirting` is active in `initialState.services` but absent from stage assignment. The compatibility shim repairs that state by locating the stage that contains `stone-all`; once the fixture removed `stone-all`, the shim intentionally had no anchor.
+Stop and split if Stone Packages shell generation requires:
+- changing the `stone-skirting requires stone-all` invariant;
+- changing the legacy repair algorithm;
+- changing stone state/pricing/material/mask behavior;
+- migrating the skirting shell in the same checkpoint;
+- changing production configuration.
 
-That is a separate published-v3 compatibility boundary, not evidence that normalized Stone-group ownership requires `stone-all`.
-
-Correction:
-- the A2d3.1 fixture now explicitly assigns `stone-skirting` to Acabamentos if the source does not already assign it;
-- it then removes only `stone-all`;
-- this constructs the self-consistent semantic input A2d3.1 is meant to test;
-- the production compatibility shim remains unchanged and will not be broadened inside CP-SD-02.
+No production configuration write.
