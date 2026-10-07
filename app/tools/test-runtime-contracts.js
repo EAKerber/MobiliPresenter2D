@@ -83,17 +83,19 @@ assert.equal((indexHtml.match(/core\/keyboard-shortcuts\.js/g) || []).length, 1,
 assert.equal((indexHtml.match(/core\/layout-profiles\.js/g) || []).length, 1, "layout profile resolver is loaded explicitly exactly once");
 assert.equal((indexHtml.match(/data-step="/g) || []).length, 0, "static buyer stage buttons are absent; runtime normalized flow owns navigation");
 const layoutProfilesIndex = indexHtml.indexOf("core/layout-profiles.js?v=cp-sd-01c1-v1");
-const stylesIndex = indexHtml.indexOf("styles.css?v=runtime-v38");
+const stylesIndex = indexHtml.indexOf("styles.css?v=runtime-v39");
 const hierarchyDefaultsIndex = indexHtml.indexOf("data/hierarchy-defaults.js?v=hierarchy-defaults-v2");
-const pricingContractIndex = indexHtml.indexOf("core/pricing-contract.js?v=runtime-v38");
-const pricingIndex = indexHtml.indexOf("core/pricing.js?v=runtime-v38");
-const flowModelIndex = indexHtml.indexOf("core/flow-model.js?v=runtime-v38");
+const pricingContractIndex = indexHtml.indexOf("core/pricing-contract.js?v=runtime-v39");
+const pricingIndex = indexHtml.indexOf("core/pricing.js?v=runtime-v39");
+const flowModelIndex = indexHtml.indexOf("core/flow-model.js?v=runtime-v39");
 const presentationIndex = indexHtml.indexOf("core/presentation-contract.js?v=cp-sd-01c1-v1");
 const presentationPolicyIndex = indexHtml.indexOf("data/presentation-policy-defaults.js?v=cp-sd-01c1-v1");
-const flowLayoutIndex = indexHtml.indexOf("core/flow-layout.js?v=runtime-v38");
+const flowLayoutIndex = indexHtml.indexOf("core/flow-layout.js?v=runtime-v39");
+const hierarchyV4Index = indexHtml.indexOf("core/hierarchy-administration.js?v=hierarchy-v2");
+const administrationV5Index = indexHtml.indexOf("core/administration-v5.js?v=cp-sd-06a1-v1");
 const runtimeContractIndex = indexHtml.indexOf("core/runtime-contracts.js?v=runtime-contracts-v2");
 const keyboardIndex = indexHtml.indexOf("core/keyboard-shortcuts.js?v=keyboard-v4");
-const appIndex = indexHtml.indexOf("app.js?v=runtime-v38");
+const appIndex = indexHtml.indexOf("app.js?v=runtime-v39");
 assert.equal(
   layoutProfilesIndex >= 0
     && stylesIndex > layoutProfilesIndex
@@ -104,7 +106,9 @@ assert.equal(
     && presentationIndex > flowModelIndex
     && presentationPolicyIndex > presentationIndex
     && flowLayoutIndex > presentationPolicyIndex
-    && runtimeContractIndex > flowLayoutIndex
+    && hierarchyV4Index > flowLayoutIndex
+    && administrationV5Index > hierarchyV4Index
+    && runtimeContractIndex > administrationV5Index
     && keyboardIndex > runtimeContractIndex
     && appIndex > keyboardIndex,
   true,
