@@ -184,12 +184,11 @@ const { chromium } = require("playwright");
   }, { entityId: firstEntityId, checked: checkedBeforeInspect });
 
   await firstToggle.evaluate((input) => { input.disabled = true; });
+  assert.equal(await firstToggle.isDisabled(), true, "blocked-inclusion fixture disables the checkbox before inspection");
+  assert.equal(await firstInspect.isEnabled(), true, "inspection remains independently enabled beside a disabled inclusion checkbox");
   await firstInspect.click();
   await page.waitForFunction((entityId) => window.CASA_EM_MODULOS_DEBUG.getState().selectedEntityId === entityId, firstEntityId);
-  assert.equal(await firstToggle.isDisabled(), true, "blocked-inclusion fixture disables only the checkbox");
-  assert.equal(await firstInspect.isEnabled(), true, "inspection remains enabled when inclusion is disabled");
   await page.keyboard.press("Escape");
-  await firstToggle.evaluate((input) => { input.disabled = false; });
   assert.deepEqual(await renderedComponents(), {
     detail: "detail-panel",
     list: "selection-list",
