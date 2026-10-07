@@ -122,7 +122,7 @@ Gates:
 
 No production write.
 
-## CP-SD-01C2 — authored material semantics — IN PROGRESS
+## CP-SD-01C2 — authored material semantics — COMPLETE / PASS
 
 Detailed plan:
 - `docs/backlog/schema-driven-ui-cp-sd-01c2-material-semantics-plan-2026-10-06.md`.
@@ -145,7 +145,16 @@ Required proof:
 - legacy current materials migrate with identical colors;
 - no current catalog/scene visual behavior changes for existing data.
 
-## CP-SD-01C3 — consolidated unpublished administration candidate
+### C2 completion record
+
+Result: PASS via PR #107 merged at `c9df1a6fd8094cf9893b89f9e5b46c7134de1eab`.
+
+Authored material color is now explicit `hex | null`; source null is preserved, UI swatch fallback stays display-only, safe admin v3 projection round-trips null, and all current app/browser/asset/variant gates plus Netlify preview #107 passed.
+
+## CP-SD-01C3 — consolidated unpublished administration candidate — IN PROGRESS
+
+Detailed plan:
+- `docs/backlog/schema-driven-ui-cp-sd-01c3-v5-candidate-plan-2026-10-06.md`.
 
 Purpose: freeze the final schema candidate before CP-SD-02.
 
