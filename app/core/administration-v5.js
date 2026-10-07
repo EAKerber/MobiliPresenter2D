@@ -131,6 +131,7 @@
           sections: group.sections.map((section) => ({
             id: section.id,
             label: section.label.trim(),
+            behavior: section.behavior,
             component: section.component,
             itemIds: [...section.itemIds]
           }))
@@ -162,6 +163,7 @@
           sections: group.sections.map((section) => ({
             id: section.id,
             label: section.label,
+            behavior: section.behavior,
             component: section.component,
             itemIds: [...section.itemIds]
           }))
