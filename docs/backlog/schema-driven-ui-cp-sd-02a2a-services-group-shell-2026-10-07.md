@@ -1,6 +1,6 @@
 # CP-SD-02A2a — Services group shell from normalized flow — 2026-10-07
 
-Status: **IN PROGRESS**.
+Status: **COMPLETE / PASS**.
 
 Parent:
 - `docs/architecture/schema-driven-ui-cp-sd-02a0-renderer-inventory-2026-10-07.md`
@@ -71,3 +71,32 @@ The runtime must not encode the group ID `services` in the shell factory.
 Definition of done:
 - current default UI is unchanged;
 - the Services group wrapper exists only because normalized flow asked for that group.
+
+
+## Completion record
+
+Result: **PASS** on reviewed code head `a5a5765adc68d2b7c37fe516ca781396a39454fc` in PR #111.
+
+Implemented:
+- removed the static semantic `data-flow-group-shell="services"` wrapper from buyer HTML;
+- Services grid now declares only the generic visual shell classes;
+- `mountStageGroups()` creates a missing group shell from normalized group identity, marks generated shells and then mounts the existing sections in normalized order;
+- current lighting/additional-services section markup and behavior remain unchanged;
+- existing component-binding validation remains active after shell generation;
+- existing static Acabamentos shells remain unchanged;
+- runtime cache revision advanced to `runtime-v16`.
+
+Gates:
+- App build purity — PASS;
+- Current variant fidelity — PASS;
+- Current asset gates — PASS;
+- Flow layout browser — PASS;
+- Keyboard browser — PASS;
+- Mobile browser — PASS;
+- Stone browser — PASS;
+- Summary/Pricing browser — PASS;
+- Netlify deploy preview #111 — PASS.
+
+No production configuration write.
+
+Next small checkpoint: **CP-SD-02A2b — generate only the `additional-services` section shell from normalized flow while retaining its existing toggle-list content renderer.** Lighting remains static because its dependency/state adapter is still specialized.
