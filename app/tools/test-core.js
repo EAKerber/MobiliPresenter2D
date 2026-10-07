@@ -529,7 +529,7 @@ assert.equal(appJs.includes("publishNormalizedFlow"), true, "app publishes one n
 assert.equal(appJs.includes("applyBuyerFlowLayout"), true, "buyer composition is mounted from normalized flow layout");
 assert.equal((indexHtml.match(/core\/layout-profiles\.js/g) || []).length, 1, "layout profile resolver loads exactly once");
 assert.equal(
-  indexHtml.indexOf("core/layout-profiles.js?v=cp-sd-01c1-v1") < indexHtml.indexOf("styles.css?v=runtime-v32"),
+  indexHtml.indexOf("core/layout-profiles.js?v=cp-sd-01c1-v1") < indexHtml.indexOf("styles.css?v=runtime-v33"),
   true,
   "canonical layout profile resolves before public topology CSS to avoid first-paint profile drift"
 );
@@ -550,6 +550,12 @@ assert.equal((indexHtml.match(/data-stage-view-id="modules-detail"/g) || []).len
 assert.equal(indexHtml.includes('data-stage-pane="list"'), true, "legacy Modules list pane hook remains during projection migration");
 assert.equal(indexHtml.includes('data-stage-pane="detail"'), true, "legacy Modules detail pane hook remains during projection migration");
 assert.equal(appJs.includes("applyModuleViewMarkers"), true, "Modules policy view records are projected onto stable pane adapters");
+assert.equal(appJs.includes("syncModuleViewVisibility"), true, "Modules compact replace has one runtime pane-visibility synchronizer");
+assert.equal(appJs.includes("rememberModuleViewScrollPositions"), true, "stacked Modules pane scroll positions are remembered before profile topology changes");
+assert.equal(appJs.includes("restoreModuleViewScrollPositions"), true, "remembered stacked Modules pane scroll positions are restored when stacked topology returns");
+assert.equal(appJs.includes('companionView.projection === "replace"'), true, "Modules pane visibility consumes the policy projection marker");
+assert.equal(appJs.includes("primary.hidden = primaryWillHide"), true, "primary pane visibility is synchronized without DOM reparenting");
+assert.equal(appJs.includes("companion.hidden = companionWillHide"), true, "companion pane visibility is synchronized without DOM reparenting");
 assert.equal(appJs.includes("container.append(pane)"), false, "policy view binding does not reorder physical Modules panes or reset pane scroll");
 assert.equal(indexHtml.includes('data-flow-group-shell="cabinet-finishes"'), false, "Cabinet Finishes group identity is no longer pre-authored in static HTML");
 assert.equal(indexHtml.includes('data-flow-group-slot="cabinet-finishes"'), true, "Cabinet Finishes keeps only a hidden neutral group renderer slot");

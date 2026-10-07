@@ -1,6 +1,6 @@
 # CP-SD-03A4 — compact Modules replace projection execution — 2026-10-07
 
-Status: **READY / NEXT**.
+Status: **COMPLETE / PASS**.
 
 Parent:
 - CP-SD-03A3 Modules companion projection discovery — PASS.
@@ -122,3 +122,56 @@ Stop and split if this requires:
 - presentation schema changes.
 
 No production configuration write.
+
+
+## Implementation candidate
+
+Candidate boundary:
+- added one `syncModuleViewVisibility(plan, adapters)` helper;
+- `replace` comes only from the policy-authored companion view projection;
+- detail-open state remains existing inspection state / `has-module-detail`;
+- stable pane adapters are hidden/shown in place; no DOM movement;
+- side-rail/stacked keep both panes visible;
+- compact closed = list visible/detail hidden;
+- compact open = list hidden/detail visible;
+- if a newly hidden pane contains focus, focus moves to the visible counterpart using existing detail close/origin helpers;
+- first Flow gate falsified the assumption that stable DOM alone preserves pane `scrollTop`: compact removes the stacked pane scroller and the browser can clamp its offset;
+- revised boundary snapshots pane scroll offsets only when leaving `stacked` and restores them only when `stacked` returns; compact itself is not forced to retain an artificial pane scroll offset;
+- no keyboard-core, state, pricing, scene, PiP or schema changes;
+- runtime cache v32 -> v33.
+
+Proof added:
+- source gates pin the single visibility synchronizer and reject reparenting;
+- Flow verifies stacked -> compact focus repair, pane scroll preservation, compact Escape/return and round-trip;
+- Mobile PiP verifies a hotspot-opened detail keeps PiP pinned while compact replace hides the list and focuses close.
+
+Final functional head `43d6148514c6afaabe10dbd7033f7e81e5f564f9` passed all eight repository workflows plus Netlify deploy preview #135. The documentation closeout that follows does not change runtime behavior.
+
+
+### Gate-driven correction
+
+First candidate head `da2b761539161eae7cab418178d47032fbef1d24`:
+- Mobile browser — PASS;
+- Keyboard browser — PASS;
+- Flow reached the new replace/focus assertions but failed the initial assumption that the visible detail pane's stacked `scrollTop` must remain numerically identical while compact is active.
+
+Observed:
+- stacked detail `scrollTop = 72`;
+- compact detail `scrollTop = 0`.
+
+Reason:
+compact topology removes the bounded independent pane scroller, so the browser may clamp the element's scroll offset even though the pane node is stable.
+
+Correction:
+- remember pane offsets when leaving stacked;
+- restore them when stacked returns;
+- test the round-trip contract, not an invalid compact intermediate offset.
+
+This remains inside the A4 scroll-preservation goal and does not alter compact scrolling ownership.
+
+
+## Closeout
+
+CP-SD-03A4 is complete. Compact Modules now executes the policy-owned `replace` projection with stable pane adapters, deterministic focus repair and stacked scroll round-trip preservation. No schema, pricing, scene-state, keyboard-core, module inclusion semantics or production configuration changed.
+
+Next checkpoint: `docs/backlog/schema-driven-ui-cp-sd-03a5-stacked-pip-discovery-2026-10-07.md`.

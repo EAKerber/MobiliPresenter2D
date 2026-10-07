@@ -59,6 +59,13 @@ const { chromium } = require("playwright");
   await page.waitForFunction(() => window.CASA_EM_MODULOS_DEBUG.getState().selectedEntityId === "module-03");
   assert(await page.evaluate(() => document.body.classList.contains("is-mobile-scene-pinned")),
     "opening a module from the PiP must keep the PiP open");
+  assert.equal(await page.locator('[data-stage-view-id="modules-list"]').isHidden(), true,
+    "opening module detail from pinned compact PiP executes replace by hiding the primary list");
+  assert.equal(await page.locator('[data-stage-view-id="modules-detail"]').isVisible(), true,
+    "opening module detail from pinned compact PiP keeps the companion detail visible");
+  await page.waitForFunction(() => document.activeElement?.matches?.("[data-close-module-detail]"));
+  assert.equal(await page.locator("[data-close-module-detail]").evaluate((element) => element === document.activeElement), true,
+    "pinned-scene detail opening focuses the visible close action");
 
   const card = page.locator("#viewerCard");
   const resize = page.locator("#mobileSceneResizeHandle");
