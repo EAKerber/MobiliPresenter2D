@@ -1,6 +1,6 @@
 # CP-SD-03A1 — executable Modules view plan/binding — 2026-10-07
 
-Status: **IN PROGRESS — IMPLEMENTATION CANDIDATE**.
+Status: **COMPLETE / PASS**.
 
 Parent:
 - CP-SD-03A0 responsive presentation discovery — PASS.
@@ -139,4 +139,19 @@ Proof added:
 - source assertions for exactly one adapter per policy view id and preservation of legacy pane hooks;
 - browser assertions for side-rail/stacked `side-panel`, compact `replace`, unchanged geometry and selected-module persistence across profile marker updates.
 
-Gate pending: all eight repository workflows + Netlify preview.
+Gate result:
+- App build purity — PASS;
+- Current variant fidelity — PASS;
+- Current asset gates — PASS;
+- Flow layout browser — PASS;
+- Keyboard browser — PASS;
+- Mobile browser — PASS;
+- Stone browser — PASS;
+- Summary/Pricing browser — PASS;
+- Netlify deploy preview #132 — PASS.
+
+The first Flow run failed only because the pre-existing `renderedComponents()` snapshot did not yet include the newly legitimate `detail: "detail-panel"` executable binding. The correction was test-only; no runtime/CSS/topology adjustment followed.
+
+Functional head: `3c5d63bd9f33178233b25ebed35ff6972037246d`.
+
+Decision: A1 passes. The frozen Modules view relation/projection is now executable and DOM-bound, while physical geometry remains the accepted baseline. No production configuration write.
