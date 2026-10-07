@@ -89,6 +89,14 @@ const pricingRoles = [
   ["globalAdjustment", "Adicionais globais"]
 ];
 
+const pricingTypeLabels = Object.freeze({
+  amount: "Valor fixo",
+  percentage: "Percentual"
+});
+const pricingBasisLabels = Object.freeze({
+  "eligible-module-base": "Base: valor base de cada módulo elegível"
+});
+
 function setMessage(element, message, kind = "") {
   element.textContent = message;
   element.dataset.kind = kind;
@@ -1094,16 +1102,58 @@ function renderPricing() {
     const card = document.createElement("article");
     card.className = "editor-card pricing-card";
     const heading = document.createElement("h2"); heading.textContent = title; card.append(heading);
+    const capabilities = pricingContract.ROLE_CAPABILITIES[role];
     Object.entries(model.pricing.roles[role]).forEach(([id, rule]) => {
       const percentage = rule.type === "percentage";
       const storedValue = percentage ? rule.bps : rule.cents;
-      const label = document.createElement("label"); label.className = "data-field pricing-field";
-      const copy = document.createElement("span"); copy.textContent = priceLabel(role, id);
-      const input = document.createElement("input"); input.type = "number"; input.min = "0"; input.step = "0.01";
+      const publicLabel = priceLabel(role, id);
+      const row = document.createElement("div");
+      row.className = "data-field pricing-field";
+      const copy = document.createElement("span");
+      copy.className = "pricing-field__label";
+      copy.textContent = publicLabel;
+
+      if ((capabilities?.types || []).length > 1) {
+        row.classList.add("pricing-field--typed");
+        const select = document.createElement("select");
+        select.dataset.priceRuleType = "true";
+        select.dataset.priceRole = role;
+        select.dataset.priceId = id;
+        select.setAttribute("aria-label", `Tipo de preço: ${publicLabel}`);
+        capabilities.types.forEach((type) => {
+          const option = document.createElement("option");
+          option.value = type;
+          option.textContent = pricingTypeLabels[type] || type;
+          option.selected = type === rule.type;
+          select.append(option);
+        });
+        row.append(copy, select);
+      } else {
+        row.append(copy);
+      }
+
+      const input = document.createElement("input");
+      input.type = "number";
+      input.min = "0";
+      input.step = "0.01";
       input.value = (storedValue / 100).toFixed(2);
-      input.dataset.priceRole = role; input.dataset.priceId = id; input.dataset.priceType = rule.type;
-      const unit = document.createElement("small"); unit.textContent = percentage ? "%" : "R$";
-      label.append(copy, input, unit); card.append(label);
+      input.dataset.priceRole = role;
+      input.dataset.priceId = id;
+      input.dataset.priceType = rule.type;
+      input.setAttribute("aria-label", `Valor de ${publicLabel}`);
+
+      const unit = document.createElement("small");
+      unit.className = "pricing-unit";
+      unit.textContent = percentage ? "%" : "R$";
+      row.append(input, unit);
+
+      if (percentage && rule.basis) {
+        const basis = document.createElement("small");
+        basis.className = "pricing-basis";
+        basis.textContent = pricingBasisLabels[rule.basis] || `Base: ${rule.basis}`;
+        row.append(basis);
+      }
+      card.append(row);
     });
     pricingList.append(card);
   });
@@ -1347,7 +1397,27 @@ document.querySelector("[data-admin-panel=rules]").addEventListener("click", (ev
 });
 
 pricingList.addEventListener("change", (event) => {
-  const input = event.target.closest("[data-price-role]");
+  const typeSelect = event.target.closest("[data-price-rule-type]");
+  if (typeSelect) {
+    const role = typeSelect.dataset.priceRole;
+    const id = typeSelect.dataset.priceId;
+    const capabilities = pricingContract.ROLE_CAPABILITIES[role];
+    const nextType = typeSelect.value;
+    const rules = model.pricing.roles[role];
+    if (!rules?.[id] || !capabilities?.types?.includes(nextType)) return;
+    if (nextType === "percentage") {
+      const basis = capabilities.percentageBases?.[0];
+      if (!basis) return;
+      rules[id] = { type: "percentage", bps: 0, basis };
+    } else {
+      rules[id] = { type: "amount", cents: 0 };
+    }
+    setMessage(saveMessage, "Tipo de preço alterado. O valor foi zerado para evitar conversão implícita entre R$ e %.", "success");
+    renderPricing();
+    return;
+  }
+
+  const input = event.target.closest("input[data-price-role]");
   if (!input) return;
   const amount = Number(input.value);
   if (!Number.isFinite(amount) || amount < 0) return;
@@ -1737,6 +1807,14 @@ saveButton.addEventListener("click", async () => {
         setMessage(
           saveMessage,
           "A hierarquia foi alterada. Este rascunho não será achatado no schema publicado; publique a hierarquia apenas no checkpoint autenticado.",
+          "error"
+        );
+        return;
+      }
+      if (projection.code === "pricing_requires_publication") {
+        setMessage(
+          saveMessage,
+          "Este tipo de preço exige a futura publicação consolidada. Nenhuma configuração foi publicada; use Percentual para manter compatibilidade com o schema atual.",
           "error"
         );
         return;
