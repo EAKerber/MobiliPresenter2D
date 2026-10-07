@@ -528,6 +528,7 @@ assert.equal(indexHtml.includes(">Acabamentos do conjunto</h2>"), false, "Cabine
 assert.equal(indexHtml.includes('data-flow-group-shell="stone"'), true, "Stone group remains static in A2f1");
 assert.equal(appJs.includes("flowGroupSlot"), true, "group shell builder supports generic neutral group-slot affinity");
 assert.equal(appJs.includes("ambiguous-group-slot"), true, "ambiguous neutral group-slot bindings fail closed");
+assert.equal(appJs.includes("delete shell.dataset.flowGroupShell"), true, "stale claimed group slots return to neutral state when normalized groups disappear");
 assert.equal(appJs.includes('candidate.closest("[hidden]")'), true, "stage-entry heading selection ignores hidden group adapters");
 assert.equal(indexHtml.includes('data-flow-group-shell="services"'), false, "Services group identity is no longer pre-authored in static HTML");
 assert.equal(indexHtml.includes('data-flow-group-class="flow-group-shell flow-group-shell--embedded"'), true, "Services keeps only a generic visual group-shell class contract");

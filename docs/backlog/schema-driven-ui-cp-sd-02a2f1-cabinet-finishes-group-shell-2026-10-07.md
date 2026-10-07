@@ -153,3 +153,30 @@ Correction is generic:
 - advance shared cache revision v25 -> v26 so the revised flow-layout contract cannot reuse the failed preview cache key.
 
 No Cabinet visual adapter, section/item, Stone, material, state or pricing behavior changes are added by this correction.
+
+
+### Second Flow-layout gate correction
+
+The second browser gate advanced past label generation and failed only on the valid Cabinet-absence assertion:
+
+`omitted Cabinet Finishes data creates no semantic cabinet group shell`
+
+Cause:
+- the app initially mounts canonical defaults, where Cabinet exists, so the neutral slot becomes a generated group shell;
+- the routed configuration is then normalized without Cabinet;
+- reconciliation hid the old generated shell but left its runtime `data-flow-group-shell` ownership in place.
+
+That violates the fail-closed rule even though the UI was hidden.
+
+Correction is generic for **claimed neutral group slots**:
+- when their group is no longer expected, hide the slot;
+- clear normalized group-label text;
+- remove `data-flow-group-shell`, `data-flow-generated-group`, `data-flow-group` and `data-flow-span`;
+- remove the stale shell from the current id map;
+- keep `data-flow-group-slot` so a later valid configuration can reclaim the same visual adapter.
+
+Existing class-created generic group shells are not broadened in this checkpoint.
+
+Shared cache revision advances v26 -> v27.
+
+The valid Cabinet-absence fixture remains unchanged and now tests both UI absence and runtime semantic ownership absence.

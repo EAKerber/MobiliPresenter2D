@@ -227,7 +227,22 @@
     });
 
     shells.forEach((shell) => {
-      shell.hidden = !expectedGroupIds.has(shell.dataset.flowGroupShell);
+      const groupId = shell.dataset.flowGroupShell;
+      const expected = expectedGroupIds.has(groupId);
+      const claimedNeutralSlot = shell.dataset.flowGeneratedGroup === "true" && Boolean(shell.dataset.flowGroupSlot);
+      if (!expected && claimedNeutralSlot) {
+        shell.hidden = true;
+        shell.querySelectorAll("[data-flow-group-label]").forEach((label) => {
+          label.textContent = "";
+        });
+        delete shell.dataset.flowGroupShell;
+        delete shell.dataset.flowGeneratedGroup;
+        delete shell.dataset.flowGroup;
+        delete shell.dataset.flowSpan;
+        shellById.delete(groupId);
+        return;
+      }
+      shell.hidden = !expected;
     });
     groupSlots.forEach((slot) => {
       if (!slot.dataset.flowGroupShell) slot.hidden = true;
