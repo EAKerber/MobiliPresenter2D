@@ -1,6 +1,6 @@
 # CURRENT_STATE — MobiliPresenter2D
 
-Updated: 2026-10-06
+Updated: 2026-10-07
 Authority: live `main` plus the canonical roadmaps linked below.
 
 ## Purpose
@@ -47,11 +47,12 @@ Canonical plan:
 - `docs/backlog/schema-driven-ui-consolidation-roadmap-2026-10-06.md`
 - completed audit: `docs/architecture/schema-ui-authority-audit-2026-10-06.md`
 - completed contract checkpoint: `docs/backlog/schema-driven-ui-cp-sd-01-contract-plan-2026-10-06.md`
-- next track: CP-SD-02, to be executed as smaller slices beginning with a focused semantic-renderer inventory/removal checkpoint
+- next track: CP-SD-02, executed as small self-contained slices
+- next checkpoint: `docs/backlog/schema-driven-ui-cp-sd-02a2c0-lighting-discovery-2026-10-07.md`
 
 **CP-SD-00 — COMPLETE / PASS.** The audit found no critical unknowns. The main publication blocker is now explicit: v4 persists section presentation metadata, but that metadata is not yet the executable buyer-renderer authority.
 
-**CP-SD-02A0 — COMPLETE / PASS.** Residual buyer semantic-renderer authority is inventoried in `docs/architecture/schema-driven-ui-cp-sd-02a0-renderer-inventory-2026-10-07.md`. **CP-SD-02A1 — COMPLETE / PASS** in PR #110: normalized enabled stages are the sole buyer navigation source. **CP-SD-02A2a — COMPLETE / PASS** in PR #111: the Services group shell is now created from normalized flow using only a generic visual class hook; all current gates and deploy preview passed. **CP-SD-02A2b is IN PROGRESS.** Mini-checkpoint **A2b.1 PASS** proved that omitting `additional-services` from normalized flow creates no semantic section shell, leaves the neutral slot hidden and emits no fallback/invariant error; it also fixed stale generated-shell reconciliation after async configuration load. Mini-checkpoint **A2b.2 PASS**: all eight repository workflows are green on the current PR #112 head, with no additional implementation changes. **A2b.3 is NEXT and closure-only**: final documentation check and merge PR #112; no new functionality.
+**CP-SD-02A0 — COMPLETE / PASS.** Residual buyer semantic-renderer authority is inventoried in `docs/architecture/schema-driven-ui-cp-sd-02a0-renderer-inventory-2026-10-07.md`. **CP-SD-02A1 — COMPLETE / PASS** in PR #110: normalized enabled stages are the sole buyer navigation source. **CP-SD-02A2a — COMPLETE / PASS** in PR #111: the Services group shell is now created from normalized flow using only a generic visual class hook; all current gates and deploy preview passed. **CP-SD-02A2b — COMPLETE / PASS** in PR #112: `additional-services` is now materialized from normalized flow into a generated section shell, absence produces no semantic UI/fallback, and stale generated shells are removed during configuration reconciliation. All eight repository workflows and Netlify preview #112 passed. **CP-SD-02A2c0 is NEXT / discovery-only**: map Lighting's section semantics versus its specialized dependency/scene/state logic before choosing any implementation slice. No runtime change belongs in A2c0.
 
 **CP-SD-01 — COMPLETE / PASS.** CP-SD-01A established one item capability authority; CP-SD-01B established closed executable presentation bindings; CP-SD-01C froze ownership/availability semantics, named layout profiles, companion/PiP/bottom-dock policy, authored material `hex | null` semantics and the unpublished `ConfiguratorAdministration2D 5.0` candidate. PR #108 passed all current app/browser/asset/variant gates and Netlify preview; direct v4/v5 publication remains server-blocked and production was not written. **CP-SD-02 is NEXT**, but will be split into smaller reviewable checkpoints rather than one broad renderer rewrite.
 
