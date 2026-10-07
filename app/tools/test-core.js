@@ -743,9 +743,9 @@ assert.equal(
   "admin pricing contract loads before the v3 compatibility core"
 );
 
-assert.equal(adminHtml.includes("core/administration-v5.js?v=cp-sd-05a3a-v1"), true, "admin v5 cache revision declares typed pricing ownership");
+assert.equal(adminHtml.includes("core/administration-v5.js?v=cp-sd-06a1-v1"), true, "admin v5 cache revision declares typed pricing ownership");
 assert.equal(
-  adminHtml.indexOf("core/pricing-contract.js?v=pricing-contract-v1") < adminHtml.indexOf("core/administration-v5.js?v=cp-sd-05a3a-v1"),
+  adminHtml.indexOf("core/pricing-contract.js?v=pricing-contract-v1") < adminHtml.indexOf("core/administration-v5.js?v=cp-sd-06a1-v1"),
   true,
   "typed pricing contract loads before administration v5"
 );
