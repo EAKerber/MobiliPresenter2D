@@ -1,6 +1,6 @@
 # CP-SD-02A2c1 — generated Lighting section shell — 2026-10-07
 
-Status: **IN PROGRESS**.
+Status: **COMPLETE / PASS**.
 
 Parent discovery:
 - `docs/architecture/schema-driven-ui-cp-sd-02a2c0-lighting-discovery-result-2026-10-07.md`
@@ -73,13 +73,46 @@ Proven with Services still present but `lighting-08` omitted:
 
 
 
-### A2c1.3 — regression only
+### A2c1.3 — regression only — PASS
 
 Run current repository gates. No new functionality.
 
-### A2c1.4 — closure only
+#### A2c1.3 result
+
+PASS on PR #114 head `4227512b55f34bbc295a751903e68143c05c017f`.
+
+All repository regression gates are green:
+- App build purity — PASS;
+- Current variant fidelity — PASS;
+- Current asset gates — PASS;
+- Flow layout browser — PASS;
+- Keyboard browser — PASS;
+- Mobile browser — PASS;
+- Stone browser — PASS;
+- Summary pricing browser — PASS;
+- Netlify deploy preview #114 — PASS.
+
+No implementation change was made in A2c1.3.
+
+
+### A2c1.4 — closure only — PASS
 
 Docs + merge. No new functionality.
+
+#### A2c1.4 result
+
+Closure-only checkpoint.
+
+Final CP-SD-02A2c1 result:
+- Lighting section id/label/behavior/component are materialized from normalized flow;
+- static HTML retains only the specialized `lighting-08` item adapter in a neutral item-affinity slot;
+- omitting `lighting-08` yields no Lighting semantic UI, no configurable Lighting scene layer and no renderer fallback;
+- Additional Services remains independent;
+- dependency, scene, state, pricing and summary behavior were preserved;
+- no production configuration write.
+
+After this documentation commit, merge PR #114 only if the head remains clean/green.
+
 
 ## Invariants
 
