@@ -525,7 +525,10 @@ assert.equal(indexHtml.includes('data-flow-group-shell="cabinet-finishes"'), fal
 assert.equal(indexHtml.includes('data-flow-group-slot="cabinet-finishes"'), true, "Cabinet Finishes keeps only a hidden neutral group renderer slot");
 assert.equal(indexHtml.includes('data-flow-group-label'), true, "Cabinet Finishes visible group label has a normalized-flow population hook");
 assert.equal(indexHtml.includes(">Acabamentos do conjunto</h2>"), false, "Cabinet Finishes group heading copy comes from normalized flow");
-assert.equal(indexHtml.includes('data-flow-group-shell="stone"'), true, "Stone group remains static in A2f1");
+assert.equal(indexHtml.includes('data-flow-group-shell="stone"'), false, "Stone group identity is no longer pre-authored in static HTML");
+assert.equal(indexHtml.includes('data-flow-group-slot="stone"'), true, "Stone keeps only a hidden neutral group renderer slot");
+assert.equal(/id="stonePanel"[^>]*data-configurable-item="stone-all"/.test(indexHtml), false, "Stone group no longer duplicates stone-all availability ownership");
+assert.equal(indexHtml.includes(">Pedra do conjunto</h2>"), false, "Stone group heading copy comes from normalized flow");
 assert.equal(appJs.includes("flowGroupSlot"), true, "group shell builder supports generic neutral group-slot affinity");
 assert.equal(appJs.includes("ambiguous-group-slot"), true, "ambiguous neutral group-slot bindings fail closed");
 assert.equal(appJs.includes("delete shell.dataset.flowGroupShell"), true, "stale claimed group slots return to neutral state when normalized groups disappear");

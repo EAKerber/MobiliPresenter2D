@@ -1,6 +1,6 @@
 # CP-SD-02A2f2 — generated Stone group shell — 2026-10-07
 
-Status: **READY / NEXT**.
+Status: **COMPLETE / PASS**.
 
 Parent:
 - CP-SD-02A2f0 group-shell discovery — PASS;
@@ -97,5 +97,65 @@ Stop and split if Stone group migration requires:
 - changing the v3 repair;
 - touching Modules/PiP/dock;
 - publishing configuration.
+
+No production configuration write.
+
+
+## Implementation candidate
+
+Applied only the Stone group migration:
+- converted `#stonePanel` from static `data-flow-group-shell="stone"` to hidden neutral `data-flow-group-slot="stone"`;
+- removed the group-level `data-configurable-item="stone-all"` duplicate availability hook;
+- preserved `id="stonePanel"`, `aria-labelledby`, panel classes and explanatory paragraph;
+- `stoneHeading` keeps its stable id/tabindex and now receives normalized `group.label` through `data-flow-group-label`;
+- Stone Packages and Stone Skirting section slots/item adapters are unchanged;
+- generic group-slot runtime code is unchanged from A2f1;
+- positive browser proof now requires generated Stone group ownership, stable id and normalized visible heading;
+- valid Stone-absence fixture now proves the neutral group slot is unclaimed/hidden, no semantic Stone shell remains and stage-entry focus stays on `frontFinishHeading`;
+- intentional Skirting-absence fixture remains in place and must keep Stone group visible;
+- shared runtime cache revision advances v27 -> v28.
+
+Explicitly unchanged:
+- `stone-skirting requires stone-all`;
+- selected Stone material vs MDF/front-finish behavior;
+- `renderStonePackages()`;
+- Stone Skirting service state;
+- pricing/global charges;
+- v3 compatibility repair;
+- all section/item adapters;
+- Modules/PiP/dock;
+- production configuration.
+
+Gate pending: all eight repository workflows + Netlify preview.
+
+
+## Final result — PASS
+
+Final functional head:
+`e1554589154a9ef66b61f9077359c3a0ce39aed1`.
+
+Proven:
+- Stone group identity is no longer pre-authored in static HTML;
+- `#stonePanel` is a hidden neutral `data-flow-group-slot="stone"` adapter;
+- normalized flow supplies Stone group existence/id/label/order/span;
+- normalized label populates the stable `stoneHeading`;
+- the group-level `data-configurable-item="stone-all"` duplicate availability hook is retired;
+- Stone Packages and Stone Skirting section/item adapters remain unchanged;
+- valid Stone absence leaves no runtime semantic Stone shell after default -> remote reconciliation;
+- neutral Stone group slot stays hidden/unclaimed when absent;
+- Cabinet remains visible and stage-entry focus remains `frontFinishHeading`;
+- intentional Skirting absence still retains Stone group + Stone Packages;
+- Stone browser confirms selected-material/MDF path, Skirting service state and pricing behavior unchanged.
+
+Gate:
+- App build purity — PASS;
+- Current variant fidelity — PASS;
+- Current asset gates — PASS;
+- Flow layout browser — PASS;
+- Keyboard browser — PASS;
+- Mobile browser — PASS;
+- Stone browser — PASS;
+- Summary/Pricing browser — PASS;
+- Netlify deploy preview #126 — PASS.
 
 No production configuration write.
