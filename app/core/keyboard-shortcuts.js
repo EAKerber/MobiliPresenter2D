@@ -307,6 +307,23 @@
     return null;
   }
 
+  function bottomDockViewportRect() {
+    const dock = document.querySelector('.flow-actions[data-bottom-dock-enabled="true"]');
+    if (!dock || !isVisible(dock)) return null;
+    const rect = dock.getBoundingClientRect();
+    if (rect.height <= 0 || rect.bottom <= 0 || rect.top >= window.innerHeight) return null;
+    return rect;
+  }
+
+  function dockAwareBottom(baseBottom, bounds, top) {
+    const dock = bottomDockViewportRect();
+    if (!dock) return Math.max(top + 1, baseBottom);
+    const overlapsHorizontally = dock.right > bounds.left && dock.left < bounds.right;
+    const overlapsVertically = dock.top < baseBottom && dock.bottom > bounds.top;
+    if (!overlapsHorizontally || !overlapsVertically) return Math.max(top + 1, baseBottom);
+    return Math.max(top + 1, Math.min(baseBottom, dock.top - 12));
+  }
+
   function scrollViewport(sectionElement) {
     const scroller = scrollContainerFor(sectionElement);
     const nav = document.querySelector(".flow-nav");
@@ -321,15 +338,16 @@
       return {
         scroller,
         top,
-        bottom: Math.max(top + 1, bounds.bottom - 16)
+        bottom: dockAwareBottom(bounds.bottom - 16, bounds, top)
       };
     }
 
     const top = navRect ? Math.max(12, navRect.bottom + 12) : 12;
+    const bounds = { top: 0, right: window.innerWidth, bottom: window.innerHeight, left: 0 };
     return {
       scroller: null,
       top,
-      bottom: Math.max(top + 1, window.innerHeight - 16)
+      bottom: dockAwareBottom(window.innerHeight - 16, bounds, top)
     };
   }
 
