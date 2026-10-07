@@ -23,6 +23,7 @@ const presentationPolicy = require(path.join(projectRoot, "data/presentation-pol
 const configuration = require(path.join(projectRoot, "core/configuration.js"));
 const flow = require(path.join(projectRoot, "core/flow-model.js"));
 const hierarchyV4 = require(path.join(projectRoot, "core/hierarchy-administration.js"));
+const pricingContract = require(path.join(projectRoot, "core/pricing-contract.js"));
 const v5Core = require(path.join(projectRoot, "core/administration-v5.js"));
 
 const v3 = configuration.createDefaultAdministration(defaults, catalog, priceBook, scene);
@@ -33,6 +34,11 @@ assert.equal(v5Core.SCHEMA, "ConfiguratorAdministration2D 5.0");
 assert.equal(v5Core.PREVIOUS_SCHEMA, "ConfiguratorAdministration2D 4.0");
 assert.equal(v5.schemaVersion, v5Core.SCHEMA);
 assert.deepEqual(v5.presentationPolicy, presentationPolicy, "v5 carries the validated presentation policy");
+assert.equal(v5.pricing.schemaVersion, pricingContract.SCHEMA, "v5 owns the typed pricing contract");
+assert.deepEqual(v5.pricing, pricingContract.upgradeLegacy(v3.pricing), "v3 pricing migrates exactly into typed v5 pricing");
+["entries", "handleEntries", "frontFinishRatesBps", "localEntries", "globalEntries", "handleFrontTotal"].forEach((legacyKey) => {
+  assert.equal(Object.hasOwn(v5.pricing, legacyKey), false, `v5 pricing has no legacy bucket authority: ${legacyKey}`);
+});
 
 const sections = v5.stages.flatMap((stage) => stage.groups.flatMap((group) => group.sections));
 assert.equal(sections.every((section) => ["selection", "toggle", "action"].includes(section.behavior)), true, "every v5 section has explicit interaction behavior");
@@ -83,6 +89,7 @@ assert.deepEqual(
   finishes.groups.map((group) => group.id),
   "historical v4 imports preserve group structure"
 );
+assert.deepEqual(v5FromV4.pricing, v5.pricing, "historical v4 pricing converges to the same typed v5 contract");
 assert.equal(
   v5Core.publicationSignature(v5FromV4),
   v5Core.publicationSignature(v5),
@@ -178,11 +185,56 @@ assert.deepEqual(projected.value.stages, v3.stages, "v3 -> v5 -> v3 preserves cu
 
 const unrelated = structuredClone(v5);
 unrelated.objects["module-01"].title = "Título v5";
-unrelated.pricing.entries["module-01"] += 100;
+unrelated.pricing.roles.itemBase["module-01"].cents += 100;
 const unrelatedProjection = v5Core.projectToLegacy(unrelated, configuration, flow, catalog, priceBook, scene, hierarchyDefaults);
 assert.equal(unrelatedProjection.ok, true, "non-hierarchy edit remains safely projectable");
 assert.equal(unrelatedProjection.value.objects["module-01"].title, "Título v5");
 assert.equal(unrelatedProjection.value.pricing.entries["module-01"], v3.pricing.entries["module-01"] + 100);
+
+const typedFinishAmount = structuredClone(v5);
+typedFinishAmount.pricing.roles.frontFinishAdjustment.cocoa = { type: "amount", cents: 15000 };
+assert.deepEqual(
+  v5Core.validate(typedFinishAmount, configuration, catalog, priceBook, scene),
+  [],
+  "v5 accepts a valid typed finish amount even though legacy v3 cannot represent it"
+);
+const typedFinishAmountProjection = v5Core.projectToLegacy(
+  typedFinishAmount,
+  configuration,
+  flow,
+  catalog,
+  priceBook,
+  scene,
+  hierarchyDefaults
+);
+assert.equal(typedFinishAmountProjection.ok, false);
+assert.equal(typedFinishAmountProjection.code, "pricing_requires_publication", "typed finish amount blocks legacy publication without coercion");
+
+const invalidTypedPricing = structuredClone(v5);
+invalidTypedPricing.pricing.roles.itemBase["module-01"] = { type: "percentage", bps: 1000, basis: "eligible-module-base" };
+assert.equal(
+  v5Core.validate(invalidTypedPricing, configuration, catalog, priceBook, scene)
+    .some((error) => error.includes("unsupported pricing rule type")),
+  true,
+  "invalid typed pricing fails current v5 validation"
+);
+
+const bogusPricingId = structuredClone(v5);
+bogusPricingId.pricing.roles.itemBase["not-a-catalog-item"] = { type: "amount", cents: 100 };
+assert.equal(
+  v5Core.validate(bogusPricingId, configuration, catalog, priceBook, scene)
+    .some((error) => error.includes("pricing identifiers must match: entries")),
+  true,
+  "typed v5 pricing keeps legacy catalog identifier validation"
+);
+
+const pricingSignatureProbe = structuredClone(v5);
+pricingSignatureProbe.pricing.roles.globalAdjustment["move-stone"].cents += 1;
+assert.notEqual(
+  v5Core.publicationSignature(pricingSignatureProbe),
+  v5Core.publicationSignature(v5),
+  "typed pricing participates in the v5 publication signature"
+);
 
 const reorderedGroups = structuredClone(v5);
 reorderedGroups.stages.find((stage) => stage.id === "finishes").groups.reverse();
