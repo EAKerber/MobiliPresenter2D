@@ -62,7 +62,10 @@ function sourceFacts(source) {
     schemaVersion: source?.schemaVersion || null,
     revision: Number.isSafeInteger(source?.revision) ? source.revision : null,
     stageIds: Array.isArray(source?.stages) ? source.stages.map((stage) => stage.id) : [],
-    handlesOwners: stageItemOwners(source, "handles-all")
+    handlesOwners: stageItemOwners(source, "handles-all"),
+    stoneOwners: stageItemOwners(source, "stone-all"),
+    skirtingOwners: stageItemOwners(source, "stone-skirting"),
+    skirtingSelected: Boolean(source?.initialState?.services?.includes("stone-skirting"))
   };
 }
 
@@ -104,6 +107,30 @@ function createPreflight(source, runtime = loadRuntime()) {
       "source_not_canonical",
       "Source v3 changes during normalization; publication must use a canonical freshly read record.",
       { normalizedSourceDigest: digestJson(normalizedSource) }
+    );
+  }
+
+  const facts = sourceFacts(normalizedSource);
+  if (facts.skirtingOwners.length > 1) {
+    return failedReport(
+      normalizedSource,
+      "skirting_duplicate_owner",
+      "stone-skirting is assigned to more than one stage."
+    );
+  }
+  if (facts.skirtingSelected && facts.skirtingOwners.length === 0) {
+    return failedReport(
+      normalizedSource,
+      "skirting_repair_required",
+      "stone-skirting is selected but has no published stage owner. Execute and verify the isolated v3 consistency repair before v5 publication."
+    );
+  }
+  if (facts.skirtingOwners.length === 1 && facts.stoneOwners.length === 1
+    && facts.skirtingOwners[0] !== facts.stoneOwners[0]) {
+    return failedReport(
+      normalizedSource,
+      "skirting_wrong_owner",
+      "stone-skirting is assigned outside the stage that owns stone-all; do not move it automatically."
     );
   }
 
