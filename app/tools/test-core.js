@@ -506,7 +506,14 @@ assert.equal(indexHtml.includes('id="stoneSkirtingSectionHeading"'), false, "Sto
 assert.equal(indexHtml.includes(">Rodapé de pedra</h3>"), false, "Stone Skirting section heading copy comes from normalized data");
 assert.equal(indexHtml.includes('data-flow-slot-item="stone-skirting"'), true, "Stone Skirting neutral slot declares item affinity without owning the section");
 assert.equal(/id="summaryPanel"[^>]*data-render-component="action-list"/.test(indexHtml), false, "Summary stage root no longer owns the action-list binding");
-assert.equal(indexHtml.includes('data-flow-group-grid="summary"'), true, "Summary stage exposes a normalized-flow group grid");
+assert.equal(indexHtml.includes('data-flow-group-grid="summary"'), false, "Summary group grid no longer pre-authors the historical stage id");
+assert.equal(indexHtml.includes('data-flow-group-grid="finishes"'), false, "Finishes group grid no longer pre-authors the historical stage id");
+assert.equal(indexHtml.includes('data-flow-group-grid="services"'), false, "Services group grid no longer pre-authors the historical stage id");
+assert.equal((indexHtml.match(/\bdata-flow-group-grid(?=[\s>])/g) || []).length, 3, "generic non-Modules core roots retain exactly one neutral group-grid host each");
+assert.equal(appJs.includes('querySelectorAll(":scope > [data-flow-group-grid]")'), true, "generic stage mounting resolves a neutral group-grid host inside the visual root");
+assert.equal(appJs.includes("grid.dataset.flowGroupGrid = stageId"), true, "normalized stage id claims the neutral group-grid host at runtime");
+assert.equal(appJs.includes("ambiguous-group-grid"), true, "multiple neutral group-grid hosts fail closed");
+assert.equal(/mountStageGroups\("(?:finishes|services|summary)"/.test(appJs), false, "generic core-stage dispatcher does not hardcode historical Finishes/Services/Summary ids");
 assert.equal(indexHtml.includes('data-flow-slot-item="summary"'), true, "Summary neutral slot declares summary item affinity");
 assert.equal(indexHtml.includes('data-flow-section-heading-class="sr-only"'), true, "Summary semantic heading remains accessible without duplicate visible copy");
 assert.equal((indexHtml.match(/id="summaryContent"/g) || []).length, 1, "Summary domain content host remains unique");

@@ -205,8 +205,18 @@
   function mountStageGroups(stageId, stageRoot) {
     const plan = flowLayout.stageLayout(normalizedFlow, stageId);
     if (!plan || !stageRoot) return [];
-    const grid = stageRoot.querySelector(`[data-flow-group-grid="${stageId}"]`);
-    if (!grid) return [{ code: "missing-group-grid", stageId, message: `missing group grid for ${stageId}` }];
+    const grids = [...stageRoot.querySelectorAll(":scope > [data-flow-group-grid]")];
+    if (grids.length !== 1) {
+      return [{
+        code: grids.length ? "ambiguous-group-grid" : "missing-group-grid",
+        stageId,
+        message: grids.length
+          ? `multiple group grids for ${stageId}`
+          : `missing group grid for ${stageId}`
+      }];
+    }
+    const grid = grids[0];
+    grid.dataset.flowGroupGrid = stageId;
 
     const errors = [];
     const shells = [...grid.querySelectorAll(":scope > [data-flow-group-shell]")];
@@ -448,13 +458,26 @@
   }
 
   function applyBuyerFlowLayout() {
-    const errors = [
-      ...mountStageGroups("finishes", finishesStagePanel),
-      ...mountStageGroups("services", servicesPanel),
-      ...mountModuleViewPanes(),
-      ...mountStageGroups("summary", summaryPanel),
-      ...validateCustomStageBindings()
-    ];
+    const errors = [];
+    (normalizedFlow?.stages || []).forEach((stage) => {
+      const kind = stageKind(stage);
+      if (kind === "custom") return;
+      if (kind === "modules") {
+        errors.push(...mountModuleViewPanes());
+        return;
+      }
+      if (!stagePanels.has(kind)) {
+        errors.push({
+          code: "missing-core-stage-renderer",
+          stageId: stage.id,
+          stageKind: kind,
+          message: `missing core stage renderer: ${stage.id} (${kind})`
+        });
+        return;
+      }
+      errors.push(...mountStageGroups(stage.id, stagePanelFor(stage)));
+    });
+    errors.push(...validateCustomStageBindings());
     setFlowLayoutErrors(errors);
     return errors;
   }
