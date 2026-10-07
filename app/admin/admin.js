@@ -25,14 +25,7 @@ const hierarchyEditor = window.CasaModulesHierarchyEditor;
 const legacyStageRepair = window.CasaModulesLegacyStageRepair;
 const hierarchyDefaults = window.CASA_EM_MODULOS_HIERARCHY_DEFAULTS;
 const legacyDefaults = configurationCore.createDefaultAdministration(settingsDefaults, catalog, priceBook, scene);
-const catalogPricing = pricingContract.upgradeLegacy({
-  entries: priceBook.entries,
-  handleEntries: priceBook.handleEntries,
-  frontFinishRatesBps: priceBook.frontFinishRatesBps,
-  localEntries: priceBook.localEntries,
-  globalEntries: priceBook.globalEntries,
-  handleFrontTotal: priceBook.handleFrontTotal
-});
+const catalogPricing = pricingContract.normalize(priceBook.pricing);
 const defaults = hierarchyCore.upgrade(legacyDefaults, configurationCore, flowCore, catalog, priceBook, scene, hierarchyDefaults);
 const byId = (id) => document.getElementById(id);
 const loginPanel = byId("loginPanel");

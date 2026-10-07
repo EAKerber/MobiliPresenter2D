@@ -16,7 +16,7 @@
   const presentationPolicy = global.CASA_EM_MODULOS_PRESENTATION_POLICY;
   const flowLayout = global.CasaModulesFlowLayout;
   const hierarchyDefaults = global.CASA_EM_MODULOS_HIERARCHY_DEFAULTS;
-  let priceBook = structuredClone(global.CASA_EM_MODULOS_PRICE_BOOK);
+  const priceBook = structuredClone(global.CASA_EM_MODULOS_PRICE_BOOK);
   const pricingContract = global.CasaModulesPricingContract;
   const pricing = global.CasaModulesPricing;
   let pricingRules = null;
@@ -28,6 +28,17 @@
   let normalizedFlow = null;
   let flowLayoutErrors = [];
   let initialStateApplied = false;
+
+  function amountPricingCents(role, id) {
+    const rule = pricingRules?.roles?.[role]?.[id];
+    return rule?.type === "amount" && Number.isSafeInteger(rule.cents) ? rule.cents : 0;
+  }
+
+  function handleFrontTotal() {
+    return Number.isSafeInteger(pricingRules?.allocation?.handleFrontTotal)
+      ? pricingRules.allocation.handleFrontTotal
+      : 0;
+  }
 
   if (!scene || !inlineMasks || !core || !visibility || !validation || !fingerprint || !finishes || !catalog || !priceBook || !pricingContract || !pricing || !configurationCore || !flowCore || !layoutProfiles || !presentationCore || !presentationPolicy || !flowLayout || !hierarchyDefaults || !configuratorSettings) {
     throw new Error("Não foi possível carregar os dados da cena 2D.");
@@ -43,7 +54,7 @@
   }
 
   const initialAdministration = configurationCore.createDefaultAdministration(configuratorSettings, catalog, priceBook, scene);
-  pricingRules = pricingContract.upgradeLegacy(initialAdministration.pricing);
+  pricingRules = pricingContract.normalize(priceBook.pricing);
   dynamicDependencies = initialAdministration.dependencies;
   dynamicEvents = initialAdministration.events;
   configuredObjectAssets = initialAdministration.objectAssets;
@@ -813,8 +824,9 @@
       const label = document.createElement("strong");
       label.textContent = handle.label;
       const description = document.createElement("small");
-      const value = priceBook.handleEntries?.[handle.id] || 0;
-      const perFront = value ? formatCurrency(Math.round(value / priceBook.handleFrontTotal)) : "";
+      const value = amountPricingCents("handleChoiceTotal", handle.id);
+      const fronts = handleFrontTotal();
+      const perFront = value && fronts ? formatCurrency(Math.round(value / fronts)) : "";
       description.textContent = value
         ? handle.description + " · " + perFront + " por frente; " + formatCurrency(value) + " no conjunto completo."
         : handle.description;
@@ -845,7 +857,7 @@
       const title = document.createElement("strong");
       title.textContent = stone.label;
       const description = document.createElement("small");
-      const value = priceBook.globalEntries?.[stone.id] || 0;
+      const value = amountPricingCents("globalAdjustment", stone.id);
       description.textContent = stone.description + (value ? " · +" + formatCurrency(value) : " · sem adicional.");
       button.append(swatch, title, description);
       stonePackageOptions.append(button);
@@ -880,7 +892,7 @@
       const title = document.createElement("strong");
       title.textContent = service.title;
       const description = document.createElement("small");
-      const value = priceBook.globalEntries?.[service.id] || 0;
+      const value = amountPricingCents("globalAdjustment", service.id);
       description.textContent = service.description + (value ? " · +" + formatCurrency(value) : "");
       copy.append(title, description);
       card.append(input, copy);
@@ -1673,7 +1685,7 @@
 
     const compositionEstimate = getEstimate(resolved);
     const itemPricing = compositionEstimate.moduleEstimates?.find((entry) => entry.item.entityId === product.entityId)?.estimate
-      || pricing.itemEstimate(product, catalog, state, priceBook);
+      || pricing.itemEstimate(product, catalog, state, pricingRules);
     const price = document.createElement("section");
     price.className = "module-detail__price";
     const priceLabel = document.createElement("span");
@@ -1984,7 +1996,7 @@
     });
     catalog.options.handles = [{ ...(previousHandles.get("none") || { id: "none", label: "Definir depois", description: "Sem adicional na simulação.", isAbsence: true }), isAbsence: true, validMaterialIds: [], validMaterials: [] }, ...handles.materialIds.map((id) => {
       const product = handleProducts.get(id); const old = previousHandles.get(product.priceEntryId);
-      if (priceBook.handleEntries[product.priceEntryId] == null) priceBook.handleEntries[product.priceEntryId] = 0;
+      if (!pricingRules.roles.handleChoiceTotal[product.priceEntryId]) pricingRules.roles.handleChoiceTotal[product.priceEntryId] = { type: "amount", cents: 0 };
       return { ...old, id: product.priceEntryId, label: product.label, description: product.description || old?.description || "Puxador selecionável.", isAbsence: false, validMaterialIds: [...product.materialIds], validMaterials: product.materialIds.map((materialId) => materials.get(materialId)).filter(Boolean).map((material) => ({ ...material })) };
     })];
     catalog.options.stonePackages = stone.materialIds.map((id) => {
@@ -2040,7 +2052,6 @@
       }
     });
     pricingRules = pricingContract.upgradeLegacy(normalized.pricing);
-    priceBook = { ...priceBook, ...normalized.pricing };
     finishSettings = new Map(normalized.finishes.map((item) => [item.id, item]));
     applyMaterialLibrary(normalized);
     publishNormalizedFlow(normalized);
