@@ -1,6 +1,6 @@
 # CP-SD-02A1 — stage navigation authority — 2026-10-07
 
-Status: **IN PROGRESS**.
+Status: **COMPLETE / PASS**.
 
 Parent:
 - `docs/architecture/schema-driven-ui-cp-sd-02a0-renderer-inventory-2026-10-07.md`
@@ -56,3 +56,33 @@ Definition of done:
 - no static `data-step="modules|finishes|services|summary"` buttons remain in `index.html`;
 - runtime is the only creator of buyer stage buttons;
 - all current gates pass unchanged.
+
+
+## Completion record
+
+Result: **PASS** on reviewed code head `c8861c57c34817f9a97879f0a51926b0e3593fea` in PR #110.
+
+Implemented:
+- removed the four static buyer `.flow-step` buttons from `index.html`;
+- `flow-layout.stageNavigation(normalizedFlow)` is the buyer navigation projection;
+- startup renders navigation before the first buyer sync, so default/offline behavior does not depend on static markup;
+- runtime configuration reloads rebuild the same navigation from the updated normalized flow;
+- a disabled normalized stage is absent from the navigation projection;
+- static `data-step` markup is now test-forbidden;
+- current compact labels, order, `aria-controls`, keyboard behavior and scene pin remain unchanged;
+- shared runtime cache revision advanced to `runtime-v15`.
+
+Gates:
+- App build purity — PASS;
+- Current variant fidelity — PASS;
+- Current asset gates — PASS;
+- Flow layout browser — PASS;
+- Keyboard browser — PASS;
+- Mobile browser — PASS;
+- Stone browser — PASS;
+- Summary/Pricing browser — PASS;
+- Netlify deploy preview #110 — PASS.
+
+No production configuration write.
+
+Next small checkpoint: **CP-SD-02A2 — generic core stage/group/section shell host**, limited to shell creation/reconciliation. Component content renderers remain unchanged.
