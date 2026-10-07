@@ -1,10 +1,13 @@
 import { getDeployStore, getStore } from "@netlify/blobs";
 import { getUser } from "@netlify/identity";
 import configCore from "../../app/core/configuration.js";
+import administrationV5 from "../../app/core/administration-v5.js";
+import publishedReader from "../../app/core/published-configuration.js";
 import legacyStageRepair from "../../app/core/legacy-stage-repair.js";
 import defaults from "../../app/data/configurator-settings.js";
 import catalog from "../../app/data/catalog-data.js";
 import priceBook from "../../app/data/mock-price-book.js";
+import scene from "../../app/data/scene-data.js";
 
 const cacheHeaders = {
   "Cache-Control": "no-store, max-age=0",
@@ -19,11 +22,20 @@ function getConfigurationStore(context) {
 }
 
 async function readPublished(store) {
-  const base = configCore.createDefaultAdministration(defaults, catalog, priceBook);
-  const published = await store.get("published", { type: "json" });
-  if (!published) return base;
-  try { return configCore.normalizeConfiguratorSettings(published, catalog, priceBook); }
-  catch { return base; }
+  const raw = await publishedReader.readRawPublished(store);
+  const inspected = publishedReader.inspectPublishedRaw(raw, {
+    configuration: configCore, administrationV5, catalog, priceBook, scene
+  });
+  if (inspected.kind === "valid") return inspected;
+  // Preserve the pre-v5 missing/invalid-v3 resilience only. Never turn an
+  // unrecognized or invalid v5 blob into plausible default product data.
+  if (inspected.kind === "missing" || inspected.code === "invalid_v3") {
+    return {
+      kind: "fallback", schema: configCore.SCHEMA,
+      value: configCore.createDefaultAdministration(defaults, catalog, priceBook)
+    };
+  }
+  return { kind: "invalid", code: inspected.code };
 }
 
 export default async (request, context) => {
@@ -32,7 +44,12 @@ export default async (request, context) => {
   }
 
   const store = getConfigurationStore(context);
-  if (request.method === "GET") return respond(await readPublished(store));
+  if (request.method === "GET") {
+    const published = await readPublished(store);
+    return published.kind === "invalid"
+      ? respond({ error: "stored_configuration_invalid", code: published.code }, 422)
+      : respond(published.value);
+  }
 
   const user = await getUser();
   const roles = [...(user?.roles || []), ...(user?.app_metadata?.roles || [])];
@@ -51,7 +68,16 @@ export default async (request, context) => {
     return respond({ error: "invalid_json" }, 400);
   }
 
-  const current = await readPublished(store);
+  const currentRead = await readPublished(store);
+  if (currentRead.kind === "invalid") {
+    return respond({ error: "stored_configuration_invalid", code: currentRead.code }, 409);
+  }
+  // Until the separate authenticated v5 publication checkpoint, a v3 PUT
+  // must never overwrite an already-published v5 record.
+  if (currentRead.schema === administrationV5.SCHEMA) {
+    return respond({ error: "hierarchy_publication_required", message: "Published v5 cannot be replaced by the legacy v3 writer." }, 409);
+  }
+  const current = currentRead.value;
   if (payload?.revision !== current.revision) return respond({ error: "revision_conflict", currentRevision: current.revision }, 409);
 
   const operation = request.headers.get("x-configuration-operation") || "";
