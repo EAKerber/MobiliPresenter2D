@@ -354,7 +354,77 @@ const { chromium } = require("playwright");
   assert.deepEqual(lightingNegativeErrors, [], "Lighting absence fixture has no console/page errors");
   await lightingNegativePage.close();
 
-  fs.writeFileSync(path.join(output, "result.json"), JSON.stringify({ targetUrl, uniqueness, errors, negativeErrors, lightingNegativeErrors }, null, 2));
+  const withoutFronts = structuredClone(sourceConfiguration);
+  const frontsFinishesStage = withoutFronts.stages.find((stage) => (stage.kind || stage.id) === "finishes");
+  assert.ok(frontsFinishesStage, "Fronts negative fixture has Acabamentos stage");
+  frontsFinishesStage.items = frontsFinishesStage.items.filter((id) => id !== "fronts-all");
+
+  const frontsNegativeErrors = [];
+  const frontsNegativePage = await browser.newPage({ viewport: { width: 1366, height: 900 } });
+  frontsNegativePage.on("pageerror", (error) => frontsNegativeErrors.push(error.message));
+  frontsNegativePage.on("console", (message) => { if (message.type() === "error") frontsNegativeErrors.push(message.text()); });
+  await frontsNegativePage.route("**/api/configuration", async (route) => {
+    if (route.request().method() !== "GET") return route.continue();
+    await route.fulfill({
+      status: 200,
+      contentType: "application/json",
+      body: JSON.stringify(withoutFronts)
+    });
+  });
+  await frontsNegativePage.goto(targetUrl, { waitUntil: "domcontentloaded", timeout: 15000 });
+  await frontsNegativePage.waitForFunction(() => {
+    const finishes = window.CASA_NORMALIZED_FLOW?.stages?.find((stage) => stage.id === "finishes");
+    const sectionIds = finishes?.groups?.flatMap((group) => group.sections.map((section) => section.id)) || [];
+    return finishes
+      && !sectionIds.includes("fronts")
+      && sectionIds.includes("handles")
+      && sectionIds.includes("stone-packages")
+      && sectionIds.includes("stone-skirting")
+      && window.CASA_EM_MODULOS_DEBUG?.getFlowLayoutErrors;
+  }, null, { timeout: 10000 });
+
+  await frontsNegativePage.locator('.flow-nav [data-step="finishes"]').click();
+  await frontsNegativePage.waitForFunction(() => !document.getElementById("finishesStagePanel").hidden);
+
+  assert.equal(
+    await frontsNegativePage.locator('[data-keyboard-section="fronts"]').count(),
+    0,
+    "omitted Fronts data creates no semantic Fronts section shell"
+  );
+  assert.equal(
+    await frontsNegativePage.locator('[data-flow-section-slot][data-flow-slot-item="fronts-all"]').isHidden(),
+    true,
+    "unclaimed Fronts item-affinity slot stays hidden"
+  );
+  assert.equal(
+    await frontsNegativePage.locator('[data-keyboard-section="handles"]').count(),
+    1,
+    "Handles remains materialized when Fronts is omitted"
+  );
+  assert.equal(
+    await frontsNegativePage.locator('[data-keyboard-section="handles"]').isVisible(),
+    true,
+    "Handles remains visible when Fronts is omitted"
+  );
+  assert.equal(
+    await frontsNegativePage.locator('[data-keyboard-section="stone-packages"]').count(),
+    1,
+    "Stone packages remains materialized when Fronts is omitted"
+  );
+  assert.equal(
+    await frontsNegativePage.locator('[data-keyboard-section="stone-skirting"]').count(),
+    1,
+    "Stone skirting remains materialized when Fronts is omitted"
+  );
+  assert.deepEqual(
+    await frontsNegativePage.evaluate(() => window.CASA_EM_MODULOS_DEBUG.getFlowLayoutErrors()),
+    [],
+    "omitted Fronts data does not trigger a fabricated renderer fallback"
+  );
+  assert.deepEqual(frontsNegativeErrors, [], "Fronts absence fixture has no console/page errors");
+  await frontsNegativePage.close();
+
+  fs.writeFileSync(path.join(output, "result.json"), JSON.stringify({ targetUrl, uniqueness, errors, negativeErrors, lightingNegativeErrors, frontsNegativeErrors }, null, 2));
   await browser.close();
   console.log("flow layout browser: PASS");
 })().catch((error) => {

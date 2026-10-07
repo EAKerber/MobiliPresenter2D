@@ -72,9 +72,11 @@ Gate:
 
 A2d1.2 remains a separate negative-fixture commit.
 
-### A2d1.2 — negative Fronts absence proof
+### A2d1.2 — negative Fronts absence proof — CANDIDATE
 
 Fixture keeps Acabamentos but omits `fronts-all`.
+
+Candidate proof is intentionally test-only: production/runtime code remains identical to the A2d1.1 PASS head.
 
 Prove:
 - no normalized `fronts` section;
