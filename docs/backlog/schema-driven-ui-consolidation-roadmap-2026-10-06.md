@@ -143,7 +143,7 @@ Current CP-SD-02 progress:
 
 ### CP-SD-03 — responsive presentation primitives
 
-Status: **IN PROGRESS**. CP-SD-03A0 responsive-presentation discovery, CP-SD-03A1 executable Modules view binding, CP-SD-03A2 profile-driven application topology, CP-SD-03A3 Modules companion projection discovery, CP-SD-03A4 compact `replace` execution, CP-SD-03A5 stacked PiP discovery, CP-SD-03A6 stacked PiP execution and CP-SD-03A7 bottom-dock discovery are complete. Immediate checkpoint: `docs/backlog/schema-driven-ui-cp-sd-03a8-bottom-dock-execution-2026-10-07.md`.
+Status: **COMPLETE / PASS**. CP-SD-03A0 through CP-SD-03A8 are complete. Layout topology, Modules companion projection, policy-owned PiP, persistent bottom dock and dock-aware scrolling now execute from the consolidated presentation authority. Immediate next track: `docs/backlog/schema-driven-ui-cp-sd-04a0-interaction-affordance-discovery-2026-10-07.md`.
 
 Goal: implement audited presentation behavior from one responsive authority.
 
@@ -163,7 +163,7 @@ Current CP-SD-03 sequence:
 - CP-SD-03A5: stacked PiP discovery — complete;
 - CP-SD-03A6: stacked PiP execution — complete;
 - CP-SD-03A7: persistent bottom dock + scroll-clearance discovery — complete;
-- CP-SD-03A8: persistent bottom dock execution — next.
+- CP-SD-03A8: persistent bottom dock execution — complete.
 
 Gate:
 - wide, stacked-workspace and compact browser geometry tests;
@@ -172,6 +172,8 @@ Gate:
 - no change to semantic item ownership.
 
 ### CP-SD-04 — interaction affordance cleanup
+
+Status: **IN PROGRESS**. Immediate checkpoint: `docs/backlog/schema-driven-ui-cp-sd-04a0-interaction-affordance-discovery-2026-10-07.md`.
 
 Goal: polish generic interactions without inflating the domain schema.
 

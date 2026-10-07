@@ -54,14 +54,43 @@ const { chromium } = require("playwright");
     "stacked PiP reuses the transparency control");
   assert.equal(await stackedPage.locator("#mobileSceneResizeHandle").isVisible(), true,
     "stacked PiP reuses the resize handle");
+  assert.deepEqual(
+    await stackedPage.evaluate(() => window.CASA_EM_MODULOS_DEBUG.getBottomDock().slots),
+    ["estimate", "primary-action"],
+    "stacked PiP coexists with the policy-owned bottom dock"
+  );
 
   const stackedCard = stackedPage.locator("#viewerCard");
+  const stackedDock = stackedPage.locator(".flow-actions");
+  const stackedInitialPip = await stackedCard.boundingBox();
+  const stackedInitialDock = await stackedDock.boundingBox();
+  assert(stackedInitialPip && stackedInitialDock, "stacked PiP and dock must be measurable");
+  assert(stackedInitialPip.y + stackedInitialPip.height <= stackedInitialDock.y - 6,
+    "stacked PiP opens above the persistent bottom dock");
   const stackedWidthBefore = (await stackedCard.boundingBox()).width;
   await stackedPage.locator("#mobileSceneResize").click();
   await stackedPage.waitForTimeout(50);
-  const stackedWidthAfter = (await stackedCard.boundingBox()).width;
+  const stackedAfterResize = await stackedCard.boundingBox();
+  const stackedDockAfterResize = await stackedDock.boundingBox();
+  const stackedWidthAfter = stackedAfterResize.width;
   assert(stackedWidthAfter > stackedWidthBefore + 20,
     "stacked PiP reuses the existing size control");
+  assert(stackedAfterResize.y + stackedAfterResize.height <= stackedDockAfterResize.y - 6,
+    "stacked PiP resize remains above the persistent dock");
+
+  const stackedDragStart = {
+    x: stackedAfterResize.x + 8,
+    y: stackedAfterResize.y + stackedAfterResize.height * 0.55
+  };
+  await stackedPage.mouse.move(stackedDragStart.x, stackedDragStart.y);
+  await stackedPage.mouse.down();
+  await stackedPage.mouse.move(stackedDragStart.x, 890, { steps: 5 });
+  await stackedPage.mouse.up();
+  await stackedPage.waitForTimeout(50);
+  const stackedAfterDrag = await stackedCard.boundingBox();
+  const stackedDockAfterDrag = await stackedDock.boundingBox();
+  assert(stackedAfterDrag.y + stackedAfterDrag.height <= stackedDockAfterDrag.y - 6,
+    "stacked PiP downward drag is clamped above the persistent dock");
   await stackedPage.locator("#mobileSceneTransparency").click();
   assert.equal(await stackedPage.evaluate(() => document.body.classList.contains("is-mobile-scene-transparent")), true,
     "stacked PiP reuses the transparency state");
@@ -139,6 +168,14 @@ const { chromium } = require("playwright");
     window.scrollTo(0, sentinel.getBoundingClientRect().top + window.scrollY + 180);
   });
   await page.waitForFunction(() => document.body.classList.contains("is-mobile-scene-pinned"));
+  const compactDockState = await page.evaluate(() => window.CASA_EM_MODULOS_DEBUG.getBottomDock());
+  assert.equal(compactDockState.enabled, true, "compact keeps the policy-owned bottom dock enabled");
+  assert.deepEqual(compactDockState.slots, ["estimate", "primary-action"], "compact dock preserves policy slot order");
+  const compactInitialPip = await page.locator("#viewerCard").boundingBox();
+  const compactInitialDock = await page.locator(".flow-actions").boundingBox();
+  assert(compactInitialPip && compactInitialDock, "compact PiP and dock must be measurable");
+  assert(compactInitialPip.y + compactInitialPip.height <= compactInitialDock.y - 6,
+    "compact auto PiP opens above the persistent bottom dock");
 
   const transparency = page.locator("#mobileSceneTransparency");
   const transparencyBox = await transparency.boundingBox();
@@ -188,10 +225,27 @@ const { chromium } = require("playwright");
   await page.waitForTimeout(100);
 
   const afterResize = await card.boundingBox();
+  const compactDockAfterResize = await page.locator(".flow-actions").boundingBox();
   assert(afterResize.width > beforeResize.width + 20,
     "dragging the bottom-left resize handle left must increase PiP width");
   assert(Math.abs(afterResize.x + afterResize.width - (beforeResize.x + beforeResize.width)) <= 4,
     "bottom-left resize must keep the PiP right edge effectively anchored");
+  assert(afterResize.y + afterResize.height <= compactDockAfterResize.y - 6,
+    "compact PiP resize remains above the persistent dock");
+
+  const compactDragStart = {
+    x: afterResize.x + 8,
+    y: afterResize.y + afterResize.height * 0.55
+  };
+  await page.mouse.move(compactDragStart.x, compactDragStart.y);
+  await page.mouse.down();
+  await page.mouse.move(compactDragStart.x, 834, { steps: 5 });
+  await page.mouse.up();
+  await page.waitForTimeout(50);
+  const compactAfterDrag = await card.boundingBox();
+  const compactDockAfterDrag = await page.locator(".flow-actions").boundingBox();
+  assert(compactAfterDrag.y + compactAfterDrag.height <= compactDockAfterDrag.y - 6,
+    "compact PiP downward drag is clamped above the persistent dock");
 
   const stage = page.locator(".module-detail__carousel-stage");
   await stage.scrollIntoViewIfNeeded();
@@ -251,12 +305,14 @@ const { chromium } = require("playwright");
       closesOnSideRail: true,
       widthBefore: stackedWidthBefore,
       widthAfter: stackedWidthAfter,
+      dockGapAfterDrag: stackedDockAfterDrag.y - (stackedAfterDrag.y + stackedAfterDrag.height),
       pageErrors: stackedErrors
     },
     resize: {
       beforeWidth: beforeResize.width,
       afterWidth: afterResize.width,
-      rightEdgeDelta: (afterResize.x + afterResize.width) - (beforeResize.x + beforeResize.width)
+      rightEdgeDelta: (afterResize.x + afterResize.width) - (beforeResize.x + beforeResize.width),
+      dockGapAfterDrag: compactDockAfterDrag.y - (compactAfterDrag.y + compactAfterDrag.height)
     },
     carousel: { beforeSwipe, afterSwipe },
     pageErrors: errors

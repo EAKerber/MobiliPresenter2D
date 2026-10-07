@@ -529,7 +529,7 @@ assert.equal(appJs.includes("publishNormalizedFlow"), true, "app publishes one n
 assert.equal(appJs.includes("applyBuyerFlowLayout"), true, "buyer composition is mounted from normalized flow layout");
 assert.equal((indexHtml.match(/core\/layout-profiles\.js/g) || []).length, 1, "layout profile resolver loads exactly once");
 assert.equal(
-  indexHtml.indexOf("core/layout-profiles.js?v=cp-sd-01c1-v1") < indexHtml.indexOf("styles.css?v=runtime-v34"),
+  indexHtml.indexOf("core/layout-profiles.js?v=cp-sd-01c1-v1") < indexHtml.indexOf("styles.css?v=runtime-v35"),
   true,
   "canonical layout profile resolves before public topology CSS to avoid first-paint profile drift"
 );
@@ -611,6 +611,15 @@ assert.equal(appJs.includes("function isMobileViewport()"), false, "PiP availabi
 assert.equal(styles.includes('html:is([data-layout-profile="stacked"], [data-layout-profile="compact"]) body.is-mobile-scene-pinned .viewer-card'), true, "fixed PiP presentation consumes canonical layout profiles");
 assert.equal(styles.includes('@media (max-width: 700px) {\n  body.is-mobile-scene-pinned .viewer-anchor'), false, "PiP presentation is not owned by the compact numeric breakpoint");
 assert.equal(indexHtml.includes('@media (max-width: 700px) {\n        body.is-mobile-scene-pinned.is-mobile-scene-transparent'), false, "inline PiP transparency follows layout profiles rather than a numeric breakpoint");
+assert.equal(appJs.includes("function bottomDockPolicy()"), true, "bottom dock runtime consumes the presentation policy");
+assert.equal(appJs.includes('["estimate", configurationValue]'), true, "bottom dock estimate slot reuses the stable estimate adapter");
+assert.equal(appJs.includes('["primary-action", nextStepButton]'), true, "bottom dock primary-action slot reuses the stable CTA adapter");
+assert.equal(appJs.includes('flowActions.dataset.bottomDockEnabled'), true, "bottom dock exposes one executable shell marker");
+assert.equal(appJs.includes('"--bottom-dock-clearance"'), true, "runtime exposes live dock clearance instead of a fixed dock height");
+assert.equal(styles.includes('.flow-actions[data-bottom-dock-enabled="true"]'), true, "persistent dock presentation is bound to the executable policy marker");
+assert.equal(styles.includes('scroll-padding-bottom: calc(var(--bottom-dock-clearance, 0px) + 12px);'), true, "scroll owners consume live bottom dock clearance");
+assert.equal(styles.includes('html[data-layout-profile="compact"] .flow-actions { position: static;'), false, "compact no longer disables the persistent dock projection");
+assert.equal(appJs.includes("bottomDockViewportRect()?.top"), true, "PiP vertical geometry consumes the live dock boundary");
 assert.equal(appJs.includes("getBoundingClientRect().bottom || 0"), true);
 assert.equal(appJs.includes("const pipBottom = Math.max(navBottom, mobilePipPosition?.top || 0) + pipHeight;"), true);
 assert.equal(/state = core\.createInitialState\(scene\);\s*setAllVisibility\(true\);/.test(appJs), false, "restoring must preserve optional defaults");

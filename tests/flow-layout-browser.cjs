@@ -76,8 +76,54 @@ const { chromium } = require("playwright");
       activeClose: Boolean(document.activeElement?.matches?.("[data-close-module-detail]"))
     };
   });
+  const bottomDockState = () => page.evaluate(() => {
+    const dock = document.querySelector(".flow-actions");
+    const dockRect = dock.getBoundingClientRect();
+    const controls = document.querySelector(".controls");
+    const controlsRect = controls.getBoundingClientRect();
+    return {
+      profile: document.documentElement.dataset.layoutProfile,
+      enabled: dock.dataset.bottomDockEnabled === "true",
+      slots: dock.dataset.bottomDockSlots?.split(/\s+/).filter(Boolean) || [],
+      position: getComputedStyle(dock).position,
+      visible: !dock.hidden && dockRect.height > 0,
+      dock: { top: dockRect.top, bottom: dockRect.bottom, height: dockRect.height },
+      controls: { top: controlsRect.top, bottom: controlsRect.bottom, scrollTop: controls.scrollTop, scrollHeight: controls.scrollHeight, clientHeight: controls.clientHeight },
+      viewportHeight: window.innerHeight,
+      directChildIds: [...dock.children].map((node) => node.id),
+      estimateCount: document.querySelectorAll("#configurationValue").length,
+      actionCount: document.querySelectorAll("#nextStepButton").length,
+      clearance: window.CASA_EM_MODULOS_DEBUG.getBottomDock().clearance
+    };
+  });
 
   assert.deepEqual(await page.evaluate(() => window.CASA_EM_MODULOS_DEBUG.getFlowLayoutErrors()), [], "initial flow layout has no renderer invariant errors");
+  assert.deepEqual(
+    await page.evaluate(() => window.CASA_EM_MODULOS_DEBUG.getPresentationPolicy().shell.bottomDock),
+    { enabled: true, slots: ["estimate", "primary-action"] },
+    "bottom dock shell policy is frozen and explicit"
+  );
+  const dockInitial = await bottomDockState();
+  assert.equal(dockInitial.enabled, true, "bottom dock policy is executable");
+  assert.equal(dockInitial.position, "sticky", "one stable footer owns persistent positioning");
+  assert.deepEqual(dockInitial.slots, ["estimate", "primary-action"], "dock runtime preserves policy slot order");
+  assert.deepEqual(dockInitial.directChildIds, ["configurationValue", "nextStepButton"], "dock reuses existing estimate and primary action nodes");
+  assert.equal(dockInitial.estimateCount, 1, "estimate adapter remains unique");
+  assert.equal(dockInitial.actionCount, 1, "primary action adapter remains unique");
+  assert.ok(Math.abs(dockInitial.clearance - dockInitial.dock.height) <= 2, "live bottom clearance follows the rendered dock height");
+  await page.evaluate(() => { document.querySelector(".controls").scrollTop = 0; });
+  await page.waitForTimeout(30);
+  const dockSideRailTop = await bottomDockState();
+  assert.ok(Math.abs(dockSideRailTop.controls.bottom - dockSideRailTop.dock.bottom) <= 4,
+    "side-rail dock sticks to the controls scrollport bottom");
+  await page.evaluate(() => {
+    const controls = document.querySelector(".controls");
+    controls.scrollTop = Math.max(0, Math.min(controls.scrollHeight - controls.clientHeight, Math.round(controls.scrollHeight * 0.4)));
+  });
+  await page.waitForTimeout(30);
+  const dockSideRailScrolled = await bottomDockState();
+  assert.ok(Math.abs(dockSideRailScrolled.controls.bottom - dockSideRailScrolled.dock.bottom) <= 4,
+    "side-rail dock remains persistent while controls scroll");
   assert.equal(await page.evaluate(() => window.CASA_EM_MODULOS_DEBUG.getLayoutProfile()), "side-rail", "1366px resolves to side-rail");
   assert.equal(await page.evaluate(() => document.documentElement.dataset.layoutProfile), "side-rail", "resolved profile is exposed on the document");
   assert.equal(await page.evaluate(() => window.CASA_EM_MODULOS_DEBUG.getPresentationPolicy().stageViews.modules.views.find((view) => view.id === "modules-detail").relation.of), "modules-list", "buyer exposes the validated module companion policy");
@@ -261,6 +307,12 @@ const { chromium } = require("playwright");
   assert.equal((await modulesViewContract()).detail.projection, "side-panel", "stacked profile updates Modules companion projection marker from policy");
   assert.equal((await modulesViewContract()).selectedEntityId, selectedModuleBeforeProfileChanges, "selected module survives side-rail -> stacked profile marker update");
   assert.equal(await page.evaluate(() => document.documentElement.dataset.layoutProfile), "stacked", "stacked profile marker follows viewport");
+  await page.evaluate(() => window.scrollTo(0, Math.min(320, Math.max(0, document.scrollingElement.scrollHeight - window.innerHeight))));
+  await page.waitForTimeout(30);
+  const dockStacked = await bottomDockState();
+  assert.equal(dockStacked.position, "fixed", "stacked document-scroll profile keeps the same footer persistently fixed to the viewport");
+  assert.ok(dockStacked.dock.bottom <= dockStacked.viewportHeight + 2 && dockStacked.dock.bottom >= dockStacked.viewportHeight - 4,
+    "stacked dock remains pinned to the document viewport bottom while controls content scrolls");
   const cabinetMedium = await rect('[data-flow-group-shell="cabinet-finishes"]');
   const stoneMedium = await rect('[data-flow-group-shell="stone"]');
   assert.ok(Math.abs(cabinetMedium.top - stoneMedium.top) < 4, "when controls move below the scene, Acabamentos switches to two columns");
@@ -399,6 +451,13 @@ const { chromium } = require("playwright");
   assert.equal((await modulesViewContract()).detail.projection, "replace", "compact profile updates Modules companion projection marker from policy");
   assert.equal((await modulesViewContract()).selectedEntityId, selectedModuleBeforeProfileChanges, "selected module survives stacked -> compact profile marker update");
   assert.equal(await page.evaluate(() => document.documentElement.dataset.layoutProfile), "compact", "compact profile marker follows viewport");
+  await page.evaluate(() => window.scrollTo(0, Math.min(320, Math.max(0, document.scrollingElement.scrollHeight - window.innerHeight))));
+  await page.waitForTimeout(30);
+  const dockCompact = await bottomDockState();
+  assert.equal(dockCompact.position, "fixed", "compact document-scroll profile keeps the same footer persistently fixed to the viewport");
+  assert.ok(dockCompact.dock.bottom <= dockCompact.viewportHeight + 2 && dockCompact.dock.bottom >= dockCompact.viewportHeight - 4,
+    "compact dock remains pinned to the document viewport bottom");
+  assert.ok(dockCompact.clearance >= dockCompact.dock.height - 2, "compact safe-area-aware dock keeps live clearance synchronized");
   await page.locator('.flow-nav [data-step="modules"]').click();
   await page.waitForFunction(() => !document.getElementById("modulesPanel").hidden);
   const compactOpenPanes = await modulePaneState();

@@ -49,6 +49,34 @@ const {chromium} = require('playwright');
     return stage ? stage.groups.flatMap(group => group.sections).filter(section => section.keyboard).map(section => section.id) : [];
   }, stageId);
   const navigationErrors = () => page.evaluate(() => window.CASA_KEYBOARD_SHORTCUTS.navigationInvariantErrors());
+  const sectionDockGeometry = (sectionId) => page.evaluate((id) => {
+    const element = document.querySelector(`[data-keyboard-section="${id}"]`);
+    const dock = document.querySelector('.flow-actions[data-bottom-dock-enabled="true"]');
+    const scroller = window.CASA_KEYBOARD_SHORTCUTS.scrollContainerFor(element);
+    const rect = element.getBoundingClientRect();
+    const focused = element.contains(document.activeElement) ? document.activeElement : null;
+    const focusRect = focused?.getBoundingClientRect() || null;
+    const bounds = scroller?.getBoundingClientRect() || { top: 0, bottom: window.innerHeight, left: 0, right: window.innerWidth };
+    const dockRect = dock.getBoundingClientRect();
+    const navRect = document.querySelector('.flow-nav')?.getBoundingClientRect();
+    const usableTop = navRect ? Math.max(bounds.top + 12, navRect.bottom + 12) : bounds.top + 12;
+    const usableBottom = Math.min(bounds.bottom - 16, dockRect.top - 12);
+    return {
+      profile: document.documentElement.dataset.layoutProfile,
+      scrollerClass: scroller?.className || null,
+      top: rect.top,
+      bottom: rect.bottom,
+      usableTop,
+      usableBottom,
+      dockTop: dockRect.top,
+      sectionFits: rect.height <= usableBottom - usableTop,
+      fullyAboveDock: rect.bottom <= usableBottom + 2,
+      focusedTag: focused?.tagName || null,
+      focusedTop: focusRect?.top ?? null,
+      focusedBottom: focusRect?.bottom ?? null,
+      focusVisible: Boolean(focusRect && focusRect.top >= usableTop - 2 && focusRect.bottom <= usableBottom + 2)
+    };
+  }, sectionId);
   const moveToSection = async (id) => {
     for (let index = 0; index < 12; index += 1) {
       if (await activeSection() === id) return;
@@ -294,9 +322,11 @@ const {chromium} = require('playwright');
     const element = document.querySelector('[data-keyboard-section="additional-services"]');
     const scroller = document.querySelector('.controls');
     const bounds = scroller.getBoundingClientRect();
+    const dockTop = document.querySelector('.flow-actions[data-bottom-dock-enabled="true"]').getBoundingClientRect().top;
     const rect = element.getBoundingClientRect();
     const maxScroll = Math.max(0, scroller.scrollHeight - scroller.clientHeight);
-    const targetBottom = bounds.bottom - 140;
+    const viewportBottom = Math.min(bounds.bottom - 16, dockTop - 12);
+    const targetBottom = viewportBottom - 124;
     scroller.scrollTop = Math.max(0, Math.min(maxScroll, scroller.scrollTop + rect.bottom - targetBottom));
     const positioned = element.getBoundingClientRect();
     const navBottom = document.querySelector('.flow-nav').getBoundingClientRect().bottom;
@@ -304,8 +334,8 @@ const {chromium} = require('playwright');
       top: positioned.top,
       bottom: positioned.bottom,
       viewportTop: navBottom + 12,
-      viewportBottom: bounds.bottom - 16,
-      fullyVisible: positioned.top >= navBottom + 12 && positioned.bottom <= bounds.bottom - 16
+      viewportBottom,
+      fullyVisible: positioned.top >= navBottom + 12 && positioned.bottom <= viewportBottom
     };
   });
   assert.equal(beforeLastSection.fullyVisible, true, 'test setup keeps the final service section fully visible before section navigation');
@@ -318,13 +348,17 @@ const {chromium} = require('playwright');
     const scroller = document.querySelector('.controls');
     const rect = element.getBoundingClientRect();
     const bounds = scroller.getBoundingClientRect();
+    const dockTop = document.querySelector('.flow-actions[data-bottom-dock-enabled="true"]').getBoundingClientRect().top;
     const maxScroll = Math.max(0, scroller.scrollHeight - scroller.clientHeight);
+    const usableBottom = Math.min(bounds.bottom - 16, dockTop - 12);
     return {
-      bottomGap: (bounds.bottom - 16) - rect.bottom,
+      bottomGap: usableBottom - rect.bottom,
+      aboveDock: rect.bottom <= usableBottom + 2,
       atDocumentEnd: Math.abs(scroller.scrollTop - maxScroll) < 3
     };
   });
-  assert.ok(Math.abs(lastSectionGeometry.bottomGap) < 42 || lastSectionGeometry.atDocumentEnd, 'last-section navigation aligns the final section with the usable viewport end');
+  assert.equal(lastSectionGeometry.aboveDock, true, 'last-section navigation keeps the final section above the persistent dock');
+  assert.ok(Math.abs(lastSectionGeometry.bottomGap) < 42 || lastSectionGeometry.atDocumentEnd, 'last-section navigation aligns with the dock-aware usable viewport end');
 
   const focusedAdditionalService = await page.evaluate(() => ({
     id: document.activeElement?.id || null,
@@ -345,9 +379,11 @@ const {chromium} = require('playwright');
     const element = document.querySelector('[data-keyboard-section="additional-services"]');
     const scroller = document.querySelector('.controls');
     const bounds = scroller.getBoundingClientRect();
+    const dockTop = document.querySelector('.flow-actions[data-bottom-dock-enabled="true"]').getBoundingClientRect().top;
     const rect = element.getBoundingClientRect();
     const maxScroll = Math.max(0, scroller.scrollHeight - scroller.clientHeight);
-    scroller.scrollTop = Math.max(0, Math.min(maxScroll, scroller.scrollTop + rect.bottom - (bounds.bottom - 140)));
+    const targetBottom = Math.min(bounds.bottom - 16, dockTop - 12) - 124;
+    scroller.scrollTop = Math.max(0, Math.min(maxScroll, scroller.scrollTop + rect.bottom - targetBottom));
   });
   await page.keyboard.press('ArrowDown');
   await page.waitForTimeout(30);
@@ -356,14 +392,39 @@ const {chromium} = require('playwright');
     const scroller = document.querySelector('.controls');
     const rect = element.getBoundingClientRect();
     const bounds = scroller.getBoundingClientRect();
+    const dockTop = document.querySelector('.flow-actions[data-bottom-dock-enabled="true"]').getBoundingClientRect().top;
     const maxScroll = Math.max(0, scroller.scrollHeight - scroller.clientHeight);
+    const usableBottom = Math.min(bounds.bottom - 16, dockTop - 12);
     return {
-      bottomGap: (bounds.bottom - 16) - rect.bottom,
+      bottomGap: usableBottom - rect.bottom,
+      aboveDock: rect.bottom <= usableBottom + 2,
       atDocumentEnd: Math.abs(scroller.scrollTop - maxScroll) < 3
     };
   });
-  assert.ok(Math.abs(reducedMotionGeometry.bottomGap) < 42 || reducedMotionGeometry.atDocumentEnd, 'reduced motion reaches the same final section geometry without relying on animation');
+  assert.equal(reducedMotionGeometry.aboveDock, true, 'reduced-motion section navigation stays above the dock');
+  assert.ok(Math.abs(reducedMotionGeometry.bottomGap) < 42 || reducedMotionGeometry.atDocumentEnd, 'reduced motion reaches the same dock-aware final section geometry without relying on animation');
   await page.emulateMedia({reducedMotion: 'no-preference'});
+
+  await page.setViewportSize({width: 1050, height: 900});
+  await page.waitForFunction(() => document.documentElement.dataset.layoutProfile === 'stacked');
+  await page.keyboard.press('ArrowUp');
+  await page.keyboard.press('ArrowDown');
+  await page.waitForTimeout(450);
+  const stackedServiceGeometry = await sectionDockGeometry('additional-services');
+  assert.equal(stackedServiceGeometry.scrollerClass, null, 'stacked Services keep window/document scrolling');
+  assert.equal(stackedServiceGeometry.focusVisible, true, 'stacked keyboard target stays inside the dock-aware usable viewport');
+
+  await page.setViewportSize({width: 390, height: 844});
+  await page.waitForFunction(() => document.documentElement.dataset.layoutProfile === 'compact');
+  await page.keyboard.press('ArrowUp');
+  await page.keyboard.press('ArrowDown');
+  await page.waitForTimeout(450);
+  const compactServiceGeometry = await sectionDockGeometry('additional-services');
+  assert.equal(compactServiceGeometry.scrollerClass, null, 'compact Services keep window/document scrolling');
+  assert.equal(compactServiceGeometry.focusVisible, true, 'compact keyboard target stays inside the dock-aware usable viewport');
+
+  await page.setViewportSize({width: 1366, height: 900});
+  await page.waitForFunction(() => document.documentElement.dataset.layoutProfile === 'side-rail');
 
   // DOM structure is now a rendering bridge, not semantic authority. A rogue section cannot
   // create new keyboard semantics unless it exists in the normalized flow model.
