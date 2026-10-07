@@ -40,9 +40,9 @@ assert.deepEqual(
 );
 
 const finishes = layout.stageLayout(flow, "finishes");
-assert.deepEqual(finishes.groups.map((group) => ({ id: group.id, span: group.span })), [
-  { id: "cabinet-finishes", span: 1 },
-  { id: "stone", span: 1 }
+assert.deepEqual(finishes.groups.map((group) => ({ id: group.id, label: group.label, span: group.span })), [
+  { id: "cabinet-finishes", label: "Acabamentos do conjunto", span: 1 },
+  { id: "stone", label: "Pedra do conjunto", span: 1 }
 ]);
 assert.deepEqual(layout.semanticSectionIds(finishes), ["fronts", "handles", "stone-packages", "stone-skirting"]);
 assert.deepEqual(layout.semanticItemIds(finishes), ["fronts-all", "handles-all", "stone-all", "stone-skirting"]);
@@ -57,8 +57,8 @@ assert.deepEqual(
 );
 
 const services = layout.stageLayout(flow, "services");
-assert.deepEqual(services.groups.map((group) => ({ id: group.id, span: group.span })), [
-  { id: "services", span: 2 }
+assert.deepEqual(services.groups.map((group) => ({ id: group.id, label: group.label, span: group.span })), [
+  { id: "services", label: "Serviços", span: 2 }
 ]);
 assert.deepEqual(layout.semanticSectionIds(services), ["lighting", "additional-services"]);
 assert.deepEqual(services.groups[0].sections.map((section) => section.component), ["toggle-list", "toggle-list"]);

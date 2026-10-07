@@ -136,3 +136,20 @@ Explicitly unchanged:
 - production configuration.
 
 Gate pending: eight repository workflows + Netlify preview.
+
+
+### First Flow-layout gate correction
+
+The first browser gate failed only on:
+
+`Cabinet Finishes visible group heading comes from normalized group label`
+
+The group slot itself was claimed successfully. Root cause: `flow-layout.stageLayout()` did not project normalized `group.label`; it exposed only group id/span/sections.
+
+Correction is generic:
+- add `label: group.label` to the group layout projection;
+- unit-test normalized labels for Cabinet, Stone and Services;
+- keep the group-slot renderer free of group-name branches;
+- advance shared cache revision v25 -> v26 so the revised flow-layout contract cannot reuse the failed preview cache key.
+
+No Cabinet visual adapter, section/item, Stone, material, state or pricing behavior changes are added by this correction.

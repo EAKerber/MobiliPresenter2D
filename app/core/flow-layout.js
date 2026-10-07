@@ -14,6 +14,7 @@
       kind: stage.kind,
       groups: stage.groups.map((group) => ({
         id: group.id,
+        label: group.label,
         span: Math.max(1, Math.min(2, Number(group.presentation?.span) || 1)),
         sections: group.sections.map((section) => ({
           id: section.id,
