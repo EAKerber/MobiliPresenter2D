@@ -208,7 +208,7 @@
           id: sectionEntry.id,
           label: sectionEntry.label,
           order: sectionIndex,
-          behavior: behaviors.values().next().value || "action",
+          behavior: sectionEntry.behavior || behaviors.values().next().value || "action",
           keyboard: !["modules", "summary"].includes(kind),
           component: sectionEntry.component || null,
           presentation: sectionEntry.presentation || "auto",
