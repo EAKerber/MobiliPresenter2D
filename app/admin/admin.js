@@ -1523,10 +1523,11 @@ stagesList.addEventListener("click", (event) => {
     const stage = model.stages.find((entry) => entry.id === splitItem.dataset.stageId);
     const sectionIds = new Set((stage?.groups || []).flatMap((group) => group.sections.map((section) => section.id)));
     const sectionId = hierarchyEditor.uniqueId(sectionIds, label, "secao");
-    const candidate = hierarchyEditor.splitItemToSection(model, splitItem.dataset.splitHierarchyItem, {
+    const itemId = splitItem.dataset.splitHierarchyItem;
+    const candidate = hierarchyEditor.splitItemToSection(model, itemId, {
       sectionId,
       label: label.trim().slice(0, 40),
-      presentation: "auto"
+      component: presentationCore.componentForBehavior(itemBehavior(itemId))
     });
     commitHierarchy(candidate);
     return;
