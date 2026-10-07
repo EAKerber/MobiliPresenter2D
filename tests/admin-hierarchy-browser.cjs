@@ -21,6 +21,9 @@ const priceBook = sandbox.window.CASA_EM_MODULOS_PRICE_BOOK;
 const scene = sandbox.window.CASA_EM_MODULOS_SCENE;
 const defaults = require(path.join(appRoot, "data/configurator-settings.js"));
 const configuration = require(path.join(appRoot, "core/configuration.js"));
+const flow = require(path.join(appRoot, "core/flow-model.js"));
+const v5Core = require(path.join(appRoot, "core/administration-v5.js"));
+const hierarchyDefaults = require(path.join(appRoot, "data/hierarchy-defaults.js"));
 
 let current = configuration.createDefaultAdministration(defaults, catalog, priceBook, scene);
 let putCount = 0;
@@ -315,6 +318,31 @@ async function sectionItemIds(page, stageId, groupId, sectionId) {
     ["move-stone", "tempered-glass", "lighting-08"],
     "unrelated compatible save preserves the original v3 service item order"
   );
+
+  current = v5Core.upgrade(
+    configuration.createDefaultAdministration(defaults, catalog, priceBook, scene),
+    configuration,
+    flow,
+    catalog,
+    priceBook,
+    scene,
+    hierarchyDefaults
+  );
+  current.stages.find((stage) => stage.id === "modules").label = "Módulos v5 admin";
+  current = v5Core.normalize(current);
+  putCount = 0;
+  lastPut = null;
+  await page.reload({ waitUntil: "networkidle" });
+  await page.waitForSelector('[data-hierarchy-stage="modules"]');
+  assert.equal(
+    await page.locator('[data-stage-label="modules"]').inputValue(),
+    "Módulos v5 admin",
+    "admin loads an already-published v5 source directly"
+  );
+  assert.equal(await page.locator("#persistHandlesButton").isHidden(), true, "legacy Puxadores repair is hidden for a v5 source");
+  await page.locator("#saveButton").click();
+  await page.waitForFunction(() => document.getElementById("saveMessage").textContent.includes("já está em v5"));
+  assert.equal(putCount, 0, "normal admin save cannot downgrade an already-published v5 source");
 
   await page.screenshot({ path: path.join(reviewDir, "admin-hierarchy.png"), fullPage: true });
   fs.writeFileSync(path.join(reviewDir, "result.json"), JSON.stringify({
