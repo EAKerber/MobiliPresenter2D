@@ -147,6 +147,20 @@ const { chromium } = require("playwright");
     "Services group shell is created at runtime from normalized flow"
   );
   assert.deepEqual(await renderedSectionOrder("services"), await modelSectionOrder("services", "services"), "Services section order follows normalized flow");
+  const generatedLighting = page.locator('[data-keyboard-section="lighting"]');
+  assert.equal(
+    await generatedLighting.getAttribute("data-flow-generated-section"),
+    "true",
+    "Lighting section shell is created from normalized flow"
+  );
+  assert.equal(await generatedLighting.getAttribute("data-keyboard-behavior"), "toggle", "generated Lighting behavior comes from normalized flow");
+  assert.equal(await generatedLighting.getAttribute("data-render-component"), "toggle-list", "generated Lighting component comes from normalized flow");
+  assert.equal(await generatedLighting.locator("h3").textContent(), "Iluminação", "generated Lighting heading comes from normalized flow label");
+  assert.equal(
+    await generatedLighting.locator('[data-flow-item-id="lighting-08"] #lightingToggle').count(),
+    1,
+    "specialized Lighting item adapter remains owned by the generated semantic section"
+  );
   const generatedAdditionalServices = page.locator('[data-keyboard-section="additional-services"]');
   assert.equal(
     await generatedAdditionalServices.getAttribute("data-flow-generated-section"),
@@ -259,7 +273,69 @@ const { chromium } = require("playwright");
   assert.deepEqual(negativeErrors, [], "negative section-absence fixture has no console/page errors");
   await negativePage.close();
 
-  fs.writeFileSync(path.join(output, "result.json"), JSON.stringify({ targetUrl, uniqueness, errors, negativeErrors }, null, 2));
+  const withoutLighting = structuredClone(sourceConfiguration);
+  const lightingServicesStage = withoutLighting.stages.find((stage) => (stage.kind || stage.id) === "services");
+  assert.ok(lightingServicesStage, "Lighting negative fixture has Services stage");
+  lightingServicesStage.items = lightingServicesStage.items.filter((id) => id !== "lighting-08");
+
+  const lightingNegativeErrors = [];
+  const lightingNegativePage = await browser.newPage({ viewport: { width: 1366, height: 900 } });
+  lightingNegativePage.on("pageerror", (error) => lightingNegativeErrors.push(error.message));
+  lightingNegativePage.on("console", (message) => { if (message.type() === "error") lightingNegativeErrors.push(message.text()); });
+  await lightingNegativePage.route("**/api/configuration", async (route) => {
+    if (route.request().method() !== "GET") return route.continue();
+    await route.fulfill({
+      status: 200,
+      contentType: "application/json",
+      body: JSON.stringify(withoutLighting)
+    });
+  });
+  await lightingNegativePage.goto(targetUrl, { waitUntil: "domcontentloaded", timeout: 15000 });
+  await lightingNegativePage.waitForFunction(() => {
+    const services = window.CASA_NORMALIZED_FLOW?.stages?.find((stage) => stage.id === "services");
+    return services
+      && services.groups.flatMap((group) => group.sections).every((section) => section.id !== "lighting")
+      && services.groups.flatMap((group) => group.sections).some((section) => section.id === "additional-services")
+      && window.CASA_EM_MODULOS_DEBUG?.getFlowLayoutErrors;
+  }, null, { timeout: 10000 });
+
+  await lightingNegativePage.locator('.flow-nav [data-step="services"]').click();
+  await lightingNegativePage.waitForFunction(() => !document.getElementById("servicesPanel").hidden);
+
+  assert.equal(
+    await lightingNegativePage.locator('[data-keyboard-section="lighting"]').count(),
+    0,
+    "omitted Lighting data creates no semantic Lighting section shell"
+  );
+  assert.equal(
+    await lightingNegativePage.locator('[data-flow-section-slot][data-flow-slot-item="lighting-08"]').isHidden(),
+    true,
+    "unclaimed Lighting item-affinity slot stays hidden"
+  );
+  assert.equal(
+    await lightingNegativePage.locator('[data-keyboard-section="additional-services"]').count(),
+    1,
+    "Additional Services remains materialized when Lighting is omitted"
+  );
+  assert.equal(
+    await lightingNegativePage.locator('[data-keyboard-section="additional-services"]').isVisible(),
+    true,
+    "Additional Services remains visible in the Services stage"
+  );
+  assert.equal(
+    await lightingNegativePage.locator('.layer-group[data-entity-id="lighting-08"]').getAttribute("hidden"),
+    "",
+    "Lighting scene layer is not configurable when Lighting is absent from normalized data"
+  );
+  assert.deepEqual(
+    await lightingNegativePage.evaluate(() => window.CASA_EM_MODULOS_DEBUG.getFlowLayoutErrors()),
+    [],
+    "omitted Lighting data does not trigger a fabricated renderer fallback"
+  );
+  assert.deepEqual(lightingNegativeErrors, [], "Lighting absence fixture has no console/page errors");
+  await lightingNegativePage.close();
+
+  fs.writeFileSync(path.join(output, "result.json"), JSON.stringify({ targetUrl, uniqueness, errors, negativeErrors, lightingNegativeErrors }, null, 2));
   await browser.close();
   console.log("flow layout browser: PASS");
 })().catch((error) => {

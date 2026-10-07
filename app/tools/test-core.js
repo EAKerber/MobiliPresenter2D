@@ -488,7 +488,11 @@ assert.equal(appJs.includes('services: "Serv."'), true, "runtime stage projectio
 assert.equal(indexHtml.includes('data-flow-item-id="fronts-all"'), true, "front section exposes stable flow ownership");
 assert.equal(indexHtml.includes('data-flow-item-id="handles-all"'), true, "handle section exposes stable flow ownership");
 assert.equal(indexHtml.includes('data-flow-item-id="stone-all"'), true, "stone section exposes stable flow ownership");
-assert.equal(indexHtml.includes('data-flow-item-id="lighting-08"'), true, "lighting section exposes stable flow ownership");
+assert.equal(indexHtml.includes('data-flow-item-id="lighting-08"'), true, "specialized Lighting item adapter exposes stable flow ownership");
+assert.equal(indexHtml.includes('data-keyboard-section="lighting"'), false, "Lighting semantic section is no longer pre-authored in static HTML");
+assert.equal(indexHtml.includes('id="lightingSectionHeading"'), false, "Lighting heading identity is no longer static");
+assert.equal(indexHtml.includes(">Iluminação</h3>"), false, "Lighting section heading copy comes from normalized data");
+assert.equal(indexHtml.includes('data-flow-slot-item="lighting-08"'), true, "Lighting neutral slot declares item affinity without owning the section");
 assert.equal(indexHtml.includes("data/hierarchy-defaults.js?v=hierarchy-defaults-v2"), true, "legacy hierarchy semantics load from explicit configuration data");
 assert.equal(appJs.includes("publishNormalizedFlow"), true, "app publishes one normalized flow contract to navigation");
 assert.equal(appJs.includes("applyBuyerFlowLayout"), true, "buyer composition is mounted from normalized flow layout");

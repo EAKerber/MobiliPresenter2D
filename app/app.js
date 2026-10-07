@@ -252,10 +252,16 @@
     };
 
     const createSectionShell = (section) => {
-      const compatibleSlots = sectionSlots.filter((slot) =>
+      const unclaimedCompatibleSlots = sectionSlots.filter((slot) =>
         !slot.closest("[data-keyboard-section]")
         && slot.dataset.renderComponent === section.component
       );
+      const affinitySlots = unclaimedCompatibleSlots.filter((slot) =>
+        slot.dataset.flowSlotItem
+        && section.itemIds.includes(slot.dataset.flowSlotItem)
+      );
+      const genericSlots = unclaimedCompatibleSlots.filter((slot) => !slot.dataset.flowSlotItem);
+      const compatibleSlots = affinitySlots.length ? affinitySlots : genericSlots;
       if (compatibleSlots.length !== 1) {
         return {
           element: null,
