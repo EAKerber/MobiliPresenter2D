@@ -16,12 +16,16 @@
   const defaultPresentationPolicy = typeof module !== "undefined" && module.exports && typeof require === "function"
     ? require("../data/presentation-policy-defaults.js")
     : global?.CASA_EM_MODULOS_PRESENTATION_POLICY;
+  const pricingContract = typeof module !== "undefined" && module.exports && typeof require === "function"
+    ? require("./pricing-contract.js")
+    : global?.CasaModulesPricingContract;
 
   if (!hierarchyV4) throw new Error("Hierarchy v4 compatibility core is required.");
   if (!itemCapabilities) throw new Error("Item capability registry is required.");
   if (!presentationCore) throw new Error("Presentation contract is required.");
   if (!layoutProfiles) throw new Error("Layout profile contract is required.");
   if (!defaultPresentationPolicy) throw new Error("Default presentation policy is required.");
+  if (!pricingContract) throw new Error("Typed pricing contract is required.");
 
   const SCHEMA = "ConfiguratorAdministration2D 5.0";
   const PREVIOUS_SCHEMA = hierarchyV4.SCHEMA;
@@ -134,12 +138,41 @@
     };
   }
 
+  function pricingValidationSurrogate(value) {
+    const normalized = pricingContract.normalize(value);
+    const amountRole = (role) => Object.fromEntries(
+      Object.entries(normalized.roles[role]).map(([id, rule]) => [id, rule.cents])
+    );
+    return {
+      entries: amountRole("itemBase"),
+      handleEntries: amountRole("handleChoiceTotal"),
+      frontFinishRatesBps: Object.fromEntries(
+        Object.entries(normalized.roles.frontFinishAdjustment).map(([id, rule]) => [
+          id,
+          rule.type === "percentage" ? rule.bps : 0
+        ])
+      ),
+      localEntries: amountRole("localAdjustment"),
+      globalEntries: amountRole("globalAdjustment"),
+      handleFrontTotal: normalized.allocation.handleFrontTotal
+    };
+  }
+
+  function projectedLegacyPricing(value) {
+    const projected = pricingContract.projectToLegacy(value);
+    if (projected.ok) return projected.value;
+    const error = new TypeError(projected.errors?.[0] || "pricing cannot be projected to the previous schema");
+    error.code = projected.code;
+    throw error;
+  }
+
   function normalize(value) {
     return {
       ...clone(value),
       schemaVersion: SCHEMA,
       revision: Number.isSafeInteger(value.revision) && value.revision > 0 ? value.revision : 1,
       presentationPolicy: clone(value.presentationPolicy),
+      pricing: pricingContract.normalize(value.pricing),
       stages: value.stages.map((stage) => ({
         id: stage.id,
         kind: stage.kind || stage.id,
@@ -161,11 +194,12 @@
     };
   }
 
-  function toV4(value) {
-    const { presentationPolicy: _presentationPolicy, ...rest } = clone(value);
+  function toV4(value, legacyPricing = null) {
+    const { presentationPolicy: _presentationPolicy, pricing: _pricing, ...rest } = clone(value);
     return {
       ...rest,
       schemaVersion: PREVIOUS_SCHEMA,
+      pricing: legacyPricing || projectedLegacyPricing(value.pricing),
       stages: value.stages.map(stageToV4)
     };
   }
@@ -190,7 +224,8 @@
           }))
         }))
       })),
-      presentationPolicy: value.presentationPolicy
+      presentationPolicy: value.presentationPolicy,
+      pricing: pricingContract.normalize(value.pricing)
     });
   }
 
@@ -200,6 +235,8 @@
       return ["unsupported current administration schema"];
     }
     if (!value.presentationPolicy) errors.push("presentation policy is required");
+    const pricingErrors = pricingContract.validate(value.pricing);
+    pricingErrors.forEach((error) => errors.push(`pricing: ${error}`));
 
     const registry = configurationCore.itemRegistry(catalog);
     value.stages.forEach((stage) => {
@@ -229,9 +266,9 @@
         .forEach((error) => errors.push(`presentation policy: ${error.path}: ${error.message}`));
     }
 
-    if (!errors.some((error) => error.startsWith("invalid section component:"))) {
+    if (!pricingErrors.length && !errors.some((error) => error.startsWith("invalid section component:"))) {
       try {
-        const v4 = toV4(value);
+        const v4 = toV4(value, pricingValidationSurrogate(value.pricing));
         hierarchyV4.validateHierarchyAdministration(v4, configurationCore, catalog, priceBook, scene)
           .forEach((error) => errors.push(`v4-compatible validation: ${error}`));
       } catch (error) {
@@ -248,6 +285,7 @@
     const candidate = {
       ...clone(value),
       schemaVersion: SCHEMA,
+      pricing: pricingContract.upgradeLegacy(value.pricing),
       stages: value.stages.map((stage) => currentStageFromV4(stage, registry, hierarchyDefaults)),
       presentationPolicy: clone(defaultPresentationPolicy)
     };
@@ -273,7 +311,10 @@
     const errors = validate(value, configurationCore, catalog, priceBook, scene);
     if (errors.length) return { ok: false, code: "invalid_hierarchy", errors };
 
-    const v4 = toV4(value);
+    const pricingProjection = pricingContract.projectToLegacy(value.pricing);
+    if (!pricingProjection.ok) return pricingProjection;
+
+    const v4 = toV4(value, pricingProjection.value);
     const projected = hierarchyV4.projectHierarchyToLegacy(
       v4,
       configurationCore,

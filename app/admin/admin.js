@@ -13,6 +13,7 @@ import {
 const settingsDefaults = window.CASA_EM_MODULOS_CONFIGURATOR_DEFAULTS;
 const catalog = window.CASA_EM_MODULOS_CATALOG;
 const priceBook = window.CASA_EM_MODULOS_PRICE_BOOK;
+const pricingContract = window.CasaModulesPricingContract;
 const scene = window.CASA_EM_MODULOS_SCENE;
 const configurationCore = window.CasaModulesConfiguration;
 const capabilityCore = window.CasaModulesItemCapabilities;
@@ -24,6 +25,14 @@ const hierarchyEditor = window.CasaModulesHierarchyEditor;
 const legacyStageRepair = window.CasaModulesLegacyStageRepair;
 const hierarchyDefaults = window.CASA_EM_MODULOS_HIERARCHY_DEFAULTS;
 const legacyDefaults = configurationCore.createDefaultAdministration(settingsDefaults, catalog, priceBook, scene);
+const catalogPricing = pricingContract.upgradeLegacy({
+  entries: priceBook.entries,
+  handleEntries: priceBook.handleEntries,
+  frontFinishRatesBps: priceBook.frontFinishRatesBps,
+  localEntries: priceBook.localEntries,
+  globalEntries: priceBook.globalEntries,
+  handleFrontTotal: priceBook.handleFrontTotal
+});
 const defaults = hierarchyCore.upgrade(legacyDefaults, configurationCore, flowCore, catalog, priceBook, scene, hierarchyDefaults);
 const byId = (id) => document.getElementById(id);
 const loginPanel = byId("loginPanel");
@@ -72,12 +81,12 @@ function configuredHierarchyItemLabel(itemId) {
   return null;
 }
 
-const priceSections = [
-  ["entries", "Valores de módulos e acessórios", "item"],
-  ["handleEntries", "Puxadores", "handle"],
-  ["frontFinishRatesBps", "Adicional por acabamento", "rate"],
-  ["localEntries", "Adicionais locais", "local"],
-  ["globalEntries", "Adicionais globais", "global"]
+const pricingRoles = [
+  ["itemBase", "Valores de módulos e acessórios"],
+  ["handleChoiceTotal", "Puxadores"],
+  ["frontFinishAdjustment", "Adicional por acabamento"],
+  ["localAdjustment", "Adicionais locais"],
+  ["globalAdjustment", "Adicionais globais"]
 ];
 
 function setMessage(element, message, kind = "") {
@@ -865,10 +874,16 @@ function setMaterialTarget(materialId, targetId, enabled) {
     if (enabled && !model.finishes.some((item) => item.id === materialId)) model.finishes.push({ id: materialId, enabled: false, scope: "global", moduleIds: catalog.modules.map((item) => item.entityId) });
     if (!enabled) model.finishes = model.finishes.filter((item) => item.id !== materialId);
   }
-  const priceSection = targetId === "fronts-all" ? "frontFinishRatesBps" : "globalEntries";
-  const catalogPrices = priceBook[priceSection] || {};
-  if (targetId === "stone-all") { if (enabled) model.pricing.globalEntries[materialId] ??= 0; else if (!Object.hasOwn(catalogPrices, materialId)) delete model.pricing.globalEntries[materialId]; }
-  if (targetId === "fronts-all") { if (enabled) model.pricing.frontFinishRatesBps[materialId] ??= 0; else if (!Object.hasOwn(catalogPrices, materialId)) delete model.pricing.frontFinishRatesBps[materialId]; }
+  if (targetId === "stone-all") {
+    const rules = model.pricing.roles.globalAdjustment;
+    if (enabled) rules[materialId] ??= { type: "amount", cents: 0 };
+    else if (!Object.hasOwn(catalogPricing.roles.globalAdjustment, materialId)) delete rules[materialId];
+  }
+  if (targetId === "fronts-all") {
+    const rules = model.pricing.roles.frontFinishAdjustment;
+    if (enabled) rules[materialId] ??= { type: "percentage", bps: 0, basis: "eligible-module-base" };
+    else if (!Object.hasOwn(catalogPricing.roles.frontFinishAdjustment, materialId)) delete rules[materialId];
+  }
   reconcileInitialMaterials();
 }
 
@@ -1069,23 +1084,25 @@ function priceLabel(section, id) {
   if (stone) return stone.label;
   const service = catalog.services.find((item) => item.id === id);
   if (service) return service.title;
-  if (section === "localEntries") return `${catalog.modules.find((item) => item.entityId === id.split(":")[0])?.referenceLabel || id} · ${id.split(":").slice(1).join(":")}`;
+  if (section === "localAdjustment") return `${catalog.modules.find((item) => item.entityId === id.split(":")[0])?.referenceLabel || id} · ${id.split(":").slice(1).join(":")}`;
   return id;
 }
 
 function renderPricing() {
   pricingList.replaceChildren();
-  priceSections.forEach(([section, title, kind]) => {
+  pricingRoles.forEach(([role, title]) => {
     const card = document.createElement("article");
     card.className = "editor-card pricing-card";
     const heading = document.createElement("h2"); heading.textContent = title; card.append(heading);
-    Object.entries(model.pricing[section]).forEach(([id, centsOrBps]) => {
+    Object.entries(model.pricing.roles[role]).forEach(([id, rule]) => {
+      const percentage = rule.type === "percentage";
+      const storedValue = percentage ? rule.bps : rule.cents;
       const label = document.createElement("label"); label.className = "data-field pricing-field";
-      const copy = document.createElement("span"); copy.textContent = priceLabel(section, id);
-      const input = document.createElement("input"); input.type = "number"; input.min = "0"; input.step = kind === "rate" ? "0.01" : "0.01";
-      input.value = kind === "rate" ? (centsOrBps / 100).toFixed(2) : (centsOrBps / 100).toFixed(2);
-      input.dataset.priceSection = section; input.dataset.priceId = id; input.dataset.priceKind = kind;
-      const unit = document.createElement("small"); unit.textContent = kind === "rate" ? "%" : "R$";
+      const copy = document.createElement("span"); copy.textContent = priceLabel(role, id);
+      const input = document.createElement("input"); input.type = "number"; input.min = "0"; input.step = "0.01";
+      input.value = (storedValue / 100).toFixed(2);
+      input.dataset.priceRole = role; input.dataset.priceId = id; input.dataset.priceType = rule.type;
+      const unit = document.createElement("small"); unit.textContent = percentage ? "%" : "R$";
       label.append(copy, input, unit); card.append(label);
     });
     pricingList.append(card);
@@ -1298,7 +1315,7 @@ byId("addMaterialButton").addEventListener("click", () => {
   model.materials.push(material);
   model.materialGroups.find((group) => group.id === "fronts-all").materialIds.push(id);
   model.finishes.push({ id, enabled: false, scope: "global", moduleIds: catalog.modules.map((item) => item.entityId) });
-  model.pricing.frontFinishRatesBps[id] = 0;
+  model.pricing.roles.frontFinishAdjustment[id] = { type: "percentage", bps: 0, basis: "eligible-module-base" };
   materialPageIndex = Math.floor((model.materials.length - 1) / MATERIALS_PER_PAGE);
   renderFinishes(); renderMaterials(); renderMaterialGroups(); renderPricing();
 });
@@ -1311,9 +1328,9 @@ materialsList.addEventListener("click", (event) => {
   model.handleProducts.forEach((product) => { product.materialIds = product.materialIds.filter((itemId) => itemId !== id); });
   model.materials.forEach((material) => { material.groupIds = model.materialGroups.filter((group) => group.materialIds.includes(material.id)).map((group) => group.id); });
   model.finishes = model.finishes.filter((finish) => finish.id !== id);
-  if (!Object.hasOwn(priceBook.frontFinishRatesBps, id)) delete model.pricing.frontFinishRatesBps[id];
-  if (!Object.hasOwn(priceBook.handleEntries, id)) delete model.pricing.handleEntries[id];
-  if (!Object.hasOwn(priceBook.globalEntries, id) && !catalog.services.some((service) => service.id === id)) delete model.pricing.globalEntries[id];
+  if (!Object.hasOwn(catalogPricing.roles.frontFinishAdjustment, id)) delete model.pricing.roles.frontFinishAdjustment[id];
+  if (!Object.hasOwn(catalogPricing.roles.handleChoiceTotal, id)) delete model.pricing.roles.handleChoiceTotal[id];
+  if (!Object.hasOwn(catalogPricing.roles.globalAdjustment, id) && !catalog.services.some((service) => service.id === id)) delete model.pricing.roles.globalAdjustment[id];
   reconcileInitialMaterials();
   renderFinishes(); renderMaterials(); renderMaterialGroups(); renderPricing();
 });
@@ -1330,11 +1347,15 @@ document.querySelector("[data-admin-panel=rules]").addEventListener("click", (ev
 });
 
 pricingList.addEventListener("change", (event) => {
-  const input = event.target.closest("[data-price-section]");
+  const input = event.target.closest("[data-price-role]");
   if (!input) return;
   const amount = Number(input.value);
   if (!Number.isFinite(amount) || amount < 0) return;
-  model.pricing[input.dataset.priceSection][input.dataset.priceId] = Math.round(amount * 100);
+  const rule = model.pricing.roles[input.dataset.priceRole]?.[input.dataset.priceId];
+  if (!rule) return;
+  const storedValue = Math.round(amount * 100);
+  if (rule.type === "percentage") rule.bps = storedValue;
+  else rule.cents = storedValue;
 });
 
 async function showUser(user) {
