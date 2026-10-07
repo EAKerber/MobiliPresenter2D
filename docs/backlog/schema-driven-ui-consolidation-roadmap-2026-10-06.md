@@ -208,7 +208,7 @@ Gate:
 
 ### CP-SD-06 — production schema publication and legacy retirement
 
-Status: **IN PROGRESS**. CP-SD-06A0 repository publication preflight is COMPLETE / PASS. Immediate checkpoint: `docs/backlog/schema-driven-ui-cp-sd-06a1-server-v5-read-migration-support-2026-10-07.md`. A1 remains repository-only; no production write is authorized.
+Status: **IN PROGRESS**. CP-SD-06A0 repository publication preflight is COMPLETE / PASS. CP-SD-06A1 is split into **A1a safe v5 read** (implemented in PR #153; gates pending) and **A1b guarded migration operation** (next after A1a passes). Plans: `docs/backlog/schema-driven-ui-cp-sd-06a1-server-v5-read-migration-support-2026-10-07.md` and `docs/backlog/schema-driven-ui-cp-sd-06a1a-safe-v5-read-2026-10-07.md`. Both are repository-only; no production write is authorized.
 
 Goal: hand the consolidated contract back into the authenticated CP-UX-05 publication boundary.
 
