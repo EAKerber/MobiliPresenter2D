@@ -385,8 +385,8 @@ const wrongOwnerSource = structuredClone(sourceWithoutHandles);
 wrongOwnerSource.stages.find((stage) => (stage.kind || stage.id) === "services").items.push("handles-all");
 assert.equal(
   publicationPreflight.createPreflight(wrongOwnerSource).code,
-  "handles_wrong_owner",
-  "preflight never moves Puxadores from a conflicting owner automatically"
+  "invalid_source",
+  "the v3 schema itself rejects Puxadores in an invalid stage before any repair planner can move it"
 );
 
 const nonCanonicalSource = structuredClone(v3);
