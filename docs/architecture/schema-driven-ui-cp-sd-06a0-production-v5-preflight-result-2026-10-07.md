@@ -1,6 +1,6 @@
 # CP-SD-06A0 — production v5 publication preflight result — 2026-10-07
 
-Status: **REPOSITORY PREFLIGHT IMPLEMENTED / GATE PENDING**.
+Status: **COMPLETE / PASS**.
 
 Parent:
 - CP-SD-00 through CP-SD-05 — COMPLETE / PASS.
@@ -245,3 +245,19 @@ Stop without writing if any of the following is true:
 After A0 gates pass, the next repository slice should add **server-side v5 read + migration-operation support** while keeping the operation disabled/fail-closed until reviewed.
 
 The actual production mutation remains a separate interactive authenticated step.
+
+
+## Final gate / merge evidence
+
+CP-SD-06A0 is closed.
+
+Final PR:
+- #151 — `CP-SD-06A0: add offline v5 publication preflight`
+- final head: `e51f1dfd346f656ac4ef136b3c831f6ea0b5ff45`
+- merge commit: `cabdffdaad26945e57eb32856c5d2c4c034d3b48`
+- all six path-triggered workflows passed;
+- Netlify deploy preview passed;
+- no production configuration write occurred.
+
+Next:
+`docs/backlog/schema-driven-ui-cp-sd-06a1-server-v5-read-migration-support-2026-10-07.md`.
