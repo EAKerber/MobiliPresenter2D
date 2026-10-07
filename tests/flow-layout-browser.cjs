@@ -141,6 +141,11 @@ const { chromium } = require("playwright");
   await page.locator('.flow-nav [data-step="services"]').click();
   await page.waitForFunction(() => !document.getElementById("servicesPanel").hidden);
   assert.deepEqual(await stageGroupOrder("services"), await modelGroupOrder("services"), "Services group ownership comes from normalized flow");
+  assert.equal(
+    await page.locator('[data-flow-group-shell="services"]').getAttribute("data-flow-generated-group"),
+    "true",
+    "Services group shell is created at runtime from normalized flow"
+  );
   assert.deepEqual(await renderedSectionOrder("services"), await modelSectionOrder("services", "services"), "Services section order follows normalized flow");
   const lighting = await rect('[data-keyboard-section="lighting"]');
   const additional = await rect('[data-keyboard-section="additional-services"]');
