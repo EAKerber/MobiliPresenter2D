@@ -26,6 +26,19 @@ const layout = require(path.join(projectRoot, "core/flow-layout.js"));
 const administration = configuration.createDefaultAdministration(defaults, catalog, priceBook, scene);
 const flow = flowCore.normalizeFlow(administration, configuration.itemRegistry(catalog), hierarchyDefaults);
 
+assert.deepEqual(
+  layout.stageNavigation(flow).map((stage) => stage.id),
+  ["modules", "finishes", "services", "summary"],
+  "buyer stage navigation follows normalized enabled-stage order"
+);
+const flowWithoutServices = structuredClone(flow);
+flowWithoutServices.stages.find((stage) => stage.id === "services").enabled = false;
+assert.deepEqual(
+  layout.stageNavigation(flowWithoutServices).map((stage) => stage.id),
+  ["modules", "finishes", "summary"],
+  "disabled normalized stage produces no buyer navigation entry"
+);
+
 const finishes = layout.stageLayout(flow, "finishes");
 assert.deepEqual(finishes.groups.map((group) => ({ id: group.id, span: group.span })), [
   { id: "cabinet-finishes", span: 1 },

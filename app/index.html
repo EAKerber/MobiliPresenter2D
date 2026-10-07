@@ -13,7 +13,7 @@
       content="Visualizador interativo dos módulos da cozinha Casa em Módulos."
     />
     <title>Casa em Módulos — Configurador</title>
-    <link rel="stylesheet" href="styles.css?v=runtime-v14" />
+    <link rel="stylesheet" href="styles.css?v=runtime-v15" />
     <style>
       @media (max-width: 700px) {
         body.is-mobile-scene-pinned.is-mobile-scene-transparent .viewer-card {
@@ -86,10 +86,6 @@
 
       <aside class="controls">
         <nav class="flow-nav" aria-label="Etapas da configuração">
-          <button class="flow-step is-active" type="button" data-step="modules" aria-controls="modulesPanel"><span>1</span><span class="flow-step__label" data-compact-label="Módulos">Módulos</span></button>
-          <button class="flow-step" type="button" data-step="finishes" aria-controls="finishesStagePanel"><span>2</span><span class="flow-step__label" data-compact-label="Acab.">Acabamentos</span></button>
-          <button class="flow-step" type="button" data-step="services" aria-controls="servicesPanel"><span>3</span><span class="flow-step__label" data-compact-label="Serv.">Serviços</span></button>
-          <button class="flow-step" type="button" data-step="summary" aria-controls="summaryPanel"><span>4</span><span class="flow-step__label" data-compact-label="Resumo">Resumo</span></button>
           <button class="flow-nav__scene-pin" id="mobileSceneRepin" type="button" hidden aria-label="Fixar cena durante a configuração">⌖ Fixar cena</button>
         </nav>
 
@@ -197,30 +193,30 @@
       </aside>
     </main>
 
-    <script src="data/scene-data.js?v=runtime-v14"></script>
-    <script src="data/catalog-data.js?v=runtime-v14"></script>
+    <script src="data/scene-data.js?v=runtime-v15"></script>
+    <script src="data/catalog-data.js?v=runtime-v15"></script>
     <script src="data/configurator-settings.js?v=admin-config-v2"></script>
     <script src="data/hierarchy-defaults.js?v=hierarchy-defaults-v2"></script>
-    <script src="data/mock-price-book.js?v=runtime-v14"></script>
-    <script src="data/mask-data.js?v=runtime-v14"></script>
-    <script src="core/state.js?v=runtime-v14"></script>
-    <script src="core/visibility.js?v=runtime-v14"></script>
-    <script src="core/validation.js?v=runtime-v14"></script>
-    <script src="core/fingerprint.js?v=runtime-v14"></script>
-    <script src="core/finishes.js?v=runtime-v14"></script>
-    <script src="core/pricing.js?v=runtime-v14"></script>
+    <script src="data/mock-price-book.js?v=runtime-v15"></script>
+    <script src="data/mask-data.js?v=runtime-v15"></script>
+    <script src="core/state.js?v=runtime-v15"></script>
+    <script src="core/visibility.js?v=runtime-v15"></script>
+    <script src="core/validation.js?v=runtime-v15"></script>
+    <script src="core/fingerprint.js?v=runtime-v15"></script>
+    <script src="core/finishes.js?v=runtime-v15"></script>
+    <script src="core/pricing.js?v=runtime-v15"></script>
     <script src="core/item-capabilities.js?v=cp-sd-01a-v1"></script>
     <script src="core/configuration.js?v=admin-config-v7"></script>
-    <script src="core/flow-model.js?v=runtime-v14"></script>
+    <script src="core/flow-model.js?v=runtime-v15"></script>
     <script src="core/layout-profiles.js?v=cp-sd-01c1-v1"></script>
     <script src="core/presentation-contract.js?v=cp-sd-01c1-v1"></script>
     <script src="data/presentation-policy-defaults.js?v=cp-sd-01c1-v1"></script>
-    <script src="core/flow-layout.js?v=runtime-v14"></script>
+    <script src="core/flow-layout.js?v=runtime-v15"></script>
     <script src="core/runtime-contracts.js?v=runtime-contracts-v2"></script>
     <script src="core/keyboard-shortcuts.js?v=keyboard-v4"></script>
-    <script src="data/stone-data.js?v=runtime-v14"></script>
-    <script src="core/stone.js?v=runtime-v14"></script>
-    <script src="app.js?v=runtime-v14"></script>
+    <script src="data/stone-data.js?v=runtime-v15"></script>
+    <script src="core/stone.js?v=runtime-v15"></script>
+    <script src="app.js?v=runtime-v15"></script>
     <script>
       (() => {
         const resizeHandle = document.getElementById("mobileSceneResizeHandle");

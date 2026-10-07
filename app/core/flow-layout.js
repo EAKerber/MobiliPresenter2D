@@ -31,6 +31,17 @@
     return (flow?.stages || []).map((stage) => stageLayout(flow, stage.id));
   }
 
+  function stageNavigation(flow) {
+    return (flow?.stages || [])
+      .filter((stage) => stage.enabled)
+      .map((stage) => Object.freeze({
+        id: stage.id,
+        kind: stage.kind,
+        label: stage.label,
+        order: stage.order
+      }));
+  }
+
   function semanticSectionIds(layout) {
     return (layout?.groups || []).flatMap((group) => group.sections.map((section) => section.id));
   }
@@ -108,6 +119,7 @@
   const api = Object.freeze({
     stageLayout,
     stageLayouts,
+    stageNavigation,
     semanticSectionIds,
     semanticItemIds,
     validateBindings,
