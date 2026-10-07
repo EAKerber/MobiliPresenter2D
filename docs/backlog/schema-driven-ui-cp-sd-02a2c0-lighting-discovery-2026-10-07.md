@@ -1,6 +1,6 @@
 # CP-SD-02A2c0 — Lighting specialization discovery — 2026-10-07
 
-Status: **NEXT / discovery only**.
+Status: **COMPLETE / PASS**.
 
 Parent:
 - `docs/backlog/schema-driven-ui-cp-sd-02a2b-additional-services-section-shell-2026-10-07.md`
@@ -59,3 +59,16 @@ PASS when the repository contains enough evidence to choose exactly one next imp
 - **A2c1 — extract Lighting item-state adapter first**, with section generation deferred.
 
 No implementation belongs in A2c0.
+
+
+## Completion record
+
+PASS.
+
+Result:
+- `docs/architecture/schema-driven-ui-cp-sd-02a2c0-lighting-discovery-result-2026-10-07.md`.
+
+Decision:
+- next implementation is **CP-SD-02A2c1 — generated Lighting section shell with item-affinity slot matching**;
+- preserve the current specialized Lighting item adapter and dependency/scene/pricing behavior;
+- do not introduce a generic item-effects framework in this track.
