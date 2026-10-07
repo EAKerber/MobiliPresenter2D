@@ -1,6 +1,6 @@
 # CP-SD-05A1 — typed pricing contract execution — 2026-10-07
 
-Status: **READY / NEXT**.
+Status: **COMPLETE / PASS**.
 
 Parent:
 - CP-SD-05A0 typed pricing contract discovery — COMPLETE / PASS.
@@ -102,3 +102,23 @@ If adding the contract requires changing current buyer/admin behavior, stop and 
 If a rule cannot be represented losslessly in legacy buckets, keep the structured projection failure; do not invent a compatibility encoding.
 
 No production configuration writes.
+
+
+## Result
+
+Implemented on PR #146 as a pure contract slice:
+
+- added `app/core/pricing-contract.js`;
+- froze `CommercialPricingRules 1.0`;
+- froze the five typed roles and the sole percentage basis `eligible-module-base`;
+- validation rejects mixed fields, unsupported types/bases, unknown roles and out-of-range values;
+- `upgradeLegacy()` maps the current five bucket sections + `handleFrontTotal` into typed rules exactly;
+- `projectToLegacy()` returns exact legacy buckets when representable;
+- front-finish amount rules are valid typed state but fail legacy projection with `pricing_requires_publication`;
+- current zero values and inclusive legacy numeric maxima are pinned by tests.
+
+The contract is **not loaded or consumed by buyer/admin runtime in A1**. Current pricing calculation, admin `priceSections`, persisted v3 pricing and production publication behavior remain unchanged.
+
+Final functional head `1650debf4727acde900f72ac58ab0456fd36dfd3` passed all six path-triggered repository workflows for this diff plus Netlify deploy preview #146.
+
+Next: `docs/backlog/schema-driven-ui-cp-sd-05a2-typed-pricing-runtime-execution-2026-10-07.md`.
