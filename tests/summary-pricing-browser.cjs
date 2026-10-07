@@ -10,6 +10,33 @@ function parseBrl(text) {
   return Math.round(value * 100);
 }
 
+function createV5BuyerFixture() {
+  const repoRoot = path.resolve(__dirname, '..');
+  const appRoot = path.join(repoRoot, 'app');
+  const vm = require('node:vm');
+  const sandbox = { window: {} };
+  vm.createContext(sandbox);
+  ['data/scene-data.js', 'data/catalog-data.js', 'data/mock-price-book.js'].forEach(relativePath => {
+    vm.runInContext(fs.readFileSync(path.join(appRoot, relativePath), 'utf8'), sandbox, { filename: relativePath });
+  });
+  const scene = sandbox.window.CASA_EM_MODULOS_SCENE;
+  const catalog = sandbox.window.CASA_EM_MODULOS_CATALOG;
+  const priceBook = sandbox.window.CASA_EM_MODULOS_PRICE_BOOK;
+  const defaults = require(path.join(appRoot, 'data/configurator-settings.js'));
+  const hierarchyDefaults = require(path.join(appRoot, 'data/hierarchy-defaults.js'));
+  const configuration = require(path.join(appRoot, 'core/configuration.js'));
+  const flow = require(path.join(appRoot, 'core/flow-model.js'));
+  const v5 = require(path.join(appRoot, 'core/administration-v5.js'));
+  const legacy = configuration.createDefaultAdministration(defaults, catalog, priceBook, scene);
+  const candidate = v5.upgrade(legacy, configuration, flow, catalog, priceBook, scene, hierarchyDefaults);
+  candidate.stages.find(stage => stage.id === 'modules').label = 'Módulos v5';
+  candidate.objects['module-01'].title = 'Módulo 01 v5';
+  candidate.pricing.roles.itemBase['module-01'].cents += 1000;
+  const errors = v5.validate(candidate, configuration, catalog, priceBook, scene);
+  assert.deepEqual(errors, [], 'synthetic buyer v5 fixture remains schema-valid');
+  return v5.normalize(candidate);
+}
+
 (async () => {
   const output = process.argv[2] || '/tmp/summary-pricing-browser';
   fs.mkdirSync(output, { recursive: true });
@@ -146,6 +173,31 @@ function parseBrl(text) {
   assert.deepEqual(errors, [], 'browser console must remain clean');
   await go('summary');
   await page.screenshot({ path: path.join(output, 'summary-pricing.png'), fullPage: true, animations: 'disabled' });
+
+  const v5Fixture = createV5BuyerFixture();
+  const v5Page = await browser.newPage({ viewport: { width: 1366, height: 900 } });
+  const v5Errors = [];
+  v5Page.on('pageerror', error => v5Errors.push(error.message));
+  v5Page.on('console', message => { if (message.type() === 'error') v5Errors.push(message.text()); });
+  await v5Page.route('**/api/configuration', route => route.fulfill({
+    status: 200,
+    contentType: 'application/json',
+    body: JSON.stringify(v5Fixture)
+  }));
+  await v5Page.goto(targetUrl, { waitUntil: 'domcontentloaded', timeout: 15000 });
+  await v5Page.waitForFunction(() =>
+    window.CASA_EM_MODULOS_DEBUG?.getNormalizedFlow?.().stages?.find(stage => stage.id === 'modules')?.label === 'Módulos v5'
+  );
+  const v5NavLabel = await v5Page.locator('.flow-nav [data-step="modules"] .flow-step__label').textContent();
+  assert.equal(v5NavLabel, 'Módulos v5', 'buyer applies v5 stage copy instead of retaining v3/default flow');
+  await v5Page.locator('[data-select-entity="module-01"]').first().click();
+  await v5Page.waitForFunction(() => document.querySelector('#moduleDetail')?.textContent?.includes('Módulo 01 v5'));
+  assert.ok((await v5Page.locator('#moduleDetail').textContent()).includes('Módulo 01 v5'), 'buyer applies v5 object content');
+  const v5TotalText = await v5Page.locator('#configurationValue strong').textContent();
+  assert.equal(parseBrl(v5TotalText), 875000, 'buyer consumes typed v5 pricing without legacy projection');
+  assert.deepEqual(v5Errors, [], 'buyer v5 smoke has no console/page errors');
+  await v5Page.close();
+
   const result = {
     status: 'PASS',
     targetUrl,
@@ -153,7 +205,8 @@ function parseBrl(text) {
     totalWithSkirting,
     totalWithoutSkirting,
     skirtingCents,
-    baselineSummary
+    baselineSummary,
+    v5Buyer: { totalCents: 875000, modulesLabel: v5NavLabel }
   };
   fs.writeFileSync(path.join(output, 'result.json'), JSON.stringify(result, null, 2));
   await browser.close();
