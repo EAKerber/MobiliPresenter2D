@@ -28,7 +28,7 @@ function inspectPublishedRaw(raw, { configuration, administrationV5, catalog, pr
   try {
     if (schema === configuration.SCHEMA) {
       return {
-        kind: "valid", schema, value: configuration.normalizeConfiguratorSettings(raw.value, catalog, priceBook, scene),
+        kind: "valid", schema, value: configuration.normalizeConfiguratorSettings(raw.value, catalog, priceBook),
         rawValue: raw.value, etag: raw.etag
       };
     }
