@@ -1087,7 +1087,7 @@ function materialAssetChoices() {
 }
 
 function baselineHierarchyFor(source) {
-  return hierarchyCore.upgradeToHierarchy(source, configurationCore, flowCore, catalog, priceBook, scene, hierarchyDefaults);
+  return hierarchyCore.upgrade(source, configurationCore, flowCore, catalog, priceBook, scene, hierarchyDefaults);
 }
 
 function handlesRepairPlan(source = publishedSource) {
@@ -1661,7 +1661,7 @@ persistHandlesButton.addEventListener("click", async () => {
       saveMessage,
       hasLocalDraft
         ? "Puxadores foi persistido em Acabamentos no v3 publicado. O painel foi recarregado a partir do publicado; outras alterações locais não foram enviadas."
-        : "Puxadores foi persistido em Acabamentos no v3 publicado. A publicação hierárquica v4 continua bloqueada.",
+        : "Puxadores foi persistido em Acabamentos no v3 publicado. A publicação hierárquica v5 continua bloqueada.",
       "success"
     );
   } catch (error) {
@@ -1678,7 +1678,7 @@ saveButton.addEventListener("click", async () => {
     const hierarchyValidation = hierarchyErrors(model);
     if (hierarchyValidation.length) throw new Error(hierarchyValidation[0]);
 
-    const projection = hierarchyCore.projectHierarchyToLegacy(
+    const projection = hierarchyCore.projectToLegacy(
       model,
       configurationCore,
       flowCore,
@@ -1713,7 +1713,7 @@ saveButton.addEventListener("click", async () => {
       if (payload?.error === "hierarchy_publication_required") throw new Error("A API bloqueou uma publicação hierárquica antes do checkpoint autorizado.");
       throw new Error(payload?.message || "A configuração não foi aceita. Confira nomes e itens selecionados.");
     }
-    model = hierarchyCore.upgradeToHierarchy(payload, configurationCore, flowCore, catalog, priceBook, scene, hierarchyDefaults);
+    model = hierarchyCore.upgrade(payload, configurationCore, flowCore, catalog, priceBook, scene, hierarchyDefaults);
     byId("revisionLabel").textContent = `Versão ${model.revision} · editor hierárquico`;
     setMessage(saveMessage, "Configuração compatível publicada. A hierarquia estrutural continua protegida contra publicação prematura.", "success");
     renderAdminTabs();
