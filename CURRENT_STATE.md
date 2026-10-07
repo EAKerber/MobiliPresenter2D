@@ -48,7 +48,7 @@ Canonical plan:
 - completed audit: `docs/architecture/schema-ui-authority-audit-2026-10-06.md`
 - completed contract checkpoint: `docs/backlog/schema-driven-ui-cp-sd-01-contract-plan-2026-10-06.md`
 - next track: CP-SD-03, executed as small self-contained responsive-presentation slices
-- next checkpoint: `docs/backlog/schema-driven-ui-cp-sd-03a5-stacked-pip-discovery-2026-10-07.md`
+- next checkpoint: `docs/backlog/schema-driven-ui-cp-sd-03a6-stacked-pip-execution-2026-10-07.md`
 
 **CP-SD-00 — COMPLETE / PASS.** The audit found no critical unknowns. The main publication blocker is now explicit: v4 persists section presentation metadata, but that metadata is not yet the executable buyer-renderer authority.
 
@@ -211,4 +211,4 @@ For historical evidence, use normal docs/ADRs/PRs; for the current continuation 
 A4 gate correction: the first Flow run falsified the assumption that stable pane DOM alone preserves `scrollTop` across stacked -> compact. Compact removes the fixed pane scroller, so the browser legitimately clamps the detail pane to 0. The candidate now snapshots pane scroll offsets only when leaving `stacked` and restores them when `stacked` returns; it does not force an artificial pane scroll position while compact is active. The failed run otherwise reached and passed the compact focus/visibility assertions before this scroll expectation. Mobile and Keyboard passed on the same first head.
 
 
-**CP-SD-03A5 is NEXT.** Discovery-only stacked PiP checkpoint: reconcile the existing policy (`stacked = available + manual`, `compact = auto-after-anchor`) with the current compact-only executable PiP path, define one runtime/state/CSS owner and transition/focus contract, and name the smallest execution slice. No PiP implementation or production write in A5. Plan: `docs/backlog/schema-driven-ui-cp-sd-03a5-stacked-pip-discovery-2026-10-07.md`.
+**CP-SD-03A5 — COMPLETE / PASS.** Discovery proved the existing single viewer/PiP DOM and transient runtime state are sufficient. The gap is policy consumption: runtime still gates PiP to `compact`, the fixed-PiP CSS/manual launcher are still <=700-scoped, and the existing launcher does not explicitly open a manual-profile PiP. No new schema or overlay/state framework is needed. Result: `docs/architecture/schema-driven-ui-cp-sd-03a5-stacked-pip-discovery-result-2026-10-07.md`. **CP-SD-03A6 is NEXT**: execute stacked manual PiP through the existing owner while preserving compact auto-after-anchor and side-rail unavailability.
