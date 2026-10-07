@@ -1,6 +1,6 @@
 # CP-SD-02A2d4 — Stone Skirting section shell — 2026-10-07
 
-Status: **READY / NEXT — A2d4.0 discovery first**.
+Status: **IN PROGRESS — A2d4.0 PASS; A2d4.1 NEXT**.
 
 Parent:
 - CP-SD-02A2d0 Acabamentos family discovery;
@@ -53,3 +53,54 @@ Prove:
 - renderer/page errors remain empty.
 
 No production configuration write.
+
+
+## A2d4.0 discovery result — PASS
+
+Observed on `main` at `136511e4af43342401db60fcdb521c18d6688f10`.
+
+### Product decision — presence/state is separate; material is not
+
+Stone Packages and Stone Skirting remain separate semantic sections because they represent different buyer interactions:
+- Stone Packages selects the global stone material/package;
+- Stone Skirting toggles whether the plinth uses Stone behavior/material.
+
+That separation **does not** imply separate material authoring.
+
+Current material authority remains intentionally unified:
+- one material group: `stone-all`;
+- label: `Pedra e rodapé`;
+- `linkedItemIds: ["stone-skirting"]`;
+- no separate Stone Skirting material group;
+- no admin option for linked vs independent stone/skirting materials.
+
+Runtime behavior already matches this decision:
+- Stone Skirting ON -> plinth follows the selected Stone material;
+- Stone Skirting OFF -> plinth follows the MDF/front-finish path;
+- changing Stone while OFF does not recolor the plinth;
+- changing Stone while ON does recolor the plinth.
+
+A previously considered future capability — independent stone/skirting colors with linking controlled by administration — is **explicitly deferred** because it adds unnecessary schema/admin/material complexity for the current product.
+
+### Renderer boundary
+
+The semantic shell can migrate independently:
+- `#stoneSkirtingToggle` is a stable control host;
+- `renderStonePackages()` only synchronizes its checked/disabled/title state and does not require a static section wrapper;
+- the change handler calls `setGlobalService(state, "stone-skirting", ...)` directly and does not require static section ownership;
+- keyboard ownership is modeled by semantic section id `stone-skirting`;
+- hierarchy defaults already model `stone-skirting` as `toggle-list`;
+- canonical validation keeps `stone-skirting requires stone-all`;
+- the v3 compatibility repair remains a separate migration concern.
+
+Decision: proceed to A2d4.1 with **shell generation only**.
+
+A2d4.1 must not:
+- introduce a new material group;
+- introduce admin linking/unlinking;
+- change `linkedItemIds`;
+- change Stone/Skirting color behavior;
+- change service state;
+- change `repairSkirtingStageContract()`;
+- change `stone-skirting requires stone-all`;
+- write production configuration.
