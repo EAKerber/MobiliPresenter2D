@@ -628,7 +628,11 @@ assert.equal(appJs.includes("depthDimensionStart"), true, "isometric depth dimen
 assert.equal(appJs.includes("module-detail__focus-finish"), true, "focus uses the live masked finish layer");
 assert.equal(appJs.includes("structure-layer--${kind}"), true, "scene creates semantic seam layers");
 assert.equal(styles.includes("--mobile-pip-height"), false);
-assert.equal(styles.includes("body.is-mobile-scene-pinned .scene-hotspots { pointer-events: auto; }"), true);
+assert.equal(
+  styles.includes('html:is([data-layout-profile="stacked"], [data-layout-profile="compact"]) body.is-mobile-scene-pinned .scene-hotspots {'),
+  true,
+  "PiP scene hotspots are enabled only inside policy-authorized layout profiles"
+);
 assert.equal(styles.includes("top: env(safe-area-inset-top); margin-top: 0;"), true);
 assert.equal(styles.includes("width: 44px; height: 44px;"), true);
 assert.equal(styles.includes(".panel h2 { scroll-margin-top: 72px; }"), false);
