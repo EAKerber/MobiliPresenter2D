@@ -618,7 +618,7 @@ assert.equal(styles.includes("body.is-mobile-scene-pinned .scene-hotspots { poin
 assert.equal(styles.includes("top: env(safe-area-inset-top); margin-top: 0;"), true);
 assert.equal(styles.includes("width: 44px; height: 44px;"), true);
 assert.equal(styles.includes(".panel h2 { scroll-margin-top: 72px; }"), false);
-assert.equal(styles.includes(".panel { scroll-margin-top: var(--mobile-content-clearance, 72px); }"), true);
+assert.equal(styles.includes('html[data-layout-profile="compact"] .panel,'), true, "compact panel scroll clearance is profile-owned");
 assert.equal(styles.includes(".flow-nav__scene-pin { display: none; }"), true);
 assert.equal(styles.includes("grid-column: 1 / -1;"), true);
 assert.equal(styles.includes("container-name: flow-steps;"), true);
