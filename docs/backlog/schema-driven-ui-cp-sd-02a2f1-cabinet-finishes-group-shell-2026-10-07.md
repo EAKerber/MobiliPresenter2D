@@ -1,6 +1,6 @@
 # CP-SD-02A2f1 — generated Cabinet Finishes group shell — 2026-10-07
 
-Status: **IN PROGRESS — IMPLEMENTATION CANDIDATE**.
+Status: **COMPLETE / PASS**.
 
 Parent:
 - CP-SD-02A2f0 group-shell discovery — PASS.
@@ -180,3 +180,37 @@ Existing class-created generic group shells are not broadened in this checkpoint
 Shared cache revision advances v26 -> v27.
 
 The valid Cabinet-absence fixture remains unchanged and now tests both UI absence and runtime semantic ownership absence.
+
+
+## Final result — PASS
+
+Final functional head:
+`0a26025476583e6898dbcf844022e73fd7b43502`.
+
+Proven:
+- `cabinet-finishes` has no static semantic group-shell identity in HTML;
+- the hidden neutral Cabinet group slot is claimed only when normalized flow contains the group;
+- normalized group label populates `frontFinishHeading`;
+- group order/span/container-query behavior remain driven by normalized flow;
+- Fronts and Handles generated sections/adapters remain unchanged;
+- valid Cabinet absence removes runtime semantic group ownership completely, not merely visually;
+- the neutral group slot remains reusable after unclaim;
+- stage-entry focus skips hidden adapters and focuses `stoneHeading` when Cabinet is intentionally absent;
+- Stone group markup/domain behavior remains unchanged.
+
+The two failed intermediate Flow gates were productive:
+1. completed the generic flow-layout group-label projection;
+2. completed generic claimed-neutral-group reconciliation semantics.
+
+Final gate:
+- App build purity — PASS;
+- Current variant fidelity — PASS;
+- Current asset gates — PASS;
+- Flow layout browser — PASS;
+- Keyboard browser — PASS;
+- Mobile browser — PASS;
+- Stone browser — PASS;
+- Summary/Pricing browser — PASS;
+- Netlify deploy preview #125 — PASS.
+
+No production configuration write.
