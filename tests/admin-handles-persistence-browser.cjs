@@ -51,7 +51,7 @@ function type(filePath) {
 
 function adminHarness() {
   const source = fs.readFileSync(path.join(appRoot, "admin.html"), "utf8");
-  const moduleTag = '<script type="module" src="admin/admin.bundle.js?v=admin-pricing-v3"></script>';
+  const moduleTag = '<script type="module" src="admin/admin.bundle.js?v=admin-v5-read-v1"></script>';
   assert.equal(source.includes(moduleTag), true, "Puxadores harness expects the current admin bundle revision");
   return source.replace(
     moduleTag,
