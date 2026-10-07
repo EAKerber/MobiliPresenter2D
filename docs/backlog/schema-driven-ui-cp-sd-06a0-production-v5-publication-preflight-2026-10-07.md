@@ -1,6 +1,6 @@
 # CP-SD-06A0 — production v5 publication preflight — 2026-10-07
 
-Status: **READY / NEXT — PREFLIGHT ONLY**.
+Status: **IN PROGRESS / REPOSITORY PREFLIGHT IMPLEMENTED; GATE PENDING**.
 
 Parent:
 - CP-SD-00 through CP-SD-05 — COMPLETE / PASS.
@@ -86,3 +86,18 @@ The isolated `persist-handles-all` v3 repair remains a separate guarded operatio
 A0 passes when repository-side publication readiness is deterministic and reviewable, while production remains unchanged.
 
 The next slice after A0 may cross the authenticated boundary only with an interactive authenticated session and a fresh live read.
+
+
+## Implementation checkpoint
+
+Repository-only A0 work is implemented on branch `docs/cp-sd-06a0-production-v5-preflight`.
+
+Outputs:
+
+- offline tool: `app/tools/v5-publication-preflight.js`;
+- v5/admin test coverage for deterministic migration, digest/readback verification, skirting consistency and Puxadores preconditions;
+- architecture result: `docs/architecture/schema-driven-ui-cp-sd-06a0-production-v5-preflight-result-2026-10-07.md`.
+
+Important result: the initial v5 migration is now defined as a pure schema migration from a freshly read, self-consistent, canonical v3 source. It must not combine skirting repair, Puxadores repair or arbitrary admin draft edits.
+
+The production endpoint remains unchanged in A0 and v5 publication remains blocked.
