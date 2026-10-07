@@ -136,7 +136,8 @@ Current CP-SD-02 progress:
 - CP-SD-02A2f1: generated `cabinet-finishes` group shell + valid absence proof — complete;
 - CP-SD-02A2f2: generated `stone` group shell + redundant group-availability hook retirement — complete;
 - CP-SD-02A2g0: Services item-renderer membership discovery — complete;
-- CP-SD-02A2g1: bound-section Services checklist membership/order — next.
+- CP-SD-02A2g1: bound-section Services checklist membership/order — complete;
+- CP-SD-02A2h0: stage navigation / core-dispatch residual discovery — next.
 
 ### CP-SD-03 — responsive presentation primitives
 

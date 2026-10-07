@@ -533,6 +533,10 @@ assert.equal(appJs.includes("flowGroupSlot"), true, "group shell builder support
 assert.equal(appJs.includes("ambiguous-group-slot"), true, "ambiguous neutral group-slot bindings fail closed");
 assert.equal(appJs.includes("delete shell.dataset.flowGroupShell"), true, "stale claimed group slots return to neutral state when normalized groups disappear");
 assert.equal(appJs.includes('candidate.closest("[hidden]")'), true, "stage-entry heading selection ignores hidden group adapters");
+assert.equal(appJs.includes("stageItems("), false, "Services checklist no longer derives membership from whole-stage items");
+assert.equal(appJs.includes("boundFlowSectionFor"), true, "generic checklist adapters can resolve their owning normalized section");
+assert.equal(appJs.includes("section.itemIds.map((id) => serviceById.get(id))"), true, "Services checklist membership and order come from normalized section itemIds");
+assert.equal(appJs.includes('stageItems("services")'), false, "Services renderer contains no legacy stage-level membership lookup");
 assert.equal(indexHtml.includes('data-flow-group-shell="services"'), false, "Services group identity is no longer pre-authored in static HTML");
 assert.equal(indexHtml.includes('data-flow-group-class="flow-group-shell flow-group-shell--embedded"'), true, "Services keeps only a generic visual group-shell class contract");
 assert.equal(indexHtml.includes('data-keyboard-section="additional-services"'), false, "additional-services semantic section is no longer pre-authored in static HTML");
