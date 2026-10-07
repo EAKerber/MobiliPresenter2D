@@ -48,7 +48,7 @@ Canonical plan:
 - completed audit: `docs/architecture/schema-ui-authority-audit-2026-10-06.md`
 - completed contract checkpoint: `docs/backlog/schema-driven-ui-cp-sd-01-contract-plan-2026-10-06.md`
 - next track: CP-SD-05 typed pricing, executed discovery-first as small self-contained contract/runtime/admin slices
-- next checkpoint: `docs/backlog/schema-driven-ui-cp-sd-05a3a-v5-typed-pricing-ownership-execution-2026-10-07.md`
+- next checkpoint: `docs/backlog/schema-driven-ui-cp-sd-05a3b-admin-pricing-type-authoring-execution-2026-10-07.md`
 
 **CP-SD-00 — COMPLETE / PASS.** The audit found no critical unknowns. The main publication blocker is now explicit: v4 persists section presentation metadata, but that metadata is not yet the executable buyer-renderer authority.
 
@@ -227,3 +227,6 @@ A4 gate correction: the first Flow run falsified the assumption that stable pane
 
 
 **CP-SD-05A2 — COMPLETE / PASS.** Buyer numeric pricing authority now consumes `CommercialPricingRules 1.0`; legacy v3 buckets remain only the configuration compatibility input and estimate metadata carrier. The calculator no longer reads legacy bucket names, executes both finish amount and percentage rules, preserves per-module percentage rounding and exact handle allocation, and keeps summary/current value unchanged. Shared buyer runtime cache is `runtime-v37`. Final head `22516cd3f4d5e8e3ace93c08eede780598ad3a65` passed all eight workflows plus Netlify preview #147. **CP-SD-05A3a is NEXT**: move the live v5/admin model to typed pricing ownership while preserving the current admin UI behavior; the amount/percentage selector is split into A3b.
+
+
+**CP-SD-05A3a — COMPLETE / PASS.** Unpublished v5 and the live admin model now own `CommercialPricingRules 1.0` directly. v3/v4 imports migrate exactly, representable typed edits project exactly, front-finish amount stays valid v5 state but fails legacy publication with `pricing_requires_publication`, and the admin derives BRL/% from each rule instead of bucket names. Material pricing reconciliation is typed; no type selector is exposed yet. Functional head `a39e416dfcdbe6ac0f137a92fad8aca562333d42` passed all seven path-triggered workflows plus Netlify preview #148, including Admin hierarchy and isolated Puxadores persistence. **CP-SD-05A3b is NEXT**: explicit amount/percentage selector only for front-finish adjustments, with zero-on-type-switch and visible percentage basis.
