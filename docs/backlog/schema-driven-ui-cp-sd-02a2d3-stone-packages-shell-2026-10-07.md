@@ -1,6 +1,6 @@
 # CP-SD-02A2d3 — Stone Packages section shell — 2026-10-07
 
-Status: **IN PROGRESS — A2d3.2 PASS; A2d3.3 CANDIDATE**.
+Status: **COMPLETE / PASS**.
 
 Parent:
 - CP-SD-02A2d0 Acabamentos family discovery;
@@ -140,3 +140,40 @@ Prove:
 - renderer invariant errors and page/console errors remain empty.
 
 Production/runtime implementation is unchanged from the A2d3.2 PASS head.
+
+
+## A2d3.3 result — PASS
+
+PASS on PR #119 head `be7526d035d5ebceb64bfe1aadbc8cd8e678e8c4`.
+
+Proven with a schema-valid Stone-absence fixture:
+- `stone-all` and `stone-skirting` are removed from Acabamentos stage items;
+- `stone-skirting` is also removed from `initialState.services`, so the legacy repair shim has no contradictory active service to restore;
+- normalized flow contains no Stone group;
+- no semantic `stone-packages` shell exists;
+- the unclaimed `stone-all` neutral slot remains hidden;
+- `#stonePanel` is hidden;
+- Fronts and Handles remain visible;
+- renderer invariant errors and page/console errors remain empty.
+
+No production/runtime implementation change was required by A2d3.3.
+
+## A2d3.4 regression + closure — PASS
+
+The same final functional head ran:
+- App build purity — PASS;
+- Current variant fidelity — PASS;
+- Current asset gates — PASS;
+- Flow layout browser — PASS;
+- Keyboard browser — PASS;
+- Mobile browser — PASS;
+- Stone browser — PASS;
+- Summary/Pricing browser — PASS;
+- Netlify deploy preview #119 — PASS.
+
+Final result:
+- normalized flow is the sole semantic owner of Stone Packages section id/label/behavior/component;
+- static HTML retains only a neutral `choice-cards` affinity slot with a bounded `stone-all` adapter;
+- current Stone-group availability semantics remain unchanged;
+- static `stone-skirting` remains for the next checkpoint;
+- no state/pricing/material/mask/compatibility or production-configuration semantics changed.

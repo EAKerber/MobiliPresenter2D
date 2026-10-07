@@ -128,7 +128,8 @@ Current CP-SD-02 progress:
 - CP-SD-02A2d0: Acabamentos family discovery — complete;
 - CP-SD-02A2d1: generated Fronts section shell + absence proof — complete;
 - CP-SD-02A2d2: generated Handles section shell + absence proof — complete;
-- CP-SD-02A2d3: Stone Packages boundary discovery + generated shell — next.
+- CP-SD-02A2d3: Stone Packages discovery + generated shell + schema-valid absence proof — complete;
+- CP-SD-02A2d4: Stone Skirting boundary discovery + generated shell — next.
 
 ### CP-SD-03 — responsive presentation primitives
 
