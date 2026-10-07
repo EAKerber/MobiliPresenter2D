@@ -155,7 +155,7 @@ async function sectionItemIds(page, stageId, groupId, sectionId) {
   assert.equal(await handleComponent.inputValue(), "choice-grid", "admin loads the v3 source as an explicit v5 component");
   assert.deepEqual(
     await handleComponent.locator("option").evaluateAll((options) => options.map((option) => option.value)),
-    ["choice-swatches", "choice-grid", "choice-cards", "selection-list", "toggle-list", "action-list"],
+    ["choice-swatches", "choice-grid", "choice-cards", "selection-list"],
     "section editor exposes executable component ids only"
   );
   assert.equal(
