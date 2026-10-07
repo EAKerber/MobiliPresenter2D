@@ -51,6 +51,11 @@ assert.deepEqual(
   "legacy presentation values become explicit executable components"
 );
 assert.equal(v5.stages.find((stage) => stage.id === "modules").groups[0].sections[0].behavior, "selection", "Modules keeps its primary inspect/selection section behavior");
+assert.equal(
+  v5Core.defaultSectionBehavior(v5.stages.find((stage) => stage.id === "modules"), "module-01", configuration, catalog, hierarchyDefaults),
+  "selection",
+  "stage-aware default behavior differs from the module item's secondary toggle capability"
+);
 assert.equal(v5.stages.find((stage) => stage.id === "modules").groups[0].sections[0].component, "selection-list");
 assert.equal(v5.stages.find((stage) => stage.id === "summary").groups[0].sections[0].component, "action-list");
 
