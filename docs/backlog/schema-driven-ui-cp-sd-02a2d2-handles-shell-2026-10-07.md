@@ -1,6 +1,6 @@
 # CP-SD-02A2d2 — generated Handles section shell — 2026-10-07
 
-Status: **READY / NEXT**.
+Status: **IN PROGRESS — A2d2.0 PASS; A2d2.1 NEXT**.
 
 Parent:
 - `docs/architecture/schema-driven-ui-cp-sd-02a2d0-finishes-family-discovery-result-2026-10-07.md`;
@@ -35,3 +35,23 @@ Before implementation, confirm that:
 Stop and split discovery if any handle state/pricing behavior must move to make the shell generation work.
 
 No production configuration write.
+
+
+## A2d2.0 discovery result — PASS
+
+Observed on `main` at `d362ab34d2750524e89bf07d8f67bb27c35f6ce6`:
+
+- `renderHandleControlsFromData()` reads/writes only `#handleOptions`, `#handleHelp`, catalog handles, `handleId` state and pricing data;
+- the click bridge calls `CASA_KEYBOARD_SHORTCUTS.activateSection("handles", handleIndex, false)`, so semantic reactivation is keyed by section id rather than a pre-authored DOM wrapper;
+- keyboard discovery resolves the modeled `handles` section against the runtime-rendered semantic section and item ownership; this remains valid for a generated shell;
+- `.handle-fieldset` already provides an internal grid with 9px rhythm and can move to the inner item adapter, leaving the neutral slot presentation-free so `hidden` remains authoritative;
+- `#handleOptions` card geometry and responsive rules are independent from static section identity.
+
+Decision: proceed with A2d2.1 without changing handle state, pricing, catalog, scene, masks or keyboard algorithms.
+
+A2d2.1 exact boundary:
+- outer neutral slot: `data-flow-section-slot`, component `choice-grid`, item affinity `handles-all`, `hidden`;
+- inner bounded adapter: `.handle-fieldset[data-configurable-item="handles-all"][data-flow-item-id="handles-all"]`;
+- preserve `#handleHelp` and `#handleOptions`;
+- normalized flow owns section id, heading, behavior and component;
+- add positive source/Flow-layout proof only; absence fixture remains A2d2.2.
