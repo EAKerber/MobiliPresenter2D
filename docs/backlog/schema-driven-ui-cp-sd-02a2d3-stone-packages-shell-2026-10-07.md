@@ -1,6 +1,6 @@
 # CP-SD-02A2d3 — Stone Packages section shell — 2026-10-07
 
-Status: **READY / NEXT — A2d3.0 discovery first**.
+Status: **IN PROGRESS — A2d3.0 PASS WITH PREREQUISITE; A2d3.1 NEXT**.
 
 Parent:
 - CP-SD-02A2d0 Acabamentos family discovery;
@@ -42,3 +42,37 @@ Only:
 A2d3.2 remains a separate absence proof.
 
 No production configuration write.
+
+
+## A2d3.0 discovery result — PASS WITH PREREQUISITE
+
+Observed on `main` at `208980ac0a7a4c941549d41ce1ebc4a8ed92a6a9`.
+
+The Stone Packages section itself remains a good candidate for a generated `choice-cards` shell:
+- package controls are concentrated in `#stonePackageOptions`;
+- package selection uses `stonePackageId` and existing catalog/pricing data;
+- keyboard navigation addresses the semantic `stone-packages` section;
+- the separate `stone-skirting` control has its own item id, section id and toggle handler.
+
+However, one legacy ownership hook blocks a correct absence proof:
+
+```html
+<section id="stonePanel"
+         data-flow-group-shell="stone"
+         data-configurable-item="stone-all">
+```
+
+During configuration reconciliation, the generic `[data-configurable-item]` pass hides that whole group whenever `stone-all` is absent. This suppresses `stone-skirting` even when normalized flow still models it.
+
+That group-level item ownership is not needed:
+- `mountStageGroups()` already computes expected group ids from normalized flow;
+- it sets each `[data-flow-group-shell]` hidden state from whether the group exists;
+- therefore the Stone group can remain when only skirting exists and disappear when the normalized Stone group is empty.
+
+Decision:
+- do **not** migrate the Stone Packages shell yet;
+- first execute A2d3.1 as a smaller prerequisite cleanup;
+- remove only `data-configurable-item="stone-all"` from `#stonePanel`;
+- prove normalized flow, not `stone-all`, owns Stone-group existence.
+
+No change to `renderStonePackages()`, stone state, pricing, materials/masks, skirting compatibility repair or production configuration in A2d3.1.
