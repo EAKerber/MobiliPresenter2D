@@ -167,6 +167,19 @@ const invalidPricingBpsRange = structuredClone(typedPricingFixture);
 invalidPricingBpsRange.roles.frontFinishAdjustment.cocoa = { type: "percentage", bps: pricingContract.PERCENTAGE_MAX_BPS + 1, basis: "eligible-module-base" };
 assert.equal(pricingContract.validate(invalidPricingBpsRange).some((error) => error.includes("invalid percentage bps")), true);
 
+const validPricingRangeEdges = structuredClone(typedPricingFixture);
+validPricingRangeEdges.roles.itemBase["module-01"] = { type: "amount", cents: pricingContract.AMOUNT_MAX_CENTS };
+validPricingRangeEdges.roles.frontFinishAdjustment.cocoa = { type: "percentage", bps: pricingContract.PERCENTAGE_MAX_BPS, basis: "eligible-module-base" };
+assert.deepEqual(pricingContract.validate(validPricingRangeEdges), [], "legacy amount/BPS maxima remain inclusive");
+
+const invalidPricingMissingBasis = structuredClone(typedPricingFixture);
+invalidPricingMissingBasis.roles.frontFinishAdjustment.cocoa = { type: "percentage", bps: 1500 };
+assert.equal(pricingContract.validate(invalidPricingMissingBasis).some((error) => error.includes("unsupported percentage basis")), true);
+
+const invalidPricingAmountBps = structuredClone(typedPricingFixture);
+invalidPricingAmountBps.roles.itemBase["module-01"] = { type: "amount", cents: 90000, bps: 1000 };
+assert.equal(pricingContract.validate(invalidPricingAmountBps).some((error) => error.includes("unexpected amount fields")), true);
+
 const invalidPricingUnknownRole = structuredClone(typedPricingFixture);
 invalidPricingUnknownRole.roles.discount = {};
 assert.equal(pricingContract.validate(invalidPricingUnknownRole).some((error) => error.includes("unknown pricing role")), true);
