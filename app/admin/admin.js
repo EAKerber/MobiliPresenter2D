@@ -24,7 +24,7 @@ const hierarchyEditor = window.CasaModulesHierarchyEditor;
 const legacyStageRepair = window.CasaModulesLegacyStageRepair;
 const hierarchyDefaults = window.CASA_EM_MODULOS_HIERARCHY_DEFAULTS;
 const legacyDefaults = configurationCore.createDefaultAdministration(settingsDefaults, catalog, priceBook, scene);
-const defaults = hierarchyCore.upgradeToHierarchy(legacyDefaults, configurationCore, flowCore, catalog, priceBook, scene, hierarchyDefaults);
+const defaults = hierarchyCore.upgrade(legacyDefaults, configurationCore, flowCore, catalog, priceBook, scene, hierarchyDefaults);
 const byId = (id) => document.getElementById(id);
 const loginPanel = byId("loginPanel");
 const deniedPanel = byId("deniedPanel");
@@ -129,7 +129,7 @@ function itemLabel(stageId, itemId) {
 }
 
 function hierarchyErrors(candidate) {
-  return hierarchyCore.validateHierarchyAdministration(candidate, configurationCore, catalog, priceBook, scene);
+  return hierarchyCore.validate(candidate, configurationCore, catalog, priceBook, scene);
 }
 
 function commitHierarchy(candidate, successMessage = "") {
