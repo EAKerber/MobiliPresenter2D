@@ -25,7 +25,7 @@ ConfiguratorAdministration2D 5.0
 The v5 document must be able to represent, in one validated model:
 
 - Stage -> Group -> Section -> Item semantic hierarchy;
-- executable section component identity;
+- explicit section interaction behavior plus executable section component identity;
 - the validated presentation policy from CP-SD-01C1;
 - explicit authored material `color: hex | null` semantics;
 - existing non-hierarchy administration data unchanged.
@@ -59,10 +59,13 @@ v5 section representation:
 {
   "id": "handles",
   "label": "Puxadores",
+  "behavior": "selection",
   "component": "choice-grid",
   "itemIds": ["handles-all"]
 }
 ```
+
+`behavior` is explicit section semantics and is not inferred from the visual component. This is required because a section can expose a primary inspect/selection interaction even when its items also have a secondary toggle capability (Modules is the current concrete case).
 
 There is **no parallel persisted legacy `presentation` string** in v5.
 
@@ -131,7 +134,7 @@ The publication signature must include:
 
 - hierarchy identity/order/labels/enabled state;
 - group span;
-- section executable component;
+- section interaction behavior and executable component;
 - section item order/ownership;
 - presentation policy.
 
@@ -210,7 +213,7 @@ Migration/normalization:
 1. current default v3 -> v5;
 2. v3 -> v5 deterministic across repeated migration;
 3. historical v4 -> v5 preserves stage/group/section/item structure;
-4. v4 `swatches/grid/cards/list/auto` resolve deterministically to explicit components;
+4. v4 `swatches/grid/cards/list/auto` resolve deterministically to explicit behavior + component pairs;
 5. v5 normalization is idempotent;
 6. v5 contains no persisted section `presentation` field;
 7. v5 always contains a validated presentation policy;
@@ -218,7 +221,7 @@ Migration/normalization:
 
 Validation:
 
-9. unknown component fails;
+9. unknown behavior or component fails;
 10. missing component fails;
 11. invalid presentation policy fails;
 12. missing presentation policy fails;
@@ -280,3 +283,16 @@ If C3 passes, CP-SD-01 is complete when documentation records:
 - CP-SD-02 may now remove static semantic buyer UI fallback surfaces against this stable contract.
 
 No further schema fields should be added in CP-SD-01 unless a failing gate demonstrates a missing semantic requirement.
+
+
+## Gate-discovered correction — explicit section behavior
+
+The first v5 unit run exposed a real semantic loss in v4: Modules items have item capability `toggle`, while the canonical Modules section intentionally has primary section behavior `selection` (inspect/detail). v4 persisted only `presentation: list`, so deriving v5 behavior exclusively from item kind incorrectly produced `toggle-list`.
+
+Decision:
+- v5 persists `section.behavior` explicitly;
+- v3/v4 migration restores an explicit behavior from the canonical hierarchy template when the section has one, otherwise from homogeneous item capabilities;
+- `section.component` must be compatible with the persisted section behavior;
+- item capability remains a separate secondary/domain capability and is not overwritten by section behavior.
+
+This is a contract correction required by a failing gate, not a new generic interaction engine.
