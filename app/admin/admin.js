@@ -153,6 +153,7 @@ function defaultEmptyPlacement(stage, itemId) {
     groupLabel: stage.label || "Grupo",
     sectionId: hierarchyEditor.uniqueId(new Set(), `${stage.id}-items`, "items"),
     sectionLabel,
+    behavior,
     component: presentationCore.componentForBehavior(behavior),
     columnSpan: 2
   };
@@ -1527,6 +1528,7 @@ stagesList.addEventListener("click", (event) => {
     const candidate = hierarchyEditor.splitItemToSection(model, itemId, {
       sectionId,
       label: label.trim().slice(0, 40),
+      behavior: itemBehavior(itemId),
       component: presentationCore.componentForBehavior(itemBehavior(itemId))
     });
     commitHierarchy(candidate);
