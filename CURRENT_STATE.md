@@ -48,7 +48,7 @@ Canonical plan:
 - completed audit: `docs/architecture/schema-ui-authority-audit-2026-10-06.md`
 - completed contract checkpoint: `docs/backlog/schema-driven-ui-cp-sd-01-contract-plan-2026-10-06.md`
 - next track: CP-SD-05 typed pricing, executed discovery-first as small self-contained contract/runtime/admin slices
-- next checkpoint: `docs/backlog/schema-driven-ui-cp-sd-05a3b-admin-pricing-type-authoring-execution-2026-10-07.md`
+- next checkpoint: `docs/backlog/schema-driven-ui-cp-sd-05a4-price-book-v2-retirement-execution-2026-10-07.md`
 
 **CP-SD-00 — COMPLETE / PASS.** The audit found no critical unknowns. The main publication blocker is now explicit: v4 persists section presentation metadata, but that metadata is not yet the executable buyer-renderer authority.
 
@@ -230,3 +230,6 @@ A4 gate correction: the first Flow run falsified the assumption that stable pane
 
 
 **CP-SD-05A3a — COMPLETE / PASS.** Unpublished v5 and the live admin model now own `CommercialPricingRules 1.0` directly. v3/v4 imports migrate exactly, representable typed edits project exactly, front-finish amount stays valid v5 state but fails legacy publication with `pricing_requires_publication`, and the admin derives BRL/% from each rule instead of bucket names. Material pricing reconciliation is typed; no type selector is exposed yet. Functional head `a39e416dfcdbe6ac0f137a92fad8aca562333d42` passed all seven path-triggered workflows plus Netlify preview #148, including Admin hierarchy and isolated Puxadores persistence. **CP-SD-05A3b is NEXT**: explicit amount/percentage selector only for front-finish adjustments, with zero-on-type-switch and visible percentage basis.
+
+
+**CP-SD-05A3b — COMPLETE / PASS.** Admin pricing now exposes explicit amount/percentage type authoring only for `frontFinishAdjustment`, with options derived from `ROLE_CAPABILITIES`. Percentage shows the explicit `eligible-module-base` basis; switching type resets the numeric value to zero rather than reinterpreting units. Fixed front-finish amount remains valid local v5 state but Publish stops before any current-v3 PUT with a pricing-specific message. Fresh retry head `f4291c6fc063e27efc52c88463d849578e9ce9cf` passed all seven path-triggered workflows plus Netlify preview #149, including Admin hierarchy, isolated Puxadores and Summary/Pricing. **CP-SD-05A4 is NEXT**: make `CommercialEstimatePriceBook 2.0` typed by default and retire remaining buyer/admin legacy pricing bucket reads outside explicit v3 compatibility seams. The A4 audit also found a latent module-detail fallback still calling `pricing.itemEstimate(..., priceBook)`; A4 must pass `pricingRules` there.
