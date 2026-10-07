@@ -1,6 +1,6 @@
 # CP-SD-02A2f1 — generated Cabinet Finishes group shell — 2026-10-07
 
-Status: **READY / NEXT**.
+Status: **IN PROGRESS — IMPLEMENTATION CANDIDATE**.
 
 Parent:
 - CP-SD-02A2f0 group-shell discovery — PASS.
@@ -100,3 +100,39 @@ Stop and split if cabinet group generation requires:
 - production writes.
 
 No production configuration write.
+
+
+## Implementation candidate
+
+Applied only the Cabinet group seam:
+- added a generic direct-child `data-flow-group-slot` binding path to `mountStageGroups()`;
+- group-slot affinity is exact `group.id`; ambiguous matches fail closed as `ambiguous-group-slot`;
+- a claimed slot receives `data-flow-group-shell`, `data-flow-generated-group="true"`, normalized label text, span/order and is unhidden in place;
+- the existing class-based group-shell fallback remains unchanged for Services/Summary;
+- converted only `#frontFinishPanel` to hidden `data-flow-group-slot="cabinet-finishes"`;
+- removed static `data-flow-group-shell="cabinet-finishes"`;
+- `frontFinishHeading` is now populated from normalized `group.label`;
+- the icon, explanatory paragraph, ids, Fronts/Handles section slots and item adapters are unchanged;
+- `focusCurrentStep()` now chooses the first `h2` without a `[hidden]` ancestor;
+- added normal generated-group proof and a valid Cabinet-absent fixture;
+- shared runtime cache revision advanced v24 -> v25.
+
+Valid Cabinet-absent fixture:
+- removes `fronts-all` and `handles-all`;
+- retains Stone;
+- proves no semantic cabinet group shell is fabricated;
+- proves the neutral Cabinet slot stays hidden;
+- proves Stone remains visible;
+- Ctrl+ArrowRight into Acabamentos focuses `stoneHeading`, not the hidden Cabinet heading;
+- renderer/page errors remain empty.
+
+Explicitly unchanged:
+- `#stonePanel[data-flow-group-shell="stone"][data-configurable-item="stone-all"]`;
+- all four generated Acabamentos section shells;
+- finish/handle/stone state, pricing and materials;
+- `renderStonePackages()`;
+- Stone/Skirting dependency/material semantics;
+- Modules/PiP/dock;
+- production configuration.
+
+Gate pending: eight repository workflows + Netlify preview.

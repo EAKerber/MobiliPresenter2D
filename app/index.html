@@ -13,7 +13,7 @@
       content="Visualizador interativo dos módulos da cozinha Casa em Módulos."
     />
     <title>Casa em Módulos — Configurador</title>
-    <link rel="stylesheet" href="styles.css?v=runtime-v24" />
+    <link rel="stylesheet" href="styles.css?v=runtime-v25" />
     <style>
       @media (max-width: 700px) {
         body.is-mobile-scene-pinned.is-mobile-scene-transparent .viewer-card {
@@ -113,11 +113,11 @@
 
         <section class="flow-stage-layout" id="finishesStagePanel" aria-label="Acabamentos" hidden>
           <div class="flow-group-grid" data-flow-group-grid="finishes">
-          <section class="panel flow-group-shell" id="frontFinishPanel" data-flow-group-shell="cabinet-finishes" aria-labelledby="frontFinishHeading">
+          <section class="panel flow-group-shell" id="frontFinishPanel" data-flow-group-slot="cabinet-finishes" aria-labelledby="frontFinishHeading" hidden>
             <header class="finish-heading">
               <span aria-hidden="true">◐</span>
               <div>
-                <h2 id="frontFinishHeading" tabindex="-1">Acabamentos do conjunto</h2>
+                <h2 id="frontFinishHeading" tabindex="-1" data-flow-group-label></h2>
                 <p>Uma cor e um puxador para a composição. A caixaria permanece clara.</p>
               </div>
             </header>
@@ -195,30 +195,30 @@
       </aside>
     </main>
 
-    <script src="data/scene-data.js?v=runtime-v24"></script>
-    <script src="data/catalog-data.js?v=runtime-v24"></script>
+    <script src="data/scene-data.js?v=runtime-v25"></script>
+    <script src="data/catalog-data.js?v=runtime-v25"></script>
     <script src="data/configurator-settings.js?v=admin-config-v2"></script>
     <script src="data/hierarchy-defaults.js?v=hierarchy-defaults-v2"></script>
-    <script src="data/mock-price-book.js?v=runtime-v24"></script>
-    <script src="data/mask-data.js?v=runtime-v24"></script>
-    <script src="core/state.js?v=runtime-v24"></script>
-    <script src="core/visibility.js?v=runtime-v24"></script>
-    <script src="core/validation.js?v=runtime-v24"></script>
-    <script src="core/fingerprint.js?v=runtime-v24"></script>
-    <script src="core/finishes.js?v=runtime-v24"></script>
-    <script src="core/pricing.js?v=runtime-v24"></script>
+    <script src="data/mock-price-book.js?v=runtime-v25"></script>
+    <script src="data/mask-data.js?v=runtime-v25"></script>
+    <script src="core/state.js?v=runtime-v25"></script>
+    <script src="core/visibility.js?v=runtime-v25"></script>
+    <script src="core/validation.js?v=runtime-v25"></script>
+    <script src="core/fingerprint.js?v=runtime-v25"></script>
+    <script src="core/finishes.js?v=runtime-v25"></script>
+    <script src="core/pricing.js?v=runtime-v25"></script>
     <script src="core/item-capabilities.js?v=cp-sd-01a-v1"></script>
     <script src="core/configuration.js?v=admin-config-v7"></script>
-    <script src="core/flow-model.js?v=runtime-v24"></script>
+    <script src="core/flow-model.js?v=runtime-v25"></script>
     <script src="core/layout-profiles.js?v=cp-sd-01c1-v1"></script>
     <script src="core/presentation-contract.js?v=cp-sd-01c1-v1"></script>
     <script src="data/presentation-policy-defaults.js?v=cp-sd-01c1-v1"></script>
-    <script src="core/flow-layout.js?v=runtime-v24"></script>
+    <script src="core/flow-layout.js?v=runtime-v25"></script>
     <script src="core/runtime-contracts.js?v=runtime-contracts-v2"></script>
     <script src="core/keyboard-shortcuts.js?v=keyboard-v4"></script>
-    <script src="data/stone-data.js?v=runtime-v24"></script>
-    <script src="core/stone.js?v=runtime-v24"></script>
-    <script src="app.js?v=runtime-v24"></script>
+    <script src="data/stone-data.js?v=runtime-v25"></script>
+    <script src="core/stone.js?v=runtime-v25"></script>
+    <script src="app.js?v=runtime-v25"></script>
     <script>
       (() => {
         const resizeHandle = document.getElementById("mobileSceneResizeHandle");

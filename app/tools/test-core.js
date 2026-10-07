@@ -521,8 +521,14 @@ assert.equal(indexHtml.includes("data/hierarchy-defaults.js?v=hierarchy-defaults
 assert.equal(appJs.includes("publishNormalizedFlow"), true, "app publishes one normalized flow contract to navigation");
 assert.equal(appJs.includes("applyBuyerFlowLayout"), true, "buyer composition is mounted from normalized flow layout");
 assert.equal(indexHtml.includes('data-stage-view-layout="modules"'), true, "modules expose a view-level two-pane renderer contract");
-assert.equal(indexHtml.includes('data-flow-group-shell="cabinet-finishes"'), true, "finish renderer exposes cabinet group shell");
-assert.equal(indexHtml.includes('data-flow-group-shell="stone"'), true, "finish renderer exposes stone group shell");
+assert.equal(indexHtml.includes('data-flow-group-shell="cabinet-finishes"'), false, "Cabinet Finishes group identity is no longer pre-authored in static HTML");
+assert.equal(indexHtml.includes('data-flow-group-slot="cabinet-finishes"'), true, "Cabinet Finishes keeps only a hidden neutral group renderer slot");
+assert.equal(indexHtml.includes('data-flow-group-label'), true, "Cabinet Finishes visible group label has a normalized-flow population hook");
+assert.equal(indexHtml.includes(">Acabamentos do conjunto</h2>"), false, "Cabinet Finishes group heading copy comes from normalized flow");
+assert.equal(indexHtml.includes('data-flow-group-shell="stone"'), true, "Stone group remains static in A2f1");
+assert.equal(appJs.includes("flowGroupSlot"), true, "group shell builder supports generic neutral group-slot affinity");
+assert.equal(appJs.includes("ambiguous-group-slot"), true, "ambiguous neutral group-slot bindings fail closed");
+assert.equal(appJs.includes('candidate.closest("[hidden]")'), true, "stage-entry heading selection ignores hidden group adapters");
 assert.equal(indexHtml.includes('data-flow-group-shell="services"'), false, "Services group identity is no longer pre-authored in static HTML");
 assert.equal(indexHtml.includes('data-flow-group-class="flow-group-shell flow-group-shell--embedded"'), true, "Services keeps only a generic visual group-shell class contract");
 assert.equal(indexHtml.includes('data-keyboard-section="additional-services"'), false, "additional-services semantic section is no longer pre-authored in static HTML");

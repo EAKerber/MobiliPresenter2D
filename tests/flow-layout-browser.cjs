@@ -110,6 +110,10 @@ const { chromium } = require("playwright");
   await page.locator('.flow-nav [data-step="finishes"]').click();
   await page.waitForFunction(() => !document.getElementById("finishesStagePanel").hidden);
   assert.deepEqual(await stageGroupOrder("finishes"), await modelGroupOrder("finishes"), "Acabamentos group order comes from normalized flow");
+  const generatedCabinetGroup = page.locator('[data-flow-group-shell="cabinet-finishes"]');
+  assert.equal(await generatedCabinetGroup.getAttribute("data-flow-generated-group"), "true", "Cabinet Finishes group shell is claimed from normalized flow");
+  assert.equal(await generatedCabinetGroup.getAttribute("id"), "frontFinishPanel", "Cabinet Finishes keeps the accepted stable visual adapter id");
+  assert.equal(await page.locator("#frontFinishHeading").textContent(), "Acabamentos do conjunto", "Cabinet Finishes visible group heading comes from normalized group label");
   assert.deepEqual(await renderedSectionOrder("cabinet-finishes"), await modelSectionOrder("finishes", "cabinet-finishes"), "cabinet section order follows normalized flow");
   assert.deepEqual(await renderedSectionOrder("stone"), await modelSectionOrder("finishes", "stone"), "stone section order follows normalized flow");
   const generatedFronts = page.locator('[data-keyboard-section="fronts"]');
@@ -557,6 +561,72 @@ const { chromium } = require("playwright");
   assert.deepEqual(handlesNegativeErrors, [], "Handles absence fixture has no console/page errors");
   await handlesNegativePage.close();
 
+  const withoutCabinetFinishes = structuredClone(sourceConfiguration);
+  const cabinetFinishesStage = withoutCabinetFinishes.stages.find((stage) => (stage.kind || stage.id) === "finishes");
+  assert.ok(cabinetFinishesStage, "Cabinet Finishes absence fixture has Acabamentos stage");
+  cabinetFinishesStage.items = cabinetFinishesStage.items.filter((id) => id !== "fronts-all" && id !== "handles-all");
+
+  const cabinetNegativeErrors = [];
+  const cabinetNegativePage = await browser.newPage({ viewport: { width: 1366, height: 900 } });
+  cabinetNegativePage.on("pageerror", (error) => cabinetNegativeErrors.push(error.message));
+  cabinetNegativePage.on("console", (message) => { if (message.type() === "error") cabinetNegativeErrors.push(message.text()); });
+  await cabinetNegativePage.route("**/api/configuration", async (route) => {
+    if (route.request().method() !== "GET") return route.continue();
+    await route.fulfill({
+      status: 200,
+      contentType: "application/json",
+      body: JSON.stringify(withoutCabinetFinishes)
+    });
+  });
+  await cabinetNegativePage.goto(targetUrl, { waitUntil: "domcontentloaded", timeout: 15000 });
+  await cabinetNegativePage.waitForFunction(() => {
+    const finishes = window.CASA_NORMALIZED_FLOW?.stages?.find((stage) => stage.id === "finishes");
+    const groupIds = finishes?.groups?.map((group) => group.id) || [];
+    const sectionIds = finishes?.groups?.flatMap((group) => group.sections.map((section) => section.id)) || [];
+    return finishes
+      && !groupIds.includes("cabinet-finishes")
+      && groupIds.includes("stone")
+      && !sectionIds.includes("fronts")
+      && !sectionIds.includes("handles")
+      && sectionIds.includes("stone-packages")
+      && window.CASA_EM_MODULOS_DEBUG?.getFlowLayoutErrors;
+  }, null, { timeout: 10000 });
+
+  assert.equal(
+    await cabinetNegativePage.locator('[data-flow-group-shell="cabinet-finishes"]').count(),
+    0,
+    "omitted Cabinet Finishes data creates no semantic cabinet group shell"
+  );
+  assert.equal(
+    await cabinetNegativePage.locator('[data-flow-group-slot="cabinet-finishes"]').isHidden(),
+    true,
+    "unclaimed Cabinet Finishes neutral group slot stays hidden"
+  );
+  assert.equal(
+    await cabinetNegativePage.locator('[data-flow-group-shell="stone"]').isVisible(),
+    false,
+    "Stone group remains semantically available before entering Acabamentos"
+  );
+
+  await cabinetNegativePage.keyboard.press("Control+ArrowRight");
+  await cabinetNegativePage.waitForFunction(() =>
+    document.querySelector('.flow-nav [data-step="finishes"]')?.getAttribute("aria-current") === "step"
+    && document.activeElement?.id === "stoneHeading",
+    null,
+    { timeout: 10000 }
+  );
+
+  assert.equal(await cabinetNegativePage.locator("#frontFinishPanel").isHidden(), true, "hidden cabinet adapter is never used as the stage-entry focus target");
+  assert.equal(await cabinetNegativePage.locator("#stonePanel").isVisible(), true, "Stone group remains visible when Cabinet Finishes is omitted");
+  assert.equal(await cabinetNegativePage.evaluate(() => document.activeElement?.id), "stoneHeading", "stage entry focuses the first visible group heading");
+  assert.deepEqual(
+    await cabinetNegativePage.evaluate(() => window.CASA_EM_MODULOS_DEBUG.getFlowLayoutErrors()),
+    [],
+    "Cabinet Finishes absence creates no renderer fallback"
+  );
+  assert.deepEqual(cabinetNegativeErrors, [], "Cabinet Finishes absence fixture has no console/page errors");
+  await cabinetNegativePage.close();
+
   const withoutStone = structuredClone(sourceConfiguration);
   const stoneFinishesStage = withoutStone.stages.find((stage) => (stage.kind || stage.id) === "finishes");
   assert.ok(stoneFinishesStage, "Stone absence fixture has Acabamentos stage");
@@ -693,7 +763,7 @@ const { chromium } = require("playwright");
   assert.deepEqual(skirtingNegativeErrors, [], "Stone Skirting absence fixture has no console/page errors");
   await skirtingNegativePage.close();
 
-  fs.writeFileSync(path.join(output, "result.json"), JSON.stringify({ targetUrl, uniqueness, errors, negativeErrors, lightingNegativeErrors, frontsNegativeErrors, handlesNegativeErrors, stoneNegativeErrors, skirtingNegativeErrors }, null, 2));
+  fs.writeFileSync(path.join(output, "result.json"), JSON.stringify({ targetUrl, uniqueness, errors, negativeErrors, lightingNegativeErrors, frontsNegativeErrors, handlesNegativeErrors, cabinetNegativeErrors, stoneNegativeErrors, skirtingNegativeErrors }, null, 2));
   await browser.close();
   console.log("flow layout browser: PASS");
 })().catch((error) => {
