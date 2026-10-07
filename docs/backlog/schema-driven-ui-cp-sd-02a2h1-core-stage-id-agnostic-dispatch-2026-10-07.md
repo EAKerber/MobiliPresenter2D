@@ -1,6 +1,6 @@
 # CP-SD-02A2h1 — id-agnostic generic core-stage dispatch — 2026-10-07
 
-Status: **IN PROGRESS — IMPLEMENTATION CANDIDATE**.
+Status: **COMPLETE / PASS**.
 
 Parent:
 - CP-SD-02A2h0 residual discovery — PASS.
@@ -145,4 +145,17 @@ Explicitly untouched:
 - domain renderers, pricing, state and scene;
 - production configuration.
 
-Gate pending: all eight workflows + Netlify preview.
+Gate result:
+- App build purity — PASS;
+- Current variant fidelity — PASS;
+- Current asset gates — PASS;
+- Flow layout browser — PASS, including renamed non-Modules core-stage ids;
+- Keyboard browser — PASS;
+- Mobile browser — PASS;
+- Stone browser — PASS;
+- Summary/Pricing browser — PASS;
+- Netlify deploy preview #130 — PASS.
+
+Functional head: `306de22e89e9c12fa56b80bd618e2be48f412ee9`.
+
+Decision: A2h1 passes and satisfies the CP-SD-02 stop condition. No production configuration write.
