@@ -101,3 +101,19 @@ Outputs:
 Important result: the initial v5 migration is now defined as a pure schema migration from a freshly read, self-consistent, canonical v3 source. It must not combine skirting repair, Puxadores repair or arbitrary admin draft edits.
 
 The production endpoint remains unchanged in A0 and v5 publication remains blocked.
+
+
+## Gate retry checkpoint
+
+Functional/preflight head `d59afbccf53566d895478c2f97cbb1184f72e5b4` passed:
+
+- App build purity;
+- Current asset gates, including the new v5 publication preflight tests;
+- Current variant fidelity;
+- Summary pricing browser;
+- Mobile browser;
+- Netlify deploy preview #151.
+
+Stone browser did not reach its functional test and remained blocked in isolated browser-tool installation. No Stone/runtime assertion failed.
+
+This documentation-only checkpoint creates a fresh head so Stone can execute on a clean runner. A0 remains IN PROGRESS until Stone browser completes successfully.
