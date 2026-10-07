@@ -50,7 +50,7 @@ Canonical plan:
 
 **CP-SD-00 — COMPLETE / PASS.** The audit found no critical unknowns. The main publication blocker is now explicit: v4 persists section presentation metadata, but that metadata is not yet the executable buyer-renderer authority.
 
-**CP-SD-01 — IN PROGRESS.** **CP-SD-01A COMPLETE / PASS** established one item capability authority. **CP-SD-01B COMPLETE / PASS** established closed executable presentation bindings. **CP-SD-01C1 COMPLETE / PASS** on functional head `b7716089175e2d7e324c95c8447be631cf5964de`: ownership vs availability, named layout profiles and validated companion/PiP/bottom-dock policy are now explicit with all current gates green. **CP-SD-01C2 is IN PROGRESS**: make authored material color semantics explicit (`hex | null`) without changing existing visuals. Detailed plan: `docs/backlog/schema-driven-ui-cp-sd-01c2-material-semantics-plan-2026-10-06.md`. CP-SD-01C3 then freezes the consolidated unpublished administration candidate. No production publication in this checkpoint.
+**CP-SD-01 — IN PROGRESS.** **CP-SD-01A COMPLETE / PASS** established one item capability authority. **CP-SD-01B COMPLETE / PASS** established closed executable presentation bindings. **CP-SD-01C1 COMPLETE / PASS** on functional head `b7716089175e2d7e324c95c8447be631cf5964de`: ownership vs availability, named layout profiles and validated companion/PiP/bottom-dock policy are now explicit with all current gates green. **CP-SD-01C2 COMPLETE / PASS** via PR #107 at `c9df1a6fd8094cf9893b89f9e5b46c7134de1eab`: authored material color semantics are now explicit (`hex | null`) with display fallbacks kept out of authored data. **CP-SD-01C3 is IN PROGRESS**: freeze the consolidated unpublished `ConfiguratorAdministration2D 5.0` candidate, preserve v3/v4 deterministic import, keep safe v3 projection only when lossless, and keep direct v5 publication server-blocked. Detailed plan: `docs/backlog/schema-driven-ui-cp-sd-01c3-v5-candidate-plan-2026-10-06.md`. No production publication in this checkpoint.
 
 The isolated authenticated CP-UX-05A0 v3 Puxadores repair remains valid and independent. The broader production hierarchy publication is intentionally held until CP-SD-01 freezes the schema/presentation contract. The final migration may target a consolidated version after the unpublished v4 milestone rather than publishing v4 and immediately migrating again.
 
@@ -173,12 +173,13 @@ Read, in order:
 2. `docs/architecture/schema-ui-authority-audit-2026-10-06.md`
 3. `docs/backlog/schema-driven-ui-cp-sd-01-contract-plan-2026-10-06.md`
 4. `docs/backlog/schema-driven-ui-cp-sd-01c-contract-plan-2026-10-06.md`
-5. `docs/backlog/schema-driven-ui-cp-sd-00-audit-plan-2026-10-06.md`
-6. `docs/backlog/ux-navigation-hierarchy-roadmap-2026-10-05.md`
-7. `docs/backlog/housekeeping-roadmap-and-checkpoint-2026-10-05.md`
-8. `docs/architecture/official-candidate-gate-2026-10-05.md`
-9. `docs/architecture/runtime-contract-map-2026-10-05.md`
-10. `docs/architecture/published-config-compat-audit-2026-10-05.md`
+5. `docs/backlog/schema-driven-ui-cp-sd-01c3-v5-candidate-plan-2026-10-06.md`
+6. `docs/backlog/schema-driven-ui-cp-sd-00-audit-plan-2026-10-06.md`
+7. `docs/backlog/ux-navigation-hierarchy-roadmap-2026-10-05.md`
+8. `docs/backlog/housekeeping-roadmap-and-checkpoint-2026-10-05.md`
+9. `docs/architecture/official-candidate-gate-2026-10-05.md`
+10. `docs/architecture/runtime-contract-map-2026-10-05.md`
+11. `docs/architecture/published-config-compat-audit-2026-10-05.md`
 
 The schema-driven UI roadmap is the immediate sequencing authority before broader v4 publication. The UX roadmap remains authority for the completed navigation/hierarchy history and authenticated CP-UX-05 safety boundary. The housekeeping roadmap remains authority for the independent published-configuration compatibility cleanup.
 
