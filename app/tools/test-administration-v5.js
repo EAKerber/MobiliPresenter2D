@@ -35,6 +35,7 @@ assert.equal(v5.schemaVersion, v5Core.SCHEMA);
 assert.deepEqual(v5.presentationPolicy, presentationPolicy, "v5 carries the validated presentation policy");
 
 const sections = v5.stages.flatMap((stage) => stage.groups.flatMap((group) => group.sections));
+assert.equal(sections.every((section) => ["selection", "toggle", "action"].includes(section.behavior)), true, "every v5 section has explicit interaction behavior");
 assert.equal(sections.every((section) => typeof section.component === "string"), true, "every v5 section has an explicit component");
 assert.equal(sections.some((section) => Object.hasOwn(section, "presentation")), false, "v5 has no parallel legacy section presentation field");
 
@@ -49,6 +50,7 @@ assert.deepEqual(
   ],
   "legacy presentation values become explicit executable components"
 );
+assert.equal(v5.stages.find((stage) => stage.id === "modules").groups[0].sections[0].behavior, "selection", "Modules keeps its primary inspect/selection section behavior");
 assert.equal(v5.stages.find((stage) => stage.id === "modules").groups[0].sections[0].component, "selection-list");
 assert.equal(v5.stages.find((stage) => stage.id === "summary").groups[0].sections[0].component, "action-list");
 
@@ -84,6 +86,22 @@ assert.equal(
 
 assert.equal(v5.materials.find((material) => material.id === "stone-existing").color, null, "v5 preserves explicit null authored stone color");
 assert.equal(v5.materials.find((material) => material.id === "stone-light-sink").color, null, "v5 preserves second null authored stone color");
+
+const missingBehavior = structuredClone(v5);
+delete missingBehavior.stages.find((stage) => stage.id === "finishes").groups[0].sections[0].behavior;
+assert.ok(
+  v5Core.validate(missingBehavior, configuration, catalog, priceBook, scene)
+    .some((error) => error.includes("invalid section behavior")),
+  "missing v5 behavior fails closed"
+);
+
+const invalidBehavior = structuredClone(v5);
+invalidBehavior.stages.find((stage) => stage.id === "finishes").groups[0].sections[0].behavior = "hover";
+assert.ok(
+  v5Core.validate(invalidBehavior, configuration, catalog, priceBook, scene)
+    .some((error) => error.includes("invalid section behavior")),
+  "unknown v5 behavior fails closed"
+);
 
 const invalidComponent = structuredClone(v5);
 invalidComponent.stages.find((stage) => stage.id === "finishes").groups[0].sections[0].component = "raw-css";
