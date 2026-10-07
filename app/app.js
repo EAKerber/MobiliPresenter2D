@@ -219,7 +219,16 @@
     const sectionSlots = [...grid.querySelectorAll("[data-flow-section-slot]")];
 
     allSectionElements.forEach((element) => {
-      element.hidden = !expectedSectionIds.has(element.dataset.keyboardSection);
+      const expected = expectedSectionIds.has(element.dataset.keyboardSection);
+      if (!expected && element.dataset.flowGeneratedSection === "true") {
+        [...element.querySelectorAll(":scope > [data-flow-section-slot]")].forEach((slot) => {
+          slot.hidden = true;
+          grid.append(slot);
+        });
+        element.remove();
+        return;
+      }
+      element.hidden = !expected;
     });
     sectionSlots.forEach((slot) => {
       const owner = slot.closest("[data-keyboard-section]");
@@ -308,6 +317,7 @@
       const ordered = [];
       group.sections.forEach((section) => {
         const candidateSections = allSectionElements.filter((element) => {
+          if (!grid.contains(element)) return false;
           const owner = element.closest("[data-flow-group-shell]");
           return owner === shell || owner == null;
         });
