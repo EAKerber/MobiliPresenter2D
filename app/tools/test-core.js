@@ -658,7 +658,23 @@ assert.equal(adminJs.includes('byId("passwordInput").value'), true, "login conti
 assert.equal(adminJs.includes('byId("newPasswordInput").value'), true, "password update continues reading the same new-password value");
 assert.equal(adminCss.includes(".password-field"), true, "admin reveal control has local field layout");
 assert.equal(adminHtml.includes("admin/admin.css?v=admin-affordance-v1"), true, "admin reveal CSS cache revision is explicit");
-assert.equal(adminHtml.includes("admin/admin.bundle.js?v=admin-affordance-v1"), true, "admin reveal bundle cache revision is explicit");
+assert.equal(adminHtml.includes("admin/admin.bundle.js?v=admin-pricing-v1"), true, "admin typed-pricing bundle cache revision is explicit");
+assert.equal(adminHtml.includes("core/pricing-contract.js?v=pricing-contract-v1"), true, "admin explicitly loads the typed pricing contract");
+assert.equal(adminHtml.includes("core/administration-v5.js?v=cp-sd-05a3a-v1"), true, "admin v5 cache revision declares typed pricing ownership");
+assert.equal(
+  adminHtml.indexOf("core/pricing-contract.js?v=pricing-contract-v1") < adminHtml.indexOf("core/administration-v5.js?v=cp-sd-05a3a-v1"),
+  true,
+  "typed pricing contract loads before administration v5"
+);
+assert.equal(adminJs.includes("const pricingRoles = ["), true, "admin pricing groups are keyed by typed roles");
+assert.equal(adminJs.includes("priceSections"), false, "admin no longer owns pricing type through legacy bucket sections");
+assert.equal(adminJs.includes("model.pricing.roles[role]"), true, "admin pricing renderer consumes typed role maps");
+assert.equal(adminJs.includes('rule.type === "percentage"'), true, "admin unit/value rendering comes from each typed rule");
+assert.equal(adminJs.includes("data-price-section"), false, "admin inputs no longer address legacy pricing buckets");
+assert.equal(adminJs.includes("model.pricing.frontFinishRatesBps"), false, "admin has no legacy finish bucket authority");
+assert.equal(adminJs.includes("model.pricing.handleEntries"), false, "admin has no legacy handle bucket authority");
+assert.equal(adminJs.includes("model.pricing.globalEntries"), false, "admin has no legacy global bucket authority");
+assert.equal(adminJs.includes("dataset.priceRuleType"), false, "A3a does not expose amount/percentage type switching yet");
 assert.equal(indexHtml.includes("Acabamentos por módulo"), false);
 assert.equal(indexHtml.includes("finishTargetSelect"), false);
 assert.equal(indexHtml.includes('data-compact-label="Acab."'), false, "stage compact labels are no longer pre-authored in static navigation");
