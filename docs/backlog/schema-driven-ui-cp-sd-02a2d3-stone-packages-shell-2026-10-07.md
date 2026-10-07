@@ -1,6 +1,6 @@
 # CP-SD-02A2d3 — Stone Packages section shell — 2026-10-07
 
-Status: **IN PROGRESS — A2d3.0 PASS WITH PREREQUISITE; A2d3.1 NEXT**.
+Status: **IN PROGRESS — A2d3.0 PASS; A2d3.1 CANDIDATE**.
 
 Parent:
 - CP-SD-02A2d0 Acabamentos family discovery;
@@ -76,3 +76,18 @@ Decision:
 - prove normalized flow, not `stone-all`, owns Stone-group existence.
 
 No change to `renderStonePackages()`, stone state, pricing, materials/masks, skirting compatibility repair or production configuration in A2d3.1.
+
+
+## A2d3.1 prerequisite candidate
+
+Only:
+- remove `data-configurable-item="stone-all"` from `#stonePanel`;
+- keep `data-flow-group-shell="stone"` unchanged;
+- do not change either Stone section shell.
+
+Proof:
+- with only `stone-all` omitted, normalized Stone group remains with `stone-skirting`, `#stonePanel` stays visible, Stone Packages is hidden and skirting remains visible;
+- with both Stone items omitted, normalized Stone group is absent and flow layout hides `#stonePanel`;
+- no renderer fallback/invariant/page error.
+
+No `renderStonePackages()`, state, pricing, material/mask, compatibility or production write changes.

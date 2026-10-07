@@ -513,7 +513,60 @@ const { chromium } = require("playwright");
   assert.deepEqual(handlesNegativeErrors, [], "Handles absence fixture has no console/page errors");
   await handlesNegativePage.close();
 
-  fs.writeFileSync(path.join(output, "result.json"), JSON.stringify({ targetUrl, uniqueness, errors, negativeErrors, lightingNegativeErrors, frontsNegativeErrors, handlesNegativeErrors }, null, 2));
+  const withoutStonePackages = structuredClone(sourceConfiguration);
+  const stoneStage = withoutStonePackages.stages.find((stage) => (stage.kind || stage.id) === "finishes");
+  assert.ok(stoneStage, "Stone prerequisite fixture has Acabamentos stage");
+  stoneStage.items = stoneStage.items.filter((id) => id !== "stone-all");
+
+  const stoneGroupErrors = [];
+  const stoneGroupPage = await browser.newPage({ viewport: { width: 1366, height: 900 } });
+  stoneGroupPage.on("pageerror", (error) => stoneGroupErrors.push(error.message));
+  stoneGroupPage.on("console", (message) => { if (message.type() === "error") stoneGroupErrors.push(message.text()); });
+  await stoneGroupPage.route("**/api/configuration", async (route) => {
+    if (route.request().method() !== "GET") return route.continue();
+    await route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify(withoutStonePackages) });
+  });
+  await stoneGroupPage.goto(targetUrl, { waitUntil: "domcontentloaded", timeout: 15000 });
+  await stoneGroupPage.waitForFunction(() => {
+    const finishes = window.CASA_NORMALIZED_FLOW?.stages?.find((stage) => stage.id === "finishes");
+    const stone = finishes?.groups?.find((group) => group.id === "stone");
+    const ids = stone?.sections?.map((section) => section.id) || [];
+    return stone && !ids.includes("stone-packages") && ids.includes("stone-skirting") && window.CASA_EM_MODULOS_DEBUG?.getFlowLayoutErrors;
+  }, null, { timeout: 10000 });
+  await stoneGroupPage.locator('.flow-nav [data-step="finishes"]').click();
+  await stoneGroupPage.waitForFunction(() => !document.getElementById("finishesStagePanel").hidden);
+  assert.equal(await stoneGroupPage.locator("#stonePanel").isVisible(), true, "Stone group remains visible when only stone-skirting is modeled");
+  assert.equal(await stoneGroupPage.locator('[data-keyboard-section="stone-packages"]').isHidden(), true, "Stone Packages is hidden when stone-all is absent");
+  assert.equal(await stoneGroupPage.locator('[data-keyboard-section="stone-skirting"]').isVisible(), true, "Stone skirting remains visible independently of stone-all");
+  assert.deepEqual(await stoneGroupPage.evaluate(() => window.CASA_EM_MODULOS_DEBUG.getFlowLayoutErrors()), [], "Stone group with only skirting satisfies flow layout invariants");
+  assert.deepEqual(stoneGroupErrors, [], "Stone prerequisite fixture has no console/page errors");
+  await stoneGroupPage.close();
+
+  const withoutStoneGroup = structuredClone(sourceConfiguration);
+  const emptyStoneStage = withoutStoneGroup.stages.find((stage) => (stage.kind || stage.id) === "finishes");
+  assert.ok(emptyStoneStage, "empty Stone fixture has Acabamentos stage");
+  emptyStoneStage.items = emptyStoneStage.items.filter((id) => id !== "stone-all" && id !== "stone-skirting");
+  const emptyStoneErrors = [];
+  const emptyStonePage = await browser.newPage({ viewport: { width: 1366, height: 900 } });
+  emptyStonePage.on("pageerror", (error) => emptyStoneErrors.push(error.message));
+  emptyStonePage.on("console", (message) => { if (message.type() === "error") emptyStoneErrors.push(message.text()); });
+  await emptyStonePage.route("**/api/configuration", async (route) => {
+    if (route.request().method() !== "GET") return route.continue();
+    await route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify(withoutStoneGroup) });
+  });
+  await emptyStonePage.goto(targetUrl, { waitUntil: "domcontentloaded", timeout: 15000 });
+  await emptyStonePage.waitForFunction(() => {
+    const finishes = window.CASA_NORMALIZED_FLOW?.stages?.find((stage) => stage.id === "finishes");
+    return finishes && finishes.groups.every((group) => group.id !== "stone") && window.CASA_EM_MODULOS_DEBUG?.getFlowLayoutErrors;
+  }, null, { timeout: 10000 });
+  await emptyStonePage.locator('.flow-nav [data-step="finishes"]').click();
+  await emptyStonePage.waitForFunction(() => !document.getElementById("finishesStagePanel").hidden);
+  assert.equal(await emptyStonePage.locator("#stonePanel").isHidden(), true, "flow layout hides Stone group when normalized Stone group is absent");
+  assert.deepEqual(await emptyStonePage.evaluate(() => window.CASA_EM_MODULOS_DEBUG.getFlowLayoutErrors()), [], "absent Stone group creates no renderer invariant fallback");
+  assert.deepEqual(emptyStoneErrors, [], "empty Stone fixture has no console/page errors");
+  await emptyStonePage.close();
+
+  fs.writeFileSync(path.join(output, "result.json"), JSON.stringify({ targetUrl, uniqueness, errors, negativeErrors, lightingNegativeErrors, frontsNegativeErrors, handlesNegativeErrors, stoneGroupErrors, emptyStoneErrors }, null, 2));
   await browser.close();
   console.log("flow layout browser: PASS");
 })().catch((error) => {
