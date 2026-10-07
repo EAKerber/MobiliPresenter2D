@@ -1,6 +1,6 @@
 # CP-SD-02A2d2 — generated Handles section shell — 2026-10-07
 
-Status: **IN PROGRESS — A2d2.1 PASS; A2d2.2 NEXT**.
+Status: **IN PROGRESS — A2d2.1 PASS; A2d2.2 CANDIDATE**.
 
 Parent:
 - `docs/architecture/schema-driven-ui-cp-sd-02a2d0-finishes-family-discovery-result-2026-10-07.md`;
@@ -98,3 +98,18 @@ Gate:
 - Netlify deploy preview #117 — PASS.
 
 A2d2.2 remains a separate test-only absence proof.
+
+
+## A2d2.2 absence-proof candidate
+
+Test-only fixture:
+- clone the live/default configuration fixture;
+- remove only `handles-all` from Acabamentos;
+- require normalized flow to keep `fronts`, `stone-packages` and `stone-skirting` while omitting `handles`;
+- require zero semantic Handles shells;
+- require the unclaimed Handles neutral slot to stay hidden;
+- require Fronts to remain visible;
+- require Stone sibling sections to remain materialized;
+- require zero renderer fallback/invariant/page errors.
+
+No production/runtime implementation change belongs to this checkpoint unless the proof exposes a directly related shell defect.

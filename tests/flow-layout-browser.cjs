@@ -443,7 +443,77 @@ const { chromium } = require("playwright");
   assert.deepEqual(frontsNegativeErrors, [], "Fronts absence fixture has no console/page errors");
   await frontsNegativePage.close();
 
-  fs.writeFileSync(path.join(output, "result.json"), JSON.stringify({ targetUrl, uniqueness, errors, negativeErrors, lightingNegativeErrors, frontsNegativeErrors }, null, 2));
+  const withoutHandles = structuredClone(sourceConfiguration);
+  const handlesFinishesStage = withoutHandles.stages.find((stage) => (stage.kind || stage.id) === "finishes");
+  assert.ok(handlesFinishesStage, "Handles negative fixture has Acabamentos stage");
+  handlesFinishesStage.items = handlesFinishesStage.items.filter((id) => id !== "handles-all");
+
+  const handlesNegativeErrors = [];
+  const handlesNegativePage = await browser.newPage({ viewport: { width: 1366, height: 900 } });
+  handlesNegativePage.on("pageerror", (error) => handlesNegativeErrors.push(error.message));
+  handlesNegativePage.on("console", (message) => { if (message.type() === "error") handlesNegativeErrors.push(message.text()); });
+  await handlesNegativePage.route("**/api/configuration", async (route) => {
+    if (route.request().method() !== "GET") return route.continue();
+    await route.fulfill({
+      status: 200,
+      contentType: "application/json",
+      body: JSON.stringify(withoutHandles)
+    });
+  });
+  await handlesNegativePage.goto(targetUrl, { waitUntil: "domcontentloaded", timeout: 15000 });
+  await handlesNegativePage.waitForFunction(() => {
+    const finishes = window.CASA_NORMALIZED_FLOW?.stages?.find((stage) => stage.id === "finishes");
+    const sectionIds = finishes?.groups?.flatMap((group) => group.sections.map((section) => section.id)) || [];
+    return finishes
+      && sectionIds.includes("fronts")
+      && !sectionIds.includes("handles")
+      && sectionIds.includes("stone-packages")
+      && sectionIds.includes("stone-skirting")
+      && window.CASA_EM_MODULOS_DEBUG?.getFlowLayoutErrors;
+  }, null, { timeout: 10000 });
+
+  await handlesNegativePage.locator('.flow-nav [data-step="finishes"]').click();
+  await handlesNegativePage.waitForFunction(() => !document.getElementById("finishesStagePanel").hidden);
+
+  assert.equal(
+    await handlesNegativePage.locator('[data-keyboard-section="handles"]').count(),
+    0,
+    "omitted Handles data creates no semantic Handles section shell"
+  );
+  assert.equal(
+    await handlesNegativePage.locator('[data-flow-section-slot][data-flow-slot-item="handles-all"]').isHidden(),
+    true,
+    "unclaimed Handles item-affinity slot stays hidden"
+  );
+  assert.equal(
+    await handlesNegativePage.locator('[data-keyboard-section="fronts"]').count(),
+    1,
+    "Fronts remains materialized when Handles is omitted"
+  );
+  assert.equal(
+    await handlesNegativePage.locator('[data-keyboard-section="fronts"]').isVisible(),
+    true,
+    "Fronts remains visible when Handles is omitted"
+  );
+  assert.equal(
+    await handlesNegativePage.locator('[data-keyboard-section="stone-packages"]').count(),
+    1,
+    "Stone packages remains materialized when Handles is omitted"
+  );
+  assert.equal(
+    await handlesNegativePage.locator('[data-keyboard-section="stone-skirting"]').count(),
+    1,
+    "Stone skirting remains materialized when Handles is omitted"
+  );
+  assert.deepEqual(
+    await handlesNegativePage.evaluate(() => window.CASA_EM_MODULOS_DEBUG.getFlowLayoutErrors()),
+    [],
+    "omitted Handles data does not trigger a fabricated renderer fallback"
+  );
+  assert.deepEqual(handlesNegativeErrors, [], "Handles absence fixture has no console/page errors");
+  await handlesNegativePage.close();
+
+  fs.writeFileSync(path.join(output, "result.json"), JSON.stringify({ targetUrl, uniqueness, errors, negativeErrors, lightingNegativeErrors, frontsNegativeErrors, handlesNegativeErrors }, null, 2));
   await browser.close();
   console.log("flow layout browser: PASS");
 })().catch((error) => {
