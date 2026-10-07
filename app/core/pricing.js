@@ -1,13 +1,32 @@
 (function registerPricingCore(global) {
   "use strict";
 
-  function safeEntry(entries, id) {
-    const value = entries?.[id];
-    return Number.isSafeInteger(value) ? value : 0;
+  function amountRule(rules, role, id) {
+    const rule = rules?.roles?.[role]?.[id];
+    return rule?.type === "amount" && Number.isSafeInteger(rule.cents) ? rule : null;
   }
 
-  function hasEntry(entries, id) {
-    return Boolean(entries && Object.prototype.hasOwnProperty.call(entries, id) && Number.isSafeInteger(entries[id]));
+  function amountCents(rules, role, id) {
+    return amountRule(rules, role, id)?.cents || 0;
+  }
+
+  function finishAdjustment(rule, baseCents) {
+    if (!rule) return Object.freeze({ type: null, cents: 0, bps: 0, basis: null, amountCents: 0 });
+    if (rule.type === "amount" && Number.isSafeInteger(rule.cents)) {
+      return Object.freeze({ type: "amount", cents: rule.cents, bps: 0, basis: null, amountCents: rule.cents });
+    }
+    if (rule.type === "percentage"
+      && rule.basis === "eligible-module-base"
+      && Number.isSafeInteger(rule.bps)) {
+      return Object.freeze({
+        type: "percentage",
+        cents: Math.round((baseCents * rule.bps) / 10000),
+        bps: rule.bps,
+        basis: rule.basis,
+        amountCents: 0
+      });
+    }
+    return Object.freeze({ type: null, cents: 0, bps: 0, basis: null, amountCents: 0 });
   }
 
   function distributeCents(totalCents, count) {
@@ -25,45 +44,68 @@
     return state.globalSelections?.handleId || "none";
   }
 
-  function itemEstimate(item, catalog, state, priceBook) {
-    const baseCents = safeEntry(priceBook?.entries, item.entityId);
-    if (!hasEntry(priceBook?.entries, item.entityId)) {
+  function itemEstimate(item, catalog, state, pricingRules) {
+    const baseRule = amountRule(pricingRules, "itemBase", item.entityId);
+    if (!baseRule) {
       return Object.freeze({ status: "unavailable", totalCents: null, baseCents: null, handleCents: 0, finishCents: 0, localCents: 0 });
     }
+
+    const baseCents = baseRule.cents;
     const finishId = state.localSelections?.finishByEntityId?.[item.entityId] || globalFinishId(state);
-    const finishRateBps = item.commercial?.finishEligible ? safeEntry(priceBook?.frontFinishRatesBps, finishId) : 0;
-    const finishCents = Math.round((baseCents * finishRateBps) / 10000);
+    const finishRule = item.commercial?.finishEligible
+      ? pricingRules?.roles?.frontFinishAdjustment?.[finishId]
+      : null;
+    const finish = finishAdjustment(finishRule, baseCents);
     const localIds = item.commercial?.mandatoryLocalChargeIds || [];
-    const localCents = localIds.reduce((total, id) => total + safeEntry(priceBook?.localEntries, item.entityId + ":" + id), 0);
+    const localCents = localIds.reduce(
+      (total, id) => total + amountCents(pricingRules, "localAdjustment", item.entityId + ":" + id),
+      0
+    );
+
     return Object.freeze({
       status: "ready",
       baseCents,
       finishId,
-      finishRateBps,
-      finishCents,
+      finishRuleType: finish.type,
+      finishRateBps: finish.bps,
+      finishBasis: finish.basis,
+      finishAmountCents: finish.amountCents,
+      finishCents: finish.cents,
       handleId: globalHandleId(state),
       handleCents: 0,
       handleFrontCount: Number.isInteger(item.commercial?.handleFrontCount) ? item.commercial.handleFrontCount : 0,
       localCents,
       localChargeIds: Object.freeze([...localIds]),
-      totalCents: baseCents + finishCents + localCents
+      totalCents: baseCents + finish.cents + localCents
     });
   }
 
-  function globalAdjustments(state, priceBook, lightingEnabled) {
+  function globalAdjustments(state, pricingRules, lightingEnabled) {
     const selected = state.globalSelections || {};
     const items = [];
     const stoneId = selected.stonePackageId || "stone-existing";
-    items.push({ id: stoneId, scope: "stone", cents: safeEntry(priceBook?.globalEntries, stoneId) });
-    (selected.serviceIds || []).forEach((id) => items.push({ id, scope: id === "stone-skirting" ? "stone" : "service", cents: safeEntry(priceBook?.globalEntries, id) }));
-    if (lightingEnabled) items.push({ id: "lighting-08", scope: "service", cents: safeEntry(priceBook?.entries, "lighting-08") });
+    items.push({ id: stoneId, scope: "stone", cents: amountCents(pricingRules, "globalAdjustment", stoneId) });
+    (selected.serviceIds || []).forEach((id) => items.push({
+      id,
+      scope: id === "stone-skirting" ? "stone" : "service",
+      cents: amountCents(pricingRules, "globalAdjustment", id)
+    }));
+    if (lightingEnabled) {
+      items.push({
+        id: "lighting-08",
+        scope: "service",
+        cents: amountCents(pricingRules, "itemBase", "lighting-08")
+      });
+    }
     return Object.freeze({ items: Object.freeze(items), totalCents: items.reduce((total, item) => total + item.cents, 0) });
   }
 
-  function handleAllocations(catalog, state, priceBook) {
+  function handleAllocations(catalog, state, pricingRules) {
     const id = globalHandleId(state);
-    const totalCents = safeEntry(priceBook?.handleEntries, id);
-    const frontTotal = safeEntry(priceBook, "handleFrontTotal") || 14;
+    const totalCents = amountCents(pricingRules, "handleChoiceTotal", id);
+    const frontTotal = Number.isSafeInteger(pricingRules?.allocation?.handleFrontTotal)
+      ? pricingRules.allocation.handleFrontTotal
+      : 0;
     const perFront = distributeCents(totalCents, frontTotal);
     let cursor = 0;
     const result = new Map();
@@ -75,15 +117,26 @@
     return result;
   }
 
-  function calculatePublicEstimate(scene, state, catalog, resolvedVisibility, priceBook) {
-    const visibleIds = new Set(scene.entities.filter((entity) => resolvedVisibility?.[entity.id]?.visible).map((entity) => entity.id));
-    const moduleEntries = catalog.modules.filter((item) => visibleIds.has(item.entityId))
-      .map((item) => ({ item, estimate: itemEstimate(item, catalog, state, priceBook) }));
-    const missingPriceIds = moduleEntries.filter(({ estimate }) => estimate.status === "unavailable").map(({ item }) => item.entityId);
+  function calculatePublicEstimate(scene, state, catalog, resolvedVisibility, pricingRules, metadata = {}) {
+    const visibleIds = new Set(
+      scene.entities
+        .filter((entity) => resolvedVisibility?.[entity.id]?.visible)
+        .map((entity) => entity.id)
+    );
+    const moduleEntries = catalog.modules
+      .filter((item) => visibleIds.has(item.entityId))
+      .map((item) => ({ item, estimate: itemEstimate(item, catalog, state, pricingRules) }));
+    const missingPriceIds = moduleEntries
+      .filter(({ estimate }) => estimate.status === "unavailable")
+      .map(({ item }) => item.entityId);
     if (missingPriceIds.length) return Object.freeze({ status: "unavailable", totalCents: null, missingPriceIds });
 
-    const global = globalAdjustments(state, priceBook, Boolean(resolvedVisibility?.["lighting-08"]?.visible));
-    const handlesByItem = handleAllocations(catalog, state, priceBook);
+    const global = globalAdjustments(
+      state,
+      pricingRules,
+      Boolean(resolvedVisibility?.["lighting-08"]?.visible)
+    );
+    const handlesByItem = handleAllocations(catalog, state, pricingRules);
     const moduleEstimates = moduleEntries.map(({ item, estimate }) => {
       const handleCents = handlesByItem.get(item.entityId) || 0;
       return Object.freeze({
@@ -105,8 +158,8 @@
     return Object.freeze({
       status: "estimate",
       totalCents,
-      label: priceBook?.label || "Estimativa da composição",
-      disclaimer: priceBook?.disclaimer || "",
+      label: metadata.label || "Estimativa da composição",
+      disclaimer: metadata.disclaimer || "",
       missingPriceIds: [],
       moduleEstimates: Object.freeze(moduleEstimates),
       global,
@@ -120,5 +173,10 @@
     });
   }
 
-  global.CasaModulesPricing = Object.freeze({ calculatePublicEstimate, distributeCents, globalAdjustments, itemEstimate });
+  global.CasaModulesPricing = Object.freeze({
+    calculatePublicEstimate,
+    distributeCents,
+    globalAdjustments,
+    itemEstimate
+  });
 })(window);
