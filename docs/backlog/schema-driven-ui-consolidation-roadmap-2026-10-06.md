@@ -132,7 +132,8 @@ Current CP-SD-02 progress:
 - CP-SD-02A2d4: Stone Skirting discovery + generated shell + intentional absence proof — complete;
 - CP-SD-02A2e0: Summary stage/single-section boundary discovery — complete;
 - CP-SD-02A2e1: generated Summary semantic shell + binding fail-closed proof — complete;
-- CP-SD-02A2f0: Acabamentos group-shell boundary discovery — next.
+- CP-SD-02A2f0: Acabamentos group-shell boundary discovery — complete;
+- CP-SD-02A2f1: generated `cabinet-finishes` group shell + valid absence proof — next.
 
 ### CP-SD-03 — responsive presentation primitives
 
