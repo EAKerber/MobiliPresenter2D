@@ -173,7 +173,7 @@ Gate:
 
 ### CP-SD-04 — interaction affordance cleanup
 
-Status: **IN PROGRESS**. Immediate checkpoint: `docs/backlog/schema-driven-ui-cp-sd-04a0-interaction-affordance-discovery-2026-10-07.md`.
+Status: **IN PROGRESS**. CP-SD-04A0 interaction-affordance discovery is complete. Immediate checkpoint: `docs/backlog/schema-driven-ui-cp-sd-04a1-module-card-affordance-execution-2026-10-07.md`; CP-SD-04A2 admin password reveal is queued after A1.
 
 Goal: polish generic interactions without inflating the domain schema.
 

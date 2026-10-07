@@ -48,7 +48,7 @@ Canonical plan:
 - completed audit: `docs/architecture/schema-ui-authority-audit-2026-10-06.md`
 - completed contract checkpoint: `docs/backlog/schema-driven-ui-cp-sd-01-contract-plan-2026-10-06.md`
 - next track: CP-SD-03, executed as small self-contained responsive-presentation slices
-- next checkpoint: `docs/backlog/schema-driven-ui-cp-sd-04a0-interaction-affordance-discovery-2026-10-07.md`
+- next checkpoint: `docs/backlog/schema-driven-ui-cp-sd-04a1-module-card-affordance-execution-2026-10-07.md`
 
 **CP-SD-00 — COMPLETE / PASS.** The audit found no critical unknowns. The main publication blocker is now explicit: v4 persists section presentation metadata, but that metadata is not yet the executable buyer-renderer authority.
 
@@ -217,4 +217,4 @@ A4 gate correction: the first Flow run falsified the assumption that stable pane
 **CP-SD-03A7 — COMPLETE / PASS.** Discovery found the existing `.flow-actions` footer already contains the exact frozen `estimate` + `primary-action` adapters in policy order. Result: `docs/architecture/schema-driven-ui-cp-sd-03a7-bottom-dock-discovery-result-2026-10-07.md`. **CP-SD-03A8 — COMPLETE / PASS.** The same footer now executes the policy: sticky inside the side-rail controls scroller, fixed in stacked/compact document-scroll profiles, with live measured clearance consumed by keyboard navigation and PiP clamping. Functional head `7cc304b65b89a36197358a61c5fea3e8b926c87f` passed all eight workflows plus Netlify preview #141. Runtime cache advances v34 -> v35. **CP-SD-03 — COMPLETE / PASS. CP-SD-04A0 is NEXT**: discovery-only generic interaction affordance cleanup.
 
 
-**CP-SD-04A0 is NEXT.** Discovery-only interaction affordance checkpoint: separate module inspection from inclusion more cleanly (card body vs checkbox, without nested interactive semantics), inventory real password inputs before adding any reveal control, and freeze pointer/keyboard/focus/accessibility gates before implementation. Plan: `docs/backlog/schema-driven-ui-cp-sd-04a0-interaction-affordance-discovery-2026-10-07.md`.
+**CP-SD-04A0 — COMPLETE / PASS.** Discovery freezes a non-nested module-card pattern: checkbox-only inclusion hit area plus sibling inspection button spanning number/title/dimensions, reusing the current `data-select-entity` and detail-origin paths. It also inventories two live admin password fields (`#passwordInput`, `#newPasswordInput`) with no reveal control; password reveal is a separate admin-local slice. Result: `docs/architecture/schema-driven-ui-cp-sd-04a0-interaction-affordance-discovery-result-2026-10-07.md`. **CP-SD-04A1 is NEXT**; CP-SD-04A2 is queued after it.
