@@ -190,7 +190,7 @@ Gate:
 
 ### CP-SD-05 — typed pricing authoring
 
-Status: **IN PROGRESS**. CP-SD-05A0 typed pricing discovery is COMPLETE / PASS. Immediate checkpoint: `docs/backlog/schema-driven-ui-cp-sd-05a1-typed-pricing-contract-execution-2026-10-07.md`.
+Status: **IN PROGRESS**. CP-SD-05A0 discovery and CP-SD-05A1 typed contract/migration are COMPLETE / PASS. Immediate checkpoint: `docs/backlog/schema-driven-ui-cp-sd-05a2-typed-pricing-runtime-execution-2026-10-07.md`.
 
 Goal: let admin price adjustments choose absolute amount or percentage without ambiguous numeric meaning.
 
