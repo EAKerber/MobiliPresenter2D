@@ -1,6 +1,6 @@
 # CP-SD-02A2d1 — generated Fronts section shell — 2026-10-07
 
-Status: **IN PROGRESS — A2d1.1 PASS; A2d1.2 NEXT**.
+Status: **COMPLETE / PASS**.
 
 Parent discovery:
 - `docs/architecture/schema-driven-ui-cp-sd-02a2d0-finishes-family-discovery-result-2026-10-07.md`.
@@ -72,7 +72,7 @@ Gate:
 
 A2d1.2 remains a separate negative-fixture commit.
 
-### A2d1.2 — negative Fronts absence proof — CANDIDATE
+### A2d1.2 — negative Fronts absence proof — PASS
 
 Fixture keeps Acabamentos but omits `fronts-all`.
 
@@ -87,7 +87,20 @@ Prove:
 
 No new functionality beyond a correction directly exposed by this proof.
 
-### A2d1.3 — regression only
+#### A2d1.2 result
+
+PASS on PR #116 head `73494b9eb5fb58cd33f3c934c1ecec8f13ba499c`.
+
+Proven:
+- normalized Acabamentos contains no `fronts` section when only `fronts-all` is omitted;
+- zero semantic Fronts shells exist;
+- the unclaimed Fronts neutral slot remains hidden;
+- Handles, stone packages and stone skirting remain materialized;
+- no renderer fallback/invariant/page error occurs.
+
+The first fixture run exposed one directly related shell bug: `display:grid` on the neutral slot defeated `hidden`. The fix moved layout and item ownership to an inner adapter while leaving the outer slot presentation-free.
+
+### A2d1.3 — regression only — PASS
 
 Run current repository gates. No new functionality.
 
@@ -102,9 +115,32 @@ Expected gates:
 - Summary/Pricing browser;
 - deploy preview.
 
-### A2d1.4 — closure only
+#### A2d1.3 result
+
+PASS on the same final A2d1.2 head `73494b9eb5fb58cd33f3c934c1ecec8f13ba499c`; that head ran the complete repository gate set:
+- App build purity — PASS;
+- Current variant fidelity — PASS;
+- Current asset gates — PASS;
+- Flow layout browser — PASS;
+- Keyboard browser — PASS;
+- Mobile browser — PASS;
+- Stone browser — PASS;
+- Summary/Pricing browser — PASS;
+- Netlify deploy preview #116 — PASS.
+
+No separate no-tree-change rerun is required because the final absence-proof head already exercised the full regression set.
+
+### A2d1.4 — closure only — PASS
 
 Docs + merge. No new functionality.
+
+Final result:
+- normalized flow is the sole semantic owner of Fronts section id/label/behavior/component;
+- static HTML retains only a neutral item-affinity slot and bounded `fronts-all` adapter;
+- missing Fronts data produces no semantic Fronts UI;
+- sibling Acabamentos sections remain independent;
+- no material/state/pricing/mask/scene semantics changed;
+- no production configuration write.
 
 ## Invariants
 
