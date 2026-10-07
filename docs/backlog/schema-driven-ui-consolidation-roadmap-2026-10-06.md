@@ -127,7 +127,8 @@ Current CP-SD-02 progress:
 - CP-SD-02A2c0/A2c1: Lighting boundary discovery + generated Lighting shell — complete;
 - CP-SD-02A2d0: Acabamentos family discovery — complete;
 - CP-SD-02A2d1: generated Fronts section shell + absence proof — complete;
-- CP-SD-02A2d2: generated Handles section shell — next.
+- CP-SD-02A2d2: generated Handles section shell + absence proof — complete;
+- CP-SD-02A2d3: Stone Packages boundary discovery + generated shell — next.
 
 ### CP-SD-03 — responsive presentation primitives
 

@@ -1,6 +1,6 @@
 # CP-SD-02A2d2 — generated Handles section shell — 2026-10-07
 
-Status: **IN PROGRESS — A2d2.1 PASS; A2d2.2 CANDIDATE**.
+Status: **COMPLETE / PASS**.
 
 Parent:
 - `docs/architecture/schema-driven-ui-cp-sd-02a2d0-finishes-family-discovery-result-2026-10-07.md`;
@@ -113,3 +113,48 @@ Test-only fixture:
 - require zero renderer fallback/invariant/page errors.
 
 No production/runtime implementation change belongs to this checkpoint unless the proof exposes a directly related shell defect.
+
+
+## A2d2.2 result — PASS
+
+PASS on PR #117 functional head `43a9c9fd7393d35866df2384d22a79caedd74601`.
+
+Proven with Acabamentos enabled but `handles-all` omitted:
+- normalized flow contains no `handles` section;
+- zero semantic Handles shells exist;
+- the unclaimed Handles item-affinity slot remains hidden;
+- Fronts remains generated and visible;
+- stone packages and stone skirting remain materialized;
+- renderer invariant errors remain empty;
+- no page/console errors occur.
+
+No production/runtime implementation change was required by the absence proof.
+
+## A2d2.3 regression — PASS
+
+The same functional head ran the complete repository gate set:
+- App build purity — PASS;
+- Current variant fidelity — PASS;
+- Current asset gates — PASS;
+- Flow layout browser — PASS;
+- Keyboard browser — PASS;
+- Mobile browser — PASS;
+- Stone browser — PASS;
+- Summary/Pricing browser — PASS;
+- Netlify deploy preview #117 — PASS.
+
+A separate no-tree-change regression commit would add no evidence.
+
+## A2d2.4 closure — PASS
+
+Closure only. No new functionality.
+
+Final result:
+- normalized flow is the sole semantic owner of Handles section id/label/behavior/component;
+- static HTML retains only a neutral `choice-grid` affinity slot and bounded `handles-all` adapter;
+- missing Handles data creates no semantic Handles UI;
+- Fronts and Stone remain independent;
+- handle catalog/state/pricing/scene semantics remain unchanged;
+- no production configuration write.
+
+Merge PR #117 only if this closure head remains green/mergeable.
