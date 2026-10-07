@@ -147,6 +147,27 @@ const { chromium } = require("playwright");
     "Services group shell is created at runtime from normalized flow"
   );
   assert.deepEqual(await renderedSectionOrder("services"), await modelSectionOrder("services", "services"), "Services section order follows normalized flow");
+  const generatedAdditionalServices = page.locator('[data-keyboard-section="additional-services"]');
+  assert.equal(
+    await generatedAdditionalServices.getAttribute("data-flow-generated-section"),
+    "true",
+    "additional-services section shell is created from normalized flow"
+  );
+  assert.equal(
+    await generatedAdditionalServices.getAttribute("data-keyboard-behavior"),
+    "toggle",
+    "generated section behavior comes from normalized flow"
+  );
+  assert.equal(
+    await generatedAdditionalServices.getAttribute("data-render-component"),
+    "toggle-list",
+    "generated section component comes from normalized flow"
+  );
+  assert.equal(
+    await generatedAdditionalServices.locator("h3").textContent(),
+    "Serviços adicionais",
+    "generated section heading comes from normalized flow label"
+  );
   const lighting = await rect('[data-keyboard-section="lighting"]');
   const additional = await rect('[data-keyboard-section="additional-services"]');
   assert.ok(additional.top >= lighting.bottom - 2, "while controls are beside the scene, Services uses one internal column");
