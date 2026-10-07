@@ -2239,6 +2239,7 @@
     flowActions.hidden = !policy.enabled;
     flowActions.dataset.bottomDockEnabled = String(Boolean(policy.enabled));
     flowActions.dataset.bottomDockSlots = slots.join(" ");
+    document.body.classList.toggle("has-bottom-dock", Boolean(policy.enabled));
     syncBottomDockClearance();
   }
 
