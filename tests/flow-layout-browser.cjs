@@ -135,6 +135,60 @@ const { chromium } = require("playwright");
     { listHidden: false, detailHidden: false },
     "side-rail keeps both stable Modules panes visible with no detail open"
   );
+
+  const firstModuleCard = page.locator("#moduleList .module-card").first();
+  const moduleAffordanceShape = await firstModuleCard.evaluate((card) => {
+    const toggle = card.querySelector("[data-module-toggle]");
+    const inspect = card.querySelector("[data-select-entity]");
+    return {
+      interactiveCount: card.querySelectorAll("input,button").length,
+      toggleTag: toggle?.tagName || null,
+      inspectTag: inspect?.tagName || null,
+      nestedInteractive: Boolean(card.querySelector("button input, button button, label button, label [role='button']")),
+      labelContainsCopy: Boolean(card.querySelector(".module-card__toggle .module-card__copy")),
+      inspectContainsCopy: Boolean(card.querySelector(".module-card__inspect .module-card__copy")),
+      visibleVerButton: [...card.querySelectorAll("button")].some((button) => button.textContent.trim() === "Ver")
+    };
+  });
+  assert.deepEqual(moduleAffordanceShape, {
+    interactiveCount: 2,
+    toggleTag: "INPUT",
+    inspectTag: "BUTTON",
+    nestedInteractive: false,
+    labelContainsCopy: false,
+    inspectContainsCopy: true,
+    visibleVerButton: false
+  }, "module card exposes exactly one inclusion control plus one non-nested inspection body");
+
+  const firstInspect = firstModuleCard.locator("[data-select-entity]");
+  const firstToggle = firstModuleCard.locator("[data-module-toggle]");
+  const firstEntityId = await firstInspect.getAttribute("data-select-entity");
+  const checkedBeforeInspect = await firstToggle.isChecked();
+  await firstModuleCard.locator(".module-card__copy").click();
+  await page.waitForFunction((entityId) => window.CASA_EM_MODULOS_DEBUG.getState().selectedEntityId === entityId, firstEntityId);
+  assert.equal(await firstToggle.isChecked(), checkedBeforeInspect, "clicking module body opens detail without changing inclusion");
+  await page.keyboard.press("Escape");
+  await page.waitForFunction(() => window.CASA_EM_MODULOS_DEBUG.getState().selectedEntityId === null);
+
+  await firstModuleCard.locator(".module-card__toggle").click();
+  await page.waitForFunction(({ entityId, checked }) => {
+    const toggle = document.querySelector(`[data-module-toggle="${entityId}"]`);
+    return toggle && toggle.checked !== checked;
+  }, { entityId: firstEntityId, checked: checkedBeforeInspect });
+  assert.equal(await page.evaluate(() => window.CASA_EM_MODULOS_DEBUG.getState().selectedEntityId), null,
+    "checkbox hit area changes inclusion without opening detail");
+  await firstModuleCard.locator(".module-card__toggle").click();
+  await page.waitForFunction(({ entityId, checked }) => {
+    const toggle = document.querySelector(`[data-module-toggle="${entityId}"]`);
+    return toggle && toggle.checked === checked;
+  }, { entityId: firstEntityId, checked: checkedBeforeInspect });
+
+  await firstToggle.evaluate((input) => { input.disabled = true; });
+  assert.equal(await firstToggle.isDisabled(), true, "blocked-inclusion fixture disables the checkbox before inspection");
+  assert.equal(await firstInspect.isEnabled(), true, "inspection remains independently enabled beside a disabled inclusion checkbox");
+  await firstInspect.click();
+  await page.waitForFunction((entityId) => window.CASA_EM_MODULOS_DEBUG.getState().selectedEntityId === entityId, firstEntityId);
+  await page.keyboard.press("Escape");
   assert.deepEqual(await renderedComponents(), {
     detail: "detail-panel",
     list: "selection-list",
@@ -347,7 +401,7 @@ const { chromium } = require("playwright");
     detail.scrollTop = Math.min(72, Math.max(0, detail.scrollHeight - detail.clientHeight));
     return { list: list.scrollTop, detail: detail.scrollTop };
   });
-  await page.locator('#moduleList .module-card.is-selected [data-select-entity]').focus();
+  await page.locator('#moduleList .module-card.is-selected [data-select-entity]').evaluate((element) => element.focus({ preventScroll: true }));
   assert.equal((await modulePaneState()).activeView, "modules-list", "stacked focus hazard fixture starts inside the primary list pane");
   await page.setViewportSize({ width: 390, height: 844 });
   await page.waitForFunction(() =>

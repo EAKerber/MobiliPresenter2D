@@ -114,6 +114,19 @@ const {chromium} = require('playwright');
   await page.waitForFunction(() => !document.body.classList.contains('has-module-detail'));
   assert.equal(await selectedNumber(), null, 'Escape closes module details');
 
+  const firstModuleToggle = page.locator('#moduleList .module-card').first().locator('[data-module-toggle]');
+  const firstModuleInspect = page.locator('#moduleList .module-card').first().locator('[data-select-entity]');
+  await firstModuleToggle.focus();
+  await page.keyboard.press('Tab');
+  assert.equal(await firstModuleInspect.evaluate((element) => element === document.activeElement), true,
+    'Tab moves from inclusion checkbox to the sibling module inspection body');
+  await page.keyboard.press('Enter');
+  await page.waitForFunction(() => document.body.classList.contains('has-module-detail'));
+  await page.keyboard.press('Escape');
+  await page.waitForFunction(() => !document.body.classList.contains('has-module-detail'));
+  assert.equal(await firstModuleInspect.evaluate((element) => element === document.activeElement), true,
+    'closing detail restores focus to the module inspection body that opened it');
+
   await page.keyboard.press('3');
   assert.equal(await selectedNumber(), 3, 'single digit belongs to the Modules stage');
 
