@@ -264,5 +264,5 @@ const { chromium } = require("playwright");
   console.log("flow layout browser: PASS");
 })().catch((error) => {
   console.error(error);
-  process.exitCode = 1;
+  process.exit(1);
 });
