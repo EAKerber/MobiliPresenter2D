@@ -32,6 +32,15 @@
     action: "action-list"
   });
 
+  const BEHAVIOR_BY_COMPONENT = Object.freeze({
+    "choice-swatches": "selection",
+    "choice-grid": "selection",
+    "choice-cards": "selection",
+    "selection-list": "selection",
+    "toggle-list": "toggle",
+    "action-list": "action"
+  });
+
   function assertComponent(component) {
     if (!COMPONENT_SET.has(component)) {
       throw new TypeError(`unsupported presentation component: ${component || "(empty)"}`);
