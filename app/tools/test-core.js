@@ -112,6 +112,7 @@ const legacyPricingFixture = JSON.parse(JSON.stringify({
   handleFrontTotal: priceBook.handleFrontTotal
 }));
 const typedPricingFixture = pricingContract.upgradeLegacy(legacyPricingFixture);
+const pricingMetadata = { label: priceBook.label, disclaimer: priceBook.disclaimer };
 assert.equal(typedPricingFixture.schemaVersion, "CommercialPricingRules 1.0");
 assert.deepEqual(pricingContract.validate(typedPricingFixture), []);
 assert.deepEqual(
@@ -437,7 +438,7 @@ assert.equal(module04Entity.markerPlacement?.side, "right", "M04 has a semantic 
 assert.equal(module04Entity.finishMaskVariants[0].requiresVisibleIds, undefined, "M04/M06 is not a configuration dependency");
 assert.deepEqual(Array.from(module04Entity.finishMaskVariants[0].visibleWithIds), ["module-06"], "M04 mask changes only at the visual overlap");
 const initialFingerprint = fingerprints.computeFingerprint(scene, defaultState);
-let estimate = pricing.calculatePublicEstimate(scene, defaultState, catalog, resolved(defaultState), priceBook);
+let estimate = pricing.calculatePublicEstimate(scene, defaultState, catalog, resolved(defaultState), typedPricingFixture, pricingMetadata);
 assert.equal(estimate.status, "estimate");
 assert.equal(estimate.totalCents, 874000);
 assert.deepEqual(
@@ -461,42 +462,55 @@ assert.equal(
 const state = core.createInitialState(scene);
 core.setGlobalSelection(state, { serviceIds: [] });
 core.setEntityVisibility(state, "lighting-08", false);
-estimate = pricing.calculatePublicEstimate(scene, state, catalog, resolved(state), priceBook);
+estimate = pricing.calculatePublicEstimate(scene, state, catalog, resolved(state), typedPricingFixture, pricingMetadata);
 assert.equal(estimate.totalCents, 716600);
 
 core.setGlobalSelection(state, { finishId: "cocoa" });
-estimate = pricing.calculatePublicEstimate(scene, state, catalog, resolved(state), priceBook);
+estimate = pricing.calculatePublicEstimate(scene, state, catalog, resolved(state), typedPricingFixture, pricingMetadata);
 assert.equal(estimate.breakdown.finishesCents, 99000);
 assert.equal(estimate.totalCents, 815600);
 const localFinishState = structuredClone(state);
 core.setLocalFinish(localFinishState, "module-05", "fiber");
-const localFinishEstimate = pricing.calculatePublicEstimate(scene, localFinishState, catalog, resolved(localFinishState), priceBook);
+const localFinishEstimate = pricing.calculatePublicEstimate(scene, localFinishState, catalog, resolved(localFinishState), typedPricingFixture, pricingMetadata);
 assert.equal(localFinishEstimate.moduleEstimates.find((entry) => entry.item.entityId === "module-05").estimate.finishId, "fiber");
 assert.equal(localFinishEstimate.moduleEstimates.find((entry) => entry.item.entityId === "module-05").estimate.finishCents, 20000);
 assert.equal(localFinishEstimate.moduleEstimates.find((entry) => entry.item.entityId === "module-03").estimate.finishId, "cocoa", "global finish remains active on modules without a local override");
 
 core.setGlobalSelection(state, { handleId: "tango-chrome" });
-estimate = pricing.calculatePublicEstimate(scene, state, catalog, resolved(state), priceBook);
+estimate = pricing.calculatePublicEstimate(scene, state, catalog, resolved(state), typedPricingFixture, pricingMetadata);
 assert.equal(estimate.breakdown.handlesCents, 17985);
 assert.equal(estimate.moduleEstimates.reduce((sum, entry) => sum + entry.estimate.handleCents, 0), 17985);
 assert.equal(estimate.moduleEstimates.find((entry) => entry.item.entityId === "module-02").estimate.handleCents, 0);
 assert.equal(estimate.totalCents, 833585);
+assert.deepEqual(
+  Object.fromEntries(estimate.moduleEstimates.map(({ item, estimate: itemEstimate }) => [item.entityId, itemEstimate.handleCents])),
+  {
+    "module-01": 2570,
+    "module-02": 0,
+    "module-03": 7710,
+    "module-04": 0,
+    "module-05": 2569,
+    "module-06": 2568,
+    "module-07": 2568
+  },
+  "typed runtime preserves exact handle remainder allocation"
+);
 
 core.setEntityVisibility(state, "module-01", false);
-estimate = pricing.calculatePublicEstimate(scene, state, catalog, resolved(state), priceBook);
+estimate = pricing.calculatePublicEstimate(scene, state, catalog, resolved(state), typedPricingFixture, pricingMetadata);
 assert.equal(estimate.breakdown.handlesCents, 15415);
 assert.equal(estimate.totalCents, 727515);
 
 const withoutModule03 = core.createInitialState(scene);
 core.setGlobalSelection(withoutModule03, { handleId: "tango-chrome" });
 core.setEntityVisibility(withoutModule03, "module-03", false);
-estimate = pricing.calculatePublicEstimate(scene, withoutModule03, catalog, resolved(withoutModule03), priceBook);
+estimate = pricing.calculatePublicEstimate(scene, withoutModule03, catalog, resolved(withoutModule03), typedPricingFixture, pricingMetadata);
 assert.equal(estimate.breakdown.handlesCents, 10275);
 
 const withoutModule06 = core.createInitialState(scene);
 core.setGlobalSelection(withoutModule06, { handleId: "tango-chrome" });
 core.setEntityVisibility(withoutModule06, "module-06", false);
-estimate = pricing.calculatePublicEstimate(scene, withoutModule06, catalog, resolved(withoutModule06), priceBook);
+estimate = pricing.calculatePublicEstimate(scene, withoutModule06, catalog, resolved(withoutModule06), typedPricingFixture, pricingMetadata);
 assert.equal(estimate.breakdown.handlesCents, 15417);
 
 core.setEntityVisibility(state, "module-01", true);
@@ -505,13 +519,13 @@ core.setGlobalService(state, "stone-skirting", true);
 core.setGlobalService(state, "move-stone", true);
 core.setGlobalService(state, "tempered-glass", true);
 core.setEntityVisibility(state, "lighting-08", true);
-estimate = pricing.calculatePublicEstimate(scene, state, catalog, resolved(state), priceBook);
+estimate = pricing.calculatePublicEstimate(scene, state, catalog, resolved(state), typedPricingFixture, pricingMetadata);
 assert.equal(estimate.breakdown.finishesCents, 165000);
 assert.equal(estimate.global.totalCents, 327300);
 assert.equal(estimate.totalCents, 1208900);
 
 core.setEntityVisibility(state, "module-02", false);
-estimate = pricing.calculatePublicEstimate(scene, state, catalog, resolved(state), priceBook);
+estimate = pricing.calculatePublicEstimate(scene, state, catalog, resolved(state), typedPricingFixture, pricingMetadata);
 assert.equal(estimate.breakdown.localCents, 0);
 assert.equal(estimate.breakdown.modulesCents, 550000);
 assert.equal(estimate.totalCents, 1014800);
@@ -534,7 +548,7 @@ const zeroModuleState = core.createInitialState(scene);
 core.setGlobalSelection(zeroModuleState, { stonePackageId: "stone-light-sink", serviceIds: [] });
 core.setGlobalService(zeroModuleState, "move-stone", true);
 core.setAllControllableVisibility(scene, zeroModuleState, false);
-estimate = pricing.calculatePublicEstimate(scene, zeroModuleState, catalog, resolved(zeroModuleState), priceBook);
+estimate = pricing.calculatePublicEstimate(scene, zeroModuleState, catalog, resolved(zeroModuleState), typedPricingFixture, pricingMetadata);
 assert.equal(estimate.breakdown.globalCents, 209800);
 assert.equal(estimate.totalCents, 209800);
 
@@ -543,8 +557,66 @@ core.setGlobalSelection(oneModuleState, { stonePackageId: "stone-light-sink", se
 core.setGlobalService(oneModuleState, "move-stone", true);
 core.setAllControllableVisibility(scene, oneModuleState, false);
 core.setEntityVisibility(oneModuleState, "module-03", true);
-estimate = pricing.calculatePublicEstimate(scene, oneModuleState, catalog, resolved(oneModuleState), priceBook);
+estimate = pricing.calculatePublicEstimate(scene, oneModuleState, catalog, resolved(oneModuleState), typedPricingFixture, pricingMetadata);
 assert.equal(estimate.totalCents, 359800);
+
+const syntheticScene = {
+  entities: [
+    { id: "synthetic-a", kind: "module" },
+    { id: "synthetic-b", kind: "module" }
+  ]
+};
+const syntheticCatalog = {
+  modules: [
+    { entityId: "synthetic-a", commercial: { finishEligible: true, handleEligible: false, handleFrontCount: 0, mandatoryLocalChargeIds: [] } },
+    { entityId: "synthetic-b", commercial: { finishEligible: true, handleEligible: false, handleFrontCount: 0, mandatoryLocalChargeIds: [] } }
+  ]
+};
+const syntheticState = {
+  localSelections: { finishByEntityId: {} },
+  globalSelections: { finishId: "cocoa", handleId: "none", stonePackageId: "stone-existing", serviceIds: [] }
+};
+const syntheticVisibility = {
+  "synthetic-a": { visible: true },
+  "synthetic-b": { visible: true }
+};
+const syntheticPercentageRules = {
+  schemaVersion: pricingContract.SCHEMA,
+  roles: {
+    itemBase: {
+      "synthetic-a": { type: "amount", cents: 10 },
+      "synthetic-b": { type: "amount", cents: 10 }
+    },
+    handleChoiceTotal: { none: { type: "amount", cents: 0 } },
+    frontFinishAdjustment: { cocoa: { type: "percentage", bps: 1500, basis: "eligible-module-base" } },
+    localAdjustment: {},
+    globalAdjustment: { "stone-existing": { type: "amount", cents: 0 } }
+  },
+  allocation: { handleFrontTotal: 1 }
+};
+assert.deepEqual(pricingContract.validate(syntheticPercentageRules), []);
+const syntheticPercentageEstimate = pricing.calculatePublicEstimate(
+  syntheticScene,
+  syntheticState,
+  syntheticCatalog,
+  syntheticVisibility,
+  syntheticPercentageRules
+);
+assert.equal(syntheticPercentageEstimate.breakdown.finishesCents, 4, "percentage rounding occurs per eligible module before summation");
+assert.equal(syntheticPercentageEstimate.totalCents, 24, "per-module rounding differs from subtotal percentage rounding");
+
+const syntheticAmountRules = structuredClone(syntheticPercentageRules);
+syntheticAmountRules.roles.frontFinishAdjustment.cocoa = { type: "amount", cents: 7 };
+assert.deepEqual(pricingContract.validate(syntheticAmountRules), []);
+const syntheticAmountEstimate = pricing.calculatePublicEstimate(
+  syntheticScene,
+  syntheticState,
+  syntheticCatalog,
+  syntheticVisibility,
+  syntheticAmountRules
+);
+assert.equal(syntheticAmountEstimate.breakdown.finishesCents, 14, "finish amount applies once per eligible visible module");
+assert.equal(syntheticAmountEstimate.totalCents, 34);
 
 const fingerprintBeforeUi = fingerprints.computeFingerprint(scene, state);
 state.selectedEntityId = "module-03";
@@ -564,6 +636,16 @@ const styles = fs.readFileSync(path.join(projectRoot, "styles.css"), "utf8");
 const adminHtml = fs.readFileSync(path.join(projectRoot, "admin.html"), "utf8");
 const adminJs = fs.readFileSync(path.join(projectRoot, "admin/admin.js"), "utf8");
 const adminCss = fs.readFileSync(path.join(projectRoot, "admin/admin.css"), "utf8");
+const pricingSource = fs.readFileSync(path.join(projectRoot, "core/pricing.js"), "utf8");
+assert.equal(indexHtml.includes("core/pricing-contract.js?v=runtime-v37"), true, "buyer loads the typed pricing contract");
+assert.equal(indexHtml.indexOf("core/pricing-contract.js?v=runtime-v37") < indexHtml.indexOf("core/pricing.js?v=runtime-v37"), true, "pricing contract loads before calculator");
+assert.equal(indexHtml.includes("core/pricing.js?v=runtime-v37"), true, "typed pricing calculator cache revision is explicit");
+assert.equal(indexHtml.includes("app.js?v=runtime-v37"), true, "typed pricing buyer cache revision is explicit");
+["frontFinishRatesBps", "handleEntries", "localEntries", "globalEntries"].forEach((legacyBucket) => {
+  assert.equal(pricingSource.includes(legacyBucket), false, `calculator no longer reads legacy pricing bucket: ${legacyBucket}`);
+});
+assert.equal(appJs.includes("pricingContract.upgradeLegacy(initialAdministration.pricing)"), true, "initial buyer pricing authority is migrated from normalized legacy administration");
+assert.equal(appJs.includes("pricingContract.upgradeLegacy(normalized.pricing)"), true, "published legacy pricing is migrated at the compatibility seam");
 assert.equal((adminHtml.match(/data-password-reveal=/g) || []).length, 2, "admin exposes exactly two password reveal controls");
 assert.equal(adminHtml.includes('data-password-reveal="passwordInput"'), true, "login password reveal targets the current-password field");
 assert.equal(adminHtml.includes('data-password-reveal="newPasswordInput"'), true, "recovery password reveal targets the new-password field");
