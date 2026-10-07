@@ -1,6 +1,6 @@
 # CP-SD-02A2d3 — Stone Packages section shell — 2026-10-07
 
-Status: **IN PROGRESS — A2d3.2 PASS; A2d3.3 NEXT**.
+Status: **IN PROGRESS — A2d3.2 PASS; A2d3.3 CANDIDATE**.
 
 Parent:
 - CP-SD-02A2d0 Acabamentos family discovery;
@@ -122,3 +122,21 @@ Gate:
 - Netlify deploy preview #119 — PASS.
 
 A2d3.3 remains a separate schema-valid absence proof.
+
+
+## A2d3.3 schema-valid absence-proof candidate
+
+Test-only fixture:
+- remove `stone-all` and `stone-skirting` from Acabamentos stage items;
+- remove `stone-skirting` from `initialState.services` so the legacy repair shim has no contradictory active service to repair;
+- keep material groups/catalog/pricing unchanged.
+
+Prove:
+- normalized flow has no Stone group;
+- no semantic `stone-packages` shell exists;
+- the unclaimed `stone-all` neutral slot stays hidden;
+- `#stonePanel` is hidden;
+- Fronts and Handles remain visible;
+- renderer invariant errors and page/console errors remain empty.
+
+Production/runtime implementation is unchanged from the A2d3.2 PASS head.
