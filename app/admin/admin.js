@@ -118,7 +118,7 @@ function itemBehavior(itemId) {
 }
 
 function sectionBehavior(section) {
-  return itemBehavior(section?.itemIds?.[0]);
+  return section?.behavior || itemBehavior(section?.itemIds?.[0]);
 }
 
 function itemLabel(stageId, itemId) {
@@ -146,7 +146,7 @@ function commitHierarchy(candidate, successMessage = "") {
 }
 
 function defaultEmptyPlacement(stage, itemId) {
-  const behavior = itemBehavior(itemId);
+  const behavior = hierarchyCore.defaultSectionBehavior(stage, itemId, configurationCore, catalog, hierarchyDefaults) || itemBehavior(itemId);
   const sectionLabel = itemLabel(stage.id, itemId);
   return {
     groupId: hierarchyEditor.uniqueId(new Set(), `${stage.id}-group`, "group"),
@@ -160,10 +160,10 @@ function defaultEmptyPlacement(stage, itemId) {
 }
 
 function compatibleDestinationOptions(itemId) {
-  const behavior = itemBehavior(itemId);
   const options = [];
   model.stages.forEach((stage) => {
     if (!getItemOptions(stage.id).some((item) => item.id === itemId)) return;
+    const behavior = hierarchyCore.defaultSectionBehavior(stage, itemId, configurationCore, catalog, hierarchyDefaults) || itemBehavior(itemId);
     if (!stage.groups.length) {
       options.push({
         value: `${stage.id}||`,
