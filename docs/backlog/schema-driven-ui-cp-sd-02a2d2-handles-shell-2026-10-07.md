@@ -1,6 +1,6 @@
 # CP-SD-02A2d2 — generated Handles section shell — 2026-10-07
 
-Status: **IN PROGRESS — A2d2.0 PASS; A2d2.1 CANDIDATE**.
+Status: **IN PROGRESS — A2d2.1 PASS; A2d2.2 NEXT**.
 
 Parent:
 - `docs/architecture/schema-driven-ui-cp-sd-02a2d0-finishes-family-discovery-result-2026-10-07.md`;
@@ -71,3 +71,30 @@ Applied only the shell seam:
 No changes to `app.js`, handle catalog, `handleId` state, pricing/rateio, scene, masks, Fronts or Stone semantics.
 
 A2d2.2 absence proof remains a separate checkpoint after A2d2.1 gates pass.
+
+
+## A2d2.1 result — PASS
+
+PASS on PR #117 head `9981f8856c9aa2309b96d47da23199daeeee3cd0`.
+
+Proven:
+- normalized flow materializes Handles section id/label/behavior/component;
+- static HTML no longer owns Handles section semantics;
+- `#handleHelp` and `#handleOptions` remain inside the generated section through the bounded `handles-all` adapter;
+- handle redraw still restores the semantic Handles section by id;
+- keyboard row-major traversal remains intact;
+- current responsive handle geometry remains intact;
+- `app.js`, handle catalog, `handleId` state, pricing/rateio, scene and masks were unchanged.
+
+Gate:
+- App build purity — PASS;
+- Current variant fidelity — PASS;
+- Current asset gates — PASS;
+- Flow layout browser — PASS;
+- Keyboard browser — PASS;
+- Mobile browser — PASS;
+- Stone browser — PASS;
+- Summary/Pricing browser — PASS;
+- Netlify deploy preview #117 — PASS.
+
+A2d2.2 remains a separate test-only absence proof.
