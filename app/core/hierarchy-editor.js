@@ -100,6 +100,7 @@
       owner.section.itemIds.splice(owner.itemIndex, 1);
       const sourceIndex = owner.group.sections.indexOf(owner.section);
       const nextSection = { id: sectionId, label, itemIds: [itemId] };
+      if (behavior) nextSection.behavior = behavior;
       if (component) nextSection.component = component;
       else nextSection.presentation = presentation;
       owner.group.sections.splice(sourceIndex + 1, 0, nextSection);
