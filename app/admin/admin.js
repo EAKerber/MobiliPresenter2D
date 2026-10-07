@@ -404,14 +404,14 @@ function renderSection(stage, group, section, sectionIndex) {
 
   const presentation = document.createElement("label");
   presentation.className = "hierarchy-field";
-  presentation.append(document.createTextNode("Apresentação"));
+  presentation.append(document.createTextNode("Componente"));
   const select = document.createElement("select");
-  select.dataset.sectionPresentation = `${stage.id}|${group.id}|${section.id}`;
-  hierarchyCore.PRESENTATIONS.forEach((value) => {
+  select.dataset.sectionComponent = `${stage.id}|${group.id}|${section.id}`;
+  hierarchyCore.COMPONENTS.forEach((value) => {
     const option = document.createElement("option");
     option.value = value;
     option.textContent = value;
-    option.selected = value === section.presentation;
+    option.selected = value === section.component;
     select.append(option);
   });
   presentation.append(select);
