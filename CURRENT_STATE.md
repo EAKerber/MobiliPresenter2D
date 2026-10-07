@@ -50,8 +50,10 @@ Canonical plan:
 - completed track: CP-SD-05 typed pricing — COMPLETE / PASS
 - active track: CP-SD-06 production v5 publication / legacy retirement
 - completed checkpoint: CP-SD-06A0 repository/authentication preflight — COMPLETE / PASS
-- active CP-SD-06A1 checkpoint: `docs/backlog/schema-driven-ui-cp-sd-06a1-server-v5-read-migration-support-2026-10-07.md`; split into A1a safe v5 read (COMPLETE / PASS in PR #153) and A1b guarded migration support (NEXT)
+- active CP-SD-06A1 checkpoint: `docs/backlog/schema-driven-ui-cp-sd-06a1-server-v5-read-migration-support-2026-10-07.md`; split into A1a safe v5 read (COMPLETE / PASS in PR #153) and A1b guarded migration support (COMPLETE / PASS in PR #154; activation OFF); next CP-SD-06A2 authenticated production activation (not authorized)
 - A1a checkpoint/gates: `docs/backlog/schema-driven-ui-cp-sd-06a1a-safe-v5-read-2026-10-07.md`
+- A1b checkpoint/gates: `docs/backlog/schema-driven-ui-cp-sd-06a1b-guarded-migration-2026-10-07.md`
+- next production gate: `docs/backlog/schema-driven-ui-cp-sd-06a2-authenticated-v5-publication-2026-10-07.md` (planning only; not authorized to execute)
 - current handoff: `docs/handoffs/schema-driven-ui-current-handoff-2026-10-07.md`
 
 **CP-SD-00 — COMPLETE / PASS.** The audit found no critical unknowns. The main publication blocker is now explicit: v4 persists section presentation metadata, but that metadata is not yet the executable buyer-renderer authority.

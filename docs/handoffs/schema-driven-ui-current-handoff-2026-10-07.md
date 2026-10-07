@@ -2,6 +2,8 @@
 
 Status: **CANONICAL HANDOFF FOR NEXT AGENT**.
 
+Update 2026-10-07 (A1b): migration operation support is COMPLETE / PASS in PR #154 (7/7 functional CI workflows, Netlify preview), behind source-code `V5_MIGRATION_ENABLED = false`. The source/digest/CAS/readback operation is tested only with fake stores. Next is CP-SD-06A2 (`docs/backlog/schema-driven-ui-cp-sd-06a2-authenticated-v5-publication-2026-10-07.md`), which remains NOT AUTHORIZED for live operation. `docs/backlog/schema-driven-ui-cp-sd-06a1b-guarded-migration-2026-10-07.md` is its execution document.
+
 Update 2026-10-07: CP-SD-06A1 was split for safer review. A1a v5 server read support is **COMPLETE / PASS in PR #153 (7/7 CI workflows and Netlify preview green)**, branch `cp-sd-06a1a-v5-read-support`. This checkpoint never authorizes live migration or a production configuration mutation. A1b conditional migration-operation support follows only after A1a passes. See `docs/backlog/schema-driven-ui-cp-sd-06a1a-safe-v5-read-2026-10-07.md`.
 
 Repository:
