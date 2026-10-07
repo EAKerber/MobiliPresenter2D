@@ -33,7 +33,7 @@ async function run() {
   const inspectedV3 = reader.inspectPublishedRaw(rawV3, dependencies);
   assert.equal(inspectedV3.kind, "valid");
   assert.equal(inspectedV3.schema, configuration.SCHEMA);
-  assert.deepEqual(inspectedV3.value, configuration.normalizeConfiguratorSettings(v3, catalog, priceBook, scene));
+  assert.deepEqual(inspectedV3.value, configuration.normalizeConfiguratorSettings(v3, catalog, priceBook));
   assert.equal(inspectedV3.rawValue, rawV3.value);
 
   const rawV5 = await reader.readRawPublished(store(JSON.stringify(v5)));
