@@ -1,6 +1,6 @@
 # Schema-driven UI consolidation roadmap — 2026-10-06
 
-Status: canonical planning track for consolidating schema ownership before production hierarchy publication. CP-SD-00 and CP-SD-01 are complete; CP-SD-02 is next.
+Status: canonical planning track for consolidating schema ownership before production hierarchy publication. CP-SD-00 and CP-SD-01 are complete; CP-SD-02 is in progress through small self-contained slices.
 
 This track starts from the manually accepted PR #97 buyer baseline and the current repository state after the isolated Puxadores persistence hotfix. It is intentionally documentation-first: no runtime, schema-version, pricing, catalog, scene, asset or production-configuration behavior changes are part of CP-SD-00.
 
@@ -119,6 +119,14 @@ Gate:
 - current PR #97 baseline semantics preserved for unchanged data;
 - flow/keyboard/admin/browser gates green;
 - no duplicate semantic hierarchy authority remains in renderer code.
+
+Current CP-SD-02 progress:
+- CP-SD-02A1: stage navigation authority — complete;
+- CP-SD-02A2a: Services group shell generation — complete;
+- CP-SD-02A2b: Additional Services section shell generation — complete;
+- CP-SD-02A2c0/A2c1: Lighting boundary discovery + generated Lighting shell — complete;
+- CP-SD-02A2d0: Acabamentos family discovery — complete;
+- CP-SD-02A2d1: generated Fronts section shell — next.
 
 ### CP-SD-03 — responsive presentation primitives
 
