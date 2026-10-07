@@ -1,6 +1,6 @@
 # CP-SD-03A3 — Modules companion visual projection discovery — 2026-10-07
 
-Status: **READY / NEXT — discovery only**.
+Status: **COMPLETE / PASS**.
 
 Parent:
 - CP-SD-03A0 responsive presentation discovery — PASS;
@@ -122,5 +122,127 @@ Split implementation if discovery shows compact replace requires:
 - schema/presentation-contract changes.
 
 Those concerns belong to CP-SD-04 or later CP-SD-03 slices.
+
+No production configuration write.
+
+
+## Discovery result — PASS
+
+Baseline:
+- `main` = `c4921816c9afd13b89bcb37b96a70ef7fe4a54b7`;
+- A1 policy view adapters + projection markers are executable;
+- A2 root layout profile is canonical.
+
+### Inspection and inclusion are already separate
+
+`state.selectedEntityId` owns **detail inspection**.
+
+`state.visibilityByEntity` owns whether a module is included in the composition.
+
+Therefore compact `replace` does not require changing selection/inclusion semantics.
+
+A module may remain inspected while excluded; the detail's inclusion control can re-enable it. Do not auto-close detail merely because visibility becomes false.
+
+### Existing open / close focus contract
+
+Opening from list or scene:
+- stores `detailOrigin` as the active element with a source-specific fallback;
+- sets `selectedEntityId`;
+- renders the detail;
+- focuses the detail close control.
+
+Detail navigation:
+- keeps the companion open;
+- updates origin fallback to the newly inspected module's list control.
+
+Closing:
+- captures `detailOrigin`;
+- clears only `selectedEntityId`;
+- synchronously redraws through `syncLayerVisibility()`;
+- restores focus on the next animation frame to the original connected element, the module's list control, or the Modules heading.
+
+Escape already dispatches through the visible close control when Modules is active.
+
+This is sufficient for compact replace if pane visibility is synchronized before focus restoration.
+
+### Current side-panel projections are already satisfied
+
+#### side-rail
+
+Accepted current behavior:
+- one controls rail;
+- opening detail widens the rail;
+- detail and list remain available in a single vertical presentation;
+- no pane reparenting;
+- list/selection state remains intact.
+
+No new drawer/overlay is justified by the current requirement. Treat current visual behavior as a valid `side-panel` projection for this checkpoint family.
+
+#### stacked
+
+Accepted current behavior:
+- detail and list are peer columns;
+- each pane owns its vertical scroller;
+- ArrowUp/ArrowDown scroll the pane containing focus;
+- scroll ownership is independent from window scroll.
+
+This already satisfies the intended `side-panel` projection. Preserve it.
+
+### Compact replace state machine
+
+When profile projection for the companion is `replace`:
+
+| detail inspection | primary list | companion detail |
+| --- | --- | --- |
+| closed (`selectedEntityId == null`) | visible | hidden |
+| open (`selectedEntityId != null`) | hidden | visible |
+
+The stable pane elements must remain in the DOM. Do not reparent or recreate them.
+
+When projection is not `replace`:
+- both panes remain visible exactly as today.
+
+### Profile transitions
+
+Profile changes already update policy projection markers without clearing `selectedEntityId`.
+
+Required behavior:
+- side-panel -> compact replace with detail open: detail stays visible, list hides;
+- side-panel -> compact replace with detail closed: list stays visible, detail hides;
+- compact -> stacked/side-rail: both panes become visible;
+- pane `scrollTop` values survive all transitions.
+
+### Focus hazard and rule
+
+One new hazard exists:
+
+If profile changes to compact while detail is open and focus is inside the list pane, hiding the list would leave the active element inside a hidden subtree.
+
+Rule:
+- after applying replace visibility, if the newly hidden pane contains `document.activeElement`, focus the visible counterpart:
+  - detail opened -> detail close control;
+  - detail closed -> stored/fallback list origin or Modules heading.
+
+Do not steal focus merely because the profile changed when the active element remains visible.
+
+### PiP boundary
+
+Compact PiP is independent and already correct:
+- opening detail from a pinned scene preserves `is-mobile-scene-pinned`;
+- the scene control continues to own its own focus/hit-testing;
+- detail navigation does not unpin the PiP.
+
+A4 must not alter PiP activation, geometry, transparency or resize behavior.
+
+## Decision
+
+Proceed to A4 as a narrow compact replace execution:
+- keep stable panes;
+- compute visibility from A1 policy projection + detail-open state;
+- use `hidden`/explicit projection state, no reparenting;
+- preserve side-rail/stacked visuals;
+- preserve scrollTop;
+- repair focus only if a profile transition would hide the active pane;
+- retain current detail open/close, Escape, selection/inclusion and PiP behavior.
 
 No production configuration write.

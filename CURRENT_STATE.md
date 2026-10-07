@@ -48,7 +48,7 @@ Canonical plan:
 - completed audit: `docs/architecture/schema-ui-authority-audit-2026-10-06.md`
 - completed contract checkpoint: `docs/backlog/schema-driven-ui-cp-sd-01-contract-plan-2026-10-06.md`
 - next track: CP-SD-03, executed as small self-contained responsive-presentation slices
-- next checkpoint: `docs/backlog/schema-driven-ui-cp-sd-03a3-modules-companion-projection-discovery-2026-10-07.md`
+- next checkpoint: `docs/backlog/schema-driven-ui-cp-sd-03a4-compact-modules-replace-projection-2026-10-07.md`
 
 **CP-SD-00 — COMPLETE / PASS.** The audit found no critical unknowns. The main publication blocker is now explicit: v4 persists section presentation metadata, but that metadata is not yet the executable buyer-renderer authority.
 
@@ -200,3 +200,6 @@ Update this file whenever a meaningful checkpoint changes:
 Do not create a new rotating status file for each chat. Keep this path stable.
 
 For historical evidence, use normal docs/ADRs/PRs; for the current continuation state, update this file.
+
+
+**CP-SD-03A3 — COMPLETE / PASS.** Discovery found no reason to invent a new drawer/overlay for the current `side-panel` projections: side-rail already presents the detail/list in the widened controls rail and stacked already presents independent peer panes with preserved scroll ownership. The actual executable gap is compact `replace`: the policy marker says replace while both panes are still vertically visible. Existing state already separates inspection (`selectedEntityId`) from inclusion (`visibilityByEntity`), preserves a `detailOrigin`, focuses the close action on open, restores origin/fallback on close, and keeps compact PiP pinned when detail opens from the scene. The only additional transition hazard is resizing into compact while focus remains inside the primary list and detail is already open; A4 must move focus only when the newly hidden pane contains the active element. Result: `docs/architecture/schema-driven-ui-cp-sd-03a3-modules-companion-projection-discovery-result-2026-10-07.md`. **CP-SD-03A4 is NEXT**: execute compact `replace` using stable pane adapters, without reparenting or changing selection semantics.
