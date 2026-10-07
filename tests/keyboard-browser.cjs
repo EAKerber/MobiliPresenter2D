@@ -54,17 +54,27 @@ const {chromium} = require('playwright');
     const dock = document.querySelector('.flow-actions[data-bottom-dock-enabled="true"]');
     const scroller = window.CASA_KEYBOARD_SHORTCUTS.scrollContainerFor(element);
     const rect = element.getBoundingClientRect();
+    const focused = element.contains(document.activeElement) ? document.activeElement : null;
+    const focusRect = focused?.getBoundingClientRect() || null;
     const bounds = scroller?.getBoundingClientRect() || { top: 0, bottom: window.innerHeight, left: 0, right: window.innerWidth };
     const dockRect = dock.getBoundingClientRect();
+    const navRect = document.querySelector('.flow-nav')?.getBoundingClientRect();
+    const usableTop = navRect ? Math.max(bounds.top + 12, navRect.bottom + 12) : bounds.top + 12;
     const usableBottom = Math.min(bounds.bottom - 16, dockRect.top - 12);
     return {
       profile: document.documentElement.dataset.layoutProfile,
       scrollerClass: scroller?.className || null,
       top: rect.top,
       bottom: rect.bottom,
+      usableTop,
       usableBottom,
       dockTop: dockRect.top,
-      fullyAboveDock: rect.bottom <= usableBottom + 2
+      sectionFits: rect.height <= usableBottom - usableTop,
+      fullyAboveDock: rect.bottom <= usableBottom + 2,
+      focusedTag: focused?.tagName || null,
+      focusedTop: focusRect?.top ?? null,
+      focusedBottom: focusRect?.bottom ?? null,
+      focusVisible: Boolean(focusRect && focusRect.top >= usableTop - 2 && focusRect.bottom <= usableBottom + 2)
     };
   }, sectionId);
   const moveToSection = async (id) => {
@@ -402,7 +412,7 @@ const {chromium} = require('playwright');
   await page.waitForTimeout(450);
   const stackedServiceGeometry = await sectionDockGeometry('additional-services');
   assert.equal(stackedServiceGeometry.scrollerClass, null, 'stacked Services keep window/document scrolling');
-  assert.equal(stackedServiceGeometry.fullyAboveDock, true, 'stacked keyboard section navigation stays above the persistent dock');
+  assert.equal(stackedServiceGeometry.focusVisible, true, 'stacked keyboard target stays inside the dock-aware usable viewport');
 
   await page.setViewportSize({width: 390, height: 844});
   await page.waitForFunction(() => document.documentElement.dataset.layoutProfile === 'compact');
@@ -411,7 +421,7 @@ const {chromium} = require('playwright');
   await page.waitForTimeout(450);
   const compactServiceGeometry = await sectionDockGeometry('additional-services');
   assert.equal(compactServiceGeometry.scrollerClass, null, 'compact Services keep window/document scrolling');
-  assert.equal(compactServiceGeometry.fullyAboveDock, true, 'compact keyboard section navigation stays above the persistent dock');
+  assert.equal(compactServiceGeometry.focusVisible, true, 'compact keyboard target stays inside the dock-aware usable viewport');
 
   await page.setViewportSize({width: 1366, height: 900});
   await page.waitForFunction(() => document.documentElement.dataset.layoutProfile === 'side-rail');
