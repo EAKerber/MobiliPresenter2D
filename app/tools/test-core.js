@@ -529,7 +529,7 @@ assert.equal(appJs.includes("publishNormalizedFlow"), true, "app publishes one n
 assert.equal(appJs.includes("applyBuyerFlowLayout"), true, "buyer composition is mounted from normalized flow layout");
 assert.equal((indexHtml.match(/core\/layout-profiles\.js/g) || []).length, 1, "layout profile resolver loads exactly once");
 assert.equal(
-  indexHtml.indexOf("core/layout-profiles.js?v=cp-sd-01c1-v1") < indexHtml.indexOf("styles.css?v=runtime-v33"),
+  indexHtml.indexOf("core/layout-profiles.js?v=cp-sd-01c1-v1") < indexHtml.indexOf("styles.css?v=runtime-v34"),
   true,
   "canonical layout profile resolves before public topology CSS to avoid first-paint profile drift"
 );
@@ -603,6 +603,14 @@ assert.equal(appJs.includes("setModuleSelection"), false);
 assert.equal(appJs.includes("refreshMobileSceneDock"), true);
 assert.equal(appJs.includes("mobileSceneTransparency"), true);
 assert.equal(appJs.includes("mobileSceneRepin"), true);
+assert.equal(appJs.includes("scenePipMode"), true, "scene PiP runtime consumes the presentation policy by layout profile");
+assert.equal(appJs.includes("pip?.availableProfiles?.includes(profile)"), true, "PiP availability comes from policy rather than a compact-only viewport check");
+assert.equal(appJs.includes('mode.activation === "manual"'), true, "stacked manual activation has one explicit runtime path");
+assert.equal(appJs.includes('mode.activation !== "auto-after-anchor"'), true, "anchor auto-activation is limited to policy profiles that request it");
+assert.equal(appJs.includes("function isMobileViewport()"), false, "PiP availability no longer reconstructs compact authority through a mobile helper");
+assert.equal(styles.includes('html:is([data-layout-profile="stacked"], [data-layout-profile="compact"]) body.is-mobile-scene-pinned .viewer-card'), true, "fixed PiP presentation consumes canonical layout profiles");
+assert.equal(styles.includes('@media (max-width: 700px) {\n  body.is-mobile-scene-pinned .viewer-anchor'), false, "PiP presentation is not owned by the compact numeric breakpoint");
+assert.equal(indexHtml.includes('@media (max-width: 700px) {\n        body.is-mobile-scene-pinned.is-mobile-scene-transparent'), false, "inline PiP transparency follows layout profiles rather than a numeric breakpoint");
 assert.equal(appJs.includes("getBoundingClientRect().bottom || 0"), true);
 assert.equal(appJs.includes("const pipBottom = Math.max(navBottom, mobilePipPosition?.top || 0) + pipHeight;"), true);
 assert.equal(/state = core\.createInitialState\(scene\);\s*setAllVisibility\(true\);/.test(appJs), false, "restoring must preserve optional defaults");
