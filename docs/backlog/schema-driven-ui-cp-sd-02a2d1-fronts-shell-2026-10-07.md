@@ -1,6 +1,6 @@
 # CP-SD-02A2d1 — generated Fronts section shell — 2026-10-07
 
-Status: **IN PROGRESS — A2d1.1 implementation candidate**.
+Status: **IN PROGRESS — A2d1.1 PASS; A2d1.2 NEXT**.
 
 Parent discovery:
 - `docs/architecture/schema-driven-ui-cp-sd-02a2d0-finishes-family-discovery-result-2026-10-07.md`.
@@ -47,7 +47,30 @@ Focused gate progress:
 - Keyboard exposed a test-only stale assumption: its negative ownership mutation removed `data-flow-item-id` from the semantic section, but A2d1.1 intentionally moved ownership to the bounded Fronts item adapter;
 - the Keyboard fixture now removes/restores ownership on that actual adapter. Production code is unchanged by this correction.
 
-A2d1.1 remains pending the rerun of the corrected Keyboard/full gate. A2d1.2 must remain a separate negative-fixture commit.
+#### A2d1.1 result
+
+PASS on PR #116 head `6e88be670f5cd8abced2d2bd951d9a78e34cd42d`.
+
+Proven:
+- Fronts section id/label/behavior/component are materialized from normalized flow;
+- the `fronts-all` swatch and selected-description adapter remains inside the generated semantic section;
+- static HTML no longer owns Fronts section semantics;
+- existing responsive Acabamentos geometry remains valid;
+- the Keyboard invariant test now mutates the actual item owner rather than the removed static shell;
+- material/state/pricing/mask/scene behavior was not changed.
+
+Gate:
+- App build purity — PASS;
+- Current variant fidelity — PASS;
+- Current asset gates — PASS;
+- Flow layout browser — PASS;
+- Keyboard browser — PASS;
+- Mobile browser — PASS;
+- Stone browser — PASS;
+- Summary/Pricing browser — PASS;
+- Netlify deploy preview #116 — PASS after one no-tree-change retry of an operational build failure.
+
+A2d1.2 remains a separate negative-fixture commit.
 
 ### A2d1.2 — negative Fronts absence proof
 
