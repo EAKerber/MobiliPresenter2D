@@ -1,6 +1,6 @@
 # CP-SD-02A2g1 — bound-section Services checklist renderer — 2026-10-07
 
-Status: **IN PROGRESS — IMPLEMENTATION CANDIDATE**.
+Status: **COMPLETE / PASS**.
 
 Parent:
 - CP-SD-02A2g0 Services item-renderer discovery — PASS.
@@ -137,3 +137,34 @@ Proof added:
 No section-shell, Lighting, pricing, state, event/dependency, custom-stage, responsive or production-configuration behavior is changed.
 
 Gate pending: all eight repository workflows + Netlify preview.
+
+
+## Final result — PASS
+
+Final functional head:
+`cb7998e6014314bb64f94f527cadcb1d71e93641`.
+
+Proven:
+- `stageItems()` is removed from buyer runtime;
+- the generic service checklist derives its actual owning semantic section from the mounted flow DOM;
+- checklist membership/order comes from normalized `section.itemIds`;
+- catalog service records supply metadata only;
+- default card order remains `move-stone, tempered-glass`;
+- valid source reorder to `tempered-glass, move-stone` is reflected identically in normalized section and rendered DOM;
+- the reordered service still toggles/restores state correctly after redraw;
+- omitted Additional Services yields no semantic section and zero stale generic service cards;
+- Lighting specialized adapter/dependencies/scene behavior remain unchanged;
+- Summary/Pricing service rows and totals remain unchanged.
+
+Gate:
+- App build purity — PASS;
+- Current variant fidelity — PASS;
+- Current asset gates — PASS;
+- Flow layout browser — PASS;
+- Keyboard browser — PASS;
+- Mobile browser — PASS;
+- Stone browser — PASS;
+- Summary/Pricing browser — PASS;
+- Netlify deploy preview #128 — PASS.
+
+No production configuration write.
