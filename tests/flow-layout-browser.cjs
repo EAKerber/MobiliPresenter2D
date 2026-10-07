@@ -148,6 +148,20 @@ const { chromium } = require("playwright");
     1,
     "Stone Packages options adapter remains owned by the generated semantic section"
   );
+  const generatedStoneSkirting = page.locator('[data-keyboard-section="stone-skirting"]');
+  assert.equal(
+    await generatedStoneSkirting.getAttribute("data-flow-generated-section"),
+    "true",
+    "Stone Skirting section shell is created from normalized flow"
+  );
+  assert.equal(await generatedStoneSkirting.getAttribute("data-keyboard-behavior"), "toggle", "generated Stone Skirting behavior comes from normalized flow");
+  assert.equal(await generatedStoneSkirting.getAttribute("data-render-component"), "toggle-list", "generated Stone Skirting component comes from normalized flow");
+  assert.equal(await generatedStoneSkirting.locator("h3").textContent(), "Rodapé de pedra", "generated Stone Skirting heading comes from normalized flow label");
+  assert.equal(
+    await generatedStoneSkirting.locator('[data-flow-item-id="stone-skirting"] #stoneSkirtingToggle').count(),
+    1,
+    "Stone Skirting toggle adapter remains owned by the generated semantic section"
+  );
   const cabinet = await rect('[data-flow-group-shell="cabinet-finishes"]');
   const stone = await rect('[data-flow-group-shell="stone"]');
   assert.ok(stone.top >= cabinet.bottom - 2, "while controls are beside the scene, Acabamentos remains one column");

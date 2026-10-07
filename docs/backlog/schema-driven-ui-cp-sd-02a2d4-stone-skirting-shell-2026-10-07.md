@@ -1,6 +1,6 @@
 # CP-SD-02A2d4 — Stone Skirting section shell — 2026-10-07
 
-Status: **IN PROGRESS — A2d4.0 PASS; A2d4.1 NEXT**.
+Status: **IN PROGRESS — A2d4.0 PASS; A2d4.1 CANDIDATE**.
 
 Parent:
 - CP-SD-02A2d0 Acabamentos family discovery;
@@ -104,3 +104,27 @@ A2d4.1 must not:
 - change `repairSkirtingStageContract()`;
 - change `stone-skirting requires stone-all`;
 - write production configuration.
+
+
+## A2d4.1 implementation candidate
+
+Applied only the semantic shell seam:
+- static `stone-skirting` section id/heading/behavior/component removed from HTML;
+- outer neutral slot carries `toggle-list` + `stone-skirting` affinity and remains presentation-free/hidden until claimed;
+- inner adapter retains `data-configurable-item="stone-skirting"`, `data-flow-item-id="stone-skirting"` and `#stoneSkirtingToggle`;
+- normalized flow supplies section id, label, behavior and component;
+- source and Flow-layout positive proof added;
+- shared runtime cache revision advanced from v22 to v23.
+
+Explicitly unchanged:
+- `renderStonePackages()`;
+- toggle change handler / `setGlobalService()`;
+- `stone-all` material group and `linkedItemIds`;
+- ON = selected Stone material, OFF = MDF/front-finish path;
+- `stone-skirting requires stone-all`;
+- pricing;
+- material/mask rendering;
+- `repairSkirtingStageContract()`;
+- production configuration.
+
+A2d4.2 remains a separate absence proof.

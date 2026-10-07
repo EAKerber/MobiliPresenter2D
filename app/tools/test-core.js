@@ -500,6 +500,11 @@ assert.equal(indexHtml.includes('data-keyboard-section="stone-packages"'), false
 assert.equal(indexHtml.includes('id="stonePackagesSectionHeading"'), false, "Stone Packages heading identity is no longer static");
 assert.equal(indexHtml.includes(">Pacote de pedra</h3>"), false, "Stone Packages section heading copy comes from normalized data");
 assert.equal(indexHtml.includes('data-flow-slot-item="stone-all"'), true, "Stone Packages neutral slot declares stone-all affinity without owning the section");
+assert.equal(indexHtml.includes('data-flow-item-id="stone-skirting"'), true, "Stone Skirting item adapter exposes stable flow ownership");
+assert.equal(indexHtml.includes('data-keyboard-section="stone-skirting"'), false, "Stone Skirting semantic section is no longer pre-authored in static HTML");
+assert.equal(indexHtml.includes('id="stoneSkirtingSectionHeading"'), false, "Stone Skirting heading identity is no longer static");
+assert.equal(indexHtml.includes(">Rodapé de pedra</h3>"), false, "Stone Skirting section heading copy comes from normalized data");
+assert.equal(indexHtml.includes('data-flow-slot-item="stone-skirting"'), true, "Stone Skirting neutral slot declares item affinity without owning the section");
 assert.equal(indexHtml.includes('data-flow-item-id="lighting-08"'), true, "specialized Lighting item adapter exposes stable flow ownership");
 assert.equal(indexHtml.includes('data-keyboard-section="lighting"'), false, "Lighting semantic section is no longer pre-authored in static HTML");
 assert.equal(indexHtml.includes('id="lightingSectionHeading"'), false, "Lighting heading identity is no longer static");
