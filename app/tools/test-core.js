@@ -657,8 +657,8 @@ assert.equal(adminJs.includes('input.type = input.type === "password" ? "text" :
 assert.equal(adminJs.includes('byId("passwordInput").value'), true, "login continues reading the same password value");
 assert.equal(adminJs.includes('byId("newPasswordInput").value'), true, "password update continues reading the same new-password value");
 assert.equal(adminCss.includes(".password-field"), true, "admin reveal control has local field layout");
-assert.equal(adminHtml.includes("admin/admin.css?v=admin-affordance-v1"), true, "admin reveal CSS cache revision is explicit");
-assert.equal(adminHtml.includes("admin/admin.bundle.js?v=admin-pricing-v1"), true, "admin typed-pricing bundle cache revision is explicit");
+assert.equal(adminHtml.includes("admin/admin.css?v=admin-pricing-v2"), true, "admin pricing authoring CSS cache revision is explicit");
+assert.equal(adminHtml.includes("admin/admin.bundle.js?v=admin-pricing-v2"), true, "admin pricing type-authoring bundle cache revision is explicit");
 assert.equal(adminHtml.includes("core/pricing-contract.js?v=pricing-contract-v1"), true, "admin explicitly loads the typed pricing contract");
 assert.equal(adminHtml.includes("core/administration-v5.js?v=cp-sd-05a3a-v1"), true, "admin v5 cache revision declares typed pricing ownership");
 assert.equal(
@@ -674,7 +674,14 @@ assert.equal(adminJs.includes("data-price-section"), false, "admin inputs no lon
 assert.equal(adminJs.includes("model.pricing.frontFinishRatesBps"), false, "admin has no legacy finish bucket authority");
 assert.equal(adminJs.includes("model.pricing.handleEntries"), false, "admin has no legacy handle bucket authority");
 assert.equal(adminJs.includes("model.pricing.globalEntries"), false, "admin has no legacy global bucket authority");
-assert.equal(adminJs.includes("dataset.priceRuleType"), false, "A3a does not expose amount/percentage type switching yet");
+assert.equal(adminJs.includes("pricingContract.ROLE_CAPABILITIES[role]"), true, "pricing type choices derive from contract role capabilities");
+assert.equal(adminJs.includes("select.dataset.priceRuleType"), true, "dual-type pricing rows expose an explicit type selector");
+assert.equal(adminJs.includes('{ type: "amount", cents: 0 }'), true, "percentage to amount switching resets the numeric value instead of converting units");
+assert.equal(adminJs.includes('{ type: "percentage", bps: 0, basis }'), true, "amount to percentage switching resets BPS and restores the contract basis");
+assert.equal(adminJs.includes("O valor foi zerado para evitar conversão implícita"), true, "admin explains zero-on-type-switch behavior");
+assert.equal(adminJs.includes('projection.code === "pricing_requires_publication"'), true, "non-representable typed pricing is blocked before legacy publication");
+assert.equal(adminCss.includes(".pricing-field--typed"), true, "dual-type pricing rows have a dedicated compact layout");
+assert.equal(adminCss.includes(".pricing-basis"), true, "percentage basis copy has an explicit admin style hook");
 assert.equal(indexHtml.includes("Acabamentos por módulo"), false);
 assert.equal(indexHtml.includes("finishTargetSelect"), false);
 assert.equal(indexHtml.includes('data-compact-label="Acab."'), false, "stage compact labels are no longer pre-authored in static navigation");

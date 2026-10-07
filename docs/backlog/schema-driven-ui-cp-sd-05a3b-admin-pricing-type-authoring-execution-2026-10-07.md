@@ -1,6 +1,6 @@
 # CP-SD-05A3b — admin pricing type authoring execution — 2026-10-07
 
-Status: **READY / NEXT**.
+Status: **COMPLETE / PASS**.
 
 Parent:
 - CP-SD-05A0 discovery — COMPLETE / PASS.
@@ -140,3 +140,51 @@ Do not change:
 ## Next
 
 After A3b, inspect residual pricing authority. If static `CommercialEstimatePriceBook 1.1` remains the last canonical legacy-shaped source, execute CP-SD-05A4 to move that source to `CommercialEstimatePriceBook 2.0` typed data and retire remaining runtime bucket compatibility outside named migration seams.
+
+
+## Implementation checkpoint
+
+Functional patch on PR #149, head `9f02ea46f2d50b1ca810fc21aae2c3bfb8d86a68`:
+
+- only `frontFinishAdjustment` rows expose a type selector;
+- selector options come from `pricingContract.ROLE_CAPABILITIES[role]`;
+- percentage rows expose the explicit `eligible-module-base` explanation;
+- switching type creates a new zero-valued rule rather than reinterpreting the old number;
+- amount finish pricing remains valid v5 state but Publish stops before any v3 PUT with a pricing-specific message;
+- current amount-only roles remain unchanged;
+- admin CSS/bundle cache advanced to `admin-pricing-v2`;
+- buyer calculator, pricing contract schema, commercial defaults, endpoint acceptance and Puxadores repair code were not changed.
+
+Initial gate round:
+
+- PASS: App build purity;
+- PASS: Current variant fidelity;
+- PASS: Mobile browser;
+- PASS: Stone browser;
+- PASS: Current asset gates;
+- PASS: Netlify deploy preview #149;
+- Admin hierarchy browser: **CANCELLED before tests**, while installing Playwright under the workflow's 10-minute timeout;
+- Summary pricing browser: static gate passed; deployed buyer test timed out waiting for the total to change after toggling stone skirting. This buyer path is unchanged by A3b and passed on the immediately preceding PR #148, so the first response is a clean rerun rather than a speculative runtime patch.
+
+The connector rerun endpoints returned internal errors. This documentation checkpoint intentionally creates a fresh PR head so the same functional patch receives a clean workflow round. Do not mark A3b COMPLETE until Admin hierarchy, isolated Puxadores and Summary pricing all execute successfully.
+
+
+## Final gate result
+
+Fresh head `f4291c6fc063e27efc52c88463d849578e9ce9cf` repeated the same functional patch without runtime changes and closed the ambiguity from the first round:
+
+- PASS: App build purity;
+- PASS: Current variant fidelity;
+- PASS: Mobile browser;
+- PASS: Stone browser;
+- PASS: Current asset gates;
+- PASS: Admin hierarchy browser;
+- PASS: isolated Puxadores persistence inside the Admin workflow;
+- PASS: Summary pricing browser;
+- PASS: Netlify deploy preview #149.
+
+The first Admin cancellation was therefore runner/install timeout, and the first Summary timeout was non-reproducible on the clean head. No speculative buyer patch was added.
+
+A3b is COMPLETE / PASS. The current production endpoint still accepts only v3-compatible pricing; fixed front-finish amounts remain valid local v5 authoring state and fail closed before network publication.
+
+Next: `docs/backlog/schema-driven-ui-cp-sd-05a4-price-book-v2-retirement-execution-2026-10-07.md`.

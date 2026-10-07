@@ -52,7 +52,7 @@ function contentType(filePath) {
 
 function adminHarness() {
   const source = fs.readFileSync(path.join(appRoot, "admin.html"), "utf8");
-  const moduleTag = '<script type="module" src="admin/admin.bundle.js?v=admin-pricing-v1"></script>';
+  const moduleTag = '<script type="module" src="admin/admin.bundle.js?v=admin-pricing-v2"></script>';
   assert.equal(source.includes(moduleTag), true, "admin harness expects the current admin bundle revision");
   return source.replace(
     moduleTag,
@@ -178,24 +178,48 @@ async function sectionItemIds(page, stageId, groupId, sectionId) {
 
   await page.locator('[data-admin-tab="pricing"]').click();
   await page.waitForSelector('[data-admin-panel="pricing"]:not([hidden])');
-  const module01Price = page.locator('[data-price-role="itemBase"][data-price-id="module-01"]');
-  const cocoaPrice = page.locator('[data-price-role="frontFinishAdjustment"][data-price-id="cocoa"]');
-  assert.equal(await module01Price.inputValue(), "900.00", "typed amount row preserves the current BRL value");
-  assert.equal(await module01Price.locator("xpath=..").locator("small").textContent(), "R$", "amount rule renders as BRL from its rule type");
-  assert.equal(await cocoaPrice.inputValue(), "15.00", "typed percentage row preserves the current BPS value");
-  assert.equal(await cocoaPrice.locator("xpath=..").locator("small").textContent(), "%", "percentage rule renders as percent from its rule type");
-  assert.equal(await page.locator("#pricingList select").count(), 0, "A3a keeps current pricing UI without a type selector");
+  const module01Price = page.locator('input[data-price-role="itemBase"][data-price-id="module-01"]');
+  const cocoaPrice = page.locator('input[data-price-role="frontFinishAdjustment"][data-price-id="cocoa"]');
+  const cocoaType = page.locator('[data-price-rule-type][data-price-role="frontFinishAdjustment"][data-price-id="cocoa"]');
+  const cocoaRow = cocoaPrice.locator("xpath=..");
+  const finishTypeSelectors = page.locator('[data-price-rule-type][data-price-role="frontFinishAdjustment"]');
+  const finishPriceInputs = page.locator('input[data-price-role="frontFinishAdjustment"]');
 
-  await module01Price.fill("901.00");
-  await module01Price.press("Tab");
-  await cocoaPrice.fill("15.25");
+  assert.equal(await module01Price.inputValue(), "900.00", "amount-only module row preserves the current BRL value");
+  assert.equal(await module01Price.locator("xpath=..").locator(".pricing-unit").textContent(), "R$", "amount-only rule renders as BRL");
+  assert.equal(await module01Price.locator("xpath=..").locator("[data-price-rule-type]").count(), 0, "amount-only roles expose no type selector");
+  assert.equal(await finishTypeSelectors.count(), await finishPriceInputs.count(), "every front-finish row derives a type selector from the dual-type role capability");
+  assert.equal(await page.locator('[data-price-rule-type]:not([data-price-role="frontFinishAdjustment"])').count(), 0, "no other pricing role exposes a type selector");
+
+  assert.equal(await cocoaType.inputValue(), "percentage", "migrated front-finish pricing starts as percentage");
+  assert.equal(await cocoaPrice.inputValue(), "15.00", "migrated cocoa BPS displays as 15 percent");
+  assert.equal(await cocoaRow.locator(".pricing-unit").textContent(), "%", "percentage rule renders a percent unit");
+  assert.equal(await cocoaRow.locator(".pricing-basis").textContent(), "Base: valor base de cada módulo elegível", "percentage authoring exposes the explicit calculation basis");
+
+  await cocoaType.selectOption("amount");
+  assert.equal(await cocoaType.inputValue(), "amount", "front-finish type can switch to fixed amount");
+  assert.equal(await cocoaPrice.inputValue(), "0.00", "percentage-to-amount switch resets the numeric value");
+  assert.equal(await cocoaRow.locator(".pricing-unit").textContent(), "R$", "fixed finish amount renders as BRL");
+  assert.equal(await cocoaRow.locator(".pricing-basis").count(), 0, "fixed amount has no percentage basis");
+  assert.ok((await page.locator("#saveMessage").textContent()).includes("zerado"), "admin explains that type switching resets the value");
+
+  await page.locator("#saveButton").click();
+  await page.waitForFunction(() => document.getElementById("saveMessage").textContent.includes("futura publicação consolidada"));
+  assert.equal(putCount, 0, "non-representable finish amount is blocked before any production PUT");
+
+  await cocoaType.selectOption("percentage");
+  assert.equal(await cocoaType.inputValue(), "percentage", "finish can return to percentage authoring");
+  assert.equal(await cocoaPrice.inputValue(), "0.00", "amount-to-percentage switch resets BPS instead of converting currency");
+  assert.equal(await cocoaRow.locator(".pricing-unit").textContent(), "%", "percentage unit returns after switching back");
+  assert.equal(await cocoaRow.locator(".pricing-basis").textContent(), "Base: valor base de cada módulo elegível", "percentage basis returns after switching back");
+
+  await cocoaPrice.fill("15.00");
   await cocoaPrice.press("Tab");
   await page.locator("#saveButton").click();
   await page.waitForFunction(() => document.getElementById("saveMessage").textContent.includes("Configuração compatível publicada"));
-  assert.equal(putCount, 1, "representable typed pricing edit performs one v3-compatible PUT");
-  assert.equal(lastPut.schemaVersion, "ConfiguratorAdministration2D 3.0", "typed admin pricing still publishes only the current v3 schema");
-  assert.equal(lastPut.pricing.entries["module-01"], 90100, "typed amount edit projects back to exact cents");
-  assert.equal(lastPut.pricing.frontFinishRatesBps.cocoa, 1525, "typed percentage edit projects back to exact basis points");
+  assert.equal(putCount, 1, "representable percentage pricing performs one v3-compatible PUT");
+  assert.equal(lastPut.schemaVersion, "ConfiguratorAdministration2D 3.0", "admin still sends only v3 to the current production-compatible harness");
+  assert.equal(lastPut.pricing.frontFinishRatesBps.cocoa, 1500, "restored percentage projects to exact basis points");
 
   current = configuration.createDefaultAdministration(defaults, catalog, priceBook, scene);
   putCount = 0;
