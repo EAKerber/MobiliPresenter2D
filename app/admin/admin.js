@@ -85,6 +85,27 @@ function setMessage(element, message, kind = "") {
   element.dataset.kind = kind;
 }
 
+function syncPasswordReveal(button) {
+  const input = byId(button.dataset.passwordReveal);
+  if (!input) return;
+  const revealed = input.type === "text";
+  const label = revealed ? "Ocultar senha" : "Mostrar senha";
+  button.setAttribute("aria-pressed", String(revealed));
+  button.setAttribute("aria-label", label);
+  button.title = label;
+  button.textContent = revealed ? "Ocultar" : "Mostrar";
+}
+
+document.querySelectorAll("[data-password-reveal]").forEach((button) => {
+  syncPasswordReveal(button);
+  button.addEventListener("click", () => {
+    const input = byId(button.dataset.passwordReveal);
+    if (!input) return;
+    input.type = input.type === "password" ? "text" : "password";
+    syncPasswordReveal(button);
+  });
+});
+
 function isAdmin(user) {
   const roles = [...(user?.roles || []), ...(user?.app_metadata?.roles || [])];
   return roles.includes("admin");
