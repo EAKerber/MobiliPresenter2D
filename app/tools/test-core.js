@@ -495,7 +495,8 @@ assert.equal(appJs.includes("applyBuyerFlowLayout"), true, "buyer composition is
 assert.equal(indexHtml.includes('data-stage-view-layout="modules"'), true, "modules expose a view-level two-pane renderer contract");
 assert.equal(indexHtml.includes('data-flow-group-shell="cabinet-finishes"'), true, "finish renderer exposes cabinet group shell");
 assert.equal(indexHtml.includes('data-flow-group-shell="stone"'), true, "finish renderer exposes stone group shell");
-assert.equal(indexHtml.includes('data-flow-group-shell="services"'), true, "services renderer exposes a normalized group shell");
+assert.equal(indexHtml.includes('data-flow-group-shell="services"'), false, "Services group identity is no longer pre-authored in static HTML");
+assert.equal(indexHtml.includes('data-flow-group-class="flow-group-shell flow-group-shell--embedded"'), true, "Services keeps only a generic visual group-shell class contract");
 const runtimeScriptRevisions = [
   /data\/scene-data\.js\?v=([^\"]+)/,
   /data\/catalog-data\.js\?v=([^\"]+)/,
