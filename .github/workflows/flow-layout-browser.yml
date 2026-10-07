@@ -13,6 +13,7 @@ on:
       - 'app/index.html'
       - 'app/styles.css'
       - 'tests/flow-layout-browser.cjs'
+      - 'tests/buyer-v5-browser.cjs'
       - '.github/workflows/flow-layout-browser.yml'
   pull_request:
     paths:
@@ -26,6 +27,7 @@ on:
       - 'app/index.html'
       - 'app/styles.css'
       - 'tests/flow-layout-browser.cjs'
+      - 'tests/buyer-v5-browser.cjs'
       - '.github/workflows/flow-layout-browser.yml'
   workflow_dispatch:
     inputs:
@@ -64,10 +66,16 @@ jobs:
         env:
           NODE_PATH: /tmp/flow-layout-tools/node_modules
         run: node tests/flow-layout-browser.cjs /tmp/flow-layout-review
+      - name: Verify buyer v3/v5 response parity and invalid-v5 failure
+        env:
+          NODE_PATH: /tmp/flow-layout-tools/node_modules
+        run: node tests/buyer-v5-browser.cjs /tmp/buyer-v5-review
       - name: Save flow layout review
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: flow-layout-browser-${{ github.run_id }}
-          path: /tmp/flow-layout-review
+          path: |
+            /tmp/flow-layout-review
+            /tmp/buyer-v5-review
           if-no-files-found: ignore
