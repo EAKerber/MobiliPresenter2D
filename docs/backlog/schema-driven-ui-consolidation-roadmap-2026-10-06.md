@@ -138,9 +138,12 @@ Current CP-SD-02 progress:
 - CP-SD-02A2g0: Services item-renderer membership discovery — complete;
 - CP-SD-02A2g1: bound-section Services checklist membership/order — complete;
 - CP-SD-02A2h0: stage navigation / core-dispatch residual discovery — complete;
-- CP-SD-02A2h1: id-agnostic generic core-stage dispatch — next / intended final CP-SD-02 runtime slice.
+- CP-SD-02A2h1: id-agnostic generic core-stage dispatch — complete;
+- **CP-SD-02 gate: COMPLETE / PASS** — semantic renderer hierarchy authority consolidated; deliberate responsive/domain residuals deferred to their owning tracks.
 
 ### CP-SD-03 — responsive presentation primitives
+
+Status: **NEXT**. Immediate checkpoint: `docs/backlog/schema-driven-ui-cp-sd-03a0-responsive-presentation-discovery-2026-10-07.md`.
 
 Goal: implement audited presentation behavior from one responsive authority.
 

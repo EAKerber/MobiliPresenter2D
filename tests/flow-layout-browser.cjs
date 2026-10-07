@@ -329,6 +329,97 @@ const { chromium } = require("playwright");
     if (!response.ok) throw new Error("failed to load configuration fixture");
     return response.json();
   });
+  const renamedCoreStages = structuredClone(sourceConfiguration);
+  const renamedIdsByKind = {
+    finishes: "finishes-layout",
+    services: "services-layout",
+    summary: "review-layout"
+  };
+  renamedCoreStages.stages.forEach((stage) => {
+    const kind = stage.kind || stage.id;
+    if (!renamedIdsByKind[kind]) return;
+    stage.id = renamedIdsByKind[kind];
+    stage.kind = kind;
+  });
+  const expectedRenamedNavigation = renamedCoreStages.stages.filter((stage) => stage.enabled).map((stage) => stage.id);
+
+  const renamedErrors = [];
+  const renamedPage = await browser.newPage({ viewport: { width: 1366, height: 900 } });
+  renamedPage.on("pageerror", (error) => renamedErrors.push(error.message));
+  renamedPage.on("console", (message) => { if (message.type() === "error") renamedErrors.push(message.text()); });
+  await renamedPage.route("**/api/configuration", async (route) => {
+    if (route.request().method() !== "GET") return route.continue();
+    await route.fulfill({
+      status: 200,
+      contentType: "application/json",
+      body: JSON.stringify(renamedCoreStages)
+    });
+  });
+  await renamedPage.goto(targetUrl, { waitUntil: "domcontentloaded", timeout: 15000 });
+  await renamedPage.waitForFunction(() => {
+    const flow = window.CASA_NORMALIZED_FLOW;
+    const byKind = Object.fromEntries((flow?.stages || []).map((stage) => [stage.kind, stage]));
+    return byKind.finishes?.id === "finishes-layout"
+      && byKind.services?.id === "services-layout"
+      && byKind.summary?.id === "review-layout"
+      && document.querySelector("#finishesStagePanel > [data-flow-group-grid]")?.dataset.flowGroupGrid === "finishes-layout"
+      && document.querySelector("#servicesPanel > [data-flow-group-grid]")?.dataset.flowGroupGrid === "services-layout"
+      && document.querySelector("#summaryPanel > [data-flow-group-grid]")?.dataset.flowGroupGrid === "review-layout"
+      && window.CASA_EM_MODULOS_DEBUG?.getFlowLayoutErrors;
+  }, null, { timeout: 10000 });
+
+  assert.deepEqual(
+    await renamedPage.locator(".flow-nav [data-step]").evaluateAll((nodes) => nodes.map((node) => node.dataset.step)),
+    expectedRenamedNavigation,
+    "navigation uses normalized renamed stage ids in configured order"
+  );
+  assert.equal(await renamedPage.locator('.flow-nav [data-step="finishes"]').count(), 0, "historical Finishes stage id is not fabricated");
+  assert.equal(await renamedPage.locator('.flow-nav [data-step="services"]').count(), 0, "historical Services stage id is not fabricated");
+  assert.equal(await renamedPage.locator('.flow-nav [data-step="summary"]').count(), 0, "historical Summary stage id is not fabricated");
+  assert.deepEqual(
+    await renamedPage.evaluate(() => Object.fromEntries(
+      window.CASA_NORMALIZED_FLOW.stages
+        .filter((stage) => ["finishes", "services", "summary"].includes(stage.kind))
+        .map((stage) => [stage.kind, { id: stage.id, enabled: stage.enabled }])
+    )),
+    {
+      finishes: { id: "finishes-layout", enabled: true },
+      services: { id: "services-layout", enabled: true },
+      summary: { id: "review-layout", enabled: true }
+    },
+    "renamed core stages preserve canonical kinds and mandatory Summary enabled state"
+  );
+  assert.deepEqual(
+    await renamedPage.evaluate(() => ({
+      finishes: document.querySelector("#finishesStagePanel > [data-flow-group-grid]")?.dataset.flowGroupGrid,
+      services: document.querySelector("#servicesPanel > [data-flow-group-grid]")?.dataset.flowGroupGrid,
+      summary: document.querySelector("#summaryPanel > [data-flow-group-grid]")?.dataset.flowGroupGrid
+    })),
+    {
+      finishes: "finishes-layout",
+      services: "services-layout",
+      summary: "review-layout"
+    },
+    "stable visual roots are claimed by actual normalized stage ids"
+  );
+
+  await renamedPage.locator('.flow-nav [data-step="finishes-layout"]').click();
+  await renamedPage.waitForFunction(() => !document.getElementById("finishesStagePanel").hidden);
+  assert.equal(await renamedPage.locator('[data-keyboard-section="fronts"]').count(), 1, "renamed Finishes stage still materializes Fronts");
+  assert.equal(await renamedPage.locator('[data-keyboard-section="handles"]').count(), 1, "renamed Finishes stage still materializes Handles");
+
+  await renamedPage.locator('.flow-nav [data-step="services-layout"]').click();
+  await renamedPage.waitForFunction(() => !document.getElementById("servicesPanel").hidden);
+  assert.equal(await renamedPage.locator('[data-keyboard-section="lighting"]').count(), 1, "renamed Services stage still materializes Lighting");
+  assert.equal(await renamedPage.locator('[data-keyboard-section="additional-services"]').count(), 1, "renamed Services stage still materializes Additional Services");
+
+  await renamedPage.locator('.flow-nav [data-step="review-layout"]').click();
+  await renamedPage.waitForFunction(() => !document.getElementById("summaryPanel").hidden);
+  assert.equal(await renamedPage.locator('[data-keyboard-section="summary"]').count(), 1, "renamed Summary stage still materializes its semantic section");
+  assert.deepEqual(await renamedPage.evaluate(() => window.CASA_EM_MODULOS_DEBUG.getFlowLayoutErrors()), [], "renamed non-Modules core stage ids create no renderer invariant errors");
+  assert.deepEqual(renamedErrors, [], "renamed non-Modules core stage fixture has no console/page errors");
+  await renamedPage.close();
+
   const reorderedServices = structuredClone(sourceConfiguration);
   const reorderedServicesStage = reorderedServices.stages.find((stage) => (stage.kind || stage.id) === "services");
   assert.ok(reorderedServicesStage, "Services order fixture has Services stage");
@@ -860,7 +951,7 @@ const { chromium } = require("playwright");
   assert.deepEqual(skirtingNegativeErrors, [], "Stone Skirting absence fixture has no console/page errors");
   await skirtingNegativePage.close();
 
-  fs.writeFileSync(path.join(output, "result.json"), JSON.stringify({ targetUrl, uniqueness, errors, reorderErrors, negativeErrors, lightingNegativeErrors, frontsNegativeErrors, handlesNegativeErrors, cabinetNegativeErrors, stoneNegativeErrors, skirtingNegativeErrors }, null, 2));
+  fs.writeFileSync(path.join(output, "result.json"), JSON.stringify({ targetUrl, uniqueness, errors, renamedErrors, reorderErrors, negativeErrors, lightingNegativeErrors, frontsNegativeErrors, handlesNegativeErrors, cabinetNegativeErrors, stoneNegativeErrors, skirtingNegativeErrors }, null, 2));
   await browser.close();
   console.log("flow layout browser: PASS");
 })().catch((error) => {

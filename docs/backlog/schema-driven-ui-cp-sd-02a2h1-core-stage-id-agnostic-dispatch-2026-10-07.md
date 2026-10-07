@@ -1,6 +1,6 @@
 # CP-SD-02A2h1 — id-agnostic generic core-stage dispatch — 2026-10-07
 
-Status: **READY / NEXT — intended final CP-SD-02 runtime slice**.
+Status: **COMPLETE / PASS**.
 
 Parent:
 - CP-SD-02A2h0 residual discovery — PASS.
@@ -112,3 +112,50 @@ Stop and split if this requires:
 - publishing configuration.
 
 After a green A2h1, CP-SD-02 should be closed and CP-SD-03 becomes the next schema/UI track.
+
+
+## Implementation candidate
+
+Candidate changes:
+- Finishes / Services / Summary static group grids retain only the neutral `data-flow-group-grid` host marker; historical ids are removed from static HTML;
+- `mountStageGroups()` resolves exactly one direct neutral group-grid host, fails closed on zero/multiple hosts, then claims it with the actual normalized `stageId`;
+- `applyBuyerFlowLayout()` iterates normalized stages:
+  - Modules keeps the existing specialized pane mount;
+  - custom stages keep their existing validator;
+  - remaining core stages use the existing `stagePanels` kind registry and mount by actual `stage.id`;
+- no literal generic `mountStageGroups("finishes"|"services"|"summary")` calls remain;
+- shared cache revision advances v29 -> v30.
+
+New browser proof:
+- clones the live v3/current administration;
+- renames only non-Modules core ids while preserving kinds:
+  - `finishes-layout`;
+  - `services-layout`;
+  - `review-layout`;
+- requires navigation to expose those renamed ids in normalized order;
+- requires no historical Finishes/Services/Summary navigation ids;
+- requires the same stable visual panel roots to claim the renamed grid ids;
+- opens all three renamed stages and proves their existing generated sections still materialize;
+- requires Summary to remain enabled by kind;
+- requires zero flow-layout/page/console errors.
+
+Explicitly untouched:
+- Modules companion presentation policy/topology;
+- compact nav copy;
+- domain renderers, pricing, state and scene;
+- production configuration.
+
+Gate result:
+- App build purity — PASS;
+- Current variant fidelity — PASS;
+- Current asset gates — PASS;
+- Flow layout browser — PASS, including renamed non-Modules core-stage ids;
+- Keyboard browser — PASS;
+- Mobile browser — PASS;
+- Stone browser — PASS;
+- Summary/Pricing browser — PASS;
+- Netlify deploy preview #130 — PASS.
+
+Functional head: `306de22e89e9c12fa56b80bd618e2be48f412ee9`.
+
+Decision: A2h1 passes and satisfies the CP-SD-02 stop condition. No production configuration write.
