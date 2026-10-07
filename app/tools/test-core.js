@@ -31,6 +31,7 @@ const validation = sandbox.window.CasaModulesValidation;
 const fingerprints = sandbox.window.CasaModulesFingerprint;
 const finishes = sandbox.window.CasaModulesFinishes;
 const pricing = sandbox.window.CasaModulesPricing;
+const pricingContract = require(path.join(projectRoot, "core/pricing-contract.js"));
 const settingsCore = require(path.join(projectRoot, "core/configuration.js"));
 const settingsDefaults = require(path.join(projectRoot, "data/configurator-settings.js"));
 const defaultSettings = settingsCore.createDefaultAdministration(settingsDefaults, catalog, priceBook, scene);
@@ -101,6 +102,88 @@ assert.equal(defaultSettings.objects["stone-skirting"]?.title, "Rodapé de pedra
 assert.equal(defaultSettings.initialState.services.includes("stone-skirting"), true);
 assert.equal(priceBook.mode, "estimate");
 assert.equal(priceBook.compositionBaseReferenceCents, undefined);
+
+const legacyPricingFixture = JSON.parse(JSON.stringify({
+  entries: priceBook.entries,
+  handleEntries: priceBook.handleEntries,
+  frontFinishRatesBps: priceBook.frontFinishRatesBps,
+  localEntries: priceBook.localEntries,
+  globalEntries: priceBook.globalEntries,
+  handleFrontTotal: priceBook.handleFrontTotal
+}));
+const typedPricingFixture = pricingContract.upgradeLegacy(legacyPricingFixture);
+assert.equal(typedPricingFixture.schemaVersion, "CommercialPricingRules 1.0");
+assert.deepEqual(pricingContract.validate(typedPricingFixture), []);
+assert.deepEqual(
+  Object.keys(typedPricingFixture.roles),
+  ["itemBase", "handleChoiceTotal", "frontFinishAdjustment", "localAdjustment", "globalAdjustment"],
+  "typed pricing roles are explicit and ordered"
+);
+assert.deepEqual(typedPricingFixture.roles.itemBase["module-01"], { type: "amount", cents: 90000 });
+assert.deepEqual(typedPricingFixture.roles.handleChoiceTotal.none, { type: "amount", cents: 0 });
+assert.deepEqual(
+  typedPricingFixture.roles.frontFinishAdjustment["base-light"],
+  { type: "percentage", bps: 0, basis: "eligible-module-base" },
+  "zero-valued percentage survives migration"
+);
+assert.deepEqual(
+  typedPricingFixture.roles.frontFinishAdjustment.cocoa,
+  { type: "percentage", bps: 1500, basis: "eligible-module-base" }
+);
+assert.deepEqual(typedPricingFixture.roles.globalAdjustment["stone-existing"], { type: "amount", cents: 0 });
+assert.equal(typedPricingFixture.allocation.handleFrontTotal, 14);
+const legacyPricingProjection = pricingContract.projectToLegacy(typedPricingFixture);
+assert.equal(legacyPricingProjection.ok, true);
+assert.deepEqual(legacyPricingProjection.value, legacyPricingFixture, "legacy pricing round-trips exactly through typed rules");
+
+const amountFinishPricing = structuredClone(typedPricingFixture);
+amountFinishPricing.roles.frontFinishAdjustment.cocoa = { type: "amount", cents: 15000 };
+assert.deepEqual(pricingContract.validate(amountFinishPricing), [], "front finish may intentionally use an amount rule");
+const amountFinishProjection = pricingContract.projectToLegacy(amountFinishPricing);
+assert.equal(amountFinishProjection.ok, false);
+assert.equal(amountFinishProjection.code, "pricing_requires_publication", "legacy projection fails closed for a typed finish amount");
+
+const invalidPricingAmountFields = structuredClone(typedPricingFixture);
+invalidPricingAmountFields.roles.itemBase["module-01"] = { type: "amount", cents: 90000, basis: "eligible-module-base" };
+assert.equal(pricingContract.validate(invalidPricingAmountFields).some((error) => error.includes("unexpected amount fields")), true);
+
+const invalidPricingPercentageFields = structuredClone(typedPricingFixture);
+invalidPricingPercentageFields.roles.frontFinishAdjustment.cocoa = { type: "percentage", bps: 1500, basis: "eligible-module-base", cents: 15000 };
+assert.equal(pricingContract.validate(invalidPricingPercentageFields).some((error) => error.includes("unexpected percentage fields")), true);
+
+const invalidPricingBasis = structuredClone(typedPricingFixture);
+invalidPricingBasis.roles.frontFinishAdjustment.cocoa = { type: "percentage", bps: 1500, basis: "composition-subtotal" };
+assert.equal(pricingContract.validate(invalidPricingBasis).some((error) => error.includes("unsupported percentage basis")), true);
+
+const invalidPricingRoleType = structuredClone(typedPricingFixture);
+invalidPricingRoleType.roles.itemBase["module-01"] = { type: "percentage", bps: 1000, basis: "eligible-module-base" };
+assert.equal(pricingContract.validate(invalidPricingRoleType).some((error) => error.includes("unsupported pricing rule type")), true);
+
+const invalidPricingAmountRange = structuredClone(typedPricingFixture);
+invalidPricingAmountRange.roles.globalAdjustment["move-stone"] = { type: "amount", cents: pricingContract.AMOUNT_MAX_CENTS + 1 };
+assert.equal(pricingContract.validate(invalidPricingAmountRange).some((error) => error.includes("invalid amount cents")), true);
+
+const invalidPricingBpsRange = structuredClone(typedPricingFixture);
+invalidPricingBpsRange.roles.frontFinishAdjustment.cocoa = { type: "percentage", bps: pricingContract.PERCENTAGE_MAX_BPS + 1, basis: "eligible-module-base" };
+assert.equal(pricingContract.validate(invalidPricingBpsRange).some((error) => error.includes("invalid percentage bps")), true);
+
+const validPricingRangeEdges = structuredClone(typedPricingFixture);
+validPricingRangeEdges.roles.itemBase["module-01"] = { type: "amount", cents: pricingContract.AMOUNT_MAX_CENTS };
+validPricingRangeEdges.roles.frontFinishAdjustment.cocoa = { type: "percentage", bps: pricingContract.PERCENTAGE_MAX_BPS, basis: "eligible-module-base" };
+assert.deepEqual(pricingContract.validate(validPricingRangeEdges), [], "legacy amount/BPS maxima remain inclusive");
+
+const invalidPricingMissingBasis = structuredClone(typedPricingFixture);
+invalidPricingMissingBasis.roles.frontFinishAdjustment.cocoa = { type: "percentage", bps: 1500 };
+assert.equal(pricingContract.validate(invalidPricingMissingBasis).some((error) => error.includes("unsupported percentage basis")), true);
+
+const invalidPricingAmountBps = structuredClone(typedPricingFixture);
+invalidPricingAmountBps.roles.itemBase["module-01"] = { type: "amount", cents: 90000, bps: 1000 };
+assert.equal(pricingContract.validate(invalidPricingAmountBps).some((error) => error.includes("unexpected amount fields")), true);
+
+const invalidPricingUnknownRole = structuredClone(typedPricingFixture);
+invalidPricingUnknownRole.roles.discount = {};
+assert.equal(pricingContract.validate(invalidPricingUnknownRole).some((error) => error.includes("unknown pricing role")), true);
+
 
 assert.deepEqual(settingsCore.validateConfiguratorSettings(defaultSettings, catalog, priceBook, scene), []);
 const reorderedSettings = structuredClone(defaultSettings);
