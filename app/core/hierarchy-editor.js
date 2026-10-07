@@ -208,6 +208,7 @@
         sections: [{
           id: sectionId || uniqueId(new Set(), `${stage.id}-items`, "items"),
           label: sectionLabel || "Itens",
+          ...(behavior ? { behavior } : {}),
           ...(component ? { component } : { presentation }),
           itemIds: [itemId]
         }]
