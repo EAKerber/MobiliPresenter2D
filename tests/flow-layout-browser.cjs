@@ -401,7 +401,7 @@ const { chromium } = require("playwright");
     detail.scrollTop = Math.min(72, Math.max(0, detail.scrollHeight - detail.clientHeight));
     return { list: list.scrollTop, detail: detail.scrollTop };
   });
-  await page.locator('#moduleList .module-card.is-selected [data-select-entity]').focus();
+  await page.locator('#moduleList .module-card.is-selected [data-select-entity]').evaluate((element) => element.focus({ preventScroll: true }));
   assert.equal((await modulePaneState()).activeView, "modules-list", "stacked focus hazard fixture starts inside the primary list pane");
   await page.setViewportSize({ width: 390, height: 844 });
   await page.waitForFunction(() =>
