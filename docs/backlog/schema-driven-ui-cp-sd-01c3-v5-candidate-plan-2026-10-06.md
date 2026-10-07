@@ -1,6 +1,6 @@
 # CP-SD-01C3 — consolidated unpublished administration candidate — 2026-10-06
 
-Status: **NEXT / immediate implementation slice**.
+Status: **COMPLETE / PASS**.
 
 Parent:
 - `docs/backlog/schema-driven-ui-cp-sd-01c-contract-plan-2026-10-06.md`
@@ -296,3 +296,44 @@ Decision:
 - item capability remains a separate secondary/domain capability and is not overwritten by section behavior.
 
 This is a contract correction required by a failing gate, not a new generic interaction engine.
+
+
+## Completion record
+
+Result: **PASS** on reviewed head `7ff4746cfb60acaada1c91bf87fc54958bc957cf` in PR #108.
+
+Implemented:
+- `ConfiguratorAdministration2D 5.0` is the frozen unpublished repository administration candidate;
+- v3 remains the published legacy schema and deterministically upgrades through the historical hierarchy boundary into v5;
+- v4 remains an unchanged historical/intermediate import schema and deterministically upgrades to v5;
+- v5 sections persist explicit `behavior` + executable `component`; the legacy `presentation` field is rejected;
+- the first v5 gate exposed the Modules distinction between section-level primary `selection` behavior and item-level secondary `toggle` capability; migration now restores stage-aware section behavior from canonical hierarchy semantics before falling back to homogeneous item capability;
+- `presentationPolicy` is required and validated against `ConfiguratorPresentation2D 1.1` and the named layout-profile authority;
+- v5 safe projection to current v3 round-trips back through v5 and compares the publication signature, so hierarchy, behavior, component or presentation-policy changes cannot be silently flattened;
+- admin uses v5 internally, exposes only behavior-compatible executable components, and continues to PUT only losslessly projectable v3 payloads;
+- direct v4 and v5 publication remain explicitly server-blocked with `hierarchy_publication_required`;
+- the isolated `persist-handles-all` v3 repair remains independent;
+- no production configuration was written.
+
+Final gates on `7ff4746cfb60acaada1c91bf87fc54958bc957cf`:
+- App build purity — PASS;
+- Current variant fidelity — PASS;
+- Current asset gates — PASS;
+- Admin hierarchy browser — PASS;
+- Flow layout browser — PASS;
+- Keyboard browser — PASS;
+- Mobile browser — PASS;
+- Stone browser — PASS;
+- Summary/Pricing browser — PASS;
+- focused v3/v4/v5 migration/projection unit suite — PASS through App build purity;
+- Netlify deploy preview #108 — PASS.
+
+### Frozen version authority after C3
+
+- `ConfiguratorAdministration2D 3.0` — current production legacy schema;
+- `ConfiguratorAdministration2D 4.0` — historical/intermediate deterministic import schema;
+- `ConfiguratorAdministration2D 5.0` — frozen unpublished current repository candidate;
+- `ConfiguratorPresentation2D 1.1` — executable presentation/policy contract;
+- `ConfiguratorLayoutProfiles2D 1.0` — named topology profile authority.
+
+CP-SD-01 is complete. The next repository checkpoint is **CP-SD-02 — remove static semantic buyer-UI fallback surfaces and make buyer composition fully data-driven/fail-closed against the frozen contract**.
