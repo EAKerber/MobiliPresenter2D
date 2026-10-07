@@ -48,7 +48,7 @@ Canonical plan:
 - completed audit: `docs/architecture/schema-ui-authority-audit-2026-10-06.md`
 - completed contract checkpoint: `docs/backlog/schema-driven-ui-cp-sd-01-contract-plan-2026-10-06.md`
 - next track: CP-SD-03, executed as small self-contained responsive-presentation slices
-- next checkpoint: `docs/backlog/schema-driven-ui-cp-sd-03a8-bottom-dock-execution-2026-10-07.md`
+- next checkpoint: `docs/backlog/schema-driven-ui-cp-sd-04a0-interaction-affordance-discovery-2026-10-07.md`
 
 **CP-SD-00 — COMPLETE / PASS.** The audit found no critical unknowns. The main publication blocker is now explicit: v4 persists section presentation metadata, but that metadata is not yet the executable buyer-renderer authority.
 
@@ -214,4 +214,7 @@ A4 gate correction: the first Flow run falsified the assumption that stable pane
 **CP-SD-03A5 — COMPLETE / PASS.** Discovery proved the existing single viewer/PiP DOM and transient runtime state are sufficient. Result: `docs/architecture/schema-driven-ui-cp-sd-03a5-stacked-pip-discovery-result-2026-10-07.md`. **CP-SD-03A6 — COMPLETE / PASS.** Runtime now consumes the PiP policy by layout profile: stacked uses the existing manual launcher, compact keeps auto-after-anchor, side-rail remains unavailable, and supported-profile transitions preserve an already-open PiP. The same viewer/controls/transient state remain authoritative; fixed PiP presentation is profile-owned rather than <=700-owned. Functional head `b7162fc70bd8af557198ba2cec3194b0f27f5445` passed all eight repository workflows plus Netlify preview #139. Shared runtime cache advances v33 -> v34.
 
 
-**CP-SD-03A7 — COMPLETE / PASS.** Discovery found the existing `.flow-actions` footer already contains the exact frozen `estimate` + `primary-action` adapters in policy order. No new dock DOM or domain state is needed. The execution seam is sticky shell presentation plus one live dock geometry consumed by CSS scroll padding, keyboard viewport-bottom calculations and the A6 PiP vertical clamp. Result: `docs/architecture/schema-driven-ui-cp-sd-03a7-bottom-dock-discovery-result-2026-10-07.md`. **CP-SD-03A8 is NEXT**: execute the persistent dock through the existing footer.
+**CP-SD-03A7 — COMPLETE / PASS.** Discovery found the existing `.flow-actions` footer already contains the exact frozen `estimate` + `primary-action` adapters in policy order. Result: `docs/architecture/schema-driven-ui-cp-sd-03a7-bottom-dock-discovery-result-2026-10-07.md`. **CP-SD-03A8 — COMPLETE / PASS.** The same footer now executes the policy: sticky inside the side-rail controls scroller, fixed in stacked/compact document-scroll profiles, with live measured clearance consumed by keyboard navigation and PiP clamping. Functional head `7cc304b65b89a36197358a61c5fea3e8b926c87f` passed all eight workflows plus Netlify preview #141. Runtime cache advances v34 -> v35. **CP-SD-03 — COMPLETE / PASS. CP-SD-04A0 is NEXT**: discovery-only generic interaction affordance cleanup.
+
+
+**CP-SD-04A0 is NEXT.** Discovery-only interaction affordance checkpoint: separate module inspection from inclusion more cleanly (card body vs checkbox, without nested interactive semantics), inventory real password inputs before adding any reveal control, and freeze pointer/keyboard/focus/accessibility gates before implementation. Plan: `docs/backlog/schema-driven-ui-cp-sd-04a0-interaction-affordance-discovery-2026-10-07.md`.
