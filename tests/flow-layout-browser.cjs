@@ -273,6 +273,10 @@ const { chromium } = require("playwright");
   await page.screenshot({ path: path.join(output, "modules-stacked.png"), fullPage: true });
 
   await page.setViewportSize({ width: 1366, height: 900 });
+  await page.waitForTimeout(80);
+  assert.equal(await page.evaluate(() => document.documentElement.dataset.layoutProfile), "side-rail", "stacked -> side-rail resize restores the canonical profile marker");
+  assert.equal((await modulesViewContract()).detail.projection, "side-panel", "stacked -> side-rail resize restores the policy projection marker");
+  assert.equal((await modulesViewContract()).selectedEntityId, selectedModuleBeforeProfileChanges, "selected module survives stacked -> side-rail topology transition");
   assert.deepEqual(await page.evaluate(() => window.CASA_EM_MODULOS_DEBUG.getFlowLayoutErrors()), [], "finish layout has no renderer invariant errors");
   await page.screenshot({ path: path.join(output, "finishes-desktop.png"), fullPage: true });
 
@@ -363,6 +367,13 @@ const { chromium } = require("playwright");
   assert.deepEqual(await stageGroupOrder("finishes"), await modelGroupOrder("finishes"), "responsive collapse does not change semantic group order");
   assert.equal(await noOverflow("#finishesStagePanel"), true, "narrow Acabamentos does not overflow horizontally");
   await page.screenshot({ path: path.join(output, "finishes-mobile.png"), fullPage: true });
+
+  await page.setViewportSize({ width: 1366, height: 900 });
+  await page.waitForTimeout(80);
+  assert.equal(await page.evaluate(() => document.documentElement.dataset.layoutProfile), "side-rail", "compact -> side-rail resize restores the canonical profile marker");
+  assert.equal((await modulesViewContract()).detail.projection, "side-panel", "compact -> side-rail resize restores the policy projection marker");
+  assert.equal((await modulesViewContract()).selectedEntityId, selectedModuleBeforeProfileChanges, "selected module survives compact -> side-rail topology transition");
+  assert.equal(await noOverflow("#modulesPanel"), true, "side-rail Modules remains overflow-safe after a full profile round trip");
 
   const uniqueness = await page.evaluate(() => ({
     moduleDetail: document.querySelectorAll("#moduleDetail").length,
