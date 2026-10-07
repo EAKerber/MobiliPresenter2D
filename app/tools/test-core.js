@@ -497,6 +497,10 @@ assert.equal(indexHtml.includes('data-flow-group-shell="cabinet-finishes"'), tru
 assert.equal(indexHtml.includes('data-flow-group-shell="stone"'), true, "finish renderer exposes stone group shell");
 assert.equal(indexHtml.includes('data-flow-group-shell="services"'), false, "Services group identity is no longer pre-authored in static HTML");
 assert.equal(indexHtml.includes('data-flow-group-class="flow-group-shell flow-group-shell--embedded"'), true, "Services keeps only a generic visual group-shell class contract");
+assert.equal(indexHtml.includes('data-keyboard-section="additional-services"'), false, "additional-services semantic section is no longer pre-authored in static HTML");
+assert.equal(indexHtml.includes('id="additionalServicesHeading"'), false, "additional-services heading identity is no longer static");
+assert.equal(indexHtml.includes(">Serviços adicionais</h3>"), false, "additional-services heading copy comes from normalized data");
+assert.equal(indexHtml.includes('data-flow-section-slot'), true, "Services exposes one neutral section renderer slot");
 const runtimeScriptRevisions = [
   /data\/scene-data\.js\?v=([^\"]+)/,
   /data\/catalog-data\.js\?v=([^\"]+)/,
