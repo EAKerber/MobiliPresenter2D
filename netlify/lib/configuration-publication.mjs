@@ -19,6 +19,10 @@ export function digestJson(value) {
   return crypto.createHash("sha256").update(canonicalJson(value)).digest("hex");
 }
 
+export function digestText(value) {
+  return crypto.createHash("sha256").update(String(value)).digest("hex");
+}
+
 function stageItemOwners(value, itemId) {
   return (value?.stages || [])
     .filter((stage) => Array.isArray(stage.items) && stage.items.includes(itemId))
@@ -330,7 +334,7 @@ export function prepareMigration(raw, payload, declaredSourceDigest, deps) {
     candidateDigest: derived.candidateDigest,
     output,
     outputDigest: digestJson(output),
-    outputSignatureDigest: digestJson(deps.v5Core.publicationSignature(output))
+    outputSignatureDigest: digestText(deps.v5Core.publicationSignature(output))
   };
 }
 
@@ -362,7 +366,7 @@ export function verifyMigrationReadback(prepared, raw, deps) {
       actual: digest
     });
   }
-  const signatureDigest = digestJson(deps.v5Core.publicationSignature(normalized));
+  const signatureDigest = digestText(deps.v5Core.publicationSignature(normalized));
   if (signatureDigest !== prepared.outputSignatureDigest) {
     return failure("readback_signature_mismatch", "Readback publication signature differs.", 500);
   }
