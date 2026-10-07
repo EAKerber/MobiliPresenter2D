@@ -214,13 +214,31 @@
     const shells = [...grid.querySelectorAll(":scope > [data-flow-group-shell]")];
     const shellById = new Map(shells.map((shell) => [shell.dataset.flowGroupShell, shell]));
     const expectedGroupIds = new Set(plan.groups.map((group) => group.id));
+    const expectedSectionIds = new Set(plan.groups.flatMap((group) => group.sections.map((section) => section.id)));
+    const allSectionElements = [...grid.querySelectorAll("[data-keyboard-section]")];
+
+    allSectionElements.forEach((element) => {
+      element.hidden = !expectedSectionIds.has(element.dataset.keyboardSection);
+    });
 
     shells.forEach((shell) => {
       shell.hidden = !expectedGroupIds.has(shell.dataset.flowGroupShell);
     });
 
+    const shellClassName = String(grid.dataset.flowGroupClass || "").trim();
+    const createGroupShell = (groupId) => {
+      if (!shellClassName) return null;
+      const shell = document.createElement("div");
+      shell.className = shellClassName;
+      shell.dataset.flowGroupShell = groupId;
+      shell.dataset.flowGeneratedGroup = "true";
+      grid.append(shell);
+      shellById.set(groupId, shell);
+      return shell;
+    };
+
     plan.groups.forEach((group) => {
-      const shell = shellById.get(group.id);
+      const shell = shellById.get(group.id) || createGroupShell(group.id);
       if (!shell) {
         errors.push({ code: "missing-group-binding", stageId, groupId: group.id, message: `missing renderer group: ${stageId}/${group.id}` });
         return;
@@ -231,11 +249,9 @@
       shell.dataset.flowSpan = String(group.span);
       grid.append(shell);
 
-      const expectedSectionIds = new Set(group.sections.map((section) => section.id));
-      const candidateSections = [...shell.querySelectorAll("[data-keyboard-section]")]
-        .filter((element) => element.closest("[data-flow-group-shell]") === shell);
-      candidateSections.forEach((element) => {
-        element.hidden = !expectedSectionIds.has(element.dataset.keyboardSection);
+      const candidateSections = allSectionElements.filter((element) => {
+        const owner = element.closest("[data-flow-group-shell]");
+        return owner === shell || owner == null;
       });
 
       const ordered = [];
@@ -260,13 +276,7 @@
         ordered.push(element);
       });
 
-      const parents = new Set(ordered.map((element) => element.parentElement));
-      if (ordered.length && parents.size !== 1) {
-        errors.push({ code: "split-section-host", stageId, groupId: group.id, message: `sections for ${stageId}/${group.id} do not share one renderer host` });
-      } else if (ordered.length) {
-        const host = ordered[0].parentElement;
-        ordered.forEach((element) => host.append(element));
-      }
+      ordered.forEach((element) => shell.append(element));
     });
 
     return errors;
