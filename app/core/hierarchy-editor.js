@@ -207,7 +207,7 @@
         sections: [{
           id: sectionId || uniqueId(new Set(), `${stage.id}-items`, "items"),
           label: sectionLabel || "Itens",
-          presentation,
+          ...(component ? { component } : { presentation }),
           itemIds: [itemId]
         }]
       });
