@@ -1,6 +1,6 @@
 # Schema-driven UI consolidation roadmap — 2026-10-06
 
-Status: canonical planning track for consolidating schema ownership before production hierarchy publication. CP-SD-00 and CP-SD-01 are complete; CP-SD-02 is in progress through small self-contained slices.
+Status: canonical planning track for consolidating schema ownership before production hierarchy publication. CP-SD-00 through CP-SD-04 are complete; CP-SD-05 is in progress through discovery-first typed-pricing slices.
 
 This track starts from the manually accepted PR #97 buyer baseline and the current repository state after the isolated Puxadores persistence hotfix. It is intentionally documentation-first: no runtime, schema-version, pricing, catalog, scene, asset or production-configuration behavior changes are part of CP-SD-00.
 
@@ -173,7 +173,7 @@ Gate:
 
 ### CP-SD-04 — interaction affordance cleanup
 
-Status: **IN PROGRESS**. CP-SD-04A0 discovery and CP-SD-04A1 module-card affordance execution are complete. Immediate checkpoint: `docs/backlog/schema-driven-ui-cp-sd-04a2-admin-password-reveal-execution-2026-10-07.md`.
+Status: **COMPLETE / PASS**. CP-SD-04A0 discovery, CP-SD-04A1 module-card affordance execution and CP-SD-04A2 admin password reveal execution are complete. Final A2 functional head `77776f504147f0f9ed8718adbe3f41a5a77e61e9` passed all eight repository workflows plus Netlify deploy preview #144.
 
 Goal: polish generic interactions without inflating the domain schema.
 
@@ -189,6 +189,8 @@ Gate:
 - existing selection state and navigation behavior remain deterministic.
 
 ### CP-SD-05 — typed pricing authoring
+
+Status: **IN PROGRESS — DISCOVERY FIRST**. Immediate checkpoint: `docs/backlog/schema-driven-ui-cp-sd-05a0-typed-pricing-contract-discovery-2026-10-07.md`.
 
 Goal: let admin price adjustments choose absolute amount or percentage without ambiguous numeric meaning.
 
