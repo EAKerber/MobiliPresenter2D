@@ -2,6 +2,8 @@
 
 Status: **CANONICAL HANDOFF FOR NEXT AGENT**.
 
+Update 2026-10-07: CP-SD-06A1 was split for safer review. A1a v5 server read support is **implemented in draft PR #153 / gates pending**, branch `cp-sd-06a1a-v5-read-support`. Do not treat as merged or production activated. A1b conditional migration-operation support follows only after A1a passes. See `docs/backlog/schema-driven-ui-cp-sd-06a1a-safe-v5-read-2026-10-07.md`.
+
 Repository:
 - `EAKerber/MobiliPresenter2D`
 - resume from live `main`;
