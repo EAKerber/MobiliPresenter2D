@@ -100,18 +100,59 @@ assert.deepEqual(Array.from(skirtingService?.stageKinds || []), ["finishes", "se
 assert.equal(settingsCore.itemRegistry(catalog).get("stone-skirting"), "service");
 assert.equal(defaultSettings.objects["stone-skirting"]?.title, "Rodapé de pedra");
 assert.equal(defaultSettings.initialState.services.includes("stone-skirting"), true);
+assert.equal(priceBook.schemaVersion, "CommercialEstimatePriceBook 2.0");
 assert.equal(priceBook.mode, "estimate");
 assert.equal(priceBook.compositionBaseReferenceCents, undefined);
+["entries", "handleEntries", "frontFinishRatesBps", "localEntries", "globalEntries", "handleFrontTotal"].forEach((legacyKey) => {
+  assert.equal(Object.hasOwn(priceBook, legacyKey), false, `PriceBook 2.0 has no legacy top-level bucket: ${legacyKey}`);
+});
 
-const legacyPricingFixture = JSON.parse(JSON.stringify({
-  entries: priceBook.entries,
-  handleEntries: priceBook.handleEntries,
-  frontFinishRatesBps: priceBook.frontFinishRatesBps,
-  localEntries: priceBook.localEntries,
-  globalEntries: priceBook.globalEntries,
-  handleFrontTotal: priceBook.handleFrontTotal
-}));
-const typedPricingFixture = pricingContract.upgradeLegacy(legacyPricingFixture);
+const typedPricingFixture = pricingContract.normalize(priceBook.pricing);
+const projectedDefaultPricing = pricingContract.projectToLegacy(typedPricingFixture);
+assert.equal(projectedDefaultPricing.ok, true);
+const legacyPricingFixture = projectedDefaultPricing.value;
+const historicalPriceBook11Fixture = {
+  entries: {
+    "module-01": 90000,
+    "module-02": 110000,
+    "module-03": 150000,
+    "module-04": 60000,
+    "module-05": 80000,
+    "module-06": 110000,
+    "module-07": 60000,
+    "lighting-08": 60000
+  },
+  handleEntries: {
+    none: 0,
+    "tango-chrome": 17985,
+    ponto: 14985,
+    "alca-colors": 32850
+  },
+  frontFinishRatesBps: {
+    "base-light": 0,
+    cocoa: 1500,
+    mist: 1500,
+    steel: 1500,
+    fiber: 2500,
+    shadow: 2500
+  },
+  localEntries: {
+    "module-02:mandatory-cooktop-stone": 56600
+  },
+  globalEntries: {
+    "stone-existing": 0,
+    "stone-light-sink": 169900,
+    "stone-cloud": 219900,
+    "stone-grove": 219900,
+    "stone-night": 219900,
+    "stone-skirting": 18500,
+    "move-stone": 39900,
+    "tempered-glass": 39000
+  },
+  handleFrontTotal: 14
+};
+assert.deepEqual(legacyPricingFixture, historicalPriceBook11Fixture, "PriceBook 2.0 projects exactly to the historical 1.1 pricing values");
+assert.deepEqual(defaultSettings.pricing, historicalPriceBook11Fixture, "v3 default administration receives the exact historical pricing payload");
 const pricingMetadata = { label: priceBook.label, disclaimer: priceBook.disclaimer };
 assert.equal(typedPricingFixture.schemaVersion, "CommercialPricingRules 1.0");
 assert.deepEqual(pricingContract.validate(typedPricingFixture), []);
@@ -346,25 +387,39 @@ assert.equal(settingsCore.validateConfiguratorSettings(invalidPricingSettings, c
 
 const officialModulePrices = [90000, 110000, 150000, 60000, 80000, 110000, 60000];
 catalog.modules.forEach((module, index) => {
-  assert.equal(priceBook.entries[module.entityId], officialModulePrices[index], module.entityId);
+  assert.equal(priceBook.pricing.roles.itemBase[module.entityId].cents, officialModulePrices[index], module.entityId);
   assert.equal(module.dimensions.displayPolicy, "nominal", module.entityId);
   assert.equal(module.dimensions.evidence.some((entry) => entry.source === "promob-dxf" && entry.status === "confirmed"), true, module.entityId);
 });
-assert.equal(priceBook.entries["lighting-08"], 60000);
-assert.equal(priceBook.localEntries["module-02:mandatory-cooktop-stone"], 56600);
-assert.equal(priceBook.globalEntries["stone-light-sink"], 169900);
-assert.equal(priceBook.globalEntries["stone-cloud"], 219900);
-assert.equal(priceBook.globalEntries["stone-grove"], 219900);
-assert.equal(priceBook.globalEntries["stone-night"], 219900);
-assert.equal(priceBook.globalEntries["stone-skirting"], 18500);
-assert.equal(priceBook.globalEntries["move-stone"], 39900);
-assert.equal(priceBook.globalEntries["tempered-glass"], 39000);
+assert.equal(priceBook.pricing.roles.itemBase["lighting-08"].cents, 60000);
+assert.equal(priceBook.pricing.roles.localAdjustment["module-02:mandatory-cooktop-stone"].cents, 56600);
+assert.equal(priceBook.pricing.roles.globalAdjustment["stone-light-sink"].cents, 169900);
+assert.equal(priceBook.pricing.roles.globalAdjustment["stone-cloud"].cents, 219900);
+assert.equal(priceBook.pricing.roles.globalAdjustment["stone-grove"].cents, 219900);
+assert.equal(priceBook.pricing.roles.globalAdjustment["stone-night"].cents, 219900);
+assert.equal(priceBook.pricing.roles.globalAdjustment["stone-skirting"].cents, 18500);
+assert.equal(priceBook.pricing.roles.globalAdjustment["move-stone"].cents, 39900);
+assert.equal(priceBook.pricing.roles.globalAdjustment["tempered-glass"].cents, 39000);
 
 const chargeableFronts = catalog.modules
   .filter((module) => module.commercial.handleEligible)
   .reduce((total, module) => total + module.commercial.handleFrontCount, 0);
 assert.equal(chargeableFronts, 14);
-assert.equal(priceBook.handleFrontTotal, chargeableFronts);
+assert.equal(priceBook.pricing.allocation.handleFrontTotal, chargeableFronts);
+
+const nonRepresentablePriceBook = structuredClone(priceBook);
+nonRepresentablePriceBook.pricing.roles.frontFinishAdjustment.cocoa = { type: "amount", cents: 15000 };
+assert.throws(
+  () => settingsCore.createDefaultAdministration(settingsDefaults, catalog, nonRepresentablePriceBook, scene),
+  /price book pricing is not v3-compatible/,
+  "current v3 configuration seam fails closed for a typed price source it cannot represent"
+);
+assert.equal(
+  settingsCore.validateConfiguratorSettings(defaultSettings, catalog, nonRepresentablePriceBook, scene)
+    .some((error) => error.includes("price book pricing is not v3-compatible")),
+  true,
+  "v3 validation reports the non-representable typed price source instead of coercing it"
+);
 
 const module03 = catalog.modules.find((module) => module.entityId === "module-03");
 const module04 = catalog.modules.find((module) => module.entityId === "module-04");
@@ -637,15 +692,29 @@ const adminHtml = fs.readFileSync(path.join(projectRoot, "admin.html"), "utf8");
 const adminJs = fs.readFileSync(path.join(projectRoot, "admin/admin.js"), "utf8");
 const adminCss = fs.readFileSync(path.join(projectRoot, "admin/admin.css"), "utf8");
 const pricingSource = fs.readFileSync(path.join(projectRoot, "core/pricing.js"), "utf8");
-assert.equal(indexHtml.includes("core/pricing-contract.js?v=runtime-v37"), true, "buyer loads the typed pricing contract");
-assert.equal(indexHtml.indexOf("core/pricing-contract.js?v=runtime-v37") < indexHtml.indexOf("core/pricing.js?v=runtime-v37"), true, "pricing contract loads before calculator");
-assert.equal(indexHtml.includes("core/pricing.js?v=runtime-v37"), true, "typed pricing calculator cache revision is explicit");
-assert.equal(indexHtml.includes("app.js?v=runtime-v37"), true, "typed pricing buyer cache revision is explicit");
+const configurationSource = fs.readFileSync(path.join(projectRoot, "core/configuration.js"), "utf8");
+const priceBookSource = fs.readFileSync(path.join(projectRoot, "data/mock-price-book.js"), "utf8");
+assert.equal(indexHtml.includes("data/mock-price-book.js?v=runtime-v38"), true, "buyer cache revision declares PriceBook 2.0");
+assert.equal(indexHtml.includes("core/pricing-contract.js?v=runtime-v38"), true, "buyer loads the typed pricing contract");
+assert.equal(indexHtml.indexOf("core/pricing-contract.js?v=runtime-v38") < indexHtml.indexOf("core/configuration.js?v=admin-config-v8"), true, "pricing contract loads before the v3 compatibility core");
+assert.equal(indexHtml.indexOf("core/pricing-contract.js?v=runtime-v38") < indexHtml.indexOf("core/pricing.js?v=runtime-v38"), true, "pricing contract loads before calculator");
+assert.equal(indexHtml.includes("core/pricing.js?v=runtime-v38"), true, "typed pricing calculator cache revision is explicit");
+assert.equal(indexHtml.includes("app.js?v=runtime-v38"), true, "PriceBook 2.0 buyer cache revision is explicit");
 ["frontFinishRatesBps", "handleEntries", "localEntries", "globalEntries"].forEach((legacyBucket) => {
   assert.equal(pricingSource.includes(legacyBucket), false, `calculator no longer reads legacy pricing bucket: ${legacyBucket}`);
 });
-assert.equal(appJs.includes("pricingContract.upgradeLegacy(initialAdministration.pricing)"), true, "initial buyer pricing authority is migrated from normalized legacy administration");
+assert.equal(appJs.includes("pricingContract.normalize(priceBook.pricing)"), true, "initial buyer pricing authority comes directly from PriceBook 2.0 typed rules");
 assert.equal(appJs.includes("pricingContract.upgradeLegacy(normalized.pricing)"), true, "published legacy pricing is migrated at the compatibility seam");
+["priceBook.handleEntries", "priceBook.frontFinishRatesBps", "priceBook.localEntries", "priceBook.globalEntries", "priceBook.entries", "priceBook.handleFrontTotal"].forEach((legacyRead) => {
+  assert.equal(appJs.includes(legacyRead), false, `buyer no longer reads legacy PriceBook field: ${legacyRead}`);
+  assert.equal(adminJs.includes(legacyRead), false, `admin no longer reads legacy PriceBook field: ${legacyRead}`);
+});
+assert.equal(appJs.includes("pricing.itemEstimate(product, catalog, state, pricingRules)"), true, "module-detail fallback consumes typed pricing rules");
+assert.equal(appJs.includes("priceBook = { ...priceBook, ...normalized.pricing }"), false, "buyer no longer rebuilds a mutable legacy-shaped PriceBook");
+assert.equal(adminJs.includes("pricingContract.normalize(priceBook.pricing)"), true, "admin initializes catalog pricing directly from PriceBook 2.0");
+assert.equal(priceBookSource.includes('schemaVersion: "CommercialEstimatePriceBook 2.0"'), true, "public price source declares PriceBook 2.0");
+assert.equal(configurationSource.includes("pricingContract.projectToLegacy(priceBook.pricing)"), true, "v3 configuration core owns the explicit typed-to-legacy PriceBook projection seam");
+
 assert.equal((adminHtml.match(/data-password-reveal=/g) || []).length, 2, "admin exposes exactly two password reveal controls");
 assert.equal(adminHtml.includes('data-password-reveal="passwordInput"'), true, "login password reveal targets the current-password field");
 assert.equal(adminHtml.includes('data-password-reveal="newPasswordInput"'), true, "recovery password reveal targets the new-password field");
@@ -658,8 +727,16 @@ assert.equal(adminJs.includes('byId("passwordInput").value'), true, "login conti
 assert.equal(adminJs.includes('byId("newPasswordInput").value'), true, "password update continues reading the same new-password value");
 assert.equal(adminCss.includes(".password-field"), true, "admin reveal control has local field layout");
 assert.equal(adminHtml.includes("admin/admin.css?v=admin-pricing-v2"), true, "admin pricing authoring CSS cache revision is explicit");
-assert.equal(adminHtml.includes("admin/admin.bundle.js?v=admin-pricing-v2"), true, "admin pricing type-authoring bundle cache revision is explicit");
+assert.equal(adminHtml.includes("admin/admin.bundle.js?v=admin-pricing-v3"), true, "admin PriceBook 2.0 bundle cache revision is explicit");
 assert.equal(adminHtml.includes("core/pricing-contract.js?v=pricing-contract-v1"), true, "admin explicitly loads the typed pricing contract");
+assert.equal(adminHtml.includes("data/mock-price-book.js?v=admin-data-v4"), true, "admin loads the PriceBook 2.0 cache revision");
+assert.equal(adminHtml.includes("core/configuration.js?v=admin-config-v8"), true, "admin loads the v3 compatibility core revision");
+assert.equal(
+  adminHtml.indexOf("core/pricing-contract.js?v=pricing-contract-v1") < adminHtml.indexOf("core/configuration.js?v=admin-config-v8"),
+  true,
+  "admin pricing contract loads before the v3 compatibility core"
+);
+
 assert.equal(adminHtml.includes("core/administration-v5.js?v=cp-sd-05a3a-v1"), true, "admin v5 cache revision declares typed pricing ownership");
 assert.equal(
   adminHtml.indexOf("core/pricing-contract.js?v=pricing-contract-v1") < adminHtml.indexOf("core/administration-v5.js?v=cp-sd-05a3a-v1"),
