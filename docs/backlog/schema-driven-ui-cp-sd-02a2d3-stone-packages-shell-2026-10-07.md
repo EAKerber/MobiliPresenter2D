@@ -1,6 +1,6 @@
 # CP-SD-02A2d3 — Stone Packages section shell — 2026-10-07
 
-Status: **IN PROGRESS — A2d3.0 REVISED PASS; A2d3.1 FALSIFIED/REVERTED; A2d3.2 NEXT**.
+Status: **COMPLETE / PASS**.
 
 Parent:
 - CP-SD-02A2d0 Acabamentos family discovery;
@@ -81,3 +81,99 @@ Stop and split if Stone Packages shell generation requires:
 - changing production configuration.
 
 No production configuration write.
+
+
+## A2d3.2 implementation candidate
+
+Applied only the Stone Packages shell seam:
+- static `stone-packages` section id/heading/behavior/component removed from HTML;
+- outer neutral slot carries `choice-cards` + `stone-all` affinity and stays hidden until normalized flow claims it;
+- inner `data-flow-item-id="stone-all"` adapter preserves `#stonePackageOptions`;
+- `#stonePanel[data-configurable-item="stone-all"]` remains unchanged;
+- static `stone-skirting` section remains unchanged;
+- `renderStonePackages()` and all stone state/pricing/material/mask logic remain unchanged;
+- source and Flow-layout positive proof added;
+- shared runtime cache revision advanced from v21 to v22.
+
+A2d3.3 remains a separate schema-valid absence proof.
+
+
+## A2d3.2 result — PASS
+
+PASS on PR #119 head `6bd26a83ba9497f666f7a0ed7a4c67fd268efd7c`.
+
+Proven:
+- normalized flow materializes Stone Packages section id/label/behavior/component;
+- static HTML no longer owns `stone-packages` section semantics;
+- `#stonePackageOptions` remains inside the generated section through the bounded `stone-all` adapter;
+- static `stone-skirting` remains unchanged;
+- `#stonePanel[data-configurable-item="stone-all"]` remains unchanged;
+- `renderStonePackages()`, state, pricing, materials/masks and compatibility repair remain unchanged.
+
+Gate:
+- App build purity — PASS;
+- Current variant fidelity — PASS;
+- Current asset gates — PASS;
+- Flow layout browser — PASS;
+- Keyboard browser — PASS;
+- Mobile browser — PASS;
+- Stone browser — PASS;
+- Summary/Pricing browser — PASS;
+- Netlify deploy preview #119 — PASS.
+
+A2d3.3 remains a separate schema-valid absence proof.
+
+
+## A2d3.3 schema-valid absence-proof candidate
+
+Test-only fixture:
+- remove `stone-all` and `stone-skirting` from Acabamentos stage items;
+- remove `stone-skirting` from `initialState.services` so the legacy repair shim has no contradictory active service to repair;
+- keep material groups/catalog/pricing unchanged.
+
+Prove:
+- normalized flow has no Stone group;
+- no semantic `stone-packages` shell exists;
+- the unclaimed `stone-all` neutral slot stays hidden;
+- `#stonePanel` is hidden;
+- Fronts and Handles remain visible;
+- renderer invariant errors and page/console errors remain empty.
+
+Production/runtime implementation is unchanged from the A2d3.2 PASS head.
+
+
+## A2d3.3 result — PASS
+
+PASS on PR #119 head `be7526d035d5ebceb64bfe1aadbc8cd8e678e8c4`.
+
+Proven with a schema-valid Stone-absence fixture:
+- `stone-all` and `stone-skirting` are removed from Acabamentos stage items;
+- `stone-skirting` is also removed from `initialState.services`, so the legacy repair shim has no contradictory active service to restore;
+- normalized flow contains no Stone group;
+- no semantic `stone-packages` shell exists;
+- the unclaimed `stone-all` neutral slot remains hidden;
+- `#stonePanel` is hidden;
+- Fronts and Handles remain visible;
+- renderer invariant errors and page/console errors remain empty.
+
+No production/runtime implementation change was required by A2d3.3.
+
+## A2d3.4 regression + closure — PASS
+
+The same final functional head ran:
+- App build purity — PASS;
+- Current variant fidelity — PASS;
+- Current asset gates — PASS;
+- Flow layout browser — PASS;
+- Keyboard browser — PASS;
+- Mobile browser — PASS;
+- Stone browser — PASS;
+- Summary/Pricing browser — PASS;
+- Netlify deploy preview #119 — PASS.
+
+Final result:
+- normalized flow is the sole semantic owner of Stone Packages section id/label/behavior/component;
+- static HTML retains only a neutral `choice-cards` affinity slot with a bounded `stone-all` adapter;
+- current Stone-group availability semantics remain unchanged;
+- static `stone-skirting` remains for the next checkpoint;
+- no state/pricing/material/mask/compatibility or production-configuration semantics changed.

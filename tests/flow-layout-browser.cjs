@@ -134,6 +134,20 @@ const { chromium } = require("playwright");
     1,
     "Handles options adapter remains owned by the generated semantic section"
   );
+  const generatedStonePackages = page.locator('[data-keyboard-section="stone-packages"]');
+  assert.equal(
+    await generatedStonePackages.getAttribute("data-flow-generated-section"),
+    "true",
+    "Stone Packages section shell is created from normalized flow"
+  );
+  assert.equal(await generatedStonePackages.getAttribute("data-keyboard-behavior"), "selection", "generated Stone Packages behavior comes from normalized flow");
+  assert.equal(await generatedStonePackages.getAttribute("data-render-component"), "choice-cards", "generated Stone Packages component comes from normalized flow");
+  assert.equal(await generatedStonePackages.locator("h3").textContent(), "Pacote de pedra", "generated Stone Packages heading comes from normalized flow label");
+  assert.equal(
+    await generatedStonePackages.locator('[data-flow-item-id="stone-all"] #stonePackageOptions').count(),
+    1,
+    "Stone Packages options adapter remains owned by the generated semantic section"
+  );
   const cabinet = await rect('[data-flow-group-shell="cabinet-finishes"]');
   const stone = await rect('[data-flow-group-shell="stone"]');
   assert.ok(stone.top >= cabinet.bottom - 2, "while controls are beside the scene, Acabamentos remains one column");
@@ -513,7 +527,76 @@ const { chromium } = require("playwright");
   assert.deepEqual(handlesNegativeErrors, [], "Handles absence fixture has no console/page errors");
   await handlesNegativePage.close();
 
-  fs.writeFileSync(path.join(output, "result.json"), JSON.stringify({ targetUrl, uniqueness, errors, negativeErrors, lightingNegativeErrors, frontsNegativeErrors, handlesNegativeErrors }, null, 2));
+  const withoutStone = structuredClone(sourceConfiguration);
+  const stoneFinishesStage = withoutStone.stages.find((stage) => (stage.kind || stage.id) === "finishes");
+  assert.ok(stoneFinishesStage, "Stone absence fixture has Acabamentos stage");
+  stoneFinishesStage.items = stoneFinishesStage.items.filter((id) => id !== "stone-all" && id !== "stone-skirting");
+  if (Array.isArray(withoutStone.initialState?.services)) {
+    withoutStone.initialState.services = withoutStone.initialState.services.filter((id) => id !== "stone-skirting");
+  }
+
+  const stoneNegativeErrors = [];
+  const stoneNegativePage = await browser.newPage({ viewport: { width: 1366, height: 900 } });
+  stoneNegativePage.on("pageerror", (error) => stoneNegativeErrors.push(error.message));
+  stoneNegativePage.on("console", (message) => { if (message.type() === "error") stoneNegativeErrors.push(message.text()); });
+  await stoneNegativePage.route("**/api/configuration", async (route) => {
+    if (route.request().method() !== "GET") return route.continue();
+    await route.fulfill({
+      status: 200,
+      contentType: "application/json",
+      body: JSON.stringify(withoutStone)
+    });
+  });
+  await stoneNegativePage.goto(targetUrl, { waitUntil: "domcontentloaded", timeout: 15000 });
+  await stoneNegativePage.waitForFunction(() => {
+    const finishes = window.CASA_NORMALIZED_FLOW?.stages?.find((stage) => stage.id === "finishes");
+    const sectionIds = finishes?.groups?.flatMap((group) => group.sections.map((section) => section.id)) || [];
+    return finishes
+      && finishes.groups.every((group) => group.id !== "stone")
+      && !sectionIds.includes("stone-packages")
+      && !sectionIds.includes("stone-skirting")
+      && sectionIds.includes("fronts")
+      && sectionIds.includes("handles")
+      && window.CASA_EM_MODULOS_DEBUG?.getFlowLayoutErrors;
+  }, null, { timeout: 10000 });
+
+  await stoneNegativePage.locator('.flow-nav [data-step="finishes"]').click();
+  await stoneNegativePage.waitForFunction(() => !document.getElementById("finishesStagePanel").hidden);
+
+  assert.equal(
+    await stoneNegativePage.locator('[data-keyboard-section="stone-packages"]').count(),
+    0,
+    "omitted Stone data creates no semantic Stone Packages section shell"
+  );
+  assert.equal(
+    await stoneNegativePage.locator('[data-flow-section-slot][data-flow-slot-item="stone-all"]').isHidden(),
+    true,
+    "unclaimed Stone Packages item-affinity slot stays hidden"
+  );
+  assert.equal(
+    await stoneNegativePage.locator("#stonePanel").isHidden(),
+    true,
+    "Stone group is hidden when both canonical Stone items are absent"
+  );
+  assert.equal(
+    await stoneNegativePage.locator('[data-keyboard-section="fronts"]').isVisible(),
+    true,
+    "Fronts remains visible when Stone is omitted"
+  );
+  assert.equal(
+    await stoneNegativePage.locator('[data-keyboard-section="handles"]').isVisible(),
+    true,
+    "Handles remains visible when Stone is omitted"
+  );
+  assert.deepEqual(
+    await stoneNegativePage.evaluate(() => window.CASA_EM_MODULOS_DEBUG.getFlowLayoutErrors()),
+    [],
+    "schema-valid Stone absence creates no renderer fallback"
+  );
+  assert.deepEqual(stoneNegativeErrors, [], "Stone absence fixture has no console/page errors");
+  await stoneNegativePage.close();
+
+  fs.writeFileSync(path.join(output, "result.json"), JSON.stringify({ targetUrl, uniqueness, errors, negativeErrors, lightingNegativeErrors, frontsNegativeErrors, handlesNegativeErrors, stoneNegativeErrors }, null, 2));
   await browser.close();
   console.log("flow layout browser: PASS");
 })().catch((error) => {
