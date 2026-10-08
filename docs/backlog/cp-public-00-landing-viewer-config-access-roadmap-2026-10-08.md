@@ -1,5 +1,8 @@
 # CP-PUBLIC-00 — Integração Landing + Viewer + Configurador e acesso por link — 2026-10-08
 
+> **Atualização de implementação 2026-10-08 — 03a2-1A:** [PR #185](https://github.com/EAKerber/MobiliPresenter2D/pull/185) entrega `BuyerConfiguration2D 0.1` e `GET /api/buyer-configuration` com autenticação **somente admin provisória**, antes de storage, sem defaults. Comparação v5->DTO garantida por testes; integração do consumidor app.js **não** realizada; ticket de e-mail ainda não existe. [Contrato](../architecture/cp-public-03a2-1-buyer-dto-read-model-2026-10-08.md). Prosseguir checkpoint 03a2-2 (sessão atômica/verificada); branch de integração #182/#184/#185 depois do gate. Não mesclar endpoint novo isoladamente e não reabrir raw v5 anônimo. O viewer permanece vitrine, sem pedra/rodapé/oclusão comercial.
+
+
 Status: **PLANO CANÔNICO / DESCOBERTA CONFIRMADA; MIGRAÇÃO DE ROTAS AINDA NÃO ATIVADA.**
 
 **Handoff atual para troca de agente:** `docs/handoffs/public-pages-current-handoff-2026-10-08.md` — consulta ao vivo das PRs #175 (DRAFT + 7/7 CI + Netlify ready), #176 (MERGED) e #34 (DRAFT), arquivos de staging, duplicações e próximo recorte CP-PUBLIC-02a. Não confundir o deploy preview com incorporação do viewer à `main`.
