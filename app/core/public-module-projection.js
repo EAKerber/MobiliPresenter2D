@@ -102,8 +102,8 @@
         textureAsset: material.textureAsset, textureSize: material.textureSize
       };
     });
-    const ids = availableFinishes.map((finish) => finish.id);
-    if (!ids.length || !ids.includes(initial.finishId) || new Set(ids).size !== ids.length) {
+    const finishIds = availableFinishes.map((finish) => finish.id);
+    if (!finishIds.length || !finishIds.includes(initial.finishId) || new Set(finishIds).size !== finishIds.length) {
       throw new TypeError("published initial finish must be globally available");
     }
     // Never return the whole materials library, admin object assets or pricing.
