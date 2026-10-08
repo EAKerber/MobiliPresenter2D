@@ -203,7 +203,7 @@ async function main() {
     assert.equal(nativeV5Store.writes, 1, "retired migration operation cannot write stored v5");
 
     const afterLegacyAttempts = await sendV5("GET");
-    assert.deepEqual(afterLegacyAttempts.body, saved, "v5 document must remain identical after all rejected legacy operations");
+    assert.deepEqual(afterLegacyAttempts.body, saved.body, "v5 document must remain identical after all rejected legacy operations");
     console.log("v5 endpoint preview/admin/storage isolation: PASS");
   } finally {
     delete globalThis.__v5ReadinessHarness;
