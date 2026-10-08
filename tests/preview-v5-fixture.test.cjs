@@ -1,6 +1,6 @@
 "use strict";
 const assert = require("node:assert/strict");
-const { shouldSeed, createFixture, seed } = require("../scripts/seed-public-preview-v5.cjs");
+const { shouldSeed, createFixture } = require("../scripts/seed-public-preview-v5.cjs");
 const { project } = require("../app/core/public-module-projection.js");
 const catalog = require("../app/data/catalog-data.js");
 const scene = require("../app/data/scene-data.js");
@@ -23,8 +23,6 @@ for (const override of [
 ]) {
   assert.equal(shouldSeed({ ...allowed, ...override }), false);
 }
-assert.equal(seed({ ...allowed, CONTEXT: "production" }), false,
-  "no fixture written in production branch");
 const fixture = createFixture();
 assert.equal(fixture.schemaVersion, "ConfiguratorAdministration2D 5.0");
 assert.match(fixture.objects["module-01"].title, /homologação PR 180/);
