@@ -55,7 +55,64 @@ async function main() {
       assert.deepEqual(errors, [], "viewer errors: " + errors.join(" | "));
       await page.close();
     }
-    console.log("public landing/viewer interactive desktop + mobile smoke: PASS");
+    // CP-PUBLIC-02b: exercise the optional asynchronous public projection
+    // in an isolated browser with a fully mocked same-origin endpoint.
+    // Never read or modify real production/preview configuration Blobs.
+    const approvedProjection = {
+      schemaVersion: "PublicModulePresentation2D 0.1",
+      modules: [
+        { id: "module-07", title: "Nome publicado 07",
+          benefits: ["Destaque publicado 07"], components: ["Componente 07"], requirements: [] },
+        { id: "module-03", title: "Nome publicado 03",
+          benefits: ["Destaque publicado 03"], components: ["Componente 03"],
+          requirements: ["Requisito publicado 03"] }
+      ],
+      publicState: {
+        entities: { "module-07": true, "module-03": true },
+        finishId: "base-light",
+        availableFinishes: [{ id: "base-light", label: "Branco", color: "#faf9f6",
+          textureAsset: "", textureSize: "cover" }]
+      }
+    };
+    const published = await browser.newPage({ viewport: { width: 1366, height: 768 } });
+    await published.addInitScript(() => {
+      window.CASA_PUBLIC_VIEWER_INTEGRATION = { usePublishedApi: true };
+    });
+    await published.route("**/api/public-modules", async (route) => {
+      await route.fulfill({ status: 200, contentType: "application/json",
+        body: JSON.stringify(approvedProjection) });
+    });
+    await published.goto(new URL("/viewer/", base).href, { waitUntil: "networkidle" });
+    const publishedTitle = published.locator("#block-overview .overview-title");
+    await publishedTitle.waitFor({ timeout: 12000 });
+    assert.equal(await publishedTitle.textContent(), "Nome publicado 07",
+      "default must follow published order, not static catalog");
+    assert.equal(await published.locator("#sceneStage [data-select-scene-entity]").count(), 2,
+      "unpublished modules must not be selectable");
+    assert.equal(await published.locator("#block-overview .overview-highlights li").first().textContent(),
+      "Destaque publicado 07", "authored highlights must not be replaced by description");
+    await published.locator('#sceneStage [data-select-scene-entity="module-03"]').click();
+    assert.equal(await publishedTitle.textContent(), "Nome publicado 03");
+    assert.equal(await published.locator("#block-details .detail-row").count(), 2);
+    await published.close();
+
+    const unavailable = await browser.newPage({ viewport: { width: 390, height: 844 } });
+    await unavailable.addInitScript(() => {
+      window.CASA_PUBLIC_VIEWER_INTEGRATION = { usePublishedApi: true };
+    });
+    await unavailable.route("**/api/public-modules", (route) =>
+      route.fulfill({ status: 503, contentType: "application/json",
+        body: JSON.stringify({ error: "public_modules_unavailable" }) })
+    );
+    await unavailable.goto(new URL("/viewer/", base).href, { waitUntil: "networkidle" });
+    const alert = unavailable.locator("#viewerLayout [role=alert]");
+    await alert.waitFor({ timeout: 12000 });
+    assert.match(await alert.textContent(), /temporariamente indisponíveis/);
+    assert.equal(await unavailable.locator("#block-overview .overview-title").count(), 0,
+      "failed public API must not expose static catalog fallback");
+    await unavailable.close();
+
+    console.log("public landing/viewer interactive desktop + mobile smoke and mocked public bootstrap: PASS");
   } finally {
     await browser.close();
   }
