@@ -51,13 +51,15 @@ async function main() {
     const response = await ctx.request.get(api, { headers: { Accept: "application/json" } });
     assert.deepEqual((response.headers()["cache-control"] || "").split(",").map((part) => part.trim()).sort(), ["max-age=0", "no-store"]);
     assert.equal(response.headers()["access-control-allow-origin"], undefined);
-    assert([200, 503].includes(response.status()), "Unexpected public API status: " + response.status());
+    assert.equal(response.status(), 200,
+      "PR #180 must read its deploy-scoped v5 fixture; 503 means the isolated build upload is missing");
     const data = await response.json();
-    const expectedFirst = response.status() === 200 ? checkPublicShape(data) : null;
-    if (response.status() === 503) {
-      assert.deepEqual(data, { error: "public_modules_unavailable" },
-        "Missing or incompatible preview v5 must fail closed");
-    } else assert(expectedFirst, "A successful publication needs a visible module");
+    const expectedFirst = checkPublicShape(data);
+    assert(expectedFirst, "A published preview needs a visible module");
+    const sentinel = data.modules.find((module) => module.id === "module-01");
+    assert.equal(sentinel?.title, "Módulo 01 — homologação PR 180",
+      "The endpoint must read the explicitly seeded preview v5, not production or bundled static data");
+    assert.equal(sentinel?.benefits?.[0], "Destaque exclusivo do preview 180");
 
     // The same browser now consumes the ACTUAL public Netlify endpoint.
     const page = await ctx.newPage();
@@ -66,24 +68,15 @@ async function main() {
     await page.addInitScript(() => { window.CASA_PUBLIC_VIEWER_INTEGRATION = { usePublishedApi: true }; });
     console.log("CP-PUBLIC-02c preview API response: " + response.status());
     await page.goto(new URL("/viewer/", origin).href, { waitUntil: "domcontentloaded", timeout: 20000 });
-    if (response.status() === 503) {
-      const error = page.locator("#viewerLayout [role=alert]");
-      await error.waitFor({ timeout: 12000 });
-      assert.match(await error.textContent(), /temporariamente indisponíveis/);
-      assert.equal(await page.locator("#block-overview").count(), 0,
-        "A failed public API must not silently present bundled catalog data");
-    } else {
-      const title = page.locator("#block-overview .overview-title");
-      await title.waitFor({ timeout: 12000 });
-      assert.equal((await title.textContent()).trim(), expectedFirst.title);
-      assert.equal(await page.locator("#sceneStage [data-select-scene-entity]").count(),
-        data.modules.filter((item) => data.publicState.entities[item.id] === true).length);
-      assert.deepEqual(await page.locator("#block-overview .overview-highlights li").allTextContents(),
-        expectedFirst.benefits || [], "Destaques must be preserved exactly");
-    }
+    const title = page.locator("#block-overview .overview-title");
+    await title.waitFor({ timeout: 12000 });
+    assert.equal((await title.textContent()).trim(), expectedFirst.title);
+    assert.equal(await page.locator("#sceneStage [data-select-scene-entity]").count(),
+      data.modules.filter((item) => data.publicState.entities[item.id] === true).length);
+    assert.deepEqual(await page.locator("#block-overview .overview-highlights li").allTextContents(),
+      expectedFirst.benefits || [], "Destaques must be preserved exactly");
     assert.deepEqual(pageErrors, [], "Uncaught viewer errors: " + pageErrors.join(" | "));
-    console.log("CP-PUBLIC-02c real preview endpoint + viewer: PASS, API=" + response.status()
-      + (response.status() === 503 ? " (no preview publication, expected safe state)" : " (published v5 readback)"));
+    console.log("CP-PUBLIC-02c real deploy-scoped v5 readback + viewer: PASS, API=200");
     await ctx.close();
   } finally { await browser.close(); }
 }
