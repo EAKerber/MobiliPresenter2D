@@ -13,7 +13,8 @@ function shouldSeed(e) {
     const origin = new URL(e.DEPLOY_PRIME_URL || "");
     return e.NETLIFY === "true"
       && e.CONTEXT === "deploy-preview"
-      && e.BRANCH === PREVIEW_BRANCH
+      // Netlify's BRANCH can be the synthetic Deploy Preview ref.
+      // REVIEW_ID plus the canonical preview host identify PR #180 exactly.
       && e.REVIEW_ID === PREVIEW_REVIEW_ID
       && origin.protocol === "https:"
       && origin.hostname === PREVIEW_HOST;
@@ -60,14 +61,14 @@ function seed(e = process.env) {
   };
   if (permitted) {
     const fixture = createFixture();
-    const destination = path.join(process.cwd(), ".netlify", "blobs", "deploy",
+    const destination = path.join(__dirname, "..", ".netlify", "blobs", "deploy",
       "configurator-settings", "published");
     fs.mkdirSync(path.dirname(destination), { recursive: true });
     fs.writeFileSync(destination, JSON.stringify(fixture), { flag: "wx", mode: 0o600 });
     diagnostic.prepared = fs.statSync(destination).size > 0;
     console.log("CP-PUBLIC-02c preview-only v5 fixture prepared for Netlify deploy-scoped Blob.");
   } else console.log("CP-PUBLIC-02c preview v5 fixture disabled outside isolated PR #180.");
-  const output = path.join(process.cwd(), "app", "__cp-public-02c-seed-checks.json");
+  const output = path.join(__dirname, "..", "app", "__cp-public-02c-seed-checks.json");
   fs.writeFileSync(output, JSON.stringify(diagnostic));
   return permitted;
 }
