@@ -12,6 +12,9 @@ function published(ids = catalog.modules.map((item) => item.entityId)) {
     pricing: { secret: "must-not-leak" },
     etag: "private-etag",
     draft: { secret: true },
+    finishes: catalog.options.finishes.map((finish) => ({
+      id: finish.id, enabled: finish.status === "published", scope: "global"
+    })),
     initialState: {
       entities: Object.fromEntries(catalog.modules.map((item) => [item.entityId, true])),
       finishId: "base-light",
@@ -41,6 +44,7 @@ test("CP-PUBLIC-02a: all seven public modules in published order", () => {
   assert.deepEqual(result.modules[2].benefits, ["Destaque A", "Destaque B"]);
   assert.equal(result.modules[2].dimensionLabel, catalog.modules[2].dimensions.display);
   assert.equal(result.publicState.finishId, "base-light");
+  assert.deepEqual(result.publicState.availableFinishIds, catalog.options.finishes.map((f) => f.id));
   assert.deepEqual(Object.keys(result.publicState.entities), catalog.modules.map((m) => m.entityId));
   assert.ok(result.modules[2].components.length);
 });
@@ -101,6 +105,10 @@ test("CP-PUBLIC-02a: visible-state subset and selected finish come from publicat
   assert.deepEqual(Object.keys(result.publicState.entities), ["module-07", "module-03"]);
   assert.equal(result.publicState.entities["module-07"], false);
   assert.equal(result.publicState.finishId, "cocoa");
+  assert.equal(result.publicState.availableFinishIds.includes("cocoa"), true);
+  source.finishes.find((finish) => finish.id === "cocoa").enabled = false;
+  assert.throws(() => project(source, catalog, scene), /published initial finish/);
+  source.finishes.find((finish) => finish.id === "cocoa").enabled = true;
   assert.throws(() => project({ ...source, initialState: null }, catalog, scene));
   source.initialState.entities["module-03"] = undefined;
   assert.throws(() => project(source, catalog, scene), /missing published module visibility/);
