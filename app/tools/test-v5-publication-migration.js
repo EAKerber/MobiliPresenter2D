@@ -133,11 +133,11 @@ async function main() {
     "../../netlify/lib/configuration-access.cjs"), "utf8");
   const auth = endpoint.indexOf("accessGuard.authorize(request");
   const denial = endpoint.indexOf("if (!access.ok)");
-  const store = endpoint.indexOf("const store = getConfigurationStore(context)");
+  const storeAccessOrder = endpoint.indexOf("const store = getConfigurationStore(context)");
   const oldOperation = endpoint.indexOf('operation === "publish-v5-migration"');
   assert.match(guardSource, /function hasAdminRole\(user\)/);
   assert.match(guardSource, /if \(hasAdminRole\(user\)\)/);
-  assert(auth !== -1 && auth < denial && denial < store && store < oldOperation,
+  assert(auth !== -1 && auth < denial && denial < storeAccessOrder && storeAccessOrder < oldOperation,
     "server-side authorization must precede any Blob access or retired operation check");
   console.log("v5 publication migration mock-store gates: PASS");
 }
