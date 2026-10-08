@@ -4,6 +4,7 @@ import configCore from "../../app/core/configuration.js";
 import administrationV5 from "../../app/core/administration-v5.js";
 import publishedReader from "../../app/core/published-configuration.js";
 import v5Migration from "../../app/core/v5-publication-migration.js";
+import v5NormalSave from "../../app/core/v5-normal-save.js";
 import flow from "../../app/core/flow-model.js";
 import hierarchyDefaults from "../../app/data/hierarchy-defaults.js";
 import legacyStageRepair from "../../app/core/legacy-stage-repair.js";
@@ -90,10 +91,16 @@ export default async (request, context) => {
   if (currentRead.kind === "invalid") {
     return respond({ error: "stored_configuration_invalid", code: currentRead.code }, 409);
   }
-  // Until the separate authenticated v5 publication checkpoint, a v3 PUT
-  // must never overwrite an already-published v5 record.
+  // Existing v5 is editable by an admin with native v5 validation and
+  // conditional storage; this does not enable an initial v3->v5 migration.
   if (currentRead.schema === administrationV5.SCHEMA) {
-    return respond({ error: "hierarchy_publication_required", message: "Published v5 cannot be replaced by the legacy v3 writer." }, 409);
+    if (operation) return respond({ error: "unsupported_configuration_operation" }, 422);
+    const saved = await v5NormalSave.savePublishedV5({
+      store, payload,
+      runtime: { configuration: configCore, v5Core: administrationV5, catalog, priceBook, scene }
+    });
+    if (!saved.ok) return respond({ error: saved.code }, saved.status);
+    return respond(saved.value);
   }
   const current = currentRead.value;
   if (payload?.revision !== current.revision) return respond({ error: "revision_conflict", currentRevision: current.revision }, 409);
