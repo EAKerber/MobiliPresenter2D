@@ -19,12 +19,14 @@ Rejeita v5 inválido de versão/shape básico, stage desabilitada, IDs duplicado
 | `Descrição → objects[id].description` | `summary`, fallback `benefits[0]` ou texto fabricado | Renomeação e fallback indevido; omitir vazio |
 | `Destaques (um por linha) → benefits[]` | `benefits[]` como lista, mas também filtra item que diga `caixaria` | Lista correta, porém o filtro semântico altera conteúdo publicado |
 | `Componentes (um por linha) → components[]` | Lista de detalhes `components[]` | Correto; não confundir com `section.component` do renderer |
-| `Requisitos (um por linha) → requirements[]` | Lista de detalhes `requirements[]` | Correto como copy; não equivale à `dependencies[]` executável |
+| `Requisitos (um por linha) → requirements[]` | Lista de detalhes `requirements[]` | O configurador atual mostra **somente `product.requirements[0]`** (ou mensagem de bloqueio), enquanto o viewer lista todos. É diferença de UX/consumo, não lacuna do schema; corrigir em checkpoint visual próprio, preservando aviso de bloqueio. Nunca converter copy automaticamente em `dependencies[]`. |
 | `objectAssets[id].detailImageAsset / imageAsset` | `scene.entities[].asset` | Override editável ignorado pelo viewer; projetar só assets autorizados futuramente |
 | `initialState.finishId`, `finishes[]` | Finish base derivado de `core.createInitialState(scene)` | Pode divergir do preset publicado; paridade visual separada |
 | `category`, `dimensions`, `frontLayout`, `drawingSpec` | Catálogo/Scene | Fonte física correta; não duplicar no v5 |
 | `stone-all` e `stone-skirting` | Composição do viewer incompleta | Material de pedra compartilhado, serviço de rodapé distinto por design; não criar segunda autoridade |
 | `pricing` v5 | Viewer não exibe preço | Excluir dados de preço inteiramente na fronteira pública |
+
+**Listas e linhas vazias:** o ADM usa `textarea` com `.split("\\n")`, inclusive entradas vazias. O normalizador de configuração aplica `.trim()` mas não elimina todas as linhas vazias; `createDetailList()` do configurador gera um `<li>` para cada entrada. O projetor público filtra vazias. Um ajuste comum de normalização de listas deve ser testado separadamente para não modificar sem querer o documento de publicação v5 já aceito. Descrição vazia deve continuar vazia (não substituí-la por primeiro destaque).
 
 ## Caixaria — decisão de produto / gate separado
 O viewer tenta extrair `carcass` de um campo antigo `publicPresentation.carcass` ou de texto livre em `benefits[]`. **Isso não é fonte de verdade válida**. Decisão solicitada: caixaria como *família própria de acabamento*, com aplicabilidade explícita por módulo e **seleção global**, semelhante às frentes, e apenas opção **Branco** neste primeiro momento.
