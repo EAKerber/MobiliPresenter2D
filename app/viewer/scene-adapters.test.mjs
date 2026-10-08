@@ -56,13 +56,15 @@ test("public adapter reconciles all real modules by entity id, not index", () =>
     assert.equal(module.dimensionLabel, product.dimensions.display);
     assert.deepEqual([...module.components], [...product.components]);
     assert.deepEqual([...module.requirements], [...product.requirements]);
-    assert.notEqual(module.summary, "", "public page must not present an empty summary");
+    assert.equal(module.description, "", "an empty authored description stays empty");
+    assert.equal("summary" in module, false);
+    assert.equal("carcass" in module, false);
   }
 });
 
 test("viewer composition is separate from published administration schema", () => {
   assert.deepEqual(Array.from(viewer.layout), ["overview", "scene", "views", "details"]);
-  assert.equal(viewer.defaultModuleId, "module-07");
+  assert.equal(Object.hasOwn(viewer, "defaultModuleId"), false);
   assert(viewer.detailLayout.every((item) => item.placeholder && item.source));
   assert(!("objects" in viewer), "viewer/page composition must not copy v5 objects");
   assert(!("pricing" in viewer), "viewer must not expose independent pricing buckets");
@@ -112,4 +114,60 @@ test("standalone constructor and explicit injected repository share one adapter"
   const other = factory.create({ ...dependencies, initialSelectedId: "module-05" });
   assert.equal(other.getSelectedModule().id, "module-05");
   assert.equal(other.modules.length, catalog.modules.length);
+});
+
+test("viewer initial selection follows visible module data instead of an arbitrary default", () => {
+  const adapter = factory.createRepositoryAdapter(dependencies);
+  assert.equal(adapter.getSelectedModule().id, catalog.modules[0].entityId);
+  assert.equal(adapter.getState().selectedEntityId, adapter.getSelectedModule().id);
+  const hidden = factory.createRepositoryAdapter({
+    ...dependencies, publicState: { entities: { "module-01": false, "module-02": false } }
+  });
+  assert.equal(hidden.getSelectedModule().id, "module-03");
+  assert.deepEqual(Array.from(hidden.getState().visibleModuleIds).slice(0, 2), ["module-03", "module-04"]);
+  assert.equal(hidden.select("module-01"), false, "an invisible module cannot become selected");
+  const override = factory.createRepositoryAdapter({
+    ...dependencies, initialSelectedId: "module-07",
+    publicState: { entities: { "module-07": false } }
+  });
+  assert.equal(override.getSelectedModule().id, "module-01", "invalid deep link cannot select hidden entity");
+});
+test("approved public module projection owns order and authored highlights, without summary or carcass inference", () => {
+  const entries = ["module-07", "module-02"].map((id) => ({
+    id, title: "Título público " + id, description: "",
+    benefits: ["Caixaria interna clara", "Outro destaque"],
+    components: ["MDF"], requirements: []
+  }));
+  const a = factory.createRepositoryAdapter({ ...dependencies, publicModules: entries });
+  assert.deepEqual(a.modules.map((module) => module.id), ["module-07", "module-02"]);
+  assert.equal(a.getSelectedModule().id, "module-07");
+  assert.equal(a.modules[0].title, entries[0].title);
+  assert.deepEqual(Array.from(a.modules[0].benefits), entries[0].benefits);
+  assert.equal(a.modules[0].description, "");
+  assert(!("summary" in a.modules[0]));
+  assert(!("carcass" in a.modules[0]));
+  assert.throws(() => factory.createRepositoryAdapter({
+    ...dependencies, publicModules: [...entries, entries[0]]
+  }), /Duplicate published module/);
+});
+test("finish changes use the same canonical adapter state and notify subscribers", () => {
+  const a = factory.createRepositoryAdapter({
+    ...dependencies,
+    publicState: { finishId: "cocoa", entities: { "module-01": true } }
+  });
+  assert.equal(a.getState().finishId, "cocoa");
+  const stateEvents = [];
+  const stop = a.subscribeState((value) => stateEvents.push(value));
+  assert.equal(a.setGlobalFinish("steel"), true);
+  assert.equal(a.getState().finishId, "steel");
+  assert.equal(stateEvents.at(-1).finishId, "steel");
+  assert.equal(a.select("module-03"), true);
+  assert.equal(a.getState().selectedEntityId, "module-03");
+  assert.equal(stateEvents.at(-1).selectedEntityId, "module-03");
+  assert.equal(a.setGlobalFinish("no-such-finish"), false);
+  assert.equal(a.getState().finishId, "steel");
+  stop();
+  assert.throws(() => factory.createRepositoryAdapter({
+    ...dependencies, publicState: { finishId: "unknown" }
+  }), /Unknown public finish/);
 });
