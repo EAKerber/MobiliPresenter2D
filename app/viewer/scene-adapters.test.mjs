@@ -166,6 +166,13 @@ test("finish changes use the same canonical adapter state and notify subscribers
   assert.equal(stateEvents.at(-1).selectedEntityId, "module-03");
   assert.equal(a.setGlobalFinish("no-such-finish"), false);
   assert.equal(a.getState().finishId, "steel");
+  const limited = factory.createRepositoryAdapter({
+    ...dependencies,
+    publicState: { finishId: "cocoa", availableFinishIds: ["base-light", "cocoa"] }
+  });
+  assert.equal(limited.setGlobalFinish("steel"), false, "unpublished finish must not be selectable");
+  assert.equal(limited.setGlobalFinish("base-light"), true);
+  assert.equal(limited.getState().finishId, "base-light");
   stop();
   assert.throws(() => factory.createRepositoryAdapter({
     ...dependencies, publicState: { finishId: "unknown" }
