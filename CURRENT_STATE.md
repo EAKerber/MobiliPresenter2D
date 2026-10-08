@@ -1,6 +1,6 @@
 # CURRENT_STATE — MobiliPresenter2D
 
-Updated: 2026-10-07
+Updated: 2026-10-08
 Authority: live `main` plus the canonical roadmaps linked below.
 
 ## Purpose
@@ -14,6 +14,9 @@ Do not treat an embedded commit SHA as the permanent current `main` head. Query 
 Later housekeeping/documentation commits may advance `main` without changing buyer-visible product behavior.
 
 ## Current status
+
+**CURRENT AUTHORITY — POST-v5.** CP-SD-00→06 is COMPLETE/PASS after PR #170 (`c379d4d48c98143c3eba79392134ad00817f6533` merge at the time of this checkpoint). The production schema v5 revision 7 was published and visually accepted by the user. Historical one-time migration paths are retired; v3 recovery compatibility is deliberate. No new production mutation is required. **Next proposed discovery:** `docs/backlog/post-v5-work-frontier-2026-10-08.md` (CP-POSTV5-01 admin/schema authorship coverage). Landing/viewer remain a parallel, separately coordinated track. Later paragraphs recording old pending stages are historical, not current orders to run v3/v4 migration.
+
 
 Housekeeping of repository/runtime legacy is substantially complete.
 
