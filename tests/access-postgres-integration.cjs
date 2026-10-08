@@ -84,7 +84,7 @@ async function main() {
       audience, ttlSeconds: 900 });
     assert.deepEqual(limit, { ok: false, code: "rate_limited" });
     const all = await pool.query("SELECT count(*)::int AS n FROM casa_access_tickets");
-    assert.equal(all.rows[0].n, 7, "4 initial tickets + 3 rate-limit tickets");
+    assert.equal(all.rows[0].n, 6, "3 initial tickets + 3 rate-limit tickets");
 
     // Trigger an explicit DB error after a successful conditional claim:
     // transaction rollback must make the ticket usable again.
@@ -92,14 +92,18 @@ async function main() {
     await store.issue({ ticketHash: rollbackTicket, subject: core.digest("rollback"),
       recipient: "rollback@example.com", issuer: "admin-rollback", audience,
       ttlSeconds: 900 });
-    const original = core.digest(core.generate());
-    await pool.query(`INSERT INTO casa_access_sessions
-      (session_hash,ticket_hash,subject,audience,expires_at)
-      VALUES($1,$2,$3,$4,now()+interval '1 hour')`,
-      [original, core.digest(t), core.digest("s1"), audience]).catch(()=>{});
+    await assert.rejects(store.redeem({ ticketHash: rollbackTicket,
+      sessionHash: row.session_hash, audience, sessionSeconds: 43200 }),
+      "duplicate session PK must abort claim transaction");
+    const rolledBack = await pool.query(
+      "SELECT consumed_at FROM casa_access_tickets WHERE ticket_hash=$1",
+      [rollbackTicket]
+    );
+    assert.equal(rolledBack.rows[0].consumed_at, null,
+      "a failed session insert must rollback the ticket claim");
     const inserted = await store.redeem({ ticketHash: rollbackTicket,
       sessionHash: core.digest(core.generate()), audience, sessionSeconds: 43200 });
-    assert.equal(inserted.ok, true);
+    assert.equal(inserted.ok, true, "ticket remains usable after rolled-back claim");
 
     console.log("CP-PUBLIC-03a2-2 PostgreSQL: 32-way atomic single-use, expiry, audience, revocation, quotas: PASS");
   } finally {
