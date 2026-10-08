@@ -71,3 +71,7 @@ Antes de cada remoção, confirmar ausência de referências com busca no projet
 ## Acabamentos
 
 O viewer aplica o acabamento-base pelas máscaras compartilhadas, mas ainda não oferece picker. O catálogo publica opções globais de frente, e o estado existente também modela essa seleção como global; para adicioná-la, expor leitura e troca de acabamento no adapter e renderizar as opções publicadas, sem importar `app.js`. A caixaria não tem grupo nem máscara próprios e **não** é apresentada como propriedade visual deduzida de texto. Qualquer seleção própria de cor requer geometria/máscaras separadas, mas a frente de laterais está congelada indefinidamente; não implementá-la como parte deste viewer.
+
+
+## CP-PUBLIC-02b — materiais novos sem duplicar autoridade
+`publicState.availableFinishes[]` traz somente opções públicas da publicação v5, incluindo materiais cadastrados depois do catálogo físico. O adapter valida os campos e usa esses acabamentos para atualizar a cena; `getFinishes()` expõe opções ao futuro controle sem nova cópia de estado, e `setGlobalFinish()` altera o `ViewerState2D` compartilhado. A fixture do viewer comprova IDs de acabamento inéditos e recusa texturas externas. Não adicionamos controle visual nem persistência de seleção local/inter-sessão neste recorte.
