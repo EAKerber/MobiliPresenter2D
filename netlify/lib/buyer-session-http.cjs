@@ -75,7 +75,7 @@ async function issue(request, context, { getIdentityUser, store, sender, origin 
       email: body.email, issuer: user.id, audience: audience(context)
     });
     if (!result.ok && result.code === "rate_limited") return reply({ error: "rate_limited" }, 429);
-    return result.ok ? reply({ delivered: true }, 202) :
+    return result.ok ? reply({ accepted: true }, 202) :
       reply({ error: "access_unavailable" }, 503);
   } catch {
     return reply({ error: "access_unavailable" }, 503);
