@@ -17,18 +17,26 @@ html, body { margin: 0; min-height: 100%; }
 
 body { background: var(--background); color: var(--text); }
 
-.published-config-error {
-  max-width: 900px;
+/* CP-PUBLIC-03a2-0: CSS/HTML lock precedes JavaScript, including on slow loads.
+   `hidden` is mandatory in addition to `inert`; no visible price until 200+apply. */
+.workspace[hidden],
+html:not([data-configuration-access-state="ready"]):not([data-configuration-access-state="offline"]) .workspace {
+  display: none !important;
+}
+.configuration-access-status {
+  width: min(900px, calc(100% - 32px));
   margin: 24px auto;
   padding: 20px 24px;
   border: 1px solid var(--border);
   border-radius: 12px;
   background: var(--surface);
   color: var(--text);
-  font-weight: 600;
   line-height: 1.5;
 }
-
+.configuration-access-status[hidden] { display: none !important; }
+.configuration-access-status p { margin: 0; }
+.configuration-access-status .button { margin-top: 14px; }
+#restoreButton:disabled { opacity: .5; pointer-events: none; }
 
 button, input { font: inherit; }
 

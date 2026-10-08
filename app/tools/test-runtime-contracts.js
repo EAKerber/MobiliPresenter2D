@@ -93,6 +93,7 @@ const presentationPolicyIndex = indexHtml.indexOf("data/presentation-policy-defa
 const flowLayoutIndex = indexHtml.indexOf("core/flow-layout.js?v=runtime-v38");
 const runtimeContractIndex = indexHtml.indexOf("core/runtime-contracts.js?v=runtime-contracts-v2");
 const keyboardIndex = indexHtml.indexOf("core/keyboard-shortcuts.js?v=keyboard-v4");
+const bootstrapIndex = indexHtml.indexOf("core/authorized-bootstrap.js?v=cp-public-03a2-0");
 const appIndex = indexHtml.indexOf("app.js?v=runtime-v38");
 assert.equal(
   layoutProfilesIndex >= 0
@@ -106,7 +107,8 @@ assert.equal(
     && flowLayoutIndex > presentationPolicyIndex
     && runtimeContractIndex > flowLayoutIndex
     && keyboardIndex > runtimeContractIndex
-    && appIndex > keyboardIndex,
+    && bootstrapIndex > keyboardIndex
+    && appIndex > bootstrapIndex,
   true,
   "layout profile bootstraps before CSS; hierarchy, typed pricing, flow, presentation, runtime migration, keyboard behavior and app then load in explicit order"
 );

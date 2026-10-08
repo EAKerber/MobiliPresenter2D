@@ -2,6 +2,7 @@ const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
 const {chromium} = require('playwright');
+const domainFixture = require('./helpers/buyer-domain-fixture.cjs');
 
 (async () => {
   const output = process.argv[2] || '/tmp/keyboard-browser';
@@ -9,6 +10,7 @@ const {chromium} = require('playwright');
   const targetUrl = process.env.KEYBOARD_BROWSER_URL || 'https://mobilipresenter2d.netlify.app/';
   const browser = await chromium.launch({headless: true});
   const page = await browser.newPage({viewport: {width: 1366, height: 900}});
+  await domainFixture.attach(page, targetUrl);
   const errors = [];
   page.on('pageerror', error => errors.push(error.message));
   page.on('console', message => { if (message.type() === 'error') errors.push(message.text()); });
@@ -26,6 +28,7 @@ const {chromium} = require('playwright');
     }
   }
   if (lastError) throw lastError;
+  await domainFixture.requireReady(page);
 
   const selectedNumber = () => page.evaluate(() => {
     const card = document.querySelector('#moduleList .module-card.is-selected');

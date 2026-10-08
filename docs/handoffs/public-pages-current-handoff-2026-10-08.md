@@ -1,5 +1,8 @@
 # HANDOFF CANÔNICO — páginas públicas Landing + Viewer + Config protegido — 2026-10-08
 
+> **Retomada CP-PUBLIC — 2026-10-08, PR #184 (DRAFT / NÃO MESCLADA).** Recorte 03a2-0 implementou a máquina `loading/ready/unauthorized/forbidden/invalid/unavailable` e bloqueou a workspace/preço desde HTML inicial. Browser negativo 401/403/503/v5 inválida/timeout e positivo v3/v5 + retry passaram. **9/9 workflows e Netlify SUCCESS** no código `ab4d2d3959bef6f9714090f3a26d57dda5f23232`, [PR #184](https://github.com/EAKerber/MobiliPresenter2D/pull/184), [detalhes](../architecture/cp-public-03a2-0-failclosed-bootstrap-2026-10-08.md). Fluxos comerciais/testes Stone/Summary/Mobile/Keyboard usam v5 explícita em Playwright; Flow hierárquico usa v3 explícita; não são testes reais de login. **HOLD:** a API raw v5 continua pública na base main do #184; a PR #182 admin guard continua independente; próxima etapa #183/03a2-1 DTO buyer de stored v5 sem defaults, seguida por sessão atômica por link e rotas Edge protegidas. Não cutover ou merge isolado; os dados produtivos e a main estão intactos. Os status mais antigos abaixo são históricos.
+
+
 **Estado verificado em GitHub + Netlify em 2026-10-08. Documento de retomada do CP-PUBLIC; ler ANTES de reconstruir o chat.** Este arquivo registra a autoridade *atual* em sua data; consultar a `main`, PRs e deploys ao vivo antes de agir. Não inferir que merges ou deploys posteriores não aconteceram.
 
 ## 0. Resposta em 30 segundos para um agente novo

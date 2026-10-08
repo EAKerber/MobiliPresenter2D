@@ -1,5 +1,8 @@
 # CURRENT_STATE — MobiliPresenter2D
 
+> **Novo checkpoint executável CP-PUBLIC-03a2-0 — 2026-10-08 (PR #184, DRAFT/HOLD).** [PR #184](https://github.com/EAKerber/MobiliPresenter2D/pull/184) implementa bootstrap HTTP fail-closed: HTML começa com workspace `hidden inert`; 401/403/503, rede e v5 inválida não deixam preço/controles visíveis, e 200 válido só libera após aplicar configuração. **9/9 GitHub Actions PASS e Netlify Deploy Preview SUCCESS** no commit de código `ab4d2d3959bef6f9714090f3a26d57dda5f23232`, incluindo Stone/Summary/Mobile/Keyboard/Flow sob fixture explicitamente interceptada só em PR e a suíte negativa própria. Consulte `docs/architecture/cp-public-03a2-0-failclosed-bootstrap-2026-10-08.md` **nesta branch**. O GET legacy ainda é público neste recorte; **não mesclar sozinho**. PR #182 protege raw GET antes de Blob mas quebra o consumidor até 03a2-1/2; PR #183 documenta DTO cliente, ticket/sessão por e-mail, Edge/rotas. Nenhuma produção/Blob/`main` foi modificada. Viewer não adota lógica de pedra/rodapé/oclusão do comprador.
+
+
 Updated: 2026-10-08
 Authority: live `main` plus the canonical roadmaps linked below.
 

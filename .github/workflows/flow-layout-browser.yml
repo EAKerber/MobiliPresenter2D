@@ -9,6 +9,9 @@ on:
       - 'app/core/presentation-contract.js'
       - 'app/data/presentation-policy-defaults.js'
       - 'app/core/flow-layout.js'
+      - 'netlify/functions/**'
+      - 'netlify/lib/**'
+      - 'tests/helpers/buyer-domain-fixture.cjs'
       - 'app/app.js'
       - 'app/index.html'
       - 'app/styles.css'
@@ -23,6 +26,9 @@ on:
       - 'app/core/presentation-contract.js'
       - 'app/data/presentation-policy-defaults.js'
       - 'app/core/flow-layout.js'
+      - 'netlify/functions/**'
+      - 'netlify/lib/**'
+      - 'tests/helpers/buyer-domain-fixture.cjs'
       - 'app/app.js'
       - 'app/index.html'
       - 'app/styles.css'
@@ -65,6 +71,7 @@ jobs:
       - name: Test hierarchy-driven buyer layout
         env:
           NODE_PATH: /tmp/flow-layout-tools/node_modules
+          BUYER_DOMAIN_FIXTURE_V5: ${{ github.event_name == 'pull_request' && '1' || '0' }}
         run: node tests/flow-layout-browser.cjs /tmp/flow-layout-review
       - name: Verify buyer v3/v5 response parity and invalid-v5 failure
         env:

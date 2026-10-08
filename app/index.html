@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="pt-BR">
+<html lang="pt-BR" data-configuration-access-state="loading" data-published-configuration-status="loading">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -42,7 +42,7 @@
         </div>
 
         <div class="topbar__actions">
-          <button class="button button--secondary" id="restoreButton" type="button" aria-label="Restaurar">
+          <button class="button button--secondary" id="restoreButton" type="button" aria-label="Restaurar" disabled>
             <span aria-hidden="true">↺</span>
             <span class="button__wide-label">Recomeçar</span>
           </button>
@@ -50,7 +50,13 @@
       </div>
     </header>
 
-    <main class="workspace">
+    <section id="configurationAccessStatus" class="configuration-access-status"
+      role="status" aria-live="polite" aria-atomic="true">
+      <p id="configurationAccessMessage">Validando o acesso e carregando a configuração publicada…</p>
+      <button id="configurationAccessRetry" class="button button--secondary" type="button" hidden>Tentar novamente</button>
+    </section>
+
+    <main class="workspace" hidden inert>
       <div class="viewer-anchor" id="viewerAnchor">
       <section class="viewer-card" id="viewerCard" aria-label="Visualização da cozinha">
         <div class="viewer-pip-controls" aria-label="Controles da mini-cena">
@@ -224,6 +230,7 @@
     <script src="core/keyboard-shortcuts.js?v=keyboard-v4"></script>
     <script src="data/stone-data.js?v=runtime-v38"></script>
     <script src="core/stone.js?v=runtime-v38"></script>
+    <script src="core/authorized-bootstrap.js?v=cp-public-03a2-0"></script>
     <script src="app.js?v=runtime-v38"></script>
     <script>
       (() => {

@@ -1,0 +1,53 @@
+name: Authorized buyer bootstrap browser
+
+on:
+  pull_request:
+    paths:
+      - 'app/app.js'
+      - 'app/index.html'
+      - 'app/styles.css'
+      - 'app/core/authorized-bootstrap.js'
+      - 'tests/authorized-bootstrap-browser.cjs'
+      - '.github/workflows/authorized-bootstrap-browser.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  fail-closed-browser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Resolve isolated browser target
+        shell: bash
+        run: echo "AUTHORIZED_BOOTSTRAP_BROWSER_URL=https://deploy-preview-${{ github.event.pull_request.number }}--mobilipresenter2d.netlify.app/" >> "$GITHUB_ENV"
+      - name: Wait for matching Netlify preview (never production)
+        shell: bash
+        run: |
+          for attempt in $(seq 1 50); do
+            if curl -fsS --max-time 8 "${AUTHORIZED_BOOTSTRAP_BROWSER_URL}core/authorized-bootstrap.js?v=cp-public-03a2-0" | grep -q 'registerAuthorizedBootstrap'; then
+              exit 0
+            fi
+            sleep 3
+          done
+          echo "Netlify preview did not deploy the requested bootstrap checkpoint" >&2
+          exit 1
+      - name: Install isolated browser runtime
+        run: |
+          npm install --prefix /tmp/authorized-bootstrap-tools --no-audit --no-fund playwright@1.62.1
+          /tmp/authorized-bootstrap-tools/node_modules/.bin/playwright install --with-deps chromium
+      - name: Exercise HTTP denial and applied v5 cases in the browser
+        env:
+          NODE_PATH: /tmp/authorized-bootstrap-tools/node_modules
+        run: node tests/authorized-bootstrap-browser.cjs /tmp/authorized-bootstrap-evidence
+      - name: Preserve accessible error/loading evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: authorized-bootstrap-${{ github.run_id }}
+          path: /tmp/authorized-bootstrap-evidence
+          if-no-files-found: ignore
