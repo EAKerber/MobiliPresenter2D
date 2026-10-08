@@ -134,7 +134,8 @@
   adapter.subscribe(({ moduleId: id, module }) => {
     currentView = 0;
     renderers.get("overview")(module); renderers.get("scene")(module); renderers.get("views")(module); renderers.get("details")(module);
-    root.querySelectorAll(".scene-hotspot").forEach((button) => button.setAttribute("aria-pressed", String(button.dataset.moduleId === id)));
+    // The scene adapter owns the hotspot's selected/pressed state. Do not
+    // overwrite it from a second DOM loop with a different attribute key.
     integration.onSelectionChange?.({ moduleId: id, module, entity: adapter.getSceneEntity(id) });
   });
   const initial = adapter.getSelectedModule();
