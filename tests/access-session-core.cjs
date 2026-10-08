@@ -123,7 +123,7 @@ async function main() {
       getIdentityUser: async () => ({ id: "adm-1", app_metadata: { roles: ["admin"] } })
     });
   assert.equal(admin.status, 202);
-  assert.deepEqual(await admin.json(), { delivered: true });
+  assert.deepEqual(await admin.json(), { accepted: true });
   assert.equal(storeReads, 1);
 
   const crossSite = await http.redeem(makeRequest("/api/access/redeem", "POST",
