@@ -208,8 +208,27 @@ Gate:
 
 ### CP-SD-06 — production schema publication and legacy retirement
 
-Status: **IN PROGRESS**. CP-SD-06A2A0 consumer-readiness audit found buyer/admin post-migration blockers. A2A2a native validated v5 server PUT is COMPLETE / PASS in PR #158 (7/7 workflows plus Netlify preview); see `docs/backlog/schema-driven-ui-cp-sd-06a2a2a-server-v5-save-2026-10-07.md`. Native admin Save is COMPLETE / PASS in PR #159 (7/7 GitHub workflows and Netlify preview); A2A3 integrated rehearsal remains a prerequisite. `docs/backlog/schema-driven-ui-cp-sd-06a2a2b-admin-v5-save-2026-10-07.md`. Activation remains prohibited until A2A1 buyer v5, A2A2 admin/server v5 and A2A3 offline integrated gates pass.
-Activation remains prohibited until A2A1 buyer v5, A2A2 admin/server v5 and A2A3 offline integrated gates pass. A2A3a full-chain offline mock-provider rehearsal COMPLETE / PASS in PR #160 (6/6 CI gates plus Netlify preview). A2A3b authenticated raw v3 preflight inspection is COMPLETE / PASS in PR #161 (7/7 CI workflows + Netlify preview). A2A3c1 mock full-endpoint Identity/preview-isolation and provider-semantics audit COMPLETE / PASS in PR #162 (6/6 GitHub workflows + Netlify preview); `docs/backlog/schema-driven-ui-cp-sd-06a2a3c1-endpoint-provider-safety-2026-10-07.md`., `docs/backlog/schema-driven-ui-cp-sd-06a2a3b-authenticated-raw-preflight-2026-10-07.md`; no production reads authorized or performed., documented in `docs/backlog/schema-driven-ui-cp-sd-06a2a3a-offline-rehearsal-2026-10-07.md`. A2A1a pure buyer v3/v5 projection contract is COMPLETE / PASS in PR #156. A2A1b public buyer runtime wiring and browser proof are COMPLETE / PASS in PR #157 (8/8 workflows and Netlify preview), detailed in `docs/backlog/schema-driven-ui-cp-sd-06a2a1b-buyer-runtime-2026-10-07.md`; see `docs/backlog/schema-driven-ui-cp-sd-06a2a1a-buyer-projection-2026-10-07.md`. Detailed audit: `docs/architecture/schema-driven-ui-cp-sd-06a2a0-consumer-readiness-audit-2026-10-07.md`. CP-SD-06A0 repository publication preflight is COMPLETE / PASS. CP-SD-06A1 is split into **A1a safe v5 read** (COMPLETE / PASS in PR #153) and **A1b guarded migration operation** (COMPLETE / PASS in PR #154, activation OFF). **CP-SD-06A2** is the next separately authorized production execution gate; plan: `docs/backlog/schema-driven-ui-cp-sd-06a2-authenticated-v5-publication-2026-10-07.md`. Plans: `docs/backlog/schema-driven-ui-cp-sd-06a1-server-v5-read-migration-support-2026-10-07.md` and `docs/backlog/schema-driven-ui-cp-sd-06a1a-safe-v5-read-2026-10-07.md`. Both are repository-only; no production write is authorized.
+Status: **IN PROGRESS — repository/preview readiness COMPLETE; production publication NOT AUTHORIZED**.
+
+The schema-driven v5 buyer/runtime/admin path is complete in the repository, but the persisted production configuration has **not** been freshly inspected or migrated. The one-time migration remains `V5_MIGRATION_ENABLED = false`.
+
+Implemented and validated checkpoints:
+- CP-SD-06A0: deterministic canonical v3→v5 preflight — COMPLETE/PASS.
+- CP-SD-06A1a/b: v3/v5 server reads + guarded disabled one-time migration — COMPLETE/PASS (PRs #153/#154).
+- CP-SD-06A2A0: buyer/admin readiness audit — COMPLETE/PASS (PR #155).
+- CP-SD-06A2A1a/b: pure v3/v5 buyer contract and browser v5 runtime — COMPLETE/PASS (PRs #156/#157).
+- CP-SD-06A2A2a/b: native v5 server/admin Save, typed pricing and ETag/readback — COMPLETE/PASS (PRs #158/#159).
+- CP-SD-06A2A3a: offline end-to-end simulated migration + buyer/admin chain — COMPLETE/PASS (PR #160).
+- CP-SD-06A2A3b: admin-only read-only raw source preflight route — COMPLETE/PASS (PR #161; never invoked against live production).
+- CP-SD-06A2A3c1: mock full-handler Identity, deploy-store isolation and provider limitations — COMPLETE/PASS (PR #162).
+- CP-SD-06A2A3c2: operational production cutover GO/NO-GO runbook and evidence template — documentation-only closure of preparation (separate PR).
+
+Canonical execution boundary: `docs/backlog/schema-driven-ui-cp-sd-06a2-authenticated-v5-publication-2026-10-07.md`.
+Operator runbook: `docs/backlog/schema-driven-ui-cp-sd-06a2a3c2-production-cutover-runbook-2026-10-07.md`.
+Provider caution: Netlify Blobs offers conditional writes and strong reads, but is not a transactional multi-writer database. A live one-time cutover requires independently verified backup, an administrative edit freeze, fresh authenticated source ETag/revision/digest, exact write/readback, and a separate approval.
+
+**Next authorization gate:** CP-SD-06A2 live authenticated production inspection, then possibly one-time activation/migration if all GO gates pass. No one may infer actual production source state from the repository or historical mock tests. Legacy retirement is a separate gate after published v5 is proven.
+
 
 Goal: hand the consolidated contract back into the authenticated CP-UX-05 publication boundary.
 
