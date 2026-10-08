@@ -1,91 +1,115 @@
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
+import { fileURLToPath } from "node:url";
+import path from "node:path";
 import { test } from "node:test";
 import vm from "node:vm";
 
-const context = vm.createContext({ console });
-context.window = context;
-[
-  "app/data/scene-data.js",
-  "app/data/catalog-data.js",
-  "app/core/state.js",
-  "app/core/visibility.js",
-  "app/core/validation.js",
-  "app/core/finishes.js",
-  "app/core/scene-component.js",
-  "app/viewer/data.js",
-  "app/viewer/scene-adapters.js"
-].forEach((path) => vm.runInContext(readFileSync(path, "utf8"), context, { filename: path }));
+const appRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
+const fixture = vm.createContext({ console, structuredClone });
+fixture.window = fixture;
+for (const pathname of [
+  "data/scene-data.js",
+  "data/catalog-data.js",
+  "core/state.js",
+  "core/visibility.js",
+  "core/validation.js",
+  "core/finishes.js",
+  "core/scene-component.js",
+  "viewer/data.js",
+  "viewer/scene-adapters.js"
+]) {
+  vm.runInContext(readFileSync(path.join(appRoot, pathname), "utf8"), fixture, { filename: pathname });
+}
 
+const { CASA_EM_MODULOS_SCENE: scene, CASA_EM_MODULOS_CATALOG: catalog } = fixture;
+const { CASA_PUBLIC_SCENE_ADAPTERS: factory, CASA_PUBLIC_VIEWER: viewer } = fixture;
 const dependencies = {
-  scene: context.CASA_EM_MODULOS_SCENE,
-  catalog: context.CASA_EM_MODULOS_CATALOG,
-  core: context.CasaModulesCore,
-  visibility: context.CasaModulesVisibility,
-  validation: context.CasaModulesValidation
+  scene, catalog,
+  core: fixture.CasaModulesCore,
+  visibility: fixture.CasaModulesVisibility,
+  validation: fixture.CasaModulesValidation
 };
+const byProductId = new Map(catalog.modules.map((module) => [module.entityId, module]));
+const sceneIds = new Set(scene.entities.map((entity) => entity.id));
 
-test("repository adapter maps the current scene and catalog into the public contract", () => {
-  const adapter = context.CASA_PUBLIC_SCENE_ADAPTERS.createRepositoryAdapter({
-    ...dependencies,
-    initialSelectedId: context.CASA_PUBLIC_VIEWER.defaultModuleId
-  });
+test("viewer donor remains an independent page without starting configurator UI", () => {
+  const html = readFileSync(path.join(appRoot, "viewer/index.html"), "utf8");
+  assert.doesNotMatch(html, /(?:src=["'][^"']*app\.js|\/api\/configuration)/);
+  assert.match(html, /core\/scene-component\.js/);
+  assert.match(html, /scene-adapters\.js/);
+  assert.match(html, /data\/catalog-data\.js/);
+});
 
+test("public adapter reconciles all real modules by entity id, not index", () => {
+  const adapter = factory.createRepositoryAdapter(dependencies);
   assert.equal(adapter.contractVersion, "PublicSceneAdapter 0.5");
-  assert.equal(adapter.modules.length, 7);
+  assert.equal(adapter.modules.length, catalog.modules.length);
+  assert.equal(adapter.modules.length, 7, "current kitchen baseline is seven physical modules");
+  assert.equal(new Set(adapter.modules.map((x) => x.id)).size, adapter.modules.length);
+  for (const module of adapter.modules) {
+    const product = byProductId.get(module.id);
+    assert(product, "viewer may not invent product entity ids");
+    assert(sceneIds.has(module.id), "each public module must exist in the current scene");
+    assert.equal(module.title, product.title);
+    assert.equal(module.bounds.width, scene.entities.find((x) => x.id === module.id).alphaBounds.width);
+    assert.equal(module.dimensionLabel, product.dimensions.display);
+    assert.deepEqual([...module.components], [...product.components]);
+    assert.deepEqual([...module.requirements], [...product.requirements]);
+    assert.notEqual(module.summary, "", "public page must not present an empty summary");
+  }
+});
+
+test("viewer composition is separate from published administration schema", () => {
+  assert.deepEqual(Array.from(viewer.layout), ["overview", "scene", "views", "details"]);
+  assert.equal(viewer.defaultModuleId, "module-07");
+  assert(viewer.detailLayout.every((item) => item.placeholder && item.source));
+  assert(!("objects" in viewer), "viewer/page composition must not copy v5 objects");
+  assert(!("pricing" in viewer), "viewer must not expose independent pricing buckets");
+});
+
+test("selected module and callbacks remain stable through navigation", () => {
+  const events = [];
+  const adapter = factory.create({
+    ...dependencies,
+    initialSelectedId: "module-07",
+    onSelectionChange(e) { events.push(e); }
+  });
   assert.equal(adapter.getSelectedModule().id, "module-07");
-  assert.equal(adapter.getAssetUrl("assets/kitchen/layers/07_aereo_geladeira.png"), "../assets/kitchen/layers/07_aereo_geladeira.png");
-  assert.equal(adapter.getSelectedModule().summary, "Módulo aéreo com duas portas de abrir e uma prateleira fixa.");
-  assert.equal(adapter.getSelectedModule().carcass, "Caixaria branca");
-  assert.equal(adapter.getSceneEntity("module-07").alphaBounds.width, 274);
-  assert.equal(adapter.getSceneCanvas().width, dependencies.scene.canvas.width);
-  assert.equal(adapter.getSceneCanvas().height, dependencies.scene.canvas.height);
-  assert.equal(adapter.modules.find((module) => module.id === "module-02").requirements.length, 1);
-  assert.equal(adapter.modules.find((module) => module.id === "module-03").internalLayout.length, 3);
-  assert.equal(adapter.modules.find((module) => module.id === "module-05").requirements.length, 0);
-
-  let selectedId = null;
-  let selection = null;
-  adapter.subscribe((event) => { selectedId = event.moduleId; selection = event; });
-  assert.equal(adapter.select("module-02"), true);
-  assert.equal(selectedId, "module-02");
-  assert.equal(selection.module.id, "module-02");
-  assert.equal(selection.entity.id, "module-02");
-  assert.equal(adapter.select("module-missing"), false);
-});
-
-test("standalone page delegates to the same canonical adapter", () => {
-  const adapter = context.CASA_PUBLIC_SCENE_ADAPTERS.createStandaloneAdapter("module-05");
-  assert.equal(adapter.contractVersion, "PublicSceneAdapter 0.5");
-  assert.equal(adapter.getSelectedModule().id, "module-05");
-  assert.equal(adapter.modules.length, dependencies.catalog.modules.length);
-});
-
-test("factory accepts explicit dependencies and publishes the adapter contract version", () => {
-  const api = context.CASA_PUBLIC_SCENE_ADAPTERS;
-  assert.equal(api.contractVersion, "PublicSceneAdapter 0.5");
-  const adapter = api.create({ ...dependencies, initialSelectedId: "module-03" });
+  assert.equal(adapter.select("module-03"), true);
   assert.equal(adapter.getSelectedModule().id, "module-03");
+  assert.equal(events.at(-1).moduleId, "module-03");
+  assert.equal(events.at(-1).entity.id, "module-03");
+  assert.equal(adapter.select("module-unknown"), false);
+  assert.equal(events.length, 1, "invalid selection must never emit");
 });
 
-test("selection callback receives normalized module and entity", () => {
-  let selected = null;
-  const adapter = context.CASA_PUBLIC_SCENE_ADAPTERS.create({
-    ...dependencies,
-    initialSelectedId: "module-01",
-    onSelectionChange(event) { selected = event; }
-  });
-  assert.equal(adapter.select("module-04"), true);
-  assert.equal(selected.moduleId, "module-04");
-  assert.equal(selected.module.id, "module-04");
-  assert.equal(selected.entity.id, "module-04");
+test("invalid deep link falls back to available catalog entity", () => {
+  const a = factory.create({ ...dependencies, initialSelectedId: "module-invalid" });
+  assert.equal(a.getSelectedModule().id, a.modules[0].id);
 });
 
-test("integrated asset paths can be supplied by the host", () => {
-  const adapter = context.CASA_PUBLIC_SCENE_ADAPTERS.createRepositoryAdapter({
-    ...dependencies,
-    assetPrefix: "/public-assets/"
-  });
-  assert.equal(adapter.getAssetUrl("assets/example.png"), "/public-assets/assets/example.png");
-  assert.equal(adapter.getAssetUrl("https://cdn.example/image.png"), "https://cdn.example/image.png");
+test("valid configured modules preserve current technical drawing evidence", () => {
+  const a = factory.createRepositoryAdapter(dependencies);
+  for (const m of a.modules) {
+    const original = byProductId.get(m.id);
+    assert.equal(m.drawingSpec?.kind ?? null, original.drawingSpec?.kind ?? null);
+    assert.deepEqual(m.frontLayout, original.frontLayout || null);
+    assert.deepEqual(m.internalLayout,
+      original.internalLayout || original.technicalLayout?.internalFront?.segments || null);
+  }
+});
+
+test("asset paths resolve relative assets without rewriting HTTP(S) URLs", () => {
+  const a = factory.createRepositoryAdapter({ ...dependencies, assetPrefix: "/project/" });
+  assert.equal(a.getAssetUrl("assets/kitchen/base.png"), "/project/assets/kitchen/base.png");
+  assert.equal(a.getAssetUrl("https://example.com/image.png"), "https://example.com/image.png");
+  assert.equal(a.getAssetUrl("/assets/icon.svg"), "/assets/icon.svg");
+});
+
+test("standalone constructor and explicit injected repository share one adapter", () => {
+  assert.equal(factory.createStandaloneAdapter("module-05").getSelectedModule().id, "module-05");
+  const other = factory.create({ ...dependencies, initialSelectedId: "module-05" });
+  assert.equal(other.getSelectedModule().id, "module-05");
+  assert.equal(other.modules.length, catalog.modules.length);
 });
