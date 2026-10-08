@@ -1,0 +1,103 @@
+name: Customer ticket and session security
+
+on:
+  pull_request:
+    paths:
+      - 'netlify/lib/buyer-session-*.cjs'
+      - 'netlify/lib/authorized-buyer-read.cjs'
+      - 'netlify/functions/access-*.mjs'
+      - 'netlify/functions/buyer-configuration.mjs'
+      - 'netlify/access-migrations/**'
+      - 'tests/access-*.cjs'
+      - 'app/tools/test-authorized-buyer-read.js'
+      - 'package.json'
+      - 'netlify.toml'
+      - '.github/workflows/buyer-session-security.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'netlify/lib/buyer-session-*.cjs'
+      - 'netlify/functions/access-*.mjs'
+      - 'netlify/access-migrations/**'
+      - 'tests/access-*.cjs'
+      - '.github/workflows/buyer-session-security.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  pure-contracts:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Syntax and protocol tests (no secrets or network)
+        run: |
+          for script in netlify/lib/buyer-session-*.cjs netlify/functions/access-*.mjs netlify/functions/buyer-configuration.mjs; do
+            node --check "$script"
+          done
+          node tests/access-session-core.cjs
+          node app/tools/test-authorized-buyer-read.js
+          node app/tools/test-buyer-configuration-projection.js
+
+  postgres-atomic-redeem:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: access_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres -d access_test"
+          --health-interval 3s
+          --health-timeout 3s
+          --health-retries 20
+    env:
+      CASA_ACCESS_TEST_DB_URL: postgresql://postgres:postgres@127.0.0.1:5432/access_test
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install PostgreSQL driver in ephemeral CI runner
+        run: npm install --no-fund --no-audit
+      - name: Run real transactions and concurrent ticket redemption
+        run: node tests/access-postgres-integration.cjs
+
+  preview-closed-by-default:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - name: Check Netlify preview never enables magic links without a DB and sender
+        shell: bash
+        env:
+          PREVIEW_ID: ${{ github.event.pull_request.number }}
+        run: |
+          set -euo pipefail
+          base="https://deploy-preview-${PREVIEW_ID}--mobilipresenter2d.netlify.app"
+          for attempt in $(seq 1 70); do
+            code=$(curl -sS --max-time 8 -o /tmp/access-redeem -w '%{http_code}' -X POST \
+              -H 'Content-Type: application/json' -H "Origin: $base" \
+              --data '{"ticket":"not-a-real-ticket"}' "$base/api/access/redeem" || true)
+            if [ "$code" = "503" ] && grep -q '"access_unavailable"' /tmp/access-redeem; then break; fi
+            sleep 3
+          done
+          test "$code" = "503"
+          test "$(curl -sS --max-time 8 -o /tmp/access-direct -w '%{http_code}' -X POST \
+            -H 'Content-Type: application/json' -H "Origin: $base" \
+            --data '{"ticket":"not-a-real-ticket"}' "$base/.netlify/functions/access-redeem")" = "503"
+          test "$(curl -sS --max-time 8 -o /tmp/access-issue -w '%{http_code}' -X POST \
+            -H 'Content-Type: application/json' -H "Origin: $base" \
+            --data '{"email":"nobody@example.invalid"}' "$base/api/access/issue")" = "503"
+          test "$(curl -sS --max-time 8 -o /tmp/access-session -w '%{http_code}' "$base/api/access/session")" = "503"
+          ! grep -Ei '"(ticket|session|pricing|objects|source|email)"' /tmp/access-redeem
+          echo 'CP-PUBLIC-03a2-2 preview: disabled-by-default access endpoints PASS'
