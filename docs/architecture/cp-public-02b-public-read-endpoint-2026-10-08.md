@@ -1,6 +1,6 @@
 # CP-PUBLIC-02b — transporte público validado (isolado, 2026-10-08)
 
-**Status: DRAFT / endpoint somente na branch.** Base: CP-PUBLIC-02a (#178). Não publicar na main antes de validar o acesso e integração do viewer.
+**Status: DRAFT / endpoint somente na branch.** Dependência lógica: CP-PUBLIC-02a (#178); a PR #179 usa `main` como base para habilitar o deploy preview do Netlify e os browser gates. Até #178 ser incorporada, o diff da #179 contém também seus commits preexistentes. Não publicar na main antes de validar o acesso e integração do viewer.
 
 ## Objetivo
 `GET /api/public-modules` resolve apenas uma projeção `PublicModulePresentation2D 0.1` da **configuração v5 publicada e validada**, sem exigir que a página do viewer faça `GET /api/configuration`. O novo endpoint não altera o GET completo, PUT admin, Blob, a raiz ou a autenticação do configurador.
@@ -21,3 +21,6 @@
 
 ## Decisões congeladas
 Caixaria não tem representação visual: técnica de laterais congelada por prazo indeterminado. Textos `benefits[]` são Destaques, não `description`. Estado inicial não escolhe arbitrariamente módulo 7.
+
+## Diagnóstico CI inicial
+A primeira execução GitHub Actions da PR #179, quando apontava para base `work/cp-public-02a-public-module-projection-20261008`, passou no `App build purity` (incluindo testes do endpoint), mas falhou em Stone/Mobile/Summary navegador por procurar `deploy-preview-179` inexistente. No Mobile: `CasaModulesRuntime.getLayoutProfile` undefined; no Stone: timeout aguardando runtime na página. Isso não é evidência de bug da API: os browser jobs exigem preview hospedado. Retarget de PR #179 para `main` e novo commit forçam a criação do preview; gates serão considerados completos somente se a nova execução tiver deploy associado e browser PASS.
