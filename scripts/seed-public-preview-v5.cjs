@@ -2,8 +2,6 @@
 
 // Explicitly temporary CP-PUBLIC-02c preview fixture. NEVER writes to a
 // site-wide Blob; Netlify deploys the generated file into getDeployStore.
-const fs = require("node:fs");
-const path = require("node:path");
 const PREVIEW_BRANCH = "work/cp-public-02c-integrated-preview-20261008";
 const PREVIEW_HOST = "deploy-preview-180--mobilipresenter2d.netlify.app";
 const PREVIEW_REVIEW_ID = "180";
@@ -44,33 +42,4 @@ function createFixture() {
   return v5;
 }
 
-function seed(e = process.env) {
-  // A temporary public diagnostic exposes only boolean checks, never the
-  // environment variable values, tokens, or private publication data.
-  const permitted = shouldSeed(e);
-  const diagnostic = {
-    netlify: e.NETLIFY === "true",
-    preview: e.CONTEXT === "deploy-preview",
-    branch: e.BRANCH === PREVIEW_BRANCH,
-    review: e.REVIEW_ID === PREVIEW_REVIEW_ID,
-    primeUrl: (() => { try {
-      const u = new URL(e.DEPLOY_PRIME_URL || "");
-      return u.protocol === "https:" && u.hostname === PREVIEW_HOST;
-    } catch { return false; } })(),
-    prepared: false
-  };
-  if (permitted) {
-    const fixture = createFixture();
-    const destination = path.join(__dirname, "..", ".netlify", "blobs", "deploy",
-      "configurator-settings", "published");
-    fs.mkdirSync(path.dirname(destination), { recursive: true });
-    fs.writeFileSync(destination, JSON.stringify(fixture), { flag: "wx", mode: 0o600 });
-    diagnostic.prepared = fs.statSync(destination).size > 0;
-    console.log("CP-PUBLIC-02c preview-only v5 fixture prepared for Netlify deploy-scoped Blob.");
-  } else console.log("CP-PUBLIC-02c preview v5 fixture disabled outside isolated PR #180.");
-  const output = path.join(__dirname, "..", "app", "__cp-public-02c-seed-checks.json");
-  fs.writeFileSync(output, JSON.stringify(diagnostic));
-  return permitted;
-}
-if (require.main === module) seed();
-module.exports = Object.freeze({ shouldSeed, createFixture, seed });
+module.exports = Object.freeze({ shouldSeed, createFixture });
