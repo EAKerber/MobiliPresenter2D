@@ -29,7 +29,7 @@ Data: 2026-10-08. Tipo: **inventário + plano**, sem ativação de autenticaçã
 | Principal | Landing/Viewer | GET `/api/public-modules` | GET configuração **integral** | PUT configuração integral | `/config/` |
 | --- | --- | --- | --- | --- | --- |
 | Anônimo | público | 200 allowlist (ou 503 seguro) | **401** | **401** | acesso negado |
-| Cliente com sessão válida de e-mail | público | público | **200** com `no-store`, somente escopo autorizado | **403** | permitido |
+| Cliente com sessão válida de e-mail | público | público | **200** com `no-store` e apenas dados necessários ao runtime de compra (projeção de comprador autorizada, não necessariamente v5 administrativo integral) | **403** | permitido |
 | Admin Netlify Identity com role `admin` | público | público | permitido | permitido com validação v5/CAS existente | permitido |
 | Sessão expirada/inválida, ticket gasto/revogado | público | público | **401** | negado | negado |
 
@@ -39,13 +39,15 @@ Data: 2026-10-08. Tipo: **inventário + plano**, sem ativação de autenticaçã
 
 **03a0 — contrato, inventário e testes offline (este recorte).** Documentar rotas, origem de valores públicos, snapshots permitidos, legitimidade de leitura de preços. Construir matriz de testes adversariais sem escrever no Blob produtivo. `GET` legado continua aberto até ter mecanismo de sessão operacional; **não** fazer mudança quebradora isolada na main.
 
-**03a1 — middleware de autorização isolado e teste de API.** Implementar em branch própria uma função `authorizeConfigurationRead` testável: valida admin Identity ou cookie de sessão; GET anônimo retorna 401 *antes* de `getStore`; PUT exige admin Identity e proteção CSRF. Testar GET direto e por rewrite em preview. Manter fail-closed se backing ou assinatura indisponíveis; sem bypass por ambiente.
+**03a1 — middleware de autorização isolado e teste de API.** Implementar em branch própria uma função `authorizeConfigurationRead` testável: valida admin Identity ou cookie de sessão; GET anônimo retorna 401 *antes* de `getStore`; PUT exige admin Identity e proteção CSRF. **Antes de permitir GET ao comprador, auditar `app/core/published-buyer-projection.js:prepare()`: ela ainda devolve `source` com o v5 integral. Preferir projeção cliente restrita com dados necessários à UI, e manter respostas administrativas completas exclusivamente para admin; provar regressão funcional do comprador.** Testar GET direto e por rewrite em preview. Manter fail-closed se backing ou assinatura indisponíveis; sem bypass por ambiente.
 
 **03a2 — emissão/troca de ticket e armazenamento com atomicidade.** Controlar emissão para e-mail verificado, ticket curto, token hash, consumo único, expiração, revogação e abuso; cookie e logout. Validar dois resgates simultâneos (exatamente um vence), alteração de clock, reuso e domínios. Não inserir Google Auth.
 
 **03a3 — proteção real da distribuição HTML/assets.** Separar landing de `index.html`, servir `/config/` somente depois de Edge/servidor autorizar e controlar aliases; validar a exposição de `mock-price-book.js` conforme política comercial. Se não for viável impedir download direto do HTML/JS protegido com a topologia escolhida, **não** cortar rotas.
 
 **03a4 — gates integrados de segurança + lançamento coordenado.** Dev/staging totalmente isolados, admin PUT + cliente read-only + anônimo negativo, expiração e logs sem credenciais; no-store, CSP, referrer, rate limit, CSRF, anti-enumeration, links de e-mail; checar `/`, `/index.html`, `/config`, `/config/`, `/admin.html`, `/api/configuration`, `/.netlify/functions/configuration`, `/api/public-modules` e URL Netlify do deploy. Plano rollback antes de publicar.
+
+**Separação de leitura:** `GET /api/configuration` atualmente é o contrato legado consumido pelo configurador; não basta exigir qualquer cookie e retornar o documento administrativo inteiro. A função `published-buyer-projection.prepare()` atual é helper interno, **não sanitizador de rede** porque inclui `source` sem allowlist. Criar uma resposta de comprador própria ou provar, campo por campo, que sua superfície é segura; testar no cliente antes do cutover.
 
 ## Gates de parada
 
