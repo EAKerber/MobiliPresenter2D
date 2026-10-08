@@ -62,3 +62,19 @@ A melhor prova de `publishedConfigurationStatus === "validated"` já existe em `
 ## Experimento reproduzível
 
 `tests/diagnostics/configuration-401-fallback.cjs` e `.github/workflows/configuration-fallback-diagnostic.yml` foram adicionados **temporariamente na PR #182**. Executam Chrome isolado contra somente `deploy-preview-182--mobilipresenter2d.netlify.app/`, sem login, POST, escrita ou produção. Capturam o GET real 401, o valor de `publishedConfigurationStatus`, estado interativo da workspace, preço, alertas e erro de console. O teste é **diagnóstico de um comportamento incorreto conhecido**: PASSE dele significa *reprodução do defeito*, não autorização para publicar. **Retirar ou substituir por negativo fail-closed antes de merge**.
+
+## Contraprova A/B: mesmas suítes, dados v5 válidos
+
+Realizado na PR #182 em 2026-10-08. Sem alterar `app/app.js`, o guard de API, o backend de produção ou qualquer asserção de pedra/preço/PiP, adicionamos o helper **opt-in e temporário** `tests/diagnostics/published-v5-browser-fixture.cjs`. Sob `CP_PUBLIC_DIAGNOSTIC_V5=1`, ele gera uma fixture `ConfiguratorAdministration2D 5.0` validada, intercepta apenas o GET dentro do Playwright e exige `publishedConfigurationStatus="validated"` e `CASA_NORMALIZED_FLOW.source.schemaVersion="ConfiguratorAdministration2D 5.0"` antes dos testes de interação.
+
+A [execução 37815673306](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/37815673306) terminou **SUCCESS** e percorreu sequencialmente **os três scripts completos existentes**, `tests/stone-browser.cjs`, `tests/summary-pricing-browser.cjs` e `tests/mobile-pip-main-browser.cjs`, produzindo [screenshots/artefatos](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/37815673306/artifacts/11567655194). Como os scripts são executados sob `set -e` e o passo alcançou o marcador final `3 business UI suites exercised ...`, todas as assertions comerciais e de UI executadas nessa repetição passaram.
+
+| Cenário | Fonte de dados | Resultado |
+| --- | --- | --- |
+| Browser padrão da PR #182 | GET real anônimo = `401`; fallback interno não validado | 3 falhas, todas na `console.errors===[]`; diagnóstico separado registra workspace/preço indevidamente ativos |
+| Browser de domínio controlado | GET **interceptado** com fixture v5 válida; estado `validated` requerido | **Stone PASS / Summary PASS / Mobile PASS** |
+
+A comparação suporta fortemente que **o diferencial causal é a falha de bootstrap/autorização**, não um defeito independente nos três componentes. **Não** converte a fixture em teste de login: o GET 200 vem de `route.fulfill` e a autenticação do provedor não foi testada. Também não valida preços de uma publicação v5 verdadeira. O teste HTTP real de negação `401` continua separado.
+
+O fixture opt-in e o workflow `.github/workflows/configuration-fixture-comparison.yml` são **diagnósticos específicos da PR #182**, não devem ser mesclados como bypass permanente. Para preservar o valor dos testes de interface, converter futuramente o mock em fixture de CI declarada para **testes de domínio**, e criar outro gate de **sessão real → v5 publicada → interface**. Ao solucionar o bug, substituir também o diagnóstico que espera fallback inseguro por teste que exige UI bloqueada a 401/403/503.
+
