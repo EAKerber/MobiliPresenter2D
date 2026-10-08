@@ -1,0 +1,27 @@
+name: Configuration anonymous access preview
+
+on:
+  pull_request:
+    paths:
+      - 'netlify/functions/configuration.mjs'
+      - 'netlify/lib/configuration-access.cjs'
+      - 'tests/configuration-access-http.cjs'
+      - '.github/workflows/configuration-access-preview.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  security-read:
+    if: github.event.pull_request.number == 182
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Prove anonymous GET/PUT denial at Netlify preview (no production)
+        env:
+          CONFIG_ACCESS_PREVIEW_URL: https://deploy-preview-182--mobilipresenter2d.netlify.app
+        run: node tests/configuration-access-http.cjs
