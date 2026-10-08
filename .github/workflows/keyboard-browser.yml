@@ -10,6 +10,9 @@ on:
       - 'app/data/presentation-policy-defaults.js'
       - 'app/core/keyboard-shortcuts.js'
       - 'app/core/runtime-contracts.js'
+      - 'netlify/functions/**'
+      - 'netlify/lib/**'
+      - 'tests/helpers/buyer-domain-fixture.cjs'
       - 'app/app.js'
       - 'app/index.html'
       - 'tests/keyboard-browser.cjs'
@@ -23,6 +26,9 @@ on:
       - 'app/data/presentation-policy-defaults.js'
       - 'app/core/keyboard-shortcuts.js'
       - 'app/core/runtime-contracts.js'
+      - 'netlify/functions/**'
+      - 'netlify/lib/**'
+      - 'tests/helpers/buyer-domain-fixture.cjs'
       - 'app/app.js'
       - 'app/index.html'
       - 'tests/keyboard-browser.cjs'
@@ -63,6 +69,7 @@ jobs:
       - name: Test keyboard shortcuts
         env:
           NODE_PATH: /tmp/keyboard-browser-tools/node_modules
+          BUYER_DOMAIN_FIXTURE_V5: ${{ github.event_name == 'pull_request' && '1' || '0' }}
         run: node tests/keyboard-browser.cjs /tmp/keyboard-browser-review
       - name: Save keyboard review
         if: always()
