@@ -64,7 +64,8 @@ async function main() {
     const pageErrors = [];
     page.on("pageerror", (error) => pageErrors.push(error.message));
     await page.addInitScript(() => { window.CASA_PUBLIC_VIEWER_INTEGRATION = { usePublishedApi: true }; });
-    await page.goto(new URL("/viewer/", origin).href, { waitUntil: "networkidle" });
+    console.log("CP-PUBLIC-02c preview API response: " + response.status());
+    await page.goto(new URL("/viewer/", origin).href, { waitUntil: "domcontentloaded", timeout: 20000 });
     if (response.status() === 503) {
       const error = page.locator("#viewerLayout [role=alert]");
       await error.waitFor({ timeout: 12000 });
