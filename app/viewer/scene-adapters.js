@@ -127,6 +127,7 @@
       getSelectedModule() { return modules.find((module) => module.id === selectedId) || null; },
       getSelection,
       getState,
+      getFinishes() { return Object.freeze(finishes.filter((finish) => allowedFinishIds.includes(finish.id)).map((finish) => Object.freeze({ id: finish.id, label: finish.label || finish.publicLabel || finish.id, color: finish.color, textureAsset: finish.textureAsset || "" }))); },
       setGlobalFinish,
       subscribeState(listener) { stateListeners.add(listener); return () => stateListeners.delete(listener); },
       getSceneEntity(id) { return renderScene.entities.find((entity) => entity.id === id) || null; },
@@ -215,16 +216,37 @@
         core.setGlobalSelection(state, { finishId: publicState.finishId });
       }
     }
-    const sceneFinishIds = new Set(catalog.options.finishes.map((finish) => finish.id));
-    const availability = allowedFinishIds || publicState?.availableFinishIds
-      || catalog.options.finishes.filter((finish) => finish.status === "published").map((finish) => finish.id);
-    if (!Array.isArray(availability) || !availability.length || availability.some((id) => !sceneFinishIds.has(id))
+    const physicalFinishes = catalog.options?.finishes || [];
+    const byPhysicalFinish = new Map(physicalFinishes.map((finish) => [finish.id, finish]));
+    const authorizedFinishes = publicState?.availableFinishes;
+    if (authorizedFinishes != null && (!Array.isArray(authorizedFinishes) || !authorizedFinishes.length)) {
+      throw new TypeError("Invalid public finish options");
+    }
+    const sceneFinishes = authorizedFinishes
+      ? authorizedFinishes.map((entry) => {
+        if (!entry || typeof entry.id !== "string" || !entry.id
+          || typeof entry.label !== "string" || !entry.label.trim()
+          || !(entry.color === null || /^#[0-9a-fA-F]{6}$/.test(entry.color || ""))
+          || typeof entry.textureAsset !== "string"
+          || (entry.textureAsset && (!/^assets\/[A-Za-z0-9_./-]+\.(png|webp|jpe?g)$/i.test(entry.textureAsset)
+            || entry.textureAsset.includes("..")))
+          || typeof entry.textureSize !== "string") {
+          throw new TypeError("Invalid published finish");
+        }
+        return { ...byPhysicalFinish.get(entry.id), ...entry, status: "published" };
+      })
+      : physicalFinishes;
+    const availability = allowedFinishIds || (authorizedFinishes
+      ? authorizedFinishes.map((finish) => finish.id)
+      : sceneFinishes.filter((finish) => finish.status === "published").map((finish) => finish.id));
+    if (!Array.isArray(availability) || !availability.length || new Set(availability).size !== availability.length
+      || availability.some((id) => !sceneFinishes.some((finish) => finish.id === id))
       || !availability.includes(core.globalFinishId(state))) {
       throw new TypeError("Invalid public finish availability or selected finish");
     }
     return createAdapter(scene, modules, {
       initialSelectedId, sceneState: state, allowedFinishIds: availability,
-      scene, products: sourceProducts, catalog, finishes: catalog.options?.finishes || [],
+      scene, products: sourceProducts, catalog, finishes: sceneFinishes,
       sceneComponent: sharedSceneComponent, finishApi: sharedFinishApi,
       assetPrefix, inlineMasks, core, visibility, onSelectionChange
     });
