@@ -150,7 +150,7 @@
 
   // Dormant integration connector. It maps the repository's current data and
   // state contracts to the public adapter without starting configurator UI.
-  function createRepositoryAdapter({ scene, catalog, core, visibility, validation, initialSelectedId, publicState = null, allowedFinishIds = null, sceneComponent, finishApi, inlineMasks = global.CASA_EM_MODULOS_MASK_DATA, assetPrefix = "../", onSelectionChange }) {
+  function createRepositoryAdapter({ scene, catalog, core, visibility, validation, initialSelectedId, publicState = null, publicModules = null, allowedFinishIds = null, sceneComponent, finishApi, inlineMasks = global.CASA_EM_MODULOS_MASK_DATA, assetPrefix = "../", onSelectionChange }) {
     if (!scene?.entities || !catalog?.modules || !core?.createInitialState || !visibility?.resolveVisibility || !validation?.assertValidScene) {
       throw new Error("Contratos Scene2D/ProductCatalog2D incompletos para a integração pública.");
     }
@@ -165,9 +165,23 @@
     }
     validation.assertValidScene(scene);
     const entityById = new Map(scene.entities.map((entity) => [entity.id, entity]));
-    const modules = catalog.modules.map((product) => {
-      return normalizeModule(product, entityById.get(product.entityId));
-    }).filter((module) => entityById.has(module.id));
+    const catalogById = new Map(catalog.modules.map((product) => [product.entityId, product]));
+    // When a server-approved public projection is provided, it owns published
+    // order and editable copy. ProductCatalog supplies only physical evidence.
+    const sourceProducts = publicModules ? publicModules.map((entry) => {
+      const physical = catalogById.get(entry?.id);
+      if (!physical || !entityById.has(entry.id) || typeof entry.title !== "string" || !entry.title.trim()) {
+        throw new TypeError("Unknown or invalid published module: " + entry?.id);
+      }
+      return { ...physical, title: entry.title, description: entry.description || "",
+        benefits: entry.benefits || [], components: entry.components || [], requirements: entry.requirements || [] };
+    }) : catalog.modules;
+    const modules = sourceProducts.map((product) =>
+      normalizeModule(product, entityById.get(product.entityId))
+    ).filter((module) => entityById.has(module.id));
+    if (new Set(modules.map((module) => module.id)).size !== modules.length) {
+      throw new TypeError("Duplicate published module");
+    }
     if (!modules.length) throw new Error("O catálogo não contém módulos associados à cena.");
     const state = core.createInitialState(scene);
     if (publicState) {
@@ -193,7 +207,7 @@
     }
     return createAdapter(scene, modules, {
       initialSelectedId, sceneState: state, allowedFinishIds: allowedFinishIds || catalog.options.finishes.filter((finish) => finish.status === "published").map((finish) => finish.id),
-      scene, products: catalog.modules, catalog, finishes: catalog.options?.finishes || [],
+      scene, products: sourceProducts, catalog, finishes: catalog.options?.finishes || [],
       sceneComponent: sharedSceneComponent, finishApi: sharedFinishApi,
       assetPrefix, inlineMasks, core, visibility, onSelectionChange
     });
