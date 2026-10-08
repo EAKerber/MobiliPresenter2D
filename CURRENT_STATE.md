@@ -3,6 +3,10 @@
 Updated: 2026-10-08
 Authority: live `main` plus the canonical roadmaps linked below.
 
+## Retomada imediata — CP-PUBLIC (2026-10-08)
+
+**Primeiro leia:** `docs/handoffs/public-pages-current-handoff-2026-10-08.md`. Esse handoff captura o estado vivo das PRs #174/#175/#176/#34, os links/heads de preview, os 7/7 CI do staging, a fronteira do v5 publicado, as duplicações encontradas e a sequência segura CP-PUBLIC-02a/02b/03/04. **PR #175 permanece DRAFT / HOLD**, apesar de preview PASS; a `main` continua com o configurador na raiz, sem auth por e-mail implementado. Este pointer é mais recente que trechos históricos abaixo.
+
 ## Purpose
 
 This is the first resume point for future work. Read this file before reconstructing state from chat history.

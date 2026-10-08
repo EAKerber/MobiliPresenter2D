@@ -2,6 +2,8 @@
 
 Status: **PLANO CANÔNICO / DESCOBERTA CONFIRMADA; MIGRAÇÃO DE ROTAS AINDA NÃO ATIVADA.**
 
+**Handoff atual para troca de agente:** `docs/handoffs/public-pages-current-handoff-2026-10-08.md` — consulta ao vivo das PRs #175 (DRAFT + 7/7 CI + Netlify ready), #176 (MERGED) e #34 (DRAFT), arquivos de staging, duplicações e próximo recorte CP-PUBLIC-02a. Não confundir o deploy preview com incorporação do viewer à `main`.
+
 ## Evidências / autoridade
 
 - `main` observada em `d11d9b59f43841640112adae578c4a7e2cdaa1fc` (consultar SHA atual antes de cada checkpoint). O schema v5 está publicado e aceito; **nenhuma alteração deste plano deve reeditar o Blob de produção, redefinir v5 ou modificar seu contrato sem gate**.

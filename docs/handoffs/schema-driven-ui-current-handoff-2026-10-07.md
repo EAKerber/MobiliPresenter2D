@@ -1,5 +1,8 @@
 # MobiliPresenter2D — current backlog / handoff — 2026-10-07
 
+**CP-PUBLIC retomada de 2026-10-08:** para landing + viewer + config protegido, começar pelo handoff mais recente `docs/handoffs/public-pages-current-handoff-2026-10-08.md`, não por esta cronologia histórica de schema. PR #175 é DRAFT e não está na `main`. Leia o CP-PUBLIC-00 roadmap antes de mudar roteamento/autenticação.
+
+
 **CP-POSTV5-02a1 current checkpoint:** PR #173 tests the already-present admin Add Material data contract entirely in memory, through v5 validation, published buyer projection, native Save and strong readback, with unknown-module negative. 6/6 GitHub workflows and Netlify preview PASS; `docs/architecture/post-v5-cp-02a1-new-material-roundtrip-fixture-2026-10-08.md`. This is NOT visual new-swatch proof (A2); production unchanged.
 
 **POST-v5 DISCOVERY UPDATE:** `docs/architecture/post-v5-cp-01-authoring-coverage-discovery-2026-10-08.md` audita autoria v5. Limite fundamental: hierarquia pode reorganizar IDs conhecidos, mas módulos novos ainda exigem catálogo e cena/asset; primeiro teste recomendado é nova cor/material v5 em fixture e browser, CP-POSTV5-02a. Não misturar com landing/viewer.
