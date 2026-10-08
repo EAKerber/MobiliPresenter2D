@@ -66,7 +66,6 @@ function itemsOf(prepared) {
       id: group.id,
       sections: group.sections.map((section) => ({
         id: section.id,
-        component: section.component,
         itemIds: [...section.itemIds]
       }))
     }))
@@ -107,6 +106,8 @@ async function main() {
   const after = buyerProjection.prepare(inspected.value, buyerRuntime);
   assert.equal(after.flow.source.schemaVersion, administrationV5.SCHEMA);
   assert.deepEqual(itemsOf(after), itemsOf(before), "migration cannot alter buyer stage/item hierarchy");
+  assert(after.flow.stages.every((stage) => stage.groups.every((group) => group.sections.every((section) => typeof section.component === "string"))),
+    "v5 explicitly owns component metadata even where legacy v3 flow leaves component undefined");
   assert.deepEqual(after.pricingRules, before.pricingRules, "migration cannot alter typed buyer pricing rules");
   assert.deepEqual(after.presentationPolicy, preflight.candidatePayload.presentationPolicy);
 
