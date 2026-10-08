@@ -1,6 +1,6 @@
 # CP-SD-06A2A3c2 — production v5 cutover runbook and GO/NO-GO — 2026-10-07
 
-Status: **PREPARATORY DOCUMENTATION; LIVE ACTIVATION NOT AUTHORIZED**.
+Status: **HISTORICAL RUNBOOK — LIVE CUTOVER EXECUTED / VERIFIED v5 REVISION 7**. See `docs/backlog/schema-driven-ui-cp-sd-06a2-live-cutover-evidence-2026-10-07.md`. The temporary migration endpoint was removed by PR #165, and the ordinary migration flag remains OFF. **Do not execute these steps again**; remaining follow-ups are visual/read-only smoke and separate legacy retirement.
 
 ## Purpose and scope
 
