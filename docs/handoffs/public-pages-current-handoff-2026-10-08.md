@@ -1,5 +1,8 @@
 # HANDOFF CANÔNICO — páginas públicas Landing + Viewer + Config protegido — 2026-10-08
 
+> **ATUALIZAÇÃO PRIORITÁRIA — plano CP-PUBLIC-03a2 (2026-10-08, não mesclado):** o estado de retomada mais novo para segurança é [plano arquitetural](../architecture/cp-public-03a2-authorized-buyer-bootstrap-plan-2026-10-08.md) e [gates](../testing/cp-public-03a2-release-gates-2026-10-08.md). A PR #182 (DRAFT/HOLD) corretamente impõe `401` para GET anônimo de configuração integral, porém `app/app.js` converte `401` em `null` e mantém UI/preços locais ativos sem validação. [Reprodução #37815057147](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/37815057147); contraprova funcional Stone/Summary/Mobile 3/3 com v5 mockada [#37815673306](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/37815673306). **Não ignorar console 401 nem liberar #182 isoladamente.** Próximos checkpoints: bootstrap fail-closed, read model cliente limitado, ticket por e-mail em banco transacional, Edge + proteção de JS de preço, gates CI separados e cutover coordenado. `main` atual observada em `bf30e008a81b7bc9cc34573e3d60a953810a9e72`; confirmar ao retomar. #180 integrada viewer e #181 inventário continuam DRAFT/HOLD; viewer não precisa de pedra/rodapé/oclusão comercial. Os links/heads mais antigos abaixo são históricos.
+
+
 **Estado verificado em GitHub + Netlify em 2026-10-08. Documento de retomada do CP-PUBLIC; ler ANTES de reconstruir o chat.** Este arquivo registra a autoridade *atual* em sua data; consultar a `main`, PRs e deploys ao vivo antes de agir. Não inferir que merges ou deploys posteriores não aconteceram.
 
 ## 0. Resposta em 30 segundos para um agente novo

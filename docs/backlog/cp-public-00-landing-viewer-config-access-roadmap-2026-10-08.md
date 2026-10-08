@@ -1,5 +1,8 @@
 # CP-PUBLIC-00 — Integração Landing + Viewer + Configurador e acesso por link — 2026-10-08
 
+> **Plano executável CP-PUBLIC-03a2 (2026-10-08):** [bootstrap, DTO comprador, e-mail/sessão, rotas](../architecture/cp-public-03a2-authorized-buyer-bootstrap-plan-2026-10-08.md) + [teste/aceitação](../testing/cp-public-03a2-release-gates-2026-10-08.md). Resolvida a causa: GET raw negado com 401, mas HTTP client cai silenciosamente nos defaults. A/B comprovou 3/3 Stone/Summary/Mobile PASS sob fixture v5 validada, porém auth real permanece pendente. **Não aplicar PR #182 isoladamente.** Ordem por PRs DRAFT: (0) falha fechada e estados, (1) projeção cliente explícita sem `source` admin, (2) ticket e-mail transacional/sessão, (3) proteção Edge/HTML/price-book e cutover, (4) testes real/auth + domínio fixture e cleanup. #180/#181/#182 continuam HOLD. Viewer vitrine, não simulador comercial de pedra/rodapé/oclusão; cor de frentes opcional. Este texto prevalece sobre os recortes históricos abaixo.
+
+
 Status: **PLANO CANÔNICO / DESCOBERTA CONFIRMADA; MIGRAÇÃO DE ROTAS AINDA NÃO ATIVADA.**
 
 **Handoff atual para troca de agente:** `docs/handoffs/public-pages-current-handoff-2026-10-08.md` — consulta ao vivo das PRs #175 (DRAFT + 7/7 CI + Netlify ready), #176 (MERGED) e #34 (DRAFT), arquivos de staging, duplicações e próximo recorte CP-PUBLIC-02a. Não confundir o deploy preview com incorporação do viewer à `main`.
