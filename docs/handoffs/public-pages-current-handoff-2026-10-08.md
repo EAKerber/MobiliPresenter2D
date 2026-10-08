@@ -1,5 +1,11 @@
 # HANDOFF CANÔNICO — páginas públicas Landing + Viewer + Config protegido — 2026-10-08
 
+> **Retomada prioritária — CP-PUBLIC-03a2-2, PR #186 DRAFT/HOLD (2026-10-08).** [Documento detalhado](../architecture/cp-public-03a2-2-email-session-2026-10-08.md): core ticket 15 min + sessão 12h, sha256, cookie HttpOnly/Secure/SameSite, transação Postgres que consome convite uma vez, rate limits, admin issue e Resend com secret env; roteamento Functions de issue/redeem/session/logout e página /access sem terceiros. Projeção #185 agora autoriza comprador só com sessão verificada em DB ou admin Identity; **nenhum banco/emails de produção foram ligados**. PR #186 foi retargetada a **main somente para validação Netlify preview**, contém o código #185 empilhado; ainda NÃO é release. Próximo: validar todos os workflows, cadastrar Postgres + Resend em sandbox isolado, prova E2E real, unificar #182/#184 e DTO no app.js, Edge/price-book. Não mexer viewer pedra/rodapé/oclusão.
+
+
+> **Novo recorte CP-PUBLIC-03a2-1A — PR #185 DRAFT/HOLD (2026-10-08).** Projetor puro `app/core/buyer-configuration-projection.js` para `BuyerConfiguration2D 0.1`, allowlist campos de configuração/precificação estritamente de v5 validada, adaptador `prepare(dto)` independente de `published-buyer-projection.prepare().source`. Novo `GET /api/buyer-configuration` admin-only até autenticação de comprador, sem fallback/ETag; URL Function direta protegida. Testes de não vazamento e paridade v5; HTTP real do Netlify anônimo nega 401. [Detalhes e inventário](../architecture/cp-public-03a2-1-buyer-dto-read-model-2026-10-08.md). **Não confundir API preparada com integração pronta:** app.js na #184 ainda consome raw, 03a2-2 sessão real pendente, #182 guard admin-only raw separado, #180 viewer com fixture temporária. Para retomada 03a2-2 usar PR #183 e #185; manter Draft/HOLD; main não foi alterada.
+
+
 **Estado verificado em GitHub + Netlify em 2026-10-08. Documento de retomada do CP-PUBLIC; ler ANTES de reconstruir o chat.** Este arquivo registra a autoridade *atual* em sua data; consultar a `main`, PRs e deploys ao vivo antes de agir. Não inferir que merges ou deploys posteriores não aconteceram.
 
 ## 0. Resposta em 30 segundos para um agente novo
