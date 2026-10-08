@@ -6,12 +6,14 @@
   const requestedModuleId = new URLSearchParams(window.location.search).get("module");
   const integration = window.CASA_PUBLIC_VIEWER_INTEGRATION || {};
   // Deep links override initial selection; otherwise the adapter derives it from visible data.
-  const adapter = window.CASA_PUBLIC_SCENE_ADAPTERS.create({
-    ...(integration.repository || {}),
-    initialSelectedId: requestedModuleId || undefined,
-    onSelectionChange: null
-  });
-  let currentView = 0;
+  function start(publicData = null) {
+    const adapter = window.CASA_PUBLIC_SCENE_ADAPTERS.create({
+      ...(integration.repository || {}),
+      ...(publicData || {}),
+      initialSelectedId: requestedModuleId || undefined,
+      onSelectionChange: null
+    });
+    let currentView = 0;
 
   function element(tag, className, text) {
     const node = document.createElement(tag);
@@ -136,4 +138,22 @@
   const initial = adapter.getSelectedModule();
   renderers.get("overview")(initial); renderers.get("scene")(initial); renderers.get("views")(initial); renderers.get("details")(initial);
   integration.onSelectionChange?.(adapter.getSelection());
+  }
+  if (integration.usePublishedApi === true) {
+    root.textContent = "Carregando informações publicadas…";
+    window.CASA_PUBLIC_VIEWER_DATA.load()
+      .then((projection) => start(projection))
+      .catch(() => {
+        // Don't silently replace unavailable/invalid published data with
+        // bundled static copy. Never show stack traces or raw API errors.
+        root.replaceChildren();
+        const message = document.createElement("p");
+        message.className = "viewer-public-error";
+        message.setAttribute("role", "alert");
+        message.textContent = "Informações temporariamente indisponíveis. Tente novamente mais tarde.";
+        root.append(message);
+      });
+  } else {
+    start();
+  }
 })();
