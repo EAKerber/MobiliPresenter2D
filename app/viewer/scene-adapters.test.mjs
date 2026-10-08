@@ -169,7 +169,11 @@ test("finish changes use the same canonical adapter state and notify subscribers
   assert.equal(a.getState().finishId, "steel");
   const limited = factory.createRepositoryAdapter({
     ...dependencies,
-    publicState: { finishId: "cocoa", availableFinishIds: ["base-light", "cocoa"] }
+    publicState: { finishId: "cocoa", availableFinishes: ["base-light", "cocoa"].map((id) => {
+      const source = catalog.options.finishes.find((finish) => finish.id === id);
+      return { id, label: source.publicLabel, color: source.color,
+        textureAsset: source.textureAsset, textureSize: source.textureSize };
+    }) }
   });
   assert.equal(limited.setGlobalFinish("steel"), false, "unpublished finish must not be selectable");
   assert.equal(limited.setGlobalFinish("base-light"), true);
@@ -185,7 +189,9 @@ test("standalone adapter honors approved projection instead of silently using ca
     benefits: ["Destaque específico"], components: [], requirements: [] }];
   const a = factory.create({
     publicModules,
-    publicState: { finishId: "base-light", availableFinishIds: ["base-light"], entities: { "module-07": true } }
+    publicState: { finishId: "base-light", availableFinishes: [{
+      id: "base-light", label: "Branco", color: "#faf9f6", textureAsset: "", textureSize: "cover"
+    }], entities: { "module-07": true } }
   });
   assert.deepEqual(a.modules.map((item) => item.id), ["module-07"]);
   assert.equal(a.getSelectedModule().title, "Publicado via API");
@@ -201,7 +207,9 @@ test("public loader requests only allowlisted endpoint; rejects invalid response
       return { schemaVersion: "PublicModulePresentation2D 0.1",
         modules: [{ id: "module-03", title: "Nome publicado" }],
         publicState: { entities: { "module-03": true },
-          finishId: "base-light", availableFinishIds: ["base-light"] }
+          finishId: "base-light", availableFinishes: [{
+            id: "base-light", label: "Branco", color: "#faf9f6", textureAsset: "", textureSize: "cover"
+          }] }
       };
     } };
   };
@@ -218,4 +226,20 @@ test("public loader requests only allowlisted endpoint; rejects invalid response
     schemaVersion: "ConfiguratorAdministration2D 5.0", pricing: { secret: true }
   }; } });
   await assert.rejects(() => loader.load(), /invalid_public_module_projection/);
+});
+
+test("viewer renders authored global finish unavailable in static catalog", () => {
+  const a = factory.createRepositoryAdapter({ ...dependencies, publicState: {
+    finishId: "new-front-color", availableFinishes: [{
+      id: "new-front-color", label: "Branco novo", color: "#ffffff", textureAsset: "", textureSize: "cover"
+    }]
+  } });
+  assert.equal(a.getState().finishId, "new-front-color");
+  assert.equal(a.getFinishes()[0].label, "Branco novo");
+  assert.equal(a.setGlobalFinish("steel"), false);
+  assert.throws(() => factory.createRepositoryAdapter({ ...dependencies, publicState: {
+    finishId: "new-front-color", availableFinishes: [{
+      id: "new-front-color", label: "Bad", color: "#ffffff", textureAsset: "https://malicious.example/track.png", textureSize: "cover"
+    }]
+  } }), /Invalid published finish/);
 });
