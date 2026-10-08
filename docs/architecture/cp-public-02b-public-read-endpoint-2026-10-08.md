@@ -24,3 +24,9 @@ Caixaria não tem representação visual: técnica de laterais congelada por pra
 
 ## Diagnóstico CI inicial
 A primeira execução GitHub Actions da PR #179, quando apontava para base `work/cp-public-02a-public-module-projection-20261008`, passou no `App build purity` (incluindo testes do endpoint), mas falhou em Stone/Mobile/Summary navegador por procurar `deploy-preview-179` inexistente. No Mobile: `CasaModulesRuntime.getLayoutProfile` undefined; no Stone: timeout aguardando runtime na página. Isso não é evidência de bug da API: os browser jobs exigem preview hospedado. Retarget de PR #179 para `main` e novo commit forçam a criação do preview; gates serão considerados completos somente se a nova execução tiver deploy associado e browser PASS.
+
+
+## Contrato de acabamentos dinâmicos e resultado do gate
+A allowlist de `publicState` evoluiu de IDs estáticos para `availableFinishes[]`: somente acabamentos globais habilitados e vinculados ao grupo de frentes, com campos visuais explícitos `id/label/color/textureAsset/textureSize`. Isso suporta novos acabamentos publicados pelo ADM sem tornar o catálogo físico editável e sem divulgar materiais, preços ou regras administrativas.
+
+O primeiro CI verde do endpoint inclui teste em `app/tools/test-public-modules-endpoint.js` e deploy preview próprio, após retarget para `main`. Não confundir esse mock com GET publicado real: previews sem Blob v5 próprio retornam 503 intencionalmente. #175 tem carregador público **opt-in** em staging; conexão de ponta a ponta permanece um gate separado.
