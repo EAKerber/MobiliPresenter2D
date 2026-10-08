@@ -31,3 +31,19 @@ Esse recorte pode falhar em testes do legado que assumam que o configurador pode
 ## Continuação
 
 A próxima PR implementará **03a2-1** (projeção de comprador explícita), sem reutilizar `prepared.source` como DTO de rede. Antes do merge final, consolidar #182 + 03a2-0 e gates de segurança/DOM, sem bypass para prod. CAIXARIA/laterais permanecem congeladas; viewer público é vitrine de módulos e não importa pedra/rodapé/oclusão do comprador.
+
+
+## Gate executado — código `ab4d2d3959bef6f9714090f3a26d57dda5f23232`
+
+**9/9 GitHub workflows PASS; Netlify Deploy Preview #184 SUCCESS** em 2026-10-08:
+- [Bootstrap browser #37826846091](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/37826846091): HTTP 401/403/404/422/429/503, rede, v5 inválida, v3/v5 válidas, primeiro paint bloqueado, retry 503→200. Resultado verificado no **browser com resposta interceptada em Playwright**; não é teste de e-mail, Identity ou proteção da API real.
+- [App build purity #37826845814](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/37826845814), [assets #37826846018](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/37826846018), [variant fidelity #37826846052](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/37826846052): PASS.
+- [Stone #37826846117](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/37826846117), [Summary #37826846053](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/37826846053), [Mobile #37826846231](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/37826846231), [Keyboard #37826846067](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/37826846067), [Flow layout #37826846245](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/37826846245): PASS com fonte de teste declarada.
+
+O helper `tests/helpers/buyer-domain-fixture.cjs` gera v3 e v5 **válidas em memória** e intercepta `GET /api/configuration` **somente no Playwright em Deploy Preview**, opt-in `BUYER_DOMAIN_FIXTURE_V5=1`. Os quatro testes modernos usam v5, enquanto o teste de hierarquia `flow-layout-browser.cjs` usa **v3 explícita** porque testa o `stages[].items` legado; `buyer-v5-browser.cjs` no mesmo workflow faz comparação v3/v5 com suas próprias fixtures. Os testes não tentam reproduzir autenticação: um gate distinto (a PR #182) prova 401 real no servidor.
+
+Os workflows agora monitoram alterações em `netlify/functions/**`, `netlify/lib/**`, HTML/app e helper, para não ignorarem regressões causadas pelo backend. `BUYER_DOMAIN_FIXTURE_V5` só é habilitado no evento `pull_request`; no push/main e execução manual os tests atuais continuam usando seu URL real. **Antes de um release com GET privado é necessário configurar o CI de main para sessão sandbox válida ou migrar testes de domínio para ambiente local explícito**; não mesclar #184 isoladamente.
+
+**Limitação crítica remanescente:** `app/app.js` ainda lê `/api/configuration` (legado raw v5) no caminho 200, e o endpoint da main pode emitir dados default quando não há publicação (200). Portanto esta PR prova **bloqueio por HTTP não-OK**, mas não prova que um 200 foi emitido exclusivamente a partir de Blob publicado/autorizado. Esse contrato só ficará fechado com 03a2-1, quando `/api/buyer-configuration` projetar de v5 armazenado válido, **sem fallback 200**, e com 03a2-2/3 para sessão/Edge/assets. Não levar raw v5 ou regra comercial exposta para um cliente anônimo.
+
+**Remoção/limpeza:** foi removida a classe CSS sem uso `.published-config-error`; `app/core/authorized-bootstrap.js` é código permanente do recorte, e os testes de domínio com fixture explícita são candidatos a permanência após adaptação para CI segura. Revisar a revisão de cache de `app.js` junto à integração final: o arquivo continua com `runtime-v38` para preservar o contrato de versionamento compartilhado de cena/máscaras; `authorized-bootstrap.js` tem cache busting separado `cp-public-03a2-0`.
