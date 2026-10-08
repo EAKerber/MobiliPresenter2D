@@ -12,6 +12,11 @@ function published(ids = catalog.modules.map((item) => item.entityId)) {
     pricing: { secret: "must-not-leak" },
     etag: "private-etag",
     draft: { secret: true },
+    initialState: {
+      entities: Object.fromEntries(catalog.modules.map((item) => [item.entityId, true])),
+      finishId: "base-light",
+      privateSession: "must-not-leak"
+    },
     objects: Object.fromEntries(catalog.modules.map((item) => [item.entityId, {
       title: item.title, description: "",
       benefits: [...item.benefits], components: [...item.components], requirements: [...item.requirements]
@@ -35,6 +40,8 @@ test("CP-PUBLIC-02a: all seven public modules in published order", () => {
   assert.equal(result.modules[2].description, "Descrição publicada");
   assert.deepEqual(result.modules[2].benefits, ["Destaque A", "Destaque B"]);
   assert.equal(result.modules[2].dimensionLabel, catalog.modules[2].dimensions.display);
+  assert.equal(result.publicState.finishId, "base-light");
+  assert.deepEqual(Object.keys(result.publicState.entities), catalog.modules.map((m) => m.entityId));
   assert.ok(result.modules[2].components.length);
 });
 test("CP-PUBLIC-02a: allowlist excludes pricing, private state and donor fields", () => {
@@ -53,7 +60,7 @@ test("CP-PUBLIC-02a: allowlist excludes pricing, private state and donor fields"
     ].includes(key)));
   }
   const wire = JSON.stringify(result);
-  for (const secret of ["pricing", "price", "etag", "draft", "revision", "secret", "unapproved", "publicPresentation", "commercial", "geometryMm"]) {
+  for (const secret of ["pricing", "price", "etag", "draft", "revision", "secret", "unapproved", "publicPresentation", "commercial", "geometryMm", "privateSession"]) {
     assert.ok(!wire.includes(secret), secret);
   }
 });
@@ -84,4 +91,17 @@ test("CP-PUBLIC-02a: blank description and lists are omitted without fallback", 
   for (const key of ["description", "benefits", "components", "requirements", "summary", "carcass"]) {
     assert.equal(Object.hasOwn(item, key), false, key);
   }
+});
+
+test("CP-PUBLIC-02a: visible-state subset and selected finish come from publication", () => {
+  const source = published(["module-07", "module-03"]);
+  source.initialState.entities["module-07"] = false;
+  source.initialState.finishId = "cocoa";
+  const result = project(source, catalog, scene);
+  assert.deepEqual(Object.keys(result.publicState.entities), ["module-07", "module-03"]);
+  assert.equal(result.publicState.entities["module-07"], false);
+  assert.equal(result.publicState.finishId, "cocoa");
+  assert.throws(() => project({ ...source, initialState: null }, catalog, scene));
+  source.initialState.entities["module-03"] = undefined;
+  assert.throws(() => project(source, catalog, scene), /missing published module visibility/);
 });
