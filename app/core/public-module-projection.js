@@ -60,9 +60,28 @@
       }
       return result;
     });
+    // Allowlisted scene state: module presence and selected global finish only.
+    // A viewer should never invent its initial selection or reveal the entire
+    // administration initialState. These keys are sufficient to initialize the
+    // current public scene and keep future finish controllers synchronized.
+    const initial = published.initialState;
+    if (!initial || !initial.entities || typeof initial.entities !== "object"
+      || typeof initial.finishId !== "string"
+      || !catalog.options?.finishes?.some((finish) => finish.id === initial.finishId)) {
+      throw new TypeError("published initial module/finish state missing or invalid");
+    }
+    const entities = {};
+    for (const module of modules) {
+      if (typeof initial.entities[module.id] !== "boolean") {
+        throw new TypeError("missing published module visibility: " + module.id);
+      }
+      entities[module.id] = initial.entities[module.id];
+    }
     // v5 owns published membership and editorial lists/text. Physical catalog
     // owns measurements and category. No benefit-to-summary or carcass guess.
-    return { schemaVersion: SCHEMA, modules };
+    return { schemaVersion: SCHEMA, modules, publicState: {
+      entities, finishId: initial.finishId
+    } };
   }
   const api = Object.freeze({ SCHEMA, project });
   if (typeof module !== "undefined" && module.exports) module.exports = api;
