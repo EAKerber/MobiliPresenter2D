@@ -2,6 +2,8 @@
 
 Status: **CANONICAL HANDOFF FOR NEXT AGENT**.
 
+**Latest authoritative update — CP-SD-06A2A3c2:** repository/preview v5 readiness has passed through PR #162. A2A3c2 is the operator-only production cutover runbook: `docs/backlog/schema-driven-ui-cp-sd-06a2a3c2-production-cutover-runbook-2026-10-07.md`. The reconciled summary is at `CURRENT_STATE.md` and `docs/backlog/schema-driven-ui-consolidation-roadmap-2026-10-06.md`. The real production blob has **not** been inspected or migrated. `V5_MIGRATION_ENABLED = false`; CP-SD-06A2 live execution requires separate user authorization and an administrative write freeze, backup, fresh raw-source ETag/revision/digest and verified readback. Do not initiate it from chat continuation alone. After verified v5 publication, legacy retirement is a separately gated step. Historical checkpoint entries below are retained as an audit trail, not as current next-action instructions.
+
 Update 2026-10-07 A2A3c1: PR #162 COMPLETE / PASS (6/6 GitHub CI workflows + Netlify preview) exercises the real Netlify function under fake Identity and separate fake site/deploy Blobs; documents nontransactional Netlify Blobs and ETag compare-and-swap limitations. No live production configuration was read or written; activation stays OFF. Next A2A3c2 final pre-production checklist. `docs/backlog/schema-driven-ui-cp-sd-06a2a3c1-endpoint-provider-safety-2026-10-07.md`.
 
 Update 2026-10-07 A2A3b: PR #161 completes authenticated read-only raw v3 preflight inspection (7/7 CI workflows and Netlify preview); no live production inspection executed. Docs: `docs/backlog/schema-driven-ui-cp-sd-06a2a3b-authenticated-raw-preflight-2026-10-07.md`. A2A3c provider safety/preview rehearsal next, live migration still OFF and unauthorized.
