@@ -58,6 +58,8 @@ Arquitetura proposta (design, não implementação ainda):
 - Persistir a arquitetura, auditoria de duplicações, fronteira v5 e segurança. **Não alterar root, admin, dados produtivos ou emails**.
 - Definição de pronto: documento canônico referenciado em `CURRENT_STATE.md`, gates de execução e risks claros.
 
+**Progress (2026-10-08):** CP-PUBLIC-01 donor staging PR #175 imported only 41 previously isolated blobs and added adapter tests plus desktop/mobile Playwright screenshots. All seven GitHub workflows and Netlify preview passed at `09b8a7313ce6fda78e34c0d124fca3b2e93b8ca0`. A real dual `aria-pressed` writer bug was found/fixed. PR remains **DRAFT / HOLD** until CP-PUBLIC-02 public v5 content projection and visual parity of masks, stone/plinth are satisfied; no route, session, admin or production data change. Do not interpret basic smoke PASS as final commercial viewer acceptance.
+
 ### CP-PUBLIC-01 — reconciliação da branch doadora em preview, sem ativar rotas canônicas
 - Copiar **somente** `app/landing/`, `app/viewer/`, `app/public-theme.css` e o *novo* `app/core/scene-component.js` de forma isolada para uma branch sobre main atual, preservando blobs binários; **não copiar** `app/data/catalog-data.js` antigo.
 - Verificar integridade de arquivos e build/testes atuais. O viewer precisa de adapter para o catálogo/scene correntes; se ainda incompatível, manter PR DRAFT/preview e não incorporar a main. Landing/viewer públicos apenas após gate visual, no máximo sem rotas canônicas neste incremento.
