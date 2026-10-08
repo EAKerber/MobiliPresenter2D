@@ -1,8 +1,6 @@
 # CP-SD-06L1c — contrato de recuperação v3 e bloqueio de regressão v5 — 2026-10-07
 
-Status: IMPLEMENTED IN PR / CI PENDING. **Decisão: RETER compatibilidade de leitura/escrita v3 sob fonte v3, não reativar migração.**
-
-## Questão analisada
+Status: **COMPLETE / PASS in PR #170**. Functional head `9b13cc3bd7b2cd9760ba1329d2257416aa7dfec1` passed **6/6 applicable GitHub workflows** and Netlify preview #170. An initial test asserted the response envelope instead of its body; this was corrected before the passing rerun. **Decisão: RETER compatibilidade de leitura/escrita v3 sob fonte v3, não reativar migração.** ## Questão analisada
 
 Após a conclusão da migração em produção (`ConfiguratorAdministration2D 5.0`, revisão 7) e a aposentadoria das duas superfícies específicas de migração nos PRs #168 (preflight remoto) e #169 (despachante remoto v3→v5), o servidor ainda possui uma lógica de `PUT` v3 e o reparo histórico `persist-handles-all`.
 
