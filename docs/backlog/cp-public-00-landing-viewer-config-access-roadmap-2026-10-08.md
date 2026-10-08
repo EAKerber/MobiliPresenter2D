@@ -1,5 +1,8 @@
 # CP-PUBLIC-00 — Integração Landing + Viewer + Configurador e acesso por link — 2026-10-08
 
+> **Atualização de escopo — 2026-10-08; CP-PUBLIC-03a e CP-PUBLIC-05 (docs independentes de #180).** O viewer é vitrine dos módulos. **Não exigir lógica de pedra/rodapé/oclusão do configurador como paridade do viewer**: a apresentação atual do preview é a referência. O controle global de cor das frentes fica **opcional** (adapter já sincroniza `finishId`). Caixaria/laterais continuam visualmente congeladas. Prioridades: **segurança server-side de `/config/` e APIs privadas** e **inventário de duplicações e limpeza planejada**. Consulte `docs/architecture/cp-public-03a-access-security-surface-2026-10-08.md` e `docs/architecture/cp-public-05-duplications-and-cleanup-ledger-2026-10-08.md`. **Nada foi deletado ou migrado para produção.** `main` mantém configurador na raiz, `GET /api/configuration` anônimo e `app/data/mock-price-book.js` público; proteger apenas API sem classificar o preço estático é insuficiente. A [PR #180](https://github.com/EAKerber/MobiliPresenter2D/pull/180) confirmou endpoint + viewer no deploy de homologação (8/8 CI), mas **permanece DRAFT/HOLD com Build Plugin/fixture sintética a remover antes de merge**.
+
+
 Status: **PLANO CANÔNICO / DESCOBERTA CONFIRMADA; MIGRAÇÃO DE ROTAS AINDA NÃO ATIVADA.**
 
 **Handoff atual para troca de agente:** `docs/handoffs/public-pages-current-handoff-2026-10-08.md` — consulta ao vivo das PRs #175 (DRAFT + 7/7 CI + Netlify ready), #176 (MERGED) e #34 (DRAFT), arquivos de staging, duplicações e próximo recorte CP-PUBLIC-02a. Não confundir o deploy preview com incorporação do viewer à `main`.
