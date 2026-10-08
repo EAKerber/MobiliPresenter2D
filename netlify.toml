@@ -15,3 +15,29 @@
   to = "/.netlify/functions/buyer-configuration"
   status = 200
   force = true
+
+# Access functions stay fail-closed until DB, mail, origin, and enable flag are configured.
+
+[[redirects]]
+  from = "/api/access/issue"
+  to = "/.netlify/functions/access-issue"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/api/access/redeem"
+  to = "/.netlify/functions/access-redeem"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/api/access/session"
+  to = "/.netlify/functions/access-session"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/api/access/logout"
+  to = "/.netlify/functions/access-logout"
+  status = 200
+  force = true
