@@ -1,6 +1,6 @@
 # MobiliPresenter2D — current backlog / handoff — 2026-10-07
 
-**CP-SD-06L1b next independent slice:** retire the live migration arm and the switch enabling it; return 410 to authenticated migration attempts, keep the offline migration algorithm and v3 recovery. PR/CI pending, see `docs/architecture/schema-driven-ui-cp-sd-06l1b-retire-live-v5-migration-dispatch-2026-10-07.md`. No live Blob access or writes in tests.
+**CP-SD-06L1b next independent slice:** retire the live migration arm and the switch enabling it; return 410 to authenticated migration attempts, keep the offline migration algorithm and v3 recovery. COMPLETE/PASS in PR #169 (7/7 CI + Netlify preview), see `docs/architecture/schema-driven-ui-cp-sd-06l1b-retire-live-v5-migration-dispatch-2026-10-07.md`. No live Blob access or writes in tests.
 
 **L1a current small checkpoint:** only retire the no-longer-used authenticated v3 preflight API query with 410 and zero Blob access; preserve offline preflight tools and v3 backup/import. COMPLETE/PASS in PR #168 (7/7 GitHub workflows + Netlify preview); see `docs/architecture/schema-driven-ui-cp-sd-06l1a-retired-v3-live-preflight-2026-10-07.md`. Do not touch native v5 writes or live production data.
 
