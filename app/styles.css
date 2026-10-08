@@ -17,19 +17,6 @@ html, body { margin: 0; min-height: 100%; }
 
 body { background: var(--background); color: var(--text); }
 
-.published-config-error {
-  max-width: 900px;
-  margin: 24px auto;
-  padding: 20px 24px;
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  background: var(--surface);
-  color: var(--text);
-  font-weight: 600;
-  line-height: 1.5;
-}
-
-
 /* CP-PUBLIC-03a2-0: CSS/HTML lock precedes JavaScript, including on slow loads.
    `hidden` is mandatory in addition to `inert`; no visible price until 200+apply. */
 .workspace[hidden],
