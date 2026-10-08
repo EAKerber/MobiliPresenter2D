@@ -1,0 +1,56 @@
+name: Public pages browser preview
+on:
+  pull_request:
+    paths:
+      - 'app/landing/**'
+      - 'app/viewer/**'
+      - 'app/public-theme.css'
+      - 'app/core/scene-component.js'
+      - 'tests/public-pages-smoke.cjs'
+      - '.github/workflows/public-pages-browser.yml'
+  workflow_dispatch:
+    inputs:
+      target_url:
+        description: URL of an isolated preview (never production for write tests)
+        required: false
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Select public pages preview origin
+        shell: bash
+        run: |
+          if [ -n "${{ inputs.target_url }}" ]; then
+            target="${{ inputs.target_url }}"
+          elif [ "${{ github.event_name }}" = "pull_request" ]; then
+            target="https://deploy-preview-${{ github.event.pull_request.number }}--mobilipresenter2d.netlify.app"
+          else
+            echo "An explicit preview URL is required for manual dispatch"
+            exit 1
+          fi
+          echo "PUBLIC_PAGES_URL=$target" >> "$GITHUB_ENV"
+      - name: Install test browser
+        run: |
+          npm install --prefix /tmp/public-pages-tools --no-audit --no-fund playwright@1.62.1
+          /tmp/public-pages-tools/node_modules/.bin/playwright install --with-deps chromium
+      - name: Smoke public landing and viewer
+        env:
+          NODE_PATH: /tmp/public-pages-tools/node_modules
+        run: node tests/public-pages-smoke.cjs /tmp/public-pages-review
+      - name: Preserve screenshot evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: public-pages-${{ github.run_id }}
+          path: /tmp/public-pages-review
+          if-no-files-found: ignore
