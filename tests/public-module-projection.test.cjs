@@ -12,30 +12,43 @@ function published(ids = catalog.modules.map((item) => item.entityId)) {
     pricing: { secret: "must-not-leak" },
     etag: "private-etag",
     draft: { secret: true },
+    objects: Object.fromEntries(catalog.modules.map((item) => [item.entityId, {
+      title: item.title, description: "",
+      benefits: [...item.benefits], components: [...item.components], requirements: [...item.requirements]
+    }])),
     stages: [{
       id: "modules-renamed", kind: "modules", enabled: true,
       groups: [{ sections: [{ itemIds: ids }] }]
     }]
   };
 }
-test("CP-PUBLIC-02a: all seven source-backed public modules in published order", () => {
-  const result = project(published(), catalog, scene);
+test("CP-PUBLIC-02a: all seven public modules in published order", () => {
+  const source = published();
+  source.objects["module-03"].title = "Título publicado";
+  source.objects["module-03"].description = "Descrição publicada";
+  source.objects["module-03"].benefits = ["Destaque A", "Destaque B"];
+  const result = project(source, catalog, scene);
   assert.equal(result.schemaVersion, SCHEMA);
   assert.deepEqual(result.modules.map((entry) => entry.id), catalog.modules.map((item) => item.entityId));
   assert.equal(result.modules.length, 7);
-  assert.equal(result.modules[2].title, catalog.modules[2].title);
+  assert.equal(result.modules[2].title, "Título publicado");
+  assert.equal(result.modules[2].description, "Descrição publicada");
+  assert.deepEqual(result.modules[2].benefits, ["Destaque A", "Destaque B"]);
   assert.equal(result.modules[2].dimensionLabel, catalog.modules[2].dimensions.display);
   assert.ok(result.modules[2].components.length);
 });
-test("CP-PUBLIC-02a: explicit shape excludes administration, pricing and unsanctioned extras", () => {
+test("CP-PUBLIC-02a: allowlist excludes pricing, private state and donor fields", () => {
   const modified = structuredClone(catalog);
   modified.modules[0].price = 1234;
   modified.modules[0].privateToken = "secret-extra";
   modified.modules[0].publicPresentation = { description: "unapproved" };
-  const result = project(published(), modified, scene);
+  const source = published();
+  source.objects["module-01"].privateToken = "private-object-value";
+  source.objects["module-01"].publicPresentation = { carcass: "unapproved" };
+  const result = project(source, modified, scene);
   for (const item of result.modules) {
     assert.ok(Object.keys(item).every((key) => [
-      "id", "referenceLabel", "title", "category", "dimensionLabel",
+      "id", "referenceLabel", "title", "description", "category", "dimensionLabel",
       "benefits", "components", "requirements"
     ].includes(key)));
   }
@@ -44,28 +57,31 @@ test("CP-PUBLIC-02a: explicit shape excludes administration, pricing and unsanct
     assert.ok(!wire.includes(secret), secret);
   }
 });
-test("CP-PUBLIC-02a: published membership controls omission and order", () => {
+test("CP-PUBLIC-02a: published membership controls omissions and order", () => {
   const result = project(published(["module-07", "module-02"]), catalog, scene);
   assert.deepEqual(result.modules.map((item) => item.id), ["module-07", "module-02"]);
 });
-test("CP-PUBLIC-02a: invalid/missing/disabled publication fails closed", () => {
+test("CP-PUBLIC-02a: invalid sources and foreign memberships fail closed", () => {
   assert.throws(() => project(null, catalog, scene));
   assert.throws(() => project({ ...published(), schemaVersion: "ConfiguratorAdministration2D 3.0" }, catalog, scene));
   assert.throws(() => project(published(["module-99"]), catalog, scene));
+  assert.throws(() => project(published(["lighting-08"]), catalog, scene));
   assert.throws(() => project(published(["module-01", "module-01"]), catalog, scene));
   assert.throws(() => project(published([]), catalog, scene));
-  const disabled = published();
-  disabled.stages[0].enabled = false;
+  const disabled = published(); disabled.stages[0].enabled = false;
   assert.throws(() => project(disabled, catalog, scene));
+  const missingObject = published(); delete missingObject.objects["module-01"];
+  assert.throws(() => project(missingObject, catalog, scene));
+  const invalidList = published(); invalidList.objects["module-01"].components = null;
+  assert.throws(() => project(invalidList, catalog, scene));
 });
-test("CP-PUBLIC-02a: missing optional editorial data stays absent", () => {
-  const modified = structuredClone(catalog);
-  modified.modules[0].benefits = [];
-  modified.modules[0].requirements = [];
-  modified.modules[0].title = null;
-  const item = project(published(["module-01"]), modified, scene).modules[0];
-  assert.equal(Object.hasOwn(item, "title"), false);
-  assert.equal(Object.hasOwn(item, "benefits"), false);
-  assert.equal(Object.hasOwn(item, "requirements"), false);
-  assert.equal(Object.hasOwn(item, "summary"), false);
+test("CP-PUBLIC-02a: blank description and lists are omitted without fallback", () => {
+  const source = published(["module-01"]);
+  source.objects["module-01"].benefits = [];
+  source.objects["module-01"].components = ["", "   "];
+  source.objects["module-01"].requirements = [];
+  const item = project(source, catalog, scene).modules[0];
+  for (const key of ["description", "benefits", "components", "requirements", "summary", "carcass"]) {
+    assert.equal(Object.hasOwn(item, key), false, key);
+  }
 });
