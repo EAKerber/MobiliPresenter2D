@@ -205,8 +205,15 @@
         core.setGlobalSelection(state, { finishId: publicState.finishId });
       }
     }
+    const sceneFinishIds = new Set(catalog.options.finishes.map((finish) => finish.id));
+    const availability = allowedFinishIds || publicState?.availableFinishIds
+      || catalog.options.finishes.filter((finish) => finish.status === "published").map((finish) => finish.id);
+    if (!Array.isArray(availability) || !availability.length || availability.some((id) => !sceneFinishIds.has(id))
+      || !availability.includes(core.globalFinishId(state))) {
+      throw new TypeError("Invalid public finish availability or selected finish");
+    }
     return createAdapter(scene, modules, {
-      initialSelectedId, sceneState: state, allowedFinishIds: allowedFinishIds || catalog.options.finishes.filter((finish) => finish.status === "published").map((finish) => finish.id),
+      initialSelectedId, sceneState: state, allowedFinishIds: availability,
       scene, products: sourceProducts, catalog, finishes: catalog.options?.finishes || [],
       sceneComponent: sharedSceneComponent, finishApi: sharedFinishApi,
       assetPrefix, inlineMasks, core, visibility, onSelectionChange
