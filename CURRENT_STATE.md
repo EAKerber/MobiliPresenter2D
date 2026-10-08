@@ -50,17 +50,16 @@ Canonical plan:
 - completed track: CP-SD-05 typed pricing — COMPLETE / PASS
 - active track: CP-SD-06 production v5 publication / legacy retirement
 - completed checkpoint: CP-SD-06A0 repository/authentication preflight — COMPLETE / PASS
-- active CP-SD-06A1 checkpoint: `docs/backlog/schema-driven-ui-cp-sd-06a1-server-v5-read-migration-support-2026-10-07.md`; split into A1a safe v5 read (COMPLETE / PASS in PR #153) and A1b guarded migration support (COMPLETE / PASS in PR #154; activation OFF); next CP-SD-06A2 authenticated production activation (not authorized)
-- A1a checkpoint/gates: `docs/backlog/schema-driven-ui-cp-sd-06a1a-safe-v5-read-2026-10-07.md`
-- A1b checkpoint/gates: `docs/backlog/schema-driven-ui-cp-sd-06a1b-guarded-migration-2026-10-07.md`
-- next production gate: `docs/backlog/schema-driven-ui-cp-sd-06a2-authenticated-v5-publication-2026-10-07.md` (planning only; not authorized to execute)
-- CP-SD-06A2A3c1 handler/provider-isolation test COMPLETE / PASS in PR #162 (6/6 CI workflows + Netlify preview): `docs/backlog/schema-driven-ui-cp-sd-06a2a3c1-endpoint-provider-safety-2026-10-07.md`. No live store accessed. Explicit ETag CAS does not create transaction isolation; final A2A3c2 production checklist still pending.
-- CP-SD-06A2A3b authenticated read-only v3 preflight inspection COMPLETE / PASS in PR #161 (7/7 GitHub plus Netlify preview), `docs/backlog/schema-driven-ui-cp-sd-06a2a3b-authenticated-raw-preflight-2026-10-07.md`. No live inspection executed. A2A3c provider and preview safety gate still ahead.
-- CP-SD-06A2A3a offline full-chain rehearsal COMPLETE / PASS in PR #160 (6/6 GitHub gates + Netlify preview), `docs/backlog/schema-driven-ui-cp-sd-06a2a3a-offline-rehearsal-2026-10-07.md`. A2A3b trusted authenticated raw source snapshot and A2A3c preview/browser rehearsal remain prerequisites; live migration disabled.
-- CP-SD-06A2A2b admin native v5 Save/browser gate COMPLETE / PASS in PR #159 (7/7 GitHub and preview); `docs/backlog/schema-driven-ui-cp-sd-06a2a2b-admin-v5-save-2026-10-07.md`. Follows completed A2A2a. Next A2A3 offline rehearsal; live migration not authorized.
-- CP-SD-06A2A2a native v5 server-save support COMPLETE / PASS in PR #158 (7/7 GitHub workflows plus Netlify preview): `docs/backlog/schema-driven-ui-cp-sd-06a2a2a-server-v5-save-2026-10-07.md`; next A2A2b admin UI Save plus A2A3 integrated rehearsal. Migration activation remains OFF.
-- CP-SD-06A2A0 COMPLETE (consumer-readiness audit, PR #155): `docs/architecture/schema-driven-ui-cp-sd-06a2a0-consumer-readiness-audit-2026-10-07.md`.
-- CP-SD-06A2A1a pure buyer v3/v5 projection contract COMPLETE / PASS in PR #156. A2A1b runtime wiring COMPLETE / PASS in PR #157 (8/8 workflows and Netlify preview); A2A2 admin/server v5 and A2A3 rehearsal still block live activation: `docs/backlog/schema-driven-ui-cp-sd-06a2a1a-buyer-projection-2026-10-07.md`. A2A1b runtime wiring, A2A2 admin/server v5 edits and A2A3 integrated rehearsal remain required before live authorization.
+- CP-SD-06A1a/b server v3/v5 read and disabled guarded migration COMPLETE/PASS (PRs #153/#154).
+- CP-SD-06A2A0 readiness audit COMPLETE/PASS (PR #155).
+- CP-SD-06A2A1a/b buyer v5 projection/runtime COMPLETE/PASS (PRs #156/#157).
+- CP-SD-06A2A2a/b native v5 server/admin Save COMPLETE/PASS (PRs #158/#159).
+- CP-SD-06A2A3a offline end-to-end simulated migration and buyer/admin proof COMPLETE/PASS (PR #160).
+- CP-SD-06A2A3b read-only authenticated raw-source preflight route COMPLETE/PASS (PR #161; never called against live production).
+- CP-SD-06A2A3c1 endpoint Identity/deploy isolation and provider audit COMPLETE/PASS (PR #162).
+- CP-SD-06A2A3c2 operator runbook and final GO/NO-GO preparation: `docs/backlog/schema-driven-ui-cp-sd-06a2a3c2-production-cutover-runbook-2026-10-07.md` (documentation-only checkpoint).
+- Production execution plan: `docs/backlog/schema-driven-ui-cp-sd-06a2-authenticated-v5-publication-2026-10-07.md`. **LIVE INSPECTION/MIGRATION NOT AUTHORIZED; production source unverified; `V5_MIGRATION_ENABLED = false`.** A one-time cutover requires explicit approval, authenticated evidence, a raw backup and freeze of concurrent admin writes.
+- After verified production v5 publication: close CP-SD-06 legacy-retirement gate separately; keep historical imports. Landing/commercial viewer integration and future design-system work are not part of CP-SD-06.
 - current handoff: `docs/handoffs/schema-driven-ui-current-handoff-2026-10-07.md`
 
 **CP-SD-00 — COMPLETE / PASS.** The audit found no critical unknowns. The main publication blocker is now explicit: v4 persists section presentation metadata, but that metadata is not yet the executable buyer-renderer authority.
