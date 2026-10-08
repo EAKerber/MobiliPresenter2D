@@ -47,6 +47,10 @@ jobs:
         env:
           NODE_PATH: /tmp/public-pages-tools/node_modules
         run: node tests/public-pages-smoke.cjs /tmp/public-pages-review
+      - name: Probe real isolated endpoint and viewer (no Blob writes)
+        env:
+          NODE_PATH: /tmp/public-pages-tools/node_modules
+        run: node tests/public-pages-integrated.cjs
       - name: Preserve screenshot evidence
         if: always()
         uses: actions/upload-artifact@v4
