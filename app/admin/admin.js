@@ -45,6 +45,7 @@ const dependenciesList = byId("dependenciesList");
 const eventsList = byId("eventsList");
 const saveButton = byId("saveButton");
 const persistHandlesButton = byId("persistHandlesButton");
+const publishV5OnceButton = byId("publishV5OnceButton");
 const saveMessage = byId("saveMessage");
 const logoutButton = byId("logoutButton");
 let model = structuredClone(defaults);
@@ -1193,6 +1194,8 @@ async function loadSettings() {
   model = baselineHierarchyFor(published);
   byId("revisionLabel").textContent = `Versão ${model.revision || 1} · editor hierárquico`;
   const repair = refreshHandlesRepairState();
+  publishV5OnceButton.hidden = published.schemaVersion !== configurationCore.SCHEMA || published.revision !== 6;
+  publishV5OnceButton.disabled = false;
   setMessage(
     saveMessage,
     repair?.ok && repair.needed
@@ -1778,6 +1781,112 @@ persistHandlesButton.addEventListener("click", async () => {
   } catch (error) {
     setMessage(saveMessage, error.message || "Falha ao persistir Puxadores.", "error");
   } finally {
+    saveButton.disabled = false;
+    if (!persistHandlesButton.hidden) persistHandlesButton.disabled = false;
+  }
+});
+
+// Temporary v3 -> v5 cutover UI. This never sends any admin draft changes:
+ // the candidate comes solely from the fresh authenticated server preflight.
+publishV5OnceButton.addEventListener("click", async () => {
+  publishV5OnceButton.disabled = true;
+  saveButton.disabled = true;
+  persistHandlesButton.disabled = true;
+  try {
+    if (publishedSource?.schemaVersion !== configurationCore.SCHEMA || publishedSource.revision !== 6) {
+      throw new Error("A migração v5 exige uma configuração v3 na revisão 6.");
+    }
+    if (JSON.stringify(model) !== JSON.stringify(baselineHierarchyFor(publishedSource))) {
+      throw new Error("Há alterações locais ainda não publicadas. Recarregue ou descarte o rascunho antes de migrar; esta operação não o salvará.");
+    }
+    const inspect = async () => {
+      const response = await fetch("/api/configuration?inspection=v5-preflight", {
+        credentials: "same-origin", cache: "no-store"
+      });
+      const report = await response.json().catch(() => null);
+      if (!response.ok || report?.code !== "v5_preflight_ready" || !report?.ok) {
+        throw new Error("O preflight autenticado bloqueou a migração: " + (report?.code || response.status));
+      }
+      if (report.source?.schemaVersion !== configurationCore.SCHEMA ||
+          report.source.revision !== 6 ||
+          report.preflight?.source?.digest !== report.source?.rawCanonicalDigest ||
+          report.preflight?.expectedReadback?.revision !== 7 ||
+          report.preflight?.expectedReadback?.schemaVersion !== hierarchyCore.SCHEMA) {
+        throw new Error("A fonte ou a revisão prevista não corresponde ao plano de migração.");
+      }
+      if (typeof report.source.etag !== "string" || !report.source.etag ||
+          !/^[0-9a-f]{64}$/.test(report.source.rawCanonicalDigest)) {
+        throw new Error("Não foi possível obter ETag e digest íntegros da fonte.");
+      }
+      return report;
+    };
+
+    setMessage(saveMessage, "Inspecionando a configuração original no servidor…");
+    const first = await inspect();
+    if (first.source.revision !== publishedSource.revision) {
+      throw new Error("A configuração mudou. Recarregue o editor antes de continuar.");
+    }
+    const confirmation = window.prompt(
+      "Operação ÚNICA de produção: revisão v3 6 será convertida em v5 7. Confirme backup guardado e nenhuma outra edição administrativa em andamento. Digite MIGRAR V5 para prosseguir.",
+      ""
+    );
+    if (confirmation !== "MIGRAR V5") {
+      setMessage(saveMessage, "Migração cancelada. Nenhum dado foi gravado.");
+      return;
+    }
+
+    setMessage(saveMessage, "Reconferindo ETag e digest antes da gravação única…");
+    const fresh = await inspect();
+    if (fresh.source.etag !== first.source.etag ||
+        fresh.source.rawCanonicalDigest !== first.source.rawCanonicalDigest ||
+        fresh.preflight.expectedReadback.digest !== first.preflight.expectedReadback.digest) {
+      throw new Error("A fonte mudou durante a confirmação. Migração cancelada.");
+    }
+
+    setMessage(saveMessage, "Solicitando publicação v5; não repita a operação se houver erro de rede…");
+    const response = await fetch("/api/publish-v5-once", {
+      method: "PUT", credentials: "same-origin", cache: "no-store",
+      headers: {
+        "Content-Type": "application/json",
+        "X-Configuration-Source-Digest": fresh.source.rawCanonicalDigest
+      },
+      body: JSON.stringify(fresh.candidatePayload)
+    });
+    const result = await response.json().catch(() => null);
+    if (!response.ok || result?.code !== "published_v5_verified" || !result?.ok) {
+      throw new Error(
+        "Publicação não confirmada. Não tente novamente: verificar estado bruto antes de qualquer ação. " +
+        (result?.error || response.status)
+      );
+    }
+    if (result.revision !== fresh.preflight.expectedReadback.revision ||
+        result.schemaVersion !== hierarchyCore.SCHEMA ||
+        result.publishedDigest !== fresh.preflight.expectedReadback.digest ||
+        result.publicationSignatureDigest !== fresh.preflight.expectedReadback.publicationSignatureDigest) {
+      throw new Error("O servidor retornou evidências diferentes do preflight. Não tente novamente.");
+    }
+
+    const readbackResponse = await fetch("/api/configuration", {
+      credentials: "same-origin", cache: "no-store"
+    });
+    if (!readbackResponse.ok) throw new Error("Gravação confirmada, mas a releitura pública falhou; não repita.");
+    const readback = await readbackResponse.json();
+    if (readback.schemaVersion !== hierarchyCore.SCHEMA || readback.revision !== 7) {
+      throw new Error("A releitura pública não mostrou v5 revisão 7; não repita a operação.");
+    }
+    publishedSource = structuredClone(readback);
+    model = baselineHierarchyFor(readback);
+    byId("revisionLabel").textContent = "Versão 7 · editor hierárquico";
+    refreshHandlesRepairState();
+    renderAdminTabs();
+    publishV5OnceButton.hidden = true;
+    setMessage(saveMessage,
+      "Migração concluída e confirmada pelo servidor: v5 revisão 7. Informe o resultado para remover imediatamente o endpoint temporário.",
+      "success");
+  } catch (error) {
+    setMessage(saveMessage, error.message || "Resultado desconhecido. Não tente novamente.", "error");
+  } finally {
+    publishV5OnceButton.disabled = false;
     saveButton.disabled = false;
     if (!persistHandlesButton.hidden) persistHandlesButton.disabled = false;
   }
