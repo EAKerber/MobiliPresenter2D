@@ -5,11 +5,17 @@ on:
     branches: [main]
     paths:
       - 'app/**'
+      - 'netlify/functions/**'
+      - 'netlify/lib/**'
+      - 'tests/helpers/buyer-domain-fixture.cjs'
       - 'tests/summary-pricing-browser.cjs'
       - '.github/workflows/summary-pricing-browser.yml'
   pull_request:
     paths:
       - 'app/**'
+      - 'netlify/functions/**'
+      - 'netlify/lib/**'
+      - 'tests/helpers/buyer-domain-fixture.cjs'
       - 'tests/summary-pricing-browser.cjs'
       - '.github/workflows/summary-pricing-browser.yml'
   workflow_dispatch:
@@ -58,6 +64,7 @@ jobs:
       - name: Test summary and pricing ownership
         env:
           NODE_PATH: /tmp/summary-pricing-tools/node_modules
+          BUYER_DOMAIN_FIXTURE_V5: ${{ github.event_name == 'pull_request' && '1' || '0' }}
         run: node tests/summary-pricing-browser.cjs /tmp/summary-pricing-review
       - name: Save interface review
         if: always()
