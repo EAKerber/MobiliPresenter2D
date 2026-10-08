@@ -1,5 +1,7 @@
 # MobiliPresenter2D — current backlog / handoff — 2026-10-07
 
+**CP-POSTV5-02a1 current checkpoint:** PR #173 tests the already-present admin Add Material data contract entirely in memory, through v5 validation, published buyer projection, native Save and strong readback, with unknown-module negative. CI still pending; `docs/architecture/post-v5-cp-02a1-new-material-roundtrip-fixture-2026-10-08.md`. This is NOT visual new-swatch proof (A2); production unchanged.
+
 **POST-v5 DISCOVERY UPDATE:** `docs/architecture/post-v5-cp-01-authoring-coverage-discovery-2026-10-08.md` audita autoria v5. Limite fundamental: hierarquia pode reorganizar IDs conhecidos, mas módulos novos ainda exigem catálogo e cena/asset; primeiro teste recomendado é nova cor/material v5 em fixture e browser, CP-POSTV5-02a. Não misturar com landing/viewer.
 
 **AUTHORITATIVE CONTINUATION (2026-10-08):** CP-SD-06 is COMPLETE/PASS; PR #170 merged at `c379d4d48c98143c3eba79392134ad00817f6533` after 6/6 CI and Netlify preview. Native v5 is published and user-accepted; exceptional v3 migration routes are retired and v3 backup/recovery compatibility deliberately retained. **Next decision point is the CP-POSTV5-01 authorship-coverage discovery**, in `docs/backlog/post-v5-work-frontier-2026-10-08.md`. Work on landing/viewer proceeds separately. Read current `main` before relying on embedded SHAs. Earlier `next` notes below are retained for audit history only.
