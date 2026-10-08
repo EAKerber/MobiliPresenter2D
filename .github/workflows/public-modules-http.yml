@@ -1,0 +1,27 @@
+name: Public modules isolated HTTP readback
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/public-modules-http.yml'
+      - 'tests/public-modules-http-smoke.cjs'
+      - 'netlify/**'
+      - 'netlify.toml'
+      - 'app/core/public-module-projection.js'
+
+permissions:
+  contents: read
+
+jobs:
+  http:
+    if: github.event.pull_request.number == 180
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Prove preview-only v5 readback, public allowlist and no PUT
+        env:
+          PUBLIC_PAGES_URL: https://deploy-preview-180--mobilipresenter2d.netlify.app
+        run: node tests/public-modules-http-smoke.cjs
