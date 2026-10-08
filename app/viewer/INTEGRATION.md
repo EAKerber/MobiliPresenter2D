@@ -45,7 +45,7 @@ O adapter exige as capacidades `createInitialState`, `resolveVisibility` e `asse
 
 ## Código temporário e aposentadoria
 
-O snapshot local dos sete módulos foi removido. As descrições públicas e a informação da caixaria agora ficam no `ProductCatalog2D 1.1`; componentes, requisitos, benefícios, medidas, desenho e geometria vêm de suas fontes atuais. A composição da página em `data.js` permanece necessária e não é uma cópia do catálogo.
+O snapshot local dos sete módulos foi removido. O staging usa `ProductCatalog2D 1.0` da main apenas como fallback até que `publicModules` e `publicState` sejam entregues por transporte seguro. Descrição editorial separada permanece vazia no baseline; Destaques são a lista `benefits[]` do ADM. Não existe informação visual independente de caixaria, e não se infere caixaria de benefícios. A composição da página em `data.js` permanece necessária e não é uma cópia do catálogo.
 
 `app/viewer/technical-views.js` ainda repete os geradores SVG do configurador. Essa é a duplicação temporária remanescente; não a apagar antes de substituir ambas as implementações por um módulo puro compartilhado. Sequência segura:
 
@@ -60,4 +60,4 @@ Antes de cada remoção, confirmar ausência de referências com busca no projet
 
 ## Acabamentos
 
-O viewer aplica o acabamento-base pelas máscaras compartilhadas, mas ainda não oferece picker. O catálogo publica opções globais de frente, e o estado existente também modela essa seleção como global; para adicioná-la, expor leitura e troca de acabamento no adapter e renderizar as opções publicadas, sem importar `app.js`. A caixaria não tem grupo nem máscara próprios: neste momento pode ser apresentada como propriedade do módulo, mas sua seleção de cor requer geometria/máscaras separadas e um contrato específico.
+O viewer aplica o acabamento-base pelas máscaras compartilhadas, mas ainda não oferece picker. O catálogo publica opções globais de frente, e o estado existente também modela essa seleção como global; para adicioná-la, expor leitura e troca de acabamento no adapter e renderizar as opções publicadas, sem importar `app.js`. A caixaria não tem grupo nem máscara próprios e **não** é apresentada como propriedade visual deduzida de texto. Qualquer seleção própria de cor requer geometria/máscaras separadas, mas a frente de laterais está congelada indefinidamente; não implementá-la como parte deste viewer.
