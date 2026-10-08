@@ -1,6 +1,6 @@
 # CP-SD-06A2A3b — authenticated raw v3 inspection / publication evidence — 2026-10-07
 
-Status: IMPLEMENTED IN DRAFT PR / TEST GATE PENDING. This checkpoint builds a read-only inspection capability but does not call it against live production data.
+Status: COMPLETE / PASS in PR #161. Functional head `c39abddec9c1639e46bb60d5e5c90bf6d7262f39` passed 7/7 applicable GitHub workflows and Netlify preview #161. Read-only tests use fake storage; no live production inspection executed. This checkpoint builds a read-only inspection capability but does not call it against live production data.
 
 ## Purpose
 
