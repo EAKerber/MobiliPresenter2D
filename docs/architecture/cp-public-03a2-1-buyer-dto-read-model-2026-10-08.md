@@ -46,3 +46,16 @@
 4. 03a2-3: Edge e aliases de `/config/`, política de HTML/asset e remoção da exposição anônima de price-book. 03a2-4: suíte E2E completa, cleanup #180/#182 e cutover com rollback seguro. Sem merges parciais com endpoint admin raw exposto.
 
 **STOP** se houver fallback de v3/default em endpoint buyer, resposta com `revision/etag/source`, vazamento de field-level, autorização por header/cookie não verificado, desvio de cálculo v5, necessidade de receber pricing anônima, ou CI que interprete fixture em Playwright como sessão real.
+
+
+## Evidência suplementar — ADM adiciona acabamento global desconhecido do catálogo físico
+
+`app/tools/test-buyer-configuration-projection.js` também reproduz `Add Material` de v5: cria `fixture-new-fronts-20261008` com `materialGroups.fronts-all`, `finishes` habilitado, estado inicial apontando para a nova opção e `CommercialPricingRules 1.0` com ajuste em basis points. O teste exige `administrationV5.validate()=[]`, material/opção/estado e regra intactos em `BuyerConfiguration2D 0.1`, mantendo a hierarquia dos módulos inalterada. Isto evita modelar apenas as cores físicas de catálogo, que seria regressão na autoridade do ADM.
+
+## Gates confirmados para o código do projetor
+
+Na [execução de contrato #37830371111](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/37830371111), ambos os jobs da suíte *Scoped buyer configuration boundary* concluíram **SUCCESS**:
+- `projection-unit`: DTO v5 sem campos admin, paridade hierárquica/precificação e novo acabamento global.
+- `preview-anonymous-negative`: requests reais de anônimo ao Netlify Deploy Preview #185 em `/api/buyer-configuration` e na URL direta da Function retornam 401; `?inspection=raw` 400 e PUT 405.
+
+Isto **não** comprova sessão de cliente ou leitura real 200 de v5 armazenada com Identity; esses gates seguem pendentes. Unit mocks injetam identidade de admin e store v5; a validação externa é negativa no HTTP.
