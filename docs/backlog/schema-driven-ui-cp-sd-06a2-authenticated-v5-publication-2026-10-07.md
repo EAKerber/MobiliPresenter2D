@@ -1,8 +1,10 @@
 # CP-SD-06A2 — authenticated v5 activation and publication — 2026-10-07
 
-Status: **PLANNED / LIVE EXECUTION NOT AUTHORIZED — CONSUMER READINESS BLOCKED**.
+Status: **REPOSITORY AND PREVIEW READINESS COMPLETE / LIVE EXECUTION NOT AUTHORIZED**.
 
-**New mandatory prerequisite (CP-SD-06A2A0):** `docs/architecture/schema-driven-ui-cp-sd-06a2a0-consumer-readiness-audit-2026-10-07.md`. The public buyer still consumes v3 only, normal admin Save projects to v3, and normal server PUT refuses stored v5. Finish A2A1 buyer v5, A2A2 admin/server v5 and A2A3 offline rehearsal before any activation.
+Offline consumer/server readiness and integrated proof are COMPLETE/PASS through PRs #155–#162 (buyer v5, native admin v5, fake-store rehearsal, authenticated read-only inspection and endpoint-isolation gate). This does **not** prove the current production blob is canonical v3 or authorize inspection/activation. Netlify Blobs is not a general transaction database; a one-time cutover requires a short administrative edit freeze and independently checked raw backup.
+
+**Mandatory future operator runbook:** `docs/backlog/schema-driven-ui-cp-sd-06a2a3c2-production-cutover-runbook-2026-10-07.md`. This document describes a live execution gate, not permission to perform it.
 
 Prerequisites:
 - CP-SD-06A0 offline canonical preflight COMPLETE/PASS.
