@@ -20,6 +20,8 @@ Status: **DISCOVERY / PLANEJAMENTO**, sem mudança de código e sem decisão de 
 | Landing / Viewer públicos | Trabalho em paralelo com contratos próprios; dependências de cena e dados podem ser compartilhadas só por interface estável | Revisar fronteiras entre artefatos atuais, navegação e experiência pública quando a frente pedir integração | Nunca substituir a UI de configurador/admin aceitos pela landing em desenvolvimento |
 | Adaptações futuras de estilo e apresentação | Avaliar variações de tema, nominal sizing e componentes quando houver definições/arte aceitas | Discovery isolada por comportamento ou token, sem alterar schemas por conveniência | Não remodelar schema atual por hipóteses visuais ainda não verificadas |
 
+**CP-POSTV5-02a1 COMPLETE/PASS:** isolated fixture in PR #173 (6/6 GitHub workflows plus Netlify preview) for new authored Fronts color's v5 validation, buyer projection and native Save/readback; browser proof is explicitly deferred to CP-POSTV5-02a2. `docs/architecture/post-v5-cp-02a1-new-material-roundtrip-fixture-2026-10-08.md`.
+
 **CP-POSTV5-01 discovery executado:** matriz auditada em `docs/architecture/post-v5-cp-01-authoring-coverage-discovery-2026-10-08.md`. Próximo recorte recomendado **CP-POSTV5-02a**: falsificação v5 in-memory/browser da criação de novo material de Frentes; sem migration, novo módulo físico ou alteração de produção.
 
 ## Próximo recorte recomendado: CP-POSTV5-01 (somente descoberta)
