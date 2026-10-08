@@ -1,6 +1,6 @@
 # CP-POSTV5-02a1 — falsificação de novo material no contrato v5 — 2026-10-08
 
-Status: **IMPLEMENTED IN PR #173 / FULL CI AND PREVIEW PENDING**.
+Status: **COMPLETE / PASS in PR #173**. Functional integration test and documentation head `2ca1d1df867c0653b2b681bad2ee0156ba7a9f7d` passed all **6 applicable GitHub CI workflows** and Netlify deploy preview #173. The new Fronts material survives the pure v5 validation, buyer projection, mock-store CAS/save/readback; **visual new-swatch browser proof remains PENDING separately**.
 
 ## Hipótese e fronteira
 
