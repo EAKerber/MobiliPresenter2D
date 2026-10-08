@@ -70,7 +70,7 @@ Never commit raw production data, credentials, opaque production ETags or full a
 ### 3. Disable, smoke and record
 
 11. Immediately restore `V5_MIGRATION_ENABLED = false` in a separate reviewed deploy; verify that another `publish-v5-migration` request returns `403 v5_migration_disabled` and cannot write. Avoid sending the production candidate unnecessarily when checking disablement.
-12. Confirm normal buyer GET and authenticated admin read show v5; smoke all enabled stages, modules, Puxadores, stone/sirting ownership, independent scroll, PiP, dock, Summary totals/rounding, authored presentation policy and mobile breakpoints. Avoid nonessential production writes.
+12. Confirm normal buyer GET and authenticated admin read show v5; smoke all enabled stages, modules, Puxadores, stone-skirting ownership, independent scroll, PiP, dock, Summary totals/rounding, authored presentation policy and mobile breakpoints. Avoid nonessential production writes.
 13. Confirm native admin v5 Save can be operated in isolated preview, and that a legacy v3 PUT against stored v5 is rejected. Production test writes, if any, require their **own** scoped approval and exact readback; do not silently mutate live catalog or prices for smoke testing.
 14. Record all redacted evidence, deploy IDs, merged commit SHA, pass/fail outcomes and any deferred legacy retirement. Mark CP-SD-06 COMPLETE only when the durable production proof exists, not when the repository/test readiness is green.
 
