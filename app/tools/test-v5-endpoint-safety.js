@@ -165,10 +165,13 @@ async function main() {
     const v5Harness = { ...globalThis.__v5ReadinessHarness, getDeployStore: () => nativeV5Store };
     globalThis.__v5ReadinessHarness = v5Harness;
     const v5Endpoint = await import("data:text/javascript;base64," + Buffer.from(moduleSource + "\n// native-v5-fixture").toString("base64"));
-    const sendV5 = async (method, body) => {
+    const sendV5 = async (method, body, operation = "") => {
       const response = await v5Endpoint.default(
         new Request("https://unit-test.invalid/api/configuration", {
-          method, headers: { "Content-Type": "application/json" },
+          method, headers: {
+            "Content-Type": "application/json",
+            ...(operation ? { "X-Configuration-Operation": operation } : {})
+          },
           body: body === undefined ? undefined : JSON.stringify(body)
         }), previewContext
       );
@@ -188,6 +191,19 @@ async function main() {
     const downgrade = await sendV5("PUT", v3);
     assert.equal(downgrade.status, 409);
     assert.equal(nativeV5Store.writes, 1, "v3 downgrade cannot overwrite stored v5");
+    // Historic v3-only operations must be unable to mutate a v5 store.
+    const handleRepair = await sendV5("PUT", v3, "persist-handles-all");
+    assert.equal(handleRepair.status, 422);
+    assert.equal(handleRepair.body.error, "unsupported_configuration_operation");
+    assert.equal(nativeV5Store.writes, 1, "legacy handles repair cannot write stored v5");
+
+    const oldMigration = await sendV5("PUT", v3, "publish-v5-migration");
+    assert.equal(oldMigration.status, 410);
+    assert.equal(oldMigration.body.error, "v5_migration_retired");
+    assert.equal(nativeV5Store.writes, 1, "retired migration operation cannot write stored v5");
+
+    const afterLegacyAttempts = await sendV5("GET");
+    assert.deepEqual(afterLegacyAttempts.body, saved.body, "v5 document must remain identical after all rejected legacy operations");
     console.log("v5 endpoint preview/admin/storage isolation: PASS");
   } finally {
     delete globalThis.__v5ReadinessHarness;
