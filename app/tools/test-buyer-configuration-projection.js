@@ -102,6 +102,34 @@ assert.deepEqual(typedDto.pricing.roles.frontFinishAdjustment[frontRateId],
   { type: "amount", cents: 1485 }, "typed amount rules are not coerced to percentages");
 assert.deepEqual(projection.prepare(typedDto, runtime).pricingRules, pricingContract.normalize(typed.pricing));
 
+// V5-native custom front finishes must survive without extending the
+// immutable physical scene/catalog. Reproduce ADM's Add Material contract.
+const custom = structuredClone(v5);
+const NEW_FINISH = "fixture-new-fronts-20261008";
+custom.materials.push({
+  id: NEW_FINISH, label: "Frente autorada teste", kind: "color",
+  color: "#a1b2c3", textureAsset: "", textureSize: "cover",
+  groupIds: ["fronts-all"], locked: false
+});
+custom.materialGroups.find(group => group.id === "fronts-all").materialIds.push(NEW_FINISH);
+custom.finishes.push({
+  id: NEW_FINISH, enabled: true, scope: "global",
+  moduleIds: catalog.modules.map(item => item.entityId)
+});
+custom.initialState.finishId = NEW_FINISH;
+custom.pricing.roles.frontFinishAdjustment[NEW_FINISH] = {
+  type: "percentage", bps: 175, basis: "eligible-module-base"
+};
+assert.deepEqual(administrationV5.validate(custom, configuration, catalog, priceBook, scene), []);
+const customDto = projection.project(custom, runtime);
+assert.equal(customDto.materials.find(item => item.id === NEW_FINISH).label,
+  "Frente autorada teste");
+assert.equal(customDto.finishes.find(item => item.id === NEW_FINISH).enabled, true);
+assert.equal(customDto.initialState.finishId, NEW_FINISH);
+assert.deepEqual(projection.prepare(customDto, runtime).pricingRules.roles.frontFinishAdjustment[NEW_FINISH],
+  { type: "percentage", bps: 175, basis: "eligible-module-base" });
+assert.deepEqual(customDto.stages, dto.stages, "new finish must not mutate physical stage hierarchy");
+
 const amended = structuredClone(v5);
 amended.objects["module-01"].title = "Módulo de atendimento — valor autorado em publicação";
 const amendedDto = projection.project(amended, runtime);
