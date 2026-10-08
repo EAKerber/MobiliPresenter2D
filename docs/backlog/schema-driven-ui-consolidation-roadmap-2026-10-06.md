@@ -1,6 +1,6 @@
 # Schema-driven UI consolidation roadmap — 2026-10-06
 
-Status: canonical planning track for consolidating schema ownership before production hierarchy publication. CP-SD-00 through CP-SD-05 are COMPLETE / PASS; CP-SD-06 is IN PROGRESS with A0 preflight complete and A1 server support next.
+Status: **COMPLETE / PASS** through CP-SD-06 and PR #170. Production schema v5 revision 7 was published and accepted by the user; historical live migration paths retired and v3 recovery compatibility preserved. This is now an architectural/historical plan. New work starts at `docs/backlog/post-v5-work-frontier-2026-10-08.md`; older NEXT/PENDING statements below are milestone history, not current instructions.
 
 This track starts from the manually accepted PR #97 buyer baseline and the current repository state after the isolated Puxadores persistence hotfix. It is intentionally documentation-first: no runtime, schema-version, pricing, catalog, scene, asset or production-configuration behavior changes are part of CP-SD-00.
 
