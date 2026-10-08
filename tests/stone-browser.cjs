@@ -3,6 +3,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 const {pathToFileURL} = require('node:url');
 const {chromium} = require('playwright');
+const domainFixture = require('./helpers/buyer-domain-fixture.cjs');
 
 (async () => {
   const output = process.argv[2] || '/tmp/stone-browser';
@@ -14,6 +15,7 @@ const {chromium} = require('playwright');
     args: mode === 'local' ? ['--allow-file-access-from-files'] : []
   });
   const page = await browser.newPage({viewport: {width: 1366, height: 900}});
+  await domainFixture.attach(page, targetUrl);
   const errors = [];
   page.on('pageerror', error => errors.push(error.message));
   page.on('console', message => { if (message.type() === 'error') errors.push(message.text()); });
@@ -44,6 +46,7 @@ const {chromium} = require('playwright');
   }
 
   await openCurrentRuntime();
+  await domainFixture.requireReady(page);
 
   const settle = () => page.waitForTimeout(350);
   const screenshot = name => page.screenshot({path: path.join(output, `${name}.png`), fullPage: true, animations: 'disabled'});
