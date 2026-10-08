@@ -100,7 +100,11 @@
         priceEntryId: id(product.priceEntryId), materialIds: list(product.materialIds).map(id)
       }));
     if (handleProducts.length !== handleProductIds.size) throw new TypeError("handle product coverage missing");
-    const allowedMaterials = new Set(groups.flatMap(group => group.materialIds));
+    // `handles-all.materialIds` refers to handle PRODUCT ids, not materials;
+    // pulling them into the material set would incorrectly assert missing
+    // material records and tempt fallback to the full admin inventory.
+    const allowedMaterials = new Set(groups.filter(group => group.id !== "handles-all")
+      .flatMap(group => group.materialIds));
     handleProducts.forEach(product => product.materialIds.forEach(value => allowedMaterials.add(value)));
     const materials = v5.materials.filter(item => allowedMaterials.has(item.id)).map(item => ({
       id: id(item.id), label: item.label, kind: item.kind,
