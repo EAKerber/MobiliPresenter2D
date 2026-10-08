@@ -45,6 +45,20 @@ Data: 2026-10-08. Código: PR #182 (DRAFT/HOLD). Auditoria baseada no código at
 4. Corrigir gatilhos CI para backend/rotas e incluir logs de `response.status`, `publishedConfigurationStatus`, revisão/sentinela e `sourceKind`; distinguir `auth` de `business UI` no nome dos jobs.
 5. Só após fechar esses gates reabilitar workflows de compra sem ignorar `console.error` de rede. Não aplicar bypass de autorização só para tornar CI verde.
 
+### Evidência de execução do diagnóstico
+
+O [workflow real 37815057147](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/37815057147) concluiu `success` **para a reprodução, não para o produto**. O log registrou:
+
+```json
+{"endpointHttpStatus":401,"publicationStatus":null,"workspaceInteractive":true,"estimateVisible":true,"visibleAlert":false,"modulesPresent":7,"stoneControlPresent":true,"debugStatePresent":true,"httpErrorReportedInConsole":true,"pageErrorCount":0}
+```
+
+Isso **prova no preview** que a falta de resposta autorizada não impediu a vitrine de compra e a estimativa locais. O navegador não lançou erro JavaScript; a única mensagem de console foi o recurso HTTP 401. Nem a exibição de R$ nem o sucesso da matriz de pedra mostram que valores do v5 real chegaram ao runtime.
+
+### Observação sobre cobertura CI
+
+A melhor prova de `publishedConfigurationStatus === "validated"` já existe em `tests/buyer-v5-browser.cjs`, mas ela é executada pelo workflow `.github/workflows/flow-layout-browser.yml`, cujo filtro `paths` cobre somente determinados arquivos do fluxo e apresentação e **não** `netlify/functions/configuration.mjs`, `netlify/lib/configuration-access.cjs` ou `app/package.json`. Por isso **não apareceu no conjunto de checks da PR #182**. Ainda que fosse executada, sua resposta `200` é interceptada pelo Playwright e não testaria a política real de acesso. Esse workflow deve ser acionado também por mudanças na fronteira de autenticação e deve coexistir com um teste sem mock para autorização/deploy.
+
 ## Experimento reproduzível
 
 `tests/diagnostics/configuration-401-fallback.cjs` e `.github/workflows/configuration-fallback-diagnostic.yml` foram adicionados **temporariamente na PR #182**. Executam Chrome isolado contra somente `deploy-preview-182--mobilipresenter2d.netlify.app/`, sem login, POST, escrita ou produção. Capturam o GET real 401, o valor de `publishedConfigurationStatus`, estado interativo da workspace, preço, alertas e erro de console. O teste é **diagnóstico de um comportamento incorreto conhecido**: PASSE dele significa *reprodução do defeito*, não autorização para publicar. **Retirar ou substituir por negativo fail-closed antes de merge**.
