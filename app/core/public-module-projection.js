@@ -66,8 +66,7 @@
     // current public scene and keep future finish controllers synchronized.
     const initial = published.initialState;
     if (!initial || !initial.entities || typeof initial.entities !== "object"
-      || typeof initial.finishId !== "string"
-      || !catalog.options?.finishes?.some((finish) => finish.id === initial.finishId)) {
+      || typeof initial.finishId !== "string") {
       throw new TypeError("published initial module/finish state missing or invalid");
     }
     const entities = {};
@@ -77,18 +76,39 @@
       }
       entities[module.id] = initial.entities[module.id];
     }
-    const catalogFinishIds = new Set(catalog.options.finishes.map((finish) => finish.id));
-    if (!Array.isArray(published.finishes)) throw new TypeError("published finish availability required");
-    const availableFinishIds = published.finishes.filter((entry) => entry?.enabled === true && entry.scope === "global")
-      .map((entry) => entry.id).filter((id) => catalogFinishIds.has(id));
-    if (!availableFinishIds.length || !availableFinishIds.includes(initial.finishId)
-      || new Set(availableFinishIds).size !== availableFinishIds.length) {
-      throw new TypeError("published initial finish must be available and supported by the public scene");
+    // v5 permits newly authored finishes that do NOT exist in the frozen
+    // physical catalog. Only published, global front finishes are allowed.
+    const fronts = published.materialGroups?.find((group) => group.id === "fronts-all");
+    if (!Array.isArray(fronts?.materialIds) || !Array.isArray(published.finishes)
+      || !Array.isArray(published.materials)) {
+      throw new TypeError("published front finish library required");
     }
-    // v5 owns published membership, editorial lists and material availability.
-    // Physical catalog owns measurements and current scene-capable finishes.
+    const allowed = new Set(fronts.materialIds);
+    const materials = new Map(published.materials.map((material) => [material.id, material]));
+    const enabled = published.finishes.filter((entry) => entry?.enabled === true && entry.scope === "global");
+    const availableFinishes = enabled.map((entry) => {
+      const material = materials.get(entry.id);
+      if (!allowed.has(entry.id) || !material || !text(material.label)
+        || !["color", "texture"].includes(material.kind)
+        || !(material.color === null || /^#[0-9a-fA-F]{6}$/.test(material.color || ""))
+        || typeof material.textureAsset !== "string"
+        || (material.textureAsset && (!/^assets\/[A-Za-z0-9_./-]+\.(png|webp|jpe?g)$/i.test(material.textureAsset)
+          || material.textureAsset.includes("..")))
+        || typeof material.textureSize !== "string") {
+        throw new TypeError("invalid published front finish: " + entry.id);
+      }
+      return {
+        id: entry.id, label: material.label.trim(), color: material.color,
+        textureAsset: material.textureAsset, textureSize: material.textureSize
+      };
+    });
+    const ids = availableFinishes.map((finish) => finish.id);
+    if (!ids.length || !ids.includes(initial.finishId) || new Set(ids).size !== ids.length) {
+      throw new TypeError("published initial finish must be globally available");
+    }
+    // Never return the whole materials library, admin object assets or pricing.
     return { schemaVersion: SCHEMA, modules, publicState: {
-      entities, finishId: initial.finishId, availableFinishIds
+      entities, finishId: initial.finishId, availableFinishes
     } };
   }
   const api = Object.freeze({ SCHEMA, project });
