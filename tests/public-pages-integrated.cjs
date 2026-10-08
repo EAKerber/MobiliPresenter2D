@@ -49,7 +49,7 @@ async function main() {
     assert.deepEqual(await deniedPut.json(), { error: "method_not_allowed" });
 
     const response = await ctx.request.get(api, { headers: { Accept: "application/json" } });
-    assert.equal(response.headers()["cache-control"], "no-store, max-age=0");
+    assert.deepEqual((response.headers()["cache-control"] || "").split(",").map((part) => part.trim()).sort(), ["max-age=0", "no-store"]);
     assert.equal(response.headers()["access-control-allow-origin"], undefined);
     assert([200, 503].includes(response.status()), "Unexpected public API status: " + response.status());
     const data = await response.json();
