@@ -51,8 +51,13 @@ async function main() {
     const response = await ctx.request.get(api, { headers: { Accept: "application/json" } });
     assert.deepEqual((response.headers()["cache-control"] || "").split(",").map((part) => part.trim()).sort(), ["max-age=0", "no-store"]);
     assert.equal(response.headers()["access-control-allow-origin"], undefined);
+    const diagnosticResponse = await ctx.request.get(
+      new URL("/__cp-public-02c-seed-checks.json", origin).href);
+    const diagnostics = diagnosticResponse.ok() ? await diagnosticResponse.json()
+      : { diagnosticStatus: diagnosticResponse.status() };
+    console.log("CP-PUBLIC-02c isolated build checks: " + JSON.stringify(diagnostics));
     assert.equal(response.status(), 200,
-      "PR #180 must read its deploy-scoped v5 fixture; 503 means the isolated build upload is missing");
+      "PR #180 must read its deploy-scoped v5 fixture: " + JSON.stringify(diagnostics));
     const data = await response.json();
     const expectedFirst = checkPublicShape(data);
     assert(expectedFirst, "A published preview needs a visible module");
