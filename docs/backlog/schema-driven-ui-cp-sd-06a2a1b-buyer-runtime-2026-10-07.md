@@ -1,6 +1,6 @@
 # CP-SD-06A2A1b — published v5 buyer runtime integration — 2026-10-07
 
-Status: IMPLEMENTED IN DRAFT PR #157 / CI AND VISUAL GATES PENDING.
+Status: COMPLETE / PASS in PR #157. Functional head `973ac0643f8e8cd202fb80631a4a3cafc3d18398` passed 8/8 workflows including v3/v5 injected Playwright and Netlify deploy preview. No production configuration accessed; migration flag remains OFF.
 
 Parent: A2A1a pure projection contract COMPLETE/PASS in PR #156.
 
