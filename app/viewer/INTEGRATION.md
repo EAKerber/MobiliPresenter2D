@@ -1,5 +1,18 @@
 # Viewer público: fronteira e migração
 
+## 2026-10-08 — Autoridade editorial, estado inicial e caixaria (CP-PUBLIC-02a)
+
+**Decisão de produto e implementação corrigida no staging:**
+- `Destaques (um por linha)` no ADM são `objects[id].benefits[]`, lista de frases autoradas; no viewer podem aparecer sob um título cosmético **Descrição**, mas não devem virar `objects[id].description` nem `summary` sintético. O campo `description` real está vazio no baseline e continua opcional. Nenhum destaque é removido por conter a palavra “caixaria”.
+- Componentes e Requisitos seguem `components[]` e `requirements[]`; cada linha é um item independente. Título/labels do bloco no viewer são apresentação, não fonte de dados.
+- `module-07` era default arbitrário em `data.js` e foi removido. Precedência agora: deep link `?module=` válido **e visível** → `selectedEntityId` explícito no estado injetado, se válido/visível → primeiro módulo visível na **ordem fornecida pelos dados públicos**. Sem módulo visível, falha fechada. Na falta temporária de projeção externa, o staging usa cena + catálogo atual (não simula publicação v5).
+- `createRepositoryAdapter` pode receber `publicModules` (a lista allowlist do CP-PUBLIC-02a com ordem/texto publicado) e `publicState` (`entities` e `finishId` publicados). **Não** receber v5 administrativo integral no browser. `getState()`, `subscribeState()` e `setGlobalFinish()` usam o mesmo `ViewerState2D` que renderiza a cena; mudança de acabamento atualiza a cena e emite estado sem segundo store/writer. Não há seletor novo nem sincronização entre abas/sessões implementada: isso requer contrato explícito de persistência/transporte no futuro.
+- **Caixaria:** o usuário confirmou que não existe representação visual separável no cenário atual. A técnica de laterais está **congelada por prazo indeterminado**. Não fazer máscara/recoloração, não parsear destaques para inferir caixaria, não criar botão de cor sem efeito. O conceito futuro continua: acabamento próprio, Branco como opção única, seleção global, elegibilidade por módulo. Nenhuma alteração ao schema v5 em produção é autorizada por esse conceito.
+- Metadado contratual da doadora `ProductCatalog2D 1.1` foi corrigido para a versão **1.0** declarada na main.
+
+**Gates ainda abertos:** CP-PUBLIC-02a precisa integrar um transporte público seguro; o viewer standalone em preview ainda usa dados estáticos até receber `CASA_PUBLIC_VIEWER_INTEGRATION.repository`. Paridade stone/plinth/masks e segurança de acesso permanecem pendentes. PR #175 continua DRAFT/HOLD.
+
+
 ## 2026-10-08 — Rebase seletivo sobre a main v5 (CP-PUBLIC-01)
 
 **Estado: staging experimental, NÃO autoriza publicação do viewer como experiência comercial final.** A branch doadora estava **228 commits atrás** da main no inventário. Foram importados arquivos isolados, sem substituir `app/data/catalog-data.js`, `app/index.html`, rotas, API, configuração v5 ou editor. O status canônico é `docs/backlog/cp-public-00-landing-viewer-config-access-roadmap-2026-10-08.md`.
