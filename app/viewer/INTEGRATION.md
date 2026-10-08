@@ -1,5 +1,15 @@
 # Viewer público: fronteira e migração
 
+## 2026-10-08 — Carregamento público preparado (CP-PUBLIC-02b, opt-in)
+
+O adapter standalone foi corrigido para respeitar `publicModules` e `publicState` injetados (antes o caminho `create()` descartava `publicModules`). Módulos fora da allowlist publicada ficam invisíveis também na cena, não apenas sem hotspot.
+
+`viewer/public-data.js` faz exclusivamente GET same-origin de `/api/public-modules`, sem cache, e exige `PublicModulePresentation2D 0.1`. `viewer.js` usa a resposta para iniciar a página quando `window.CASA_PUBLIC_VIEWER_INTEGRATION.usePublishedApi === true`; enquanto o endpoint não estiver presente, a flag fica desativada e o staging continua com dados do catálogo/cena **explicitamente de teste**.
+
+**Fail-closed quando habilitado:** API sem publicação válida, erro HTTP, erro de rede ou payload incompatível → mensagem neutra, sem trocar silenciosamente para catálogo estático. Há testes de contrato do carregador, da fábrica standalone e dos acabamentos permitidos, mas NÃO há prova de integração em deploy real ainda.
+
+O endpoint separado é proposto na PR #179 (que depende de #178 e aponta para `main` para gerar deploy preview), nunca em `/api/configuration` integral. Habilitar a flag em produção só depois que endpoint + viewer estiverem na mesma árvore, com publicação v5 correta, browser tests e revisão do isolamento do configurador. A rota `/` e o GET completo ainda permanecem legados por enquanto.
+
 ## 2026-10-08 — Autoridade editorial, estado inicial e caixaria (CP-PUBLIC-02a)
 
 **Decisão de produto e implementação corrigida no staging:**
