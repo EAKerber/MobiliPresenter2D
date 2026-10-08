@@ -208,9 +208,9 @@ Gate:
 
 ### CP-SD-06 — production schema publication and legacy retirement
 
-Status: **IN PROGRESS — live v5 publication COMPLETE/PASS; manual visual acceptance received without noticed problems; legacy-retirement decision remains**. User acceptance is qualitative and does not claim exhaustive cross-browser coverage. See `docs/architecture/schema-driven-ui-cp-sd-06l0-postcutover-acceptance-legacy-audit-2026-10-07.md`. Production v3 rev6 was migrated once, with server-verified v5 rev7. PR #164 supplied the temporary operator; PR #165 removed it, and Netlify production deploy includes only the normal configuration function. Evidence: `docs/backlog/schema-driven-ui-cp-sd-06a2-live-cutover-evidence-2026-10-07.md`. No further migration is authorized or needed.
+Status: **COMPLETE / PASS — production v5 revision 7 published, manually accepted, unnecessary live migration routes retired, recovery compatibility intentionally preserved (PRs #164–#170)**. User acceptance is qualitative and does not claim exhaustive cross-browser coverage. See `docs/architecture/schema-driven-ui-cp-sd-06l0-postcutover-acceptance-legacy-audit-2026-10-07.md`. Production v3 rev6 was migrated once, with server-verified v5 rev7. PR #164 supplied the temporary operator; PR #165 removed it, and Netlify production deploy includes only the normal configuration function. Evidence: `docs/backlog/schema-driven-ui-cp-sd-06a2-live-cutover-evidence-2026-10-07.md`. No further migration is authorized or needed.
 
-The schema-driven v5 buyer/runtime/admin is now backed by a **live, server-verified v5 revision-7 publication**, observed by the authenticated operator and verified through public GET in the admin migration flow. The general one-time migration flag remained `V5_MIGRATION_ENABLED = false`; the temporary operator endpoint was deleted from the published production deploy.
+The schema-driven v5 buyer/runtime/admin is now backed by a **live, server-verified v5 revision-7 publication**, observed by the authenticated operator and verified through public GET in the admin migration flow. The general one-time migration flag remained OFF during publication; PR #169 removed the switch and live migration dispatch entirely. The temporary operator endpoint was already deleted by PR #165.
 
 Implemented and validated checkpoints:
 - CP-SD-06A0: deterministic canonical v3→v5 preflight — COMPLETE/PASS.
@@ -227,7 +227,7 @@ Canonical execution boundary: `docs/backlog/schema-driven-ui-cp-sd-06a2-authenti
 Operator runbook: `docs/backlog/schema-driven-ui-cp-sd-06a2a3c2-production-cutover-runbook-2026-10-07.md`.
 Provider caution: Netlify Blobs offers conditional writes and strong reads, but is not a transactional multi-writer database. A live one-time cutover requires independently verified backup, an administrative edit freeze, fresh authenticated source ETag/revision/digest, exact write/readback, and a separate approval.
 
-**CP-SD-06L1c pending CI:** explicit recovery decision: retain guarded v3 writer only for deliberate v3-source recovery; assert no v3 downgrade, handles repair or retired migration against stored v5 using full endpoint fixtures. docs/architecture/schema-driven-ui-cp-sd-06l1c-v3-recovery-compatibility-decision-2026-10-07.md.
+**CP-SD-06L1c COMPLETE/PASS in PR #170 (6/6 applicable CI + Netlify preview):** explicit recovery decision: retain guarded v3 writer only for deliberate v3-source recovery; assert no v3 downgrade, handles repair or retired migration against stored v5 using full endpoint fixtures. docs/architecture/schema-driven-ui-cp-sd-06l1c-v3-recovery-compatibility-decision-2026-10-07.md.
 
 **CP-SD-06L1b COMPLETE/PASS in PR #169 (7/7 CI + Netlify preview):** retire the former activation flag and live migration dispatch to 410 after admin authentication; keep offline conversion/recovery. `docs/architecture/schema-driven-ui-cp-sd-06l1b-retire-live-v5-migration-dispatch-2026-10-07.md`. v3 reader and normal v5 writer unchanged.
 
