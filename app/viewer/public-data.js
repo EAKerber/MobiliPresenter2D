@@ -12,7 +12,7 @@
     if (payload?.schemaVersion !== "PublicModulePresentation2D 0.1"
       || !Array.isArray(payload.modules) || !payload.modules.length
       || !payload.publicState || typeof payload.publicState !== "object"
-      || !Array.isArray(payload.publicState.availableFinishIds)
+      || !Array.isArray(payload.publicState.availableFinishes)
       || typeof payload.publicState.finishId !== "string") {
       throw new TypeError("invalid_public_module_projection");
     }
@@ -20,7 +20,7 @@
     if (new Set(ids).size !== ids.length || ids.some((id) => typeof id !== "string")) {
       throw new TypeError("invalid_public_module_membership");
     }
-    if (!payload.publicState.availableFinishIds.includes(payload.publicState.finishId)) {
+    if (!payload.publicState.availableFinishes.some((finish) => finish?.id === payload.publicState.finishId)) {
       throw new TypeError("invalid_public_finish");
     }
     return { publicModules: payload.modules, publicState: payload.publicState };
