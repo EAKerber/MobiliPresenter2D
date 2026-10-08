@@ -108,29 +108,38 @@ async function main() {
     assert.equal(siteOpens, 0, "preview must not open site-wide production store");
     assert.equal(previewOpens, 1);
 
-    const beforeUnauthorized = previewStore.reads;
+    // Retired admin-only raw preflight must never fall back to public GET,
+    // never open a Blob store and never expose raw ETags/candidate data.
+    const beforeRetiredReads = previewStore.reads;
+    const beforeRetiredOpens = previewOpens;
     const deniedAnon = await invoke("GET", "/api/configuration?inspection=v5-preflight");
-    assert.equal(deniedAnon.status, 401);
-    assert.equal(previewStore.reads, beforeUnauthorized, "unauthorized inspection may not touch raw storage");
+    assert.equal(deniedAnon.status, 410);
+    assert.deepEqual(deniedAnon.body, { error: "v5_preflight_retired" });
+    assert.equal(previewStore.reads, beforeRetiredReads);
+    assert.equal(previewOpens, beforeRetiredOpens);
 
     viewer = { roles: ["buyer"], app_metadata: { roles: [] } };
-    const deniedRole = await invoke("GET", "/api/configuration?inspection=v5-preflight");
-    assert.equal(deniedRole.status, 403);
-    assert.equal(previewStore.reads, beforeUnauthorized);
+    const retiredBuyer = await invoke("GET", "/api/configuration?inspection=v5-preflight");
+    assert.equal(retiredBuyer.status, 410);
+    assert.equal(previewOpens, beforeRetiredOpens);
     const deniedWrite = await invoke("PUT", "/api/configuration", v3);
     assert.equal(deniedWrite.status, 403);
     assert.equal(previewStore.writes, 0);
 
     viewer = { roles: ["admin"], app_metadata: { roles: ["admin"] } };
-    const inspected = await invoke("GET", "/api/configuration?inspection=v5-preflight");
-    assert.equal(inspected.status, 200);
-    assert.equal(inspected.body.ok, true);
-    assert.equal(inspected.body.source.etag, '"fixture-0"');
-    assert.equal(inspected.body.source.revision, v3.revision);
-    assert.equal(inspected.body.candidatePayload.schemaVersion, administrationV5.SCHEMA);
-    assert.equal(previewStore.writes, 0, "inspection must never write");
+    const opensBeforeAdmin = previewOpens;
+    const retiredAdmin = await invoke("GET", "/api/configuration?inspection=v5-preflight");
+    assert.equal(retiredAdmin.status, 410);
+    assert.deepEqual(retiredAdmin.body, { error: "v5_preflight_retired" });
+    assert.equal(previewOpens, opensBeforeAdmin);
+    assert.equal(previewStore.reads, beforeRetiredReads);
+    const unsupported = await invoke("GET", "/api/configuration?inspection=unknown");
+    assert.equal(unsupported.status, 422);
+    assert.deepEqual(unsupported.body, { error: "unsupported_inspection" });
+    assert.equal(previewOpens, opensBeforeAdmin);
+    assert.equal(previewStore.writes, 0);
 
-    const disabled = await invoke("PUT", "/api/configuration", inspected.body.candidatePayload,
+    const disabled = await invoke("PUT", "/api/configuration", v5,
       previewContext, { "X-Configuration-Operation": "publish-v5-migration" });
     assert.equal(disabled.status, 403, "the one-time migration remains disabled at runtime");
     assert.equal(disabled.body.error, "v5_migration_disabled");

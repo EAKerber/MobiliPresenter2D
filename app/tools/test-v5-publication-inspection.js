@@ -81,16 +81,14 @@ async function main() {
   assert.equal(blocked.source.etag, '"source-etag"');
   assert.equal(blocked.source.rawCanonicalDigest, gate.digestJson(missingHandles));
 
+  // The canonical read-only preflight service remains usable offline, but
+  // the once-needed live v3 inspection URL must now fail closed.
   const endpoint = fs.readFileSync(path.resolve(__dirname, "../../netlify/functions/configuration.mjs"), "utf8");
-  assert.match(endpoint, /inspection !== "v5-preflight"/);
-  const start = endpoint.indexOf('if (request.method === "GET")');
-  const inspectCall = endpoint.indexOf("v5Inspection.inspectV5Preflight");
-  const auth = endpoint.indexOf("const inspectionUser = await getUser()");
-  const role = endpoint.indexOf('inspectionRoles.includes("admin")');
-  const normalGet = endpoint.indexOf("const published = await readPublished(store)");
-  assert(start !== -1 && start < auth && auth < role && role < inspectCall && inspectCall < normalGet,
-    "raw inspection must require authenticated admin before any preflight read and be separate from public GET");
+  assert.match(endpoint, /inspection === "v5-preflight"/);
+  assert.match(endpoint, /v5_preflight_retired/);
+  assert.doesNotMatch(endpoint, /v5Inspection\.inspectV5Preflight/);
+  assert.doesNotMatch(endpoint, /import v5Inspection from/);
   assert.match(endpoint, /const V5_MIGRATION_ENABLED = false;/);
-  console.log("admin-only read-only v5 preflight inspection: PASS");
+  console.log("offline preflight preserved; live v3 inspection endpoint retired: PASS");
 }
 main().catch((error) => { console.error(error); process.exitCode = 1; });
