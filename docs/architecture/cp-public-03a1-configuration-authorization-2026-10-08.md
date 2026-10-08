@@ -24,6 +24,12 @@ Ambos incluídos no `npm test` existente. A CI de app deve executar os gates; fa
 
 **Evidência inicial validada:** [run 37813263240](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/37813263240) — `Configuration anonymous access preview`, **PASS**, registro `CP-PUBLIC-03a1 real anonymous preview API access (alias + direct): PASS`. O gate foi observado no commit de código `b62c575eb283c69b9a4b55b6e92b59dc29f41f1d`. Essa prova é de negação anônima no preview; **não** prova login admin na Netlify real, emissão de links, sessão cliente ou proteção de HTML/assets.
 
+## Resultado dos gates de integração existentes (não esconder)
+
+Na execução de código `b62c575eb283c69b9a4b55b6e92b59dc29f41f1d`, os workflows **App build purity**, **Current asset gates**, **Current variant fidelity**, **Admin hierarchy browser** e o novo **Configuration anonymous access preview** passaram (5/8). **Mobile browser**, **Stone browser** e **Summary pricing browser** falharam (3/8) por um motivo reproduzido nos logs: console do navegador registrou `Failed to load resource: the server responded with a status of 401` ao iniciar `/`, porque o configurador ainda faz GET integral anônimo. Não são falhas de máscara, de pedra ou de precificação isoladamente; são **regressões de bootstrap induzidas pelo novo controle de acesso**, e portanto um gate legítimo.
+
+Não marcar esta PR como pronta com 5/8. Não mudar as assertions dos testes de UI para ignorar 401. Antes de tornar o guard aplicável ao usuário final, CP-PUBLIC-03a2 precisa emitir/verificar a sessão válida e permitir ao configurador consumir apenas os dados de comprador necessários; CP-PUBLIC-03a3 deve proteger o HTML e o preço estático. Testes de navegador devem voltar a PASS sem mock bypass de autorização e com um usuário de teste autenticado; testes anônimos devem continuar a exigir 401.
+
 ## Por que a PR **não pode** entrar na main
 
 1. **O configurador atual usa GET integral sem sessão**, então esta PR isolada deixaria o comprador sem dados publicados. Antes de merge, implementar emissão/troca de link por e-mail, cookie validado no servidor, read model autorizado do comprador, e ajuste no carregamento da UI.
