@@ -1,6 +1,6 @@
 # CP-SD-06A2A3a — offline end-to-end migration rehearsal — 2026-10-07
 
-Status: IMPLEMENTED / GATES PENDING. Repository-only; one-time production migration flag remains OFF.
+Status: COMPLETE / PASS in PR #160. Functional head `eb2cc72fc94b12c75bbd397a6657458aa2a90820` passed 6/6 triggered GitHub workflows (including full mock-provider chain in App build purity) and Netlify preview #160. No production access; one-time migration flag remains OFF.
 
 ## Scope
 
