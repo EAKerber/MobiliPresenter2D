@@ -77,10 +77,18 @@
       }
       entities[module.id] = initial.entities[module.id];
     }
-    // v5 owns published membership and editorial lists/text. Physical catalog
-    // owns measurements and category. No benefit-to-summary or carcass guess.
+    const catalogFinishIds = new Set(catalog.options.finishes.map((finish) => finish.id));
+    if (!Array.isArray(published.finishes)) throw new TypeError("published finish availability required");
+    const availableFinishIds = published.finishes.filter((entry) => entry?.enabled === true && entry.scope === "global")
+      .map((entry) => entry.id).filter((id) => catalogFinishIds.has(id));
+    if (!availableFinishIds.length || !availableFinishIds.includes(initial.finishId)
+      || new Set(availableFinishIds).size !== availableFinishIds.length) {
+      throw new TypeError("published initial finish must be available and supported by the public scene");
+    }
+    // v5 owns published membership, editorial lists and material availability.
+    // Physical catalog owns measurements and current scene-capable finishes.
     return { schemaVersion: SCHEMA, modules, publicState: {
-      entities, finishId: initial.finishId
+      entities, finishId: initial.finishId, availableFinishIds
     } };
   }
   const api = Object.freeze({ SCHEMA, project });
