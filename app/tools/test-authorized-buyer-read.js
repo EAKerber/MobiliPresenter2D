@@ -97,6 +97,49 @@ async function main() {
   });
   assert.equal(actor.status, 503, "storage errors never emit 200");
 
+  const validSession = {
+    verified: true, kind: "customer-session", subject: "sha256-subject",
+    scopes: ["configuration:read"], issuedAt: 1000, expiresAt: 2000
+  };
+  const sessionRequest = makeRequest("GET", undefined, {
+    Cookie: "__Host-casa-config-session=opaque-secret"
+  });
+  const authenticatedStore = deps({ document: v5 });
+  const authorizedSession = await service.handle(sessionRequest, context, {
+    ...authenticatedStore.dependencies,
+    getIdentityUser: () => { throw Error("Identity down but buyer session still valid"); },
+    verifyCustomerSession: async () => validSession,
+    now: () => 1500 * 1000
+  });
+  assert.equal(authorizedSession.status, 200);
+  assert.equal((await authorizedSession.json()).schemaVersion, projection.SCHEMA);
+  assert.deepEqual(authenticatedStore.calls(), { selected: 1, accessed: 1 });
+  for (const invalid of [
+    { ...validSession, verified: false },
+    { ...validSession, scopes: ["other:scope"] },
+    { ...validSession, expiresAt: 1499 },
+    { ...validSession, subject: "" },
+    { ...validSession, issuedAt: 2200 }
+  ]) {
+    const invalidDeps = deps({ document: v5 });
+    const denied = await service.handle(sessionRequest, context, {
+      ...invalidDeps.dependencies,
+      getIdentityUser: async () => null,
+      verifyCustomerSession: async () => invalid,
+      now: () => 1500 * 1000
+    });
+    assert.equal(denied.status, 401);
+    assert.deepEqual(invalidDeps.calls(), { selected: 0, accessed: 0 });
+  }
+  const brokenSession = deps({ document: v5 });
+  const providerDown = await service.handle(sessionRequest, context, {
+    ...brokenSession.dependencies,
+    verifyCustomerSession: async () => { throw Error("DB connection unavailable"); },
+    now: () => 1500 * 1000
+  });
+  assert.equal(providerDown.status, 503);
+  assert.deepEqual(brokenSession.calls(), { selected: 0, accessed: 0 });
+  console.log("CP-PUBLIC-03a2-2 buyer endpoint: verified customer scope, expiry, Identity independence: PASS");
   console.log("CP-PUBLIC-03a2-1 buyer endpoint: authorization-before-blob, no fallback, strict v5: PASS");
 }
 main().catch(error => { console.error(error); process.exitCode = 1; });
