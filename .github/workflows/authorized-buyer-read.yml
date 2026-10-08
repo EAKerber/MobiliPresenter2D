@@ -1,0 +1,72 @@
+name: Scoped buyer configuration boundary
+
+on:
+  pull_request:
+    paths:
+      - 'app/core/buyer-configuration-projection.js'
+      - 'app/core/published-configuration.js'
+      - 'app/core/administration-v5.js'
+      - 'app/core/pricing-contract.js'
+      - 'app/tools/test-buyer-configuration-projection.js'
+      - 'app/tools/test-authorized-buyer-read.js'
+      - 'netlify/lib/authorized-buyer-read.cjs'
+      - 'netlify/functions/buyer-configuration.mjs'
+      - 'netlify.toml'
+      - '.github/workflows/authorized-buyer-read.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'app/core/buyer-configuration-projection.js'
+      - 'netlify/lib/authorized-buyer-read.cjs'
+      - 'netlify/functions/buyer-configuration.mjs'
+      - '.github/workflows/authorized-buyer-read.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  projection-unit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Compile projected contracts
+        run: |
+          node --check app/core/buyer-configuration-projection.js
+          node --check netlify/lib/authorized-buyer-read.cjs
+          node --check netlify/functions/buyer-configuration.mjs
+      - name: Validate DTO semantics and anti-leak boundaries
+        run: |
+          node app/tools/test-buyer-configuration-projection.js
+          node app/tools/test-authorized-buyer-read.js
+
+  preview-anonymous-negative:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Verify direct Function and routed endpoint deny anonymous reads
+        shell: bash
+        env:
+          PREVIEW_ID: ${{ github.event.pull_request.number }}
+        run: |
+          set -euo pipefail
+          base="https://deploy-preview-${PREVIEW_ID}--mobilipresenter2d.netlify.app"
+          endpoint="${base}/api/buyer-configuration"
+          function_url="${base}/.netlify/functions/buyer-configuration"
+          status=""
+          for attempt in $(seq 1 70); do
+            status=$(curl -L -s -o /tmp/buyer-anon-body -w '%{http_code}' --max-time 8 "$endpoint" || true)
+            if [ "$status" = "401" ] && grep -q '"unauthorized"' /tmp/buyer-anon-body; then break; fi
+            sleep 3
+          done
+          test "$status" = "401"
+          grep -q '"unauthorized"' /tmp/buyer-anon-body
+          test "$(curl -L -s -o /tmp/buyer-direct-body -w '%{http_code}' --max-time 10 "$function_url")" = "401"
+          test "$(curl -L -s -o /tmp/buyer-query-body -w '%{http_code}' --max-time 10 "${endpoint}?inspection=raw")" = "400"
+          test "$(curl -L -s -o /tmp/buyer-put-body -w '%{http_code}' --max-time 10 -X PUT "$endpoint")" = "405"
+          ! grep -Ei '"(pricing|objects|revision|stages|etag|source)"' /tmp/buyer-anon-body
+          echo "CP-PUBLIC-03a2-1 real Netlify preview anonymous denial (alias/direct/query/PUT): PASS"
