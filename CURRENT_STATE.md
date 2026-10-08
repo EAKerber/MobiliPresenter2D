@@ -1,5 +1,8 @@
 # CURRENT_STATE — MobiliPresenter2D
 
+> **CP-PUBLIC-03a2 — plano de implementação (2026-10-08, docs-only na branch de plano).** Ler antes de seguir os marcos históricos: [plano de bootstrap + DTO + sessão](docs/architecture/cp-public-03a2-authorized-buyer-bootstrap-plan-2026-10-08.md) e [matriz de testes/gates](docs/testing/cp-public-03a2-release-gates-2026-10-08.md). A [PR #182](https://github.com/EAKerber/MobiliPresenter2D/pull/182) provou que GET anônimo bloqueado por Identity => `401`, mas o comprador continua exibindo defaults/estimativa sem publicação autorizada; [reprodução #37815057147](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/37815057147). Em [A/B #37815673306](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/37815673306), Stone/Summary/Mobile 3/3 PASS com fixture v5 explícita; não prova auth real. Solução: UI HTTP fail-closed desde primeiro paint, API cliente `BuyerConfiguration2D` **não raw v5**, sessão por ticket de e-mail transacional e Edge/rotas protegidas, testes de domínio e Auth separados. **PRs #180/#181/#182 DRAFT/HOLD, nenhuma foi mesclada; main e produção não alteradas por este plano.** Viewer só apresenta módulos; lógica de pedra/rodapé/oclusão do comprador não migra para o viewer. 
+
+
 Updated: 2026-10-08
 Authority: live `main` plus the canonical roadmaps linked below.
 
