@@ -17,6 +17,8 @@ Later housekeeping/documentation commits may advance `main` without changing buy
 
 - **CP-POSTV5-01 authoring-coverage discovery:** source audit distinguishes schema-editable existing product data from static catalog/scene/new-entity requirements. Proposed next gate CP-POSTV5-02a is a fixture/browser falsification for newly added materials; do not assume the admin Add Material action implies complete live rendering. `docs/architecture/post-v5-cp-01-authoring-coverage-discovery-2026-10-08.md`.
 
+- **CP-POSTV5-02a1:** isolated new Fronts material fixture exercises v5 validation → buyer projection → fake-store Save/strong readback; unregistered physical module is rejected. PR #173 / CI in progress; details: `docs/architecture/post-v5-cp-02a1-new-material-roundtrip-fixture-2026-10-08.md`. Browser swatch-selection proof remains separate CP-POSTV5-02a2.
+
 **CURRENT AUTHORITY — POST-v5.** CP-SD-00→06 is COMPLETE/PASS after PR #170 (`c379d4d48c98143c3eba79392134ad00817f6533` merge at the time of this checkpoint). The production schema v5 revision 7 was published and visually accepted by the user. Historical one-time migration paths are retired; v3 recovery compatibility is deliberate. No new production mutation is required. **Next proposed discovery:** `docs/backlog/post-v5-work-frontier-2026-10-08.md` (CP-POSTV5-01 admin/schema authorship coverage). Landing/viewer remain a parallel, separately coordinated track. Later paragraphs recording old pending stages are historical, not current orders to run v3/v4 migration.
 
 
