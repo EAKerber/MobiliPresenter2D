@@ -17,6 +17,7 @@ for (const pathname of [
   "core/finishes.js",
   "core/scene-component.js",
   "viewer/data.js",
+  "viewer/public-data.js",
   "viewer/scene-adapters.js"
 ]) {
   vm.runInContext(readFileSync(path.join(appRoot, pathname), "utf8"), fixture, { filename: pathname });
@@ -177,4 +178,44 @@ test("finish changes use the same canonical adapter state and notify subscribers
   assert.throws(() => factory.createRepositoryAdapter({
     ...dependencies, publicState: { finishId: "unknown" }
   }), /Unknown public finish/);
+});
+
+test("standalone adapter honors approved projection instead of silently using catalog text", () => {
+  const publicModules = [{ id: "module-07", title: "Publicado via API",
+    benefits: ["Destaque específico"], components: [], requirements: [] }];
+  const a = factory.create({
+    publicModules,
+    publicState: { finishId: "base-light", availableFinishIds: ["base-light"], entities: { "module-07": true } }
+  });
+  assert.deepEqual(a.modules.map((item) => item.id), ["module-07"]);
+  assert.equal(a.getSelectedModule().title, "Publicado via API");
+  assert.deepEqual(Array.from(a.getSelectedModule().benefits), ["Destaque específico"]);
+  assert.equal(a.setGlobalFinish("cocoa"), false);
+});
+test("public loader requests only allowlisted endpoint; rejects invalid responses with no fallback", async () => {
+  const { CASA_PUBLIC_VIEWER_DATA: loader } = fixture;
+  const calls = [];
+  fixture.fetch = async (url, init) => {
+    calls.push({ url, init });
+    return { ok: true, async json() {
+      return { schemaVersion: "PublicModulePresentation2D 0.1",
+        modules: [{ id: "module-03", title: "Nome publicado" }],
+        publicState: { entities: { "module-03": true },
+          finishId: "base-light", availableFinishIds: ["base-light"] }
+      };
+    } };
+  };
+  const result = await loader.load();
+  assert.equal(calls.length, 1);
+  assert.equal(calls[0].url, "/api/public-modules");
+  assert.equal(calls[0].init.method, "GET");
+  assert.equal(calls[0].init.credentials, "same-origin");
+  assert.equal(calls[0].init.cache, "no-store");
+  assert.equal(result.publicModules[0].title, "Nome publicado");
+  fixture.fetch = async () => ({ ok: false, status: 503 });
+  await assert.rejects(() => loader.load(), /public_modules_unavailable/);
+  fixture.fetch = async () => ({ ok: true, async json() { return {
+    schemaVersion: "ConfiguratorAdministration2D 5.0", pricing: { secret: true }
+  }; } });
+  await assert.rejects(() => loader.load(), /invalid_public_module_projection/);
 });
