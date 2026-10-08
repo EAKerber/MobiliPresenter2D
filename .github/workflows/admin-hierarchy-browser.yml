@@ -19,6 +19,7 @@ on:
       - 'netlify/functions/configuration.mjs'
       - 'tests/admin-hierarchy-browser.cjs'
       - 'tests/admin-handles-persistence-browser.cjs'
+      - 'tests/admin-v5-save-browser.cjs'
       - '.github/workflows/admin-hierarchy-browser.yml'
   pull_request:
     paths:
@@ -38,6 +39,7 @@ on:
       - 'netlify/functions/configuration.mjs'
       - 'tests/admin-hierarchy-browser.cjs'
       - 'tests/admin-handles-persistence-browser.cjs'
+      - 'tests/admin-v5-save-browser.cjs'
       - '.github/workflows/admin-hierarchy-browser.yml'
   workflow_dispatch:
 permissions:
@@ -63,6 +65,10 @@ jobs:
         env:
           NODE_PATH: /tmp/admin-hierarchy-tools/node_modules
         run: node tests/admin-handles-persistence-browser.cjs
+      - name: Verify native v5 admin Save and exact readback
+        env:
+          NODE_PATH: /tmp/admin-hierarchy-tools/node_modules
+        run: node tests/admin-v5-save-browser.cjs
       - name: Save admin hierarchy review
         if: always()
         uses: actions/upload-artifact@v4

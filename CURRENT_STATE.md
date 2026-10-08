@@ -54,6 +54,7 @@ Canonical plan:
 - A1a checkpoint/gates: `docs/backlog/schema-driven-ui-cp-sd-06a1a-safe-v5-read-2026-10-07.md`
 - A1b checkpoint/gates: `docs/backlog/schema-driven-ui-cp-sd-06a1b-guarded-migration-2026-10-07.md`
 - next production gate: `docs/backlog/schema-driven-ui-cp-sd-06a2-authenticated-v5-publication-2026-10-07.md` (planning only; not authorized to execute)
+- CP-SD-06A2A2b admin native v5 Save/browser gate COMPLETE / PASS in PR #159 (7/7 GitHub and preview); `docs/backlog/schema-driven-ui-cp-sd-06a2a2b-admin-v5-save-2026-10-07.md`. Follows completed A2A2a. Next A2A3 offline rehearsal; live migration not authorized.
 - CP-SD-06A2A2a native v5 server-save support COMPLETE / PASS in PR #158 (7/7 GitHub workflows plus Netlify preview): `docs/backlog/schema-driven-ui-cp-sd-06a2a2a-server-v5-save-2026-10-07.md`; next A2A2b admin UI Save plus A2A3 integrated rehearsal. Migration activation remains OFF.
 - CP-SD-06A2A0 COMPLETE (consumer-readiness audit, PR #155): `docs/architecture/schema-driven-ui-cp-sd-06a2a0-consumer-readiness-audit-2026-10-07.md`.
 - CP-SD-06A2A1a pure buyer v3/v5 projection contract COMPLETE / PASS in PR #156. A2A1b runtime wiring COMPLETE / PASS in PR #157 (8/8 workflows and Netlify preview); A2A2 admin/server v5 and A2A3 rehearsal still block live activation: `docs/backlog/schema-driven-ui-cp-sd-06a2a1a-buyer-projection-2026-10-07.md`. A2A1b runtime wiring, A2A2 admin/server v5 edits and A2A3 integrated rehearsal remain required before live authorization.

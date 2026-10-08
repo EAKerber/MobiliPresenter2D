@@ -1173,7 +1173,7 @@ function baselineHierarchyFor(source) {
 }
 
 function handlesRepairPlan(source = publishedSource) {
-  if (!source || !legacyStageRepair) return null;
+  if (!source || source.schemaVersion !== configurationCore.SCHEMA || !legacyStageRepair) return null;
   return legacyStageRepair.planHandlesAssignment(source, configurationCore.SCHEMA);
 }
 
@@ -1197,7 +1197,9 @@ async function loadSettings() {
     saveMessage,
     repair?.ok && repair.needed
       ? "Puxadores ainda não está atribuído no v3 publicado. Persista Puxadores no v3 antes da futura publicação hierárquica."
-      : "Hierarquia carregada. Alterações estruturais permanecem em rascunho até a publicação hierárquica ser habilitada."
+      : published.schemaVersion === hierarchyCore.SCHEMA
+        ? "Configuração v5 carregada. A hierarquia e os preços tipados podem ser publicados com validação."
+        : "Hierarquia carregada. Alterações estruturais permanecem em rascunho até a publicação hierárquica ser habilitada."
   );
   renderAdminTabs();
 }
@@ -1690,6 +1692,7 @@ persistHandlesButton.addEventListener("click", async () => {
   saveButton.disabled = true;
   try {
     if (!publishedSource) throw new Error("A configuração publicada ainda não foi carregada.");
+    if (publishedSource.schemaVersion !== configurationCore.SCHEMA) throw new Error("A persistência isolada de Puxadores é exclusiva do v3.");
     const baseline = baselineHierarchyFor(publishedSource);
     const hasLocalDraft = JSON.stringify(model) !== JSON.stringify(baseline);
     if (hasLocalDraft) {
@@ -1785,6 +1788,57 @@ saveButton.addEventListener("click", async () => {
   try {
     const hierarchyValidation = hierarchyErrors(model);
     if (hierarchyValidation.length) throw new Error(hierarchyValidation[0]);
+    if (!publishedSource) throw new Error("A configuração publicada ainda não foi carregada.");
+
+    if (publishedSource.schemaVersion === hierarchyCore.SCHEMA) {
+      if (model.revision !== publishedSource.revision) {
+        throw new Error("O rascunho não corresponde à revisão publicada. Recarregue antes de salvar.");
+      }
+      const candidate = hierarchyCore.normalize(model);
+      const expected = hierarchyCore.normalize({
+        ...structuredClone(candidate), revision: publishedSource.revision + 1
+      });
+      setMessage(saveMessage, "Publicando configuração hierárquica v5…");
+      const response = await fetch("/api/configuration", {
+        method: "PUT",
+        credentials: "same-origin",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(candidate)
+      });
+      const payload = await response.json().catch(() => null);
+      if (response.status === 401 || response.status === 403) {
+        throw new Error("Sua sessão não tem permissão para publicar esta configuração.");
+      }
+      if (response.status === 409) {
+        throw new Error("A configuração mudou em outra sessão. Recarregue o painel antes de salvar.");
+      }
+      if (!response.ok) throw new Error(payload?.message || payload?.error || "A API recusou a publicação v5.");
+      if (JSON.stringify(payload) !== JSON.stringify(expected)) {
+        throw new Error("A resposta de publicação v5 não corresponde ao documento esperado.");
+      }
+
+      const readbackResponse = await fetch("/api/configuration", {
+        credentials: "same-origin", cache: "no-store"
+      });
+      if (!readbackResponse.ok) {
+        throw new Error("A publicação v5 foi aceita, mas a releitura de confirmação falhou.");
+      }
+      const readback = await readbackResponse.json();
+      if (JSON.stringify(readback) !== JSON.stringify(expected)) {
+        throw new Error("A releitura v5 não corresponde à revisão publicada; nenhuma confirmação foi assumida.");
+      }
+      publishedSource = structuredClone(readback);
+      model = baselineHierarchyFor(readback);
+      byId("revisionLabel").textContent = `Versão ${model.revision} · editor hierárquico`;
+      refreshHandlesRepairState();
+      renderAdminTabs();
+      setMessage(saveMessage, "Configuração v5 publicada e verificada por releitura.", "success");
+      return;
+    }
+
+    if (publishedSource.schemaVersion !== configurationCore.SCHEMA) {
+      throw new Error("O schema publicado não é compatível com este editor.");
+    }
 
     const projection = hierarchyCore.projectToLegacy(
       model,
@@ -1830,7 +1884,9 @@ saveButton.addEventListener("click", async () => {
       throw new Error(payload?.message || "A configuração não foi aceita. Confira nomes e itens selecionados.");
     }
     model = hierarchyCore.upgrade(payload, configurationCore, flowCore, catalog, priceBook, scene, hierarchyDefaults);
+    publishedSource = structuredClone(payload);
     byId("revisionLabel").textContent = `Versão ${model.revision} · editor hierárquico`;
+    refreshHandlesRepairState();
     setMessage(saveMessage, "Configuração compatível publicada. A hierarquia estrutural continua protegida contra publicação prematura.", "success");
     renderAdminTabs();
   } catch (error) {
