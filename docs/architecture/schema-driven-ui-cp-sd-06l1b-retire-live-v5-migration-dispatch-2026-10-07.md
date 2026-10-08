@@ -1,6 +1,6 @@
 # CP-SD-06L1b — remover o despachante remoto da migração v3→v5 — 2026-10-07
 
-Status: IMPLEMENTED IN PR / CI PENDING. A publicação de produção já ocorreu, foi validada em v5 rev7 e aceita visualmente pelo operador.
+Status: COMPLETE/PASS in PR #169. Functional head `06349e0bc04211814d5547270df9ae4b6da9cecd` passed 7/7 GitHub CI workflows plus Netlify deploy preview #169; no production Blob read or write was executed during verification. A publicação de produção já ocorreu, foi validada em v5 rev7 e aceita visualmente pelo operador.
 
 ## Decisão
 
