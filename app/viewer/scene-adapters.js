@@ -184,6 +184,16 @@
     }
     if (!modules.length) throw new Error("O catálogo não contém módulos associados à cena.");
     const state = core.createInitialState(scene);
+    if (publicModules) {
+      // A missing module in the published allowlist must not remain visibly
+      // rendered just because Scene2D's fallback defaults include it.
+      const publishedIds = new Set(modules.map((module) => module.id));
+      for (const product of catalog.modules) {
+        if (!publishedIds.has(product.entityId)) {
+          core.setEntityVisibility(state, product.entityId, false);
+        }
+      }
+    }
     if (publicState) {
       // Public projection only; never inject an entire administrative document.
       if (publicState.entities && typeof publicState.entities === "object") {
