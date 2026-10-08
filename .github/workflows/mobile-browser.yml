@@ -5,11 +5,17 @@ on:
     branches: [main]
     paths:
       - 'app/**'
+      - 'netlify/functions/**'
+      - 'netlify/lib/**'
+      - 'tests/helpers/buyer-domain-fixture.cjs'
       - 'tests/mobile-pip-main-browser.cjs'
       - '.github/workflows/mobile-browser.yml'
   pull_request:
     paths:
       - 'app/**'
+      - 'netlify/functions/**'
+      - 'netlify/lib/**'
+      - 'tests/helpers/buyer-domain-fixture.cjs'
       - 'tests/mobile-pip-main-browser.cjs'
       - '.github/workflows/mobile-browser.yml'
   workflow_dispatch:
@@ -50,6 +56,7 @@ jobs:
       - name: Test mobile PiP and touch interactions
         env:
           NODE_PATH: /tmp/mobile-browser-tools/node_modules
+          BUYER_DOMAIN_FIXTURE_V5: ${{ github.event_name == 'pull_request' && '1' || '0' }}
         run: node tests/mobile-pip-main-browser.cjs /tmp/mobile-browser-review
       - name: Save mobile review
         if: always()
