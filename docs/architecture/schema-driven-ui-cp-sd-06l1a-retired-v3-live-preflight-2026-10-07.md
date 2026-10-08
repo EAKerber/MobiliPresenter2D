@@ -1,6 +1,6 @@
 # CP-SD-06L1a — aposentadoria da inspeção v3 exclusiva na API pública — 2026-10-07
 
-Status: **IMPLEMENTED IN PR / CI PENDING**. Sem consulta ou gravação do Blob de produção.
+Status: **COMPLETE / PASS in PR #168**. Functional head `de5dfc1964ec038ad51f6b0ee72fe786b575f732` passed **7/7 GitHub workflows** and Netlify deploy preview #168. No live production Blob read/write was part of these tests. Sem consulta ou gravação do Blob de produção.
 
 ## Descoberta e decisão
 
