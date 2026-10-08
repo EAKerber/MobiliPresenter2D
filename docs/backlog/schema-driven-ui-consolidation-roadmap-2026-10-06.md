@@ -208,9 +208,9 @@ Gate:
 
 ### CP-SD-06 — production schema publication and legacy retirement
 
-Status: **IN PROGRESS — repository/preview readiness COMPLETE; production publication NOT AUTHORIZED**.
+Status: **IN PROGRESS — live v5 publication COMPLETE/PASS; manual buyer smoke and legacy retirement pending**. Production v3 rev6 was migrated once, with server-verified v5 rev7. PR #164 supplied the temporary operator; PR #165 removed it, and Netlify production deploy includes only the normal configuration function. Evidence: `docs/backlog/schema-driven-ui-cp-sd-06a2-live-cutover-evidence-2026-10-07.md`. No further migration is authorized or needed.
 
-The schema-driven v5 buyer/runtime/admin path is complete in the repository, but the persisted production configuration has **not** been freshly inspected or migrated. The one-time migration remains `V5_MIGRATION_ENABLED = false`.
+The schema-driven v5 buyer/runtime/admin is now backed by a **live, server-verified v5 revision-7 publication**, observed by the authenticated operator and verified through public GET in the admin migration flow. The general one-time migration flag remained `V5_MIGRATION_ENABLED = false`; the temporary operator endpoint was deleted from the published production deploy.
 
 Implemented and validated checkpoints:
 - CP-SD-06A0: deterministic canonical v3→v5 preflight — COMPLETE/PASS.
@@ -227,7 +227,7 @@ Canonical execution boundary: `docs/backlog/schema-driven-ui-cp-sd-06a2-authenti
 Operator runbook: `docs/backlog/schema-driven-ui-cp-sd-06a2a3c2-production-cutover-runbook-2026-10-07.md`.
 Provider caution: Netlify Blobs offers conditional writes and strong reads, but is not a transactional multi-writer database. A live one-time cutover requires independently verified backup, an administrative edit freeze, fresh authenticated source ETag/revision/digest, exact write/readback, and a separate approval.
 
-**Next authorization gate:** CP-SD-06A2 live authenticated production inspection, then possibly one-time activation/migration if all GO gates pass. No one may infer actual production source state from the repository or historical mock tests. Legacy retirement is a separate gate after published v5 is proven.
+**Next gate:** visual/read-only production smoke across buyer/adaptive layouts, and a separately reviewed CP-SD-06 legacy-retirement slice. Production migration is finished and must not be repeated; any native v5 admin Save is a new deliberate transaction.
 
 
 Goal: hand the consolidated contract back into the authenticated CP-UX-05 publication boundary.

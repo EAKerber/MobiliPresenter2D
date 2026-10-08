@@ -1,6 +1,6 @@
 # CP-SD-06A2 — authenticated v5 activation and publication — 2026-10-07
 
-Status: **REPOSITORY AND PREVIEW READINESS COMPLETE / LIVE EXECUTION NOT AUTHORIZED**.
+Status: **LIVE EXECUTION COMPLETE / SERVER-VERIFIED v5 REVISION 7; TEMPORARY MIGRATION ROUTE REMOVED**. This document is a historical runbook, not an instruction to repeat migration. See `docs/backlog/schema-driven-ui-cp-sd-06a2-live-cutover-evidence-2026-10-07.md`. Manual buyer visual smoke and separate legacy retirement remain pending.
 
 Offline consumer/server readiness and integrated proof are COMPLETE/PASS through PRs #155–#162 (buyer v5, native admin v5, fake-store rehearsal, authenticated read-only inspection and endpoint-isolation gate). This does **not** prove the current production blob is canonical v3 or authorize inspection/activation. Netlify Blobs is not a general transaction database; a one-time cutover requires a short administrative edit freeze and independently checked raw backup.
 
