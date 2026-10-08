@@ -208,7 +208,7 @@ Gate:
 
 ### CP-SD-06 — production schema publication and legacy retirement
 
-Status: **IN PROGRESS — live v5 publication COMPLETE/PASS; manual buyer smoke and legacy retirement pending**. Production v3 rev6 was migrated once, with server-verified v5 rev7. PR #164 supplied the temporary operator; PR #165 removed it, and Netlify production deploy includes only the normal configuration function. Evidence: `docs/backlog/schema-driven-ui-cp-sd-06a2-live-cutover-evidence-2026-10-07.md`. No further migration is authorized or needed.
+Status: **IN PROGRESS — live v5 publication COMPLETE/PASS; manual visual acceptance received without noticed problems; legacy-retirement decision remains**. User acceptance is qualitative and does not claim exhaustive cross-browser coverage. See `docs/architecture/schema-driven-ui-cp-sd-06l0-postcutover-acceptance-legacy-audit-2026-10-07.md`. Production v3 rev6 was migrated once, with server-verified v5 rev7. PR #164 supplied the temporary operator; PR #165 removed it, and Netlify production deploy includes only the normal configuration function. Evidence: `docs/backlog/schema-driven-ui-cp-sd-06a2-live-cutover-evidence-2026-10-07.md`. No further migration is authorized or needed.
 
 The schema-driven v5 buyer/runtime/admin is now backed by a **live, server-verified v5 revision-7 publication**, observed by the authenticated operator and verified through public GET in the admin migration flow. The general one-time migration flag remained `V5_MIGRATION_ENABLED = false`; the temporary operator endpoint was deleted from the published production deploy.
 
@@ -227,7 +227,7 @@ Canonical execution boundary: `docs/backlog/schema-driven-ui-cp-sd-06a2-authenti
 Operator runbook: `docs/backlog/schema-driven-ui-cp-sd-06a2a3c2-production-cutover-runbook-2026-10-07.md`.
 Provider caution: Netlify Blobs offers conditional writes and strong reads, but is not a transactional multi-writer database. A live one-time cutover requires independently verified backup, an administrative edit freeze, fresh authenticated source ETag/revision/digest, exact write/readback, and a separate approval.
 
-**Next gate:** visual/read-only production smoke across buyer/adaptive layouts, and a separately reviewed CP-SD-06 legacy-retirement slice. Production migration is finished and must not be repeated; any native v5 admin Save is a new deliberate transaction.
+**Next gate:** CP-SD-06L1 risk-gated legacy retirement discovery based on `docs/architecture/schema-driven-ui-cp-sd-06l0-postcutover-acceptance-legacy-audit-2026-10-07.md`; prefer no runtime change over unsafe v3 backup/import removal. Manual buyer acceptance was provided with no noticed issues, though not every viewport/browser case was explicitly enumerated. Production migration is finished and must not be repeated; any native v5 admin Save is a new deliberate transaction.
 
 
 Goal: hand the consolidated contract back into the authenticated CP-UX-05 publication boundary.

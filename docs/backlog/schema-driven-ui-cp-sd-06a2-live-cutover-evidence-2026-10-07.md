@@ -14,7 +14,7 @@ Status: **LIVE MIGRATION COMPLETE / VERIFIED BY SERVER + CLIENT; TEMPORARY FUNCT
 
 ## Remaining verification (not silently marked complete)
 
-- Cross-device buyer smoke: Modules, Acabamentos/Puxadores, stone+skirting, Serviços, Resumo, PiP/dock, mobile, typed pricing totals and normal admin read. The server/browser publish-readback above verifies storage and basic public schema; the full human visual walkthrough remains outstanding.
+- **User acceptance recorded after cutover:** the operator reported “nenhum problema que eu tenha notado”. This closes the qualitative manual buyer visual gate without asserting exhaustive cross-device/price/browser test coverage. The server/browser migration readback separately verifies persisted v5 revision 7. Audit: `docs/architecture/schema-driven-ui-cp-sd-06l0-postcutover-acceptance-legacy-audit-2026-10-07.md`.
 - Native v5 admin Save should only be tested with a separately authorized, intentional edit, **not** by changing production prices as a smoke fixture.
 - CP-SD-06 legacy retirement: a separately reviewed cleanup of obsolete normal v3 writers where appropriate, preserving explicit historical import/migration support.
 - Production migration already happened; **do not attempt it again**. Store the backup privately and do not publish credentials, raw JSON or ETags.
