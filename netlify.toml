@@ -8,3 +8,10 @@
   to = "/.netlify/functions/configuration"
   status = 200
   force = true
+
+# CP-PUBLIC-02b: public, validated, allowlisted read-only module projection.
+[[redirects]]
+  from = "/api/public-modules"
+  to = "/.netlify/functions/public-modules"
+  status = 200
+  force = true
