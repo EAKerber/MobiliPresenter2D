@@ -54,7 +54,8 @@ function makeStore(initial) {
 async function main() {
   const endpointPath = path.resolve(__dirname, "../../netlify/functions/configuration.mjs");
   const source = fs.readFileSync(endpointPath, "utf8");
-  assert.match(source, /const V5_MIGRATION_ENABLED = false;/);
+  assert.doesNotMatch(source, /V5_MIGRATION_ENABLED/);
+  assert.doesNotMatch(source, /import v5Migration from/);
   const withoutImports = source.replace(/^import\s+.*?\s+from\s+["'][^"']+["'];\s*$/gm, "");
   assert.equal(withoutImports.includes("from \"@netlify/blobs\""), false,
     "endpoint imports are replaced by injected mocks");
@@ -141,8 +142,8 @@ async function main() {
 
     const disabled = await invoke("PUT", "/api/configuration", v5,
       previewContext, { "X-Configuration-Operation": "publish-v5-migration" });
-    assert.equal(disabled.status, 403, "the one-time migration remains disabled at runtime");
-    assert.equal(disabled.body.error, "v5_migration_disabled");
+    assert.equal(disabled.status, 410, "the one-time migration is permanently retired");
+    assert.equal(disabled.body.error, "v5_migration_retired");
     assert.equal(previewStore.writes, 0);
 
     const prematureV5 = await invoke("PUT", "/api/configuration", v5);

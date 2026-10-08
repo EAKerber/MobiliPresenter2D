@@ -97,7 +97,8 @@ async function main() {
   await fails("invalid readback", mockStore(v5, "invalid-readback"), payload, "readback_digest_mismatch", 1);
 
   const endpoint = fs.readFileSync(path.join(__dirname, "../../netlify/functions/configuration.mjs"), "utf8");
-  assert.match(endpoint, /const V5_MIGRATION_ENABLED = false;/, "one-time migration is still hard OFF");
+  assert.doesNotMatch(endpoint, /V5_MIGRATION_ENABLED/, "one-time migration cannot be switched ON");
+  assert.match(endpoint, /v5_migration_retired/, "one-time migration is now explicitly retired");
   assert(endpoint.indexOf("const user = await getUser()") < endpoint.indexOf("v5NormalSave.savePublishedV5"),
     "identity check precedes normal v5 save");
   assert(endpoint.indexOf('roles.includes("admin")') < endpoint.indexOf("v5NormalSave.savePublishedV5"),

@@ -125,12 +125,15 @@ async function main() {
   assert.equal(store.writes, 0, "Puxadores must never be repaired as part of migration");
 
   const endpoint = fs.readFileSync(path.resolve(__dirname, "../../netlify/functions/configuration.mjs"), "utf8");
-  assert.match(endpoint, /const V5_MIGRATION_ENABLED = false;/, "production activation must default OFF in source");
-  assert.match(endpoint, /if \(!V5_MIGRATION_ENABLED\) return respond\(\{ error: "v5_migration_disabled" \}, 403\)/);
-  assert(endpoint.indexOf("const user = await getUser()") < endpoint.indexOf('operation === "publish-v5-migration"'),
-    "authentication must precede migration routing");
-  assert(endpoint.indexOf('roles.includes("admin")') < endpoint.indexOf('operation === "publish-v5-migration"'),
-    "admin role must precede migration routing");
+  assert.doesNotMatch(endpoint, /V5_MIGRATION_ENABLED/, "no live activation toggle must remain");
+  assert.doesNotMatch(endpoint, /import v5Migration from/, "historical migration service must not be bundled in the live endpoint");
+  assert.match(endpoint, /if \(operation === "publish-v5-migration"\)/);
+  assert.match(endpoint, /return respond\(\{ error: "v5_migration_retired" \}, 410\)/);
+  const auth = endpoint.indexOf("const user = await getUser()");
+  const role = endpoint.indexOf('roles.includes("admin")');
+  const oldOperation = endpoint.indexOf('operation === "publish-v5-migration"');
+  assert(auth !== -1 && auth < role && role < oldOperation,
+    "authentication and admin authorization must precede rejection of the retired operation");
   console.log("v5 publication migration mock-store gates: PASS");
 }
 main().catch((error) => { console.error(error); process.exitCode = 1; });

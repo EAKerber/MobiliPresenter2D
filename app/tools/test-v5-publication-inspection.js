@@ -88,7 +88,8 @@ async function main() {
   assert.match(endpoint, /v5_preflight_retired/);
   assert.doesNotMatch(endpoint, /v5Inspection\.inspectV5Preflight/);
   assert.doesNotMatch(endpoint, /import v5Inspection from/);
-  assert.match(endpoint, /const V5_MIGRATION_ENABLED = false;/);
+  assert.doesNotMatch(endpoint, /V5_MIGRATION_ENABLED/);
+  assert.match(endpoint, /v5_migration_retired/);
   console.log("offline preflight preserved; live v3 inspection endpoint retired: PASS");
 }
 main().catch((error) => { console.error(error); process.exitCode = 1; });

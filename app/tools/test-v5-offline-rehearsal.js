@@ -158,7 +158,8 @@ async function main() {
     "buyer must not fall back to defaults for malformed stored v5");
 
   const endpoint = require("node:fs").readFileSync(require("node:path").resolve(__dirname, "../../netlify/functions/configuration.mjs"), "utf8");
-  assert.match(endpoint, /const V5_MIGRATION_ENABLED = false;/);
+  assert.doesNotMatch(endpoint, /V5_MIGRATION_ENABLED/);
+  assert.match(endpoint, /v5_migration_retired/);
   console.log("CP-SD-06A2A3a offline v3 -> v5 -> buyer -> admin -> buyer: PASS");
 }
 main().catch((err) => { console.error(err); process.exitCode = 1; });
