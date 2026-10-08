@@ -13,6 +13,10 @@ Do not treat an embedded commit SHA as the permanent current `main` head. Query 
 
 Later housekeeping/documentation commits may advance `main` without changing buyer-visible product behavior.
 
+## Public pages integration authority (CP-PUBLIC-00, 2026-10-08)
+
+User-directed future route plan: `/` landing public, `/viewer/` public, `/config/` gated by Identity admin or verified-email short-lived session link; existing admin remains Identity-protected. Do **not** change current routing until protected delivery and API are tested. Existing donor branch `experiment/public-landing-commercial-viewer` is 228 commits behind current main; import new page tree only after reconciling current v5/contracts, never merge donor branch wholesale. Scope, duplicate inventory, auth gates and checkpoint roadmap: `docs/backlog/cp-public-00-landing-viewer-config-access-roadmap-2026-10-08.md`. No changes to production v5, root or admin in CP-PUBLIC-00.
+
 ## Current status
 
 - **CP-POSTV5-01 authoring-coverage discovery:** source audit distinguishes schema-editable existing product data from static catalog/scene/new-entity requirements. Proposed next gate CP-POSTV5-02a is a fixture/browser falsification for newly added materials; do not assume the admin Add Material action implies complete live rendering. `docs/architecture/post-v5-cp-01-authoring-coverage-discovery-2026-10-08.md`.
