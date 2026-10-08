@@ -1,6 +1,6 @@
 # CP-PUBLIC-03a1 — guard de acesso à configuração integral
 
-**Data:** 2026-10-08. **Status: DRAFT/HOLD, não integrar na main ou publicar.** Recorte independente sobre a main observada `bf30e008a81b7bc9cc34573e3d60a953810a9e72`; decisão de segurança baseada no inventário [CP-PUBLIC-03a](../architecture/cp-public-03a-access-security-surface-2026-10-08.md) da PR #181.
+**Data:** 2026-10-08. **Status: DRAFT/HOLD, não integrar na main ou publicar.** Recorte independente sobre a main observada `bf30e008a81b7bc9cc34573e3d60a953810a9e72`; decisão de segurança baseada no inventário [CP-PUBLIC-03a](https://github.com/EAKerber/MobiliPresenter2D/blob/work/cp-public-03a-security-and-hygiene-inventory-20261008/docs/architecture/cp-public-03a-access-security-surface-2026-10-08.md) da PR #181.
 
 ## Contrato implementado (somente preview de branch)
 
@@ -17,6 +17,12 @@
 `app/tools/test-v5-endpoint-safety.js` atualizado: invoca o handler Netlify **real reescrito apenas para mocks offline**, verifica `401` anônimo tanto no alias quanto na URL direta; nenhum Blob aberto nem lido; GET Identity comprador `403`; PUT Identity comprador `403`; admin ainda lê v3/v5 e salva v5 no store de preview de teste; produção mockada só é acessada quando `context.deploy.context=production`; GET inválido de inspeção não abre store.
 
 Ambos incluídos no `npm test` existente. A CI de app deve executar os gates; falha implica HOLD.
+
+### Gate HTTP no Deploy Preview #182
+
+`tests/configuration-access-http.cjs` e `.github/workflows/configuration-access-preview.yml` testam exclusivamente o hostname `deploy-preview-182--mobilipresenter2d.netlify.app`. O teste real chama `GET /api/configuration` e `GET /.netlify/functions/configuration`, verifica HTTP `401`, erro `unauthorized`, `no-store`, `nosniff` e ausência de corpo v5. Testa ainda credenciais forjadas por HTTP e `PUT` anônimo. Não usa credenciais verdadeiras, não grava nem consulta produção.
+
+**Evidência inicial validada:** [run 37813263240](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/37813263240) — `Configuration anonymous access preview`, **PASS**, registro `CP-PUBLIC-03a1 real anonymous preview API access (alias + direct): PASS`. O gate foi observado no commit de código `b62c575eb283c69b9a4b55b6e92b59dc29f41f1d`. Essa prova é de negação anônima no preview; **não** prova login admin na Netlify real, emissão de links, sessão cliente ou proteção de HTML/assets.
 
 ## Por que a PR **não pode** entrar na main
 
