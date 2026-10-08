@@ -32,6 +32,7 @@ async function main() {
       const kitchen = page.locator('[data-environment-id="cozinha"]');
       assert.equal(await kitchen.count(), 1);
       await kitchen.click();
+      await page.waitForFunction(() => document.getElementById("featureAction")?.getAttribute("href")?.includes("viewer"));
       const kitchenHref = await page.locator("#featureAction").getAttribute("href");
       assert(kitchenHref && kitchenHref.includes("viewer"), "kitchen card must link to viewer");
       await page.screenshot({ path: path.join(outputDir, `landing-${viewport.name}.png`), fullPage: true });
