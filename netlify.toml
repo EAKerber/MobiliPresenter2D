@@ -8,3 +8,10 @@
   to = "/.netlify/functions/configuration"
   status = 200
   force = true
+
+# Buyer read model: server guard remains admin-only until customer sessions exist.
+[[redirects]]
+  from = "/api/buyer-configuration"
+  to = "/.netlify/functions/buyer-configuration"
+  status = 200
+  force = true

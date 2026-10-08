@@ -1,5 +1,8 @@
 # HANDOFF CANÔNICO — páginas públicas Landing + Viewer + Config protegido — 2026-10-08
 
+> **Novo recorte CP-PUBLIC-03a2-1A — PR #185 DRAFT/HOLD (2026-10-08).** Projetor puro `app/core/buyer-configuration-projection.js` para `BuyerConfiguration2D 0.1`, allowlist campos de configuração/precificação estritamente de v5 validada, adaptador `prepare(dto)` independente de `published-buyer-projection.prepare().source`. Novo `GET /api/buyer-configuration` admin-only até autenticação de comprador, sem fallback/ETag; URL Function direta protegida. Testes de não vazamento e paridade v5; HTTP real do Netlify anônimo nega 401. [Detalhes e inventário](../architecture/cp-public-03a2-1-buyer-dto-read-model-2026-10-08.md). **Não confundir API preparada com integração pronta:** app.js na #184 ainda consome raw, 03a2-2 sessão real pendente, #182 guard admin-only raw separado, #180 viewer com fixture temporária. Para retomada 03a2-2 usar PR #183 e #185; manter Draft/HOLD; main não foi alterada.
+
+
 **Estado verificado em GitHub + Netlify em 2026-10-08. Documento de retomada do CP-PUBLIC; ler ANTES de reconstruir o chat.** Este arquivo registra a autoridade *atual* em sua data; consultar a `main`, PRs e deploys ao vivo antes de agir. Não inferir que merges ou deploys posteriores não aconteceram.
 
 ## 0. Resposta em 30 segundos para um agente novo
