@@ -1,7 +1,7 @@
 "use strict";
 
-// CP-PUBLIC-03a2-1 — server-only read boundary, deliberately admin-only
-// until the transactional customer-session verifier (CP-PUBLIC-03a2-2).
+// CP-PUBLIC-03a2-2 — server-only buyer read boundary. Grant access only
+// via Identity admin OR a database-verified, unrevoked customer cookie.
 const HEADERS = Object.freeze({
   "Cache-Control": "private, no-store, max-age=0",
   "Content-Type": "application/json; charset=utf-8",
@@ -19,20 +19,38 @@ function hasVerifiedAdminRole(user) {
 }
 
 async function handle(request, context, { getIdentityUser, selectStore, reader, projection,
-  runtime } = {}) {
+  runtime, verifyCustomerSession, now = () => Date.now() } = {}) {
   if (request?.method !== "GET") return reply({ error: "method_not_allowed" }, 405);
   if (new URL(request.url).search) return reply({ error: "unsupported_query" }, 400);
   if (typeof getIdentityUser !== "function" || typeof selectStore !== "function"
     || !reader || !projection || !runtime) return reply({ error: "service_unavailable" }, 503);
-  let user;
-  try {
-    user = await getIdentityUser();
-  } catch {
-    return reply({ error: "identity_unavailable" }, 503);
+  // Verify the opaque cookie against the transactional session store first:
+  // a valid customer's access is independent of Netlify Identity availability.
+  // Never accept `verified` from request headers or JSON as proof.
+  let customer = false;
+  if (typeof verifyCustomerSession === "function") {
+    let session;
+    try {
+      session = await verifyCustomerSession(request, context);
+    } catch {
+      return reply({ error: "session_unavailable" }, 503);
+    }
+    const seconds = Math.floor(now() / 1000);
+    customer = Boolean(session?.verified === true
+      && session.kind === "customer-session"
+      && typeof session.subject === "string" && session.subject.trim()
+      && Array.isArray(session.scopes) && session.scopes.includes("configuration:read")
+      && Number.isSafeInteger(session.issuedAt) && session.issuedAt <= seconds + 60
+      && Number.isSafeInteger(session.expiresAt) && session.expiresAt > seconds
+      && session.expiresAt - session.issuedAt <= 12 * 60 * 60);
   }
-  // No caller-supplied HTTP role, JWT text or cookie is accepted as proof.
-  if (!user) return reply({ error: "unauthorized" }, 401);
-  if (!hasVerifiedAdminRole(user)) return reply({ error: "forbidden" }, 403);
+  if (!customer) {
+    let user;
+    try { user = await getIdentityUser(); }
+    catch { return reply({ error: "identity_unavailable" }, 503); }
+    if (!user) return reply({ error: "unauthorized" }, 401);
+    if (!hasVerifiedAdminRole(user)) return reply({ error: "forbidden" }, 403);
+  }
 
   try {
     const store = selectStore(context);
