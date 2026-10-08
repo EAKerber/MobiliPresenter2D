@@ -1,8 +1,7 @@
 /* Page composition only; module data comes from Scene2D and ProductCatalog2D. */
 window.CASA_PUBLIC_VIEWER = {
   adapterContractVersion: "PublicSceneAdapter 0.5",
-  sourceContracts: { scene: "Scene2D 1.0", catalog: "ProductCatalog2D 1.1" },
-  defaultModuleId: "module-07",
+  sourceContracts: { scene: "Scene2D 1.0", catalog: "ProductCatalog2D 1.0" },
   layout: ["overview", "scene", "views", "details"],
   viewTypes: {
     focus: { label: "Detalhe do módulo", kind: "focus" },
