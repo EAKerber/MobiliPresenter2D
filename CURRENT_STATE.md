@@ -54,6 +54,7 @@ Canonical plan:
 - A1a checkpoint/gates: `docs/backlog/schema-driven-ui-cp-sd-06a1a-safe-v5-read-2026-10-07.md`
 - A1b checkpoint/gates: `docs/backlog/schema-driven-ui-cp-sd-06a1b-guarded-migration-2026-10-07.md`
 - next production gate: `docs/backlog/schema-driven-ui-cp-sd-06a2-authenticated-v5-publication-2026-10-07.md` (planning only; not authorized to execute)
+- CP-SD-06A2A3c1 handler/provider-isolation test implemented in draft PR #162 (CI pending): `docs/backlog/schema-driven-ui-cp-sd-06a2a3c1-endpoint-provider-safety-2026-10-07.md`. No live store accessed. Explicit ETag CAS does not create transaction isolation; final A2A3c2 production checklist still pending.
 - CP-SD-06A2A3b authenticated read-only v3 preflight inspection COMPLETE / PASS in PR #161 (7/7 GitHub plus Netlify preview), `docs/backlog/schema-driven-ui-cp-sd-06a2a3b-authenticated-raw-preflight-2026-10-07.md`. No live inspection executed. A2A3c provider and preview safety gate still ahead.
 - CP-SD-06A2A3a offline full-chain rehearsal COMPLETE / PASS in PR #160 (6/6 GitHub gates + Netlify preview), `docs/backlog/schema-driven-ui-cp-sd-06a2a3a-offline-rehearsal-2026-10-07.md`. A2A3b trusted authenticated raw source snapshot and A2A3c preview/browser rehearsal remain prerequisites; live migration disabled.
 - CP-SD-06A2A2b admin native v5 Save/browser gate COMPLETE / PASS in PR #159 (7/7 GitHub and preview); `docs/backlog/schema-driven-ui-cp-sd-06a2a2b-admin-v5-save-2026-10-07.md`. Follows completed A2A2a. Next A2A3 offline rehearsal; live migration not authorized.
