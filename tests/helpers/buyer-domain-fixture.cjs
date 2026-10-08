@@ -19,29 +19,32 @@ const v5 = v5Core.upgrade(v3, config, flow, catalog, book, scene, hierarchy);
 assert.deepEqual(v5Core.validate(v5, config, catalog, book, scene), []);
 const enabled = () => process.env.BUYER_DOMAIN_FIXTURE_V5 === "1";
 
-async function attach(page, url) {
+async function attach(page, url, { schema = "v5" } = {}) {
   if (!enabled()) return;
   const target = new URL(url);
   assert(/^deploy-preview-\d+--mobilipresenter2d\.netlify\.app$/.test(target.hostname)
     && target.protocol === "https:", "domain fixture only allowed in isolated Netlify preview");
+  assert(["v3", "v5"].includes(schema));
+  const payload = schema === "v3" ? v3 : v5;
   await page.route("**/api/configuration", async route => {
     if (route.request().method() !== "GET") return route.continue();
     await route.fulfill({
-      status: 200, contentType: "application/json", body: JSON.stringify(v5),
+      status: 200, contentType: "application/json", body: JSON.stringify(payload),
       headers: { "Cache-Control": "no-store" }
     });
   });
 }
 
-async function requireReady(page) {
+async function requireReady(page, { schema = "v5" } = {}) {
   if (!enabled()) return;
-  await page.waitForFunction(() =>
+  const expectedSchema = schema === "v3" ? config.SCHEMA : v5Core.SCHEMA;
+  await page.waitForFunction(expected =>
     document.documentElement.dataset.configurationAccessState === "ready"
       && document.documentElement.dataset.publishedConfigurationStatus === "validated"
-      && window.CASA_NORMALIZED_FLOW?.source?.schemaVersion === "ConfiguratorAdministration2D 5.0"
+      && window.CASA_NORMALIZED_FLOW?.source?.schemaVersion === expected
       && document.querySelector(".workspace")?.hidden === false
       && document.querySelector(".workspace")?.inert === false,
-    null, { timeout: 12000 }
+    expectedSchema, { timeout: 12000 }
   );
 }
 module.exports = Object.freeze({ enabled, attach, requireReady });
