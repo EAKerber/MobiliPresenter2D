@@ -12,9 +12,11 @@ const allowed = {
   DEPLOY_PRIME_URL: "https://deploy-preview-180--mobilipresenter2d.netlify.app"
 };
 assert.equal(shouldSeed(allowed), true);
+assert.equal(shouldSeed({ ...allowed, BRANCH: "synthetic-deploy-preview-ref" }), true,
+  "Netlify BRANCH may be a synthetic checkout ref, while REVIEW_ID + preview host identify the PR");
 for (const override of [
   { CONTEXT: "production" }, { NETLIFY: "false" },
-  { BRANCH: "main" }, { REVIEW_ID: "179" },
+  { REVIEW_ID: "179" },
   { DEPLOY_PRIME_URL: "https://casaemmodulos.casa" },
   { DEPLOY_PRIME_URL: "https://deploy-preview-180--evil.example" },
   { DEPLOY_PRIME_URL: "not-a-url" }
