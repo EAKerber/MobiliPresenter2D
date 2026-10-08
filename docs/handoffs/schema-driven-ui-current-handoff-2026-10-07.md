@@ -1,5 +1,8 @@
 # MobiliPresenter2D — current backlog / handoff — 2026-10-07
 
+**AUTHORITATIVE CONTINUATION (2026-10-08):** CP-SD-06 is COMPLETE/PASS; PR #170 merged at `c379d4d48c98143c3eba79392134ad00817f6533` after 6/6 CI and Netlify preview. Native v5 is published and user-accepted; exceptional v3 migration routes are retired and v3 backup/recovery compatibility deliberately retained. **Next decision point is the CP-POSTV5-01 authorship-coverage discovery**, in `docs/backlog/post-v5-work-frontier-2026-10-08.md`. Work on landing/viewer proceeds separately. Read current `main` before relying on embedded SHAs. Earlier `next` notes below are retained for audit history only.
+
+
 **CP-SD-06 COMPLETE/PASS — L1c decision confirmed in PR #170 (6/6 applicable GitHub CI + Netlify preview):** negative tests on native v5 store verify v3 downgrade, handles-only repair and retired migration cannot mutate it. Keep v3 reader/writer only as controlled recovery compatibility; do not delete backup/import. docs/architecture/schema-driven-ui-cp-sd-06l1c-v3-recovery-compatibility-decision-2026-10-07.md.
 
 **CP-SD-06L1b next independent slice:** retire the live migration arm and the switch enabling it; return 410 to authenticated migration attempts, keep the offline migration algorithm and v3 recovery. COMPLETE/PASS in PR #169 (7/7 CI + Netlify preview), see `docs/architecture/schema-driven-ui-cp-sd-06l1b-retire-live-v5-migration-dispatch-2026-10-07.md`. No live Blob access or writes in tests.
