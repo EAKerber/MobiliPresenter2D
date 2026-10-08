@@ -1,6 +1,6 @@
 # CP-SD-06A2A3c1 — endpoint and provider-isolation safety — 2026-10-07
 
-Status: IMPLEMENTED IN PR / CI PENDING. NO LIVE PRODUCTION ACCESS.
+Status: COMPLETE / PASS in PR #162. Functional head `83123a9aae986e993b1e01f5f57543b7a270004c` passed 6/6 applicable GitHub workflows, including full real-endpoint simulation via fake stores, plus Netlify deploy preview #162. NO LIVE PRODUCTION ACCESS.
 
 ## Scope
 
