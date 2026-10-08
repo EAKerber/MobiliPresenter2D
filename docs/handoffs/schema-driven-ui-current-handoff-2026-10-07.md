@@ -2,6 +2,8 @@
 
 Status: **CANONICAL HANDOFF FOR NEXT AGENT**.
 
+Update 2026-10-07 A2A3c1: PR #162 COMPLETE / PASS (6/6 GitHub CI workflows + Netlify preview) exercises the real Netlify function under fake Identity and separate fake site/deploy Blobs; documents nontransactional Netlify Blobs and ETag compare-and-swap limitations. No live production configuration was read or written; activation stays OFF. Next A2A3c2 final pre-production checklist. `docs/backlog/schema-driven-ui-cp-sd-06a2a3c1-endpoint-provider-safety-2026-10-07.md`.
+
 Update 2026-10-07 A2A3b: PR #161 completes authenticated read-only raw v3 preflight inspection (7/7 CI workflows and Netlify preview); no live production inspection executed. Docs: `docs/backlog/schema-driven-ui-cp-sd-06a2a3b-authenticated-raw-preflight-2026-10-07.md`. A2A3c provider safety/preview rehearsal next, live migration still OFF and unauthorized.
 
 Update 2026-10-07 A2A3a: full-chain offline v3→v5→buyer→admin v5 Save→buyer test is COMPLETE / PASS in PR #160 (6/6 CI gates plus Netlify preview). A2A3b raw source evidence/access review and A2A3c preview smoke are next; no production config has been read or modified and V5_MIGRATION_ENABLED stays false. `docs/backlog/schema-driven-ui-cp-sd-06a2a3a-offline-rehearsal-2026-10-07.md`.
