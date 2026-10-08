@@ -8,3 +8,15 @@
   to = "/.netlify/functions/configuration"
   status = 200
   force = true
+
+# CP-PUBLIC-02b: public, validated, allowlisted read-only module projection.
+[[redirects]]
+  from = "/api/public-modules"
+  to = "/.netlify/functions/public-modules"
+  status = 200
+  force = true
+
+# Only PR #180 seeds a deploy-specific v5 fixture; the plugin fail-closes elsewhere.
+# Remove this block and the fixture plugin before promoting public routes.
+[[plugins]]
+  package = "./netlify/plugins/cp-public-02c-preview"

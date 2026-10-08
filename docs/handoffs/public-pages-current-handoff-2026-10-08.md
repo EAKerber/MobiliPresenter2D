@@ -1,3 +1,11 @@
+> **CP-PUBLIC — estado verificado em 2026-10-08 (PR #180, DRAFT/HOLD).**
+>
+> O checkpoint integrado [PR #180](https://github.com/EAKerber/MobiliPresenter2D/pull/180), branch `work/cp-public-02c-integrated-preview-20261008`, head testado `fd6513c671c2f329c56dac689b3c060d134c65dc`, reúne #175 (landing/viewer), #178 (projetor público) e #179 (GET público Netlify). **8/8 GitHub workflows PASS, Netlify preview ready**, incluindo HTTP real `/api/public-modules` **200** e Playwright com leitura de **v5 isolado do deploy** e renderização do título/Destaques de homologação. Evidência: [HTTP #37806591033](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/37806591033) e [browser #37806590973](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/37806590973). Preview: `https://deploy-preview-180--mobilipresenter2d.netlify.app/viewer/`.
+>
+> Uma fixture v5 **fictícia e temporária** é gravada somente em `getDeployStore("configurator-settings")` por Build Plugin `netlify/plugins/cp-public-02c-preview`, protegido por contexto/PR/host, com readback forte. **É obrigatório eliminar fixture, plugin, diagnósticos e testes específicos de seed antes de qualquer merge/produção.** Não houve mudança no Blob produtivo nem na `main` (observada `bf30e008a81b7bc9cc34573e3d60a953810a9e72`). Os demais PRs continuam DRAFT/HOLD.
+>
+> **PRÓXIMOS GATES:** (1) paridade visual real de pedra/rodapé/máscaras/oclusão no viewer; (2) CP-PUBLIC-03, segurança server-side para configurador, aliases e GET completo `/api/configuration`, mais sessão por link. Não fazer cutover de `/`. Caixaria/laterais visualmente congeladas. Documento específico: [CP-PUBLIC-02c](../architecture/cp-public-02c-integrated-preview-2026-10-08.md).
+>
 # HANDOFF CANÔNICO — páginas públicas Landing + Viewer + Config protegido — 2026-10-08
 
 **Estado verificado em GitHub + Netlify em 2026-10-08. Documento de retomada do CP-PUBLIC; ler ANTES de reconstruir o chat.** Este arquivo registra a autoridade *atual* em sua data; consultar a `main`, PRs e deploys ao vivo antes de agir. Não inferir que merges ou deploys posteriores não aconteceram.
