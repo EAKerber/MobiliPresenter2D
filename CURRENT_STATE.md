@@ -1,5 +1,8 @@
 # CURRENT_STATE — MobiliPresenter2D
 
+> **CP-PUBLIC-03a2-1A — projetor comprador + API protegida (2026-10-08, PR #185 DRAFT/HOLD).** [PR #185](https://github.com/EAKerber/MobiliPresenter2D/pull/185) adiciona o DTO allowlisted `BuyerConfiguration2D 0.1` construído da publicação v5 válida, sem `revision/ETag/source`; o endpoint `/api/buyer-configuration` exige temporariamente **admin Identity** (401 anônimo, 403 não admin) **antes** de ler o Blob, sem fallback 200 se v5 ausente. Testa paridade de etapas, apresentações, preços tipados, options/arte e não vazamento de campos aninhados; [contrato e gates](docs/architecture/cp-public-03a2-1-buyer-dto-read-model-2026-10-08.md). **A UI ainda não consome o DTO e não existe sessão comprador**. #184 tem bootstrap fail-closed 9/9 CI green, #182 protege raw v5 em outra PR, #183 contém roadmap. **Todas em Draft/HOLD; main e produção sem alterações; não fazer merge parcial**. Prossiga 03a2-2 sessão por e-mail atômica; depois integração DTO + #182/#184 e Edge/bundle.
+
+
 Updated: 2026-10-08
 Authority: live `main` plus the canonical roadmaps linked below.
 
