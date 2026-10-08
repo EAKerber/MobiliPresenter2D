@@ -1,6 +1,6 @@
 # CP-SD-06A2 — temporary one-shot v5 cutover operator — 2026-10-07
 
-Status: TEMPORARY CODE IN PR / PROD EXECUTION PENDING.
+Status: TESTED / READY FOR DELIBERATE OPERATOR ACTION. PR #164 functional head `4904615da496585df81b526a30a07135c9f04df7` passed 7/7 GitHub CI workflows and Netlify preview. **The live production blob has NOT been migrated by these tests.**
 
 User authorized a guarded production migration after successful live read-only preflight and saved raw v3 backup. **This authorization is not evidence that the write occurred.** The authenticated Netlify Identity session is available only within the user's browser, not through the GitHub/Netlify project-management connectors.
 
