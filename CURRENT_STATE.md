@@ -58,6 +58,7 @@ Canonical plan:
 - CP-SD-06A2A3b read-only authenticated raw-source preflight route COMPLETE/PASS (PR #161; never called against live production).
 - CP-SD-06A2A3c1 endpoint Identity/deploy isolation and provider audit COMPLETE/PASS (PR #162).
 - CP-SD-06A2A3c2 operator runbook and final GO/NO-GO preparation: `docs/backlog/schema-driven-ui-cp-sd-06a2a3c2-production-cutover-runbook-2026-10-07.md` (documentation-only checkpoint).
+- User explicitly authorized the one-time production v5 migration after preflight and saved backup. Temporary admin Identity-gated production-only migration operator is implemented in PR pending validation; see `docs/backlog/schema-driven-ui-cp-sd-06a2-live-one-shot-operator-2026-10-07.md`. **NO LIVE WRITE YET**. After verified user-session execution, remove the temporary endpoint and document results.
 - Production execution plan: `docs/backlog/schema-driven-ui-cp-sd-06a2-authenticated-v5-publication-2026-10-07.md`. **LIVE INSPECTION/MIGRATION NOT AUTHORIZED; production source unverified; `V5_MIGRATION_ENABLED = false`.** A one-time cutover requires explicit approval, authenticated evidence, a raw backup and freeze of concurrent admin writes.
 - After verified production v5 publication: close CP-SD-06 legacy-retirement gate separately; keep historical imports. Landing/commercial viewer integration and future design-system work are not part of CP-SD-06.
 - current handoff: `docs/handoffs/schema-driven-ui-current-handoff-2026-10-07.md`
