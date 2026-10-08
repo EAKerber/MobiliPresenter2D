@@ -1,6 +1,6 @@
 [build]
   publish = "app"
-  command = "npm run build"
+  command = "npm run build && node scripts/seed-public-preview-v5.cjs"
   functions = "netlify/functions"
 
 [[redirects]]
