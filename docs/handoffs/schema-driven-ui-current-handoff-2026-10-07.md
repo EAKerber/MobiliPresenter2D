@@ -2,7 +2,7 @@
 
 Status: **CANONICAL HANDOFF FOR NEXT AGENT**.
 
-Update 2026-10-07 A2A2b: native v5 admin Save branch `cp-sd-06a2a2b-admin-native-v5-save`, draft PR #159 (CI/browser gates pending). It preserves legacy v3 Save and validates v5 response + GET readback, restores confirmed revision, and prevents v3-only Puxadores repair in v5. A2A3 offline rehearsal is next; production migration disabled and not authorized. Docs: `docs/backlog/schema-driven-ui-cp-sd-06a2a2b-admin-v5-save-2026-10-07.md`.
+Update 2026-10-07 A2A2b: native v5 admin Save branch `cp-sd-06a2a2b-admin-native-v5-save`, PR #159 COMPLETE / PASS (7/7 GitHub workflows, Netlify preview). It preserves legacy v3 Save and validates v5 response + GET readback, restores confirmed revision, and prevents v3-only Puxadores repair in v5. A2A3 offline rehearsal is next; production migration disabled and not authorized. Docs: `docs/backlog/schema-driven-ui-cp-sd-06a2a2b-admin-v5-save-2026-10-07.md`.
 
 Update 2026-10-07 A2A2a: repository-only native server v5 admin-save support is COMPLETE / PASS in PR #158 (7/7 GitHub workflows, Netlify preview). Only when source storage is already v5, admin-authorized validated v5 PUT uses revision, ETag CAS and exact readback. A2A2b admin UI wiring and A2A3 rehearsal remain prerequisites before live activation; see `docs/backlog/schema-driven-ui-cp-sd-06a2a2a-server-v5-save-2026-10-07.md`.
 
