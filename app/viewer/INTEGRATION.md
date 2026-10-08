@@ -1,0 +1,38 @@
+# Viewer público: fronteira e migração
+
+O viewer é uma página independente: não carrega `app.js` nem a UI do configurador/admin. Seu contrato público fica em `PublicSceneAdapter 0.5`; o contrato do produto continua no catálogo existente (`ProductCatalog2D 1.1`), sem um segundo schema de produto.
+
+## Fonte de cada dado
+
+- `app/data/scene-data.js` é a fonte de IDs, entidades, bounds, assets, máscaras, camadas e visibilidade.
+- `app/data/catalog-data.js` é a fonte de título, categoria, medidas, componentes, requisitos, destaques e desenho técnico. `publicPresentation.description` e `.carcass` são campos opcionais aditivos para texto público que não pertence aos dados geométricos.
+- `app/viewer/data.js` define apenas a ordem dos blocos, os tipos de vista e os placeholders de detalhe. Não mantém cópias de módulos.
+- `app/core/scene-component.js` é compartilhado para renderizar a cena, aplicar máscaras, selecionar entidades e tratar os atalhos.
+- `app/viewer/scene-adapters.js` traduz os contratos atuais para o modelo que a página consome. Esse limite deve permanecer durante as atualizações do core.
+
+## Caminhos do adapter
+
+`CASA_PUBLIC_SCENE_ADAPTERS.create(options)` é a factory única: recebe `repository` (cena, catálogo, core, validação, componente de cena, máscaras, acabamento e prefixo de assets) e retorna a interface estável. A página lê a configuração opcional de `CASA_PUBLIC_VIEWER_INTEGRATION.repository`; se ausente, usa a factory standalone com os contratos locais. `onSelectionChange` pode ser fornecida nessa configuração e recebe `{ moduleId, module, entity }` na inicialização e a cada seleção. A assinatura é igual à de `subscribe`. O host pode assim sincronizar o viewer com uma rota, telemetria ou painel externo sem importar `app.js`.
+
+`createStandaloneAdapter` encaminha para `createRepositoryAdapter`; o mapeamento do conector é exercido também na página independente. O adapter centraliza `getAssetUrl(asset)` e `getSceneCanvas()` para renderizadores e mantém `subscribe(listener)`/`select(id)` para controle bidirecional. Evitamos comparar versões literais de contratos em runtime: a factory valida capacidades necessárias, e o host pode inspecionar `contractVersion` antes de ligar uma integração externa.
+
+O adapter exige as capacidades `createInitialState`, `resolveVisibility` e `assertValidScene` e valida a cena recebida. Ele usa IDs de entidade para relacionar catálogo e geometria, em vez de depender de posição em arrays ou comparar a versão literal dos contratos. A seleção inicial aceita `?module=module-07` e volta ao primeiro módulo disponível quando o ID não existe.
+
+## Código temporário e aposentadoria
+
+O snapshot local dos sete módulos foi removido. As descrições públicas e a informação da caixaria agora ficam no `ProductCatalog2D 1.1`; componentes, requisitos, benefícios, medidas, desenho e geometria vêm de suas fontes atuais. A composição da página em `data.js` permanece necessária e não é uma cópia do catálogo.
+
+`app/viewer/technical-views.js` ainda repete os geradores SVG do configurador. Essa é a duplicação temporária remanescente; não a apagar antes de substituir ambas as implementações por um módulo puro compartilhado. Sequência segura:
+
+1. Na hospedagem integrada, fornecer `CASA_PUBLIC_VIEWER_INTEGRATION.repository` com contratos e helpers ativos e ligar `onSelectionChange` à rota/página hospedeira; o teste local cobre factory, mapeamento de catálogo, bounds, requisitos, seleção e prefixo de assets.
+2. Comparar a cena e os detalhes para os sete módulos. Depois da aprovação, retirar `createStandaloneAdapter` e os scripts locais de `scene-data`, `catalog-data`, `mask-data`, `state`, `visibility`, `validation`, `finishes` e `scene-component` de `viewer/index.html`; o host passa a fornecê-los uma única vez.
+3. Extrair os geradores e suas funções auxiliares de desenho para `app/core/technical-drawings.js`, recebendo apenas dados normalizados e sem acessar o estado ou DOM do configurador.
+4. Fazer configurador e viewer chamarem esse módulo, preservando os wrappers de layout de cada página.
+5. Comparar vistas frontal, lateral, isométrica, foco e interna confirmada nos sete módulos, em desktop e mobile; também confirmar que o acabamento não colore a caixaria.
+6. Só depois remover os geradores duplicados de `app/app.js` e excluir `app/viewer/technical-views.js`; apagar scripts e estilos que ficarem sem referências. Manter `createRepositoryAdapter` como fronteira de compatibilidade.
+
+Antes de cada remoção, confirmar ausência de referências com busca no projeto e executar os testes de contrato e a comparação visual. Não remover o catálogo, `data.js` de composição, nem o adapter de fronteira: eles seguem tendo papéis distintos após a integração.
+
+## Acabamentos
+
+O viewer aplica o acabamento-base pelas máscaras compartilhadas, mas ainda não oferece picker. O catálogo publica opções globais de frente, e o estado existente também modela essa seleção como global; para adicioná-la, expor leitura e troca de acabamento no adapter e renderizar as opções publicadas, sem importar `app.js`. A caixaria não tem grupo nem máscara próprios: neste momento pode ser apresentada como propriedade do módulo, mas sua seleção de cor requer geometria/máscaras separadas e um contrato específico.
