@@ -1,5 +1,8 @@
 # CP-PUBLIC-00 — Integração Landing + Viewer + Configurador e acesso por link — 2026-10-08
 
+**Checkpoint CP-PUBLIC-02c — 2026-10-08:** a [PR #180](https://github.com/EAKerber/MobiliPresenter2D/pull/180) (DRAFT/HOLD) reúne staging de landing/viewer (#175), projetor v5 seguro (#178) e endpoint público (#179) no mesmo preview. CI **8/8 PASS** no head `fd6513c671c2f329c56dac689b3c060d134c65dc`; HTTP `/api/public-modules` **200** com v5 **fictício em `getDeployStore` exclusivamente do preview**, e Playwright verificando readback/seleção/Destaques. Evidência e condições de remoção da fixture no [documento CP-PUBLIC-02c](../architecture/cp-public-02c-integrated-preview-2026-10-08.md). O endpoint/preview **não significa publicação em produção**. Antes de merge: remover plugin e seed temporários, completar paridade visual do viewer e CP-PUBLIC-03 de isolamento server-side da configuração completa. Este checkpoint prevalece sobre as linhas históricas abaixo que indicam CP-PUBLIC-01 como próximo passo.
+
+
 Status: **PLANO CANÔNICO / DESCOBERTA CONFIRMADA; MIGRAÇÃO DE ROTAS AINDA NÃO ATIVADA.**
 
 **Handoff atual para troca de agente:** `docs/handoffs/public-pages-current-handoff-2026-10-08.md` — consulta ao vivo das PRs #175 (DRAFT + 7/7 CI + Netlify ready), #176 (MERGED) e #34 (DRAFT), arquivos de staging, duplicações e próximo recorte CP-PUBLIC-02a. Não confundir o deploy preview com incorporação do viewer à `main`.

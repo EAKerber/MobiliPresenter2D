@@ -13,21 +13,29 @@ A branch combina as árvores de staging sem alterar a rota `/`, o conteúdo do c
 3. `app/viewer/public-data.js`: GET assíncrono same-origin sem cache. Com `CASA_PUBLIC_VIEWER_INTEGRATION.usePublishedApi === true`, o viewer exige resposta válida; na falta dela mostra indisponibilidade sem fallback estático. Sem o opt-in, o preview mostra a cena local de staging e **não pretende refletir a publicação v5**.
 4. `app/viewer/scene-adapters.js`: uma instância de `ViewerState2D` para seleção/visibilidade/acabamento, com módulos visíveis em ordem v5 (quando injetada) e opções globais de frente publicadas, inclusive materiais novos do ADM.
 
-## Gates automatizados
+## Gates automatizados e evidência de execução
 
-- `npm test` da aplicação combina casos do configurador, regras de publicação, isolamento de endpoint e adapter do viewer.
-- `tests/public-pages-smoke.cjs`: landing + viewer em desktop/mobile com screenshots, além de sucesso 200 e erro 503 da projeção **simulados no Playwright**, sem Blob real.
-- `tests/public-pages-integrated.cjs`: no **deploy-preview-180** real do Netlify, primeiro exige 400 em query de inspeção e 405 em PUT; faz GET HTTP real em `/api/public-modules` com headers de não-cache. Aceita somente:
-  - HTTP 200: inspeção de campos allowlist, ordem/visibilidade e renderização editorial real correspondente no viewer;
-  - HTTP 503: erro neutro `public_modules_unavailable`, browser com `[role=alert]` e sem título do catálogo estático.
-- Esse teste não faz PUT de conteúdo nem faz seed de Blob, e rejeita URLs que não sejam Deploy Previews dessa instalação.
+- `app/npm test` integra suíte do configurador, projetor allowlist v5, isolamento da Function e adapter do viewer.
+- `tests/public-pages-smoke.cjs` cobre landing/viewer desktop/mobile, screenshots, seleção, além de respostas 200 e 503 simuladas em Playwright.
+- `tests/public-pages-integrated.cjs` usa o **endpoint real do Deploy Preview #180**. Rejeita query privada (400) e PUT (405), exige resposta **HTTP 200** do v5 de homologação, confirma cabeçalhos de não-cache, correspondência do título, Destaques e estado selecionado no viewer, sem fallback. Os testes negativos 503 continuam cobertos no smoke.
+- `tests/public-modules-http-smoke.cjs` e workflow `Public modules isolated HTTP readback` fazem o readback real sem dependência do navegador, verificam o sentinela e a ausência de campos privados.
+- Os **8/8 GitHub Actions passaram** no head `fd6513c671c2f329c56dac689b3c060d134c65dc` e o Netlify Deploy Preview concluiu com sucesso:
+  - HTTP independente: [run 37806591033](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/37806591033) — `CP-PUBLIC-02c real Netlify deploy-specific v5 public readback: PASS, HTTP 200`.
+  - Playwright integrado: [run 37806590973](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/37806590973) — resposta `200` e `real deploy-scoped v5 readback + viewer: PASS`.
+  - Preview: `https://deploy-preview-180--mobilipresenter2d.netlify.app/viewer/`.
 
-## Critério de saída (não atingido somente por CI verde)
+## Como o v5 isolado foi comprovado
 
-O ramo HTTP 503 comprova **isolamento seguro**, não a capacidade de ler dados v5 publicados em produção. Para fechar 200 de ponta a ponta é necessário que o preview receba uma publicação v5 própria, produzida pelo mesmo fluxo autenticado do ADM ou por fixture implantada em ambiente isolado com autoridade comprovada, sem recorrer ao Blob produtivo. Não abrir endpoint anônimo de seed.
+O Build Plugin **temporário** `netlify/plugins/cp-public-02c-preview`, configurado somente neste ramo em `netlify.toml`, valida `NETLIFY=true`, contexto `deploy-preview`, `REVIEW_ID=180` e hostname exato do preview. Não depende de `BRANCH`, que no build Netlify pode ser uma ref sintética. Em `onPostBuild`, grava uma fixture v5 validada em `getDeployStore({name:"configurator-settings",consistency:"strong"})`, usando `onlyIfNew`, e confirma readback forte antes de concluir.
 
-Separadamente permanece a paridade visual de pedras/rodapés/máscaras/sombras/oclusão e o acesso seguro a todo o configurador, inclusive `/index.html`, `/config/`, API integral e caminhos alternativos. Não fazer rollout da landing para `/` antes desses gates. Caixaria continua sem representação visual; laterais congeladas por prazo indeterminado.
+A fixture altera exclusivamente dados **fictícios de homologação**, com o sentinela `Módulo 01 — homologação PR 180` e o Destaque `Destaque exclusivo do preview 180`. Esse texto foi observado tanto na API real quanto no viewer. Nenhum `getStore` site-wide foi usado para seed e nenhum dado ou autenticação de produção foi alterado. O diagnóstico estático `app/__cp-public-02c-seed-checks.json` contém apenas booleanos, sem segredos.
 
-## Próxima ação
+**REMOÇÃO OBRIGATÓRIA ANTES DE MERGE:** retirar o Build Plugin, configuração `[[plugins]]`, script e fixture de homologação, diagnósticos estáticos, teste específico de seed e testes obrigatoriamente dependentes do ID 180. Preservar testes de contrato úteis sem dados fictícios na aplicação final. A PR #180 continua **DRAFT/HOLD**.
 
-Após inspeção dos logs CI e resposta real da API, classificar o ramo 200/503 e registrar no handoff. Se 503 por ausência de publicação no preview, manter HOLD e estruturar um ensaio seguro com estado v5 apenas no store do deploy, sem alterar configurações ou autenticações de produção.
+## Gates restantes — não confundir smoke com lançamento
+
+1. Paridade visual/funcional da cena com o configurador aceito (pedra, rodapé, máscaras, oclusão, sombreamento e interações), com evidência de capturas desktop/mobile e estados condicionais. O workflow `Stone browser` da página principal **não valida por si a paridade do viewer**.
+2. **CP-PUBLIC-03:** proteger no servidor `/config/`, `/index.html`, aliases e o GET integral `/api/configuration`; o configurador existente ainda o expõe. Validar link por e-mail, sessão, expiração, replay, direitos de admin e isolamento do usuário antes do cutover.
+3. Retirar fixture temporária e revalidar o bundle final sem writes de teste. Somente após gates passar ao CP-PUBLIC-04 de rotas/produção.
+
+A caixaria continua sem representação visual, com laterais congeladas indefinidamente. A `main` e a publicação de produção permanecem inalteradas.
