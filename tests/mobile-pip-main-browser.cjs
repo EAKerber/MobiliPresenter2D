@@ -3,6 +3,7 @@ const fs = require("node:fs");
 const path = require("node:path");
 const { pathToFileURL } = require("node:url");
 const { chromium } = require("playwright");
+const domainFixture = require("./helpers/buyer-domain-fixture.cjs");
 
 (async () => {
   const output = process.argv[2] || "/tmp/mobile-pip-main-review";
@@ -17,12 +18,14 @@ const { chromium } = require("playwright");
     deviceScaleFactor: 1
   });
   const stackedPage = await stackedContext.newPage();
+  await domainFixture.attach(stackedPage, targetUrl);
   const stackedErrors = [];
   stackedPage.on("pageerror", error => stackedErrors.push(error.message));
   stackedPage.on("console", message => {
     if (message.type() === "error") stackedErrors.push(message.text());
   });
   await stackedPage.goto(targetUrl);
+  await domainFixture.requireReady(stackedPage);
   await stackedPage.evaluate(() => Promise.all(Array.from(document.images, image => image.decode())));
   assert.equal(await stackedPage.evaluate(() => window.CASA_EM_MODULOS_DEBUG.getLayoutProfile()), "stacked",
     "1050px resolves through the canonical stacked profile");
@@ -148,6 +151,7 @@ const { chromium } = require("playwright");
     deviceScaleFactor: 1
   });
   const page = await context.newPage();
+  await domainFixture.attach(page, targetUrl);
   const errors = [];
   page.on("pageerror", error => errors.push(error.message));
   page.on("console", message => {
@@ -155,6 +159,7 @@ const { chromium } = require("playwright");
   });
 
   await page.goto(targetUrl);
+  await domainFixture.requireReady(page);
   await page.evaluate(() => Promise.all(Array.from(document.images, image => image.decode())));
   assert.equal(await page.evaluate(() => window.CASA_EM_MODULOS_DEBUG.getLayoutProfile()), "compact",
     "mobile viewport resolves through the canonical compact profile");
