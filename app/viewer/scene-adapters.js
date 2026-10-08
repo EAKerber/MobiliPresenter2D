@@ -136,14 +136,14 @@
     });
   }
 
-  function createStandaloneAdapter(initialSelectedId, publicState) {
+  function createStandaloneAdapter(initialSelectedId, publicState, publicModules) {
     return createRepositoryAdapter({
       scene: global.CASA_EM_MODULOS_SCENE,
       catalog: global.CASA_EM_MODULOS_CATALOG,
       core: global.CasaModulesCore,
       visibility: global.CasaModulesVisibility,
       validation: global.CasaModulesValidation,
-      initialSelectedId, publicState,
+      initialSelectedId, publicState, publicModules,
       assetPrefix: "../", inlineMasks: global.CASA_EM_MODULOS_MASK_DATA
     });
   }
@@ -226,7 +226,7 @@
     createRepositoryAdapter,
     create(options = {}) {
       if (options.scene && options.catalog) return createRepositoryAdapter(options);
-      return createStandaloneAdapter(options.initialSelectedId, options.publicState);
+      return createStandaloneAdapter(options.initialSelectedId, options.publicState, options.publicModules);
     }
   });
 })(window);
