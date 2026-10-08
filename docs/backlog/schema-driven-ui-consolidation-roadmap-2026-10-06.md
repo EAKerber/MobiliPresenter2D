@@ -227,7 +227,7 @@ Canonical execution boundary: `docs/backlog/schema-driven-ui-cp-sd-06a2-authenti
 Operator runbook: `docs/backlog/schema-driven-ui-cp-sd-06a2a3c2-production-cutover-runbook-2026-10-07.md`.
 Provider caution: Netlify Blobs offers conditional writes and strong reads, but is not a transactional multi-writer database. A live one-time cutover requires independently verified backup, an administrative edit freeze, fresh authenticated source ETag/revision/digest, exact write/readback, and a separate approval.
 
-**CP-SD-06L1b in progress:** retire the former activation flag and live migration dispatch to 410 after admin authentication; keep offline conversion/recovery. `docs/architecture/schema-driven-ui-cp-sd-06l1b-retire-live-v5-migration-dispatch-2026-10-07.md`. v3 reader and normal v5 writer unchanged.
+**CP-SD-06L1b COMPLETE/PASS in PR #169 (7/7 CI + Netlify preview):** retire the former activation flag and live migration dispatch to 410 after admin authentication; keep offline conversion/recovery. `docs/architecture/schema-driven-ui-cp-sd-06l1b-retire-live-v5-migration-dispatch-2026-10-07.md`. v3 reader and normal v5 writer unchanged.
 
 **CP-SD-06L1a COMPLETE/PASS in PR #168 (7/7 GitHub workflows + Netlify preview):** narrow retirement of historical v3-only live preflight route, replaced by HTTP 410 before any Blob access, with offline preflight/import kept: `docs/architecture/schema-driven-ui-cp-sd-06l1a-retired-v3-live-preflight-2026-10-07.md`. Subsequent v3 writer/legacy operation decisions require separate gates.
 
