@@ -699,7 +699,7 @@ assert.equal(indexHtml.includes("core/pricing-contract.js?v=runtime-v38"), true,
 assert.equal(indexHtml.indexOf("core/pricing-contract.js?v=runtime-v38") < indexHtml.indexOf("core/configuration.js?v=admin-config-v8"), true, "pricing contract loads before the v3 compatibility core");
 assert.equal(indexHtml.indexOf("core/pricing-contract.js?v=runtime-v38") < indexHtml.indexOf("core/pricing.js?v=runtime-v38"), true, "pricing contract loads before calculator");
 assert.equal(indexHtml.includes("core/pricing.js?v=runtime-v38"), true, "typed pricing calculator cache revision is explicit");
-assert.equal(indexHtml.includes("app.js?v=runtime-v38"), true, "PriceBook 2.0 buyer cache revision is explicit");
+assert.equal(indexHtml.includes("app.js?v=cp-public-03a2-0"), true, "authorized bootstrap buyer entry cache revision is explicit");
 ["frontFinishRatesBps", "handleEntries", "localEntries", "globalEntries"].forEach((legacyBucket) => {
   assert.equal(pricingSource.includes(legacyBucket), false, `calculator no longer reads legacy pricing bucket: ${legacyBucket}`);
 });
