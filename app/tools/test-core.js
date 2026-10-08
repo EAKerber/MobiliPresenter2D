@@ -704,7 +704,10 @@ assert.equal(indexHtml.includes("app.js?v=runtime-v38"), true, "PriceBook 2.0 bu
   assert.equal(pricingSource.includes(legacyBucket), false, `calculator no longer reads legacy pricing bucket: ${legacyBucket}`);
 });
 assert.equal(appJs.includes("pricingContract.normalize(priceBook.pricing)"), true, "initial buyer pricing authority comes directly from PriceBook 2.0 typed rules");
-assert.equal(appJs.includes("pricingContract.upgradeLegacy(normalized.pricing)"), true, "published legacy pricing is migrated at the compatibility seam");
+const buyerProjectionSource = fs.readFileSync(path.join(projectRoot, "core/published-buyer-projection.js"), "utf8");
+assert.equal(appJs.includes("buyerProjection.prepare(value"), true, "published buyer data passes a v3/v5 schema-dispatch boundary");
+assert.equal(buyerProjectionSource.includes("pricingContract.upgradeLegacy(normalized.pricing)"), true, "published v3 pricing is migrated at the explicit compatibility seam");
+assert.equal(buyerProjectionSource.includes("pricingContract.normalize(normalized.pricing)"), true, "published v5 pricing consumes typed rules without legacy projection");
 ["priceBook.handleEntries", "priceBook.frontFinishRatesBps", "priceBook.localEntries", "priceBook.globalEntries", "priceBook.entries", "priceBook.handleFrontTotal"].forEach((legacyRead) => {
   assert.equal(appJs.includes(legacyRead), false, `buyer no longer reads legacy PriceBook field: ${legacyRead}`);
   assert.equal(adminJs.includes(legacyRead), false, `admin no longer reads legacy PriceBook field: ${legacyRead}`);

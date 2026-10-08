@@ -55,7 +55,7 @@ Canonical plan:
 - A1b checkpoint/gates: `docs/backlog/schema-driven-ui-cp-sd-06a1b-guarded-migration-2026-10-07.md`
 - next production gate: `docs/backlog/schema-driven-ui-cp-sd-06a2-authenticated-v5-publication-2026-10-07.md` (planning only; not authorized to execute)
 - CP-SD-06A2A0 COMPLETE (consumer-readiness audit, PR #155): `docs/architecture/schema-driven-ui-cp-sd-06a2a0-consumer-readiness-audit-2026-10-07.md`.
-- CP-SD-06A2A1a pure buyer v3/v5 projection contract COMPLETE / PASS in PR #156 (6/6 CI workflows plus Netlify preview); still awaiting A2A1b runtime wiring: `docs/backlog/schema-driven-ui-cp-sd-06a2a1a-buyer-projection-2026-10-07.md`. A2A1b runtime wiring, A2A2 admin/server v5 edits and A2A3 integrated rehearsal remain required before live authorization.
+- CP-SD-06A2A1a pure buyer v3/v5 projection contract COMPLETE / PASS in PR #156. A2A1b runtime wiring COMPLETE / PASS in PR #157 (8/8 workflows and Netlify preview); A2A2 admin/server v5 and A2A3 rehearsal still block live activation: `docs/backlog/schema-driven-ui-cp-sd-06a2a1a-buyer-projection-2026-10-07.md`. A2A1b runtime wiring, A2A2 admin/server v5 edits and A2A3 integrated rehearsal remain required before live authorization.
 - current handoff: `docs/handoffs/schema-driven-ui-current-handoff-2026-10-07.md`
 
 **CP-SD-00 — COMPLETE / PASS.** The audit found no critical unknowns. The main publication blocker is now explicit: v4 persists section presentation metadata, but that metadata is not yet the executable buyer-renderer authority.
