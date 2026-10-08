@@ -41,3 +41,12 @@ Não marcar esta PR como pronta com 5/8. Não mudar as assertions dos testes de 
 ## Próximo gate
 
 CP-PUBLIC-03a2: capacidade de ticket emitido a e-mail elegível + back-end atômico para troca de uso único, limite de emissão/replay e sessão com revogação. Criar projeção de comprador **sem `source` v5 integral**, testando valores e estados que a UI realmente consome. Depois integrar ao guard e concluir proteção de páginas/arquivos antes de qualquer redirect de `/`.
+
+## Triagem adicional de 2026-10-08 — causa isolada, testes auditados
+
+Veja `docs/testing/cp-public-03a1-regression-root-cause-2026-10-08.md` nesta branch. O experimento no [run 37815057147](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/37815057147) reproduziu **GET 401**, `publishedConfigurationStatus=null`, workspace **interativo**, preço **visível** e **nenhum alerta**. Isso é uma falha de bootstrap/UX fail-open, mesmo que o raw v5 esteja protegido no servidor.
+
+A contraprova [run 37815673306](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/37815673306) executou as **três suítes de domínio integralmente com um v5 válido interceptado somente no Playwright** (Stone, Summary Pricing e Mobile: **3/3 PASS**). A carga de dados foi explicitamente verificada como `validated` e `ConfiguratorAdministration2D 5.0` antes das interações. Assim, as três falhas originais não demonstram regressão desses componentes; demonstram que a UI antiga trata 401 como fallback silencioso e os testes originais só apuravam erro genérico de console depois de executar as regras com defaults.
+
+Atenção: esse replay **não equivale a autenticação real**. A PR permanece HOLD até sessão válida de comprador, projeção autorizada e bloqueio visual seguro. Os helpers de diagnóstico são temporários e não podem virar bypass em produção.
+
