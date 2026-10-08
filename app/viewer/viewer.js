@@ -5,10 +5,10 @@
   const renderers = new Map();
   const requestedModuleId = new URLSearchParams(window.location.search).get("module");
   const integration = window.CASA_PUBLIC_VIEWER_INTEGRATION || {};
-  const initialModuleId = requestedModuleId || data.defaultModuleId;
+  // Deep links override initial selection; otherwise the adapter derives it from visible data.
   const adapter = window.CASA_PUBLIC_SCENE_ADAPTERS.create({
     ...(integration.repository || {}),
-    initialSelectedId: initialModuleId,
+    initialSelectedId: requestedModuleId || undefined,
     onSelectionChange: null
   });
   let currentView = 0;
@@ -40,13 +40,8 @@
       module.benefits.forEach((item) => highlights.append(element("li", "", item)));
       target.append(highlights);
     }
-    target.append(element("p", "overview-summary", module.summary));
+    if (module.description) target.append(element("p", "overview-summary", module.description));
     if (module.dimensionLabel) target.append(element("p", "dimension-pill", module.dimensionLabel));
-    if (module.carcass) {
-      const note = element("div", "carcass-note"); note.setAttribute("aria-label", `Caixaria: ${module.carcass}`);
-      const carcassLabel = /^caixaria\b/i.test(module.carcass) ? module.carcass : `Caixaria · ${module.carcass}`;
-      note.append(element("span", "carcass-swatch"), element("span", "", carcassLabel)); target.append(note);
-    }
   }
 
   function renderViews(target, module) {
