@@ -4,7 +4,6 @@ import configCore from "../../app/core/configuration.js";
 import administrationV5 from "../../app/core/administration-v5.js";
 import publishedReader from "../../app/core/published-configuration.js";
 import v5Migration from "../../app/core/v5-publication-migration.js";
-import v5Inspection from "../../app/core/v5-publication-inspection.js";
 import v5NormalSave from "../../app/core/v5-normal-save.js";
 import flow from "../../app/core/flow-model.js";
 import hierarchyDefaults from "../../app/data/hierarchy-defaults.js";
@@ -51,23 +50,21 @@ export default async (request, context) => {
     return respond({ error: "method_not_allowed" }, 405);
   }
 
-  const store = getConfigurationStore(context);
+  // CP-SD-06L1a: the one-time v3 production preflight is retired following
+  // verified v5 cutover. Explicitly reject even authenticated old requests
+  // before opening a site-wide store; never reinterpret these URLs as
+  // public configuration GETs or leak historical raw source ETags.
   if (request.method === "GET") {
     const inspection = new URL(request.url).searchParams.get("inspection");
     if (inspection) {
-      if (inspection !== "v5-preflight") return respond({ error: "unsupported_inspection" }, 422);
-      // The normal GET remains public. Only this explicit raw-store evidence
-      // route requires authenticated admin Identity and a matching role.
-      const inspectionUser = await getUser();
-      if (!inspectionUser) return respond({ error: "unauthorized" }, 401);
-      const inspectionRoles = [...(inspectionUser.roles || []), ...(inspectionUser.app_metadata?.roles || [])];
-      if (!inspectionRoles.includes("admin")) return respond({ error: "forbidden" }, 403);
-      const report = await v5Inspection.inspectV5Preflight({
-        store,
-        runtime: { configuration: configCore, v5Core: administrationV5, flow, catalog, priceBook, scene, hierarchyDefaults, legacyStageRepair }
-      });
-      return respond(report, report.status);
+      return inspection === "v5-preflight"
+        ? respond({ error: "v5_preflight_retired" }, 410)
+        : respond({ error: "unsupported_inspection" }, 422);
     }
+  }
+
+  const store = getConfigurationStore(context);
+  if (request.method === "GET") {
     const published = await readPublished(store);
     return published.kind === "invalid"
       ? respond({ error: "stored_configuration_invalid", code: published.code }, 422)
