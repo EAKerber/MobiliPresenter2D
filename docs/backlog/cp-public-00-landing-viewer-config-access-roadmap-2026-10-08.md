@@ -1,5 +1,8 @@
 # CP-PUBLIC-00 — Integração Landing + Viewer + Configurador e acesso por link — 2026-10-08
 
+> **03a2-2 implementado como núcleo NÃO ativado (2026-10-08):** [PR #186](https://github.com/EAKerber/MobiliPresenter2D/pull/186) associa ticket e sessão ao Postgres com transação única, 256 bits/15 min/12h, e-mail via Resend e cookie HttpOnly; 4 endpoints `/api/access/*`, buyer DTO de #185 agora aceita verificação DB, nenhuma concessão cliente por role HTTP. [Handoff e bloqueios](../architecture/cp-public-03a2-2-email-session-2026-10-08.md). Integração caixa postal/Banco preview, bootstrap DTO #184, guard admin raw #182 e Edge `/config/`/bundle continuam pendentes. O plano **não** autoriza PRs parciais para main. #186 tem base main para Netlify preview, embora dependa semanticamente de #185.
+
+
 > **Atualização de implementação 2026-10-08 — 03a2-1A:** [PR #185](https://github.com/EAKerber/MobiliPresenter2D/pull/185) entrega `BuyerConfiguration2D 0.1` e `GET /api/buyer-configuration` com autenticação **somente admin provisória**, antes de storage, sem defaults. Comparação v5->DTO garantida por testes; integração do consumidor app.js **não** realizada; ticket de e-mail ainda não existe. [Contrato](../architecture/cp-public-03a2-1-buyer-dto-read-model-2026-10-08.md). Prosseguir checkpoint 03a2-2 (sessão atômica/verificada); branch de integração #182/#184/#185 depois do gate. Não mesclar endpoint novo isoladamente e não reabrir raw v5 anônimo. O viewer permanece vitrine, sem pedra/rodapé/oclusão comercial.
 
 
