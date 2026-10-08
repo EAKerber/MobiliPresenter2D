@@ -2,7 +2,7 @@
 
 Status: **CANONICAL HANDOFF FOR NEXT AGENT**.
 
-Update 2026-10-07 A2A3b: draft PR #161 adds only an admin-Identity-gated read-only raw v3 preflight query with canonical digest and ETag evidence, pending CI; no live production inspection executed. Docs: `docs/backlog/schema-driven-ui-cp-sd-06a2a3b-authenticated-raw-preflight-2026-10-07.md`. A2A3c provider safety/preview rehearsal next, live migration still OFF and unauthorized.
+Update 2026-10-07 A2A3b: PR #161 completes authenticated read-only raw v3 preflight inspection (7/7 CI workflows and Netlify preview); no live production inspection executed. Docs: `docs/backlog/schema-driven-ui-cp-sd-06a2a3b-authenticated-raw-preflight-2026-10-07.md`. A2A3c provider safety/preview rehearsal next, live migration still OFF and unauthorized.
 
 Update 2026-10-07 A2A3a: full-chain offline v3→v5→buyer→admin v5 Save→buyer test is COMPLETE / PASS in PR #160 (6/6 CI gates plus Netlify preview). A2A3b raw source evidence/access review and A2A3c preview smoke are next; no production config has been read or modified and V5_MIGRATION_ENABLED stays false. `docs/backlog/schema-driven-ui-cp-sd-06a2a3a-offline-rehearsal-2026-10-07.md`.
 
