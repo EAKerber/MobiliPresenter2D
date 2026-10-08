@@ -1871,6 +1871,10 @@
   }
 
   function renderCurrentValue(resolved) {
+    if (!["ready", "offline"].includes(document.documentElement.dataset.configurationAccessState)) {
+      configurationValue?.replaceChildren();
+      return;
+    }
     const estimate = getEstimate(resolved);
     if (!configurationValue) return;
     if (estimate.status === "estimate") {
@@ -1890,6 +1894,10 @@
   }
 
   function renderSummary(resolved) {
+    if (!["ready", "offline"].includes(document.documentElement.dataset.configurationAccessState)) {
+      summaryContent?.replaceChildren();
+      return;
+    }
     const estimate = getEstimate(resolved);
     const list = document.createElement("ul");
     list.className = "summary-list";
@@ -2815,38 +2823,76 @@
     syncLayerVisibility();
   });
 
-  function failClosedPublishedConfiguration(error) {
-    console.error("Configuração publicada inválida:", error);
-    document.documentElement.dataset.publishedConfigurationStatus = "invalid";
-    const message = document.createElement("p");
-    message.className = "published-config-error";
-    message.setAttribute("role", "alert");
-    message.textContent = "Não foi possível validar a configuração publicada. O configurador está temporariamente indisponível.";
-    const header = document.querySelector(".topbar");
-    if (header) header.after(message);
-    else document.body.prepend(message);
-    const workspace = document.querySelector(".workspace");
-    if (workspace) {
-      workspace.inert = true;
-      workspace.hidden = true;
-      workspace.style.display = "none";
+  // The HTML and CSS keep the workspace hidden/inert before this script.
+  // This gate governs presentation, NOT access to server data or static assets.
+  const bootstrap = global.CasaModulesAuthorizedBootstrap;
+  const accessWorkspace = document.querySelector(".workspace");
+  const accessStatus = document.getElementById("configurationAccessStatus");
+  const accessMessage = document.getElementById("configurationAccessMessage");
+  const accessRetry = document.getElementById("configurationAccessRetry");
+  if (!bootstrap || !accessWorkspace || !accessStatus || !accessMessage || !accessRetry) {
+    throw new Error("authorized bootstrap boundary missing");
+  }
+  const messages = Object.freeze({
+    loading: "Validando o acesso e carregando a configuração publicada…",
+    unauthorized: "É necessário um link de acesso válido para configurar. Solicite um novo link para continuar.",
+    forbidden: "Este acesso não tem permissão para abrir o configurador.",
+    invalid: "A configuração publicada não pôde ser validada. O configurador está indisponível.",
+    unavailable: "Não foi possível consultar a configuração agora. Tente novamente.",
+    offline: "Modo offline de demonstração. Os valores locais não representam uma configuração publicada."
+  });
+  function setConfigurationAccess(state) {
+    const ready = state === "ready";
+    const offline = state === "offline" && global.location?.protocol === "file:";
+    document.documentElement.dataset.configurationAccessState = state;
+    document.documentElement.dataset.publishedConfigurationStatus = ready ? "validated" : state;
+    accessWorkspace.inert = !(ready || offline);
+    accessWorkspace.hidden = !(ready || offline);
+    restoreButton.disabled = !(ready || offline);
+    accessStatus.hidden = ready;
+    accessStatus.setAttribute("role", state === "loading" || offline ? "status" : "alert");
+    accessMessage.textContent = ready ? "" : (messages[state] || messages.unavailable);
+    accessRetry.hidden = !["unavailable", "invalid"].includes(state);
+    if (ready || offline) {
+      // Layout geometry was calculated while hidden. Recompute after unlocking
+      // so the mobile PiP/dock measures the actual displayed workspace.
+      syncLayerVisibility();
+      updateVisibleCount();
+      syncLayoutProfileMarker();
+      syncBottomDockUi();
+      syncPinnedSceneUi();
+    } else {
+      // A previously authorized (then expired) price must not remain visible.
+      configurationValue?.replaceChildren();
+      summaryContent?.replaceChildren();
     }
   }
-
+  function fetchPublishedConfiguration() {
+    const controller = new AbortController();
+    const timeout = global.setTimeout(() => controller.abort(), 12000);
+    return fetch("/api/configuration", {
+      credentials: "same-origin", cache: "no-store", signal: controller.signal
+    }).finally(() => global.clearTimeout(timeout));
+  }
+  let bootstrapAttempt = 0;
+  async function loadAuthorizedConfiguration() {
+    const current = ++bootstrapAttempt;
+    await bootstrap.load({
+      request: fetchPublishedConfiguration,
+      apply: applyConfiguratorSettings,
+      transition: (state) => {
+        if (current === bootstrapAttempt) setConfigurationAccess(state);
+      }
+    });
+  }
+  accessRetry.addEventListener("click", () => { void loadAuthorizedConfiguration(); });
   if (global.location?.protocol === "https:" || global.location?.protocol === "http:") {
-    fetch("/api/configuration", { credentials: "same-origin", cache: "no-store" })
-      .then((response) => {
-        if (response.ok) return response.json();
-        if (response.status === 422) throw new TypeError("invalid published configuration returned by the server");
-        return null; // Continue legacy offline/empty-server resilience for non-schema errors.
-      })
-      .then((settings) => {
-        if (settings) {
-          applyConfiguratorSettings(settings);
-          document.documentElement.dataset.publishedConfigurationStatus = "validated";
-        }
-      })
-      .catch(failClosedPublishedConfiguration);
+    void loadAuthorizedConfiguration();
+  } else if (global.location?.protocol === "file:") {
+    // Deliberate local-only demonstration; never an HTTP fallback.
+    setConfigurationAccess("offline");
+  } else {
+    setConfigurationAccess("unavailable");
   }
 
   renderStageNavigation();
