@@ -1,3 +1,9 @@
+> **Retomada do CP-PUBLIC — atualização 2026-10-08, integração #180 (DRAFT, somente na branch).**
+>
+> Há agora um checkpoint integrado de preview: [PR #180](https://github.com/EAKerber/MobiliPresenter2D/pull/180), sobre a `main` observada `bf30e008a81b7bc9cc34573e3d60a953810a9e72`, reuniu os arquivos da #175, o projetor #178 e o endpoint #179 sem modificar produção. Consulte [CP-PUBLIC-02c](../architecture/cp-public-02c-integrated-preview-2026-10-08.md) antes de retomar; este bloco substitui os HEADs e recomendações anteriores **apenas para o ramo integrado**.
+>
+> Gate automatizado adicional: `tests/public-pages-integrated.cjs` chama o GET **real** de `/api/public-modules` no Deploy Preview, rejeita queries e PUT, testa `Cache-Control` e renderização do viewer via opt-in. Na ausência de v5 próprio do preview, API `503` + viewer sem fallback é resultado seguro; **não** equivale a testar o caminho 200 com publicação real. O passo posterior requer v5 isolado no preview, sem seed anônimo e sem tocar Blob de produção. Nenhuma rota pública foi ativada na `main`, nem houve alteração de autenticação; #175, #178, #179 e #180 continuam Draft/HOLD.
+>
 # HANDOFF CANÔNICO — páginas públicas Landing + Viewer + Config protegido — 2026-10-08
 
 **Estado verificado em GitHub + Netlify em 2026-10-08. Documento de retomada do CP-PUBLIC; ler ANTES de reconstruir o chat.** Este arquivo registra a autoridade *atual* em sua data; consultar a `main`, PRs e deploys ao vivo antes de agir. Não inferir que merges ou deploys posteriores não aconteceram.
