@@ -78,7 +78,7 @@ async function main() {
   assert.equal(saved.value.pricing.roles.frontFinishAdjustment[Object.keys(payload.pricing.roles.frontFinishAdjustment)[0]].type, "amount");
   assert.equal(digestJson(saved.value), digestJson(store.document), "verified readback returned");
 
-  await fails("stale revision after first save", store, payload, "revision_conflict");
+  await fails("stale revision after first save", store, payload, "revision_conflict", 1);
   await fails("v5 is never created through normal PUT on v3", mockStore(v3), payload, "hierarchy_publication_required");
   await fails("missing source", mockStore(null), payload, "published_blob_missing");
   await fails("malformed source", mockStore("{not-json"), payload, "invalid_stored_json");
