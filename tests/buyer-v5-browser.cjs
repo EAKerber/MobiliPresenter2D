@@ -88,7 +88,7 @@ async function main() {
     });
     await negativePage.goto(targetUrl, { waitUntil: "domcontentloaded", timeout: 15000 });
     await negativePage.waitForFunction(() => document.documentElement.dataset.publishedConfigurationStatus === "invalid", null, { timeout: 12000 });
-    assert.equal(await negativePage.locator(".published-config-error[role=alert]").isVisible(), true,
+    assert.equal(await negativePage.locator("#configurationAccessStatus[role=alert]").isVisible(), true,
       "invalid v5 must surface accessible error");
     assert.equal(await negativePage.locator(".workspace").isVisible(), false,
       "invalid v5 must never leave plausible default buyer controls visible");
