@@ -10,7 +10,7 @@ const domainFixture = require("./helpers/buyer-domain-fixture.cjs");
   const targetUrl = process.env.FLOW_LAYOUT_URL || "https://mobilipresenter2d.netlify.app/";
   const browser = await chromium.launch({ headless: true });
   const page = await browser.newPage({ viewport: { width: 1366, height: 900 } });
-  await domainFixture.attach(page, targetUrl);
+  await domainFixture.attach(page, targetUrl, { schema: "v3" });
   const errors = [];
   page.on("pageerror", (error) => errors.push(error.message));
   page.on("console", (message) => { if (message.type() === "error") errors.push(message.text()); });
@@ -34,7 +34,7 @@ const domainFixture = require("./helpers/buyer-domain-fixture.cjs");
     }
   }
   if (lastError) throw lastError;
-  await domainFixture.requireReady(page);
+  await domainFixture.requireReady(page, { schema: "v3" });
 
   const stageGroupOrder = (stageId) => page.evaluate((id) => {
     const grid = document.querySelector('[data-flow-group-grid="' + id + '"]');
