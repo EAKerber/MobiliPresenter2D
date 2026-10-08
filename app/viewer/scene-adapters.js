@@ -210,7 +210,8 @@
         state.selectedEntityId = publicState.selectedEntityId;
       }
       if (publicState.finishId != null) {
-        if (!catalog.options.finishes.some((finish) => finish.id === publicState.finishId)) {
+        const initialOptions = publicState.availableFinishes || catalog.options.finishes;
+        if (!initialOptions.some((finish) => finish.id === publicState.finishId)) {
           throw new TypeError("Unknown public finish: " + publicState.finishId);
         }
         core.setGlobalSelection(state, { finishId: publicState.finishId });
