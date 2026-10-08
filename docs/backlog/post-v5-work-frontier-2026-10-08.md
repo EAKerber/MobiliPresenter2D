@@ -2,6 +2,10 @@
 
 Status: **DISCOVERY / PLANEJAMENTO**, sem mudança de código e sem decisão de produto implícita.
 
+## Nova frente coordenada — CP-PUBLIC-00
+
+Por solicitação do usuário, landing e viewer passam da experimentação isolada para planejamento de integração entre páginas e autenticação do configurador. Contrato canônico: `docs/backlog/cp-public-00-landing-viewer-config-access-roadmap-2026-10-08.md`. Decisão: landing `/`, viewer público `/viewer/`, configurador `/config/` acessível a admin Identity ou por link curto enviado ao e-mail já capturado. Nenhum root/path/proteção de produção será alterado até executar os gates; o schema v5 continua autoridade dos conteúdos administráveis. A branch experimental antiga não pode ser incorporada diretamente por estar distante da main. Este item substitui apenas as observações de planejamento anteriores sobre não coordenar a landing sem contrato, sem modificar o trabalho CP-POSTV5 em andamento.
+
 ## Estado aceito e imutáveis
 
 - CP-SD-00→06 está encerrado: `ConfiguratorAdministration2D 5.0` publicado em produção (revisão 7 na aceitação), usuário não notou problemas visuais, e as operações remotas excepcionais v3→v5 foram aposentadas pelos PRs #165, #168 e #169.
