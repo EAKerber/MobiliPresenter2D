@@ -3,6 +3,19 @@ const assert = require("node:assert/strict");
 const fs = require("node:fs");
 const path = require("node:path");
 const { chromium } = require("playwright");
+const config = require("../app/core/configuration.js");
+const adminV5 = require("../app/core/administration-v5.js");
+const flow = require("../app/core/flow-model.js");
+const defaults = require("../app/data/configurator-settings.js");
+const hierarchy = require("../app/data/hierarchy-defaults.js");
+const catalog = require("../app/data/catalog-data.js");
+const prices = require("../app/data/mock-price-book.js");
+const scene = require("../app/data/scene-data.js");
+const { project } = require("../app/core/public-module-projection.js");
+const fixture = adminV5.upgrade(config.createDefaultAdministration(defaults, catalog, prices, scene),
+  config, flow, catalog, prices, scene, hierarchy);
+const publicFixture = project(fixture, catalog, scene);
+
 
 async function main() {
   const base = process.env.PUBLIC_PAGES_URL;
@@ -25,7 +38,7 @@ async function main() {
         }
       });
 
-      await page.goto(new URL("/landing/", base).href, { waitUntil: "networkidle" });
+      await page.goto(new URL("/", base).href, { waitUntil: "networkidle" });
       assert.match(await page.title(), /Casa em Módulos/);
       assert.equal(await page.locator("#environmentTrack .environment").count(), 5,
         "landing must render five environments");
@@ -38,6 +51,10 @@ async function main() {
       await page.screenshot({ path: path.join(outputDir, `landing-${viewport.name}.png`), fullPage: true });
 
       errors.length = 0;
+      await page.route("**/api/public-modules", async route => {
+        await route.fulfill({ status: 200, contentType: "application/json",
+          body: JSON.stringify(publicFixture) });
+      });
       await page.goto(new URL("/viewer/?module=module-03", base).href, { waitUntil: "networkidle" });
       const heading = page.locator("#block-overview .overview-title");
       await heading.waitFor({ timeout: 12000 });
@@ -55,6 +72,15 @@ async function main() {
       assert.deepEqual(errors, [], "viewer errors: " + errors.join(" | "));
       await page.close();
     }
+    // Public interim cutover: /config/ loads the original buyer application and
+    // does NOT require Clerk until the later explicit auth release.
+    const configPage = await browser.newPage({ viewport: { width: 1366, height: 768 } });
+    await configPage.goto(new URL("/config/", base).href, { waitUntil: "domcontentloaded", timeout: 20000 });
+    assert.match(await configPage.title(), /Casa em Módulos/i);
+    await configPage.waitForFunction(() => Boolean(window.CASA_EM_MODULOS_DEBUG?.getLayoutProfile), null,
+      { timeout: 15000 });
+    assert.equal(await configPage.locator(".workspace").count(), 1);
+    await configPage.close();
     // CP-PUBLIC-02b: exercise the optional asynchronous public projection
     // in an isolated browser with a fully mocked same-origin endpoint.
     // Never read or modify real production/preview configuration Blobs.
