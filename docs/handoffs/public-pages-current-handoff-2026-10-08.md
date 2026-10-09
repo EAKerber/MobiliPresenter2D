@@ -1,5 +1,8 @@
 # HANDOFF CANÔNICO — páginas públicas Landing + Viewer + Config protegido — 2026-10-08
 
+> **NOVA PRIORIDADE CP-PUBLIC-04a — autorização de publicação intermediária sem Clerk (2026-10-08).** [PR #187](https://github.com/EAKerber/MobiliPresenter2D/pull/187) prepara `/` landing, `/viewer/` público (v5 allowlisted) e `/config/` **público por decisão expressa**, preservando o HTML/js original via `<base href="/">`. Sem PostgreSQL/Resend/Clerk ou seed sintético do preview #180. A produção atual já serve configurador/preço público na raiz; o release intermediário mantém esse trade-off sem conceder privacidade fictícia. PRs #182/#184/#185/#186 não fazem parte do release inicial, ficam Draft. [Contrato e gates](../architecture/cp-public-04a-public-before-clerk-2026-10-08.md). Validar workflows e Netlify; depois a etapa Clerk protege HTML, preço e GET administrativos numa única mudança coordenada.
+
+
 **Estado verificado em GitHub + Netlify em 2026-10-08. Documento de retomada do CP-PUBLIC; ler ANTES de reconstruir o chat.** Este arquivo registra a autoridade *atual* em sua data; consultar a `main`, PRs e deploys ao vivo antes de agir. Não inferir que merges ou deploys posteriores não aconteceram.
 
 ## 0. Resposta em 30 segundos para um agente novo
