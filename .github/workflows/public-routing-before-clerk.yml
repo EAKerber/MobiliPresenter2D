@@ -78,6 +78,7 @@ jobs:
         run: |
           set -euo pipefail
           status=$(curl -sS -o /tmp/public-unavailable -w '%{http_code}' "$PUBLIC_PAGES_URL/api/public-modules")
+          echo "Deploy-preview scoped public-modules HTTP status: $status"
           test "$status" = 503
           grep -q '"public_modules_unavailable"' /tmp/public-unavailable
           test "$(curl -sS -o /dev/null -w '%{http_code}' -X PUT "$PUBLIC_PAGES_URL/api/public-modules")" = 405

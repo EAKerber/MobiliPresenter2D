@@ -1,0 +1,34 @@
+name: Public production read-only verification
+
+on:
+  pull_request:
+    paths:
+      - 'tests/public-production-readonly.cjs'
+      - '.github/workflows/public-production-readonly.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'tests/public-production-readonly.cjs'
+      - '.github/workflows/public-production-readonly.yml'
+      - 'app/index.html'
+      - 'app/config/**'
+      - 'app/viewer/**'
+      - 'netlify/functions/public-modules.mjs'
+      - 'netlify.toml'
+
+permissions:
+  contents: read
+
+jobs:
+  production-readonly:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Probe current production HTML and published viewer DTO without writes
+        env:
+          PUBLIC_LIVE_ORIGIN: https://mobilipresenter2d.netlify.app
+        run: node tests/public-production-readonly.cjs

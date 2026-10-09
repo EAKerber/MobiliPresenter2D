@@ -2,6 +2,16 @@ const assert = require("node:assert/strict");
 const fs = require("node:fs");
 const path = require("node:path");
 const { chromium } = require("playwright");
+const configuration = require("../app/core/configuration.js");
+const defaultSettings = require("../app/data/configurator-settings.js");
+const catalog = require("../app/data/catalog-data.js");
+const priceBook = require("../app/data/mock-price-book.js");
+const scene = require("../app/data/scene-data.js");
+// Local test fixture ONLY; published v5 stage groups do not have legacy .items.
+const flatV3 = configuration.createDefaultAdministration(
+  defaultSettings, catalog, priceBook
+);
+
 
 (async () => {
   const output = process.argv[2] || "/tmp/flow-layout-browser";
@@ -567,11 +577,10 @@ const { chromium } = require("playwright");
   assert.deepEqual(uniqueness, { moduleDetail: 1, moduleList: 1, fronts: 1, handles: 1, lighting: 1 }, "layout remounting reuses controls instead of duplicating them");
   assert.deepEqual(errors, [], "flow layout browser run has no console/page errors");
 
-  const sourceConfiguration = await page.evaluate(async () => {
-    const response = await fetch("/api/configuration", { cache: "no-store" });
-    if (!response.ok) throw new Error("failed to load configuration fixture");
-    return response.json();
-  });
+  // The baseline above exercises real production v5. The following variants
+  // intentionally mutate legacy flat stages.items using an isolated fixture;
+  // each variant intercepts its own GET. No production write or seed.
+  const sourceConfiguration = structuredClone(flatV3);
   const renamedCoreStages = structuredClone(sourceConfiguration);
   const renamedIdsByKind = {
     finishes: "finishes-layout",
