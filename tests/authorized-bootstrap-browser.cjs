@@ -11,12 +11,16 @@ const catalog = require("../app/data/catalog-data.js");
 const prices = require("../app/data/mock-price-book.js");
 const scene = require("../app/data/scene-data.js");
 const hierarchy = require("../app/data/hierarchy-defaults.js");
+const buyer = require("../app/core/buyer-configuration-projection.js");
+const pricingContract = require("../app/core/pricing-contract.js");
 
 const v3 = config.normalizeConfiguratorSettings(
   config.createDefaultAdministration(defaults, catalog, prices, scene), catalog, prices, scene
 );
 const v5 = admin.upgrade(v3, config, flow, catalog, prices, scene, hierarchy);
 assert.deepEqual(admin.validate(v5, config, catalog, prices, scene), []);
+const dto = buyer.project(v5, { administrationV5: admin, configuration: config,
+  catalog, priceBook: prices, scene, pricingContract });
 const base = process.env.AUTHORIZED_BOOTSTRAP_BROWSER_URL;
 assert(base, "set AUTHORIZED_BOOTSTRAP_BROWSER_URL to Deploy Preview");
 const origin = new URL(base);
@@ -33,7 +37,7 @@ async function main() {
       const page = await browser.newPage({ viewport });
       const pageErrors = [];
       page.on("pageerror", e => pageErrors.push(e.message));
-      await page.route("**/api/configuration", async route => {
+      await page.route("**/api/buyer-configuration", async route => {
         if (typeof responseBody === "function") return responseBody(route);
         await route.fulfill({
           status: responseBody.status,
@@ -89,15 +93,16 @@ async function main() {
     const bad = structuredClone(v5);
     bad.presentationPolicy = null;
     await openCase("invalid-v5", { status: 200, body: bad }, "invalid");
-    await openCase("valid-v3", { status: 200, body: v3 }, "ready");
-    await openCase("valid-v5", { status: 200, body: v5 }, "ready");
+    await openCase("raw-v3-rejected", { status: 200, body: v3 }, "invalid");
+    await openCase("raw-v5-rejected", { status: 200, body: v5 }, "invalid");
+    await openCase("valid-buyer-dto", { status: 200, body: dto }, "ready");
     await openCase("network-error", async route => route.abort("failed"), "unavailable");
     // Regression: the page must remain locked until the requested configuration
     // is applied; never briefly display a local estimate before the response.
     const loading = await browser.newPage();
-    await loading.route("**/api/configuration", async route => {
+    await loading.route("**/api/buyer-configuration", async route => {
       await new Promise(resolve => setTimeout(resolve, 900));
-      await route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify(v5) });
+      await route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify(dto) });
     });
     await loading.goto(target, { waitUntil: "domcontentloaded", timeout: 20000 });
     assert.equal(await loading.locator(".workspace").isVisible(), false);
@@ -109,12 +114,12 @@ async function main() {
 
     const retry = await browser.newPage();
     let hits = 0;
-    await retry.route("**/api/configuration", async route => {
+    await retry.route("**/api/buyer-configuration", async route => {
       hits += 1;
       await route.fulfill({
         status: hits === 1 ? 503 : 200,
         contentType: "application/json",
-        body: JSON.stringify(hits === 1 ? { error: "temporary_failure" } : v5)
+        body: JSON.stringify(hits === 1 ? { error: "temporary_failure" } : dto)
       });
     });
     await retry.goto(target, { waitUntil: "domcontentloaded", timeout: 20000 });
