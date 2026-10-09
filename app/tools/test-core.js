@@ -53,7 +53,7 @@ assert.equal(resolved(glassState)["tempered-glass"].visible, true);
 assert.equal(scene.entities.find(e => e.id === "tempered-glass").controllable, false);
 assert.equal(scene.entities.some(e => /(?:right-return|left-return|right-side|exposed-face|floor-side-bridge)$/.test(e.id)), false, "experimental furniture side overlays stay out of the canonical scene");
 const appSource = fs.readFileSync(path.join(projectRoot, "app.js"), "utf8");
-const indexSource = fs.readFileSync(path.join(projectRoot, "index.html"), "utf8");
+const indexSource = fs.readFileSync(path.join(projectRoot, "config", "index.html"), "utf8");
 const staticHtmlIds = new Set([...indexSource.matchAll(/\bid="([^"]+)"/g)].map((match) => match[1]));
 const orphanedStaticDomIds = [...new Set(
   [...appSource.matchAll(/document\.getElementById\("([^"]+)"\)/g)].map((match) => match[1])
@@ -685,7 +685,7 @@ core.setEntityVisibility(visibilityProbe, "module-06", false);
 visibilityState = resolved(visibilityProbe);
 assert.equal(finishes.resolveMaskAsset(module04Entity, visibilityState), "assets/kitchen/masks/04.png");
 
-const indexHtml = fs.readFileSync(path.join(projectRoot, "index.html"), "utf8");
+const indexHtml = fs.readFileSync(path.join(projectRoot, "config", "index.html"), "utf8");
 const appJs = fs.readFileSync(path.join(projectRoot, "app.js"), "utf8");
 const styles = fs.readFileSync(path.join(projectRoot, "styles.css"), "utf8");
 const adminHtml = fs.readFileSync(path.join(projectRoot, "admin.html"), "utf8");
