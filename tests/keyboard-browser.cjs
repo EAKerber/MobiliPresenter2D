@@ -495,7 +495,7 @@ const {chromium} = require('playwright');
   const adminErrors = [];
   adminPage.on('pageerror', error => adminErrors.push(error.message));
   adminPage.on('console', message => { if (message.type() === 'error') adminErrors.push(message.text()); });
-  const adminUrl = new URL('admin.html', targetUrl).href;
+  const adminUrl = new URL('/admin.html', targetUrl).href;
   await adminPage.goto(adminUrl, {waitUntil: 'domcontentloaded'});
   await adminPage.waitForSelector('[data-password-reveal="passwordInput"]');
 
