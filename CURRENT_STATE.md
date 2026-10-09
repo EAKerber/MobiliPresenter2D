@@ -1,5 +1,8 @@
 # CURRENT_STATE — MobiliPresenter2D
 
+> **CP-PUBLIC-04a — ORDEM DE PUBLICAÇÃO REVISADA (2026-10-08).** Usuário autorizou manter temporariamente o configurador **público** para publicar primeiro a landing em `/`, viewer em `/viewer/` e a UI atual em `/config/`; Clerk fica **para uma segunda atualização**, sem bloquear a integração visual. [PR #187](https://github.com/EAKerber/MobiliPresenter2D/pull/187), branch `work/cp-public-04a-public-routing-before-clerk-20261008` (DRAFT até CI e validação de preview). Configurador e preço raw continuam públicos explicitamente; não confundir mudança de URL com controle de acesso. Público viewer obtém `PublicModulePresentation2D` v5 pelo backend, sem seed e sem fallback estático. PRs #182/#184/#185/#186 em HOLD separadas, não incorporar guards sem Clerk. [Contrato operacional](docs/architecture/cp-public-04a-public-before-clerk-2026-10-08.md). Nenhuma publicação em produção deve ser alegada sem merge confirmado.
+
+
 Updated: 2026-10-08
 Authority: live `main` plus the canonical roadmaps linked below.
 
