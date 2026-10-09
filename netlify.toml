@@ -8,3 +8,17 @@
   to = "/.netlify/functions/configuration"
   status = 200
   force = true
+
+# CP-PUBLIC: public projection from validated v5. No deploy-preview seed.
+[[redirects]]
+  from = "/api/public-modules"
+  to = "/.netlify/functions/public-modules"
+  status = 200
+  force = true
+
+# CP-PUBLIC: buyer DTO, admin-only until a verified Clerk adapter is configured.
+[[redirects]]
+  from = "/api/buyer-configuration"
+  to = "/.netlify/functions/buyer-configuration"
+  status = 200
+  force = true
