@@ -15,7 +15,7 @@
   const presentationCore = global.CasaModulesPresentation;
   let presentationPolicy = global.CASA_EM_MODULOS_PRESENTATION_POLICY;
   const administrationV5 = global.CasaModulesAdministrationV5;
-  const buyerProjection = global.CasaModulesPublishedBuyerProjection;
+  const buyerProjection = global.CasaModulesAuthorizedBuyerConfiguration;
   const flowLayout = global.CasaModulesFlowLayout;
   const hierarchyDefaults = global.CASA_EM_MODULOS_HIERARCHY_DEFAULTS;
   const priceBook = structuredClone(global.CASA_EM_MODULOS_PRICE_BOOK);
@@ -47,12 +47,18 @@
   }
   validation.assertValidScene(scene);
 
-  function publishNormalizedFlow(settings) {
-    normalizedFlow = flowCore.normalizeFlow(settings, configurationCore.itemRegistry(catalog), hierarchyDefaults);
-    presentationCore.assertValidPolicy(presentationPolicy, layoutProfiles.PROFILES, normalizedFlow);
+  function commitNormalizedFlow(model) {
+    presentationCore.assertValidPolicy(presentationPolicy, layoutProfiles.PROFILES, model);
+    normalizedFlow = model;
     global.CASA_NORMALIZED_FLOW = normalizedFlow;
     global.CASA_KEYBOARD_SHORTCUTS?.setFlow?.(normalizedFlow);
     return normalizedFlow;
+  }
+
+  function publishNormalizedFlow(settings) {
+    return commitNormalizedFlow(flowCore.normalizeFlow(
+      settings, configurationCore.itemRegistry(catalog), hierarchyDefaults
+    ));
   }
 
   const initialAdministration = configurationCore.createDefaultAdministration(configuratorSettings, catalog, priceBook, scene);
@@ -2045,16 +2051,16 @@
   }
 
   function applyConfiguratorSettings(value) {
+    // HTTP responses MUST be the allowlisted BuyerConfiguration2D DTO, never
+    // a raw administrator v3/v5 document or prepared.source from admin code.
     const prepared = buyerProjection.prepare(value, {
       configuration: configurationCore,
-      administrationV5,
       flow: flowCore,
       catalog,
-      priceBook,
-      scene,
       hierarchyDefaults,
       pricingContract,
-      defaultPresentationPolicy: global.CASA_EM_MODULOS_PRESENTATION_POLICY
+      presentationCore,
+      layoutProfiles
     });
     const normalized = prepared.displaySettings;
     configuratorSettings = normalized;
@@ -2076,7 +2082,7 @@
     presentationPolicy = prepared.presentationPolicy;
     finishSettings = new Map(normalized.finishes.map((item) => [item.id, item]));
     applyMaterialLibrary(normalized);
-    publishNormalizedFlow(prepared.source);
+    commitNormalizedFlow(prepared.flow);
     scene.entities.forEach((entity) => {
       const original = originalSceneEntities.get(entity.id) || entity;
       const assets = normalized.objectAssets[entity.id];
@@ -2870,7 +2876,7 @@
   function fetchPublishedConfiguration() {
     const controller = new AbortController();
     const timeout = global.setTimeout(() => controller.abort(), 12000);
-    return fetch("/api/configuration", {
+    return fetch("/api/buyer-configuration", {
       credentials: "same-origin", cache: "no-store", signal: controller.signal
     }).finally(() => global.clearTimeout(timeout));
   }
