@@ -11,6 +11,8 @@ const hierarchyDefaults = require("../app/data/hierarchy-defaults.js");
 const catalog = require("../app/data/catalog-data.js");
 const priceBook = require("../app/data/mock-price-book.js");
 const scene = require("../app/data/scene-data.js");
+const pricingContract = require("../app/core/pricing-contract.js");
+const buyer = require("../app/core/buyer-configuration-projection.js");
 
 const v3 = configuration.normalizeConfiguratorSettings(
   configuration.createDefaultAdministration(settings, catalog, priceBook, scene),
@@ -27,12 +29,15 @@ async function main() {
   const result = {};
   try {
     async function openFixture(name, payload) {
+      const dto = buyer.project(payload.schemaVersion === configuration.SCHEMA
+        ? administrationV5.upgrade(payload, configuration, flow, catalog, priceBook, scene, hierarchyDefaults)
+        : payload, { administrationV5, configuration, catalog, priceBook, scene, pricingContract });
       const page = await browser.newPage({ viewport: { width: 1366, height: 900 } });
       const errors = [];
       page.on("pageerror", (e) => errors.push(e.message));
-      await page.route("**/api/configuration", async (route) => {
+      await page.route("**/api/buyer-configuration", async (route) => {
         if (route.request().method() !== "GET") return route.continue();
-        await route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify(payload) });
+        await route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify(dto) });
       });
       let error;
       for (let attempt = 0; attempt < 12; attempt += 1) {
@@ -70,8 +75,8 @@ async function main() {
 
     const old = await openFixture("v3", v3);
     const current = await openFixture("v5", v5);
-    assert.equal(old.schema, configuration.SCHEMA);
-    assert.equal(current.schema, administrationV5.SCHEMA);
+    assert.equal(old.schema, buyer.SCHEMA);
+    assert.equal(current.schema, buyer.SCHEMA);
     assert.deepEqual(current.navigation, old.navigation, "same published semantics preserve navigation");
     assert.deepEqual(current.stages, old.stages, "same published semantics preserve stage/group/section/item hierarchy");
     assert.equal(current.modules, old.modules, "same seven canonical module controls");
@@ -82,7 +87,7 @@ async function main() {
     const bad = structuredClone(v5);
     bad.presentationPolicy = null;
     const negativePage = await browser.newPage({ viewport: { width: 1366, height: 900 } });
-    await negativePage.route("**/api/configuration", async (route) => {
+    await negativePage.route("**/api/buyer-configuration", async (route) => {
       if (route.request().method() !== "GET") return route.continue();
       await route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify(bad) });
     });
