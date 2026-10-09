@@ -2,9 +2,175 @@
   "schemaVersion": "BranchDispositionSet 0.1",
   "controlBranch": "main",
   "preserveBranches": [
+    "experiment/public-landing-commercial-viewer",
     "feat/exposed-sides-and-glass"
   ],
   "terminalBranches": [
+    {
+      "branch": "docs-backlog-after-preview-95",
+      "sha": "21b675550d2b50f09024871ee1e78f0f619738b8",
+      "reason": "merged-pull-request-head",
+      "allowDelete": true,
+      "evidence": {
+        "pullRequest": 96,
+        "mergedMainSha": "980c9853aabde1a244fd6659831273ff904c7a27"
+      },
+      "note": "Merged PR #96; exact current branch head matches the recorded merged PR head. Reobserve exact SHA and open-PR relation before deletion."
+    },
+    {
+      "branch": "docs-cp-ux-01-closeout",
+      "sha": "b14a86de9f8126f290fc8214b51f3a616c1806ab",
+      "reason": "merged-pull-request-head",
+      "allowDelete": true,
+      "evidence": {
+        "pullRequest": 82,
+        "mergedMainSha": "1882b7f9d9d87e36fd2455fa8e8de6944af24f3f"
+      },
+      "note": "Merged PR #82; exact current branch head matches the recorded merged PR head. Reobserve exact SHA and open-PR relation before deletion."
+    },
+    {
+      "branch": "docs-cp-ux-03-closeout",
+      "sha": "8d417e6740124738cf568fea449a0b07b4f926aa",
+      "reason": "merged-pull-request-head",
+      "allowDelete": true,
+      "evidence": {
+        "pullRequest": 86,
+        "mergedMainSha": "69865114de92b0c5621976a260525bd8510baa24"
+      },
+      "note": "Merged PR #86; exact current branch head matches the recorded merged PR head. Reobserve exact SHA and open-PR relation before deletion."
+    },
+    {
+      "branch": "docs-cp-ux-04-1-closeout",
+      "sha": "801c72763a030d3f0d779826c76bda1f3da83016",
+      "reason": "merged-pull-request-head",
+      "allowDelete": true,
+      "evidence": {
+        "pullRequest": 91,
+        "mergedMainSha": "6bd2727156f0ad3606f7d3ba78933235257c2d01"
+      },
+      "note": "Merged PR #91; exact current branch head matches the recorded merged PR head. Reobserve exact SHA and open-PR relation before deletion."
+    },
+    {
+      "branch": "docs-cp-ux-04-closeout",
+      "sha": "50169e888f78f9b740e0439a558c7f8e33beb1db",
+      "reason": "merged-pull-request-head",
+      "allowDelete": true,
+      "evidence": {
+        "pullRequest": 88,
+        "mergedMainSha": "1937fdd85a15e9d796cdccaabe2ecc6b0ed7829f"
+      },
+      "note": "Merged PR #88; exact current branch head matches the recorded merged PR head. Reobserve exact SHA and open-PR relation before deletion."
+    },
+    {
+      "branch": "docs-cp-ux-05a0-merged",
+      "sha": "63df33b3579ea878f449314ac0ba22ff70215d0a",
+      "reason": "merged-pull-request-head",
+      "allowDelete": true,
+      "evidence": {
+        "pullRequest": 100,
+        "mergedMainSha": "9f486c3e29b6b0a2fd7f9fe3f32862dba5edff90"
+      },
+      "note": "Merged PR #100; exact current branch head matches the recorded merged PR head. Reobserve exact SHA and open-PR relation before deletion."
+    },
+    {
+      "branch": "docs/cp-public-04-release-handoff-20261008",
+      "sha": "e317d57e39a4c88e9535f09d475738f1f6f429c7",
+      "reason": "merged-pull-request-head",
+      "allowDelete": true,
+      "evidence": {
+        "pullRequest": 189,
+        "mergedMainSha": "204fd7d2f29267cfb0166bcfa0c1a2baef07b9c3"
+      },
+      "note": "Merged PR #189; exact current branch head matches the recorded merged PR head. Reobserve exact SHA and open-PR relation before deletion."
+    },
+    {
+      "branch": "docs/cp-public-live-resume-after-189-20261008",
+      "sha": "d33b2cc32bd817f4566ed499ab54e2957542b8a5",
+      "reason": "merged-pull-request-head",
+      "allowDelete": true,
+      "evidence": {
+        "pullRequest": 190,
+        "mergedMainSha": "74e22ad4ed96e3090813aea0cf4c45daa80282ae"
+      },
+      "note": "Merged PR #190; exact current branch head matches the recorded merged PR head. Reobserve exact SHA and open-PR relation before deletion."
+    },
+    {
+      "branch": "docs/cp-sd-02a2c0-lighting-discovery",
+      "sha": "a07c68dc0cd1a49669c5422bfaadf3b7bd3789f5",
+      "reason": "merged-pull-request-head",
+      "allowDelete": true,
+      "evidence": {
+        "pullRequest": 113,
+        "mergedMainSha": "33a9be289735f9aaf28994316860a4fcc4966c1c"
+      },
+      "note": "Merged PR #113; exact current branch head matches the recorded merged PR head. Reobserve exact SHA and open-PR relation before deletion."
+    },
+    {
+      "branch": "docs/cp-ux-02-merged",
+      "sha": "38ab084d3b85a5fa40dae015938b16529ff52785",
+      "reason": "merged-pull-request-head",
+      "allowDelete": true,
+      "evidence": {
+        "pullRequest": 84,
+        "mergedMainSha": "87615cde47c0032f8823359f018496993ccd8a96"
+      },
+      "note": "Merged PR #84; exact current branch head matches the recorded merged PR head. Reobserve exact SHA and open-PR relation before deletion."
+    },
+    {
+      "branch": "docs/cp-ux-04-2-closeout",
+      "sha": "c8d3dba3a834446e0b0981963aea8aa47869ff2a",
+      "reason": "merged-pull-request-head",
+      "allowDelete": true,
+      "evidence": {
+        "pullRequest": 94,
+        "mergedMainSha": "76f73c5e3652b19e1c5d13d6441683e56dec812e"
+      },
+      "note": "Merged PR #94; exact current branch head matches the recorded merged PR head. Reobserve exact SHA and open-PR relation before deletion."
+    },
+    {
+      "branch": "docs/cp-ux-04-4-closeout",
+      "sha": "2fb23aaab55983f805d4664fddeb7e0209718cd7",
+      "reason": "merged-pull-request-head",
+      "allowDelete": true,
+      "evidence": {
+        "pullRequest": 98,
+        "mergedMainSha": "f641e83cbb06c2be5b2062fffd2f241055b6b17b"
+      },
+      "note": "Merged PR #98; exact current branch head matches the recorded merged PR head. Reobserve exact SHA and open-PR relation before deletion."
+    },
+    {
+      "branch": "docs/cp-ux-05a0-cache-closeout",
+      "sha": "c8f47860301a2473fff36ab97004c0f87b24d433",
+      "reason": "merged-pull-request-head",
+      "allowDelete": true,
+      "evidence": {
+        "pullRequest": 137,
+        "mergedMainSha": "3597c4952c3fd76645a54cdac91019bbe5f55394"
+      },
+      "note": "Merged PR #137; exact current branch head matches the recorded merged PR head. Reobserve exact SHA and open-PR relation before deletion."
+    },
+    {
+      "branch": "docs/cp-ux-05a0-hotfix-closeout",
+      "sha": "b38baa0f1a5c2590d1bb681f1722b8a5223a072c",
+      "reason": "merged-pull-request-head",
+      "allowDelete": true,
+      "evidence": {
+        "pullRequest": 102,
+        "mergedMainSha": "191b4953dac54290694f35faf27855de39330297"
+      },
+      "note": "Merged PR #102; exact current branch head matches the recorded merged PR head. Reobserve exact SHA and open-PR relation before deletion."
+    },
+    {
+      "branch": "docs/current-state-pointer",
+      "sha": "739bf62c2812ebbe6d27c0980bdc6ec20a1b5c4e",
+      "reason": "merged-documentation-head",
+      "allowDelete": true,
+      "evidence": {
+        "pullRequest": 78,
+        "mergedMainSha": "f5739f1eaf787e0842d776320fb3dd0f5d4cc0b0"
+      },
+      "note": "Stable CURRENT_STATE.md pointer is merged to main; branch head was reobserved exactly via PR metadata before disposition."
+    },
     {
       "branch": "docs/fix-housekeeping-checkpoint-reference",
       "sha": "85e1f45d1ae34ec764e04f23d738be0eaa3c4809",
@@ -28,15 +194,422 @@
       "note": "Canonical checkpoint document is already present on main and subsequently corrected by PR #77. Branch head was reobserved exactly before disposition."
     },
     {
-      "branch": "docs/current-state-pointer",
-      "sha": "739bf62c2812ebbe6d27c0980bdc6ec20a1b5c4e",
-      "reason": "merged-documentation-head",
+      "branch": "docs/schema-driven-ui-consolidation-plan",
+      "sha": "47be3f9bc46fc3f2d4ce099672c2dae0018d3805",
+      "reason": "merged-pull-request-head",
       "allowDelete": true,
       "evidence": {
-        "pullRequest": 78,
-        "mergedMainSha": "f5739f1eaf787e0842d776320fb3dd0f5d4cc0b0"
+        "pullRequest": 103,
+        "mergedMainSha": "d3e911a4e5a43870438e9648603cc2314645b40e"
       },
-      "note": "Stable CURRENT_STATE.md pointer is merged to main; branch head was reobserved exactly via PR metadata before disposition."
+      "note": "Merged PR #103; exact current branch head matches the recorded merged PR head. Reobserve exact SHA and open-PR relation before deletion."
+    },
+    {
+      "branch": "docs/ux-cp00-closeout",
+      "sha": "8eb28427d7dc63da615a499f5282e3a4e704c752",
+      "reason": "merged-pull-request-head",
+      "allowDelete": true,
+      "evidence": {
+        "pullRequest": 80,
+        "mergedMainSha": "370d59dfeea8287706cf4f6be3adc112f791c4fd"
+      },
+      "note": "Merged PR #80; exact current branch head matches the recorded merged PR head. Reobserve exact SHA and open-PR relation before deletion."
+    },
+    {
+      "branch": "docs/ux-navigation-hierarchy-roadmap",
+      "sha": "6fddde0915f1981aa847278752a65df34c01713d",
+      "reason": "merged-pull-request-head",
+      "allowDelete": true,
+      "evidence": {
+        "pullRequest": 79,
+        "mergedMainSha": "7e728d0f15e445fbb8a1625e2757ad40495fc97d"
+      },
+      "note": "Merged PR #79; exact current branch head matches the recorded merged PR head. Reobserve exact SHA and open-PR relation before deletion."
+    },
+    {
+      "branch": "feat/cp-sd-01-contract-authority",
+      "sha": "38e503b73ad302c2af7d63deb6e8337b3260c209",
+      "reason": "merged-pull-request-head",
+      "allowDelete": true,
+      "evidence": {
+        "pullRequest": 104,
+        "mergedMainSha": "460869cfb12bf31e95fa09d915446c2f75c47c19"
+      },
+      "note": "Merged PR #104; exact current branch head matches the recorded merged PR head. Reobserve exact SHA and open-PR relation before deletion."
+    },
+    {
+      "branch": "feat/cp-sd-01b-executable-presentation",
+      "sha": "d66d51602ef86d094238894cfd233c8bc06ac671",
+      "reason": "merged-pull-request-head",
+      "allowDelete": true,
+      "evidence": {
+        "pullRequest": 105,
+        "mergedMainSha": "998b470364816112cc9003ff198104ee37544227"
+      },
+      "note": "Merged PR #105; exact current branch head matches the recorded merged PR head. Reobserve exact SHA and open-PR relation before deletion."
+    },
+    {
+      "branch": "feat/cp-sd-01c1-topology-contract",
+      "sha": "d041af76bdca593324b48261ec52bb7b4bda5877",
+      "reason": "merged-pull-request-head",
+      "allowDelete": true,
+      "evidence": {
+        "pullRequest": 106,
+        "mergedMainSha": "4e657f2e3a1761e93dd3195743109b5d08db0907"
+      },
+      "note": "Merged PR #106; exact current branch head matches the recorded merged PR head. Reobserve exact SHA and open-PR relation before deletion."
+    },
+    {
+      "branch": "feat/cp-sd-01c2-material-semantics",
+      "sha": "d5aa27c6681d6ec954ff9421ffd0163342016602",
+      "reason": "merged-pull-request-head",
+      "allowDelete": true,
+      "evidence": {
+        "pullRequest": 107,
+        "mergedMainSha": "c9df1a6fd8094cf9893b89f9e5b46c7134de1eab"
+      },
+      "note": "Merged PR #107; exact current branch head matches the recorded merged PR head. Reobserve exact SHA and open-PR relation before deletion."
+    },
+    {
+      "branch": "feat/cp-sd-01c3-v5-candidate",
+      "sha": "83a0cb961b366088e664cfaf169bf58f4808558f",
+      "reason": "merged-pull-request-head",
+      "allowDelete": true,
+      "evidence": {
+        "pullRequest": 108,
+        "mergedMainSha": "c33acb2be8a3160539873681c4bfeb02c2322bae"
+      },
+      "note": "Merged PR #108; exact current branch head matches the recorded merged PR head. Reobserve exact SHA and open-PR relation before deletion."
+    },
+    {
+      "branch": "feat/cp-sd-02a0-semantic-renderer-inventory",
+      "sha": "ce83d6b087558b7cb2696c2853438599a7e9c6df",
+      "reason": "merged-pull-request-head",
+      "allowDelete": true,
+      "evidence": {
+        "pullRequest": 109,
+        "mergedMainSha": "47693dc7bc1da444eb5ff51538153dc12f9a8391"
+      },
+      "note": "Merged PR #109; exact current branch head matches the recorded merged PR head. Reobserve exact SHA and open-PR relation before deletion."
+    },
+    {
+      "branch": "feat/cp-sd-02a1-stage-navigation-authority",
+      "sha": "f89b6253210d3cbeca4e1eb96b31a1146ae649e7",
+      "reason": "merged-pull-request-head",
+      "allowDelete": true,
+      "evidence": {
+        "pullRequest": 110,
+        "mergedMainSha": "48f246c90bc30a9ae2f7ca1c01c1f76fcfa13668"
+      },
+      "note": "Merged PR #110; exact current branch head matches the recorded merged PR head. Reobserve exact SHA and open-PR relation before deletion."
+    },
+    {
+      "branch": "feat/cp-sd-02a2a-services-group-shell",
+      "sha": "3ab0998506abe5ab55326e54e8fe673fb9c715b7",
+      "reason": "merged-pull-request-head",
+      "allowDelete": true,
+      "evidence": {
+        "pullRequest": 111,
+        "mergedMainSha": "3e6f66437677711ec934aa962b404524242392d6"
+      },
+      "note": "Merged PR #111; exact current branch head matches the recorded merged PR head. Reobserve exact SHA and open-PR relation before deletion."
+    },
+    {
+      "branch": "feat/cp-sd-02a2b-additional-services-section-shell",
+      "sha": "25885219566b9cf2e41447d3159936b4417ce336",
+      "reason": "merged-pull-request-head",
+      "allowDelete": true,
+      "evidence": {
+        "pullRequest": 112,
+        "mergedMainSha": "317baa57f05cd9210fc95999fd968b8a4075b3d5"
+      },
+      "note": "Merged PR #112; exact current branch head matches the recorded merged PR head. Reobserve exact SHA and open-PR relation before deletion."
+    },
+    {
+      "branch": "feat/cp-sd-02a2c1-lighting-shell",
+      "sha": "b4142e9722c75e7eb56be20ac180f08dd110c1cc",
+      "reason": "merged-pull-request-head",
+      "allowDelete": true,
+      "evidence": {
+        "pullRequest": 121,
+        "mergedMainSha": "13cc1e16e81243a34360110561904fd48562b191"
+      },
+      "note": "Merged PR #121; exact current branch head matches the recorded merged PR head. Reobserve exact SHA and open-PR relation before deletion."
+    },
+    {
+      "branch": "feat/cp-sd-02a2e0-summary-discovery",
+      "sha": "7b04dca723182fdc2e9fda1e7dbc48ad152053fa",
+      "reason": "merged-pull-request-head",
+      "allowDelete": true,
+      "evidence": {
+        "pullRequest": 122,
+        "mergedMainSha": "e966ec6a60ae3dd533fc9e0fb7c48bb053a289fb"
+      },
+      "note": "Merged PR #122; exact current branch head matches the recorded merged PR head. Reobserve exact SHA and open-PR relation before deletion."
+    },
+    {
+      "branch": "feat/cp-sd-02a2e1-summary-shell",
+      "sha": "5a7285a225408a223c9ae3f81cb6e3c61354ad81",
+      "reason": "merged-pull-request-head",
+      "allowDelete": true,
+      "evidence": {
+        "pullRequest": 123,
+        "mergedMainSha": "faa52a0d115409de36ac07f96b74b9bc93683d06"
+      },
+      "note": "Merged PR #123; exact current branch head matches the recorded merged PR head. Reobserve exact SHA and open-PR relation before deletion."
+    },
+    {
+      "branch": "feat/cp-sd-02a2f0-finishes-group-discovery",
+      "sha": "90bc7143ca45cc329a9240636a4173c5420121e4",
+      "reason": "merged-pull-request-head",
+      "allowDelete": true,
+      "evidence": {
+        "pullRequest": 124,
+        "mergedMainSha": "c079e7699aa3563c1d19dec0b08241922f167700"
+      },
+      "note": "Merged PR #124; exact current branch head matches the recorded merged PR head. Reobserve exact SHA and open-PR relation before deletion."
+    },
+    {
+      "branch": "feat/cp-sd-02a2f1-cabinet-group-shell",
+      "sha": "77ec8b2c0a23204018c794a189001837d3943235",
+      "reason": "merged-pull-request-head",
+      "allowDelete": true,
+      "evidence": {
+        "pullRequest": 125,
+        "mergedMainSha": "3d576eaa91e6336177c29ada6d53a9983d38bbf7"
+      },
+      "note": "Merged PR #125; exact current branch head matches the recorded merged PR head. Reobserve exact SHA and open-PR relation before deletion."
+    },
+    {
+      "branch": "feat/cp-sd-02a2f2-stone-group-shell",
+      "sha": "22fe846b0f054b2574a31a148be2ec101bf422b9",
+      "reason": "merged-pull-request-head",
+      "allowDelete": true,
+      "evidence": {
+        "pullRequest": 126,
+        "mergedMainSha": "0036c70d1ab14ad13cadd627dcc3eb8158d81eaa"
+      },
+      "note": "Merged PR #126; exact current branch head matches the recorded merged PR head. Reobserve exact SHA and open-PR relation before deletion."
+    },
+    {
+      "branch": "feat/cp-sd-02a2g0-services-item-discovery",
+      "sha": "96549515d435c496bf552ab6c3d325d40b5fc73c",
+      "reason": "merged-pull-request-head",
+      "allowDelete": true,
+      "evidence": {
+        "pullRequest": 127,
+        "mergedMainSha": "3a90c3aa0b678405f6d060b3ba4828d847dc8e24"
+      },
+      "note": "Merged PR #127; exact current branch head matches the recorded merged PR head. Reobserve exact SHA and open-PR relation before deletion."
+    },
+    {
+      "branch": "feat/cp-sd-02a2g1-services-section-membership",
+      "sha": "43d31db1bada29908a8b49f006cbf26af6586c52",
+      "reason": "merged-pull-request-head",
+      "allowDelete": true,
+      "evidence": {
+        "pullRequest": 128,
+        "mergedMainSha": "27bdc6b3926d34ac56f7283682ca64838c3fceac"
+      },
+      "note": "Merged PR #128; exact current branch head matches the recorded merged PR head. Reobserve exact SHA and open-PR relation before deletion."
+    },
+    {
+      "branch": "feat/cp-sd-02a2h0-stage-dispatch-discovery",
+      "sha": "e5cc31f34390446d1a1128bc7214301ef361bc66",
+      "reason": "merged-pull-request-head",
+      "allowDelete": true,
+      "evidence": {
+        "pullRequest": 129,
+        "mergedMainSha": "42e5c41496d3c6e4f47e28e17148d2b954c38844"
+      },
+      "note": "Merged PR #129; exact current branch head matches the recorded merged PR head. Reobserve exact SHA and open-PR relation before deletion."
+    },
+    {
+      "branch": "feat/cp-sd-02a2h1",
+      "sha": "111ea1efd6c4055b07728c0252f3c6bc7ef01119",
+      "reason": "merged-pull-request-head",
+      "allowDelete": true,
+      "evidence": {
+        "pullRequest": 130,
+        "mergedMainSha": "8dc7c2d5485f8e8ab03a030ac95b72ecfb2dd961"
+      },
+      "note": "Merged PR #130; exact current branch head matches the recorded merged PR head. Reobserve exact SHA and open-PR relation before deletion."
+    },
+    {
+      "branch": "feat/cp-sd-03a0-responsive-discovery",
+      "sha": "965a54ed273ddf8251e475addc59bf84d8e37f45",
+      "reason": "merged-pull-request-head",
+      "allowDelete": true,
+      "evidence": {
+        "pullRequest": 131,
+        "mergedMainSha": "28ae642f0994b3d05407ee36efbf162f056996a0"
+      },
+      "note": "Merged PR #131; exact current branch head matches the recorded merged PR head. Reobserve exact SHA and open-PR relation before deletion."
+    },
+    {
+      "branch": "feat/cp-sd-03a1-executable-modules-view",
+      "sha": "299208826c1e1e184176aa4065b78e4417b079a3",
+      "reason": "merged-pull-request-head",
+      "allowDelete": true,
+      "evidence": {
+        "pullRequest": 132,
+        "mergedMainSha": "99eb3ad96c453f471c693aa5f26f17b966a96e83"
+      },
+      "note": "Merged PR #132; exact current branch head matches the recorded merged PR head. Reobserve exact SHA and open-PR relation before deletion."
+    },
+    {
+      "branch": "feat/cp-sd-03a2-profile-driven-topology",
+      "sha": "9f2a5edcf5bca7a32c59d691973187d1c3982bcb",
+      "reason": "merged-pull-request-head",
+      "allowDelete": true,
+      "evidence": {
+        "pullRequest": 133,
+        "mergedMainSha": "c4921816c9afd13b89bcb37b96a70ef7fe4a54b7"
+      },
+      "note": "Merged PR #133; exact current branch head matches the recorded merged PR head. Reobserve exact SHA and open-PR relation before deletion."
+    },
+    {
+      "branch": "feat/cp-sd-03a3-modules-projection-discovery",
+      "sha": "1e7f9d2e6b1dd11a9a3fe0a0f19b98ac1c263e20",
+      "reason": "merged-pull-request-head",
+      "allowDelete": true,
+      "evidence": {
+        "pullRequest": 134,
+        "mergedMainSha": "cc510a43a97e6e2270dead893efa377eb3005b59"
+      },
+      "note": "Merged PR #134; exact current branch head matches the recorded merged PR head. Reobserve exact SHA and open-PR relation before deletion."
+    },
+    {
+      "branch": "feat/cp-ux-01-navigation-friction",
+      "sha": "ede50780b3f48ea62fd078a34a9610018ccc24b1",
+      "reason": "merged-pull-request-head",
+      "allowDelete": true,
+      "evidence": {
+        "pullRequest": 81,
+        "mergedMainSha": "91973ebc056be58b62440ed48ad6f473bb9f26b9"
+      },
+      "note": "Merged PR #81; exact current branch head matches the recorded merged PR head. Reobserve exact SHA and open-PR relation before deletion."
+    },
+    {
+      "branch": "feat/cp-ux-02-flow-model",
+      "sha": "bcf99e66e66d9394047873a8b68766cb191b3c99",
+      "reason": "merged-pull-request-head",
+      "allowDelete": true,
+      "evidence": {
+        "pullRequest": 83,
+        "mergedMainSha": "f6ffa6bcfb06b12a76170933cb952bce869fd28b"
+      },
+      "note": "Merged PR #83; exact current branch head matches the recorded merged PR head. Reobserve exact SHA and open-PR relation before deletion."
+    },
+    {
+      "branch": "feat/cp-ux-03-hierarchy-editor",
+      "sha": "54736248ce9b16422026addcdcd89aface2ba6ec",
+      "reason": "merged-pull-request-head",
+      "allowDelete": true,
+      "evidence": {
+        "pullRequest": 85,
+        "mergedMainSha": "d02867fa4db940f40e208183e756a146ef5f73b3"
+      },
+      "note": "Merged PR #85; exact current branch head matches the recorded merged PR head. Reobserve exact SHA and open-PR relation before deletion."
+    },
+    {
+      "branch": "feat/cp-ux-05a0-persist-handles",
+      "sha": "cc605bef346f92e060cf8f12cfc656acb7cea2ad",
+      "reason": "merged-pull-request-head",
+      "allowDelete": true,
+      "evidence": {
+        "pullRequest": 99,
+        "mergedMainSha": "cca8b6f2a51033cfc8830243511be58617fc24b9"
+      },
+      "note": "Merged PR #99; exact current branch head matches the recorded merged PR head. Reobserve exact SHA and open-PR relation before deletion."
+    },
+    {
+      "branch": "fix/admin-bundle-cache-bust",
+      "sha": "dd22365bc2445486a6d8a232336fbf08223b478d",
+      "reason": "merged-pull-request-head",
+      "allowDelete": true,
+      "evidence": {
+        "pullRequest": 136,
+        "mergedMainSha": "9acdf7e15ab1b6af941a839885ff5c1c39d345e8"
+      },
+      "note": "Merged PR #136; exact current branch head matches the recorded merged PR head. Reobserve exact SHA and open-PR relation before deletion."
+    },
+    {
+      "branch": "fix/cp-ux-04-1-buyer-review",
+      "sha": "490ebda8ab56fa7c31411f1b5a6761a114d37cce",
+      "reason": "merged-pull-request-head",
+      "allowDelete": true,
+      "evidence": {
+        "pullRequest": 90,
+        "mergedMainSha": "a7294f8dd4f8209de1e39ccdcdc0902cb84beab0"
+      },
+      "note": "Merged PR #90; exact current branch head matches the recorded merged PR head. Reobserve exact SHA and open-PR relation before deletion."
+    },
+    {
+      "branch": "fix/cp-ux-04-2-hierarchy-authority",
+      "sha": "6c4b9e4308315a7039846306f4ebd0f863f60dd3",
+      "reason": "merged-pull-request-head",
+      "allowDelete": true,
+      "evidence": {
+        "pullRequest": 92,
+        "mergedMainSha": "006128343e09388676640d0ac33970ae928c6e8d"
+      },
+      "note": "Merged PR #92; exact current branch head matches the recorded merged PR head. Reobserve exact SHA and open-PR relation before deletion."
+    },
+    {
+      "branch": "fix/cp-ux-04-4-pane-scroll",
+      "sha": "97e7f6b4f035df44953c1a91a37a933b65afff79",
+      "reason": "merged-pull-request-head",
+      "allowDelete": true,
+      "evidence": {
+        "pullRequest": 97,
+        "mergedMainSha": "6985100edc0012b87f9a01a627a415b39454a699"
+      },
+      "note": "Merged PR #97; exact current branch head matches the recorded merged PR head. Reobserve exact SHA and open-PR relation before deletion."
+    },
+    {
+      "branch": "fix/cp-ux-04-postmerge",
+      "sha": "b1d8b70d5ac478c494bd420133108e6855921c93",
+      "reason": "merged-pull-request-head",
+      "allowDelete": true,
+      "evidence": {
+        "pullRequest": 95,
+        "mergedMainSha": "cbf41d29e636fa1a80bc13c1d457837cb737c57b"
+      },
+      "note": "Merged PR #95; exact current branch head matches the recorded merged PR head. Reobserve exact SHA and open-PR relation before deletion."
+    },
+    {
+      "branch": "fix/handles-persistence-local-draft",
+      "sha": "0d1c6714b31eabd2323d852be7f57895b72a8dbe",
+      "reason": "merged-pull-request-head",
+      "allowDelete": true,
+      "evidence": {
+        "pullRequest": 101,
+        "mergedMainSha": "0ac66c2111d52800f8f9aa9228629433ced81add"
+      },
+      "note": "Merged PR #101; exact current branch head matches the recorded merged PR head. Reobserve exact SHA and open-PR relation before deletion."
+    },
+    {
+      "branch": "work/cp-public-04a-public-routing-before-clerk-20261008",
+      "sha": "f9ca6b7e1f61c7c165e456a1c7acba0dacce4201",
+      "reason": "merged-pull-request-head",
+      "allowDelete": true,
+      "evidence": {
+        "pullRequest": 187,
+        "mergedMainSha": "74ce1733cca222e41e61a0e6c1ae643d1d297203"
+      },
+      "note": "Merged PR #187; exact current branch head matches the recorded merged PR head. Reobserve exact SHA and open-PR relation before deletion."
+    },
+    {
+      "branch": "work/cp-public-04b-post-merge-readonly-gates-20261008",
+      "sha": "5de9316d813fa985dba860d48b665466125f35df",
+      "reason": "merged-pull-request-head",
+      "allowDelete": true,
+      "evidence": {
+        "pullRequest": 188,
+        "mergedMainSha": "afec414b956128887544b60cbe4d5e952779bb0f"
+      },
+      "note": "Merged PR #188; exact current branch head matches the recorded merged PR head. Reobserve exact SHA and open-PR relation before deletion."
     }
   ]
 }
