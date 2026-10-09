@@ -14,7 +14,6 @@
   const layoutProfiles = global.CasaModulesLayoutProfiles;
   const presentationCore = global.CasaModulesPresentation;
   let presentationPolicy = global.CASA_EM_MODULOS_PRESENTATION_POLICY;
-  const administrationV5 = global.CasaModulesAdministrationV5;
   const buyerProjection = global.CasaModulesAuthorizedBuyerConfiguration;
   const flowLayout = global.CasaModulesFlowLayout;
   const hierarchyDefaults = global.CASA_EM_MODULOS_HIERARCHY_DEFAULTS;
@@ -42,7 +41,7 @@
       : 0;
   }
 
-  if (!scene || !inlineMasks || !core || !visibility || !validation || !fingerprint || !finishes || !catalog || !priceBook || !pricingContract || !pricing || !configurationCore || !flowCore || !layoutProfiles || !presentationCore || !presentationPolicy || !flowLayout || !hierarchyDefaults || !configuratorSettings || !administrationV5 || !buyerProjection) {
+  if (!scene || !inlineMasks || !core || !visibility || !validation || !fingerprint || !finishes || !catalog || !priceBook || !pricingContract || !pricing || !configurationCore || !flowCore || !layoutProfiles || !presentationCore || !presentationPolicy || !flowLayout || !hierarchyDefaults || !configuratorSettings || !buyerProjection) {
     throw new Error("Não foi possível carregar os dados da cena 2D.");
   }
   validation.assertValidScene(scene);
