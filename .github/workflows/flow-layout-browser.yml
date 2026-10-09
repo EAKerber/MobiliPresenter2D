@@ -52,9 +52,9 @@ jobs:
           if [ -n "${{ inputs.target_url }}" ]; then
             target="${{ inputs.target_url }}"
           elif [ "${{ github.event_name }}" = "pull_request" ]; then
-            target="https://deploy-preview-${{ github.event.pull_request.number }}--mobilipresenter2d.netlify.app/"
+            target="https://deploy-preview-${{ github.event.pull_request.number }}--mobilipresenter2d.netlify.app/config/"
           else
-            target="https://mobilipresenter2d.netlify.app/"
+            target="https://mobilipresenter2d.netlify.app/config/"
           fi
           echo "FLOW_LAYOUT_URL=$target" >> "$GITHUB_ENV"
           echo "Browser target: $target"
