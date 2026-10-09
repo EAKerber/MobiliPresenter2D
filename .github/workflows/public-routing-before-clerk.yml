@@ -1,0 +1,100 @@
+name: Public routing before Clerk
+
+on:
+  pull_request:
+    paths:
+      - 'app/index.html'
+      - 'app/config/**'
+      - 'app/landing/**'
+      - 'app/viewer/**'
+      - 'app/core/public-module-projection.js'
+      - 'app/core/scene-component.js'
+      - 'netlify/functions/public-modules.mjs'
+      - 'netlify.toml'
+      - 'tests/public-*.cjs'
+      - 'app/tools/test-public-modules-endpoint.js'
+      - '.github/workflows/public-routing-before-clerk.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'app/index.html'
+      - 'app/config/**'
+      - 'app/landing/**'
+      - 'app/viewer/**'
+      - 'netlify/functions/public-modules.mjs'
+      - '.github/workflows/public-routing-before-clerk.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  static-and-contract:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Root/config routing invariants
+        run: node tests/public-cutover-contract.cjs
+      - name: Public allowlist / no leak tests
+        run: |
+          node --test tests/public-module-projection.test.cjs
+          node app/tools/test-public-modules-endpoint.js
+          node --test app/viewer/scene-adapters.test.mjs
+
+  browser:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Set preview
+        env:
+          PR_ID: ${{ github.event.pull_request.number }}
+        shell: bash
+        run: |
+          echo "PUBLIC_PAGES_URL=https://deploy-preview-${PR_ID}--mobilipresenter2d.netlify.app" >> "$GITHUB_ENV"
+      - name: Wait for complete Netlify HTML cutover
+        shell: bash
+        run: |
+          set -euo pipefail
+          for i in $(seq 1 90); do
+            root=$(curl -L -sS --max-time 6 "$PUBLIC_PAGES_URL/" || true)
+            config=$(curl -L -sS --max-time 6 "$PUBLIC_PAGES_URL/config/" || true)
+            if [[ "$root" == *'id="environmentTrack"'* && "$config" == *'class="workspace"'* ]]; then
+              echo "Netlify preview root and config ready"
+              break
+            fi
+            sleep 3
+          done
+          [[ "$root" == *'id="environmentTrack"'* && "$config" == *'class="workspace"'* ]]
+      - name: Public function negative endpoints (preview has no v5 seed)
+        shell: bash
+        run: |
+          set -euo pipefail
+          status=$(curl -sS -o /tmp/public-unavailable -w '%{http_code}' "$PUBLIC_PAGES_URL/api/public-modules")
+          test "$status" = 503
+          grep -q '"public_modules_unavailable"' /tmp/public-unavailable
+          test "$(curl -sS -o /dev/null -w '%{http_code}' -X PUT "$PUBLIC_PAGES_URL/api/public-modules")" = 405
+          test "$(curl -sS -o /dev/null -w '%{http_code}' "$PUBLIC_PAGES_URL/api/public-modules?inspection=raw")" = 400
+      - name: Install isolated browser
+        shell: bash
+        run: |
+          npm install --prefix /tmp/public-cutover-tools --no-audit --no-fund playwright@1.62.1
+          /tmp/public-cutover-tools/node_modules/.bin/playwright install --with-deps chromium
+      - name: Desktop and mobile landing/viewer/config smoke
+        env:
+          NODE_PATH: /tmp/public-cutover-tools/node_modules
+        run: node tests/public-pages-smoke.cjs /tmp/public-cutover-screens
+      - name: Upload browser screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: public-cutover-${{ github.run_id }}
+          path: /tmp/public-cutover-screens
+          if-no-files-found: ignore

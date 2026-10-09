@@ -1,5 +1,8 @@
 # CP-PUBLIC-00 — Integração Landing + Viewer + Configurador e acesso por link — 2026-10-08
 
+> **Plano de entrega revisado (2026-10-08):** usuário autorizou primeiro a migração visual e de rotas com configurador **temporariamente público**. Nova PR #187 CP-PUBLIC-04a: `/` landing, `/viewer/` vitrine pública e `/config/` configurador atual sem novos guards; `/api/public-modules` publica apenas projeção v5 sem preço. **Clerk depois em release isolado**, quando Identity, autorização, proteção de HTML/assets e DTO comprador puderem ser integrados sem travar landing. Os gates de segurança #182/#184/#185/#186 permanecem como trabalho Draft/HOLD, não são pré-requisitos para o **recorte público explicitamente assumido**, mas são necessários antes de proclamar `/config/` privado. [Detalhes](../architecture/cp-public-04a-public-before-clerk-2026-10-08.md).
+
+
 Status: **PLANO CANÔNICO / DESCOBERTA CONFIRMADA; MIGRAÇÃO DE ROTAS AINDA NÃO ATIVADA.**
 
 **Handoff atual para troca de agente:** `docs/handoffs/public-pages-current-handoff-2026-10-08.md` — consulta ao vivo das PRs #175 (DRAFT + 7/7 CI + Netlify ready), #176 (MERGED) e #34 (DRAFT), arquivos de staging, duplicações e próximo recorte CP-PUBLIC-02a. Não confundir o deploy preview com incorporação do viewer à `main`.

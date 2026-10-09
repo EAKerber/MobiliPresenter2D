@@ -72,7 +72,7 @@ const wrappedPublished = sandbox.CasaModulesConfiguration.normalizeConfiguratorS
 assert.equal(wrappedPublished.stages[0].items.includes("stone-skirting"), true, "the public normalization path self-heals the legacy published shape");
 
 const runtimeContractsSource = fs.readFileSync(path.join(projectRoot, "core/runtime-contracts.js"), "utf8");
-const indexHtml = fs.readFileSync(path.join(projectRoot, "index.html"), "utf8");
+const indexHtml = fs.readFileSync(path.join(projectRoot, "config", "index.html"), "utf8");
 const stylesCss = fs.readFileSync(path.join(projectRoot, "styles.css"), "utf8");
 assert.equal(runtimeContractsSource.includes("repairDefaultStageSettings"), false, "migration shim must not carry obsolete default repair");
 assert.equal(runtimeContractsSource.includes("installSceneStackContracts"), false, "migration shim must not own presentation stacking");
