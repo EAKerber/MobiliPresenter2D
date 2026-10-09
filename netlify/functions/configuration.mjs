@@ -1,5 +1,6 @@
 import { getDeployStore, getStore } from "@netlify/blobs";
 import { getUser } from "@netlify/identity";
+import accessGuard from "../lib/configuration-access.cjs";
 import configCore from "../../app/core/configuration.js";
 import administrationV5 from "../../app/core/administration-v5.js";
 import publishedReader from "../../app/core/published-configuration.js";
@@ -60,6 +61,17 @@ export default async (request, context) => {
     }
   }
 
+  // Authorization precedes store selection/read on both URL aliases.
+  // Customers cannot consume the raw administrative document: CP-PUBLIC-03a2
+  // will provide a verified-session transport and a restricted buyer projection.
+  // No customer session verifier is connected here, so all non-admin reads
+  // fail closed rather than trust cookies/roles supplied in HTTP headers.
+  const access = await accessGuard.authorize(request, { getIdentityUser: getUser });
+  if (!access.ok) return respond({ error: access.error }, access.status);
+  if (request.method === "GET" && access.principal !== "admin") {
+    return respond({ error: "buyer_projection_unavailable" }, 503);
+  }
+
   const store = getConfigurationStore(context);
   if (request.method === "GET") {
     const published = await readPublished(store);
@@ -67,11 +79,6 @@ export default async (request, context) => {
       ? respond({ error: "stored_configuration_invalid", code: published.code }, 422)
       : respond(published.value);
   }
-
-  const user = await getUser();
-  const roles = [...(user?.roles || []), ...(user?.app_metadata?.roles || [])];
-  if (!user) return respond({ error: "unauthorized" }, 401);
-  if (!roles.includes("admin")) return respond({ error: "forbidden" }, 403);
 
   const declaredLength = Number(request.headers.get("content-length") || 0);
   if (declaredLength > 64 * 1024) return respond({ error: "payload_too_large" }, 413);
