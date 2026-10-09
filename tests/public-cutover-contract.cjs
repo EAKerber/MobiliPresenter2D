@@ -14,7 +14,7 @@ assert.match(landing,/<base href="\/landing\/">/);
 assert.match(landing,/href="\/#ambientes"/);
 assert.match(landing,/href="\/viewer\/"/);
 assert.doesNotMatch(landing,/src="app.js|id="sceneLayers"/);
-assert.match(config,/<base href="\/">/);
+assert.match(config, /<base href="\/"\s*\/?>/);
 assert.match(config,/src="app.js\?/);
 assert.match(config,/class="workspace"/);
 assert.doesNotMatch(config,/core\/authorized-bootstrap\.js/);
