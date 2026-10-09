@@ -1,282 +1,58 @@
 <!doctype html>
-<html lang="pt-BR">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <script>
-      if (/(?:^|[&#])(?:invite_token|recovery_token|confirmation_token|email_change_token|access_token)=/.test(window.location.hash)) {
-        window.location.replace(`/admin.html${window.location.hash}`);
-      }
-    </script>
-    <meta
-      name="description"
-      content="Visualizador interativo dos módulos da cozinha Casa em Módulos."
-    />
-    <title>Casa em Módulos — Configurador</title>
-    <script src="core/layout-profiles.js?v=cp-sd-01c1-v1"></script>
-    <script>
-      document.documentElement.dataset.layoutProfile =
-        window.CasaModulesLayoutProfiles.profileForWidth(window.innerWidth);
-    </script>
-    <link rel="stylesheet" href="styles.css?v=runtime-v38" />
-    <style>
-      html:is([data-layout-profile="stacked"], [data-layout-profile="compact"]) body.is-mobile-scene-pinned.is-mobile-scene-transparent .viewer-card {
-        background: transparent;
-        box-shadow: none;
-      }
-      html:is([data-layout-profile="stacked"], [data-layout-profile="compact"]) body.is-mobile-scene-pinned.is-mobile-scene-transparent .viewer {
-        background: transparent;
-        opacity: .58;
-      }
-    </style>
-  </head>
-  <body>
-    <header class="topbar">
-      <div class="topbar__inner">
-        <div class="brand">
-          <span class="brand__mark" aria-hidden="true">▱</span>
-          <div>
-            <h1>Casa em Módulos</h1>
-            <p>Monte sua cozinha por módulos</p>
-          </div>
-        </div>
+<html lang="pt-BR" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <!-- Shared landing files reside under /landing/; canonical public entry is /. -->
+  <base href="/landing/">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#f7f5f2">
+  <meta name="description" content="Móveis modulares pensados para a vida real.">
+  <title>Casa em Módulos</title>
+  <link rel="preload" as="image" href="assets/hero/lifestyle-phone.webp">
+  <link rel="stylesheet" href="../public-theme.css?v=gold-system-r1">
+  <link rel="stylesheet" href="landing.css?v=gold-system-r1">
+</head>
+<body>
+  <div class="intro-splash" id="introSplash" aria-label="Casa em Módulos" role="status"><div class="intro-mark"><img src="assets/logo/casa-em-modulos-logo-transparent.png" alt="Casa em Módulos"><span></span><p class="intro-words" aria-label="Moderno, inteligente, inovador e econômico"><i>moderno</i><i>inteligente</i><i>inovador</i><i>econômico</i></p></div></div>
+  <header class="site-header">
+    <a class="brand" href="/" aria-label="Casa em Módulos, início"><img src="assets/logo/casa-em-modulos-logo-transparent.png" alt="Casa em Módulos"></a>
+    <nav id="primaryNav" aria-label="Navegação principal"><a href="/#ambientes">Ambientes</a><a href="como-funciona/">Como funciona</a><a href="quem-somos/">Quem somos</a></nav>
+    <a class="header-cta" href="https://wa.me/" aria-label="Fale conosco pelo WhatsApp"><span>Fale conosco</span><img src="assets/icons/ui/white/whatsapp.svg" alt="" aria-hidden="true"><span aria-hidden="true">↗</span></a>
+    <button class="menu-toggle" id="menuToggle" type="button" aria-expanded="false" aria-controls="primaryNav" aria-label="Abrir menu"><span></span><span></span><span></span></button>
+  </header>
 
-        <div class="topbar__actions">
-          <button class="button button--secondary" id="restoreButton" type="button" aria-label="Restaurar">
-            <span aria-hidden="true">↺</span>
-            <span class="button__wide-label">Recomeçar</span>
-          </button>
+  <main>
+    <section class="hero" aria-labelledby="heroTitle">
+      <div class="hero-copy">
+        <p class="eyebrow">Casa em Módulos</p>
+        <h1 id="heroTitle">Monte.<br>Escolha.<br><em>Aproveite.</em></h1>
+        <p class="hero-lead">Móveis inteligentes, pensados para o seu espaço e para o seu orçamento.</p>
+        <p class="hero-description">Um novo conceito em mobiliário que une projeto, fabricação e instalação em uma solução simples, prática e acessível.</p>
+        <div class="mini-benefits" id="miniBenefits" aria-label="Vantagens"></div>
+        <a class="button button-dark" href="/#ambientes">Conheça nossos ambientes <span aria-hidden="true">→</span></a>
+      </div>
+      <div class="hero-art"><img src="assets/hero/lifestyle-phone.webp" alt="Ambiente planejado com a interface Casa em Módulos"></div>
+    </section>
+
+    <section class="benefit-strip" aria-label="Vantagens Casa em Módulos"><div id="benefits" class="benefit-grid"></div></section>
+
+    <section class="environments-section" id="ambientes" aria-labelledby="environmentsTitle">
+      <div class="section-heading"><p class="eyebrow">Você escolhe o que precisa</p><h2 id="environmentsTitle">A gente já sabe como fazer.</h2></div>
+      <div class="environment-browser" id="environmentBrowser">
+        <div class="environment-window" id="environmentWindow"><div class="environment-track" id="environmentTrack"></div></div>
+        <div class="carousel-controls" id="carouselControls" hidden>
+          <button type="button" id="previousPage" aria-label="Ambientes anteriores">←</button><div class="pagination" id="pagination" aria-label="Página do carrossel"></div><button type="button" id="nextPage" aria-label="Próximos ambientes">→</button>
         </div>
       </div>
-    </header>
+      <article class="environment-feature" id="environmentFeature" hidden aria-live="polite">
+        <div class="feature-art"><img id="featureImage" alt=""></div>
+        <div class="feature-copy"><p class="eyebrow">Seu ambiente, do seu jeito</p><h3 id="featureTitle"></h3><p id="featureDescription"></p><a class="button button-copper" id="featureAction" href="/viewer/">Explorar a cozinha <span aria-hidden="true">→</span></a></div>
+      </article>
+    </section>
 
-    <main class="workspace">
-      <div class="viewer-anchor" id="viewerAnchor">
-      <section class="viewer-card" id="viewerCard" aria-label="Visualização da cozinha">
-        <div class="viewer-pip-controls" aria-label="Controles da mini-cena">
-          <button class="viewer-pip-control" id="mobileScenePin" type="button" aria-pressed="true" aria-label="Liberar cena" title="Liberar cena">⌖</button>
-          <button class="viewer-pip-control" id="mobileSceneTransparency" type="button" aria-pressed="false" aria-label="Alternar transparência" title="Alternar transparência">◐</button>
-          <button class="viewer-pip-control" id="mobileSceneResize" type="button" aria-label="Alterar tamanho da mini-cena" title="Alterar tamanho">⤢</button>
-        </div>
-        <span id="mobileSceneResizeHandle" class="viewer-pip-resize-handle" aria-hidden="true"></span>
-        <div class="viewer" id="viewer">
-          <img
-            id="sceneBase"
-            class="scene-layer"
-            src="assets/kitchen/base.png"
-            alt="Cenário da cozinha sem os módulos"
-            draggable="false"
-          />
-          <div id="sceneLayers"></div>
-
-          <canvas id="stoneCanvas" class="scene-layer stone-color-layer" width="1536" height="1024" aria-hidden="true"></canvas>
-          <canvas id="plinthCanvas" class="scene-layer stone-color-layer" width="1536" height="1024" aria-hidden="true"></canvas>
-          <div id="sceneHotspots" class="scene-hotspots" aria-label="Módulos selecionáveis na cena"></div>
-          <div class="alignment-grid" id="alignmentGrid" aria-hidden="true"></div>
-          <div class="selection-frame" id="selectionFrame" aria-hidden="true"></div>
-        </div>
-
-        <footer class="viewer-card__footer">
-          <p class="layer-status" aria-live="polite">
-            <span class="layer-status__indicator" aria-hidden="true"></span>
-            <strong id="visibleCount">8</strong> de <span id="totalCount">8</span> itens incluídos
-          </p>
-          <p id="viewerHint">Selecione um módulo na cena para abrir sua ficha.</p>
-        </footer>
-      </section>
-      <div class="viewer-pin-sentinel" id="viewerPinSentinel" aria-hidden="true"></div>
-      </div>
-
-      <aside class="controls">
-        <nav class="flow-nav" aria-label="Etapas da configuração">
-          <button class="flow-nav__scene-pin" id="mobileSceneRepin" type="button" hidden aria-label="Fixar cena durante a configuração">⌖ Fixar cena</button>
-        </nav>
-
-        <section class="panel" id="modulesPanel" aria-labelledby="modulesHeading">
-          <header class="panel__header">
-            <div>
-              <h2 id="modulesHeading" tabindex="-1">Módulos</h2>
-              <p>Inclua apenas o que faz sentido para o seu ambiente.</p>
-            </div>
-          </header>
-
-          <div class="module-stage-panes" data-stage-view-layout="modules">
-            <section class="module-stage-pane module-stage-pane--detail" data-stage-pane="detail" data-stage-view-id="modules-detail" data-render-component="detail-panel" aria-label="Detalhes do módulo selecionado">
-              <div class="module-detail-placeholder" id="moduleDetailPlaceholder">
-                <strong>Detalhes do módulo</strong>
-                <p>Selecione um módulo na cena ou na lista para consultar medidas, componentes e acabamentos.</p>
-              </div>
-              <section id="moduleDetail" class="module-detail" aria-label="Detalhes do módulo"></section>
-            </section>
-            <section class="module-stage-pane module-stage-pane--list" data-stage-pane="list" data-stage-view-id="modules-list" data-render-component="selection-list" aria-label="Lista de módulos">
-              <div class="module-list" id="moduleList"></div>
-            </section>
-          </div>
-        </section>
-
-        <section class="flow-stage-layout" id="finishesStagePanel" aria-label="Acabamentos" hidden>
-          <div class="flow-group-grid" data-flow-group-grid>
-          <section class="panel flow-group-shell" id="frontFinishPanel" data-flow-group-slot="cabinet-finishes" aria-labelledby="frontFinishHeading" hidden>
-            <header class="finish-heading">
-              <span aria-hidden="true">◐</span>
-              <div>
-                <h2 id="frontFinishHeading" tabindex="-1" data-flow-group-label></h2>
-                <p>Uma cor e um puxador para a composição. A caixaria permanece clara.</p>
-              </div>
-            </header>
-  
-            <div class="finish-controls">
-              <div data-flow-section-slot data-flow-section-class="config-section finish-section" data-flow-slot-item="fronts-all" data-render-component="choice-swatches" hidden>
-                <div class="flow-item-stack" data-configurable-item="fronts-all" data-flow-item-id="fronts-all">
-                  <div class="swatches" id="finishSwatches"></div>
-                  <p class="finish-help" id="selectedFinishDescription"></p>
-                </div>
-              </div>
-  
-              <div data-flow-section-slot data-flow-section-class="config-section finish-section" data-flow-slot-item="handles-all" data-render-component="choice-grid" hidden>
-                <div class="handle-fieldset" data-configurable-item="handles-all" data-flow-item-id="handles-all">
-                  <p class="finish-help" id="handleHelp">Escolha global; o valor é rateado somente nas frentes aplicáveis de cada módulo.</p>
-                  <div class="handle-options" id="handleOptions"></div>
-                </div>
-              </div>
-            </div>
-          </section>
-          <section class="panel flow-group-shell" id="stonePanel" data-flow-group-slot="stone" aria-labelledby="stoneHeading" hidden>
-            <header class="finish-heading"><div><h2 id="stoneHeading" tabindex="-1" data-flow-group-label></h2><p>Uma escolha global, aplicada uma vez à composição.</p></div></header>
-            <div class="finish-controls">
-              <div data-flow-section-slot data-flow-section-class="config-section finish-section" data-flow-slot-item="stone-all" data-render-component="choice-cards" hidden>
-                <div data-flow-item-id="stone-all">
-                  <div class="global-options" id="stonePackageOptions"></div>
-                </div>
-              </div>
-              <div data-flow-section-slot data-flow-section-class="config-section finish-section" data-flow-slot-item="stone-skirting" data-render-component="toggle-list" hidden>
-                <div data-configurable-item="stone-skirting" data-flow-item-id="stone-skirting">
-                  <label class="accessory-toggle" for="stoneSkirtingToggle">
-                    <input id="stoneSkirtingToggle" type="checkbox" />
-                    <span><strong>Rodapé de pedra</strong><small>Acabamento global para a composição.</small></span>
-                  </label>
-                </div>
-              </div>
-            </div>
-          </section>
-          </div>
-        </section>
-
-        <section class="panel services-panel" id="servicesPanel" aria-labelledby="servicesHeading" hidden>
-          <header class="finish-heading">
-            <span aria-hidden="true">✓</span>
-            <div><h2 id="servicesHeading" tabindex="-1">Serviços</h2><p>Serviços globais que impactam uma vez o conjunto.</p></div>
-          </header>
-          <div class="flow-group-grid flow-group-grid--embedded" data-flow-group-grid data-flow-group-class="flow-group-shell flow-group-shell--embedded">
-            <div data-flow-section-slot data-flow-section-class="config-section service-section" data-flow-slot-item="lighting-08" data-render-component="toggle-list" hidden>
-              <label class="service-check" for="lightingToggle" data-configurable-item="lighting-08" data-flow-item-id="lighting-08">
-                <input id="lightingToggle" type="checkbox" />
-                <span><strong>Iluminação embutida</strong><small>Serviço global que realça a bancada e requer a lateral da geladeira e o aéreo da pia.</small></span>
-              </label>
-            </div>
-            <div id="servicesChecklist" class="services-checklist" data-flow-section-slot data-flow-section-class="config-section service-section" data-render-component="toggle-list" hidden></div>
-          </div>
-        </section>
-
-        <section class="panel summary-panel" id="summaryPanel" aria-labelledby="summaryHeading" hidden>
-          <header class="finish-heading">
-            <span aria-hidden="true">✓</span>
-            <div><h2 id="summaryHeading" tabindex="-1">Sua composição</h2><p>Revise antes de solicitar a proposta.</p></div>
-          </header>
-          <div class="flow-group-grid" data-flow-group-grid data-flow-group-class="flow-group-shell">
-            <div data-flow-section-slot data-flow-section-class="summary-flow-section" data-flow-section-heading-class="sr-only" data-flow-slot-item="summary" data-render-component="action-list" hidden>
-              <div id="summaryContent"></div>
-            </div>
-          </div>
-        </section>
-
-        <footer class="flow-actions">
-          <p class="configuration-value" id="configurationValue" aria-live="polite"></p>
-          <button id="nextStepButton" class="button button--primary" type="button">Continuar para acabamentos →</button>
-        </footer>
-        <p class="sr-only" id="configurationAnnouncement" aria-live="polite"></p>
-      </aside>
-    </main>
-
-    <script src="data/scene-data.js?v=runtime-v38"></script>
-    <script src="data/catalog-data.js?v=runtime-v38"></script>
-    <script src="data/configurator-settings.js?v=admin-config-v2"></script>
-    <script src="data/hierarchy-defaults.js?v=hierarchy-defaults-v2"></script>
-    <script src="data/mock-price-book.js?v=runtime-v38"></script>
-    <script src="data/mask-data.js?v=runtime-v38"></script>
-    <script src="core/state.js?v=runtime-v38"></script>
-    <script src="core/visibility.js?v=runtime-v38"></script>
-    <script src="core/validation.js?v=runtime-v38"></script>
-    <script src="core/fingerprint.js?v=runtime-v38"></script>
-    <script src="core/finishes.js?v=runtime-v38"></script>
-    <script src="core/pricing-contract.js?v=runtime-v38"></script>
-    <script src="core/pricing.js?v=runtime-v38"></script>
-    <script src="core/item-capabilities.js?v=cp-sd-01a-v1"></script>
-    <script src="core/configuration.js?v=admin-config-v8"></script>
-    <script src="core/flow-model.js?v=runtime-v38"></script>
-    <script src="core/presentation-contract.js?v=cp-sd-01c1-v1"></script>
-    <script src="data/presentation-policy-defaults.js?v=cp-sd-01c1-v1"></script>
-  <script src="core/hierarchy-administration.js?v=cp-sd-06a2a1b-v1"></script>
-  <script src="core/administration-v5.js?v=cp-sd-06a2a1b-v1"></script>
-  <script src="core/published-buyer-projection.js?v=cp-sd-06a2a1b-v1"></script>
-    <script src="core/flow-layout.js?v=runtime-v38"></script>
-    <script src="core/runtime-contracts.js?v=runtime-contracts-v2"></script>
-    <script src="core/keyboard-shortcuts.js?v=keyboard-v4"></script>
-    <script src="data/stone-data.js?v=runtime-v38"></script>
-    <script src="core/stone.js?v=runtime-v38"></script>
-    <script src="app.js?v=runtime-v38"></script>
-    <script>
-      (() => {
-        const resizeHandle = document.getElementById("mobileSceneResizeHandle");
-        if (!resizeHandle) return;
-
-        let resizeSession = null;
-        let committingResize = false;
-
-        resizeHandle.addEventListener("pointerdown", (event) => {
-          if (!document.body.classList.contains("is-mobile-scene-pinned")) return;
-          resizeSession = {
-            pointerId: event.pointerId,
-            pointerType: event.pointerType,
-            clientX: event.clientX,
-            clientY: event.clientY
-          };
-        }, true);
-
-        window.addEventListener("pointermove", (event) => {
-          if (!resizeSession || event.pointerId !== resizeSession.pointerId || committingResize) return;
-          resizeSession.clientX = event.clientX;
-          resizeSession.clientY = event.clientY;
-          event.stopImmediatePropagation();
-        }, true);
-
-        window.addEventListener("pointerup", (event) => {
-          if (!resizeSession || event.pointerId !== resizeSession.pointerId) return;
-
-          committingResize = true;
-          window.dispatchEvent(new PointerEvent("pointermove", {
-            bubbles: true,
-            pointerId: resizeSession.pointerId,
-            pointerType: resizeSession.pointerType,
-            clientX: resizeSession.clientX,
-            clientY: resizeSession.clientY
-          }));
-          window.dispatchEvent(new PointerEvent("pointercancel", {
-            bubbles: true,
-            pointerId: resizeSession.pointerId,
-            pointerType: resizeSession.pointerType,
-            clientX: resizeSession.clientX,
-            clientY: resizeSession.clientY
-          }));
-          committingResize = false;
-          resizeSession = null;
-        }, true);
-
-        window.addEventListener("pointercancel", (event) => {
-          if (committingResize) return;
-          if (resizeSession && event.pointerId === resizeSession.pointerId) resizeSession = null;
-        }, true);
-      })();
-    </script>
-  </body>
+    <section class="story-section" id="como-funciona"><p class="eyebrow">Simples do início ao fim</p><h2>Do seu espaço ao ambiente pronto.</h2><p>Escolha o ambiente, conheça os módulos e encontre uma solução que acompanha sua rotina.</p><a href="/#ambientes">Encontre seu ambiente <span aria-hidden="true">→</span></a></section>
+  </main>
+  <footer class="site-footer" id="quem-somos"><img src="assets/logo/casa-em-modulos-logo-transparent.png" alt="Casa em Módulos"><span>Móveis modulares pensados para a vida real.</span><a href="/#ambientes">Voltar aos ambientes ↑</a></footer>
+  <script src="data.js"></script><script src="landing.js?v=gold-system-r1"></script>
+</body>
 </html>

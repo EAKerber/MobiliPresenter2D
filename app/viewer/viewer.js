@@ -139,7 +139,7 @@
   renderers.get("overview")(initial); renderers.get("scene")(initial); renderers.get("views")(initial); renderers.get("details")(initial);
   integration.onSelectionChange?.(adapter.getSelection());
   }
-  if (integration.usePublishedApi === true) {
+  {
     root.textContent = "Carregando informações publicadas…";
     window.CASA_PUBLIC_VIEWER_DATA.load()
       .then((projection) => start(projection))
@@ -153,7 +153,5 @@
         message.textContent = "Informações temporariamente indisponíveis. Tente novamente mais tarde.";
         root.append(message);
       });
-  } else {
-    start();
   }
 })();

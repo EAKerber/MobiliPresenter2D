@@ -8,3 +8,10 @@
   to = "/.netlify/functions/configuration"
   status = 200
   force = true
+
+# CP-PUBLIC-04a: public schema-driven read projection; no preview seeds.
+[[redirects]]
+  from = "/api/public-modules"
+  to = "/.netlify/functions/public-modules"
+  status = 200
+  force = true
