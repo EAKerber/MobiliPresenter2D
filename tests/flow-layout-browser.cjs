@@ -2,6 +2,22 @@ const assert = require("node:assert/strict");
 const fs = require("node:fs");
 const path = require("node:path");
 const { chromium } = require("playwright");
+const configuration = require("../app/core/configuration.js");
+const defaults = require("../app/data/configurator-settings.js");
+const catalog = require("../app/data/catalog-data.js");
+const priceBook = require("../app/data/mock-price-book.js");
+const scene = require("../app/data/scene-data.js");
+
+// This suite mutates legacy flat stage.items, NOT the production v5 hierarchy.
+// Use an explicit Playwright-only v3 fixture on PR and main alike. The separate
+// buyer-v5-browser suite exercises the actual v3/v5 projection and round-trip.
+const legacyFixture = configuration.normalizeConfiguratorSettings(
+  configuration.createDefaultAdministration(defaults, catalog, priceBook, scene),
+  catalog, priceBook, scene
+);
+assert.equal(legacyFixture.schemaVersion, configuration.SCHEMA);
+assert(legacyFixture.stages.every(stage => Array.isArray(stage.items)));
+
 
 (async () => {
   const output = process.argv[2] || "/tmp/flow-layout-browser";
@@ -9,6 +25,14 @@ const { chromium } = require("playwright");
   const targetUrl = process.env.FLOW_LAYOUT_URL || "https://mobilipresenter2d.netlify.app/";
   const browser = await chromium.launch({ headless: true });
   const page = await browser.newPage({ viewport: { width: 1366, height: 900 } });
+  await page.route("**/api/configuration", async route => {
+    if (route.request().method() !== "GET") return route.continue();
+    await route.fulfill({
+      status: 200, contentType: "application/json",
+      body: JSON.stringify(legacyFixture),
+      headers: { "Cache-Control": "no-store" }
+    });
+  });
   const errors = [];
   page.on("pageerror", (error) => errors.push(error.message));
   page.on("console", (message) => { if (message.type() === "error") errors.push(message.text()); });
@@ -567,11 +591,8 @@ const { chromium } = require("playwright");
   assert.deepEqual(uniqueness, { moduleDetail: 1, moduleList: 1, fronts: 1, handles: 1, lighting: 1 }, "layout remounting reuses controls instead of duplicating them");
   assert.deepEqual(errors, [], "flow layout browser run has no console/page errors");
 
-  const sourceConfiguration = await page.evaluate(async () => {
-    const response = await fetch("/api/configuration", { cache: "no-store" });
-    if (!response.ok) throw new Error("failed to load configuration fixture");
-    return response.json();
-  });
+  // Don't read production's published v5 into a test that mutates stage.items.
+  const sourceConfiguration = structuredClone(legacyFixture);
   const renamedCoreStages = structuredClone(sourceConfiguration);
   const renamedIdsByKind = {
     finishes: "finishes-layout",
