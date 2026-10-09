@@ -1,6 +1,8 @@
 # CP-PUBLIC-04a — Publicar landing + viewer antes do Clerk
 
-**Data:** 2026-10-08 · **Status:** integração independente; publicação só após gates verificáveis · **Autenticação deliberadamente DEFERIDA**.
+**STATUS CONFIRMADO EM PRODUÇÃO — 2026-10-08 (America/Sao_Paulo).** [PR #187](https://github.com/EAKerber/MobiliPresenter2D/pull/187) **MERGED**, main em `74ce1733cca222e41e61a0e6c1ae643d1d297203`; [PR #188](https://github.com/EAKerber/MobiliPresenter2D/pull/188) **MERGED**, main em `afec414b956128887544b60cbe4d5e952779bb0f`. Netlify production deploy `6ac8429c9457c4000813c997` **READY**, com commit exatamente igual à main. **Rotas publicadas:** `/` landing pública, `/viewer/` público, `/config/` configurador existente **público**, `/admin.html` Identity admin, `GET /api/public-modules` 200 v5 com allowlist. HTTP live verificado em [Actions #37869461344](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/37869461344) e pós-merge [#37869729096](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/37869729096). [CI v3/v5 hierarquia #37869729107](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/37869729107) e todos os **5/5 workflows do push** PASS. **Clerk ainda NÃO integrado; raw GET /api/configuration e JS comercial permanecem públicos**. PRs de auth #182/#184/#185/#186 mantidas DRAFT/HOLD; não mesclar sem cutover coordenado. Trabalho seguinte: Clerk Free (chaves do usuário) + backend validação de sessão e entitlement + DTO comprador, guard HTML/assets/API raw, sem DB novo por padrão.
+
+**Data:** 2026-10-08 · **Status:** PUBLICADO em produção (PRs #187 e #188, 5/5 workflows pós-merge PASS); **autenticação Clerk deliberadamente DEFERIDA**.
 
 ## Decisão revisada pelo usuário
 
