@@ -8,9 +8,8 @@ const catalog = require("../app/data/catalog-data.js");
 const priceBook = require("../app/data/mock-price-book.js");
 const scene = require("../app/data/scene-data.js");
 // Local test fixture ONLY; published v5 stage groups do not have legacy .items.
-const flatV3 = configuration.normalizeConfiguratorSettings(
-  configuration.createDefaultAdministration(defaultSettings, catalog, priceBook, scene),
-  catalog, priceBook, scene
+const flatV3 = configuration.createDefaultAdministration(
+  defaultSettings, catalog, priceBook
 );
 
 
