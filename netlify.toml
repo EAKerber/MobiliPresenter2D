@@ -15,3 +15,24 @@
   to = "/.netlify/functions/public-modules"
   status = 200
   force = true
+
+# Keep old landing-page URLs usable after moving their canonical paths to the site root.
+[[redirects]]
+  from = "/landing/como-funciona"
+  to = "/how-it-works/"
+  status = 301
+
+[[redirects]]
+  from = "/landing/como-funciona/"
+  to = "/how-it-works/"
+  status = 301
+
+[[redirects]]
+  from = "/landing/quem-somos"
+  to = "/about/"
+  status = 301
+
+[[redirects]]
+  from = "/landing/quem-somos/"
+  to = "/about/"
+  status = 301
