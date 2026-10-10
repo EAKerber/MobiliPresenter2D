@@ -1,8 +1,234 @@
 <!doctype html>
 <html lang="pt-BR" data-theme="light">
-<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Como funciona | Casa em Módulos</title><link rel="stylesheet" href="../../public-theme.css"><link rel="stylesheet" href="../landing.css"></head>
-<body>
-  <header class="site-header"><a class="brand" href="../" aria-label="Casa em Módulos, início"><img src="../assets/logo/casa-em-modulos-logo-transparent.png" alt="Casa em Módulos"></a><nav aria-label="Navegação principal"><a href="../#ambientes">Ambientes</a><a href="./" aria-current="page">Como funciona</a><a href="../quem-somos/">Quem somos</a></nav><a class="header-cta" href="https://wa.me/" aria-label="Fale conosco pelo WhatsApp"><span>Fale conosco</span><img src="../assets/icons/ui/white/whatsapp.svg" alt=""><span aria-hidden="true">↗</span></a><button class="menu-toggle" type="button" aria-label="Menu"><span></span><span></span><span></span></button></header>
-  <main class="story-section page-content"><p class="eyebrow">Como funciona</p><h1>Do seu espaço ao ambiente pronto.</h1><p>Esta página receberá o conteúdo definitivo do processo, desde a escolha do ambiente até a instalação.</p><a class="button button-copper" href="../#ambientes">Conheça os ambientes <span aria-hidden="true">→</span></a></main>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#f7f5f2">
+  <meta name="description" content="Entenda como os módulos são planejados, combinados, produzidos e entregues para o seu espaço.">
+  <title>Como funciona | Casa em Módulos</title>
+  <link rel="preload" as="image" href="assets/hero-abertura.webp" fetchpriority="high">
+  <link rel="stylesheet" href="../../public-theme.css?v=gold-system-r1">
+  <link rel="stylesheet" href="../landing.css?v=gold-system-r1">
+  <link rel="stylesheet" href="como-funciona.css">
+</head>
+<body class="how-page">
+  <header class="site-header">
+    <a class="brand" href="../" aria-label="Casa em Módulos, início"><img src="../assets/logo/casa-em-modulos-logo-transparent.png" alt="Casa em Módulos"></a>
+    <nav id="primaryNav" aria-label="Navegação principal">
+      <a href="../#ambientes">Ambientes</a>
+      <a href="./" aria-current="page">Como funciona</a>
+      <a href="../quem-somos/">Quem somos</a>
+    </nav>
+    <a class="header-cta" href="../#ambientes" aria-label="Conheça os ambientes Casa em Módulos"><span>Ver ambientes</span><span aria-hidden="true">↗</span></a>
+    <button class="menu-toggle" id="menuToggle" type="button" aria-expanded="false" aria-controls="primaryNav" aria-label="Abrir menu"><span></span><span></span><span></span></button>
+  </header>
+
+  <main>
+    <section class="how-hero" aria-labelledby="heroTitle">
+      <div class="how-hero-copy">
+        <p class="eyebrow">Como funciona</p>
+        <h1 id="heroTitle">A evolução do móvel <em>sob medida.</em></h1>
+        <p class="how-hero-lead">Qualidade, inteligência e valores acessíveis para você montar a casa do seu jeito.</p>
+        <p class="how-hero-note">Para quem pesquisa, compara e quer aproveitar melhor o espaço e o investimento.</p>
+        <a class="button button-copper" href="#passos">Veja como funciona <span aria-hidden="true">↓</span></a>
+      </div>
+      <figure class="how-hero-art">
+        <img src="assets/hero-abertura.webp" alt="Render ilustrativo de sala integrada à cozinha, em tons de madeira e luz acolhedora" fetchpriority="high">
+      </figure>
+    </section>
+
+    <section class="section comparison-section" aria-labelledby="comparisonTitle">
+      <div class="section-intro">
+        <p class="eyebrow">Três formas de atender necessidades diferentes</p>
+        <h2 id="comparisonTitle">O que muda em cada modelo?</h2>
+        <p>As características variam conforme produto, projeto e fornecedor. Veja como cada formato costuma organizar a escolha e a produção.</p>
+      </div>
+      <div class="comparison-grid">
+        <article class="comparison-card">
+          <img class="comparison-illustration" src="assets/comparacao-moveis-prontos-raster-v1.png" alt="" loading="lazy">
+          <h3>Móveis prontos</h3>
+          <dl>
+            <div><dt><span class="comparison-marker comparison-marker-standard" aria-hidden="true">?</span>Adaptação</dt><dd>Dimensões e configurações da linha.</dd></div>
+            <div><dt><span class="comparison-marker comparison-marker-standard" aria-hidden="true">?</span>Qualidade</dt><dd>Varia conforme o produto e o fabricante.</dd></div>
+            <div><dt><span class="comparison-marker comparison-marker-standard" aria-hidden="true">?</span>Personalização</dt><dd>Opções oferecidas pela linha.</dd></div>
+            <div><dt><span class="comparison-marker comparison-marker-standard" aria-hidden="true">?</span>Custo</dt><dd>Varia conforme produto e configuração.</dd></div>
+            <div><dt><span class="comparison-marker comparison-marker-standard" aria-hidden="true">?</span>Compra por etapas</dt><dd>Depende da linha e da disponibilidade.</dd></div>
+            <div><dt><span class="comparison-marker comparison-marker-standard" aria-hidden="true">?</span>Produção</dt><dd>Produção da linha do fabricante.</dd></div>
+          </dl>
+        </article>
+        <article class="comparison-card">
+          <img class="comparison-illustration" src="assets/comparacao-planejados-raster-v2.png" alt="Ilustração conceitual de módulo inferior para pia e módulo aéreo, com cotas sem medidas numéricas" loading="lazy">
+          <h3>Planejados tradicionais</h3>
+          <dl>
+            <div><dt><span class="comparison-marker comparison-marker-standard" aria-hidden="true">✓</span>Adaptação</dt><dd>Projeto definido para o ambiente.</dd></div>
+            <div><dt><span class="comparison-marker comparison-marker-standard" aria-hidden="true">?</span>Qualidade</dt><dd>Definida por materiais, projeto e execução.</dd></div>
+            <div><dt><span class="comparison-marker comparison-marker-standard" aria-hidden="true">✓</span>Personalização</dt><dd>Definida durante o projeto.</dd></div>
+            <div><dt><span class="comparison-marker comparison-marker-standard" aria-hidden="true">?</span>Custo</dt><dd>Varia conforme projeto, materiais e serviço.</dd></div>
+            <div><dt><span class="comparison-marker comparison-marker-standard" aria-hidden="true">?</span>Compra por etapas</dt><dd>Definida com o prestador.</dd></div>
+            <div><dt><span class="comparison-marker comparison-marker-standard" aria-hidden="true">✓</span>Produção</dt><dd>Produção conforme o projeto.</dd></div>
+          </dl>
+        </article>
+        <article class="comparison-card comparison-card-featured">
+          <img src="assets/comparacao-casa-em-modulos.svg" alt="" loading="lazy">
+          <h3>Casa em Módulos</h3>
+          <dl>
+            <div><dt><span class="comparison-marker comparison-marker-featured" aria-hidden="true">✓</span>Adaptação</dt><dd>Combinação de módulos estudados para o empreendimento.</dd></div>
+            <div><dt><span class="comparison-marker comparison-marker-featured" aria-hidden="true">✓</span>Qualidade</dt><dd>Padrão de marcenaria conforme especificações do projeto.</dd></div>
+            <div><dt><span class="comparison-marker comparison-marker-featured" aria-hidden="true">✓</span>Personalização</dt><dd>Combinações de módulos, acabamentos e acessórios disponíveis.</dd></div>
+            <div><dt><span class="comparison-marker comparison-marker-featured" aria-hidden="true">✓</span>Custo</dt><dd>Busca valores acessíveis por eficiência e escala.</dd></div>
+            <div><dt><span class="comparison-marker comparison-marker-featured" aria-hidden="true">✓</span>Compra por etapas</dt><dd>Possibilidade prevista no modelo, conforme regras comerciais.</dd></div>
+            <div><dt><span class="comparison-marker comparison-marker-featured" aria-hidden="true">✓</span>Produção</dt><dd>Organizada a partir de uma plataforma modular por empreendimento.</dd></div>
+          </dl>
+        </article>
+      </div>
+    </section>
+
+    <section class="study-band" aria-labelledby="studyTitle">
+      <div class="study-copy">
+        <p class="eyebrow">A eficiência começa antes da produção</p>
+        <h2 id="studyTitle">Cada empreendimento tem um estudo próprio.</h2>
+        <p>Analisamos plantas e medidas para entender circulação, armazenamento, ergonomia e as combinações possíveis em cada espaço.</p>
+        <p>Parte da engenharia já está estudada. Assim, a escolha parte de soluções modulares pensadas para o empreendimento, em vez de começar sempre do zero.</p>
+        <ul class="check-list">
+          <li>Plantas e dimensões</li>
+          <li>Circulação e ergonomia</li>
+          <li>Necessidades de armazenamento</li>
+        </ul>
+      </div>
+      <figure class="study-art">
+        <img class="study-space-illustration" src="assets/estudo-espaco.webp" alt="Ilustração conceitual de uma planta com medidas e circulação analisadas" loading="lazy">
+        <figcaption>Esquema conceitual de estudo do espaço</figcaption>
+      </figure>
+    </section>
+
+    <section class="section modules-section" aria-labelledby="modulesTitle">
+      <div class="section-intro section-intro-left">
+        <p class="eyebrow">Soluções que se combinam</p>
+        <h2 id="modulesTitle">Uma base modular. Muitas composições.</h2>
+        <p>O repertório interno reúne soluções estudadas para cada empreendimento. As peças podem funcionar individualmente e se integrar em composições para diferentes ambientes.</p>
+        <p>Entre os exemplos estão módulos inferiores e aéreos, torres, gaveteiros, armários, nichos, painéis e bancadas. A seleção varia por empreendimento.</p>
+      </div>
+      <div class="module-grid">
+        <figure class="module-card"><img src="assets/modulo-aereo-cutout-v2.png" alt="Render ilustrativo de módulo aéreo de duas portas" loading="lazy"><figcaption>Módulo aéreo</figcaption></figure>
+        <figure class="module-card module-card-tall"><img src="assets/modulo-torre-cutout-v1.webp" alt="Render ilustrativo de uma torre modular alta" loading="lazy"><figcaption>Torre</figcaption></figure>
+        <figure class="module-card"><img src="assets/modulo-inferior-cutout-v2.png" alt="Render ilustrativo de módulo inferior com duas portas, sem gaveta" loading="lazy"><figcaption>Módulo inferior</figcaption></figure>
+        <figure class="module-card"><img src="assets/modulo-gaveteiro-cutout-v1.webp" alt="Render ilustrativo de um gaveteiro modular" loading="lazy"><figcaption>Gaveteiro</figcaption></figure>
+      </div>
+      <div class="integration-callout">
+        <img src="assets/integracao-modular.webp" alt="Ilustração de um módulo individual conectado a uma composição com outros módulos" loading="lazy">
+        <p><strong>Estudados em conjunto, sem deixar os ambientes iguais.</strong><br>Você escolhe combinações e acabamentos entre as opções previstas para o seu projeto.</p>
+      </div>
+    </section>
+
+    <section class="economy-section" aria-labelledby="economyTitle">
+      <div class="section section-intro">
+        <p class="eyebrow">Economia no processo</p>
+        <h2 id="economyTitle">De onde vem a eficiência?</h2>
+        <p>Planejamento, escala e repetição ajudam a organizar a produção e buscar valores acessíveis, sem tratar economia como retirada de qualidade.</p>
+      </div>
+      <div class="section economy-grid">
+        <article class="economy-card"><img src="assets/economia-escala.webp" alt="Ilustração de chapas concentradas em uma composição" loading="lazy"><h3>Compra em escala</h3><p>Mais volume concentrado amplia o poder de negociação de insumos.</p></article>
+        <article class="economy-card"><img src="assets/economia-coletiva.webp" alt="Ilustração de diferentes composições conectadas a uma plataforma comum" loading="lazy"><h3>Compras coletivas</h3><p>Uma base comum atende diferentes composições do empreendimento.</p></article>
+        <article class="economy-card"><img src="assets/economia-producao.webp" alt="Ilustração de módulos repetidos em uma sequência organizada" loading="lazy"><h3>Produção planejada</h3><p>Processos repetíveis ajudam a organizar a produção.</p></article>
+        <article class="economy-card"><img src="assets/economia-chapas.webp" alt="Ilustração de peças organizadas sobre uma chapa, com sobra visível" loading="lazy"><h3>Aproveitamento de material</h3><p>Planos de corte organizados ajudam a aproveitar melhor as chapas.</p></article>
+        <article class="economy-card"><img class="study-space-illustration" src="assets/estudo-espaco.webp" alt="Ilustração de um espaço estudado antes de definir os módulos" loading="lazy"><h3>Engenharia já estudada</h3><p>Soluções-base não precisam ser redesenhadas do zero a cada escolha.</p></article>
+        <article class="economy-card"><img src="assets/economia-retrabalho.webp" alt="Ilustração de módulos acompanhados por uma lista de conferência" loading="lazy"><h3>Menos retrabalho</h3><p>Padrões e conferências contribuem para reduzir repetição de trabalho.</p></article>
+      </div>
+      <p class="economy-synthesis">A economia está na forma de planejar e produzir.</p>
+    </section>
+
+    <section class="section staged-section" aria-labelledby="stagedTitle">
+      <div class="section-intro">
+        <p class="eyebrow">Escolha no seu ritmo</p>
+        <h2 id="stagedTitle">Comece pelo que você precisa agora.</h2>
+        <p>A chegada a um novo apartamento concentra despesas. Você pode priorizar os ambientes essenciais e ampliar a composição depois, conforme sua necessidade e disponibilidade financeira.</p>
+      </div>
+      <ol class="staged-flow">
+        <li><img src="assets/etapa-cozinha.webp" alt="" loading="lazy"><span class="stage-number">01</span><strong>Cozinha</strong><span>Comece pelo ambiente prioritário.</span></li>
+        <li><img src="assets/etapa-lavanderia.webp" alt="" loading="lazy"><span class="stage-number">02</span><strong>Lavanderia</strong><span>Acrescente o que fizer sentido.</span></li>
+        <li><img src="assets/etapa-torre.webp" alt="" loading="lazy"><span class="stage-number">03</span><strong>Armário ou torre</strong><span>Amplie conforme sua rotina.</span></li>
+        <li><img src="assets/etapa-quarto.webp" alt="" loading="lazy"><span class="stage-number">04</span><strong>Quarto</strong><span>Complete em outro momento.</span></li>
+        <li><img src="assets/etapa-escritorio.webp" alt="" loading="lazy"><span class="stage-number">05</span><strong>Escritório</strong><span>Continue quando quiser.</span></li>
+      </ol>
+    </section>
+
+    <section class="finish-band" aria-labelledby="finishTitle">
+      <div class="finish-copy">
+        <p class="eyebrow">Escolhas que dão personalidade</p>
+        <h2 id="finishTitle">Acabamentos e detalhes do seu jeito.</h2>
+        <p>Combine módulos, cores, padrões e acessórios entre as opções disponíveis para o seu projeto. A base é modular; a composição continua pessoal.</p>
+        <p class="finish-signature">Padronizado por dentro. Seu por fora.</p>
+      </div>
+      <div class="finish-examples">
+        <figure><img src="assets/amostras-mdf-r2.webp" alt="Render conceitual de quatro amostras de acabamento em tons claros e madeirados" loading="lazy"><figcaption>Cores e acabamentos</figcaption></figure>
+        <figure><img src="assets/puxadores-tango.svg" alt="Ilustração vetorial conceitual de puxadores lineares em preto, dourado e bronze, apresentados do maior ao menor" loading="lazy"><figcaption>Puxadores lineares</figcaption></figure>
+        <figure><img src="assets/puxadores-ponto-r2.webp" alt="Render conceitual de puxadores tipo botão em preto, cromado, dourado e cobre" loading="lazy"><figcaption>Puxadores tipo botão</figcaption></figure>
+      </div>
+    </section>
+
+    <section class="section quality-section" aria-labelledby="qualityTitle">
+      <div class="production-panel">
+        <div class="production-intro">
+          <p class="eyebrow">Eficiência no processo</p>
+          <h3>A economia vem da organização da produção.</h3>
+          <p>Equipamentos especializados, produção em série e equipe experiente tornam cada etapa mais previsível — sem depender de reduzir as especificações de materiais e componentes.</p>
+        </div>
+        <ol class="production-flow">
+          <li><span>01</span><div><strong>Corte</strong><p>Planos de corte organizam as chapas para seguir as medidas previstas no projeto.</p></div></li>
+          <li><span>02</span><div><strong>Usinagem e furação</strong><p>Equipamentos especializados repetem encaixes e pontos de montagem com consistência.</p></div></li>
+          <li><span>03</span><div><strong>Acabamento</strong><p>A sequência de produção prepara cada peça antes da montagem.</p></div></li>
+          <li><span>04</span><div><strong>Montagem e controle</strong><p>Uma equipe experiente confere componentes, encaixes e especificações.</p></div></li>
+        </ol>
+      </div>
+      <div class="quality-copy">
+        <p class="eyebrow">Materiais e componentes</p>
+        <h2 id="qualityTitle">Qualidade definida em cada detalhe.</h2>
+        <p class="quality-lead">Caixaria em MDF, fundos revestidos, dobradiças com amortecimento e corrediças telescópicas reforçadas: cada componente segue a especificação definida para o projeto.</p>
+        <ul class="quality-points">
+          <li><h3>Caixaria e portas</h3><p>MDF de 18 mm para uma estrutura firme e frentes consistentes.</p></li>
+          <li><h3>Fundos</h3><p>MDF de 6 mm com revestimento melamínico nas duas faces.</p></li>
+          <li><h3>Dobradiças</h3><p>Amortecimento para um fechamento mais suave.</p></li>
+          <li><h3>Corrediças</h3><p>Telescópicas reforçadas, especificadas para uso frequente.</p></li>
+        </ul>
+      </div>
+      <p class="quality-disclaimer">A configuração de cada módulo e as condições da garantia constam no respectivo projeto e contrato.</p>
+    </section>
+
+    <section class="process-section" id="passos" aria-labelledby="processTitle">
+      <div class="section section-intro">
+        <p class="eyebrow">Como funciona na prática</p>
+        <h2 id="processTitle">Do primeiro ambiente à escolha de recebimento.</h2>
+        <p>Um caminho claro para definir o que entra no projeto e como os módulos chegam até você.</p>
+      </div>
+      <ol class="process-flow section">
+        <li><span>01</span><div><h3>Escolha o ambiente</h3><p>Cozinha, sala, quarto, escritório ou lavanderia.</p></div></li>
+        <li><span>02</span><div><h3>Escolha os módulos</h3><p>Veja as soluções previstas para o empreendimento.</p></div></li>
+        <li><span>03</span><div><h3>Monte a composição</h3><p>Combine as peças para o espaço e a rotina.</p></div></li>
+        <li><span>04</span><div><h3>Defina acabamentos</h3><p>Escolha entre as opções disponíveis no projeto.</p></div></li>
+        <li><span>05</span><div><h3>Faça a conferência técnica</h3><p>Revise medidas e condições antes da produção.</p></div></li>
+        <li><span>06</span><div><h3>Produção dos módulos</h3><p>As peças seguem para fabricação e controle.</p></div></li>
+      </ol>
+      <div class="receiving-options section" aria-label="Duas formas de receber os módulos">
+        <article class="receiving-card">
+          <div class="receiving-icon" aria-hidden="true"><svg viewBox="0 0 72 64"><path d="M12 31 32 14l20 17v20H12zM23 51V36h18v15M8 31l24-21 24 21M18 23v-9h9"/><circle cx="63" cy="12" r="7" fill="var(--public-accent)" stroke="none"/><path d="m59.5 12 2.4 2.4 4.5-5" stroke="white" stroke-width="1.8"/></svg></div>
+          <div><p class="eyebrow">Opção 1</p><h3>Instalação pela equipe</h3><p>Para quem prefere praticidade, a equipe pode realizar a instalação conforme o escopo do projeto.</p></div>
+        </article>
+        <article class="receiving-card">
+          <div class="receiving-icon" aria-hidden="true"><svg viewBox="0 0 64 64"><path d="M10 18h29v29H10zM39 28h9l7 8v11H39zM16 47h2m30 0h2"/><circle cx="22" cy="49" r="5"/><circle cx="47" cy="49" r="5"/><path d="M18 25h13M18 32h13M18 39h13"/></svg></div>
+          <div><p class="eyebrow">Opção 2</p><h3>Retirada no ponto definido</h3><p>Você pode retirar os módulos e instalar por conta própria ou com profissional de confiança, seguindo as condições e orientações técnicas do projeto.</p></div>
+        </article>
+      </div>
+    </section>
+
+    <section class="closing-hero" aria-labelledby="closingTitle">
+      <img src="assets/hero-encerramento.webp" alt="Render ilustrativo de sala integrada à cozinha, com iluminação quente" loading="lazy">
+      <div class="closing-shade"></div>
+      <div class="closing-copy"><p class="eyebrow">Qualidade de marcenaria. Inteligência de indústria.</p><h2 id="closingTitle">Economia para a sua vida.</h2><p>Um projeto pensado para o seu espaço, para o seu orçamento e para o seu jeito de morar.</p><p class="closing-signature">Seu espaço. Do seu jeito.</p><a class="button button-copper" href="../#ambientes">Conheça os ambientes <span aria-hidden="true">→</span></a></div>
+    </section>
+    <p class="image-disclaimer section">As imagens desta página são ilustrativas; produtos e opções disponíveis podem variar conforme o projeto.</p>
+  </main>
+
   <footer class="site-footer"><img src="../assets/logo/casa-em-modulos-logo-transparent.png" alt="Casa em Módulos"><span>Móveis modulares pensados para a vida real.</span><a href="../">Voltar ao início ↑</a></footer>
-</body></html>
+  <script src="como-funciona.js"></script>
+</body>
+</html>

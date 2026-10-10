@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="430" viewBox="0 0 1000 430" fill="none" role="img" aria-label="Três puxadores lineares geométricos em tamanhos decrescentes">
+  <defs>
+    <linearGradient id="black" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#4a4a4a"/><stop offset="0.28" stop-color="#202020"/><stop offset="1" stop-color="#111111"/></linearGradient>
+    <linearGradient id="gold" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f0d59a"/><stop offset="0.3" stop-color="#c89b48"/><stop offset="1" stop-color="#a8752e"/></linearGradient>
+    <linearGradient id="bronze" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#c78b59"/><stop offset="0.3" stop-color="#9b5e34"/><stop offset="1" stop-color="#704124"/></linearGradient>
+    <filter id="shadow" x="-8%" y="-25%" width="116%" height="160%"><feGaussianBlur in="SourceAlpha" stdDeviation="3"/><feOffset dy="3"/><feComponentTransfer><feFuncA type="linear" slope="0.16"/></feComponentTransfer><feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+  </defs>
+  <!-- 160 mm: 700 units -->
+  <g filter="url(#shadow)">
+    <rect x="150" y="48" width="700" height="22" rx="7" fill="url(#black)"/>
+    <rect x="150" y="68" width="28" height="44" rx="5" fill="url(#black)"/>
+    <rect x="822" y="68" width="28" height="44" rx="5" fill="url(#black)"/>
+  </g>
+  <!-- 128 mm: 560 units; exactly 4/5 of the top crossbar -->
+  <g filter="url(#shadow)">
+    <rect x="220" y="178" width="560" height="22" rx="7" fill="url(#gold)"/>
+    <rect x="220" y="198" width="28" height="44" rx="5" fill="url(#gold)"/>
+    <rect x="752" y="198" width="28" height="44" rx="5" fill="url(#gold)"/>
+  </g>
+  <!-- 96 mm: 420 units; exactly 3/5 of the top crossbar -->
+  <g filter="url(#shadow)">
+    <rect x="290" y="308" width="420" height="22" rx="7" fill="url(#bronze)"/>
+    <rect x="290" y="328" width="28" height="44" rx="5" fill="url(#bronze)"/>
+    <rect x="682" y="328" width="28" height="44" rx="5" fill="url(#bronze)"/>
+  </g>
+</svg>
