@@ -237,3 +237,43 @@ A escolha de persistência não precisa ser refeita para todo o produto:
 - **Hospedagem do Postgres:** Netlify Database é a primeira opção a avaliar por integrar provisão, migrações e branching dos Deploy Previews. Ele só está disponível em planos baseados em créditos e cobra créditos por compute e bandwidth; verificar o plano e o custo esperado da conta antes de provisionar. Se não couber no plano ou orçamento, o adaptador usa uma URL PostgreSQL (CASA_ACCESS_DB_URL) e pode apontar para outro serviço PostgreSQL gerenciado, sem alterar Clerk nem o contrato dos grants.
 - Nenhum banco deve ser provisionado ou migrado até a configuração de ambiente ser deliberada. Deploy Preview não pode apontar para o banco de produção durante validação.
 
+
+
+## 10. Inventário de publicação estática — confirmado no SHA de main
+
+**Base observada:** main em 38a314fb3d9830e43310e59c0166197fd19341e0; árvore Git completa, sem truncamento. O diretório Netlify de publicação segue como app e o build principal executa o empacotamento do painel admin. Não há arquivo _headers, _redirects ou .netlifyignore na árvore; os redirects observados estão em netlify.toml. Esta é análise da configuração/versionamento, não uma requisição HTTP de cada URL ao deploy publicado.
+
+### Rotas HTML e consumidores
+
+| URL canônica | Arquivo | Dependências que devem continuar públicas / decisão de corte |
+| --- | --- | --- |
+| / | app/index.html | Usa /landing/data.js, /landing/landing.js, /landing/landing.css, /public-theme.css e /landing/assets/**. Página e conteúdo públicos. |
+| /viewer/ | app/viewer/index.html | Usa viewer e renderizador compartilhado; carrega data/scene-data.js, catalog-data.js e mask-data.js, módulos core de cena/desenhos e GET /api/public-modules. Esses dados e ativos necessários ao viewer continuam públicos; não proteger /core/**, /data/** ou /assets/** em bloco. |
+| /how-it-works/ | app/how-it-works/index.html | Usa how-it-works.js/css, tema/CSS da landing, assets próprios e logo compartilhado. Página pública. |
+| /about/ | app/about/index.html | Usa tema/CSS e assets compartilhados da landing. Página pública. |
+| /config/ | app/config/index.html | Define base href=/ e carrega /styles.css, /app.js, /core/**, /data/** e /assets/kitchen/base.png; hoje inclui /data/mock-price-book.js. Requer gate no shell e autorização no bootstrap/API; valores de preço devem deixar de estar nos arquivos estáticos. |
+| /admin.html | app/admin.html | Shell estático e scripts carregam configurações, catálogo, cena e mock-price-book.js antes do bundle admin. Login/role no browser não protegem o HTML nem esses URLs. Migrar dados admin exclusivos para leitura autorizada; manter protegidos os endpoints de escrita. |
+
+O índice HTML publica somente essas seis páginas. O roteamento de funções confirmado é /api/configuration → /.netlify/functions/configuration e /api/public-modules → /.netlify/functions/public-modules. Ambos os caminhos diretos chegam ao handler; a policy deve valer nas duas formas. O primeiro handler ainda devolve a configuração bruta anônima em GET; o segundo é o DTO público allowlisted do viewer.
+
+### Recursos compartilhados e conteúdo auxiliar no publish root
+
+A árvore contém 224 arquivos sob app: 6 HTML, 6 CSS, 68 JavaScript, 57 PNG, 16 SVG, 39 WebP, 13 JSON e os demais metadados/scripts. Além dos arquivos de produto, também ficam sob o publish root:
+
+- app/docs/: três documentos de implementação/inventário;
+- app/reports/: oito relatórios de validação/materialização;
+- app/tools/: scripts de build/teste, imagens-fonte e máscaras de trabalho;
+- app/scripts/build-static.sh e app/drizzle/meta/_journal.json.
+
+Como o publish aponta diretamente para app e o build raiz não limpa esses diretórios, devem ser tratados como potencialmente baixáveis por URL enquanto permanecerem ali. A ação simples e compatível com o deploy existente é movê-los para áreas de desenvolvimento fora de app, ou justificar explicitamente os que precisem ser servidos; não mudar o publish directory só para resolver isso. Um exame amostral dos documentos/relatórios pesquisados não encontrou campos óbvios de segredo, mas isso não é uma auditoria completa de credenciais.
+
+O _journal.json encontrado declara dialeto sqlite e nenhuma migration. Não há runtime/driver PostgreSQL nem Clerk na main; a integração Postgres continua somente nos protótipos PR #186. Esse arquivo não é evidência de uma base PostgreSQL ativa.
+
+### Critérios de implementação derivados
+
+1. Gate por rota/arquivo privado e também na Function direta; não depender de menu, login em JavaScript ou redirect não forçado.
+2. Manter públicos os quatro shells de conteúdo e os arquivos compartilhados realmente necessários ao viewer/landing.
+3. Separar preço e dados administrativos dos módulos públicos compartilhados antes de impor restrição por diretório.
+4. Tirar docs, relatórios, ferramentas, fontes e metadados de desenvolvimento de dentro do diretório publicado, mantendo o deploy Netlify e o publish configurado.
+5. Validar URL direta dos seis shells, dos assets privados removidos, dos dois rewrites e das duas URLs /.netlify/functions/*. Hoje nenhum teste HTTP ao deploy foi executado.
+
