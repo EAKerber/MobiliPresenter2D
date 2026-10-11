@@ -32,14 +32,6 @@
       make("line", { x1: middle, y1: y, x2: middle, y2: y + height, class: className });
       return;
     }
-    if (layout?.pattern === "two-doors-and-lift") {
-      // Legacy and known to be visually incorrect; retained only for compatibility until its source data is repaired.
-      const liftBottom = y + height * 0.34;
-      const middle = x + width / 2;
-      make("line", { x1: x, y1: liftBottom, x2: x + width, y2: liftBottom, class: className });
-      make("line", { x1: middle, y1: liftBottom, x2: middle, y2: y + height, class: className });
-      return;
-    }
     if (layout?.pattern === "two-doors-and-microwave") {
       const leftZoneEnd = x + width * 0.54;
       const leftDoorSplit = x + width * 0.27;
