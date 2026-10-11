@@ -95,35 +95,80 @@ Fora do recorte. Não é pré-requisito para Clerk de compradores e exigiria pla
 
 A PR #186 prototipou tickets de 256 bits com digest SHA-256, ticket curto, sessão no cookie seguro, transação PostgreSQL `UPDATE ... consumed_at IS NULL ... RETURNING` + `INSERT session`, quotas com locks transacionais e integração Resend. Seu gate CI usou PostgreSQL 16 descartável e concorrência de 32 resgates com um vencedor. Era DRAFT/HOLD; não alterou `main`, produção, banco ou credenciais. Diferenças a reconciliar: expirava ticket em 15 min e sessão em 12 h, emissão somente por `admin`, e dependia de PostgreSQL/Resend. As decisões desta conversa substituem esses parâmetros: `admin` **e** `staff` emitem/revogam, o acesso dura 3 h, e serviço/identidade continuam aguardando decisão. Não portar essa PR wholesale nem reintroduzir PostgreSQL sem necessidade comprovada.
 
-## 6. Inventário de segurança — trabalho neutro a fazer antes/depois da escolha
+## 6. Inventário de segurança — evidência verificada em `main`
 
-### Fazer antes de escolher provedor
+Leitura dos arquivos remotos de `main` em `38a314fb3d9830e43310e59c0166197fd19341e0`. O inventário abaixo cobre os pontos de entrada e consumidores centrais encontrados; ainda não é uma enumeração exaustiva de todos os arquivos publicados.
 
-1. Construir inventário arquivo → URL publicada → consumidor → classificação (público, interno, admin, dado comercial) para:
-   - HTML estático e aliases, incluindo `/config/`, `/config/index.html`, `/index.html` e URL direta Netlify;
-   - scripts, CSS, imagens e dados carregados por caminhos desde `/`;
-   - configuração raw e projeção de comprador;
-   - `mock-price-book.js`, dados de catálogo/cena e ativos incluídos em bundles;
-   - `/admin.html`, API normal e URL direta de cada Function.
-2. Identificar quais recursos são compartilhados com landing/viewer. Um caminho compartilhado necessário ao conteúdo público não pode ser simplesmente bloqueado sem separar o artefato ou mover o dado protegido para entrega autorizada.
-3. Fazer matriz rota × método × principal com status esperado (401/403/200) e cabeçalhos privados. Distinguir `GET` raw admin, DTO comprador e projeção pública do viewer.
-4. Preparar sequência de cutover/rollback que mantenha a superfície atual honesta até os gates finais e nunca reabra acesso raw anônimo como rollback.
-5. Atualizar ponteiros do handoff/issue #192 para este plano e marcar a divergência dos documentos antigos.
+### Rotas, shells e recursos estáticos observados
+
+| URL/caminho publicado | Consumidor e conteúdo | Classificação atual / consequência |
+| --- | --- | --- |
+| `/` (`app/index.html`) | Landing; usa CSS, scripts, imagens e dados em `/landing/**`. | Pública. |
+| `/viewer/` (`app/viewer/index.html`) | Viewer; carrega catálogo/cena/máscaras e o renderizador compartilhado, depois consulta `GET /api/public-modules`. | Pública. A projeção é allowlisted; não bloquear seus recursos visuais compartilhados sem separar dependências. |
+| `/how-it-works/`, `/about/` | Páginas públicas estáticas; reutilizam tema, CSS e logo da landing. | Públicas; assets comuns também são usados pela landing. |
+| `/config/` e `/config/index.html` (`app/config/index.html`) | Shell do configurador; `<base href="/">` carrega `/styles.css`, `/data/**`, `/core/**`, `/assets/kitchen/base.png` e `/app.js`. O cliente busca `GET /api/configuration`. | Shell, JS, CSS e imagens são URLs estáticas públicas no deploy atual. Um gate apenas no HTML deixaria os dados/recursos acessíveis por URL direta. O catálogo e a cena também têm consumidores públicos; preço comercial e outros dados exigem classificação e separação antes do corte. |
+| `/admin.html` | Painel carrega scripts, CSS e dados estáticos antes/de forma independente do login da interface. O login Netlify Identity e a seleção visual do editor são executados no browser. | O shell e recursos podem ser obtidos diretamente hoje. Ocultar painel no cliente não é autorização; escrita é protegida separadamente pela Function. |
+| `/landing/**`, `/core/**`, `/data/**`, `/assets/**`, `/admin/**` | Aliases/caminhos estáticos sob o diretório publicado `app`; vários arquivos são compartilhados entre rotas e módulos. | O arquivo publicado não ganha proteção pelo fato de uma página pai exigir login. Verificar URL direta de cada arquivo incluído no inventário de cutover. |
+
+`netlify.toml` configura `publish = "app"`, reescritas para as duas Functions abaixo e redirects 301 dos aliases antigos `/landing`, `/landing/como-funciona` e `/landing/quem-somos`. Assim, a pasta publicada não é uma fronteira de segurança. A lista de diretórios acima é representativa dos imports observados, não uma prova de que foram enumerados todos os nomes/aliases possíveis.
+
+### APIs e caminhos diretos das Functions
+
+| Endpoint | Métodos/consumidores observados | Estado atual em `main` | Alvo de autorização |
+| --- | --- | --- | --- |
+| `/api/configuration` → `/.netlify/functions/configuration` | `GET` pelo configurador; `PUT` pelo admin. A URL direta `/.netlify/functions/configuration` executa o mesmo handler. | `GET` retorna publicação raw ou fallback sem autenticação; `PUT` valida Netlify Identity e exige role `admin`. | Remover GET raw anônimo. Separar leitura do comprador (DTO allowlisted, grant `config:read`) da leitura/escrita administrativa; preservar escrita restrita a `admin` salvo mudança deliberada na matriz. Aplicar policy idêntica no rewrite e na URL direta. |
+| `/api/public-modules` → `/.netlify/functions/public-modules` | `GET` somente, usado pelo viewer; sem query string. A URL direta da Function também chega ao handler. | Projeção pública allowlisted, sem preço, revision, ETag opaco ou metadados admin; responde 503 se a publicação estiver ausente/inválida, com fallback limitado à projeção pública primária em deploy-preview sem snapshot local. | Manter pública e independente do DTO do configurador; preservar validação e falha fechada. |
+
+As duas Functions declaram explicitamente métodos aceitos. A consulta atual a `GET /api/configuration` no `app/app.js` mantém caminho legado de continuidade quando há certos erros HTTP; no cutover buyer-auth isso deve deixar de permitir qualquer bootstrap com configuração local/estática ou estado de preço quando não houver resposta autorizada. O estado atual não é uma proteção parcial confiável.
+
+### Dados e classificação
+
+- `app/data/mock-price-book.js` é entregue ao browser do configurador e também incluído pela Function/admin. Contém valores comerciais estimados por módulo/acabamento/serviço e disclaimer; o arquivo declara que custo, margem e dados de fornecedor não devem estar nele. Esses montantes não são segredo técnico hoje, mas a decisão comercial sobre exposição em páginas públicas ainda precisa ser explícita.
+- `app/data/catalog-data.js`, `scene-data.js`, `mask-data.js` e diversos `core/*.js` alimentam configurador, viewer e/ou Function. Não classificar todo o catálogo/cena como privado por associação: identificar campos e ativos individualmente. A projeção pública já é a fronteira de dados do viewer.
+- `app/core/published-buyer-projection.js` é transformação pura, sem I/O ou fallback, carregada pelo shell configurador. Não é endpoint nem autorização; sua presença no cliente não limita acesso a valores de origem.
+- `app/admin.html` mostra um formulário/login e painel negado por Identity no cliente, mas o HTML, bundle, CSS e scripts/dados carregados permanecem recursos estáticos. A autenticação client-side não impede download direto desses arquivos.
+- Não foi identificada dependência de PostgreSQL ou Clerk no runtime de `main`; o `package.json` observado inclui Blobs, Identity e esbuild.
+
+### Matriz mínima de superfície observada (antes de implementar)
+
+| Recurso/método | Anônimo | Identity `staff` | Identity `admin` | Comprador com e-mail verificado + grant ativo |
+| --- | --- | --- | --- | --- |
+| Landing, viewer, how-it-works, about; `GET /api/public-modules` | 200 | 200 | 200 | 200 |
+| Páginas/recursos internos comuns (a enumerar), incluindo sessão de operador | 401/redirect | 200 | 200 | 401/redirect |
+| `GET /config/` e bootstrap/DTO de comprador | 401/redirect | 200 | 200 | 200 apenas com grant e escopo |
+| `GET /api/configuration` raw + URL direta da Function | 401/403 | 403 | 200 | 403 |
+| `PUT /api/configuration` + URL direta da Function | 401 | 403 | 200 | 403 |
+| `/admin.html` e dados exclusivos admin (após separar de assets públicos) | 401/redirect | 403 | 200 | 403 |
+| Emissão/revogação de grant | 401 | 200 | 200 | 403 |
+
+Usar 401/403 conforme exista ou não uma identidade autenticada; páginas HTML podem redirecionar para login, mas API/arquivo direto deve responder sem revelar conteúdo protegido. Confirmar política de recursos privados e cabeçalhos `no-store` por caminho durante implementação. A matriz não autoriza atualmente acesso de `staff` à escrita de configuração.
+
+### O que ainda falta para fechar o inventário antes do cutover
+
+1. Enumerar cada HTML/alias, script, CSS, imagem, fonte, JSON/dado e bundle diretamente servidos por `app`; registrar URL exata, hash/referências relevantes, consumidores e classificação de campos. Distinguir arquivo realmente compartilhado de recurso exclusivo.
+2. Examinar todos os endpoints/Functions e métodos no branch-base do cutover, inclusive qualquer endpoint adicionado desde o SHA inventariado, e testar caminhos diretos além dos dois rewrites confirmados.
+3. Decidir explicitamente se valores estimados do `mock-price-book.js` são conteúdo público ou somente autenticado. Se privados, removê-los do bundle estático e entregá-los por resposta autorizada; bloquear apenas `/config/` não basta.
+4. Desenhar o limite Netlify/CDN que bloqueia shells/arquivos privados por URL direta e mantém arquivos públicos compartilhados disponíveis. Se um mesmo bundle contém código/dados públicos e privados, separar dados privados em entrega autenticada em vez de proteger o asset inteiro e quebrar landing/viewer.
+5. Fechar matriz rota × método × papel/grant com cada resultado 200/401/403, incluindo `OPTIONS`, query strings, métodos não aceitos, aliases, sessão expirada/revogada e cabeçalhos de cache.
+6. Preparar sequência de cutover/rollback que não reabra leitura raw anônima nem use fallback estático/local de preço; rollback deve retornar para estado seguro ou interromper a publicação protegida.
+7. Atualizar ponteiros do handoff/issue #192 para este plano e assinalar documentos antigos que ainda apresentem Clerk como escolha feita.
 
 ### Implementar somente após selecionar provedor
 
 1. Policy pura: `public | internal(role) | admin | buyer(config:read, expiresAt, revokedAt)`; rejeitar default permissivo e validar identidade no servidor.
-2. Adaptador de ator do provedor escolhido; usar contratos pequenos. Não criar abstração genérica multi-provedor antes da decisão.
-3. Endpoints de emissão, consulta/resgate, sessão e revogação, protegidos por Identity `admin` ou `staff`; limite antiabuso/rate limit e confirmação do emissor.
-4. Persistência atômica de estado de ticket/grant/sessão; selecionar Blobs-CAS ou PostgreSQL pela evidência do gate concorrente, não por suposição. Se PostgreSQL for necessário, usar migração isolada aprovada; nada de auto-provisionamento oculto em build/deploy.
-5. Migrar o configurador para DTO allowlisted de comprador e bootstrap fail-closed desde o primeiro paint.
-6. Proteger entrega de HTML e todos os assets/dados comerciais diretos via Edge/Function/CDN; proteger cada API independentemente. A URL direta da Function e rewrites devem ter a mesma policy.
-7. Só então executar testes e validações: policies, concorrência real no backend selecionado, resgate/expiração/revogação, superfície HTTP direta, regressões do configurador e deploy preview com credenciais sandbox. Não usar resultado de teste com fixture interceptada como evidência de auth real.
-8. Ativar produção em cutover coordenado, com variáveis/segredos configurados fora do repositório e critérios de rollback documentados.
+2. Adaptador do provedor escolhido, com contratos pequenos; não criar abstração multi-provedor antes da decisão.
+3. Endpoints de emissão, consulta/resgate, sessão e revogação, protegidos por Identity `admin` ou `staff`; limite antiabuso/rate limit e auditoria sem segredos.
+4. Persistência atômica de estado de ticket/grant/sessão; selecionar Blobs-CAS ou PostgreSQL pela evidência do gate concorrente, não por suposição.
+5. Migrar configurador para DTO allowlisted e bootstrap fail-closed desde o primeiro paint, removendo os fallbacks de config/preço locais do caminho de comprador.
+6. Proteger entrega de HTML e dados realmente privados por Edge/Function/CDN, todos os aliases e cada API; manter separado o conjunto de recursos públicos compartilhados.
+7. Depois executar testes de policies, concorrência real, resgate/expiração/revogação, superfície HTTP direta, regressão do configurador e deploy preview com credenciais sandbox.
+8. Ativar produção em cutover coordenado, com segredos fora do repositório e critérios de rollback registrados.
 
 ## 7. Fronteira e próxima ação
 
-**Podemos começar agora:** concluir o inventário de paths/arquivos e rascunhar a matriz endpoint × papel usando o estado atual de `main`. Isso não decide Clerk, e-mail ou storage.
+**Concluído neste plano, sem alterar runtime:** leitura das rotas principais, dos shells `/config/` e `/admin.html`, dos consumidores de `/api/configuration` e `/api/public-modules`, da publicação estática (`publish = "app"`), de recursos compartilhados e da classificação inicial do preço. A matriz mínima agora separa página pública, interno, admin e comprador com grant.
+
+**Ainda pode avançar sem escolher provedor:** enumerar o restante dos arquivos/aliases e Functions no SHA vigente; decidir a classificação de cada dado comercial; definir a fronteira de proteção estática/Edge e a estratégia de assets públicos compartilhados; fechar a matriz HTTP e um roteiro de cutover/rollback. Isso é documentação/análise, não ativa autenticação.
 
 **Esperar pela resposta do Clerk antes de:** selecionar autenticação de clientes, dependência/provedor de envio, criação de conta versus login sob demanda, variáveis de ambiente, cadastro/invite mode ou implementação do adaptador de identidade do comprador.
 
