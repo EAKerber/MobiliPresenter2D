@@ -18,6 +18,24 @@
 
 # Keep old landing-page URLs usable after moving their canonical paths to the site root.
 [[redirects]]
+  from = "/landing"
+  to = "/"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/landing/"
+  to = "/"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/landing/index.html"
+  to = "/"
+  status = 301
+  force = true
+
+[[redirects]]
   from = "/landing/como-funciona"
   to = "/how-it-works/"
   status = 301

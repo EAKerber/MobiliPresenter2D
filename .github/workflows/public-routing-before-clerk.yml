@@ -73,14 +73,20 @@ jobs:
             sleep 3
           done
           [[ "$root" == *'id="environmentTrack"'* && "$config" == *'class="workspace"'* ]]
-      - name: Public function negative endpoints (preview has no v5 seed)
+      - name: Public projection and negative endpoint checks
         shell: bash
         run: |
           set -euo pipefail
-          status=$(curl -sS -o /tmp/public-unavailable -w '%{http_code}' "$PUBLIC_PAGES_URL/api/public-modules")
-          echo "Deploy-preview scoped public-modules HTTP status: $status"
-          test "$status" = 503
-          grep -q '"public_modules_unavailable"' /tmp/public-unavailable
+          status=$(curl -sS -o /tmp/public-projection.json -w '%{http_code}' "$PUBLIC_PAGES_URL/api/public-modules")
+          echo "Deploy-preview public-modules HTTP status: $status"
+          test "$status" = 200
+          node <<'NODE'
+          const assert = require("node:assert/strict");
+          const value = JSON.parse(require("node:fs").readFileSync("/tmp/public-projection.json", "utf8"));
+          assert.equal(value.schemaVersion, "PublicModulePresentation2D 0.1");
+          assert(Array.isArray(value.modules) && value.modules.length > 0);
+          assert.deepEqual(Object.keys(value).sort(), ["modules", "publicState", "schemaVersion"]);
+          NODE
           test "$(curl -sS -o /dev/null -w '%{http_code}' -X PUT "$PUBLIC_PAGES_URL/api/public-modules")" = 405
           test "$(curl -sS -o /dev/null -w '%{http_code}' "$PUBLIC_PAGES_URL/api/public-modules?inspection=raw")" = 400
       - name: Install isolated browser

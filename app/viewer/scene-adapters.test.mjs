@@ -15,6 +15,7 @@ for (const pathname of [
   "core/visibility.js",
   "core/validation.js",
   "core/finishes.js",
+  "core/scene-geometry.js",
   "core/scene-component.js",
   "viewer/data.js",
   "viewer/public-data.js",

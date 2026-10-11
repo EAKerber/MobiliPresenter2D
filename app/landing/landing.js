@@ -23,7 +23,7 @@
       const benefit = document.createElement("div");
       benefit.className = "mini-benefit";
       const icon = document.createElement("img");
-      icon.src = `assets/icons/ui/gold/${["modular", "inteligente", "para-sua-vida"][index]}.svg`;
+      icon.src = `/landing/assets/icons/ui/gold/${["modular", "inteligente", "para-sua-vida"][index]}.svg`;
       icon.alt = "";
       const strong = document.createElement("strong"); strong.textContent = title;
       benefit.append(icon, strong); mini.append(benefit);

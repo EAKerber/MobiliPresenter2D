@@ -10,7 +10,11 @@ const viewer = read("app/viewer/index.html");
 const viewerJS = read("app/viewer/viewer.js");
 const toml = read("netlify.toml");
 assert.match(landing,/id="environmentTrack"/);
-assert.match(landing,/<base href="\/landing\/">/);
+assert.doesNotMatch(landing,/<base href="\/landing\/">/);
+assert.match(landing,/href="\/landing\/landing\.css\?/);
+assert.equal(fs.existsSync(path.join(root,"app/landing/index.html")), false, "root index is the only landing document");
+assert.match(read("app/landing/data.js"),/image: "\/landing\/assets\//);
+assert.match(read("app/landing/landing.js"),/icon\.src = `\/landing\/assets\//);
 assert.match(landing,/href="\/#ambientes"/);
 assert.match(landing,/href="\/viewer\/"/);
 assert.doesNotMatch(landing,/src="app.js|id="sceneLayers"/);
@@ -24,6 +28,9 @@ assert.match(viewerJS,/CASA_PUBLIC_VIEWER_DATA\.load\(\)/);
 assert.doesNotMatch(viewerJS,/if \(integration\.usePublishedApi === true\)/);
 assert.doesNotMatch(viewerJS,/else\s*\{\s*start\(\);/);
 assert.match(toml,/from = "\/api\/public-modules"/);
+assert.match(toml,/from = "\/landing"[\s\S]*?to = "\/"[\s\S]*?status = 301/);
+assert.match(toml,/from = "\/landing\/"[\s\S]*?to = "\/"[\s\S]*?status = 301/);
+assert.match(toml,/from = "\/landing\/index\.html"[\s\S]*?to = "\/"[\s\S]*?status = 301/);
 for(const banned of ["netlify/plugins/cp-public-02c-preview/index.js",
   "scripts/seed-public-preview-v5.cjs","netlify/lib/buyer-session-postgres.cjs"]) {
   assert.equal(fs.existsSync(path.join(root,banned)), false, banned+" must never be released");
