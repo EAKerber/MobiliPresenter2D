@@ -277,3 +277,40 @@ O _journal.json encontrado declara dialeto sqlite e nenhuma migration. Não há 
 4. Tirar docs, relatórios, ferramentas, fontes e metadados de desenvolvimento de dentro do diretório publicado, mantendo o deploy Netlify e o publish configurado.
 5. Validar URL direta dos seis shells, dos assets privados removidos, dos dois rewrites e das duas URLs /.netlify/functions/*. Hoje nenhum teste HTTP ao deploy foi executado.
 
+## 11. Classificação dos auxiliares e proposta de exclusão da publicação
+
+Esta proposta preserva `publish = "app"`, o deploy Netlify existente e os arquivos necessários a desenvolvimento/CI. Não é uma alteração de runtime ou deploy aplicada nesta PR.
+
+A documentação oficial descreve o publish directory como a pasta cujos arquivos são implantados, sem um mecanismo de exclusão seletiva de arquivos estáticos identificado na configuração versionada atual. Referências: [configuração de build](https://docs.netlify.com/build/configure-builds/overview/) e [configuração por arquivo](https://docs.netlify.com/build/configure-builds/file-based-configuration/). Portanto, a opção de menor alcance é limpar caminhos explicitamente classificados do checkout efêmero ao final do comando de build Netlify, depois do empacotamento do admin e antes de Netlify coletar `app`. O diretório `app` continua sendo o publish.
+
+### Classificação inicial
+
+| Caminho atual em `app` | Uso encontrado | Destino/proposta | Condição antes de implementar |
+| --- | --- | --- | --- |
+| `docs/**` (3 arquivos) | Checkpoints, guia arquitetural e inventário de reuso; documentação para quem mantém o projeto, não carregada pelos shells HTML consultados. | Manter versionada, fora do conjunto publicado. Pode permanecer no repositório em `app/docs` e ser removida apenas do checkout Netlify antes da publicação. | Confirmar que outros consumidores do deploy não usam esses documentos por URL. |
+| `reports/**` (7 JSON + PNG composto de ~2,1 MB) | Evidência de validação/proveniência. Os relatórios JSON referenciam `tools/**` e caminhos de assets como dados de evidência; não são imports do runtime consultado. | Manter versionados para auditoria local/CI, fora da publicação. | Confirmar buscas de imports/URLs no repo e que nenhum consumidor externo depende do PNG/JSON por URL. |
+| `tools/**` (scripts, testes, máscaras e fontes de imagem) | É necessário aos comandos `app/package.json` de build/teste e ao workflow `app-build-purity.yml`; contém scripts Python/Node, máscaras de trabalho e fontes de imagem. Não é dependência dos shells de produto consultados. | Manter versionado e executável em CI/desenvolvimento; excluir apenas no estágio final do build Netlify. Não mover nem apagar nesta etapa. | O build Netlify atual executa somente o build raiz que empacota `app/admin/admin.js`; confirmar comportamento do build/deploy em preview antes de aplicar a limpeza. |
+| `scripts/build-static.sh` | Chamado por `app/package.json` em `build:current`, dentro do workflow de build/teste da app. | Preservar no repositório; excluir do payload Netlify após qualquer operação de build necessária. | Garantir que o comando final da Netlify não execute `app/npm run build` antes da remoção. |
+| `drizzle/meta/_journal.json` | Journal vazio que declara dialeto SQLite; não há driver ou runtime PostgreSQL em `main`. | Fora da publicação; manter versionado até confirmar se ferramenta futura depende do scaffold Drizzle. | Não remover nem interpretar como banco ativo. |
+| `README.md` dentro de `app` | Instruções de desenvolvimento/arquitetura local; não é página HTML de produto. | Fora da publicação; preservar em Git. | Verificar se existe consumidor de download/documentação pública antes de remover do payload. |
+| `HOT_SWAP_VALIDATION.json` e `reports/**` | Metadados e resultados históricos de validação/proveniência. | Preservar no repositório, fora do payload público. | Conferir referências por nome antes de adicionar a allowlist de exclusão. |
+| `.openai/hosting.json` | Metadado de hospedagem do projeto OpenAI Sites com identificador de projeto e diretório `dist`; não é configuração Netlify. | **Preservar por enquanto**; não inferir que possa ser descartado. | Determinar se outra integração ativa depende dele e se deve ficar em `app` ou ser realocado com configuração correspondente. |
+| `.gitignore` e `.openai/**` | Metadados ocultos/da ferramenta dentro do publish root. | Não tentar tratá-los como controle de publicação; o `.gitignore` não altera o diretório entregue pelo Netlify. | Decidir junto da investigação de metadados ocultos; não presumir confidencialidade ou remoção segura. |
+
+### Implementação mínima sugerida para uma etapa posterior
+
+1. Fazer busca de referências no repositório e validar que nenhum HTML, JS/CSS de runtime, redirect, Function, workflow ou integração externa depende das URLs auxiliares listadas.
+2. Adicionar um script idempotente e explícito fora de `app` que remova do checkout de build somente a allowlist aprovada (`app/docs`, `app/reports`, `app/tools`, `app/scripts`, `app/drizzle`, `app/README.md` e, se confirmado, `app/HOT_SWAP_VALIDATION.json`). Não apagar os arquivos do Git.
+3. Encadear esse script depois de `npm run build` na configuração Netlify; preservar `publish = "app"`. A limpeza ocorre apenas no checkout descartável da compilação Netlify; os jobs de CI de app continuam vendo e usando os diretórios versionados.
+4. Fazer um Deploy Preview e conferir no File Explorer/HTTP que os recursos do site continuam presentes e que as URLs auxiliares respondem 404. Isso é a verificação necessária antes de produção.
+5. Manter `.openai/hosting.json` fora de qualquer limpeza até a dependência do outro host ser resolvida.
+
+A limpeza do checkout de build é mais simples que mover agora dezenas de ferramentas, ajustar todos os caminhos usados por `app/package.json` e workflows, e manter histórico/evidência. Se um build ou deploy fora da Netlify precisar reproduzir o pacote, encapsular essa exclusão num script versionado permite repetir a regra. Nenhuma remoção seria aplicada ao checkout do desenvolvedor.
+
+### Limites da evidência
+
+- Foram lidos `netlify.toml`, `package.json` raiz, `app/package.json`, `app/.gitignore`, `app/README.md`, `app/scripts/build-static.sh` e o workflow `.github/workflows/app-build-purity.yml` em `main`.
+- A classificação foi feita por conteúdo/nomes e referências centrais. Ainda não se fez uma busca exaustiva de todas as strings de URL nem a inspeção HTTP do deploy.
+- O workflow de CI roda build e testes dentro de `app`; não o alteramos e não executamos testes nesta análise.
+- Uma exclusão no build só será considerada concluída após preview verificar as respostas diretas. Até então, os arquivos seguem no publish root configurado.
+
