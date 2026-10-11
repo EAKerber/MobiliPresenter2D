@@ -74,7 +74,7 @@ Condições de concorrência a comprovar antes do cutover:
 
 - Identity autentica `admin` e `staff`; Functions validam roles.
 - Um serviço transacional separado entrega código/link de verificação ao e-mail do comprador; depois do resgate, o servidor cria a sessão/grant de 3h.
-- Armazenamento de grants pode reaproveitar o padrão Blobs `strong read + ETag + onlyIfMatch + readback` já usado em `app/core/v5-normal-save.js`, **sujeito a gate real de concorrência** para resgate e revogação. Se o runtime não garantir a semântica necessária, adotar o mecanismo transacional já prototipado em PostgreSQL, sem improvisar locks em memória.
+- Usar PostgreSQL para tickets, grants e sessões: o resgate consome o ticket e cria a sessão atomicamente; revogação e limites por destinatário/emissor também são operações transacionais. Manter Blobs para a publicação atual do configurador, cujo CAS protege a atualização de um único documento. Isso não exige migrar a configuração inteira.
 - Vantagem: não introduz segundo provedor de identidade para compradores. Custo/limites e responsabilidade de entrega de e-mail dependem do serviço escolhido.
 - Ponto de atenção: Identity não é o mecanismo do grant temporário; ele não deve virar role permanente.
 
@@ -83,7 +83,7 @@ Condições de concorrência a comprovar antes do cutover:
 - Netlify Identity continua autenticando os operadores internos e protegendo emissão/revogação.
 - Clerk fornece identidade/login de comprador e prova de e-mail. O servidor só ativa o grant pendente quando a sessão Clerk verificada pertence ao mesmo e-mail que `admin`/`staff` autorizou.
 - A autorização de três horas continua própria do site; uma sessão Clerk mais longa não estende o grant. Revogação/expiração devem ser conferidas no boundary de API e de recursos protegidos.
-- Grant em Blobs com escrita condicional continua sendo uma opção a comprovar; Clerk não torna o estado do grant ou o gate Netlify automaticamente atômicos.
+- O estado de tickets, grants e sessões continua em PostgreSQL independentemente de Clerk. Clerk autentica/verifica o comprador, mas não substitui a transação que consome o grant, abre a sessão e permite revogá-la.
 - Vantagem: prepara contas e login persistente de clientes se isso virar requisito. Custo é a coexistência temporária de Identity e Clerk e a necessidade de conciliar identidades com e-mail verificado.
 - Pendência decisiva: resposta do suporte sobre limites e política de entrega de códigos/links de e-mail em produção no plano considerado. A página de preços lista verificação por e-mail, mas não publica uma franquia de envio que possamos usar como garantia.
 
@@ -192,7 +192,7 @@ Leitura somente, sem alterar arquivos, de `work/MobiliPresenter2D`: branch `expe
 
 **Esperar pela resposta do Clerk antes de:** selecionar autenticação de clientes, dependência/provedor de envio, criação de conta versus login sob demanda, variáveis de ambiente, cadastro/invite mode ou implementação do adaptador de identidade do comprador.
 
-**Esperar por um gate específico antes de declarar Blobs suficiente:** resgate e revogação concorrentes reais em deploy preview. Se CAS não assegurar único vencedor e consistência observável, reutilizar o modelo transacional PostgreSQL já desenvolvido como alternativa técnica, depois de pesar custo/operação.
+**Persistência já recomendada para grants:** PostgreSQL, com base no fluxo transacional já exercitado na PR #186 e na orientação do Netlify para dados por usuário e operações transacionais. Não precisamos testar Blobs como banco de sessões. Blobs permanece no salvamento/publicação de configuração já vigente; isso não implica reescrever esse subsistema.
 
 **Não fazer ainda:** deploy/auth cutover, provisionar Clerk/DB/Resend, enviar e-mails reais, modificar Blob publicado, proteger rota parcialmente, mesclar PRs antigas, migrar Identity admin, ativar inscrição aberta, ou afirmar que produção está protegida.
 
@@ -224,4 +224,16 @@ Leitura somente, sem alterar arquivos, de `work/MobiliPresenter2D`: branch `expe
 Hoje app/data/mock-price-book.js está dentro do diretório Netlify publicado e contém valores; bloquear somente a tela /config/ ou a API não protege a URL direta desse arquivo. No cutover, retirar os valores do bundle estático: colocar a fonte canônica em caminho não publicado ou carregá-la do armazenamento de publicação no servidor, remover referências de preço embutidas no HTML/JS e eliminar fallbacks locais com valores. O editor administrativo deverá obter a cópia de trabalho por leitura autenticada; o configurador só recebe o DTO após autorização.
 
 A etapa inicial exige trabalho real de separação e migração do carregamento, porque o sistema hoje entrega valores em arquivos estáticos. **A etapa posterior para publicá-los é pequena** se essa separação tiver sido feita: liberar o mesmo endpoint estreito para anônimos e revalidar que não houve exposição de outros dados. Não se deve deixar uma cópia estática pública “por compatibilidade”, pois isso anularia a policy.
+
+
+
+## 9. Persistência: Blobs para publicação, PostgreSQL para grants
+
+A escolha de persistência não precisa ser refeita para todo o produto:
+
+- **Configuração publicada:** manter o modelo Blobs existente e seu compare-and-swap por ETag. Em app/core/v5-normal-save.js, cada salvamento lê o único blob published, valida a revisão, grava com onlyIfMatch e confere ETag, digest e semântica no readback. Esse padrão previne que duas edições concorrentes sobrescrevam silenciosamente a mesma publicação.
+- **Acesso temporário:** usar PostgreSQL para tickets, estado do grant e sessões. A PR #186 já tem um adaptador pg que consome o ticket com UPDATE ... RETURNING e insere a sessão na mesma transação/conexão; também serializa as quotas de emissão por destinatário e emissor. Seu teste de integração usou PostgreSQL 16 e 32 resgates concorrentes, com um vencedor. Reutilizar esse desenho, ajustando os papéis, a duração de 3 horas e o provedor de identidade definidos aqui; não portar a PR inteira.
+- **Por que não estender Blobs para esse caso:** o CAS do salvamento atual cobre um blob. O fluxo de grants combina estados por usuário, expiração, revogação e operações relacionadas. A documentação atual do Netlify recomenda banco para controle de concorrência avançado/modelo relacional e descreve Blobs como orientado a leituras frequentes e escritas infrequentes. O padrão de configuração não é evidência suficiente para trocar a transação PostgreSQL por Blobs.
+- **Hospedagem do Postgres:** Netlify Database é a primeira opção a avaliar por integrar provisão, migrações e branching dos Deploy Previews. Ele só está disponível em planos baseados em créditos e cobra créditos por compute e bandwidth; verificar o plano e o custo esperado da conta antes de provisionar. Se não couber no plano ou orçamento, o adaptador usa uma URL PostgreSQL (CASA_ACCESS_DB_URL) e pode apontar para outro serviço PostgreSQL gerenciado, sem alterar Clerk nem o contrato dos grants.
+- Nenhum banco deve ser provisionado ou migrado até a configuração de ambiente ser deliberada. Deploy Preview não pode apontar para o banco de produção durante validação.
 
