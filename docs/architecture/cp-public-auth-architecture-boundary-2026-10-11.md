@@ -164,6 +164,26 @@ Usar 401/403 conforme exista ou não uma identidade autenticada; páginas HTML p
 7. Depois executar testes de policies, concorrência real, resgate/expiração/revogação, superfície HTTP direta, regressão do configurador e deploy preview com credenciais sandbox.
 8. Ativar produção em cutover coordenado, com segredos fora do repositório e critérios de rollback registrados.
 
+### Revisão de protótipo local — evidência não merged
+
+Leitura somente, sem alterar arquivos, de `work/MobiliPresenter2D`: branch `experiment/public-landing-commercial-viewer`, HEAD local `b67a6fbdaa1af263c6b1e94ab60145320c4a9621`, com alterações staged/unstaged e arquivos não rastreados. O conteúdo a seguir descreve esse snapshot de trabalho, **não** `main`, PR aprovada nem comportamento implantado. Revalidar hashes e estado antes de portar qualquer peça.
+
+**Candidatos reutilizáveis, depois de revisão no branch de implementação limpo:**
+- Autenticação de operador no servidor via Netlify Identity, extraindo papéis apenas de `app_metadata.roles`; proteção contra CSRF/origem para mutações; nunca refletir tokens/senhas em URL, resposta ou logs.
+- Separação de operações de rascunho e publicação em `/api/admin/configuration` e `/api/admin/publish`, com verificação de identidade em cada handler (a proteção do caminho estático não substitui a proteção da API direta).
+- Contrato comercial allowlisted: valores numéricos só para IDs/regras já aprovados; rascunho, publicação, projeção pública e auditoria em registros distintos. É uma fronteira útil para a **tabela de preços**, não para a configuração completa do comprador.
+- A tela `/backoffice/` e login separado demonstram como manter edição interna fora do viewer público; ainda requerem classificação de role coerente com o modelo aprovado.
+
+**Divergências que impedem adoção literal:**
+- O protótipo usa role customizada `catalog-admin`. A matriz acordada tem `admin` e `staff`; não criar um terceiro papel incidental. Acesso a painel/admin e escrita de catálogo devem continuar coerentes com “staff exceto admin”; emissão/revogação de grants podem ser permitidas a ambos como decisão já tomada.
+- O handler experimental `GET /api/configuration` serve apenas uma projeção comercial publicada; no `main` auditado, esse caminho retorna a configuração publicada bruta. Não são contratos intercambiáveis. O comprador precisa de DTO próprio e grant `config:read`.
+- O configurador conserva a tabela estática revisada quando a API retorna 404, falha de rede ou contrato inválido. Isso não protege os valores se preço for classificado privado e não é bootstrap fail-closed para o novo fluxo.
+- Não há emissão/resgate de ticket de comprador, verificação de posse do e-mail, sessão buyer de 3 horas ou revogação nesse snapshot.
+- O repositório comercial usa leitura forte e comparação de revisão antes de `setJSON`, mas gravação não é condicional/transacional. Duas gravações podem passar pela mesma revisão; publicar em paralelo também pode competir por versão/ponteiro. A própria nota local limita o uso a uma pessoa editando. Isso não satisfaz ainda o uso concorrente nem o gate de Blobs-CAS definido no plano.
+- O gate Netlify por role cobre `/backoffice/*`; recursos reutilizados em outras rotas e caminhos/arquivos não abrangidos continuam dependendo de policy própria. Não usar o redirect de página como substituto de autorização de API ou assets.
+
+**Destino recomendado:** tratar o protótipo como fonte de ideias para o backoffice de preço e para os handlers protegidos de operador, não como solução de autenticação de comprador nem como branch para merge em bloco. Antes de portar: comparar cada arquivo com `main` atual, separar alterações não relacionadas do checkout sujo, reconciliar papel/DTO/fallback, e escolher uma estratégia de gravação que passe o gate concorrente.
+
 ## 7. Fronteira e próxima ação
 
 **Concluído neste plano, sem alterar runtime:** leitura das rotas principais, dos shells `/config/` e `/admin.html`, dos consumidores de `/api/configuration` e `/api/public-modules`, da publicação estática (`publish = "app"`), de recursos compartilhados e da classificação inicial do preço. A matriz mínima agora separa página pública, interno, admin e comprador com grant.
