@@ -1,5 +1,17 @@
 # Viewer público: fronteira e migração
 
+## 2026-10-10 — helpers compartilhados de desenho e geometria
+
+`app/core/technical-drawings.js` agora é carregado pelo configurador e pelo viewer. Ambos usam os mesmos geradores de vistas frontal/lateral, isométrica e interna, incluindo os padrões `two-doors` e `two-doors-and-microwave`. `two-doors-and-lift` é um padrão legado e quebrado; a implementação preservada na extração não deve ser tratada como comportamento correto nem como referência visual. As páginas continuam normalizando seus próprios dados e montando seus wrappers, títulos, notas e recortes de foco. A vista interna aceita enquadramento e chamada próprios do viewer, preservando seu retângulo maior e o rótulo de vãos confirmados.
+
+`app/core/scene-geometry.js` compartilha a conversão de `alphaBounds` para percentuais e a resolução de lado dos marcadores. A composição completa continua própria de cada página, mas `app/core/scene-component.js` também fornece a criação de camadas com máscaras, a atualização do estado de hotspots e o posicionamento do retângulo de seleção. Filtros, seleção, criação dos hotspots e estado comercial continuam próprios.
+
+Gate visual local dos SVGs: rasterizei offline as vistas anteriores e atuais dos sete módulos do catálogo, incluindo frontal, lateral, isométrica e a vista interna disponível. Não encontrei diferença geométrica nas vistas do catálogo. A prancha também contém um oitavo caso sintético de `two-doors-and-lift`, que é legado quebrado; esse caso deve ser desconsiderado como referência de correção. A prancha está em `C:/Users/eduak/.codex/visualizations/2026/10/09/01a11e58-fea7-7d21-9732-fd375df49fa7/technical-drawings-20261011/svg-baseline-vs-current.png`.
+
+Esta foi uma comparação offline da geometria SVG; não valida DOM/CSS responsivo, layout completo no navegador, foco/cena ou integração da página. Nenhum teste automatizado foi executado.
+
+Os cabeçalhos das páginas permanecem explícitos no HTML. Há poucas páginas com links e comportamentos de navegação diferentes; não há template/build de páginas que reduza a duplicação sem introduzir carregamento em runtime ou alterar semântica/SEO.
+
 ## 2026-10-08 — Carregamento público preparado (CP-PUBLIC-02b, opt-in)
 
 O adapter standalone foi corrigido para respeitar `publicModules` e `publicState` injetados (antes o caminho `create()` descartava `publicModules`). Módulos fora da allowlist publicada ficam invisíveis também na cena, não apenas sem hotspot.
@@ -29,8 +41,9 @@ O endpoint separado é proposto na PR #179 (que depende de #178 e aponta para `m
 
 - A main atual **não contém** `publicPresentation.description` nem `.carcass` no catálogo; a branch doadora propunha dados adicionais. O adapter em staging faz fallback para dados existentes (benefícios etc.); **isso não prova equivalência editorial com v5**. Nenhuma descrição/caixaria comercial deve ser inventada ou copiada do catálogo defasado. A próxima revisão deve obter a apresentação pública do contrato publicado, com projeção allowlist segura, preservando cena e dimensões do catálogo/scene.
 - **Falha real falsificada no browser (PR #175):** após seleção, o `viewer.js` aplicava `aria-pressed` lendo `data-module-id`, enquanto o adapter marca `data-select-scene-entity`/`data-entity-id`; sobrescrevia a seleção correta do componente com `false`. Corrigido removendo o segundo writer. Gating: screenshot e clique em um segundo módulo em desktop e mobile.
-- `app/core/scene-component.js` importado ainda **não é o renderizador da main**; contém implementação paralela de camadas, máscaras, finish, hotspot, quadro e teclado. O configurador v5 contém caminhos mais completos (pedra, rodapé, overlays, oclusão). Reutilizar só primitivas após testes de imagem/caso, não trocar o renderer aceito em lote.
-- Os geradores SVG ainda são duplicados entre `app/viewer/technical-views.js` e `app/app.js`. Extração `app/core/technical-drawings.js` requer comparação por módulo, tipo, estado interno e breakpoint. Carrosséis de ambientes, de views e dock/PiP são domínios diferentes, não candidatos a compartilhamento automático.
+- `app/core/scene-component.js` é **parte do viewer standalone**, não um renderer compartilhado com a main. Os helpers puros de bounds e lado do marcador agora são compartilhados em `app/core/scene-geometry.js`. Camadas, máscaras, hotspots, seleção e composição continuam distintas: o configurador filtra módulos configurados, define z-index e acrescenta comportamento de pedra, rodapé, overlays e oclusão. Não trocar o renderer aceito em lote.
+- Os geradores SVG comuns de `app/viewer/technical-views.js` e `app/app.js` agora vivem em `app/core/technical-drawings.js`; as páginas passam dados normalizados e mantêm wrappers/notas/foco. `two-doors-and-lift` é um padrão legado quebrado, não uma referência correta; a oitava amostra sintética da prancha visual deve ser ignorada. O gate de CSS/responsividade e integração em browser continua distinto e não foi executado.
+- A cena também compartilha em `app/core/scene-component.js` a criação das camadas, aplicação de máscaras, atualização de estados acessíveis dos hotspots e geometria do retângulo de seleção. O configurador injeta a resolução de assets administrativa e mantém z-index inline. A seleção de módulos, filtros, criação dos hotspots, controles, visibilidade e acabamento comercial continuam com suas políticas próprias.
 - `node --test app/viewer/scene-adapters.test.mjs` (invocado da raiz; no pacote `app` roda `node --test viewer/scene-adapters.test.mjs`) verifica catálogo/cena **atuais**, sete entidades, detalhes reais, callbacks e assets. **Não** verifica pixel-perfect, visibilidade dinâmica de pedra/rodapé nem auth; esses gates ficam para CP-PUBLIC-02/03.
 - A landing e o viewer são páginas públicas planejadas; o configurador irá de `/` para `/config/` somente após o gate de sessão emitida por e-mail e proteção server-side. O admin continua Identity. Não criar backend de contas nem ativar Google nesta etapa.
 
@@ -42,7 +55,7 @@ O viewer é uma página independente: não carrega `app.js` nem a UI do configur
 - `app/data/scene-data.js` é a fonte de IDs, entidades, bounds, assets, máscaras, camadas e visibilidade.
 - `app/data/catalog-data.js` é a fonte de título, categoria, medidas, componentes, requisitos, destaques e desenho técnico. `publicPresentation.description` e `.carcass` são campos opcionais aditivos para texto público que não pertence aos dados geométricos.
 - `app/viewer/data.js` define apenas a ordem dos blocos, os tipos de vista e os placeholders de detalhe. Não mantém cópias de módulos.
-- `app/core/scene-component.js` é compartilhado para renderizar a cena, aplicar máscaras, selecionar entidades e tratar os atalhos.
+- `app/core/scene-component.js` atende a cena do viewer standalone: aplica suas camadas/máscaras, hotspots, seleção e atalhos. O configurador mantém renderização própria em `app/app.js`; não assumir que a implementação do viewer já é compartilhada ou equivalente.
 - `app/viewer/scene-adapters.js` traduz os contratos atuais para o modelo que a página consome. Esse limite deve permanecer durante as atualizações do core.
 
 ## Caminhos do adapter
@@ -57,14 +70,14 @@ O adapter exige as capacidades `createInitialState`, `resolveVisibility` e `asse
 
 O snapshot local dos sete módulos foi removido. O staging usa `ProductCatalog2D 1.0` da main apenas como fallback até que `publicModules` e `publicState` sejam entregues por transporte seguro. Descrição editorial separada permanece vazia no baseline; Destaques são a lista `benefits[]` do ADM. Não existe informação visual independente de caixaria, e não se infere caixaria de benefícios. A composição da página em `data.js` permanece necessária e não é uma cópia do catálogo.
 
-`app/viewer/technical-views.js` ainda repete os geradores SVG do configurador. Essa é a duplicação temporária remanescente; não a apagar antes de substituir ambas as implementações por um módulo puro compartilhado. Sequência segura:
+`app/viewer/technical-views.js` mantém o adaptador de dados, o foco de cena e os wrappers; os algoritmos geométricos são compartilhados com `app/app.js` por `app/core/technical-drawings.js`. A geometria de seleção/posicionamento também usa dois helpers pequenos compartilhados. Sequência restante:
 
 1. Na hospedagem integrada, fornecer `CASA_PUBLIC_VIEWER_INTEGRATION.repository` com contratos e helpers ativos e ligar `onSelectionChange` à rota/página hospedeira; o teste local cobre factory, mapeamento de catálogo, bounds, requisitos, seleção e prefixo de assets.
 2. Comparar a cena e os detalhes para os sete módulos. Depois da aprovação, retirar `createStandaloneAdapter` e os scripts locais de `scene-data`, `catalog-data`, `mask-data`, `state`, `visibility`, `validation`, `finishes` e `scene-component` de `viewer/index.html`; o host passa a fornecê-los uma única vez.
-3. Extrair os geradores e suas funções auxiliares de desenho para `app/core/technical-drawings.js`, recebendo apenas dados normalizados e sem acessar o estado ou DOM do configurador.
-4. Fazer configurador e viewer chamarem esse módulo, preservando os wrappers de layout de cada página.
-5. Comparar vistas frontal, lateral, isométrica, foco e interna confirmada nos sete módulos, em desktop e mobile; também confirmar que o acabamento não colore a caixaria.
-6. Só depois remover os geradores duplicados de `app/app.js` e excluir `app/viewer/technical-views.js`; apagar scripts e estilos que ficarem sem referências. Manter `createRepositoryAdapter` como fronteira de compatibilidade.
+3. **Concluído localmente:** extrair os geradores para `app/core/technical-drawings.js`, com dados normalizados, sem estado de produto/configurador.
+4. **Concluído localmente:** configurar viewer e configurador para consumir o módulo mantendo wrappers de cada página.
+5. **Pendente antes de publicar:** comparar vistas frontal, lateral, isométrica, foco e interna confirmada nos sete módulos em desktop/mobile e confirmar que acabamento não colore caixaria.
+6. Não excluir `technical-views.js`: o adapter ainda fornece foco, integração de dados e wrappers do viewer. Não unificar renderizadores. Manter `createRepositoryAdapter` como fronteira.
 
 Antes de cada remoção, confirmar ausência de referências com busca no projeto e executar os testes de contrato e a comparação visual. Não remover o catálogo, `data.js` de composição, nem o adapter de fronteira: eles seguem tendo papéis distintos após a integração.
 

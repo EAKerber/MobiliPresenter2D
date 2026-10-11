@@ -8,6 +8,7 @@
   const validation = global.CasaModulesValidation;
   const fingerprint = global.CasaModulesFingerprint;
   const finishes = global.CasaModulesFinishes;
+  const sceneComponent = global.CasaModulesSceneComponent;
   let catalog = structuredClone(global.CASA_EM_MODULOS_CATALOG);
   const configurationCore = global.CasaModulesConfiguration;
   const flowCore = global.CasaModulesFlow;
@@ -42,7 +43,7 @@
       : 0;
   }
 
-  if (!scene || !inlineMasks || !core || !visibility || !validation || !fingerprint || !finishes || !catalog || !priceBook || !pricingContract || !pricing || !configurationCore || !flowCore || !layoutProfiles || !presentationCore || !presentationPolicy || !flowLayout || !hierarchyDefaults || !configuratorSettings || !administrationV5 || !buyerProjection) {
+  if (!scene || !inlineMasks || !core || !visibility || !validation || !fingerprint || !finishes || !sceneComponent || !catalog || !priceBook || !pricingContract || !pricing || !configurationCore || !flowCore || !layoutProfiles || !presentationCore || !presentationPolicy || !flowLayout || !hierarchyDefaults || !configuratorSettings || !administrationV5 || !buyerProjection) {
     throw new Error("Não foi possível carregar os dados da cena 2D.");
   }
   validation.assertValidScene(scene);
@@ -622,56 +623,10 @@
   }
 
   function renderSceneFromData() {
-    sceneBase.src = scene.baseAsset;
-    sceneBase.width = scene.canvas.width;
-    sceneBase.height = scene.canvas.height;
-    sceneLayers.replaceChildren();
-
-    scene.entities
-      .slice()
-      .sort((left, right) => left.zIndex - right.zIndex || left.id.localeCompare(right.id))
-      .forEach((rawEntity) => {
-        const entity = configuredEntity(rawEntity);
-        const group = document.createElement("div");
-        group.className = "layer-group";
-        group.dataset.entityId = entity.id;
-        group.dataset.module = entity.alias;
-        group.style.zIndex = String(entity.zIndex);
-
-        const image = document.createElement("img");
-        image.src = entity.asset;
-        image.alt = "";
-        image.draggable = false;
-        image.width = scene.canvas.width;
-        image.height = scene.canvas.height;
-        group.append(image);
-
-        if (entity.maskAsset) {
-          const maskSource = inlineMasks[entity.maskAsset];
-          if (!maskSource) throw new Error(`Máscara incorporada ausente: ${entity.maskAsset}`);
-          const finishLayer = document.createElement("div");
-          finishLayer.className = "finish-layer";
-          finishLayer.style.setProperty("--mask-image", `url("${maskSource}")`);
-          finishLayer.dataset.maskAsset = entity.maskAsset;
-          group.append(finishLayer);
-
-          const moduleKey = /^module-(\d{2})$/.exec(entity.id)?.[1];
-          if (moduleKey) {
-            ["shadow", "highlight"].forEach((kind) => {
-              const structureAsset = `assets/kitchen/masks/structure-${moduleKey}-${kind}.png`;
-              const structureMask = inlineMasks[structureAsset];
-              if (!structureMask) throw new Error(`Máscara estrutural incorporada ausente: ${structureAsset}`);
-              const structureLayer = document.createElement("div");
-              structureLayer.className = `structure-layer structure-layer--${kind}`;
-              structureLayer.style.setProperty("--structure-mask-image", `url("${structureMask}")`);
-              structureLayer.dataset.structureAsset = structureAsset;
-              group.append(structureLayer);
-            });
-          }
-        }
-
-        sceneLayers.append(group);
-      });
+    sceneComponent.renderLayers(scene, sceneBase, sceneLayers, inlineMasks, "", {
+      prepareEntity: configuredEntity,
+      setLayerZIndex: true
+    });
   }
 
   function renderModuleControlsFromData() {
@@ -903,22 +858,11 @@
   }
 
   function selectionStyle(entity) {
-    const bounds = entity?.alphaBounds;
-    if (!bounds) return null;
-    return {
-      left: `${(bounds.x / scene.canvas.width) * 100}%`,
-      top: `${(bounds.y / scene.canvas.height) * 100}%`,
-      width: `${(bounds.width / scene.canvas.width) * 100}%`,
-      height: `${(bounds.height / scene.canvas.height) * 100}%`
-    };
+    return CasaSceneGeometry.boundsToPercent(entity, scene);
   }
 
   function resolveMarkerPlacement(entity, product) {
-    const inferredSide = product?.category === "Aéreo" ? "bottom" : "top";
-    const preferredSide = entity?.markerPlacement?.side;
-    return {
-      side: ["top", "right", "bottom", "left"].includes(preferredSide) ? preferredSide : inferredSide
-    };
+    return CasaSceneGeometry.resolveMarkerPlacement(entity, product);
   }
 
   function selectedFrontFinishLabel(product) {
@@ -1040,47 +984,7 @@
     const caption = document.createElement("figcaption");
     caption.textContent = "Vista interna";
 
-    const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-    svg.setAttribute("viewBox", "0 0 180 126");
-    svg.setAttribute("role", "img");
-    const segmentsLabel = layout.segments.map((segment) => `${segment.label} ${formatDimension(segment.spanMm)} milímetros`).join(", ");
-    svg.setAttribute("aria-label", `Vista interna frontal: ${segmentsLabel}.`);
-    const make = (name, attributes = {}) => {
-      const node = document.createElementNS("http://www.w3.org/2000/svg", name);
-      Object.entries(attributes).forEach(([key, value]) => node.setAttribute(key, String(value)));
-      return node;
-    };
-    const text = (value, xPosition, yPosition) => {
-      const node = make("text", { x: xPosition, y: yPosition, "text-anchor": "middle" });
-      node.textContent = value;
-      return node;
-    };
-    const x = 48, y = 30, width = 94, height = 61;
-    let cursorMm = 0;
-    const diagram = [
-      make("line", { x1: x, y1: 17, x2: x + width, y2: 17, class: "module-detail__dimension-line" }),
-      make("line", { x1: x, y1: 13, x2: x, y2: 21, class: "module-detail__dimension-line" }),
-      make("line", { x1: x + width, y1: 13, x2: x + width, y2: 21, class: "module-detail__dimension-line" }),
-      text(`L ${formatDimension(dimensions.width)} mm`, x + width / 2, 10),
-      make("rect", { x, y, width, height, rx: 2, class: "module-detail__view-shape" })
-    ];
-    layout.segments.forEach((segment, index) => {
-      cursorMm += segment.spanMm;
-      const segmentEnd = x + (cursorMm / dimensions.width) * width;
-      if (index < layout.segments.length - 1) {
-        diagram.push(make("line", { x1: segmentEnd, y1: y, x2: segmentEnd, y2: y + height, class: "module-detail__view-shape" }));
-      }
-      if (segment.subdivisions) {
-        const segmentStartMm = cursorMm - segment.spanMm;
-        const segmentStart = x + (segmentStartMm / dimensions.width) * width;
-        for (let part = 1; part < segment.subdivisions; part += 1) {
-          const divisionY = y + (height / segment.subdivisions) * part;
-          diagram.push(make("line", { x1: segmentStart, y1: divisionY, x2: segmentEnd, y2: divisionY, class: "module-detail__view-shape" }));
-        }
-      }
-    });
-    diagram.push(text(layout.segments.map((segment) => formatDimension(segment.spanMm)).join(" · "), x + width / 2, 108));
-    svg.append(...diagram);
+    const svg = CasaTechnicalDrawings.internalFront({ widthMm: dimensions.width, segments: layout.segments });
     card.append(caption, svg);
     return card;
   }
@@ -1182,170 +1086,25 @@
     return `Medidas nominais: ${product.dimensions.display}${axes}`;
   }
 
-  function fitProportionalBox(widthMm, heightMm, maxWidth = 104, maxHeight = 64) {
-    const safeWidth = Math.max(Number(widthMm) || 1, 1);
-    const safeHeight = Math.max(Number(heightMm) || 1, 1);
-    const scale = Math.min(maxWidth / safeWidth, maxHeight / safeHeight);
-    return { width: safeWidth * scale, height: safeHeight * scale, scale };
-  }
-
-  function svgFactory(svg) {
-    return (name, attributes = {}) => {
-      const node = document.createElementNS("http://www.w3.org/2000/svg", name);
-      Object.entries(attributes).forEach(([key, value]) => node.setAttribute(key, String(value)));
-      svg.append(node);
-      return node;
-    };
-  }
-
-  function svgLabel(make, value, x, y, anchor = "middle") {
-    const label = make("text", { x, y, "text-anchor": anchor });
-    label.textContent = value;
-    return label;
-  }
-
-  function appendFrontSegments(make, layout, x, y, width, height, faceWidthMm) {
-    if (layout?.pattern === "two-doors") {
-      const middle = x + width / 2;
-      make("line", { x1: middle, y1: y, x2: middle, y2: y + height, class: "module-detail__view-shape" });
-      return;
-    }
-    if (layout?.pattern === "two-doors-and-lift") {
-      const liftBottom = y + height * 0.34;
-      const middle = x + width / 2;
-      make("line", { x1: x, y1: liftBottom, x2: x + width, y2: liftBottom, class: "module-detail__view-shape" });
-      make("line", { x1: middle, y1: liftBottom, x2: middle, y2: y + height, class: "module-detail__view-shape" });
-      return;
-    }
-    if (layout?.pattern === "two-doors-and-microwave") {
-      // M06 has two doors beside a microwave niche and a lift front above it.
-      // Exact opening spans are not yet published, so this remains orientative.
-      const leftZoneEnd = x + width * 0.54;
-      const leftDoorSplit = x + width * 0.27;
-      const liftBottom = y + height * 0.42;
-      const nicheInset = Math.max(2, width * 0.035);
-      make("line", { x1: leftDoorSplit, y1: y, x2: leftDoorSplit, y2: y + height, class: "module-detail__view-shape" });
-      make("line", { x1: leftZoneEnd, y1: y, x2: leftZoneEnd, y2: y + height, class: "module-detail__view-shape" });
-      make("line", { x1: leftZoneEnd, y1: liftBottom, x2: x + width, y2: liftBottom, class: "module-detail__view-shape" });
-      make("rect", {
-        x: leftZoneEnd + nicheInset,
-        y: liftBottom + nicheInset,
-        width: Math.max(4, width * 0.46 - nicheInset * 2),
-        height: Math.max(4, height * 0.58 - nicheInset * 2),
-        rx: 1.5,
-        class: "module-detail__view-shape"
-      });
-      return;
-    }
-    if (!layout?.segments?.length) return;
-    const segmentsWidthMm = layout.innerWidthMm || layout.segments.reduce((total, segment) => total + (segment.spanMm || 0), 0);
-    if (!segmentsWidthMm) return;
-    const visibleWidth = width * Math.min(segmentsWidthMm, faceWidthMm) / faceWidthMm;
-    const startX = x + (width - visibleWidth) / 2;
-    let cursorMm = 0;
-    layout.segments.forEach((segment, index) => {
-      const segmentWidthMm = segment.spanMm || 0;
-      const segmentStart = startX + (cursorMm / segmentsWidthMm) * visibleWidth;
-      cursorMm += segmentWidthMm;
-      const segmentEnd = startX + (cursorMm / segmentsWidthMm) * visibleWidth;
-      if (index < layout.segments.length - 1) {
-        make("line", { x1: segmentEnd, y1: y, x2: segmentEnd, y2: y + height, class: "module-detail__view-shape" });
-      }
-      if (segment.subdivisions) {
-        for (let part = 1; part < segment.subdivisions; part += 1) {
-          const divisionY = y + (height / segment.subdivisions) * part;
-          make("line", { x1: segmentStart, y1: divisionY, x2: segmentEnd, y2: divisionY, class: "module-detail__view-shape" });
-        }
-      }
-    });
-  }
-
   function createProportionalView(product, type) {
     const spec = drawingSpecFor(product);
     const isSide = type === "side";
-    const horizontalMm = isSide ? spec.extrusionMm : spec.faceWidthMm;
-    const horizontalLabel = isSide ? spec.extrusionLabel : spec.faceHorizontalLabel;
-    const fit = fitProportionalBox(horizontalMm, spec.faceHeightMm);
-    const isAmplifiedThickness = spec.kind === "panel" && isSide && fit.width < 2.5;
-    const drawingWidth = isAmplifiedThickness ? 2.5 : fit.width;
-    const drawingHeight = fit.height;
-    const x = 94 - drawingWidth / 2;
-    const y = 62 - drawingHeight / 2;
     const figure = document.createElement("figure");
     figure.className = "module-detail__view module-detail__view--technical";
     const caption = document.createElement("figcaption");
     caption.textContent = isSide ? "Vista lateral" : "Vista frontal";
-    const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-    svg.setAttribute("viewBox", "0 0 180 126");
-    svg.setAttribute("role", "img");
-    svg.setAttribute("aria-label", `${caption.textContent}: ${horizontalLabel} ${formatDimension(horizontalMm)} milímetros por A ${formatDimension(spec.faceHeightMm)} milímetros${isAmplifiedThickness ? ". A espessura foi ampliada apenas para legibilidade." : "."}`);
-    const make = svgFactory(svg);
-    make("line", { x1: x, y1: 17, x2: x + drawingWidth, y2: 17, class: "module-detail__dimension-line" });
-    make("line", { x1: x, y1: 13, x2: x, y2: 21, class: "module-detail__dimension-line" });
-    make("line", { x1: x + drawingWidth, y1: 13, x2: x + drawingWidth, y2: 21, class: "module-detail__dimension-line" });
-    svgLabel(make, `${horizontalLabel} ${formatDimension(horizontalMm)} mm`, 94, 10);
-    make("line", { x1: Math.max(14, x - 18), y1: y, x2: Math.max(14, x - 18), y2: y + drawingHeight, class: "module-detail__dimension-line" });
-    make("line", { x1: Math.max(10, x - 22), y1: y, x2: Math.max(18, x - 14), y2: y, class: "module-detail__dimension-line" });
-    make("line", { x1: Math.max(10, x - 22), y1: y + drawingHeight, x2: Math.max(18, x - 14), y2: y + drawingHeight, class: "module-detail__dimension-line" });
-    make("rect", { x, y, width: drawingWidth, height: drawingHeight, rx: 2, class: "module-detail__view-shape" });
-    if (!isSide) appendFrontSegments(make, product.frontLayout, x, y, drawingWidth, drawingHeight, spec.faceWidthMm);
-    svgLabel(make, `A ${formatDimension(spec.faceHeightMm)} mm`, 4, y + drawingHeight / 2 + 3, "start");
+    const svg = CasaTechnicalDrawings.elevation(spec, product.frontLayout, type);
     figure.append(caption, svg);
     return figure;
   }
 
   function createTechnicalIsometricView(product) {
     const spec = drawingSpecFor(product);
-    const fit = fitProportionalBox(spec.faceWidthMm, spec.faceHeightMm, 86, 58);
-    const rawExtrusion = spec.extrusionMm * fit.scale * 0.68;
-    const isAmplifiedThickness = spec.kind === "panel" && rawExtrusion < 4;
-    const depthX = Math.max(isAmplifiedThickness ? 4 : 6, rawExtrusion);
-    const depthY = -Math.min(18, depthX * 0.62);
-    const width = fit.width;
-    const height = fit.height;
-    const left = 92 - (width + depthX) / 2;
-    const top = 59 - height / 2 - depthY / 2;
-    const right = left + width;
-    const bottom = top + height;
     const figure = document.createElement("figure");
     figure.className = "module-detail__view module-detail__view--isometric module-detail__view--technical";
     const caption = document.createElement("figcaption");
     caption.textContent = "Projeção isométrica";
-    const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-    svg.setAttribute("viewBox", "0 0 180 126");
-    svg.setAttribute("role", "img");
-    svg.setAttribute("aria-label", `Projeção isométrica orientativa: ${spec.faceHorizontalLabel} ${formatDimension(spec.faceWidthMm)} milímetros, A ${formatDimension(spec.faceHeightMm)} milímetros e ${spec.extrusionLabel} ${formatDimension(spec.extrusionMm)} milímetros${isAmplifiedThickness ? ". A espessura foi ampliada apenas para legibilidade." : "."}`);
-    const make = svgFactory(svg);
-    make("path", { d: `M ${left} ${top} L ${right} ${top} L ${right + depthX} ${top + depthY} L ${left + depthX} ${top + depthY} Z`, class: "module-detail__view-shape" });
-    make("path", { d: `M ${right} ${top} L ${right + depthX} ${top + depthY} L ${right + depthX} ${bottom + depthY} L ${right} ${bottom} Z`, class: "module-detail__view-shape" });
-    make("rect", { x: left, y: top, width, height, class: "module-detail__view-shape" });
-    appendFrontSegments(make, product.frontLayout, left, top, width, height, spec.faceWidthMm);
-    make("line", { x1: left, y1: bottom + 14, x2: right, y2: bottom + 14, class: "module-detail__dimension-line" });
-    make("line", { x1: left, y1: bottom + 10, x2: left, y2: bottom + 18, class: "module-detail__dimension-line" });
-    make("line", { x1: right, y1: bottom + 10, x2: right, y2: bottom + 18, class: "module-detail__dimension-line" });
-    make("line", { x1: Math.max(15, left - 19), y1: top, x2: Math.max(15, left - 19), y2: bottom, class: "module-detail__dimension-line" });
-    make("line", { x1: Math.max(11, left - 23), y1: top, x2: Math.max(19, left - 15), y2: top, class: "module-detail__dimension-line" });
-    make("line", { x1: Math.max(11, left - 23), y1: bottom, x2: Math.max(19, left - 15), y2: bottom, class: "module-detail__dimension-line" });
-    const depthDimensionStart = { x: right + 4, y: top - 6 };
-    const depthDimensionEnd = { x: right + depthX + 4, y: top + depthY - 6 };
-    const depthLength = Math.hypot(depthDimensionEnd.x - depthDimensionStart.x, depthDimensionEnd.y - depthDimensionStart.y) || 1;
-    const depthTick = {
-      x: (-(depthDimensionEnd.y - depthDimensionStart.y) / depthLength) * 4,
-      y: ((depthDimensionEnd.x - depthDimensionStart.x) / depthLength) * 4
-    };
-    make("line", { x1: depthDimensionStart.x, y1: depthDimensionStart.y, x2: depthDimensionEnd.x, y2: depthDimensionEnd.y, class: "module-detail__dimension-line" });
-    [depthDimensionStart, depthDimensionEnd].forEach((point) => {
-      make("line", {
-        x1: point.x - depthTick.x,
-        y1: point.y - depthTick.y,
-        x2: point.x + depthTick.x,
-        y2: point.y + depthTick.y,
-        class: "module-detail__dimension-line"
-      });
-    });
-    svgLabel(make, `${spec.faceHorizontalLabel} ${formatDimension(spec.faceWidthMm)} mm`, left + width / 2, bottom + 27);
-    svgLabel(make, `A ${formatDimension(spec.faceHeightMm)} mm`, 4, top + height / 2 + 3, "start");
-    svgLabel(make, `${spec.extrusionLabel} ${formatDimension(spec.extrusionMm)} mm`, Math.min(171, right + depthX + 9), Math.max(13, top + depthY - 8), "end");
+    const svg = CasaTechnicalDrawings.isometric(spec, product.frontLayout);
     figure.append(caption, svg);
     return figure;
   }
@@ -1638,9 +1397,7 @@
     const catalogProduct = catalogByEntityId.get(state.selectedEntityId);
     const product = catalogProduct ? productForCurrentConfiguration(catalogProduct) : null;
     const isVisible = Boolean(entity && resolved?.[entity.id]?.visible);
-    const style = isVisible ? selectionStyle(entity) : null;
-    selectionFrame.hidden = !style;
-    if (style) Object.assign(selectionFrame.style, style);
+    sceneComponent.renderSelectionFrame(selectionFrame, isVisible ? entity : null, scene);
     if (!product) {
       clearDetailCarouselTimer();
       document.body.classList.remove("has-module-detail");
@@ -1808,17 +1565,7 @@
   }
 
   function updateSceneHotspots(resolved) {
-    sceneHotspots.querySelectorAll("[data-select-scene-entity]").forEach((hotspot) => {
-      const entityId = hotspot.dataset.entityId;
-      const isVisible = Boolean(resolved?.[entityId]?.visible);
-      const isSelected = state.selectedEntityId === entityId;
-      hotspot.hidden = !isVisible;
-      hotspot.disabled = !isVisible;
-      hotspot.tabIndex = isVisible ? 0 : -1;
-      hotspot.setAttribute("aria-disabled", String(!isVisible));
-      hotspot.classList.toggle("is-selected", isSelected);
-      hotspot.setAttribute("aria-pressed", String(isSelected));
-    });
+    sceneComponent.updateHotspots(sceneHotspots, resolved, state.selectedEntityId);
   }
 
   function updateAccessoryControls(resolved) {

@@ -1,24 +1,15 @@
 (function registerSceneComponent(global) {
   "use strict";
-  function selectionStyle(entity, scene) {
-    const bounds = entity?.alphaBounds;
-    if (!bounds) return null;
-    return {
-      left: `${bounds.x / scene.canvas.width * 100}%`, top: `${bounds.y / scene.canvas.height * 100}%`,
-      width: `${bounds.width / scene.canvas.width * 100}%`, height: `${bounds.height / scene.canvas.height * 100}%`
-    };
-  }
-  function resolveMarkerPlacement(entity, product) {
-    const preferredSide = entity?.markerPlacement?.side;
-    return { side: ["top", "right", "bottom", "left"].includes(preferredSide) ? preferredSide : product?.category === "Aéreo" ? "bottom" : "top" };
-  }
-  function renderLayers(scene, base, layers, inlineMasks = null, assetPrefix = "") {
+  const { boundsToPercent, resolveMarkerPlacement } = global.CasaSceneGeometry;
+  function renderLayers(scene, base, layers, inlineMasks = null, assetPrefix = "", options = {}) {
     base.src = `${assetPrefix}${scene.baseAsset}`;
     base.width = scene.canvas.width; base.height = scene.canvas.height;
     layers.replaceChildren();
     scene.entities.slice().sort((a, b) => a.zIndex - b.zIndex || a.id.localeCompare(b.id)).forEach((entity) => {
+      entity = options.prepareEntity ? options.prepareEntity(entity) : entity;
       const group = document.createElement("div");
       group.className = "layer-group"; group.dataset.entityId = entity.id; group.dataset.module = entity.alias;
+      if (options.setLayerZIndex) group.style.zIndex = String(entity.zIndex);
       const image = document.createElement("img");
       image.src = `${assetPrefix}${entity.asset}`; image.alt = ""; image.draggable = false;
       image.width = scene.canvas.width; image.height = scene.canvas.height; group.append(image);
@@ -53,7 +44,7 @@
         button.setAttribute("aria-label", `Ver ficha de ${product.referenceLabel || product.number || entity.alias}, ${product.title || entity.label}`);
         button.setAttribute("aria-pressed", "false"); button.title = `${product.referenceLabel || product.number || entity.alias} · ${product.title || entity.label}`;
         button.style.zIndex = String(500 + entity.zIndex);
-        Object.assign(button.style, selectionStyle(entity, scene));
+        Object.assign(button.style, boundsToPercent(entity, scene));
         const tag = document.createElement("span"); tag.className = "scene-hotspot__tag"; tag.setAttribute("aria-hidden", "true"); tag.textContent = entity.alias; button.append(tag); target.append(button);
       });
   }
@@ -65,7 +56,7 @@
     });
   }
   function renderSelectionFrame(frame, entity, scene) {
-    const style = selectionStyle(entity, scene); frame.hidden = !style;
+    const style = boundsToPercent(entity, scene); frame.hidden = !style;
     if (style) Object.assign(frame.style, style);
   }
   function applyFinishAppearance({ scene, layers, products, inlineMasks, resolved, finish, finishApi, assetPrefix = "" }) {
