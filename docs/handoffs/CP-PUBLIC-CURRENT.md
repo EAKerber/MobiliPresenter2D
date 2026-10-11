@@ -2,6 +2,12 @@
 
 **Checkpoint local atualizado em 2026-10-11 (America/Sao_Paulo).** O foco segue no [issue #192](https://github.com/EAKerber/MobiliPresenter2D/issues/192), agora em `work/cp-public-housekeeping`.
 
+### Extensão de 2026-10-11 — revisão visual do viewer em preview
+
+PR [#193](https://github.com/EAKerber/MobiliPresenter2D/pull/193) segue aberta e sem merge. O Deploy Preview #193 estava `ready` no SHA `4bb00621e562bfbaa8ae6e0c3eb79fd0650f2f69`, mas seu Blob isolado não continha publicação. Para o gate visual, a mudança local permite apenas ao contexto `deploy-preview` consultar o endpoint público `/api/public-modules` da URL principal quando seu próprio Blob está ausente; não lê o Blob de produção nem o endpoint raw `/api/configuration`, e falha fechado se a projeção não corresponder ao schema público. A página limpa o indicador transitório “Carregando…” ao iniciar com os dados.
+
+Há alterações locais ainda não publicadas em `netlify/functions/public-modules.mjs`, `app/viewer/viewer.js`, `app/tools/test-public-modules-endpoint.js` e nesta documentação, além de atualização de contexto em `app/viewer/INTEGRATION.md`. O contrato de teste foi atualizado, mas não foi executado conforme a preferência de evitar testes automatizados que consumam recursos; validação visual remota ainda pendente. Antes de atualizar a PR, confirmar novamente seu HEAD, manter a configuração de Deploy Preview ativa somente durante a publicação/validação e desativá-la em seguida. Não criar outra PR ou branch; não fazer merge.
+
 > A seção “Baseline histórico de 2026-10-08” e os handoffs/roadmaps antigos abaixo preservam evidências e decisões daquela data. Seus SHAs, deploys, PRs e próximos passos não são estado atual. Para o foco presente, prevalecem este checkpoint e o issue #192; revalidar remotos antes de qualquer Git write, alteração de produção ou declaração sobre deploy.
 
 ## Checkpoint atual — house cleaning e preparação de acesso

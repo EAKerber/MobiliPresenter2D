@@ -51,6 +51,17 @@ publishedReader, publicModules, catalog, priceBook, scene } = globalThis.__publi
 `;
   const prod = store(v5), preview = store(null);
   let prodOpens = 0, previewOpens = 0, failRead = false;
+  let productionResponse = null, productionFetches = 0;
+  const originalFetch = globalThis.fetch;
+  globalThis.fetch = async (input, options = {}) => {
+    productionFetches++;
+    assert.equal(String(input), "https://production.fixture.invalid/api/public-modules");
+    assert.equal(options.method, "GET");
+    assert.equal(options.redirect, "error");
+    return productionResponse
+      ? new Response(JSON.stringify(productionResponse.body), { status: 200, headers: { "content-type": "application/json" } })
+      : new Response("{}", { status: 503 });
+  };
   globalThis.__publicModuleHarness = {
     getStore(options) { assert.deepEqual(options, { name: "configurator-settings", consistency: "strong" }); prodOpens++; return prod; },
     getDeployStore(options) {
@@ -63,10 +74,10 @@ publishedReader, publicModules, catalog, priceBook, scene } = globalThis.__publi
   };
   try {
     const endpoint = await import("data:text/javascript;base64," + Buffer.from(dependencies + withoutImports).toString("base64"));
-    const previewCtx = { deploy: { context: "deploy-preview" } };
-    const prodCtx = { deploy: { context: "production" } };
+    const previewCtx = { deploy: { context: "deploy-preview" }, site: { url: "https://production.fixture.invalid" } };
+    const prodCtx = { deploy: { context: "production" }, site: { url: "https://production.fixture.invalid" } };
     async function invoke(method, suffix = "", context = previewCtx) {
-      const response = await endpoint.default(new Request("https://fixture.invalid/api/public-modules" + suffix, { method }), context);
+      const response = await endpoint.default(new Request("https://preview.fixture.invalid/api/public-modules" + suffix, { method }), context);
       assert.equal(response.headers.get("content-type"), "application/json; charset=utf-8");
       assert.equal(response.headers.get("cache-control"), "no-store, max-age=0");
       assert.equal(response.headers.get("x-content-type-options"), "nosniff");
@@ -80,12 +91,7 @@ publishedReader, publicModules, catalog, priceBook, scene } = globalThis.__publi
     });
     assert.equal(prodOpens, 0); assert.equal(previewOpens, 0);
 
-    // A preview must NEVER read the production published Blob.
-    assert.deepEqual(await invoke("GET"), { status: 503, body: { error: "public_modules_unavailable" } });
-    assert.equal(prodOpens, 0);
-    assert.equal(preview.reads, 1);
-
-    const productionResponse = await invoke("GET", "", prodCtx);
+    productionResponse = await invoke("GET", "", prodCtx);
     assert.equal(productionResponse.status, 200);
     assert.equal(productionResponse.body.schemaVersion, publicModules.SCHEMA);
     assert.equal(productionResponse.body.modules.length, 7);
@@ -103,10 +109,20 @@ publishedReader, publicModules, catalog, priceBook, scene } = globalThis.__publi
     assert.equal(prod.reads, 1);
     assert.equal(prod.writes, 0);
 
+    // A preview never reads the production Blob; if its own Blob is missing,
+    // it consumes only the public projection from the primary site endpoint.
+    const previewProjection = await invoke("GET");
+    assert.deepEqual(previewProjection, productionResponse);
+    assert.equal(prodOpens, 1);
+    assert.equal(preview.reads, 1);
+    assert.equal(prod.reads, 1, "preview must not read the production published Blob");
+    assert.equal(productionFetches, 1);
+
     preview.setMock(v5);
     const isolated = await invoke("GET");
     assert.equal(isolated.status, 200);
     assert.deepEqual(isolated.body, productionResponse.body);
+    assert.equal(productionFetches, 1, "a valid preview publication takes precedence over the public primary projection");
     assert.equal(prod.reads, 1, "preview must not share production store");
     for (const invalid of ["not-json", v3, { ...v5, schemaVersion: "unknown" },
       { ...v5, objects: null }, null]) {
@@ -123,6 +139,7 @@ publishedReader, publicModules, catalog, priceBook, scene } = globalThis.__publi
     assert.equal(prod.writes, 0);
     console.log("CP-PUBLIC-02b isolated public endpoint, v5 validation and no-leak: PASS");
   } finally {
+    globalThis.fetch = originalFetch;
     delete globalThis.__publicModuleHarness;
   }
 }

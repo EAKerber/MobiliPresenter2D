@@ -1,5 +1,11 @@
 # Viewer público: fronteira e migração
 
+## 2026-10-11 — dados publicados no Deploy Preview
+
+O Deploy Preview isolado pode não ter a publicação v5 no próprio Netlify Blobs. Em `deploy-preview`, quando o Blob do deploy está ausente, `/api/public-modules` consulta a URL principal do site e lê somente o endpoint público `/api/public-modules`, que já entrega `PublicModulePresentation2D 0.1` por allowlist. O preview valida o schema recebido, não lê o Blob de produção, não chama `/api/configuration` e não usa fixtures. Se a publicação pública não estiver disponível ou válida, responde 503. Uma publicação própria válida do preview continua tendo precedência.
+
+Essa rota possibilita revisar visualmente o refactor em uma URL de preview diferente da produção. `viewer.js` também limpa a mensagem transitória de carregamento assim que inicia a renderização com dados publicados. Nenhum teste automatizado foi executado neste gate; o próximo passo é conferir o endpoint e a página no preview após o deploy.
+
 ## 2026-10-11 — helpers compartilhados de desenho, geometria e cena
 
 `app/core/technical-drawings.js` agora é carregado pelo configurador e pelo viewer. Ambos usam os mesmos geradores de vistas frontal/lateral, isométrica e interna, incluindo os padrões `two-doors` e `two-doors-and-microwave`. O padrão legado `two-doors-and-lift` não aparece em nenhum dado atual do catálogo e foi removido por produzir um desenho sabidamente incorreto. As páginas continuam normalizando seus próprios dados e montando seus wrappers, títulos, notas e recortes de foco. A vista interna aceita enquadramento e chamada próprios do viewer, preservando seu retângulo maior e o rótulo de vãos confirmados.

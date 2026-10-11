@@ -7,6 +7,7 @@
   const integration = window.CASA_PUBLIC_VIEWER_INTEGRATION || {};
   // Deep links override initial selection; otherwise the adapter derives it from visible data.
   function start(publicData = null) {
+    root.replaceChildren();
     const adapter = window.CASA_PUBLIC_SCENE_ADAPTERS.create({
       ...(integration.repository || {}),
       ...(publicData || {}),
