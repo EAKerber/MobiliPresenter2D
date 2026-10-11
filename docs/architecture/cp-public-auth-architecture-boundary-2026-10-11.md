@@ -205,3 +205,23 @@ Leitura somente, sem alterar arquivos, de `work/MobiliPresenter2D`: branch `expe
 - [PR #186 — ticket/session + PostgreSQL + Resend](https://github.com/EAKerber/MobiliPresenter2D/pull/186) — protótipo detalhado com teste PostgreSQL concorrente; DRAFT/HOLD, não merged.
 - [`v5-normal-save.js`](https://github.com/EAKerber/MobiliPresenter2D/blob/main/app/core/v5-normal-save.js) — padrão atual de atualização condicional ETag e readback para publicação v5.
 - [Arquitetura Identity de 2026-10-10](https://github.com/EAKerber/MobiliPresenter2D/blob/main/docs/architecture/cp-public-netlify-identity-access-2026-10-10.md) — registro anterior; decisões abertas e premissas supersedidas neste plano.
+
+
+## 8. Política reversível para preços
+
+**Padrão recomendado enquanto a decisão comercial não estiver tomada:** preços não acessíveis a anônimos. “Privado” aqui significa que não são publicados como recurso estático nem incluídos nas rotas públicas; admin, staff e compradores com grant ativo podem recebê-los quando necessários ao configurador. Isso é um default técnico reversível, não uma decisão de negócio permanente.
+
+### Contrato que reduz o retrabalho futuro
+
+- Preservar uma única fonte canônica das regras e valores de preço, vinculada à publicação administrativa vigente. Não manter um segundo catálogo de preços no viewer ou no cliente.
+- Expor ao configurador um DTO estreito e allowlisted de preços por um endpoint próprio, por exemplo GET /api/pricing. A policy inicial aceita sessão interna válida ou grant buyer ativo; a resposta não inclui configuração bruta, margem, custo ou metadados administrativos.
+- Manter a projeção pública /api/public-modules separada e sem preço. Não tornar GET /api/configuration bruto anônimo quando preços forem liberados.
+- Para torná-los públicos no futuro, alterar a policy do endpoint de preços para também aceitar anônimos, após decisão comercial explícita e revisão dos campos/valores retornados. O contrato, fonte de dados e cálculo podem permanecer iguais; não exige migração de banco ou troca de provedor.
+- Como o endpoint poderá servir conteúdo público se a política mudar, ele deve sempre retornar somente o DTO comercial aprovado. Manter Cache-Control: no-store é válido mesmo depois de público, embora a política de cache possa ser revista separadamente por desempenho.
+
+### O que precisa mudar para que o default privado seja verdadeiro
+
+Hoje app/data/mock-price-book.js está dentro do diretório Netlify publicado e contém valores; bloquear somente a tela /config/ ou a API não protege a URL direta desse arquivo. No cutover, retirar os valores do bundle estático: colocar a fonte canônica em caminho não publicado ou carregá-la do armazenamento de publicação no servidor, remover referências de preço embutidas no HTML/JS e eliminar fallbacks locais com valores. O editor administrativo deverá obter a cópia de trabalho por leitura autenticada; o configurador só recebe o DTO após autorização.
+
+A etapa inicial exige trabalho real de separação e migração do carregamento, porque o sistema hoje entrega valores em arquivos estáticos. **A etapa posterior para publicá-los é pequena** se essa separação tiver sido feita: liberar o mesmo endpoint estreito para anônimos e revalidar que não houve exposição de outros dados. Não se deve deixar uma cópia estática pública “por compatibilidade”, pois isso anularia a policy.
+
