@@ -337,3 +337,20 @@ Foram feitos pedidos HTTP GET somente de leitura, sem enviar payload. As respost
 
 A sondagem confirma a hipótese de exposição para os exemplos da tabela, mas não é uma enumeração HTTP completa dos 224 arquivos nem uma verificação de cada API/alias. Isso não muda a recomendação: preservar arquivos no Git/CI e removê-los do checkout de build Netlify por allowlist explícita, sem alterar `publish = "app"`. Depois de implementar, validar no Deploy Preview os mesmos caminhos (auxiliares retornam 404; ativo público continua 200) antes de produção. Nenhuma limpeza foi implementada ainda.
 
+### Rotas e APIs — respostas sem autenticação
+
+Foram feitos GETs sem enviar credenciais/cookies e sem ler os corpos das respostas de configuração. No mesmo deploy imutável:
+
+| Caminho | HTTP | Content-Type | Observação |
+| --- | ---: | --- | --- |
+| `/config/` | 200 | `text/html` | Shell do configurador entregue. |
+| `/viewer/` | 200 | `text/html` | Shell público entregue. |
+| `/admin.html` | 200 | `text/html` | Shell admin entregue estaticamente; 200 não prova autorização de dados/operações. |
+| `/data/mock-price-book.js` | 200 | `application/javascript` | Tabela de preços estática diretamente baixável. |
+| `/api/configuration` | 200 | `application/json` | GET anônimo da rota bruta; corpo não foi lido. |
+| `/.netlify/functions/configuration` | 200 | `application/json` | GET anônimo pela URL direta da Function; corpo não foi lido. |
+| `/api/public-modules` | 200 | `application/json` | Projeção pública do viewer. |
+| `/.netlify/functions/public-modules` | 200 | `application/json` | Projeção também disponível pela URL direta da Function. |
+
+A observação confirma na produção a diferença arquitetural já apontada pelo código: o viewer tem uma projeção própria, enquanto a configuração bruta e a tabela de preço são alcançáveis sem autenticação. Não se coletou nem examinou o JSON retornado por `/api/configuration`; o teste limitou-se ao status e cabeçalhos.
+
