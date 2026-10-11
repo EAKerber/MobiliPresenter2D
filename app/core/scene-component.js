@@ -30,19 +30,24 @@
       layers.append(group);
     });
   }
-  function renderHotspots(scene, products, target, assetPrefix = "") {
+  function renderHotspots(scene, products, target, assetPrefix = "", options = {}) {
     const productByEntity = products instanceof Map ? products : new Map(products.map((p) => [p.entityId || p.id, p]));
     target.replaceChildren();
     scene.entities.filter((entity) => entity.controllable && entity.kind === "module" && entity.alphaBounds)
+      .filter((entity) => !options.filterEntity || options.filterEntity(entity))
       .sort((a, b) => a.zIndex - b.zIndex || a.id.localeCompare(b.id)).forEach((entity) => {
         const product = productByEntity.get(entity.id); if (!product) return;
-        const bounds = entity.alphaBounds, button = document.createElement("button");
+        const labels = options.getHotspotLabels?.(product, entity) || {
+          reference: product.referenceLabel || product.number || entity.alias,
+          title: product.title || entity.label
+        };
+        const button = document.createElement("button");
         button.type = "button"; button.className = "scene-hotspot";
         button.classList.toggle("scene-hotspot--aerial", product.category === "Aéreo");
         button.dataset.selectSceneEntity = entity.id; button.dataset.entityId = entity.id;
         button.dataset.markerSide = resolveMarkerPlacement(entity, product).side;
-        button.setAttribute("aria-label", `Ver ficha de ${product.referenceLabel || product.number || entity.alias}, ${product.title || entity.label}`);
-        button.setAttribute("aria-pressed", "false"); button.title = `${product.referenceLabel || product.number || entity.alias} · ${product.title || entity.label}`;
+        button.setAttribute("aria-label", `Ver ficha de ${labels.reference}, ${labels.title}`);
+        button.setAttribute("aria-pressed", "false"); button.title = `${labels.reference} · ${labels.title}`;
         button.style.zIndex = String(500 + entity.zIndex);
         Object.assign(button.style, boundsToPercent(entity, scene));
         const tag = document.createElement("span"); tag.className = "scene-hotspot__tag"; tag.setAttribute("aria-hidden", "true"); tag.textContent = entity.alias; button.append(tag); target.append(button);

@@ -689,33 +689,10 @@
   }
 
   function renderSceneHotspotsFromData() {
-    sceneHotspots.replaceChildren();
-    scene.entities
-      .filter((entity) => entity.controllable && entity.kind === "module" && entity.alphaBounds && configuredModuleIds().has(entity.id))
-      .sort((left, right) => left.zIndex - right.zIndex || left.id.localeCompare(right.id))
-      .forEach((entity) => {
-        const product = catalogByEntityId.get(entity.id);
-        if (!product) return;
-        const hotspot = document.createElement("button");
-        hotspot.type = "button";
-        hotspot.className = "scene-hotspot";
-        hotspot.classList.toggle("scene-hotspot--aerial", product.category === "Aéreo");
-        hotspot.dataset.selectSceneEntity = entity.id;
-        hotspot.dataset.entityId = entity.id;
-        hotspot.dataset.markerSide = resolveMarkerPlacement(entity, product).side;
-        hotspot.setAttribute("aria-label", `Ver ficha de ${product.referenceLabel}, ${product.title}`);
-        hotspot.setAttribute("aria-pressed", "false");
-        hotspot.title = `${product.referenceLabel} · ${product.title}`;
-        hotspot.style.zIndex = String(500 + entity.zIndex);
-        Object.assign(hotspot.style, selectionStyle(entity));
-
-        const tag = document.createElement("span");
-        tag.className = "scene-hotspot__tag";
-        tag.setAttribute("aria-hidden", "true");
-        tag.textContent = entity.alias;
-        hotspot.append(tag);
-        sceneHotspots.append(hotspot);
-      });
+    sceneComponent.renderHotspots(scene, catalogByEntityId, sceneHotspots, "", {
+      filterEntity: (entity) => configuredModuleIds().has(entity.id),
+      getHotspotLabels: (product) => ({ reference: product.referenceLabel, title: product.title })
+    });
   }
 
   function selectedModuleFinish(entityId = state.selectedEntityId) {
@@ -855,14 +832,6 @@
       card.append(input, copy);
       servicesChecklist.append(card);
     });
-  }
-
-  function selectionStyle(entity) {
-    return CasaSceneGeometry.boundsToPercent(entity, scene);
-  }
-
-  function resolveMarkerPlacement(entity, product) {
-    return CasaSceneGeometry.resolveMarkerPlacement(entity, product);
   }
 
   function selectedFrontFinishLabel(product) {
