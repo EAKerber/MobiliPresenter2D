@@ -14,6 +14,14 @@
 .section-intro { margin-bottom: 32px; text-align: center; }
 .section-intro h2, .study-copy h2, .finish-copy h2, .quality-copy h2 { max-width: 780px; margin: 0 auto; font-size: clamp(2rem, 4.2vw, 3.55rem); line-height: 1.02; letter-spacing: -.055em; }
 .section-intro > p:not(.eyebrow) { max-width: 700px; margin: 13px auto 0; color: var(--public-muted); line-height: 1.55; }
+.story-text-section { display: grid; grid-template-columns: minmax(240px, .78fr) minmax(0, 1.22fr); align-items: center; gap: clamp(28px, 5vw, 68px); max-width: 1192px; margin: 0 auto 16px; padding: clamp(28px, 4vw, 42px); border: 1px solid var(--public-line); border-top: 3px solid var(--public-accent); border-radius: var(--public-radius); background: var(--public-surface); }
+.how-hero + .story-text-section { margin-top: clamp(24px, 3vw, 38px); }
+.story-text-section-evolution { margin-bottom: 0; }
+.story-text-heading h2 { max-width: 460px; margin: 0; font-size: clamp(1.8rem, 3vw, 2.65rem); line-height: 1.04; letter-spacing: -.045em; }
+.story-text-heading .eyebrow { margin: 0 0 9px; color: var(--public-accent-dark); }
+.story-text-copy { padding-left: clamp(20px, 3vw, 36px); border-left: 1px solid var(--public-line); }
+.story-text-copy p { max-width: 700px; margin: 0 0 12px; color: var(--public-muted); font-size: .94rem; line-height: 1.62; }
+.story-text-copy p:last-child { margin-bottom: 0; }
 .comparison-section { padding-block: clamp(56px, 7vw, 92px); }
 .comparison-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); grid-template-rows: 132px auto repeat(6, auto); align-items: stretch; gap: 0 18px; }
 .comparison-card { display: grid; grid-row: span 8; grid-template-columns: minmax(0, 1fr); grid-template-rows: subgrid; overflow: hidden; border: 1px solid var(--public-line); border-top: 3px solid var(--public-line); border-radius: var(--public-radius); background: var(--public-surface); }
@@ -31,6 +39,16 @@
 .comparison-card-featured { border: 1px solid color-mix(in srgb, var(--public-accent) 55%, var(--public-line)); border-top: 3px solid var(--public-accent); box-shadow: 0 12px 30px rgb(45 36 28 / 8%); }
 .comparison-card-featured h3 { color: var(--public-accent-dark); }
 .image-disclaimer { margin-block: 0; padding-block: 13px 26px; color: var(--public-muted); font-size: .69rem; line-height: 1.45; text-align: center; }
+.closing-notes { padding-top: 18px; padding-bottom: 26px; }
+.launch-card { display: grid; grid-template-columns: 190px minmax(0, 1fr); align-items: stretch; overflow: hidden; border: 1px solid color-mix(in srgb, var(--public-accent) 32%, var(--public-line)); border-radius: var(--public-radius); background: var(--public-surface-soft); }
+.launch-badge { display: grid; grid-template-columns: 30px minmax(0, 1fr); grid-template-rows: auto auto; align-content: center; gap: 2px 10px; padding: 13px 16px; background: #a64d13; color: white; }
+.launch-badge svg { grid-row: 1 / span 2; width: 30px; height: 30px; fill: none; stroke: currentColor; stroke-linecap: round; stroke-linejoin: round; stroke-width: 1.8; }
+.launch-badge span { align-self: end; font-size: .59rem; font-weight: 800; letter-spacing: .07em; line-height: 1.2; text-transform: uppercase; }
+.launch-badge strong { font-size: 1.38rem; line-height: 1.1; }
+.launch-copy { align-self: center; padding: 13px 18px; }
+.launch-copy h2 { margin: 0 0 4px; font-size: .88rem; }
+.launch-copy p { margin: 0; color: var(--public-muted); font-size: .72rem; line-height: 1.48; }
+.closing-notes .image-disclaimer { padding-block: 10px 0; }
 .study-band { display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); align-items: center; gap: clamp(32px, 6vw, 80px); padding: clamp(48px, 7vw, 90px) max(24px, calc((100vw - 1240px) / 2)); background: #e8e3dc; }
 .study-copy h2 { margin-inline: 0; }
 .study-copy > p:not(.eyebrow) { max-width: 540px; color: #514d48; line-height: 1.6; }
@@ -125,6 +143,7 @@
   .how-hero { grid-template-columns: minmax(0, .95fr) minmax(0, 1.05fr); min-height: 560px; }
   .how-hero-copy { padding-inline: 30px; }
   .how-hero-copy h1 { font-size: clamp(3.15rem, 7vw, 5rem); }
+  .story-text-section { grid-template-columns: minmax(200px, .72fr) minmax(0, 1.28fr); gap: 26px; padding: 28px; }
   .comparison-grid { gap: 11px; }
   .comparison-card dl { padding-inline: 0; }
   .comparison-card dl > div { grid-template-columns: minmax(100px, .78fr) 1.22fr; gap: 9px; padding-inline: 13px; }
@@ -138,6 +157,17 @@
   .closing-copy { width: min(550px, 65%); }
 }
 @media (max-width: 680px) {
+  .story-text-section { grid-template-columns: 1fr; gap: 15px; padding: 24px 20px; }
+  .story-text-copy { padding: 0; border-left: 0; }
+  .story-text-heading h2 { max-width: 560px; font-size: clamp(1.75rem, 8vw, 2.35rem); }
+  .story-text-copy p { font-size: .92rem; }
+  .launch-card { grid-template-columns: 1fr; }
+  .launch-badge { display: flex; align-items: center; gap: 9px; padding: 9px 13px; }
+  .launch-badge svg { flex: 0 0 24px; width: 24px; height: 24px; }
+  .launch-badge span { align-self: auto; font-size: .58rem; }
+  .launch-badge strong { margin-left: auto; font-size: 1.12rem; }
+  .launch-copy { padding: 12px 14px; }
+  .launch-copy p { font-size: .7rem; }
   .how-page .site-header { grid-template-columns: minmax(0, 1fr) auto auto; }
   .how-page .header-cta { width: 40px; height: 40px; justify-content: center; padding: 0; }
   .how-page .header-cta span:first-child { display: none; }
