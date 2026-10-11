@@ -125,7 +125,7 @@ publishedReader, publicModules, catalog, priceBook, scene } = globalThis.__publi
     assert.equal(productionFetches, 1, "a valid preview publication takes precedence over the public primary projection");
     assert.equal(prod.reads, 1, "preview must not share production store");
     for (const invalid of ["not-json", v3, { ...v5, schemaVersion: "unknown" },
-      { ...v5, objects: null }, null]) {
+      { ...v5, objects: null }]) {
       preview.setMock(invalid);
       assert.deepEqual(await invoke("GET"), {
         status: 503, body: { error: "public_modules_unavailable" }

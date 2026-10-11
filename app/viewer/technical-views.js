@@ -31,9 +31,7 @@
       segments,
       frame: { x: 28, y: 28, width: 124, height: 68 },
       segmentScaleMm: segments.reduce((total, part) => total + Number(part.spanMm || part.span || 0), 0),
-      ariaLabel: `Vista interna frontal com segmentos confirmados: ${segments.map((part) => `${part.label}, ${dimension(part.spanMm || part.span)} milímetros`).join("; ")}.`,
-      showEndTicks: false,
-      dimensionLabelY: 12
+      ariaLabel: `Vista interna frontal com segmentos confirmados: ${segments.map((part) => `${part.label}, ${dimension(part.spanMm || part.span)} milímetros`).join("; ")}.`
     });
     const figure = document.createElement("article"); figure.className = "technical-view";
     figure.append(Object.assign(document.createElement("h3"), { textContent: "Vista interna" }), svg,

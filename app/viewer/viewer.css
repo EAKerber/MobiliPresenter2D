@@ -40,7 +40,7 @@
 .scene-hotspot:hover::after, .scene-hotspot:focus-visible::after { border-color: color-mix(in srgb, var(--public-accent-highlight) 88%, white); background: rgb(216 188 124 / 19%); }
 .scene-hotspot.is-selected::after { border-color: transparent; }
 .scene-hotspot:focus-visible { outline: 0; }
-.scene-hotspot__tag { position: absolute; left: 50%; top: -8px; display: grid; width: 26px; height: 26px; place-items: center; transform: translate(-50%, -100%); border: 1px solid var(--public-accent-highlight); border-radius: 50%; background: #fff; color: #6e512e; font-size: 11px; font-weight: 800; opacity: 0; pointer-events: none; transition: opacity 160ms ease; }
+.scene-hotspot__tag { position: absolute; left: 50%; top: -8px; display: grid; width: 26px; height: 26px; place-items: center; transform: translate(-50%, -100%); border: 1px solid rgba(226, 201, 145, .8); border-radius: 50%; background: #1b1c1a; color: #d8cbbb; font-size: 11px; font-weight: 800; opacity: 0; pointer-events: none; transition: opacity 160ms ease; }
 .scene-hotspot:hover .scene-hotspot__tag, .scene-hotspot:focus-visible .scene-hotspot__tag, .scene-hotspot.is-selected .scene-hotspot__tag { opacity: 1; }
 .scene-hotspot[data-marker-side="bottom"] .scene-hotspot__tag { top: auto; bottom: -8px; transform: translate(-50%, 100%); }
 .scene-hotspot[data-marker-side="right"] .scene-hotspot__tag { top: 50%; right: -8px; left: auto; transform: translate(100%, -50%); }
@@ -62,7 +62,7 @@
 .technical-view.is-current { border-color: color-mix(in srgb, var(--public-accent) 60%, var(--public-line)); box-shadow: 0 0 0 1px color-mix(in srgb, var(--public-accent) 20%, transparent); }
 .technical-view h3 { min-height: 30px; margin: 0; font-size: .72rem; font-weight: 750; line-height: 1.25; text-transform: uppercase; }
 .technical-view svg { display: block; width: 100%; height: clamp(190px, 20vw, 250px); overflow: visible; color: #403c37; }
-.technical-view svg text { fill: currentColor; font-family: inherit; font-size: 8px; }
+.technical-view svg text { fill: currentColor; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 7px; font-weight: 700; }
 .technical-view svg .module-detail__view-shape { fill: color-mix(in srgb, var(--public-accent) 8%, transparent); stroke: currentColor; stroke-width: 1.4; }
 .technical-view svg .module-detail__dimension-line { fill: none; stroke: currentColor; stroke-width: .9; }
 .technical-view p { margin: 0; color: var(--public-muted); font-size: .73rem; line-height: 1.4; }

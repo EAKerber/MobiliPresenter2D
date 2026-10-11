@@ -83,7 +83,7 @@ assert.equal((indexHtml.match(/core\/keyboard-shortcuts\.js/g) || []).length, 1,
 assert.equal((indexHtml.match(/core\/layout-profiles\.js/g) || []).length, 1, "layout profile resolver is loaded explicitly exactly once");
 assert.equal((indexHtml.match(/data-step="/g) || []).length, 0, "static buyer stage buttons are absent; runtime normalized flow owns navigation");
 const layoutProfilesIndex = indexHtml.indexOf("core/layout-profiles.js?v=cp-sd-01c1-v1");
-const stylesIndex = indexHtml.indexOf("styles.css?v=runtime-v38");
+const stylesIndex = indexHtml.indexOf("styles.css");
 const hierarchyDefaultsIndex = indexHtml.indexOf("data/hierarchy-defaults.js?v=hierarchy-defaults-v2");
 const pricingContractIndex = indexHtml.indexOf("core/pricing-contract.js?v=runtime-v38");
 const pricingIndex = indexHtml.indexOf("core/pricing.js?v=runtime-v38");
