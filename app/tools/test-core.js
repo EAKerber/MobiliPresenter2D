@@ -53,6 +53,9 @@ assert.equal(resolved(glassState)["tempered-glass"].visible, true);
 assert.equal(scene.entities.find(e => e.id === "tempered-glass").controllable, false);
 assert.equal(scene.entities.some(e => /(?:right-return|left-return|right-side|exposed-face|floor-side-bridge)$/.test(e.id)), false, "experimental furniture side overlays stay out of the canonical scene");
 const appSource = fs.readFileSync(path.join(projectRoot, "app.js"), "utf8");
+const sceneComponentSource = fs.readFileSync(path.join(projectRoot, "core/scene-component.js"), "utf8");
+const sceneGeometrySource = fs.readFileSync(path.join(projectRoot, "core/scene-geometry.js"), "utf8");
+const technicalDrawingsSource = fs.readFileSync(path.join(projectRoot, "core/technical-drawings.js"), "utf8");
 const indexSource = fs.readFileSync(path.join(projectRoot, "config", "index.html"), "utf8");
 const staticHtmlIds = new Set([...indexSource.matchAll(/\bid="([^"]+)"/g)].map((match) => match[1]));
 const orphanedStaticDomIds = [...new Set(
@@ -78,13 +81,14 @@ const keyboardSource = fs.readFileSync(path.join(projectRoot, "core/keyboard-sho
 const cssSelectorText = [...styleSource.matchAll(/([^{}]+)\{/g)].map((match) => match[1]).join("\n");
 const cssClassNames = [...new Set([...cssSelectorText.matchAll(/\.([A-Za-z_-][A-Za-z0-9_-]*)/g)].map((match) => match[1]))];
 const dynamicCssClasses = new Set(["structure-layer--shadow", "structure-layer--highlight"]);
-const cssReachabilityCorpus = indexSource + "\n" + appSource + "\n" + keyboardSource;
+const cssReachabilityCorpus = indexSource + "\n" + appSource + "\n" + sceneComponentSource + "\n" + sceneGeometrySource + "\n" + technicalDrawingsSource + "\n" + keyboardSource;
 const unreachableCssClasses = cssClassNames.filter((name) => !dynamicCssClasses.has(name) && !cssReachabilityCorpus.includes(name)).sort();
 assert.deepEqual(unreachableCssClasses, [], "public styles.css classes must be reachable from public markup/runtime or explicitly dynamic");
 const cssIdNames = [...new Set([...cssSelectorText.matchAll(/#([A-Za-z_-][A-Za-z0-9_-]*)/g)].map((match) => match[1]))];
 const unreachableCssIds = cssIdNames.filter((id) => !staticHtmlIds.has(id)).sort();
 assert.deepEqual(unreachableCssIds, [], "public styles.css id selectors must exist in index.html");
-assert.match(appSource, /group\.style\.zIndex = String\(entity\.zIndex\)/);
+assert.match(appSource, /setLayerZIndex: true/);
+assert.match(sceneComponentSource, /options\.setLayerZIndex\) group\.style\.zIndex = String\(entity\.zIndex\)/);
 assert.doesNotMatch(styleSource, /data-entity-id="tempered-glass"\]\s*\{\s*z-index/);
 const stoveDisabledState = core.createInitialState(scene);
 core.setEntityVisibility(stoveDisabledState, "module-02", false);
@@ -694,12 +698,12 @@ const adminCss = fs.readFileSync(path.join(projectRoot, "admin/admin.css"), "utf
 const pricingSource = fs.readFileSync(path.join(projectRoot, "core/pricing.js"), "utf8");
 const configurationSource = fs.readFileSync(path.join(projectRoot, "core/configuration.js"), "utf8");
 const priceBookSource = fs.readFileSync(path.join(projectRoot, "data/mock-price-book.js"), "utf8");
-assert.equal(indexHtml.includes("data/mock-price-book.js?v=runtime-v38"), true, "buyer cache revision declares PriceBook 2.0");
-assert.equal(indexHtml.includes("core/pricing-contract.js?v=runtime-v38"), true, "buyer loads the typed pricing contract");
-assert.equal(indexHtml.indexOf("core/pricing-contract.js?v=runtime-v38") < indexHtml.indexOf("core/configuration.js?v=admin-config-v8"), true, "pricing contract loads before the v3 compatibility core");
-assert.equal(indexHtml.indexOf("core/pricing-contract.js?v=runtime-v38") < indexHtml.indexOf("core/pricing.js?v=runtime-v38"), true, "pricing contract loads before calculator");
-assert.equal(indexHtml.includes("core/pricing.js?v=runtime-v38"), true, "typed pricing calculator cache revision is explicit");
-assert.equal(indexHtml.includes("app.js?v=runtime-v38"), true, "PriceBook 2.0 buyer cache revision is explicit");
+assert.equal(indexHtml.includes("data/mock-price-book.js?v=runtime-v39"), true, "buyer cache revision declares PriceBook 2.0");
+assert.equal(indexHtml.includes("core/pricing-contract.js?v=runtime-v39"), true, "buyer loads the typed pricing contract");
+assert.equal(indexHtml.indexOf("core/pricing-contract.js?v=runtime-v39") < indexHtml.indexOf("core/configuration.js?v=admin-config-v8"), true, "pricing contract loads before the v3 compatibility core");
+assert.equal(indexHtml.indexOf("core/pricing-contract.js?v=runtime-v39") < indexHtml.indexOf("core/pricing.js?v=runtime-v39"), true, "pricing contract loads before calculator");
+assert.equal(indexHtml.includes("core/pricing.js?v=runtime-v39"), true, "typed pricing calculator cache revision is explicit");
+assert.equal(indexHtml.includes("app.js?v=runtime-v39"), true, "buyer cache revision is explicit");
 ["frontFinishRatesBps", "handleEntries", "localEntries", "globalEntries"].forEach((legacyBucket) => {
   assert.equal(pricingSource.includes(legacyBucket), false, `calculator no longer reads legacy pricing bucket: ${legacyBucket}`);
 });
@@ -813,7 +817,7 @@ assert.equal(appJs.includes("publishNormalizedFlow"), true, "app publishes one n
 assert.equal(appJs.includes("applyBuyerFlowLayout"), true, "buyer composition is mounted from normalized flow layout");
 assert.equal((indexHtml.match(/core\/layout-profiles\.js/g) || []).length, 1, "layout profile resolver loads exactly once");
 assert.equal(
-  indexHtml.indexOf("core/layout-profiles.js?v=cp-sd-01c1-v1") < indexHtml.indexOf("styles.css?v=runtime-v38"),
+  indexHtml.indexOf("core/layout-profiles.js?v=cp-sd-01c1-v1") < indexHtml.indexOf("styles.css?v=runtime-v39"),
   true,
   "canonical layout profile resolves before public topology CSS to avoid first-paint profile drift"
 );
@@ -873,6 +877,9 @@ const runtimeScriptRevisions = [
   /core\/validation\.js\?v=([^\"]+)/,
   /core\/fingerprint\.js\?v=([^\"]+)/,
   /core\/finishes\.js\?v=([^\"]+)/,
+  /core\/scene-geometry\.js\?v=([^\"]+)/,
+  /core\/technical-drawings\.js\?v=([^\"]+)/,
+  /core\/scene-component\.js\?v=([^\"]+)/,
   /core\/pricing\.js\?v=([^\"]+)/,
   /core\/flow-model\.js\?v=([^\"]+)/,
   /core\/flow-layout\.js\?v=([^\"]+)/,
@@ -881,7 +888,7 @@ const runtimeScriptRevisions = [
   /app\.js\?v=([^\"]+)/
 ].map((pattern) => indexHtml.match(pattern)?.[1]);
 assert.equal(runtimeScriptRevisions.every(Boolean), true, "scene runtime scripts require an explicit shared revision");
-assert.equal(new Set(runtimeScriptRevisions).size, 1, "mask data, material data, renderer and app must update together");
+assert.equal(new Set(runtimeScriptRevisions).size, 1, "mask data, scene helpers, renderer and app must update together");
 assert.equal(indexHtml.includes(`styles.css?v=${runtimeScriptRevisions[0]}`), true, "styles and runtime scripts share the same cache revision");
 assert.equal(appJs.includes("setModuleSelection"), false);
 assert.equal(appJs.includes("refreshMobileSceneDock"), true);
@@ -917,15 +924,15 @@ assert.equal(appJs.includes("const requirementHidden = requirementsForEntity(\"l
 assert.equal(appJs.includes("lightingToggle.disabled = blocked"), true);
 assert.equal(appJs.includes("function moduleEntityIds()"), true, "detail navigation must include modules outside the composition");
 assert.equal(appJs.includes("function createModuleSelectionControl"), true, "detail keeps a selection control for hidden modules");
-assert.equal(appJs.includes("scene-hotspot--aerial"), true, "aerial module labels have a safe placement variant");
-assert.equal(appJs.includes("resolveMarkerPlacement"), true, "marker position derives from a default with data overrides");
+assert.equal(sceneComponentSource.includes("scene-hotspot--aerial"), true, "aerial module labels have a safe placement variant");
+assert.equal(sceneGeometrySource.includes("resolveMarkerPlacement"), true, "marker position derives from a default with data overrides");
 assert.equal(appJs.includes("module-detail__carousel-arrow"), true, "detail carousel has circular arrow controls");
 assert.equal(appJs.includes("detailNavigationAttentionByEntity"), true, "navigating to an excluded module calls attention to selection");
 assert.equal(appJs.includes("Cota do módulo em pedra e serviços do conjunto"), false, "global totals do not appear in individual module cards");
-assert.equal(appJs.includes("two-doors-and-microwave"), true, "M06 has a dedicated orientative front pattern");
-assert.equal(appJs.includes("depthDimensionStart"), true, "isometric depth dimension has endpoint ticks");
+assert.equal(technicalDrawingsSource.includes("two-doors-and-microwave"), true, "M06 has a dedicated orientative front pattern");
+assert.equal(technicalDrawingsSource.includes("depthStart") && technicalDrawingsSource.includes("depthEnd"), true, "isometric depth dimension has endpoint ticks");
 assert.equal(appJs.includes("module-detail__focus-finish"), true, "focus uses the live masked finish layer");
-assert.equal(appJs.includes("structure-layer--${kind}"), true, "scene creates semantic seam layers");
+assert.equal(sceneComponentSource.includes("structure-layer--${kind}"), true, "scene creates semantic seam layers");
 assert.equal(styles.includes("--mobile-pip-height"), false);
 assert.equal(
   styles.includes('html:is([data-layout-profile="stacked"], [data-layout-profile="compact"]) body.is-mobile-scene-pinned .scene-hotspots {'),

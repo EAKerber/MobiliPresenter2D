@@ -2170,17 +2170,7 @@
       if (!product?.commercial?.finishEligible && !entity?.tags?.includes("finish-matched-side")) return;
       const finishId = selectedModuleFinish(entity.id);
       const finish = catalog.options.finishes.find((item) => item.id === finishId) || catalog.options.finishes[0];
-      const hasTexture = Boolean(finish.textureAsset);
-      layer.classList.toggle("is-texture", hasTexture);
-      layer.classList.add("is-color");
-      layer.style.backgroundImage = materialBackground(finish);
-      layer.style.backgroundColor = finish.color;
-      layer.style.backgroundSize = finish.textureSize || "160px 160px";
-      layer.style.setProperty("--finish-brightness", String(finish.textureBrightness || 1));
-      layer.style.setProperty("--finish-opacity", String(finishes.resolveOverlayOpacity(finish, finish.color)));
-      const structure = finishes.resolveStructureStrength(finish, finish.color);
-      group.style.setProperty("--structure-shadow-opacity", String(structure.shadowOpacity));
-      group.style.setProperty("--structure-highlight-opacity", String(structure.highlightOpacity));
+      const structure = sceneComponent.applyFinishLayerStyle(layer, group, finish, finishes, materialBackground(finish));
       group.dataset.structureLuminance = structure.luminance.toFixed(4);
     });
   }

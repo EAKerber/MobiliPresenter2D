@@ -64,6 +64,18 @@
     const style = boundsToPercent(entity, scene); frame.hidden = !style;
     if (style) Object.assign(frame.style, style);
   }
+  function applyFinishLayerStyle(layer, group, finish, finishApi, backgroundImage) {
+    layer.classList.toggle("is-texture", Boolean(finish.textureAsset)); layer.classList.add("is-color");
+    layer.style.backgroundImage = backgroundImage;
+    layer.style.backgroundColor = finish.color;
+    layer.style.backgroundSize = finish.textureSize || "160px 160px";
+    layer.style.setProperty("--finish-brightness", String(finish.textureBrightness || 1));
+    layer.style.setProperty("--finish-opacity", String(finishApi.resolveOverlayOpacity(finish, finish.color)));
+    const structure = finishApi.resolveStructureStrength(finish, finish.color);
+    group.style.setProperty("--structure-shadow-opacity", String(structure.shadowOpacity));
+    group.style.setProperty("--structure-highlight-opacity", String(structure.highlightOpacity));
+    return structure;
+  }
   function applyFinishAppearance({ scene, layers, products, inlineMasks, resolved, finish, finishApi, assetPrefix = "" }) {
     const productByEntity = products instanceof Map ? products : new Map(products.map((product) => [product.entityId || product.id, product]));
     layers.querySelectorAll(".finish-layer").forEach((layer) => {
@@ -73,16 +85,8 @@
       const maskAsset = finishApi.resolveMaskAsset(entity, resolved);
       const maskSource = inlineMasks?.[maskAsset];
       if (maskSource) { layer.style.setProperty("--mask-image", `url("${maskSource}")`); layer.dataset.maskAsset = maskAsset; }
-      layer.classList.toggle("is-texture", Boolean(finish.textureAsset)); layer.classList.add("is-color");
       const texture = finish.textureAsset ? `${assetPrefix}${finish.textureAsset}` : finish.textureCss;
-      layer.style.backgroundImage = texture ? `url("${texture}")` : "none";
-      layer.style.backgroundColor = finish.color;
-      layer.style.backgroundSize = finish.textureSize || "160px 160px";
-      layer.style.setProperty("--finish-brightness", String(finish.textureBrightness || 1));
-      layer.style.setProperty("--finish-opacity", String(finishApi.resolveOverlayOpacity(finish, finish.color)));
-      const structure = finishApi.resolveStructureStrength(finish, finish.color);
-      group.style.setProperty("--structure-shadow-opacity", String(structure.shadowOpacity));
-      group.style.setProperty("--structure-highlight-opacity", String(structure.highlightOpacity));
+      applyFinishLayerStyle(layer, group, finish, finishApi, texture ? `url("${texture}")` : "none");
     });
   }
   function bindKeyboard(target, modules, getSelectedId, select) {
@@ -113,5 +117,5 @@
   function createSelectionFrame() {
     const frame = document.createElement("div"); frame.className = "selection-frame"; frame.setAttribute("aria-hidden", "true"); return frame;
   }
-  global.CasaModulesSceneComponent = Object.freeze({ renderLayers, renderHotspots, updateHotspots, renderSelectionFrame, applyFinishAppearance, bindKeyboard, createSelectionFrame, resolveMarkerPlacement });
+  global.CasaModulesSceneComponent = Object.freeze({ renderLayers, renderHotspots, updateHotspots, renderSelectionFrame, applyFinishLayerStyle, applyFinishAppearance, bindKeyboard, createSelectionFrame, resolveMarkerPlacement });
 })(window);
