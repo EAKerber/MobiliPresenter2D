@@ -310,7 +310,30 @@ A limpeza do checkout de build é mais simples que mover agora dezenas de ferram
 ### Limites da evidência
 
 - Foram lidos `netlify.toml`, `package.json` raiz, `app/package.json`, `app/.gitignore`, `app/README.md`, `app/scripts/build-static.sh` e o workflow `.github/workflows/app-build-purity.yml` em `main`.
-- A classificação foi feita por conteúdo/nomes e referências centrais. Ainda não se fez uma busca exaustiva de todas as strings de URL nem a inspeção HTTP do deploy.
+- A classificação foi feita por conteúdo/nomes e referências centrais; ainda não houve busca exaustiva de todas as strings de URL. A inspeção HTTP somente de leitura do deploy atual está na seção 12.
 - O workflow de CI roda build e testes dentro de `app`; não o alteramos e não executamos testes nesta análise.
-- Uma exclusão no build só será considerada concluída após preview verificar as respostas diretas. Até então, os arquivos seguem no publish root configurado.
+- Nenhuma exclusão no build foi aplicada. A inspeção da seção 12 confirma alguns recursos em 200 na produção atual; preview continuará necessário depois de uma futura limpeza.
+
+## 12. Verificação HTTP de arquivos publicados em produção
+
+**Deploy observado pelo Netlify:** site `mobilipresenter2d`, contexto `production`, deploy `6acbb1efcd8e3600084885d4`, publicado em 2026-10-11, commit `38a314fb3d9830e43310e59c0166197fd19341e0`. O SHA coincide com a `main` usada no inventário da seção 10. A URL imutável do deploy foi usada para que o resultado não dependa de um alias móvel.
+
+Foram feitos pedidos HTTP GET somente de leitura, sem enviar payload. As respostas observadas:
+
+| Caminho no deploy imutável | HTTP | Tipo retornado | Tamanho informado |
+| --- | ---: | --- | ---: |
+| `/docs/CHECKPOINTS.md` | 200 | `text/markdown` | 5.237 bytes |
+| `/reports/phase-1-validation.json` | 200 | `application/json` | 4.976 bytes |
+| `/tools/test-core.js` | 200 | `application/javascript` | 79.334 bytes |
+| `/scripts/build-static.sh` | 200 | `application/x-sh` | 1.014 bytes |
+| `/drizzle/meta/_journal.json` | 200 | `application/json` | 61 bytes |
+| `/README.md` | 200 | `text/markdown` | 2.439 bytes |
+| `/HOT_SWAP_VALIDATION.json` | 200 | `application/json` | 1.126 bytes |
+| `/.openai/hosting.json` | 404 | HTML de erro | — |
+| `/.gitignore` | 404 | HTML de erro | — |
+| `/assets/kitchen/base.png` | 200 | `image/png` | 1.954.488 bytes |
+
+**Conclusão confirmada:** exemplos de documentação, relatório, teste/ferramenta, script de build, journal e metadado de validação são baixáveis diretamente da produção atual. Os dois dotfiles testados não são servidos; `.openai/hosting.json` deve continuar preservado no repositório por sua possível função em outra integração. O ativo de base permanece necessário ao produto e está servido normalmente.
+
+A sondagem confirma a hipótese de exposição para os exemplos da tabela, mas não é uma enumeração HTTP completa dos 224 arquivos nem uma verificação de cada API/alias. Isso não muda a recomendação: preservar arquivos no Git/CI e removê-los do checkout de build Netlify por allowlist explícita, sem alterar `publish = "app"`. Depois de implementar, validar no Deploy Preview os mesmos caminhos (auxiliares retornam 404; ativo público continua 200) antes de produção. Nenhuma limpeza foi implementada ainda.
 
