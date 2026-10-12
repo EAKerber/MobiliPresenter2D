@@ -3,6 +3,9 @@
   command = "npm run build"
   functions = "netlify/functions"
 
+[[plugins]]
+  package = "./netlify/plugins/publish-cleanup"
+
 [[redirects]]
   from = "/api/configuration"
   to = "/.netlify/functions/configuration"
