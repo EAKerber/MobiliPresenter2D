@@ -20,8 +20,30 @@ function logAccessDiagnostic(stage, error, details = {}) {
   if (error) {
     diagnostic.errorClass = safeLogValue(error.name, /^[A-Za-z][A-Za-z0-9_]{0,63}$/);
     diagnostic.errorCode = safeLogValue(error.code, /^(?:[0-9A-Z]{5}|E[A-Z0-9_]{1,31})$/);
+    diagnostic.causeClass = safeLogValue(error.cause?.name, /^[A-Za-z][A-Za-z0-9_]{0,63}$/);
+    diagnostic.causeCode = safeLogValue(error.cause?.code, /^(?:[0-9A-Z]{5}|E[A-Z0-9_]{1,31})$/);
+    diagnostic.errorCategory = classifyAccessError(error);
   }
   console.error("[access-diagnostic]", JSON.stringify(diagnostic));
+}
+
+function classifyAccessError(error) {
+  const messages = [];
+  let current = error;
+  for (let depth = 0; current && depth < 3; depth += 1, current = current.cause) {
+    if (typeof current.message === "string") messages.push(current.message.toLowerCase());
+    if (typeof current.code === "string") messages.push(current.code.toLowerCase());
+  }
+  const message = messages.join(" ");
+  if (/enotfound|eai_again|getaddrinfo/.test(message)) return "dns_resolution";
+  if (/econnrefused|connection refused/.test(message)) return "connection_refused";
+  if (/etimedout|timeout|timed out/.test(message)) return "connection_timeout";
+  if (/certificate|tls|ssl/.test(message)) return "tls";
+  if (/password authentication|authentication failed|sasl/.test(message)) return "database_authentication";
+  if (/permission denied|insufficient privilege/.test(message)) return "database_permission";
+  if (/does not exist/.test(message) && /database|role/.test(message)) return "database_or_role_missing";
+  if (/connect|connection terminated|socket/.test(message)) return "connection";
+  return "unclassified";
 }
 
 function safeLogValue(value, pattern) {
@@ -51,7 +73,11 @@ export default async (request) => {
   if (request.method === "GET") {
     try {
       const grants = await listRecentGrants({ limit: 100 });
-      console.info("[access-diagnostic]", JSON.stringify({ component: "access-grants", stage: "grant_list_succeeded", count: grants.length }));
+      console.info("[access-diagnostic]", JSON.stringify({
+        component: "access-grants",
+        stage: "grant_list_succeeded",
+        count: grants.length,
+      }));
       return jsonResponse({ grants });
     } catch (error) {
       logAccessDiagnostic("grant_list_failed", error);
