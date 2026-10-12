@@ -15,24 +15,54 @@ import {
   normalizeRecipientEmail,
 } from "../access/tokens.mjs";
 
+function logAccessDiagnostic(stage, error, details = {}) {
+  const diagnostic = { component: "access-grants", stage, ...details };
+  if (error) {
+    diagnostic.errorClass = safeLogValue(error.name, /^[A-Za-z][A-Za-z0-9_]{0,63}$/);
+    diagnostic.errorCode = safeLogValue(error.code, /^(?:[0-9A-Z]{5}|E[A-Z0-9_]{1,31})$/);
+  }
+  console.error("[access-diagnostic]", JSON.stringify(diagnostic));
+}
+
+function safeLogValue(value, pattern) {
+  return typeof value === "string" && pattern.test(value) ? value : undefined;
+}
+
 export default async (request) => {
   if (!["GET", "POST", "DELETE"].includes(request.method)) {
     return jsonResponse({ error: "method_not_allowed" }, 405, { Allow: "GET, POST, DELETE" });
   }
 
-  const actor = await getUser();
-  if (!canIssueOrRevokeGrants(actor)) return jsonResponse({ error: actor ? "forbidden" : "unauthorized" }, actor ? 403 : 401);
+  let actor;
+  try {
+    actor = await getUser();
+  } catch (error) {
+    logAccessDiagnostic("identity_lookup_failed", error, { method: request.method });
+    return jsonResponse({ error: "identity_unavailable" }, 503);
+  }
+  if (!canIssueOrRevokeGrants(actor)) {
+    logAccessDiagnostic("authorization_denied", null, {
+      method: request.method,
+      authenticated: Boolean(actor),
+    });
+    return jsonResponse({ error: actor ? "forbidden" : "unauthorized" }, actor ? 403 : 401);
+  }
 
   if (request.method === "GET") {
     try {
       const grants = await listRecentGrants({ limit: 100 });
+      console.info("[access-diagnostic]", JSON.stringify({ component: "access-grants", stage: "grant_list_succeeded", count: grants.length }));
       return jsonResponse({ grants });
-    } catch {
+    } catch (error) {
+      logAccessDiagnostic("grant_list_failed", error);
       return jsonResponse({ error: "access_store_unavailable" }, 503);
     }
   }
 
-  if (!hasSameOrigin(request)) return jsonResponse({ error: "invalid_request_origin" }, 403);
+  if (!hasSameOrigin(request)) {
+    logAccessDiagnostic("origin_check_failed", null, { method: request.method });
+    return jsonResponse({ error: "invalid_request_origin" }, 403);
+  }
   const parsed = await readJson(request);
   if (!parsed.ok) return jsonResponse({ error: parsed.status === 413 ? "payload_too_large" : "invalid_json" }, parsed.status);
 
@@ -50,7 +80,10 @@ export default async (request) => {
 
   const recipientEmail = normalizeRecipientEmail(parsed.value.email);
   if (!recipientEmail) return jsonResponse({ error: "invalid_email" }, 400);
-  if (!env("DATABASE_URL") || !accessMailIsConfigured()) {
+  const databaseConfigured = Boolean(env("DATABASE_URL"));
+  const mailConfigured = accessMailIsConfigured();
+  if (!databaseConfigured || !mailConfigured) {
+    logAccessDiagnostic("configuration_incomplete", null, { databaseConfigured, mailConfigured });
     return jsonResponse({ error: "access_service_not_configured" }, 503);
   }
 
@@ -65,14 +98,23 @@ export default async (request) => {
       issuedBy: actor.id,
       expiresAt,
     });
-  } catch {
+    console.info("[access-diagnostic]", JSON.stringify({ component: "access-grants", stage: "grant_insert_succeeded" }));
+  } catch (error) {
+    logAccessDiagnostic("grant_insert_failed", error);
     return jsonResponse({ error: "access_store_unavailable" }, 503);
   }
 
   try {
     await sendAccessLink({ recipientEmail, token });
-  } catch {
-    try { await revokeGrant({ grantId, revokedBy: actor.id }); } catch { /* fail closed; grant expires in 3 hours */ }
+    console.info("[access-diagnostic]", JSON.stringify({ component: "access-grants", stage: "email_delivery_succeeded" }));
+  } catch (error) {
+    logAccessDiagnostic("email_delivery_failed", error);
+    try {
+      await revokeGrant({ grantId, revokedBy: actor.id });
+      console.info("[access-diagnostic]", JSON.stringify({ component: "access-grants", stage: "grant_rollback_succeeded" }));
+    } catch (rollbackError) {
+      logAccessDiagnostic("grant_rollback_failed", rollbackError);
+    }
     return jsonResponse({ error: "access_email_delivery_failed" }, 502);
   }
 
