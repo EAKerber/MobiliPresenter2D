@@ -23,6 +23,9 @@ function logAccessDiagnostic(stage, error, details = {}) {
     diagnostic.causeClass = safeLogValue(error.cause?.name, /^[A-Za-z][A-Za-z0-9_]{0,63}$/);
     diagnostic.causeCode = safeLogValue(error.cause?.code, /^(?:[0-9A-Z]{5}|E[A-Z0-9_]{1,31})$/);
     diagnostic.errorCategory = classifyAccessError(error);
+    if (diagnostic.errorCategory === "tls") {
+      diagnostic.tlsHint = classifyTlsFailure(error);
+    }
   }
   console.error("[access-diagnostic]", JSON.stringify(diagnostic));
 }
@@ -44,6 +47,22 @@ function classifyAccessError(error) {
   if (/does not exist/.test(message) && /database|role/.test(message)) return "database_or_role_missing";
   if (/connect|connection terminated|socket/.test(message)) return "connection";
   return "unclassified";
+}
+
+function classifyTlsFailure(error) {
+  const messages = [];
+  let current = error;
+  for (let depth = 0; current && depth < 3; depth += 1, current = current.cause) {
+    if (typeof current.message === "string") messages.push(current.message.toLowerCase());
+    if (typeof current.code === "string") messages.push(current.code.toLowerCase());
+  }
+  const message = messages.join(" ");
+  if (/hostname|altname|does not match/.test(message)) return "certificate_hostname_mismatch";
+  if (/expired|not yet valid/.test(message)) return "certificate_validity";
+  if (/unable to verify|self.signed|issuer|certificate chain/.test(message)) return "certificate_trust_chain";
+  if (/handshake|protocol version|wrong.version.number/.test(message)) return "tls_handshake";
+  if (/certificate|tls|ssl/.test(message)) return "tls_other";
+  return "tls_unconfirmed";
 }
 
 function safeLogValue(value, pattern) {
@@ -148,3 +167,4 @@ export default async (request) => {
 };
 
 export const config = { path: "/api/access/grants" };
+
