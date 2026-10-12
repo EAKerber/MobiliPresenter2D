@@ -1,7 +1,8 @@
 "use strict";
 
 const assert = require("node:assert/strict");
-const prepare = require("../core/published-buyer-projection.js").prepare;
+const buyerProjection = require("../core/published-buyer-projection.js");
+const { prepare } = buyerProjection;
 const configuration = require("../core/configuration.js");
 const administrationV5 = require("../core/administration-v5.js");
 const flow = require("../core/flow-model.js");
@@ -51,6 +52,14 @@ assert.deepEqual(current.presentationPolicy, v5.presentationPolicy);
 assert.deepEqual(old.pricingRules, pricingContract.upgradeLegacy(v3.pricing));
 assert.deepEqual(old.presentationPolicy, defaultPresentationPolicy);
 
+const buyerPayload = buyerProjection.project(v5, runtime);
+assert.equal(buyerPayload.schemaVersion, buyerProjection.BUYER_SCHEMA);
+assert.equal(Object.hasOwn(buyerPayload, "source"), false, "buyer payload omits the raw administrative source");
+assert.equal(Object.hasOwn(buyerPayload.displaySettings, "revision"), false, "buyer DTO omits the admin revision");
+assert.equal(Object.hasOwn(buyerPayload.displaySettings, "pricing"), false, "buyer DTO omits admin pricing storage");
+assert.deepEqual(buyerProjection.consume(buyerPayload).flow, buyerPayload.flow);
+assert.throws(() => buyerProjection.consume({ ...buyerPayload, schemaVersion: "unknown" }), /invalid published buyer payload/);
+
 // A valid typed amount adjustment is not projectable through v3 but must
 // still reach the buyer without coercion to basis points.
 const amountCandidate = structuredClone(v5);
@@ -75,4 +84,4 @@ const brokenHierarchy = structuredClone(v5);
 brokenHierarchy.stages[0].groups[0].sections[0].itemIds = [];
 assert.throws(() => prepare(brokenHierarchy, runtime));
 
-console.log("published buyer v3/v5 projection contract: PASS");
+console.log("published buyer v3/v5 projection and allowlisted DTO contract: PASS");

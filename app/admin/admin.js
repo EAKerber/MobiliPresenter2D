@@ -10,9 +10,8 @@ import {
   updateUser
 } from "@netlify/identity";
 
-const settingsDefaults = window.CASA_EM_MODULOS_CONFIGURATOR_DEFAULTS;
 const catalog = window.CASA_EM_MODULOS_CATALOG;
-const priceBook = window.CASA_EM_MODULOS_PRICE_BOOK;
+let priceBook = null;
 const pricingContract = window.CasaModulesPricingContract;
 const scene = window.CASA_EM_MODULOS_SCENE;
 const configurationCore = window.CasaModulesConfiguration;
@@ -24,12 +23,12 @@ const hierarchyCore = window.CasaModulesAdministrationV5;
 const hierarchyEditor = window.CasaModulesHierarchyEditor;
 const legacyStageRepair = window.CasaModulesLegacyStageRepair;
 const hierarchyDefaults = window.CASA_EM_MODULOS_HIERARCHY_DEFAULTS;
-const legacyDefaults = configurationCore.createDefaultAdministration(settingsDefaults, catalog, priceBook, scene);
-const catalogPricing = pricingContract.normalize(priceBook.pricing);
-const defaults = hierarchyCore.upgrade(legacyDefaults, configurationCore, flowCore, catalog, priceBook, scene, hierarchyDefaults);
+let catalogPricing = null;
+let adminDataPromise = null;
 const byId = (id) => document.getElementById(id);
 const loginPanel = byId("loginPanel");
 const deniedPanel = byId("deniedPanel");
+const adminServiceError = byId("adminServiceError");
 const editorPanel = byId("editorPanel");
 const loginForm = byId("loginForm");
 const loginMessage = byId("loginMessage");
@@ -47,7 +46,7 @@ const saveButton = byId("saveButton");
 const persistHandlesButton = byId("persistHandlesButton");
 const saveMessage = byId("saveMessage");
 const logoutButton = byId("logoutButton");
-let model = structuredClone(defaults);
+let model = null;
 let publishedSource = null;
 let inviteToken = null;
 let recoveryToken = null;
@@ -1427,6 +1426,7 @@ async function showUser(user) {
   loginPanel.hidden = Boolean(user);
   logoutButton.hidden = !user;
   deniedPanel.hidden = true;
+  adminServiceError.hidden = true;
   editorPanel.hidden = true;
   if (!user) return;
   if (!isAdmin(user)) {
@@ -1434,12 +1434,34 @@ async function showUser(user) {
     return;
   }
   byId("userLabel").textContent = user.email || "Administrador";
-  editorPanel.hidden = false;
   try {
+    await ensureAdminData();
+    editorPanel.hidden = false;
     await loadSettings();
   } catch (error) {
-    setMessage(saveMessage, error.message || "Falha ao carregar as etapas.", "error");
+    adminServiceError.hidden = false;
+    setMessage(adminServiceError, error.message || "Falha ao carregar os dados administrativos.", "error");
   }
+}
+
+async function ensureAdminData() {
+  if (!adminDataPromise) {
+    adminDataPromise = (async () => {
+      const response = await fetch("/api/admin-bootstrap", {
+        credentials: "same-origin",
+        cache: "no-store"
+      });
+      if (!response.ok) throw new Error("Não foi possível carregar os dados administrativos.");
+      const payload = await response.json();
+      if (!payload?.priceBook?.pricing) throw new Error("Os dados de preços administrativos são inválidos.");
+      priceBook = payload.priceBook;
+      catalogPricing = pricingContract.normalize(priceBook.pricing);
+    })().catch((error) => {
+      adminDataPromise = null;
+      throw error;
+    });
+  }
+  return adminDataPromise;
 }
 
 function showPasswordAction(type, token) {

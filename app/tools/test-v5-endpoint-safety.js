@@ -62,7 +62,8 @@ async function main() {
   const harnessPrefix = `const {
     getStore, getDeployStore, getUser, configCore, administrationV5,
     publishedReader, v5Migration, v5Inspection, v5NormalSave,
-    flow, hierarchyDefaults, legacyStageRepair, defaults, catalog, priceBook, scene
+    flow, hierarchyDefaults, legacyStageRepair, defaults, catalog, priceBook, scene,
+    canManageAdministration
   } = globalThis.__v5ReadinessHarness;\n`;
 
   let viewer = null;
@@ -84,7 +85,8 @@ async function main() {
     async getUser() { return viewer; },
     configCore: configuration, administrationV5, publishedReader, v5Migration,
     v5Inspection, v5NormalSave, flow, hierarchyDefaults, legacyStageRepair,
-    defaults, catalog, priceBook, scene
+    defaults, catalog, priceBook, scene,
+    canManageAdministration: (user) => Boolean(user?.id && user?.roles?.includes("admin"))
   };
 
   try {
@@ -102,10 +104,18 @@ async function main() {
       return { status: response.status, body: await response.json() };
     };
 
-    const publicV3 = await invoke("GET", "/api/configuration");
-    assert.equal(publicV3.status, 200);
-    assert.equal(publicV3.body.schemaVersion, configuration.SCHEMA);
-    assert.equal(Object.hasOwn(publicV3.body, "etag"), false, "public GET must never include raw ETag");
+    const anonymousRead = await invoke("GET", "/api/configuration");
+    assert.equal(anonymousRead.status, 401, "raw configuration GET is private");
+    assert.equal(previewOpens, 0, "unauthorized reads must not open a Blob store");
+    viewer = { id: "staff-1", roles: ["staff"] };
+    const staffRead = await invoke("GET", "/api/configuration");
+    assert.equal(staffRead.status, 403, "staff cannot read the administrative raw configuration API");
+    assert.equal(previewOpens, 0, "staff-denied reads must not open a Blob store");
+    viewer = { id: "admin-1", roles: ["admin"] };
+    const adminRead = await invoke("GET", "/api/configuration");
+    assert.equal(adminRead.status, 200);
+    assert.equal(adminRead.body.schemaVersion, configuration.SCHEMA);
+    assert.equal(Object.hasOwn(adminRead.body, "etag"), false, "admin read must never include raw ETag");
     assert.equal(siteOpens, 0, "preview must not open site-wide production store");
     assert.equal(previewOpens, 1);
 
@@ -119,7 +129,7 @@ async function main() {
     assert.equal(previewStore.reads, beforeRetiredReads);
     assert.equal(previewOpens, beforeRetiredOpens);
 
-    viewer = { roles: ["buyer"], app_metadata: { roles: [] } };
+    viewer = { id: "buyer-1", roles: ["buyer"], app_metadata: { roles: [] } };
     const retiredBuyer = await invoke("GET", "/api/configuration?inspection=v5-preflight");
     assert.equal(retiredBuyer.status, 410);
     assert.equal(previewOpens, beforeRetiredOpens);
@@ -127,7 +137,7 @@ async function main() {
     assert.equal(deniedWrite.status, 403);
     assert.equal(previewStore.writes, 0);
 
-    viewer = { roles: ["admin"], app_metadata: { roles: ["admin"] } };
+    viewer = { id: "admin-1", roles: ["admin"], app_metadata: { roles: ["admin"] } };
     const opensBeforeAdmin = previewOpens;
     const retiredAdmin = await invoke("GET", "/api/configuration?inspection=v5-preflight");
     assert.equal(retiredAdmin.status, 410);
@@ -178,7 +188,7 @@ async function main() {
       return { status: response.status, body: await response.json() };
     };
 
-    viewer = { roles: ["admin"] };
+    viewer = { id: "admin-1", roles: ["admin"] };
     const changed = structuredClone(v5);
     changed.objects["module-01"].title = "Alteração v5 confirmada";
     const saved = await sendV5("PUT", changed);

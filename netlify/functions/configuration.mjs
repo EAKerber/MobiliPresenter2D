@@ -1,5 +1,6 @@
 import { getDeployStore, getStore } from "@netlify/blobs";
 import { getUser } from "@netlify/identity";
+import { canManageAdministration } from "../access/identity-policy.mjs";
 import configCore from "../../app/core/configuration.js";
 import administrationV5 from "../../app/core/administration-v5.js";
 import publishedReader from "../../app/core/published-configuration.js";
@@ -60,8 +61,12 @@ export default async (request, context) => {
     }
   }
 
-  const store = getConfigurationStore(context);
   if (request.method === "GET") {
+    const user = await getUser();
+    if (!canManageAdministration(user)) {
+      return respond({ error: user ? "forbidden" : "unauthorized" }, user ? 403 : 401);
+    }
+    const store = getConfigurationStore(context);
     const published = await readPublished(store);
     return published.kind === "invalid"
       ? respond({ error: "stored_configuration_invalid", code: published.code }, 422)
@@ -72,6 +77,7 @@ export default async (request, context) => {
   const roles = [...(user?.roles || []), ...(user?.app_metadata?.roles || [])];
   if (!user) return respond({ error: "unauthorized" }, 401);
   if (!roles.includes("admin")) return respond({ error: "forbidden" }, 403);
+  const store = getConfigurationStore(context);
 
   const declaredLength = Number(request.headers.get("content-length") || 0);
   if (declaredLength > 64 * 1024) return respond({ error: "payload_too_large" }, 413);

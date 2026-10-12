@@ -3,12 +3,21 @@
   command = "npm run build"
   functions = "netlify/functions"
 
-[[plugins]]
-  package = "./netlify/plugins/publish-cleanup"
-
 [[redirects]]
   from = "/api/configuration"
   to = "/.netlify/functions/configuration"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/api/buyer-configuration"
+  to = "/.netlify/functions/buyer-configuration"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/api/admin-bootstrap"
+  to = "/.netlify/functions/admin-bootstrap"
   status = 200
   force = true
 

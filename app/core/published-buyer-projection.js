@@ -60,7 +60,55 @@
     });
   }
 
-  const api = Object.freeze({ prepare });
+  const BUYER_SCHEMA = "BuyerConfiguratorPayload 1.0";
+  const BUYER_SETTING_FIELDS = Object.freeze([
+    "stages", "dependencies", "events", "objectAssets", "objects", "initialState",
+    "finishes", "materials", "handleProducts", "materialGroups"
+  ]);
+
+  function project(value, dependencies) {
+    const prepared = prepare(value, dependencies);
+    const displaySettings = Object.fromEntries(BUYER_SETTING_FIELDS
+      .filter((key) => Object.hasOwn(prepared.displaySettings, key))
+      .map((key) => [key, structuredClone(prepared.displaySettings[key])]));
+    return {
+      schemaVersion: BUYER_SCHEMA,
+      displaySettings,
+      flow: structuredClone(prepared.flow),
+      pricingRules: structuredClone(prepared.pricingRules),
+      presentationPolicy: structuredClone(prepared.presentationPolicy)
+    };
+  }
+
+  function consume(payload) {
+    if (!payload || payload.schemaVersion !== BUYER_SCHEMA
+      || !payload.displaySettings || typeof payload.displaySettings !== "object"
+      || !Array.isArray(payload.displaySettings.stages)
+      || !Array.isArray(payload.displaySettings.dependencies)
+      || !Array.isArray(payload.displaySettings.events)
+      || !Array.isArray(payload.displaySettings.finishes)
+      || !Array.isArray(payload.displaySettings.materials)
+      || !Array.isArray(payload.displaySettings.handleProducts)
+      || !Array.isArray(payload.displaySettings.materialGroups)
+      || !payload.displaySettings.initialState || typeof payload.displaySettings.initialState !== "object"
+      || !payload.displaySettings.objectAssets || typeof payload.displaySettings.objectAssets !== "object"
+      || !payload.displaySettings.objects || typeof payload.displaySettings.objects !== "object"
+      || !payload.flow || !Array.isArray(payload.flow.stages)
+      || !payload.pricingRules || typeof payload.pricingRules !== "object"
+      || !payload.presentationPolicy || typeof payload.presentationPolicy !== "object") {
+      throw new TypeError("invalid published buyer payload");
+    }
+    const displaySettings = Object.fromEntries(BUYER_SETTING_FIELDS
+      .map((key) => [key, structuredClone(payload.displaySettings[key])]));
+    return Object.freeze({
+      displaySettings,
+      flow: structuredClone(payload.flow),
+      pricingRules: structuredClone(payload.pricingRules),
+      presentationPolicy: structuredClone(payload.presentationPolicy)
+    });
+  }
+
+  const api = Object.freeze({ BUYER_SCHEMA, prepare, project, consume });
   if (typeof module !== "undefined" && module.exports) module.exports = api;
   if (global && typeof global === "object") global.CasaModulesPublishedBuyerProjection = api;
 })(typeof window === "undefined" ? globalThis : window);
