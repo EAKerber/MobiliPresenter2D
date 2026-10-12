@@ -1,12 +1,21 @@
 # CP-PUBLIC — plano de arquitetura de acesso até a decisão de provedor
 
 **Status:** plano canônico proposto; nenhuma autenticação nova, gate ou integração de e-mail foi ativada.  
-**Base remota observada:** `main` em `38a314fb3d9830e43310e59c0166197fd19341e0` (merge da PR #193, 2026-10-11).  
+**Base original do plano:** `main` em `38a314fb3d9830e43310e59c0166197fd19341e0` (antes da PR #197). A atualização corrente está registrada abaixo.  
 **Fronteira em aberto:** Netlify-only versus Clerk para autenticação dos compradores e envio/verificação de e-mail. O ticket de suporte do Clerk está pendente.  
 **Decisões já acordadas nesta conversa:** validade do acesso do comprador de 3 horas; Identity `admin` e `staff` podem emitir e revogar grants; destinatário comprova controle do endereço de e-mail; o grant só dá acesso ao configurador.  
 **Não é autorização para deploy, provisionar serviços, configurar credenciais, migrar dados ou alterar produção.**
 
 Este documento reconcilia o desenho Identity/Blobs recente com o trabalho histórico nas PRs #181, #183 e #185–#186. As PRs antigas são referência e material de análise, não código aprovado para merge.
+
+### Atualização de estado e decisão comercial — 2026-10-12
+
+A `main` atual é `717dec38f6ceb162bc1aa03c347cd64376b2a7e7`; a produção está em `6acc3141c830050008998c37` (`ready`), com o mesmo commit. A PR #197 validou e publicou a limpeza do diretório auxiliar depois do empacotamento das Functions. Isso removeu documentação, relatórios e ferramentas do payload estático, mas não alterou a fronteira comercial ou de autenticação.
+
+**Decisão do usuário:** preços são privados por padrão e só devem ser exibidos no contexto autorizado do configurador. Uma futura abertura pública precisa ser simples de reverter e limitar-se a uma projeção própria de preços. O alvo é um controle server-side `publicPricingEnabled`, com padrão `false`; quando explicitamente habilitado, ele libera somente um DTO de preços allowlisted. Esse controle não libera `GET /api/configuration`, recursos administrativos ou dados brutos. O local e o operador desse controle serão definidos no cutover, após o provedor; nenhuma exposição pública está habilitada agora.
+
+**Estado atual ainda não cumpre essa política:** `/data/mock-price-book.js` continua incluído no shell público de `/config/`, e `GET /api/configuration` continua respondendo sem autenticação. A rota pública do viewer, `/api/public-modules`, segue separada e sem preços. Portanto, a decisão foi registrada, mas a privacidade de preços ainda depende de um cutover coordenado com autenticação e migração do bootstrap do configurador. Os detalhes HTTP das seções 10–12 são evidência do snapshot anterior; não descrevem o payload após a limpeza da PR #197.
+
 
 ## 1. Objetivo e invariantes
 
@@ -97,7 +106,7 @@ A PR #186 prototipou tickets de 256 bits com digest SHA-256, ticket curto, sess�
 
 ## 6. Inventário de segurança — evidência verificada em `main`
 
-Leitura dos arquivos remotos de `main` em `38a314fb3d9830e43310e59c0166197fd19341e0`. O inventário abaixo cobre os pontos de entrada e consumidores centrais encontrados; ainda não é uma enumeração exaustiva de todos os arquivos publicados.
+Leitura do snapshot de `main` em `38a314fb3d9830e43310e59c0166197fd19341e0`; os caminhos de preço e autorização foram rechecados na `main` `717dec38f6ceb162bc1aa03c347cd64376b2a7e7`. O inventário abaixo cobre os pontos de entrada e consumidores centrais encontrados; ainda não é uma enumeração exaustiva de todos os arquivos publicados.
 
 ### Rotas, shells e recursos estáticos observados
 
@@ -123,7 +132,7 @@ As duas Functions declaram explicitamente métodos aceitos. A consulta atual a `
 
 ### Dados e classificação
 
-- `app/data/mock-price-book.js` é entregue ao browser do configurador e também incluído pela Function/admin. Contém valores comerciais estimados por módulo/acabamento/serviço e disclaimer; o arquivo declara que custo, margem e dados de fornecedor não devem estar nele. Esses montantes não são segredo técnico hoje, mas a decisão comercial sobre exposição em páginas públicas ainda precisa ser explícita.
+- `app/data/mock-price-book.js` é entregue ao browser do configurador e também incluído pela Function/admin. Contém valores comerciais estimados por módulo/acabamento/serviço e disclaimer; o arquivo declara que custo, margem e dados de fornecedor não devem estar nele. A decisão registrada em 2026-10-12 é tratar esses valores como privados por padrão e exibi-los somente após autorização para o configurador. Uma abertura pública futura deve usar controle server-side independente, desligado por padrão, e DTO allowlisted específico; não deve liberar a configuração bruta. O deploy atual ainda serve o arquivo estaticamente, portanto essa política é um alvo de cutover, não uma proteção já ativa.
 - `app/data/catalog-data.js`, `scene-data.js`, `mask-data.js` e diversos `core/*.js` alimentam configurador, viewer e/ou Function. Não classificar todo o catálogo/cena como privado por associação: identificar campos e ativos individualmente. A projeção pública já é a fronteira de dados do viewer.
 - `app/core/published-buyer-projection.js` é transformação pura, sem I/O ou fallback, carregada pelo shell configurador. Não é endpoint nem autorização; sua presença no cliente não limita acesso a valores de origem.
 - `app/admin.html` mostra um formulário/login e painel negado por Identity no cliente, mas o HTML, bundle, CSS e scripts/dados carregados permanecem recursos estáticos. A autenticação client-side não impede download direto desses arquivos.
@@ -143,15 +152,14 @@ As duas Functions declaram explicitamente métodos aceitos. A consulta atual a `
 
 Usar 401/403 conforme exista ou não uma identidade autenticada; páginas HTML podem redirecionar para login, mas API/arquivo direto deve responder sem revelar conteúdo protegido. Confirmar política de recursos privados e cabeçalhos `no-store` por caminho durante implementação. A matriz não autoriza atualmente acesso de `staff` à escrita de configuração.
 
-### O que ainda falta para fechar o inventário antes do cutover
+### Pendências antes do cutover
 
-1. Enumerar cada HTML/alias, script, CSS, imagem, fonte, JSON/dado e bundle diretamente servidos por `app`; registrar URL exata, hash/referências relevantes, consumidores e classificação de campos. Distinguir arquivo realmente compartilhado de recurso exclusivo.
-2. Examinar todos os endpoints/Functions e métodos no branch-base do cutover, inclusive qualquer endpoint adicionado desde o SHA inventariado, e testar caminhos diretos além dos dois rewrites confirmados.
-3. Decidir explicitamente se valores estimados do `mock-price-book.js` são conteúdo público ou somente autenticado. Se privados, removê-los do bundle estático e entregá-los por resposta autorizada; bloquear apenas `/config/` não basta.
-4. Desenhar o limite Netlify/CDN que bloqueia shells/arquivos privados por URL direta e mantém arquivos públicos compartilhados disponíveis. Se um mesmo bundle contém código/dados públicos e privados, separar dados privados em entrega autenticada em vez de proteger o asset inteiro e quebrar landing/viewer.
-5. Fechar matriz rota × método × papel/grant com cada resultado 200/401/403, incluindo `OPTIONS`, query strings, métodos não aceitos, aliases, sessão expirada/revogada e cabeçalhos de cache.
-6. Preparar sequência de cutover/rollback que não reabra leitura raw anônima nem use fallback estático/local de preço; rollback deve retornar para estado seguro ou interromper a publicação protegida.
-7. Atualizar ponteiros do handoff/issue #192 para este plano e assinalar documentos antigos que ainda apresentem Clerk como escolha feita.
+1. Fechar a matriz rota × método × papel/grant com resultados 200/401/403, incluindo `OPTIONS`, query strings, métodos não aceitos, aliases, sessão expirada/revogada e cabeçalhos de cache.
+2. Especificar a fronteira de entrega do HTML e dos dados protegidos, mantendo públicos os assets realmente compartilhados com landing/viewer.
+3. Especificar o DTO estreito de preço e o ponto único de carregamento autenticado; retirar o preço do bundle estático e do bootstrap/fallback do comprador.
+4. Definir o armazenamento operacional do controle server-side `publicPricingEnabled=false`. Quando habilitado no futuro, ele pode abrir somente o DTO público de preços; não altera as regras de identidade nem o GET raw.
+5. Preparar cutover e rollback que mantenham a superfície protegida fechada e não recuperem preços por fallback local.
+6. Atualizar handoff/issue #192 para apontar o estado da PR #197 e a decisão comercial registrada.
 
 ### Implementar somente após selecionar provedor
 
@@ -188,7 +196,7 @@ Leitura somente, sem alterar arquivos, de `work/MobiliPresenter2D`: branch `expe
 
 **Concluído neste plano, sem alterar runtime:** leitura das rotas principais, dos shells `/config/` e `/admin.html`, dos consumidores de `/api/configuration` e `/api/public-modules`, da publicação estática (`publish = "app"`), de recursos compartilhados e da classificação inicial do preço. A matriz mínima agora separa página pública, interno, admin e comprador com grant.
 
-**Ainda pode avançar sem escolher provedor:** enumerar o restante dos arquivos/aliases e Functions no SHA vigente; decidir a classificação de cada dado comercial; definir a fronteira de proteção estática/Edge e a estratégia de assets públicos compartilhados; fechar a matriz HTTP e um roteiro de cutover/rollback. Isso é documentação/análise, não ativa autenticação.
+**Concluído sem escolher provedor:** inventário estático e busca de referências internas; limpeza do publish e validação no Preview pela PR #197; classificação dos preços como privados por padrão. **Próximo trabalho neutro ao provedor:** fechar a matriz HTTP e o roteiro de cutover/rollback; definir o limite entre assets públicos compartilhados e recursos protegidos; especificar o DTO de preço e o controle server-side `publicPricingEnabled=false`, sem ativar exposição pública ou autenticação.
 
 **Esperar pela resposta do Clerk antes de:** selecionar autenticação de clientes, dependência/provedor de envio, criação de conta versus login sob demanda, variáveis de ambiente, cadastro/invite mode ou implementação do adaptador de identidade do comprador.
 
@@ -325,7 +333,7 @@ A limpeza do checkout de build é mais simples que mover agora dezenas de ferram
 - Foram lidos `netlify.toml`, `package.json` raiz, `app/package.json`, `app/.gitignore`, `app/README.md`, `app/scripts/build-static.sh` e o workflow `.github/workflows/app-build-purity.yml` em `main`.
 - A varredura de referências da seção 11 cobriu 420 arquivos textuais versionados e não encontrou imports/URLs de runtime para os auxiliares, além das dependências registradas ali. Não prova que consumidores externos não existam. A inspeção HTTP da seção 12 foi amostral, não uma enumeração dos 224 arquivos publicados.
 - O workflow de CI roda build e testes dentro de `app`; não o alteramos e não executamos testes nesta análise.
-- Nenhuma exclusão no build foi aplicada. A inspeção da seção 12 confirma alguns recursos em 200 na produção atual; preview continuará necessário depois de uma futura limpeza.
+- Nenhuma exclusão havia sido aplicada no snapshot deste inventário. A PR #197 concluiu posteriormente a limpeza e a validação no Deploy Preview.
 
 ## 12. Verificação HTTP de arquivos publicados em produção
 
@@ -346,9 +354,9 @@ Foram feitos pedidos HTTP GET somente de leitura, sem enviar payload. As respost
 | `/.gitignore` | 404 | HTML de erro | — |
 | `/assets/kitchen/base.png` | 200 | `image/png` | 1.954.488 bytes |
 
-**Conclusão confirmada:** exemplos de documentação, relatório, teste/ferramenta, script de build, journal e metadado de validação são baixáveis diretamente da produção atual. Os dois dotfiles testados não são servidos; `.openai/hosting.json` deve continuar preservado no repositório por sua possível função em outra integração. O ativo de base permanece necessário ao produto e está servido normalmente.
+**Conclusão do snapshot anterior:** exemplos de documentação, relatório, teste/ferramenta, script de build, journal e metadado de validação eram baixáveis diretamente da produção. A PR #197 validou e publicou a remoção desses auxiliares da publicação estática. Os dois dotfiles testados não são servidos; `.openai/hosting.json` deve continuar preservado no repositório por sua possível função em outra integração. O ativo de base permanece necessário ao produto e está servido normalmente.
 
-A sondagem confirma a hipótese de exposição para os exemplos da tabela, mas não é uma enumeração HTTP completa dos 224 arquivos nem uma verificação de cada API/alias. A busca textual da seção 11 fechou as referências internas conhecidas; consumidores externos não são observáveis por ela. A proposta atual é preservar arquivos no Git/CI e removê-los do publish com allowlist em `onPostBuild`, sem alterar `publish = "app"`. Nenhuma limpeza foi implementada ainda.
+A sondagem confirma a hipótese de exposição para os exemplos da tabela, mas não é uma enumeração HTTP completa dos 224 arquivos nem uma verificação de cada API/alias. A busca textual da seção 11 fechou as referências internas conhecidas; consumidores externos não são observáveis por ela. A proposta foi aplicada pela PR #197: os arquivos continuam no Git/CI e a allowlist os remove do publish em `onPostBuild`, sem alterar `publish = "app"`. O Deploy Preview confirmou os 404 esperados e a disponibilidade das páginas, assets e Functions necessárias.
 
 ### Rotas e APIs — respostas sem autenticação
 
