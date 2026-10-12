@@ -2,7 +2,7 @@
 
 **Status:** plano canônico proposto; nenhuma autenticação nova, gate ou integração de e-mail foi ativada.  
 **Base original do plano:** `main` em `38a314fb3d9830e43310e59c0166197fd19341e0` (antes da PR #197). A atualização corrente está registrada abaixo.  
-**Fronteira em aberto:** Netlify-only versus Clerk para autenticação dos compradores e envio/verificação de e-mail. O ticket de suporte do Clerk está pendente.  
+**Decisão vigente em 2026-10-12:** seguir com a arquitetura Netlify-only; a resposta pendente do Clerk deixa de bloquear o trabalho. Netlify Identity permanece para autenticar operadores `admin`/`staff`. O serviço de e-mail transacional do grant continua sendo um adaptador separado a selecionar; não confundir o e-mail de confirmação de conta do Identity com o link emitido por `admin`/`staff`.  
 **Decisões já acordadas nesta conversa:** validade do acesso do comprador de 3 horas; Identity `admin` e `staff` podem emitir e revogar grants; destinatário comprova controle do endereço de e-mail; o grant só dá acesso ao configurador.  
 **Não é autorização para deploy, provisionar serviços, configurar credenciais, migrar dados ou alterar produção.**
 
@@ -79,22 +79,18 @@ Condições de concorrência a comprovar antes do cutover:
 
 ## 5. Opções que aguardam a resposta do Clerk
 
-### A. Netlify-only
+### A. Netlify-only — escolhida
 
-- Identity autentica `admin` e `staff`; Functions validam roles.
-- Um serviço transacional separado entrega código/link de verificação ao e-mail do comprador; depois do resgate, o servidor cria a sessão/grant de 3h.
-- Usar PostgreSQL para tickets, grants e sessões: o resgate consome o ticket e cria a sessão atomicamente; revogação e limites por destinatário/emissor também são operações transacionais. Manter Blobs para a publicação atual do configurador, cujo CAS protege a atualização de um único documento. Isso não exige migrar a configuração inteira.
-- Vantagem: não introduz segundo provedor de identidade para compradores. Custo/limites e responsabilidade de entrega de e-mail dependem do serviço escolhido.
-- Ponto de atenção: Identity não é o mecanismo do grant temporário; ele não deve virar role permanente.
+- Netlify Identity autentica `admin` e `staff`; as Functions validam roles no servidor. Identity não recebe role permanente de comprador.
+- `admin`/`staff` emitem e revogam um grant de 3 horas. Uma camada de e-mail transacional envia o link de resgate para o endereço autorizado; ela fica isolada para permitir trocar o fornecedor depois sem alterar o modelo de grants ou a autorização.
+- Após prova de posse do mesmo e-mail, resgate único e POST explícito, o app cria a sessão opaca de 3 horas. O grant permanece distinto da sessão Identity dos operadores.
+- PostgreSQL armazena tickets, grants e sessões; consumo e criação da sessão ocorrem na mesma transação. Netlify Database é a primeira hospedagem a avaliar, sem provisionar até confirmar plano/custo. Blobs/CAS continua somente na publicação atual do configurador.
+- A mudança de Clerk para Netlify-only não altera as regras de escopo: comprador só lê o configurador autorizado, sem acesso administrativo.
+- Limite conhecido: o Netlify Identity documenta e-mails automáticos para cadastro/convite/recuperação, mas esse fluxo não substitui o link do grant emitido pelo app. A documentação pública consultada não especifica quotas de entrega para esse fluxo; o adaptador de e-mail precisa ser escolhido e validado antes da produção.
 
-### B. Clerk para compradores; Identity continua para `admin`/`staff`
+### B. Clerk para compradores; Identity continua para `admin`/`staff` — não escolhido
 
-- Netlify Identity continua autenticando os operadores internos e protegendo emissão/revogação.
-- Clerk fornece identidade/login de comprador e prova de e-mail. O servidor só ativa o grant pendente quando a sessão Clerk verificada pertence ao mesmo e-mail que `admin`/`staff` autorizou.
-- A autorização de três horas continua própria do site; uma sessão Clerk mais longa não estende o grant. Revogação/expiração devem ser conferidas no boundary de API e de recursos protegidos.
-- O estado de tickets, grants e sessões continua em PostgreSQL independentemente de Clerk. Clerk autentica/verifica o comprador, mas não substitui a transação que consome o grant, abre a sessão e permite revogá-la.
-- Vantagem: prepara contas e login persistente de clientes se isso virar requisito. Custo é a coexistência temporária de Identity e Clerk e a necessidade de conciliar identidades com e-mail verificado.
-- Pendência decisiva: resposta do suporte sobre limites e política de entrega de códigos/links de e-mail em produção no plano considerado. A página de preços lista verificação por e-mail, mas não publica uma franquia de envio que possamos usar como garantia.
+Manter como opção de migração se a entrega de e-mail ou um requisito futuro de conta/login persistente justificar. A resposta do suporte do Clerk pode informar uma reavaliação posterior, mas não bloqueia a implementação inicial Netlify-only.
 
 ### C. Migração de `admin`/`staff` para Clerk
 
@@ -208,9 +204,11 @@ Leitura somente, sem alterar arquivos, de `work/MobiliPresenter2D`: branch `expe
 
 **Concluído neste plano, sem alterar runtime:** leitura das rotas principais, dos shells `/config/` e `/admin.html`, dos consumidores de `/api/configuration` e `/api/public-modules`, da publicação estática (`publish = "app"`), de recursos compartilhados e da classificação inicial do preço. A matriz mínima agora separa página pública, interno, admin e comprador com grant.
 
-**Concluído sem escolher provedor:** inventário estático e busca de referências internas; limpeza do publish e validação no Preview pela PR #197; classificação privada de preço, contrato do DTO, `PUBLIC_PRICING_ENABLED=false`, matriz HTTP e sequência de cutover/rollback. A implementação integrada aguarda somente as decisões de provedor e plano/custo de banco.
+**Concluído sem escolher provedor:** inventário estático e busca de referências internas; limpeza do publish e validação no Preview pela PR #197; classificação privada de preço, contrato do DTO, `PUBLIC_PRICING_ENABLED=false`, matriz HTTP e sequência de cutover/rollback. A implementação integrada não aguarda mais uma decisão entre Clerk e Netlify Identity. Permanecem a escolha/validação do serviço de e-mail transacional e a confirmação do plano/custo do Netlify Database antes de provisionar.
 
-**Esperar pela resposta do Clerk antes de:** selecionar autenticação de clientes, dependência/provedor de envio, criação de conta versus login sob demanda, variáveis de ambiente, cadastro/invite mode ou implementação do adaptador de identidade do comprador.
+**A decisão de autenticação inicial é Netlify-only. Implementar Identity para os papéis internos, grants/sessões próprios para compradores e manter a entrega de e-mail transacional atrás de um adaptador.
+
+**Antes de produção:** escolher/validar o serviço transacional que entrega o link de grant e confirmar plano/custo do Netlify Database antes de provisionar. Clerk permanece como caminho de migração se os limites ou requisitos mudarem.
 
 **Persistência já recomendada para grants:** PostgreSQL, com base no fluxo transacional já exercitado na PR #186 e na orientação do Netlify para dados por usuário e operações transacionais. Não precisamos testar Blobs como banco de sessões. Blobs permanece no salvamento/publicação de configuração já vigente; isso não implica reescrever esse subsistema.
 
@@ -218,7 +216,7 @@ Leitura somente, sem alterar arquivos, de `work/MobiliPresenter2D`: branch `expe
 
 ## Fontes de trabalho relacionadas
 
-- [Issue #192 — foco CP-PUBLIC atual](https://github.com/EAKerber/MobiliPresenter2D/issues/192) — atualizar para apontar à decisão de provedor pendente.
+- [Issue #192 — foco CP-PUBLIC atual](https://github.com/EAKerber/MobiliPresenter2D/issues/192) — registrar que a arquitetura Netlify-only foi escolhida; Clerk não bloqueia mais o início da implementação.
 - [PR #181 — inventário de superfícies e duplicações](https://github.com/EAKerber/MobiliPresenter2D/pull/181) — aproveitar análise de assets, APIs e rotas; DRAFT/HOLD.
 - [PR #183 — plano de sessão/autorização](https://github.com/EAKerber/MobiliPresenter2D/pull/183) — plano histórico; não tratar Clerk como decisão atual.
 - [PR #185 — buyer DTO](https://github.com/EAKerber/MobiliPresenter2D/pull/185) — candidato a reutilizar depois de reconciliação.
