@@ -167,7 +167,7 @@ A matriz não concede a `staff` leitura ou escrita do GET raw. `staff` usa o DTO
 1. Confirmar provedor do comprador e hospedagem/plano do PostgreSQL; usar armazenamento isolado no Preview, sem acessar a configuração ou o banco de produção.
 2. No mesmo conjunto funcional, implementar policy, endpoints de DTO/grants, gate do shell e arquivos diretos, proteção das Functions diretas e remoção do preço estático após empacotar as Functions.
 3. Migrar o bootstrap do configurador e do admin para carregamento autenticado; falha de autorização ou indisponibilidade não usa dados/configuração/preços locais como fallback.
-4. Fazer um único Deploy Preview integrado. Conferir a matriz desta seção em sessão anônima sem cookies, staff, admin, grant válido/inválido/expirado/revogado, caminhos diretos, cache, acesso ao viewer e operação do configurador. Usar apenas dados e credenciais sandbox.
+4. Agrupar as mudanças do cutover em um único conjunto coerente de PR/Deploy Preview e, após aprovação, uma promoção à produção. Conferir a matriz desta seção em sessão anônima sem cookies, staff, admin, grant válido/inválido/expirado/revogado, caminhos diretos, cache, acesso ao viewer e operação do configurador. Usar apenas dados e credenciais sandbox. Evitar previews/deploys intermediários para partes da mesma implementação, salvo correção urgente de segurança.
 5. Só promover à produção após todos os casos esperados passarem. Não fazer cutover parcial de shell, preço e API.
 6. O deploy anterior contém leitura pública; portanto rollback simples para ele reabriria a exposição. Preparar um alvo seguro compatível antes do cutover. Se o alvo seguro não estiver disponível, interromper/falhar fechado e corrigir com roll-forward, sem retornar ao artefato vulnerável.
 
@@ -178,7 +178,7 @@ A matriz não concede a `staff` leitura ou escrita do GET raw. `staff` usa o DTO
 1. Policy pura: `public | internal(role) | admin | buyer(config:read, expiresAt, revokedAt)`; rejeitar default permissivo e validar identidade no servidor.
 2. Adaptador do provedor escolhido, com contratos pequenos; não criar abstração multi-provedor antes da decisão.
 3. Endpoints de emissão, consulta/resgate, sessão e revogação, protegidos por Identity `admin` ou `staff`; limite antiabuso/rate limit e auditoria sem segredos.
-4. Persistência atômica de estado de ticket/grant/sessão; selecionar Blobs-CAS ou PostgreSQL pela evidência do gate concorrente, não por suposição.
+4. Persistir tickets, grants e sessões em PostgreSQL e fazer consumo/resgate e criação de sessão na mesma transação. A decisão de persistência está tomada; reutilizar o desenho transacional validado na PR #186, ajustando as regras acordadas, sem reabrir Blobs como alternativa para grants.
 5. Migrar configurador para DTO allowlisted e bootstrap fail-closed desde o primeiro paint, removendo os fallbacks de config/preço locais do caminho de comprador.
 6. Proteger entrega de HTML e dados realmente privados por Edge/Function/CDN, todos os aliases e cada API; manter separado o conjunto de recursos públicos compartilhados.
 7. Depois executar testes de policies, concorrência real, resgate/expiração/revogação, superfície HTTP direta, regressão do configurador e deploy preview com credenciais sandbox.
