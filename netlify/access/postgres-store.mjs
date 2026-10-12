@@ -1,4 +1,5 @@
 import pg from "pg";
+import { SUPABASE_DATABASE_CA } from "./supabase-database-ca.mjs";
 import {
   ACCESS_SCOPE,
   createId,
@@ -25,7 +26,10 @@ function getPool() {
     max: 1,
     idleTimeoutMillis: 5_000,
     connectionTimeoutMillis: 4_000,
-    ssl: { rejectUnauthorized: true },
+    ssl: {
+      ca: SUPABASE_DATABASE_CA,
+      rejectUnauthorized: true,
+    },
     application_name: "mobilipresenter2d-access",
   });
   pool.on("error", () => {
@@ -158,3 +162,4 @@ export async function listRecentGrants({ limit = 100 } = {}) {
   );
   return result.rows;
 }
+
