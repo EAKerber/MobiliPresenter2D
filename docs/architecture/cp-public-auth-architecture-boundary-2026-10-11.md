@@ -393,3 +393,7 @@ A observação confirma na produção a diferença arquitetural já apontada pel
 **Probe autorizado nesta etapa:** incluir `@netlify/database` e uma migração SQL pequena para as tabelas `cp_access_grants` e `cp_access_sessions`. A migração contém apenas estrutura, sem dados de teste, clientes ou credenciais. O objetivo do Deploy Preview é confirmar se a conta consegue provisionar a ramificação isolada do Netlify Database e aplicar o schema. Isso não implementa login, envio de e-mail, endpoints de grants ou proteção do configurador.
 
 A documentação atual do Netlify indica que o pacote junto com migrações em `netlify/database/migrations/` aciona o provisionamento e a aplicação automática da migração no Deploy Preview. Não mesclar esta PR: em um deploy de produção o mesmo pacote poderia provisionar o banco de produção e aplicar a migração. O probe não muda o plano da conta nem cria/configura credenciais.
+
+### Resultado do probe em 2026-10-12
+
+O Deploy Preview #196 detectou a migração e tentou criar a ramificação do banco, mas a API Netlify respondeu HTTP 403: `database feature not available for this account`. A criação da base/ramificação não ocorreu e o SQL não foi aplicado; portanto, o schema ainda não foi validado em PostgreSQL. Nenhuma mudança de plano foi feita. Retomar este schema quando a conta tiver acesso ao Netlify Database ou quando outra hospedagem PostgreSQL for escolhida.
