@@ -386,3 +386,10 @@ Foram feitos GETs sem enviar credenciais/cookies e sem ler os corpos das respost
 
 A observação confirma na produção a diferença arquitetural já apontada pelo código: o viewer tem uma projeção própria, enquanto a configuração bruta e a tabela de preço são alcançáveis sem autenticação. Não se coletou nem examinou o JSON retornado por `/api/configuration`; o teste limitou-se ao status e cabeçalhos.
 
+## Atualização 2026-10-12 — e-mail e probe do banco
+
+**Decisão do usuário:** Gmail é suficiente como provedor inicial para o baixo volume previsto. A implementação deverá usar um adaptador de envio; credenciais OAuth/API do endereço oficial ainda não foram configuradas e nenhum e-mail foi enviado. Clerk permanece fora do primeiro corte.
+
+**Probe autorizado nesta etapa:** incluir `@netlify/database` e uma migração SQL pequena para as tabelas `cp_access_grants` e `cp_access_sessions`. A migração contém apenas estrutura, sem dados de teste, clientes ou credenciais. O objetivo do Deploy Preview é confirmar se a conta consegue provisionar a ramificação isolada do Netlify Database e aplicar o schema. Isso não implementa login, envio de e-mail, endpoints de grants ou proteção do configurador.
+
+A documentação atual do Netlify indica que o pacote junto com migrações em `netlify/database/migrations/` aciona o provisionamento e a aplicação automática da migração no Deploy Preview. Não mesclar esta PR: em um deploy de produção o mesmo pacote poderia provisionar o banco de produção e aplicar a migração. O probe não muda o plano da conta nem cria/configura credenciais.
