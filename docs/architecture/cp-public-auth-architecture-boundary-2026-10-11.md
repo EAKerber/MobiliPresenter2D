@@ -12,7 +12,7 @@ Este documento reconcilia o desenho Identity/Blobs recente com o trabalho histó
 
 A `main` atual é `717dec38f6ceb162bc1aa03c347cd64376b2a7e7`; a produção está em `6acc3141c830050008998c37` (`ready`), com o mesmo commit. A PR #197 validou e publicou a limpeza do diretório auxiliar depois do empacotamento das Functions. Isso removeu documentação, relatórios e ferramentas do payload estático, mas não alterou a fronteira comercial ou de autenticação.
 
-**Decisão do usuário:** preços são privados por padrão e só devem ser exibidos no contexto autorizado do configurador. Uma futura abertura pública precisa ser simples de reverter e limitar-se a uma projeção própria de preços. O alvo é um controle server-side `publicPricingEnabled`, com padrão `false`; quando explicitamente habilitado, ele libera somente um DTO de preços allowlisted. Esse controle não libera `GET /api/configuration`, recursos administrativos ou dados brutos. O local e o operador desse controle serão definidos no cutover, após o provedor; nenhuma exposição pública está habilitada agora.
+**Decisão do usuário:** preços são privados por padrão e só devem ser exibidos no contexto autorizado do configurador. Uma futura abertura pública precisa ser simples de reverter e limitar-se a uma projeção própria de preços. O alvo é um controle server-side `publicPricingEnabled`, com padrão `false`; quando explicitamente habilitado, ele libera somente um DTO de preços allowlisted. Esse controle não libera `GET /api/configuration`, recursos administrativos ou dados brutos. O controle será a variável de ambiente Netlify `PUBLIC_PRICING_ENABLED`, disponível somente às Functions; valor ausente ou inválido equivale a `false`. Atualizar o valor exige novo deploy, conforme a documentação do Netlify. A variável ainda não foi criada/configurada e nenhuma exposição pública está habilitada.
 
 **Estado atual ainda não cumpre essa política:** `/data/mock-price-book.js` continua incluído no shell público de `/config/`, e `GET /api/configuration` continua respondendo sem autenticação. A rota pública do viewer, `/api/public-modules`, segue separada e sem preços. Portanto, a decisão foi registrada, mas a privacidade de preços ainda depende de um cutover coordenado com autenticação e migração do bootstrap do configurador. Os detalhes HTTP das seções 10–12 são evidência do snapshot anterior; não descrevem o payload após a limpeza da PR #197.
 
@@ -138,28 +138,40 @@ As duas Functions declaram explicitamente métodos aceitos. A consulta atual a `
 - `app/admin.html` mostra um formulário/login e painel negado por Identity no cliente, mas o HTML, bundle, CSS e scripts/dados carregados permanecem recursos estáticos. A autenticação client-side não impede download direto desses arquivos.
 - Não foi identificada dependência de PostgreSQL ou Clerk no runtime de `main`; o `package.json` observado inclui Blobs, Identity e esbuild.
 
-### Matriz mínima de superfície observada (antes de implementar)
+### Matriz alvo de rotas e métodos
 
-| Recurso/método | Anônimo | Identity `staff` | Identity `admin` | Comprador com e-mail verificado + grant ativo |
+| Recurso/método | Anônimo | Identity `staff` | Identity `admin` | Comprador com e-mail provado e grant ativo |
 | --- | --- | --- | --- | --- |
 | Landing, viewer, how-it-works, about; `GET /api/public-modules` | 200 | 200 | 200 | 200 |
-| Páginas/recursos internos comuns (a enumerar), incluindo sessão de operador | 401/redirect | 200 | 200 | 401/redirect |
-| `GET /config/` e bootstrap/DTO de comprador | 401/redirect | 200 | 200 | 200 apenas com grant e escopo |
-| `GET /api/configuration` raw + URL direta da Function | 401/403 | 403 | 200 | 403 |
-| `PUT /api/configuration` + URL direta da Function | 401 | 403 | 200 | 403 |
-| `/admin.html` e dados exclusivos admin (após separar de assets públicos) | 401/redirect | 403 | 200 | 403 |
-| Emissão/revogação de grant | 401 | 200 | 200 | 403 |
+| `GET /config/`, aliases e DTO de configuração do comprador | 401/redirect | 200 | 200 | 200 somente com grant `config:read` |
+| `GET/PUT /api/configuration` raw e URL direta da Function | 401 | 403 | 200 | 403 |
+| `GET /api/pricing` (proposto) e URL direta da Function | 401/403; 200 somente se `PUBLIC_PRICING_ENABLED=true` | 200 | 200 | 200 com grant `config:read` |
+| `/admin.html` e dados exclusivos de administração | 401/redirect | 403 | 200 | 403 |
+| Criar/revogar grants por `POST` | 401 | 200 | 200 | 403 |
+| Resgatar ticket por `POST` | 200 somente com ticket válido e e-mail verificado correspondente | 200 somente para fluxo autorizado | 200 somente para fluxo autorizado | Não aplicável |
 
-Usar 401/403 conforme exista ou não uma identidade autenticada; páginas HTML podem redirecionar para login, mas API/arquivo direto deve responder sem revelar conteúdo protegido. Confirmar política de recursos privados e cabeçalhos `no-store` por caminho durante implementação. A matriz não autoriza atualmente acesso de `staff` à escrita de configuração.
+A matriz é alvo de implementação, não comportamento já ativo. O comprador recebe DTO de configuração e de preço; nunca o objeto bruto. A flag de preço, mesmo ligada, altera somente a leitura anônima do DTO de preço e não permite acesso ao shell `/config/`.
 
-### Pendências antes do cutover
+### Regras comuns de método, URL e cache
 
-1. Fechar a matriz rota × método × papel/grant com resultados 200/401/403, incluindo `OPTIONS`, query strings, métodos não aceitos, aliases, sessão expirada/revogada e cabeçalhos de cache.
-2. Especificar a fronteira de entrega do HTML e dos dados protegidos, mantendo públicos os assets realmente compartilhados com landing/viewer.
-3. Especificar o DTO estreito de preço e o ponto único de carregamento autenticado; retirar o preço do bundle estático e do bootstrap/fallback do comprador.
-4. Definir o armazenamento operacional do controle server-side `publicPricingEnabled=false`. Quando habilitado no futuro, ele pode abrir somente o DTO público de preços; não altera as regras de identidade nem o GET raw.
-5. Preparar cutover e rollback que mantenham a superfície protegida fechada e não recuperem preços por fallback local.
-6. Atualizar handoff/issue #192 para apontar o estado da PR #197 e a decisão comercial registrada.
+- A mesma policy deve proteger o caminho amigável e a URL direta `/.netlify/functions/*`; aliases de página e caminhos estáticos diretos recebem a mesma checagem do shell.
+- A rota de preço é somente leitura: métodos diferentes de `GET`/eventual `HEAD` retornam 405; `HEAD` usa a mesma autorização de `GET` e não retorna corpo.
+- Queries não autenticam nem ampliam acesso. Rejeitar parâmetros não definidos; nunca transportar token de resgate em query string. O resgate exige ação explícita `POST`, de mesma origem, para que scanners de e-mail não consumam o ticket.
+- Não habilitar CORS para origem arbitrária. Respostas privadas usam `Cache-Control: no-store`; erros de autorização não contêm configuração, valores ou indicação de existência de e-mail/grant.
+- Desativação de grant é consultada no servidor em cada pedido. Revogar uma role Identity pode aguardar refresh do JWT; para operações sensíveis, respeitar esse limite ou manter checagem de estado atualizado.
+
+A matriz não concede a `staff` leitura ou escrita do GET raw. `staff` usa o DTO de comprador no configurador; somente `admin` acessa `/admin.html` e configuração bruta.
+
+### Ordem de cutover e rollback
+
+1. Confirmar provedor do comprador e hospedagem/plano do PostgreSQL; usar armazenamento isolado no Preview, sem acessar a configuração ou o banco de produção.
+2. No mesmo conjunto funcional, implementar policy, endpoints de DTO/grants, gate do shell e arquivos diretos, proteção das Functions diretas e remoção do preço estático após empacotar as Functions.
+3. Migrar o bootstrap do configurador e do admin para carregamento autenticado; falha de autorização ou indisponibilidade não usa dados/configuração/preços locais como fallback.
+4. Fazer um único Deploy Preview integrado. Conferir a matriz desta seção em sessão anônima sem cookies, staff, admin, grant válido/inválido/expirado/revogado, caminhos diretos, cache, acesso ao viewer e operação do configurador. Usar apenas dados e credenciais sandbox.
+5. Só promover à produção após todos os casos esperados passarem. Não fazer cutover parcial de shell, preço e API.
+6. O deploy anterior contém leitura pública; portanto rollback simples para ele reabriria a exposição. Preparar um alvo seguro compatível antes do cutover. Se o alvo seguro não estiver disponível, interromper/falhar fechado e corrigir com roll-forward, sem retornar ao artefato vulnerável.
+
+`PUBLIC_PRICING_ENABLED` é variável de escopo Functions, separada por contexto de deploy, com `false` em produção e Deploy Preview. Só a Function de preços a lê. Para abrir a visão pública, configurar `true` no contexto aprovado e criar novo deploy; para trancar, voltar a `false` e criar novo deploy. Isso muda apenas o acesso anônimo ao DTO de preços, não a matriz de identidade, o conteúdo do DTO nem o gate das outras rotas.
 
 ### Implementar somente após selecionar provedor
 
@@ -196,7 +208,7 @@ Leitura somente, sem alterar arquivos, de `work/MobiliPresenter2D`: branch `expe
 
 **Concluído neste plano, sem alterar runtime:** leitura das rotas principais, dos shells `/config/` e `/admin.html`, dos consumidores de `/api/configuration` e `/api/public-modules`, da publicação estática (`publish = "app"`), de recursos compartilhados e da classificação inicial do preço. A matriz mínima agora separa página pública, interno, admin e comprador com grant.
 
-**Concluído sem escolher provedor:** inventário estático e busca de referências internas; limpeza do publish e validação no Preview pela PR #197; classificação dos preços como privados por padrão. **Próximo trabalho neutro ao provedor:** fechar a matriz HTTP e o roteiro de cutover/rollback; definir o limite entre assets públicos compartilhados e recursos protegidos; especificar o DTO de preço e o controle server-side `publicPricingEnabled=false`, sem ativar exposição pública ou autenticação.
+**Concluído sem escolher provedor:** inventário estático e busca de referências internas; limpeza do publish e validação no Preview pela PR #197; classificação privada de preço, contrato do DTO, `PUBLIC_PRICING_ENABLED=false`, matriz HTTP e sequência de cutover/rollback. A implementação integrada aguarda somente as decisões de provedor e plano/custo de banco.
 
 **Esperar pela resposta do Clerk antes de:** selecionar autenticação de clientes, dependência/provedor de envio, criação de conta versus login sob demanda, variáveis de ambiente, cadastro/invite mode ou implementação do adaptador de identidade do comprador.
 
@@ -217,23 +229,22 @@ Leitura somente, sem alterar arquivos, de `work/MobiliPresenter2D`: branch `expe
 
 ## 8. Política reversível para preços
 
-**Padrão recomendado enquanto a decisão comercial não estiver tomada:** preços não acessíveis a anônimos. “Privado” aqui significa que não são publicados como recurso estático nem incluídos nas rotas públicas; admin, staff e compradores com grant ativo podem recebê-los quando necessários ao configurador. Isso é um default técnico reversível, não uma decisão de negócio permanente.
+**Decisão registrada em 2026-10-12:** preços privados por padrão e exibidos somente no configurador após autorização. A regra comercial sobre permitir ou não uma visão pública continua sujeita a confirmação; até lá, o controle público fica desligado. Privacidade significa que valores não são publicados em arquivos estáticos nem em APIs públicas. A tela atual ainda não aplica esse controle, portanto a produção segue exposta até um cutover coordenado.
 
 ### Contrato que reduz o retrabalho futuro
 
-- Preservar uma única fonte canônica das regras e valores de preço, vinculada à publicação administrativa vigente. Não manter um segundo catálogo de preços no viewer ou no cliente.
-- Expor ao configurador um DTO estreito e allowlisted de preços por um endpoint próprio, por exemplo GET /api/pricing. A policy inicial aceita sessão interna válida ou grant buyer ativo; a resposta não inclui configuração bruta, margem, custo ou metadados administrativos.
-- Manter a projeção pública /api/public-modules separada e sem preço. Não tornar GET /api/configuration bruto anônimo quando preços forem liberados.
-- Para torná-los públicos no futuro, alterar a policy do endpoint de preços para também aceitar anônimos, após decisão comercial explícita e revisão dos campos/valores retornados. O contrato, fonte de dados e cálculo podem permanecer iguais; não exige migração de banco ou troca de provedor.
-- Como o endpoint poderá servir conteúdo público se a política mudar, ele deve sempre retornar somente o DTO comercial aprovado. Manter Cache-Control: no-store é válido mesmo depois de público, embora a política de cache possa ser revista separadamente por desempenho.
+- Preservar uma fonte canônica das regras e valores, vinculada à publicação administrativa vigente. Não manter um segundo catálogo no viewer ou no cliente.
+- Entregar ao configurador um DTO estreito, por endpoint próprio (por exemplo, `GET /api/pricing`). O DTO reutiliza o contrato tipado necessário ao cálculo comercial (`CommercialPricingRules 1.0`, moeda, rótulo e ressalva); exclui configuração bruta, estado de administração, revisão/ETag, custos, margens e metadados internos.
+- O endpoint deriva a decisão server-side da variável Netlify `PUBLIC_PRICING_ENABLED`, com valor permitido estritamente `true` ou `false`; ausente/inválido resulta em `false`. `admin`, `staff` e comprador com grant válido recebem o DTO conforme a policy de acesso. Anônimo recebe 401/403 quando `false`; se a regra comercial for alterada, configurar `true` e fazer novo deploy permite somente o DTO aprovado.
+- O flag é avaliado no servidor; o browser não pode defini-lo nem sobrescrever seu valor. Ele altera somente a leitura anônima do DTO de preços. Não abre `/config/`, não muda roles/grants e não libera `GET /api/configuration` bruto.
+- Manter `GET /api/public-modules` separado e sem preço. Os rewrites e as URLs diretas das Functions de preço/configuração devem aplicar a mesma policy.
+- Usar `Cache-Control: no-store` para o DTO durante a primeira versão, inclusive se a visão pública for habilitada. O contrato e o cálculo permanecem iguais; a alteração de regra limita-se ao controle server-side após aprovação comercial, sem duplicar a tabela nem migrar o banco.
 
 ### O que precisa mudar para que o default privado seja verdadeiro
 
-Hoje app/data/mock-price-book.js está dentro do diretório Netlify publicado e contém valores; bloquear somente a tela /config/ ou a API não protege a URL direta desse arquivo. No cutover, retirar os valores do bundle estático: colocar a fonte canônica em caminho não publicado ou carregá-la do armazenamento de publicação no servidor, remover referências de preço embutidas no HTML/JS e eliminar fallbacks locais com valores. O editor administrativo deverá obter a cópia de trabalho por leitura autenticada; o configurador só recebe o DTO após autorização.
+Hoje `app/data/mock-price-book.js` está dentro do diretório Netlify publicado e contém valores; bloquear somente `/config/` ou a API não protege sua URL direta. No cutover, retirar os valores do bundle estático, carregar a fonte canônica somente pelo servidor e remover fallbacks locais com preços. O editor administrativo recebe a cópia por leitura autenticada; configurador recebe o DTO somente após autorização. A Function pode importar a fonte durante o build, e o build plugin pode excluí-la do publish depois do bundling, preservando o arquivo e consumidores de CI no Git.
 
-A etapa inicial exige trabalho real de separação e migração do carregamento, porque o sistema hoje entrega valores em arquivos estáticos. **A etapa posterior para publicá-los é pequena** se essa separação tiver sido feita: liberar o mesmo endpoint estreito para anônimos e revalidar que não houve exposição de outros dados. Não se deve deixar uma cópia estática pública “por compatibilidade”, pois isso anularia a policy.
-
-
+A etapa inicial exige separar a carga porque os valores estão em arquivos estáticos hoje. **A etapa posterior para tornar pública somente a visão de preço é pequena:** mudar o flag server-side, sem abrir páginas ou APIs administrativas. Não deixar cópia estática “por compatibilidade”, pois ela anularia o lock.
 
 ## 9. Persistência: Blobs para publicação, PostgreSQL para grants
 
@@ -286,6 +297,8 @@ O _journal.json encontrado declara dialeto sqlite e nenhuma migration. Não há 
 5. Validar URL direta dos seis shells, dos assets privados removidos, dos dois rewrites e das duas URLs `/.netlify/functions/*`. A amostragem HTTP ao deploy está registrada na seção 12; ela não cobre cada arquivo individual.
 
 ## 11. Classificação dos auxiliares e proposta de exclusão da publicação
+
+Este é o registro técnico anterior à PR #197. O estado vigente após a limpeza e a validação no Deploy Preview está resumido na atualização inicial deste documento; as tabelas abaixo descrevem a decisão original e sua proveniência.
 
 Esta proposta preserva `publish = "app"`, o deploy Netlify existente e os arquivos necessários a desenvolvimento/CI. Não é uma alteração de runtime ou deploy aplicada nesta PR.
 
