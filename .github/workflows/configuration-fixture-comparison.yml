@@ -1,0 +1,44 @@
+name: Configuration v5 fixture domain comparison
+on:
+  pull_request:
+    paths:
+      - 'tests/diagnostics/published-v5-browser-fixture.cjs'
+      - 'tests/mobile-pip-main-browser.cjs'
+      - 'tests/stone-browser.cjs'
+      - 'tests/summary-pricing-browser.cjs'
+      - '.github/workflows/configuration-fixture-comparison.yml'
+permissions:
+  contents: read
+jobs:
+  domain-under-known-v5:
+    if: github.event.pull_request.number == 182
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install isolated browser tooling
+        run: |
+          npm install --prefix /tmp/fixture-domain-browser --no-audit --no-fund playwright@1.62.1
+          /tmp/fixture-domain-browser/node_modules/.bin/playwright install --with-deps chromium
+      - name: Exercise complete stone, summary and mobile behavior against explicit v5 fixture
+        env:
+          NODE_PATH: /tmp/fixture-domain-browser/node_modules
+          CP_PUBLIC_DIAGNOSTIC_V5: "1"
+          STONE_BROWSER_URL: https://deploy-preview-182--mobilipresenter2d.netlify.app/
+          SUMMARY_PRICING_BROWSER_URL: https://deploy-preview-182--mobilipresenter2d.netlify.app/
+          MOBILE_INTERACTIONS_URL: https://deploy-preview-182--mobilipresenter2d.netlify.app/
+        run: |
+          node tests/stone-browser.cjs /tmp/fixture-domain-evidence/stone
+          node tests/summary-pricing-browser.cjs /tmp/fixture-domain-evidence/summary
+          node tests/mobile-pip-main-browser.cjs /tmp/fixture-domain-evidence/mobile
+          echo "CP-PUBLIC-03a1: 3 business UI suites exercised on explicit validated mock-v5 (NOT auth E2E)"
+      - name: Preserve fixture domain evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pr182-fixture-domain-${{ github.run_id }}
+          path: /tmp/fixture-domain-evidence
+          if-no-files-found: ignore

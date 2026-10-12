@@ -3,6 +3,8 @@ const fs = require("node:fs");
 const path = require("node:path");
 const { pathToFileURL } = require("node:url");
 const { chromium } = require("playwright");
+const fixture = process.env.CP_PUBLIC_DIAGNOSTIC_V5 === "1"
+  ? require("./diagnostics/published-v5-browser-fixture.cjs") : null;
 
 (async () => {
   const output = process.argv[2] || "/tmp/mobile-pip-main-review";
@@ -17,12 +19,14 @@ const { chromium } = require("playwright");
     deviceScaleFactor: 1
   });
   const stackedPage = await stackedContext.newPage();
+  if (fixture) await fixture.attach(stackedPage);
   const stackedErrors = [];
   stackedPage.on("pageerror", error => stackedErrors.push(error.message));
   stackedPage.on("console", message => {
     if (message.type() === "error") stackedErrors.push(message.text());
   });
   await stackedPage.goto(targetUrl);
+  if (fixture) await fixture.assertApplied(stackedPage);
   await stackedPage.evaluate(() => Promise.all(Array.from(document.images, image => image.decode())));
   assert.equal(await stackedPage.evaluate(() => window.CASA_EM_MODULOS_DEBUG.getLayoutProfile()), "stacked",
     "1050px resolves through the canonical stacked profile");
@@ -148,6 +152,7 @@ const { chromium } = require("playwright");
     deviceScaleFactor: 1
   });
   const page = await context.newPage();
+  if (fixture) await fixture.attach(page);
   const errors = [];
   page.on("pageerror", error => errors.push(error.message));
   page.on("console", message => {
@@ -155,6 +160,7 @@ const { chromium } = require("playwright");
   });
 
   await page.goto(targetUrl);
+  if (fixture) await fixture.assertApplied(page);
   await page.evaluate(() => Promise.all(Array.from(document.images, image => image.decode())));
   assert.equal(await page.evaluate(() => window.CASA_EM_MODULOS_DEBUG.getLayoutProfile()), "compact",
     "mobile viewport resolves through the canonical compact profile");

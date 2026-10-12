@@ -129,11 +129,16 @@ async function main() {
   assert.doesNotMatch(endpoint, /import v5Migration from/, "historical migration service must not be bundled in the live endpoint");
   assert.match(endpoint, /if \(operation === "publish-v5-migration"\)/);
   assert.match(endpoint, /return respond\(\{ error: "v5_migration_retired" \}, 410\)/);
-  const auth = endpoint.indexOf("const user = await getUser()");
-  const role = endpoint.indexOf('roles.includes("admin")');
+  const guardSource = fs.readFileSync(path.resolve(__dirname,
+    "../../netlify/lib/configuration-access.cjs"), "utf8");
+  const auth = endpoint.indexOf("accessGuard.authorize(request");
+  const denial = endpoint.indexOf("if (!access.ok)");
+  const storeAccessOrder = endpoint.indexOf("const store = getConfigurationStore(context)");
   const oldOperation = endpoint.indexOf('operation === "publish-v5-migration"');
-  assert(auth !== -1 && auth < role && role < oldOperation,
-    "authentication and admin authorization must precede rejection of the retired operation");
+  assert.match(guardSource, /function hasAdminRole\(user\)/);
+  assert.match(guardSource, /if \(hasAdminRole\(user\)\)/);
+  assert(auth !== -1 && auth < denial && denial < storeAccessOrder && storeAccessOrder < oldOperation,
+    "server-side authorization must precede any Blob access or retired operation check");
   console.log("v5 publication migration mock-store gates: PASS");
 }
 main().catch((error) => { console.error(error); process.exitCode = 1; });

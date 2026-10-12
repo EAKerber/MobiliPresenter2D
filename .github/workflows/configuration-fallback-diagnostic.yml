@@ -1,0 +1,27 @@
+name: Configuration fallback diagnostic (known bug)
+on:
+  pull_request:
+    paths:
+      - 'tests/diagnostics/configuration-401-fallback.cjs'
+      - '.github/workflows/configuration-fallback-diagnostic.yml'
+      - 'netlify/functions/configuration.mjs'
+permissions:
+  contents: read
+jobs:
+  reproduce:
+    if: github.event.pull_request.number == 182
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install isolated browser runtime
+        run: |
+          npm install --prefix /tmp/fallback-diagnostic --no-audit --no-fund playwright@1.62.1
+          /tmp/fallback-diagnostic/node_modules/.bin/playwright install --with-deps chromium
+      - name: Observe the known unauthorized fallback (NOT a release gate)
+        env:
+          NODE_PATH: /tmp/fallback-diagnostic/node_modules
+        run: node tests/diagnostics/configuration-401-fallback.cjs

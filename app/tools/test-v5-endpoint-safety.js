@@ -4,6 +4,7 @@
 // No live Netlify SDK, credentials, production URL or network calls are used.
 const assert = require("node:assert/strict");
 const fs = require("node:fs");
+const accessGuard = require("../../netlify/lib/configuration-access.cjs");
 const path = require("node:path");
 const configuration = require("../core/configuration.js");
 const administrationV5 = require("../core/administration-v5.js");
@@ -60,7 +61,7 @@ async function main() {
   assert.equal(withoutImports.includes("from \"@netlify/blobs\""), false,
     "endpoint imports are replaced by injected mocks");
   const harnessPrefix = `const {
-    getStore, getDeployStore, getUser, configCore, administrationV5,
+    getStore, getDeployStore, getUser, accessGuard, configCore, administrationV5,
     publishedReader, v5Migration, v5Inspection, v5NormalSave,
     flow, hierarchyDefaults, legacyStageRepair, defaults, catalog, priceBook, scene
   } = globalThis.__v5ReadinessHarness;\n`;
@@ -82,6 +83,7 @@ async function main() {
       return previewStore;
     },
     async getUser() { return viewer; },
+    accessGuard,
     configCore: configuration, administrationV5, publishedReader, v5Migration,
     v5Inspection, v5NormalSave, flow, hierarchyDefaults, legacyStageRepair,
     defaults, catalog, priceBook, scene
@@ -102,12 +104,21 @@ async function main() {
       return { status: response.status, body: await response.json() };
     };
 
-    const publicV3 = await invoke("GET", "/api/configuration");
-    assert.equal(publicV3.status, 200);
-    assert.equal(publicV3.body.schemaVersion, configuration.SCHEMA);
-    assert.equal(Object.hasOwn(publicV3.body, "etag"), false, "public GET must never include raw ETag");
-    assert.equal(siteOpens, 0, "preview must not open site-wide production store");
-    assert.equal(previewOpens, 1);
+    // Anonymous full configuration GET must now fail before opening any
+    // deploy or site-wide Blob, including direct Function URL and forged
+    // role/cookie headers. Public modules have a separate safe endpoint.
+    for (const url of ["/api/configuration", "/.netlify/functions/configuration"]) {
+      const anonymous = await invoke("GET", url);
+      assert.deepEqual(anonymous, { status: 401, body: { error: "unauthorized" } });
+    }
+    const forged = await invoke("GET", "/api/configuration", undefined, previewContext, {
+      "x-user-role": "admin", Cookie: "__Host-casa-config-session=forged",
+      Authorization: "Bearer forged"
+    });
+    assert.equal(forged.status, 401);
+    assert.equal(siteOpens, 0, "anonymous preview must never open site-wide production store");
+    assert.equal(previewOpens, 0, "unauthenticated GET must not select Blob store");
+    assert.equal(previewStore.reads, 0);
 
     // Retired admin-only raw preflight must never fall back to public GET,
     // never open a Blob store and never expose raw ETags/candidate data.
@@ -123,9 +134,13 @@ async function main() {
     const retiredBuyer = await invoke("GET", "/api/configuration?inspection=v5-preflight");
     assert.equal(retiredBuyer.status, 410);
     assert.equal(previewOpens, beforeRetiredOpens);
+    const buyerRead = await invoke("GET", "/api/configuration");
+    assert.equal(buyerRead.status, 403, "Identity buyer cannot read raw admin v5");
+    assert.equal(previewOpens, 0);
     const deniedWrite = await invoke("PUT", "/api/configuration", v3);
     assert.equal(deniedWrite.status, 403);
     assert.equal(previewStore.writes, 0);
+    assert.equal(previewOpens, 0);
 
     viewer = { roles: ["admin"], app_metadata: { roles: ["admin"] } };
     const opensBeforeAdmin = previewOpens;
@@ -139,6 +154,13 @@ async function main() {
     assert.deepEqual(unsupported.body, { error: "unsupported_inspection" });
     assert.equal(previewOpens, opensBeforeAdmin);
     assert.equal(previewStore.writes, 0);
+
+    const adminV3 = await invoke("GET", "/api/configuration");
+    assert.equal(adminV3.status, 200, "Identity admin can still load the editor");
+    assert.equal(adminV3.body.schemaVersion, configuration.SCHEMA);
+    assert.equal(Object.hasOwn(adminV3.body, "etag"), false);
+    assert.equal(previewOpens, 1);
+    assert.equal(siteOpens, 0, "admin preview may not open production Blob");
 
     const disabled = await invoke("PUT", "/api/configuration", v5,
       previewContext, { "X-Configuration-Operation": "publish-v5-migration" });
@@ -186,7 +208,7 @@ async function main() {
     assert.equal(saved.body.revision, v5.revision + 1);
     assert.equal(nativeV5Store.writes, 1);
     const checked = await sendV5("GET");
-    assert.deepEqual(checked.body, saved.body, "public v5 GET must expose confirmed new document");
+    assert.deepEqual(checked.body, saved.body, "authorized admin v5 GET must expose confirmed new document");
     assert.equal(Object.hasOwn(checked.body, "etag"), false);
     const downgrade = await sendV5("PUT", v3);
     assert.equal(downgrade.status, 409);

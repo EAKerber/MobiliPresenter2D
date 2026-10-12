@@ -2,6 +2,8 @@ const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
 const { chromium } = require('playwright');
+const fixture = process.env.CP_PUBLIC_DIAGNOSTIC_V5 === "1"
+  ? require("./diagnostics/published-v5-browser-fixture.cjs") : null;
 
 function parseBrl(text) {
   const normalized = String(text || '').replace(/[^0-9,.-]/g, '').replace(/\./g, '').replace(',', '.');
@@ -16,6 +18,7 @@ function parseBrl(text) {
   const targetUrl = process.env.SUMMARY_PRICING_BROWSER_URL || 'https://mobilipresenter2d.netlify.app/';
   const browser = await chromium.launch({ headless: true });
   const page = await browser.newPage({ viewport: { width: 1366, height: 900 } });
+  if (fixture) await fixture.attach(page);
   const errors = [];
   page.on('pageerror', error => errors.push(error.message));
   page.on('console', message => { if (message.type() === 'error') errors.push(message.text()); });
@@ -37,6 +40,7 @@ function parseBrl(text) {
     }
   }
   if (lastError) throw lastError;
+  if (fixture) await fixture.assertApplied(page);
 
   const valueText = () => page.locator('#configurationValue strong').textContent();
   const currentTotal = async () => parseBrl(await valueText());
