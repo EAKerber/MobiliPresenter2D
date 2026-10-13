@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="pt-BR" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="theme-color" content="#f7f5f2">
+  <title>Gerenciar acessos | Casa em Módulos</title>
+  <link rel="stylesheet" href="/public-theme.css">
+  <style>
+    body { min-height: 100vh; }
+    header, main { width: min(100% - 32px, 1040px); margin-inline: auto; }
+    header { display: flex; justify-content: space-between; align-items: center; gap: 16px; padding-block: 22px; border-bottom: 1px solid var(--public-line); }
+    header a { color: var(--public-accent-dark); }
+    main { padding-block: clamp(32px, 7vw, 72px); }
+    .eyebrow { color: var(--public-accent-dark); font-size: .78rem; font-weight: 800; letter-spacing: .13em; text-transform: uppercase; }
+    h1 { margin: 0; font-size: clamp(2rem, 5vw, 3rem); line-height: 1.05; letter-spacing: -.045em; }
+    .intro { max-width: 660px; color: var(--public-muted); line-height: 1.6; }
+    .panel { margin-top: 28px; padding: clamp(20px, 4vw, 32px); border: 1px solid var(--public-line); border-radius: 14px; background: var(--public-surface); box-shadow: var(--public-shadow); }
+    label { display: grid; gap: 8px; font-weight: 700; }
+    input { width: 100%; min-height: 48px; padding: 10px 12px; border: 1px solid var(--public-line); border-radius: 7px; font: inherit; }
+    button { min-height: 44px; padding: 10px 16px; border: 0; border-radius: 7px; background: var(--public-accent-dark); color: white; font: inherit; font-weight: 750; cursor: pointer; }
+    button.secondary { border: 1px solid var(--public-line); background: white; color: var(--public-text); }
+    button:disabled { cursor: wait; opacity: .6; }
+    form { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: end; gap: 14px; }
+    #loginForm { grid-template-columns: repeat(2, minmax(0, 1fr)) auto; }
+    .toolbar { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+    #grantList { display: grid; gap: 10px; padding: 0; list-style: none; }
+    .grant { display: flex; justify-content: space-between; align-items: center; gap: 16px; padding: 14px; border: 1px solid var(--public-line); border-radius: 8px; }
+    .grant p { margin: 4px 0 0; color: var(--public-muted); font-size: .9rem; }
+    [role="status"] { min-height: 1.5em; color: var(--public-muted); }
+    [hidden] { display: none !important; }
+    @media (max-width: 640px) { form, #loginForm { grid-template-columns: 1fr; } .grant { align-items: flex-start; flex-direction: column; } }
+  </style>
+</head>
+<body>
+  <header><a href="/" aria-label="Casa em Módulos, início">Casa em Módulos</a><a href="/">Voltar ao site</a></header>
+  <main>
+    <p class="eyebrow">Acesso do configurador</p>
+    <h1>Gerenciar convites temporários</h1>
+    <p class="intro">Envie um link de acesso individual, válido por três horas e com resgate único. Somente contas internas com papel admin ou staff podem usar esta página.</p>
+    <section id="loginPanel" class="panel" hidden>
+      <h2>Entrar com Netlify Identity</h2>
+      <form id="loginForm">
+        <label>Email<input id="email" type="email" autocomplete="username" required></label>
+        <label>Senha<input id="password" type="password" autocomplete="current-password" required></label>
+        <button type="submit">Entrar</button>
+      </form>
+    </section>
+    <section id="deniedPanel" class="panel" hidden><h2>Acesso restrito</h2><p>Esta conta não tem o papel admin ou staff.</p></section>
+    <section id="managerPanel" class="panel" hidden>
+      <form id="grantForm">
+        <label for="recipient">Email do destinatário<input id="recipient" name="recipient" type="email" autocomplete="email" required maxlength="254"></label>
+        <button id="sendButton" type="submit">Enviar link de acesso</button>
+      </form>
+      <p id="managerStatus" role="status" aria-live="polite"></p>
+      <div class="toolbar"><h2>Acessos recentes</h2><div><button id="refreshButton" class="secondary" type="button">Atualizar</button> <button id="logoutButton" class="secondary" type="button">Sair</button></div></div>
+      <ul id="grantList"></ul>
+    </section>
+    <p id="loginStatus" role="status" aria-live="polite"></p>
+  </main>
+  <script type="module" src="/access/manage.bundle.js"></script>
+</body>
+</html>

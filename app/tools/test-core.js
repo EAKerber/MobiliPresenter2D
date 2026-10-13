@@ -709,7 +709,7 @@ assert.equal(indexHtml.includes("app.js?v=runtime-v39"), true, "buyer cache revi
 });
 assert.equal(appJs.includes("pricingContract.normalize(priceBook.pricing)"), true, "initial buyer pricing authority comes directly from PriceBook 2.0 typed rules");
 const buyerProjectionSource = fs.readFileSync(path.join(projectRoot, "core/published-buyer-projection.js"), "utf8");
-assert.equal(appJs.includes("buyerProjection.prepare(value"), true, "published buyer data passes a v3/v5 schema-dispatch boundary");
+assert.equal(appJs.includes("buyerProjection.consume(value)"), true, "buyer consumes only the server's allowlisted DTO");
 assert.equal(buyerProjectionSource.includes("pricingContract.upgradeLegacy(normalized.pricing)"), true, "published v3 pricing is migrated at the explicit compatibility seam");
 assert.equal(buyerProjectionSource.includes("pricingContract.normalize(normalized.pricing)"), true, "published v5 pricing consumes typed rules without legacy projection");
 ["priceBook.handleEntries", "priceBook.frontFinishRatesBps", "priceBook.localEntries", "priceBook.globalEntries", "priceBook.entries", "priceBook.handleFrontTotal"].forEach((legacyRead) => {
@@ -736,7 +736,7 @@ assert.equal(adminCss.includes(".password-field"), true, "admin reveal control h
 assert.equal(adminHtml.includes("admin/admin.css?v=admin-pricing-v2"), true, "admin pricing authoring CSS cache revision is explicit");
 assert.equal(adminHtml.includes("admin/admin.bundle.js?v=admin-pricing-v3"), true, "admin PriceBook 2.0 bundle cache revision is explicit");
 assert.equal(adminHtml.includes("core/pricing-contract.js?v=pricing-contract-v1"), true, "admin explicitly loads the typed pricing contract");
-assert.equal(adminHtml.includes("data/mock-price-book.js?v=admin-data-v4"), true, "admin loads the PriceBook 2.0 cache revision");
+assert.equal(adminHtml.includes("data/mock-price-book.js"), false, "admin loads protected pricing through the authenticated bootstrap endpoint");
 assert.equal(adminHtml.includes("core/configuration.js?v=admin-config-v8"), true, "admin loads the v3 compatibility core revision");
 assert.equal(
   adminHtml.indexOf("core/pricing-contract.js?v=pricing-contract-v1") < adminHtml.indexOf("core/configuration.js?v=admin-config-v8"),

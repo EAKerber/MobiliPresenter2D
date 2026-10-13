@@ -49,6 +49,7 @@
         <p class="eyebrow">Acesso restrito</p><h1>Esta conta não é administradora</h1>
         <p class="intro">Peça a um responsável para adicionar o papel <code>admin</code> à sua conta no Netlify Identity.</p>
       </section>
+      <p id="adminServiceError" class="message" role="alert" hidden></p>
 
       <section id="editorPanel" hidden>
         <div class="admin-heading">
@@ -79,11 +80,9 @@
         <div class="editor-actions"><p id="saveMessage" class="message" aria-live="polite"></p><div class="editor-actions__buttons"><button id="persistHandlesButton" class="button button--secondary" type="button" hidden>Persistir Puxadores no v3</button><button id="saveButton" class="button button--primary" type="button">Publicar configuração</button></div></div>
       </section>
     </main>
-    <script src="data/configurator-settings.js?v=admin-config-v2"></script>
     <script src="data/hierarchy-defaults.js?v=hierarchy-defaults-v2"></script>
     <script src="data/catalog-data.js?v=catalog-services-v1"></script>
     <script src="data/scene-data.js?v=admin-data-v3"></script>
-    <script src="data/mock-price-book.js?v=admin-data-v4"></script>
     <script src="core/item-capabilities.js?v=cp-sd-01a-v1"></script>
     <script src="core/pricing-contract.js?v=pricing-contract-v1"></script>
     <script src="core/configuration.js?v=admin-config-v8"></script>

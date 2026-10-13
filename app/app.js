@@ -1753,17 +1753,7 @@
   }
 
   function applyConfiguratorSettings(value) {
-    const prepared = buyerProjection.prepare(value, {
-      configuration: configurationCore,
-      administrationV5,
-      flow: flowCore,
-      catalog,
-      priceBook,
-      scene,
-      hierarchyDefaults,
-      pricingContract,
-      defaultPresentationPolicy: global.CASA_EM_MODULOS_PRESENTATION_POLICY
-    });
+    const prepared = buyerProjection.consume(value);
     const normalized = prepared.displaySettings;
     configuratorSettings = normalized;
     dynamicDependencies = normalized.dependencies;
@@ -1784,7 +1774,10 @@
     presentationPolicy = prepared.presentationPolicy;
     finishSettings = new Map(normalized.finishes.map((item) => [item.id, item]));
     applyMaterialLibrary(normalized);
-    publishNormalizedFlow(prepared.source);
+    normalizedFlow = prepared.flow;
+    presentationCore.assertValidPolicy(presentationPolicy, layoutProfiles.PROFILES, normalizedFlow);
+    global.CASA_NORMALIZED_FLOW = normalizedFlow;
+    global.CASA_KEYBOARD_SHORTCUTS?.setFlow?.(normalizedFlow);
     scene.entities.forEach((entity) => {
       const original = originalSceneEntities.get(entity.id) || entity;
       const assets = normalized.objectAssets[entity.id];
@@ -2540,17 +2533,15 @@
   }
 
   if (global.location?.protocol === "https:" || global.location?.protocol === "http:") {
-    fetch("/api/configuration", { credentials: "same-origin", cache: "no-store" })
+    fetch("/api/buyer-configuration", { credentials: "same-origin", cache: "no-store" })
       .then((response) => {
         if (response.ok) return response.json();
         if (response.status === 422) throw new TypeError("invalid published configuration returned by the server");
-        return null; // Continue legacy offline/empty-server resilience for non-schema errors.
+        throw new Error("published configuration unavailable or unauthorized");
       })
       .then((settings) => {
-        if (settings) {
-          applyConfiguratorSettings(settings);
-          document.documentElement.dataset.publishedConfigurationStatus = "validated";
-        }
+        applyConfiguratorSettings(settings);
+        document.documentElement.dataset.publishedConfigurationStatus = "validated";
       })
       .catch(failClosedPublishedConfiguration);
   }
