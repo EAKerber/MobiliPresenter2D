@@ -14,6 +14,14 @@
       initialSelectedId: requestedModuleId || undefined,
       onSelectionChange: null
     });
+    if (!adapter.getState().visibleModuleIds.length) {
+      const empty = document.createElement("p");
+      empty.className = "viewer-empty-state";
+      empty.setAttribute("role", "status");
+      empty.textContent = "Nenhum módulo está visível no viewer neste momento.";
+      root.replaceChildren(empty);
+      return;
+    }
     let currentView = 0;
 
   function element(tag, className, text) {

@@ -101,11 +101,13 @@
       objectAssets,
       initialState: {
         entities: Object.fromEntries([...moduleIds, ...catalog.accessories.map((item) => item.entityId)].map((id) => [id, true])),
+        viewerEntities: Object.fromEntries(moduleIds.map((id) => [id, true])),
         services: catalog.services.filter((item) => item.defaultSelected).map((item) => item.id),
         finishId: catalog.options.finishes[0]?.id || "base-light",
         handleId: "none",
         stonePackageId: "stone-existing"
       },
+      moduleDimensions: Object.fromEntries(catalog.modules.map((item) => [item.entityId, { ...item.dimensions.nominalMm }])),
       materials: defaultMaterials(catalog),
       materialGroups: [
         { id: "fronts-all", label: "Frentes", materialIds: catalog.options.finishes.map((item) => item.id), mode: "finish", scope: "global", moduleIds: [...moduleIds] },
@@ -194,12 +196,25 @@
 
   function migrateCurrentHandleModel(value, catalog, priceBook, scene) {
     if (!value) return value;
+    const moduleIds = catalog.modules.map((item) => item.entityId);
     if (value.schemaVersion === SCHEMA) {
       const base = createDefaultAdministration({ stages: value.stages || [] }, catalog, priceBook, scene);
       return {
         ...value,
         objects: { ...base.objects, ...(value.objects || {}) },
-        objectAssets: { ...base.objectAssets, ...(value.objectAssets || {}) }
+        objectAssets: { ...base.objectAssets, ...(value.objectAssets || {}) },
+        initialState: {
+          ...base.initialState, ...(value.initialState || {}),
+          entities: { ...base.initialState.entities, ...(value.initialState?.entities || {}) },
+          viewerEntities: Object.fromEntries(moduleIds.map((id) => [
+            id,
+            value.initialState?.viewerEntities?.[id] ?? value.initialState?.entities?.[id] ?? base.initialState.viewerEntities[id]
+          ]))
+        },
+        moduleDimensions: Object.fromEntries(catalog.modules.map((item) => [
+          item.entityId,
+          { ...item.dimensions.nominalMm, ...(value.moduleDimensions?.[item.entityId] || {}) }
+        ]))
       };
     }
     if (![PREVIOUS_SCHEMA, LEGACY_SCHEMA].includes(value.schemaVersion)) return value;
@@ -239,7 +254,19 @@
       stages: (value.stages || base.stages).map((stage) => ({ ...stage, kind: stage.kind || stage.id })),
       objects: { ...base.objects, ...(value.objects || {}) }, objectAssets: { ...base.objectAssets, ...(value.objectAssets || {}) },
       materials, materialGroups, handleProducts,
-      initialState: { ...base.initialState, ...(value.initialState || {}), handleId: migratedInitialHandle },
+      initialState: {
+        ...base.initialState, ...(value.initialState || {}),
+        entities: { ...base.initialState.entities, ...(value.initialState?.entities || {}) },
+        viewerEntities: Object.fromEntries(moduleIds.map((id) => [
+          id,
+          value.initialState?.viewerEntities?.[id] ?? value.initialState?.entities?.[id] ?? base.initialState.viewerEntities[id]
+        ])),
+        handleId: migratedInitialHandle
+      },
+      moduleDimensions: Object.fromEntries(catalog.modules.map((item) => [
+        item.entityId,
+        { ...item.dimensions.nominalMm, ...(value.moduleDimensions?.[item.entityId] || {}) }
+      ])),
       finishes: base.finishes.map((finish) => ({ ...finish, ...(value.finishes || []).find((item) => item.id === finish.id) })).filter((finish) => materialGroups.find((item) => item.id === "fronts-all")?.materialIds.includes(finish.id)),
       pricing: { ...base.pricing, ...(value.pricing || {}), handleEntries, frontFinishRatesBps: { ...base.pricing.frontFinishRatesBps, ...(value.pricing?.frontFinishRatesBps || {}) }, localEntries: { ...base.pricing.localEntries, ...(value.pricing?.localEntries || {}) }, globalEntries: { ...base.pricing.globalEntries, ...(value.pricing?.globalEntries || {}) } },
       dependencies: value.dependencies || base.dependencies, events: value.events || base.events
@@ -300,10 +327,22 @@
     if (!defaults || typeof defaults !== "object") errors.push("initial state is required");
     else {
       if (!defaults.entities || Object.keys(defaults.entities).some((id) => !entityIds.has(id)) || Object.values(defaults.entities).some((enabled) => typeof enabled !== "boolean")) errors.push("invalid initial entity state");
+      if (defaults.viewerEntities != null && (Object.keys(defaults.viewerEntities).some((id) => !moduleIds.has(id)) || Object.values(defaults.viewerEntities).some((enabled) => typeof enabled !== "boolean"))) errors.push("invalid initial viewer entity state");
       // lighting-08 is retained here only for backwards-compatible published states;
       // canonical service identifiers come from the public catalog.
       const allowedServices = new Set([...catalog.services.map((item) => item.id), "lighting-08"]);
       if (!Array.isArray(defaults.services) || defaults.services.some((id) => !allowedServices.has(id)) || new Set(defaults.services).size !== defaults.services.length) errors.push("invalid initial services");
+    }
+
+    if (value.moduleDimensions != null) {
+      if (!value.moduleDimensions || typeof value.moduleDimensions !== "object" || Array.isArray(value.moduleDimensions)
+        || Object.keys(value.moduleDimensions).some((id) => !moduleIds.has(id))) errors.push("invalid module nominal dimensions");
+      else catalog.modules.forEach((item) => {
+        const dimensions = value.moduleDimensions[item.entityId];
+        if (!dimensions || ["width", "height", "depth"].some((axis) => !Number.isFinite(dimensions[axis]) || Math.abs(dimensions[axis] * 10 - Math.round(dimensions[axis] * 10)) > 1e-6 || dimensions[axis] < 1 || dimensions[axis] > 5000)) {
+          errors.push(`invalid nominal dimensions: ${item.entityId}`);
+        }
+      });
     }
 
     const validAssetPath = (asset) => /^assets\/[A-Za-z0-9_./-]+\.(png|webp|jpe?g)$/i.test(asset) && !asset.includes("..") && !asset.includes("//");
@@ -451,7 +490,13 @@
       stages: value.stages.map((stage) => ({ id: stage.id, kind: stage.kind || stage.id, label: stage.label.trim(), enabled: stage.enabled, items: [...new Set(stage.items)] })),
       objects: Object.fromEntries(Object.entries(value.objects).map(([id, item]) => [id, { title: item.title.trim(), description: item.description.trim(), benefits: item.benefits.map((entry) => entry.trim()).filter(Boolean), components: item.components.map((entry) => entry.trim()).filter(Boolean), requirements: item.requirements.map((entry) => entry.trim()).filter(Boolean) }])),
       objectAssets: Object.fromEntries(Object.entries(value.objectAssets).map(([id, assets]) => [id, { imageAsset: assets.imageAsset, detailImageAsset: assets.detailImageAsset || assets.imageAsset, maskAsset: assets.maskAsset }])),
-      initialState: { entities: { ...value.initialState.entities }, services: [...value.initialState.services], finishId: value.initialState.finishId, handleId: value.initialState.handleId, stonePackageId: value.initialState.stonePackageId },
+      initialState: {
+        entities: { ...value.initialState.entities },
+        viewerEntities: { ...value.initialState.viewerEntities },
+        services: [...value.initialState.services], finishId: value.initialState.finishId,
+        handleId: value.initialState.handleId, stonePackageId: value.initialState.stonePackageId
+      },
+      moduleDimensions: Object.fromEntries(catalog.modules.map((item) => [item.entityId, { ...value.moduleDimensions[item.entityId] }])),
       materials: value.materials.map((item) => ({ id: item.id, label: item.label.trim(), kind: item.kind === "texture" ? "texture" : "color", color: item.color, textureAsset: item.textureAsset, textureSize: item.textureSize || "cover", groupIds: [...item.groupIds], locked: Boolean(item.locked) })),
       handleProducts: value.handleProducts.map((item) => ({ id: item.id, label: item.label.trim(), description: item.description.trim(), priceEntryId: item.priceEntryId, materialIds: [...item.materialIds] })),
       materialGroups: value.materialGroups.map((group) => ({ ...group, materialIds: [...group.materialIds], ...(group.moduleIds ? { moduleIds: [...group.moduleIds] } : {}), ...(group.linkedItemIds ? { linkedItemIds: [...group.linkedItemIds] } : {}) })),

@@ -237,12 +237,24 @@ function appendInitialStateControl(option, itemId, item) {
     const initial = document.createElement("input");
     initial.type = "checkbox";
     initial.checked = Boolean(model.initialState.entities[itemId]);
-    initial.dataset.initialEntity = itemId;
+    initial.dataset.initialConfiguratorEntity = itemId;
     initial.setAttribute("aria-label", `${item.label}: ativo inicialmente`);
     const label = document.createElement("label");
     label.className = "initial-state-option";
-    label.append(initial, document.createTextNode("Iniciar ativo"));
+    label.append(initial, document.createTextNode(kind === "module" ? "Iniciar visível no configurador" : "Iniciar ativo"));
     option.append(label);
+    if (kind === "module") {
+      const viewer = document.createElement("input");
+      viewer.type = "checkbox";
+      viewer.checked = Boolean(model.initialState.viewerEntities[itemId]);
+      viewer.dataset.initialViewerEntity = itemId;
+      viewer.setAttribute("aria-label", `${item.label}: visível inicialmente no viewer`);
+      const viewerLabel = document.createElement("label");
+      viewerLabel.className = "initial-state-option";
+      viewerLabel.append(viewer, document.createTextNode("Iniciar visível no viewer"));
+      option.append(viewerLabel);
+      appendNominalDimensionControls(option, itemId, item.label);
+    }
   } else if (kind === "service") {
     const initial = document.createElement("input");
     initial.type = "checkbox";
@@ -254,6 +266,38 @@ function appendInitialStateControl(option, itemId, item) {
     label.append(initial, document.createTextNode("Iniciar ativo"));
     option.append(label);
   }
+}
+
+function appendNominalDimensionControls(option, itemId, label) {
+  const dimensions = model.moduleDimensions[itemId];
+  if (!dimensions) return;
+  const fieldset = document.createElement("fieldset");
+  fieldset.className = "module-nominal-dimensions";
+  const legend = document.createElement("legend");
+  legend.textContent = "Medidas nominais (mm)";
+  fieldset.append(legend);
+  const note = document.createElement("small");
+  note.className = "module-nominal-dimensions__note";
+  note.textContent = "Atualiza as cotas e vistas técnicas; não altera a geometria da cena.";
+  fieldset.append(note);
+  const axes = [["width", "Largura"], ["height", "Altura"], ["depth", "Profundidade"]];
+  axes.forEach(([axis, axisLabel]) => {
+    const fieldLabel = document.createElement("label");
+    fieldLabel.className = "module-nominal-dimensions__field";
+    fieldLabel.append(document.createTextNode(axisLabel));
+    const input = document.createElement("input");
+    input.type = "number";
+    input.min = "1";
+    input.max = "5000";
+    input.step = "0.1";
+    input.value = String(dimensions[axis]);
+    input.dataset.moduleDimension = itemId;
+    input.dataset.dimensionAxis = axis;
+    input.setAttribute("aria-label", `${label}: ${axisLabel} nominal em milímetros`);
+    fieldLabel.append(input);
+    fieldset.append(fieldLabel);
+  });
+  option.append(fieldset);
 }
 
 function makeOrderButtons(upData, downData, index, length, label) {
@@ -1174,7 +1218,32 @@ function materialAssetChoices() {
 }
 
 function baselineHierarchyFor(source) {
-  return hierarchyCore.upgrade(source, configurationCore, flowCore, catalog, priceBook, scene, hierarchyDefaults);
+  const candidate = hierarchyCore.upgrade(source, configurationCore, flowCore, catalog, priceBook, scene, hierarchyDefaults);
+  const defaultEntities = Object.fromEntries([
+    ...catalog.modules.map((item) => item.entityId),
+    ...catalog.accessories.map((item) => item.entityId)
+  ].map((id) => [id, true]));
+  const defaultViewerEntities = Object.fromEntries(catalog.modules.map((item) => [item.entityId, true]));
+  const previousInitialState = candidate.initialState || {};
+  candidate.initialState = {
+    entities: { ...defaultEntities, ...(previousInitialState.entities || {}) },
+    viewerEntities: previousInitialState.viewerEntities || null,
+    services: previousInitialState.services || [],
+    finishId: previousInitialState.finishId || catalog.options.finishes[0]?.id || "base-light",
+    handleId: previousInitialState.handleId || "none",
+    stonePackageId: previousInitialState.stonePackageId || catalog.options.stonePackages[0]?.id || "stone-existing"
+  };
+  candidate.initialState.viewerEntities = Object.fromEntries(catalog.modules.map((item) => [
+    item.entityId,
+    previousInitialState.viewerEntities?.[item.entityId]
+      ?? previousInitialState.entities?.[item.entityId]
+      ?? defaultViewerEntities[item.entityId]
+  ]));
+  candidate.moduleDimensions = Object.fromEntries(catalog.modules.map((item) => [
+    item.entityId,
+    { ...item.dimensions.nominalMm, ...(candidate.moduleDimensions?.[item.entityId] || {}) }
+  ]));
+  return candidate;
 }
 
 function handlesRepairPlan(source = publishedSource) {
@@ -1597,9 +1666,29 @@ stagesList.addEventListener("change", (event) => {
     return;
   }
 
-  const initialEntity = event.target.closest("[data-initial-entity]");
-  if (initialEntity) {
-    model.initialState.entities[initialEntity.dataset.initialEntity] = initialEntity.checked;
+  const initialConfiguratorEntity = event.target.closest("[data-initial-configurator-entity]");
+  if (initialConfiguratorEntity) {
+    model.initialState.entities[initialConfiguratorEntity.dataset.initialConfiguratorEntity] = initialConfiguratorEntity.checked;
+    return;
+  }
+  const initialViewerEntity = event.target.closest("[data-initial-viewer-entity]");
+  if (initialViewerEntity) {
+    model.initialState.viewerEntities[initialViewerEntity.dataset.initialViewerEntity] = initialViewerEntity.checked;
+    return;
+  }
+  const nominalDimension = event.target.closest("[data-module-dimension]");
+  if (nominalDimension) {
+    const itemId = nominalDimension.dataset.moduleDimension;
+    const axis = nominalDimension.dataset.dimensionAxis;
+    const value = Number(nominalDimension.value);
+    if (!Number.isFinite(value) || Math.abs(value * 10 - Math.round(value * 10)) > 1e-6 || value < 1 || value > 5000) {
+      nominalDimension.value = String(model.moduleDimensions[itemId]?.[axis] || "");
+      setMessage(saveMessage, "Informe uma medida nominal entre 1 e 5.000 mm, com até uma casa decimal.", "error");
+      return;
+    }
+    if (model.moduleDimensions[itemId] && ["width", "height", "depth"].includes(axis)) {
+      model.moduleDimensions[itemId][axis] = value;
+    }
     return;
   }
   const initialService = event.target.closest("[data-initial-service]");
@@ -1948,16 +2037,20 @@ logoutButton.addEventListener("click", async () => {
 
 onAuthChange((_event, user) => { void showUser(user); });
 
-try {
-  const hash = new URLSearchParams(window.location.hash.slice(1));
-  const recovery = hash.get("recovery_token");
-  if (recovery) showPasswordAction("recovery", recovery);
-  else {
-    const callback = await handleAuthCallback();
-    if (callback?.type === "invite") showPasswordAction(callback.type, callback.token);
-    else await showUser(await getUser());
+async function initializeAdminAccess() {
+  try {
+    const hash = new URLSearchParams(window.location.hash.slice(1));
+    const recovery = hash.get("recovery_token");
+    if (recovery) showPasswordAction("recovery", recovery);
+    else {
+      const callback = await handleAuthCallback();
+      if (callback?.type === "invite") showPasswordAction(callback.type, callback.token);
+      else await showUser(await getUser());
+    }
+  } catch (error) {
+    setMessage(loginMessage, error.message || "Não foi possível concluir o acesso.", "error");
+    await showUser(await getUser());
   }
-} catch (error) {
-  setMessage(loginMessage, error.message || "Não foi possível concluir o acesso.", "error");
-  await showUser(await getUser());
 }
+
+void initializeAdminAccess();

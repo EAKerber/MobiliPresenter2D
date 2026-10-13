@@ -855,11 +855,23 @@
 
   function productForCurrentConfiguration(product) {
     if (!product.dimensions?.nominalMm || !product.dimensions?.geometryMm) return product;
+    const configuredNominal = configuratorSettings?.moduleDimensions?.[product.entityId];
+    const nominalMm = { ...product.dimensions.nominalMm };
+    if (configuredNominal) {
+      ["width", "height", "depth"].forEach((axis) => {
+        if (Number.isFinite(configuredNominal[axis]) && configuredNominal[axis] > 0) nominalMm[axis] = configuredNominal[axis];
+      });
+    }
+    const displayOrder = product.dimensions.displayAxes === "A × P × E" ? ["height", "depth", "width"] : ["width", "height", "depth"];
+    const display = `${displayOrder.map((dimension) => formatDimension(nominalMm[dimension])).join(" × ")} mm`;
+    const hasNominalOverride = ["width", "height", "depth"].some((axis) => nominalMm[axis] !== product.dimensions.nominalMm[axis]);
+    const nominalProduct = hasNominalOverride
+      ? { ...product, dimensions: { ...product.dimensions, nominalMm, display } }
+      : product;
     const events = dynamicEvents.filter((rule) => rule.targetId === product.entityId
       && eventIsActive(rule)
       && (rule.action === "set-dimension" || rule.action === "set-depth" && product.entityId === "module-07"));
-    if (!events.length) return product;
-    const nominalMm = { ...product.dimensions.nominalMm };
+    if (!events.length) return nominalProduct;
     const geometryMm = { ...product.dimensions.geometryMm };
     const applied = [];
     events.forEach((event) => {
@@ -869,9 +881,7 @@
       geometryMm[dimension] = event.valueMm;
       applied.push({ dimension, valueMm: event.valueMm });
     });
-    if (!applied.length) return product;
-    const displayOrder = product.dimensions.displayAxes === "A × P × E" ? ["height", "depth", "width"] : ["width", "height", "depth"];
-    const display = `${displayOrder.map((dimension) => formatDimension(nominalMm[dimension])).join(" × ")} mm`;
+    if (!applied.length) return nominalProduct;
     const labels = { width: "largura", height: "altura", depth: "profundidade" };
     const changes = applied.map(({ dimension, valueMm }) => `${labels[dimension]} ajustada para ${formatDimension(valueMm)} mm`).join("; ");
     return {

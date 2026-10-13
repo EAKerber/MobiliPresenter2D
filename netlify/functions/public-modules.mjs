@@ -26,17 +26,18 @@ function storeFor(context) {
   return context?.deploy?.context === "production" ? getStore(options) : getDeployStore(options);
 }
 function isPublicProjection(value) {
+  const visibility = value?.publicState?.viewerEntities || value?.publicState?.entities;
   if (value?.schemaVersion !== PUBLIC_SCHEMA || !Array.isArray(value.modules) || !value.modules.length
     || !value.publicState || typeof value.publicState !== "object"
-    || !value.publicState.entities || typeof value.publicState.entities !== "object"
-    || Array.isArray(value.publicState.entities)
+    || !visibility || typeof visibility !== "object"
+    || Array.isArray(visibility)
     || !Array.isArray(value.publicState.availableFinishes)
     || typeof value.publicState.finishId !== "string") return false;
 
   const moduleIds = value.modules.map((module) => module?.id);
   if (moduleIds.some((id) => typeof id !== "string" || !id)
     || new Set(moduleIds).size !== moduleIds.length
-    || moduleIds.some((id) => typeof value.publicState.entities[id] !== "boolean")) return false;
+    || moduleIds.some((id) => typeof visibility[id] !== "boolean")) return false;
 
   const finishIds = value.publicState.availableFinishes.map((finish) => finish?.id);
   return finishIds.length > 0

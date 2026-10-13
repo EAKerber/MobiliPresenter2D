@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="robots" content="noindex, nofollow" />
     <title>Administração — Casa em Módulos</title>
-    <link rel="stylesheet" href="admin/admin.css?v=admin-pricing-v2" />
+    <link rel="stylesheet" href="admin/admin.css?v=admin-nominal-visibility-v1" />
   </head>
   <body>
     <header class="admin-topbar">
@@ -21,12 +21,12 @@
         <p class="eyebrow">Acesso restrito</p>
         <h1>Painel administrativo</h1>
         <p class="intro">Entre com uma conta administrativa convidada para editar as etapas e os itens disponíveis no configurador.</p>
-        <form id="loginForm" class="admin-form">
-          <label>E-mail<input id="emailInput" name="email" type="email" autocomplete="username" required /></label>
+        <form id="loginForm" class="admin-form" method="post">
+          <label>E-mail<input id="emailInput" type="email" autocomplete="username" required /></label>
           <div class="admin-field">
             <label for="passwordInput">Senha</label>
             <div class="password-field">
-              <input id="passwordInput" name="password" type="password" autocomplete="current-password" required />
+              <input id="passwordInput" type="password" autocomplete="current-password" required />
               <button class="password-reveal" type="button" data-password-reveal="passwordInput" aria-controls="passwordInput" aria-pressed="false" aria-label="Mostrar senha" title="Mostrar senha">Mostrar</button>
             </div>
           </div>
@@ -81,12 +81,13 @@
         <div class="editor-actions"><p id="saveMessage" class="message" aria-live="polite"></p><div class="editor-actions__buttons"><button id="persistHandlesButton" class="button button--secondary" type="button" hidden>Persistir Puxadores no v3</button><button id="saveButton" class="button button--primary" type="button">Publicar configuração</button></div></div>
       </section>
     </main>
+    <script src="core/browser-compat.js?v=browser-compat-v1"></script>
     <script src="data/hierarchy-defaults.js?v=hierarchy-defaults-v2"></script>
     <script src="data/catalog-data.js?v=catalog-services-v1"></script>
     <script src="data/scene-data.js?v=admin-data-v3"></script>
     <script src="core/item-capabilities.js?v=cp-sd-01a-v1"></script>
     <script src="core/pricing-contract.js?v=pricing-contract-v1"></script>
-    <script src="core/configuration.js?v=admin-config-v8"></script>
+    <script src="core/configuration.js?v=admin-config-v9"></script>
     <script src="core/flow-model.js?v=runtime-v9"></script>
     <script src="core/layout-profiles.js?v=cp-sd-01c1-v1"></script>
     <script src="core/presentation-contract.js?v=cp-sd-01c3-v1"></script>
@@ -96,6 +97,6 @@
     <script src="core/hierarchy-editor.js?v=hierarchy-v3"></script>
     <script src="core/legacy-stage-repair.js?v=cp-ux-05a0-v1"></script>
     <script src="core/runtime-contracts.js?v=runtime-contracts-v2"></script>
-    <script type="module" src="admin/admin.bundle.js?v=admin-pricing-v3"></script>
+    <script type="module" src="admin/admin.bundle.js?v=admin-nominal-visibility-v1"></script>
   </body>
 </html>

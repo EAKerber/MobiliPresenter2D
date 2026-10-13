@@ -134,6 +134,29 @@ test("viewer initial selection follows visible module data instead of an arbitra
   });
   assert.equal(override.getSelectedModule().id, "module-01", "invalid deep link cannot select hidden entity");
 });
+test("viewer has an intentional empty state when every module starts hidden", () => {
+  const viewerEntities = Object.fromEntries(catalog.modules.map((item) => [item.entityId, false]));
+  const configuratorEntities = Object.fromEntries(catalog.modules.map((item) => [item.entityId, true]));
+  const adapter = factory.createRepositoryAdapter({
+    ...dependencies, publicState: { viewerEntities, entities: configuratorEntities }
+  });
+  assert.deepEqual(Array.from(adapter.getState().visibleModuleIds), []);
+  assert.equal(adapter.getSelectedModule(), null);
+  assert.equal(adapter.select("module-01"), false);
+});
+test("viewer uses published nominal measurements while retaining catalog drawing structure", () => {
+  const adapter = factory.createRepositoryAdapter({
+    ...dependencies,
+    publicModules: [{ id: "module-01", title: "Aéreo", nominalDimensionsMm: { width: 800, height: 710, depth: 360 }, dimensionLabel: "800 × 710 × 360 mm" }],
+    publicState: { viewerEntities: { "module-01": true } }
+  });
+  const module = adapter.getSelectedModule();
+  assert.equal(module.dimensions.width, 800);
+  assert.equal(module.dimensions.height, 710);
+  assert.equal(module.dimensions.depth, 360);
+  assert.equal(module.dimensionLabel, "800 × 710 × 360 mm");
+  assert.equal(module.frontLayout, catalog.modules[0].frontLayout);
+});
 test("approved public module projection owns order and authored highlights, without summary or carcass inference", () => {
   const entries = ["module-07", "module-02"].map((id) => ({
     id, title: "Título público " + id, description: "",
