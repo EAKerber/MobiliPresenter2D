@@ -19,5 +19,3 @@ export default async (request) => {
 
   return jsonResponse({ priceBook });
 };
-
-export const config = { path: "/api/admin-bootstrap" };

@@ -130,8 +130,19 @@ byId("grantForm").addEventListener("submit", async (event) => {
 
 byId("refreshButton").addEventListener("click", refreshGrants);
 byId("logoutButton").addEventListener("click", async () => {
+  try {
+    await fetch("/api/access/session/logout", {
+      method: "POST",
+      credentials: "same-origin",
+      cache: "no-store",
+      headers: { "Content-Type": "application/json" },
+      body: "{}",
+    });
+  } catch {
+    // Identity logout must still proceed if temporary-session cleanup is unavailable.
+  }
   await logout();
-  await renderUser(null);
+  window.location.replace("/admin.html?returnTo=%2Faccess%2Fmanage.html");
 });
 onAuthChange((_event, user) => { void renderUser(user); });
 renderUser(await getUser());

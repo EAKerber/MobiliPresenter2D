@@ -129,6 +129,19 @@ export async function findActiveSession(sessionToken) {
   return result.rows[0] ?? null;
 }
 
+export async function revokeSession(sessionToken) {
+  const sessionHash = hashOpaqueToken(sessionToken);
+  if (!sessionHash) return false;
+  const result = await getPool().query(
+    `UPDATE access_control.access_sessions
+        SET revoked_at = now()
+      WHERE token_hash = $1 AND revoked_at IS NULL
+      RETURNING id`,
+    [sessionHash],
+  );
+  return result.rowCount === 1;
+}
+
 export async function revokeGrant({ grantId, revokedBy }) {
   if (!grantId || !revokedBy) return false;
   return inTransaction(async (client) => {
@@ -162,4 +175,3 @@ export async function listRecentGrants({ limit = 100 } = {}) {
   );
   return result.rows;
 }
-

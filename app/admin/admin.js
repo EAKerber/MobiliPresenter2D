@@ -46,6 +46,7 @@ const saveButton = byId("saveButton");
 const persistHandlesButton = byId("persistHandlesButton");
 const saveMessage = byId("saveMessage");
 const logoutButton = byId("logoutButton");
+const manageAccessLink = byId("manageAccessLink");
 let model = null;
 let publishedSource = null;
 let inviteToken = null;
@@ -118,6 +119,11 @@ document.querySelectorAll("[data-password-reveal]").forEach((button) => {
 function isAdmin(user) {
   const roles = [...(user?.roles || []), ...(user?.app_metadata?.roles || [])];
   return roles.includes("admin");
+}
+
+function canManageAccess(user) {
+  const roles = [...(user?.roles || []), ...(user?.app_metadata?.roles || [])];
+  return Boolean(user?.id && roles.some((role) => role === "admin" || role === "staff"));
 }
 
 function getItemOptions(stageId) {
@@ -1425,10 +1431,16 @@ pricingList.addEventListener("change", (event) => {
 async function showUser(user) {
   loginPanel.hidden = Boolean(user);
   logoutButton.hidden = !user;
+  manageAccessLink.hidden = !canManageAccess(user);
   deniedPanel.hidden = true;
   adminServiceError.hidden = true;
   editorPanel.hidden = true;
   if (!user) return;
+  const returnTo = new URLSearchParams(window.location.search).get("returnTo");
+  if (returnTo === "/access/manage.html" && canManageAccess(user)) {
+    window.location.replace(returnTo);
+    return;
+  }
   if (!isAdmin(user)) {
     deniedPanel.hidden = false;
     return;
@@ -1919,8 +1931,19 @@ saveButton.addEventListener("click", async () => {
 });
 
 logoutButton.addEventListener("click", async () => {
+  try {
+    await fetch("/api/access/session/logout", {
+      method: "POST",
+      credentials: "same-origin",
+      cache: "no-store",
+      headers: { "Content-Type": "application/json" },
+      body: "{}",
+    });
+  } catch {
+    // Identity logout must still proceed if temporary-session cleanup is unavailable.
+  }
   await logout();
-  await showUser(null);
+  window.location.replace("/");
 });
 
 onAuthChange((_event, user) => { void showUser(user); });
