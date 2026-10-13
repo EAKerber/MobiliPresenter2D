@@ -99,6 +99,8 @@ publishedReader, publicModules, catalog, priceBook, scene } = globalThis.__publi
     assert.equal(productionResponse.body.modules[0].description, undefined);
     assert.deepEqual(productionResponse.body.modules[0].benefits, ["Destaque A", "Caixaria interna clara"]);
     assert.equal(productionResponse.body.publicState.finishId, v5.initialState.finishId);
+    assert.equal(productionResponse.body.publicState.viewerEntities["module-01"], true,
+      "public projection exposes viewer visibility separately from configurator visibility");
     assert.deepEqual(Object.keys(productionResponse.body), ["schemaVersion", "modules", "publicState"]);
     const wire = JSON.stringify(productionResponse.body);
     for (const secret of ["pricing", "price", "revision", "etag", "private-etag", "draft",
@@ -117,6 +119,13 @@ publishedReader, publicModules, catalog, priceBook, scene } = globalThis.__publi
     assert.equal(preview.reads, 1);
     assert.equal(prod.reads, 1, "preview must not read the production published Blob");
     assert.equal(productionFetches, 1);
+
+    // Turning off a module in the configurator must not suppress its public
+    // viewer state. Preview fallback accepts the current viewerEntities DTO.
+    const configuratorHidden = structuredClone(v5);
+    for (const item of catalog.modules) configuratorHidden.initialState.entities[item.entityId] = false;
+    const independentProjection = publicModules.project(configuratorHidden, catalog, scene);
+    assert(catalog.modules.every((item) => independentProjection.publicState.viewerEntities[item.entityId] === true));
 
     preview.setMock(v5);
     const isolated = await invoke("GET");
