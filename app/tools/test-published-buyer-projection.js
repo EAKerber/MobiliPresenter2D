@@ -57,6 +57,8 @@ assert.equal(buyerPayload.schemaVersion, buyerProjection.BUYER_SCHEMA);
 assert.equal(Object.hasOwn(buyerPayload, "source"), false, "buyer payload omits the raw administrative source");
 assert.equal(Object.hasOwn(buyerPayload.displaySettings, "revision"), false, "buyer DTO omits the admin revision");
 assert.equal(Object.hasOwn(buyerPayload.displaySettings, "pricing"), false, "buyer DTO omits admin pricing storage");
+assert.deepEqual(buyerPayload.displaySettings.moduleDimensions, v5.moduleDimensions, "buyer receives published nominal module dimensions");
+assert.deepEqual(buyerProjection.consume(buyerPayload).displaySettings.moduleDimensions, v5.moduleDimensions);
 assert.deepEqual(buyerProjection.consume(buyerPayload).flow, buyerPayload.flow);
 assert.throws(() => buyerProjection.consume({ ...buyerPayload, schemaVersion: "unknown" }), /invalid published buyer payload/);
 

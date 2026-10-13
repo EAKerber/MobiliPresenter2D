@@ -46,12 +46,19 @@
       // Explicit allowlist; omit unknown and missing fields. In particular:
       // no pricing, raw geometry assets, administration state or revision.
       const result = { id };
+      const nominalMm = published.moduleDimensions?.[id] || product.dimensions?.nominalMm;
+      if (!nominalMm || ["width", "height", "depth"].some((axis) => !Number.isFinite(nominalMm[axis]) || nominalMm[axis] < 1 || nominalMm[axis] > 5000)) {
+        throw new TypeError("invalid public nominal dimensions: " + id);
+      }
+      const axes = product.dimensions?.displayAxes === "A × P × E" ? ["height", "depth", "width"] : ["width", "height", "depth"];
+      const dimensionLabel = `${axes.map((axis) => new Intl.NumberFormat("pt-BR", { maximumFractionDigits: 1 }).format(nominalMm[axis])).join(" × ")} mm`;
       const fields = {
         referenceLabel: text(product.referenceLabel),
         title: text(authored.title),
         description: text(authored.description),
         category: text(product.category),
-        dimensionLabel: text(product.dimensions?.display)
+        dimensionLabel,
+        nominalDimensionsMm: { width: nominalMm.width, height: nominalMm.height, depth: nominalMm.depth }
       };
       for (const [key, value] of Object.entries(fields)) if (value) result[key] = value;
       for (const key of ["benefits", "components", "requirements"]) {
@@ -71,10 +78,11 @@
     }
     const entities = {};
     for (const module of modules) {
-      if (typeof initial.entities[module.id] !== "boolean") {
+      const visibility = initial.viewerEntities?.[module.id] ?? initial.entities[module.id];
+      if (typeof visibility !== "boolean") {
         throw new TypeError("missing published module visibility: " + module.id);
       }
-      entities[module.id] = initial.entities[module.id];
+      entities[module.id] = visibility;
     }
     // v5 permits newly authored finishes that do NOT exist in the frozen
     // physical catalog. Only published, global front finishes are allowed.
@@ -108,7 +116,7 @@
     }
     // Never return the whole materials library, admin object assets or pricing.
     return { schemaVersion: SCHEMA, modules, publicState: {
-      entities, finishId: initial.finishId, availableFinishes
+      viewerEntities: entities, finishId: initial.finishId, availableFinishes
     } };
   }
   const api = Object.freeze({ SCHEMA, project });

@@ -23,6 +23,17 @@
     if (!payload.publicState.availableFinishes.some((finish) => finish?.id === payload.publicState.finishId)) {
       throw new TypeError("invalid_public_finish");
     }
+    const visibility = payload.publicState.viewerEntities || payload.publicState.entities;
+    if (!visibility || typeof visibility !== "object" || Array.isArray(visibility)
+      || ids.some((id) => typeof visibility[id] !== "boolean")) {
+      throw new TypeError("invalid_public_module_visibility");
+    }
+    for (const module of payload.modules) {
+      const dimensions = module?.nominalDimensionsMm;
+      if (dimensions != null && ["width", "height", "depth"].some((axis) => !Number.isFinite(dimensions[axis]) || dimensions[axis] < 1 || dimensions[axis] > 5000)) {
+        throw new TypeError("invalid_public_module_dimensions");
+      }
+    }
     return { publicModules: payload.modules, publicState: payload.publicState };
   }
   global.CASA_PUBLIC_VIEWER_DATA = Object.freeze({ load });

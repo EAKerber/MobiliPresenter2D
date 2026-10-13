@@ -232,6 +232,18 @@ assert.equal(pricingContract.validate(invalidPricingUnknownRole).some((error) =>
 
 
 assert.deepEqual(settingsCore.validateConfiguratorSettings(defaultSettings, catalog, priceBook, scene), []);
+const splitVisibilitySettings = structuredClone(defaultSettings);
+splitVisibilitySettings.initialState.entities["module-01"] = false;
+splitVisibilitySettings.initialState.viewerEntities["module-01"] = true;
+splitVisibilitySettings.moduleDimensions["module-01"].width = 800.5;
+assert.deepEqual(settingsCore.validateConfiguratorSettings(splitVisibilitySettings, catalog, priceBook, scene), [], "viewer visibility and nominal module dimensions are independent valid settings");
+const normalizedSplitVisibility = settingsCore.normalizeConfiguratorSettings(splitVisibilitySettings, catalog, priceBook, scene);
+assert.equal(normalizedSplitVisibility.initialState.entities["module-01"], false);
+assert.equal(normalizedSplitVisibility.initialState.viewerEntities["module-01"], true);
+assert.equal(normalizedSplitVisibility.moduleDimensions["module-01"].width, 800.5);
+const legacyVisibilitySettings = structuredClone(defaultSettings);
+delete legacyVisibilitySettings.initialState.viewerEntities;
+assert.equal(settingsCore.normalizeConfiguratorSettings(legacyVisibilitySettings, catalog, priceBook, scene).initialState.viewerEntities["module-01"], true, "legacy visibility initializes both destinations identically");
 const reorderedSettings = structuredClone(defaultSettings);
 reorderedSettings.stages.reverse();
 reorderedSettings.stages.find((stage) => stage.id === "finishes").items = ["fronts-all", "handles-all"];
@@ -698,12 +710,12 @@ const adminCss = fs.readFileSync(path.join(projectRoot, "admin/admin.css"), "utf
 const pricingSource = fs.readFileSync(path.join(projectRoot, "core/pricing.js"), "utf8");
 const configurationSource = fs.readFileSync(path.join(projectRoot, "core/configuration.js"), "utf8");
 const priceBookSource = fs.readFileSync(path.join(projectRoot, "data/mock-price-book.js"), "utf8");
-assert.equal(indexHtml.includes("data/mock-price-book.js?v=runtime-v39"), true, "buyer cache revision declares PriceBook 2.0");
-assert.equal(indexHtml.includes("core/pricing-contract.js?v=runtime-v39"), true, "buyer loads the typed pricing contract");
-assert.equal(indexHtml.indexOf("core/pricing-contract.js?v=runtime-v39") < indexHtml.indexOf("core/configuration.js?v=admin-config-v8"), true, "pricing contract loads before the v3 compatibility core");
-assert.equal(indexHtml.indexOf("core/pricing-contract.js?v=runtime-v39") < indexHtml.indexOf("core/pricing.js?v=runtime-v39"), true, "pricing contract loads before calculator");
-assert.equal(indexHtml.includes("core/pricing.js?v=runtime-v39"), true, "typed pricing calculator cache revision is explicit");
-assert.equal(indexHtml.includes("app.js?v=runtime-v39"), true, "buyer cache revision is explicit");
+assert.equal(indexHtml.includes("data/mock-price-book.js?v=runtime-v40"), true, "buyer cache revision declares PriceBook 2.0");
+assert.equal(indexHtml.includes("core/pricing-contract.js?v=runtime-v40"), true, "buyer loads the typed pricing contract");
+assert.equal(indexHtml.indexOf("core/pricing-contract.js?v=runtime-v40") < indexHtml.indexOf("core/configuration.js?v=admin-config-v9"), true, "pricing contract loads before the v3 compatibility core");
+assert.equal(indexHtml.indexOf("core/pricing-contract.js?v=runtime-v40") < indexHtml.indexOf("core/pricing.js?v=runtime-v40"), true, "pricing contract loads before calculator");
+assert.equal(indexHtml.includes("core/pricing.js?v=runtime-v40"), true, "typed pricing calculator cache revision is explicit");
+assert.equal(indexHtml.includes("app.js?v=runtime-v40"), true, "buyer cache revision is explicit");
 ["frontFinishRatesBps", "handleEntries", "localEntries", "globalEntries"].forEach((legacyBucket) => {
   assert.equal(pricingSource.includes(legacyBucket), false, `calculator no longer reads legacy pricing bucket: ${legacyBucket}`);
 });
@@ -733,13 +745,13 @@ assert.equal(adminJs.includes('input.type = input.type === "password" ? "text" :
 assert.equal(adminJs.includes('byId("passwordInput").value'), true, "login continues reading the same password value");
 assert.equal(adminJs.includes('byId("newPasswordInput").value'), true, "password update continues reading the same new-password value");
 assert.equal(adminCss.includes(".password-field"), true, "admin reveal control has local field layout");
-assert.equal(adminHtml.includes("admin/admin.css?v=admin-pricing-v2"), true, "admin pricing authoring CSS cache revision is explicit");
-assert.equal(adminHtml.includes("admin/admin.bundle.js?v=admin-pricing-v3"), true, "admin PriceBook 2.0 bundle cache revision is explicit");
+assert.equal(adminHtml.includes("admin/admin.css?v=admin-nominal-visibility-v1"), true, "admin editor CSS cache revision is explicit");
+assert.equal(adminHtml.includes("admin/admin.bundle.js?v=admin-nominal-visibility-v1"), true, "admin editor bundle cache revision is explicit");
 assert.equal(adminHtml.includes("core/pricing-contract.js?v=pricing-contract-v1"), true, "admin explicitly loads the typed pricing contract");
 assert.equal(adminHtml.includes("data/mock-price-book.js"), false, "admin loads protected pricing through the authenticated bootstrap endpoint");
-assert.equal(adminHtml.includes("core/configuration.js?v=admin-config-v8"), true, "admin loads the v3 compatibility core revision");
+assert.equal(adminHtml.includes("core/configuration.js?v=admin-config-v9"), true, "admin loads the v3 compatibility core revision");
 assert.equal(
-  adminHtml.indexOf("core/pricing-contract.js?v=pricing-contract-v1") < adminHtml.indexOf("core/configuration.js?v=admin-config-v8"),
+  adminHtml.indexOf("core/pricing-contract.js?v=pricing-contract-v1") < adminHtml.indexOf("core/configuration.js?v=admin-config-v9"),
   true,
   "admin pricing contract loads before the v3 compatibility core"
 );
@@ -817,7 +829,7 @@ assert.equal(appJs.includes("publishNormalizedFlow"), true, "app publishes one n
 assert.equal(appJs.includes("applyBuyerFlowLayout"), true, "buyer composition is mounted from normalized flow layout");
 assert.equal((indexHtml.match(/core\/layout-profiles\.js/g) || []).length, 1, "layout profile resolver loads exactly once");
 assert.equal(
-  indexHtml.indexOf("core/layout-profiles.js?v=cp-sd-01c1-v1") < indexHtml.indexOf("styles.css?v=runtime-v39"),
+  indexHtml.indexOf("core/layout-profiles.js?v=cp-sd-01c1-v1") < indexHtml.indexOf("styles.css?v=runtime-v40"),
   true,
   "canonical layout profile resolves before public topology CSS to avoid first-paint profile drift"
 );

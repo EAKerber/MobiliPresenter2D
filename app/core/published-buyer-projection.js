@@ -63,7 +63,7 @@
   const BUYER_SCHEMA = "BuyerConfiguratorPayload 1.0";
   const BUYER_SETTING_FIELDS = Object.freeze([
     "stages", "dependencies", "events", "objectAssets", "objects", "initialState",
-    "finishes", "materials", "handleProducts", "materialGroups"
+    "moduleDimensions", "finishes", "materials", "handleProducts", "materialGroups"
   ]);
 
   function project(value, dependencies) {
@@ -91,6 +91,7 @@
       || !Array.isArray(payload.displaySettings.handleProducts)
       || !Array.isArray(payload.displaySettings.materialGroups)
       || !payload.displaySettings.initialState || typeof payload.displaySettings.initialState !== "object"
+      || (payload.displaySettings.moduleDimensions != null && (typeof payload.displaySettings.moduleDimensions !== "object" || Array.isArray(payload.displaySettings.moduleDimensions)))
       || !payload.displaySettings.objectAssets || typeof payload.displaySettings.objectAssets !== "object"
       || !payload.displaySettings.objects || typeof payload.displaySettings.objects !== "object"
       || !payload.flow || !Array.isArray(payload.flow.stages)

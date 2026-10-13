@@ -44,8 +44,7 @@
     const isAvailable = (id) => modules.some((module) => module.id === id) && resolvedVisibility[id]?.visible;
     const selectedIdFromData = [options.initialSelectedId, sceneState.selectedEntityId,
       ...visibleModules().map((module) => module.id)].find((id) => isAvailable(id));
-    if (!selectedIdFromData) throw new Error("Nenhum módulo publicado está visível na cena.");
-    let selectedId = selectedIdFromData;
+    let selectedId = selectedIdFromData || null;
     sceneState.selectedEntityId = selectedId;
     const allowedFinishIds = options.allowedFinishIds || finishes.filter((finish) => finish.status === "published").map((finish) => finish.id);
     function getState() {
@@ -85,7 +84,8 @@
         layer.classList.toggle("is-hidden", !visible); layer.setAttribute("aria-hidden", String(!visible));
       });
       sceneComponent.updateHotspots(hotspots, resolvedVisibility, selectedId);
-      sceneComponent.renderSelectionFrame(frame, renderScene.entities.find((entity) => entity.id === selectedId), renderScene);
+      if (selectedId) sceneComponent.renderSelectionFrame(frame, renderScene.entities.find((entity) => entity.id === selectedId), renderScene);
+      else frame.hidden = true;
       stage.replaceChildren(base, layers, hotspots, frame);
       hotspots.addEventListener("click", (event) => {
         const button = event.target.closest("[data-select-scene-entity]");
@@ -118,7 +118,7 @@
         if (stage && stage !== target) throw new Error("Viewer scene already mounted on another element");
         stage = target;
         renderSurface();
-        if (!keyboardBound) {
+        if (!keyboardBound && visibleModules().length) {
           sceneComponent.bindKeyboard(stage, visibleModules(), () => selectedId, select);
           keyboardBound = true;
         }
@@ -174,7 +174,12 @@
       if (!physical || !entityById.has(entry.id) || typeof entry.title !== "string" || !entry.title.trim()) {
         throw new TypeError("Unknown or invalid published module: " + entry?.id);
       }
-      return { ...physical, title: entry.title, description: entry.description || "",
+      const dimensions = entry.nominalDimensionsMm ? {
+        ...physical.dimensions,
+        nominalMm: { ...physical.dimensions.nominalMm, ...entry.nominalDimensionsMm },
+        display: entry.dimensionLabel || physical.dimensions.display
+      } : physical.dimensions;
+      return { ...physical, dimensions, title: entry.title, description: entry.description || "",
         benefits: entry.benefits || [], components: entry.components || [], requirements: entry.requirements || [] };
     }) : catalog.modules;
     const modules = sourceProducts.map((product) =>
@@ -197,8 +202,9 @@
     }
     if (publicState) {
       // Public projection only; never inject an entire administrative document.
-      if (publicState.entities && typeof publicState.entities === "object") {
-        for (const [id, enabled] of Object.entries(publicState.entities)) {
+      const initialViewerEntities = publicState.viewerEntities || publicState.entities;
+      if (initialViewerEntities && typeof initialViewerEntities === "object") {
+        for (const [id, enabled] of Object.entries(initialViewerEntities)) {
           if (!modules.some((module) => module.id === id) || typeof enabled !== "boolean") {
             throw new TypeError("Invalid public module visibility: " + id);
           }

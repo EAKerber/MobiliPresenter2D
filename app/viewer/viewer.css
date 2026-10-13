@@ -29,6 +29,7 @@
 .carcass-swatch { width: 27px; height: 27px; flex: 0 0 auto; border: 1px solid #d7d3cb; border-radius: 5px; background: linear-gradient(135deg, #fff 0 48%, #e9e5de 49% 52%, #fff 53%); }
 .carcass-note span:last-child { font-size: .82rem; font-weight: 750; }
 .scene-stage { position: relative; overflow: hidden; width: 100%; aspect-ratio: 3 / 2; border-radius: 7px; background: #ebe7e1; }
+.viewer-empty-state { grid-column: 1 / -1; margin: 0; padding: 28px; border: 1px solid var(--public-line); border-radius: var(--public-radius); background: var(--public-surface); color: var(--public-muted); text-align: center; }
 .scene-stage:focus-visible { outline-color: var(--public-accent); }
 .scene-layer, .layer-group, .layer-group img, .finish-layer, .scene-hotspots { position: absolute; inset: 0; width: 100%; height: 100%; }
 .scene-layer, .layer-group img { display: block; object-fit: contain; user-select: none; }

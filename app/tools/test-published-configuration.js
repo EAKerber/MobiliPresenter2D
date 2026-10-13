@@ -11,6 +11,7 @@ const hierarchyDefaults = require("../data/hierarchy-defaults.js");
 const scene = require("../data/scene-data.js");
 const catalog = require("../data/catalog-data.js");
 const priceBook = require("../data/mock-price-book.js");
+const publicModuleProjection = require("../core/public-module-projection.js");
 
 const dependencies = { configuration, administrationV5, catalog, priceBook, scene };
 const v3 = configuration.createDefaultAdministration(defaults, catalog, priceBook, scene);
@@ -42,6 +43,18 @@ async function run() {
   assert.equal(inspectedV5.schema, administrationV5.SCHEMA);
   assert.deepEqual(inspectedV5.value, administrationV5.normalize(v5));
   assert.equal(inspectedV5.rawValue, rawV5.value);
+
+  const viewerInitial = Object.fromEntries(catalog.modules.map((item) => [item.entityId, false]));
+  viewerInitial["module-01"] = true;
+  const projectedSource = structuredClone(v5);
+  projectedSource.initialState.entities["module-01"] = false;
+  projectedSource.initialState.viewerEntities = viewerInitial;
+  projectedSource.moduleDimensions["module-01"].width = 800.5;
+  const publicProjection = publicModuleProjection.project(projectedSource, catalog, scene);
+  assert.equal(publicProjection.publicState.viewerEntities["module-01"], true, "public viewer reads its own initial visibility");
+  assert.equal(Object.hasOwn(publicProjection.publicState, "entities"), false, "projection omits configurator visibility");
+  assert.deepEqual(publicProjection.modules.find((item) => item.id === "module-01").nominalDimensionsMm,
+    { width: 800.5, height: catalog.modules[0].dimensions.nominalMm.height, depth: catalog.modules[0].dimensions.nominalMm.depth });
 
   assert.deepEqual(await reader.readRawPublished(store(null)), { kind: "missing" });
   assert.equal((await reader.readRawPublished(store("{broken"))).code, "invalid_stored_json");
