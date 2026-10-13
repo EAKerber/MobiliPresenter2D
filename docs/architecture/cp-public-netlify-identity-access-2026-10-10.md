@@ -2,6 +2,8 @@
 
 **Status em 2026-10-12:** schema inicial aplicado e verificado no projeto Supabase de desenvolvimento. A implementação inclui emissão/revogação/resgate, adaptador Gmail, DTO comprador, autorização do endpoint administrativo, bootstrap de preços apenas para `admin` e Edge gate para `/config/*` e o arquivo estático de preços. O usuário reportou configuração de autenticação e variáveis no Netlify; nomes/escopos não foram verificados. Consulta read-only confirmou `access_service` com login habilitado e membro de `access_runtime`. A implementação requer validação integrada em Deploy Preview e não está liberada para cutover de produção. Foco associado: [issue #192](https://github.com/EAKerber/MobiliPresenter2D/issues/192); consulte o runbook datado para os bloqueios e próximos passos.
 
+**Revisão local em 2026-10-12:** o checkout atual endurece `/access/manage.html` e seus aliases com Identity `admin`/`staff`, encaminha visitantes para login e volta ao destino após autenticação. Corrige a colisão entre o rewrite TOML e o `config.path` de `admin-bootstrap`, corrige o retorno do admin para `/config/` e faz o logout invalidar também a sessão temporária deste navegador. Essas mudanças ainda não foram compiladas pelo build do projeto nem validadas em Deploy Preview; não descrevem o deploy atual.
+
 ## Decisões vigentes — 2026-10-12 (America/Sao_Paulo)
 
 Este registro datado atualiza as decisões de provedor e persistência abaixo. Se agentes encontrarem notas anteriores com alternativas em aberto, usar esta seção como decisão vigente e ainda sujeita a revisão explícita.
@@ -26,23 +28,26 @@ Usar Netlify Identity para contas internas `admin` e `staff`. Visitantes `user` 
 
 ## Matriz de acesso pretendida
 
-| Tipo | Rotas públicas | `/config/` e outras páginas internas | `/admin.html` e APIs administrativas |
-| --- | --- | --- | --- |
-| Anônimo | Sim | Não | Não |
-| Identity `staff` | Sim | Sim, com login | Não |
-| Identity `admin` | Sim | Sim, com login | Sim, com login e papel `admin` |
-| `user` com link temporário | Sim | Somente configurador, até expirar | Não |
+| Tipo | Rotas públicas | `/config/` | `/access/manage.html` | Dados/API do admin |
+| --- | --- | --- | --- | --- |
+| Anônimo | Sim | Não | Não; redirecionado para login | Não |
+| Identity `staff` | Sim | Sim | Sim | Não |
+| Identity `admin` | Sim | Sim | Sim | Sim |
+| `user` com link temporário | Sim | Somente configurador, até expirar | Não | Não |
+
+`/admin.html` continua acessível como casca de login; o conteúdo e as APIs administrativas exigem Identity `admin`. A rota de gestão de convites não deve servir seu HTML de gerenciamento a anônimos; o login redireciona para a casca administrativa e retorna ao destino apenas para `admin`/`staff`.
 
 `admin` tem precedência sobre `staff` se uma conta tiver ambos. Nenhuma conta recebe papel por cadastro público: preferir Identity em modo `Invite only`; conceder `admin` e `staff` explicitamente. `user` descreve uma concessão temporária de acesso, não um terceiro papel Identity.
 
 ## Regras por camada
 
 1. Netlify Identity autentica `admin` e `staff`. No servidor, `getUser()` valida a sessão e as Functions verificam o papel em `user.roles`; nunca confiar em papel, email ou ID vindo do browser.
-2. Para páginas internas, o gate aceita `staff` ou `admin`. `/admin.html`, recursos administrativos e endpoints de escrita exigem `admin`. Páginas públicas ficam fora das regras de gate.
+2. Para páginas internas, o gate aceita `staff` ou `admin`. `/access/manage.html` exige `staff` ou `admin`; `/admin.html` segue como casca pública de login, enquanto o painel, recursos administrativos e APIs administrativas exigem `admin`. Páginas públicas ficam fora das regras de gate.
 3. `/config/*` precisa aceitar `admin`, `staff` ou uma concessão temporária válida `config`. Como o link temporário não é uma role Identity, um redirect estático com `Role=` não resolve esse caso sozinho: uma Edge Function restrita aos caminhos protegidos deve validar Identity ou a sessão temporária antes de continuar até o HTML/asset.
-4. APIs repetem a autorização no próprio boundary. O GET raw `/api/configuration`, PUT, `/api/admin-bootstrap` e quaisquer APIs administrativas exigem `admin`. O comprador recebe `/api/buyer-configuration`, DTO allowlisted com `staff`/`admin` ou grant temporário `config`; não entregar o schema v5 administrativo integral como API de comprador. Respostas privadas usam `no-store`.
+4. APIs repetem a autorização no próprio boundary. O GET raw `/api/configuration`, PUT, `/api/admin-bootstrap` e quaisquer APIs administrativas exigem `admin`. `/api/access/grants` exige `staff` ou `admin`; o endpoint de logout só pode revogar a sessão temporária apresentada pelo próprio cookie. O comprador recebe `/api/buyer-configuration`, DTO allowlisted com `staff`/`admin` ou grant temporário `config`; não entregar o schema v5 administrativo integral como API de comprador. Respostas privadas usam `no-store`.
 5. Proteger acesso direto aos caminhos servidos pelo CDN, não só a navegação e o HTML. Inventariar `/config/index.html`, aliases, scripts, preço/configuração estáticos e assets necessários. Mover dados comerciais protegidos para rotas privadas ou servi-los por endpoint autorizado se houver caminho estático público compartilhado.
 6. Toda resposta privada/autorizada usa `Cache-Control: no-store`; nunca registrar token, cookies, PII, configuração bruta ou preços protegidos.
+7. Sair encerra a sessão Identity e tenta revogar/limpar o cookie temporário do mesmo navegador. As sessões são independentes; revogar só uma delas não encerra a outra.
 
 ## Link temporário para `user` — contrato e pendências de execução
 

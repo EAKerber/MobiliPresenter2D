@@ -21,6 +21,12 @@
   status = 200
   force = true
 
+[[redirects]]
+  from = "/api/access/session/logout"
+  to = "/.netlify/functions/access-session-logout"
+  status = 200
+  force = true
+
 # CP-PUBLIC-04a: public schema-driven read projection; no preview seeds.
 [[redirects]]
   from = "/api/public-modules"

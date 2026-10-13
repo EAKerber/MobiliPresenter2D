@@ -1,5 +1,5 @@
 import { getUser } from "@netlify/identity";
-import { canUseInternalPages } from "../access/identity-policy.mjs";
+import { canIssueOrRevokeGrants, canUseInternalPages } from "../access/identity-policy.mjs";
 import { ACCESS_COOKIE_NAME } from "../access/constants.mjs";
 
 const PRIVATE_HEADERS = {
@@ -34,6 +34,22 @@ export default async (request, context) => {
     user = await getUser();
   } catch {
     return denied(pathname, 503, request.url);
+  }
+
+  if (["/access/manage", "/access/manage/", "/access/manage.html"].includes(pathname)) {
+    if (!canIssueOrRevokeGrants(user)) {
+      if (!user) {
+        const loginUrl = new URL("/admin.html", request.url);
+        loginUrl.searchParams.set("returnTo", "/access/manage.html");
+        return Response.redirect(loginUrl, 302);
+      }
+      return denied(pathname, 403, request.url);
+    }
+
+    const response = await context.next();
+    const headers = new Headers(response.headers);
+    for (const [name, value] of Object.entries(PRIVATE_HEADERS)) headers.set(name, value);
+    return new Response(response.body, { status: response.status, statusText: response.statusText, headers });
   }
 
   if (canUseInternalPages(user)) {
@@ -73,5 +89,12 @@ export default async (request, context) => {
 };
 
 export const config = {
-  path: ["/config", "/config/*", "/data/mock-price-book.js"],
+  path: [
+    "/config",
+    "/config/*",
+    "/data/mock-price-book.js",
+    "/access/manage",
+    "/access/manage/",
+    "/access/manage.html",
+  ],
 };
