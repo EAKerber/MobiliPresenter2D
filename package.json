@@ -3,7 +3,7 @@
   "private": true,
   "engines": { "node": ">=20" },
   "scripts": {
-    "build": "esbuild app/admin/admin.js --bundle --format=esm --target=es2017 --outfile=app/admin/admin.bundle.js && esbuild app/access/manage.js --bundle --format=esm --target=es2017 --outfile=app/access/manage.bundle.js"
+    "build": "esbuild app/admin/admin.js --bundle --format=esm --target=safari14 --supported:destructuring=true --outfile=app/admin/admin.bundle.js && esbuild app/access/manage.js --bundle --format=esm --target=safari14 --supported:destructuring=true --outfile=app/access/manage.bundle.js"
   },
   "dependencies": {
     "@netlify/blobs": "^11.1.1",

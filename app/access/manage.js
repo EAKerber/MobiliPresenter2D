@@ -145,4 +145,7 @@ byId("logoutButton").addEventListener("click", async () => {
   window.location.replace("/admin.html?returnTo=%2Faccess%2Fmanage.html");
 });
 onAuthChange((_event, user) => { void renderUser(user); });
-renderUser(await getUser());
+async function initializeAccessManager() {
+  await renderUser(await getUser());
+}
+void initializeAccessManager();

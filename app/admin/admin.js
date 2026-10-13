@@ -2037,16 +2037,20 @@ logoutButton.addEventListener("click", async () => {
 
 onAuthChange((_event, user) => { void showUser(user); });
 
-try {
-  const hash = new URLSearchParams(window.location.hash.slice(1));
-  const recovery = hash.get("recovery_token");
-  if (recovery) showPasswordAction("recovery", recovery);
-  else {
-    const callback = await handleAuthCallback();
-    if (callback?.type === "invite") showPasswordAction(callback.type, callback.token);
-    else await showUser(await getUser());
+async function initializeAdminAccess() {
+  try {
+    const hash = new URLSearchParams(window.location.hash.slice(1));
+    const recovery = hash.get("recovery_token");
+    if (recovery) showPasswordAction("recovery", recovery);
+    else {
+      const callback = await handleAuthCallback();
+      if (callback?.type === "invite") showPasswordAction(callback.type, callback.token);
+      else await showUser(await getUser());
+    }
+  } catch (error) {
+    setMessage(loginMessage, error.message || "Não foi possível concluir o acesso.", "error");
+    await showUser(await getUser());
   }
-} catch (error) {
-  setMessage(loginMessage, error.message || "Não foi possível concluir o acesso.", "error");
-  await showUser(await getUser());
 }
+
+void initializeAdminAccess();
