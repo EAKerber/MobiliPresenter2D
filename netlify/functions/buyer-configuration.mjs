@@ -72,5 +72,3 @@ export default async (request, context) => {
     return jsonResponse({ error: "published_configuration_unavailable" }, 503);
   }
 };
-
-export const config = { path: "/api/buyer-configuration" };
