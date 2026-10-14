@@ -80,7 +80,7 @@
 .economy-card p { align-self: start; margin: 7px 0 0; color: rgb(255 255 255 / 70%); font-size: .75rem; line-height: 1.45; }
 .economy-synthesis { margin: 29px 24px 0; color: var(--public-accent-highlight); font-size: clamp(1.25rem, 2.7vw, 2rem); font-weight: 750; letter-spacing: -.025em; text-align: center; }
 .staged-section { padding-block: clamp(58px, 7vw, 90px); }
-.staged-flow { position: relative; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 16px; margin: 0; padding: 0; list-style: none; }
+.staged-flow { position: relative; display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 16px; margin: 0; padding: 0; list-style: none; }
 .staged-flow::before { position: absolute; top: 34px; left: 9%; right: 9%; height: 1px; background: var(--public-accent-highlight); content: ""; }
 .staged-flow li { position: relative; display: grid; justify-items: center; isolation: isolate; text-align: center; }
 .staged-flow li::before { grid-area: 1 / 1; width: min(100%, 155px); height: 108px; border-radius: 12px; background: #fef9f0; content: ""; }
