@@ -58,8 +58,12 @@
   }
   function createControl() {
     if (doc.querySelector("[data-ui-theme-toggle]")) return;
-    var header = doc.querySelector(".site-header, .viewer-header, .topbar__actions, .admin-topbar__actions, .access-page > header, body > header");
-    if (!header) return;
+    // Prefer page content for the two approved pilot pages.
+    // On landing, only mount in the displayed environment feature; otherwise
+    // preserve the existing header-adjacent control as a safe fallback.
+    var contextEyebrow = doc.querySelector(".environment-feature:not([hidden]) .feature-copy > .eyebrow, .viewer-heading > .eyebrow");
+    var header = contextEyebrow ? null : doc.querySelector(".site-header, .viewer-header, .topbar__actions, .admin-topbar__actions, .access-page > header, body > header");
+    if (!contextEyebrow && !header) return;
     var button = doc.createElement("button");
     button.type = "button";
     button.className = "ui-theme-toggle";
@@ -68,21 +72,30 @@
       '<span class="ui-theme-toggle__label-long"></span>' +
       '<span class="ui-theme-toggle__label-short"></span>';
     button.addEventListener("click", function () { select(nextMode(), true); });
-    // Public headers reserve their main grid for brand, navigation and CTA.
-    var standalone = header.classList.contains("site-header") ||
-      header.classList.contains("viewer-header") ||
-      (header.parentNode && header.parentNode.classList &&
-       header.parentNode.classList.contains("access-page"));
-    if (standalone) {
+    if (contextEyebrow) {
+      // Reuse the existing eyebrow rather than adding a new UI band.
+      var contextRow = doc.createElement("div");
+      contextRow.className = "ui-theme-context-row";
+      contextEyebrow.parentNode.insertBefore(contextRow, contextEyebrow);
+      contextRow.appendChild(contextEyebrow);
+      contextRow.appendChild(button);
+    } else {
+      // All other pages retain their existing placement while the pilot is reviewed.
+      var standalone = header.classList.contains("site-header") ||
+        header.classList.contains("viewer-header") ||
+        (header.parentNode && header.parentNode.classList &&
+         header.parentNode.classList.contains("access-page"));
+      if (standalone) {
       var utility = doc.createElement("div");
       utility.className = "ui-theme-utility";
       if (header.classList.contains("viewer-header")) utility.classList.add("ui-theme-utility--viewer");
       if (header.parentNode.classList && header.parentNode.classList.contains("access-page")) utility.classList.add("ui-theme-utility--access");
       utility.appendChild(button);
-      header.parentNode.insertBefore(utility, header.nextSibling);
-    } else {
-      // Config/admin retain their contextual toolbar layout.
-      header.insertBefore(button, header.firstChild);
+        header.parentNode.insertBefore(utility, header.nextSibling);
+      } else {
+        // Config/admin retain their contextual toolbar layout.
+        header.insertBefore(button, header.firstChild);
+      }
     }
     refreshControls();
   }

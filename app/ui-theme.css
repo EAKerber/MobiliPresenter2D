@@ -1,7 +1,24 @@
 /* DS-01 theme shell: approved existing palettes, scoped adaptations.
    Real imagery, finish swatches and technical drawings retain their source colors. */
 
-/* Post-preview: a subordinate utility below public and viewer headers. */
+/* DS-01 pilot: prefer existing page-introduction metadata over a separate band. */
+.ui-theme-context-row {
+  display: flex; flex-wrap: wrap; align-items: center;
+  justify-content: space-between; gap: 6px 14px;
+  min-width: 0; margin-bottom: 8px;
+}
+.ui-theme-context-row > .eyebrow { flex: 0 1 auto; min-width: 0; margin: 0; }
+.ui-theme-context-row > .ui-theme-toggle {
+  margin-left: auto; min-height: 44px; min-width: 44px;
+  padding: 8px 12px; font-size: 12px;
+}
+@media (max-width: 480px) {
+  .ui-theme-context-row { gap: 6px 8px; }
+  .ui-theme-context-row .ui-theme-toggle__label-long { display: none; }
+  .ui-theme-context-row .ui-theme-toggle__label-short { display: inline; }
+}
+
+/* Fallback placement retained for non-pilot public pages. */
 .ui-theme-utility {
   display: flex; align-items: center; justify-content: flex-start;
   width: min(calc(100% - 48px), 1280px); margin: 0 auto; padding: 8px 0 0;

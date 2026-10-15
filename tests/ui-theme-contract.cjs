@@ -30,7 +30,16 @@ for (const file of ["app/index.html", "app/about/index.html", "app/how-it-works/
   assert(read(file).includes('aria-current="page"'), file + " active route announced");
 }
 assert(code.includes("ui-theme-utility") && code.includes("header.parentNode.insertBefore(utility, header.nextSibling)"),
-  "public theme utility sits after the header");
+  "non-pilot pages retain the header-adjacent fallback");
+assert(code.includes('.environment-feature:not([hidden]) .feature-copy > .eyebrow') &&
+  code.includes('.viewer-heading > .eyebrow'), "contextual control targets landing and viewer only");
+assert(code.includes('contextRow.appendChild(contextEyebrow)') &&
+  code.includes('contextRow.appendChild(button)'), "eyebrow and toggle share a contextual row");
+assert(themeCSS.includes('.ui-theme-context-row > .ui-theme-toggle') &&
+  themeCSS.includes('min-height: 44px; min-width: 44px;'),
+  "contextual control keeps the required 44px touch target");
+assert(themeCSS.includes('.ui-theme-context-row .ui-theme-toggle__label-short'),
+  "small-screen layout preserves a textual mode label");
 assert(themeCSS.includes(".ui-theme-utility--viewer"), "viewer utility aligned to viewer shell");
 assert(themeCSS.includes('html[data-theme="dark"] .detail-row {'), "viewer detail rows follow dark theme");
 assert(themeCSS.includes('html[data-theme="dark"] .technical-view { background: #fff;'),
