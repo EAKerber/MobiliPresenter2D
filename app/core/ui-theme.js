@@ -58,7 +58,7 @@
   }
   function createControl() {
     if (doc.querySelector("[data-ui-theme-toggle]")) return;
-    var header = doc.querySelector(".site-header .header-actions, .viewer-header, .topbar__actions, .admin-topbar__actions, body > header");
+    var header = doc.querySelector(".site-header, .viewer-header, .topbar__actions, .admin-topbar__actions, .access-page > header, body > header");
     if (!header) return;
     var button = doc.createElement("button");
     button.type = "button";
@@ -68,14 +68,21 @@
       '<span class="ui-theme-toggle__label-long"></span>' +
       '<span class="ui-theme-toggle__label-short"></span>';
     button.addEventListener("click", function () { select(nextMode(), true); });
-    if (header.classList.contains("header-actions")) {
-      header.insertBefore(button, header.firstChild);
-    } else if (header.classList.contains("viewer-header")) {
-      header.insertBefore(button, header.querySelector(".back-link") || null);
-    } else if (header.classList.contains("admin-topbar__actions") || header.classList.contains("topbar__actions")) {
-      header.insertBefore(button, header.firstChild);
+    // Public headers reserve their main grid for brand, navigation and CTA.
+    var standalone = header.classList.contains("site-header") ||
+      header.classList.contains("viewer-header") ||
+      (header.parentNode && header.parentNode.classList &&
+       header.parentNode.classList.contains("access-page"));
+    if (standalone) {
+      var utility = doc.createElement("div");
+      utility.className = "ui-theme-utility";
+      if (header.classList.contains("viewer-header")) utility.classList.add("ui-theme-utility--viewer");
+      if (header.parentNode.classList && header.parentNode.classList.contains("access-page")) utility.classList.add("ui-theme-utility--access");
+      utility.appendChild(button);
+      header.parentNode.insertBefore(utility, header.nextSibling);
     } else {
-      header.insertBefore(button, header.lastElementChild);
+      // Config/admin retain their contextual toolbar layout.
+      header.insertBefore(button, header.firstChild);
     }
     refreshControls();
   }

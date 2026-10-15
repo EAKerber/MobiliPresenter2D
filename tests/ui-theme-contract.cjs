@@ -23,6 +23,18 @@ for (const file of shells) {
   assert(html.includes("data-brand-variant"), file + " proper brand logo");
   assert(!html.includes('aria-hidden="true">▱</span>'), file + " no fake mark");
 }
+const themeCSS = read("app/ui-theme.css");
+const navCSS = read("app/landing/landing.css");
+assert(navCSS.includes('.site-header nav a[aria-current="page"]'), "shared active navigation styling");
+for (const file of ["app/index.html", "app/about/index.html", "app/how-it-works/index.html"]) {
+  assert(read(file).includes('aria-current="page"'), file + " active route announced");
+}
+assert(code.includes("ui-theme-utility") && code.includes("header.parentNode.insertBefore(utility, header.nextSibling)"),
+  "public theme utility sits after the header");
+assert(themeCSS.includes(".ui-theme-utility--viewer"), "viewer utility aligned to viewer shell");
+assert(themeCSS.includes('html[data-theme="dark"] .detail-row {'), "viewer detail rows follow dark theme");
+assert(themeCSS.includes('html[data-theme="dark"] .technical-view { background: #fff;'),
+  "technical drawings remain on a stable light sheet");
 const landing = read("app/index.html");
 assert(landing.includes('id="introSplash"') && landing.includes('logo-light-splash-1548.png'));
 assert(landing.includes('id="environmentTrack"'));

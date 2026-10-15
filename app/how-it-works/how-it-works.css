@@ -1,6 +1,4 @@
 .how-page { --study-illustration-surface: #fcf9ef; overflow-x: clip; }
-.how-page .site-header nav a[aria-current="page"] { color: var(--public-accent-dark); }
-.how-page .site-header nav a[aria-current="page"]::after { display: block; width: 100%; height: 2px; margin-top: 5px; background: var(--public-accent); content: ""; }
 .how-hero { display: grid; grid-template-columns: minmax(310px, .82fr) minmax(0, 1.18fr); align-items: stretch; max-width: 1440px; min-height: min(660px, calc(100svh - 76px)); margin: auto; background: var(--public-surface-soft); }
 .how-hero-copy { align-self: center; padding: clamp(36px, 5.5vw, 82px) clamp(26px, 6vw, 88px); }
 .how-hero-copy h1 { max-width: 600px; margin: 0; font-size: clamp(3.3rem, 6.2vw, 6.6rem); line-height: .92; letter-spacing: -.075em; }

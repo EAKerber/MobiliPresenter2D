@@ -1,5 +1,16 @@
 /* DS-01 theme shell: approved existing palettes, scoped adaptations.
    Real imagery, finish swatches and technical drawings retain their source colors. */
+
+/* Post-preview: a subordinate utility below public and viewer headers. */
+.ui-theme-utility {
+  display: flex; align-items: center; justify-content: flex-start;
+  width: min(calc(100% - 48px), 1280px); margin: 0 auto; padding: 8px 0 0;
+}
+.ui-theme-utility--viewer { width: min(calc(100% - 44px), 1380px); }
+.ui-theme-utility--access { width: min(calc(100% - 32px), 1040px); }
+@media (max-width: 760px) {
+  .ui-theme-utility, .ui-theme-utility--viewer { width: calc(100% - 28px); }
+}
 html[data-theme="light"] {
   --ui-theme-focus: #6e512e;
   --ui-theme-control-bg: #f0ede8;
@@ -12,10 +23,10 @@ html[data-theme="dark"] {
 }
 .ui-theme-toggle {
   display: inline-flex; align-items: center; justify-content: center; gap: 8px;
-  min-height: 40px; min-width: 40px; padding: 7px 10px;
-  border: 1px solid var(--ui-theme-control-border); border-radius: 9px;
+  min-height: 40px; min-width: 40px; width: max-content; max-width: 100%; padding: 7px 11px;
+  border: 1px solid var(--ui-theme-control-border); border-radius: 999px;
   background: var(--ui-theme-control-bg); color: inherit;
-  font: inherit; font-size: 14px; font-weight: 650; line-height: 1.2;
+  font: inherit; font-size: 12px; font-weight: 650; line-height: 1.2;
   cursor: pointer; white-space: nowrap; flex: 0 0 auto;
 }
 .ui-theme-toggle:hover { filter: brightness(.96); }
@@ -27,8 +38,8 @@ html[data-theme="dark"] {
 .ui-theme-toggle[data-mode="light"] .ui-theme-toggle__glyph { background: #f9f2e9; }
 .ui-theme-toggle[data-mode="dark"] .ui-theme-toggle__glyph { background: #22211f; }
 .ui-theme-toggle__label-short { display: none; }
-@media(max-width: 760px) {
-  .ui-theme-toggle { padding: 7px; gap: 6px; min-height: 38px; }
+@media(max-width: 380px) {
+  .ui-theme-toggle { padding: 7px 9px; gap: 6px; }
   .ui-theme-toggle__label-long { display: none; }
   .ui-theme-toggle__label-short { display: inline; }
 }
@@ -92,8 +103,11 @@ html[data-theme="dark"] .study-art { --study-illustration-surface: #fcf9ef; colo
 html[data-theme="dark"] .viewer-header { background: var(--public-surface); }
 html[data-theme="dark"] .overview-highlights li,
 html[data-theme="dark"] .dimension-pill { color: var(--public-text); }
-html[data-theme="dark"] .technical-view,
-html[data-theme="dark"] .detail-row { background: #fff; color: #514a43; border-color: #ded9d2; }
+html[data-theme="dark"] .technical-view { background: #fff; color: #514a43; border-color: #ded9d2; }
+html[data-theme="dark"] .detail-row {
+  background: var(--public-surface-soft); color: var(--public-text);
+  border-color: var(--public-line);
+}
 html[data-theme="dark"] .technical-view h3 { color: #514a43; }
 html[data-theme="dark"] .technical-view p { color: #706c66; }
 html[data-theme="dark"] .technical-view svg { color: #403c37; }
