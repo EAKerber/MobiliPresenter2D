@@ -1,0 +1,290 @@
+{
+  "repository": "EAKerber/MobiliPresenter2D",
+  "source_commit": "864c38e70d406e8a3f9dfc9af6c3cf928472671b",
+  "main_parent_sha": "d3ab7736eafb667427d28e08c0ccb31ae0265030",
+  "active_count": 36,
+  "legacy_count": 4,
+  "file_count": 40,
+  "files": [
+    {
+      "source_path": "app/how-it-works/assets/amostras-mdf-r2.webp",
+      "category": "used",
+      "archive_path": "originais_em_uso/app/how-it-works/assets/amostras-mdf-r2.webp",
+      "git_blob_sha": "8eeecb49f9a87cda1a658263eb3342f9d6622964",
+      "size_bytes": 89870
+    },
+    {
+      "source_path": "app/how-it-works/assets/comparacao-casa-em-modulos.svg",
+      "category": "used",
+      "archive_path": "originais_em_uso/app/how-it-works/assets/comparacao-casa-em-modulos.svg",
+      "git_blob_sha": "b7304c5574e647cb2bc85fbc918df65726a67adc",
+      "size_bytes": 280
+    },
+    {
+      "source_path": "app/how-it-works/assets/comparacao-moveis-prontos-raster-v1.png",
+      "category": "used",
+      "archive_path": "originais_em_uso/app/how-it-works/assets/comparacao-moveis-prontos-raster-v1.png",
+      "git_blob_sha": "5fd807babfa9ec1acefb70fe3aaf5aea46c7b4d4",
+      "size_bytes": 450618
+    },
+    {
+      "source_path": "app/how-it-works/assets/comparacao-planejados-raster-v2.png",
+      "category": "used",
+      "archive_path": "originais_em_uso/app/how-it-works/assets/comparacao-planejados-raster-v2.png",
+      "git_blob_sha": "178390b3e6f6acb92b8be96bba5564fdf57b329b",
+      "size_bytes": 561210
+    },
+    {
+      "source_path": "app/how-it-works/assets/economia-chapas.webp",
+      "category": "used",
+      "archive_path": "originais_em_uso/app/how-it-works/assets/economia-chapas.webp",
+      "git_blob_sha": "5b12dac1defc9f1da1a96dceba4727a89129873e",
+      "size_bytes": 6272
+    },
+    {
+      "source_path": "app/how-it-works/assets/economia-coletiva.webp",
+      "category": "used",
+      "archive_path": "originais_em_uso/app/how-it-works/assets/economia-coletiva.webp",
+      "git_blob_sha": "5523c68b353b10e3c0e324b7c7edda1c64c67889",
+      "size_bytes": 11230
+    },
+    {
+      "source_path": "app/how-it-works/assets/economia-escala.webp",
+      "category": "used",
+      "archive_path": "originais_em_uso/app/how-it-works/assets/economia-escala.webp",
+      "git_blob_sha": "11e2ad1ae04b18541d054b0010c6c794891a6dc3",
+      "size_bytes": 26838
+    },
+    {
+      "source_path": "app/how-it-works/assets/economia-producao.webp",
+      "category": "used",
+      "archive_path": "originais_em_uso/app/how-it-works/assets/economia-producao.webp",
+      "git_blob_sha": "800b3750af5eff39f92745be6a4bdb4c37a6c1ab",
+      "size_bytes": 6510
+    },
+    {
+      "source_path": "app/how-it-works/assets/economia-retrabalho.webp",
+      "category": "used",
+      "archive_path": "originais_em_uso/app/how-it-works/assets/economia-retrabalho.webp",
+      "git_blob_sha": "7ff439ee29a6d0927f6b965dd5d330cb39f479ea",
+      "size_bytes": 10812
+    },
+    {
+      "source_path": "app/how-it-works/assets/estudo-espaco.webp",
+      "category": "used",
+      "archive_path": "originais_em_uso/app/how-it-works/assets/estudo-espaco.webp",
+      "git_blob_sha": "f2c29e4ee3aba63f62475330c3c9f03944c1a362",
+      "size_bytes": 13582
+    },
+    {
+      "source_path": "app/how-it-works/assets/etapa-cozinha.webp",
+      "category": "used",
+      "archive_path": "originais_em_uso/app/how-it-works/assets/etapa-cozinha.webp",
+      "git_blob_sha": "e02ba428a71ad300739ac93703840a912070d847",
+      "size_bytes": 5930
+    },
+    {
+      "source_path": "app/how-it-works/assets/etapa-escritorio.webp",
+      "category": "used",
+      "archive_path": "originais_em_uso/app/how-it-works/assets/etapa-escritorio.webp",
+      "git_blob_sha": "811850218c0ff8e1e26907edb65afe69843f46cb",
+      "size_bytes": 6388
+    },
+    {
+      "source_path": "app/how-it-works/assets/etapa-lavanderia.webp",
+      "category": "used",
+      "archive_path": "originais_em_uso/app/how-it-works/assets/etapa-lavanderia.webp",
+      "git_blob_sha": "927f30bbd64c7ecd6ae01ae5e0bbb2681dd08dc7",
+      "size_bytes": 8066
+    },
+    {
+      "source_path": "app/how-it-works/assets/etapa-quarto.webp",
+      "category": "used",
+      "archive_path": "originais_em_uso/app/how-it-works/assets/etapa-quarto.webp",
+      "git_blob_sha": "0ccf1454317e9e46d571a2bbcf97525e3354009f",
+      "size_bytes": 5344
+    },
+    {
+      "source_path": "app/how-it-works/assets/etapa-sala-v1.webp",
+      "category": "used",
+      "archive_path": "originais_em_uso/app/how-it-works/assets/etapa-sala-v1.webp",
+      "git_blob_sha": "c822def87bbbcc8bc1248189233cdf2156de1739",
+      "size_bytes": 13422
+    },
+    {
+      "source_path": "app/how-it-works/assets/hero-abertura.webp",
+      "category": "used",
+      "archive_path": "originais_em_uso/app/how-it-works/assets/hero-abertura.webp",
+      "git_blob_sha": "830fe9b8ec2072952d74c92041771560cab51e3c",
+      "size_bytes": 159262
+    },
+    {
+      "source_path": "app/how-it-works/assets/hero-encerramento.webp",
+      "category": "used",
+      "archive_path": "originais_em_uso/app/how-it-works/assets/hero-encerramento.webp",
+      "git_blob_sha": "53de352c30510ba17f0bf72c608f9ea407b7a0c3",
+      "size_bytes": 211426
+    },
+    {
+      "source_path": "app/how-it-works/assets/integracao-modular.webp",
+      "category": "used",
+      "archive_path": "originais_em_uso/app/how-it-works/assets/integracao-modular.webp",
+      "git_blob_sha": "88ae660bacf226cfb420fbb67255e1c08e88c75e",
+      "size_bytes": 5900
+    },
+    {
+      "source_path": "app/how-it-works/assets/modulo-aereo-cinza-v1.webp",
+      "category": "used",
+      "archive_path": "originais_em_uso/app/how-it-works/assets/modulo-aereo-cinza-v1.webp",
+      "git_blob_sha": "a80d6684143916427e9d6463d16425b3e6e095f1",
+      "size_bytes": 77574
+    },
+    {
+      "source_path": "app/how-it-works/assets/modulo-gaveteiro-cinza-v1.webp",
+      "category": "used",
+      "archive_path": "originais_em_uso/app/how-it-works/assets/modulo-gaveteiro-cinza-v1.webp",
+      "git_blob_sha": "9bee4b329f102e99c4fc32cbe9320106fa42ce2a",
+      "size_bytes": 33542
+    },
+    {
+      "source_path": "app/how-it-works/assets/modulo-inferior-cinza-v1.webp",
+      "category": "used",
+      "archive_path": "originais_em_uso/app/how-it-works/assets/modulo-inferior-cinza-v1.webp",
+      "git_blob_sha": "b0ef4307f22fb68f3249dec3c955bf1f5d57463f",
+      "size_bytes": 112384
+    },
+    {
+      "source_path": "app/how-it-works/assets/modulo-torre-cinza-v1.webp",
+      "category": "used",
+      "archive_path": "originais_em_uso/app/how-it-works/assets/modulo-torre-cinza-v1.webp",
+      "git_blob_sha": "2b136a740867154c3062be4e8dd6a8bca7ba0a6b",
+      "size_bytes": 36574
+    },
+    {
+      "source_path": "app/how-it-works/assets/puxadores-lineares-v1.webp",
+      "category": "used",
+      "archive_path": "originais_em_uso/app/how-it-works/assets/puxadores-lineares-v1.webp",
+      "git_blob_sha": "01c1329645cc77215a45df79d51b3ad66c839a34",
+      "size_bytes": 19896
+    },
+    {
+      "source_path": "app/how-it-works/assets/puxadores-ponto-r2.webp",
+      "category": "used",
+      "archive_path": "originais_em_uso/app/how-it-works/assets/puxadores-ponto-r2.webp",
+      "git_blob_sha": "f705318a3a8fecad818e93bb6eca71157f55e4c3",
+      "size_bytes": 49234
+    },
+    {
+      "source_path": "app/landing/assets/hero/lifestyle-phone.webp",
+      "category": "used",
+      "archive_path": "originais_em_uso/app/landing/assets/hero/lifestyle-phone.webp",
+      "git_blob_sha": "7e94437cf2b1685baf3dbc8d2fe5d83a45727152",
+      "size_bytes": 1766259
+    },
+    {
+      "source_path": "app/landing/assets/icons/large/cozinha.webp",
+      "category": "used",
+      "archive_path": "originais_em_uso/app/landing/assets/icons/large/cozinha.webp",
+      "git_blob_sha": "25dbf3c12602614d340516b48c0b065f0eebec5d",
+      "size_bytes": 190028
+    },
+    {
+      "source_path": "app/landing/assets/icons/large/escritorio.webp",
+      "category": "used",
+      "archive_path": "originais_em_uso/app/landing/assets/icons/large/escritorio.webp",
+      "git_blob_sha": "212e672784b2ef128893bc3f63cdec09bc301c09",
+      "size_bytes": 60334
+    },
+    {
+      "source_path": "app/landing/assets/icons/large/lavanderia.webp",
+      "category": "used",
+      "archive_path": "originais_em_uso/app/landing/assets/icons/large/lavanderia.webp",
+      "git_blob_sha": "b2da202d8e92273579d0869047033d312d7aa11a",
+      "size_bytes": 71832
+    },
+    {
+      "source_path": "app/landing/assets/icons/large/quarto.webp",
+      "category": "used",
+      "archive_path": "originais_em_uso/app/landing/assets/icons/large/quarto.webp",
+      "git_blob_sha": "ca52d4838343df53beb456b9b10fe0a59954a178",
+      "size_bytes": 92854
+    },
+    {
+      "source_path": "app/landing/assets/icons/large/sala.webp",
+      "category": "used",
+      "archive_path": "originais_em_uso/app/landing/assets/icons/large/sala.webp",
+      "git_blob_sha": "1f166d6eb26aa1f49b4cd8d4a25c4d52bf5d948f",
+      "size_bytes": 107160
+    },
+    {
+      "source_path": "app/landing/assets/icons/small/cozinha.webp",
+      "category": "used",
+      "archive_path": "originais_em_uso/app/landing/assets/icons/small/cozinha.webp",
+      "git_blob_sha": "b6334c061d147b72d562c55a7dc61bca500a508d",
+      "size_bytes": 24244
+    },
+    {
+      "source_path": "app/landing/assets/icons/small/escritorio.webp",
+      "category": "used",
+      "archive_path": "originais_em_uso/app/landing/assets/icons/small/escritorio.webp",
+      "git_blob_sha": "ac80f24032fac47d6045c027ae7781b2a87afc5b",
+      "size_bytes": 11628
+    },
+    {
+      "source_path": "app/landing/assets/icons/small/lavanderia.webp",
+      "category": "used",
+      "archive_path": "originais_em_uso/app/landing/assets/icons/small/lavanderia.webp",
+      "git_blob_sha": "36eb4cd49838b2238318279e3172b4e12ba1782a",
+      "size_bytes": 14318
+    },
+    {
+      "source_path": "app/landing/assets/icons/small/quarto.webp",
+      "category": "used",
+      "archive_path": "originais_em_uso/app/landing/assets/icons/small/quarto.webp",
+      "git_blob_sha": "2cfe3156842e9cf60fc75088402d20c24bb7c73e",
+      "size_bytes": 16116
+    },
+    {
+      "source_path": "app/landing/assets/icons/small/sala.webp",
+      "category": "used",
+      "archive_path": "originais_em_uso/app/landing/assets/icons/small/sala.webp",
+      "git_blob_sha": "3f7e5824633b6c7e52672b741b03052789834dee",
+      "size_bytes": 16470
+    },
+    {
+      "source_path": "app/viewer/assets/icon-placeholder.svg",
+      "category": "used",
+      "archive_path": "originais_em_uso/app/viewer/assets/icon-placeholder.svg",
+      "git_blob_sha": "628cb0a7a67271601f5b6326cee453398f59d960",
+      "size_bytes": 390
+    },
+    {
+      "source_path": "app/how-it-works/assets/modulo-aereo-cutout-v2.png",
+      "category": "legacy",
+      "archive_path": "legados_para_consulta/app/how-it-works/assets/modulo-aereo-cutout-v2.png",
+      "git_blob_sha": "feb79547cf4a99364cd5052273887ad713a1c751",
+      "size_bytes": 1439243
+    },
+    {
+      "source_path": "app/how-it-works/assets/modulo-gaveteiro-cutout-v1.webp",
+      "category": "legacy",
+      "archive_path": "legados_para_consulta/app/how-it-works/assets/modulo-gaveteiro-cutout-v1.webp",
+      "git_blob_sha": "0f13eb758adb9c7642ce8b328aee98555e7247ee",
+      "size_bytes": 120206
+    },
+    {
+      "source_path": "app/how-it-works/assets/modulo-inferior-cutout-v2.png",
+      "category": "legacy",
+      "archive_path": "legados_para_consulta/app/how-it-works/assets/modulo-inferior-cutout-v2.png",
+      "git_blob_sha": "cdcbf06f6774a071daee02fd69872137ed607360",
+      "size_bytes": 1437416
+    },
+    {
+      "source_path": "app/how-it-works/assets/modulo-torre-cutout-v1.webp",
+      "category": "legacy",
+      "archive_path": "legados_para_consulta/app/how-it-works/assets/modulo-torre-cutout-v1.webp",
+      "git_blob_sha": "461dc1570975325ef102d5a4a2f0ff7fa9f30823",
+      "size_bytes": 66152
+    }
+  ]
+}
