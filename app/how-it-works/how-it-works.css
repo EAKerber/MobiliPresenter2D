@@ -168,7 +168,7 @@
   .launch-badge strong { margin-left: auto; font-size: 1.12rem; }
   .launch-copy { padding: 12px 14px; }
   .launch-copy p { font-size: .7rem; }
-  .how-page .site-header { grid-template-columns: minmax(0, 1fr) auto auto; }
+  .how-page .site-header { grid-template-columns: minmax(0, 1fr) auto; }
   .how-page .header-cta { width: 40px; height: 40px; justify-content: center; padding: 0; }
   .how-page .header-cta span:first-child { display: none; }
   .how-page .header-cta span:last-child { display: inline; font-size: 1.1rem; }

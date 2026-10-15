@@ -70,18 +70,7 @@ html:is([data-layout-profile="stacked"], [data-layout-profile="compact"]) .flow-
 
 .brand { display: flex; min-width: 0; align-items: center; gap: 12px; }
 
-.brand__mark {
-  width: 40px;
-  height: 40px;
-  flex: 0 0 auto;
-  display: grid;
-  place-items: center;
-  border-radius: 12px;
-  background: #d6c9b9;
-  color: #20211f;
-  font-size: 26px;
-  font-weight: 700;
-}
+.brand__logo { display: block; flex: 0 0 auto; width: clamp(116px, 12vw, 156px); max-width: 40vw; height: auto; object-fit: contain; }
 
 h1, h2, p { margin: 0; }
 
@@ -859,3 +848,5 @@ html:is([data-layout-profile="stacked"], [data-layout-profile="compact"]) body.i
 html:is([data-layout-profile="stacked"], [data-layout-profile="compact"]) body.is-mobile-scene-transparent .viewer {
   opacity: .58;
 }
+
+.visually-hidden { position:absolute!important; width:1px!important; height:1px!important; padding:0!important; margin:-1px!important; overflow:hidden!important; clip:rect(0,0,0,0)!important; white-space:nowrap!important; border:0!important; }
