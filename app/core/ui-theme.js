@@ -80,6 +80,13 @@
     refreshControls();
   }
 
+  // Watch parser insertions only until DOMContentLoaded, so a dark-mode logo is
+  // switched to its approved dark asset before the first rendered frame.
+  var imageObserver = null;
+  if (typeof win.MutationObserver === "function" && root) {
+    imageObserver = new win.MutationObserver(refreshBrandImages);
+    imageObserver.observe(root, { childList: true, subtree: true });
+  }
   // Theme attributes are applied synchronously in <head>, ahead of CSS rendering.
   apply();
   if (mql) {
@@ -92,8 +99,9 @@
     select(MODES.indexOf(event.newValue) !== -1 ? event.newValue : "auto", false);
   });
   if (doc.readyState === "loading") {
-    doc.addEventListener("DOMContentLoaded", function () { createControl(); apply(); }, { once: true });
+    doc.addEventListener("DOMContentLoaded", function () { if (imageObserver) imageObserver.disconnect(); createControl(); apply(); }, { once: true });
   } else {
+    if (imageObserver) imageObserver.disconnect();
     createControl(); apply();
   }
   win.CASA_UI_THEME = {
