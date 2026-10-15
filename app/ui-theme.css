@@ -1,7 +1,7 @@
 /* DS-01 theme shell: approved existing palettes, scoped adaptations.
    Real imagery, finish swatches and technical drawings retain their source colors. */
 
-/* DS-01 pilot: prefer existing page-introduction metadata over a separate band. */
+/* Functional viewer: theme utility belongs to the first visible content heading. */
 .ui-theme-context-row {
   display: flex; flex-wrap: wrap; align-items: center;
   justify-content: space-between; gap: 6px 14px;
@@ -18,7 +18,7 @@
   .ui-theme-context-row .ui-theme-toggle__label-short { display: inline; }
 }
 
-/* Fallback placement retained for non-pilot public pages. */
+/* Top-of-page utility fallback for functional screens without a contextual heading. */
 .ui-theme-utility {
   display: flex; align-items: center; justify-content: flex-start;
   width: min(calc(100% - 48px), 1280px); margin: 0 auto; padding: 8px 0 0;
@@ -55,6 +55,24 @@ html[data-theme="dark"] {
 .ui-theme-toggle[data-mode="light"] .ui-theme-toggle__glyph { background: #f9f2e9; }
 .ui-theme-toggle[data-mode="dark"] .ui-theme-toggle__glyph { background: #22211f; }
 .ui-theme-toggle__label-short { display: none; }
+
+/* Presentation headers: accessible, compact secondary action; no extra row.
+   Keep the logo/nav/CTA hierarchy and 44px interactive hit area. */
+.site-header .ui-theme-toggle--header {
+  width: auto; max-width: 96px; height: 44px; min-width: 44px; min-height: 44px;
+  padding: 0 9px; gap: 6px; flex: 0 0 auto;
+  font-size: 12px; font-weight: 600;
+  border-color: transparent; background: transparent;
+}
+.site-header .ui-theme-toggle--header:hover {
+  background: var(--ui-theme-control-bg); filter: none;
+}
+.site-header .ui-theme-toggle--header .ui-theme-toggle__label-long { display: none; }
+.site-header .ui-theme-toggle--header .ui-theme-toggle__label-short { display: inline; }
+@media (max-width: 1150px) {
+  .site-header .ui-theme-toggle--header { width: 44px; padding: 0; }
+  .site-header .ui-theme-toggle--header .ui-theme-toggle__label-short { display: none; }
+}
 @media(max-width: 380px) {
   .ui-theme-toggle { padding: 7px 9px; gap: 6px; }
   .ui-theme-toggle__label-long { display: none; }
@@ -62,9 +80,8 @@ html[data-theme="dark"] {
 }
 @media(max-width: 400px) {
   .site-header .header-actions { gap: 5px; }
-  .site-header .ui-theme-toggle { font-size: 12px; padding: 6px 5px; }
+  .site-header .ui-theme-toggle--header { font-size: 12px; padding: 0; }
   .viewer-header { gap: 7px; }
-  .viewer-header .ui-theme-toggle { font-size: 12px; padding: 6px 5px; }
   .viewer-brand__logo { width: min(34vw, 124px); }
 }
 
@@ -116,18 +133,21 @@ html[data-theme="dark"] .study-topics details { border-color: var(--public-line)
 /* Pinned decorative/tutorial surfaces must preserve original drawings. */
 html[data-theme="dark"] .study-art { --study-illustration-surface: #fcf9ef; color: #22211f; }
 
-/* Public viewer: keep technical drawings stable on an intentionally white sheet. */
+/* Public viewer: light-neutral technical palette, independent from SVG geometry.
+   Technical drawing code emits semantic classes; colors belong to the CSS,
+   never a global filter or numerical reprocessing of dimensions. */
 html[data-theme="dark"] .viewer-header { background: var(--public-surface); }
 html[data-theme="dark"] .overview-highlights li,
 html[data-theme="dark"] .dimension-pill { color: var(--public-text); }
-html[data-theme="dark"] .technical-view { background: #fff; color: #514a43; border-color: #ded9d2; }
+html[data-theme="dark"] .technical-view,
 html[data-theme="dark"] .detail-row {
-  background: var(--public-surface-soft); color: var(--public-text);
-  border-color: var(--public-line);
+  background: #f0ede8; color: #514a43; border-color: #c7bba8;
 }
-html[data-theme="dark"] .technical-view h3 { color: #514a43; }
-html[data-theme="dark"] .technical-view p { color: #706c66; }
-html[data-theme="dark"] .technical-view svg { color: #403c37; }
+html[data-theme="dark"] .technical-view h3,
+html[data-theme="dark"] .detail-row { color: #403c37; }
+html[data-theme="dark"] .technical-view p { color: #514a43; }
+html[data-theme="dark"] .technical-view svg { color: #514a43; }
+html[data-theme="dark"] .technical-view svg text { color: #3f3a34; }
 html[data-theme="dark"] .technical-view--focus svg { background: #f7f5f2; }
 
 /* Internal configurator: override only authored UI surfaces, not scene materials or drawings. */

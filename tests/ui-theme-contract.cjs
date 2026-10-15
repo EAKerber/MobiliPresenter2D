@@ -29,21 +29,29 @@ assert(navCSS.includes('.site-header nav a[aria-current="page"]'), "shared activ
 for (const file of ["app/index.html", "app/about/index.html", "app/how-it-works/index.html"]) {
   assert(read(file).includes('aria-current="page"'), file + " active route announced");
 }
-assert(code.includes("ui-theme-utility") && code.includes("header.parentNode.insertBefore(utility, header.nextSibling)"),
-  "non-pilot pages retain the header-adjacent fallback");
-assert(code.includes('.environment-feature:not([hidden]) .feature-copy > .eyebrow') &&
-  code.includes('.viewer-heading > .eyebrow'), "contextual control targets landing and viewer only");
+assert(code.includes('.site-header .header-actions') &&
+  code.includes('presentationActions.insertBefore(button, presentationActions.querySelector(".menu-toggle") || null)'),
+  "presentation pages mount compact theme control inside their sticky header");
+assert(code.includes('.viewer-heading > .eyebrow') &&
+  !code.includes('.environment-feature:not([hidden])'), "only viewer uses contextual first-screen introduction");
 assert(code.includes('contextRow.appendChild(contextEyebrow)') &&
-  code.includes('contextRow.appendChild(button)'), "eyebrow and toggle share a contextual row");
+  code.includes('contextRow.appendChild(button)'), "viewer eyebrow and toggle share a contextual row");
+assert(code.includes("ui-theme-utility") && code.includes("header.parentNode.insertBefore(utility, header.nextSibling)"),
+  "remaining functional fallback remains at top of page");
 assert(themeCSS.includes('.ui-theme-context-row > .ui-theme-toggle') &&
   themeCSS.includes('min-height: 44px; min-width: 44px;'),
   "contextual control keeps the required 44px touch target");
 assert(themeCSS.includes('.ui-theme-context-row .ui-theme-toggle__label-short'),
   "small-screen layout preserves a textual mode label");
-assert(themeCSS.includes(".ui-theme-utility--viewer"), "viewer utility aligned to viewer shell");
-assert(themeCSS.includes('html[data-theme="dark"] .detail-row {'), "viewer detail rows follow dark theme");
-assert(themeCSS.includes('html[data-theme="dark"] .technical-view { background: #fff;'),
-  "technical drawings remain on a stable light sheet");
+assert(themeCSS.includes(".site-header .ui-theme-toggle--header") &&
+  themeCSS.includes("@media (max-width: 1150px)"),
+  "header theme control is compact across desktop/mobile");
+assert(themeCSS.includes('html[data-theme="dark"] .technical-view,') &&
+  themeCSS.includes('html[data-theme="dark"] .detail-row {') &&
+  themeCSS.includes('background: #f0ede8;'),
+  "technical views and detail cards share light-neutral surface in dark mode");
+assert(themeCSS.includes('.technical-view svg text { color: #3f3a34; }'),
+  "technical SVG labels use an intentional readable neutral color");
 const landing = read("app/index.html");
 assert(landing.includes('id="introSplash"') && landing.includes('logo-light-splash-1548.png'));
 assert(landing.includes('id="environmentTrack"'));

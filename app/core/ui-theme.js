@@ -58,12 +58,13 @@
   }
   function createControl() {
     if (doc.querySelector("[data-ui-theme-toggle]")) return;
-    // Prefer page content for the two approved pilot pages.
-    // On landing, only mount in the displayed environment feature; otherwise
-    // preserve the existing header-adjacent control as a safe fallback.
-    var contextEyebrow = doc.querySelector(".environment-feature:not([hidden]) .feature-copy > .eyebrow, .viewer-heading > .eyebrow");
-    var header = contextEyebrow ? null : doc.querySelector(".site-header, .viewer-header, .topbar__actions, .admin-topbar__actions, .access-page > header, body > header");
-    if (!contextEyebrow && !header) return;
+    // Presentation pages: compact control is always visible in the sticky header.
+    // Functional viewer: contextual control at page entrance, without a sticky header.
+    var presentationActions = doc.querySelector(".site-header .header-actions");
+    var contextEyebrow = presentationActions ? null : doc.querySelector(".viewer-heading > .eyebrow");
+    var header = presentationActions || contextEyebrow ? null :
+      doc.querySelector(".viewer-header, .topbar__actions, .admin-topbar__actions, .access-page > header, body > header");
+    if (!presentationActions && !contextEyebrow && !header) return;
     var button = doc.createElement("button");
     button.type = "button";
     button.className = "ui-theme-toggle";
@@ -72,8 +73,11 @@
       '<span class="ui-theme-toggle__label-long"></span>' +
       '<span class="ui-theme-toggle__label-short"></span>';
     button.addEventListener("click", function () { select(nextMode(), true); });
-    if (contextEyebrow) {
-      // Reuse the existing eyebrow rather than adding a new UI band.
+    if (presentationActions) {
+      button.classList.add("ui-theme-toggle--header");
+      presentationActions.insertBefore(button, presentationActions.querySelector(".menu-toggle") || null);
+    } else if (contextEyebrow) {
+      // Reuse the viewer introduction eyebrow; visible without scrolling.
       var contextRow = doc.createElement("div");
       contextRow.className = "ui-theme-context-row";
       contextEyebrow.parentNode.insertBefore(contextRow, contextEyebrow);
