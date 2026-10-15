@@ -1,0 +1,171 @@
+/* DS-01 theme shell: approved existing palettes, scoped adaptations.
+   Real imagery, finish swatches and technical drawings retain their source colors. */
+html[data-theme="light"] {
+  --ui-theme-focus: #6e512e;
+  --ui-theme-control-bg: #f0ede8;
+  --ui-theme-control-border: #c7b7a2;
+}
+html[data-theme="dark"] {
+  --ui-theme-focus: #d8bc7c;
+  --ui-theme-control-bg: #20211f;
+  --ui-theme-control-border: #7b766c;
+}
+.ui-theme-toggle {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  min-height: 40px; min-width: 40px; padding: 7px 10px;
+  border: 1px solid var(--ui-theme-control-border); border-radius: 9px;
+  background: var(--ui-theme-control-bg); color: inherit;
+  font: inherit; font-size: 14px; font-weight: 650; line-height: 1.2;
+  cursor: pointer; white-space: nowrap; flex: 0 0 auto;
+}
+.ui-theme-toggle:hover { filter: brightness(.96); }
+.ui-theme-toggle:focus-visible { outline: 3px solid var(--ui-theme-focus); outline-offset: 2px; }
+.ui-theme-toggle__glyph {
+  width: 18px; height: 18px; flex: 0 0 18px; border: 1.5px solid currentColor; border-radius: 50%;
+  background: linear-gradient(90deg, #f9f2e9 50%, #22211f 50%);
+}
+.ui-theme-toggle[data-mode="light"] .ui-theme-toggle__glyph { background: #f9f2e9; }
+.ui-theme-toggle[data-mode="dark"] .ui-theme-toggle__glyph { background: #22211f; }
+.ui-theme-toggle__label-short { display: none; }
+@media(max-width: 760px) {
+  .ui-theme-toggle { padding: 7px; gap: 6px; min-height: 38px; }
+  .ui-theme-toggle__label-long { display: none; }
+  .ui-theme-toggle__label-short { display: inline; }
+}
+@media(max-width: 400px) {
+  .site-header .header-actions { gap: 5px; }
+  .site-header .ui-theme-toggle { font-size: 12px; padding: 6px 5px; }
+  .viewer-header { gap: 7px; }
+  .viewer-header .ui-theme-toggle { font-size: 12px; padding: 6px 5px; }
+  .viewer-brand__logo { width: min(34vw, 124px); }
+}
+
+/* Public pages: semantic palette rather than route-based theme assumptions. */
+html[data-theme="dark"] {
+  --public-bg: #111210;
+  --public-surface: #1b1c1a;
+  --public-surface-soft: #20211f;
+  --public-text: #f4f1eb;
+  --public-muted: #c4bcb2;
+  --public-line: #4a4843;
+  --public-accent: #d8bc7c;
+  --public-accent-dark: #e2c991;
+  --public-accent-highlight: #d8bc7c;
+  --public-shadow: 0 18px 48px rgb(0 0 0 / 16%);
+}
+html[data-theme="dark"] .site-header { background: rgb(27 28 26 / 94%); border-bottom-color: var(--public-line); }
+html[data-theme="dark"] .menu-open .site-header nav { background: rgb(27 28 26 / 98%); }
+html[data-theme="dark"] .hero { background: var(--public-surface-soft); }
+html[data-theme="dark"] .story-section { background: var(--public-surface-soft); }
+html[data-theme="dark"] .button-dark { background: #6e512e; color: #f9f2e9; }
+html[data-theme="dark"] .button-dark:hover { background: #8b6a40; }
+html[data-theme="dark"] .header-cta,
+html[data-theme="dark"] .button-primary,
+html[data-theme="dark"] .button-copper { background: #8b6a40; color: #ffffff; }
+html[data-theme="dark"] .header-cta:hover,
+html[data-theme="dark"] .button-primary:hover,
+html[data-theme="dark"] .button-copper:hover { background: #6e512e; color: #fff; }
+html[data-theme="light"] :focus-visible { outline-color: #6e512e; }
+html[data-theme="dark"] :focus-visible { outline-color: #d8bc7c; }
+
+/* Public how-it-works: reverse interface surfaces, not editorial graphics. */
+html[data-theme="dark"] .study-band,
+html[data-theme="dark"] .production-panel,
+html[data-theme="dark"] .quality-copy,
+html[data-theme="dark"] .process-section { background: var(--public-surface-soft); }
+html[data-theme="dark"] .module-card,
+html[data-theme="dark"] .foundation-item,
+html[data-theme="dark"] .study-topics details { background: var(--public-surface); }
+html[data-theme="dark"] .study-copy > p:not(.eyebrow),
+html[data-theme="dark"] .production-intro > p:last-child,
+html[data-theme="dark"] .quality-lead,
+html[data-theme="dark"] .study-topics details > p { color: var(--public-muted); }
+html[data-theme="dark"] .comparison-marker-featured,
+html[data-theme="dark"] .foundation-number,
+html[data-theme="dark"] .process-flow li > span,
+html[data-theme="dark"] .stage-number { color: #22211f; }
+html[data-theme="dark"] .study-topics details { border-color: var(--public-line); }
+/* Pinned decorative/tutorial surfaces must preserve original drawings. */
+html[data-theme="dark"] .study-art { --study-illustration-surface: #fcf9ef; color: #22211f; }
+
+/* Public viewer: keep technical drawings stable on an intentionally white sheet. */
+html[data-theme="dark"] .viewer-header { background: var(--public-surface); }
+html[data-theme="dark"] .overview-highlights li,
+html[data-theme="dark"] .dimension-pill { color: var(--public-text); }
+html[data-theme="dark"] .technical-view,
+html[data-theme="dark"] .detail-row { background: #fff; color: #514a43; border-color: #ded9d2; }
+html[data-theme="dark"] .technical-view h3 { color: #514a43; }
+html[data-theme="dark"] .technical-view p { color: #706c66; }
+html[data-theme="dark"] .technical-view svg { color: #403c37; }
+html[data-theme="dark"] .technical-view--focus svg { background: #f7f5f2; }
+
+/* Internal configurator: override only authored UI surfaces, not scene materials or drawings. */
+html[data-theme="light"] {
+  --background: #f7f5f2;
+  --surface: #ffffff;
+  --surface-raised: #f0ede8;
+  --text: #22211f;
+  --muted: #706c66;
+  --border: rgb(34 33 31 / 16%);
+  --accent: #8b6a40;
+  --accent-strong: #6e512e;
+}
+html[data-theme="light"] .topbar,
+html[data-theme="light"] .flow-nav { background: #ffffff; }
+html[data-theme="light"] .flow-nav { border-color: var(--border); }
+html[data-theme="light"] .button--secondary { background: rgb(34 33 31 / 5%); border-color: var(--border); }
+html[data-theme="light"] .button--secondary:hover { background: rgb(34 33 31 / 9%); }
+html[data-theme="light"] .module-card,
+html[data-theme="light"] .global-option,
+html[data-theme="light"] .handle-option,
+html[data-theme="light"] .summary-list li { background: rgb(34 33 31 / 3%); }
+html[data-theme="light"] .module-card:hover,
+html[data-theme="light"] .global-option:hover,
+html[data-theme="light"] .handle-option:hover { background: rgb(34 33 31 / 7%); }
+html[data-theme="light"] .module-card__inspect:hover { background: rgb(34 33 31 / 7%); }
+html[data-theme="light"] .flow-step.is-active,
+html[data-theme="light"] .module-card.is-selected,
+html[data-theme="light"] .global-option.is-selected,
+html[data-theme="light"] .handle-option.is-selected { background: rgb(139 106 64 / 10%); }
+html[data-theme="light"] .module-detail__price { background: #28241f; color: #f6f2e9; }
+/* Keep the technical module-detail views on their validated pale canvas. */
+
+/* Internal administration: scoped light UI equivalents. The auth API remains untouched. */
+html[data-theme="light"] {
+  --bg: #f7f5f2;
+  --raised: #f0ede8;
+}
+html[data-theme="light"] .admin-topbar,
+html[data-theme="light"] .stage-unassigned { background: #f0ede8; }
+html[data-theme="light"] .admin-form label,
+html[data-theme="light"] .stage-name,
+html[data-theme="light"] .admin-field > label,
+html[data-theme="light"] .data-field { color: #22211f; }
+html[data-theme="light"] input[type=email],
+html[data-theme="light"] input[type=password],
+html[data-theme="light"] input[type=text],
+html[data-theme="light"] input[type=number],
+html[data-theme="light"] select,
+html[data-theme="light"] textarea { background: #ffffff; color: var(--text); border-color: var(--border); }
+html[data-theme="light"] .button--primary { background: #8b6a40; color: #ffffff; }
+html[data-theme="light"] .button--secondary { background: rgb(34 33 31 / 5%); }
+html[data-theme="light"] .stage-pool-item { color: var(--text); border-color: var(--border); background: var(--surface-raised); }
+html[data-theme="light"] .hierarchy-section,
+html[data-theme="light"] .hierarchy-choice-options,
+html[data-theme="light"] .material-targets,
+html[data-theme="light"] .multi-picker,
+html[data-theme="light"] .material-availability-list { background: #f0ede8; border-color: var(--border); }
+html[data-theme="light"] .hierarchy-item { background: rgb(34 33 31 / 3%); border-color: var(--border); }
+html[data-theme="light"] .admin-topbar__actions { flex-wrap: wrap; justify-content: flex-end; }
+html[data-theme="light"] .text-button { color: #6e512e; }
+html[data-theme="light"] code { background: #f0ede8; color: #22211f; }
+@media(max-width: 650px) {
+  .admin-topbar { flex-wrap: wrap; }
+  .admin-topbar__actions { flex-wrap: wrap; justify-content: flex-end; }
+}
+
+/* Access management page has scoped inline CSS; adapt only its explicit white control. */
+html[data-theme="dark"] .access-page > header .access-brand-logo { width: 160px; }
+html[data-theme="dark"] .access-page .panel { background: var(--public-surface); }
+html[data-theme="dark"] .access-page button.secondary { background: var(--public-surface-soft); color: var(--public-text); }
+html[data-theme="dark"] .access-page input { background: var(--public-surface); color: var(--public-text); }
