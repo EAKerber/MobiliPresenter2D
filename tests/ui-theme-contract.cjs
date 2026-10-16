@@ -55,6 +55,26 @@ assert(themeCSS.includes('.technical-view svg text { color: #3f3a34; }'),
 const landing = read("app/index.html");
 assert(landing.includes('id="introSplash"') && landing.includes('logo-light-splash-1548.png'));
 assert(landing.includes('id="environmentTrack"'));
+assert(landing.includes('class="environment-art environment-art--feature"') &&
+  landing.includes('id="featureImage"'), "feature composition retains the accessible interior image");
+const sceneJS = read("app/landing/landing.js");
+assert(sceneJS.includes('art.className = "environment-art"') &&
+  sceneJS.includes('card.append(art, title, copy)'), "card composition shares the same wrapper");
+assert(navCSS.includes(".environment-art::after") &&
+  navCSS.includes('html[data-theme="dark"] .environment-art::after'), "frame is theme-dependent in CSS");
+assert(!navCSS.includes('canvas('), "no runtime canvas or scene assets");
+const names = ["cozinha", "sala", "quarto", "escritorio", "lavanderia"];
+for (const name of names) for (const dimension of ["large", "small"]) {
+  const file = "app/landing/assets/icons/" + dimension + "/" + name + ".webp";
+  const bytes = fs.readFileSync(path.join(root, file));
+  assert.equal(bytes.toString("ascii", 0, 4), "RIFF", "webp RIFF signature: " + file);
+  assert.equal(bytes.toString("ascii", 8, 12), "WEBP", "webp format signature: " + file);
+}
+for (const theme of ["light", "dark"]) {
+  const svg = read("app/landing/assets/icons/frame-" + theme + ".svg");
+  assert(svg.includes('viewBox="0 0 900 738"') && svg.includes('#AE5B09'),
+    "approved SVG frame geometry and brand color: " + theme);
+}
 assert(read("app/about/index.html").includes('aria-controls="primaryNav"'));
 assert(read("app/about/index.html").includes('header-menu.js'));
 assert(read("app/admin.html").includes('id="loginForm"'));

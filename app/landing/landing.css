@@ -75,7 +75,13 @@
 .environment-track { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); align-items: start; gap: 18px; }
 .environment { display: flex; min-width: 0; flex-direction: column; align-items: center; padding: 4px 5px 10px; border: 0; background: transparent; text-align: center; cursor: pointer; transform: scale(.96); transition: transform .22s ease, opacity .18s ease; }
 .environment:hover, .environment.is-selected { transform: translateY(-4px) scale(1); }
-.environment-art { display: block; width: 100%; aspect-ratio: 1.22; object-fit: contain; filter: drop-shadow(0 8px 14px rgb(0 0 0 / 8%)); pointer-events: none; }
+/* DS-03: two-file runtime composition: transparent interior + shared SVG frame.
+   Frames are identical for every room; the resolved theme selects only one.
+   No canvas or masks from the functional 3D scene are used here. */
+.environment-art { display: block; position: relative; width: 100%; aspect-ratio: 900 / 738; filter: drop-shadow(0 8px 14px rgb(0 0 0 / 8%)); pointer-events: none; }
+.environment-art > .environment-interior, .environment-art > #featureImage { display: block; width: 100%; height: 100%; object-fit: contain; }
+.environment-art::after { content: ""; position: absolute; inset: 0; background: url("/landing/assets/icons/frame-light.svg") center / contain no-repeat; pointer-events: none; }
+html[data-theme="dark"] .environment-art::after { background-image: url("/landing/assets/icons/frame-dark.svg"); }
 .environment strong { margin-top: 4px; font-size: .8rem; letter-spacing: .04em; text-transform: uppercase; }
 .environment span { max-width: 190px; margin-top: 7px; color: var(--public-muted); font-size: .7rem; line-height: 1.35; }
 .environment.is-selected strong { color: var(--public-accent); }
@@ -94,7 +100,7 @@
 .environment-feature[hidden] { display: none; }
 .environment-feature.is-changing { opacity: .35; transform: translateY(4px); }
 .feature-art { display: grid; min-height: 290px; place-items: center; }
-.feature-art img { width: min(100%, 500px); max-height: 370px; object-fit: contain; filter: drop-shadow(0 14px 20px rgb(0 0 0 / 9%)); }
+.feature-art .environment-art { width: min(100%, 450px); max-height: 370px; filter: drop-shadow(0 14px 20px rgb(0 0 0 / 9%)); }
 .feature-copy h3 { margin: 0 0 12px; font-size: clamp(2.5rem, 5vw, 4.4rem); line-height: .95; letter-spacing: -.06em; }
 .feature-copy > p:not(.eyebrow) { max-width: 500px; margin: 0 0 23px; color: var(--public-muted); font-size: 1.08rem; line-height: 1.5; }
 .feature-copy .button[hidden] { display: none; }

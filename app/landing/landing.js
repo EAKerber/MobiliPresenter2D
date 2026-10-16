@@ -77,10 +77,15 @@
       card.type = "button"; card.className = "environment";
       card.dataset.environmentId = environment.id;
       card.setAttribute("aria-pressed", "false");
-      const image = document.createElement("img"); image.className = "environment-art"; image.src = environment.image; image.alt = ""; image.loading = "lazy";
+      const art = document.createElement("div"); art.className = "environment-art";
+      const image = document.createElement("img");
+      image.className = "environment-interior"; image.src = environment.image;
+      image.alt = ""; image.width = 300; image.height = 246;
+      image.loading = "lazy"; image.decoding = "async";
+      art.append(image);
       const title = document.createElement("strong"); title.textContent = environment.name;
       const copy = document.createElement("span"); copy.textContent = environment.description;
-      card.append(image, title, copy);
+      card.append(art, title, copy);
       card.addEventListener("click", () => select(environment, true));
       card.addEventListener("animationend", (event) => { if (event.animationName === "card-wave") card.classList.remove("wave"); });
       track.append(card);
