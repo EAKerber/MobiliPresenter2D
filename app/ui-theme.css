@@ -130,6 +130,15 @@ html[data-theme="dark"] .foundation-number,
 html[data-theme="dark"] .process-flow li > span,
 html[data-theme="dark"] .stage-number { color: #22211f; }
 html[data-theme="dark"] .study-topics details { border-color: var(--public-line); }
+/* Integration callout is interface content, not a pinned editorial sheet.
+   Keep the original illustration file; use semantic dark surfaces and readable text. */
+html[data-theme="dark"] .integration-callout {
+  background: var(--public-surface-soft);
+  border-color: var(--public-line);
+}
+html[data-theme="dark"] .integration-callout p { color: var(--public-muted); }
+html[data-theme="dark"] .integration-callout strong { color: var(--public-text); }
+html[data-theme="dark"] .integration-callout img { mix-blend-mode: normal; }
 /* Pinned decorative/tutorial surfaces must preserve original drawings. */
 html[data-theme="dark"] .study-art { --study-illustration-surface: #fcf9ef; color: #22211f; }
 

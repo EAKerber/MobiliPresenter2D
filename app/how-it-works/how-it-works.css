@@ -167,9 +167,6 @@
   .launch-copy { padding: 12px 14px; }
   .launch-copy p { font-size: .7rem; }
   .how-page .site-header { grid-template-columns: minmax(0, 1fr) auto; }
-  .how-page .header-cta { width: 40px; height: 40px; justify-content: center; padding: 0; }
-  .how-page .header-cta span:first-child { display: none; }
-  .how-page .header-cta span:last-child { display: inline; font-size: 1.1rem; }
   .how-hero { grid-template-columns: 1fr; min-height: auto; }
   .how-hero-copy { padding: 38px 22px 30px; }
   .how-hero-copy h1 { max-width: 530px; font-size: clamp(3.4rem, 13vw, 5rem); }

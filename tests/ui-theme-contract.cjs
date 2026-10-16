@@ -46,12 +46,11 @@ assert(themeCSS.includes('.ui-theme-context-row .ui-theme-toggle__label-short'),
 assert(themeCSS.includes(".site-header .ui-theme-toggle--header") &&
   themeCSS.includes("@media (max-width: 1150px)"),
   "header theme control is compact across desktop/mobile");
-assert(themeCSS.includes('html[data-theme="dark"] .technical-view,') &&
-  themeCSS.includes('html[data-theme="dark"] .detail-row {') &&
-  themeCSS.includes('background: #f0ede8;'),
-  "technical views and detail cards share light-neutral surface in dark mode");
-assert(themeCSS.includes('.technical-view svg text { color: #3f3a34; }'),
-  "technical SVG labels use an intentional readable neutral color");
+// DS-01 #206: homologated variant A is dark-sheet + light geometry.
+assert(themeCSS.includes('html[data-theme="dark"] .technical-view {') &&
+  themeCSS.includes('background: #252622;') &&
+  themeCSS.includes('stroke: #ddd5c9;'),
+  "approved technical variant A is the default dark palette");
 // DS-01 #205-#206: palette only, technical geometry and labels unchanged.
 assert(themeCSS.includes('html[data-theme="dark"] .detail-row {') &&
   themeCSS.includes('background: var(--public-surface-soft);'), "dark detail cards use shell tokens");
@@ -62,6 +61,26 @@ assert(themeCSS.includes('html[data-theme="dark"][data-technical-palette="neutra
   "previous marfim palette available for A/B");
 assert(read("app/viewer/viewer.js").includes('search.get("technical") === "neutral"'),
   "query override does not modify technical drawing generator");
+// Public presentation header and comparison align with already approved brand assets.
+const how = read("app/how-it-works/index.html");
+const about = read("app/about/index.html");
+const howStyles = read("app/how-it-works/how-it-works.css");
+assert(how.includes('class="header-cta" href="https://wa.me/"') &&
+  how.includes('Fale conosco pelo WhatsApp') &&
+  how.includes('src="/landing/assets/icons/ui/white/whatsapp.svg"'),
+  "how-it-works contact CTA matches the shared public header");
+assert(about.includes('href="https://wa.me/"'), "contact target matches existing public pages");
+assert(!howStyles.includes('.how-page .header-cta span:first-child { display: none; }'),
+  "how-it-works no longer replaces the WhatsApp contact icon with a bare arrow on mobile");
+assert(how.includes('class="comparison-brand-logo" data-brand-variant') &&
+  how.includes('data-src-light="/branding/logo-light-380.png"') &&
+  how.includes('data-src-dark="/branding/logo-dark-380.png"') &&
+  !how.includes('src="assets/comparacao-casa-em-modulos.svg"'),
+  "comparison uses complete approved logos for both modes");
+assert(themeCSS.includes('html[data-theme="dark"] .integration-callout {') &&
+  themeCSS.includes('html[data-theme="dark"] .integration-callout p { color: var(--public-muted); }') &&
+  themeCSS.includes('html[data-theme="dark"] .integration-callout img { mix-blend-mode: normal; }'),
+  "dark integration card uses theme tokens without editing its image");
 const landing = read("app/index.html");
 assert(landing.includes('id="introSplash"') && landing.includes('logo-light-splash-1548.png'));
 assert(landing.includes('id="environmentTrack"'));
