@@ -65,6 +65,10 @@ assert(read("app/viewer/viewer.js").includes('search.get("technical") === "neutr
 const how = read("app/how-it-works/index.html");
 const about = read("app/about/index.html");
 const howStyles = read("app/how-it-works/how-it-works.css");
+assert(howStyles.includes('.integration-callout img { display: block; width: min(100%, 320px); height: auto;') &&
+  howStyles.includes('aspect-ratio: 2 / 1; object-fit: contain; border-radius: 10px;') &&
+  howStyles.includes('.integration-callout img { width: min(100%, 250px); max-height: 125px; }'),
+  "integration illustration box follows 900x450 original at both breakpoints so rounded corners clip the visible white rectangle");
 assert(how.includes('class="header-cta" href="https://wa.me/"') &&
   how.includes('Fale conosco pelo WhatsApp') &&
   how.includes('src="/landing/assets/icons/ui/white/whatsapp.svg"'),
