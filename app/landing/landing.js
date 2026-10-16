@@ -6,13 +6,17 @@
   const controls = document.getElementById("carouselControls");
   const pagination = document.getElementById("pagination");
   const feature = document.getElementById("environmentFeature");
-  const featureImage = document.getElementById("featureImage");
+  let featureImage = document.getElementById("featureImage");
   const featureTitle = document.getElementById("featureTitle");
   const featureDescription = document.getElementById("featureDescription");
   const featureAction = document.getElementById("featureAction");
+  const featureAvailability = document.getElementById("featureAvailability");
+  const featureImageFallback = document.getElementById("featureImageFallback");
   const menuToggle = document.getElementById("menuToggle");
   const primaryNav = document.getElementById("primaryNav");
   let selectedId = "cozinha";
+  let selectionVersion = 0;
+  const featureImageCache = new Map();
   let page = 0;
   let hintTimer;
   let hintStopped = false;
@@ -37,40 +41,83 @@
     });
   }
 
+  // Load and decode the next WebP before switching its text and destination.
+  // A monotonically increasing token prevents slower requests replacing newer ones.
+  function preparedFeatureImage(src) {
+    if (featureImageCache.has(src)) return featureImageCache.get(src);
+    const image = new Image(900, 738);
+    image.decoding = "async";
+    image.id = "featureImage";
+    const pending = new Promise((resolve, reject) => {
+      image.onload = () => {
+        const decoded = typeof image.decode === "function" ? image.decode() : Promise.resolve();
+        decoded.then(() => resolve(image), () => resolve(image));
+      };
+      image.onerror = () => reject(new Error("Imagem indisponível"));
+      image.src = src;
+    }).catch((error) => {
+      featureImageCache.delete(src);
+      throw error;
+    });
+    featureImageCache.set(src, pending);
+    return pending;
+  }
+
   function select(environment, userInitiated = false) {
+    const version = ++selectionVersion;
     selectedId = environment.id;
     track.querySelectorAll(".environment").forEach((card) => {
       const active = card.dataset.environmentId === selectedId;
       card.classList.toggle("is-selected", active);
       card.setAttribute("aria-pressed", String(active));
     });
-    feature.hidden = false;
     feature.classList.add("is-changing");
-    window.setTimeout(() => {
-      featureImage.src = environment.featureImage;
-      featureImage.alt = environment.alt;
+    feature.setAttribute("aria-busy", "true");
+
+    function commit(image, failed) {
+      if (version !== selectionVersion) return;
+      if (image) {
+        image.alt = environment.alt;
+        if (image !== featureImage) featureImage.replaceWith(image);
+        featureImage = image;
+        featureImage.hidden = false;
+      } else {
+        featureImage.hidden = true;
+      }
+      featureImageFallback.hidden = !failed;
+      feature.classList.toggle("has-image-error", failed);
       featureTitle.textContent = environment.name;
       featureDescription.textContent = environment.description;
-      featureAction.hidden = !environment.destination;
-      if (environment.destination) {
+      const available = Boolean(environment.destination);
+      featureAction.hidden = !available;
+      featureAvailability.hidden = available;
+      if (available) {
         featureAction.href = environment.destination;
         featureAction.firstChild.textContent = `${environment.action} `;
+      } else {
+        featureAction.removeAttribute("href");
       }
+      feature.hidden = false;
       feature.classList.remove("is-changing");
-      if (userInitiated && environment.destination) {
+      feature.removeAttribute("aria-busy");
+      if (userInitiated) {
         window.requestAnimationFrame(() => {
-          featureAction.scrollIntoView({
+          if (version !== selectionVersion) return;
+          (available ? featureAction : featureAvailability).scrollIntoView({
             behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth",
             block: "center",
             inline: "nearest"
           });
         });
       }
-    }, 120);
+    }
+    preparedFeatureImage(environment.featureImage).then(
+      (image) => commit(image, false),
+      () => commit(null, true)
+    );
     revealCard(environment.id);
     if (userInitiated) stopHint();
   }
-
   function renderCards() {
     data.environments.forEach((environment, index) => {
       const card = document.createElement("button");

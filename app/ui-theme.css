@@ -133,22 +133,48 @@ html[data-theme="dark"] .study-topics details { border-color: var(--public-line)
 /* Pinned decorative/tutorial surfaces must preserve original drawings. */
 html[data-theme="dark"] .study-art { --study-illustration-surface: #fcf9ef; color: #22211f; }
 
-/* Public viewer: light-neutral technical palette, independent from SVG geometry.
-   Technical drawing code emits semantic classes; colors belong to the CSS,
-   never a global filter or numerical reprocessing of dimensions. */
+/* DS-01 #205: information cards are UI surfaces, not technical sheets.
+   DS-01 #206: SVG dimensions remain unchanged; dark palette via classes only. */
 html[data-theme="dark"] .viewer-header { background: var(--public-surface); }
 html[data-theme="dark"] .overview-highlights li,
 html[data-theme="dark"] .dimension-pill { color: var(--public-text); }
-html[data-theme="dark"] .technical-view,
 html[data-theme="dark"] .detail-row {
-  background: #f0ede8; color: #514a43; border-color: #c7bba8;
+  background: var(--public-surface-soft);
+  color: var(--public-text);
+  border-color: var(--public-line);
 }
-html[data-theme="dark"] .technical-view h3,
-html[data-theme="dark"] .detail-row { color: #403c37; }
-html[data-theme="dark"] .technical-view p { color: #514a43; }
-html[data-theme="dark"] .technical-view svg { color: #514a43; }
-html[data-theme="dark"] .technical-view svg text { color: #3f3a34; }
+html[data-theme="dark"] .detail-row img { border-radius: 3px; }
+html[data-theme="dark"] .technical-view {
+  background: #252622;
+  color: #f9f2e9;
+  border-color: #69655e;
+}
+html[data-theme="dark"] .technical-view h3 { color: #f9f2e9; }
+html[data-theme="dark"] .technical-view p { color: #d7cec2; }
+html[data-theme="dark"] .technical-view svg { color: #ddd5c9; }
+html[data-theme="dark"] .technical-view svg text { color: #f9f2e9; fill: currentColor; }
+html[data-theme="dark"] .technical-view svg .module-detail__view-shape {
+  fill: rgb(174 91 9 / 10%);
+  stroke: #ddd5c9;
+}
+html[data-theme="dark"] .technical-view svg .module-detail__dimension-line { stroke: #ddd5c9; }
+/* The focus crop embeds original scene photography, not geometry; do not recolor. */
 html[data-theme="dark"] .technical-view--focus svg { background: #f7f5f2; }
+/* Dark-mode A/B: ?technical=neutral keeps the previous light-neutral sheet. */
+html[data-theme="dark"][data-technical-palette="neutral"] .technical-view {
+  background: #f0ede8;
+  color: #403c37;
+  border-color: #c7bba8;
+}
+html[data-theme="dark"][data-technical-palette="neutral"] .technical-view h3 { color: #403c37; }
+html[data-theme="dark"][data-technical-palette="neutral"] .technical-view p { color: #514a43; }
+html[data-theme="dark"][data-technical-palette="neutral"] .technical-view svg { color: #514a43; }
+html[data-theme="dark"][data-technical-palette="neutral"] .technical-view svg text { color: #3f3a34; fill: currentColor; }
+html[data-theme="dark"][data-technical-palette="neutral"] .technical-view svg .module-detail__view-shape {
+  fill: rgb(139 106 64 / 8%);
+  stroke: #514a43;
+}
+html[data-theme="dark"][data-technical-palette="neutral"] .technical-view svg .module-detail__dimension-line { stroke: #514a43; }
 
 /* Internal configurator: override only authored UI surfaces, not scene materials or drawings. */
 html[data-theme="light"] {

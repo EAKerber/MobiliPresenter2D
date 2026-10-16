@@ -52,9 +52,38 @@ assert(themeCSS.includes('html[data-theme="dark"] .technical-view,') &&
   "technical views and detail cards share light-neutral surface in dark mode");
 assert(themeCSS.includes('.technical-view svg text { color: #3f3a34; }'),
   "technical SVG labels use an intentional readable neutral color");
+// DS-01 #205-#206: palette only, technical geometry and labels unchanged.
+assert(themeCSS.includes('html[data-theme="dark"] .detail-row {') &&
+  themeCSS.includes('background: var(--public-surface-soft);'), "dark detail cards use shell tokens");
+assert(themeCSS.includes('html[data-theme="dark"] .technical-view {') &&
+  themeCSS.includes('background: #252622;') && themeCSS.includes('stroke: #ddd5c9;'),
+  "dark technical sheets use light strokes");
+assert(themeCSS.includes('html[data-theme="dark"][data-technical-palette="neutral"] .technical-view {'),
+  "previous marfim palette available for A/B");
+assert(read("app/viewer/viewer.js").includes('search.get("technical") === "neutral"'),
+  "query override does not modify technical drawing generator");
 const landing = read("app/index.html");
 assert(landing.includes('id="introSplash"') && landing.includes('logo-light-splash-1548.png'));
 assert(landing.includes('id="environmentTrack"'));
+assert(landing.includes('id="featureAvailability"') &&
+  landing.includes("Visualização em breve") && landing.includes('id="featureImageFallback"'),
+  "coming-soon and fallback present");
+const landingJS = read("app/landing/landing.js");
+const landingData = read("app/landing/data.js");
+const landingSandbox = { window: {} };
+vm.runInNewContext(landingData, landingSandbox);
+assert.deepEqual(Array.from(landingSandbox.window.CASA_PUBLIC_LANDING.environments)
+  .filter((environment) => Boolean(environment.destination)).map((environment) => environment.id),
+  ["cozinha"], "only kitchen has an actual viewer destination");
+assert(landingJS.includes("const version = ++selectionVersion") &&
+  landingJS.includes("if (version !== selectionVersion) return") &&
+  landingJS.includes("preparedFeatureImage(environment.featureImage)"),
+  "decoded image required before updates; stale clicks ignored");
+assert(landingJS.includes("featureImage.replaceWith(image)") &&
+  landingJS.includes("featureAvailability.hidden = available") &&
+  landingJS.includes("featureAction.hidden = !available"), "atomic availability and image switch");
+assert(navCSS.includes(".feature-copy > p.feature-availability[hidden]") &&
+  navCSS.includes(".feature-art #featureImage[hidden]"), "hidden state respects higher specificity");
 assert(landing.includes('class="environment-art environment-art--feature"') &&
   landing.includes('id="featureImage"'), "feature composition retains the accessible interior image");
 const sceneJS = read("app/landing/landing.js");

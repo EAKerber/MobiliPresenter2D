@@ -3,7 +3,12 @@
   const data = window.CASA_PUBLIC_VIEWER;
   const root = document.getElementById("viewerLayout");
   const renderers = new Map();
-  const requestedModuleId = new URLSearchParams(window.location.search).get("module");
+  const search = new URLSearchParams(window.location.search);
+  const requestedModuleId = search.get("module");
+  // Temporary A/B inspection of technical colors; no drawing data changes.
+  if (search.get("technical") === "neutral") {
+    document.documentElement.dataset.technicalPalette = "neutral";
+  }
   const integration = window.CASA_PUBLIC_VIEWER_INTEGRATION || {};
   // Deep links override initial selection; otherwise the adapter derives it from visible data.
   function start(publicData = null) {
