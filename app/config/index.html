@@ -1,6 +1,12 @@
 <!doctype html>
 <html lang="pt-BR">
   <head>
+<script src="/core/ui-theme.js?v=ds01-theme-v1"></script>
+<link rel="icon" type="image/x-icon" href="/branding/favicon.ico">
+<link rel="icon" type="image/png" sizes="32x32" href="/branding/favicon-32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="/branding/android-chrome-192.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/branding/apple-touch-icon.png">
+
     <meta charset="UTF-8" />
     <!-- Shared configurator assets stay rooted at /. Netlify gate protects this route. -->
     <base href="/" />
@@ -32,14 +38,15 @@
         opacity: .58;
       }
     </style>
-  </head>
+  <link rel="stylesheet" href="/ui-theme.css?v=ds01-theme-v1">
+</head>
   <body>
     <header class="topbar">
       <div class="topbar__inner">
         <div class="brand">
-          <span class="brand__mark" aria-hidden="true">▱</span>
+          <img class="brand__logo" data-brand-variant data-src-light="/branding/logo-light-380.png" data-src-dark="/branding/logo-dark-380.png" src="/branding/logo-dark-380.png" width="380" height="136" alt="Casa em Módulos">
           <div>
-            <h1>Casa em Módulos</h1>
+            <h1 class="visually-hidden">Casa em Módulos</h1>
             <p>Monte sua cozinha por módulos</p>
           </div>
         </div>

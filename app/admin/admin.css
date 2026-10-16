@@ -7,7 +7,7 @@ button:focus-visible,input:focus-visible,a:focus-visible { outline:2px solid #e4
 [hidden] { display:none!important; }
 .admin-topbar { min-height:68px; display:flex; align-items:center; justify-content:space-between; gap:20px; padding:12px max(22px,calc((100vw - 1120px)/2)); border-bottom:1px solid var(--border); background:#171816; }
 .brand { display:flex; align-items:center; gap:11px; }
-.brand>span:first-child { display:grid; width:38px; height:38px; place-items:center; border-radius:11px; background:#d6c9b9; color:#20211f; font-size:24px; }
+.brand__logo { display:block; width:clamp(114px,12vw,150px); max-width:38vw; height:auto; object-fit:contain; }
 .brand strong,.brand small { display:block; }.brand strong { font-size:15px; }.brand small { margin-top:2px; color:var(--muted); font-size:12px; }
 .admin-topbar__actions,.auth-actions,.editor-actions { display:flex; align-items:center; gap:10px; }
 .admin-main { width:min(100% - 36px,960px); margin:40px auto 72px; }
@@ -153,3 +153,5 @@ code { padding:2px 5px; border-radius:4px; background:#111; }
 @media(max-width:650px) { .stage-hierarchy { margin-left:0; }.hierarchy-group__header,.hierarchy-section__header { grid-template-columns:1fr; }.hierarchy-order { justify-self:start; }.hierarchy-sections,.hierarchy-items { padding-left:8px; }.pricing-field--typed { grid-template-columns:1fr auto; }.pricing-field--typed .pricing-field__label,.pricing-field--typed [data-price-rule-type],.pricing-field--typed .pricing-basis { grid-column:1 / -1; }.pricing-basis { grid-column:1 / -1; } }
 
 .editor-actions__buttons { display:flex; flex-wrap:wrap; justify-content:flex-end; gap:8px; }
+
+.visually-hidden { position:absolute!important; width:1px!important; height:1px!important; padding:0!important; margin:-1px!important; overflow:hidden!important; clip:rect(0,0,0,0)!important; white-space:nowrap!important; border:0!important; }
