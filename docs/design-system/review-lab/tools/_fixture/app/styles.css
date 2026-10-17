@@ -1,0 +1,5 @@
+:root{--surface:#1b1c1a;--text:#f4f1eb;--muted:#b9b1a9;--border:#777;--accent:#bdb5a1}
+body{background:#121311;color:var(--text)}.viewer-card{background:var(--surface)}.viewer-card__footer{color:rgba(255,255,255,.42)}.layer-status{color:rgba(255,255,255,.68)}.flow-actions[data-bottom-dock-enabled="true"]{background:rgba(23,24,22,.96)}.configuration-value strong{color:var(--text)}.config-section>h3{color:rgba(255,255,255,.58)}.price-state__breakdown dt{color:rgba(255,255,255,.68)}
+
+.module-number{display:grid;width:32px;height:32px;place-items:center;background:rgba(0,0,0,.2);color:rgba(255,255,255,.65)}.price-state{padding:14px;background:rgba(203,188,170,.13)}.price-state__breakdown dt{color:rgba(255,255,255,.68)}.configuration-value{color:var(--muted)}.configuration-value strong{color:var(--text)}
+.panel{background:var(--surface)}

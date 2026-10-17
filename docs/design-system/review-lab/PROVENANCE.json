@@ -1,0 +1,104 @@
+{
+  "schema": "M2D.DocumentaryPersistence.1",
+  "created_at": "2026-10-17",
+  "source_code_baseline": "67d31976c605c76c7ef10876d03fdeb17369ab78",
+  "historical_design_baseline": "38a314fb3d9830e43310e59c0166197fd19341e0",
+  "notes": "Text and screenshots are preserved as historical/review sources. v0.3 does not imply approval. No app changes.",
+  "files": [
+    {
+      "path": "README.md",
+      "size": 3834,
+      "sha256": "23b807424ec92eb2dd735a036540d40597fb510d6ca88b5b00bdcf72c034f485"
+    },
+    {
+      "path": "audits/DS04-cssom-v2.md",
+      "size": 7713,
+      "sha256": "562832475eecd36552f36b91ffb5028fce6b69545e48c88b2d03575e212769b2"
+    },
+    {
+      "path": "audits/DS04-static-v1.md",
+      "size": 13518,
+      "sha256": "6054f98b627b6f13f62a606fb91b77a2fead7c4083aa010204aa76f39ac049fd"
+    },
+    {
+      "path": "audits/DS05A-plan.md",
+      "size": 5028,
+      "sha256": "fed17bcf51fa5321efcf8b4edfa4a5db4cb685d206a70d53dc2c871ab9acc04a"
+    },
+    {
+      "path": "decisions/CMP-001R-2026-10-13.json",
+      "size": 71011,
+      "sha256": "f93c2df2b954f954091615d9727622c8255ab420bdfbb0e7492ed59b5c923589"
+    },
+    {
+      "path": "decisions/EST-10-2026-10-11.json",
+      "size": 33304,
+      "sha256": "2a009743d3c0f104416f1aea8d187c536f77c4981ee6532831fe00f15b9e817e"
+    },
+    {
+      "path": "evidence/laboratorio-1366.png",
+      "size": 160939,
+      "sha256": "28d37fb0bd9131270ed80575eff154ea44c654a782aa1c278ec683d0b07f015b"
+    },
+    {
+      "path": "evidence/laboratorio-390.png",
+      "size": 156590,
+      "sha256": "1b4bcdd7678ee4b106e3ca0bb4ea446ed0245adf71dc9dadb6324faa749675a0"
+    },
+    {
+      "path": "history/review-v0.2-original.html",
+      "size": 335401,
+      "sha256": "0244e9e743be3c6000b70e9a9e741bd6d6b8b88ccd39930c9fe77cbf7b783dbb"
+    },
+    {
+      "path": "review-v0.3.html",
+      "size": 386585,
+      "sha256": "555c2fa442215f9f97743f595f7c400556c8bd86a01d9d096d0cebf86c53dc24"
+    },
+    {
+      "path": "tools/_fixture/app/admin/admin.css",
+      "size": 378,
+      "sha256": "f9e8bf77e72303ad57bb7dec631126db191ecceb56a7199d9c285e0c290b69e8"
+    },
+    {
+      "path": "tools/_fixture/app/app.js",
+      "size": 147,
+      "sha256": "7147ac8fd427d38285910661231884521499b9e52293878c0b68a99f6d49f65f"
+    },
+    {
+      "path": "tools/_fixture/app/config/index.html",
+      "size": 146,
+      "sha256": "5e60c693148c9d3db9874e165734a6e4108ed0548558eb5b856d08a723e5e0da"
+    },
+    {
+      "path": "tools/_fixture/app/data/configurator-settings.js",
+      "size": 172,
+      "sha256": "f49a609c91ec5191100464b35ba43d6317728e78618aca7210a81131715335ef"
+    },
+    {
+      "path": "tools/_fixture/app/styles.css",
+      "size": 845,
+      "sha256": "a34cef54068dffcff2e8d05de8f1309caff8fe387063c6fa99c7ebdb8163c80d"
+    },
+    {
+      "path": "tools/_fixture/app/ui-theme.css",
+      "size": 147,
+      "sha256": "83d06b7b1cb5524cd88d04478d180b871299fd86ea46d759ccaa7ead4f2e1e3e"
+    },
+    {
+      "path": "tools/test_cssom_v2.cjs",
+      "size": 2609,
+      "sha256": "bc47061240d5cd8482953f2ae61943b4be221ecc6f941fd28dd93244add30e1d"
+    },
+    {
+      "path": "tools/theme_audit_v1.cjs",
+      "size": 6094,
+      "sha256": "feafac3cce041503905aca5bf0363a85a5039683b4ce7d14e8f6a83d8ea55896"
+    },
+    {
+      "path": "tools/theme_cssom_v2.cjs",
+      "size": 16092,
+      "sha256": "bf196a13ee90cea85f1b57480b2bc45e984cd9ef44cc3fa1b43843afa5d4b7c0"
+    }
+  ]
+}
