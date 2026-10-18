@@ -46,7 +46,6 @@ const saveButton = byId("saveButton");
 const persistHandlesButton = byId("persistHandlesButton");
 const saveMessage = byId("saveMessage");
 const logoutButton = byId("logoutButton");
-const manageAccessLink = byId("manageAccessLink");
 let model = null;
 let publishedSource = null;
 let inviteToken = null;
@@ -1500,7 +1499,6 @@ pricingList.addEventListener("change", (event) => {
 async function showUser(user) {
   loginPanel.hidden = Boolean(user);
   logoutButton.hidden = !user;
-  manageAccessLink.hidden = !canManageAccess(user);
   deniedPanel.hidden = true;
   adminServiceError.hidden = true;
   editorPanel.hidden = true;

@@ -63,7 +63,7 @@
     var presentationActions = doc.querySelector(".site-header .header-actions");
     var contextEyebrow = presentationActions ? null : doc.querySelector(".viewer-heading > .eyebrow");
     var header = presentationActions || contextEyebrow ? null :
-      doc.querySelector(".viewer-header, .topbar__actions, .admin-topbar__actions, .access-page > header, body > header");
+      doc.querySelector(".viewer-header, .private-header__actions, .topbar__actions, .admin-topbar__actions, .access-page > header, body > header");
     if (!presentationActions && !contextEyebrow && !header) return;
     var button = doc.createElement("button");
     button.type = "button";
