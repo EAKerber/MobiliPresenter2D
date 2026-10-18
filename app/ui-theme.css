@@ -245,7 +245,6 @@ html[data-theme="light"] .hierarchy-section,
 html[data-theme="light"] .hierarchy-choice-options,
 html[data-theme="light"] .material-targets,
 html[data-theme="light"] .multi-picker,
-html[data-theme="light"] .admin-field,
 html[data-theme="light"] .material-availability-list { background: #f0ede8; border-color: var(--border); }
 html[data-theme="light"] .hierarchy-item { background: rgb(34 33 31 / 3%); border-color: var(--border); }
 html[data-theme="light"] .admin-topbar__actions { flex-wrap: wrap; justify-content: flex-end; }
