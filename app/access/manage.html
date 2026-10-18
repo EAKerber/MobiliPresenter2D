@@ -45,6 +45,13 @@
     <a class="private-header__brand" href="/" aria-label="Casa em Módulos, início"><img class="access-brand-logo" data-brand-variant data-src-light="/branding/logo-light-380.png" data-src-dark="/branding/logo-dark-380.png" src="/branding/logo-light-380.png" width="380" height="136" alt="Casa em Módulos"><span class="private-header__page-name">Gerenciar acessos</span></a>
     <div class="admin-topbar__actions private-header__actions">
       <button class="private-menu-toggle" style="order:3" type="button" data-private-menu-toggle aria-expanded="false" aria-controls="privateMenu" aria-label="Abrir menu"><span></span><span></span><span></span></button>
+      <nav id="privateMenu" class="private-menu" data-private-menu aria-label="Menu do site" hidden>
+        <div data-private-links></div>
+        <div class="private-menu__account" data-private-account hidden>
+          <p class="private-menu__email" data-private-email hidden></p>
+          <button id="logoutButton" class="private-menu__logout" type="button" hidden>Sair</button>
+        </div>
+      </nav>
       
     </div>
   </header>
