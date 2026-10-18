@@ -61,9 +61,10 @@
     // Presentation pages: compact control is always visible in the sticky header.
     // Functional viewer: contextual control at page entrance, without a sticky header.
     var presentationActions = doc.querySelector(".site-header .header-actions");
-    var contextEyebrow = presentationActions ? null : doc.querySelector(".viewer-heading > .eyebrow");
+    var privateActions = doc.querySelector(".private-header__actions, .topbar__actions, .admin-topbar__actions");
+    var contextEyebrow = presentationActions || privateActions ? null : doc.querySelector(".viewer-heading > .eyebrow");
     var header = presentationActions || contextEyebrow ? null :
-      doc.querySelector(".viewer-header, .private-header__actions, .topbar__actions, .admin-topbar__actions, .access-page > header, body > header");
+      privateActions || doc.querySelector(".viewer-header, .access-page > header, body > header");
     if (!presentationActions && !contextEyebrow && !header) return;
     var button = doc.createElement("button");
     button.type = "button";
@@ -84,20 +85,22 @@
       contextRow.appendChild(contextEyebrow);
       contextRow.appendChild(button);
     } else {
-      // All other pages retain their existing placement while the pilot is reviewed.
-      var standalone = header.classList.contains("site-header") ||
+      // Private pages keep the theme selector inside the shared right-side action group.
+      // Standalone functional screens retain their existing utility placement.
+      var standalone = !privateActions && (
+        header.classList.contains("site-header") ||
         header.classList.contains("viewer-header") ||
         (header.parentNode && header.parentNode.classList &&
-         header.parentNode.classList.contains("access-page"));
+         header.parentNode.classList.contains("access-page"))
+      );
       if (standalone) {
-      var utility = doc.createElement("div");
-      utility.className = "ui-theme-utility";
-      if (header.classList.contains("viewer-header")) utility.classList.add("ui-theme-utility--viewer");
-      if (header.parentNode.classList && header.parentNode.classList.contains("access-page")) utility.classList.add("ui-theme-utility--access");
-      utility.appendChild(button);
+        var utility = doc.createElement("div");
+        utility.className = "ui-theme-utility";
+        if (header.classList.contains("viewer-header")) utility.classList.add("ui-theme-utility--viewer");
+        if (header.parentNode.classList && header.parentNode.classList.contains("access-page")) utility.classList.add("ui-theme-utility--access");
+        utility.appendChild(button);
         header.parentNode.insertBefore(utility, header.nextSibling);
       } else {
-        // Config/admin retain their contextual toolbar layout.
         header.insertBefore(button, header.firstChild);
       }
     }
@@ -126,7 +129,8 @@
     doc.addEventListener("DOMContentLoaded", function () { if (imageObserver) imageObserver.disconnect(); createControl(); apply(); }, { once: true });
   } else {
     if (imageObserver) imageObserver.disconnect();
-    createControl(); apply();
+    createControl();
+    apply();
   }
   win.CASA_UI_THEME = {
     getMode: function () { return mode; },
