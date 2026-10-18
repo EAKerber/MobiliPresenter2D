@@ -115,7 +115,7 @@ export async function findActiveSession(sessionToken) {
   const sessionHash = hashOpaqueToken(sessionToken);
   if (!sessionHash) return null;
   const result = await getPool().query(
-    `SELECT s.id, s.grant_id, s.expires_at
+    `SELECT s.id, s.grant_id, s.expires_at, g.recipient_email, g.scope
        FROM access_control.access_sessions AS s
        JOIN access_control.access_grants AS g ON g.id = s.grant_id
       WHERE s.token_hash = $1

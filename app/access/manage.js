@@ -17,6 +17,7 @@ function rolesFor(user) {
 
 async function renderUser(user) {
   loginStatus.textContent = "";
+  byId("logoutButton").hidden = !user;
   loginPanel.hidden = Boolean(user);
   managerPanel.hidden = true;
   deniedPanel.hidden = true;

@@ -12,15 +12,21 @@
     <meta name="robots" content="noindex, nofollow" />
     <title>Administração — Casa em Módulos</title>
     <link rel="stylesheet" href="admin/admin.css?v=admin-nominal-visibility-v1" />
-  <link rel="stylesheet" href="/ui-theme.css?v=ds01-theme-v1">
+  <link rel="stylesheet" href="/ui-theme.css?v=private-header-v1">
 </head>
   <body>
-    <header class="admin-topbar">
-      <a class="brand" href="index.html"><img class="brand__logo" data-brand-variant data-src-light="/branding/logo-light-380.png" data-src-dark="/branding/logo-dark-380.png" src="/branding/logo-dark-380.png" width="380" height="136" alt="Casa em Módulos"><span><strong class="visually-hidden">Casa em Módulos</strong><small>Administração</small></span></a>
-      <div class="admin-topbar__actions">
-        <a id="manageAccessLink" class="button button--secondary" href="/access/manage.html" hidden>Gerenciar acessos</a>
-        <a class="button button--secondary" href="/config/">Voltar ao configurador</a>
-        <button id="logoutButton" class="button button--secondary" type="button" hidden>Sair</button>
+    <header class="admin-topbar private-header" data-private-header>
+      <a class="brand private-header__brand" href="/" aria-label="Casa em Módulos, início"><img class="brand__logo" data-brand-variant data-src-light="/branding/logo-light-380.png" data-src-dark="/branding/logo-dark-380.png" src="/branding/logo-dark-380.png" width="380" height="136" alt="Casa em Módulos"><span><strong class="visually-hidden">Casa em Módulos</strong><small class="private-header__page-name">Administração</small></span></a>
+      <div class="admin-topbar__actions private-header__actions">
+        <button class="private-menu-toggle" style="order:3" type="button" data-private-menu-toggle aria-expanded="false" aria-controls="privateMenu" aria-label="Abrir menu"><span></span><span></span><span></span></button>
+        <nav id="privateMenu" class="private-menu" data-private-menu aria-label="Menu do site" hidden>
+          <div data-private-links></div>
+          <div class="private-menu__account" data-private-account hidden>
+            <p class="private-menu__email" data-private-email hidden></p>
+            <button id="logoutButton" class="private-menu__logout" type="button" hidden>Sair</button>
+          </div>
+        </nav>
+        
       </div>
     </header>
     <main class="admin-main">
@@ -104,6 +110,7 @@
     <script src="core/hierarchy-editor.js?v=hierarchy-v3"></script>
     <script src="core/legacy-stage-repair.js?v=cp-ux-05a0-v1"></script>
     <script src="core/runtime-contracts.js?v=runtime-contracts-v2"></script>
+    <script type="module" src="/core/private-navigation.bundle.js?v=private-header-v1"></script>
     <script type="module" src="admin/admin.bundle.js?v=admin-nominal-visibility-v1"></script>
   </body>
 </html>

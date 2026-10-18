@@ -15,8 +15,7 @@
   <link rel="stylesheet" href="/public-theme.css">
   <style>
     body { min-height: 100vh; }
-    header, main { width: min(100% - 32px, 1040px); margin-inline: auto; }
-    header { display: flex; justify-content: space-between; align-items: center; gap: 16px; padding-block: 22px; border-bottom: 1px solid var(--public-line); }
+    main { width: min(100% - 32px, 1040px); margin-inline: auto; }
     header a { color: var(--public-accent-dark); }
     header a img { display: block; width: 160px; height: auto; max-width: 40vw; }
     main { padding-block: clamp(32px, 7vw, 72px); }
@@ -39,10 +38,23 @@
     [hidden] { display: none !important; }
     @media (max-width: 640px) { form, #loginForm { grid-template-columns: 1fr; } .grant { align-items: flex-start; flex-direction: column; } }
   </style>
-<link rel="stylesheet" href="/ui-theme.css?v=ds01-theme-v1">
+<link rel="stylesheet" href="/ui-theme.css?v=private-header-v1">
 </head>
 <body class="access-page">
-  <header><a href="/" aria-label="Casa em Módulos, início"><img class="access-brand-logo" data-brand-variant data-src-light="/branding/logo-light-380.png" data-src-dark="/branding/logo-dark-380.png" src="/branding/logo-light-380.png" width="380" height="136" alt="Casa em Módulos"></a><a href="/">Voltar ao site</a></header>
+  <header class="private-header access-private-header" data-private-header>
+    <a class="private-header__brand" href="/" aria-label="Casa em Módulos, início"><img class="access-brand-logo" data-brand-variant data-src-light="/branding/logo-light-380.png" data-src-dark="/branding/logo-dark-380.png" src="/branding/logo-light-380.png" width="380" height="136" alt="Casa em Módulos"><span class="private-header__page-name">Gerenciar acessos</span></a>
+    <div class="admin-topbar__actions private-header__actions">
+      <button class="private-menu-toggle" style="order:3" type="button" data-private-menu-toggle aria-expanded="false" aria-controls="privateMenu" aria-label="Abrir menu"><span></span><span></span><span></span></button>
+      <nav id="privateMenu" class="private-menu" data-private-menu aria-label="Menu do site" hidden>
+        <div data-private-links></div>
+        <div class="private-menu__account" data-private-account hidden>
+          <p class="private-menu__email" data-private-email hidden></p>
+          <button id="logoutButton" class="private-menu__logout" type="button" hidden>Sair</button>
+        </div>
+      </nav>
+      
+    </div>
+  </header>
   <main>
     <p class="eyebrow">Acesso do configurador</p>
     <h1>Gerenciar convites temporários</h1>
@@ -62,11 +74,12 @@
         <button id="sendButton" type="submit">Enviar link de acesso</button>
       </form>
       <p id="managerStatus" role="status" aria-live="polite"></p>
-      <div class="toolbar"><h2>Acessos recentes</h2><div><button id="refreshButton" class="secondary" type="button">Atualizar</button> <button id="logoutButton" class="secondary" type="button">Sair</button></div></div>
+      <div class="toolbar"><h2>Acessos recentes</h2><div><button id="refreshButton" class="secondary" type="button">Atualizar</button></div></div>
       <ul id="grantList"></ul>
     </section>
     <p id="loginStatus" role="status" aria-live="polite"></p>
   </main>
+  <script type="module" src="/core/private-navigation.bundle.js?v=private-header-v1"></script>
   <script type="module" src="/access/manage.bundle.js"></script>
 </body>
 </html>

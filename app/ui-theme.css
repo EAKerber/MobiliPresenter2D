@@ -260,3 +260,88 @@ html[data-theme="dark"] .access-page > header .access-brand-logo { width: 160px;
 html[data-theme="dark"] .access-page .panel { background: var(--public-surface); }
 html[data-theme="dark"] .access-page button.secondary { background: var(--public-surface-soft); color: var(--public-text); }
 html[data-theme="dark"] .access-page input { background: var(--public-surface); color: var(--public-text); }
+
+/* Shared private-page header and role-aware menu. */
+.private-header {
+  position: relative; z-index: 30; display: flex; align-items: center;
+  justify-content: space-between; gap: 18px; width: 100%; min-height: 68px;
+  padding: 10px clamp(16px, calc((100vw - 1380px) / 2), 60px);
+  border-bottom: 1px solid var(--public-line, #ded9d2);
+  background: var(--public-surface, #fff); color: var(--public-text, #22211f);
+}
+.private-header__brand { display: flex; align-items: center; gap: 16px; min-width: 0; color: inherit; text-decoration: none; }
+.private-header__brand img { display: block; width: clamp(120px, 15vw, 160px); max-width: 38vw; height: auto; object-fit: contain; }
+.private-header__page-name { color: var(--public-muted, #706c66); font-size: 15px; line-height: 1.3; white-space: nowrap; }
+.private-header__actions { display: flex; align-items: center; justify-content: flex-end; gap: 8px; flex: 0 0 auto; }
+.private-menu-toggle {
+  display: grid; place-content: center; gap: 5px; width: 44px; height: 44px; padding: 10px;
+  border: 1px solid var(--public-line, #ded9d2); border-radius: 10px;
+  background: var(--public-surface, #fff); color: inherit; cursor: pointer;
+}
+.private-menu-toggle:hover { background: var(--public-surface-soft, #f0ede8); }
+.private-menu-toggle span { display: block; width: 18px; height: 2px; border-radius: 2px; background: currentColor; }
+.private-menu {
+  position: absolute; top: calc(100% + 8px); right: clamp(12px, calc((100vw - 1380px) / 2), 60px);
+  z-index: 80; display: grid; gap: 15px; width: min(340px, calc(100vw - 24px));
+  max-height: min(75vh, 620px); overflow: auto; padding: 18px;
+  border: 1px solid var(--public-line, #ded9d2); border-radius: 14px;
+  background: var(--public-surface, #fff); color: var(--public-text, #22211f);
+  box-shadow: 0 18px 48px rgb(34 33 31 / 18%);
+}
+.private-menu[hidden] { display: none !important; }
+.private-menu__group { display: grid; gap: 7px; }
+.private-menu__group + .private-menu__group { padding-top: 13px; border-top: 1px solid var(--public-line, #ded9d2); }
+.private-menu__group h2 { margin: 0 0 2px; color: var(--public-muted, #706c66); font-size: 10px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; }
+.private-menu__links { display: grid; gap: 3px; }
+.private-menu__links a { display: block; padding: 9px 10px; border-radius: 8px; color: inherit; text-decoration: none; font-size: 13px; }
+.private-menu__links a:hover, .private-menu__links a[aria-current="page"] { background: var(--public-surface-soft, #f0ede8); color: var(--public-accent-dark, #6e512e); }
+.private-menu__note { margin: 2px 0 0; padding: 8px 10px; color: var(--public-muted, #706c66); font-size: 12px; }
+.private-menu__account { display: grid; gap: 9px; padding-top: 12px; border-top: 1px solid var(--public-line, #ded9d2); }
+.private-menu__account[hidden] { display: none !important; }
+.private-menu__email { overflow-wrap: anywhere; color: var(--public-muted, #706c66); font-size: 12px; }
+.private-menu__logout {
+  display: inline-flex; align-items: center; justify-content: center; width: 100%;
+  min-height: 42px; margin: 0; padding: 9px 12px; border: 1px solid var(--public-line, #ded9d2);
+  border-radius: 8px; background: var(--public-surface-soft, #f0ede8);
+  color: var(--public-text, #22211f); font: inherit; font-size: 13px; font-weight: 700; cursor: pointer;
+}
+.private-header .ui-theme-toggle { min-height: 44px; }
+/* Keep page-specific actions first, then the shared theme control and menu. */
+.private-header__actions > #restoreButton { order: 1; }
+.private-header__actions > .ui-theme-toggle { order: 2; }
+.private-header__actions > .private-menu-toggle { order: 3; }
+.private-header__actions > [data-private-menu] { order: 4; }
+.private-header .private-menu-toggle { flex: 0 0 44px; }
+.topbar.private-header { padding-inline: 0; }
+.topbar.private-header .topbar__inner { position: relative; width: 100%; max-width: 1380px; margin-inline: auto; padding-inline: clamp(16px, calc((100vw - 1380px) / 2), 60px); }
+.topbar.private-header .private-header__actions { margin-left: auto; }
+html[data-theme="dark"] .private-header { border-color: #4a4843; background: #171816; color: #f4f1eb; }
+html[data-theme="dark"] .private-header__page-name { color: #c4bcb2; }
+html[data-theme="dark"] .private-menu { border-color: #4a4843; background: #1b1c1a; color: #f4f1eb; box-shadow: 0 18px 48px rgb(0 0 0 / 34%); }
+html[data-theme="dark"] .private-menu__group + .private-menu__group,
+html[data-theme="dark"] .private-menu__account { border-color: #4a4843; }
+html[data-theme="dark"] .private-menu__links a:hover,
+html[data-theme="dark"] .private-menu__links a[aria-current="page"] { background: #292a27; color: #e2c991; }
+html[data-theme="dark"] .private-menu-toggle { border-color: #7b766c; background: #20211f; }
+html[data-theme="dark"] .private-menu-toggle:hover { background: #292a27; }
+html[data-theme="dark"] .private-menu__logout { border-color:#4a4843; background:#20211f; color:#f4f1eb; }
+.private-header .ui-theme-toggle--header { border-color: var(--ui-theme-control-border); background: var(--ui-theme-control-bg); }
+.private-header .ui-theme-toggle--header:hover { filter: brightness(.96); }
+@media (max-width: 650px) {
+  .private-header { min-height: 62px; gap: 8px; padding: 9px 14px; }
+  .private-header__brand { gap: 9px; }
+  .private-header__brand img { width: min(34vw, 132px); max-width: 132px; }
+  .private-header__page-name { font-size: 12px; white-space: normal; }
+  .private-header__actions { gap: 5px; }
+  .private-header .ui-theme-toggle { padding-inline: 8px; gap: 6px; }
+  .private-header .ui-theme-toggle__label-long { display: none; }
+  .private-header .ui-theme-toggle__label-short { display: inline; }
+  .private-menu { right: 8px; }
+  .topbar.private-header .topbar__inner { padding-inline: 14px; }
+}
+@media (max-width: 380px) {
+  .private-header__brand img { width: 105px; }
+  .private-header__page-name { font-size: 11px; }
+  .private-header .ui-theme-toggle { min-width: 40px; min-height: 40px; padding-inline: 6px; }
+  .private-header .private-menu-toggle { flex-basis: 40px; width: 40px; height: 40px; }
+}

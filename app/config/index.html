@@ -38,24 +38,32 @@
         opacity: .58;
       }
     </style>
-  <link rel="stylesheet" href="/ui-theme.css?v=ds01-theme-v1">
+  <link rel="stylesheet" href="/ui-theme.css?v=private-header-v1">
 </head>
   <body>
-    <header class="topbar">
+    <header class="topbar private-header private-header--config" data-private-header>
       <div class="topbar__inner">
-        <div class="brand">
+        <div class="brand private-header__brand">
           <img class="brand__logo" data-brand-variant data-src-light="/branding/logo-light-380.png" data-src-dark="/branding/logo-dark-380.png" src="/branding/logo-dark-380.png" width="380" height="136" alt="Casa em Módulos">
           <div>
             <h1 class="visually-hidden">Casa em Módulos</h1>
-            <p>Monte sua cozinha por módulos</p>
+            <p class="private-header__page-name">Monte sua cozinha por módulos</p>
           </div>
         </div>
 
-        <div class="topbar__actions">
+        <div class="topbar__actions private-header__actions">
           <button class="button button--secondary" id="restoreButton" type="button" aria-label="Restaurar">
             <span aria-hidden="true">↺</span>
             <span class="button__wide-label">Recomeçar</span>
           </button>
+          <button class="private-menu-toggle" style="order:3" type="button" data-private-menu-toggle aria-expanded="false" aria-controls="privateMenu" aria-label="Abrir menu"><span></span><span></span><span></span></button>
+          <nav id="privateMenu" class="private-menu" data-private-menu aria-label="Menu do site" hidden>
+            <div data-private-links></div>
+            <div class="private-menu__account" data-private-account hidden>
+              <p class="private-menu__email" data-private-email hidden></p>
+            </div>
+          </nav>
+          
         </div>
       </div>
     </header>
@@ -238,6 +246,7 @@
     <script src="data/stone-data.js?v=runtime-v40"></script>
     <script src="core/stone.js?v=runtime-v40"></script>
     <script src="app.js?v=runtime-v40"></script>
+    <script type="module" src="/core/private-navigation.bundle.js?v=private-header-v1"></script>
     <script>
       (() => {
         const resizeHandle = document.getElementById("mobileSceneResizeHandle");
