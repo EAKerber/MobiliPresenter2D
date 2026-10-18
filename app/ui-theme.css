@@ -301,9 +301,10 @@ html[data-theme="dark"] .access-page input { background: var(--public-surface); 
   color: var(--public-text, #22211f); font: inherit; font-size: 13px; font-weight: 700; cursor: pointer;
 }
 .private-header .ui-theme-toggle { min-height: 44px; }
-.private-header__actions > .ui-theme-toggle { order: 0; }
+/* Keep page-specific actions first, then the shared theme control and menu. */
+.private-header__actions > #restoreButton { order: 1; }
+.private-header__actions > .ui-theme-toggle { order: 2; }
 .private-header__actions > .private-menu-toggle { order: 3; }
-.private-header__actions > #restoreButton { order: 2; }
 .private-header__actions > [data-private-menu] { order: 4; }
 .private-header .private-menu-toggle { flex: 0 0 44px; }
 .topbar.private-header { padding-inline: 0; }
