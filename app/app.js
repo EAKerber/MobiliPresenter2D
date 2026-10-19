@@ -1837,6 +1837,7 @@
       layer.hidden = !shouldConfigure;
     });
     syncLayerVisibility();
+    updateVisibleCount();
   }
 
   function syncStep(resolved) {
