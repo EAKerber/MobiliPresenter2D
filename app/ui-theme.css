@@ -199,6 +199,9 @@ html[data-theme="light"] {
 html[data-theme="light"] .topbar,
 html[data-theme="light"] .flow-nav { background: #ffffff; }
 html[data-theme="light"] .flow-nav { border-color: var(--border); }
+html[data-theme="light"] .price-state { background: #F0EDE8; }
+html[data-theme="light"] .price-state__breakdown > div { border-top-color: #D6CCC0; }
+html[data-theme="light"] .price-state__breakdown dt { color: #292723; }
 html[data-theme="light"] .button--secondary { background: rgb(34 33 31 / 5%); border-color: var(--border); }
 html[data-theme="light"] .button--secondary:hover { background: rgb(34 33 31 / 9%); }
 html[data-theme="light"] .module-card,
@@ -263,7 +266,7 @@ html[data-theme="dark"] .access-page input { background: var(--public-surface); 
 
 /* Shared private-page header and role-aware menu. */
 .private-header {
-  position: relative; z-index: 30; display: flex; align-items: center;
+  position: relative; z-index: 60; display: flex; align-items: center;
   justify-content: space-between; gap: 18px; width: 100%; min-height: 68px;
   padding: 10px clamp(16px, calc((100vw - 1380px) / 2), 60px);
   border-bottom: 1px solid var(--public-line, #ded9d2);

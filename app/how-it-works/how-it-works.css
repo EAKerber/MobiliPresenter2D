@@ -276,3 +276,9 @@
 .commercial-clarity{border:1px solid var(--public-line);border-top:3px solid var(--public-accent);border-radius:var(--public-radius);background:var(--public-surface-soft);padding-block:24px;margin-bottom:30px}.commercial-clarity h3{font-size:clamp(1.4rem,2.5vw,2rem);margin:0}.commercial-clarity>p:not(.eyebrow){color:var(--public-muted);line-height:1.55;max-width:850px}
 @media(max-width:900px){.foundation-list,.study-topics{grid-template-columns:1fr}.foundation-item summary{min-height:0}.economy-detail{grid-template-columns:1fr}}
 @media(max-width:680px){.how-video-bridge{grid-template-columns:1fr;padding-block:40px}.video-embed{width:min(65vw,230px)}.economy-action{grid-template-columns:88px minmax(0,1fr) 20px}.economy-detail{padding:18px!important}}
+
+
+/* Contextual VIS-002 and VIS-003 pairs approved for these surfaces only. */
+html[data-theme="light"] .how-hero-note { color: #705C4B; }
+html[data-theme="light"] .study-band .eyebrow { color: #70522F; }
+html[data-theme="dark"] .study-art figcaption { background: #20211F; color: #F0EDE8; }

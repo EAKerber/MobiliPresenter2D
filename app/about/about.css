@@ -45,3 +45,6 @@
   .about-chapter__body p, .about-scale__copy p, .about-closing > p:not(.eyebrow):not(.about-closing__signature) { font-size: 15px; }
   .about-closing { padding-inline: 18px; }
 }
+
+/* Contextual VIS-002 pair for the approved warm scale surface. */
+html[data-theme="light"] .about-scale p:not(.eyebrow) { color: #705C4B; }
