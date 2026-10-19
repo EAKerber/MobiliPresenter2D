@@ -761,7 +761,8 @@ html[data-layout-profile="stacked"] #modulesPanel .module-stage-pane--detail { m
 html[data-layout-profile="compact"] .workspace { gap: 8px; }
 html[data-layout-profile="compact"] .viewer-anchor { min-width: 0; min-height: 0; }
 html[data-layout-profile="compact"] .viewer-pin-sentinel { block-size: 1px; }
-html[data-layout-profile="compact"] .viewer-card { position: static; width: 100%; }
+/* Contain the scene's high-z layers so they cannot paint over the private menu. */
+html[data-layout-profile="compact"] .viewer-card { position: static; width: 100%; isolation: isolate; }
 html[data-layout-profile="compact"] .flow-nav { top: env(safe-area-inset-top); margin-top: 0; }
 html[data-layout-profile="compact"] body:not(.has-bottom-dock) .controls { padding-bottom: calc(24px + env(safe-area-inset-bottom)); }
 html[data-layout-profile="compact"] .panel,
