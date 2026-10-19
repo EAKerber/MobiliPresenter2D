@@ -2145,10 +2145,11 @@
   }
 
   function updateVisibleCount() {
-    const configured = new Set([...configuredModuleIds(), ...(itemAvailable("lighting-08") ? ["lighting-08"] : [])]);
+    const configured = configuredModuleIds();
+    const configuredControllable = scene.entities.filter((entity) => entity.controllable && configured.has(entity.id));
     const visible = visibility.getVisibleControllableEntities(scene, state).filter((entity) => configured.has(entity.id));
     visibleCount.textContent = String(visible.length);
-    totalCount.textContent = String(scene.entities.filter((entity) => entity.controllable && configured.has(entity.id)).length);
+    totalCount.textContent = String(configuredControllable.length);
     syncFingerprint();
   }
 
