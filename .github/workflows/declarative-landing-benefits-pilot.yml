@@ -1,0 +1,58 @@
+name: Declarative Landing benefits isolated pilot
+
+on:
+  push:
+    branches:
+      - experiment/ui-declarative-landing-benefits-20261020
+    paths:
+      - "app/index.html"
+      - "app/landing/landing.js"
+      - "app/landing/benefit-strip.js"
+      - "app/core/page-composition.js"
+      - "tests/landing-benefit*"
+      - ".github/workflows/declarative-landing-benefits-pilot.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  local-differential:
+    name: Node + Chromium main/candidate equivalence (no deploy)
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout isolated candidate
+        uses: actions/checkout@v4
+      - name: Checkout unchanged product main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          path: baseline
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Check contract behavior without a browser
+        run: |
+          node --test tests/landing-benefit-composition.test.cjs
+          node tests/public-cutover-contract.cjs
+      - name: Install browser instrumentation without changing repository
+        run: |
+          npm install --no-save --no-package-lock playwright@1.56.0
+          npx playwright install --with-deps chromium
+      - name: Serve main and candidate locally
+        run: |
+          python3 -m http.server 8123 --bind 127.0.0.1 --directory app >/tmp/landing-candidate-http.log 2>&1 &
+          python3 -m http.server 8124 --bind 127.0.0.1 --directory baseline/app >/tmp/landing-baseline-http.log 2>&1 &
+          sleep 2
+          curl --fail http://127.0.0.1:8123/ >/dev/null
+          curl --fail http://127.0.0.1:8124/ >/dev/null
+      - name: Compare DOM, computed styles, bounding boxes and screenshots
+        run: node tests/landing-benefit-browser-gate.mjs
+      - name: Retain differential evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: declarative-landing-benefits-differential
+          path: artifacts/landing-benefits/
+          if-no-files-found: warn
+          retention-days: 7
