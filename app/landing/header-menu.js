@@ -8,9 +8,19 @@
     toggle.setAttribute("aria-expanded", String(open));
     toggle.setAttribute("aria-label", open ? "Fechar menu" : "Abrir menu");
   }
-  toggle.addEventListener("click", () => setOpen(toggle.getAttribute("aria-expanded") !== "true"));
+  toggle.addEventListener("click", event => {
+    const opening = toggle.getAttribute("aria-expanded") !== "true";
+    setOpen(opening);
+    // Mobile DOM orders nav before the toggle; keyboard-open must expose a tab target.
+    if (opening && event.detail === 0) nav.querySelector("a[href]")?.focus();
+  });
   nav.querySelectorAll("a").forEach(a => a.addEventListener("click", () => setOpen(false)));
-  document.addEventListener("keydown", e => { if (e.key === "Escape") setOpen(false); });
+  document.addEventListener("keydown", event => {
+    if (event.key !== "Escape" || toggle.getAttribute("aria-expanded") !== "true") return;
+    const focusWasInsideMenu = nav.contains(document.activeElement);
+    setOpen(false);
+    if (focusWasInsideMenu) toggle.focus();
+  });
   document.addEventListener("pointerdown", e => {
     if (!nav.contains(e.target) && !toggle.contains(e.target)) setOpen(false);
   });
