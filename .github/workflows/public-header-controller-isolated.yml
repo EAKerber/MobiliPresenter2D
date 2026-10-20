@@ -9,6 +9,7 @@ on:
       - "app/landing/header-menu.js"
       - "app/how-it-works/how-it-works.js"
       - "app/index.html"
+      - "app/about/index.html"
       - "app/how-it-works/index.html"
       - "tests/public-header-controller-gate.mjs"
       - ".github/workflows/public-header-controller-isolated.yml"
