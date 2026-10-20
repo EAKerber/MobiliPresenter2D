@@ -7,11 +7,17 @@ on:
     paths:
       - "app/index.html"
       - "app/landing/landing.js"
+      - "app/landing/data.js"
       - "app/landing/benefit-strip.js"
       - "app/core/page-composition.js"
       - "tests/landing-benefit*"
       - "tests/landing-interaction-gate.mjs"
+      - "tests/public-cutover-contract.cjs"
       - ".github/workflows/declarative-landing-benefits-pilot.yml"
+
+concurrency:
+  group: landing-pilot-${{ github.ref }}
+  cancel-in-progress: true
 
 permissions:
   contents: read
