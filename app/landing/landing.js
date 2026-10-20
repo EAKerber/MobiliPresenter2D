@@ -23,15 +23,14 @@
 
   function renderBenefits() {
     const mini = document.getElementById("miniBenefits");
-    ["Modular", "Inteligente", "Para a sua vida"].forEach((title, index) => {
-      const benefit = document.createElement("div");
-      benefit.className = "mini-benefit";
-      const icon = document.createElement("img");
-      icon.src = `/landing/assets/icons/ui/gold/${["modular", "inteligente", "para-sua-vida"][index]}.svg`;
-      icon.alt = "";
-      const strong = document.createElement("strong"); strong.textContent = title;
-      benefit.append(icon, strong); mini.append(benefit);
-    });
+    try {
+      window.CasaLandingBenefitStrip.mountCompact(mini, data, document);
+    } catch (error) {
+      console.error("Landing compact benefits contract failure", error);
+      mini.replaceChildren();
+      mini.setAttribute("role", "status");
+      mini.textContent = "Vantagens temporariamente indisponíveis.";
+    }
     const strip = document.getElementById("benefits");
     try {
       window.CasaLandingBenefitStrip.mount(strip, data, document);
