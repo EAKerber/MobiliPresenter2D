@@ -9,6 +9,9 @@ import {
   recoverPassword,
   updateUser
 } from "@netlify/identity";
+import { createAuthDiagnostics } from "./auth-diagnostics.js";
+
+const authDiagnostics = createAuthDiagnostics(new URLSearchParams(window.location.search).get("authDebug") === "1");
 
 const catalog = window.CASA_EM_MODULOS_CATALOG;
 let priceBook = null;
@@ -25,6 +28,8 @@ const legacyStageRepair = window.CasaModulesLegacyStageRepair;
 const hierarchyDefaults = window.CASA_EM_MODULOS_HIERARCHY_DEFAULTS;
 let catalogPricing = null;
 let adminDataPromise = null;
+let adminDataLoadState = "idle";
+let adminViewRun = 0;
 const byId = (id) => document.getElementById(id);
 const loginPanel = byId("loginPanel");
 const deniedPanel = byId("deniedPanel");
@@ -1258,23 +1263,37 @@ function refreshHandlesRepairState() {
   return plan;
 }
 
-async function loadSettings() {
-  const response = await fetch("/api/configuration", { credentials: "same-origin", cache: "no-store" });
-  if (!response.ok) throw new Error(response.status === 404 ? "A API de configuração ainda não foi publicada." : "Não foi possível carregar a configuração.");
-  const published = await response.json();
-  publishedSource = structuredClone(published);
-  model = baselineHierarchyFor(published);
-  byId("revisionLabel").textContent = `Versão ${model.revision || 1} · editor hierárquico`;
-  const repair = refreshHandlesRepairState();
-  setMessage(
-    saveMessage,
-    repair?.ok && repair.needed
-      ? "Puxadores ainda não está atribuído no v3 publicado. Persista Puxadores no v3 antes da futura publicação hierárquica."
-      : published.schemaVersion === hierarchyCore.SCHEMA
-        ? "Configuração v5 carregada. A hierarquia e os preços tipados podem ser publicados com validação."
-        : "Hierarquia carregada. Alterações estruturais permanecem em rascunho até a publicação hierárquica ser habilitada."
-  );
-  renderAdminTabs();
+async function loadSettings(runId) {
+  const startedAt = performance.now();
+  authDiagnostics.record("settings:start", { runId });
+  try {
+    const response = await fetch("/api/configuration", { credentials: "same-origin", cache: "no-store" });
+    authDiagnostics.record("settings:response", {
+      runId,
+      status: response.status,
+      durationMs: Math.round(performance.now() - startedAt),
+      requestId: response.headers.get("x-nf-request-id") || ""
+    });
+    if (!response.ok) throw new Error(response.status === 404 ? "A API de configuração ainda não foi publicada." : "Não foi possível carregar a configuração.");
+    const published = await response.json();
+    publishedSource = structuredClone(published);
+    model = baselineHierarchyFor(published);
+    byId("revisionLabel").textContent = `Versão ${model.revision || 1} · editor hierárquico`;
+    const repair = refreshHandlesRepairState();
+    setMessage(
+      saveMessage,
+      repair?.ok && repair.needed
+        ? "Puxadores ainda não está atribuído no v3 publicado. Persista Puxadores no v3 antes da futura publicação hierárquica."
+        : published.schemaVersion === hierarchyCore.SCHEMA
+          ? "Configuração v5 carregada. A hierarquia e os preços tipados podem ser publicados com validação."
+          : "Hierarquia carregada. Alterações estruturais permanecem em rascunho até a publicação hierárquica ser habilitada."
+    );
+    renderAdminTabs();
+    authDiagnostics.record("settings:loaded", { runId, durationMs: Math.round(performance.now() - startedAt) });
+  } catch (error) {
+    authDiagnostics.record("settings:failed", { runId, errorType: error?.name || "Error" });
+    throw error;
+  }
 }
 
 document.querySelector(".admin-tabs").addEventListener("click", (event) => {
@@ -1496,13 +1515,18 @@ pricingList.addEventListener("change", (event) => {
   else rule.cents = storedValue;
 });
 
-async function showUser(user) {
+async function showUser(user, source = "unspecified") {
+  const runId = ++adminViewRun;
+  authDiagnostics.record("admin-view:start", { runId, source, userPresent: Boolean(user), adminRole: isAdmin(user) });
   loginPanel.hidden = Boolean(user);
   logoutButton.hidden = !user;
   deniedPanel.hidden = true;
   adminServiceError.hidden = true;
   editorPanel.hidden = true;
-  if (!user) return;
+  if (!user) {
+    authDiagnostics.record("admin-view:anonymous", { runId });
+    return;
+  }
   const returnTo = new URLSearchParams(window.location.search).get("returnTo");
   if (returnTo === "/access/manage.html" && canManageAccess(user)) {
     window.location.replace(returnTo);
@@ -1510,35 +1534,68 @@ async function showUser(user) {
   }
   if (!isAdmin(user)) {
     deniedPanel.hidden = false;
+    authDiagnostics.record("admin-view:denied", { runId });
     return;
   }
   byId("userLabel").textContent = user.email || "Administrador";
   try {
-    await ensureAdminData();
+    await ensureAdminData(runId);
     editorPanel.hidden = false;
-    await loadSettings();
+    await loadSettings(runId);
+    authDiagnostics.record("admin-view:ready", { runId });
   } catch (error) {
     adminServiceError.hidden = false;
     setMessage(adminServiceError, error.message || "Falha ao carregar os dados administrativos.", "error");
+    authDiagnostics.record("admin-view:failed", { runId, errorType: error?.name || "Error" });
+    document.querySelector(".auth-diagnostics")?.setAttribute("open", "");
   }
 }
 
-async function ensureAdminData() {
+async function ensureAdminData(runId) {
   if (!adminDataPromise) {
+    const startedAt = performance.now();
+    adminDataLoadState = "pending";
+    authDiagnostics.record("admin-bootstrap:start", { runId });
     adminDataPromise = (async () => {
-      const response = await fetch("/api/admin-bootstrap", {
-        credentials: "same-origin",
-        cache: "no-store"
+      let response;
+      try {
+        response = await fetch("/api/admin-bootstrap", {
+          credentials: "same-origin",
+          cache: "no-store"
+        });
+      } catch (error) {
+        authDiagnostics.record("admin-bootstrap:request-failed", { runId, errorType: error?.name || "Error" });
+        throw error;
+      }
+      authDiagnostics.record("admin-bootstrap:response", {
+        runId,
+        status: response.status,
+        durationMs: Math.round(performance.now() - startedAt),
+        requestId: response.headers.get("x-nf-request-id") || ""
       });
       if (!response.ok) throw new Error("Não foi possível carregar os dados administrativos.");
-      const payload = await response.json();
-      if (!payload?.priceBook?.pricing) throw new Error("Os dados de preços administrativos são inválidos.");
+      let payload;
+      try {
+        payload = await response.json();
+      } catch (error) {
+        authDiagnostics.record("admin-bootstrap:invalid-payload", { runId, errorType: error?.name || "Error", payloadValid: false });
+        throw new Error("Os dados de preços administrativos são inválidos.");
+      }
+      if (!payload?.priceBook?.pricing) {
+        authDiagnostics.record("admin-bootstrap:invalid-payload", { runId, payloadValid: false });
+        throw new Error("Os dados de preços administrativos são inválidos.");
+      }
       priceBook = payload.priceBook;
       catalogPricing = pricingContract.normalize(priceBook.pricing);
+      adminDataLoadState = "loaded";
+      authDiagnostics.record("admin-bootstrap:loaded", { runId, durationMs: Math.round(performance.now() - startedAt), payloadValid: true });
     })().catch((error) => {
       adminDataPromise = null;
+      adminDataLoadState = "idle";
       throw error;
     });
+  } else {
+    authDiagnostics.record("admin-bootstrap:promise-reused", { runId, promiseState: adminDataLoadState });
   }
   return adminDataPromise;
 }
@@ -1556,14 +1613,18 @@ function showPasswordAction(type, token) {
 
 loginForm.addEventListener("submit", async (event) => {
   event.preventDefault();
+  const startedAt = performance.now();
+  authDiagnostics.record("login:started", { source: "form" });
   const submit = loginForm.querySelector("button[type=submit]");
   submit.disabled = true;
   setMessage(loginMessage, "Entrando…");
   try {
     const user = await login(byId("emailInput").value.trim(), byId("passwordInput").value);
-    await showUser(user);
+    authDiagnostics.record("login:resolved", { durationMs: Math.round(performance.now() - startedAt), userPresent: Boolean(user), adminRole: isAdmin(user) });
+    await showUser(user, "login-form");
     setMessage(loginMessage, "");
   } catch (error) {
+    authDiagnostics.record("login:failed", { durationMs: Math.round(performance.now() - startedAt), errorType: error?.name || "Error" });
     setMessage(loginMessage, error.message || "Não foi possível entrar. Confira os dados e tente novamente.", "error");
   } finally {
     submit.disabled = false;
@@ -2033,22 +2094,37 @@ logoutButton.addEventListener("click", async () => {
   window.location.replace("/");
 });
 
-onAuthChange((_event, user) => { void showUser(user); });
+onAuthChange((event, user) => {
+  const eventName = ["login", "logout", "init", "recovery", "error"].includes(event) ? event : "other";
+  authDiagnostics.record("identity:change", { eventName, userPresent: Boolean(user), adminRole: isAdmin(user) });
+  void showUser(user, "identity-change");
+});
 
 async function initializeAdminAccess() {
+  authDiagnostics.record("admin-init:started");
   try {
     const hash = new URLSearchParams(window.location.hash.slice(1));
     const recovery = hash.get("recovery_token");
     if (recovery) showPasswordAction("recovery", recovery);
     else {
       const callback = await handleAuthCallback();
-      if (callback?.type === "invite") showPasswordAction(callback.type, callback.token);
-      else await showUser(await getUser());
+      if (callback?.type === "invite") {
+        authDiagnostics.record("admin-init:invite-callback");
+        showPasswordAction(callback.type, callback.token);
+      } else {
+        const user = await getUser();
+        authDiagnostics.record("admin-init:session-resolved", { userPresent: Boolean(user), adminRole: isAdmin(user) });
+        await showUser(user, "initial-session");
+      }
     }
   } catch (error) {
+    authDiagnostics.record("admin-init:failed", { errorType: error?.name || "Error" });
     setMessage(loginMessage, error.message || "Não foi possível concluir o acesso.", "error");
-    await showUser(await getUser());
+    const user = await getUser();
+    authDiagnostics.record("admin-init:fallback-session", { userPresent: Boolean(user), adminRole: isAdmin(user) });
+    await showUser(user, "initial-fallback");
   }
+  authDiagnostics.record("admin-init:finished");
 }
 
 void initializeAdminAccess();
