@@ -134,7 +134,7 @@
       throw new TypeError("DOM target and document required");
     }
     // Render into a detached fragment first; never mount half a component.
-    const fragment = section.definition.render(section.data, documentRef);
+    const fragment = section.definition.render(section.data, documentRef, section.variant);
     if (!fragment || fragment.nodeType !== 11) throw new TypeError("renderer must return DocumentFragment");
     container.replaceChildren(fragment);
   }
