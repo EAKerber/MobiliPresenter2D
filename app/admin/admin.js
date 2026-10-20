@@ -9,7 +9,6 @@ import {
   recoverPassword,
   updateUser
 } from "@netlify/identity";
-
 const catalog = window.CASA_EM_MODULOS_CATALOG;
 let priceBook = null;
 const pricingContract = window.CasaModulesPricingContract;
@@ -25,6 +24,7 @@ const legacyStageRepair = window.CasaModulesLegacyStageRepair;
 const hierarchyDefaults = window.CASA_EM_MODULOS_HIERARCHY_DEFAULTS;
 let catalogPricing = null;
 let adminDataPromise = null;
+let adminViewRun = 0;
 const byId = (id) => document.getElementById(id);
 const loginPanel = byId("loginPanel");
 const deniedPanel = byId("deniedPanel");
@@ -1264,7 +1264,7 @@ async function loadSettings() {
   const published = await response.json();
   publishedSource = structuredClone(published);
   model = baselineHierarchyFor(published);
-  byId("revisionLabel").textContent = `Versão ${model.revision || 1} · editor hierárquico`;
+  byId("revisionLabel").textContent = "Versão " + (model.revision || 1) + " · editor hierárquico";
   const repair = refreshHandlesRepairState();
   setMessage(
     saveMessage,
@@ -1497,6 +1497,7 @@ pricingList.addEventListener("change", (event) => {
 });
 
 async function showUser(user) {
+  const runId = ++adminViewRun;
   loginPanel.hidden = Boolean(user);
   logoutButton.hidden = !user;
   deniedPanel.hidden = true;
@@ -1515,9 +1516,12 @@ async function showUser(user) {
   byId("userLabel").textContent = user.email || "Administrador";
   try {
     await ensureAdminData();
+    if (runId !== adminViewRun) return;
     editorPanel.hidden = false;
     await loadSettings();
+    if (runId !== adminViewRun) return;
   } catch (error) {
+    if (runId !== adminViewRun) return;
     adminServiceError.hidden = false;
     setMessage(adminServiceError, error.message || "Falha ao carregar os dados administrativos.", "error");
   }
@@ -1531,7 +1535,12 @@ async function ensureAdminData() {
         cache: "no-store"
       });
       if (!response.ok) throw new Error("Não foi possível carregar os dados administrativos.");
-      const payload = await response.json();
+      let payload;
+      try {
+        payload = await response.json();
+      } catch {
+        throw new Error("Os dados de preços administrativos são inválidos.");
+      }
       if (!payload?.priceBook?.pricing) throw new Error("Os dados de preços administrativos são inválidos.");
       priceBook = payload.priceBook;
       catalogPricing = pricingContract.normalize(priceBook.pricing);
@@ -1560,8 +1569,7 @@ loginForm.addEventListener("submit", async (event) => {
   submit.disabled = true;
   setMessage(loginMessage, "Entrando…");
   try {
-    const user = await login(byId("emailInput").value.trim(), byId("passwordInput").value);
-    await showUser(user);
+    await login(byId("emailInput").value.trim(), byId("passwordInput").value);
     setMessage(loginMessage, "");
   } catch (error) {
     setMessage(loginMessage, error.message || "Não foi possível entrar. Confira os dados e tente novamente.", "error");

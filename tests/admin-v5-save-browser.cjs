@@ -39,7 +39,7 @@ const stub = [
 
 function adminPage() {
   const html = fs.readFileSync(path.join(appRoot, "admin.html"), "utf8");
-  const tag = '<script type="module" src="admin/admin.bundle.js?v=admin-pricing-v3"></script>';
+  const tag = '<script type="module" src="admin/admin.bundle.js?v=admin-auth-flow-v2"></script>';
   assert(html.includes(tag));
   return html.replace(tag,
     '<script type="importmap">{"imports":{"@netlify/identity":"/__identity_stub__.js"}}</script><script type="module" src="admin/admin.js"></script>');
