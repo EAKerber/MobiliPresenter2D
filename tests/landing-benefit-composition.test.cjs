@@ -88,3 +88,40 @@ test("invalid component renderer cannot partially replace host",()=>{
   assert.throws(()=>core.mountSection(model,"benefits",host,doc),/injected error/);
   assert.deepEqual(host.children,[{tag:"sentinel"}]);
 });
+
+const miniBenefits = [
+  {label:"Modular", icon:"/landing/assets/icons/ui/gold/modular.svg"},
+  {label:"Inteligente", icon:"/landing/assets/icons/ui/gold/inteligente.svg"},
+  {label:"Para a sua vida", icon:"/landing/assets/icons/ui/gold/para-sua-vida.svg"}
+];
+test("compact variant preserves three original strong/icon rows without CSS change",()=>{
+  const {doc,host}=fakeDOM();
+  feature.mountCompact(host,{miniBenefits},doc);
+  assert.equal(host.children.length,3);
+  const actual=snapshotNodes(host.children);
+  const expected=miniBenefits.map(item=>({tag:"div",className:"mini-benefit",children:[
+    {tag:"img",src:item.icon,alt:""},
+    {tag:"span",text:item.label}
+  ]}));
+  // snapshotNodes records all text nodes as span; explicit check keeps strong semantic tag.
+  assert.deepEqual(actual,expected);
+  assert.deepEqual(host.children.map(node=>node.children[1].tag),["strong","strong","strong"]);
+});
+test("standard and compact share only semantic data shape, not style variant",()=>{
+  assert.equal(feature.definition.type,"landing/benefits@1");
+  assert.deepEqual([...feature.definition.variants],["standard","compact"]);
+  const source={benefits,miniBenefits};
+  const std=core.compilePage(feature.manifest,{landing:source},core.createRegistry([feature.definition]));
+  const compact=core.compilePage(feature.compactManifest,{landing:source},core.createRegistry([feature.definition]));
+  assert.equal(std.sections[0].variant,"standard");
+  assert.equal(compact.sections[0].variant,"compact");
+  const wrong={benefits:miniBenefits,miniBenefits:benefits};
+  assert.throws(()=>feature.mount(fakeDOM().host,wrong,fakeDOM().doc),{code:"invalid-data"});
+  assert.throws(()=>feature.mountCompact(fakeDOM().host,wrong,fakeDOM().doc),{code:"invalid-data"});
+});
+test("missing compact benefits never synthesizes editorial content or changes existing host",()=>{
+  const {doc,host}=fakeDOM();
+  host.children.push({tag:"sentinel"});
+  assert.throws(()=>feature.mountCompact(host,{benefits},doc),{code:"missing-reference"});
+  assert.deepEqual(host.children,[{tag:"sentinel"}]);
+});
