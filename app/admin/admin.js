@@ -1540,10 +1540,13 @@ async function showUser(user, source = "unspecified") {
   byId("userLabel").textContent = user.email || "Administrador";
   try {
     await ensureAdminData(runId);
+    if (runId !== adminViewRun) return;
     editorPanel.hidden = false;
     await loadSettings(runId);
+    if (runId !== adminViewRun) return;
     authDiagnostics.record("admin-view:ready", { runId });
   } catch (error) {
+    if (runId !== adminViewRun) return;
     adminServiceError.hidden = false;
     setMessage(adminServiceError, error.message || "Falha ao carregar os dados administrativos.", "error");
     authDiagnostics.record("admin-view:failed", { runId, errorType: error?.name || "Error" });
@@ -1621,7 +1624,6 @@ loginForm.addEventListener("submit", async (event) => {
   try {
     const user = await login(byId("emailInput").value.trim(), byId("passwordInput").value);
     authDiagnostics.record("login:resolved", { durationMs: Math.round(performance.now() - startedAt), userPresent: Boolean(user), adminRole: isAdmin(user) });
-    await showUser(user, "login-form");
     setMessage(loginMessage, "");
   } catch (error) {
     authDiagnostics.record("login:failed", { durationMs: Math.round(performance.now() - startedAt), errorType: error?.name || "Error" });

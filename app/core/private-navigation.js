@@ -69,7 +69,7 @@ if (header) {
       });
     }
 
-    function render(user) {
+    function render(user, { loading = false } = {}) {
       privateLinks.replaceChildren();
       account.hidden = !user;
       email.hidden = !user;
@@ -86,6 +86,11 @@ if (header) {
         privateGroup.append(makeLink("/access/manage.html", "Gerenciar acessos"));
       } else if (user?.temporarySession) {
         privateGroup.append(makeLink("/config/", "Configurador"));
+      } else if (loading) {
+        const note = document.createElement("p");
+        note.className = "private-menu__note";
+        note.textContent = "Verificando acesso…";
+        privateGroup.append(note);
       } else if (!user) {
         privateGroup.append(makeLink("/admin.html", "Entrar na administração"));
       } else {
@@ -120,12 +125,35 @@ if (header) {
       if (event.key === "Escape" && !menu.hidden) setOpen(false, true);
     });
 
-    render(null);
+    let authRevision = 0;
+    let sessionLookupPromise = null;
+    function resolveCurrentSession() {
+      if (!sessionLookupPromise) {
+        sessionLookupPromise = currentSession().finally(() => {
+          sessionLookupPromise = null;
+        });
+      }
+      return sessionLookupPromise;
+    }
+    function syncFromAuth(user) {
+      const revision = ++authRevision;
+      if (user) {
+        render(user);
+        return;
+      }
+      render(null, { loading: true });
+      resolveCurrentSession()
+        .then((session) => {
+          if (revision === authRevision) render(session);
+        })
+        .catch(() => {
+          if (revision === authRevision) render(null);
+        });
+    }
+
+    render(null, { loading: true });
     try {
-      onAuthChange((_event, user) => {
-        if (user) render(user);
-        else currentSession().then(render).catch(() => render(null));
-      });
+      onAuthChange((_event, user) => syncFromAuth(user));
     } catch { /* Keep the public links if Identity is unavailable. */ }
     async function currentSession() {
       let user = null;
@@ -144,6 +172,6 @@ if (header) {
         ? { email: result.email || "", roles: [], temporarySession: true }
         : null;
     }
-    currentSession().then(render).catch(() => render(null));
+    syncFromAuth(null);
   }
 }
