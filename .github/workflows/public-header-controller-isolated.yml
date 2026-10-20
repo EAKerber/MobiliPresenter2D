@@ -1,0 +1,65 @@
+name: Public header controller isolated gate
+
+on:
+  push:
+    branches:
+      - experiment/shared-public-header-controller-20261020
+    paths:
+      - "app/landing/landing.js"
+      - "app/landing/header-menu.js"
+      - "app/how-it-works/how-it-works.js"
+      - "app/index.html"
+      - "app/how-it-works/index.html"
+      - "tests/public-header-controller-gate.mjs"
+      - ".github/workflows/public-header-controller-isolated.yml"
+
+concurrency:
+  group: nav-controller-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  nav-differential:
+    name: Three public headers / Chromium and WebKit / no deploy
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    steps:
+      - name: Checkout isolated candidate
+        uses: actions/checkout@v4
+      - name: Checkout unchanged main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          path: baseline
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Validate JavaScript and existing public cutover
+        run: |
+          node --check app/landing/header-menu.js
+          node --check app/landing/landing.js
+          node --check app/how-it-works/how-it-works.js
+          node tests/public-cutover-contract.cjs
+      - name: Install isolated browser test tools
+        run: |
+          npm install --no-save --no-package-lock playwright@1.56.0
+          npx playwright install --with-deps chromium webkit
+      - name: Serve main and candidate on localhost only
+        run: |
+          python3 -m http.server 8123 --bind 127.0.0.1 --directory app >/tmp/nav-candidate.log 2>&1 &
+          python3 -m http.server 8124 --bind 127.0.0.1 --directory baseline/app >/tmp/nav-baseline.log 2>&1 &
+          sleep 2
+          curl --fail http://127.0.0.1:8123/ >/dev/null
+          curl --fail http://127.0.0.1:8124/ >/dev/null
+      - name: Compare headers and test menu keyboard pointer click
+        run: node tests/public-header-controller-gate.mjs
+      - name: Retain read-only test report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: public-nav-gate
+          path: artifacts/public-nav/
+          if-no-files-found: warn
+          retention-days: 7
