@@ -29,10 +29,15 @@ async function assertLanding(page,engine,width) {
 
   // Navigation should remain functional with the same menu toggle.
   const menu=page.locator("#menuToggle");
-  await menu.click();
-  assert.equal(await menu.getAttribute("aria-expanded"),"true");
-  await menu.click();
-  assert.equal(await menu.getAttribute("aria-expanded"),"false");
+  if (await menu.isVisible()) {
+    await menu.click();
+    assert.equal(await menu.getAttribute("aria-expanded"),"true");
+    await menu.click();
+    assert.equal(await menu.getAttribute("aria-expanded"),"false");
+  } else {
+    // Desktop header shows the navigation inline and hides the hamburger.
+    assert.equal(await page.locator("#primaryNav").isVisible(),true);
+  }
   assert.deepEqual(errors,[],"no exceptions during interactions");
   console.log("LANDING_INTERACTION_PASS "+JSON.stringify({engine,width,benefits:4,miniBenefits:3,environments:5,menu:true,kitchen:true,errors:0}));
 }
