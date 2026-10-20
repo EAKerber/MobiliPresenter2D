@@ -3,7 +3,6 @@ const test = require("node:test");
 const assert = require("node:assert/strict");
 const core = require("../app/core/page-composition.js");
 const feature = require("../app/landing/benefit-strip.js");
-const dataModule = require("../app/landing/data.js");
 
 // The data is an intentionally frozen, public local fixture; no admin or API access.
 const benefits = [
