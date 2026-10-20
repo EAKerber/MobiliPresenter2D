@@ -69,10 +69,11 @@ try {
   await page.waitForSelector("#benefits[role=status]",{timeout:8000});
   assert.match(await page.locator("#benefits").textContent(),/Benefícios temporariamente indisponíveis/);
   assert.equal(await page.locator("#benefits > .benefit-item").count(),0);
-  assert.equal(await page.locator("#miniBenefits > .mini-benefit").count(),3);
+  assert.equal(await page.locator("#miniBenefits > .mini-benefit").count(),0);
+  assert.match(await page.locator("#miniBenefits[role=status]").textContent(),/Vantagens temporariamente indisponíveis/);
   assert.equal(await page.locator("#environmentTrack .environment").count(),5);
   assert.equal(exceptions.length,0,"isolated component script failure must not crash page renderer");
   await page.locator('[data-environment-id="cozinha"]').click();
   await page.waitForFunction(()=>document.querySelector("#featureAction")?.getAttribute("href")==="/viewer/");
-  console.log("LANDING_COMPONENT_FAILURE_ISOLATED "+JSON.stringify({benefitsFallback:0,miniBenefits:3,environments:5,uncaughtExceptions:0,kitchenStillFunctional:true}));
+  console.log("LANDING_COMPONENT_FAILURE_ISOLATED "+JSON.stringify({benefitsFallback:0,miniBenefits:0,environments:5,uncaughtExceptions:0,kitchenStillFunctional:true}));
 } finally { await browser.close(); }
