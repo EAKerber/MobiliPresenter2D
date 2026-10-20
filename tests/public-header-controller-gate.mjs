@@ -100,8 +100,10 @@ async function exercise(engine,route,width) {
       await page.keyboard.press("Enter");
       assert.equal(await toggle.getAttribute("aria-expanded"),"true","keyboard activation");
       assert.equal(await page.locator("body").evaluate(el=>el.classList.contains("menu-open")),true);
+      assert.equal(await page.evaluate(()=>document.activeElement===document.querySelector("#primaryNav a")) ,true,"keyboard-open focuses first nav link");
       await page.keyboard.press("Escape");
       assert.equal(await toggle.getAttribute("aria-expanded"),"false","Escape closes");
+      assert.equal(await toggle.evaluate(el=>document.activeElement===el),true,"Escape restores toggle focus");
       await toggle.click();
       assert.equal(await toggle.getAttribute("aria-expanded"),"true");
       await page.locator("body").dispatchEvent("pointerdown");
