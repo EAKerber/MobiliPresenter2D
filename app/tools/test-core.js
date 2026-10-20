@@ -745,8 +745,8 @@ assert.equal(adminJs.includes('input.type = input.type === "password" ? "text" :
 assert.equal(adminJs.includes('byId("passwordInput").value'), true, "login continues reading the same password value");
 assert.equal(adminJs.includes('byId("newPasswordInput").value'), true, "password update continues reading the same new-password value");
 assert.equal(adminCss.includes(".password-field"), true, "admin reveal control has local field layout");
-assert.equal(adminHtml.includes("admin/admin.css?v=admin-auth-diagnostics-v1"), true, "admin editor CSS cache revision is explicit");
-assert.equal(adminHtml.includes("admin/admin.bundle.js?v=admin-auth-diagnostics-v1"), true, "admin editor bundle cache revision is explicit");
+assert.equal(adminHtml.includes("admin/admin.css?v=admin-auth-flow-v2"), true, "admin editor CSS cache revision is explicit");
+assert.equal(adminHtml.includes("admin/admin.bundle.js?v=admin-auth-flow-v2"), true, "admin editor bundle cache revision is explicit");
 assert.equal(adminHtml.includes("core/pricing-contract.js?v=pricing-contract-v1"), true, "admin explicitly loads the typed pricing contract");
 assert.equal(adminHtml.includes("data/mock-price-book.js"), false, "admin loads protected pricing through the authenticated bootstrap endpoint");
 assert.equal(adminHtml.includes("core/configuration.js?v=admin-config-v9"), true, "admin loads the v3 compatibility core revision");
