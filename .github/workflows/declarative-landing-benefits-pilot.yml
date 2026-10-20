@@ -10,6 +10,7 @@ on:
       - "app/landing/benefit-strip.js"
       - "app/core/page-composition.js"
       - "tests/landing-benefit*"
+      - "tests/landing-interaction-gate.mjs"
       - ".github/workflows/declarative-landing-benefits-pilot.yml"
 
 permissions:
@@ -38,7 +39,7 @@ jobs:
       - name: Install browser instrumentation without changing repository
         run: |
           npm install --no-save --no-package-lock playwright@1.56.0
-          npx playwright install --with-deps chromium
+          npx playwright install --with-deps chromium webkit
       - name: Serve main and candidate locally
         run: |
           python3 -m http.server 8123 --bind 127.0.0.1 --directory app >/tmp/landing-candidate-http.log 2>&1 &
@@ -48,6 +49,8 @@ jobs:
           curl --fail http://127.0.0.1:8124/ >/dev/null
       - name: Compare DOM, computed styles, bounding boxes and screenshots
         run: node tests/landing-benefit-browser-gate.mjs
+      - name: Exercise Landing interactions in Chromium/WebKit and component-failure isolation
+        run: node tests/landing-interaction-gate.mjs
       - name: Retain differential evidence
         if: always()
         uses: actions/upload-artifact@v4
