@@ -8,6 +8,11 @@ window.CASA_PUBLIC_LANDING = Object.freeze({
     { id: "escritorio", name: "Escritório", image: "/landing/assets/icons/small/escritorio.webp", featureImage: "/landing/assets/icons/large/escritorio.webp", alt: "Escritório modular", description: "Produtividade com organização e design." },
     { id: "lavanderia", name: "Lavanderia", image: "/landing/assets/icons/small/lavanderia.webp", featureImage: "/landing/assets/icons/large/lavanderia.webp", alt: "Lavanderia modular", description: "Praticidade que facilita o dia a dia." }
   ],
+  miniBenefits: [
+    { label: "Modular", icon: "/landing/assets/icons/ui/gold/modular.svg" },
+    { label: "Inteligente", icon: "/landing/assets/icons/ui/gold/inteligente.svg" },
+    { label: "Para a sua vida", icon: "/landing/assets/icons/ui/gold/para-sua-vida.svg" }
+  ],
   benefits: [
     { label: "Qualidade de móvel planejado", icon: "/landing/assets/icons/ui/white/qualidade.svg" },
     { label: "Praticidade de um sistema modular", icon: "/landing/assets/icons/ui/white/modularidade.svg" },
