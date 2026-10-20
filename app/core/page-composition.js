@@ -3,7 +3,7 @@
 
   // UI-P1/P2 experimental bridge. Contracts are in code, not in published Admin v5.
   const SCHEMA = "PageCompositionExperimental 0.1";
-  const KEY = /^[a-z][a-z0-9-]*$/;
+  const KEY = /^[a-z][a-zA-Z0-9-]*$/;
   const TYPE = /^[a-z][a-z0-9-]*\/[a-z][a-z0-9-]*@[1-9][0-9]*$/;
   const FORBIDDEN = new Set(["__proto__", "constructor", "prototype"]);
 
