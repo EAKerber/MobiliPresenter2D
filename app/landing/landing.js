@@ -33,12 +33,15 @@
       benefit.append(icon, strong); mini.append(benefit);
     });
     const strip = document.getElementById("benefits");
-    data.benefits.forEach((item) => {
-      const node = document.createElement("div"); node.className = "benefit-item";
-      const icon = document.createElement("img"); icon.src = item.icon; icon.alt = "";
-      const text = document.createElement("span"); text.textContent = item.label;
-      node.append(icon, text); strip.append(node);
-    });
+    try {
+      window.CasaLandingBenefitStrip.mount(strip, data, document);
+    } catch (error) {
+      // Do not synthesize missing editorial content or interrupt the other Landing widgets.
+      console.error("Landing benefit-strip contract failure", error);
+      strip.replaceChildren();
+      strip.setAttribute("role", "status");
+      strip.textContent = "Benefícios temporariamente indisponíveis.";
+    }
   }
 
   // Load and decode the next WebP before switching its text and destination.
