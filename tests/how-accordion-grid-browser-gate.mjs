@@ -76,11 +76,13 @@ for(const engine of [chromium,webkit]){
       inspect(browser,BASE,width,theme,false),
       inspect(browser,CAND,width,theme,true)
    ]);
+   let allClosedPixelEqual=true;
    for(let i=0;i<selectors.length;i++){
      assert.equal(after[i].closedDom,before[i].closedDom,"closed-state DOM changed");
      assert.deepEqual(after[i].closedMetrics,before[i].closedMetrics,
        "closed-state CSS and geometry changed in "+selectors[i]+" "+engine.name()+" "+width+" "+theme);
      const closedPixelsEqual=after[i].closedScreenshot.equals(before[i].closedScreenshot);
+     if(!closedPixelsEqual) allClosedPixelEqual=false;
      if(!closedPixelsEqual) {
        await writeFile(artifact+"/"+engine.name()+"-"+width+"-"+theme+"-closed-main-"+i+".png",before[i].closedScreenshot);
        await writeFile(artifact+"/"+engine.name()+"-"+width+"-"+theme+"-closed-candidate-"+i+".png",after[i].closedScreenshot);
@@ -94,7 +96,7 @@ for(const engine of [chromium,webkit]){
      }
      await writeFile(artifact+"/"+engine.name()+"-"+width+"-"+theme+"-open-"+i+".png",after[i].screenshotOpened);
    }
-   const record={engine:engine.name(),width,theme,closedPixelEqual:true,
+   const record={engine:engine.name(),width,theme,closedPixelEqual:allClosedPixelEqual,
      foundationFixed:true,studyFixed:true,keyboard:true,independentOpen:true,errors:0};
    results.push(record);
    console.log("HOW_ACCORDION_GRID_PASS "+JSON.stringify(record));
