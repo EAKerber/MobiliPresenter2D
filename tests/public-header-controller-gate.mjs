@@ -42,9 +42,14 @@ async function sample(browser,origin,route,width,theme){
     const res=await page.goto(origin+route,{waitUntil:"domcontentloaded",timeout:30000});
     assert.equal(res?.status(),200,origin+route);
     await page.locator("[data-ui-theme-toggle]").first().waitFor({timeout:12000});
-    await page.evaluate(async()=>{await document.fonts?.ready;});
-    await sleep(150);
     const root=route==="/viewer/"?".viewer-header":".site-header";
+    await page.evaluate(async rootSelector=>{
+      // Dynamic brand assets switch with the theme. Wait for their decode and a stable paint.
+      await document.fonts?.ready;
+      await Promise.all([...document.querySelectorAll(rootSelector+" img")].map(image=>image.decode().catch(()=>{})));
+      await new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));
+    },root);
+    await sleep(180);
     const initial=await state(page,root);
     assert.equal(initial.theme,theme);
     const closed=await page.locator(root).screenshot({animations:"disabled"});
@@ -71,11 +76,23 @@ try {
     const {menuScriptCount:oldCount,...original}=before.initial;
     const {menuScriptCount:newCount,...updated}=after.initial;
     assert.deepEqual(updated,original,"header markup or CSS changed "+route+"/"+width+"/"+theme);
+    if(!after.closed.equals(before.closed)){
+      const prefix=folder+"/mismatch-"+route.replaceAll("/","_")+"-"+width+"-"+theme;
+      await writeFile(prefix+"-main.png",before.closed);
+      await writeFile(prefix+"-candidate.png",after.closed);
+      await writeFile(prefix+"-diagnostic.json",JSON.stringify({route,width,theme,original,updated},null,2));
+    }
     assert.equal(after.closed.equals(before.closed),true,"header closed pixels changed "+route+"/"+width+"/"+theme);
     if(before.opened){
       const {menuScriptCount:ignored,...oldOpened}=before.opened;
       const {menuScriptCount:ignoredAgain,...newOpened}=after.opened;
       assert.deepEqual(newOpened,oldOpened,"opened header/CSS changed "+route+"/"+width+"/"+theme);
+      if(!after.open.equals(before.open)){
+        const prefix=folder+"/open-mismatch-"+route.replaceAll("/","_")+"-"+width+"-"+theme;
+        await writeFile(prefix+"-main.png",before.open);
+        await writeFile(prefix+"-candidate.png",after.open);
+        await writeFile(prefix+"-diagnostic.json",JSON.stringify({route,width,theme,oldOpened,newOpened},null,2));
+      }
       assert.equal(after.open.equals(before.open),true,"menu open pixels changed "+route+"/"+width+"/"+theme);
     }else assert.equal(after.opened,null);
     assert.equal(newCount,1,"candidate must use exactly one shared controller "+route);
