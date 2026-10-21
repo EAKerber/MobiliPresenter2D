@@ -1,0 +1,44 @@
+name: Viewer NAV-005 secondary header isolated gate
+on:
+  push:
+    branches:
+      - fix/viewer-secondary-header-nav005-20261021
+    paths:
+      - "app/viewer/index.html"
+      - "app/viewer/viewer.css"
+      - "app/core/ui-theme.js"
+      - "tests/viewer-secondary-header-browser-gate.mjs"
+      - ".github/workflows/viewer-secondary-header-isolated.yml"
+concurrency:
+  group: viewer-nav005-${{ github.ref }}
+  cancel-in-progress: true
+permissions:
+  contents: read
+jobs:
+  secondary-header:
+    runs-on: ubuntu-latest
+    timeout-minutes: 16
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Install browser runners locally in CI
+        run: |
+          npm install --no-save --no-package-lock playwright@1.56.0
+          npx playwright install --with-deps chromium webkit
+      - name: Serve only local candidate (no deploy)
+        run: |
+          python3 -m http.server 8123 --bind 127.0.0.1 --directory app >/tmp/viewer-nav005.log 2>&1 &
+          sleep 2
+          curl --fail http://127.0.0.1:8123/viewer/ >/dev/null
+      - name: Validate secondary NAV-005 behavior and layout
+        run: node tests/viewer-secondary-header-browser-gate.mjs
+      - name: Preserve screenshots for visual review
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: viewer-nav005-header
+          path: artifacts/viewer-secondary-header/
+          if-no-files-found: warn
+          retention-days: 7
