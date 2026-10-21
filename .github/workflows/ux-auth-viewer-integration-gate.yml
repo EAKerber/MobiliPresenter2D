@@ -1,0 +1,77 @@
+name: Auth and public UX integration isolated gate
+on:
+  push:
+    branches:
+      - integration/ux-auth-viewer-preview-20261021
+    paths:
+      - "app/admin/admin.js"
+      - "app/core/admin-bootstrap-retry.mjs"
+      - "app/core/private-navigation.js"
+      - "app/core/ui-theme.js"
+      - "app/how-it-works/how-it-works.css"
+      - "app/viewer/index.html"
+      - "app/viewer/viewer.css"
+      - "app/viewer/viewer.js"
+      - "tests/auth-first-login-recovery.test.mjs"
+      - "tests/how-accordion-grid-browser-gate.mjs"
+      - "tests/viewer-secondary-header-browser-gate.mjs"
+      - "tests/viewer-overview-editorial-browser-gate.mjs"
+      - ".github/workflows/ux-auth-viewer-integration-gate.yml"
+concurrency:
+  group: ux-integration-${{ github.ref }}
+  cancel-in-progress: true
+permissions:
+  contents: read
+jobs:
+  integrated-gate:
+    name: Four independent changes combined / no Netlify deploy
+    runs-on: ubuntu-latest
+    timeout-minutes: 28
+    steps:
+      - name: Checkout isolated candidate
+        uses: actions/checkout@v4
+      - name: Checkout unchanged main baseline
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          path: baseline
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Read-only auth tests and static route contract
+        run: |
+          node --test tests/auth-first-login-recovery.test.mjs
+          node tests/public-cutover-contract.cjs
+          node --check app/admin/admin.js
+          node --check app/core/private-navigation.js
+          node --check app/core/ui-theme.js
+          node --check app/viewer/viewer.js
+      - name: Install only Playwright outside project dependencies
+        run: |
+          npm install --prefix /tmp/ux-integrated-playwright --no-save --no-package-lock playwright@1.56.0
+          ln -s /tmp/ux-integrated-playwright/node_modules ./node_modules
+          /tmp/ux-integrated-playwright/node_modules/.bin/playwright install --with-deps chromium webkit
+      - name: Serve main and candidate on loopback
+        run: |
+          python3 -m http.server 8123 --bind 127.0.0.1 --directory app >/tmp/ux-candidate.log 2>&1 &
+          python3 -m http.server 8124 --bind 127.0.0.1 --directory baseline/app >/tmp/ux-baseline.log 2>&1 &
+          sleep 2
+          curl --fail http://127.0.0.1:8123/viewer/ >/dev/null
+          curl --fail http://127.0.0.1:8124/viewer/ >/dev/null
+      - name: How-it-works accordion visual and keyboard differential
+        run: node tests/how-accordion-grid-browser-gate.mjs
+      - name: Viewer NAV-005 depth-2 header and menu cross-engine
+        run: node tests/viewer-secondary-header-browser-gate.mjs
+      - name: Viewer editorial public-projection comparison
+        run: node tests/viewer-overview-editorial-browser-gate.mjs
+      - name: Keep evidence for review
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ux-auth-viewer-integration-evidence
+          path: |
+            artifacts/how-accordion/
+            artifacts/viewer-secondary-header/
+            artifacts/viewer-overview-editorial/
+          if-no-files-found: warn
+          retention-days: 7
