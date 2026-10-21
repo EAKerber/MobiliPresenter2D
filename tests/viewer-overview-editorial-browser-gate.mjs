@@ -110,7 +110,12 @@ for(const engine of [chromium,webkit]){
      assert.ok(last.bottom<=after.data.dimension.y+1,"benefits overlap footer");
    }
    if(width===1366){
-     assert.ok(after.data.dimension.y>=before.data.dimension.y-1,"footer not anchored lower");
+     // Absolute document Y changes when typography/card sizes grow. The stable
+     // editorial contract anchors the dimensions near the card's own bottom.
+     const gap=after.data.overview.bottom-after.data.dimension.bottom;
+     const baselineGap=before.data.overview.bottom-before.data.dimension.bottom;
+     assert.ok(gap>=-1 && gap<=baselineGap+3,
+       "footer must remain near card bottom (gap="+gap+", baseline="+baselineGap+")");
    }
    const scenario={engine:engine.name(),width,theme,moduleId:c.id,benefits:c.benefits.length,
      largerBenefits:true,footerBottomLeft:true,noPrice:true,errors:0};
