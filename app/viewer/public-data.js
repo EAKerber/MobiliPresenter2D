@@ -5,7 +5,8 @@
   // silently to the static catalog from the standalone staging shell.
   async function load() {
     const response = await global.fetch("/api/public-modules", {
-      method: "GET", cache: "no-store", credentials: "same-origin"
+      method: "GET", cache: "no-store", credentials: "same-origin",
+      headers: { "X-Public-Modules-Version": "0.2" }
     });
     if (!response.ok) throw new Error("public_modules_unavailable");
     const payload = await response.json();

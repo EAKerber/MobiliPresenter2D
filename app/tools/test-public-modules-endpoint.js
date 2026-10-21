@@ -76,8 +76,10 @@ publishedReader, publicModules, catalog, priceBook, scene } = globalThis.__publi
     const endpoint = await import("data:text/javascript;base64," + Buffer.from(dependencies + withoutImports).toString("base64"));
     const previewCtx = { deploy: { context: "deploy-preview" }, site: { url: "https://production.fixture.invalid" } };
     const prodCtx = { deploy: { context: "production" }, site: { url: "https://production.fixture.invalid" } };
-    async function invoke(method, suffix = "", context = previewCtx) {
-      const response = await endpoint.default(new Request("https://preview.fixture.invalid/api/public-modules" + suffix, { method }), context);
+    async function invoke(method, suffix = "", context = previewCtx, version = "") {
+      const response = await endpoint.default(new Request("https://preview.fixture.invalid/api/public-modules" + suffix, {
+        method, ...(version ? { headers: { "X-Public-Modules-Version": version } } : {})
+      }), context);
       assert.equal(response.headers.get("content-type"), "application/json; charset=utf-8");
       assert.equal(response.headers.get("cache-control"), "no-store, max-age=0");
       assert.equal(response.headers.get("x-content-type-options"), "nosniff");
@@ -119,6 +121,25 @@ publishedReader, publicModules, catalog, priceBook, scene } = globalThis.__publi
     assert.equal(preview.reads, 1);
     assert.equal(prod.reads, 1, "preview must not read the production published Blob");
     assert.equal(productionFetches, 1);
+
+    // Negotiation never grants permission: only the published V5 flag can.
+    assert.deepEqual(await invoke("GET", "", prodCtx, "0.7"), {
+      status: 406, body: { error: "unsupported_public_modules_version" }
+    });
+    const enabledDocument = structuredClone(v5);
+    enabledDocument.viewerPricePublication = { enabled: true };
+    prod.setMock(enabledDocument);
+    const legacyWhenOn = await invoke("GET", "", prodCtx);
+    const pricedWhenOn = await invoke("GET", "", prodCtx, "0.2");
+    assert.equal(legacyWhenOn.body.schemaVersion, publicModules.SCHEMA);
+    assert.equal(JSON.stringify(legacyWhenOn.body).includes("basePriceCents"), false);
+    assert.equal(pricedWhenOn.body.schemaVersion, publicModules.PRICED_SCHEMA);
+    assert.equal(pricedWhenOn.body.modules[0].basePriceCents, v5.pricing.roles.itemBase["module-01"].cents);
+    assert.equal(JSON.stringify(pricedWhenOn.body).includes('"pricing"'),false);
+    prod.setMock(v5);
+    const pricedWhileOff = await invoke("GET", "", prodCtx, "0.2");
+    assert.equal(pricedWhileOff.body.schemaVersion,publicModules.SCHEMA);
+    assert.equal(JSON.stringify(pricedWhileOff.body).includes("basePriceCents"),false);
 
     // Turning off a module in the configurator must not suppress its public
     // viewer state. Preview fallback accepts the current viewerEntities DTO.

@@ -91,3 +91,14 @@ test("V5 permission is optional for legacy, exactly boolean when present", () =>
     assert.throws(() => project(source,catalog,scene));
   }
 });
+
+test("old 0.1 projection is available even when 0.2 prices are published", () => {
+ const f=fixture();f.viewerPricePublication={enabled:true};
+ const result=project(f,catalog,scene);
+ assert.equal(result.schemaVersion,PRICED_SCHEMA);
+ const legacy=require("../app/core/public-module-projection.js").forLegacyViewer(result);
+ assert.equal(legacy.schemaVersion,SCHEMA);
+ assert.equal(JSON.stringify(legacy).includes("basePriceCents"),false);
+ assert.equal(legacy.modules.length,result.modules.length);
+ assert.equal(result.modules[0].basePriceCents,10000,"new DTO remains authorized");
+});

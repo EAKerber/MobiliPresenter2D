@@ -145,7 +145,17 @@
       viewerEntities: entities, finishId: initial.finishId, availableFinishes
     } };
   }
-  const api = Object.freeze({ SCHEMA, PRICED_SCHEMA, project });
+  // Version negotiation: cached 0.1 viewers must never fail when the public
+  // publication uses 0.2. This down-projection cannot authorize prices.
+  function forLegacyViewer(projected) {
+    if (projected?.schemaVersion !== PRICED_SCHEMA) return projected;
+    return {
+      schemaVersion: SCHEMA,
+      modules: projected.modules.map(({ basePriceCents: _omitted, ...module }) => module),
+      publicState: projected.publicState
+    };
+  }
+  const api = Object.freeze({ SCHEMA, PRICED_SCHEMA, project, forLegacyViewer });
   if (typeof module !== "undefined" && module.exports) module.exports = api;
   if (global && typeof global === "object") global.CasaModulesPublicModuleProjection = api;
 })(typeof globalThis === "undefined" ? this : globalThis);

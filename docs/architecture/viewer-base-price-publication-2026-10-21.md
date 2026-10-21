@@ -18,3 +18,6 @@ Incremento experimental isolado da PR #230. Base: `integration/ux-auth-viewer-pr
 - Browser Admin (troca de aba, estado OFF, publicar/erro/retentativa) e Viewer (390/1366 claro/escuro, cifra longa, foco).
 - HTTP anônimo ON/OFF contra deploy real e a autorização administrativa com sessão de teste; não usar valores privados nas capturas.
 - Inspeção WebKit/iPad, revogação/cache e verificação rollback.
+
+## Retrocompatibilidade de clientes (gate aplicado)
+O endpoint negocia a versão via header `X-Public-Modules-Version: 0.2`, enviado somente pelo Viewer atualizado. Clientes antigos, que não enviam header, recebem `0.1` sem preço mesmo com autorização global ON. O header **não concede autorização**: com a publicação desligada, a API retorna `0.1` sem preço mesmo quando solicitado `0.2`. Publicação ON + header de versão 0.2 retorna DTO 0.2 com campos mínimos. Versão desconhecida responde HTTP 406. O fallback do Deploy Preview permanece 0.1 quando lê a origem primária sem header, não importando regras comerciais.

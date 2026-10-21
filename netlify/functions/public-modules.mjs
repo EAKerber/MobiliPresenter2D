@@ -78,8 +78,15 @@ async function readPrimaryPublicProjection(context, request) {
 
 export default async (request, context) => {
   if (request.method !== "GET") return respond({ error: "method_not_allowed" }, 405, { Allow: "GET" });
-  // Inspection, filtering and unrecognized parameters are not public APIs.
+  // Schema negotiation is compatibility, never price authorization: it cannot
+  // override the administrator's persisted OFF-by-default publication gate.
+  // Pre-upgrade cached viewers omit the header and always get the 0.1 DTO.
+  // The new Viewer sends X-Public-Modules-Version: 0.2 and handles either.
   if (new URL(request.url).search) return respond({ error: "unsupported_query" }, 400);
+  const requestedVersion = request.headers.get("x-public-modules-version") || "0.1";
+  if (!["0.1", "0.2"].includes(requestedVersion)) {
+    return respond({ error: "unsupported_public_modules_version" }, 406);
+  }
 
   try {
     const raw = await publishedReader.readRawPublished(storeFor(context));
@@ -99,7 +106,7 @@ export default async (request, context) => {
       return respond({ error: "public_modules_unavailable" }, 503);
     }
     const result = publicModules.project(inspected.value, catalog, scene);
-    return respond(result, 200);
+    return respond(requestedVersion === "0.2" ? result : publicModules.forLegacyViewer(result), 200);
   } catch {
     // Fail closed without publishing internal validation/storage exceptions.
     return respond({ error: "public_modules_unavailable" }, 503);
