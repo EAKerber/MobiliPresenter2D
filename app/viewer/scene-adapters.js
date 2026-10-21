@@ -21,7 +21,9 @@
       drawingSpec: product.drawingSpec || null,
       internalLayout: product.internalLayout || product.technicalLayout?.internalFront?.segments || null,
       internalLayoutAxis: product.internalLayoutAxis || (product.technicalLayout?.internalFront ? "width" : null),
-      views
+      views,
+      ...(Number.isSafeInteger(product.basePriceCents) && product.basePriceCents > 0
+        && product.basePriceCents <= 100000000 ? { basePriceCents: product.basePriceCents } : {})
     };
   }
 
@@ -180,7 +182,9 @@
         display: entry.dimensionLabel || physical.dimensions.display
       } : physical.dimensions;
       return { ...physical, dimensions, title: entry.title, description: entry.description || "",
-        benefits: entry.benefits || [], components: entry.components || [], requirements: entry.requirements || [] };
+        benefits: entry.benefits || [], components: entry.components || [], requirements: entry.requirements || [],
+        ...(Number.isSafeInteger(entry.basePriceCents) && entry.basePriceCents > 0
+          && entry.basePriceCents <= 100000000 ? { basePriceCents: entry.basePriceCents } : {}) };
     }) : catalog.modules;
     const modules = sourceProducts.map((product) =>
       normalizeModule(product, entityById.get(product.entityId))

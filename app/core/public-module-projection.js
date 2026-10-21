@@ -4,6 +4,7 @@
   // CP-PUBLIC-02a: pure, intentionally narrow fixture boundary. Neither
   // pricing nor a complete administration document crosses this boundary.
   const SCHEMA = "PublicModulePresentation2D 0.1";
+  const PRICED_SCHEMA = "PublicModulePresentation2D 0.2";
   const SOURCE_SCHEMA = "ConfiguratorAdministration2D 5.0";
 
   function text(value) {
@@ -114,12 +115,47 @@
     if (!finishIds.length || !finishIds.includes(initial.finishId) || new Set(finishIds).size !== finishIds.length) {
       throw new TypeError("published initial finish must be globally available");
     }
-    // Never return the whole materials library, admin object assets or pricing.
-    return { schemaVersion: SCHEMA, modules, publicState: {
+    // Opt-in: only a V5 administrator may persist this single global permission.
+    // Older publications (property absent) are always unpriced. No browser flag or URL input.
+    const publication = published.viewerPricePublication;
+    if (publication !== undefined && (!publication || typeof publication !== "object"
+      || Array.isArray(publication) || Object.keys(publication).length !== 1
+      || typeof publication.enabled !== "boolean")) {
+      throw new TypeError("invalid viewer price publication permission");
+    }
+    const publishBasePrices = publication?.enabled === true;
+    if (publishBasePrices) {
+      const prices = published.pricing?.roles?.itemBase;
+      if (!prices || typeof prices !== "object" || Array.isArray(prices)) {
+        throw new TypeError("published base price rules missing");
+      }
+      for (const module of modules) {
+        if (!entities[module.id]) continue; // hidden modules never carry a public price
+        const price = Object.hasOwn(prices, module.id) ? prices[module.id] : null;
+        // Zero means no chargeable commercial base and is intentionally omitted.
+        // Missing or invalid rules are omitted, never inferred from a bundled price book.
+        if (price?.type === "amount" && Number.isSafeInteger(price.cents)
+          && price.cents > 0 && price.cents <= 100000000) {
+          module.basePriceCents = price.cents;
+        }
+      }
+    }
+    // Never return the complete priceBook, rules, margins, admin assets or publication flag.
+    return { schemaVersion: publishBasePrices ? PRICED_SCHEMA : SCHEMA, modules, publicState: {
       viewerEntities: entities, finishId: initial.finishId, availableFinishes
     } };
   }
-  const api = Object.freeze({ SCHEMA, project });
+  // Version negotiation: cached 0.1 viewers must never fail when the public
+  // publication uses 0.2. This down-projection cannot authorize prices.
+  function forLegacyViewer(projected) {
+    if (projected?.schemaVersion !== PRICED_SCHEMA) return projected;
+    return {
+      schemaVersion: SCHEMA,
+      modules: projected.modules.map(({ basePriceCents: _omitted, ...module }) => module),
+      publicState: projected.publicState
+    };
+  }
+  const api = Object.freeze({ SCHEMA, PRICED_SCHEMA, project, forLegacyViewer });
   if (typeof module !== "undefined" && module.exports) module.exports = api;
   if (global && typeof global === "object") global.CasaModulesPublicModuleProjection = api;
 })(typeof globalThis === "undefined" ? this : globalThis);
