@@ -111,3 +111,58 @@
   .detail-row { min-height: 42px; padding: 7px 9px; }
   .viewer-footer { padding-inline: 16px; }
 }
+
+
+/* NAV-005 secondaryNavigationPages: contextual return + theme + public menu.
+   Deliberately scoped to Viewer; first-level and private header CSS are separate. */
+.viewer-header { position: relative; isolation: isolate; gap: 12px; }
+.viewer-header__context { display: flex; align-items: center; gap: clamp(7px, 1.5vw, 18px); flex: 1 1 auto; min-width: 0; }
+.viewer-header__context .viewer-brand { flex: 0 1 auto; min-width: 0; }
+.viewer-header__context .back-link { flex: 0 0 auto; white-space: nowrap; }
+.viewer-header__actions { display: flex; align-items: center; justify-content: flex-end; gap: 8px; flex: 0 0 auto; margin-left: auto; }
+.viewer-header .ui-theme-toggle--header {
+  display: inline-flex; align-items: center; justify-content: center;
+  gap: 6px; min-width: 44px; min-height: 44px; max-width: 98px;
+  padding: 0 8px; border-color: transparent; background: transparent;
+  font-size: 12px; font-weight: 650;
+}
+.viewer-header .ui-theme-toggle--header .ui-theme-toggle__label-long { display: none; }
+.viewer-header .ui-theme-toggle--header .ui-theme-toggle__label-short { display: inline; }
+.viewer-header .menu-toggle {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 4px; width: 44px; height: 44px; padding: 0; flex: 0 0 44px;
+  border: 1px solid var(--public-line); border-radius: 9px;
+  background: var(--public-surface); color: var(--public-text); cursor: pointer;
+}
+.viewer-header .menu-toggle span { display: block; width: 18px; height: 2px; border-radius: 2px; background: currentColor; }
+.viewer-header .menu-toggle:hover { background: var(--ui-theme-control-bg); }
+.viewer-header .menu-toggle:focus-visible,
+.viewer-header__nav a:focus-visible,
+.viewer-header .back-link:focus-visible {
+  outline: 3px solid var(--ui-theme-focus); outline-offset: 3px;
+}
+.viewer-header__nav {
+  position: absolute; z-index: 1200; top: calc(100% + 4px); right: max(16px, calc((100vw - 1380px) / 2));
+  display: flex; flex-direction: column; gap: 2px;
+  width: min(310px, calc(100vw - 28px)); padding: 10px;
+  border: 1px solid var(--public-line); border-radius: 12px;
+  background: var(--public-surface); box-shadow: 0 16px 42px rgb(21 18 13 / 14%);
+  opacity: 0; visibility: hidden; pointer-events: none;
+}
+.viewer-header__nav a {
+  display: block; padding: 12px 14px; border-radius: 8px;
+  color: var(--public-text); font-size: .9rem; text-decoration: none;
+}
+.viewer-header__nav a:hover { background: var(--ui-theme-control-bg); }
+body.menu-open .viewer-header__nav { visibility: visible; opacity: 1; pointer-events: auto; }
+@media (max-width: 480px) {
+  .viewer-header { gap: 8px; padding-inline: 14px; }
+  .viewer-header__context { gap: 6px; }
+  .viewer-header__context .viewer-brand { flex: 0 1 120px; min-width: 84px; }
+  .viewer-header__context .viewer-brand__logo { width: 100%; min-width: 84px; }
+  .viewer-header__context .back-link { font-size: .78rem; }
+}
+@media (max-width: 350px) {
+  .viewer-header .ui-theme-toggle--header { width: 44px; max-width: 44px; padding: 0; }
+  .viewer-header .ui-theme-toggle--header .ui-theme-toggle__label-short { display: none; }
+}
