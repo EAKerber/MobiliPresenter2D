@@ -37,7 +37,8 @@ test("V5 accepts absent flag and preserves explicit OFF/ON across normalization"
     const candidate={...base,viewerPricePublication:{enabled:state}};
     assert.deepEqual(v5Core.validate(candidate,configuration,catalog,priceBook,scene),[]);
     assert.deepEqual(v5Core.normalize(candidate).viewerPricePublication,{enabled:state});
-    assert.notEqual(v5Core.publicationSignature(base),v5Core.publicationSignature(candidate), "approval signature changes");
+    if (state) assert.notEqual(v5Core.publicationSignature(base),v5Core.publicationSignature(candidate), "ON changes publication authority");
+    else assert.equal(v5Core.publicationSignature(base),v5Core.publicationSignature(candidate), "OFF is the legacy default");
   }
   for (const flag of [null,{enabled:1},{enabled:true,debug:true},"yes",[]]) {
     assert.ok(v5Core.validate({...base,viewerPricePublication:flag},configuration,catalog,priceBook,scene).some((e)=>e.includes("viewer price publication")), "reject "+JSON.stringify(flag));
