@@ -1,0 +1,55 @@
+name: Viewer overview editorial isolated gate
+on:
+  push:
+    branches:
+      - experiment/viewer-overview-editorial-20261021
+    paths:
+      - "app/viewer/viewer.js"
+      - "app/viewer/viewer.css"
+      - "tests/viewer-overview-editorial-browser-gate.mjs"
+      - ".github/workflows/viewer-overview-editorial-isolated.yml"
+concurrency:
+  group: viewer-overview-${{ github.ref }}
+  cancel-in-progress: true
+permissions:
+  contents: read
+jobs:
+  editorial-differential:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout candidate
+        uses: actions/checkout@v4
+      - name: Checkout main for immutable baseline
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          path: baseline
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Public projection and cutover unit contract
+        run: |
+          node --test tests/public-module-projection.test.cjs
+          node tests/public-cutover-contract.cjs
+      - name: Install local browsers
+        run: |
+          npm install --no-save --no-package-lock playwright@1.56.0
+          npx playwright install --with-deps chromium webkit
+      - name: Serve only local candidate and baseline
+        run: |
+          python3 -m http.server 8123 --bind 127.0.0.1 --directory app >/tmp/overview-candidate.log 2>&1 &
+          python3 -m http.server 8124 --bind 127.0.0.1 --directory baseline/app >/tmp/overview-main.log 2>&1 &
+          sleep 2
+          curl --fail http://127.0.0.1:8123/viewer/ >/dev/null
+          curl --fail http://127.0.0.1:8124/viewer/ >/dev/null
+      - name: Browser comparative overview gate
+        run: node tests/viewer-overview-editorial-browser-gate.mjs
+      - name: Preserve screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: viewer-overview-editorial
+          path: artifacts/viewer-overview-editorial/
+          if-no-files-found: warn
+          retention-days: 7
