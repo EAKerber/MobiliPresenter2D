@@ -21,10 +21,11 @@
 .module-kicker { margin: 0 0 8px; color: var(--public-accent); font-size: .73rem; font-weight: 850; letter-spacing: .12em; text-transform: uppercase; }
 .overview-title { margin: 0; font-size: clamp(1.7rem, 2.4vw, 2.55rem); line-height: .98; letter-spacing: -.055em; }
 .overview-summary { margin: 14px 0 18px; color: var(--public-muted); line-height: 1.55; }
-.overview-highlights { display: grid; gap: 7px; margin: 18px 0 0; padding: 0; list-style: none; }
-.overview-highlights li { position: relative; padding-left: 15px; color: #514a43; font-size: .8rem; line-height: 1.35; }
-.overview-highlights li::before { position: absolute; top: .48em; left: 0; width: 6px; height: 6px; border-radius: 50%; background: var(--public-accent); content: ""; }
-.dimension-pill { width: fit-content; padding: 9px 12px; border: 1px solid var(--public-line); border-radius: 5px; color: #514a43; font-size: .78rem; font-weight: 700; }
+.overview-highlights { display: grid; gap: clamp(10px, 1.2vw, 14px); margin: 22px 0 0; padding: 0; list-style: none; }
+.overview-highlights li { position: relative; padding-left: 22px; color: #514a43; font-size: clamp(.96rem, 1.08vw, 1.07rem); line-height: 1.5; }
+.overview-highlights li::before { position: absolute; top: .47em; left: 1px; width: 9px; height: 9px; border-radius: 50%; background: var(--public-accent); content: ""; }
+.overview-footer { display: flex; align-items: flex-end; justify-content: space-between; flex-wrap: wrap; gap: 14px; min-width: 0; margin-top: auto; padding-top: clamp(20px, 2.7vw, 34px); }
+.dimension-pill { width: fit-content; max-width: 100%; margin: 0; padding: 9px 12px; border: 1px solid var(--public-line); border-radius: 5px; color: #514a43; font-size: .78rem; font-weight: 700; overflow-wrap: anywhere; }
 .carcass-note { display: flex; gap: 10px; align-items: center; margin-top: 18px; padding-top: 15px; border-top: 1px solid var(--public-line); }
 .carcass-swatch { width: 27px; height: 27px; flex: 0 0 auto; border: 1px solid #d7d3cb; border-radius: 5px; background: linear-gradient(135deg, #fff 0 48%, #e9e5de 49% 52%, #fff 53%); }
 .carcass-note span:last-child { font-size: .82rem; font-weight: 750; }
