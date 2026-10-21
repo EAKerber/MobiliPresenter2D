@@ -3,7 +3,6 @@ on:
   push:
     branches:
       - integration/ux-auth-viewer-preview-20261021
-      - integration/pr230-with-pricing-20261021
     paths:
       - "app/admin/admin.js"
       - "app/core/admin-bootstrap-retry.mjs"

@@ -1,7 +1,7 @@
 name: Viewer base-price publication contract (no Netlify deploy)
 on:
   push:
-    branches: [integration/viewer-base-prices-main-20261021, integration/pr230-with-pricing-20261021, main]
+    branches: [integration/viewer-base-prices-main-20261021, main]
     paths:
       - 'app/admin/**'
       - 'app/admin.html'
