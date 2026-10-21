@@ -134,10 +134,18 @@ if (header) {
 
     let authRevision = 0;
     let sessionLookupPromise = null;
-    function resolveCurrentSession() {
-      if (!sessionLookupPromise) {
-        sessionLookupPromise = currentSession().finally(() => {
-          sessionLookupPromise = null;
+    let sessionLookupRevision = -1;
+    function resolveCurrentSession(revision) {
+      // Do not coalesce a post-login lookup with one started before login.
+      // An older request may have legitimately observed the anonymous session.
+      if (!sessionLookupPromise || sessionLookupRevision !== revision) {
+        sessionLookupRevision = revision;
+        const lookup = currentSession();
+        sessionLookupPromise = lookup;
+        void lookup.then(() => {
+          if (sessionLookupPromise === lookup) sessionLookupPromise = null;
+        }, () => {
+          if (sessionLookupPromise === lookup) sessionLookupPromise = null;
         });
       }
       return sessionLookupPromise;
@@ -149,12 +157,12 @@ if (header) {
         return;
       }
       render(null, { loading: true });
-      resolveCurrentSession()
+      resolveCurrentSession(revision)
         .then((session) => {
           if (revision === authRevision) render(session);
         })
         .catch(() => {
-          if (revision === authRevision) render(null);
+          if (revision === authRevision) render(null, { loading: true });
         });
     }
 
