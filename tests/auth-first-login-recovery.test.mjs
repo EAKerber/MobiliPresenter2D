@@ -76,3 +76,23 @@ test("admin offers explicit recovery after non-permission errors",()=>{
   assert.match(code,/retry\.textContent = "Tentar novamente"/);
   assert.match(code,/fetchAdminBootstrap\(\{ fetchImpl: fetch, getUserImpl: getUser \}\)/);
 });
+
+test("an anonymous in-flight lookup is never reused for a newer auth revision", async()=>{
+  const source=readFileSync(new URL("../app/core/private-navigation.js",import.meta.url),"utf8");
+  const start=source.indexOf("    let authRevision = 0;");
+  const end=source.indexOf("    function syncFromAuth(user)",start);
+  assert.ok(start>=0&&end>start);
+  const create=new Function("currentSession",source.slice(start,end)+"\nreturn resolveCurrentSession;");
+  let resolveOld,resolveFresh,count=0;
+  const old=new Promise(resolve=>{resolveOld=resolve;});
+  const fresh=new Promise(resolve=>{resolveFresh=resolve;});
+  const reconcile=create(()=>++count===1?old:fresh);
+  const a=reconcile(1);
+  const b=reconcile(2);
+  assert.notStrictEqual(a,b);
+  resolveFresh({id:"authenticated",roles:["admin"]});
+  assert.equal((await b).id,"authenticated");
+  resolveOld(null);
+  assert.equal(await a,null);
+  assert.equal(count,2);
+});
