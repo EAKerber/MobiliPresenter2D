@@ -13,5 +13,8 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: "22"
-      - run: node --test tests/viewer-base-price-publication.test.cjs
-      - run: node --check app/core/administration-v5.js && node --check app/core/public-module-projection.js && node --check netlify/functions/public-modules.mjs
+      - run: node --test tests/viewer-base-price-publication.test.cjs tests/viewer-price-v5-save.test.cjs
+      - run: node app/tools/test-administration-v5.js && node app/tools/test-v5-normal-save.js && node app/tools/test-v5-endpoint-safety.js
+      - run: node --check app/core/administration-v5.js && node --check app/core/public-module-projection.js && node --check netlify/functions/public-modules.mjs && node --check app/viewer/public-data.js && node --check app/viewer/scene-adapters.js && node --check app/viewer/viewer.js
+      - run: npm install --no-audit --no-fund
+      - run: npm run build
