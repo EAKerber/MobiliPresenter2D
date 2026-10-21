@@ -28,10 +28,11 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: "22"
-      - name: Public projection and cutover unit contract
+      - name: Scope-limited baseline contracts
         run: |
-          node --test tests/public-module-projection.test.cjs
           node tests/public-cutover-contract.cjs
+          node --check app/viewer/viewer.js
+          node --check tests/viewer-overview-editorial-browser-gate.mjs
       - name: Install local browsers
         run: |
           npm install --no-save --no-package-lock playwright@1.56.0
