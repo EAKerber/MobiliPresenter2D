@@ -51,7 +51,17 @@ for(const engine of [chromium,webkit]){
    assert.equal(initial.menuScripts,1);
    assert.equal(initial.navCurrent,0,"Viewer is not the active Ambientes page");
    assert.deepEqual(initial.navHref,["/#ambientes","/how-it-works/","/about/","https://wa.me/"]);
-   assert.ok(initial.logo.left<initial.back.left);
+   // NAV-005 correction approved by user: logo LEFT; return, theme and hamburger RIGHT.
+   assert.equal(await page.locator(".viewer-header__actions > a.back-link").count(),1,
+     "contextual return must be in right-side action cluster");
+   assert.equal(await page.locator(".viewer-header__context > a.back-link").count(),0,
+     "contextual return must not remain next to the brand");
+   assert.equal(await page.locator(".viewer-header__actions > .back-link + [data-ui-theme-toggle]").count(),1,
+     "return must immediately precede theme selector");
+   assert.equal(await page.locator(".viewer-header__actions > [data-ui-theme-toggle] + #menuToggle").count(),1,
+     "theme must immediately precede hamburger");
+   assert.ok(initial.logo.left<initial.back.left,"brand must stay at left");
+   assert.ok(initial.back.left>=initial.logo.right-1,"right-side return must not overlap brand");
    assert.ok(initial.back.right<=initial.theme.left+1,"contextual return must precede theme");
    assert.ok(initial.theme.right<=initial.toggle.left+1,"theme must precede hamburger");
    assert.ok(initial.toggle.right<=width+1,"hamburger must remain inside viewport");
