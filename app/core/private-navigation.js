@@ -111,7 +111,14 @@ if (header) {
       else if (restoreFocus) toggle.focus();
     }
 
-    toggle.addEventListener("click", () => setOpen(menu.hidden));
+    toggle.addEventListener("click", () => {
+      const opening = menu.hidden;
+      // A login and the menu's initial auth callback can finish out of order.
+      // Reconcile the authoritative session at the point the user opens it,
+      // even when an earlier callback left a stale anonymous menu.
+      if (opening) syncFromAuth(null);
+      setOpen(opening);
+    });
     menu.addEventListener("keydown", (event) => {
       if (event.key === "Escape") {
         event.preventDefault();
