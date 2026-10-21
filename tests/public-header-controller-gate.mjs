@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import { mkdir, writeFile } from "node:fs/promises";
 import { chromium, webkit } from "playwright";
+import { PNG } from "pngjs";
 
 // Differential against untouched main, served locally. NO Netlify deployment or production API.
 const BASE="http://127.0.0.1:8124", CANDIDATE="http://127.0.0.1:8123";
@@ -14,6 +15,31 @@ const report={schema:"PCOMP01PublicMenuGate/0.1",visual:[],functional:[],limitat
   "No CSS/HTML generation or schema V5 changes under test"
 ]};
 const sleep=ms=>new Promise(resolve=>setTimeout(resolve,ms));
+function summarizePixelDifference(previous,current){
+  const a=PNG.sync.read(previous),b=PNG.sync.read(current);
+  if(a.width!==b.width||a.height!==b.height)
+    return {kind:"dimensions",main:[a.width,a.height],candidate:[b.width,b.height]};
+  let changed=0, maxChannelDifference=0, sumChannelDifference=0;
+  let left=a.width,right=-1,top=a.height,bottom=-1;
+  const samples=[];
+  for(let y=0;y<a.height;y++)for(let x=0;x<a.width;x++){
+    const index=(y*a.width+x)*4,oldPixel=[...a.data.slice(index,index+4)],newPixel=[...b.data.slice(index,index+4)];
+    let delta=0;
+    for(let channel=0;channel<4;channel++){
+      const d=Math.abs(oldPixel[channel]-newPixel[channel]);
+      delta=Math.max(delta,d);
+      sumChannelDifference+=d;
+    }
+    if(delta===0)continue;
+    changed++;maxChannelDifference=Math.max(maxChannelDifference,delta);
+    left=Math.min(left,x);right=Math.max(right,x);top=Math.min(top,y);bottom=Math.max(bottom,y);
+    if(samples.length<8)samples.push({x,y,from:oldPixel,to:newPixel});
+  }
+  return {kind:"pixel",size:[a.width,a.height],changed,pixels:a.width*a.height,
+    fraction:changed/(a.width*a.height),maxChannelDifference,sumChannelDifference,
+    bounds:changed?{left,right,top,bottom}:null,samples};
+}
+
 function errMsg(err){return String(err?.message||err).slice(0,240);}
 async function state(page,rootSel){
   return await page.evaluate(sel=>{
@@ -80,7 +106,9 @@ try {
       const prefix=folder+"/mismatch-"+route.replaceAll("/","_")+"-"+width+"-"+theme;
       await writeFile(prefix+"-main.png",before.closed);
       await writeFile(prefix+"-candidate.png",after.closed);
-      await writeFile(prefix+"-diagnostic.json",JSON.stringify({route,width,theme,original,updated},null,2));
+      const pixelDifference=summarizePixelDifference(before.closed,after.closed);
+      console.error("P_COMP_01_PIXEL_MISMATCH "+JSON.stringify({route,width,theme,...pixelDifference}));
+      await writeFile(prefix+"-diagnostic.json",JSON.stringify({route,width,theme,original,updated,pixelDifference},null,2));
     }
     assert.equal(after.closed.equals(before.closed),true,"header closed pixels changed "+route+"/"+width+"/"+theme);
     if(before.opened){
@@ -91,7 +119,9 @@ try {
         const prefix=folder+"/open-mismatch-"+route.replaceAll("/","_")+"-"+width+"-"+theme;
         await writeFile(prefix+"-main.png",before.open);
         await writeFile(prefix+"-candidate.png",after.open);
-        await writeFile(prefix+"-diagnostic.json",JSON.stringify({route,width,theme,oldOpened,newOpened},null,2));
+        const pixelDifference=summarizePixelDifference(before.open,after.open);
+        console.error("P_COMP_01_PIXEL_MISMATCH "+JSON.stringify({route,width,theme,open:true,...pixelDifference}));
+        await writeFile(prefix+"-diagnostic.json",JSON.stringify({route,width,theme,oldOpened,newOpened,pixelDifference},null,2));
       }
       assert.equal(after.open.equals(before.open),true,"menu open pixels changed "+route+"/"+width+"/"+theme);
     }else assert.equal(after.opened,null);
