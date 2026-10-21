@@ -140,6 +140,7 @@ publishedReader, publicModules, catalog, priceBook, scene } = globalThis.__publi
     const pricedWhileOff = await invoke("GET", "", prodCtx, "0.2");
     assert.equal(pricedWhileOff.body.schemaVersion,publicModules.SCHEMA);
     assert.equal(JSON.stringify(pricedWhileOff.body).includes("basePriceCents"),false);
+    const prodReadsAfterVersionChecks = prod.reads;
 
     // Turning off a module in the configurator must not suppress its public
     // viewer state. Preview fallback accepts the current viewerEntities DTO.
@@ -153,7 +154,7 @@ publishedReader, publicModules, catalog, priceBook, scene } = globalThis.__publi
     assert.equal(isolated.status, 200);
     assert.deepEqual(isolated.body, productionResponse.body);
     assert.equal(productionFetches, 1, "a valid preview publication takes precedence over the public primary projection");
-    assert.equal(prod.reads, 1, "preview must not share production store");
+    assert.equal(prod.reads, prodReadsAfterVersionChecks, "preview must not share production store");
     for (const invalid of ["not-json", v3, { ...v5, schemaVersion: "unknown" },
       { ...v5, objects: null }]) {
       preview.setMock(invalid);
