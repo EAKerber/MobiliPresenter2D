@@ -1,0 +1,39 @@
+name: Auth first-login isolated gate
+on:
+  push:
+    branches:
+      - fix/auth-first-login-session-reconciliation-20261021
+    paths:
+      - "app/admin/admin.js"
+      - "app/core/admin-bootstrap-retry.mjs"
+      - "app/core/private-navigation.js"
+      - "tests/auth-first-login-recovery.test.mjs"
+      - ".github/workflows/auth-first-login-isolated.yml"
+concurrency:
+  group: auth-p0-${{ github.ref }}
+  cancel-in-progress: true
+permissions:
+  contents: read
+jobs:
+  auth-gate:
+    name: Safe read retries and bundle compilation / no deploy
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Contract and regression tests
+        run: |
+          node --test tests/auth-first-login-recovery.test.mjs
+          node --check app/core/admin-bootstrap-retry.mjs
+          node --check app/core/private-navigation.js
+      - name: Install build dependencies without generating lockfile
+        run: npm install --no-package-lock --ignore-scripts --no-audit --no-fund
+      - name: Build Netlify Identity and Admin client bundles in isolated runner
+        run: npm run build
+      - name: Ensure no private credentials, cookies or deploy artifacts used
+        run: |
+          test ! -f .env
+          echo "Auth P0 isolated gate: no Netlify deployment configured"
