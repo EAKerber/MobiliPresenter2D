@@ -60,7 +60,7 @@
     if (doc.querySelector("[data-ui-theme-toggle]")) return;
     // Presentation pages: compact control is always visible in the sticky header.
     // Functional viewer: contextual control at page entrance, without a sticky header.
-    var presentationActions = doc.querySelector(".site-header .header-actions");
+    var presentationActions = doc.querySelector(".site-header .header-actions, .viewer-header .header-actions");
     var privateActions = doc.querySelector(".private-header__actions, .topbar__actions, .admin-topbar__actions");
     var contextEyebrow = presentationActions || privateActions ? null : doc.querySelector(".viewer-heading > .eyebrow");
     var header = presentationActions || contextEyebrow ? null :
