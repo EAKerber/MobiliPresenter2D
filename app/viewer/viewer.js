@@ -57,7 +57,13 @@
       target.append(highlights);
     }
     if (module.description) target.append(element("p", "overview-summary", module.description));
-    if (module.dimensionLabel) target.append(element("p", "dimension-pill", module.dimensionLabel));
+    // Dedicated footer permits a future *authorized* public price without
+    // mixing price calculation or unpublished data into this visual increment.
+    if (module.dimensionLabel) {
+      const footer = element("div", "overview-footer");
+      footer.append(element("p", "dimension-pill", module.dimensionLabel));
+      target.append(footer);
+    }
   }
 
   function renderViews(target, module) {
