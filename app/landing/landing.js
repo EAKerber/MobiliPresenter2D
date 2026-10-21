@@ -12,8 +12,6 @@
   const featureAction = document.getElementById("featureAction");
   const featureAvailability = document.getElementById("featureAvailability");
   const featureImageFallback = document.getElementById("featureImageFallback");
-  const menuToggle = document.getElementById("menuToggle");
-  const primaryNav = document.getElementById("primaryNav");
   let selectedId = "cozinha";
   let selectionVersion = 0;
   const featureImageCache = new Map();
@@ -174,23 +172,11 @@
   }
   function stopHint() { hintStopped = true; window.clearInterval(hintTimer); track.querySelectorAll(".wave").forEach((card) => card.classList.remove("wave")); }
 
-  function closeMenu() {
-    document.body.classList.remove("menu-open");
-    menuToggle.setAttribute("aria-expanded", "false");
-    menuToggle.setAttribute("aria-label", "Abrir menu");
-  }
-
   renderBenefits(); renderCards();
   document.getElementById("previousPage").addEventListener("click", () => goToPage(0));
   document.getElementById("nextPage").addEventListener("click", () => goToPage(1));
   windowEl.addEventListener("scroll", () => { if (mobileMode()) { window.clearTimeout(windowEl.settleTimer); windowEl.settleTimer = window.setTimeout(() => { page = windowEl.scrollLeft >= maxScroll() / 2 ? 1 : 0; syncPagination(); }, 100); } }, { passive: true });
   window.addEventListener("resize", applyResponsive);
-  menuToggle.addEventListener("click", () => {
-    const open = document.body.classList.toggle("menu-open");
-    menuToggle.setAttribute("aria-expanded", String(open));
-    menuToggle.setAttribute("aria-label", open ? "Fechar menu" : "Abrir menu");
-  });
-  primaryNav.querySelectorAll("a").forEach((link) => link.addEventListener("click", closeMenu));
   document.addEventListener("pointerdown", stopHint, { once: true }); document.addEventListener("keydown", stopHint, { once: true });
   applyResponsive(); select(data.environments.find((item) => item.id === selectedId));
   if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) { window.setTimeout(() => { runHint(); hintTimer = window.setInterval(runHint, 10000); }, 700); }
