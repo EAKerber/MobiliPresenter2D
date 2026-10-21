@@ -1,0 +1,17 @@
+name: Viewer base-price publication contract (no Netlify deploy)
+on:
+  push:
+    branches: [feature/viewer-base-prices-global-off-20261021]
+  workflow_dispatch:
+jobs:
+  price-contract:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - run: node --test tests/viewer-base-price-publication.test.cjs
+      - run: node --check app/core/administration-v5.js && node --check app/core/public-module-projection.js && node --check netlify/functions/public-modules.mjs

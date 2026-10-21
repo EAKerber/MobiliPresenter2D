@@ -173,6 +173,7 @@
       revision: Number.isSafeInteger(value.revision) && value.revision > 0 ? value.revision : 1,
       presentationPolicy: clone(value.presentationPolicy),
       pricing: pricingContract.normalize(value.pricing),
+      ...(Object.hasOwn(value, "viewerPricePublication") ? { viewerPricePublication: { enabled: value.viewerPricePublication.enabled } } : {}),
       stages: value.stages.map((stage) => ({
         id: stage.id,
         kind: stage.kind || stage.id,
@@ -195,7 +196,7 @@
   }
 
   function toV4(value, legacyPricing = null) {
-    const { presentationPolicy: _presentationPolicy, pricing: _pricing, ...rest } = clone(value);
+    const { presentationPolicy: _presentationPolicy, pricing: _pricing, viewerPricePublication: _viewerPricePublication, ...rest } = clone(value);
     return {
       ...rest,
       schemaVersion: PREVIOUS_SCHEMA,
@@ -225,7 +226,8 @@
         }))
       })),
       presentationPolicy: value.presentationPolicy,
-      pricing: pricingContract.normalize(value.pricing)
+      pricing: pricingContract.normalize(value.pricing),
+      viewerPricePublication: value.viewerPricePublication?.enabled === true
     });
   }
 
@@ -235,6 +237,11 @@
       return ["unsupported current administration schema"];
     }
     if (!value.presentationPolicy) errors.push("presentation policy is required");
+    // Optional for legacy V5 snapshots. The only authorized persisted shape is an explicit boolean.
+    if (Object.hasOwn(value, "viewerPricePublication") && (
+      !value.viewerPricePublication || typeof value.viewerPricePublication !== "object" || Array.isArray(value.viewerPricePublication)
+      || Object.keys(value.viewerPricePublication).length !== 1 || typeof value.viewerPricePublication.enabled !== "boolean"
+    )) errors.push("invalid viewer price publication permission");
     const pricingErrors = pricingContract.validate(value.pricing);
     pricingErrors.forEach((error) => errors.push(`pricing: ${error}`));
 

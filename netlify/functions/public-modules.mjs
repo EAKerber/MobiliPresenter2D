@@ -18,6 +18,11 @@ const headers = {
   "Content-Security-Policy": "default-src 'none'",
 };
 const PUBLIC_SCHEMA = "PublicModulePresentation2D 0.1";
+const PRICED_SCHEMA = "PublicModulePresentation2D 0.2";
+const PUBLIC_MODULE_KEYS = new Set([
+  "id", "referenceLabel", "title", "description", "category", "dimensionLabel",
+  "nominalDimensionsMm", "benefits", "components", "requirements", "basePriceCents"
+]);
 function respond(body, status, extra = {}) {
   return new Response(JSON.stringify(body), { status, headers: { ...headers, ...extra } });
 }
@@ -27,12 +32,17 @@ function storeFor(context) {
 }
 function isPublicProjection(value) {
   const visibility = value?.publicState?.viewerEntities || value?.publicState?.entities;
-  if (value?.schemaVersion !== PUBLIC_SCHEMA || !Array.isArray(value.modules) || !value.modules.length
+  if (![PUBLIC_SCHEMA, PRICED_SCHEMA].includes(value?.schemaVersion) || !Array.isArray(value.modules) || !value.modules.length
     || !value.publicState || typeof value.publicState !== "object"
     || !visibility || typeof visibility !== "object"
     || Array.isArray(visibility)
     || !Array.isArray(value.publicState.availableFinishes)
     || typeof value.publicState.finishId !== "string") return false;
+
+  if (value.modules.some((module) => !module || Object.keys(module).some((key) => !PUBLIC_MODULE_KEYS.has(key))
+    || (Object.hasOwn(module, "basePriceCents")
+      && (value.schemaVersion !== PRICED_SCHEMA || !Number.isSafeInteger(module.basePriceCents)
+        || module.basePriceCents <= 0 || module.basePriceCents > 100000000)))) return false;
 
   const moduleIds = value.modules.map((module) => module?.id);
   if (moduleIds.some((id) => typeof id !== "string" || !id)
