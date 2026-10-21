@@ -1,0 +1,51 @@
+name: How accordion grid isolated gate
+on:
+  push:
+    branches:
+      - fix/how-it-works-accordion-grid-20261021
+    paths:
+      - "app/how-it-works/how-it-works.css"
+      - "tests/how-accordion-grid-browser-gate.mjs"
+      - ".github/workflows/how-accordion-grid-isolated.yml"
+concurrency:
+  group: how-accordion-${{ github.ref }}
+  cancel-in-progress: true
+permissions:
+  contents: read
+jobs:
+  browser-gate:
+    name: Closed pixel parity, opened card intrinsic height, browser keyboard
+    runs-on: ubuntu-latest
+    timeout-minutes: 16
+    steps:
+      - name: Checkout candidate
+        uses: actions/checkout@v4
+      - name: Checkout main baseline
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          path: baseline
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Install isolated Playwright Chromium and WebKit
+        run: |
+          npm install --no-save --no-package-lock playwright@1.56.0
+          npx playwright install --with-deps chromium webkit
+      - name: Serve baseline and candidate locally only
+        run: |
+          python3 -m http.server 8123 --bind 127.0.0.1 --directory app >/tmp/how-candidate.log 2>&1 &
+          python3 -m http.server 8124 --bind 127.0.0.1 --directory baseline/app >/tmp/how-baseline.log 2>&1 &
+          sleep 2
+          curl --fail http://127.0.0.1:8123/how-it-works/ >/dev/null
+          curl --fail http://127.0.0.1:8124/how-it-works/ >/dev/null
+      - name: Accordion layout and keyboard browser regression
+        run: node tests/how-accordion-grid-browser-gate.mjs
+      - name: Retain visual evidence (7 days)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: how-accordion-gate
+          path: artifacts/how-accordion/
+          if-no-files-found: warn
+          retention-days: 7
