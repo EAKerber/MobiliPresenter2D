@@ -9,6 +9,7 @@ import {
   recoverPassword,
   updateUser
 } from "@netlify/identity";
+import { fetchAdminBootstrap } from "../core/admin-bootstrap-retry.mjs";
 const catalog = window.CASA_EM_MODULOS_CATALOG;
 let priceBook = null;
 const pricingContract = window.CasaModulesPricingContract;
@@ -1139,7 +1140,8 @@ function priceLabel(section, id) {
 
 function renderPricing() {
   pricingList.replaceChildren();
-  // Permission is only a draft until the existing authenticated V5 publish/save.
+  // The switch changes a draft only; publication requires the existing
+  // authenticated V5 PUT, ETag check and server-side readback.
   const publicationCard = document.createElement("article");
   publicationCard.className = "editor-card pricing-publication-card";
   const publicationTitle = document.createElement("h2");
@@ -1556,24 +1558,25 @@ async function showUser(user) {
     if (runId !== adminViewRun) return;
     adminServiceError.hidden = false;
     setMessage(adminServiceError, error.message || "Falha ao carregar os dados administrativos.", "error");
+    if (error.code === "forbidden") return;
+    const retry = document.createElement("button");
+    retry.type = "button";
+    retry.className = "button button--secondary";
+    retry.textContent = "Tentar novamente";
+    retry.addEventListener("click", async () => {
+      retry.disabled = true;
+      let currentUser = null;
+      try { currentUser = await getUser(); } catch { /* Session requires a fresh check. */ }
+      await showUser(currentUser);
+    }, { once: true });
+    adminServiceError.append(document.createTextNode(" "), retry);
   }
 }
 
 async function ensureAdminData() {
   if (!adminDataPromise) {
     adminDataPromise = (async () => {
-      const response = await fetch("/api/admin-bootstrap", {
-        credentials: "same-origin",
-        cache: "no-store"
-      });
-      if (!response.ok) throw new Error("Não foi possível carregar os dados administrativos.");
-      let payload;
-      try {
-        payload = await response.json();
-      } catch {
-        throw new Error("Os dados de preços administrativos são inválidos.");
-      }
-      if (!payload?.priceBook?.pricing) throw new Error("Os dados de preços administrativos são inválidos.");
+      const payload = await fetchAdminBootstrap({ fetchImpl: fetch, getUserImpl: getUser });
       priceBook = payload.priceBook;
       catalogPricing = pricingContract.normalize(priceBook.pricing);
     })().catch((error) => {

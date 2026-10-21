@@ -57,7 +57,8 @@
       target.append(highlights);
     }
     if (module.description) target.append(element("p", "overview-summary", module.description));
-    // Only display the allowlisted public scalar; never calculate or fetch pricing locally.
+    // Only a server-allowlisted scalar may reach this UI; no local pricebook,
+    // URL flag, option pricing or fallback from the configurator is permitted.
     const basePriceCents = Number.isSafeInteger(module.basePriceCents)
       && module.basePriceCents > 0 && module.basePriceCents <= 100000000
       ? module.basePriceCents : null;
