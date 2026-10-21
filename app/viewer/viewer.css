@@ -118,7 +118,7 @@
 .viewer-header { position: relative; isolation: isolate; gap: 12px; }
 .viewer-header__context { display: flex; align-items: center; gap: clamp(7px, 1.5vw, 18px); flex: 1 1 auto; min-width: 0; }
 .viewer-header__context .viewer-brand { flex: 0 1 auto; min-width: 0; }
-.viewer-header__context .back-link { flex: 0 0 auto; white-space: nowrap; }
+.viewer-header__actions .back-link { flex: 0 0 auto; white-space: nowrap; }
 .viewer-header__actions { display: flex; align-items: center; justify-content: flex-end; gap: 8px; flex: 0 0 auto; margin-left: auto; }
 .viewer-header .ui-theme-toggle--header {
   display: inline-flex; align-items: center; justify-content: center;
@@ -159,7 +159,7 @@ body.menu-open .viewer-header__nav { display: flex; }
   .viewer-header__context { gap: 6px; }
   .viewer-header__context .viewer-brand { flex: 0 1 120px; min-width: 84px; }
   .viewer-header__context .viewer-brand__logo { width: 100%; min-width: 84px; }
-  .viewer-header__context .back-link { font-size: .78rem; }
+  .viewer-header__actions .back-link { font-size: .78rem; }
 }
 @media (max-width: 350px) {
   .viewer-header .ui-theme-toggle--header { width: 44px; max-width: 44px; padding: 0; }
