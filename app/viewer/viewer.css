@@ -26,6 +26,9 @@
 .overview-highlights li::before { position: absolute; top: .47em; left: 1px; width: 9px; height: 9px; border-radius: 50%; background: var(--public-accent); content: ""; }
 .overview-footer { display: flex; align-items: flex-end; justify-content: space-between; flex-wrap: wrap; gap: 14px; min-width: 0; margin-top: auto; padding-top: clamp(20px, 2.7vw, 34px); }
 .dimension-pill { width: fit-content; max-width: 100%; margin: 0; padding: 9px 12px; border: 1px solid var(--public-line); border-radius: 5px; color: #514a43; font-size: .78rem; font-weight: 700; overflow-wrap: anywhere; }
+.overview-base-price { display:flex; flex-direction:column; align-items:flex-end; gap:4px; margin-left:auto; max-width:100%; min-width:0; text-align:right; }
+.overview-base-price__label { color:var(--public-muted); font-size:.76rem; line-height:1.35; font-weight:650; }
+.overview-base-price__amount { color:var(--public-text); font-size:clamp(1.2rem, 2.2vw, 1.8rem); letter-spacing:-.025em; line-height:1.1; font-weight:850; overflow-wrap:anywhere; }
 .carcass-note { display: flex; gap: 10px; align-items: center; margin-top: 18px; padding-top: 15px; border-top: 1px solid var(--public-line); }
 .carcass-swatch { width: 27px; height: 27px; flex: 0 0 auto; border: 1px solid #d7d3cb; border-radius: 5px; background: linear-gradient(135deg, #fff 0 48%, #e9e5de 49% 52%, #fff 53%); }
 .carcass-note span:last-child { font-size: .82rem; font-weight: 750; }

@@ -57,11 +57,21 @@
       target.append(highlights);
     }
     if (module.description) target.append(element("p", "overview-summary", module.description));
-    // Dedicated footer permits a future *authorized* public price without
-    // mixing price calculation or unpublished data into this visual increment.
-    if (module.dimensionLabel) {
+    // Only a server-allowlisted scalar may reach this UI; no local pricebook,
+    // URL flag, option pricing or fallback from the configurator is permitted.
+    const basePriceCents = Number.isSafeInteger(module.basePriceCents)
+      && module.basePriceCents > 0 && module.basePriceCents <= 100000000
+      ? module.basePriceCents : null;
+    if (module.dimensionLabel || basePriceCents !== null) {
       const footer = element("div", "overview-footer");
-      footer.append(element("p", "dimension-pill", module.dimensionLabel));
+      if (module.dimensionLabel) footer.append(element("p", "dimension-pill", module.dimensionLabel));
+      if (basePriceCents !== null) {
+        const amount = element("div", "overview-base-price");
+        amount.append(element("span", "overview-base-price__label", "Valor base do módulo"));
+        amount.append(element("strong", "overview-base-price__amount",
+          new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(basePriceCents / 100)));
+        footer.append(amount);
+      }
       target.append(footer);
     }
   }

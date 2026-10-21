@@ -81,3 +81,13 @@ test("unknown membership and disabled modules stage do not expose prices", () =>
   const g = fixture(); g.viewerPricePublication = { enabled: true }; g.stages[0].enabled = false;
   assert.throws(() => project(g, catalog, scene));
 });
+
+
+test("V5 permission is optional for legacy, exactly boolean when present", () => {
+  const source = fixture(); // projector itself must reject invalid shape
+  assert.equal(project(source, catalog, scene).schemaVersion, SCHEMA);
+  for (const wrong of [{enabled:1}, {enabled:false, extra:0}, null]) {
+    source.viewerPricePublication = wrong;
+    assert.throws(() => project(source,catalog,scene));
+  }
+});

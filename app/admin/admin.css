@@ -208,3 +208,10 @@ html[data-theme="light"] .message { color:var(--muted); }
 html[data-theme="light"] .message[data-kind="success"] { color:var(--success); }
 html[data-theme="light"] .message[data-kind="error"] { color:var(--error); }
 html[data-theme="light"] code { background:#eee9e2; color:#403a34; }
+
+/* Global opt-in Viewer price publishing — scoped to Admin → Preços. */
+.pricing-publication-card { grid-column: 1 / -1; }
+.pricing-publication-switch { display:flex; align-items:center; gap:12px; cursor:pointer; font-size:14px; font-weight:700; }
+.pricing-publication-switch input { width:20px; height:20px; flex:0 0 20px; accent-color:var(--accent); }
+.pricing-publication-switch:has(input:disabled) { opacity:.65; cursor:not-allowed; }
+.pricing-publication-switch input:focus-visible { outline:3px solid var(--focus, #d8bc7c); outline-offset:3px; }

@@ -9,7 +9,7 @@
     });
     if (!response.ok) throw new Error("public_modules_unavailable");
     const payload = await response.json();
-    if (payload?.schemaVersion !== "PublicModulePresentation2D 0.1"
+    if (!["PublicModulePresentation2D 0.1", "PublicModulePresentation2D 0.2"].includes(payload?.schemaVersion)
       || !Array.isArray(payload.modules) || !payload.modules.length
       || !payload.publicState || typeof payload.publicState !== "object"
       || !Array.isArray(payload.publicState.availableFinishes)
@@ -29,6 +29,11 @@
       throw new TypeError("invalid_public_module_visibility");
     }
     for (const module of payload.modules) {
+      if (Object.hasOwn(module, "basePriceCents") && (
+        payload.schemaVersion !== "PublicModulePresentation2D 0.2"
+        || !Number.isSafeInteger(module.basePriceCents)
+        || module.basePriceCents <= 0 || module.basePriceCents > 100000000
+      )) throw new TypeError("invalid_public_base_price");
       const dimensions = module?.nominalDimensionsMm;
       if (dimensions != null && ["width", "height", "depth"].some((axis) => !Number.isFinite(dimensions[axis]) || dimensions[axis] < 1 || dimensions[axis] > 5000)) {
         throw new TypeError("invalid_public_module_dimensions");

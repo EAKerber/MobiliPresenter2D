@@ -1140,6 +1140,27 @@ function priceLabel(section, id) {
 
 function renderPricing() {
   pricingList.replaceChildren();
+  // The switch changes a draft only; publication requires the existing
+  // authenticated V5 PUT, ETag check and server-side readback.
+  const publicationCard = document.createElement("article");
+  publicationCard.className = "editor-card pricing-publication-card";
+  const publicationTitle = document.createElement("h2");
+  publicationTitle.textContent = "Exibição pública no Viewer";
+  const publicationLabel = document.createElement("label");
+  publicationLabel.className = "pricing-publication-switch";
+  const publicationInput = document.createElement("input");
+  publicationInput.type = "checkbox";
+  publicationInput.dataset.viewerBasePricePublication = "true";
+  publicationInput.checked = model.viewerPricePublication?.enabled === true;
+  publicationInput.disabled = publishedSource?.schemaVersion !== hierarchyCore.SCHEMA;
+  publicationLabel.append(publicationInput, document.createTextNode("Mostrar preços base no Viewer"));
+  const publicationNote = document.createElement("p");
+  publicationNote.className = "admin-note";
+  publicationNote.textContent = publicationInput.disabled
+    ? "Esta opção exige uma configuração V5 publicada."
+    : "Inicialmente desativado. Somente os valores base válidos dos módulos publicados e visíveis serão exibidos; não inclui opções e serviços. Alterar esta opção não publica nada até clicar em Publicar configuração.";
+  publicationCard.append(publicationTitle, publicationLabel, publicationNote);
+  pricingList.append(publicationCard);
   pricingRoles.forEach(([role, title]) => {
     const card = document.createElement("article");
     card.className = "editor-card pricing-card";
@@ -1466,6 +1487,18 @@ document.querySelector("[data-admin-panel=rules]").addEventListener("click", (ev
 });
 
 pricingList.addEventListener("change", (event) => {
+  const publicationSwitch = event.target.closest("[data-viewer-base-price-publication]");
+  if (publicationSwitch) {
+    if (publishedSource?.schemaVersion !== hierarchyCore.SCHEMA) {
+      publicationSwitch.checked = false;
+      return;
+    }
+    model.viewerPricePublication = { enabled: publicationSwitch.checked };
+    setMessage(saveMessage, publicationSwitch.checked
+      ? "Exibição de preços base ativada apenas no rascunho. Clique em Publicar configuração para autorizar valores públicos."
+      : "Exibição de preços base desativada apenas no rascunho. Clique em Publicar configuração para retirar valores da API pública.");
+    return;
+  }
   const typeSelect = event.target.closest("[data-price-rule-type]");
   if (typeSelect) {
     const role = typeSelect.dataset.priceRole;
