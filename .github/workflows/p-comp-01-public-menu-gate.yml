@@ -1,0 +1,73 @@
+name: P-COMP-01 public menu isolated gate
+
+on:
+  push:
+    branches:
+      - architecture/p-comp-01-public-menu-20261021
+    paths:
+      - "app/landing/header-menu.js"
+      - "app/landing/landing.js"
+      - "app/how-it-works/how-it-works.js"
+      - "app/index.html"
+      - "app/about/index.html"
+      - "app/how-it-works/index.html"
+      - "app/viewer/index.html"
+      - "tests/public-header-controller-gate.mjs"
+      - ".github/workflows/p-comp-01-public-menu-gate.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: p-comp-01-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  differential:
+    name: Four public menus / Chromium and WebKit / no deploy
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - name: Checkout candidate
+        uses: actions/checkout@v4
+      - name: Checkout unmodified main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          path: baseline
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Validate source syntax and public contract
+        run: |
+          node --check app/landing/header-menu.js
+          node --check app/landing/landing.js
+          node --check app/how-it-works/how-it-works.js
+          node --check tests/public-header-controller-gate.mjs
+          node tests/public-cutover-contract.cjs
+      - name: Install isolated browser test dependencies
+        run: |
+          npm install --no-save --no-package-lock playwright@1.56.0
+          npx playwright install --with-deps chromium webkit
+      - name: Start localhost-only source servers
+        run: |
+          python3 -m http.server 8123 --bind 127.0.0.1 --directory app >/tmp/p-comp-01-candidate.log 2>&1 &
+          python3 -m http.server 8124 --bind 127.0.0.1 --directory baseline/app >/tmp/p-comp-01-baseline.log 2>&1 &
+          sleep 2
+          curl --fail http://127.0.0.1:8123/ >/dev/null
+          curl --fail http://127.0.0.1:8124/ >/dev/null
+          curl --fail http://127.0.0.1:8123/viewer/ >/dev/null
+      - name: Compare baseline pixels and test navigation behavior
+        run: node tests/public-header-controller-gate.mjs
+      - name: Verify approved Viewer NAV-005 layout
+        run: node tests/viewer-secondary-header-browser-gate.mjs
+      - name: Retain evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: p-comp-01-menu-gate
+          path: |
+            artifacts/p-comp-01/
+            artifacts/viewer-secondary-header/
+          if-no-files-found: warn
+          retention-days: 7
