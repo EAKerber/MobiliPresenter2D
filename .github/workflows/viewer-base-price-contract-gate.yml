@@ -1,0 +1,46 @@
+name: Viewer base-price publication contract (no Netlify deploy)
+on:
+  push:
+    branches: [integration/viewer-base-prices-main-20261021, main]
+    paths:
+      - 'app/admin/**'
+      - 'app/admin.html'
+      - 'app/core/administration-v5.js'
+      - 'app/core/public-module-projection.js'
+      - 'app/tools/test-public-modules-endpoint.js'
+      - 'app/viewer/**'
+      - 'netlify/functions/public-modules.mjs'
+      - 'tests/viewer-base-price*'
+      - 'tests/viewer-price-v5-save.test.cjs'
+      - '.github/workflows/viewer-base-price-contract-gate.yml'
+  workflow_dispatch:
+jobs:
+  price-contract:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - run: node --test tests/viewer-base-price-publication.test.cjs tests/viewer-price-v5-save.test.cjs
+      - run: node app/tools/test-administration-v5.js && node app/tools/test-v5-normal-save.js && node app/tools/test-v5-endpoint-safety.js && node app/tools/test-public-modules-endpoint.js
+      - run: node --check app/core/administration-v5.js && node --check app/core/public-module-projection.js && node --check netlify/functions/public-modules.mjs && node --check app/viewer/public-data.js && node --check app/viewer/scene-adapters.js && node --check app/viewer/viewer.js
+      - run: npm install --no-audit --no-fund
+      - run: npm run build
+      - name: Playwright cross-engine (without Netlify)
+        run: |
+          npm install --no-save --no-package-lock playwright@1.56.0
+          npx playwright install --with-deps chromium webkit
+          python3 -m http.server 8123 --bind 127.0.0.1 --directory app >/tmp/viewer-base-price-local.log 2>&1 &
+          sleep 2
+          node tests/viewer-base-price-browser-gate.mjs
+      - name: Attach browser diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: viewer-base-price-browser
+          path: artifacts/viewer-base-price/
+          if-no-files-found: ignore
+          retention-days: 7
