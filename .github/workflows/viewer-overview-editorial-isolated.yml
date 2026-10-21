@@ -35,8 +35,9 @@ jobs:
           node --check tests/viewer-overview-editorial-browser-gate.mjs
       - name: Install local browsers
         run: |
-          npm install --no-save --no-package-lock playwright@1.56.0
-          npx playwright install --with-deps chromium webkit
+          npm install --prefix /tmp/viewer-playwright --no-save --no-package-lock playwright@1.56.0
+          ln -s /tmp/viewer-playwright/node_modules ./node_modules
+          /tmp/viewer-playwright/node_modules/.bin/playwright install --with-deps chromium webkit
       - name: Serve only local candidate and baseline
         run: |
           python3 -m http.server 8123 --bind 127.0.0.1 --directory app >/tmp/overview-candidate.log 2>&1 &
