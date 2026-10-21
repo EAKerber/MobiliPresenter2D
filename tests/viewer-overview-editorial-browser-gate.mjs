@@ -22,7 +22,7 @@ const published={
     components:[...m.components],requirements:[...m.requirements]
   }])),
   finishes:finishes.map(x=>({id:x.id,enabled:x.status==="published",scope:"global"})),
-  materialGroups:[{id:"all",materialIds:finishes.map(x=>x.id)}],
+  materialGroups:[{id:"fronts-all",materialIds:finishes.map(x=>x.id)}],
   materials:finishes.map(x=>({id:x.id,label:x.publicLabel,kind:"texture",
     color:x.color,textureAsset:x.textureAsset,textureSize:x.textureSize})),
   initialState:{entities:Object.fromEntries(ids.map(id=>[id,true])),finishId:"base-light"}
@@ -98,7 +98,7 @@ for(const engine of [chromium,webkit]){
    assert.equal(after.data.overflow,false,"horizontal overflow introduced");
    assert.ok(after.data.footer,"footer absent");
    assert.ok(after.data.dimension,"dimension absent");
-   assert.ok(after.data.dimension.y>=after.data.title.length*0,"valid dimension position");
+   assert.ok(after.data.dimension.y>=after.data.overview.y+1,"dimension remains inside card");
    assert.ok(after.data.dimension.bottom<=after.data.overview.bottom+1,"dimension outside card");
    assert.ok(after.data.dimension.x<after.data.overview.x+after.data.overview.width/2,"dimension not left aligned");
    if(c.benefits.length){
