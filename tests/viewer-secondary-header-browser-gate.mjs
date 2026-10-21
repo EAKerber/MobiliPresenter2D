@@ -64,7 +64,14 @@ for(const engine of [chromium,webkit]){
    const closed=await page.locator(".viewer-header").screenshot({animations:"disabled"});
    await toggle.click();
    assert.equal(await toggle.getAttribute("aria-expanded"),"true");
-   assert.equal(await nav.isVisible(),true);
+   const navState=await page.evaluate(()=>{
+     const el=document.querySelector("#primaryNav"),css=getComputedStyle(el),r=el.getBoundingClientRect();
+     return {body:document.body.className,display:css.display,visibility:css.visibility,
+       opacity:css.opacity,pointerEvents:css.pointerEvents,rect:{x:r.x,y:r.y,width:r.width,height:r.height},
+       parent:el.parentElement?.className};
+   });
+   console.log("VIEWER_NAV005_OPEN_STATE "+JSON.stringify({engine:engine.name(),width,theme,...navState}));
+   assert.equal(await nav.isVisible(),true,"menu must be visible: "+JSON.stringify(navState));
    const open=await page.locator(".viewer-header").screenshot({animations:"disabled"});
    await page.keyboard.press("Escape");
    assert.equal(await toggle.getAttribute("aria-expanded"),"false");
