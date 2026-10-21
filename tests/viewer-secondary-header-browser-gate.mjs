@@ -71,7 +71,16 @@ for(const engine of [chromium,webkit]){
        parent:el.parentElement?.className};
    });
    console.log("VIEWER_NAV005_OPEN_STATE "+JSON.stringify({engine:engine.name(),width,theme,...navState}));
-   assert.equal(await nav.isVisible(),true,"menu must be visible: "+JSON.stringify(navState));
+   await page.waitForTimeout(300);
+   const settled=await page.evaluate(()=>{
+     const nav=document.querySelector("#primaryNav"),parent=nav.parentElement,css=getComputedStyle(nav);
+     const pc=getComputedStyle(parent),root=getComputedStyle(document.querySelector(".viewer-header"));
+     return {nav:{display:css.display,visibility:css.visibility,opacity:css.opacity,pointerEvents:css.pointerEvents},
+       parent:{display:pc.display,visibility:pc.visibility,opacity:pc.opacity},header:{visibility:root.visibility,opacity:root.opacity},
+       body:document.body.className,cssRules:[...document.styleSheets].map(sheet=>sheet.href)};
+   });
+   console.log("VIEWER_NAV005_SETTLED_STATE "+JSON.stringify({engine:engine.name(),width,theme,...settled}));
+   assert.equal(await nav.isVisible(),true,"menu must be visible when settled: "+JSON.stringify(settled));
    const open=await page.locator(".viewer-header").screenshot({animations:"disabled"});
    await page.keyboard.press("Escape");
    assert.equal(await toggle.getAttribute("aria-expanded"),"false");
