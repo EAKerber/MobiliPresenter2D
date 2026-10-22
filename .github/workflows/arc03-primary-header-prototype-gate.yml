@@ -1,0 +1,43 @@
+name: ARC-03 primary header build-time prototype
+
+on:
+  push:
+    branches:
+      - architecture/arc03-primary-header-fragment-prototype-20261022
+    paths:
+      - "architecture/fragments/**"
+      - "scripts/compile-primary-header-prototype.mjs"
+      - "tests/arc03-primary-header-prototype.test.mjs"
+      - ".github/workflows/arc03-primary-header-prototype-gate.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  equivalence:
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Syntax, provenance, route and drift gates
+        run: |
+          node --check scripts/compile-primary-header-prototype.mjs
+          node --test tests/arc03-primary-header-prototype.test.mjs
+          node scripts/compile-primary-header-prototype.mjs --check
+      - name: Emit scratch-only HTML and compare source boundaries
+        run: node scripts/compile-primary-header-prototype.mjs --emit-scratch
+      - name: Ensure no production or Netlify build change
+        run: git diff --quiet origin/main...HEAD -- app netlify.toml package.json netlify
+      - name: Save isolated rendering probe evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: arc03-primary-header-scratch
+          path: artifacts/arc03-preview-only/
+          retention-days: 7
+          if-no-files-found: warn
