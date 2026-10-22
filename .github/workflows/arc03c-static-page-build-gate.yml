@@ -1,0 +1,91 @@
+name: ARC-03C real static page build and browser gate
+on:
+  push:
+    branches:
+      - architecture/arc03c-static-page-build-20261022
+    paths:
+      - "architecture/fragments/**"
+      - "architecture/pages/**"
+      - "architecture/generated/**"
+      - "scripts/compile-primary-pages.mjs"
+      - "tests/arc03c-*"
+      - "app/index.html"
+      - "app/about/index.html"
+      - "app/how-it-works/index.html"
+      - "package.json"
+      - ".github/workflows/arc03c-static-page-build-gate.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  build-and-source:
+    runs-on: ubuntu-latest
+    timeout-minutes: 14
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Deterministic source and fail-closed tampering checks
+        run: |
+          node --check scripts/compile-primary-pages.mjs
+          node --test tests/arc03c-source-authority.test.mjs
+          npm run pages:check
+      - name: Execute the actual Netlify publish-folder build
+        run: |
+          npm install --no-save --no-package-lock esbuild@0.28.2
+          npm run build
+          npm run pages:check
+      - name: Protect Viewer, Config, Admin, Access and other app surfaces
+        run: |
+          git fetch origin main
+          git diff --quiet origin/main...HEAD -- app/viewer app/config app/admin app/access netlify netlify.toml
+          for path in $(git diff --name-only origin/main...HEAD -- app); do
+            case "$path" in
+              app/index.html|app/about/index.html|app/how-it-works/index.html) ;;
+              *) echo "Unexpected app mutation: $path"; exit 1 ;;
+            esac
+          done
+          echo ARC03C_SCOPE_PASS
+
+  browser-baseline:
+    runs-on: ubuntu-latest
+    container:
+      image: mcr.microsoft.com/playwright:v1.56.0-noble
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Build actual Netlify publish folder
+        run: |
+          npm install --no-save --no-package-lock esbuild@0.28.2 playwright@1.56.0 pngjs@7.0.0
+          npm run build
+          npm run pages:check
+      - name: Materialize immutable pre-cutover public HTML
+        run: |
+          mkdir -p artifacts/arc03c/baseline/about artifacts/arc03c/baseline/how-it-works
+          git show 303468b4ddbb07a761316abca28901ccaea219df:app/index.html > artifacts/arc03c/baseline/index.html
+          git show 303468b4ddbb07a761316abca28901ccaea219df:app/about/index.html > artifacts/arc03c/baseline/about/index.html
+          git show 303468b4ddbb07a761316abca28901ccaea219df:app/how-it-works/index.html > artifacts/arc03c/baseline/how-it-works/index.html
+      - name: Serve generated publish directory
+        run: |
+          python3 -m http.server 8123 --bind 127.0.0.1 --directory app >/tmp/arc03c-http.log 2>&1 &
+          sleep 2
+          curl --fail http://127.0.0.1:8123/ >/dev/null
+      - name: Compare DOM CSS keyboard and screenshots in Chromium and WebKit
+        run: node tests/arc03c-published-pages-browser-differential.mjs
+      - name: Preserve browser gate
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: arc03c-generated-page-gate
+          path: artifacts/arc03c/
+          retention-days: 14
+          if-no-files-found: warn
