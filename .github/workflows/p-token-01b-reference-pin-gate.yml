@@ -1,0 +1,39 @@
+name: P-TOKEN-01B product reference pin gate
+
+on:
+  push:
+    branches:
+      - architecture/p-token-01b-reference-pin-20261022
+    paths:
+      - "design-system/pins/vis-002/**"
+      - "scripts/verify-design-system-reference-pin.mjs"
+      - "tests/design-system-reference-pin.test.mjs"
+      - ".github/workflows/p-token-01b-reference-pin-gate.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: p-token-01b-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  pin:
+    name: Design System pin and nonactivation / no deploy
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: JavaScript syntax and pin integrity
+        run: |
+          node --check scripts/verify-design-system-reference-pin.mjs
+          node scripts/verify-design-system-reference-pin.mjs
+          node --test tests/design-system-reference-pin.test.mjs
+      - name: Ensure runtime and existing Netlify build are byte-identical to main
+        run: |
+          git diff --quiet origin/main...HEAD -- app netlify.toml package.json
