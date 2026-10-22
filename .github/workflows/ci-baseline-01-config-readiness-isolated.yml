@@ -1,0 +1,38 @@
+name: CI-BASELINE-01 anonymous config readiness audit
+
+on:
+  push:
+    branches:
+      - ci/ci-baseline-01-config-readiness-20261022
+    paths:
+      - "tests/ci-baseline-config-readiness-diagnostic.mjs"
+      - ".github/workflows/ci-baseline-01-config-readiness-isolated.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  diagnostic:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Check diagnostic syntax
+        run: node --check tests/ci-baseline-config-readiness-diagnostic.mjs
+      - name: Install browser without changing product dependencies
+        run: |
+          npm install --no-save --no-package-lock playwright@1.62.1
+          npx playwright install --with-deps chromium
+      - name: Inspect anonymous readiness without bypass or credentials
+        run: node tests/ci-baseline-config-readiness-diagnostic.mjs
+      - name: Preserve redacted diagnostic evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ci-baseline-01-config-readiness
+          path: artifacts/ci-baseline-01/readiness.json
+          retention-days: 14
+          if-no-files-found: warn
