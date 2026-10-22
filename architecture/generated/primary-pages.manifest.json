@@ -1,0 +1,35 @@
+{
+  "schema": "M2DARC03CPublishedPages/1",
+  "authority": "architecture/pages",
+  "fragment": {
+    "path": "architecture/fragments/primary-header.fragment.html",
+    "gitBlobSha": "25712fa6f2423372f076d041f9a7253ced088040"
+  },
+  "routesConfig": {
+    "path": "architecture/fragments/primary-header.routes.json",
+    "gitBlobSha": "7d2027e4701c80e93b4b940730e34756fe94fc12"
+  },
+  "pages": [
+    {
+      "route": "/",
+      "source": "architecture/pages/root.page.html",
+      "output": "app/index.html",
+      "sourceGitBlobSha": "c0d7dda53407d005785f871f5643690ebc949802",
+      "outputGitBlobSha": "b4dc4ee92e89d0bb747793aed073ec4d22421d77"
+    },
+    {
+      "route": "/about/",
+      "source": "architecture/pages/about.page.html",
+      "output": "app/about/index.html",
+      "sourceGitBlobSha": "0930ec31608f2cc02b635483e8936788266c4697",
+      "outputGitBlobSha": "006717b7b1ca75a6270e5f54ce1b626fbcb2867b"
+    },
+    {
+      "route": "/how-it-works/",
+      "source": "architecture/pages/how-it-works.page.html",
+      "output": "app/how-it-works/index.html",
+      "sourceGitBlobSha": "7611349ac1ebe3ccb3912ac29c2f85373225e426",
+      "outputGitBlobSha": "6d3669310d05b6381c2b0497bff5e81350c6eb59"
+    }
+  ]
+}

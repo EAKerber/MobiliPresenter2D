@@ -1,12 +1,12 @@
 {
   "schema": "M2DPrimaryHeaderRoutes/0.1",
-  "status": "EXPERIMENTAL_BUILD_TIME_ONLY_NOT_PUBLISHED",
+  "status": "BUILD_AUTHORITATIVE_ARC03C",
   "authority": "ARC-03 + ARC-04 + NAV-004; Viewer NAV-005 excluded",
   "template": "architecture/fragments/primary-header.fragment.html",
   "routes": [
     {
       "route": "/",
-      "source": "app/index.html",
+      "source": "architecture/pages/root.page.html",
       "brandHref": "/",
       "ambientesHref": "/#ambientes",
       "howHref": "/how-it-works/",
@@ -16,7 +16,7 @@
     },
     {
       "route": "/about/",
-      "source": "app/about/index.html",
+      "source": "architecture/pages/about.page.html",
       "brandHref": "/",
       "ambientesHref": "/#ambientes",
       "howHref": "/how-it-works/",
@@ -26,7 +26,7 @@
     },
     {
       "route": "/how-it-works/",
-      "source": "app/how-it-works/index.html",
+      "source": "architecture/pages/how-it-works.page.html",
       "brandHref": "../",
       "ambientesHref": "../#ambientes",
       "howHref": "./",
@@ -43,8 +43,8 @@
       "/access/",
       "/access/manage.html"
     ],
-    "emissionTarget": "artifacts/arc03-preview-only",
+    "emissionTarget": "app/ (Netlify publish directory)",
     "mayOverwriteAuthoredPages": false,
-    "mayModifyNetlifyBuild": false
+    "mayModifyNetlifyBuild": true
   }
 }
