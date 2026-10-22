@@ -1,0 +1,55 @@
+name: ARC-03B staged authored HTML equivalence
+
+on:
+  push:
+    branches:
+      - architecture/arc03-primary-header-fragment-prototype-20261022
+    paths:
+      - "architecture/fragments/**"
+      - "architecture/pages/**"
+      - "scripts/compile-primary-pages.mjs"
+      - "tests/arc03b-*"
+      - ".github/workflows/arc03b-authored-pages-browser-gate.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  staged-html:
+    runs-on: ubuntu-latest
+    container:
+      image: mcr.microsoft.com/playwright:v1.56.0-noble
+    timeout-minutes: 16
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Source syntax and staged build
+        run: |
+          node --check scripts/compile-primary-pages.mjs
+          node --check tests/arc03b-primary-header-browser-differential.mjs
+          node --test tests/arc03b-static-pages.test.mjs
+          node scripts/compile-primary-pages.mjs --check
+          node scripts/compile-primary-pages.mjs --emit-scratch
+      - name: Install test libraries only (browser OS deps provided by official image)
+        run: npm install --no-save --no-package-lock playwright@1.56.0 pngjs@7.0.0
+      - name: Serve original unchanged static product
+        run: |
+          python3 -m http.server 8123 --bind 127.0.0.1 --directory app >/tmp/arc03b-source.log 2>&1 &
+          sleep 2
+          curl --fail http://127.0.0.1:8123/ >/dev/null
+      - name: Verify generated HTML in Chromium and WebKit
+        run: node tests/arc03b-primary-header-browser-differential.mjs
+      - name: Verify published app and deploy settings are untouched
+        run: git diff --quiet origin/main...HEAD -- app netlify.toml package.json netlify
+      - name: Preserve build manifest and browser diff
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: arc03b-staged-page-evidence
+          path: artifacts/arc03b/
+          retention-days: 14
+          if-no-files-found: warn
