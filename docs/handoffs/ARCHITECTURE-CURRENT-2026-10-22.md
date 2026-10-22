@@ -1,0 +1,74 @@
+# HANDOVER CANÔNICO — MobiliPresenter2D / consolidação Vanilla + Design System
+
+**Data de observação:** 2026-10-22, America/Sao_Paulo.
+**Âmbito:** estado efetivamente lido nos repositórios, não um plano imaginado.
+**Entrada recomendada para novos agentes:** este documento -> `CURRENT_STATE.md` como **histórico** -> Design System [handover cruzado](https://github.com/EAKerber/MobiliPresenter2D_DesignSystem/blob/main/docs/ARCHITECTURE_CURRENT_HANDOVER_2026-10-22.md) -> decisões visuais e roadmap.
+**Atenção:** os parágrafos antigos de `CURRENT_STATE.md`, `README.md` e `docs/handoffs/CP-PUBLIC-CURRENT.md` descrevem fases/datas diferentes, especialmente uma fase em que `/config/` era pública. **Não têm precedência sobre commits HEAD, decisões posteriores e observação live de 22/10.**
+
+## 0. Estado observado e autoridade
+
+| Área | Estado verificável |
+|---|---|
+| Produto `EAKerber/MobiliPresenter2D` | **main `303468b4ddbb07a761316abca28901ccaea219df`** (última alteração de testes da issue #233; **runtime visual inalterado** ante `840a0cd`) |
+| Design System `EAKerber/MobiliPresenter2D_DesignSystem` | **main `5ba1137721ad056bee82da9615f3e24eda192699`** na leitura anterior à persistência deste handover; consultar HEAD live ao retomar |
+| Arquitetura | [ARC-01…ARC-16 aprovadas](https://github.com/EAKerber/MobiliPresenter2D_DesignSystem/blob/main/docs/ARCHITECTURE_DECISIONS_ARC01_ARC16_AND_EXECUTION_2026-10-21.md); sem React/Vue, runtime vanilla |
+| Decisão visual | **`decisions.json` no Design System**; não copiar ou ampliar homologações com base em aparência. NAV-004 (header primário) e NAV-005 (header Viewer secundário) são variantes separadas |
+| Publicação visual dessas migrações | **Nenhum P-COMP, P-TOKEN ou ARC-03B foi integrado à `main` do produto.** POC/testes não constituem publicação |
+| Risco de deploy | PR de produto pode disparar **Netlify Deploy Preview** automaticamente; evitar PR/previews repetidos |
+
+A diferença entre os repositórios é proposital: **DS é dono das homologações/tokens de referência e contratos; produto é dono da implementação Vanilla, build e domínios V5.** `Viewer` e `Configurator` compartilham projeções/domínio conforme necessidade, mas preservam apresentação contextual distinta. Não migrar conteúdo comercial para bundles UI sem decisão própria.
+
+## 1. Projetos executados, gate real e próximo movimento
+
+| Frente | Status comprovado | Próxima ação |
+|---|---|---|
+| **ARC-01…16** | Decisões consolidadas na main DS; contratos, ownership, variantes, CI e critérios de parada | Usar como limites; não reiniciar questionário sem fato novo |
+| **V0-A/V0-B inventário** | Fontes JS, CSS lexical e strings candidatas inventariados, com lacunas marcadas no DS | AST/scanner i18n completo, consumidores e runtime quando entrar ARC-13 |
+| **P-COMP-01 menu público** | Branch `architecture/p-comp-01-public-menu-20261021@4ba9384733a8cb46ad8a6c7c8ef3b9aebe25cd93`; [Actions #39697470826 PASS](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/39697470826): 40 diferenciais + 16 funcionais + 20 NAV-005 | Branch está **1 commit atrás da main**, não mergear sem rebase/reconciliação e gate de integração; não misturar com ARC-03C |
+| **P-TOKEN-01A/02B DS** | DS [PR #49](https://github.com/EAKerber/MobiliPresenter2D_DesignSystem/pull/49) + [PR #50](https://github.com/EAKerber/MobiliPresenter2D_DesignSystem/pull/50) MERGED; exportações Node determinísticas, paleta `VIS-002` e um par contextual | Preservar `implementationAuthorized=false` para uso **global** da paleta; aplicar somente pareamentos contextuais explicitamente homologados |
+| **P-TOKEN-01B/02B produto** | [PR #231 DRAFT/HOLD](https://github.com/EAKerber/MobiliPresenter2D/pull/231), branch `architecture/p-token-02b-contextual-copy-20261022@afb80965336083209eac93e2729de77170524ee5`. [Actions #39780241560 PASS](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/39780241560): **48/48**, zero diferenças de pixels. PR 1 commit atrás da main | Não fazer merge ignorando CI global; conferir mudanças de testes já integradas à main e revalidar; um único preview da PR foi criado |
+| **CI-BASELINE-01 / #233** | [Issue #233 FECHADA](https://github.com/EAKerber/MobiliPresenter2D/issues/233): assertions públicas `viewerEntities` + `nominalDimensionsMm` corrigidas **na main** com commit `303468b`; [Actions #39848703737 PASS](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/39848703737) | Não refazer o patch ou reabrir a questão só porque branches antigas estão divergentes |
+| **CI-BASELINE-01 / #232** | [Issue #232 ABERTA](https://github.com/EAKerber/MobiliPresenter2D/issues/232). [Diagnóstico #39849284220 PASS](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/39849284220) confirmou **`/config/ → /access/` para usuário anônimo** na produção e no preview #231. Testes antigos assumem sessão e falham em `CASA_EM_MODULOS_DEBUG`/readiness | Deixar **PENDENTE**; projetar fixture autenticada de menor privilégio e expiração ou marcar `BLOCKED_AUTH_FIXTURE` sem falsificar PASS; NÃO abrir `/config/` para CI |
+| **ARC-03 header POC** | Branch `architecture/arc03-primary-header-fragment-prototype-20261022`, baseada na main atual; primeiro POC de três headers aprovado em [#39852406075](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/39852406075) | Superado pelo ARC-03B, não retornar ao POC como última fonte |
+| **ARC-03B autoria/compilador** | **MESMA BRANCH** `architecture/arc03-primary-header-fragment-prototype-20261022@e459b9bd85c4e9c8bb96813ae6758789de75dc13`. [Actions #39867859774 SUCCESS](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/39867859774), **60/60 Chromium/WebKit** (3 páginas × 5 larguras × 2 temas × 2 engines), **0 raster differences** e job de comparação `app/` + build PASS | **ARC-03C**: planejar cutover para entrada autoral única no `npm run build` real; preservar Viewer NAV-005 e outras rotas; CI + browser + rollback antes de PR/merge |
+| **ARC-13 localização** | Inventário de candidatos e lacunas persistido; **extração completa/ativação NÃO realizadas** | Scanner robusto AST/HTML, classificar UI vs V5 vs diagnóstico; migrar por componente sem framework pesado |
+
+O ARC-03B está descrito minuciosamente no [checkpoint DS](https://github.com/EAKerber/MobiliPresenter2D_DesignSystem/blob/main/docs/ARC03B_AUTHORED_PAGES_STATIC_COMPILER_BROWSER_GATE_2026-10-22.md). O primeiro run do ARC-03B (#39867401114) passou nas 60 comparações de browser mas falhou no `git diff` executado sem repositório Git dentro do container; o run **final #39867859774 é integralmente verde**, com esse check num job separado. Não retroceder ao estado do primeiro run ao recuperar este projeto.
+
+## 2. ARC-03B: o que existe, o que ainda NÃO existe
+
+**Existe somente em branch do produto:**
+- `architecture/fragments/primary-header.fragment.html` e `primary-header.routes.json`;
+- `architecture/pages/root.page.html`, `about.page.html`, `how-it-works.page.html` com marcador de header;
+- `scripts/compile-primary-header-prototype.mjs`, `scripts/compile-primary-pages.mjs`;
+- testes `arc03-primary-header-prototype.test.mjs`, `arc03b-static-pages.test.mjs`, `arc03b-primary-header-browser-differential.mjs` e workflow ARC-03B;
+- emissões somente em `artifacts/arc03b/pages/` e manifesto de hashes, **fora da pasta `app`**.
+
+**Ainda não existe:** adoção do HTML gerado como fonte de verdade publicada, integração no `npm run build`, refatoração de outras páginas ou um renderer universal. As três páginas atuais de `app/` ainda são arquivos de autoria redundantes com as fontes experimentais. ARC-03B **prova viabilidade e fidelidade antes do cutover**, não sua conclusão.
+
+**Próxima etapa recomendada ARC-03C:** ler `package.json` e `netlify.toml` correntes; gerar páginas no pipeline certo (o Netlify publica `app`, não o `app/dist` histórico), definir precedência e proteção de drift para que não haja duas fontes autorais, validar saída byte a byte quando requerido, repetir matriz visual/funcional no build gerado, preservar preço/Viewer/Admin/Config/Access e documentar rollback. Não alterar o produto `main` antes do gate isolado; usar branch atual ou branch derivada após avaliar a fronteira de escopo.
+
+## 3. Pendências externas e prevenção de conflitos
+
+**Não misturar com ARC-03C:**
+- [#232](https://github.com/EAKerber/MobiliPresenter2D/issues/232) fix de sessão de teste (requer desenho de permissões/fixture).
+- [#231](https://github.com/EAKerber/MobiliPresenter2D/pull/231) migração de token contextual, **draft e CI global vermelho**, ainda que gate restrito verde.
+- #212 (Admin pós-login), #213 (navegação de sessão), #222 (endpoint temporário 404), #228 (controle global Admin de preços base OFF por padrão), #229 (roadmap funcional), #215/#224 (bugs Landing), #225 (NAV-005): são issues **abertas no tracker**; algumas podem ter implementação posterior já publicada. Verificar status real em código e testes antes de declarar que continuam sem correção.
+- PRs legadas CP-PUBLIC #175/#178–#186, #196, PR #34, DS [#39](https://github.com/EAKerber/MobiliPresenter2D_DesignSystem/pull/39) e [#41](https://github.com/EAKerber/MobiliPresenter2D_DesignSystem/pull/41) abertas/draft. **Não fazer merge em bloco**, mesmo com histórico de previews.
+
+**Política permanente:** preservar compatibilidade V5/BuyerDTO/Viewer público, não inventar catálogo ou preço; `viewerPricePublication` OFF até publicação autorizada; não expor dados privados; diferenciar testes sem sessão de fluxos autenticados; CSS e tokens de referência **não** equivalem a novas decisões de estilo; manter HTML/CSS/JS Vanilla.
+
+## 4. Handover operacional — ações sem reconstruir o chat
+
+1. Revalidar os dois HEADs e o status da PR #231/#232. Assumir este documento como **fotografia de 22/10**, não verdade futura.
+2. Para **ARC-03C**, abrir primeiro a [branch ARC-03B](https://github.com/EAKerber/MobiliPresenter2D/tree/architecture/arc03-primary-header-fragment-prototype-20261022) e ler seu [gate já aprovado](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/39867859774). Identificar entradas/saídas do build e propor corte restrito; não misturar o controlador P-COMP.
+3. Executar testes de compilação/DOM/CSS/headers primários + controle negativo Viewer NAV-005, desktop/mobile, light/dark, Chromium/WebKit. **Node check ≠ pixel ≠ teste em dispositivo real**. Comparar com main no SHA do candidato.
+4. Criar **uma** PR de produto somente quando for necessário para revisar e testar o pipeline real; não disparar previews em loop. Não fazer merge quando houver regressão verificada ou gates obrigatórios sem resolução explícita.
+5. Persistir novos checkpoints materialmente úteis no produto e DS, atualizar este ponto de entrada primeiro, manter `decisions.json` exclusivamente para homologações visuais (não decisões ARC).
+6. Para #232, manter pendência acessível até fixture autenticada segura e teste efetivo; não deixar CI global vermelho se tornar waiver implícito.
+
+## 5. Progresso relatado ao usuário
+
+**Programa global de consolidação:** estimativa orientativa **~22%**, contra **~15%** no marco anterior (**+7 pontos percentuais**); faixa aproximada **18–25%**. Isto **não é métrica de CI nem porcentagem de funcionalidade já publicada**: inclui decisões/governança, investigação, componentes testados isolados e infra geradora DS. A adoção em `main` do produto ainda é pequena. ARC-03B fortalece o caminho do build, **sem inaugurar cutover em produção**.
+
+**Parada honesta:** trabalho conclui por escopo + gate + integração + readback, e nunca somente porque uma PR abriu ou a branch foi criada. Quando o usuário pedir "prossiga", executar ARC-03C com mudanças mínimas e testes; quando pedir handover, atualizar os dois pontos de entrada em vez de responder só no chat.
