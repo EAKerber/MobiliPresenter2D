@@ -1,0 +1,422 @@
+{
+  "schema": "M2DReferencePaletteConsumerObservations/0.1",
+  "sourceCommit": "840a0cda361b3ce215fc934badc26df72dffc6e8",
+  "designSystemCommit": "70f0eabf609b5b4391459c426d6f7ecaeac070c8",
+  "status": "LEXICAL OBSERVATION ONLY; values matching is NOT proof of same semantic role, contrast, component approval or safe substitution",
+  "method": "Case-insensitive exact 6-digit CSS hex literal equality with the 14 approved VIS-002 base reference swatches; does not resolve custom properties, computed CSS, RGB/HSL, alpha, gradient or theme scopes",
+  "totals": {
+    "cssFiles": 8,
+    "literalMatches": 54
+  },
+  "scanned": [
+    {
+      "path": "app/public-theme.css",
+      "blob": "e2add5053fbc1a897c035eb854b168c9711d2d18",
+      "rawMatches": 4,
+      "matches": [
+        {
+          "line": 6,
+          "reference": "--ds-reference-surface-light",
+          "value": "#F0EDE8",
+          "excerpt": "--public-surface-soft: #f0ede8;"
+        },
+        {
+          "line": 9,
+          "reference": "--ds-reference-surface-soft-light",
+          "value": "#DED9D2",
+          "excerpt": "--public-line: #ded9d2;"
+        },
+        {
+          "line": 10,
+          "reference": "--ds-reference-focus-outline-light",
+          "value": "#8B6A40",
+          "excerpt": "--public-accent: #8b6a40;"
+        },
+        {
+          "line": 12,
+          "reference": "--ds-reference-focus-outline-dark",
+          "value": "#D8BC7C",
+          "excerpt": "--public-accent-highlight: #d8bc7c;"
+        }
+      ]
+    },
+    {
+      "path": "app/ui-theme.css",
+      "blob": "b0f04c566183ba1f9c015f5d2a827db9e91dea45",
+      "rawMatches": 27,
+      "matches": [
+        {
+          "line": 33,
+          "reference": "--ds-reference-surface-light",
+          "value": "#F0EDE8",
+          "excerpt": "--ui-theme-control-bg: #f0ede8;"
+        },
+        {
+          "line": 37,
+          "reference": "--ds-reference-focus-outline-dark",
+          "value": "#D8BC7C",
+          "excerpt": "--ui-theme-focus: #d8bc7c;"
+        },
+        {
+          "line": 96,
+          "reference": "--ds-reference-focus-outline-dark",
+          "value": "#D8BC7C",
+          "excerpt": "--public-accent: #d8bc7c;"
+        },
+        {
+          "line": 98,
+          "reference": "--ds-reference-focus-outline-dark",
+          "value": "#D8BC7C",
+          "excerpt": "--public-accent-highlight: #d8bc7c;"
+        },
+        {
+          "line": 106,
+          "reference": "--ds-reference-focus-outline-light",
+          "value": "#8B6A40",
+          "excerpt": "html[data-theme=\"dark\"] .button-dark:hover { background: #8b6a40; }"
+        },
+        {
+          "line": 109,
+          "reference": "--ds-reference-focus-outline-light",
+          "value": "#8B6A40",
+          "excerpt": "html[data-theme=\"dark\"] .button-copper { background: #8b6a40; color: #ffffff; }"
+        },
+        {
+          "line": 114,
+          "reference": "--ds-reference-focus-outline-dark",
+          "value": "#D8BC7C",
+          "excerpt": "html[data-theme=\"dark\"] :focus-visible { outline-color: #d8bc7c; }"
+        },
+        {
+          "line": 174,
+          "reference": "--ds-reference-surface-light",
+          "value": "#F0EDE8",
+          "excerpt": "background: #f0ede8;"
+        },
+        {
+          "line": 192,
+          "reference": "--ds-reference-surface-light",
+          "value": "#F0EDE8",
+          "excerpt": "--surface-raised: #f0ede8;"
+        },
+        {
+          "line": 196,
+          "reference": "--ds-reference-focus-outline-light",
+          "value": "#8B6A40",
+          "excerpt": "--accent: #8b6a40;"
+        },
+        {
+          "line": 202,
+          "reference": "--ds-reference-surface-light",
+          "value": "#F0EDE8",
+          "excerpt": "html[data-theme=\"light\"] .price-state { background: #F0EDE8; }"
+        },
+        {
+          "line": 203,
+          "reference": "--ds-reference-border-light",
+          "value": "#D6CCC0",
+          "excerpt": "html[data-theme=\"light\"] .price-state__breakdown > div { border-top-color: #D6CCC0; }"
+        },
+        {
+          "line": 204,
+          "reference": "--ds-reference-text-primary-light",
+          "value": "#292723",
+          "excerpt": "html[data-theme=\"light\"] .price-state__breakdown dt { color: #292723; }"
+        },
+        {
+          "line": 230,
+          "reference": "--ds-reference-surface-light",
+          "value": "#F0EDE8",
+          "excerpt": "--raised: #f0ede8;"
+        },
+        {
+          "line": 233,
+          "reference": "--ds-reference-surface-light",
+          "value": "#F0EDE8",
+          "excerpt": "html[data-theme=\"light\"] .stage-unassigned { background: #f0ede8; }"
+        },
+        {
+          "line": 244,
+          "reference": "--ds-reference-focus-outline-light",
+          "value": "#8B6A40",
+          "excerpt": "html[data-theme=\"light\"] .button--primary { background: #8b6a40; color: #ffffff; }"
+        },
+        {
+          "line": 251,
+          "reference": "--ds-reference-surface-light",
+          "value": "#F0EDE8",
+          "excerpt": "html[data-theme=\"light\"] .material-availability-list { background: #f0ede8; border-color: var(--border); }"
+        },
+        {
+          "line": 255,
+          "reference": "--ds-reference-surface-light",
+          "value": "#F0EDE8",
+          "excerpt": "html[data-theme=\"light\"] code { background: #f0ede8; color: #22211f; }"
+        },
+        {
+          "line": 272,
+          "reference": "--ds-reference-surface-soft-light",
+          "value": "#DED9D2",
+          "excerpt": "border-bottom: 1px solid var(--public-line, #ded9d2);"
+        },
+        {
+          "line": 281,
+          "reference": "--ds-reference-surface-soft-light",
+          "value": "#DED9D2",
+          "excerpt": "border: 1px solid var(--public-line, #ded9d2); border-radius: 10px;"
+        },
+        {
+          "line": 284,
+          "reference": "--ds-reference-surface-light",
+          "value": "#F0EDE8",
+          "excerpt": ".private-menu-toggle:hover { background: var(--public-surface-soft, #f0ede8); }"
+        },
+        {
+          "line": 290,
+          "reference": "--ds-reference-surface-soft-light",
+          "value": "#DED9D2",
+          "excerpt": "border: 1px solid var(--public-line, #ded9d2); border-radius: 14px;"
+        },
+        {
+          "line": 296,
+          "reference": "--ds-reference-surface-soft-light",
+          "value": "#DED9D2",
+          "excerpt": ".private-menu__group + .private-menu__group { padding-top: 13px; border-top: 1px solid var(--public-line, #ded9d2); }"
+        },
+        {
+          "line": 300,
+          "reference": "--ds-reference-surface-light",
+          "value": "#F0EDE8",
+          "excerpt": ".private-menu__links a:hover, .private-menu__links a[aria-current=\"page\"] { background: var(--public-surface-soft, #f0ede8); color: var(--public-accen"
+        },
+        {
+          "line": 302,
+          "reference": "--ds-reference-surface-soft-light",
+          "value": "#DED9D2",
+          "excerpt": ".private-menu__account { display: grid; gap: 9px; padding-top: 12px; border-top: 1px solid var(--public-line, #ded9d2); }"
+        },
+        {
+          "line": 307,
+          "reference": "--ds-reference-surface-soft-light",
+          "value": "#DED9D2",
+          "excerpt": "min-height: 42px; margin: 0; padding: 9px 12px; border: 1px solid var(--public-line, #ded9d2);"
+        },
+        {
+          "line": 308,
+          "reference": "--ds-reference-surface-light",
+          "value": "#F0EDE8",
+          "excerpt": "border-radius: 8px; background: var(--public-surface-soft, #f0ede8);"
+        }
+      ]
+    },
+    {
+      "path": "app/landing/landing.css",
+      "blob": "91a7bc7cd912ac7f0a9e81c16fcee576dc50a4ea",
+      "rawMatches": 3,
+      "matches": [
+        {
+          "line": 38,
+          "reference": "--ds-reference-surface-light",
+          "value": "#F0EDE8",
+          "excerpt": ".hero { display: grid; grid-template-columns: minmax(0, .92fr) minmax(0, 1.08fr); max-width: 1440px; min-height: min(690px, calc(100svh - 76px)); marg"
+        },
+        {
+          "line": 51,
+          "reference": "--ds-reference-text-secondary-light",
+          "value": "#705C4B",
+          "excerpt": "html[data-theme=\"light\"] .hero-description { color: #705C4B; }"
+        },
+        {
+          "line": 125,
+          "reference": "--ds-reference-canvas-light",
+          "value": "#E8E3DC",
+          "excerpt": ".story-section { padding: 58px 24px 64px; background: #e8e3dc; text-align: center; }"
+        }
+      ]
+    },
+    {
+      "path": "app/about/about.css",
+      "blob": "b58689554cccd9493810fb66a383be2cb30c595a",
+      "rawMatches": 1,
+      "matches": [
+        {
+          "line": 50,
+          "reference": "--ds-reference-text-secondary-light",
+          "value": "#705C4B",
+          "excerpt": "html[data-theme=\"light\"] .about-scale p:not(.eyebrow) { color: #705C4B; }"
+        }
+      ]
+    },
+    {
+      "path": "app/how-it-works/how-it-works.css",
+      "blob": "52f36d212d286ef5157a20fc822cbfab25e09b2f",
+      "rawMatches": 5,
+      "matches": [
+        {
+          "line": 50,
+          "reference": "--ds-reference-canvas-light",
+          "value": "#E8E3DC",
+          "excerpt": ".study-band { display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); align-items: center; gap: clamp(32px, 6vw, 80px); padding: clamp"
+        },
+        {
+          "line": 103,
+          "reference": "--ds-reference-canvas-light",
+          "value": "#E8E3DC",
+          "excerpt": ".quality-copy { grid-column: 2; display: grid; align-content: start; padding: 25px; border: 1px solid var(--public-line); border-radius: var(--public-"
+        },
+        {
+          "line": 109,
+          "reference": "--ds-reference-canvas-light",
+          "value": "#E8E3DC",
+          "excerpt": ".production-panel { grid-column: 1; display: grid; align-content: start; gap: 22px; padding: 25px; border: 1px solid var(--public-line); border-radius"
+        },
+        {
+          "line": 282,
+          "reference": "--ds-reference-text-secondary-light",
+          "value": "#705C4B",
+          "excerpt": "html[data-theme=\"light\"] .how-hero-note { color: #705C4B; }"
+        },
+        {
+          "line": 284,
+          "reference": "--ds-reference-surface-light",
+          "value": "#F0EDE8",
+          "excerpt": "html[data-theme=\"dark\"] .study-art figcaption { background: #20211F; color: #F0EDE8; }"
+        }
+      ]
+    },
+    {
+      "path": "app/viewer/viewer.css",
+      "blob": "90d23678630c17f63ac343bfd7e5e1ce3bbcb1b2",
+      "rawMatches": 0,
+      "matches": []
+    },
+    {
+      "path": "app/styles.css",
+      "blob": "d43e6fb5e66133d2389b5c39b165b76b13cfa868",
+      "rawMatches": 7,
+      "matches": [
+        {
+          "line": 467,
+          "reference": "--ds-reference-focus-outline-light",
+          "value": "#8B6A40",
+          "excerpt": ".module-detail__selection-toggle input { width: 15px; height: 15px; margin: 0; accent-color: #8b6a40; }"
+        },
+        {
+          "line": 525,
+          "reference": "--ds-reference-focus-outline-light",
+          "value": "#8B6A40",
+          "excerpt": ".module-detail__carousel-dot.is-active { width: 22px; background: #8b6a40; }"
+        },
+        {
+          "line": 526,
+          "reference": "--ds-reference-focus-outline-light",
+          "value": "#8B6A40",
+          "excerpt": ".module-detail__carousel-dot:focus-visible { outline: 2px solid #8b6a40; outline-offset: 3px; }"
+        },
+        {
+          "line": 529,
+          "reference": "--ds-reference-focus-outline-light",
+          "value": "#8B6A40",
+          "excerpt": ".module-detail__carousel-arrow:hover { border-color: #8b6a40; background: #fffaf0; transform: translateY(-1px); }"
+        },
+        {
+          "line": 530,
+          "reference": "--ds-reference-focus-outline-light",
+          "value": "#8B6A40",
+          "excerpt": ".module-detail__carousel-arrow:focus-visible { outline: 2px solid #8b6a40; outline-offset: 2px; }"
+        },
+        {
+          "line": 536,
+          "reference": "--ds-reference-focus-outline-light",
+          "value": "#8B6A40",
+          "excerpt": ".module-detail__benefits li::before { content: \"•\"; margin-right: 7px; color: #8b6a40; }"
+        },
+        {
+          "line": 539,
+          "reference": "--ds-reference-focus-outline-light",
+          "value": "#8B6A40",
+          "excerpt": ".module-detail__requirements { padding: 9px 10px; border-left: 3px solid #8b6a40; background: rgba(139,106,64,.1); color: #514537; font-size: 12px; li"
+        }
+      ]
+    },
+    {
+      "path": "app/admin/admin.css",
+      "blob": "1b3b41e166d44dbf70c1096db36255398aff8493",
+      "rawMatches": 7,
+      "matches": [
+        {
+          "line": 162,
+          "reference": "--ds-reference-surface-light",
+          "value": "#F0EDE8",
+          "excerpt": "--bg:#f7f5f2; --surface:#ffffff; --raised:#f0ede8; --text:#22211f;"
+        },
+        {
+          "line": 165,
+          "reference": "--ds-reference-surface-light",
+          "value": "#F0EDE8",
+          "excerpt": "--inset-bg:#f4f1ec; --subtle-bg:#f0ede8; --asset-bg:#f0ede8;"
+        },
+        {
+          "line": 165,
+          "reference": "--ds-reference-surface-light",
+          "value": "#F0EDE8",
+          "excerpt": "--inset-bg:#f4f1ec; --subtle-bg:#f0ede8; --asset-bg:#f0ede8;"
+        },
+        {
+          "line": 166,
+          "reference": "--ds-reference-surface-light",
+          "value": "#F0EDE8",
+          "excerpt": "--button-muted-bg:#f0ede8; --primary-bg:#8b6a40; --primary-text:#ffffff;"
+        },
+        {
+          "line": 166,
+          "reference": "--ds-reference-focus-outline-light",
+          "value": "#8B6A40",
+          "excerpt": "--button-muted-bg:#f0ede8; --primary-bg:#8b6a40; --primary-text:#ffffff;"
+        },
+        {
+          "line": 200,
+          "reference": "--ds-reference-surface-light",
+          "value": "#F0EDE8",
+          "excerpt": "html[data-theme=\"light\"] .hierarchy-choice-option[data-available=\"false\"] { color:#6b6259; background:#f0ede8; }"
+        },
+        {
+          "line": 217,
+          "reference": "--ds-reference-focus-outline-dark",
+          "value": "#D8BC7C",
+          "excerpt": ".pricing-publication-switch input:focus-visible { outline:3px solid var(--focus, #d8bc7c); outline-offset:3px; }"
+        }
+      ]
+    }
+  ],
+  "knownNonEquivalentBaseRoles": [
+    {
+      "live": "--public-bg (light)",
+      "value": "#F7F5F2",
+      "reference": "--ds-reference-canvas-light",
+      "refValue": "#E8E3DC",
+      "result": "different — cannot replace without authorized redesign"
+    },
+    {
+      "live": "--public-surface (light)",
+      "value": "#FFFFFF",
+      "reference": "--ds-reference-surface-light",
+      "refValue": "#F0EDE8",
+      "result": "different — existing surface roles differ"
+    },
+    {
+      "live": "--public-text (light)",
+      "value": "#22211F",
+      "reference": "--ds-reference-text-primary-light",
+      "refValue": "#292723",
+      "result": "different — appearance shift"
+    },
+    {
+      "live": "--public-bg (dark)",
+      "value": "#111210",
+      "reference": "--ds-reference-canvas-dark",
+      "refValue": "#171614",
+      "result": "different — contrast and imagery impact"
+    }
+  ]
+}
