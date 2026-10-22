@@ -1,5 +1,8 @@
 # CURRENT_STATE — MobiliPresenter2D
 
+> **RETOMADA MAIS RECENTE — ARQUITETURA/DS (22/10/2026):** antes dos registros históricos abaixo, leia [HANDOVER CANÔNICO — consolidação de componentes, tokens, CI e ARC-03B](docs/handoffs/ARCHITECTURE-CURRENT-2026-10-22.md), verificado nos dois repositórios. Produto `main@303468b` antes deste commit documental; ARC-03B **60/60 PASS em branch, sem cutover/build publicado**; PR #231 de tokens **DRAFT/HOLD**; #232 de fixture autenticada **ABERTA**; #233 corrigida em main. **A afirmação datada de 08/10 de que `/config/` era pública é histórica**: em 22/10, o diagnóstico anônimo documentado observou redirecionamento `/config/ → /access/` em produção e preview. Não usar conteúdo anterior como estado atual sem ler HEAD.
+
+
 > **ENTRADA CANÔNICA CP-PUBLIC — ESTADO PUBLICADO E RETOMADA EM 2026-10-08 22:45 (America/Sao_Paulo):** ler primeiro [`docs/handoffs/CP-PUBLIC-CURRENT.md`](docs/handoffs/CP-PUBLIC-CURRENT.md). As PRs #187/#188/#189 foram **MERGED**; a `main` passou a servir landing em `/`, viewer em `/viewer/` e configurador **temporariamente PÚBLICO** em `/config/`. Netlify produção READY no deploy `6ac8436f9b8dde000949bb0a`, commit `204fd7d2f29267cfb0166bcfa0c1a2baef07b9c3`. Clerk Auth **adiado por decisão expressa do usuário**; não começar PostgreSQL/Resend (#186) como caminho padrão, não mesclar guards #182/#184/#185/#186 isoladamente. Demais seções deste arquivo contêm histórico — inclusive pointers e proibições ANTERIORES agora superados por este gate. Revalidar `main` e deploy em toda retomada.
 
 
