@@ -43,8 +43,6 @@ jobs:
           curl --fail http://127.0.0.1:8123/ >/dev/null
       - name: Verify generated HTML in Chromium and WebKit
         run: node tests/arc03b-primary-header-browser-differential.mjs
-      - name: Verify published app and deploy settings are untouched
-        run: git diff --quiet origin/main...HEAD -- app netlify.toml package.json netlify
       - name: Preserve build manifest and browser diff
         if: always()
         uses: actions/upload-artifact@v4
@@ -53,3 +51,17 @@ jobs:
           path: artifacts/arc03b/
           retention-days: 14
           if-no-files-found: warn
+
+  runtime-boundary:
+    name: Prove app/ and build were not edited
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Compare source changes with main without browser container isolation
+        run: |
+          git rev-parse --is-inside-work-tree
+          git diff --quiet origin/main...HEAD -- app netlify.toml package.json netlify
+          echo "ARC03B_RUNTIME_BOUNDARY_PASS"
