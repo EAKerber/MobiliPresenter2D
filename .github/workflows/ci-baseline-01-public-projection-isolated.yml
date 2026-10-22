@@ -21,6 +21,8 @@ jobs:
     timeout-minutes: 7
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - uses: actions/setup-node@v4
         with:
           node-version: "22"
@@ -34,5 +36,4 @@ jobs:
           node --test app/viewer/scene-adapters.test.mjs
       - name: Verify no runtime or deployment change
         run: |
-          git fetch origin main --depth=1
           git diff --quiet origin/main...HEAD -- app netlify.toml package.json netlify
