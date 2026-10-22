@@ -51,8 +51,12 @@ test("CP-PUBLIC-02a: all seven public modules in published order", () => {
   assert.equal(result.publicState.finishId, "base-light");
   assert.deepEqual(result.publicState.availableFinishes.map((f) => f.id), catalog.options.finishes.map((f) => f.id));
   assert.equal(result.publicState.availableFinishes[0].label, catalog.options.finishes[0].publicLabel);
-  assert.deepEqual(Object.keys(result.publicState.entities), catalog.modules.map((m) => m.entityId));
+  assert.deepEqual(Object.keys(result.publicState.viewerEntities), catalog.modules.map((m) => m.entityId));
   assert.ok(result.modules[2].components.length);
+  // Dimensions are an explicit public rendering field, not the raw scene geometry.
+  assert.deepEqual(result.modules[2].nominalDimensionsMm, catalog.modules[2].dimensions.nominalMm);
+  assert.equal(Object.hasOwn(result.publicState, "entities"), false);
+
 });
 test("CP-PUBLIC-02a: allowlist excludes pricing, private state and donor fields", () => {
   const modified = structuredClone(catalog);
@@ -66,8 +70,13 @@ test("CP-PUBLIC-02a: allowlist excludes pricing, private state and donor fields"
   for (const item of result.modules) {
     assert.ok(Object.keys(item).every((key) => [
       "id", "referenceLabel", "title", "description", "category", "dimensionLabel",
-      "benefits", "components", "requirements"
+      "benefits", "components", "requirements", "nominalDimensionsMm"
     ].includes(key)));
+  }
+  for (const item of result.modules) {
+    assert.deepEqual(Object.keys(item.nominalDimensionsMm).sort(), ["depth", "height", "width"]);
+    assert.equal(Object.hasOwn(item, "basePriceCents"), false,
+      "public prices remain opt-in, disabled in this fixture");
   }
   const wire = JSON.stringify(result);
   for (const secret of ["pricing", "price", "etag", "draft", "revision", "secret", "unapproved", "publicPresentation", "commercial", "geometryMm", "privateSession"]) {
@@ -108,8 +117,8 @@ test("CP-PUBLIC-02a: visible-state subset and selected finish come from publicat
   source.initialState.entities["module-07"] = false;
   source.initialState.finishId = "cocoa";
   const result = project(source, catalog, scene);
-  assert.deepEqual(Object.keys(result.publicState.entities), ["module-07", "module-03"]);
-  assert.equal(result.publicState.entities["module-07"], false);
+  assert.deepEqual(Object.keys(result.publicState.viewerEntities), ["module-07", "module-03"]);
+  assert.equal(result.publicState.viewerEntities["module-07"], false);
   assert.equal(result.publicState.finishId, "cocoa");
   assert.equal(result.publicState.availableFinishes.some((finish) => finish.id === "cocoa"), true);
   source.finishes.find((finish) => finish.id === "cocoa").enabled = false;
