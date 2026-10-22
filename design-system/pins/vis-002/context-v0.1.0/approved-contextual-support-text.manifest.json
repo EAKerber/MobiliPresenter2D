@@ -1,0 +1,35 @@
+{
+  "schema": "M2DApprovedContextualTextToken/0.1",
+  "version": "0.1.0",
+  "source": {
+    "repository": "EAKerber/MobiliPresenter2D_DesignSystem",
+    "decision": "VIS-002",
+    "gitBlobSha": "63b60f8d87327c6fd1e80c8cdf4ff832c4089bfa",
+    "decisionPath": "approvedRuntimePairs[0].candidateReplacement"
+  },
+  "status": "EXACT_EXISTING_CONTEXT_ONLY",
+  "token": "--ds-vis002-approved-support-text-light",
+  "value": "#705C4B",
+  "theme": "light",
+  "approvedBackground": "#F0EDE8",
+  "contexts": [
+    {
+      "route": "/",
+      "selector": ".hero-description"
+    },
+    {
+      "route": "/how-it-works/",
+      "selector": ".how-hero-note"
+    },
+    {
+      "route": "/about/",
+      "selector": ".about-scale p:not(.eyebrow)"
+    }
+  ],
+  "constraints": {
+    "allowsGlobalUsage": false,
+    "allowsDifferentColor": false,
+    "productUseRequiresExactSelectors": true,
+    "visualChangeAuthorized": false
+  }
+}
