@@ -6,6 +6,7 @@ on:
       - architecture/p-token-01b-reference-pin-20261022
     paths:
       - "design-system/pins/vis-002/**"
+      - "design-system/audits/p-token-01b-current-css-literal-observations.json"
       - "scripts/verify-design-system-reference-pin.mjs"
       - "tests/design-system-reference-pin.test.mjs"
       - ".github/workflows/p-token-01b-reference-pin-gate.yml"
