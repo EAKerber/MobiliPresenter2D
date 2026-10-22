@@ -24,3 +24,11 @@ ARC-03B permanece um checkpoint verificável na branch original e no Design Syst
 
 - Run [#39871724976](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/39871724976): build, testes estáticos, drift e escopo PASS; browser não iniciou a matriz porque git show dentro do container Playwright retornou unsafe/dubious ownership (exit 128). Classificar como erro de runner, NÃO como validação visual.
 - Commit [4318e81](https://github.com/EAKerber/MobiliPresenter2D/commit/4318e81571af0835d05ff133bf539c5f4f0aeba1) adicionou safe.directory explícito no container, sem alterar produto. Reexecução: [#39871907031](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/39871907031); depender de conclusão final antes de declarar ARC-03C PASS.
+
+## Gate técnico final (22/10) — PASS em branch
+
+- [Actions #39871907031 — SUCCESS](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/39871907031) no código exato `4318e81571af0835d05ff133bf539c5f4f0aeba1`.
+- Job `build-and-source` PASS: três fontes/proveniência, teste de tampering HTML e manifesto, comando real `npm run build`, verificações de escopo sem alterações em Viewer/Config/Admin/Access.
+- Job `browser-baseline` PASS: **60/60 cenários Chromium/WebKit** com 320/390/486/768/1366 px, dois temas, três páginas, header/ARIA/computed CSS/menu via Enter e screenshots; `ARC03C_BROWSER_PASS {"scenarios":60,"rasterCases":0}`.
+- Baseline original foi obtida do commit imutável `303468b4` e comparada contra o output gerado no diretório Netlify `app/`. Não é comparação tautológica entre dois compilados.
+- **Limite:** prova técnica isolada, sem PR/Deploy Preview/merge/produção nem dispositivo físico. A issue #232 de fixture autenticada continua HOLD independente. Próxima integração requer PR única controlada e avaliação do gate global antes de merge.
