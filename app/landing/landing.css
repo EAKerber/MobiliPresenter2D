@@ -48,7 +48,7 @@
 .hero h1 em { color: var(--public-accent); font-style: normal; }
 .hero-lead { max-width: 440px; margin: 25px 0 0; font-size: clamp(1.2rem, 1.9vw, 1.55rem); font-weight: 700; line-height: 1.25; }
 .hero-description { max-width: 480px; margin: 14px 0 0; color: var(--public-muted); line-height: 1.6; }
-html[data-theme="light"] .hero-description { color: #705C4B; }
+html[data-theme="light"] .hero-description { color: var(--ds-vis002-approved-support-text-light); }
 .mini-benefits { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; margin: 25px 0; }
 .mini-benefit img { display: block; width: 28px; height: 28px; margin-bottom: 7px; }
 .mini-benefit strong { font-size: .78rem; }

@@ -1,0 +1,69 @@
+name: P-TOKEN-02B scoped VIS-002 text differential
+
+on:
+  push:
+    branches:
+      - architecture/p-token-02b-contextual-copy-20261022
+    paths:
+      - "app/design-system/approved-contextual-support-text.css"
+      - "app/index.html"
+      - "app/how-it-works/index.html"
+      - "app/about/index.html"
+      - "app/landing/landing.css"
+      - "app/how-it-works/how-it-works.css"
+      - "app/about/about.css"
+      - "design-system/pins/vis-002/context-v0.1.0/**"
+      - "scripts/verify-vis002-contextual-token.mjs"
+      - "tests/vis002-contextual-text-differential.mjs"
+      - ".github/workflows/p-token-02b-contextual-text-gate.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: p-token-02b-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  equivalence:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          path: baseline
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Verify source pin, scope and JS syntax
+        run: |
+          node --check scripts/verify-vis002-contextual-token.mjs
+          node --check tests/vis002-contextual-text-differential.mjs
+          node scripts/verify-vis002-contextual-token.mjs
+          node tests/public-cutover-contract.cjs
+      - name: Install browser tools only in isolated CI
+        run: |
+          npm install --no-save --no-package-lock playwright@1.56.0 pngjs@7.0.0
+          npx playwright install --with-deps chromium webkit
+      - name: Start candidate and unchanged main localhost servers
+        run: |
+          python3 -m http.server 8123 --bind 127.0.0.1 --directory app >/tmp/p-token-02b-candidate.log 2>&1 &
+          python3 -m http.server 8124 --bind 127.0.0.1 --directory baseline/app >/tmp/p-token-02b-main.log 2>&1 &
+          sleep 2
+          curl --fail http://127.0.0.1:8123/ >/dev/null
+          curl --fail http://127.0.0.1:8124/ >/dev/null
+          curl --fail http://127.0.0.1:8123/design-system/approved-contextual-support-text.css >/dev/null
+      - name: Match DOM CSS layout and text screenshots in Chromium and WebKit
+        run: node tests/vis002-contextual-text-differential.mjs
+      - name: Persist evidence without deployment
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: p-token-02b-scoped-text-equivalence
+          path: artifacts/p-token-02b/
+          retention-days: 14
+          if-no-files-found: warn
