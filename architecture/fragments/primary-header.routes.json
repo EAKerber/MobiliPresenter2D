@@ -1,0 +1,50 @@
+{
+  "schema": "M2DPrimaryHeaderRoutes/0.1",
+  "status": "EXPERIMENTAL_BUILD_TIME_ONLY_NOT_PUBLISHED",
+  "authority": "ARC-03 + ARC-04 + NAV-004; Viewer NAV-005 excluded",
+  "template": "architecture/fragments/primary-header.fragment.html",
+  "routes": [
+    {
+      "route": "/",
+      "source": "app/index.html",
+      "brandHref": "/",
+      "ambientesHref": "/#ambientes",
+      "howHref": "/how-it-works/",
+      "aboutHref": "/about/",
+      "current": "ambientes",
+      "whatsAppIconAriaHidden": true
+    },
+    {
+      "route": "/about/",
+      "source": "app/about/index.html",
+      "brandHref": "/",
+      "ambientesHref": "/#ambientes",
+      "howHref": "/how-it-works/",
+      "aboutHref": "/about/",
+      "current": "about",
+      "whatsAppIconAriaHidden": false
+    },
+    {
+      "route": "/how-it-works/",
+      "source": "app/how-it-works/index.html",
+      "brandHref": "../",
+      "ambientesHref": "../#ambientes",
+      "howHref": "./",
+      "aboutHref": "../about/",
+      "current": "how",
+      "whatsAppIconAriaHidden": true
+    }
+  ],
+  "scope": {
+    "doesNotInclude": [
+      "/viewer/",
+      "/config/",
+      "/admin.html",
+      "/access/",
+      "/access/manage.html"
+    ],
+    "emissionTarget": "artifacts/arc03-preview-only",
+    "mayOverwriteAuthoredPages": false,
+    "mayModifyNetlifyBuild": false
+  }
+}
