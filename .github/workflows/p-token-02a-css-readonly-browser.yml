@@ -1,0 +1,52 @@
+name: P-TOKEN-02A computed CSS read-only evidence
+
+on:
+  push:
+    branches:
+      - architecture/p-token-01b-reference-pin-20261022
+    paths:
+      - "tests/design-system-computed-style-readonly-audit.mjs"
+      - ".github/workflows/p-token-02a-css-readonly-browser.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: p-token-02a-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  css-evidence:
+    name: Four public routes / two engines / no deploy
+    runs-on: ubuntu-latest
+    timeout-minutes: 16
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Syntax and read-only source verification
+        run: |
+          node --check tests/design-system-computed-style-readonly-audit.mjs
+          git diff --quiet origin/main...HEAD -- app netlify.toml package.json
+      - name: Install isolated browser tools
+        run: |
+          npm install --no-save --no-package-lock playwright@1.56.0
+          npx playwright install --with-deps chromium webkit
+      - name: Serve existing unchanged app locally
+        run: |
+          python3 -m http.server 8123 --bind 127.0.0.1 --directory app >/tmp/p-token-02a-local.log 2>&1 &
+          sleep 2
+          curl --fail http://127.0.0.1:8123/ >/dev/null
+      - name: Read computed theme and surface styles
+        run: node tests/design-system-computed-style-readonly-audit.mjs
+      - name: Save inspectable CSS observation data
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: p-token-02a-computed-style-readonly
+          path: artifacts/p-token-02a/
+          retention-days: 14
+          if-no-files-found: warn
