@@ -202,6 +202,5 @@ for(const engine of [chromium,webkit]){
   }
  }finally{await browser.close()}
 }
-await writeFile(folder+"/report.json",JSON.stringify({...report,at:new Date().toISOString()},null,2)+"
-");
+await writeFile(folder+"/report.json",JSON.stringify({...report,at:new Date().toISOString()},null,2)+"\n");
 console.log("P_COMP_01_PASS "+JSON.stringify({differential:report.visual.length,functional:report.functional.length}));
