@@ -70,6 +70,7 @@ jobs:
           npm run pages:check
       - name: Materialize immutable pre-cutover public HTML
         run: |
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
           mkdir -p artifacts/arc03c/baseline/about artifacts/arc03c/baseline/how-it-works
           git show 303468b4ddbb07a761316abca28901ccaea219df:app/index.html > artifacts/arc03c/baseline/index.html
           git show 303468b4ddbb07a761316abca28901ccaea219df:app/about/index.html > artifacts/arc03c/baseline/about/index.html
