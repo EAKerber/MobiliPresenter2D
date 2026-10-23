@@ -42,3 +42,12 @@
 ### Estado e próximo gate
 
 **CI-BASELINE-01 AUTH PASS / BUYER PUBLISHED CONFIG BLOCKED / FUNCTIONAL SUITES HOLD.** Para testar as páginas no preview será necessário preparar **configuração publicada válida no Blob Store desse deploy**, com proveniência aprovada e sem converter fallback em publicação silenciosa. Alternativamente, decidir testar o baseline no domínio atual que já possua publicação válida (não equivale a homologar o stack consolidado). Não contornar o fail-closed. O convite foi consumido e a sessão revogada; **não repetir o workflow autenticado com o mesmo token**. Preparar a configuração/target antes de solicitar um novo convite.
+
+
+## Retomada 23/10 — terceiro convite ainda NÃO solicitado
+
+O código validado foi isolado em `fix/ci-baseline-v5-nav-flow-clean-20261023`, com [#40012591135](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40012591135) **5/5 funcional, 28/28 cross-browser, 56/56 visual**, e [#40012591081](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40012591081) **20/20 limiar compact**.
+
+O runner desta branch recebeu o patch mínimo de CSS e as fixtures Flow V5 no commit `0c7bea38a122bc4c80c6d3c2b0a060c173433128` (sem gatilho autenticado); [preflight sem token #40013670459](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40013670459) passou e job autenticado foi skipped. O preview DRAFT #235 recebeu os mesmos patchs em `705457503d5ccc47c80d8fef9a1ae4f85d9e6d71`, Netlify deploy **READY** `6adbb953c1ce2b0ad2216abf`, plugin de publicação V5 **success**. Executar novo preflight sem token para esse deploy antes de consumir o terceiro convite.
+
+**Ação do usuário necessária quando preflight novo estiver PASS:** gerar convite novo de uso único e atualizar o environment secret `ci-auth-preview.CI_CONFIG_TEST_TOKEN` no GitHub. Nunca divulgar o valor. O job authenticated só deve ser disparado por commit `[auth-fixture-run]` após confirmação, numa única tentativa. O sucesso local não substitui GET autenticado pós-fix 200.
