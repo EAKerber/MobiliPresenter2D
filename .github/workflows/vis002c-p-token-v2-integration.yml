@@ -1,0 +1,90 @@
+name: VIS-002C + P-TOKEN-02B v0.2 isolated integration gate
+on:
+  push:
+    branches:
+      - integration/vis002c-p-token-02b-v2-20261023
+    paths:
+      - app/design-system/approved-contextual-support-text-v2.css
+      - app/index.html
+      - app/about/index.html
+      - app/how-it-works/index.html
+      - app/landing/landing.css
+      - app/about/about.css
+      - app/how-it-works/how-it-works.css
+      - design-system/pins/vis-002/context-v0.2.0/**
+      - scripts/verify-vis002-contextual-token*.mjs
+      - tests/vis002c-*.mjs
+      - tests/design-system-reference-pin.test.mjs
+      - tests/vis002-contextual-text-differential.mjs
+      - .github/workflows/vis002c-p-token-v2-integration.yml
+      - docs/architecture/vis002c-p-token02b-integration-2026-10-23.md
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  pin-and-contract:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify source SHA, 8 consumer contract, historical pin and syntax
+        run: |
+          node --check scripts/verify-vis002-contextual-token-v2.mjs
+          node --check tests/vis002c-p-token-v2.test.mjs
+          node scripts/verify-vis002-contextual-token.mjs
+          node scripts/verify-design-system-reference-pin.mjs
+          node --test tests/vis002c-p-token-v2.test.mjs tests/design-system-reference-pin.test.mjs
+          node tests/public-cutover-contract.cjs
+      - name: Detect changes outside authorized product surfaces
+        run: |
+          git diff --name-only origin/main...HEAD > /tmp/vis002c-files
+          if grep -E '^(app/(admin|config|viewer|access)/|app/(public-theme|ui-theme)\.css|netlify\.toml|package\.json|app/admin\.html)' /tmp/vis002c-files; then
+            echo "Private/global code was modified"; exit 1
+          fi
+  browser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    container:
+      image: mcr.microsoft.com/playwright:v1.56.0-noble
+      options: --ipc=host
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Use Chromium and WebKit with PNG comparison
+        run: |
+          npm install --prefix /tmp/m2d-vis002c-p-token-v2 --no-audit --no-fund playwright@1.56.0 pngjs@7.0.0
+          ln -s /tmp/m2d-vis002c-p-token-v2/node_modules ./node_modules
+      - name: Serve candidate locally with archived v0.1 and active v0.2 stylesheets
+        run: |
+          python3 -m http.server 8123 --bind 127.0.0.1 --directory app >/tmp/v2-candidate.log 2>&1 &
+          sleep 2
+          curl -fsS http://127.0.0.1:8123/ >/dev/null
+          curl -fsS http://127.0.0.1:8123/design-system/approved-contextual-support-text.css >/dev/null
+          curl -fsS http://127.0.0.1:8123/design-system/approved-contextual-support-text-v2.css >/dev/null
+      - name: Prove original three consumers identical v0.1 vs v0.2 on same DOM
+        run: node tests/vis002c-original-three-equivalence.mjs
+      - name: Check 8 approved text pairs and semantic exclusions
+        run: node tests/vis002c-public-contrast.mjs
+      - name: Compare full public page raster on new five contexts
+        run: node tests/vis002c-full-page-visual.mjs
+      - name: Verify no test mutated app sources
+        run: |
+          test -z "$(git status --porcelain --untracked-files=no -- app)"
+      - name: Preserve inspectable results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: vis002c-p-token-v2-integration
+          path: |
+            artifacts/vis002c-original-three/
+            artifacts/vis002c-contrast/
+            artifacts/vis002c-full-page/
+          retention-days: 14
+          if-no-files-found: warn
