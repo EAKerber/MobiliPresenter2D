@@ -73,4 +73,7 @@ test("real product smoke: route discovery and focus evidence, not homologation",
   assert.ok(config.scripts.includes("core/browser-compat.js"),"config resolves root scripts through its HTML base");
   assert.ok(config.stylesheets.includes("styles.css"),"config root stylesheet belongs to /styles.css");
   assert.equal(config.unresolved.some(x=>x.path?.startsWith("config/core/")),false);
+  assert.ok(config.generated.includes("core/private-navigation.bundle.js"),"generated bundle is declared by npm build, not a missing source");
+  assert.equal(result.summary.missingReferences,0,"build artifacts are classified independently of missing source references");
+  assert.equal(result.summary.declaredGeneratedAssets,3,"three output bundles are declared by the root build");
 });
