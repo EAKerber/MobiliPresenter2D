@@ -38,7 +38,7 @@ for(const [engine,lib] of [["chromium",chromium],["webkit",webkit]]){
       const c=getComputedStyle(element),r=element.getBoundingClientRect();
       return {color:c.color,background:c.backgroundColor,fontFamily:c.fontFamily,fontSize:c.fontSize,
        fontWeight:c.fontWeight,lineHeight:c.lineHeight,letterSpacing:c.letterSpacing,
-       opacity:c.opacity,width:r.width,height:r.height,x:r.left,y:r.top,
+       opacity:c.opacity,width:r.width,height:r.height,x:r.left+scrollX,y:r.top+scrollY,
        content:element.textContent,token:c.getPropertyValue(property).trim()};
      },token);
      const shot=await loc.screenshot({animations:"disabled"});
