@@ -92,6 +92,14 @@ try{
  assert.ok(cookies.some(c=>c.name===ACCESS_COOKIE_NAME && c.httpOnly && c.secure),
   "MISSING_SECURE_HTTPONLY_SESSION_COOKIE");
  result.cookieSecure=true;
+ const sessionReadback=await context.request.post(ORIGIN+"/api/access/session",{
+  headers:{Origin:ORIGIN,"Content-Type":"application/json"},data:{},timeout:18000
+ });
+ result.sessionReadbackHTTP=sessionReadback.status();
+ assert.equal(sessionReadback.status(),200,"TEMPORARY_SESSION_STATUS_ROUTE_UNAVAILABLE");
+ const sessionStatus=await sessionReadback.json();
+ assert.equal(sessionStatus?.authenticated,true,"TEMPORARY_SESSION_STATUS_NOT_AUTHENTICATED");
+ assert.equal(sessionStatus?.accessType,"temporary","TEMPORARY_SESSION_SCOPE_UNEXPECTED");
  const published=await context.request.get(ORIGIN+"/api/buyer-configuration",{timeout:18000});
  result.buyerConfigurationHTTP=published.status();
  assert.equal(published.status(),200,"PUBLISHED_CONFIGURATION_NOT_AVAILABLE_IN_PREVIEW");
