@@ -1,0 +1,72 @@
+name: CI-BASELINE-01 one-time authenticated Config on existing preview
+on:
+  push:
+    branches:
+      - ci/ci-baseline-01-shared-db-preview-20261023
+    paths:
+      - ".github/workflows/ci-baseline-01-preview-token.yml"
+      - "tests/ci/config-auth-preview-runner.mjs"
+      - "tests/mobile-pip-main-browser.cjs"
+      - "tests/keyboard-browser.cjs"
+      - "tests/flow-layout-browser.cjs"
+      - "tests/summary-pricing-browser.cjs"
+      - "tests/stone-browser.cjs"
+      - "docs/handoffs/CI_BASELINE_01_PREVIEW_TOKEN_2026-10-23.md"
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: ci-baseline-01-preview-token-once
+  cancel-in-progress: false
+jobs:
+  preflight:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Validate existing browser test syntax and one-time runner
+        run: |
+          node --check tests/ci/config-auth-preview-runner.mjs
+          for f in tests/mobile-pip-main-browser.cjs tests/keyboard-browser.cjs tests/flow-layout-browser.cjs tests/summary-pricing-browser.cjs tests/stone-browser.cjs; do
+            node --check "$f"
+          done
+      - name: Ensure existing Netlify PR #234 is reachable before touching secret
+        run: |
+          curl --fail --silent --show-error --location --max-time 20 \
+            https://deploy-preview-234--mobilipresenter2d.netlify.app/access/ \
+            --output /tmp/ci-access-page
+          grep -q 'id="confirmAccess"' /tmp/ci-access-page
+          echo CI_CONFIG_PREVIEW_PREFLIGHT_PASS
+  authenticated:
+    needs: preflight
+    if: ${{ github.event_name == 'workflow_dispatch' || (github.event_name == 'push' && contains(github.event.head_commit.message, '[auth-fixture-run]')) }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    environment: ci-auth-preview
+    container:
+      image: mcr.microsoft.com/playwright:v1.56.0-noble
+      options: --ipc=host
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Install browser dependencies without Netlify deploy
+        run: |
+          npm install --prefix /tmp/m2d-ci-token-playwright --no-audit --no-fund playwright@1.56.0
+          ln -s /tmp/m2d-ci-token-playwright/node_modules ./node_modules
+      - name: Redeem user-supplied one-time secret and run five authenticated suites
+        env:
+          CI_CONFIG_TEST_TOKEN: ${{ secrets.CI_CONFIG_TEST_TOKEN }}
+        run: node tests/ci/config-auth-preview-runner.mjs
+      - name: Do not publish session artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ci-config-authenticated-preview-sanitized
+          path: artifacts/ci-baseline-01/preview-invitation.json
+          retention-days: 7
+          if-no-files-found: warn

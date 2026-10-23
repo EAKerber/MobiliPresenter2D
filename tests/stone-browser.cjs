@@ -13,7 +13,7 @@ const {chromium} = require('playwright');
     headless: true,
     args: mode === 'local' ? ['--allow-file-access-from-files'] : []
   });
-  const page = await browser.newPage({viewport: {width: 1366, height: 900}});
+  const page = await browser.newPage({storageState: process.env.PLAYWRIGHT_AUTH_STATE_FILE || undefined, viewport: {width: 1366, height: 900}});
   const errors = [];
   page.on('pageerror', error => errors.push(error.message));
   page.on('console', message => { if (message.type() === 'error') errors.push(message.text()); });

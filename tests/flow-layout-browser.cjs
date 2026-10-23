@@ -18,7 +18,7 @@ const flatV3 = configuration.createDefaultAdministration(
   fs.mkdirSync(output, { recursive: true });
   const targetUrl = process.env.FLOW_LAYOUT_URL || "https://mobilipresenter2d.netlify.app/";
   const browser = await chromium.launch({ headless: true });
-  const page = await browser.newPage({ viewport: { width: 1366, height: 900 } });
+  const page = await browser.newPage({storageState: process.env.PLAYWRIGHT_AUTH_STATE_FILE || undefined,  viewport: { width: 1366, height: 900 } });
   const errors = [];
   page.on("pageerror", (error) => errors.push(error.message));
   page.on("console", (message) => { if (message.type() === "error") errors.push(message.text()); });
@@ -596,7 +596,7 @@ const flatV3 = configuration.createDefaultAdministration(
   const expectedRenamedNavigation = renamedCoreStages.stages.filter((stage) => stage.enabled).map((stage) => stage.id);
 
   const renamedErrors = [];
-  const renamedPage = await browser.newPage({ viewport: { width: 1366, height: 900 } });
+  const renamedPage = await browser.newPage({storageState: process.env.PLAYWRIGHT_AUTH_STATE_FILE || undefined,  viewport: { width: 1366, height: 900 } });
   renamedPage.on("pageerror", (error) => renamedErrors.push(error.message));
   renamedPage.on("console", (message) => { if (message.type() === "error") renamedErrors.push(message.text()); });
   await renamedPage.route("**/api/configuration", async (route) => {
@@ -682,7 +682,7 @@ const flatV3 = configuration.createDefaultAdministration(
   ];
 
   const reorderErrors = [];
-  const reorderPage = await browser.newPage({ viewport: { width: 1366, height: 900 } });
+  const reorderPage = await browser.newPage({storageState: process.env.PLAYWRIGHT_AUTH_STATE_FILE || undefined,  viewport: { width: 1366, height: 900 } });
   reorderPage.on("pageerror", (error) => reorderErrors.push(error.message));
   reorderPage.on("console", (message) => { if (message.type() === "error") reorderErrors.push(message.text()); });
   await reorderPage.route("**/api/configuration", async (route) => {
@@ -737,7 +737,7 @@ const flatV3 = configuration.createDefaultAdministration(
   servicesStage.items = servicesStage.items.filter((id) => id === "lighting-08");
 
   const negativeErrors = [];
-  const negativePage = await browser.newPage({ viewport: { width: 1366, height: 900 } });
+  const negativePage = await browser.newPage({storageState: process.env.PLAYWRIGHT_AUTH_STATE_FILE || undefined,  viewport: { width: 1366, height: 900 } });
   negativePage.on("pageerror", (error) => negativeErrors.push(error.message));
   negativePage.on("console", (message) => { if (message.type() === "error") negativeErrors.push(message.text()); });
   await negativePage.route("**/api/configuration", async (route) => {
@@ -785,7 +785,7 @@ const flatV3 = configuration.createDefaultAdministration(
   lightingServicesStage.items = lightingServicesStage.items.filter((id) => id !== "lighting-08");
 
   const lightingNegativeErrors = [];
-  const lightingNegativePage = await browser.newPage({ viewport: { width: 1366, height: 900 } });
+  const lightingNegativePage = await browser.newPage({storageState: process.env.PLAYWRIGHT_AUTH_STATE_FILE || undefined,  viewport: { width: 1366, height: 900 } });
   lightingNegativePage.on("pageerror", (error) => lightingNegativeErrors.push(error.message));
   lightingNegativePage.on("console", (message) => { if (message.type() === "error") lightingNegativeErrors.push(message.text()); });
   await lightingNegativePage.route("**/api/configuration", async (route) => {
@@ -847,7 +847,7 @@ const flatV3 = configuration.createDefaultAdministration(
   frontsFinishesStage.items = frontsFinishesStage.items.filter((id) => id !== "fronts-all");
 
   const frontsNegativeErrors = [];
-  const frontsNegativePage = await browser.newPage({ viewport: { width: 1366, height: 900 } });
+  const frontsNegativePage = await browser.newPage({storageState: process.env.PLAYWRIGHT_AUTH_STATE_FILE || undefined,  viewport: { width: 1366, height: 900 } });
   frontsNegativePage.on("pageerror", (error) => frontsNegativeErrors.push(error.message));
   frontsNegativePage.on("console", (message) => { if (message.type() === "error") frontsNegativeErrors.push(message.text()); });
   await frontsNegativePage.route("**/api/configuration", async (route) => {
@@ -917,7 +917,7 @@ const flatV3 = configuration.createDefaultAdministration(
   handlesFinishesStage.items = handlesFinishesStage.items.filter((id) => id !== "handles-all");
 
   const handlesNegativeErrors = [];
-  const handlesNegativePage = await browser.newPage({ viewport: { width: 1366, height: 900 } });
+  const handlesNegativePage = await browser.newPage({storageState: process.env.PLAYWRIGHT_AUTH_STATE_FILE || undefined,  viewport: { width: 1366, height: 900 } });
   handlesNegativePage.on("pageerror", (error) => handlesNegativeErrors.push(error.message));
   handlesNegativePage.on("console", (message) => { if (message.type() === "error") handlesNegativeErrors.push(message.text()); });
   await handlesNegativePage.route("**/api/configuration", async (route) => {
@@ -987,7 +987,7 @@ const flatV3 = configuration.createDefaultAdministration(
   cabinetFinishesStage.items = cabinetFinishesStage.items.filter((id) => id !== "fronts-all" && id !== "handles-all");
 
   const cabinetNegativeErrors = [];
-  const cabinetNegativePage = await browser.newPage({ viewport: { width: 1366, height: 900 } });
+  const cabinetNegativePage = await browser.newPage({storageState: process.env.PLAYWRIGHT_AUTH_STATE_FILE || undefined,  viewport: { width: 1366, height: 900 } });
   cabinetNegativePage.on("pageerror", (error) => cabinetNegativeErrors.push(error.message));
   cabinetNegativePage.on("console", (message) => { if (message.type() === "error") cabinetNegativeErrors.push(message.text()); });
   await cabinetNegativePage.route("**/api/configuration", async (route) => {
@@ -1056,7 +1056,7 @@ const flatV3 = configuration.createDefaultAdministration(
   }
 
   const stoneNegativeErrors = [];
-  const stoneNegativePage = await browser.newPage({ viewport: { width: 1366, height: 900 } });
+  const stoneNegativePage = await browser.newPage({storageState: process.env.PLAYWRIGHT_AUTH_STATE_FILE || undefined,  viewport: { width: 1366, height: 900 } });
   stoneNegativePage.on("pageerror", (error) => stoneNegativeErrors.push(error.message));
   stoneNegativePage.on("console", (message) => { if (message.type() === "error") stoneNegativeErrors.push(message.text()); });
   await stoneNegativePage.route("**/api/configuration", async (route) => {
@@ -1145,7 +1145,7 @@ const flatV3 = configuration.createDefaultAdministration(
   }
 
   const skirtingNegativeErrors = [];
-  const skirtingNegativePage = await browser.newPage({ viewport: { width: 1366, height: 900 } });
+  const skirtingNegativePage = await browser.newPage({storageState: process.env.PLAYWRIGHT_AUTH_STATE_FILE || undefined,  viewport: { width: 1366, height: 900 } });
   skirtingNegativePage.on("pageerror", (error) => skirtingNegativeErrors.push(error.message));
   skirtingNegativePage.on("console", (message) => { if (message.type() === "error") skirtingNegativeErrors.push(message.text()); });
   await skirtingNegativePage.route("**/api/configuration", async (route) => {

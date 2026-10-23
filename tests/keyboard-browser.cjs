@@ -8,7 +8,7 @@ const {chromium} = require('playwright');
   fs.mkdirSync(output, {recursive: true});
   const targetUrl = process.env.KEYBOARD_BROWSER_URL || 'https://mobilipresenter2d.netlify.app/';
   const browser = await chromium.launch({headless: true});
-  const page = await browser.newPage({viewport: {width: 1366, height: 900}});
+  const page = await browser.newPage({storageState: process.env.PLAYWRIGHT_AUTH_STATE_FILE || undefined, viewport: {width: 1366, height: 900}});
   const errors = [];
   page.on('pageerror', error => errors.push(error.message));
   page.on('console', message => { if (message.type() === 'error') errors.push(message.text()); });
@@ -491,7 +491,7 @@ const {chromium} = require('playwright');
   assert.deepEqual(errors, [], 'browser console must remain clean');
   await page.screenshot({path: path.join(output, 'keyboard-stage-navigation.png'), fullPage: true, animations: 'disabled'});
 
-  const adminPage = await browser.newPage({viewport: {width: 760, height: 760}});
+  const adminPage = await browser.newPage({storageState: process.env.PLAYWRIGHT_AUTH_STATE_FILE || undefined, viewport: {width: 760, height: 760}});
   const adminErrors = [];
   adminPage.on('pageerror', error => adminErrors.push(error.message));
   adminPage.on('console', message => { if (message.type() === 'error') adminErrors.push(message.text()); });
