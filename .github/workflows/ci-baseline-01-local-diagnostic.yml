@@ -1,0 +1,47 @@
+name: CI-BASELINE-01 local Config functional diagnostics (no secrets)
+on:
+  push:
+    branches:
+      - ci/ci-baseline-01-shared-db-preview-20261023
+    paths:
+      - "tests/ci/config-unlocked-local-diagnostic.mjs"
+      - ".github/workflows/ci-baseline-01-local-diagnostic.yml"
+      - "tests/mobile-pip-main-browser.cjs"
+      - "tests/keyboard-browser.cjs"
+      - "tests/flow-layout-browser.cjs"
+      - "tests/summary-pricing-browser.cjs"
+      - "tests/stone-browser.cjs"
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  diagnostic:
+    runs-on: ubuntu-latest
+    timeout-minutes: 21
+    container:
+      image: mcr.microsoft.com/playwright:v1.56.0-noble
+      options: --ipc=host
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Install browsers for local-only diagnostic
+        run: |
+          npm install --prefix /tmp/m2d-local-config-diagnostics --no-audit --no-fund playwright@1.56.0
+          ln -s /tmp/m2d-local-config-diagnostics/node_modules ./node_modules
+      - name: Serve source code only, without Netlify or DB access
+        run: |
+          python3 -m http.server 8123 --bind 127.0.0.1 --directory app > /tmp/config-local-server.log 2>&1 &
+          sleep 2
+          curl --fail --silent http://127.0.0.1:8123/config/ --output /dev/null
+      - name: Classify five existing suites without changing their assertions
+        run: node tests/ci/config-unlocked-local-diagnostic.mjs
+      - name: Upload sanitized classifications only
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ci-config-local-diagnostic-no-session
+          path: artifacts/ci-baseline-01/unlocked-local.json
+          retention-days: 7
+          if-no-files-found: warn

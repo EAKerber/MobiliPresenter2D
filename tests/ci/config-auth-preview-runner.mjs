@@ -82,7 +82,12 @@ try{
   });
   delete safeEnv[key];
   const status=run.error?.code==="ETIMEDOUT"?"TIMEOUT":run.status===0?"PASS":"FAIL";
-  result.tests.push({name,status,exitCode:run.status});
+  const transcript=String(run.stderr||"")+"\n"+String(run.stdout||"");
+  const diagnostic=/AssertionError|TimeoutError|ERR_ASSERTION|TypeError|ReferenceError|Error:/.exec(transcript);
+  const location=transcript.match(/(?:\/tests\/|tests\/)[A-Za-z0-9_./-]+[.]cjs:[0-9]+(?::[0-9]+)?/)?.[0]||null;
+  result.tests.push({name,status,exitCode:run.status,
+   errorClass:status==="PASS"?null:(diagnostic?.[0]||run.error?.code||"UNKNOWN"),
+   failureLocation:status==="PASS"?null:location});
   console.log("CI_CONFIG_TEST "+JSON.stringify({name,status}));
  }
  result.status=result.tests.every(t=>t.status==="PASS")?"FIVE_FLOWS_PASS":"FIVE_FLOWS_PARTIAL";
