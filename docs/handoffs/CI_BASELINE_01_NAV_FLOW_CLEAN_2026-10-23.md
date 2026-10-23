@@ -14,7 +14,7 @@
 - [Gate clean de main #40011470495](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40011470495): **5/5 funcionais PASS, 28/28 cenários cross-browser PASS e 56/56 visuais PASS**, reproduzidos sem os arquivos temporários da branch diagnóstica.
 - [Boundary negativo #40012194119](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40012194119): detectou **7 divergências** próximo do limiar 500px após mover o container; não foi tratado como waiver.
 - [Boundary corrigido #40012591081](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40012591081): **20/20 equivalências** entre referência e CSS candidato (Chromium/WebKit, 496–522px de largura forçada no painel), com limiar compensado em 514px.
-- [Verificação integral do commit final #40012591135](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40012591135): verificação final após ajuste do breakpoint; consultar conclusão antes de promover.
+- [Verificação integral do commit final #40012591135](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40012591135): **PASS**: 5/5 suites funcionais, 28/28 cenários Chromium/WebKit e 56/56 comparações visuais/geométricas após o ajuste do limiar. Commit de implementação CSS `70e36a8e8d9f1c65534ca480cf12d2a70df74659`.
 
 ## HOLD restante — autenticação real
 
