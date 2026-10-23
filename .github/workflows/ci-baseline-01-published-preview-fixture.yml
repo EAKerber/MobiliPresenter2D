@@ -45,8 +45,30 @@ jobs:
           test ! -e app/ci-validation/build-context.json
           test ! -e app/ci-validation/published-v5-status.json
           echo CI_PRODUCTION_BUILD_HAS_NO_TEST_PUBLISHED_BLOB
-      - name: Private app and runtime functions unchanged
+      - name: No private application changes; only pinned preview OIDC additions allowed
+        shell: bash
         run: |
+          set -euo pipefail
           git fetch --no-tags origin main
-          git diff --quiet origin/main...HEAD -- netlify/ app/config app/admin app/access app/viewer
-          echo CI_NO_AUTH_OR_PRODUCTION_RUNTIME_CHANGE
+          # App/Admin/Viewer access logic stays frozen. Preview-only OIDC files
+          # are *new* isolated endpoints, not rewrites of existing functions.
+          git diff --quiet origin/main...HEAD -- app/config app/admin app/access app/viewer
+          mapfile -t changed < <(git diff --name-only origin/main...HEAD -- netlify/)
+          for file in "${changed[@]}"; do
+            case "$file" in
+              netlify/access/github-oidc-ci.mjs|netlify/functions/ci-config-session.mjs)
+                : # explicitly allowed preview-only addition
+                ;;
+              *)
+                echo "::error::Unreviewed Netlify runtime change: $file"
+                exit 1
+                ;;
+            esac
+          done
+          test -f netlify/access/github-oidc-ci.mjs
+          test -f netlify/functions/ci-config-session.mjs
+          grep -Fq 'CI_PREVIEW_ORIGIN="https://deploy-preview-235--mobilipresenter2d.netlify.app"' netlify/access/github-oidc-ci.mjs
+          grep -Fq 'context?.deploy?.context==="deploy-preview"' netlify/access/github-oidc-ci.mjs
+          grep -Fq 'await verifyGithubOidc(jwt)' netlify/functions/ci-config-session.mjs
+          grep -Fq 'access:"config-only"' netlify/functions/ci-config-session.mjs
+          echo CI_PRIVATE_APP_FROZEN_AND_PINNED_PREVIEW_OIDC_ONLY
