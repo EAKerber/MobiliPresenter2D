@@ -7,6 +7,7 @@ on:
     paths:
       - "tests/ci/config-unlocked-local-diagnostic.mjs"
       - "tests/ci/local-buyer-config-server.mjs"
+      - "tests/ci/v5-local-navigation-probe.mjs"
       - ".github/workflows/ci-baseline-01-local-diagnostic.yml"
       - "tests/mobile-pip-main-browser.cjs"
       - "tests/keyboard-browser.cjs"
@@ -40,11 +41,19 @@ jobs:
           curl --fail --silent http://127.0.0.1:8123/api/buyer-configuration --output /dev/null
       - name: Classify five existing suites without changing their assertions
         run: node tests/ci/config-unlocked-local-diagnostic.mjs
+      - name: Inspect navigation states on V5 local runtime
+        run: node tests/ci/v5-local-navigation-probe.mjs
+      - name: Identify missing resources in local harness
+        if: always()
+        run: |
+          grep 'CI_LOCAL_HTTP_404' /tmp/config-local-server.log | sort -u || true
       - name: Upload sanitized classifications only
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: ci-config-local-diagnostic-no-session
-          path: artifacts/ci-baseline-01/unlocked-local.json
+          path: |
+            artifacts/ci-baseline-01/unlocked-local.json
+            artifacts/ci-baseline-01/v5-navigation.json
           retention-days: 7
           if-no-files-found: warn

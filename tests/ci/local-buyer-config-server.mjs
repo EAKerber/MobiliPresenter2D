@@ -54,6 +54,8 @@ const server=http.createServer(async(req,res)=>{
   res.writeHead(200,{"Content-Type":mime[extname(f)]||"application/octet-stream","Cache-Control":"no-store"});
   res.end(body);
  }catch{
+  // Local-only diagnostic; paths are localhost and contain no real credentials.
+  console.log("CI_LOCAL_HTTP_404 "+JSON.stringify({path:new URL(req.url,"http://localhost").pathname}));
   res.writeHead(404,{"Content-Type":"text/plain"});res.end("not found");
  }
 });
