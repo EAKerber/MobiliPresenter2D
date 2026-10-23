@@ -142,12 +142,20 @@ function parseBrl(text) {
   // A priced stone package is also global and must appear only once, never once per module.
   const cloud = page.locator('[data-stone-package-id="stone-cloud"]');
   if (await cloud.count() && await cloud.isVisible()) {
+    // V5 owns the published material label: the old "Clara mineral" string
+    // came from the baked-in catalog and is not guaranteed after projection.
+    const publishedCloudLabel = (await cloud.locator('strong').textContent())?.trim();
+    assert.ok(publishedCloudLabel, 'stone cloud has a nonempty published option label');
+    const publishedCloudDescription = await cloud.locator('small').textContent() || '';
+    assert.match(publishedCloudDescription, /R\$/, 'stone cloud is explicitly priced in this test fixture');
     const previousStoneId = await page.evaluate(() => window.CASA_EM_MODULOS_DEBUG.getState().globalSelections?.stonePackageId || null);
     await cloud.click();
     await page.waitForFunction(() => window.CASA_EM_MODULOS_DEBUG.getState().globalSelections?.stonePackageId === 'stone-cloud');
     await go('summary');
     const cloudSummary = await summarySnapshot();
-    assert.equal(cloudSummary.rows.filter(row => row.label === 'Clara mineral').length, 1, 'selected priced stone appears exactly once in the global breakdown');
+    const pricedCloudRows = cloudSummary.rows.filter(row => row.label === publishedCloudLabel);
+    assert.equal(pricedCloudRows.length, 1, 'the selected published stone label appears exactly once in the global breakdown');
+    assert.ok(parseBrl(pricedCloudRows[0].amount)>0, 'the selected stone retains a positive global charge');
     assert.equal(parseBrl(cloudSummary.totalText), await currentTotal(), 'stone selection keeps summary and persistent total synchronized');
 
     if (previousStoneId && previousStoneId !== 'stone-cloud') {
