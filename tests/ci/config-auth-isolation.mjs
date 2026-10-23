@@ -30,6 +30,8 @@ export function validateFixtureEnvironment(input) {
  assert.ok(["postgres:","postgresql:"].includes(db.protocol),"BLOCKED_AUTH_FIXTURE: DB protocol mismatch");
  assert.ok(db.username==="access_ci_fixture"||db.username==="access_ci_fixture."+projectRef,
   "BLOCKED_AUTH_FIXTURE: fixture DB role must be least-privileged access_ci_fixture");
+ assert.ok(!db.hostname.includes(FORBIDDEN_PRIMARY_DB_REF)&&!db.username.includes(FORBIDDEN_PRIMARY_DB_REF),
+  "BLOCKED_AUTH_FIXTURE: known production database endpoint denied");
  const projectEvidence=db.hostname.includes(projectRef)||db.username.endsWith("."+projectRef);
  assert.ok(projectEvidence,"BLOCKED_AUTH_FIXTURE: DB URI does not match isolated project ref");
  assert.ok(db.hostname.endsWith(".supabase.com")||db.hostname.endsWith(".supabase.co"),
