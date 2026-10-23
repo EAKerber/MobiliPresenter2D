@@ -1,5 +1,39 @@
 # CI-BASELINE-01 — Runner seguro para Deploy Preview #235
 
+## CHECKPOINT VIGENTE — 23/10/2026
+
+**Issue #232: OPEN / HOLD.** Atualização após duas execuções com convite, correção
+da publicação e diagnósticos locais. As seções antigas abaixo são
+**históricas**: referências ao segundo convite como não consumido ou à
+publicação V5 como não validada já estão superadas.
+
+| Frente | Resultado atual | Evidência |
+|---|---|---|
+| Acesso anônimo | PASS: /config/ → /access/, buyer API protegida | [Preflight #39985006606](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/39985006606) |
+| Convites autenticados | PASS: redeem 200, cookie HttpOnly+Secure, Admin negado, logout e bloqueio de replay; **dois convites consumidos e revogados** | [#39964244149](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/39964244149), [#39982544942](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/39982544942) |
+| Buyer API no segundo convite | **FAIL**: 503 antes dos testes funcionais | [#39982544942](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/39982544942) |
+| Seed V5 no Deploy Preview #235 após correção | **PASS técnico de build e readback**: plugin passou a usar HEAD (branch de origem) em vez de BRANCH (branch base); marcadores públicos não sensíveis com HTTP 200 | [Deploy `6adb87a7fc8cd994e4a86c10`](https://app.netlify.com/projects/mobilipresenter2d/deploys/6adb87a7fc8cd994e4a86c10), [#39984974211](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/39984974211), [#39985006606](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/39985006606) |
+| Buyer API autenticada **após a correção do HEAD** | **UNVERIFIED**: o preflight anônimo não substitui GET autenticado 200 | Requer novo convite somente quando os testes funcionais estiverem prontos |
+| Mobile/PiP, Summary/preços, Stone/pedras | **3/5 PASS locais** com projeção V5 e assertions preservadas | [#39987226959](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/39987226959) |
+| Keyboard e Flow | **2/5 HOLD locais**: timeout após sequência de foco/viewport, Keyboard :165 Ctrl+ArrowRight e Flow :391 clique Módulos | [#39987226959](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/39987226959); [sondagem de ações isoladas #39986124888](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/39986124888) |
+
+**Estado de branches:** `main@15e1cfb4866886649adbcd00fef9bef5e5843fda`
+inalterada; [PR #235 DRAFT](https://github.com/EAKerber/MobiliPresenter2D/pull/235)
+é somente fixture experimental com base `main` para habilitar preview,
+**não mergear**. PRs #231/#234 continuam DRAFT; arquitetura consolidada
+permanece isolada. O workflow desta branch
+`ci/ci-baseline-01-auth235-only-20261023` usa Environment
+`ci-auth-preview` e só consome token em commit explicitamente marcado
+`[auth-fixture-run]`.
+
+**Próxima ação:** caracterizar sequência/foco de Keyboard e Flow, manter
+as assertions originais, depois preparar gate completo e **somente então**
+solicitar um terceiro convite de uso único para conferir o buyer endpoint
+pós-fix e a matriz autenticada. Não reutilizar o token já consumido e
+não disparar deploys adicionais para atualizar documentação.
+
+---
+
 **Data:** 23/10/2026. **Status:** preparado; segundo convite NÃO
 solicitado nem consumido. Branch independente
 `ci/ci-baseline-01-auth235-only-20261023`, sem PR e sem deploy.
