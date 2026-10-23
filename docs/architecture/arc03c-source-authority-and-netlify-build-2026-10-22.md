@@ -32,3 +32,11 @@ ARC-03B permanece um checkpoint verificável na branch original e no Design Syst
 - Job `browser-baseline` PASS: **60/60 cenários Chromium/WebKit** com 320/390/486/768/1366 px, dois temas, três páginas, header/ARIA/computed CSS/menu via Enter e screenshots; `ARC03C_BROWSER_PASS {"scenarios":60,"rasterCases":0}`.
 - Baseline original foi obtida do commit imutável `303468b4` e comparada contra o output gerado no diretório Netlify `app/`. Não é comparação tautológica entre dois compilados.
 - **Limite:** prova técnica isolada, sem PR/Deploy Preview/merge/produção nem dispositivo físico. A issue #232 de fixture autenticada continua HOLD independente. Próxima integração requer PR única controlada e avaliação do gate global antes de merge.
+
+## Pré-revisão de integração — contrato CI e HOLD (22/10)
+
+- Estado de refs confirmado: produto `main@15e1cfb`, candidato `e47bd135` no preflight, DS `main@03e4d83`; sem divergência `main...ARC-03C` (**ahead=6, behind=0** antes desta atualização documental).
+- O escopo do candidato tem **14 arquivos**. Apenas `app/index.html` e `app/how-it-works/index.html` aparecem com mudanças de HTML gerado; `app/about/index.html` é byte a byte igual ao da main. Build e teste passam no gate dedicado sem modificar dados V5, auth, Viewer ou preço.
+- Revisão dos workflows `mobile-browser.yml` e `public-routing-before-clerk.yml`: ambos podem executar sobre `/config/` sem autenticação; o segundo aguarda explicitamente HTML `class="workspace"` na rota privada. Isso conflita com o redirecionamento legitimamente documentado em [issue #232](https://github.com/EAKerber/MobiliPresenter2D/issues/232). **Não reduzir autenticação, não desativar ou falsificar resultado de teste**. Classificar eventuais falhas desses gates por evidência e manter HOLD para merge.
+- `app-build-purity.yml` valida o build próprio de `app/`; `public-routing-before-clerk.yml` valida outras invariantes públicas. Diferenciar essas verificações das provas 60/60 ARC-03C.
+- Próximo passo: **uma única PR draft** de integração para executar os checks reais e eventual preview justificável. Não é autorização de merge ou release, e o checkpoint será atualizado com os resultados exatos quando conhecidos.
