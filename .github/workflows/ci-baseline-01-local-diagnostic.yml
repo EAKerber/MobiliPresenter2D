@@ -5,6 +5,7 @@ on:
       - ci/ci-baseline-01-shared-db-preview-20261023
     paths:
       - "tests/ci/config-unlocked-local-diagnostic.mjs"
+      - "tests/ci/local-buyer-config-server.mjs"
       - ".github/workflows/ci-baseline-01-local-diagnostic.yml"
       - "tests/mobile-pip-main-browser.cjs"
       - "tests/keyboard-browser.cjs"
@@ -30,11 +31,12 @@ jobs:
         run: |
           npm install --prefix /tmp/m2d-local-config-diagnostics --no-audit --no-fund playwright@1.56.0
           ln -s /tmp/m2d-local-config-diagnostics/node_modules ./node_modules
-      - name: Serve source code only, without Netlify or DB access
+      - name: Serve codebase-default validated buyer projection entirely locally
         run: |
-          python3 -m http.server 8123 --bind 127.0.0.1 --directory app > /tmp/config-local-server.log 2>&1 &
+          node tests/ci/local-buyer-config-server.mjs > /tmp/config-local-server.log 2>&1 &
           sleep 2
           curl --fail --silent http://127.0.0.1:8123/config/ --output /dev/null
+          curl --fail --silent http://127.0.0.1:8123/api/buyer-configuration --output /dev/null
       - name: Classify five existing suites without changing their assertions
         run: node tests/ci/config-unlocked-local-diagnostic.mjs
       - name: Upload sanitized classifications only
