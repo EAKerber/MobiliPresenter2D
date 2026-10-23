@@ -1,0 +1,46 @@
+name: Public contrast inventory (isolated, no deploy)
+on:
+  push:
+    branches:
+      - audit/public-text-contrast-coverage-20261022
+    paths:
+      - tests/public-text-contrast-coverage.mjs
+      - .github/workflows/public-text-contrast-audit.yml
+      - docs/audits/public-text-contrast-audit-2026-10-22.md
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  public-contrast:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install browsers in isolated tooling directory
+        run: |
+          npm install --prefix /tmp/m2d-contrast-playwright --no-audit --no-fund playwright@1.56.0
+          ln -s /tmp/m2d-contrast-playwright/node_modules ./node_modules
+          /tmp/m2d-contrast-playwright/node_modules/.bin/playwright install --with-deps chromium webkit
+      - name: Serve checked-out public app locally (no deployment)
+        run: |
+          python3 -m http.server 8123 --bind 127.0.0.1 --directory app >/tmp/m2d-public-audit.log 2>&1 &
+          sleep 2
+          curl -fsS http://127.0.0.1:8123/ >/dev/null
+          curl -fsS http://127.0.0.1:8123/about/ >/dev/null
+          curl -fsS http://127.0.0.1:8123/how-it-works/ >/dev/null
+      - name: Read computed text/background in Chromium and WebKit
+        run: node tests/public-text-contrast-coverage.mjs
+      - name: Assert audit is read-only for app
+        run: |
+          test -z "$(git status --porcelain --untracked-files=no -- app)"
+      - name: Save auditable observations
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: public-text-contrast
+          path: artifacts/public-contrast-audit/
+          retention-days: 14
+          if-no-files-found: warn
