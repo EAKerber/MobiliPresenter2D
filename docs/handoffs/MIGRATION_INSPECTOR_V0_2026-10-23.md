@@ -14,7 +14,9 @@ V0-A/V0-B do Design System mapearam consumidores e candidatos. V2/V3/V4 exigem r
 
     node --test tests/migration-inspector.test.mjs
 
-O padrão é **somente leitura** e imprime JSON determinístico em stdout. --out grava apenas no caminho explicitamente escolhido. Um manifesto contém as páginas primárias, script/style referenciados diretamente (normalizando caminho relativo, raiz e query strings), hashes de arquivos texto lidos, dependências compartilhadas, candidatos de classes CSS lexicais que co-carregam, e consumidores diretos de caminhos fornecidos em --changed. Classes compartilhadas são apenas **candidatos de investigação**, não erros nem duplicações de autoridade.
+O padrão é **somente leitura** e imprime JSON determinístico em stdout. --out grava apenas no caminho explicitamente escolhido. Um manifesto contém as páginas primárias, script/style referenciados diretamente (normalizando caminho relativo, raiz e query strings), hashes de arquivos texto lidos, dependências compartilhadas, candidatos de classes CSS lexicais que co-carregam, e consumidores diretos de caminhos fornecidos em --changed. Classes compartilhadas são apenas **candidatos de investigação**, não erros nem duplicações de autoridade. Os bundles declarados por --outfile=app/... nos scripts do package.json raiz são classificados como artefatos aguardados do build, **não** como arquivos-fonte ausentes. O Inspector também respeita a declaração HTML base href: /config/ aponta seus caminhos relativos para a raiz do site.
+
+**Gate de qualidade do próprio scanner:** a primeira execução listou 39 ausências; 33 eram falsos positivos por ignorar base href em /config/, e seis entradas correspondiam a três bundles de build. Ambas as classes de falso positivo foram removidas de diagnostics sem alterar o runtime; novas ausências reais deverão ser investigadas, não descartadas.
 
 ### Não promete / regras de segurança
 
