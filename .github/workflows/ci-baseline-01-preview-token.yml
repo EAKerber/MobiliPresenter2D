@@ -56,7 +56,7 @@ jobs:
             fi
             test "$code" = "200" || exit 1
           done
-          node -e 'const x=require("/tmp/ci-build-context.json");if(x.schema!=="M2DCIPreviewBuildContext/1"||x.reviewId!==235||!x.branchMatches||!x.hasDeployId||!x.hasSiteId)process.exit(1);console.log("CI_PREVIEW_BUILD_CONTEXT_PASS")'
+          node -e 'const x=require("/tmp/ci-build-context.json");if(x.schema!=="M2DCIPreviewBuildContext/1"||x.reviewId!==235||!x.headMatches||!x.hasDeployId||!x.hasSiteId)process.exit(1);console.log("CI_PREVIEW_BUILD_CONTEXT_PASS")'
           # The preview Build Plugin must expose a nonsecret artifact only
           # AFTER writing/reading back V5 in the deploy-only Blob Store.
           curl --fail --silent --show-error --max-time 20 \
