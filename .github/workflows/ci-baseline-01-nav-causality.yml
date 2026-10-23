@@ -5,6 +5,7 @@ on:
       - ci/ci-baseline-01-nav-sequence-probe-20261023
     paths:
       - "tests/ci/v5-container-causality.mjs"
+      - "tests/ci/nav-flow-profile-crossbrowser.mjs"
       - "app/styles.css"
       - ".github/workflows/ci-baseline-01-nav-causality.yml"
   workflow_dispatch:
@@ -38,3 +39,5 @@ jobs:
           curl --fail --silent http://127.0.0.1:8123/api/buyer-configuration --output /dev/null
       - name: Compare fresh browser layouts and reversible CSS interventions
         run: node tests/ci/v5-container-causality.mjs
+      - name: Validate actual stage interactions in Chromium and WebKit
+        run: node tests/ci/nav-flow-profile-crossbrowser.mjs
