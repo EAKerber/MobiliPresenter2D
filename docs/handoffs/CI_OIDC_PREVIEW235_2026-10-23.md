@@ -1,5 +1,8 @@
 # CI-BASELINE-01 — GitHub OIDC → sessão temporária do Configurador (#235)
 
+> **Readback OIDC — 23/10/2026:** o primeiro teste real [#40034256795](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40034256795) confirmou o preflight (rota 400 sem JWT e buyer anônimo 401/403), mas retornou exchange 401. Diagnóstico exclusivamente booleano em [#40034577344](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40034577344): 14 verificações específicas da identidade coincidiram; somente a formatação de `sub` era diferente do valor presumido. Como o `sub` é customizável no GitHub, a autorização agora usa os identificadores assinados e os claims explícitos de workflow/ref/environment/repo; `sub` permanece obrigatório e delimitado, mas sem exigir template arbitrário. [Gate estático #40034763369](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40034763369) PASS; [preview deploy `6adbe1acd4d1a00283a91a3f`](https://app.netlify.com/projects/mobilipresenter2d/deploys/6adbe1acd4d1a00283a91a3f) READY. Próximo ciclo executa JWT real com verificação de assinatura e sessão.
+
+
 **Status:** gate estático [#40034055182](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40034055182) **5/5 PASS**. O endpoint foi integrado somente ao preview experimental #235 no commit `b30668d02c0c6c61a04563a300691c23741d1fb6`, [deploy `6adbe0371b10ece423bb013c`](https://app.netlify.com/projects/mobilipresenter2d/deploys/6adbe0371b10ece423bb013c) READY; sem alteração na main. O próximo run marcado explicitamente comprovará (ou recusará) a troca OIDC e a matriz real.
 
 ## Objetivo
