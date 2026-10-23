@@ -51,14 +51,34 @@ function htmlClasses(html){
   }
   return sorted(values);
 }
+// The current root build declares the expected missing artifacts explicitly.
+// This is an observation of scripts.build; no command is executed.
+function buildOutputPaths(root){
+  const candidate=resolve(root,"..","package.json");
+  if(!existsSync(candidate))return [];
+  try{
+    const pkg=JSON.parse(readFileSync(candidate,"utf8"));
+    const outputs=[];
+    for(const command of Object.values(pkg.scripts??{})){
+      if(typeof command!=="string")continue;
+      for(const match of command.matchAll(/--outfile=app\/([A-Za-z0-9_./-]+)/g))outputs.push(match[1]);
+    }
+    return sorted(outputs);
+  }catch{return [];} // unknown remains unknown, not treated as valid output
+}
 export function inspect({appRoot=resolve("app"),routes=DEFAULT_ROUTES,focus=null,changed=[]}={}){
   const root=resolve(appRoot);
   if(focus!==null&&!safeName(focus))throw new Error("Invalid --focus class");
+  const buildOutputs=new Set(buildOutputPaths(root));
   const files=new Map(), routeRecords=[], diagnostics=[];
   function evidence(path,kind){
     if(!files.has(path)){
       const absolute=resolve(root,path);
-      if(!existsSync(absolute)){files.set(path,{path,kind,status:"MISSING"});}
+      if(!existsSync(absolute)){
+        files.set(path,buildOutputs.has(path)?
+          {path,kind,status:"DECLARED_BUILD_OUTPUT_NOT_IN_SOURCE",provenance:"package.json:scripts"}:
+          {path,kind,status:"MISSING"});
+      }
       else{
         const content=readFileSync(absolute,"utf8");
         files.set(path,{path,kind,status:"FOUND",sha256:sha256(content),
@@ -69,7 +89,7 @@ export function inspect({appRoot=resolve("app"),routes=DEFAULT_ROUTES,focus=null
   }
   for(const [id,page] of routes){
     const pageAbsolute=resolve(root,page);
-    const route={id,page,status:"MISSING",htmlClasses:[],stylesheets:[],scripts:[],unresolved:[]};
+    const route={id,page,status:"MISSING",htmlClasses:[],stylesheets:[],scripts:[],generated:[],unresolved:[]};
     const pageEvidence=evidence(page,"html");
     if(pageEvidence.status==="MISSING"){
       diagnostics.push({kind:"PAGE_NOT_FOUND",route:id,path:page});
@@ -111,7 +131,9 @@ export function inspect({appRoot=resolve("app"),routes=DEFAULT_ROUTES,focus=null
       const file=evidence(resolved.path,kind==="stylesheet"?"css":"js");
       const slot=kind==="stylesheet"?"stylesheets":"scripts";
       route[slot].push(file.path);
-      if(file.status!=="FOUND"){
+      if(file.status==="DECLARED_BUILD_OUTPUT_NOT_IN_SOURCE"){
+        route.generated.push(file.path); // expected after running the build, not a source error
+      }else if(file.status!=="FOUND"){
         route.unresolved.push({kind:"REFERENCED_FILE_MISSING",path:file.path});
         diagnostics.push({kind:"REFERENCED_FILE_MISSING",route:id,path:file.path});
       }
@@ -165,12 +187,13 @@ export function inspect({appRoot=resolve("app"),routes=DEFAULT_ROUTES,focus=null
       jsImports:"NOT_TRACED",cssImports:"NOT_TRACED",
       dynamicDom:"NOT_TRACED",runtimeCssom:"NOT_TRACED",
       ownersAndApprovedTokens:"NOT_INFERRED",
-      negativeImpact:"NOT_PROVEN"
+      negativeImpact:"NOT_PROVEN",buildOutputs:"package.json scripts --outfile=app/* only"
     },
     summary:{
       routes:routeRecords.length,found:routeRecords.filter(r=>r.status==="FOUND").length,
       uniqueDirectAssets:consumers.size,sharedDirectAssets:sharedDependencies.length,
-      lexicalOverlapPairs:overlaps.length,missingReferences:diagnostics.length
+      lexicalOverlapPairs:overlaps.length,missingReferences:diagnostics.length,
+      declaredGeneratedAssets:buildOutputs.size,generatedReferences:routeRecords.reduce((n,r)=>n+r.generated.length,0)
     },
     routes:routeEvidence,files:fileEvidence,sharedDependencies,
     cssOverlapCandidates:overlaps,focusClass:focus,
