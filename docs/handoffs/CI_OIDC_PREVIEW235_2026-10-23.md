@@ -1,5 +1,18 @@
 # CI-BASELINE-01 — GitHub OIDC → sessão temporária do Configurador (#235)
 
+## FINAL CHECKPOINT — 23/10/2026: OIDC + V5 5/5 REPRODUZIDOS
+
+**Evidência final, sem credencial estática:** [Actions #40039686284](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40039686284) e [#40039882104](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40039882104) — ambos **FIVE_FLOWS_PASS**; Mobile/PiP, Keyboard, Flow, Summary/Preços e Stone 5/5, Admin negado, sessão V5, logout e replay denial PASS. [Testes OIDC estáticos 6/6](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40039882104) e gate direcionado [2/2](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40039529026) também PASS. Testes negativos de emissão, issuer/audience, repo/workflow/ref/environment e assinatura permanecem obrigatórios.
+
+**Causa-raiz das falhas intermitentes:** o Configurador inicializava UI/DEBUG antes da conclusão da leitura assíncrona de /api/buyer-configuration. As suites começavam a operar antes da aplicação do V5 e tinham escolhas sobrescritas. A variável de execução **CI_EXPECT_PUBLISHED_V5=1** faz cada uma das cinco suítes esperar a autoridade da aplicação: document.documentElement.dataset.publishedConfigurationStatus === 'validated'. Além disso, o teste Summary passou a usar setChecked(true/false), em vez de alternância cega, sem afrouxar cobrança única nem igualdade exata de totais. O runtime do produto não foi modificado para esta correção. O endpoint /api/access/session foi consertado no preview ao remover um rewrite forçado que retornava 404 CDN.
+
+**Limites de integração:** [PR #235](https://github.com/EAKerber/MobiliPresenter2D/pull/235) continua DRAFT/HOLD e é fixture de CI, não candidato a merge. O código OIDC está na branch **security/oidc-ci-preview235-v0-20261023** e seu endpoint restrito no preview branch; main e produção permanecem intactas. A infraestrutura de CI antiga ainda dispara workflows de navegador sem sessão e pode apresentar vermelho por 401/302; isso é trabalho separado de substituição/gate por impacto, não reprovação deste gate autenticado. Não criar novo preview ou acrescentar novos tokens para dar continuidade a este gate.
+
+**Repetição controlada:** executar push explícito na branch security/oidc-ci-preview235-v0-20261023 com mensagem contendo o marcador de execução autenticada do workflow (.github/workflows/ci-preview-oidc.yml), sem marcador de modo direcionado. O workflow requer GitHub Environment ci-auth-preview e permissão id-token:write; nenhum GitHub Secret de senha/token é necessário. Cada execução cria e revoga sua própria sessão. Não usar esse endpoint para Admin nem reutilizar o convite de uso único antigo.
+
+---
+
+
 > **V5 READY gate integral — 23/10/2026:** [Actions #40039686284](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40039686284) **FIVE_FLOWS_PASS, 5/5**, mesma fixture V5 e autenticação OIDC, readback de sessão, Admin denied e logout/replay denied. O loader do produto é assíncrono, e a marcação `publishedConfigurationStatus=validated` sucede à aplicação V5; logo a guarda browser protege de restauro tardio que causava falsos negativos de estado. Nenhuma assertion enfraquecida. O próximo run documenta **repetição integral independente do mesmo commit de código**, sem Netlify preview adicional.
 
 
