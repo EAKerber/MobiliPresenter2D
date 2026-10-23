@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - ci/ci-baseline-01-shared-db-preview-20261023
+      - ci/ci-baseline-01-v5-local-diagnostics-20261023
     paths:
       - "tests/ci/config-unlocked-local-diagnostic.mjs"
       - "tests/ci/local-buyer-config-server.mjs"
