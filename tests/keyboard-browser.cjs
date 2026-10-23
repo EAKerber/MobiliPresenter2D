@@ -161,6 +161,19 @@ const {chromium} = require('playwright');
 
   // Ctrl shortcuts are global and move between stages.
   assert.equal(await currentStage(), 'modules');
+  await page.evaluate(() => {
+    window.__CI_CTRL_RIGHT_EVENT__ = null;
+    document.addEventListener('keydown', event => {
+      if (event.ctrlKey && event.key === 'ArrowRight') {
+        window.__CI_CTRL_RIGHT_EVENT__ = {
+          defaultPrevented: event.defaultPrevented,
+          targetId: event.target?.id || null,
+          targetTag: event.target?.tagName || null,
+          targetType: event.target?.type || null
+        };
+      }
+    }, true);
+  });
   await page.keyboard.press('Control+ArrowRight');
   try {
     await page.waitForFunction(() => document.querySelector('.flow-nav [data-step][aria-current="step"]')?.dataset.step === 'finishes');
@@ -172,7 +185,17 @@ const {chromium} = require('playwright');
       profile: document.documentElement.dataset.layoutProfile ?? null,
       hasModuleDetail: document.body.classList.contains('has-module-detail'),
       modulePaneHidden: document.getElementById('modulesPanel')?.hidden ?? null,
-      finishesPaneHidden: document.getElementById('finishesStagePanel')?.hidden ?? null
+      finishesPaneHidden: document.getElementById('finishesStagePanel')?.hidden ?? null,
+      ctrlRightEvent: window.__CI_CTRL_RIGHT_EVENT__ || null,
+      focusedTag: document.activeElement?.tagName || null,
+      focusedType: document.activeElement?.type || null,
+      nav: Array.from(document.querySelectorAll('.flow-nav [data-step]')).map(el => ({
+        step: el.dataset.step,
+        display: getComputedStyle(el).display,
+        hidden: el.hidden,
+        rects: el.getClientRects().length,
+        ariaCurrent: el.getAttribute('aria-current')
+      }))
     })).catch(() => ({captureError: true}));
     console.error('CI_KEYBOARD_STAGE_TIMEOUT ' + JSON.stringify(state));
     throw error;

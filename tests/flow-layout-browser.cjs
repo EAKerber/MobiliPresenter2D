@@ -409,7 +409,19 @@ const flatV3 = configuration.createDefaultAdministration(
         hitId: hit?.id || null,
         hitClass: typeof hit?.className === 'string' ? hit.className.slice(0, 80) : null,
         disabled: tab?.getAttribute('aria-disabled') ?? null,
-        modulesPaneHidden: document.getElementById('modulesPanel')?.hidden ?? null
+        modulesPaneHidden: document.getElementById('modulesPanel')?.hidden ?? null,
+        ancestry: (() => {
+          const chain=[];
+          for(let node=tab, depth=0;node && depth<7;node=node.parentElement,depth++){
+            const style=getComputedStyle(node);
+            const nr=node.getBoundingClientRect();
+            chain.push({tag:node.tagName,id:node.id || null,
+              classes:typeof node.className==='string'?node.className.slice(0,72):null,
+              display:style.display,visibility:style.visibility,opacity:style.opacity,
+              position:style.position,rect:[nr.x,nr.y,nr.width,nr.height]});
+          }
+          return chain;
+        })()
       };
     }).catch(() => ({captureError: true}));
     console.error('CI_FLOW_NAV_CLICK_TIMEOUT ' + JSON.stringify(state));
