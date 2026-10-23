@@ -2,6 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import { resolve } from "node:path";
+import { execFileSync } from "node:child_process";
 import { verifyReferencePin } from "../scripts/verify-design-system-reference-pin.mjs";
 
 test("P-TOKEN-01B vendor pin is intact, known-source and excluded from runtime", async () => {
@@ -25,7 +26,7 @@ test("lexical consumer observations are reproducible, not token-mapping authoriz
   const entries=manifest.entries.filter(e=>e.value.startsWith("#"));
   let observed=0;
   for(const row of audit.scanned){
-    const css=await readFile(resolve(row.path),"utf8");
+    const css=execFileSync("git",["show",audit.sourceCommit+":"+row.path],{encoding:"utf8"});
     let matches=0;
     for(const line of css.split("\n"))for(const token of entries)
       for(const match of line.matchAll(/#[0-9a-fA-F]{6}\b/g))

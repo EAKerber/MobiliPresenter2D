@@ -36,8 +36,7 @@ seletores autorizados nas três páginas públicas, sem globalizar a paleta.
 ## Gates (isolados, sem Netlify Preview)
 1. JS syntax, pin v0.1 preservado, hashes v0.2, escopo de roteamento e CSS,
    teste Node para contrato e integridade, escopo de arquivos do diff.
-2. 48 comparações de browser dos **três consumidores antigos** contra
-   `main`, exigindo nenhuma mudança visual/material.
+2. 48 comparações **v0.1 versus v0.2 no mesmo DOM** para os três consumidores antigos, com alternância de stylesheet, CSS computado integral, raster byte a byte e round-trip idênticos. O gate original P-TOKEN-02B contra `main` continua documentado no seu próprio run; não repetir capturas de páginas independentes com animação de intro não sincronizada.
 3. VIS-002C, 36 cenários de contraste Chromium/WebKit, temas claro/escuro,
    três larguras; assert dos pares e das assinaturas/estados preservados.
 4. 12 pares full-page Chromium/WebKit 390/1366 em light; mudanças de pixel
@@ -48,3 +47,7 @@ seletores autorizados nas três páginas públicas, sem globalizar a paleta.
 **Rollback:** reverter a nova importação, restabelecendo a versão v0.1 e
 removendo cinco consumidores adicionados; os arquivos v0.1 continuam disponíveis
 e não precisam de rebuild. Não remover PINs históricos.
+
+## Diagnóstico de primeira integração
+
+[Run #39893006948](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/39893006948) parou em dois testes herdados que eram inadequados para um incremento autorizado: `design-system-reference-pin.test.mjs` comparava inventário lexical histórico (54 ocorrências sobre `main@840a0cd`) com o CSS atual, que já contém consumidores gerados; o teste passou a ler arquivos do commit de origem `audit.sourceCommit` via `git show`, sem alterar o inventário. Já o teste P-TOKEN original capturava duas cargas independentes de Landing e falhou por animação de entrada num raster do hero em viewport 1366, mesmo com CSS computado idêntico. Para a integração foi adicionado um teste mais direto e rigoroso: alternar v0.1 e v0.2 na **mesma** página, exigindo 48/48 casos byte-idênticos e CSS computado idêntico, preservando as provas já obtidas de P-TOKEN-02B sobre a main na sua branch anterior. A correção não remove verificação de cores nem permite diferenças de raster.

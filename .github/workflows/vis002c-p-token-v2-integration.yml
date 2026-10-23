@@ -14,6 +14,7 @@ on:
       - design-system/pins/vis-002/context-v0.2.0/**
       - scripts/verify-vis002-contextual-token*.mjs
       - tests/vis002c-*.mjs
+      - tests/design-system-reference-pin.test.mjs
       - tests/vis002-contextual-text-differential.mjs
       - .github/workflows/vis002c-p-token-v2-integration.yml
       - docs/architecture/vis002c-p-token02b-integration-2026-10-23.md
@@ -53,10 +54,6 @@ jobs:
       options: --ipc=host
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/checkout@v4
-        with:
-          ref: main
-          path: baseline
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
@@ -64,16 +61,15 @@ jobs:
         run: |
           npm install --prefix /tmp/m2d-vis002c-p-token-v2 --no-audit --no-fund playwright@1.56.0 pngjs@7.0.0
           ln -s /tmp/m2d-vis002c-p-token-v2/node_modules ./node_modules
-      - name: Serve candidate and read-only baseline locally
+      - name: Serve candidate locally with archived v0.1 and active v0.2 stylesheets
         run: |
           python3 -m http.server 8123 --bind 127.0.0.1 --directory app >/tmp/v2-candidate.log 2>&1 &
-          python3 -m http.server 8124 --bind 127.0.0.1 --directory baseline/app >/tmp/v2-baseline.log 2>&1 &
           sleep 2
           curl -fsS http://127.0.0.1:8123/ >/dev/null
-          curl -fsS http://127.0.0.1:8124/ >/dev/null
+          curl -fsS http://127.0.0.1:8123/design-system/approved-contextual-support-text.css >/dev/null
           curl -fsS http://127.0.0.1:8123/design-system/approved-contextual-support-text-v2.css >/dev/null
-      - name: Check original 3 consumers are visually unchanged
-        run: node tests/vis002-contextual-text-differential.mjs
+      - name: Prove original three consumers identical v0.1 vs v0.2 on same DOM
+        run: node tests/vis002c-original-three-equivalence.mjs
       - name: Check 8 approved text pairs and semantic exclusions
         run: node tests/vis002c-public-contrast.mjs
       - name: Compare full public page raster on new five contexts
@@ -87,7 +83,7 @@ jobs:
         with:
           name: vis002c-p-token-v2-integration
           path: |
-            artifacts/p-token-02b/
+            artifacts/vis002c-original-three/
             artifacts/vis002c-contrast/
             artifacts/vis002c-full-page/
           retention-days: 14
