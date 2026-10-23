@@ -37,7 +37,16 @@ const mime={".html":"text/html; charset=utf-8",".js":"application/javascript; ch
 const server=http.createServer(async(req,res)=>{
  try{
   const raw=new URL(req.url,"http://localhost");
-  if(req.method!=="GET"){res.writeHead(405);res.end();return}
+  // Expected anonymous navigation readiness. Not an auth bypass: this stub
+  // is bound to localhost in an ephemeral CI process only.
+  if(req.method==="POST"&&raw.pathname==="/api/access/session"){
+   res.writeHead(200,{"Content-Type":"application/json; charset=utf-8","Cache-Control":"no-store"});
+   res.end('{"authenticated":false}');return;
+  }
+  if(req.method!=="GET"){
+   console.log("CI_LOCAL_HTTP_405 "+JSON.stringify({method:req.method,path:raw.pathname}));
+   res.writeHead(405);res.end();return;
+  }
   if(raw.pathname==="/api/buyer-configuration"){
    res.writeHead(200,{"Content-Type":"application/json; charset=utf-8","Cache-Control":"no-store"});
    res.end(json);return;
