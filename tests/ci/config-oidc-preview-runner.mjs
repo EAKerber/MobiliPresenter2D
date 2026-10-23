@@ -96,6 +96,17 @@ try{
  result.buyerConfigurationHTTP=published.status();
  assert.equal(published.status(),200,"PUBLISHED_CONFIGURATION_NOT_AVAILABLE_IN_PREVIEW");
  const probe=await context.newPage();
+ const bootstrapErrors=[];
+ const bootstrapHttpErrors=[];
+ probe.on("pageerror",e=>bootstrapErrors.push(String(e?.name||"PAGE_ERROR").slice(0,40)));
+ probe.on("console",m=>{if(m.type()==="error")bootstrapErrors.push(m.text());});
+ probe.on("response",response=>{
+  if(response.status()<400)return;
+  try{
+   const uri=new URL(response.url());
+   if(uri.origin===ORIGIN)bootstrapHttpErrors.push({status:response.status(),path:uri.pathname.slice(0,180)});
+  }catch{}
+ });
  const privateResponse=await probe.goto(TARGET,{waitUntil:"domcontentloaded",timeout:25000});
  assert.equal(privateResponse?.status(),200,"AUTHENTICATED_CONFIG_HTTP_ERROR");
  assert.equal(new URL(probe.url()).pathname,"/config/","AUTHENTICATED_CONFIG_REDIRECTED");
@@ -109,6 +120,21 @@ try{
    && rect?.width>0 && rect?.height>0;
  },null,{timeout:30000});
  result.bootstrap=true;
+ const classifyBrowserError=raw=>{
+  const message=String(raw||"");
+  const path=message.match(/https:\/\/deploy-preview-235--mobilipresenter2d[.]netlify[.]app(\/[a-zA-Z0-9/_-]+(?:\.[a-zA-Z0-9]+)?)/)?.[1]||null;
+  const type=/Failed to load resource/i.test(message)?"RESOURCE_LOAD":
+   /content security policy|CSP/i.test(message)?"CSP":
+   /Refused to execute/i.test(message)?"SCRIPT_EXECUTION":
+   /Cross-Origin|CORS/i.test(message)?"CORS":
+   /TypeError/.test(message)?"TYPE_ERROR":/ReferenceError/.test(message)?"REFERENCE_ERROR":
+   /net::ERR_/i.test(message)?"NETWORK":/404|401|403|500|503/.test(message)?"HTTP_ERROR":"OTHER";
+  return {type,path};
+ };
+ const summarized=bootstrapErrors.slice(0,25).map(classifyBrowserError);
+ result.bootstrapConsole={count:bootstrapErrors.length,classified:summarized};
+ result.bootstrapHttp={count:bootstrapHttpErrors.length,items:bootstrapHttpErrors.slice(0,25)};
+ console.log("CI_AUTHENTICATED_BOOTSTRAP_DIAGNOSTICS "+JSON.stringify({console:result.bootstrapConsole,http:result.bootstrapHttp}));
  const denied=await context.request.get(ORIGIN+"/api/admin-bootstrap",{timeout:15000});
  assert.ok([401,403].includes(denied.status()),"TEMP_SESSION_GAINED_ADMIN_ACCESS");
  result.adminDenied=true;
