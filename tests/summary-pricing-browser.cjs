@@ -109,11 +109,34 @@ function parseBrl(text) {
   // Restore the user-visible state and prove exact round-trip of the total.
   await go('finishes');
   await skirting.click();
-  await page.waitForFunction(expected => {
-    const text = document.querySelector('#configurationValue strong')?.textContent || '';
-    const normalized = text.replace(/[^0-9,.-]/g, '').replace(/\./g, '').replace(',', '.');
-    return Math.round(Number(normalized) * 100) === expected;
-  }, totalWithSkirting);
+  try {
+    await page.waitForFunction(expected => {
+      const text = document.querySelector('#configurationValue strong')?.textContent || '';
+      const normalized = text.replace(/[^0-9,.-]/g, '').replace(/\./g, '').replace(',', '.');
+      return Math.round(Number(normalized) * 100) === expected;
+    }, totalWithSkirting);
+  } catch (error) {
+    // Preview synthetic pricing only: never log a raw payload, tokens, user data
+    // or commercial prices. The original equality assertion remains unchanged.
+    const diagnostic = await page.evaluate(expected => {
+      const text = document.querySelector('#configurationValue strong')?.textContent || '';
+      const normalized = text.replace(/[^0-9,.-]/g, '').replace(/\./g, '').replace(',', '.');
+      const current = Math.round(Number(normalized) * 100);
+      const toggle = document.querySelector('#stoneSkirtingToggle');
+      const state = window.CASA_EM_MODULOS_DEBUG?.getState?.();
+      return {
+        amountReadable: Number.isFinite(current),
+        deltaCents: Number.isFinite(current) ? current - expected : null,
+        skirtingChecked: Boolean(toggle?.checked),
+        skirtingDisabled: Boolean(toggle?.disabled),
+        skirtingConnected: Boolean(toggle?.isConnected),
+        currentStage: document.querySelector('.flow-nav [aria-current="step"]')?.getAttribute('data-step')||null,
+        stonePackagePresent: Boolean(state?.globalSelections?.stonePackageId)
+      };
+    }, totalWithSkirting).catch(() => ({probe:"UNAVAILABLE"}));
+    console.error("CI_SUMMARY_RESTORE_DIAGNOSTIC " + JSON.stringify(diagnostic));
+    throw error;
+  }
   assert.equal(await currentTotal(), totalWithSkirting, 'restoring skirting restores the exact prior total');
 
   // A priced stone package is also global and must appear only once, never once per module.
