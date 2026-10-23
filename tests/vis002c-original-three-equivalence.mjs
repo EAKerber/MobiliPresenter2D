@@ -30,7 +30,8 @@ for(const [engine,lib] of [["chromium",chromium],["webkit",webkit]]){
       await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)));
     });
     if(route.path==="/")await page.waitForTimeout(800);
-    const link=page.locator('link[href="'+v2+'"]');
+    // Stable locator: href itself changes from v0.2 to v0.1 and back.
+    const link=page.locator('link[rel="stylesheet"][href*="approved-contextual-support-text"]');
     assert.equal(await link.count(),1);
     async function read(){
      const stats=await loc.evaluate((element,property)=>{
