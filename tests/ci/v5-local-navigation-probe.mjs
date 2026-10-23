@@ -25,7 +25,12 @@ const snapshot=async(label)=>{
     hidden:el.hidden,ariaCurrent:el.getAttribute("aria-current"),
     disabled:el.disabled||el.getAttribute("aria-disabled")==="true",
     rect:[Math.round(r.left),Math.round(r.top),Math.round(r.width),Math.round(r.height)],
-    hit:hit?.id||hit?.getAttribute("data-step")||hit?.tagName||null};
+    hit:hit?.id||hit?.getAttribute("data-step")||hit?.tagName||null,
+    connected:el.isConnected,
+    rects:el.getClientRects().length,
+    offset:[el.offsetWidth,el.offsetHeight],
+    css:{width:cs.width,height:cs.height,contentVisibility:cs.contentVisibility,
+     contain:cs.contain,gridArea:cs.gridArea}};
   }
   return {stage:document.querySelector(".flow-nav [aria-current='step']")?.dataset.step||null,
    profile:document.documentElement.dataset.layoutProfile,
@@ -42,6 +47,15 @@ try{
  await page.waitForFunction(()=>document.documentElement.dataset.publishedConfigurationStatus==="validated"
    && !document.querySelector(".workspace")?.hidden,null,{timeout:14000});
  await snapshot("initial");
+ // Minimal causal probe: does opening module detail collapse stage buttons?
+ const firstModule=page.locator("#moduleList [data-select-entity]").first();
+ await firstModule.click({timeout:3000});
+ await page.waitForTimeout(180);
+ await snapshot("detail-open");
+ const close=page.locator("#moduleDetail [data-close-module-detail]");
+ try{await close.click({timeout:3000});}catch(e){reports.push({label:"detail-close-failed",errorClass:e.name});}
+ await page.waitForTimeout(180);
+ await snapshot("detail-closed");
  await page.keyboard.press("Control+ArrowRight");
  await page.waitForTimeout(800);
  await snapshot("after-control-right");
