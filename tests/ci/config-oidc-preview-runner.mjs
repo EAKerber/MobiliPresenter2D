@@ -117,7 +117,9 @@ try{
 } catch(e){
  result.errorClass=classify(e);
  result.status=sessionIssued?"AUTH_FLOW_FAILURE":"AUTH_PRECHECK_OR_OIDC_FAILURE";
- console.error("CI_CONFIG_AUTH_GATE "+result.status+" errorClass="+result.errorClass);
+ const stage=typeof e?.message==="string" ? (/^[A-Z][A-Z0-9_]{4,90}$/.exec(e.message.split("\n")[0])?.[0]||"UNCLASSIFIED") : "UNCLASSIFIED";
+ result.failureStage=stage;
+ console.error("CI_CONFIG_AUTH_GATE "+result.status+" errorClass="+result.errorClass+" stage="+stage+" exchangeStatus="+result.exchangeStatus);
  process.exitCode=1;
 } finally{
  if(sessionIssued&&context){
