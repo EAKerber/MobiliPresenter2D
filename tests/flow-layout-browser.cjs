@@ -7,6 +7,26 @@ const defaultSettings = require("../app/data/configurator-settings.js");
 const catalog = require("../app/data/catalog-data.js");
 const priceBook = require("../app/data/mock-price-book.js");
 const scene = require("../app/data/scene-data.js");
+const administrationV5 = require("../app/core/administration-v5.js");
+const normalizedFlowCore = require("../app/core/flow-model.js");
+const hierarchyDefaults = require("../app/data/hierarchy-defaults.js");
+const buyerProjection = require("../app/core/published-buyer-projection.js");
+const pricingContract = require("../app/core/pricing-contract.js");
+const defaultPresentationPolicy = require("../app/data/presentation-policy-defaults.js");
+
+// Legacy scenario authors remain, but all browser fixtures are V5 projections.
+// Fail closed on invalid hierarchy; keep the behavioral assertions unchanged.
+function projectFixtureToV5Buyer(value) {
+  const v5 = administrationV5.upgrade(
+    value, configuration, normalizedFlowCore, catalog, priceBook, scene, hierarchyDefaults
+  );
+  const errors = administrationV5.validate(v5, configuration, catalog, priceBook, scene);
+  if (errors.length) throw new Error("CI_FLOW_V5_FIXTURE_INVALID: " + errors.join("; "));
+  return buyerProjection.project(v5, {
+    configuration, administrationV5, flow: normalizedFlowCore,
+    catalog, priceBook, scene, hierarchyDefaults, pricingContract, defaultPresentationPolicy
+  });
+}
 // Local test fixture ONLY; published v5 stage groups do not have legacy .items.
 const flatV3 = configuration.createDefaultAdministration(
   defaultSettings, catalog, priceBook
@@ -669,12 +689,12 @@ const flatV3 = configuration.createDefaultAdministration(
   const renamedPage = await browser.newPage({storageState: process.env.PLAYWRIGHT_AUTH_STATE_FILE || undefined,  viewport: { width: 1366, height: 900 } });
   renamedPage.on("pageerror", (error) => renamedErrors.push(error.message));
   renamedPage.on("console", (message) => { if (message.type() === "error") renamedErrors.push(message.text()); });
-  await renamedPage.route("**/api/configuration", async (route) => {
+  await renamedPage.route("**/api/buyer-configuration", async (route) => {
     if (route.request().method() !== "GET") return route.continue();
     await route.fulfill({
       status: 200,
       contentType: "application/json",
-      body: JSON.stringify(renamedCoreStages)
+      body: JSON.stringify(projectFixtureToV5Buyer(renamedCoreStages))
     });
   });
   await renamedPage.goto(targetUrl, { waitUntil: "domcontentloaded", timeout: 15000 });
@@ -755,12 +775,12 @@ const flatV3 = configuration.createDefaultAdministration(
   const reorderPage = await browser.newPage({storageState: process.env.PLAYWRIGHT_AUTH_STATE_FILE || undefined,  viewport: { width: 1366, height: 900 } });
   reorderPage.on("pageerror", (error) => reorderErrors.push(error.message));
   reorderPage.on("console", (message) => { if (message.type() === "error") reorderErrors.push(message.text()); });
-  await reorderPage.route("**/api/configuration", async (route) => {
+  await reorderPage.route("**/api/buyer-configuration", async (route) => {
     if (route.request().method() !== "GET") return route.continue();
     await route.fulfill({
       status: 200,
       contentType: "application/json",
-      body: JSON.stringify(reorderedServices)
+      body: JSON.stringify(projectFixtureToV5Buyer(reorderedServices))
     });
   });
   await reorderPage.goto(targetUrl, { waitUntil: "domcontentloaded", timeout: 15000 });
@@ -810,12 +830,12 @@ const flatV3 = configuration.createDefaultAdministration(
   const negativePage = await browser.newPage({storageState: process.env.PLAYWRIGHT_AUTH_STATE_FILE || undefined,  viewport: { width: 1366, height: 900 } });
   negativePage.on("pageerror", (error) => negativeErrors.push(error.message));
   negativePage.on("console", (message) => { if (message.type() === "error") negativeErrors.push(message.text()); });
-  await negativePage.route("**/api/configuration", async (route) => {
+  await negativePage.route("**/api/buyer-configuration", async (route) => {
     if (route.request().method() !== "GET") return route.continue();
     await route.fulfill({
       status: 200,
       contentType: "application/json",
-      body: JSON.stringify(withoutAdditionalServices)
+      body: JSON.stringify(projectFixtureToV5Buyer(withoutAdditionalServices))
     });
   });
   await negativePage.goto(targetUrl, { waitUntil: "domcontentloaded", timeout: 15000 });
@@ -858,12 +878,12 @@ const flatV3 = configuration.createDefaultAdministration(
   const lightingNegativePage = await browser.newPage({storageState: process.env.PLAYWRIGHT_AUTH_STATE_FILE || undefined,  viewport: { width: 1366, height: 900 } });
   lightingNegativePage.on("pageerror", (error) => lightingNegativeErrors.push(error.message));
   lightingNegativePage.on("console", (message) => { if (message.type() === "error") lightingNegativeErrors.push(message.text()); });
-  await lightingNegativePage.route("**/api/configuration", async (route) => {
+  await lightingNegativePage.route("**/api/buyer-configuration", async (route) => {
     if (route.request().method() !== "GET") return route.continue();
     await route.fulfill({
       status: 200,
       contentType: "application/json",
-      body: JSON.stringify(withoutLighting)
+      body: JSON.stringify(projectFixtureToV5Buyer(withoutLighting))
     });
   });
   await lightingNegativePage.goto(targetUrl, { waitUntil: "domcontentloaded", timeout: 15000 });
@@ -920,12 +940,12 @@ const flatV3 = configuration.createDefaultAdministration(
   const frontsNegativePage = await browser.newPage({storageState: process.env.PLAYWRIGHT_AUTH_STATE_FILE || undefined,  viewport: { width: 1366, height: 900 } });
   frontsNegativePage.on("pageerror", (error) => frontsNegativeErrors.push(error.message));
   frontsNegativePage.on("console", (message) => { if (message.type() === "error") frontsNegativeErrors.push(message.text()); });
-  await frontsNegativePage.route("**/api/configuration", async (route) => {
+  await frontsNegativePage.route("**/api/buyer-configuration", async (route) => {
     if (route.request().method() !== "GET") return route.continue();
     await route.fulfill({
       status: 200,
       contentType: "application/json",
-      body: JSON.stringify(withoutFronts)
+      body: JSON.stringify(projectFixtureToV5Buyer(withoutFronts))
     });
   });
   await frontsNegativePage.goto(targetUrl, { waitUntil: "domcontentloaded", timeout: 15000 });
@@ -990,12 +1010,12 @@ const flatV3 = configuration.createDefaultAdministration(
   const handlesNegativePage = await browser.newPage({storageState: process.env.PLAYWRIGHT_AUTH_STATE_FILE || undefined,  viewport: { width: 1366, height: 900 } });
   handlesNegativePage.on("pageerror", (error) => handlesNegativeErrors.push(error.message));
   handlesNegativePage.on("console", (message) => { if (message.type() === "error") handlesNegativeErrors.push(message.text()); });
-  await handlesNegativePage.route("**/api/configuration", async (route) => {
+  await handlesNegativePage.route("**/api/buyer-configuration", async (route) => {
     if (route.request().method() !== "GET") return route.continue();
     await route.fulfill({
       status: 200,
       contentType: "application/json",
-      body: JSON.stringify(withoutHandles)
+      body: JSON.stringify(projectFixtureToV5Buyer(withoutHandles))
     });
   });
   await handlesNegativePage.goto(targetUrl, { waitUntil: "domcontentloaded", timeout: 15000 });
@@ -1060,12 +1080,12 @@ const flatV3 = configuration.createDefaultAdministration(
   const cabinetNegativePage = await browser.newPage({storageState: process.env.PLAYWRIGHT_AUTH_STATE_FILE || undefined,  viewport: { width: 1366, height: 900 } });
   cabinetNegativePage.on("pageerror", (error) => cabinetNegativeErrors.push(error.message));
   cabinetNegativePage.on("console", (message) => { if (message.type() === "error") cabinetNegativeErrors.push(message.text()); });
-  await cabinetNegativePage.route("**/api/configuration", async (route) => {
+  await cabinetNegativePage.route("**/api/buyer-configuration", async (route) => {
     if (route.request().method() !== "GET") return route.continue();
     await route.fulfill({
       status: 200,
       contentType: "application/json",
-      body: JSON.stringify(withoutCabinetFinishes)
+      body: JSON.stringify(projectFixtureToV5Buyer(withoutCabinetFinishes))
     });
   });
   await cabinetNegativePage.goto(targetUrl, { waitUntil: "domcontentloaded", timeout: 15000 });
@@ -1129,12 +1149,12 @@ const flatV3 = configuration.createDefaultAdministration(
   const stoneNegativePage = await browser.newPage({storageState: process.env.PLAYWRIGHT_AUTH_STATE_FILE || undefined,  viewport: { width: 1366, height: 900 } });
   stoneNegativePage.on("pageerror", (error) => stoneNegativeErrors.push(error.message));
   stoneNegativePage.on("console", (message) => { if (message.type() === "error") stoneNegativeErrors.push(message.text()); });
-  await stoneNegativePage.route("**/api/configuration", async (route) => {
+  await stoneNegativePage.route("**/api/buyer-configuration", async (route) => {
     if (route.request().method() !== "GET") return route.continue();
     await route.fulfill({
       status: 200,
       contentType: "application/json",
-      body: JSON.stringify(withoutStone)
+      body: JSON.stringify(projectFixtureToV5Buyer(withoutStone))
     });
   });
   await stoneNegativePage.goto(targetUrl, { waitUntil: "domcontentloaded", timeout: 15000 });
@@ -1218,12 +1238,12 @@ const flatV3 = configuration.createDefaultAdministration(
   const skirtingNegativePage = await browser.newPage({storageState: process.env.PLAYWRIGHT_AUTH_STATE_FILE || undefined,  viewport: { width: 1366, height: 900 } });
   skirtingNegativePage.on("pageerror", (error) => skirtingNegativeErrors.push(error.message));
   skirtingNegativePage.on("console", (message) => { if (message.type() === "error") skirtingNegativeErrors.push(message.text()); });
-  await skirtingNegativePage.route("**/api/configuration", async (route) => {
+  await skirtingNegativePage.route("**/api/buyer-configuration", async (route) => {
     if (route.request().method() !== "GET") return route.continue();
     await route.fulfill({
       status: 200,
       contentType: "application/json",
-      body: JSON.stringify(withoutSkirting)
+      body: JSON.stringify(projectFixtureToV5Buyer(withoutSkirting))
     });
   });
   await skirtingNegativePage.goto(targetUrl, { waitUntil: "domcontentloaded", timeout: 15000 });
