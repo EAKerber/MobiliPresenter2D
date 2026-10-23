@@ -81,7 +81,7 @@ function parseBrl(text) {
   const initiallyChecked = await skirting.isChecked();
   if (!initiallyChecked) {
     const before = await valueText();
-    await skirting.click();
+    await skirting.setChecked(true);
     await waitTotalChange(before);
   }
   const totalWithSkirting = await currentTotal();
@@ -96,7 +96,7 @@ function parseBrl(text) {
 
   await go('finishes');
   const beforeSkirtingOff = await valueText();
-  await skirting.click();
+  await skirting.setChecked(false);
   await waitTotalChange(beforeSkirtingOff);
   const totalWithoutSkirting = await currentTotal();
   assert.equal(totalWithSkirting - totalWithoutSkirting, skirtingCents, 'removing skirting subtracts exactly its single global breakdown row');
@@ -107,8 +107,11 @@ function parseBrl(text) {
   assert.equal(parseBrl(withoutSkirting.totalText), totalWithoutSkirting, 'summary total follows the skirting toggle');
 
   // Restore the user-visible state and prove exact round-trip of the total.
+  // Navigation can redraw control state; specifying the desired state, rather
+  // than blindly toggling, preserves the user intent and original total gate.
   await go('finishes');
-  await skirting.click();
+  await skirting.setChecked(true);
+  assert.equal(await skirting.isChecked(), true, 'restoration must leave the skirting control checked');
   try {
     await page.waitForFunction(expected => {
       const text = document.querySelector('#configurationValue strong')?.textContent || '';
@@ -171,7 +174,8 @@ function parseBrl(text) {
   // Restore the original skirting state when production/default administration had it disabled.
   if (!initiallyChecked) {
     await go('finishes');
-    if (await skirting.isChecked()) await skirting.click();
+    await skirting.setChecked(false);
+    assert.equal(await skirting.isChecked(), false, 'the original skirting-off state is restored');
   }
 
   assert.deepEqual(errors, [], 'browser console must remain clean');
