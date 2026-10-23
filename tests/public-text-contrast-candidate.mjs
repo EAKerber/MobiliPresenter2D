@@ -56,6 +56,12 @@ for(const [engine,lib] of [["chromium",chromium],["webkit",webkit]]){
     assert.equal(response?.status(),200,"Route failed: "+route);
     assert.equal(await page.locator("html").getAttribute("data-theme"),theme);
     await page.evaluate(()=>document.fonts.ready);
+    // Landing's real intro uses an animated transform. Comparing document
+    // coordinates during that intro incorrectly attributes movement to CSS.
+    if(route==="/")await page.waitForFunction(()=>{
+      const splash=document.querySelector("#introSplash");
+      return !splash||getComputedStyle(splash).pointerEvents==="none";
+    },null,{timeout:8000});
     const targets=CASES.filter(c=>c.route===route),controls=CONTROLS.filter(c=>c.route===route);
     const beforeControl=new Map();
     for(const c of controls)beforeControl.set(c.selector,await snapshot(page,c.selector));
