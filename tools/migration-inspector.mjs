@@ -79,6 +79,19 @@ export function inspect({appRoot=resolve("app"),routes=DEFAULT_ROUTES,focus=null
     const html=readFileSync(pageAbsolute,"utf8");
     route.status="FOUND";
     route.htmlClasses=htmlClasses(html);
+    // Honor the HTML base element. /config/ uses <base href="/"> so relative
+    // core/*.js resolves at the site root, NOT beneath /config/.
+    let assetBase=pageAbsolute;
+    const baseTag=html.match(/<base\b[^>]*>/i)?.[0];
+    if(baseTag){
+      const href=attributes(baseTag).href;
+      const base=localAsset(root,pageAbsolute,href);
+      if(base&&!base.unsafe&&href.endsWith("/")){
+        assetBase=resolve(base.absolute,"__base_document__.html");
+      }else{
+        route.unresolved.push({kind:"BASE_HREF_NOT_MODELED",source:href??""});
+      }
+    }
     const tags=html.match(/<(?:script|link)\b[^>]*>/gi)??[];
     for(const tag of tags){
       const script=/^<script\b/i.test(tag),attrs=attributes(tag);
@@ -86,7 +99,7 @@ export function inspect({appRoot=resolve("app"),routes=DEFAULT_ROUTES,focus=null
       if(!kind)continue;
       const src=script?attrs.src:attrs.href;
       if(!src)continue; // inline script not modeled
-      const resolved=localAsset(root,pageAbsolute,src);
+      const resolved=localAsset(root,assetBase,src);
       if(!resolved){
         route.unresolved.push({kind:"EXTERNAL_OR_DYNAMIC_ASSET",source:src});
         continue;
