@@ -58,6 +58,31 @@ try{
   data:{jwt},timeout:20000
  });
  result.exchangeStatus=String(response.status());
+ if(response.status()===401){
+  // OIDC JWT is not logged or written; only equality flags for exact trust predicates.
+  let flags={parseable:false};
+  try{
+   const parts=jwt.split(".");
+   const header=JSON.parse(Buffer.from(parts[0],"base64url").toString("utf8"));
+   const c=JSON.parse(Buffer.from(parts[1],"base64url").toString("utf8"));
+   flags={
+    parseable:true,alg:header.alg==="RS256",kid:Boolean(header.kid),
+    iss:c.iss==="https://token.actions.githubusercontent.com",
+    aud:c.aud===CI_OIDC_AUDIENCE,
+    repository:c.repository==="EAKerber/MobiliPresenter2D",
+    repositoryId:c.repository_id==="1356562826",ownerId:c.repository_owner_id==="62451548",
+    ref:c.ref==="refs/heads/security/oidc-ci-preview235-v0-20261023",
+    workflowRef:c.workflow_ref==="EAKerber/MobiliPresenter2D/.github/workflows/ci-preview-oidc.yml@refs/heads/security/oidc-ci-preview235-v0-20261023",
+    environment:c.environment==="ci-auth-preview",
+    subject:c.sub==="repo:EAKerber/MobiliPresenter2D:environment:ci-auth-preview",
+    event:["push","workflow_dispatch"].includes(c.event_name),
+    jti:typeof c.jti==="string"&&c.jti.length>=12&&c.jti.length<=256,
+    runId:/^[0-9]{1,22}$/.test(String(c.run_id??"")),
+    timing:Number.isInteger(c.iat)&&Number.isInteger(c.exp)&&c.iat<=Math.floor(Date.now()/1000)+60&&c.iat>=Math.floor(Date.now()/1000)-600&&c.exp>Math.floor(Date.now()/1000)&&c.exp<=Math.floor(Date.now()/1000)+900
+   };
+  }catch{}
+  console.error("CI_OIDC_CLAIM_MATCH_FLAGS "+JSON.stringify(flags));
+ }
  assert.equal(response.status(),200,"OIDC_EXCHANGE_FAILED");
  const json=await response.json();
  assert.equal(json?.ok,true,"OIDC_EXCHANGE_NOT_OK");
