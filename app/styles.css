@@ -692,9 +692,11 @@ html[data-layout-profile="compact"] .flow-group-grid--embedded .flow-group-shell
   .configuration-value small { grid-column: 1 / -1; justify-self: start; white-space: nowrap; }
 }
 
-/* The steps may live in a narrow rail on a wide screen. Compact labels must
-   therefore follow the panel width rather than the viewport width. */
-@container flow-steps (max-width: 500px) {
+/* The steps may live in a narrow rail on a wide screen. Compact labels
+   follow actual panel width, not viewport. The flow-steps container now lives
+   on .controls, so account for .flow-nav's 6px padding and 1px border on
+   each side: 514px here equals its former 500px inner-content threshold. */
+@container flow-steps (max-width: 514px) {
   .flow-step { display: grid; place-items: center; align-content: center; gap: 2px; padding: 4px 2px; line-height: 1.1; }
   .flow-step > span:first-child { width: 18px; height: 18px; margin-right: 0; font-size: 10px; }
   .flow-step__label { display: block; max-width: 100%; font-size: 0; }
