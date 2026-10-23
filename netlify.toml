@@ -27,11 +27,8 @@
   status = 200
   force = true
 
-[[redirects]]
-  from = "/api/access/session"
-  to = "/.netlify/functions/access-session-status"
-  status = 200
-  force = true
+# /api/access/session is owned exclusively by netlify/functions/access-session-status.mjs
+# via its config.path; a forced legacy rewrite produced CDN 404 on Deploy Preview.
 
 # CP-PUBLIC-04a: public schema-driven read projection; no preview seeds.
 [[redirects]]
