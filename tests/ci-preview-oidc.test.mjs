@@ -45,7 +45,7 @@ test("wrong issuer, audience, repository identity, workflow, environment and eve
     ["iss","https://evil.invalid"],["aud","other-audience"],["repository","somewhere/else"],
     ["repository_id","1"],["repository_owner_id","2"],["ref","refs/heads/main"],
     ["workflow_ref","wrong/workflow@refs/heads/main"],["environment","production"],
-    ["sub","repo:EAKerber/MobiliPresenter2D:ref:refs/heads/main"],
+    ["sub",null],
     ["event_name","pull_request"],["iat",now-700],["exp",now-5],
     ["jti","short"],["run_id","not-an-integer"]
   ];
@@ -53,6 +53,16 @@ test("wrong issuer, audience, repository identity, workflow, environment and eve
     const changed={...claims(),[field]:value};
     assert.equal(validateOidcClaims(changed,now),false,field);
     await assert.rejects(verifyGithubOidc(jwt(changed),{fetchJwks:()=>{throw Error("unexpected JWKS network");},now}),/oidc_claims_denied/,field);
+  }
+});
+test("custom GitHub subject templates are not treated as a new authorization authority",async()=>{
+  const changed={...claims(),sub:"custom:repository_id:1356562826:workflow:ci-preview"};
+  assert.equal(validateOidcClaims(changed,now),true,"signed immutable claims remain the authority");
+  const verified=await verifyGithubOidc(jwt(changed),{fetchJwks:fakeKeys,now});
+  assert.equal(verified.repository_id,"1356562826");
+  for(const field of ["repository_id","ref","workflow_ref","environment"]){
+    const wrong={...changed,[field]:"untrusted"};
+    assert.equal(validateOidcClaims(wrong,now),false,field);
   }
 });
 test("only the pinned unpublished Netlify preview is eligible",()=>{
