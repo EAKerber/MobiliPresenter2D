@@ -162,7 +162,21 @@ const {chromium} = require('playwright');
   // Ctrl shortcuts are global and move between stages.
   assert.equal(await currentStage(), 'modules');
   await page.keyboard.press('Control+ArrowRight');
-  await page.waitForFunction(() => document.querySelector('.flow-nav [data-step][aria-current="step"]')?.dataset.step === 'finishes');
+  try {
+    await page.waitForFunction(() => document.querySelector('.flow-nav [data-step][aria-current="step"]')?.dataset.step === 'finishes');
+  } catch (error) {
+    // Diagnostics are read-only. Keep the original timeout and assertion.
+    const state = await page.evaluate(() => ({
+      currentStep: document.querySelector('.flow-nav [data-step][aria-current="step"]')?.dataset.step ?? null,
+      focus: document.activeElement?.id || document.activeElement?.tagName || null,
+      profile: document.documentElement.dataset.layoutProfile ?? null,
+      hasModuleDetail: document.body.classList.contains('has-module-detail'),
+      modulePaneHidden: document.getElementById('modulesPanel')?.hidden ?? null,
+      finishesPaneHidden: document.getElementById('finishesStagePanel')?.hidden ?? null
+    })).catch(() => ({captureError: true}));
+    console.error('CI_KEYBOARD_STAGE_TIMEOUT ' + JSON.stringify(state));
+    throw error;
+  }
   assert.equal(await currentStage(), 'finishes', 'Ctrl+ArrowRight advances one stage');
   await page.waitForTimeout(450);
   const finishStageGeometry = await page.evaluate(() => {
