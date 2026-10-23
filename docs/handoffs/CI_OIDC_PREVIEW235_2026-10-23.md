@@ -1,6 +1,6 @@
 # CI-BASELINE-01 — GitHub OIDC → sessão temporária do Configurador (#235)
 
-**Status:** implementado em branch experimental, sem publicação/execução autenticada inicial; resultado somente após gates e deploy controlado.
+**Status:** gate estático [#40034055182](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40034055182) **5/5 PASS**. O endpoint foi integrado somente ao preview experimental #235 no commit `b30668d02c0c6c61a04563a300691c23741d1fb6`, [deploy `6adbe0371b10ece423bb013c`](https://app.netlify.com/projects/mobilipresenter2d/deploys/6adbe0371b10ece423bb013c) READY; sem alteração na main. O próximo run marcado explicitamente comprovará (ou recusará) a troca OIDC e a matriz real.
 
 ## Objetivo
 
