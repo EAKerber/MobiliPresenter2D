@@ -24,7 +24,7 @@ async function snapshot(page,trial,stage) {
   records.push({trial,stage,...state});
   console.log("CI_CAUSAL_SNAPSHOT "+JSON.stringify({trial,stage,...state}));
 }
-async function fresh(trial,detail){
+async function fresh(trial,detail,treatment=null){
   const page=await browser.newPage({viewport:{width:1366,height:900},reducedMotion:"reduce"});
   await page.goto(origin,{waitUntil:"domcontentloaded",timeout:20000});
   await page.waitForFunction(()=>document.documentElement.dataset.publishedConfigurationStatus==="validated"
@@ -35,48 +35,40 @@ async function fresh(trial,detail){
     await page.waitForFunction(()=>document.body.classList.contains("has-module-detail"));
     await snapshot(page,trial,"detail-open");
   }
+  if(treatment){
+    await page.evaluate(treatment=>{
+      const nav=document.querySelector(".flow-nav");
+      if(treatment==="pre-no-container")nav.style.containerType="normal";
+      if(treatment==="pre-display-change")nav.querySelectorAll(".flow-step").forEach(el=>el.style.display="grid");
+      if(treatment==="pre-transform")nav.style.transform="translateZ(0)";
+      if(treatment==="pre-columns")nav.style.gridTemplateColumns="repeat(4,1fr)";
+      if(treatment==="pre-outline")nav.querySelectorAll(".flow-step").forEach(el=>el.style.outline="0 solid transparent");
+    },treatment);
+    await snapshot(page,trial,"pre-resize-treatment");
+  }
   await page.setViewportSize({width:1050,height:900});
   await page.waitForTimeout(160);
   await snapshot(page,trial,"stacked");
   return page;
 }
 try{
-  let page=await fresh("no-detail",false);
-  await page.close();
-  page=await fresh("detail-control",true);
-  await page.close();
-
-  const interventions=[
-    "pin-hide", "grid-template-columns", "grid-template-rows",
-    "grid-auto-flow", "grid-explicit", "grid-auto-rows", "display-flex"
-  ];
-  for(const label of interventions){
-    const page=await fresh(label,true);
-    await page.evaluate(label=>{
-      const nav=document.querySelector(".flow-nav");
-      if(label==="pin-hide")nav.querySelector("#mobileSceneRepin").hidden=true;
-      if(label==="grid-template-columns")nav.style.gridTemplateColumns="repeat(4,1fr)";
-      if(label==="grid-template-rows")nav.style.gridTemplateRows="44px 44px";
-      if(label==="grid-auto-flow")nav.style.gridAutoFlow="row dense";
-      if(label==="grid-explicit")nav.style.display="grid";
-      if(label==="grid-auto-rows")nav.style.gridAutoRows="minmax(44px,auto)";
-      if(label==="display-flex")nav.style.display="flex";
-    },label);
-    await page.waitForTimeout(100);
-    await snapshot(page,label,"intervention");
-    await page.evaluate(label=>{
-      const nav=document.querySelector(".flow-nav");
-      if(label==="pin-hide")nav.querySelector("#mobileSceneRepin").hidden=false;
-      if(label==="grid-template-columns")nav.style.removeProperty("grid-template-columns");
-      if(label==="grid-template-rows")nav.style.removeProperty("grid-template-rows");
-      if(label==="grid-auto-flow")nav.style.removeProperty("grid-auto-flow");
-      if(label==="grid-explicit"||label==="display-flex")nav.style.removeProperty("display");
-      if(label==="grid-auto-rows")nav.style.removeProperty("grid-auto-rows");
-    },label);
-    await page.waitForTimeout(100);
-    await snapshot(page,label,"rollback");
-    await page.close();
+  for(let round=1;round<=3;round++){
+    const variants=[
+      ["control",null],["pre-no-container","pre-no-container"],
+      ["pre-display-change","pre-display-change"],
+      ["pre-transform","pre-transform"],
+      ["pre-columns","pre-columns"],["pre-outline","pre-outline"]
+    ];
+    for(const [name,treatment] of variants){
+      const label=name+"-"+round;
+      const page=await fresh(label,true,treatment);
+      await page.close();
+    }
   }
-} finally {await browser.close();}
-console.log("CI_CAUSAL_COMPLETE "+JSON.stringify({snapshots:records.length,
-  zeroStates:records.filter(x=>x.steps.every(s=>s.visibleRects===0)).map(x=>x.trial+":"+x.stage)}));
+}finally{await browser.close();}
+const results=records.filter(x=>x.stage==="stacked").map(x=>({
+  trial:x.trial,profile:x.profile,
+  failed:x.steps.some(s=>s.visibleRects===0),
+  navBox:x.navBox,stepBoxes:x.steps.map(s=>s.box)
+}));
+console.log("CI_CAUSAL_MATRIX "+JSON.stringify(results));
