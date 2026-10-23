@@ -1,0 +1,77 @@
+name: CI-BASELINE-01 GitHub OIDC preview (no static secret)
+on:
+  push:
+    branches:
+      - security/oidc-ci-preview235-v0-20261023
+    paths:
+      - ".github/workflows/ci-preview-oidc.yml"
+      - "netlify/access/github-oidc-ci.mjs"
+      - "netlify/functions/ci-config-session.mjs"
+      - "tests/ci-preview-oidc.test.mjs"
+      - "tests/ci/config-oidc-preview-runner.mjs"
+      - "docs/handoffs/CI_OIDC_PREVIEW235_2026-10-23.md"
+permissions:
+  contents: read
+concurrency:
+  group: ci-baseline-01-oidc-preview235
+  cancel-in-progress: false
+jobs:
+  static:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Verify signed OIDC trust and fail-closed preview guards with test keys
+        run: |
+          node --check netlify/access/github-oidc-ci.mjs
+          node --check netlify/functions/ci-config-session.mjs
+          node --check tests/ci/config-oidc-preview-runner.mjs
+          node --test tests/ci-preview-oidc.test.mjs
+  authenticated:
+    needs: static
+    # No attempt to authenticate on ordinary commits or while preview is not deployed.
+    if: contains(github.event.head_commit.message, '[oidc-preview-run]')
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    environment: ci-auth-preview
+    permissions:
+      contents: read
+      id-token: write
+    container:
+      image: mcr.microsoft.com/playwright:v1.56.0-noble
+      options: --ipc=host
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Confirm preview and protected buyer API before requesting OIDC
+        run: |
+          origin=https://deploy-preview-235--mobilipresenter2d.netlify.app
+          status=$(curl -sS --max-time 20 -o /tmp/m2d-oidc-unauthenticated -w '%{http_code}' \
+            -H "Origin: $origin" -H "Content-Type: application/json" \
+            -X POST -d '{}' "$origin/api/ci/config-session")
+          echo "CI_OIDC_PREVIEW_ENDPOINT_STATUS=$status"
+          test "$status" = "400"
+          buyer=$(curl -sS --max-time 20 -o /tmp/m2d-anonymous-buyer -w '%{http_code}' \
+            "$origin/api/buyer-configuration")
+          case "$buyer" in 401|403) echo "CI_ANONYMOUS_PROTECTED_PASS";; *) exit 1;; esac
+          curl -sSfL --max-time 20 "$origin/access/" -o /tmp/m2d-access-ui
+          grep -q 'id="confirmAccess"' /tmp/m2d-access-ui
+      - name: Install Playwright without touching application build or deploy
+        run: |
+          npm install --prefix /tmp/m2d-ci-oidc-playwright --no-audit --no-fund playwright@1.56.0
+          ln -s /tmp/m2d-ci-oidc-playwright/node_modules ./node_modules
+      - name: Exchange GitHub OIDC JWT for revocable Configurator-only session; run five suites
+        run: node tests/ci/config-oidc-preview-runner.mjs
+      - name: Preserve sanitized outcomes only
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ci-config-oidc-preview-sanitized
+          path: artifacts/ci-baseline-01/preview-invitation.json
+          retention-days: 7
+          if-no-files-found: warn
