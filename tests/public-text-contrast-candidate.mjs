@@ -29,7 +29,7 @@ function lum(h){const t=h.slice(1);return .2126*lin(t.slice(0,2))+.7152*lin(t.sl
 function ratio(x,y){let a=lum(x),b=lum(y);return (Math.max(a,b)+.05)/(Math.min(a,b)+.05);}
 async function snapshot(page,selector){
  return page.locator(selector).evaluateAll(list=>list.map(el=>{
-  const s=getComputedStyle(el),b=getComputedStyle(el.closest("section")||el.parentElement),
+  const s=getComputedStyle(el),b=getComputedStyle(el.closest(".environment-feature")||el.closest("section")||el.parentElement),
     r=el.getBoundingClientRect();
   return {color:s.color,background:b.backgroundColor,fontSize:s.fontSize,fontWeight:s.fontWeight,
    x:r.x+scrollX,y:r.y+scrollY,w:r.width,h:r.height,content:el.textContent?.trim()||"",textAlign:s.textAlign};
