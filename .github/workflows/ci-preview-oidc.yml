@@ -7,6 +7,9 @@ on:
       - ".github/workflows/ci-preview-oidc.yml"
       - "netlify/access/github-oidc-ci.mjs"
       - "netlify/functions/ci-config-session.mjs"
+      - "netlify.toml"
+      - "netlify/functions/access-session-status.mjs"
+      - "tests/access-session-routing.test.mjs"
       - "tests/ci-preview-oidc.test.mjs"
       - "tests/ci/config-oidc-preview-runner.mjs"
       - "docs/handoffs/CI_OIDC_PREVIEW235_2026-10-23.md"
@@ -29,7 +32,7 @@ jobs:
           node --check netlify/access/github-oidc-ci.mjs
           node --check netlify/functions/ci-config-session.mjs
           node --check tests/ci/config-oidc-preview-runner.mjs
-          node --test tests/ci-preview-oidc.test.mjs
+          node --test tests/ci-preview-oidc.test.mjs tests/access-session-routing.test.mjs
   authenticated:
     needs: static
     # No attempt to authenticate on ordinary commits or while preview is not deployed.
