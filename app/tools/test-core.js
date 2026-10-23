@@ -843,7 +843,8 @@ assert.equal(styles.includes('html[data-layout-profile="compact"]'), true, "comp
 assert.equal(styles.includes("@container modules-stage (max-width: 520px)"), true, "Modules local content-fit query remains container-owned");
 assert.equal(styles.includes("@container cabinet-finishes (max-width: 430px)"), true, "Cabinet Finishes local content-fit query remains container-owned");
 assert.equal(styles.includes("@container flow-stage (max-width: 300px)"), true, "flow-stage local content-fit query remains container-owned");
-assert.equal(styles.includes("@container flow-steps (max-width: 500px)"), true, "navigation compact-label fit remains container-owned");
+assert.equal(styles.includes(".controls { display: flex; flex-direction: column; gap: 16px; container: flow-steps / inline-size; }"), true, "navigation compact-label fit is owned by the controls container");
+assert.equal(styles.includes("@container flow-steps (max-width: 514px)"), true, "navigation compact-label content-box threshold remains 500px after the 14px gutter compensation");
 assert.equal(indexHtml.includes('data-stage-view-layout="modules"'), true, "modules expose a view-level two-pane renderer contract");
 assert.equal((indexHtml.match(/data-stage-view-id="modules-list"/g) || []).length, 1, "Modules list has exactly one policy view adapter");
 assert.equal((indexHtml.match(/data-stage-view-id="modules-detail"/g) || []).length, 1, "Modules detail has exactly one policy view adapter");
