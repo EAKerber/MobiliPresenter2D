@@ -12,6 +12,7 @@ on:
       - app/ui-theme.css
       - tests/vis002c-public-contrast.mjs
       - tests/vis002c-css-contract.test.mjs
+      - tests/vis002c-full-page-visual.mjs
       - docs/audits/vis002c-contextual-text-contrast-2026-10-22.md
       - .github/workflows/vis002c-public-contrast.yml
   pull_request:
@@ -24,6 +25,7 @@ on:
       - app/ui-theme.css
       - tests/vis002c-public-contrast.mjs
       - tests/vis002c-css-contract.test.mjs
+      - tests/vis002c-full-page-visual.mjs
       - .github/workflows/vis002c-public-contrast.yml
   workflow_dispatch:
 permissions:
@@ -52,7 +54,7 @@ jobs:
           node-version: '22'
       - name: Use versioned Chromium and WebKit
         run: |
-          npm install --prefix /tmp/m2d-vis002c-playwright --no-audit --no-fund playwright@1.56.0
+          npm install --prefix /tmp/m2d-vis002c-playwright --no-audit --no-fund playwright@1.56.0 pngjs@7.0.0
           ln -s /tmp/m2d-vis002c-playwright/node_modules ./node_modules
       - name: Serve actual public app without deploy
         run: |
@@ -63,6 +65,8 @@ jobs:
           curl -fsS http://127.0.0.1:8123/how-it-works/ >/dev/null
       - name: Assert computed approved pairs and excluded roles
         run: node tests/vis002c-public-contrast.mjs
+      - name: Compare full-page before/after raster inside approved text bounds
+        run: node tests/vis002c-full-page-visual.mjs
       - name: Assert browser audit did not modify app
         run: |
           test -z "$(git status --porcelain --untracked-files=no -- app)"
@@ -71,6 +75,8 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: vis002c-public-contrast
-          path: artifacts/vis002c-contrast/
+          path: |
+            artifacts/vis002c-contrast/
+            artifacts/vis002c-full-page/
           retention-days: 14
           if-no-files-found: warn
