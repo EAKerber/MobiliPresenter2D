@@ -7,7 +7,7 @@ import {mkdir,writeFile} from "node:fs/promises";
 import pg from "pg";
 import {chromium} from "playwright";
 import {SUPABASE_DATABASE_CA} from "../../netlify/access/supabase-database-ca.mjs";
-import {createOpaqueToken,hashOpaqueToken} from "../../netlify/access/tokens.mjs";
+import {createOpaqueToken,hashOpaqueToken,ACCESS_COOKIE_NAME} from "../../netlify/access/tokens.mjs";
 import {validateFixtureEnvironment,safeErrorClass,ISOLATION_TAG} from "./config-auth-isolation.mjs";
 
 const out="artifacts/ci-baseline-01/authenticated.json";
@@ -63,7 +63,7 @@ try{
  // Grant secret is never written to disk or echoed. The browser context's
  // HttpOnly cookie comes from the *real* redeem endpoint.
  const cookies=await context.cookies(gate.origin);
- assert.ok(cookies.some(c=>c.name==="m2d_access_session"||c.name.startsWith("m2d_")),
+ assert.ok(cookies.some(c=>c.name===ACCESS_COOKIE_NAME),
   "BLOCKED_AUTH_FIXTURE: redeem did not establish a scoped browser cookie");
  report.stage="authenticated-readiness";
  const config=await page.goto(new URL("/config/",gate.origin).toString(),{
