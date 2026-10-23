@@ -78,6 +78,8 @@ for(const [engine,lib] of [["chromium",chromium],["webkit",webkit]]){
     }
     const beforeVar=await page.locator("html").evaluate(el=>getComputedStyle(el).getPropertyValue("--public-muted"));
     await page.addStyleTag({content:CANDIDATE});
+    // Stylesheet parsing is observable before its first painted frame.
+    await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
     const afterVar=await page.locator("html").evaluate(el=>getComputedStyle(el).getPropertyValue("--public-muted"));
     assert.equal(afterVar,beforeVar,"Global --public-muted modified");
     for(const c of controls){
@@ -107,6 +109,14 @@ for(const [engine,lib] of [["chromium",chromium],["webkit",webkit]]){
           inline:el.getAttribute("style"),color:getComputedStyle(el).color,
           styleCount:styles.length,candidatePresent:!!our,
           candidateText:our?.textContent?.slice(0,900),
+          candidateDisabled:our?.sheet?.disabled??null,
+          candidateMedia:our?.media,
+          allMatchedRules:[...document.styleSheets].flatMap((sheet,i)=>{
+           try{return [...sheet.cssRules].filter(rule=>rule.selectorText&&
+              rule.style?.getPropertyValue("color")&&el.matches(rule.selectorText))
+            .map(rule=>({sheet:i,selector:rule.selectorText,color:rule.style.getPropertyValue("color"),
+              priority:rule.style.getPropertyPriority("color")}));}catch(_){return [];}
+          }),
           rules:our?[...our.sheet.cssRules].map(r=>({selector:r.selectorText,color:r.style?.color,match:el.matches(r.selectorText)})):[],
           relevantSheets:[...document.styleSheets].map(s=>s.href||"inline").slice(-12)
          };
