@@ -79,3 +79,11 @@ administrativa real. Mesmo se renderizar corretamente, ainda será
 necessário conferir as cinco suítes sob essa configuração e não mascarar
 divergências. O primeiro convite já foi consumido/revogado: jamais
 reexecutar aquele token.
+
+
+## Atualização dos gates — 23/10/2026
+
+- [CI de proveniência da fixture #39971920429 — PASS](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/39971920429), no HEAD inicial `6de8229188d017fe58299181e7bd6284ea12a044`.
+- [Diagnóstico de cinco suítes com V5 local #39972527537 — SUCCESS como diagnóstico](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/39972527537), mas **0/5 testes funcionais PASS**: Mobile falha no assert de console em `mobile-pip-main-browser.cjs:141`; Keyboard timeout no Ctrl+ArrowRight `keyboard-browser.cjs:165`; Flow timeout ao acionar aba de módulos `flow-layout-browser.cjs:391`; Summary e Stone falham em assertions de console limpo nas linhas 146 e 251. A publicação V5 permitiu chegar a essas etapas, não corrigiu os defeitos remanescentes. Servidor local sem auth/Netlify; não pode ser confundido com deploy homologado.
+- [PR #235](https://github.com/EAKerber/MobiliPresenter2D/pull/235) foi aberta DRAFT. A base foi direcionada à `main` apenas porque o Netlify exige base de produção ou branch com deploy habilitado para criar preview. **Não mergear**; a PR contém outros incrementos históricos no diff contra main que não integram este gate. O objetivo é verificar uma única publicação experimental no deploy, sem tocar no site-wide store.
+- Este commit de documentação provoca a sincronização da PR após correção de base para disparar o Deploy Preview. O URL e o estado do preview devem ser verificados antes de solicitar um segundo convite.
