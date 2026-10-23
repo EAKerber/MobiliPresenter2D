@@ -388,7 +388,33 @@ const flatV3 = configuration.createDefaultAdministration(
   }));
   assert.ok(handleGeometry.every((entry) => entry.width >= 190 && entry.copyWidth >= 125), "Puxadores stays readable in the two-column stacked-workspace layout");
 
-  await page.locator('.flow-nav [data-step="modules"]').click();
+  try {
+    await page.locator('.flow-nav [data-step="modules"]').click();
+  } catch (error) {
+    // Do not force-click or weaken the hit-target assertion; capture state.
+    const state = await page.evaluate(() => {
+      const tab = document.querySelector('.flow-nav [data-step="modules"]');
+      const r = tab?.getBoundingClientRect();
+      const x = r ? Math.max(0, Math.min(innerWidth - 1, r.left + r.width / 2)) : 0;
+      const y = r ? Math.max(0, Math.min(innerHeight - 1, r.top + r.height / 2)) : 0;
+      const hit = document.elementFromPoint(x, y);
+      return {
+        currentStep: document.querySelector('.flow-nav [data-step][aria-current="step"]')?.dataset.step ?? null,
+        focus: document.activeElement?.id || document.activeElement?.tagName || null,
+        profile: document.documentElement.dataset.layoutProfile ?? null,
+        viewport: [innerWidth, innerHeight],
+        scrollY,
+        targetRect: r ? [r.x, r.y, r.width, r.height] : null,
+        hitTag: hit?.tagName || null,
+        hitId: hit?.id || null,
+        hitClass: typeof hit?.className === 'string' ? hit.className.slice(0, 80) : null,
+        disabled: tab?.getAttribute('aria-disabled') ?? null,
+        modulesPaneHidden: document.getElementById('modulesPanel')?.hidden ?? null
+      };
+    }).catch(() => ({captureError: true}));
+    console.error('CI_FLOW_NAV_CLICK_TIMEOUT ' + JSON.stringify(state));
+    throw error;
+  }
   await page.waitForFunction(() => !document.getElementById("modulesPanel").hidden);
   await page.locator("#moduleList [data-select-entity]").first().click();
   await page.waitForFunction(() => document.body.classList.contains("has-module-detail"));
