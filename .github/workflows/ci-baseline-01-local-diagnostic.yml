@@ -7,6 +7,7 @@ on:
       - ci/ci-baseline-01-nav-sequence-probe-20261023
     paths:
       - "tests/ci/config-unlocked-local-diagnostic.mjs"
+      - "app/styles.css"
       - "tests/ci/local-buyer-config-server.mjs"
       - "tests/ci/v5-local-navigation-probe.mjs"
       - ".github/workflows/ci-baseline-01-local-diagnostic.yml"

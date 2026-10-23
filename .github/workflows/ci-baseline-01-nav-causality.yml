@@ -5,6 +5,7 @@ on:
       - ci/ci-baseline-01-nav-sequence-probe-20261023
     paths:
       - "tests/ci/v5-container-causality.mjs"
+      - "app/styles.css"
       - ".github/workflows/ci-baseline-01-nav-causality.yml"
   workflow_dispatch:
 permissions:
