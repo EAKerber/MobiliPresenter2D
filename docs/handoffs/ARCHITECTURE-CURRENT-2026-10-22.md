@@ -1,5 +1,8 @@
 # HANDOVER CANÔNICO — MobiliPresenter2D / consolidação Vanilla + Design System
 
+> **Diagnóstico incremental Keyboard/Flow — 23/10, última evidência:** [run #40001391408](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40001391408) confirma **3/5 PASS locais** e dois timeouts longos. O run [#40000682626](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40000682626) capturou evento Ctrl+ArrowRight recebido/prevenido, porém os quatro botões `flow-step` com geometria nula; na Flow a barra NAV permanecia visível, mas o botão Módulos era 0×0. **Controle causal mínimo refutou que apenas abrir o detalhe produza o defeito:** botões 76×44 → 137×44 → 76×44, Ctrl+Right e clique continuam funcionais isoladamente. Causa-raiz ainda **UNVERIFIED**; investigação exige rastrear a primeira transição de sequência/viewport que zera geometria, não alterar CSS/runtime por hipótese. [Checkpoint experimental completo](https://github.com/EAKerber/MobiliPresenter2D/blob/ci/ci-baseline-01-nav-sequence-probe-20261023/docs/handoffs/CI_BASELINE_01_NAV_SEQUENCE_2026-10-23.md). Nenhum terceiro convite deve ser consumido antes dos gates 5/5 locais e endpoint autenticado.
+
+
 > **Atualização operacional 23/10/2026 — esta seção tem precedência sobre a fotografia de 22/10 abaixo.**  
 > HEAD da `main` conferido: `15e1cfb4866886649adbcd00fef9bef5e5843fda`. Esta atualização é **documental em branch isolada** `docs/handover-reconcile-20261023`, sem merge nem deploy; confirmar novos HEADs ao retomar.
 >
