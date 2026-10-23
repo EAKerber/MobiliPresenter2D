@@ -5,6 +5,7 @@ import assert from "node:assert/strict";
 // Never log connection strings, grant tokens, or cookies.
 export const FORBIDDEN_PRIMARY_DB_REF = "jaedzligsqazyjelpweu";
 export const ISOLATION_TAG = "M2D_CI_AUTH_ISOLATED_V1";
+export const DEDICATED_CI_NETLIFY_HOST = "m2d-auth-ci-isolated.netlify.app";
 
 export function validateFixtureEnvironment(input) {
  const {
@@ -19,6 +20,7 @@ export function validateFixtureEnvironment(input) {
  }
  assert.equal(target.protocol,"https:","BLOCKED_AUTH_FIXTURE: staging must use HTTPS");
  assert.equal(target.hostname,expectedHost,"BLOCKED_AUTH_FIXTURE: origin/allowlist mismatch");
+ assert.equal(expectedHost,DEDICATED_CI_NETLIFY_HOST,"BLOCKED_AUTH_FIXTURE: only the dedicated test site may be used");
  assert.equal(target.pathname,"/","BLOCKED_AUTH_FIXTURE: staging origin must be root");
  assert.equal(target.search+target.hash,"","BLOCKED_AUTH_FIXTURE: staging origin must have no query/fragment");
  assert.match(target.hostname,/^m2d-auth-ci-[a-z0-9-]+\.netlify\.app$/,"BLOCKED_AUTH_FIXTURE: dedicated CI site required");
