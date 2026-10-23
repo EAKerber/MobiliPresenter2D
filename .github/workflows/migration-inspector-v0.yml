@@ -30,3 +30,4 @@ jobs:
           node tools/migration-inspector.mjs --focus site-header --out /tmp/migration-v0-second.json
           cmp /tmp/migration-v0-first.json /tmp/migration-v0-second.json
           node -e 'const x=require("/tmp/migration-v0-first.json"); if(x.schema!=="M2DMigrationInspector/0.1" || x.coverage.negativeImpact!=="NOT_PROVEN" || x.summary.found<6) process.exit(1); console.log("MIGRATION_INSPECTOR_PASS "+JSON.stringify(x.summary))'
+          node -e 'const x=require("/tmp/migration-v0-first.json"); for(const r of x.routes){const d=x.diagnostics.filter(d=>d.route===r.id);if(d.length)console.log("MIGRATION_INSPECTOR_DIAGNOSTICS "+JSON.stringify({route:r.id,count:d.length,entries:d}));}'
