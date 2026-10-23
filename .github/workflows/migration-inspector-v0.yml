@@ -1,0 +1,32 @@
+name: Migration Inspector V0 source-only gate
+on:
+  push:
+    branches:
+      - tooling/migration-inspector-v0-20261023
+    paths:
+      - "tools/migration-inspector.mjs"
+      - "tests/migration-inspector.test.mjs"
+      - "docs/handoffs/MIGRATION_INSPECTOR_V0_2026-10-23.md"
+      - ".github/workflows/migration-inspector-v0.yml"
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  source-inventory:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Syntax and fixed-fixture tests
+        run: |
+          node --check tools/migration-inspector.mjs
+          node --test tests/migration-inspector.test.mjs
+      - name: Read-only deterministic report against real app
+        run: |
+          node tools/migration-inspector.mjs --focus site-header --out /tmp/migration-v0-first.json
+          node tools/migration-inspector.mjs --focus site-header --out /tmp/migration-v0-second.json
+          cmp /tmp/migration-v0-first.json /tmp/migration-v0-second.json
+          node -e 'const x=require("/tmp/migration-v0-first.json"); if(x.schema!=="M2DMigrationInspector/0.1" || x.coverage.negativeImpact!=="NOT_PROVEN" || x.summary.found<6) process.exit(1); console.log("MIGRATION_INSPECTOR_PASS "+JSON.stringify(x.summary))'
