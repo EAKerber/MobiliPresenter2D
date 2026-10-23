@@ -51,6 +51,9 @@ jobs:
               --output "/tmp/ci-${marker}" --write-out '%{http_code}' \
               "https://deploy-preview-235--mobilipresenter2d.netlify.app/ci-validation/${marker}")
             echo "CI_PREVIEW_MARKER_STATUS name=${marker} http=${code}"
+            if [ "$marker" = "build-context.json" ] && [ "$code" = "200" ]; then
+              node -e 'const x=require("/tmp/ci-build-context.json");console.log("CI_PREVIEW_BUILD_FLAGS "+JSON.stringify({branchMatches:x.branchMatches,hasDeployId:x.hasDeployId,hasSiteId:x.hasSiteId,contextMatches:x.contextMatches,netlifyMatches:x.netlifyMatches}))'
+            fi
             test "$code" = "200" || exit 1
           done
           node -e 'const x=require("/tmp/ci-build-context.json");if(x.schema!=="M2DCIPreviewBuildContext/1"||x.reviewId!==235||!x.branchMatches||!x.hasDeployId||!x.hasSiteId)process.exit(1);console.log("CI_PREVIEW_BUILD_CONTEXT_PASS")'
