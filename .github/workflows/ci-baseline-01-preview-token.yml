@@ -2,7 +2,7 @@ name: CI-BASELINE-01 one-time authenticated Config on existing preview
 on:
   push:
     branches:
-      - ci/ci-baseline-01-shared-db-preview-20261023
+      - ci/ci-baseline-01-auth235-only-20261023
     paths:
       - ".github/workflows/ci-baseline-01-preview-token.yml"
       - "tests/ci/config-auth-preview-runner.mjs"
@@ -12,7 +12,6 @@ on:
       - "tests/summary-pricing-browser.cjs"
       - "tests/stone-browser.cjs"
       - "docs/handoffs/CI_BASELINE_01_PREVIEW_TOKEN_2026-10-23.md"
-  workflow_dispatch:
 permissions:
   contents: read
 concurrency:
@@ -33,16 +32,22 @@ jobs:
           for f in tests/mobile-pip-main-browser.cjs tests/keyboard-browser.cjs tests/flow-layout-browser.cjs tests/summary-pricing-browser.cjs tests/stone-browser.cjs; do
             node --check "$f"
           done
-      - name: Ensure existing Netlify PR #234 is reachable before touching secret
+      - name: Ensure validated Netlify PR #235 is reachable before touching secret
         run: |
           curl --fail --silent --show-error --location --max-time 20 \
-            https://deploy-preview-234--mobilipresenter2d.netlify.app/access/ \
+            https://deploy-preview-235--mobilipresenter2d.netlify.app/access/ \
             --output /tmp/ci-access-page
           grep -q 'id="confirmAccess"' /tmp/ci-access-page
+          status=$(curl --silent --show-error --max-time 15 -o /tmp/ci-anon-buyer -w '%{http_code}' \
+            https://deploy-preview-235--mobilipresenter2d.netlify.app/api/buyer-configuration)
+          case "$status" in
+            401|403) echo CI_ANONYMOUS_BUYER_GUARD_PASS ;;
+            *) echo "Expected protected buyer API 401/403; received $status"; exit 1 ;;
+          esac
           echo CI_CONFIG_PREVIEW_PREFLIGHT_PASS
   authenticated:
     needs: preflight
-    if: ${{ github.event_name == 'workflow_dispatch' || (github.event_name == 'push' && contains(github.event.head_commit.message, '[auth-fixture-run]')) }}
+    if: ${{ github.event_name == 'push' && contains(github.event.head_commit.message, '[auth-fixture-run]') }}
     runs-on: ubuntu-latest
     timeout-minutes: 35
     environment: ci-auth-preview

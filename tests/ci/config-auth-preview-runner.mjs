@@ -8,7 +8,7 @@ import {join} from "node:path";
 import {chromium} from "playwright";
 import {ACCESS_COOKIE_NAME} from "../../netlify/access/tokens.mjs";
 
-const ORIGIN="https://deploy-preview-234--mobilipresenter2d.netlify.app";
+const ORIGIN="https://deploy-preview-235--mobilipresenter2d.netlify.app";
 const TARGET=ORIGIN+"/config/";
 const SAMPLE=/^[a-zA-Z0-9_-]{43}$/;
 const tests=[
@@ -19,7 +19,7 @@ const tests=[
  ["stone","tests/stone-browser.cjs","STONE_BROWSER_URL"]
 ];
 let browser,context,folder,sessionIssued=false,logoutVerified=false;
-const result={schema:"CIConfigTemporaryAccess/1",origin:"deploy-preview-234",status:"NOT_STARTED",
+const result={schema:"CIConfigTemporaryAccess/1",origin:"deploy-preview-235",status:"NOT_STARTED",
  preflight:{},redeemStatus:"NOT_ATTEMPTED",bootstrap:false,adminDenied:false,
  tests:[],logout:"NOT_ATTEMPTED",replayDenied:false};
 const classify=e=>(e?.name==="AssertionError"?"ASSERTION_FAILURE":e?.name||"ERROR").slice(0,40);
