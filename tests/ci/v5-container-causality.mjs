@@ -16,7 +16,10 @@ async function snapshot(page,trial,stage) {
     return {width:innerWidth,profile:document.documentElement.dataset.layoutProfile,
       detail:document.body.classList.contains("has-module-detail"),
       navBox:[Math.round(r.width),Math.round(r.height)],gridCols:style.gridTemplateColumns,
-      gridRows:style.gridTemplateRows,containerType:style.containerType,steps};
+      gridRows:style.gridTemplateRows,containerType:style.containerType,
+      computedDisplay:style.display,inlineDisplay:nav.style.display,
+      stylesheets:[...document.styleSheets].map(sheet=>sheet.href||"inline"),
+      fetchedCss:document.querySelector('link[href*="styles.css"]')?.href||null,steps};
   });
   records.push({trial,stage,...state});
   console.log("CI_CAUSAL_SNAPSHOT "+JSON.stringify({trial,stage,...state}));
