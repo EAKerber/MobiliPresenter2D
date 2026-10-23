@@ -80,6 +80,7 @@ jobs:
       options: --ipc=host
     env:
       CI_EXPECT_PUBLISHED_V5: "1"
+      NODE_PATH: /tmp/m2d-local-v5-browser/node_modules
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -93,7 +94,7 @@ jobs:
       - name: Isolated Playwright tools
         run: |
           npm install --prefix /tmp/m2d-local-v5-browser --no-audit --no-fund playwright@1.56.0
-          ln -s /tmp/m2d-local-v5-browser/node_modules ./node_modules
+          node -e 'require("playwright"); console.log("CI_LOCAL_PLAYWRIGHT_MODULE_RESOLVED")'
       - name: Start checked-in V5 projection over loopback only
         run: |
           set -eu
