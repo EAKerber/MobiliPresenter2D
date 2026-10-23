@@ -31,7 +31,7 @@ for(const [browserName,driver] of [["chromium",chromium],["webkit",webkit]]){
             await page.waitForFunction(()=>document.body.classList.contains("has-module-detail"));
           }
           await page.evaluate(()=>new Promise(done=>requestAnimationFrame(()=>requestAnimationFrame(done))));
-          const geometry=await page.evaluate(()=>{
+          const geometryBeforeCapture=await page.evaluate(()=>{
             const nav=document.querySelector(".flow-nav"),r=nav.getBoundingClientRect();
             const buttons=[...nav.querySelectorAll("[data-step]")];
             return {
@@ -43,13 +43,33 @@ for(const [browserName,driver] of [["chromium",chromium],["webkit",webkit]]){
               })
             };
           });
+          // Playwright's screenshot waits for layout stability and may flush
+          // the browser's pending container-query/paint invalidation. Compare
+          // the geometry corresponding to the actual rendered capture.
           const capture=await page.locator(".flow-nav").screenshot({animations:"disabled",timeout:7000});
-          results[version]={geometry,hash:hash(capture),length:capture.length};
+          const geometryAfterCapture=await page.evaluate(()=>{
+            const nav=document.querySelector(".flow-nav"),r=nav.getBoundingClientRect();
+            const buttons=[...nav.querySelectorAll("[data-step]")];
+            return {
+              nav:[r.width,r.height].map(n=>Math.round(n*100)/100),
+              steps:buttons.map(el=>{
+                const box=el.getBoundingClientRect(),style=getComputedStyle(el);
+                return {step:el.dataset.step,rect:[box.x,box.y,box.width,box.height].map(n=>Math.round(n*100)/100),
+                  display:style.display,letterSpacing:style.letterSpacing,fontSize:style.fontSize};
+              })
+            };
+          });
+          results[version]={geometry:geometryAfterCapture,
+            beforeCapture:geometryBeforeCapture,hash:hash(capture),length:capture.length};
         }finally{await page.close()}
       }
       comparable++;
       const sameRaster=results.baseline.hash===results.candidate.hash;
       const sameGeometry=JSON.stringify(results.baseline.geometry)===JSON.stringify(results.candidate.geometry);
+      const baselineStabilized=JSON.stringify(results.baseline.beforeCapture)!==JSON.stringify(results.baseline.geometry);
+      const candidateStabilized=JSON.stringify(results.candidate.beforeCapture)!==JSON.stringify(results.candidate.geometry);
+      if(baselineStabilized||candidateStabilized)console.log("CI_NAV_VISUAL_STABILIZATION "+
+        JSON.stringify({browser:browserName,width,theme,detail,baselineStabilized,candidateStabilized}));
       if(sameRaster&&sameGeometry)exact++;
       else {
         const row={browser:browserName,width,theme,detail,sameRaster,sameGeometry,
