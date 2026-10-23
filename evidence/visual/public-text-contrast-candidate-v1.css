@@ -1,0 +1,8 @@
+/* AUDIT-PUBLIC-TEXT-02 — EXPERIMENTAL. NOT IMPORTED IN app/. */
+/* Candidate use of VIS-002 secondary color; not a visual homologation. */
+/* Restrict to light theme and verified solid backgrounds. */
+html[data-theme="light"] .story-section > p:not(.eyebrow) { color: #705C4B; }
+html[data-theme="light"] .feature-copy > p:not(.eyebrow):not(.feature-availability) { color: #705C4B; }
+html[data-theme="light"] .about-closing > p:not(.eyebrow):not(.about-closing__signature) { color: #705C4B; }
+html[data-theme="light"] .about-scale__stat > span { color: #705C4B; }
+html[data-theme="light"] .finish-copy > p:not(.eyebrow) { color: #705C4B; }

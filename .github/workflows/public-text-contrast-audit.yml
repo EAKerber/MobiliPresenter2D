@@ -7,6 +7,9 @@ on:
       - tests/public-text-contrast-coverage.mjs
       - .github/workflows/public-text-contrast-audit.yml
       - docs/audits/public-text-contrast-audit-2026-10-22.md
+      - docs/audits/public-text-contrast-candidate-2026-10-22.md
+      - tests/public-text-contrast-candidate.mjs
+      - evidence/visual/public-text-contrast-candidate-v1.css
   workflow_dispatch:
 permissions:
   contents: read
@@ -33,6 +36,8 @@ jobs:
           curl -fsS http://127.0.0.1:8123/how-it-works/ >/dev/null
       - name: Read computed text/background in Chromium and WebKit
         run: node tests/public-text-contrast-coverage.mjs
+      - name: Evaluate optional visual correction with injected CSS only
+        run: node tests/public-text-contrast-candidate.mjs
       - name: Assert audit is read-only for app
         run: |
           test -z "$(git status --porcelain --untracked-files=no -- app)"
@@ -41,6 +46,8 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: public-text-contrast
-          path: artifacts/public-contrast-audit/
+          path: |
+            artifacts/public-contrast-audit/
+            artifacts/public-contrast-candidate/
           retention-days: 14
           if-no-files-found: warn
