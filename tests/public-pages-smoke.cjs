@@ -72,14 +72,25 @@ async function main() {
       assert.deepEqual(errors, [], "viewer errors: " + errors.join(" | "));
       await page.close();
     }
-    // Public interim cutover: /config/ loads the original buyer application and
-    // does NOT require Clerk until the later explicit auth release.
+    // The public cutover keeps Landing and Viewer accessible. The Configurator
+    // is explicitly PRIVATE now: an anonymous browser must reach Access, not
+    // receive the workspace or its debug API. Positive Config tests run through
+    // the independently pinned GitHub OIDC preview suite.
     const configPage = await browser.newPage({ viewport: { width: 1366, height: 768 } });
-    await configPage.goto(new URL("/config/", base).href, { waitUntil: "domcontentloaded", timeout: 20000 });
-    assert.match(await configPage.title(), /Casa em Módulos/i);
-    await configPage.waitForFunction(() => Boolean(window.CASA_EM_MODULOS_DEBUG?.getLayoutProfile), null,
-      { timeout: 15000 });
-    assert.equal(await configPage.locator(".workspace").count(), 1);
+    const configResponse = await configPage.goto(new URL("/config/", base).href,
+      { waitUntil: "domcontentloaded", timeout: 20000 });
+    assert.equal(configResponse?.status(), 200, "access landing must load after gated navigation");
+    assert.equal(new URL(configPage.url()).pathname, "/access/",
+      "anonymous /config/ must redirect to /access/");
+    assert.equal(await configPage.locator("#confirmAccess").count(), 1,
+      "access page must render the confirmation control");
+    assert.equal(await configPage.locator(".workspace").count(), 0,
+      "protected configurator workspace must not leak anonymously");
+    assert.equal(await configPage.evaluate(() => Boolean(window.CASA_EM_MODULOS_DEBUG)), false,
+      "private Configurator debug API must not leak anonymously");
+    const buyer=await configPage.request.get(new URL("/api/buyer-configuration",base).href);
+    assert([401,403].includes(buyer.status()),
+      "anonymous buyer API must deny private published configuration");
     await configPage.close();
     // CP-PUBLIC-02b: exercise the optional asynchronous public projection
     // in an isolated browser with a fully mocked same-origin endpoint.
