@@ -18,8 +18,11 @@ import pricingContract from "../../app/core/pricing-contract.js";
 import presentationPolicy from "../../app/data/presentation-policy-defaults.js";
 const root=resolve("app");
 const port=Number(process.env.CI_LOCAL_CONFIG_PORT||8123);
-const v3=configCore.createDefaultAdministration(defaults,catalog,priceBook,scene);
-const inspected=publishedReader.inspectPublishedRaw({kind:"stored",etag:"LOCAL_ONLY",value:v3},
+const v3=configCore.normalizeConfiguratorSettings(configCore.createDefaultAdministration(defaults,catalog,priceBook,scene),catalog,priceBook,scene);
+const v5=administrationV5.upgrade(v3,configCore,flow,catalog,priceBook,scene,hierarchy);
+const errors=administrationV5.validate(v5,configCore,catalog,priceBook,scene);
+if(errors.length)throw new Error("LOCAL_V5_FIXTURE_INVALID");
+const inspected=publishedReader.inspectPublishedRaw({kind:"stored",etag:"LOCAL_ONLY",value:v5},
   {configuration:configCore,administrationV5,catalog,priceBook,scene});
 if(inspected.kind!=="valid")throw new Error("CI_LOCAL_FIXTURE_INVALID");
 const payload=projection.project(inspected.value,{
@@ -55,6 +58,6 @@ const server=http.createServer(async(req,res)=>{
  }
 });
 server.listen(port,"127.0.0.1",()=>console.log("CI_LOCAL_BUYER_DEFAULTS_FIXTURE_READY "+JSON.stringify({
- source:"checked-in defaults",schema:v3.schemaVersion,buyerSchema:payload.schemaVersion,
+ source:"checked-in defaults",schema:v5.schemaVersion,buyerSchema:payload.schemaVersion,
  warning:"Local testing only; not a Netlify published Blob"
 })));

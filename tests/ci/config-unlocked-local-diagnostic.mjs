@@ -26,8 +26,11 @@ try{
   const diagnostic=/AssertionError|TimeoutError|ERR_ASSERTION|TypeError|ReferenceError|Error:/.exec(message);
   const className=diagnostic?.[0]??(res.error?.code==="ETIMEDOUT"?"PROCESS_TIMEOUT":res.status===0?"PASS":"PROCESS_FAILURE");
   const location=message.match(/(?:\/tests\/|tests\/)[A-Za-z0-9_./-]+[.]cjs:[0-9]+(?::[0-9]+)?/)?.[0]??null;
+  const assertion=(message.match(/AssertionError(?:\s*\[[^\]]+\])?:\s*([^\n]+)/)||[])[1]||null;
+  const errorDetail=(message.match(/Error:\s*([^\n]+)/)||[])[1]||null;
   const result={name,status:res.status===0?"PASS":"FAIL",errorClass:className,
-   failureLocation:location,exitCode:res.status};
+   failureLocation:location,exitCode:res.status,
+   assertion:(assertion||errorDetail||"").slice(0,240)};
   out.push(result);
   console.log("LOCAL_CONFIG_DIAGNOSTIC "+JSON.stringify(result));
  }
