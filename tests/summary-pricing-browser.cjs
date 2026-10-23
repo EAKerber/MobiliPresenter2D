@@ -110,7 +110,30 @@ function parseBrl(text) {
   // Navigation can redraw control state; specifying the desired state, rather
   // than blindly toggling, preserves the user intent and original total gate.
   await go('finishes');
-  await skirting.setChecked(true);
+  try {
+    await skirting.setChecked(true);
+  } catch(error) {
+    const message=String(error?.message||"");
+    const failureKind=/did not change its state|did not change state/i.test(message)?"STATE_NOT_STABLE":
+      /not attached|detached/i.test(message)?"DETACHED":
+      /intercept|receives pointer events|another element/i.test(message)?"POINTER_INTERCEPT":
+      /hidden|not visible|visibility/i.test(message)?"NOT_VISIBLE":
+      /Timeout|exceeded/i.test(message)?"TIMEOUT":
+      /closed/i.test(message)?"CONTEXT_CLOSED":"OTHER";
+    const flags=await page.evaluate(()=>{
+      const control=document.getElementById('stoneSkirtingToggle');
+      const state=window.CASA_EM_MODULOS_DEBUG?.getState?.();
+      return {
+        stage:document.querySelector('.flow-nav [aria-current="step"]')?.dataset.step||null,
+        exists:Boolean(control),connected:Boolean(control?.isConnected),
+        checked:Boolean(control?.checked),disabled:Boolean(control?.disabled),
+        stateSelected:Boolean(state?.globalSelections?.serviceIds?.includes('stone-skirting')),
+        visible:Boolean(control && control.getBoundingClientRect().width>0 && control.getBoundingClientRect().height>0)
+      };
+    }).catch(()=>({stage:null,exists:false,connected:false,checked:false,disabled:false,stateSelected:false,visible:false}));
+    console.error("CI_SUMMARY_CHECKBOX_DIAGNOSTIC "+JSON.stringify({...flags,failureKind}));
+    throw error;
+  }
   assert.equal(await skirting.isChecked(), true, 'restoration must leave the skirting control checked');
   try {
     await page.waitForFunction(expected => {
