@@ -37,6 +37,11 @@ function parseBrl(text) {
     }
   }
   if (lastError) throw lastError;
+  // Authenticated preview: the legacy UI initializes before the async V5
+  // published configuration is applied. Start interactions only after commit.
+  if (process.env.CI_EXPECT_PUBLISHED_V5 === "1") {
+    await page.waitForFunction(() => document.documentElement.dataset.publishedConfigurationStatus === "validated", null, {timeout:30000});
+  }
 
   const valueText = () => page.locator('#configurationValue strong').textContent();
   const currentTotal = async () => parseBrl(await valueText());

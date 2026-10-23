@@ -44,6 +44,9 @@ const {chromium} = require('playwright');
   }
 
   await openCurrentRuntime();
+  if (process.env.CI_EXPECT_PUBLISHED_V5 === "1") {
+    await page.waitForFunction(() => document.documentElement.dataset.publishedConfigurationStatus === "validated", null, {timeout:30000});
+  }
 
   const settle = () => page.waitForTimeout(350);
   const screenshot = name => page.screenshot({path: path.join(output, `${name}.png`), fullPage: true, animations: 'disabled'});

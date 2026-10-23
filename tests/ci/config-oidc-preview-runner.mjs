@@ -151,7 +151,7 @@ try{
  await context.storageState({path:statePath});
  await chmod(statePath,0o600);
  await probe.close();
- const safeEnv={...process.env,PLAYWRIGHT_AUTH_STATE_FILE:statePath};
+ const safeEnv={...process.env,PLAYWRIGHT_AUTH_STATE_FILE:statePath,CI_EXPECT_PUBLISHED_V5:"1"};
  delete safeEnv.CI_CONFIG_TEST_TOKEN;
  delete safeEnv.ACTIONS_ID_TOKEN_REQUEST_TOKEN;
  delete safeEnv.ACTIONS_ID_TOKEN_REQUEST_URL;

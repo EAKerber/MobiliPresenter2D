@@ -26,6 +26,11 @@ const {chromium} = require('playwright');
     }
   }
   if (lastError) throw lastError;
+  // Authenticated preview: the legacy UI initializes before the async V5
+  // published configuration is applied. Start interactions only after commit.
+  if (process.env.CI_EXPECT_PUBLISHED_V5 === "1") {
+    await page.waitForFunction(() => document.documentElement.dataset.publishedConfigurationStatus === "validated", null, {timeout:30000});
+  }
 
   const selectedNumber = () => page.evaluate(() => {
     const card = document.querySelector('#moduleList .module-card.is-selected');
