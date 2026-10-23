@@ -65,3 +65,7 @@ Reader/Viewer NAV-005, animações ou conteúdo.
 A ordem de integração, atualização de PRs e eventual Deploy Preview **devem**
 ser deliberadas após todos os gates, preferencialmente um único preview para
 validação final do stack consolidado.
+
+## Resultado da primeira rodada de consolidação
+
+[Actions #39948489072](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/39948489072): **dois jobs PASS** (`source-and-build`, `arc03c-header-parity`) e todas as etapas de contraste do terceiro job passaram antes da última verificação de git. Foram verificados o compilador ARC-03C (3/3), build real do Netlify sem drift, pin antigo e v0.2, **60/60** casos de header NAV-004 com **zero diferenças raster**, **48/48** contextos antigos v0.1→v0.2 byte-identical, **36/36** cenários de contraste (72 pares, 424 PASS, 0 abaixo, 32 UNVERIFIED) e **12/12** pares full-page (90.315 pixels alterados apenas nos cinco textos, 0 fora). O workflow inicialmente terminou **FAIL** somente em `git diff --quiet -- app architecture` após o teste browser em contêiner com UID diferente do checkout, tal como o erro `safe.directory` já tratado na ARC-03C. O job atualizado inclui `git config --global --add safe.directory "$GITHUB_WORKSPACE"`, imprime o status e exige `git diff --exit-code` com tolerância zero; não remove a proteção. A execução revisada é o gate conclusivo.

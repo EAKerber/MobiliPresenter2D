@@ -1,5 +1,16 @@
 # HANDOVER CANÔNICO — MobiliPresenter2D / consolidação Vanilla + Design System
 
+> **CHECKPOINT DA BRANCH CONSOLIDADA (23/10/2026; não é main).** A branch
+> [`integration/consolidated-arc03c-vis002c-token-20261023`](https://github.com/EAKerber/MobiliPresenter2D/tree/integration/consolidated-arc03c-vis002c-token-20261023)
+> reúne PR #234 ARC-03C (fontes autorais e compilador), PR #231 P-TOKEN-01B/02B
+> (pin e distribuição contextual) e VIS-002C (cinco novos textos aprovados).
+> As três importações v0.2 foram feitas em **`architecture/pages`**, e
+> `app`/manifesto foram regenerados a partir do mesmo compilador, preservando
+> 8 contextos e NAV-005 do Viewer separado. Produto `main` não foi alterada.
+> [Handover atualizado desta branch](CONSOLIDATED_INTEGRATION_2026-10-23.md).
+> Gates de browser e CI privado da issue #232 devem ser consultados antes de merge;
+> PRs #231/#234 continuam DRAFT e não há Deploy Preview novo nesta branch.
+
 **Data de observação:** 2026-10-22, America/Sao_Paulo.
 **Âmbito:** estado efetivamente lido nos repositórios, não um plano imaginado.
 **Entrada recomendada para novos agentes:** este documento -> `CURRENT_STATE.md` como **histórico** -> Design System [handover cruzado](https://github.com/EAKerber/MobiliPresenter2D_DesignSystem/blob/main/docs/ARCHITECTURE_CURRENT_HANDOVER_2026-10-22.md) -> decisões visuais e roadmap.
