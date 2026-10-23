@@ -411,6 +411,12 @@ html[data-layout-profile="compact"] .viewer-card__footer { align-items: flex-sta
   container-type: inline-size;
   container-name: flow-steps;
 }
+/* Isolated V5 navigation regression candidate: prevent stale containment
+   when module detail expands the rail before side-rail/stacked reflow.
+   Compact retains its width-based label query unchanged. */
+html:is([data-layout-profile="side-rail"], [data-layout-profile="stacked"]) body.has-module-detail .flow-nav {
+  container-type: normal;
+}
 .panel[hidden] { display: none !important; }
 .flow-step {
   min-width: 0; min-height: 44px; border: 1px solid var(--border); border-radius: 10px;
