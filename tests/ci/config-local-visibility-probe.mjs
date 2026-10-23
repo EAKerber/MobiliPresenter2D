@@ -47,7 +47,19 @@ for(const width of [1050,1366]){
   const after150=await sample();
   await page.waitForTimeout(1500);
   const after1650=await sample();
-  const report={width,initial,after150,after1650};
+  const ancestorChain=await page.evaluate(()=>{
+    const el=document.querySelector(".flow-nav [data-step='finishes']");
+    const chain=[];let node=el;
+    while(node&&node!==document.documentElement){
+      const c=getComputedStyle(node),r=node.getBoundingClientRect();
+      chain.push({tag:node.tagName,id:node.id||null,cls:typeof node.className==="string"?node.className.slice(0,90):"",
+        display:c.display,visibility:c.visibility,hidden:node.hidden,rect:[r.width,r.height]});
+      node=node.parentElement;
+    }
+    return chain;
+  });
+  const report={width,initial,after150,after1650,ancestorChain};
+  console.log("CI_CONFIG_ANCESTORS "+JSON.stringify({width,chain:ancestorChain}).slice(0,2900));
   reports.push(report);
   await page.screenshot({path:dir+"/config-"+width+".png",fullPage:true,animations:"disabled"});
   console.log("CI_CONFIG_VISIBILITY "+JSON.stringify({width,layout:initial.layout,
