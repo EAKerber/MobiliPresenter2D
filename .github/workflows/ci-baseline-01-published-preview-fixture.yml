@@ -5,6 +5,8 @@ on:
       - ci/ci-baseline-01-published-preview-fixture-20261023
     paths:
       - scripts/build-ci-preview-fixture.mjs
+      - scripts/ci-preview-build-context.mjs
+      - package.json
       - plugins/ci-config-preview-fixture/**
       - tests/ci/preview-published-fixture.test.mjs
       - netlify.toml
@@ -29,6 +31,7 @@ jobs:
       - name: Pure preview fixture and fail-closed source tests
         run: |
           node --check scripts/build-ci-preview-fixture.mjs
+          node --check scripts/ci-preview-build-context.mjs
           node --check plugins/ci-config-preview-fixture/index.js
           node --test tests/ci/preview-published-fixture.test.mjs
           node scripts/verify-design-system-reference-pin.mjs
@@ -39,6 +42,8 @@ jobs:
           npm run build
           npm run pages:check
           test ! -e .netlify/blobs/deploy/configurator-settings/published
+          test ! -e app/ci-validation/build-context.json
+          test ! -e app/ci-validation/published-v5-status.json
           echo CI_PRODUCTION_BUILD_HAS_NO_TEST_PUBLISHED_BLOB
       - name: Private app and runtime functions unchanged
         run: |
