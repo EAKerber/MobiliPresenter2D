@@ -23,6 +23,14 @@ try{
     encoding:"utf8",env,timeout:180000,maxBuffer:6*1024*1024
   });
   const message=String(res.stderr||"")+"\n"+String(res.stdout||"");
+  // Forward only explicitly typed nonsecret geometry checkpoints. These
+  // originate in the local test runner, never from external page content.
+  const geometryCheckpoints=message.split("\n").flatMap(line=>{
+    if(!line.startsWith("CI_NAV_CHECKPOINT "))return [];
+    try{return [JSON.parse(line.slice("CI_NAV_CHECKPOINT ".length))]}
+    catch{return [{parseError:true}]}
+  });
+  if(geometryCheckpoints.length)console.log("CI_NAV_SERIES "+JSON.stringify({name,checkpoints:geometryCheckpoints}));
   const diagnostic=/AssertionError|TimeoutError|ERR_ASSERTION|TypeError|ReferenceError|Error:/.exec(message);
   const className=diagnostic?.[0]??(res.error?.code==="ETIMEDOUT"?"PROCESS_TIMEOUT":res.status===0?"PASS":"PROCESS_FAILURE");
   const location=message.match(/(?:\/tests\/|tests\/)[A-Za-z0-9_./-]+[.]cjs:[0-9]+(?::[0-9]+)?/)?.[0]??null;
