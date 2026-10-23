@@ -16,17 +16,19 @@ permissions:
 jobs:
   public-contrast:
     runs-on: ubuntu-latest
+    container:
+      image: mcr.microsoft.com/playwright:v1.56.0-noble
+      options: --ipc=host
     timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - name: Install browsers in isolated tooling directory
+      - name: Use preinstalled Chromium and WebKit in versioned Playwright container
         run: |
           npm install --prefix /tmp/m2d-contrast-playwright --no-audit --no-fund playwright@1.56.0
           ln -s /tmp/m2d-contrast-playwright/node_modules ./node_modules
-          /tmp/m2d-contrast-playwright/node_modules/.bin/playwright install --with-deps chromium webkit
       - name: Serve checked-out public app locally (no deployment)
         run: |
           python3 -m http.server 8123 --bind 127.0.0.1 --directory app >/tmp/m2d-public-audit.log 2>&1 &

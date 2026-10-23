@@ -19,7 +19,7 @@ entra no publish Netlify. Aplica `#705C4B` **somente em tema claro** a:
 - Quem somos: `.about-closing > p:not(.eyebrow):not(.about-closing__signature)`
   sobre `#F0EDE8`;
 - Quem somos: `.about-scale__stat > span` sobre `#F0EDE8`;
-- Como funciona: `.finish-copy > p:not(.eyebrow)` sobre `#F0EDE8`.
+- Como funciona: `.finish-copy > p:not(.eyebrow):not(.finish-signature)` sobre `#F0EDE8`.
 
 São valores presentes na paleta aprovada, mas **a seleção desses novos
 consumidores ainda não foi homologada**. A abordagem não promove
@@ -55,3 +55,6 @@ Falha do gate significa **rejeitar ou corrigir o candidato**, não alterar produ
 
 NÃO classificar um gate bem-sucedido da hipótese como aprovação estética
 automática da aplicação nem como WCAG global.
+
+## Refinamento por semântica de assinatura
+A revisão do CSS encontrou `.finish-signature` com cor própria `var(--public-accent-dark) !important` e peso itálico. O candidato agora exclui explicitamente a assinatura, que permanece como controle negativo. O runner usa a imagem versionada Playwright com navegadores pré-instalados para evitar instalação repetida de centenas de MB em cada push da branch.

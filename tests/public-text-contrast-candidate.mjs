@@ -12,7 +12,7 @@ const CASES=[
  {route:"/",id:"feature",selector:".feature-copy > p:not(.eyebrow):not(.feature-availability)",surface:"#f0ede8"},
  {route:"/about/",id:"closing",selector:".about-closing > p:not(.eyebrow):not(.about-closing__signature)",surface:"#f0ede8"},
  {route:"/about/",id:"stat",selector:".about-scale__stat > span",surface:"#f0ede8"},
- {route:"/how-it-works/",id:"finish",selector:".finish-copy > p:not(.eyebrow)",surface:"#f0ede8"}
+ {route:"/how-it-works/",id:"finish",selector:".finish-copy > p:not(.eyebrow):not(.finish-signature)",surface:"#f0ede8"}
 ];
 const CONTROLS=[
  {route:"/",selector:".hero-description"},
@@ -20,7 +20,8 @@ const CONTROLS=[
  {route:"/about/",selector:".about-scale__copy > p:not(.eyebrow)"},
  {route:"/about/",selector:".about-closing__signature"},
  {route:"/how-it-works/",selector:".how-hero-note"},
- {route:"/how-it-works/",selector:".study-band .eyebrow"}
+ {route:"/how-it-works/",selector:".study-band .eyebrow"},
+ {route:"/how-it-works/",selector:".finish-copy > p.finish-signature"}
 ];
 assert.equal((CANDIDATE.match(/html\[data-theme="light"\]/g)||[]).length,5);
 assert.ok(!/\bimportant\b/.test(CANDIDATE),"Candidate cannot use !important");
@@ -153,7 +154,7 @@ for(const [engine,lib] of [["chromium",chromium],["webkit",webkit]]){
 assert.equal(report.scenarios,36);
 assert.equal(report.changed,36,"Expected 36 element-level light-theme changes");
 assert.equal(report.unchangedDark,36);
-assert.equal(report.controlChecks,72);
+assert.equal(report.controlChecks,84);
 const out=join("artifacts/public-contrast-candidate","report.json");
 await writeFile(out,JSON.stringify(report,null,2)+"\n");
 console.log("PUBLIC_CONTRAST_CANDIDATE_PASS "+JSON.stringify({
