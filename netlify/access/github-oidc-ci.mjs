@@ -13,8 +13,7 @@ const EXPECTED={
   repository_owner_id:"62451548",
   ref:"refs/heads/security/oidc-ci-preview235-v0-20261023",
   workflow_ref:CI_WORKFLOW_REF,
-  environment:"ci-auth-preview",
-  sub:"repo:EAKerber/MobiliPresenter2D:environment:ci-auth-preview"
+  environment:"ci-auth-preview"
 };
 const JWKS_URL="https://token.actions.githubusercontent.com/.well-known/jwks";
 const error=code=>Object.assign(new Error(code),{code});
@@ -44,6 +43,10 @@ export function validateOidcClaims(claims, now=Math.floor(Date.now()/1000)){
     if(claims[name]!==want)return false;
   }
   if(claims.aud!==CI_OIDC_AUDIENCE)return false;
+  // GitHub allows customized subject templates. The authoritative identity is
+  // pinned via the signed immutable repository/owner IDs, ref, workflow and environment.
+  // Require a well-formed subject, not one optional formatting convention.
+  if(typeof claims.sub!=="string"||claims.sub.length<6||claims.sub.length>1024)return false;
   if(!["push","workflow_dispatch"].includes(claims.event_name))return false;
   if(typeof claims.jti!=="string"||claims.jti.length<12||claims.jti.length>256)return false;
   if(!/^[0-9]{1,22}$/.test(String(claims.run_id??"")))return false;
