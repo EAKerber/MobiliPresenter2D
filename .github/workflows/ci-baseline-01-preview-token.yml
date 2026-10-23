@@ -46,6 +46,12 @@ jobs:
             401|403) echo CI_ANONYMOUS_BUYER_GUARD_PASS ;;
             *) echo "Expected protected buyer API 401/403; received $status"; exit 1 ;;
           esac
+          # The preview Build Plugin must expose a nonsecret artifact only
+          # AFTER writing/reading back V5 in the deploy-only Blob Store.
+          curl --fail --silent --show-error --max-time 20 \
+            https://deploy-preview-235--mobilipresenter2d.netlify.app/ci-validation/published-v5-status.json \
+            --output /tmp/ci-fixture-status.json
+          node -e 'const fs=require("node:fs");const x=JSON.parse(fs.readFileSync("/tmp/ci-fixture-status.json","utf8"));if(x.schema!=="M2DPreviewPublishedFixtureStatus/1"||x.reviewId!==235||x.verified!==true||x.store!=="configurator-settings"||!/^\\w{64}$/.test(x.sha256))process.exit(1);console.log("CI_PREVIEW_PUBLISHED_MARKER_PASS")'
           echo CI_CONFIG_PREVIEW_PREFLIGHT_PASS
   authenticated:
     needs: preflight
