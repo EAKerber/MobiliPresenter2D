@@ -35,6 +35,13 @@ for(const [browserName,lib] of [["chromium",chromium],["webkit",webkit]]){
   for(const width of [390,1366])for(const route of routes){
    const page=await browser.newPage({viewport:{width,height:900},colorScheme:"light",reducedMotion:"reduce",deviceScaleFactor:1});
    try{
+    // The remote YouTube thumbnail loads asynchronously between snapshots.
+    // Keep the SAME iframe/geometry, but pin its cross-origin HTML in CI only.
+    // Do not globally silence third-party requests or skip raster assertions.
+    await page.route("https://www.youtube-nocookie.com/embed/**",route=>route.fulfill({
+      status:200,contentType:"text/html",
+      body:"<!doctype html><html><head><meta charset='utf-8'></head><body style='margin:0;background:#000'></body></html>"
+    }));
     await page.addInitScript(()=>localStorage.setItem("casa-ui-theme-mode-v1","light"));
     const response=await page.goto(new URL(route.path,origin).toString(),{waitUntil:"domcontentloaded",timeout:20000});
     assert.equal(response?.status(),200,route.path+" HTTP failure");
