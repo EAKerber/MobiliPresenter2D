@@ -1,4 +1,4 @@
-name: Public routing before Clerk
+name: Public routing with protected Config
 
 on:
   pull_request:
@@ -59,20 +59,24 @@ jobs:
         shell: bash
         run: |
           echo "PUBLIC_PAGES_URL=https://deploy-preview-${PR_ID}--mobilipresenter2d.netlify.app" >> "$GITHUB_ENV"
-      - name: Wait for complete Netlify HTML cutover
+      - name: Wait for public Landing and Access HTML (Configurator stays protected)
         shell: bash
         run: |
           set -euo pipefail
-          for i in $(seq 1 90); do
+          # Do NOT poll /config/ expecting a private workspace: that route is gated.
+          # Limit network probes to minimize preview bandwidth.
+          ready=0
+          for i in $(seq 1 20); do
             root=$(curl -L -sS --max-time 6 "$PUBLIC_PAGES_URL/" || true)
-            config=$(curl -L -sS --max-time 6 "$PUBLIC_PAGES_URL/config/" || true)
-            if [[ "$root" == *'id="environmentTrack"'* && "$config" == *'class="workspace"'* ]]; then
-              echo "Netlify preview root and config ready"
+            access=$(curl -L -sS --max-time 6 "$PUBLIC_PAGES_URL/access/" || true)
+            if [[ "$root" == *'id="environmentTrack"'* && "$access" == *'id="confirmAccess"'* ]]; then
+              ready=1
               break
             fi
             sleep 3
           done
-          [[ "$root" == *'id="environmentTrack"'* && "$config" == *'class="workspace"'* ]]
+          test "$ready" = 1
+          echo "CI_PUBLIC_ROOT_AND_ACCESS_READY"
       - name: Public projection and negative endpoint checks
         shell: bash
         run: |
@@ -94,7 +98,7 @@ jobs:
         run: |
           npm install --prefix /tmp/public-cutover-tools --no-audit --no-fund playwright@1.62.1
           /tmp/public-cutover-tools/node_modules/.bin/playwright install --with-deps chromium
-      - name: Desktop and mobile landing/viewer/config smoke
+      - name: Desktop/mobile public Landing and Viewer plus anonymous Config denial
         env:
           NODE_PATH: /tmp/public-cutover-tools/node_modules
         run: node tests/public-pages-smoke.cjs /tmp/public-cutover-screens
