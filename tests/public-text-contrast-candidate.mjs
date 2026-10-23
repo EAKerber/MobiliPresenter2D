@@ -96,6 +96,23 @@ for(const [engine,lib] of [["chromium",chromium],["webkit",webkit]]){
       assert.ok(Math.abs(b.x-a.x)<.01 && Math.abs(b.y-a.y)<.01,"Position changed");
       if(theme==="light"){
        assert.equal(hex(a.color),"#706c66","Baseline drift: "+c.id);
+       if(hex(b.color)!=="#705c4b"){
+        const detail=await page.evaluate(selector=>{
+         const el=document.querySelector(selector);
+         const styles=[...document.querySelectorAll("style")];
+         const our=styles.find(s=>s.textContent?.includes("AUDIT-PUBLIC-TEXT-02"));
+         return {
+          theme:document.documentElement.getAttribute("data-theme"),
+          matches:el.matches('html[data-theme="light"] .story-section > p:not(.eyebrow)'),
+          inline:el.getAttribute("style"),color:getComputedStyle(el).color,
+          styleCount:styles.length,candidatePresent:!!our,
+          candidateText:our?.textContent?.slice(0,900),
+          rules:our?[...our.sheet.cssRules].map(r=>({selector:r.selectorText,color:r.style?.color,match:el.matches(r.selectorText)})):[],
+          relevantSheets:[...document.styleSheets].map(s=>s.href||"inline").slice(-12)
+         };
+        },c.selector);
+        console.error("PUBLIC_CANDIDATE_DEBUG "+JSON.stringify({engine,width,theme,route,id:c.id,detail}));
+       }
        assert.equal(hex(b.color),"#705c4b","New candidate incorrect: "+c.id);
        assert.equal(hex(a.background),c.surface,"Unexpected surface: "+c.id);
        assert.equal(hex(b.background),c.surface,"Candidate surface changed: "+c.id);
