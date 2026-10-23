@@ -8,6 +8,11 @@ on:
       - ".github/workflows/public-routing-before-clerk.yml"
       - ".github/workflows/ci-baseline-01-published-preview-fixture.yml"
       - "tests/public-pages-smoke.cjs"
+      - "tests/mobile-pip-main-browser.cjs"
+      - "tests/keyboard-browser.cjs"
+      - "tests/flow-layout-browser.cjs"
+      - "tests/summary-pricing-browser.cjs"
+      - "tests/stone-browser.cjs"
       - "docs/handoffs/CI_GLOBAL_ACCESS_BOUNDARY_2026-10-23.md"
   workflow_dispatch:
 permissions:
@@ -64,5 +69,53 @@ jobs:
         with:
           name: ci-global-public-access-evidence
           path: /tmp/m2d-public-review
+          retention-days: 7
+          if-no-files-found: warn
+
+  local-validated-buyer-v5:
+    runs-on: ubuntu-latest
+    timeout-minutes: 24
+    container:
+      image: mcr.microsoft.com/playwright:v1.56.0-noble
+      options: --ipc=host
+    env:
+      CI_EXPECT_PUBLISHED_V5: "1"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Build local buyer artifacts (no Netlify release)
+        run: |
+          npm install --no-package-lock --no-audit --no-fund
+          npm run build
+          npm run pages:check
+      - name: Isolated Playwright tools
+        run: |
+          npm install --prefix /tmp/m2d-local-v5-browser --no-audit --no-fund playwright@1.56.0
+          ln -s /tmp/m2d-local-v5-browser/node_modules ./node_modules
+      - name: Start checked-in V5 projection over loopback only
+        run: |
+          set -eu
+          node tests/ci/local-buyer-config-server.mjs > /tmp/m2d-local-v5-server.log 2>&1 &
+          for i in $(seq 1 20); do
+            if curl -fsS --max-time 2 http://127.0.0.1:8123/api/buyer-configuration -o /tmp/m2d-local-buyer.json; then
+              echo CI_LOCAL_V5_FIXTURE_READY
+              exit 0
+            fi
+            sleep 1
+          done
+          echo "::error::Local validated buyer projection not ready"
+          exit 1
+      - name: Execute five existing browser suites on local V5
+        run: |
+          node tests/ci/config-unlocked-local-diagnostic.mjs
+          node -e 'const d=require("./artifacts/ci-baseline-01/unlocked-local.json"); if(d.cases.length!==5 || !d.cases.every(x=>x.status==="PASS")){ console.error("CI_LOCAL_V5_MATRIX_NOT_GREEN",JSON.stringify(d.cases)); process.exit(1); } console.log("CI_LOCAL_V5_FIVE_FLOWS_PASS");'
+      - name: Upload sanitized classification (never credentials or fixture payload)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ci-local-v5-five-suites
+          path: artifacts/ci-baseline-01/unlocked-local.json
           retention-days: 7
           if-no-files-found: warn

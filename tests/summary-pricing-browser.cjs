@@ -37,6 +37,11 @@ function parseBrl(text) {
     }
   }
   if (lastError) throw lastError;
+  // Authenticated preview: the legacy UI initializes before the async V5
+  // published configuration is applied. Start interactions only after commit.
+  if (process.env.CI_EXPECT_PUBLISHED_V5 === "1") {
+    await page.waitForFunction(() => document.documentElement.dataset.publishedConfigurationStatus === "validated", null, {timeout:30000});
+  }
 
   const valueText = () => page.locator('#configurationValue strong').textContent();
   const currentTotal = async () => parseBrl(await valueText());
@@ -81,7 +86,7 @@ function parseBrl(text) {
   const initiallyChecked = await skirting.isChecked();
   if (!initiallyChecked) {
     const before = await valueText();
-    await skirting.click();
+    await skirting.setChecked(true);
     await waitTotalChange(before);
   }
   const totalWithSkirting = await currentTotal();
@@ -96,7 +101,7 @@ function parseBrl(text) {
 
   await go('finishes');
   const beforeSkirtingOff = await valueText();
-  await skirting.click();
+  await skirting.setChecked(false);
   await waitTotalChange(beforeSkirtingOff);
   const totalWithoutSkirting = await currentTotal();
   assert.equal(totalWithSkirting - totalWithoutSkirting, skirtingCents, 'removing skirting subtracts exactly its single global breakdown row');
@@ -107,24 +112,81 @@ function parseBrl(text) {
   assert.equal(parseBrl(withoutSkirting.totalText), totalWithoutSkirting, 'summary total follows the skirting toggle');
 
   // Restore the user-visible state and prove exact round-trip of the total.
+  // Navigation can redraw control state; specifying the desired state, rather
+  // than blindly toggling, preserves the user intent and original total gate.
   await go('finishes');
-  await skirting.click();
-  await page.waitForFunction(expected => {
-    const text = document.querySelector('#configurationValue strong')?.textContent || '';
-    const normalized = text.replace(/[^0-9,.-]/g, '').replace(/\./g, '').replace(',', '.');
-    return Math.round(Number(normalized) * 100) === expected;
-  }, totalWithSkirting);
+  try {
+    await skirting.setChecked(true);
+  } catch(error) {
+    const message=String(error?.message||"");
+    const failureKind=/did not change its state|did not change state/i.test(message)?"STATE_NOT_STABLE":
+      /not attached|detached/i.test(message)?"DETACHED":
+      /intercept|receives pointer events|another element/i.test(message)?"POINTER_INTERCEPT":
+      /hidden|not visible|visibility/i.test(message)?"NOT_VISIBLE":
+      /Timeout|exceeded/i.test(message)?"TIMEOUT":
+      /closed/i.test(message)?"CONTEXT_CLOSED":"OTHER";
+    const flags=await page.evaluate(()=>{
+      const control=document.getElementById('stoneSkirtingToggle');
+      const state=window.CASA_EM_MODULOS_DEBUG?.getState?.();
+      return {
+        stage:document.querySelector('.flow-nav [aria-current="step"]')?.dataset.step||null,
+        exists:Boolean(control),connected:Boolean(control?.isConnected),
+        checked:Boolean(control?.checked),disabled:Boolean(control?.disabled),
+        stateSelected:Boolean(state?.globalSelections?.serviceIds?.includes('stone-skirting')),
+        visible:Boolean(control && control.getBoundingClientRect().width>0 && control.getBoundingClientRect().height>0)
+      };
+    }).catch(()=>({stage:null,exists:false,connected:false,checked:false,disabled:false,stateSelected:false,visible:false}));
+    console.error("CI_SUMMARY_CHECKBOX_DIAGNOSTIC "+JSON.stringify({...flags,failureKind}));
+    throw error;
+  }
+  assert.equal(await skirting.isChecked(), true, 'restoration must leave the skirting control checked');
+  try {
+    await page.waitForFunction(expected => {
+      const text = document.querySelector('#configurationValue strong')?.textContent || '';
+      const normalized = text.replace(/[^0-9,.-]/g, '').replace(/\./g, '').replace(',', '.');
+      return Math.round(Number(normalized) * 100) === expected;
+    }, totalWithSkirting);
+  } catch (error) {
+    // Preview synthetic pricing only: never log a raw payload, tokens, user data
+    // or commercial prices. The original equality assertion remains unchanged.
+    const diagnostic = await page.evaluate(expected => {
+      const text = document.querySelector('#configurationValue strong')?.textContent || '';
+      const normalized = text.replace(/[^0-9,.-]/g, '').replace(/\./g, '').replace(',', '.');
+      const current = Math.round(Number(normalized) * 100);
+      const toggle = document.querySelector('#stoneSkirtingToggle');
+      const state = window.CASA_EM_MODULOS_DEBUG?.getState?.();
+      return {
+        amountReadable: Number.isFinite(current),
+        deltaCents: Number.isFinite(current) ? current - expected : null,
+        skirtingChecked: Boolean(toggle?.checked),
+        skirtingDisabled: Boolean(toggle?.disabled),
+        skirtingConnected: Boolean(toggle?.isConnected),
+        currentStage: document.querySelector('.flow-nav [aria-current="step"]')?.getAttribute('data-step')||null,
+        stonePackagePresent: Boolean(state?.globalSelections?.stonePackageId)
+      };
+    }, totalWithSkirting).catch(() => ({probe:"UNAVAILABLE"}));
+    console.error("CI_SUMMARY_RESTORE_DIAGNOSTIC " + JSON.stringify(diagnostic));
+    throw error;
+  }
   assert.equal(await currentTotal(), totalWithSkirting, 'restoring skirting restores the exact prior total');
 
   // A priced stone package is also global and must appear only once, never once per module.
   const cloud = page.locator('[data-stone-package-id="stone-cloud"]');
   if (await cloud.count() && await cloud.isVisible()) {
+    // V5 owns the published material label: the old "Clara mineral" string
+    // came from the baked-in catalog and is not guaranteed after projection.
+    const publishedCloudLabel = (await cloud.locator('strong').textContent())?.trim();
+    assert.ok(publishedCloudLabel, 'stone cloud has a nonempty published option label');
+    const publishedCloudDescription = await cloud.locator('small').textContent() || '';
+    assert.match(publishedCloudDescription, /R\$/, 'stone cloud is explicitly priced in this test fixture');
     const previousStoneId = await page.evaluate(() => window.CASA_EM_MODULOS_DEBUG.getState().globalSelections?.stonePackageId || null);
     await cloud.click();
     await page.waitForFunction(() => window.CASA_EM_MODULOS_DEBUG.getState().globalSelections?.stonePackageId === 'stone-cloud');
     await go('summary');
     const cloudSummary = await summarySnapshot();
-    assert.equal(cloudSummary.rows.filter(row => row.label === 'Clara mineral').length, 1, 'selected priced stone appears exactly once in the global breakdown');
+    const pricedCloudRows = cloudSummary.rows.filter(row => row.label === publishedCloudLabel);
+    assert.equal(pricedCloudRows.length, 1, 'the selected published stone label appears exactly once in the global breakdown');
+    assert.ok(parseBrl(pricedCloudRows[0].amount)>0, 'the selected stone retains a positive global charge');
     assert.equal(parseBrl(cloudSummary.totalText), await currentTotal(), 'stone selection keeps summary and persistent total synchronized');
 
     if (previousStoneId && previousStoneId !== 'stone-cloud') {
@@ -140,7 +202,8 @@ function parseBrl(text) {
   // Restore the original skirting state when production/default administration had it disabled.
   if (!initiallyChecked) {
     await go('finishes');
-    if (await skirting.isChecked()) await skirting.click();
+    await skirting.setChecked(false);
+    assert.equal(await skirting.isChecked(), false, 'the original skirting-off state is restored');
   }
 
   assert.deepEqual(errors, [], 'browser console must remain clean');
