@@ -23,3 +23,7 @@
 - O convite expira em três horas e só pode ser resgatado uma vez. Evitar repetir o job autenticado no mesmo segredo após consumo. Em caso de token expirado, requer convite novo, sem enviar o token em chat.
 - A autenticação de usuário temporário não autoriza Admin e não prova o envio de e-mail (o convite foi emitido separadamente).
 - Mesmo com testes de preview verdes, as PRs #231 e #234 continuam DRAFT e o merge/publicação da branch consolidada continuam HOLD até validação dos gates globais pertinentes.
+
+## Disparo controlado — 23/10/2026
+
+[Preflight #39964154219](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/39964154219) concluiu SUCCESS; o job autenticado foi SKIPPED por falta proposital do marcador one-shot. O commit seguinte é explicitamente autorizado para consumir CI_CONFIG_TEST_TOKEN **uma única vez** no preview #234; não reexecutar o job autenticado automaticamente após consumo. Registro sem valor de segredo.
