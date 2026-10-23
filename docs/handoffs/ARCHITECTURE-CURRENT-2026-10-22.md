@@ -1,5 +1,54 @@
 # HANDOVER CANÔNICO — MobiliPresenter2D / consolidação Vanilla + Design System
 
+> **ESTADO MAIS RECENTE — 23/10/2026, CI-BASELINE-01 / ISSUE #232**
+> Este bloco atualiza o estado da [issue #232](https://github.com/EAKerber/MobiliPresenter2D/issues/232);
+> os marcos de 22/10 e blocos anteriores abaixo são **históricos**, não
+> substituem a verificação dos HEADs e dos gates. **Sem merge na main**:
+> `main@15e1cfb4866886649adbcd00fef9bef5e5843fda`.
+>
+> - **Consolidação arquitetural já aprovada em branch, não publicada**:
+>   [`integration/consolidated-arc03c-vis002c-token-20261023`](https://github.com/EAKerber/MobiliPresenter2D/tree/integration/consolidated-arc03c-vis002c-token-20261023)
+>   reúne ARC-03C (PR #234), P-TOKEN-01B/02B (PR #231) e VIS-002C.
+>   [Gate combinado #39949036571 — 3/3 jobs PASS](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/39949036571).
+>   PRs #231 e #234 seguem DRAFT/HOLD, por CI privado não concluído.
+> - **Autenticação temporária real confirmada** em dois convites, ambos
+>   consumidos e revogados. [Actions #39964244149](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/39964244149)
+>   e [#39982544942](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/39982544942):
+>   POST de redeem 200, cookie HttpOnly+Secure, Config autorizado,
+>   privilégio Admin negado, logout 200 e replay negado. No segundo run,
+>   `/api/buyer-configuration` retornou **503** antes dos cinco testes.
+> - **Causa do 503 inicial no preview identificada**: o plugin de seed
+>   comparava `BRANCH` ao nome da branch de origem; no contexto Netlify
+>   PR #235 o identificador correto é `HEAD`. Correção isolada na
+>   [PR #235 — DRAFT, NÃO MERGEAR](https://github.com/EAKerber/MobiliPresenter2D/pull/235),
+>   HEAD `79d1a865e480a6cbfd36e5cce6d1bb4c2266166e`, base `main`
+>   apenas para habilitar Deploy Preview.
+>   [Preview #235 `6adb87a7fc8cd994e4a86c10` READY](https://app.netlify.com/projects/mobilipresenter2d/deploys/6adb87a7fc8cd994e4a86c10);
+>   [teste de proveniência #39984974211 PASS](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/39984974211)
+>   e [preflight #39985006606 PASS](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/39985006606):
+>   `/ci-validation/build-context.json` e
+>   `/ci-validation/published-v5-status.json` responderam 200, com
+>   comprovação de escrita/readback SHA no `getDeployStore('configurator-settings')`
+>   **somente do deploy**, sem store site-wide ou banco alterado.
+>   **Ainda NÃO foi confirmado HTTP 200 do buyer endpoint COM SESSÃO após
+>   esta correção**. Não confundir preview READY com gate autenticado PASS.
+> - **Cobertura funcional local V5: 3/5 PASS**, com asserções preservadas:
+>   [diagnóstico #39987226959](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/39987226959)
+>   aprovou Mobile/PiP, Summary/preços e Stone/pedras.
+>   Keyboard segue FAIL em `tests/keyboard-browser.cjs:165` (Ctrl+ArrowRight
+>   na sequência de foco/viewport), e Flow FAIL em
+>   `tests/flow-layout-browser.cjs:391` (clique para retornar a Módulos).
+>   Em [sondagem isolada #39986124888](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/39986124888),
+>   ambos os comandos funcionaram isoladamente: investigar sequência/foco
+>   antes de atribuir regressão à aplicação. Os três PASS **são locais**,
+>   não prova de ambiente autenticado real.
+> - **Próximos passos e restrições:** resolver Keyboard/Flow sem remover
+>   assertions, conservar V5 validada e fail-closed, verificar o gate
+>   autenticado do buyer endpoint somente depois; pedir terceiro convite
+>   **apenas quando o teste estiver pronto**, nunca reutilizar tokens consumidos.
+>   Issue #232 **OPEN/HOLD**; sem PR #235 merge, sem alteração de `main`
+>   ou publicação de dados reais. [Handover CI detalhado](https://github.com/EAKerber/MobiliPresenter2D/blob/ci/ci-baseline-01-auth235-only-20261023/docs/handoffs/CI_BASELINE_01_AUTH235_READY_2026-10-23.md).
+>
 > **CHECKPOINT DA BRANCH CONSOLIDADA (23/10/2026; não é main).** A branch
 > [`integration/consolidated-arc03c-vis002c-token-20261023`](https://github.com/EAKerber/MobiliPresenter2D/tree/integration/consolidated-arc03c-vis002c-token-20261023)
 > reúne PR #234 ARC-03C (fontes autorais e compilador), PR #231 P-TOKEN-01B/02B
