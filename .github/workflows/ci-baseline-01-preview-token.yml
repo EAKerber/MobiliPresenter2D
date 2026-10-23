@@ -1,3 +1,5 @@
+# CI-BASELINE-01: second invitation authorized by user on 2026-10-23.
+# One-shot push only. Never rerun this commit with the consumed invitation.
 name: CI-BASELINE-01 one-time authenticated Config on existing preview
 on:
   push:
