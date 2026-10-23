@@ -28,7 +28,15 @@ try{
   const location=message.match(/(?:\/tests\/|tests\/)[A-Za-z0-9_./-]+[.]cjs:[0-9]+(?::[0-9]+)?/)?.[0]??null;
   const assertion=(message.match(/AssertionError(?:\s*\[[^\]]+\])?:\s*([^\n]+)/)||[])[1]||null;
   const errorDetail=(message.match(/Error:\s*([^\n]+)/)||[])[1]||null;
+  // Only preselected nonsecret DOM geometry, focus and stage metadata.
+  const navLine=message.split("\n").find(line=>/CI_(KEYBOARD_STAGE_TIMEOUT|FLOW_NAV_CLICK_TIMEOUT) \{/.test(line));
+  let navState=null;
+  if(navLine) {
+    try { navState=JSON.parse(navLine.slice(navLine.indexOf("{"))); }
+    catch { navState={parseError:true}; }
+  }
   const result={name,status:res.status===0?"PASS":"FAIL",errorClass:className,
+   navigationState:navState,
    failureLocation:location,exitCode:res.status,
    assertion:(assertion||errorDetail||"").slice(0,240),
    failureExcerpt:res.status===0?null:message.slice(
