@@ -113,6 +113,31 @@ const flatV3 = configuration.createDefaultAdministration(
     { enabled: true, slots: ["estimate", "primary-action"] },
     "bottom dock shell policy is frozen and explicit"
   );
+  const ciNavCheckpoint = async label => {
+    const state = await page.evaluate(() => {
+      const nav=document.querySelector('.flow-nav');
+      const ncs=nav&&getComputedStyle(nav),nr=nav?.getBoundingClientRect();
+      const steps=Array.from(nav?.querySelectorAll('[data-step]')||[]).map(el=>{
+        const cs=getComputedStyle(el),r=el.getBoundingClientRect();
+        return {step:el.dataset.step,connected:el.isConnected,
+          rect:[r.x,r.y,r.width,r.height],offset:[el.offsetWidth,el.offsetHeight],
+          clientRects:el.getClientRects().length,display:cs.display,
+          visibility:cs.visibility,contentVisibility:cs.contentVisibility,
+          hidden:el.hidden,current:el.getAttribute('aria-current')};
+      });
+      return {profile:document.documentElement.dataset.layoutProfile,
+        stage:nav?.querySelector('[aria-current="step"]')?.dataset.step||null,
+        detail:document.body.classList.contains('has-module-detail'),
+        focus:document.activeElement?.id||document.activeElement?.tagName||null,
+        navCount:document.querySelectorAll('.flow-nav').length,
+        nav:{connected:nav?.isConnected,rect:nr?[nr.x,nr.y,nr.width,nr.height]:null,
+          columns:ncs?.gridTemplateColumns,rows:ncs?.gridTemplateRows,
+          contentVisibility:ncs?.contentVisibility,contain:ncs?.contain},
+        steps};
+    });
+    console.error('CI_NAV_CHECKPOINT '+JSON.stringify({label,...state}));
+  };
+
   const dockInitial = await bottomDockState();
   assert.equal(dockInitial.enabled, true, "bottom dock policy is executable");
   assert.equal(dockInitial.position, "sticky", "one stable footer owns persistent positioning");
@@ -279,10 +304,14 @@ const flatV3 = configuration.createDefaultAdministration(
   assert.ok(listDesktop.top >= detailDesktop.bottom - 2, "while controls are beside the scene, Modules uses one internal column");
   assert.equal(await page.locator("#moduleDetailPlaceholder").isHidden(), true, "selected module replaces the detail placeholder");
   assert.equal(await noOverflow("#modulesPanel"), true, "desktop side-panel Modules does not overflow horizontally");
+  await ciNavCheckpoint('flow-before-screenshot');
   await page.screenshot({ path: path.join(output, "modules-desktop.png"), fullPage: true });
+  await ciNavCheckpoint('flow-after-screenshot');
 
+  await ciNavCheckpoint('flow-before-finishes-click');
   await page.locator('.flow-nav [data-step="finishes"]').click();
   await page.waitForFunction(() => !document.getElementById("finishesStagePanel").hidden);
+  await ciNavCheckpoint('flow-after-finishes-click');
   assert.deepEqual(await stageGroupOrder("finishes"), await modelGroupOrder("finishes"), "Acabamentos group order comes from normalized flow");
   const generatedCabinetGroup = page.locator('[data-flow-group-shell="cabinet-finishes"]');
   assert.equal(await generatedCabinetGroup.getAttribute("data-flow-generated-group"), "true", "Cabinet Finishes group shell is claimed from normalized flow");
@@ -365,8 +394,10 @@ const flatV3 = configuration.createDefaultAdministration(
   assert.ok(stone.top >= cabinet.bottom - 2, "while controls are beside the scene, Acabamentos remains one column");
   assert.equal(await noOverflow("#finishesStagePanel"), true, "desktop side-panel Acabamentos does not overflow horizontally");
 
+  await ciNavCheckpoint('flow-before-stacked-resize');
   await page.setViewportSize({ width: 1050, height: 900 });
   await page.waitForTimeout(80);
+  await ciNavCheckpoint('flow-after-stacked-resize');
   assert.equal(await page.evaluate(() => window.CASA_EM_MODULOS_DEBUG.getLayoutProfile()), "stacked", "1050px resolves to stacked");
   assert.equal((await modulesViewContract()).detail.projection, "side-panel", "stacked profile updates Modules companion projection marker from policy");
   assert.equal((await modulesViewContract()).selectedEntityId, selectedModuleBeforeProfileChanges, "selected module survives side-rail -> stacked profile marker update");
@@ -387,6 +418,7 @@ const flatV3 = configuration.createDefaultAdministration(
     return { width: box.width, copyWidth: copy?.width || 0 };
   }));
   assert.ok(handleGeometry.every((entry) => entry.width >= 190 && entry.copyWidth >= 125), "Puxadores stays readable in the two-column stacked-workspace layout");
+  await ciNavCheckpoint('flow-before-modules-click');
 
   try {
     await page.locator('.flow-nav [data-step="modules"]').click();

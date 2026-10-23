@@ -93,6 +93,31 @@ const {chromium} = require('playwright');
     return control?.checked ?? null;
   }, descriptor);
 
+  const ciNavCheckpoint = async label => {
+    const state = await page.evaluate(() => {
+      const nav=document.querySelector('.flow-nav');
+      const ncs=nav&&getComputedStyle(nav),nr=nav?.getBoundingClientRect();
+      const steps=Array.from(nav?.querySelectorAll('[data-step]')||[]).map(el=>{
+        const cs=getComputedStyle(el),r=el.getBoundingClientRect();
+        return {step:el.dataset.step,connected:el.isConnected,
+          rect:[r.x,r.y,r.width,r.height],offset:[el.offsetWidth,el.offsetHeight],
+          clientRects:el.getClientRects().length,display:cs.display,
+          visibility:cs.visibility,contentVisibility:cs.contentVisibility,
+          hidden:el.hidden,current:el.getAttribute('aria-current')};
+      });
+      return {profile:document.documentElement.dataset.layoutProfile,
+        stage:nav?.querySelector('[aria-current="step"]')?.dataset.step||null,
+        detail:document.body.classList.contains('has-module-detail'),
+        focus:document.activeElement?.id||document.activeElement?.tagName||null,
+        navCount:document.querySelectorAll('.flow-nav').length,
+        nav:{connected:nav?.isConnected,rect:nr?[nr.x,nr.y,nr.width,nr.height]:null,
+          columns:ncs?.gridTemplateColumns,rows:ncs?.gridTemplateRows,
+          contentVisibility:ncs?.contentVisibility,contain:ncs?.contain},
+        steps};
+    });
+    console.error('CI_NAV_CHECKPOINT '+JSON.stringify({label,...state}));
+  };
+
   // Modules own their unmodified arrows, space and numeric shortcuts.
   await page.keyboard.press('ArrowRight');
   await page.waitForFunction(() => document.body.classList.contains('has-module-detail'));
@@ -130,7 +155,9 @@ const {chromium} = require('playwright');
   await page.keyboard.press('3');
   assert.equal(await selectedNumber(), 3, 'single digit belongs to the Modules stage');
 
+  await ciNavCheckpoint('keyboard-before-stacked');
   await page.setViewportSize({width: 1050, height: 650});
+  await ciNavCheckpoint('keyboard-after-stacked');
   await page.waitForTimeout(80);
   await page.locator('#moduleList .module-card.is-selected [data-module-toggle]').focus();
   const moduleScrollBefore = await page.evaluate(() => {
@@ -156,8 +183,10 @@ const {chromium} = require('playwright');
   }));
   assert.ok(Math.abs(moduleScrollAfterUp.windowY - moduleScrollBefore.windowY) < 2, 'ArrowUp in Modules does not scroll the window');
   assert.ok(moduleScrollAfterUp.paneTop < moduleScrollAfterDown.paneTop, 'ArrowUp reverses the focused Modules column scroll');
+  await ciNavCheckpoint('keyboard-before-side-rail-return');
   await page.setViewportSize({width: 1366, height: 900});
   await page.waitForTimeout(80);
+  await ciNavCheckpoint('keyboard-after-side-rail-return');
 
   // Ctrl shortcuts are global and move between stages.
   assert.equal(await currentStage(), 'modules');
