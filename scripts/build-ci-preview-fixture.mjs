@@ -21,7 +21,9 @@ export const KEY="published";
 const digest=s=>createHash("sha256").update(s).digest("hex");
 
 export function shouldSeed(env){
- if(env.CONTEXT!=="deploy-preview"||env.BRANCH!==TARGET_BRANCH)return false;
+ if(env.CONTEXT!=="deploy-preview"||env.REVIEW_ID!=="235")return false;
+ // Netlify BRANCH may point at the PR base; HEAD is the source branch.
+ assert.equal(env.HEAD||env.BRANCH,TARGET_BRANCH,"CI_PREVIEW_SOURCE_HEAD_MISMATCH");
  assert.equal(env.NETLIFY,"true","REFUSE_CI_PREVIEW_SEED_OUTSIDE_NETLIFY");
  assert.match(String(env.REVIEW_ID||""),/^[1-9]\d{0,5}$/,"CI_PREVIEW_REVIEW_ID_REQUIRED");
  assert.match(String(env.DEPLOY_ID||""),/^[a-zA-Z0-9_-]{8,}$/,"CI_PREVIEW_DEPLOY_ID_REQUIRED");

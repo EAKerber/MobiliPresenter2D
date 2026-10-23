@@ -9,7 +9,7 @@ module.exports = {
   );
   const env={...process.env,
     SITE_ID:constants.SITE_ID||process.env.SITE_ID||process.env.NETLIFY_SITE_ID};
-  if(env.BRANCH!==TARGET_BRANCH || env.CONTEXT!=="deploy-preview"){
+  if(env.CONTEXT!=="deploy-preview" || env.REVIEW_ID!=="235"){
    console.log("CI_PREVIEW_PUBLISHED_FIXTURE_SKIPPED_OTHER_CONTEXT");
    return;
   }

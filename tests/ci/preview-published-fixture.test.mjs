@@ -5,8 +5,8 @@ import {
  TARGET_BRANCH,STORE,KEY,shouldSeed,prepareExplicitFixture,writeDeployFixture
 } from "../../scripts/build-ci-preview-fixture.mjs";
 
-const base={NETLIFY:"true",CONTEXT:"deploy-preview",BRANCH:TARGET_BRANCH,
- REVIEW_ID:"345",DEPLOY_ID:"aabbccdd11223344",
+const base={NETLIFY:"true",CONTEXT:"deploy-preview",BRANCH:"main",HEAD:TARGET_BRANCH,
+ REVIEW_ID:"235",DEPLOY_ID:"aabbccdd11223344",
  SITE_ID:"20c0dc08-2490-4418-8eec-b298c90cfcce"};
 const fakeStore=(initial=null)=>{
  let text=initial;
@@ -31,9 +31,9 @@ test("no fixture outside one explicit preview branch / context / site",async()=>
  const variants=[
   {...base,CONTEXT:"production"},
   {...base,CONTEXT:"branch-deploy"},
-  {...base,BRANCH:"main"},
-  {...base,BRANCH:"ci/ci-baseline-01-shared-db-preview-20261023"},
-  {...base,BRANCH:"architecture/arc03c-static-page-build-20261022"},
+  {...base,REVIEW_ID:"231"},
+  {...base,REVIEW_ID:"234"},
+  {...base,CONTEXT:"production",HEAD:"main"},
   {...base,CONTEXT:undefined},
   {}
  ];
@@ -46,8 +46,8 @@ test("no fixture outside one explicit preview branch / context / site",async()=>
 });
 test("preview requires Netlify, valid review/deploy IDs and correct site",()=>{
  for(const env of [
-  {...base,NETLIFY:undefined}, {...base,REVIEW_ID:undefined},
-  {...base,REVIEW_ID:"0"}, {...base,DEPLOY_ID:undefined},
+  {...base,NETLIFY:undefined}, {...base,HEAD:"main"},
+  {...base,HEAD:undefined,BRANCH:"main"}, {...base,DEPLOY_ID:undefined},
   {...base,SITE_ID:"d92799b1-9afc-4b52-9eee-22824bba7925"}
  ])assert.throws(()=>shouldSeed(env));
 });

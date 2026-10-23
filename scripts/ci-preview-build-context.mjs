@@ -10,6 +10,7 @@ if(env.NETLIFY==="true"&&env.CONTEXT==="deploy-preview"&&env.REVIEW_ID==="235"){
   schema:"M2DCIPreviewBuildContext/1",
   reviewId:235,
   branchMatches:env.BRANCH==="ci/ci-baseline-01-published-preview-fixture-20261023",
+  headMatches:env.HEAD==="ci/ci-baseline-01-published-preview-fixture-20261023",
   hasDeployId:Boolean(env.DEPLOY_ID),
   hasSiteId:Boolean(env.SITE_ID||env.NETLIFY_SITE_ID),
   contextMatches:true,
