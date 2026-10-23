@@ -1,5 +1,19 @@
 # HANDOVER CANÔNICO — MobiliPresenter2D / consolidação Vanilla + Design System
 
+> **Atualização operacional 23/10/2026 — esta seção tem precedência sobre a fotografia de 22/10 abaixo.**  
+> HEAD da `main` conferido: `15e1cfb4866886649adbcd00fef9bef5e5843fda`. Esta atualização é **documental em branch isolada** `docs/handover-reconcile-20261023`, sem merge nem deploy; confirmar novos HEADs ao retomar.
+>
+> **ARC-03C evoluiu de plano para [PR #234 DRAFT/HOLD](https://github.com/EAKerber/MobiliPresenter2D/pull/234)** na branch `architecture/arc03c-static-page-build-20261022@8ab2317`. HTML das três páginas primárias agora deriva de fontes únicas `architecture/pages` via `npm run pages:sync/check/build`, com manifesto de hashes e drift fail-closed. O [gate isolado #39871907031](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/39871907031) validou **60/60**, zero diferença raster contra `main@303468b`. O preview #234 foi criado, mas falhas de CI antigo em `/config/` anônimo mantêm **HOLD**; não fazer merge sem gate global satisfatório.
+>
+> **CI-BASELINE-01 #232 avançou, mas não terminou.** A [PR #235](https://github.com/EAKerber/MobiliPresenter2D/pull/235) é fixture **experimental, não publicável, não mesclar**, usando apenas `getDeployStore('configurator-settings')` e validação V5, num preview isolado. O [deploy #6adb87a7fc8cd994e4a86c10](https://app.netlify.com/projects/mobilipresenter2d/deploys/6adb87a7fc8cd994e4a86c10) está READY; [preflight #39985006606](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/39985006606) verificou marcadores não secretos e proteção anônima. **Não equivale a GET autenticado 200**. Dois convites anteriores já foram consumidos/revogados; não reutilizá-los. A [sondagem local #39987226959](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/39987226959) obteve **3/5 PASS** (Mobile, Summary e Stone), **2/5 HOLD** (Keyboard/Flow em timeout de sequência/foco). Em 23/10 foi criada a branch `ci/ci-baseline-01-nav-sequence-probe-20261023` exclusivamente para observabilidade, sem relaxar assertions. [Checkpoint CI mais recente](https://github.com/EAKerber/MobiliPresenter2D/blob/ci/ci-baseline-01-auth235-only-20261023/docs/handoffs/CI_BASELINE_01_AUTH235_READY_2026-10-23.md). **Próximo gate:** caracterizar Keyboard/Flow, só então avaliar novo convite de uso único. O teste local não demonstra o runtime autenticado Netlify.
+>
+> **VIS-002C / P-TOKEN:** fonte e pareamentos homologados no DS. Reconciliação derivada da PR #231 na [branch `integration/vis002c-p-token-02b-v2-20261023`](https://github.com/EAKerber/MobiliPresenter2D/tree/integration/vis002c-p-token-02b-v2-20261023), com [gate #39894163198 PASS](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/39894163198): 48/48 equivalências prévias, 36/36 cenários de contraste e diff visual restrito aos cinco textos autorizados. **Não foi integrada na main**; a PR #231 original permanece DRAFT/HOLD. Não duplicar tokens nem estender a paleta a outros contextos.
+>
+> **Política de retomada:** não assumir que 60/60 do ARC-03C ou 3/5 local liberem merge; conservar NAV-005 Viewer separado do NAV-004 público, Auth/V5/preços intactos, preços globais OFF por padrão. Não abrir mais previews por iteração documental; branches documentais são apenas checkpoints, não publicação. A `main` de produção não foi alterada por estas ações.
+>
+---
+
+
 **Data de observação:** 2026-10-22, America/Sao_Paulo.
 **Âmbito:** estado efetivamente lido nos repositórios, não um plano imaginado.
 **Entrada recomendada para novos agentes:** este documento -> `CURRENT_STATE.md` como **histórico** -> Design System [handover cruzado](https://github.com/EAKerber/MobiliPresenter2D_DesignSystem/blob/main/docs/ARCHITECTURE_CURRENT_HANDOVER_2026-10-22.md) -> decisões visuais e roadmap.
