@@ -38,27 +38,42 @@ async function fresh(trial,detail){
   return page;
 }
 try{
- let page=await fresh("no-detail",false);
- await page.close();
- page=await fresh("detail",true);
- // Evaluate each reversible style intervention and its rollback.
- const experiments=[
-   ["container-normal",el=>{el.style.containerType="normal";},el=>{el.style.removeProperty("container-type");}],
-   ["display-flex",el=>{el.style.display="flex";},el=>{el.style.removeProperty("display");}],
-   ["grid-columns-refresh",el=>{el.style.gridTemplateColumns="repeat(4, 1fr)";},el=>{el.style.gridTemplateColumns="repeat(4, minmax(0, 1fr))";}],
-   ["paint-containment",el=>{el.style.contain="paint";},el=>{el.style.removeProperty("contain");}]
- ];
- for(const [label,apply,rollback] of experiments){
-   await page.evaluate(label=>{const el=document.querySelector(".flow-nav"); if(label==="container-normal")el.style.containerType="normal"; else if(label==="display-flex")el.style.display="flex"; else if(label==="grid-columns-refresh")el.style.gridTemplateColumns="repeat(4, 1fr)"; else if(label==="paint-containment")el.style.contain="paint";},label);
-   await page.waitForTimeout(100);
-   await snapshot(page,"detail",label);
-   await page.evaluate(label=>{const el=document.querySelector(".flow-nav"); if(label==="container-normal")el.style.removeProperty("container-type"); else if(label==="display-flex")el.style.removeProperty("display"); else if(label==="grid-columns-refresh")el.style.gridTemplateColumns="repeat(4, minmax(0, 1fr))"; else if(label==="paint-containment")el.style.removeProperty("contain");},label);
-   await page.waitForTimeout(100);
-   await snapshot(page,"detail",label+"-rollback");
- }
- await page.close();
-} finally {
- await browser.close();
-}
+  let page=await fresh("no-detail",false);
+  await page.close();
+  page=await fresh("detail-control",true);
+  await page.close();
+
+  const interventions=[
+    "pin-hide", "grid-template-columns", "grid-template-rows",
+    "grid-auto-flow", "grid-explicit", "grid-auto-rows", "display-flex"
+  ];
+  for(const label of interventions){
+    const page=await fresh(label,true);
+    await page.evaluate(label=>{
+      const nav=document.querySelector(".flow-nav");
+      if(label==="pin-hide")nav.querySelector("#mobileSceneRepin").hidden=true;
+      if(label==="grid-template-columns")nav.style.gridTemplateColumns="repeat(4,1fr)";
+      if(label==="grid-template-rows")nav.style.gridTemplateRows="44px 44px";
+      if(label==="grid-auto-flow")nav.style.gridAutoFlow="row dense";
+      if(label==="grid-explicit")nav.style.display="grid";
+      if(label==="grid-auto-rows")nav.style.gridAutoRows="minmax(44px,auto)";
+      if(label==="display-flex")nav.style.display="flex";
+    },label);
+    await page.waitForTimeout(100);
+    await snapshot(page,label,"intervention");
+    await page.evaluate(label=>{
+      const nav=document.querySelector(".flow-nav");
+      if(label==="pin-hide")nav.querySelector("#mobileSceneRepin").hidden=false;
+      if(label==="grid-template-columns")nav.style.removeProperty("grid-template-columns");
+      if(label==="grid-template-rows")nav.style.removeProperty("grid-template-rows");
+      if(label==="grid-auto-flow")nav.style.removeProperty("grid-auto-flow");
+      if(label==="grid-explicit"||label==="display-flex")nav.style.removeProperty("display");
+      if(label==="grid-auto-rows")nav.style.removeProperty("grid-auto-rows");
+    },label);
+    await page.waitForTimeout(100);
+    await snapshot(page,label,"rollback");
+    await page.close();
+  }
+} finally {await browser.close();}
 console.log("CI_CAUSAL_COMPLETE "+JSON.stringify({snapshots:records.length,
- zeroStates:records.filter(x=>x.steps.every(s=>s.visibleRects===0)).map(x=>x.trial+":"+x.stage)}));
+  zeroStates:records.filter(x=>x.steps.every(s=>s.visibleRects===0)).map(x=>x.trial+":"+x.stage)}));
