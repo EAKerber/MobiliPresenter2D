@@ -1,5 +1,8 @@
 # CI-BASELINE-01 — GitHub OIDC → sessão temporária do Configurador (#235)
 
+> **Primeiro 5/5 pós-fix — 23/10/2026:** [Actions #40038709279](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40038709279) concluiu **PASS**, `FIVE_FLOWS_PASS` para Mobile/PiP, Keyboard, Flow, Summary e Stone com OIDC, session-readback, acesso Admin negado, logout e replay negado. A alteração foi *exclusivamente no teste Summary* (`setChecked(true/false)` no lugar de clique cego), sem relaxar preços/exatidão. A execução não usou modo direcionado. Este commit de documentação dispara uma **repetição integral independente com o mesmo código**; segredos não são necessários e o commit inclui `[skip netlify]`.
+
+
 > **Reprodutibilidade do Summary — 23/10/2026:** [Gate integral #40038286100](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40038286100) exibiu intermitência específica: 4/5 PASS, restore do rodapé falhou; diagnóstico sanitizado mostrou `deltaCents=-18500`, checkbox `skirtingChecked=false`, `disabled=false`, estágio finishes. A suíte usava clique de alternância para alcançar estado desejado após navegação. Alterado em branch **somente o teste** para `setChecked(true/false)`, mantendo o mesmo gate monetário exato e asserções, e exigindo checkbox final explícito. [Gate direcionado pós-correção #40038558835](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40038558835) **2/2 PASS Summary + Stone**, auth/Admin/logout PASS. Este commit executa o gate **completo 5/5**, não direcionado. Nenhuma alteração de runtime, backend, dados, produção ou main.
 
 
