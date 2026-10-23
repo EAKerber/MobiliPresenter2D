@@ -1,0 +1,42 @@
+name: CI-BASELINE-01 local Config visibility probe (no secrets)
+on:
+  push:
+    branches:
+      - ci/ci-baseline-01-shared-db-preview-20261023
+    paths:
+      - "tests/ci/config-local-visibility-probe.mjs"
+      - ".github/workflows/ci-baseline-01-visibility-probe.yml"
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    container:
+      image: mcr.microsoft.com/playwright:v1.56.0-noble
+      options: --ipc=host
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Install browser tooling without Netlify deploy
+        run: |
+          npm install --prefix /tmp/m2d-ci-visibility --no-audit --no-fund playwright@1.56.0
+          ln -s /tmp/m2d-ci-visibility/node_modules ./node_modules
+      - name: Serve public code locally
+        run: |
+          python3 -m http.server 8123 --bind 127.0.0.1 --directory app >/tmp/ci-visibility-http.log 2>&1 &
+          sleep 2
+          curl --fail --silent http://127.0.0.1:8123/config/ --output /dev/null
+      - name: Record computed visibility and hit-testing without secrets
+        run: node tests/ci/config-local-visibility-probe.mjs
+      - name: Keep inspectable screenshots and JSON
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ci-config-visibility-probe
+          path: artifacts/ci-baseline-01/visibility/
+          retention-days: 7
+          if-no-files-found: warn
