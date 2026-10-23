@@ -3,13 +3,27 @@ on:
   push:
     branches:
       - fix/vis002c-public-text-contrast-20261022
+      - main
     paths:
       - app/landing/landing.css
       - app/about/about.css
       - app/how-it-works/how-it-works.css
+      - app/public-theme.css
+      - app/ui-theme.css
       - tests/vis002c-public-contrast.mjs
       - tests/vis002c-css-contract.test.mjs
       - docs/audits/vis002c-contextual-text-contrast-2026-10-22.md
+      - .github/workflows/vis002c-public-contrast.yml
+  pull_request:
+    branches: [main]
+    paths:
+      - app/landing/landing.css
+      - app/about/about.css
+      - app/how-it-works/how-it-works.css
+      - app/public-theme.css
+      - app/ui-theme.css
+      - tests/vis002c-public-contrast.mjs
+      - tests/vis002c-css-contract.test.mjs
       - .github/workflows/vis002c-public-contrast.yml
   workflow_dispatch:
 permissions:

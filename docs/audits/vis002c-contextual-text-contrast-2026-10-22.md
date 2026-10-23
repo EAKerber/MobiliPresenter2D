@@ -19,3 +19,8 @@ O gate não recomenda nem escolhe cores. A decisão sobre papéis e consumidores
 
 ## Saída
 Exigir CI PASS, inspeção visual das páginas inteiras, avaliação de regressões e reconciliação com PRs #231 (tokens), #234 (HTML) e issue #232 (CI autenticado) antes de permitir integração/produção. Rollback = reversão das três regras CSS e do gate de escopo, sem mexer na paleta do Design System.
+
+## Gate do patch real (23/10)
+[Run VIS-002C #39890281124 — SUCCESS](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/39890281124): ambos os jobs passaram (contrato CSS e browser). CSS computado do app publicado **localmente** em 36/36 cenários, 72 verificações de pares contextualizados; 456 observações totais: 424 aprovadas por contraste, 0 abaixo do limiar e 32 não verificadas (elementos ocultos e casos excluídos do escopo). Isso não é um laudo WCAG global.
+
+**Manutenção de longo prazo:** após o gate inaugural, a regressão automática deve funcionar em PRs para `main` e em push `main`, por mudança nas CSS ou nos próprios testes. O contrato estático exige as regras aprovadas e verifica as variáveis globais, mas não congela todo o CSS original, para permitir adições independentes; o teste navegador protege as cores computadas e os estados reais. Antes do merge, validar o diff de escopo sobre o baseline fixo.
