@@ -78,3 +78,9 @@
   from = "/landing/quem-somos/"
   to = "/about/"
   status = 301
+
+# CI-BASELINE-01: installed ONLY for Deploy Previews. Plugin performs an
+# additional hard check on source BRANCH, REVIEW_ID, SITE_ID, and NETLIFY
+# before opening a deploy-scoped (never site-scoped) Blobs store.
+[[context.deploy-preview.plugins]]
+  package = "./plugins/ci-config-preview-fixture"

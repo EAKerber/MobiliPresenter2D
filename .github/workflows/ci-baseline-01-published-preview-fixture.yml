@@ -1,0 +1,47 @@
+name: CI-BASELINE-01 verify gated V5 published preview fixture
+on:
+  push:
+    branches:
+      - ci/ci-baseline-01-published-preview-fixture-20261023
+    paths:
+      - scripts/build-ci-preview-fixture.mjs
+      - plugins/ci-config-preview-fixture/**
+      - tests/ci/preview-published-fixture.test.mjs
+      - netlify.toml
+      - .github/workflows/ci-baseline-01-published-preview-fixture.yml
+      - docs/handoffs/CI_BASELINE_01_PUBLISHED_PREVIEW_2026-10-23.md
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  preview-fixture-contract:
+    runs-on: ubuntu-latest
+    timeout-minutes: 16
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install baseline dependencies
+        run: npm install --no-package-lock --no-audit --no-fund
+      - name: Pure preview fixture and fail-closed source tests
+        run: |
+          node --check scripts/build-ci-preview-fixture.mjs
+          node --check plugins/ci-config-preview-fixture/index.js
+          node --test tests/ci/preview-published-fixture.test.mjs
+          node scripts/verify-design-system-reference-pin.mjs
+          node scripts/verify-vis002-contextual-token.mjs
+          npm run pages:check
+      - name: Ordinary build MUST remain unchanged, never publish CI data
+        run: |
+          npm run build
+          npm run pages:check
+          test ! -e .netlify/blobs/deploy/configurator-settings/published
+          echo CI_PRODUCTION_BUILD_HAS_NO_TEST_PUBLISHED_BLOB
+      - name: Private app and runtime functions unchanged
+        run: |
+          git fetch --no-tags origin main
+          git diff --quiet origin/main...HEAD -- netlify/ app/config app/admin app/access app/viewer
+          echo CI_NO_AUTH_OR_PRODUCTION_RUNTIME_CHANGE
