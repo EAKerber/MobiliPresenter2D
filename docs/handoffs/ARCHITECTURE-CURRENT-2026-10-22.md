@@ -7,7 +7,13 @@
 > As três importações v0.2 foram feitas em **`architecture/pages`**, e
 > `app`/manifesto foram regenerados a partir do mesmo compilador, preservando
 > 8 contextos e NAV-005 do Viewer separado. Produto `main` não foi alterada.
-> [Handover atualizado desta branch](CONSOLIDATED_INTEGRATION_2026-10-23.md).
+> [Handover atualizado desta branch](CONSOLIDATED_INTEGRATION_2026-10-23.md) e
+> [resultado final do gate](CONSOLIDATED_GATE_RESULT_2026-10-23.md).
+> **Actions #39949036571 SUCCESS nos três jobs:** 3/3 páginas compiladas,
+> 60/60 cenários do NAV-004 sem diferenças raster, 48/48 equivalências
+> v0.1/v0.2 com screenshots byte-idênticos, 36/36 cenários de contraste
+> (424 PASS, zero abaixo, 32 não verificadas), 12/12 pares full-page com
+> 90.315 pixels alterados, zero fora dos textos homologados.
 > Gates de browser e CI privado da issue #232 devem ser consultados antes de merge;
 > PRs #231/#234 continuam DRAFT e não há Deploy Preview novo nesta branch.
 
