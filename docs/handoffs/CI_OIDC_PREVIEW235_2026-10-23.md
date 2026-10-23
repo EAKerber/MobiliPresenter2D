@@ -1,5 +1,8 @@
 # CI-BASELINE-01 — GitHub OIDC → sessão temporária do Configurador (#235)
 
+> **GATE INTEGRAL OIDC — 23/10/2026:** [GitHub Actions #40038071520](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40038071520) **PASS COMPLETO**, `FIVE_FLOWS_PASS`: Mobile/PiP, Keyboard, Flow, Summary/Preços, Stone **5/5 no preview real**; bootstrap V5 autenticado, `POST /api/access/session` HTTP 200, Admin 401/403, logout e bloqueio do replay **PASS**. O gate integral não usou `CI_TARGET_ONLY`. Houve falhas intermitentes nas execuções anteriores e 2/2 de diagnóstico [#40037900550](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40037900550); por isso **não converter PASS isolado em homologação geral de estabilidade** até repetição independente. Este commit documental aciona segunda execução integral sem redeploy Netlify (`[skip netlify]`). Preview #235 permanece DRAFT/HOLD, `main` intacta.
+
+
 > **Gate direcionado de intermitência — 23/10/2026:** [Actions #40037900550](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40037900550) **PASS**: Summary/Preços e Stone (2/2), autenticação OIDC, Admin negado, readback de sessão e revogação comprovados. O modo `CI_TARGET_ONLY=summary,stone` tem saída explícita `TARGETED_TWO_FLOWS_PASS`, **não promove** para o gate geral. A execução anterior [#40036686930](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40036686930) teve 3/5, com inconsistências intermitentes na restauração do total e estado visual; preservamos as assertions e instrumentamos apenas diagnósticos sanitizados. Próximo gate obrigatório: **5/5 em uma execução integral**, sem `CI_TARGET_ONLY`, mantendo preview #235 em DRAFT/HOLD.
 
 
