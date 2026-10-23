@@ -12,6 +12,11 @@ on:
       - "tests/access-session-routing.test.mjs"
       - "tests/ci-preview-oidc.test.mjs"
       - "tests/ci/config-oidc-preview-runner.mjs"
+      - "tests/mobile-pip-main-browser.cjs"
+      - "tests/keyboard-browser.cjs"
+      - "tests/flow-layout-browser.cjs"
+      - "tests/summary-pricing-browser.cjs"
+      - "tests/stone-browser.cjs"
       - "docs/handoffs/CI_OIDC_PREVIEW235_2026-10-23.md"
 permissions:
   contents: read
@@ -32,6 +37,7 @@ jobs:
           node --check netlify/access/github-oidc-ci.mjs
           node --check netlify/functions/ci-config-session.mjs
           node --check tests/ci/config-oidc-preview-runner.mjs
+          for file in tests/mobile-pip-main-browser.cjs tests/keyboard-browser.cjs tests/flow-layout-browser.cjs tests/summary-pricing-browser.cjs tests/stone-browser.cjs; do node --check "$file"; done
           node --test tests/ci-preview-oidc.test.mjs tests/access-session-routing.test.mjs
   authenticated:
     needs: static
