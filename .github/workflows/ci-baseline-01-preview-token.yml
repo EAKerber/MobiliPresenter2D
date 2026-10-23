@@ -51,7 +51,7 @@ jobs:
           curl --fail --silent --show-error --max-time 20 \
             https://deploy-preview-235--mobilipresenter2d.netlify.app/ci-validation/published-v5-status.json \
             --output /tmp/ci-fixture-status.json
-          node -e 'const fs=require("node:fs");const x=JSON.parse(fs.readFileSync("/tmp/ci-fixture-status.json","utf8"));if(x.schema!=="M2DPreviewPublishedFixtureStatus/1"||x.reviewId!==235||x.verified!==true||x.store!=="configurator-settings"||!/^\\w{64}$/.test(x.sha256))process.exit(1);console.log("CI_PREVIEW_PUBLISHED_MARKER_PASS")'
+          node -e 'const fs=require("node:fs");const x=JSON.parse(fs.readFileSync("/tmp/ci-fixture-status.json","utf8"));if(x.schema!=="M2DPreviewPublishedFixtureStatus/1"||x.reviewId!==235||x.verified!==true||x.store!=="configurator-settings"||!/^[a-f0-9]{64}$/.test(x.sha256))process.exit(1);console.log("CI_PREVIEW_PUBLISHED_MARKER_PASS")'
           echo CI_CONFIG_PREVIEW_PREFLIGHT_PASS
   authenticated:
     needs: preflight
