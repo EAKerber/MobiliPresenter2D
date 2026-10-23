@@ -261,7 +261,7 @@ button:focus-visible, input:focus-visible {
 .layer-status__indicator { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 12px var(--accent); }
 .layer-status strong { font-weight: 600; }
 
-.controls { display: flex; flex-direction: column; gap: 16px; }
+.controls { display: flex; flex-direction: column; gap: 16px; container: flow-steps / inline-size; }
 .panel { padding: 16px; }
 
 .flow-stage-layout[hidden] { display: none !important; }
@@ -408,14 +408,6 @@ html[data-layout-profile="compact"] .viewer-card__footer { align-items: flex-sta
   display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px;
   padding: 6px; border: 1px solid var(--border); border-radius: 12px;
   background: rgba(23,24,22,.96); backdrop-filter: blur(10px);
-  container-type: inline-size;
-  container-name: flow-steps;
-}
-/* Isolated V5 navigation regression candidate: prevent stale containment
-   when module detail expands the rail before side-rail/stacked reflow.
-   Compact retains its width-based label query unchanged. */
-html[data-layout-profile="stacked"] body.has-module-detail .flow-nav {
-  container-type: normal;
 }
 .panel[hidden] { display: none !important; }
 .flow-step {
