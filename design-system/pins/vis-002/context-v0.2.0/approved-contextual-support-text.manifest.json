@@ -1,0 +1,75 @@
+{
+  "schema": "M2DApprovedContextualTextToken/0.2",
+  "version": "0.2.0",
+  "source": {
+    "repository": "EAKerber/MobiliPresenter2D_DesignSystem",
+    "decision": "VIS-002",
+    "decisionGitBlobSha": "63b60f8d87327c6fd1e80c8cdf4ff832c4089bfa",
+    "paletteManifest": "design-system/pins/vis-002/v0.1.0/approved-palette-reference.manifest.json",
+    "mappingDocument": "docs/VIS002C_CONTEXTUAL_MAPPING_V0_2_0.json",
+    "mappingGitBlobSha": "717b400da8d5590a03118e4ce58f07fcbababc48",
+    "authorizedUses": "docs/VIS002_PUBLIC_TEXT_CONTRAST_APPLICATION_RULE_2026-10-22.md"
+  },
+  "status": "APPROVED_EXACT_CONTEXTS_ONLY",
+  "token": "--ds-vis002-approved-support-text-light",
+  "value": "#705C4B",
+  "theme": "light",
+  "roleRef": "VIS-002.approvedPalette.colors.textSecondary.light",
+  "contexts": [
+    {
+      "route": "/",
+      "selector": ".hero-description",
+      "background": "#F0EDE8",
+      "authorization": "VIS-002.approvedRuntimePairs[0]"
+    },
+    {
+      "route": "/how-it-works/",
+      "selector": ".how-hero-note",
+      "background": "#F0EDE8",
+      "authorization": "VIS-002.approvedRuntimePairs[0]"
+    },
+    {
+      "route": "/about/",
+      "selector": ".about-scale p:not(.eyebrow)",
+      "background": "#F0EDE8",
+      "authorization": "VIS-002.approvedRuntimePairs[0]"
+    },
+    {
+      "route": "/",
+      "selector": ".story-section > p:not(.eyebrow)",
+      "background": "#E8E3DC",
+      "authorization": "VIS-002C"
+    },
+    {
+      "route": "/",
+      "selector": ".feature-copy > p:not(.eyebrow):not(.feature-availability)",
+      "background": "#F0EDE8",
+      "authorization": "VIS-002C"
+    },
+    {
+      "route": "/about/",
+      "selector": ".about-closing > p:not(.eyebrow):not(.about-closing__signature)",
+      "background": "#F0EDE8",
+      "authorization": "VIS-002C"
+    },
+    {
+      "route": "/about/",
+      "selector": ".about-scale__stat > span",
+      "background": "#F0EDE8",
+      "authorization": "VIS-002C"
+    },
+    {
+      "route": "/how-it-works/",
+      "selector": ".finish-copy > p:not(.eyebrow):not(.finish-signature)",
+      "background": "#F0EDE8",
+      "authorization": "VIS-002C"
+    }
+  ],
+  "constraints": {
+    "allowsGlobalUsage": false,
+    "allowsDifferentColor": false,
+    "productUseRequiresExactSelectors": true,
+    "visualChangeAuthorized": "VIS-002C approval only for five additional light-theme support text consumers",
+    "darkThemeUnchanged": true
+  }
+}

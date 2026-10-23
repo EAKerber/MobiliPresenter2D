@@ -194,3 +194,7 @@ html[data-theme="dark"] .environment-art::after { background-image: url("/landin
   .intro-mark { width: min(112vw, 774px); }
   .intro-words { font-size: clamp(1rem, 2vw, 1.45rem); }
 }
+
+/* VIS-002C / P-TOKEN-02B v0.2: approved scoped secondary text; excludes unavailable state. */
+html[data-theme="light"] .story-section > p:not(.eyebrow),
+html[data-theme="light"] .feature-copy > p:not(.eyebrow):not(.feature-availability) { color: var(--ds-vis002-approved-support-text-light); }

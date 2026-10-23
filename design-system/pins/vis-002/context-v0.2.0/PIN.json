@@ -1,0 +1,33 @@
+{
+  "schema": "M2DApprovedContextualTextPin/0.2",
+  "status": "SCOPED_INTEGRATION_CANDIDATE_NOT_RELEASED",
+  "designSystem": {
+    "repository": "EAKerber/MobiliPresenter2D_DesignSystem",
+    "decisionGitBlob": "63b60f8d87327c6fd1e80c8cdf4ff832c4089bfa",
+    "mappingDocument": "docs/VIS002C_CONTEXTUAL_MAPPING_V0_2_0.json",
+    "mappingGitBlob": "717b400da8d5590a03118e4ce58f07fcbababc48",
+    "governance": "docs/VIS002_PUBLIC_TEXT_CONTRAST_APPLICATION_RULE_2026-10-22.md"
+  },
+  "artifact": {
+    "path": "app/design-system/approved-contextual-support-text-v2.css",
+    "gitBlob": "39591876eb0a563553214dcd64062258c7eb35c0"
+  },
+  "manifest": {
+    "path": "design-system/pins/vis-002/context-v0.2.0/approved-contextual-support-text.manifest.json",
+    "gitBlob": "8eb499f06ea4595f9575f79c24736b5833928876"
+  },
+  "mapping": {
+    "path": "design-system/pins/vis-002/context-v0.2.0/contextual-mapping.json",
+    "gitBlob": "717b400da8d5590a03118e4ce58f07fcbababc48"
+  },
+  "previousVersion": "design-system/pins/vis-002/context-v0.1.0/PIN.json",
+  "allowedRoutes": [
+    "/",
+    "/how-it-works/",
+    "/about/"
+  ],
+  "allowedSelectorsCount": 8,
+  "lightOnly": true,
+  "visualChangeAuthorizedOnlyFor": "VIS-002C five new text contexts; existing three strictly equivalent",
+  "runtimeStatus": "NOT_RELEASED"
+}
