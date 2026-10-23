@@ -136,7 +136,7 @@ try{
   result.tests.push({name,status,exitCode:run.status,
    errorClass:status==="PASS"?null:(diagnostic?.[0]||run.error?.code||"UNKNOWN"),
    failureLocation:status==="PASS"?null:location});
-  console.log("CI_CONFIG_TEST "+JSON.stringify({name,status}));
+  console.log("CI_CONFIG_TEST "+JSON.stringify({name,status,errorClass:status==="PASS"?null:(diagnostic?.[0]||run.error?.code||"UNKNOWN"),failureLocation:status==="PASS"?null:location}));
  }
  result.status=result.tests.every(t=>t.status==="PASS")?"FIVE_FLOWS_PASS":"FIVE_FLOWS_PARTIAL";
 } catch(e){
