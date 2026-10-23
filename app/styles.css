@@ -414,7 +414,7 @@ html[data-layout-profile="compact"] .viewer-card__footer { align-items: flex-sta
 /* Isolated V5 navigation regression candidate: prevent stale containment
    when module detail expands the rail before side-rail/stacked reflow.
    Compact retains its width-based label query unchanged. */
-html:is([data-layout-profile="side-rail"], [data-layout-profile="stacked"]) body.has-module-detail .flow-nav {
+html[data-layout-profile="stacked"] body.has-module-detail .flow-nav {
   container-type: normal;
 }
 .panel[hidden] { display: none !important; }
