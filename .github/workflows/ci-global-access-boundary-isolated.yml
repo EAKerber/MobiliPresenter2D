@@ -1,0 +1,67 @@
+name: CI-BASELINE-01 global access boundary migration (isolated)
+on:
+  push:
+    branches:
+      - ci/ci-global-auth-boundary-repair-20261023
+    paths:
+      - ".github/workflows/ci-global-access-boundary-isolated.yml"
+      - ".github/workflows/public-routing-before-clerk.yml"
+      - ".github/workflows/ci-baseline-01-published-preview-fixture.yml"
+      - "tests/public-pages-smoke.cjs"
+      - "docs/handoffs/CI_GLOBAL_ACCESS_BOUNDARY_2026-10-23.md"
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  public-access-boundary:
+    runs-on: ubuntu-latest
+    timeout-minutes: 16
+    container:
+      image: mcr.microsoft.com/playwright:v1.56.0-noble
+      options: --ipc=host
+    env:
+      PUBLIC_PAGES_URL: https://deploy-preview-235--mobilipresenter2d.netlify.app
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Syntax and route contract; immutable private app
+        run: |
+          node --check tests/public-pages-smoke.cjs
+          node tests/public-cutover-contract.cjs
+          git fetch --no-tags origin main
+          git diff --quiet origin/main...HEAD -- app/config app/admin app/access app/viewer
+          changed=$(git diff --name-only origin/main...HEAD -- netlify/)
+          unexpected=$(printf '%s\n' "$changed" | grep -Ev '^(netlify/access/github-oidc-ci\.mjs|netlify/functions/ci-config-session\.mjs)?$' || true)
+          if [ -n "$unexpected" ]; then echo "::error::Unreviewed Netlify runtime changes"; exit 1; fi
+          grep -Fq 'CI_PREVIEW_ORIGIN="https://deploy-preview-235--mobilipresenter2d.netlify.app"' netlify/access/github-oidc-ci.mjs
+          grep -Fq 'context?.deploy?.context==="deploy-preview"' netlify/access/github-oidc-ci.mjs
+          grep -Fq 'await verifyGithubOidc(jwt)' netlify/functions/ci-config-session.mjs
+          grep -Fq 'access:"config-only"' netlify/functions/ci-config-session.mjs
+          echo CI_PRIVATE_APP_AND_OIDC_SCOPE_PASS
+      - name: Check existing preview without fetching protected Config HTML
+        run: |
+          set -eu
+          curl -fsSL --max-time 20 "$PUBLIC_PAGES_URL/" -o /tmp/m2d-public-landing.html
+          curl -fsSL --max-time 20 "$PUBLIC_PAGES_URL/access/" -o /tmp/m2d-access-landing.html
+          grep -Fq 'id="environmentTrack"' /tmp/m2d-public-landing.html
+          grep -Fq 'id="confirmAccess"' /tmp/m2d-access-landing.html
+          status=$(curl -sS --max-time 20 -o /dev/null -w '%{http_code}' "$PUBLIC_PAGES_URL/api/buyer-configuration")
+          case "$status" in 401|403) echo CI_PRIVATE_BUYER_DENIAL_PASS;; *) echo "::error::Buyer API must be private"; exit 1;; esac
+      - name: Isolated browser tooling (no Netlify deployment)
+        run: |
+          npm install --prefix /tmp/m2d-ci-global-public --no-audit --no-fund playwright@1.56.0
+          ln -s /tmp/m2d-ci-global-public/node_modules ./node_modules
+      - name: Public Landing/Viewer, anonymous Config denial, synthetic public projection
+        run: node tests/public-pages-smoke.cjs /tmp/m2d-public-review
+      - name: Save only public test screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ci-global-public-access-evidence
+          path: /tmp/m2d-public-review
+          retention-days: 7
+          if-no-files-found: warn
