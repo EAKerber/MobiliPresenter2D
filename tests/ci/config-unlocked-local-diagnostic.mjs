@@ -30,7 +30,11 @@ try{
   const errorDetail=(message.match(/Error:\s*([^\n]+)/)||[])[1]||null;
   const result={name,status:res.status===0?"PASS":"FAIL",errorClass:className,
    failureLocation:location,exitCode:res.status,
-   assertion:(assertion||errorDetail||"").slice(0,240)};
+   assertion:(assertion||errorDetail||"").slice(0,240),
+   failureExcerpt:res.status===0?null:message.slice(
+    Math.max(0,message.search(/AssertionError|TimeoutError|Error:/)), 
+    Math.max(0,message.search(/AssertionError|TimeoutError|Error:/))+1600
+   ).replace(/https?:\/\/[^\s'"]+/g,"[URL]").replace(/\x1b\[[0-9;]*m/g,"")};
   out.push(result);
   console.log("LOCAL_CONFIG_DIAGNOSTIC "+JSON.stringify(result));
  }
