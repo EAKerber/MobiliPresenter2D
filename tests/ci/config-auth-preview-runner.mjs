@@ -55,13 +55,22 @@ try{
  assert.ok(cookies.some(c=>c.name===ACCESS_COOKIE_NAME && c.httpOnly && c.secure),
   "MISSING_SECURE_HTTPONLY_SESSION_COOKIE");
  result.cookieSecure=true;
+ const published=await context.request.get(ORIGIN+"/api/buyer-configuration",{timeout:18000});
+ result.buyerConfigurationHTTP=published.status();
+ assert.equal(published.status(),200,"PUBLISHED_CONFIGURATION_NOT_AVAILABLE_IN_PREVIEW");
  const probe=await context.newPage();
  const privateResponse=await probe.goto(TARGET,{waitUntil:"domcontentloaded",timeout:25000});
  assert.equal(privateResponse?.status(),200,"AUTHENTICATED_CONFIG_HTTP_ERROR");
  assert.equal(new URL(probe.url()).pathname,"/config/","AUTHENTICATED_CONFIG_REDIRECTED");
- await probe.waitForFunction(()=>
-  Boolean(window.CASA_EM_MODULOS_DEBUG?.getLayoutProfile)
-  && Boolean(document.querySelector(".workspace")),null,{timeout:30000});
+ await probe.waitForFunction(()=>{
+  const workspace=document.querySelector(".workspace");
+  const rect=workspace?.getBoundingClientRect();
+  return document.documentElement.dataset.publishedConfigurationStatus==="validated"
+   && Boolean(window.CASA_EM_MODULOS_DEBUG?.getLayoutProfile)
+   && Boolean(workspace)&&!workspace.hidden
+   && !workspace.inert && getComputedStyle(workspace).display!=="none"
+   && rect?.width>0 && rect?.height>0;
+ },null,{timeout:30000});
  result.bootstrap=true;
  const denied=await context.request.get(ORIGIN+"/api/admin-bootstrap",{timeout:15000});
  assert.ok([401,403].includes(denied.status()),"TEMP_SESSION_GAINED_ADMIN_ACCESS");
