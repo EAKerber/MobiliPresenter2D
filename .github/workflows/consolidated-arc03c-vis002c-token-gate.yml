@@ -1,0 +1,150 @@
+name: Consolidated ARC-03C + P-TOKEN-02B v0.2 + VIS-002C integration
+on:
+  push:
+    branches:
+      - integration/consolidated-arc03c-vis002c-token-20261023
+    paths:
+      - "architecture/pages/**"
+      - "architecture/fragments/**"
+      - "architecture/generated/**"
+      - "app/index.html"
+      - "app/about/index.html"
+      - "app/how-it-works/index.html"
+      - "app/landing/landing.css"
+      - "app/about/about.css"
+      - "app/how-it-works/how-it-works.css"
+      - "app/design-system/**"
+      - "design-system/**"
+      - "scripts/compile-primary-pages.mjs"
+      - "scripts/verify-*"
+      - "tests/arc03c-*"
+      - "tests/vis002c-*"
+      - "tests/design-system-*"
+      - ".github/workflows/consolidated-arc03c-vis002c-token-gate.yml"
+      - "docs/handoffs/CONSOLIDATED_INTEGRATION_2026-10-23.md"
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: consolidated-public-source-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  source-and-build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: ARC authorial source and historical immutable pins
+        run: |
+          node --check scripts/compile-primary-pages.mjs
+          node --test tests/arc03c-source-authority.test.mjs
+          npm run pages:check
+          node scripts/verify-design-system-reference-pin.mjs
+          node scripts/verify-vis002-contextual-token.mjs
+          node --test tests/design-system-reference-pin.test.mjs tests/vis002c-p-token-v2.test.mjs
+      - name: Verify actual Netlify output build
+        run: |
+          npm install --no-save --no-package-lock esbuild@0.28.2
+          npm run build
+          npm run pages:check
+      - name: Check source guard and protected public/private boundaries
+        run: |
+          git diff --quiet -- architecture/pages architecture/generated app/index.html app/about/index.html app/how-it-works/index.html
+          git fetch origin main
+          git diff --quiet origin/main...HEAD -- app/viewer app/config app/admin app/access app/admin.html netlify.toml
+          git diff --name-only origin/main...HEAD -- app | while IFS= read -r p; do
+            case "$p" in
+              app/index.html|app/about/index.html|app/how-it-works/index.html|app/landing/landing.css|app/about/about.css|app/how-it-works/how-it-works.css|app/design-system/approved-contextual-support-text.css|app/design-system/approved-contextual-support-text-v2.css) ;;
+              *) echo "Unauthorized app mutation: $p"; exit 1 ;;
+            esac
+          done
+          echo CONSOLIDATED_SOURCE_SCOPE_PASS
+  context-and-raster:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    container:
+      image: mcr.microsoft.com/playwright:v1.56.0-noble
+      options: --ipc=host
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Isolated Chromium WebKit tooling, no Netlify deploy
+        run: |
+          npm install --prefix /tmp/m2d-consolidated-playwright --no-audit --no-fund playwright@1.56.0 pngjs@7.0.0
+          ln -s /tmp/m2d-consolidated-playwright/node_modules ./node_modules
+      - name: Serve real staged Netlify publish directory locally
+        run: |
+          node scripts/compile-primary-pages.mjs --check
+          python3 -m http.server 8123 --bind 127.0.0.1 --directory app >/tmp/consolidated-http.log 2>&1 &
+          sleep 2
+          curl -fsS http://127.0.0.1:8123/ >/dev/null
+          curl -fsS http://127.0.0.1:8123/about/ >/dev/null
+          curl -fsS http://127.0.0.1:8123/how-it-works/ >/dev/null
+      - name: Retain exact v0.1 to v0.2 equivalence for three original consumers
+        run: node tests/vis002c-original-three-equivalence.mjs
+      - name: Assert five new contrast consumers and semantic exceptions
+        run: node tests/vis002c-public-contrast.mjs
+      - name: Full-page pixel containment and third-party iframe stabilization
+        run: node tests/vis002c-full-page-visual.mjs
+      - name: Generated pages remain unchanged after browser tests
+        run: |
+          node scripts/compile-primary-pages.mjs --check
+          git diff --quiet -- app architecture
+      - name: Preserve inspection evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: consolidated-token-public-visual
+          path: |
+            artifacts/vis002c-original-three/
+            artifacts/vis002c-contrast/
+            artifacts/vis002c-full-page/
+          retention-days: 14
+          if-no-files-found: warn
+  arc03c-header-parity:
+    runs-on: ubuntu-latest
+    timeout-minutes: 24
+    container:
+      image: mcr.microsoft.com/playwright:v1.56.0-noble
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Build tools for static browser parity
+        run: |
+          npm install --prefix /tmp/m2d-consolidated-arc03c --no-audit --no-fund playwright@1.56.0 pngjs@7.0.0
+          ln -s /tmp/m2d-consolidated-arc03c/node_modules ./node_modules
+      - name: Restore the immutable pre-cutover authored HTML baseline
+        run: |
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
+          mkdir -p artifacts/arc03c/baseline/about artifacts/arc03c/baseline/how-it-works
+          git show 303468b4ddbb07a761316abca28901ccaea219df:app/index.html > artifacts/arc03c/baseline/index.html
+          git show 303468b4ddbb07a761316abca28901ccaea219df:app/about/index.html > artifacts/arc03c/baseline/about/index.html
+          git show 303468b4ddbb07a761316abca28901ccaea219df:app/how-it-works/index.html > artifacts/arc03c/baseline/how-it-works/index.html
+      - name: Serve consolidated generated pages
+        run: |
+          python3 -m http.server 8123 --bind 127.0.0.1 --directory app >/tmp/consolidated-arc03c.log 2>&1 &
+          sleep 2
+          curl -fsS http://127.0.0.1:8123/ >/dev/null
+      - name: Check primary header DOM, keyboard and screenshot parity
+        run: node tests/arc03c-published-pages-browser-differential.mjs
+      - name: Retain ARC visual evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: consolidated-primary-header-parity
+          path: artifacts/arc03c/
+          retention-days: 14
+          if-no-files-found: warn
