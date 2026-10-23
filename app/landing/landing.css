@@ -194,3 +194,7 @@ html[data-theme="dark"] .environment-art::after { background-image: url("/landin
   .intro-mark { width: min(112vw, 774px); }
   .intro-words { font-size: clamp(1rem, 2vw, 1.45rem); }
 }
+
+/* VIS-002C: approved secondary copy on these light surfaces only. */
+html[data-theme="light"] .story-section > p:not(.eyebrow),
+html[data-theme="light"] .feature-copy > p:not(.eyebrow):not(.feature-availability) { color: #705C4B; }

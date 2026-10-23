@@ -1,0 +1,62 @@
+name: VIS-002C contextual public text contrast
+on:
+  push:
+    branches:
+      - fix/vis002c-public-text-contrast-20261022
+    paths:
+      - app/landing/landing.css
+      - app/about/about.css
+      - app/how-it-works/how-it-works.css
+      - tests/vis002c-public-contrast.mjs
+      - tests/vis002c-css-contract.test.mjs
+      - docs/audits/vis002c-contextual-text-contrast-2026-10-22.md
+      - .github/workflows/vis002c-public-contrast.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  css-contract:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: node --test tests/vis002c-css-contract.test.mjs
+  browser-contrast:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    container:
+      image: mcr.microsoft.com/playwright:v1.56.0-noble
+      options: --ipc=host
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Use versioned Chromium and WebKit
+        run: |
+          npm install --prefix /tmp/m2d-vis002c-playwright --no-audit --no-fund playwright@1.56.0
+          ln -s /tmp/m2d-vis002c-playwright/node_modules ./node_modules
+      - name: Serve actual public app without deploy
+        run: |
+          python3 -m http.server 8123 --bind 127.0.0.1 --directory app >/tmp/vis002c-app.log 2>&1 &
+          sleep 2
+          curl -fsS http://127.0.0.1:8123/ >/dev/null
+          curl -fsS http://127.0.0.1:8123/about/ >/dev/null
+          curl -fsS http://127.0.0.1:8123/how-it-works/ >/dev/null
+      - name: Assert computed approved pairs and excluded roles
+        run: node tests/vis002c-public-contrast.mjs
+      - name: Assert browser audit did not modify app
+        run: |
+          test -z "$(git status --porcelain --untracked-files=no -- app)"
+      - name: Save measured values
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: vis002c-public-contrast
+          path: artifacts/vis002c-contrast/
+          retention-days: 14
+          if-no-files-found: warn

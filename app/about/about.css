@@ -48,3 +48,7 @@
 
 /* Contextual VIS-002 pair for the approved warm scale surface. */
 html[data-theme="light"] .about-scale p:not(.eyebrow) { color: #705C4B; }
+
+/* VIS-002C: approved secondary copy; preserve editorial signature. */
+html[data-theme="light"] .about-closing > p:not(.eyebrow):not(.about-closing__signature),
+html[data-theme="light"] .about-scale__stat > span { color: #705C4B; }

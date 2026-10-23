@@ -284,3 +284,6 @@ html[data-theme="light"] .study-band .eyebrow { color: #70522F; }
 html[data-theme="dark"] .study-art figcaption { background: #20211F; color: #F0EDE8; }
 
 @media(min-width:901px){.foundation-list,.study-topics{align-items:start}}
+
+/* VIS-002C: approved secondary copy; keep the copper signature unchanged. */
+html[data-theme="light"] .finish-copy > p:not(.eyebrow):not(.finish-signature) { color: #705C4B; }
