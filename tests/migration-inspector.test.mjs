@@ -39,6 +39,17 @@ test("maps static pages, assets, shared dependencies and cautious CSS candidates
     assert.equal(existsSync(join(root,"migration-inspector.json")),false,"read-only by default");
   });
 });
+test("honors base href for protected configurator-relative assets",()=>{
+  fixture(({root,put})=>{
+    put("config/index.html",'<base href="/"><script src="core/controller.js?v=1"></script><link rel="stylesheet" href="styles.css">');
+    put("core/controller.js","window.ready=true;");
+    put("styles.css",".config { display: block }");
+    const result=inspect({appRoot:root,routes:[["config","config/index.html"]]});
+    assert.deepEqual(result.routes[0].scripts,["core/controller.js"]);
+    assert.deepEqual(result.routes[0].stylesheets,["styles.css"]);
+    assert.equal(result.summary.missingReferences,0);
+  });
+});
 test("flags missing pages and unsafe relative assets without traversing filesystem",()=>{
   fixture(({root,put})=>{
     put("index.html",'<script src="../../../outside.js"></script><link rel="stylesheet" href="/css/missing.css">');
@@ -58,4 +69,8 @@ test("real product smoke: route discovery and focus evidence, not homologation",
   assert.equal(result.routes.find(r=>r.id==="viewer")?.status,"FOUND");
   assert.equal(result.focusEvidence.some(x=>x.route==="landing"&&x.htmlStatic),true);
   assert.equal(result.focusEvidence.some(x=>x.route==="viewer"&&x.htmlStatic),false,"Viewer NAV-005 is a distinct variant");
+  const config=result.routes.find(r=>r.id==="config");
+  assert.ok(config.scripts.includes("core/browser-compat.js"),"config resolves root scripts through its HTML base");
+  assert.ok(config.stylesheets.includes("styles.css"),"config root stylesheet belongs to /styles.css");
+  assert.equal(config.unresolved.some(x=>x.path?.startsWith("config/core/")),false);
 });
