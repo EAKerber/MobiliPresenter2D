@@ -1,0 +1,28 @@
+name: VIS-002C P-TOKEN v0.3 product pin
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - app/design-system/vis002c-long-copy-light-v0.3.0.css
+      - app/landing/landing.css
+      - app/about/about.css
+      - app/how-it-works/how-it-works.css
+      - design-system/pins/vis-002/context-v0.3.0/**
+      - scripts/verify-vis002c-product-pin-v03.mjs
+      - docs/architecture/vis002c-v03-product-integration-2026-10-24.md
+      - .github/workflows/vis002c-v03-product-pin.yml
+permissions:
+  contents: read
+jobs:
+  verify-pinned-consumers:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify copied source blobs, seven contexts, token consumers and theme scope
+        run: |
+          node --check scripts/verify-vis002c-product-pin-v03.mjs
+          node scripts/verify-vis002c-product-pin-v03.mjs
