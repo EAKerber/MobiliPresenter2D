@@ -1,0 +1,14 @@
+/* GENERATED CANDIDATE — VIS-002C measured long-copy contexts only.
+ * Mapping: docs/VIS002C_CONTEXTUAL_MAPPING_V0_3_0.json
+ * Decision source blob: 63b60f8d87327c6fd1e80c8cdf4ff832c4089bfa
+ * Does not change v0.2, global roles, text color declarations, or dark theme.
+ */
+html[data-theme="light"] .story-section > p:not(.eyebrow),
+html[data-theme="light"] .feature-copy > p:not(.eyebrow):not(.feature-availability),
+html[data-theme="light"] .about-closing > p:not(.eyebrow):not(.about-closing__signature),
+html[data-theme="light"] .about-scale__stat > span,
+html[data-theme="light"] .finish-copy > p:not(.eyebrow):not(.finish-signature),
+html[data-theme="light"] .commercial-clarity > p:not(.eyebrow),
+html[data-theme="light"] .launch-card .launch-copy > p {
+  --ds-vis002c-long-copy-light: #292723;
+}
