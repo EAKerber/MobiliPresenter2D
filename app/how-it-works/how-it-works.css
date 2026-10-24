@@ -284,3 +284,19 @@ html[data-theme="light"] .study-band .eyebrow { color: #70522F; }
 html[data-theme="dark"] .study-art figcaption { background: #20211F; color: #F0EDE8; }
 
 @media(min-width:901px){.foundation-list,.study-topics{align-items:start}}
+
+
+/* VIS-002: measured light-surface labels and copy only. */
+html[data-theme="light"] .how-hero-copy > p.eyebrow,
+html[data-theme="light"] .finish-copy > p.eyebrow,
+html[data-theme="light"] .production-intro > p.eyebrow,
+html[data-theme="light"] .quality-copy > p.eyebrow,
+html[data-theme="light"] .commercial-clarity > p.eyebrow {
+  color: #70522F;
+}
+
+html[data-theme="light"] .finish-copy > p:not(.eyebrow):not(.finish-signature),
+html[data-theme="light"] .commercial-clarity > p:not(.eyebrow),
+html[data-theme="light"] .launch-card .launch-copy > p {
+  color: var(--ds-vis002c-long-copy-light);
+}
