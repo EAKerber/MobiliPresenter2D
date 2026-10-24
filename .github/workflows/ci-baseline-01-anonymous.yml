@@ -51,6 +51,7 @@ jobs:
             "netlify.toml",
             "netlify/plugins/ci-v5-fixture/index.mjs",
             "netlify/plugins/ci-v5-fixture/package.json",
+            "netlify/plugins/ci-v5-fixture/manifest.yml",
             "netlify/access/migrations/20261024120000_ci_config_fixture_role.sql",
             "scripts/build-ci-preview-fixture.mjs",
             "tests/ci/build-ci-preview-fixture.test.mjs",
@@ -62,7 +63,7 @@ jobs:
           ]);
           const unexpected = changed.filter(path => !allowed.has(path));
           if (unexpected.length) throw new Error("Unexpected files in CI fixture PR: " + unexpected.join(", "));
-          if (!changed.includes("netlify.toml") || !changed.includes("netlify/plugins/ci-v5-fixture/index.mjs")) {
+          if (!changed.includes("netlify.toml") || !changed.includes("netlify/plugins/ci-v5-fixture/index.mjs") || !changed.includes("netlify/plugins/ci-v5-fixture/manifest.yml")) {
             throw new Error("Approved isolated preview fixture is not included");
           }
           NODE
