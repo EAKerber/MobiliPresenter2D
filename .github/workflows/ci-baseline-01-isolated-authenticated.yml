@@ -66,3 +66,5 @@ jobs:
           path: artifacts/ci-baseline-01/authenticated.json
           retention-days: 7
           if-no-files-found: warn
+
+# This scoped push trigger permits pre-merge validation after environment setup.
