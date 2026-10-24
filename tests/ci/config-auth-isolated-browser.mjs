@@ -12,7 +12,7 @@ const out="artifacts/ci-baseline-01/authenticated.json";
 await mkdir("artifacts/ci-baseline-01",{recursive:true});
 let report={schema:"M2DCIIsolatedSessionFixture/1",classification:"BLOCKED_AUTH_FIXTURE",
   stage:"preflight",realAccessRedeem:false,bootstrap:false,revoked:false};
-let db,browser,context,grantId;
+let db,browser,context,grantId,jsErrors=[];
 try{
  const input={
   origin:process.env.CI_STAGING_ORIGIN,
@@ -50,7 +50,7 @@ try{
  browser=await chromium.launch({headless:true});
  context=await browser.newContext({viewport:{width:1366,height:768},serviceWorkers:"block"});
  const page=await context.newPage();
- const jsErrors=[];
+ jsErrors=[];
  page.on("pageerror",error=>jsErrors.push(error.name||"Error"));
  const redeem=await context.request.post(new URL("/api/access/redeem",gate.origin).toString(),{
   headers:{Origin:gate.origin,"Content-Type":"application/json"},
