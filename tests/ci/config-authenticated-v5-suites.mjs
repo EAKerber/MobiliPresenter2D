@@ -21,6 +21,7 @@ const origin = process.env.CI_STAGING_PREVIEW_ORIGIN;
 const expectedHost = "deploy-preview-238--m2d-auth-ci-isolated.netlify.app";
 const configUrl = new URL("/config/", expectedHost ? "https://" + expectedHost : origin).toString();
 const reportPath = "artifacts/ci-baseline-01/authenticated-v5-suites.json";
+const delay = milliseconds => new Promise(resolve => setTimeout(resolve, milliseconds));
 const report = {
   schema: "M2DAuthenticatedV5Suites/1", classification: "BLOCKED_AUTH_FIXTURE",
   fixtureVerified: false, suites: {}, grantsRevoked: true, tokenReplayDenied: true,
@@ -40,9 +41,18 @@ try {
   assert.equal(origin, "https://" + expectedHost, "BLOCKED_AUTH_FIXTURE: preview origin is not the approved #238 deploy preview");
   assert.equal(process.env.CI_STAGING_PREVIEW_REVIEW_ID, "238",
     "BLOCKED_AUTH_FIXTURE: preview review ID is not the approved #238");
-  const markerResponse = await fetch(new URL("/ci-validation/published-v5-status.json", origin));
-  assert.equal(markerResponse.status, 200, "BLOCKED_AUTH_FIXTURE: preview V5 marker is missing");
-  const marker = await markerResponse.json();
+  report.stage = "preview-fixture-preflight";
+  const markerUrl = new URL("/ci-validation/published-v5-status.json", origin);
+  const markerDeadline = Date.now() + 180000;
+  let marker = null;
+  while (Date.now() < markerDeadline && !marker) {
+    try {
+      const response = await fetch(markerUrl, {signal: AbortSignal.timeout(5000)});
+      if (response.status === 200) marker = await response.json();
+    } catch {}
+    if (!marker) await delay(5000);
+  }
+  assert.ok(marker, "BLOCKED_AUTH_FIXTURE: preview V5 marker did not become ready");
   assert.equal(marker.schema, "M2DPreviewPublishedFixtureStatus/1");
   assert.equal(marker.reviewId, 238);
   assert.equal(marker.verified, true);
@@ -52,7 +62,6 @@ try {
   report.fixtureVerified = true;
   report.fixtureSha256 = marker.sha256;
   report.previewReviewId = marker.reviewId;
-  report.stage = "preview-fixture-preflight";
 
   db = new pg.Client({
     connectionString: process.env.CI_STAGING_DATABASE_URL,
