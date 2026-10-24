@@ -182,6 +182,31 @@ try{
    priceBarVisible:state.priceBarVisible,
    priceEstimateHasCurrency:state.priceEstimateHasCurrency
   };
+  if(stage.key==="finishes"){
+   report.stage="ds05a-finishes-option";
+   const skirtingToggle=page.locator("#stoneSkirtingToggle");
+   assert.equal(await skirtingToggle.count(),1,"DS-05A: stone skirting option not rendered");
+   const originalSkirting=await skirtingToggle.isChecked();
+   if(originalSkirting)await skirtingToggle.uncheck();else await skirtingToggle.check();
+   await page.waitForFunction((expected)=>
+    document.querySelector("#stoneSkirtingToggle")?.checked===expected,
+    !originalSkirting,{timeout:5000});
+   const changedEstimate=await priceEstimateStatus();
+   assert.ok(changedEstimate.visible&&changedEstimate.hasCurrency,
+    "DS-05A: estimate missing after finish option change");
+   if(originalSkirting)await skirtingToggle.check();else await skirtingToggle.uncheck();
+   await page.waitForFunction((expected)=>
+    document.querySelector("#stoneSkirtingToggle")?.checked===expected,
+    originalSkirting,{timeout:5000});
+   const restoredEstimate=await priceEstimateStatus();
+   assert.ok(restoredEstimate.visible&&restoredEstimate.hasCurrency,
+    "DS-05A: estimate missing after finish option restore");
+   report.ds05aFinishOption={
+    stoneSkirtingAvailable:true,
+    optionChangedAndRestored:true,
+    priceEstimateVisibleAfterChangeAndRestore:true
+   };
+  }
  }
  report.ds05aNextStep=ds05aStageProgression;
  // Staging user must not acquire admin capabilities.
