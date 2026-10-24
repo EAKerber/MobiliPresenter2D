@@ -1,5 +1,13 @@
 name: CI-BASELINE-01 isolated authenticated Config
 on:
+  push:
+    branches:
+      - ci/ci-baseline-01-isolated-auth-extraction-20261024
+    paths:
+      - ".github/workflows/ci-baseline-01-isolated-authenticated.yml"
+      - "tests/ci/config-auth-isolated-browser.mjs"
+      - "tests/ci/config-auth-isolation.mjs"
+      - "tests/ci/config-auth-isolation.test.mjs"
   workflow_dispatch:
 permissions:
   contents: read
@@ -28,6 +36,12 @@ jobs:
           node-version: "22"
       - name: Reject unsafe origins and roles before any network access
         run: node --test tests/ci/config-auth-isolation.test.mjs
+      - name: Check required environment values without displaying them
+        run: |
+          if [ -z "$CI_STAGING_SUPABASE_REF" ] || [ -z "$CI_STAGING_DATABASE_URL" ]; then
+            echo "BLOCKED_AUTH_FIXTURE: environment values are not configured"
+            exit 1
+          fi
       - name: Install isolated Playwright and Postgres tooling
         run: |
           npm install --prefix /tmp/m2d-ci-config-auth --no-audit --no-fund playwright@1.56.0 pg@8.16.3
