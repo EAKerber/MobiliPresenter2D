@@ -89,12 +89,12 @@ try{
   const next=document.querySelector("#nextStepButton");
   const visibleCount=Number(visibleText),totalCount=Number(totalText);
   return {
-   visibleCountReady:/^\\d+$/.test(visibleText),
-   totalCountReady:/^\\d+$/.test(totalText),
+   visibleCountReady:visibleText.length>0&&Array.from(visibleText).every(ch=>ch>="0"&&ch<="9"),
+   totalCountReady:totalText.length>0&&Array.from(totalText).every(ch=>ch>="0"&&ch<="9"),
    visibleCountWithinTotal:Number.isFinite(visibleCount)&&Number.isFinite(totalCount)&&visibleCount>=0&&visibleCount<=totalCount,
    priceBarVisible:visible(price),
    priceBarHasText:Boolean(priceText),
-   priceEstimateHasCurrency:/R\\$\\s*[\\d.,]+/.test(priceText),
+   priceEstimateHasCurrency:priceText.includes("R$")&&Array.from(priceText).some(ch=>ch>="0"&&ch<="9"),
    nextStepVisible:visible(next)&&!next.disabled
   };
  });
