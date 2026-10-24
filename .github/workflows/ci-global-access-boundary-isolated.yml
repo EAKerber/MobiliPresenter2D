@@ -13,6 +13,7 @@ on:
       - "tests/flow-layout-browser.cjs"
       - "tests/summary-pricing-browser.cjs"
       - "tests/stone-browser.cjs"
+      - "tests/ci/local-buyer-config-server.mjs"
       - "docs/handoffs/CI_GLOBAL_ACCESS_BOUNDARY_2026-10-23.md"
   workflow_dispatch:
 permissions:
@@ -101,7 +102,10 @@ jobs:
           node tests/ci/local-buyer-config-server.mjs > /tmp/m2d-local-v5-server.log 2>&1 &
           for i in $(seq 1 20); do
             if curl -fsS --max-time 2 http://127.0.0.1:8123/api/buyer-configuration -o /tmp/m2d-local-buyer.json; then
-              echo CI_LOCAL_V5_FIXTURE_READY
+              status=$(curl -sS --max-time 3 -X POST -H "Content-Type: application/json" -d '{}' -o /tmp/m2d-local-session.json -w '%{http_code}' http://127.0.0.1:8123/api/access/session)
+              test "$status" = 200
+              node -e 'const assert=require("node:assert/strict");const s=require("/tmp/m2d-local-session.json");assert.deepEqual(s,{authenticated:false});'
+              echo CI_LOCAL_V5_FIXTURE_READY_ANONYMOUS
               exit 0
             fi
             sleep 1
