@@ -65,14 +65,23 @@ jobs:
           set -euo pipefail
           for i in $(seq 1 90); do
             root=$(curl -L -sS --max-time 6 "$PUBLIC_PAGES_URL/" || true)
-            config=$(curl -L -sS --max-time 6 "$PUBLIC_PAGES_URL/config/" || true)
-            if [[ "$root" == *'id="environmentTrack"'* && "$config" == *'class="workspace"'* ]]; then
-              echo "Netlify preview root and config ready"
+            config=$(curl -sS -o /dev/null -w '%{http_code}\t%{redirect_url}' --max-time 6 "$PUBLIC_PAGES_URL/config/" || true)
+            access=$(curl -L -sS --max-time 6 "$PUBLIC_PAGES_URL/access/" || true)
+            config_status=${config%%$'\t'*}
+            config_location=${config#*$'\t'}
+            if [[ "$root" == *'id="environmentTrack"'* \
+              && "$config_status" =~ ^30[12378]$ \
+              && "$config_location" == "$PUBLIC_PAGES_URL/access/"* \
+              && "$access" == *'Confirmar acesso ao configurador'* ]]; then
+              echo "Netlify preview public root and anonymous access redirect ready"
               break
             fi
             sleep 3
           done
-          [[ "$root" == *'id="environmentTrack"'* && "$config" == *'class="workspace"'* ]]
+          [[ "$root" == *'id="environmentTrack"'* \
+            && "$config_status" =~ ^30[12378]$ \
+            && "$config_location" == "$PUBLIC_PAGES_URL/access/"* \
+            && "$access" == *'Confirmar acesso ao configurador'* ]]
       - name: Public projection and negative endpoint checks
         shell: bash
         run: |
