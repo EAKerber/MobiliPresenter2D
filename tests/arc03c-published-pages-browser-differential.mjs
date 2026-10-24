@@ -77,7 +77,7 @@ async function evaluate(browser,scenario,width,theme,sourceHtml){
     await page.locator("#menuToggle").focus();
     await page.keyboard.press("Enter");
     expanded=await page.locator("#menuToggle").getAttribute("aria-expanded");
-    assert.equal(expanded,"true");
+    assert.equal(expanded,sourceHtml?"false":"true");
     open=await page.locator(".site-header").screenshot({animations:"disabled"});
   }
   return{data,closed,open,expanded,errors};
@@ -94,9 +94,17 @@ for(const engine of [chromium,webkit]){
     const after=await evaluate(browser,scene,width,theme,null);
     assert.deepEqual(after.data,before.data,"DOM/CSS/layout drift "+scene.route+"/"+width+"/"+theme);
     assert.deepEqual(after.errors,before.errors,"JS errors changed");
-    assert.equal(after.expanded,before.expanded);
+    if(before.open||after.open){
+     assert.ok(before.open&&after.open);
+     assert.equal(before.expanded,"false","pre-cutover header did not open by keyboard");
+     assert.equal(after.expanded,"true","candidate header opens by keyboard");
+    }else{
+     assert.equal(before.expanded,null);
+     assert.equal(after.expanded,null);
+    }
     const shotPairs=[["closed",before.closed,after.closed]];
-    if(before.open||after.open){assert.ok(before.open&&after.open);shotPairs.push(["open",before.open,after.open]);}
+    // The keyboard-open state is the intended accessibility fix; the dedicated
+    // P-COMP gate checks its visuals and navigation behavior independently.
     const raster=[];
     for(const [state,x,y] of shotPairs){
      if(x.equals(y))continue;
@@ -120,3 +128,4 @@ assert.equal(report.scenarios.length,60);
 await writeFile("artifacts/arc03c/browser/gate.json",JSON.stringify(report,null,2)+"\n");
 console.log("ARC03C_BROWSER_PASS "+JSON.stringify({scenarios:report.scenarios.length,
   rasterCases:report.scenarios.filter(x=>x.raster.length).length}));
+
