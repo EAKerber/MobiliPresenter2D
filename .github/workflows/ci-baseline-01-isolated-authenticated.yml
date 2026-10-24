@@ -68,3 +68,5 @@ jobs:
           if-no-files-found: warn
 
 # This scoped push trigger permits pre-merge validation after environment setup.
+
+# Retry after the Supabase pooler username correction.
