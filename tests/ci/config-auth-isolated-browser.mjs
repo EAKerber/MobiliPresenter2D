@@ -204,19 +204,33 @@ try{
    report.stage="ds05a-finishes-next-action";
    await page.locator("#nextStepButton").click({timeout:10000});
   }else{
-   report.stage=`ds05a-${stage.key}-navigation-readiness`;
-   const navStep=page.locator(`.flow-nav [data-step="${stage.key}"]`);
-   await navStep.waitFor({state:"visible",timeout:10000});
-   report.stage=`ds05a-${stage.key}-navigation`;
+   report.stage="ds05a-"+stage.key+"-next-action-readiness";
+   const nextAction=page.locator("#nextStepButton");
+   await nextAction.waitFor({state:"visible",timeout:10000});
+   await page.waitForFunction(()=>{
+    const button=document.querySelector("#nextStepButton");
+    const style=button&&getComputedStyle(button),rect=button?.getBoundingClientRect();
+    return Boolean(button&&!button.disabled&&style?.display!=="none"&&style?.visibility==="visible"&&rect?.width>0&&rect?.height>0);
+   },null,{timeout:10000});
+   report.stage="ds05a-"+stage.key+"-next-action";
    try{
-    await navStep.click({timeout:10000});
+    await nextAction.click({timeout:10000});
    }catch(error){
-    report.navigationDiagnostic=await captureNavigationDiagnostic(stage.key);
+    report.nextActionDiagnostic=await page.evaluate(()=>{
+     const button=document.querySelector("#nextStepButton");
+     const rect=button?.getBoundingClientRect();
+     return {
+      buttonPresent:Boolean(button),buttonDisabled:Boolean(button?.disabled),
+      buttonHasArea:Boolean(rect&&rect.width>0&&rect.height>0),
+      currentStep:document.querySelector(".flow-nav [aria-current=step]")?.dataset.step||null,
+      visiblePanels:Array.from(document.querySelectorAll("#finishesStagePanel,#servicesPanel,#summaryPanel")).filter(panel=>!panel.hidden).map(panel=>panel.id)
+     };
+    });
     throw error;
    }
    try{
     await page.waitForFunction((key)=>
-     document.querySelector(`.flow-nav [data-step="${key}"]`)?.getAttribute("aria-current")==="step",
+     document.querySelector(".flow-nav [aria-current=step]")?.dataset.step===key,
      stage.key,{timeout:10000});
    }catch(error){
     report.navigationDiagnostic=await captureNavigationDiagnostic(stage.key);
