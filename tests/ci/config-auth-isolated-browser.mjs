@@ -157,8 +157,14 @@ try{
   {id:"summaryPanel",key:"summary"}
  ];
  for(const stage of expectedStages){
+  report.stage=`ds05a-${stage.key}-action-readiness`;
+  await page.waitForFunction(()=>{
+   const button=document.querySelector("#nextStepButton");
+   const style=button&&getComputedStyle(button),rect=button?.getBoundingClientRect();
+   return Boolean(button&&!button.disabled&&style?.display!=="none"&&style?.visibility==="visible"&&rect?.width>0&&rect?.height>0);
+  },null,{timeout:10000});
   report.stage=`ds05a-${stage.key}-click`;
-  await page.locator("#nextStepButton").click();
+  await page.locator("#nextStepButton").click({timeout:10000});
   report.stage=`ds05a-${stage.key}-panel-readiness`;
   await page.waitForFunction((id)=>{
    const panel=document.getElementById(id);
