@@ -34,6 +34,14 @@ const mime={".html":"text/html; charset=utf-8",".js":"application/javascript; ch
 const server=http.createServer(async(req,res)=>{
  try{
   const raw=new URL(req.url,"http://localhost");
+  // The browser navigation asks for anonymous session status even though
+  // this is a local-only, unauthenticated V5 UI fixture. Respond as ANONYMOUS
+  // rather than 405: HTTP errors pollute console assertions in all five suites.
+  // Never issue a cookie or imply a real authenticated Netlify session.
+  if(req.method==="POST" && raw.pathname==="/api/access/session"){
+   res.writeHead(200,{"Content-Type":"application/json; charset=utf-8","Cache-Control":"no-store"});
+   res.end(JSON.stringify({authenticated:false}));return;
+  }
   if(req.method!=="GET"){res.writeHead(405);res.end();return}
   if(raw.pathname==="/api/buyer-configuration"){
    res.writeHead(200,{"Content-Type":"application/json; charset=utf-8","Cache-Control":"no-store"});
