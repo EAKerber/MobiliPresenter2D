@@ -163,6 +163,14 @@ try{
    const panel=document.getElementById(id);
    return Boolean(panel&&!panel.hidden);
   },stage.id,{timeout:10000});
+  await page.waitForFunction((id)=>{
+   const panel=document.getElementById(id);
+   const price=document.querySelector("#configurationValue");
+   const text=price?.textContent?.trim()||"";
+   const style=price&&getComputedStyle(price),rect=price?.getBoundingClientRect();
+   const visible=Boolean(price&&!price.hidden&&style?.display!=="none"&&style?.visibility==="visible"&&rect?.width>0&&rect?.height>0);
+   return Boolean(panel&&!panel.hidden&&visible&&text.includes("R$")&&Array.from(text).some(ch=>ch>="0"&&ch<="9"));
+  },stage.id,{timeout:10000});
   const state=await page.evaluate((id)=>{
    const panel=document.getElementById(id);
    const price=document.querySelector("#configurationValue");
