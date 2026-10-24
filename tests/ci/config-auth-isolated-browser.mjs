@@ -1,3 +1,12 @@
+import assert from "node:assert/strict";
+import {randomUUID} from "node:crypto";
+import {mkdir,writeFile} from "node:fs/promises";
+import pg from "pg";
+import {chromium} from "playwright";
+import {SUPABASE_DATABASE_CA} from "../../netlify/access/supabase-database-ca.mjs";
+import {createOpaqueToken,hashOpaqueToken,ACCESS_COOKIE_NAME} from "../../netlify/access/tokens.mjs";
+import {validateFixtureEnvironment,safeErrorClass,ISOLATION_TAG} from "./config-auth-isolation.mjs";
+
 // CI-BASELINE-01: positive integration against the dedicated test site and user-confirmed internal test DB. All session secrets remain in memory.
 const out="artifacts/ci-baseline-01/authenticated.json";
 await mkdir("artifacts/ci-baseline-01",{recursive:true});
