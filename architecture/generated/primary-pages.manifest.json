@@ -3,33 +3,33 @@
   "authority": "architecture/pages",
   "fragment": {
     "path": "architecture/fragments/primary-header.fragment.html",
-    "gitBlobSha": "25712fa6f2423372f076d041f9a7253ced088040"
+    "gitBlobSha": "acceff6ffe3f6c7fc4d1d6fad5a1f2d5c435aa58"
   },
   "routesConfig": {
     "path": "architecture/fragments/primary-header.routes.json",
-    "gitBlobSha": "7d2027e4701c80e93b4b940730e34756fe94fc12"
+    "gitBlobSha": "f5befac8e3bcc18a979eb37c6b2d5e14f6c3a16d"
   },
   "pages": [
     {
       "route": "/",
       "source": "architecture/pages/root.page.html",
       "output": "app/index.html",
-      "sourceGitBlobSha": "c0d7dda53407d005785f871f5643690ebc949802",
-      "outputGitBlobSha": "b4dc4ee92e89d0bb747793aed073ec4d22421d77"
+      "sourceGitBlobSha": "b3cf868c554dc4dd385d68bfcf49ebbc353860c4",
+      "outputGitBlobSha": "522fe88a01ee34322cd4e26929f6116f7e21314f"
     },
     {
       "route": "/about/",
       "source": "architecture/pages/about.page.html",
       "output": "app/about/index.html",
-      "sourceGitBlobSha": "0930ec31608f2cc02b635483e8936788266c4697",
-      "outputGitBlobSha": "006717b7b1ca75a6270e5f54ce1b626fbcb2867b"
+      "sourceGitBlobSha": "32c855d33216abc871baa26b39153a85955c7ce2",
+      "outputGitBlobSha": "9458e69d55a5b8bb37149e03a365d42b2d33314b"
     },
     {
       "route": "/how-it-works/",
       "source": "architecture/pages/how-it-works.page.html",
       "output": "app/how-it-works/index.html",
-      "sourceGitBlobSha": "7611349ac1ebe3ccb3912ac29c2f85373225e426",
-      "outputGitBlobSha": "6d3669310d05b6381c2b0497bff5e81350c6eb59"
+      "sourceGitBlobSha": "ec8da63a59c70070a59cc7708a79b272e8252685",
+      "outputGitBlobSha": "144ad54481e6d35e25730b954c3bbd55820c1264"
     }
   ]
 }

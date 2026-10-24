@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - architecture/arc03c-static-page-build-20261022
+      - architecture/p-comp-01-arc03c-reconcile
     paths:
       - "architecture/fragments/**"
       - "architecture/pages/**"
@@ -12,6 +13,12 @@ on:
       - "app/index.html"
       - "app/about/index.html"
       - "app/how-it-works/index.html"
+      - "app/viewer/index.html"
+      - "app/landing/header-menu.js"
+      - "app/landing/landing.js"
+      - "app/how-it-works/how-it-works.js"
+      - "tests/public-header-controller-gate.mjs"
+      - ".github/workflows/p-comp-01-public-menu-gate.yml"
       - "package.json"
       - ".github/workflows/arc03c-static-page-build-gate.yml"
 
@@ -39,13 +46,13 @@ jobs:
           npm install --no-save --no-package-lock esbuild@0.28.2
           npm run build
           npm run pages:check
-      - name: Protect Viewer, Config, Admin, Access and other app surfaces
+      - name: Protect private app surfaces and contain the public menu update
         run: |
           git fetch origin main
-          git diff --quiet origin/main...HEAD -- app/viewer app/config app/admin app/access netlify netlify.toml
+          git diff --quiet origin/main...HEAD -- app/config app/admin app/access netlify netlify.toml
           for path in $(git diff --name-only origin/main...HEAD -- app); do
             case "$path" in
-              app/index.html|app/about/index.html|app/how-it-works/index.html) ;;
+              app/index.html|app/about/index.html|app/how-it-works/index.html|app/viewer/index.html|app/landing/header-menu.js|app/landing/landing.js|app/how-it-works/how-it-works.js) ;;
               *) echo "Unexpected app mutation: $path"; exit 1 ;;
             esac
           done
