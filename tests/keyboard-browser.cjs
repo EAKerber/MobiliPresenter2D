@@ -129,6 +129,10 @@ const {chromium} = require('playwright');
   await page.waitForFunction(() => document.body.classList.contains('has-module-detail'));
   await page.keyboard.press('Escape');
   await page.waitForFunction(() => !document.body.classList.contains('has-module-detail'));
+  // The detail exit state and focus restoration can settle in different
+  // tasks. Wait for the actual expected focus instead of sampling too early.
+  await page.waitForFunction(() => document.querySelector('#moduleList .module-card [data-select-entity]') === document.activeElement,
+    null, {timeout:5000});
   assert.equal(await firstModuleInspect.evaluate((element) => element === document.activeElement), true,
     'closing detail restores focus to the module inspection body that opened it');
 
