@@ -159,11 +159,29 @@ try{
  for(const stage of expectedStages){
   if(stage.key==="finishes"){
    report.stage="ds05a-finishes-next-action-readiness";
-   await page.waitForFunction(()=>{
-    const button=document.querySelector("#nextStepButton");
-    const style=button&&getComputedStyle(button),rect=button?.getBoundingClientRect();
-    return Boolean(button&&!button.disabled&&style?.display!=="none"&&style?.visibility==="visible"&&rect?.width>0&&rect?.height>0);
-   },null,{timeout:10000});
+   try{
+    await page.waitForFunction(()=>{
+     const button=document.querySelector("#nextStepButton");
+     const style=button&&getComputedStyle(button),rect=button?.getBoundingClientRect();
+     return Boolean(button&&!button.disabled&&style?.display!=="none"&&style?.visibility==="visible"&&rect?.width>0&&rect?.height>0);
+    },null,{timeout:10000});
+   }catch(error){
+    report.nextActionDiagnostic=await page.evaluate(()=>{
+     const button=document.querySelector("#nextStepButton");
+     const style=button&&getComputedStyle(button),rect=button?.getBoundingClientRect();
+     return {
+      buttonPresent:Boolean(button),buttonDisabled:Boolean(button?.disabled),buttonAriaDisabled:button?.getAttribute("aria-disabled")||null,
+      buttonHidden:Boolean(button?.hidden),buttonDisplay:style?.display||null,buttonVisibility:style?.visibility||null,
+      buttonHasArea:Boolean(rect&&rect.width>0&&rect.height>0),
+      currentStep:document.querySelector(".flow-nav [aria-current=step]")?.getAttribute("data-step")||null,
+      visiblePanels:Array.from(document.querySelectorAll("#finishesStagePanel,#servicesPanel,#summaryPanel")).filter(panel=>!panel.hidden).map(panel=>panel.id),
+      enabledModuleToggleCount:document.querySelectorAll("[data-module-toggle]:not(:disabled)").length,
+      checkedModuleToggleCount:document.querySelectorAll("[data-module-toggle]:not(:disabled):checked").length,
+      visibleCount:document.querySelector("#visibleCount")?.textContent?.trim()||null
+     };
+    });
+    throw error;
+   }
    report.stage="ds05a-finishes-next-action";
    await page.locator("#nextStepButton").click({timeout:10000});
   }else{
