@@ -12,10 +12,16 @@ const cases=[
  ["summary","tests/summary-pricing-browser.cjs","SUMMARY_PRICING_BROWSER_URL"],
  ["stone","tests/stone-browser.cjs","STONE_BROWSER_URL"]
 ];
+// When called by a legacy per-suite workflow, only that suite runs. The
+// default remains an all-five diagnostic with no auth or preview network.
+const suite=process.env.CI_LOCAL_CONFIG_SUITE||"all";
+const allow=new Set(["all",...cases.map(([name])=>name)]);
+if(!allow.has(suite))throw new Error("CI_LOCAL_CONFIG_SUITE_NOT_ALLOWED");
+const selected=cases.filter(([name])=>suite==="all"||name===suite);
 const out=[];
 const tmp=await mkdtemp(join(tmpdir(),"m2d-ci-local-diagnostic-"));
 try{
- for(const [name,file,key] of cases){
+ for(const [name,file,key] of selected){
   const env={...process.env,[key]:site};
   delete env.CI_CONFIG_TEST_TOKEN;
   delete env.PLAYWRIGHT_AUTH_STATE_FILE;
@@ -35,6 +41,7 @@ try{
 await mkdir("artifacts/ci-baseline-01",{recursive:true});
 await writeFile("artifacts/ci-baseline-01/unlocked-local.json",JSON.stringify({
  schema:"LocalConfigBrowserDiagnostic/1",
+ suiteSelection:suite,
  warning:"Local server bypasses Edge and Functions; PASS does not imply authenticated preview PASS",
  cases:out
 },null,2)+"\n");
