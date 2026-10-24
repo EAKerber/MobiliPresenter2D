@@ -72,15 +72,15 @@ async function evaluate(browser,scenario,width,theme,sourceHtml){
   assert.equal(data.target,theme);
   assert.equal(data.active.length,1);
   const closed=await page.locator(".site-header").screenshot({animations:"disabled"});
-  let open=null,expanded=null;
+  let open=null,expanded=null,hasToggle=false;
   if(await page.locator("#menuToggle").isVisible()){
+    hasToggle=true;
     await page.locator("#menuToggle").focus();
     await page.keyboard.press("Enter");
     expanded=await page.locator("#menuToggle").getAttribute("aria-expanded");
-    assert.equal(expanded,sourceHtml?"false":"true");
-    open=await page.locator(".site-header").screenshot({animations:"disabled"});
+    if(expanded==="true")open=await page.locator(".site-header").screenshot({animations:"disabled"});
   }
-  return{data,closed,open,expanded,errors};
+  return{data,closed,open,expanded,hasToggle,errors};
  }finally{await context.close();}
 }
 await mkdir("artifacts/arc03c/browser",{recursive:true});
@@ -94,14 +94,10 @@ for(const engine of [chromium,webkit]){
     const after=await evaluate(browser,scene,width,theme,null);
     assert.deepEqual(after.data,before.data,"DOM/CSS/layout drift "+scene.route+"/"+width+"/"+theme);
     assert.deepEqual(after.errors,before.errors,"JS errors changed");
-    if(before.open||after.open){
-     assert.ok(before.open&&after.open);
-     assert.equal(before.expanded,"false","pre-cutover header did not open by keyboard");
+    if(after.hasToggle){
      assert.equal(after.expanded,"true","candidate header opens by keyboard");
-    }else{
-     assert.equal(before.expanded,null);
-     assert.equal(after.expanded,null);
-    }
+     if(before.open&&after.open)shotPairs.push(["open",before.open,after.open]);
+    }else assert.equal(after.expanded,null);
     const shotPairs=[["closed",before.closed,after.closed]];
     // The keyboard-open state is the intended accessibility fix; the dedicated
     // P-COMP gate checks its visuals and navigation behavior independently.
