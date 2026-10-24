@@ -425,6 +425,10 @@ html[data-theme="dark"] .private-menu__logout { border-color:#4a4843; background
 /* The theme state remains available to assistive technology through the
    control's aria-label while the visible label yields space at 320 px. */
 @media (max-width: 320px) {
+  /* The public shell has a 320px floor; private access pages must be allowed
+     to reach the approved 291px one-row minimum. */
+  html:has(body.access-page) { min-width: 0; }
+  body.access-page { min-width: 0; }
   .private-header .ui-theme-toggle {
     width: 44px;
     min-width: 44px;
