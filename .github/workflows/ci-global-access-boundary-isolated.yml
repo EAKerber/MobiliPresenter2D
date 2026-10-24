@@ -13,6 +13,7 @@ on:
       - "tests/flow-layout-browser.cjs"
       - "tests/summary-pricing-browser.cjs"
       - "tests/stone-browser.cjs"
+      - "tests/buyer-v5-browser.cjs"
       - "tests/ci/local-buyer-config-server.mjs"
       - "tests/ci/prepare-local-v5-browser.sh"
       - ".github/workflows/mobile-browser.yml"
@@ -109,6 +110,8 @@ jobs:
         run: |
           node tests/ci/config-unlocked-local-diagnostic.mjs
           node -e 'const d=require("./artifacts/ci-baseline-01/unlocked-local.json"); if(d.cases.length!==5 || !d.cases.every(x=>x.status==="PASS")){ console.error("CI_LOCAL_V5_MATRIX_NOT_GREEN",JSON.stringify(d.cases)); process.exit(1); } console.log("CI_LOCAL_V5_FIVE_FLOWS_PASS");'
+      - name: V3 to V5 projection equivalence and invalid-publication fail closed
+        run: node tests/buyer-v5-browser.cjs /tmp/m2d-local-v5-buyer-parity
       - name: Upload sanitized classification (never credentials or fixture payload)
         if: always()
         uses: actions/upload-artifact@v4
