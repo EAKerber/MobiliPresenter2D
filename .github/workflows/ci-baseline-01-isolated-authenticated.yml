@@ -38,10 +38,16 @@ jobs:
         run: node --test tests/ci/config-auth-isolation.test.mjs
       - name: Check required environment values without displaying them
         run: |
-          if [ -z "$CI_STAGING_SUPABASE_REF" ] || [ -z "$CI_STAGING_DATABASE_URL" ]; then
-            echo "BLOCKED_AUTH_FIXTURE: environment values are not configured"
-            exit 1
+          missing=0
+          if [ -z "$CI_STAGING_SUPABASE_REF" ]; then
+            echo "BLOCKED_AUTH_FIXTURE: CI_STAGING_SUPABASE_REF is missing"
+            missing=1
           fi
+          if [ -z "$CI_STAGING_DATABASE_URL" ]; then
+            echo "BLOCKED_AUTH_FIXTURE: CI_STAGING_DATABASE_URL is missing"
+            missing=1
+          fi
+          exit "$missing"
       - name: Install isolated Playwright and Postgres tooling
         run: |
           npm install --prefix /tmp/m2d-ci-config-auth --no-audit --no-fund playwright@1.56.0 pg@8.16.3
