@@ -69,4 +69,4 @@ jobs:
 
 # This scoped push trigger permits pre-merge validation after environment setup.
 
-# Retry after the Supabase pooler username correction.
+# Post-deploy revalidation: 6adc77b6603e52a336fe045d
