@@ -22,6 +22,12 @@ try{
   isolationTag:process.env.CI_STAGING_ISOLATION_TAG
  };
  const gate=validateFixtureEnvironment(input);
+ report.stage="staging-site-preflight";
+ const stagingAccess=await fetch(new URL("/access/",gate.origin));
+ assert.equal(new URL(stagingAccess.url).pathname,"/access/",
+  "BLOCKED_AUTH_FIXTURE: dedicated staging site did not serve /access/");
+ assert.equal(stagingAccess.status,200,
+  "BLOCKED_AUTH_FIXTURE: dedicated staging app did not return HTTP 200");
  report.stage="isolated-role-check";
  db=new pg.Client({connectionString:input.databaseUrl,
   ssl:{ca:SUPABASE_DATABASE_CA,rejectUnauthorized:true},
