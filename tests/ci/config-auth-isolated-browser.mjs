@@ -104,6 +104,25 @@ try{
   "DS-05A: Config price/status bar not visible");
  assert.ok(ds05aConfigSurface.nextStepVisible,"DS-05A: next-step action not visible");
  report.ds05aConfigSurface=ds05aConfigSurface;
+ // Exercise one client-side module change and return the checkbox and counter to their initial state.
+ const availableModuleToggles=page.locator("[data-module-toggle]:not(:disabled)");
+ assert.ok(await availableModuleToggles.count()>0,"DS-05A: no enabled module toggle rendered");
+ const moduleToggle=availableModuleToggles.first();
+ const originalModuleChecked=await moduleToggle.isChecked();
+ const originalVisibleCount=Number((await page.locator("#visibleCount").textContent())?.trim());
+ assert.ok(Number.isFinite(originalVisibleCount),"DS-05A: initial visible count is not numeric");
+ if(originalModuleChecked)await moduleToggle.uncheck();else await moduleToggle.check();
+ await page.waitForFunction((previous)=>{
+  const count=Number(document.querySelector("#visibleCount")?.textContent?.trim());
+  return Number.isFinite(count)&&count!==previous;
+ },originalVisibleCount,{timeout:10000});
+ if(originalModuleChecked)await moduleToggle.check();else await moduleToggle.uncheck();
+ await page.waitForFunction(({expected,visibleCount})=>{
+  const toggle=document.querySelector("[data-module-toggle]:not(:disabled)");
+  const count=Number(document.querySelector("#visibleCount")?.textContent?.trim());
+  return toggle?.checked===expected&&count===visibleCount;
+ },{expected:originalModuleChecked,visibleCount:originalVisibleCount},{timeout:10000});
+ report.ds05aConfigInteraction={moduleToggleAvailable:true,visibleCountChanged:true,visibleCountRestored:true};
  // Staging user must not acquire admin capabilities.
  const admin=await context.request.get(new URL("/api/admin-bootstrap",gate.origin).toString(),{
   timeout:10000});
@@ -124,7 +143,7 @@ try{
  report.classification="AUTHENTICATED_FIXTURE_PASS";
  report.stage="complete";
  console.log("CI_CONFIG_AUTHENTICATED_PASS "+JSON.stringify({
-  bootstrap:report.bootstrap,revoked:report.revoked,adminAccessDenied:report.adminAccessDenied,ds05aConfigSurface:report.ds05aConfigSurface}));
+  bootstrap:report.bootstrap,revoked:report.revoked,adminAccessDenied:report.adminAccessDenied,ds05aConfigSurface:report.ds05aConfigSurface,ds05aConfigInteraction:report.ds05aConfigInteraction}));
 }catch(error){
  report.errorClass=safeErrorClass(error);
  report.classification=report.stage==="preflight"||report.stage==="isolated-role-check"
