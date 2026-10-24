@@ -279,8 +279,12 @@
 
 
 /* Contextual VIS-002 and VIS-003 pairs approved for these surfaces only. */
-html[data-theme="light"] .how-hero-note { color: #705C4B; }
+html[data-theme="light"] .how-hero-note { color: var(--ds-vis002-approved-support-text-light); }
 html[data-theme="light"] .study-band .eyebrow { color: #70522F; }
 html[data-theme="dark"] .study-art figcaption { background: #20211F; color: #F0EDE8; }
 
 @media(min-width:901px){.foundation-list,.study-topics{align-items:start}}
+
+
+/* VIS-002C / P-TOKEN-02B v0.2: approved finish copy, not editorial signature. */
+html[data-theme="light"] .finish-copy > p:not(.eyebrow):not(.finish-signature) { color: var(--ds-vis002-approved-support-text-light); }

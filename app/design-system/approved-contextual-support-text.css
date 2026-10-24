@@ -1,0 +1,10 @@
+/* GENERATED — VIS-002.approvedRuntimePairs, exact contextual selectors only.
+ * Decision Git blob: 63b60f8d87327c6fd1e80c8cdf4ff832c4089bfa
+ * No global role assignment; no CSS color declaration; product owns use.
+ * Do not broaden selector reach without new evidence and approval.
+ */
+html[data-theme="light"] .hero-description,
+html[data-theme="light"] .how-hero-note,
+html[data-theme="light"] .about-scale p:not(.eyebrow) {
+  --ds-vis002-approved-support-text-light: #705C4B;
+}
