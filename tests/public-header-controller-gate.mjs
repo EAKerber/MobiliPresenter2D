@@ -49,7 +49,7 @@ async function state(page,rootSel){
       return {display:c.display,visibility:c.visibility,color:c.color,bg:c.backgroundColor,
         position:c.position,opacity:c.opacity,rect:[r.x,r.y,r.width,r.height].map(n=>Math.round(n*100)/100)};};
     return {
-      html:root?.outerHTML,
+      html:root?.outerHTML.replace(/>\s+</g, "><"),
       header:metrics(root),nav:metrics(nav),button:metrics(toggle),
       theme:document.documentElement.dataset.theme,
       expanded:toggle.getAttribute("aria-expanded"),
