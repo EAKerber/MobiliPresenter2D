@@ -9,6 +9,10 @@ A distribuição v0.2 vincula o valor homologado `#705C4B` aos oito seletores ex
 
 As três rotas públicas carregam apenas a distribuição v0.2. Os componentes usam a propriedade contextual nos oito seletores autorizados. São preservados: `.feature-availability`, `.finish-signature`, `.about-closing__signature`, `.eyebrow`, todos os pares no tema escuro e o `--public-muted` global.
 
+## Fontes autorais e HTML publicado
+
+As três páginas são HTML gerado por ARC-03C. O patch altera as fontes em `architecture/pages/`, mantém os arquivos `app/` gerados idênticos ao resultado do compilador e atualiza `architecture/generated/primary-pages.manifest.json`. O gate de build continua estrito; nenhuma saída gerada é editada sem atualizar sua origem.
+
 ## Integridade e verificação
 
 Os arquivos versionados em `design-system/pins/vis-002/` preservam os pins de paleta e distribuição v0.1, acrescentam mapa/manifests v0.2 e permitem regenerar/verificar a folha CSS. O workflow de integração em PR executa:

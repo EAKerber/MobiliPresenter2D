@@ -14,22 +14,22 @@
       "route": "/",
       "source": "architecture/pages/root.page.html",
       "output": "app/index.html",
-      "sourceGitBlobSha": "562e357953382946b6e97f3ef052aaa522b25db8",
-      "outputGitBlobSha": "9d025dc17d16b8eeaec6c77fa10295900f005ed7"
+      "sourceGitBlobSha": "c0dedc8a0195723e23e073649804b17fb1eaf796",
+      "outputGitBlobSha": "019bd0877768acc9e35c8f97c59451f0f44dd766"
     },
     {
       "route": "/about/",
       "source": "architecture/pages/about.page.html",
       "output": "app/about/index.html",
-      "sourceGitBlobSha": "715082b9bc4ffd80dcf841ea1e4b544968783fdb",
-      "outputGitBlobSha": "0f830a962485a67c2d9f264056a637693491fc01"
+      "sourceGitBlobSha": "52423d705eb56e07f5f66137ea3efb5d6ba2ef22",
+      "outputGitBlobSha": "00e62c70bc6d969ae2c4c8326ee797a2725ad57b"
     },
     {
       "route": "/how-it-works/",
       "source": "architecture/pages/how-it-works.page.html",
       "output": "app/how-it-works/index.html",
-      "sourceGitBlobSha": "0b8e9f742d1a43611cede3f3fb017256627893fe",
-      "outputGitBlobSha": "02accfae392a89e51803eb02ad84ede073d4d54c"
+      "sourceGitBlobSha": "c9404fa717130c5c3781737afea567a2ee4748ff",
+      "outputGitBlobSha": "a538ce34689776ae019b5a655ae60cd5ce00d760"
     }
   ]
 }
