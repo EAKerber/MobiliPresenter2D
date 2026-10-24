@@ -205,14 +205,34 @@ try{
    return Boolean(panel&&!panel.hidden);
   },stage.id,{timeout:10000});
   report.stage=`ds05a-${stage.key}-estimate-readiness`;
-  await page.waitForFunction((id)=>{
-   const panel=document.getElementById(id);
-   const price=document.querySelector("#configurationValue");
-   const text=price?.textContent?.trim()||"";
-   const style=price&&getComputedStyle(price),rect=price?.getBoundingClientRect();
-   const visible=Boolean(price&&!price.hidden&&style?.display!=="none"&&style?.visibility==="visible"&&rect?.width>0&&rect?.height>0);
-   return Boolean(panel&&!panel.hidden&&visible&&text.includes("R$")&&Array.from(text).some(ch=>ch>="0"&&ch<="9"));
-  },stage.id,{timeout:10000});
+  try{
+   await page.waitForFunction((id)=>{
+    const panel=document.getElementById(id);
+    const price=document.querySelector("#configurationValue");
+    const text=price?.textContent?.trim()||"";
+    const style=price&&getComputedStyle(price),rect=price?.getBoundingClientRect();
+    const visible=Boolean(price&&!price.hidden&&style?.display!=="none"&&style?.visibility==="visible"&&rect?.width>0&&rect?.height>0);
+    return Boolean(panel&&!panel.hidden&&visible&&text.includes("R$")&&Array.from(text).some(ch=>ch>="0"&&ch<="9"));
+   },stage.id,{timeout:10000});
+  }catch(error){
+   report.estimateDiagnostic=await page.evaluate((id)=>{
+    const panel=document.getElementById(id);
+    const price=document.querySelector("#configurationValue");
+    const text=price?.textContent?.trim()||"";
+    const chain=[];
+    for(let node=price;node&&chain.length<6;node=node.parentElement){
+     const style=getComputedStyle(node),rect=node.getBoundingClientRect();
+     chain.push({tag:node.tagName,id:node.id||null,class:typeof node.className==="string"?node.className.slice(0,100):null,hidden:node.hidden,display:style.display,visibility:style.visibility,opacity:style.opacity,hasArea:rect.width>0&&rect.height>0});
+    }
+    const panelRect=panel?.getBoundingClientRect();
+    return {
+     stagePanelPresent:Boolean(panel),stagePanelHidden:Boolean(panel?.hidden),stagePanelHasArea:Boolean(panelRect&&panelRect.width>0&&panelRect.height>0),
+     estimateElementPresent:Boolean(price),estimateHasCurrency:text.includes("R$")&&Array.from(text).some(ch=>ch>="0"&&ch<="9"),
+     estimateElementHidden:Boolean(price?.hidden),ancestorChain:chain
+    };
+   },stage.id);
+   throw error;
+  }
   report.stage=`ds05a-${stage.key}-state-check`;
   const state=await page.evaluate((id)=>{
    const panel=document.getElementById(id);
