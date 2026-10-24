@@ -123,6 +123,25 @@ try{
   return toggle?.checked===expected&&count===visibleCount;
  },{expected:originalModuleChecked,visibleCount:originalVisibleCount},{timeout:10000});
  report.ds05aConfigInteraction={moduleToggleAvailable:true,visibleCountChanged:true,visibleCountRestored:true};
+ await page.locator("#nextStepButton").click();
+ await page.waitForFunction(()=>{
+  const panel=document.querySelector("#finishesStagePanel");
+  return Boolean(panel&&!panel.hidden);
+ },null,{timeout:10000});
+ const ds05aNextStep=await page.evaluate(()=>{
+  const panel=document.querySelector("#finishesStagePanel");
+  const price=document.querySelector("#configurationValue");
+  const priceText=price?.textContent?.trim()||"";
+  const style=price&&getComputedStyle(price),rect=price?.getBoundingClientRect();
+  return {
+   advancedToFinishes:Boolean(panel&&!panel.hidden),
+   priceBarVisible:Boolean(price&&!price.hidden&&style?.display!=="none"&&style?.visibility==="visible"&&rect?.width>0&&rect?.height>0),
+   priceEstimateHasCurrency:priceText.includes("R$")&&Array.from(priceText).some(ch=>ch>="0"&&ch<="9")
+  };
+ });
+ assert.ok(ds05aNextStep.advancedToFinishes,"DS-05A: next step did not open finishes");
+ assert.ok(ds05aNextStep.priceBarVisible,"DS-05A: price/status bar disappeared in finishes");
+ report.ds05aNextStep=ds05aNextStep;
  // Staging user must not acquire admin capabilities.
  const admin=await context.request.get(new URL("/api/admin-bootstrap",gate.origin).toString(),{
   timeout:10000});
@@ -143,7 +162,7 @@ try{
  report.classification="AUTHENTICATED_FIXTURE_PASS";
  report.stage="complete";
  console.log("CI_CONFIG_AUTHENTICATED_PASS "+JSON.stringify({
-  bootstrap:report.bootstrap,revoked:report.revoked,adminAccessDenied:report.adminAccessDenied,ds05aConfigSurface:report.ds05aConfigSurface,ds05aConfigInteraction:report.ds05aConfigInteraction}));
+  bootstrap:report.bootstrap,revoked:report.revoked,adminAccessDenied:report.adminAccessDenied,ds05aConfigSurface:report.ds05aConfigSurface,ds05aConfigInteraction:report.ds05aConfigInteraction,ds05aNextStep:report.ds05aNextStep}));
 }catch(error){
  report.errorClass=safeErrorClass(error);
  report.classification=report.stage==="preflight"||report.stage==="isolated-role-check"
