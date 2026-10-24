@@ -1,0 +1,38 @@
+{
+  "schema": "M2DProductContextualTextPin/0.3",
+  "status": "SCOPED_INTEGRATION_CANDIDATE_NOT_RELEASED",
+  "designSystem": {
+    "repository": "EAKerber/MobiliPresenter2D_DesignSystem",
+    "sourceCommit": "3144735173b2a4d3c978acc26b6daea6f21d2e27",
+    "decisionGitBlob": "63b60f8d87327c6fd1e80c8cdf4ff832c4089bfa",
+    "mappingDocument": "docs/VIS002C_CONTEXTUAL_MAPPING_V0_3_0.json",
+    "mappingGitBlob": "0252bcb2df4d2899df7e845003b643709befc17e",
+    "artifactSource": "dist/vis002c-long-copy-light-v0.3.0.css",
+    "artifactGitBlob": "55455756eca9fd2f8efaca5526d75e6290de701b",
+    "manifestSource": "dist/vis002c-long-copy-light-v0.3.0.manifest.json",
+    "manifestGitBlob": "aa6da3ead577a8e060fa52abf556ca31991c1ee1"
+  },
+  "artifact": {
+    "path": "app/design-system/vis002c-long-copy-light-v0.3.0.css",
+    "gitBlob": "55455756eca9fd2f8efaca5526d75e6290de701b"
+  },
+  "mapping": {
+    "path": "design-system/pins/vis-002/context-v0.3.0/contextual-mapping.json",
+    "gitBlob": "0252bcb2df4d2899df7e845003b643709befc17e"
+  },
+  "manifest": {
+    "path": "design-system/pins/vis-002/context-v0.3.0/manifest.json",
+    "gitBlob": "aa6da3ead577a8e060fa52abf556ca31991c1ee1"
+  },
+  "allowedRoutes": [
+    "/",
+    "/about/",
+    "/how-it-works/"
+  ],
+  "allowedSelectorsCount": 7,
+  "theme": "light",
+  "productConsumer": "app/landing/landing.css imports the scoped artifact; page CSS consumes its token only on seven mapped selectors",
+  "runtimeStatus": "PREVIEW_PENDING",
+  "changesCanonicalDecision": false,
+  "darkThemeUnchanged": true
+}
