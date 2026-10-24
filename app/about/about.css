@@ -1,6 +1,7 @@
 .about-page { --about-content: 1180px; color: var(--public-text); }
 .about-skip { position: absolute; z-index: 100; top: 10px; left: 10px; transform: translateY(-160%); padding: 10px 14px; border-radius: 6px; background: var(--public-surface); color: var(--public-text); }
 .about-skip:focus { transform: translateY(0); }
+html[data-theme] .about-skip:focus-visible { outline: 4px solid var(--public-accent); outline-offset: 3px; }
 .about-hero, .about-chapter, .about-scale, .about-closing { width: min(calc(100% - 48px), var(--about-content)); margin-inline: auto; }
 .about-hero { display: grid; grid-template-columns: minmax(0, 1.45fr) minmax(220px, .55fr); align-items: end; gap: clamp(32px, 8vw, 120px); padding-block: clamp(72px, 11vw, 148px) clamp(64px, 9vw, 116px); }
 .about-hero__copy { max-width: 820px; }
