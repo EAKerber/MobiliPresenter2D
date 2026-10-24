@@ -148,25 +148,39 @@ try{
   secondModuleChangedAndRestored:true,
   priceEstimateVisibleAfterToggleAndRestore:true
  };
- await page.locator("#nextStepButton").click();
- await page.waitForFunction(()=>{
-  const panel=document.querySelector("#finishesStagePanel");
-  return Boolean(panel&&!panel.hidden);
- },null,{timeout:10000});
- const ds05aNextStep=await page.evaluate(()=>{
-  const panel=document.querySelector("#finishesStagePanel");
-  const price=document.querySelector("#configurationValue");
-  const priceText=price?.textContent?.trim()||"";
-  const style=price&&getComputedStyle(price),rect=price?.getBoundingClientRect();
-  return {
-   advancedToFinishes:Boolean(panel&&!panel.hidden),
-   priceBarVisible:Boolean(price&&!price.hidden&&style?.display!=="none"&&style?.visibility==="visible"&&rect?.width>0&&rect?.height>0),
-   priceEstimateHasCurrency:priceText.includes("R$")&&Array.from(priceText).some(ch=>ch>="0"&&ch<="9")
+ const ds05aStageProgression={};
+ const expectedStages=[
+  {id:"finishesStagePanel",key:"finishes"},
+  {id:"servicesPanel",key:"services"},
+  {id:"summaryPanel",key:"summary"}
+ ];
+ for(const stage of expectedStages){
+  await page.locator("#nextStepButton").click();
+  await page.waitForFunction((id)=>{
+   const panel=document.getElementById(id);
+   return Boolean(panel&&!panel.hidden);
+  },stage.id,{timeout:10000});
+  const state=await page.evaluate((id)=>{
+   const panel=document.getElementById(id);
+   const price=document.querySelector("#configurationValue");
+   const priceText=price?.textContent?.trim()||"";
+   const style=price&&getComputedStyle(price),rect=price?.getBoundingClientRect();
+   return {
+    stageVisible:Boolean(panel&&!panel.hidden),
+    priceBarVisible:Boolean(price&&!price.hidden&&style?.display!=="none"&&style?.visibility==="visible"&&rect?.width>0&&rect?.height>0),
+    priceEstimateHasCurrency:priceText.includes("R$")&&Array.from(priceText).some(ch=>ch>="0"&&ch<="9")
+   };
+  },stage.id);
+  assert.ok(state.stageVisible,`DS-05A: ${stage.key} stage did not open`);
+  assert.ok(state.priceBarVisible&&state.priceEstimateHasCurrency,
+   `DS-05A: estimate missing after opening ${stage.key}`);
+  ds05aStageProgression[stage.key]={
+   stageVisible:state.stageVisible,
+   priceBarVisible:state.priceBarVisible,
+   priceEstimateHasCurrency:state.priceEstimateHasCurrency
   };
- });
- assert.ok(ds05aNextStep.advancedToFinishes,"DS-05A: next step did not open finishes");
- assert.ok(ds05aNextStep.priceBarVisible,"DS-05A: price/status bar disappeared in finishes");
- report.ds05aNextStep=ds05aNextStep;
+ }
+ report.ds05aNextStep=ds05aStageProgression;
  // Staging user must not acquire admin capabilities.
  const admin=await context.request.get(new URL("/api/admin-bootstrap",gate.origin).toString(),{
   timeout:10000});
