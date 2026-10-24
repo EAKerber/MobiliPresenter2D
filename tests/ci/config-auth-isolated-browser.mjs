@@ -114,9 +114,25 @@ try{
   const price=document.querySelector("#configurationValue");
   const text=price?.textContent?.trim()||"";
   const style=price&&getComputedStyle(price),rect=price?.getBoundingClientRect();
+  let ancestorChainVisible=true;
+  for(let ancestor=price?.parentElement;ancestor;ancestor=ancestor.parentElement){
+   const ancestorStyle=getComputedStyle(ancestor);
+   if(ancestor.hidden||ancestorStyle.display==="none"||ancestorStyle.visibility!=="visible")ancestorChainVisible=false;
+  }
+  const ownDisplayVisible=Boolean(style&&style.display!=="none");
+  const ownVisibilityVisible=Boolean(style&&style.visibility==="visible");
+  const ownOpacityVisible=Boolean(style&&Number(style.opacity)>0);
+  const hasArea=Boolean(rect&&rect.width>0&&rect.height>0);
   return {
-   visible:Boolean(price&&!price.hidden&&style?.display!=="none"&&style?.visibility==="visible"&&rect?.width>0&&rect?.height>0),
-   hasCurrency:text.includes("R$")&&Array.from(text).some(ch=>ch>="0"&&ch<="9")
+   visible:Boolean(price&&!price.hidden&&ownDisplayVisible&&ownVisibilityVisible&&hasArea),
+   hasCurrency:text.includes("R$")&&Array.from(text).some(ch=>ch>="0"&&ch<="9"),
+   elementPresent:Boolean(price),
+   hiddenAttribute:Boolean(price?.hidden),
+   ownDisplayVisible,
+   ownVisibilityVisible,
+   ownOpacityVisible,
+   hasArea,
+   ancestorChainVisible
   };
  });
  const exerciseModuleToggle=async(index)=>{
