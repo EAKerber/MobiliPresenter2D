@@ -454,3 +454,7 @@ html[data-theme="dark"] .private-menu__logout { border-color:#4a4843; background
     margin-left: auto;
   }
 }
+
+
+/* NAV-005: override page-level button minimums for the 44px private menu target. */
+.private-header .private-menu-toggle { min-height: 44px; }
