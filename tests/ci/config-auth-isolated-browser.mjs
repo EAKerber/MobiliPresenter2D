@@ -29,7 +29,6 @@ try{
  // Only nonreal address in the RFC-reserved example domain. Five-minute grant.
  grantId=randomUUID();
  const grantToken=createOpaqueToken();
- const expire=new Date(Date.now()+5*60_000);
  await db.query("SELECT access_control.ci_create_config_fixture_grant($1::uuid,$2::text)",
   [grantId,hashOpaqueToken(grantToken)]);
  report.stage="real-redeem";
@@ -72,9 +71,6 @@ try{
  // Tear down sessions and grant. Revoked cookie should never authorize /config.
  const revoked=await db.query("SELECT access_control.ci_revoke_config_fixture_grant($1::uuid) AS revoked",[grantId]);
  assert.equal(revoked.rows[0]?.revoked,true,"Fixture grant was not revoked");
- await db.query("UPDATE access_control.access_grants "+
-  "SET revoked_at=now(),revoked_by_identity_id='ci-isolated-fixture' "+
-  "WHERE id=$1 AND revoked_at IS NULL",[grantId]);
  report.revoked=true;
  const after=await page.goto(new URL("/config/",gate.origin).toString(),{
   waitUntil:"domcontentloaded",timeout:20000});
