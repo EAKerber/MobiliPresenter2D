@@ -28,4 +28,10 @@ export function validateFixtureEnvironment(input) {
  assert.equal(db.pathname,"/postgres","BLOCKED_AUTH_FIXTURE: staging database must be postgres");
  return Object.freeze({origin:target.origin,hostname:target.hostname,projectRef,user:"access_ci_fixture",status:"INTERNAL_TEST_CONFIG_VERIFIED"});
 }
-export function safeErrorClass(error){return error?.name==="AssertionError"?"BLOCKED_AUTH_FIXTURE":"AUTH_FIXTURE_RUNTIME_ERROR";}
+export function safeErrorClass(error){
+ if(error?.name==="AssertionError"){
+  const firstLine=typeof error.message==="string"?error.message.split(/\r?\n/,1)[0]:"";
+  return firstLine.startsWith("BLOCKED_AUTH_FIXTURE:")?firstLine:"BLOCKED_AUTH_FIXTURE";
+ }
+ return "AUTH_FIXTURE_RUNTIME_ERROR";
+}
