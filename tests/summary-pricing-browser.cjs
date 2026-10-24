@@ -15,7 +15,7 @@ function parseBrl(text) {
   fs.mkdirSync(output, { recursive: true });
   const targetUrl = process.env.SUMMARY_PRICING_BROWSER_URL || 'https://mobilipresenter2d.netlify.app/';
   const browser = await chromium.launch({ headless: true });
-  const page = await browser.newPage({ viewport: { width: 1366, height: 900 } });
+  const page = await browser.newPage({storageState: process.env.PLAYWRIGHT_AUTH_STATE_FILE || undefined,  viewport: { width: 1366, height: 900 } });
   const errors = [];
   page.on('pageerror', error => errors.push(error.message));
   page.on('console', message => { if (message.type() === 'error') errors.push(message.text()); });
@@ -37,7 +37,7 @@ function parseBrl(text) {
     }
   }
   if (lastError) throw lastError;
-  // CI buyer fixture: the legacy UI initializes before the async V5
+  // Authenticated preview: the legacy UI initializes before the async V5
   // published configuration is applied. Start interactions only after commit.
   if (process.env.CI_EXPECT_PUBLISHED_V5 === "1") {
     await page.waitForFunction(() => document.documentElement.dataset.publishedConfigurationStatus === "validated", null, {timeout:30000});

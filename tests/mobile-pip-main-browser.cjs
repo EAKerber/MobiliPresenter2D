@@ -12,7 +12,7 @@ const { chromium } = require("playwright");
   const targetUrl = process.env.MOBILE_INTERACTIONS_URL ||
     pathToFileURL(path.resolve(__dirname, "../app/index.html")).href;
 
-  const stackedContext = await browser.newContext({
+  const stackedContext = await browser.newContext({storageState: process.env.PLAYWRIGHT_AUTH_STATE_FILE || undefined, 
     viewport: { width: 1050, height: 900 },
     deviceScaleFactor: 1
   });
@@ -144,7 +144,7 @@ const { chromium } = require("playwright");
   assert.deepEqual(stackedErrors, []);
   await stackedContext.close();
 
-  const context = await browser.newContext({
+  const context = await browser.newContext({storageState: process.env.PLAYWRIGHT_AUTH_STATE_FILE || undefined, 
     viewport: { width: 390, height: 844 },
     isMobile: true,
     hasTouch: true,
