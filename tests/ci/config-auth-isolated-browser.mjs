@@ -75,6 +75,7 @@ try{
  assert.ok(await page.locator(".workspace").count()>0,"Configurator workspace not found");
  report.bootstrap=true;
  report.layoutProfile=await page.evaluate(()=>window.CASA_EM_MODULOS_DEBUG.getLayoutProfile());
+ report.stage="ds05a-config-surface";
  // DS-05A Config surface: collect readiness booleans only; never persist prices or customer/configuration data.
  const ds05aConfigSurface=await page.evaluate(()=>{
   const visible=(element)=>{
@@ -104,6 +105,7 @@ try{
   "DS-05A: Config price/status bar not visible");
  assert.ok(ds05aConfigSurface.nextStepVisible,"DS-05A: next-step action not visible");
  report.ds05aConfigSurface=ds05aConfigSurface;
+ report.stage="ds05a-module-interactions";
  // Exercise two client-side module changes; restore each checkbox and counter before continuing.
  const availableModuleToggles=page.locator("[data-module-toggle]:not(:disabled)");
  const moduleToggleCount=await availableModuleToggles.count();
@@ -155,6 +157,7 @@ try{
   {id:"summaryPanel",key:"summary"}
  ];
  for(const stage of expectedStages){
+  report.stage=`ds05a-${stage.key}-stage`;
   await page.locator("#nextStepButton").click();
   await page.waitForFunction((id)=>{
    const panel=document.getElementById(id);
