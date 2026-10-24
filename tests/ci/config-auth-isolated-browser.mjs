@@ -191,21 +191,30 @@ try{
    priceEstimateHasCurrency:state.priceEstimateHasCurrency
   };
   if(stage.key==="finishes"){
-   report.stage="ds05a-finishes-option";
+   report.stage="ds05a-finishes-option-read";
    const skirtingToggle=page.locator("#stoneSkirtingToggle");
    assert.equal(await skirtingToggle.count(),1,"DS-05A: stone skirting option not rendered");
-   const originalSkirting=await skirtingToggle.isChecked();
-   if(originalSkirting)await skirtingToggle.uncheck();else await skirtingToggle.check();
-   await page.waitForFunction((expected)=>
-    document.querySelector("#stoneSkirtingToggle")?.checked===expected,
-    !originalSkirting,{timeout:5000});
+   const originalSkirting=await page.evaluate(()=>
+    window.CASA_EM_MODULOS_DEBUG.getState().globalSelections.serviceIds.includes("stone-skirting"));
+   report.stage="ds05a-finishes-option-change";
+   await skirtingToggle.setChecked(!originalSkirting);
+   await page.waitForFunction((expected)=>{
+    const state=window.CASA_EM_MODULOS_DEBUG.getState();
+    return document.querySelector("#stoneSkirtingToggle")?.checked===expected&&
+     state.globalSelections.serviceIds.includes("stone-skirting")===expected;
+   },!originalSkirting,{timeout:10000});
+   report.stage="ds05a-finishes-option-estimate";
    const changedEstimate=await priceEstimateStatus();
    assert.ok(changedEstimate.visible&&changedEstimate.hasCurrency,
     "DS-05A: estimate missing after finish option change");
-   if(originalSkirting)await skirtingToggle.check();else await skirtingToggle.uncheck();
-   await page.waitForFunction((expected)=>
-    document.querySelector("#stoneSkirtingToggle")?.checked===expected,
-    originalSkirting,{timeout:5000});
+   report.stage="ds05a-finishes-option-restore";
+   await skirtingToggle.setChecked(originalSkirting);
+   await page.waitForFunction((expected)=>{
+    const state=window.CASA_EM_MODULOS_DEBUG.getState();
+    return document.querySelector("#stoneSkirtingToggle")?.checked===expected&&
+     state.globalSelections.serviceIds.includes("stone-skirting")===expected;
+   },originalSkirting,{timeout:10000});
+   report.stage="ds05a-finishes-option-restore-estimate";
    const restoredEstimate=await priceEstimateStatus();
    assert.ok(restoredEstimate.visible&&restoredEstimate.hasCurrency,
     "DS-05A: estimate missing after finish option restore");
