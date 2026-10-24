@@ -8,6 +8,7 @@ case "$key" in
 esac
 npm install --no-package-lock --no-audit --no-fund
 npm run build
+npm run pages:check
 node tests/ci/local-buyer-config-server.mjs > /tmp/m2d-local-v5-browser-server.log 2>&1 &
 for i in $(seq 1 20); do
   if curl -fsS --max-time 2 http://127.0.0.1:8123/api/buyer-configuration -o /tmp/m2d-local-v5-browser.json; then

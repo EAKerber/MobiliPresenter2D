@@ -14,6 +14,12 @@ on:
       - "tests/summary-pricing-browser.cjs"
       - "tests/stone-browser.cjs"
       - "tests/ci/local-buyer-config-server.mjs"
+      - "tests/ci/prepare-local-v5-browser.sh"
+      - ".github/workflows/mobile-browser.yml"
+      - ".github/workflows/keyboard-browser.yml"
+      - ".github/workflows/flow-layout-browser.yml"
+      - ".github/workflows/summary-pricing-browser.yml"
+      - ".github/workflows/stone-browser.yml"
       - "docs/handoffs/CI_GLOBAL_ACCESS_BOUNDARY_2026-10-23.md"
   workflow_dispatch:
 permissions:
@@ -87,31 +93,18 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: "22"
-      - name: Build local buyer artifacts (no Netlify release)
+      - name: Validate the shared local-browser preparation script and five workflows
         run: |
-          npm install --no-package-lock --no-audit --no-fund
-          npm run build
-          npm run pages:check
+          bash -n tests/ci/prepare-local-v5-browser.sh
+          for f in mobile-browser keyboard-browser flow-layout-browser summary-pricing-browser stone-browser; do
+            grep -Fq 'bash tests/ci/prepare-local-v5-browser.sh' ".github/workflows/$f.yml"
+          done
+      - name: Build and start source-derived V5 on loopback
+        run: bash tests/ci/prepare-local-v5-browser.sh FLOW_LAYOUT_URL
       - name: Isolated Playwright tools
         run: |
           npm install --prefix /tmp/m2d-local-v5-browser --no-audit --no-fund playwright@1.56.0
           node -e 'require("playwright"); console.log("CI_LOCAL_PLAYWRIGHT_MODULE_RESOLVED")'
-      - name: Start checked-in V5 projection over loopback only
-        run: |
-          set -eu
-          node tests/ci/local-buyer-config-server.mjs > /tmp/m2d-local-v5-server.log 2>&1 &
-          for i in $(seq 1 20); do
-            if curl -fsS --max-time 2 http://127.0.0.1:8123/api/buyer-configuration -o /tmp/m2d-local-buyer.json; then
-              status=$(curl -sS --max-time 3 -X POST -H "Content-Type: application/json" -d '{}' -o /tmp/m2d-local-session.json -w '%{http_code}' http://127.0.0.1:8123/api/access/session)
-              test "$status" = 200
-              node -e 'const assert=require("node:assert/strict");const s=require("/tmp/m2d-local-session.json");assert.deepEqual(s,{authenticated:false});'
-              echo CI_LOCAL_V5_FIXTURE_READY_ANONYMOUS
-              exit 0
-            fi
-            sleep 1
-          done
-          echo "::error::Local validated buyer projection not ready"
-          exit 1
       - name: Execute five existing browser suites on local V5
         run: |
           node tests/ci/config-unlocked-local-diagnostic.mjs
