@@ -1,6 +1,6 @@
 "use strict";
-const assert = require("node:assert/strict");
-const { chromium } = require("playwright");
+import assert from "node:assert/strict";
+import { chromium } from "playwright";
 
 async function main() {
   const base = process.env.PUBLIC_PAGES_URL;
@@ -19,7 +19,7 @@ async function main() {
     await page.keyboard.press("Enter");
     await page.waitForFunction(() =>
       location.hash === "#main" && document.activeElement?.matches("main#main"),
-      { timeout: 3000 }
+      null, { timeout: 3000 }
     );
     assert.equal(await page.locator("main#main").getAttribute("tabindex"), "-1",
       "the main landmark must be programmatically focusable without joining the Tab order");
