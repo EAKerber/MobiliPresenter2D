@@ -44,7 +44,7 @@
 .scene-hotspot::after { content: ""; position: absolute; inset: 2px; border: 2px solid transparent; border-radius: 6px; transition: border-color 160ms ease, background 160ms ease; }
 .scene-hotspot:hover::after, .scene-hotspot:focus-visible::after { border-color: color-mix(in srgb, var(--public-accent-highlight) 88%, white); background: rgb(216 188 124 / 19%); }
 .scene-hotspot.is-selected::after { border-color: transparent; }
-.scene-hotspot:focus-visible { outline: 0; }
+html[data-theme] .scene-hotspot:focus-visible { outline: 4px solid var(--public-accent); outline-offset: 3px; }
 .scene-hotspot__tag { position: absolute; left: 50%; top: -8px; display: grid; width: 26px; height: 26px; place-items: center; transform: translate(-50%, -100%); border: 1px solid rgba(226, 201, 145, .8); border-radius: 50%; background: #1b1c1a; color: #d8cbbb; font-size: 11px; font-weight: 800; opacity: 0; pointer-events: none; transition: opacity 160ms ease; }
 .scene-hotspot:hover .scene-hotspot__tag, .scene-hotspot:focus-visible .scene-hotspot__tag, .scene-hotspot.is-selected .scene-hotspot__tag { opacity: 1; }
 .scene-hotspot[data-marker-side="bottom"] .scene-hotspot__tag { top: auto; bottom: -8px; transform: translate(-50%, 100%); }
