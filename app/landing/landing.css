@@ -1,3 +1,5 @@
+@import url("/design-system/vis002c-long-copy-light-v0.3.0.css?v=vis002c-0.3.0");
+
 .intro-splash { position: fixed; z-index: 100; inset: 0; display: grid; place-items: center; background: var(--public-bg, #f7f5f2); animation: intro-exit .4s ease 2.65s forwards; }
 .intro-mark { display: grid; justify-items: center; width: min(62vw, 430px); animation: intro-enter .58s cubic-bezier(.2,.8,.2,1) both; }
 .intro-mark img { display: block; width: 100%; height: auto; }
@@ -205,5 +207,5 @@ html[data-theme="light"] .story-section > p.eyebrow {
 
 html[data-theme="light"] .environment-feature .feature-copy > p:not(.eyebrow):not(.feature-availability),
 html[data-theme="light"] .story-section > p:not(.eyebrow) {
-  color: var(--public-text);
+  color: var(--ds-vis002c-long-copy-light);
 }
