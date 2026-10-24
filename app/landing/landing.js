@@ -158,7 +158,8 @@
     if (!mobileMode()) return;
     const card = track.querySelector(`[data-environment-id="${id}"]`);
     const bounds = card.getBoundingClientRect(); const viewport = windowEl.getBoundingClientRect();
-    if (bounds.right > viewport.right || bounds.left < viewport.left) goToPage(bounds.left >= viewport.right ? 1 : 0);
+    if (bounds.right > viewport.right) goToPage(1);
+    else if (bounds.left < viewport.left) goToPage(0);
   }
   function applyResponsive() {
     controls.hidden = !mobileMode();
