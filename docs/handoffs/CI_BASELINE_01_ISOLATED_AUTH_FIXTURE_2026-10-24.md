@@ -24,3 +24,13 @@ It does not change Config, Admin, Access, Viewer or production Netlify functions
 ## Required completion
 
 Configure the role password and GitHub environment values without sharing credentials in chat. Verify the dedicated Netlify deploy, then manually run the authenticated redeem/bootstrap/admin-denial/revoke gate. Keep issue #232 open until the current gate and remaining legacy workflow reconciliation are complete.
+
+
+## Verificação após deploy e reconciliação dos workflows — 24/10/2026
+
+- Deploy isolado atual: `m2d-auth-ci-isolated`, deploy `6adc77b6603e52a336fe045d`, state `ready`, commit `5ccb2a8dde6dd16e136f03387dc833aab828c5cf`. O deploy publica as funções `access-check`, `access-redeem`, `access-session-status`, `access-session-logout`, `buyer-configuration` e `admin-bootstrap`.
+- Gate anônimo: [Actions #40075575907](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40075575907) passou no head `a9129e11afeae6e92fa8a9dda88f44e01c385c8a).
+- Gate autenticado real: [Actions #40075575871](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40075575871), tentativa 4, passou contra o site dedicado e o projeto Supabase de teste confirmado. Resgate, bootstrap do Config, negação de Admin e revogação foram confirmados; logs não contêm URI nem segredo.
+- Reconciliação funcional legado: os cinco workflows existentes foram executados com sucesso no commit-base `5ccb2a8dde6dd16e136f03387dc833aab828c5cf`, cada um usando a fixture V5 validada em loopback (não o Deploy Preview protegido): [Mobile #40057347194](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40057347194), [Keyboard #40057347179](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40057347179), [Flow #40057347220](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40057347220), [Summary/Pricing #40057347150](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40057347150), [Stone #40057347138](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40057347138). Todos os cinco jobs concluíram SUCCESS.
+- **Limite da evidência:** os cinco fluxos de interação estão validados na fixture local; o gate autenticado real verifica sessão/bootstrap e controle de Admin, não repete as cinco suítes no staging. Manter essa separação explícita. Não declarar teste de interação autenticado em Deploy Preview.
+- Issue `#232` continua aberta até revisão e integração do PR; PR `#238` permanece draft. Nenhum merge foi feito.
