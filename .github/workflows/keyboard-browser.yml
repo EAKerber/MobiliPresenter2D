@@ -1,4 +1,4 @@
-name: Keyboard browser
+name: Keyboard browser (local V5; protected preview separately gated)
 on:
   push:
     branches: [main]
@@ -14,6 +14,8 @@ on:
       - 'app/index.html'
       - 'tests/keyboard-browser.cjs'
       - '.github/workflows/keyboard-browser.yml'
+      - 'tests/ci/prepare-local-v5-browser.sh'
+      - 'tests/ci/local-buyer-config-server.mjs'
   pull_request:
     paths:
       - 'app/data/hierarchy-defaults.js'
@@ -27,6 +29,8 @@ on:
       - 'app/index.html'
       - 'tests/keyboard-browser.cjs'
       - '.github/workflows/keyboard-browser.yml'
+      - 'tests/ci/prepare-local-v5-browser.sh'
+      - 'tests/ci/local-buyer-config-server.mjs'
   workflow_dispatch:
     inputs:
       target_url:
@@ -44,18 +48,16 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - name: Resolve browser target
+      - name: Resolve browser target (validated V5 loopback by default)
         shell: bash
         run: |
           if [ -n "${{ inputs.target_url }}" ]; then
             target="${{ inputs.target_url }}"
-          elif [ "${{ github.event_name }}" = "pull_request" ]; then
-            target="https://deploy-preview-${{ github.event.pull_request.number }}--mobilipresenter2d.netlify.app/config/"
+            echo "KEYBOARD_BROWSER_URL=$target" >> "$GITHUB_ENV"
+            echo "CI_EXPLICIT_BROWSER_TARGET_SPECIFIED"
           else
-            target="https://mobilipresenter2d.netlify.app/config/"
+            bash tests/ci/prepare-local-v5-browser.sh KEYBOARD_BROWSER_URL
           fi
-          echo "KEYBOARD_BROWSER_URL=$target" >> "$GITHUB_ENV"
-          echo "Browser target: $target"
       - name: Install browser test tooling
         run: |
           npm install --prefix /tmp/keyboard-browser-tools --no-audit --no-fund playwright@1.62.1
