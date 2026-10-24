@@ -94,11 +94,11 @@ for(const engine of [chromium,webkit]){
     const after=await evaluate(browser,scene,width,theme,null);
     assert.deepEqual(after.data,before.data,"DOM/CSS/layout drift "+scene.route+"/"+width+"/"+theme);
     assert.deepEqual(after.errors,before.errors,"JS errors changed");
+    const shotPairs=[["closed",before.closed,after.closed]];
     if(after.hasToggle){
      assert.equal(after.expanded,"true","candidate header opens by keyboard");
      if(before.open&&after.open)shotPairs.push(["open",before.open,after.open]);
     }else assert.equal(after.expanded,null);
-    const shotPairs=[["closed",before.closed,after.closed]];
     // The keyboard-open state is the intended accessibility fix; the dedicated
     // P-COMP gate checks its visuals and navigation behavior independently.
     const raster=[];
