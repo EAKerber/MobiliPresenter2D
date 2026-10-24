@@ -75,6 +75,35 @@ try{
  assert.ok(await page.locator(".workspace").count()>0,"Configurator workspace not found");
  report.bootstrap=true;
  report.layoutProfile=await page.evaluate(()=>window.CASA_EM_MODULOS_DEBUG.getLayoutProfile());
+ // DS-05A Config surface: collect readiness booleans only; never persist prices or customer/configuration data.
+ const ds05aConfigSurface=await page.evaluate(()=>{
+  const visible=(element)=>{
+   if(!element||element.hidden)return false;
+   const style=getComputedStyle(element),rect=element.getBoundingClientRect();
+   return style.display!=="none"&&style.visibility==="visible"&&rect.width>0&&rect.height>0;
+  };
+  const visibleText=document.querySelector("#visibleCount")?.textContent?.trim()||"";
+  const totalText=document.querySelector("#totalCount")?.textContent?.trim()||"";
+  const price=document.querySelector("#configurationValue");
+  const priceText=price?.textContent?.trim()||"";
+  const next=document.querySelector("#nextStepButton");
+  const visibleCount=Number(visibleText),totalCount=Number(totalText);
+  return {
+   visibleCountReady:/^\\d+$/.test(visibleText),
+   totalCountReady:/^\\d+$/.test(totalText),
+   visibleCountWithinTotal:Number.isFinite(visibleCount)&&Number.isFinite(totalCount)&&visibleCount>=0&&visibleCount<=totalCount,
+   priceBarVisible:visible(price),
+   priceBarHasText:Boolean(priceText),
+   priceEstimateHasCurrency:/R\\$\\s*[\\d.,]+/.test(priceText),
+   nextStepVisible:visible(next)&&!next.disabled
+  };
+ });
+ assert.ok(ds05aConfigSurface.visibleCountReady&&ds05aConfigSurface.totalCountReady&&
+  ds05aConfigSurface.visibleCountWithinTotal,"DS-05A: Config module counters not ready");
+ assert.ok(ds05aConfigSurface.priceBarVisible&&ds05aConfigSurface.priceBarHasText,
+  "DS-05A: Config price/status bar not visible");
+ assert.ok(ds05aConfigSurface.nextStepVisible,"DS-05A: next-step action not visible");
+ report.ds05aConfigSurface=ds05aConfigSurface;
  // Staging user must not acquire admin capabilities.
  const admin=await context.request.get(new URL("/api/admin-bootstrap",gate.origin).toString(),{
   timeout:10000});
@@ -95,7 +124,7 @@ try{
  report.classification="AUTHENTICATED_FIXTURE_PASS";
  report.stage="complete";
  console.log("CI_CONFIG_AUTHENTICATED_PASS "+JSON.stringify({
-  bootstrap:report.bootstrap,revoked:report.revoked,adminAccessDenied:report.adminAccessDenied}));
+  bootstrap:report.bootstrap,revoked:report.revoked,adminAccessDenied:report.adminAccessDenied,ds05aConfigSurface:report.ds05aConfigSurface}));
 }catch(error){
  report.errorClass=safeErrorClass(error);
  report.classification=report.stage==="preflight"||report.stage==="isolated-role-check"
