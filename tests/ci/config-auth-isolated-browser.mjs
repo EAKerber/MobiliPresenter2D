@@ -212,7 +212,15 @@ try{
     return document.querySelector("#stoneSkirtingToggle")?.checked===expected&&
      state.globalSelections.serviceIds.includes("stone-skirting")===expected;
    },!originalSkirting,{timeout:10000});
-   report.stage="ds05a-finishes-option-estimate";
+   report.stage="ds05a-finishes-option-estimate-readiness";
+   await page.waitForFunction(()=>{
+    const price=document.querySelector("#configurationValue");
+    const text=price?.textContent?.trim()||"";
+    const style=price&&getComputedStyle(price),rect=price?.getBoundingClientRect();
+    return Boolean(price&&!price.hidden&&style?.display!=="none"&&style?.visibility==="visible"&&
+     rect?.width>0&&rect?.height>0&&text.includes("R$")&&
+     Array.from(text).some(ch=>ch>="0"&&ch<="9"));
+   },null,{timeout:10000});
    const changedEstimate=await priceEstimateStatus();
    assert.ok(changedEstimate.visible&&changedEstimate.hasCurrency,
     "DS-05A: estimate missing after finish option change");
@@ -223,7 +231,15 @@ try{
     return document.querySelector("#stoneSkirtingToggle")?.checked===expected&&
      state.globalSelections.serviceIds.includes("stone-skirting")===expected;
    },originalSkirting,{timeout:10000});
-   report.stage="ds05a-finishes-option-restore-estimate";
+   report.stage="ds05a-finishes-option-restore-estimate-readiness";
+   await page.waitForFunction(()=>{
+    const price=document.querySelector("#configurationValue");
+    const text=price?.textContent?.trim()||"";
+    const style=price&&getComputedStyle(price),rect=price?.getBoundingClientRect();
+    return Boolean(price&&!price.hidden&&style?.display!=="none"&&style?.visibility==="visible"&&
+     rect?.width>0&&rect?.height>0&&text.includes("R$")&&
+     Array.from(text).some(ch=>ch>="0"&&ch<="9"));
+   },null,{timeout:10000});
    const restoredEstimate=await priceEstimateStatus();
    assert.ok(restoredEstimate.visible&&restoredEstimate.hasCurrency,
     "DS-05A: estimate missing after finish option restore");
