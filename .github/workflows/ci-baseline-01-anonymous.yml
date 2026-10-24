@@ -8,6 +8,7 @@ on:
       - ".github/workflows/ci-baseline-01-anonymous.yml"
       - ".github/workflows/ci-baseline-01-isolated-authenticated.yml"
       - "docs/handoffs/CI_BASELINE_01_ISOLATED_AUTH_FIXTURE_2026-10-24.md"
+      - "netlify/access/migrations/**"
   workflow_dispatch:
 permissions:
   contents: read

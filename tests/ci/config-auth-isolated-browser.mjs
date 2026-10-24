@@ -1,15 +1,4 @@
-// CI-BASELINE-01: positive integration against a dedicated, nonproduction
-// Netlify site + Supabase project only. All session secrets remain in memory.
-// This does not mint admin/staff rights and exercises real access-redeem + Edge.
-import assert from "node:assert/strict";
-import {randomUUID} from "node:crypto";
-import {mkdir,writeFile} from "node:fs/promises";
-import pg from "pg";
-import {chromium} from "playwright";
-import {SUPABASE_DATABASE_CA} from "../../netlify/access/supabase-database-ca.mjs";
-import {createOpaqueToken,hashOpaqueToken,ACCESS_COOKIE_NAME} from "../../netlify/access/tokens.mjs";
-import {validateFixtureEnvironment,safeErrorClass,ISOLATION_TAG} from "./config-auth-isolation.mjs";
-
+// CI-BASELINE-01: positive integration against the dedicated test site and user-confirmed internal test DB. All session secrets remain in memory.
 const out="artifacts/ci-baseline-01/authenticated.json";
 await mkdir("artifacts/ci-baseline-01",{recursive:true});
 let report={schema:"M2DCIIsolatedSessionFixture/1",classification:"BLOCKED_AUTH_FIXTURE",
@@ -32,20 +21,17 @@ try{
  const role=await db.query("select current_user as name");
  assert.equal(role.rows[0]?.name,"access_ci_fixture",
   "BLOCKED_AUTH_FIXTURE: database connection role is not access_ci_fixture");
- const schema=await db.query("select to_regclass('access_control.access_grants') as grant_table");
- assert.equal(schema.rows[0]?.grant_table,"access_control.access_grants",
-  "BLOCKED_AUTH_FIXTURE: access migration absent on isolated database");
+ const functions=await db.query("select to_regprocedure('access_control.ci_create_config_fixture_grant(uuid,text)') as create_fn, "+
+  "to_regprocedure('access_control.ci_revoke_config_fixture_grant(uuid)') as revoke_fn");
+ assert.ok(functions.rows[0]?.create_fn&&functions.rows[0]?.revoke_fn,
+  "BLOCKED_AUTH_FIXTURE: fixture functions absent; apply the reviewed migration first");
 
  // Only nonreal address in the RFC-reserved example domain. Five-minute grant.
  grantId=randomUUID();
  const grantToken=createOpaqueToken();
  const expire=new Date(Date.now()+5*60_000);
- await db.query(
-  "INSERT INTO access_control.access_grants "+
-  "(id,recipient_email,scope,token_hash,issued_by_identity_id,expires_at) "+
-  "VALUES ($1,$2,'config',$3,$4,$5)",
-  [grantId,"ci-config@fixture.example",hashOpaqueToken(grantToken),"ci-isolated-fixture",expire]
- );
+ await db.query("SELECT access_control.ci_create_config_fixture_grant($1::uuid,$2::text)",
+  [grantId,hashOpaqueToken(grantToken)]);
  report.stage="real-redeem";
  browser=await chromium.launch({headless:true});
  context=await browser.newContext({viewport:{width:1366,height:768},serviceWorkers:"block"});
@@ -84,8 +70,8 @@ try{
  report.jsErrorClasses=jsErrors;
  report.stage="revoke-and-check";
  // Tear down sessions and grant. Revoked cookie should never authorize /config.
- await db.query("UPDATE access_control.access_sessions SET revoked_at=now() "+
-  "WHERE grant_id=$1 AND revoked_at IS NULL",[grantId]);
+ const revoked=await db.query("SELECT access_control.ci_revoke_config_fixture_grant($1::uuid) AS revoked",[grantId]);
+ assert.equal(revoked.rows[0]?.revoked,true,"Fixture grant was not revoked");
  await db.query("UPDATE access_control.access_grants "+
   "SET revoked_at=now(),revoked_by_identity_id='ci-isolated-fixture' "+
   "WHERE id=$1 AND revoked_at IS NULL",[grantId]);
@@ -108,11 +94,7 @@ try{
 }finally{
  if(grantId&&db&&!report.revoked){
   try{
-   await db.query("UPDATE access_control.access_sessions SET revoked_at=now() "+
-    "WHERE grant_id=$1 AND revoked_at IS NULL",[grantId]);
-   await db.query("UPDATE access_control.access_grants "+
-    "SET revoked_at=now(),revoked_by_identity_id='ci-isolated-fixture' "+
-    "WHERE id=$1 AND revoked_at IS NULL",[grantId]);
+   await db.query("SELECT access_control.ci_revoke_config_fixture_grant($1::uuid)",[grantId]);
    report.revoked=true;
   }catch{
    report.cleanup="FAILED_MANUAL_REVOCATION_REQUIRED";
