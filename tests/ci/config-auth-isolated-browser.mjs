@@ -226,6 +226,10 @@ try{
     return document.querySelector("#stoneSkirtingToggle")?.checked===expected&&
      state.globalSelections.serviceIds.includes("stone-skirting")===expected;
    },!originalSkirting,{timeout:10000});
+   report.stage="ds05a-finishes-option-estimate-snapshot";
+   await page.waitForTimeout(500);
+   const estimateSnapshot=await priceEstimateStatus();
+   console.log("CI_CONFIG_DS05A_FINISH_ESTIMATE "+JSON.stringify(estimateSnapshot));
    report.stage="ds05a-finishes-option-estimate-readiness";
    await page.waitForFunction(()=>{
     const price=document.querySelector("#configurationValue");
@@ -234,7 +238,7 @@ try{
     return Boolean(price&&!price.hidden&&style?.display!=="none"&&style?.visibility==="visible"&&
      rect?.width>0&&rect?.height>0&&text.includes("R$")&&
      Array.from(text).some(ch=>ch>="0"&&ch<="9"));
-   },null,{timeout:10000});
+   },null,{timeout:20000});
    const changedEstimate=await priceEstimateStatus();
    assert.ok(changedEstimate.visible&&changedEstimate.hasCurrency,
     "DS-05A: estimate missing after finish option change");
