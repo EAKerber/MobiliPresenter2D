@@ -26,6 +26,11 @@ const {chromium} = require('playwright');
     }
   }
   if (lastError) throw lastError;
+  // CI buyer fixture: the legacy UI initializes before the async V5
+  // published configuration is applied. Start interactions only after commit.
+  if (process.env.CI_EXPECT_PUBLISHED_V5 === "1") {
+    await page.waitForFunction(() => document.documentElement.dataset.publishedConfigurationStatus === "validated", null, {timeout:30000});
+  }
 
   const selectedNumber = () => page.evaluate(() => {
     const card = document.querySelector('#moduleList .module-card.is-selected');
@@ -124,6 +129,10 @@ const {chromium} = require('playwright');
   await page.waitForFunction(() => document.body.classList.contains('has-module-detail'));
   await page.keyboard.press('Escape');
   await page.waitForFunction(() => !document.body.classList.contains('has-module-detail'));
+  // The detail exit state and focus restoration can settle in different
+  // tasks. Wait for the actual expected focus instead of sampling too early.
+  await page.waitForFunction(() => document.querySelector('#moduleList .module-card [data-select-entity]') === document.activeElement,
+    null, {timeout:5000});
   assert.equal(await firstModuleInspect.evaluate((element) => element === document.activeElement), true,
     'closing detail restores focus to the module inspection body that opened it');
 

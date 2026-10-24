@@ -23,6 +23,9 @@ const { chromium } = require("playwright");
     if (message.type() === "error") stackedErrors.push(message.text());
   });
   await stackedPage.goto(targetUrl);
+  if (process.env.CI_EXPECT_PUBLISHED_V5 === "1") {
+    await stackedPage.waitForFunction(() => document.documentElement.dataset.publishedConfigurationStatus === "validated", null, {timeout:30000});
+  }
   await stackedPage.evaluate(() => Promise.all(Array.from(document.images, image => image.decode())));
   assert.equal(await stackedPage.evaluate(() => window.CASA_EM_MODULOS_DEBUG.getLayoutProfile()), "stacked",
     "1050px resolves through the canonical stacked profile");
@@ -155,6 +158,9 @@ const { chromium } = require("playwright");
   });
 
   await page.goto(targetUrl);
+  if (process.env.CI_EXPECT_PUBLISHED_V5 === "1") {
+    await page.waitForFunction(() => document.documentElement.dataset.publishedConfigurationStatus === "validated", null, {timeout:30000});
+  }
   await page.evaluate(() => Promise.all(Array.from(document.images, image => image.decode())));
   assert.equal(await page.evaluate(() => window.CASA_EM_MODULOS_DEBUG.getLayoutProfile()), "compact",
     "mobile viewport resolves through the canonical compact profile");

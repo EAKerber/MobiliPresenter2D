@@ -42,6 +42,11 @@ const flatV3 = configuration.createDefaultAdministration(
     }
   }
   if (lastError) throw lastError;
+  // CI buyer fixture: the legacy UI initializes before the async V5
+  // published configuration is applied. Start interactions only after commit.
+  if (process.env.CI_EXPECT_PUBLISHED_V5 === "1") {
+    await page.waitForFunction(() => document.documentElement.dataset.publishedConfigurationStatus === "validated", null, {timeout:30000});
+  }
 
   const stageGroupOrder = (stageId) => page.evaluate((id) => {
     const grid = document.querySelector('[data-flow-group-grid="' + id + '"]');
