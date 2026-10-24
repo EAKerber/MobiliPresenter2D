@@ -104,25 +104,50 @@ try{
   "DS-05A: Config price/status bar not visible");
  assert.ok(ds05aConfigSurface.nextStepVisible,"DS-05A: next-step action not visible");
  report.ds05aConfigSurface=ds05aConfigSurface;
- // Exercise one client-side module change and return the checkbox and counter to their initial state.
+ // Exercise two client-side module changes; restore each checkbox and counter before continuing.
  const availableModuleToggles=page.locator("[data-module-toggle]:not(:disabled)");
- assert.ok(await availableModuleToggles.count()>0,"DS-05A: no enabled module toggle rendered");
- const moduleToggle=availableModuleToggles.first();
- const originalModuleChecked=await moduleToggle.isChecked();
- const originalVisibleCount=Number((await page.locator("#visibleCount").textContent())?.trim());
- assert.ok(Number.isFinite(originalVisibleCount),"DS-05A: initial visible count is not numeric");
- if(originalModuleChecked)await moduleToggle.uncheck();else await moduleToggle.check();
- await page.waitForFunction((previous)=>{
-  const count=Number(document.querySelector("#visibleCount")?.textContent?.trim());
-  return Number.isFinite(count)&&count!==previous;
- },originalVisibleCount,{timeout:10000});
- if(originalModuleChecked)await moduleToggle.check();else await moduleToggle.uncheck();
- await page.waitForFunction(({expected,visibleCount})=>{
-  const toggle=document.querySelector("[data-module-toggle]:not(:disabled)");
-  const count=Number(document.querySelector("#visibleCount")?.textContent?.trim());
-  return toggle?.checked===expected&&count===visibleCount;
- },{expected:originalModuleChecked,visibleCount:originalVisibleCount},{timeout:10000});
- report.ds05aConfigInteraction={moduleToggleAvailable:true,visibleCountChanged:true,visibleCountRestored:true};
+ const moduleToggleCount=await availableModuleToggles.count();
+ assert.ok(moduleToggleCount>=2,"DS-05A: fewer than two enabled module toggles rendered");
+ const priceEstimateStatus=async()=>page.evaluate(()=>{
+  const price=document.querySelector("#configurationValue");
+  const text=price?.textContent?.trim()||"";
+  const style=price&&getComputedStyle(price),rect=price?.getBoundingClientRect();
+  return {
+   visible:Boolean(price&&!price.hidden&&style?.display!=="none"&&style?.visibility==="visible"&&rect?.width>0&&rect?.height>0),
+   hasCurrency:text.includes("R$")&&Array.from(text).some(ch=>ch>="0"&&ch<="9")
+  };
+ });
+ const exerciseModuleToggle=async(index)=>{
+  const moduleToggle=availableModuleToggles.nth(index);
+  const originalModuleChecked=await moduleToggle.isChecked();
+  const originalVisibleCount=Number((await page.locator("#visibleCount").textContent())?.trim());
+  assert.ok(Number.isFinite(originalVisibleCount),"DS-05A: initial visible count is not numeric");
+  if(originalModuleChecked)await moduleToggle.uncheck();else await moduleToggle.check();
+  await page.waitForFunction((previous)=>{
+   const count=Number(document.querySelector("#visibleCount")?.textContent?.trim());
+   return Number.isFinite(count)&&count!==previous;
+  },originalVisibleCount,{timeout:10000});
+  const changedEstimate=await priceEstimateStatus();
+  assert.ok(changedEstimate.visible&&changedEstimate.hasCurrency,
+   "DS-05A: price estimate missing after module toggle");
+  if(originalModuleChecked)await moduleToggle.check();else await moduleToggle.uncheck();
+  await page.waitForFunction(({expected,index,visibleCount})=>{
+   const toggles=Array.from(document.querySelectorAll("[data-module-toggle]:not(:disabled)"));
+   const count=Number(document.querySelector("#visibleCount")?.textContent?.trim());
+   return toggles[index]?.checked===expected&&count===visibleCount;
+  },{expected:originalModuleChecked,index,visibleCount:originalVisibleCount},{timeout:10000});
+  const restoredEstimate=await priceEstimateStatus();
+  assert.ok(restoredEstimate.visible&&restoredEstimate.hasCurrency,
+   "DS-05A: price estimate missing after restoring module toggle");
+ };
+ await exerciseModuleToggle(0);
+ await exerciseModuleToggle(1);
+ report.ds05aConfigInteraction={
+  twoModuleTogglesAvailable:true,
+  firstModuleChangedAndRestored:true,
+  secondModuleChangedAndRestored:true,
+  priceEstimateVisibleAfterToggleAndRestore:true
+ };
  await page.locator("#nextStepButton").click();
  await page.waitForFunction(()=>{
   const panel=document.querySelector("#finishesStagePanel");
