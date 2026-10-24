@@ -203,10 +203,24 @@ try{
    report.stage="ds05a-finishes-option-read";
    const skirtingToggle=page.locator("#stoneSkirtingToggle");
    assert.equal(await skirtingToggle.count(),1,"DS-05A: stone skirting option not rendered");
+   const optionReadiness=await page.evaluate(()=>{
+    const toggle=document.querySelector("#stoneSkirtingToggle");
+    const style=toggle&&getComputedStyle(toggle),rect=toggle?.getBoundingClientRect();
+    return {
+     visible:Boolean(toggle&&!toggle.hidden&&style?.display!=="none"&&style?.visibility==="visible"&&rect?.width>0&&rect?.height>0),
+     enabled:Boolean(toggle&&!toggle.disabled)
+    };
+   });
+   assert.ok(optionReadiness.visible&&optionReadiness.enabled,
+    "DS-05A: stone skirting option is not interactable");
    const originalSkirting=await page.evaluate(()=>
     window.CASA_EM_MODULOS_DEBUG.getState().globalSelections.serviceIds.includes("stone-skirting"));
-   report.stage="ds05a-finishes-option-change";
-   await skirtingToggle.setChecked(!originalSkirting);
+   report.ds05aFinishOptionAvailability=optionReadiness;
+   report.stage="ds05a-finishes-option-keyboard-focus";
+   await skirtingToggle.focus();
+   report.stage="ds05a-finishes-option-keyboard-change";
+   await skirtingToggle.press("Space");
+   report.stage="ds05a-finishes-option-state-change";
    await page.waitForFunction((expected)=>{
     const state=window.CASA_EM_MODULOS_DEBUG.getState();
     return document.querySelector("#stoneSkirtingToggle")?.checked===expected&&
@@ -224,8 +238,11 @@ try{
    const changedEstimate=await priceEstimateStatus();
    assert.ok(changedEstimate.visible&&changedEstimate.hasCurrency,
     "DS-05A: estimate missing after finish option change");
-   report.stage="ds05a-finishes-option-restore";
-   await skirtingToggle.setChecked(originalSkirting);
+   report.stage="ds05a-finishes-option-restore-focus";
+   await skirtingToggle.focus();
+   report.stage="ds05a-finishes-option-restore-keyboard";
+   await skirtingToggle.press("Space");
+   report.stage="ds05a-finishes-option-state-restore";
    await page.waitForFunction((expected)=>{
     const state=window.CASA_EM_MODULOS_DEBUG.getState();
     return document.querySelector("#stoneSkirtingToggle")?.checked===expected&&
