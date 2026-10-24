@@ -1,9 +1,13 @@
 {
   "name": "mobilipresenter2d-admin",
   "private": true,
-  "engines": { "node": ">=20" },
+  "engines": {
+    "node": ">=20"
+  },
   "scripts": {
-    "build": "esbuild app/admin/admin.js --bundle --format=esm --target=safari14 --supported:destructuring=true --outfile=app/admin/admin.bundle.js && esbuild app/access/manage.js --bundle --format=esm --target=safari14 --supported:destructuring=true --outfile=app/access/manage.bundle.js && esbuild app/core/private-navigation.js --bundle --format=esm --target=safari14 --supported:destructuring=true --outfile=app/core/private-navigation.bundle.js"
+    "build": "node scripts/compile-primary-pages.mjs --build && esbuild app/admin/admin.js --bundle --format=esm --target=safari14 --supported:destructuring=true --outfile=app/admin/admin.bundle.js && esbuild app/access/manage.js --bundle --format=esm --target=safari14 --supported:destructuring=true --outfile=app/access/manage.bundle.js && esbuild app/core/private-navigation.js --bundle --format=esm --target=safari14 --supported:destructuring=true --outfile=app/core/private-navigation.bundle.js",
+    "pages:check": "node scripts/compile-primary-pages.mjs --check",
+    "pages:sync": "node scripts/compile-primary-pages.mjs --sync"
   },
   "dependencies": {
     "@netlify/blobs": "^11.1.1",

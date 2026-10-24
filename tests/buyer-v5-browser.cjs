@@ -11,6 +11,9 @@ const hierarchyDefaults = require("../app/data/hierarchy-defaults.js");
 const catalog = require("../app/data/catalog-data.js");
 const priceBook = require("../app/data/mock-price-book.js");
 const scene = require("../app/data/scene-data.js");
+const projection = require("../app/core/published-buyer-projection.js");
+const pricingContract = require("../app/core/pricing-contract.js");
+const defaultPresentationPolicy = require("../app/data/presentation-policy-defaults.js");
 
 const v3 = configuration.normalizeConfiguratorSettings(
   configuration.createDefaultAdministration(settings, catalog, priceBook, scene),
@@ -18,6 +21,16 @@ const v3 = configuration.normalizeConfiguratorSettings(
 );
 const v5 = administrationV5.upgrade(v3, configuration, flow, catalog, priceBook, scene, hierarchyDefaults);
 assert.deepEqual(administrationV5.validate(v5, configuration, catalog, priceBook, scene), []);
+function toPublishedBuyerPayload(authored) {
+  const converted=authored.schemaVersion===administrationV5.SCHEMA
+    ? authored
+    : administrationV5.upgrade(authored,configuration,flow,catalog,priceBook,scene,hierarchyDefaults);
+  assert.deepEqual(administrationV5.validate(converted,configuration,catalog,priceBook,scene),[]);
+  return projection.project(converted,{
+    configuration,administrationV5,flow,catalog,priceBook,scene,
+    hierarchyDefaults,pricingContract,defaultPresentationPolicy
+  });
+}
 
 async function main() {
   const output = process.argv[2] || "/tmp/buyer-v5-browser";
@@ -30,9 +43,9 @@ async function main() {
       const page = await browser.newPage({ viewport: { width: 1366, height: 900 } });
       const errors = [];
       page.on("pageerror", (e) => errors.push(e.message));
-      await page.route("**/api/configuration", async (route) => {
+      await page.route("**/api/buyer-configuration", async (route) => {
         if (route.request().method() !== "GET") return route.continue();
-        await route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify(payload) });
+        await route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify(toPublishedBuyerPayload(payload)) });
       });
       let error;
       for (let attempt = 0; attempt < 12; attempt += 1) {
@@ -70,8 +83,8 @@ async function main() {
 
     const old = await openFixture("v3", v3);
     const current = await openFixture("v5", v5);
-    assert.equal(old.schema, configuration.SCHEMA);
-    assert.equal(current.schema, administrationV5.SCHEMA);
+    assert.equal(old.schema, administrationV5.SCHEMA, "V3 authoring is upgraded to V5 before buyer runtime");
+    assert.equal(current.schema, administrationV5.SCHEMA, "V5 authoring remains V5");
     assert.deepEqual(current.navigation, old.navigation, "same published semantics preserve navigation");
     assert.deepEqual(current.stages, old.stages, "same published semantics preserve stage/group/section/item hierarchy");
     assert.equal(current.modules, old.modules, "same seven canonical module controls");
@@ -79,12 +92,16 @@ async function main() {
     assert.deepEqual(current.errors, [], "v5 runtime binds all sections without fallback");
     assert.deepEqual(current.policy, v5.presentationPolicy, "authored v5 policy must control buyer presentation");
 
+    // Server publication is authoritative: malformed V5 must return 422 and
+    // buyer UI MUST fail closed rather than render a fallback authoring payload.
     const bad = structuredClone(v5);
     bad.presentationPolicy = null;
+    assert.notDeepEqual(administrationV5.validate(bad,configuration,catalog,priceBook,scene),[],
+      "the negative fixture must actually violate the V5 contract");
     const negativePage = await browser.newPage({ viewport: { width: 1366, height: 900 } });
-    await negativePage.route("**/api/configuration", async (route) => {
+    await negativePage.route("**/api/buyer-configuration", async (route) => {
       if (route.request().method() !== "GET") return route.continue();
-      await route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify(bad) });
+      await route.fulfill({ status: 422, contentType: "application/json", body: JSON.stringify({error:"invalid_published_configuration"}) });
     });
     await negativePage.goto(targetUrl, { waitUntil: "domcontentloaded", timeout: 15000 });
     await negativePage.waitForFunction(() => document.documentElement.dataset.publishedConfigurationStatus === "invalid", null, { timeout: 12000 });

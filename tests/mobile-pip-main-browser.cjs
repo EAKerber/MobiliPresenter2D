@@ -12,7 +12,7 @@ const { chromium } = require("playwright");
   const targetUrl = process.env.MOBILE_INTERACTIONS_URL ||
     pathToFileURL(path.resolve(__dirname, "../app/index.html")).href;
 
-  const stackedContext = await browser.newContext({
+  const stackedContext = await browser.newContext({storageState: process.env.PLAYWRIGHT_AUTH_STATE_FILE || undefined, 
     viewport: { width: 1050, height: 900 },
     deviceScaleFactor: 1
   });
@@ -23,6 +23,9 @@ const { chromium } = require("playwright");
     if (message.type() === "error") stackedErrors.push(message.text());
   });
   await stackedPage.goto(targetUrl);
+  if (process.env.CI_EXPECT_PUBLISHED_V5 === "1") {
+    await stackedPage.waitForFunction(() => document.documentElement.dataset.publishedConfigurationStatus === "validated", null, {timeout:30000});
+  }
   await stackedPage.evaluate(() => Promise.all(Array.from(document.images, image => image.decode())));
   assert.equal(await stackedPage.evaluate(() => window.CASA_EM_MODULOS_DEBUG.getLayoutProfile()), "stacked",
     "1050px resolves through the canonical stacked profile");
@@ -141,7 +144,7 @@ const { chromium } = require("playwright");
   assert.deepEqual(stackedErrors, []);
   await stackedContext.close();
 
-  const context = await browser.newContext({
+  const context = await browser.newContext({storageState: process.env.PLAYWRIGHT_AUTH_STATE_FILE || undefined, 
     viewport: { width: 390, height: 844 },
     isMobile: true,
     hasTouch: true,
@@ -155,6 +158,9 @@ const { chromium } = require("playwright");
   });
 
   await page.goto(targetUrl);
+  if (process.env.CI_EXPECT_PUBLISHED_V5 === "1") {
+    await page.waitForFunction(() => document.documentElement.dataset.publishedConfigurationStatus === "validated", null, {timeout:30000});
+  }
   await page.evaluate(() => Promise.all(Array.from(document.images, image => image.decode())));
   assert.equal(await page.evaluate(() => window.CASA_EM_MODULOS_DEBUG.getLayoutProfile()), "compact",
     "mobile viewport resolves through the canonical compact profile");

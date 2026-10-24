@@ -1,0 +1,50 @@
+{
+  "schema": "M2DPrimaryHeaderRoutes/0.1",
+  "status": "BUILD_AUTHORITATIVE_ARC03C",
+  "authority": "ARC-03 + ARC-04 + NAV-004; Viewer NAV-005 excluded",
+  "template": "architecture/fragments/primary-header.fragment.html",
+  "routes": [
+    {
+      "route": "/",
+      "source": "architecture/pages/root.page.html",
+      "brandHref": "/",
+      "ambientesHref": "/#ambientes",
+      "howHref": "/how-it-works/",
+      "aboutHref": "/about/",
+      "current": "ambientes",
+      "whatsAppIconAriaHidden": true
+    },
+    {
+      "route": "/about/",
+      "source": "architecture/pages/about.page.html",
+      "brandHref": "/",
+      "ambientesHref": "/#ambientes",
+      "howHref": "/how-it-works/",
+      "aboutHref": "/about/",
+      "current": "about",
+      "whatsAppIconAriaHidden": false
+    },
+    {
+      "route": "/how-it-works/",
+      "source": "architecture/pages/how-it-works.page.html",
+      "brandHref": "../",
+      "ambientesHref": "../#ambientes",
+      "howHref": "./",
+      "aboutHref": "../about/",
+      "current": "how",
+      "whatsAppIconAriaHidden": true
+    }
+  ],
+  "scope": {
+    "doesNotInclude": [
+      "/viewer/",
+      "/config/",
+      "/admin.html",
+      "/access/",
+      "/access/manage.html"
+    ],
+    "emissionTarget": "app/ (Netlify publish directory)",
+    "mayOverwriteAuthoredPages": false,
+    "mayModifyNetlifyBuild": true
+  }
+}

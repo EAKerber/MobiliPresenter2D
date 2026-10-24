@@ -13,7 +13,7 @@ const {chromium} = require('playwright');
     headless: true,
     args: mode === 'local' ? ['--allow-file-access-from-files'] : []
   });
-  const page = await browser.newPage({viewport: {width: 1366, height: 900}});
+  const page = await browser.newPage({storageState: process.env.PLAYWRIGHT_AUTH_STATE_FILE || undefined, viewport: {width: 1366, height: 900}});
   const errors = [];
   page.on('pageerror', error => errors.push(error.message));
   page.on('console', message => { if (message.type() === 'error') errors.push(message.text()); });
@@ -44,6 +44,9 @@ const {chromium} = require('playwright');
   }
 
   await openCurrentRuntime();
+  if (process.env.CI_EXPECT_PUBLISHED_V5 === "1") {
+    await page.waitForFunction(() => document.documentElement.dataset.publishedConfigurationStatus === "validated", null, {timeout:30000});
+  }
 
   const settle = () => page.waitForTimeout(350);
   const screenshot = name => page.screenshot({path: path.join(output, `${name}.png`), fullPage: true, animations: 'disabled'});
@@ -182,6 +185,21 @@ const {chromium} = require('playwright');
   assert(rightPoint, 'right plinth territory must expose at least one rendered pixel');
 
   const offBase = {state: await state(), plinth: await canvasStats('plinthCanvas')};
+  if(offBase.state.globalSelections.serviceIds.includes('stone-skirting')){
+    const flags=await page.evaluate(()=>{
+      const value=window.CASA_EM_MODULOS_DEBUG.getState();
+      const toggle=document.getElementById('stoneSkirtingToggle');
+      return {
+        stateOff:!value.globalSelections?.serviceIds?.includes('stone-skirting'),
+        toggleOff:toggle?.checked===false,
+        stateServicesArray:Array.isArray(value.globalSelections?.serviceIds),
+        stoneIsCloud:value.globalSelections?.stonePackageId==='stone-cloud',
+        finishIsCocoa:value.globalSelections?.finishId==='cocoa',
+        currentStage:document.querySelector('.flow-nav [aria-current="step"]')?.dataset.step||null
+      };
+    });
+    console.error("CI_STONE_OFF_DIAGNOSTIC "+JSON.stringify(flags));
+  }
   assert.equal(offBase.state.globalSelections.serviceIds.includes('stone-skirting'), false);
   assert(offBase.plinth.nonzero > 0, 'OFF uses the MDF material canvas');
 

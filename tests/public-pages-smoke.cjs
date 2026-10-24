@@ -72,14 +72,21 @@ async function main() {
       assert.deepEqual(errors, [], "viewer errors: " + errors.join(" | "));
       await page.close();
     }
-    // Public interim cutover: /config/ loads the original buyer application and
-    // does NOT require Clerk until the later explicit auth release.
+    // Anonymous users must follow the access contract; the private workspace
+    // is not part of the public routing smoke test.
     const configPage = await browser.newPage({ viewport: { width: 1366, height: 768 } });
-    await configPage.goto(new URL("/config/", base).href, { waitUntil: "domcontentloaded", timeout: 20000 });
-    assert.match(await configPage.title(), /Casa em Módulos/i);
-    await configPage.waitForFunction(() => Boolean(window.CASA_EM_MODULOS_DEBUG?.getLayoutProfile), null,
-      { timeout: 15000 });
-    assert.equal(await configPage.locator(".workspace").count(), 1);
+    const configResponse = await configPage.goto(new URL("/config/", base).href,
+      { waitUntil: "domcontentloaded", timeout: 20000 });
+    assert(configResponse && configResponse.ok(), "anonymous /config/ navigation must resolve to the access page");
+    assert.equal(new URL(configPage.url()).pathname, "/access/",
+      "anonymous /config/ navigation redirects to the access route");
+    assert.match(await configPage.title(), /Acesso ao configurador/i);
+    assert.equal(await configPage.locator(".workspace").count(), 0,
+      "anonymous access must not render the private workspace");
+    assert.equal(await configPage.evaluate(() => Boolean(window.CASA_EM_MODULOS_DEBUG)), false,
+      "anonymous access must not initialize private configurator controls");
+    assert.match(await configPage.locator("main").textContent(), /Solicite um novo acesso/i,
+      "the access page explains that a valid private link is required");
     await configPage.close();
     // CP-PUBLIC-02b: exercise the optional asynchronous public projection
     // in an isolated browser with a fully mocked same-origin endpoint.
