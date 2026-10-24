@@ -78,3 +78,6 @@
   from = "/landing/quem-somos/"
   to = "/about/"
   status = 301
+
+[[context.deploy-preview.plugins]]
+  package = "./netlify/plugins/ci-v5-fixture"

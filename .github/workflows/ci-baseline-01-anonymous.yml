@@ -9,6 +9,11 @@ on:
       - ".github/workflows/ci-baseline-01-isolated-authenticated.yml"
       - "docs/handoffs/CI_BASELINE_01_ISOLATED_AUTH_FIXTURE_2026-10-24.md"
       - "netlify/access/migrations/**"
+      - "netlify.toml"
+      - "netlify/plugins/ci-v5-fixture/**"
+      - "scripts/build-ci-preview-fixture.mjs"
+      - "tests/ci/build-ci-preview-fixture.test.mjs"
+      - "tests/ci/config-authenticated-v5-suites.mjs"
   workflow_dispatch:
 permissions:
   contents: read
@@ -27,11 +32,40 @@ jobs:
           node --check tests/ci/config-auth-isolation.mjs
           node --check tests/ci/config-auth-anonymous-browser.mjs
           node --check tests/ci/config-auth-isolated-browser.mjs
+          node --check tests/ci/config-authenticated-v5-suites.mjs
+          node --check scripts/build-ci-preview-fixture.mjs
+          node --check netlify/plugins/ci-v5-fixture/index.mjs
+          node --test tests/ci/build-ci-preview-fixture.test.mjs
           node --test tests/ci/config-auth-isolation.test.mjs
-      - name: No private Config/Netlify production changes in this increment
+      - name: Restrict changes to the approved CI fixture and test scope
         run: |
           git fetch origin main
-          git diff --exit-code origin/main...HEAD -- app/config app/admin app/access app/viewer netlify/ netlify.toml ':(exclude)netlify/access/migrations/20261024120000_ci_config_fixture_role.sql'
+          git diff --exit-code origin/main...HEAD -- app/config app/admin app/access app/viewer netlify/access netlify/functions netlify/edge-functions ':(exclude)netlify/access/migrations/20261024120000_ci_config_fixture_role.sql'
+          node --input-type=module <<'NODE'
+          import {execFileSync} from "node:child_process";
+          const changed = execFileSync("git", ["diff", "--name-only", "origin/main...HEAD"], {encoding:"utf8"}).trim().split("\n").filter(Boolean);
+          const allowed = new Set([
+            ".github/workflows/ci-baseline-01-anonymous.yml",
+            ".github/workflows/ci-baseline-01-isolated-authenticated.yml",
+            "docs/handoffs/CI_BASELINE_01_ISOLATED_AUTH_FIXTURE_2026-10-24.md",
+            "netlify.toml",
+            "netlify/plugins/ci-v5-fixture/index.mjs",
+            "netlify/plugins/ci-v5-fixture/package.json",
+            "netlify/access/migrations/20261024120000_ci_config_fixture_role.sql",
+            "scripts/build-ci-preview-fixture.mjs",
+            "tests/ci/build-ci-preview-fixture.test.mjs",
+            "tests/ci/config-auth-anonymous-browser.mjs",
+            "tests/ci/config-auth-isolated-browser.mjs",
+            "tests/ci/config-auth-isolation.mjs",
+            "tests/ci/config-auth-isolation.test.mjs",
+            "tests/ci/config-authenticated-v5-suites.mjs"
+          ]);
+          const unexpected = changed.filter(path => !allowed.has(path));
+          if (unexpected.length) throw new Error("Unexpected files in CI fixture PR: " + unexpected.join(", "));
+          if (!changed.includes("netlify.toml") || !changed.includes("netlify/plugins/ci-v5-fixture/index.mjs")) {
+            throw new Error("Approved isolated preview fixture is not included");
+          }
+          NODE
   anonymous-config:
     runs-on: ubuntu-latest
     timeout-minutes: 12
