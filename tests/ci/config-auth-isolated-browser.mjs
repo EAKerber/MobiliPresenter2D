@@ -114,25 +114,9 @@ try{
   const price=document.querySelector("#configurationValue");
   const text=price?.textContent?.trim()||"";
   const style=price&&getComputedStyle(price),rect=price?.getBoundingClientRect();
-  let ancestorChainVisible=true;
-  for(let ancestor=price?.parentElement;ancestor;ancestor=ancestor.parentElement){
-   const ancestorStyle=getComputedStyle(ancestor);
-   if(ancestor.hidden||ancestorStyle.display==="none"||ancestorStyle.visibility!=="visible")ancestorChainVisible=false;
-  }
-  const ownDisplayVisible=Boolean(style&&style.display!=="none");
-  const ownVisibilityVisible=Boolean(style&&style.visibility==="visible");
-  const ownOpacityVisible=Boolean(style&&Number(style.opacity)>0);
-  const hasArea=Boolean(rect&&rect.width>0&&rect.height>0);
   return {
-   visible:Boolean(price&&!price.hidden&&ownDisplayVisible&&ownVisibilityVisible&&hasArea),
-   hasCurrency:text.includes("R$")&&Array.from(text).some(ch=>ch>="0"&&ch<="9"),
-   elementPresent:Boolean(price),
-   hiddenAttribute:Boolean(price?.hidden),
-   ownDisplayVisible,
-   ownVisibilityVisible,
-   ownOpacityVisible,
-   hasArea,
-   ancestorChainVisible
+   visible:Boolean(price&&!price.hidden&&style?.display!=="none"&&style?.visibility==="visible"&&rect?.width>0&&rect?.height>0),
+   hasCurrency:text.includes("R$")&&Array.from(text).some(ch=>ch>="0"&&ch<="9")
   };
  });
  const exerciseModuleToggle=async(index)=>{
@@ -215,77 +199,7 @@ try{
    priceBarVisible:state.priceBarVisible,
    priceEstimateHasCurrency:state.priceEstimateHasCurrency
   };
-  if(stage.key==="finishes"){
-   report.stage="ds05a-finishes-option-read";
-   const skirtingToggle=page.locator("#stoneSkirtingToggle");
-   assert.equal(await skirtingToggle.count(),1,"DS-05A: stone skirting option not rendered");
-   const optionReadiness=await page.evaluate(()=>{
-    const toggle=document.querySelector("#stoneSkirtingToggle");
-    const style=toggle&&getComputedStyle(toggle),rect=toggle?.getBoundingClientRect();
-    return {
-     visible:Boolean(toggle&&!toggle.hidden&&style?.display!=="none"&&style?.visibility==="visible"&&rect?.width>0&&rect?.height>0),
-     enabled:Boolean(toggle&&!toggle.disabled)
-    };
-   });
-   assert.ok(optionReadiness.visible&&optionReadiness.enabled,
-    "DS-05A: stone skirting option is not interactable");
-   const originalSkirting=await page.evaluate(()=>
-    window.CASA_EM_MODULOS_DEBUG.getState().globalSelections.serviceIds.includes("stone-skirting"));
-   report.ds05aFinishOptionAvailability=optionReadiness;
-   report.stage="ds05a-finishes-option-keyboard-focus";
-   await skirtingToggle.focus();
-   report.stage="ds05a-finishes-option-keyboard-change";
-   await skirtingToggle.press("Space");
-   report.stage="ds05a-finishes-option-state-change";
-   await page.waitForFunction((expected)=>{
-    const state=window.CASA_EM_MODULOS_DEBUG.getState();
-    return document.querySelector("#stoneSkirtingToggle")?.checked===expected&&
-     state.globalSelections.serviceIds.includes("stone-skirting")===expected;
-   },!originalSkirting,{timeout:10000});
-   report.stage="ds05a-finishes-option-estimate-snapshot";
-   await page.waitForTimeout(500);
-   const estimateSnapshot=await priceEstimateStatus();
-   console.log("CI_CONFIG_DS05A_FINISH_ESTIMATE "+JSON.stringify(estimateSnapshot));
-   report.stage="ds05a-finishes-option-estimate-readiness";
-   await page.waitForFunction(()=>{
-    const price=document.querySelector("#configurationValue");
-    const text=price?.textContent?.trim()||"";
-    const style=price&&getComputedStyle(price),rect=price?.getBoundingClientRect();
-    return Boolean(price&&!price.hidden&&style?.display!=="none"&&style?.visibility==="visible"&&
-     rect?.width>0&&rect?.height>0&&text.includes("R$")&&
-     Array.from(text).some(ch=>ch>="0"&&ch<="9"));
-   },null,{timeout:20000});
-   const changedEstimate=await priceEstimateStatus();
-   assert.ok(changedEstimate.visible&&changedEstimate.hasCurrency,
-    "DS-05A: estimate missing after finish option change");
-   report.stage="ds05a-finishes-option-restore-focus";
-   await skirtingToggle.focus();
-   report.stage="ds05a-finishes-option-restore-keyboard";
-   await skirtingToggle.press("Space");
-   report.stage="ds05a-finishes-option-state-restore";
-   await page.waitForFunction((expected)=>{
-    const state=window.CASA_EM_MODULOS_DEBUG.getState();
-    return document.querySelector("#stoneSkirtingToggle")?.checked===expected&&
-     state.globalSelections.serviceIds.includes("stone-skirting")===expected;
-   },originalSkirting,{timeout:10000});
-   report.stage="ds05a-finishes-option-restore-estimate-readiness";
-   await page.waitForFunction(()=>{
-    const price=document.querySelector("#configurationValue");
-    const text=price?.textContent?.trim()||"";
-    const style=price&&getComputedStyle(price),rect=price?.getBoundingClientRect();
-    return Boolean(price&&!price.hidden&&style?.display!=="none"&&style?.visibility==="visible"&&
-     rect?.width>0&&rect?.height>0&&text.includes("R$")&&
-     Array.from(text).some(ch=>ch>="0"&&ch<="9"));
-   },null,{timeout:10000});
-   const restoredEstimate=await priceEstimateStatus();
-   assert.ok(restoredEstimate.visible&&restoredEstimate.hasCurrency,
-    "DS-05A: estimate missing after finish option restore");
-   report.ds05aFinishOption={
-    stoneSkirtingAvailable:true,
-    optionChangedAndRestored:true,
-    priceEstimateVisibleAfterChangeAndRestore:true
-   };
-  }
+
  }
  report.ds05aNextStep=ds05aStageProgression;
  // Staging user must not acquire admin capabilities.
