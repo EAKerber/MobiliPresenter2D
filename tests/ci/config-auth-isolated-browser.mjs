@@ -171,7 +171,30 @@ try{
    const navStep=page.locator(`.flow-nav [data-step="${stage.key}"]`);
    await navStep.waitFor({state:"visible",timeout:10000});
    report.stage=`ds05a-${stage.key}-navigation`;
-   await navStep.click({timeout:10000});
+   try{
+    await navStep.click({timeout:10000});
+   }catch(error){
+    report.navigationDiagnostic=await page.evaluate((key)=>{
+     const target=document.querySelector(`.flow-nav [data-step="${key}"]`);
+     const rect=target?.getBoundingClientRect();
+     const active=document.activeElement;
+     return {
+      targetFound:Boolean(target),
+      targetTag:target?.tagName||null,
+      targetDisabled:Boolean(target?.disabled),
+      targetAriaDisabled:target?.getAttribute("aria-disabled")||null,
+      targetCurrent:target?.getAttribute("aria-current")||null,
+      targetClass:typeof target?.className==="string"?target.className.slice(0,120):null,
+      targetRect:rect?{width:rect.width,height:rect.height}:null,
+      currentSteps:Array.from(document.querySelectorAll(".flow-nav [data-step]")).map(node=>({
+       step:node.getAttribute("data-step"),current:node.getAttribute("aria-current"),disabled:Boolean(node.disabled),ariaDisabled:node.getAttribute("aria-disabled")
+      })),
+      activeElement:active?{tag:active.tagName,id:active.id||null,role:active.getAttribute("role")}:null,
+      visiblePanels:Array.from(document.querySelectorAll("#finishesStagePanel,#servicesPanel,#summaryPanel")).filter(panel=>!panel.hidden).map(panel=>panel.id)
+     };
+    },stage.key);
+    throw error;
+   }
    await page.waitForFunction((key)=>
     document.querySelector(`.flow-nav [data-step="${key}"]`)?.getAttribute("aria-current")==="step",
     stage.key,{timeout:10000});
