@@ -258,7 +258,7 @@ try{
    throw error;
   }
   report.stage=`ds05a-${stage.key}-state-check`;
-  const state=await page.evaluate((id)=>{
+  const readStageState=()=>page.evaluate((id)=>{
    const panel=document.getElementById(id);
    const price=document.querySelector("#configurationValue");
    const priceText=price?.textContent?.trim()||"";
@@ -269,9 +269,22 @@ try{
     priceEstimateHasCurrency:priceText.includes("R$")&&Array.from(priceText).some(ch=>ch>="0"&&ch<="9")
    };
   },stage.id);
-  assert.ok(state.stageVisible,`DS-05A: ${stage.key} stage did not open`);
+  let state=await readStageState();
+  if(!state.stageVisible||!state.priceBarVisible||!state.priceEstimateHasCurrency){
+   try{
+    await page.waitForFunction((id)=>{
+     const panel=document.getElementById(id),price=document.querySelector("#configurationValue");
+     const text=price?.textContent?.trim()||"",style=price&&getComputedStyle(price),rect=price?.getBoundingClientRect();
+     const visible=Boolean(price&&!price.hidden&&style?.display!=="none"&&style?.visibility==="visible"&&rect?.width>0&&rect?.height>0);
+     return Boolean(panel&&!panel.hidden&&visible&&text.includes("R$")&&Array.from(text).some(ch=>ch>="0"&&ch<="9"));
+    },stage.id,{timeout:5000});
+   }catch{}
+   state=await readStageState();
+  }
+  report.ds05aLastStageState={key:stage.key,...state};
+  assert.ok(state.stageVisible,"DS-05A: stage did not open: "+stage.key);
   assert.ok(state.priceBarVisible&&state.priceEstimateHasCurrency,
-   `DS-05A: estimate missing after opening ${stage.key}`);
+   "DS-05A: estimate missing after opening "+stage.key);
   ds05aStageProgression[stage.key]={
    stageVisible:state.stageVisible,
    priceBarVisible:state.priceBarVisible,
