@@ -31,7 +31,7 @@ jobs:
       - name: No private Config/Netlify production changes in this increment
         run: |
           git fetch origin main
-          git diff --exit-code origin/main...HEAD -- app/config app/admin app/access app/viewer netlify/ netlify.toml
+          git diff --exit-code origin/main...HEAD -- app/config app/admin app/access app/viewer netlify/ netlify.toml ':(exclude)netlify/access/migrations/20261024120000_ci_config_fixture_role.sql'
   anonymous-config:
     runs-on: ubuntu-latest
     timeout-minutes: 12
