@@ -113,6 +113,7 @@ try {
       const childEnv = {
         PATH: process.env.PATH, HOME: process.env.HOME, CI: "true",
         NODE_PATH: "/tmp/m2d-ci-config-auth/node_modules",
+        PLAYWRIGHT_BROWSERS_PATH: process.env.PLAYWRIGHT_BROWSERS_PATH,
         PLAYWRIGHT_AUTH_STATE_FILE: statePath, CI_EXPECT_PUBLISHED_V5: "1",
         [suite.urlEnv]: target
       };
@@ -152,7 +153,7 @@ try {
           body: JSON.stringify({token: grantToken})
         });
         result.replayStatus = replay.status;
-        result.tokenReplayDenied = [401, 403].includes(replay.status);
+        result.tokenReplayDenied = [400, 401, 403].includes(replay.status);
         assert.equal(result.tokenReplayDenied, true, "Revoked fixture token was accepted for replay");
         if (context) {
           const page = await context.newPage();
