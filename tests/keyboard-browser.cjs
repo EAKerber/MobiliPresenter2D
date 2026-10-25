@@ -182,15 +182,24 @@ const {chromium} = require('playwright');
         navVisible: Boolean(nav && nav.getClientRects().length),
         viewport: {width: innerWidth, height: innerHeight, scrollY: scrollY},
         navRect: rect ? {x: rect.x, y: rect.y, width: rect.width, height: rect.height} : null,
+        navDisplay: nav ? getComputedStyle(nav).display : null,
+        navGridColumns: nav ? getComputedStyle(nav).gridTemplateColumns : null,
         buttons: [...(nav?.querySelectorAll("[data-step]") || [])].map(button => ({
           step: button.dataset.step || null,
           current: button.getAttribute("aria-current"),
           hidden: Boolean(button.hidden),
           disabled: Boolean(button.disabled),
+          display: getComputedStyle(button).display,
+          visibility: getComputedStyle(button).visibility,
+          position: getComputedStyle(button).position,
+          computedWidth: getComputedStyle(button).width,
+          computedHeight: getComputedStyle(button).height,
+          style: button.getAttribute("style"),
           rect: (() => { const box = button.getBoundingClientRect(); return {x: box.x, y: box.y, width: box.width, height: box.height}; })()
         })),
         activeElement: document.activeElement ? {
           tag: document.activeElement.tagName,
+          inputType: document.activeElement instanceof HTMLInputElement ? document.activeElement.type : null,
           id: document.activeElement.id || null,
           className: typeof document.activeElement.className === "string" ? document.activeElement.className.slice(0, 120) : null
         } : null
