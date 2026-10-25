@@ -185,27 +185,7 @@ try {
             const safeViewport = state.viewport && typeof state.viewport === "object" ? Object.fromEntries(
               ["width", "height", "scrollY"].filter(key => Number.isFinite(state.viewport[key])).map(key => [key, state.viewport[key]])
             ) : null;
-            const safeLayoutNode = value => value && typeof value === "object" ? {
-              tag: typeof value.tag === "string" ? value.tag.slice(0,24) : null,
-              className: typeof value.className === "string" ? value.className.slice(0,80) : null,
-              connected: value.connected === true,
-              display: typeof value.display === "string" ? value.display.slice(0,24) : null,
-              visibility: typeof value.visibility === "string" ? value.visibility.slice(0,24) : null,
-              position: typeof value.position === "string" ? value.position.slice(0,24) : null,
-              width: typeof value.width === "string" ? value.width.slice(0,32) : null,
-              height: typeof value.height === "string" ? value.height.slice(0,32) : null,
-              minHeight: typeof value.minHeight === "string" ? value.minHeight.slice(0,32) : null,
-              gridTemplateRows: typeof value.gridTemplateRows === "string" ? value.gridTemplateRows.slice(0,120) : null,
-              gridAutoRows: typeof value.gridAutoRows === "string" ? value.gridAutoRows.slice(0,32) : null,
-              gridAutoFlow: typeof value.gridAutoFlow === "string" ? value.gridAutoFlow.slice(0,24) : null,
-              contentVisibility: typeof value.contentVisibility === "string" ? value.contentVisibility.slice(0,24) : null,
-              contain: typeof value.contain === "string" ? value.contain.slice(0,32) : null,
-              overflow: typeof value.overflow === "string" ? value.overflow.slice(0,32) : null,
-              clientRectCount: Number.isInteger(value.clientRectCount) ? value.clientRectCount : null,
-              rect: safeRect(value.rect),
-              offsetParentTag: typeof value.offsetParentTag === "string" ? value.offsetParentTag.slice(0,24) : null,
-              childCount: Number.isInteger(value.childCount) ? value.childCount : null
-            } : null;
+                        } : null;
             const safeLayoutNode = value => value && typeof value === "object" ? {
               tag: typeof value.tag === "string" ? value.tag.slice(0,24) : null,
               className: typeof value.className === "string" ? value.className.slice(0,80) : null,
