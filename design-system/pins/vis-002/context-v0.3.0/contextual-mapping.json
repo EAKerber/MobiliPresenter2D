@@ -15,8 +15,8 @@
     "normalTextMinContrast": 4.5,
     "publicPagesOnly": true,
     "darkThemeMustStayUnchanged": true,
-    "existingV0_2ContextsMustStayUnchanged": true,
-    "onlyMeasuredContexts": true
+    "onlyMeasuredContexts": true,
+    "priorV0_2ColorReplacedOnMappedContexts": true
   },
   "preservedMapping": {
     "version": "0.2.0",
@@ -38,6 +38,30 @@
     ]
   },
   "contexts": [
+    {
+      "route": "/",
+      "selector": ".hero-description",
+      "background": "#F0EDE8",
+      "foreground": "#292723",
+      "contrast": "12.77:1",
+      "authorization": "VIS-002.approvedRuntimePairs[0]; user direction 2026-10-24"
+    },
+    {
+      "route": "/how-it-works/",
+      "selector": ".how-hero-note",
+      "background": "#F0EDE8",
+      "foreground": "#292723",
+      "contrast": "12.77:1",
+      "authorization": "VIS-002.approvedRuntimePairs[0]; user direction 2026-10-24"
+    },
+    {
+      "route": "/about/",
+      "selector": ".about-scale p:not(.eyebrow)",
+      "background": "#F0EDE8",
+      "foreground": "#292723",
+      "contrast": "12.77:1",
+      "authorization": "VIS-002.approvedRuntimePairs[0]; user direction 2026-10-24"
+    },
     {
       "route": "/",
       "selector": ".story-section > p:not(.eyebrow)",
@@ -94,5 +118,25 @@
       "contrast": "12.77:1",
       "authorization": "VIS-002 measured in PR #241 preview; user direction 2026-10-24"
     }
-  ]
+  ],
+  "supersededMapping": {
+    "version": "0.2.0",
+    "roleRef": "VIS-002.approvedPalette.colors.textSecondary.light",
+    "value": "#705C4B",
+    "contexts": [
+      {
+        "route": "/",
+        "selector": ".hero-description"
+      },
+      {
+        "route": "/how-it-works/",
+        "selector": ".how-hero-note"
+      },
+      {
+        "route": "/about/",
+        "selector": ".about-scale p:not(.eyebrow)"
+      }
+    ],
+    "reason": "The same three measured contexts now use the user's near-black long-copy preference in v0.3; v0.2 remains historical."
+  }
 }
