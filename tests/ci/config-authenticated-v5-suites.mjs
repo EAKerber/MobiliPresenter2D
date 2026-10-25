@@ -153,8 +153,8 @@ try {
             ? "PLAYWRIGHT_TIMEOUT"
             : "SUITE_ASSERTION_OR_RUNTIME_FAILURE";
         result.failureSignals = {
-          timeoutMs: [...combined.matchAll(/Timeout (\\d+)ms exceeded/gi)].map(match => Number(match[1])).slice(0, 5),
-          consoleHttpStatuses: [...combined.matchAll(/server responded with a status of (\\d{3})/gi)].map(match => Number(match[1])).slice(0, 10),
+          timeoutMs: [...combined.matchAll(/Timeout ([0-9]+)ms exceeded/gi)].map(match => Number(match[1])).slice(0, 5),
+          consoleHttpStatuses: [...combined.matchAll(/server responded with a status of ([0-9]{3})/gi)].map(match => Number(match[1])).slice(0, 10),
           networkErrorCodes: [...combined.matchAll(/net::(ERR_[A-Z0-9_]+)/g)].map(match => match[1]).slice(0, 10)
         };
       }
