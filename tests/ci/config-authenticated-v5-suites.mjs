@@ -244,6 +244,10 @@ try {
                 width: Number.isFinite(node.width) ? node.width : null,
                 height: Number.isFinite(node.height) ? node.height : null,
                 minHeight: typeof node.minHeight === "string" ? node.minHeight.slice(0,32) : null,
+                contentVisibility: typeof node.contentVisibility === "string" ? node.contentVisibility.slice(0,24) : null,
+                position: typeof node.position === "string" ? node.position.slice(0,24) : null,
+                zoom: typeof node.zoom === "string" ? node.zoom.slice(0,24) : null,
+                transform: typeof node.transform === "string" ? node.transform.slice(0,48) : null,
                 childCount: Number.isInteger(node.childCount) ? node.childCount : null
               })) : [],
               modulesPanelHidden: state.modulesPanelHidden === true
