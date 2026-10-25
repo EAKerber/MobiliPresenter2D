@@ -203,6 +203,11 @@ try {
                 position: typeof button.position === "string" ? button.position.slice(0, 24) : null,
                 computedWidth: typeof button.computedWidth === "string" ? button.computedWidth.slice(0, 32) : null,
                 computedHeight: typeof button.computedHeight === "string" ? button.computedHeight.slice(0, 32) : null,
+                minWidth: typeof button.minWidth === "string" ? button.minWidth.slice(0, 32) : null,
+                minHeight: typeof button.minHeight === "string" ? button.minHeight.slice(0, 32) : null,
+                gridColumn: typeof button.gridColumn === "string" ? button.gridColumn.slice(0, 32) : null,
+                gridRow: typeof button.gridRow === "string" ? button.gridRow.slice(0, 32) : null,
+                clientRectCount: Number.isInteger(button.clientRectCount) ? button.clientRectCount : null,
                 rect: safeRect(button.rect)
               })) : [],
               target: state.target && typeof state.target === "object" ? {
@@ -214,11 +219,33 @@ try {
                 position: typeof state.target.position === "string" ? state.target.position.slice(0, 24) : null,
                 computedWidth: typeof state.target.computedWidth === "string" ? state.target.computedWidth.slice(0, 32) : null,
                 computedHeight: typeof state.target.computedHeight === "string" ? state.target.computedHeight.slice(0, 32) : null,
+                minHeight: typeof state.target.minHeight === "string" ? state.target.minHeight.slice(0, 32) : null,
+                gridColumn: typeof state.target.gridColumn === "string" ? state.target.gridColumn.slice(0, 32) : null,
+                gridRow: typeof state.target.gridRow === "string" ? state.target.gridRow.slice(0, 32) : null,
+                clientRectCount: Number.isInteger(state.target.clientRectCount) ? state.target.clientRectCount : null,
                 rect: safeRect(state.target.rect),
                 centerHit: safeElement(state.target.centerHit)
               } : null,
               activeElement: safeElement(state.activeElement),
               activeInputType: typeof state.activeElement?.inputType === "string" ? state.activeElement.inputType.slice(0, 16) : null,
+              keyEvents: Array.isArray(state.keyEvents) ? state.keyEvents.slice(0, 4).map(event => ({
+                defaultPrevented: event.defaultPrevented === true,
+                targetTag: typeof event.targetTag === "string" ? event.targetTag.slice(0, 24) : null,
+                targetType: typeof event.targetType === "string" ? event.targetType.slice(0, 16) : null,
+                activeStage: safeStep(event.activeStage)
+              })) : [],
+              layoutProfile: ["wide","stacked","compact"].includes(state.layoutProfile) ? state.layoutProfile : null,
+              nodeChain: Array.isArray(state.nodeChain) ? state.nodeChain.slice(0,5).map(node => ({
+                tag: typeof node.tag === "string" ? node.tag.slice(0,24) : null,
+                id: typeof node.id === "string" && /^[a-zA-Z0-9_-]{1,80}$/.test(node.id) ? node.id : null,
+                className: typeof node.className === "string" ? node.className.slice(0,80) : null,
+                display: typeof node.display === "string" ? node.display.slice(0,24) : null,
+                visibility: typeof node.visibility === "string" ? node.visibility.slice(0,24) : null,
+                width: Number.isFinite(node.width) ? node.width : null,
+                height: Number.isFinite(node.height) ? node.height : null,
+                minHeight: typeof node.minHeight === "string" ? node.minHeight.slice(0,32) : null,
+                childCount: Number.isInteger(node.childCount) ? node.childCount : null
+              })) : [],
               modulesPanelHidden: state.modulesPanelHidden === true
             };
           } catch {}
