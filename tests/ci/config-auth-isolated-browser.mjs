@@ -333,7 +333,7 @@ try{
  report.errorClass=safeErrorClass(error);
  report.classification=report.stage==="preflight"||report.stage==="isolated-role-check"
   ?"BLOCKED_AUTH_FIXTURE":"AUTHENTICATED_FIXTURE_FAIL";
- const safeDiagnostic=report.navigationDiagnostic?{navigation:report.navigationDiagnostic}:report.ds05aLastStageState?{stage:report.ds05aLastStageState}:report.estimateDiagnostic?{estimate:report.estimateDiagnostic}:{};
+ const safeDiagnostic=report.navigationDiagnostic?{navigation:report.navigationDiagnostic}:report.nextActionDiagnostic?{nextAction:report.nextActionDiagnostic}:report.ds05aLastStageState?{stage:report.ds05aLastStageState}:report.estimateDiagnostic?{estimate:report.estimateDiagnostic}:{};
  console.error(report.classification+" stage="+report.stage+" errorClass="+report.errorClass+" evidence="+JSON.stringify(safeDiagnostic));
  process.exitCode=1;
 }finally{
