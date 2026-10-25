@@ -9,6 +9,7 @@ import {chromium} from "playwright";
 import {SUPABASE_DATABASE_CA} from "../../netlify/access/supabase-database-ca.mjs";
 import {createOpaqueToken, hashOpaqueToken, ACCESS_COOKIE_NAME} from "../../netlify/access/tokens.mjs";
 import {validateFixtureEnvironment, safeErrorClass, ISOLATION_TAG} from "./config-auth-isolation.mjs";
+import {PREVIEW_TARGETS} from "../../scripts/build-ci-preview-fixture.mjs";
 
 const suites = [
   {name: "mobile-pip", file: "tests/mobile-pip-main-browser.cjs", urlEnv: "MOBILE_INTERACTIONS_URL"},
@@ -18,8 +19,10 @@ const suites = [
   {name: "stone", file: "tests/stone-browser.cjs", urlEnv: "STONE_BROWSER_URL"}
 ];
 const origin = process.env.CI_STAGING_PREVIEW_ORIGIN;
-const expectedHost = "deploy-preview-238--m2d-auth-ci-isolated.netlify.app";
-const configUrl = new URL("/config/", expectedHost ? "https://" + expectedHost : origin).toString();
+const expectedBranch = process.env.CI_STAGING_PREVIEW_BRANCH;
+const expectedReviewId = process.env.CI_STAGING_PREVIEW_REVIEW_ID;
+const expectedHost = new URL(origin).host;
+const configUrl = new URL("/config/", origin).toString();
 const reportPath = "artifacts/ci-baseline-01/authenticated-v5-suites.json";
 const delay = milliseconds => new Promise(resolve => setTimeout(resolve, milliseconds));
 const report = {
@@ -38,9 +41,12 @@ try {
     expectedHost: process.env.CI_STAGING_EXPECTED_HOST,
     isolationTag: process.env.CI_STAGING_ISOLATION_TAG
   });
-  assert.equal(origin, "https://" + expectedHost, "BLOCKED_AUTH_FIXTURE: preview origin is not the approved #238 deploy preview");
-  assert.equal(process.env.CI_STAGING_PREVIEW_REVIEW_ID, "238",
-    "BLOCKED_AUTH_FIXTURE: preview review ID is not the approved #238");
+  assert.equal(PREVIEW_TARGETS[expectedBranch], expectedReviewId,
+    "BLOCKED_AUTH_FIXTURE: preview branch and review ID are not an enumerated pair");
+  assert.equal(origin, `https://deploy-preview-${expectedReviewId}--m2d-auth-ci-isolated.netlify.app`,
+    "BLOCKED_AUTH_FIXTURE: preview origin is not the approved isolated-site deploy preview");
+  assert.equal(expectedHost, `deploy-preview-${expectedReviewId}--m2d-auth-ci-isolated.netlify.app`,
+    "BLOCKED_AUTH_FIXTURE: preview host does not match the review ID");
   report.stage = "preview-fixture-preflight";
   const markerUrl = new URL("/ci-validation/published-v5-status.json", origin);
   const markerDeadline = Date.now() + 180000;
@@ -54,9 +60,9 @@ try {
   }
   assert.ok(marker, "BLOCKED_AUTH_FIXTURE: preview V5 marker did not become ready");
   assert.equal(marker.schema, "M2DPreviewPublishedFixtureStatus/1");
-  assert.equal(marker.reviewId, 238);
+  assert.equal(marker.reviewId, Number(expectedReviewId));
   assert.equal(marker.verified, true);
-  assert.equal(marker.sourceBranch, "ci/ci-baseline-01-isolated-auth-extraction-20261024");
+  assert.equal(marker.sourceBranch, expectedBranch);
   assert.equal(marker.v5Schema, "ConfiguratorAdministration2D 5.0");
   assert.match(marker.sha256 || "", /^[a-f0-9]{64}$/);
   report.fixtureVerified = true;
