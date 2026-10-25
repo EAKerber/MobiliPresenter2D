@@ -423,11 +423,19 @@ const flatV3 = configuration.createDefaultAdministration(
       return {
         currentStep: nav?.querySelector('[data-step][aria-current="step"]')?.dataset.step || null,
         navVisible: Boolean(nav && nav.getClientRects().length),
+        navDisplay: nav ? getComputedStyle(nav).display : null,
+        navGridColumns: nav ? getComputedStyle(nav).gridTemplateColumns : null,
         viewport: {width: innerWidth, height: innerHeight, scrollY: scrollY},
         target: target ? {
           current: target.getAttribute("aria-current"),
           hidden: Boolean(target.hidden),
           disabled: Boolean(target.disabled),
+          display: getComputedStyle(target).display,
+          visibility: getComputedStyle(target).visibility,
+          position: getComputedStyle(target).position,
+          computedWidth: getComputedStyle(target).width,
+          computedHeight: getComputedStyle(target).height,
+          style: target.getAttribute("style"),
           rect: rect ? {x: rect.x, y: rect.y, width: rect.width, height: rect.height} : null,
           centerHit: hit ? {tag: hit.tagName, id: hit.id || null, className: typeof hit.className === "string" ? hit.className.slice(0, 120) : null} : null
         } : null,
