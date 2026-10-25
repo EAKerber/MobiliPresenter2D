@@ -28,8 +28,8 @@
       "route": "/how-it-works/",
       "source": "architecture/pages/how-it-works.page.html",
       "output": "app/how-it-works/index.html",
-      "sourceGitBlobSha": "1e3253c88b3a29a2575fd8a7b0d8e24947b7b14c",
-      "outputGitBlobSha": "d0fafe849cb17229e1d09f2447adf2732cd4cf84"
+      "sourceGitBlobSha": "d8f1cb01dd7df8f8c219c0c783e45e90b74366f8",
+      "outputGitBlobSha": "68c7962c3af4d7ff711767ff790b0355d1ff12db"
     }
   ]
 }
