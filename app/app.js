@@ -2131,6 +2131,13 @@
     const profile = syncLayoutProfileMarker();
     const nextMode = scenePipMode(profile);
     const profileChanged = profile !== previousProfile;
+    if (profileChanged && flowNav) {
+      const focusedStep = flowNav.contains(document.activeElement) ? document.activeElement : null;
+      const navChildren = document.createDocumentFragment();
+      while (flowNav.firstChild) navChildren.append(flowNav.firstChild);
+      flowNav.append(navChildren);
+      if (focusedStep?.isConnected) focusedStep.focus({ preventScroll: true });
+    }
     if (mobilePipPosition) mobilePipPosition = null;
     if (!nextMode.available) mobileSceneIsMini = false;
     else if (profileChanged && previousMode.available && wasOpen) mobileSceneIsMini = true;
