@@ -226,7 +226,53 @@ const {chromium} = require('playwright');
           clientRectCount: button.getClientRects().length,
           style: button.getAttribute("style"),
           rect: (() => { const box = button.getBoundingClientRect(); return {x: box.x, y: box.y, width: box.width, height: box.height}; })()
-        })),activeElement: document.activeElement ? {
+        })),
+        layoutProbe: (() => {
+          const rectOf = element => { const r = element?.getBoundingClientRect(); return r ? {x:r.x,y:r.y,width:r.width,height:r.height} : null; };
+          const node = element => {
+            if (!element) return null;
+            const style = getComputedStyle(element), rect = rectOf(element);
+            return {tag:element.tagName,className:typeof element.className==="string"?element.className.slice(0,80):null,
+              connected:element.isConnected,display:style.display,visibility:style.visibility,position:style.position,
+              width:style.width,height:style.height,minHeight:style.minHeight,gridTemplateRows:style.gridTemplateRows,
+              gridAutoRows:style.gridAutoRows,gridAutoFlow:style.gridAutoFlow,contentVisibility:style.contentVisibility,
+              contain:style.contain,overflow:style.overflow,clientRectCount:element.getClientRects().length,rect,
+              offsetParentTag:element.offsetParent?.tagName||null,childCount:element.children?.length||0,
+              attrs:{hidden:Boolean(element.hidden),inert:Boolean(element.inert),ariaHidden:element.getAttribute("aria-hidden"),
+                ariaCurrent:element.getAttribute("aria-current"),dataStep:element.getAttribute("data-step"),
+                ariaControlsPresent:element.hasAttribute("aria-controls"),hasStyleAttribute:element.hasAttribute("style"),
+                ariaLabelLength:element.getAttribute("aria-label")?.length||0},
+              inlineStyle:Object.fromEntries(["display","visibility","position","width","height","minHeight","maxHeight","gridColumn","gridRow","transform","zoom","contain","contentVisibility","pointerEvents","overflow"].map(key=>[key,element.style[key]||""])),
+              children:[...element.children].slice(0,3).map(child=>{const cs=getComputedStyle(child),cr=rectOf(child);return {
+                tag:child.tagName,className:typeof child.className==="string"?child.className.slice(0,80):null,
+                display:cs.display,visibility:cs.visibility,width:cs.width,height:cs.height,minHeight:cs.minHeight,
+                clientRectCount:child.getClientRects().length,rect:cr,
+                inlineStyle:Object.fromEntries(["display","visibility","position","width","height","minHeight","transform","zoom","contain","contentVisibility","pointerEvents","overflow"].map(key=>[key,child.style[key]||""]))
+              };})
+            };
+          };
+          const probe = (parent, location) => {
+            if (!parent) return null;
+            const button=document.createElement("button");
+            button.type="button"; button.className="flow-step"; button.dataset.step="modules"; button.textContent="probe";
+            parent.append(button);
+            const result={location,parent:node(parent),button:node(button)};
+            button.remove();
+            return result;
+          };
+          const stylesheets=[...document.styleSheets].slice(0,16).map(sheet=>{
+            let path="inline",hasFlowStepRule=null;
+            try { if(sheet.href) path=new URL(sheet.href).pathname; } catch {}
+            try { hasFlowStepRule=[...sheet.cssRules].some(rule=>rule.cssText.includes(".flow-step")); } catch {}
+            return {path,disabled:sheet.disabled,hasFlowStepRule};
+          });
+          const existing=nav?.querySelector("[data-step]")||null;
+          let clonedExisting=null;
+          if(existing&&nav){const clone=existing.cloneNode(true);nav.append(clone);clonedExisting=node(clone);clone.remove();}
+          return {nav:node(nav),existing:node(existing),clonedExisting,
+            probes:[probe(nav,"nav"),probe(nav?.parentElement,"controls"),probe(document.body,"body")],stylesheets};
+        })(),
+        activeElement: document.activeElement ? {
           tag: document.activeElement.tagName,
           inputType: document.activeElement instanceof HTMLInputElement ? document.activeElement.type : null,
           id: document.activeElement.id || null,
