@@ -217,12 +217,15 @@ try {
   console.error(report.classification + " stage=" + (report.stage || "preflight") + " errorClass=" + report.errorClass);
   if (report.suites) console.error("AUTHENTICATED_V5_SUITES_RESULT " + JSON.stringify({
     fixtureVerified: report.fixtureVerified,
+    browserBootstrap: report.browserBootstrap || null,
+    browserPageErrorClasses: report.browserPageErrorClasses || [],
     suites: Object.fromEntries(Object.entries(report.suites).map(([name, suite]) => [name, {
       passed: suite.passed === true,
       revoked: suite.revoked === true,
       replayDenied: suite.tokenReplayDenied === true,
       revokedSessionRedirected: suite.revokedSessionRedirected === true,
       redeemStatus: suite.redeemStatus,
+      buyerConfigurationStatus: suite.buyerConfigurationStatus ?? null,
       replayStatus: suite.replayStatus,
       revokedStatus: suite.revokedStatus,
       revokedPath: suite.revokedPath,
