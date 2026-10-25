@@ -59,7 +59,9 @@ jobs:
             "tests/ci/config-auth-isolated-browser.mjs",
             "tests/ci/config-auth-isolation.mjs",
             "tests/ci/config-auth-isolation.test.mjs",
-            "tests/ci/config-authenticated-v5-suites.mjs"
+            "tests/ci/config-authenticated-v5-suites.mjs",
+            "tests/flow-layout-browser.cjs",
+            "tests/keyboard-browser.cjs"
           ]);
           const unexpected = changed.filter(path => !allowed.has(path));
           if (unexpected.length) throw new Error("Unexpected files in CI fixture PR: " + unexpected.join(", "));
