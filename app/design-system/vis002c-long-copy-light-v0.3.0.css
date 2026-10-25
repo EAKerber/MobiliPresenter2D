@@ -1,8 +1,11 @@
 /* GENERATED CANDIDATE — VIS-002C measured long-copy contexts only.
  * Mapping: docs/VIS002C_CONTEXTUAL_MAPPING_V0_3_0.json
  * Decision source blob: 63b60f8d87327c6fd1e80c8cdf4ff832c4089bfa
- * Does not change v0.2, global roles, text color declarations, or dark theme.
+ * Replaces v0.2 color only on the three mapped legacy consumers; no global role or dark-theme change.
  */
+html[data-theme="light"] .hero-description,
+html[data-theme="light"] .how-hero-note,
+html[data-theme="light"] .about-scale p:not(.eyebrow),
 html[data-theme="light"] .story-section > p:not(.eyebrow),
 html[data-theme="light"] .feature-copy > p:not(.eyebrow):not(.feature-availability),
 html[data-theme="light"] .about-closing > p:not(.eyebrow):not(.about-closing__signature),
