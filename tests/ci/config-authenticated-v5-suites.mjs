@@ -166,6 +166,14 @@ try {
           consoleHttpStatuses: [...combined.matchAll(/server responded with a status of ([0-9]{3})/gi)].map(match => Number(match[1])).slice(0, 10),
           networkErrorCodes: [...combined.matchAll(/net::(ERR_[A-Z0-9_]+)/g)].map(match => match[1]).slice(0, 10)
         };
+        const navStateLine = combined.split(/\r?\n/).find(line => line.includes("CI_AUTH_STAGE_NAV_STATE "));
+        if (navStateLine) {
+          try {
+            result.failureSignals.stageNavigation = JSON.parse(
+              navStateLine.slice(navStateLine.indexOf("CI_AUTH_STAGE_NAV_STATE ") + "CI_AUTH_STAGE_NAV_STATE ".length)
+            );
+          } catch {}
+        }
       }
       result.passed = passed;
       result.errorClass = errorClass;
