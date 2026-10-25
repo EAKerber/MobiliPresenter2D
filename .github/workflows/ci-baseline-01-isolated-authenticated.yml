@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - ci/ci-baseline-01-isolated-auth-extraction-20261024
+      - fix/config-stage-nav-grid-track-20261025
     paths:
       - ".github/workflows/ci-baseline-01-isolated-authenticated.yml"
       - "tests/ci/config-auth-isolated-browser.mjs"
@@ -13,6 +14,7 @@ on:
       - "scripts/build-ci-preview-fixture.mjs"
       - "netlify/plugins/ci-v5-fixture/**"
       - "netlify.toml"
+      - "app/styles.css"
   workflow_dispatch:
 permissions:
   contents: read
@@ -21,7 +23,7 @@ concurrency:
   cancel-in-progress: false
 jobs:
   authenticated-config:
-    if: github.ref == 'refs/heads/ci/ci-baseline-01-isolated-auth-extraction-20261024'
+    if: github.ref == 'refs/heads/ci/ci-baseline-01-isolated-auth-extraction-20261024' || github.ref == 'refs/heads/fix/config-stage-nav-grid-track-20261025'
     name: Isolated session redeem, bootstrap and revoke
     runs-on: ubuntu-latest
     timeout-minutes: 25
@@ -33,8 +35,9 @@ jobs:
       CI_STAGING_ORIGIN: https://m2d-auth-ci-isolated.netlify.app
       CI_STAGING_EXPECTED_HOST: m2d-auth-ci-isolated.netlify.app
       CI_STAGING_ISOLATION_TAG: M2D_CI_AUTH_ISOLATED_V1
-      CI_STAGING_PREVIEW_ORIGIN: https://deploy-preview-238--m2d-auth-ci-isolated.netlify.app
-      CI_STAGING_PREVIEW_REVIEW_ID: "238"
+      CI_STAGING_PREVIEW_ORIGIN: ${{ github.ref_name == 'ci/ci-baseline-01-isolated-auth-extraction-20261024' && 'https://deploy-preview-238--m2d-auth-ci-isolated.netlify.app' || 'https://deploy-preview-245--m2d-auth-ci-isolated.netlify.app' }}
+      CI_STAGING_PREVIEW_REVIEW_ID: ${{ github.ref_name == 'ci/ci-baseline-01-isolated-auth-extraction-20261024' && '238' || '245' }}
+      CI_STAGING_PREVIEW_BRANCH: ${{ github.ref_name }}
       CI_STAGING_SUPABASE_REF: ${{ vars.CI_STAGING_SUPABASE_REF }}
       CI_STAGING_DATABASE_URL: ${{ secrets.CI_STAGING_DATABASE_URL }}
     steps:
