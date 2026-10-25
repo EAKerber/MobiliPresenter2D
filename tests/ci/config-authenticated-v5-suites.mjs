@@ -121,8 +121,9 @@ try {
       });
       const passed = child.status === 0 && !child.error;
       let errorClass = null;
+      let combined = "";
       if (!passed) {
-        const combined = String(child.stderr || "") + "\n" + String(child.stdout || "");
+        combined = String(child.stderr || "") + "\n" + String(child.stdout || "");
         errorClass = child.error?.code === "ETIMEDOUT" || child.signal === "SIGTERM"
           ? "SUITE_TIMEOUT"
           : /Timeout|timed out/i.test(combined)
@@ -132,8 +133,8 @@ try {
       result.passed = passed;
       result.errorClass = errorClass;
       result.childExitCode = child.status ?? null;
-      const location = combined.match(/(tests[\\/][A-Za-z0-9._\\/-]+\\.cjs):(\\d+):(\\d+)/);
-      result.failureLocation = location ? `${location[1].replaceAll("\\\\", "/")}:${location[2]}` : null;
+      const location = combined.match(/tests[^\s)]+\.cjs:\d+:\d+/);
+      result.failureLocation = location ? location[0].replaceAll("\\", "/") : null;
       result.targetPath = "/config/";
     } catch (error) {
       result.errorClass = safeErrorClass(error);
