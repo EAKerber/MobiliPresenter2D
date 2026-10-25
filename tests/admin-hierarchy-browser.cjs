@@ -4,6 +4,7 @@ const http = require("node:http");
 const path = require("node:path");
 const vm = require("node:vm");
 const { chromium } = require("playwright");
+let browser = null;
 
 const repoRoot = path.resolve(__dirname, "..");
 const appRoot = path.join(repoRoot, "app");
@@ -65,6 +66,12 @@ const server = http.createServer(async (request, response) => {
   if (url.pathname === "/__identity_stub__.js") {
     response.writeHead(200, { "Content-Type": "text/javascript; charset=utf-8" });
     response.end(identityStub);
+    return;
+  }
+
+  if (url.pathname === "/api/admin-bootstrap" && request.method === "GET") {
+    response.writeHead(200, { "Content-Type": "application/json; charset=utf-8", "Cache-Control": "no-store" });
+    response.end(JSON.stringify({ priceBook }));
     return;
   }
 
@@ -134,7 +141,7 @@ async function sectionItemIds(page, stageId, groupId, sectionId) {
   const address = server.address();
   const baseUrl = "http://127.0.0.1:" + address.port;
 
-  const browser = await chromium.launch({ headless: true });
+  browser = await chromium.launch({ headless: true });
   const page = await browser.newPage({ viewport: { width: 1440, height: 1100 } });
   const errors = [];
   page.on("pageerror", (error) => errors.push(error.message));
@@ -327,8 +334,9 @@ async function sectionItemIds(page, stageId, groupId, sectionId) {
   await browser.close();
   server.close();
   console.log("admin hierarchy browser: PASS");
-})().catch((error) => {
+})().catch(async (error) => {
   console.error(error);
+  try { await browser?.close(); } catch { /* Preserve the original test failure. */ }
   server.close();
   process.exitCode = 1;
 });
