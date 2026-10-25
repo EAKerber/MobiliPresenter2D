@@ -152,6 +152,11 @@ try {
           : /Timeout|timed out/i.test(combined)
             ? "PLAYWRIGHT_TIMEOUT"
             : "SUITE_ASSERTION_OR_RUNTIME_FAILURE";
+        result.failureSignals = {
+          timeoutMs: [...combined.matchAll(/Timeout (\\d+)ms exceeded/gi)].map(match => Number(match[1])).slice(0, 5),
+          consoleHttpStatuses: [...combined.matchAll(/server responded with a status of (\\d{3})/gi)].map(match => Number(match[1])).slice(0, 10),
+          networkErrorCodes: [...combined.matchAll(/net::(ERR_[A-Z0-9_]+)/g)].map(match => match[1]).slice(0, 10)
+        };
       }
       result.passed = passed;
       result.errorClass = errorClass;
@@ -231,6 +236,7 @@ try {
       revokedPath: suite.revokedPath,
       childExitCode: suite.childExitCode,
       failureLocation: suite.failureLocation,
+      failureSignals: suite.failureSignals || null,
       errorClass: suite.errorClass || null
     }]))
   }));
