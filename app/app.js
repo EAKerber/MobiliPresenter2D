@@ -1741,6 +1741,7 @@
   function renderStageNavigation() {
     const repin = mobileSceneRepin;
     flowNav.querySelectorAll("[data-step]").forEach((button) => button.remove());
+    const fragment = document.createDocumentFragment();
     const stages = flowLayout.stageNavigation(normalizedFlow);
     stages.forEach((stage, index) => {
       const button = document.createElement("button");
@@ -1757,8 +1758,9 @@
       label.textContent = stage.label;
       button.setAttribute("aria-label", stage.label);
       button.append(number, label);
-      flowNav.insertBefore(button, repin);
+      fragment.append(button);
     });
+    flowNav.insertBefore(fragment, repin);
   }
 
   function applyConfiguratorSettings(value) {
