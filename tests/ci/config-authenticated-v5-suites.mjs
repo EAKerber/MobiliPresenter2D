@@ -85,7 +85,7 @@ try {
     const grantId = randomUUID();
     const grantToken = createOpaqueToken();
     let context, tempDir, revoked = false;
-    const result = {passed: false, revoked: false, tokenReplayDenied: false, revokedSessionRedirected: false};
+    const result = {passed: false, revoked: false, tokenReplayDenied: false, revokedSessionRedirected: false, redeemStatus: null, replayStatus: null, revokedStatus: null, revokedPath: null, failureLocation: null, childExitCode: null};
     try {
       await db.query("SELECT access_control.ci_create_config_fixture_grant($1::uuid,$2::text)",
         [grantId, hashOpaqueToken(grantToken)]);
@@ -96,6 +96,7 @@ try {
         headers: {Origin: origin, "Content-Type": "application/json"},
         data: {token: grantToken}, timeout: 15000
       });
+      result.redeemStatus = redeem.status();
       assert.equal(redeem.status(), 200, "Access redeem rejected the short-lived V5 suite grant");
       const redeemBody = await redeem.json();
       assert.equal(redeemBody?.ok, true);
@@ -130,6 +131,9 @@ try {
       }
       result.passed = passed;
       result.errorClass = errorClass;
+      result.childExitCode = child.status ?? null;
+      const location = combined.match(/(tests[\\/][A-Za-z0-9._\\/-]+\\.cjs):(\\d+):(\\d+)/);
+      result.failureLocation = location ? `${location[1].replaceAll("\\\\", "/")}:${location[2]}` : null;
       result.targetPath = "/config/";
     } catch (error) {
       result.errorClass = safeErrorClass(error);
@@ -146,13 +150,16 @@ try {
           headers: {Origin: origin, "Content-Type": "application/json"},
           body: JSON.stringify({token: grantToken})
         });
+        result.replayStatus = replay.status;
         result.tokenReplayDenied = [401, 403].includes(replay.status);
         assert.equal(result.tokenReplayDenied, true, "Revoked fixture token was accepted for replay");
         if (context) {
           const page = await context.newPage();
           const response = await page.goto(configUrl, {waitUntil: "domcontentloaded", timeout: 20000});
+          result.revokedStatus = response?.status() ?? null;
+          result.revokedPath = new URL(page.url()).pathname;
           result.revokedSessionRedirected =
-            new URL(page.url()).pathname === "/access/" && response?.status() === 200;
+            result.revokedPath === "/access/" && result.revokedStatus === 200;
           assert.equal(result.revokedSessionRedirected, true,
             "Revoked browser session still reached protected Config");
         }
@@ -191,6 +198,12 @@ try {
       revoked: suite.revoked === true,
       replayDenied: suite.tokenReplayDenied === true,
       revokedSessionRedirected: suite.revokedSessionRedirected === true,
+      redeemStatus: suite.redeemStatus,
+      replayStatus: suite.replayStatus,
+      revokedStatus: suite.revokedStatus,
+      revokedPath: suite.revokedPath,
+      childExitCode: suite.childExitCode,
+      failureLocation: suite.failureLocation,
       errorClass: suite.errorClass || null
     }]))
   }));
