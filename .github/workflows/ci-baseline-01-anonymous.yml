@@ -5,6 +5,9 @@ on:
       - ci/ci-baseline-01-isolated-auth-extraction-20261024
     paths:
       - "tests/ci/config-auth-*"
+      - ".github/workflows/stone-browser.yml"
+      - "app/app.js"
+      - "app/styles.css"
       - ".github/workflows/ci-baseline-01-anonymous.yml"
       - ".github/workflows/ci-baseline-01-isolated-authenticated.yml"
       - "docs/handoffs/CI_BASELINE_01_ISOLATED_AUTH_FIXTURE_2026-10-24.md"
@@ -47,6 +50,9 @@ jobs:
           const allowed = new Set([
             ".github/workflows/ci-baseline-01-anonymous.yml",
             ".github/workflows/ci-baseline-01-isolated-authenticated.yml",
+            ".github/workflows/stone-browser.yml",
+            "app/app.js",
+            "app/styles.css",
             "docs/handoffs/CI_BASELINE_01_ISOLATED_AUTH_FIXTURE_2026-10-24.md",
             "netlify.toml",
             "netlify/plugins/ci-v5-fixture/index.mjs",
