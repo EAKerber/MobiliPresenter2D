@@ -298,6 +298,7 @@ try {
                 transform: typeof node.transform === "string" ? node.transform.slice(0,48) : null,
                 childCount: Number.isInteger(node.childCount) ? node.childCount : null
               })) : [],
+              // Accept only bounded clone/probe fields captured by the browser diagnostics.
               layoutProbe: state.layoutProbe && typeof state.layoutProbe === "object" ? {
                 nav:safeLayoutNode(state.layoutProbe.nav),
                 existing:safeLayoutNode(state.layoutProbe.existing),
