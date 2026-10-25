@@ -12,7 +12,7 @@ const mapping=JSON.parse(mapText),manifest=JSON.parse(manifestText);
 assert.equal(pin.schema,"M2DProductContextualTextPin/0.3");
 assert.equal(pin.status,"SCOPED_INTEGRATION_CANDIDATE_NOT_RELEASED");
 assert.equal(pin.designSystem.repository,"EAKerber/MobiliPresenter2D_DesignSystem");
-assert.equal(pin.designSystem.sourceCommit,"3144735173b2a4d3c978acc26b6daea6f21d2e27");
+assert.equal(pin.designSystem.sourceCommit,"2f11ecf8948c779706a0ce0795e088d29633fb7e");
 assert.equal(pin.designSystem.decisionGitBlob,"63b60f8d87327c6fd1e80c8cdf4ff832c4089bfa");
 assert.equal(gitBlob(css),pin.artifact.gitBlob);
 assert.equal(gitBlob(mapText),pin.mapping.gitBlob);
@@ -20,16 +20,19 @@ assert.equal(gitBlob(manifestText),pin.manifest.gitBlob);
 assert.equal(pin.artifact.gitBlob,pin.designSystem.artifactGitBlob);
 assert.equal(pin.mapping.gitBlob,pin.designSystem.mappingGitBlob);
 assert.equal(pin.manifest.gitBlob,pin.designSystem.manifestGitBlob);
+assert.equal(pin.allowedSelectorsCount,10);
 assert.equal(mapping.version,"0.3.0");
 assert.equal(mapping.roleRef,"VIS-002.approvedPalette.colors.textPrimary.light");
 assert.equal(mapping.value,"#292723");
-assert.equal(mapping.contexts.length,7);
+assert.equal(mapping.contexts.length,10);
 assert.equal(manifest.version,"0.3.0");
 assert.equal(manifest.token,"--ds-vis002c-long-copy-light");
 assert.equal(manifest.value,"#292723");
 assert.deepEqual(manifest.contexts.map(({route,selector,background})=>({route,selector,background})),
  mapping.contexts.map(({route,selector,background})=>({route,selector,background})));
-assert.equal(mapping.contexts.filter(c=>c.route==="/how-it-works/").length,3);
+assert.equal(mapping.contexts.filter(c=>c.route==="/").length,3);
+assert.equal(mapping.contexts.filter(c=>c.route==="/about/").length,3);
+assert.equal(mapping.contexts.filter(c=>c.route==="/how-it-works/").length,4);
 assert.ok(css.includes("--ds-vis002c-long-copy-light: #292723;"));
 assert.equal((css.match(/--ds-vis002c-long-copy-light:/g)||[]).length,1);
 assert.doesNotMatch(css,/\bcolor\s*:/i);
@@ -39,14 +42,17 @@ const landing=await read("app/landing/landing.css");
 assert.ok(landing.startsWith(importRule),"Scoped artifact must be imported before page styles");
 const pageCss={
  "app/landing/landing.css":[
+  ".hero-description",
   ".environment-feature .feature-copy > p:not(.eyebrow):not(.feature-availability)",
   ".story-section > p:not(.eyebrow)"
  ],
  "app/about/about.css":[
+  ".about-scale p:not(.eyebrow)",
   ".about-closing > p:not(.eyebrow):not(.about-closing__signature)",
   ".about-scale__stat > span"
  ],
  "app/how-it-works/how-it-works.css":[
+  ".how-hero-note",
   ".finish-copy > p:not(.eyebrow):not(.finish-signature)",
   ".commercial-clarity > p:not(.eyebrow)",
   ".launch-card .launch-copy > p"
@@ -61,4 +67,4 @@ for(const path of ["app/index.html","app/about/index.html","app/how-it-works/ind
  const html=await read(path);
  assert.match(html,/landing\/landing\.css/,"Landing stylesheet must be present on "+path);
 }
-console.log("VIS002C_PRODUCT_PIN_V03_PASS seven-contexts dark-theme-preserved");
+console.log("VIS002C_PRODUCT_PIN_V03_PASS contexts="+mapping.contexts.length+" dark-theme-preserved");
