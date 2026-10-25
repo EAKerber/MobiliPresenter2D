@@ -190,12 +190,22 @@ const {chromium} = require('playwright');
     const snapshot = await page.evaluate(() => {
       const nav = document.querySelector(".flow-nav");
       const rect = nav?.getBoundingClientRect();
+      const firstStep = nav?.querySelector("[data-step]");
+      const nodeChain = [];
+      for (let node = firstStep, depth = 0; node && depth < 6; node = node.parentElement, depth += 1) {
+        const box = node.getBoundingClientRect();
+        const style = getComputedStyle(node);
+        nodeChain.push({tag:node.tagName,id:node.id||null,className:typeof node.className==="string"?node.className.slice(0,80):null,
+          display:style.display,visibility:style.visibility,contentVisibility:style.contentVisibility,position:style.position,
+          width:box.width,height:box.height,zoom:style.zoom,transform:style.transform,childCount:node.children.length});
+      }
       return {
         currentStep: nav?.querySelector('[data-step][aria-current="step"]')?.dataset.step || null,
         navVisible: Boolean(nav && nav.getClientRects().length),
         viewport: {width: innerWidth, height: innerHeight, scrollY: scrollY},
         navRect: rect ? {x: rect.x, y: rect.y, width: rect.width, height: rect.height} : null,
         keyEvents: Array.isArray(window.__ciStageKeyEvents) ? window.__ciStageKeyEvents.slice(0, 4) : [],
+        nodeChain,
         layoutProfile: document.documentElement.dataset.layoutProfile || null,
         navDisplay: nav ? getComputedStyle(nav).display : null,
         navGridColumns: nav ? getComputedStyle(nav).gridTemplateColumns : null,
