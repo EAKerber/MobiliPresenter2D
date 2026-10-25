@@ -103,6 +103,10 @@ try {
       const cookies = await context.cookies(origin);
       assert.ok(cookies.some(cookie => cookie.name === ACCESS_COOKIE_NAME),
         "BLOCKED_AUTH_FIXTURE: redeem did not establish the scoped session cookie");
+      const buyerResponse = await context.request.get(new URL("/api/buyer-configuration", origin).toString(), {timeout: 15000});
+      result.buyerConfigurationStatus = buyerResponse.status();
+      assert.equal(buyerResponse.status(), 200,
+        "BLOCKED_AUTH_FIXTURE: authenticated preview buyer configuration endpoint is unavailable");
 
       tempDir = await mkdtemp(join(tmpdir(), "m2d-auth-v5-"));
       await chmod(tempDir, 0o700);
