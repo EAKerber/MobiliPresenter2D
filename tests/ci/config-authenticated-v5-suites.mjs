@@ -110,7 +110,15 @@ try {
       if (!report.browserBootstrap) {
         const probe = await context.newPage();
         const pageErrorClasses = [];
+        const browserHttpFailures = [];
         probe.on("pageerror", error => pageErrorClasses.push(error.name || "Error"));
+        probe.on("response", response => {
+          if (response.status() >= 400 && browserHttpFailures.length < 10) {
+            let pathname = null;
+            try { pathname = new URL(response.url()).pathname; } catch {}
+            browserHttpFailures.push({status: response.status(), pathname});
+          }
+        });
         await probe.goto(new URL("/config/", origin).toString(), {waitUntil: "domcontentloaded", timeout: 20000});
         try {
           await probe.waitForFunction(() => ["validated", "invalid"].includes(document.documentElement.dataset.publishedConfigurationStatus), null, {timeout: 15000});
@@ -121,6 +129,7 @@ try {
           workspaceHidden: Boolean(document.querySelector(".workspace")?.hidden)
         }));
         report.browserPageErrorClasses = [...new Set(pageErrorClasses)].slice(0, 5);
+        report.browserHttpFailures = browserHttpFailures;
         await probe.close();
         assert.equal(report.browserBootstrap.publishedConfigurationStatus, "validated",
           "BLOCKED_AUTH_FIXTURE: authenticated browser could not apply published V5 configuration");
@@ -224,6 +233,7 @@ try {
     fixtureVerified: report.fixtureVerified,
     browserBootstrap: report.browserBootstrap || null,
     browserPageErrorClasses: report.browserPageErrorClasses || [],
+    browserHttpFailures: report.browserHttpFailures || [],
     suites: Object.fromEntries(Object.entries(report.suites).map(([name, suite]) => [name, {
       passed: suite.passed === true,
       revoked: suite.revoked === true,
