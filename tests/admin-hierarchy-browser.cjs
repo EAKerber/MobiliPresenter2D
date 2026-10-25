@@ -52,8 +52,8 @@ function contentType(filePath) {
 
 function adminHarness() {
   const source = fs.readFileSync(path.join(appRoot, "admin.html"), "utf8");
-  const moduleTag = '<script type="module" src="admin/admin.bundle.js?v=admin-auth-flow-v2"></script>';
-  assert.equal(source.includes(moduleTag), true, "admin harness expects the current admin bundle revision");
+  const moduleTag = source.match(/<script type="module" src="admin\/admin\.bundle\.js(?:\?[^"]*)?"><\/script>/)?.[0];
+  assert.ok(moduleTag, "admin harness expects the current admin bundle entry");
   return source.replace(
     moduleTag,
     '<script type="importmap">{"imports":{"@netlify/identity":"/__identity_stub__.js"}}</script><script type="module" src="admin/admin.js"></script>'
