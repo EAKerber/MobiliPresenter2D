@@ -218,10 +218,15 @@ try{
    }catch(error){
     report.nextActionDiagnostic=await page.evaluate(()=>{
      const button=document.querySelector("#nextStepButton");
-     const rect=button?.getBoundingClientRect();
+     const rect=button?.getBoundingClientRect(),bar=document.querySelector(".flow-actions");
+     const style=button&&getComputedStyle(button),barStyle=bar&&getComputedStyle(bar),barRect=bar?.getBoundingClientRect();
      return {
-      buttonPresent:Boolean(button),buttonDisabled:Boolean(button?.disabled),
+      buttonPresent:Boolean(button),buttonDisabled:Boolean(button?.disabled),buttonHidden:Boolean(button?.hidden),
+      buttonDisplay:style?.display||null,buttonVisibility:style?.visibility||null,
       buttonHasArea:Boolean(rect&&rect.width>0&&rect.height>0),
+      dockPresent:Boolean(bar),dockHidden:Boolean(bar?.hidden),dockDisplay:barStyle?.display||null,
+      dockVisibility:barStyle?.visibility||null,dockHasArea:Boolean(barRect&&barRect.width>0&&barRect.height>0),
+      dockEnabled:bar?.dataset.bottomDockEnabled||null,dockSlots:bar?.dataset.bottomDockSlots||null,
       currentStep:document.querySelector(".flow-nav [aria-current=step]")?.dataset.step||null,
       visiblePanels:Array.from(document.querySelectorAll("#finishesStagePanel,#servicesPanel,#summaryPanel")).filter(panel=>!panel.hidden).map(panel=>panel.id)
      };
