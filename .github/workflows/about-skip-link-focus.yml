@@ -1,0 +1,51 @@
+name: About skip-link destination focus
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - architecture/pages/about.page.html
+      - app/about/about.js
+      - app/about/index.html
+      - architecture/generated/primary-pages.manifest.json
+      - tests/about-skip-link-focus.mjs
+      - .github/workflows/about-skip-link-focus.yml
+  push:
+    branches:
+      - fix/focus-ring-about-approved-vis002-20261024
+    paths:
+      - architecture/pages/about.page.html
+      - app/about/about.js
+      - app/about/index.html
+      - architecture/generated/primary-pages.manifest.json
+      - tests/about-skip-link-focus.mjs
+      - .github/workflows/about-skip-link-focus.yml
+permissions:
+  contents: read
+jobs:
+  browser:
+    runs-on: ubuntu-latest
+    container:
+      image: mcr.microsoft.com/playwright:v1.56.0-noble
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Build the published pages and check ARC-03C hashes
+        run: |
+          npm install --no-save --no-package-lock esbuild@0.28.2 playwright@1.56.0
+          node --check app/about/about.js
+          node --check tests/about-skip-link-focus.mjs
+          npm run build
+          npm run pages:check
+      - name: Serve the actual publish folder
+        run: |
+          python3 -m http.server 8123 --bind 127.0.0.1 --directory app >/tmp/about-skip-link-http.log 2>&1 &
+          sleep 2
+          curl --fail http://127.0.0.1:8123/about/ >/dev/null
+      - name: Verify keyboard activation moves focus to main
+        env:
+          PUBLIC_PAGES_URL: http://127.0.0.1:8123
+        run: node tests/about-skip-link-focus.mjs

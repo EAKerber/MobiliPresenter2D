@@ -56,3 +56,6 @@ html[data-theme="light"] .about-scale__stat > span,
 html[data-theme="light"] .about-closing > p:not(.eyebrow):not(.about-closing__signature) {
   color: var(--ds-vis002c-long-copy-light);
 }
+
+/* Approved VIS-002 focus treatment for the About skip link. */
+html[data-theme] .about-skip:focus-visible { outline: 4px solid var(--public-accent); outline-offset: 3px; }

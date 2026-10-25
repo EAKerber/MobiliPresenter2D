@@ -21,8 +21,8 @@
       "route": "/about/",
       "source": "architecture/pages/about.page.html",
       "output": "app/about/index.html",
-      "sourceGitBlobSha": "715082b9bc4ffd80dcf841ea1e4b544968783fdb",
-      "outputGitBlobSha": "0f830a962485a67c2d9f264056a637693491fc01"
+      "sourceGitBlobSha": "69c2c1b2e6f7eb0bf70da35e90edf4348bca8afc",
+      "outputGitBlobSha": "5124d3d930073fdfad1a8602cca999ea3413cd5e"
     },
     {
       "route": "/how-it-works/",
