@@ -15,21 +15,30 @@ import scene from "../app/data/scene-data.js";
 import pricingContract from "../app/core/pricing-contract.js";
 import presentationPolicy from "../app/data/presentation-policy-defaults.js";
 
-export const TARGET_BRANCH = "ci/ci-baseline-01-isolated-auth-extraction-20261024";
-export const TARGET_REVIEW_ID = "238";
+export const PREVIEW_TARGETS = Object.freeze({
+  "ci/ci-baseline-01-isolated-auth-extraction-20261024": "238",
+  "fix/config-stage-nav-grid-track-20261025": "245"
+});
 export const TARGET_SITE_ID = "d92799b1-9afc-4b52-9eee-22824bba7925";
 export const STORE = "configurator-settings";
 export const KEY = "published";
 const digest = value => createHash("sha256").update(value).digest("hex");
 
+export function previewTarget(env) {
+  const sourceBranch = env.HEAD || env.BRANCH;
+  const reviewId = PREVIEW_TARGETS[sourceBranch];
+  if (env.CONTEXT !== "deploy-preview" || !reviewId || env.REVIEW_ID !== reviewId) return null;
+  return {sourceBranch, reviewId: Number(reviewId)};
+}
+
 export function shouldSeed(env) {
-  if (env.CONTEXT !== "deploy-preview" || env.REVIEW_ID !== TARGET_REVIEW_ID) return false;
+  const target = previewTarget(env);
+  if (!target) return false;
   const siteId = env.SITE_ID || env.NETLIFY_SITE_ID;
   if (!siteId) throw new Error("CI_PREVIEW_SITE_ID_REQUIRED");
   // This config also builds the public Netlify site; it must skip that site.
   if (siteId !== TARGET_SITE_ID) return false;
   assert.equal(env.NETLIFY, "true", "CI_PREVIEW_NETLIFY_CONTEXT_REQUIRED");
-  assert.equal(env.HEAD || env.BRANCH, TARGET_BRANCH, "CI_PREVIEW_SOURCE_HEAD_MISMATCH");
   assert.match(String(env.REVIEW_ID), /^[1-9]\d{0,5}$/, "CI_PREVIEW_REVIEW_ID_REQUIRED");
   assert.match(String(env.DEPLOY_ID || ""), /^[a-zA-Z0-9_-]{8,}$/, "CI_PREVIEW_DEPLOY_ID_REQUIRED");
   return true;
@@ -64,7 +73,8 @@ export function prepareExplicitFixture() {
 }
 
 export async function writeDeployFixture({env, store}) {
-  if (!shouldSeed(env)) return {status: "SKIPPED_NOT_DEDICATED_PREVIEW"};
+  const target = previewTarget(env);
+  if (!target || !shouldSeed(env)) return {status: "SKIPPED_NOT_DEDICATED_PREVIEW"};
   assert.ok(store && typeof store.getWithMetadata === "function" && typeof store.setJSON === "function",
     "CI_PREVIEW_NAMED_STORE_REQUIRED");
   const before = await store.getWithMetadata(KEY, {type: "text", consistency: "strong"});
@@ -80,6 +90,7 @@ export async function writeDeployFixture({env, store}) {
   assert.equal(digest(JSON.stringify(after.value)), data.sha256, "CI_PREVIEW_BLOB_READBACK_DIGEST_MISMATCH");
   return {
     status: "CI_DEPLOY_STORE_V5_VERIFIED", store: STORE, key: KEY, sha256: data.sha256,
-    schema: data.schema, revision: data.revision, reviewID: env.REVIEW_ID, provenance: data.provenance
+    schema: data.schema, revision: data.revision, reviewID: target.reviewId,
+    sourceBranch: target.sourceBranch, provenance: data.provenance
   };
 }
