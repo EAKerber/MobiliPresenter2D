@@ -4,6 +4,7 @@ const http = require("node:http");
 const path = require("node:path");
 const vm = require("node:vm");
 const { chromium } = require("playwright");
+let browser = null;
 
 const repoRoot = path.resolve(__dirname, "..");
 const appRoot = path.join(repoRoot, "app");
@@ -51,12 +52,11 @@ function type(filePath) {
 
 function adminHarness() {
   const source = fs.readFileSync(path.join(appRoot, "admin.html"), "utf8");
-  const moduleTag = '<script type="module" src="admin/admin.bundle.js?v=admin-auth-flow-v2"></script>';
-  assert.equal(source.includes(moduleTag), true, "Puxadores harness expects the current admin bundle revision");
-  return source.replace(
-    moduleTag,
-    '<script type="importmap">{"imports":{"@netlify/identity":"/__identity_stub__.js"}}</script><script type="module" src="admin/admin.js"></script>'
-  );
+  const moduleTag = source.match(/<script type="module" src="admin\/admin\.bundle\.js(?:\?[^"]*)?"><\/script>/)?.[0];
+  assert.ok(moduleTag, "Puxadores harness expects the current admin bundle entry");
+  const importMap = '<script type="importmap">{"imports":{"@netlify/identity":"/__identity_stub__.js"}}</script>';
+  const withImportMap = source.replace("</head>", importMap + "</head>");
+  return withImportMap.replace(moduleTag, '<script type="module" src="admin/admin.js"></script>');
 }
 
 const server = http.createServer(async (request, response) => {
@@ -64,6 +64,16 @@ const server = http.createServer(async (request, response) => {
   if (url.pathname === "/__identity_stub__.js") {
     response.writeHead(200, { "Content-Type": "text/javascript; charset=utf-8" });
     response.end(identityStub);
+    return;
+  }
+  if (url.pathname === "/api/admin-bootstrap" && request.method === "GET") {
+    response.writeHead(200, { "Content-Type": "application/json; charset=utf-8", "Cache-Control": "no-store" });
+    response.end(JSON.stringify({ priceBook }));
+    return;
+  }
+  if (url.pathname === "/core/private-navigation.bundle.js") {
+    response.writeHead(200, { "Content-Type": "text/javascript; charset=utf-8", "Cache-Control": "no-store" });
+    fs.createReadStream(path.join(appRoot, "core/private-navigation.js")).pipe(response);
     return;
   }
   if (url.pathname === "/api/configuration") {
@@ -126,7 +136,7 @@ const server = http.createServer(async (request, response) => {
 (async () => {
   await new Promise((resolve) => server.listen(0, "127.0.0.1", resolve));
   const baseUrl = "http://127.0.0.1:" + server.address().port;
-  const browser = await chromium.launch({ headless: true });
+  browser = await chromium.launch({ headless: true });
   const page = await browser.newPage({ viewport: { width: 1366, height: 900 } });
   const errors = [];
   page.on("pageerror", (error) => errors.push(error.message));
@@ -174,8 +184,9 @@ const server = http.createServer(async (request, response) => {
   await browser.close();
   server.close();
   console.log("admin handles persistence browser: PASS");
-})().catch((error) => {
+})().catch(async (error) => {
   console.error(error);
+  try { await browser?.close(); } catch { /* Preserve the original test failure. */ }
   server.close();
   process.exitCode = 1;
 });
