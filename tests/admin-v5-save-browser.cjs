@@ -107,7 +107,7 @@ const server = http.createServer(async (req, res) => {
   if (!filePath.startsWith(appRoot + path.sep) || !fs.existsSync(filePath) || !fs.statSync(filePath).isFile()) {
     res.writeHead(404);res.end("not found");return;
   }
-  const type = filePath.endsWith(".js") ? "text/javascript" : filePath.endsWith(".css") ? "text/css" : "application/octet-stream";
+  const type = filePath.endsWith(".js") || filePath.endsWith(".mjs") ? "text/javascript" : filePath.endsWith(".css") ? "text/css" : "application/octet-stream";
   res.writeHead(200, { "Content-Type": type, "Cache-Control": "no-store" });
   fs.createReadStream(filePath).pipe(res);
 });
