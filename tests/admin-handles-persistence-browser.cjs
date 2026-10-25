@@ -143,7 +143,23 @@ const server = http.createServer(async (request, response) => {
   page.on("console", (message) => { if (message.type() === "error") errors.push(message.text()); });
 
   await page.goto(baseUrl + "/admin-test.html", { waitUntil: "networkidle" });
-  await page.waitForSelector("#persistHandlesButton:not([hidden])");
+  const initialRepair = repair.planHandlesAssignment(current, configuration.SCHEMA);
+  assert.equal(initialRepair.ok, true, "Puxadores repair fixture is valid");
+  assert.equal(initialRepair.needed, true, "Puxadores repair fixture starts unassigned");
+  await page.waitForTimeout(300);
+  const pageState = await page.evaluate(() => ({
+    buttonPresent: Boolean(document.getElementById("persistHandlesButton")),
+    buttonHidden: document.getElementById("persistHandlesButton")?.hidden,
+    schema: window.CasaModulesConfiguration?.SCHEMA,
+    repairAvailable: Boolean(window.CasaModulesLegacyStageRepair),
+    message: document.getElementById("saveMessage")?.textContent,
+    serviceErrorHidden: document.getElementById("adminServiceError")?.hidden,
+    serviceError: document.getElementById("adminServiceError")?.textContent,
+    editorHidden: document.getElementById("editorPanel")?.hidden
+  }));
+  if (pageState.buttonHidden !== false) {
+    throw new Error("Puxadores action did not appear: " + JSON.stringify({ pageState, browserErrors: errors }));
+  }
   assert.match(await page.locator("#saveMessage").textContent(), /Puxadores ainda não está atribuído/);
   assert.equal(await page.locator('[data-hierarchy-section="handles"]').count(), 0, "unpublished v3 does not pretend Puxadores is already a persisted section");
 
