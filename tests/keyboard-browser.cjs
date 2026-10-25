@@ -171,7 +171,34 @@ const {chromium} = require('playwright');
   // Ctrl shortcuts are global and move between stages.
   assert.equal(await currentStage(), 'modules');
   await page.keyboard.press('Control+ArrowRight');
-  await page.waitForFunction(() => document.querySelector('.flow-nav [data-step][aria-current="step"]')?.dataset.step === 'finishes');
+  try {
+    await page.waitForFunction(() => document.querySelector('.flow-nav [data-step][aria-current="step"]')?.dataset.step === 'finishes');
+  } catch (error) {
+    const snapshot = await page.evaluate(() => {
+      const nav = document.querySelector(".flow-nav");
+      const rect = nav?.getBoundingClientRect();
+      return {
+        currentStep: nav?.querySelector('[data-step][aria-current="step"]')?.dataset.step || null,
+        navVisible: Boolean(nav && nav.getClientRects().length),
+        viewport: {width: innerWidth, height: innerHeight, scrollY: scrollY},
+        navRect: rect ? {x: rect.x, y: rect.y, width: rect.width, height: rect.height} : null,
+        buttons: [...(nav?.querySelectorAll("[data-step]") || [])].map(button => ({
+          step: button.dataset.step || null,
+          current: button.getAttribute("aria-current"),
+          hidden: Boolean(button.hidden),
+          disabled: Boolean(button.disabled),
+          rect: (() => { const box = button.getBoundingClientRect(); return {x: box.x, y: box.y, width: box.width, height: box.height}; })()
+        })),
+        activeElement: document.activeElement ? {
+          tag: document.activeElement.tagName,
+          id: document.activeElement.id || null,
+          className: typeof document.activeElement.className === "string" ? document.activeElement.className.slice(0, 120) : null
+        } : null
+      };
+    });
+    console.error("CI_AUTH_STAGE_NAV_STATE " + JSON.stringify({suite:"keyboard", ...snapshot}));
+    throw error;
+  }
   assert.equal(await currentStage(), 'finishes', 'Ctrl+ArrowRight advances one stage');
   await page.waitForTimeout(450);
   const finishStageGeometry = await page.evaluate(() => {
