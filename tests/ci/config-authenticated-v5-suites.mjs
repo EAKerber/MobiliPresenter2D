@@ -107,6 +107,24 @@ try {
       result.buyerConfigurationStatus = buyerResponse.status();
       assert.equal(buyerResponse.status(), 200,
         "BLOCKED_AUTH_FIXTURE: authenticated preview buyer configuration endpoint is unavailable");
+      if (!report.browserBootstrap) {
+        const probe = await context.newPage();
+        const pageErrorClasses = [];
+        probe.on("pageerror", error => pageErrorClasses.push(error.name || "Error"));
+        await probe.goto(new URL("/config/", origin).toString(), {waitUntil: "domcontentloaded", timeout: 20000});
+        try {
+          await probe.waitForFunction(() => ["validated", "invalid"].includes(document.documentElement.dataset.publishedConfigurationStatus), null, {timeout: 15000});
+        } catch {}
+        report.browserBootstrap = await probe.evaluate(() => ({
+          publishedConfigurationStatus: document.documentElement.dataset.publishedConfigurationStatus || null,
+          publishedConfigurationErrorPresent: Boolean(document.querySelector(".published-config-error")),
+          workspaceHidden: Boolean(document.querySelector(".workspace")?.hidden)
+        }));
+        report.browserPageErrorClasses = [...new Set(pageErrorClasses)].slice(0, 5);
+        await probe.close();
+        assert.equal(report.browserBootstrap.publishedConfigurationStatus, "validated",
+          "BLOCKED_AUTH_FIXTURE: authenticated browser could not apply published V5 configuration");
+      }
 
       tempDir = await mkdtemp(join(tmpdir(), "m2d-auth-v5-"));
       await chmod(tempDir, 0o700);
