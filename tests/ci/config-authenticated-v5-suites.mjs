@@ -185,7 +185,6 @@ try {
             const safeViewport = state.viewport && typeof state.viewport === "object" ? Object.fromEntries(
               ["width", "height", "scrollY"].filter(key => Number.isFinite(state.viewport[key])).map(key => [key, state.viewport[key]])
             ) : null;
-                        } : null;
             const safeLayoutNode = value => value && typeof value === "object" ? {
               tag: typeof value.tag === "string" ? value.tag.slice(0,24) : null,
               className: typeof value.className === "string" ? value.className.slice(0,80) : null,
