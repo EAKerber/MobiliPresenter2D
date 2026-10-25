@@ -72,10 +72,10 @@ for(const engine of [chromium,webkit]){
  const browser=await engine.launch({headless:true});
  try{
   for(const width of widths)for(const theme of themes){
-   const [before,after]=await Promise.all([
-      inspect(browser,BASE,width,theme,false),
-      inspect(browser,CAND,width,theme,true)
-   ]);
+   // WebKit shares a browser process across contexts. Serialize these
+   // captures so the two pages cannot race during screenshot capture.
+   const before=await inspect(browser,BASE,width,theme,false);
+   const after=await inspect(browser,CAND,width,theme,true);
    let allClosedPixelEqual=true;
    for(let i=0;i<selectors.length;i++){
      assert.equal(after[i].closedDom,before[i].closedDom,"closed-state DOM changed");
