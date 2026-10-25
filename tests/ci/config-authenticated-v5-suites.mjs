@@ -184,6 +184,16 @@ try {
   report.classification = report.stage === "preview-fixture-preflight" || report.stage === undefined
     ? "BLOCKED_AUTH_FIXTURE" : "AUTHENTICATED_V5_SUITES_FAIL";
   console.error(report.classification + " stage=" + (report.stage || "preflight") + " errorClass=" + report.errorClass);
+  if (report.suites) console.error("AUTHENTICATED_V5_SUITES_RESULT " + JSON.stringify({
+    fixtureVerified: report.fixtureVerified,
+    suites: Object.fromEntries(Object.entries(report.suites).map(([name, suite]) => [name, {
+      passed: suite.passed === true,
+      revoked: suite.revoked === true,
+      replayDenied: suite.tokenReplayDenied === true,
+      revokedSessionRedirected: suite.revokedSessionRedirected === true,
+      errorClass: suite.errorClass || null
+    }]))
+  }));
   process.exitCode = 1;
 } finally {
   try { await browser?.close(); } catch {}
