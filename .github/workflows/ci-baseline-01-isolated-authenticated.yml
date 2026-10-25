@@ -16,6 +16,7 @@ on:
       - "netlify.toml"
       - "app/styles.css"
       - "app/app.js"
+      - "app/config/index.html"
   workflow_dispatch:
 permissions:
   contents: read
