@@ -1,5 +1,5 @@
 // CI-only fixture seed. The conditional Deploy Preview plugin block and the
-// runtime identity checks both restrict this to the isolated preview #238.
+// runtime identity checks both restrict this to the two enumerated isolated previews #238 and #245.
 export async function onPostBuild({constants}) {
   const {join} = await import("node:path");
   const {mkdir, writeFile} = await import("node:fs/promises");
@@ -22,11 +22,11 @@ export async function onPostBuild({constants}) {
   await mkdir(dir, {recursive: true});
   await writeFile(join(dir, "published-v5-status.json"), JSON.stringify({
     schema: "M2DPreviewPublishedFixtureStatus/1",
-    reviewId: 238, verified: true, deployId: env.DEPLOY_ID,
-    sourceBranch: fixture.TARGET_BRANCH, store: fixture.STORE, key: fixture.KEY,
+    reviewId: result.reviewID, verified: true, deployId: env.DEPLOY_ID,
+    sourceBranch: result.sourceBranch, store: fixture.STORE, key: fixture.KEY,
     v5Schema: result.schema, sha256: result.sha256
   }, null, 2) + "\n", {mode: 0o644});
   console.log("CI_PREVIEW_PUBLISHED_FIXTURE_VERIFIED " + JSON.stringify({
-    reviewId: 238, sha256: result.sha256, store: fixture.STORE
+    reviewId: result.reviewID, sha256: result.sha256, store: fixture.STORE
   }));
 }
