@@ -170,6 +170,19 @@ const {chromium} = require('playwright');
 
   // Ctrl shortcuts are global and move between stages.
   assert.equal(await currentStage(), 'modules');
+  await page.evaluate(() => {
+    window.__ciStageKeyEvents = [];
+    document.addEventListener("keydown", event => {
+      if (event.key === "ArrowRight" && event.ctrlKey) {
+        window.__ciStageKeyEvents.push({
+          defaultPrevented: event.defaultPrevented,
+          targetTag: event.target?.tagName || null,
+          targetType: event.target instanceof HTMLInputElement ? event.target.type : null,
+          activeStage: document.querySelector('.flow-nav [data-step][aria-current="step"]')?.dataset.step || null
+        });
+      }
+    }, true);
+  });
   await page.keyboard.press('Control+ArrowRight');
   try {
     await page.waitForFunction(() => document.querySelector('.flow-nav [data-step][aria-current="step"]')?.dataset.step === 'finishes');
@@ -182,6 +195,8 @@ const {chromium} = require('playwright');
         navVisible: Boolean(nav && nav.getClientRects().length),
         viewport: {width: innerWidth, height: innerHeight, scrollY: scrollY},
         navRect: rect ? {x: rect.x, y: rect.y, width: rect.width, height: rect.height} : null,
+        keyEvents: Array.isArray(window.__ciStageKeyEvents) ? window.__ciStageKeyEvents.slice(0, 4) : [],
+        layoutProfile: document.documentElement.dataset.layoutProfile || null,
         navDisplay: nav ? getComputedStyle(nav).display : null,
         navGridColumns: nav ? getComputedStyle(nav).gridTemplateColumns : null,
         buttons: [...(nav?.querySelectorAll("[data-step]") || [])].map(button => ({
@@ -194,6 +209,11 @@ const {chromium} = require('playwright');
           position: getComputedStyle(button).position,
           computedWidth: getComputedStyle(button).width,
           computedHeight: getComputedStyle(button).height,
+          minWidth: getComputedStyle(button).minWidth,
+          minHeight: getComputedStyle(button).minHeight,
+          gridColumn: getComputedStyle(button).gridColumn,
+          gridRow: getComputedStyle(button).gridRow,
+          clientRectCount: button.getClientRects().length,
           style: button.getAttribute("style"),
           rect: (() => { const box = button.getBoundingClientRect(); return {x: box.x, y: box.y, width: box.width, height: box.height}; })()
         })),
