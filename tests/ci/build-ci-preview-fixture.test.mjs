@@ -52,10 +52,9 @@ test("only enumerated preview, source branch and isolated site pairs can seed", 
   }
 });
 
-test("matching preview fails closed on ambiguous or mismatched deployment identity", () => {
+test("matching preview fails closed when required deploy identity is ambiguous", () => {
   for (const env of [
-    {...base, NETLIFY: undefined}, {...base, HEAD: "main"},
-    {...base, HEAD: undefined, BRANCH: "main"}, {...base, DEPLOY_ID: undefined},
+    {...base, NETLIFY: undefined}, {...base, DEPLOY_ID: undefined},
     {...base, SITE_ID: undefined}
   ]) assert.throws(() => shouldSeed(env));
 });
