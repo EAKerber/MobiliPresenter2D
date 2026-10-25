@@ -412,7 +412,31 @@ const flatV3 = configuration.createDefaultAdministration(
   }));
   assert.ok(handleGeometry.every((entry) => entry.width >= 190 && entry.copyWidth >= 125), "Puxadores stays readable in the two-column stacked-workspace layout");
 
-  await page.locator('.flow-nav [data-step="modules"]').click();
+  try {
+    await page.locator('.flow-nav [data-step="modules"]').click();
+  } catch (error) {
+    const snapshot = await page.evaluate(() => {
+      const nav = document.querySelector(".flow-nav");
+      const target = nav?.querySelector('[data-step="modules"]');
+      const rect = target?.getBoundingClientRect();
+      const hit = rect ? document.elementFromPoint(rect.x + rect.width / 2, rect.y + rect.height / 2) : null;
+      return {
+        currentStep: nav?.querySelector('[data-step][aria-current="step"]')?.dataset.step || null,
+        navVisible: Boolean(nav && nav.getClientRects().length),
+        viewport: {width: innerWidth, height: innerHeight, scrollY: scrollY},
+        target: target ? {
+          current: target.getAttribute("aria-current"),
+          hidden: Boolean(target.hidden),
+          disabled: Boolean(target.disabled),
+          rect: rect ? {x: rect.x, y: rect.y, width: rect.width, height: rect.height} : null,
+          centerHit: hit ? {tag: hit.tagName, id: hit.id || null, className: typeof hit.className === "string" ? hit.className.slice(0, 120) : null} : null
+        } : null,
+        modulesPanelHidden: Boolean(document.getElementById("modulesPanel")?.hidden)
+      };
+    });
+    console.error("CI_AUTH_STAGE_NAV_STATE " + JSON.stringify({suite:"flow", ...snapshot}));
+    throw error;
+  }
   await page.waitForFunction(() => !document.getElementById("modulesPanel").hidden);
   await page.locator("#moduleList [data-select-entity]").first().click();
   await page.waitForFunction(() => document.body.classList.contains("has-module-detail"));
