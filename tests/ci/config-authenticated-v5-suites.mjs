@@ -169,9 +169,58 @@ try {
         const navStateLine = combined.split(/\r?\n/).find(line => line.includes("CI_AUTH_STAGE_NAV_STATE "));
         if (navStateLine) {
           try {
-            result.failureSignals.stageNavigation = JSON.parse(
+            const state = JSON.parse(
               navStateLine.slice(navStateLine.indexOf("CI_AUTH_STAGE_NAV_STATE ") + "CI_AUTH_STAGE_NAV_STATE ".length)
             );
+            const allowedSteps = new Set(["modules", "finishes", "services", "summary"]);
+            const safeRect = value => value && typeof value === "object" ? Object.fromEntries(
+              ["x", "y", "width", "height"].filter(key => Number.isFinite(value[key])).map(key => [key, value[key]])
+            ) : null;
+            const safeStep = value => allowedSteps.has(value) ? value : null;
+            const safeElement = value => value && typeof value === "object" ? {
+              tag: typeof value.tag === "string" ? value.tag.slice(0, 24) : null,
+              id: typeof value.id === "string" && /^[a-zA-Z0-9_-]{1,80}$/.test(value.id) ? value.id : null,
+              className: typeof value.className === "string" ? value.className.slice(0, 80) : null
+            } : null;
+            const safeViewport = state.viewport && typeof state.viewport === "object" ? Object.fromEntries(
+              ["width", "height", "scrollY"].filter(key => Number.isFinite(state.viewport[key])).map(key => [key, state.viewport[key]])
+            ) : null;
+            result.failureSignals.stageNavigation = {
+              suite: ["keyboard", "flow"].includes(state.suite) ? state.suite : null,
+              currentStep: safeStep(state.currentStep),
+              navVisible: state.navVisible === true,
+              navDisplay: typeof state.navDisplay === "string" ? state.navDisplay.slice(0, 24) : null,
+              navGridColumns: typeof state.navGridColumns === "string" ? state.navGridColumns.slice(0, 120) : null,
+              viewport: safeViewport,
+              navRect: safeRect(state.navRect),
+              buttons: Array.isArray(state.buttons) ? state.buttons.slice(0, 8).map(button => ({
+                step: safeStep(button.step),
+                current: ["step", "false"].includes(button.current) ? button.current : null,
+                hidden: button.hidden === true,
+                disabled: button.disabled === true,
+                display: typeof button.display === "string" ? button.display.slice(0, 24) : null,
+                visibility: typeof button.visibility === "string" ? button.visibility.slice(0, 24) : null,
+                position: typeof button.position === "string" ? button.position.slice(0, 24) : null,
+                computedWidth: typeof button.computedWidth === "string" ? button.computedWidth.slice(0, 32) : null,
+                computedHeight: typeof button.computedHeight === "string" ? button.computedHeight.slice(0, 32) : null,
+                rect: safeRect(button.rect)
+              })) : [],
+              target: state.target && typeof state.target === "object" ? {
+                current: ["step", "false"].includes(state.target.current) ? state.target.current : null,
+                hidden: state.target.hidden === true,
+                disabled: state.target.disabled === true,
+                display: typeof state.target.display === "string" ? state.target.display.slice(0, 24) : null,
+                visibility: typeof state.target.visibility === "string" ? state.target.visibility.slice(0, 24) : null,
+                position: typeof state.target.position === "string" ? state.target.position.slice(0, 24) : null,
+                computedWidth: typeof state.target.computedWidth === "string" ? state.target.computedWidth.slice(0, 32) : null,
+                computedHeight: typeof state.target.computedHeight === "string" ? state.target.computedHeight.slice(0, 32) : null,
+                rect: safeRect(state.target.rect),
+                centerHit: safeElement(state.target.centerHit)
+              } : null,
+              activeElement: safeElement(state.activeElement),
+              activeInputType: typeof state.activeElement?.inputType === "string" ? state.activeElement.inputType.slice(0, 16) : null,
+              modulesPanelHidden: state.modulesPanelHidden === true
+            };
           } catch {}
         }
       }
