@@ -55,10 +55,9 @@ function adminHarness() {
   const source = fs.readFileSync(path.join(appRoot, "admin.html"), "utf8");
   const moduleTag = source.match(/<script type="module" src="admin\/admin\.bundle\.js(?:\?[^"]*)?"><\/script>/)?.[0];
   assert.ok(moduleTag, "admin harness expects the current admin bundle entry");
-  return source.replace(
-    moduleTag,
-    '<script type="importmap">{"imports":{"@netlify/identity":"/__identity_stub__.js"}}</script><script type="module" src="admin/admin.js"></script>'
-  );
+  const importMap = '<script type="importmap">{"imports":{"@netlify/identity":"/__identity_stub__.js"}}</script>';
+  const withImportMap = source.replace("</head>", importMap + "</head>");
+  return withImportMap.replace(moduleTag, '<script type="module" src="admin/admin.js"></script>');
 }
 
 const server = http.createServer(async (request, response) => {
@@ -72,6 +71,13 @@ const server = http.createServer(async (request, response) => {
   if (url.pathname === "/api/admin-bootstrap" && request.method === "GET") {
     response.writeHead(200, { "Content-Type": "application/json; charset=utf-8", "Cache-Control": "no-store" });
     response.end(JSON.stringify({ priceBook }));
+    return;
+  }
+
+  if (url.pathname === "/core/private-navigation.bundle.js") {
+    const sourceBundle = path.join(appRoot, "core/private-navigation.js");
+    response.writeHead(200, { "Content-Type": "text/javascript; charset=utf-8", "Cache-Control": "no-store" });
+    fs.createReadStream(sourceBundle).pipe(response);
     return;
   }
 
