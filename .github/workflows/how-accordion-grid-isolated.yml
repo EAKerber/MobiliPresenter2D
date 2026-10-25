@@ -20,10 +20,11 @@ jobs:
     steps:
       - name: Checkout candidate
         uses: actions/checkout@v4
-      - name: Checkout main baseline
+      - name: Checkout immutable pre-fix baseline
         uses: actions/checkout@v4
         with:
-          ref: main
+          # Parent of the first accordion fix; keep the regression baseline immutable.
+          ref: 1878ae1057ce7c6190e0c8cb08a1f3baadd49463
           path: baseline
       - uses: actions/setup-node@v4
         with:
