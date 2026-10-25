@@ -51,6 +51,7 @@ html[data-theme="light"] .about-scale p:not(.eyebrow) { color: #705C4B; }
 
 
 /* VIS-002: measured light-surface copy only. */
+html[data-theme="light"] .about-scale p:not(.eyebrow),
 html[data-theme="light"] .about-scale__stat > span,
 html[data-theme="light"] .about-closing > p:not(.eyebrow):not(.about-closing__signature) {
   color: var(--ds-vis002c-long-copy-light);
