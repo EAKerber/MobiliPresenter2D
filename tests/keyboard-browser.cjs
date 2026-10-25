@@ -267,9 +267,13 @@ const {chromium} = require('playwright');
             return {path,disabled:sheet.disabled,hasFlowStepRule};
           });
           const existing=nav?.querySelector("[data-step]")||null;
-          let clonedExisting=null;
-          if(existing&&nav){const clone=existing.cloneNode(true);nav.append(clone);clonedExisting=node(clone);clone.remove();}
-          return {nav:node(nav),existing:node(existing),clonedExisting,
+          let clonedExisting=null,reinsertedExisting=null;
+          if(existing&&nav){
+            const clone=existing.cloneNode(true);nav.append(clone);clonedExisting=node(clone);clone.remove();
+            const nextSibling=existing.nextSibling;existing.remove();nav.insertBefore(existing,nextSibling);
+            reinsertedExisting=node(existing);
+          }
+          return {nav:node(nav),existing:node(existing),clonedExisting,reinsertedExisting,
             probes:[probe(nav,"nav"),probe(nav?.parentElement,"controls"),probe(document.body,"body")],stylesheets};
         })(),
         activeElement: document.activeElement ? {

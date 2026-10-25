@@ -303,6 +303,7 @@ try {
                 nav:safeLayoutNode(state.layoutProbe.nav),
                 existing:safeLayoutNode(state.layoutProbe.existing),
                 clonedExisting:safeLayoutNode(state.layoutProbe.clonedExisting),
+                reinsertedExisting:safeLayoutNode(state.layoutProbe.reinsertedExisting),
                 probes:Array.isArray(state.layoutProbe.probes)?state.layoutProbe.probes.slice(0,3).map(item=>({
                   location:["nav","controls","body"].includes(item.location)?item.location:null,
                   parent:safeLayoutNode(item.parent),button:safeLayoutNode(item.button)
