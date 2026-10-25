@@ -305,7 +305,40 @@ const flatV3 = configuration.createDefaultAdministration(
   assert.equal(await noOverflow("#modulesPanel"), true, "desktop side-panel Modules does not overflow horizontally");
   await page.screenshot({ path: path.join(output, "modules-desktop.png"), fullPage: true });
 
-  await page.locator('.flow-nav [data-step="finishes"]').click();
+  try {
+    await page.locator('.flow-nav [data-step="finishes"]').click();
+  } catch (error) {
+    const snapshot = await page.evaluate(() => {
+      const nav = document.querySelector(".flow-nav");
+      const target = nav?.querySelector('[data-step="finishes"]');
+      const rect = target?.getBoundingClientRect();
+      const hit = rect ? document.elementFromPoint(rect.x + rect.width / 2, rect.y + rect.height / 2) : null;
+      const chain = [];
+      for (let node = target, depth = 0; node && depth < 5; node = node.parentElement, depth += 1) {
+        const box = node.getBoundingClientRect();
+        const style = getComputedStyle(node);
+        chain.push({tag:node.tagName,id:node.id||null,className:typeof node.className==="string"?node.className.slice(0,80):null,
+          display:style.display,visibility:style.visibility,width:box.width,height:box.height,minHeight:style.minHeight,childCount:node.children.length});
+      }
+      return {
+        currentStep: nav?.querySelector('[data-step][aria-current="step"]')?.dataset.step || null,
+        navVisible: Boolean(nav && nav.getClientRects().length),
+        navDisplay: nav ? getComputedStyle(nav).display : null,
+        navGridColumns: nav ? getComputedStyle(nav).gridTemplateColumns : null,
+        viewport: {width: innerWidth, height: innerHeight, scrollY: scrollY},
+        target: target ? {current:target.getAttribute("aria-current"),hidden:Boolean(target.hidden),disabled:Boolean(target.disabled),
+          display:getComputedStyle(target).display,visibility:getComputedStyle(target).visibility,position:getComputedStyle(target).position,
+          computedWidth:getComputedStyle(target).width,computedHeight:getComputedStyle(target).height,
+          minHeight:getComputedStyle(target).minHeight,gridColumn:getComputedStyle(target).gridColumn,
+          gridRow:getComputedStyle(target).gridRow,clientRectCount:target.getClientRects().length,
+          rect:rect?{x:rect.x,y:rect.y,width:rect.width,height:rect.height}:null,
+          centerHit:hit?{tag:hit.tagName,id:hit.id||null,className:typeof hit.className==="string"?hit.className.slice(0,80):null}:null}:null,
+        nodeChain:chain,layoutProfile:document.documentElement.dataset.layoutProfile||null
+      };
+    });
+    console.error("CI_AUTH_STAGE_NAV_STATE " + JSON.stringify({suite:"flow", ...snapshot}));
+    throw error;
+  }
   await page.waitForFunction(() => !document.getElementById("finishesStagePanel").hidden);
   assert.deepEqual(await stageGroupOrder("finishes"), await modelGroupOrder("finishes"), "Acabamentos group order comes from normalized flow");
   const generatedCabinetGroup = page.locator('[data-flow-group-shell="cabinet-finishes"]');
