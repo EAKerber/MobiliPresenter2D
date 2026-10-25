@@ -15,6 +15,24 @@
   "contexts": [
     {
       "route": "/",
+      "selector": ".hero-description",
+      "background": "#F0EDE8",
+      "contrast": "12.77:1"
+    },
+    {
+      "route": "/how-it-works/",
+      "selector": ".how-hero-note",
+      "background": "#F0EDE8",
+      "contrast": "12.77:1"
+    },
+    {
+      "route": "/about/",
+      "selector": ".about-scale p:not(.eyebrow)",
+      "background": "#F0EDE8",
+      "contrast": "12.77:1"
+    },
+    {
+      "route": "/",
       "selector": ".story-section > p:not(.eyebrow)",
       "background": "#E8E3DC",
       "contrast": "11.68:1"
@@ -63,6 +81,7 @@
     "darkThemeUnchanged": true,
     "productUseRequiresExactSelectors": true,
     "visualChangeAuthorized": true,
-    "onlyMeasuredContexts": true
+    "onlyMeasuredContexts": true,
+    "changesPriorV0_2ColorOnThreeMeasuredContexts": true
   }
 }
