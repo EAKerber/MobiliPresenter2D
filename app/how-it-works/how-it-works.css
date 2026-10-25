@@ -295,6 +295,7 @@ html[data-theme="light"] .commercial-clarity > p.eyebrow {
   color: #70522F;
 }
 
+html[data-theme="light"] .how-hero-note,
 html[data-theme="light"] .finish-copy > p:not(.eyebrow):not(.finish-signature),
 html[data-theme="light"] .commercial-clarity > p:not(.eyebrow),
 html[data-theme="light"] .launch-card .launch-copy > p {
