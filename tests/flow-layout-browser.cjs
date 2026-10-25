@@ -323,6 +323,7 @@ const flatV3 = configuration.createDefaultAdministration(
       return {
         currentStep: nav?.querySelector('[data-step][aria-current="step"]')?.dataset.step || null,
         navVisible: Boolean(nav && nav.getClientRects().length),
+        nodeChain,
         navDisplay: nav ? getComputedStyle(nav).display : null,
         navGridColumns: nav ? getComputedStyle(nav).gridTemplateColumns : null,
         viewport: {width: innerWidth, height: innerHeight, scrollY: scrollY},
@@ -451,6 +452,14 @@ const flatV3 = configuration.createDefaultAdministration(
     const snapshot = await page.evaluate(() => {
       const nav = document.querySelector(".flow-nav");
       const target = nav?.querySelector('[data-step="modules"]');
+      const nodeChain = [];
+      for (let node = target, depth = 0; node && depth < 6; node = node.parentElement, depth += 1) {
+        const box = node.getBoundingClientRect();
+        const style = getComputedStyle(node);
+        nodeChain.push({tag:node.tagName,id:node.id||null,className:typeof node.className==="string"?node.className.slice(0,80):null,
+          display:style.display,visibility:style.visibility,contentVisibility:style.contentVisibility,position:style.position,
+          width:box.width,height:box.height,zoom:style.zoom,transform:style.transform,childCount:node.children.length});
+      }
       const rect = target?.getBoundingClientRect();
       const hit = rect ? document.elementFromPoint(rect.x + rect.width / 2, rect.y + rect.height / 2) : null;
       return {
