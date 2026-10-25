@@ -206,6 +206,54 @@ try {
               offsetParentTag: typeof value.offsetParentTag === "string" ? value.offsetParentTag.slice(0,24) : null,
               childCount: Number.isInteger(value.childCount) ? value.childCount : null
             } : null;
+            const safeLayoutNode = value => value && typeof value === "object" ? {
+              tag: typeof value.tag === "string" ? value.tag.slice(0,24) : null,
+              className: typeof value.className === "string" ? value.className.slice(0,80) : null,
+              connected: value.connected === true,
+              display: typeof value.display === "string" ? value.display.slice(0,24) : null,
+              visibility: typeof value.visibility === "string" ? value.visibility.slice(0,24) : null,
+              position: typeof value.position === "string" ? value.position.slice(0,24) : null,
+              width: typeof value.width === "string" ? value.width.slice(0,32) : null,
+              height: typeof value.height === "string" ? value.height.slice(0,32) : null,
+              minHeight: typeof value.minHeight === "string" ? value.minHeight.slice(0,32) : null,
+              gridTemplateRows: typeof value.gridTemplateRows === "string" ? value.gridTemplateRows.slice(0,120) : null,
+              gridAutoRows: typeof value.gridAutoRows === "string" ? value.gridAutoRows.slice(0,32) : null,
+              gridAutoFlow: typeof value.gridAutoFlow === "string" ? value.gridAutoFlow.slice(0,24) : null,
+              contentVisibility: typeof value.contentVisibility === "string" ? value.contentVisibility.slice(0,24) : null,
+              contain: typeof value.contain === "string" ? value.contain.slice(0,32) : null,
+              overflow: typeof value.overflow === "string" ? value.overflow.slice(0,32) : null,
+              clientRectCount: Number.isInteger(value.clientRectCount) ? value.clientRectCount : null,
+              rect: safeRect(value.rect),
+              offsetParentTag: typeof value.offsetParentTag === "string" ? value.offsetParentTag.slice(0,24) : null,
+              childCount: Number.isInteger(value.childCount) ? value.childCount : null,
+              attrs: value.attrs && typeof value.attrs === "object" ? {
+                hidden:value.attrs.hidden===true,inert:value.attrs.inert===true,
+                ariaHidden:["true","false"].includes(value.attrs.ariaHidden)?value.attrs.ariaHidden:null,
+                ariaCurrent:["step","false"].includes(value.attrs.ariaCurrent)?value.attrs.ariaCurrent:null,
+                dataStep:["modules","finishes","services","summary"].includes(value.attrs.dataStep)?value.attrs.dataStep:null,
+                ariaControlsPresent:value.attrs.ariaControlsPresent===true,hasStyleAttribute:value.attrs.hasStyleAttribute===true,
+                ariaLabelLength:Number.isInteger(value.attrs.ariaLabelLength)?value.attrs.ariaLabelLength:null
+              } : null,
+              inlineStyle: value.inlineStyle && typeof value.inlineStyle === "object" ? Object.fromEntries(
+                ["display","visibility","position","width","height","minHeight","maxHeight","gridColumn","gridRow","transform","zoom","contain","contentVisibility","pointerEvents","overflow"]
+                  .map(key=>[key,typeof value.inlineStyle[key]==="string"?value.inlineStyle[key].slice(0,40):null])
+              ) : null,
+              children: Array.isArray(value.children)?value.children.slice(0,3).map(child=>({
+                tag:typeof child.tag==="string"?child.tag.slice(0,24):null,
+                className:typeof child.className==="string"?child.className.slice(0,80):null,
+                display:typeof child.display==="string"?child.display.slice(0,24):null,
+                visibility:typeof child.visibility==="string"?child.visibility.slice(0,24):null,
+                width:typeof child.width==="string"?child.width.slice(0,32):null,
+                height:typeof child.height==="string"?child.height.slice(0,32):null,
+                minHeight:typeof child.minHeight==="string"?child.minHeight.slice(0,32):null,
+                clientRectCount:Number.isInteger(child.clientRectCount)?child.clientRectCount:null,
+                rect:safeRect(child.rect),
+                inlineStyle:child.inlineStyle&&typeof child.inlineStyle==="object"?Object.fromEntries(
+                  ["display","visibility","position","width","height","minHeight","transform","zoom","contain","contentVisibility","pointerEvents","overflow"]
+                   .map(key=>[key,typeof child.inlineStyle[key]==="string"?child.inlineStyle[key].slice(0,40):null])
+                ):null
+              })):[],
+            } : null;
             result.failureSignals.stageNavigation = {
               suite: ["keyboard", "flow"].includes(state.suite) ? state.suite : null,
               currentStep: safeStep(state.currentStep),
@@ -272,17 +320,17 @@ try {
                 childCount: Number.isInteger(node.childCount) ? node.childCount : null
               })) : [],
               layoutProbe: state.layoutProbe && typeof state.layoutProbe === "object" ? {
-                nav: safeLayoutNode(state.layoutProbe.nav),
-                existing: safeLayoutNode(state.layoutProbe.existing),
-                probes: Array.isArray(state.layoutProbe.probes) ? state.layoutProbe.probes.slice(0,3).map(item => ({
-                  location: ["nav","controls","body"].includes(item.location) ? item.location : null,
-                  parent: safeLayoutNode(item.parent), button: safeLayoutNode(item.button)
-                })) : [],
-                stylesheets: Array.isArray(state.layoutProbe.stylesheets) ? state.layoutProbe.stylesheets.slice(0,16).map(sheet => ({
-                  path: ["/styles.css","/config/styles.css","/ui-theme.css","/config/ui-theme.css"].includes(sheet.path) ? sheet.path : null,
-                  disabled: sheet.disabled === true,
-                  hasFlowStepRule: sheet.hasFlowStepRule === true
-                })) : []
+                nav:safeLayoutNode(state.layoutProbe.nav),
+                existing:safeLayoutNode(state.layoutProbe.existing),
+                clonedExisting:safeLayoutNode(state.layoutProbe.clonedExisting),
+                probes:Array.isArray(state.layoutProbe.probes)?state.layoutProbe.probes.slice(0,3).map(item=>({
+                  location:["nav","controls","body"].includes(item.location)?item.location:null,
+                  parent:safeLayoutNode(item.parent),button:safeLayoutNode(item.button)
+                })):[],
+                stylesheets:Array.isArray(state.layoutProbe.stylesheets)?state.layoutProbe.stylesheets.slice(0,16).map(sheet=>({
+                  path:["/styles.css","/config/styles.css","/ui-theme.css","/config/ui-theme.css"].includes(sheet.path)?sheet.path:null,
+                  disabled:sheet.disabled===true,hasFlowStepRule:sheet.hasFlowStepRule===true
+                })):[]
               } : null,
               modulesPanelHidden: state.modulesPanelHidden === true
             };

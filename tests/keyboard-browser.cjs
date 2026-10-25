@@ -226,38 +226,7 @@ const {chromium} = require('playwright');
           clientRectCount: button.getClientRects().length,
           style: button.getAttribute("style"),
           rect: (() => { const box = button.getBoundingClientRect(); return {x: box.x, y: box.y, width: box.width, height: box.height}; })()
-        })),
-        layoutProbe: (() => {
-          const rectOf = element => { const r = element?.getBoundingClientRect(); return r ? {x:r.x,y:r.y,width:r.width,height:r.height} : null; };
-          const node = element => {
-            if (!element) return null;
-            const style = getComputedStyle(element), rect = rectOf(element);
-            return {tag:element.tagName,className:typeof element.className==="string"?element.className.slice(0,80):null,
-              connected:element.isConnected,display:style.display,visibility:style.visibility,position:style.position,
-              width:style.width,height:style.height,minHeight:style.minHeight,gridTemplateRows:style.gridTemplateRows,
-              gridAutoRows:style.gridAutoRows,gridAutoFlow:style.gridAutoFlow,contentVisibility:style.contentVisibility,
-              contain:style.contain,overflow:style.overflow,clientRectCount:element.getClientRects().length,rect,
-              offsetParentTag:element.offsetParent?.tagName||null,childCount:element.children?.length||0};
-          };
-          const probe = (parent, location) => {
-            if (!parent) return null;
-            const button=document.createElement("button");
-            button.type="button"; button.className="flow-step"; button.dataset.step="modules"; button.textContent="probe";
-            parent.append(button);
-            const result={location,parent:node(parent),button:node(button)};
-            button.remove();
-            return result;
-          };
-          const stylesheets=[...document.styleSheets].slice(0,16).map(sheet=>{
-            let path="inline",hasFlowStepRule=null;
-            try { if(sheet.href) path=new URL(sheet.href).pathname; } catch {}
-            try { hasFlowStepRule=[...sheet.cssRules].some(rule=>rule.cssText.includes(".flow-step")); } catch {}
-            return {path,disabled:sheet.disabled,hasFlowStepRule};
-          });
-          return {nav:node(nav),existing:node(nav?.querySelector("[data-step]")||null),
-            probes:[probe(nav,"nav"),probe(nav?.parentElement,"controls"),probe(document.body,"body")],stylesheets};
-        })(),
-        activeElement: document.activeElement ? {
+        })),activeElement: document.activeElement ? {
           tag: document.activeElement.tagName,
           inputType: document.activeElement instanceof HTMLInputElement ? document.activeElement.type : null,
           id: document.activeElement.id || null,

@@ -480,38 +480,7 @@ const flatV3 = configuration.createDefaultAdministration(
           style: target.getAttribute("style"),
           rect: rect ? {x: rect.x, y: rect.y, width: rect.width, height: rect.height} : null,
           centerHit: hit ? {tag: hit.tagName, id: hit.id || null, className: typeof hit.className === "string" ? hit.className.slice(0, 120) : null} : null
-        } : null,
-        layoutProbe: (() => {
-          const rectOf = element => { const r = element?.getBoundingClientRect(); return r ? {x:r.x,y:r.y,width:r.width,height:r.height} : null; };
-          const node = element => {
-            if (!element) return null;
-            const style = getComputedStyle(element), rect = rectOf(element);
-            return {tag:element.tagName,className:typeof element.className==="string"?element.className.slice(0,80):null,
-              connected:element.isConnected,display:style.display,visibility:style.visibility,position:style.position,
-              width:style.width,height:style.height,minHeight:style.minHeight,gridTemplateRows:style.gridTemplateRows,
-              gridAutoRows:style.gridAutoRows,gridAutoFlow:style.gridAutoFlow,contentVisibility:style.contentVisibility,
-              contain:style.contain,overflow:style.overflow,clientRectCount:element.getClientRects().length,rect,
-              offsetParentTag:element.offsetParent?.tagName||null,childCount:element.children?.length||0};
-          };
-          const probe = (parent, location) => {
-            if (!parent) return null;
-            const button=document.createElement("button");
-            button.type="button"; button.className="flow-step"; button.dataset.step="modules"; button.textContent="probe";
-            parent.append(button);
-            const result={location,parent:node(parent),button:node(button)};
-            button.remove();
-            return result;
-          };
-          const stylesheets=[...document.styleSheets].slice(0,16).map(sheet=>{
-            let path="inline",hasFlowStepRule=null;
-            try { if(sheet.href) path=new URL(sheet.href).pathname; } catch {}
-            try { hasFlowStepRule=[...sheet.cssRules].some(rule=>rule.cssText.includes(".flow-step")); } catch {}
-            return {path,disabled:sheet.disabled,hasFlowStepRule};
-          });
-          return {nav:node(nav),existing:node(nav?.querySelector("[data-step]")||null),
-            probes:[probe(nav,"nav"),probe(nav?.parentElement,"controls"),probe(document.body,"body")],stylesheets};
-        })(),
-        modulesPanelHidden: Boolean(document.getElementById("modulesPanel")?.hidden)
+        } : null,modulesPanelHidden: Boolean(document.getElementById("modulesPanel")?.hidden)
       };
     });
     console.error("CI_AUTH_STAGE_NAV_STATE " + JSON.stringify({suite:"flow", ...snapshot}));
