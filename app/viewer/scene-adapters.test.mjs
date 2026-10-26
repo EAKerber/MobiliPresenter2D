@@ -267,3 +267,136 @@ test("viewer renders authored global finish unavailable in static catalog", () =
     }]
   } }), /Invalid published finish/);
 });
+
+
+class SceneFallbackTestElement {
+  constructor(tagName) {
+    this.tagName = String(tagName).toUpperCase();
+    this.className = "";
+    this.children = [];
+    this.parentElement = null;
+    this.dataset = {};
+    this.style = { setProperty() {} };
+    this.attributes = new Map();
+    this.listeners = new Map();
+    this.hidden = false;
+    this.complete = false;
+    this.naturalWidth = 0;
+    this.src = "";
+  }
+  get classList() {
+    const node = this;
+    return {
+      contains(name) { return node.className.split(/\s+/).includes(name); },
+      add(name) { if (!this.contains(name)) node.className = `${node.className} ${name}`.trim(); },
+      remove(name) { node.className = node.className.split(/\s+/).filter((item) => item && item !== name).join(" "); },
+      toggle(name, force) {
+        const enabled = force === undefined ? !this.contains(name) : Boolean(force);
+        if (enabled) this.add(name); else this.remove(name);
+        return enabled;
+      }
+    };
+  }
+  append(...nodes) {
+    for (const node of nodes) { node.parentElement = this; this.children.push(node); }
+  }
+  replaceChildren(...nodes) {
+    this.children.forEach((node) => { node.parentElement = null; });
+    this.children = [];
+    this.append(...nodes);
+  }
+  setAttribute(name, value) {
+    this.attributes.set(name, String(value));
+    if (name === "class") this.className = String(value);
+  }
+  getAttribute(name) { return this.attributes.get(name) ?? null; }
+  addEventListener(type, listener, capture = false) {
+    const items = this.listeners.get(type) || [];
+    items.push({ listener, capture });
+    this.listeners.set(type, items);
+  }
+  removeEventListener(type, listener) {
+    this.listeners.set(type, (this.listeners.get(type) || []).filter((item) => item.listener !== listener));
+  }
+  contains(target) {
+    return target === this || this.children.some((child) => child.contains(target));
+  }
+  closest(selector) {
+    let current = this;
+    while (current) {
+      if (selector === ".layer-group" && current.classList.contains("layer-group")) return current;
+      current = current.parentElement;
+    }
+    return null;
+  }
+  querySelectorAll(selector) {
+    const found = [];
+    const visit = (node) => {
+      for (const child of node.children) {
+        if ((selector === "img" && child.tagName === "IMG")
+          || (selector === ".layer-group" && child.classList.contains("layer-group"))
+          || (selector === ".scene-image-fallback" && child.classList.contains("scene-image-fallback"))) found.push(child);
+        visit(child);
+      }
+    };
+    visit(this);
+    return found;
+  }
+  querySelector(selector) { return this.querySelectorAll(selector)[0] || null; }
+}
+
+test("scene asset errors cover the stage only for the base or a visible layer", () => {
+  const previousDocument = fixture.document;
+  fixture.document = { createElement: (tag) => new SceneFallbackTestElement(tag), addEventListener() {} };
+  const sceneComponent = {
+    createSelectionFrame() { return new SceneFallbackTestElement("div"); },
+    renderLayers(currentScene, base, layers) {
+      base.src = currentScene.baseAsset;
+      for (const id of ["module-01", "tempered-glass"]) {
+        const entity = currentScene.entities.find((item) => item.id === id);
+        const group = new SceneFallbackTestElement("div");
+        group.className = "layer-group";
+        group.dataset.entityId = entity.id;
+        const image = new SceneFallbackTestElement("img");
+        image.src = entity.asset;
+        group.append(image);
+        layers.append(group);
+      }
+    },
+    renderHotspots(currentScene, products, target) { target.className = "scene-hotspots"; },
+    updateHotspots() {},
+    renderSelectionFrame() {},
+    bindKeyboard() {},
+    applyFinishAppearance() {}
+  };
+  try {
+    const adapter = factory.createRepositoryAdapter({ ...dependencies, sceneComponent });
+    const stage = new SceneFallbackTestElement("div");
+    adapter.mount(stage);
+    const base = stage.children[0];
+    const layers = stage.children[1];
+    const hotspots = stage.children[2];
+    const frame = stage.children[3];
+    const fallback = stage.children[4];
+    const moduleGroup = layers.children.find((group) => group.dataset.entityId === "module-01");
+    const hiddenGroup = layers.children.find((group) => group.dataset.entityId === "tempered-glass");
+    hiddenGroup.classList.add("is-hidden");
+    const errorListener = stage.listeners.get("error")?.[0];
+    assert(errorListener, "error capture must be attached to the scene stage");
+    assert.equal(errorListener.capture, true, "image error does not bubble, so capture is required");
+    assert.equal(fallback.hidden, true);
+
+    errorListener.listener({ target: hiddenGroup.children[0] });
+    assert.equal(fallback.hidden, true, "an invisible layer must not invalidate the current scene");
+
+    errorListener.listener({ target: moduleGroup.children[0] });
+    assert.equal(fallback.hidden, false);
+    assert.equal(fallback.getAttribute("role"), "alert");
+    assert.match(fallback.children.map((item) => item.textContent).join(" "), /Imagem indisponível/);
+    assert.match(fallback.children.map((item) => item.textContent).join(" "), /composição completa da cozinha/);
+    assert.deepEqual([base, layers, hotspots, frame].map((node) => node.hidden), [true, true, true, true]);
+    assert.match(stage.getAttribute("aria-label"), /Cena da cozinha indisponível/);
+  } finally {
+    fixture.document = previousDocument;
+  }
+});
