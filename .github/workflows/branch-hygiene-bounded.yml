@@ -1,0 +1,107 @@
+name: Bounded branch hygiene (explicit SHA batch)
+
+on:
+  pull_request:
+    paths:
+      - 'ops/branch-hygiene-batch.json'
+      - 'tools/branch_hygiene_apply.py'
+      - 'tools/branch_hygiene_plan.py'
+      - 'tools/branch_hygiene_observe.py'
+      - 'tests/test_branch_hygiene_batch.py'
+      - '.github/workflows/branch-hygiene-bounded.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'ops/branch-hygiene-batch.json'
+
+concurrency:
+  group: m2d-bounded-branch-hygiene
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+  pull-requests: read
+
+jobs:
+  audit:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: read
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Bounded-batch safety regression tests
+        run: |
+          python -m unittest discover -s tests -p 'test_branch_hygiene_*.py'
+          python -m py_compile tools/branch_hygiene_plan.py tools/branch_hygiene_observe.py tools/branch_hygiene_apply.py
+      - name: Observe and build exact plan
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          python tools/branch_hygiene_observe.py --output /tmp/batch-observation.json
+          python tools/branch_hygiene_plan.py --observation /tmp/batch-observation.json --dispositions ops/branch-dispositions.json --output /tmp/batch-plan.json >/dev/null
+      - name: Audit only selected refs; do not mutate PR branches
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          python tools/branch_hygiene_apply.py \
+            --plan /tmp/batch-plan.json \
+            --dispositions ops/branch-dispositions.json \
+            --expected-plan "$(python -c 'import json; print(json.load(open("/tmp/batch-plan.json"))["planHash"])')" \
+            --batch ops/branch-hygiene-batch.json \
+            --receipt /tmp/batch-receipt.json \
+            --audit-only
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: m2d-branch-batch-audit-${{ github.run_id }}
+          path: /tmp/batch-receipt.json
+          if-no-files-found: warn
+
+  apply:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: read
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Bounded-batch safety regression tests
+        run: |
+          python -m unittest discover -s tests -p 'test_branch_hygiene_*.py'
+          python -m py_compile tools/branch_hygiene_plan.py tools/branch_hygiene_observe.py tools/branch_hygiene_apply.py
+      - name: Observe and build exact plan
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          python tools/branch_hygiene_observe.py --output /tmp/batch-observation.json
+          python tools/branch_hygiene_plan.py --observation /tmp/batch-observation.json --dispositions ops/branch-dispositions.json --output /tmp/batch-plan.json >/dev/null
+      - name: Apply only exact pinned refs, reobserve and read back after every deletion
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          MOBILIPRESENTER2D_BRANCH_HYGIENE_AUTHORIZED: '1'
+        run: |
+          python tools/branch_hygiene_apply.py \
+            --plan /tmp/batch-plan.json \
+            --dispositions ops/branch-dispositions.json \
+            --expected-plan "$(python -c 'import json; print(json.load(open("/tmp/batch-plan.json"))["planHash"])')" \
+            --batch ops/branch-hygiene-batch.json \
+            --receipt /tmp/batch-receipt.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: m2d-branch-batch-receipt-${{ github.run_id }}
+          path: /tmp/batch-receipt.json
+          if-no-files-found: warn

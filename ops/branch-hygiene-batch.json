@@ -1,0 +1,18 @@
+{
+  "schemaVersion": "BranchHygieneBatch 0.1",
+  "repository": "EAKerber/MobiliPresenter2D",
+  "wave": "M2D-R4-2026-10-26",
+  "purpose": "Retire exactly two already-merged ancestor branches; ARC-03C excluded until workflow trigger dependency is reconciled.",
+  "branches": [
+    {
+      "branch": "ci/ci-baseline-01-browser-suite-stabilization-20261024",
+      "sha": "b5e06ff030e268fd934835fde1a6b99244908efc",
+      "closedPr": 236
+    },
+    {
+      "branch": "maintenance/branch-hygiene-audit-only-20261026",
+      "sha": "0b2b8a382816b29429be6128fd34fe078bdb1d35",
+      "mergedPr": 247
+    }
+  ]
+}

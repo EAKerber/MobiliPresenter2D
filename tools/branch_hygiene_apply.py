@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
-"""Apply one exact branch-hygiene plan with CAS-style reobservation/readback."""
+"""Apply only an explicit exact-SHA batch using existing GitHub branch hygiene evidence.
+
+PR reviews are audit-only. No implicit 'delete all eligible' mode exists.
+"""
 from __future__ import annotations
 
 import argparse
@@ -9,7 +12,7 @@ import subprocess
 from pathlib import Path
 
 from branch_hygiene_observe import observe
-from branch_hygiene_plan import build_plan, load_json
+from branch_hygiene_plan import build_plan, load_json, select_bounded_batch
 
 AUTH_ENV = "MOBILIPRESENTER2D_BRANCH_HYGIENE_AUTHORIZED"
 
@@ -17,70 +20,115 @@ AUTH_ENV = "MOBILIPRESENTER2D_BRANCH_HYGIENE_AUTHORIZED"
 def remote_refs() -> dict[str, str]:
     proc = subprocess.run(
         ["git", "ls-remote", "--heads", "origin"],
-        text=True,
-        capture_output=True,
-        check=True,
+        text=True, capture_output=True, check=True,
     )
-    result: dict[str, str] = {}
+    result = {}
     for line in proc.stdout.splitlines():
         sha, ref = line.split("\t", 1)
         result[ref.removeprefix("refs/heads/")] = sha
     return result
 
 
-def apply(plan_path: Path, dispositions_path: Path, expected_plan: str) -> dict:
-    if os.environ.get(AUTH_ENV) != "1":
+def apply(plan_path: Path, dispositions_path: Path, expected_plan: str,
+          batch_path: Path, receipt_path: Path, audit_only: bool) -> dict:
+    if not audit_only and os.environ.get(AUTH_ENV) != "1":
         raise RuntimeError("DESTRUCTIVE_AUTHORIZATION_MISSING")
     token = os.environ.get("GITHUB_TOKEN")
     repository = os.environ.get("GITHUB_REPOSITORY")
     if not token or not repository:
         raise RuntimeError("GITHUB_CONTEXT_MISSING")
-
     supplied = load_json(plan_path)
     if supplied.get("planHash") != expected_plan:
         raise RuntimeError("EXPECTED_PLAN_MISMATCH")
 
     dispositions = load_json(dispositions_path)
-    fresh_observation = observe(repository, supplied["controlBranch"], token)
-    fresh_plan = build_plan(fresh_observation, dispositions)
-    if fresh_plan.get("planHash") != expected_plan:
+    fresh = observe(repository, supplied["controlBranch"], token)
+    fresh_plan = build_plan(fresh, dispositions)
+    if fresh_plan["planHash"] != expected_plan:
         raise RuntimeError("PLAN_DRIFT_REOBSERVATION_REQUIRED")
-
-    expected_inventory = {item["branch"]: item["sha"] for item in fresh_plan["entries"]}
-    if remote_refs() != expected_inventory:
+    selected = select_bounded_batch(fresh_plan, load_json(batch_path))
+    inventory = {entry["branch"]: entry["sha"] for entry in fresh_plan["entries"]}
+    if remote_refs() != inventory:
         raise RuntimeError("REF_INVENTORY_DRIFT_INITIAL")
 
-    deleted: list[dict[str, str]] = []
-    for entry in fresh_plan["entries"]:
-        if entry["action"] != "delete-candidate" or entry["autoDeleteEligible"] is not True:
-            continue
-        branch = entry["branch"]
-        sha = entry["sha"]
+    if not audit_only:
+        if (os.environ.get("GITHUB_EVENT_NAME") != "push"
+                or os.environ.get("GITHUB_REF") != "refs/heads/main"):
+            raise RuntimeError("APPLY_REQUIRES_MAIN_PUSH")
+        head = subprocess.run(["git", "rev-parse", "HEAD"], text=True,
+                              capture_output=True, check=True).stdout.strip()
+        if head != os.environ.get("GITHUB_SHA") or head != fresh_plan["controlSha"]:
+            raise RuntimeError("MAIN_HEAD_DRIFT")
 
-        current = remote_refs()
-        if current != expected_inventory:
-            raise RuntimeError(f"REF_INVENTORY_DRIFT_BEFORE:{branch}")
-        if current.get(branch) != sha:
-            raise RuntimeError(f"BRANCH_HEAD_DRIFT:{branch}")
-        if current.get(fresh_plan["controlBranch"]) != fresh_plan["controlSha"]:
-            raise RuntimeError(f"CONTROL_HEAD_DRIFT:{branch}")
-
-        subprocess.run(["git", "push", "origin", "--delete", branch], check=True)
-        expected_inventory.pop(branch)
-        if remote_refs() != expected_inventory:
-            raise RuntimeError(f"REF_READBACK_FAILED:{branch}")
-        deleted.append({"branch": branch, "sha": sha})
-
-    return {
-        "schemaVersion": "BranchHygieneApplyReceipt 0.1",
+    receipt = {
+        "schemaVersion": "BranchHygieneBatchReceipt 0.1",
         "repository": repository,
         "planHash": expected_plan,
         "controlSha": fresh_plan["controlSha"],
-        "deleted": deleted,
-        "deletedCount": len(deleted),
-        "remainingBranchCount": len(expected_inventory),
-        "readback": "PASS",
+        "batch": batch_path.name,
+        "approvedPins": [{"branch": x["branch"], "sha": x["sha"]} for x in selected],
+        "mode": "audit" if audit_only else "apply",
+        "deleted": [],
+        "readback": "NOT_APPLIED" if audit_only else "PENDING",
     }
+
+    def save() -> None:
+        receipt_path.write_text(
+            json.dumps(receipt, indent=2, ensure_ascii=False) + "\n", encoding="utf-8"
+        )
+
+    save()
+    if audit_only:
+        receipt["status"] = "PASS"
+        save()
+        return receipt
+
+    expected_inventory = inventory.copy()
+    for entry in selected:
+        branch, sha = entry["branch"], entry["sha"]
+        # Re-observe the full inventory, PRs and protection for every candidate.
+        # GitHub REST can briefly lag Git refs after the previous deletion.
+        # Retry only cross-provider synchronization, never a changed inventory.
+        import time
+        for attempt in range(5):
+            try:
+                observed = observe(repository, fresh_plan["controlBranch"], token)
+                break
+            except RuntimeError as error:
+                transient = str(error).lower().startswith((
+                    "branch inventory mismatch", "branch sha mismatch"
+                ))
+                if not transient or attempt == 4:
+                    raise
+                time.sleep(2)
+        live_inventory = {x["name"]: x["sha"] for x in observed["branches"]}
+        if live_inventory != expected_inventory:
+            raise RuntimeError("CONCURRENT_INVENTORY_DRIFT:" + branch)
+        if observed["controlSha"] != fresh_plan["controlSha"]:
+            raise RuntimeError("CONTROL_HEAD_DRIFT:" + branch)
+        if branch in observed["openPrHeads"] or branch in observed["openPrBases"]:
+            raise RuntimeError("NEW_OPEN_PR:" + branch)
+        live = next((x for x in observed["branches"] if x["name"] == branch), None)
+        if live is None or live.get("protected"):
+            raise RuntimeError("NEW_PROTECTION_OR_MISSING_REF:" + branch)
+        if remote_refs() != expected_inventory or expected_inventory.get(branch) != sha:
+            raise RuntimeError("REF_DRIFT_BEFORE_DELETE:" + branch)
+
+        subprocess.run([
+            "git", "push", f"--force-with-lease=refs/heads/{branch}:{sha}",
+            "origin", f":refs/heads/{branch}"
+        ], check=True)
+        expected_inventory.pop(branch)
+        if remote_refs() != expected_inventory:
+            raise RuntimeError("REF_READBACK_FAILED:" + branch)
+        receipt["deleted"].append({"branch": branch, "sha": sha})
+        save()
+
+    receipt["readback"] = "PASS"
+    receipt["status"] = "PASS"
+    receipt["remainingBranchCount"] = len(expected_inventory)
+    save()
+    return receipt
 
 
 def main() -> int:
@@ -88,11 +136,19 @@ def main() -> int:
     parser.add_argument("--plan", type=Path, required=True)
     parser.add_argument("--dispositions", type=Path, required=True)
     parser.add_argument("--expected-plan", required=True)
+    parser.add_argument("--batch", type=Path, required=True)
     parser.add_argument("--receipt", type=Path, required=True)
+    parser.add_argument("--audit-only", action="store_true")
     args = parser.parse_args()
-    receipt = apply(args.plan, args.dispositions, args.expected_plan)
-    args.receipt.write_text(json.dumps(receipt, indent=2, ensure_ascii=False, sort_keys=True) + "\n", encoding="utf-8")
-    print(json.dumps(receipt, ensure_ascii=False, sort_keys=True))
+    receipt = apply(args.plan, args.dispositions, args.expected_plan,
+                    args.batch, args.receipt, args.audit_only)
+    print(json.dumps({
+        "status": receipt["status"],
+        "mode": receipt["mode"],
+        "count": len(receipt["deleted"]),
+        "batch": receipt["batch"],
+        "readback": receipt["readback"],
+    }))
     return 0
 
 
