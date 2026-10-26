@@ -348,3 +348,113 @@ html[data-theme="dark"] .private-menu__logout { border-color:#4a4843; background
   .private-header .ui-theme-toggle { min-width: 40px; min-height: 40px; padding-inline: 6px; }
   .private-header .private-menu-toggle { flex-basis: 40px; width: 40px; height: 40px; }
 }
+
+
+/* NAV-005: keep the approved private-header hierarchy at compact widths.
+   The logo may shrink by at most 30%; the page identifier stays complete. */
+@media (max-width: 650px) {
+  .private-header {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .private-header__brand {
+    flex: 1 1 158.4px;
+    min-width: 0;
+  }
+  .private-header__brand img {
+    flex: 0 1 132px;
+    width: min(34vw, 132px);
+    min-width: 92.4px;
+    max-width: 132px;
+  }
+  .private-header__actions {
+    flex: 0 0 auto;
+    flex-wrap: nowrap;
+    gap: 8px;
+  }
+  .private-header .private-menu-toggle {
+    flex: 0 0 44px;
+    width: 44px;
+    height: 44px;
+  }
+  .private-header .ui-theme-toggle {
+    min-width: 44px;
+    min-height: 44px;
+    padding-inline: 8px;
+    gap: 6px;
+  }
+  .topbar.private-header .topbar__inner {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .topbar.private-header .private-header__brand {
+    flex: 1 1 158.4px;
+    min-width: 0;
+  }
+  .topbar.private-header .private-header__actions {
+    flex: 0 0 auto;
+    flex-wrap: nowrap;
+    gap: 8px;
+    margin-left: auto;
+  }
+  .access-page > header .private-header__brand img.access-brand-logo {
+    flex: 0 1 132px;
+    width: min(34vw, 132px);
+    min-width: 92.4px;
+    max-width: 132px;
+  }
+}
+
+/* The existing narrow logo size is the 105 px reference for the approved
+   30% shrink limit; the page identifier remains a separate, wrapping item. */
+@media (max-width: 380px) {
+  .private-header__brand img {
+    flex-basis: 105px;
+    width: 105px;
+    min-width: 73.5px;
+    max-width: 105px;
+  }
+  .access-page > header .private-header__brand img.access-brand-logo {
+    flex-basis: 105px;
+    width: 105px;
+    min-width: 73.5px;
+    max-width: 105px;
+  }
+}
+
+/* The theme state remains available to assistive technology through the
+   control's aria-label while the visible label yields space at 320 px. */
+@media (max-width: 320px) {
+  /* The public shell has a 320px floor; private access pages must be allowed
+     to reach the approved 291px one-row minimum. */
+  html:has(body.access-page) { min-width: 0; }
+  body.access-page { min-width: 0; }
+  .private-header .ui-theme-toggle {
+    width: 44px;
+    min-width: 44px;
+    max-width: 44px;
+    padding: 0;
+    gap: 0;
+  }
+  .private-header .ui-theme-toggle__label-long,
+  .private-header .ui-theme-toggle__label-short {
+    display: none;
+  }
+}
+
+/* Below the approved one-row minimum, keep all content and controls visible
+   by moving the action group to a second row. */
+@media (max-width: 290px) {
+  .private-header__brand,
+  .topbar.private-header .private-header__brand {
+    flex-basis: 100%;
+  }
+  .private-header__actions,
+  .topbar.private-header .private-header__actions {
+    margin-left: auto;
+  }
+}
+
+
+/* NAV-005: override page-level button minimums for the 44px private menu target. */
+.private-header .private-menu-toggle { min-height: 44px; }

@@ -39,10 +39,11 @@ const stub = [
 
 function adminPage() {
   const html = fs.readFileSync(path.join(appRoot, "admin.html"), "utf8");
-  const tag = '<script type="module" src="admin/admin.bundle.js?v=admin-auth-flow-v2"></script>';
-  assert(html.includes(tag));
-  return html.replace(tag,
-    '<script type="importmap">{"imports":{"@netlify/identity":"/__identity_stub__.js"}}</script><script type="module" src="admin/admin.js"></script>');
+  const tag = html.match(/<script type="module" src="admin\/admin\.bundle\.js(?:\?[^"]*)?"><\/script>/)?.[0];
+  assert.ok(tag, "native v5 harness expects the current admin bundle entry");
+  const importMap = '<script type="importmap">{"imports":{"@netlify/identity":"/__identity_stub__.js"}}</script>';
+  const withImportMap = html.replace("</head>", importMap + "</head>");
+  return withImportMap.replace(tag, '<script type="module" src="admin/admin.js"></script>');
 }
 const server = http.createServer(async (req, res) => {
   const target = new URL(req.url, "http://127.0.0.1");
@@ -53,6 +54,15 @@ const server = http.createServer(async (req, res) => {
   if (target.pathname === "/__identity_stub__.js") {
     res.writeHead(200, { "Content-Type": "text/javascript" });
     res.end(stub);
+    return;
+  }
+  if (target.pathname === "/api/admin-bootstrap" && req.method === "GET") {
+    json({ priceBook });
+    return;
+  }
+  if (target.pathname === "/core/private-navigation.bundle.js") {
+    res.writeHead(200, { "Content-Type": "text/javascript", "Cache-Control": "no-store" });
+    fs.createReadStream(path.join(appRoot, "core/private-navigation.js")).pipe(res);
     return;
   }
   if (target.pathname === "/api/configuration") {
@@ -97,7 +107,7 @@ const server = http.createServer(async (req, res) => {
   if (!filePath.startsWith(appRoot + path.sep) || !fs.existsSync(filePath) || !fs.statSync(filePath).isFile()) {
     res.writeHead(404);res.end("not found");return;
   }
-  const type = filePath.endsWith(".js") ? "text/javascript" : filePath.endsWith(".css") ? "text/css" : "application/octet-stream";
+  const type = filePath.endsWith(".js") || filePath.endsWith(".mjs") ? "text/javascript" : filePath.endsWith(".css") ? "text/css" : "application/octet-stream";
   res.writeHead(200, { "Content-Type": type, "Cache-Control": "no-store" });
   fs.createReadStream(filePath).pipe(res);
 });
