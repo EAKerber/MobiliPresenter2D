@@ -1,0 +1,142 @@
+{
+  "schema": "M2DApprovedContextualTextMapping/0.3",
+  "version": "0.3.0",
+  "theme": "light",
+  "roleRef": "VIS-002.approvedPalette.colors.textPrimary.light",
+  "value": "#292723",
+  "token": "--ds-vis002c-long-copy-light",
+  "sourceDecision": "decisions.json",
+  "sourceDecisionGitBlob": "63b60f8d87327c6fd1e80c8cdf4ff832c4089bfa",
+  "status": "scoped-candidate-user-authorized-2026-10-24; canonical-decision-file-unchanged",
+  "userDirection": "For long-form running text, prefer colors close to black or white according to context.",
+  "constraints": {
+    "globalUsage": false,
+    "requiresSolidVerifiedBackground": true,
+    "normalTextMinContrast": 4.5,
+    "publicPagesOnly": true,
+    "darkThemeMustStayUnchanged": true,
+    "onlyMeasuredContexts": true,
+    "priorV0_2ColorReplacedOnMappedContexts": true
+  },
+  "preservedMapping": {
+    "version": "0.2.0",
+    "roleRef": "VIS-002.approvedPalette.colors.textSecondary.light",
+    "value": "#705C4B",
+    "contexts": [
+      {
+        "route": "/",
+        "selector": ".hero-description"
+      },
+      {
+        "route": "/how-it-works/",
+        "selector": ".how-hero-note"
+      },
+      {
+        "route": "/about/",
+        "selector": ".about-scale p:not(.eyebrow)"
+      }
+    ]
+  },
+  "contexts": [
+    {
+      "route": "/",
+      "selector": ".hero-description",
+      "background": "#F0EDE8",
+      "foreground": "#292723",
+      "contrast": "12.77:1",
+      "authorization": "VIS-002.approvedRuntimePairs[0]; user direction 2026-10-24"
+    },
+    {
+      "route": "/how-it-works/",
+      "selector": ".how-hero-note",
+      "background": "#F0EDE8",
+      "foreground": "#292723",
+      "contrast": "12.77:1",
+      "authorization": "VIS-002.approvedRuntimePairs[0]; user direction 2026-10-24"
+    },
+    {
+      "route": "/about/",
+      "selector": ".about-scale p:not(.eyebrow)",
+      "background": "#F0EDE8",
+      "foreground": "#292723",
+      "contrast": "12.77:1",
+      "authorization": "VIS-002.approvedRuntimePairs[0]; user direction 2026-10-24"
+    },
+    {
+      "route": "/",
+      "selector": ".story-section > p:not(.eyebrow)",
+      "background": "#E8E3DC",
+      "foreground": "#292723",
+      "contrast": "11.68:1",
+      "authorization": "VIS-002C measured context; user direction 2026-10-24"
+    },
+    {
+      "route": "/",
+      "selector": ".feature-copy > p:not(.eyebrow):not(.feature-availability)",
+      "background": "#F0EDE8",
+      "foreground": "#292723",
+      "contrast": "12.77:1",
+      "authorization": "VIS-002C measured context; user direction 2026-10-24"
+    },
+    {
+      "route": "/about/",
+      "selector": ".about-closing > p:not(.eyebrow):not(.about-closing__signature)",
+      "background": "#F0EDE8",
+      "foreground": "#292723",
+      "contrast": "12.77:1",
+      "authorization": "VIS-002C measured context; user direction 2026-10-24"
+    },
+    {
+      "route": "/about/",
+      "selector": ".about-scale__stat > span",
+      "background": "#F0EDE8",
+      "foreground": "#292723",
+      "contrast": "12.77:1",
+      "authorization": "VIS-002C measured context; user direction 2026-10-24"
+    },
+    {
+      "route": "/how-it-works/",
+      "selector": ".finish-copy > p:not(.eyebrow):not(.finish-signature)",
+      "background": "#F0EDE8",
+      "foreground": "#292723",
+      "contrast": "12.77:1",
+      "authorization": "VIS-002C measured context; user direction 2026-10-24"
+    },
+    {
+      "route": "/how-it-works/",
+      "selector": ".commercial-clarity > p:not(.eyebrow)",
+      "background": "#F0EDE8",
+      "foreground": "#292723",
+      "contrast": "12.77:1",
+      "authorization": "VIS-002 measured in PR #241 preview; user direction 2026-10-24"
+    },
+    {
+      "route": "/how-it-works/",
+      "selector": ".launch-card .launch-copy > p",
+      "background": "#F0EDE8",
+      "foreground": "#292723",
+      "contrast": "12.77:1",
+      "authorization": "VIS-002 measured in PR #241 preview; user direction 2026-10-24"
+    }
+  ],
+  "supersededMapping": {
+    "version": "0.2.0",
+    "roleRef": "VIS-002.approvedPalette.colors.textSecondary.light",
+    "value": "#705C4B",
+    "contexts": [
+      {
+        "route": "/",
+        "selector": ".hero-description"
+      },
+      {
+        "route": "/how-it-works/",
+        "selector": ".how-hero-note"
+      },
+      {
+        "route": "/about/",
+        "selector": ".about-scale p:not(.eyebrow)"
+      }
+    ],
+    "reason": "The same three measured contexts now use the user's near-black long-copy preference in v0.3; v0.2 remains historical."
+  }
+}

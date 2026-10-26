@@ -1,0 +1,80 @@
+name: VIS-002C P-TOKEN v0.3 product pin
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - app/design-system/vis002c-long-copy-light-v0.3.0.css
+      - app/landing/landing.css
+      - app/about/about.css
+      - app/how-it-works/how-it-works.css
+      - app/core/image-fallback.js
+      - app/how-it-works/how-it-works.js
+      - architecture/pages/root.page.html
+      - architecture/pages/how-it-works.page.html
+      - app/index.html
+      - app/how-it-works/index.html
+      - app/public-theme.css
+      - tests/public-image-fallback.test.mjs
+      - tests/vis002c-v03-scoped-raster.mjs
+      - tests/public-image-fallback-browser.mjs
+      - design-system/pins/vis-002/context-v0.3.0/**
+      - scripts/verify-vis002c-product-pin-v03.mjs
+      - docs/architecture/vis002c-v03-product-integration-2026-10-24.md
+      - .github/workflows/vis002c-v03-product-pin.yml
+permissions:
+  contents: read
+jobs:
+  verify-pinned-consumers:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify copied source blobs, seven contexts, token consumers and theme scope
+        run: |
+          node --check scripts/verify-vis002c-product-pin-v03.mjs
+          node scripts/verify-vis002c-product-pin-v03.mjs
+          node --check app/core/image-fallback.js
+          node --check app/how-it-works/how-it-works.js
+          node tests/public-image-fallback.test.mjs
+
+  scoped-raster:
+    runs-on: ubuntu-latest
+    container:
+      image: mcr.microsoft.com/playwright:v1.56.0-noble
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Compile actual public pages and install scoped visual test dependencies
+        run: |
+          npm install --no-save --no-package-lock esbuild@0.28.2 playwright@1.56.0 pngjs@7.0.0
+          node --check tests/vis002c-v03-scoped-raster.mjs
+          node --check tests/public-image-fallback-browser.mjs
+          npm run build
+          npm run pages:check
+      - name: Serve built public pages locally, no Deploy Preview
+        run: |
+          python3 -m http.server 8123 --bind 127.0.0.1 --directory app > /tmp/vis002c-v03-http.log 2>&1 &
+          sleep 2
+          curl --fail --silent http://127.0.0.1:8123/about/ >/dev/null
+      - name: Assert v0.3 colors and full-page raster containment
+        env:
+          PUBLIC_AUDIT_ORIGIN: http://127.0.0.1:8123
+        run: node tests/vis002c-v03-scoped-raster.mjs
+      - name: Verify 19 informative fallbacks on both themes and browsers
+        env:
+          PUBLIC_AUDIT_ORIGIN: http://127.0.0.1:8123
+        run: node tests/public-image-fallback-browser.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: vis002c-v03-scoped-raster-${{ github.run_id }}
+          path: |
+            artifacts/vis002c-v03-scoped-raster/report.json
+            artifacts/public-image-fallback-browser/report.json
+          if-no-files-found: warn
