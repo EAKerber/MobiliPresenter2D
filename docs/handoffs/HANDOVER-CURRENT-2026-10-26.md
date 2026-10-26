@@ -2,6 +2,30 @@
 
 **Checkpoint:** 26/10/2026, America/Sao_Paulo. **Destinatário:** próximo chat/agente, sem acesso ao contexto desta conversa. **Missão:** retomar implementação e reconciliação incremental, sem reabrir decisões homologadas nem descartar conteúdo exclusivo.
 
+## Higiene R5 / DS-R2 — exclusões comprovadas em 26/10/2026 (18:54 UTC)
+
+**Autoridade:** solicitação explícita de prosseguir com higiene e poda, executada pelo mecanismo bounded existente de cada repositório. Este checkpoint substitui as contagens anteriores, mas preserva seus inventários históricos. NÃO interpretar manifests já consumidos como autorização para repetir o lote.
+
+| Repositório | Main após a poda | Branches antes de criar branches operacionais | Exclusões | Branches após readback | Gate e PR |
+| --- | --- | ---: | ---: | ---: | --- |
+| MobiliPresenter2D | `c53ddad6047b86de4fcfec9ba196e0e427e720d2` | 72 | 3 | 70 | [PR #257](https://github.com/EAKerber/MobiliPresenter2D/pull/257), [audit PASS #40381713888](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40381713888), [apply PASS #40381864794](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40381864794) |
+| MobiliPresenter2D_DesignSystem | `cd62ab334ee7cbf473af2c2d5855469f55bf105a` | 46 | 2 | 45 | [PR #57](https://github.com/EAKerber/MobiliPresenter2D_DesignSystem/pull/57), [audit PASS #40381719713](https://github.com/EAKerber/MobiliPresenter2D_DesignSystem/actions/runs/40381719713), [apply PASS #40381854689](https://github.com/EAKerber/MobiliPresenter2D_DesignSystem/actions/runs/40381854689) |
+
+**Readback independente:** todas as cinco refs abaixo estão ausentes nas listas GitHub pós-gate. Product apply log: `{"status":"PASS","mode":"apply","count":3,"readback":"PASS"}`; DS apply log: `{"status":"PASS","mode":"apply","count":2}` com readback implementado por ref. Os commits permanecem recuperáveis por SHA e a história das PRs mescladas foi preservada.
+
+| Excluída | SHA fixado | Evidência histórica |
+| --- | --- | --- |
+| produto `fix/viewer-hotspot-focus-approved-vis002-20261024` | `aa62c1e4265e084464094433efb74354ffd345e9` | PR #242 MERGED, ancestral da main |
+| produto `fix/issue224-carousel-preserve-page-20261024` | `8f2c3e5f5c0e2c3d17e01c1abc899675cd058ceb` | PR #243 MERGED, ancestral |
+| produto `feat/nav005-private-header-20261024` | `063796224c55924a8b3a909c9631c6b5f5590972` | PR #244 MERGED, ancestral |
+| DS `feat/vis002-role-split-v03-20261024` | `2f11ecf8948c779706a0ce0795e088d29633fb7e` | PR #52 MERGED, ancestral |
+| DS `maintenance/bounded-retirement-wave01-20261026` | `aef7a49a75de7bbcf57afe60fbc3ba9d72d1b5b2` | PR #56 MERGED, ancestral |
+
+**Saldo real:** 118 branches antes desta execução → 115 depois (produto 72→70, DS 46→45): cinco exclusões, duas branches operacionais novas `maintenance/branch-retirement-r5-20261026` e `maintenance/bounded-retirement-wave02-20261026`. Nenhuma PR aberta foi encerrada ou teve sua branch apagada; 12 PRs abertas no produto e 3 no DS. Nenhum código/runtime, tokens, decisões, login ou dados de produção foi alterado pelos manifests. `architecture/arc03c-static-page-build-20261022` continua HOLD por trigger explícito no workflow.
+
+**Regras para a próxima rodada:** os manifests `ops/branch-hygiene-batch.json` e `ops/branch-retirement-batch.json` contêm SHAs de refs já eliminadas. **Nunca reexecutá-los**; repinar 1–3 refs atualmente existentes após novas consultas de heads, PRs, proteção, ancestry, referências em workflows e PRs históricas. Testes de CI, receipts e confirmação de exclusão exigidos antes de declarar nova poda. Ref produto `ci/ci238-responsive-nav-evidence-20261026` entrou na main por *squash*: não é ancestral e não pode passar no executor ancestry-only por mera equivalência de nome; considerar separadamente após prova de conteúdo. Preservar #238, DS #51, CP-PUBLIC Draft/HOLD, #231 e demais divergentes até reconciliação material. Não criar metas arbitrárias de contagem.
+
+---
 ## Atualização de retomada — 26/10/2026, após PR #256 (18:41 UTC)
 
 **Estado observado após leitura integral e nova consulta aos dois repositórios:** produto `main@44bf5b5520b21bd402cc5ce8787c73adda3d2e97` (commit de integração funcional, *anterior ao commit documental desta atualização*); Design System `main@04358f892de98bdf0f2f3c12a432e296f6fc9c56`. As decisões D01=A, D02=B, D03=A, D04=A e as decisões visuais CLOSED seguem inalteradas.
