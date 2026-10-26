@@ -2,6 +2,22 @@
 
 **Checkpoint:** 26/10/2026, America/Sao_Paulo. **Destinatário:** próximo chat/agente, sem acesso ao contexto desta conversa. **Missão:** retomar implementação e reconciliação incremental, sem reabrir decisões homologadas nem descartar conteúdo exclusivo.
 
+## Atualização de retomada — 26/10/2026, após PR #256 (18:41 UTC)
+
+**Estado observado após leitura integral e nova consulta aos dois repositórios:** produto `main@44bf5b5520b21bd402cc5ce8787c73adda3d2e97` (commit de integração funcional, *anterior ao commit documental desta atualização*); Design System `main@04358f892de98bdf0f2f3c12a432e296f6fc9c56`. As decisões D01=A, D02=B, D03=A, D04=A e as decisões visuais CLOSED seguem inalteradas.
+
+**Release efetivo:** Netlify `mobilipresenter2d` Production READY, deploy `6adf9eb9129a21cc59af9131`, `commit_ref=44bf5b5520b21bd402cc5ce8787c73adda3d2e97`, publicado em 26/10/2026 18:41:20 UTC. O deploy do site isolado foi observado READY em `a285cc744956eded9e4fabe2f0067b44a0c2165a` antes da nova integração; seu estado posterior não foi usado como prova da PR #238. Esta atualização documental não é prova de publicação de seu próprio commit.
+
+**CI-238 / progresso material:** [PR produto #256](https://github.com/EAKerber/MobiliPresenter2D/pull/256) MERGED (squash `44bf5b5520b21bd402cc5ce8787c73adda3d2e97`), após [Flow layout browser PASS](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40379417504) e [Current asset gates PASS](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40379417460). O patch restringe-se a `tests/ci/nav-flow-responsive-crossbrowser.cjs` e `.github/workflows/flow-layout-browser.yml`. Reaproveita matriz responsiva histórica sem copiar a suposição obsoleta de quatro etapas: compara os controles à configuração V5 publicada e testa 390, 700, 701, 1050, 1051 e 1366 px × claro/escuro × Chromium/WebKit, com resize, geometria, clique e navegação por teclado nas fronteiras. **24/24 PASS, 0 FAIL** no log do job `121771286343`. A fixture atualmente exercitada tinha quatro etapas, mas a asserção lê as etapas dinamicamente; não alegar teste de quantidade alternativa sem fixture específica. A execução usa V5 validada em loopback, **não** sessão autenticada real nem Deploy Preview. Nenhum novo workflow isolado, segredo, banco ou endpoint foi criado.
+
+**PR #238 e issue #232 continuam abertas:** head `3ccce161235df925c5b708bf6feefbe6f4b10103`; em nova comparação antes da #256 estavam 102 ahead/113 behind, 20 arquivos divergentes em relação à `main@a285cc7`. Recalcular antes de novo patch. O gate de 26/10 [run #40257905366](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40257905366) passou pelo resgate e revogação de grant, mas falhou na etapa das cinco suítes protegidas, pois o preview não correspondia ao SHA; não foi uma passagem completa no head. A PR ainda inclui alterações a `app/app.js`, `app/styles.css`, `netlify.toml` (inclusive remoção de redirect `/api/access/session`), workflows e migração privilegiada de fixture no banco interno. **Não transportar nem mesclar integralmente** sem revisão explícita de contratos/autorização e de compatibilidade com os merges #241/#242/#244/#254. A regra D02=B não dispensa fail-closed, negação de privilégio, escopo e revogação.
+
+**DS #51:** ainda aberta e divergente de `main` (814 ahead/39 behind, 236 caminhos listados no compare), `head=28062602a4ddcd1bee090742fe2587fe3837175d`; manter D04 seletiva e os sete documentos já extraídos por #56. Nenhuma alteração no repositório Design System nesta retomada.
+
+**Próximo gate concreto:** separar os 20 caminhos de #238 em (a) testes portáveis e já cobertos, (b) testes específicos de preview/CI, (c) alterações de runtime/Netlify/DB que exigem revisão de ameaça. Checar destino dos redirects, fixture plugin e compatibilidade da navegação; preferir nova PR pequena baseada na `main`, com provas negativas e positivas reproduzíveis. Não solicitar preview por conveniência e não fechar #232 antes da revisão real.
+
+---
+
 > **ESTE HANDOVER SUBSTITUI O STATUS DE RETOMADA DOS RELATÓRIOS R5–R8 E DO HANDOVER DE 22/10, MAS NÃO SUAS EVIDÊNCIAS.** Alguns arquivos ainda afirmam que as PRs #241, #242 e #244 estão Draft; isso se tornou histórico. Sempre ler heads, PRs, jobs, Netlify e árvore da main *novamente* antes de agir. Não deduzir produção publicada a partir de merge.
 
 ## 0. Bootstrap do próximo chat — começar aqui
