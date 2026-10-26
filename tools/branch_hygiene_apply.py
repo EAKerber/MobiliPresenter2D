@@ -87,7 +87,20 @@ def apply(plan_path: Path, dispositions_path: Path, expected_plan: str,
     for entry in selected:
         branch, sha = entry["branch"], entry["sha"]
         # Re-observe the full inventory, PRs and protection for every candidate.
-        observed = observe(repository, fresh_plan["controlBranch"], token)
+        # GitHub REST can briefly lag Git refs after the previous deletion.
+        # Retry only cross-provider synchronization, never a changed inventory.
+        import time
+        for attempt in range(5):
+            try:
+                observed = observe(repository, fresh_plan["controlBranch"], token)
+                break
+            except RuntimeError as error:
+                transient = str(error).lower().startswith((
+                    "branch inventory mismatch", "branch sha mismatch"
+                ))
+                if not transient or attempt == 4:
+                    raise
+                time.sleep(2)
         live_inventory = {x["name"]: x["sha"] for x in observed["branches"]}
         if live_inventory != expected_inventory:
             raise RuntimeError("CONCURRENT_INVENTORY_DRIFT:" + branch)
