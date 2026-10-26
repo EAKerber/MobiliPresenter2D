@@ -18,13 +18,13 @@ Automatic evidence is intentionally narrow: a non-control branch whose current h
 
 Before apply, the executor rematerializes the whole observation and plan. Any changed branch inventory, control head, PR relationship, branch SHA, policy, or plan hash blocks mutation. After every delete, the complete remote branch inventory must equal the expected inventory with only that exact ref removed.
 
-## Trigger policy
+## Trigger policy — revisão 2026-10-26
 
-Pull-request runs are dry-run only so a change to the hygiene logic can expose its candidate set before integration. Scheduled and manual runs are audit-only.
+Observação e planejamento automáticos permanecem permitidos em pull requests, push para `main`, agendamento e execução manual. **Todos esses eventos são somente leitura**: publicam observação, plano com hash e artefatos de auditoria; nenhum deles executa exclusão de refs.
 
-Every push to `main` performs a fresh observation/plan and may apply that exact plan. This is intentionally not path-filtered: a normal product PR merge must be able to clean its just-integrated branch. The same CAS/readback rules apply to every main transition; a no-candidate plan is a valid no-op.
+O executor `tools/branch_hygiene_apply.py` permanece no repositório como ferramenta de execução restrita, mas não é chamado pelo workflow. A reintrodução de mutação requer proposta separada, autorização explícita por lote de branches e SHAs, reobservação CAS/readback e revisão da capacidade real do executor. Não inferir autorização a partir de `delete-candidate` no plano: esse campo registra elegibilidade técnica, não aprovação de descarte.
 
-Branches that must survive a main transition can be listed explicitly in `ops/branch-dispositions.json` under `preserveBranches`.
+A diretriz operacional é reduzir dívida em ondas pequenas, sem teto numérico para branches. A primeira onda examina ancestralidade e referências; só uma decisão auditada por branch permite remover uma ref. Essa regra tem precedência sobre o comportamento de limpeza automática anteriormente documentado aqui.
 
 ## R0/R1 bootstrap result
 
