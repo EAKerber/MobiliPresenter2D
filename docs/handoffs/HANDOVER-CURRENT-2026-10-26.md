@@ -2,6 +2,50 @@
 
 **Checkpoint:** 26/10/2026, America/Sao_Paulo. **Destinatário:** próximo chat/agente, sem acesso ao contexto desta conversa. **Missão:** retomar implementação e reconciliação incremental, sem reabrir decisões homologadas nem descartar conteúdo exclusivo.
 
+## Higiene R7–R9 — prova de squash e poda ampliada (26/10/2026, 20:20 UTC)
+
+**Status: COMPLETE/PASS, confirmado por recibos e readback de GitHub.** Autoridade: pedido do usuário para continuar a higiene mais agressivamente, sem perder segurança de conteúdo. Esta seção prevalece sobre contagens anteriores deste handover. `main` do produto após R9, antes desta atualização documental: `478ad445c861670a767d22034c68e88f069fb2df`; DS `main@94a425576700580f3af99900a90cb6b14a031394`.
+
+### Aumento seguro da capacidade do executor
+
+[PR #259](https://github.com/EAKerber/MobiliPresenter2D/pull/259) MERGED, commit `afcdbd25b7c279a46c58a788e4b917f9d7feedab`. Introduziu prova *opt-in* `squashMerge: {pullRequest, mergeCommit}` para branches com conteúdo já incorporado por squash. Não altera o planejamento automático: o branch divergente permanece `keep`, só o lote exato de 1–3 refs pode requerer prova extra.
+
+**Gate de exclusão de uma squash-ref:** manifesto com SHA exato; metadata live do PR fechado/merged com `head.ref`, `head.sha`, origem e destino neste repositório; merge SHA igual ao pin; commit de merge com **um pai** e presente na `main`; pai do merge ancestral do head original; `Git tree SHA` **integral do head = merge = observação**; ausência de referência da branch em workflows ativos; checagem de PRs abertas, proteção, inventário e head da main; `--force-with-lease` e readback; prova repetida imediatamente antes de cada delete. Evidência da verificação registrada no receipt. O caminho anterior por ancestralidade direta continua inalterado. [27 testes de segurança PASS](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40393536849); [asset gates PASS](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40393536943). PR de ferramenta não excluiu refs. A falha transitória da primeira run #40393263354 foi identificada: manifesto R6 consumido; workflow corrigido para auditar refs somente quando uma PR altera o manifesto, e o novo gate passou. Não esconder ou interpretar essa falha inicial como teste de ferramenta verde.
+
+### Lotes e recibos
+
+| Lote | PR | Auditoria PASS | Apply PASS | Exclusões |
+| --- | --- | --- | --- | ---: |
+| R7 | [#260](https://github.com/EAKerber/MobiliPresenter2D/pull/260) | [40393943074](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40393943074) | [40394086158](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40394086158) | 3 |
+| R8 | [#261](https://github.com/EAKerber/MobiliPresenter2D/pull/261) | [40394327714](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40394327714) | [40394411006](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40394411006) | 3 |
+| R9 | [#262](https://github.com/EAKerber/MobiliPresenter2D/pull/262) | [40394586086](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40394586086) | [40394705163](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40394705163) | 3 |
+
+Todos os três logs de apply terminaram em `status=PASS`, `count=3`, `readback=PASS`. Exceções, exclusões parciais ou drift não foram observados nos recibos dessas runs. A leitura independente de `branches?per_page=100` confirmou a ausência das nove refs abaixo.
+
+| Ref excluída | SHA exato do head | PR integrada ou prova |
+| --- | --- | --- |
+| `ci/ci238-responsive-nav-evidence-20261026` | `49bff492492e77f7536b9efa813abc1be03ab3fc` | squash #256 → `44bf5b5520b21bd402cc5ce8787c73adda3d2e97`; árvore `00b6c3f4426d589b00bb6a97ce1f374e869cfdbf` |
+| `fix/buyer-configuration-function-route-20261013` | `10622a4cb370ce38d1f38b83cb3bcfecf426b01a` | squash #199 → `053060ab56a94ecaee6f9654817b9cec97e5c6f8`; árvore `ee1f242e1386356703343d218cbdd04ddce40969` |
+| `fix/config-counter-after-publication-20261019` | `83946246cd541919b67144cf5aa04b4494697c6c` | squash #220 → `db4cbd3496300450c40b82f820d4a4d42f418d0b`; árvore `b4c472b7c8acf57c6a1717a75928455d8d32b015` |
+| `fix/approved-visual-pairs-menu-layer-20261019` | `52a0f830a80de7a7711e33bc0f5b58c390d702f1` | squash #219 → `690fd87f340505b06cc8f6697ee51f1fbee6e79a`; árvore `331ed298cbf4508c10012c5adaa0ffed7c274774` |
+| `fix/admin-auth-diagnostics` | `0a7a247979a2cd0dd0e058f032d8262f2636b795` | squash #223 → `1878ae1057ce7c6190e0c8cb08a1f3baadd49463`; árvore `fc6112a388684039c43dfc968a27dc6584438579` |
+| `maintenance/branch-retirement-r7-squash-20261026` | `558c3457dda70c1512e20ad0ffe6f37d360ff995` | PR #260 merged, ancestral direta |
+| `maintenance/branch-retirement-r6-20261026` | `3d54b9d5c9e7f30556606487e923ec20503a46eb` | PR #258 merged, ancestral direta |
+| `maintenance/branch-hygiene-squash-proof-20261026` | `7009ac55901fab001447bff9f42ff9bd261f61f0` | PR #259 merged, ancestral direta |
+| `maintenance/branch-retirement-r8-squash-20261026` | `1f724fb486bf8d538677e5c2508903fe065e4d72` | PR #261 merged, ancestral direta |
+
+**Controle negativo relevante:** branch `fix/mobile-menu-scene-stacking-20261019` (PR #221) apresentou árvores **diferentes** entre head e merge; não foi incluída, permanece para reconciliação. Não concluir equivalência por PR “merged” sem prova de árvore.
+
+### Inventário final e continuidade
+
+**R5–R9/DS-R2–R3 acumulados:** 118 refs iniciais → **108 refs atuais** (produto **63**, Design System **45**). Foram aposentadas **18 branches ao todo** por gates verificáveis; oito branches operacionais surgiram durante as rodadas, portanto a redução **líquida** é de 10. Após a leitura final, somente uma branch operacional no produto (`maintenance/branch-retirement-r9-operational-20261026`) e uma no DS (`maintenance/bounded-retirement-wave03-20261026`). Evitar criar uma sequência infinita de PRs só para apagar a branch operacional criada pela PR anterior.
+
+**Intactas:** 12 PRs abertas de produto (incluindo #238, #231 e CP-PUBLIC/HOLD), três PRs abertas DS (incluindo #51). HOMOLOGAÇÕES D01=A, D02=B, D03=A, D04=A e VISUAL_CLOSED inalteradas. Os manifests R7, R8, R9 em `ops/branch-hygiene-batch.json` foram **consumidos**: nunca disparar apply novamente com estes SHA pins.
+
+**Próxima etapa com boa relação risco/benefício:** classificar outras PRs *merged* com árvore inteira igual antes de executar nova poda, sempre com identificadores de head atuais e sem workflow refs. Para branches realmente divergentes (#221, variantes antigas de CI #238, CP-PUBLIC e DS #51), produzir ledger `arquivo/contrato → destino/teste/proveniência`; não afrouxar a equivalência de árvore para obter um número menor. Não abrir previews redundantes. O deploy de produção posterior ao commit documental exige verificação separada; `MERGED ≠ DEPLOYED`.
+
+---
+
 ## Higiene R6 / DS-R3 — 26/10/2026 (19:59 UTC) — poda acelerada, fail-closed
 
 **Continuação material da rodada R5/DS-R2 logo abaixo.** O usuário solicitou poda mais agressiva. Foi intensificada a classificação por ancestralidade, mantendo o gate crítico: somente refs exatas com commit integralmente ancestral da main, sem PR aberta, sem proteção e sem gatilho explícito de workflow ativo. Não usar nome/idade de branch ou declaração de squash como prova de absorção.
