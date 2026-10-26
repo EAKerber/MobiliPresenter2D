@@ -1,5 +1,5 @@
 // CI-only fixture seed. The conditional Deploy Preview plugin block and the
-// runtime identity checks both restrict this to the two enumerated isolated previews #238 and #245.
+// runtime identity checks restrict this to the consolidated isolated preview #238.
 export async function onPostBuild({constants}) {
   const {join} = await import("node:path");
   const {mkdir, writeFile} = await import("node:fs/promises");

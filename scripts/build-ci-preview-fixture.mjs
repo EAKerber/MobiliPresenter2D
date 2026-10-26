@@ -16,8 +16,7 @@ import pricingContract from "../app/core/pricing-contract.js";
 import presentationPolicy from "../app/data/presentation-policy-defaults.js";
 
 export const PREVIEW_TARGETS = Object.freeze({
-  "ci/ci-baseline-01-isolated-auth-extraction-20261024": "238",
-  "fix/config-stage-nav-grid-track-20261025": "245"
+  "ci/ci-baseline-01-isolated-auth-extraction-20261024": "238"
 });
 export const TARGET_SITE_ID = "d92799b1-9afc-4b52-9eee-22824bba7925";
 export const STORE = "configurator-settings";

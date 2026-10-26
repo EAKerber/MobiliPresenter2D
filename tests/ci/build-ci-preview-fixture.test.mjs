@@ -33,7 +33,7 @@ test("only enumerated preview, source branch and isolated site pairs can seed", 
   for (const env of [
     {...base, CONTEXT: "production"}, {...base, CONTEXT: "branch-deploy"},
     {...base, REVIEW_ID: "237"}, {...base, HEAD: "main"},
-    {...base, HEAD: "fix/config-stage-nav-grid-track-20261025", REVIEW_ID: "238"},
+    {...base, HEAD: "fix/config-stage-nav-grid-track-20261025", REVIEW_ID: "245"},
     {...base, SITE_ID: "other-site"}, {...base, CONTEXT: undefined}, {}
   ]) {
     assert.equal(shouldSeed(env), false);
