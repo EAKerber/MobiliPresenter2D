@@ -1,23 +1,32 @@
 {
   "schemaVersion": "BranchHygieneBatch 0.1",
   "repository": "EAKerber/MobiliPresenter2D",
-  "wave": "M2D-R9-2026-10-26",
-  "purpose": "Retire 3 exact ancestry-proven branches for already merged #258,#259,#261; leave one operational branch current.",
+  "wave": "M2D-R10-2026-10-26",
+  "purpose": "3 previously merged full-tree-identical squash heads with exact PR identity and no active workflow references (#191,#204,#197).",
   "branches": [
     {
-      "branch": "maintenance/branch-retirement-r6-20261026",
-      "sha": "3d54b9d5c9e7f30556606487e923ec20503a46eb",
-      "mergedPr": 258
+      "branch": "docs/branch-hygiene-dispositions-20261008",
+      "sha": "a0b3acd221825a4aef07ca65510b831cf07272ab",
+      "squashMerge": {
+        "pullRequest": 191,
+        "mergeCommit": "0a431e94c627011b1f124b89efd49f06ddbacb26"
+      }
     },
     {
-      "branch": "maintenance/branch-hygiene-squash-proof-20261026",
-      "sha": "7009ac55901fab001447bff9f42ff9bd261f61f0",
-      "mergedPr": 259
+      "branch": "work/ds01-homologated-identity-theme-20261014",
+      "sha": "3cf082f9f1d233c63988a93f9485007ab9520e04",
+      "squashMerge": {
+        "pullRequest": 204,
+        "mergeCommit": "67d31976c605c76c7ef10876d03fdeb17369ab78"
+      }
     },
     {
-      "branch": "maintenance/branch-retirement-r8-squash-20261026",
-      "sha": "1f724fb486bf8d538677e5c2508903fe065e4d72",
-      "mergedPr": 261
+      "branch": "work/static-publish-cleanup",
+      "sha": "b4f3a2b0c974807d1773eaefff4eea2d7053ead5",
+      "squashMerge": {
+        "pullRequest": 197,
+        "mergeCommit": "717dec38f6ceb162bc1aa03c347cd64376b2a7e7"
+      }
     }
   ]
 }
