@@ -120,6 +120,44 @@ def build_plan(observation: dict[str, Any], dispositions: dict[str, Any]) -> dic
     return payload
 
 
+def select_bounded_batch(plan: dict[str, Any], batch: dict[str, Any]) -> list[dict[str, Any]]:
+    """Fail-closed selection; the broader planner never authorizes an entire batch."""
+    import re
+
+    if batch.get("schemaVersion") != "BranchHygieneBatch 0.1":
+        raise ValueError("BATCH_SCHEMA_MISMATCH")
+    if batch.get("repository") != plan.get("repository") or plan.get("controlBranch") != "main":
+        raise ValueError("BATCH_REPOSITORY_MISMATCH")
+    entries = batch.get("branches")
+    if not isinstance(entries, list) or not 1 <= len(entries) <= 3:
+        raise ValueError("BATCH_SIZE_NOT_1_TO_3")
+
+    by_name = {item["branch"]: item for item in plan["entries"]}
+    if len(by_name) != len(plan["entries"]):
+        raise ValueError("PLAN_DUPLICATE_BRANCH")
+    result = []
+    seen = set()
+    for ref in entries:
+        if not isinstance(ref, dict):
+            raise ValueError("BATCH_ENTRY_NOT_OBJECT")
+        name, sha = ref.get("branch"), ref.get("sha")
+        if (not isinstance(name, str) or name in seen or name == "main"
+                or not re.fullmatch(r"[a-zA-Z0-9._/-]+", name)
+                or ".." in name or "//" in name or name.startswith("-")
+                or not isinstance(sha, str) or not re.fullmatch("[0-9a-f]{40}", sha)):
+            raise ValueError("INVALID_OR_DUPLICATE_PINNED_REF")
+        seen.add(name)
+        entry = by_name.get(name)
+        if (not entry or entry["sha"] != sha
+                or entry.get("action") != "delete-candidate"
+                or entry.get("autoDeleteEligible") is not True
+                or entry.get("protections")
+                or not any(e.get("kind") == "ancestor-of-control" for e in entry.get("evidence", []))):
+            raise ValueError("UNSAFE_OR_MOVED_BRANCH:" + name)
+        result.append(entry)
+    return result
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--observation", type=Path, required=True)
