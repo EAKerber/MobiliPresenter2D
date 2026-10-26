@@ -1,23 +1,32 @@
 {
   "schemaVersion": "BranchHygieneBatch 0.1",
   "repository": "EAKerber/MobiliPresenter2D",
-  "wave": "M2D-R6-2026-10-26",
-  "purpose": "Three ancestry-proven heads already merged (#241,#255,#257); no active workflow trigger or open PR; preserve SHA/PR lineage.",
+  "wave": "M2D-R7-2026-10-26",
+  "purpose": "Opt-in verified squash full-tree equivalence for merged PRs #256/#199/#220; no active workflow triggers; exact SHA and commit tree lease.",
   "branches": [
     {
-      "branch": "a11y/vis002-measured-copy-contrast-20261024",
-      "sha": "5aebebc33bc90069a85822859692145fabb31c11",
-      "mergedPr": 241
+      "branch": "ci/ci238-responsive-nav-evidence-20261026",
+      "sha": "49bff492492e77f7536b9efa813abc1be03ab3fc",
+      "squashMerge": {
+        "pullRequest": 256,
+        "mergeCommit": "44bf5b5520b21bd402cc5ce8787c73adda3d2e97"
+      }
     },
     {
-      "branch": "maintenance/branch-retirement-r4-20261026",
-      "sha": "4b4cc4cd455cf246c6b17a04fabc50f0fa27192b",
-      "mergedPr": 255
+      "branch": "fix/buyer-configuration-function-route-20261013",
+      "sha": "10622a4cb370ce38d1f38b83cb3bcfecf426b01a",
+      "squashMerge": {
+        "pullRequest": 199,
+        "mergeCommit": "053060ab56a94ecaee6f9654817b9cec97e5c6f8"
+      }
     },
     {
-      "branch": "maintenance/branch-retirement-r5-20261026",
-      "sha": "f69002f2d9af59a85dc6ca634a61524d375a36af",
-      "mergedPr": 257
+      "branch": "fix/config-counter-after-publication-20261019",
+      "sha": "83946246cd541919b67144cf5aa04b4494697c6c",
+      "squashMerge": {
+        "pullRequest": 220,
+        "mergeCommit": "db4cbd3496300450c40b82f820d4a4d42f418d0b"
+      }
     }
   ]
 }
