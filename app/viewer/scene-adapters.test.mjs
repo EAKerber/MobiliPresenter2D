@@ -287,9 +287,9 @@ class SceneFallbackTestElement {
   get classList() {
     const node = this;
     return {
-      contains(name) { return node.className.split(/\\s+/).includes(name); },
+      contains(name) { return node.className.split(/\s+/).includes(name); },
       add(name) { if (!this.contains(name)) node.className = `${node.className} ${name}`.trim(); },
-      remove(name) { node.className = node.className.split(/\\s+/).filter((item) => item && item !== name).join(" "); },
+      remove(name) { node.className = node.className.split(/\s+/).filter((item) => item && item !== name).join(" "); },
       toggle(name, force) {
         const enabled = force === undefined ? !this.contains(name) : Boolean(force);
         if (enabled) this.add(name); else this.remove(name);
