@@ -21,6 +21,7 @@ const suites = [
 const origin = process.env.CI_STAGING_PREVIEW_ORIGIN;
 const expectedBranch = process.env.CI_STAGING_PREVIEW_BRANCH;
 const expectedReviewId = process.env.CI_STAGING_PREVIEW_REVIEW_ID;
+const expectedCommit = process.env.CI_STAGING_EXPECTED_COMMIT;
 const expectedHost = new URL(origin).host;
 const configUrl = new URL("/config/", origin).toString();
 const reportPath = "artifacts/ci-baseline-01/authenticated-v5-suites.json";
@@ -63,6 +64,10 @@ try {
   assert.equal(marker.reviewId, Number(expectedReviewId));
   assert.equal(marker.verified, true);
   assert.equal(marker.sourceBranch, expectedBranch);
+  assert.match(expectedCommit || "", /^[a-f0-9]{40}$/,
+    "BLOCKED_AUTH_FIXTURE: expected GitHub commit is missing or invalid");
+  assert.equal(marker.sourceCommit, expectedCommit,
+    "BLOCKED_AUTH_FIXTURE: Deploy Preview was built from a different commit");
   assert.equal(marker.v5Schema, "ConfiguratorAdministration2D 5.0");
   assert.match(marker.sha256 || "", /^[a-f0-9]{64}$/);
   report.fixtureVerified = true;

@@ -23,7 +23,8 @@ export async function onPostBuild({constants}) {
   await writeFile(join(dir, "published-v5-status.json"), JSON.stringify({
     schema: "M2DPreviewPublishedFixtureStatus/1",
     reviewId: result.reviewID, verified: true, deployId: env.DEPLOY_ID,
-    sourceBranch: result.sourceBranch, store: fixture.STORE, key: fixture.KEY,
+    sourceBranch: result.sourceBranch, sourceCommit: result.sourceCommit,
+    store: fixture.STORE, key: fixture.KEY,
     v5Schema: result.schema, sha256: result.sha256
   }, null, 2) + "\n", {mode: 0o644});
   console.log("CI_PREVIEW_PUBLISHED_FIXTURE_VERIFIED " + JSON.stringify({

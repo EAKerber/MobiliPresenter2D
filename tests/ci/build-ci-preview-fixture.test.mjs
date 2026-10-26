@@ -8,7 +8,7 @@ import {
 
 const base = {
   NETLIFY: "true", CONTEXT: "deploy-preview", BRANCH: "main", HEAD: "ci/ci-baseline-01-isolated-auth-extraction-20261024",
-  REVIEW_ID: PREVIEW_TARGETS["ci/ci-baseline-01-isolated-auth-extraction-20261024"], DEPLOY_ID: "aabbccdd11223344", SITE_ID: TARGET_SITE_ID
+  REVIEW_ID: PREVIEW_TARGETS["ci/ci-baseline-01-isolated-auth-extraction-20261024"], DEPLOY_ID: "aabbccdd11223344", SITE_ID: TARGET_SITE_ID, COMMIT_REF: "0123456789abcdef0123456789abcdef01234567"
 };
 const fakeStore = (initial = null) => {
   let value = initial, writes = 0;
@@ -49,13 +49,15 @@ test("only enumerated preview, source branch and isolated site pairs can seed", 
     assert.equal(result.status, "CI_DEPLOY_STORE_V5_VERIFIED");
     assert.equal(result.reviewID, Number(reviewId));
     assert.equal(result.sourceBranch, sourceBranch);
+    assert.equal(result.sourceCommit, base.COMMIT_REF);
   }
 });
 
 test("matching preview fails closed when required deploy identity is ambiguous", () => {
   for (const env of [
     {...base, NETLIFY: undefined}, {...base, DEPLOY_ID: undefined},
-    {...base, SITE_ID: undefined}
+    {...base, SITE_ID: undefined}, {...base, COMMIT_REF: undefined},
+    {...base, COMMIT_REF: "invalid"}
   ]) assert.throws(() => shouldSeed(env));
 });
 

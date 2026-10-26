@@ -39,6 +39,7 @@ jobs:
       CI_STAGING_PREVIEW_ORIGIN: https://deploy-preview-238--m2d-auth-ci-isolated.netlify.app
       CI_STAGING_PREVIEW_REVIEW_ID: '238'
       CI_STAGING_PREVIEW_BRANCH: ${{ github.ref_name }}
+      CI_STAGING_EXPECTED_COMMIT: ${{ github.sha }}
       CI_STAGING_SUPABASE_REF: ${{ vars.CI_STAGING_SUPABASE_REF }}
       CI_STAGING_DATABASE_URL: ${{ secrets.CI_STAGING_DATABASE_URL }}
     steps:

@@ -40,6 +40,7 @@ export function shouldSeed(env) {
   assert.equal(env.NETLIFY, "true", "CI_PREVIEW_NETLIFY_CONTEXT_REQUIRED");
   assert.match(String(env.REVIEW_ID), /^[1-9]\d{0,5}$/, "CI_PREVIEW_REVIEW_ID_REQUIRED");
   assert.match(String(env.DEPLOY_ID || ""), /^[a-zA-Z0-9_-]{8,}$/, "CI_PREVIEW_DEPLOY_ID_REQUIRED");
+  assert.match(String(env.COMMIT_REF || ""), /^[a-f0-9]{40}$/, "CI_PREVIEW_SOURCE_COMMIT_REQUIRED");
   return true;
 }
 
@@ -90,6 +91,6 @@ export async function writeDeployFixture({env, store}) {
   return {
     status: "CI_DEPLOY_STORE_V5_VERIFIED", store: STORE, key: KEY, sha256: data.sha256,
     schema: data.schema, revision: data.revision, reviewID: target.reviewId,
-    sourceBranch: target.sourceBranch, provenance: data.provenance
+    sourceBranch: target.sourceBranch, sourceCommit: env.COMMIT_REF, provenance: data.provenance
   };
 }
