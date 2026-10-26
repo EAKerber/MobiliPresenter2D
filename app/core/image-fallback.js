@@ -38,12 +38,20 @@
         fallback.setAttribute("aria-label", label + ": " + alt);
         image.hidden = true;
         fallback.hidden = false;
+        // Some compact cards need an internal scroll area for the full alt text.
+        // Make only those fallbacks keyboard reachable; avoid 19 extra tab stops.
+        if (fallback.scrollHeight > fallback.clientHeight + 2) {
+          fallback.setAttribute("tabindex", "0");
+        } else {
+          fallback.removeAttribute("tabindex");
+        }
       };
       const restoreImage = () => {
         image.hidden = false;
         fallback.hidden = true;
         fallback.removeAttribute("role");
         fallback.removeAttribute("aria-label");
+        fallback.removeAttribute("tabindex");
       };
       image.addEventListener("error", showFallback);
       image.addEventListener("load", restoreImage);
