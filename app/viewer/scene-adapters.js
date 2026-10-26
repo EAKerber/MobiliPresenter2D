@@ -32,6 +32,8 @@
     const stateListeners = new Set();
     let stage = null;
     let keyboardBound = false;
+    let sceneImageErrorHandler = null;
+    const failedSceneAssetUrls = new Set();
     const renderScene = options.scene || scene;
     const sceneProducts = options.products || modules;
     const core = options.core || global.CasaModulesCore;
@@ -67,10 +69,32 @@
       stage.tabIndex = 0;
       stage.dataset.keyboardGlobal = "true";
       stage.setAttribute("aria-label", "Cena da cozinha. Use as setas para percorrer os módulos ou as teclas de 1 a 7 para selecionar pelo número.");
+      delete stage.dataset.sceneImageUnavailable;
       const base = document.createElement("img"); base.className = "scene-layer"; base.alt = "Composição da cozinha Casa em Módulos"; base.draggable = false;
       const layers = document.createElement("div");
       const hotspots = document.createElement("div"); hotspots.className = "scene-hotspots"; hotspots.setAttribute("aria-label", "Módulos selecionáveis na cena");
       const frame = sceneComponent.createSelectionFrame();
+      const fallback = document.createElement("div");
+      fallback.className = "scene-image-fallback";
+      fallback.hidden = true;
+      fallback.setAttribute("role", "alert");
+      const fallbackIcon = document.createElement("span");
+      fallbackIcon.className = "scene-image-fallback__icon";
+      fallbackIcon.setAttribute("aria-hidden", "true");
+      fallbackIcon.textContent = "▧";
+      const fallbackStatus = document.createElement("span");
+      fallbackStatus.className = "scene-image-fallback__status";
+      fallbackStatus.textContent = "Imagem indisponível";
+      const fallbackDescription = document.createElement("span");
+      fallbackDescription.className = "scene-image-fallback__description";
+      fallbackDescription.textContent = "A composição completa da cozinha não pôde ser exibida.";
+      fallback.append(fallbackIcon, fallbackStatus, fallbackDescription);
+      function coverScene() {
+        [base, layers, hotspots, frame].forEach((node) => { node.hidden = true; });
+        fallback.hidden = false;
+        stage.dataset.sceneImageUnavailable = "true";
+        stage.setAttribute("aria-label", "Cena da cozinha indisponível. A composição completa não pôde ser exibida.");
+      }
       sceneComponent.renderLayers(renderScene, base, layers, options.inlineMasks || null, options.assetPrefix || "");
       const selectedFinishId = core.globalFinishId(sceneState);
       const baseFinish = finishes.find((finish) => finish.id === selectedFinishId);
@@ -88,7 +112,37 @@
       sceneComponent.updateHotspots(hotspots, resolvedVisibility, selectedId);
       if (selectedId) sceneComponent.renderSelectionFrame(frame, renderScene.entities.find((entity) => entity.id === selectedId), renderScene);
       else frame.hidden = true;
-      stage.replaceChildren(base, layers, hotspots, frame);
+      if (sceneImageErrorHandler) stage.removeEventListener("error", sceneImageErrorHandler, true);
+      sceneImageErrorHandler = (event) => {
+        const image = event.target;
+        if (!image || image.tagName !== "IMG") return;
+        const layerGroup = image.closest(".layer-group");
+        if (image !== base && (!layerGroup || layerGroup.classList.contains("is-hidden"))) return;
+        const assetUrl = image.currentSrc || image.src;
+        if (assetUrl) failedSceneAssetUrls.add(assetUrl);
+        coverScene();
+      };
+      stage.addEventListener("error", sceneImageErrorHandler, true);
+      stage.replaceChildren(base, layers, hotspots, frame, fallback);
+      const visibleSceneImages = [
+        base,
+        ...Array.from(layers.querySelectorAll(".layer-group"))
+          .filter((layer) => !layer.classList.contains("is-hidden"))
+          .flatMap((layer) => Array.from(layer.querySelectorAll("img")))
+      ];
+      const hasUnavailableVisibleImage = visibleSceneImages.some((image) => {
+        const assetUrl = image.currentSrc || image.src;
+        if (image.complete && image.naturalWidth > 0) {
+          failedSceneAssetUrls.delete(assetUrl);
+          return false;
+        }
+        if (image.complete && image.naturalWidth === 0) {
+          if (assetUrl) failedSceneAssetUrls.add(assetUrl);
+          return true;
+        }
+        return Boolean(assetUrl && failedSceneAssetUrls.has(assetUrl));
+      });
+      if (hasUnavailableVisibleImage) coverScene();
       hotspots.addEventListener("click", (event) => {
         const button = event.target.closest("[data-select-scene-entity]");
         if (button && !button.disabled) select(button.dataset.selectSceneEntity);
