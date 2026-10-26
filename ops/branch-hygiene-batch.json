@@ -1,23 +1,23 @@
 {
   "schemaVersion": "BranchHygieneBatch 0.1",
   "repository": "EAKerber/MobiliPresenter2D",
-  "wave": "M2D-R5-2026-10-26",
-  "purpose": "Retire three ancestry-proven, merged PR #242/#243/#244 refs; exact current SHAs, no open PR and no active workflow trigger references.",
+  "wave": "M2D-R6-2026-10-26",
+  "purpose": "Three ancestry-proven heads already merged (#241,#255,#257); no active workflow trigger or open PR; preserve SHA/PR lineage.",
   "branches": [
     {
-      "branch": "fix/viewer-hotspot-focus-approved-vis002-20261024",
-      "sha": "aa62c1e4265e084464094433efb74354ffd345e9",
-      "mergedPr": 242
+      "branch": "a11y/vis002-measured-copy-contrast-20261024",
+      "sha": "5aebebc33bc90069a85822859692145fabb31c11",
+      "mergedPr": 241
     },
     {
-      "branch": "fix/issue224-carousel-preserve-page-20261024",
-      "sha": "8f2c3e5f5c0e2c3d17e01c1abc899675cd058ceb",
-      "mergedPr": 243
+      "branch": "maintenance/branch-retirement-r4-20261026",
+      "sha": "4b4cc4cd455cf246c6b17a04fabc50f0fa27192b",
+      "mergedPr": 255
     },
     {
-      "branch": "feat/nav005-private-header-20261024",
-      "sha": "063796224c55924a8b3a909c9631c6b5f5590972",
-      "mergedPr": 244
+      "branch": "maintenance/branch-retirement-r5-20261026",
+      "sha": "f69002f2d9af59a85dc6ca634a61524d375a36af",
+      "mergedPr": 257
     }
   ]
 }
