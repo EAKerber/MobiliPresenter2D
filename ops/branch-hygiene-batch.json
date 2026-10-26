@@ -1,18 +1,23 @@
 {
   "schemaVersion": "BranchHygieneBatch 0.1",
   "repository": "EAKerber/MobiliPresenter2D",
-  "wave": "M2D-R4-2026-10-26",
-  "purpose": "Retire exactly two already-merged ancestor branches; ARC-03C excluded until workflow trigger dependency is reconciled.",
+  "wave": "M2D-R5-2026-10-26",
+  "purpose": "Retire three ancestry-proven, merged PR #242/#243/#244 refs; exact current SHAs, no open PR and no active workflow trigger references.",
   "branches": [
     {
-      "branch": "ci/ci-baseline-01-browser-suite-stabilization-20261024",
-      "sha": "b5e06ff030e268fd934835fde1a6b99244908efc",
-      "closedPr": 236
+      "branch": "fix/viewer-hotspot-focus-approved-vis002-20261024",
+      "sha": "aa62c1e4265e084464094433efb74354ffd345e9",
+      "mergedPr": 242
     },
     {
-      "branch": "maintenance/branch-hygiene-audit-only-20261026",
-      "sha": "0b2b8a382816b29429be6128fd34fe078bdb1d35",
-      "mergedPr": 247
+      "branch": "fix/issue224-carousel-preserve-page-20261024",
+      "sha": "8f2c3e5f5c0e2c3d17e01c1abc899675cd058ceb",
+      "mergedPr": 243
+    },
+    {
+      "branch": "feat/nav005-private-header-20261024",
+      "sha": "063796224c55924a8b3a909c9631c6b5f5590972",
+      "mergedPr": 244
     }
   ]
 }
