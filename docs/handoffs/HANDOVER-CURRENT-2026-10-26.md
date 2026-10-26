@@ -2,6 +2,34 @@
 
 **Checkpoint:** 26/10/2026, America/Sao_Paulo. **Destinatário:** próximo chat/agente, sem acesso ao contexto desta conversa. **Missão:** retomar implementação e reconciliação incremental, sem reabrir decisões homologadas nem descartar conteúdo exclusivo.
 
+## Higiene R6 / DS-R3 — 26/10/2026 (19:59 UTC) — poda acelerada, fail-closed
+
+**Continuação material da rodada R5/DS-R2 logo abaixo.** O usuário solicitou poda mais agressiva. Foi intensificada a classificação por ancestralidade, mantendo o gate crítico: somente refs exatas com commit integralmente ancestral da main, sem PR aberta, sem proteção e sem gatilho explícito de workflow ativo. Não usar nome/idade de branch ou declaração de squash como prova de absorção.
+
+| Repositório | Branches no readback anterior | Ref(s) aposentadas | Nova branch operacional | Total atual após readback |
+| --- | ---: | ---: | ---: | ---: |
+| Produto | 70 | 3 | 1 (`maintenance/branch-retirement-r6-20261026`) | **68** |
+| Design System | 45 | 1 | 1 (`maintenance/bounded-retirement-wave03-20261026`) | **45** |
+| **Total** | **115** | **4** | **2** | **113** |
+
+**Produto:** [PR #258](https://github.com/EAKerber/MobiliPresenter2D/pull/258) merged por merge commit `ed1a260e56a2f8c26b43cd968fd72c11b4a40641`. [Auditoria PASS #40391470990](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40391470990) e [apply PASS #40391608490](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40391608490), com log `{"status":"PASS","mode":"apply","count":3,"readback":"PASS"}`. Branches eliminadas e confirmadas ausentes por API:
+- `a11y/vis002-measured-copy-contrast-20261024` — `5aebebc33bc90069a85822859692145fabb31c11`, PR #241 MERGED;
+- `maintenance/branch-retirement-r4-20261026` — `4b4cc4cd455cf246c6b17a04fabc50f0fa27192b`, PR #255 MERGED;
+- `maintenance/branch-retirement-r5-20261026` — `f69002f2d9af59a85dc6ca634a61524d375a36af`, PR #257 MERGED.
+
+**Design System:** [PR #58](https://github.com/EAKerber/MobiliPresenter2D_DesignSystem/pull/58) merged por `94a425576700580f3af99900a90cb6b14a031394`; [auditoria PASS #40391463053](https://github.com/EAKerber/MobiliPresenter2D_DesignSystem/actions/runs/40391463053) e [apply PASS #40391597866](https://github.com/EAKerber/MobiliPresenter2D_DesignSystem/actions/runs/40391597866). Excluída/ausente: `maintenance/bounded-retirement-wave02-20261026` — `44b34f984c205c8b44c4bd58aecaaf3c16ecf0f5`, PR #57 MERGED. O executor comprovou `{"status":"PASS","mode":"apply","count":1}` e fez readback.
+
+**Saldo acumulado R5+R6/DS-R2+R3:** 118 → **113 refs** (nove exclusões com SHA, quatro branches operacionais criadas; redução líquida de cinco refs). Todos os commits originais permanecem identificados por SHA e PR; 12 PRs abertas no produto, três no DS, intactas. O total 113 é após a poda e antes de eventuais alterações de inventário por terceiros.
+
+**Resultado da varredura mais agressiva:** além das candidatas ancestrais, dezenas de branches antigas de CI, CP-PUBLIC, experimentos visuais e evidências DS continuam divergentes (`behind > 0`). A verificação foi por comparação direta `branch...main` em amostra ampla dos nomes em ambos os inventários; não é prova de equivalência funcional, nem alegação de classificação completa. Três casos representativos:
+- `ci/ci238-responsive-nav-evidence-20261026` foi integrada por squash #256 e segue divergente (2 commits exclusivos); precisa correspondência de conteúdo para aposentar, o executor atual exige ancestralidade;
+- `fix/focus-ring-about-approved-vis002-20261024` é ancestral, mas ainda possui referência nominal em `.github/workflows/about-skip-link-focus.yml`: **HOLD** até reconciliar gatilho;
+- `architecture/arc03c-static-page-build-20261022` é ancestral, mas está no gatilho em `.github/workflows/arc03c-static-page-build-gate.yml`: **HOLD** até reconciliar dependência.
+
+**Julgamento de risco e próxima ação:** acelerar mais a *triagem/reconciliação* é vantajoso; acelerar exclusões de branches divergentes sem equivalência documentada não compensa. Para reduzir dezenas adicionais, propor lote de reconciliação de conteúdo (`arquivo/símbolo/contrato → substituto atual, SHA doador, evidência de teste`) primeiro em #238/CI, depois CP-PUBLIC e DS #51; promover a `discardable` só depois de demonstrada cobertura com recibo. Nunca alterar o tamanho máximo 1–3 do executor ou descartar histórico de decisões para otimizar contagem. Os manifests R6/R3 da main foram **consumidos**; não reexecutar, repinar novas refs em PR subsequente. Sem alteração de código, runtime, banco, tokens ou regras visuais nesta rodada de higiene.
+
+---
+
 ## Higiene R5 / DS-R2 — exclusões comprovadas em 26/10/2026 (18:54 UTC)
 
 **Autoridade:** solicitação explícita de prosseguir com higiene e poda, executada pelo mecanismo bounded existente de cada repositório. Este checkpoint substitui as contagens anteriores, mas preserva seus inventários históricos. NÃO interpretar manifests já consumidos como autorização para repetir o lote.
