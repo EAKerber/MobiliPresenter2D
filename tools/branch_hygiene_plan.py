@@ -148,13 +148,30 @@ def select_bounded_batch(plan: dict[str, Any], batch: dict[str, Any]) -> list[di
             raise ValueError("INVALID_OR_DUPLICATE_PINNED_REF")
         seen.add(name)
         entry = by_name.get(name)
-        if (not entry or entry["sha"] != sha
-                or entry.get("action") != "delete-candidate"
-                or entry.get("autoDeleteEligible") is not True
-                or entry.get("protections")
-                or not any(e.get("kind") == "ancestor-of-control" for e in entry.get("evidence", []))):
+        # A squash head may diverge in commit history while having the *same
+        # entire Git tree* as the integrated merge commit. This is only a
+        # request for a second, runtime-verified proof; never auto-classify it
+        # as generally deletable in the plan.
+        proof = ref.get("squashMerge")
+        valid_proof_shape = (
+            isinstance(proof, dict)
+            and set(proof) == {"pullRequest", "mergeCommit"}
+            and type(proof["pullRequest"]) is int
+            and proof["pullRequest"] > 0
+            and isinstance(proof["mergeCommit"], str)
+            and re.fullmatch(r"[0-9a-f]{40}", proof["mergeCommit"]) is not None
+        )
+        ancestor_proven = (
+            entry is not None
+            and entry.get("action") == "delete-candidate"
+            and entry.get("autoDeleteEligible") is True
+            and any(e.get("kind") == "ancestor-of-control" for e in entry.get("evidence", []))
+        )
+        if (not entry or entry["sha"] != sha or entry.get("protections")
+                or (proof is not None and not valid_proof_shape)
+                or not (ancestor_proven or valid_proof_shape)):
             raise ValueError("UNSAFE_OR_MOVED_BRANCH:" + name)
-        result.append(entry)
+        result.append({**entry, "squashMerge": proof} if valid_proof_shape else entry)
     return result
 
 
