@@ -2,6 +2,55 @@
 
 **Checkpoint:** 26/10/2026, America/Sao_Paulo. **Destinatário:** próximo chat/agente, sem acesso ao contexto desta conversa. **Missão:** retomar implementação e reconciliação incremental, sem reabrir decisões homologadas nem descartar conteúdo exclusivo.
 
+## Higiene R10 / DS-R4–R7 — 26/10/2026 (22:02 UTC) — equivalência de árvores e CI ledger
+
+**Status: 5 lotes PASS, 15 refs excluídas e readback independente; 108 → 99 branches líquidas (produto 63→61, Design System 45→38).** Este checkpoint prevalece sobre contagens anteriores. No momento da reconciliação, produto `main@10ca1d36f085e6b38358b9bb5cd18c939e52eac6` e DS `main@cdebbc211f758ecbb8baf07398619dda568361d7`. No acumulado desde R5: **118 → 99**, 33 exclusões físicas com lote/gate/leitura e 14 branches operacionais criadas ao longo das iterações (redução líquida 19). Nunca usar manifests consumidos para reaplicar uma onda.
+
+### Extensão de gate no Design System — sem exclusões diretas
+
+[PR DS #59](https://github.com/EAKerber/MobiliPresenter2D_DesignSystem/pull/59) merged, `main@54829780e420a129e58d9348b69419889f19fad4`; [CI PASS #40407759656](https://github.com/EAKerber/MobiliPresenter2D_DesignSystem/actions/runs/40407759656). Implementada prova opt-in `squashMerge: {pullRequest, mergeCommit}` em `tools/retire_merged_branches.py`: consultar PR live e conferir estado merged/identidade head SHA e branch/base main, merge SHA de pai único ancestral da main, pai do squash ancestral do head, **SHA da árvore integral do head igual ao do merge**; bloquear nomes presentes em workflows de `origin/main`; revalidar antes de cada exclusão com PR aberta/proteção/inventário/CAS/readback. Novos testes negativos para metadados, PR não merged, árvore diferente, ancestry, workflow e erros de leitura. O audit de batch só executa em PR quando o manifesto muda; mudanças apenas do executor rodam testes sem reaplicar lotes antigos. Não alterou runtime/tema/tokens nem habilitou poda indiscriminada.
+
+### Execução, proveniência e resultados
+
+| Repositório / lote | PR merged | Audit PASS | Apply PASS | Refs eliminadas |
+| --- | --- | --- | --- | ---: |
+| Produto R10 | [#263](https://github.com/EAKerber/MobiliPresenter2D/pull/263) `10ca1d36` | [40408407549](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40408407549) | [40408530577](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40408530577), count=3/readback=PASS | 3 |
+| DS R4 | [#60](https://github.com/EAKerber/MobiliPresenter2D_DesignSystem/pull/60) `9b66e58b` | [40407998355](https://github.com/EAKerber/MobiliPresenter2D_DesignSystem/actions/runs/40407998355) | [40408136644](https://github.com/EAKerber/MobiliPresenter2D_DesignSystem/actions/runs/40408136644), count=3 | 3 |
+| DS R5 | [#61](https://github.com/EAKerber/MobiliPresenter2D_DesignSystem/pull/61) `e0180a87` | [40408600973](https://github.com/EAKerber/MobiliPresenter2D_DesignSystem/actions/runs/40408600973) | [40408699808](https://github.com/EAKerber/MobiliPresenter2D_DesignSystem/actions/runs/40408699808), count=3 | 3 |
+| DS R6 | [#62](https://github.com/EAKerber/MobiliPresenter2D_DesignSystem/pull/62) `04f7356b` | [40408894183](https://github.com/EAKerber/MobiliPresenter2D_DesignSystem/actions/runs/40408894183) | [40408961696](https://github.com/EAKerber/MobiliPresenter2D_DesignSystem/actions/runs/40408961696), count=3 | 3 |
+| DS R7 | [#63](https://github.com/EAKerber/MobiliPresenter2D_DesignSystem/pull/63) `cdebbc21` | [40409217551](https://github.com/EAKerber/MobiliPresenter2D_DesignSystem/actions/runs/40409217551) | [40409292714](https://github.com/EAKerber/MobiliPresenter2D_DesignSystem/actions/runs/40409292714), count=3 | 3 |
+
+**Produto R10, hashes exatos removidos, PR merged + full tree igual ao respectivo squash:**
+- `docs/branch-hygiene-dispositions-20261008@a0b3acd221825a4aef07ca65510b831cf07272ab` → #191/merge `0a431e94c627011b1f124b89efd49f06ddbacb26`.
+- `work/ds01-homologated-identity-theme-20261014@3cf082f9f1d233c63988a93f9485007ab9520e04` → #204/merge `67d31976c605c76c7ef10876d03fdeb17369ab78`.
+- `work/static-publish-cleanup@b4f3a2b0c974807d1773eaefff4eea2d7053ead5` → #197/merge `717dec38f6ceb162bc1aa03c347cd64376b2a7e7`.
+
+**DS R4 removidos:** `audit/admin-dark-message-runtime-2026-10-19@ae6f4b4ce9f75508297eddacc378d9888c7fb74b` (#25), `audit/auth-session-flow-2026-10-20@2ed6e450e6db5db36da39d11aa9a210cb17836d1` (#38), `audit/g1-public-runtime-20261021@70b7b3c93484b5f32a7cc484a2055a18eb6491d6` (#45). Todos por prova de árvore integral.
+
+**DS R5 removidos:** `audit/how-it-works-caption-contrast-20261018@be5488d42705393642e44e90762083c8d6d9db33` (#17), `audit/nav005-runtime-narrow-20261019@c0cb07d4a10b42576c77f6c5a56dddcc80df4597` (#16), `audit/runtime-auth-header-2026-10-18@c43d6ec250916ebc8ef27f649176fca303c01b38` (#22). Todos por prova de árvore integral.
+
+**DS R6 removidos:** `audit/semantic-swatches-static-map-2026-10-19@68b6c41bcae786b34dc17899754ecff32953a67d` (#24, árvore integral), `decisions/admin-status-as-process-info-2026-10-19@4da0b82866d6b7c8791429ecfe009e94641979d0` (#26, árvore integral), `maintenance/bounded-retirement-wave03-20261026@6b51590adafd1e88496d8fbf6ab131bf261bc816` (#58, ancestral direta).
+
+**DS R7 removidos:** `maintenance/squash-tree-retirement-gate-20261026@3d6cf10924452f31f0fb1a7c7e9d562eb8c38d44` (#59), `maintenance/retire-squash-proof-wave04-20261026@19005dca2f4a2c3e3e2ed083206bb21b80ed0545` (#60), `maintenance/retire-squash-proof-wave05-20261026@7ec2f69f2fd7fc13542eeff2b7136e20bf488e4a` (#61). Três ancestrais diretas. API pós-gates confirmou a ausência individual de todas as 15 refs.
+
+**Branches operacionais restantes:** produto `maintenance/branch-retirement-r9-operational-20261026`, `maintenance/branch-retirement-r10-squash-20261026`; DS `maintenance/retire-squash-proof-wave06-20261026`, `maintenance/retire-operational-wave07-20261026`. Não abrir novos lotes só para eliminar a branch operacional recém-criada sem benefício líquido material.
+
+### Reconciliação de branches divergentes — evidência antes da decisão de podar
+
+**CI-BASELINE-01/issue #232 / PR #238:** `ci/ci-baseline-01-isolated-auth-extraction-20261024` ainda é PR #238 **OPEN**, não tocar. Em amostra de dez branches antigas de CI, a comparação Git `main...branch` mostra diferenças significativas: `ci/ci-baseline-01-auth235-only-20261023` (71 arquivos no diff), `ci/ci-baseline-01-isolated-session-fixture-20261023` (48), `ci/ci-baseline-01-nav-sequence-probe-20261023` (69), `ci/ci-baseline-01-published-preview-fixture-20261023` (84), `ci/ci-baseline-01-shared-db-preview-20261023` (61), `ci/ci-baseline-01-v5-local-diagnostics-20261023` (62), `ci/ci-global-auth-boundary-repair-20261023` (85) e `ci-auth-base-20261025` (17). Contagens são do diff Git, **não** equivalência funcional, reutilização ou elegibilidade para exclusão; vários históricos têm alterações exclusivas de workflows/fixtures/scripts.
+
+**Piloto de quatro arquivos com comparação de blob:**
+- `ci/ci-baseline-01-public-projection-test-20261022`: `tests/public-module-projection.test.cjs` tem SHA blob `6a8faec2f00e0d7cd26084a1927fb6a5d9c660c3` **idêntico à main**, mas `.github/workflows/ci-baseline-01-public-projection-isolated.yml` (`481b8c8d53a0bfcd3f5f62cc3f215d58becea2dc`) **não existe na main nesse caminho**; classificar `PARTIALLY_ABSORBED / HOLD`. A branch tem dois caminhos no diff.
+- `ci/ci-baseline-01-config-readiness-20261022`: ambos os arquivos do diff têm blob sem homólogo no mesmo caminho da main: `.github/workflows/ci-baseline-01-config-readiness-isolated.yml@426a8b7d3655e7481b62ae497856c5597a25c97b` e `tests/ci-baseline-config-readiness-diagnostic.mjs@e2e88fb563ebb6f5de2a2fec136772ed972fdcd5`. Classificar `UNIQUE_PATHS / HOLD` até mapear funcionalmente substitutos e testar a intenção do diagnóstico. Não inferir que falta o mesmo comportamento na main só pela ausência do nome de arquivo.
+
+**Dependências de workflows, HOLD mesmo quando prova integral seria possível:** DS `architecture/p-token-01-executable-palette-20261022` (#49 merged, árvore igual) é nomeada em `.github/workflows/p-token-01-reference-export-gate.yml`; DS `architecture/p-token-02b-contextual-copy-20261022` (#50 merged, árvore igual) em `.github/workflows/p-token-02b-contextual-export.yml`. No produto, `architecture/arc03c-static-page-build-20261022` e `fix/focus-ring-about-approved-vis002-20261024` continuam nomeadas em workflows ativos. Reconciliar o trigger e seus gates antes de aposentá-las; nunca quebrar CI só para reduzir contagem.
+
+**PRs abertas preservadas:** produto 12 (`#238,#231,#196,#186,#185,#184,#182,#180,#179,#178,#175,#34`); DS 3 (`#51,#41,#39`). Não fechar #51 ou CP-PUBLIC sem D03/D04, proveniência material, review e gates. Não reabrir decisões visuais CLOSED nem D01=A/D02=B/D03=A/D04=A.
+
+**Próximo gate recomendado:** ledger arquivo/contrato/fixture→substituto em `main`, com blob/SHA/prova de execução; identificar qual das alternativas antigas de CI é exclusivamente diagnóstica e pode ser encerrada com proveniência, e qual contém comportamento ainda útil (especialmente autenticação publicada). Comparar `#238` com fluxo autenticado real separado do CI isolado; testes isolados não provam produção. Para DS #51, extrair artefatos úteis seletivamente sem mover 236 caminhos de auditoria em bloco. Reavaliar refs somente depois dessa prova. Nenhum deploy preview adicional necessário para esta higiene; eventual status de produção deve ser readback separado do commit documental.
+
+---
+
 ## Higiene R7–R9 — prova de squash e poda ampliada (26/10/2026, 20:20 UTC)
 
 **Status: COMPLETE/PASS, confirmado por recibos e readback de GitHub.** Autoridade: pedido do usuário para continuar a higiene mais agressivamente, sem perder segurança de conteúdo. Esta seção prevalece sobre contagens anteriores deste handover. `main` do produto após R9, antes desta atualização documental: `478ad445c861670a767d22034c68e88f069fb2df`; DS `main@94a425576700580f3af99900a90cb6b14a031394`.
