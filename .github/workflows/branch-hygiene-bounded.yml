@@ -7,7 +7,7 @@ on:
       - 'tools/branch_hygiene_apply.py'
       - 'tools/branch_hygiene_plan.py'
       - 'tools/branch_hygiene_observe.py'
-      - 'tests/test_branch_hygiene_batch.py'
+      - 'tests/test_branch_hygiene_*.py'
       - '.github/workflows/branch-hygiene-bounded.yml'
   push:
     branches: [main]
