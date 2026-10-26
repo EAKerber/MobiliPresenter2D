@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import copy
 import unittest
+from pathlib import Path
 
 from tools.branch_hygiene_plan import build_plan
 
@@ -83,6 +84,18 @@ class PlannerTests(unittest.TestCase):
         obs2 = copy.deepcopy(obs1)
         obs2["observedAt"] = "2026-09-04T00:01:00+00:00"
         self.assertEqual(build_plan(obs1, self.dispositions())["planHash"], build_plan(obs2, self.dispositions())["planHash"])
+
+
+class WorkflowSafetyTests(unittest.TestCase):
+    def test_automatic_triggers_are_audit_only(self):
+        workflow = (
+            Path(__file__).resolve().parents[1]
+            / ".github/workflows/branch-hygiene.yml"
+        ).read_text(encoding="utf-8")
+        self.assertIn("Build exact plan", workflow)
+        self.assertIn("Upload evidence", workflow)
+        self.assertNotIn("tools/branch_hygiene_apply.py", workflow)
+        self.assertNotIn("MOBILIPRESENTER2D_BRANCH_HYGIENE_AUTHORIZED", workflow)
 
 
 if __name__ == "__main__":
