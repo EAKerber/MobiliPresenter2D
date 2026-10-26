@@ -7,6 +7,14 @@ on:
       - app/landing/landing.css
       - app/about/about.css
       - app/how-it-works/how-it-works.css
+      - app/core/image-fallback.js
+      - app/how-it-works/how-it-works.js
+      - architecture/pages/root.page.html
+      - architecture/pages/how-it-works.page.html
+      - app/index.html
+      - app/how-it-works/index.html
+      - app/public-theme.css
+      - tests/public-image-fallback.test.mjs
       - design-system/pins/vis-002/context-v0.3.0/**
       - scripts/verify-vis002c-product-pin-v03.mjs
       - docs/architecture/vis002c-v03-product-integration-2026-10-24.md
@@ -26,3 +34,6 @@ jobs:
         run: |
           node --check scripts/verify-vis002c-product-pin-v03.mjs
           node scripts/verify-vis002c-product-pin-v03.mjs
+          node --check app/core/image-fallback.js
+          node --check app/how-it-works/how-it-works.js
+          node tests/public-image-fallback.test.mjs

@@ -1,21 +1,5 @@
 /* Scoped interactive explanation panel. */
 (function(){
-  document.querySelectorAll("[data-image-fallback]").forEach((figure)=>{
-    const image=figure.querySelector(".study-space-illustration");
-    const fallback=figure.querySelector(".image-fallback");
-    if(!image||!fallback)return;
-    const showFallback=()=>{
-      const description=image.alt.trim();
-      const status=fallback.querySelector(".image-fallback__status")?.textContent.trim()||"Imagem indisponível";
-      const descriptionNode=fallback.querySelector(".image-fallback__description");
-      if(descriptionNode)descriptionNode.textContent=description;
-      fallback.setAttribute("aria-label",description?status+": "+description:status);
-      image.hidden=true;
-      fallback.hidden=false;
-    };
-    image.addEventListener("error",showFallback,{once:true});
-    if(image.complete&&image.naturalWidth===0)showFallback();
-  });
   const explanations={
     escala:['Compra em escala','Concentrar a compra de chapas, ferragens e outros insumos em mais pedidos ajuda a negociar com fornecedores e programar as aquisições.'],
     coletivas:['Compras coletivas','Diferentes apartamentos compartilham uma plataforma técnica, sem exigir que todos escolham a mesma composição. Materiais e processos comuns podem ser planejados juntos.'],

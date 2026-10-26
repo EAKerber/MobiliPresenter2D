@@ -24,3 +24,14 @@ a { color: inherit; }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
 }
+
+
+/* Shared, accessible image failure placeholder for informative public media. */
+.image-fallback-frame { position: relative; overflow: hidden; }
+.image-fallback-frame > img[hidden] { display: none !important; }
+.image-fallback { position: absolute; z-index: 1; inset: 0; display: grid; align-content: center; justify-items: center; gap: 10px; overflow: auto; padding: clamp(12px, 4vw, 30px); background: var(--image-fallback-bg, var(--public-surface-soft)); color: var(--image-fallback-fg, var(--public-text)); text-align: center; }
+.image-fallback[hidden] { display: none !important; }
+.image-fallback__icon { display: grid; width: 2.5rem; flex: 0 0 auto; aspect-ratio: 1; place-items: center; border: 1px solid color-mix(in srgb, currentColor 35%, transparent); border-radius: 6px; color: currentColor; font-size: 1.15rem; line-height: 1; opacity: .72; }
+.image-fallback__status { font-size: .78rem; font-weight: 700; }
+.image-fallback__description { max-width: 34ch; font-size: clamp(.82rem, 1.5vw, 1rem); font-weight: 600; line-height: 1.4; }
+html[data-theme="dark"] .image-fallback-frame .image-fallback { --image-fallback-bg: #20211F; --image-fallback-fg: #F0EDE8; }
