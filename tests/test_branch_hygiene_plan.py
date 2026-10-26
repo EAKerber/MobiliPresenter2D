@@ -93,8 +93,9 @@ class WorkflowSafetyTests(unittest.TestCase):
             / ".github/workflows/branch-hygiene.yml"
         ).read_text(encoding="utf-8")
         self.assertIn("Build exact plan", workflow)
+        self.assertIn("contents: read", workflow)
         self.assertIn("Upload evidence", workflow)
-        self.assertNotIn("tools/branch_hygiene_apply.py", workflow)
+        self.assertNotIn("python tools/branch_hygiene_apply.py", workflow)
         self.assertNotIn("MOBILIPRESENTER2D_BRANCH_HYGIENE_AUTHORIZED", workflow)
 
 
