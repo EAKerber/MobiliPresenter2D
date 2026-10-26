@@ -19,7 +19,6 @@ async function get(path, init = {}) {
 async function main() {
   const routes = [
     ["/", "id=\"environmentTrack\""],
-    ["/config/", "class=\"workspace\""],
     ["/viewer/", "id=\"viewerLayout\""],
     ["/admin.html", "Casa em Módulos"]
   ];
@@ -29,6 +28,22 @@ async function main() {
     assert((await response.text()).includes(expected), path + " missing expected HTML signature");
     console.log("GET " + path + ": 200, expected shell present");
   }
+  // The Configurator is protected by the Netlify access edge function.
+  // An unauthenticated GET must NOT disclose the workspace HTML. The previous
+  // smoke test incorrectly expected a public workspace and followed the 302
+  // to /access/, then reported a missing markup signature as a regression.
+  const deniedConfig = await get("/config/", { redirect: "manual" });
+  assert.equal(deniedConfig.status, 302,
+    "anonymous /config/ must redirect to access, not expose workspace");
+  const loginUrl = new URL(deniedConfig.headers.get("location") || "", new URL("/config/", base));
+  assert.equal(loginUrl.origin, base.origin, "redirect must stay on production origin");
+  assert.equal(loginUrl.pathname, "/access/", "anonymous /config/ must lead to access");
+  const loginShell = await get("/access/");
+  assert.equal(loginShell.status, 200, "access route must return the login shell");
+  assert.match(await loginShell.text(), /Confirmar acesso/,
+    "access page must contain its expected public heading");
+  console.log("GET /config/: 302 to /access/ (fail-closed), access shell 200");
+
   const response = await get("/api/public-modules", {
     headers: { Accept: "application/json" }
   });
