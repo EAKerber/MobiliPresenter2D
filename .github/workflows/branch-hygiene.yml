@@ -52,17 +52,7 @@ jobs:
           open('/tmp/branch-plan-hash.txt','w').write(p['planHash'])
           print('DELETE_CANDIDATES', [e['branch'] for e in p['entries'] if e['action']=='delete-candidate'])
           PY
-      - name: Apply exact plan after every main transition
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
-          MOBILIPRESENTER2D_BRANCH_HYGIENE_AUTHORIZED: '1'
-        run: |
-          python tools/branch_hygiene_apply.py \
-            --plan /tmp/branch-plan.json \
-            --dispositions ops/branch-dispositions.json \
-            --expected-plan "$(cat /tmp/branch-plan-hash.txt)" \
-            --receipt /tmp/branch-apply-receipt.json
+      # Audit-only: branch removal requires a separately reviewed, explicit batch.
       - name: Upload evidence
         if: always()
         uses: actions/upload-artifact@v4
@@ -72,5 +62,4 @@ jobs:
             /tmp/branch-observation.json
             /tmp/branch-plan.json
             /tmp/branch-plan-hash.txt
-            /tmp/branch-apply-receipt.json
           if-no-files-found: warn
