@@ -11,7 +11,7 @@ import os
 import subprocess
 from pathlib import Path
 
-from branch_hygiene_observe import observe
+from branch_hygiene_observe import observe, api_get
 from branch_hygiene_plan import build_plan, load_json, select_bounded_batch
 
 AUTH_ENV = "MOBILIPRESENTER2D_BRANCH_HYGIENE_AUTHORIZED"
@@ -27,6 +27,73 @@ def remote_refs() -> dict[str, str]:
         sha, ref = line.split("\t", 1)
         result[ref.removeprefix("refs/heads/")] = sha
     return result
+
+
+
+def verify_squash_merge(repository: str, token: str, entry: dict,
+                        control_sha: str) -> dict | None:
+    """Verify an opt-in squash proof against real PR metadata and Git objects.
+
+    Both the original head and the already-merged commit must resolve to the
+    *identical full tree*. A stale PR, missing ref or live workflow dependency
+    aborts. The planner never promotes this to general auto-delete eligibility.
+    """
+    proof = entry.get("squashMerge")
+    if proof is None:
+        return None
+    name, head_sha = entry["branch"], entry["sha"]
+    pr_number, merge_sha = proof["pullRequest"], proof["mergeCommit"]
+    pr = api_get(repository, f"pulls/{pr_number}", token)
+    pr_head, pr_base = pr.get("head") or {}, pr.get("base") or {}
+    if (pr.get("state") != "closed" or not pr.get("merged_at")
+            or pr.get("merge_commit_sha") != merge_sha
+            or pr_head.get("ref") != name or pr_head.get("sha") != head_sha
+            or (pr_head.get("repo") or {}).get("full_name") != repository
+            or pr_base.get("ref") != "main"
+            or (pr_base.get("repo") or {}).get("full_name") != repository):
+        raise RuntimeError("SQUASH_PR_IDENTITY_MISMATCH:" + name)
+
+    # A real squash merge has exactly one parent. Its resulting tree must be
+    # identical to the PR head; the merge and its base must belong to main.
+    merge_parents = subprocess.run(
+        ["git", "rev-list", "--parents", "-n", "1", merge_sha],
+        text=True, capture_output=True, check=True,
+    ).stdout.strip().split()
+    if len(merge_parents) != 2 or merge_parents[0] != merge_sha:
+        raise RuntimeError("SQUASH_NOT_SINGLE_PARENT:" + name)
+    merged_into_main = subprocess.run(
+        ["git", "merge-base", "--is-ancestor", merge_sha, control_sha],
+        check=False,
+    ).returncode == 0
+    original_base_present = subprocess.run(
+        ["git", "merge-base", "--is-ancestor", merge_parents[1], head_sha],
+        check=False,
+    ).returncode == 0
+    if not merged_into_main or not original_base_present:
+        raise RuntimeError("SQUASH_ANCESTRY_MISMATCH:" + name)
+
+    def tree(sha: str) -> str:
+        return subprocess.run(["git", "show", "-s", "--format=%T", sha],
+                              text=True, capture_output=True, check=True).stdout.strip()
+
+    original_tree, merged_tree = tree(head_sha), tree(merge_sha)
+    if (original_tree != merged_tree
+            or original_tree != entry.get("treeSha")
+            or len(original_tree) != 40):
+        raise RuntimeError("SQUASH_TREE_MISMATCH:" + name)
+
+    # Do not retire an old branch while a live workflow still names it.
+    workflow_dir = Path(".github/workflows")
+    if workflow_dir.exists() and any(
+        name in item.read_text(encoding="utf-8")
+        for item in workflow_dir.glob("*.yml")
+    ):
+        raise RuntimeError("SQUASH_ACTIVE_WORKFLOW_REF:" + name)
+    return {
+        "branch": name, "sha": head_sha, "pullRequest": pr_number,
+        "mergeCommit": merge_sha, "treeSha": original_tree,
+        "controlSha": control_sha, "proof": "SQUASH_TREE_IDENTICAL",
+    }
 
 
 def apply(plan_path: Path, dispositions_path: Path, expected_plan: str,
@@ -51,6 +118,11 @@ def apply(plan_path: Path, dispositions_path: Path, expected_plan: str,
     if remote_refs() != inventory:
         raise RuntimeError("REF_INVENTORY_DRIFT_INITIAL")
 
+    squash_proofs = [
+        result for item in selected
+        if (result := verify_squash_merge(repository, token, item, fresh_plan["controlSha"])) is not None
+    ]
+
     if not audit_only:
         if (os.environ.get("GITHUB_EVENT_NAME") != "push"
                 or os.environ.get("GITHUB_REF") != "refs/heads/main"):
@@ -67,6 +139,7 @@ def apply(plan_path: Path, dispositions_path: Path, expected_plan: str,
         "controlSha": fresh_plan["controlSha"],
         "batch": batch_path.name,
         "approvedPins": [{"branch": x["branch"], "sha": x["sha"]} for x in selected],
+        "squashProofs": squash_proofs,
         "mode": "audit" if audit_only else "apply",
         "deleted": [],
         "readback": "NOT_APPLIED" if audit_only else "PENDING",
@@ -113,6 +186,8 @@ def apply(plan_path: Path, dispositions_path: Path, expected_plan: str,
             raise RuntimeError("NEW_PROTECTION_OR_MISSING_REF:" + branch)
         if remote_refs() != expected_inventory or expected_inventory.get(branch) != sha:
             raise RuntimeError("REF_DRIFT_BEFORE_DELETE:" + branch)
+        # Recheck PR identity and exact tree *immediately* before mutation.
+        verify_squash_merge(repository, token, entry, fresh_plan["controlSha"])
 
         subprocess.run([
             "git", "push", f"--force-with-lease=refs/heads/{branch}:{sha}",
