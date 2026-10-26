@@ -40,6 +40,7 @@ async function inspect(page,index,fail=false){
       alt:img.alt,loaded:img.complete&&img.naturalWidth>0,
       hidden:img.hidden,placeholderHidden:placeholder?.hidden??null,
       role:placeholder?.getAttribute("role"),
+      tabindex:placeholder?.getAttribute("tabindex"),
       label:placeholder?.getAttribute("aria-label"),
       description:placeholder?.querySelector(".image-fallback__description")?.textContent,
       text:placeholder?.querySelector(".image-fallback__status")?.textContent,
@@ -112,7 +113,23 @@ for(const [engineName,engine] of [["chromium",chromium],["webkit",webkit]]){
           context+" fallback contrast insufficient "+index+" ratio="+ratio);
         assert.equal(failed.horizontalOverflow,false,context+" horizontal overflow "+index);
         if(failed.box.height<80)smallFrames++;
-        if(failed.clipped)clippedCount++;
+        if(failed.clipped){
+          clippedCount++;
+          assert.equal(failed.tabindex,"0",context+" scrollable fallback is not keyboard reachable "+index);
+          const keyboardReachable=await page.evaluate(index=>{
+            const el=[...document.querySelectorAll("[data-image-fallback]")][index]
+              .querySelector(".image-fallback");
+            el.focus({preventScroll:true});
+            const focused=document.activeElement===el;
+            const before=el.scrollTop;
+            el.scrollTop=before+100;
+            return {focused,scrolled:el.scrollTop>before};
+          },index);
+          assert.equal(keyboardReachable.focused,true,context+" cannot focus fallback "+index);
+          assert.equal(keyboardReachable.scrolled,true,context+" cannot scroll full description "+index);
+        }else{
+          assert.equal(failed.tabindex,null,context+" unnecessary fallback tab stop "+index);
+        }
         await page.evaluate(index=>{
           const f=[...document.querySelectorAll("[data-image-fallback]")][index];
           const img=[...f.querySelectorAll("img[alt]")].find(x=>x.alt.trim());
@@ -121,6 +138,7 @@ for(const [engineName,engine] of [["chromium",chromium],["webkit",webkit]]){
         const restored=await inspect(page,index);
         assert.equal(restored.hidden,false,context+" image not restored "+index);
         assert.equal(restored.placeholderHidden,true,context+" fallback not concealed "+index);
+        assert.equal(restored.tabindex,null,context+" tab stop retained after recovery "+index);
         assert.ok(close(restored.box.width,before.box.width)&&
           close(restored.box.height,before.box.height),
           context+" frame not restored "+index);
