@@ -26,6 +26,16 @@ O executor `tools/branch_hygiene_apply.py` permanece no repositório como ferram
 
 A diretriz operacional é reduzir dívida em ondas pequenas, sem teto numérico para branches. A primeira onda examina ancestralidade e referências; só uma decisão auditada por branch permite remover uma ref. Essa regra tem precedência sobre o comportamento de limpeza automática anteriormente documentado aqui.
 
+## R4 — lotes restritos (2026-10-26)
+
+O workflow periódico `.github/workflows/branch-hygiene.yml` permanece **somente auditoria** com token `contents: read`.
+
+O novo workflow `.github/workflows/branch-hygiene-bounded.yml` só executa a fase de aplicação após integração na `main` de uma alteração explícita no manifesto `ops/branch-hygiene-batch.json`. A PR executa auditoria sem mutação. A fase de aplicação tem token `contents: write` isolado e exige 1 a 3 nomes de branches com SHAs exatos e comprovadamente ancestrais de `main`, sem proteção, preservação ou vínculo com PR aberta.
+
+O executor nativo `tools/branch_hygiene_apply.py` **não possui mais modo de excluir todos os candidatos automaticamente**: exige manifesto, identidade de repositório, `planHash`, reobservação do inventário, confirmação de `main`, `--force-with-lease` específico e leitura do estado remoto após cada ref. Qualquer divergência interrompe o lote; o recibo é persistido progressivamente. O workflow de auditoria geral não chama o executor.
+
+A onda R4 contém duas branches antigas integralmente absorvidas na `main`: CI-BASELINE-01 estabilização e branch operacional da PR #247. **ARC-03C permanece preservada** por referência histórica em workflow especializado; a tentativa de alterar esse gatilho foi bloqueada, então não será removida neste lote.
+
 ## R0/R1 bootstrap result
 
 The first accepted R1 plan removed five exact refs and left only `main`:
