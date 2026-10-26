@@ -49,7 +49,15 @@
 html[data-theme] .scene-hotspot:focus-visible {
   outline: 4px solid var(--public-accent);
   outline-offset: 3px;
-  box-shadow: 0 0 0 2px #000, 0 0 0 3px #fff;
+}
+
+/* O preenchimento opaco cria contraste local para o anel sobre qualquer foto. */
+html[data-theme="light"] .scene-hotspot:focus-visible {
+  box-shadow: 0 0 0 8px #fff;
+}
+
+html[data-theme="dark"] .scene-hotspot:focus-visible {
+  box-shadow: 0 0 0 8px #111;
 }
 .scene-hotspot__tag { position: absolute; left: 50%; top: -8px; display: grid; width: 26px; height: 26px; place-items: center; transform: translate(-50%, -100%); border: 1px solid rgba(226, 201, 145, .8); border-radius: 50%; background: #1b1c1a; color: #d8cbbb; font-size: 11px; font-weight: 800; opacity: 0; pointer-events: none; transition: opacity 160ms ease; }
 .scene-hotspot:hover .scene-hotspot__tag, .scene-hotspot:focus-visible .scene-hotspot__tag, .scene-hotspot.is-selected .scene-hotspot__tag { opacity: 1; }
