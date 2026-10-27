@@ -8,7 +8,7 @@ from urllib.request import Request,urlopen
 REPO="EAKerber/MobiliPresenter2D"
 BASE="docs/work/DEVELOPMENT_CLUSTER_INVENTORY_2026-10-27.json"
 PROPOSAL="docs/work/DEVELOPMENT_AUX_RETIREMENT_PLAN_2026-10-27.json"
-BATCH="ops/development-aux-retirement-batch.json"
+BATCH="ops/development-aux-retirement-batch-a2.json"
 OP="integration/01-aux-retire-gate-20261027"
 PR_IDS={34,175,178,179,180,182,184,185,186,196,231,238}
 SHA=re.compile(r"[0-9a-f]{40}\Z")
@@ -30,10 +30,10 @@ def remote():
     return result
 def validate(m,p,o):
     if (m.get("schemaVersion")!="M2DDevelopmentAuxBatch/0.1"
-        or m.get("wave")!="M2D-DEV-AUX-A1-20261027"
+        or m.get("wave")!="M2D-DEV-AUX-A2-20261027"
         or m.get("repository")!=REPO or m.get("control")!="development"
         or m.get("mainSha")!=p.get("stableMainSha")
-        or m.get("baseline")!="00eadf770513107db4be71519e6a38a9da9f9854"
+        or m.get("baseline")!="665729876e6536c96f1c5cde9a9023bedeb1369d"
         or p.get("controlSha")!="994d7f613db144cbb07d638b05754820170a20a4"
         or m.get("operational")!=OP or p.get("status")!="PROPOSAL_ONLY_NO_DELETE"
         or p.get("authorizedDeletions")!=0 or o.get("baseSha")!=m.get("mainSha")
@@ -42,7 +42,7 @@ def validate(m,p,o):
     six=p.get("allAuxiliaries")
     targets=m.get("targets")
     if (not isinstance(six,list) or len(six)!=6
-        or not isinstance(targets,list) or targets!=six[:3]
+        or not isinstance(targets,list) or targets!=six[3:]
         or len({x.get("branch") for x in six})!=6
         or len(o.get("rows",[]))!=60):
         raise RuntimeError("STRICT_BATCH_SHAPE")
@@ -54,7 +54,7 @@ def validate(m,p,o):
         raise RuntimeError("INVALID_PINNED_HISTORY")
     return old,aux
 def verify_roster(refs,old,aux,main,dev,oper):
-    expected={**old,**aux,"main":main,"development":dev,OP:oper}
+    expected={**old,**{k:v for k,v in aux.items() if k in list(aux)[3:]},"main":main,"development":dev,OP:oper}
     if refs!=expected:raise RuntimeError("REMOTE_INVENTORY_DRIFT")
     return expected
 def assert_safe(m,old,aux,mode):
@@ -87,6 +87,10 @@ def assert_safe(m,old,aux,mode):
     if {p.get("number") for p in prs}!=PR_IDS:raise RuntimeError("PR_DRIFT")
     inuse={x.get("ref") for p in prs for x in (p.get("head") or {},p.get("base") or {})}
     if inuse&set(aux):raise RuntimeError("AUX_HAS_OPEN_PR")
+    proof=api("actions/runs/40544066545")
+    if (proof.get("conclusion")!="success"
+        or proof.get("head_sha")!="071c9ed266c060aa55b2c646ebc3552d3e29ed33"):
+        raise RuntimeError("A1_RECEIPT_NOT_VERIFIED")
     if api("rulesets?per_page=100"):raise RuntimeError("NEW_RULESET")
     for path in list(Path(".github/workflows").glob("*.yml"))+list(Path(".github/workflows").glob("*.yaml")):
         s=path.read_text()

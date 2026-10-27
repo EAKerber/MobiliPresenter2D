@@ -1,0 +1,23 @@
+{
+  "schemaVersion": "M2DDevelopmentAuxBatch/0.1",
+  "repository": "EAKerber/MobiliPresenter2D",
+  "wave": "M2D-DEV-AUX-A2-20261027",
+  "control": "development",
+  "baseline": "665729876e6536c96f1c5cde9a9023bedeb1369d",
+  "mainSha": "221b54b2a41ecc8c338d1bf2cf67280cf165ce95",
+  "operational": "integration/01-aux-retire-gate-20261027",
+  "targets": [
+    {
+      "branch": "integration/01-ci-auth-identity-20261027",
+      "sha": "27d5945f4eda0fb6ed875fb2e62f44b2637cf3da"
+    },
+    {
+      "branch": "integration/01-ci-r9-container-20261027",
+      "sha": "a653745f5b485dc473156871d1209b2abf3193e5"
+    },
+    {
+      "branch": "integration/01-ci-label500-invariant-20261027",
+      "sha": "994d7f613db144cbb07d638b05754820170a20a4"
+    }
+  ]
+}

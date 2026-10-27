@@ -1,4 +1,4 @@
-name: Development exact-SHA auxiliary hygiene — A1
+name: Development exact-SHA auxiliary hygiene — A2
 
 on:
   push:
@@ -6,7 +6,7 @@ on:
       - integration/01-aux-retire-gate-20261027
       - development
     paths:
-      - 'ops/development-aux-retirement-batch.json'
+      - 'ops/development-aux-retirement-batch-a2.json'
       - 'tools/development_aux_retirement.py'
       - 'tests/test_development_aux_retirement.py'
       - '.github/workflows/development-aux-retirement.yml'
