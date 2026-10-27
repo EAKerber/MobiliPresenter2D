@@ -39,3 +39,13 @@ O manifest SHA auditado é proveniência, **não** um certificado de correção 
 ## Situação desta etapa
 
 A branch `integration/07-asset-provenance-20261027` contém somente arquivos de auditoria, testes e este relatório. Nenhum dos originais, folhas de máscara ou serviços do Viewer foi modificado. O próximo passo de execução é consolidar por fast-forward validado na `development`, observar gate no destino e atualizar o handover; só então fazer higiene da auxiliar de auditoria, sem remover nenhuma das duas origens.
+
+
+## Fechamento operacional — integração e higiene da auxiliar 07
+
+- Gate final da auxiliar após inclusão do ledger: [Actions #40571666117](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40571666117) **PASS**; 7/7 testes negativos e comparação por objetos Git. Integração por `update_ref` **fast-forward com SHA esperado** de `development@55ffac9d26f1a7533ec924ca58c2d7026fb20465` para `fa3780e3bf4dfe659cf12d0f4cf53625094eff31`.
+- Gate na `development`: [#40571761061](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40571761061) **PASS**, seguido de [#40571887674](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40571887674) **PASS** após remover o gatilho da auxiliar no workflow.
+- Retirada da **única** auxiliar `integration/07-asset-provenance-20261027@fa3780e3bf4dfe659cf12d0f4cf53625094eff31`: [Actions #40572051580](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40572051580) com **AUDIT PASS** e **APPLY PASS**. Recibos `scene-assets-aux-audit-40572051580` (artifact ID 12764999274) e `scene-assets-aux-apply-40572051580` (12766430170); ref retirada somente via `--force-with-lease` no SHA exato e leitura integral de todas as referências depois da exclusão.
+- Readback independente pelo conector: **63→62** branches; **60 históricas preservadas** (incluindo **as duas fontes 07**), `main@221b54b2a41ecc8c338d1bf2cf67280cf165ce95` inalterada; **12 PRs**, inclusive #34, inalteradas.
+- O workflow `.github/workflows/development-scene-asset-aux-retire.yml` foi convertido em comprovante somente manual, sem permissões de escrita. `tools/development_scene_asset_aux_retire.py` é de **uso único consumido, proibida reexecução**.
+- Nenhum PNG/WebP/SVG de aplicação ou cena foi modificado; não foi criado Deploy Preview e nada foi publicado na `main`. O fechamento é de **proveniência**, não de aprovação visual das laterais ou vidro.
