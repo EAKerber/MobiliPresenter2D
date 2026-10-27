@@ -38,7 +38,7 @@ jobs:
         run: |
           npm install --prefix /tmp/m2d-label500 --no-audit --no-fund playwright@1.62.1
           node -e 'const p=require("/tmp/m2d-label500/node_modules/playwright/package.json");if(p.version!=="1.62.1") process.exit(1);'
-      - name: Verify 80 computed container states; no production call
+      - name: Verify 136 computed container states; no production call
         env:
           NODE_PATH: /tmp/m2d-label500/node_modules
         run: node tests/ci/nav-label500-invariant.cjs
