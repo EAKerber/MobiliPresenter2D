@@ -40,3 +40,12 @@ A falsificação é de política estrutural: não comprova que um usuário real 
 6. Após consolidação, retirar a branch auxiliar somente com gate terminal novo, lease SHA/ancestralidade, contagem integral de branches, 60 origens preservadas e ausência de PR no head auxiliar; não reutilizar A1/A2/03/04/05 consumidos.
 
 **Próxima prioridade sugerida:** analisar `06-config-viewer` e preço publicado com schema V5, ou continuar a fronteira auth do bloco 01 em preview **somente** quando houver commit de preview verificado. Não automatizar fechamento das PRs #182/#184/#185/#186.
+
+
+## Consolidação e higiene verificadas (27/10/2026)
+
+- Auxiliar `integration/02-access-dto-authorization-20261027@14c598a159c004c9cf79ecb8ff1bd38d454cbf22` avançou por **fast-forward com lease** desde `development@ac7366486de3dade506c54f8d8e77842c79ac77d`. Diffs exatos: endpoint `configuration.mjs`, teste adversarial V5, teste negativo Buyer, workflow CI offline e este ledger.
+- Gate pós-integração na `development`: [#40566373322](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40566373322) **PASS**; após retirar o trigger da auxiliar, [#40566595755](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40566595755) **PASS**.
+- Higiene de uso único: [Actions #40566796709](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40566796709) **AUDIT PASS + APPLY PASS**, com 10 testes negativos, lease exato, ausência de PR na auxiliar, ancestralidade e inventário completo. Artifacts `access-dto-aux-audit-40566796709` (12763117809) e `access-dto-aux-apply-40566796709` (12763930465).
+- Readback pelo conector: **63→62 refs**, `integration/02-access-dto-authorization-20261027` ausente, **60** origens históricas preservadas, `main@221b54b2a41ecc8c338d1bf2cf67280cf165ce95` intacta, **12 PRs** inalteradas. O workflow `development-access-dto-aux-retire.yml` foi desativado depois de consumido; o executor Python é registro histórico **não reutilizável**.
+- O único runtime alterado permanece **não publicado**, na `development`. Não existe evidência de chamadas a banco real, Netlify ou grants nesta rodada. Mais testes necessários para 401/403/503 em ambiente real antes de promoção a main.
