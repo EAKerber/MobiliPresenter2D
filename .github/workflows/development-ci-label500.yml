@@ -1,0 +1,44 @@
+name: Development nav label 500px named container gate (localhost)
+
+on:
+  push:
+    branches:
+      - integration/01-ci-label500-invariant-20261027
+      - development
+    paths:
+      - 'tests/ci/nav-label500-invariant.cjs'
+      - '.github/workflows/development-ci-label500.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: m2d-label500-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  nav-label500:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    container:
+      image: mcr.microsoft.com/playwright:v1.62.1-noble
+      options: --ipc=host
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify source and prepare isolated V5 loopback
+        shell: bash
+        run: |
+          node --check tests/ci/nav-label500-invariant.cjs
+          bash tests/ci/prepare-local-v5-browser.sh FLOW_LAYOUT_URL
+      - name: Resolve exact Playwright package against preinstalled Chromium/WebKit
+        run: |
+          npm install --prefix /tmp/m2d-label500 --no-audit --no-fund playwright@1.62.1
+          node -e 'const p=require("/tmp/m2d-label500/node_modules/playwright/package.json");if(p.version!=="1.62.1") process.exit(1);'
+      - name: Verify 80 computed container states; no production call
+        env:
+          NODE_PATH: /tmp/m2d-label500/node_modules
+        run: node tests/ci/nav-label500-invariant.cjs
