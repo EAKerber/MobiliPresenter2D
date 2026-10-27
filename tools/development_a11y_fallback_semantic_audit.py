@@ -66,8 +66,13 @@ def verify() -> dict:
     old_page = git("show", OLD + ":architecture/pages/how-it-works.page.html")
     current_page = Path("architecture/pages/how-it-works.page.html").read_text(encoding="utf-8")
     current_generated = Path("app/how-it-works/index.html").read_text(encoding="utf-8")
+    # Legacy attached the fallback to <figure>; current shared handler attaches
+    # it to the inner media frame so failure does not obscure figcaption.
+    require('class="study-art" data-image-fallback' in old_page, "LEGACY_STUDY_SCOPE_CHANGED")
+    for page in (current_page, current_generated):
+        require('class="study-art"><div class="study-art-media image-fallback-frame" data-image-fallback>' in page,
+                "CURRENT_MEDIA_FRAME_SCOPE_CHANGED")
     for page in (old_page, current_page, current_generated):
-        require('class="study-art" data-image-fallback' in page, "STUDY_FRAME_NOT_PRESENT")
         require('class="study-space-illustration"' in page, "STUDY_IMG_NOT_PRESENT")
     require(current_page.count("data-image-fallback") == 18, "CURRENT_FRAME_COUNT_NOT_18")
     require(current_generated.count("data-image-fallback") == 18, "GENERATED_FRAME_COUNT_NOT_18")
