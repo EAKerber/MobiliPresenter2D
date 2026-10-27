@@ -1,0 +1,30 @@
+name: Development auth-preview identity contract (synthetic; no network)
+
+on:
+  push:
+    branches:
+      - integration/01-ci-auth-identity-20261027
+      - development
+    paths:
+      - 'tests/ci/preview-identity-attestation.mjs'
+      - 'tests/ci/preview-identity-attestation.test.mjs'
+      - '.github/workflows/development-ci-auth-identity.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  preflight-unit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check pure preflight; no tokens, role, site or network
+        run: |
+          node --check tests/ci/preview-identity-attestation.mjs
+          node --check tests/ci/preview-identity-attestation.test.mjs
+          node --test tests/ci/preview-identity-attestation.test.mjs
