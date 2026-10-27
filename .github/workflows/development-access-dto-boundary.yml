@@ -1,0 +1,41 @@
+name: Development CP-PUBLIC-03a authorization boundary (offline)
+
+on:
+  push:
+    branches:
+      - integration/02-access-dto-authorization-20261027
+      - development
+    paths:
+      - 'app/tools/test-v5-endpoint-safety.js'
+      - 'app/tools/test-access-policy.mjs'
+      - 'netlify/functions/configuration.mjs'
+      - 'netlify/access/identity-policy.mjs'
+      - '.github/workflows/development-access-dto-boundary.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: m2d-access-dto-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  authorization-contract:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify syntax
+        run: |
+          node --check netlify/functions/configuration.mjs
+          node --check netlify/functions/buyer-configuration.mjs
+          node --check app/tools/test-v5-endpoint-safety.js
+      - name: Test authorization and role policy without credentials or network
+        run: |
+          node app/tools/test-access-policy.mjs
+          node app/tools/test-v5-endpoint-safety.js
+          node --test tests/auth-first-login-recovery.test.mjs
