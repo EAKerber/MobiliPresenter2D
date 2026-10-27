@@ -130,5 +130,41 @@ class DevelopmentRetirementContract(unittest.TestCase):
             mod.canonical_targets(b, i)
 
 
+    def test_equal_blob_proof_accepts_valid_shape(self):
+        b, i = fixture()
+        b["targets"][0].pop("sourcePath")
+        b["targets"][0].pop("sourceBlobSha")
+        b["targets"][0]["equalBlobPath"] = "app/styles.css"
+        b["targets"][0]["equalBlobSha"] = "d43e6fb5e66133d2389b5c39b165b76b13cfa868"
+        self.assertEqual(len(mod.canonical_targets(b, i)[1]), 3)
+
+    def test_mixed_equal_and_archived_delta_proof_denied(self):
+        b, i = fixture()
+        b["targets"][0]["equalBlobPath"] = "app/styles.css"
+        b["targets"][0]["equalBlobSha"] = "d43e6fb5e66133d2389b5c39b165b76b13cfa868"
+        with self.assertRaisesRegex(ValueError, "MIXED_ARCHIVE_PROOF_MODES"):
+            mod.canonical_targets(b, i)
+
+    def test_equal_blob_wrong_path_or_sha_denied(self):
+        for key, val in [("equalBlobPath", "../secrets"),
+                         ("equalBlobPath", "netlify.toml"),
+                         ("equalBlobSha", "not-a-sha")]:
+            b, i = fixture()
+            b["targets"][0].pop("sourcePath")
+            b["targets"][0].pop("sourceBlobSha")
+            b["targets"][0]["equalBlobPath"] = "app/styles.css"
+            b["targets"][0]["equalBlobSha"] = "d43e6fb5e66133d2389b5c39b165b76b13cfa868"
+            b["targets"][0][key] = val
+            with self.assertRaisesRegex(ValueError, "INVALID_EQUAL_BLOB_PROOF"):
+                mod.canonical_targets(b, i)
+
+    def test_previous_retired_cannot_be_retargeted(self):
+        b, i = fixture()
+        b["retired"] = [{"branch": R9, "sha": ANCESTORS[0]["sha"], "kind": "ancestor-main"}]
+        b["targets"] = [ANCESTORS[0]]
+        with self.assertRaisesRegex(ValueError, "TARGET_NOT_IN_PINNED_INVENTORY"):
+            mod.canonical_targets(b, i)
+
+
 if __name__ == "__main__":
     unittest.main()
