@@ -3,7 +3,6 @@ name: Development CP-PUBLIC-03 strict preview DTO fallback (localhost fixtures)
 on:
   push:
     branches:
-      - integration/03-public-dto-fallback-gate-20261027
       - development
     paths:
       - 'app/tools/test-public-modules-endpoint.js'

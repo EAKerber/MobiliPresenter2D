@@ -1,0 +1,71 @@
+name: Development CP-PUBLIC-03 one-shot auxiliary retirement
+
+on:
+  push:
+    branches: [development]
+    paths:
+      - 'tools/development_public_dto_aux_retire.py'
+      - 'tests/test_development_public_dto_aux_retire.py'
+      - '.github/workflows/development-public-dto-aux-retire.yml'
+
+concurrency:
+  group: m2d-development-public-dto-aux-hygiene
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+  pull-requests: read
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Negative tests and one-shot tool syntax
+        run: |
+          python -m unittest discover -s tests -p 'test_development_public_dto_aux_retire.py' -v
+          python -m py_compile tools/development_public_dto_aux_retire.py
+      - name: Read-only exact 63-ref audit and destination-gate proof
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: python tools/development_public_dto_aux_retire.py --mode audit
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: public-dto-aux-audit-${{ github.run_id }}
+          path: public-dto-aux-retire-receipt.json
+          if-no-files-found: warn
+
+  apply:
+    needs: audit
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    permissions:
+      contents: write
+      pull-requests: read
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Repeat one-shot negative tests
+        run: python -m unittest discover -s tests -p 'test_development_public_dto_aux_retire.py' -v
+      - name: Delete only exact ancestor branch with SHA lease and remote readback
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: python tools/development_public_dto_aux_retire.py --mode apply
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: public-dto-aux-apply-${{ github.run_id }}
+          path: public-dto-aux-retire-receipt.json
+          if-no-files-found: warn
