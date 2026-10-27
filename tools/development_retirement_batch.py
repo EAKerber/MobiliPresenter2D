@@ -108,6 +108,29 @@ def canonical_targets(batch, inventory):
         if branch in original:
             raise ValueError("ORIGINAL_DUPLICATE_REF")
         original[branch] = sha
+    retired = batch.get("retired", [])
+    if not isinstance(retired, list) or len(retired) > 60:
+        raise ValueError("INVALID_RETIRED_REGISTRY")
+    seen_retired = set()
+    for record in retired:
+        if not isinstance(record, dict):
+            raise ValueError("INVALID_RETIRED_ENTRY")
+        name, sha, kind = record.get("branch"), record.get("sha"), record.get("kind")
+        if (not safe_name(name) or name in seen_retired
+            or name in seen_retired or name not in original or original[name] != sha):
+            raise ValueError("RETIRED_ORIGINAL_PIN_MISMATCH")
+        if kind == "ancestor-main":
+            if set(record) != {"branch", "sha", "kind"}:
+                raise ValueError("BAD_PREVIOUS_ANCESTOR")
+        elif kind == "archive-diverged":
+            tag = record.get("archiveTag")
+            if (set(record) != {"branch", "sha", "kind", "archiveTag"}
+                or not isinstance(tag, str) or not TAG_RE.fullmatch(tag)
+                or ".." in tag or "//" in tag or tag.endswith("/")):
+                raise ValueError("BAD_PREVIOUS_ARCHIVE")
+        else:
+            raise ValueError("UNSUPPORTED_PREVIOUS_DISPOSITION")
+        seen_retired.add(name)
     seen = set()
     for item in entries:
         if not isinstance(item, dict):
@@ -121,27 +144,44 @@ def canonical_targets(batch, inventory):
             if set(item) != {"branch", "sha", "kind"}:
                 raise ValueError("UNEXPECTED_ANCESTOR_FIELDS")
         elif kind == "archive-diverged":
-            if set(item) != {"branch", "sha", "kind", "archiveTag", "snapshotPath", "sourcePath", "sourceBlobSha"}:
+            allowed = {"branch", "sha", "kind", "archiveTag", "snapshotPath", "sourcePath", "sourceBlobSha"}
+            required = {"branch", "sha", "kind", "archiveTag", "snapshotPath"}
+            if not required.issubset(item) or not set(item).issubset(allowed):
                 raise ValueError("INVALID_ARCHIVE_FIELDS")
             tag, path = item["archiveTag"], item["snapshotPath"]
             if (not isinstance(tag, str) or not TAG_RE.fullmatch(tag)
                 or ".." in tag or "//" in tag or tag.endswith("/")
-                or not isinstance(path, str) or not path.startswith("docs/handoffs/")
-                or ".." in Path(path).parts or not isinstance(item["sourcePath"], str)
-                or not item["sourcePath"].startswith("docs/handoffs/")
-                or not SHA_RE.fullmatch(str(item["sourceBlobSha"]))):
+                or not isinstance(path, str) or not path.startswith("docs/")
+                or ".." in Path(path).parts):
+                raise ValueError("INVALID_ARCHIVE_IDENTITY")
+            with_source = "sourcePath" in item or "sourceBlobSha" in item
+            if with_source and (not isinstance(item.get("sourcePath"), str)
+                or not item["sourcePath"].startswith("docs/")
+                or ".." in Path(item["sourcePath"]).parts
+                or not SHA_RE.fullmatch(str(item.get("sourceBlobSha")))):
                 raise ValueError("INVALID_ARCHIVE_IDENTITY")
         else:
             raise ValueError("UNSUPPORTED_DISPOSITION")
-    return original, entries
+    return {name: sha for name, sha in original.items() if name not in seen_retired}, entries
 
 
 def prove_snapshot(target):
+    """A diverged ref is never removed without a human-readable pinned record.
+
+    An optional exact 23 Oct source delta additionally verifies literal content;
+    generic future batches may preserve arbitrary DAGs using a full Git tag and
+    exact pinned documentary note, rather than reusing this specific delta format.
+    """
+    copy = Path(target["snapshotPath"]).read_text(encoding="utf-8")
+    if (target["branch"] + "@" + target["sha"] not in copy
+        or target["archiveTag"] not in copy):
+        raise RuntimeError("ARCHIVE_PROVENANCE_RECORD_MISSING")
+    if "sourcePath" not in target:
+        return {"snapshotPath": target["snapshotPath"], "fullCommitRetainedByTag": True}
     old = git("show", target["sha"] + ":" + target["sourcePath"])
     current = git("show", "HEAD:" + target["sourcePath"])
-    copy = Path(target["snapshotPath"]).read_text(encoding="utf-8")
-    marker_a = "<!-- BEGIN-ARCHIVED-20261023-EXACT-26-LINES -->\n"
-    marker_b = "\n<!-- END-ARCHIVED-20261023-EXACT-26-LINES -->"
+    marker_a = "<!-- BEGIN-ARCHIVED-20261023-EXACT-26-LINES -->\\n"
+    marker_b = "\\n<!-- END-ARCHIVED-20261023-EXACT-26-LINES -->"
     if (copy.count(marker_a) != 1 or copy.count(marker_b) != 1
         or git("rev-parse", target["sha"] + ":" + target["sourcePath"]) != target["sourceBlobSha"]):
         raise RuntimeError("HISTORICAL_COPY_MARKER_OR_BLOB_DRIFT")
@@ -165,6 +205,14 @@ def verify_context(batch, inventory, mode):
         or git("rev-parse", "HEAD") != env_sha):
         raise RuntimeError("NOT_EXACT_DEVELOPMENT_PUSH")
     refs = remote_refs()
+    previous = batch.get("retired", [])
+    tags_before = archive_tags()
+    for row in previous:
+        if row["kind"] == "ancestor-main":
+            if subprocess.run(["git", "merge-base", "--is-ancestor", row["sha"], MAIN_SHA]).returncode:
+                raise RuntimeError("PREVIOUS_ANCESTOR_NOT_RECOVERABLE")
+        elif tags_before.get(row["archiveTag"]) != row["sha"]:
+            raise RuntimeError("PREVIOUS_ARCHIVE_TAG_NOT_RECOVERABLE")
     expected = {**original, "main": MAIN_SHA, "development": env_sha}
     if refs != expected:
         raise RuntimeError("FULL_REF_ROSTER_DRIFT")
