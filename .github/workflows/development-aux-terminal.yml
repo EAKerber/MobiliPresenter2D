@@ -1,0 +1,74 @@
+name: Development one-shot terminal auxiliary retirement
+
+on:
+  push:
+    branches: [development]
+    paths:
+      - 'ops/development-aux-terminal.json'
+      - 'tools/development_aux_terminal.py'
+      - 'tests/test_development_aux_terminal.py'
+      - '.github/workflows/development-aux-terminal.yml'
+
+concurrency:
+  group: m2d-dev-terminal-aux
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+  pull-requests: read
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: read
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Negative terminal gates and syntax
+        run: |
+          python -m unittest discover -s tests -p 'test_development_aux_terminal.py' -v
+          python -m py_compile tools/development_aux_terminal.py
+      - name: Read-only exact-63-ref terminal audit
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: python tools/development_aux_terminal.py --mode audit
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: dev-terminal-audit-${{ github.run_id }}
+          path: development-aux-terminal-receipt.json
+          if-no-files-found: warn
+
+  apply:
+    needs: audit
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: read
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Require same negative tests
+        run: |
+          python -m unittest discover -s tests -p 'test_development_aux_terminal.py' -v
+      - name: One-shot exact-SHA operational ref retirement after fresh gates
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: python tools/development_aux_terminal.py --mode apply
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: dev-terminal-apply-${{ github.run_id }}
+          path: development-aux-terminal-receipt.json
+          if-no-files-found: warn

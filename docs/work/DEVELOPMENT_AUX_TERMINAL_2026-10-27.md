@@ -1,0 +1,7 @@
+# One-shot operational branch retirement after A1 and A2
+
+Pre-state: 63 branches: 60 preexisting historical/donor heads, `main`, `development`, and `integration/01-aux-retire-gate-20261027@8bc69de89f977b9e82960c5b0c950c6fe6854fc1`. All six temporary implementation auxiliaries are gone with ancestor commits preserved in development. [A1 #40544066545](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40544066545) and [A2 #40546084945](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40546084945) PASS/readback.
+
+A terminal workflow on development must first audit immutable pins, original 60-HEAD inventory, PR list, rule/branch protection, original operational SHA reachability, active workflow references, and both prior run identities. It then repeats every check independently in the apply job before deleting **only** the operational ref by `--force-with-lease`; a full remote refs readback must show exactly **62 branches**, comprising the original 60 plus main/development. No other ref can be touched.
+
+The consumed A2 workflow is now inert (`workflow_dispatch` informational placeholder), removing the obsolete operational branch trigger. A failed condition blocks deletion; not a fallback to partial other deletions. The final receipt is uploaded by GitHub Actions, and this plan is not proof of execution until the Action reports PASS and remote readback verifies the branch count. Never reuse this manifest after consumption. Production main and Netlify remain outside scope.

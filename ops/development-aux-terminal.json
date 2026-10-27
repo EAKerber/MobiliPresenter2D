@@ -1,0 +1,9 @@
+{
+  "schemaVersion": "M2DDevAuxTerminal/0.1",
+  "repository": "EAKerber/MobiliPresenter2D",
+  "operational": "integration/01-aux-retire-gate-20261027",
+  "mainSha": "221b54b2a41ecc8c338d1bf2cf67280cf165ce95",
+  "developmentBaseSha": "2ea9627ed315430586adccf269594a1769169d89",
+  "operationalSha": "8bc69de89f977b9e82960c5b0c950c6fe6854fc1",
+  "purpose": "ONE_SHOT: terminal branch exact SHA, preserve all 60 historical HEADs and both permanent branches, after verified A1 A2 PASS; not general-purpose hygiene"
+}
