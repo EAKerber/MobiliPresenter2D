@@ -23,9 +23,9 @@ INVENTORY = Path("docs/work/DEVELOPMENT_CLUSTER_INVENTORY_2026-10-27.json")
 MANIFEST = Path("ops/development-retirement-batch.json")
 RECEIPT = Path("artifacts/development-retirement/receipt.json")
 PR_NUMBERS = frozenset([34, 175, 178, 179, 180, 182, 184, 185, 186, 196, 231, 238])
-SHA_RE = re.compile(r"[0-9a-f]{40}\\Z")
-BRANCH_RE = re.compile(r"[A-Za-z0-9._/-]+\\Z")
-TAG_RE = re.compile(r"archive/m2d/[a-z0-9][a-z0-9._/-]*\\Z")
+SHA_RE = re.compile(r"[0-9a-f]{40}\Z")
+BRANCH_RE = re.compile(r"[A-Za-z0-9._/-]+\Z")
+TAG_RE = re.compile(r"archive/m2d/[a-z0-9][a-z0-9._/-]*\Z")
 
 
 def git(*args: str, check: bool = True) -> str:
@@ -52,7 +52,7 @@ def api(path: str):
 def remote_refs():
     result = {}
     for row in git("ls-remote", "--heads", "origin").splitlines():
-        sha, ref = row.split("\\t", 1)
+        sha, ref = row.split("\t", 1)
         if not ref.startswith("refs/heads/") or not SHA_RE.fullmatch(sha):
             raise RuntimeError("BAD_REMOTE_ROW")
         name = ref.removeprefix("refs/heads/")
@@ -65,7 +65,7 @@ def remote_refs():
 def archive_tags():
     result = {}
     for row in git("ls-remote", "--tags", "origin").splitlines():
-        sha, ref = row.split("\\t", 1)
+        sha, ref = row.split("\t", 1)
         if ref.endswith("^{}"):
             continue
         if not ref.startswith("refs/tags/") or not SHA_RE.fullmatch(sha):
@@ -140,8 +140,8 @@ def prove_snapshot(target):
     old = git("show", target["sha"] + ":" + target["sourcePath"])
     current = git("show", "HEAD:" + target["sourcePath"])
     copy = Path(target["snapshotPath"]).read_text(encoding="utf-8")
-    marker_a = "<!-- BEGIN-ARCHIVED-20261023-EXACT-26-LINES -->\\n"
-    marker_b = "\\n<!-- END-ARCHIVED-20261023-EXACT-26-LINES -->"
+    marker_a = "<!-- BEGIN-ARCHIVED-20261023-EXACT-26-LINES -->\n"
+    marker_b = "\n<!-- END-ARCHIVED-20261023-EXACT-26-LINES -->"
     if (copy.count(marker_a) != 1 or copy.count(marker_b) != 1
         or git("rev-parse", target["sha"] + ":" + target["sourcePath"]) != target["sourceBlobSha"]):
         raise RuntimeError("HISTORICAL_COPY_MARKER_OR_BLOB_DRIFT")
@@ -216,7 +216,7 @@ def main():
                "targetPins": targets, "archivalTags": [],
                "deleted": [], "status": "AUDIT_PASS" if args.mode == "audit" else "APPLY_STARTED"}
     RECEIPT.parent.mkdir(parents=True, exist_ok=True)
-    RECEIPT.write_text(json.dumps(receipt, indent=2) + "\\n", encoding="utf-8")
+    RECEIPT.write_text(json.dumps(receipt, indent=2) + "\n", encoding="utf-8")
     if args.mode == "audit":
         print(json.dumps({"status": "AUDIT_PASS", "batch": batch["batchId"], "count": len(targets)}))
         return
@@ -234,7 +234,7 @@ def main():
         if archive_tags().get(name) != sha:
             raise RuntimeError("ARCHIVE_TAG_READBACK_FAILED")
         receipt["archivalTags"].append({"tag": name, "sha": sha})
-    RECEIPT.write_text(json.dumps(receipt, indent=2) + "\\n", encoding="utf-8")
+    RECEIPT.write_text(json.dumps(receipt, indent=2) + "\n", encoding="utf-8")
     expected = before.copy()
     for item in targets:
         # Re-check all mutable external safety conditions for every deletion.
@@ -258,12 +258,12 @@ def main():
         if remote_refs() != expected:
             raise RuntimeError("REF_READBACK_AFTER_DELETE_FAILED")
         receipt["deleted"].append({"branch": item["branch"], "sha": item["sha"]})
-        RECEIPT.write_text(json.dumps(receipt, indent=2) + "\\n", encoding="utf-8")
+        RECEIPT.write_text(json.dumps(receipt, indent=2) + "\n", encoding="utf-8")
     for item in targets:
         if item["kind"] == "archive-diverged" and archive_tags().get(item["archiveTag"]) != item["sha"]:
             raise RuntimeError("FINAL_ARCHIVE_TAG_DRIFT")
     receipt.update(status="PASS", remainingBranches=len(expected), readback="PASS")
-    RECEIPT.write_text(json.dumps(receipt, indent=2) + "\\n", encoding="utf-8")
+    RECEIPT.write_text(json.dumps(receipt, indent=2) + "\n", encoding="utf-8")
     print(json.dumps({"status": receipt["status"], "batch": receipt["batchId"],
                       "deleted": receipt["deleted"], "remainingBranches": len(expected)}))
 
