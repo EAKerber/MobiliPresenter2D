@@ -3,7 +3,6 @@ name: Development 06 Viewer price/publication gate (offline and localhost)
 on:
   push:
     branches:
-      - integration/06-viewer-price-wire-contract-20261027
       - development
     paths:
       - 'tests/ci/viewer-price-wire-contract.test.cjs'
