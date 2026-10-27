@@ -1,0 +1,71 @@
+name: Development navigation auxiliary one-shot retirement
+
+on:
+  push:
+    branches: [development]
+    paths:
+      - 'tools/development_nav_aux_retire.py'
+      - 'tests/test_development_nav_aux_retire.py'
+      - '.github/workflows/development-nav-aux-retire.yml'
+
+concurrency:
+  group: m2d-nav-one-shot-retire
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+  pull-requests: read
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Negative tests and syntax
+        run: |
+          python -m unittest discover -s tests -p 'test_development_nav_aux_retire.py' -v
+          python -m py_compile tools/development_nav_aux_retire.py
+      - name: Audit 63 exact remote refs without deletion
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: python tools/development_nav_aux_retire.py --mode audit
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: nav-aux-retire-audit-${{ github.run_id }}
+          path: navigation-aux-retire-receipt.json
+          if-no-files-found: warn
+
+  apply:
+    needs: audit
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    permissions:
+      contents: write
+      pull-requests: read
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Repeat negative tests
+        run: python -m unittest discover -s tests -p 'test_development_nav_aux_retire.py' -v
+      - name: Retire ONLY the exact NAV 05 integrated auxiliary
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: python tools/development_nav_aux_retire.py --mode apply
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: nav-aux-retire-apply-${{ github.run_id }}
+          path: navigation-aux-retire-receipt.json
+          if-no-files-found: warn

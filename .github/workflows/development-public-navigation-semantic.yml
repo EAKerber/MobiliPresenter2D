@@ -3,7 +3,6 @@ name: Development public NAV-004 / NAV-005 semantic gate (local browsers)
 on:
   push:
     branches:
-      - integration/05-navigation-contracts-20261027
       - development
     paths:
       - 'tests/ci/public-navigation-semantic-browser.mjs'
