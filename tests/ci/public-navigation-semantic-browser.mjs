@@ -33,7 +33,8 @@ for(const [engineName,engine] of ENGINES){
           else await route.abort("blockedbyclient");
         });
         await context.addInitScript(mode=>{
-          localStorage.setItem("casa-ui-theme-mode-v1",mode);
+          try { localStorage.setItem("casa-ui-theme-mode-v1",mode); }
+          catch { /* Sandboxed third-party iframe has no storage origin. */ }
         },theme);
         const page=await context.newPage(),errors=[];
         page.on("pageerror",e=>errors.push(String(e.message).slice(0,250)));
@@ -52,7 +53,7 @@ for(const [engineName,engine] of ENGINES){
           assert.equal(await page.evaluate(()=>document.documentElement.dataset.theme),
             theme,id+" theme");
           assert.deepEqual(await nav.locator("[aria-current='page']").evaluateAll(
-            elements=>elements.map(e=>e.getAttribute("href"))),active?[active]:[],
+            elements=>elements.map(e=>{const u=new URL(e.getAttribute("href"),document.baseURI);return u.pathname+u.hash;})),active?[active]:[],
             id+" active nav must match route (Viewer has none)");
           if(kind==="primary"){
             assert.equal(await page.locator(".site-header").count(),1);
