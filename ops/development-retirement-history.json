@@ -116,7 +116,59 @@
         "mainSha": "221b54b2a41ecc8c338d1bf2cf67280cf165ce95"
       },
       "noDeploy": true
+    },
+    {
+      "batchId": "dev-20261027-a11y-semantic-aux-d2",
+      "workflowRun": 40582950464,
+      "workflowUrl": "https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40582950464",
+      "headSha": "852d0f0a2780c18e79f78545a2438a7c4dd0f4d1",
+      "auditArtifactId": 12770123137,
+      "applyArtifactId": 12769169430,
+      "audit": "PASS",
+      "apply": "PASS",
+      "refsBefore": 57,
+      "refsAfter": 55,
+      "archived": [
+        {
+          "tag": "archive/m2d/a11y-image-fallback-6840d898",
+          "sha": "6840d8986e44a7860b541e6becb3b5373ef48c09"
+        }
+      ],
+      "retired": [
+        {
+          "branch": "a11y/image-failure-scalable-placeholder-20261025",
+          "sha": "6840d8986e44a7860b541e6becb3b5373ef48c09",
+          "kind": "archive-diverged",
+          "archiveTag": "archive/m2d/a11y-image-fallback-6840d898"
+        }
+      ],
+      "auxiliaryRetired": [
+        {
+          "branch": "integration/10-a11y-fallback-semantic-reconcile-20261027",
+          "sha": "5154004be71c1cd75069f0ca64ab5d91c3a95b99",
+          "kind": "auxiliary-ancestor-development",
+          "recoverableFromDevelopment": true
+        }
+      ],
+      "semanticProof": {
+        "workflowRun": 40581205414,
+        "workflowSha": "0f752e6d09623579d3db87a7f65d6eabbc183457",
+        "finalDevGate": 40582867385,
+        "sourceChangedPaths": 5,
+        "browserCases": 152,
+        "scenarios": 16,
+        "contract": "SEMANTIC_SUPERSET_STATIC_CONTRACT_PASS",
+        "runtimeChanged": false
+      },
+      "preserved": {
+        "openPRs": 12,
+        "remainingOriginalHistoricalRefs": 53,
+        "mainSha": "221b54b2a41ecc8c338d1bf2cf67280cf165ce95",
+        "originalAssetsBranch": "artifacts/ds02-imagens-originais-20261015",
+        "unmergedVisualPR": 34
+      },
+      "noDeploy": true
     }
   ],
-  "nextBatchContract": "Next wave: concatenate six waves[].retired from all three applied waves; bounded 1-3 new SHA pinned targets only. Original inventory still has 60 refs; 54 historical branches are live. Open PR heads/base and DS02 originals and PR34 remain protected. Archival tags of the two divergent retired branches must resolve to their original SHA."
+  "nextBatchContract": "Next wave must carry the seven historical waves[].retired (four ancestor-main, three archive-diverged with verified recoverable tags). The one auxiliaryRetired of wave D is already reachable from development and must NOT be inserted into historic retired[] because it is not one of the original 60. Only 1-3 new SHA-pinned refs; keep 12 PRs protected and verify complete roster of 53 historical refs + main + development."
 }
