@@ -48,3 +48,16 @@ Ao aplicar novos lotes, o manifesto explícito `ops/development-retirement-batch
 **Novo estado:** 53 branches históricas + main + development = **55 branches**. Foram reconciliadas e retiradas **7 branches históricas** em quatro ondas (4 ancestrais; 3 divergentes retidas em tags). A matriz original de 55 era uma fotografia anterior à poda e suas categorias de blocos permanecerão como evidência, não como estado corrente. `retired[]` para a próxima onda terá **sete** históricos; auxiliares já absorvidas **não** pertencem a esse conjunto de 60 fontes iniciais.
 
 **Próximos grupos para decisão por contrato:** `fix/how-it-works-accordion-grid-20261021` (página e layout atuais); `tooling/migration-inspector-v0-20261023` (código e diagnósticos estáticos); `feature/viewer-base-prices-global-off-20261021` (DTO/preços, alta sensibilidade). Nenhuma destas foi descartada nem reclassificada sem teste.
+
+
+## Revarredura após a onda D2 — fotografia atual
+
+A varredura read-only foi repetida com `tools/development_branch_reconciliation_scan.py` já generalizado e com as **7 aposentadorias históricas** reconhecidas pelo ledger, sem assumir que um nome antigo ainda existe. [GitHub Actions #40583453663](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40583453663) **PASS**; artifact `development-semantic-reconciliation-40583453663`, ID `12770662040`. Roster conferido: **53 refs históricas + main + development = 55 branches**, 12 PRs abertas.
+
+| Classificação por contribuição de blob, apenas 53 atuais | Quantidade |
+|---|---:|
+| Todos os blobs contribuídos idênticos ao destino | **0** |
+| Parcialmente reconciliados por identidade de arquivo | **19** |
+| Sem blob contribuído idêntico no mesmo caminho | **34** |
+
+O `0` na primeira linha significa que todas as equivalências **puramente por SHA** já foram tratadas. O exemplo da acessibilidade provou que uma das 34 restantes na fotografia anterior já havia sido absorvida *semanticamente* por outro arquivo. Logo, os próximos 53 casos devem ser avaliados por contrato, não apenas SHA. A branch `fix/how-it-works-accordion-grid-20261021` possui o mesmo teste-base de interação no destino, mas não está autorizada para exclusão enquanto a semântica CSS/responsividade não for verificada por navegador contra a versão de origem. Não confundir presença de um teste com resultado PASS em comparação de comportamento.
