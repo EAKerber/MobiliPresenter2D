@@ -79,7 +79,44 @@
         "mainSha": "221b54b2a41ecc8c338d1bf2cf67280cf165ce95"
       },
       "noDeploy": true
+    },
+    {
+      "batchId": "dev-20261027-mobile-menu-exact-blob-c",
+      "workflowRun": 40579188891,
+      "workflowUrl": "https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40579188891",
+      "headSha": "69d68eb2312993dd5caf28b21e74c41372bca147",
+      "auditArtifactId": 12768906379,
+      "applyArtifactId": 12768497745,
+      "audit": "PASS",
+      "apply": "PASS",
+      "refsBefore": 57,
+      "refsAfter": 56,
+      "archived": [
+        {
+          "tag": "archive/m2d/fix-mobile-menu-scene-stacking-b81308a2",
+          "sha": "b81308a22c2a9d281037306f5ebf9eecb521d15e"
+        }
+      ],
+      "retired": [
+        {
+          "branch": "fix/mobile-menu-scene-stacking-20261019",
+          "sha": "b81308a22c2a9d281037306f5ebf9eecb521d15e",
+          "kind": "archive-diverged",
+          "archiveTag": "archive/m2d/fix-mobile-menu-scene-stacking-b81308a2"
+        }
+      ],
+      "sourceProof": {
+        "file": "app/styles.css",
+        "equalBlob": "d43e6fb5e66133d2389b5c39b165b76b13cfa868",
+        "allChangedPathsEqualDevelopment": true
+      },
+      "preserved": {
+        "openPRs": 12,
+        "remainingOriginalHistoricalRefs": 54,
+        "mainSha": "221b54b2a41ecc8c338d1bf2cf67280cf165ce95"
+      },
+      "noDeploy": true
     }
   ],
-  "nextBatchContract": "For the next authorized batch, concatenate all waves[].retired (now five entries) into ops/development-retirement-batch.json retired[], choose only 1–3 newly verified SHA-pinned targets, and preserve all open PR heads/bases. Existing applied batch is consumed; never replay without a new complete manifest, audit, and lease."
+  "nextBatchContract": "Next wave: concatenate six waves[].retired from all three applied waves; bounded 1-3 new SHA pinned targets only. Original inventory still has 60 refs; 54 historical branches are live. Open PR heads/base and DS02 originals and PR34 remain protected. Archival tags of the two divergent retired branches must resolve to their original SHA."
 }
