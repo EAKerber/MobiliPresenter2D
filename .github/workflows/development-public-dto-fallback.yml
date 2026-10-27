@@ -9,6 +9,7 @@ on:
       - 'app/tools/test-public-modules-endpoint.js'
       - 'netlify/functions/public-modules.mjs'
       - '.github/workflows/development-public-dto-fallback.yml'
+      - 'docs/work/DEVELOPMENT_PUBLIC_PAGES_DTO_CLUSTER_2026-10-27.md'
   workflow_dispatch:
 
 permissions:
