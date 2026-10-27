@@ -217,5 +217,47 @@ class DevelopmentRetirementContract(unittest.TestCase):
             mod.canonical_targets(b, i)
 
 
+    def test_semantic_gate_explicit_green_run_shape(self):
+        b, i = fixture()
+        b["targets"][0].pop("sourcePath")
+        b["targets"][0].pop("sourceBlobSha")
+        b["targets"][0]["semanticGate"] = {
+            "runId": 40581205414,
+            "headSha": "0f752e6d09623579d3db87a7f65d6eabbc183457",
+            "workflowName": "Development 10 — legacy a11y fallback semantic supersession (offline)"
+        }
+        self.assertEqual(len(mod.canonical_targets(b, i)[1]), 3)
+
+    def test_unproved_divergent_archive_denied(self):
+        b, i = fixture()
+        b["targets"][0].pop("sourcePath")
+        b["targets"][0].pop("sourceBlobSha")
+        with self.assertRaisesRegex(ValueError, "EXACTLY_ONE_ARCHIVE_PROOF_REQUIRED"):
+            mod.canonical_targets(b, i)
+
+    def test_semantic_gate_conflicting_proofs_denied(self):
+        b, i = fixture()
+        b["targets"][0]["semanticGate"] = {
+            "runId": 40581205414,
+            "headSha": "0f752e6d09623579d3db87a7f65d6eabbc183457",
+            "workflowName": "Development 10 — legacy a11y fallback semantic supersession (offline)"
+        }
+        with self.assertRaisesRegex(ValueError, "EXACTLY_ONE_ARCHIVE_PROOF_REQUIRED"):
+            mod.canonical_targets(b, i)
+
+    def test_semantic_gate_invalid_run_denied(self):
+        for run in [0, -2, True, "40581205414"]:
+            b, i = fixture()
+            b["targets"][0].pop("sourcePath")
+            b["targets"][0].pop("sourceBlobSha")
+            b["targets"][0]["semanticGate"] = {
+                "runId": run,
+                "headSha": "0f752e6d09623579d3db87a7f65d6eabbc183457",
+                "workflowName": "Development 10 — legacy a11y fallback semantic supersession (offline)"
+            }
+            with self.assertRaisesRegex(ValueError, "INVALID_SEMANTIC_GATE"):
+                mod.canonical_targets(b, i)
+
+
 if __name__ == "__main__":
     unittest.main()
