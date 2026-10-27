@@ -1,0 +1,47 @@
+name: Development 07 archived asset provenance — offline Git DAG
+
+on:
+  push:
+    branches:
+      - integration/07-asset-provenance-20261027
+      - development
+    paths:
+      - 'tools/development_asset_provenance_audit.py'
+      - 'tests/test_development_asset_provenance.py'
+      - 'docs/work/DEVELOPMENT_SCENE_ASSET_CLUSTER_2026-10-27.md'
+      - '.github/workflows/development-asset-provenance.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: m2d-asset-provenance-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  provenance:
+    runs-on: ubuntu-latest
+    timeout-minutes: 14
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Verify negative guards (no network, no image rebuild)
+        run: python3 -m unittest tests/test_development_asset_provenance.py
+      - name: Fetch only the two pinned historical refs for read-only object comparison
+        run: |
+          git fetch --no-tags origin \
+            '+refs/heads/artifacts/ds02-imagens-originais-20261015:refs/remotes/origin/artifacts/ds02-imagens-originais-20261015' \
+            '+refs/heads/feat/exposed-sides-and-glass:refs/remotes/origin/feat/exposed-sides-and-glass'
+          test "$(git rev-parse refs/remotes/origin/artifacts/ds02-imagens-originais-20261015)" = e9c405bfc0189baed8b4b679a1113c37b6ddbd21
+          test "$(git rev-parse refs/remotes/origin/feat/exposed-sides-and-glass)" = 20040da835d6da66b03f73642c0c44db109dd6e8
+      - name: Reconcile all 40 original image Git blob identities and scene assets
+        run: python3 tools/development_asset_provenance_audit.py --output artifacts/asset-provenance/report.json
+      - name: Publish proof only, no Netlify, no mutation
+        uses: actions/upload-artifact@v4
+        with:
+          name: asset-provenance-${{ github.run_id }}
+          path: artifacts/asset-provenance/report.json
+          if-no-files-found: error
+          retention-days: 30
