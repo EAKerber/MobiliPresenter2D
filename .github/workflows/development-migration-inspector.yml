@@ -1,0 +1,35 @@
+name: Development migration inspector (source only)
+
+on:
+  push:
+    branches:
+      - integration/00-migration-inspector-20261027
+      - development
+    paths:
+      - 'tools/migration-inspector.mjs'
+      - 'tests/migration-inspector.test.mjs'
+      - '.github/workflows/development-migration-inspector.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  source-inspector:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Static/fixture contract
+        run: |
+          node --check tools/migration-inspector.mjs
+          node --test tests/migration-inspector.test.mjs
+      - name: Deterministic read-only product inventory
+        run: |
+          node tools/migration-inspector.mjs --focus site-header --out /tmp/migration-1.json
+          node tools/migration-inspector.mjs --focus site-header --out /tmp/migration-2.json
+          cmp /tmp/migration-1.json /tmp/migration-2.json
+          node -e 'const x=require("/tmp/migration-1.json");if(x.schema!=="M2DMigrationInspector/0.1"||x.coverage.negativeImpact!=="NOT_PROVEN"||x.summary.found<6) process.exit(1);console.log("M2D_DEV_MIGRATION_INSPECTOR_PASS "+JSON.stringify(x.summary))'
