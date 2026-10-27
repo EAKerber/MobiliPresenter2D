@@ -3,7 +3,6 @@ name: Development VIS-002 scoped provenance and accessibility gate
 on:
   push:
     branches:
-      - integration/04-vis002-context-audit-20261027
       - development
     paths:
       - 'tests/ci/vis002-context-pin.test.mjs'
