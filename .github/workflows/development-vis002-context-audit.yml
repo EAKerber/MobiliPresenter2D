@@ -1,0 +1,60 @@
+name: Development VIS-002 scoped provenance and accessibility gate
+
+on:
+  push:
+    branches:
+      - integration/04-vis002-context-audit-20261027
+      - development
+    paths:
+      - 'tests/ci/vis002-context-pin.test.mjs'
+      - 'tests/ci/vis002-context-browser.mjs'
+      - '.github/workflows/development-vis002-context-audit.yml'
+      - 'app/design-system/vis002c-long-copy-light-v0.3.0.css'
+      - 'design-system/pins/vis-002/context-v0.3.0/**'
+      - 'app/landing/landing.css'
+      - 'app/about/about.css'
+      - 'app/how-it-works/how-it-works.css'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: m2d-development-vis002-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  scoped-readonly:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    container:
+      image: mcr.microsoft.com/playwright:v1.62.1-noble
+      options: --ipc=host
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Source, provenance, strict contrast and generated pages
+        run: |
+          node --check tests/ci/vis002-context-browser.mjs
+          node --test tests/ci/vis002-context-pin.test.mjs
+          npm run pages:check
+      - name: Install matching Playwright npm package only
+        run: |
+          npm install --prefix /tmp/m2d-vis002 --no-audit --no-fund playwright@1.62.1
+          node -e 'if(require("/tmp/m2d-vis002/node_modules/playwright/package.json").version!=="1.62.1")process.exit(1)'
+      - name: Local static server; no Netlify
+        shell: bash
+        run: |
+          python3 -m http.server 8123 --bind 127.0.0.1 --directory app >/tmp/m2d-vis002.log 2>&1 &
+          for i in $(seq 1 30); do
+            if curl --silent --fail http://127.0.0.1:8123/ >/dev/null; then break; fi
+            sleep 1
+          done
+          curl --fail http://127.0.0.1:8123/about/ >/dev/null
+          curl --fail http://127.0.0.1:8123/how-it-works/ >/dev/null
+      - name: Read rendered CSS on 24 theme/route/engine viewport combinations
+        env:
+          NODE_PATH: /tmp/m2d-vis002/node_modules
+        run: node tests/ci/vis002-context-browser.mjs
