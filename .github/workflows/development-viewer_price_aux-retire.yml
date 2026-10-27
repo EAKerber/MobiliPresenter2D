@@ -1,0 +1,56 @@
+name: Development 06 exact Viewer auxiliary retirement (one-shot)
+
+on:
+  push:
+    branches:
+      - development
+    paths:
+      - 'tools/development_viewer_price_aux_retire.py'
+      - 'tests/test_development_viewer_price_aux_retire.py'
+      - '.github/workflows/development-viewer_price_aux-retire.yml'
+
+permissions:
+  contents: write
+  actions: read
+  pull-requests: read
+
+concurrency:
+  group: m2d-viewer-price-exact-aux-one-shot
+  cancel-in-progress: false
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Negative tests
+        run: python3 -m unittest tests/test_development_viewer_price_aux_retire.py
+      - name: Full SHA-pinned read-only roster audit
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: python3 tools/development_viewer_price_aux_retire.py --mode audit
+      - uses: actions/upload-artifact@v4
+        with:
+          name: dev-viewer-price-aux-audit-${{ github.run_id }}
+          path: viewer-price-aux-retirement-receipt.json
+          retention-days: 30
+  apply:
+    needs: audit
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Retire single exact branch ref with SHA lease and complete readback
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: python3 tools/development_viewer_price_aux_retire.py --mode apply
+      - uses: actions/upload-artifact@v4
+        with:
+          name: dev-viewer-price-aux-apply-${{ github.run_id }}
+          path: viewer-price-aux-retirement-receipt.json
+          retention-days: 30
