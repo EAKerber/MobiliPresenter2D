@@ -48,7 +48,38 @@
         "mainSha": "221b54b2a41ecc8c338d1bf2cf67280cf165ce95"
       },
       "noDeploy": true
+    },
+    {
+      "batchId": "dev-20261027-ancestor-build-and-focus-b",
+      "workflowRun": 40577256058,
+      "workflowUrl": "https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40577256058",
+      "headSha": "7fad704a386a10b64e764c9fcf6d3c05def3ea36",
+      "auditArtifactId": 12766104720,
+      "applyArtifactId": 12766224515,
+      "audit": "PASS",
+      "apply": "PASS",
+      "refsBefore": 59,
+      "refsAfter": 57,
+      "archived": [],
+      "retired": [
+        {
+          "branch": "architecture/arc03c-static-page-build-20261022",
+          "sha": "fbd00a9628c81b4902a8c679abb7ac72e93ca549",
+          "kind": "ancestor-main"
+        },
+        {
+          "branch": "fix/focus-ring-about-approved-vis002-20261024",
+          "sha": "e7b02c04308e9fcc7b52f1d09534058a2a0bbc65",
+          "kind": "ancestor-main"
+        }
+      ],
+      "preserved": {
+        "openPRs": 12,
+        "remainingOriginalHistoricalRefs": 55,
+        "mainSha": "221b54b2a41ecc8c338d1bf2cf67280cf165ce95"
+      },
+      "noDeploy": true
     }
   ],
-  "nextBatchContract": "Copy all waves[].retired into ops/development-retirement-batch.json retired[] before authorizing any future 1-3 target batch. For archived ref preserve exact tag; never rerun consumed batch; update historical receipts after readback."
+  "nextBatchContract": "For the next authorized batch, concatenate all waves[].retired (now five entries) into ops/development-retirement-batch.json retired[], choose only 1–3 newly verified SHA-pinned targets, and preserve all open PR heads/bases. Existing applied batch is consumed; never replay without a new complete manifest, audit, and lease."
 }
