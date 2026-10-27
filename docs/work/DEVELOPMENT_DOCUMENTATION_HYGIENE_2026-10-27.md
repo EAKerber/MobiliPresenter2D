@@ -1,0 +1,36 @@
+# Bloco 08 — checkpoint histórico + higiene por lote na development (27/10/2026)
+
+## Proveniência e escopo
+
+O inventário de 60 branches em `docs/work/DEVELOPMENT_CLUSTER_INVENTORY_2026-10-27.json` define `08-documentation` como a única fonte `docs/handover-reconcile-20261023@d6c238946526cfd33b3b498b5d2187790c1d78bd`, divergente de `main` e `development` (6 ahead em relação a ambas). A comparação com o destino de 27/10 tinha um **único caminho modificado**, `docs/handoffs/ARCHITECTURE-CURRENT-2026-10-22.md`: são 26 linhas adicionadas em 23/10, que registram estados históricos de OIDC, CI/Flow, ARC-03C, Migration Inspector e tokens.
+
+Nenhum dos eventos antigos deve sobrescrever um estado posterior ou justificar publicação. A inserção **literal** de 26 linhas foi salva, com blob SHA da fonte `06ece5e9f97dc7b8141338a0dc2c844d90e80ec7`, em [ARCHITECTURE_CHECKPOINT_2026-10-23_ARCHIVED.md](../handoffs/ARCHITECTURE_CHECKPOINT_2026-10-23_ARCHIVED.md). O verificador confronta o fragmento com `git show d6c23894:docs/handoffs/ARCHITECTURE-CURRENT-2026-10-22.md` e verifica que o resto do arquivo é byte a byte equivalente em linhas ao arquivo em `development`. [Gate #40576099332](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40576099332) **PASS** após corrigir a inclusão da linha em branco terminal. São 14 testes negativos/invariantes de lote, mais a prova literal do checkpoint.
+
+A branch divergente contém uma DAG exclusiva. **Não basta guardar 26 linhas para apagar a ref.** A política exige primeiro criar uma tag Git de retenção com SHA exato `archive/m2d/docs-handover-20261023-d6c23894 -> d6c238946526cfd33b3b498b5d2187790c1d78bd`; validar via `ls-remote --tags`; depois, e somente depois, admitir exclusão da branch. A tag é uma ref de recuperação, não uma homologação de código. Não alterar `main`, workflows de produção ou apps.
+
+## Outros dois candidatos de manutenção
+
+As duas referências do grupo `00-ops` são ancestrais da `main@221b54b2a41ecc8c338d1bf2cf67280cf165ce95`, verificado por GitHub compare em 27/10:
+
+- `maintenance/branch-retirement-r9-operational-20261026@535a2edf9d7bcfaab5e51d9a00374417a0e376b9`: ancestor, 0 behind relativo à main.
+- `maintenance/branch-retirement-r10-squash-20261026@74562dd8a26b6ed5ebcdc3d039eb0ee3306c9bd6`: ancestor, 0 behind relativo à main.
+
+Não têm PR aberta. Mesmo nesses casos, nenhum nome ou idade de branch autoriza poda sem `merge-base --is-ancestor`, GitHub branch protection/rulesets, roster completo e lease.
+
+## Mecanismo generalizado na development
+
+`tools/development_retirement_batch.py` substitui o padrão de um script específico para cada auxiliar (scripts antigos permanecem históricos e **consumidos**). O novo executor exige um manifesto `ops/development-retirement-batch.json` e impõe:
+
+1. **No máximo três targets explícitos** e SHAs exatos presentes no inventário fixado de 60. `main` e `development` são impossíveis como targets. `retired` descreve as referências consumidas por lotes anteriores e prova sua ancestralidade/tag arquivada, tornando o executor reutilizável para lotes posteriores sem assumir sempre 62 refs.
+2. Roster completo de `git ls-remote --heads`, sem refs surpresa ou SHAs alterados; contexto GitHub exato `development` e HEAD da execução; `main` verificada em SHA fixo.
+3. Todos os números das **12 PRs abertas** fixados, nenhuma branch alvo pode constar como head/base; nenhum branch protegido ou ruleset não homologado; nenhum workflow ativo referencia literalmente as refs.
+4. Para `ancestor-main`, identidade ancestral provada por `git merge-base`. Para `archive-diverged`, registro de proveniência em `docs/` com SHA original e tag específica, além de verificações adicionais de conteúdo quando aplicáveis.
+5. **Auditoria sem efeitos**; fase apply exige credencial de escrita e autorização de execução restrita a `push` real na `development`. Primeiro cria/verifica tags de arquivo; depois aplica `git push --force-with-lease` a cada alvo, com readback integral entre todas as exclusões.
+6. O workflow `.github/workflows/development-retirement-batch.yml` só dispara mutações por **edição explícita do manifesto** na `development`; atualizações ordinárias de código/docs nunca reexecutam o último lote. Relatórios audit/apply são artifacts e handover os referencia.
+7. O workflow `.github/workflows/development-hygiene-safety.yml` é separado e **somente read-only** para testar refutações e reprodução do checkpoint. Isso evita acoplar atualização da ferramenta a exclusão.
+
+## Lote proposto e limites
+
+O primeiro lote contempla exatamente as três refs citadas acima, nunca os 57 itens restantes e jamais a PR #34 ou o pacote dos 40 originais DS-02. O manifesto de execução deve ser escrito **depois** dos gates de ferramenta, e a exclusão só pode ser considerada concluída quando audit + apply + inspeção de tag + contagem de branches retornarem sucesso; erros geram HOLD, não `force`.
+
+Não fechar PRs automaticamente. Não fazer Deploy Preview ou deploy de `main`. O fluxo de tags e todos os arquivos aqui são de higiene Git e não um atestado de autenticação, CI produtivo ou qualidade visual.
