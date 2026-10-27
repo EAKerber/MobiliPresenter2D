@@ -3,7 +3,7 @@
   "repository": "EAKerber/MobiliPresenter2D",
   "controlBranch": "development",
   "mainSha": "221b54b2a41ecc8c338d1bf2cf67280cf165ce95",
-  "batchId": "dev-20261027-mobile-menu-exact-blob-c",
+  "batchId": "dev-20261027-a11y-semantic-aux-d",
   "retired": [
     {
       "branch": "docs/handover-reconcile-20261023",
@@ -30,17 +30,37 @@
       "branch": "fix/focus-ring-about-approved-vis002-20261024",
       "sha": "e7b02c04308e9fcc7b52f1d09534058a2a0bbc65",
       "kind": "ancestor-main"
-    }
-  ],
-  "targets": [
+    },
     {
       "branch": "fix/mobile-menu-scene-stacking-20261019",
       "sha": "b81308a22c2a9d281037306f5ebf9eecb521d15e",
       "kind": "archive-diverged",
-      "archiveTag": "archive/m2d/fix-mobile-menu-scene-stacking-b81308a2",
-      "snapshotPath": "docs/work/DEVELOPMENT_SEMANTIC_RECONCILIATION_2026-10-27.md",
-      "equalBlobPath": "app/styles.css",
-      "equalBlobSha": "d43e6fb5e66133d2389b5c39b165b76b13cfa868"
+      "archiveTag": "archive/m2d/fix-mobile-menu-scene-stacking-b81308a2"
+    }
+  ],
+  "auxiliaryRefs": [
+    {
+      "branch": "integration/10-a11y-fallback-semantic-reconcile-20261027",
+      "sha": "5154004be71c1cd75069f0ca64ab5d91c3a95b99"
+    }
+  ],
+  "targets": [
+    {
+      "branch": "a11y/image-failure-scalable-placeholder-20261025",
+      "sha": "6840d8986e44a7860b541e6becb3b5373ef48c09",
+      "kind": "archive-diverged",
+      "archiveTag": "archive/m2d/a11y-image-fallback-6840d898",
+      "snapshotPath": "docs/work/DEVELOPMENT_A11Y_FALLBACK_SEMANTIC_CLUSTER_2026-10-27.md",
+      "semanticGate": {
+        "runId": 40581205414,
+        "headSha": "0f752e6d09623579d3db87a7f65d6eabbc183457",
+        "workflowName": "Development 10 — legacy a11y fallback semantic supersession (offline)"
+      }
+    },
+    {
+      "branch": "integration/10-a11y-fallback-semantic-reconcile-20261027",
+      "sha": "5154004be71c1cd75069f0ca64ab5d91c3a95b99",
+      "kind": "auxiliary-ancestor-development"
     }
   ]
 }
