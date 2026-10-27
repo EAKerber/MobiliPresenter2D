@@ -1,4 +1,4 @@
-name: Development 55-branch semantic and blob provenance scan
+name: Development historical-branch semantic and blob provenance scan
 
 on:
   push:
@@ -21,7 +21,7 @@ jobs:
         with:
           fetch-depth: 0
           persist-credentials: true
-      - name: Read-only scan of the pinned original 60 refs, 5 retired and 55 live
+      - name: Read-only scan of pinned historical inventory minus ledger-backed retirements
         env:
           GITHUB_TOKEN: ${{ github.token }}
         run: |
