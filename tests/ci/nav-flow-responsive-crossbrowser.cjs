@@ -73,7 +73,12 @@ async function inspect(page, context) {
             await page.locator("#moduleList [data-select-entity]").first().click();
             await page.waitForFunction(() => document.body.classList.contains("has-module-detail"));
             await page.setViewportSize({width, height: 900});
-            await page.waitForTimeout(180);
+            // WebKit can deliver resize/layout-profile updates after a fixed
+            // 180 ms delay, especially across light/dark contexts. Wait for
+            // the actual model resolution; NEVER suppress profile assertions.
+            await page.waitForFunction(expected =>
+              document.documentElement.dataset.layoutProfile === expected,
+              expectedProfile, {timeout: 7500});
             let state = await inspect(page, context + "/resize");
             assert.equal(state.profile, expectedProfile, "profile boundary " + context);
             const firstId = state.ids[0], secondId = state.ids[1];
@@ -97,7 +102,9 @@ async function inspect(page, context) {
               // This is intentionally NOT the legacy fixed-four-stage test.
               const peerWidth = width === 1050 ? 1051 : 1050;
               await page.setViewportSize({width: peerWidth, height: 900});
-              await page.waitForTimeout(180);
+              await page.waitForFunction(expected =>
+                document.documentElement.dataset.layoutProfile === expected,
+                peerWidth === 1050 ? "stacked" : "side-rail", {timeout: 7500});
               const peer = await inspect(page, context + "/adjacent-" + peerWidth);
               assert.equal(peer.profile, peerWidth === 1050 ? "stacked" : "side-rail",
                 "adjacent breakpoint resolves the expected profile: " + context);
@@ -106,13 +113,17 @@ async function inspect(page, context) {
               assert.equal(peer.current, secondId,
                 "keyboard-selected stage must survive profile transition: " + context);
               await page.setViewportSize({width, height: 900});
-              await page.waitForTimeout(180);
+              await page.waitForFunction(expected =>
+                document.documentElement.dataset.layoutProfile === expected,
+                expectedProfile, {timeout: 7500});
               const restored = await inspect(page, context + "/adjacent-return");
               assert.equal(restored.current, secondId,
                 "active stage is stable after return across breakpoint: " + context);
             }
             await page.setViewportSize({width: 1366, height: 900});
-            await page.waitForTimeout(180);
+            await page.waitForFunction(() =>
+              document.documentElement.dataset.layoutProfile === "side-rail",
+              null, {timeout: 7500});
             state = await inspect(page, context + "/restore");
             assert.equal(state.profile, "side-rail", "restored profile " + context);
             console.log("CI_NAV_RESPONSIVE_PASS " + JSON.stringify({engineName, width, theme, stages: state.ids.length}));
