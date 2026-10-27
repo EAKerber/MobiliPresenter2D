@@ -32,8 +32,10 @@ jobs:
       - name: Materialize and pin exact original and main commits
         run: |
           git fetch --no-tags origin main
-          git fetch --no-tags origin '+refs/heads/a11y/image-failure-scalable-placeholder-20261025:refs/remotes/origin/a11y/image-failure-scalable-placeholder-20261025'
-          test "$(git rev-parse origin/a11y/image-failure-scalable-placeholder-20261025)" = 6840d8986e44a7860b541e6becb3b5373ef48c09
+          # Commit objects remain reachable via the historical archival tag.
+          # Never bind a test workflow to a branch eligible for retirement.
+          git fetch --no-tags origin 6840d8986e44a7860b541e6becb3b5373ef48c09
+          test "$(git cat-file -t 6840d8986e44a7860b541e6becb3b5373ef48c09)" = commit
       - name: Verify legacy behavior was superseded without copying HTML or JS
         run: |
           python3 -m py_compile tools/development_a11y_fallback_semantic_audit.py
