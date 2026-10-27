@@ -57,3 +57,15 @@ A `development` pode avançar independentemente da `main` sem herdar estabilidad
 - Nenhum endpoint/grant/banco de produção foi modificado. A `main` segue estável. O teste novo é contrato de preflight puro; **não** homologa autenticação real, revogação, Admin denial nem suite browser em Deploy Preview.
 
 **Próximo gate:** melhorar apenas o setup da CI responsiva usando container verificado. Não declarar bloco R9 totalmente repetido no destino antes de novo PASS. Consolidar mudanças aprovadas por auxiliares temporárias e registrar os HEADs com leases.
+
+
+## Reconciliação CI 15/15 e gate R9 finalmente PASS no destino (27/10/2026)
+
+- [Ledger CI/autenticação](../work/CI_CLUSTER_RECONCILIATION_2026-10-27.md) cruza as 15 branches do inventário por SHA e classifica extração de blobs, teste já existente, adaptação semântica, ancestralidade da PR #238 e pendências.
+- O container `mcr.microsoft.com/playwright:v1.62.1-noble` substituiu downloads de browsers. Auxiliar `integration/01-ci-r9-container-20261027@a653745f5b485dc473156871d1209b2abf3193e5`: [Actions #40529695931](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40529695931) **PASS 32/32**. Fast-forward para `development`; repetição [#40530168178](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40530168178) **PASS 32/32**, 16 Chromium + 16 WebKit, 8 larguras × 2 temas. Não houve regressão de navegação nem login/deploy Netlify.
+- O novo teste de identidade da PR #238 foi absorvido previamente com 9/9 PASS no destino [#40529157447](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40529157447). A PR #238 propriamente dita segue **HOLD**: preview commit mismatch, sem autorização para mesclar o runtime legado.
+- Teste público projetado da branch histórica `ci/ci-baseline-01-public-projection-test-20261022` já existe na development pelo mesmo blob `6a8faec2f00e0d7cd26084a1927fb6a5d9c660c3`; não duplicar.
+- Ancestrais exatos de PR #238 provados por compare: `ci-auth-base-20261025` (22 commits atrás, 0 adiante) e `fix/config-stage-nav-grid-track-20261025` (4 atrás, 0 adiante). Como a PR #238 não entrou na development, a proveniência é dado de análise, não permissão de exclusão.
+- Estado: `main@221b54b2a41ecc8c338d1bf2cf67280cf165ce95` permanece estável. Todas 12 PRs abertas foram mantidas até este checkpoint. **Próximo recorte técnico:** testar semântica da largura de rótulos 496–522px, extraindo seletivamente o que for útil do teste legado `fix/ci-baseline-v5-nav-flow-clean-20261023` (sem copiá-lo literalmente ou mudar CSS por heurística).
+
+Este checkpoint encerra o gate de execução do R9 no destino; substitui o status *pending* da seção anterior. Nenhum deploy, exclusão de branch, escrita na main ou modificação de autenticação foi autorizado/feito.
