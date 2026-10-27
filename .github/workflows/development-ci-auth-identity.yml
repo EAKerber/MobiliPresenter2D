@@ -3,7 +3,6 @@ name: Development auth-preview identity contract (synthetic; no network)
 on:
   push:
     branches:
-      - integration/01-ci-auth-identity-20261027
       - development
     paths:
       - 'tests/ci/preview-identity-attestation.mjs'

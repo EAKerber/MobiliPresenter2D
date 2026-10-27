@@ -3,8 +3,6 @@ name: Development V5 responsive boundary regression (localhost only)
 on:
   push:
     branches:
-      - integration/01-ci-nav-boundary-20261027
-      - integration/01-ci-r9-container-20261027
       - development
     paths:
       - 'tests/ci/nav-flow-responsive-crossbrowser.cjs'

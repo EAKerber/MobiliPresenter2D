@@ -1,0 +1,78 @@
+name: Development exact-SHA auxiliary hygiene — A1
+
+on:
+  push:
+    branches:
+      - integration/01-aux-retire-gate-20261027
+      - development
+    paths:
+      - 'ops/development-aux-retirement-batch.json'
+      - 'tools/development_aux_retirement.py'
+      - 'tests/test_development_aux_retirement.py'
+      - '.github/workflows/development-aux-retirement.yml'
+
+concurrency:
+  group: m2d-development-aux-retirement
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+  pull-requests: read
+
+jobs:
+  audit:
+    if: github.ref == 'refs/heads/integration/01-aux-retire-gate-20261027'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: read
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Negative safety tests
+        run: |
+          python -m unittest discover -s tests -p 'test_development_aux_retirement.py' -v
+          python -m py_compile tools/development_aux_retirement.py
+      - name: Audit exact inventory without deletion
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: python tools/development_aux_retirement.py --mode audit
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: dev-aux-audit-${{ github.run_id }}
+          path: development-aux-retirement-receipt.json
+          if-no-files-found: warn
+
+  apply:
+    if: github.ref == 'refs/heads/development'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: read
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Negative safety tests
+        run: |
+          python -m unittest discover -s tests -p 'test_development_aux_retirement.py' -v
+          python -m py_compile tools/development_aux_retirement.py
+      - name: Retire only three ancestor refs after renewed exact-SHA gates and readbacks
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: python tools/development_aux_retirement.py --mode apply
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: dev-aux-apply-${{ github.run_id }}
+          path: development-aux-retirement-receipt.json
+          if-no-files-found: warn

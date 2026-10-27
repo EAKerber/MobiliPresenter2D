@@ -3,7 +3,6 @@ name: Development nav label 500px named container gate (localhost)
 on:
   push:
     branches:
-      - integration/01-ci-label500-invariant-20261027
       - development
     paths:
       - 'tests/ci/nav-label500-invariant.cjs'

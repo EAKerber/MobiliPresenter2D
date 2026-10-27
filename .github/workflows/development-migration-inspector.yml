@@ -3,7 +3,6 @@ name: Development migration inspector (source only)
 on:
   push:
     branches:
-      - integration/00-migration-inspector-20261027
       - development
     paths:
       - 'tools/migration-inspector.mjs'
