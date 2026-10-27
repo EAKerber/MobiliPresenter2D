@@ -1,0 +1,37 @@
+name: Development 55-branch semantic and blob provenance scan
+
+on:
+  push:
+    branches: [development]
+    paths:
+      - 'tools/development_branch_reconciliation_scan.py'
+      - '.github/workflows/development-branch-reconciliation.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pull-requests: read
+
+jobs:
+  read-only-audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: true
+      - name: Read-only scan of the pinned original 60 refs, 5 retired and 55 live
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          python3 -m py_compile tools/development_branch_reconciliation_scan.py
+          git fetch --no-tags origin '+refs/heads/*:refs/remotes/origin/*'
+          python3 tools/development_branch_reconciliation_scan.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: development-semantic-reconciliation-${{ github.run_id }}
+          path: artifacts/development-branch-reconciliation/scan.json
+          retention-days: 30
+          if-no-files-found: warn
