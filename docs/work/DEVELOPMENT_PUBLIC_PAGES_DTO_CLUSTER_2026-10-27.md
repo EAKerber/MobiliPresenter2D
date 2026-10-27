@@ -40,3 +40,12 @@ O caminho de produção com publicação V5 validada permanece inalterado e cons
 - **Próxima segurança:** cluster `02-access-dto`, checando no isolamento os códigos `401/403/503`, revogação e separação entre a configuração completa e a projeção do comprador. O gate atual não comprova o resultado de autenticação produtivo.
 
 Nenhuma autorização para gerar Netlify Deploy Preview foi dada por este documento; não dispará-lo deliberadamente.
+
+
+
+## Recibos e resultado do recorte (27/10/2026)
+
+- Teste adversarial fail-before-fix: [Actions #40562417734](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40562417734) demonstrou que uma propriedade administrativa extra no DTO de origem retornava 200, embora a resposta correta seja 503. Não foi consulta ao site real.
+- [Auxiliar #40563093791](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40563093791) **PASS**; [development #40563232051](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40563232051) **PASS**, [recheck #40563726945](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40563726945) **PASS**. Testes existentes de preço/projeção 14/14; quatro negativas de DTO foram acrescentadas ao harness do endpoint.
+- A auxiliar `integration/03-public-dto-fallback-gate-20261027@48934bc4bc1dda0c57d1c5e50f6fe07aedd9b835` foi integrada por fast-forward na development e **excluída exclusivamente enquanto ref ancestral** via [higiene #40563727219](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40563727219), audit+apply/readback PASS, 63→62 refs. 60 HEADs históricos e 12 PRs continuam em HOLD. Nada foi implantado na main ou Netlify.
+- O executor de limpeza foi desativado e não deve ser chamado novamente. O status deste recorte não permite encerrar as PRs #175/#178/#179/#180 nem reativar as fixtures de preview antigas.
