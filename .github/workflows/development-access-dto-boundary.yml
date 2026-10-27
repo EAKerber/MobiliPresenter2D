@@ -3,7 +3,6 @@ name: Development CP-PUBLIC-03a authorization boundary (offline)
 on:
   push:
     branches:
-      - integration/02-access-dto-authorization-20261027
       - development
     paths:
       - 'app/tools/test-v5-endpoint-safety.js'
