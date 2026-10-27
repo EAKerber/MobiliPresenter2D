@@ -90,7 +90,7 @@ test("module membership and published scene state remain authoritative", async (
     mutate(body);
     const { result, error } = await invoke(body);
     assert.equal(result, undefined);
-    assert.ok(error instanceof Error, "invalid published state must be denied");
+    assert.match(String(error?.message), /^invalid_public_/, "invalid published state must be denied");
   }
 });
 test("HTTP failure, network failure, unknown schema: no fallback to local catalog", async () => {
