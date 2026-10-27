@@ -1,0 +1,29 @@
+{
+  "schemaVersion": "M2DDevRetirementBatch/0.1",
+  "repository": "EAKerber/MobiliPresenter2D",
+  "controlBranch": "development",
+  "mainSha": "221b54b2a41ecc8c338d1bf2cf67280cf165ce95",
+  "batchId": "dev-20261027-historic-doc-and-maintenance-a",
+  "retired": [],
+  "targets": [
+    {
+      "branch": "docs/handover-reconcile-20261023",
+      "sha": "d6c238946526cfd33b3b498b5d2187790c1d78bd",
+      "kind": "archive-diverged",
+      "archiveTag": "archive/m2d/docs-handover-20261023-d6c23894",
+      "snapshotPath": "docs/handoffs/ARCHITECTURE_CHECKPOINT_2026-10-23_ARCHIVED.md",
+      "sourcePath": "docs/handoffs/ARCHITECTURE-CURRENT-2026-10-22.md",
+      "sourceBlobSha": "06ece5e9f97dc7b8141338a0dc2c844d90e80ec7"
+    },
+    {
+      "branch": "maintenance/branch-retirement-r9-operational-20261026",
+      "sha": "535a2edf9d7bcfaab5e51d9a00374417a0e376b9",
+      "kind": "ancestor-main"
+    },
+    {
+      "branch": "maintenance/branch-retirement-r10-squash-20261026",
+      "sha": "74562dd8a26b6ed5ebcdc3d039eb0ee3306c9bd6",
+      "kind": "ancestor-main"
+    }
+  ]
+}
