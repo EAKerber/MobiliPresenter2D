@@ -8,8 +8,8 @@ def f():
     old=[{"branch":"docs/legacy"+str(k),"sha":str(k%8+1)*40} for k in range(60)]
     m={"schemaVersion":"M2DDevelopmentAuxBatch/0.1","wave":"M2D-DEV-AUX-A1-20261027",
        "repository":"EAKerber/MobiliPresenter2D","control":"development",
-       "mainSha":M,"baseline":D,"operational":OP,"targets":six[:3]}
-    p={"stableMainSha":M,"controlSha":D,"status":"PROPOSAL_ONLY_NO_DELETE",
+       "mainSha":M,"baseline":"00eadf770513107db4be71519e6a38a9da9f9854","operational":OP,"targets":six[:3]}
+    p={"stableMainSha":M,"controlSha":"994d7f613db144cbb07d638b05754820170a20a4","status":"PROPOSAL_ONLY_NO_DELETE",
        "authorizedDeletions":0,"allAuxiliaries":six}
     o={"baseSha":M,"totals":{"branches":60},"rows":old}
     return m,p,o
