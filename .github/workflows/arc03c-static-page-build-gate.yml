@@ -1,26 +1,8 @@
 name: ARC-03C real static page build and browser gate
 on:
-  push:
-    branches:
-      - architecture/arc03c-static-page-build-20261022
-      - architecture/p-comp-01-arc03c-reconcile
-    paths:
-      - "architecture/fragments/**"
-      - "architecture/pages/**"
-      - "architecture/generated/**"
-      - "scripts/compile-primary-pages.mjs"
-      - "tests/arc03c-*"
-      - "app/index.html"
-      - "app/about/index.html"
-      - "app/how-it-works/index.html"
-      - "app/viewer/index.html"
-      - "app/landing/header-menu.js"
-      - "app/landing/landing.js"
-      - "app/how-it-works/how-it-works.js"
-      - "tests/public-header-controller-gate.mjs"
-      - ".github/workflows/p-comp-01-public-menu-gate.yml"
-      - "package.json"
-      - ".github/workflows/arc03c-static-page-build-gate.yml"
+  # Historical differential gate; branch was absorbed in main.
+  # Manual only. No dead experimental push targets or surprise CI builds.
+  workflow_dispatch:
 
 permissions:
   contents: read
