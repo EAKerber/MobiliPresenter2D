@@ -6,7 +6,7 @@ const assert = require("node:assert/strict");
 const {chromium, webkit} = require("playwright");
 
 const sourceUrl = process.env.FLOW_LAYOUT_URL || "http://127.0.0.1:8123/config/";
-const widths = [496, 500, 502, 505, 509, 512, 514, 515, 518, 522];
+const widths = [496, 500, 502, 505, 509, 512, 514, 515, 518, 522, 526, 528, 529, 530, 532, 536, 540];
 const styles = ["light", "dark"];
 const profiles = [["chromium", chromium], ["webkit", webkit]];
 const result = [];
