@@ -1,0 +1,44 @@
+name: Development bounded branch hygiene — dry safety contracts
+
+on:
+  push:
+    branches: [development]
+    paths:
+      - 'tools/development_retirement_batch.py'
+      - 'tests/test_development_retirement_batch.py'
+      - '.github/workflows/development-hygiene-safety.yml'
+      - 'docs/handoffs/ARCHITECTURE_CHECKPOINT_2026-10-23_ARCHIVED.md'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  pure-guards:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Compile and verify deny-by-default selection (no deletes)
+        run: |
+          python3 -m py_compile tools/development_retirement_batch.py
+          python3 -m unittest tests/test_development_retirement_batch.py
+      - name: Verify original 23 October architecture delta is exact
+        run: |
+          git fetch --no-tags origin '+refs/heads/docs/handover-reconcile-20261023:refs/remotes/origin/docs/handover-reconcile-20261023'
+          python3 - <<'PY'
+          import sys
+          sys.path.insert(0, 'tools')
+          from development_retirement_batch import prove_snapshot
+          t = {
+            "branch": "docs/handover-reconcile-20261023",
+            "sha": "d6c238946526cfd33b3b498b5d2187790c1d78bd",
+            "archiveTag": "archive/m2d/docs-handover-20261023-d6c23894",
+            "snapshotPath": "docs/handoffs/ARCHITECTURE_CHECKPOINT_2026-10-23_ARCHIVED.md",
+            "sourcePath": "docs/handoffs/ARCHITECTURE-CURRENT-2026-10-22.md",
+            "sourceBlobSha": "06ece5e9f97dc7b8141338a0dc2c844d90e80ec7"
+          }
+          print(prove_snapshot(t))
+          PY
