@@ -62,7 +62,12 @@ export default async (request, context) => {
   }
 
   if (request.method === "GET") {
-    const user = await getUser();
+    let user;
+    try {
+      user = await getUser();
+    } catch {
+      return respond({ error: "identity_unavailable" }, 503);
+    }
     if (!canManageAdministration(user)) {
       return respond({ error: user ? "forbidden" : "unauthorized" }, user ? 403 : 401);
     }
@@ -73,10 +78,15 @@ export default async (request, context) => {
       : respond(published.value);
   }
 
-  const user = await getUser();
-  const roles = [...(user?.roles || []), ...(user?.app_metadata?.roles || [])];
-  if (!user) return respond({ error: "unauthorized" }, 401);
-  if (!roles.includes("admin")) return respond({ error: "forbidden" }, 403);
+  let user;
+  try {
+    user = await getUser();
+  } catch {
+    return respond({ error: "identity_unavailable" }, 503);
+  }
+  if (!canManageAdministration(user)) {
+    return respond({ error: user ? "forbidden" : "unauthorized" }, user ? 403 : 401);
+  }
   const store = getConfigurationStore(context);
 
   const declaredLength = Number(request.headers.get("content-length") || 0);
