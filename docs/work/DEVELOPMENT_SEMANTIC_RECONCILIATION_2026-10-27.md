@@ -37,3 +37,14 @@ Algoritmo: para cada branch, identificar seu ancestral comum com a main via `git
 **Bloco 09 — equivalência semântica:** a execução read-only foi validada. A única candidata imediata do scan tem prova de igualdade de SHA por caminho e exige archival tag antes da limpeza. Não haverá exclusão das outras **54** branches sem documentação individual de conteúdo, decisão de HOLD ou gates de equivalência apropriados.
 
 Ao aplicar novos lotes, o manifesto explícito `ops/development-retirement-batch.json` deve carregar os cinco `retired[]` de `ops/development-retirement-history.json`; remover uma linha antiga provoca erro de roster, não novo método de bypass. Após qualquer execução, acrescentar recibos, contagem e SHA no ledger e no handover. **Nenhum deploy Netlify é necessário para este trabalho.**
+
+
+## Revisão posterior: não confundir diferença de blob com ausência de funcionalidade
+
+**Retificação do item “Acessibilidade” acima:** a inspeção por contrato mostrou que o fallback já havia sido generalizado em `app/core/image-fallback.js`. A branch `a11y/image-failure-scalable-placeholder-20261025` tinha os cinco blobs diferentes, mas **a funcionalidade estava presente por outro caminho**. A análise detalhada está em [DEVELOPMENT_A11Y_FALLBACK_SEMANTIC_CLUSTER_2026-10-27.md](DEVELOPMENT_A11Y_FALLBACK_SEMANTIC_CLUSTER_2026-10-27.md).
+
+[Gate #40581205414](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40581205414) validou a relação origem→destino e **152 testes de falha/recuperação em 16 cenários Chromium/WebKit**. [Higiene #40582950464](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40582950464) **AUDIT+APPLY PASS**, com DAG preservada pela tag `archive/m2d/a11y-image-fallback-6840d898@6840d8986e44a7860b541e6becb3b5373ef48c09`. Retiradas a branch antiga e a auxiliar já integrada.
+
+**Novo estado:** 53 branches históricas + main + development = **55 branches**. Foram reconciliadas e retiradas **7 branches históricas** em quatro ondas (4 ancestrais; 3 divergentes retidas em tags). A matriz original de 55 era uma fotografia anterior à poda e suas categorias de blocos permanecerão como evidência, não como estado corrente. `retired[]` para a próxima onda terá **sete** históricos; auxiliares já absorvidas **não** pertencem a esse conjunto de 60 fontes iniciais.
+
+**Próximos grupos para decisão por contrato:** `fix/how-it-works-accordion-grid-20261021` (página e layout atuais); `tooling/migration-inspector-v0-20261023` (código e diagnósticos estáticos); `feature/viewer-base-prices-global-off-20261021` (DTO/preços, alta sensibilidade). Nenhuma destas foi descartada nem reclassificada sem teste.
