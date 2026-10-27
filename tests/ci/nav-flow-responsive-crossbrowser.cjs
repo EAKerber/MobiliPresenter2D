@@ -9,8 +9,10 @@ const cases = [
   [390, "compact"],
   [700, "compact"],
   [701, "stacked"],
+  [900, "stacked"],
   [1050, "stacked"],
   [1051, "side-rail"],
+  [1200, "side-rail"],
   [1366, "side-rail"]
 ];
 let completed = 0;
@@ -90,6 +92,24 @@ async function inspect(page, context) {
                 document.querySelector('.flow-nav [data-step="' + id + '"]')?.getAttribute("aria-current") === "step"
               , secondId, {timeout: 4500});
               await inspect(page, context + "/keyboard-next");
+              // Adjacent 1050/1051 transitions occur in the SAME initialized
+              // page, preserving the active published V5 stage and module.
+              // This is intentionally NOT the legacy fixed-four-stage test.
+              const peerWidth = width === 1050 ? 1051 : 1050;
+              await page.setViewportSize({width: peerWidth, height: 900});
+              await page.waitForTimeout(180);
+              const peer = await inspect(page, context + "/adjacent-" + peerWidth);
+              assert.equal(peer.profile, peerWidth === 1050 ? "stacked" : "side-rail",
+                "adjacent breakpoint resolves the expected profile: " + context);
+              assert.deepEqual(peer.ids, state.ids,
+                "published stage IDs must survive responsive transition: " + context);
+              assert.equal(peer.current, secondId,
+                "keyboard-selected stage must survive profile transition: " + context);
+              await page.setViewportSize({width, height: 900});
+              await page.waitForTimeout(180);
+              const restored = await inspect(page, context + "/adjacent-return");
+              assert.equal(restored.current, secondId,
+                "active stage is stable after return across breakpoint: " + context);
             }
             await page.setViewportSize({width: 1366, height: 900});
             await page.waitForTimeout(180);

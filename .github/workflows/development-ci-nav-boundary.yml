@@ -1,0 +1,41 @@
+name: Development V5 responsive boundary regression (localhost only)
+
+on:
+  push:
+    branches:
+      - integration/01-ci-nav-boundary-20261027
+      - development
+    paths:
+      - 'tests/ci/nav-flow-responsive-crossbrowser.cjs'
+      - '.github/workflows/development-ci-nav-boundary.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: m2d-development-boundary-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  responsive-boundaries:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Syntax and known local V5 fixture preparation
+        shell: bash
+        run: |
+          node --check tests/ci/nav-flow-responsive-crossbrowser.cjs
+          bash tests/ci/prepare-local-v5-browser.sh FLOW_LAYOUT_URL
+      - name: Install isolated browser engines
+        run: |
+          npm install --prefix /tmp/m2d-dev-boundary-tools --no-audit --no-fund playwright@1.62.1
+          /tmp/m2d-dev-boundary-tools/node_modules/.bin/playwright install --with-deps chromium webkit
+      - name: Run 32 local V5 boundary and stage-survival scenarios
+        env:
+          NODE_PATH: /tmp/m2d-dev-boundary-tools/node_modules
+        run: node tests/ci/nav-flow-responsive-crossbrowser.cjs
