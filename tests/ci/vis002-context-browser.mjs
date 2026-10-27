@@ -34,14 +34,26 @@ for(const [engineName,engine] of [["chromium",chromium],["webkit",webkit]]){
     assert.equal(response?.status(),200,label+" HTTP");
     await page.waitForFunction(expected=>
       document.documentElement.dataset.theme===expected,theme,{timeout:12000});
+    // Match the existing R7 raster gate's settled static-page fixture.
+    await page.evaluate(async()=>{
+      for(const img of document.images) img.loading="eager";
+      await document.fonts.ready;
+      await Promise.all([...document.images].filter(x=>x.src)
+        .map(x=>x.decode?.().catch(()=>{})));
+    });
     if(route==="/"){
+      await page.locator("#environmentFeature").waitFor({state:"visible",timeout:15000});
       await page.locator("#featureDescription").waitFor({state:"visible",timeout:15000});
     }
-    await page.evaluate(()=>document.fonts?.ready);
+    await page.waitForTimeout(300);
     const entries=m.contexts.filter(x=>x.route===route);
     for(const entry of entries){
       const candidates=page.locator(entry.selector);
       assert.ok(await candidates.count()>0,label+" unmapped selector "+entry.selector);
+      await page.waitForFunction(selector=>[...document.querySelectorAll(selector)]
+        .some(el=>{const css=getComputedStyle(el),r=el.getBoundingClientRect();
+          return r.width>0&&r.height>0&&css.display!=="none"&&css.visibility!=="hidden"&&Number(css.opacity)>0;
+        }),entry.selector,{timeout:10000});
       const observations=await candidates.evaluateAll(nodes=>nodes.map(el=>{
         const css=getComputedStyle(el),r=el.getBoundingClientRect();
         return {
