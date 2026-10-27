@@ -131,15 +131,34 @@ def canonical_targets(batch, inventory):
         else:
             raise ValueError("UNSUPPORTED_PREVIOUS_DISPOSITION")
         seen_retired.add(name)
+    aux_rows = batch.get("auxiliaryRefs", [])
+    if not isinstance(aux_rows, list) or len(aux_rows) > 3:
+        raise ValueError("INVALID_AUXILIARY_ROSTER")
+    aux_pins = {}
+    for ref in aux_rows:
+        if not isinstance(ref, dict) or set(ref) != {"branch", "sha"}:
+            raise ValueError("INVALID_AUXILIARY_PIN")
+        name, sha = ref["branch"], ref["sha"]
+        if (not safe_name(name) or not name.startswith("integration/")
+            or name in original or name in aux_pins
+            or not isinstance(sha, str) or not SHA_RE.fullmatch(sha)):
+            raise ValueError("AUXILIARY_PIN_NOT_ISOLATED")
+        aux_pins[name] = sha
     seen = set()
     for item in entries:
         if not isinstance(item, dict):
             raise ValueError("INVALID_TARGET")
         name, sha, kind = item.get("branch"), item.get("sha"), item.get("kind")
         if (not safe_name(name) or name in seen or name in ("main", "development")
-            or name in seen_retired or name not in original or original[name] != sha):
-            raise ValueError("TARGET_NOT_IN_PINNED_INVENTORY")
+            or name in seen_retired):
+            raise ValueError("INVALID_OR_DUPLICATE_TARGET")
         seen.add(name)
+        if kind == "auxiliary-ancestor-development":
+            if (set(item) != {"branch", "sha", "kind"} or aux_pins.get(name) != sha):
+                raise ValueError("UNPINNED_AUXILIARY_TARGET")
+            continue
+        if name not in original or original[name] != sha:
+            raise ValueError("TARGET_NOT_IN_PINNED_INVENTORY")
         if kind == "ancestor-main":
             if set(item) != {"branch", "sha", "kind"}:
                 raise ValueError("UNEXPECTED_ANCESTOR_FIELDS")
@@ -170,7 +189,10 @@ def canonical_targets(batch, inventory):
                 raise ValueError("INVALID_EQUAL_BLOB_PROOF")
         else:
             raise ValueError("UNSUPPORTED_DISPOSITION")
-    return {name: sha for name, sha in original.items() if name not in seen_retired}, entries
+    if {z["branch"] for z in entries if z["kind"] == "auxiliary-ancestor-development"} != set(aux_pins):
+        raise ValueError("UNACCOUNTED_AUXILIARY_PIN")
+    return {**{name: sha for name, sha in original.items() if name not in seen_retired},
+            **aux_pins}, entries
 
 
 def prove_snapshot(target):
@@ -254,6 +276,11 @@ def verify_context(batch, inventory, mode):
         if item["kind"] == "ancestor-main":
             if subprocess.run(["git", "merge-base", "--is-ancestor", sha, MAIN_SHA]).returncode:
                 raise RuntimeError("NOT_MAIN_ANCESTOR:" + name)
+        elif item["kind"] == "auxiliary-ancestor-development":
+            # This operation archives no new tag because the auxiliary commit
+            # is already permanently reachable from the development HEAD.
+            if subprocess.run(["git", "merge-base", "--is-ancestor", sha, env_sha]).returncode:
+                raise RuntimeError("AUXILIARY_NOT_REACHABLE_FROM_DEVELOPMENT:" + name)
         else:
             prove_snapshot(item)
     tags = archive_tags()
