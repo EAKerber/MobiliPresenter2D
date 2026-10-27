@@ -144,7 +144,7 @@ def canonical_targets(batch, inventory):
             if set(item) != {"branch", "sha", "kind"}:
                 raise ValueError("UNEXPECTED_ANCESTOR_FIELDS")
         elif kind == "archive-diverged":
-            allowed = {"branch", "sha", "kind", "archiveTag", "snapshotPath", "sourcePath", "sourceBlobSha"}
+            allowed = {"branch", "sha", "kind", "archiveTag", "snapshotPath", "sourcePath", "sourceBlobSha", "equalBlobPath", "equalBlobSha"}
             required = {"branch", "sha", "kind", "archiveTag", "snapshotPath"}
             if not required.issubset(item) or not set(item).issubset(allowed):
                 raise ValueError("INVALID_ARCHIVE_FIELDS")
@@ -155,11 +155,19 @@ def canonical_targets(batch, inventory):
                 or ".." in Path(path).parts):
                 raise ValueError("INVALID_ARCHIVE_IDENTITY")
             with_source = "sourcePath" in item or "sourceBlobSha" in item
+            with_equal = "equalBlobPath" in item or "equalBlobSha" in item
+            if with_source and with_equal:
+                raise ValueError("MIXED_ARCHIVE_PROOF_MODES")
             if with_source and (not isinstance(item.get("sourcePath"), str)
                 or not item["sourcePath"].startswith("docs/")
                 or ".." in Path(item["sourcePath"]).parts
                 or not SHA_RE.fullmatch(str(item.get("sourceBlobSha")))):
                 raise ValueError("INVALID_ARCHIVE_IDENTITY")
+            if with_equal and (not isinstance(item.get("equalBlobPath"), str)
+                or not item["equalBlobPath"].startswith("app/")
+                or ".." in Path(item["equalBlobPath"]).parts
+                or not SHA_RE.fullmatch(str(item.get("equalBlobSha")))):
+                raise ValueError("INVALID_EQUAL_BLOB_PROOF")
         else:
             raise ValueError("UNSUPPORTED_DISPOSITION")
     return {name: sha for name, sha in original.items() if name not in seen_retired}, entries
@@ -176,6 +184,16 @@ def prove_snapshot(target):
     if (target["branch"] + "@" + target["sha"] not in copy
         or target["archiveTag"] not in copy):
         raise RuntimeError("ARCHIVE_PROVENANCE_RECORD_MISSING")
+    if "equalBlobPath" in target:
+        path, sha = target["equalBlobPath"], target["equalBlobSha"]
+        base = git("merge-base", MAIN_SHA, target["sha"])
+        changed = git("diff", "--name-only", "-z", base, target["sha"]).split("\\x00")
+        if [p.decode("utf-8") for p in changed if p] != [path]:
+            raise RuntimeError("EQUAL_BLOB_SOURCE_SCOPE_DRIFT")
+        if (git("rev-parse", target["sha"] + ":" + path) != sha
+            or git("rev-parse", "HEAD:" + path) != sha):
+            raise RuntimeError("EQUAL_BLOB_NOT_IDENTICAL_TO_DEVELOPMENT")
+        return {"snapshotPath": target["snapshotPath"], "sameBlobSha": sha, "exactPaths": [path]}
     if "sourcePath" not in target:
         return {"snapshotPath": target["snapshotPath"], "fullCommitRetainedByTag": True}
     old = git("show", target["sha"] + ":" + target["sourcePath"])
