@@ -149,9 +149,10 @@ def canonical_targets(batch, inventory):
         if not isinstance(item, dict):
             raise ValueError("INVALID_TARGET")
         name, sha, kind = item.get("branch"), item.get("sha"), item.get("kind")
-        if (not safe_name(name) or name in seen or name in ("main", "development")
-            or name in seen_retired):
+        if not safe_name(name) or name in seen or name in ("main", "development"):
             raise ValueError("INVALID_OR_DUPLICATE_TARGET")
+        if name in seen_retired:
+            raise ValueError("TARGET_NOT_IN_PINNED_INVENTORY")
         seen.add(name)
         if kind == "auxiliary-ancestor-development":
             if (set(item) != {"branch", "sha", "kind"} or aux_pins.get(name) != sha):
