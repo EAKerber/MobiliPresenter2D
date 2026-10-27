@@ -1,0 +1,65 @@
+name: Development public NAV-004 / NAV-005 semantic gate (local browsers)
+
+on:
+  push:
+    branches:
+      - integration/05-navigation-contracts-20261027
+      - development
+    paths:
+      - 'tests/ci/public-navigation-semantic-browser.mjs'
+      - '.github/workflows/development-public-navigation-semantic.yml'
+      - 'architecture/fragments/**'
+      - 'architecture/pages/**'
+      - 'app/landing/header-menu.js'
+      - 'app/about/index.html'
+      - 'app/how-it-works/index.html'
+      - 'app/index.html'
+      - 'app/viewer/index.html'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: m2d-development-public-nav-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  public-nav-contract:
+    runs-on: ubuntu-latest
+    timeout-minutes: 22
+    container:
+      image: mcr.microsoft.com/playwright:v1.62.1-noble
+      options: --ipc=host
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Source and generated-page integrity, no rewrite
+        run: |
+          node --check app/landing/header-menu.js
+          node --check app/how-it-works/how-it-works.js
+          node --check tests/ci/public-navigation-semantic-browser.mjs
+          node --test tests/arc03c-source-authority.test.mjs
+          npm run pages:check
+          node tests/public-cutover-contract.cjs
+      - name: Resolve package against preinstalled Playwright browsers
+        run: |
+          npm install --prefix /tmp/m2d-public-nav --no-audit --no-fund playwright@1.62.1
+          node -e 'const p=require("/tmp/m2d-public-nav/node_modules/playwright/package.json");if(p.version!=="1.62.1") process.exit(1)'
+      - name: Serve only the local static public app
+        shell: bash
+        run: |
+          python3 -m http.server 8123 --bind 127.0.0.1 --directory app >/tmp/m2d-public-nav-http.log 2>&1 &
+          for i in $(seq 1 30); do
+            if curl --silent --show-error --fail http://127.0.0.1:8123/ >/dev/null; then break; fi
+            sleep 1
+          done
+          curl --fail http://127.0.0.1:8123/about/ >/dev/null
+          curl --fail http://127.0.0.1:8123/how-it-works/ >/dev/null
+          curl --fail http://127.0.0.1:8123/viewer/ >/dev/null
+      - name: Verify 48 NAV-004 / NAV-005 behavioral scenarios across 2 engines
+        env:
+          NODE_PATH: /tmp/m2d-public-nav/node_modules
+        run: node tests/ci/public-navigation-semantic-browser.mjs
