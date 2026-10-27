@@ -1,0 +1,7 @@
+# R9 — container Playwright pré-instalado para evitar gate cancelado
+
+- `development` recebeu o gate V5 responsive R9, validado na auxiliar [#40524950791](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40524950791) **32/32 PASS**; a repetição na development [#40525526467](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40525526467) terminou **CANCELLED na etapa `Install isolated browser engines`**, sem executar as asserções no destino.
+- Esta auxiliar somente altera `.github/workflows/development-ci-nav-boundary.yml`, mantendo todos os 32 casos, limiares, asserts e fixture V5 local absolutamente idênticos. Substitui instalação do sistema por container `mcr.microsoft.com/playwright:v1.62.1-noble`, oficialmente publicado pela Microsoft Artifact Registry, de versão igual ao pacote npm `playwright@1.62.1`. **Não afrouxar asserções ou autenticação.**
+- O workflow continua limitado a push da auxiliar e da development e `workflow_dispatch`; nenhum preview Netlify, login, banco ou deployment. O container pode ser baixado pela infraestrutura GitHub Actions, mas não pelo bandwidth Netlify.
+- A compatibilidade do navegador e o custo de bootstrap devem ser comprovados por GitHub Actions PASS na auxiliar **e** na development. Falha no runner continua BLOQUEANTE; não declarar o gate verde por existência do container.
+- Referências técnicas: https://mcr.microsoft.com/product/playwright (tag `v1.62.1-noble`) e https://playwright.dev/docs/ci (documentação oficial de CI via container).

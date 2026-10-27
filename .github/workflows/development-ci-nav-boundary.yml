@@ -21,6 +21,10 @@ jobs:
   responsive-boundaries:
     runs-on: ubuntu-latest
     timeout-minutes: 20
+    # Exact browser+package version. Avoid rebuilding system deps/downloads on each run.
+    container:
+      image: mcr.microsoft.com/playwright:v1.62.1-noble
+      options: --ipc=host
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -31,10 +35,10 @@ jobs:
         run: |
           node --check tests/ci/nav-flow-responsive-crossbrowser.cjs
           bash tests/ci/prepare-local-v5-browser.sh FLOW_LAYOUT_URL
-      - name: Install isolated browser engines
+      - name: Resolve Playwright package against baked-in browsers
         run: |
           npm install --prefix /tmp/m2d-dev-boundary-tools --no-audit --no-fund playwright@1.62.1
-          /tmp/m2d-dev-boundary-tools/node_modules/.bin/playwright install --with-deps chromium webkit
+          node -e 'const p=require("/tmp/m2d-dev-boundary-tools/node_modules/playwright/package.json");if(p.version!=="1.62.1") process.exit(1);console.log("R9_PLAYWRIGHT_VERSION_PIN_PASS "+p.version)'
       - name: Run 32 local V5 boundary and stage-survival scenarios
         env:
           NODE_PATH: /tmp/m2d-dev-boundary-tools/node_modules
