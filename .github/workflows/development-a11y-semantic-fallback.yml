@@ -3,7 +3,6 @@ name: Development 10 — legacy a11y fallback semantic supersession (offline)
 on:
   push:
     branches:
-      - integration/10-a11y-fallback-semantic-reconcile-20261027
       - development
     paths:
       - 'tools/development_a11y_fallback_semantic_audit.py'
