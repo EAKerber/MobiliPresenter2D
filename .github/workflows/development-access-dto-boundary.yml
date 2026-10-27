@@ -8,6 +8,7 @@ on:
     paths:
       - 'app/tools/test-v5-endpoint-safety.js'
       - 'app/tools/test-access-policy.mjs'
+      - 'tests/ci/access-dto-boundary.test.mjs'
       - 'netlify/functions/configuration.mjs'
       - 'netlify/access/identity-policy.mjs'
       - '.github/workflows/development-access-dto-boundary.yml'
@@ -38,4 +39,6 @@ jobs:
         run: |
           node app/tools/test-access-policy.mjs
           node app/tools/test-v5-endpoint-safety.js
+          node --test tests/ci/access-dto-boundary.test.mjs
+          node app/tools/test-published-buyer-projection.js
           node --test tests/auth-first-login-recovery.test.mjs
