@@ -3,7 +3,7 @@
   "repository": "EAKerber/MobiliPresenter2D",
   "controlBranch": "development",
   "mainSha": "221b54b2a41ecc8c338d1bf2cf67280cf165ce95",
-  "batchId": "dev-20261027-ancestor-build-and-focus-b",
+  "batchId": "dev-20261027-mobile-menu-exact-blob-c",
   "retired": [
     {
       "branch": "docs/handover-reconcile-20261023",
@@ -20,9 +20,7 @@
       "branch": "maintenance/branch-retirement-r10-squash-20261026",
       "sha": "74562dd8a26b6ed5ebcdc3d039eb0ee3306c9bd6",
       "kind": "ancestor-main"
-    }
-  ],
-  "targets": [
+    },
     {
       "branch": "architecture/arc03c-static-page-build-20261022",
       "sha": "fbd00a9628c81b4902a8c679abb7ac72e93ca549",
@@ -32,6 +30,17 @@
       "branch": "fix/focus-ring-about-approved-vis002-20261024",
       "sha": "e7b02c04308e9fcc7b52f1d09534058a2a0bbc65",
       "kind": "ancestor-main"
+    }
+  ],
+  "targets": [
+    {
+      "branch": "fix/mobile-menu-scene-stacking-20261019",
+      "sha": "b81308a22c2a9d281037306f5ebf9eecb521d15e",
+      "kind": "archive-diverged",
+      "archiveTag": "archive/m2d/fix-mobile-menu-scene-stacking-b81308a2",
+      "snapshotPath": "docs/work/DEVELOPMENT_SEMANTIC_RECONCILIATION_2026-10-27.md",
+      "equalBlobPath": "app/styles.css",
+      "equalBlobSha": "d43e6fb5e66133d2389b5c39b165b76b13cfa868"
     }
   ]
 }
