@@ -187,8 +187,8 @@ def prove_snapshot(target):
     if "equalBlobPath" in target:
         path, sha = target["equalBlobPath"], target["equalBlobSha"]
         base = git("merge-base", MAIN_SHA, target["sha"])
-        changed = git("diff", "--name-only", "-z", base, target["sha"]).split("\\x00")
-        if [p.decode("utf-8") for p in changed if p] != [path]:
+        changed = git("diff", "--name-only", "-z", base, target["sha"]).split("\x00")
+        if [p for p in changed if p] != [path]:
             raise RuntimeError("EQUAL_BLOB_SOURCE_SCOPE_DRIFT")
         if (git("rev-parse", target["sha"] + ":" + path) != sha
             or git("rev-parse", "HEAD:" + path) != sha):
