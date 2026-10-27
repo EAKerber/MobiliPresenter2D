@@ -38,5 +38,5 @@
 ## Disposição
 
 - Conteúdo documental útil **preservado integralmente**, sem sobrescrever o handover atualizado em `development`.
-- O registro permanente do commit e da sua DAG requer uma ref de retenção antes de qualquer exclusão da branch divergente. A presença desta cópia em Markdown não substitui a ref Git.
+- O registro permanente do commit e da sua DAG requer a tag exata `archive/m2d/docs-handover-20261023-d6c23894` apontando para `d6c238946526cfd33b3b498b5d2187790c1d78bd` antes de qualquer exclusão da branch divergente. A presença desta cópia em Markdown não substitui a ref Git.
 - Nenhuma PR é encerrada por esta etapa; #238 permanece HOLD até validação real do preview/identidade.
