@@ -1,0 +1,36 @@
+name: Development CP-PUBLIC-03 strict preview DTO fallback (localhost fixtures)
+
+on:
+  push:
+    branches:
+      - integration/03-public-dto-fallback-gate-20261027
+      - development
+    paths:
+      - 'app/tools/test-public-modules-endpoint.js'
+      - 'netlify/functions/public-modules.mjs'
+      - '.github/workflows/development-public-dto-fallback.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: m2d-public-dto-fallback-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  no-leak-contract:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify strict read-only function and fixture source
+        run: |
+          node --check app/tools/test-public-modules-endpoint.js
+          node --check netlify/functions/public-modules.mjs
+          node --test tests/public-module-projection.test.cjs tests/viewer-base-price-publication.test.cjs
+      - name: Adversarial primary-public DTO fallback, no real network
+        run: node app/tools/test-public-modules-endpoint.js

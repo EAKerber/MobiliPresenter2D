@@ -122,6 +122,31 @@ publishedReader, publicModules, catalog, priceBook, scene } = globalThis.__publi
     assert.equal(prod.reads, 1, "preview must not read the production published Blob");
     assert.equal(productionFetches, 1);
 
+    // Legacy #179/#180 preview-security gap: only public DTO fields may flow
+    // through the PRIMARY PUBLIC endpoint, even if that origin returns a bad
+    // body. Never treat an upstream 0.2 response as permission for 0.1 clients.
+    const cleanPrimary = structuredClone(productionResponse);
+    const originalPublished = cleanPrimary.body;
+    const forged = [
+      { ...originalPublished, administrativeSecret: { token: "must-never-cross" } },
+      { ...originalPublished, publicState: { ...originalPublished.publicState, pricing: { secret: true } } },
+      { ...originalPublished, publicState: { ...originalPublished.publicState,
+          availableFinishes: originalPublished.publicState.availableFinishes.map(
+            (finish, i) => i ? finish : { ...finish, administrativeColorToken: "private" }) } },
+      { ...originalPublished, schemaVersion: publicModules.PRICED_SCHEMA,
+        modules: originalPublished.modules.map((module,i) => i
+          ? module : { ...module, basePriceCents: 90000 }) }
+    ];
+    for (const [index, body] of forged.entries()) {
+      productionResponse = { ...cleanPrimary, body };
+      const denied = await invoke("GET", "", previewCtx);
+      assert.deepEqual(denied, { status: 503, body: { error: "public_modules_unavailable" } },
+        "forged primary-public response must fail closed #" + index);
+      assert.equal(prod.reads, 1, "preview never accesses primary private storage");
+    }
+    productionResponse = cleanPrimary;
+    const productionFetchesAfterNegativeProbes = productionFetches;
+
     // Negotiation never grants permission: only the published V5 flag can.
     assert.deepEqual(await invoke("GET", "", prodCtx, "0.7"), {
       status: 406, body: { error: "unsupported_public_modules_version" }
@@ -153,7 +178,7 @@ publishedReader, publicModules, catalog, priceBook, scene } = globalThis.__publi
     const isolated = await invoke("GET");
     assert.equal(isolated.status, 200);
     assert.deepEqual(isolated.body, productionResponse.body);
-    assert.equal(productionFetches, 1, "a valid preview publication takes precedence over the public primary projection");
+    assert.equal(productionFetches, productionFetchesAfterNegativeProbes, "a valid preview publication takes precedence over the public primary projection");
     assert.equal(prod.reads, prodReadsAfterVersionChecks, "preview must not share production store");
     for (const invalid of ["not-json", v3, { ...v5, schemaVersion: "unknown" },
       { ...v5, objects: null }]) {
