@@ -1,0 +1,54 @@
+{
+  "schemaVersion": "M2DDevRetirementHistory/0.1",
+  "repository": "EAKerber/MobiliPresenter2D",
+  "controlBranch": "development",
+  "baseline": {
+    "mainSha": "221b54b2a41ecc8c338d1bf2cf67280cf165ce95",
+    "historicalRefCount": 60
+  },
+  "waves": [
+    {
+      "batchId": "dev-20261027-historic-doc-and-maintenance-a",
+      "workflowRun": 40576562178,
+      "workflowUrl": "https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40576562178",
+      "headSha": "821ff78e18796120b8531eeb709cf65650f1def5",
+      "auditArtifactId": 12766939318,
+      "applyArtifactId": 12768360061,
+      "audit": "PASS",
+      "apply": "PASS",
+      "refsBefore": 62,
+      "refsAfter": 59,
+      "archived": [
+        {
+          "tag": "archive/m2d/docs-handover-20261023-d6c23894",
+          "sha": "d6c238946526cfd33b3b498b5d2187790c1d78bd"
+        }
+      ],
+      "retired": [
+        {
+          "branch": "docs/handover-reconcile-20261023",
+          "sha": "d6c238946526cfd33b3b498b5d2187790c1d78bd",
+          "kind": "archive-diverged",
+          "archiveTag": "archive/m2d/docs-handover-20261023-d6c23894"
+        },
+        {
+          "branch": "maintenance/branch-retirement-r9-operational-20261026",
+          "sha": "535a2edf9d7bcfaab5e51d9a00374417a0e376b9",
+          "kind": "ancestor-main"
+        },
+        {
+          "branch": "maintenance/branch-retirement-r10-squash-20261026",
+          "sha": "74562dd8a26b6ed5ebcdc3d039eb0ee3306c9bd6",
+          "kind": "ancestor-main"
+        }
+      ],
+      "preserved": {
+        "openPRs": 12,
+        "remainingOriginalHistoricalRefs": 57,
+        "mainSha": "221b54b2a41ecc8c338d1bf2cf67280cf165ce95"
+      },
+      "noDeploy": true
+    }
+  ],
+  "nextBatchContract": "Copy all waves[].retired into ops/development-retirement-batch.json retired[] before authorizing any future 1-3 target batch. For archived ref preserve exact tag; never rerun consumed batch; update historical receipts after readback."
+}
