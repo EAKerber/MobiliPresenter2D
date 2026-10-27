@@ -177,6 +177,8 @@ def canonical_targets(batch, inventory):
             with_source = "sourcePath" in item or "sourceBlobSha" in item
             with_equal = "equalBlobPath" in item or "equalBlobSha" in item
             with_gate = "semanticGate" in item
+            if with_source and with_equal:
+                raise ValueError("MIXED_ARCHIVE_PROOF_MODES")
             if sum((with_source, with_equal, with_gate)) != 1:
                 raise ValueError("EXACTLY_ONE_ARCHIVE_PROOF_REQUIRED")
             if with_gate:
