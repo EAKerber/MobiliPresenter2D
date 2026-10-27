@@ -1,0 +1,92 @@
+name: CI-BASELINE-01 isolated authenticated Config
+on:
+  push:
+    branches:
+      - ci/ci-baseline-01-isolated-auth-extraction-20261024
+    paths:
+      - ".github/workflows/ci-baseline-01-isolated-authenticated.yml"
+      - "tests/ci/config-auth-isolated-browser.mjs"
+      - "tests/ci/config-auth-isolation.mjs"
+      - "tests/ci/config-auth-isolation.test.mjs"
+      - "tests/ci/config-authenticated-v5-suites.mjs"
+      - "tests/ci/build-ci-preview-fixture.test.mjs"
+      - "scripts/build-ci-preview-fixture.mjs"
+      - "netlify/plugins/ci-v5-fixture/**"
+      - "netlify.toml"
+      - "app/styles.css"
+      - "app/app.js"
+      - "app/config/index.html"
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: ci-config-isolated-auth-once
+  cancel-in-progress: false
+jobs:
+  authenticated-config:
+    if: github.ref == 'refs/heads/ci/ci-baseline-01-isolated-auth-extraction-20261024'
+    name: Isolated session redeem, bootstrap and revoke
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    environment: ci-auth-isolated
+    container:
+      image: mcr.microsoft.com/playwright:v1.56.0-noble
+      options: --ipc=host
+    env:
+      CI_STAGING_ORIGIN: https://m2d-auth-ci-isolated.netlify.app
+      CI_STAGING_EXPECTED_HOST: m2d-auth-ci-isolated.netlify.app
+      CI_STAGING_ISOLATION_TAG: M2D_CI_AUTH_ISOLATED_V1
+      CI_STAGING_PREVIEW_ORIGIN: https://deploy-preview-238--m2d-auth-ci-isolated.netlify.app
+      CI_STAGING_PREVIEW_REVIEW_ID: '238'
+      CI_STAGING_PREVIEW_BRANCH: ${{ github.ref_name }}
+      CI_STAGING_EXPECTED_COMMIT: ${{ github.sha }}
+      CI_STAGING_SUPABASE_REF: ${{ vars.CI_STAGING_SUPABASE_REF }}
+      CI_STAGING_DATABASE_URL: ${{ secrets.CI_STAGING_DATABASE_URL }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Reject unsafe origins and roles before any network access
+        run: node --test tests/ci/config-auth-isolation.test.mjs
+      - name: Check required environment values without displaying them
+        run: |
+          missing=0
+          if [ -z "$CI_STAGING_SUPABASE_REF" ]; then
+            echo "BLOCKED_AUTH_FIXTURE: CI_STAGING_SUPABASE_REF is missing"
+            missing=1
+          fi
+          if [ -z "$CI_STAGING_DATABASE_URL" ]; then
+            echo "BLOCKED_AUTH_FIXTURE: CI_STAGING_DATABASE_URL is missing"
+            missing=1
+          fi
+          exit "$missing"
+      - name: Install isolated Playwright and Postgres tooling
+        run: |
+          npm install --prefix /tmp/m2d-ci-config-auth --no-audit --no-fund playwright@1.56.0 pg@8.16.3
+          ln -s /tmp/m2d-ci-config-auth/node_modules ./node_modules
+      - name: Validate synthetic V5 Deploy Preview fixture contract
+        run: |
+          node --check scripts/build-ci-preview-fixture.mjs
+          node --check netlify/plugins/ci-v5-fixture/index.mjs
+          node --test tests/ci/build-ci-preview-fixture.test.mjs
+      - name: Redeem real isolated access grant, check role and revoke
+        run: node tests/ci/config-auth-isolated-browser.mjs
+      - name: Run five legacy browser suites with short-lived authenticated grants
+        run: node tests/ci/config-authenticated-v5-suites.mjs
+      - name: Guard against test writing protected source files
+        run: |
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
+          git diff --exit-code -- app netlify
+      - name: Retain sanitized evidence (no cookies/tokens/DB URIs)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ci-config-isolated-authenticated
+          path: artifacts/ci-baseline-01/
+          retention-days: 7
+          if-no-files-found: warn
+
+# This scoped push trigger permits pre-merge validation after environment setup.
+
+# Post-deploy revalidation: 6adc77b6603e52a336fe045d

@@ -1,0 +1,6 @@
+{
+  "name": "m2d-ci-preview-v5-fixture",
+  "private": true,
+  "type": "module",
+  "main": "index.mjs"
+}

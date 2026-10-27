@@ -1741,8 +1741,8 @@
   function renderStageNavigation() {
     const repin = mobileSceneRepin;
     flowNav.querySelectorAll("[data-step]").forEach((button) => button.remove());
+    const fragment = document.createDocumentFragment();
     const stages = flowLayout.stageNavigation(normalizedFlow);
-    flowNav.style.gridTemplateColumns = `repeat(${stages.length}, minmax(0, 1fr))`;
     stages.forEach((stage, index) => {
       const button = document.createElement("button");
       button.type = "button";
@@ -1758,8 +1758,9 @@
       label.textContent = stage.label;
       button.setAttribute("aria-label", stage.label);
       button.append(number, label);
-      flowNav.insertBefore(button, repin);
+      fragment.append(button);
     });
+    flowNav.insertBefore(fragment, repin);
   }
 
   function applyConfiguratorSettings(value) {
@@ -2130,6 +2131,13 @@
     const profile = syncLayoutProfileMarker();
     const nextMode = scenePipMode(profile);
     const profileChanged = profile !== previousProfile;
+    if (profileChanged && flowNav) {
+      const focusedStep = flowNav.contains(document.activeElement) ? document.activeElement : null;
+      const navChildren = document.createDocumentFragment();
+      while (flowNav.firstChild) navChildren.append(flowNav.firstChild);
+      flowNav.append(navChildren);
+      if (focusedStep?.isConnected) focusedStep.focus({ preventScroll: true });
+    }
     if (mobilePipPosition) mobilePipPosition = null;
     if (!nextMode.available) mobileSceneIsMini = false;
     else if (profileChanged && previousMode.available && wasOpen) mobileSceneIsMini = true;

@@ -305,7 +305,41 @@ const flatV3 = configuration.createDefaultAdministration(
   assert.equal(await noOverflow("#modulesPanel"), true, "desktop side-panel Modules does not overflow horizontally");
   await page.screenshot({ path: path.join(output, "modules-desktop.png"), fullPage: true });
 
-  await page.locator('.flow-nav [data-step="finishes"]').click();
+  try {
+    await page.locator('.flow-nav [data-step="finishes"]').click();
+  } catch (error) {
+    const snapshot = await page.evaluate(() => {
+      const nav = document.querySelector(".flow-nav");
+      const target = nav?.querySelector('[data-step="finishes"]');
+      const rect = target?.getBoundingClientRect();
+      const hit = rect ? document.elementFromPoint(rect.x + rect.width / 2, rect.y + rect.height / 2) : null;
+      const chain = [];
+      for (let node = target, depth = 0; node && depth < 5; node = node.parentElement, depth += 1) {
+        const box = node.getBoundingClientRect();
+        const style = getComputedStyle(node);
+        chain.push({tag:node.tagName,id:node.id||null,className:typeof node.className==="string"?node.className.slice(0,80):null,
+          display:style.display,visibility:style.visibility,width:box.width,height:box.height,minHeight:style.minHeight,childCount:node.children.length});
+      }
+      return {
+        currentStep: nav?.querySelector('[data-step][aria-current="step"]')?.dataset.step || null,
+        navVisible: Boolean(nav && nav.getClientRects().length),
+        nodeChain,
+        navDisplay: nav ? getComputedStyle(nav).display : null,
+        navGridColumns: nav ? getComputedStyle(nav).gridTemplateColumns : null,
+        viewport: {width: innerWidth, height: innerHeight, scrollY: scrollY},
+        target: target ? {current:target.getAttribute("aria-current"),hidden:Boolean(target.hidden),disabled:Boolean(target.disabled),
+          display:getComputedStyle(target).display,visibility:getComputedStyle(target).visibility,position:getComputedStyle(target).position,
+          computedWidth:getComputedStyle(target).width,computedHeight:getComputedStyle(target).height,
+          minHeight:getComputedStyle(target).minHeight,gridColumn:getComputedStyle(target).gridColumn,
+          gridRow:getComputedStyle(target).gridRow,clientRectCount:target.getClientRects().length,
+          rect:rect?{x:rect.x,y:rect.y,width:rect.width,height:rect.height}:null,
+          centerHit:hit?{tag:hit.tagName,id:hit.id||null,className:typeof hit.className==="string"?hit.className.slice(0,80):null}:null}:null,
+        nodeChain:chain,layoutProfile:document.documentElement.dataset.layoutProfile||null
+      };
+    });
+    console.error("CI_AUTH_STAGE_NAV_STATE " + JSON.stringify({suite:"flow", ...snapshot}));
+    throw error;
+  }
   await page.waitForFunction(() => !document.getElementById("finishesStagePanel").hidden);
   assert.deepEqual(await stageGroupOrder("finishes"), await modelGroupOrder("finishes"), "Acabamentos group order comes from normalized flow");
   const generatedCabinetGroup = page.locator('[data-flow-group-shell="cabinet-finishes"]');
@@ -412,7 +446,96 @@ const flatV3 = configuration.createDefaultAdministration(
   }));
   assert.ok(handleGeometry.every((entry) => entry.width >= 190 && entry.copyWidth >= 125), "Puxadores stays readable in the two-column stacked-workspace layout");
 
-  await page.locator('.flow-nav [data-step="modules"]').click();
+  try {
+    await page.locator('.flow-nav [data-step="modules"]').click();
+  } catch (error) {
+    const snapshot = await page.evaluate(() => {
+      const nav = document.querySelector(".flow-nav");
+      const target = nav?.querySelector('[data-step="modules"]');
+      const nodeChain = [];
+      for (let node = target, depth = 0; node && depth < 6; node = node.parentElement, depth += 1) {
+        const box = node.getBoundingClientRect();
+        const style = getComputedStyle(node);
+        nodeChain.push({tag:node.tagName,id:node.id||null,className:typeof node.className==="string"?node.className.slice(0,80):null,
+          display:style.display,visibility:style.visibility,contentVisibility:style.contentVisibility,position:style.position,
+          width:box.width,height:box.height,zoom:style.zoom,transform:style.transform,childCount:node.children.length});
+      }
+      const rect = target?.getBoundingClientRect();
+      const hit = rect ? document.elementFromPoint(rect.x + rect.width / 2, rect.y + rect.height / 2) : null;
+      return {
+        currentStep: nav?.querySelector('[data-step][aria-current="step"]')?.dataset.step || null,
+        navVisible: Boolean(nav && nav.getClientRects().length),
+        navDisplay: nav ? getComputedStyle(nav).display : null,
+        navGridColumns: nav ? getComputedStyle(nav).gridTemplateColumns : null,
+        viewport: {width: innerWidth, height: innerHeight, scrollY: scrollY},
+        target: target ? {
+          current: target.getAttribute("aria-current"),
+          hidden: Boolean(target.hidden),
+          disabled: Boolean(target.disabled),
+          display: getComputedStyle(target).display,
+          visibility: getComputedStyle(target).visibility,
+          position: getComputedStyle(target).position,
+          computedWidth: getComputedStyle(target).width,
+          computedHeight: getComputedStyle(target).height,
+          style: target.getAttribute("style"),
+          rect: rect ? {x: rect.x, y: rect.y, width: rect.width, height: rect.height} : null,
+          centerHit: hit ? {tag: hit.tagName, id: hit.id || null, className: typeof hit.className === "string" ? hit.className.slice(0, 120) : null} : null
+        } : null,
+        layoutProbe: (() => {
+          const rectOf = element => { const r = element?.getBoundingClientRect(); return r ? {x:r.x,y:r.y,width:r.width,height:r.height} : null; };
+          const node = element => {
+            if (!element) return null;
+            const style = getComputedStyle(element), rect = rectOf(element);
+            return {tag:element.tagName,className:typeof element.className==="string"?element.className.slice(0,80):null,
+              connected:element.isConnected,display:style.display,visibility:style.visibility,position:style.position,
+              width:style.width,height:style.height,minHeight:style.minHeight,gridTemplateRows:style.gridTemplateRows,
+              gridAutoRows:style.gridAutoRows,gridAutoFlow:style.gridAutoFlow,contentVisibility:style.contentVisibility,
+              contain:style.contain,overflow:style.overflow,clientRectCount:element.getClientRects().length,rect,
+              offsetParentTag:element.offsetParent?.tagName||null,childCount:element.children?.length||0,
+              attrs:{hidden:Boolean(element.hidden),inert:Boolean(element.inert),ariaHidden:element.getAttribute("aria-hidden"),
+                ariaCurrent:element.getAttribute("aria-current"),dataStep:element.getAttribute("data-step"),
+                ariaControlsPresent:element.hasAttribute("aria-controls"),hasStyleAttribute:element.hasAttribute("style"),
+                ariaLabelLength:element.getAttribute("aria-label")?.length||0},
+              inlineStyle:Object.fromEntries(["display","visibility","position","width","height","minHeight","maxHeight","gridColumn","gridRow","transform","zoom","contain","contentVisibility","pointerEvents","overflow"].map(key=>[key,element.style[key]||""])),
+              children:[...element.children].slice(0,3).map(child=>{const cs=getComputedStyle(child),cr=rectOf(child);return {
+                tag:child.tagName,className:typeof child.className==="string"?child.className.slice(0,80):null,
+                display:cs.display,visibility:cs.visibility,width:cs.width,height:cs.height,minHeight:cs.minHeight,
+                clientRectCount:child.getClientRects().length,rect:cr,
+                inlineStyle:Object.fromEntries(["display","visibility","position","width","height","minHeight","transform","zoom","contain","contentVisibility","pointerEvents","overflow"].map(key=>[key,child.style[key]||""]))
+              };})
+            };
+          };
+          const probe = (parent, location) => {
+            if (!parent) return null;
+            const button=document.createElement("button");
+            button.type="button"; button.className="flow-step"; button.dataset.step="modules"; button.textContent="probe";
+            parent.append(button);
+            const result={location,parent:node(parent),button:node(button)};
+            button.remove();
+            return result;
+          };
+          const stylesheets=[...document.styleSheets].slice(0,16).map(sheet=>{
+            let path="inline",hasFlowStepRule=null;
+            try { if(sheet.href) path=new URL(sheet.href).pathname; } catch {}
+            try { hasFlowStepRule=[...sheet.cssRules].some(rule=>rule.cssText.includes(".flow-step")); } catch {}
+            return {path,disabled:sheet.disabled,hasFlowStepRule};
+          });
+          const existing=nav?.querySelector("[data-step]")||null;
+          let clonedExisting=null,reinsertedExisting=null;
+          if(existing&&nav){
+            const clone=existing.cloneNode(true);nav.append(clone);clonedExisting=node(clone);clone.remove();
+            const nextSibling=existing.nextSibling;existing.remove();nav.insertBefore(existing,nextSibling);
+            reinsertedExisting=node(existing);
+          }
+          return {nav:node(nav),existing:node(existing),clonedExisting,reinsertedExisting,
+            probes:[probe(nav,"nav"),probe(nav?.parentElement,"controls"),probe(document.body,"body")],stylesheets};
+        })(),
+        modulesPanelHidden: Boolean(document.getElementById("modulesPanel")?.hidden)
+      };
+    });
+    console.error("CI_AUTH_STAGE_NAV_STATE " + JSON.stringify({suite:"flow", ...snapshot}));
+    throw error;
+  }
   await page.waitForFunction(() => !document.getElementById("modulesPanel").hidden);
   await page.locator("#moduleList [data-select-entity]").first().click();
   await page.waitForFunction(() => document.body.classList.contains("has-module-detail"));
