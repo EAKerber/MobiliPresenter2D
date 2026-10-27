@@ -166,5 +166,56 @@ class DevelopmentRetirementContract(unittest.TestCase):
             mod.canonical_targets(b, i)
 
 
+    def test_auxiliary_exact_pin_happy_path(self):
+        b, i = fixture()
+        ref = {"branch": "integration/10-a11y-fallback-semantic-reconcile-20261027",
+               "sha": "a" * 40}
+        b["auxiliaryRefs"] = [ref]
+        b["targets"] = [{"branch": ref["branch"], "sha": ref["sha"],
+                         "kind": "auxiliary-ancestor-development"}]
+        roster, targets = mod.canonical_targets(b, i)
+        self.assertEqual(len(roster), 61)
+        self.assertEqual(roster[ref["branch"]], ref["sha"])
+        self.assertEqual(len(targets), 1)
+
+    def test_auxiliary_missing_lease_denied(self):
+        b, i = fixture()
+        b["targets"] = [{"branch": "integration/10-unknown",
+                         "sha": "a" * 40,
+                         "kind": "auxiliary-ancestor-development"}]
+        with self.assertRaisesRegex(ValueError, "UNPINNED_AUXILIARY_TARGET"):
+            mod.canonical_targets(b, i)
+
+    def test_auxiliary_unaccounted_roster_denied(self):
+        b, i = fixture()
+        b["auxiliaryRefs"] = [{"branch": "integration/unapproved",
+                               "sha": "a" * 40}]
+        with self.assertRaisesRegex(ValueError, "UNACCOUNTED_AUXILIARY_PIN"):
+            mod.canonical_targets(b, i)
+
+    def test_auxiliary_wrong_prefix_and_original_collision_denied(self):
+        for branch in ["main", "development", "feat/suspicious", DOC,
+                       "integration/../bypass", "integration/a//b"]:
+            b, i = fixture()
+            b["auxiliaryRefs"] = [{"branch": branch, "sha": "a" * 40}]
+            with self.assertRaisesRegex(ValueError, "AUXILIARY_PIN_NOT_ISOLATED"):
+                mod.canonical_targets(b, i)
+
+    def test_auxiliary_extra_force_flag_denied(self):
+        b, i = fixture()
+        b["auxiliaryRefs"] = [{"branch": "integration/a", "sha": "a" * 40}]
+        b["targets"] = [{"branch": "integration/a", "sha": "a" * 40,
+                         "kind": "auxiliary-ancestor-development", "force": True}]
+        with self.assertRaisesRegex(ValueError, "UNPINNED_AUXILIARY_TARGET"):
+            mod.canonical_targets(b, i)
+
+    def test_auxiliary_cannot_promote_ordinary_historical_ref(self):
+        b, i = fixture()
+        b["targets"] = [{"branch": DOC, "sha": DOC_SHA,
+                         "kind": "auxiliary-ancestor-development"}]
+        with self.assertRaisesRegex(ValueError, "UNPINNED_AUXILIARY_TARGET"):
+            mod.canonical_targets(b, i)
+
+
 if __name__ == "__main__":
     unittest.main()
