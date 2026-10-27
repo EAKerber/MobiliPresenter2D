@@ -164,7 +164,7 @@ def canonical_targets(batch, inventory):
             if set(item) != {"branch", "sha", "kind"}:
                 raise ValueError("UNEXPECTED_ANCESTOR_FIELDS")
         elif kind == "archive-diverged":
-            allowed = {"branch", "sha", "kind", "archiveTag", "snapshotPath", "sourcePath", "sourceBlobSha", "equalBlobPath", "equalBlobSha"}
+            allowed = {"branch", "sha", "kind", "archiveTag", "snapshotPath", "sourcePath", "sourceBlobSha", "equalBlobPath", "equalBlobSha", "semanticGate"}
             required = {"branch", "sha", "kind", "archiveTag", "snapshotPath"}
             if not required.issubset(item) or not set(item).issubset(allowed):
                 raise ValueError("INVALID_ARCHIVE_FIELDS")
@@ -176,8 +176,19 @@ def canonical_targets(batch, inventory):
                 raise ValueError("INVALID_ARCHIVE_IDENTITY")
             with_source = "sourcePath" in item or "sourceBlobSha" in item
             with_equal = "equalBlobPath" in item or "equalBlobSha" in item
-            if with_source and with_equal:
-                raise ValueError("MIXED_ARCHIVE_PROOF_MODES")
+            with_gate = "semanticGate" in item
+            if sum((with_source, with_equal, with_gate)) != 1:
+                raise ValueError("EXACTLY_ONE_ARCHIVE_PROOF_REQUIRED")
+            if with_gate:
+                gate = item["semanticGate"]
+                if (not isinstance(gate, dict)
+                    or set(gate) != {"runId", "headSha", "workflowName"}
+                    or type(gate["runId"]) is not int or gate["runId"] <= 0
+                    or not isinstance(gate["headSha"], str)
+                    or not SHA_RE.fullmatch(gate["headSha"])
+                    or not isinstance(gate["workflowName"], str)
+                    or not 12 <= len(gate["workflowName"]) <= 180):
+                    raise ValueError("INVALID_SEMANTIC_GATE")
             if with_source and (not isinstance(item.get("sourcePath"), str)
                 or not item["sourcePath"].startswith("docs/")
                 or ".." in Path(item["sourcePath"]).parts
@@ -207,6 +218,19 @@ def prove_snapshot(target):
     if (target["branch"] + "@" + target["sha"] not in copy
         or target["archiveTag"] not in copy):
         raise RuntimeError("ARCHIVE_PROVENANCE_RECORD_MISSING")
+    if "semanticGate" in target:
+        gate = target["semanticGate"]
+        run = api("actions/runs/" + str(gate["runId"]))
+        if (run.get("conclusion") != "success" or run.get("status") != "completed"
+            or run.get("head_sha") != gate["headSha"]
+            or run.get("name") != gate["workflowName"]
+            or run.get("event") != "push"):
+            raise RuntimeError("SEMANTIC_GATE_NOT_PROVED")
+        if subprocess.run(["git", "merge-base", "--is-ancestor",
+                           gate["headSha"], git("rev-parse", "HEAD")]).returncode:
+            raise RuntimeError("SEMANTIC_GATE_HEAD_NOT_ON_DEVELOPMENT")
+        return {"snapshotPath": target["snapshotPath"],
+                "semanticGateRun": gate["runId"], "semanticGateSha": gate["headSha"]}
     if "equalBlobPath" in target:
         path, sha = target["equalBlobPath"], target["equalBlobSha"]
         base = git("merge-base", MAIN_SHA, target["sha"])
@@ -218,7 +242,7 @@ def prove_snapshot(target):
             raise RuntimeError("EQUAL_BLOB_NOT_IDENTICAL_TO_DEVELOPMENT")
         return {"snapshotPath": target["snapshotPath"], "sameBlobSha": sha, "exactPaths": [path]}
     if "sourcePath" not in target:
-        return {"snapshotPath": target["snapshotPath"], "fullCommitRetainedByTag": True}
+        raise RuntimeError("UNPROVEN_ARCHIVE_DISPOSITION")
     old = git("show", target["sha"] + ":" + target["sourcePath"])
     current = git("show", "HEAD:" + target["sourcePath"])
     marker_a = "<!-- BEGIN-ARCHIVED-20261023-EXACT-26-LINES -->\n"
