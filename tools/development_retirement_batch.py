@@ -117,7 +117,7 @@ def canonical_targets(batch, inventory):
             raise ValueError("INVALID_RETIRED_ENTRY")
         name, sha, kind = record.get("branch"), record.get("sha"), record.get("kind")
         if (not safe_name(name) or name in seen_retired
-            or name in seen_retired or name not in original or original[name] != sha):
+            or name not in original or original[name] != sha):
             raise ValueError("RETIRED_ORIGINAL_PIN_MISMATCH")
         if kind == "ancestor-main":
             if set(record) != {"branch", "sha", "kind"}:
@@ -137,7 +137,7 @@ def canonical_targets(batch, inventory):
             raise ValueError("INVALID_TARGET")
         name, sha, kind = item.get("branch"), item.get("sha"), item.get("kind")
         if (not safe_name(name) or name in seen or name in ("main", "development")
-            or name not in original or original[name] != sha):
+            or name in seen_retired or name not in original or original[name] != sha):
             raise ValueError("TARGET_NOT_IN_PINNED_INVENTORY")
         seen.add(name)
         if kind == "ancestor-main":
@@ -180,8 +180,8 @@ def prove_snapshot(target):
         return {"snapshotPath": target["snapshotPath"], "fullCommitRetainedByTag": True}
     old = git("show", target["sha"] + ":" + target["sourcePath"])
     current = git("show", "HEAD:" + target["sourcePath"])
-    marker_a = "<!-- BEGIN-ARCHIVED-20261023-EXACT-26-LINES -->\\n"
-    marker_b = "\\n<!-- END-ARCHIVED-20261023-EXACT-26-LINES -->"
+    marker_a = "<!-- BEGIN-ARCHIVED-20261023-EXACT-26-LINES -->\n"
+    marker_b = "\n<!-- END-ARCHIVED-20261023-EXACT-26-LINES -->"
     if (copy.count(marker_a) != 1 or copy.count(marker_b) != 1
         or git("rev-parse", target["sha"] + ":" + target["sourcePath"]) != target["sourceBlobSha"]):
         raise RuntimeError("HISTORICAL_COPY_MARKER_OR_BLOB_DRIFT")
