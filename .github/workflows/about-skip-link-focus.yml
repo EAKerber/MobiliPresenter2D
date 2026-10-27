@@ -10,16 +10,8 @@ on:
       - architecture/generated/primary-pages.manifest.json
       - tests/about-skip-link-focus.mjs
       - .github/workflows/about-skip-link-focus.yml
-  push:
-    branches:
-      - fix/focus-ring-about-approved-vis002-20261024
-    paths:
-      - architecture/pages/about.page.html
-      - app/about/about.js
-      - app/about/index.html
-      - architecture/generated/primary-pages.manifest.json
-      - tests/about-skip-link-focus.mjs
-      - .github/workflows/about-skip-link-focus.yml
+  # Legacy feature push target retired; retain the live PR gate.
+  workflow_dispatch:
 permissions:
   contents: read
 jobs:
