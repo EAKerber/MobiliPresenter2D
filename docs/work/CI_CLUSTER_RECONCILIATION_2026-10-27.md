@@ -29,7 +29,7 @@ A PR continua aberta e precisa de preview reconstruído ou validado contra seu H
 | `ci/ci-baseline-01-shared-db-preview-20261023@1e164dc55cc1` | `HOLD_CROSS_BLOCK_RECONCILIATION` | merged UI/tokens/pages/auth history; do not merge whole branch |
 | `ci/ci-baseline-01-v5-local-diagnostics-20261023@5ce7327a9e4c` | `HOLD_CROSS_BLOCK_RECONCILIATION` | merged UI/tokens/pages/auth history; do not merge whole branch |
 | `ci/ci-global-auth-boundary-repair-20261023@cacd0e916043` | `HOLD_CROSS_BLOCK_RECONCILIATION` | merged UI/tokens/pages/auth history; do not merge whole branch |
-| `fix/ci-baseline-v5-nav-flow-clean-20261023@62c5521d7e88` | `HOLD_VISUAL_DIFFERENTIAL_CANDIDATE` | 500px label boundary and CSS differential tests potentially reusable after V5 reconciliation |
+| `fix/ci-baseline-v5-nav-flow-clean-20261023@62c5521d7e88` | `SEMANTIC_LABEL500_EXTRACTED_PARTIAL` | 136/136 measured named CSS container checks in Chromium/WebKit, including true 500px inner-width crossing; source HEAD remains divergent and retained |
 | `fix/config-stage-nav-grid-track-20261025@dbfbd9a7bca0` | `COMMIT_ANCESTOR_OF_PR238` | GitHub compare directly to PR #238 confirms behind=0; NOT in main/development |
 | `security/oidc-ci-preview235-v0-20261023@833f36a52456` | `HOLD_SECURITY_POLICY_REVIEW` | old preview #235 and credentials must never be treated as current authority |
 | `tooling/migration-inspector-v0-20261023@2b00351acc1d` | `PARTIAL_EXACT_BLOB_IN_DEVELOPMENT` | 2 source blobs imported, no merge of historical HEAD |
@@ -42,3 +42,11 @@ A PR continua aberta e precisa de preview reconstruído ou validado contra seu H
 4. Poda das branches deve ocorrer só após registro de proveniência, confirmação de ausência de PR e proteção de DAGs divergentes; cinco auxiliares atuais são ancestrais da development, mas também exigem lease e readback.
 
 **Nenhuma das 15 origens é declarada integralmente absorvida pela simples classificação.** A `main` fica intacta. A fonte viva desta auditoria é `development` e os SHA pinned acima.
+
+## R10 — resolução de contêiner real e limiar CSS comprovados (27/10/2026)
+
+A fonte `tests/ci/nav-label-width-boundary.mjs` (blob `7d15daeac6a88ecd295b5393a1878d610a809d57`) comparava visualmente CSS baseline/candidato e amostrava `.controls` em 496–522px. A `main` e a `development` atuais compartilhavam o mesmo blob CSS `d43e6fb5e66133d2389b5c39b165b76b13cfa868`; comparar duas entradas idênticas não prova a regra de container.
+
+Recorte extraído: `tests/ci/nav-label500-invariant.cjs` e [evidência](CI_BASELINE_NAV_LABEL500_2026-10-27.md) na `development`, sem alteração de CSS. A primeira janela não cruzava o threshold real e falhou conscientemente ([#40537787907](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40537787907)). Estendida a 17 larguras, produziu 136/136 PASS na [auxiliar #40539023485](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40539023485) e na [development #40539657812](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40539657812), 2 motores × 2 temas × 2 estados.
+
+**Ponto real:** Chromium .controls 529px→conteúdo nav 500px compacto, 530→501px completo; WebKit .controls 514px→conteúdo nav 500px compacto, 515→501px completo. Assim, a regra CSS de 500px é interna ao contêiner nomeado e se comporta corretamente mesmo quando a geometria externa varia entre motores. **Não transplantar o CSS legado** e não tratar a branch inteira como absorvida; nenhum merge de seus HEADs foi feito.

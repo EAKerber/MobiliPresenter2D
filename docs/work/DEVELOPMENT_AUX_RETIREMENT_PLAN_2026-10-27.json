@@ -1,0 +1,77 @@
+{
+  "schemaVersion": "M2DDevelopmentAuxRetentionPlan/0.1",
+  "repository": "EAKerber/MobiliPresenter2D",
+  "observedDate": "2026-10-27",
+  "status": "PROPOSAL_ONLY_NO_DELETE",
+  "control": "development",
+  "controlSha": "994d7f613db144cbb07d638b05754820170a20a4",
+  "stableMainSha": "221b54b2a41ecc8c338d1bf2cf67280cf165ce95",
+  "preexistingLegacyInventory": "docs/work/DEVELOPMENT_CLUSTER_INVENTORY_2026-10-27.json",
+  "branchCountBefore": 68,
+  "allAuxiliaries": [
+    {
+      "branch": "integration/00-inventory-governance-20261027",
+      "sha": "ac7ace579bb69bdf4ca709a352c1462a1c65061b"
+    },
+    {
+      "branch": "integration/00-migration-inspector-20261027",
+      "sha": "89d5343f7e627ea5f8bebccb4ecb78c4eb962bfb"
+    },
+    {
+      "branch": "integration/01-ci-nav-boundary-20261027",
+      "sha": "ab7d2d06ca798fe56327d25ba563aebfed972754"
+    },
+    {
+      "branch": "integration/01-ci-auth-identity-20261027",
+      "sha": "27d5945f4eda0fb6ed875fb2e62f44b2637cf3da"
+    },
+    {
+      "branch": "integration/01-ci-r9-container-20261027",
+      "sha": "a653745f5b485dc473156871d1209b2abf3193e5"
+    },
+    {
+      "branch": "integration/01-ci-label500-invariant-20261027",
+      "sha": "994d7f613db144cbb07d638b05754820170a20a4"
+    }
+  ],
+  "firstProposedBoundedBatch": [
+    {
+      "branch": "integration/00-inventory-governance-20261027",
+      "sha": "ac7ace579bb69bdf4ca709a352c1462a1c65061b"
+    },
+    {
+      "branch": "integration/00-migration-inspector-20261027",
+      "sha": "89d5343f7e627ea5f8bebccb4ecb78c4eb962bfb"
+    },
+    {
+      "branch": "integration/01-ci-nav-boundary-20261027",
+      "sha": "ab7d2d06ca798fe56327d25ba563aebfed972754"
+    }
+  ],
+  "futureProposedBoundedBatch": [
+    {
+      "branch": "integration/01-ci-auth-identity-20261027",
+      "sha": "27d5945f4eda0fb6ed875fb2e62f44b2637cf3da"
+    },
+    {
+      "branch": "integration/01-ci-r9-container-20261027",
+      "sha": "a653745f5b485dc473156871d1209b2abf3193e5"
+    },
+    {
+      "branch": "integration/01-ci-label500-invariant-20261027",
+      "sha": "994d7f613db144cbb07d638b05754820170a20a4"
+    }
+  ],
+  "conditions": [
+    "exact remote ref SHA and lease",
+    "ancestor of latest development HEAD",
+    "full original 60 branch inventory unchanged",
+    "zero open PR heads/bases among targets",
+    "target unprotected",
+    "pre-delete and post-delete readback",
+    "no implicit names-based deletions",
+    "do not touch main, development or 60 historical refs"
+  ],
+  "authorizedDeletions": 0,
+  "action": "NO_MUTATION"
+}
