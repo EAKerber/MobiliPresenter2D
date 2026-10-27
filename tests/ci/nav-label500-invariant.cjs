@@ -14,6 +14,26 @@ const stablePaint = () => new Promise(done => requestAnimationFrame(() => reques
 
 async function snapshot(page) {
   await page.evaluate(stablePaint);
+  // A container query may paint one frame after the named container's
+  // geometry changes (observed intermittently on Chromium/dark/536).
+  // Require convergence of both the measured content width AND rendered
+  // label state. A persistent discrepancy still FAILS after the timeout.
+  await page.waitForFunction(() => {
+    const nav = document.querySelector(".flow-nav");
+    if (!nav) return false;
+    const css = getComputedStyle(nav);
+    const inner = nav.clientWidth - parseFloat(css.paddingLeft) - parseFloat(css.paddingRight);
+    const compact = inner <= 500.02;
+    const spans = [...nav.querySelectorAll(".flow-step__label")];
+    return spans.length >= 2 && spans.every(span => {
+      const size = parseFloat(getComputedStyle(span).fontSize);
+      const after = getComputedStyle(span, "::after");
+      return compact
+        ? size === 0 && parseFloat(after.fontSize) >= 8 &&
+          after.content !== "none" && !!span.dataset.compactLabel
+        : size > 0;
+    });
+  }, null, {timeout: 5000});
   return page.evaluate(() => {
     const nav = document.querySelector(".flow-nav");
     const controls = document.querySelector(".controls");
