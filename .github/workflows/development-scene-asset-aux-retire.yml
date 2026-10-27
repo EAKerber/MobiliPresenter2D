@@ -1,0 +1,57 @@
+name: Development 07 exact provenance auxiliary retirement (one-shot)
+
+on:
+  push:
+    branches:
+      - development
+    paths:
+      - 'tools/development_scene_asset_aux_retire.py'
+      - 'tests/test_development_scene_asset_aux_retire.py'
+      - '.github/workflows/development-scene-asset-aux-retire.yml'
+
+permissions:
+  contents: write
+  actions: read
+  pull-requests: read
+
+concurrency:
+  group: m2d-scene-asset-exact-aux-one-shot
+  cancel-in-progress: false
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Negative branch roster and lease tests
+        run: python3 -m unittest tests/test_development_scene_asset_aux_retire.py
+      - name: Complete remote read-only audit
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: python3 tools/development_scene_asset_aux_retire.py --mode audit
+      - uses: actions/upload-artifact@v4
+        with:
+          name: scene-assets-aux-audit-${{ github.run_id }}
+          path: asset-provenance-aux-retirement-receipt.json
+          retention-days: 30
+
+  apply:
+    needs: audit
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Delete exactly one ancestor ref with SHA lease and full readback
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: python3 tools/development_scene_asset_aux_retire.py --mode apply
+      - uses: actions/upload-artifact@v4
+        with:
+          name: scene-assets-aux-apply-${{ github.run_id }}
+          path: asset-provenance-aux-retirement-receipt.json
+          retention-days: 30
