@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Read-only, complete SHA-pinned branch equivalence scan for development.
+"""Read-only, complete SHA-pinned historical-branch equivalence scan for development.
 
 Compare each historical branch's *contributed paths* from its merge-base with
 main, using Git blob identity against development; do not mistake full-tree
@@ -82,8 +82,8 @@ def scan():
         or history.get("schemaVersion") != "M2DDevRetirementHistory/0.1"):
         raise RuntimeError("baseline inventory mismatch")
     retired = {z["branch"]: z["sha"] for wave in history["waves"] for z in wave["retired"]}
-    if len(retired) != 5:
-        raise RuntimeError("expected exactly 5 prior retirements")
+    if not 0 <= len(retired) <= 60:
+        raise RuntimeError("invalid count of prior retirements")
     originals = {z["branch"]: z for z in inventory["rows"]}
     if len(originals) != 60:
         raise RuntimeError("duplicate historical entry")
@@ -179,7 +179,7 @@ def scan():
         "comparisonCounts": dict(sorted(counts.items())),
         "reviewCandidates": eligible, "branches": results,
     }
-    if len(results) != 55:
+    if len(results) != 60 - len(retired):
         raise RuntimeError("SCAN_INCOMPLETE")
     OUTPUT.parent.mkdir(parents=True, exist_ok=True)
     OUTPUT.write_text(json.dumps(result, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
