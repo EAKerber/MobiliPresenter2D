@@ -38,3 +38,13 @@ Gates: aprovado somente com execução **PASS no HEAD exato da auxiliar** e repe
 ## Pontos cegos preservados
 
 O fato de `#292723` contrastar adequadamente com fundos de referência sólidos **não valida fundo fotográfico/gradiente/translúcido**, texto de outros componentes, acessibilidade do fluxo privado nem aparência percebida. O foco VIS-002 aprovado indica contorno externo, mas aplicação por rota/estado ainda demanda inspeção. Candidato `v0.3` não significa que `v0.1`/`v0.2` deixam de ser provas históricas; versões supersedidas não devem ser reativadas. O PR #231 deve ser reconciliado por conteúdo antes de decisão de fechamento (D03=A).
+
+
+
+## Gates completos e referências finais
+
+- Primeira execução [#40555807771](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40555807771): 3/3 testes de pin PASS; browser FAIL devido a leitura anterior à visibilidade da Landing. Corrigido no teste, não no CSS.
+- Validações do candidato: [#40556199504](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40556199504) **PASS**, 3/3 testes + 24/24 cenários. Testes 56 nós de texto light e 56 verificações de token ausente no dark.
+- Validação do fast-forward: [#40556552629](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40556552629) **PASS** na `development`; revalidação [#40557142068](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40557142068) **PASS**.
+- Ref auxiliar removida por gate de uso único [#40557142349](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40557142349) **PASS/readback**: exatamente 62 refs após exclusão. Artifact `vis002-aux-apply-40557142349`, ID `12757956981`. 60 branches históricas e 12 PRs preservadas.
+- A ferramenta de exclusão é de uso único, consumida e desativada. O próximo bloco deve partir da `development` corrente e aplicar somente extrações com proveniência. Nenhuma alteração de runtime, globais VIS-002, DS main ou release Netlify nesta rodada.
