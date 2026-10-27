@@ -1,0 +1,71 @@
+name: Development bounded branch retirement — exact manifest only
+
+on:
+  push:
+    branches: [development]
+    paths:
+      - 'ops/development-retirement-batch.json'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: m2d-development-bounded-retirement
+  cancel-in-progress: false
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    permissions:
+      contents: read
+      pull-requests: read
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Run pure negative selection tests
+        run: |
+          python3 -m py_compile tools/development_retirement_batch.py
+          python3 -m unittest tests/test_development_retirement_batch.py
+      - name: Exact-ref, PR, ruleset, archival delta and tag audit (READ-ONLY)
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          python3 tools/development_retirement_batch.py --mode audit
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: dev-bounded-retirement-audit-${{ github.run_id }}
+          path: artifacts/development-retirement/receipt.json
+          if-no-files-found: warn
+          retention-days: 30
+
+  apply:
+    needs: audit
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    permissions:
+      contents: write
+      pull-requests: read
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: true
+      - name: Repeat negative tests before applying explicit batch
+        run: |
+          python3 -m unittest tests/test_development_retirement_batch.py
+      - name: Create archive tag before deleting divergent ref; use SHA leases and readback
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          M2D_DEVELOPMENT_RETIRE_AUTHORIZED: '1'
+        run: |
+          python3 tools/development_retirement_batch.py --mode apply
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: dev-bounded-retirement-apply-${{ github.run_id }}
+          path: artifacts/development-retirement/receipt.json
+          if-no-files-found: warn
+          retention-days: 30
