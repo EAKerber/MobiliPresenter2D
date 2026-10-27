@@ -186,7 +186,7 @@ def prove_snapshot(target):
         or git("rev-parse", target["sha"] + ":" + target["sourcePath"]) != target["sourceBlobSha"]):
         raise RuntimeError("HISTORICAL_COPY_MARKER_OR_BLOB_DRIFT")
     original_lines, current_lines = old.splitlines(), current.splitlines()
-    archive = copy.split(marker_a, 1)[1].split(marker_b, 1)[0].splitlines()
+    archive = copy.split(marker_a, 1)[1].split(marker_b, 1)[0].split("\n")
     if (len(original_lines) != 100 or len(current_lines) != 74
         or archive != original_lines[2:28]
         or original_lines[:2] + original_lines[28:] != current_lines):
