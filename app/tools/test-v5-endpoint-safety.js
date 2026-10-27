@@ -67,6 +67,7 @@ async function main() {
   } = globalThis.__v5ReadinessHarness;\n`;
 
   let viewer = null;
+  const identityFailure = Symbol("mock_identity_unavailable");
   const siteStore = makeStore(v3);
   const previewStore = makeStore(v3);
   let siteOpens = 0;
@@ -82,7 +83,7 @@ async function main() {
       assert.deepEqual(options, { name: "configurator-settings", consistency: "strong" });
       return previewStore;
     },
-    async getUser() { return viewer; },
+    async getUser() { if (viewer === identityFailure) throw new Error("identity fixture unavailable"); return viewer; },
     configCore: configuration, administrationV5, publishedReader, v5Migration,
     v5Inspection, v5NormalSave, flow, hierarchyDefaults, legacyStageRepair,
     defaults, catalog, priceBook, scene,
@@ -111,6 +112,29 @@ async function main() {
     const staffRead = await invoke("GET", "/api/configuration");
     assert.equal(staffRead.status, 403, "staff cannot read the administrative raw configuration API");
     assert.equal(previewOpens, 0, "staff-denied reads must not open a Blob store");
+    // CP-PUBLIC-03a: a role claim without a principal identifier must never
+    // authorize raw reads OR mutations. Both endpoints share the same policy.
+    viewer = { roles: ["admin"] };
+    assert.deepEqual(await invoke("GET", "/api/configuration"),
+      { status: 403, body: { error: "forbidden" } });
+    assert.deepEqual(await invoke("PUT", "/api/configuration", v3),
+      { status: 403, body: { error: "forbidden" } });
+    assert.equal(previewOpens, 0, "claims without principal ID must not open Blob");
+
+    // Unavailable Identity must fail closed with a stable 503 JSON response,
+    // without resolving a store or trying to write anything.
+    viewer = identityFailure;
+    for (const method of ["GET", "PUT"]) {
+      assert.deepEqual(await invoke(method, "/api/configuration", method === "PUT" ? v3 : undefined),
+        { status: 503, body: { error: "identity_unavailable" } });
+    }
+    assert.equal(previewOpens, 0, "identity failure must not open Blob");
+
+    viewer = null;
+    assert.deepEqual(await invoke("PUT", "/api/configuration", v3),
+      { status: 401, body: { error: "unauthorized" } });
+    assert.equal(previewOpens, 0);
+
     viewer = { id: "admin-1", roles: ["admin"] };
     const adminRead = await invoke("GET", "/api/configuration");
     assert.equal(adminRead.status, 200);
