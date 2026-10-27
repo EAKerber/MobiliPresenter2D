@@ -33,7 +33,8 @@ def validate(m,p,o):
         or m.get("wave")!="M2D-DEV-AUX-A1-20261027"
         or m.get("repository")!=REPO or m.get("control")!="development"
         or m.get("mainSha")!=p.get("stableMainSha")
-        or m.get("baseline")!=p.get("controlSha")
+        or m.get("baseline")!="00eadf770513107db4be71519e6a38a9da9f9854"
+        or p.get("controlSha")!="994d7f613db144cbb07d638b05754820170a20a4"
         or m.get("operational")!=OP or p.get("status")!="PROPOSAL_ONLY_NO_DELETE"
         or p.get("authorizedDeletions")!=0 or o.get("baseSha")!=m.get("mainSha")
         or o.get("totals",{}).get("branches")!=60):
@@ -73,6 +74,9 @@ def assert_safe(m,old,aux,mode):
     if refs.get("main")!=m["mainSha"]:raise RuntimeError("MAIN_CHANGED")
     inventory=verify_roster(refs,old,aux,m["mainSha"],refs["development"],refs[OP])
     git("fetch","--no-tags","origin","development")
+    if subprocess.run(["git","merge-base","--is-ancestor",
+                       "994d7f613db144cbb07d638b05754820170a20a4",m["baseline"]]).returncode:
+        raise RuntimeError("PROPOSAL_SHA_NOT_ANCESTOR_OF_BASE")
     if subprocess.run(["git","merge-base","--is-ancestor",m["baseline"],refs["development"]]).returncode:
         raise RuntimeError("DEV_BASE_NOT_ANCESTOR")
     for name,sha in aux.items():
