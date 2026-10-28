@@ -1,0 +1,135 @@
+{
+  "schema": "M2DVis002HistoricalCluster/0.1",
+  "status": "REFERENCE_ONLY_SUPERSEDED_BY_V03",
+  "intent": "provenance plus semantic and browser guard extraction; no CSS import",
+  "sourceBranches": [
+    {
+      "id": "audit",
+      "branch": "audit/public-text-contrast-coverage-20261022",
+      "sha": "ace851004713f92b4425e5832c6c892825814f0a"
+    },
+    {
+      "id": "fix",
+      "branch": "fix/vis002c-public-text-contrast-20261022",
+      "sha": "007fc8e0ca8d9366efd0c9b5c7adf0da1a5325e5"
+    },
+    {
+      "id": "v2",
+      "branch": "integration/vis002c-p-token-02b-v2-20261023",
+      "sha": "34a305c1ddb9850dc194f68b16fa097c6691c06b"
+    },
+    {
+      "id": "consolidated",
+      "branch": "integration/consolidated-arc03c-vis002c-token-20261023",
+      "sha": "c239012c126c9b3e2c477778ea4b2d37b74c963f"
+    },
+    {
+      "id": "support",
+      "branch": "integration/vis002c-contextual-support-v02-20261024",
+      "sha": "a285a2dc6f543f33f45615ba653a296236f8b3ac"
+    }
+  ],
+  "archivedArtifacts": [
+    {
+      "source": "audit",
+      "sourcePath": "docs/audits/public-text-contrast-audit-2026-10-22.md",
+      "sha": "533f342a68e68174d238b101cdeb53db9a18ef14",
+      "archivePath": "docs/reconciliation/vis002/legacy/audit/docs/audits/public-text-contrast-audit-2026-10-22.md"
+    },
+    {
+      "source": "audit",
+      "sourcePath": "docs/audits/public-text-contrast-candidate-2026-10-22.md",
+      "sha": "abb660e5892fa7d47e1b975334ccb528b0f8fdf7",
+      "archivePath": "docs/reconciliation/vis002/legacy/audit/docs/audits/public-text-contrast-candidate-2026-10-22.md"
+    },
+    {
+      "source": "audit",
+      "sourcePath": "evidence/visual/public-text-contrast-candidate-v1.css",
+      "sha": "8bc0188732309d4a903d7b3a72d040c730fef50c",
+      "archivePath": "docs/reconciliation/vis002/legacy/audit/evidence/visual/public-text-contrast-candidate-v1.css"
+    },
+    {
+      "source": "fix",
+      "sourcePath": "docs/audits/vis002c-contextual-text-contrast-2026-10-22.md",
+      "sha": "da90dfdcc234c90f12c92dcc4fd4bf71ba7484c7",
+      "archivePath": "docs/reconciliation/vis002/legacy/fix/docs/audits/vis002c-contextual-text-contrast-2026-10-22.md"
+    },
+    {
+      "source": "fix",
+      "sourcePath": "tests/vis002c-css-contract.test.mjs",
+      "sha": "d087aeac222ac5b2caa5acb6e8f0b79b8f99cb57",
+      "archivePath": "docs/reconciliation/vis002/legacy/fix/tests/vis002c-css-contract.test.mjs"
+    },
+    {
+      "source": "fix",
+      "sourcePath": "tests/vis002c-full-page-visual.mjs",
+      "sha": "62e8340df5b24e289bbda535726d6f6cbec390d3",
+      "archivePath": "docs/reconciliation/vis002/legacy/fix/tests/vis002c-full-page-visual.mjs"
+    },
+    {
+      "source": "fix",
+      "sourcePath": "tests/vis002c-public-contrast.mjs",
+      "sha": "291044c281e602e4395cc67c3069f10f7452410f",
+      "archivePath": "docs/reconciliation/vis002/legacy/fix/tests/vis002c-public-contrast.mjs"
+    },
+    {
+      "source": "v2",
+      "sourcePath": "docs/architecture/vis002c-p-token02b-integration-2026-10-23.md",
+      "sha": "6249613cb9355940f3c931439edd472ed00d239d",
+      "archivePath": "docs/reconciliation/vis002/legacy/v2/docs/architecture/vis002c-p-token02b-integration-2026-10-23.md"
+    },
+    {
+      "source": "v2",
+      "sourcePath": "design-system/pins/vis-002/context-v0.2.0/contextual-mapping.json",
+      "sha": "717b400da8d5590a03118e4ce58f07fcbababc48",
+      "archivePath": "docs/reconciliation/vis002/legacy/v2/design-system/pins/vis-002/context-v0.2.0/contextual-mapping.json"
+    },
+    {
+      "source": "v2",
+      "sourcePath": "tests/vis002c-original-three-equivalence.mjs",
+      "sha": "edbe6fbeae2d294b984208722cc1e52864643a64",
+      "archivePath": "docs/reconciliation/vis002/legacy/v2/tests/vis002c-original-three-equivalence.mjs"
+    },
+    {
+      "source": "consolidated",
+      "sourcePath": "docs/handoffs/CONSOLIDATED_GATE_RESULT_2026-10-23.md",
+      "sha": "5b38b5ccb513584d681a9ed4685ef6b4a49ac873",
+      "archivePath": "docs/reconciliation/vis002/legacy/consolidated/docs/handoffs/CONSOLIDATED_GATE_RESULT_2026-10-23.md"
+    },
+    {
+      "source": "consolidated",
+      "sourcePath": "docs/handoffs/CONSOLIDATED_INTEGRATION_2026-10-23.md",
+      "sha": "9a0411f1c2a41a5dd2e73f70ec54cedefb101d86",
+      "archivePath": "docs/reconciliation/vis002/legacy/consolidated/docs/handoffs/CONSOLIDATED_INTEGRATION_2026-10-23.md"
+    },
+    {
+      "source": "support",
+      "sourcePath": "docs/architecture/vis002c-p-token02b-integration-2026-10-23.md",
+      "sha": "372d3220ad9bffcc3de29c182ae8e5e2a1f626a3",
+      "archivePath": "docs/reconciliation/vis002/legacy/support/docs/architecture/vis002c-p-token02b-integration-2026-10-23.md"
+    },
+    {
+      "source": "support",
+      "sourcePath": "tests/vis002c-original-three-equivalence.mjs",
+      "sha": "edbe6fbeae2d294b984208722cc1e52864643a64",
+      "archivePath": "docs/reconciliation/vis002/legacy/support/tests/vis002c-original-three-equivalence.mjs"
+    }
+  ],
+  "current": {
+    "mappingPath": "design-system/pins/vis-002/context-v0.3.0/contextual-mapping.json",
+    "mappingBlob": "e8f42f76e2732cbcf3e9a68d1dc8f82ea79dd73d",
+    "cssPath": "app/design-system/vis002c-long-copy-light-v0.3.0.css",
+    "cssBlob": "9e7f243039a717d02f897d7320a4c383856f8fa0",
+    "longCopyForeground": "#292723",
+    "contextCount": 10
+  },
+  "hold": [
+    "architecture/p-token-02b-contextual-copy-20261022 (PR #231)",
+    "all five historical sources until independent gates, source tags and per-wave readback"
+  ],
+  "references": [
+    "The old #705C4B remains historically correct for its date but is not to be reactivated for v0.3 contexts.",
+    "Audit is not permission to recolor excluded states and signatures.",
+    "Preserve full diverged DAG through archive tag before any source retirement."
+  ]
+}

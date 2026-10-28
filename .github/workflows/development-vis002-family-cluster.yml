@@ -1,0 +1,52 @@
+name: Development VIS002 family cluster historical and state gate
+on:
+  push:
+    branches:
+      - development
+      - integration/19-vis002-cluster-semantic-20261028
+    paths:
+      - 'docs/reconciliation/vis002/**'
+      - 'tests/test_development_vis002_cluster.py'
+      - 'tests/ci/vis002-family-state-browser.mjs'
+      - '.github/workflows/development-vis002-family-cluster.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  cluster:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    container:
+      image: mcr.microsoft.com/playwright:v1.62.1-noble
+      options: --ipc=host
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify 5 historical sources, 14 original blobs, current 10 contexts and pages
+        run: |
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
+          python3 -m unittest discover -s tests -p test_development_vis002_cluster.py -v
+          node --test tests/ci/vis002-context-pin.test.mjs
+          npm run pages:check
+      - name: Install matching local browser client
+        run: |
+          npm install --prefix /tmp/m2d-vis002-family --no-audit --no-fund playwright@1.62.1
+          node -e 'if(require("/tmp/m2d-vis002-family/node_modules/playwright/package.json").version!=="1.62.1")process.exit(1)'
+      - name: Serve local pages, never Netlify
+        shell: bash
+        run: |
+          python3 -m http.server 8123 --bind 127.0.0.1 --directory app >/tmp/m2d-vis002-family.log 2>&1 &
+          for i in $(seq 1 30); do
+            if curl -fsS http://127.0.0.1:8123/ >/dev/null; then break; fi
+            sleep 1
+          done
+          curl -fsS http://127.0.0.1:8123/about/ >/dev/null
+      - name: Check availability alternative states on 8 browser fixtures
+        env:
+          NODE_PATH: /tmp/m2d-vis002-family/node_modules
+          PUBLIC_AUDIT_ORIGIN: http://127.0.0.1:8123
+        run: node tests/ci/vis002-family-state-browser.mjs
