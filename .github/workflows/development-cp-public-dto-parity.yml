@@ -6,6 +6,7 @@ on:
       - integration/23-cp-public-dto-parity-20261028
     paths:
       - 'tests/ci/cp-public-dto-parity.test.cjs'
+      - 'tests/ci/cp-public-session-contract.test.mjs'
       - 'app/core/published-buyer-projection.js'
       - 'docs/work/DEVELOPMENT_CP_PUBLIC_DTO_PARITY_2026-10-28.md'
       - '.github/workflows/development-cp-public-dto-parity.yml'
@@ -23,8 +24,34 @@ jobs:
           node-version: '22'
       - name: Historic vs current V5 DTO differential
         run: node --test tests/ci/cp-public-dto-parity.test.cjs
+      - name: Current access session contracts (no live grants)
+        run: node --test tests/ci/cp-public-session-contract.test.mjs
       - name: Existing V5 projection and public contract tests
         run: |
           node app/tools/test-published-buyer-projection.js
+          node app/tools/test-core.js
+          node app/tools/test-runtime-contracts.js
+          node app/tools/test-v5-endpoint-safety.js
+          node app/tools/test-public-modules-endpoint.js
           node --test tests/public-module-projection.test.cjs
           npm run pages:check
+
+  browser-loopback:
+    needs: parity
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Prepare compiled V5 on localhost, never deploy
+        run: bash tests/ci/prepare-local-v5-browser.sh FLOW_LAYOUT_URL
+      - name: Install chromium for private buyer contract tests
+        run: |
+          npm install --prefix /tmp/cp-public-browser-tools --no-audit --no-fund playwright@1.62.1
+          /tmp/cp-public-browser-tools/node_modules/.bin/playwright install --with-deps chromium
+      - name: Browser V5 buyer payload and invalid publication fail-closed
+        env:
+          NODE_PATH: /tmp/cp-public-browser-tools/node_modules
+        run: node tests/buyer-v5-browser.cjs /tmp/cp-public-buyer-v5
