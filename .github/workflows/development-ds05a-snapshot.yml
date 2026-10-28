@@ -1,0 +1,24 @@
+name: Development DS05A historical snapshot (not activated)
+on:
+  push:
+    branches:
+      - development
+      - integration/18-ds05a-documentary-snapshot-20261027
+    paths:
+      - 'docs/design-system/review-lab/**'
+      - 'tests/test_development_ds05a_snapshot.py'
+      - '.github/workflows/development-ds05a-snapshot.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  immutable-documentation:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Verify source subtree and nineteen SHA256 hashes
+        run: |
+          python3 -m unittest discover -s tests -p test_development_ds05a_snapshot.py -v

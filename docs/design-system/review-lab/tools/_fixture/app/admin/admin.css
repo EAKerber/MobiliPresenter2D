@@ -1,0 +1,1 @@
+:root{--surface:#1b1c1a;--text:#f4f1eb;--muted:#b9b1a9}body{background:var(--surface);color:var(--text)}.admin-card{background:var(--surface)}.item-option,.hierarchy-name,.hierarchy-move,.hierarchy-choice-option{color:#ddd8d0} .message{color:#dfc9a8} .message[data-kind="error"]{color:#ffaaa0} .message[data-kind="success"]{color:#a9ddb6} .stage-card{background:var(--surface)}

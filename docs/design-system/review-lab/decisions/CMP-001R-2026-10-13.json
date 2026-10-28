@@ -1,0 +1,991 @@
+{
+  "schema": "M2DReview1",
+  "project": "MobiliPresenter2D",
+  "version": "0.2-consolidated",
+  "sourceSnapshot": "38a314fb3d9830e43310e59c0166197fd19341e0",
+  "exportedAt": "2026-10-12T01:31:42.074317Z",
+  "decisions": [
+    {
+      "id": "GOV-001",
+      "canonicalStatus": "defined",
+      "verdict": "agreed",
+      "note": ""
+    },
+    {
+      "id": "NAV-001",
+      "canonicalStatus": "direction",
+      "verdict": "agreed",
+      "note": ""
+    },
+    {
+      "id": "NAV-002",
+      "canonicalStatus": "direction",
+      "verdict": "agreed",
+      "note": ""
+    },
+    {
+      "id": "NAV-003",
+      "canonicalStatus": "direction",
+      "verdict": "agreed",
+      "note": "a página como funciona já aplica o fav icon, usar o mesmo em todo site"
+    },
+    {
+      "id": "NAV-004",
+      "canonicalStatus": "proposal",
+      "verdict": "agreed",
+      "note": "APROVADO — contrato funcional de menus públicos: abertura/fechamento pelo botão, Escape, clique fora, navegação por teclado, aria-expanded, retorno de foco quando adequado e preferência por movimento reduzido. Todas as páginas públicas devem permitir acesso a Ambientes (landing), Como funciona, Quem somos e Contato. A estética do header NÃO foi aprovada e será discutida em NAV-005."
+    },
+    {
+      "id": "NAV-005",
+      "canonicalStatus": "direction",
+      "verdict": "agreed",
+      "note": "APROVADO — organização de NAV-005: adotar um header global, com acesso às quatro opções públicas (Ambientes/landing, Como funciona, Quem somos e Contato), e manter a identificação do ambiente do viewer em uma área contextual separada do header, por exemplo “Ambientes › Cozinha”. Esse exemplo de texto não é uma decisão final sobre o breadcrumb. Controles e interação da cena permanecem no conteúdo do viewer. O viewer é uma subpágina de ambiente; não marcar “Ambientes” falsamente como página ativa do viewer. ESTÉTICA DO HEADER NÃO APROVADA: layout final, altura, tipografia, cores, logo, aparência do menu e apresentação do contexto aguardam comparação e discussão visual. Também não se aprovou a generalização multiambiente (ENV-001 permanece futuro). NÃO IMPLEMENTAR até encerramento do design system e autorização expressa."
+    },
+    {
+      "id": "VIS-001",
+      "canonicalStatus": "direction",
+      "verdict": "agreed",
+      "note": "Direções conceituais de tipografia VIS-001, VIS-001B..H aprovadas; fontes, métricas e validação visual efetiva não homologadas."
+    },
+    {
+      "id": "VIS-002",
+      "canonicalStatus": "direction",
+      "verdict": "agreed",
+      "note": "APROVADO APENAS EM NÍVEL CONCEITUAL — uma paleta-base de identidade compartilhada entre as interfaces, com aplicações por contexto. As páginas públicas já têm linguagem light e as administrativas linguagem dark; prever compatibilidade da arquitetura de tokens com ambos os modos no futuro, sem declarar que ambos existem em todas as rotas. Revisar cobertura dos requisitos mínimos de contraste (textos, controles, foco e estados). Especificar cores auxiliares semânticas para erro, aviso, sucesso e informação, além de foco, seleção, hover, pressionado e desabilitado. Nenhuma cor auxiliar, código hexadecimal, par de contraste, aparência, variante ou troca de tema foi homologada por esta decisão. Nenhuma implementação autorizada. ADENDO ACEITO EM 2026-10-11 — escolha A para cores auxiliares: estados semânticos reconhecíveis (erro, sucesso, aviso, informação) harmonizados com a marca e com contrastes independentes para light/dark. Preservar variante de comunicação editorial/comercial (ex.: aviso de condição de lançamento por 3 meses) com destaque laranja/cobre da identidade, distinto do estado técnico de aviso/erro. A informação funcional pode usar papel semântico próprio; não obrigar todo aviso informativo ao azul. Comunicação deve ter texto/ícone/rotulo e não depender só da cor. O exemplo enviado exibe uma amostra laranja/cobre aproximada #A64D13 extraída do PNG, com contraste calculado 5,69:1 contra branco; esse valor é evidência da imagem, NÃO token aprovado. Cores auxiliares exatas, variantes finais e demais estados de interação continuam pendentes de especificação/contraste. NÃO IMPLEMENTAR. ADENDO ACEITO — estados contextuais: a semântica de seleção e foco é compartilhada, mas a intensidade visual de seleção deve variar conforme a tarefa. Viewer: realce mais discreto, com função contextual e cena como protagonista. Configurador: seleção mais explícita para orientar escolhas entre configurações próximas e reduzir erros. Admin: destaque forte e inequívoco para indicar campo/objeto/configuração em edição, em telas densas. Foco de teclado permanece independente de seleção e perceptível em todos os contextos e em light/dark. Não implica novas cores, tokens, medidas, estilos ou variantes aprovadas. Manter contraste, hover, pressed, disabled e loading sob detalhamento pendente. Nenhuma implementação autorizada. ADENDO EST-01 / APROVADO CONCEITUALMENTE EM 2026-10-11: No configurador, a seleção que altera a configuração deve combinar um indicador explícito (ex.: marca/check) com destaque moderado de superfície ou borda. A combinação reforça a escolha sem competir com o conteúdo; o foco de teclado permanece um estado distinto, perceptível e não precisa gerar uma variante decorativa “selecionado + foco”. Não foram aprovados formato do indicador, cores, espessura, medidas, intensidade numérica, tema ou implementação. EST-02 (foco de teclado) continua aberto para discussão. NÃO IMPLEMENTAR. ADENDO EST-02 / APROVADO CONCEITUALMENTE EM 2026-10-11: Adotar indicador de foco de teclado por contorno EXTERNO independente da aparência de seleção; foco visível apenas na interação apropriada de teclado (focus-visible), perceptível em light/dark, sem decoração excessiva. Seleção permanece sinalizada por seu próprio indicador/destaque; quando selecionado e com foco, preservar o indicador de seleção e acrescentar apenas o contorno mínimo necessário, sem criar uma terceira variante visual complexa. Cores exatas, espessura, afastamento do contorno, desenho para diferentes superfícies e verificação de acessibilidade permanecem abertos. EST-03 (hover/pressionado) está em discussão. NÃO IMPLEMENTAR. ADENDO EST-03 / APROVADO CONCEITUALMENTE EM 2026-10-11: Hover e pressionado têm funções distintas. Hover informa interatividade, com tratamento proporcional ao contexto; pressionado dá resposta imediata à ação, sem equivaler a uma seleção persistente nem comprovar conclusão da operação. A resposta visual deve depender da família: botões PODEM utilizar microfeedback físico sutil (pequena escala ou deslocamento) quando isso melhora a compreensão; campos, seletores densos e cards técnicos ficam geometricamente estáveis, usando principalmente fundo, cor ou borda. Em viewer, a resposta permanece discreta; no configurador e admin, suficientemente explícita para orientar tarefas, mas sem agitação visual. A interface não deve depender de hover para acesso a conteúdo, deve funcionar em touch e respeitar preferência de movimento reduzido. Não foram aprovados offsets, escalas, durações, easing, cores, sombras ou exceções finais por componente; nenhum código, deploy ou implementação autorizados. EST-04 em discussão. ADENDO EST-04 / APROVADO CONCEITUALMENTE EM 2026-10-11: Desabilitado (ação não permitida) e somente leitura (valor consultável, porém não editável) devem ter semântica, comportamento e indicações distinguíveis. Somente leitura mantém boa legibilidade e, quando pertinente, possibilidade de copiar/selecionar texto; desabilitado não aciona a ação, deve permitir ao usuário compreender a causa por texto/contexto acessível quando necessário, sem depender apenas da redução de opacidade. Visibilidade na UI, habilitação de ação/edição, publicação e eventual disponibilidade comercial são dimensões distintas; não tratar “selecionado”, “editável”, “publicado”, “disponível” e “visível” como sinônimos. Considerar dependências reais do domínio antes de admitir todas as combinações como válidas. Evitar excesso de badges/ícones/cores concorrentes: priorizar agrupamento por seção e informações de status visíveis no contexto de decisão ou em detalhes, quando for viável e acessível. A escolha do layout, de como expor cada status, seus valores/cores e casos de exceção permanece pendente. Não implementar. ADENDO EST-05 / APROVADO CONCEITUALMENTE EM 2026-10-11: Durante carregamento e operações assíncronas, adotar BLOQUEIO CONFORME AS DEPENDÊNCIAS REAIS, impedindo somente ações que criem conflito ou duplicidade; não impor bloqueio indiscriminado de toda a tela ou seção. Operações críticas, especialmente publicação, exigem proteção adicional, feedback explícito de andamento e confirmação efetiva do resultado. Distinguir carregamento de conteúdo, alterações locais ainda não persistidas, salvamento em andamento, persistência confirmada e eventual falha; “salvo/publicado” só pode aparecer mediante confirmação da operação pertinente. A extensão concreta do bloqueio deve depender da operação e de seus efeitos, não de um padrão visual uniforme. Continuam EM DISCUSSÃO: apresentação do feedback, duração/posição de mensagens, forma de retry, recuperação de falhas, concorrência, prevenção de perda de dados, modo offline, publicação parcial e casos de exceção. Não foram aprovados componentes, timeouts, cores, animações nem detalhes de implementação. NÃO IMPLEMENTAR. ADENDO EST-06 / APROVADO CONCEITUALMENTE EM 2026-10-11: Feedback deve ser contextual à operação e área afetada; condições relevantes (alterações locais, salvando, falha e necessidade de ação) permanecem visíveis enquanto forem pertinentes. Sucessos rotineiros devem ser confirmados preferencialmente no mesmo contexto sem gerar notificações repetitivas; operações críticas, como publicação, podem exigir aviso geral complementar. Mensagens de falha devem diferenciar salvamento não confirmado, erro real e resultado ainda desconhecido, sem indicar conclusão antes de confirmação. Organizar conteúdo para evitar poluição visual; feedback temporário não substitui estados persistentes de atenção/recuperação. Não se aprovou layout, tipo de toast, texto final, duração, valores de cor, algoritmo de retry, política de conflitos ou implementação. Discussão seguinte: EST-07, preservação de rascunhos, retry e resolução de conflitos de versões. NÃO IMPLEMENTAR. ADENDO EST-07 / APROVADO CONCEITUALMENTE EM 2026-10-11: Na fase inicial, preservar versões e diferenças em conflitos de edição/publicação e exigir resolução explícita antes de sobrescrever mudanças divergentes; conciliação automática somente futuramente, após validação de segurança e confiabilidade. Feedback relevante não deve ser do tipo \"quick time event\": erros e avisos que exijam atenção devem permanecer acessíveis e existir em histórico consultável de ocorrências relevantes, sem exigir leitura/reação durante um toast fugaz. Histórico é complementar à mensagem contextual persistente; não se exige log de toda interação ou sucesso trivial. Ainda pendentes: granularidade da resolução, visual do histórico, retenção e persistência, retry, conservação local/offline, verificações de estado desconhecido e compatibilidade de acessibilidade/contraste. NÃO IMPLEMENTAR. ADENDO EST-08 / APROVADO CONCEITUALMENTE EM 2026-10-11: Recuperação de rascunhos persistente conforme importância e custo de refazer o trabalho: priorizar edições administrativas e configurações trabalhosas com potencial de sobreviver a reload/encerramento, preservando identidade/contexto e observando privacidade em dispositivos compartilhados. Estados transitórios de navegação no viewer não exigem mesma garantia. Rascunho recuperável, persistência confirmada e publicação confirmada são condições distintas; restaurar não deve sobrescrever silenciosamente versão remota mais recente. Escopo de resolução de conflito intencionalmente ENXUTO: não assumir editor de diff/merge, comparação campo a campo ou conciliação automática; na incidência rara de conflito, preservar as informações necessárias, exibir aviso claro e alternativas simples, e registrar a decisão tomada. O detalhe de opções e política de retenção, sincronização, retry, segurança e arquitetura depende de definição posterior. Apenas direção; não implementar. ADENDO EST-09 / APROVADO CONCEITUALMENTE EM 2026-10-11: Preferir tentativas automáticas APENAS quando comprovadamente seguras; operações de leitura e recuperação localizada podem ser repetidas quando não houver riscos colaterais. Escritas, salvamento e publicação não devem ser repetidos cegamente diante de resultado incerto (timeout/perda de confirmação). Primeiro consultar o estado efetivo remoto e/ou confirmar manualmente, conforme a operação, para evitar duplicidade, publicação involuntária ou sobrescrita. Preservar rascunhos e distinguir falha confirmada, resultado desconhecido e sucesso confirmado. A direção não aprova mecanismos de idempotência, backoff, timeouts, limites de tentativas, indicadores, API, UX final nem arquitetura. EST-10 (histórico de erros e avisos, retenção, escopo e poluição visual) continua em discussão. NÃO IMPLEMENTAR. ADENDO EST-10 / APROVADO CONCEITUALMENTE EM 2026-10-11: Historico enxuto e consultavel de erros, avisos, conflitos e resultados relevantes, com retencao proporcional. Pendencias ativas permanecem acessiveis ate resolucao e nao desaparecem apos mero reconhecimento/leitura. Ocorrencias resolvidas podem ter retencao limitada; sucessos triviais nao precisam ser registrados. Preferir um unico indicador discreto de pendencias e apresentacao contextual, evitando badges e toasts redundantes. Avisos importantes nao dependem exclusivamente de notificacoes efemeras do tipo quick-time event. Historico de ocorrencias da UI nao equivale a log tecnico ou auditoria administrativa. Prazos de retencao, criterios de relevancia, expurgo, privacidade, escopo por documento/conta, persistencia entre sessoes e layout final AINDA NAO HOMOLOGADOS. A decisao EST-10 SUBSTITUI a indicacao historica de que EST-10 estava em discussao. Nenhuma implementacao autorizada."
+    },
+    {
+      "id": "CMP-001",
+      "canonicalStatus": "ongoing",
+      "verdict": "agreed",
+      "note": "Governança conceitual CMP-001A..R aprovada; somente famílias críticas priorizadas inicialmente. Inventário das 43 famílias e homologação concreta ainda em andamento."
+    },
+    {
+      "id": "ENV-001",
+      "canonicalStatus": "future",
+      "verdict": "revisit",
+      "note": "A decidir, ponto de discussão futuro"
+    }
+  ],
+  "notice": "Checkpoint cumulativo canônico de decisões CONCEITUAIS até CMP-001R. Não implica inspeção de código, homologação visual ou autorização de implementação. Fonte EST-10 preservada e decisões adicionais consolidadas.",
+  "detailDecisions": [
+    {
+      "id": "EST-01",
+      "status": "direction-agreed",
+      "context": "configurador",
+      "decision": "Seleção com indicador explícito e destaque moderado de superfície OU borda, preservando a legibilidade e distinção entre seleção e foco.",
+      "notYetSpecified": [
+        "formato do indicador",
+        "cores",
+        "espessuras",
+        "comportamento por tipo de seleção",
+        "contraste light/dark"
+      ],
+      "implementationAuthorized": false
+    },
+    {
+      "id": "EST-02",
+      "status": "direction-agreed",
+      "context": "viewer, configurador, admin; light/dark",
+      "decision": "Foco de teclado com contorno externo independente e sem decoração excessiva; visível de forma suficientemente contrastante; preservar separadamente o estado selecionado.",
+      "interaction": "Focus-visible quando apropriado para navegação por teclado; seleção e foco podem coexistir sem terceira variante visual ornamentada.",
+      "notYetSpecified": [
+        "cor por tema e superfície",
+        "espessura e offset",
+        "padrões para limites de clipping",
+        "contraste nos casos concretos",
+        "exemplos de foco em componentes especiais"
+      ],
+      "implementationAuthorized": false
+    },
+    {
+      "id": "EST-03",
+      "status": "direction-agreed",
+      "context": "botões, campos, cards técnicos; viewer, configurador, admin, páginas públicas",
+      "decision": "Hover sinaliza interatividade; pressionado responde imediatamente ao acionamento. Feedback depende da família: botões podem ter microfeedback físico discreto, enquanto campos e cards técnicos mantêm geometria estável e usam superfície, cor ou borda.",
+      "accessibility": "Não depender apenas de hover; compatibilidade touch; respeitar reduced motion. Pressionado não implica seleção nem conclusão de operação.",
+      "notYetSpecified": [
+        "escala ou deslocamento exatos quando aplicáveis",
+        "duração/easing e estratégias para reduced motion",
+        "cores, bordas e sombras por contexto",
+        "exceções por família e testes de acessibilidade"
+      ],
+      "implementationAuthorized": false
+    },
+    {
+      "id": "EST-04",
+      "status": "direction-agreed",
+      "context": "viewer, configurador, admin e formulários públicos; particularmente o admin",
+      "decision": "Diferenciar claramente desabilitado de somente leitura por semântica, apresentação e comportamento, mantendo boa legibilidade. Tratar publicação e disponibilidade/visibilidade na UI como dimensões independentes da capacidade de edição, sujeitas às regras e dependências reais do domínio.",
+      "disabled": "Ação indisponível; não acionável. Quando a razão não for óbvia, explicá-la em texto/contexto acessível sem depender exclusivamente de opacidade reduzida.",
+      "readOnly": "Valor consultável, não editável; preservar legibilidade e, quando fizer sentido, permitir cópia/seleção do texto.",
+      "stateAxes": [
+        "seleção ou item em edição",
+        "ação habilitada/desabilitada",
+        "somente leitura/editável",
+        "publicado/não publicado",
+        "disponível/indisponível na UI (ex.: frontstage/fluxo)"
+      ],
+      "densityGuidance": "Minimizar poluição visual: agrupar estados e controles por seção quando viável; exibir os indicadores necessários no ponto de decisão e explicações adicionais nos detalhes. Não obrigar cada eixo a ter badge ou cor simultâneos.",
+      "notYetSpecified": [
+        "regras de combinação e dependência entre eixos",
+        "layout e localização dos status por tipo de tela",
+        "indicadores específicos para publicação e disponibilidade",
+        "diferenças entre permissionamento, estado da publicação e estado comercial",
+        "acessibilidade e contraste por tema",
+        "casos de exceção no admin e configurador"
+      ],
+      "implementationAuthorized": false
+    },
+    {
+      "id": "EST-05",
+      "status": "direction-agreed",
+      "context": "operações assíncronas em páginas públicas, viewer, configurador e admin; atenção especial a salvar e publicar",
+      "decision": "Bloquear somente ações com dependências ou riscos de conflito reais; preservar funcionamento das regiões independentes. Operações críticas, particularmente publicação, exigem proteção contra duplicidade/conflito e feedback mais explícito.",
+      "stateDistinctions": [
+        "carregando dados/conteúdo",
+        "alterações locais ainda não persistidas",
+        "salvando ou aguardando confirmação",
+        "persistência confirmada",
+        "falha/estado incerto",
+        "publicação em andamento/concluída ou com falha (separada de salvar)"
+      ],
+      "confirmationRule": "Nunca comunicar salvo ou publicado antes da respectiva confirmação real.",
+      "stillUnderDiscussion": [
+        "posicionamento, persistência e hierarquia de feedback de sucesso/erro/aviso",
+        "preservação do trabalho local após falha; retry e recuperação",
+        "tratamento de conflitos e concorrência; idempotência das ações críticas",
+        "comportamento offline e operações de longa duração",
+        "indicadores de progresso e casos de publicação parcial",
+        "regras específicas por controle, seção e operação"
+      ],
+      "implementationAuthorized": false
+    },
+    {
+      "id": "EST-06",
+      "status": "direction-agreed",
+      "context": "feedback de operações locais e assíncronas, especialmente configurador e admin; salvar e publicar são distintos",
+      "decision": "Adotar feedback contextual junto à ação ou área afetada; manter mensagens e estados visíveis enquanto exigirem ação ou puderem afetar decisões. Sucesso comum deve ser confirmado discretamente e sem excesso de notificações; avisos globais são admissíveis para operações críticas, como publicação.",
+      "principles": [
+        "feedback temporário não substitui estado persistente necessário",
+        "distinguir alterações locais, operação em andamento, confirmação efetiva, falha e resultado ainda desconhecido",
+        "não afirmar salvo/publicado sem confirmação da ação pertinente",
+        "não acumular badges, toasts e avisos para o mesmo estado quando um indicador contextual é suficiente",
+        "falha com ação pendente permanece visível até resolução, com próximos passos claros"
+      ],
+      "notYetSpecified": [
+        "layout e posicionamento por interface",
+        "mensagens, hierarquia de severidade e acessibilidade",
+        "duração e formas de fechamento de feedback transitório",
+        "regras de preservação de alterações locais",
+        "estratégias de retry seguro e offline",
+        "conflitos de versão, diferenças entre estados e recuperação",
+        "tratamento de estado desconhecido e confirmação de operações críticas"
+      ],
+      "nextDiscussion": "EST-07 — recuperação de falhas, tentativas novamente, versões concorrentes e proteção de rascunhos",
+      "implementationAuthorized": false
+    },
+    {
+      "id": "EST-07",
+      "status": "direction-agreed",
+      "context": "configurador/admin; operações de salvamento, publicação e conflitos de versões; feedback e histórico de erros/avisos",
+      "decision": "Na fase inicial, preservar a edição local e evitar sobrescrita silenciosa: conflitos entre versões exigem comparação/resolução explícita. Conciliação automática de alterações independentes poderá ser proposta futuramente, somente mediante validação de segurança e confiabilidade.",
+      "notificationPolicy": "Notificações transitórias não podem funcionar como quick-time events: erros e avisos relevantes não devem depender de uma janela curta de leitura/ação. Priorizar indicação contextual persistente quando há pendência e histórico consultável de erros/avisos para recuperação posterior. Um toast pode ser complementar, jamais única fonte da informação importante.",
+      "historyGuidance": "Histórico de ocorrências relevantes (erros, avisos, conflitos e resultados operacionais importantes); favorecer consulta, contexto e recuperação sem excesso de indicadores permanentes. Não pressupor registro de cada interação ou sucesso trivial.",
+      "conflictGuidance": "Distinguir divergências reais, resultado desconhecido e erro de persistência. Não tratar timeout sem confirmação como falha definitiva de publicação nem repetir operações críticas cegamente. Regras de retry e garantias de conservação local permanecem para a próxima decisão.",
+      "notYetSpecified": [
+        "regra simplificada de precedência, ações permitidas e evidência da decisão (sem homologar diff/merge sofisticado)",
+        "resolução excepcional e explícita; não pressupor comparação campo a campo",
+        "formato, agrupamento, prioridade, filtros e navegação do histórico",
+        "persistência entre sessões, retenção, privacidade e limpeza do histórico",
+        "duração e fechamento de avisos informativos não críticos",
+        "garantias reais de rascunho local após falha, reload e encerramento",
+        "política de tentativas automáticas/manuais, offline e idempotência",
+        "integração visual com light/dark e testes de acessibilidade"
+      ],
+      "nextDiscussion": "EST-08 — preservação de rascunhos locais, tentativas novamente e comportamento offline/estado desconhecido",
+      "implementationAuthorized": false,
+      "conflictScopeClarification": "Estabelecer regra de precedência e consentimento explícito para impedir sobrescrita silenciosa. Não assumir construção de editor de diff, merge campo a campo ou motor de conciliação: o conflito é considerado incomum; apresentar aviso compreensível, opções simples e registrar a escolha. Pode-se oferecer consulta básica das versões quando necessário, sem homologar interface de diff."
+    },
+    {
+      "id": "EST-08",
+      "status": "direction-agreed",
+      "context": "rascunhos administrativos, configurações trabalhosas, reload/encerramento, eventual uso compartilhado de dispositivo e contexto de versões concorrentes",
+      "decision": "Recuperação persistente proporcional à relevância/custo da edição. Priorizar proteção de rascunhos administrativos e configurações trabalhosas; não obrigar persistência duradoura de estados transitórios do viewer.",
+      "guarantees": "Separar rascunho recuperável de salvamento confirmado e publicação confirmada. Não restaurar automaticamente por cima de uma versão remota que possa ter mudado.",
+      "conflictComplexityBound": "Evitar produto de diff/merge sofisticado para conflito raro: regra explícita, aviso legível, alternativas simples e registro da escolha humana; sem conciliação automática inicialmente. Não foram aprovados fluxos detalhados nem opções específicas de substituição.",
+      "privacyAndPersistence": "Considerar identidade/contexto do rascunho e proteção em dispositivos compartilhados; meios técnicos, retenção, expiração, quotas, criptografia, exclusão e armazenamento continuam pendentes.",
+      "notYetSpecified": [
+        "política efetiva de retenção/expiração e exclusão de rascunhos",
+        "persistência real ao fechar ou recarregar; limites por dispositivo e sessão",
+        "detecção de mudanças remotas e resolução mínima de conflitos raros",
+        "política de tentativa automática ou manual por operação",
+        "tratamento de falha claramente confirmada versus resultado desconhecido",
+        "histórico de erros/avisos: retenção, escopo, forma de acesso e privacidade",
+        "regras de operações offline e rascunhos antigos"
+      ],
+      "nextDiscussion": "EST-09 — novas tentativas, estado desconhecido e histórico de erros/avisos",
+      "implementationAuthorized": false
+    },
+    {
+      "id": "EST-09",
+      "status": "direction-agreed",
+      "context": "novas tentativas em carregamento, salvamento, sincronização e publicação; estados de falha confirmada versus resultado desconhecido",
+      "decision": "Tentativas automáticas somente quando comprovadamente seguras. Nas demais situações, especialmente escritas ou publicação com resultado não confirmado, consultar o estado remoto e/ou solicitar decisão humana antes de repetir. Não presumir falha por ausência de resposta.",
+      "principles": [
+        "repetição de leitura pode ser automatizada quando não cria efeitos colaterais",
+        "repetir escrita somente quando há garantias efetivas contra duplicação, sobrescrita ou publicação indevida",
+        "falha confirmada, resultado desconhecido e sucesso confirmado possuem mensagens e ações diferentes",
+        "preservar rascunho local e contexto da operação enquanto sua conclusão não for segura",
+        "consulta ao estado remoto é preferível a repetir cegamente operação crítica",
+        "notificações importantes não devem depender de toast fugaz; política detalhada de histórico será definida em EST-10"
+      ],
+      "notYetSpecified": [
+        "critério por operação para retry automático e limites de novas tentativas",
+        "backoff, temporização, comportamento offline e prevenção de duplicidades",
+        "mecanismo de verificação remota de operações não confirmadas",
+        "caminho de recuperação manual quando verificação é impossível",
+        "interface, mensagens e localização dos controles de retry",
+        "histórico EST-10: retenção, segmentação, escopo, acesso, reconhecimento e privacidade"
+      ],
+      "nextDiscussion": "EST-10 — histórico de erros e avisos, com foco em retenção proporcional e redução da poluição visual",
+      "implementationAuthorized": false
+    },
+    {
+      "id": "EST-10",
+      "status": "direction-agreed",
+      "context": "viewer, configurador, administração; estados de falha, aviso, conflito, publicação e recuperação",
+      "decision": "Histórico enxuto e consultável de erros, avisos e resultados relevantes, com retenção proporcional ao risco/necessidade e um único indicador discreto para pendências ativas. Mensagens relevantes não podem desaparecer antes de serem compreendidas nem depender exclusivamente de toasts temporários.",
+      "presentation": {
+        "active": "Pendências que exigem ação permanecem acessíveis enquanto relevantes, com contexto, gravidade e próximo passo. Marcar como lida não equivale a resolvida.",
+        "resolved": "Ocorrências resolvidas podem permanecer em histórico por período limitado, ainda não homologado.",
+        "routine": "Sucessos triviais e eventos rotineiros usam feedback contextual e não exigem registro no histórico.",
+        "entryPoint": "Preferir um único acesso discreto ao histórico, com indicador de pendências efetivas; evitar múltiplos badges simultâneos.",
+        "duplicates": "Agrupar ocorrências semelhantes sem ocultar recorrência relevante; decisão de agrupamento visual e temporal pendente."
+      },
+      "scopeBoundary": "Histórico de ocorrências da interface não é log técnico completo nem auditoria administrativa de autoria/alterações; cada domínio pode exigir contrato próprio futuramente.",
+      "retention": "Retenção proporcional: ativa enquanto relevante, resolvidas por prazo limitado, eventos triviais descartáveis; sem prazo numérico homologado e sem garantia de persistência entre sessões ainda definida.",
+      "privacy": "Não armazenar informações sensíveis desnecessárias; escopo por conta, documento, sessão e dispositivo ainda a especificar.",
+      "remainingDesignGates": [
+        "prazos e condições de expiração, descarte e limpeza",
+        "quais ocorrências são recuperáveis entre sessões e em qual dispositivo/conta",
+        "critério de pendência resolvida vs apenas reconhecida",
+        "mensagens, prioridades, agrupamento e acesso contextual por interface",
+        "acessibilidade das notificações e regiões de status sem roubo de foco",
+        "tratamento de offline e de resultado remoto desconhecido",
+        "parâmetros de contraste, foco e visibilidade nos temas light/dark"
+      ],
+      "nextDiscussion": "Fechamento das lacunas transversais de estados (vazio, sem conexão, carregando, erro, permissões) e gates de acessibilidade/contraste; sem implementar.",
+      "implementationAuthorized": false
+    },
+    {
+      "id": "EST-11",
+      "status": "direction-agreed",
+      "title": "Estados vazios",
+      "selectedAlternative": "A",
+      "decision": "Estados vazios contextuais e proporcionais; distinguir ausência legítima, carregamento, falha e restrição por permissão. Tratamento discreto no viewer e mais orientativo em configurador/admin conforme a tarefa.",
+      "userObservation": null,
+      "implementationAuthorized": false,
+      "decisionAuthority": "conceptual_user_approval_in_this_conversation"
+    },
+    {
+      "id": "EST-12",
+      "status": "direction-agreed",
+      "title": "Offline e conectividade",
+      "selectedAlternative": "A",
+      "decision": "Degradação contextual e proporcional: manter funções independentes da conexão, preservar rascunhos quando seguro, indicar dados possivelmente desatualizados e verificar estados remotos antes de repetir operações incertas. Não permitir confirmação fictícia de escrita/publicação.",
+      "userObservation": null,
+      "implementationAuthorized": false,
+      "decisionAuthority": "conceptual_user_approval_in_this_conversation"
+    },
+    {
+      "id": "EST-13",
+      "status": "direction-agreed",
+      "title": "Carregamento e progresso",
+      "selectedAlternative": "A",
+      "decision": "Feedback progressivo e contextual: evitar piscadas em operações rápidas; mostrar indicação adequada em operações longas, comunicar etapas relevantes e exibir progresso estimado apenas quando mensurável. Preservar conteúdo útil e distinguir andamento de resultado desconhecido.",
+      "userObservation": null,
+      "implementationAuthorized": false,
+      "decisionAuthority": "conceptual_user_approval_in_this_conversation"
+    },
+    {
+      "id": "EST-14",
+      "status": "direction-agreed",
+      "title": "Permissões e visibilidade",
+      "selectedAlternative": "A",
+      "decision": "Visibilidade contextual conforme utilidade: ocultar ações restritas irrelevantes e explicar restrições quando a presença da ação ajudar a compreender a tarefa; nunca confundir esconder/desabilitar UI com autorização efetiva.",
+      "userObservation": "Idealmente regras data-driven, mas a viabilidade/funcionamento ainda não está garantida.",
+      "implementationAuthorized": false,
+      "decisionAuthority": "conceptual_user_approval_in_this_conversation",
+      "qualifications": [
+        "Data-driven é preferência arquitetural a validar, NÃO garantia técnica já existente."
+      ]
+    },
+    {
+      "id": "EST-15",
+      "status": "direction-agreed",
+      "title": "Erros e recuperação",
+      "selectedAlternative": "A",
+      "decision": "Erros contextuais e recuperação proporcional: localizar falhas junto a controles, seções ou página conforme seu alcance; conservar conteúdo válido e distinguir falha confirmada, parcial e resultado desconhecido, com recuperação segura.",
+      "userObservation": null,
+      "implementationAuthorized": false,
+      "decisionAuthority": "conceptual_user_approval_in_this_conversation"
+    },
+    {
+      "id": "EST-16",
+      "status": "direction-agreed",
+      "title": "Acessibilidade dos estados",
+      "selectedAlternative": "A",
+      "decision": "Acessibilidade integrada e proporcional aos estados e feedback: linguagem visual e semântica adequada, teclado, foco, touch e movimento reduzido; avisos relevantes para tecnologias assistivas sem interrupções excessivas.",
+      "userObservation": null,
+      "implementationAuthorized": false,
+      "decisionAuthority": "conceptual_user_approval_in_this_conversation",
+      "qualifications": [
+        "Critérios verificáveis de aceitação são necessários; valores e testes concretos continuam pendentes."
+      ]
+    },
+    {
+      "id": "VIS-001",
+      "status": "direction-agreed",
+      "title": "Hierarquia tipográfica",
+      "selectedAlternative": "A",
+      "decision": "Hierarquia tipográfica compartilhada com adaptações contextuais: landing mais expressiva, viewer equilibrado, configurador orientado à leitura e admin compacto.",
+      "userObservation": "Tipos e casos de uso devem ser bem definidos; evitar proliferação de dezenas de tamanhos e exceções para títulos.",
+      "implementationAuthorized": false,
+      "decisionAuthority": "conceptual_user_approval_in_this_conversation"
+    },
+    {
+      "id": "VIS-001B",
+      "status": "direction-agreed",
+      "title": "Taxonomia de papéis",
+      "selectedAlternative": "A",
+      "decision": "Poucos papéis semânticos de tipografia, com finalidade, casos de uso e variantes controladas; exceções exigem necessidade real, duradoura e preferencialmente reutilizam padrões.",
+      "userObservation": null,
+      "implementationAuthorized": false,
+      "decisionAuthority": "conceptual_user_approval_in_this_conversation"
+    },
+    {
+      "id": "VIS-001C",
+      "status": "direction-agreed",
+      "title": "Responsividade tipográfica",
+      "selectedAlternative": "A",
+      "decision": "Adaptação responsiva por papel, com limites inferior/superior e consideração de breakpoints horizontais e verticais; tipografia de leitura, informação e controle deve permanecer estável e legível.",
+      "userObservation": "Cada papel terá lower e upper bounds baseados em pontos de quebra verticais e horizontais; leitura e informação sempre legíveis.",
+      "implementationAuthorized": false,
+      "decisionAuthority": "conceptual_user_approval_in_this_conversation",
+      "qualifications": [
+        "Reflow, zoom e tamanho de texto devem ser preservados; diminuir fonte essencial não é solução automática para falta de espaço."
+      ]
+    },
+    {
+      "id": "VIS-001D",
+      "status": "direction-agreed",
+      "title": "Quebras, truncamento e densidade",
+      "selectedAlternative": "A",
+      "decision": "Preservar conteúdo conforme relevância, usando composição espacial, mudança de representação e divulgação progressiva; garantir acesso ao essencial sem truncamento silencioso.",
+      "userObservation": "Não forçar tudo na tela nem gerar scrolls enormes; reorganizar layout inclui repensar representação (menus suspensos, abas e afins), não só posicionamento.",
+      "implementationAuthorized": false,
+      "decisionAuthority": "conceptual_user_approval_in_this_conversation",
+      "qualifications": [
+        "Essencial não significa simultaneamente visível; a apresentação deve depender da tarefa."
+      ]
+    },
+    {
+      "id": "VIS-001E",
+      "status": "direction-agreed",
+      "title": "Famílias tipográficas",
+      "selectedAlternative": "A (com princípios de B)",
+      "decision": "Usar família principal e papéis tipográficos claramente definidos; aceitar fontes alternativas excepcionalmente para necessidades específicas justificadas e duradouras.",
+      "userObservation": "Mistura de A e B: já definir fontes e papéis; reservar espaço para fontes alternativas quando casos específicos não couberem em uma categoria. Flexibilidade sem arbitrariedade ou escolhas efêmeras.",
+      "implementationAuthorized": false,
+      "decisionAuthority": "conceptual_user_approval_in_this_conversation",
+      "qualifications": [
+        "Fontes concretas ainda não foram homologadas."
+      ]
+    },
+    {
+      "id": "VIS-001F",
+      "status": "direction-agreed",
+      "title": "Tokens e métricas tipográficas",
+      "selectedAlternative": "A",
+      "decision": "Conjunto enxuto de tokens por papel, com tamanho, peso, altura de linha e espaçamento quando pertinente; compartilhar métricas e admitir exceções fundamentadas. Escalas matemáticas são referência, não obrigação.",
+      "userObservation": null,
+      "implementationAuthorized": false,
+      "decisionAuthority": "conceptual_user_approval_in_this_conversation"
+    },
+    {
+      "id": "VIS-001G",
+      "status": "direction-agreed",
+      "title": "Dados técnicos e números",
+      "selectedAlternative": "A",
+      "decision": "Poucos papéis tipográficos técnicos reutilizáveis para preços, medidas, códigos e quantidades; priorizar fonte principal, alinhamento e algarismos tabulares quando úteis. Evitar estilos individuais por campo.",
+      "userObservation": null,
+      "implementationAuthorized": false,
+      "decisionAuthority": "conceptual_user_approval_in_this_conversation"
+    },
+    {
+      "id": "VIS-001H",
+      "status": "direction-agreed",
+      "title": "Validação da tipografia",
+      "selectedAlternative": "A",
+      "decision": "Catálogo de papéis com especificações e exemplos adequados/inadequados, validado em contextos reais de landing, viewer, configurador e admin; incluir tamanhos de tela, conteúdo extenso, dados técnicos e acessibilidade.",
+      "userObservation": null,
+      "implementationAuthorized": false,
+      "decisionAuthority": "conceptual_user_approval_in_this_conversation",
+      "qualifications": [
+        "Direção de VIS-001 encerrada; medidas, fontes concretas e homologação visual continuam pendentes."
+      ]
+    },
+    {
+      "id": "VIS-002A",
+      "status": "direction-agreed",
+      "title": "Arquitetura de tokens cromáticos",
+      "selectedAlternative": "A",
+      "decision": "Tokens primitivos da paleta-base e tokens semânticos de função, com adaptação por contexto e suporte light/dark; poucos níveis de abstração e novos tokens somente por necessidade distinta.",
+      "userObservation": null,
+      "implementationAuthorized": false,
+      "decisionAuthority": "conceptual_user_approval_in_this_conversation"
+    },
+    {
+      "id": "VIS-002B",
+      "status": "direction-agreed",
+      "title": "Superfícies e profundidade",
+      "selectedAlternative": "A",
+      "decision": "Poucos níveis semânticos de superfície (base, agrupamento, destaque, sobreposição), com coerência de texto e borda; profundidade apenas quando informa estrutura/interação, sem exigir mesma cor em temas diferentes.",
+      "userObservation": null,
+      "implementationAuthorized": false,
+      "decisionAuthority": "conceptual_user_approval_in_this_conversation"
+    },
+    {
+      "id": "VIS-002C",
+      "status": "direction-agreed",
+      "title": "Textos, bordas e contraste",
+      "selectedAlternative": "A",
+      "decision": "Hierarquia semântica com contraste funcional para texto principal, secundário, auxiliar e interativo; bordas estruturais e de controles possuem funções próprias; texto secundário importante continua legível.",
+      "userObservation": null,
+      "implementationAuthorized": false,
+      "decisionAuthority": "conceptual_user_approval_in_this_conversation"
+    },
+    {
+      "id": "VIS-002D",
+      "status": "direction-agreed",
+      "title": "Cores de ações e links",
+      "selectedAlternative": "A",
+      "decision": "Hierarquia cromática por intenção e contexto para ações primárias, secundárias, discretas, destrutivas e links; destaque proporcional à tarefa e ao risco, não somente ao tipo de elemento.",
+      "userObservation": null,
+      "implementationAuthorized": false,
+      "decisionAuthority": "conceptual_user_approval_in_this_conversation"
+    },
+    {
+      "id": "VIS-002E",
+      "status": "direction-agreed",
+      "title": "Intensidade de cores semânticas",
+      "selectedAlternative": "A",
+      "decision": "Intensidade de erro, aviso, sucesso e informação proporcional à criticidade e ao contexto; evitar excesso de cor, preservar semântica e destacar comunicação editorial/comercial separadamente de estados técnicos.",
+      "userObservation": null,
+      "implementationAuthorized": false,
+      "decisionAuthority": "conceptual_user_approval_in_this_conversation"
+    },
+    {
+      "id": "VIS-002F",
+      "status": "direction-agreed",
+      "title": "Composição de estados interativos",
+      "selectedAlternative": "A",
+      "decision": "Estados semânticos podem coexistir com precedência e canais visuais complementares, sem criar variante para toda combinação; foco independente, seleção persistente, hover/pressionado transitórios.",
+      "userObservation": "Concordo especialmente com adições: só compor estados semanticamente válidos; erro e seleção não podem se ocultar, podendo usar borda/superfície/ícone/mensagem; intensidade contextual por interface.",
+      "implementationAuthorized": false,
+      "decisionAuthority": "conceptual_user_approval_in_this_conversation",
+      "qualifications": [
+        "Não homologadas combinações finais nem precedência numérica/detalhada."
+      ]
+    },
+    {
+      "id": "VIS-002G",
+      "status": "direction-agreed",
+      "title": "Pares de contraste light/dark",
+      "selectedAlternative": "A (disciplinada por B)",
+      "decision": "Priorizar pares cromáticos semanticamente homologados com regras claras e previsíveis, validados em contextos reais light/dark; exceções justificadas e verificadas, sem proliferação local.",
+      "userObservation": "A nos moldes de B. A diferença anterior entre páginas públicas light e privadas dark foi ACIDENTAL, não uma regra; escolha de tema poderá ser persistida localmente.",
+      "implementationAuthorized": false,
+      "decisionAuthority": "conceptual_user_approval_in_this_conversation",
+      "qualifications": [
+        "NÃO associar tema a público/privado. A observação corrige a suposição anterior do checkpoint EST-10."
+      ]
+    },
+    {
+      "id": "VIS-002H",
+      "status": "direction-agreed",
+      "title": "Escolha e persistência de tema",
+      "selectedAlternative": "A",
+      "decision": "Preferência light/dark compartilhada entre interfaces e persistente; iniciar seguindo preferência do dispositivo quando disponível; escolha manual prevalece sobre sistema; navegação não redefine tema arbitrariamente.",
+      "userObservation": null,
+      "implementationAuthorized": false,
+      "decisionAuthority": "conceptual_user_approval_in_this_conversation"
+    },
+    {
+      "id": "VIS-002I",
+      "status": "direction-agreed",
+      "title": "Texto sobre imagens",
+      "selectedAlternative": "A",
+      "decision": "Preferir evitar texto sobre imagens. Quando necessário, usar soluções contextuais homologadas de composição/reposicionamento e somente depois sobreposições controladas. Superfície de proteção sólida ou semitransparente como fallback para contraste.",
+      "userObservation": "Evitar texto sobre imagens; priorizar soluções homologadas de contexto e usar bloco de cor sólida/semitransparente como superfície de proteção somente em fallback. Escolha A foi reafirmada depois sem revogar ressalvas.",
+      "implementationAuthorized": false,
+      "decisionAuthority": "conceptual_user_approval_in_this_conversation",
+      "qualifications": [
+        "Verificar contraste em imagens dinâmicas, não apenas amostra estática."
+      ]
+    },
+    {
+      "id": "VIS-002J",
+      "status": "direction-agreed",
+      "title": "Paletas de indicadores e visualizações",
+      "selectedAlternative": "C",
+      "decision": "Paletas específicas e governadas para indicadores e visualizações, separadas das cores da interface; evitar redundâncias e significados conflitantes. Não reduzir esta decisão à alternativa A.",
+      "userObservation": null,
+      "implementationAuthorized": false,
+      "decisionAuthority": "conceptual_user_approval_in_this_conversation",
+      "qualifications": [
+        "Não homologadas cores nem mapeamentos concretos."
+      ]
+    },
+    {
+      "id": "VIS-002K",
+      "status": "direction-agreed",
+      "title": "Associações estáveis de cor",
+      "selectedAlternative": "A",
+      "decision": "Associações de cor semanticamente relevantes e persistentes permanecem estáveis; categorias ocasionais podem usar paletas locais homologadas sem exigir token global; não confundir categorização de dados com estados técnicos.",
+      "userObservation": null,
+      "implementationAuthorized": false,
+      "decisionAuthority": "conceptual_user_approval_in_this_conversation"
+    },
+    {
+      "id": "VIS-002L",
+      "status": "direction-agreed",
+      "title": "Homologação cromática",
+      "selectedAlternative": "A",
+      "decision": "Catálogo enxuto de tokens, pares cromáticos e usos aprovados; validação em contextos reais, light/dark e acessibilidade; padrão homologado como preferência, exceções justificadas e combinação não avaliada sem homologação presumida.",
+      "userObservation": null,
+      "implementationAuthorized": false,
+      "decisionAuthority": "conceptual_user_approval_in_this_conversation",
+      "qualifications": [
+        "Direção conceitual VIS-002 encerrada; cores reais e homologação visual pendentes."
+      ]
+    },
+    {
+      "id": "NAV-005A",
+      "status": "direction-agreed",
+      "title": "Protagonismo do header",
+      "selectedAlternative": "A",
+      "decision": "Header global discreto, consistente e reconhecível; conteúdo é protagonista; dimensões controladas com responsividade. Não exigir o mesmo header funcional em áreas administrativas.",
+      "userObservation": null,
+      "implementationAuthorized": false,
+      "decisionAuthority": "conceptual_user_approval_in_this_conversation"
+    },
+    {
+      "id": "NAV-005B",
+      "status": "direction-agreed",
+      "title": "Distribuição logo/navegação",
+      "selectedAlternative": "A",
+      "decision": "No desktop, logo no início e navegação agrupada no extremo oposto; quando necessário, transformar em menu compacto baseado no espaço real. Organização previsível sem breakpoints ainda fixados.",
+      "userObservation": null,
+      "implementationAuthorized": false,
+      "decisionAuthority": "conceptual_user_approval_in_this_conversation"
+    },
+    {
+      "id": "NAV-005C",
+      "status": "direction-agreed",
+      "title": "Comportamento na rolagem",
+      "selectedAlternative": "A",
+      "decision": "Fixação, rolagem natural ou recolhimento controlado conforme contexto, guiados por poucos comportamentos homologados; manter acesso, teclado, menu e estabilidade visual, respeitando reduced motion.",
+      "userObservation": null,
+      "implementationAuthorized": false,
+      "decisionAuthority": "conceptual_user_approval_in_this_conversation"
+    },
+    {
+      "id": "NAV-005D",
+      "status": "direction-agreed",
+      "title": "Formato do menu compacto",
+      "selectedAlternative": "A",
+      "decision": "Menu suspenso compacto associado ao header, com os quatro destinos públicos e espaço de toque confortável; preservar o contexto da página e o contrato acessível NAV-004.",
+      "userObservation": null,
+      "implementationAuthorized": false,
+      "decisionAuthority": "conceptual_user_approval_in_this_conversation"
+    },
+    {
+      "id": "NAV-005E",
+      "status": "direction-agreed",
+      "title": "Contexto do viewer",
+      "selectedAlternative": "A",
+      "decision": "O header global indica apenas a página global realmente ativa; contexto próprio do viewer é discreto e externo ao header, com título, breadcrumb ou ambos conforme utilidade. Não marcar Ambientes falsamente ativo.",
+      "userObservation": null,
+      "implementationAuthorized": false,
+      "decisionAuthority": "conceptual_user_approval_in_this_conversation"
+    },
+    {
+      "id": "NAV-005F",
+      "status": "direction-agreed",
+      "title": "Logo no header",
+      "selectedAlternative": "A",
+      "decision": "Logo oficial existente como padrão, com versões compactas somente quando forem necessárias e formalmente homologadas; preservar proporções e identidade, sem inventar símbolos.",
+      "userObservation": null,
+      "implementationAuthorized": false,
+      "decisionAuthority": "conceptual_user_approval_in_this_conversation"
+    },
+    {
+      "id": "NAV-005G",
+      "status": "direction-agreed",
+      "title": "Superfície do header",
+      "selectedAlternative": "A",
+      "decision": "Header com superfície própria e consistente, separação discreta conforme necessidade por diferença tonal, borda ou recurso mínimo; não impor sombras ou bordas decorativas em todo contexto.",
+      "userObservation": null,
+      "implementationAuthorized": false,
+      "decisionAuthority": "conceptual_user_approval_in_this_conversation"
+    },
+    {
+      "id": "NAV-005H",
+      "status": "direction-agreed",
+      "title": "Densidade e áreas interativas",
+      "selectedAlternative": "A",
+      "decision": "Densidade adaptativa com limites ergonômicos homologados; dimensões visuais podem ser menores que áreas clicáveis, respeitando toque, zoom, ampliação de texto, largura e altura.",
+      "userObservation": null,
+      "implementationAuthorized": false,
+      "decisionAuthority": "conceptual_user_approval_in_this_conversation"
+    },
+    {
+      "id": "NAV-005I",
+      "status": "direction-agreed",
+      "title": "CTA de Contato",
+      "selectedAlternative": "B",
+      "decision": "Contato recebe destaque moderado como chamada para ação no header global; demais destinos seguem navegação convencional, sem competir em excesso com conteúdo.",
+      "userObservation": null,
+      "implementationAuthorized": false,
+      "decisionAuthority": "conceptual_user_approval_in_this_conversation"
+    },
+    {
+      "id": "NAV-005J",
+      "status": "direction-agreed",
+      "title": "Contato no menu compacto",
+      "selectedAlternative": "A",
+      "decision": "Quando o menu é compacto, os quatro destinos ficam agrupados nele e Contato mantém destaque próprio dentro do painel; não exige CTA ocupando espaço permanente no header pequeno.",
+      "userObservation": null,
+      "implementationAuthorized": false,
+      "decisionAuthority": "conceptual_user_approval_in_this_conversation"
+    },
+    {
+      "id": "NAV-005K",
+      "status": "direction-agreed",
+      "title": "Validação do header",
+      "selectedAlternative": "A",
+      "decision": "Header global deve ser homologado em contextos reais (landing, institucionais, viewer; desktop, tablet, mobile, telas baixas, zoom, light/dark, touch, teclado e rolagem); preservar padrão compartilhado e justificar exceções.",
+      "userObservation": null,
+      "implementationAuthorized": false,
+      "decisionAuthority": "conceptual_user_approval_in_this_conversation",
+      "qualifications": [
+        "Direção conceitual NAV-005 encerrada; aparência e testes finais pendentes."
+      ]
+    },
+    {
+      "id": "CMP-001A",
+      "status": "direction-agreed",
+      "title": "Organização das famílias",
+      "selectedAlternative": "A",
+      "decision": "Famílias semânticas por responsabilidade e comportamento compartilhados, com variantes controladas e composições específicas; reutilizar não implica unificar por semelhança visual.",
+      "userObservation": null,
+      "implementationAuthorized": false,
+      "decisionAuthority": "conceptual_user_approval_in_this_conversation"
+    },
+    {
+      "id": "CMP-001B",
+      "status": "direction-agreed",
+      "title": "Família vs variante vs composição",
+      "selectedAlternative": "A",
+      "decision": "Nova família por responsabilidade/contrato distinto; variante pela mesma finalidade com diferenças controláveis; composição por combinação de existentes. Classificação revisável quando complexidade indicar divisão ou fusão.",
+      "userObservation": null,
+      "implementationAuthorized": false,
+      "decisionAuthority": "conceptual_user_approval_in_this_conversation"
+    },
+    {
+      "id": "CMP-001C",
+      "status": "direction-agreed",
+      "title": "Contratos e responsabilidades",
+      "selectedAlternative": "A",
+      "decision": "Contratos explícitos de entradas, eventos, estados e variantes; separar dados/domínio, apresentação e coordenação de forma pragmática, sem camadas artificiais em componentes simples.",
+      "userObservation": null,
+      "implementationAuthorized": false,
+      "decisionAuthority": "conceptual_user_approval_in_this_conversation"
+    },
+    {
+      "id": "CMP-001D",
+      "status": "direction-agreed",
+      "title": "Autoridade e sincronização de estado",
+      "selectedAlternative": "A",
+      "decision": "Estados transitórios podem ser locais; dados de domínio e estados compartilhados têm autoridade explícita no menor escopo competente; intenções e atualizações por contratos claros, sem fontes de verdade concorrentes.",
+      "userObservation": null,
+      "implementationAuthorized": false,
+      "decisionAuthority": "conceptual_user_approval_in_this_conversation"
+    },
+    {
+      "id": "CMP-001E",
+      "status": "direction-agreed",
+      "title": "Variantes e propriedades ortogonais",
+      "selectedAlternative": "A",
+      "decision": "Variantes por finalidade e estrutura; propriedades para aspectos independentes, estados com contrato próprio e composição separada; combinações válidas explicitadas sem explosão booleana. Presets justificáveis podem auxiliar.",
+      "userObservation": null,
+      "implementationAuthorized": false,
+      "decisionAuthority": "conceptual_user_approval_in_this_conversation"
+    },
+    {
+      "id": "CMP-001F",
+      "status": "direction-agreed",
+      "title": "Pontos de extensão semânticos",
+      "selectedAlternative": "A",
+      "decision": "Regiões de composição semânticas para componentes que delas necessitem; diferenciar partes obrigatórias, opcionais e extensíveis; omissões/substituições previstas não podem romper semântica ou acessibilidade.",
+      "userObservation": null,
+      "implementationAuthorized": false,
+      "decisionAuthority": "conceptual_user_approval_in_this_conversation"
+    },
+    {
+      "id": "CMP-001G",
+      "status": "direction-agreed",
+      "title": "Responsividade dos componentes",
+      "selectedAlternative": "A",
+      "decision": "Adaptação por capacidade e contexto, incluindo largura/altura do contêiner, densidade, tarefa, zoom e interação; permitir mudanças de representação homologadas preservando função e informação.",
+      "userObservation": null,
+      "implementationAuthorized": false,
+      "decisionAuthority": "conceptual_user_approval_in_this_conversation"
+    },
+    {
+      "id": "CMP-001H",
+      "status": "direction-agreed",
+      "title": "Acessibilidade contratual",
+      "selectedAlternative": "A",
+      "decision": "Garantias acessíveis próprias de cada componente e deveres explícitos das composições; manter semântica, foco, teclado, touch, ordem e anúncios nas mudanças de representação, com verificação real posterior.",
+      "userObservation": null,
+      "implementationAuthorized": false,
+      "decisionAuthority": "conceptual_user_approval_in_this_conversation"
+    },
+    {
+      "id": "CMP-001I",
+      "status": "direction-agreed",
+      "title": "Catálogo e matriz de cobertura",
+      "selectedAlternative": "A",
+      "decision": "Catálogo conciso por família e matriz de cobertura proporcional à complexidade/risco; separar contrato de evidências; maturidade: inventariado, direção aprovada, especificado, homologado visualmente e validado funcionalmente.",
+      "userObservation": null,
+      "implementationAuthorized": false,
+      "decisionAuthority": "conceptual_user_approval_in_this_conversation"
+    },
+    {
+      "id": "CMP-001J",
+      "status": "direction-agreed",
+      "title": "Governança de alterações",
+      "selectedAlternative": "A",
+      "decision": "Homologação proporcional ao impacto real; registrar evidências e compatibilidade, distinguir evoluções compatíveis, mudanças que exigem adaptação e descontinuação de variantes redundantes.",
+      "userObservation": null,
+      "implementationAuthorized": false,
+      "decisionAuthority": "conceptual_user_approval_in_this_conversation"
+    },
+    {
+      "id": "CMP-001K",
+      "status": "direction-agreed",
+      "title": "Priorização das famílias",
+      "selectedAlternative": "A",
+      "decision": "Ordenar por dependências reais, reutilização, impacto transversal e risco/incerteza; examinar antecipadamente componentes complexos críticos para descobrir lacunas. 43 famílias são inventário inicial, não quantidade final.",
+      "userObservation": null,
+      "implementationAuthorized": false,
+      "decisionAuthority": "conceptual_user_approval_in_this_conversation"
+    },
+    {
+      "id": "CMP-001L",
+      "status": "direction-agreed",
+      "title": "Transição gradual",
+      "selectedAlternative": "A",
+      "decision": "Adoção incremental com compatibilidade e critérios de convergência; reconhecer componentes existentes conformes sem reimplementar; migrar gradualmente os demais, eliminar duplicações com evidência e aceitar coexistência temporária.",
+      "userObservation": null,
+      "implementationAuthorized": false,
+      "decisionAuthority": "conceptual_user_approval_in_this_conversation"
+    },
+    {
+      "id": "CMP-001M",
+      "status": "direction-agreed",
+      "title": "Recorte do inventário",
+      "selectedAlternative": "C",
+      "decision": "Analisar inicialmente apenas famílias críticas, deixando o restante para etapa posterior conforme dependências/risco.",
+      "userObservation": "Urgência: padronizar header e logos oficiais em viewer/config/admin; favicon oficial em todas páginas; switch light/dark seguindo dispositivo e preferência persistida; font-size/font-weight insuficientes em algumas resoluções; contrastes ruins em pontos.",
+      "implementationAuthorized": false,
+      "decisionAuthority": "conceptual_user_approval_in_this_conversation",
+      "qualifications": [
+        "Prioridades baseadas em observações do usuário, ainda não verificadas no código. Não confundir prioridade alta com autorização para implementar."
+      ],
+      "priority": "critical"
+    },
+    {
+      "id": "CMP-001N",
+      "status": "direction-agreed",
+      "title": "Identidade compartilhada, headers contextualizados",
+      "selectedAlternative": "A",
+      "decision": "Centralizar logo, favicon e identidade oficial; compartilhar padrões visuais e comportamentos pertinentes, preservando estruturas e controles funcionais próprios entre páginas públicas, viewer, configurador e admin.",
+      "userObservation": null,
+      "implementationAuthorized": false,
+      "decisionAuthority": "conceptual_user_approval_in_this_conversation",
+      "priority": "critical"
+    },
+    {
+      "id": "CMP-001O",
+      "status": "direction-agreed",
+      "title": "Assets homologados e fallback",
+      "selectedAlternative": "A",
+      "decision": "Usar exclusivamente assets oficiais/variantes homologadas; na falha, fallback textual neutro, acessível e sem logo inventado; preservar navegação, registrar falha.",
+      "userObservation": "Pipeline provisório na ordem exata: homologar -> corrigir -> identificar -> tornar data dependent.",
+      "implementationAuthorized": false,
+      "decisionAuthority": "conceptual_user_approval_in_this_conversation",
+      "qualifications": [
+        "Sequência PROVISÓRIA preservada literalmente, sem interpretar “identificar” como uma fase técnica já detalhada.",
+        "Favicon da página Como funciona é referência mencionada, ainda requer confirmação de asset."
+      ],
+      "priority": "critical"
+    },
+    {
+      "id": "CMP-001P",
+      "status": "direction-agreed",
+      "title": "Disponibilização do switch de tema",
+      "selectedAlternative": "A",
+      "decision": "Contrato compartilhado de alternância light/dark; controle pode ficar visível no header quando houver espaço e no menu compacto quando necessário; estado/ação acessíveis e consistentes entre páginas.",
+      "userObservation": null,
+      "implementationAuthorized": false,
+      "decisionAuthority": "conceptual_user_approval_in_this_conversation",
+      "priority": "critical"
+    },
+    {
+      "id": "CMP-001Q",
+      "status": "direction-agreed",
+      "title": "Estados e affordance do tema",
+      "selectedAlternative": "A",
+      "decision": "Três modos: Automático, Claro (light), Escuro (dark). Controle circular: metade branca/metade preta para Automático, branco para Claro, preto para Escuro. Legenda ao lado indica estado atual, inicialmente Automático. Clique cicla Automático → Claro → Escuro → Automático.",
+      "userObservation": "Usuário enviou imagem-referência circular dividida ao meio e especificou cor por modo, legenda e sequência cíclica. Assistente concordou e usuário prosseguiu com essa escolha.",
+      "implementationAuthorized": false,
+      "decisionAuthority": "conceptual_user_approval_in_this_conversation",
+      "qualifications": [
+        "Modo Automático acompanha a preferência do dispositivo; escolha manual persiste até retorno ao Automático.",
+        "Forma e ciclo aprovados apenas conceitualmente; assegurar rótulo de estado e ação acessíveis; medidas e CSS pendentes."
+      ],
+      "priority": "critical"
+    },
+    {
+      "id": "CMP-001R",
+      "status": "direction-agreed",
+      "title": "Legibilidade mínima da tipografia",
+      "selectedAlternative": "A",
+      "decision": "Baseline mínimo homologado por papel e contexto de leitura, informação e controle, com limites de tamanho, peso e contraste verificáveis em resoluções e densidades reais; textos essenciais estáveis/legíveis, títulos mais flexíveis.",
+      "userObservation": null,
+      "implementationAuthorized": false,
+      "decisionAuthority": "conceptual_user_approval_in_this_conversation",
+      "qualifications": [
+        "Não definir ainda valores numéricos; corrigir preferencialmente tokens compartilhados, respeitando VIS-001C."
+      ],
+      "priority": "high"
+    }
+  ],
+  "importCompatibility": {
+    "reviewHtmlVersion": "v0.2",
+    "basicDecisions": "Compatível com importação de decisions por ID e sourceSnapshot.",
+    "detailDecisions": "EST-01 a EST-10 estão em detailDecisions; o importador HTML v0.2 ignora este campo e não o exporta novamente.",
+    "preservation": "Este JSON consolidado é fonte durável das aprovações; NÃO reexportar a partir do HTML v0.2 como se preservasse as decisões detalhadas.",
+    "updatedConsolidation": "detailDecisions foi ampliado até CMP-001R e contem aprovações posteriores ao checkpoint original. O HTML de revisão v0.2 ignora detailDecisions, parentRecordRevisions e consolidation.",
+    "sourceSnapshotCaveat": "sourceSnapshot é histórico; decisões posteriores não provam mudanças em fonte/repositório."
+  },
+  "consolidation": {
+    "dateLocal": "2026-10-13",
+    "purpose": "checkpoint de retomada do inventário de Design System MobiliPresenter2D; decisões até CMP-001R",
+    "authority": "aprovações conceituais nesta conversa; não especificação executável",
+    "sourceSnapshot": "38a314fb3d9830e43310e59c0166197fd19341e0",
+    "sourceSnapshotCaveat": "identificador de snapshot histórico fornecido no EST-10, NÃO indica estado atual do repositório",
+    "designFreeze": "NENHUMA alteração de implementação, código, repositório ou publicação autorizada nesta revisão",
+    "countOriginalDetailed": 10,
+    "countNewDetailed": 55,
+    "countTotalDetailed": 65,
+    "countSourceTopLevel": 10,
+    "approvedByArea": {
+      "EST": "EST-01..EST-16",
+      "VIS": "VIS-001, VIS-001B..H; VIS-002A..L",
+      "NAV": "NAV-004/005 direções originais; NAV-005A..K",
+      "CMP": "CMP-001A..R"
+    },
+    "conceptualDirectionsClosed": [
+      "EST-01..EST-16",
+      "VIS-001 e variantes B..H",
+      "VIS-002A..L",
+      "NAV-005A..K",
+      "CMP-001A..R até o recorte crítico"
+    ],
+    "openWork": [
+      "Fontes, tamanhos, pesos, limites e homologação tipográfica real",
+      "Tokens e valores cromáticos, contrastes efetivos e testes light/dark",
+      "Aparência e comportamento final dos headers/menus e seus contextos",
+      "Localização e validação dos assets oficiais (logo, favicon) nas páginas e interfaces",
+      "Verificação de problemas relatados de logos, baixa legibilidade e contrastes em resoluções reais",
+      "Mecanismo exato de preferência de tema, persistência, UI final e testes de acessibilidade",
+      "Análise prioritária das famílias críticas; restante das 43 famílias sem homologação individual",
+      "Contratos e governança de dados/permissões dependentes de validação da arquitetura atual"
+    ],
+    "priorityCriticalFocus": [
+      "header/logo oficial transversal",
+      "favicon consistente",
+      "alternância de tema (automático/light/dark)",
+      "legibilidade de leitura por resolução",
+      "contraste real nos temas e superfícies"
+    ],
+    "provisionalTransitionPipeline": [
+      "homologar",
+      "corrigir",
+      "identificar",
+      "tornar data dependent"
+    ],
+    "nextSuggestedDiscussion": "CMP-001S — critérios de triagem e evidências para problemas reais de contraste em componentes críticos",
+    "specialCorrections": [
+      "Light/dark associado a público/privado foi acidental; não congelar tema por rota (VIS-002G).",
+      "VIS-002J escolheu alternativa C, não A.",
+      "NAV-005I escolheu alternativa B (Contato como CTA).",
+      "CMP-001M escolheu alternativa C (somente famílias críticas).",
+      "VIS-002I foi reafirmada, sem revogar observações sobre evitar texto em imagem e superfície de proteção fallback.",
+      "CMP-001Q aprovou botão circular meio a meio/claridade/escuro e ciclo, não apenas um seletor genérico."
+    ]
+  },
+  "consolidatedAt": "2026-10-14T00:06:09.720112Z",
+  "updatedThrough": "CMP-001R",
+  "sourceCheckpoint": {
+    "filename": "MobiliPresenter2D_Decisoes_Canonicas_EST-10.json",
+    "sha256": "2a009743d3c0f104416f1aea8d187c536f77c4981ee6532831fe00f15b9e817e",
+    "exportedAt": "2026-10-12T01:31:42.074317Z",
+    "sourceSnapshot": "38a314fb3d9830e43310e59c0166197fd19341e0",
+    "sourceOfPriorDecisions": "Anexo do usuário; decisões EST-01..10 preservadas integralmente sem reescrita."
+  },
+  "parentRecordRevisions": [
+    {
+      "id": "VIS-001",
+      "before": {
+        "id": "VIS-001",
+        "canonicalStatus": "pending",
+        "verdict": "revisit",
+        "note": "A decidir, ponto de discussão futuro"
+      },
+      "after": {
+        "canonicalStatus": "direction",
+        "verdict": "agreed",
+        "note": "Direções conceituais de tipografia VIS-001, VIS-001B..H aprovadas; fontes, métricas e validação visual efetiva não homologadas."
+      }
+    },
+    {
+      "id": "CMP-001",
+      "before": {
+        "id": "CMP-001",
+        "canonicalStatus": "ongoing",
+        "verdict": "revisit",
+        "note": "A decidir, ponto de discussão futuro"
+      },
+      "after": {
+        "canonicalStatus": "ongoing",
+        "verdict": "agreed",
+        "note": "Governança conceitual CMP-001A..R aprovada; somente famílias críticas priorizadas inicialmente. Inventário das 43 famílias e homologação concreta ainda em andamento."
+      }
+    }
+  ]
+}

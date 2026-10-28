@@ -1,0 +1,315 @@
+{
+  "schema": "M2DReview1",
+  "project": "MobiliPresenter2D",
+  "version": "0.1",
+  "sourceSnapshot": "38a314fb3d9830e43310e59c0166197fd19341e0",
+  "exportedAt": "2026-10-12T01:31:42.074317Z",
+  "decisions": [
+    {
+      "id": "GOV-001",
+      "canonicalStatus": "defined",
+      "verdict": "agreed",
+      "note": ""
+    },
+    {
+      "id": "NAV-001",
+      "canonicalStatus": "direction",
+      "verdict": "agreed",
+      "note": ""
+    },
+    {
+      "id": "NAV-002",
+      "canonicalStatus": "direction",
+      "verdict": "agreed",
+      "note": ""
+    },
+    {
+      "id": "NAV-003",
+      "canonicalStatus": "direction",
+      "verdict": "agreed",
+      "note": "a página como funciona já aplica o fav icon, usar o mesmo em todo site"
+    },
+    {
+      "id": "NAV-004",
+      "canonicalStatus": "proposal",
+      "verdict": "agreed",
+      "note": "APROVADO — contrato funcional de menus públicos: abertura/fechamento pelo botão, Escape, clique fora, navegação por teclado, aria-expanded, retorno de foco quando adequado e preferência por movimento reduzido. Todas as páginas públicas devem permitir acesso a Ambientes (landing), Como funciona, Quem somos e Contato. A estética do header NÃO foi aprovada e será discutida em NAV-005."
+    },
+    {
+      "id": "NAV-005",
+      "canonicalStatus": "direction",
+      "verdict": "agreed",
+      "note": "APROVADO — organização de NAV-005: adotar um header global, com acesso às quatro opções públicas (Ambientes/landing, Como funciona, Quem somos e Contato), e manter a identificação do ambiente do viewer em uma área contextual separada do header, por exemplo “Ambientes › Cozinha”. Esse exemplo de texto não é uma decisão final sobre o breadcrumb. Controles e interação da cena permanecem no conteúdo do viewer. O viewer é uma subpágina de ambiente; não marcar “Ambientes” falsamente como página ativa do viewer. ESTÉTICA DO HEADER NÃO APROVADA: layout final, altura, tipografia, cores, logo, aparência do menu e apresentação do contexto aguardam comparação e discussão visual. Também não se aprovou a generalização multiambiente (ENV-001 permanece futuro). NÃO IMPLEMENTAR até encerramento do design system e autorização expressa."
+    },
+    {
+      "id": "VIS-001",
+      "canonicalStatus": "pending",
+      "verdict": "revisit",
+      "note": "A decidir, ponto de discussão futuro"
+    },
+    {
+      "id": "VIS-002",
+      "canonicalStatus": "direction",
+      "verdict": "agreed",
+      "note": "APROVADO APENAS EM NÍVEL CONCEITUAL — uma paleta-base de identidade compartilhada entre as interfaces, com aplicações por contexto. As páginas públicas já têm linguagem light e as administrativas linguagem dark; prever compatibilidade da arquitetura de tokens com ambos os modos no futuro, sem declarar que ambos existem em todas as rotas. Revisar cobertura dos requisitos mínimos de contraste (textos, controles, foco e estados). Especificar cores auxiliares semânticas para erro, aviso, sucesso e informação, além de foco, seleção, hover, pressionado e desabilitado. Nenhuma cor auxiliar, código hexadecimal, par de contraste, aparência, variante ou troca de tema foi homologada por esta decisão. Nenhuma implementação autorizada. ADENDO ACEITO EM 2026-10-11 — escolha A para cores auxiliares: estados semânticos reconhecíveis (erro, sucesso, aviso, informação) harmonizados com a marca e com contrastes independentes para light/dark. Preservar variante de comunicação editorial/comercial (ex.: aviso de condição de lançamento por 3 meses) com destaque laranja/cobre da identidade, distinto do estado técnico de aviso/erro. A informação funcional pode usar papel semântico próprio; não obrigar todo aviso informativo ao azul. Comunicação deve ter texto/ícone/rotulo e não depender só da cor. O exemplo enviado exibe uma amostra laranja/cobre aproximada #A64D13 extraída do PNG, com contraste calculado 5,69:1 contra branco; esse valor é evidência da imagem, NÃO token aprovado. Cores auxiliares exatas, variantes finais e demais estados de interação continuam pendentes de especificação/contraste. NÃO IMPLEMENTAR. ADENDO ACEITO — estados contextuais: a semântica de seleção e foco é compartilhada, mas a intensidade visual de seleção deve variar conforme a tarefa. Viewer: realce mais discreto, com função contextual e cena como protagonista. Configurador: seleção mais explícita para orientar escolhas entre configurações próximas e reduzir erros. Admin: destaque forte e inequívoco para indicar campo/objeto/configuração em edição, em telas densas. Foco de teclado permanece independente de seleção e perceptível em todos os contextos e em light/dark. Não implica novas cores, tokens, medidas, estilos ou variantes aprovadas. Manter contraste, hover, pressed, disabled e loading sob detalhamento pendente. Nenhuma implementação autorizada. ADENDO EST-01 / APROVADO CONCEITUALMENTE EM 2026-10-11: No configurador, a seleção que altera a configuração deve combinar um indicador explícito (ex.: marca/check) com destaque moderado de superfície ou borda. A combinação reforça a escolha sem competir com o conteúdo; o foco de teclado permanece um estado distinto, perceptível e não precisa gerar uma variante decorativa “selecionado + foco”. Não foram aprovados formato do indicador, cores, espessura, medidas, intensidade numérica, tema ou implementação. EST-02 (foco de teclado) continua aberto para discussão. NÃO IMPLEMENTAR. ADENDO EST-02 / APROVADO CONCEITUALMENTE EM 2026-10-11: Adotar indicador de foco de teclado por contorno EXTERNO independente da aparência de seleção; foco visível apenas na interação apropriada de teclado (focus-visible), perceptível em light/dark, sem decoração excessiva. Seleção permanece sinalizada por seu próprio indicador/destaque; quando selecionado e com foco, preservar o indicador de seleção e acrescentar apenas o contorno mínimo necessário, sem criar uma terceira variante visual complexa. Cores exatas, espessura, afastamento do contorno, desenho para diferentes superfícies e verificação de acessibilidade permanecem abertos. EST-03 (hover/pressionado) está em discussão. NÃO IMPLEMENTAR. ADENDO EST-03 / APROVADO CONCEITUALMENTE EM 2026-10-11: Hover e pressionado têm funções distintas. Hover informa interatividade, com tratamento proporcional ao contexto; pressionado dá resposta imediata à ação, sem equivaler a uma seleção persistente nem comprovar conclusão da operação. A resposta visual deve depender da família: botões PODEM utilizar microfeedback físico sutil (pequena escala ou deslocamento) quando isso melhora a compreensão; campos, seletores densos e cards técnicos ficam geometricamente estáveis, usando principalmente fundo, cor ou borda. Em viewer, a resposta permanece discreta; no configurador e admin, suficientemente explícita para orientar tarefas, mas sem agitação visual. A interface não deve depender de hover para acesso a conteúdo, deve funcionar em touch e respeitar preferência de movimento reduzido. Não foram aprovados offsets, escalas, durações, easing, cores, sombras ou exceções finais por componente; nenhum código, deploy ou implementação autorizados. EST-04 em discussão. ADENDO EST-04 / APROVADO CONCEITUALMENTE EM 2026-10-11: Desabilitado (ação não permitida) e somente leitura (valor consultável, porém não editável) devem ter semântica, comportamento e indicações distinguíveis. Somente leitura mantém boa legibilidade e, quando pertinente, possibilidade de copiar/selecionar texto; desabilitado não aciona a ação, deve permitir ao usuário compreender a causa por texto/contexto acessível quando necessário, sem depender apenas da redução de opacidade. Visibilidade na UI, habilitação de ação/edição, publicação e eventual disponibilidade comercial são dimensões distintas; não tratar “selecionado”, “editável”, “publicado”, “disponível” e “visível” como sinônimos. Considerar dependências reais do domínio antes de admitir todas as combinações como válidas. Evitar excesso de badges/ícones/cores concorrentes: priorizar agrupamento por seção e informações de status visíveis no contexto de decisão ou em detalhes, quando for viável e acessível. A escolha do layout, de como expor cada status, seus valores/cores e casos de exceção permanece pendente. Não implementar. ADENDO EST-05 / APROVADO CONCEITUALMENTE EM 2026-10-11: Durante carregamento e operações assíncronas, adotar BLOQUEIO CONFORME AS DEPENDÊNCIAS REAIS, impedindo somente ações que criem conflito ou duplicidade; não impor bloqueio indiscriminado de toda a tela ou seção. Operações críticas, especialmente publicação, exigem proteção adicional, feedback explícito de andamento e confirmação efetiva do resultado. Distinguir carregamento de conteúdo, alterações locais ainda não persistidas, salvamento em andamento, persistência confirmada e eventual falha; “salvo/publicado” só pode aparecer mediante confirmação da operação pertinente. A extensão concreta do bloqueio deve depender da operação e de seus efeitos, não de um padrão visual uniforme. Continuam EM DISCUSSÃO: apresentação do feedback, duração/posição de mensagens, forma de retry, recuperação de falhas, concorrência, prevenção de perda de dados, modo offline, publicação parcial e casos de exceção. Não foram aprovados componentes, timeouts, cores, animações nem detalhes de implementação. NÃO IMPLEMENTAR. ADENDO EST-06 / APROVADO CONCEITUALMENTE EM 2026-10-11: Feedback deve ser contextual à operação e área afetada; condições relevantes (alterações locais, salvando, falha e necessidade de ação) permanecem visíveis enquanto forem pertinentes. Sucessos rotineiros devem ser confirmados preferencialmente no mesmo contexto sem gerar notificações repetitivas; operações críticas, como publicação, podem exigir aviso geral complementar. Mensagens de falha devem diferenciar salvamento não confirmado, erro real e resultado ainda desconhecido, sem indicar conclusão antes de confirmação. Organizar conteúdo para evitar poluição visual; feedback temporário não substitui estados persistentes de atenção/recuperação. Não se aprovou layout, tipo de toast, texto final, duração, valores de cor, algoritmo de retry, política de conflitos ou implementação. Discussão seguinte: EST-07, preservação de rascunhos, retry e resolução de conflitos de versões. NÃO IMPLEMENTAR. ADENDO EST-07 / APROVADO CONCEITUALMENTE EM 2026-10-11: Na fase inicial, preservar versões e diferenças em conflitos de edição/publicação e exigir resolução explícita antes de sobrescrever mudanças divergentes; conciliação automática somente futuramente, após validação de segurança e confiabilidade. Feedback relevante não deve ser do tipo \"quick time event\": erros e avisos que exijam atenção devem permanecer acessíveis e existir em histórico consultável de ocorrências relevantes, sem exigir leitura/reação durante um toast fugaz. Histórico é complementar à mensagem contextual persistente; não se exige log de toda interação ou sucesso trivial. Ainda pendentes: granularidade da resolução, visual do histórico, retenção e persistência, retry, conservação local/offline, verificações de estado desconhecido e compatibilidade de acessibilidade/contraste. NÃO IMPLEMENTAR. ADENDO EST-08 / APROVADO CONCEITUALMENTE EM 2026-10-11: Recuperação de rascunhos persistente conforme importância e custo de refazer o trabalho: priorizar edições administrativas e configurações trabalhosas com potencial de sobreviver a reload/encerramento, preservando identidade/contexto e observando privacidade em dispositivos compartilhados. Estados transitórios de navegação no viewer não exigem mesma garantia. Rascunho recuperável, persistência confirmada e publicação confirmada são condições distintas; restaurar não deve sobrescrever silenciosamente versão remota mais recente. Escopo de resolução de conflito intencionalmente ENXUTO: não assumir editor de diff/merge, comparação campo a campo ou conciliação automática; na incidência rara de conflito, preservar as informações necessárias, exibir aviso claro e alternativas simples, e registrar a decisão tomada. O detalhe de opções e política de retenção, sincronização, retry, segurança e arquitetura depende de definição posterior. Apenas direção; não implementar. ADENDO EST-09 / APROVADO CONCEITUALMENTE EM 2026-10-11: Preferir tentativas automáticas APENAS quando comprovadamente seguras; operações de leitura e recuperação localizada podem ser repetidas quando não houver riscos colaterais. Escritas, salvamento e publicação não devem ser repetidos cegamente diante de resultado incerto (timeout/perda de confirmação). Primeiro consultar o estado efetivo remoto e/ou confirmar manualmente, conforme a operação, para evitar duplicidade, publicação involuntária ou sobrescrita. Preservar rascunhos e distinguir falha confirmada, resultado desconhecido e sucesso confirmado. A direção não aprova mecanismos de idempotência, backoff, timeouts, limites de tentativas, indicadores, API, UX final nem arquitetura. EST-10 (histórico de erros e avisos, retenção, escopo e poluição visual) continua em discussão. NÃO IMPLEMENTAR. ADENDO EST-10 / APROVADO CONCEITUALMENTE EM 2026-10-11: Historico enxuto e consultavel de erros, avisos, conflitos e resultados relevantes, com retencao proporcional. Pendencias ativas permanecem acessiveis ate resolucao e nao desaparecem apos mero reconhecimento/leitura. Ocorrencias resolvidas podem ter retencao limitada; sucessos triviais nao precisam ser registrados. Preferir um unico indicador discreto de pendencias e apresentacao contextual, evitando badges e toasts redundantes. Avisos importantes nao dependem exclusivamente de notificacoes efemeras do tipo quick-time event. Historico de ocorrencias da UI nao equivale a log tecnico ou auditoria administrativa. Prazos de retencao, criterios de relevancia, expurgo, privacidade, escopo por documento/conta, persistencia entre sessoes e layout final AINDA NAO HOMOLOGADOS. A decisao EST-10 SUBSTITUI a indicacao historica de que EST-10 estava em discussao. Nenhuma implementacao autorizada."
+    },
+    {
+      "id": "CMP-001",
+      "canonicalStatus": "ongoing",
+      "verdict": "revisit",
+      "note": "A decidir, ponto de discussão futuro"
+    },
+    {
+      "id": "ENV-001",
+      "canonicalStatus": "future",
+      "verdict": "revisit",
+      "note": "A decidir, ponto de discussão futuro"
+    }
+  ],
+  "notice": "Checkpoint cumulativo canônico de revisão de design: EST-01 a EST-10 aprovadas apenas conceitualmente; demais decisões conforme registro. Visual, contratos de domínio e implementação pendentes. Nenhuma modificação ou autorização para implementar.",
+  "detailDecisions": [
+    {
+      "id": "EST-01",
+      "status": "direction-agreed",
+      "context": "configurador",
+      "decision": "Seleção com indicador explícito e destaque moderado de superfície OU borda, preservando a legibilidade e distinção entre seleção e foco.",
+      "notYetSpecified": [
+        "formato do indicador",
+        "cores",
+        "espessuras",
+        "comportamento por tipo de seleção",
+        "contraste light/dark"
+      ],
+      "implementationAuthorized": false
+    },
+    {
+      "id": "EST-02",
+      "status": "direction-agreed",
+      "context": "viewer, configurador, admin; light/dark",
+      "decision": "Foco de teclado com contorno externo independente e sem decoração excessiva; visível de forma suficientemente contrastante; preservar separadamente o estado selecionado.",
+      "interaction": "Focus-visible quando apropriado para navegação por teclado; seleção e foco podem coexistir sem terceira variante visual ornamentada.",
+      "notYetSpecified": [
+        "cor por tema e superfície",
+        "espessura e offset",
+        "padrões para limites de clipping",
+        "contraste nos casos concretos",
+        "exemplos de foco em componentes especiais"
+      ],
+      "implementationAuthorized": false
+    },
+    {
+      "id": "EST-03",
+      "status": "direction-agreed",
+      "context": "botões, campos, cards técnicos; viewer, configurador, admin, páginas públicas",
+      "decision": "Hover sinaliza interatividade; pressionado responde imediatamente ao acionamento. Feedback depende da família: botões podem ter microfeedback físico discreto, enquanto campos e cards técnicos mantêm geometria estável e usam superfície, cor ou borda.",
+      "accessibility": "Não depender apenas de hover; compatibilidade touch; respeitar reduced motion. Pressionado não implica seleção nem conclusão de operação.",
+      "notYetSpecified": [
+        "escala ou deslocamento exatos quando aplicáveis",
+        "duração/easing e estratégias para reduced motion",
+        "cores, bordas e sombras por contexto",
+        "exceções por família e testes de acessibilidade"
+      ],
+      "implementationAuthorized": false
+    },
+    {
+      "id": "EST-04",
+      "status": "direction-agreed",
+      "context": "viewer, configurador, admin e formulários públicos; particularmente o admin",
+      "decision": "Diferenciar claramente desabilitado de somente leitura por semântica, apresentação e comportamento, mantendo boa legibilidade. Tratar publicação e disponibilidade/visibilidade na UI como dimensões independentes da capacidade de edição, sujeitas às regras e dependências reais do domínio.",
+      "disabled": "Ação indisponível; não acionável. Quando a razão não for óbvia, explicá-la em texto/contexto acessível sem depender exclusivamente de opacidade reduzida.",
+      "readOnly": "Valor consultável, não editável; preservar legibilidade e, quando fizer sentido, permitir cópia/seleção do texto.",
+      "stateAxes": [
+        "seleção ou item em edição",
+        "ação habilitada/desabilitada",
+        "somente leitura/editável",
+        "publicado/não publicado",
+        "disponível/indisponível na UI (ex.: frontstage/fluxo)"
+      ],
+      "densityGuidance": "Minimizar poluição visual: agrupar estados e controles por seção quando viável; exibir os indicadores necessários no ponto de decisão e explicações adicionais nos detalhes. Não obrigar cada eixo a ter badge ou cor simultâneos.",
+      "notYetSpecified": [
+        "regras de combinação e dependência entre eixos",
+        "layout e localização dos status por tipo de tela",
+        "indicadores específicos para publicação e disponibilidade",
+        "diferenças entre permissionamento, estado da publicação e estado comercial",
+        "acessibilidade e contraste por tema",
+        "casos de exceção no admin e configurador"
+      ],
+      "implementationAuthorized": false
+    },
+    {
+      "id": "EST-05",
+      "status": "direction-agreed",
+      "context": "operações assíncronas em páginas públicas, viewer, configurador e admin; atenção especial a salvar e publicar",
+      "decision": "Bloquear somente ações com dependências ou riscos de conflito reais; preservar funcionamento das regiões independentes. Operações críticas, particularmente publicação, exigem proteção contra duplicidade/conflito e feedback mais explícito.",
+      "stateDistinctions": [
+        "carregando dados/conteúdo",
+        "alterações locais ainda não persistidas",
+        "salvando ou aguardando confirmação",
+        "persistência confirmada",
+        "falha/estado incerto",
+        "publicação em andamento/concluída ou com falha (separada de salvar)"
+      ],
+      "confirmationRule": "Nunca comunicar salvo ou publicado antes da respectiva confirmação real.",
+      "stillUnderDiscussion": [
+        "posicionamento, persistência e hierarquia de feedback de sucesso/erro/aviso",
+        "preservação do trabalho local após falha; retry e recuperação",
+        "tratamento de conflitos e concorrência; idempotência das ações críticas",
+        "comportamento offline e operações de longa duração",
+        "indicadores de progresso e casos de publicação parcial",
+        "regras específicas por controle, seção e operação"
+      ],
+      "implementationAuthorized": false
+    },
+    {
+      "id": "EST-06",
+      "status": "direction-agreed",
+      "context": "feedback de operações locais e assíncronas, especialmente configurador e admin; salvar e publicar são distintos",
+      "decision": "Adotar feedback contextual junto à ação ou área afetada; manter mensagens e estados visíveis enquanto exigirem ação ou puderem afetar decisões. Sucesso comum deve ser confirmado discretamente e sem excesso de notificações; avisos globais são admissíveis para operações críticas, como publicação.",
+      "principles": [
+        "feedback temporário não substitui estado persistente necessário",
+        "distinguir alterações locais, operação em andamento, confirmação efetiva, falha e resultado ainda desconhecido",
+        "não afirmar salvo/publicado sem confirmação da ação pertinente",
+        "não acumular badges, toasts e avisos para o mesmo estado quando um indicador contextual é suficiente",
+        "falha com ação pendente permanece visível até resolução, com próximos passos claros"
+      ],
+      "notYetSpecified": [
+        "layout e posicionamento por interface",
+        "mensagens, hierarquia de severidade e acessibilidade",
+        "duração e formas de fechamento de feedback transitório",
+        "regras de preservação de alterações locais",
+        "estratégias de retry seguro e offline",
+        "conflitos de versão, diferenças entre estados e recuperação",
+        "tratamento de estado desconhecido e confirmação de operações críticas"
+      ],
+      "nextDiscussion": "EST-07 — recuperação de falhas, tentativas novamente, versões concorrentes e proteção de rascunhos",
+      "implementationAuthorized": false
+    },
+    {
+      "id": "EST-07",
+      "status": "direction-agreed",
+      "context": "configurador/admin; operações de salvamento, publicação e conflitos de versões; feedback e histórico de erros/avisos",
+      "decision": "Na fase inicial, preservar a edição local e evitar sobrescrita silenciosa: conflitos entre versões exigem comparação/resolução explícita. Conciliação automática de alterações independentes poderá ser proposta futuramente, somente mediante validação de segurança e confiabilidade.",
+      "notificationPolicy": "Notificações transitórias não podem funcionar como quick-time events: erros e avisos relevantes não devem depender de uma janela curta de leitura/ação. Priorizar indicação contextual persistente quando há pendência e histórico consultável de erros/avisos para recuperação posterior. Um toast pode ser complementar, jamais única fonte da informação importante.",
+      "historyGuidance": "Histórico de ocorrências relevantes (erros, avisos, conflitos e resultados operacionais importantes); favorecer consulta, contexto e recuperação sem excesso de indicadores permanentes. Não pressupor registro de cada interação ou sucesso trivial.",
+      "conflictGuidance": "Distinguir divergências reais, resultado desconhecido e erro de persistência. Não tratar timeout sem confirmação como falha definitiva de publicação nem repetir operações críticas cegamente. Regras de retry e garantias de conservação local permanecem para a próxima decisão.",
+      "notYetSpecified": [
+        "regra simplificada de precedência, ações permitidas e evidência da decisão (sem homologar diff/merge sofisticado)",
+        "resolução excepcional e explícita; não pressupor comparação campo a campo",
+        "formato, agrupamento, prioridade, filtros e navegação do histórico",
+        "persistência entre sessões, retenção, privacidade e limpeza do histórico",
+        "duração e fechamento de avisos informativos não críticos",
+        "garantias reais de rascunho local após falha, reload e encerramento",
+        "política de tentativas automáticas/manuais, offline e idempotência",
+        "integração visual com light/dark e testes de acessibilidade"
+      ],
+      "nextDiscussion": "EST-08 — preservação de rascunhos locais, tentativas novamente e comportamento offline/estado desconhecido",
+      "implementationAuthorized": false,
+      "conflictScopeClarification": "Estabelecer regra de precedência e consentimento explícito para impedir sobrescrita silenciosa. Não assumir construção de editor de diff, merge campo a campo ou motor de conciliação: o conflito é considerado incomum; apresentar aviso compreensível, opções simples e registrar a escolha. Pode-se oferecer consulta básica das versões quando necessário, sem homologar interface de diff."
+    },
+    {
+      "id": "EST-08",
+      "status": "direction-agreed",
+      "context": "rascunhos administrativos, configurações trabalhosas, reload/encerramento, eventual uso compartilhado de dispositivo e contexto de versões concorrentes",
+      "decision": "Recuperação persistente proporcional à relevância/custo da edição. Priorizar proteção de rascunhos administrativos e configurações trabalhosas; não obrigar persistência duradoura de estados transitórios do viewer.",
+      "guarantees": "Separar rascunho recuperável de salvamento confirmado e publicação confirmada. Não restaurar automaticamente por cima de uma versão remota que possa ter mudado.",
+      "conflictComplexityBound": "Evitar produto de diff/merge sofisticado para conflito raro: regra explícita, aviso legível, alternativas simples e registro da escolha humana; sem conciliação automática inicialmente. Não foram aprovados fluxos detalhados nem opções específicas de substituição.",
+      "privacyAndPersistence": "Considerar identidade/contexto do rascunho e proteção em dispositivos compartilhados; meios técnicos, retenção, expiração, quotas, criptografia, exclusão e armazenamento continuam pendentes.",
+      "notYetSpecified": [
+        "política efetiva de retenção/expiração e exclusão de rascunhos",
+        "persistência real ao fechar ou recarregar; limites por dispositivo e sessão",
+        "detecção de mudanças remotas e resolução mínima de conflitos raros",
+        "política de tentativa automática ou manual por operação",
+        "tratamento de falha claramente confirmada versus resultado desconhecido",
+        "histórico de erros/avisos: retenção, escopo, forma de acesso e privacidade",
+        "regras de operações offline e rascunhos antigos"
+      ],
+      "nextDiscussion": "EST-09 — novas tentativas, estado desconhecido e histórico de erros/avisos",
+      "implementationAuthorized": false
+    },
+    {
+      "id": "EST-09",
+      "status": "direction-agreed",
+      "context": "novas tentativas em carregamento, salvamento, sincronização e publicação; estados de falha confirmada versus resultado desconhecido",
+      "decision": "Tentativas automáticas somente quando comprovadamente seguras. Nas demais situações, especialmente escritas ou publicação com resultado não confirmado, consultar o estado remoto e/ou solicitar decisão humana antes de repetir. Não presumir falha por ausência de resposta.",
+      "principles": [
+        "repetição de leitura pode ser automatizada quando não cria efeitos colaterais",
+        "repetir escrita somente quando há garantias efetivas contra duplicação, sobrescrita ou publicação indevida",
+        "falha confirmada, resultado desconhecido e sucesso confirmado possuem mensagens e ações diferentes",
+        "preservar rascunho local e contexto da operação enquanto sua conclusão não for segura",
+        "consulta ao estado remoto é preferível a repetir cegamente operação crítica",
+        "notificações importantes não devem depender de toast fugaz; política detalhada de histórico será definida em EST-10"
+      ],
+      "notYetSpecified": [
+        "critério por operação para retry automático e limites de novas tentativas",
+        "backoff, temporização, comportamento offline e prevenção de duplicidades",
+        "mecanismo de verificação remota de operações não confirmadas",
+        "caminho de recuperação manual quando verificação é impossível",
+        "interface, mensagens e localização dos controles de retry",
+        "histórico EST-10: retenção, segmentação, escopo, acesso, reconhecimento e privacidade"
+      ],
+      "nextDiscussion": "EST-10 — histórico de erros e avisos, com foco em retenção proporcional e redução da poluição visual",
+      "implementationAuthorized": false
+    },
+    {
+      "id": "EST-10",
+      "status": "direction-agreed",
+      "context": "viewer, configurador, administração; estados de falha, aviso, conflito, publicação e recuperação",
+      "decision": "Histórico enxuto e consultável de erros, avisos e resultados relevantes, com retenção proporcional ao risco/necessidade e um único indicador discreto para pendências ativas. Mensagens relevantes não podem desaparecer antes de serem compreendidas nem depender exclusivamente de toasts temporários.",
+      "presentation": {
+        "active": "Pendências que exigem ação permanecem acessíveis enquanto relevantes, com contexto, gravidade e próximo passo. Marcar como lida não equivale a resolvida.",
+        "resolved": "Ocorrências resolvidas podem permanecer em histórico por período limitado, ainda não homologado.",
+        "routine": "Sucessos triviais e eventos rotineiros usam feedback contextual e não exigem registro no histórico.",
+        "entryPoint": "Preferir um único acesso discreto ao histórico, com indicador de pendências efetivas; evitar múltiplos badges simultâneos.",
+        "duplicates": "Agrupar ocorrências semelhantes sem ocultar recorrência relevante; decisão de agrupamento visual e temporal pendente."
+      },
+      "scopeBoundary": "Histórico de ocorrências da interface não é log técnico completo nem auditoria administrativa de autoria/alterações; cada domínio pode exigir contrato próprio futuramente.",
+      "retention": "Retenção proporcional: ativa enquanto relevante, resolvidas por prazo limitado, eventos triviais descartáveis; sem prazo numérico homologado e sem garantia de persistência entre sessões ainda definida.",
+      "privacy": "Não armazenar informações sensíveis desnecessárias; escopo por conta, documento, sessão e dispositivo ainda a especificar.",
+      "remainingDesignGates": [
+        "prazos e condições de expiração, descarte e limpeza",
+        "quais ocorrências são recuperáveis entre sessões e em qual dispositivo/conta",
+        "critério de pendência resolvida vs apenas reconhecida",
+        "mensagens, prioridades, agrupamento e acesso contextual por interface",
+        "acessibilidade das notificações e regiões de status sem roubo de foco",
+        "tratamento de offline e de resultado remoto desconhecido",
+        "parâmetros de contraste, foco e visibilidade nos temas light/dark"
+      ],
+      "nextDiscussion": "Fechamento das lacunas transversais de estados (vazio, sem conexão, carregando, erro, permissões) e gates de acessibilidade/contraste; sem implementar.",
+      "implementationAuthorized": false
+    }
+  ],
+  "importCompatibility": {
+    "reviewHtmlVersion": "v0.2",
+    "basicDecisions": "Compatível com importação de decisions por ID e sourceSnapshot.",
+    "detailDecisions": "EST-01 a EST-10 estão em detailDecisions; o importador HTML v0.2 ignora este campo e não o exporta novamente.",
+    "preservation": "Preservar este JSON cumulativo como checkpoint canônico das definições EST enquanto o formato de revisão não suportar round-trip dessas decisões detalhadas."
+  },
+  "consolidation": {
+    "dateLocal": "2026-10-11",
+    "purpose": "retomada do inventario e definicao do Design System MobiliPresenter2D",
+    "authority": "registro de decisões conceituais do usuário; não especificação de implementação",
+    "sourceSnapshot": "38a314fb3d9830e43310e59c0166197fd19341e0",
+    "designFreeze": "nenhuma alteração do repositório/produto até encerramento do design system e autorização explícita",
+    "approvedDetailDecisions": [
+      "EST-01",
+      "EST-02",
+      "EST-03",
+      "EST-04",
+      "EST-05",
+      "EST-06",
+      "EST-07",
+      "EST-08",
+      "EST-09",
+      "EST-10"
+    ],
+    "pendingTopics": [
+      "VIS-001 detalhamento tipográfico",
+      "NAV-005 estética final do header",
+      "VIS-002 contraste/tokens exatos light/dark",
+      "estados vazios/offline/permissões/progresso e mensagens finais",
+      "CMP-001 43 famílias",
+      "ENV-001 futuro multiambiente"
+    ],
+    "importantImportCaveat": "HTML de revisão v0.2 ignora detailDecisions e consolidation; reexportação não conserva EST-01 a EST-10. Preserve o JSON como fonte canônica."
+  }
+}

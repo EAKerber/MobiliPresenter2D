@@ -1,0 +1,1 @@
+function updateVisibleCount() { const configured = new Set([...configuredModuleIds(), ...(itemAvailable("lighting-08") ? ["lighting-08"] : [])]);}

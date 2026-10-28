@@ -1,0 +1,1 @@
+module.exports={stages:[{id:'modules',items:['module-01','module-02','module-03','module-04','module-05','module-06','module-07']},{id:'services',items:['lighting-08']}]};
