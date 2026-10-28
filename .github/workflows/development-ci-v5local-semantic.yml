@@ -1,0 +1,65 @@
+name: Development V5 local DTO and visibility semantics (offline)
+on:
+  push:
+    branches:
+      - development
+      - integration/32-ci-v5local-dto-hit-target-20261028
+    paths:
+      - 'tests/ci/legacy-v5local-dto-parity.test.cjs'
+      - 'tests/ci/v5-local-hit-target-semantic.cjs'
+      - 'tests/test_development_ci_v5local_semantic.py'
+      - 'docs/reconciliation/ci-v5local/**'
+      - 'docs/work/DEVELOPMENT_CI_V5LOCAL_SEMANTIC_2026-10-28.md'
+      - '.github/workflows/development-ci-v5local-semantic.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  dto-and-source:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify exact historical provenance and no runtime edits
+        run: python3 -m unittest discover -s tests -p test_development_ci_v5local_semantic.py -v
+      - name: Compare projected V3 direct vs pre-upgraded V5
+        run: node --test tests/ci/legacy-v5local-dto-parity.test.cjs
+  browser-local-only:
+    needs: dto-and-source
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    container:
+      image: mcr.microsoft.com/playwright:v1.62.1-noble
+      options: --ipc=host
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Build and serve checked-in Buyer configuration on loopback
+        shell: bash
+        run: bash tests/ci/prepare-local-v5-browser.sh FLOW_LAYOUT_URL
+      - name: Use Playwright matching container browsers
+        run: npm install --prefix /tmp/m2d-v5local-semantic --no-audit --no-fund playwright@1.62.1
+      - name: Existing published V3/V5 buyer browser contract
+        env:
+          NODE_PATH: /tmp/m2d-v5local-semantic/node_modules
+        run: node tests/buyer-v5-browser.cjs /tmp/m2d-v5local-browser-existing
+      - name: Hit-target and scroll semantics from legacy probe, not legacy runtime
+        env:
+          NODE_PATH: /tmp/m2d-v5local-semantic/node_modules
+        run: node tests/ci/v5-local-hit-target-semantic.cjs /tmp/m2d-v5local-hit-target
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: development-v5local-semantic-${{ github.run_id }}
+          path: |
+            /tmp/m2d-v5local-browser-existing/result.json
+            /tmp/m2d-v5local-hit-target/result.json
+          retention-days: 14
+          if-no-files-found: ignore
