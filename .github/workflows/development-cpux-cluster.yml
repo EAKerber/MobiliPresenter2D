@@ -3,7 +3,6 @@ on:
   push:
     branches:
       - development
-      - integration/20-cpux-hierarchy-publication-family-20261028
     paths:
       - 'docs/reconciliation/cp-ux/**'
       - 'docs/work/DEVELOPMENT_CPUX_CLUSTER_2026-10-28.md'

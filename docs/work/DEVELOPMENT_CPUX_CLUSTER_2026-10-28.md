@@ -23,3 +23,9 @@ As fontes históricas são diferentes estados de CP-UX-04/05A, mas a `developmen
 ## Saída
 
 Se workflow da auxiliar passar: FF de lease para development; repetir gate no destino; registrar handover. Após isso, uma rodada de higiene de escopo exato pode retirar a auxiliar e, se comprovado, a v2 documental com tag. Não fazer merge ou deploy em main.
+
+## Gate CP-UX verificado e lote N documental
+
+- [Auxiliar #40680719779](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40680719779) PASS; [development #40680800240](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40680800240) PASS, ambos sobre o mesmo HEAD de código `6fc6ab3ea759e4d1f4dd237e8483a897d46eec93`, com quatro testes de reconciliação, testes atuais de layout/admin e `pages:check`. Uma auxiliar reconciliou quatro fontes, **não** quatro auxiliares.
+- `feat/cp-ux-05a-publication-prep-v2@1872ca2a79585449df370910f18500ad5351451a` é doc-only (uma única alteração no roadmap frente à base original), o conteúdo foi preservado por blob `2b335334d24235c92a1e9f2ae3f2128a24b5e077` em `docs/reconciliation/cp-ux/legacy/cp05av2/docs/backlog/ux-navigation-hierarchy-roadmap-2026-10-05.md`. A intenção/roadmap atual é posterior e domina a alternativa antiga. Para aposentadoria, preservar o commit inteiro pela tag `archive/m2d/cpux05a-v2-1872ca2a` antes do delete. Auxiliar `integration/20-cpux-hierarchy-publication-family-20261028@6fc6ab3ea759e4d1f4dd237e8483a897d46eec93` é ancestral de development e também pode ser retirada.
+- Sem PR, sem proteção, 12 PRs gerais inalteradas, 45 históricas no conjunto anterior (43 originais; lote N retira apenas 1 original). O manifesto N é de uso único; **não declarar retirada até o gate audit+apply e readback**. CP-UX-04, CP-UX-05A e CP-UX-05A-v4 com código relevante continuam em HOLD.

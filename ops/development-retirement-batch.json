@@ -3,7 +3,7 @@
   "repository": "EAKerber/MobiliPresenter2D",
   "controlBranch": "development",
   "mainSha": "221b54b2a41ecc8c338d1bf2cf67280cf165ce95",
-  "batchId": "dev-20261028-vis002-five-cluster-auditfix-m",
+  "batchId": "dev-20261028-cpux-four-source-documentary-n",
   "retired": [
     {
       "branch": "docs/handover-reconcile-20261023",
@@ -90,42 +90,42 @@
       "sha": "6120a294e0de4b018b18b1b50f20411ce44cce09",
       "kind": "archive-diverged",
       "archiveTag": "archive/m2d/ds05a-theme-lab-6120a294"
-    }
-  ],
-  "auxiliaryRefs": [
-    {
-      "branch": "integration/19-vis002-cluster-semantic-20261028",
-      "sha": "2c7c4ed68744bb4f6370dc808ed84c1716901802"
-    }
-  ],
-  "targets": [
+    },
     {
       "branch": "audit/public-text-contrast-coverage-20261022",
       "sha": "ace851004713f92b4425e5832c6c892825814f0a",
       "kind": "archive-diverged",
-      "archiveTag": "archive/m2d/vis002-audit-ace85100",
-      "snapshotPath": "docs/work/DEVELOPMENT_VIS002_FAMILY_CLUSTER_2026-10-28.md",
-      "semanticGate": {
-        "runId": 40677120764,
-        "headSha": "2c7c4ed68744bb4f6370dc808ed84c1716901802",
-        "workflowName": "Development VIS002 family cluster historical and state gate"
-      }
+      "archiveTag": "archive/m2d/vis002-audit-ace85100"
     },
     {
       "branch": "fix/vis002c-public-text-contrast-20261022",
       "sha": "007fc8e0ca8d9366efd0c9b5c7adf0da1a5325e5",
       "kind": "archive-diverged",
-      "archiveTag": "archive/m2d/vis002-fix-007fc8e0",
-      "snapshotPath": "docs/work/DEVELOPMENT_VIS002_FAMILY_CLUSTER_2026-10-28.md",
+      "archiveTag": "archive/m2d/vis002-fix-007fc8e0"
+    }
+  ],
+  "auxiliaryRefs": [
+    {
+      "branch": "integration/20-cpux-hierarchy-publication-family-20261028",
+      "sha": "6fc6ab3ea759e4d1f4dd237e8483a897d46eec93"
+    }
+  ],
+  "targets": [
+    {
+      "branch": "feat/cp-ux-05a-publication-prep-v2",
+      "sha": "1872ca2a79585449df370910f18500ad5351451a",
+      "kind": "archive-diverged",
+      "archiveTag": "archive/m2d/cpux05a-v2-1872ca2a",
+      "snapshotPath": "docs/work/DEVELOPMENT_CPUX_CLUSTER_2026-10-28.md",
       "semanticGate": {
-        "runId": 40677120764,
-        "headSha": "2c7c4ed68744bb4f6370dc808ed84c1716901802",
-        "workflowName": "Development VIS002 family cluster historical and state gate"
+        "runId": 40680800240,
+        "headSha": "6fc6ab3ea759e4d1f4dd237e8483a897d46eec93",
+        "workflowName": "Development CP-UX four-source hierarchy and publication reconciliation (offline)"
       }
     },
     {
-      "branch": "integration/19-vis002-cluster-semantic-20261028",
-      "sha": "2c7c4ed68744bb4f6370dc808ed84c1716901802",
+      "branch": "integration/20-cpux-hierarchy-publication-family-20261028",
+      "sha": "6fc6ab3ea759e4d1f4dd237e8483a897d46eec93",
       "kind": "auxiliary-ancestor-development"
     }
   ]
