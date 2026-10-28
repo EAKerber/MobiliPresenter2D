@@ -1185,7 +1185,69 @@
         "unmergedVisualPR": 34
       },
       "noDeploy": true
+    },
+    {
+      "batchId": "dev-20261028-ci-nav-dynamic-v5-main-authority-v",
+      "workflowRun": 40712788297,
+      "workflowUrl": "https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40712788297",
+      "headSha": "6f98475aee6e19c9308f280ea7c2774ab082ed0a",
+      "audit": "PASS",
+      "apply": "PASS",
+      "auditArtifactId": 12825798628,
+      "applyArtifactId": 12827126479,
+      "refsBefore": 35,
+      "refsAfter": 33,
+      "archived": [
+        {
+          "tag": "archive/m2d/legacy-ci-nav-causality-b9be8bfd",
+          "sha": "b9be8bfdac1063094446b2f78f3c59387b47b7c5"
+        }
+      ],
+      "retired": [
+        {
+          "branch": "ci/ci-baseline-01-nav-sequence-probe-20261023",
+          "sha": "b9be8bfdac1063094446b2f78f3c59387b47b7c5",
+          "kind": "archive-diverged",
+          "archiveTag": "archive/m2d/legacy-ci-nav-causality-b9be8bfd"
+        }
+      ],
+      "auxiliaryRetired": [
+        {
+          "branch": "integration/28-ci-nav-provenance-20261028",
+          "sha": "17fa210fc1448fa7ca011ff3b3062afcf57190f8",
+          "kind": "auxiliary-ancestor-development",
+          "recoverableFromDevelopment": true
+        }
+      ],
+      "semanticProof": {
+        "pinnedMainSha": "221b54b2a41ecc8c338d1bf2cf67280cf165ce95",
+        "mainAuthorityPolicy": "ops/development-main-authority-policy.json",
+        "originalDiagnosticSourceBlobsPreserved": 7,
+        "historicNavWidths": 7,
+        "currentDevelopmentNavWidths": 8,
+        "engines": 2,
+        "themes": 2,
+        "modernPublishedV5Scenarios": 32,
+        "currentTestsDynamicStages": true,
+        "latestDevNavGate": 40712156189,
+        "auxGate": 40711544188,
+        "postManifestGate": 40712788311,
+        "legacyCausalAndPixelScriptsArchivedOnly": true,
+        "noPixelEquivalenceClaim": true,
+        "localV5BrowserOnly": true,
+        "noRealNetlifySessionOrDBTest": true,
+        "noAppRuntimeChanges": true
+      },
+      "preserved": {
+        "mainSha": "221b54b2a41ecc8c338d1bf2cf67280cf165ce95",
+        "openPRs": 12,
+        "remainingOriginalHistoricalRefs": 31,
+        "otherCIAuthorizationHeadsRemain": true,
+        "originalAssetsBranch": "artifacts/ds02-imagens-originais-20261015",
+        "unmergedVisualPR": 34
+      },
+      "noDeploy": true
     }
   ],
-  "nextBatchContract": "21 waves; 28/60 historical originals retired, 18 auxiliaries retired; 32 original heads + main + development = 34. Batch U consumed: do not replay. Original UX04 entire DAG retained via archive/m2d/legacy-ux04-hierarchy-layout-5d8347ed. Canonical main modern layout prevails, historic handle keyboard focus restored only in development, all 3 local V5 browser gates pass. 12 PRs, DS02 and main untouched; no live Netlify authentication tested."
+  "nextBatchContract": "22 waves; 29/60 original historical refs retired; 19 auxiliary retired; 31 historical + main + development = 33 branches. V batch consumed — NEVER replay. Superseded CI nav diagnostics archived in full via archive/m2d/legacy-ci-nav-causality-b9be8bfd; seven primary blobs byte-identical saved. Current V5 navigation tests 32 scenarios (2 browsers x 8 widths x 2 themes) passed auxiliary, development and post-manifest. MAIN remains stable high-authority. 12 PRs, DS02 and auth/DB CI branches untouched; no Netlify authenticated session tested or deploy."
 }
