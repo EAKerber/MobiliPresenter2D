@@ -1418,7 +1418,69 @@
         "unmergedVisualPR": 34
       },
       "noDeploy": true
+    },
+    {
+      "batchId": "dev-20261028-v5local-dto-hit-target-aux-only-z",
+      "workflowRun": 40740686487,
+      "workflowUrl": "https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40740686487",
+      "headSha": "8e922b2d83d68e4970f0ebce46c76d5c18d902eb",
+      "audit": "PASS",
+      "apply": "PASS",
+      "refsBefore": 33,
+      "refsAfter": 32,
+      "retired": [],
+      "auxiliaryRetired": [
+        {
+          "branch": "integration/32-ci-v5local-dto-hit-target-20261028",
+          "sha": "200350735c24ccd234054261596732a707c245a1",
+          "kind": "auxiliary-ancestor-development",
+          "recoverableFromDevelopment": true
+        }
+      ],
+      "artifacts": [
+        {
+          "name": "dev-bounded-retirement-audit-40740686487",
+          "id": 12839261962
+        },
+        {
+          "name": "dev-bounded-retirement-apply-40740686487",
+          "id": 12839746093
+        }
+      ],
+      "semanticProof": {
+        "originalBranchRetained": "ci/ci-baseline-01-v5-local-diagnostics-20261023",
+        "originalSha": "5ce7327a9e4c8c11483163507d29af4bb8b1312a",
+        "mainSha": "221b54b2a41ecc8c338d1bf2cf67280cf165ce95",
+        "report": "docs/work/DEVELOPMENT_CI_V5LOCAL_SEMANTIC_2026-10-28.md",
+        "provenanceSnapshot": "docs/reconciliation/ci-v5local/legacy/tests/ci/config-local-visibility-probe.mjs",
+        "legacyVisibilityBlob": "9aca354f3ed9641fcb268d3a515df73365135588",
+        "auxGate": 40739854622,
+        "devGate": 40740278746,
+        "v3DirectVsPreupgradedV5SemanticParity": true,
+        "knownRepresentationDifferences": [
+          "V3 service item flat order vs V5 lighting-first grouped order",
+          "V3 legacy presentation vs V5 explicit component"
+        ],
+        "hitTargetScenarios": 8,
+        "hitTargetSnapshots": 20,
+        "browserEngines": [
+          "chromium",
+          "webkit"
+        ],
+        "localOnly": true,
+        "authNotVerified": true,
+        "noRuntimeChanges": true,
+        "noDeploy": true
+      },
+      "preserved": {
+        "mainSha": "221b54b2a41ecc8c338d1bf2cf67280cf165ce95",
+        "openPRs": 12,
+        "remainingOriginalHistoricalRefs": 30,
+        "originalAssetsBranch": "artifacts/ds02-imagens-originais-20261015",
+        "unmergedVisualPR": 34
+      },
+      "noDeploy": true
     }
   ],
-  "nextBatchContract": "25 waves; 30/60 original historical branches retired, 22 temporary auxiliary branches retired; 30 historical + main + development = 32 heads. Batch Y consumed; NEVER replay. Historical CI v5 local 5ce7327 remains HOLD (differences in local V3/V5 buyer projection, diagnostics, visibility and auth scripts). Auxiliary proof 40730950467 and development proof 40731040183 PASS, Y audit/apply 40731295816 PASS. No main/DS02/auth/runtime/Netlify/database changes; 12 open PRs maintained."
+  "nextBatchContract": "26 waves; 30/60 historical original branches retired; 23 temporary auxiliary branches retired; 30 historical + main + development = 32 heads. Batch Z consumed, never replay. Local V3 direct vs pre-upgraded V5 Buyer DTO semantically equivalent modulo explicit services order and legacy presentation->V5 component; local Chromium/WebKit hit targets PASS 8 cases/20 snapshots at 1050/1366. CI #40739854622 and development #40740278746 PASS; retirement #40740686487 audit/apply PASS. CI original 5ce7327 remains HOLD due live-auth preview/grant pathways. Main, DS02, 12 PRs unchanged; no runtime, DB, deployment."
 }
