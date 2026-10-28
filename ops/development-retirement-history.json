@@ -1726,7 +1726,81 @@
         "PR238": "ci/ci-baseline-01-isolated-auth-extraction-20261024"
       },
       "noDeploy": true
+    },
+    {
+      "batchId": "dev-20261028-cppublic-03a2-3-dag-archive-ae",
+      "workflowRun": 40754057048,
+      "workflowUrl": "https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40754057048",
+      "headSha": "f264ea678f4e89344dfefded207be9a76aac0a60",
+      "audit": "PASS",
+      "apply": "PASS",
+      "refsBefore": 28,
+      "refsAfter": 26,
+      "auditArtifactId": 12845352460,
+      "applyArtifactId": 12844108342,
+      "archived": [
+        {
+          "tag": "archive/m2d/cp-public-03a2-3-68362325",
+          "sha": "68362325972a4a2db8acbdb475a1d686dd6663b4"
+        }
+      ],
+      "retired": [
+        {
+          "branch": "work/cp-public-03a2-3-contract-integration-20261008",
+          "sha": "68362325972a4a2db8acbdb475a1d686dd6663b4",
+          "kind": "archive-diverged",
+          "archiveTag": "archive/m2d/cp-public-03a2-3-68362325"
+        }
+      ],
+      "auxiliaryRetired": [
+        {
+          "branch": "integration/36-cppublic-pr-lineage-20261028",
+          "sha": "435bf4a11453f8498bdc997f81191b3b4234a939",
+          "kind": "auxiliary-ancestor-development",
+          "recoverableFromDevelopment": true
+        }
+      ],
+      "semanticProof": {
+        "mainSha": "221b54b2a41ecc8c338d1bf2cf67280cf165ce95",
+        "cp03a23LegacyCommits": 41,
+        "pr186IsDivergent": true,
+        "currentBuyerSchema": "BuyerConfiguratorPayload 1.0",
+        "oldBuyerSchema": "BuyerConfiguration2D 0.1",
+        "currentDevelopmentBuyerProjectionDiffersFromMain": true,
+        "currentDevelopmentPublicModulesDiffersFromMain": true,
+        "openCPPRsPreserved": [
+          175,
+          178,
+          179,
+          180,
+          182,
+          184,
+          185,
+          186,
+          196
+        ],
+        "otherOpenPRsPreserved": [
+          34,
+          231,
+          238
+        ],
+        "negativeInitialGate": 40753601150,
+        "correctedAuxGate": 40753800950,
+        "destinationGate": 40753930441,
+        "source": "docs/work/DEVELOPMENT_CP_PUBLIC_PR_LINEAGE_2026-10-28.md",
+        "noRuntimeChanges": true,
+        "noDeploy": true,
+        "noRealAuthTest": true
+      },
+      "preserved": {
+        "mainSha": "221b54b2a41ecc8c338d1bf2cf67280cf165ce95",
+        "openPRs": 12,
+        "remainingOriginalHistoricalRefs": 24,
+        "originalAssetsBranch": "artifacts/ds02-imagens-originais-20261015",
+        "noAuthOrDBMutation": true
+      },
+      "noDeploy": true
     }
   ],
-  "nextBatchContract": "30 waves; 35/60 original historical refs retired, 26 auxiliary refs retired. 25 historical + main + development = 27 remote heads. AC v2 and AD batches CONSUMED; never replay. Three VIS002C v02 source DAGs archived under exact tags archive/m2d/vis002c-arc03c-c239012c, archive/m2d/vis002c-support-a285a2dc, archive/m2d/vis002c-v02-token-34a305c1. Blobs source/output ARC03C and v02 subset of v03 verified in gate 40751285149; current v03 unchanged and not declared in production. Gate blocked four-target manifest and absent branch@SHA, both fail-closed without APPLY; corrected AC 40751897855 and AD 40752191013 passed. Main/12PRs/DS02/auth/Netlify/DB untouched. Next: CP-PUBLIC open PR lineage, no automatic PR deletion."
+  "nextBatchContract": "31 waves; 36/60 original historical branches retired, 27 temporary auxiliary branches retired; 24 original historical + main + development = 26 remote heads. AE batch consumed, never replay. Old work/cp-public-03a2-3-contract-integration-20261008 41 unique commits not ancestor PR186, full DAG archived at archive/m2d/cp-public-03a2-3-68362325 exact 68362325972a4a2db8acbdb475a1d686dd6663b4; semantic proof was inventory of 12 open PRs and modern public/buyer/auth contracts, NOT real grant/live validation or equivalence of legacy browser. Main/dev public-modules and buyer DTO projections intentionally differ, preserve development. PRs 175/178/179/180/182/184/185/186/196 and 34/231/238 intact; DS02/main protected. Next compare CP-PUBLIC PR heads and consider safe close only under future explicit PR-history and gate review; no auth cutover."
 }
