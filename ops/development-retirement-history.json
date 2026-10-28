@@ -686,7 +686,61 @@
         "unmergedVisualPR": 34
       },
       "noDeploy": true
+    },
+    {
+      "batchId": "dev-20261028-cpux-four-source-documentary-n",
+      "workflowRun": 40680948612,
+      "workflowUrl": "https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40680948612",
+      "headSha": "5ec6f050d369f49aa414f5decee0affac079fa77",
+      "auditArtifactId": 12812208700,
+      "applyArtifactId": 12812867207,
+      "audit": "PASS",
+      "apply": "PASS",
+      "refsBefore": 46,
+      "refsAfter": 44,
+      "archived": [
+        {
+          "tag": "archive/m2d/cpux05a-v2-1872ca2a",
+          "sha": "1872ca2a79585449df370910f18500ad5351451a"
+        }
+      ],
+      "retired": [
+        {
+          "branch": "feat/cp-ux-05a-publication-prep-v2",
+          "sha": "1872ca2a79585449df370910f18500ad5351451a",
+          "kind": "archive-diverged",
+          "archiveTag": "archive/m2d/cpux05a-v2-1872ca2a"
+        }
+      ],
+      "auxiliaryRetired": [
+        {
+          "branch": "integration/20-cpux-hierarchy-publication-family-20261028",
+          "sha": "6fc6ab3ea759e4d1f4dd237e8483a897d46eec93",
+          "kind": "auxiliary-ancestor-development",
+          "recoverableFromDevelopment": true
+        }
+      ],
+      "semanticProof": {
+        "auxGate": 40680719779,
+        "developmentGate": 40680800240,
+        "destinationManifestGate": 40680948561,
+        "originalSourceBranches": 4,
+        "archivedBlobs": 11,
+        "unitChecks": 4,
+        "currentLiveFlowTests": "PASS",
+        "currentLiveHierarchyTests": "PASS",
+        "pageCheck": "PASS",
+        "noRuntimeChanges": true
+      },
+      "preserved": {
+        "openPRs": 12,
+        "remainingOriginalHistoricalRefs": 42,
+        "mainSha": "221b54b2a41ecc8c338d1bf2cf67280cf165ce95",
+        "originalAssetsBranch": "artifacts/ds02-imagens-originais-20261015",
+        "unmergedVisualPR": 34
+      },
+      "noDeploy": true
     }
   ],
-  "nextBatchContract": "Carry 17 historical rows from waves[].retired, excluding 10 auxiliaryRetired. 43 original historical refs + development + main = 45 branches. Batch M consumed; never replay. Group auxiliaries by semantic family with compatibility and gates, not by individual branch. Bounded safety retirement remains max 3 refs. Three VIS002 v0.2/consolidated histories HOLD and PR231 active; protect data/DTO/auth separately."
+  "nextBatchContract": "Carry all 18 original historical waves[].retired records, excluding 11 auxiliaryRetired. 42 historical originals + main/development = 44 branches. Batch N consumed: do not replay. Adopt one semantic family auxiliary for multiple sources; only safe, verified ref retirement in ≤3 per batch. CP-UX-04/05A/05Av4 still HOLD for UI/backend diff and semantic provenance. Security/DTO/CI require isolated gates."
 }
