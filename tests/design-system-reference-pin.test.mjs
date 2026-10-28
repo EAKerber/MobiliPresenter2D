@@ -29,7 +29,7 @@ test("archived 22 Oct literal observation is immutable historical evidence, not 
   let currentLiteralMatches=0,changedFiles=0;
   for(const row of audit.scanned){
     const css=await readFile(resolve(row.path),"utf8");
-    const hexes=css.match(/#[0-9a-fA-F]{6}\\b/g)||[];
+    const hexes=css.match(/#[0-9a-fA-F]{6}\b/g)||[];
     const n=hexes.filter(hex=>swatches.has(hex.toUpperCase())).length;
     currentLiteralMatches+=n;
     if(n!==row.rawMatches)changedFiles++;
