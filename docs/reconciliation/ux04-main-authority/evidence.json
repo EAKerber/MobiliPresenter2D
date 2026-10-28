@@ -100,7 +100,7 @@
     {
       "path": "tests/keyboard-browser.cjs",
       "mainSha": "2d3eb81fd6a7e21b5bbb3bb87c35fa3d63815fbe",
-      "developmentSha": "2d3eb81fd6a7e21b5bbb3bb87c35fa3d63815fbe"
+      "developmentSha": "3e901267fc6a9e24dc6cb7edfc7d0c7fc29cf7d7"
     },
     {
       "path": "app/tools/test-flow-layout.js",
@@ -137,6 +137,12 @@
     "oldIntent": "desktop Modules/Services two columns; mobile detail then list stacked",
     "keyboardChange": "two final-section assertions upgraded to dock-aware alignment; redraw focus assertion removed and requires dedicated real browser result",
     "mode": "GATED_HOLD_UNTIL_FOCUS_PROVED",
-    "noRuntimeChange": true
+    "noRuntimeChange": true,
+    "focusFixCandidate": {
+      "source": "feat/cp-ux-04-hierarchy-layout@5d8347edb6ea247307b6fc27b424117553542f78",
+      "fix": "requestAnimationFrame / activateSection(handles,index,true)",
+      "mainAppRemainsUnchanged": true,
+      "developmentOnly": true
+    }
   }
 }
