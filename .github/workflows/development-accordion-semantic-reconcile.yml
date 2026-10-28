@@ -1,0 +1,54 @@
+name: Development 11 — accordion latest-test semantic regression (offline)
+
+on:
+  push:
+    branches:
+      - integration/11-accordion-latest-tests-20261027
+      - development
+    paths:
+      - 'tests/how-accordion-grid-browser-gate.mjs'
+      - '.github/workflows/development-accordion-semantic-reconcile.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  accordion-browser:
+    name: Newest source test + historical fixed baseline, Chromium and WebKit
+    runs-on: ubuntu-latest
+    container:
+      image: mcr.microsoft.com/playwright:v1.56.0-noble
+    timeout-minutes: 20
+    steps:
+      - name: Checkout current candidate
+        uses: actions/checkout@v4
+      - name: Checkout immutable pre-fix comparator
+        uses: actions/checkout@v4
+        with:
+          ref: 1878ae1057ce7c6190e0c8cb08a1f3baadd49463
+          path: baseline
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Confirm newer recovered test blob and syntax
+        run: |
+          test "$(git hash-object tests/how-accordion-grid-browser-gate.mjs)" = 42cfde7bb249bd4f20a24607a0e82e32a80dd0b3
+          node --check tests/how-accordion-grid-browser-gate.mjs
+          npm install --no-save --no-package-lock playwright@1.56.0
+      - name: Serve only static local candidate and historical baseline
+        run: |
+          python3 -m http.server 8123 --bind 127.0.0.1 --directory app >/tmp/how-current.log 2>&1 &
+          python3 -m http.server 8124 --bind 127.0.0.1 --directory baseline/app >/tmp/how-baseline.log 2>&1 &
+          sleep 3
+          curl --fail http://127.0.0.1:8123/how-it-works/ >/dev/null
+          curl --fail http://127.0.0.1:8124/how-it-works/ >/dev/null
+      - name: Exercise independent native details, keyboard and visual parity
+        run: node tests/how-accordion-grid-browser-gate.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: accordion-semantic-${{ github.run_id }}
+          path: artifacts/how-accordion/
+          if-no-files-found: warn
+          retention-days: 30
