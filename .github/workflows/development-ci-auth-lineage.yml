@@ -3,7 +3,6 @@ on:
   push:
     branches:
       - development
-      - integration/33-ci-auth-pr238-lineage-20261028
     paths:
       - 'docs/work/DEVELOPMENT_CI_AUTH_LINEAGE_PR238_2026-10-28.md'
       - 'tests/test_development_ci_auth_lineage.py'
