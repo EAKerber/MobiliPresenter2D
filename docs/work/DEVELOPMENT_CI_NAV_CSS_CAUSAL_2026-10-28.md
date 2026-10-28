@@ -11,3 +11,8 @@ Gate criado para:
 - preservar o valor diagnóstico histórico, sem alegar equivalência pixel como condição necessária de aceitação da implementação mais recente.
 
 A branch original continua HOLD até interpretação do resultado empírico; não aplicar o antigo CSS à main ou development, não abrir Netlify Preview nem executar banco/Identity. Isto é medição do V5 local, não prova de sessão externa.
+
+## Correção de hipótese antes do navegador
+
+- [Primeiro gate #40725316011](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40725316011) **FAIL estático, navegador SKIPPED**: o teste supunha, incorretamente, que o CSS histórico também usava `@container flow-steps (max-width: 500px)`. O CSS da branch antiga contém exatamente `@container flow-steps (max-width: 514px)`; a main usa 500 px. O comentário histórico explicita que +14px compensa 6px de padding e 1px de borda por lado da nav. A mudança histórica é **proprietário .controls + limiar 514**, comparada ao estado **proprietário .flow-nav + limiar 500** na main.
+- O documento de prova e o teste estático foram corrigidos sem mudar CSS de runtime nem mascarar qualquer diferença visual. Medir as duas políticas lado a lado em V5 local. Até os resultados, a fonte histórica continua HOLD.

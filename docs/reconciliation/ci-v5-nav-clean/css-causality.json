@@ -21,9 +21,11 @@
   "cause": {
     "oldSelector": ".controls",
     "newSelector": ".flow-nav",
-    "cssQuery": "@container flow-steps (max-width: 500px)",
-    "thresholdPx": 500,
-    "notes": "Historical CSS attached the named query container to the entire controls column; main attaches it to the step-navigation element itself. The nav labels are its descendants."
+    "notes": "Old branch moves ownership to .controls AND offsets the compact-label threshold by 14 px to compensate nav padding/borders; main attaches ownership to .flow-nav with 500 px. Cannot assume pixel equivalence.",
+    "cssQueryOld": "@container flow-steps (max-width: 514px)",
+    "cssQueryMain": "@container flow-steps (max-width: 500px)",
+    "oldThresholdPx": 514,
+    "currentThresholdPx": 500
   },
   "test": {
     "widths": [
@@ -48,7 +50,8 @@
     ],
     "target": "http://127.0.0.1:8123/config/",
     "source": "validated local V5",
-    "rasterHashes": "collected not assumed equal"
+    "rasterHashes": "collected not assumed equal",
+    "observation": "Measure paired old 514px controls content query versus main 500px nav content query, do not assume identical effective thresholds."
   },
   "decision": "HOLD_OLD_BRANCH_PENDING_BEHAVIORAL_DIFFERENTIAL",
   "noRuntimeEdits": true,

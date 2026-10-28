@@ -27,8 +27,10 @@ class CSSCausal(unittest.TestCase):
         self.assertIn("container-name: flow-steps;",current)
         self.assertIn("container-type: inline-size;",current)
         self.assertNotIn("container-name: flow-steps;",old)
-        for x in [old,current]:
-            self.assertIn("@container flow-steps (max-width: 500px)",x)
+        self.assertIn("@container flow-steps (max-width: 514px)",old)
+        self.assertIn("@container flow-steps (max-width: 500px)",current)
+        self.assertEqual(m["cause"]["oldThresholdPx"],514)
+        self.assertEqual(m["cause"]["currentThresholdPx"],500)
     def test_no_main_or_production_mutations(self):
         m=self.m
         self.assertEqual(m["decision"],"HOLD_OLD_BRANCH_PENDING_BEHAVIORAL_DIFFERENTIAL")
