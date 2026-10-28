@@ -1,0 +1,61 @@
+name: Development CI nav query-container causal differential (offline V5)
+on:
+  push:
+    branches:
+      - development
+      - integration/30-ci-nav-css-container-causality-20261028
+    paths:
+      - 'docs/reconciliation/ci-v5-nav-clean/css-causality.json'
+      - 'docs/reconciliation/ci-v5-nav-clean/source/app/styles.css'
+      - 'tests/test_development_ci_nav_css_causality.py'
+      - 'tests/ci/ci-v5-nav-css-container-differential.cjs'
+      - 'docs/work/DEVELOPMENT_CI_NAV_CSS_CAUSAL_2026-10-28.md'
+      - '.github/workflows/development-ci-nav-css-causality.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  exact-source-and-main-authority:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check old/new CSS Git blobs and query ownership
+        run: python3 -m unittest discover -s tests -p test_development_ci_nav_css_causality.py -v
+      - name: Current main-equivalent pages and JS validation
+        run: |
+          node --check tests/ci/ci-v5-nav-css-container-differential.cjs
+          npm run pages:check
+  chromium-webkit-differential:
+    needs: exact-source-and-main-authority
+    runs-on: ubuntu-latest
+    timeout-minutes: 24
+    container:
+      image: mcr.microsoft.com/playwright:v1.62.1-noble
+      options: --ipc=host
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Build validated buyer V5 locally (no Netlify deploy)
+        shell: bash
+        run: bash tests/ci/prepare-local-v5-browser.sh FLOW_LAYOUT_URL
+      - name: Install package matching baked-in Chromium and WebKit
+        run: npm install --prefix /tmp/m2d-nav-css-boundary-tools --no-audit --no-fund playwright@1.62.1
+      - name: Compare 20 CSS ownership boundary cases on V5
+        env:
+          NODE_PATH: /tmp/m2d-nav-css-boundary-tools/node_modules
+        run: node tests/ci/ci-v5-nav-css-container-differential.cjs /tmp/m2d-ci-css-causal
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: m2d-ci-nav-css-causal-${{ github.run_id }}
+          path: /tmp/m2d-ci-css-causal/result.json
+          if-no-files-found: ignore
+          retention-days: 30

@@ -1,0 +1,56 @@
+{
+  "schema": "M2DCIV5NavCSSCausality/0.1",
+  "repository": "EAKerber/MobiliPresenter2D",
+  "stableMain": {
+    "sha": "221b54b2a41ecc8c338d1bf2cf67280cf165ce95",
+    "cssBlob": "d43e6fb5e66133d2389b5c39b165b76b13cfa868",
+    "role": "authoritative stable CSS"
+  },
+  "older": {
+    "branch": "fix/ci-baseline-v5-nav-flow-clean-20261023",
+    "sha": "62c5521d7e883443696ce1c58c912ac4794ff75e",
+    "cssBlob": "eb55a9b5cb92d2e76ae70e0e41ac9fdf8b366616",
+    "cssArchive": "docs/reconciliation/ci-v5-nav-clean/source/app/styles.css",
+    "role": "historical evidence, not authoritative"
+  },
+  "present": {
+    "branch": "development",
+    "baselineSha": "79f3ed1e9d247076cc77ee44f100104e35eebdaa",
+    "cssBlob": "d43e6fb5e66133d2389b5c39b165b76b13cfa868"
+  },
+  "cause": {
+    "oldSelector": ".controls",
+    "newSelector": ".flow-nav",
+    "cssQuery": "@container flow-steps (max-width: 500px)",
+    "thresholdPx": 500,
+    "notes": "Historical CSS attached the named query container to the entire controls column; main attaches it to the step-navigation element itself. The nav labels are its descendants."
+  },
+  "test": {
+    "widths": [
+      496,
+      500,
+      502,
+      505,
+      509,
+      512,
+      514,
+      515,
+      518,
+      522
+    ],
+    "engines": [
+      "chromium",
+      "webkit"
+    ],
+    "modes": [
+      "historical-css",
+      "stable-main-css"
+    ],
+    "target": "http://127.0.0.1:8123/config/",
+    "source": "validated local V5",
+    "rasterHashes": "collected not assumed equal"
+  },
+  "decision": "HOLD_OLD_BRANCH_PENDING_BEHAVIORAL_DIFFERENTIAL",
+  "noRuntimeEdits": true,
+  "noDeploy": true
+}
