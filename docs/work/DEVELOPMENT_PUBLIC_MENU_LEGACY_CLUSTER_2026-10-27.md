@@ -33,3 +33,14 @@ Branch auxiliar `integration/14-public-menu-controller-reconcile-20261027` deve 
 [GitHub Actions #40615773638](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40615773638) **PASS** na branch auxiliar com verificação do escopo de contribuição pinado dos dois históricos, da precedência real de implementação (20/10, 21/10, 24/10), da preservação do gate P-COMP de diferença raster e das 4 rotas de controlador único. Testes ARC-03C e integridade da compilação pública passaram; **48 cenários funcionais** em Chromium/WebKit passaram sem Netlify. Artifact `public-menu-legacy-semantic-40615773638`.
 
 A documentação e o auditor adicionados na auxiliar não alteram runtime. Próximo gate obrigatório: rodar novamente após fast-forward para development. Só então enviar manifest da onda H ao executor de higiene.
+
+
+## Gates, integração e aposentadoria confirmadas — onda H
+
+- **Gate na auxiliar:** [#40615773638](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40615773638), **PASS**, artifact `12784789277`. **Gate repetido na development**: [#40615995337](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40615995337), **PASS**, 48 cenários Chromium/WebKit, sem alterar um único byte de runtime.
+- A auxiliar foi integrada por fast-forward com lease `development@1ac8356579a0ad5111dcf9a31de4b6d877b1a402 -> f45500ea6de4d6cce86c009af09cab8a661124f9`. Diff contém auditor estático, workflow CI, relatório e handover. O mecanismo de scanner da development recebeu correção separada de corrida de HEAD: verifica que um novo HEAD é FF antes de auditar, **sem relaxar o inventário de branches**.
+- **Higiene:** [#40616242504](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40616242504), **AUDIT PASS / APPLY PASS**, artifacts `12785162303` auditoria e `12785695520` aplicação. Tags exatas criadas e verificadas antes da exclusão:
+  - `archive/m2d/public-menu-experiment-fdeb931a -> fdeb931af285f6cf76795ccdd50a8b75d0f25aef`
+  - `archive/m2d/public-menu-pcomp-4ba93847 -> 4ba9384733a8cb46ad8a6c7c8ef3b9aebe25cd93`
+- Branches históricas e auxiliar absorvida removidas, sem afetar o commit histórico, que permanece alcançável por tags; **50 branches ativas** = **48 históricas** + main + development. Histórico: **12/60 fontes aposentadas em oito ondas**, **cinco auxiliares** integradas e retiradas. As 12 PRs abertas, branch DS-02 e PR #34 foram confirmadas por leitura independente. `main@221b54b2a41ecc8c338d1bf2cf67280cf165ce95` sem mudanças.
+- **Uma branch desse cluster continua HOLD:** `architecture/arc03-primary-header-fragment-prototype-20261022@e459b9bd85c4e9c8bb96813ae6758789de75dc13`. Cabeçalho template igual no destino, mas `scripts/compile-primary-header-prototype.mjs` antigo está ausente. Comparar contratos do protótipo/geração ARC03C em revisão própria, não tratar ausência de arquivo como ausência de valor.
