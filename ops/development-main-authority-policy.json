@@ -1,0 +1,98 @@
+{
+  "schema": "M2DMainAuthorityPolicy/0.1",
+  "issued": "2026-10-28",
+  "repository": "EAKerber/MobiliPresenter2D",
+  "main": {
+    "sha": "221b54b2a41ecc8c338d1bf2cf67280cf165ce95",
+    "role": "stable-authoritative",
+    "note": "main at October 26; verify the pinned SHA before each retirement, refresh if main changes"
+  },
+  "development": {
+    "baseline": "221b54b2a41ecc8c338d1bf2cf67280cf165ce95",
+    "role": "gated-changes-only",
+    "note": "development descends from main; divergences require explicit provenance/gates and recent intent, not just branch age"
+  },
+  "precedence": [
+    "Existing tested main implementation and current user-approved behavior win over older incomplete experiments by default.",
+    "A newer, explicit, user-approved direction may supersede main only after scoped tests and review; development is an integration candidate, not an automatic production authority.",
+    "File/commit recency is evidence, not proof; semantic intent and functional behavior can override chronology.",
+    "Retire only refs without open PR, protection or unpreserved unique contributions; store exact blob snapshots of material artifacts and tag original entire DAG before branch deletion.",
+    "Retirement batches remain SHA-pinned (max 3 refs); pass independent audit and readback; preserve main, DS02 and PR #34; no automatic Netlify deployment.",
+    "Security/auth/DTO and unreconciled browser/visual changes remain HOLD even if their branches are old."
+  ],
+  "exception": "The development-only V5 buyer DTO privacy improvement requires its own gated review before promotion to main. No implied main replacement.",
+  "sources": [
+    {
+      "id": "public-prototype",
+      "branch": "experiment/public-landing-commercial-viewer",
+      "sha": "0e28f7ec8ac0298a82d00e12cd8c0aa6c7bf3371",
+      "date": "2026-10-07",
+      "status": "RETIRE_CANDIDATE_FULL_DAG_TAG",
+      "reason": "historical donor prototype; current main authoritative and substantially newer"
+    },
+    {
+      "id": "viewer-price",
+      "branch": "feature/viewer-base-prices-global-off-20261021",
+      "sha": "82e4d09a842d830d80b0b5f19bd5370fe146d57c",
+      "date": "2026-10-21",
+      "status": "RETIRE_CANDIDATE_FULL_DAG_TAG",
+      "reason": "current main exact price contract tests and projection"
+    },
+    {
+      "id": "viewer-editorial",
+      "branch": "experiment/viewer-overview-editorial-20261021",
+      "sha": "8ad1405f176e5c2263689450c361c3ae617a94db",
+      "date": "2026-10-21",
+      "status": "HOLD_UNIQUE_BEHAVIOR",
+      "reason": "historic CSS/browser behavior not established equivalent to main; avoid silent override"
+    },
+    {
+      "id": "declarative-benefits",
+      "branch": "experiment/ui-declarative-landing-benefits-20261020",
+      "sha": "176cd0931056ad6814317f3aa580a624f6f2e871",
+      "date": "2026-10-20",
+      "status": "HOLD_UNIQUE_ARCHITECTURE",
+      "reason": "experimental composition engine and browser UX not yet shown equivalent or intended to supersede main"
+    }
+  ],
+  "currentMainContracts": [
+    {
+      "path": "app/viewer/viewer.js",
+      "sha": "17c8cca26aecfd70d154a71c6bb1ee176e2527bd"
+    },
+    {
+      "path": "app/landing/landing.js",
+      "sha": "0982d94d644b7051f2a0b6775bca97486682640f"
+    },
+    {
+      "path": "app/core/scene-component.js",
+      "sha": "6fa00bb31d2ecd3eeccb1d0e5eabcf410acdcab6"
+    },
+    {
+      "path": "app/core/public-module-projection.js",
+      "sha": "fff325e9699f806f0e4d599b05374aa7c3d2c43f"
+    },
+    {
+      "path": "app/core/administration-v5.js",
+      "sha": "fce8319c7ed56d6e0e7e525742275aa2f0e25a32"
+    },
+    {
+      "path": "tests/viewer-base-price-publication.test.cjs",
+      "sha": "72359965aeeed41e263328b359645982ccfcae86"
+    },
+    {
+      "path": "tests/viewer-price-v5-save.test.cjs",
+      "sha": "e9ad71cbdd0a4b26e2ee099adf516fc297b509f4"
+    },
+    {
+      "path": "tests/viewer-overview-editorial-browser-gate.mjs",
+      "sha": "1528f51ff633fce6d86915eb21d48f0b0937a7cb"
+    }
+  ],
+  "holdExamples": [
+    "experiment/viewer-overview-editorial-20261021",
+    "experiment/ui-declarative-landing-benefits-20261020",
+    "work/cp-public-03a2-2-email-access-core-20261008",
+    "ci/ci-baseline-01-isolated-auth-extraction-20261024"
+  ]
+}

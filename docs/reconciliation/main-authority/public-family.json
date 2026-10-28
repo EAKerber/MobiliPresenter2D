@@ -1,0 +1,180 @@
+{
+  "schema": "M2DMainAuthorityPublicFamily/0.1",
+  "sources": [
+    {
+      "id": "public-prototype",
+      "branch": "experiment/public-landing-commercial-viewer",
+      "sha": "0e28f7ec8ac0298a82d00e12cd8c0aa6c7bf3371",
+      "date": "2026-10-07",
+      "status": "RETIRE_CANDIDATE_FULL_DAG_TAG",
+      "reason": "historical donor prototype; current main authoritative and substantially newer"
+    },
+    {
+      "id": "viewer-price",
+      "branch": "feature/viewer-base-prices-global-off-20261021",
+      "sha": "82e4d09a842d830d80b0b5f19bd5370fe146d57c",
+      "date": "2026-10-21",
+      "status": "RETIRE_CANDIDATE_FULL_DAG_TAG",
+      "reason": "current main exact price contract tests and projection"
+    },
+    {
+      "id": "viewer-editorial",
+      "branch": "experiment/viewer-overview-editorial-20261021",
+      "sha": "8ad1405f176e5c2263689450c361c3ae617a94db",
+      "date": "2026-10-21",
+      "status": "HOLD_UNIQUE_BEHAVIOR",
+      "reason": "historic CSS/browser behavior not established equivalent to main; avoid silent override"
+    },
+    {
+      "id": "declarative-benefits",
+      "branch": "experiment/ui-declarative-landing-benefits-20261020",
+      "sha": "176cd0931056ad6814317f3aa580a624f6f2e871",
+      "date": "2026-10-20",
+      "status": "HOLD_UNIQUE_ARCHITECTURE",
+      "reason": "experimental composition engine and browser UX not yet shown equivalent or intended to supersede main"
+    }
+  ],
+  "artifacts": [
+    {
+      "source": "public-prototype",
+      "path": "app/landing/landing.js",
+      "blob": "c559c092a3ce8e06548fdbe3986240ea12878e8a",
+      "archive": "docs/reconciliation/main-authority/public-legacy/public-prototype/app/landing/landing.js"
+    },
+    {
+      "source": "public-prototype",
+      "path": "app/viewer/viewer.js",
+      "blob": "d750b4e890b57a71197cd1faee054607e2c7fac4",
+      "archive": "docs/reconciliation/main-authority/public-legacy/public-prototype/app/viewer/viewer.js"
+    },
+    {
+      "source": "public-prototype",
+      "path": "app/core/scene-component.js",
+      "blob": "215a22450b3a6367fceeeb215178a8db510ddc85",
+      "archive": "docs/reconciliation/main-authority/public-legacy/public-prototype/app/core/scene-component.js"
+    },
+    {
+      "source": "viewer-price",
+      "path": "tests/viewer-base-price-publication.test.cjs",
+      "blob": "72359965aeeed41e263328b359645982ccfcae86",
+      "archive": "docs/reconciliation/main-authority/public-legacy/viewer-price/tests/viewer-base-price-publication.test.cjs"
+    },
+    {
+      "source": "viewer-price",
+      "path": "tests/viewer-price-v5-save.test.cjs",
+      "blob": "e9ad71cbdd0a4b26e2ee099adf516fc297b509f4",
+      "archive": "docs/reconciliation/main-authority/public-legacy/viewer-price/tests/viewer-price-v5-save.test.cjs"
+    },
+    {
+      "source": "viewer-price",
+      "path": "app/core/public-module-projection.js",
+      "blob": "fff325e9699f806f0e4d599b05374aa7c3d2c43f",
+      "archive": "docs/reconciliation/main-authority/public-legacy/viewer-price/app/core/public-module-projection.js"
+    },
+    {
+      "source": "viewer-price",
+      "path": "docs/architecture/viewer-base-price-publication-2026-10-21.md",
+      "blob": "d68afc2460bc3e83149100ee988848dac03be3da",
+      "archive": "docs/reconciliation/main-authority/public-legacy/viewer-price/docs/architecture/viewer-base-price-publication-2026-10-21.md"
+    },
+    {
+      "source": "viewer-editorial",
+      "path": "tests/viewer-overview-editorial-browser-gate.mjs",
+      "blob": "944cc70e720c8c4bdeb6497d5290057fde35a5ba",
+      "archive": "docs/reconciliation/main-authority/public-legacy/viewer-editorial/tests/viewer-overview-editorial-browser-gate.mjs"
+    },
+    {
+      "source": "viewer-editorial",
+      "path": "app/viewer/viewer.js",
+      "blob": "87212054c07a1d9f6f5fa2f31fd3b0f945206581",
+      "archive": "docs/reconciliation/main-authority/public-legacy/viewer-editorial/app/viewer/viewer.js"
+    },
+    {
+      "source": "viewer-editorial",
+      "path": "app/viewer/viewer.css",
+      "blob": "8368805ef5a5c82a5d1a16cee5c06b97bd7e6883",
+      "archive": "docs/reconciliation/main-authority/public-legacy/viewer-editorial/app/viewer/viewer.css"
+    },
+    {
+      "source": "declarative-benefits",
+      "path": "tests/landing-benefit-composition.test.cjs",
+      "blob": "03271a74178542e1f2cbf7a5f2a2ee110d340643",
+      "archive": "docs/reconciliation/main-authority/public-legacy/declarative-benefits/tests/landing-benefit-composition.test.cjs"
+    },
+    {
+      "source": "declarative-benefits",
+      "path": "app/core/page-composition.js",
+      "blob": "da890027c5ea822e89303a746935bf273de9ab21",
+      "archive": "docs/reconciliation/main-authority/public-legacy/declarative-benefits/app/core/page-composition.js"
+    },
+    {
+      "source": "declarative-benefits",
+      "path": "app/landing/benefit-strip.js",
+      "blob": "43bd3f5edbc04f2634d9fb8a32ef37dbce0269de",
+      "archive": "docs/reconciliation/main-authority/public-legacy/declarative-benefits/app/landing/benefit-strip.js"
+    },
+    {
+      "source": "declarative-benefits",
+      "path": "tests/public-cutover-contract.cjs",
+      "blob": "ccdac3104263131b94805fd7dbd4f73c1073ba89",
+      "archive": "docs/reconciliation/main-authority/public-legacy/declarative-benefits/tests/public-cutover-contract.cjs"
+    }
+  ],
+  "mainSha": "221b54b2a41ecc8c338d1bf2cf67280cf165ce95",
+  "currentMainContracts": [
+    {
+      "path": "app/viewer/viewer.js",
+      "sha": "17c8cca26aecfd70d154a71c6bb1ee176e2527bd"
+    },
+    {
+      "path": "app/landing/landing.js",
+      "sha": "0982d94d644b7051f2a0b6775bca97486682640f"
+    },
+    {
+      "path": "app/core/scene-component.js",
+      "sha": "6fa00bb31d2ecd3eeccb1d0e5eabcf410acdcab6"
+    },
+    {
+      "path": "app/core/public-module-projection.js",
+      "sha": "fff325e9699f806f0e4d599b05374aa7c3d2c43f"
+    },
+    {
+      "path": "app/core/administration-v5.js",
+      "sha": "fce8319c7ed56d6e0e7e525742275aa2f0e25a32"
+    },
+    {
+      "path": "tests/viewer-base-price-publication.test.cjs",
+      "sha": "72359965aeeed41e263328b359645982ccfcae86"
+    },
+    {
+      "path": "tests/viewer-price-v5-save.test.cjs",
+      "sha": "e9ad71cbdd0a4b26e2ee099adf516fc297b509f4"
+    },
+    {
+      "path": "tests/viewer-overview-editorial-browser-gate.mjs",
+      "sha": "1528f51ff633fce6d86915eb21d48f0b0937a7cb"
+    }
+  ],
+  "phase": "ARCHIVE_ONLY_NO_RUNTIME_CUTOVER",
+  "candidateRefs": [
+    "experiment/public-landing-commercial-viewer",
+    "feature/viewer-base-prices-global-off-20261021"
+  ],
+  "holdRefs": [
+    "experiment/viewer-overview-editorial-20261021",
+    "experiment/ui-declarative-landing-benefits-20261020"
+  ],
+  "archiveTags": [
+    {
+      "branch": "experiment/public-landing-commercial-viewer",
+      "tag": "archive/m2d/legacy-public-donor-0e28f7ec",
+      "sha": "0e28f7ec8ac0298a82d00e12cd8c0aa6c7bf3371"
+    },
+    {
+      "branch": "feature/viewer-base-prices-global-off-20261021",
+      "tag": "archive/m2d/legacy-viewer-price-82e4d09a",
+      "sha": "82e4d09a842d830d80b0b5f19bd5370fe146d57c"
+    }
+  ],
+  "notes": "Full original DAG must be tagged in the retirement executor; exact selected code/tests/docs blobs stored here. Historical old public branch also has image/assets preserved in original DAG tag, not duplicated as extra release assets."
+}

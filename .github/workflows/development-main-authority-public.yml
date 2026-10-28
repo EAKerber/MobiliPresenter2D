@@ -1,0 +1,33 @@
+name: Development MAIN authority and historic public provenance
+on:
+  push:
+    branches:
+      - development
+      - integration/24-main-authority-public-legacy-20261028
+    paths:
+      - 'docs/reconciliation/main-authority/**'
+      - 'ops/development-main-authority-policy.json'
+      - 'docs/work/DEVELOPMENT_MAIN_AUTHORITY_PUBLIC_FAMILY_2026-10-28.md'
+      - 'tests/test_development_main_authority_public.py'
+      - '.github/workflows/development-main-authority-public.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  current-contracts:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify historical blobs and exact pinned main authority
+        run: python3 -m unittest discover -s tests -p test_development_main_authority_public.py -v
+      - name: Execute current main-equivalent viewer price/public contracts
+        run: |
+          node --test tests/viewer-base-price-publication.test.cjs tests/viewer-price-v5-save.test.cjs
+          node app/tools/test-public-modules-endpoint.js
+          npm run pages:check
