@@ -993,7 +993,78 @@
         "unmergedVisualPR": 34
       },
       "noDeploy": true
+    },
+    {
+      "batchId": "dev-20261028-cpux-v4-supersession-s2",
+      "workflowRun": 40692181770,
+      "workflowUrl": "https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40692181770",
+      "headSha": "0a2cad83360d02467bf33b0e3913b341f29db87a",
+      "auditArtifactId": 12816584917,
+      "applyArtifactId": 12818080672,
+      "audit": "PASS",
+      "apply": "PASS",
+      "refsBefore": 39,
+      "refsAfter": 36,
+      "archived": [
+        {
+          "tag": "archive/m2d/legacy-cpux-05a-preparation-de035813",
+          "sha": "de0358134963f5ce72bdee98437922a3520ee24a"
+        },
+        {
+          "tag": "archive/m2d/legacy-cpux-05a-v4-ba22963a",
+          "sha": "ba22963ad304bddb6b77d59d7340b9e085f4d9b7"
+        }
+      ],
+      "retired": [
+        {
+          "branch": "feat/cp-ux-05a-publication-prep",
+          "sha": "de0358134963f5ce72bdee98437922a3520ee24a",
+          "kind": "archive-diverged",
+          "archiveTag": "archive/m2d/legacy-cpux-05a-preparation-de035813"
+        },
+        {
+          "branch": "feat/cp-ux-05a-v4-publication-prep",
+          "sha": "ba22963ad304bddb6b77d59d7340b9e085f4d9b7",
+          "kind": "archive-diverged",
+          "archiveTag": "archive/m2d/legacy-cpux-05a-v4-ba22963a"
+        }
+      ],
+      "auxiliaryRetired": [
+        {
+          "branch": "integration/25-cpux-main-v5-supersession-20261028",
+          "sha": "bfe8f099b8ea4410af15b8469a99a2f952a696e3",
+          "kind": "auxiliary-ancestor-development",
+          "recoverableFromDevelopment": true
+        }
+      ],
+      "semanticProof": {
+        "pinnedMainSha": "221b54b2a41ecc8c338d1bf2cf67280cf165ce95",
+        "mainAuthorityPolicy": "ops/development-main-authority-policy.json",
+        "originalFourSourcesReconciled": 4,
+        "originalArtifactsExact": 14,
+        "auxGate": 40691557818,
+        "developmentGate": 40691728848,
+        "manifestGate": 40692181943,
+        "firstAuditFailedReadOnly": 40691963370,
+        "secondAuditApplied": 40692181770,
+        "currentMainEndpointGETPUTOnly": true,
+        "legacyV4MigrationRetired": true,
+        "currentDevelopmentIdentityUnavailable503": true,
+        "noRuntimeChanges": true,
+        "noPreview": true,
+        "noRealSessionTest": true
+      },
+      "preserved": {
+        "mainSha": "221b54b2a41ecc8c338d1bf2cf67280cf165ce95",
+        "openPRs": 12,
+        "remainingOriginalHistoricalRefs": 34,
+        "ux04Hold": "feat/cp-ux-04-hierarchy-layout",
+        "flowFixtureHold": "work/cp-public-04a-main-flow-test-fixture-20261008",
+        "originalAssetsBranch": "artifacts/ds02-imagens-originais-20261015",
+        "unmergedVisualPR": 34
+      },
+      "noDeploy": true
     }
   ],
-  "nextBatchContract": "18 waves, 24/60 original historic refs retired, 15 auxiliary retired, 36 historical + main + development = 38 branches. Manifest R consumed; NEVER replay. MAIN is high stable authority: default prefer current main and newer ratified intent; development gated exceptions; older branches only evidence unless semantic test proves otherwise. Four public-viewer sources grouped, two retired, two HOLD; 12 PRs untouched. No bulk deleter."
+  "nextBatchContract": "19 waves; 26/60 historical refs retired, 16 auxiliary retired, 34 historical + main + development = 36 branches. Batch S2 consumed, NEVER replay; first failed audit S was READ-ONLY, no refs removed until S2 pass. Main remains strong stable authority; development has gated identity_unavailable 503 hardening. CP-UX-04 layout + CP-PUBLIC-04a browser fixture HOLD; 12 open PRs and DS02 preserved. No production deploys or DB changes."
 }
