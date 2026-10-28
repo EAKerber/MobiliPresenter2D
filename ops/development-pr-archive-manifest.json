@@ -1,0 +1,93 @@
+{
+  "schemaVersion": "M2DDevPublicPRArchive/0.1",
+  "repository": "EAKerber/MobiliPresenter2D",
+  "controlBranch": "development",
+  "mainSha": "221b54b2a41ecc8c338d1bf2cf67280cf165ce95",
+  "batchId": "dev-20261028-public-pr-archive-ag",
+  "snapshotPath": "docs/work/DEVELOPMENT_CP_PUBLIC_PR_CLOSURE_2026-10-28.md",
+  "expectedOpenPRs": [
+    [
+      34,
+      "feat/exposed-sides-and-glass",
+      "20040da835d6da66b03f73642c0c44db109dd6e8"
+    ],
+    [
+      175,
+      "work/cp-public-01-donor-staging-20261008",
+      "c81d357df3aa78c3e8f804b6334b2da35b3a75c8"
+    ],
+    [
+      178,
+      "work/cp-public-02a-public-module-projection-20261008",
+      "f0c792397036836105dcb53a45f89780e10b6348"
+    ],
+    [
+      179,
+      "work/cp-public-02b-public-read-endpoint-20261008",
+      "44b1d6a94c06a17b73405755e03c787780e7a455"
+    ],
+    [
+      180,
+      "work/cp-public-02c-integrated-preview-20261008",
+      "82d85674595280a7c878848d0d5f09df29492e92"
+    ],
+    [
+      182,
+      "work/cp-public-03a1-configuration-read-guard-20261008",
+      "0b398618f7f2eff23da7f782d53d86ba3ee6411b"
+    ],
+    [
+      184,
+      "work/cp-public-03a2-0-failclosed-bootstrap-20261008",
+      "d1305ffdd8302fa06b37d3676f08d802a92e7d97"
+    ],
+    [
+      185,
+      "work/cp-public-03a2-1-buyer-projection-20261008",
+      "7a0d919d4e27853c50cff8afde0cdcc066e0aa0c"
+    ],
+    [
+      186,
+      "work/cp-public-03a2-2-email-access-core-20261008",
+      "40d4b65f9e7e16e0810c2308e9b947840371cbe7"
+    ],
+    [
+      196,
+      "docs/cp-public-auth-boundary-20261011",
+      "43d5fb9c5c2749c0541b99d49ee1c048d6a9a96a"
+    ],
+    [
+      231,
+      "architecture/p-token-02b-contextual-copy-20261022",
+      "afb80965336083209eac93e2729de77170524ee5"
+    ],
+    [
+      238,
+      "ci/ci-baseline-01-isolated-auth-extraction-20261024",
+      "3ccce161235df925c5b708bf6feefbe6f4b10103"
+    ]
+  ],
+  "candidateTags": [
+    [
+      175,
+      "archive/m2d/cppublic-pr175-c81d357d"
+    ],
+    [
+      178,
+      "archive/m2d/cppublic-pr178-f0c79239"
+    ],
+    [
+      179,
+      "archive/m2d/cppublic-pr179-44b1d6a9"
+    ],
+    [
+      180,
+      "archive/m2d/cppublic-pr180-82d85674"
+    ]
+  ],
+  "targets": [
+    175,
+    178
+  ],
+  "previousTagged": []
+}
