@@ -13,7 +13,6 @@ OLD = {
     "tests/ci/config-auth-isolation.mjs": "97c014e91ce57fcac7aa696dbaf9b4a9caa4450d",
 }
 MODERN = {
-    "tests/ci/nav-flow-responsive-crossbrowser.cjs": "8a4e200863f5d631c0799ba1501021451f07e00d",
     "tests/ci/config-unlocked-local-diagnostic.mjs": "74c3eab7ccfa6bd124e7133b04e793b94340edd3",
     "tests/ci/local-buyer-config-server.mjs": "1b75eb62cf41112041b1dbce753753aa415d36c8",
 }
@@ -46,6 +45,11 @@ class CIv5LocalHistory(unittest.TestCase):
             with self.subTest(path=path):
                 self.assertEqual(git("rev-parse", MAIN + ":" + path), sha)
                 self.assertEqual(git("rev-parse", "HEAD:" + path), sha)
+
+    def test_development_only_dynamic_nav_is_not_misclassified_as_main(self):
+        path = "tests/ci/nav-flow-responsive-crossbrowser.cjs"
+        self.assertEqual(git("rev-parse", MAIN + ":" + path), "84434cdde4576076ac2eadbecd064be543810dec")
+        self.assertEqual(git("rev-parse", "HEAD:" + path), "8a4e200863f5d631c0799ba1501021451f07e00d")
 
     def test_workflow_does_not_execute_legacy_or_live_auth(self):
         flow = Path(".github/workflows/development-ci-v5local-provenance.yml").read_text()
