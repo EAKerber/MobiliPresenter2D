@@ -3,7 +3,7 @@
   "repository": "EAKerber/MobiliPresenter2D",
   "controlBranch": "development",
   "mainSha": "221b54b2a41ecc8c338d1bf2cf67280cf165ce95",
-  "batchId": "dev-20261028-cppublic-pr-closure-aux-ak",
+  "batchId": "dev-20261028-cppublic-closed-heads-al",
   "retired": [
     {
       "branch": "docs/handover-reconcile-20261023",
@@ -220,23 +220,38 @@
   ],
   "auxiliaryRefs": [
     {
-      "branch": "integration/38-cppublic-pr-archive-20261028",
-      "sha": "ec76bccd2a3a809d0e154dfd439b733bff6003b2"
-    },
-    {
-      "branch": "integration/39-cppublic-pr-roster-20261028",
-      "sha": "7090d265ca8e41532dd64a7d9785243b5fa98acc"
+      "branch": "integration/40-cppublic-closed-heads-20261028",
+      "sha": "e9bbe7674dcc6f4f56e04c62f81849face1fe38c"
     }
   ],
   "targets": [
     {
-      "branch": "integration/38-cppublic-pr-archive-20261028",
-      "sha": "ec76bccd2a3a809d0e154dfd439b733bff6003b2",
-      "kind": "auxiliary-ancestor-development"
+      "branch": "work/cp-public-01-donor-staging-20261008",
+      "sha": "c81d357df3aa78c3e8f804b6334b2da35b3a75c8",
+      "kind": "archive-diverged",
+      "archiveTag": "archive/m2d/cppublic-pr175-c81d357d",
+      "snapshotPath": "docs/work/DEVELOPMENT_CP_PUBLIC_PR_CLOSURE_2026-10-28.md",
+      "semanticGate": {
+        "runId": 40783778743,
+        "headSha": "e9bbe7674dcc6f4f56e04c62f81849face1fe38c",
+        "workflowName": "Development CP-PUBLIC protected PR roster transition"
+      }
     },
     {
-      "branch": "integration/39-cppublic-pr-roster-20261028",
-      "sha": "7090d265ca8e41532dd64a7d9785243b5fa98acc",
+      "branch": "work/cp-public-02a-public-module-projection-20261008",
+      "sha": "f0c792397036836105dcb53a45f89780e10b6348",
+      "kind": "archive-diverged",
+      "archiveTag": "archive/m2d/cppublic-pr178-f0c79239",
+      "snapshotPath": "docs/work/DEVELOPMENT_CP_PUBLIC_PR_CLOSURE_2026-10-28.md",
+      "semanticGate": {
+        "runId": 40783778743,
+        "headSha": "e9bbe7674dcc6f4f56e04c62f81849face1fe38c",
+        "workflowName": "Development CP-PUBLIC protected PR roster transition"
+      }
+    },
+    {
+      "branch": "integration/40-cppublic-closed-heads-20261028",
+      "sha": "e9bbe7674dcc6f4f56e04c62f81849face1fe38c",
       "kind": "auxiliary-ancestor-development"
     }
   ]

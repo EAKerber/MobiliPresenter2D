@@ -92,3 +92,11 @@ endpoint em memória e viewer. Nenhum código de aplicação, seed de preview, a
 banco, Netlify ou main faz parte do diff. Resultados e recibo da futura onda serão
 registrados somente após confirmação. A aposentadoria requer gate auxiliar e
 destino PASS, manifesto fresco, lease por SHA e readback completo.
+
+
+### Gates anteriores ao lote AL
+
+- Auxiliar `7f328398d18971cd42656ef68b29ad9c93d4c9a2`: [#40783691653](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40783691653) **PASS**.
+- Destino `development@e9bbe7674dcc6f4f56e04c62f81849face1fe38c`: roster/retenção [#40783778743](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40783778743), segurança [#40783778809](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40783778809), linhagem [#40783778718](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40783778718) e contratos públicos [#40783778788](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40783778788), **todos PASS**.
+- Gate combinado: **61 testes Python**, incluindo espelho sem as duas refs (15 verificações internas adicionais), **7 testes de projetor + 17 de viewer**, contrato de endpoint em memória e probe remoto do roster de dez PRs.
+- Manifesto `dev-20261028-cppublic-closed-heads-al`: duas targets históricas `archive-diverged` acima + auxiliar ancestral `integration/40-cppublic-closed-heads-20261028@e9bbe7674dcc6f4f56e04c62f81849face1fe38c`. Limite total três refs, 36 aposentadorias históricas anteriores, gate de origem por SHA/run. O lote só pode operar no push exato da development e recusa qualquer mudança de refs, tags, PRs, proteção ou regras. O status de aplicação será registrado pelo recibo após readback, não presumido por este manifesto.
