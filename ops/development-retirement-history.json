@@ -470,7 +470,67 @@
         "unmergedVisualPR": 34
       },
       "noDeploy": true
+    },
+    {
+      "batchId": "dev-20261027-vis002-reference-pin-j",
+      "workflowRun": 40618568088,
+      "workflowUrl": "https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40618568088",
+      "headSha": "0d311b30653bc1dc82234cbdbce325997b6fb9a6",
+      "auditArtifactId": 12786720185,
+      "applyArtifactId": 12786490759,
+      "audit": "PASS",
+      "apply": "PASS",
+      "refsBefore": 50,
+      "refsAfter": 48,
+      "archived": [
+        {
+          "tag": "archive/m2d/vis002-reference-pin-854cc058",
+          "sha": "854cc05896523567e503f42af2b8e209c7591b31"
+        }
+      ],
+      "retired": [
+        {
+          "branch": "architecture/p-token-01b-reference-pin-20261022",
+          "sha": "854cc05896523567e503f42af2b8e209c7591b31",
+          "kind": "archive-diverged",
+          "archiveTag": "archive/m2d/vis002-reference-pin-854cc058"
+        }
+      ],
+      "auxiliaryRetired": [
+        {
+          "branch": "integration/16-vis002-reference-pin-governance-20261027",
+          "sha": "dcab88a8020a94529bc58374c571f242e11ed03f",
+          "kind": "auxiliary-ancestor-development",
+          "recoverableFromDevelopment": true
+        }
+      ],
+      "semanticProof": {
+        "workflowRun": 40618382150,
+        "workflowSha": "dcab88a8020a94529bc58374c571f242e11ed03f",
+        "auxGate": 40618136839,
+        "historicalContributedPaths": 10,
+        "exactFilesRecovered": 7,
+        "oldCssLiteralMatches": 54,
+        "newCssLiteralMatches": 55,
+        "changedCssFiles": 1,
+        "computedStyleBrowserCases": 32,
+        "engines": [
+          "chromium",
+          "webkit"
+        ],
+        "referenceOnly": true,
+        "runtimeCssLinked": false,
+        "noRuntimeChanges": true
+      },
+      "preserved": {
+        "openPRs": 12,
+        "remainingOriginalHistoricalRefs": 46,
+        "mainSha": "221b54b2a41ecc8c338d1bf2cf67280cf165ce95",
+        "originalAssetsBranch": "artifacts/ds02-imagens-originais-20261015",
+        "unmergedVisualPR": 34
+      },
+      "noDeploy": true
     }
   ],
-  "nextBatchContract": "Next wave must include all thirteen original historical waves[].retired references, excluding six auxiliaryRetired (all reachable from development). 47 original historical refs + main + development = 49 branches after wave I. Do not use consumed manifest wave I. The entire three-source navigation cluster is reconciled and archived with provenance. Continue non-navigation clusters by latest declared intent, test gates and open PR protection."
+  "nextBatchContract": "Next wave must carry all 14 original historical waves[].retired rows. Never insert 7 auxiliaryRetired rows. Remaining 46 historical originals plus main/development = 48 refs. Other VIS-002/contrast/v0.2 branches retain explicit HOLD, as the published palette reference PIN does not authorize CSS activation, nor merge the contextual patches. Batch J is consumed."
 }
