@@ -1864,7 +1864,75 @@
         ]
       },
       "noDeploy": true
+    },
+    {
+      "batchId": "dev-20261028-cppublic-pr-closure-aux-ak",
+      "workflowRun": 40764913868,
+      "workflowUrl": "https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40764913868",
+      "headSha": "b75d5b3c90f452b9684d06c6c13d52a0f0f421a3",
+      "audit": "PASS",
+      "apply": "PASS",
+      "refsBefore": 28,
+      "refsAfter": 26,
+      "auditArtifactId": 12849692682,
+      "applyArtifactId": 12850146825,
+      "archived": [],
+      "retired": [],
+      "auxiliaryRetired": [
+        {
+          "branch": "integration/38-cppublic-pr-archive-20261028",
+          "sha": "ec76bccd2a3a809d0e154dfd439b733bff6003b2",
+          "kind": "auxiliary-ancestor-development",
+          "recoverableFromDevelopment": true
+        },
+        {
+          "branch": "integration/39-cppublic-pr-roster-20261028",
+          "sha": "7090d265ca8e41532dd64a7d9785243b5fa98acc",
+          "kind": "auxiliary-ancestor-development",
+          "recoverableFromDevelopment": true
+        }
+      ],
+      "semanticProof": {
+        "mainSha": "221b54b2a41ecc8c338d1bf2cf67280cf165ce95",
+        "openPRs": [
+          34,
+          179,
+          180,
+          182,
+          184,
+          185,
+          186,
+          196,
+          231,
+          238
+        ],
+        "closedUnmergedPRs": [
+          175,
+          178
+        ],
+        "archiveTags": {
+          "175": "archive/m2d/cppublic-pr175-c81d357d",
+          "178": "archive/m2d/cppublic-pr178-f0c79239",
+          "179": "archive/m2d/cppublic-pr179-44b1d6a9",
+          "180": "archive/m2d/cppublic-pr180-82d85674"
+        },
+        "tagOnlyAG": 40763518326,
+        "tagOnlyAH": 40763684082,
+        "rosterGateDevelopment": 40764452805,
+        "rosterGateAfterClosure": 40764823295,
+        "safetyGate": 40764452836,
+        "source": "docs/work/DEVELOPMENT_CP_PUBLIC_PR_CLOSURE_2026-10-28.md",
+        "noMainRuntimeNetlifyDBAuthChanges": true
+      },
+      "preserved": {
+        "mainSha": "221b54b2a41ecc8c338d1bf2cf67280cf165ce95",
+        "remainingOriginalHistoricalRefs": 24,
+        "originalAssetsBranch": "artifacts/ds02-imagens-originais-20261015",
+        "tenOpenPRsProtected": true,
+        "originalPR175And178HeadsStillPresent": true
+      },
+      "noDeploy": true
     }
   ],
-  "nextBatchContract": "32 waves; 36/60 original historical branches retired, 28 temporary auxiliary refs retired; 24 historical + main + development = 26 remote heads. AF auxiliary-only batch consumed, never replay. Four public PRs #175 #178 #179 #180 were analyzed in full DAG and 42/2/4/51 relevant path inventory; PR179 is PR180 ancestor, PR178 and PR175 diverged; current public contract tests on development (unit public projection, endpoint isolated harness, viewer adapter) passed #40757355428 and #40757703942. PRs remain open pending precise PR roster closure protocol and full history tags; do NOT merge old preview seed or restore old CSS/assets. Other eight PRs including auth remain protected. No main/runtime/Netlify/DB/Identity changes."
+  "nextBatchContract": "33 waves; 36/60 original historical retired, 30 temporary auxiliaries retired; 24 original historical + main + development = 26 remote branches. AK (two auxiliaries 38 and 39) consumed; no source PR branch deleted. Four public draft PRs #175/#178/#179/#180 preserved by exact SHA remote tags AG (#40763518326) + AH (#40763684082), all PASS. CLOSED/UNMERGED only #175 and #178 with comments and head SHA readback; 10 PRs open. New dynamic fail-closed PR roster transition AI allows only [175,178] to be closed unmerged; 179/180 and eight others forced open; #40764823295 PASS. Next update both offline historical lineage suites for branch-or-tag state before retiring #175/#178 heads in bounded batch; then plan AJ after explicit manifest and gates for #179/#180. Main untouched."
 }
