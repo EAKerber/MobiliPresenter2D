@@ -3,7 +3,6 @@ on:
   push:
     branches:
       - development
-      - integration/38-cppublic-pr-archive-20261028
     paths:
       - 'ops/development-pr-archive-manifest.json'
       - 'tools/development_pr_archive.py'
