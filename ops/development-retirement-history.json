@@ -1676,7 +1676,57 @@
         "originalTokenHistoricalRefPending": "integration/vis002c-p-token-02b-v2-20261023"
       },
       "noDeploy": true
+    },
+    {
+      "batchId": "dev-20261028-vis002c-token-v02-archive-ad",
+      "workflowRun": 40752191013,
+      "workflowUrl": "https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40752191013",
+      "headSha": "6a15bc7228287bf961e23082b5b47c833a2ca2d6",
+      "audit": "PASS",
+      "apply": "PASS",
+      "refsBefore": 28,
+      "refsAfter": 27,
+      "auditArtifactId": 12845090917,
+      "applyArtifactId": 12844166758,
+      "archived": [
+        {
+          "tag": "archive/m2d/vis002c-v02-token-34a305c1",
+          "sha": "34a305c1ddb9850dc194f68b16fa097c6691c06b"
+        }
+      ],
+      "retired": [
+        {
+          "branch": "integration/vis002c-p-token-02b-v2-20261023",
+          "sha": "34a305c1ddb9850dc194f68b16fa097c6691c06b",
+          "kind": "archive-diverged",
+          "archiveTag": "archive/m2d/vis002c-v02-token-34a305c1"
+        }
+      ],
+      "auxiliaryRetired": [],
+      "semanticProof": {
+        "mainSha": "221b54b2a41ecc8c338d1bf2cf67280cf165ce95",
+        "branchWasDescendantOfPR231": true,
+        "uniqueCommitsAfterPR231": 5,
+        "completeDAGPreservedAtExactTag": true,
+        "manifestContainedOneTarget": true,
+        "visV02Contexts": 8,
+        "visV03Contexts": 10,
+        "allThreeHistVisSourcesRetiredAfterACAndAD": true,
+        "semanticGate": 40751285149,
+        "source": "docs/work/DEVELOPMENT_VIS002C_ARC03C_TRIAD_2026-10-28.md",
+        "noRuntimeChanges": true,
+        "noDeploy": true
+      },
+      "preserved": {
+        "mainSha": "221b54b2a41ecc8c338d1bf2cf67280cf165ce95",
+        "openPRs": 12,
+        "remainingOriginalHistoricalRefs": 25,
+        "originalAssetsBranch": "artifacts/ds02-imagens-originais-20261015",
+        "PR231": "architecture/p-token-02b-contextual-copy-20261022",
+        "PR238": "ci/ci-baseline-01-isolated-auth-extraction-20261024"
+      },
+      "noDeploy": true
     }
   ],
-  "nextBatchContract": "29 waves; 34/60 original historical branches retired, 26 temporary auxiliaries retired; 26 historical + main + development = 28 heads. AC v2 consumed, never replay. Two full historical DAGs archive/m2d/vis002c-arc03c-c239012c and archive/m2d/vis002c-support-a285a2dc verified SHA, old CSS v02 not merged into main. One token v02 historical source still pending AD, exact sha 34a305c1ddb9850dc194f68b16fa097c6691c06b. Initial four-target cap and provenance row audits failed closed without apply; AC run 40751897855 PASS after corrections. All PRs/auth/DS02/runtime/build/Netlify/main intact."
+  "nextBatchContract": "30 waves; 35/60 original historical refs retired, 26 auxiliary refs retired. 25 historical + main + development = 27 remote heads. AC v2 and AD batches CONSUMED; never replay. Three VIS002C v02 source DAGs archived under exact tags archive/m2d/vis002c-arc03c-c239012c, archive/m2d/vis002c-support-a285a2dc, archive/m2d/vis002c-v02-token-34a305c1. Blobs source/output ARC03C and v02 subset of v03 verified in gate 40751285149; current v03 unchanged and not declared in production. Gate blocked four-target manifest and absent branch@SHA, both fail-closed without APPLY; corrected AC 40751897855 and AD 40752191013 passed. Main/12PRs/DS02/auth/Netlify/DB untouched. Next: CP-PUBLIC open PR lineage, no automatic PR deletion."
 }
