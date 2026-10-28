@@ -1,0 +1,18 @@
+{
+  "schemaVersion": "M2DPublicPRRosterTransition/0.1",
+  "repository": "EAKerber/MobiliPresenter2D",
+  "mainSha": "221b54b2a41ecc8c338d1bf2cf67280cf165ce95",
+  "authoritativeArchive": "ops/development-pr-archive-manifest.json",
+  "batchId": "dev-20261028-cppublic-pr-close-ai",
+  "allowedClosedOrOpen": [
+    175,
+    178
+  ],
+  "remainingCandidatesFrozenOpen": [
+    179,
+    180
+  ],
+  "closureMethod": "closed-unmerged-only",
+  "successorEvidence": "docs/work/DEVELOPMENT_CP_PUBLIC_PRS_175_180_2026-10-28.md",
+  "provenanceEvidence": "docs/work/DEVELOPMENT_CP_PUBLIC_PR_CLOSURE_2026-10-28.md"
+}
