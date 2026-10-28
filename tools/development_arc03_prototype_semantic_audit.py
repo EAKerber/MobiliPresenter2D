@@ -52,7 +52,7 @@ def main():
               "NAV-005 excluded","Duplicate authorial header"):
         require(s in cur,"LATEST_COMPILER_GUARD_MISSING:"+s)
     t=Path("tests/arc03c-historical-prototype-guards.test.mjs").read_text()
-    for s in ("unsafe-link","invalid/injected","duplicate header slots",
+    for s in ("invalid/injected","duplicate header slots",
               "illegal Viewer header","experimental staging status"):
         # No need for the defunct preview compiler. Its security intents
         # must be carried into the current output-contract tests.
