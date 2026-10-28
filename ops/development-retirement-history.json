@@ -530,7 +530,45 @@
         "unmergedVisualPR": 34
       },
       "noDeploy": true
+    },
+    {
+      "batchId": "dev-20261027-vis002-aux17-terminal-k",
+      "workflowRun": 40622103213,
+      "workflowUrl": "https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40622103213",
+      "headSha": "193cf63a61d341ceeca60521d79ffd29df6dd8d3",
+      "auditArtifactId": 12787423750,
+      "applyArtifactId": 12787378681,
+      "audit": "PASS",
+      "apply": "PASS",
+      "refsBefore": 49,
+      "refsAfter": 48,
+      "archived": [],
+      "retired": [],
+      "auxiliaryRetired": [
+        {
+          "branch": "integration/17-public-text-contrast-audit-20261027",
+          "sha": "f3b97ca164654dd2c1f2038a5af442324498ecf1",
+          "kind": "auxiliary-ancestor-development",
+          "recoverableFromDevelopment": true
+        }
+      ],
+      "semanticProof": {
+        "auxGate": 40620317995,
+        "developmentGate": 40620489920,
+        "localBrowserScenarios": 36,
+        "approvedColorChecks": 47,
+        "nonVisualCssOnly": true,
+        "noRuntimeChanges": true
+      },
+      "preserved": {
+        "openPRs": 12,
+        "remainingOriginalHistoricalRefs": 46,
+        "mainSha": "221b54b2a41ecc8c338d1bf2cf67280cf165ce95",
+        "originalAssetsBranch": "artifacts/ds02-imagens-originais-20261015",
+        "unmergedVisualPR": 34
+      },
+      "noDeploy": true
     }
   ],
-  "nextBatchContract": "Next wave must carry all 14 original historical waves[].retired rows. Never insert 7 auxiliaryRetired rows. Remaining 46 historical originals plus main/development = 48 refs. Other VIS-002/contrast/v0.2 branches retain explicit HOLD, as the published palette reference PIN does not authorize CSS activation, nor merge the contextual patches. Batch J is consumed."
+  "nextBatchContract": "Next batch must retain all 14 original historical waves[].retired rows, excluding 8 auxiliaryRetired rows. Remaining: 46 historical originals + main/development = 48 refs. Batch K manifest is consumed; do NOT reexecute. Six other VIS-002 branches plus historical contrast audit remain HOLD; no authorization for stylesheet replay or unverified WCAG claims."
 }
