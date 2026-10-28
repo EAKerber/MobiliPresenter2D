@@ -3,7 +3,6 @@ on:
   push:
     branches:
       - development
-      - integration/21-ci-baseline-diagnostic-family-20261028
     paths:
       - 'docs/reconciliation/ci-baseline/**'
       - 'docs/work/DEVELOPMENT_CIBASELINE_CLUSTER_2026-10-28.md'

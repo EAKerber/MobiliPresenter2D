@@ -3,7 +3,7 @@
   "repository": "EAKerber/MobiliPresenter2D",
   "controlBranch": "development",
   "mainSha": "221b54b2a41ecc8c338d1bf2cf67280cf165ce95",
-  "batchId": "dev-20261028-cpux-four-source-documentary-n",
+  "batchId": "dev-20261028-ci-baseline-six-family-o",
   "retired": [
     {
       "branch": "docs/handover-reconcile-20261023",
@@ -102,30 +102,48 @@
       "sha": "007fc8e0ca8d9366efd0c9b5c7adf0da1a5325e5",
       "kind": "archive-diverged",
       "archiveTag": "archive/m2d/vis002-fix-007fc8e0"
-    }
-  ],
-  "auxiliaryRefs": [
-    {
-      "branch": "integration/20-cpux-hierarchy-publication-family-20261028",
-      "sha": "6fc6ab3ea759e4d1f4dd237e8483a897d46eec93"
-    }
-  ],
-  "targets": [
+    },
     {
       "branch": "feat/cp-ux-05a-publication-prep-v2",
       "sha": "1872ca2a79585449df370910f18500ad5351451a",
       "kind": "archive-diverged",
-      "archiveTag": "archive/m2d/cpux05a-v2-1872ca2a",
-      "snapshotPath": "docs/work/DEVELOPMENT_CPUX_CLUSTER_2026-10-28.md",
+      "archiveTag": "archive/m2d/cpux05a-v2-1872ca2a"
+    }
+  ],
+  "auxiliaryRefs": [
+    {
+      "branch": "integration/21-ci-baseline-diagnostic-family-20261028",
+      "sha": "d8b3a3d1d7e153da5bc886586ffb07ae59793e4a"
+    }
+  ],
+  "targets": [
+    {
+      "branch": "ci/ci-baseline-01-config-readiness-20261022",
+      "sha": "dcfec5b7666b8e16d984be2d0d8c838b96b41b42",
+      "kind": "archive-diverged",
+      "archiveTag": "archive/m2d/ci-readiness-dcfec5b7",
+      "snapshotPath": "docs/work/DEVELOPMENT_CIBASELINE_CLUSTER_2026-10-28.md",
       "semanticGate": {
-        "runId": 40680800240,
-        "headSha": "6fc6ab3ea759e4d1f4dd237e8483a897d46eec93",
-        "workflowName": "Development CP-UX four-source hierarchy and publication reconciliation (offline)"
+        "runId": 40681953397,
+        "headSha": "d8b3a3d1d7e153da5bc886586ffb07ae59793e4a",
+        "workflowName": "Development CI baseline six-source provenance and public isolation"
       }
     },
     {
-      "branch": "integration/20-cpux-hierarchy-publication-family-20261028",
-      "sha": "6fc6ab3ea759e4d1f4dd237e8483a897d46eec93",
+      "branch": "ci/ci-baseline-01-public-projection-test-20261022",
+      "sha": "387da6a57c4188dd32ee0c5551e11d15e9140d3f",
+      "kind": "archive-diverged",
+      "archiveTag": "archive/m2d/ci-public-projection-387da6a5",
+      "snapshotPath": "docs/work/DEVELOPMENT_CIBASELINE_CLUSTER_2026-10-28.md",
+      "semanticGate": {
+        "runId": 40681953397,
+        "headSha": "d8b3a3d1d7e153da5bc886586ffb07ae59793e4a",
+        "workflowName": "Development CI baseline six-source provenance and public isolation"
+      }
+    },
+    {
+      "branch": "integration/21-ci-baseline-diagnostic-family-20261028",
+      "sha": "d8b3a3d1d7e153da5bc886586ffb07ae59793e4a",
       "kind": "auxiliary-ancestor-development"
     }
   ]
