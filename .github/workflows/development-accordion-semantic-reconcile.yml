@@ -3,7 +3,6 @@ name: Development 11 — accordion latest-test semantic regression (offline)
 on:
   push:
     branches:
-      - integration/11-accordion-latest-tests-20261027
       - development
     paths:
       - 'tests/how-accordion-grid-browser-gate.mjs'
