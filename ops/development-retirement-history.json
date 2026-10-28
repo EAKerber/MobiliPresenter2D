@@ -925,7 +925,75 @@
         "unmergedVisualPR": 34
       },
       "noDeploy": true
+    },
+    {
+      "batchId": "dev-20261028-main-authority-public-legacy-r",
+      "workflowRun": 40689382306,
+      "workflowUrl": "https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40689382306",
+      "headSha": "9539d24fc9e572ee21961521bf61aef3961a0be2",
+      "auditArtifactId": 12816038128,
+      "applyArtifactId": 12815429312,
+      "audit": "PASS",
+      "apply": "PASS",
+      "refsBefore": 41,
+      "refsAfter": 38,
+      "archived": [
+        {
+          "tag": "archive/m2d/legacy-public-donor-0e28f7ec",
+          "sha": "0e28f7ec8ac0298a82d00e12cd8c0aa6c7bf3371"
+        },
+        {
+          "tag": "archive/m2d/legacy-viewer-price-82e4d09a",
+          "sha": "82e4d09a842d830d80b0b5f19bd5370fe146d57c"
+        }
+      ],
+      "retired": [
+        {
+          "branch": "experiment/public-landing-commercial-viewer",
+          "sha": "0e28f7ec8ac0298a82d00e12cd8c0aa6c7bf3371",
+          "kind": "archive-diverged",
+          "archiveTag": "archive/m2d/legacy-public-donor-0e28f7ec"
+        },
+        {
+          "branch": "feature/viewer-base-prices-global-off-20261021",
+          "sha": "82e4d09a842d830d80b0b5f19bd5370fe146d57c",
+          "kind": "archive-diverged",
+          "archiveTag": "archive/m2d/legacy-viewer-price-82e4d09a"
+        }
+      ],
+      "auxiliaryRetired": [
+        {
+          "branch": "integration/24-main-authority-public-legacy-20261028",
+          "sha": "620e1acf4f09066b2a635bb3f48d8caebf4d0c03",
+          "kind": "auxiliary-ancestor-development",
+          "recoverableFromDevelopment": true
+        }
+      ],
+      "semanticProof": {
+        "pinnedMainSha": "221b54b2a41ecc8c338d1bf2cf67280cf165ce95",
+        "mainAuthorityPolicy": "ops/development-main-authority-policy.json",
+        "auxGate": 40689079073,
+        "developmentGate": 40689187308,
+        "manifestGate": 40689382354,
+        "groupedHistoricalSources": 4,
+        "historicalSourceBlobsExact": 14,
+        "priceTestBlobsIdenticalToMain": 2,
+        "publicProjectionIdenticalToMain": true,
+        "currentPriceTests": 10,
+        "sourceIntegrityTests": 4,
+        "mainAndDevelopmentRuntimeBlobsIdentical": true,
+        "noProductionOrRuntimeChanges": true,
+        "uniqueEditorialAndDeclarativeHold": true
+      },
+      "preserved": {
+        "mainSha": "221b54b2a41ecc8c338d1bf2cf67280cf165ce95",
+        "openPRs": 12,
+        "remainingOriginalHistoricalRefs": 36,
+        "originalAssetsBranch": "artifacts/ds02-imagens-originais-20261015",
+        "unmergedVisualPR": 34
+      },
+      "noDeploy": true
     }
   ],
-  "nextBatchContract": "22/60 original branches retired, 14 auxiliary retired across 17 waves, 38 originals + main + development = 40 branches. Batch Q consumed and must never be replayed. V5 DTO privacy patch integrated with source-locked differential, offline session unit, and localhost Chromium gates; no staging session proven. Preserve 12 open PRs and DS02. Continue semantic remediation of CP-PUBLIC auth/DTO or CI Flow, no unproved branch retirements."
+  "nextBatchContract": "18 waves, 24/60 original historic refs retired, 15 auxiliary retired, 36 historical + main + development = 38 branches. Manifest R consumed; NEVER replay. MAIN is high stable authority: default prefer current main and newer ratified intent; development gated exceptions; older branches only evidence unless semantic test proves otherwise. Four public-viewer sources grouped, two retired, two HOLD; 12 PRs untouched. No bulk deleter."
 }
