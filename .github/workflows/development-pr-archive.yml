@@ -5,9 +5,6 @@ on:
       - development
     paths:
       - 'ops/development-pr-archive-manifest.json'
-      - 'tools/development_pr_archive.py'
-      - 'docs/work/DEVELOPMENT_CP_PUBLIC_PR_CLOSURE_2026-10-28.md'
-      - '.github/workflows/development-pr-archive.yml'
   workflow_dispatch:
 permissions:
   contents: read
