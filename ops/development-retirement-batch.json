@@ -3,7 +3,7 @@
   "repository": "EAKerber/MobiliPresenter2D",
   "controlBranch": "development",
   "mainSha": "221b54b2a41ecc8c338d1bf2cf67280cf165ce95",
-  "batchId": "dev-20261028-cp-public-dto-parity-aux-only-q",
+  "batchId": "dev-20261028-main-authority-public-legacy-r",
   "retired": [
     {
       "branch": "docs/handover-reconcile-20261023",
@@ -136,14 +136,38 @@
   ],
   "auxiliaryRefs": [
     {
-      "branch": "integration/23-cp-public-dto-parity-20261028",
-      "sha": "dd56360f1726753b133c26917378f69005a962b5"
+      "branch": "integration/24-main-authority-public-legacy-20261028",
+      "sha": "620e1acf4f09066b2a635bb3f48d8caebf4d0c03"
     }
   ],
   "targets": [
     {
-      "branch": "integration/23-cp-public-dto-parity-20261028",
-      "sha": "dd56360f1726753b133c26917378f69005a962b5",
+      "branch": "experiment/public-landing-commercial-viewer",
+      "sha": "0e28f7ec8ac0298a82d00e12cd8c0aa6c7bf3371",
+      "kind": "archive-diverged",
+      "archiveTag": "archive/m2d/legacy-public-donor-0e28f7ec",
+      "snapshotPath": "docs/work/DEVELOPMENT_MAIN_AUTHORITY_PUBLIC_FAMILY_2026-10-28.md",
+      "semanticGate": {
+        "runId": 40689187308,
+        "headSha": "620e1acf4f09066b2a635bb3f48d8caebf4d0c03",
+        "workflowName": "Development MAIN authority and historic public provenance"
+      }
+    },
+    {
+      "branch": "feature/viewer-base-prices-global-off-20261021",
+      "sha": "82e4d09a842d830d80b0b5f19bd5370fe146d57c",
+      "kind": "archive-diverged",
+      "archiveTag": "archive/m2d/legacy-viewer-price-82e4d09a",
+      "snapshotPath": "docs/work/DEVELOPMENT_MAIN_AUTHORITY_PUBLIC_FAMILY_2026-10-28.md",
+      "semanticGate": {
+        "runId": 40689187308,
+        "headSha": "620e1acf4f09066b2a635bb3f48d8caebf4d0c03",
+        "workflowName": "Development MAIN authority and historic public provenance"
+      }
+    },
+    {
+      "branch": "integration/24-main-authority-public-legacy-20261028",
+      "sha": "620e1acf4f09066b2a635bb3f48d8caebf4d0c03",
       "kind": "auxiliary-ancestor-development"
     }
   ]
