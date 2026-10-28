@@ -15,3 +15,11 @@ A fonte histórica audit/public-text-contrast-coverage-20261022@ace851004713f92b
 ## Gates
 
 Executar na auxiliar, inspecionar artifact e passar por fast-forward SHA-pinned para development somente após CI PASS. Repetir CI no destino. Aposentadoria da branch fonte NÃO está autorizada apenas por este resultado: ela contém também CSS experimental e documentação histórica. Exigir levantamento integral, tag de arquivo antes de exclusão, ledger das 14 ondas anteriores, 12 PRs, proteção de originais DS02 e PR #34, e gates de não regressão antes de propor poda.
+
+## Gate observado na auxiliar e no destino
+
+- Auxiliar: [Actions #40620317995](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40620317995), PASS; artifact 12786638891.
+- Development: [Actions #40620489920](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40620489920), PASS; artifact 12787101684.
+- Resultado idêntico: 36/36 cenários, 47 verificações de cores aprovadas, 423 amostras calculáveis acima do limiar, 0 candidatos abaixo, 33 não verificáveis, 0 seletores ausentes, 3/3 testes de pin e páginas estáticas válidas.
+- Commit de conteúdo testado e integrado por fast-forward com lease: `f3b97ca164654dd2c1f2038a5af442324498ecf1`.
+- A auxiliar 17 permanece temporariamente ativa até higiene com lease. Nenhuma das 46 históricas ou 12 PRs foi tocada. Nenhum deploy Netlify, alteração visual, auth/DB ou escrita na main.
