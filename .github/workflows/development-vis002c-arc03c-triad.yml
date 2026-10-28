@@ -3,7 +3,6 @@ on:
   push:
     branches:
       - development
-      - integration/35-vis002c-arc03c-triad-20261028
     paths:
       - 'tests/test_development_vis002c_triad.py'
       - 'docs/work/DEVELOPMENT_VIS002C_ARC03C_TRIAD_2026-10-28.md'
