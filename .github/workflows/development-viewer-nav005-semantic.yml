@@ -3,7 +3,6 @@ name: Development 13 — Viewer NAV005 newer-intent semantic reconciliation (off
 on:
   push:
     branches:
-      - integration/13-viewer-nav005-reconcile-20261027
       - development
     paths:
       - 'tools/development_nav005_semantic_audit.py'
