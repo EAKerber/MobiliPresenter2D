@@ -26,9 +26,12 @@ test("tokens are opaque, non-reusable as hashes and malformed strings fail close
  assert.match(token,/^[A-Za-z0-9_-]{43}$/);
  assert.match(hash,/^[a-f0-9]{64}$/);
  assert.notEqual(hash,token);
- for(const malformed of [undefined,null,"","x".repeat(43),"a".repeat(44),"a".repeat(42),"\n".repeat(43)])
+ for(const malformed of [undefined,null,"","a".repeat(44),"a".repeat(42),"\n".repeat(43)])
    assert.equal(hashOpaqueToken(malformed),null);
  assert.equal(hashOpaqueToken(token),hash);
+ // Any syntactically valid opaque-looking value is hashed; the DB must
+ // decide membership. Rejecting by unknown value here would be incorrect.
+ assert.match(hashOpaqueToken("x".repeat(43)),/^[a-f0-9]{64}$/);
 });
 test("ticket recipients are normalized and CRLF/header injection is rejected",()=>{
  assert.equal(normalizeRecipientEmail("  Example+Tag@Example.COM "), "example+tag@example.com");
