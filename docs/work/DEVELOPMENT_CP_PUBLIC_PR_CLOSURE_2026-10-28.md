@@ -50,3 +50,14 @@ Após os gates [#40764261034](https://github.com/EAKerber/MobiliPresenter2D/acti
 - **Onda AI CONSUMED para os fechamentos**. #179 e #180 ainda **OPEN** até onda AJ com atualização declarada de `allowedClosedOrOpen` para quatro e `remainingCandidatesFrozenOpen=[]`, read-only gate e comentários de substituição individuais. Nenhuma mudança de runtime, preços, DB, sessão, auth ou Netlify ocorreu no fechamento.
 
 **Estado provisório de refs após os fechamentos:** 28 heads remotas = 24 originais históricas + main + development + auxiliares de governança 38 e 39. As duas auxiliares devem ser aposentadas só após FF e prova do novo roster pelo executor (máximo 2 por lote) — sem eliminar ainda as heads originais de PR.
+
+## Onda AK — auxiliares 38/39 retiradas sob contrato de 10 PRs
+
+O lote `dev-20261028-cppublic-pr-closure-aux-ak` do executor limitado a 1–3 refs ([AUDIT+APPLY #40764913868](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40764913868)) **PASS** após a [prova do roster CLOSED/UNMERGED #40764823295](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40764823295) PASS. O lote removeu exclusivamente dois auxiliares já ancestrais de development:
+
+- `integration/38-cppublic-pr-archive-20261028@ec76bccd2a3a809d0e154dfd439b733bff6003b2`, scripts/manifestos das tags AG/AH;
+- `integration/39-cppublic-pr-roster-20261028@7090d265ca8e41532dd64a7d9785243b5fa98acc`, suíte negativa e autorização por PR.
+
+Recibos: audit `12849692682`, apply `12850146825`. Readback de refs **28→26**; 24 branches originais remanescentes, main e development; 36/60 originais aposentadas, **30 auxiliares**, **33 ondas**. **Onda AK CONSUMED — NÃO REAPLICAR.** As duas heads originais de PR #175/#178 (agora CLOSED/UNMERGED) **continuam presentes** e preservadas por tags. As PRs #179/#180 continuam OPEN, e as 8 demais PRs protegidas permanecem OPEN. Handover e `ops/development-retirement-history.json` atualizados.
+
+**Próxima mudança antes de retirar heads de PR fechadas:** as suítes `tests/test_development_cp_public_lineage.py` e `tests/test_development_cp_public_prs_175_180.py` ainda verificam a existência literal das 12 branches originais. Torná-las provas de **branch OU tag exata** apenas para as quatro PRs públicas, mantendo as outras oito heads no roster. Executar gate no destino primeiro; só então preparar próximo manifesto com #175/#178 `archive-diverged`, duas targets e tag SHA-exata existente. Nenhum DELETE ou merge dessas heads foi autorizado nesta onda.
