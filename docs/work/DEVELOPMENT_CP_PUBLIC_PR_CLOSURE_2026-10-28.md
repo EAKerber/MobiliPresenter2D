@@ -26,3 +26,7 @@ Validações obrigatórias antes da primeira tag: 12 PRs realmente OPEN e nenhum
 ## Risco residual e gates
 
 Gate offline de public-domain já passou em #40757355428 e #40757703942. Não foi executado browser real no deploy contemporâneo, por isso não declarar paridade visual/segurança de produção. Só fechar PRs quando houver tags remotas, contratos preservados, novo gate explícito de roster e handover atualizado. A criação das tags é operação de **preservação**, não uma exclusão irreversível. Não acionar build/deploy Netlify nem migrar banco.
+
+## Gate da auxiliar e autorização limitada ao FF
+
+[Primeiro AUDIT do mecanismo de tags #40763356696](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40763356696) **PASS** na auxiliar, sem qualquer mutação: validou 12 PRs abertas e seus SHAs, main, 60 refs originais menos 36 aposentadas, 24 heads históricas restantes, tag names e regras. APPLY não foi executado porque o job exige push na `development`. O trigger da auxiliar foi removido antes do fast-forward para que o futuro executor de higiene não considere a branch temporária uma dependência permanente. Em `development`, a fase AG é exclusivamente preservação de `#175` e `#178`, com `--mode audit` antes de `--mode apply`; nenhum fechamento de PR autorizado nesta fase.
