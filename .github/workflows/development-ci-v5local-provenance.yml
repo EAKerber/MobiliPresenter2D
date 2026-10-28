@@ -3,7 +3,6 @@ on:
   push:
     branches:
       - development
-      - integration/31-ci-v5local-provenance-20261028
     paths:
       - 'docs/work/DEVELOPMENT_CI_V5_LOCAL_DIAGNOSTICS_2026-10-28.md'
       - 'tests/test_development_ci_v5_local_provenance.py'
