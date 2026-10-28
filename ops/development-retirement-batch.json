@@ -3,7 +3,7 @@
   "repository": "EAKerber/MobiliPresenter2D",
   "controlBranch": "development",
   "mainSha": "221b54b2a41ecc8c338d1bf2cf67280cf165ce95",
-  "batchId": "dev-20261028-cppublic-public-prs-auxiliary-af",
+  "batchId": "dev-20261028-cppublic-pr-closure-aux-ak",
   "retired": [
     {
       "branch": "docs/handover-reconcile-20261023",
@@ -220,14 +220,23 @@
   ],
   "auxiliaryRefs": [
     {
-      "branch": "integration/37-cppublic-public-prs-20261028",
-      "sha": "4f5d1193c920a9fa14a67fcab278fe381829aac5"
+      "branch": "integration/38-cppublic-pr-archive-20261028",
+      "sha": "ec76bccd2a3a809d0e154dfd439b733bff6003b2"
+    },
+    {
+      "branch": "integration/39-cppublic-pr-roster-20261028",
+      "sha": "7090d265ca8e41532dd64a7d9785243b5fa98acc"
     }
   ],
   "targets": [
     {
-      "branch": "integration/37-cppublic-public-prs-20261028",
-      "sha": "4f5d1193c920a9fa14a67fcab278fe381829aac5",
+      "branch": "integration/38-cppublic-pr-archive-20261028",
+      "sha": "ec76bccd2a3a809d0e154dfd439b733bff6003b2",
+      "kind": "auxiliary-ancestor-development"
+    },
+    {
+      "branch": "integration/39-cppublic-pr-roster-20261028",
+      "sha": "7090d265ca8e41532dd64a7d9785243b5fa98acc",
       "kind": "auxiliary-ancestor-development"
     }
   ]
