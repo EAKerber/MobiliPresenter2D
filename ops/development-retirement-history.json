@@ -568,7 +568,58 @@
         "unmergedVisualPR": 34
       },
       "noDeploy": true
+    },
+    {
+      "batchId": "dev-20261027-ds05a-documentary-l",
+      "workflowRun": 40622806456,
+      "workflowUrl": "https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40622806456",
+      "headSha": "ddab824ff554869dae848c6361005a38b377993b",
+      "auditArtifactId": 12787309905,
+      "applyArtifactId": 12788291123,
+      "audit": "PASS",
+      "apply": "PASS",
+      "refsBefore": 49,
+      "refsAfter": 47,
+      "archived": [
+        {
+          "tag": "archive/m2d/ds05a-theme-lab-6120a294",
+          "sha": "6120a294e0de4b018b18b1b50f20411ce44cce09"
+        }
+      ],
+      "retired": [
+        {
+          "branch": "docs/ds05a-theme-lab-20261017",
+          "sha": "6120a294e0de4b018b18b1b50f20411ce44cce09",
+          "kind": "archive-diverged",
+          "archiveTag": "archive/m2d/ds05a-theme-lab-6120a294"
+        }
+      ],
+      "auxiliaryRetired": [
+        {
+          "branch": "integration/18-ds05a-documentary-snapshot-20261027",
+          "sha": "0a0f0ee1187ef2ae7c989e28bffab75cac5bb5f1",
+          "kind": "auxiliary-ancestor-development",
+          "recoverableFromDevelopment": true
+        }
+      ],
+      "semanticProof": {
+        "auxGate": 40622603669,
+        "developmentGate": 40622653562,
+        "originalSubtreeSha": "d98e16e5bbd563c8bb1f19a6a0597fddc6021296",
+        "originalFiles": 20,
+        "manifestSha256Checked": 19,
+        "unitTests": 4,
+        "noRuntimeChanges": true
+      },
+      "preserved": {
+        "openPRs": 12,
+        "remainingOriginalHistoricalRefs": 45,
+        "mainSha": "221b54b2a41ecc8c338d1bf2cf67280cf165ce95",
+        "originalAssetsBranch": "artifacts/ds02-imagens-originais-20261015",
+        "unmergedVisualPR": 34
+      },
+      "noDeploy": true
     }
   ],
-  "nextBatchContract": "Next batch must retain all 14 original historical waves[].retired rows, excluding 8 auxiliaryRetired rows. Remaining: 46 historical originals + main/development = 48 refs. Batch K manifest is consumed; do NOT reexecute. Six other VIS-002 branches plus historical contrast audit remain HOLD; no authorization for stylesheet replay or unverified WCAG claims."
+  "nextBatchContract": "Carry all 15 original historical waves[].retired records into each next batch; exclude nine auxiliaryRetired records. 45 historical originals + main/development = 47 branches. Batch L consumed; never replay. Keep PR #231 (v0.1) and five other VIS-002 histories on HOLD pending semantic comparison; no CSS rollback or Netlify deployment."
 }
