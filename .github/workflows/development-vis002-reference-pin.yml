@@ -3,7 +3,6 @@ name: Development 16 — VIS002 reference pin (not activated) and computed CSS a
 on:
   push:
     branches:
-      - integration/16-vis002-reference-pin-governance-20261027
       - development
     paths:
       - 'design-system/pins/vis-002/v0.1.0/**'
