@@ -343,7 +343,77 @@
         "unmergedVisualPR": 34
       },
       "noDeploy": true
+    },
+    {
+      "batchId": "dev-20261027-public-menu-semantic-h",
+      "workflowRun": 40616242504,
+      "workflowUrl": "https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40616242504",
+      "headSha": "5cd39ded214533b657870f925b12e1d3dfabd1a0",
+      "auditArtifactId": 12785162303,
+      "applyArtifactId": 12785695520,
+      "audit": "PASS",
+      "apply": "PASS",
+      "refsBefore": 53,
+      "refsAfter": 50,
+      "archived": [
+        {
+          "tag": "archive/m2d/public-menu-experiment-fdeb931a",
+          "sha": "fdeb931af285f6cf76795ccdd50a8b75d0f25aef"
+        },
+        {
+          "tag": "archive/m2d/public-menu-pcomp-4ba93847",
+          "sha": "4ba9384733a8cb46ad8a6c7c8ef3b9aebe25cd93"
+        }
+      ],
+      "retired": [
+        {
+          "branch": "experiment/shared-public-header-controller-20261020",
+          "sha": "fdeb931af285f6cf76795ccdd50a8b75d0f25aef",
+          "kind": "archive-diverged",
+          "archiveTag": "archive/m2d/public-menu-experiment-fdeb931a"
+        },
+        {
+          "branch": "architecture/p-comp-01-public-menu-20261021",
+          "sha": "4ba9384733a8cb46ad8a6c7c8ef3b9aebe25cd93",
+          "kind": "archive-diverged",
+          "archiveTag": "archive/m2d/public-menu-pcomp-4ba93847"
+        }
+      ],
+      "auxiliaryRetired": [
+        {
+          "branch": "integration/14-public-menu-controller-reconcile-20261027",
+          "sha": "f45500ea6de4d6cce86c009af09cab8a661124f9",
+          "kind": "auxiliary-ancestor-development",
+          "recoverableFromDevelopment": true
+        }
+      ],
+      "semanticProof": {
+        "workflowRun": 40615995337,
+        "workflowSha": "f45500ea6de4d6cce86c009af09cab8a661124f9",
+        "auxGate": 40615773638,
+        "historicalPaths": {
+          "experiment/shared-public-header-controller-20261020": 8,
+          "architecture/p-comp-01-public-menu-20261021": 9
+        },
+        "newerControllerCommit": "2b6dd39b609a11137cc440ae3936ea8b6141620e",
+        "localNavigationScenarios": 48,
+        "engines": [
+          "chromium",
+          "webkit"
+        ],
+        "arc03cBuildIntegrity": true,
+        "rasterDifferentialRetained": true,
+        "runtimeCodeChanged": false
+      },
+      "preserved": {
+        "openPRs": 12,
+        "remainingOriginalHistoricalRefs": 48,
+        "mainSha": "221b54b2a41ecc8c338d1bf2cf67280cf165ce95",
+        "originalAssetsBranch": "artifacts/ds02-imagens-originais-20261015",
+        "unmergedVisualPR": 34
+      },
+      "noDeploy": true
     }
   ],
-  "nextBatchContract": "Next wave must carry all ten original historical waves[].retired records, excluding the four auxiliaryRetired refs already in development DAG. 50 original historical refs remain with main and development. Re-check 12 PRs, main pin, DAG tags, rulesets, protections, exact target refs, stale workflow dependencies, and require fresh semantic gate. Wave G manifest is CONSUMED."
+  "nextBatchContract": "Next wave must carry ALL TWELVE original historical waves[].retired records, excluding five auxiliaryRetired refs already reachable from development. 48 historic originals + main + development remain. ARC03 primary header fragment prototype remains HOLD pending separate compile/build-time parity evidence. Batch H consumed; no refs from this batch may be retired a second time."
 }
