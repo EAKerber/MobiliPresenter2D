@@ -44,3 +44,11 @@
 **Nenhum deploy Netlify** e nenhuma mudança no runtime. Para aposentar a fonte: PASS do gate na auxiliar e depois na development, arquivar `archive/m2d/viewer-nav005-10445ad8` apontando ao commit histórico acima antes de excluir. Exigir também SHA lease, 12 PRs preservadas, Git rulesets e proteção. A auxiliar absorvida pode ser retirada apenas se ancestral da development.
 
 **Status inicial:** fonte comparada, gate preparado, classificação candidata `SEMANTIC_SUPERSEDED`; retirar somente após provas de browser e auditoria de higiene.
+
+
+## Primeiro gate efetivamente aprovado
+
+- [GitHub Actions #40614274549](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40614274549) **PASS** no SHA de prova `f3194755adf19a8ad703ddc7e7e852918d6d2b7f`. A ferramenta `tools/development_nav005_semantic_audit.py` provou que os cinco caminhos históricos estão pinados, a implementação de tema tem blob idêntico e a intenção posterior é satisfeita sem reintroduzir a posição antiga do link.
+- Browser local: **48 cenários de header público e 20 específicos do Viewer**, Chromium e WebKit. Testou foco, Escape, clique externo, links, 320/390/486/768/1366px (Viewer), tema claro/escuro, header de profundidade dois, marcação ativa ausente e ausência de overflow; nenhuma alteração de runtime. Artifact `development-nav005-semantic-40614274549`, ID `12784741632`.
+- Os ramos `architecture/arc03-primary-header-fragment-prototype-20261022`, `architecture/p-comp-01-public-menu-20261021` e `experiment/shared-public-header-controller-20261020` continuam em HOLD para reconciliação individual; **o PASS de NAV-005 não deve justificar a exclusão deles**.
+- Integração recomendada: fast-forward com lease na `development`, repetir o gate, e somente então submeter à higiene `fix/viewer-secondary-header-nav005-20261021@10445ad8c20ac1a415f4ba463345eda83bd7e9a6` com tag `archive/m2d/viewer-nav005-10445ad8`. A auxiliar só poderá ser retirada se ancestral de development e se passar o roster completo.
