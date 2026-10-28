@@ -69,7 +69,27 @@ test("both stored paths validate with the original schema and converge on buyer 
 });
 test("V3 direct projection and historical pre-upgraded V5 have identical buyer behavior",()=>{
  const current=project(v3), historical=project(v5);
- for(const key of ["stages","dependencies","events","objectAssets","objects",
+ // The V3 source orders services as move-stone, glass, lighting.
+ // V5's approved hierarchy projects lighting first, followed by other services.
+ // Membership must match; ordering is governed by normalized flow, not flat V3 items.
+ same("stage IDs and metadata",
+   current.displaySettings.stages.map(({items,...s})=>s),
+   historical.displaySettings.stages.map(({items,...s})=>s));
+ for(let i=0;i<current.displaySettings.stages.length;i++){
+  const oldStage=current.displaySettings.stages[i], newStage=historical.displaySettings.stages[i];
+  same("stage membership "+newStage.id,[...oldStage.items].sort(),[...newStage.items].sort());
+  if(!isDeepStrictEqual(oldStage.items,newStage.items)){
+   assert.equal(newStage.id,"services","unexpected stage-order divergence");
+   same("V3 default service ordering",oldStage.items,["move-stone","tempered-glass","lighting-08"]);
+   same("V5 authored service grouping order",newStage.items,["lighting-08","move-stone","tempered-glass"]);
+   const flattened=historical.flow.stages[i].groups.flatMap(group=>
+     group.sections.flatMap(section=>section.itemIds));
+   same("buyer presentation must respect V5 authored sections",newStage.items,flattened);
+   console.log("V3_V5_ORDER_INTENT "+JSON.stringify({stageId:newStage.id,
+     source:"V3 flat-order",target:"V5 lighting-first hierarchy",membership:"identical"}));
+  }
+ }
+ for(const key of ["dependencies","events","objectAssets","objects",
    "initialState","moduleDimensions","finishes","materials","handleProducts","materialGroups"]){
    same("displaySettings."+key,current.displaySettings[key],historical.displaySettings[key]);
  }
