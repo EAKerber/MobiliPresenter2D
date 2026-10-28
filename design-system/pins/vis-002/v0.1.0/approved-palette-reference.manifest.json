@@ -1,0 +1,137 @@
+{
+  "schema": "M2DDesignSystemReferenceTokens/0.1",
+  "version": "0.1.0",
+  "source": {
+    "repository": "EAKerber/MobiliPresenter2D_DesignSystem",
+    "path": "decisions.json",
+    "gitBlobSha": "63b60f8d87327c6fd1e80c8cdf4ff832c4089bfa"
+  },
+  "authority": {
+    "decisionId": "VIS-002",
+    "decisionStatus": "palette-base-focus-and-semantic-swatches-approved; selected contextual corrections applied to product; remaining mapping and runtime validation pending",
+    "approvalSource": "Aprovação explícita do usuário após revisão visual da prancha PALETTE-candidate-A-v2.svg.",
+    "scope": "Valores e papéis apresentados na prancha PALETTE-candidate-A-v2.svg. A aprovação define a paleta de referência; não cria tokens técnicos nem autoriza implementação no produto.",
+    "implementationAuthorized": false
+  },
+  "policy": {
+    "sourceOfTruth": "VIS-002.approvedPalette",
+    "productIntegration": "HOLD — not authorized by VIS-002",
+    "generatedCssMayBeLinkedAtRuntime": false,
+    "noSemanticAliasesForComponents": true,
+    "noGlobalStateColors": true
+  },
+  "entries": [
+    {
+      "cssName": "--ds-reference-canvas-light",
+      "role": "canvas",
+      "theme": "light",
+      "value": "#E8E3DC",
+      "sourcePath": "VIS-002.approvedPalette.colors.canvas.light"
+    },
+    {
+      "cssName": "--ds-reference-canvas-dark",
+      "role": "canvas",
+      "theme": "dark",
+      "value": "#171614",
+      "sourcePath": "VIS-002.approvedPalette.colors.canvas.dark"
+    },
+    {
+      "cssName": "--ds-reference-surface-light",
+      "role": "surface",
+      "theme": "light",
+      "value": "#F0EDE8",
+      "sourcePath": "VIS-002.approvedPalette.colors.surface.light"
+    },
+    {
+      "cssName": "--ds-reference-surface-dark",
+      "role": "surface",
+      "theme": "dark",
+      "value": "#211F1C",
+      "sourcePath": "VIS-002.approvedPalette.colors.surface.dark"
+    },
+    {
+      "cssName": "--ds-reference-surface-soft-light",
+      "role": "surfaceSoft",
+      "theme": "light",
+      "value": "#DED9D2",
+      "sourcePath": "VIS-002.approvedPalette.colors.surfaceSoft.light"
+    },
+    {
+      "cssName": "--ds-reference-surface-soft-dark",
+      "role": "surfaceSoft",
+      "theme": "dark",
+      "value": "#2C2924",
+      "sourcePath": "VIS-002.approvedPalette.colors.surfaceSoft.dark"
+    },
+    {
+      "cssName": "--ds-reference-text-primary-light",
+      "role": "textPrimary",
+      "theme": "light",
+      "value": "#292723",
+      "sourcePath": "VIS-002.approvedPalette.colors.textPrimary.light"
+    },
+    {
+      "cssName": "--ds-reference-text-primary-dark",
+      "role": "textPrimary",
+      "theme": "dark",
+      "value": "#F0EAE1",
+      "sourcePath": "VIS-002.approvedPalette.colors.textPrimary.dark"
+    },
+    {
+      "cssName": "--ds-reference-text-secondary-light",
+      "role": "textSecondary",
+      "theme": "light",
+      "value": "#705C4B",
+      "sourcePath": "VIS-002.approvedPalette.colors.textSecondary.light"
+    },
+    {
+      "cssName": "--ds-reference-text-secondary-dark",
+      "role": "textSecondary",
+      "theme": "dark",
+      "value": "#C7BBAA",
+      "sourcePath": "VIS-002.approvedPalette.colors.textSecondary.dark"
+    },
+    {
+      "cssName": "--ds-reference-border-light",
+      "role": "border",
+      "theme": "light",
+      "value": "#D6CCC0",
+      "sourcePath": "VIS-002.approvedPalette.colors.border.light"
+    },
+    {
+      "cssName": "--ds-reference-border-dark",
+      "role": "border",
+      "theme": "dark",
+      "value": "#4E4942",
+      "sourcePath": "VIS-002.approvedPalette.colors.border.dark"
+    },
+    {
+      "cssName": "--ds-reference-focus-outline-light",
+      "role": "focusOutline",
+      "theme": "light",
+      "value": "#8B6A40",
+      "sourcePath": "VIS-002.approvedPalette.colors.focusOutline.light"
+    },
+    {
+      "cssName": "--ds-reference-focus-outline-dark",
+      "role": "focusOutline",
+      "theme": "dark",
+      "value": "#D8BC7C",
+      "sourcePath": "VIS-002.approvedPalette.colors.focusOutline.dark"
+    },
+    {
+      "cssName": "--ds-reference-focus-outline-width",
+      "role": "focus-outline-width",
+      "theme": "both",
+      "value": "4px",
+      "sourcePath": "VIS-002.approvedPalette.focusTreatment"
+    },
+    {
+      "cssName": "--ds-reference-focus-outline-offset",
+      "role": "focus-outline-offset",
+      "theme": "both",
+      "value": "3px",
+      "sourcePath": "VIS-002.approvedPalette.focusTreatment"
+    }
+  ]
+}
