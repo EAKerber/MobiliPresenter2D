@@ -17,6 +17,7 @@ const priceBook = require("../../app/data/mock-price-book.js");
 const scene = require("../../app/data/scene-data.js");
 const pricingContract = require("../../app/core/pricing-contract.js");
 const presentationPolicy = require("../../app/data/presentation-policy-defaults.js");
+const presentationCore = require("../../app/core/presentation-contract.js");
 
 const dependencies = {
  configuration, administrationV5, flow, catalog, priceBook, scene,
@@ -93,7 +94,18 @@ test("V3 direct projection and historical pre-upgraded V5 have identical buyer b
    "initialState","moduleDimensions","finishes","materials","handleProducts","materialGroups"]){
    same("displaySettings."+key,current.displaySettings[key],historical.displaySettings[key]);
  }
- same("normalized stage/group/section hierarchy",current.flow.stages,historical.flow.stages);
+ const strips=stages=>stages.map(stage=>({...stage,groups:stage.groups.map(group=>({
+  ...group,sections:group.sections.map(({presentation,component,...rest})=>rest)
+ }))}));
+ same("normalized hierarchy",strips(current.flow.stages),strips(historical.flow.stages));
+ const oldSections=current.flow.stages.flatMap(stage=>stage.groups.flatMap(group=>group.sections));
+ const newSections=historical.flow.stages.flatMap(stage=>stage.groups.flatMap(group=>group.sections));
+ assert.equal(oldSections.length,newSections.length);
+ for(let i=0;i<oldSections.length;i++){
+  assert.equal(oldSections[i].id,newSections[i].id);
+  assert.equal(newSections[i].component,presentationCore.resolveSectionComponent(oldSections[i]));
+  assert.equal(newSections[i].presentation,"auto");
+ }
  same("buyer pricing",current.pricingRules,historical.pricingRules);
  same("public presentation policy",current.presentationPolicy,historical.presentationPolicy);
 });
