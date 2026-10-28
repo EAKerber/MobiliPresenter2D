@@ -5,6 +5,7 @@ on:
     branches: [development]
     paths:
       - 'tools/development_branch_reconciliation_scan.py'
+      - 'ops/development-retirement-history.json'
       - '.github/workflows/development-branch-reconciliation.yml'
   workflow_dispatch:
 
