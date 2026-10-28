@@ -4,9 +4,11 @@ on:
   push:
     branches:
       - development
+      - integration/12-migration-inspector-consolidation-20261027
     paths:
       - 'tools/migration-inspector.mjs'
       - 'tests/migration-inspector.test.mjs'
+      - 'docs/handoffs/MIGRATION_INSPECTOR_V0_2026-10-23.md'
       - '.github/workflows/development-migration-inspector.yml'
   workflow_dispatch:
 
@@ -19,9 +21,21 @@ jobs:
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
+      - name: Verify legacy executable and fixtures are byte-identical, and handover retained
+        run: |
+          git fetch --no-tags origin 2b00351acc1d1369116d8eeb546146a6b363072e
+          test "$(git rev-parse 2b00351acc1d1369116d8eeb546146a6b363072e:tools/migration-inspector.mjs)" = 0d862e435898daa8443ada12f7d093c5ab6232bc
+          test "$(git rev-parse HEAD:tools/migration-inspector.mjs)" = 0d862e435898daa8443ada12f7d093c5ab6232bc
+          test "$(git rev-parse 2b00351acc1d1369116d8eeb546146a6b363072e:tests/migration-inspector.test.mjs)" = abe491f840c82b12e93c578442a9c548f47f8a5a
+          test "$(git rev-parse HEAD:tests/migration-inspector.test.mjs)" = abe491f840c82b12e93c578442a9c548f47f8a5a
+          test "$(git rev-parse 2b00351acc1d1369116d8eeb546146a6b363072e:docs/handoffs/MIGRATION_INSPECTOR_V0_2026-10-23.md)" = 4f7cc27e51ee0840c6df90ea335a17cc770b8266
+          test "$(git rev-parse HEAD:docs/handoffs/MIGRATION_INSPECTOR_V0_2026-10-23.md)" = 4f7cc27e51ee0840c6df90ea335a17cc770b8266
+          echo 'SOURCE_AND_HANDOVER_BLOBS_PRESERVED'
       - name: Static/fixture contract
         run: |
           node --check tools/migration-inspector.mjs
@@ -32,3 +46,6 @@ jobs:
           node tools/migration-inspector.mjs --focus site-header --out /tmp/migration-2.json
           cmp /tmp/migration-1.json /tmp/migration-2.json
           node -e 'const x=require("/tmp/migration-1.json");if(x.schema!=="M2DMigrationInspector/0.1"||x.coverage.negativeImpact!=="NOT_PROVEN"||x.summary.found<6) process.exit(1);console.log("M2D_DEV_MIGRATION_INSPECTOR_PASS "+JSON.stringify(x.summary))'
+      - name: Preserve legacy per-route diagnostics as investigation hints only
+        run: |
+          node -e 'const x=require("/tmp/migration-1.json"); for(const r of x.routes){ const matches=x.diagnostics.filter(d=>d.route===r.id); if(matches.length)console.log("M2D_MIGRATION_INSPECTOR_DIAGNOSTICS "+JSON.stringify({route:r.id,count:matches.length,entries:matches})); } console.log("M2D_MIGRATION_INSPECTOR_COVERAGE "+JSON.stringify(x.coverage));'
