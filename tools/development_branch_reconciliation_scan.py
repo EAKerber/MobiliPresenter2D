@@ -16,6 +16,9 @@ from datetime import datetime, timezone
 from pathlib import Path
 from urllib.request import Request, urlopen
 
+# Share strict, archived CLOSED/UNMERGED PR roster validation with bounded hygiene.
+import development_retirement_batch as retirement_guard
+
 REPOSITORY = "EAKerber/MobiliPresenter2D"
 INVENTORY = Path("docs/work/DEVELOPMENT_CLUSTER_INVENTORY_2026-10-27.json")
 HISTORY = Path("ops/development-retirement-history.json")
@@ -71,7 +74,7 @@ def open_prs():
         if (head.get("repo") or {}).get("full_name") == REPOSITORY:
             result[head.get("ref")].append(pr["number"])
         result[(pr.get("base") or {}).get("ref")].append("base-" + str(pr["number"]))
-    return result, sorted(p["number"] for p in data)
+    return result, sorted(p["number"] for p in data), data
 
 
 def scan():
@@ -104,8 +107,14 @@ def scan():
         remote[name] = sha
     if remote != {**expected, "main": main, "development": dev}:
         raise RuntimeError("REMOTE_ROSTER_MISMATCH")
-    pr_heads, pr_ids = open_prs()
-    if pr_ids != [34, 175, 178, 179, 180, 182, 184, 185, 186, 196, 231, 238]:
+    pr_heads, pr_ids, pr_objects = open_prs()
+    # Never relax roster by setting a smaller constant. CLOSED/UNMERGED PRs
+    # must be individually pinned to their original SHA and exact archive tag;
+    # all other PRs are required to remain open on main.
+    approved_open = retirement_guard.verify_open_pr_roster(
+        pr_objects, retirement_guard.archive_tags()
+    )
+    if set(pr_ids) != approved_open:
         raise RuntimeError("OPEN_PR_SET_CHANGED")
     dev_tree = rows_from_tree("HEAD")
     results = []
