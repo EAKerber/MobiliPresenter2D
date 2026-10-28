@@ -3,7 +3,6 @@ on:
   push:
     branches:
       - development
-      - integration/34-pr-ancestors-vis002c-20261028
     paths:
       - 'tests/test_development_pr_ancestors_vis002c.py'
       - 'docs/work/DEVELOPMENT_PR_ANCESTORS_VIS002C_2026-10-28.md'
