@@ -3,7 +3,7 @@
   "repository": "EAKerber/MobiliPresenter2D",
   "controlBranch": "development",
   "mainSha": "221b54b2a41ecc8c338d1bf2cf67280cf165ce95",
-  "batchId": "dev-20261028-config-nav-ancestor-vis002c-hold-ab",
+  "batchId": "dev-20261028-vis002c-arc03c-triad-archived-ac",
   "retired": [
     {
       "branch": "docs/handover-reconcile-20261023",
@@ -186,30 +186,60 @@
       "sha": "fd61a37a11dd63b3e537d3d76a2303bfdfc4f06a",
       "kind": "archive-diverged",
       "archiveTag": "archive/m2d/ci-auth-base-pr238-fd61a37a"
-    }
-  ],
-  "auxiliaryRefs": [
-    {
-      "branch": "integration/34-pr-ancestors-vis002c-20261028",
-      "sha": "761c8210e86b062a1c77cf22ea058933e1ef26ea"
-    }
-  ],
-  "targets": [
+    },
     {
       "branch": "fix/config-stage-nav-grid-track-20261025",
       "sha": "dbfbd9a7bca0e9f581e5d8ac4a765e01829d6ce9",
       "kind": "archive-diverged",
-      "archiveTag": "archive/m2d/config-nav-grid-pr238-dbfbd9a7",
-      "snapshotPath": "docs/work/DEVELOPMENT_PR_ANCESTORS_VIS002C_2026-10-28.md",
+      "archiveTag": "archive/m2d/config-nav-grid-pr238-dbfbd9a7"
+    }
+  ],
+  "auxiliaryRefs": [
+    {
+      "branch": "integration/35-vis002c-arc03c-triad-20261028",
+      "sha": "9d454f91975d75e8d776cffd2c4492c447c9be1d"
+    }
+  ],
+  "targets": [
+    {
+      "branch": "integration/vis002c-p-token-02b-v2-20261023",
+      "sha": "34a305c1ddb9850dc194f68b16fa097c6691c06b",
+      "kind": "archive-diverged",
+      "archiveTag": "archive/m2d/vis002c-v02-token-34a305c1",
+      "snapshotPath": "docs/work/DEVELOPMENT_VIS002C_ARC03C_TRIAD_2026-10-28.md",
       "semanticGate": {
-        "runId": 40748235137,
-        "headSha": "761c8210e86b062a1c77cf22ea058933e1ef26ea",
-        "workflowName": "Development PR ancestor and VIS002C semantic provenance (offline)"
+        "runId": 40751285149,
+        "headSha": "9d454f91975d75e8d776cffd2c4492c447c9be1d",
+        "workflowName": "Development VIS002C triad and ARC03C source-output provenance"
       }
     },
     {
-      "branch": "integration/34-pr-ancestors-vis002c-20261028",
-      "sha": "761c8210e86b062a1c77cf22ea058933e1ef26ea",
+      "branch": "integration/consolidated-arc03c-vis002c-token-20261023",
+      "sha": "c239012c126c9b3e2c477778ea4b2d37b74c963f",
+      "kind": "archive-diverged",
+      "archiveTag": "archive/m2d/vis002c-arc03c-c239012c",
+      "snapshotPath": "docs/work/DEVELOPMENT_VIS002C_ARC03C_TRIAD_2026-10-28.md",
+      "semanticGate": {
+        "runId": 40751285149,
+        "headSha": "9d454f91975d75e8d776cffd2c4492c447c9be1d",
+        "workflowName": "Development VIS002C triad and ARC03C source-output provenance"
+      }
+    },
+    {
+      "branch": "integration/vis002c-contextual-support-v02-20261024",
+      "sha": "a285a2dc6f543f33f45615ba653a296236f8b3ac",
+      "kind": "archive-diverged",
+      "archiveTag": "archive/m2d/vis002c-support-a285a2dc",
+      "snapshotPath": "docs/work/DEVELOPMENT_VIS002C_ARC03C_TRIAD_2026-10-28.md",
+      "semanticGate": {
+        "runId": 40751285149,
+        "headSha": "9d454f91975d75e8d776cffd2c4492c447c9be1d",
+        "workflowName": "Development VIS002C triad and ARC03C source-output provenance"
+      }
+    },
+    {
+      "branch": "integration/35-vis002c-arc03c-triad-20261028",
+      "sha": "9d454f91975d75e8d776cffd2c4492c447c9be1d",
       "kind": "auxiliary-ancestor-development"
     }
   ]
