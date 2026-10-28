@@ -1,0 +1,32 @@
+name: Development CP-PUBLIC public PR absorption 175-180
+on:
+  push:
+    branches:
+      - development
+      - integration/37-cppublic-public-prs-20261028
+    paths:
+      - 'docs/work/DEVELOPMENT_CP_PUBLIC_PRS_175_180_2026-10-28.md'
+      - 'tests/test_development_cp_public_prs_175_180.py'
+      - '.github/workflows/development-cp-public-prs-175-180.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  public-contract:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Prove exact PR graph, Git blob absorption, routes and isolated fixture
+        run: python3 -m unittest discover -s tests -p test_development_cp_public_prs_175_180.py -v
+      - name: Public projection no-leak tests on current schema
+        run: node --test tests/public-module-projection.test.cjs
+      - name: API in-memory stub, no HTTP calls to external service
+        run: node app/tools/test-public-modules-endpoint.js
+      - name: Viewer adapter contract in memory
+        run: node --test app/viewer/scene-adapters.test.mjs
