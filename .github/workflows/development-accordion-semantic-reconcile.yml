@@ -36,7 +36,7 @@ jobs:
           git config --global --add safe.directory "$GITHUB_WORKSPACE"
           git fetch --no-tags origin 6260df944b6b82f3a86d9eed4d9bc3eacd8bc48b
           test "$(git rev-parse FETCH_HEAD:tests/how-accordion-grid-browser-gate.mjs)" = 42cfde7bb249bd4f20a24607a0e82e32a80dd0b3
-          grep -q 'const scroll=await page.evaluate' tests/how-accordion-grid-browser-gate.mjs
+          grep -q 'return locator.screenshot({animations:"disabled"})' tests/how-accordion-grid-browser-gate.mjs
           grep -q 'const before=await inspect' tests/how-accordion-grid-browser-gate.mjs
           grep -q 'const after=await inspect' tests/how-accordion-grid-browser-gate.mjs
           node --check tests/how-accordion-grid-browser-gate.mjs
