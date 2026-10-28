@@ -3,7 +3,6 @@ on:
   push:
     branches:
       - development
-      - integration/28-ci-nav-provenance-20261028
     paths:
       - 'docs/reconciliation/ci-nav-legacy/**'
       - 'tests/test_development_ci_nav_legacy.py'
