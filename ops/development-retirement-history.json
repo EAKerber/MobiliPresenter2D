@@ -1543,7 +1543,72 @@
         "unmergedAuthPR": 238
       },
       "noDeploy": true
+    },
+    {
+      "batchId": "dev-20261028-config-nav-ancestor-vis002c-hold-ab",
+      "workflowRun": 40748381758,
+      "workflowUrl": "https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40748381758",
+      "headSha": "8530b135646aac43ff12d8082fb4ebb50f258863",
+      "audit": "PASS",
+      "apply": "PASS",
+      "refsBefore": 32,
+      "refsAfter": 30,
+      "auditArtifactId": 12842062614,
+      "applyArtifactId": 12842148243,
+      "archived": [
+        {
+          "tag": "archive/m2d/config-nav-grid-pr238-dbfbd9a7",
+          "sha": "dbfbd9a7bca0e9f581e5d8ac4a765e01829d6ce9"
+        }
+      ],
+      "retired": [
+        {
+          "branch": "fix/config-stage-nav-grid-track-20261025",
+          "sha": "dbfbd9a7bca0e9f581e5d8ac4a765e01829d6ce9",
+          "kind": "archive-diverged",
+          "archiveTag": "archive/m2d/config-nav-grid-pr238-dbfbd9a7"
+        }
+      ],
+      "auxiliaryRetired": [
+        {
+          "branch": "integration/34-pr-ancestors-vis002c-20261028",
+          "sha": "761c8210e86b062a1c77cf22ea058933e1ef26ea",
+          "kind": "auxiliary-ancestor-development",
+          "recoverableFromDevelopment": true
+        }
+      ],
+      "semanticProof": {
+        "mainSha": "221b54b2a41ecc8c338d1bf2cf67280cf165ce95",
+        "pr238Head": "3ccce161235df925c5b708bf6feefbe6f4b10103",
+        "navIsAncestorOfPR238": true,
+        "navAheadToPR238": 4,
+        "pr231Head": "afb80965336083209eac93e2729de77170524ee5",
+        "vis002cBranch": "integration/vis002c-p-token-02b-v2-20261023",
+        "vis002cSha": "34a305c1ddb9850dc194f68b16fa097c6691c06b",
+        "vis002cIsDescendantOfPR231": true,
+        "vis002cUniqueCommits": 5,
+        "vis002cRetired": false,
+        "twoOtherVisSourcesHeld": true,
+        "incorrectInitialAncestryGate": 40747792240,
+        "correctedAuxGate": 40748058761,
+        "destinationGate": 40748235137,
+        "finalAuditApply": 40748381758,
+        "source": "docs/work/DEVELOPMENT_PR_ANCESTORS_VIS002C_2026-10-28.md",
+        "noLiveAuthenticatedPreviewTest": true,
+        "noFixturePrivilegeChange": true,
+        "noRuntimeChanges": true,
+        "noDeploy": true
+      },
+      "preserved": {
+        "mainSha": "221b54b2a41ecc8c338d1bf2cf67280cf165ce95",
+        "openPRs": 12,
+        "remainingOriginalHistoricalRefs": 28,
+        "originalAssetsBranch": "artifacts/ds02-imagens-originais-20261015",
+        "unmergedVisualPR": 231,
+        "unmergedAuthPR": 238
+      },
+      "noDeploy": true
     }
   ],
-  "nextBatchContract": "27 waves; 31/60 original historical branches retired, 24 temporary auxiliary branches retired; 29 original historical + main + development = 31 remote heads. Batch AA consumed, never replay. ci-auth-base-20261025 archived full original DAG archive/m2d/ci-auth-base-pr238-fd61a37a pointing to exact fd61a37; source ancestor of still-open PR #238 (22 later commits). First malformed SHA audit failed closed without apply, corrected AA #40742783896 AUDIT+APPLY PASS and remote tag/readback confirmed. PR238 head 3ccce161 still requires exact preview identity/revocation/privilege gates, not merged. No main/DS02/DB/runtime/deploy changes."
+  "nextBatchContract": "28 waves; 32/60 original historical retired, 25 temporary auxiliaries retired; 28 original historical + main + development = 30 remote branch heads. AB consumed, never replay. Only nav ancestry to PR238 was archived full DAG under archive/m2d/config-nav-grid-pr238-dbfbd9a7 at exact dbfbd9a7; branch VIS002C v02 is DESCENDANT of PR231 with five unique commits and must remain HOLD, as do two other VIS integration divergent heads. Initial gate failed safely for reversed ancestry (#40747792240); corrected source/gates #40748058761/#40748235137 and AB #40748381758 PASS with full exact readback. PRs12, main, DS02, auth/DB/runtime/deploy protected."
 }
