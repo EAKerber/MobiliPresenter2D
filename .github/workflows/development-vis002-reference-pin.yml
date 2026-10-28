@@ -1,0 +1,73 @@
+name: Development 16 — VIS002 reference pin (not activated) and computed CSS audit
+
+on:
+  push:
+    branches:
+      - integration/16-vis002-reference-pin-governance-20261027
+      - development
+    paths:
+      - 'design-system/pins/vis-002/v0.1.0/**'
+      - 'design-system/audits/p-token-01b-current-css-literal-observations.json'
+      - 'scripts/verify-design-system-reference-pin.mjs'
+      - 'tests/design-system-reference-pin.test.mjs'
+      - 'tests/design-system-computed-style-readonly-audit.mjs'
+      - 'tools/development_vis002_reference_pin_audit.py'
+      - '.github/workflows/development-vis002-reference-pin.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  provenance-and-computed-css:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    container:
+      image: mcr.microsoft.com/playwright:v1.62.1-noble
+      options: --ipc=host
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Recover pinned source metadata and prove no reference was activated
+        shell: bash
+        run: |
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
+          git fetch --no-tags origin main
+          git fetch --no-tags origin 854cc05896523567e503f42af2b8e209c7591b31
+          mkdir -p artifacts/development-vis002-reference
+          python3 -m py_compile tools/development_vis002_reference_pin_audit.py
+          python3 tools/development_vis002_reference_pin_audit.py | tee artifacts/development-vis002-reference/source.json
+          node --check scripts/verify-design-system-reference-pin.mjs
+          node --check tests/design-system-computed-style-readonly-audit.mjs
+          node scripts/verify-design-system-reference-pin.mjs
+          node --test tests/design-system-reference-pin.test.mjs | tee artifacts/development-vis002-reference/tests.txt
+      - name: Resolve Playwright against preinstalled browsers
+        run: |
+          npm install --no-save --no-package-lock --no-audit --no-fund playwright@1.62.1
+          node -e 'if(require("playwright/package.json").version!=="1.62.1")process.exit(1)'
+      - name: Local static page fixture (never Netlify)
+        shell: bash
+        run: |
+          python3 -m http.server 8123 --bind 127.0.0.1 --directory app >/tmp/m2d-reference-pin-http.log 2>&1 &
+          for i in $(seq 1 30); do
+            if curl -fsS http://127.0.0.1:8123/ >/dev/null; then break; fi
+            sleep 1
+          done
+          curl -fsS http://127.0.0.1:8123/about/ >/dev/null
+          curl -fsS http://127.0.0.1:8123/how-it-works/ >/dev/null
+          curl -fsS http://127.0.0.1:8123/viewer/ >/dev/null
+      - name: Observe current CSS on 32 browser scenarios without changing any styles
+        run: |
+          node tests/design-system-computed-style-readonly-audit.mjs
+          cp artifacts/p-token-02a/computed-style-observations.json artifacts/development-vis002-reference/
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: vis002-reference-not-activated-${{ github.run_id }}
+          path: artifacts/development-vis002-reference/
+          retention-days: 30
+          if-no-files-found: warn
