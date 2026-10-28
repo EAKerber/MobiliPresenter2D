@@ -20,3 +20,9 @@ Data: 27/10/2026. Política: [DEVELOPMENT_SEMANTIC_RECONCILIATION_2026-10-27.md]
 - Arquivos não reconstruídos/alterados: `app/how-it-works/how-it-works.css`, `app/how-it-works/how-it-works.js`, `app/how-it-works/index.html`, `architecture/pages/how-it-works.page.html`, assets originais, Viewer, Admin, produção e `main`.
 
 Estado de execução: **testes e destino ainda dependem do gate online**. Atualizar aqui com o resultado antes de declarar a reconciliação concluída.
+
+## Compatibilidade com a página posterior e primeiro resultado
+
+- O primeiro gate [#40608052660](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40608052660) falhou em uma condição de **comparação**, não no comportamento: o teste mais recente exigia o mesmo valor absoluto de `y` para `.study-topics` na página antiga e na página atual. Outras seções acima mudaram e moveram o componente verticalmente; suas medidas e estilos internos continuavam os mesmos no diff mostrado.
+- Ajuste estritamente no teste recuperado: remover `x/y` absolutos de `closedMetrics`, mantendo altura, largura, estilos, DOM, interação independente e avaliação do navegador. A captura mais recente continua serializada e recortada, mas a coordenada de `page.screenshot({clip})` foi corrigida com `scrollX/scrollY`, porque `boundingBox()` retorna posição relativa à viewport.
+- O **conteúdo exato** do teste em 25/10 é recuperável no commit `6260df944b6b82f3a86d9eed4d9bc3eacd8bc48b`; o arquivo atualizado é uma **adaptação compatível com o site mais recente**, não mais um blob idêntico. O workflow confirma o blob histórico e os dois ajustes. Sem alteração no CSS/HTML/JS publicado e sem afirmar aprovação dos screenshots antes do gate final.
