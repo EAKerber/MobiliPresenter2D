@@ -1,0 +1,38 @@
+{
+  "schema": "M2DFlowV5FixtureDifferential/0.1",
+  "repository": "EAKerber/MobiliPresenter2D",
+  "mainSha": "221b54b2a41ecc8c338d1bf2cf67280cf165ce95",
+  "developmentBaseline": "c412a2c9fa62ce837a99f16c7a3297e6e517113c",
+  "source": {
+    "branch": "work/cp-public-04a-main-flow-test-fixture-20261008",
+    "sha": "9503ad1caff406d3e3422c9d4aec25bac081132e",
+    "path": "tests/flow-layout-browser.cjs",
+    "blobSha": "7fe6f086f7f747861c520f51c3cafc6ef79446c2",
+    "archivedPath": "docs/reconciliation/cpux-main-v5/legacy/fixture/tests/flow-layout-browser.cjs",
+    "archiveTag": "archive/m2d/legacy-cp-public-flow-v3-fixture-9503ad1c"
+  },
+  "current": {
+    "path": "tests/flow-layout-browser.cjs",
+    "mainBlobSha": "840f600bbb79534bf2ddeefc882d3ea060841042",
+    "developmentBlobSha": "840f600bbb79534bf2ddeefc882d3ea060841042",
+    "assertionCount": 216,
+    "originalAssertionCount": 218,
+    "discardedV3OnlyAssertions": 2,
+    "scenarios": 9,
+    "fixtureKind": "V5 buyer-projection with publication validation"
+  },
+  "adjacentHold": {
+    "branch": "feat/cp-ux-04-hierarchy-layout",
+    "sha": "5d8347edb6ea247307b6fc27b424117553542f78",
+    "oldBrowserBlob": "14bc9e098a07593ecf1ded8d7d442962081a6981",
+    "differentGeometryAssertions": 6,
+    "decision": "HOLD pending newer-layout intentional-behavior review"
+  },
+  "constraints": {
+    "noRuntimeChange": true,
+    "noDeployment": true,
+    "doNotDeleteOtherHeads": true,
+    "oldAssertionBodiesInNewOrder": true,
+    "realBrowserOnlyLocalValidatedV5": true
+  }
+}

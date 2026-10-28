@@ -1,0 +1,69 @@
+name: Development historical V3 flow fixture vs V5 browser parity (localhost)
+on:
+  push:
+    branches:
+      - development
+      - integration/26-flow-v5-fixture-equivalence-20261028
+    paths:
+      - 'docs/reconciliation/flow-v5-fixture/**'
+      - 'docs/work/DEVELOPMENT_FLOW_FIXTURE_MAIN_V5_2026-10-28.md'
+      - 'tests/test_development_flow_v5_fixture.py'
+      - '.github/workflows/development-flow-v5-fixture.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  exact-parity:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Exact 216 old browser assertion and nine scenario contracts
+        run: python3 -m unittest discover -s tests -p test_development_flow_v5_fixture.py -v
+      - name: Main equivalent V5 flow/layout/navigation unit contracts
+        run: |
+          node app/tools/test-flow-layout.js
+          node app/tools/test-flow-model.js
+          node app/tools/test-hierarchy-administration.js
+          node app/tools/test-v5-endpoint-safety.js
+          npm run pages:check
+  browser-local-v5:
+    needs: exact-parity
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    container:
+      image: mcr.microsoft.com/playwright:v1.62.1-noble
+      options: --ipc=host
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Build and serve validated V5 locally, no Netlify deploy
+        shell: bash
+        run: bash tests/ci/prepare-local-v5-browser.sh FLOW_LAYOUT_URL
+      - name: Use matching Playwright package for baked-in Chromium
+        run: npm install --prefix /tmp/m2d-flow-fixture-browser --no-audit --no-fund playwright@1.62.1
+      - name: Run all 216 current historical assertions on V5 buyer
+        env:
+          NODE_PATH: /tmp/m2d-flow-fixture-browser/node_modules
+        run: node tests/flow-layout-browser.cjs /tmp/m2d-flow-fixture-browser
+      - name: Browser-check buyer V5 projection and fail-closed invalid raw
+        env:
+          NODE_PATH: /tmp/m2d-flow-fixture-browser/node_modules
+        run: node tests/buyer-v5-browser.cjs /tmp/m2d-flow-buyer-v5
+      - name: Save focused local browser test evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: development-flow-v5-fixture-${{ github.run_id }}
+          path: |
+            /tmp/m2d-flow-fixture-browser/result.json
+            /tmp/m2d-flow-buyer-v5/result.json
+          if-no-files-found: ignore
+          retention-days: 14
