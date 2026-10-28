@@ -619,7 +619,74 @@
         "unmergedVisualPR": 34
       },
       "noDeploy": true
+    },
+    {
+      "batchId": "dev-20261028-vis002-five-cluster-auditfix-m",
+      "workflowRun": 40677382474,
+      "workflowUrl": "https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40677382474",
+      "headSha": "58d4ca78aded69294978a5c6494c38275acc5b37",
+      "auditArtifactId": 12811251744,
+      "applyArtifactId": 12810728552,
+      "audit": "PASS",
+      "apply": "PASS",
+      "refsBefore": 48,
+      "refsAfter": 45,
+      "archived": [
+        {
+          "tag": "archive/m2d/vis002-audit-ace85100",
+          "sha": "ace851004713f92b4425e5832c6c892825814f0a"
+        },
+        {
+          "tag": "archive/m2d/vis002-fix-007fc8e0",
+          "sha": "007fc8e0ca8d9366efd0c9b5c7adf0da1a5325e5"
+        }
+      ],
+      "retired": [
+        {
+          "branch": "audit/public-text-contrast-coverage-20261022",
+          "sha": "ace851004713f92b4425e5832c6c892825814f0a",
+          "kind": "archive-diverged",
+          "archiveTag": "archive/m2d/vis002-audit-ace85100"
+        },
+        {
+          "branch": "fix/vis002c-public-text-contrast-20261022",
+          "sha": "007fc8e0ca8d9366efd0c9b5c7adf0da1a5325e5",
+          "kind": "archive-diverged",
+          "archiveTag": "archive/m2d/vis002-fix-007fc8e0"
+        }
+      ],
+      "auxiliaryRetired": [
+        {
+          "branch": "integration/19-vis002-cluster-semantic-20261028",
+          "sha": "2c7c4ed68744bb4f6370dc808ed84c1716901802",
+          "kind": "auxiliary-ancestor-development",
+          "recoverableFromDevelopment": true
+        }
+      ],
+      "semanticProof": {
+        "auxGate": 40676957154,
+        "developmentGate": 40677120764,
+        "destinationManifestGate": 40677382533,
+        "sourceBranchesStudied": 5,
+        "byteExactHistoricalFiles": 14,
+        "sourceIntegrityTests": 4,
+        "currentContextPinTests": 3,
+        "availabilityBrowserScenarios": 8,
+        "engines": [
+          "chromium",
+          "webkit"
+        ],
+        "noRuntimeChanges": true
+      },
+      "preserved": {
+        "openPRs": 12,
+        "remainingOriginalHistoricalRefs": 43,
+        "mainSha": "221b54b2a41ecc8c338d1bf2cf67280cf165ce95",
+        "originalAssetsBranch": "artifacts/ds02-imagens-originais-20261015",
+        "unmergedVisualPR": 34
+      },
+      "noDeploy": true
     }
   ],
-  "nextBatchContract": "Carry all 15 original historical waves[].retired records into each next batch; exclude nine auxiliaryRetired records. 45 historical originals + main/development = 47 branches. Batch L consumed; never replay. Keep PR #231 (v0.1) and five other VIS-002 histories on HOLD pending semantic comparison; no CSS rollback or Netlify deployment."
+  "nextBatchContract": "Carry 17 historical rows from waves[].retired, excluding 10 auxiliaryRetired. 43 original historical refs + development + main = 45 branches. Batch M consumed; never replay. Group auxiliaries by semantic family with compatibility and gates, not by individual branch. Bounded safety retirement remains max 3 refs. Three VIS002 v0.2/consolidated histories HOLD and PR231 active; protect data/DTO/auth separately."
 }
