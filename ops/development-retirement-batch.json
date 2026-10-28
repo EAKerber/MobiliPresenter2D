@@ -3,7 +3,7 @@
   "repository": "EAKerber/MobiliPresenter2D",
   "controlBranch": "development",
   "mainSha": "221b54b2a41ecc8c338d1bf2cf67280cf165ce95",
-  "batchId": "dev-20261027-a11y-semantic-aux-d2",
+  "batchId": "dev-20261027-accordion-recency-aux-e",
   "retired": [
     {
       "branch": "docs/handover-reconcile-20261023",
@@ -36,30 +36,36 @@
       "sha": "b81308a22c2a9d281037306f5ebf9eecb521d15e",
       "kind": "archive-diverged",
       "archiveTag": "archive/m2d/fix-mobile-menu-scene-stacking-b81308a2"
-    }
-  ],
-  "auxiliaryRefs": [
-    {
-      "branch": "integration/10-a11y-fallback-semantic-reconcile-20261027",
-      "sha": "5154004be71c1cd75069f0ca64ab5d91c3a95b99"
-    }
-  ],
-  "targets": [
+    },
     {
       "branch": "a11y/image-failure-scalable-placeholder-20261025",
       "sha": "6840d8986e44a7860b541e6becb3b5373ef48c09",
       "kind": "archive-diverged",
-      "archiveTag": "archive/m2d/a11y-image-fallback-6840d898",
-      "snapshotPath": "docs/work/DEVELOPMENT_A11Y_FALLBACK_SEMANTIC_CLUSTER_2026-10-27.md",
+      "archiveTag": "archive/m2d/a11y-image-fallback-6840d898"
+    }
+  ],
+  "auxiliaryRefs": [
+    {
+      "branch": "integration/11-accordion-latest-tests-20261027",
+      "sha": "0456909026d6a1229f4e5a692190a4f32496c0fc"
+    }
+  ],
+  "targets": [
+    {
+      "branch": "fix/how-it-works-accordion-grid-20261021",
+      "sha": "6260df944b6b82f3a86d9eed4d9bc3eacd8bc48b",
+      "kind": "archive-diverged",
+      "archiveTag": "archive/m2d/how-accordion-grid-6260df94",
+      "snapshotPath": "docs/work/DEVELOPMENT_ACCORDION_RECENCY_CLUSTER_2026-10-27.md",
       "semanticGate": {
-        "runId": 40581205414,
-        "headSha": "0f752e6d09623579d3db87a7f65d6eabbc183457",
-        "workflowName": "Development 10 — legacy a11y fallback semantic supersession (offline)"
+        "runId": 40608839476,
+        "headSha": "0456909026d6a1229f4e5a692190a4f32496c0fc",
+        "workflowName": "Development 11 — accordion latest-test semantic regression (offline)"
       }
     },
     {
-      "branch": "integration/10-a11y-fallback-semantic-reconcile-20261027",
-      "sha": "5154004be71c1cd75069f0ca64ab5d91c3a95b99",
+      "branch": "integration/11-accordion-latest-tests-20261027",
+      "sha": "0456909026d6a1229f4e5a692190a4f32496c0fc",
       "kind": "auxiliary-ancestor-development"
     }
   ]
