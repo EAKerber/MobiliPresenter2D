@@ -3,7 +3,7 @@
   "repository": "EAKerber/MobiliPresenter2D",
   "controlBranch": "development",
   "mainSha": "221b54b2a41ecc8c338d1bf2cf67280cf165ce95",
-  "batchId": "dev-20261027-arc03-prototype-semantic-i",
+  "batchId": "dev-20261027-vis002-reference-pin-j",
   "retired": [
     {
       "branch": "docs/handover-reconcile-20261023",
@@ -72,30 +72,36 @@
       "sha": "4ba9384733a8cb46ad8a6c7c8ef3b9aebe25cd93",
       "kind": "archive-diverged",
       "archiveTag": "archive/m2d/public-menu-pcomp-4ba93847"
-    }
-  ],
-  "auxiliaryRefs": [
-    {
-      "branch": "integration/15-arc03-prototype-reconcile-20261027",
-      "sha": "6a2e32747f91ba2cf1d819f6df741cd95622fc17"
-    }
-  ],
-  "targets": [
+    },
     {
       "branch": "architecture/arc03-primary-header-fragment-prototype-20261022",
       "sha": "e459b9bd85c4e9c8bb96813ae6758789de75dc13",
       "kind": "archive-diverged",
-      "archiveTag": "archive/m2d/arc03-prototype-e459b9bd",
-      "snapshotPath": "docs/work/DEVELOPMENT_ARC03_PROTOTYPE_RECONCILIATION_2026-10-27.md",
+      "archiveTag": "archive/m2d/arc03-prototype-e459b9bd"
+    }
+  ],
+  "auxiliaryRefs": [
+    {
+      "branch": "integration/16-vis002-reference-pin-governance-20261027",
+      "sha": "dcab88a8020a94529bc58374c571f242e11ed03f"
+    }
+  ],
+  "targets": [
+    {
+      "branch": "architecture/p-token-01b-reference-pin-20261022",
+      "sha": "854cc05896523567e503f42af2b8e209c7591b31",
+      "kind": "archive-diverged",
+      "archiveTag": "archive/m2d/vis002-reference-pin-854cc058",
+      "snapshotPath": "docs/work/DEVELOPMENT_VIS002_REFERENCE_PIN_RECONCILIATION_2026-10-27.md",
       "semanticGate": {
-        "runId": 40617029330,
-        "headSha": "6a2e32747f91ba2cf1d819f6df741cd95622fc17",
-        "workflowName": "Development 15 — ARC03 preview prototype supersession, fail-closed guards"
+        "runId": 40618382150,
+        "headSha": "dcab88a8020a94529bc58374c571f242e11ed03f",
+        "workflowName": "Development 16 — VIS002 reference pin (not activated) and computed CSS audit"
       }
     },
     {
-      "branch": "integration/15-arc03-prototype-reconcile-20261027",
-      "sha": "6a2e32747f91ba2cf1d819f6df741cd95622fc17",
+      "branch": "integration/16-vis002-reference-pin-governance-20261027",
+      "sha": "dcab88a8020a94529bc58374c571f242e11ed03f",
       "kind": "auxiliary-ancestor-development"
     }
   ]
