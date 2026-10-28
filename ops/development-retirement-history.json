@@ -1293,7 +1293,82 @@
         "originalAssetsBranch": "artifacts/ds02-imagens-originais-20261015"
       },
       "noDeploy": true
+    },
+    {
+      "batchId": "dev-20261028-ci-nav-css-visual-proof-x",
+      "workflowRun": 40728676242,
+      "workflowUrl": "https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40728676242",
+      "headSha": "ca9f1ec35ffe2b742cefb66468e1e60db491fd62",
+      "audit": "PASS",
+      "apply": "PASS",
+      "auditArtifactId": 12834735312,
+      "applyArtifactId": 12833902524,
+      "refsBefore": 34,
+      "refsAfter": 32,
+      "archived": [
+        {
+          "tag": "archive/m2d/legacy-ci-v5-nav-css-62c5521d",
+          "sha": "62c5521d7e883443696ce1c58c912ac4794ff75e"
+        }
+      ],
+      "retired": [
+        {
+          "branch": "fix/ci-baseline-v5-nav-flow-clean-20261023",
+          "sha": "62c5521d7e883443696ce1c58c912ac4794ff75e",
+          "kind": "archive-diverged",
+          "archiveTag": "archive/m2d/legacy-ci-v5-nav-css-62c5521d"
+        }
+      ],
+      "auxiliaryRetired": [
+        {
+          "branch": "integration/30-ci-nav-css-container-causality-20261028",
+          "sha": "9e8b947ecfd4a98f3b49f5b9e18383721437b8bc",
+          "kind": "auxiliary-ancestor-development",
+          "recoverableFromDevelopment": true
+        }
+      ],
+      "semanticProof": {
+        "mainSha": "221b54b2a41ecc8c338d1bf2cf67280cf165ce95",
+        "mainAuthorityPolicy": "ops/development-main-authority-policy.json",
+        "oldCssSha": "eb55a9b5cb92d2e76ae70e0e41ac9fdf8b366616",
+        "newCssSha": "d43e6fb5e66133d2389b5c39b165b76b13cfa868",
+        "historicalArtifactsPreserved": 9,
+        "oldContainer": ".controls",
+        "oldThresholdPx": 514,
+        "newContainer": ".flow-nav",
+        "newThresholdPx": 500,
+        "boundaryPairs": 20,
+        "fullProfilePairs": 56,
+        "visualNavScreenshotsMatched": 76,
+        "navRasterDifferences": 0,
+        "labelSwitchDifferences": 0,
+        "browserEngines": [
+          "chromium",
+          "webkit"
+        ],
+        "themes": [
+          "light",
+          "dark"
+        ],
+        "auxGate": 40726828140,
+        "devGate": 40727644236,
+        "devProvenanceGate": 40727644250,
+        "fullBaselinePixelOnEntirePage": false,
+        "localV5Only": true,
+        "noRealNetlifySessionTest": true,
+        "noMainChanges": true,
+        "noRuntimeChanges": true,
+        "noDeploy": true
+      },
+      "preserved": {
+        "mainSha": "221b54b2a41ecc8c338d1bf2cf67280cf165ce95",
+        "openPRs": 12,
+        "remainingOriginalHistoricalRefs": 30,
+        "originalAssetsBranch": "artifacts/ds02-imagens-originais-20261015",
+        "unmergedVisualPR": 34
+      },
+      "noDeploy": true
     }
   ],
-  "nextBatchContract": "23 waves; 29/60 historical original heads retired, 20 auxiliary heads retired, 31 historical + main + development = 33 branches. W consumed and must NEVER replay. CI V5 NAV CLEAN old historical ref intentionally HOLD pending CSS/pixel and nav-label differential proof; 8 historical blobs preserved at docs/reconciliation/ci-v5-nav-clean/source. Main stays stable authority, 12 PRs, DS02 intact. No production deploy."
+  "nextBatchContract": "24 waves; 30/60 original historical heads retired, 21 auxiliary heads retired, 30 historical + main + development = 32 total live branches. Batch X consumed; NEVER replay. CI NAV CSS original retired after 76/76 exact nav screenshot raster parity over 20 boundary + 56 profile/theme/details cases, 9 historical sources archived and full original DAG Git tag. Main stable strong authority. 12 open PRs and DS02 untouched. No real Netlify session, no deploy."
 }
