@@ -1126,7 +1126,66 @@
         "unmergedVisualPR": 34
       },
       "noDeploy": true
+    },
+    {
+      "batchId": "dev-20261028-ux04-v5-geometry-focus-u",
+      "workflowRun": 40709879421,
+      "workflowUrl": "https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40709879421",
+      "headSha": "3089aeef7ba8e8e56da6a3b5b353865a5612f8ff",
+      "audit": "PASS",
+      "apply": "PASS",
+      "auditArtifactId": 12825631263,
+      "applyArtifactId": 12825043300,
+      "refsBefore": 36,
+      "refsAfter": 34,
+      "archived": [
+        {
+          "tag": "archive/m2d/legacy-ux04-hierarchy-layout-5d8347ed",
+          "sha": "5d8347edb6ea247307b6fc27b424117553542f78"
+        }
+      ],
+      "retired": [
+        {
+          "branch": "feat/cp-ux-04-hierarchy-layout",
+          "sha": "5d8347edb6ea247307b6fc27b424117553542f78",
+          "kind": "archive-diverged",
+          "archiveTag": "archive/m2d/legacy-ux04-hierarchy-layout-5d8347ed"
+        }
+      ],
+      "auxiliaryRetired": [
+        {
+          "branch": "integration/27-ux04-responsive-focus-gate-20261028",
+          "sha": "dede6e40121ee36e216051d78d3742e07395a72b",
+          "kind": "auxiliary-ancestor-development",
+          "recoverableFromDevelopment": true
+        }
+      ],
+      "semanticProof": {
+        "pinnedMainSha": "221b54b2a41ecc8c338d1bf2cf67280cf165ce95",
+        "originalSourceBlobsPreserved": 13,
+        "oldGeometryAssertionsReplaced": 6,
+        "oldKeyboardAssertions": 74,
+        "oldKeyboardAssertionsPreserved": 72,
+        "dockAwareReplacements": 2,
+        "rootCause": "section:handles required; handles returned false",
+        "developmentOnlyFix": "activateSection(\"section:handles\",handleIndex,true)",
+        "auxGate": 40708822213,
+        "developmentGate": 40709264881,
+        "manifestGate": 40709879331,
+        "chromiumV5GeometryFocusAndKeyboard": "PASS",
+        "mainUnchanged": true,
+        "noDeploy": true,
+        "realAuthenticatedSession": "NOT TESTED"
+      },
+      "preserved": {
+        "mainSha": "221b54b2a41ecc8c338d1bf2cf67280cf165ce95",
+        "openPRs": 12,
+        "remainingOriginalHistoricalRefs": 32,
+        "originalAssetsBranch": "artifacts/ds02-imagens-originais-20261015",
+        "unmergedVisualPR": 34
+      },
+      "noDeploy": true
     }
   ],
-  "nextBatchContract": "20 waves; 27/60 original historical branches retired, 17 aux retired, 33 historical + main + development = 35 heads. T manifest consumed (never replay); main stable and strong; old V3-only fixture retired with 216/216 assertions statically identical in current V5 and two passing local Chromium+buyer browser gates at aux and development. UX04 HOLD 6 geometric assertions not in V5 suite; 12 PRs, DS02, main preserved. No authenticated Netlify session tested."
+  "nextBatchContract": "21 waves; 28/60 historical originals retired, 18 auxiliaries retired; 32 original heads + main + development = 34. Batch U consumed: do not replay. Original UX04 entire DAG retained via archive/m2d/legacy-ux04-hierarchy-layout-5d8347ed. Canonical main modern layout prevails, historic handle keyboard focus restored only in development, all 3 local V5 browser gates pass. 12 PRs, DS02 and main untouched; no live Netlify authentication tested."
 }
