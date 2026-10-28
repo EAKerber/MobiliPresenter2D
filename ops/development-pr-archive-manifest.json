@@ -3,7 +3,7 @@
   "repository": "EAKerber/MobiliPresenter2D",
   "controlBranch": "development",
   "mainSha": "221b54b2a41ecc8c338d1bf2cf67280cf165ce95",
-  "batchId": "dev-20261028-public-pr-archive-ag",
+  "batchId": "dev-20261028-public-pr-archive-ah",
   "snapshotPath": "docs/work/DEVELOPMENT_CP_PUBLIC_PR_CLOSURE_2026-10-28.md",
   "expectedOpenPRs": [
     [
@@ -86,8 +86,11 @@
     ]
   ],
   "targets": [
+    179,
+    180
+  ],
+  "previousTagged": [
     175,
     178
-  ],
-  "previousTagged": []
+  ]
 }
