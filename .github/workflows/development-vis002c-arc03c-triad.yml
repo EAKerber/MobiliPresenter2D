@@ -1,0 +1,30 @@
+name: Development VIS002C triad and ARC03C source-output provenance
+on:
+  push:
+    branches:
+      - development
+      - integration/35-vis002c-arc03c-triad-20261028
+    paths:
+      - 'tests/test_development_vis002c_triad.py'
+      - 'docs/work/DEVELOPMENT_VIS002C_ARC03C_TRIAD_2026-10-28.md'
+      - '.github/workflows/development-vis002c-arc03c-triad.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  triad-offline:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Inspect exact Git ancestry, archived candidates, ARC source-output and copy contracts
+        run: python3 -m unittest discover -s tests -p test_development_vis002c_triad.py -v
+      - name: Revalidate current ARC03C outputs and the ten v03 CSS consumers
+        run: |
+          node scripts/compile-primary-pages.mjs --check
+          node scripts/verify-vis002c-product-pin-v03.mjs
