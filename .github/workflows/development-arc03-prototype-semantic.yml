@@ -1,0 +1,73 @@
+name: Development 15 — ARC03 preview prototype supersession, fail-closed guards
+
+on:
+  push:
+    branches:
+      - integration/15-arc03-prototype-reconcile-20261027
+      - development
+    paths:
+      - 'tests/arc03c-historical-prototype-guards.test.mjs'
+      - 'tools/development_arc03_prototype_semantic_audit.py'
+      - '.github/workflows/development-arc03-prototype-semantic.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  arc03-source-and-browser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    container:
+      image: mcr.microsoft.com/playwright:v1.62.1-noble
+      options: --ipc=host
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Pin legacy 12-path DAG and prove newer compiler build authority
+        shell: bash
+        run: |
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
+          git fetch --no-tags origin main
+          git fetch --no-tags origin e459b9bd85c4e9c8bb96813ae6758789de75dc13
+          mkdir -p artifacts/development-arc03-prototype-reconciliation
+          python3 -m py_compile tools/development_arc03_prototype_semantic_audit.py
+          python3 tools/development_arc03_prototype_semantic_audit.py | tee artifacts/development-arc03-prototype-reconciliation/source.json
+      - name: Assert current authoritative pages match output and fail closed on drift
+        run: |
+          node --check scripts/compile-primary-pages.mjs
+          node --check tests/arc03c-historical-prototype-guards.test.mjs
+          npm run pages:check
+          node --test tests/arc03c-source-authority.test.mjs
+          node --test tests/arc03c-historical-prototype-guards.test.mjs
+          node tests/public-cutover-contract.cjs
+      - name: Use pinned Chromium and WebKit runners, local only
+        run: |
+          npm install --prefix /tmp/m2d-arc03-proto --no-audit --no-fund playwright@1.62.1
+          node -e 'if(require("/tmp/m2d-arc03-proto/node_modules/playwright/package.json").version!=="1.62.1")process.exit(1)'
+      - name: Serve current generated pages without deploying or mutating app
+        shell: bash
+        run: |
+          python3 -m http.server 8123 --bind 127.0.0.1 --directory app >/tmp/arc03-proto-http.log 2>&1 &
+          for i in $(seq 1 30); do
+            if curl -fsS http://127.0.0.1:8123/ >/dev/null; then break; fi
+            sleep 1
+          done
+          curl -fsS http://127.0.0.1:8123/about/ >/dev/null
+          curl -fsS http://127.0.0.1:8123/how-it-works/ >/dev/null
+          curl -fsS http://127.0.0.1:8123/viewer/ >/dev/null
+      - name: Check primary headers and independent Viewer in 48 Chromium/WebKit cases
+        env:
+          NODE_PATH: /tmp/m2d-arc03-proto/node_modules
+        run: node tests/ci/public-navigation-semantic-browser.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: arc03-prototype-semantic-${{ github.run_id }}
+          path: artifacts/development-arc03-prototype-reconciliation/
+          retention-days: 30
+          if-no-files-found: warn
