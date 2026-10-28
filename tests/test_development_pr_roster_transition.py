@@ -2,6 +2,8 @@
 import copy
 import importlib.util
 import json
+import os
+import subprocess
 import tempfile
 import unittest
 from pathlib import Path
@@ -127,6 +129,89 @@ class PRRosterGates(unittest.TestCase):
                                  set(mod.PR_HEAD_PINS))
             finally:
                 mod.PR_CLOSURE_TRANSITION=old
+
+
+class PRHeadRetentionGates(unittest.TestCase):
+    def refs(self):
+        refs = {"refs/remotes/origin/" + branch: sha
+                for branch, sha in mod.PR_HEAD_PINS.values()}
+        refs.update({"refs/tags/" + tag: mod.PR_HEAD_PINS[n][1]
+                     for n, tag in mod.PR_ARCHIVE_TAGS.items()})
+        return refs
+
+    def verify(self, refs, closed=(175, 178)):
+        return mod.verify_pr_head_retention(mod.PR_HEAD_PINS, refs, closed)
+
+    def test_exact_heads_before_and_after_two_closed_branches_removed(self):
+        refs = self.refs()
+        self.assertTrue(self.verify(refs))
+        for n in (175, 178):
+            refs.pop("refs/remotes/origin/" + mod.PR_HEAD_PINS[n][0])
+            self.assertTrue(self.verify(refs))
+
+    def test_open_pr_cannot_fall_back_to_archive_tag(self):
+        for n in set(mod.PR_HEAD_PINS) - {175, 178}:
+            with self.subTest(pr=n):
+                refs = self.refs()
+                refs.pop("refs/remotes/origin/" + mod.PR_HEAD_PINS[n][0])
+                with self.assertRaisesRegex(RuntimeError, "OPEN_PR_BRANCH_MISSING"):
+                    self.verify(refs)
+
+    def test_existing_changed_branch_must_not_be_masked_by_correct_tag(self):
+        for n in (175, 178, 179):
+            with self.subTest(pr=n):
+                refs = self.refs()
+                refs["refs/remotes/origin/" + mod.PR_HEAD_PINS[n][0]] = "f" * 40
+                with self.assertRaisesRegex(RuntimeError, "PR_RETENTION_BRANCH_DRIFT"):
+                    self.verify(refs)
+
+    def test_closed_pr_archive_required_even_if_branch_still_exists(self):
+        for n in (175, 178):
+            for present in (True, False):
+                for replacement in (None, "f" * 40):
+                    with self.subTest(pr=n, branch=present, tag=replacement):
+                        refs = self.refs()
+                        tag = "refs/tags/" + mod.PR_ARCHIVE_TAGS[n]
+                        refs.pop(tag)
+                        if replacement:
+                            refs[tag] = replacement
+                        if not present:
+                            refs.pop("refs/remotes/origin/" + mod.PR_HEAD_PINS[n][0])
+                        with self.assertRaisesRegex(RuntimeError, "PR_RETENTION_ARCHIVE_MISSING_OR_CHANGED"):
+                            self.verify(refs)
+
+    def test_closed_security_pr_is_not_an_archival_candidate(self):
+        with self.assertRaisesRegex(RuntimeError, "UNARCHIVABLE_CLOSED_PR"):
+            self.verify(self.refs(), closed=(175, 178, 182))
+
+    def test_altered_historical_pin_is_not_accepted(self):
+        pins = copy.deepcopy(mod.PR_HEAD_PINS)
+        pins[175][1] = "f" * 40
+        with self.assertRaisesRegex(RuntimeError, "PR_RETENTION_PIN_DRIFT"):
+            mod.verify_pr_head_retention(pins, self.refs(), {175, 178})
+
+    def test_both_real_lineage_suites_pass_without_closed_head_refs(self):
+        # A disposable shared mirror hides refs locally; never mutate origin or
+        # this checkout. Historical DAG/blob/route assertions run unchanged.
+        root = str(ROOT)
+        original = mod.local_pr_refs()
+        with tempfile.TemporaryDirectory() as tmp:
+            mirror = str(Path(tmp) / "history.git")
+            subprocess.run(["git", "clone", "--quiet", "--shared", "--mirror", root, mirror],
+                           check=True, capture_output=True, text=True)
+            for n in mod.PR_CONFIRMED_CLOSED_UNMERGED:
+                branch, sha = mod.PR_HEAD_PINS[n]
+                subprocess.run(["git", "--git-dir=" + mirror, "update-ref", "-d",
+                                "refs/remotes/origin/" + branch, sha], check=True)
+            env = dict(os.environ, GIT_DIR=mirror, GIT_WORK_TREE=root)
+            result = subprocess.run([
+                "python3", "-m", "unittest",
+                "tests/test_development_cp_public_lineage.py",
+                "tests/test_development_cp_public_prs_175_180.py", "-v"],
+                cwd=root, env=env, capture_output=True, text=True)
+            self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+            self.assertIn("Ran 15 tests", result.stderr)
+        self.assertEqual(mod.local_pr_refs(), original)
 
 if __name__=="__main__":
     unittest.main()

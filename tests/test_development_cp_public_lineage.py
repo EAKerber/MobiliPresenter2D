@@ -3,8 +3,14 @@
 Do not execute historical buyer/session code, contact Netlify, or access DB.
 """
 import subprocess
+import importlib.util
 import unittest
 from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[1]
+SPEC = importlib.util.spec_from_file_location("pr_retention_guard", ROOT / "tools/development_retirement_batch.py")
+guard = importlib.util.module_from_spec(SPEC)
+SPEC.loader.exec_module(guard)
 
 REPO = "EAKerber/MobiliPresenter2D"
 MAIN = "221b54b2a41ecc8c338d1bf2cf67280cf165ce95"
@@ -45,13 +51,14 @@ def ancestor(a,b):
                           stdout=subprocess.PIPE,stderr=subprocess.PIPE).returncode == 0
 
 class CPPublicLineage(unittest.TestCase):
-    def test_full_12_pr_head_pins_and_legacy_source_unheaded(self):
+    def test_full_12_historical_pr_pins_and_legacy_source_unheaded(self):
+        guard.verify_pr_head_retention(OPEN_PR_HEADS, guard.local_pr_refs(),
+                                       guard.PR_CONFIRMED_CLOSED_UNMERGED)
         self.assertEqual(len(OPEN_PR_HEADS), 12)
         self.assertEqual(len(set(n for n,_ in OPEN_PR_HEADS.values())), 12)
         for n,(name,sha) in OPEN_PR_HEADS.items():
             with self.subTest(pr=n):
                 self.assertEqual(git("rev-parse",sha+"^{commit}"),sha)
-                self.assertEqual(git("rev-parse","refs/remotes/origin/"+name),sha)
         for sha in (OLD_TERMINAL, MAIN, DEV):
             self.assertEqual(git("rev-parse",sha+"^{commit}"),sha)
         source_name = "work/cp-public-03a2-3-contract-integration-20261008"

@@ -205,6 +205,46 @@ def verify_open_pr_roster(prs, tags, fetch_pr=api):
     return set(actual)
 
 
+# Confirmed CLOSED/UNMERGED via REST on 2026-10-28; see closure evidence.
+# Offline provenance tests use this historical receipt, not live PR-state authority.
+# Remote mutation always uses verify_open_pr_roster and its fresh API readback.
+PR_CONFIRMED_CLOSED_UNMERGED = frozenset({175, 178})
+
+
+def local_pr_refs():
+    """Read full local ref identities; a matching tag must not mask branch drift."""
+    refs = {}
+    for line in git("for-each-ref", "--format=%(refname) %(objectname)",
+                    "refs/remotes/origin/", "refs/tags/").splitlines():
+        name, sha = line.split(" ", 1)
+        refs[name] = sha
+    return refs
+
+
+def verify_pr_head_retention(pins, refs, closed_pr_numbers):
+    """Require every open head branch; only closed public PRs may use exact tags.
+
+    The caller must supply already verified closed/unmerged PR numbers. Offline
+    tests pass the recorded closure receipt; the live probe passes the roster
+    verified independently against GitHub. This function makes no network calls.
+    """
+    closed = set(closed_pr_numbers)
+    if not closed.issubset(PR_ARCHIVE_TAGS):
+        raise RuntimeError("UNARCHIVABLE_CLOSED_PR")
+    for n, (branch, sha) in pins.items():
+        if PR_HEAD_PINS.get(n) != [branch, sha]:
+            raise RuntimeError("PR_RETENTION_PIN_DRIFT:" + str(n))
+        actual = refs.get("refs/remotes/origin/" + branch)
+        if actual is not None and actual != sha:
+            raise RuntimeError("PR_RETENTION_BRANCH_DRIFT:" + str(n))
+        if n in closed:
+            if refs.get("refs/tags/" + PR_ARCHIVE_TAGS[n]) != sha:
+                raise RuntimeError("PR_RETENTION_ARCHIVE_MISSING_OR_CHANGED:" + str(n))
+        elif actual is None:
+            raise RuntimeError("OPEN_PR_BRANCH_MISSING:" + str(n))
+    return True
+
+
 def safe_name(name):
     return (isinstance(name, str) and BRANCH_RE.fullmatch(name) is not None
             and ".." not in name and "//" not in name and not name.startswith("-")

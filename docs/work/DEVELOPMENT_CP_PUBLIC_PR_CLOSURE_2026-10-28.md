@@ -61,3 +61,34 @@ O lote `dev-20261028-cppublic-pr-closure-aux-ak` do executor limitado a 1–3 re
 Recibos: audit `12849692682`, apply `12850146825`. Readback de refs **28→26**; 24 branches originais remanescentes, main e development; 36/60 originais aposentadas, **30 auxiliares**, **33 ondas**. **Onda AK CONSUMED — NÃO REAPLICAR.** As duas heads originais de PR #175/#178 (agora CLOSED/UNMERGED) **continuam presentes** e preservadas por tags. As PRs #179/#180 continuam OPEN, e as 8 demais PRs protegidas permanecem OPEN. Handover e `ops/development-retirement-history.json` atualizados.
 
 **Próxima mudança antes de retirar heads de PR fechadas:** as suítes `tests/test_development_cp_public_lineage.py` e `tests/test_development_cp_public_prs_175_180.py` ainda verificam a existência literal das 12 branches originais. Torná-las provas de **branch OU tag exata** apenas para as quatro PRs públicas, mantendo as outras oito heads no roster. Executar gate no destino primeiro; só então preparar próximo manifesto com #175/#178 `archive-diverged`, duas targets e tag SHA-exata existente. Nenhum DELETE ou merge dessas heads foi autorizado nesta onda.
+
+
+## Bloco 40 — retenção das heads encerradas #175/#178 (28/10/2026)
+
+Base de desenvolvimento: `c864fe97761f2da72dcf455d5e6e0e7f1f2a261b`.
+REST confirmado antes da edição: #175 CLOSED/UNMERGED em 2026-10-28T20:35:11Z,
+#178 CLOSED/UNMERGED em 2026-10-28T20:35:39Z, ambas com base `main` e HEAD original.
+O roster vivo tem 10 PRs abertas. A transição AI continua limitada a [175,178];
+#179/#180 e as outras oito PRs continuam obrigatoriamente abertas.
+
+Proveniência exata, preservada antes da remoção de qualquer branch:
+
+- `work/cp-public-01-donor-staging-20261008@c81d357df3aa78c3e8f804b6334b2da35b3a75c8` → `archive/m2d/cppublic-pr175-c81d357d`.
+- `work/cp-public-02a-public-module-projection-20261008@f0c792397036836105dcb53a45f89780e10b6348` → `archive/m2d/cppublic-pr178-f0c79239`.
+
+As duas suítes históricas passam a validar a mesma identidade completa por branch
+ou, exclusivamente para as duas PRs comprovadamente encerradas, tag exata. Uma
+branch presente com SHA diferente continua sendo erro mesmo que a tag esteja
+correta. Uma PR aberta não pode usar a tag para mascarar a ausência de sua head.
+O probe remoto calcula o conjunto encerrado pelo roster REST já validado; o
+recibo histórico offline não concede autoridade para uma mutação remota.
+
+A regressão executa as 15 verificações de DAG, blobs, rotas e contratos históricos
+em um espelho Git descartável sem as duas refs remotas encerradas. O checkout
+original e origin não são alterados pela simulação. Testes negativos cobrem tag
+faltante/trocada, branch divergente, perda de head aberta, mudança de pin e PR de
+segurança fora do conjunto público. O gate inclui os contratos atuais do projetor,
+endpoint em memória e viewer. Nenhum código de aplicação, seed de preview, auth,
+banco, Netlify ou main faz parte do diff. Resultados e recibo da futura onda serão
+registrados somente após confirmação. A aposentadoria requer gate auxiliar e
+destino PASS, manifesto fresco, lease por SHA e readback completo.

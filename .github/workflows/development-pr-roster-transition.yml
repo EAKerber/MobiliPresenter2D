@@ -3,12 +3,15 @@ on:
   push:
     branches:
       - development
+      - integration/40-cppublic-closed-heads-20261028
     paths:
       - 'ops/development-pr-closure-transition.json'
       - 'docs/work/DEVELOPMENT_CP_PUBLIC_PR_CLOSURE_2026-10-28.md'
       - 'tools/development_retirement_batch.py'
       - 'tools/development_pr_roster_probe.py'
       - 'tests/test_development_pr_roster_transition.py'
+      - 'tests/test_development_cp_public_lineage.py'
+      - 'tests/test_development_cp_public_prs_175_180.py'
       - '.github/workflows/development-pr-roster-transition.yml'
   workflow_dispatch:
 permissions:
@@ -25,8 +28,16 @@ jobs:
       - name: Compile strict PR, archive, and bounded branch retirement logic
         run: |
           python3 -m py_compile tools/development_retirement_batch.py tools/development_pr_roster_probe.py
-          python3 -m unittest tests/test_development_retirement_batch.py tests/test_development_pr_roster_transition.py -v
+          python3 -m unittest tests/test_development_retirement_batch.py tests/test_development_pr_roster_transition.py tests/test_development_cp_public_lineage.py tests/test_development_cp_public_prs_175_180.py -v
       - name: Read-only GitHub check of all live PRs and all four exact archive tags
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: python3 tools/development_pr_roster_probe.py
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Public projection, endpoint and viewer contracts without external services
+        run: |
+          node --test tests/public-module-projection.test.cjs
+          node app/tools/test-public-modules-endpoint.js
+          node --test app/viewer/scene-adapters.test.mjs

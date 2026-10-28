@@ -4,6 +4,7 @@ on:
     branches:
       - development
     paths:
+      - 'tools/development_retirement_batch.py'
       - 'docs/work/DEVELOPMENT_CP_PUBLIC_PR_LINEAGE_2026-10-28.md'
       - 'tests/test_development_cp_public_lineage.py'
       - '.github/workflows/development-cp-public-lineage.yml'

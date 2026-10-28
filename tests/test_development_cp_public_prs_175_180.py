@@ -5,7 +5,13 @@ Read historical Git objects only; do not execute legacy preview plugins or HTTP 
 from pathlib import Path
 import re
 import subprocess
+import importlib.util
 import unittest
+
+ROOT = Path(__file__).resolve().parents[1]
+SPEC = importlib.util.spec_from_file_location("pr_retention_guard", ROOT / "tools/development_retirement_batch.py")
+guard = importlib.util.module_from_spec(SPEC)
+SPEC.loader.exec_module(guard)
 
 MAIN = "221b54b2a41ecc8c338d1bf2cf67280cf165ce95"
 DEV = "bea73af76bfd6e5b638497ad000e14de611bb183"
@@ -64,12 +70,13 @@ class PublicPRs(unittest.TestCase):
         cls.main=tree(MAIN)
         cls.dev=tree(DEV)
 
-    def test_pins_and_four_distinct_open_pr_head_branches(self):
+    def test_pins_and_four_historical_pr_heads_recoverable(self):
+        guard.verify_pr_head_retention(PR, guard.local_pr_refs(),
+                                       guard.PR_CONFIRMED_CLOSED_UNMERGED)
         self.assertEqual(len(PR),4)
         for n,(branch,sha) in PR.items():
             with self.subTest(pr=n):
                 self.assertEqual(git("rev-parse",sha+"^{commit}"),sha)
-                self.assertEqual(git("rev-parse","refs/remotes/origin/"+branch),sha)
         self.assertEqual(git("rev-parse",MAIN+"^{commit}"),MAIN)
         self.assertEqual(git("rev-parse",DEV+"^{commit}"),DEV)
         self.assertFalse(any(is_ancestor(sha,MAIN) for _,sha in PR.values()),
