@@ -23,51 +23,51 @@ INVENTORY = Path("docs/work/DEVELOPMENT_CLUSTER_INVENTORY_2026-10-27.json")
 MANIFEST = Path("ops/development-retirement-batch.json")
 RECEIPT = Path("artifacts/development-retirement/receipt.json")
 PR_HEAD_PINS = {
-  "34": [
+    34: [
     "feat/exposed-sides-and-glass",
     "20040da835d6da66b03f73642c0c44db109dd6e8"
   ],
-  "175": [
+    175: [
     "work/cp-public-01-donor-staging-20261008",
     "c81d357df3aa78c3e8f804b6334b2da35b3a75c8"
   ],
-  "178": [
+    178: [
     "work/cp-public-02a-public-module-projection-20261008",
     "f0c792397036836105dcb53a45f89780e10b6348"
   ],
-  "179": [
+    179: [
     "work/cp-public-02b-public-read-endpoint-20261008",
     "44b1d6a94c06a17b73405755e03c787780e7a455"
   ],
-  "180": [
+    180: [
     "work/cp-public-02c-integrated-preview-20261008",
     "82d85674595280a7c878848d0d5f09df29492e92"
   ],
-  "182": [
+    182: [
     "work/cp-public-03a1-configuration-read-guard-20261008",
     "0b398618f7f2eff23da7f782d53d86ba3ee6411b"
   ],
-  "184": [
+    184: [
     "work/cp-public-03a2-0-failclosed-bootstrap-20261008",
     "d1305ffdd8302fa06b37d3676f08d802a92e7d97"
   ],
-  "185": [
+    185: [
     "work/cp-public-03a2-1-buyer-projection-20261008",
     "7a0d919d4e27853c50cff8afde0cdcc066e0aa0c"
   ],
-  "186": [
+    186: [
     "work/cp-public-03a2-2-email-access-core-20261008",
     "40d4b65f9e7e16e0810c2308e9b947840371cbe7"
   ],
-  "196": [
+    196: [
     "docs/cp-public-auth-boundary-20261011",
     "43d5fb9c5c2749c0541b99d49ee1c048d6a9a96a"
   ],
-  "231": [
+    231: [
     "architecture/p-token-02b-contextual-copy-20261022",
     "afb80965336083209eac93e2729de77170524ee5"
   ],
-  "238": [
+    238: [
     "ci/ci-baseline-01-isolated-auth-extraction-20261024",
     "3ccce161235df925c5b708bf6feefbe6f4b10103"
   ]
