@@ -52,3 +52,11 @@ A execução inicial [#40608052660](https://github.com/EAKerber/MobiliPresenter2
 - **Nome da tag de recuperação, a criar ANTES da exclusão:** `archive/m2d/how-accordion-grid-6260df94` apontando para `6260df944b6b82f3a86d9eed4d9bc3eacd8bc48b`. O registro desta intenção não significa que a tag já exista.
 - A documentação e o workflow antigo da origem não serão copiados indiscriminadamente; o mecanismo offline em `development` implementa a mesma finalidade com o teste mais recente corrigido para a árvore atual.
 - A retenção do histórico continua obrigatória até aprovação do gate em `development` e o executor de higiene concluir auditoria completa e aplicar o lease de exclusão.
+
+
+## Onda E aplicada e comprovada
+
+- **Fast-forward** da auxiliar para `development` usando lease `17fb0754c9729d16896b6793a2b685422acb1651 -> 0456909026d6a1229f4e5a692190a4f32496c0fc`; arquivo de JS/CSS/HTML do produto não sofreu alteração. [Gate em development #40608839476](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40608839476) **PASS**, com as mesmas 8 combinações navegador/largura/tema e os dois grupos, abertura independente, irmãos fechados, teclas e screenshots.
+- **Higiene** [#40609050186](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40609050186): **AUDIT PASS / APPLY PASS**, artifacts `12781614106` e `12781168327`. Antes da remoção foi criada e lida de volta a tag `archive/m2d/how-accordion-grid-6260df94 -> 6260df944b6b82f3a86d9eed4d9bc3eacd8bc48b` para reter integralmente o DAG original. Removidos a branch histórica e o auxiliar absorvido por desenvolvimento. O executor verificou roster completo, 12 PRs, protections/rulesets e SHA leases.
+- Estado pós-onda: **54 branches** (52 históricas + `main` + `development`), 8 das 60 fontes originais aposentadas, 2 auxiliares integradas e retiradas, 12 PRs abertas, sem deploy Netlify.
+- Historial durável: `ops/development-retirement-history.json`, quinta onda E. O workflow do scanner passa a reagir também a alterações do ledger de aposentadorias para repetir automaticamente o inventário de sobreviventes. A recência de implementação e de intenção continua sendo analisada separadamente do mero hash de arquivo.
