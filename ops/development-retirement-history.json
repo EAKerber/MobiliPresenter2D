@@ -1800,7 +1800,71 @@
         "noAuthOrDBMutation": true
       },
       "noDeploy": true
+    },
+    {
+      "batchId": "dev-20261028-cppublic-public-prs-auxiliary-af",
+      "workflowRun": 40757846966,
+      "workflowUrl": "https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40757846966",
+      "headSha": "1f6b510d19e924e0ab6abe5b0e9ff205e20eb26d",
+      "audit": "PASS",
+      "apply": "PASS",
+      "refsBefore": 27,
+      "refsAfter": 26,
+      "auditArtifactId": 12846318471,
+      "applyArtifactId": 12845883273,
+      "archived": [],
+      "retired": [],
+      "auxiliaryRetired": [
+        {
+          "branch": "integration/37-cppublic-public-prs-20261028",
+          "sha": "4f5d1193c920a9fa14a67fcab278fe381829aac5",
+          "kind": "auxiliary-ancestor-development",
+          "recoverableFromDevelopment": true
+        }
+      ],
+      "semanticProof": {
+        "mainSha": "221b54b2a41ecc8c338d1bf2cf67280cf165ce95",
+        "auditOfOpenPRs": [
+          175,
+          178,
+          179,
+          180
+        ],
+        "PR179AncestorOfPR180": true,
+        "PR178DivergedFromPR179": true,
+        "PR175DivergedFromPR180": true,
+        "mainOldProjectionSchemas": [
+          "PublicModulePresentation2D 0.1",
+          "PublicModulePresentation2D 0.2"
+        ],
+        "currentPublicProjectionTestTitlesPreserved": 7,
+        "pr175RelevantPaths": 42,
+        "pr180RelevantPaths": 51,
+        "pr180PreviewSeedPluginAbsentCurrentRuntime": true,
+        "originalPRHeadsNotClosed": true,
+        "correctedAuxGate": 40757355428,
+        "destinationGate": 40757703942,
+        "previousNegativeDocGate": 40757206195,
+        "source": "docs/work/DEVELOPMENT_CP_PUBLIC_PRS_175_180_2026-10-28.md",
+        "noRuntimeChanges": true,
+        "noDeploy": true,
+        "noRealAuthenticatedPreviewTest": true
+      },
+      "preserved": {
+        "mainSha": "221b54b2a41ecc8c338d1bf2cf67280cf165ce95",
+        "openPRs": 12,
+        "remainingOriginalHistoricalRefs": 24,
+        "originalAssetsBranch": "artifacts/ds02-imagens-originais-20261015",
+        "authPRHeadsProtected": [
+          182,
+          184,
+          185,
+          186,
+          238
+        ]
+      },
+      "noDeploy": true
     }
   ],
-  "nextBatchContract": "31 waves; 36/60 original historical branches retired, 27 temporary auxiliary branches retired; 24 original historical + main + development = 26 remote heads. AE batch consumed, never replay. Old work/cp-public-03a2-3-contract-integration-20261008 41 unique commits not ancestor PR186, full DAG archived at archive/m2d/cp-public-03a2-3-68362325 exact 68362325972a4a2db8acbdb475a1d686dd6663b4; semantic proof was inventory of 12 open PRs and modern public/buyer/auth contracts, NOT real grant/live validation or equivalence of legacy browser. Main/dev public-modules and buyer DTO projections intentionally differ, preserve development. PRs 175/178/179/180/182/184/185/186/196 and 34/231/238 intact; DS02/main protected. Next compare CP-PUBLIC PR heads and consider safe close only under future explicit PR-history and gate review; no auth cutover."
+  "nextBatchContract": "32 waves; 36/60 original historical branches retired, 28 temporary auxiliary refs retired; 24 historical + main + development = 26 remote heads. AF auxiliary-only batch consumed, never replay. Four public PRs #175 #178 #179 #180 were analyzed in full DAG and 42/2/4/51 relevant path inventory; PR179 is PR180 ancestor, PR178 and PR175 diverged; current public contract tests on development (unit public projection, endpoint isolated harness, viewer adapter) passed #40757355428 and #40757703942. PRs remain open pending precise PR roster closure protocol and full history tags; do NOT merge old preview seed or restore old CSS/assets. Other eight PRs including auth remain protected. No main/runtime/Netlify/DB/Identity changes."
 }
