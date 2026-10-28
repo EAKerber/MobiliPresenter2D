@@ -74,3 +74,12 @@ O `0` na primeira linha significa que todas as equivalências **puramente por SH
 5. Antes de encerrar um ramo divergente, registrar SHA e data de cada candidata, fonte/data/status da última intenção, matriz de contratos, resultado dos testes e destinação (**KEEP_NEWER**, **EXTRACT_OLDER**, **HOLD**, **ARCHIVE_SUPERSEDED**). Preservar DAG por tag e o ledger conforme as regras vigentes.
 
 Aplicação imediata: na comparação de `fix/how-it-works-accordion-grid-20261021` com `development`, usar a última intenção para comportamento independente dos cards; não escolher a CSS mais antiga apenas por ser mais próxima do diff. 
+
+
+## Bloco 11 encerrado — precedência aplicada
+
+O critério de preferência pela implementação mais recente e pela intenção mais recente foi aplicado ao caso `fix/how-it-works-accordion-grid-20261021`: **preservado o CSS atual**, cuja correção de altura é a mesma e cujas outras evoluções são posteriores; **recuperada seletivamente a versão do teste de 25/10**, que estava em ramo histórico e era mais nova do que o teste de 21/10 no destino. A versão integrada do teste foi ajustada para não comparar deslocamento absoluto `y` de seções anteriores e para usar recorte nativo do Playwright abaixo da dobra, mantendo sua serialização e os contratos funcionais. Ver [DEVELOPMENT_ACCORDION_RECENCY_CLUSTER_2026-10-27.md](DEVELOPMENT_ACCORDION_RECENCY_CLUSTER_2026-10-27.md).
+
+[Actions #40608839476](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40608839476) **PASS em development** (Chromium + WebKit, 390/1366px, light/dark e detalhes independentes). Onda E [#40609050186](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40609050186) **AUDIT+APPLY PASS**, mantendo o DAG da origem na tag `archive/m2d/how-accordion-grid-6260df94`. Branch antiga e auxiliar integrada retiradas; estado **54 refs = 52 históricas + main + development**, 8 aposentadorias históricas em cinco ondas, sem mudança em runtime, main ou 12 PRs.
+
+**Próxima oportunidade detectada em leitura:** `tooling/migration-inspector-v0-20261023@2b00351acc1d1369116d8eeb546146a6b363072e` tem os blobs de `tools/migration-inspector.mjs` (`0d862e435898daa8443ada12f7d093c5ab6232bc`) e `tests/migration-inspector.test.mjs` (`abe491f840c82b12e93c578442a9c548f47f8a5a`) **exatamente iguais** aos da development. Há, porém, workflow e handover históricos que devem ser avaliados individualmente antes de qualquer encerramento; nenhum ramo Migration Inspector foi apagado neste bloco. O scanner agora também dispara em updates do ledger.
