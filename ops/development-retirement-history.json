@@ -805,7 +805,76 @@
         "unmergedVisualPR": 34
       },
       "noDeploy": true
+    },
+    {
+      "batchId": "dev-20261028-cp-public-eight-family-docs-p",
+      "workflowRun": 40683648631,
+      "workflowUrl": "https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40683648631",
+      "headSha": "605a6c04d6367f5cc8ab9bdabdb82895739f63a4",
+      "auditArtifactId": 12813307892,
+      "applyArtifactId": 12812929854,
+      "audit": "PASS",
+      "apply": "PASS",
+      "refsBefore": 43,
+      "refsAfter": 40,
+      "archived": [
+        {
+          "tag": "archive/m2d/cp-public-security-inventory-67089791",
+          "sha": "67089791497b72874b7f837853133a9ccf2311aa"
+        },
+        {
+          "tag": "archive/m2d/cp-public-session-plan-8e2124bf",
+          "sha": "8e2124bfd299d942dc2a24e80966b5cb034840e3"
+        }
+      ],
+      "retired": [
+        {
+          "branch": "work/cp-public-03a-security-and-hygiene-inventory-20261008",
+          "sha": "67089791497b72874b7f837853133a9ccf2311aa",
+          "kind": "archive-diverged",
+          "archiveTag": "archive/m2d/cp-public-security-inventory-67089791"
+        },
+        {
+          "branch": "work/cp-public-03a2-buyer-session-and-bootstrap-plan-20261008",
+          "sha": "8e2124bfd299d942dc2a24e80966b5cb034840e3",
+          "kind": "archive-diverged",
+          "archiveTag": "archive/m2d/cp-public-session-plan-8e2124bf"
+        }
+      ],
+      "auxiliaryRetired": [
+        {
+          "branch": "integration/22-cp-public-dto-security-family-20261028",
+          "sha": "672af55edb580f1b9822d96210536a61905c8698",
+          "kind": "auxiliary-ancestor-development",
+          "recoverableFromDevelopment": true
+        }
+      ],
+      "semanticProof": {
+        "auxGate": 40683398382,
+        "developmentGate": 40683492212,
+        "destinationManifestGate": 40683648630,
+        "historicalSourcesReconciled": 8,
+        "exactHistoricalBlobs": 22,
+        "provenanceTests": 4,
+        "currentRolesTests": 4,
+        "publicProjectionTests": 7,
+        "buyerProjectionTest": "PASS",
+        "publicEndpointTest": "PASS",
+        "pageCheck": "PASS",
+        "currentSchema": "BuyerConfiguratorPayload 1.0",
+        "authBeforeRead": "PASS",
+        "noRuntimeChanges": true,
+        "noLiveAuthOrDatabaseTests": true
+      },
+      "preserved": {
+        "openPRs": 12,
+        "remainingOriginalHistoricalRefs": 38,
+        "mainSha": "221b54b2a41ecc8c338d1bf2cf67280cf165ce95",
+        "originalAssetsBranch": "artifacts/ds02-imagens-originais-20261015",
+        "unmergedVisualPR": 34
+      },
+      "noDeploy": true
     }
   ],
-  "nextBatchContract": "Carry all 20 historical original retired entries from waves[].retired (exclude 12 auxiliaryRetired). 40 historical branches + development + main = 42 branches. Batch O consumed; NEVER replay. Consolidate semantic groups into ONE aux with source-exact archives, guard CI, FF lease, then bounded ≤3 SHA-pinned retirement. Four remaining CI family refs, PR238 and OIDC/security remain HOLD."
+  "nextBatchContract": "22 original historical refs retired across 16 waves; 13 integrated auxiliary refs retired, 38 historical + main + development = 40 branches. Manifest P consumed, DO NOT replay. Eight-source CP-PUBLIC family reconciled; only 2 documentary sources retired. Six remaining sources HOLD: contract/fixture and four PR heads 182/184/185/186. All 12 PRs untouched. Next reconcile sensitive DTO/auth implementation before any retirement."
 }
