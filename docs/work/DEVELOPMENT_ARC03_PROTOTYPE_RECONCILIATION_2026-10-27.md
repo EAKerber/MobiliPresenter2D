@@ -27,3 +27,10 @@ Os testes `tests/arc03c-historical-prototype-guards.test.mjs` verificam o header
 **Disposição inicialmente condicionada:** `SEMANTIC_SUPERSEDED_CANDIDATE`. Após gate PASS na auxiliar e development, arquivar DAG completa na tag `archive/m2d/arc03-prototype-e459b9bd -> e459b9bd85c4e9c8bb96813ae6758789de75dc13` **antes** de excluir a ref. A auxiliar `integration/15-arc03-prototype-reconcile-20261027` só pode ser removida após FF com lease e prova de ancestralidade. Manter 12 PRs, `main`, assets DS-02 e PR #34; nenhum deploy Netlify.
 
 **Status inicial deste documento:** nova camada de testes e auditor preparada. Não afirmar gates nem remoção antes de leitura dos recibos e verificações.
+
+
+## Evidência de gate na auxiliar
+
+[Actions #40616793829](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40616793829) **PASS** no SHA de origem do workflow `7e336aef40c90377045e7de8fbeac2fb92faf1d6`, artifact `arc03-prototype-semantic-40616793829` ID `12784874943`. O auditor confirmou o escopo histórico de 12 caminhos e a precedência temporal/status do ARC-03C. Os novos testes negativos de proteção do compilador passaram em fixtures temporárias; `npm run pages:check`, testes de source authority e cutover passaram; **48 cenários de navegador Chromium/WebKit** sobre o runtime vigente também passaram. O compilador histórico não precisou ser recuperado, e os arquivos de aplicação permaneceram intactos.
+
+Falta o gate repetido sobre `development` depois do fast-forward. A tag de recuperação e exclusão seguem condicionadas à auditoria de higiene.
