@@ -1,0 +1,30 @@
+name: Development CI old V5 nav diagnostic provenance
+on:
+  push:
+    branches:
+      - development
+      - integration/29-ci-v5-nav-clean-inventory-20261028
+    paths:
+      - 'docs/reconciliation/ci-v5-nav-clean/**'
+      - 'tests/test_development_ci_v5_nav_clean.py'
+      - 'docs/work/DEVELOPMENT_CI_V5_NAV_CLEAN_2026-10-28.md'
+      - '.github/workflows/development-ci-v5-nav-clean.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  provenance:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: python3 -m unittest discover -s tests -p test_development_ci_v5_nav_clean.py -v
+      - run: |
+          node --check tests/ci/nav-flow-responsive-crossbrowser.cjs
+          node app/tools/test-layout-profiles.js
+          npm run pages:check

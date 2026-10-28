@@ -1,0 +1,64 @@
+{
+  "schema": "M2DCIV5NavCleanInventory/0.1",
+  "repository": "EAKerber/MobiliPresenter2D",
+  "mainSha": "221b54b2a41ecc8c338d1bf2cf67280cf165ce95",
+  "developmentBaseline": "bbfb7d70d50539476041e8f7f233c24ec008dc2d",
+  "source": {
+    "branch": "fix/ci-baseline-v5-nav-flow-clean-20261023",
+    "sha": "62c5521d7e883443696ce1c58c912ac4794ff75e",
+    "date": "2026-10-23"
+  },
+  "artifacts": [
+    {
+      "path": ".github/workflows/ci-baseline-01-clean-v5.yml",
+      "blob": "00420467e0138db4a8e42c8026361eebf553f7ce",
+      "snapshot": "docs/reconciliation/ci-v5-nav-clean/source/.github/workflows/ci-baseline-01-clean-v5.yml"
+    },
+    {
+      "path": ".github/workflows/ci-baseline-01-nav-boundary.yml",
+      "blob": "fdefcdd8375af52b453945aa028941c6207f54ad",
+      "snapshot": "docs/reconciliation/ci-v5-nav-clean/source/.github/workflows/ci-baseline-01-nav-boundary.yml"
+    },
+    {
+      "path": "tests/ci/ci-baseline-clean-v5.mjs",
+      "blob": "fc17d522d664e3b506964e633b5e5d1054c3530a",
+      "snapshot": "docs/reconciliation/ci-v5-nav-clean/source/tests/ci/ci-baseline-clean-v5.mjs"
+    },
+    {
+      "path": "tests/ci/local-buyer-config-server.mjs",
+      "blob": "678a1fc2ea9a0d50f32cb17860cc1b20f02b4adb",
+      "snapshot": "docs/reconciliation/ci-v5-nav-clean/source/tests/ci/local-buyer-config-server.mjs"
+    },
+    {
+      "path": "tests/ci/nav-css-visual-differential.mjs",
+      "blob": "1b436bf6dfa5482190c570d1689a2af84ff580a1",
+      "snapshot": "docs/reconciliation/ci-v5-nav-clean/source/tests/ci/nav-css-visual-differential.mjs"
+    },
+    {
+      "path": "tests/ci/nav-flow-profile-crossbrowser.mjs",
+      "blob": "80f1bed91fdde4491b51268b76a1ec89a3058c91",
+      "snapshot": "docs/reconciliation/ci-v5-nav-clean/source/tests/ci/nav-flow-profile-crossbrowser.mjs"
+    },
+    {
+      "path": "tests/ci/nav-label-width-boundary.mjs",
+      "blob": "7d15daeac6a88ecd295b5393a1878d610a809d57",
+      "snapshot": "docs/reconciliation/ci-v5-nav-clean/source/tests/ci/nav-label-width-boundary.mjs"
+    },
+    {
+      "path": "docs/handoffs/CI_BASELINE_01_NAV_FLOW_CLEAN_2026-10-23.md",
+      "blob": "9a39e5e574db616a4096cb8bbaf581bc418a07f9",
+      "snapshot": "docs/reconciliation/ci-v5-nav-clean/source/docs/handoffs/CI_BASELINE_01_NAV_FLOW_CLEAN_2026-10-23.md"
+    }
+  ],
+  "classification": "HOLD_UNTIL_DIFFERENTIAL_VISUAL_INTENT_VERIFIED",
+  "findings": {
+    "currentV5NavWidthScenarios": 32,
+    "originalContainsCssPixelDifferential": true,
+    "originalContainsLabelBoundaryDiagnostic": true,
+    "localBuyerServerChanged": true,
+    "mainPreferred": true,
+    "oldAuthFixtureNotProofOfRealSession": true,
+    "notSafeToRetireFromStaticTestsOnly": true
+  },
+  "runtimeChanged": false
+}
