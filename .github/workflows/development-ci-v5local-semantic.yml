@@ -3,7 +3,6 @@ on:
   push:
     branches:
       - development
-      - integration/32-ci-v5local-dto-hit-target-20261028
     paths:
       - 'tests/ci/legacy-v5local-dto-parity.test.cjs'
       - 'tests/ci/v5-local-hit-target-semantic.cjs'
