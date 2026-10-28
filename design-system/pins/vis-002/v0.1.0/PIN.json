@@ -1,0 +1,31 @@
+{
+  "schema": "M2DDesignSystemDistributionPin/0.1",
+  "status": "REFERENCE_ONLY_NOT_LINKED",
+  "designSystem": {
+    "repository": "EAKerber/MobiliPresenter2D_DesignSystem",
+    "commit": "70f0eabf609b5b4391459c426d6f7ecaeac070c8",
+    "generator": "scripts/export-approved-palette.mjs",
+    "exportVersion": "0.1.0",
+    "canonicalDecision": "VIS-002.approvedPalette",
+    "decisionGitBlob": "63b60f8d87327c6fd1e80c8cdf4ff832c4089bfa"
+  },
+  "product": {
+    "repository": "EAKerber/MobiliPresenter2D",
+    "baseCommit": "840a0cda361b3ce215fc934badc26df72dffc6e8",
+    "publishedDirectory": "app",
+    "activated": false,
+    "cssImportAllowed": false,
+    "componentMappingsApproved": []
+  },
+  "distribution": {
+    "css": {
+      "path": "design-system/pins/vis-002/v0.1.0/approved-palette-reference.css",
+      "gitBlob": "4a2329955e8c4bb7d3ddca558407145b32724db4"
+    },
+    "manifest": {
+      "path": "design-system/pins/vis-002/v0.1.0/approved-palette-reference.manifest.json",
+      "gitBlob": "c1f8a474f7ed69e4f1498c397e1940d859b3a72f"
+    }
+  },
+  "policy": "The reference palette was approved but VIS-002 does not authorize global CSS tokens, alias assignment or product runtime changes. Staged only outside Netlify publish=app. Any activation requires a separate product PR, mapping evidence and visual/functional regression gate."
+}
