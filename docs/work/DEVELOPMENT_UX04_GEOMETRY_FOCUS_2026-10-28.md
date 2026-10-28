@@ -32,3 +32,7 @@ Teste determinístico dos 13 blobs originais + hashes estáveis da main/developm
 
 - [Execução #40706269409](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40706269409): teste estático PASS, navegador falhou no primeiro assert `side-rail` (antes do foco). A execução anterior #40705228634 havia passado por toda geometria até o assert de foco. O caso parece sensível ao momento de atualização do DOM/CSS, porém **não se conclui a causa apenas pela alternância de resultados**.
 - A instrumentação agora espera dois frames de renderização mais janela curta de estabilização após mudanças de perfil/etapa e inclui as medidas capturadas nas mensagens de erro. Nenhuma implementação ou policy visual é alterada. A aceitação exige geometria atual correta e recuperação de foco em Chromium, não suposições baseadas na diferença de tempo.
+
+## Gate com sincronização de foco pós-frame
+
+- [Run #40706673148](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40706673148): geometria atual passou com estabilização, mas o teste registrou `activeElement=null` logo após `keyboardActiveSection=true`. A seção já estava marcada por `pointerdown`; isso **não prova** que a restauração por `requestAnimationFrame` nunca ocorreu, apenas que foi medida cedo demais. Alterado gate dedicado para esperar explicitamente o `activeElement.dataset.handleId` atingir o id selecionado dentro de 4,5 s, depois esperar dois frames e confirmar persistência. O gate completo de teclado também verifica a asserção histórica, sem supor restauração instantânea.

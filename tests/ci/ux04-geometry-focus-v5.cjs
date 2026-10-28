@@ -76,6 +76,8 @@ const flush=async(page,profile)=>page.waitForFunction(x=>document.documentElemen
  const id=await handle.getAttribute("data-handle-id");
  await handle.click();
  await p.waitForFunction(()=>document.querySelector('[data-keyboard-section="handles"]')?.dataset.keyboardActiveSection==="true");
+ await p.waitForFunction(handleId=>document.activeElement?.dataset?.handleId===handleId,id,{timeout:4500});
+ await settle(p);
  geometry.focus={expected:id,actual:await p.evaluate(()=>document.activeElement?.dataset?.handleId||null)};
  fs.writeFileSync(path.join(out,"result.json"),JSON.stringify({geometry,errors,environment:"isolated-local-buyer-V5"},null,2));
  assert.equal(geometry.focus.actual,id,"selected handle should recover keyboard focus after redraw (legacy accessibility obligation)");
