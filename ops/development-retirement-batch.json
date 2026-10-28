@@ -3,7 +3,7 @@
   "repository": "EAKerber/MobiliPresenter2D",
   "controlBranch": "development",
   "mainSha": "221b54b2a41ecc8c338d1bf2cf67280cf165ce95",
-  "batchId": "dev-20261027-ds05a-documentary-l",
+  "batchId": "dev-20261028-vis002-five-cluster-auditfix-m",
   "retired": [
     {
       "branch": "docs/handover-reconcile-20261023",
@@ -84,30 +84,48 @@
       "sha": "854cc05896523567e503f42af2b8e209c7591b31",
       "kind": "archive-diverged",
       "archiveTag": "archive/m2d/vis002-reference-pin-854cc058"
-    }
-  ],
-  "auxiliaryRefs": [
-    {
-      "branch": "integration/18-ds05a-documentary-snapshot-20261027",
-      "sha": "0a0f0ee1187ef2ae7c989e28bffab75cac5bb5f1"
-    }
-  ],
-  "targets": [
+    },
     {
       "branch": "docs/ds05a-theme-lab-20261017",
       "sha": "6120a294e0de4b018b18b1b50f20411ce44cce09",
       "kind": "archive-diverged",
-      "archiveTag": "archive/m2d/ds05a-theme-lab-6120a294",
-      "snapshotPath": "docs/work/DEVELOPMENT_DS05A_DOCUMENTARY_SNAPSHOT_2026-10-27.md",
+      "archiveTag": "archive/m2d/ds05a-theme-lab-6120a294"
+    }
+  ],
+  "auxiliaryRefs": [
+    {
+      "branch": "integration/19-vis002-cluster-semantic-20261028",
+      "sha": "2c7c4ed68744bb4f6370dc808ed84c1716901802"
+    }
+  ],
+  "targets": [
+    {
+      "branch": "audit/public-text-contrast-coverage-20261022",
+      "sha": "ace851004713f92b4425e5832c6c892825814f0a",
+      "kind": "archive-diverged",
+      "archiveTag": "archive/m2d/vis002-audit-ace85100",
+      "snapshotPath": "docs/work/DEVELOPMENT_VIS002_FAMILY_CLUSTER_2026-10-28.md",
       "semanticGate": {
-        "runId": 40622653562,
-        "headSha": "0a0f0ee1187ef2ae7c989e28bffab75cac5bb5f1",
-        "workflowName": "Development DS05A historical snapshot (not activated)"
+        "runId": 40677120764,
+        "headSha": "2c7c4ed68744bb4f6370dc808ed84c1716901802",
+        "workflowName": "Development VIS002 family cluster historical and state gate"
       }
     },
     {
-      "branch": "integration/18-ds05a-documentary-snapshot-20261027",
-      "sha": "0a0f0ee1187ef2ae7c989e28bffab75cac5bb5f1",
+      "branch": "fix/vis002c-public-text-contrast-20261022",
+      "sha": "007fc8e0ca8d9366efd0c9b5c7adf0da1a5325e5",
+      "kind": "archive-diverged",
+      "archiveTag": "archive/m2d/vis002-fix-007fc8e0",
+      "snapshotPath": "docs/work/DEVELOPMENT_VIS002_FAMILY_CLUSTER_2026-10-28.md",
+      "semanticGate": {
+        "runId": 40677120764,
+        "headSha": "2c7c4ed68744bb4f6370dc808ed84c1716901802",
+        "workflowName": "Development VIS002 family cluster historical and state gate"
+      }
+    },
+    {
+      "branch": "integration/19-vis002-cluster-semantic-20261028",
+      "sha": "2c7c4ed68744bb4f6370dc808ed84c1716901802",
       "kind": "auxiliary-ancestor-development"
     }
   ]

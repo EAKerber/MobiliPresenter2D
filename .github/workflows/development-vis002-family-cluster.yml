@@ -3,7 +3,6 @@ on:
   push:
     branches:
       - development
-      - integration/19-vis002-cluster-semantic-20261028
     paths:
       - 'docs/reconciliation/vis002/**'
       - 'tests/test_development_vis002_cluster.py'
