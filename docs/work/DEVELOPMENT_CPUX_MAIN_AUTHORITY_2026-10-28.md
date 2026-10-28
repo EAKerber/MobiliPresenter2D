@@ -21,3 +21,9 @@ A `main@221b54b2a41ecc8c338d1bf2cf67280cf165ce95` é autoridade forte para contr
 ### Gates
 
 Verificar 14 blobs com SHA Git original, hashes dos seis contratos atuais na main e development (permitindo explicitamente a diferença do endpoint), rejeição de POST/migração nas duas versões e preservação de HOLD. Rodar suites isoladas de publicação V5, hierarquia, flow e endpoint público e `pages:check`. Sem Netlify Preview, credenciais, migração ou deploy. A antiga documentação da migração permanece arquivo histórico, **não instrução operacional vigente**.
+
+## Gate no destino e manifesto S (condicional)
+
+- [Gate da auxiliar #40691557818](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40691557818) **PASS**: 14 blobs originais conferidos, SHA da main e development, contrato de autorização/GET+PUT/rejeição de POST no endpoint atual, diferença de `identity_unavailable` documentada, suites de segurança V5/hierarquia/flow/endpoint e `pages:check`. FF com lease para `development@bfe8f099b8ea4410af15b8469a99a2f952a696e3`; [gate no destino #40691728848](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40691728848) **PASS**.
+- Somente duas branches CP-UX-05A sem PR e sem proteção são alvos, com tags para preservar toda a DAG original: `archive/m2d/legacy-cpux-05a-preparation-de035813`, `archive/m2d/legacy-cpux-05a-v4-ba22963a`. Terceiro alvo é a auxiliar ancestral `integration/25-cpux-main-v5-supersession-20261028@bfe8f099b8ea4410af15b8469a99a2f952a696e3`. Os dois outros heads `ux04` e `fixture` continuam HOLD. Nenhum JS de runtime, Netlify, banco ou main foi modificado.
+- O manifesto S é **one-shot**; a remoção só é comprovada após audit+apply e readback de tags/heads. Não antecipar conclusão.

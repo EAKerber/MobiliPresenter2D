@@ -3,7 +3,6 @@ on:
   push:
     branches:
       - development
-      - integration/25-cpux-main-v5-supersession-20261028
     paths:
       - 'docs/reconciliation/cpux-main-v5/**'
       - 'docs/work/DEVELOPMENT_CPUX_MAIN_AUTHORITY_2026-10-28.md'

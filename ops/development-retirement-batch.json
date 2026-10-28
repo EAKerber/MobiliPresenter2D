@@ -3,7 +3,7 @@
   "repository": "EAKerber/MobiliPresenter2D",
   "controlBranch": "development",
   "mainSha": "221b54b2a41ecc8c338d1bf2cf67280cf165ce95",
-  "batchId": "dev-20261028-main-authority-public-legacy-r",
+  "batchId": "dev-20261028-cpux-v4-supersession-s",
   "retired": [
     {
       "branch": "docs/handover-reconcile-20261023",
@@ -132,42 +132,54 @@
       "sha": "8e2124bfd299d942dc2a24e80966b5cb034840e3",
       "kind": "archive-diverged",
       "archiveTag": "archive/m2d/cp-public-session-plan-8e2124bf"
-    }
-  ],
-  "auxiliaryRefs": [
-    {
-      "branch": "integration/24-main-authority-public-legacy-20261028",
-      "sha": "620e1acf4f09066b2a635bb3f48d8caebf4d0c03"
-    }
-  ],
-  "targets": [
+    },
     {
       "branch": "experiment/public-landing-commercial-viewer",
       "sha": "0e28f7ec8ac0298a82d00e12cd8c0aa6c7bf3371",
       "kind": "archive-diverged",
-      "archiveTag": "archive/m2d/legacy-public-donor-0e28f7ec",
-      "snapshotPath": "docs/work/DEVELOPMENT_MAIN_AUTHORITY_PUBLIC_FAMILY_2026-10-28.md",
-      "semanticGate": {
-        "runId": 40689187308,
-        "headSha": "620e1acf4f09066b2a635bb3f48d8caebf4d0c03",
-        "workflowName": "Development MAIN authority and historic public provenance"
-      }
+      "archiveTag": "archive/m2d/legacy-public-donor-0e28f7ec"
     },
     {
       "branch": "feature/viewer-base-prices-global-off-20261021",
       "sha": "82e4d09a842d830d80b0b5f19bd5370fe146d57c",
       "kind": "archive-diverged",
-      "archiveTag": "archive/m2d/legacy-viewer-price-82e4d09a",
-      "snapshotPath": "docs/work/DEVELOPMENT_MAIN_AUTHORITY_PUBLIC_FAMILY_2026-10-28.md",
+      "archiveTag": "archive/m2d/legacy-viewer-price-82e4d09a"
+    }
+  ],
+  "auxiliaryRefs": [
+    {
+      "branch": "integration/25-cpux-main-v5-supersession-20261028",
+      "sha": "bfe8f099b8ea4410af15b8469a99a2f952a696e3"
+    }
+  ],
+  "targets": [
+    {
+      "branch": "feat/cp-ux-05a-publication-prep",
+      "sha": "de0358134963f5ce72bdee98437922a3520ee24a",
+      "kind": "archive-diverged",
+      "archiveTag": "archive/m2d/legacy-cpux-05a-preparation-de035813",
+      "snapshotPath": "docs/work/DEVELOPMENT_CPUX_MAIN_AUTHORITY_2026-10-28.md",
       "semanticGate": {
-        "runId": 40689187308,
-        "headSha": "620e1acf4f09066b2a635bb3f48d8caebf4d0c03",
-        "workflowName": "Development MAIN authority and historic public provenance"
+        "runId": 40691728848,
+        "headSha": "bfe8f099b8ea4410af15b8469a99a2f952a696e3",
+        "workflowName": "Development CP-UX historical publication main-authority gate (offline)"
       }
     },
     {
-      "branch": "integration/24-main-authority-public-legacy-20261028",
-      "sha": "620e1acf4f09066b2a635bb3f48d8caebf4d0c03",
+      "branch": "feat/cp-ux-05a-v4-publication-prep",
+      "sha": "ba22963ad304bddb6b77d59d7340b9e085f4d9b7",
+      "kind": "archive-diverged",
+      "archiveTag": "archive/m2d/legacy-cpux-05a-v4-ba22963a",
+      "snapshotPath": "docs/work/DEVELOPMENT_CPUX_MAIN_AUTHORITY_2026-10-28.md",
+      "semanticGate": {
+        "runId": 40691728848,
+        "headSha": "bfe8f099b8ea4410af15b8469a99a2f952a696e3",
+        "workflowName": "Development CP-UX historical publication main-authority gate (offline)"
+      }
+    },
+    {
+      "branch": "integration/25-cpux-main-v5-supersession-20261028",
+      "sha": "bfe8f099b8ea4410af15b8469a99a2f952a696e3",
       "kind": "auxiliary-ancestor-development"
     }
   ]
