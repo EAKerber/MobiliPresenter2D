@@ -44,3 +44,11 @@ A terceira tentativa [#40608367733](https://github.com/EAKerber/MobiliPresenter2
 A execução inicial [#40608052660](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40608052660) detectou dependência indevida da coordenada vertical `y` da página inteira. A seguinte esbarrou em `git safe.directory` no contêiner. A terceira [#40608367733](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40608367733) detectou que o recorte manual fora da viewport era inválido. Todas estas falhas foram corrigidas **apenas no teste/workflow**; o gate final passou integralmente. O mecanismo resultante mantém a captura serializada (mais recente), utiliza `locator.screenshot()` e não compara `x/y` absolutos entre páginas de gerações distintas.
 
 **Contrato escolhido:** CSS e HTML contemporâneos de `development` (incluem melhorias mais recentes) + teste consolidado com controles mais recentes de captura e execução. A homologação original de correção de card aparentemente esticado está preservada. Esta prova é funcional automatizada em navegador; não equivale a aceite visual manual em todos os dispositivos.
+
+
+## Identidade de recuperação para eventual onda E
+
+- Ramo histórico imutável: `fix/how-it-works-accordion-grid-20261021@6260df944b6b82f3a86d9eed4d9bc3eacd8bc48b`.
+- **Nome da tag de recuperação, a criar ANTES da exclusão:** `archive/m2d/how-accordion-grid-6260df94` apontando para `6260df944b6b82f3a86d9eed4d9bc3eacd8bc48b`. O registro desta intenção não significa que a tag já exista.
+- A documentação e o workflow antigo da origem não serão copiados indiscriminadamente; o mecanismo offline em `development` implementa a mesma finalidade com o teste mais recente corrigido para a árvore atual.
+- A retenção do histórico continua obrigatória até aprovação do gate em `development` e o executor de higiene concluir auditoria completa e aplicar o lease de exclusão.
