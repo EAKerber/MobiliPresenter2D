@@ -136,13 +136,30 @@
     "mainIntent": "side-rail narrow controls = one internal Modules/Services column; stacked = two; compact = replace list with detail",
     "oldIntent": "desktop Modules/Services two columns; mobile detail then list stacked",
     "keyboardChange": "two final-section assertions upgraded to dock-aware alignment; redraw focus assertion removed and requires dedicated real browser result",
-    "mode": "GATED_HOLD_UNTIL_FOCUS_PROVED",
+    "mode": "GATE_PASSED_RETIRE_CANDIDATE",
     "noRuntimeChange": true,
     "focusFixCandidate": {
       "source": "feat/cp-ux-04-hierarchy-layout@5d8347edb6ea247307b6fc27b424117553542f78",
       "fix": "requestAnimationFrame / activateSection(handles,index,true)",
       "mainAppRemainsUnchanged": true,
       "developmentOnly": true
+    },
+    "focusFix": {
+      "scope": "development only",
+      "call": "activateSection(\"section:handles\", handleIndex, true)",
+      "reason": "legacy and old main use wrong unprefixed id; keyboard section id is section:handles; release regression test covers focus"
+    },
+    "proof": {
+      "sourceArchiveArtifacts": 13,
+      "oldGeometryTestsMissingLiteral": 6,
+      "updatedLayoutContract": "current side rail single-column; stacked dual-column; compact replace",
+      "oldKeyboardAssertions": 74,
+      "preservedKeyboardAssertions": 72,
+      "improvedDockAwareAssertions": 2,
+      "auxiliaryWorkflowRun": 40708822213,
+      "developmentWorkflowRun": 40709264881,
+      "chromiumLayoutKeyboardFocus": "PASS",
+      "productionAuthenticatedSession": "NOT TESTED"
     }
   }
 }

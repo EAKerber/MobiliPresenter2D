@@ -63,5 +63,5 @@ class LegacyUX04(unittest.TestCase):
         self.assertTrue(any("reduced motion reaches the same final section geometry" in x for x in missing))
         self.assertTrue(any("above the persistent dock" in x for x in current))
         self.assertTrue(any("reduced-motion section navigation stays above the dock" in x for x in current))
-        self.assertEqual(self.p["semanticDecision"]["mode"],"GATED_HOLD_UNTIL_FOCUS_PROVED")
+        self.assertEqual(self.p["semanticDecision"]["mode"],"GATE_PASSED_RETIRE_CANDIDATE")
 if __name__=="__main__":unittest.main()

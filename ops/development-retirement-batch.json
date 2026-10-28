@@ -3,7 +3,7 @@
   "repository": "EAKerber/MobiliPresenter2D",
   "controlBranch": "development",
   "mainSha": "221b54b2a41ecc8c338d1bf2cf67280cf165ce95",
-  "batchId": "dev-20261028-v5-flow-fixture-proved-t",
+  "batchId": "dev-20261028-ux04-v5-geometry-focus-u",
   "retired": [
     {
       "branch": "docs/handover-reconcile-20261023",
@@ -156,30 +156,36 @@
       "sha": "ba22963ad304bddb6b77d59d7340b9e085f4d9b7",
       "kind": "archive-diverged",
       "archiveTag": "archive/m2d/legacy-cpux-05a-v4-ba22963a"
-    }
-  ],
-  "auxiliaryRefs": [
-    {
-      "branch": "integration/26-flow-v5-fixture-equivalence-20261028",
-      "sha": "2d9b7e3fb0a5820acb1eec019c5a904f568f48b5"
-    }
-  ],
-  "targets": [
+    },
     {
       "branch": "work/cp-public-04a-main-flow-test-fixture-20261008",
       "sha": "9503ad1caff406d3e3422c9d4aec25bac081132e",
       "kind": "archive-diverged",
-      "archiveTag": "archive/m2d/legacy-cp-public-flow-v3-fixture-9503ad1c",
-      "snapshotPath": "docs/work/DEVELOPMENT_FLOW_FIXTURE_MAIN_V5_2026-10-28.md",
+      "archiveTag": "archive/m2d/legacy-cp-public-flow-v3-fixture-9503ad1c"
+    }
+  ],
+  "auxiliaryRefs": [
+    {
+      "branch": "integration/27-ux04-responsive-focus-gate-20261028",
+      "sha": "dede6e40121ee36e216051d78d3742e07395a72b"
+    }
+  ],
+  "targets": [
+    {
+      "branch": "feat/cp-ux-04-hierarchy-layout",
+      "sha": "5d8347edb6ea247307b6fc27b424117553542f78",
+      "kind": "archive-diverged",
+      "archiveTag": "archive/m2d/legacy-ux04-hierarchy-layout-5d8347ed",
+      "snapshotPath": "docs/work/DEVELOPMENT_UX04_GEOMETRY_FOCUS_2026-10-28.md",
       "semanticGate": {
-        "runId": 40698236525,
-        "headSha": "2d9b7e3fb0a5820acb1eec019c5a904f568f48b5",
-        "workflowName": "Development historical V3 flow fixture vs V5 browser parity (localhost)"
+        "runId": 40709264881,
+        "headSha": "dede6e40121ee36e216051d78d3742e07395a72b",
+        "workflowName": "Development UX04 obsolete geometry and keyboard-focus diagnostic (V5 only)"
       }
     },
     {
-      "branch": "integration/26-flow-v5-fixture-equivalence-20261028",
-      "sha": "2d9b7e3fb0a5820acb1eec019c5a904f568f48b5",
+      "branch": "integration/27-ux04-responsive-focus-gate-20261028",
+      "sha": "dede6e40121ee36e216051d78d3742e07395a72b",
       "kind": "auxiliary-ancestor-development"
     }
   ]
