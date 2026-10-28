@@ -3,7 +3,6 @@ name: Development 15 — ARC03 preview prototype supersession, fail-closed guard
 on:
   push:
     branches:
-      - integration/15-arc03-prototype-reconcile-20261027
       - development
     paths:
       - 'tests/arc03c-historical-prototype-guards.test.mjs'
