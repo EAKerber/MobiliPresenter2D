@@ -3,7 +3,6 @@ on:
   push:
     branches:
       - development
-      - integration/17-public-text-contrast-audit-20261027
     paths:
       - 'tests/ci/public-text-contrast-semantic.mjs'
       - 'design-system/pins/vis-002/context-v0.3.0/**'

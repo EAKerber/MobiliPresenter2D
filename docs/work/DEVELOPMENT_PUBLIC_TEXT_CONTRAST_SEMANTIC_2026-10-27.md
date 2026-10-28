@@ -23,3 +23,9 @@ Executar na auxiliar, inspecionar artifact e passar por fast-forward SHA-pinned 
 - Resultado idêntico: 36/36 cenários, 47 verificações de cores aprovadas, 423 amostras calculáveis acima do limiar, 0 candidatos abaixo, 33 não verificáveis, 0 seletores ausentes, 3/3 testes de pin e páginas estáticas válidas.
 - Commit de conteúdo testado e integrado por fast-forward com lease: `f3b97ca164654dd2c1f2038a5af442324498ecf1`.
 - A auxiliar 17 permanece temporariamente ativa até higiene com lease. Nenhuma das 46 históricas ou 12 PRs foi tocada. Nenhum deploy Netlify, alteração visual, auth/DB ou escrita na main.
+
+## R17 — classificação integral do artefato de contraste
+
+Resultado real de [Actions #40620489920](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40620489920), artifact ID `12787101684`: 33 observações `unverified`, **todas** `reason:not-visible`, todas na Landing. Por seletor: `.environment span` 20 ocorrências (5 elementos × Chromium/WebKit × light/dark em 390px), `.feature-copy > p.feature-availability` 12 (1 × 3 larguras × 2 temas × 2 engines), `.hero-description` 1 (WebKit, 390px, light). Não houve classificação de gradiente, imagem, opacidade ou superfície translúcida nesses 33 registros; logo, não afirmar que eles foram falsificados nem verificados. 423 amostras calculáveis passam o limiar, zero candidatas abaixo.
+
+**Interpretação:** ambiente e disponibilidade podem estar ocultos por responsividade/estado; o único `hero` pode ser assentamento visual transiente. Não corrigir cores nem simplesmente converter `unverified` em PASS. Próxima ampliação: classificar se o ocultamento é intencional, sincronizar a visibilidade obrigatória do hero e criar controles separados para elementos condicionalmente exibidos. A prova existente de dez contextos claros continua independente. Preservar evidência no Git enquanto o artifact do Actions tiver retenção limitada.
