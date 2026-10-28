@@ -18,3 +18,10 @@ A implementação histórica 04a usava V3 `legacyFixture` e interceptava `GET /a
 ## Decisão condicional
 
 Apenas `work/cp-public-04a-main-flow-test-fixture-20261008`, se gate de equivalência + Chromium + comprador V5 passarem, torna-se candidato a arquivo/retirada. Nenhuma PR ligada à branch; nenhum deploy, mudança de admin, banco ou `main`. Manter a política `ops/development-main-authority-policy.json` e o executor com tags+SHA lease/readback. A branch auxiliar é descartável após FF; não retirar 04 sem prova de seu contrato geométrico.
+
+## Execução em branch de integração e gate no destino
+
+- [Auxiliar CI #40697870659](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40697870659) **PASS**: quatro provas estáticas, contratos atuais V5/flow, `flow layout browser: PASS` com as 216 asserções e cenários V5, `buyer published v3/v5 browser: PASS`. Browser localhost Playwright 1.62.1, artifact `12820237091`. Esse é um teste funcional real em Chromium, não sessão real de Netlify.
+- Commit documental/prova `2d9b7e3fb0a5820acb1eec019c5a904f568f48b5` integrado por FF SHA lease em development, [gate do destino #40698236525](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40698236525) **PASS** também estático + browser + V5, antes de qualquer retire.
+- **Manifesto T one-shot proposto:** aposentar somente `work/cp-public-04a-main-flow-test-fixture-20261008@9503ad1caff406d3e3422c9d4aec25bac081132e`, com tag integral `archive/m2d/legacy-cp-public-flow-v3-fixture-9503ad1c`, e a auxiliar ancestral `integration/26-flow-v5-fixture-equivalence-20261028@2d9b7e3fb0a5820acb1eec019c5a904f568f48b5`. Arquivo original `7fe6f086f7f747861c520f51c3cafc6ef79446c2` já é copiado fiel em `docs/reconciliation/cpux-main-v5/legacy/fixture/tests/flow-layout-browser.cjs`. Não copiar mais 72 KB. **Não declarar exclusão até executor audit/apply PASS e readback.**
+- `feat/cp-ux-04-hierarchy-layout` continua HOLD por seis assertions geométricas não identificadas na suite atual; compatibilidade não estabelecida apenas por esta prova.
