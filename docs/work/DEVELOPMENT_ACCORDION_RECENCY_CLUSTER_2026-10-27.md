@@ -26,3 +26,12 @@ Estado de execução: **testes e destino ainda dependem do gate online**. Atuali
 - O primeiro gate [#40608052660](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40608052660) falhou em uma condição de **comparação**, não no comportamento: o teste mais recente exigia o mesmo valor absoluto de `y` para `.study-topics` na página antiga e na página atual. Outras seções acima mudaram e moveram o componente verticalmente; suas medidas e estilos internos continuavam os mesmos no diff mostrado.
 - Ajuste estritamente no teste recuperado: remover `x/y` absolutos de `closedMetrics`, mantendo altura, largura, estilos, DOM, interação independente e avaliação do navegador. A captura mais recente continua serializada e recortada, mas a coordenada de `page.screenshot({clip})` foi corrigida com `scrollX/scrollY`, porque `boundingBox()` retorna posição relativa à viewport.
 - O **conteúdo exato** do teste em 25/10 é recuperável no commit `6260df944b6b82f3a86d9eed4d9bc3eacd8bc48b`; o arquivo atualizado é uma **adaptação compatível com o site mais recente**, não mais um blob idêntico. O workflow confirma o blob histórico e os dois ajustes. Sem alteração no CSS/HTML/JS publicado e sem afirmar aprovação dos screenshots antes do gate final.
+
+
+### Segundo ajuste do gate — captura abaixo da dobra
+
+A segunda tentativa não alcançou o browser porque o checkout dentro de `mcr.microsoft.com/playwright:v1.56.0-noble` exigiu configuração explícita de `git safe.directory` antes do `git fetch` do commit histórico. O workflow foi ajustado, sem mudar a app.
+
+A terceira tentativa [#40608367733](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40608367733) confirmou que o recorte `page.screenshot({clip})` do teste de 25/10 não era transportável para elementos que ficam abaixo da dobra: falhou com `Clipped area is either empty or outside the resulting image`. A adaptação posterior usa `locator.screenshot()` com `scrollIntoViewIfNeeded()`, verificação positiva de dimensões e capturas **serializadas** em Chromium/WebKit. Isto mantém o objetivo da correção mais nova (captura isolada e reproduzível do componente) sem seu mecanismo frágil de viewport. A lógica de teclado, independência e paridade CSS continua preservada.
+
+**Registro de discrepância de recência:** não afirmar que o teste recuperado é idêntico ao antigo depois desta adaptação: sua proveniência é pinada por SHA; a versão atual é *derivada com reparos comprovadamente necessários*. Testes de navegador continuam obrigatórios antes de integrar ou podar.
