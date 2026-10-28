@@ -3,7 +3,6 @@ on:
   push:
     branches:
       - development
-      - integration/39-cppublic-pr-roster-20261028
     paths:
       - 'ops/development-pr-closure-transition.json'
       - 'tools/development_retirement_batch.py'
