@@ -3,7 +3,7 @@
   "repository": "EAKerber/MobiliPresenter2D",
   "controlBranch": "development",
   "mainSha": "221b54b2a41ecc8c338d1bf2cf67280cf165ce95",
-  "batchId": "dev-20261027-public-menu-semantic-h",
+  "batchId": "dev-20261027-arc03-prototype-semantic-i",
   "retired": [
     {
       "branch": "docs/handover-reconcile-20261023",
@@ -60,42 +60,42 @@
       "sha": "10445ad8c20ac1a415f4ba463345eda83bd7e9a6",
       "kind": "archive-diverged",
       "archiveTag": "archive/m2d/viewer-nav005-10445ad8"
-    }
-  ],
-  "auxiliaryRefs": [
-    {
-      "branch": "integration/14-public-menu-controller-reconcile-20261027",
-      "sha": "f45500ea6de4d6cce86c009af09cab8a661124f9"
-    }
-  ],
-  "targets": [
+    },
     {
       "branch": "experiment/shared-public-header-controller-20261020",
       "sha": "fdeb931af285f6cf76795ccdd50a8b75d0f25aef",
       "kind": "archive-diverged",
-      "archiveTag": "archive/m2d/public-menu-experiment-fdeb931a",
-      "snapshotPath": "docs/work/DEVELOPMENT_PUBLIC_MENU_LEGACY_CLUSTER_2026-10-27.md",
-      "semanticGate": {
-        "runId": 40615995337,
-        "headSha": "f45500ea6de4d6cce86c009af09cab8a661124f9",
-        "workflowName": "Development 14 — prior public-menu implementations semantic reconciliation"
-      }
+      "archiveTag": "archive/m2d/public-menu-experiment-fdeb931a"
     },
     {
       "branch": "architecture/p-comp-01-public-menu-20261021",
       "sha": "4ba9384733a8cb46ad8a6c7c8ef3b9aebe25cd93",
       "kind": "archive-diverged",
-      "archiveTag": "archive/m2d/public-menu-pcomp-4ba93847",
-      "snapshotPath": "docs/work/DEVELOPMENT_PUBLIC_MENU_LEGACY_CLUSTER_2026-10-27.md",
+      "archiveTag": "archive/m2d/public-menu-pcomp-4ba93847"
+    }
+  ],
+  "auxiliaryRefs": [
+    {
+      "branch": "integration/15-arc03-prototype-reconcile-20261027",
+      "sha": "6a2e32747f91ba2cf1d819f6df741cd95622fc17"
+    }
+  ],
+  "targets": [
+    {
+      "branch": "architecture/arc03-primary-header-fragment-prototype-20261022",
+      "sha": "e459b9bd85c4e9c8bb96813ae6758789de75dc13",
+      "kind": "archive-diverged",
+      "archiveTag": "archive/m2d/arc03-prototype-e459b9bd",
+      "snapshotPath": "docs/work/DEVELOPMENT_ARC03_PROTOTYPE_RECONCILIATION_2026-10-27.md",
       "semanticGate": {
-        "runId": 40615995337,
-        "headSha": "f45500ea6de4d6cce86c009af09cab8a661124f9",
-        "workflowName": "Development 14 — prior public-menu implementations semantic reconciliation"
+        "runId": 40617029330,
+        "headSha": "6a2e32747f91ba2cf1d819f6df741cd95622fc17",
+        "workflowName": "Development 15 — ARC03 preview prototype supersession, fail-closed guards"
       }
     },
     {
-      "branch": "integration/14-public-menu-controller-reconcile-20261027",
-      "sha": "f45500ea6de4d6cce86c009af09cab8a661124f9",
+      "branch": "integration/15-arc03-prototype-reconcile-20261027",
+      "sha": "6a2e32747f91ba2cf1d819f6df741cd95622fc17",
       "kind": "auxiliary-ancestor-development"
     }
   ]
