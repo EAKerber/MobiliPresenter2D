@@ -1,0 +1,35 @@
+name: Development CP-UX historical publication main-authority gate (offline)
+on:
+  push:
+    branches:
+      - development
+      - integration/25-cpux-main-v5-supersession-20261028
+    paths:
+      - 'docs/reconciliation/cpux-main-v5/**'
+      - 'docs/work/DEVELOPMENT_CPUX_MAIN_AUTHORITY_2026-10-28.md'
+      - 'tests/test_development_cpux_main_v5.py'
+      - '.github/workflows/development-cpux-main-v5.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  main-v5-contracts:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Pin original Git blobs and enforce MAIN modern endpoint boundary
+        run: python3 -m unittest discover -s tests -p test_development_cpux_main_v5.py -v
+      - name: Main-equivalent V5 server and current hierarchy contracts
+        run: |
+          node app/tools/test-v5-endpoint-safety.js
+          node app/tools/test-hierarchy-administration.js
+          node app/tools/test-flow-model.js
+          node app/tools/test-flow-layout.js
+          node app/tools/test-public-modules-endpoint.js
+          npm run pages:check

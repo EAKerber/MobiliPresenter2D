@@ -1,0 +1,171 @@
+{
+  "schema": "M2DCPUXMainV5Reconciliation/0.1",
+  "repository": "EAKerber/MobiliPresenter2D",
+  "mainSha": "221b54b2a41ecc8c338d1bf2cf67280cf165ce95",
+  "developmentAtCapture": "2ef12e68703a66255b548da98e5feaa9dfabbf1a",
+  "authority": "main stable baseline, newer gated development hardening is a separately documented exception",
+  "sources": [
+    {
+      "id": "ux04",
+      "branch": "feat/cp-ux-04-hierarchy-layout",
+      "sha": "5d8347edb6ea247307b6fc27b424117553542f78",
+      "date": "2026-10-06",
+      "classification": "HOLD_BROWSER_LAYOUT_BEHAVIOR",
+      "why": "newer main flow implementation exists, but original interaction/CSS differences not fully exercised"
+    },
+    {
+      "id": "preparation",
+      "branch": "feat/cp-ux-05a-publication-prep",
+      "sha": "de0358134963f5ce72bdee98437922a3520ee24a",
+      "date": "2026-10-06",
+      "classification": "CANDIDATE_ARCHIVE_RETIRE",
+      "archiveTag": "archive/m2d/legacy-cpux-05a-preparation-de035813",
+      "why": "deprecated V4 draft publication and POST path superseded by main native V5 GET/PUT fail-closed + current gated development"
+    },
+    {
+      "id": "v4",
+      "branch": "feat/cp-ux-05a-v4-publication-prep",
+      "sha": "ba22963ad304bddb6b77d59d7340b9e085f4d9b7",
+      "date": "2026-10-06",
+      "classification": "CANDIDATE_ARCHIVE_RETIRE",
+      "archiveTag": "archive/m2d/legacy-cpux-05a-v4-ba22963a",
+      "why": "explicit historical V4 migration action was retired after completed V5 publication; reimport unsafe"
+    },
+    {
+      "id": "fixture",
+      "branch": "work/cp-public-04a-main-flow-test-fixture-20261008",
+      "sha": "9503ad1caff406d3e3422c9d4aec25bac081132e",
+      "date": "2026-10-09",
+      "classification": "HOLD_BROWSER_HARNESS_BEHAVIOR",
+      "why": "one-file legacy-browser mutation harness; only snapshot and mapping, no claimed parity"
+    }
+  ],
+  "artifacts": [
+    {
+      "source": "ux04",
+      "path": "app/core/flow-layout.js",
+      "sha": "7ed658c6ded1330e4d17c4fe955cde78415dc41e",
+      "archive": "docs/reconciliation/cpux-main-v5/legacy/ux04/app/core/flow-layout.js"
+    },
+    {
+      "source": "ux04",
+      "path": "app/core/flow-model.js",
+      "sha": "6d4b4e7da349089d0dbd4cfc0dc96bbdeeb909ce",
+      "archive": "docs/reconciliation/cpux-main-v5/legacy/ux04/app/core/flow-model.js"
+    },
+    {
+      "source": "ux04",
+      "path": "app/data/hierarchy-defaults.js",
+      "sha": "86c183ac35f3bb1318b3bf797290daba5bbd65f3",
+      "archive": "docs/reconciliation/cpux-main-v5/legacy/ux04/app/data/hierarchy-defaults.js"
+    },
+    {
+      "source": "ux04",
+      "path": "tests/flow-layout-browser.cjs",
+      "sha": "14bc9e098a07593ecf1ded8d7d442962081a6981",
+      "archive": "docs/reconciliation/cpux-main-v5/legacy/ux04/tests/flow-layout-browser.cjs"
+    },
+    {
+      "source": "ux04",
+      "path": "app/tools/test-flow-layout.js",
+      "sha": "e5bcc72cf4b324a055b01ba426bb055ee24b80cb",
+      "archive": "docs/reconciliation/cpux-main-v5/legacy/ux04/app/tools/test-flow-layout.js"
+    },
+    {
+      "source": "preparation",
+      "path": "netlify/lib/hierarchy-publication.mjs",
+      "sha": "847f635a82c24cf6e9a56dfbf8221818e65004af",
+      "archive": "docs/reconciliation/cpux-main-v5/legacy/preparation/netlify/lib/hierarchy-publication.mjs"
+    },
+    {
+      "source": "preparation",
+      "path": "app/tools/test-hierarchy-publication-prep.mjs",
+      "sha": "e9de107dd0ccdb8f8f7369b9f830476e619e34e2",
+      "archive": "docs/reconciliation/cpux-main-v5/legacy/preparation/app/tools/test-hierarchy-publication-prep.mjs"
+    },
+    {
+      "source": "preparation",
+      "path": "netlify/functions/configuration.mjs",
+      "sha": "72e65947b6a7ba8414bcd7c6803062a649a5dfd3",
+      "archive": "docs/reconciliation/cpux-main-v5/legacy/preparation/netlify/functions/configuration.mjs"
+    },
+    {
+      "source": "preparation",
+      "path": "docs/backlog/ux-navigation-hierarchy-roadmap-2026-10-05.md",
+      "sha": "57248c49a12343e62c5c2d370e7c0c79689d920a",
+      "archive": "docs/reconciliation/cpux-main-v5/legacy/preparation/docs/backlog/ux-navigation-hierarchy-roadmap-2026-10-05.md"
+    },
+    {
+      "source": "v4",
+      "path": "netlify/functions/configuration.mjs",
+      "sha": "f51e5f3fc657623d5a294103a99ab52cc4f23ba2",
+      "archive": "docs/reconciliation/cpux-main-v5/legacy/v4/netlify/functions/configuration.mjs"
+    },
+    {
+      "source": "v4",
+      "path": "app/core/hierarchy-administration.js",
+      "sha": "5a7714e7f23ac7fb88836014068dd20eb54317ef",
+      "archive": "docs/reconciliation/cpux-main-v5/legacy/v4/app/core/hierarchy-administration.js"
+    },
+    {
+      "source": "v4",
+      "path": "app/tools/test-hierarchy-administration.js",
+      "sha": "949e724c9387ec423f60d803b505d515c6b65f35",
+      "archive": "docs/reconciliation/cpux-main-v5/legacy/v4/app/tools/test-hierarchy-administration.js"
+    },
+    {
+      "source": "v4",
+      "path": "app/app.js",
+      "sha": "2abeeed36154f752a4a3b634cd5815ef8bd64a25",
+      "archive": "docs/reconciliation/cpux-main-v5/legacy/v4/app/app.js"
+    },
+    {
+      "source": "fixture",
+      "path": "tests/flow-layout-browser.cjs",
+      "sha": "7fe6f086f7f747861c520f51c3cafc6ef79446c2",
+      "archive": "docs/reconciliation/cpux-main-v5/legacy/fixture/tests/flow-layout-browser.cjs"
+    }
+  ],
+  "canonical": [
+    {
+      "path": "app/core/administration-v5.js",
+      "mainSha": "fce8319c7ed56d6e0e7e525742275aa2f0e25a32",
+      "developmentSha": "fce8319c7ed56d6e0e7e525742275aa2f0e25a32"
+    },
+    {
+      "path": "app/core/v5-normal-save.js",
+      "mainSha": "e9da3059ec2bbb566a0ac4c087553d383451e2e7",
+      "developmentSha": "e9da3059ec2bbb566a0ac4c087553d383451e2e7"
+    },
+    {
+      "path": "app/core/flow-model.js",
+      "mainSha": "0d27cd8effda1b0d70e89f55c423fa58d067e8ed",
+      "developmentSha": "0d27cd8effda1b0d70e89f55c423fa58d067e8ed"
+    },
+    {
+      "path": "app/core/flow-layout.js",
+      "mainSha": "48d0b255a9d47f32815a54eeb5d51fea6891b23e",
+      "developmentSha": "48d0b255a9d47f32815a54eeb5d51fea6891b23e"
+    },
+    {
+      "path": "app/data/hierarchy-defaults.js",
+      "mainSha": "c7029771a0ce289ea9f25ceddcf33d0abbaf6adb",
+      "developmentSha": "c7029771a0ce289ea9f25ceddcf33d0abbaf6adb"
+    },
+    {
+      "path": "netlify/functions/configuration.mjs",
+      "mainSha": "13c6997c7818189edfddcc529582941c7d2b5af5",
+      "developmentSha": "5189f7465bca2dec4ff1361e2ef9a3d82f822b36"
+    }
+  ],
+  "currentDecision": "ARCHIVE_ONLY_NO_LEGACY_ENDPOINT_ACTIVATION",
+  "noRuntimeChanges": true,
+  "retirementCandidates": [
+    "feat/cp-ux-05a-publication-prep",
+    "feat/cp-ux-05a-v4-publication-prep"
+  ],
+  "holdSources": [
+    "feat/cp-ux-04-hierarchy-layout",
+    "work/cp-public-04a-main-flow-test-fixture-20261008"
+  ]
+}
