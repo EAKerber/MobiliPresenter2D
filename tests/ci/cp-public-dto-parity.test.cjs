@@ -32,7 +32,10 @@ test("semantic parity: current and old preserve hierarchy, initial selection and
  assert.equal(old.schemaVersion,"BuyerConfiguration2D 0.1");
  assert.equal(now.schemaVersion,"BuyerConfiguratorPayload 1.0");
  assert.deepEqual(old.stages.map(s=>s.id),now.displaySettings.stages.map(s=>s.id));
- assert.deepEqual(old.initialState,now.displaySettings.initialState);
+ const {viewerEntities, ...currentInitial}=now.displaySettings.initialState;
+ assert.deepEqual(old.initialState,currentInitial);
+ assert.deepEqual(viewerEntities,v5.initialState.viewerEntities,
+   "newer viewer presentation state is preserved; it is not a historical DTO field");
  assert.deepEqual(old.pricing,now.pricingRules);
  assert.deepEqual(old.finishes,now.displaySettings.finishes);
  assert.deepEqual(old.dependencies,now.displaySettings.dependencies);
