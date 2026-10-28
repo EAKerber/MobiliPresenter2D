@@ -38,3 +38,12 @@ O teste `tests/design-system-reference-pin.test.mjs` de origem exigia **54 ocorr
 5. O pin fica **não ativado**. Qualquer conexão futura à UI exige análise de consumidores/contextos e gates VIS-002C com última intenção homologada. Não efetuar deploy nem mudança em `app/`.
 
 **Estado inicial:** arquivos e testes preparados na auxiliar, sujeita a resultados observados. Nenhuma exclusão ou aplicação visual é autorizada por este documento.
+
+
+## Primeiro gate final na auxiliar
+
+[Actions #40618136839](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40618136839) **PASS**, artifact `vis002-reference-not-activated-40618136839` ID `12785518105`. Verificador confirmou os SHA Git dos sete arquivos preservados, status de paleta `REFERENCE_ONLY_NOT_LINKED`, 16 valores, nenhum alias CSS carregado no produto e nenhuma atribuição de papéis aos componentes.
+
+O reprocessamento da observação lexical retornou **`historicLiteralMatches:54`, `currentLiteralMatches:55`, `changedFiles:1`**, sem congelar CSS do produto de 22/10. A varredura real de estilo computado concluiu os **32 cenários** de quatro rotas, duas larguras, dois temas e Chromium/WebKit, reportando cores, tema e contornos sem aplicar o pin. Tais dados não constituem prova de conformidade universal ou licença de ativação.
+
+A auditoria mudou de *snapshot errado como contrato* para *snapshot imutável + medição atual*, alinhando a implementação à última intenção declarada. A CI deve ser reexecutada em development antes de eventual aposentadoria histórica.
