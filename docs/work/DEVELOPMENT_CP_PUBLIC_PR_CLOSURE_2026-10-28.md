@@ -125,3 +125,10 @@ O recibo offline `PR_CONFIRMED_CLOSED_UNMERGED` só deve mudar após os readback
 reais de fechamento; ele não substitui o roster ao vivo. Não retirar as heads
 #179/#180 antes de novos gates e manifesto próprio. As PRs #182/#184/#185/#186/#238
 seguem HOLD. O seed de preview da #180 continua intencionalmente ausente.
+
+
+### Regressão após remoção efetiva
+
+O scanner final [#40784278666](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40784278666) passou com as 22 históricas remanescentes. O gate combinado [#40784278661](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40784278661) detectou um erro apenas no setup da simulação: `git update-ref -d <ref> <SHA>` foi chamado no espelho para uma ref já ausente no checkout fresco. As 15 verificações históricas diretas passaram; o probe remoto foi corretamente pulado após a falha do setup. O executor AL e seu readback não foram reexecutados.
+
+O teste agora remove a ref no espelho somente quando ela existe, mantendo lease por SHA; em ambos os estados exige ausência efetiva antes de rodar as 15 verificações históricas completas. A cópia local com refs obsoletas removidas passou novamente nos 61 testes Python. Não relaxa tags, PRs, proveniência, asserts históricos ou o executor remoto. A confirmação de CI após este reparo fica no checkpoint final do handover.

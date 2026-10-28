@@ -201,8 +201,16 @@ class PRHeadRetentionGates(unittest.TestCase):
                            check=True, capture_output=True, text=True)
             for n in mod.PR_CONFIRMED_CLOSED_UNMERGED:
                 branch, sha = mod.PR_HEAD_PINS[n]
-                subprocess.run(["git", "--git-dir=" + mirror, "update-ref", "-d",
-                                "refs/remotes/origin/" + branch, sha], check=True)
+                ref = "refs/remotes/origin/" + branch
+                # Fresh post-retirement checkouts already have no such ref.
+                # Keep the SHA lease when simulating the pre-retirement state.
+                if ref in original:
+                    self.assertEqual(original[ref], sha)
+                    subprocess.run(["git", "--git-dir=" + mirror, "update-ref", "-d",
+                                    ref, sha], check=True)
+                absent = subprocess.run(["git", "--git-dir=" + mirror, "show-ref",
+                                         "--verify", "--quiet", ref])
+                self.assertEqual(absent.returncode, 1, "closed head must be absent in mirror")
             env = dict(os.environ, GIT_DIR=mirror, GIT_WORK_TREE=root)
             result = subprocess.run([
                 "python3", "-m", "unittest",
