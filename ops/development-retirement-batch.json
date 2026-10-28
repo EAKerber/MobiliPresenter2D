@@ -3,7 +3,7 @@
   "repository": "EAKerber/MobiliPresenter2D",
   "controlBranch": "development",
   "mainSha": "221b54b2a41ecc8c338d1bf2cf67280cf165ce95",
-  "batchId": "dev-20261027-accordion-recency-aux-e",
+  "batchId": "dev-20261027-migration-inspector-exact-f",
   "retired": [
     {
       "branch": "docs/handover-reconcile-20261023",
@@ -42,30 +42,36 @@
       "sha": "6840d8986e44a7860b541e6becb3b5373ef48c09",
       "kind": "archive-diverged",
       "archiveTag": "archive/m2d/a11y-image-fallback-6840d898"
-    }
-  ],
-  "auxiliaryRefs": [
-    {
-      "branch": "integration/11-accordion-latest-tests-20261027",
-      "sha": "0456909026d6a1229f4e5a692190a4f32496c0fc"
-    }
-  ],
-  "targets": [
+    },
     {
       "branch": "fix/how-it-works-accordion-grid-20261021",
       "sha": "6260df944b6b82f3a86d9eed4d9bc3eacd8bc48b",
       "kind": "archive-diverged",
-      "archiveTag": "archive/m2d/how-accordion-grid-6260df94",
-      "snapshotPath": "docs/work/DEVELOPMENT_ACCORDION_RECENCY_CLUSTER_2026-10-27.md",
+      "archiveTag": "archive/m2d/how-accordion-grid-6260df94"
+    }
+  ],
+  "auxiliaryRefs": [
+    {
+      "branch": "integration/12-migration-inspector-consolidation-20261027",
+      "sha": "8f5de5ad86b340b23b3df15222cf7787650d64b8"
+    }
+  ],
+  "targets": [
+    {
+      "branch": "tooling/migration-inspector-v0-20261023",
+      "sha": "2b00351acc1d1369116d8eeb546146a6b363072e",
+      "kind": "archive-diverged",
+      "archiveTag": "archive/m2d/migration-inspector-2b00351a",
+      "snapshotPath": "docs/work/DEVELOPMENT_MIGRATION_INSPECTOR_RECONCILIATION_2026-10-27.md",
       "semanticGate": {
-        "runId": 40608839476,
-        "headSha": "0456909026d6a1229f4e5a692190a4f32496c0fc",
-        "workflowName": "Development 11 — accordion latest-test semantic regression (offline)"
+        "runId": 40611669102,
+        "headSha": "8f5de5ad86b340b23b3df15222cf7787650d64b8",
+        "workflowName": "Development migration inspector (source only)"
       }
     },
     {
-      "branch": "integration/11-accordion-latest-tests-20261027",
-      "sha": "0456909026d6a1229f4e5a692190a4f32496c0fc",
+      "branch": "integration/12-migration-inspector-consolidation-20261027",
+      "sha": "8f5de5ad86b340b23b3df15222cf7787650d64b8",
       "kind": "auxiliary-ancestor-development"
     }
   ]
