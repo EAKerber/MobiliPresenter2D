@@ -168,7 +168,71 @@
         "unmergedVisualPR": 34
       },
       "noDeploy": true
+    },
+    {
+      "batchId": "dev-20261027-accordion-recency-aux-e",
+      "workflowRun": 40609050186,
+      "workflowUrl": "https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40609050186",
+      "headSha": "3fce5adbd16e5e8858acdbbc7b661cd93dac8c82",
+      "auditArtifactId": 12781614106,
+      "applyArtifactId": 12781168327,
+      "audit": "PASS",
+      "apply": "PASS",
+      "refsBefore": 56,
+      "refsAfter": 54,
+      "archived": [
+        {
+          "tag": "archive/m2d/how-accordion-grid-6260df94",
+          "sha": "6260df944b6b82f3a86d9eed4d9bc3eacd8bc48b"
+        }
+      ],
+      "retired": [
+        {
+          "branch": "fix/how-it-works-accordion-grid-20261021",
+          "sha": "6260df944b6b82f3a86d9eed4d9bc3eacd8bc48b",
+          "kind": "archive-diverged",
+          "archiveTag": "archive/m2d/how-accordion-grid-6260df94"
+        }
+      ],
+      "auxiliaryRetired": [
+        {
+          "branch": "integration/11-accordion-latest-tests-20261027",
+          "sha": "0456909026d6a1229f4e5a692190a4f32496c0fc",
+          "kind": "auxiliary-ancestor-development",
+          "recoverableFromDevelopment": true
+        }
+      ],
+      "semanticProof": {
+        "workflowRun": 40608839476,
+        "workflowSha": "0456909026d6a1229f4e5a692190a4f32496c0fc",
+        "auxGate": 40608533308,
+        "preservedNewestRuntime": true,
+        "recoveredNewestHistoricalTest": true,
+        "pinnedHistoricalTestSource": "6260df944b6b82f3a86d9eed4d9bc3eacd8bc48b",
+        "browserEngines": [
+          "chromium",
+          "webkit"
+        ],
+        "widths": [
+          390,
+          1366
+        ],
+        "themes": [
+          "light",
+          "dark"
+        ],
+        "functionalCases": 8,
+        "notice": "Source test was adapted to modern site; historic source remains tagged."
+      },
+      "preserved": {
+        "openPRs": 12,
+        "remainingOriginalHistoricalRefs": 52,
+        "mainSha": "221b54b2a41ecc8c338d1bf2cf67280cf165ce95",
+        "originalAssetsBranch": "artifacts/ds02-imagens-originais-20261015",
+        "unmergedVisualPR": 34
+      },
+      "noDeploy": true
     }
   ],
-  "nextBatchContract": "Next wave must carry the seven historical waves[].retired (four ancestor-main, three archive-diverged with verified recoverable tags). The one auxiliaryRetired of wave D is already reachable from development and must NOT be inserted into historic retired[] because it is not one of the original 60. Only 1-3 new SHA-pinned refs; keep 12 PRs protected and verify complete roster of 53 historical refs + main + development."
+  "nextBatchContract": "Next wave must carry the eight original historical waves[].retired refs; do not count or insert either auxiliaryRetired (they are reachable from development). There remain 52 historic originals + main + development. Always vet branch protections, 12 open PRs, Git rulesets, source SHA and archive tag before retirements. The consumed wave E manifest is not reusable."
 }
