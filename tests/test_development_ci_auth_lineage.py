@@ -86,7 +86,7 @@ class AuthLineage(unittest.TestCase):
 
     def test_current_pr_is_not_equivalent_to_all_old_auth_browsers(self):
         p = "tests/ci/config-auth-isolated-browser.mjs"
-        self.assertEqual(git("rev-parse", OLDSESSION + ":" + p),
+        self.assertEqual(git("rev-parse", OLDSESSION + ":" + p)[:10],
                          "35cdc24126")
         self.assertEqual(git("rev-parse", PR238 + ":" + p)[:10],
                          "b4cc427e9a")
