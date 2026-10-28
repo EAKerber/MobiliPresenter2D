@@ -42,3 +42,8 @@ A ferramenta de comparação GitHub mostra `status=behind` quando o **head** est
 - [Primeiro run #40747792240](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40747792240): **FAIL** na suposição de ancestralidade VIS→PR231; nenhuma operação de aposentadoria foi feita. O erro de leitura do comparador GitHub está documentado acima.
 - [Gate corrigido #40748058761](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40748058761): **PASS**: confirma nav→PR238, PR231→token v0.2, mantém duas branches VIS divergentes em HOLD, valida v0.3 e impede importações de runtime. Resultado offline sem testar deploy, alterações em SQL ou identidade.
 - **Elegível ao lote AB:** somente `fix/config-stage-nav-grid-track-20261025` com tag de preservação e a auxiliar ancestral após FF. `integration/vis002c-p-token-02b-v2-20261023` NÃO é elegível e não deve constar do manifesto. Manter as 12 PRs.
+
+## Gate após fast-forward no destino
+
+A auxiliar `integration/34-pr-ancestors-vis002c-20261028@761c8210e86b062a1c77cf22ea058933e1ef26ea` foi promovida para development por fast-forward SHA-exato desde `5c6e0be9a0d3530d08477e15e09374c2afc264bc`. Diff: **somente relatório, teste de proveniência e workflow**, nenhum arquivo de runtime ou servidor.
+O [gate no destino #40748235137](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40748235137) concluiu **PASS**, repetindo os cinco testes de proveniência, versão visual e HOLD de VIS. O lote AB a seguir poderá mencionar unicamente a branch de navegação como `archive-diverged` e a auxiliar como `auxiliary-ancestor-development`. Os erros anteriores #40747792240/#40748018901 permanecem identificados e foram corrigidos antes do FF.
