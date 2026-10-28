@@ -1,0 +1,39 @@
+name: CI-BASELINE-01 public projection contract isolated
+
+on:
+  push:
+    branches:
+      - ci/ci-baseline-01-public-projection-test-20261022
+    paths:
+      - "tests/public-module-projection.test.cjs"
+      - ".github/workflows/ci-baseline-01-public-projection-isolated.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-baseline-01-public-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  contract:
+    runs-on: ubuntu-latest
+    timeout-minutes: 7
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Syntax and current public projection contract
+        run: |
+          node --check tests/public-module-projection.test.cjs
+          node --test tests/public-module-projection.test.cjs
+      - name: Additional public endpoint and scene-adapter contracts
+        run: |
+          node app/tools/test-public-modules-endpoint.js
+          node --test app/viewer/scene-adapters.test.mjs
+      - name: Verify no runtime or deployment change
+        run: |
+          git diff --quiet origin/main...HEAD -- app netlify.toml package.json netlify

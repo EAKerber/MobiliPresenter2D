@@ -1,0 +1,170 @@
+{
+  "schema": "M2DCIBaselineDiagnosticFamily/0.1",
+  "status": "HISTORICAL_NON_EXECUTABLE",
+  "repository": "EAKerber/MobiliPresenter2D",
+  "sources": [
+    {
+      "id": "readiness",
+      "branch": "ci/ci-baseline-01-config-readiness-20261022",
+      "sha": "dcfec5b7666b8e16d984be2d0d8c838b96b41b42",
+      "risk": "low",
+      "retirement": "candidate-read-only-diagnostic"
+    },
+    {
+      "id": "projection",
+      "branch": "ci/ci-baseline-01-public-projection-test-20261022",
+      "sha": "387da6a57c4188dd32ee0c5551e11d15e9140d3f",
+      "risk": "low",
+      "retirement": "candidate-already-exact-test"
+    },
+    {
+      "id": "nav",
+      "branch": "ci/ci-baseline-01-nav-sequence-probe-20261023",
+      "sha": "b9be8bfdac1063094446b2f78f3c59387b47b7c5",
+      "risk": "medium",
+      "retirement": "hold-geometric-test-coverage"
+    },
+    {
+      "id": "v5local",
+      "branch": "ci/ci-baseline-01-v5-local-diagnostics-20261023",
+      "sha": "5ce7327a9e4c8c11483163507d29af4bb8b1312a",
+      "risk": "medium",
+      "retirement": "hold-local-browser-fixtures"
+    },
+    {
+      "id": "session",
+      "branch": "ci/ci-baseline-01-isolated-session-fixture-20261023",
+      "sha": "cb0ae8b1e05bc9b5d96c51e2027732aff12577c3",
+      "risk": "high",
+      "retirement": "hold-authentication"
+    },
+    {
+      "id": "navfix",
+      "branch": "fix/ci-baseline-v5-nav-flow-clean-20261023",
+      "sha": "62c5521d7e883443696ce1c58c912ac4794ff75e",
+      "risk": "medium",
+      "retirement": "hold-runtime-css-diff"
+    }
+  ],
+  "artifacts": [
+    {
+      "source": "readiness",
+      "originalPath": ".github/workflows/ci-baseline-01-config-readiness-isolated.yml",
+      "blob": "426a8b7d3655e7481b62ae497856c5597a25c97b",
+      "snapshotPath": "docs/reconciliation/ci-baseline/legacy/readiness/.github/workflows/ci-baseline-01-config-readiness-isolated.yml"
+    },
+    {
+      "source": "readiness",
+      "originalPath": "tests/ci-baseline-config-readiness-diagnostic.mjs",
+      "blob": "e2e88fb563ebb6f5de2a2fec136772ed972fdcd5",
+      "snapshotPath": "docs/reconciliation/ci-baseline/legacy/readiness/tests/ci-baseline-config-readiness-diagnostic.mjs"
+    },
+    {
+      "source": "projection",
+      "originalPath": ".github/workflows/ci-baseline-01-public-projection-isolated.yml",
+      "blob": "481b8c8d53a0bfcd3f5f62cc3f215d58becea2dc",
+      "snapshotPath": "docs/reconciliation/ci-baseline/legacy/projection/.github/workflows/ci-baseline-01-public-projection-isolated.yml"
+    },
+    {
+      "source": "projection",
+      "originalPath": "tests/public-module-projection.test.cjs",
+      "blob": "6a8faec2f00e0d7cd26084a1927fb6a5d9c660c3",
+      "snapshotPath": "docs/reconciliation/ci-baseline/legacy/projection/tests/public-module-projection.test.cjs"
+    },
+    {
+      "source": "nav",
+      "originalPath": "docs/handoffs/CI_BASELINE_01_NAV_SEQUENCE_2026-10-23.md",
+      "blob": "499df49423f5f807cf4137311a10e2dfb84061a5",
+      "snapshotPath": "docs/reconciliation/ci-baseline/legacy/nav/docs/handoffs/CI_BASELINE_01_NAV_SEQUENCE_2026-10-23.md"
+    },
+    {
+      "source": "nav",
+      "originalPath": "tests/ci/v5-container-causality.mjs",
+      "blob": "69251cf3596255852b35c6bee25d3c4865eb90d8",
+      "snapshotPath": "docs/reconciliation/ci-baseline/legacy/nav/tests/ci/v5-container-causality.mjs"
+    },
+    {
+      "source": "nav",
+      "originalPath": "tests/ci/nav-css-visual-differential.mjs",
+      "blob": "1b436bf6dfa5482190c570d1689a2af84ff580a1",
+      "snapshotPath": "docs/reconciliation/ci-baseline/legacy/nav/tests/ci/nav-css-visual-differential.mjs"
+    },
+    {
+      "source": "nav",
+      "originalPath": ".github/workflows/ci-baseline-01-nav-causality.yml",
+      "blob": "0ed7a889a3a1267d1bb25705cec65e1f04fda2c5",
+      "snapshotPath": "docs/reconciliation/ci-baseline/legacy/nav/.github/workflows/ci-baseline-01-nav-causality.yml"
+    },
+    {
+      "source": "v5local",
+      "originalPath": "tests/ci/v5-local-navigation-probe.mjs",
+      "blob": "c6f889903e3013dffe5473fad414048975837678",
+      "snapshotPath": "docs/reconciliation/ci-baseline/legacy/v5local/tests/ci/v5-local-navigation-probe.mjs"
+    },
+    {
+      "source": "v5local",
+      "originalPath": ".github/workflows/ci-baseline-01-local-diagnostic.yml",
+      "blob": "1c04f12949b137ea6f4a98b9bdb5063e5611cedd",
+      "snapshotPath": "docs/reconciliation/ci-baseline/legacy/v5local/.github/workflows/ci-baseline-01-local-diagnostic.yml"
+    },
+    {
+      "source": "session",
+      "originalPath": "docs/handoffs/CI_BASELINE_01_ISOLATED_AUTH_FIXTURE_2026-10-23.md",
+      "blob": "29ccfe6a42985ecdc4a2b8b678acfc3cb9f993f0",
+      "snapshotPath": "docs/reconciliation/ci-baseline/legacy/session/docs/handoffs/CI_BASELINE_01_ISOLATED_AUTH_FIXTURE_2026-10-23.md"
+    },
+    {
+      "source": "session",
+      "originalPath": "tests/ci/config-auth-isolation.test.mjs",
+      "blob": "781a662725cfad96e34d842d6f00d33f837716c6",
+      "snapshotPath": "docs/reconciliation/ci-baseline/legacy/session/tests/ci/config-auth-isolation.test.mjs"
+    },
+    {
+      "source": "navfix",
+      "originalPath": "tests/ci/nav-label-width-boundary.mjs",
+      "blob": "7d15daeac6a88ecd295b5393a1878d610a809d57",
+      "snapshotPath": "docs/reconciliation/ci-baseline/legacy/navfix/tests/ci/nav-label-width-boundary.mjs"
+    },
+    {
+      "source": "navfix",
+      "originalPath": "tests/ci/ci-baseline-clean-v5.mjs",
+      "blob": "fc17d522d664e3b506964e633b5e5d1054c3530a",
+      "snapshotPath": "docs/reconciliation/ci-baseline/legacy/navfix/tests/ci/ci-baseline-clean-v5.mjs"
+    },
+    {
+      "source": "navfix",
+      "originalPath": "docs/handoffs/CI_BASELINE_01_NAV_FLOW_CLEAN_2026-10-23.md",
+      "blob": "9a39e5e574db616a4096cb8bbaf581bc418a07f9",
+      "snapshotPath": "docs/reconciliation/ci-baseline/legacy/navfix/docs/handoffs/CI_BASELINE_01_NAV_FLOW_CLEAN_2026-10-23.md"
+    }
+  ],
+  "currentContracts": [
+    {
+      "path": "tests/public-module-projection.test.cjs",
+      "blob": "6a8faec2f00e0d7cd26084a1927fb6a5d9c660c3",
+      "role": "V5 public-only allowlist projection, identical historical projection"
+    },
+    {
+      "path": "app/core/public-module-projection.js",
+      "blob": "fff325e9699f806f0e4d599b05374aa7c3d2c43f",
+      "role": "pure validated public projection current"
+    },
+    {
+      "path": "netlify/access/identity-policy.mjs",
+      "blob": "fc529362c8b611b9f4e1b566a3b4b52f00bd7ca5",
+      "role": "authorization guard current"
+    },
+    {
+      "path": "netlify/functions/buyer-configuration.mjs",
+      "blob": "aaace7bc2187aca4b1c484962f239ae00b20de80",
+      "role": "buyer endpoint current"
+    }
+  ],
+  "liveMode": "CI current unit and lint checks only; historical readiness and local diagnostic scripts never run",
+  "holders": [
+    "ci/ci-baseline-01-isolated-auth-extraction-20261024 (open PR #238, outside six)",
+    "ci-auth-base-20261025 (later credentials/DB fixture, outside six)",
+    "security/oidc-ci-preview235-v0-20261023 (sensitive, outside six)"
+  ],
+  "safety": "Evidence retention, not implicit auth fixture endorsement. No CSS, Netlify, database, production remote diagnostics or credentials."
+}

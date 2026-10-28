@@ -1,0 +1,33 @@
+name: Development CI baseline six-source provenance and public isolation
+on:
+  push:
+    branches:
+      - development
+      - integration/21-ci-baseline-diagnostic-family-20261028
+    paths:
+      - 'docs/reconciliation/ci-baseline/**'
+      - 'docs/work/DEVELOPMENT_CIBASELINE_CLUSTER_2026-10-28.md'
+      - 'tests/test_development_ci_baseline_cluster.py'
+      - '.github/workflows/development-ci-baseline-cluster.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  source-and-contract:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check historic provenance and isolation (never execute historic probes)
+        run: python3 -m unittest discover -s tests -p test_development_ci_baseline_cluster.py -v
+      - name: Run existing V5 public projection tests and guards
+        run: |
+          node --test tests/public-module-projection.test.cjs
+          node app/tools/test-public-modules-endpoint.js
+          node --test app/viewer/scene-adapters.test.mjs
+          npm run pages:check

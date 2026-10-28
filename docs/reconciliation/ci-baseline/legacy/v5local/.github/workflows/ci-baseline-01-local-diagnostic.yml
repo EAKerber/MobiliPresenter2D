@@ -1,0 +1,65 @@
+name: CI-BASELINE-01 local Config functional diagnostics (no secrets)
+on:
+  push:
+    branches:
+      - ci/ci-baseline-01-shared-db-preview-20261023
+      - ci/ci-baseline-01-v5-local-diagnostics-20261023
+    paths:
+      - "tests/ci/config-unlocked-local-diagnostic.mjs"
+      - "tests/ci/local-buyer-config-server.mjs"
+      - "tests/ci/v5-local-navigation-probe.mjs"
+      - ".github/workflows/ci-baseline-01-local-diagnostic.yml"
+      - "tests/mobile-pip-main-browser.cjs"
+      - "tests/keyboard-browser.cjs"
+      - "tests/flow-layout-browser.cjs"
+      - "tests/summary-pricing-browser.cjs"
+      - "tests/stone-browser.cjs"
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  diagnostic:
+    runs-on: ubuntu-latest
+    timeout-minutes: 21
+    container:
+      image: mcr.microsoft.com/playwright:v1.56.0-noble
+      options: --ipc=host
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Install browsers for local-only diagnostic
+        run: |
+          npm install --prefix /tmp/m2d-local-config-diagnostics --no-audit --no-fund playwright@1.56.0 esbuild@0.28.2 @netlify/identity@2.0.0
+          ln -s /tmp/m2d-local-config-diagnostics/node_modules ./node_modules
+      - name: Generate same static bundles as Netlify, including private navigation
+        run: |
+          npm run build
+          npm run pages:check
+          test -s app/core/private-navigation.bundle.js
+          echo CI_LOCAL_REQUIRED_BUNDLE_PASS
+      - name: Serve codebase-default validated buyer projection entirely locally
+        run: |
+          node tests/ci/local-buyer-config-server.mjs > /tmp/config-local-server.log 2>&1 &
+          sleep 2
+          curl --fail --silent http://127.0.0.1:8123/config/ --output /dev/null
+          curl --fail --silent http://127.0.0.1:8123/api/buyer-configuration --output /dev/null
+      - name: Classify five existing suites without changing their assertions
+        run: node tests/ci/config-unlocked-local-diagnostic.mjs
+      - name: Inspect navigation states on V5 local runtime
+        run: node tests/ci/v5-local-navigation-probe.mjs
+      - name: Identify missing resources in local harness
+        if: always()
+        run: |
+          grep 'CI_LOCAL_HTTP_404' /tmp/config-local-server.log | sort -u || true
+      - name: Upload sanitized classifications only
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ci-config-local-diagnostic-no-session
+          path: |
+            artifacts/ci-baseline-01/unlocked-local.json
+            artifacts/ci-baseline-01/v5-navigation.json
+          retention-days: 7
+          if-no-files-found: warn
