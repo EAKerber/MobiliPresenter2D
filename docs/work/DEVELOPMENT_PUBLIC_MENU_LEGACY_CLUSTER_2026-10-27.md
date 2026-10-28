@@ -27,3 +27,9 @@ A origem experimental e a P-COMP são **candidatas à aposentadoria**, somente s
 Branch auxiliar `integration/14-public-menu-controller-reconcile-20261027` deve ser absorvida por FF com lease, podendo então ser retirada por ancestralidade. A branch `architecture/arc03-primary-header-fragment-prototype-20261022@e459b9bd85c4e9c8bb96813ae6758789de75dc13` **permanece HOLD**: seu compilador experimental não foi provado equivalente ao publicador atual. `main`, PR #34, assets DS-02 e demais PRs são intocáveis nesta rodada.
 
 **Status inicial:** auditoria e browser gate a validar. Não afirmar remoção, homologação visual ou equivalência de ARC-03 antes de evidência.
+
+## Resultado preliminar confirmado
+
+[GitHub Actions #40615773638](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40615773638) **PASS** na branch auxiliar com verificação do escopo de contribuição pinado dos dois históricos, da precedência real de implementação (20/10, 21/10, 24/10), da preservação do gate P-COMP de diferença raster e das 4 rotas de controlador único. Testes ARC-03C e integridade da compilação pública passaram; **48 cenários funcionais** em Chromium/WebKit passaram sem Netlify. Artifact `public-menu-legacy-semantic-40615773638`.
+
+A documentação e o auditor adicionados na auxiliar não alteram runtime. Próximo gate obrigatório: rodar novamente após fast-forward para development. Só então enviar manifest da onda H ao executor de higiene.
