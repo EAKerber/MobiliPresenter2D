@@ -1,0 +1,72 @@
+name: Development 13 — Viewer NAV005 newer-intent semantic reconciliation (offline)
+
+on:
+  push:
+    branches:
+      - integration/13-viewer-nav005-reconcile-20261027
+      - development
+    paths:
+      - 'tools/development_nav005_semantic_audit.py'
+      - 'tests/viewer-secondary-header-browser-gate.mjs'
+      - 'tests/ci/public-navigation-semantic-browser.mjs'
+      - 'app/viewer/index.html'
+      - 'app/viewer/viewer.css'
+      - 'app/core/ui-theme.js'
+      - 'architecture/fragments/primary-header.routes.json'
+      - '.github/workflows/development-viewer-nav005-semantic.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  source-and-browsers:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    container:
+      image: mcr.microsoft.com/playwright:v1.62.1-noble
+      options: --ipc=host
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Pin old NAV005 commit, source scope and current design intent
+        shell: bash
+        run: |
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
+          git fetch --no-tags origin 10445ad8c20ac1a415f4ba463345eda83bd7e9a6
+          git fetch --no-tags origin main
+          python3 -m py_compile tools/development_nav005_semantic_audit.py
+          python3 tools/development_nav005_semantic_audit.py
+          node --check tests/ci/public-navigation-semantic-browser.mjs
+          node --check tests/viewer-secondary-header-browser-gate.mjs
+          npm run pages:check
+      - name: Resolve exact Playwright package for preinstalled browsers
+        run: |
+          npm install --no-save --no-package-lock --no-audit --no-fund playwright@1.62.1
+          node -e 'if(require("playwright/package.json").version!=="1.62.1")process.exit(1)'
+      - name: Serve local static site only, no Netlify
+        shell: bash
+        run: |
+          python3 -m http.server 8123 --bind 127.0.0.1 --directory app >/tmp/nav005-intent-http.log 2>&1 &
+          for i in $(seq 1 30); do
+            if curl --silent --show-error --fail http://127.0.0.1:8123/viewer/ >/dev/null; then break; fi
+            sleep 1
+          done
+          curl --fail http://127.0.0.1:8123/ >/dev/null
+          curl --fail http://127.0.0.1:8123/about/ >/dev/null
+          curl --fail http://127.0.0.1:8123/how-it-works/ >/dev/null
+      - name: Latest primary and secondary header interaction contract (48 cases)
+        run: node tests/ci/public-navigation-semantic-browser.mjs
+      - name: Depth-2 Viewer geometry, links, theme and keyboard contract (20 cases)
+        run: node tests/viewer-secondary-header-browser-gate.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: development-nav005-semantic-${{ github.run_id }}
+          path: artifacts/viewer-secondary-header/report.json
+          retention-days: 30
+          if-no-files-found: warn
