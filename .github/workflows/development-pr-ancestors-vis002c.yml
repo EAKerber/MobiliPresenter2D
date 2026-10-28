@@ -1,0 +1,23 @@
+name: Development PR ancestor and VIS002C semantic provenance (offline)
+on:
+  push:
+    branches:
+      - development
+      - integration/34-pr-ancestors-vis002c-20261028
+    paths:
+      - 'tests/test_development_pr_ancestors_vis002c.py'
+      - 'docs/work/DEVELOPMENT_PR_ANCESTORS_VIS002C_2026-10-28.md'
+      - '.github/workflows/development-pr-ancestors-vis002c.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  provenance:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Offline full DAG and exact visual contract audit; no live auth or Netlify
+        run: python3 -m unittest discover -s tests -p test_development_pr_ancestors_vis002c.py -v
