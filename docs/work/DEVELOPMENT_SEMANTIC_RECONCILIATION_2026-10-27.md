@@ -61,3 +61,16 @@ A varredura read-only foi repetida com `tools/development_branch_reconciliation_
 | Sem blob contribuído idêntico no mesmo caminho | **34** |
 
 O `0` na primeira linha significa que todas as equivalências **puramente por SHA** já foram tratadas. O exemplo da acessibilidade provou que uma das 34 restantes na fotografia anterior já havia sido absorvida *semanticamente* por outro arquivo. Logo, os próximos 53 casos devem ser avaliados por contrato, não apenas SHA. A branch `fix/how-it-works-accordion-grid-20261021` possui o mesmo teste-base de interação no destino, mas não está autorizada para exclusão enquanto a semântica CSS/responsividade não for verificada por navegador contra a versão de origem. Não confundir presença de um teste com resultado PASS em comparação de comportamento.
+
+
+## Critério homologado de precedência (instrução do usuário de 27/10/2026)
+
+**Em implementações diferentes da mesma funcionalidade, preferir a mais recente, levando em consideração também a intenção declarada mais recente.** Aplicar a partir das próximas reconciliações:
+
+1. Determinar cronologia *do código* e da *intenção declarada*, incluindo decisões homologadas, correções e ressalvas; não inferir recência somente pelo nome da branch, data do merge ou maior SHA.
+2. A intenção mais recente expressa pelo usuário define o comportamento-alvo, respeitadas homologações não revogadas. Uma proposta, commit ou hipótese técnica recente não é, por si só, nova homologação.
+3. Entre implementações que satisfaçam a intenção vigente e o mesmo contrato funcional, a mais recente é a opção preferencial. Recuperar apenas melhorias exclusivas e ainda compatíveis das anteriores, sem reintegrar versões completas por padrão.
+4. Manter gates técnicos, de responsividade, acessibilidade, segurança e fidelidade visual. Uma versão mais nova com regressão permanece em HOLD; recência não dispensa prova nem autoriza poda.
+5. Antes de encerrar um ramo divergente, registrar SHA e data de cada candidata, fonte/data/status da última intenção, matriz de contratos, resultado dos testes e destinação (**KEEP_NEWER**, **EXTRACT_OLDER**, **HOLD**, **ARCHIVE_SUPERSEDED**). Preservar DAG por tag e o ledger conforme as regras vigentes.
+
+Aplicação imediata: na comparação de `fix/how-it-works-accordion-grid-20261021` com `development`, usar a última intenção para comportamento independente dos cards; não escolher a CSS mais antiga apenas por ser mais próxima do diff. 
