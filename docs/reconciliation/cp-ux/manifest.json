@@ -1,0 +1,120 @@
+{
+  "schema": "M2DCPUXHistoricalCluster/0.1",
+  "status": "HISTORICAL_V3_V4_NOT_RUNTIME",
+  "repository": "EAKerber/MobiliPresenter2D",
+  "sourceBranches": [
+    {
+      "id": "cp04",
+      "branch": "feat/cp-ux-04-hierarchy-layout",
+      "sha": "5d8347edb6ea247307b6fc27b424117553542f78",
+      "date": "2026-10"
+    },
+    {
+      "id": "cp05a",
+      "branch": "feat/cp-ux-05a-publication-prep",
+      "sha": "de0358134963f5ce72bdee98437922a3520ee24a",
+      "date": "2026-10"
+    },
+    {
+      "id": "cp05av2",
+      "branch": "feat/cp-ux-05a-publication-prep-v2",
+      "sha": "1872ca2a79585449df370910f18500ad5351451a",
+      "date": "2026-10"
+    },
+    {
+      "id": "cp05av4",
+      "branch": "feat/cp-ux-05a-v4-publication-prep",
+      "sha": "ba22963ad304bddb6b77d59d7340b9e085f4d9b7",
+      "date": "2026-10"
+    }
+  ],
+  "archives": [
+    {
+      "source": "cp04",
+      "originalPath": "docs/backlog/ux-navigation-hierarchy-roadmap-2026-10-05.md",
+      "blob": "1b0d529ff6b60af82c19397c315651efff746496",
+      "snapshotPath": "docs/reconciliation/cp-ux/legacy/cp04/docs/backlog/ux-navigation-hierarchy-roadmap-2026-10-05.md"
+    },
+    {
+      "source": "cp04",
+      "originalPath": "app/core/flow-layout.js",
+      "blob": "7ed658c6ded1330e4d17c4fe955cde78415dc41e",
+      "snapshotPath": "docs/reconciliation/cp-ux/legacy/cp04/app/core/flow-layout.js"
+    },
+    {
+      "source": "cp04",
+      "originalPath": "app/tools/test-flow-layout.js",
+      "blob": "e5bcc72cf4b324a055b01ba426bb055ee24b80cb",
+      "snapshotPath": "docs/reconciliation/cp-ux/legacy/cp04/app/tools/test-flow-layout.js"
+    },
+    {
+      "source": "cp05a",
+      "originalPath": "docs/backlog/ux-navigation-hierarchy-roadmap-2026-10-05.md",
+      "blob": "57248c49a12343e62c5c2d370e7c0c79689d920a",
+      "snapshotPath": "docs/reconciliation/cp-ux/legacy/cp05a/docs/backlog/ux-navigation-hierarchy-roadmap-2026-10-05.md"
+    },
+    {
+      "source": "cp05a",
+      "originalPath": "netlify/lib/hierarchy-publication.mjs",
+      "blob": "847f635a82c24cf6e9a56dfbf8221818e65004af",
+      "snapshotPath": "docs/reconciliation/cp-ux/legacy/cp05a/netlify/lib/hierarchy-publication.mjs"
+    },
+    {
+      "source": "cp05a",
+      "originalPath": "app/tools/test-hierarchy-publication-prep.mjs",
+      "blob": "e9de107dd0ccdb8f8f7369b9f830476e619e34e2",
+      "snapshotPath": "docs/reconciliation/cp-ux/legacy/cp05a/app/tools/test-hierarchy-publication-prep.mjs"
+    },
+    {
+      "source": "cp05av2",
+      "originalPath": "docs/backlog/ux-navigation-hierarchy-roadmap-2026-10-05.md",
+      "blob": "2b335334d24235c92a1e9f2ae3f2128a24b5e077",
+      "snapshotPath": "docs/reconciliation/cp-ux/legacy/cp05av2/docs/backlog/ux-navigation-hierarchy-roadmap-2026-10-05.md"
+    },
+    {
+      "source": "cp05av4",
+      "originalPath": "docs/backlog/ux-navigation-hierarchy-roadmap-2026-10-05.md",
+      "blob": "0552faf883932088a8dbe6c5b1dd8cd1ae35c975",
+      "snapshotPath": "docs/reconciliation/cp-ux/legacy/cp05av4/docs/backlog/ux-navigation-hierarchy-roadmap-2026-10-05.md"
+    },
+    {
+      "source": "cp05av4",
+      "originalPath": "netlify/functions/configuration.mjs",
+      "blob": "f51e5f3fc657623d5a294103a99ab52cc4f23ba2",
+      "snapshotPath": "docs/reconciliation/cp-ux/legacy/cp05av4/netlify/functions/configuration.mjs"
+    },
+    {
+      "source": "cp05av4",
+      "originalPath": "app/core/hierarchy-administration.js",
+      "blob": "5a7714e7f23ac7fb88836014068dd20eb54317ef",
+      "snapshotPath": "docs/reconciliation/cp-ux/legacy/cp05av4/app/core/hierarchy-administration.js"
+    },
+    {
+      "source": "cp05av4",
+      "originalPath": "app/tools/test-hierarchy-administration.js",
+      "blob": "949e724c9387ec423f60d803b505d515c6b65f35",
+      "snapshotPath": "docs/reconciliation/cp-ux/legacy/cp05av4/app/tools/test-hierarchy-administration.js"
+    }
+  ],
+  "authority": {
+    "currentRoadmap": "docs/backlog/ux-navigation-hierarchy-roadmap-2026-10-05.md",
+    "currentRoadmapBlob": "9e43050cd78c8690b2edff1eaab2864770868744",
+    "currentAdmin": "app/core/administration-v5.js",
+    "adminBlob": "fce8319c7ed56d6e0e7e525742275aa2f0e25a32",
+    "currentFunction": "netlify/functions/configuration.mjs",
+    "functionBlob": "5189f7465bca2dec4ff1361e2ef9a3d82f822b36"
+  },
+  "nonPromotion": [
+    "Do not copy old v4 POST/prepare-hierarchy/publish flow into V5 production.",
+    "Historical scripts are archived and not invoked by runtime or CI.",
+    "Avoid assumptions that older docs are current despite publication-prep wording."
+  ],
+  "retirementHold": [
+    "cp04: runtime and wide UI changes",
+    "cp05a: API/function and server-only publication lib",
+    "cp05av4: API auth/hierarchy changes"
+  ],
+  "retirementCandidate": [
+    "cp05av2: one-file roadmap-only change, validate separately with tag"
+  ]
+}

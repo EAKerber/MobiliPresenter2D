@@ -1,0 +1,33 @@
+name: Development CP-UX four-source hierarchy and publication reconciliation (offline)
+on:
+  push:
+    branches:
+      - development
+      - integration/20-cpux-hierarchy-publication-family-20261028
+    paths:
+      - 'docs/reconciliation/cp-ux/**'
+      - 'docs/work/DEVELOPMENT_CPUX_CLUSTER_2026-10-28.md'
+      - 'tests/test_development_cpux_cluster.py'
+      - '.github/workflows/development-cpux-cluster.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  offline-contracts:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Source-exact archive and current v5 boundary
+        run: |
+          python3 -m unittest discover -s tests -p test_development_cpux_cluster.py -v
+      - name: Existing live hierarchy and flow test coverage
+        run: |
+          node app/tools/test-flow-layout.js
+          node app/tools/test-hierarchy-administration.js
+          npm run pages:check
