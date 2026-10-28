@@ -251,6 +251,8 @@ const {chromium} = require('playwright');
     document.querySelector('[data-keyboard-section="handles"]')?.dataset.keyboardActiveSection === "true"
   );
   assert.equal(await activeSection(), 'handles', 'Puxadores remains active after the handle controls redraw');
+  await page.waitForFunction(handleId => document.activeElement?.dataset?.handleId === handleId, handleOrder[0]);
+  assert.equal(await page.evaluate(() => document.activeElement?.dataset?.handleId || null), handleOrder[0], 'selected handle regains focus after redraw');
   await moveToSection('handles');
   assert.equal(await activeSection(), 'handles', 'Puxadores is a first-class keyboard section');
   await page.keyboard.press('ArrowRight');

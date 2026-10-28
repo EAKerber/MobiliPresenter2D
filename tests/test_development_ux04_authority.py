@@ -44,13 +44,20 @@ class LegacyUX04(unittest.TestCase):
             "narrow Modules does not overflow horizontally"
         ):
             self.assertIn(goal,current)
+    def test_minimal_keyboard_focus_restoration_is_main_exception(self):
+        main=subprocess.check_output(["git","show",self.p["mainSha"]+":app/app.js"],text=True)
+        dev=Path("app/app.js").read_text()
+        self.assertIn('activateSection?.("handles", handleIndex, false);',main)
+        self.assertNotIn('activateSection?.("handles", handleIndex, false);',dev)
+        self.assertIn('requestAnimationFrame(() => {\n      global.CASA_KEYBOARD_SHORTCUTS?.activateSection?.("handles", handleIndex, true);\n    });',dev)
+        self.assertIn("selected handle regains focus after redraw",Path("tests/keyboard-browser.cjs").read_text())
     def test_keyboard_preserves_seventy_one_and_requires_focus_gate(self):
         old=assertions(Path("docs/reconciliation/ux04-main-authority/legacy/tests/keyboard-browser.cjs").read_text())
         current=assertions(Path("tests/keyboard-browser.cjs").read_text())
         missing=[x for x in old if x not in current]
-        self.assertEqual((len(old),len(current),len(missing)),(74,100,3))
-        self.assertEqual(sum(x in current for x in old),71)
-        self.assertTrue(any("selected handle regains focus after redraw" in x for x in missing))
+        self.assertEqual((len(old),len(current),len(missing)),(74,101,2))
+        self.assertEqual(sum(x in current for x in old),72)
+        self.assertTrue(any("selected handle regains focus after redraw" in x for x in current))
         self.assertTrue(any("last-section navigation aligns the final section" in x for x in missing))
         self.assertTrue(any("reduced motion reaches the same final section geometry" in x for x in missing))
         self.assertTrue(any("above the persistent dock" in x for x in current))
