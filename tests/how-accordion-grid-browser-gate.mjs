@@ -9,18 +9,14 @@ const artifact="artifacts/how-accordion";
 await mkdir(artifact,{recursive:true});
 
 async function captureRegion(page,locator){
+ // Retain the newer serialized capture order, but let Playwright crop the
+ // element itself: page.screenshot clip coordinates are viewport-dependent
+ // on non-full-page captures and failed for elements below the fold.
  await locator.scrollIntoViewIfNeeded();
  await page.waitForTimeout(40);
  const box=await locator.boundingBox();
- assert.ok(box,"screenshot target must have a visible bounding box");
- // boundingBox() uses viewport coordinates, screenshot clip uses page
- // coordinates; add scroll offsets after scrolling the region into view.
- const scroll=await page.evaluate(()=>({x:scrollX,y:scrollY}));
- return page.screenshot({clip:{
-   x:Math.max(0,Math.floor(box.x+scroll.x)),
-   y:Math.max(0,Math.floor(box.y+scroll.y)),
-   width:Math.ceil(box.width),height:Math.ceil(box.height)
- },animations:"disabled"});
+ assert.ok(box&&box.width>0&&box.height>0,"screenshot target must have visible bounds");
+ return locator.screenshot({animations:"disabled"});
 }
 
 async function inspect(browser,origin,width,theme,verifyChanges){
