@@ -3,7 +3,7 @@
   "repository": "EAKerber/MobiliPresenter2D",
   "controlBranch": "development",
   "mainSha": "221b54b2a41ecc8c338d1bf2cf67280cf165ce95",
-  "batchId": "dev-20261028-v5local-dto-hit-target-aux-only-z",
+  "batchId": "dev-20261028-ci-auth-base-archive-aa",
   "retired": [
     {
       "branch": "docs/handover-reconcile-20261023",
@@ -184,14 +184,26 @@
   ],
   "auxiliaryRefs": [
     {
-      "branch": "integration/32-ci-v5local-dto-hit-target-20261028",
-      "sha": "200350735c24ccd234054261596732a707c245a1"
+      "branch": "integration/33-ci-auth-pr238-lineage-20261028",
+      "sha": "555ba8a67a643b876dcb5f8c46a1c48f91"
     }
   ],
   "targets": [
     {
-      "branch": "integration/32-ci-v5local-dto-hit-target-20261028",
-      "sha": "200350735c24ccd234054261596732a707c245a1",
+      "branch": "ci-auth-base-20261025",
+      "sha": "fd61a37a11dd63b3e537d3d76a2303bfdfc4f06a",
+      "kind": "archive-diverged",
+      "archiveTag": "archive/m2d/ci-auth-base-pr238-fd61a37a",
+      "snapshotPath": "docs/work/DEVELOPMENT_CI_AUTH_LINEAGE_PR238_2026-10-28.md",
+      "semanticGate": {
+        "runId": 40742370534,
+        "headSha": "555ba8a67a643b876dcb5f8c46a1c48f91",
+        "workflowName": "Development CI old auth and PR238 lineage (offline provenance)"
+      }
+    },
+    {
+      "branch": "integration/33-ci-auth-pr238-lineage-20261028",
+      "sha": "555ba8a67a643b876dcb5f8c46a1c48f91",
       "kind": "auxiliary-ancestor-development"
     }
   ]
