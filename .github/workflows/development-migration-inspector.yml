@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - development
-      - integration/12-migration-inspector-consolidation-20261027
     paths:
       - 'tools/migration-inspector.mjs'
       - 'tests/migration-inspector.test.mjs'
