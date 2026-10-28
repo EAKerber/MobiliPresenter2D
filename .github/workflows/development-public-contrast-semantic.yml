@@ -1,0 +1,59 @@
+name: Development public contrast semantic audit (read-only)
+on:
+  push:
+    branches:
+      - development
+      - integration/17-public-text-contrast-audit-20261027
+    paths:
+      - 'tests/ci/public-text-contrast-semantic.mjs'
+      - 'design-system/pins/vis-002/context-v0.3.0/**'
+      - 'app/landing/landing.css'
+      - 'app/about/about.css'
+      - 'app/how-it-works/how-it-works.css'
+      - '.github/workflows/development-public-contrast-semantic.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 24
+    container:
+      image: mcr.microsoft.com/playwright:v1.62.1-noble
+      options: --ipc=host
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Pin gate, static generation, syntax
+        run: |
+          node --check tests/ci/public-text-contrast-semantic.mjs
+          node --test tests/ci/vis002-context-pin.test.mjs
+          npm run pages:check
+      - name: Install matching browser client only
+        run: |
+          npm install --prefix /tmp/m2d-public-contrast --no-audit --no-fund playwright@1.62.1
+          node -e 'if(require("/tmp/m2d-public-contrast/node_modules/playwright/package.json").version!=="1.62.1")process.exit(1)'
+      - name: Serve local public pages, not Netlify
+        shell: bash
+        run: |
+          python3 -m http.server 8123 --bind 127.0.0.1 --directory app >/tmp/m2d-public-contrast.log 2>&1 &
+          for i in $(seq 1 30); do
+            if curl -fsS http://127.0.0.1:8123/ >/dev/null; then break; fi
+            sleep 1
+          done
+          curl -fsS http://127.0.0.1:8123/about/ >/dev/null
+          curl -fsS http://127.0.0.1:8123/how-it-works/ >/dev/null
+      - name: Audit current computed CSS
+        env:
+          NODE_PATH: /tmp/m2d-public-contrast/node_modules
+          PUBLIC_AUDIT_ORIGIN: http://127.0.0.1:8123
+        run: node tests/ci/public-text-contrast-semantic.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: public-contrast-semantic
+          path: artifacts/public-contrast-semantic/report.json
+          if-no-files-found: warn
+          retention-days: 14
