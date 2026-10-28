@@ -8,6 +8,17 @@ const widths=[390,1366],themes=["light","dark"];
 const artifact="artifacts/how-accordion";
 await mkdir(artifact,{recursive:true});
 
+async function captureRegion(page,locator){
+ await locator.scrollIntoViewIfNeeded();
+ await page.waitForTimeout(40);
+ const box=await locator.boundingBox();
+ assert.ok(box,"screenshot target must have a visible bounding box");
+ return page.screenshot({clip:{
+   x:Math.floor(box.x),y:Math.floor(box.y),
+   width:Math.ceil(box.width),height:Math.ceil(box.height)
+ },animations:"disabled"});
+}
+
 async function inspect(browser,origin,width,theme,verifyChanges){
  const context=await browser.newContext({viewport:{width,height:844},colorScheme:theme,
     reducedMotion:"reduce",deviceScaleFactor:1,locale:"pt-BR"});
@@ -28,12 +39,12 @@ async function inspect(browser,origin,width,theme,verifyChanges){
      const nodes=[el,...el.querySelectorAll("details")];
      return nodes.map(node=>{
        const rect=node.getBoundingClientRect(),css=getComputedStyle(node);
-       return {width:Math.round(rect.width*100)/100,height:Math.round(rect.height*100)/100,
+       return {x:Math.round(rect.x*100)/100,y:Math.round(rect.y*100)/100,width:Math.round(rect.width*100)/100,height:Math.round(rect.height*100)/100,
          display:css.display,color:css.color,background:css.backgroundColor,
          fontSize:css.fontSize,lineHeight:css.lineHeight,overflow:css.overflow};
      });
    });
-   const closedScreenshot=await root.screenshot({animations:"disabled"});
+   const closedScreenshot=await captureRegion(page,root);
    await details.first().locator("summary").click();
    assert.equal(await details.first().evaluate(el=>el.open),true);
    assert.deepEqual(await details.evaluateAll(nodes=>nodes.map(n=>n.open)),[true,false,false]);
@@ -47,7 +58,7 @@ async function inspect(browser,origin,width,theme,verifyChanges){
        );
      }
    }
-   const screenshotOpened=await root.screenshot({animations:"disabled"});
+   const screenshotOpened=await captureRegion(page,root);
    await details.first().locator("summary").press("Enter");
    assert.equal(await details.first().evaluate(el=>el.open),false,"Enter closes");
    await details.first().locator("summary").press("Space");
@@ -72,10 +83,10 @@ for(const engine of [chromium,webkit]){
  const browser=await engine.launch({headless:true});
  try{
   for(const width of widths)for(const theme of themes){
-   const [before,after]=await Promise.all([
-      inspect(browser,BASE,width,theme,false),
-      inspect(browser,CAND,width,theme,true)
-   ]);
+   // WebKit shares a browser process across contexts. Serialize these
+   // captures so the two pages cannot race during screenshot capture.
+   const before=await inspect(browser,BASE,width,theme,false);
+   const after=await inspect(browser,CAND,width,theme,true);
    let allClosedPixelEqual=true;
    for(let i=0;i<selectors.length;i++){
      assert.equal(after[i].closedDom,before[i].closedDom,"closed-state DOM changed");
