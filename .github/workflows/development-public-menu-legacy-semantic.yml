@@ -3,7 +3,6 @@ name: Development 14 — prior public-menu implementations semantic reconciliati
 on:
   push:
     branches:
-      - integration/14-public-menu-controller-reconcile-20261027
       - development
     paths:
       - 'tools/development_public_menu_semantic_audit.py'
