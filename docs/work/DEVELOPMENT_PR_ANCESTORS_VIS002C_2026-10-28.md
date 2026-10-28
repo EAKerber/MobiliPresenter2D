@@ -36,3 +36,9 @@ As três branches do grupo VIS-002C **continuam HOLD** e não entram nesta poda:
 ## Errata de ancestralidade (gate de segurança)
 
 A ferramenta de comparação GitHub mostra `status=behind` quando o **head** está *behind* da base. Na primeira triagem interpretamos equivocadamente `VIS→PR231: behind 5` como se o head da PR fosse cinco commits depois da fonte. `git merge-base --is-ancestor` na workflow provou a inversão. A correção não enfraquece o gate: a fonte v0.2 **não deve ser apagada** nesta onda. A falha inicial é relevante e fica registrada como prova de *fail-closed*, não como regressão no produto.
+
+## Execuções do gate e escopo aprovado
+
+- [Primeiro run #40747792240](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40747792240): **FAIL** na suposição de ancestralidade VIS→PR231; nenhuma operação de aposentadoria foi feita. O erro de leitura do comparador GitHub está documentado acima.
+- [Gate corrigido #40748058761](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40748058761): **PASS**: confirma nav→PR238, PR231→token v0.2, mantém duas branches VIS divergentes em HOLD, valida v0.3 e impede importações de runtime. Resultado offline sem testar deploy, alterações em SQL ou identidade.
+- **Elegível ao lote AB:** somente `fix/config-stage-nav-grid-track-20261025` com tag de preservação e a auxiliar ancestral após FF. `integration/vis002c-p-token-02b-v2-20261023` NÃO é elegível e não deve constar do manifesto. Manter as 12 PRs.
