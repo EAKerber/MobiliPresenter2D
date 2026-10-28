@@ -1368,7 +1368,57 @@
         "unmergedVisualPR": 34
       },
       "noDeploy": true
+    },
+    {
+      "batchId": "dev-20261028-v5local-provenance-aux-only-y",
+      "workflowRun": 40731295816,
+      "workflowUrl": "https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40731295816",
+      "headSha": "002eec173eeb127c9436c0e9362d89310d6f6881",
+      "audit": "PASS",
+      "apply": "PASS",
+      "refsBefore": 33,
+      "refsAfter": 32,
+      "retired": [],
+      "auxiliaryRetired": [
+        {
+          "branch": "integration/31-ci-v5local-provenance-20261028",
+          "sha": "d3f3570fa08728f771dd32b5969ab17237db87b1",
+          "kind": "auxiliary-ancestor-development",
+          "recoverableFromDevelopment": true
+        }
+      ],
+      "artifacts": [
+        {
+          "name": "dev-bounded-retirement-audit-40731295816",
+          "id": 12834724241
+        },
+        {
+          "name": "dev-bounded-retirement-apply-40731295816",
+          "id": 12835610465
+        }
+      ],
+      "semanticProof": {
+        "mainSha": "221b54b2a41ecc8c338d1bf2cf67280cf165ce95",
+        "historicalBranchRetained": "ci/ci-baseline-01-v5-local-diagnostics-20261023",
+        "historicalSha": "5ce7327a9e4c8c11483163507d29af4bb8b1312a",
+        "reconciliationReport": "docs/work/DEVELOPMENT_CI_V5_LOCAL_DIAGNOSTICS_2026-10-28.md",
+        "auxGate": 40730950467,
+        "devGate": 40731040183,
+        "archivedHistoricalProbesAlreadyPresent": 2,
+        "securityAuthInHold": true,
+        "notAuthenticatedPreview": true,
+        "mainAuthAuthorityPreserved": true,
+        "noRuntimeChanges": true
+      },
+      "preserved": {
+        "mainSha": "221b54b2a41ecc8c338d1bf2cf67280cf165ce95",
+        "openPRs": 12,
+        "remainingOriginalHistoricalRefs": 30,
+        "originalAssetsBranch": "artifacts/ds02-imagens-originais-20261015",
+        "unmergedVisualPR": 34
+      },
+      "noDeploy": true
     }
   ],
-  "nextBatchContract": "24 waves; 30/60 original historical heads retired, 21 auxiliary heads retired, 30 historical + main + development = 32 total live branches. Batch X consumed; NEVER replay. CI NAV CSS original retired after 76/76 exact nav screenshot raster parity over 20 boundary + 56 profile/theme/details cases, 9 historical sources archived and full original DAG Git tag. Main stable strong authority. 12 open PRs and DS02 untouched. No real Netlify session, no deploy."
+  "nextBatchContract": "25 waves; 30/60 original historical branches retired, 22 temporary auxiliary branches retired; 30 historical + main + development = 32 heads. Batch Y consumed; NEVER replay. Historical CI v5 local 5ce7327 remains HOLD (differences in local V3/V5 buyer projection, diagnostics, visibility and auth scripts). Auxiliary proof 40730950467 and development proof 40731040183 PASS, Y audit/apply 40731295816 PASS. No main/DS02/auth/runtime/Netlify/database changes; 12 open PRs maintained."
 }
