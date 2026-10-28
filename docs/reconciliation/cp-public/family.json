@@ -1,0 +1,240 @@
+{
+  "schema": "M2DCPPublicReconciliation/0.1",
+  "status": "DOCUMENTARY_NOT_PUBLISHED",
+  "repository": "EAKerber/MobiliPresenter2D",
+  "sources": [
+    {
+      "id": "security",
+      "branch": "work/cp-public-03a-security-and-hygiene-inventory-20261008",
+      "sha": "67089791497b72874b7f837853133a9ccf2311aa",
+      "risk": "documentary",
+      "retirement": "candidate-exact-docs-no-pr"
+    },
+    {
+      "id": "plan",
+      "branch": "work/cp-public-03a2-buyer-session-and-bootstrap-plan-20261008",
+      "sha": "8e2124bfd299d942dc2a24e80966b5cb034840e3",
+      "risk": "documentary",
+      "retirement": "candidate-exact-docs-no-pr"
+    },
+    {
+      "id": "contract",
+      "branch": "work/cp-public-03a2-3-contract-integration-20261008",
+      "sha": "68362325972a4a2db8acbdb475a1d686dd6663b4",
+      "risk": "runtime-plus-auth",
+      "retirement": "hold"
+    },
+    {
+      "id": "fixture",
+      "branch": "work/cp-public-04a-main-flow-test-fixture-20261008",
+      "sha": "9503ad1caff406d3e3422c9d4aec25bac081132e",
+      "risk": "browser-fixture",
+      "retirement": "hold"
+    },
+    {
+      "id": "readguard",
+      "branch": "work/cp-public-03a1-configuration-read-guard-20261008",
+      "sha": "0b398618f7f2eff23da7f782d53d86ba3ee6411b",
+      "risk": "admin-auth",
+      "retirement": "pr182-hold"
+    },
+    {
+      "id": "bootstrap",
+      "branch": "work/cp-public-03a2-0-failclosed-bootstrap-20261008",
+      "sha": "d1305ffdd8302fa06b37d3676f08d802a92e7d97",
+      "risk": "private-ui",
+      "retirement": "pr184-hold"
+    },
+    {
+      "id": "projection",
+      "branch": "work/cp-public-03a2-1-buyer-projection-20261008",
+      "sha": "7a0d919d4e27853c50cff8afde0cdcc066e0aa0c",
+      "risk": "dto",
+      "retirement": "pr185-hold"
+    },
+    {
+      "id": "email",
+      "branch": "work/cp-public-03a2-2-email-access-core-20261008",
+      "sha": "40d4b65f9e7e16e0810c2308e9b947840371cbe7",
+      "risk": "email-and-database",
+      "retirement": "pr186-hold"
+    }
+  ],
+  "archivedArtifacts": [
+    {
+      "source": "security",
+      "sourcePath": "docs/architecture/cp-public-03a-access-security-surface-2026-10-08.md",
+      "blob": "506c573e3dbce8e1a7bba5908f568b24717df53c",
+      "snapshotPath": "docs/reconciliation/cp-public/legacy/security/docs/architecture/cp-public-03a-access-security-surface-2026-10-08.md"
+    },
+    {
+      "source": "security",
+      "sourcePath": "docs/architecture/cp-public-05-duplications-and-cleanup-ledger-2026-10-08.md",
+      "blob": "53dcc1f0b4ebfbebe96c39a484c38c35261e9ba7",
+      "snapshotPath": "docs/reconciliation/cp-public/legacy/security/docs/architecture/cp-public-05-duplications-and-cleanup-ledger-2026-10-08.md"
+    },
+    {
+      "source": "plan",
+      "sourcePath": "docs/architecture/cp-public-03a2-authorized-buyer-bootstrap-plan-2026-10-08.md",
+      "blob": "8e4343c3630b6a935ab0588052d5db9447226202",
+      "snapshotPath": "docs/reconciliation/cp-public/legacy/plan/docs/architecture/cp-public-03a2-authorized-buyer-bootstrap-plan-2026-10-08.md"
+    },
+    {
+      "source": "plan",
+      "sourcePath": "docs/testing/cp-public-03a2-release-gates-2026-10-08.md",
+      "blob": "5eaf5755a6797debd6e814a36ba366da4870c34c",
+      "snapshotPath": "docs/reconciliation/cp-public/legacy/plan/docs/testing/cp-public-03a2-release-gates-2026-10-08.md"
+    },
+    {
+      "source": "contract",
+      "sourcePath": "app/core/authorized-bootstrap.js",
+      "blob": "133c7eae9f70edefe358c84d349f68a318d49ffb",
+      "snapshotPath": "docs/reconciliation/cp-public/legacy/contract/app/core/authorized-bootstrap.js"
+    },
+    {
+      "source": "contract",
+      "sourcePath": "app/core/buyer-configuration-projection.js",
+      "blob": "d618da54275304a56de16b222a2dc3870799da02",
+      "snapshotPath": "docs/reconciliation/cp-public/legacy/contract/app/core/buyer-configuration-projection.js"
+    },
+    {
+      "source": "contract",
+      "sourcePath": "netlify/lib/authorized-buyer-read.cjs",
+      "blob": "47ece2d460ba2a558c6cf09872a3efc60ad6f55d",
+      "snapshotPath": "docs/reconciliation/cp-public/legacy/contract/netlify/lib/authorized-buyer-read.cjs"
+    },
+    {
+      "source": "contract",
+      "sourcePath": "app/tools/test-authorized-bootstrap.js",
+      "blob": "0eca61b621569df9280b54c691f4356d03543950",
+      "snapshotPath": "docs/reconciliation/cp-public/legacy/contract/app/tools/test-authorized-bootstrap.js"
+    },
+    {
+      "source": "contract",
+      "sourcePath": "docs/architecture/cp-public-03a2-0-failclosed-bootstrap-2026-10-08.md",
+      "blob": "c3a5396df422c8092b9f8e9f04c81eda3b06b8ad",
+      "snapshotPath": "docs/reconciliation/cp-public/legacy/contract/docs/architecture/cp-public-03a2-0-failclosed-bootstrap-2026-10-08.md"
+    },
+    {
+      "source": "fixture",
+      "sourcePath": "tests/flow-layout-browser.cjs",
+      "blob": "7fe6f086f7f747861c520f51c3cafc6ef79446c2",
+      "snapshotPath": "docs/reconciliation/cp-public/legacy/fixture/tests/flow-layout-browser.cjs"
+    },
+    {
+      "source": "readguard",
+      "sourcePath": "docs/architecture/cp-public-03a1-configuration-authorization-2026-10-08.md",
+      "blob": "f2d951541ec837d847359023b11e03267ca607e6",
+      "snapshotPath": "docs/reconciliation/cp-public/legacy/readguard/docs/architecture/cp-public-03a1-configuration-authorization-2026-10-08.md"
+    },
+    {
+      "source": "readguard",
+      "sourcePath": "tests/configuration-access-http.cjs",
+      "blob": "8e35a8714662065ec1472161fe0dbd9f07a52ea8",
+      "snapshotPath": "docs/reconciliation/cp-public/legacy/readguard/tests/configuration-access-http.cjs"
+    },
+    {
+      "source": "bootstrap",
+      "sourcePath": "docs/architecture/cp-public-03a2-0-failclosed-bootstrap-2026-10-08.md",
+      "blob": "c3a5396df422c8092b9f8e9f04c81eda3b06b8ad",
+      "snapshotPath": "docs/reconciliation/cp-public/legacy/bootstrap/docs/architecture/cp-public-03a2-0-failclosed-bootstrap-2026-10-08.md"
+    },
+    {
+      "source": "bootstrap",
+      "sourcePath": "app/core/authorized-bootstrap.js",
+      "blob": "133c7eae9f70edefe358c84d349f68a318d49ffb",
+      "snapshotPath": "docs/reconciliation/cp-public/legacy/bootstrap/app/core/authorized-bootstrap.js"
+    },
+    {
+      "source": "bootstrap",
+      "sourcePath": "tests/authorized-bootstrap-browser.cjs",
+      "blob": "04df641a54181cafe16b9b7a4bc9bf3a7f272147",
+      "snapshotPath": "docs/reconciliation/cp-public/legacy/bootstrap/tests/authorized-bootstrap-browser.cjs"
+    },
+    {
+      "source": "projection",
+      "sourcePath": "docs/architecture/cp-public-03a2-1-buyer-dto-read-model-2026-10-08.md",
+      "blob": "1c82a4c03df9043795f139aca11fedae6639cd52",
+      "snapshotPath": "docs/reconciliation/cp-public/legacy/projection/docs/architecture/cp-public-03a2-1-buyer-dto-read-model-2026-10-08.md"
+    },
+    {
+      "source": "projection",
+      "sourcePath": "app/core/buyer-configuration-projection.js",
+      "blob": "d618da54275304a56de16b222a2dc3870799da02",
+      "snapshotPath": "docs/reconciliation/cp-public/legacy/projection/app/core/buyer-configuration-projection.js"
+    },
+    {
+      "source": "projection",
+      "sourcePath": "app/tools/test-buyer-configuration-projection.js",
+      "blob": "bfc0986308c9451413653437cf67e2640fd6dd07",
+      "snapshotPath": "docs/reconciliation/cp-public/legacy/projection/app/tools/test-buyer-configuration-projection.js"
+    },
+    {
+      "source": "email",
+      "sourcePath": "docs/architecture/cp-public-03a2-2-email-session-2026-10-08.md",
+      "blob": "49478942839174eabb47abcf503e185fb8ec218b",
+      "snapshotPath": "docs/reconciliation/cp-public/legacy/email/docs/architecture/cp-public-03a2-2-email-session-2026-10-08.md"
+    },
+    {
+      "source": "email",
+      "sourcePath": "netlify/lib/buyer-session-core.cjs",
+      "blob": "989a7c0a5ce294c817aa545e940b51789a041b09",
+      "snapshotPath": "docs/reconciliation/cp-public/legacy/email/netlify/lib/buyer-session-core.cjs"
+    },
+    {
+      "source": "email",
+      "sourcePath": "tests/access-session-core.cjs",
+      "blob": "b0f0ec8713247f4469651633c6061977bbd12080",
+      "snapshotPath": "docs/reconciliation/cp-public/legacy/email/tests/access-session-core.cjs"
+    },
+    {
+      "source": "email",
+      "sourcePath": "netlify/access-migrations/001_access_tickets_sessions.sql",
+      "blob": "0f1ec5c3a42191cd683521bd18653a48b4dcadb1",
+      "snapshotPath": "docs/reconciliation/cp-public/legacy/email/netlify/access-migrations/001_access_tickets_sessions.sql"
+    }
+  ],
+  "currentAuthority": [
+    {
+      "path": "netlify/functions/buyer-configuration.mjs",
+      "sha": "aaace7bc2187aca4b1c484962f239ae00b20de80"
+    },
+    {
+      "path": "netlify/functions/configuration.mjs",
+      "sha": "5189f7465bca2dec4ff1361e2ef9a3d82f822b36"
+    },
+    {
+      "path": "app/core/published-buyer-projection.js",
+      "sha": "4a3818187f577b0056ccba4c39f24f1881bdb0e2"
+    },
+    {
+      "path": "app/core/public-module-projection.js",
+      "sha": "fff325e9699f806f0e4d599b05374aa7c3d2c43f"
+    },
+    {
+      "path": "netlify/access/identity-policy.mjs",
+      "sha": "fc529362c8b611b9f4e1b566a3b4b52f00bd7ca5"
+    }
+  ],
+  "approvedDomains": {
+    "anonymous": [
+      "/",
+      "/viewer/",
+      "/api/public-modules"
+    ],
+    "adminOnly": [
+      "/api/configuration"
+    ],
+    "authenticatedBuyer": [
+      "/config/",
+      "/api/buyer-configuration"
+    ]
+  },
+  "risks": [
+    "Earlier 03a2 bootstrap and projection are not drop-in compatible with v5 published-buyer-projection.",
+    "Email session SQL and CJS tests remain archived but not executed against current database.",
+    "The security inventory and buyer session plan documentations already exist with identical SHA in development.",
+    "Open PR #182, #184, #185, #186 and other public PRs protect their heads.",
+    "Preserve exact historical DAG through archive tag before any retirement."
+  ]
+}

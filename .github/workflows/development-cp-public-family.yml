@@ -1,0 +1,35 @@
+name: Development CP-PUBLIC eight-source DTO/auth provenance (offline)
+on:
+  push:
+    branches:
+      - development
+      - integration/22-cp-public-dto-security-family-20261028
+    paths:
+      - 'docs/reconciliation/cp-public/**'
+      - 'docs/work/DEVELOPMENT_CP_PUBLIC_DTO_FAMILY_2026-10-28.md'
+      - 'tests/test_development_cp_public_family.py'
+      - 'tests/ci/cp-public-current-role-boundary.test.mjs'
+      - '.github/workflows/development-cp-public-family.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  contracts:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify exact source blobs and newer V5 auth-first authority
+        run: python3 -m unittest discover -s tests -p test_development_cp_public_family.py -v
+      - name: Exercise current V5 role and DTO contracts, without network
+        run: |
+          node --test tests/ci/cp-public-current-role-boundary.test.mjs
+          node app/tools/test-published-buyer-projection.js
+          node --test tests/public-module-projection.test.cjs
+          node app/tools/test-public-modules-endpoint.js
+          npm run pages:check
