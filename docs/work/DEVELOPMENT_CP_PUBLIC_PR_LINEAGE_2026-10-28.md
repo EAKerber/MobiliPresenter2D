@@ -64,3 +64,9 @@ O lote `dev-20261028-cppublic-03a2-3-dag-archive-ae` foi executado em [GitHub Ac
 Antes do lote, 28 heads (auxiliar incluída); após, **26 refs = 24 históricas originais + main + development**. **36/60** branches originais aposentadas, **27 auxiliares**, **31 ondas**. Todas as 12 PRs permanecem abertas com as heads pinadas; main, DS02, banco, auth, Netlify e código runtime intocados. O resultado é uma retirada de **referência obsoleta recuperável**, não merge de código/comportamento da origem antiga.
 
 **Lote AE CONSUMED — NÃO REAPLICAR.** Histórico persistido em `ops/development-retirement-history.json`. Próxima etapa: revisão individual das PRs CP-PUBLIC ainda abertas, agrupadas por subdomínio público vs acesso; não executar banco, Edge ou sessão em produção e não interpretar CI offline como prova de autorização E2E.
+
+## Ajuste de gate pós-arquivamento — branch ou tag SHA-exata
+
+Após o AE, o [gate de development #40754350282](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40754350282) deu **FAIL** somente em `git rev-parse refs/remotes/origin/work/cp-public-03a2-3-contract-integration-20261008`: a branch foi legitimamente removida pela onda AE, embora o commit continue recuperável pela tag. Os outros seis testes de proveniência/segurança passaram. Corrigido o teste para suportar **ambos os estados** sem enfraquecer a prova: antes da poda, `refs/remotes/origin/...` deve apontar ao SHA completo; após a poda, `refs/tags/archive/m2d/cp-public-03a2-3-68362325` deve apontar exatamente ao mesmo SHA; ao menos uma das refs deve existir. Os 12 HEADs de PR continuam exigidos. Não foi recriada a branch.
+
+O [gate corrigido #40754511392](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40754511392) terminou **PASS** na development com a fonte histórica recuperável pela tag. Nenhum `app/`, auth, DB, grants, Netlify ou PR foi modificado pela correção.
