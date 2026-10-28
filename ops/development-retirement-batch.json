@@ -3,7 +3,7 @@
   "repository": "EAKerber/MobiliPresenter2D",
   "controlBranch": "development",
   "mainSha": "221b54b2a41ecc8c338d1bf2cf67280cf165ce95",
-  "batchId": "dev-20261028-ci-v5-nav-clean-aux-only-w",
+  "batchId": "dev-20261028-ci-nav-css-visual-proof-x",
   "retired": [
     {
       "branch": "docs/handover-reconcile-20261023",
@@ -178,14 +178,26 @@
   ],
   "auxiliaryRefs": [
     {
-      "branch": "integration/29-ci-v5-nav-clean-inventory-20261028",
-      "sha": "a92a6ff836c16bc42fda0b6588ac7dbbfa24eec5"
+      "branch": "integration/30-ci-nav-css-container-causality-20261028",
+      "sha": "9e8b947ecfd4a98f3b49f5b9e18383721437b8bc"
     }
   ],
   "targets": [
     {
-      "branch": "integration/29-ci-v5-nav-clean-inventory-20261028",
-      "sha": "a92a6ff836c16bc42fda0b6588ac7dbbfa24eec5",
+      "branch": "fix/ci-baseline-v5-nav-flow-clean-20261023",
+      "sha": "62c5521d7e883443696ce1c58c912ac4794ff75e",
+      "kind": "archive-diverged",
+      "archiveTag": "archive/m2d/legacy-ci-v5-nav-css-62c5521d",
+      "snapshotPath": "docs/work/DEVELOPMENT_CI_NAV_CSS_CAUSAL_2026-10-28.md",
+      "semanticGate": {
+        "runId": 40726828140,
+        "headSha": "9e8b947ecfd4a98f3b49f5b9e18383721437b8bc",
+        "workflowName": "Development CI nav query-container causal differential (offline V5)"
+      }
+    },
+    {
+      "branch": "integration/30-ci-nav-css-container-causality-20261028",
+      "sha": "9e8b947ecfd4a98f3b49f5b9e18383721437b8bc",
       "kind": "auxiliary-ancestor-development"
     }
   ]

@@ -3,7 +3,6 @@ on:
   push:
     branches:
       - development
-      - integration/30-ci-nav-css-container-causality-20261028
     paths:
       - 'docs/reconciliation/ci-v5-nav-clean/css-causality.json'
       - 'docs/reconciliation/ci-v5-nav-clean/source/app/styles.css'
