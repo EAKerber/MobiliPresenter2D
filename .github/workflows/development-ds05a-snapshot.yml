@@ -3,7 +3,6 @@ on:
   push:
     branches:
       - development
-      - integration/18-ds05a-documentary-snapshot-20261027
     paths:
       - 'docs/design-system/review-lab/**'
       - 'tests/test_development_ds05a_snapshot.py'

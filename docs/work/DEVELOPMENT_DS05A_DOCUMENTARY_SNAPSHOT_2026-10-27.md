@@ -20,3 +20,8 @@ A subárvore foi ligada diretamente sob `docs/design-system/review-lab/` apontan
 ## Gates/limites
 
 Verificar Git blob/tree exatos na auxiliar, depois fast-forward lease para development e repetição da CI no destino. A fonte 18 só poderá ser aposentada após gate de proveniência, tag archive no commit fonte, proteção das 14 históricas anteriores, 12 PRs, DS-02/PR #34 e readback. Os estilos atuais, Design System externo e Netlify não são modificados.
+
+## Gate de destino e proposta de higiene L
+
+- [Auxiliar #40622603669](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40622603669) PASS 4/4; [development #40622653562](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40622653562) PASS 4/4, ambos no commit 0a0f0ee1187ef2ae7c989e28bffab75cac5bb5f1. 20 arquivos do laboratório correspondem à subárvore `d98e16e5bbd563c8bb1f19a6a0597fddc6021296` do commit `6120a294e0de4b018b18b1b50f20411ce44cce09` com SHA-256 individuais conferidos. Não há import na aplicação.
+- A fonte `docs/ds05a-theme-lab-20261017@6120a294e0de4b018b18b1b50f20411ce44cce09` será preservada também pela tag `archive/m2d/ds05a-theme-lab-6120a294` antes da exclusão da ref, caso o gate L finalize com PASS. Fonte documental e auxiliar ancestral, sem PR aberta, com main protegida e 14 registros anteriores. **Não declarar retirada antes de AUDIT+APPLY readback.**
