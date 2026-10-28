@@ -1064,7 +1064,69 @@
         "unmergedVisualPR": 34
       },
       "noDeploy": true
+    },
+    {
+      "batchId": "dev-20261028-v5-flow-fixture-proved-t",
+      "workflowRun": 40698623909,
+      "workflowUrl": "https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40698623909",
+      "headSha": "6b5996d2c00808d287ac46c92518b6eb7cafaaf9",
+      "audit": "PASS",
+      "apply": "PASS",
+      "auditArtifactId": 12820846581,
+      "applyArtifactId": 12821410203,
+      "refsBefore": 37,
+      "refsAfter": 35,
+      "archived": [
+        {
+          "tag": "archive/m2d/legacy-cp-public-flow-v3-fixture-9503ad1c",
+          "sha": "9503ad1caff406d3e3422c9d4aec25bac081132e"
+        }
+      ],
+      "retired": [
+        {
+          "branch": "work/cp-public-04a-main-flow-test-fixture-20261008",
+          "sha": "9503ad1caff406d3e3422c9d4aec25bac081132e",
+          "kind": "archive-diverged",
+          "archiveTag": "archive/m2d/legacy-cp-public-flow-v3-fixture-9503ad1c"
+        }
+      ],
+      "auxiliaryRetired": [
+        {
+          "branch": "integration/26-flow-v5-fixture-equivalence-20261028",
+          "sha": "2d9b7e3fb0a5820acb1eec019c5a904f568f48b5",
+          "kind": "auxiliary-ancestor-development",
+          "recoverableFromDevelopment": true
+        }
+      ],
+      "semanticProof": {
+        "pinnedMainSha": "221b54b2a41ecc8c338d1bf2cf67280cf165ce95",
+        "mainAuthorityPolicy": "ops/development-main-authority-policy.json",
+        "archiveOriginalBlob": "7fe6f086f7f747861c520f51c3cafc6ef79446c2",
+        "currentMainAndDevelopmentBlob": "840f600bbb79534bf2ddeefc882d3ea060841042",
+        "historicAssertions": 218,
+        "v3OnlyAssertions": 2,
+        "preservedAssertionCalls": 216,
+        "adaptedBuyerV5Scenarios": 9,
+        "auxRun": 40697870659,
+        "developmentRun": 40698236525,
+        "manifestRun": 40698623876,
+        "mainV5AndBuyerBrowserPass": true,
+        "chromiumLoopbackOnly": true,
+        "noNetlifyAuthenticatedSessionClaim": true,
+        "unresolvedUx04GeometryAssertions": 6,
+        "ux04Hold": true,
+        "noRuntimeChanges": true
+      },
+      "preserved": {
+        "mainSha": "221b54b2a41ecc8c338d1bf2cf67280cf165ce95",
+        "openPRs": 12,
+        "remainingOriginalHistoricalRefs": 33,
+        "ux04Hold": "feat/cp-ux-04-hierarchy-layout",
+        "originalAssetsBranch": "artifacts/ds02-imagens-originais-20261015",
+        "unmergedVisualPR": 34
+      },
+      "noDeploy": true
     }
   ],
-  "nextBatchContract": "19 waves; 26/60 historical refs retired, 16 auxiliary retired, 34 historical + main + development = 36 branches. Batch S2 consumed, NEVER replay; first failed audit S was READ-ONLY, no refs removed until S2 pass. Main remains strong stable authority; development has gated identity_unavailable 503 hardening. CP-UX-04 layout + CP-PUBLIC-04a browser fixture HOLD; 12 open PRs and DS02 preserved. No production deploys or DB changes."
+  "nextBatchContract": "20 waves; 27/60 original historical branches retired, 17 aux retired, 33 historical + main + development = 35 heads. T manifest consumed (never replay); main stable and strong; old V3-only fixture retired with 216/216 assertions statically identical in current V5 and two passing local Chromium+buyer browser gates at aux and development. UX04 HOLD 6 geometric assertions not in V5 suite; 12 PRs, DS02, main preserved. No authenticated Netlify session tested."
 }
