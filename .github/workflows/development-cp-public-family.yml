@@ -3,7 +3,6 @@ on:
   push:
     branches:
       - development
-      - integration/22-cp-public-dto-security-family-20261028
     paths:
       - 'docs/reconciliation/cp-public/**'
       - 'docs/work/DEVELOPMENT_CP_PUBLIC_DTO_FAMILY_2026-10-28.md'

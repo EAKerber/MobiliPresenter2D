@@ -3,7 +3,7 @@
   "repository": "EAKerber/MobiliPresenter2D",
   "controlBranch": "development",
   "mainSha": "221b54b2a41ecc8c338d1bf2cf67280cf165ce95",
-  "batchId": "dev-20261028-ci-baseline-six-family-o",
+  "batchId": "dev-20261028-cp-public-eight-family-docs-p",
   "retired": [
     {
       "branch": "docs/handover-reconcile-20261023",
@@ -108,42 +108,54 @@
       "sha": "1872ca2a79585449df370910f18500ad5351451a",
       "kind": "archive-diverged",
       "archiveTag": "archive/m2d/cpux05a-v2-1872ca2a"
-    }
-  ],
-  "auxiliaryRefs": [
-    {
-      "branch": "integration/21-ci-baseline-diagnostic-family-20261028",
-      "sha": "d8b3a3d1d7e153da5bc886586ffb07ae59793e4a"
-    }
-  ],
-  "targets": [
+    },
     {
       "branch": "ci/ci-baseline-01-config-readiness-20261022",
       "sha": "dcfec5b7666b8e16d984be2d0d8c838b96b41b42",
       "kind": "archive-diverged",
-      "archiveTag": "archive/m2d/ci-readiness-dcfec5b7",
-      "snapshotPath": "docs/work/DEVELOPMENT_CIBASELINE_CLUSTER_2026-10-28.md",
-      "semanticGate": {
-        "runId": 40681953397,
-        "headSha": "d8b3a3d1d7e153da5bc886586ffb07ae59793e4a",
-        "workflowName": "Development CI baseline six-source provenance and public isolation"
-      }
+      "archiveTag": "archive/m2d/ci-readiness-dcfec5b7"
     },
     {
       "branch": "ci/ci-baseline-01-public-projection-test-20261022",
       "sha": "387da6a57c4188dd32ee0c5551e11d15e9140d3f",
       "kind": "archive-diverged",
-      "archiveTag": "archive/m2d/ci-public-projection-387da6a5",
-      "snapshotPath": "docs/work/DEVELOPMENT_CIBASELINE_CLUSTER_2026-10-28.md",
+      "archiveTag": "archive/m2d/ci-public-projection-387da6a5"
+    }
+  ],
+  "auxiliaryRefs": [
+    {
+      "branch": "integration/22-cp-public-dto-security-family-20261028",
+      "sha": "672af55edb580f1b9822d96210536a61905c8698"
+    }
+  ],
+  "targets": [
+    {
+      "branch": "work/cp-public-03a-security-and-hygiene-inventory-20261008",
+      "sha": "67089791497b72874b7f837853133a9ccf2311aa",
+      "kind": "archive-diverged",
+      "archiveTag": "archive/m2d/cp-public-security-inventory-67089791",
+      "snapshotPath": "docs/work/DEVELOPMENT_CP_PUBLIC_DTO_FAMILY_2026-10-28.md",
       "semanticGate": {
-        "runId": 40681953397,
-        "headSha": "d8b3a3d1d7e153da5bc886586ffb07ae59793e4a",
-        "workflowName": "Development CI baseline six-source provenance and public isolation"
+        "runId": 40683492212,
+        "headSha": "672af55edb580f1b9822d96210536a61905c8698",
+        "workflowName": "Development CP-PUBLIC eight-source DTO/auth provenance (offline)"
       }
     },
     {
-      "branch": "integration/21-ci-baseline-diagnostic-family-20261028",
-      "sha": "d8b3a3d1d7e153da5bc886586ffb07ae59793e4a",
+      "branch": "work/cp-public-03a2-buyer-session-and-bootstrap-plan-20261008",
+      "sha": "8e2124bfd299d942dc2a24e80966b5cb034840e3",
+      "kind": "archive-diverged",
+      "archiveTag": "archive/m2d/cp-public-session-plan-8e2124bf",
+      "snapshotPath": "docs/work/DEVELOPMENT_CP_PUBLIC_DTO_FAMILY_2026-10-28.md",
+      "semanticGate": {
+        "runId": 40683492212,
+        "headSha": "672af55edb580f1b9822d96210536a61905c8698",
+        "workflowName": "Development CP-PUBLIC eight-source DTO/auth provenance (offline)"
+      }
+    },
+    {
+      "branch": "integration/22-cp-public-dto-security-family-20261028",
+      "sha": "672af55edb580f1b9822d96210536a61905c8698",
       "kind": "auxiliary-ancestor-development"
     }
   ]
