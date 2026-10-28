@@ -1,0 +1,7 @@
+# Bloco 23 — CP-PUBLIC DTO: replay funcional v0.1 vs V5 (28/10/2026)
+
+**Fase de investigação, não aprovada para integração antes de todos os gates.** Teste executa offline os dois serializers sobre o mesmo V5 válido, usando o blob histórico no repositório (source-locked em `docs/reconciliation/cp-public/legacy/projection`). A API mais recente `BuyerConfiguratorPayload 1.0` prevalece; nenhum caminho antigo vira endpoint.
+
+Hipótese de regressão: `NormalizedConfiguratorFlow 1.0` contém `source.revision`, enquanto a serialização v5 do comprador inclui `flow`. A ausência de `revision` na raiz/displaySettings, sozinha, não é prova de ausência de metadados. Testar também anexação de campos desconhecidos no documento administrativo, em profundidade (editorial, grupos, materiais, assets, sessão e política de apresentação). O serializer antigo possui allowlists aninhadas; a implementação atual só seleciona os campos raiz de displaySettings.
+
+**Gate:** (a) preservar o fluxo/seleção e regras de preço tipadas, (b) revision privativa no wire, (c) campos adicionais administrativos nunca no wire e (d) rejeição v5 inválida. Nenhuma sessão real/DB/Netlify. Se gate falhar, documentar a diferença e avaliar o patch mínimo no serializer atual sem comprometer a natureza data-driven. A PRs #182/#184/#185/#186 permanecem HOLD.

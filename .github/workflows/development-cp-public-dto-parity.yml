@@ -1,0 +1,30 @@
+name: Development CP-PUBLIC DTO parity and privacy differential (offline)
+on:
+  push:
+    branches:
+      - development
+      - integration/23-cp-public-dto-parity-20261028
+    paths:
+      - 'tests/ci/cp-public-dto-parity.test.cjs'
+      - 'app/core/published-buyer-projection.js'
+      - 'docs/work/DEVELOPMENT_CP_PUBLIC_DTO_PARITY_2026-10-28.md'
+      - '.github/workflows/development-cp-public-dto-parity.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  parity:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Historic vs current V5 DTO differential
+        run: node --test tests/ci/cp-public-dto-parity.test.cjs
+      - name: Existing V5 projection and public contract tests
+        run: |
+          node app/tools/test-published-buyer-projection.js
+          node --test tests/public-module-projection.test.cjs
+          npm run pages:check
