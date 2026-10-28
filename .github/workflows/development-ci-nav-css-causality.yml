@@ -59,3 +59,33 @@ jobs:
           path: /tmp/m2d-ci-css-causal/result.json
           if-no-files-found: ignore
           retention-days: 30
+
+  full-profile-theme-detail-differential:
+    needs: exact-source-and-main-authority
+    runs-on: ubuntu-latest
+    timeout-minutes: 24
+    container:
+      image: mcr.microsoft.com/playwright:v1.62.1-noble
+      options: --ipc=host
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Build validated V5 browser scenario without deployment
+        shell: bash
+        run: bash tests/ci/prepare-local-v5-browser.sh FLOW_LAYOUT_URL
+      - name: Match built-in Chromium WebKit
+        run: npm install --prefix /tmp/m2d-nav-css-matrix-tools --no-audit --no-fund playwright@1.62.1
+      - name: Measure 56 original CSS differential states in both engines
+        env:
+          NODE_PATH: /tmp/m2d-nav-css-matrix-tools/node_modules
+          M2D_NAV_WIDE_MATRIX: '1'
+        run: node tests/ci/ci-v5-nav-css-container-differential.cjs /tmp/m2d-ci-css-full-matrix
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: m2d-ci-nav-css-full-matrix-${{ github.run_id }}
+          path: /tmp/m2d-ci-css-full-matrix/result.json
+          if-no-files-found: ignore
+          retention-days: 30

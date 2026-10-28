@@ -12,10 +12,14 @@ assert.equal(url,"http://127.0.0.1:8123/config/","CI requires loopback V5 target
 const historical=fs.readFileSync(meta.older.cssArchive,"utf8");
 const stable=fs.readFileSync("app/styles.css","utf8");
 const output=process.argv[2]||"/tmp/m2d-nav-css-causality";
+const wide=process.env.M2D_NAV_WIDE_MATRIX==="1";
+const widths=wide?[390,701,900,1050,1051,1200,1366]:meta.test.widths;
+const themes=wide?["light","dark"]:["light"];
+const detailStates=wide?[false,true]:[true];
 fs.mkdirSync(output,{recursive:true});
 const captureSha=b=>crypto.createHash("sha256").update(b).digest("hex");
-async function inspect(driver,css,width,mode) {
- const page=await driver.newPage({viewport:{width:1366,height:900},reducedMotion:"reduce"});
+async function inspect(driver,css,width,mode,theme,detail) {
+ const page=await driver.newPage({viewport:{width:wide?width:1366,height:900},reducedMotion:"reduce"});
  let switched=0;
  try {
   await page.route(/\/styles\.css(?:\?|$)/,async r=>{switched++;await r.fulfill({status:200,contentType:"text/css",body:css})});
@@ -24,9 +28,12 @@ async function inspect(driver,css,width,mode) {
       && !document.querySelector(".workspace")?.hidden
       && window.CASA_EM_MODULOS_DEBUG?.getNormalizedFlow?.()?.stages?.length,
     null,{timeout:25000});
-  await page.locator("#moduleList [data-select-entity]").first().click();
-  await page.waitForFunction(()=>document.body.classList.contains("has-module-detail"));
-  await page.evaluate(w=>{document.querySelector(".controls").style.width=w+"px"},width);
+  await page.evaluate(t=>{document.documentElement.dataset.theme=t},theme);
+  if(detail){
+    await page.locator("#moduleList [data-select-entity]").first().click();
+    await page.waitForFunction(()=>document.body.classList.contains("has-module-detail"));
+  }
+  if(!wide)await page.evaluate(w=>{document.querySelector(".controls").style.width=w+"px"},width);
   await page.evaluate(()=>new Promise(done=>requestAnimationFrame(()=>requestAnimationFrame(done))));
   const data=await page.evaluate(()=>{
     const nav=document.querySelector(".flow-nav"),controls=document.querySelector(".controls");
@@ -74,12 +81,12 @@ async function inspect(driver,css,width,mode) {
  for(const [engineName,engine] of [["chromium",chromium],["webkit",webkit]]){
   const browser=await engine.launch({headless:true});
   try{
-   for(const width of meta.test.widths){
-    const old=await inspect(browser,historical,width,"historical");
-    const current=await inspect(browser,stable,width,"stable");
+   for(const width of widths)for(const theme of themes)for(const detail of detailStates){
+    const old=await inspect(browser,historical,width,"historical",theme,detail);
+    const current=await inspect(browser,stable,width,"stable",theme,detail);
     const sameRaster=old.navRasterSha256===current.navRasterSha256;
     const sameCompact=old.compactLabel===current.compactLabel;
-    const row={engine:engineName,width,sameRaster,sameCompact,
+    const row={engine:engineName,width,theme,detail,sameRaster,sameCompact,
       old:{navContainer:old.navContainer,controlsContainer:old.controlsContainer,
         navWidth:old.navWidth,navContentWidth:old.navContentWidth,
         controlsContentWidth:old.controlsContentWidth,compactLabel:old.compactLabel,
@@ -89,7 +96,7 @@ async function inspect(driver,css,width,mode) {
         controlsContentWidth:current.controlsContentWidth,compactLabel:current.compactLabel,
         navOverflow:current.navOverflow,sha:current.navRasterSha256}};
     rows.push(row);
-    console.log("M2D_NAV_CSS_CAUSAL_CASE "+JSON.stringify({engine:engineName,width,sameRaster,sameCompact,oldCompact:old.compactLabel,mainCompact:current.compactLabel,mainNavContent:current.navContentWidth}));
+    console.log("M2D_NAV_CSS_CAUSAL_CASE "+JSON.stringify({engine:engineName,width,theme,detail,sameRaster,sameCompact,oldCompact:old.compactLabel,mainCompact:current.compactLabel,mainNavContent:current.navContentWidth}));
    }
   }finally{await browser.close()}
  }
@@ -97,9 +104,9 @@ async function inspect(driver,css,width,mode) {
  const switchDifferences=rows.filter(r=>!r.sameCompact).length;
  const report={schema:"M2DNavCSSBoundaryMeasurement/0.1",
   pinnedMain:meta.stableMain.sha,pinnedHistorical:meta.older.sha,
-  tests:rows.length,differences,switchDifferences,rows,
+  matrix:wide?"profile-theme-detail":"controls-500-boundary",tests:rows.length,differences,switchDifferences,rows,
   caveat:"raster mismatch is evidence of changed CSS ownership, not by itself a regression; this is isolated V5 browser, not Netlify session"};
  fs.writeFileSync(path.join(output,"result.json"),JSON.stringify(report,null,2)+"\n");
- assert.equal(rows.length,meta.test.widths.length*meta.test.engines.length);
+ assert.equal(rows.length,widths.length*themes.length*detailStates.length*meta.test.engines.length);
  console.log("M2D_NAV_CSS_CAUSAL_COMPLETE "+JSON.stringify({cases:rows.length,differences,switchDifferences,main:meta.stableMain.sha}));
 })().catch(e=>{console.error(e);process.exitCode=1});
