@@ -3,7 +3,7 @@
   "repository": "EAKerber/MobiliPresenter2D",
   "controlBranch": "development",
   "mainSha": "221b54b2a41ecc8c338d1bf2cf67280cf165ce95",
-  "batchId": "dev-20261027-viewer-nav005-latest-g",
+  "batchId": "dev-20261027-public-menu-semantic-h",
   "retired": [
     {
       "branch": "docs/handover-reconcile-20261023",
@@ -54,30 +54,48 @@
       "sha": "2b00351acc1d1369116d8eeb546146a6b363072e",
       "kind": "archive-diverged",
       "archiveTag": "archive/m2d/migration-inspector-2b00351a"
-    }
-  ],
-  "auxiliaryRefs": [
-    {
-      "branch": "integration/13-viewer-nav005-reconcile-20261027",
-      "sha": "e93b2f4d61786ceb41f98b552d76d0edc2999164"
-    }
-  ],
-  "targets": [
+    },
     {
       "branch": "fix/viewer-secondary-header-nav005-20261021",
       "sha": "10445ad8c20ac1a415f4ba463345eda83bd7e9a6",
       "kind": "archive-diverged",
-      "archiveTag": "archive/m2d/viewer-nav005-10445ad8",
-      "snapshotPath": "docs/work/DEVELOPMENT_NAV005_SEMANTIC_CLUSTER_2026-10-27.md",
+      "archiveTag": "archive/m2d/viewer-nav005-10445ad8"
+    }
+  ],
+  "auxiliaryRefs": [
+    {
+      "branch": "integration/14-public-menu-controller-reconcile-20261027",
+      "sha": "f45500ea6de4d6cce86c009af09cab8a661124f9"
+    }
+  ],
+  "targets": [
+    {
+      "branch": "experiment/shared-public-header-controller-20261020",
+      "sha": "fdeb931af285f6cf76795ccdd50a8b75d0f25aef",
+      "kind": "archive-diverged",
+      "archiveTag": "archive/m2d/public-menu-experiment-fdeb931a",
+      "snapshotPath": "docs/work/DEVELOPMENT_PUBLIC_MENU_LEGACY_CLUSTER_2026-10-27.md",
       "semanticGate": {
-        "runId": 40614569805,
-        "headSha": "e93b2f4d61786ceb41f98b552d76d0edc2999164",
-        "workflowName": "Development 13 — Viewer NAV005 newer-intent semantic reconciliation (offline)"
+        "runId": 40615995337,
+        "headSha": "f45500ea6de4d6cce86c009af09cab8a661124f9",
+        "workflowName": "Development 14 — prior public-menu implementations semantic reconciliation"
       }
     },
     {
-      "branch": "integration/13-viewer-nav005-reconcile-20261027",
-      "sha": "e93b2f4d61786ceb41f98b552d76d0edc2999164",
+      "branch": "architecture/p-comp-01-public-menu-20261021",
+      "sha": "4ba9384733a8cb46ad8a6c7c8ef3b9aebe25cd93",
+      "kind": "archive-diverged",
+      "archiveTag": "archive/m2d/public-menu-pcomp-4ba93847",
+      "snapshotPath": "docs/work/DEVELOPMENT_PUBLIC_MENU_LEGACY_CLUSTER_2026-10-27.md",
+      "semanticGate": {
+        "runId": 40615995337,
+        "headSha": "f45500ea6de4d6cce86c009af09cab8a661124f9",
+        "workflowName": "Development 14 — prior public-menu implementations semantic reconciliation"
+      }
+    },
+    {
+      "branch": "integration/14-public-menu-controller-reconcile-20261027",
+      "sha": "f45500ea6de4d6cce86c009af09cab8a661124f9",
       "kind": "auxiliary-ancestor-development"
     }
   ]
