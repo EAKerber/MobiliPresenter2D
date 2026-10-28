@@ -3,7 +3,7 @@
   "repository": "EAKerber/MobiliPresenter2D",
   "controlBranch": "development",
   "mainSha": "221b54b2a41ecc8c338d1bf2cf67280cf165ce95",
-  "batchId": "dev-20261028-ci-nav-dynamic-v5-main-authority-v",
+  "batchId": "dev-20261028-ci-v5-nav-clean-aux-only-w",
   "retired": [
     {
       "branch": "docs/handover-reconcile-20261023",
@@ -168,30 +168,24 @@
       "sha": "5d8347edb6ea247307b6fc27b424117553542f78",
       "kind": "archive-diverged",
       "archiveTag": "archive/m2d/legacy-ux04-hierarchy-layout-5d8347ed"
-    }
-  ],
-  "auxiliaryRefs": [
-    {
-      "branch": "integration/28-ci-nav-provenance-20261028",
-      "sha": "17fa210fc1448fa7ca011ff3b3062afcf57190f8"
-    }
-  ],
-  "targets": [
+    },
     {
       "branch": "ci/ci-baseline-01-nav-sequence-probe-20261023",
       "sha": "b9be8bfdac1063094446b2f78f3c59387b47b7c5",
       "kind": "archive-diverged",
-      "archiveTag": "archive/m2d/legacy-ci-nav-causality-b9be8bfd",
-      "snapshotPath": "docs/work/DEVELOPMENT_CI_NAV_MAIN_AUTHORITY_2026-10-28.md",
-      "semanticGate": {
-        "runId": 40712156189,
-        "headSha": "17fa210fc1448fa7ca011ff3b3062afcf57190f8",
-        "workflowName": "Development historic CI nav vs current V5 browser parity (localhost)"
-      }
-    },
+      "archiveTag": "archive/m2d/legacy-ci-nav-causality-b9be8bfd"
+    }
+  ],
+  "auxiliaryRefs": [
     {
-      "branch": "integration/28-ci-nav-provenance-20261028",
-      "sha": "17fa210fc1448fa7ca011ff3b3062afcf57190f8",
+      "branch": "integration/29-ci-v5-nav-clean-inventory-20261028",
+      "sha": "a92a6ff836c16bc42fda0b6588ac7dbbfa24eec5"
+    }
+  ],
+  "targets": [
+    {
+      "branch": "integration/29-ci-v5-nav-clean-inventory-20261028",
+      "sha": "a92a6ff836c16bc42fda0b6588ac7dbbfa24eec5",
       "kind": "auxiliary-ancestor-development"
     }
   ]
