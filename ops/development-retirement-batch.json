@@ -185,7 +185,7 @@
   "auxiliaryRefs": [
     {
       "branch": "integration/33-ci-auth-pr238-lineage-20261028",
-      "sha": "555ba8a67a643b876dcb5f8c46a1c48f91"
+      "sha": "555ba8a67a643b876dcb5f8a9130ed1f787810dc"
     }
   ],
   "targets": [
@@ -197,13 +197,13 @@
       "snapshotPath": "docs/work/DEVELOPMENT_CI_AUTH_LINEAGE_PR238_2026-10-28.md",
       "semanticGate": {
         "runId": 40742370534,
-        "headSha": "555ba8a67a643b876dcb5f8c46a1c48f91",
+        "headSha": "555ba8a67a643b876dcb5f8a9130ed1f787810dc",
         "workflowName": "Development CI old auth and PR238 lineage (offline provenance)"
       }
     },
     {
       "branch": "integration/33-ci-auth-pr238-lineage-20261028",
-      "sha": "555ba8a67a643b876dcb5f8c46a1c48f91",
+      "sha": "555ba8a67a643b876dcb5f8a9130ed1f787810dc",
       "kind": "auxiliary-ancestor-development"
     }
   ]
