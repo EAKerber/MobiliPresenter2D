@@ -30,13 +30,17 @@ class PinTwoAncestors(unittest.TestCase):
         for source in (MAIN, DEV, PR238, NAV, PR231, VIS, CONSOLIDATED, SUPPORT):
             with self.subTest(sha=source):
                 self.assertEqual(git("rev-parse", source + "^{commit}"), source)
-        for source, head, distance in ((NAV, PR238, "4"), (VIS, PR231, "5")):
-            with self.subTest(source=source):
-                self.assertTrue(ancestor(source, head))
-                self.assertNotEqual(source, head)
-                self.assertEqual(git("merge-base", source, head), source)
-                self.assertEqual(git("rev-list", "--count", source + ".." + head), distance)
-                self.assertEqual(git("rev-list", "--count", head + ".." + source), "0")
+        self.assertTrue(ancestor(NAV, PR238), "nav source is a true PR238 ancestor")
+        self.assertEqual(git("merge-base", NAV, PR238), NAV)
+        self.assertEqual(git("rev-list", "--count", NAV + ".." + PR238), "4")
+        self.assertEqual(git("rev-list", "--count", PR238 + ".." + NAV), "0")
+
+        # FAIL-CLOSED: corrected direction from first failed GitHub Actions gate.
+        self.assertTrue(ancestor(PR231, VIS), "PR231 is older than the v02 source")
+        self.assertFalse(ancestor(VIS, PR231), "v02 is NOT safe to retire as a PR ancestor")
+        self.assertEqual(git("merge-base", PR231, VIS), PR231)
+        self.assertEqual(git("rev-list", "--count", PR231 + ".." + VIS), "5")
+        self.assertEqual(git("rev-list", "--count", VIS + ".." + PR231), "0")
         self.assertFalse(ancestor(VIS, PR238), "cross-PR ancestry is not approved")
         self.assertFalse(ancestor(NAV, PR231), "cross-PR ancestry is not approved")
 
@@ -84,7 +88,7 @@ class PinTwoAncestors(unittest.TestCase):
         v01 = "design-system/pins/vis-002/v0.1.0/PIN.json"
         self.assertEqual(git("rev-parse", VIS + ":" + v01),
                          git("rev-parse", DEV + ":" + v01))
-        # PR231 is a descendant, not necessarily a retained copy of old v02 files.
+        # PR231 is the ancestor, with five v02 commits not in PR231's tree.
         self.assertNotEqual(git("rev-parse", MAIN + ":" + NEW_CSS),
                             git("rev-parse", VIS + ":" + OLD_CSS))
 
@@ -95,8 +99,7 @@ class PinTwoAncestors(unittest.TestCase):
                 self.assertFalse(ancestor(VIS, s))
                 self.assertNotEqual(git("merge-base", s, VIS), s)
         doc = Path("docs/work/DEVELOPMENT_PR_ANCESTORS_VIS002C_2026-10-28.md").read_text()
-        for item in (CONSOLIDATED, SUPPORT, "HOLD", "archive/m2d/config-nav-grid-pr238-dbfbd9a7",
-                     "archive/m2d/vis002c-token-v02-pr231-34a305c1"):
+        for item in (CONSOLIDATED, SUPPORT, VIS, "HOLD", "archive/m2d/config-nav-grid-pr238-dbfbd9a7"):
             self.assertIn(item, doc)
 
     def test_no_product_change_or_legacy_execution(self):
