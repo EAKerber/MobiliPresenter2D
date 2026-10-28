@@ -28,3 +28,7 @@ O teste anônimo `tests/ci/config-auth-anonymous-browser.mjs@2e89a91db956...` pe
 `tests/test_development_ci_auth_lineage.py` confirma os pins de main/development/PR, seis endpoints compartilhados, divergência da função de configuração, evolução da policy antiga para a PR, contrato sintático da role e as vinte paths da PR. Também confirma que **nenhuma fonte app/Netlify foi alterada** na development por este bloco. A workflow dedicada roda esse gate e a suíte pura de identidade; **não roda nenhum workflow ou browser de autenticação legado, não faz fetch de preview, não grava banco, não constrói/deploya Netlify**.
 
 **Disposição:** **HOLD sobre todas as origens auth/preview avaliadas e sobre a PR #238**. O bloco serve apenas para separar proveniência de intenção e apoiar futura revisão. Próximo passo seguro: revisar o SQL de grants/revogação e reconciliar o comportamento de navegação da PR com a main; só depois de identidade de deploy exato e gates relevantes considerar integração gradual. Sem exclusão de históricas até prova/arquivo completo e checagem de PRs.
+
+## Verificação da auxiliar
+
+O [gate de proveniência #40742256134](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40742256134) concluiu **PASS** no commit `440f76670c7ba0fd59194dd2e45f8c46a1c48f91`, incluindo os testes de DAG/blobs/escopo e os nove negativos de identidade do preview. Trata-se de inspeção offline, não validação de grants ou deploy. Nenhuma fonte antiga de autenticação foi executada ou aposentada. A família original e a PR #238 permanecem HOLD.
