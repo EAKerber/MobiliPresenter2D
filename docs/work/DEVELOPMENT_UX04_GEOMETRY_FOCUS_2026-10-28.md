@@ -40,3 +40,9 @@ Teste determinístico dos 13 blobs originais + hashes estáveis da main/developm
 ## Diagnóstico de foco com registro antes de falha
 
 - Gate anterior [#40707110744](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40707110744) falhou por timeout aguardando o `activeElement` recuperar `data-handle-id`. A mudança de `requestAnimationFrame` já existe na auxiliar, mas a causa exata ainda não está demonstrada. Instrumentar os eventos `focusin`, localização de `handles` no modelo, botões após redraw, erros de navegação e ativação manual para distinguir falhas de descoberta, foco ou reposição DOM. **Não liberar aposentadoria/merge enquanto o gate falhar.**
+
+## Causa identificada no gate #40708331739
+
+- [Gate instrumental #40708331739](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40708331739): geometria e integridade estática passam; o foco falha com `expected=none`, `activeElement=BODY`. A coleta encontrou quatro botões conectados, `currentStage=finishes`, `activeSection=handles`, mas o teste pesquisava a identificação incorreta `handles` e a ativação manual desse nome retornava `false`.
+- **Causa raiz no código:** `resolveModelSection()` atribui `id: \`section:\${modelSection.id}\``, portanto `activateSection("handles")` não corresponde a `entry.id`. Essa chamada já era um no-op na versão histórica; simplesmente restaurar `requestAnimationFrame` não bastou. Correção mínima dev-only: `activateSection("section:handles", handleIndex, true)` após o redraw; também corrigir o gate diagnóstico para usar o ID canônico.
+- Até a execução de Chromium e testes completos de teclado passarem, **HOLD**. Não alterar main nem afirmar retirada antecipada.

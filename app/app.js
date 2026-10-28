@@ -2484,7 +2484,7 @@
     core.setGlobalSelection(state, { handleId });
     syncLayerVisibility();
     requestAnimationFrame(() => {
-      global.CASA_KEYBOARD_SHORTCUTS?.activateSection?.("handles", handleIndex, true);
+      global.CASA_KEYBOARD_SHORTCUTS?.activateSection?.("section:handles", handleIndex, true);
     });
     const handle = selectedHandle();
     announce(handle.id === "none" ? "Puxador será definido depois." : handle.label + " aplicado ao conjunto.");

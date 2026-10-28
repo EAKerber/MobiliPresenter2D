@@ -49,7 +49,8 @@ class LegacyUX04(unittest.TestCase):
         dev=Path("app/app.js").read_text()
         self.assertIn('activateSection?.("handles", handleIndex, false);',main)
         self.assertNotIn('activateSection?.("handles", handleIndex, false);',dev)
-        self.assertIn('requestAnimationFrame(() => {\n      global.CASA_KEYBOARD_SHORTCUTS?.activateSection?.("handles", handleIndex, true);\n    });',dev)
+        self.assertIn('requestAnimationFrame(() => {\n      global.CASA_KEYBOARD_SHORTCUTS?.activateSection?.("section:handles", handleIndex, true);\n    });',dev)
+        self.assertIn('id: `section:${modelSection.id}`',Path("app/core/keyboard-shortcuts.js").read_text())
         self.assertIn("selected handle regains focus after redraw",Path("tests/keyboard-browser.cjs").read_text())
     def test_keyboard_preserves_seventy_one_and_requires_focus_gate(self):
         old=assertions(Path("docs/reconciliation/ux04-main-authority/legacy/tests/keyboard-browser.cjs").read_text())

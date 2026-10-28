@@ -89,7 +89,7 @@ const flush=async(page,profile)=>page.waitForFunction(x=>document.documentElemen
  await settle(p);
  geometry.focus=await p.evaluate((expected) => {
    const api=window.CASA_KEYBOARD_SHORTCUTS;
-   const section=api?.discoverStageSections()?.find(s=>s.id==="handles");
+   const section=api?.discoverStageSections()?.find(s=>s.id==="section:handles");
    const buttons=[...document.querySelectorAll("[data-handle-id]")];
    const active=document.activeElement;
    return {
@@ -106,7 +106,7 @@ const flush=async(page,profile)=>page.waitForFunction(x=>document.documentElemen
  },id);
  geometry.manualActivation=await p.evaluate(()=>{
    const api=window.CASA_KEYBOARD_SHORTCUTS;
-   const changed=api?.activateSection?.("handles",0,true);
+   const changed=api?.activateSection?.("section:handles",0,true);
    return {changed,actual:document.activeElement?.dataset?.handleId||null};
  });
  fs.writeFileSync(path.join(out,"result.json"),JSON.stringify({geometry,errors,environment:"isolated-local-buyer-V5"},null,2));
