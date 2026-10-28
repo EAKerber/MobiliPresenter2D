@@ -1608,7 +1608,75 @@
         "unmergedAuthPR": 238
       },
       "noDeploy": true
+    },
+    {
+      "batchId": "dev-20261028-vis002c-arc03c-two-sources-ac-v2",
+      "workflowRun": 40751897855,
+      "workflowUrl": "https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40751897855",
+      "headSha": "3e0669d16f2b481a983bdcde015338891d0cdce2",
+      "audit": "PASS",
+      "apply": "PASS",
+      "refsBefore": 31,
+      "refsAfter": 28,
+      "auditArtifactId": 12843353181,
+      "applyArtifactId": 12842934175,
+      "archived": [
+        {
+          "tag": "archive/m2d/vis002c-arc03c-c239012c",
+          "sha": "c239012c126c9b3e2c477778ea4b2d37b74c963f"
+        },
+        {
+          "tag": "archive/m2d/vis002c-support-a285a2dc",
+          "sha": "a285a2dc6f543f33f45615ba653a296236f8b3ac"
+        }
+      ],
+      "retired": [
+        {
+          "branch": "integration/consolidated-arc03c-vis002c-token-20261023",
+          "sha": "c239012c126c9b3e2c477778ea4b2d37b74c963f",
+          "kind": "archive-diverged",
+          "archiveTag": "archive/m2d/vis002c-arc03c-c239012c"
+        },
+        {
+          "branch": "integration/vis002c-contextual-support-v02-20261024",
+          "sha": "a285a2dc6f543f33f45615ba653a296236f8b3ac",
+          "kind": "archive-diverged",
+          "archiveTag": "archive/m2d/vis002c-support-a285a2dc"
+        }
+      ],
+      "auxiliaryRetired": [
+        {
+          "branch": "integration/35-vis002c-arc03c-triad-20261028",
+          "sha": "9d454f91975d75e8d776cffd2c4492c447c9be1d",
+          "kind": "auxiliary-ancestor-development",
+          "recoverableFromDevelopment": true
+        }
+      ],
+      "semanticProof": {
+        "firstOverSizeAudit": 40751498062,
+        "firstOverSizeOutcome": "AUDIT_FAIL_NO_APPLY_BATCH_SIZE_1_TO_3",
+        "firstIncompleteProvenanceAudit": 40751673606,
+        "firstIncompleteProvenanceOutcome": "AUDIT_FAIL_NO_APPLY_ARCHIVE_PROVENANCE_RECORD_MISSING",
+        "correctedGate": 40751285149,
+        "mainSha": "221b54b2a41ecc8c338d1bf2cf67280cf165ce95",
+        "visualV02Contexts": 8,
+        "visualV03Contexts": 10,
+        "sameCompilerAndManifestRoundTrip": true,
+        "oldInputsReplacedByNewerImageFallbackAndA11y": true,
+        "source": "docs/work/DEVELOPMENT_VIS002C_ARC03C_TRIAD_2026-10-28.md",
+        "thirdSourceRetainedForAD": "integration/vis002c-p-token-02b-v2-20261023",
+        "noRuntimeChanges": true,
+        "noDeploy": true
+      },
+      "preserved": {
+        "mainSha": "221b54b2a41ecc8c338d1bf2cf67280cf165ce95",
+        "openPRs": 12,
+        "remainingOriginalHistoricalRefs": 26,
+        "originalAssetsBranch": "artifacts/ds02-imagens-originais-20261015",
+        "originalTokenHistoricalRefPending": "integration/vis002c-p-token-02b-v2-20261023"
+      },
+      "noDeploy": true
     }
   ],
-  "nextBatchContract": "28 waves; 32/60 original historical retired, 25 temporary auxiliaries retired; 28 original historical + main + development = 30 remote branch heads. AB consumed, never replay. Only nav ancestry to PR238 was archived full DAG under archive/m2d/config-nav-grid-pr238-dbfbd9a7 at exact dbfbd9a7; branch VIS002C v02 is DESCENDANT of PR231 with five unique commits and must remain HOLD, as do two other VIS integration divergent heads. Initial gate failed safely for reversed ancestry (#40747792240); corrected source/gates #40748058761/#40748235137 and AB #40748381758 PASS with full exact readback. PRs12, main, DS02, auth/DB/runtime/deploy protected."
+  "nextBatchContract": "29 waves; 34/60 original historical branches retired, 26 temporary auxiliaries retired; 26 historical + main + development = 28 heads. AC v2 consumed, never replay. Two full historical DAGs archive/m2d/vis002c-arc03c-c239012c and archive/m2d/vis002c-support-a285a2dc verified SHA, old CSS v02 not merged into main. One token v02 historical source still pending AD, exact sha 34a305c1ddb9850dc194f68b16fa097c6691c06b. Initial four-target cap and provenance row audits failed closed without apply; AC run 40751897855 PASS after corrections. All PRs/auth/DS02/runtime/build/Netlify/main intact."
 }
