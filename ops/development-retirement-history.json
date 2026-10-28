@@ -285,7 +285,65 @@
         "unmergedVisualPR": 34
       },
       "noDeploy": true
+    },
+    {
+      "batchId": "dev-20261027-viewer-nav005-latest-g",
+      "workflowRun": 40614785356,
+      "workflowUrl": "https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40614785356",
+      "headSha": "11ecfe8f15136b709c25812271536a644fd1e59b",
+      "auditArtifactId": 12784697438,
+      "applyArtifactId": 12784931801,
+      "audit": "PASS",
+      "apply": "PASS",
+      "refsBefore": 54,
+      "refsAfter": 52,
+      "archived": [
+        {
+          "tag": "archive/m2d/viewer-nav005-10445ad8",
+          "sha": "10445ad8c20ac1a415f4ba463345eda83bd7e9a6"
+        }
+      ],
+      "retired": [
+        {
+          "branch": "fix/viewer-secondary-header-nav005-20261021",
+          "sha": "10445ad8c20ac1a415f4ba463345eda83bd7e9a6",
+          "kind": "archive-diverged",
+          "archiveTag": "archive/m2d/viewer-nav005-10445ad8"
+        }
+      ],
+      "auxiliaryRetired": [
+        {
+          "branch": "integration/13-viewer-nav005-reconcile-20261027",
+          "sha": "e93b2f4d61786ceb41f98b552d76d0edc2999164",
+          "kind": "auxiliary-ancestor-development",
+          "recoverableFromDevelopment": true
+        }
+      ],
+      "semanticProof": {
+        "workflowRun": 40614569805,
+        "workflowSha": "e93b2f4d61786ceb41f98b552d76d0edc2999164",
+        "auxGate": 40614274549,
+        "historicScope": 5,
+        "themeBlob": "bb12be03221e3fefa45dd2918df049bc5ccd5c64",
+        "localPublicNavCases": 48,
+        "localViewerHeaderCases": 20,
+        "engines": [
+          "chromium",
+          "webkit"
+        ],
+        "historicalAmbientesPlacement": "brand cluster on left",
+        "currentApprovedAmbientesPlacement": "right-side action cluster before theme and menu",
+        "noRuntimeChanges": true
+      },
+      "preserved": {
+        "openPRs": 12,
+        "remainingOriginalHistoricalRefs": 50,
+        "mainSha": "221b54b2a41ecc8c338d1bf2cf67280cf165ce95",
+        "originalAssetsBranch": "artifacts/ds02-imagens-originais-20261015",
+        "unmergedVisualPR": 34
+      },
+      "noDeploy": true
     }
   ],
-  "nextBatchContract": "Next wave must carry the nine original historical waves[].retired refs; do not count or insert the three auxiliaryRetired (all are already reachable from development). 51 historic original branches + main + development remain. Use new unique batchId and exactly 1-3 pinned targets, 12 open PRs protected, archived diverged DAGs protected by tags. The wave F manifest is consumed."
+  "nextBatchContract": "Next wave must carry all ten original historical waves[].retired records, excluding the four auxiliaryRetired refs already in development DAG. 50 original historical refs remain with main and development. Re-check 12 PRs, main pin, DAG tags, rulesets, protections, exact target refs, stale workflow dependencies, and require fresh semantic gate. Wave G manifest is CONSUMED."
 }
