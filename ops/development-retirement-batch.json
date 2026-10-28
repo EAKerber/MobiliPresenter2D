@@ -3,7 +3,7 @@
   "repository": "EAKerber/MobiliPresenter2D",
   "controlBranch": "development",
   "mainSha": "221b54b2a41ecc8c338d1bf2cf67280cf165ce95",
-  "batchId": "dev-20261028-v5local-provenance-aux-only-y",
+  "batchId": "dev-20261028-v5local-dto-hit-target-aux-only-z",
   "retired": [
     {
       "branch": "docs/handover-reconcile-20261023",
@@ -184,14 +184,14 @@
   ],
   "auxiliaryRefs": [
     {
-      "branch": "integration/31-ci-v5local-provenance-20261028",
-      "sha": "d3f3570fa08728f771dd32b5969ab17237db87b1"
+      "branch": "integration/32-ci-v5local-dto-hit-target-20261028",
+      "sha": "200350735c24ccd234054261596732a707c245a1"
     }
   ],
   "targets": [
     {
-      "branch": "integration/31-ci-v5local-provenance-20261028",
-      "sha": "d3f3570fa08728f771dd32b5969ab17237db87b1",
+      "branch": "integration/32-ci-v5local-dto-hit-target-20261028",
+      "sha": "200350735c24ccd234054261596732a707c245a1",
       "kind": "auxiliary-ancestor-development"
     }
   ]
