@@ -9,6 +9,7 @@ const base=process.env.FLOW_LAYOUT_URL;
 assert(/^http:\/\/127\.0\.0\.1:8123\/config\/$/.test(base||""),"requires isolated loopback V5, not Netlify");
 const out=process.argv[2]||"/tmp/m2d-ux04";
 const rect=async(page,selector)=>page.locator(selector).evaluate(x=>{const r=x.getBoundingClientRect();return {left:r.left,right:r.right,top:r.top,bottom:r.bottom,width:r.width,height:r.height};});
+const settle=async(page)=>{await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));await page.waitForTimeout(180)};
 const overflow=async(page,selector)=>page.locator(selector).evaluate(x=>({scroll:x.scrollWidth,client:x.clientWidth,ok:x.scrollWidth<=x.clientWidth+2}));
 const flush=async(page,profile)=>page.waitForFunction(x=>document.documentElement.dataset.layoutProfile===x,profile,{timeout:6000});
 (async()=>{
@@ -26,22 +27,26 @@ const flush=async(page,profile)=>page.waitForFunction(x=>document.documentElemen
  await flush(p,"side-rail");
  await p.locator("#moduleList [data-select-entity]").first().click();
  await p.waitForFunction(()=>document.body.classList.contains("has-module-detail"));
+ await settle(p);
  geometry.desktopModules={detail:await rect(p,'[data-stage-pane="detail"]'),list:await rect(p,'[data-stage-pane="list"]')};
- assert.ok(geometry.desktopModules.list.top>=geometry.desktopModules.detail.bottom-2,"current side-rail is single column, replaces older wide split");
+ assert.ok(geometry.desktopModules.list.top>=geometry.desktopModules.detail.bottom-2,"current side-rail is single column, replaces older wide split "+JSON.stringify(geometry.desktopModules));
  assert.equal((await overflow(p,"#modulesPanel")).ok,true);
  await p.locator('.flow-nav [data-step="services"]').click();
  await p.waitForFunction(()=>!document.getElementById("servicesPanel").hidden);
+ await settle(p);
  geometry.desktopServices={light:await rect(p,'[data-keyboard-section="lighting"]'),additional:await rect(p,'[data-keyboard-section="additional-services"]')};
  assert.ok(geometry.desktopServices.additional.top>=geometry.desktopServices.light.bottom-2,"current side-rail Services is single column");
  await p.setViewportSize({width:1050,height:900});
  await flush(p,"stacked");
  await p.locator('.flow-nav [data-step="modules"]').click();
  await p.waitForFunction(()=>!document.getElementById("modulesPanel").hidden);
+ await settle(p);
  geometry.stackedModules={detail:await rect(p,'[data-stage-pane="detail"]'),list:await rect(p,'[data-stage-pane="list"]')};
  assert.ok(Math.abs(geometry.stackedModules.detail.top-geometry.stackedModules.list.top)<4);
  assert.ok(geometry.stackedModules.detail.right<=geometry.stackedModules.list.left+4);
  await p.locator('.flow-nav [data-step="services"]').click();
  await p.waitForFunction(()=>!document.getElementById("servicesPanel").hidden);
+ await settle(p);
  geometry.stackedServices={light:await rect(p,'[data-keyboard-section="lighting"]'),additional:await rect(p,'[data-keyboard-section="additional-services"]')};
  assert.ok(Math.abs(geometry.stackedServices.light.top-geometry.stackedServices.additional.top)<4);
  assert.ok(geometry.stackedServices.light.right<=geometry.stackedServices.additional.left+4);
@@ -49,6 +54,7 @@ const flush=async(page,profile)=>page.waitForFunction(x=>document.documentElemen
  await flush(p,"compact");
  await p.locator('.flow-nav [data-step="modules"]').click();
  await p.waitForFunction(()=>!document.getElementById("modulesPanel").hidden);
+ await settle(p);
  geometry.compact={
   listHidden:await p.locator('[data-stage-view-id="modules-list"]').isHidden(),
   detailVisible:await p.locator('[data-stage-view-id="modules-detail"]').isVisible(),

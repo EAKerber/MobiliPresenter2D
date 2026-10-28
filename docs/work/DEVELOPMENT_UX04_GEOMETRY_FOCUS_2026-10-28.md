@@ -27,3 +27,8 @@ Teste determinístico dos 13 blobs originais + hashes estáveis da main/developm
 ## Correção do gate de identidade de blobs
 
 - [Gate auxiliar #40706011964](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40706011964) bloqueou o teste estático por manifesto ainda apontar ao blob de **main** para `tests/keyboard-browser.cjs`, embora a alteração da asserção tenha produzido o novo blob de desenvolvimento `3e901267fc6a9e24dc6cb7edfc7d0c7fc29cf7d7`. Corrigir só o campo `developmentSha`; manter `mainSha=2d3eb81fd6a7e21b5bbb3bb87c35fa3d63815fbe`. O navegador dessa execução não iniciou; é incorreto afirmar que o comportamento foi aprovado.
+
+## Segunda investigação do gate de browser
+
+- [Execução #40706269409](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40706269409): teste estático PASS, navegador falhou no primeiro assert `side-rail` (antes do foco). A execução anterior #40705228634 havia passado por toda geometria até o assert de foco. O caso parece sensível ao momento de atualização do DOM/CSS, porém **não se conclui a causa apenas pela alternância de resultados**.
+- A instrumentação agora espera dois frames de renderização mais janela curta de estabilização após mudanças de perfil/etapa e inclui as medidas capturadas nas mensagens de erro. Nenhuma implementação ou policy visual é alterada. A aceitação exige geometria atual correta e recuperação de foco em Chromium, não suposições baseadas na diferença de tempo.
