@@ -5,6 +5,7 @@ on:
       - development
     paths:
       - 'ops/development-pr-closure-transition.json'
+      - 'docs/work/DEVELOPMENT_CP_PUBLIC_PR_CLOSURE_2026-10-28.md'
       - 'tools/development_retirement_batch.py'
       - 'tools/development_pr_roster_probe.py'
       - 'tests/test_development_pr_roster_transition.py'
