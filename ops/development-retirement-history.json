@@ -1247,7 +1247,53 @@
         "unmergedVisualPR": 34
       },
       "noDeploy": true
+    },
+    {
+      "batchId": "dev-20261028-ci-v5-nav-clean-aux-only-w",
+      "workflowRun": 40720613338,
+      "workflowUrl": "https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40720613338",
+      "headSha": "12de7a6d29c29d32d702da06f4dc56baee9af74f",
+      "audit": "PASS",
+      "apply": "PASS",
+      "refsBefore": 34,
+      "refsAfter": 33,
+      "retired": [],
+      "auxiliaryRetired": [
+        {
+          "branch": "integration/29-ci-v5-nav-clean-inventory-20261028",
+          "sha": "a92a6ff836c16bc42fda0b6588ac7dbbfa24eec5",
+          "kind": "auxiliary-ancestor-development",
+          "recoverableFromDevelopment": true
+        }
+      ],
+      "artifacts": [
+        {
+          "name": "dev-bounded-retirement-apply-40720613338",
+          "id": 12831115186
+        },
+        {
+          "name": "dev-bounded-retirement-audit-40720613338",
+          "id": 12829848441
+        }
+      ],
+      "semanticProof": {
+        "mainSha": "221b54b2a41ecc8c338d1bf2cf67280cf165ce95",
+        "archivedHistoricalBlobs": 8,
+        "sourceBranchRetained": "fix/ci-baseline-v5-nav-flow-clean-20261023",
+        "reasonHold": "original CSS/pixel differential and nav label boundaries not proved redundant",
+        "auxGate": 40720137240,
+        "devGate": 40720394329,
+        "noMainOrRuntimeChanges": true,
+        "authenticatedSessionNotTested": true
+      },
+      "preserved": {
+        "mainSha": "221b54b2a41ecc8c338d1bf2cf67280cf165ce95",
+        "openPRs": 12,
+        "remainingOriginalHistoricalRefs": 31,
+        "originalAssetsBranch": "artifacts/ds02-imagens-originais-20261015"
+      },
+      "noDeploy": true
     }
   ],
-  "nextBatchContract": "22 waves; 29/60 original historical refs retired; 19 auxiliary retired; 31 historical + main + development = 33 branches. V batch consumed — NEVER replay. Superseded CI nav diagnostics archived in full via archive/m2d/legacy-ci-nav-causality-b9be8bfd; seven primary blobs byte-identical saved. Current V5 navigation tests 32 scenarios (2 browsers x 8 widths x 2 themes) passed auxiliary, development and post-manifest. MAIN remains stable high-authority. 12 PRs, DS02 and auth/DB CI branches untouched; no Netlify authenticated session tested or deploy."
+  "nextBatchContract": "23 waves; 29/60 historical original heads retired, 20 auxiliary heads retired, 31 historical + main + development = 33 branches. W consumed and must NEVER replay. CI V5 NAV CLEAN old historical ref intentionally HOLD pending CSS/pixel and nav-label differential proof; 8 historical blobs preserved at docs/reconciliation/ci-v5-nav-clean/source. Main stays stable authority, 12 PRs, DS02 intact. No production deploy."
 }
