@@ -22,7 +22,66 @@ MAIN_SHA = "221b54b2a41ecc8c338d1bf2cf67280cf165ce95"
 INVENTORY = Path("docs/work/DEVELOPMENT_CLUSTER_INVENTORY_2026-10-27.json")
 MANIFEST = Path("ops/development-retirement-batch.json")
 RECEIPT = Path("artifacts/development-retirement/receipt.json")
-PR_NUMBERS = frozenset([34, 175, 178, 179, 180, 182, 184, 185, 186, 196, 231, 238])
+PR_HEAD_PINS = {
+  "34": [
+    "feat/exposed-sides-and-glass",
+    "20040da835d6da66b03f73642c0c44db109dd6e8"
+  ],
+  "175": [
+    "work/cp-public-01-donor-staging-20261008",
+    "c81d357df3aa78c3e8f804b6334b2da35b3a75c8"
+  ],
+  "178": [
+    "work/cp-public-02a-public-module-projection-20261008",
+    "f0c792397036836105dcb53a45f89780e10b6348"
+  ],
+  "179": [
+    "work/cp-public-02b-public-read-endpoint-20261008",
+    "44b1d6a94c06a17b73405755e03c787780e7a455"
+  ],
+  "180": [
+    "work/cp-public-02c-integrated-preview-20261008",
+    "82d85674595280a7c878848d0d5f09df29492e92"
+  ],
+  "182": [
+    "work/cp-public-03a1-configuration-read-guard-20261008",
+    "0b398618f7f2eff23da7f782d53d86ba3ee6411b"
+  ],
+  "184": [
+    "work/cp-public-03a2-0-failclosed-bootstrap-20261008",
+    "d1305ffdd8302fa06b37d3676f08d802a92e7d97"
+  ],
+  "185": [
+    "work/cp-public-03a2-1-buyer-projection-20261008",
+    "7a0d919d4e27853c50cff8afde0cdcc066e0aa0c"
+  ],
+  "186": [
+    "work/cp-public-03a2-2-email-access-core-20261008",
+    "40d4b65f9e7e16e0810c2308e9b947840371cbe7"
+  ],
+  "196": [
+    "docs/cp-public-auth-boundary-20261011",
+    "43d5fb9c5c2749c0541b99d49ee1c048d6a9a96a"
+  ],
+  "231": [
+    "architecture/p-token-02b-contextual-copy-20261022",
+    "afb80965336083209eac93e2729de77170524ee5"
+  ],
+  "238": [
+    "ci/ci-baseline-01-isolated-auth-extraction-20261024",
+    "3ccce161235df925c5b708bf6feefbe6f4b10103"
+  ]
+} 
+PR_NUMBERS = frozenset(PR_HEAD_PINS)
+PR_ARCHIVE_MANIFEST = Path("ops/development-pr-archive-manifest.json")
+PR_CLOSURE_TRANSITION = Path("ops/development-pr-closure-transition.json")
+PR_ARCHIVE_TAGS = {
+  175: "archive/m2d/cppublic-pr175-c81d357d",
+  178: "archive/m2d/cppublic-pr178-f0c79239",
+  179: "archive/m2d/cppublic-pr179-44b1d6a9",
+  180: "archive/m2d/cppublic-pr180-82d85674"
+}
+
 SHA_RE = re.compile(r"[0-9a-f]{40}\Z")
 BRANCH_RE = re.compile(r"[A-Za-z0-9._/-]+\Z")
 TAG_RE = re.compile(r"archive/m2d/[a-z0-9][a-z0-9._/-]*\Z")
@@ -75,6 +134,75 @@ def archive_tags():
             raise RuntimeError("DUPLICATE_REMOTE_TAG")
         result[name] = sha
     return result
+
+
+def verify_open_pr_roster(prs, tags, fetch_pr=api):
+    """PR closure allows only exact documented 2-at-a-time transitions.
+
+    A closed PR must be CLOSED/UNMERGED at its original SHA with an immutable
+    archive tag. No other PR is allowed to close, move, merge, or change HEAD.
+    This is intentionally stricter than merely changing PR_NUMBERS from 12 to 8.
+    """
+    archive = json.loads(PR_ARCHIVE_MANIFEST.read_text(encoding="utf-8"))
+    transition = json.loads(PR_CLOSURE_TRANSITION.read_text(encoding="utf-8"))
+    if (archive.get("schemaVersion") != "M2DDevPublicPRArchive/0.1"
+        or archive.get("repository") != REPO
+        or archive.get("mainSha") != MAIN_SHA
+        or archive.get("expectedOpenPRs") != [[n, *PR_HEAD_PINS[n]] for n in sorted(PR_HEAD_PINS)]
+        or archive.get("candidateTags") != [[n, PR_ARCHIVE_TAGS[n]] for n in sorted(PR_ARCHIVE_TAGS)]):
+        raise RuntimeError("PR_ARCHIVE_PINNED_INVENTORY_DRIFT")
+    allowed_keys = {"schemaVersion", "repository", "mainSha", "authoritativeArchive",
+                    "batchId", "allowedClosedOrOpen", "remainingCandidatesFrozenOpen",
+                    "closureMethod", "successorEvidence", "provenanceEvidence"}
+    allowed = transition.get("allowedClosedOrOpen")
+    expected_frozen = [n for n in PR_ARCHIVE_TAGS if n not in (allowed or [])]
+    if (not isinstance(transition, dict) or set(transition) != allowed_keys
+        or transition.get("schemaVersion") != "M2DPublicPRRosterTransition/0.1"
+        or transition.get("repository") != REPO
+        or transition.get("mainSha") != MAIN_SHA
+        or transition.get("authoritativeArchive") != str(PR_ARCHIVE_MANIFEST)
+        or transition.get("batchId") not in
+            ("dev-20261028-cppublic-pr-close-ai", "dev-20261028-cppublic-pr-close-aj")
+        or allowed not in ([175, 178], [175, 178, 179, 180])
+        or transition.get("remainingCandidatesFrozenOpen") != expected_frozen
+        or transition.get("closureMethod") != "closed-unmerged-only"
+        or transition.get("successorEvidence") !=
+             "docs/work/DEVELOPMENT_CP_PUBLIC_PRS_175_180_2026-10-28.md"
+        or transition.get("provenanceEvidence") !=
+             "docs/work/DEVELOPMENT_CP_PUBLIC_PR_CLOSURE_2026-10-28.md"):
+        raise RuntimeError("PR_TRANSITION_MANIFEST_DRIFT")
+    if ((transition["batchId"].endswith("-ai") and allowed != [175,178])
+        or (transition["batchId"].endswith("-aj") and allowed != [175,178,179,180])):
+        raise RuntimeError("PR_TRANSITION_WAVE_DRIFT")
+    # Even still-open public PRs must retain complete original DAGs, so an
+    # accidental deletion of any of these tags shuts down future hygiene.
+    for n, tag in PR_ARCHIVE_TAGS.items():
+        if tags.get(tag) != PR_HEAD_PINS[n][1]:
+            raise RuntimeError("PR_ARCHIVE_TAG_MISSING_OR_CHANGED:"+str(n))
+    if not isinstance(prs, list):
+        raise RuntimeError("PR_OPEN_INVENTORY_NOT_LIST")
+    actual = {p.get("number"): p for p in prs}
+    if len(actual) != len(prs) or set(actual) - PR_NUMBERS:
+        raise RuntimeError("PR_OPEN_INVENTORY_UNEXPECTED")
+    for n,p in actual.items():
+        head=p.get("head") or {}
+        if (p.get("state")!="open"
+            or (head.get("ref"),head.get("sha")) != tuple(PR_HEAD_PINS[n])
+            or ((p.get("base") or {}).get("ref"))!="main"
+            or p.get("merged_at")):
+            raise RuntimeError("PR_OPEN_IDENTITY_DRIFT:"+str(n))
+    missing=PR_NUMBERS-set(actual)
+    if not missing.issubset(set(allowed)):
+        raise RuntimeError("UNAUTHORIZED_PR_CLOSURE:"+repr(sorted(missing)))
+    for n in sorted(missing):
+        p=fetch_pr("pulls/"+str(n))
+        head=p.get("head") or {}
+        if (p.get("number")!=n or p.get("state")!="closed" or p.get("merged")
+            or p.get("merged_at") or not p.get("closed_at")
+            or (head.get("ref"),head.get("sha"))!=tuple(PR_HEAD_PINS[n])
+            or ((p.get("base") or {}).get("ref"))!="main"):
+            raise RuntimeError("PR_CLOSED_UNMERGED_PIN_MISMATCH:"+str(n))
+    return set(actual)
 
 
 def safe_name(name):
@@ -284,8 +412,7 @@ def verify_context(batch, inventory, mode):
     if refs != expected:
         raise RuntimeError("FULL_REF_ROSTER_DRIFT")
     prs = api("pulls?state=open&per_page=100")
-    if not isinstance(prs, list) or {p.get("number") for p in prs} != PR_NUMBERS:
-        raise RuntimeError("OPEN_PR_INVENTORY_DRIFT")
+    verify_open_pr_roster(prs, tags_before)
     used = {value.get("ref") for p in prs for value in (p.get("head") or {}, p.get("base") or {})}
     if set(item["branch"] for item in targets) & used:
         raise RuntimeError("TARGET_HAS_OPEN_PR")
@@ -361,8 +488,7 @@ def main():
         if remote_refs() != expected:
             raise RuntimeError("REF_DRIFT_BEFORE_DELETE")
         fresh_prs = api("pulls?state=open&per_page=100")
-        if {p.get("number") for p in fresh_prs} != PR_NUMBERS:
-            raise RuntimeError("PR_DRIFT_BEFORE_DELETE")
+        verify_open_pr_roster(fresh_prs, archive_tags())
         active = {v.get("ref") for p in fresh_prs for v in (p.get("head") or {}, p.get("base") or {})}
         if item["branch"] in active or api("rulesets?per_page=100"):
             raise RuntimeError("PR_OR_RULESET_DRIFT")
