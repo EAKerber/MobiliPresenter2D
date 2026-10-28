@@ -3,7 +3,6 @@ on:
   push:
     branches:
       - development
-      - integration/23-cp-public-dto-parity-20261028
     paths:
       - 'tests/ci/cp-public-dto-parity.test.cjs'
       - 'tests/ci/cp-public-session-contract.test.mjs'
