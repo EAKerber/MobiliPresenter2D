@@ -3,7 +3,7 @@
   "repository": "EAKerber/MobiliPresenter2D",
   "controlBranch": "development",
   "mainSha": "221b54b2a41ecc8c338d1bf2cf67280cf165ce95",
-  "batchId": "dev-20261028-cppublic-03a2-3-dag-archive-ae",
+  "batchId": "dev-20261028-cppublic-public-prs-auxiliary-af",
   "retired": [
     {
       "branch": "docs/handover-reconcile-20261023",
@@ -210,30 +210,24 @@
       "sha": "34a305c1ddb9850dc194f68b16fa097c6691c06b",
       "kind": "archive-diverged",
       "archiveTag": "archive/m2d/vis002c-v02-token-34a305c1"
-    }
-  ],
-  "auxiliaryRefs": [
-    {
-      "branch": "integration/36-cppublic-pr-lineage-20261028",
-      "sha": "435bf4a11453f8498bdc997f81191b3b4234a939"
-    }
-  ],
-  "targets": [
+    },
     {
       "branch": "work/cp-public-03a2-3-contract-integration-20261008",
       "sha": "68362325972a4a2db8acbdb475a1d686dd6663b4",
       "kind": "archive-diverged",
-      "archiveTag": "archive/m2d/cp-public-03a2-3-68362325",
-      "snapshotPath": "docs/work/DEVELOPMENT_CP_PUBLIC_PR_LINEAGE_2026-10-28.md",
-      "semanticGate": {
-        "runId": 40753930441,
-        "headSha": "435bf4a11453f8498bdc997f81191b3b4234a939",
-        "workflowName": "Development CP-PUBLIC historical PR lineage (offline)"
-      }
-    },
+      "archiveTag": "archive/m2d/cp-public-03a2-3-68362325"
+    }
+  ],
+  "auxiliaryRefs": [
     {
-      "branch": "integration/36-cppublic-pr-lineage-20261028",
-      "sha": "435bf4a11453f8498bdc997f81191b3b4234a939",
+      "branch": "integration/37-cppublic-public-prs-20261028",
+      "sha": "4f5d1193c920a9fa14a67fcab278fe381829aac5"
+    }
+  ],
+  "targets": [
+    {
+      "branch": "integration/37-cppublic-public-prs-20261028",
+      "sha": "4f5d1193c920a9fa14a67fcab278fe381829aac5",
       "kind": "auxiliary-ancestor-development"
     }
   ]
