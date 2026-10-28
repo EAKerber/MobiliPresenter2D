@@ -21,3 +21,8 @@ A branch original continua HOLD até interpretação do resultado empírico; nã
 
 - [Gate do limite #40725564223](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40725564223) **PASS**: exatos 20 pares em Chromium/WebKit, 496–522 px de controls, CSS antigo 514 px/`.controls` versus CSS moderno 500 px/`.flow-nav`, **0 divergências raster, 0 divergências de compactação**, navegação atual sem overflow. Artefato JSON `12831694922`. Isso é igualdade das capturas da navegação nesse recorte, não equivalência universal.
 - Foi preservada a intenção do teste antigo: nova matriz de **56 pares** = 7 larguras (390/701/900/1050/1051/1200/1366) × 2 browsers × 2 temas × 2 estados de detalhe. Exigência de identidade da navegação moderna, sem confundir diferença de raster (se surgir) com regressão automática. O estado da branch histórica segue HOLD até relatório detalhado e gates no destino.
+
+## Primeiro gate de matriz: sincronização da pintura e limites
+
+- [Run #40726174428](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40726174428) estático PASS e matriz maior falhou **antes do término** no caso Chromium 1051px, light, detalhe aberto. `navContentWidth=566`, mas `font-size=0px` nos rótulos; o script lia `getComputedStyle` **antes** de `.screenshot()`. A implementação histórica de teste já observava que Playwright pode liberar invalidação de container query pendente durante a screenshot.
+- Corrigido o protocolo: esperar estabilização curta, capturar a navegação e **só depois** medir o estilo e fazer a asserção de container proprietário. Não foi alterado CSS, renderizador, router ou lógica de negócio. Se o erro persistir depois da captura, manter HOLD com resultado empírico de possível bug.

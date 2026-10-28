@@ -35,6 +35,10 @@ async function inspect(driver,css,width,mode,theme,detail) {
   }
   if(!wide)await page.evaluate(w=>{document.querySelector(".controls").style.width=w+"px"},width);
   await page.evaluate(()=>new Promise(done=>requestAnimationFrame(()=>requestAnimationFrame(done))));
+  // Screenshot flushes pending container-query/layout updates before reading
+  // computed text metrics; historical nav-differential gate used the same order.
+  await page.waitForTimeout(160);
+  const shot=await page.locator(".flow-nav").screenshot({animations:"disabled",timeout:10000});
   const data=await page.evaluate(()=>{
     const nav=document.querySelector(".flow-nav"),controls=document.querySelector(".controls");
     const labels=[...nav.querySelectorAll(".flow-step__label")];
@@ -55,7 +59,6 @@ async function inspect(driver,css,width,mode,theme,detail) {
       compactLabel:labels.length>0&&labels.every(x=>Number.parseFloat(getComputedStyle(x).fontSize)===0)
     };
   });
-  const shot=await page.locator(".flow-nav").screenshot({animations:"disabled",timeout:10000});
   data.navRasterSha256=captureSha(shot);
   data.cssRouteFulfilled=switched;
   assert.ok(switched>0,"Stylesheet injection must have occurred: "+mode+"/"+width);
