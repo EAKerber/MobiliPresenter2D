@@ -1,0 +1,28 @@
+name: Development CI V5 local diagnostic provenance (offline only)
+on:
+  push:
+    branches:
+      - development
+      - integration/31-ci-v5local-provenance-20261028
+    paths:
+      - 'docs/work/DEVELOPMENT_CI_V5_LOCAL_DIAGNOSTICS_2026-10-28.md'
+      - 'tests/test_development_ci_v5_local_provenance.py'
+      - '.github/workflows/development-ci-v5local-provenance.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  provenance-only:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Verify preserved legacy source against current main (no legacy execution)
+        run: python3 -m unittest discover -s tests -p test_development_ci_v5_local_provenance.py -v
+      - name: Parse modern offline navigation and fixture scripts
+        run: |
+          node --check tests/ci/nav-flow-responsive-crossbrowser.cjs
+          node --check tests/ci/config-unlocked-local-diagnostic.mjs
+          node --check tests/ci/local-buyer-config-server.mjs
