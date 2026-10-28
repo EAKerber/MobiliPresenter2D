@@ -13,8 +13,12 @@ async function captureRegion(page,locator){
  await page.waitForTimeout(40);
  const box=await locator.boundingBox();
  assert.ok(box,"screenshot target must have a visible bounding box");
+ // boundingBox() uses viewport coordinates, screenshot clip uses page
+ // coordinates; add scroll offsets after scrolling the region into view.
+ const scroll=await page.evaluate(()=>({x:scrollX,y:scrollY}));
  return page.screenshot({clip:{
-   x:Math.floor(box.x),y:Math.floor(box.y),
+   x:Math.max(0,Math.floor(box.x+scroll.x)),
+   y:Math.max(0,Math.floor(box.y+scroll.y)),
    width:Math.ceil(box.width),height:Math.ceil(box.height)
  },animations:"disabled"});
 }
@@ -39,7 +43,9 @@ async function inspect(browser,origin,width,theme,verifyChanges){
      const nodes=[el,...el.querySelectorAll("details")];
      return nodes.map(node=>{
        const rect=node.getBoundingClientRect(),css=getComputedStyle(node);
-       return {x:Math.round(rect.x*100)/100,y:Math.round(rect.y*100)/100,width:Math.round(rect.width*100)/100,height:Math.round(rect.height*100)/100,
+       // Absolute x/y depend on independent content above this component.
+       // Only compare scoped width, height and computed style across snapshots.
+       return {width:Math.round(rect.width*100)/100,height:Math.round(rect.height*100)/100,
          display:css.display,color:css.color,background:css.backgroundColor,
          fontSize:css.fontSize,lineHeight:css.lineHeight,overflow:css.overflow};
      });
