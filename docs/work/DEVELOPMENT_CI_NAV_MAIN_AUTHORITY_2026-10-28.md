@@ -1,0 +1,15 @@
+# Família CI-NAV: branch de diagnóstico 23/10 vs autoridade da main (28/10/2026)
+
+Fonte **`ci/ci-baseline-01-nav-sequence-probe-20261023@b9be8bfdac1063094446b2f78f3c59387b47b7c5`**, sem PR aberta. A `main@221b54b2a41ecc8c338d1bf2cf67280cf165ce95` continua referência estável. A `development` conserva uma evolução posterior de testes de navegador (sem mudança de runtime neste bloco).
+
+## Comparação funcional
+
+O teste histórico `tests/ci/nav-flow-profile-crossbrowser.mjs` validava 7 larguras (390,701,900,1050,1051,1200,1366), dois motores (Chromium/WebKit), dois temas, com **28 cenários** e a suposição rígida de **quatro etapas**. O teste atual `tests/ci/nav-flow-responsive-crossbrowser.cjs` da development verifica **8 larguras**, incluindo 700px, portanto 32 cenários, a estrutura publicada de etapas derivada do V5, ordem exata da navegação, geometria positiva, ausência de overflow, mudança de etapa, navegação por teclado e transição contínua 1050/1051 no mesmo contexto. O teste não abre a API de admin nem assume número fixo de etapas.
+
+## Proveniência preservada
+
+Sete arquivos originais pinados por blob SHA em `docs/reconciliation/ci-nav-legacy/source/`, incluindo os quatro diagnósticos únicos: (1) matriz causal de CSS e container query, (2) pixel/geometry differential CSS, (3) sequência visual local de navegação, (4) execução desbloqueada local. São ferramentas **experimentais de investigação**; sua presença histórica não exige substituir a regra visual ou a implementação homologada da main. Para recuperar todos os commits, assets e outros arquivos históricos além desses sete, criar **antes de retirar** `archive/m2d/legacy-ci-nav-causality-b9be8bfd` apontando para `b9be8bfdac1063094446b2f78f3c59387b47b7c5`.
+
+## Gates e limites
+
+Conferir blobs contra a fonte Git integral, `main` vs `development` com hashes distintos explicitados e superset de larguras. Executar **32 cenários reais locais** Chromium/WebKit com payload comprador V5 validado e `pages:check`; isso **não comprova** identidade Netlify, conta/DB, data real ou equivalência pixel da antiga ferramenta de CSS. Se o gate passar, classificar como candidata a aposentadoria com tag íntegra e executor limitado; nenhuma PR, main, DS02, preview, banco ou deploy será alterado. Outras branches de CI (auth, fixture, DB, diagnóstico) permanecem HOLD até prova própria.

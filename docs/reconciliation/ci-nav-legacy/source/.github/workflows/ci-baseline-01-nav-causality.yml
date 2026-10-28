@@ -1,0 +1,43 @@
+name: CI-BASELINE-01 local nav container causality (no secrets)
+on:
+  push:
+    branches:
+      - ci/ci-baseline-01-nav-sequence-probe-20261023
+    paths:
+      - "tests/ci/v5-container-causality.mjs"
+      - "tests/ci/nav-flow-profile-crossbrowser.mjs"
+      - "app/styles.css"
+      - ".github/workflows/ci-baseline-01-nav-causality.yml"
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  geometry:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    container:
+      image: mcr.microsoft.com/playwright:v1.56.0-noble
+      options: --ipc=host
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Install only test and build requirements
+        run: |
+          npm install --prefix /tmp/m2d-nav-causal --no-audit --no-fund playwright@1.56.0 esbuild@0.28.2 @netlify/identity@2.0.0
+          ln -s /tmp/m2d-nav-causal/node_modules ./node_modules
+      - name: Prepare built Vanilla pages
+        run: |
+          npm run build
+          npm run pages:check
+      - name: Serve local validated V5 projection
+        run: |
+          node tests/ci/local-buyer-config-server.mjs > /tmp/ci-nav-server.log 2>&1 &
+          sleep 2
+          curl --fail --silent http://127.0.0.1:8123/config/ --output /dev/null
+          curl --fail --silent http://127.0.0.1:8123/api/buyer-configuration --output /dev/null
+      - name: Compare fresh browser layouts and reversible CSS interventions
+        run: node tests/ci/v5-container-causality.mjs
+      - name: Validate actual stage interactions in Chromium and WebKit
+        run: node tests/ci/nav-flow-profile-crossbrowser.mjs

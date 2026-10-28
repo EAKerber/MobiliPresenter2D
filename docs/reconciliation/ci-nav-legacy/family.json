@@ -1,0 +1,89 @@
+{
+  "schema": "M2DLegacyCINavMainAuthority/0.1",
+  "repository": "EAKerber/MobiliPresenter2D",
+  "mainSha": "221b54b2a41ecc8c338d1bf2cf67280cf165ce95",
+  "developmentBaseline": "d3b6131bbeb7657d7f4dbca189b9751e9c9d5b72",
+  "source": {
+    "branch": "ci/ci-baseline-01-nav-sequence-probe-20261023",
+    "sha": "b9be8bfdac1063094446b2f78f3c59387b47b7c5",
+    "date": "2026-10-23",
+    "tag": "archive/m2d/legacy-ci-nav-causality-b9be8bfd",
+    "classification": "retire-candidate-after-gate"
+  },
+  "artifacts": [
+    {
+      "path": "tests/ci/nav-flow-profile-crossbrowser.mjs",
+      "blob": "80f1bed91fdde4491b51268b76a1ec89a3058c91",
+      "archive": "docs/reconciliation/ci-nav-legacy/source/tests/ci/nav-flow-profile-crossbrowser.mjs"
+    },
+    {
+      "path": "tests/ci/nav-css-visual-differential.mjs",
+      "blob": "1b436bf6dfa5482190c570d1689a2af84ff580a1",
+      "archive": "docs/reconciliation/ci-nav-legacy/source/tests/ci/nav-css-visual-differential.mjs"
+    },
+    {
+      "path": "tests/ci/v5-container-causality.mjs",
+      "blob": "69251cf3596255852b35c6bee25d3c4865eb90d8",
+      "archive": "docs/reconciliation/ci-nav-legacy/source/tests/ci/v5-container-causality.mjs"
+    },
+    {
+      "path": "tests/ci/v5-local-navigation-probe.mjs",
+      "blob": "3ee06b4a7a0c137b2ca5eaebad525e5d9eaa5109",
+      "archive": "docs/reconciliation/ci-nav-legacy/source/tests/ci/v5-local-navigation-probe.mjs"
+    },
+    {
+      "path": "tests/ci/config-unlocked-local-diagnostic.mjs",
+      "blob": "5fa4b679678009867f491ee9c3d632d58cb44e78",
+      "archive": "docs/reconciliation/ci-nav-legacy/source/tests/ci/config-unlocked-local-diagnostic.mjs"
+    },
+    {
+      "path": ".github/workflows/ci-baseline-01-nav-causality.yml",
+      "blob": "0ed7a889a3a1267d1bb25705cec65e1f04fda2c5",
+      "archive": "docs/reconciliation/ci-nav-legacy/source/.github/workflows/ci-baseline-01-nav-causality.yml"
+    },
+    {
+      "path": ".github/workflows/ci-baseline-01-nav-visual.yml",
+      "blob": "1f6dcdd65213236effdeadced7759dfdb2d08f53",
+      "archive": "docs/reconciliation/ci-nav-legacy/source/.github/workflows/ci-baseline-01-nav-visual.yml"
+    }
+  ],
+  "modern": {
+    "path": "tests/ci/nav-flow-responsive-crossbrowser.cjs",
+    "developmentBlob": "8a4e200863f5d631c0799ba1501021451f07e00d",
+    "mainBlob": "84434cdde4576076ac2eadbecd064be543810dec",
+    "oldCrossBrowserWidthSet": [
+      390,
+      701,
+      900,
+      1050,
+      1051,
+      1200,
+      1366
+    ],
+    "currentWidthSet": [
+      390,
+      700,
+      701,
+      900,
+      1050,
+      1051,
+      1200,
+      1366
+    ],
+    "engines": [
+      "chromium",
+      "webkit"
+    ],
+    "themes": [
+      "light",
+      "dark"
+    ],
+    "modernScenarios": 32,
+    "replacement": "data-driven published V5 navigation, dynamic stage IDs, no fixed four-stage assumption, explicit 1050/1051 same-page transitions",
+    "archivalOnly": [
+      "legacy CSS baseline-vs-candidate pixel snapshots",
+      "CSS causality interventions and navigation diagnostics (experimental; not production invariants)"
+    ],
+    "scope": "browser test vs isolated validated V5 localhost; no Netlify authenticated session or actual DB"
+  }
+}

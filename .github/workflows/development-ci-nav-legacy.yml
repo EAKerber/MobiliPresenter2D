@@ -1,0 +1,52 @@
+name: Development historic CI nav vs current V5 browser parity (localhost)
+on:
+  push:
+    branches:
+      - development
+      - integration/28-ci-nav-provenance-20261028
+    paths:
+      - 'docs/reconciliation/ci-nav-legacy/**'
+      - 'tests/test_development_ci_nav_legacy.py'
+      - 'docs/work/DEVELOPMENT_CI_NAV_MAIN_AUTHORITY_2026-10-28.md'
+      - '.github/workflows/development-ci-nav-legacy.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  pinned-archive-and-contract:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: python3 -m unittest discover -s tests -p test_development_ci_nav_legacy.py -v
+      - run: |
+          node --check tests/ci/nav-flow-responsive-crossbrowser.cjs
+          node app/tools/test-flow-layout.js
+          node app/tools/test-flow-model.js
+          npm run pages:check
+  browser-v5-navigation:
+    needs: pinned-archive-and-contract
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    container:
+      image: mcr.microsoft.com/playwright:v1.62.1-noble
+      options: --ipc=host
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validated V5 buyer localhost only
+        shell: bash
+        run: bash tests/ci/prepare-local-v5-browser.sh FLOW_LAYOUT_URL
+      - name: Match Chromium and WebKit baked-in browser versions
+        run: npm install --prefix /tmp/m2d-nav-legacy-tools --no-audit --no-fund playwright@1.62.1
+      - name: Run all 32 published V5 nav scenarios (2 browsers x 8 widths x 2 themes)
+        env:
+          NODE_PATH: /tmp/m2d-nav-legacy-tools/node_modules
+        run: node tests/ci/nav-flow-responsive-crossbrowser.cjs

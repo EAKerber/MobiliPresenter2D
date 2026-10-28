@@ -1,0 +1,47 @@
+name: CI-BASELINE-01 nav static visual differential (no preview)
+on:
+  push:
+    branches:
+      - ci/ci-baseline-01-nav-sequence-probe-20261023
+    paths:
+      - "tests/ci/nav-css-visual-differential.mjs"
+      - ".github/workflows/ci-baseline-01-nav-visual.yml"
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  nav-visual:
+    runs-on: ubuntu-latest
+    timeout-minutes: 16
+    container:
+      image: mcr.microsoft.com/playwright:v1.56.0-noble
+      options: --ipc=host
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Fetch immutable baseline CSS from main
+        run: |
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
+          git fetch --no-tags --depth=1 origin main:refs/remotes/origin/main
+      - name: Install local-only browser requirements
+        run: |
+          npm install --prefix /tmp/m2d-visual --no-audit --no-fund playwright@1.56.0 esbuild@0.28.2 @netlify/identity@2.0.0
+          ln -s /tmp/m2d-visual/node_modules ./node_modules
+      - name: Build and serve local synthetic validated V5
+        run: |
+          npm run build
+          node tests/ci/local-buyer-config-server.mjs > /tmp/ci-visual-server.log 2>&1 &
+          sleep 2
+          curl --fail --silent http://127.0.0.1:8123/api/buyer-configuration --output /dev/null
+      - name: Compare baseline and candidate nav CSS in Chromium and WebKit
+        run: node tests/ci/nav-css-visual-differential.mjs
+      - name: Upload sanitized hashes and geometry only
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ci-nav-visual-differential-no-screenshots
+          path: artifacts/ci-baseline-01/nav-visual-differential.json
+          retention-days: 7
+          if-no-files-found: ignore
