@@ -197,7 +197,7 @@ class PublicPRs(unittest.TestCase):
                           "seed-public-preview-v5.cjs","CI_STAGING_DATABASE_URL"):
             self.assertNotIn(forbidden,workflow)
         doc=Path("docs/work/DEVELOPMENT_CP_PUBLIC_PRS_175_180_2026-10-28.md").read_text()
-        for expected in ("#175","#178","#179","#180","HOLD","archive",
+        for expected in ("#175","#178","#179","#180","HOLD","proveniência",
                          "c81d357df3aa78c3e8f804b6334b2da35b3a75c8"):
             self.assertIn(expected,doc)
 
