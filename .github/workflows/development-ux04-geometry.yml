@@ -1,0 +1,61 @@
+name: Development UX04 obsolete geometry and keyboard-focus diagnostic (V5 only)
+on:
+  push:
+    branches:
+      - development
+      - integration/27-ux04-responsive-focus-gate-20261028
+    paths:
+      - 'docs/reconciliation/ux04-main-authority/**'
+      - 'tests/test_development_ux04_authority.py'
+      - 'tests/ci/ux04-geometry-focus-v5.cjs'
+      - 'docs/work/DEVELOPMENT_UX04_GEOMETRY_FOCUS_2026-10-28.md'
+      - '.github/workflows/development-ux04-geometry.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  exact-archive-and-static-intent:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: python3 -m unittest discover -s tests -p test_development_ux04_authority.py -v
+      - run: |
+          node app/tools/test-flow-layout.js
+          node app/tools/test-flow-model.js
+          node app/tools/test-hierarchy-administration.js
+          node --check tests/ci/ux04-geometry-focus-v5.cjs
+          npm run pages:check
+  live-local-browser:
+    needs: exact-archive-and-static-intent
+    runs-on: ubuntu-latest
+    timeout-minutes: 24
+    container:
+      image: mcr.microsoft.com/playwright:v1.62.1-noble
+      options: --ipc=host
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Build validated buyer V5, local isolated server
+        shell: bash
+        run: bash tests/ci/prepare-local-v5-browser.sh FLOW_LAYOUT_URL
+      - name: Use matching Chromium package
+        run: npm install --prefix /tmp/m2d-ux04-tools --no-audit --no-fund playwright@1.62.1
+      - name: Verify responsive geometry and historical keyboard-focus obligation
+        env:
+          NODE_PATH: /tmp/m2d-ux04-tools/node_modules
+        run: node tests/ci/ux04-geometry-focus-v5.cjs /tmp/m2d-ux04-proof
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: development-ux04-geometry-focus-${{ github.run_id }}
+          path: /tmp/m2d-ux04-proof/result.json
+          if-no-files-found: ignore
+          retention-days: 14

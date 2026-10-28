@@ -1,0 +1,142 @@
+{
+  "schema": "M2DUX04MainAuthority/0.1",
+  "repository": "EAKerber/MobiliPresenter2D",
+  "mainSha": "221b54b2a41ecc8c338d1bf2cf67280cf165ce95",
+  "developmentBaseline": "57c84260057dc3bfc03f86431387b8f9ac31fc7a",
+  "source": {
+    "branch": "feat/cp-ux-04-hierarchy-layout",
+    "sha": "5d8347edb6ea247307b6fc27b424117553542f78",
+    "date": "2026-10-06",
+    "archiveTag": "archive/m2d/legacy-ux04-hierarchy-layout-5d8347ed"
+  },
+  "historicalBlobs": [
+    {
+      "path": "app/styles.css",
+      "blob": "2229bc0b4471fa81f071d9752446dcb9b3a7b020",
+      "archive": "docs/reconciliation/ux04-main-authority/legacy/app/styles.css"
+    },
+    {
+      "path": "app/app.js",
+      "blob": "8339217f2780d75fb05712c2059078fa62b03dfd",
+      "archive": "docs/reconciliation/ux04-main-authority/legacy/app/app.js"
+    },
+    {
+      "path": "app/core/flow-model.js",
+      "blob": "6d4b4e7da349089d0dbd4cfc0dc96bbdeeb909ce",
+      "archive": "docs/reconciliation/ux04-main-authority/legacy/app/core/flow-model.js"
+    },
+    {
+      "path": "app/index.html",
+      "blob": "dabc7e5b38903fb54d73fc124b4a59ce50ddd4d3",
+      "archive": "docs/reconciliation/ux04-main-authority/legacy/app/index.html"
+    },
+    {
+      "path": "app/admin/admin.css",
+      "blob": "98abb4350ba05a4eacbb0834e830a94b1b00404f",
+      "archive": "docs/reconciliation/ux04-main-authority/legacy/app/admin/admin.css"
+    },
+    {
+      "path": "app/admin/admin.js",
+      "blob": "1b573baee1dacfe903a9da7ba50c0edfb941a935",
+      "archive": "docs/reconciliation/ux04-main-authority/legacy/app/admin/admin.js"
+    },
+    {
+      "path": "app/core/flow-layout.js",
+      "blob": "7ed658c6ded1330e4d17c4fe955cde78415dc41e",
+      "archive": "docs/reconciliation/ux04-main-authority/legacy/app/core/flow-layout.js"
+    },
+    {
+      "path": "app/core/keyboard-shortcuts.js",
+      "blob": "62c78300aaf1f96c44c0137a2a19be0b3fb62edc",
+      "archive": "docs/reconciliation/ux04-main-authority/legacy/app/core/keyboard-shortcuts.js"
+    },
+    {
+      "path": "app/data/hierarchy-defaults.js",
+      "blob": "86c183ac35f3bb1318b3bf797290daba5bbd65f3",
+      "archive": "docs/reconciliation/ux04-main-authority/legacy/app/data/hierarchy-defaults.js"
+    },
+    {
+      "path": "tests/flow-layout-browser.cjs",
+      "blob": "14bc9e098a07593ecf1ded8d7d442962081a6981",
+      "archive": "docs/reconciliation/ux04-main-authority/legacy/tests/flow-layout-browser.cjs"
+    },
+    {
+      "path": "tests/keyboard-browser.cjs",
+      "blob": "e67c00434bbcd3cdaaa9cab30e7aad29ca48aa1f",
+      "archive": "docs/reconciliation/ux04-main-authority/legacy/tests/keyboard-browser.cjs"
+    },
+    {
+      "path": "app/tools/test-flow-layout.js",
+      "blob": "e5bcc72cf4b324a055b01ba426bb055ee24b80cb",
+      "archive": "docs/reconciliation/ux04-main-authority/legacy/app/tools/test-flow-layout.js"
+    },
+    {
+      "path": "docs/backlog/ux-navigation-hierarchy-roadmap-2026-10-05.md",
+      "blob": "1b0d529ff6b60af82c19397c315651efff746496",
+      "archive": "docs/reconciliation/ux04-main-authority/legacy/docs/backlog/ux-navigation-hierarchy-roadmap-2026-10-05.md"
+    }
+  ],
+  "current": [
+    {
+      "path": "app/styles.css",
+      "mainSha": "d43e6fb5e66133d2389b5c39b165b76b13cfa868",
+      "developmentSha": "d43e6fb5e66133d2389b5c39b165b76b13cfa868"
+    },
+    {
+      "path": "app/core/flow-layout.js",
+      "mainSha": "48d0b255a9d47f32815a54eeb5d51fea6891b23e",
+      "developmentSha": "48d0b255a9d47f32815a54eeb5d51fea6891b23e"
+    },
+    {
+      "path": "app/core/layout-profiles.js",
+      "mainSha": "9f12bf877e234a48de23723074730f5058c2bacc",
+      "developmentSha": "9f12bf877e234a48de23723074730f5058c2bacc"
+    },
+    {
+      "path": "tests/flow-layout-browser.cjs",
+      "mainSha": "840f600bbb79534bf2ddeefc882d3ea060841042",
+      "developmentSha": "840f600bbb79534bf2ddeefc882d3ea060841042"
+    },
+    {
+      "path": "tests/keyboard-browser.cjs",
+      "mainSha": "2d3eb81fd6a7e21b5bbb3bb87c35fa3d63815fbe",
+      "developmentSha": "2d3eb81fd6a7e21b5bbb3bb87c35fa3d63815fbe"
+    },
+    {
+      "path": "app/tools/test-flow-layout.js",
+      "mainSha": "b11b83420b783347e89d8ba41329039c9cc4f6e5",
+      "developmentSha": "b11b83420b783347e89d8ba41329039c9cc4f6e5"
+    },
+    {
+      "path": "app/core/keyboard-shortcuts.js",
+      "mainSha": "c87577e9f577d6ae757248830d1cb4659fec12c3",
+      "developmentSha": "c87577e9f577d6ae757248830d1cb4659fec12c3"
+    },
+    {
+      "path": "app/data/presentation-policy-defaults.js",
+      "mainSha": "e7d9643f00212b257eedbc6fb046ea2804462446",
+      "developmentSha": "e7d9643f00212b257eedbc6fb046ea2804462446"
+    }
+  ],
+  "browserAssertionCounts": {
+    "historicalFlow": 29,
+    "currentFlow": 216,
+    "missingLiteral": 6,
+    "historicalKeyboard": 74,
+    "currentKeyboard": 100,
+    "keyboardPreservedLiteral": 71,
+    "keyboardMissingLiteral": 3
+  },
+  "semanticDecision": {
+    "mainProfiles": [
+      "side-rail:1366",
+      "stacked:1050",
+      "compact:390"
+    ],
+    "mainIntent": "side-rail narrow controls = one internal Modules/Services column; stacked = two; compact = replace list with detail",
+    "oldIntent": "desktop Modules/Services two columns; mobile detail then list stacked",
+    "keyboardChange": "two final-section assertions upgraded to dock-aware alignment; redraw focus assertion removed and requires dedicated real browser result",
+    "mode": "GATED_HOLD_UNTIL_FOCUS_PROVED",
+    "noRuntimeChange": true
+  }
+}
