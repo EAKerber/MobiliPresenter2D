@@ -1480,7 +1480,70 @@
         "unmergedVisualPR": 34
       },
       "noDeploy": true
+    },
+    {
+      "batchId": "dev-20261028-ci-auth-base-archive-aa",
+      "workflowRun": 40742783896,
+      "workflowUrl": "https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40742783896",
+      "headSha": "7327fea3968bf69823cff94edbabc4828d78fe28",
+      "audit": "PASS",
+      "apply": "PASS",
+      "refsBefore": 33,
+      "refsAfter": 31,
+      "auditArtifactId": 12839958291,
+      "applyArtifactId": 12838794227,
+      "archived": [
+        {
+          "tag": "archive/m2d/ci-auth-base-pr238-fd61a37a",
+          "sha": "fd61a37a11dd63b3e537d3d76a2303bfdfc4f06a"
+        }
+      ],
+      "retired": [
+        {
+          "branch": "ci-auth-base-20261025",
+          "sha": "fd61a37a11dd63b3e537d3d76a2303bfdfc4f06a",
+          "kind": "archive-diverged",
+          "archiveTag": "archive/m2d/ci-auth-base-pr238-fd61a37a"
+        }
+      ],
+      "auxiliaryRetired": [
+        {
+          "branch": "integration/33-ci-auth-pr238-lineage-20261028",
+          "sha": "555ba8a67a643b876dcb5f8a9130ed1f787810dc",
+          "kind": "auxiliary-ancestor-development",
+          "recoverableFromDevelopment": true
+        }
+      ],
+      "semanticProof": {
+        "mainSha": "221b54b2a41ecc8c338d1bf2cf67280cf165ce95",
+        "pr238Head": "3ccce161235df925c5b708bf6feefbe6f4b10103",
+        "sourceAncestorOfPR238": true,
+        "commitsFromSourceToPRHead": 22,
+        "sourceNotIntegratedIntoMain": true,
+        "archiveOriginalEntireDAG": true,
+        "exactGitTagVerified": true,
+        "authOriginalsRemainingHeld": true,
+        "source": "docs/work/DEVELOPMENT_CI_AUTH_LINEAGE_PR238_2026-10-28.md",
+        "auxiliaryGate": 40742256134,
+        "developmentGate": 40742370534,
+        "firstRejectedManifest": 40742639709,
+        "firstManifestOutcome": "AUDIT_FAIL_NO_APPLY_INCOMPLETE_AUX_SHA",
+        "retestGate": 40742783896,
+        "noLiveAuthenticatedPreviewTest": true,
+        "noFixturePrivilegeChange": true,
+        "noRuntimeChanges": true,
+        "noDeploy": true
+      },
+      "preserved": {
+        "mainSha": "221b54b2a41ecc8c338d1bf2cf67280cf165ce95",
+        "openPRs": 12,
+        "remainingOriginalHistoricalRefs": 29,
+        "originalAssetsBranch": "artifacts/ds02-imagens-originais-20261015",
+        "unmergedVisualPR": 34,
+        "unmergedAuthPR": 238
+      },
+      "noDeploy": true
     }
   ],
-  "nextBatchContract": "26 waves; 30/60 historical original branches retired; 23 temporary auxiliary branches retired; 30 historical + main + development = 32 heads. Batch Z consumed, never replay. Local V3 direct vs pre-upgraded V5 Buyer DTO semantically equivalent modulo explicit services order and legacy presentation->V5 component; local Chromium/WebKit hit targets PASS 8 cases/20 snapshots at 1050/1366. CI #40739854622 and development #40740278746 PASS; retirement #40740686487 audit/apply PASS. CI original 5ce7327 remains HOLD due live-auth preview/grant pathways. Main, DS02, 12 PRs unchanged; no runtime, DB, deployment."
+  "nextBatchContract": "27 waves; 31/60 original historical branches retired, 24 temporary auxiliary branches retired; 29 original historical + main + development = 31 remote heads. Batch AA consumed, never replay. ci-auth-base-20261025 archived full original DAG archive/m2d/ci-auth-base-pr238-fd61a37a pointing to exact fd61a37; source ancestor of still-open PR #238 (22 later commits). First malformed SHA audit failed closed without apply, corrected AA #40742783896 AUDIT+APPLY PASS and remote tag/readback confirmed. PR238 head 3ccce161 still requires exact preview identity/revocation/privilege gates, not merged. No main/DS02/DB/runtime/deploy changes."
 }
