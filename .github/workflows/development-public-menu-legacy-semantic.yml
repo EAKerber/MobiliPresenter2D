@@ -1,0 +1,72 @@
+name: Development 14 — prior public-menu implementations semantic reconciliation
+
+on:
+  push:
+    branches:
+      - integration/14-public-menu-controller-reconcile-20261027
+      - development
+    paths:
+      - 'tools/development_public_menu_semantic_audit.py'
+      - '.github/workflows/development-public-menu-legacy-semantic.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  public-menu-contract:
+    runs-on: ubuntu-latest
+    timeout-minutes: 22
+    container:
+      image: mcr.microsoft.com/playwright:v1.62.1-noble
+      options: --ipc=host
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Pin both source histories and verify current controller authority
+        shell: bash
+        run: |
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
+          git fetch --no-tags origin main
+          git fetch --no-tags origin fdeb931af285f6cf76795ccdd50a8b75d0f25aef
+          git fetch --no-tags origin 4ba9384733a8cb46ad8a6c7c8ef3b9aebe25cd93
+          mkdir -p artifacts/development-public-menu-reconciliation
+          python3 -m py_compile tools/development_public_menu_semantic_audit.py
+          python3 tools/development_public_menu_semantic_audit.py | tee artifacts/development-public-menu-reconciliation/static.json
+      - name: Validate current authored pages, menu JS and source-only contracts
+        run: |
+          node --check app/landing/header-menu.js
+          node --check tests/ci/public-navigation-semantic-browser.mjs
+          node --test tests/arc03c-source-authority.test.mjs
+          npm run pages:check
+          node tests/public-cutover-contract.cjs
+      - name: Use exact preinstalled Chromium and WebKit revision
+        run: |
+          npm install --prefix /tmp/m2d-publicmenu-tools --no-audit --no-fund playwright@1.62.1
+          node -e 'if(require("/tmp/m2d-publicmenu-tools/node_modules/playwright/package.json").version!=="1.62.1")process.exit(1)'
+      - name: Run only loopback static public app
+        shell: bash
+        run: |
+          python3 -m http.server 8123 --bind 127.0.0.1 --directory app >/tmp/menu-public-http.log 2>&1 &
+          for i in $(seq 1 30); do
+            if curl -fsS http://127.0.0.1:8123/ >/dev/null; then break; fi
+            sleep 1
+          done
+          curl -fsS http://127.0.0.1:8123/about/ >/dev/null
+          curl -fsS http://127.0.0.1:8123/how-it-works/ >/dev/null
+          curl -fsS http://127.0.0.1:8123/viewer/ >/dev/null
+      - name: Verify latest shared controller semantics in 48 Chromium/WebKit scenarios
+        env:
+          NODE_PATH: /tmp/m2d-publicmenu-tools/node_modules
+        run: node tests/ci/public-navigation-semantic-browser.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: public-menu-legacy-semantic-${{ github.run_id }}
+          path: artifacts/development-public-menu-reconciliation/
+          retention-days: 30
+          if-no-files-found: warn
