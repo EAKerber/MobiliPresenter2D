@@ -36,3 +36,9 @@ Os scripts antigos de contraste, diferencial v0.1/v0.2 e raster (incluindo estab
 ## Gate de integração na auxiliar
 
 [Workflow #40751124977](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40751124977) **PASS** em `58397b6c00d9b5d804dfe98b5fb4ccf89d358d29`: seis testes Python de revisão da DAG, mapeamento 8⊂10, manifestação/autoria ARC-03C e preservação de headings, IDs, imagens e controles comerciais, escopo do diff sem auth/DB; `ARC03C_PAGE_GATE_PASS` para 3 páginas e `VIS002C_PRODUCT_PIN_V03_PASS contexts=10 dark-theme-preserved` (Node oficial). Este é um **gate offline de reconciliação**, não validação em Netlify nem equivalência de raster entre versões. O workflow na auxiliar foi posteriormente limitado a trigger de development; os commits de configuração devem ser integrados por FF SHA-exato, revalidados no destino e só então permitem o lote AC.
+
+## Verificação no destino
+
+Após fast-forward SHA-exato `integration/35-vis002c-arc03c-triad-20261028@9d454f91975d75e8d776cffd2c4492c447c9be1d` desde `development@b0d6f676f0cc0189b4a0430922ec00c5bda4f7c6`, o [gate no destino #40751285149](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40751285149) concluiu **PASS** nos seis testes Python e nos verificadores oficiais de ARC-03C e VIS-002C v0.3. Diff da auxiliar: apenas três arquivos `docs/work/`, `tests/`, `.github/workflows/`; nenhum `app/`, `architecture/`, `design-system/`, `netlify/` ou `scripts/` alterado. A main segue autoridade forte e a PR #231 segue aberta com seu próprio head.
+
+**Higiene AC elegível**, ainda condicional à auditoria do executor: criar tags que preservem as três DAGs integrais antes de remover qualquer uma das referências; quarta target é apenas a auxiliar ancestral. Nenhuma migração silenciosa de V0.2; código de produto fica na v0.3. Esta validação não informa qualquer deploy ou smoke de browser real.
