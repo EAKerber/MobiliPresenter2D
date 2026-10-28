@@ -413,7 +413,64 @@
         "unmergedVisualPR": 34
       },
       "noDeploy": true
+    },
+    {
+      "batchId": "dev-20261027-arc03-prototype-semantic-i",
+      "workflowRun": 40617212656,
+      "workflowUrl": "https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40617212656",
+      "headSha": "8f2901df7a4de63a576f4ad23fdff0cf8df14c67",
+      "auditArtifactId": 12786150804,
+      "applyArtifactId": 12786021132,
+      "audit": "PASS",
+      "apply": "PASS",
+      "refsBefore": 51,
+      "refsAfter": 49,
+      "archived": [
+        {
+          "tag": "archive/m2d/arc03-prototype-e459b9bd",
+          "sha": "e459b9bd85c4e9c8bb96813ae6758789de75dc13"
+        }
+      ],
+      "retired": [
+        {
+          "branch": "architecture/arc03-primary-header-fragment-prototype-20261022",
+          "sha": "e459b9bd85c4e9c8bb96813ae6758789de75dc13",
+          "kind": "archive-diverged",
+          "archiveTag": "archive/m2d/arc03-prototype-e459b9bd"
+        }
+      ],
+      "auxiliaryRetired": [
+        {
+          "branch": "integration/15-arc03-prototype-reconcile-20261027",
+          "sha": "6a2e32747f91ba2cf1d819f6df741cd95622fc17",
+          "kind": "auxiliary-ancestor-development",
+          "recoverableFromDevelopment": true
+        }
+      ],
+      "semanticProof": {
+        "workflowRun": 40617029330,
+        "workflowSha": "6a2e32747f91ba2cf1d819f6df741cd95622fc17",
+        "auxGate": 40616793829,
+        "historicalContributedPaths": 12,
+        "identicalFragmentBlob": "25712fa6f2423372f076d041f9a7253ced088040",
+        "laterAuthoritativeCompiler": "scripts/compile-primary-pages.mjs",
+        "newIsolatedNegativeFixtureTests": 5,
+        "localBrowserScenarios": 48,
+        "engines": [
+          "chromium",
+          "webkit"
+        ],
+        "noRuntimeChanges": true
+      },
+      "preserved": {
+        "openPRs": 12,
+        "remainingOriginalHistoricalRefs": 47,
+        "mainSha": "221b54b2a41ecc8c338d1bf2cf67280cf165ce95",
+        "originalAssetsBranch": "artifacts/ds02-imagens-originais-20261015",
+        "unmergedVisualPR": 34
+      },
+      "noDeploy": true
     }
   ],
-  "nextBatchContract": "Next wave must carry ALL TWELVE original historical waves[].retired records, excluding five auxiliaryRetired refs already reachable from development. 48 historic originals + main + development remain. ARC03 primary header fragment prototype remains HOLD pending separate compile/build-time parity evidence. Batch H consumed; no refs from this batch may be retired a second time."
+  "nextBatchContract": "Next wave must include all thirteen original historical waves[].retired references, excluding six auxiliaryRetired (all reachable from development). 47 original historical refs + main + development = 49 branches after wave I. Do not use consumed manifest wave I. The entire three-source navigation cluster is reconciled and archived with provenance. Continue non-navigation clusters by latest declared intent, test gates and open PR protection."
 }
