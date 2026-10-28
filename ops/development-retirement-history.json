@@ -874,7 +874,58 @@
         "unmergedVisualPR": 34
       },
       "noDeploy": true
+    },
+    {
+      "batchId": "dev-20261028-cp-public-dto-parity-aux-only-q",
+      "workflowRun": 40687041489,
+      "workflowUrl": "https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40687041489",
+      "headSha": "e394e0922b0fd5b4f009d2136793f63a7eeff069",
+      "auditArtifactId": 12815507000,
+      "applyArtifactId": 12816105320,
+      "audit": "PASS",
+      "apply": "PASS",
+      "refsBefore": 41,
+      "refsAfter": 40,
+      "archived": [],
+      "retired": [],
+      "auxiliaryRetired": [
+        {
+          "branch": "integration/23-cp-public-dto-parity-20261028",
+          "sha": "dd56360f1726753b133c26917378f69005a962b5",
+          "kind": "auxiliary-ancestor-development",
+          "recoverableFromDevelopment": true
+        }
+      ],
+      "semanticProof": {
+        "failureReplay": 40685797662,
+        "candidatePass": 40686115305,
+        "broadGateAux": 40686527526,
+        "broadGateDevelopment": 40686777131,
+        "postManifestGate": 40687041649,
+        "currentBuyerSchema": "BuyerConfiguratorPayload 1.0",
+        "historicBuyerSchema": "BuyerConfiguration2D 0.1",
+        "canaryPositions": 8,
+        "flowSourceRevisionRemovedFromWire": true,
+        "publicProjectionTests": 7,
+        "parityTests": 4,
+        "sessionTests": 5,
+        "localhostChromiumV5": "PASS",
+        "invalidPublicationFailClosed": "PASS",
+        "coreContracts": "PASS",
+        "runtimeContracts": "PASS",
+        "v5EndpointSafety": "PASS",
+        "noNetlifyDeployment": true,
+        "noRealStagingSessionTest": true
+      },
+      "preserved": {
+        "openPRs": 12,
+        "remainingOriginalHistoricalRefs": 38,
+        "mainSha": "221b54b2a41ecc8c338d1bf2cf67280cf165ce95",
+        "originalAssetsBranch": "artifacts/ds02-imagens-originais-20261015",
+        "unmergedVisualPR": 34
+      },
+      "noDeploy": true
     }
   ],
-  "nextBatchContract": "22 original historical refs retired across 16 waves; 13 integrated auxiliary refs retired, 38 historical + main + development = 40 branches. Manifest P consumed, DO NOT replay. Eight-source CP-PUBLIC family reconciled; only 2 documentary sources retired. Six remaining sources HOLD: contract/fixture and four PR heads 182/184/185/186. All 12 PRs untouched. Next reconcile sensitive DTO/auth implementation before any retirement."
+  "nextBatchContract": "22/60 original branches retired, 14 auxiliary retired across 17 waves, 38 originals + main + development = 40 branches. Batch Q consumed and must never be replayed. V5 DTO privacy patch integrated with source-locked differential, offline session unit, and localhost Chromium gates; no staging session proven. Preserve 12 open PRs and DS02. Continue semantic remediation of CP-PUBLIC auth/DTO or CI Flow, no unproved branch retirements."
 }
