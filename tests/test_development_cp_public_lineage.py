@@ -55,7 +55,15 @@ class CPPublicLineage(unittest.TestCase):
         for sha in (OLD_TERMINAL, MAIN, DEV):
             self.assertEqual(git("rev-parse",sha+"^{commit}"),sha)
         source_name = "work/cp-public-03a2-3-contract-integration-20261008"
-        self.assertEqual(git("rev-parse","refs/remotes/origin/"+source_name), OLD_TERMINAL)
+        source_branch = "refs/remotes/origin/" + source_name
+        archived_ref = "refs/tags/archive/m2d/cp-public-03a2-3-68362325"
+        has_source = subprocess.run(["git","show-ref","--verify","--quiet",source_branch]).returncode == 0
+        has_archive = subprocess.run(["git","show-ref","--verify","--quiet",archived_ref]).returncode == 0
+        self.assertTrue(has_source or has_archive, "old source must be reachable from its branch or exact archive tag")
+        if has_source:
+            self.assertEqual(git("rev-parse", source_branch), OLD_TERMINAL)
+        if has_archive:
+            self.assertEqual(git("rev-parse", archived_ref), OLD_TERMINAL)
         self.assertNotIn(source_name,{v[0] for v in OPEN_PR_HEADS.values()})
 
     def test_not_a_fake_ancestor_of_pr186_or_current_main(self):
