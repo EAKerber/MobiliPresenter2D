@@ -100,3 +100,28 @@ destino PASS, manifesto fresco, lease por SHA e readback completo.
 - Destino `development@e9bbe7674dcc6f4f56e04c62f81849face1fe38c`: roster/retenção [#40783778743](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40783778743), segurança [#40783778809](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40783778809), linhagem [#40783778718](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40783778718) e contratos públicos [#40783778788](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40783778788), **todos PASS**.
 - Gate combinado: **61 testes Python**, incluindo espelho sem as duas refs (15 verificações internas adicionais), **7 testes de projetor + 17 de viewer**, contrato de endpoint em memória e probe remoto do roster de dez PRs.
 - Manifesto `dev-20261028-cppublic-closed-heads-al`: duas targets históricas `archive-diverged` acima + auxiliar ancestral `integration/40-cppublic-closed-heads-20261028@e9bbe7674dcc6f4f56e04c62f81849face1fe38c`. Limite total três refs, 36 aposentadorias históricas anteriores, gate de origem por SHA/run. O lote só pode operar no push exato da development e recusa qualquer mudança de refs, tags, PRs, proteção ou regras. O status de aplicação será registrado pelo recibo após readback, não presumido por este manifesto.
+
+
+### Onda AL concluída — readback final
+
+[Actions #40783892131](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40783892131),
+push `a387f723327a96d22399dd6245e74339a967fb21`: **AUDIT PASS, APPLY PASS, READBACK PASS**.
+Recibos audit `12858466552` e apply `12858163120`. Foram removidas exatamente as
+heads das PRs #175/#178 e a auxiliar 40; as tags acima já existiam e foram
+novamente conferidas nos SHAs originais. Ambas as PRs permanecem CLOSED/UNMERGED.
+O lote AL está **CONSUMED — NÃO REAPLICAR**.
+
+Readback REST/Git: **27→24 refs** contando a auxiliar temporária (**26→24** em
+relação ao início da rodada); **38/60 originais históricas aposentadas**, **31
+auxiliares**, **34 ondas**. Dez PRs seguem abertas, com mesmas bases e heads:
+`[34,179,180,182,184,185,186,196,231,238]`. `main` continua
+`221b54b2a41ecc8c338d1bf2cf67280cf165ce95`; DS02 e auth protegidos. Nenhuma mudança
+em aplicação, produção, banco, sessão ou deploy foi feita nesta rodada.
+
+Próximo recorte AJ: manifestar a passagem de `allowedClosedOrOpen=[175,178]` para
+`[175,178,179,180]`, `remainingCandidatesFrozenOpen=[]`, adaptar os testes para
+ambas as fases e validar antes de encerrar individualmente #179/#180 sem merge.
+O recibo offline `PR_CONFIRMED_CLOSED_UNMERGED` só deve mudar após os readbacks
+reais de fechamento; ele não substitui o roster ao vivo. Não retirar as heads
+#179/#180 antes de novos gates e manifesto próprio. As PRs #182/#184/#185/#186/#238
+seguem HOLD. O seed de preview da #180 continua intencionalmente ausente.

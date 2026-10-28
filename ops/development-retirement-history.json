@@ -1932,7 +1932,98 @@
         "originalPR175And178HeadsStillPresent": true
       },
       "noDeploy": true
+    },
+    {
+      "batchId": "dev-20261028-cppublic-closed-heads-al",
+      "workflowRun": 40783892131,
+      "workflowUrl": "https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40783892131",
+      "headSha": "a387f723327a96d22399dd6245e74339a967fb21",
+      "audit": "PASS",
+      "apply": "PASS",
+      "readback": "PASS",
+      "refsBefore": 27,
+      "refsAfter": 24,
+      "auditArtifactId": 12858466552,
+      "applyArtifactId": 12858163120,
+      "archived": [
+        {
+          "tag": "archive/m2d/cppublic-pr175-c81d357d",
+          "sha": "c81d357df3aa78c3e8f804b6334b2da35b3a75c8",
+          "alreadyPreserved": true
+        },
+        {
+          "tag": "archive/m2d/cppublic-pr178-f0c79239",
+          "sha": "f0c792397036836105dcb53a45f89780e10b6348",
+          "alreadyPreserved": true
+        }
+      ],
+      "retired": [
+        {
+          "branch": "work/cp-public-01-donor-staging-20261008",
+          "sha": "c81d357df3aa78c3e8f804b6334b2da35b3a75c8",
+          "kind": "archive-diverged",
+          "archiveTag": "archive/m2d/cppublic-pr175-c81d357d"
+        },
+        {
+          "branch": "work/cp-public-02a-public-module-projection-20261008",
+          "sha": "f0c792397036836105dcb53a45f89780e10b6348",
+          "kind": "archive-diverged",
+          "archiveTag": "archive/m2d/cppublic-pr178-f0c79239"
+        }
+      ],
+      "auxiliaryRetired": [
+        {
+          "branch": "integration/40-cppublic-closed-heads-20261028",
+          "sha": "e9bbe7674dcc6f4f56e04c62f81849face1fe38c",
+          "kind": "auxiliary-ancestor-development",
+          "recoverableFromDevelopment": true
+        }
+      ],
+      "semanticProof": {
+        "source": "docs/work/DEVELOPMENT_CP_PUBLIC_PR_CLOSURE_2026-10-28.md",
+        "auxiliaryGate": 40783691653,
+        "destinationGate": 40783778743,
+        "safetyGate": 40783778809,
+        "lineageGate": 40783778718,
+        "publicContractsGate": 40783778788,
+        "pythonTests": 61,
+        "mirrorHistoricalAssertions": 15,
+        "projectionTests": 7,
+        "viewerTests": 17,
+        "endpointMemoryContract": "PASS",
+        "livePRRoster": "PASS",
+        "noRuntimeChanges": true
+      },
+      "preserved": {
+        "mainSha": "221b54b2a41ecc8c338d1bf2cf67280cf165ce95",
+        "openPRs": [
+          34,
+          179,
+          180,
+          182,
+          184,
+          185,
+          186,
+          196,
+          231,
+          238
+        ],
+        "closedUnmergedPRs": [
+          175,
+          178
+        ],
+        "remainingOriginalHistoricalRefs": 22,
+        "originalAssetsBranch": "artifacts/ds02-imagens-originais-20261015",
+        "authPRHeadsProtected": [
+          182,
+          184,
+          185,
+          186,
+          238
+        ]
+      },
+      "noDeploy": true
     }
   ],
-  "nextBatchContract": "33 waves; 36/60 original historical retired, 30 temporary auxiliaries retired; 24 original historical + main + development = 26 remote branches. AK (two auxiliaries 38 and 39) consumed; no source PR branch deleted. Four public draft PRs #175/#178/#179/#180 preserved by exact SHA remote tags AG (#40763518326) + AH (#40763684082), all PASS. CLOSED/UNMERGED only #175 and #178 with comments and head SHA readback; 10 PRs open. New dynamic fail-closed PR roster transition AI allows only [175,178] to be closed unmerged; 179/180 and eight others forced open; #40764823295 PASS. Next update both offline historical lineage suites for branch-or-tag state before retiring #175/#178 heads in bounded batch; then plan AJ after explicit manifest and gates for #179/#180. Main untouched."
+  "nextBatchContract": "34 waves; 38/60 original historical retired, 31 temporary auxiliaries retired; 22 original historical + main + development = 24 remote branches. AL consumed; DO NOT REPLAY. PR175/178 heads retired only after exact DAG tags, CLOSED/UNMERGED REST readback, 61 Python tests (including 15-test mirror regression), 7 projection + 17 viewer tests and endpoint memory contract, auxiliary and destination PASS. PR175/178 remain closed/unmerged; 10 PRs still open. Next AJ requires an explicit transition [175,178,179,180], frozen candidates empty, phase-aware negative tests and new gates BEFORE individual closed/unmerged operations on PR179/180; update offline confirmed-closed receipt only after actual REST readback. Never restore PR180 preview seed. Security PR182/184/185/186/238 HOLD; main untouched."
 }
