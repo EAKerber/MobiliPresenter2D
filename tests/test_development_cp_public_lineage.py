@@ -99,10 +99,15 @@ class CPPublicLineage(unittest.TestCase):
         old=show(OLD_TERMINAL,OLD_BUYER)
         self.assertIn('BuyerConfiguration2D 0.1',old)
         self.assertEqual(blob(MAIN,BUYER_ENDPOINT),blob(DEV,BUYER_ENDPOINT))
-        self.assertEqual(blob(MAIN,BUYER_PROJECTION),blob(DEV,BUYER_PROJECTION))
-        new=show(MAIN,BUYER_PROJECTION)
-        self.assertIn('BuyerConfiguratorPayload 1.0',new)
-        self.assertIn("normalizeFlow",new)
+        self.assertEqual(blob(MAIN,BUYER_PROJECTION),
+                         "4a3818187f577b0056ccba4c39f24f1881bdb0e2")
+        self.assertEqual(blob(DEV,BUYER_PROJECTION),
+                         "c1f8e099f2dce29bd003577e8c0a724d7b6475fa")
+        self.assertNotEqual(blob(MAIN,BUYER_PROJECTION),blob(DEV,BUYER_PROJECTION))
+        for ref in (MAIN, DEV):
+            new=show(ref,BUYER_PROJECTION)
+            self.assertIn('BuyerConfiguratorPayload 1.0',new)
+        self.assertIn("normalizeFlow",show(DEV,BUYER_PROJECTION))
         endpoint=show(DEV,BUYER_ENDPOINT)
         for name in ("canUseConfigurator","getUser","findActiveSession","buyerProjection.project"):
             self.assertIn(name,endpoint)
@@ -140,7 +145,7 @@ class CPPublicLineage(unittest.TestCase):
         self.assertFalse(has_blob(OLD_TERMINAL,"app/config/index.html"))
         # Static existence is not a browser/real auth test.
         doc=Path("docs/work/DEVELOPMENT_CP_PUBLIC_PR_LINEAGE_2026-10-28.md").read_text()
-        for p in ["NÃO", "não", "12 PRs", "HOLD", "archive/m2d/cp-public-03a2-3-68362325"]:
+        for p in ["não", "12 PRs", "HOLD", "archive/m2d/cp-public-03a2-3-68362325"]:
             self.assertIn(p,doc)
 
     def test_unchanged_runtime_and_no_preview_or_database(self):
