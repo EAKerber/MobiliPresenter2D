@@ -112,6 +112,7 @@ class PRRosterGates(unittest.TestCase):
             target=Path(t)/"phase.json"
             actual=json.loads(mod.PR_CLOSURE_TRANSITION.read_text())
             actual["allowedClosedOrOpen"]=[175,178,179,180]
+            actual["remainingCandidatesFrozenOpen"]=[]
             # This is NOT permitted with the initial wave ID.
             target.write_text(json.dumps(actual),encoding="utf-8")
             old=mod.PR_CLOSURE_TRANSITION
