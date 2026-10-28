@@ -36,3 +36,7 @@ Teste determinístico dos 13 blobs originais + hashes estáveis da main/developm
 ## Gate com sincronização de foco pós-frame
 
 - [Run #40706673148](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40706673148): geometria atual passou com estabilização, mas o teste registrou `activeElement=null` logo após `keyboardActiveSection=true`. A seção já estava marcada por `pointerdown`; isso **não prova** que a restauração por `requestAnimationFrame` nunca ocorreu, apenas que foi medida cedo demais. Alterado gate dedicado para esperar explicitamente o `activeElement.dataset.handleId` atingir o id selecionado dentro de 4,5 s, depois esperar dois frames e confirmar persistência. O gate completo de teclado também verifica a asserção histórica, sem supor restauração instantânea.
+
+## Diagnóstico de foco com registro antes de falha
+
+- Gate anterior [#40707110744](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40707110744) falhou por timeout aguardando o `activeElement` recuperar `data-handle-id`. A mudança de `requestAnimationFrame` já existe na auxiliar, mas a causa exata ainda não está demonstrada. Instrumentar os eventos `focusin`, localização de `handles` no modelo, botões após redraw, erros de navegação e ativação manual para distinguir falhas de descoberta, foco ou reposição DOM. **Não liberar aposentadoria/merge enquanto o gate falhar.**

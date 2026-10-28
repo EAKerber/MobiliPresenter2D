@@ -72,13 +72,45 @@ const flush=async(page,profile)=>page.waitForFunction(x=>document.documentElemen
  await flush(p,"side-rail");
  await p.locator('.flow-nav [data-step="finishes"]').click();
  await p.waitForFunction(()=>!document.getElementById("finishesStagePanel").hidden);
+ await p.evaluate(() => {
+   window.__ux04FocusTrace = [];
+   document.addEventListener("focusin", event => {
+     window.__ux04FocusTrace.push({
+       time: Math.round(performance.now()), id: event.target.id || null,
+       handle: event.target.dataset?.handleId || null,
+       tag: event.target.tagName, connected: event.target.isConnected
+     });
+   }, true);
+ });
  const handle=p.locator("[data-handle-id]").first();
  const id=await handle.getAttribute("data-handle-id");
  await handle.click();
- await p.waitForFunction(()=>document.querySelector('[data-keyboard-section="handles"]')?.dataset.keyboardActiveSection==="true");
- await p.waitForFunction(handleId=>document.activeElement?.dataset?.handleId===handleId,id,{timeout:4500});
+ await p.waitForTimeout(700);
  await settle(p);
- geometry.focus={expected:id,actual:await p.evaluate(()=>document.activeElement?.dataset?.handleId||null)};
+ geometry.focus=await p.evaluate((expected) => {
+   const api=window.CASA_KEYBOARD_SHORTCUTS;
+   const section=api?.discoverStageSections()?.find(s=>s.id==="handles");
+   const buttons=[...document.querySelectorAll("[data-handle-id]")];
+   const active=document.activeElement;
+   return {
+     expected, actual:active?.dataset?.handleId||null,
+     currentStage:api?.activeStageId?.(), apiPresent:Boolean(api),
+     sectionFound:Boolean(section), sectionItemCount:section?.items?.length??null,
+     sectionItemIds:section?.items?.map(x=>x.dataset.handleId)||[],
+     activeTag:active?.tagName, activeId:active?.id, activeHTML:active?.outerHTML?.slice(0,200),
+     buttons:buttons.map(b=>({handle:b.dataset.handleId,hidden:b.hidden,disabled:b.disabled,connected:b.isConnected,selected:b.classList.contains("is-selected"),tabIndex:b.tabIndex})),
+     activeSection:document.querySelector('[data-keyboard-active-section="true"]')?.dataset.keyboardSection||null,
+     errors:api?.navigationInvariantErrors?.()||[],
+     trace:window.__ux04FocusTrace||[]
+   };
+ },id);
+ geometry.manualActivation=await p.evaluate(()=>{
+   const api=window.CASA_KEYBOARD_SHORTCUTS;
+   const changed=api?.activateSection?.("handles",0,true);
+   return {changed,actual:document.activeElement?.dataset?.handleId||null};
+ });
+ fs.writeFileSync(path.join(out,"result.json"),JSON.stringify({geometry,errors,environment:"isolated-local-buyer-V5"},null,2));
+ console.log("UX04_FOCUS_DIAGNOSTIC "+JSON.stringify({focus:geometry.focus,manualActivation:geometry.manualActivation}));
  fs.writeFileSync(path.join(out,"result.json"),JSON.stringify({geometry,errors,environment:"isolated-local-buyer-V5"},null,2));
  assert.equal(geometry.focus.actual,id,"selected handle should recover keyboard focus after redraw (legacy accessibility obligation)");
  assert.deepEqual(errors,[],"page and console errors");
