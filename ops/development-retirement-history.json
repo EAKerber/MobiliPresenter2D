@@ -232,7 +232,60 @@
         "unmergedVisualPR": 34
       },
       "noDeploy": true
+    },
+    {
+      "batchId": "dev-20261027-migration-inspector-exact-f",
+      "workflowRun": 40611772782,
+      "workflowUrl": "https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40611772782",
+      "headSha": "ff127e2ec22cdd086e10c7fad746e9f9b7b0ef6b",
+      "auditArtifactId": 12782788428,
+      "applyArtifactId": 12782843456,
+      "audit": "PASS",
+      "apply": "PASS",
+      "refsBefore": 55,
+      "refsAfter": 53,
+      "archived": [
+        {
+          "tag": "archive/m2d/migration-inspector-2b00351a",
+          "sha": "2b00351acc1d1369116d8eeb546146a6b363072e"
+        }
+      ],
+      "retired": [
+        {
+          "branch": "tooling/migration-inspector-v0-20261023",
+          "sha": "2b00351acc1d1369116d8eeb546146a6b363072e",
+          "kind": "archive-diverged",
+          "archiveTag": "archive/m2d/migration-inspector-2b00351a"
+        }
+      ],
+      "auxiliaryRetired": [
+        {
+          "branch": "integration/12-migration-inspector-consolidation-20261027",
+          "sha": "8f5de5ad86b340b23b3df15222cf7787650d64b8",
+          "kind": "auxiliary-ancestor-development",
+          "recoverableFromDevelopment": true
+        }
+      ],
+      "semanticProof": {
+        "workflowRun": 40611669102,
+        "workflowSha": "8f5de5ad86b340b23b3df15222cf7787650d64b8",
+        "auxGate": 40611491832,
+        "sourceToolBlob": "0d862e435898daa8443ada12f7d093c5ab6232bc",
+        "sourceTestBlob": "abe491f840c82b12e93c578442a9c548f47f8a5a",
+        "historicalHandoverBlob": "4f7cc27e51ee0840c6df90ea335a17cc770b8266",
+        "newDiagnosticReport": true,
+        "sourceOnly": true,
+        "noRuntimeChanges": true
+      },
+      "preserved": {
+        "openPRs": 12,
+        "remainingOriginalHistoricalRefs": 51,
+        "mainSha": "221b54b2a41ecc8c338d1bf2cf67280cf165ce95",
+        "originalAssetsBranch": "artifacts/ds02-imagens-originais-20261015",
+        "unmergedVisualPR": 34
+      },
+      "noDeploy": true
     }
   ],
-  "nextBatchContract": "Next wave must carry the eight original historical waves[].retired refs; do not count or insert either auxiliaryRetired (they are reachable from development). There remain 52 historic originals + main + development. Always vet branch protections, 12 open PRs, Git rulesets, source SHA and archive tag before retirements. The consumed wave E manifest is not reusable."
+  "nextBatchContract": "Next wave must carry the nine original historical waves[].retired refs; do not count or insert the three auxiliaryRetired (all are already reachable from development). 51 historic original branches + main + development remain. Use new unique batchId and exactly 1-3 pinned targets, 12 open PRs protected, archived diverged DAGs protected by tags. The wave F manifest is consumed."
 }
