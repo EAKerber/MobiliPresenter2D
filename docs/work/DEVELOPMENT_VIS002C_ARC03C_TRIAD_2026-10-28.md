@@ -46,3 +46,13 @@ Após fast-forward SHA-exato `integration/35-vis002c-arc03c-triad-20261028@9d454
 ## Restrição de lote: falha segura antes de qualquer exclusão
 
 A primeira tentativa de manifesto `dev-20261028-vis002c-arc03c-triad-archived-ac`, [run #40751498062](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40751498062), recebeu **AUDIT FAIL / APPLY SKIPPED** por `BATCH_SIZE_1_TO_3`: três branches históricas + uma auxiliar = **4 targets**, acima do limite estabelecido do executor. O bloqueio evitou qualquer tag ou exclusão nesse lote. A política de 3 alvos **não será alterada**. Lote corrigido AC terá duas fontes ARC-03C + auxiliar (3 alvos); lote novo AD terá token v0.2 (1 alvo). Manter checks de SHA, PR, main, ruleset e tags independentes nas duas ondas.
+
+## Registros canônicos exatos para executor bounded
+
+A [auditoria AC #40751673606](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40751673606) falhou **antes de APPLY** em `ARCHIVE_PROVENANCE_RECORD_MISSING`. O executor exige o formato literal `branch@SHA` no `snapshotPath`; a tabela anterior continha os valores separados. Este requisito é preservado, não relaxado. Registro de todas as fontes com a correspondência inequívoca à tag integral de restauração:
+
+- `integration/consolidated-arc03c-vis002c-token-20261023@c239012c126c9b3e2c477778ea4b2d37b74c963f` → `archive/m2d/vis002c-arc03c-c239012c`. O SHA da tag deve ser `c239012c126c9b3e2c477778ea4b2d37b74c963f`.
+- `integration/vis002c-contextual-support-v02-20261024@a285a2dc6f543f33f45615ba653a296236f8b3ac` → `archive/m2d/vis002c-support-a285a2dc`. O SHA da tag deve ser `a285a2dc6f543f33f45615ba653a296236f8b3ac`.
+- `integration/vis002c-p-token-02b-v2-20261023@34a305c1ddb9850dc194f68b16fa097c6691c06b` → `archive/m2d/vis002c-v02-token-34a305c1`. O SHA da tag deve ser `34a305c1ddb9850dc194f68b16fa097c6691c06b`.
+
+A primeira dupla é alvo de AC (junto à auxiliar), a terceira somente de AD posterior. **Nenhuma tag nem ref foi alterada pelas duas auditorias falhadas**. Todas as três origens possuem histórico integral e testes/proveniência pinados; a decisão é aposentadoria de branch histórica com tag, não absorção de código v0.2 na main.
