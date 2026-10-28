@@ -3,7 +3,7 @@
   "repository": "EAKerber/MobiliPresenter2D",
   "controlBranch": "development",
   "mainSha": "221b54b2a41ecc8c338d1bf2cf67280cf165ce95",
-  "batchId": "dev-20261028-ci-auth-base-archive-aa",
+  "batchId": "dev-20261028-config-nav-ancestor-vis002c-hold-ab",
   "retired": [
     {
       "branch": "docs/handover-reconcile-20261023",
@@ -180,30 +180,36 @@
       "sha": "62c5521d7e883443696ce1c58c912ac4794ff75e",
       "kind": "archive-diverged",
       "archiveTag": "archive/m2d/legacy-ci-v5-nav-css-62c5521d"
-    }
-  ],
-  "auxiliaryRefs": [
-    {
-      "branch": "integration/33-ci-auth-pr238-lineage-20261028",
-      "sha": "555ba8a67a643b876dcb5f8a9130ed1f787810dc"
-    }
-  ],
-  "targets": [
+    },
     {
       "branch": "ci-auth-base-20261025",
       "sha": "fd61a37a11dd63b3e537d3d76a2303bfdfc4f06a",
       "kind": "archive-diverged",
-      "archiveTag": "archive/m2d/ci-auth-base-pr238-fd61a37a",
-      "snapshotPath": "docs/work/DEVELOPMENT_CI_AUTH_LINEAGE_PR238_2026-10-28.md",
+      "archiveTag": "archive/m2d/ci-auth-base-pr238-fd61a37a"
+    }
+  ],
+  "auxiliaryRefs": [
+    {
+      "branch": "integration/34-pr-ancestors-vis002c-20261028",
+      "sha": "761c8210e86b062a1c77cf22ea058933e1ef26ea"
+    }
+  ],
+  "targets": [
+    {
+      "branch": "fix/config-stage-nav-grid-track-20261025",
+      "sha": "dbfbd9a7bca0e9f581e5d8ac4a765e01829d6ce9",
+      "kind": "archive-diverged",
+      "archiveTag": "archive/m2d/config-nav-grid-pr238-dbfbd9a7",
+      "snapshotPath": "docs/work/DEVELOPMENT_PR_ANCESTORS_VIS002C_2026-10-28.md",
       "semanticGate": {
-        "runId": 40742370534,
-        "headSha": "555ba8a67a643b876dcb5f8a9130ed1f787810dc",
-        "workflowName": "Development CI old auth and PR238 lineage (offline provenance)"
+        "runId": 40748235137,
+        "headSha": "761c8210e86b062a1c77cf22ea058933e1ef26ea",
+        "workflowName": "Development PR ancestor and VIS002C semantic provenance (offline)"
       }
     },
     {
-      "branch": "integration/33-ci-auth-pr238-lineage-20261028",
-      "sha": "555ba8a67a643b876dcb5f8a9130ed1f787810dc",
+      "branch": "integration/34-pr-ancestors-vis002c-20261028",
+      "sha": "761c8210e86b062a1c77cf22ea058933e1ef26ea",
       "kind": "auxiliary-ancestor-development"
     }
   ]
