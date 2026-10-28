@@ -1,0 +1,55 @@
+name: Development protected CP-PUBLIC PR archive (tag only)
+on:
+  push:
+    branches:
+      - development
+      - integration/38-cppublic-pr-archive-20261028
+    paths:
+      - 'ops/development-pr-archive-manifest.json'
+      - 'tools/development_pr_archive.py'
+      - 'docs/work/DEVELOPMENT_CP_PUBLIC_PR_CLOSURE_2026-10-28.md'
+      - '.github/workflows/development-pr-archive.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: m2d-cppublic-pr-archive
+  cancel-in-progress: false
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Verify source, 12 PR SHA pins, history roster and existing tags
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: python3 tools/development_pr_archive.py --mode audit
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: cp-public-pr-archive-audit-${{ github.run_id }}
+          path: artifacts/development-pr-archive/receipt.json
+  apply:
+    needs: audit
+    if: github.ref == 'refs/heads/development' && github.event_name == 'push'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Create only SHA-exact archival tags for at most 2 PRs, read back
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          M2D_PR_ARCHIVE_AUTHORIZED: '1'
+        run: python3 tools/development_pr_archive.py --mode apply
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: cp-public-pr-archive-apply-${{ github.run_id }}
+          path: artifacts/development-pr-archive/receipt.json
