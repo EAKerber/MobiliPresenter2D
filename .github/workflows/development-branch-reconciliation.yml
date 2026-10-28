@@ -28,6 +28,17 @@ jobs:
         run: |
           python3 -m py_compile tools/development_branch_reconciliation_scan.py
           git fetch --no-tags origin '+refs/heads/*:refs/remotes/origin/*'
+          # A ledger push can be followed by documentation commits before this
+          # queued job starts. Audit the freshly fetched development snapshot,
+          # but only if it fast-forwards the triggering checkout. No force,
+          # no remote writes, and the scanner still checks live refs/PRs.
+          latest="$(git rev-parse origin/development)"
+          if [ "$(git rev-parse HEAD)" != "$latest" ]; then
+            git merge-base --is-ancestor HEAD "$latest" || {
+              echo "NON_FAST_FORWARD_DEVELOPMENT_REF_DRIFT"; exit 1;
+            }
+            git checkout --detach "$latest"
+          fi
           python3 tools/development_branch_reconciliation_scan.py
       - uses: actions/upload-artifact@v4
         if: always()
