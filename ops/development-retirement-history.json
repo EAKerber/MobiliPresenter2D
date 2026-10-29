@@ -2023,7 +2023,75 @@
         ]
       },
       "noDeploy": true
+    },
+    {
+      "batchId": "dev-20261029-cppublic-ux04-aux-an",
+      "workflowRun": 40807726085,
+      "workflowUrl": "https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40807726085",
+      "headSha": "c6917937dca157c8ba73f3528f8addb0d30ff508",
+      "auditArtifactId": 12869220996,
+      "applyArtifactId": 12868693409,
+      "audit": "PASS",
+      "apply": "PASS",
+      "readback": "PASS",
+      "refsBefore": 26,
+      "refsAfter": 24,
+      "archived": [],
+      "retired": [],
+      "auxiliaryRetired": [
+        {
+          "branch": "integration/41-ux04-focus-restore-20261028",
+          "sha": "7ec2448418781405e0eb20ee85708166f5472ef1",
+          "kind": "auxiliary-ancestor-development",
+          "recoverableFromDevelopment": true
+        },
+        {
+          "branch": "integration/42-cppublic-pr-roster-aj-20261029",
+          "sha": "fc2c635a754f83d4dbde5b02aab747f7c3346458",
+          "kind": "auxiliary-ancestor-development",
+          "recoverableFromDevelopment": true
+        }
+      ],
+      "semanticProof": {
+        "source": "docs/handoffs/HANDOVER_DEVELOPMENT_2026-10-27.md",
+        "priorAuditOnlyFailureRun": 40807562937,
+        "priorFailure": "ACTIVE_WORKFLOW_DEPENDENCY:integration/41-ux04-focus-restore-20261028",
+        "workflowDependencyRemovedIn": "a5b015630784a2604c309b19397b429f309d15e6",
+        "ux04V5Gate": 40807682467,
+        "ux04V5GateConclusion": "success",
+        "closureRosterGate": 40807167763,
+        "noRuntimeChanges": true
+      },
+      "preserved": {
+        "mainSha": "221b54b2a41ecc8c338d1bf2cf67280cf165ce95",
+        "openPRs": [
+          34,
+          182,
+          184,
+          185,
+          186,
+          196,
+          231,
+          238
+        ],
+        "closedUnmergedPRs": [
+          175,
+          178,
+          179,
+          180
+        ],
+        "remainingOriginalHistoricalRefs": 22,
+        "originalAssetsBranch": "artifacts/ds02-imagens-originais-20261015",
+        "authPRHeadsProtected": [
+          182,
+          184,
+          185,
+          186,
+          238
+        ]
+      },
+      "noDeploy": true
     }
   ],
-  "nextBatchContract": "34 waves; 38/60 original historical retired, 31 temporary auxiliaries retired; 22 original historical + main + development = 24 remote branches. AL consumed; DO NOT REPLAY. PR175/178 heads retired only after exact DAG tags, CLOSED/UNMERGED REST readback, 61 Python tests (including 15-test mirror regression), 7 projection + 17 viewer tests and endpoint memory contract, auxiliary and destination PASS. PR175/178 remain closed/unmerged; 10 PRs still open. Next AJ requires an explicit transition [175,178,179,180], frozen candidates empty, phase-aware negative tests and new gates BEFORE individual closed/unmerged operations on PR179/180; update offline confirmed-closed receipt only after actual REST readback. Never restore PR180 preview seed. Security PR182/184/185/186/238 HOLD; main untouched."
+  "nextBatchContract": "35 successful waves; 38/60 original historical branches retired, 33 temporary auxiliaries retired; 22 original historical + main + development = 24 remote branches. AN consumed; do not replay. Main and all eight remaining OPEN PR heads unchanged; #175/#178/#179/#180 CLOSED/UNMERGED with exact DAG tags. UX04 V5 removal of the obsolete integration/41 workflow trigger passed before retirement. Security PRs #182/#184/#185/#238 remain HOLD. Continue classification of the 22 remaining original branches; only use exact bounded manifests, gates, leases and readback. No deploy."
 }
