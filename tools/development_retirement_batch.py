@@ -205,10 +205,10 @@ def verify_open_pr_roster(prs, tags, fetch_pr=api):
     return set(actual)
 
 
-# Confirmed CLOSED/UNMERGED via REST on 2026-10-28; see closure evidence.
+# Confirmed CLOSED/UNMERGED via individual REST readbacks on 2026-10-29; see closure evidence.
 # Offline provenance tests use this historical receipt, not live PR-state authority.
 # Remote mutation always uses verify_open_pr_roster and its fresh API readback.
-PR_CONFIRMED_CLOSED_UNMERGED = frozenset({175, 178})
+PR_CONFIRMED_CLOSED_UNMERGED = frozenset({175, 178, 179, 180})
 
 
 def local_pr_refs():

@@ -172,18 +172,20 @@ class PRHeadRetentionGates(unittest.TestCase):
                      for n, tag in mod.PR_ARCHIVE_TAGS.items()})
         return refs
 
-    def verify(self, refs, closed=(175, 178)):
+    def verify(self, refs, closed=None):
+        if closed is None:
+            closed = mod.PR_CONFIRMED_CLOSED_UNMERGED
         return mod.verify_pr_head_retention(mod.PR_HEAD_PINS, refs, closed)
 
-    def test_exact_heads_before_and_after_two_closed_branches_removed(self):
+    def test_exact_heads_before_and_after_four_closed_branches_removed(self):
         refs = self.refs()
         self.assertTrue(self.verify(refs))
-        for n in (175, 178):
+        for n in (175, 178, 179, 180):
             refs.pop("refs/remotes/origin/" + mod.PR_HEAD_PINS[n][0])
             self.assertTrue(self.verify(refs))
 
     def test_open_pr_cannot_fall_back_to_archive_tag(self):
-        for n in set(mod.PR_HEAD_PINS) - {175, 178}:
+        for n in set(mod.PR_HEAD_PINS) - {175, 178, 179, 180}:
             with self.subTest(pr=n):
                 refs = self.refs()
                 refs.pop("refs/remotes/origin/" + mod.PR_HEAD_PINS[n][0])
@@ -191,7 +193,7 @@ class PRHeadRetentionGates(unittest.TestCase):
                     self.verify(refs)
 
     def test_existing_changed_branch_must_not_be_masked_by_correct_tag(self):
-        for n in (175, 178, 179):
+        for n in (175, 178, 179, 180):
             with self.subTest(pr=n):
                 refs = self.refs()
                 refs["refs/remotes/origin/" + mod.PR_HEAD_PINS[n][0]] = "f" * 40
@@ -199,7 +201,7 @@ class PRHeadRetentionGates(unittest.TestCase):
                     self.verify(refs)
 
     def test_closed_pr_archive_required_even_if_branch_still_exists(self):
-        for n in (175, 178):
+        for n in (175, 178, 179, 180):
             for present in (True, False):
                 for replacement in (None, "f" * 40):
                     with self.subTest(pr=n, branch=present, tag=replacement):
@@ -213,6 +215,9 @@ class PRHeadRetentionGates(unittest.TestCase):
                         with self.assertRaisesRegex(RuntimeError, "PR_RETENTION_ARCHIVE_MISSING_OR_CHANGED"):
                             self.verify(refs)
 
+    def test_confirmed_closed_receipt_matches_individual_live_readbacks(self):
+        self.assertEqual(mod.PR_CONFIRMED_CLOSED_UNMERGED, {175, 178, 179, 180})
+
     def test_closed_security_pr_is_not_an_archival_candidate(self):
         with self.assertRaisesRegex(RuntimeError, "UNARCHIVABLE_CLOSED_PR"):
             self.verify(self.refs(), closed=(175, 178, 182))
@@ -221,7 +226,7 @@ class PRHeadRetentionGates(unittest.TestCase):
         pins = copy.deepcopy(mod.PR_HEAD_PINS)
         pins[175][1] = "f" * 40
         with self.assertRaisesRegex(RuntimeError, "PR_RETENTION_PIN_DRIFT"):
-            mod.verify_pr_head_retention(pins, self.refs(), {175, 178})
+            mod.verify_pr_head_retention(pins, self.refs(), {175, 178, 179, 180})
 
     def test_both_real_lineage_suites_pass_without_closed_head_refs(self):
         # A disposable shared mirror hides refs locally; never mutate origin or
