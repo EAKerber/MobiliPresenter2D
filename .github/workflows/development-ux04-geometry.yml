@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - development
+      - integration/41-ux04-focus-restore-20261028
     paths:
       - 'docs/reconciliation/ux04-main-authority/**'
       - 'tests/test_development_ux04_authority.py'

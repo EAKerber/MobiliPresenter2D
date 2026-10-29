@@ -253,6 +253,17 @@ const {chromium} = require('playwright');
   assert.equal(await activeSection(), 'handles', 'Puxadores remains active after the handle controls redraw');
   await page.waitForFunction(handleId => document.activeElement?.dataset?.handleId === handleId, handleOrder[0]);
   assert.equal(await page.evaluate(() => document.activeElement?.dataset?.handleId || null), handleOrder[0], 'selected handle regains focus after redraw');
+  const finishesStep = page.locator('.flow-nav [data-step="finishes"]');
+  await finishesStep.focus();
+  await page.locator(`[data-handle-id="${handleOrder[1]}"]`).evaluate(button => button.click());
+  await page.waitForFunction(handleId =>
+    document.querySelector('[data-handle-id].is-selected')?.dataset.handleId === handleId
+  , handleOrder[1]);
+  assert.equal(
+    await page.evaluate(() => document.activeElement?.matches('.flow-nav [data-step="finishes"]')),
+    true,
+    'programmatic handle selection must not steal focus from an unrelated control'
+  );
   await moveToSection('handles');
   assert.equal(await activeSection(), 'handles', 'Puxadores is a first-class keyboard section');
   await page.keyboard.press('ArrowRight');

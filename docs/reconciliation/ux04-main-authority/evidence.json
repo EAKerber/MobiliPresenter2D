@@ -123,9 +123,9 @@
     "currentFlow": 216,
     "missingLiteral": 6,
     "historicalKeyboard": 74,
-    "currentKeyboard": 100,
-    "keyboardPreservedLiteral": 71,
-    "keyboardMissingLiteral": 3
+    "currentKeyboard": 102,
+    "keyboardPreservedLiteral": 72,
+    "keyboardMissingLiteral": 2
   },
   "semanticDecision": {
     "mainProfiles": [
@@ -161,5 +161,21 @@
       "chromiumLayoutKeyboardFocus": "PASS",
       "productionAuthenticatedSession": "NOT TESTED"
     }
+  },
+  "candidate": {
+    "branch": "integration/41-ux04-focus-restore-20261028",
+    "baseDevelopmentSha": "519cf7a69f1628309eb21c98097cda22b893d58d",
+    "status": "HOLD_BUILD_GATE",
+    "blocker": "npm run build stops at compile-primary-pages due tracked generated-manifest drift before production of bundles.",
+    "files": [
+      {
+        "path": "app/app.js",
+        "blob": "c77a18a40702d18b7f14446a5649b202b928d2ed"
+      },
+      {
+        "path": "tests/keyboard-browser.cjs",
+        "blob": "7c3fe251bc368510b7f4e1e3e36dc2e42a8ef971"
+      }
+    ]
   }
 }
