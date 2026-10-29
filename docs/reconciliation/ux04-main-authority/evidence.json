@@ -165,7 +165,7 @@
   "candidate": {
     "branch": "integration/41-ux04-focus-restore-20261028",
     "baseDevelopmentSha": "519cf7a69f1628309eb21c98097cda22b893d58d",
-    "status": "GATE_PASSED_PENDING_PROMOTION",
+    "status": "PROMOTED",
     "blocker": null,
     "files": [
       {
@@ -179,9 +179,19 @@
     ],
     "verifiedCodeCommit": "ab6f05f8d69bbe58ffea2dc3d6eed2801a8f28e4",
     "githubActionsRun": {
-      "id": 40801773339,
+      "id": 40802057702,
+      "attempt": 2,
       "conclusion": "success",
-      "url": "https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40801773339"
+      "firstAttempt": "failure in keyboard stone navigation; retry of same SHA passed",
+      "url": "https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40802057702"
+    },
+    "promotedDevelopmentSha": "65f2f3ec781b7c36e3198159b7a512f1d26c97a4",
+    "promotion": {
+      "method": "fast-forward with expected SHA lease",
+      "expectedPreviousDevelopmentSha": "519cf7a69f1628309eb21c98097cda22b893d58d",
+      "readbackMainSha": "221b54b2a41ecc8c338d1bf2cf67280cf165ce95",
+      "readbackDevelopmentSha": "65f2f3ec781b7c36e3198159b7a512f1d26c97a4",
+      "destinationWorkflowRun": 40802466253
     }
   }
 }

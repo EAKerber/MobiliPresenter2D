@@ -28,6 +28,11 @@ class LegacyUX04(unittest.TestCase):
             self.assertEqual(git("rev-parse",baseline+":"+f["path"]),f["developmentSha"])
         for f in p.get("candidate",{}).get("files",[]):
             self.assertEqual(blob(f["path"]),f["blob"])
+        promoted=p.get("candidate",{}).get("promotedDevelopmentSha")
+        if promoted:
+            self.assertEqual(git("rev-parse",promoted),promoted)
+            for f in p["candidate"]["files"]:
+                self.assertEqual(git("rev-parse",promoted+":"+f["path"]),f["blob"])
     def test_six_geometry_assertions_are_replaced_intentionally_not_copied(self):
         p=self.p
         old=assertions(Path("docs/reconciliation/ux04-main-authority/legacy/tests/flow-layout-browser.cjs").read_text(encoding="utf-8"))
@@ -68,5 +73,5 @@ class LegacyUX04(unittest.TestCase):
         self.assertTrue(any("above the persistent dock" in x for x in current))
         self.assertTrue(any("reduced-motion section navigation stays above the dock" in x for x in current))
         self.assertEqual(self.p["semanticDecision"]["mode"],"GATE_PASSED_RETIRE_CANDIDATE")
-        self.assertEqual(self.p["candidate"]["status"],"GATE_PASSED_PENDING_PROMOTION")
+        self.assertEqual(self.p["candidate"]["status"],"PROMOTED")
 if __name__=="__main__":unittest.main()
