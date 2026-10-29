@@ -151,6 +151,13 @@ seguem HOLD. O seed de preview da #180 continua intencionalmente ausente.
   avançar para `{175,178,179,180}`. A aposentadoria das branches fica para um
   manifesto separado com lease e readback.
 
+### Readback posterior da onda AJ
+
+- Preparação promovida pelo commit `886ba49cfc19cf095cbf1fe4576cde560fdc0ed6` como fast-forward com lease de `development@7ec2448418781405e0eb20ee85708166f5472ef1`. A auxiliar `integration/42-cppublic-pr-roster-aj-20261029` aponta ao mesmo SHA; a auxiliar UX04 41 segue em `7ec2448`.
+- Gates no HEAD promovido: [roster AJ #40804568063](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40804568063), [segurança #40804568078](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40804568078) e [linhagem #40804568116](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40804568116), todos PASS. A prova de roster consultou as dez PRs abertas e as quatro tags exatas; as suítes Python/Node passaram.
+- Readback GitHub após a promoção: `main@221b54b2a41ecc8c338d1bf2cf67280cf165ce95`; 26 branches = 22 originais remanescentes + main + development + auxiliares 41/42; dez PRs abertas. #179 e #180 continuam OPEN nos SHAs originais, e as tags continuam apontando aos commits originais. Nenhuma PR foi comentada ou fechada neste checkpoint.
+- Próximo passo permanece fechamento individual CLOSED/UNMERGED após os comentários de substituição autorizados. Não remover heads #179/#180 nem auxiliares 41/42 antes de um manifesto de higiene separado, gate de ancestralidade/tag, lease e readback.
+
 
 ### Regressão após remoção efetiva
 
