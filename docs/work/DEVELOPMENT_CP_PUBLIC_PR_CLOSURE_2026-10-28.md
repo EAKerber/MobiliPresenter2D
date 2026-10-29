@@ -127,6 +127,31 @@ reais de fechamento; ele não substitui o roster ao vivo. Não retirar as heads
 seguem HOLD. O seed de preview da #180 continua intencionalmente ausente.
 
 
+## Preparação AJ — protocolo do roster atualizado, sem fechamento executado
+
+- O manifesto de transição agora identifica `dev-20261028-cppublic-pr-close-aj`,
+  permite somente as quatro PRs públicas `[175,178,179,180]` em OPEN ou
+  CLOSED/UNMERGED, e congela zero candidatas públicas restantes. Isso é uma
+  permissão de estado para o gate, não prova de que qualquer PR foi fechada.
+- Os checks de escopo funcional usam como baseline `development@7ec2448`,
+  imediatamente anterior à onda AJ; os pinos `DEV` antigos nas provas de
+  linhagem continuam como evidência histórica imutável.
+- As PRs #179 e #180 permanecem abertas até cada comentário de substituição,
+  readback individual do HEAD/base/estado e gate vivo aprovado. A fase continua
+  recusando qualquer fechamento de #182/#184/#185/#186/#238, merge, mudança de
+  base ou drift dos quatro SHAs/tag de arquivo.
+- A suíte de transição cobre os estados herdados #175/#178, #179 fechado
+  individualmente, #180 fechado individualmente e os quatro CLOSED/UNMERGED;
+  cada fixture exige o HEAD original e usa a lista de tags pinadas. A normalização
+  do caminho do manifesto usa separadores POSIX para manter a comparação igual
+  no Windows e no runner Linux.
+- Antes dos fechamentos, executar os gates locais e o workflow de roster na
+  development. Depois, fechar #179 e #180 separadamente, com revalidação entre
+  elas; só após ambos os readbacks o recibo `PR_CONFIRMED_CLOSED_UNMERGED` pode
+  avançar para `{175,178,179,180}`. A aposentadoria das branches fica para um
+  manifesto separado com lease e readback.
+
+
 ### Regressão após remoção efetiva
 
 O scanner final [#40784278666](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40784278666) passou com as 22 históricas remanescentes. O gate combinado [#40784278661](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40784278661) detectou um erro apenas no setup da simulação: `git update-ref -d <ref> <SHA>` foi chamado no espelho para uma ref já ausente no checkout fresco. As 15 verificações históricas diretas passaram; o probe remoto foi corretamente pulado após a falha do setup. O executor AL e seu readback não foram reexecutados.

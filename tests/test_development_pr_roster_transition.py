@@ -4,6 +4,7 @@ import importlib.util
 import json
 import os
 import subprocess
+import sys
 import tempfile
 import unittest
 from pathlib import Path
@@ -39,6 +40,19 @@ def fetch_map(mp):
     return f
 
 class PRRosterGates(unittest.TestCase):
+    def with_transition(self, allowed, batch_id):
+        temporary = tempfile.TemporaryDirectory(dir=ROOT.parent)
+        self.addCleanup(temporary.cleanup)
+        target=Path(temporary.name)/"phase.json"
+        actual=json.loads(mod.PR_CLOSURE_TRANSITION.read_text(encoding="utf-8"))
+        actual["allowedClosedOrOpen"]=allowed
+        actual["remainingCandidatesFrozenOpen"]=[n for n in mod.PR_ARCHIVE_TAGS if n not in allowed]
+        actual["batchId"]=batch_id
+        target.write_text(json.dumps(actual),encoding="utf-8")
+        previous=mod.PR_CLOSURE_TRANSITION
+        self.addCleanup(setattr,mod,"PR_CLOSURE_TRANSITION",previous)
+        mod.PR_CLOSURE_TRANSITION=target
+
     def test_exact_12_still_open_is_valid_before_closure(self):
         self.assertEqual(mod.verify_open_pr_roster(full_prs(),tags(),fetch_map({})),
                          set(mod.PR_HEAD_PINS))
@@ -50,7 +64,38 @@ class PRRosterGates(unittest.TestCase):
         self.assertEqual(mod.verify_open_pr_roster(openp,tags(),fetch_map(old)),
                          set(mod.PR_HEAD_PINS)-{175,178})
 
+    def test_aj_allows_only_the_four_documented_public_pr_closures(self):
+        self.with_transition([175,178,179,180],"dev-20261028-cppublic-pr-close-aj")
+        allp=full_prs()
+        inherited={p["number"]:closed_from(p) for p in allp if p["number"] in (175,178)}
+        openp=[p for p in allp if p["number"] not in inherited]
+        self.assertEqual(mod.verify_open_pr_roster(openp,tags(),fetch_map(inherited)),
+                         set(mod.PR_HEAD_PINS)-{175,178})
+
+        for candidate in (179,180):
+            with self.subTest(closed=candidate):
+                closed=dict(inherited)
+                closed[candidate]=closed_from(next(p for p in allp if p["number"]==candidate))
+                live=[p for p in allp if p["number"] not in closed]
+                self.assertEqual(mod.verify_open_pr_roster(live,tags(),fetch_map(closed)),
+                                 set(mod.PR_HEAD_PINS)-set(closed))
+
+        closed=dict(inherited)
+        closed.update({p["number"]:closed_from(p) for p in allp if p["number"] in (179,180)})
+        live=[p for p in allp if p["number"] not in closed]
+        self.assertEqual(mod.verify_open_pr_roster(live,tags(),fetch_map(closed)),
+                         set(mod.PR_HEAD_PINS)-{175,178,179,180})
+
+    def test_aj_still_rejects_security_pr_closure(self):
+        self.with_transition([175,178,179,180],"dev-20261028-cppublic-pr-close-aj")
+        allp=full_prs()
+        closed={182:closed_from(next(p for p in allp if p["number"]==182))}
+        with self.assertRaisesRegex(RuntimeError,"UNAUTHORIZED_PR_CLOSURE"):
+            mod.verify_open_pr_roster([p for p in allp if p["number"]!=182],
+                                      tags(),fetch_map(closed))
+
     def test_closed_pr_179_not_yet_authorized(self):
+        self.with_transition([175,178],"dev-20261028-cppublic-pr-close-ai")
         allp=full_prs()
         old={179:closed_from(next(p for p in allp if p["number"]==179))}
         with self.assertRaisesRegex(RuntimeError,"UNAUTHORIZED_PR_CLOSURE"):
@@ -110,25 +155,13 @@ class PRRosterGates(unittest.TestCase):
                  "base":{"ref":"main"}}],tags(),fetch_map({}))
 
     def test_manifest_prevents_unapproved_mass_closure(self):
-        with tempfile.TemporaryDirectory() as t:
-            target=Path(t)/"phase.json"
-            actual=json.loads(mod.PR_CLOSURE_TRANSITION.read_text())
-            actual["allowedClosedOrOpen"]=[175,178,179,180]
-            actual["remainingCandidatesFrozenOpen"]=[]
-            # This is NOT permitted with the initial wave ID.
-            target.write_text(json.dumps(actual),encoding="utf-8")
-            old=mod.PR_CLOSURE_TRANSITION
-            try:
-                mod.PR_CLOSURE_TRANSITION=target
-                with self.assertRaisesRegex(RuntimeError,"PR_TRANSITION_WAVE_DRIFT"):
-                    mod.verify_open_pr_roster(full_prs(),tags(),fetch_map({}))
-                actual["batchId"]="dev-20261028-cppublic-pr-close-aj"
-                actual["remainingCandidatesFrozenOpen"]=[]
-                target.write_text(json.dumps(actual),encoding="utf-8")
-                self.assertEqual(mod.verify_open_pr_roster(full_prs(),tags(),fetch_map({})),
-                                 set(mod.PR_HEAD_PINS))
-            finally:
-                mod.PR_CLOSURE_TRANSITION=old
+        # The full four-PR allowlist cannot be smuggled into the consumed AI wave.
+        self.with_transition([175,178,179,180],"dev-20261028-cppublic-pr-close-ai")
+        with self.assertRaisesRegex(RuntimeError,"PR_TRANSITION_WAVE_DRIFT"):
+            mod.verify_open_pr_roster(full_prs(),tags(),fetch_map({}))
+        self.with_transition([175,178,179,180],"dev-20261028-cppublic-pr-close-aj")
+        self.assertEqual(mod.verify_open_pr_roster(full_prs(),tags(),fetch_map({})),
+                         set(mod.PR_HEAD_PINS))
 
 
 class PRHeadRetentionGates(unittest.TestCase):
@@ -195,9 +228,14 @@ class PRHeadRetentionGates(unittest.TestCase):
         # this checkout. Historical DAG/blob/route assertions run unchanged.
         root = str(ROOT)
         original = mod.local_pr_refs()
-        with tempfile.TemporaryDirectory() as tmp:
+        with tempfile.TemporaryDirectory(dir=ROOT.parent) as tmp:
+            bundle = str(Path(tmp) / "history.bundle")
             mirror = str(Path(tmp) / "history.git")
-            subprocess.run(["git", "clone", "--quiet", "--shared", "--mirror", root, mirror],
+            # Bundling avoids Git-for-Windows spawning its restricted MSYS shell
+            # for a local shared clone while still creating an isolated mirror.
+            subprocess.run(["git", "bundle", "create", bundle, "--all"],
+                           check=True, capture_output=True, text=True)
+            subprocess.run(["git", "clone", "--quiet", "--mirror", bundle, mirror],
                            check=True, capture_output=True, text=True)
             for n in mod.PR_CONFIRMED_CLOSED_UNMERGED:
                 branch, sha = mod.PR_HEAD_PINS[n]
@@ -211,9 +249,10 @@ class PRHeadRetentionGates(unittest.TestCase):
                 absent = subprocess.run(["git", "--git-dir=" + mirror, "show-ref",
                                          "--verify", "--quiet", ref])
                 self.assertEqual(absent.returncode, 1, "closed head must be absent in mirror")
-            env = dict(os.environ, GIT_DIR=mirror, GIT_WORK_TREE=root)
+            env = dict(os.environ, GIT_DIR=mirror, GIT_WORK_TREE=root,
+                       PYTHONUTF8="1")
             result = subprocess.run([
-                "python3", "-m", "unittest",
+                sys.executable, "-m", "unittest",
                 "tests/test_development_cp_public_lineage.py",
                 "tests/test_development_cp_public_prs_175_180.py", "-v"],
                 cwd=root, env=env, capture_output=True, text=True)

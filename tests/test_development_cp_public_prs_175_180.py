@@ -15,6 +15,7 @@ SPEC.loader.exec_module(guard)
 
 MAIN = "221b54b2a41ecc8c338d1bf2cf67280cf165ce95"
 DEV = "bea73af76bfd6e5b638497ad000e14de611bb183"
+PR_ROSTER_BASELINE = "7ec2448418781405e0eb20ee85708166f5472ef1"
 PR = {
     175: ("work/cp-public-01-donor-staging-20261008","c81d357df3aa78c3e8f804b6334b2da35b3a75c8"),
     178: ("work/cp-public-02a-public-module-projection-20261008","f0c792397036836105dcb53a45f89780e10b6348"),
@@ -193,9 +194,9 @@ class PublicPRs(unittest.TestCase):
         self.assertNotIn("GET /api/configuration",dev_api)
 
     def test_no_product_changes_or_external_preview_operations(self):
-        self.assertEqual(git("diff","--name-only",DEV,"HEAD","--",
+        self.assertEqual(git("diff","--name-only",PR_ROSTER_BASELINE,"HEAD","--",
                              "app","netlify","architecture","design-system","scripts"),"")
-        workflow=Path(".github/workflows/development-cp-public-prs-175-180.yml").read_text()
+        workflow=Path(".github/workflows/development-cp-public-prs-175-180.yml").read_text(encoding="utf-8")
         self.assertIn("unittest discover",workflow)
         self.assertIn("app/tools/test-public-modules-endpoint.js",workflow)
         self.assertIn("app/viewer/scene-adapters.test.mjs",workflow)
@@ -203,7 +204,7 @@ class PublicPRs(unittest.TestCase):
                           "PUBLIC_PAGES_URL","tests/public-pages-integrated.cjs",
                           "seed-public-preview-v5.cjs","CI_STAGING_DATABASE_URL"):
             self.assertNotIn(forbidden,workflow)
-        doc=Path("docs/work/DEVELOPMENT_CP_PUBLIC_PRS_175_180_2026-10-28.md").read_text()
+        doc=Path("docs/work/DEVELOPMENT_CP_PUBLIC_PRS_175_180_2026-10-28.md").read_text(encoding="utf-8")
         for expected in ("#175","#178","#179","#180","HOLD","proveniência",
                          "c81d357df3aa78c3e8f804b6334b2da35b3a75c8"):
             self.assertIn(expected,doc)

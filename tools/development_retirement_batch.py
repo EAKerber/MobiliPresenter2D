@@ -160,7 +160,7 @@ def verify_open_pr_roster(prs, tags, fetch_pr=api):
         or transition.get("schemaVersion") != "M2DPublicPRRosterTransition/0.1"
         or transition.get("repository") != REPO
         or transition.get("mainSha") != MAIN_SHA
-        or transition.get("authoritativeArchive") != str(PR_ARCHIVE_MANIFEST)
+        or transition.get("authoritativeArchive") != PR_ARCHIVE_MANIFEST.as_posix()
         or transition.get("batchId") not in
             ("dev-20261028-cppublic-pr-close-ai", "dev-20261028-cppublic-pr-close-aj")
         or allowed not in ([175, 178], [175, 178, 179, 180])

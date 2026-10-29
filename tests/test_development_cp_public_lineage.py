@@ -15,6 +15,7 @@ SPEC.loader.exec_module(guard)
 REPO = "EAKerber/MobiliPresenter2D"
 MAIN = "221b54b2a41ecc8c338d1bf2cf67280cf165ce95"
 DEV = "895127d89b518a0a5c9a6856691442988d51407e"
+PR_ROSTER_BASELINE = "7ec2448418781405e0eb20ee85708166f5472ef1"
 OLD_TERMINAL = "68362325972a4a2db8acbdb475a1d686dd6663b4"
 FORK = "bf30e008a81b7bc9cc34573e3d60a953810a9e72"
 OPEN_PR_HEADS = {
@@ -39,7 +40,8 @@ BUYER_PROJECTION = "app/core/published-buyer-projection.js"
 OLD_BUYER = "app/core/buyer-configuration-projection.js"
 
 def git(*args):
-    return subprocess.check_output(["git", *args], text=True, stderr=subprocess.PIPE).strip()
+    return subprocess.check_output(["git", *args], text=True, encoding="utf-8",
+                                   stderr=subprocess.PIPE).strip()
 def show(ref, path):
     return git("show", ref + ":" + path)
 def blob(ref, path):
@@ -159,14 +161,14 @@ class CPPublicLineage(unittest.TestCase):
         self.assertNotIn('data-configuration-access-state="loading"',main_landing)
         self.assertFalse(has_blob(OLD_TERMINAL,"app/config/index.html"))
         # Static existence is not a browser/real auth test.
-        doc=Path("docs/work/DEVELOPMENT_CP_PUBLIC_PR_LINEAGE_2026-10-28.md").read_text()
+        doc=Path("docs/work/DEVELOPMENT_CP_PUBLIC_PR_LINEAGE_2026-10-28.md").read_text(encoding="utf-8")
         for p in ["não", "12 PRs", "HOLD", "archive/m2d/cp-public-03a2-3-68362325"]:
             self.assertIn(p,doc)
 
     def test_unchanged_runtime_and_no_preview_or_database(self):
-        self.assertEqual(git("diff","--name-only",DEV,"HEAD","--",
+        self.assertEqual(git("diff","--name-only",PR_ROSTER_BASELINE,"HEAD","--",
                              "app","netlify","scripts","architecture","design-system"),"")
-        workflow=Path(".github/workflows/development-cp-public-lineage.yml").read_text()
+        workflow=Path(".github/workflows/development-cp-public-lineage.yml").read_text(encoding="utf-8")
         for forbidden in ("npm install","netlify deploy","playwright","DATABASE_URL",
                           "SUPABASE_SERVICE_ROLE_KEY","access-postgres-integration.cjs"):
             self.assertNotIn(forbidden,workflow)
