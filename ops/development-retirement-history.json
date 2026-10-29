@@ -2091,7 +2091,86 @@
         ]
       },
       "noDeploy": true
+    },
+    {
+      "batchId": "dev-20261029-cppublic-closed-heads-ao",
+      "workflowRun": 40808093737,
+      "workflowUrl": "https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40808093737",
+      "headSha": "e948c129ebb039378555b1c366c2020cc1911ab1",
+      "auditArtifactId": 12868892977,
+      "applyArtifactId": 12868927711,
+      "audit": "PASS",
+      "apply": "PASS",
+      "readback": "PASS",
+      "refsBefore": 24,
+      "refsAfter": 22,
+      "archived": [
+        {
+          "tag": "archive/m2d/cppublic-pr179-44b1d6a9",
+          "sha": "44b1d6a94c06a17b73405755e03c787780e7a455",
+          "alreadyPreserved": true
+        },
+        {
+          "tag": "archive/m2d/cppublic-pr180-82d85674",
+          "sha": "82d85674595280a7c878848d0d5f09df29492e92",
+          "alreadyPreserved": true
+        }
+      ],
+      "retired": [
+        {
+          "branch": "work/cp-public-02b-public-read-endpoint-20261008",
+          "sha": "44b1d6a94c06a17b73405755e03c787780e7a455",
+          "kind": "archive-diverged",
+          "archiveTag": "archive/m2d/cppublic-pr179-44b1d6a9"
+        },
+        {
+          "branch": "work/cp-public-02c-integrated-preview-20261008",
+          "sha": "82d85674595280a7c878848d0d5f09df29492e92",
+          "kind": "archive-diverged",
+          "archiveTag": "archive/m2d/cppublic-pr180-82d85674"
+        }
+      ],
+      "auxiliaryRetired": [],
+      "semanticProof": {
+        "source": "docs/work/DEVELOPMENT_CP_PUBLIC_PR_CLOSURE_2026-10-28.md",
+        "rosterGate": 40807167763,
+        "closedPRs": [
+          179,
+          180
+        ],
+        "exactTags": true,
+        "noRuntimeChanges": true
+      },
+      "preserved": {
+        "mainSha": "221b54b2a41ecc8c338d1bf2cf67280cf165ce95",
+        "openPRs": [
+          34,
+          182,
+          184,
+          185,
+          186,
+          196,
+          231,
+          238
+        ],
+        "closedUnmergedPRs": [
+          175,
+          178,
+          179,
+          180
+        ],
+        "remainingOriginalHistoricalRefs": 20,
+        "originalAssetsBranch": "artifacts/ds02-imagens-originais-20261015",
+        "authPRHeadsProtected": [
+          182,
+          184,
+          185,
+          186,
+          238
+        ]
+      },
+      "noDeploy": true
     }
   ],
-  "nextBatchContract": "35 successful waves; 38/60 original historical branches retired, 33 temporary auxiliaries retired; 22 original historical + main + development = 24 remote branches. AN consumed; do not replay. Main and all eight remaining OPEN PR heads unchanged; #175/#178/#179/#180 CLOSED/UNMERGED with exact DAG tags. UX04 V5 removal of the obsolete integration/41 workflow trigger passed before retirement. Security PRs #182/#184/#185/#238 remain HOLD. Continue classification of the 22 remaining original branches; only use exact bounded manifests, gates, leases and readback. No deploy."
+  "nextBatchContract": "36 successful waves; 40/60 original historical branches retired, 33 temporary auxiliaries retired; 20 original historical + main + development = 22 remote branches. AO consumed; do not replay. Main and all eight remaining OPEN PR heads unchanged; #175/#178/#179/#180 CLOSED/UNMERGED with exact DAG tags. Preserve the original DS02 assets branch and reconcile divergent auth/security/config history before any absorption. Only use exact bounded manifests, gates, leases and readback. No deploy."
 }
