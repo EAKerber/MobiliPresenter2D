@@ -165,8 +165,8 @@
   "candidate": {
     "branch": "integration/41-ux04-focus-restore-20261028",
     "baseDevelopmentSha": "519cf7a69f1628309eb21c98097cda22b893d58d",
-    "status": "HOLD_BUILD_GATE",
-    "blocker": "npm run build stops at compile-primary-pages due tracked generated-manifest drift before production of bundles.",
+    "status": "GATE_PASSED_PENDING_PROMOTION",
+    "blocker": null,
     "files": [
       {
         "path": "app/app.js",
@@ -176,6 +176,12 @@
         "path": "tests/keyboard-browser.cjs",
         "blob": "7c3fe251bc368510b7f4e1e3e36dc2e42a8ef971"
       }
-    ]
+    ],
+    "verifiedCodeCommit": "ab6f05f8d69bbe58ffea2dc3d6eed2801a8f28e4",
+    "githubActionsRun": {
+      "id": 40801773339,
+      "conclusion": "success",
+      "url": "https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40801773339"
+    }
   }
 }

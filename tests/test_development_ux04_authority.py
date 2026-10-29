@@ -68,5 +68,5 @@ class LegacyUX04(unittest.TestCase):
         self.assertTrue(any("above the persistent dock" in x for x in current))
         self.assertTrue(any("reduced-motion section navigation stays above the dock" in x for x in current))
         self.assertEqual(self.p["semanticDecision"]["mode"],"GATE_PASSED_RETIRE_CANDIDATE")
-        self.assertEqual(self.p["candidate"]["status"],"HOLD_BUILD_GATE")
+        self.assertEqual(self.p["candidate"]["status"],"GATE_PASSED_PENDING_PROMOTION")
 if __name__=="__main__":unittest.main()
