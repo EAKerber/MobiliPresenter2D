@@ -3,7 +3,7 @@
   "repository": "EAKerber/MobiliPresenter2D",
   "controlBranch": "development",
   "mainSha": "221b54b2a41ecc8c338d1bf2cf67280cf165ce95",
-  "batchId": "dev-20261029-ci-baseline-histories-ar",
+  "batchId": "dev-20261029-ci-preview-history-as",
   "retired": [
     {
       "branch": "docs/handover-reconcile-20261023",
@@ -252,43 +252,61 @@
       "sha": "8ad1405f176e5c2263689450c361c3ae617a94db",
       "kind": "archive-diverged",
       "archiveTag": "archive/m2d/experiment-viewer-overview-editorial-8ad1405f"
-    }
-  ],
-  "auxiliaryRefs": [],
-  "targets": [
+    },
     {
       "branch": "ci/ci-baseline-01-auth235-only-20261023",
       "sha": "17dac20ecef87477cf6e5858164fa155a8b610fb",
       "kind": "archive-diverged",
-      "archiveTag": "archive/m2d/ci-auth235-only-17dac20e",
-      "snapshotPath": "docs/work/DEVELOPMENT_CI_BASELINE_ARCHIVE_2026-10-29.md",
-      "semanticGate": {
-        "runId": 40808630276,
-        "headSha": "a945446f45956c5cf294e09c3359cc60b6be1027",
-        "workflowName": "Development historical-branch semantic and blob provenance scan"
-      }
+      "archiveTag": "archive/m2d/ci-auth235-only-17dac20e"
     },
     {
       "branch": "ci/ci-baseline-01-isolated-session-fixture-20261023",
       "sha": "cb0ae8b1e05bc9b5d96c51e2027732aff12577c3",
       "kind": "archive-diverged",
-      "archiveTag": "archive/m2d/ci-isolated-session-fixture-cb0ae8b1",
-      "snapshotPath": "docs/work/DEVELOPMENT_CI_BASELINE_ARCHIVE_2026-10-29.md",
-      "semanticGate": {
-        "runId": 40808630276,
-        "headSha": "a945446f45956c5cf294e09c3359cc60b6be1027",
-        "workflowName": "Development historical-branch semantic and blob provenance scan"
-      }
+      "archiveTag": "archive/m2d/ci-isolated-session-fixture-cb0ae8b1"
     },
     {
       "branch": "ci/ci-baseline-01-v5-local-diagnostics-20261023",
       "sha": "5ce7327a9e4c8c11483163507d29af4bb8b1312a",
       "kind": "archive-diverged",
-      "archiveTag": "archive/m2d/ci-v5-local-diagnostics-5ce7327a",
-      "snapshotPath": "docs/work/DEVELOPMENT_CI_BASELINE_ARCHIVE_2026-10-29.md",
+      "archiveTag": "archive/m2d/ci-v5-local-diagnostics-5ce7327a"
+    }
+  ],
+  "auxiliaryRefs": [],
+  "targets": [
+    {
+      "branch": "ci/ci-baseline-01-published-preview-fixture-20261023",
+      "sha": "60773a62cd6d162662213cb711ce55dfe1f88c1c",
+      "kind": "archive-diverged",
+      "archiveTag": "archive/m2d/ci-published-preview-fixture-60773a62",
+      "snapshotPath": "docs/work/DEVELOPMENT_CI_PREVIEW_AUTH_ARCHIVE_2026-10-29.md",
       "semanticGate": {
-        "runId": 40808630276,
-        "headSha": "a945446f45956c5cf294e09c3359cc60b6be1027",
+        "runId": 40808897405,
+        "headSha": "299145a695c5498930c43cd129913d9928047e4d",
+        "workflowName": "Development historical-branch semantic and blob provenance scan"
+      }
+    },
+    {
+      "branch": "ci/ci-baseline-01-shared-db-preview-20261023",
+      "sha": "1e164dc55cc1f744cdacf63e675d08716dccd032",
+      "kind": "archive-diverged",
+      "archiveTag": "archive/m2d/ci-shared-db-preview-1e164dc5",
+      "snapshotPath": "docs/work/DEVELOPMENT_CI_PREVIEW_AUTH_ARCHIVE_2026-10-29.md",
+      "semanticGate": {
+        "runId": 40808897405,
+        "headSha": "299145a695c5498930c43cd129913d9928047e4d",
+        "workflowName": "Development historical-branch semantic and blob provenance scan"
+      }
+    },
+    {
+      "branch": "ci/ci-global-auth-boundary-repair-20261023",
+      "sha": "cacd0e9160437285c41302d0dd13d9664001186e",
+      "kind": "archive-diverged",
+      "archiveTag": "archive/m2d/ci-global-auth-boundary-cacd0e91",
+      "snapshotPath": "docs/work/DEVELOPMENT_CI_PREVIEW_AUTH_ARCHIVE_2026-10-29.md",
+      "semanticGate": {
+        "runId": 40808897405,
+        "headSha": "299145a695c5498930c43cd129913d9928047e4d",
         "workflowName": "Development historical-branch semantic and blob provenance scan"
       }
     }
