@@ -2329,7 +2329,92 @@
         ]
       },
       "noDeploy": true
+    },
+    {
+      "batchId": "dev-20261029-ci-preview-history-as",
+      "workflowRun": 40808995136,
+      "workflowUrl": "https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40808995136",
+      "headSha": "b5745cc33103b2cf9f04b6e835be603239f32f93",
+      "auditArtifactId": 12869526465,
+      "applyArtifactId": 12869466835,
+      "audit": "PASS",
+      "apply": "PASS",
+      "readback": "PASS",
+      "refsBefore": 17,
+      "refsAfter": 14,
+      "archived": [
+        {
+          "tag": "archive/m2d/ci-published-preview-fixture-60773a62",
+          "sha": "60773a62cd6d162662213cb711ce55dfe1f88c1c"
+        },
+        {
+          "tag": "archive/m2d/ci-shared-db-preview-1e164dc5",
+          "sha": "1e164dc55cc1f744cdacf63e675d08716dccd032"
+        },
+        {
+          "tag": "archive/m2d/ci-global-auth-boundary-cacd0e91",
+          "sha": "cacd0e9160437285c41302d0dd13d9664001186e"
+        }
+      ],
+      "retired": [
+        {
+          "branch": "ci/ci-baseline-01-published-preview-fixture-20261023",
+          "sha": "60773a62cd6d162662213cb711ce55dfe1f88c1c",
+          "kind": "archive-diverged",
+          "archiveTag": "archive/m2d/ci-published-preview-fixture-60773a62"
+        },
+        {
+          "branch": "ci/ci-baseline-01-shared-db-preview-20261023",
+          "sha": "1e164dc55cc1f744cdacf63e675d08716dccd032",
+          "kind": "archive-diverged",
+          "archiveTag": "archive/m2d/ci-shared-db-preview-1e164dc5"
+        },
+        {
+          "branch": "ci/ci-global-auth-boundary-repair-20261023",
+          "sha": "cacd0e9160437285c41302d0dd13d9664001186e",
+          "kind": "archive-diverged",
+          "archiveTag": "archive/m2d/ci-global-auth-boundary-cacd0e91"
+        }
+      ],
+      "auxiliaryRetired": [],
+      "semanticProof": {
+        "source": "docs/work/DEVELOPMENT_CI_PREVIEW_AUTH_ARCHIVE_2026-10-29.md",
+        "historicalScan": 40808897405,
+        "preflightOpenPRsUnchanged": true,
+        "noCodeAbsorption": true,
+        "noDatabaseMutation": true,
+        "noRuntimeChanges": true
+      },
+      "preserved": {
+        "mainSha": "221b54b2a41ecc8c338d1bf2cf67280cf165ce95",
+        "openPRs": [
+          34,
+          182,
+          184,
+          185,
+          186,
+          196,
+          231,
+          238
+        ],
+        "closedUnmergedPRs": [
+          175,
+          178,
+          179,
+          180
+        ],
+        "remainingOriginalHistoricalRefs": 12,
+        "originalAssetsBranch": "artifacts/ds02-imagens-originais-20261015",
+        "authPRHeadsProtected": [
+          182,
+          184,
+          185,
+          186,
+          238
+        ]
+      },
+      "noDeploy": true
     }
   ],
-  "nextBatchContract": "38 successful waves; 45/60 original historical branches retired, 33 temporary auxiliaries retired; 15 original historical + main + development = 17 remote branches. AR consumed; do not replay. Main, all eight OPEN PR heads, and original DS02 assets branch remain. Four CP-PUBLIC PR DAGs plus three old CI baseline DAGs are preserved by direct tags. Remaining CI/auth/security/database/migration histories stay unmerged; archive active refs only after exact per-batch snapshot and live audit. No deploy."
+  "nextBatchContract": "39 successful waves; 48/60 original historical branches retired, 33 temporary auxiliaries retired; 12 original historical + main + development = 14 remote branches. AS consumed; do not replay. Main, eight OPEN PR heads, and original DS02 assets branch remain. Historical CI preview/database/auth branches are preserved by exact direct tags without execution or absorption. The final three no-PR originals touch OIDC/auth/migration; process only through exact bounded manifests and archive tags. No deploy."
 }
