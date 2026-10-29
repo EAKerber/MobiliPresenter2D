@@ -2170,7 +2170,82 @@
         ]
       },
       "noDeploy": true
+    },
+    {
+      "batchId": "dev-20261029-experiment-histories-aq",
+      "workflowRun": 40808474789,
+      "workflowUrl": "https://github.com/EAKerber/MobiliPresenter2D/actions/runs/40808474789",
+      "headSha": "25cf9fb486be1cc65b36e0398ec70269090c2c57",
+      "auditArtifactId": 12869197545,
+      "applyArtifactId": 12868434480,
+      "audit": "PASS",
+      "apply": "PASS",
+      "readback": "PASS",
+      "refsBefore": 22,
+      "refsAfter": 20,
+      "archived": [
+        {
+          "tag": "archive/m2d/experiment-ui-declarative-landing-176cd093",
+          "sha": "176cd0931056ad6814317f3aa580a624f6f2e871"
+        },
+        {
+          "tag": "archive/m2d/experiment-viewer-overview-editorial-8ad1405f",
+          "sha": "8ad1405f176e5c2263689450c361c3ae617a94db"
+        }
+      ],
+      "retired": [
+        {
+          "branch": "experiment/ui-declarative-landing-benefits-20261020",
+          "sha": "176cd0931056ad6814317f3aa580a624f6f2e871",
+          "kind": "archive-diverged",
+          "archiveTag": "archive/m2d/experiment-ui-declarative-landing-176cd093"
+        },
+        {
+          "branch": "experiment/viewer-overview-editorial-20261021",
+          "sha": "8ad1405f176e5c2263689450c361c3ae617a94db",
+          "kind": "archive-diverged",
+          "archiveTag": "archive/m2d/experiment-viewer-overview-editorial-8ad1405f"
+        }
+      ],
+      "auxiliaryRetired": [],
+      "semanticProof": {
+        "source": "docs/work/DEVELOPMENT_HISTORICAL_BRANCH_ARCHIVE_2026-10-29.md",
+        "preRetirementHistoricalScan": 40808251105,
+        "auditOnlyFormatFailureRun": 40808404676,
+        "auditOnlyFormatFailure": "ARCHIVE_PROVENANCE_RECORD_MISSING",
+        "noCodeAbsorption": true,
+        "noRuntimeChanges": true
+      },
+      "preserved": {
+        "mainSha": "221b54b2a41ecc8c338d1bf2cf67280cf165ce95",
+        "openPRs": [
+          34,
+          182,
+          184,
+          185,
+          186,
+          196,
+          231,
+          238
+        ],
+        "closedUnmergedPRs": [
+          175,
+          178,
+          179,
+          180
+        ],
+        "remainingOriginalHistoricalRefs": 18,
+        "originalAssetsBranch": "artifacts/ds02-imagens-originais-20261015",
+        "authPRHeadsProtected": [
+          182,
+          184,
+          185,
+          186,
+          238
+        ]
+      },
+      "noDeploy": true
     }
   ],
-  "nextBatchContract": "36 successful waves; 40/60 original historical branches retired, 33 temporary auxiliaries retired; 20 original historical + main + development = 22 remote branches. AO consumed; do not replay. Main and all eight remaining OPEN PR heads unchanged; #175/#178/#179/#180 CLOSED/UNMERGED with exact DAG tags. Preserve the original DS02 assets branch and reconcile divergent auth/security/config history before any absorption. Only use exact bounded manifests, gates, leases and readback. No deploy."
+  "nextBatchContract": "37 successful waves; 42/60 original historical branches retired, 33 temporary auxiliaries retired; 18 original historical + main + development = 20 remote branches. AQ consumed; do not replay. Main and all eight remaining OPEN PR heads unchanged; #175/#178/#179/#180 CLOSED/UNMERGED with exact DAG tags. Two experiment branch DAGs preserved by new archive tags without code absorption. Preserve the original DS02 assets branch. Auth/security/config/migration histories remain unmerged and require individual reconciliation before any additional archival. No deploy."
 }
