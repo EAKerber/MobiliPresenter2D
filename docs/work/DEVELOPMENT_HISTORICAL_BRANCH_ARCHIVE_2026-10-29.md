@@ -6,8 +6,8 @@ These two branches have no open PR and are not referenced by any active workflow
 
 | Branch | Exact head | Compare against development | Changed paths at compare | Archive tag |
 |---|---|---|---:|---|
-| experiment/ui-declarative-landing-benefits-20261020 | 176cd0931056ad6814317f3aa580a624f6f2e871 | 22 unique commits; 595 development-only commits; merge base 1878ae1057ce7c6190e0c8cb08a1f3baadd49463 | 10 | archive/m2d/experiment-ui-declarative-landing-176cd093 |
-| experiment/viewer-overview-editorial-20261021 | 8ad1405f176e5c2263689450c361c3ae617a94db | 7 unique commits; 595 development-only commits; merge base 1878ae1057ce7c6190e0c8cb08a1f3baadd49463 | 4 | archive/m2d/experiment-viewer-overview-editorial-8ad1405f |
+| experiment/ui-declarative-landing-benefits-20261020@176cd0931056ad6814317f3aa580a624f6f2e871 | 176cd0931056ad6814317f3aa580a624f6f2e871 | 22 unique commits; 595 development-only commits; merge base 1878ae1057ce7c6190e0c8cb08a1f3baadd49463 | 10 | archive/m2d/experiment-ui-declarative-landing-176cd093 |
+| experiment/viewer-overview-editorial-20261021@8ad1405f176e5c2263689450c361c3ae617a94db | 8ad1405f176e5c2263689450c361c3ae617a94db | 7 unique commits; 595 development-only commits; merge base 1878ae1057ce7c6190e0c8cb08a1f3baadd49463 | 4 | archive/m2d/experiment-viewer-overview-editorial-8ad1405f |
 
 Changed paths for the landing experiment: `.github/workflows/declarative-landing-benefits-pilot.yml`, `app/core/page-composition.js`, `app/index.html`, `app/landing/benefit-strip.js`, `app/landing/data.js`, `app/landing/landing.js`, `tests/landing-benefit-browser-gate.mjs`, `tests/landing-benefit-composition.test.cjs`, `tests/landing-interaction-gate.mjs`, and `tests/public-cutover-contract.cjs`.
 
