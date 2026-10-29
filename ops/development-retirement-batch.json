@@ -3,7 +3,7 @@
   "repository": "EAKerber/MobiliPresenter2D",
   "controlBranch": "development",
   "mainSha": "221b54b2a41ecc8c338d1bf2cf67280cf165ce95",
-  "batchId": "dev-20261029-cppublic-ux04-aux-an",
+  "batchId": "dev-20261029-cppublic-closed-heads-ao",
   "retired": [
     {
       "branch": "docs/handover-reconcile-20261023",
@@ -230,26 +230,31 @@
       "archiveTag": "archive/m2d/cppublic-pr178-f0c79239"
     }
   ],
-  "auxiliaryRefs": [
-    {
-      "branch": "integration/41-ux04-focus-restore-20261028",
-      "sha": "7ec2448418781405e0eb20ee85708166f5472ef1"
-    },
-    {
-      "branch": "integration/42-cppublic-pr-roster-aj-20261029",
-      "sha": "fc2c635a754f83d4dbde5b02aab747f7c3346458"
-    }
-  ],
+  "auxiliaryRefs": [],
   "targets": [
     {
-      "branch": "integration/41-ux04-focus-restore-20261028",
-      "sha": "7ec2448418781405e0eb20ee85708166f5472ef1",
-      "kind": "auxiliary-ancestor-development"
+      "branch": "work/cp-public-02b-public-read-endpoint-20261008",
+      "sha": "44b1d6a94c06a17b73405755e03c787780e7a455",
+      "kind": "archive-diverged",
+      "archiveTag": "archive/m2d/cppublic-pr179-44b1d6a9",
+      "snapshotPath": "docs/work/DEVELOPMENT_CP_PUBLIC_PR_CLOSURE_2026-10-28.md",
+      "semanticGate": {
+        "runId": 40807167763,
+        "headSha": "fc2c635a754f83d4dbde5b02aab747f7c3346458",
+        "workflowName": "Development CP-PUBLIC protected PR roster transition"
+      }
     },
     {
-      "branch": "integration/42-cppublic-pr-roster-aj-20261029",
-      "sha": "fc2c635a754f83d4dbde5b02aab747f7c3346458",
-      "kind": "auxiliary-ancestor-development"
+      "branch": "work/cp-public-02c-integrated-preview-20261008",
+      "sha": "82d85674595280a7c878848d0d5f09df29492e92",
+      "kind": "archive-diverged",
+      "archiveTag": "archive/m2d/cppublic-pr180-82d85674",
+      "snapshotPath": "docs/work/DEVELOPMENT_CP_PUBLIC_PR_CLOSURE_2026-10-28.md",
+      "semanticGate": {
+        "runId": 40807167763,
+        "headSha": "fc2c635a754f83d4dbde5b02aab747f7c3346458",
+        "workflowName": "Development CP-PUBLIC protected PR roster transition"
+      }
     }
   ]
 }
