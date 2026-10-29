@@ -3,7 +3,7 @@
   "repository": "EAKerber/MobiliPresenter2D",
   "controlBranch": "development",
   "mainSha": "221b54b2a41ecc8c338d1bf2cf67280cf165ce95",
-  "batchId": "dev-20261029-cppublic-closed-heads-ao",
+  "batchId": "dev-20261029-experiment-histories-ap",
   "retired": [
     {
       "branch": "docs/handover-reconcile-20261023",
@@ -228,32 +228,44 @@
       "sha": "f0c792397036836105dcb53a45f89780e10b6348",
       "kind": "archive-diverged",
       "archiveTag": "archive/m2d/cppublic-pr178-f0c79239"
-    }
-  ],
-  "auxiliaryRefs": [],
-  "targets": [
+    },
     {
       "branch": "work/cp-public-02b-public-read-endpoint-20261008",
       "sha": "44b1d6a94c06a17b73405755e03c787780e7a455",
       "kind": "archive-diverged",
-      "archiveTag": "archive/m2d/cppublic-pr179-44b1d6a9",
-      "snapshotPath": "docs/work/DEVELOPMENT_CP_PUBLIC_PR_CLOSURE_2026-10-28.md",
-      "semanticGate": {
-        "runId": 40807167763,
-        "headSha": "fc2c635a754f83d4dbde5b02aab747f7c3346458",
-        "workflowName": "Development CP-PUBLIC protected PR roster transition"
-      }
+      "archiveTag": "archive/m2d/cppublic-pr179-44b1d6a9"
     },
     {
       "branch": "work/cp-public-02c-integrated-preview-20261008",
       "sha": "82d85674595280a7c878848d0d5f09df29492e92",
       "kind": "archive-diverged",
-      "archiveTag": "archive/m2d/cppublic-pr180-82d85674",
-      "snapshotPath": "docs/work/DEVELOPMENT_CP_PUBLIC_PR_CLOSURE_2026-10-28.md",
+      "archiveTag": "archive/m2d/cppublic-pr180-82d85674"
+    }
+  ],
+  "auxiliaryRefs": [],
+  "targets": [
+    {
+      "branch": "experiment/ui-declarative-landing-benefits-20261020",
+      "sha": "176cd0931056ad6814317f3aa580a624f6f2e871",
+      "kind": "archive-diverged",
+      "archiveTag": "archive/m2d/experiment-ui-declarative-landing-176cd093",
+      "snapshotPath": "docs/work/DEVELOPMENT_HISTORICAL_BRANCH_ARCHIVE_2026-10-29.md",
       "semanticGate": {
-        "runId": 40807167763,
-        "headSha": "fc2c635a754f83d4dbde5b02aab747f7c3346458",
-        "workflowName": "Development CP-PUBLIC protected PR roster transition"
+        "runId": 40808251105,
+        "headSha": "e72502655fa1461c46cfed05e36660d2c9dc43b4",
+        "workflowName": "Development historical-branch semantic and blob provenance scan"
+      }
+    },
+    {
+      "branch": "experiment/viewer-overview-editorial-20261021",
+      "sha": "8ad1405f176e5c2263689450c361c3ae617a94db",
+      "kind": "archive-diverged",
+      "archiveTag": "archive/m2d/experiment-viewer-overview-editorial-8ad1405f",
+      "snapshotPath": "docs/work/DEVELOPMENT_HISTORICAL_BRANCH_ARCHIVE_2026-10-29.md",
+      "semanticGate": {
+        "runId": 40808251105,
+        "headSha": "e72502655fa1461c46cfed05e36660d2c9dc43b4",
+        "workflowName": "Development historical-branch semantic and blob provenance scan"
       }
     }
   ]
