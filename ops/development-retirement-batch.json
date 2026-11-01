@@ -371,6 +371,14 @@
       "archiveTag": "archive/m2d/ux04-focus-restore-20261101-61e49ff4",
       "snapshotPath": "docs/work/UX04_FOCUS_RESTORE_BRANCH_ARCHIVE_2026-11-01.md",
       "archiveRecord": "ux04-focus-restore"
+    },
+    {
+      "branch": "maintenance/ux04-retirement-guard-20261101",
+      "sha": "be4f4748ec5c9aece18ca6ba005cd13eccc7819a",
+      "archiveTag": "archive/m2d/ux04-retirement-guard-be4f4748",
+      "snapshotPath": "docs/work/UX04_RETIREMENT_GUARD_BRANCH_ARCHIVE_2026-11-01.md",
+      "archiveRecord": "ux04-retirement-guard",
+      "kind": "archive-diverged"
     }
   ],
   "supplementalRefs": [
@@ -380,6 +388,13 @@
       "archiveTag": "archive/m2d/ux04-focus-restore-20261101-61e49ff4",
       "snapshotPath": "docs/work/UX04_FOCUS_RESTORE_BRANCH_ARCHIVE_2026-11-01.md",
       "archiveRecord": "ux04-focus-restore"
+    },
+    {
+      "branch": "maintenance/ux04-retirement-guard-20261101",
+      "sha": "be4f4748ec5c9aece18ca6ba005cd13eccc7819a",
+      "archiveTag": "archive/m2d/ux04-retirement-guard-be4f4748",
+      "snapshotPath": "docs/work/UX04_RETIREMENT_GUARD_BRANCH_ARCHIVE_2026-11-01.md",
+      "archiveRecord": "ux04-retirement-guard"
     }
   ]
 }

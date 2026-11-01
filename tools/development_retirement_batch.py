@@ -102,6 +102,11 @@ NON_PR_ARCHIVE_PINS = {
         "61e49ff44e21c4ba02f116f749a68d72d58faf61",
         "archive/m2d/ux04-focus-restore-20261101-61e49ff4",
     ],
+    "ux04-retirement-guard": [
+        "maintenance/ux04-retirement-guard-20261101",
+        "be4f4748ec5c9aece18ca6ba005cd13eccc7819a",
+        "archive/m2d/ux04-retirement-guard-be4f4748",
+    ],
 }
 SUPPLEMENTAL_ARCHIVE_PINS = {
     "ux04-focus-restore": {
@@ -110,7 +115,25 @@ SUPPLEMENTAL_ARCHIVE_PINS = {
         "archiveTag": "archive/m2d/ux04-focus-restore-20261101-61e49ff4",
         "snapshotPath": "docs/work/UX04_FOCUS_RESTORE_BRANCH_ARCHIVE_2026-11-01.md",
         "archiveRecord": "ux04-focus-restore",
-    }
+    },
+    "ux04-retirement-guard": {
+        "branch": "maintenance/ux04-retirement-guard-20261101",
+        "sha": "be4f4748ec5c9aece18ca6ba005cd13eccc7819a",
+        "archiveTag": "archive/m2d/ux04-retirement-guard-be4f4748",
+        "snapshotPath": "docs/work/UX04_RETIREMENT_GUARD_BRANCH_ARCHIVE_2026-11-01.md",
+        "archiveRecord": "ux04-retirement-guard",
+    },
+}
+SUPPLEMENTAL_PR_PINS = {
+    "fix/ux04-focus-restore-20261101": {
+        "number": 264, "sha": "61e49ff44e21c4ba02f116f749a68d72d58faf61",
+        "base": "main", "merged": False,
+    },
+    "maintenance/ux04-retirement-guard-20261101": {
+        "number": 265, "sha": "be4f4748ec5c9aece18ca6ba005cd13eccc7819a",
+        "base": "development", "merged": True,
+        "mergeCommitSha": "af04c21ae397ef42e5e9a61dc24afd885bb52f03",
+    },
 }
 RETIREMENT_WORKFLOW_NAME = "Development bounded branch retirement — exact manifest only"
 
@@ -348,7 +371,7 @@ def canonical_targets(batch, inventory):
             raise ValueError("AUXILIARY_PIN_NOT_ISOLATED")
         aux_pins[name] = sha
     supplemental_rows = batch.get("supplementalRefs", [])
-    if not isinstance(supplemental_rows, list) or len(supplemental_rows) > 1:
+    if not isinstance(supplemental_rows, list) or len(supplemental_rows) > 2:
         raise ValueError("INVALID_SUPPLEMENTAL_ROSTER")
     supplemental_pins = {}
     for ref in supplemental_rows:
@@ -549,6 +572,8 @@ def verify_context(batch, inventory, mode):
         raise RuntimeError("RULESETS_PRESENT")
     for item in targets:
         name, sha = item["branch"], item["sha"]
+        if name in SUPPLEMENTAL_PR_PINS:
+            verify_supplemental_pr_provenance(item)
         if name in completed:
             prove_snapshot(item)
             git("cat-file", "-e", sha + "^{commit}")
@@ -583,6 +608,26 @@ def verify_context(batch, inventory, mode):
     return refs, targets, tags, completed
 
 
+def verify_supplemental_pr_provenance(item):
+    pin = SUPPLEMENTAL_PR_PINS.get(item.get("branch"))
+    if not pin or pin.get("sha") != item.get("sha"):
+        raise RuntimeError("SUPPLEMENTAL_PR_PIN_MISSING")
+    pr = api("pulls/" + str(pin["number"]))
+    head, base = pr.get("head") or {}, pr.get("base") or {}
+    if (pr.get("number") != pin["number"] or pr.get("state") != "closed"
+        or pr.get("merged") is not pin["merged"] or not pr.get("closed_at")
+        or (head.get("ref"), head.get("sha")) != (item["branch"], item["sha"])
+        or base.get("ref") != pin["base"]):
+        raise RuntimeError("SUPPLEMENTAL_PR_PROVENANCE_DRIFT:" + item["branch"])
+    if pin["merged"] and (not pr.get("merged_at")
+        or pr.get("merge_commit_sha") != pin.get("mergeCommitSha")):
+        raise RuntimeError("SUPPLEMENTAL_PR_MERGE_PROVENANCE_DRIFT:" + item["branch"])
+    if not pin["merged"] and pr.get("merged_at"):
+        raise RuntimeError("SUPPLEMENTAL_PR_UNEXPECTED_MERGE:" + item["branch"])
+    return {"pr": pin["number"], "merged": pin["merged"],
+            "mergeCommitSha": pin.get("mergeCommitSha")}
+
+
 def completed_targets(targets, refs, tags):
     """Recognize only exact, already-tagged removals for idempotent readback."""
     completed = set()
@@ -602,14 +647,14 @@ def completed_targets(targets, refs, tags):
 def verify_apply_authorization(batch):
     """Require an earlier successful audit and an explicit authorization commit."""
     auth = batch.get("applyAuthorization")
-    required = {"batchId", "auditRunId", "developmentSha", "targetBranch", "targetSha", "archiveTag"}
+    required = {"batchId", "auditRunId", "developmentSha", "targetPins"}
     if not isinstance(auth, dict) or set(auth) != required:
         raise RuntimeError("APPLY_AUTHORIZATION_MISSING_OR_MALFORMED")
-    matches = [item for item in batch.get("targets", [])
-               if item.get("branch") == auth.get("targetBranch")
-               and item.get("sha") == auth.get("targetSha")
-               and item.get("archiveTag") == auth.get("archiveTag")]
-    if (auth.get("batchId") != batch.get("batchId") or len(matches) != 1
+    expected_pins = sorted(
+        [{"branch": item.get("branch"), "sha": item.get("sha"), "archiveTag": item.get("archiveTag")}
+         for item in batch.get("targets", []) if item.get("kind") == "archive-diverged"],
+        key=lambda item: item["branch"])
+    if (auth.get("batchId") != batch.get("batchId") or auth.get("targetPins") != expected_pins
         or type(auth.get("auditRunId")) is not int or auth["auditRunId"] <= 0
         or not SHA_RE.fullmatch(str(auth.get("developmentSha", "")))
         or git("rev-parse", "HEAD^") != auth["developmentSha"]):

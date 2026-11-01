@@ -305,6 +305,22 @@ class DevelopmentRetirementContract(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "UNACCOUNTED_SUPPLEMENTAL_PIN"):
             mod.canonical_targets(b, i)
         b["supplementalRefs"] = [pin, copy.deepcopy(pin)]
+        b["targets"] = [{**pin, "kind": "archive-diverged"}]
+        with self.assertRaisesRegex(ValueError, "SUPPLEMENTAL_PIN_NOT_ALLOWLISTED"):
+            mod.canonical_targets(b, i)
+
+    def test_two_exact_supplemental_archives_are_bounded_and_accepted(self):
+        b, i = fixture()
+        b["retired"] = [{"branch": row["branch"], "sha": row["sha"],
+                         "kind": "ancestor-main"} for row in i["rows"]]
+        pins = [copy.deepcopy(mod.SUPPLEMENTAL_ARCHIVE_PINS[key])
+                for key in ("ux04-focus-restore", "ux04-retirement-guard")]
+        b["supplementalRefs"] = pins
+        b["targets"] = [{**pin, "kind": "archive-diverged"} for pin in pins]
+        roster, targets = mod.canonical_targets(b, i)
+        self.assertEqual(len(roster), 2)
+        self.assertEqual(len(targets), 2)
+        b["supplementalRefs"].append(copy.deepcopy(pins[0]))
         with self.assertRaisesRegex(ValueError, "INVALID_SUPPLEMENTAL_ROSTER"):
             mod.canonical_targets(b, i)
 
@@ -316,8 +332,8 @@ class DevelopmentRetirementContract(unittest.TestCase):
         b["applyAuthorization"] = {
             "batchId": b["batchId"], "auditRunId": 50001,
             "developmentSha": "c" * 40,
-            "targetBranch": pin["branch"], "targetSha": pin["sha"],
-            "archiveTag": pin["archiveTag"],
+            "targetPins": [{"branch": pin["branch"], "sha": pin["sha"],
+                            "archiveTag": pin["archiveTag"]}],
         }
         run = {"status": "completed", "conclusion": "success", "event": "push",
                "head_sha": "c" * 40, "name": mod.RETIREMENT_WORKFLOW_NAME}
@@ -335,8 +351,8 @@ class DevelopmentRetirementContract(unittest.TestCase):
         b["applyAuthorization"] = {
             "batchId": b["batchId"], "auditRunId": 50001,
             "developmentSha": "c" * 40,
-            "targetBranch": pin["branch"], "targetSha": pin["sha"],
-            "archiveTag": pin["archiveTag"],
+            "targetPins": [{"branch": pin["branch"], "sha": pin["sha"],
+                            "archiveTag": pin["archiveTag"]}],
         }
         with patch.object(mod, "git", return_value="d" * 40), \
              self.assertRaisesRegex(RuntimeError, "APPLY_AUTHORIZATION_PIN_MISMATCH"):
@@ -360,6 +376,24 @@ class DevelopmentRetirementContract(unittest.TestCase):
             mod.completed_targets([target], {}, {tag: "f" * 40})
         with self.assertRaisesRegex(RuntimeError, "TARGET_BRANCH_SHA_DRIFT"):
             mod.completed_targets([target], {branch: "e" * 40}, {tag: sha})
+
+    def test_supplemental_pr_provenance_pins_closed_or_merged_origin(self):
+        for branch, pin in mod.SUPPLEMENTAL_PR_PINS.items():
+            target = {"branch": branch, "sha": pin["sha"]}
+            pr = {"number": pin["number"], "state": "closed", "merged": pin["merged"],
+                  "closed_at": "2026-11-01T00:00:00Z",
+                  "merged_at": "2026-11-01T00:00:00Z" if pin["merged"] else None,
+                  "merge_commit_sha": pin.get("mergeCommitSha"),
+                  "head": {"ref": branch, "sha": pin["sha"]},
+                  "base": {"ref": pin["base"]}}
+            with patch.object(mod, "api", return_value=pr):
+                result = mod.verify_supplemental_pr_provenance(target)
+            self.assertEqual(result["pr"], pin["number"])
+            drift = copy.deepcopy(pr)
+            drift["head"]["sha"] = "f" * 40
+            with patch.object(mod, "api", return_value=drift), \
+                 self.assertRaisesRegex(RuntimeError, "SUPPLEMENTAL_PR_PROVENANCE_DRIFT"):
+                mod.verify_supplemental_pr_provenance(target)
 
 
     def test_semantic_gate_explicit_green_run_shape(self):
