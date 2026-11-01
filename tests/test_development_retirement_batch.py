@@ -166,6 +166,31 @@ class DevelopmentRetirementContract(unittest.TestCase):
                 with self.assertRaisesRegex(ValueError, "CLOSED_PR_ARCHIVE_PROOF_PIN_MISMATCH"):
                     mod.canonical_targets(b, i)
 
+    def test_ds02_non_pr_archive_record_accepts_only_its_exact_head_and_tag(self):
+        b, i = fixture()
+        branch, sha, tag = mod.NON_PR_ARCHIVE_PINS["ds02-original-images"]
+        i["rows"][-1] = {"branch": branch, "sha": sha}
+        target = {"branch": branch, "sha": sha, "kind": "archive-diverged",
+                  "archiveTag": tag, "snapshotPath": mod.PR_ARCHIVE_EVIDENCE,
+                  "archiveRecord": "ds02-original-images"}
+        b["targets"] = [target]
+        self.assertEqual(mod.canonical_targets(b, i)[1], [target])
+        self.assertEqual(mod.prove_snapshot(target)["archiveRecord"], "ds02-original-images")
+
+    def test_ds02_non_pr_archive_record_denies_pin_or_key_drift(self):
+        for field, value in [("archiveTag", "archive/m2d/wrong"),
+                             ("archiveRecord", "unknown")]:
+            b, i = fixture()
+            branch, sha, tag = mod.NON_PR_ARCHIVE_PINS["ds02-original-images"]
+            i["rows"][-1] = {"branch": branch, "sha": sha}
+            target = {"branch": branch, "sha": sha, "kind": "archive-diverged",
+                      "archiveTag": tag, "snapshotPath": mod.PR_ARCHIVE_EVIDENCE,
+                      "archiveRecord": "ds02-original-images"}
+            target[field] = value
+            b["targets"] = [target]
+            with self.subTest(field=field), self.assertRaisesRegex(ValueError, "NON_PR_ARCHIVE_PROOF_PIN_MISMATCH"):
+                mod.canonical_targets(b, i)
+
     def test_mixed_equal_and_archived_delta_proof_denied(self):
         b, i = fixture()
         b["targets"][0]["equalBlobPath"] = "app/styles.css"

@@ -87,9 +87,17 @@ PR_ARCHIVE_TAGS = {
   185: "archive/m2d/cppublic-pr185-buyer-projection-7a0d919d",
   186: "archive/m2d/cppublic-pr186-email-access-40d4b65f",
   196: "archive/m2d/cppublic-pr196-auth-boundary-43d5fb9c",
-  231: "archive/m2d/p-token-02b-contextual-copy-afb80965"
+  231: "archive/m2d/p-token-02b-contextual-copy-afb80965",
+  238: "archive/m2d/ci-baseline-01-isolated-auth-3ccce161"
 }
-PR_CLOSED_ROSTER = [34, 175, 178, 179, 180, 182, 184, 185, 186, 196, 231]
+PR_CLOSED_ROSTER = [34, 175, 178, 179, 180, 182, 184, 185, 186, 196, 231, 238]
+NON_PR_ARCHIVE_PINS = {
+    "ds02-original-images": [
+        "artifacts/ds02-imagens-originais-20261015",
+        "e9c405bfc0189baed8b4b679a1113c37b6ddbd21",
+        "archive/m2d/ds02-imagens-originais-e9c405bf",
+    ]
+}
 
 SHA_RE = re.compile(r"[0-9a-f]{40}\Z")
 BRANCH_RE = re.compile(r"[A-Za-z0-9._/-]+\Z")
@@ -171,7 +179,7 @@ def verify_open_pr_roster(prs, tags, fetch_pr=api, refs=None):
         or transition.get("repository") != REPO
         or transition.get("mainSha") != MAIN_SHA
         or transition.get("authoritativeArchive") != PR_ARCHIVE_MANIFEST.as_posix()
-        or transition.get("batchId") != "dev-20261101-public-pr-archive-av"
+        or transition.get("batchId") != "dev-20261101-public-pr-archive-aw"
         or allowed != PR_CLOSED_ROSTER
         or transition.get("remainingCandidatesFrozenOpen") != expected_frozen
         or transition.get("closureMethod") != "closed-unmerged-only"
@@ -214,8 +222,8 @@ def verify_open_pr_roster(prs, tags, fetch_pr=api, refs=None):
     return set(actual)
 
 
-# Confirmed CLOSED/UNMERGED via individual REST readbacks on 2026-10-29; see closure evidence.
-# Offline provenance tests use this historical receipt, not live PR-state authority.
+# CLOSED/UNMERGED roster is still verified live by the protected workflow before every mutation.
+# Offline tests use this pinned receipt only for pure retention logic, never as live authority.
 # Remote mutation always uses verify_open_pr_roster and its fresh API readback.
 PR_CONFIRMED_CLOSED_UNMERGED = frozenset(PR_CLOSED_ROSTER)
 
@@ -344,7 +352,7 @@ def canonical_targets(batch, inventory):
             if set(item) != {"branch", "sha", "kind"}:
                 raise ValueError("UNEXPECTED_ANCESTOR_FIELDS")
         elif kind == "archive-diverged":
-            allowed = {"branch", "sha", "kind", "archiveTag", "snapshotPath", "sourcePath", "sourceBlobSha", "equalBlobPath", "equalBlobSha", "semanticGate", "closedPrNumber"}
+            allowed = {"branch", "sha", "kind", "archiveTag", "snapshotPath", "sourcePath", "sourceBlobSha", "equalBlobPath", "equalBlobSha", "semanticGate", "closedPrNumber", "archiveRecord"}
             required = {"branch", "sha", "kind", "archiveTag", "snapshotPath"}
             if not required.issubset(item) or not set(item).issubset(allowed):
                 raise ValueError("INVALID_ARCHIVE_FIELDS")
@@ -358,9 +366,10 @@ def canonical_targets(batch, inventory):
             with_equal = "equalBlobPath" in item or "equalBlobSha" in item
             with_gate = "semanticGate" in item
             with_closed_pr = "closedPrNumber" in item
+            with_archive_record = "archiveRecord" in item
             if with_source and with_equal:
                 raise ValueError("MIXED_ARCHIVE_PROOF_MODES")
-            if sum((with_source, with_equal, with_gate, with_closed_pr)) != 1:
+            if sum((with_source, with_equal, with_gate, with_closed_pr, with_archive_record)) != 1:
                 raise ValueError("EXACTLY_ONE_ARCHIVE_PROOF_REQUIRED")
             if with_closed_pr:
                 number = item["closedPrNumber"]
@@ -368,6 +377,12 @@ def canonical_targets(batch, inventory):
                     or PR_HEAD_PINS.get(number) != [name, sha]
                     or PR_ARCHIVE_TAGS.get(number) != tag):
                     raise ValueError("CLOSED_PR_ARCHIVE_PROOF_PIN_MISMATCH")
+            if with_archive_record:
+                record = item["archiveRecord"]
+                if (not isinstance(record, str)
+                    or record not in NON_PR_ARCHIVE_PINS
+                    or NON_PR_ARCHIVE_PINS[record] != [name, sha, tag]):
+                    raise ValueError("NON_PR_ARCHIVE_PROOF_PIN_MISMATCH")
             if with_gate:
                 gate = item["semanticGate"]
                 if (not isinstance(gate, dict)
@@ -407,6 +422,14 @@ def prove_snapshot(target):
     if (target["branch"] + "@" + target["sha"] not in copy
         or target["archiveTag"] not in copy):
         raise RuntimeError("ARCHIVE_PROVENANCE_RECORD_MISSING")
+    if "archiveRecord" in target:
+        record = target["archiveRecord"]
+        if (not isinstance(record, str) or record not in NON_PR_ARCHIVE_PINS
+            or NON_PR_ARCHIVE_PINS[record] != [target["branch"], target["sha"], target["archiveTag"]]):
+            raise RuntimeError("NON_PR_ARCHIVE_PROOF_PIN_MISMATCH")
+        if record not in copy:
+            raise RuntimeError("ARCHIVE_RECORD_KEY_MISSING")
+        return {"snapshotPath": target["snapshotPath"], "archiveRecord": record}
     if "semanticGate" in target:
         gate = target["semanticGate"]
         run = api("actions/runs/" + str(gate["runId"]))

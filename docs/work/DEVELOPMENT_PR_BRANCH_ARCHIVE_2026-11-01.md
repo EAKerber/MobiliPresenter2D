@@ -15,7 +15,7 @@ Method: retain each original commit as an exact `archive/m2d/*` tag before delet
 
 ## Closed PR heads in the current bounded retirement waves
 
-All seven were read back as CLOSED/UNMERGED against base `main`, with the original HEADs listed below. Their archived tags are created only by the protected executor. The current manifest begins with #34, #182, and #184; later waves must wait for the preceding workflow's PASS and ref readback.
+These closed PR heads were read back as CLOSED/UNMERGED against base `main`, with the original HEADs listed below. Their archived tags are created only by the protected executor. The current manifest begins with #34, #182, and #184; later waves must wait for the preceding workflow's PASS and ref readback.
 
 | PR | Branch@SHA | Branch | Original SHA | Archive tag | Closed |
 |---:|---|---|---|---|---|
@@ -26,12 +26,14 @@ All seven were read back as CLOSED/UNMERGED against base `main`, with the origin
 | #186 | `work/cp-public-03a2-2-email-access-core-20261008@40d4b65f9e7e16e0810c2308e9b947840371cbe7` | `work/cp-public-03a2-2-email-access-core-20261008` | `40d4b65f9e7e16e0810c2308e9b947840371cbe7` | `archive/m2d/cppublic-pr186-email-access-40d4b65f` | 2026-10-29 |
 | #196 | `docs/cp-public-auth-boundary-20261011@43d5fb9c5c2749c0541b99d49ee1c048d6a9a96a` | `docs/cp-public-auth-boundary-20261011` | `43d5fb9c5c2749c0541b99d49ee1c048d6a9a96a` | `archive/m2d/cppublic-pr196-auth-boundary-43d5fb9c` | 2026-10-29 |
 | #231 | `architecture/p-token-02b-contextual-copy-20261022@afb80965336083209eac93e2729de77170524ee5` | `architecture/p-token-02b-contextual-copy-20261022` | `afb80965336083209eac93e2729de77170524ee5` | `archive/m2d/p-token-02b-contextual-copy-afb80965` | 2026-10-29 |
+| #238 | `ci/ci-baseline-01-isolated-auth-extraction-20261024@3ccce161235df925c5b708bf6feefbe6f4b10103` | `ci/ci-baseline-01-isolated-auth-extraction-20261024` | `3ccce161235df925c5b708bf6feefbe6f4b10103` | `archive/m2d/ci-baseline-01-isolated-auth-3ccce161` | 2026-11-01 |
 
-## Retained heads
+## Final archival targets
 
-- #238 remains open in Draft at `3ccce161235df925c5b708bf6feefbe6f4b10103`; its branch is not a retirement target.
-- DS02 remains active at `artifacts/ds02-imagens-originais-20261015@e9c405bfc0189baed8b4b679a1113c37b6ddbd21`.
-- `main` remains the strong authority and is not a target. No merge, deployment, or database schema change is included.
+- Archive record `ds02-original-images`: DS02 original-image source is pinned at `artifacts/ds02-imagens-originais-20261015@e9c405bfc0189baed8b4b679a1113c37b6ddbd21` and retained by `archive/m2d/ds02-imagens-originais-e9c405bf`. The source tree contains 40 image assets, 42 blobs total, and a manifest blob `e1ef704920e8be04091a4ff48815747176521255`.
+- PR #238 remains open in Draft and **HOLD** until its preview gate is revalidated. The last authenticated gate reported a marker SHA that did not match the PR head. Its exact head is pinned at `ci/ci-baseline-01-isolated-auth-extraction-20261024@3ccce161235df925c5b708bf6feefbe6f4b10103`; the final bounded retirement will close it unmerged and preserve it at `archive/m2d/ci-baseline-01-isolated-auth-3ccce161`. No merge is implied.
+- PR #231 is closed unmerged as superseded by the implementation already present in `main`; its exact head is retained by its archive tag above.
+- `main` remains the strong authority and is not a target. No Production deploy or database schema change is included.
 
 ## Required readback
 

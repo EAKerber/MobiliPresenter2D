@@ -50,7 +50,7 @@ def fetch_map(mp):
     return f
 
 class PRRosterGates(unittest.TestCase):
-    def with_transition(self, allowed=None, batch_id="dev-20261101-public-pr-archive-av"):
+    def with_transition(self, allowed=None, batch_id="dev-20261101-public-pr-archive-aw"):
         temporary = tempfile.TemporaryDirectory(dir=ROOT.parent)
         self.addCleanup(temporary.cleanup)
         target=Path(temporary.name)/"phase.json"
@@ -84,11 +84,19 @@ class PRRosterGates(unittest.TestCase):
         with self.assertRaisesRegex(RuntimeError,"PR_ARCHIVE_TAG_MISSING_OR_BRANCH_UNPINNED:34"):
             mod.verify_open_pr_roster(full_prs(),archive_tags,fetch_map(closed_receipts()),refs=refs)
 
-    def test_closing_open_238_is_not_in_the_archive_allowlist(self):
+    def test_closing_238_is_allowed_only_at_exact_archived_head_or_pinned_branch(self):
         closed=closed_receipts()
         closed[238]=closed_from(full_prs()[0])
-        with self.assertRaisesRegex(RuntimeError,"UNAUTHORIZED_PR_CLOSURE"):
-            mod.verify_open_pr_roster([],tags(),fetch_map(closed),refs=pinned_branch_refs())
+        archive_tags=tags()
+        archive_tags.pop(mod.PR_ARCHIVE_TAGS[238])
+        self.assertEqual(
+            mod.verify_open_pr_roster([],archive_tags,fetch_map(closed),refs=pinned_branch_refs()),
+            set()
+        )
+        refs=pinned_branch_refs()
+        refs[mod.PR_HEAD_PINS[238][0]]="f"*40
+        with self.assertRaisesRegex(RuntimeError,"PR_ARCHIVE_TAG_MISSING_OR_BRANCH_UNPINNED:238"):
+            mod.verify_open_pr_roster([],archive_tags,fetch_map(closed),refs=refs)
 
     def test_wrong_tag_sha_denied(self):
         bad=tags()
@@ -190,7 +198,7 @@ class PRHeadRetentionGates(unittest.TestCase):
 
     def test_closed_security_pr_is_not_an_archival_candidate(self):
         with self.assertRaisesRegex(RuntimeError, "UNARCHIVABLE_CLOSED_PR"):
-            self.verify(self.refs(), closed=set(mod.PR_CLOSED_ROSTER) | {238})
+            self.verify(self.refs(), closed=set(mod.PR_CLOSED_ROSTER) | {999})
 
     def test_altered_historical_pin_is_not_accepted(self):
         pins = copy.deepcopy(mod.PR_HEAD_PINS)

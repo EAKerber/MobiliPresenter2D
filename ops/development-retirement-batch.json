@@ -3,7 +3,7 @@
   "repository": "EAKerber/MobiliPresenter2D",
   "controlBranch": "development",
   "mainSha": "221b54b2a41ecc8c338d1bf2cf67280cf165ce95",
-  "batchId": "dev-20261101-public-pr-retirement-aw",
+  "batchId": "dev-20261101-public-pr-retirement-ax",
   "retired": [
     {
       "branch": "docs/handover-reconcile-20261023",
@@ -324,33 +324,43 @@
       "sha": "d1305ffdd8302fa06b37d3676f08d802a92e7d97",
       "kind": "archive-diverged",
       "archiveTag": "archive/m2d/cppublic-pr184-failclosed-bootstrap-d1305ff"
-    }
-  ],
-  "auxiliaryRefs": [],
-  "targets": [
+    },
     {
       "branch": "work/cp-public-03a2-1-buyer-projection-20261008",
       "sha": "7a0d919d4e27853c50cff8afde0cdcc066e0aa0c",
       "kind": "archive-diverged",
-      "archiveTag": "archive/m2d/cppublic-pr185-buyer-projection-7a0d919d",
-      "snapshotPath": "docs/work/DEVELOPMENT_PR_BRANCH_ARCHIVE_2026-11-01.md",
-      "closedPrNumber": 185
+      "archiveTag": "archive/m2d/cppublic-pr185-buyer-projection-7a0d919d"
     },
     {
       "branch": "work/cp-public-03a2-2-email-access-core-20261008",
       "sha": "40d4b65f9e7e16e0810c2308e9b947840371cbe7",
       "kind": "archive-diverged",
-      "archiveTag": "archive/m2d/cppublic-pr186-email-access-40d4b65f",
-      "snapshotPath": "docs/work/DEVELOPMENT_PR_BRANCH_ARCHIVE_2026-11-01.md",
-      "closedPrNumber": 186
+      "archiveTag": "archive/m2d/cppublic-pr186-email-access-40d4b65f"
     },
     {
       "branch": "docs/cp-public-auth-boundary-20261011",
       "sha": "43d5fb9c5c2749c0541b99d49ee1c048d6a9a96a",
       "kind": "archive-diverged",
-      "archiveTag": "archive/m2d/cppublic-pr196-auth-boundary-43d5fb9c",
+      "archiveTag": "archive/m2d/cppublic-pr196-auth-boundary-43d5fb9c"
+    }
+  ],
+  "auxiliaryRefs": [],
+  "targets": [
+    {
+      "branch": "architecture/p-token-02b-contextual-copy-20261022",
+      "sha": "afb80965336083209eac93e2729de77170524ee5",
+      "kind": "archive-diverged",
+      "archiveTag": "archive/m2d/p-token-02b-contextual-copy-afb80965",
       "snapshotPath": "docs/work/DEVELOPMENT_PR_BRANCH_ARCHIVE_2026-11-01.md",
-      "closedPrNumber": 196
+      "closedPrNumber": 231
+    },
+    {
+      "branch": "artifacts/ds02-imagens-originais-20261015",
+      "sha": "e9c405bfc0189baed8b4b679a1113c37b6ddbd21",
+      "kind": "archive-diverged",
+      "archiveTag": "archive/m2d/ds02-imagens-originais-e9c405bf",
+      "snapshotPath": "docs/work/DEVELOPMENT_PR_BRANCH_ARCHIVE_2026-11-01.md",
+      "archiveRecord": "ds02-original-images"
     }
   ]
 }
