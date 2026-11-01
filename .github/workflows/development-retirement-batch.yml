@@ -43,10 +43,12 @@ jobs:
 
   apply:
     needs: audit
+    if: needs.audit.result == 'success' && contains(github.event.head_commit.message, '[M2D-RETIRE-APPLY]')
     runs-on: ubuntu-latest
     timeout-minutes: 12
     permissions:
       contents: write
+      actions: read
       pull-requests: read
     steps:
       - uses: actions/checkout@v4

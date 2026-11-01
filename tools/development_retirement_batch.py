@@ -96,8 +96,23 @@ NON_PR_ARCHIVE_PINS = {
         "artifacts/ds02-imagens-originais-20261015",
         "e9c405bfc0189baed8b4b679a1113c37b6ddbd21",
         "archive/m2d/ds02-imagens-originais-e9c405bf",
-    ]
+    ],
+    "ux04-focus-restore": [
+        "fix/ux04-focus-restore-20261101",
+        "61e49ff44e21c4ba02f116f749a68d72d58faf61",
+        "archive/m2d/ux04-focus-restore-20261101-61e49ff4",
+    ],
 }
+SUPPLEMENTAL_ARCHIVE_PINS = {
+    "ux04-focus-restore": {
+        "branch": "fix/ux04-focus-restore-20261101",
+        "sha": "61e49ff44e21c4ba02f116f749a68d72d58faf61",
+        "archiveTag": "archive/m2d/ux04-focus-restore-20261101-61e49ff4",
+        "snapshotPath": "docs/work/UX04_FOCUS_RESTORE_BRANCH_ARCHIVE_2026-11-01.md",
+        "archiveRecord": "ux04-focus-restore",
+    }
+}
+RETIREMENT_WORKFLOW_NAME = "Development bounded branch retirement — exact manifest only"
 
 SHA_RE = re.compile(r"[0-9a-f]{40}\Z")
 BRANCH_RE = re.compile(r"[A-Za-z0-9._/-]+\Z")
@@ -332,6 +347,19 @@ def canonical_targets(batch, inventory):
             or not isinstance(sha, str) or not SHA_RE.fullmatch(sha)):
             raise ValueError("AUXILIARY_PIN_NOT_ISOLATED")
         aux_pins[name] = sha
+    supplemental_rows = batch.get("supplementalRefs", [])
+    if not isinstance(supplemental_rows, list) or len(supplemental_rows) > 1:
+        raise ValueError("INVALID_SUPPLEMENTAL_ROSTER")
+    supplemental_pins = {}
+    for ref in supplemental_rows:
+        if not isinstance(ref, dict) or set(ref) != {"branch", "sha", "archiveTag", "snapshotPath", "archiveRecord"}:
+            raise ValueError("INVALID_SUPPLEMENTAL_PIN")
+        record = ref.get("archiveRecord")
+        pin = SUPPLEMENTAL_ARCHIVE_PINS.get(record)
+        if (pin is None or ref != pin or ref["branch"] in original
+            or ref["branch"] in aux_pins or ref["branch"] in supplemental_pins):
+            raise ValueError("SUPPLEMENTAL_PIN_NOT_ALLOWLISTED")
+        supplemental_pins[ref["branch"]] = ref["sha"]
     seen = set()
     for item in entries:
         if not isinstance(item, dict):
@@ -346,7 +374,7 @@ def canonical_targets(batch, inventory):
             if (set(item) != {"branch", "sha", "kind"} or aux_pins.get(name) != sha):
                 raise ValueError("UNPINNED_AUXILIARY_TARGET")
             continue
-        if name not in original or original[name] != sha:
+        if (name not in original and name not in supplemental_pins) or (original.get(name, supplemental_pins.get(name)) != sha):
             raise ValueError("TARGET_NOT_IN_PINNED_INVENTORY")
         if kind == "ancestor-main":
             if set(item) != {"branch", "sha", "kind"}:
@@ -383,6 +411,13 @@ def canonical_targets(batch, inventory):
                     or record not in NON_PR_ARCHIVE_PINS
                     or NON_PR_ARCHIVE_PINS[record] != [name, sha, tag]):
                     raise ValueError("NON_PR_ARCHIVE_PROOF_PIN_MISMATCH")
+                if name in supplemental_pins and item != {
+                    "branch": name, "sha": sha, "kind": "archive-diverged",
+                    "archiveTag": SUPPLEMENTAL_ARCHIVE_PINS[record]["archiveTag"],
+                    "snapshotPath": SUPPLEMENTAL_ARCHIVE_PINS[record]["snapshotPath"],
+                    "archiveRecord": record,
+                }:
+                    raise ValueError("SUPPLEMENTAL_TARGET_PROOF_MISMATCH")
             if with_gate:
                 gate = item["semanticGate"]
                 if (not isinstance(gate, dict)
@@ -407,8 +442,10 @@ def canonical_targets(batch, inventory):
             raise ValueError("UNSUPPORTED_DISPOSITION")
     if {z["branch"] for z in entries if z["kind"] == "auxiliary-ancestor-development"} != set(aux_pins):
         raise ValueError("UNACCOUNTED_AUXILIARY_PIN")
+    if set(supplemental_pins) != {z["branch"] for z in entries if z["branch"] in supplemental_pins}:
+        raise ValueError("UNACCOUNTED_SUPPLEMENTAL_PIN")
     return {**{name: sha for name, sha in original.items() if name not in seen_retired},
-            **aux_pins}, entries
+            **aux_pins, **supplemental_pins}, entries
 
 
 def prove_snapshot(target):
@@ -498,6 +535,9 @@ def verify_context(batch, inventory, mode):
         elif tags_before.get(row["archiveTag"]) != row["sha"]:
             raise RuntimeError("PREVIOUS_ARCHIVE_TAG_NOT_RECOVERABLE")
     expected = {**original, "main": MAIN_SHA, "development": env_sha}
+    completed = completed_targets(targets, refs, tags_before)
+    for branch in completed:
+        expected.pop(branch, None)
     if refs != expected:
         raise RuntimeError("FULL_REF_ROSTER_DRIFT")
     prs = api("pulls?state=open&per_page=100")
@@ -509,6 +549,10 @@ def verify_context(batch, inventory, mode):
         raise RuntimeError("RULESETS_PRESENT")
     for item in targets:
         name, sha = item["branch"], item["sha"]
+        if name in completed:
+            prove_snapshot(item)
+            git("cat-file", "-e", sha + "^{commit}")
+            continue
         branch = api("branches/" + quote(name, safe=""))
         if branch.get("protected") is not False or (branch.get("commit") or {}).get("sha") != sha:
             raise RuntimeError("PROTECTED_OR_CHANGED:" + name)
@@ -536,7 +580,52 @@ def verify_context(batch, inventory, mode):
                 # An existing correct tag is fine: a previous interrupted run
                 # may have already safely preserved the commit.
                 pass
-    return refs, targets, tags
+    return refs, targets, tags, completed
+
+
+def completed_targets(targets, refs, tags):
+    """Recognize only exact, already-tagged removals for idempotent readback."""
+    completed = set()
+    for item in targets:
+        branch, sha = item["branch"], item["sha"]
+        actual = refs.get(branch)
+        if actual is not None:
+            if actual != sha:
+                raise RuntimeError("TARGET_BRANCH_SHA_DRIFT:" + branch)
+            continue
+        if item["kind"] != "archive-diverged" or tags.get(item["archiveTag"]) != sha:
+            raise RuntimeError("TARGET_BRANCH_MISSING_WITHOUT_ARCHIVE:" + branch)
+        completed.add(branch)
+    return completed
+
+
+def verify_apply_authorization(batch):
+    """Require an earlier successful audit and an explicit authorization commit."""
+    auth = batch.get("applyAuthorization")
+    required = {"batchId", "auditRunId", "developmentSha", "targetBranch", "targetSha", "archiveTag"}
+    if not isinstance(auth, dict) or set(auth) != required:
+        raise RuntimeError("APPLY_AUTHORIZATION_MISSING_OR_MALFORMED")
+    matches = [item for item in batch.get("targets", [])
+               if item.get("branch") == auth.get("targetBranch")
+               and item.get("sha") == auth.get("targetSha")
+               and item.get("archiveTag") == auth.get("archiveTag")]
+    if (auth.get("batchId") != batch.get("batchId") or len(matches) != 1
+        or type(auth.get("auditRunId")) is not int or auth["auditRunId"] <= 0
+        or not SHA_RE.fullmatch(str(auth.get("developmentSha", "")))
+        or git("rev-parse", "HEAD^") != auth["developmentSha"]):
+        raise RuntimeError("APPLY_AUTHORIZATION_PIN_MISMATCH")
+    run = api("actions/runs/" + str(auth["auditRunId"]))
+    if (run.get("status") != "completed" or run.get("conclusion") != "success"
+        or run.get("event") != "push" or run.get("head_sha") != auth["developmentSha"]
+        or run.get("name") != RETIREMENT_WORKFLOW_NAME):
+        raise RuntimeError("PRIOR_AUDIT_RUN_NOT_GREEN_FOR_PARENT_SHA")
+    jobs = api("actions/runs/" + str(auth["auditRunId"]) + "/jobs?per_page=100").get("jobs", [])
+    audit_jobs = [job for job in jobs if job.get("name") == "audit"]
+    if (len(audit_jobs) != 1 or audit_jobs[0].get("status") != "completed"
+        or audit_jobs[0].get("conclusion") != "success"
+        or any(job.get("name") == "apply" and job.get("conclusion") != "skipped" for job in jobs)):
+        raise RuntimeError("PRIOR_RUN_IS_NOT_AUDIT_ONLY_PASS")
+    return {"auditRunId": auth["auditRunId"], "auditDevelopmentSha": auth["developmentSha"]}
 
 
 def main():
@@ -545,12 +634,15 @@ def main():
     args = parser.parse_args()
     batch = json.loads(MANIFEST.read_text(encoding="utf-8"))
     inventory = json.loads(INVENTORY.read_text(encoding="utf-8"))
-    before, targets, tags = verify_context(batch, inventory, args.mode)
+    before, targets, tags, completed = verify_context(batch, inventory, args.mode)
     receipt = {"schemaVersion": "M2DDevRetirementReceipt/0.1",
                "batchId": batch["batchId"], "mode": args.mode,
                "developmentSha": before["development"],
                "targetPins": targets, "archivalTags": [],
-               "deleted": [], "status": "AUDIT_PASS" if args.mode == "audit" else "APPLY_STARTED"}
+               "deleted": [], "completedBeforeRun": sorted(completed),
+               "status": ("AUDIT_ALREADY_APPLIED" if args.mode == "audit" and len(completed) == len(targets)
+                          else "AUDIT_PASS" if args.mode == "audit"
+                          else "APPLY_STARTED")}
     RECEIPT.parent.mkdir(parents=True, exist_ok=True)
     RECEIPT.write_text(json.dumps(receipt, indent=2) + "\n", encoding="utf-8")
     if args.mode == "audit":
@@ -558,6 +650,7 @@ def main():
         return
     if os.environ.get("M2D_DEVELOPMENT_RETIRE_AUTHORIZED") != "1":
         raise RuntimeError("APPLY_AUTHORIZATION_MISSING")
+    verify_apply_authorization(batch)
     # Archive before removing any branch, and verify exact remote readback.
     for item in targets:
         if item["kind"] != "archive-diverged":
@@ -573,6 +666,8 @@ def main():
     RECEIPT.write_text(json.dumps(receipt, indent=2) + "\n", encoding="utf-8")
     expected = before.copy()
     for item in targets:
+        if item["branch"] in completed:
+            continue
         # Re-check all mutable external safety conditions for every deletion.
         if remote_refs() != expected:
             raise RuntimeError("REF_DRIFT_BEFORE_DELETE")

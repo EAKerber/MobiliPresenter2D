@@ -2,6 +2,7 @@
 import copy
 import importlib.util
 import unittest
+from unittest.mock import patch
 from pathlib import Path
 
 FILE = Path(__file__).resolve().parents[1] / "tools/development_retirement_batch.py"
@@ -268,6 +269,97 @@ class DevelopmentRetirementContract(unittest.TestCase):
                          "kind": "auxiliary-ancestor-development"}]
         with self.assertRaisesRegex(ValueError, "UNPINNED_AUXILIARY_TARGET"):
             mod.canonical_targets(b, i)
+
+    def test_supplemental_archive_accepts_only_exact_allowlisted_pin(self):
+        b, i = fixture()
+        pin = copy.deepcopy(mod.SUPPLEMENTAL_ARCHIVE_PINS["ux04-focus-restore"])
+        b["supplementalRefs"] = [pin]
+        b["targets"] = [{**pin, "kind": "archive-diverged"}]
+        roster, targets = mod.canonical_targets(b, i)
+        self.assertEqual(roster[pin["branch"]], pin["sha"])
+        self.assertEqual(targets, [{**pin, "kind": "archive-diverged"}])
+
+    def test_supplemental_archive_rejects_ref_or_target_drift(self):
+        for field, value in [("sha", "a" * 40),
+                             ("archiveTag", "archive/m2d/unrelated"),
+                             ("branch", "integration/not-ux04")]:
+            b, i = fixture()
+            pin = copy.deepcopy(mod.SUPPLEMENTAL_ARCHIVE_PINS["ux04-focus-restore"])
+            pin[field] = value
+            b["supplementalRefs"] = [pin]
+            b["targets"] = [{**pin, "kind": "archive-diverged"}]
+            with self.subTest(field=field), self.assertRaisesRegex(ValueError, "SUPPLEMENTAL_PIN_NOT_ALLOWLISTED"):
+                mod.canonical_targets(b, i)
+
+        b, i = fixture()
+        pin = copy.deepcopy(mod.SUPPLEMENTAL_ARCHIVE_PINS["ux04-focus-restore"])
+        b["supplementalRefs"] = [pin]
+        b["targets"] = [{**pin, "kind": "archive-diverged", "sha": "b" * 40}]
+        with self.assertRaisesRegex(ValueError, "TARGET_NOT_IN_PINNED_INVENTORY"):
+            mod.canonical_targets(b, i)
+
+    def test_supplemental_pin_without_target_or_with_duplicate_denied(self):
+        b, i = fixture()
+        pin = copy.deepcopy(mod.SUPPLEMENTAL_ARCHIVE_PINS["ux04-focus-restore"])
+        b["supplementalRefs"] = [pin]
+        with self.assertRaisesRegex(ValueError, "UNACCOUNTED_SUPPLEMENTAL_PIN"):
+            mod.canonical_targets(b, i)
+        b["supplementalRefs"] = [pin, copy.deepcopy(pin)]
+        with self.assertRaisesRegex(ValueError, "INVALID_SUPPLEMENTAL_ROSTER"):
+            mod.canonical_targets(b, i)
+
+    def test_apply_authorization_requires_successful_audit_for_exact_parent(self):
+        b, _ = fixture()
+        pin = mod.SUPPLEMENTAL_ARCHIVE_PINS["ux04-focus-restore"]
+        b["batchId"] = "dev-20261101-ux04-focus-retire"
+        b["targets"] = [{**pin, "kind": "archive-diverged"}]
+        b["applyAuthorization"] = {
+            "batchId": b["batchId"], "auditRunId": 50001,
+            "developmentSha": "c" * 40,
+            "targetBranch": pin["branch"], "targetSha": pin["sha"],
+            "archiveTag": pin["archiveTag"],
+        }
+        run = {"status": "completed", "conclusion": "success", "event": "push",
+               "head_sha": "c" * 40, "name": mod.RETIREMENT_WORKFLOW_NAME}
+        jobs = {"jobs": [{"name": "audit", "status": "completed", "conclusion": "success"}]}
+        with patch.object(mod, "git", return_value="c" * 40), \
+             patch.object(mod, "api", side_effect=[run, jobs]):
+            self.assertEqual(mod.verify_apply_authorization(b),
+                             {"auditRunId": 50001, "auditDevelopmentSha": "c" * 40})
+
+    def test_apply_authorization_rejects_wrong_parent_or_run_with_apply_job(self):
+        b, _ = fixture()
+        pin = mod.SUPPLEMENTAL_ARCHIVE_PINS["ux04-focus-restore"]
+        b["batchId"] = "dev-20261101-ux04-focus-retire"
+        b["targets"] = [{**pin, "kind": "archive-diverged"}]
+        b["applyAuthorization"] = {
+            "batchId": b["batchId"], "auditRunId": 50001,
+            "developmentSha": "c" * 40,
+            "targetBranch": pin["branch"], "targetSha": pin["sha"],
+            "archiveTag": pin["archiveTag"],
+        }
+        with patch.object(mod, "git", return_value="d" * 40), \
+             self.assertRaisesRegex(RuntimeError, "APPLY_AUTHORIZATION_PIN_MISMATCH"):
+            mod.verify_apply_authorization(b)
+        run = {"status": "completed", "conclusion": "success", "event": "push",
+               "head_sha": "c" * 40, "name": mod.RETIREMENT_WORKFLOW_NAME}
+        jobs = {"jobs": [{"name": "audit", "status": "completed", "conclusion": "success"},
+                         {"name": "apply", "status": "completed", "conclusion": "success"}]}
+        with patch.object(mod, "git", return_value="c" * 40), \
+             patch.object(mod, "api", side_effect=[run, jobs]), \
+             self.assertRaisesRegex(RuntimeError, "PRIOR_RUN_IS_NOT_AUDIT_ONLY_PASS"):
+            mod.verify_apply_authorization(b)
+
+    def test_completed_target_requires_exact_archive_tag_and_branch_absence(self):
+        target = {**mod.SUPPLEMENTAL_ARCHIVE_PINS["ux04-focus-restore"],
+                  "kind": "archive-diverged"}
+        branch, sha, tag = target["branch"], target["sha"], target["archiveTag"]
+        self.assertEqual(mod.completed_targets([target], {}, {tag: sha}), {branch})
+        self.assertEqual(mod.completed_targets([target], {branch: sha}, {}), set())
+        with self.assertRaisesRegex(RuntimeError, "TARGET_BRANCH_MISSING_WITHOUT_ARCHIVE"):
+            mod.completed_targets([target], {}, {tag: "f" * 40})
+        with self.assertRaisesRegex(RuntimeError, "TARGET_BRANCH_SHA_DRIFT"):
+            mod.completed_targets([target], {branch: "e" * 40}, {tag: sha})
 
 
     def test_semantic_gate_explicit_green_run_shape(self):
