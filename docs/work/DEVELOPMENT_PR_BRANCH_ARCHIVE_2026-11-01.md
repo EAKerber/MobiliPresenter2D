@@ -15,7 +15,7 @@ Method: retain each original commit as an exact `archive/m2d/*` tag before delet
 
 ## Closed PR heads in the current bounded retirement waves
 
-These closed PR heads were read back as CLOSED/UNMERGED against base `main`, with the original HEADs listed below. Their archived tags are created only by the protected executor. The current manifest begins with #34, #182, and #184; later waves must wait for the preceding workflow's PASS and ref readback.
+These closed PR heads were read back as CLOSED/UNMERGED against base `main`, with the original HEADs listed below. Their original HEADs are retained by the exact `archive/m2d/*` tags shown. The bounded retirement manifest has been applied; see the final readback below.
 
 | PR | Branch@SHA | Branch | Original SHA | Archive tag | Closed |
 |---:|---|---|---|---|---|
@@ -31,7 +31,7 @@ These closed PR heads were read back as CLOSED/UNMERGED against base `main`, wit
 ## Final archival targets
 
 - Archive record `ds02-original-images`: DS02 original-image source is pinned at `artifacts/ds02-imagens-originais-20261015@e9c405bfc0189baed8b4b679a1113c37b6ddbd21` and retained by `archive/m2d/ds02-imagens-originais-e9c405bf`. The source tree contains 40 image assets, 42 blobs total, and a manifest blob `e1ef704920e8be04091a4ff48815747176521255`.
-- PR #238 was closed unmerged on 2026-11-01 and remains **HOLD** for code adoption because its preview gate was not revalidated against the exact head; the last authenticated gate reported a marker SHA mismatch. Its branch remains pinned at `ci/ci-baseline-01-isolated-auth-extraction-20261024@3ccce161235df925c5b708bf6feefbe6f4b10103` pending the protected final retirement. The exact archive tag is `archive/m2d/ci-baseline-01-isolated-auth-3ccce161`. No merge is implied.
+- PR #238 was closed unmerged on 2026-11-01 and remains **HOLD** for code adoption because its preview gate was not revalidated against the exact head; the last authenticated gate reported a marker SHA mismatch. Its branch was retired by the protected wave AY, and the exact archive tag `archive/m2d/ci-baseline-01-isolated-auth-3ccce161` points to the original SHA `3ccce161235df925c5b708bf6feefbe6f4b10103`. No merge is implied.
 - PR #231 is closed unmerged as superseded by the implementation already present in `main`; its exact head is retained by its archive tag above.
 - `main` remains the strong authority and is not a target. No Production deploy or database schema change is included.
 
@@ -44,6 +44,6 @@ After every batch, record the protected workflow's audit and apply conclusions, 
 
 Protected workflow [run #41342082827](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/41342082827) passed audit and apply. It archived and removed the exact #231 head `architecture/p-token-02b-contextual-copy-20261022@afb80965336083209eac93e2729de77170524ee5` at `archive/m2d/p-token-02b-contextual-copy-afb80965` and DS02 `artifacts/ds02-imagens-originais-20261015@e9c405bfc0189baed8b4b679a1113c37b6ddbd21` at `archive/m2d/ds02-imagens-originais-e9c405bf`. Remote refs were read back at both exact SHAs. The remaining live branches were `main`, `development`, and the pinned #238 branch; main stayed at `221b54b2a41ecc8c338d1bf2cf67280cf165ce95`.
 
-## Prepared final retirement wave AY
+## Retirement wave AY — readback
 
-The protected manifest now targets only closed, unmerged PR #238 at `ci/ci-baseline-01-isolated-auth-extraction-20261024@3ccce161235df925c5b708bf6feefbe6f4b10103`, preserving it at `archive/m2d/ci-baseline-01-isolated-auth-3ccce161`. This entry is a proof pin for the executor; deletion and tag creation are pending until the audit/apply workflow reports PASS and both remote refs are read back. Expected remaining branch names after a successful apply: `main` and `development`. Main remains the strong authority.
+Protected workflow [run #41342383433](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/41342383433) passed both audit and apply. The closed, unmerged PR #238 branch `ci/ci-baseline-01-isolated-auth-extraction-20261024` was deleted with SHA lease after creating `archive/m2d/ci-baseline-01-isolated-auth-3ccce161`; the tag was read back at the exact original commit `3ccce161235df925c5b708bf6feefbe6f4b10103`. The final live branch list is exactly `main` and `development` (2 branches, within the five-branch limit). `main` remains `221b54b2a41ecc8c338d1bf2cf67280cf165ce95`; `development` remains the active integration branch and contains `main` as its ancestor. No PR was merged, no deploy or database change occurred.
