@@ -175,7 +175,7 @@ class PRHeadRetentionGates(unittest.TestCase):
         refs=self.refs()
         refs.pop("refs/remotes/origin/" + mod.PR_HEAD_PINS[238][0])
         with self.assertRaisesRegex(RuntimeError, "OPEN_PR_BRANCH_MISSING"):
-            self.verify(refs)
+            self.verify(refs, closed=set(mod.PR_CLOSED_ROSTER) - {238})
 
     def test_existing_changed_branch_must_not_be_masked_by_correct_tag(self):
         for n in mod.PR_CLOSED_ROSTER:

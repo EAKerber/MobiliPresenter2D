@@ -3,7 +3,7 @@
   "repository": "EAKerber/MobiliPresenter2D",
   "controlBranch": "development",
   "mainSha": "221b54b2a41ecc8c338d1bf2cf67280cf165ce95",
-  "batchId": "dev-20261101-public-pr-retirement-ax",
+  "batchId": "dev-20261101-public-pr-retirement-ay",
   "retired": [
     {
       "branch": "docs/handover-reconcile-20261023",
@@ -342,25 +342,29 @@
       "sha": "43d5fb9c5c2749c0541b99d49ee1c048d6a9a96a",
       "kind": "archive-diverged",
       "archiveTag": "archive/m2d/cppublic-pr196-auth-boundary-43d5fb9c"
-    }
-  ],
-  "auxiliaryRefs": [],
-  "targets": [
+    },
     {
       "branch": "architecture/p-token-02b-contextual-copy-20261022",
       "sha": "afb80965336083209eac93e2729de77170524ee5",
       "kind": "archive-diverged",
-      "archiveTag": "archive/m2d/p-token-02b-contextual-copy-afb80965",
-      "snapshotPath": "docs/work/DEVELOPMENT_PR_BRANCH_ARCHIVE_2026-11-01.md",
-      "closedPrNumber": 231
+      "archiveTag": "archive/m2d/p-token-02b-contextual-copy-afb80965"
     },
     {
       "branch": "artifacts/ds02-imagens-originais-20261015",
       "sha": "e9c405bfc0189baed8b4b679a1113c37b6ddbd21",
       "kind": "archive-diverged",
-      "archiveTag": "archive/m2d/ds02-imagens-originais-e9c405bf",
+      "archiveTag": "archive/m2d/ds02-imagens-originais-e9c405bf"
+    }
+  ],
+  "auxiliaryRefs": [],
+  "targets": [
+    {
+      "branch": "ci/ci-baseline-01-isolated-auth-extraction-20261024",
+      "sha": "3ccce161235df925c5b708bf6feefbe6f4b10103",
+      "kind": "archive-diverged",
+      "archiveTag": "archive/m2d/ci-baseline-01-isolated-auth-3ccce161",
       "snapshotPath": "docs/work/DEVELOPMENT_PR_BRANCH_ARCHIVE_2026-11-01.md",
-      "archiveRecord": "ds02-original-images"
+      "closedPrNumber": 238
     }
   ]
 }
