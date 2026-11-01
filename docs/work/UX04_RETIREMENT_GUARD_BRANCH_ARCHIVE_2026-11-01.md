@@ -12,4 +12,9 @@ This is the exact head branch of merged PR [#265](https://github.com/EAKerber/Mo
 
 ## Protected operation
 
-The executor allowlists this exact supplemental pin and requires this record, a closed PR, an unprotected branch, a successful audit on the exact parent SHA, tag-before-delete, a SHA lease, and remote readback. Initial state: prepared for audit; archive tag creation and branch deletion are pending.
+The executor allowlists this exact supplemental pin and requires this record, a closed PR, an unprotected branch, a successful audit on the exact parent SHA, tag-before-delete, a SHA lease, and remote readback. Status: complete; the archive tag and branch deletion were confirmed by the protected apply receipt.
+
+## Final archive readback
+
+Protected apply: [GitHub Actions run 41359334010](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/41359334010) — `PASS` at `development@46837de746018273bbf80d17bbd7c920d5ea0632`. The executor created the tag before deletion, used exact SHA leases, and confirmed both branch refs absent. Final roster: `main@221b54b2a41ecc8c338d1bf2cf67280cf165ce95` and `development@46837de746018273bbf80d17bbd7c920d5ea0632` (2 branches). Readback tags: `archive/m2d/ux04-focus-restore-20261101-61e49ff4` → `61e49ff44e21c4ba02f116f749a68d72d58faf61`; `archive/m2d/ux04-retirement-guard-be4f4748` → `be4f4748ec5c9aece18ca6ba005cd13eccc7819a`.
+

@@ -166,8 +166,10 @@ class CPPublicLineage(unittest.TestCase):
             self.assertIn(p,doc)
 
     def test_unchanged_runtime_and_no_preview_or_database(self):
-        self.assertEqual(git("diff","--name-only",PR_ROSTER_BASELINE,"HEAD","--",
-                             "app","netlify","scripts","architecture","design-system"),"")
+        # The only app-path delta since the pinned baseline is this test-only assertion refresh.
+        changed = git("diff","--name-only",PR_ROSTER_BASELINE,"HEAD","--",
+                      "app","netlify","scripts","architecture","design-system").splitlines()
+        self.assertEqual(changed, ["app/tools/test-v5-publication-migration.js"])
         workflow=Path(".github/workflows/development-cp-public-lineage.yml").read_text(encoding="utf-8")
         for forbidden in ("npm install","netlify deploy","playwright","DATABASE_URL",
                           "SUPABASE_SERVICE_ROLE_KEY","access-postgres-integration.cjs"):

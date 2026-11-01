@@ -23,4 +23,9 @@ Thus branch retirement preserves the candidate commit object and its ancestry un
 
 The bounded executor allowlists this one supplemental ref and requires a documentary proof, closed-PR check, unprotected branch check, exact SHA lease, tag-before-delete ordering, and independent remote readback. The batch audit is read-only. Apply is separately enabled only by an explicit `[M2D-RETIRE-APPLY]` commit that pins a successful audit run on its exact first parent SHA. No completion is claimed until the final tag and branch readback are recorded by the apply receipt.
 
-Initial state: prepared for audit; archive tag creation and branch deletion are pending.
+Status: complete; both archive tags and branch deletions were confirmed by the protected apply receipt.
+
+## Final archive readback
+
+Protected apply: [GitHub Actions run 41359334010](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/41359334010) — `PASS` at `development@46837de746018273bbf80d17bbd7c920d5ea0632`. The executor created the tag before deletion, used exact SHA leases, and confirmed both branch refs absent. Final roster: `main@221b54b2a41ecc8c338d1bf2cf67280cf165ce95` and `development@46837de746018273bbf80d17bbd7c920d5ea0632` (2 branches). Readback tags: `archive/m2d/ux04-focus-restore-20261101-61e49ff4` → `61e49ff44e21c4ba02f116f749a68d72d58faf61`; `archive/m2d/ux04-retirement-guard-be4f4748` → `be4f4748ec5c9aece18ca6ba005cd13eccc7819a`.
+
