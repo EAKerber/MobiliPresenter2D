@@ -3,7 +3,7 @@
   "repository": "EAKerber/MobiliPresenter2D",
   "controlBranch": "development",
   "mainSha": "221b54b2a41ecc8c338d1bf2cf67280cf165ce95",
-  "batchId": "dev-20261101-public-pr-retirement-ay",
+  "batchId": "dev-20261101-ux04-focus-retire",
   "retired": [
     {
       "branch": "docs/handover-reconcile-20261023",
@@ -354,17 +354,32 @@
       "sha": "e9c405bfc0189baed8b4b679a1113c37b6ddbd21",
       "kind": "archive-diverged",
       "archiveTag": "archive/m2d/ds02-imagens-originais-e9c405bf"
+    },
+    {
+      "branch": "ci/ci-baseline-01-isolated-auth-extraction-20261024",
+      "sha": "3ccce161235df925c5b708bf6feefbe6f4b10103",
+      "kind": "archive-diverged",
+      "archiveTag": "archive/m2d/ci-baseline-01-isolated-auth-3ccce161"
     }
   ],
   "auxiliaryRefs": [],
   "targets": [
     {
-      "branch": "ci/ci-baseline-01-isolated-auth-extraction-20261024",
-      "sha": "3ccce161235df925c5b708bf6feefbe6f4b10103",
+      "branch": "fix/ux04-focus-restore-20261101",
+      "sha": "61e49ff44e21c4ba02f116f749a68d72d58faf61",
       "kind": "archive-diverged",
-      "archiveTag": "archive/m2d/ci-baseline-01-isolated-auth-3ccce161",
-      "snapshotPath": "docs/work/DEVELOPMENT_PR_BRANCH_ARCHIVE_2026-11-01.md",
-      "closedPrNumber": 238
+      "archiveTag": "archive/m2d/ux04-focus-restore-20261101-61e49ff4",
+      "snapshotPath": "docs/work/UX04_FOCUS_RESTORE_BRANCH_ARCHIVE_2026-11-01.md",
+      "archiveRecord": "ux04-focus-restore"
+    }
+  ],
+  "supplementalRefs": [
+    {
+      "branch": "fix/ux04-focus-restore-20261101",
+      "sha": "61e49ff44e21c4ba02f116f749a68d72d58faf61",
+      "archiveTag": "archive/m2d/ux04-focus-restore-20261101-61e49ff4",
+      "snapshotPath": "docs/work/UX04_FOCUS_RESTORE_BRANCH_ARCHIVE_2026-11-01.md",
+      "archiveRecord": "ux04-focus-restore"
     }
   ]
 }
