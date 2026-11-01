@@ -3,7 +3,7 @@
   "repository": "EAKerber/MobiliPresenter2D",
   "controlBranch": "development",
   "mainSha": "221b54b2a41ecc8c338d1bf2cf67280cf165ce95",
-  "batchId": "dev-20261101-public-pr-retirement-av",
+  "batchId": "dev-20261101-public-pr-retirement-aw",
   "retired": [
     {
       "branch": "docs/handover-reconcile-20261023",
@@ -306,33 +306,51 @@
       "sha": "70ed9ce49694db770c58f1e6953ab21da4593aa3",
       "kind": "archive-diverged",
       "archiveTag": "archive/m2d/auth-first-login-session-70ed9ce4"
-    }
-  ],
-  "auxiliaryRefs": [],
-  "targets": [
+    },
     {
       "branch": "feat/exposed-sides-and-glass",
       "sha": "20040da835d6da66b03f73642c0c44db109dd6e8",
       "kind": "archive-diverged",
-      "archiveTag": "archive/m2d/pr34-exposed-sides-glass-20040da8",
-      "snapshotPath": "docs/work/DEVELOPMENT_PR_BRANCH_ARCHIVE_2026-11-01.md",
-      "closedPrNumber": 34
+      "archiveTag": "archive/m2d/pr34-exposed-sides-glass-20040da8"
     },
     {
       "branch": "work/cp-public-03a1-configuration-read-guard-20261008",
       "sha": "0b398618f7f2eff23da7f782d53d86ba3ee6411b",
       "kind": "archive-diverged",
-      "archiveTag": "archive/m2d/cppublic-pr182-config-read-guard-0b398618",
-      "snapshotPath": "docs/work/DEVELOPMENT_PR_BRANCH_ARCHIVE_2026-11-01.md",
-      "closedPrNumber": 182
+      "archiveTag": "archive/m2d/cppublic-pr182-config-read-guard-0b398618"
     },
     {
       "branch": "work/cp-public-03a2-0-failclosed-bootstrap-20261008",
       "sha": "d1305ffdd8302fa06b37d3676f08d802a92e7d97",
       "kind": "archive-diverged",
-      "archiveTag": "archive/m2d/cppublic-pr184-failclosed-bootstrap-d1305ff",
+      "archiveTag": "archive/m2d/cppublic-pr184-failclosed-bootstrap-d1305ff"
+    }
+  ],
+  "auxiliaryRefs": [],
+  "targets": [
+    {
+      "branch": "work/cp-public-03a2-1-buyer-projection-20261008",
+      "sha": "7a0d919d4e27853c50cff8afde0cdcc066e0aa0c",
+      "kind": "archive-diverged",
+      "archiveTag": "archive/m2d/cppublic-pr185-buyer-projection-7a0d919d",
       "snapshotPath": "docs/work/DEVELOPMENT_PR_BRANCH_ARCHIVE_2026-11-01.md",
-      "closedPrNumber": 184
+      "closedPrNumber": 185
+    },
+    {
+      "branch": "work/cp-public-03a2-2-email-access-core-20261008",
+      "sha": "40d4b65f9e7e16e0810c2308e9b947840371cbe7",
+      "kind": "archive-diverged",
+      "archiveTag": "archive/m2d/cppublic-pr186-email-access-40d4b65f",
+      "snapshotPath": "docs/work/DEVELOPMENT_PR_BRANCH_ARCHIVE_2026-11-01.md",
+      "closedPrNumber": 186
+    },
+    {
+      "branch": "docs/cp-public-auth-boundary-20261011",
+      "sha": "43d5fb9c5c2749c0541b99d49ee1c048d6a9a96a",
+      "kind": "archive-diverged",
+      "archiveTag": "archive/m2d/cppublic-pr196-auth-boundary-43d5fb9c",
+      "snapshotPath": "docs/work/DEVELOPMENT_PR_BRANCH_ARCHIVE_2026-11-01.md",
+      "closedPrNumber": 196
     }
   ]
 }
