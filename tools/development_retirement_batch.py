@@ -73,8 +73,8 @@ PR_HEAD_PINS = {
   ]
 } 
 PR_NUMBERS = frozenset(PR_HEAD_PINS)
-PR_ARCHIVE_MANIFEST = Path("ops/development-pr-archive-manifest.json")
-PR_CLOSURE_TRANSITION = Path("ops/development-pr-closure-transition.json")
+PR_ARCHIVE_MANIFEST = Path("ops/development-pr-branch-archive-manifest.json")
+PR_CLOSURE_TRANSITION = Path("ops/development-pr-branch-transition.json")
 PR_ARCHIVE_EVIDENCE = "docs/work/DEVELOPMENT_PR_BRANCH_ARCHIVE_2026-11-01.md"
 PR_ARCHIVE_TAGS = {
   34: "archive/m2d/pr34-exposed-sides-glass-20040da8",
@@ -171,7 +171,7 @@ def verify_open_pr_roster(prs, tags, fetch_pr=api, refs=None):
         or transition.get("repository") != REPO
         or transition.get("mainSha") != MAIN_SHA
         or transition.get("authoritativeArchive") != PR_ARCHIVE_MANIFEST.as_posix()
-        or transition.get("batchId") != "dev-20261101-public-pr-archive-au"
+        or transition.get("batchId") != "dev-20261101-public-pr-archive-av"
         or allowed != PR_CLOSED_ROSTER
         or transition.get("remainingCandidatesFrozenOpen") != expected_frozen
         or transition.get("closureMethod") != "closed-unmerged-only"

@@ -5,7 +5,8 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "tools"))
 from development_asset_provenance_audit import (
-    EXPECTED_CHANGED_PATHS, REPOSITORY, classify
+    EXPECTED_CHANGED_PATHS, ORIGINALS_ARCHIVE_TAG, ORIGINALS_SHA,
+    REPOSITORY, SCENE_ARCHIVE_TAG, SCENE_SHA, classify, verify_archive_tags
 )
 
 
@@ -31,6 +32,21 @@ def fixture():
 
 
 class AssetProvenanceTests(unittest.TestCase):
+    def test_exact_archive_tags_are_required_after_branch_retirement(self):
+        refs = {
+            "refs/tags/" + ORIGINALS_ARCHIVE_TAG: ORIGINALS_SHA,
+            "refs/tags/" + SCENE_ARCHIVE_TAG: SCENE_SHA,
+        }
+        self.assertEqual(verify_archive_tags(refs), refs)
+
+    def test_missing_or_moved_archive_tag_fails_closed(self):
+        refs = {"refs/tags/" + ORIGINALS_ARCHIVE_TAG: ORIGINALS_SHA}
+        with self.assertRaisesRegex(RuntimeError, "PINNED_ARCHIVE_TAG_MISSING_OR_MOVED"):
+            verify_archive_tags(refs)
+        refs["refs/tags/" + SCENE_ARCHIVE_TAG] = "f" * 40
+        with self.assertRaisesRegex(RuntimeError, "PINNED_ARCHIVE_TAG_MISSING_OR_MOVED"):
+            verify_archive_tags(refs)
+
     def test_exact_lineage_and_count(self):
         manifest, old, now = fixture()
         result = classify(manifest, old, now)

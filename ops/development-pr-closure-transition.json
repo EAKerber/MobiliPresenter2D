@@ -3,22 +3,15 @@
   "repository": "EAKerber/MobiliPresenter2D",
   "mainSha": "221b54b2a41ecc8c338d1bf2cf67280cf165ce95",
   "authoritativeArchive": "ops/development-pr-archive-manifest.json",
-  "batchId": "dev-20261101-public-pr-archive-au",
+  "batchId": "dev-20261028-cppublic-pr-close-aj",
   "allowedClosedOrOpen": [
-    34,
     175,
     178,
     179,
-    180,
-    182,
-    184,
-    185,
-    186,
-    196,
-    231
+    180
   ],
   "remainingCandidatesFrozenOpen": [],
   "closureMethod": "closed-unmerged-only",
-  "successorEvidence": "docs/work/DEVELOPMENT_PR_BRANCH_ARCHIVE_2026-11-01.md",
-  "provenanceEvidence": "docs/work/DEVELOPMENT_PR_BRANCH_ARCHIVE_2026-11-01.md"
+  "successorEvidence": "docs/work/DEVELOPMENT_CP_PUBLIC_PRS_175_180_2026-10-28.md",
+  "provenanceEvidence": "docs/work/DEVELOPMENT_CP_PUBLIC_PR_CLOSURE_2026-10-28.md"
 }

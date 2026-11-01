@@ -1,10 +1,5 @@
 name: Development protected CP-PUBLIC PR archive (tag only)
 on:
-  push:
-    branches:
-      - development
-    paths:
-      - 'ops/development-pr-archive-manifest.json'
   workflow_dispatch:
 permissions:
   contents: read

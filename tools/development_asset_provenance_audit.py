@@ -12,16 +12,27 @@ import subprocess
 from pathlib import Path
 
 REPOSITORY = "EAKerber/MobiliPresenter2D"
-ORIGINALS_BRANCH = "artifacts/ds02-imagens-originais-20261015"
 ORIGINALS_SHA = "e9c405bfc0189baed8b4b679a1113c37b6ddbd21"
-SCENE_BRANCH = "feat/exposed-sides-and-glass"
+ORIGINALS_ARCHIVE_TAG = "archive/m2d/ds02-imagens-originais-e9c405bf"
 SCENE_SHA = "20040da835d6da66b03f73642c0c44db109dd6e8"
+SCENE_ARCHIVE_TAG = "archive/m2d/pr34-exposed-sides-glass-20040da8"
 EXPECTED_CHANGED_PATHS = {
     f"app/landing/assets/icons/{size}/{room}.webp"
     for size in ("large", "small")
     for room in ("cozinha", "escritorio", "lavanderia", "quarto", "sala")
 }
 SHA40 = re.compile(r"^[0-9a-f]{40}$")
+
+
+def verify_archive_tags(refs):
+    expected = {
+        "refs/tags/" + ORIGINALS_ARCHIVE_TAG: ORIGINALS_SHA,
+        "refs/tags/" + SCENE_ARCHIVE_TAG: SCENE_SHA,
+    }
+    for ref, sha in expected.items():
+        if refs.get(ref) != sha:
+            raise RuntimeError("PINNED_ARCHIVE_TAG_MISSING_OR_MOVED:" + ref)
+    return expected
 
 
 def git(*args):
@@ -105,14 +116,12 @@ def main():
     parser.add_argument("--output", default="artifacts/asset-provenance/report.json")
     args = parser.parse_args()
     head = git("rev-parse", "HEAD")
-    for name, sha in [(ORIGINALS_BRANCH, ORIGINALS_SHA), (SCENE_BRANCH, SCENE_SHA)]:
+    refs = {}
+    for line in git("for-each-ref", "--format=%(refname) %(objectname)", "refs/tags").splitlines():
+        ref, sha = line.split(" ", 1)
+        refs[ref] = sha
+    for ref, sha in verify_archive_tags(refs).items():
         git("cat-file", "-e", sha + "^{commit}")
-        try:
-            observed = git("rev-parse", "refs/remotes/origin/" + name)
-        except subprocess.CalledProcessError as exc:
-            raise RuntimeError("PINNED_REMOTE_REF_NOT_FETCHED:" + name) from exc
-        if observed != sha:
-            raise RuntimeError("HISTORICAL_REF_MOVED:" + name)
     original_tree = tree_map(ORIGINALS_SHA)
     current_tree = tree_map(head)
     old_scene_tree = tree_map(SCENE_SHA)
@@ -141,12 +150,12 @@ def main():
         "schemaVersion": "M2DAssetProvenance/0.1",
         "repository": REPOSITORY,
         "developmentSha": head,
-        "archive": {"branch": ORIGINALS_BRANCH, "sha": ORIGINALS_SHA,
+        "archive": {"tag": ORIGINALS_ARCHIVE_TAG, "sha": ORIGINALS_SHA,
                     "files": len(files), "identical": sum(x["status"] == "identical" for x in files),
                     "changed": sum(x["status"] == "changed" for x in files),
                     "missing": sum(x["status"] == "missing" for x in files),
                     "originalBytes": sum(x["bytes"] for x in files)},
-        "scene": {"branch": SCENE_BRANCH, "sha": SCENE_SHA,
+        "scene": {"tag": SCENE_ARCHIVE_TAG, "sha": SCENE_SHA,
                   "samePathIdentical": len(identical),
                   "samePathDifferent": len(different),
                   "historicOnlyPaths": len(old_only)},

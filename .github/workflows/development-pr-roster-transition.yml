@@ -4,8 +4,8 @@ on:
     branches:
       - development
     paths:
-      - 'ops/development-pr-closure-transition.json'
-      - 'docs/work/DEVELOPMENT_CP_PUBLIC_PR_CLOSURE_2026-10-28.md'
+      - 'ops/development-pr-branch-transition.json'
+      - 'docs/work/DEVELOPMENT_PR_BRANCH_ARCHIVE_2026-11-01.md'
       - 'tools/development_retirement_batch.py'
       - 'tools/development_pr_roster_probe.py'
       - 'tests/test_development_pr_roster_transition.py'
@@ -28,7 +28,7 @@ jobs:
         run: |
           python3 -m py_compile tools/development_retirement_batch.py tools/development_pr_roster_probe.py
           python3 -m unittest tests/test_development_retirement_batch.py tests/test_development_pr_roster_transition.py tests/test_development_cp_public_lineage.py tests/test_development_cp_public_prs_175_180.py -v
-      - name: Read-only GitHub check of all live PRs and all four exact archive tags
+      - name: Read-only GitHub check of live PRs, pinned branches and archive tags
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: python3 tools/development_pr_roster_probe.py

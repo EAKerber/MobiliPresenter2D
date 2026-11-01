@@ -50,7 +50,7 @@ def fetch_map(mp):
     return f
 
 class PRRosterGates(unittest.TestCase):
-    def with_transition(self, allowed=None, batch_id="dev-20261101-public-pr-archive-au"):
+    def with_transition(self, allowed=None, batch_id="dev-20261101-public-pr-archive-av"):
         temporary = tempfile.TemporaryDirectory(dir=ROOT.parent)
         self.addCleanup(temporary.cleanup)
         target=Path(temporary.name)/"phase.json"
@@ -215,6 +215,14 @@ class PRHeadRetentionGates(unittest.TestCase):
             for n in mod.PR_CONFIRMED_CLOSED_UNMERGED:
                 branch, sha = mod.PR_HEAD_PINS[n]
                 ref = "refs/remotes/origin/" + branch
+                archive_ref = "refs/tags/" + mod.PR_ARCHIVE_TAGS[n]
+                # Simulate the post-archive state: closed heads are retained
+                # by exact immutable tags after their remote branch refs leave.
+                if archive_ref in original:
+                    self.assertEqual(original[archive_ref], sha)
+                else:
+                    subprocess.run(["git", "--git-dir=" + mirror, "update-ref",
+                                    archive_ref, sha], check=True)
                 # Fresh post-retirement checkouts already have no such ref.
                 # Keep the SHA lease when simulating the pre-retirement state.
                 if ref in original:
