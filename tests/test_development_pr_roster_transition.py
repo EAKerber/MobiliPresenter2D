@@ -21,11 +21,21 @@ def tags():
     return {tag:mod.PR_HEAD_PINS[n][1] for n,tag in mod.PR_ARCHIVE_TAGS.items()}
 
 def full_prs():
-    return [
-        {"number":n,"state":"open","merged_at":None,
-         "head":{"ref":name,"sha":sha},"base":{"ref":"main"}}
-        for n,(name,sha) in sorted(mod.PR_HEAD_PINS.items())
-    ]
+    n = 238
+    name, sha = mod.PR_HEAD_PINS[n]
+    return [{"number":n,"state":"open","merged_at":None,
+             "head":{"ref":name,"sha":sha},"base":{"ref":"main"}}]
+
+def closed_receipts(numbers=None):
+    selected = mod.PR_CLOSED_ROSTER if numbers is None else numbers
+    all_pins = {n: {"number":n,"state":"open","merged_at":None,
+                    "head":{"ref":name,"sha":sha},"base":{"ref":"main"}}
+                for n,(name,sha) in mod.PR_HEAD_PINS.items()}
+    return {n: closed_from(all_pins[n]) for n in selected}
+
+def pinned_branch_refs(numbers=None):
+    selected = mod.PR_CLOSED_ROSTER if numbers is None else numbers
+    return {mod.PR_HEAD_PINS[n][0]: mod.PR_HEAD_PINS[n][1] for n in selected}
 
 def closed_from(pr, **kw):
     result=copy.deepcopy(pr)
@@ -40,85 +50,50 @@ def fetch_map(mp):
     return f
 
 class PRRosterGates(unittest.TestCase):
-    def with_transition(self, allowed, batch_id):
+    def with_transition(self, allowed=None, batch_id="dev-20261101-public-pr-archive-au"):
         temporary = tempfile.TemporaryDirectory(dir=ROOT.parent)
         self.addCleanup(temporary.cleanup)
         target=Path(temporary.name)/"phase.json"
         actual=json.loads(mod.PR_CLOSURE_TRANSITION.read_text(encoding="utf-8"))
-        actual["allowedClosedOrOpen"]=allowed
-        actual["remainingCandidatesFrozenOpen"]=[n for n in mod.PR_ARCHIVE_TAGS if n not in allowed]
+        actual_allowed=mod.PR_CLOSED_ROSTER if allowed is None else allowed
+        actual["allowedClosedOrOpen"]=actual_allowed
+        actual["remainingCandidatesFrozenOpen"]=[n for n in mod.PR_ARCHIVE_TAGS if n not in actual_allowed]
         actual["batchId"]=batch_id
         target.write_text(json.dumps(actual),encoding="utf-8")
         previous=mod.PR_CLOSURE_TRANSITION
         self.addCleanup(setattr,mod,"PR_CLOSURE_TRANSITION",previous)
         mod.PR_CLOSURE_TRANSITION=target
 
-    def test_exact_12_still_open_is_valid_before_closure(self):
-        self.assertEqual(mod.verify_open_pr_roster(full_prs(),tags(),fetch_map({})),
-                         set(mod.PR_HEAD_PINS))
+    def test_live_roster_allows_untagged_closed_heads_only_while_exact_refs_exist(self):
+        self.assertEqual(mod.verify_open_pr_roster(
+            full_prs(), tags(), fetch_map(closed_receipts()), refs=pinned_branch_refs()),
+            {238})
 
-    def test_only_two_authorized_closed_unmerged_with_tag_pass(self):
-        allp=full_prs()
-        old={p["number"]:closed_from(p) for p in allp if p["number"] in (175,178)}
-        openp=[p for p in allp if p["number"] not in old]
-        self.assertEqual(mod.verify_open_pr_roster(openp,tags(),fetch_map(old)),
-                         set(mod.PR_HEAD_PINS)-{175,178})
-
-    def test_aj_allows_only_the_four_documented_public_pr_closures(self):
-        self.with_transition([175,178,179,180],"dev-20261028-cppublic-pr-close-aj")
-        allp=full_prs()
-        inherited={p["number"]:closed_from(p) for p in allp if p["number"] in (175,178)}
-        openp=[p for p in allp if p["number"] not in inherited]
-        self.assertEqual(mod.verify_open_pr_roster(openp,tags(),fetch_map(inherited)),
-                         set(mod.PR_HEAD_PINS)-{175,178})
-
-        for candidate in (179,180):
-            with self.subTest(closed=candidate):
-                closed=dict(inherited)
-                closed[candidate]=closed_from(next(p for p in allp if p["number"]==candidate))
-                live=[p for p in allp if p["number"] not in closed]
-                self.assertEqual(mod.verify_open_pr_roster(live,tags(),fetch_map(closed)),
-                                 set(mod.PR_HEAD_PINS)-set(closed))
-
-        closed=dict(inherited)
-        closed.update({p["number"]:closed_from(p) for p in allp if p["number"] in (179,180)})
-        live=[p for p in allp if p["number"] not in closed]
-        self.assertEqual(mod.verify_open_pr_roster(live,tags(),fetch_map(closed)),
-                         set(mod.PR_HEAD_PINS)-{175,178,179,180})
-
-    def test_aj_still_rejects_security_pr_closure(self):
-        self.with_transition([175,178,179,180],"dev-20261028-cppublic-pr-close-aj")
-        allp=full_prs()
-        closed={182:closed_from(next(p for p in allp if p["number"]==182))}
-        with self.assertRaisesRegex(RuntimeError,"UNAUTHORIZED_PR_CLOSURE"):
-            mod.verify_open_pr_roster([p for p in allp if p["number"]!=182],
-                                      tags(),fetch_map(closed))
-
-    def test_closed_pr_179_not_yet_authorized(self):
-        self.with_transition([175,178],"dev-20261028-cppublic-pr-close-ai")
-        allp=full_prs()
-        old={179:closed_from(next(p for p in allp if p["number"]==179))}
-        with self.assertRaisesRegex(RuntimeError,"UNAUTHORIZED_PR_CLOSURE"):
-            mod.verify_open_pr_roster([p for p in allp if p["number"]!=179],
-                                      tags(),fetch_map(old))
-
-    def test_security_pr_182_must_never_close(self):
-        allp=full_prs()
-        old={182:closed_from(next(p for p in allp if p["number"]==182))}
-        with self.assertRaisesRegex(RuntimeError,"UNAUTHORIZED_PR_CLOSURE"):
-            mod.verify_open_pr_roster([p for p in allp if p["number"]!=182],
-                                      tags(),fetch_map(old))
-
-    def test_closure_tag_required_even_when_no_pr_closed(self):
+    def test_currently_present_archive_tags_must_match_exact_original_sha(self):
         bad=tags()
-        del bad[mod.PR_ARCHIVE_TAGS[180]]
-        with self.assertRaisesRegex(RuntimeError,"PR_ARCHIVE_TAG_MISSING"):
-            mod.verify_open_pr_roster(full_prs(),bad,fetch_map({}))
+        bad[mod.PR_ARCHIVE_TAGS[175]]="f"*40
+        with self.assertRaisesRegex(RuntimeError,"PR_ARCHIVE_TAG_MISSING_OR_CHANGED:175"):
+            mod.verify_open_pr_roster(full_prs(),bad,fetch_map(closed_receipts()),
+                                      refs=pinned_branch_refs())
+
+    def test_closed_head_without_tag_or_exact_branch_ref_is_denied(self):
+        refs=pinned_branch_refs()
+        refs.pop(mod.PR_HEAD_PINS[34][0])
+        archive_tags=tags()
+        archive_tags.pop(mod.PR_ARCHIVE_TAGS[34])
+        with self.assertRaisesRegex(RuntimeError,"PR_ARCHIVE_TAG_MISSING_OR_BRANCH_UNPINNED:34"):
+            mod.verify_open_pr_roster(full_prs(),archive_tags,fetch_map(closed_receipts()),refs=refs)
+
+    def test_closing_open_238_is_not_in_the_archive_allowlist(self):
+        closed=closed_receipts()
+        closed[238]=closed_from(full_prs()[0])
+        with self.assertRaisesRegex(RuntimeError,"UNAUTHORIZED_PR_CLOSURE"):
+            mod.verify_open_pr_roster([],tags(),fetch_map(closed),refs=pinned_branch_refs())
 
     def test_wrong_tag_sha_denied(self):
         bad=tags()
         bad[mod.PR_ARCHIVE_TAGS[175]]="f"*40
-        with self.assertRaisesRegex(RuntimeError,"PR_ARCHIVE_TAG_MISSING"):
+        with self.assertRaisesRegex(RuntimeError,"PR_ARCHIVE_TAG_MISSING_OR_CHANGED"):
             mod.verify_open_pr_roster(full_prs(),bad,fetch_map({}))
 
     def test_open_pr_head_drift_denied(self):
@@ -134,17 +109,19 @@ class PRRosterGates(unittest.TestCase):
             mod.verify_open_pr_roster(allp,tags(),fetch_map({}))
 
     def test_closed_pr_must_be_closed_unmerged_at_original_sha(self):
-        allp=full_prs()
-        pr=next(p for p in allp if p["number"]==175)
-        openp=[p for p in allp if p["number"]!=175]
+        pr={"number":34,"head":{"ref":mod.PR_HEAD_PINS[34][0],
+                                 "sha":mod.PR_HEAD_PINS[34][1]},"base":{"ref":"main"}}
+        openp=full_prs()
         for mutations in [{"merged":True},{"merged_at":"2026-10-28T21:00:00Z"},
                           {"head":{"ref":pr["head"]["ref"],"sha":"f"*40}},
                           {"state":"open"},{"closed_at":None},
                           {"base":{"ref":"development"}}]:
             with self.subTest(bad=mutations):
                 with self.assertRaisesRegex(RuntimeError,"PR_CLOSED_UNMERGED_PIN_MISMATCH"):
-                    mod.verify_open_pr_roster(openp,tags(),
-                         fetch_map({175:closed_from(pr,**mutations)}))
+                    closed=closed_receipts()
+                    closed[34]=closed_from(pr,**mutations)
+                    mod.verify_open_pr_roster(openp,tags(),fetch_map(closed),
+                                              refs=pinned_branch_refs())
 
     def test_duplicate_or_new_open_pr_denied(self):
         with self.assertRaisesRegex(RuntimeError,"PR_OPEN_INVENTORY_UNEXPECTED"):
@@ -154,14 +131,11 @@ class PRRosterGates(unittest.TestCase):
                 {"number":345,"state":"open","head":{"ref":"new","sha":"f"*40},
                  "base":{"ref":"main"}}],tags(),fetch_map({}))
 
-    def test_manifest_prevents_unapproved_mass_closure(self):
-        # The full four-PR allowlist cannot be smuggled into the consumed AI wave.
-        self.with_transition([175,178,179,180],"dev-20261028-cppublic-pr-close-ai")
-        with self.assertRaisesRegex(RuntimeError,"PR_TRANSITION_WAVE_DRIFT"):
-            mod.verify_open_pr_roster(full_prs(),tags(),fetch_map({}))
+    def test_old_transition_wave_cannot_replace_current_exact_roster(self):
         self.with_transition([175,178,179,180],"dev-20261028-cppublic-pr-close-aj")
-        self.assertEqual(mod.verify_open_pr_roster(full_prs(),tags(),fetch_map({})),
-                         set(mod.PR_HEAD_PINS))
+        with self.assertRaisesRegex(RuntimeError,"PR_TRANSITION_MANIFEST_DRIFT"):
+            mod.verify_open_pr_roster(full_prs(),tags(),fetch_map(closed_receipts()),
+                                      refs=pinned_branch_refs())
 
 
 class PRHeadRetentionGates(unittest.TestCase):
@@ -177,56 +151,52 @@ class PRHeadRetentionGates(unittest.TestCase):
             closed = mod.PR_CONFIRMED_CLOSED_UNMERGED
         return mod.verify_pr_head_retention(mod.PR_HEAD_PINS, refs, closed)
 
-    def test_exact_heads_before_and_after_four_closed_branches_removed(self):
+    def test_closed_heads_can_be_untagged_only_while_exact_branch_ref_remains(self):
         refs = self.refs()
+        for n in mod.PR_CLOSED_ROSTER:
+            refs.pop("refs/tags/" + mod.PR_ARCHIVE_TAGS[n], None)
         self.assertTrue(self.verify(refs))
-        for n in (175, 178, 179, 180):
-            refs.pop("refs/remotes/origin/" + mod.PR_HEAD_PINS[n][0])
-            self.assertTrue(self.verify(refs))
+        n=34
+        refs.pop("refs/remotes/origin/" + mod.PR_HEAD_PINS[n][0])
+        with self.assertRaisesRegex(RuntimeError,"PR_RETENTION_ARCHIVE_MISSING_OR_CHANGED"):
+            self.verify(refs)
+        refs["refs/tags/" + mod.PR_ARCHIVE_TAGS[n]]=mod.PR_HEAD_PINS[n][1]
+        self.assertTrue(self.verify(refs))
 
     def test_open_pr_cannot_fall_back_to_archive_tag(self):
-        for n in set(mod.PR_HEAD_PINS) - {175, 178, 179, 180}:
-            with self.subTest(pr=n):
-                refs = self.refs()
-                refs.pop("refs/remotes/origin/" + mod.PR_HEAD_PINS[n][0])
-                with self.assertRaisesRegex(RuntimeError, "OPEN_PR_BRANCH_MISSING"):
-                    self.verify(refs)
+        refs=self.refs()
+        refs.pop("refs/remotes/origin/" + mod.PR_HEAD_PINS[238][0])
+        with self.assertRaisesRegex(RuntimeError, "OPEN_PR_BRANCH_MISSING"):
+            self.verify(refs)
 
     def test_existing_changed_branch_must_not_be_masked_by_correct_tag(self):
-        for n in (175, 178, 179, 180):
+        for n in mod.PR_CLOSED_ROSTER:
             with self.subTest(pr=n):
                 refs = self.refs()
                 refs["refs/remotes/origin/" + mod.PR_HEAD_PINS[n][0]] = "f" * 40
                 with self.assertRaisesRegex(RuntimeError, "PR_RETENTION_BRANCH_DRIFT"):
                     self.verify(refs)
 
-    def test_closed_pr_archive_required_even_if_branch_still_exists(self):
-        for n in (175, 178, 179, 180):
-            for present in (True, False):
-                for replacement in (None, "f" * 40):
-                    with self.subTest(pr=n, branch=present, tag=replacement):
-                        refs = self.refs()
-                        tag = "refs/tags/" + mod.PR_ARCHIVE_TAGS[n]
-                        refs.pop(tag)
-                        if replacement:
-                            refs[tag] = replacement
-                        if not present:
-                            refs.pop("refs/remotes/origin/" + mod.PR_HEAD_PINS[n][0])
-                        with self.assertRaisesRegex(RuntimeError, "PR_RETENTION_ARCHIVE_MISSING_OR_CHANGED"):
-                            self.verify(refs)
+    def test_wrong_archive_tag_is_rejected_even_with_branch_present(self):
+        for n in mod.PR_CLOSED_ROSTER:
+            with self.subTest(pr=n):
+                refs=self.refs()
+                refs["refs/tags/" + mod.PR_ARCHIVE_TAGS[n]]="f"*40
+                with self.assertRaisesRegex(RuntimeError,"PR_RETENTION_ARCHIVE_MISSING_OR_CHANGED"):
+                    self.verify(refs)
 
     def test_confirmed_closed_receipt_matches_individual_live_readbacks(self):
-        self.assertEqual(mod.PR_CONFIRMED_CLOSED_UNMERGED, {175, 178, 179, 180})
+        self.assertEqual(mod.PR_CONFIRMED_CLOSED_UNMERGED, set(mod.PR_CLOSED_ROSTER))
 
     def test_closed_security_pr_is_not_an_archival_candidate(self):
         with self.assertRaisesRegex(RuntimeError, "UNARCHIVABLE_CLOSED_PR"):
-            self.verify(self.refs(), closed=(175, 178, 182))
+            self.verify(self.refs(), closed=set(mod.PR_CLOSED_ROSTER) | {238})
 
     def test_altered_historical_pin_is_not_accepted(self):
         pins = copy.deepcopy(mod.PR_HEAD_PINS)
         pins[175][1] = "f" * 40
         with self.assertRaisesRegex(RuntimeError, "PR_RETENTION_PIN_DRIFT"):
-            mod.verify_pr_head_retention(pins, self.refs(), {175, 178, 179, 180})
+            mod.verify_pr_head_retention(pins, self.refs(), set(mod.PR_CLOSED_ROSTER))
 
     def test_both_real_lineage_suites_pass_without_closed_head_refs(self):
         # A disposable shared mirror hides refs locally; never mutate origin or

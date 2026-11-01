@@ -3,7 +3,7 @@
   "repository": "EAKerber/MobiliPresenter2D",
   "controlBranch": "development",
   "mainSha": "221b54b2a41ecc8c338d1bf2cf67280cf165ce95",
-  "batchId": "dev-20261029-auth-migration-history-at",
+  "batchId": "dev-20261101-public-pr-retirement-au",
   "retired": [
     {
       "branch": "docs/handover-reconcile-20261023",
@@ -288,45 +288,51 @@
       "sha": "cacd0e9160437285c41302d0dd13d9664001186e",
       "kind": "archive-diverged",
       "archiveTag": "archive/m2d/ci-global-auth-boundary-cacd0e91"
-    }
-  ],
-  "auxiliaryRefs": [],
-  "targets": [
+    },
     {
       "branch": "security/oidc-ci-preview235-v0-20261023",
       "sha": "833f36a524567354240a272eaced8840bf296753",
       "kind": "archive-diverged",
-      "archiveTag": "archive/m2d/security-oidc-ci-preview235-833f36a5",
-      "snapshotPath": "docs/work/DEVELOPMENT_AUTH_MIGRATION_ARCHIVE_2026-10-29.md",
-      "semanticGate": {
-        "runId": 40809142504,
-        "headSha": "cb75ef8a895a2356af76e204a0cbcf1e9fb0f78d",
-        "workflowName": "Development historical-branch semantic and blob provenance scan"
-      }
+      "archiveTag": "archive/m2d/security-oidc-ci-preview235-833f36a5"
     },
     {
       "branch": "feat/cp-sd-06a1-server-v5-read-migration-support",
       "sha": "ee4ffe153ffa732ae5775089ba6876a707088498",
       "kind": "archive-diverged",
-      "archiveTag": "archive/m2d/cp-sd-06a1-migration-support-ee4ffe15",
-      "snapshotPath": "docs/work/DEVELOPMENT_AUTH_MIGRATION_ARCHIVE_2026-10-29.md",
-      "semanticGate": {
-        "runId": 40809142504,
-        "headSha": "cb75ef8a895a2356af76e204a0cbcf1e9fb0f78d",
-        "workflowName": "Development historical-branch semantic and blob provenance scan"
-      }
+      "archiveTag": "archive/m2d/cp-sd-06a1-migration-support-ee4ffe15"
     },
     {
       "branch": "fix/auth-first-login-session-reconciliation-20261021",
       "sha": "70ed9ce49694db770c58f1e6953ab21da4593aa3",
       "kind": "archive-diverged",
-      "archiveTag": "archive/m2d/auth-first-login-session-70ed9ce4",
-      "snapshotPath": "docs/work/DEVELOPMENT_AUTH_MIGRATION_ARCHIVE_2026-10-29.md",
-      "semanticGate": {
-        "runId": 40809142504,
-        "headSha": "cb75ef8a895a2356af76e204a0cbcf1e9fb0f78d",
-        "workflowName": "Development historical-branch semantic and blob provenance scan"
-      }
+      "archiveTag": "archive/m2d/auth-first-login-session-70ed9ce4"
+    }
+  ],
+  "auxiliaryRefs": [],
+  "targets": [
+    {
+      "branch": "feat/exposed-sides-and-glass",
+      "sha": "20040da835d6da66b03f73642c0c44db109dd6e8",
+      "kind": "archive-diverged",
+      "archiveTag": "archive/m2d/pr34-exposed-sides-glass-20040da8",
+      "snapshotPath": "docs/work/DEVELOPMENT_PR_BRANCH_ARCHIVE_2026-11-01.md",
+      "closedPrNumber": 34
+    },
+    {
+      "branch": "work/cp-public-03a1-configuration-read-guard-20261008",
+      "sha": "0b398618f7f2eff23da7f782d53d86ba3ee6411b",
+      "kind": "archive-diverged",
+      "archiveTag": "archive/m2d/cppublic-pr182-config-read-guard-0b398618",
+      "snapshotPath": "docs/work/DEVELOPMENT_PR_BRANCH_ARCHIVE_2026-11-01.md",
+      "closedPrNumber": 182
+    },
+    {
+      "branch": "work/cp-public-03a2-0-failclosed-bootstrap-20261008",
+      "sha": "d1305ffdd8302fa06b37d3676f08d802a92e7d97",
+      "kind": "archive-diverged",
+      "archiveTag": "archive/m2d/cppublic-pr184-failclosed-bootstrap-d1305ff",
+      "snapshotPath": "docs/work/DEVELOPMENT_PR_BRANCH_ARCHIVE_2026-11-01.md",
+      "closedPrNumber": 184
     }
   ]
 }

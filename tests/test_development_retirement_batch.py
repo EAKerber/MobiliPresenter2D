@@ -38,6 +38,14 @@ def fixture():
     return batch, inventory
 
 
+def closed_pr_archive(number=34):
+    branch, sha = mod.PR_HEAD_PINS[number]
+    return {"branch": branch, "sha": sha, "kind": "archive-diverged",
+            "archiveTag": mod.PR_ARCHIVE_TAGS[number],
+            "snapshotPath": mod.PR_ARCHIVE_EVIDENCE,
+            "closedPrNumber": number}
+
+
 class DevelopmentRetirementContract(unittest.TestCase):
     def test_exact_three_and_60_source_roster(self):
         b, i = fixture()
@@ -137,6 +145,26 @@ class DevelopmentRetirementContract(unittest.TestCase):
         b["targets"][0]["equalBlobPath"] = "app/styles.css"
         b["targets"][0]["equalBlobSha"] = "d43e6fb5e66133d2389b5c39b165b76b13cfa868"
         self.assertEqual(len(mod.canonical_targets(b, i)[1]), 3)
+
+    def test_closed_pr_documentary_archive_proof_accepts_only_its_exact_pin(self):
+        b, i = fixture()
+        target = closed_pr_archive()
+        i["rows"][-1] = {"branch": target["branch"], "sha": target["sha"]}
+        b["targets"] = [target]
+        self.assertEqual(mod.canonical_targets(b, i)[1], [target])
+        self.assertEqual(mod.prove_snapshot(target)["closedPrNumber"], 34)
+
+    def test_closed_pr_documentary_archive_proof_rejects_wrong_number_or_tag(self):
+        for field, value in [("closedPrNumber", 182),
+                             ("archiveTag", "archive/m2d/wrong")]:
+            b, i = fixture()
+            target = closed_pr_archive()
+            i["rows"][-1] = {"branch": target["branch"], "sha": target["sha"]}
+            target[field] = value
+            b["targets"] = [target]
+            with self.subTest(field=field):
+                with self.assertRaisesRegex(ValueError, "CLOSED_PR_ARCHIVE_PROOF_PIN_MISMATCH"):
+                    mod.canonical_targets(b, i)
 
     def test_mixed_equal_and_archived_delta_proof_denied(self):
         b, i = fixture()

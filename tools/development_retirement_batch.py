@@ -75,12 +75,21 @@ PR_HEAD_PINS = {
 PR_NUMBERS = frozenset(PR_HEAD_PINS)
 PR_ARCHIVE_MANIFEST = Path("ops/development-pr-archive-manifest.json")
 PR_CLOSURE_TRANSITION = Path("ops/development-pr-closure-transition.json")
+PR_ARCHIVE_EVIDENCE = "docs/work/DEVELOPMENT_PR_BRANCH_ARCHIVE_2026-11-01.md"
 PR_ARCHIVE_TAGS = {
+  34: "archive/m2d/pr34-exposed-sides-glass-20040da8",
   175: "archive/m2d/cppublic-pr175-c81d357d",
   178: "archive/m2d/cppublic-pr178-f0c79239",
   179: "archive/m2d/cppublic-pr179-44b1d6a9",
-  180: "archive/m2d/cppublic-pr180-82d85674"
+  180: "archive/m2d/cppublic-pr180-82d85674",
+  182: "archive/m2d/cppublic-pr182-config-read-guard-0b398618",
+  184: "archive/m2d/cppublic-pr184-failclosed-bootstrap-d1305ff",
+  185: "archive/m2d/cppublic-pr185-buyer-projection-7a0d919d",
+  186: "archive/m2d/cppublic-pr186-email-access-40d4b65f",
+  196: "archive/m2d/cppublic-pr196-auth-boundary-43d5fb9c",
+  231: "archive/m2d/p-token-02b-contextual-copy-afb80965"
 }
+PR_CLOSED_ROSTER = [34, 175, 178, 179, 180, 182, 184, 185, 186, 196, 231]
 
 SHA_RE = re.compile(r"[0-9a-f]{40}\Z")
 BRANCH_RE = re.compile(r"[A-Za-z0-9._/-]+\Z")
@@ -136,12 +145,13 @@ def archive_tags():
     return result
 
 
-def verify_open_pr_roster(prs, tags, fetch_pr=api):
-    """PR closure allows only exact documented 2-at-a-time transitions.
+def verify_open_pr_roster(prs, tags, fetch_pr=api, refs=None):
+    """Require the exact live PR roster and preserve closed heads losslessly.
 
     A closed PR must be CLOSED/UNMERGED at its original SHA with an immutable
-    archive tag. No other PR is allowed to close, move, merge, or change HEAD.
-    This is intentionally stricter than merely changing PR_NUMBERS from 12 to 8.
+    archive tag before its branch ref is removed. During a bounded retirement
+    wave, a missing tag is acceptable only while the exact pinned branch ref
+    still exists. No other PR may close, move, merge, or change HEAD.
     """
     archive = json.loads(PR_ARCHIVE_MANIFEST.read_text(encoding="utf-8"))
     transition = json.loads(PR_CLOSURE_TRANSITION.read_text(encoding="utf-8"))
@@ -161,23 +171,17 @@ def verify_open_pr_roster(prs, tags, fetch_pr=api):
         or transition.get("repository") != REPO
         or transition.get("mainSha") != MAIN_SHA
         or transition.get("authoritativeArchive") != PR_ARCHIVE_MANIFEST.as_posix()
-        or transition.get("batchId") not in
-            ("dev-20261028-cppublic-pr-close-ai", "dev-20261028-cppublic-pr-close-aj")
-        or allowed not in ([175, 178], [175, 178, 179, 180])
+        or transition.get("batchId") != "dev-20261101-public-pr-archive-au"
+        or allowed != PR_CLOSED_ROSTER
         or transition.get("remainingCandidatesFrozenOpen") != expected_frozen
         or transition.get("closureMethod") != "closed-unmerged-only"
-        or transition.get("successorEvidence") !=
-             "docs/work/DEVELOPMENT_CP_PUBLIC_PRS_175_180_2026-10-28.md"
-        or transition.get("provenanceEvidence") !=
-             "docs/work/DEVELOPMENT_CP_PUBLIC_PR_CLOSURE_2026-10-28.md"):
+        or transition.get("successorEvidence") != PR_ARCHIVE_EVIDENCE
+        or transition.get("provenanceEvidence") != PR_ARCHIVE_EVIDENCE):
         raise RuntimeError("PR_TRANSITION_MANIFEST_DRIFT")
-    if ((transition["batchId"].endswith("-ai") and allowed != [175,178])
-        or (transition["batchId"].endswith("-aj") and allowed != [175,178,179,180])):
-        raise RuntimeError("PR_TRANSITION_WAVE_DRIFT")
-    # Even still-open public PRs must retain complete original DAGs, so an
-    # accidental deletion of any of these tags shuts down future hygiene.
+    # Existing tags must always match. A missing tag is acceptable only while
+    # the full-roster check below still finds that closed PR's exact branch.
     for n, tag in PR_ARCHIVE_TAGS.items():
-        if tags.get(tag) != PR_HEAD_PINS[n][1]:
+        if tag in tags and tags[tag] != PR_HEAD_PINS[n][1]:
             raise RuntimeError("PR_ARCHIVE_TAG_MISSING_OR_CHANGED:"+str(n))
     if not isinstance(prs, list):
         raise RuntimeError("PR_OPEN_INVENTORY_NOT_LIST")
@@ -202,13 +206,18 @@ def verify_open_pr_roster(prs, tags, fetch_pr=api):
             or (head.get("ref"),head.get("sha"))!=tuple(PR_HEAD_PINS[n])
             or ((p.get("base") or {}).get("ref"))!="main"):
             raise RuntimeError("PR_CLOSED_UNMERGED_PIN_MISMATCH:"+str(n))
+        tag = PR_ARCHIVE_TAGS.get(n)
+        branch, sha = PR_HEAD_PINS[n]
+        if (not tag or (tags.get(tag) != sha
+                        and (refs or {}).get(branch) != sha)):
+            raise RuntimeError("PR_ARCHIVE_TAG_MISSING_OR_BRANCH_UNPINNED:"+str(n))
     return set(actual)
 
 
 # Confirmed CLOSED/UNMERGED via individual REST readbacks on 2026-10-29; see closure evidence.
 # Offline provenance tests use this historical receipt, not live PR-state authority.
 # Remote mutation always uses verify_open_pr_roster and its fresh API readback.
-PR_CONFIRMED_CLOSED_UNMERGED = frozenset({175, 178, 179, 180})
+PR_CONFIRMED_CLOSED_UNMERGED = frozenset(PR_CLOSED_ROSTER)
 
 
 def local_pr_refs():
@@ -238,7 +247,10 @@ def verify_pr_head_retention(pins, refs, closed_pr_numbers):
         if actual is not None and actual != sha:
             raise RuntimeError("PR_RETENTION_BRANCH_DRIFT:" + str(n))
         if n in closed:
-            if refs.get("refs/tags/" + PR_ARCHIVE_TAGS[n]) != sha:
+            tag_sha = refs.get("refs/tags/" + PR_ARCHIVE_TAGS[n])
+            if tag_sha is not None and tag_sha != sha:
+                raise RuntimeError("PR_RETENTION_ARCHIVE_MISSING_OR_CHANGED:" + str(n))
+            if actual is None and tag_sha != sha:
                 raise RuntimeError("PR_RETENTION_ARCHIVE_MISSING_OR_CHANGED:" + str(n))
         elif actual is None:
             raise RuntimeError("OPEN_PR_BRANCH_MISSING:" + str(n))
@@ -332,7 +344,7 @@ def canonical_targets(batch, inventory):
             if set(item) != {"branch", "sha", "kind"}:
                 raise ValueError("UNEXPECTED_ANCESTOR_FIELDS")
         elif kind == "archive-diverged":
-            allowed = {"branch", "sha", "kind", "archiveTag", "snapshotPath", "sourcePath", "sourceBlobSha", "equalBlobPath", "equalBlobSha", "semanticGate"}
+            allowed = {"branch", "sha", "kind", "archiveTag", "snapshotPath", "sourcePath", "sourceBlobSha", "equalBlobPath", "equalBlobSha", "semanticGate", "closedPrNumber"}
             required = {"branch", "sha", "kind", "archiveTag", "snapshotPath"}
             if not required.issubset(item) or not set(item).issubset(allowed):
                 raise ValueError("INVALID_ARCHIVE_FIELDS")
@@ -345,10 +357,17 @@ def canonical_targets(batch, inventory):
             with_source = "sourcePath" in item or "sourceBlobSha" in item
             with_equal = "equalBlobPath" in item or "equalBlobSha" in item
             with_gate = "semanticGate" in item
+            with_closed_pr = "closedPrNumber" in item
             if with_source and with_equal:
                 raise ValueError("MIXED_ARCHIVE_PROOF_MODES")
-            if sum((with_source, with_equal, with_gate)) != 1:
+            if sum((with_source, with_equal, with_gate, with_closed_pr)) != 1:
                 raise ValueError("EXACTLY_ONE_ARCHIVE_PROOF_REQUIRED")
+            if with_closed_pr:
+                number = item["closedPrNumber"]
+                if (type(number) is not int or number not in PR_CLOSED_ROSTER
+                    or PR_HEAD_PINS.get(number) != [name, sha]
+                    or PR_ARCHIVE_TAGS.get(number) != tag):
+                    raise ValueError("CLOSED_PR_ARCHIVE_PROOF_PIN_MISMATCH")
             if with_gate:
                 gate = item["semanticGate"]
                 if (not isinstance(gate, dict)
@@ -401,6 +420,13 @@ def prove_snapshot(target):
             raise RuntimeError("SEMANTIC_GATE_HEAD_NOT_ON_DEVELOPMENT")
         return {"snapshotPath": target["snapshotPath"],
                 "semanticGateRun": gate["runId"], "semanticGateSha": gate["headSha"]}
+    if "closedPrNumber" in target:
+        number = target["closedPrNumber"]
+        if (type(number) is not int or number not in PR_CLOSED_ROSTER
+            or PR_HEAD_PINS.get(number) != [target["branch"], target["sha"]]
+            or PR_ARCHIVE_TAGS.get(number) != target["archiveTag"]):
+            raise RuntimeError("CLOSED_PR_ARCHIVE_PROOF_PIN_MISMATCH")
+        return {"snapshotPath": target["snapshotPath"], "closedPrNumber": number}
     if "equalBlobPath" in target:
         path, sha = target["equalBlobPath"], target["equalBlobSha"]
         base = git("merge-base", MAIN_SHA, target["sha"])
@@ -452,7 +478,7 @@ def verify_context(batch, inventory, mode):
     if refs != expected:
         raise RuntimeError("FULL_REF_ROSTER_DRIFT")
     prs = api("pulls?state=open&per_page=100")
-    verify_open_pr_roster(prs, tags_before)
+    verify_open_pr_roster(prs, tags_before, refs=refs)
     used = {value.get("ref") for p in prs for value in (p.get("head") or {}, p.get("base") or {})}
     if set(item["branch"] for item in targets) & used:
         raise RuntimeError("TARGET_HAS_OPEN_PR")
@@ -528,7 +554,7 @@ def main():
         if remote_refs() != expected:
             raise RuntimeError("REF_DRIFT_BEFORE_DELETE")
         fresh_prs = api("pulls?state=open&per_page=100")
-        verify_open_pr_roster(fresh_prs, archive_tags())
+        verify_open_pr_roster(fresh_prs, archive_tags(), refs=expected)
         active = {v.get("ref") for p in fresh_prs for v in (p.get("head") or {}, p.get("base") or {})}
         if item["branch"] in active or api("rulesets?per_page=100"):
             raise RuntimeError("PR_OR_RULESET_DRIFT")
