@@ -2,6 +2,7 @@ name: Public routing before Clerk
 
 on:
   pull_request:
+    types: [opened, synchronize, reopened, edited]
     paths:
       - 'app/index.html'
       - 'app/config/**'
@@ -45,7 +46,8 @@ jobs:
           node --test app/viewer/scene-adapters.test.mjs
 
   browser:
-    if: github.event_name == 'pull_request'
+    # The live Netlify cutover smoke gates production-bound PRs; development uses local browser and contract gates.
+    if: github.event_name == 'pull_request' && github.base_ref == 'main'
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
