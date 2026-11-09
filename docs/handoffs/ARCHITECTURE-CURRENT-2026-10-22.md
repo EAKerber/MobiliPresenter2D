@@ -1,5 +1,17 @@
 # HANDOVER CANÔNICO — MobiliPresenter2D / consolidação Vanilla + Design System
 
+## Estado reobservado em 2026-11-01
+
+| Autoridade | Estado live/local observado |
+|---|---|
+| Produto `main` | `221b54b2a41ecc8c338d1bf2cf67280cf165ce95`; permanece a autoridade de produção e não foi alterada nesta continuação |
+| Produto `development` | `2babbebd73f4187daf1c0f9562c5ec0aa8abeff6`; ARC-03C e NAV-005 da PR #267 já estão integrados aqui |
+| Design System `main` | `79db735d6f05177b0c406e383d35832f3d72fdef`; não existe branch `development` nem PR aberta na leitura atual |
+| Integração local P-TOKEN-02A1 | branch local `feat/p-token-02-focus-alias-20261101`, derivada exatamente de `development@2babbebd73f4187daf1c0f9562c5ec0aa8abeff6`; último commit de código/teste `e6c7c4a20a1a1cca7148b1da0a9a9d8dfaa16515`. Dois literais de foco usam agora `var(--ui-theme-focus)` sem mudar os valores; contrato CSS focalizado PASS. Chromium isolado confirmou equivalência das declarações, mas não rota real. Runner DS-05A bloqueado por `EACCES connect 127.0.0.1`; gate completo pendente. Sem push, PR, preview ou deploy |
+| Auditoria local DS-05A | preservada em worktree/branch separado; não foi misturada ao P-TOKEN-02A |
+
+ARC-03C não é mais o próximo trabalho: já consta no `development` atual. O próximo recorte P-TOKEN-02 é incremental e de CSS: mapear pares de valores efetivos por componente/tema/estado, usar tokens somente quando a equivalência semântica e contextual estiver provada e manter layout, geometria e decoração no CSS/renderer. O alias P-TOKEN-02A1 e seu limite estão em [`P-TOKEN-02A1`](../design-system/P-TOKEN-02A1-focus-token-alias-2026-11-01.md). O restante deste handover é a fotografia histórica de 22/10, não estado live atual.
+
 **Data de observação:** 2026-10-22, America/Sao_Paulo.
 **Âmbito:** estado efetivamente lido nos repositórios, não um plano imaginado.
 **Entrada recomendada para novos agentes:** este documento -> `CURRENT_STATE.md` como **histórico** -> Design System [handover cruzado](https://github.com/EAKerber/MobiliPresenter2D_DesignSystem/blob/main/docs/ARCHITECTURE_CURRENT_HANDOVER_2026-10-22.md) -> decisões visuais e roadmap.
