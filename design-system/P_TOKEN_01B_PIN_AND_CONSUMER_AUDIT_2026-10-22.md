@@ -1,6 +1,6 @@
 # P-TOKEN-01B — distribuição versionada DS→produto (não ativada)
 
-**Data:** 2026-10-22. **Estado:** preparado em **branch isolada do produto**, não faz parte da `main` nem da publicação Netlify. **Sem alteração visual.**
+**Data:** 2026-10-22. **Estado do checkpoint original:** preparado em **branch isolada do produto**, não faz parte da `main` nem da publicação Netlify. **Sem alteração visual.**
 **Base do produto:** `EAKerber/MobiliPresenter2D@840a0cda361b3ce215fc934badc26df72dffc6e8`.
 **Fonte efetiva:** `EAKerber/MobiliPresenter2D_DesignSystem@70f0eabf609b5b4391459c426d6f7ecaeac070c8` (PR DS [#49](https://github.com/EAKerber/MobiliPresenter2D_DesignSystem/pull/49) MERGED), `VIS-002.approvedPalette`.
 **Branch:** `architecture/p-token-01b-reference-pin-20261022` (não unificar com `architecture/p-comp-01-public-menu-20261021`).
@@ -34,7 +34,11 @@ Portanto **não** importar `approved-palette-reference.css` no `app/`, não reno
 4. Mapa lexical registrado como candidato, sem promover nenhum valor visual.
 5. Nenhum PR do produto foi aberto nesta etapa para **não gerar Deploy Preview** automaticamente; merge/release continuam HOLD.
 
-## Próximo trabalho (P-TOKEN-02)
+## Progresso local em 2026-11-01 — P-TOKEN-02A1
+
+Um primeiro alias `same-value-safe` foi preparado isoladamente no produto: as duas regras globais de `:focus-visible` passaram a consumir `--ui-theme-focus`, que já continha os mesmos valores para light e dark. A mudança não atualiza `decisions.json`, não aplica a paleta VIS-002 globalmente e não altera espaçamento/forma dos contornos. Evidência e limite do gate: [P-TOKEN-02A1](../docs/design-system/P-TOKEN-02A1-focus-token-alias-2026-11-01.md). O candidato ainda aguarda leitura de computed style local; não é mudança integrada nem publicada.
+
+## Trabalho restante (P-TOKEN-02)
 
 Mapear por componente/rota/tema/estado as propriedades CSS efetivas e quais correspondem às cores homologadas, produzir evidência visual de comportamento e contraste, classificar `same-value-safe` vs `approved-but-different` vs `not-approved`, e escolher uma primeira substituição **sem mudança visual**. Patches de correção visual (cores/outline) deverão ser aprovados/inspecionados separadamente.
 

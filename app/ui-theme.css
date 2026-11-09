@@ -110,8 +110,8 @@ html[data-theme="dark"] .button-copper { background: #8b6a40; color: #ffffff; }
 html[data-theme="dark"] .header-cta:hover,
 html[data-theme="dark"] .button-primary:hover,
 html[data-theme="dark"] .button-copper:hover { background: #6e512e; color: #fff; }
-html[data-theme="light"] :focus-visible { outline-color: #6e512e; }
-html[data-theme="dark"] :focus-visible { outline-color: #d8bc7c; }
+html[data-theme="light"] :focus-visible { outline-color: var(--ui-theme-focus); }
+html[data-theme="dark"] :focus-visible { outline-color: var(--ui-theme-focus); }
 
 /* Public how-it-works: reverse interface surfaces, not editorial graphics. */
 html[data-theme="dark"] .study-band,

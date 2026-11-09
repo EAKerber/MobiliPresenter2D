@@ -13,6 +13,7 @@ on:
       - 'scripts/compile-primary-pages.mjs'
       - 'tests/arc03c-source-authority.test.mjs'
       - 'tests/public-cutover-contract.cjs'
+      - 'tests/ui-theme-focus-token-contract.cjs'
       - 'app/core/ui-theme.js'
       - 'app/public-theme.css'
       - 'package.json'
@@ -36,6 +37,7 @@ on:
       - 'scripts/compile-primary-pages.mjs'
       - 'tests/arc03c-source-authority.test.mjs'
       - 'tests/public-cutover-contract.cjs'
+      - 'tests/ui-theme-focus-token-contract.cjs'
       - 'app/core/ui-theme.js'
       - 'app/public-theme.css'
       - 'package.json'
@@ -76,6 +78,7 @@ jobs:
           node --test tests/arc03c-source-authority.test.mjs
           npm run pages:check
           node tests/public-cutover-contract.cjs
+          node tests/ui-theme-focus-token-contract.cjs
       - name: Resolve package against preinstalled Playwright browsers
         run: |
           npm install --prefix /tmp/m2d-public-nav --no-audit --no-fund playwright@1.62.1
