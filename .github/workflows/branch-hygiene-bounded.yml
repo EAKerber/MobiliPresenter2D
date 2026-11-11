@@ -18,6 +18,7 @@ on:
 
 concurrency:
   group: m2d-bounded-branch-hygiene
+  queue: max
   cancel-in-progress: false
 
 permissions:
