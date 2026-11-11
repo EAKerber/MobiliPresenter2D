@@ -17,7 +17,8 @@ const MAP=[
 ];
 const KEYS=["brandHref","ambientesHref","ambientesCurrent","howHref","howCurrent","aboutHref","aboutCurrent","whatsAppIconAriaHidden"];
 function gitBlobSha(data) {
- return createHash("sha1").update("blob "+Buffer.byteLength(data)+"\0").update(data).digest("hex");
+ const canonical=data.replace(/\r\n/g,"\n");
+ return createHash("sha1").update("blob "+Buffer.byteLength(canonical)+"\0").update(canonical).digest("hex");
 }
 function header(fragment,r) {
  assert.ok(["ambientes","how","about"].includes(r.current),"Invalid menu selection");
