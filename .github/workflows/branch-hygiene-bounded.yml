@@ -17,7 +17,7 @@ on:
       - 'ops/branch-hygiene-batch.json'
 
 concurrency:
-  group: m2d-bounded-branch-hygiene-${{ github.event_name }}
+  group: m2d-bounded-branch-hygiene
   cancel-in-progress: false
 
 permissions:
