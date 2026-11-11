@@ -14,8 +14,8 @@
       "route": "/",
       "source": "architecture/pages/root.page.html",
       "output": "app/index.html",
-      "sourceGitBlobSha": "107c3c8a3e51e8734051651a69408a6509be13dc",
-      "outputGitBlobSha": "2a56984378bb1172107e85cce954ee3acfb04c7d"
+      "sourceGitBlobSha": "278b9aa039f147c3d838a2c31fa36855a402540e",
+      "outputGitBlobSha": "b38a34cc7e9ee7551c3174fe427920fc6c0deaad"
     },
     {
       "route": "/about/",
