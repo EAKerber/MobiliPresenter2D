@@ -19,6 +19,87 @@
   let hintTimer;
   let hintStopped = false;
 
+  function layoutHeroPhoneVideo() {
+    const frame = document.querySelector(".hero-image-frame");
+    const art = document.querySelector(".hero-art");
+    const image = frame && frame.querySelector("img");
+    const trigger = document.getElementById("heroVideoTrigger");
+    if (!frame || !art || !image || !trigger || !image.naturalWidth || !image.naturalHeight) return;
+
+    const frameWidth = frame.clientWidth;
+    const frameHeight = frame.clientHeight;
+    if (!frameWidth || !frameHeight) return;
+    const scale = Math.max(frameWidth / image.naturalWidth, frameHeight / image.naturalHeight);
+    const renderedWidth = image.naturalWidth * scale;
+    const renderedHeight = image.naturalHeight * scale;
+    const offsetX = (frameWidth - renderedWidth) / 2;
+    // Screen bounds are measured on the 1074x1465 source image; keep the overlay on the rendered cover crop.
+    const screen = { left: 184, top: 170, width: 400, height: 973 };
+
+    image.style.left = `${offsetX}px`;
+    image.style.top = "0px";
+    image.style.width = `${renderedWidth}px`;
+    image.style.height = `${renderedHeight}px`;
+    trigger.style.left = `${offsetX + screen.left * scale}px`;
+    trigger.style.top = `${screen.top * scale}px`;
+    trigger.style.width = `${screen.width * scale}px`;
+    trigger.style.height = `${screen.height * scale}px`;
+    trigger.hidden = false;
+  }
+
+  function initHeroVideo() {
+    const trigger = document.getElementById("heroVideoTrigger");
+    const image = document.querySelector(".hero-image-frame > img");
+    const dialog = document.getElementById("homeVideoDialog");
+    const player = document.getElementById("homeVideoPlayer");
+    const close = document.getElementById("homeVideoClose");
+    const fullscreen = document.getElementById("homeVideoFullscreen");
+    const youtubeUrl = "https://www.youtube.com/shorts/hgcJ1k7lFkE";
+    if (!trigger || !image || !dialog || !player || !close || !fullscreen) return;
+
+    function openYoutubeFallback() {
+      window.open(youtubeUrl, "_blank", "noopener,noreferrer");
+    }
+    function loadPlayer() {
+      if (player.querySelector("iframe")) return player.querySelector("iframe");
+      const iframe = document.createElement("iframe");
+      iframe.src = "https://www.youtube-nocookie.com/embed/hgcJ1k7lFkE?autoplay=1&controls=1&fs=1&playsinline=1&rel=0&cc_load_policy=1";
+      iframe.title = "Apresentação da Casa em Módulos";
+      iframe.loading = "eager";
+      iframe.referrerPolicy = "strict-origin-when-cross-origin";
+      iframe.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen";
+      iframe.allowFullscreen = true;
+      player.replaceChildren(iframe);
+      return iframe;
+    }
+
+    trigger.addEventListener("click", () => {
+      if (typeof dialog.showModal !== "function") {
+        openYoutubeFallback();
+        return;
+      }
+      loadPlayer();
+      dialog.showModal();
+      close.focus();
+    });
+    close.addEventListener("click", () => dialog.close());
+    dialog.addEventListener("click", (event) => { if (event.target === dialog) dialog.close(); });
+    dialog.addEventListener("close", () => { player.replaceChildren(); trigger.focus(); });
+    fullscreen.addEventListener("click", () => {
+      const iframe = player.querySelector("iframe");
+      const request = iframe && (iframe.requestFullscreen || iframe.webkitRequestFullscreen);
+      if (request) Promise.resolve(request.call(iframe)).catch(() => {});
+      else openYoutubeFallback();
+    });
+
+    image.addEventListener("load", layoutHeroPhoneVideo);
+    image.addEventListener("error", () => { trigger.hidden = true; });
+    if (image.complete && image.naturalWidth) layoutHeroPhoneVideo();
+    const frame = document.querySelector(".hero-image-frame");
+    if (frame && typeof ResizeObserver === "function") new ResizeObserver(layoutHeroPhoneVideo).observe(frame);
+    else window.addEventListener("resize", layoutHeroPhoneVideo);
+  }
+
   function renderBenefits() {
     const mini = document.getElementById("miniBenefits");
     ["Modular", "Inteligente", "Para a sua vida"].forEach((title, index) => {
@@ -173,7 +254,7 @@
   }
   function stopHint() { hintStopped = true; window.clearInterval(hintTimer); track.querySelectorAll(".wave").forEach((card) => card.classList.remove("wave")); }
 
-  renderBenefits(); renderCards();
+  renderBenefits(); renderCards(); initHeroVideo();
   document.getElementById("previousPage").addEventListener("click", () => goToPage(0));
   document.getElementById("nextPage").addEventListener("click", () => goToPage(1));
   windowEl.addEventListener("scroll", () => { if (mobileMode()) { window.clearTimeout(windowEl.settleTimer); windowEl.settleTimer = window.setTimeout(() => { page = windowEl.scrollLeft >= maxScroll() / 2 ? 1 : 0; syncPagination(); }, 100); } }, { passive: true });

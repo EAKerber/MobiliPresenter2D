@@ -270,7 +270,7 @@
 .how-video-bridge{display:grid;grid-template-columns:1fr minmax(200px,290px);align-items:center;gap:clamp(28px,6vw,90px);padding-block:clamp(42px,6vw,78px)}
 .video-bridge-copy h2{font-size:clamp(2rem,4vw,3.3rem);line-height:1.06;letter-spacing:-.045em;margin:0 0 20px}
 .video-bridge-copy>p:not(.eyebrow){color:var(--public-muted);line-height:1.6}.video-bridge-copy a{display:inline-block;margin-top:12px;color:var(--public-accent-dark);font-weight:750}
-.video-embed{width:min(100%,290px);justify-self:center}.video-embed iframe{display:block;aspect-ratio:9/16;width:100%;border:1px solid var(--public-line);border-radius:14px;background:#222}
+.video-embed{width:min(100%,290px);justify-self:center}.video-embed iframe{display:block;aspect-ratio:9/16;width:100%;min-width:200px;border:1px solid var(--public-line);border-radius:14px;background:#222}.video-youtube-link{display:inline-flex!important;min-height:42px;align-items:center;padding:8px 2px;text-underline-offset:4px}.video-fullscreen{display:block;width:100%;min-height:42px;margin-top:9px;padding:8px 12px;border:1px solid var(--public-accent);border-radius:5px;background:var(--public-surface);color:var(--public-accent-dark);font:inherit;font-size:.76rem;font-weight:750;text-decoration:underline;text-underline-offset:3px;cursor:pointer}.video-fullscreen:hover{background:var(--public-surface-soft)}.video-fullscreen:focus-visible{outline:3px solid var(--public-accent);outline-offset:3px}
 .story-introduction{margin-bottom:0}.story-introduction .story-text-copy strong{color:var(--public-text)}
 .foundations-section{padding-block:clamp(44px,6vw,75px)}.foundation-list{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
 .foundation-item{border:1px solid var(--public-line);border-top:3px solid var(--public-accent);border-radius:var(--public-radius);background:#fff;overflow:hidden}.foundation-item summary{display:flex;gap:13px;align-items:flex-start;padding:20px 16px;cursor:pointer;min-height:138px;list-style:none}
@@ -289,7 +289,7 @@
 .process-flow li>.step-number{flex:0 0 34px}.process-flow li>div{flex:1 1 130px;min-width:120px}
 .commercial-clarity{border:1px solid var(--public-line);border-top:3px solid var(--public-accent);border-radius:var(--public-radius);background:var(--public-surface-soft);padding-block:24px;margin-bottom:30px}.commercial-clarity h3{font-size:clamp(1.4rem,2.5vw,2rem);margin:0}.commercial-clarity>p:not(.eyebrow){color:var(--public-muted);line-height:1.55;max-width:850px}
 @media(max-width:900px){.foundation-list,.study-topics{grid-template-columns:1fr}.foundation-item summary{min-height:0}.economy-detail{grid-template-columns:1fr}}
-@media(max-width:680px){.how-video-bridge{grid-template-columns:1fr;padding-block:40px}.video-embed{width:min(65vw,230px)}.economy-action{grid-template-columns:88px minmax(0,1fr) 20px}.economy-detail{padding:18px!important}}
+@media(max-width:680px){.how-video-bridge{grid-template-columns:1fr;padding-block:40px}.video-embed{width:min(calc(100vw - 32px),230px);min-width:200px}.economy-action{grid-template-columns:88px minmax(0,1fr) 20px}.economy-detail{padding:18px!important}}
 
 
 /* Contextual VIS-002 and VIS-003 pairs approved for these surfaces only. */
