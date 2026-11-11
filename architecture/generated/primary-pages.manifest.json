@@ -14,8 +14,8 @@
       "route": "/",
       "source": "architecture/pages/root.page.html",
       "output": "app/index.html",
-      "sourceGitBlobSha": "e247dc912a6086e5e233c3156935b9f163b5d0d7",
-      "outputGitBlobSha": "a74a9d992f3416f3143e927d7edb965635458d81"
+      "sourceGitBlobSha": "107c3c8a3e51e8734051651a69408a6509be13dc",
+      "outputGitBlobSha": "2a56984378bb1172107e85cce954ee3acfb04c7d"
     },
     {
       "route": "/about/",
@@ -28,8 +28,8 @@
       "route": "/how-it-works/",
       "source": "architecture/pages/how-it-works.page.html",
       "output": "app/how-it-works/index.html",
-      "sourceGitBlobSha": "6c64844f677f38af52fdb7192e9b541274e5192b",
-      "outputGitBlobSha": "28cefc460a7389dbc81b9a67840935c518251626"
+      "sourceGitBlobSha": "1938ec85b3f2e5d66d30574471b7348ca3cbae3d",
+      "outputGitBlobSha": "2703027565494a885d5168a89e3cceb96646227b"
     }
   ]
 }

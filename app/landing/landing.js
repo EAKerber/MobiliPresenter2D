@@ -32,7 +32,8 @@
     const frameHeight = frame.clientHeight;
     if (!frameWidth || !frameHeight) return;
     const coverScale = Math.max(frameWidth / image.naturalWidth, frameHeight / image.naturalHeight);
-    const scale = frameWidth >= 300 && frameWidth < 558 ? Math.max(coverScale, 0.52) : coverScale;
+    const minimumPhoneScale = Math.min(0.56, Math.max(0.52, frameWidth / 616));
+    const scale = Math.max(coverScale, minimumPhoneScale);
     const renderedWidth = image.naturalWidth * scale;
     const renderedHeight = image.naturalHeight * scale;
     const offsetX = frameWidth < renderedWidth ? 0 : (frameWidth - renderedWidth) / 2;
@@ -62,6 +63,20 @@
     const image = document.querySelector(".hero-image-frame > img");
     const screenElement = document.getElementById("heroPhoneScreen");
     if (!image || !screenElement) return;
+
+    const fullscreen = document.getElementById("heroPhoneFullscreen");
+    if (fullscreen) fullscreen.addEventListener("click", () => {
+      const iframe = screenElement.querySelector("iframe");
+      const request = iframe && (iframe.requestFullscreen || iframe.webkitRequestFullscreen);
+      if (!request) {
+        window.open("https://www.youtube.com/shorts/hgcJ1k7lFkE", "_blank", "noopener,noreferrer");
+        return;
+      }
+      try {
+        const result = request.call(iframe);
+        if (result && typeof result.catch === "function") result.catch(() => {});
+      } catch (_) {}
+    });
 
     image.addEventListener("load", layoutHeroPhoneScreen);
     image.addEventListener("error", () => { screenElement.hidden = true; });
