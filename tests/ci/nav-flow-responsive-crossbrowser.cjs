@@ -71,7 +71,10 @@ async function inspect(page, context) {
             await page.locator("#moduleList [data-select-entity]").first().click();
             await page.waitForFunction(() => document.body.classList.contains("has-module-detail"));
             await page.setViewportSize({width, height: 900});
-            await page.waitForTimeout(180);
+            await page.waitForFunction(({width, expectedProfile}) => (
+              window.innerWidth === width &&
+              document.documentElement.dataset.layoutProfile === expectedProfile
+            ), {width, expectedProfile}, {timeout: 5000});
             let state = await inspect(page, context + "/resize");
             assert.equal(state.profile, expectedProfile, "profile boundary " + context);
             const firstId = state.ids[0], secondId = state.ids[1];
@@ -92,7 +95,10 @@ async function inspect(page, context) {
               await inspect(page, context + "/keyboard-next");
             }
             await page.setViewportSize({width: 1366, height: 900});
-            await page.waitForTimeout(180);
+            await page.waitForFunction(() => (
+              window.innerWidth === 1366 &&
+              document.documentElement.dataset.layoutProfile === "side-rail"
+            ), null, {timeout: 5000});
             state = await inspect(page, context + "/restore");
             assert.equal(state.profile, "side-rail", "restored profile " + context);
             console.log("CI_NAV_RESPONSIVE_PASS " + JSON.stringify({engineName, width, theme, stages: state.ids.length}));
