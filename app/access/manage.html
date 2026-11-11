@@ -26,6 +26,7 @@
     label { display: grid; gap: 8px; font-weight: 700; }
     input { width: 100%; min-height: 48px; padding: 10px 12px; border: 1px solid var(--public-line); border-radius: 7px; font: inherit; }
     button { min-height: 44px; padding: 10px 16px; border: 0; border-radius: 7px; background: var(--public-accent-dark); color: white; font: inherit; font-weight: 750; cursor: pointer; }
+    html[data-theme="dark"] button[type="submit"] { color: #292723; }
     button.secondary { border: 1px solid var(--public-line); background: white; color: var(--public-text); }
     button:disabled { cursor: wait; opacity: .6; }
     form { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: end; gap: 14px; }
@@ -83,3 +84,4 @@
   <script type="module" src="/access/manage.bundle.js"></script>
 </body>
 </html>
+

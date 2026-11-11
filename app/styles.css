@@ -364,7 +364,7 @@ legend { margin-bottom: 9px; color: rgba(255, 255, 255, 0.43); font-size: 12px; 
   transition: transform 150ms ease, border-color 150ms ease;
 }
 .swatch:hover { transform: scale(1.06); }
-.swatch.is-selected { border-color: #fff; box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.12); }
+.swatch.is-selected { border-color: #292723; box-shadow: 0 0 0 2px #fff, 0 0 0 4px #292723; }
 /* Application topology consumes the canonical runtime layout profile.
    Numeric viewport thresholds live only in core/layout-profiles.js. */
 html[data-layout-profile="stacked"] .workspace,
@@ -585,7 +585,7 @@ html[data-layout-profile="compact"] .viewer-card__footer { align-items: flex-sta
 }
 .config-section > h3 {
   margin: 0;
-  color: rgba(255,255,255,.58);
+  color: var(--text);
   font-size: 12px;
   font-weight: 750;
   letter-spacing: .08em;
@@ -851,3 +851,4 @@ html:is([data-layout-profile="stacked"], [data-layout-profile="compact"]) body.i
 }
 
 .visually-hidden { position:absolute!important; width:1px!important; height:1px!important; padding:0!important; margin:-1px!important; overflow:hidden!important; clip:rect(0,0,0,0)!important; white-space:nowrap!important; border:0!important; }
+
