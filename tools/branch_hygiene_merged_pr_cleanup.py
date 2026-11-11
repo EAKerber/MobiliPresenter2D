@@ -12,13 +12,12 @@ import json
 import os
 import re
 import subprocess
+import sys
 from pathlib import Path
 from typing import Any
 
-try:
-    from .branch_hygiene_observe import api_get, observe
-except ImportError:
-    from branch_hygiene_observe import api_get, observe
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from branch_hygiene_observe import api_get, observe
 
 
 def merged_head_identity(event: dict[str, Any], repository: str) -> dict[str, Any]:
