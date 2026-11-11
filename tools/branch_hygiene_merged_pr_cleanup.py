@@ -15,7 +15,10 @@ import subprocess
 from pathlib import Path
 from typing import Any
 
-from branch_hygiene_observe import api_get, observe
+try:
+    from .branch_hygiene_observe import api_get, observe
+except ImportError:
+    from branch_hygiene_observe import api_get, observe
 
 
 def merged_head_identity(event: dict[str, Any], repository: str) -> dict[str, Any]:
