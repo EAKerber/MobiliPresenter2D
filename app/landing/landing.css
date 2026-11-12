@@ -80,6 +80,10 @@ html[data-theme="light"] .hero-description { color: #705C4B; }
 .hero-secondary-links a { color: var(--public-accent-dark); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 4px; }
 .hero-secondary-links a:hover { color: var(--public-accent); text-decoration-thickness: 2px; }
 @keyframes public-reveal { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-copy > * { animation: none; }
+}
 .benefit-strip { background: #1d1c1a; color: white; }
 .benefit-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); max-width: 1280px; margin: auto; }
 .benefit-item { display: flex; align-items: center; justify-content: center; gap: 13px; min-height: 82px; padding: 14px 18px; border-right: 1px solid rgb(255 255 255 / 14%); font-size: .75rem; line-height: 1.35; }

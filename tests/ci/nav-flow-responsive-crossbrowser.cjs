@@ -33,6 +33,8 @@ async function inspect(page, context) {
     });
     return {
       profile: document.documentElement.dataset.layoutProfile,
+      viewportWidth: innerWidth,
+      resolverProfile: window.CasaModulesLayoutProfiles?.profileForWidth(innerWidth) ?? null,
       ids,
       buttons,
       navWidth: nav?.clientWidth ?? 0,
@@ -47,6 +49,24 @@ async function inspect(page, context) {
   assert.ok(state.navWidth > 0 && state.navScrollWidth <= state.navWidth + 2, "navigation overflows horizontally: " + detail);
   assert.ok(state.current && state.ids.includes(state.current), "current stage invalid: " + detail);
   return state;
+}
+
+async function waitForResponsiveProfile(page, width, expectedProfile, context) {
+  try {
+    await page.waitForFunction(({width, expectedProfile}) => {
+      const resolved = window.CasaModulesLayoutProfiles?.profileForWidth(window.innerWidth);
+      return window.innerWidth === width
+        && resolved === expectedProfile
+        && document.documentElement.dataset.layoutProfile === resolved;
+    }, {width, expectedProfile}, {timeout: 5000});
+  } catch (error) {
+    const diagnostic = await page.evaluate(() => ({
+      viewportWidth: innerWidth,
+      profile: document.documentElement.dataset.layoutProfile || null,
+      resolverProfile: window.CasaModulesLayoutProfiles?.profileForWidth(innerWidth) || null
+    }));
+    throw new Error("responsive profile did not settle " + context + " " + JSON.stringify(diagnostic) + ": " + error.message);
+  }
 }
 
 (async () => {
@@ -71,7 +91,7 @@ async function inspect(page, context) {
             await page.locator("#moduleList [data-select-entity]").first().click();
             await page.waitForFunction(() => document.body.classList.contains("has-module-detail"));
             await page.setViewportSize({width, height: 900});
-            await page.waitForTimeout(180);
+            await waitForResponsiveProfile(page, width, expectedProfile, context + "/resize");
             let state = await inspect(page, context + "/resize");
             assert.equal(state.profile, expectedProfile, "profile boundary " + context);
             const firstId = state.ids[0], secondId = state.ids[1];
@@ -92,7 +112,7 @@ async function inspect(page, context) {
               await inspect(page, context + "/keyboard-next");
             }
             await page.setViewportSize({width: 1366, height: 900});
-            await page.waitForTimeout(180);
+            await waitForResponsiveProfile(page, 1366, "side-rail", context + "/restore");
             state = await inspect(page, context + "/restore");
             assert.equal(state.profile, "side-rail", "restored profile " + context);
             console.log("CI_NAV_RESPONSIVE_PASS " + JSON.stringify({engineName, width, theme, stages: state.ids.length}));

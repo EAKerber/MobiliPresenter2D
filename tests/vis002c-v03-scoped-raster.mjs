@@ -25,6 +25,13 @@ assert.deepEqual(byRoute.map(x => x.selectors.length), [3, 3, 4]);
 const resultDir = "artifacts/vis002c-v03-scoped-raster";
 await mkdir(resultDir, { recursive: true });
 const results = [];
+const reportPath = join(resultDir, "report.json");
+const writeReport = () => writeFile(reportPath, JSON.stringify({
+  schema: "VIS002CScopedRaster/0.3",
+  mode: "same-DOM synthetic legacy style; does not constitute human visual review",
+  sourceGitBlob: "e8f42f76e2732cbcf3e9a68d1dc8f82ea79dd73d",
+  results
+}, null, 2) + "\n");
 const sample = selectors => selectors.map(selector => {
   const elements = [...document.querySelectorAll(selector)].filter(element => {
     const rect = element.getBoundingClientRect(), css = getComputedStyle(element);
@@ -115,20 +122,28 @@ for (const [browserName, engine] of [["chromium", chromium], ["webkit", webkit]]
           y1: Math.floor(r.y - 5), y2: Math.ceil(r.y + r.height + 5)
         }));
         let changed = 0, outside = 0;
+        const outsideSamples = [];
         for (let y = 0; y < before.height; y++) for (let x = 0; x < before.width; x++) {
           const offset = 4 * (y * before.width + x);
           const delta = Math.max(...[0, 1, 2, 3].map(k =>
             Math.abs(before.data[offset + k] - after.data[offset + k])));
           if (delta <= 1) continue; // PNG raster rounding only
           changed++;
-          if (!bounds.some(r => x >= r.x1 && x <= r.x2 && y >= r.y1 && y <= r.y2))
+          if (!bounds.some(r => x >= r.x1 && x <= r.x2 && y >= r.y1 && y <= r.y2)) {
             outside++;
+            if (outsideSamples.length < 100) outsideSamples.push({
+              x, y, delta,
+              before: [...before.data.slice(offset, offset + 4)],
+              after: [...after.data.slice(offset, offset + 4)]
+            });
+          }
         }
+        const row = {browser: browserName, width, route, selectors: selectors.length,
+          targets: bounds.length, changed, outside, outsideSamples};
+        results.push(row);
+        await writeReport();
         assert.ok(changed > 0, label + " no visible scoped change");
         assert.equal(outside, 0, label + " pixels changed outside authorized text bounds");
-        const row = {browser: browserName, width, route, selectors: selectors.length,
-          targets: bounds.length, changed, outside};
-        results.push(row);
         console.log("VIS002C_V03_SCOPED_RASTER_CASE " + JSON.stringify(row));
       } finally {
         await page.close();
@@ -140,12 +155,6 @@ for (const [browserName, engine] of [["chromium", chromium], ["webkit", webkit]]
 }
 assert.equal(results.length, 12);
 assert.equal(results.reduce((sum, row) => sum + row.selectors, 0), 40);
-await writeFile(join(resultDir, "report.json"),
-  JSON.stringify({
-    schema: "VIS002CScopedRaster/0.3",
-    mode: "same-DOM synthetic legacy style; does not constitute human visual review",
-    sourceGitBlob: "e8f42f76e2732cbcf3e9a68d1dc8f82ea79dd73d",
-    results
-  }, null, 2) + "\n");
+await writeReport();
 console.log("VIS002C_V03_SCOPED_RASTER_PASS " +
   JSON.stringify({scenarios: results.length, selectorCases: 40, outside: 0}));
