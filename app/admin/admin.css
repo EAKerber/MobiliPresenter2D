@@ -215,3 +215,6 @@ html[data-theme="light"] code { background:#eee9e2; color:#403a34; }
 .pricing-publication-switch input { width:20px; height:20px; flex:0 0 20px; accent-color:var(--accent); }
 .pricing-publication-switch:has(input:disabled) { opacity:.65; cursor:not-allowed; }
 .pricing-publication-switch input:focus-visible { outline:3px solid var(--focus, #d8bc7c); outline-offset:3px; }
+
+/* Keep small initial-state labels readable over the tinted light cards. */
+html[data-theme="light"] .hierarchy-item .initial-state-option { color: var(--control-text); }
