@@ -19,6 +19,25 @@ async function ready(page){
       .map(image=>image.decode?.().catch(()=>{})));
   });
   await page.waitForTimeout(180);
+  await page.evaluate(async()=>{
+    const started=performance.now();
+    let previous="",stableFrames=0;
+    while(performance.now()-started<3000){
+      await new Promise(requestAnimationFrame);
+      const current=JSON.stringify([...document.querySelectorAll("[data-image-fallback]")]
+        .map(frame=>{
+          const {x,y,width,height}=frame.getBoundingClientRect();
+          return [x,y,width,height].map(value=>Math.round(value*1000)/1000);
+        }));
+      if(current===previous){
+        if(++stableFrames>=2)return;
+      }else{
+        previous=current;
+        stableFrames=0;
+      }
+    }
+    throw new Error("public image frame geometry did not settle: "+previous);
+  });
 }
 async function inspect(page,index,fail=false){
   return page.evaluate(({index,fail})=>{

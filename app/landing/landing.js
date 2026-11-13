@@ -19,6 +19,73 @@
   let hintTimer;
   let hintStopped = false;
 
+  function layoutHeroPhoneScreen() {
+    const frame = document.querySelector(".hero-image-frame");
+    const art = document.querySelector(".hero-art");
+    const image = frame && frame.querySelector("img");
+    const screenElement = document.getElementById("heroPhoneScreen");
+    const header = screenElement && screenElement.querySelector(".hero-phone-screen__header");
+    const player = screenElement && screenElement.querySelector(".hero-phone-player");
+    if (!frame || !art || !image || !screenElement || !header || !player || !image.naturalWidth || !image.naturalHeight) return;
+
+    const frameWidth = frame.clientWidth;
+    const frameHeight = frame.clientHeight;
+    if (!frameWidth || !frameHeight) return;
+    const coverScale = Math.max(frameWidth / image.naturalWidth, frameHeight / image.naturalHeight);
+    const minimumPhoneScale = Math.min(0.56, Math.max(0.52, frameWidth / 616));
+    const scale = Math.max(coverScale, minimumPhoneScale);
+    const renderedWidth = image.naturalWidth * scale;
+    const renderedHeight = image.naturalHeight * scale;
+    const offsetX = frameWidth < renderedWidth ? 0 : (frameWidth - renderedWidth) / 2;
+    // Screen bounds are measured on the 1074x1465 source image; keep the overlay on the rendered cover crop.
+    const screen = { left: 184, top: 170, width: 400, height: 973 };
+
+    image.style.left = `${offsetX}px`;
+    image.style.top = "0px";
+    image.style.width = `${renderedWidth}px`;
+    image.style.height = `${renderedHeight}px`;
+    screenElement.style.left = `${offsetX + screen.left * scale}px`;
+    screenElement.style.top = `${screen.top * scale}px`;
+    screenElement.style.width = `${screen.width * scale}px`;
+    screenElement.style.height = `${screen.height * scale}px`;
+    screenElement.hidden = false;
+
+    const screenStyle = window.getComputedStyle(screenElement);
+    const borderTop = parseFloat(screenStyle.borderTopWidth) || 0;
+    const paddingTop = parseFloat(screenStyle.paddingTop) || 0;
+    const paddingBottom = parseFloat(screenStyle.paddingBottom) || 0;
+    const artMinimum = frameWidth <= 680 ? 350 : frameWidth <= 900 ? Math.max(340, Math.min(frameWidth * 0.56, 500)) : 420;
+    const phoneBottom = screen.top * scale + screen.height * scale + borderTop + paddingBottom;
+    art.style.minHeight = `${Math.ceil(Math.max(artMinimum, phoneBottom))}px`;
+  }
+
+  function initHeroPhoneScreen() {
+    const image = document.querySelector(".hero-image-frame > img");
+    const screenElement = document.getElementById("heroPhoneScreen");
+    if (!image || !screenElement) return;
+
+    const fullscreen = document.getElementById("heroPhoneFullscreen");
+    if (fullscreen) fullscreen.addEventListener("click", () => {
+      const iframe = screenElement.querySelector("iframe");
+      const request = iframe && (iframe.requestFullscreen || iframe.webkitRequestFullscreen);
+      if (!request) {
+        window.open("https://www.youtube.com/shorts/hgcJ1k7lFkE", "_blank", "noopener,noreferrer");
+        return;
+      }
+      try {
+        const result = request.call(iframe);
+        if (result && typeof result.catch === "function") result.catch(() => {});
+      } catch (_) {}
+    });
+
+    image.addEventListener("load", layoutHeroPhoneScreen);
+    image.addEventListener("error", () => { screenElement.hidden = true; });
+    if (image.complete && image.naturalWidth) layoutHeroPhoneScreen();
+    const frame = document.querySelector(".hero-image-frame");
+    if (frame && typeof ResizeObserver === "function") new ResizeObserver(layoutHeroPhoneScreen).observe(frame);
+    else window.addEventListener("resize", layoutHeroPhoneScreen);
+  }
+
   function renderBenefits() {
     const mini = document.getElementById("miniBenefits");
     ["Modular", "Inteligente", "Para a sua vida"].forEach((title, index) => {
@@ -173,7 +240,7 @@
   }
   function stopHint() { hintStopped = true; window.clearInterval(hintTimer); track.querySelectorAll(".wave").forEach((card) => card.classList.remove("wave")); }
 
-  renderBenefits(); renderCards();
+  renderBenefits(); renderCards(); initHeroPhoneScreen();
   document.getElementById("previousPage").addEventListener("click", () => goToPage(0));
   document.getElementById("nextPage").addEventListener("click", () => goToPage(1));
   windowEl.addEventListener("scroll", () => { if (mobileMode()) { window.clearTimeout(windowEl.settleTimer); windowEl.settleTimer = window.setTimeout(() => { page = windowEl.scrollLeft >= maxScroll() / 2 ? 1 : 0; syncPagination(); }, 100); } }, { passive: true });

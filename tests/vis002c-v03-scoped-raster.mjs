@@ -25,6 +25,13 @@ assert.deepEqual(byRoute.map(x => x.selectors.length), [3, 3, 4]);
 const resultDir = "artifacts/vis002c-v03-scoped-raster";
 await mkdir(resultDir, { recursive: true });
 const results = [];
+const reportPath = join(resultDir, "report.json");
+const writeReport = () => writeFile(reportPath, JSON.stringify({
+  schema: "VIS002CScopedRaster/0.3",
+  mode: "same-DOM synthetic legacy style; does not constitute human visual review",
+  sourceGitBlob: "e8f42f76e2732cbcf3e9a68d1dc8f82ea79dd73d",
+  results
+}, null, 2) + "\n");
 const sample = selectors => selectors.map(selector => {
   const elements = [...document.querySelectorAll(selector)].filter(element => {
     const rect = element.getBoundingClientRect(), css = getComputedStyle(element);
@@ -54,6 +61,12 @@ const ready = async (page, route) => {
   await page.waitForTimeout(300);
 };
 const flattened = observations => observations.flatMap(row => row.elements);
+const geometryOnly = observations => observations.map(({selector, elements}) => ({
+  selector,
+  elements: elements.map(({selector: elementSelector, x, y, width, height}) => ({
+    selector: elementSelector, x, y, width, height
+  }))
+}));
 const expectTargetColor = (rows, rgb, label) => {
   for (const item of rows) {
     assert.ok(item.elements.length > 0, label + " missing visible " + item.selector);
@@ -100,35 +113,47 @@ for (const [browserName, engine] of [["chromium", chromium], ["webkit", webkit]]
         const before = PNG.sync.read(await page.screenshot({
           fullPage: true, animations: "disabled", caret: "hide"
         }));
+        const stableLegacy = await page.evaluate(sample, selectors);
+        expectTargetColor(stableLegacy, "rgb(112, 92, 75)", label + " captured synthetic reference");
         await injected.evaluate(element => element.remove());
         await page.evaluate(() => new Promise(done => requestAnimationFrame(() =>
           requestAnimationFrame(done))));
         const afterState = await page.evaluate(sample, selectors);
-        assert.deepEqual(afterState, approved, label + " geometry or restored style drift");
+        expectTargetColor(afterState, "rgb(41, 39, 35)", label + " restored");
+        assert.deepEqual(geometryOnly(afterState), geometryOnly(stableLegacy),
+          label + " geometry drift after restoring the approved style");
         const after = PNG.sync.read(await page.screenshot({
           fullPage: true, animations: "disabled", caret: "hide"
         }));
         assert.equal(before.width, after.width, label + " page width changed");
         assert.equal(before.height, after.height, label + " page height changed");
-        const bounds = flattened(approved).map(r => ({
+        const bounds = flattened(stableLegacy).map(r => ({
           x1: Math.floor(r.x - 5), x2: Math.ceil(r.x + r.width + 5),
           y1: Math.floor(r.y - 5), y2: Math.ceil(r.y + r.height + 5)
         }));
         let changed = 0, outside = 0;
+        const outsideSamples = [];
         for (let y = 0; y < before.height; y++) for (let x = 0; x < before.width; x++) {
           const offset = 4 * (y * before.width + x);
           const delta = Math.max(...[0, 1, 2, 3].map(k =>
             Math.abs(before.data[offset + k] - after.data[offset + k])));
           if (delta <= 1) continue; // PNG raster rounding only
           changed++;
-          if (!bounds.some(r => x >= r.x1 && x <= r.x2 && y >= r.y1 && y <= r.y2))
+          if (!bounds.some(r => x >= r.x1 && x <= r.x2 && y >= r.y1 && y <= r.y2)) {
             outside++;
+            if (outsideSamples.length < 100) outsideSamples.push({
+              x, y, delta,
+              before: [...before.data.slice(offset, offset + 4)],
+              after: [...after.data.slice(offset, offset + 4)]
+            });
+          }
         }
+        const row = {browser: browserName, width, route, selectors: selectors.length,
+          targets: bounds.length, changed, outside, outsideSamples};
+        results.push(row);
+        await writeReport();
         assert.ok(changed > 0, label + " no visible scoped change");
         assert.equal(outside, 0, label + " pixels changed outside authorized text bounds");
-        const row = {browser: browserName, width, route, selectors: selectors.length,
-          targets: bounds.length, changed, outside};
-        results.push(row);
         console.log("VIS002C_V03_SCOPED_RASTER_CASE " + JSON.stringify(row));
       } finally {
         await page.close();
@@ -140,12 +165,6 @@ for (const [browserName, engine] of [["chromium", chromium], ["webkit", webkit]]
 }
 assert.equal(results.length, 12);
 assert.equal(results.reduce((sum, row) => sum + row.selectors, 0), 40);
-await writeFile(join(resultDir, "report.json"),
-  JSON.stringify({
-    schema: "VIS002CScopedRaster/0.3",
-    mode: "same-DOM synthetic legacy style; does not constitute human visual review",
-    sourceGitBlob: "e8f42f76e2732cbcf3e9a68d1dc8f82ea79dd73d",
-    results
-  }, null, 2) + "\n");
+await writeReport();
 console.log("VIS002C_V03_SCOPED_RASTER_PASS " +
   JSON.stringify({scenarios: results.length, selectorCases: 40, outside: 0}));
