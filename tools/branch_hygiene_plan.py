@@ -167,9 +167,19 @@ def select_bounded_batch(plan: dict[str, Any], batch: dict[str, Any]) -> list[di
             and entry.get("autoDeleteEligible") is True
             and any(e.get("kind") == "ancestor-of-control" for e in entry.get("evidence", []))
         )
+        terminal_proven = (
+            entry is not None
+            and entry.get("action") == "delete-candidate"
+            and entry.get("autoDeleteEligible") is True
+            and any(
+                e.get("kind") == "explicit-terminal-disposition"
+                and e.get("recordedSha") == sha
+                for e in entry.get("evidence", [])
+            )
+        )
         if (not entry or entry["sha"] != sha or entry.get("protections")
                 or (proof is not None and not valid_proof_shape)
-                or not (ancestor_proven or valid_proof_shape)):
+                or not (ancestor_proven or terminal_proven or valid_proof_shape)):
             raise ValueError("UNSAFE_OR_MOVED_BRANCH:" + name)
         result.append({**entry, "squashMerge": proof} if valid_proof_shape else entry)
     return result
