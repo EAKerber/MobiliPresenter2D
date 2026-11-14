@@ -1,7 +1,7 @@
 {
   "schema": "M2DPrimaryHeaderRoutes/0.1",
   "status": "BUILD_AUTHORITATIVE_ARC03C",
-  "authority": "ARC-03 + ARC-04 + NAV-004; Viewer NAV-005 excluded",
+  "authority": "ARC-03 + ARC-04 + NAV-004 + NAV-005 (public first-level only); Viewer NAV-005 excluded",
   "template": "architecture/fragments/primary-header.fragment.html",
   "routes": [
     {

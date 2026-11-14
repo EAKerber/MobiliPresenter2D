@@ -299,6 +299,12 @@ html[data-theme="dark"] .study-art figcaption { background: #20211F; color: #F0E
 
 @media(min-width:901px){.foundation-list,.study-topics{align-items:start}}
 
+/* NAV-005: keep the title within the public narrow-width fallback. */
+@media (max-width: 290px) {
+  .how-page .how-hero-copy { padding-inline: 16px; }
+  .how-page .how-hero-copy h1 { font-size: clamp(2.6rem, 13vw, 3.4rem); }
+}
+
 
 /* VIS-002: measured light-surface labels and copy only. */
 html[data-theme="light"] .how-hero-copy > p.eyebrow,
