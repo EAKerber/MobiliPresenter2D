@@ -95,6 +95,9 @@ for(const [engineName,engine] of [["chromium",chromium],["webkit",webkit]]){
     });
     const context=engineName+"/"+width+"/"+theme+"/"+pageSpec.path;
     try{
+      await page.route("https://i.ytimg.com/vi/hgcJ1k7lFkE/**", request => request.fulfill({
+        status: 200, contentType: "image/svg+xml", body: "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 9 16\"><rect width=\"9\" height=\"16\" fill=\"#211d1a\"/></svg>"
+      }));
       await page.route("https://www.youtube-nocookie.com/embed/**",request=>request.fulfill({
         status:200,contentType:"text/html",
         body:"<!doctype html><html><body style='margin:0;background:#000'></body></html>"

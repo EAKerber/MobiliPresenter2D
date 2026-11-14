@@ -24,9 +24,8 @@
     const art = document.querySelector(".hero-art");
     const image = frame && frame.querySelector("img");
     const screenElement = document.getElementById("heroPhoneScreen");
-    const header = screenElement && screenElement.querySelector(".hero-phone-screen__header");
     const player = screenElement && screenElement.querySelector(".hero-phone-player");
-    if (!frame || !art || !image || !screenElement || !header || !player || !image.naturalWidth || !image.naturalHeight) return;
+    if (!frame || !art || !image || !screenElement || !player || !image.naturalWidth || !image.naturalHeight) return;
 
     const frameWidth = frame.clientWidth;
     const frameHeight = frame.clientHeight;
@@ -62,14 +61,29 @@
   function initHeroPhoneScreen() {
     const image = document.querySelector(".hero-image-frame > img");
     const screenElement = document.getElementById("heroPhoneScreen");
-    if (!image || !screenElement) return;
+    const player = screenElement && screenElement.querySelector(".hero-phone-player");
+    const poster = document.getElementById("heroPhonePoster");
+    const videoId = player && player.dataset.videoId;
+    if (!image || !screenElement || !player || !poster || !videoId) return;
+
+    poster.addEventListener("click", () => {
+      if (player.querySelector("iframe")) return;
+      const iframe = document.createElement("iframe");
+      iframe.src = `https://www.youtube-nocookie.com/embed/${encodeURIComponent(videoId)}?autoplay=1&playsinline=1&rel=0&controls=1&fs=1`;
+      iframe.title = "Casa em Módulos — apresentação institucional";
+      iframe.loading = "eager";
+      iframe.referrerPolicy = "strict-origin-when-cross-origin";
+      iframe.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen";
+      iframe.allowFullscreen = true;
+      poster.replaceWith(iframe);
+    });
 
     const fullscreen = document.getElementById("heroPhoneFullscreen");
     if (fullscreen) fullscreen.addEventListener("click", () => {
       const iframe = screenElement.querySelector("iframe");
       const request = iframe && (iframe.requestFullscreen || iframe.webkitRequestFullscreen);
-      if (!request) {
-        window.open("https://www.youtube.com/shorts/hgcJ1k7lFkE", "_blank", "noopener,noreferrer");
+      if (!iframe || !request) {
+        window.open(`https://www.youtube.com/shorts/${encodeURIComponent(videoId)}`, "_blank", "noopener,noreferrer");
         return;
       }
       try {
