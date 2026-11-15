@@ -58,15 +58,12 @@
     const image = document.querySelector(".hero-image-frame > img");
     const screenElement = document.getElementById("heroPhoneScreen");
     const media = document.getElementById("heroPhoneMedia");
-    const controls = document.getElementById("heroPhoneControls");
     const poster = document.getElementById("heroPhonePoster");
-    const playback = document.getElementById("heroPhonePlayback");
     const videoId = screenElement && screenElement.querySelector(".hero-phone-player") && screenElement.querySelector(".hero-phone-player").dataset.videoId;
-    if (!image || !screenElement || !media || !controls || !poster || !playback || !videoId) return;
+    if (!image || !screenElement || !media || !poster || !videoId) return;
 
     let apiPromise = null;
     let youtubePlayer = null;
-    let playerState = null;
     let playerRequested = false;
 
     function loadYouTubeIframeApi() {
@@ -108,10 +105,7 @@
     function handlePlayerError(event) {
       if (media.classList.contains("is-playing")) return;
       youtubePlayer = null;
-      playerState = null;
       playerRequested = false;
-      controls.classList.remove("is-ready");
-      playback.hidden = true;
       poster.disabled = false;
       poster.removeAttribute("aria-hidden");
       const iframe = event && event.target && event.target.getIframe ? event.target.getIframe() : media.querySelector("iframe");
@@ -132,9 +126,9 @@
       iframe.allowFullscreen = true;
       const params = new URLSearchParams({
         autoplay: "1",
-        controls: "0",
+        controls: "1",
         enablejsapi: "1",
-        fs: "0",
+        fs: "1",
         origin: window.location.origin,
         playsinline: "1",
         rel: "0"
@@ -147,19 +141,7 @@
           events: {
             onReady: (event) => event.target.playVideo(),
             onStateChange: (event) => {
-              playerState = event.data;
-              if (event.data === YT.PlayerState.PLAYING) {
-                controls.classList.add("is-ready");
-                playback.hidden = false;
-                playback.classList.remove("is-paused");
-                playback.setAttribute("aria-label", "Pausar vídeo");
-                revealPlayingVideo();
-              } else if (event.data === YT.PlayerState.PAUSED || event.data === YT.PlayerState.ENDED) {
-                controls.classList.add("is-ready");
-                playback.hidden = false;
-                playback.classList.add("is-paused");
-                playback.setAttribute("aria-label", event.data === YT.PlayerState.ENDED ? "Reproduzir vídeo novamente" : "Reproduzir vídeo");
-              }
+              if (event.data === YT.PlayerState.PLAYING) revealPlayingVideo();
             },
             onError: handlePlayerError
           }
@@ -169,30 +151,6 @@
         poster.disabled = false;
         if (iframe.parentNode) iframe.remove();
       });
-    });
-
-    playback.addEventListener("click", () => {
-      if (!youtubePlayer || !window.YT || !window.YT.PlayerState) return;
-      if (playerState === window.YT.PlayerState.PLAYING) {
-        youtubePlayer.pauseVideo();
-      } else {
-        if (playerState === window.YT.PlayerState.ENDED) youtubePlayer.seekTo(0, true);
-        youtubePlayer.playVideo();
-      }
-    });
-
-    const fullscreen = document.getElementById("heroPhoneFullscreen");
-    if (fullscreen) fullscreen.addEventListener("click", () => {
-      const iframe = youtubePlayer && youtubePlayer.getIframe();
-      const request = iframe && (iframe.requestFullscreen || iframe.webkitRequestFullscreen);
-      if (!request) {
-        window.open("https://www.youtube.com/shorts/" + encodeURIComponent(videoId), "_blank", "noopener");
-        return;
-      }
-      try {
-        const result = request.call(iframe);
-        if (result && typeof result.catch === "function") result.catch(() => {});
-      } catch (_) {}
     });
 
     image.addEventListener("load", layoutHeroPhoneScreen);
