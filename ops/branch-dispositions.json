@@ -610,6 +610,17 @@
         "mergedMainSha": "afec414b956128887544b60cbe4d5e952779bb0f"
       },
       "note": "Merged PR #188; exact current branch head matches the recorded merged PR head. Reobserve exact SHA and open-PR relation before deletion."
+    },
+    {
+      "branch": "codex/ds04-208-css-contrast-20261111",
+      "sha": "219d9e672bf390a7af4b5815d50f9ea15f723913",
+      "reason": "closed-unmerged-superseded-pull-request",
+      "allowDelete": true,
+      "evidence": {
+        "pullRequest": 270,
+        "supersededByPullRequest": 271
+      },
+      "note": "Closed unmerged draft PR #270 was superseded by #271. The exact head SHA is pinned here; reobserve branch identity and open-PR/protection state before deletion."
     }
   ]
 }

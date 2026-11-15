@@ -19,6 +19,25 @@ async function ready(page){
       .map(image=>image.decode?.().catch(()=>{})));
   });
   await page.waitForTimeout(180);
+  await page.evaluate(async()=>{
+    const started=performance.now();
+    let previous="",stableFrames=0;
+    while(performance.now()-started<3000){
+      await new Promise(requestAnimationFrame);
+      const current=JSON.stringify([...document.querySelectorAll("[data-image-fallback]")]
+        .map(frame=>{
+          const {x,y,width,height}=frame.getBoundingClientRect();
+          return [x,y,width,height].map(value=>Math.round(value*1000)/1000);
+        }));
+      if(current===previous){
+        if(++stableFrames>=2)return;
+      }else{
+        previous=current;
+        stableFrames=0;
+      }
+    }
+    throw new Error("public image frame geometry did not settle: "+previous);
+  });
 }
 async function inspect(page,index,fail=false){
   return page.evaluate(({index,fail})=>{
@@ -76,6 +95,9 @@ for(const [engineName,engine] of [["chromium",chromium],["webkit",webkit]]){
     });
     const context=engineName+"/"+width+"/"+theme+"/"+pageSpec.path;
     try{
+      await page.route("https://i.ytimg.com/vi/hgcJ1k7lFkE/**", request => request.fulfill({
+        status: 200, contentType: "image/svg+xml", body: "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 9 16\"><rect width=\"9\" height=\"16\" fill=\"#211d1a\"/></svg>"
+      }));
       await page.route("https://www.youtube-nocookie.com/embed/**",request=>request.fulfill({
         status:200,contentType:"text/html",
         body:"<!doctype html><html><body style='margin:0;background:#000'></body></html>"

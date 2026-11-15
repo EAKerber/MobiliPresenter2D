@@ -1,5 +1,7 @@
 /* Scoped interactive explanation panel. */
 (function(){
+  const fullscreenButton=document.getElementById('howVideoFullscreen'),videoFrame=document.getElementById('howVideoPlayer');
+  if(fullscreenButton&&videoFrame)fullscreenButton.addEventListener('click',()=>{const request=videoFrame.requestFullscreen||videoFrame.webkitRequestFullscreen;if(request)Promise.resolve(request.call(videoFrame)).catch(()=>{});else window.open('https://www.youtube.com/shorts/hgcJ1k7lFkE','_blank','noopener,noreferrer');});
   const explanations={
     escala:['Compra em escala','Concentrar a compra de chapas, ferragens e outros insumos em mais pedidos ajuda a negociar com fornecedores e programar as aquisições.'],
     coletivas:['Compras coletivas','Diferentes apartamentos compartilham uma plataforma técnica, sem exigir que todos escolham a mesma composição. Materiais e processos comuns podem ser planejados juntos.'],
