@@ -59,12 +59,54 @@
     const screenElement = document.getElementById("heroPhoneScreen");
     const media = document.getElementById("heroPhoneMedia");
     const poster = document.getElementById("heroPhonePoster");
+    const playToggle = document.getElementById("heroPhonePlayToggle");
+    const fullscreenToggle = document.getElementById("heroPhoneFullscreen");
     const videoId = screenElement && screenElement.querySelector(".hero-phone-player") && screenElement.querySelector(".hero-phone-player").dataset.videoId;
-    if (!image || !screenElement || !media || !poster || !videoId) return;
+    if (!image || !screenElement || !media || !poster || !playToggle || !fullscreenToggle || !videoId) return;
 
     let apiPromise = null;
     let youtubePlayer = null;
     let playerRequested = false;
+
+    function syncPlaybackControl(playing) {
+      playToggle.setAttribute("aria-label", playing ? "Pausar o vídeo" : "Reproduzir o vídeo");
+      playToggle.querySelector("[data-play-icon]").hidden = playing;
+      playToggle.querySelector("[data-pause-icon]").hidden = !playing;
+    }
+
+    function togglePlayback() {
+      if (!youtubePlayer) {
+        if (!playerRequested) poster.click();
+        return;
+      }
+      const isPlaying = youtubePlayer.getPlayerState() === window.YT.PlayerState.PLAYING;
+      if (isPlaying) youtubePlayer.pauseVideo();
+      else youtubePlayer.playVideo();
+    }
+
+    function syncFullscreenControl() {
+      const isFullscreen = document.fullscreenElement === screenElement || document.webkitFullscreenElement === screenElement;
+      fullscreenToggle.setAttribute("aria-label", isFullscreen ? "Sair da tela cheia" : "Tela cheia");
+    }
+
+    function toggleFullscreen() {
+      const isFullscreen = document.fullscreenElement === screenElement || document.webkitFullscreenElement === screenElement;
+      if (isFullscreen) {
+        const exitFullscreen = document.exitFullscreen || document.webkitExitFullscreen;
+        if (exitFullscreen) exitFullscreen.call(document);
+        return;
+      }
+      const requestFullscreen = screenElement.requestFullscreen || screenElement.webkitRequestFullscreen;
+      if (requestFullscreen) {
+        const result = requestFullscreen.call(screenElement);
+        if (result && typeof result.catch === "function") result.catch(() => {});
+      }
+    }
+
+    playToggle.addEventListener("click", togglePlayback);
+    fullscreenToggle.addEventListener("click", toggleFullscreen);
+    document.addEventListener("fullscreenchange", syncFullscreenControl);
+    document.addEventListener("webkitfullscreenchange", syncFullscreenControl);
 
     function loadYouTubeIframeApi() {
       if (window.YT && window.YT.Player) return Promise.resolve(window.YT);
@@ -108,6 +150,7 @@
       playerRequested = false;
       poster.disabled = false;
       poster.removeAttribute("aria-hidden");
+      syncPlaybackControl(false);
       const iframe = event && event.target && event.target.getIframe ? event.target.getIframe() : media.querySelector("iframe");
       if (iframe) iframe.remove();
     }
@@ -126,7 +169,7 @@
       iframe.allowFullscreen = true;
       const params = new URLSearchParams({
         autoplay: "1",
-        controls: "1",
+        controls: "0",
         enablejsapi: "1",
         fs: "1",
         origin: window.location.origin,
@@ -141,7 +184,12 @@
           events: {
             onReady: (event) => event.target.playVideo(),
             onStateChange: (event) => {
-              if (event.data === YT.PlayerState.PLAYING) revealPlayingVideo();
+              if (event.data === YT.PlayerState.PLAYING) {
+                syncPlaybackControl(true);
+                revealPlayingVideo();
+              } else if (event.data === YT.PlayerState.PAUSED || event.data === YT.PlayerState.ENDED) {
+                syncPlaybackControl(false);
+              }
             },
             onError: handlePlayerError
           }
@@ -149,6 +197,7 @@
       }).catch(() => {
         playerRequested = false;
         poster.disabled = false;
+        syncPlaybackControl(false);
         if (iframe.parentNode) iframe.remove();
       });
     });
