@@ -22,3 +22,11 @@ Decision recorded against inventory SHA-256 `904c49a3b32722ece528a468e030b10800d
 ## Revalidated on Product main after PR #273 — 2026-11-14
 
 The six `Casa em Módulos, início` sink records remain present in the current inventory `b3739e5ff57005600665cc6c1a04fbe986649b8f8e8e9b80a6fb09b2d3adf178`, with the owner-approved comma preserved. Their current IDs are unchanged: `2f0337ef2f5c5e9a`, `b48d3866e85996bd`, `81a6d89bbdea70bc`, `7b0753494b736d68`, `a4f19243c147b4fb`, and `6c06f82283064a24`. The home and public-page instances continue to trace to the shared header fragment where applicable. The original owner choice above remains limited to punctuation; it does not authorize shared keys or extraction.
+
+## Home hero navigation link — “Saiba mais”
+
+**Owner choice (2026-11-14):** use the visible wording **“Saiba mais”** for the text link on the Home hero and navigate to `/about/`. This records the user's explicit request for a text link to the About page.
+
+- Current sink: `e185d906c6f85858` in `app/index.html:34`, inventory SHA-256 `b3739e5ff57005600665cc6c1a04fbe986649b8f8e8e9b80a6fb09b2d3adf178`.
+- The wording and destination are settled. This does not choose a canonical catalog key, authorize runtime extraction, or change the generated inventory; those remain separate decisions.
+

@@ -11,7 +11,7 @@
 
 - 977 sink IDs remain unchanged. Another 34 exact-content records have position-derived IDs: 28 remaps are unique fingerprints and six records belong to three repeated-fingerprint groups. The prior disposition is uniform inside each ambiguous group, so it can be carried at group level without inventing individual pairings. See [`inventory-crosswalk-2026-11-14.json`](inventory-crosswalk-2026-11-14.json).
 - One Home image alternative changed from “Ambiente planejado com a interface Casa em Módulos” to “Ambiente planejado com uma apresentação da Casa em Módulos no celular”. The independent judgment recommends `catalog_candidate` only if it accurately describes the revised artwork. Owner confirmation remains pending.
-- Nine new occurrences have first-pass common-sense recommendations in the crosswalk. Eight look like fixed interface or accessibility text; “Mais informações” labels a generic `div` and needs an accessibility-semantics check before classifying it as catalog copy. “Saiba mais” is the phrase the owner requested; its exact wording is settled, while extraction and key decisions remain open.
+- Nine new occurrences have first-pass common-sense recommendations in the crosswalk. Eight look like fixed interface or accessibility text; “Mais informações” labels a generic `div` and needs an accessibility-semantics check before classifying it as catalog copy. “Saiba mais” (sink `e185d906c6f85858`) and its `/about/` destination are owner-approved; its catalog key and runtime extraction remain undecided.
 - Prior sink decisions carry to 1,011 exact-fingerprint records. The changed alt and nine new occurrences remain pending. No canonical key or runtime extraction is authorized here.
 
 ## JavaScript source disposition continuity
