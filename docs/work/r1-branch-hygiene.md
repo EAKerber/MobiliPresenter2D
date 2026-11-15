@@ -24,7 +24,7 @@ Observação e planejamento automáticos permanecem permitidos em pull requests,
 
 O executor `tools/branch_hygiene_apply.py` permanece no repositório como ferramenta de execução restrita, mas não é chamado pelo workflow. A reintrodução de mutação requer proposta separada, autorização explícita por lote de branches e SHAs, reobservação CAS/readback e revisão da capacidade real do executor. Não inferir autorização a partir de `delete-candidate` no plano: esse campo registra elegibilidade técnica, não aprovação de descarte.
 
-A diretriz operacional é reduzir dívida em ondas pequenas, sem teto numérico para branches. A primeira onda examina ancestralidade e referências; só uma decisão auditada por branch permite remover uma ref. Essa regra tem precedência sobre o comportamento de limpeza automática anteriormente documentado aqui.
+A diretriz operacional é reduzir dívida em ondas pequenas. Em 11/11/2026, o usuário definiu 2 refs como meta quando o repositório estiver estável e 5 refs como ponto para revisar o crescimento e considerar se um limite rígido é necessário. Cinco não é um teto vigente, critério de elegibilidade ou autorização de exclusão. O retorno a 2 é um objetivo de estabilidade, sujeito a resolver ou concluir o trabalho ativo e comprovar cada ref removível. Exceções temporárias acima de 2 precisam de justificativa e plano de convergência registrados; toda remoção continua condicionada à prova, ao manifesto e aos SHAs exatos, à revisão, ao lease e ao readback abaixo.
 
 ## R4 — lotes restritos (2026-10-26)
 

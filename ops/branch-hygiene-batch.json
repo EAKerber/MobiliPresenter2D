@@ -1,32 +1,12 @@
 {
   "schemaVersion": "BranchHygieneBatch 0.1",
   "repository": "EAKerber/MobiliPresenter2D",
-  "wave": "M2D-R10-2026-10-26",
-  "purpose": "3 previously merged full-tree-identical squash heads with exact PR identity and no active workflow references (#191,#204,#197).",
+  "wave": "M2D-R11-2026-11-11",
+  "purpose": "Remove only the closed unmerged PR #270 head at its exact SHA; #271 remains the preserved successor.",
   "branches": [
     {
-      "branch": "docs/branch-hygiene-dispositions-20261008",
-      "sha": "a0b3acd221825a4aef07ca65510b831cf07272ab",
-      "squashMerge": {
-        "pullRequest": 191,
-        "mergeCommit": "0a431e94c627011b1f124b89efd49f06ddbacb26"
-      }
-    },
-    {
-      "branch": "work/ds01-homologated-identity-theme-20261014",
-      "sha": "3cf082f9f1d233c63988a93f9485007ab9520e04",
-      "squashMerge": {
-        "pullRequest": 204,
-        "mergeCommit": "67d31976c605c76c7ef10876d03fdeb17369ab78"
-      }
-    },
-    {
-      "branch": "work/static-publish-cleanup",
-      "sha": "b4f3a2b0c974807d1773eaefff4eea2d7053ead5",
-      "squashMerge": {
-        "pullRequest": 197,
-        "mergeCommit": "717dec38f6ceb162bc1aa03c347cd64376b2a7e7"
-      }
+      "branch": "codex/ds04-208-css-contrast-20261111",
+      "sha": "219d9e672bf390a7af4b5815d50f9ea15f723913"
     }
   ]
 }

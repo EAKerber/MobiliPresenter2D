@@ -66,11 +66,30 @@ class BoundedHygieneTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             self.chosen()
 
-    def test_diverged_blocks_even_when_disposition_allows(self):
+    def test_exact_terminal_disposition_allows_diverged_branch(self):
         self.batch["branches"] = [{"branch": "diverged", "sha": "3" * 40}]
         self.dispositions["terminalBranches"] = [
-            {"branch": "diverged", "sha": "3" * 40, "allowDelete": True}
+            {"branch": "diverged", "sha": "3" * 40, "reason": "closed-unmerged",
+             "allowDelete": True}
         ]
+        self.assertEqual([x["branch"] for x in self.chosen()], ["diverged"])
+
+    def test_terminal_sha_drift_blocks_batch(self):
+        self.batch["branches"] = [{"branch": "diverged", "sha": "4" * 40}]
+        self.dispositions["terminalBranches"] = [
+            {"branch": "diverged", "sha": "3" * 40, "reason": "closed-unmerged",
+             "allowDelete": True}
+        ]
+        with self.assertRaises(ValueError):
+            self.chosen()
+
+    def test_terminal_disposition_does_not_override_protection(self):
+        self.batch["branches"] = [{"branch": "diverged", "sha": "3" * 40}]
+        self.dispositions["terminalBranches"] = [
+            {"branch": "diverged", "sha": "3" * 40, "reason": "closed-unmerged",
+             "allowDelete": True}
+        ]
+        self.obs["openPrHeads"] = ["diverged"]
         with self.assertRaises(ValueError):
             self.chosen()
 
