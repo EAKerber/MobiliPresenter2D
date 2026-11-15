@@ -135,13 +135,6 @@
     function revealPlayingVideo() {
       if (media.classList.contains("is-playing")) return;
       media.classList.add("is-playing");
-      poster.disabled = true;
-      poster.setAttribute("aria-hidden", "true");
-      const removePoster = () => poster.remove();
-      poster.addEventListener("transitionend", (event) => {
-        if (event.propertyName === "opacity") removePoster();
-      }, { once: true });
-      window.setTimeout(removePoster, 320);
     }
 
     function handlePlayerError(event) {
@@ -153,12 +146,14 @@
       syncPlaybackControl(false);
       const iframe = event && event.target && event.target.getIframe ? event.target.getIframe() : media.querySelector("iframe");
       if (iframe) iframe.remove();
+      if (!poster.isConnected) media.prepend(poster);
     }
 
     poster.addEventListener("click", () => {
       if (playerRequested) return;
       playerRequested = true;
       poster.disabled = true;
+      poster.remove();
 
       const iframe = document.createElement("iframe");
       iframe.className = "hero-phone-media__iframe";
@@ -199,6 +194,7 @@
         poster.disabled = false;
         syncPlaybackControl(false);
         if (iframe.parentNode) iframe.remove();
+        if (!poster.isConnected) media.prepend(poster);
       });
     });
 
