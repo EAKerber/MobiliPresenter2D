@@ -62,6 +62,7 @@ assert.ok(landingJs.includes('controls: "1"'), "YouTube progress and native cont
 assert.ok(!landingJs.includes("cc_load_policy"), "caption visibility must follow the viewer preference");
 assert.ok(landingCss.includes(".hero-phone-player { position: absolute; inset: 2px;"), "player must be inset 2px to reveal the phone bezel");
 assert.ok(landingCss.includes(".hero-phone-media { position: absolute; inset: 0;"), "player media must fill its inset frame");
+assert.ok(landingCss.includes("object-fit: contain; object-position: center;"), "poster must keep the native video aspect ratio without cropping");
 for (const property of ["screenLeft", "screenTop", "screenWidth", "screenHeight"]) {
   assert.ok(landingJs.includes("screenElement.dataset." + property),
     "runtime must use calibrated " + property + " from the published page");
@@ -158,6 +159,7 @@ async function main() {
           const mediaBox = media.getBoundingClientRect();
           const posterBox = poster.getBoundingClientRect();
           const playBox = play.getBoundingClientRect();
+          const posterImageFit = getComputedStyle(poster.querySelector("img")).objectFit;
           const scale = imageBox.width / 1024;
           return {
             screen: {
@@ -173,6 +175,7 @@ async function main() {
             media: { left: mediaBox.left, top: mediaBox.top, width: mediaBox.width, height: mediaBox.height },
             poster: { left: posterBox.left, top: posterBox.top, width: posterBox.width, height: posterBox.height },
             play: { left: playBox.left, top: playBox.top, width: playBox.width, height: playBox.height },
+            posterImageFit,
             expected: {
               left: imageBox.left + 305 * scale,
               top: imageBox.top + 617 * scale,
@@ -203,6 +206,7 @@ async function main() {
               context + " " + layer + " does not fill player: " + JSON.stringify(measured));
           }
         }
+        assert.equal(measured.posterImageFit, "contain", context + " poster crop must match the native player aspect ratio");
         assert.ok(closeEnough(measured.play.left + measured.play.width / 2, measured.media.left + measured.media.width / 2, 0.25)
           && closeEnough(measured.play.top + measured.play.height / 2, measured.media.top + measured.media.height / 2, 0.25),
         context + " poster play control is not centered: " + JSON.stringify(measured));
