@@ -28,11 +28,10 @@
     if (!frame || !art || !image || !screenElement || !player || !image.naturalWidth || !image.naturalHeight) return;
 
     const frameWidth = frame.clientWidth;
-    const frameHeight = frame.clientHeight;
-    if (!frameWidth || !frameHeight) return;
-    const coverScale = Math.max(frameWidth / image.naturalWidth, frameHeight / image.naturalHeight);
+    if (!frameWidth) return;
+    // The art height is increased below to fit the phone. Using it here feeds the previous layout back into the next scale calculation.
     const minimumPhoneScale = Math.min(0.56, Math.max(0.52, frameWidth / 616));
-    const scale = Math.max(coverScale, minimumPhoneScale);
+    const scale = Math.max(frameWidth / image.naturalWidth, minimumPhoneScale);
     const renderedWidth = image.naturalWidth * scale;
     const renderedHeight = image.naturalHeight * scale;
     const offsetX = (frameWidth - renderedWidth) / 2;
