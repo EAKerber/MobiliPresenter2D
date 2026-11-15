@@ -10,6 +10,8 @@ const SLOT="<!-- ARC03_PRIMARY_HEADER -->";
 const FRAGMENT="architecture/fragments/primary-header.fragment.html";
 const ROUTES="architecture/fragments/primary-header.routes.json";
 const MANIFEST="architecture/generated/primary-pages.manifest.json";
+const COMPILER="scripts/compile-primary-pages.mjs";
+const SOURCE_MAP_SCHEMA="M2DARC03CProvenanceMap/1";
 const MAP=[
  {route:"/",source:"architecture/pages/root.page.html",output:"app/index.html"},
  {route:"/about/",source:"architecture/pages/about.page.html",output:"app/about/index.html"},
@@ -20,7 +22,31 @@ function gitBlobSha(data) {
  const canonical=data.replace(/\r\n/g,"\n");
  return createHash("sha1").update("blob "+Buffer.byteLength(canonical)+"\0").update(canonical).digest("hex");
 }
-function header(fragment,r) {
+function codePointLength(value) { return Array.from(value).length; }
+function appendMapped(parts,segments,offset,value,transform,origin) {
+ const start=offset,end=start+codePointLength(value);
+ parts.push(value);
+ if(end>start)segments.push({output:{start,end},transform,origin});
+ return end;
+}
+function trimRendered(parts,segments) {
+ const value=parts.join(""),trimmed=value.trim();
+ const leadingUtf16=value.length-value.trimStart().length;
+ const leading=codePointLength(value.slice(0,leadingUtf16));
+ const end=leading+codePointLength(trimmed);
+ const cropped=[];
+ for(const segment of segments) {
+  const start=Math.max(segment.output.start,leading),finish=Math.min(segment.output.end,end);
+  if(finish<=start)continue;
+  const deltaStart=start-segment.output.start,deltaEnd=segment.output.end-finish;
+  const origin={...segment.origin};
+  if(segment.transform==="copy"&&origin.range)
+   origin.range={start:origin.range.start+deltaStart,end:origin.range.end-deltaEnd};
+  cropped.push({...segment,output:{start:start-leading,end:finish-leading},origin});
+ }
+ return {text:trimmed,segments:cropped};
+}
+function header(fragment,r,routeIndex) {
  assert.ok(["ambientes","how","about"].includes(r.current),"Invalid menu selection");
  for(const k of ["brandHref","ambientesHref","howHref","aboutHref"])
   assert.match(r[k],/^(?:\/[^\s"'<>]*|\.\.\/[^\s"'<>]*|\.\/)$/,"Unsafe static link: "+k);
@@ -32,9 +58,45 @@ function header(fragment,r) {
   whatsAppIconAriaHidden:r.whatsAppIconAriaHidden?' aria-hidden="true"':""
  };
  assert.deepEqual([...new Set([...fragment.matchAll(/\{\{([^{}]+)\}\}/g)].map(m=>m[1]))].sort(),[...KEYS].sort());
- const text=fragment.replace(/\{\{([^{}]+)\}\}/g,(_,key)=>values[key]).trim();
- assert.ok(!text.includes("{{"),"Unresolved placeholder");
- return text;
+ const parts=[],segments=[];let outputOffset=0,cursor=0;
+ const routeConfigPointer=(key)=>"/routes/"+routeIndex+"/"+(key.endsWith("Current")?"current":key);
+ for(const match of fragment.matchAll(/\{\{([^{}]+)\}\}/g)) {
+  const key=match[1],literal=fragment.slice(cursor,match.index);
+  if(literal) {
+   const sourceStart=codePointLength(fragment.slice(0,cursor));
+   outputOffset=appendMapped(parts,segments,outputOffset,literal,"copy",{
+    kind:"shared-fragment",path:FRAGMENT,range:{start:sourceStart,end:sourceStart+codePointLength(literal)}
+   });
+  }
+  const replacement=values[key];
+  const placeholderStart=codePointLength(fragment.slice(0,match.index));
+  const template={path:FRAGMENT,range:{start:placeholderStart,end:placeholderStart+codePointLength(match[0])}};
+  const configOrigin={kind:"route-config",path:ROUTES,pointer:routeConfigPointer(key),template};
+  const generatedRules={
+   ambientesCurrent:"current-route-to-ambientes-aria-current",
+   howCurrent:"current-route-to-how-aria-current",
+   aboutCurrent:"current-route-to-about-aria-current",
+   whatsAppIconAriaHidden:"true-config-flag-to-aria-hidden"
+  };
+  const generatedOrigin={kind:"generator-rule",rule:generatedRules[key],inputs:[{
+   kind:"route-config",path:ROUTES,pointer:routeConfigPointer(key)
+  }],template};
+  const directConfigKey=["brandHref","ambientesHref","howHref","aboutHref"].includes(key);
+  outputOffset=appendMapped(parts,segments,outputOffset,replacement,
+   directConfigKey?"route-placeholder-substitution":"conditional-attribute-generation",
+   directConfigKey?configOrigin:generatedOrigin);
+  cursor=match.index+match[0].length;
+ }
+ const trailing=fragment.slice(cursor);
+ if(trailing) {
+  const sourceStart=codePointLength(fragment.slice(0,cursor));
+  outputOffset=appendMapped(parts,segments,outputOffset,trailing,"copy",{
+   kind:"shared-fragment",path:FRAGMENT,range:{start:sourceStart,end:sourceStart+codePointLength(trailing)}
+  });
+ }
+ const result=trimRendered(parts,segments);
+ assert.ok(!result.text.includes("{{"),"Unresolved placeholder");
+ return result;
 }
 export async function projectPages() {
  const [routeText,fragment]=await Promise.all([
@@ -49,8 +111,11 @@ export async function projectPages() {
  assert.deepEqual(config.scope.doesNotInclude,["/viewer/","/config/","/admin.html","/access/","/access/manage.html"]);
  assert.equal(config.scope.mayOverwriteAuthoredPages,false);
  assert.equal(config.scope.mayModifyNetlifyBuild,true);
+ const compilerSource=await readFile(join(ROOT,COMPILER),"utf8");
  const manifest={
-  schema:"M2DARC03CPublishedPages/1",authority:"architecture/pages",
+  schema:"M2DARC03CPublishedPages/2",authority:"architecture/pages",
+  sourceMap:{schema:SOURCE_MAP_SCHEMA,offsetUnit:"unicode-codepoints",
+   generator:{path:COMPILER,gitBlobSha:gitBlobSha(compilerSource)}},
   fragment:{path:FRAGMENT,gitBlobSha:gitBlobSha(fragment)},
   routesConfig:{path:ROUTES,gitBlobSha:gitBlobSha(routeText)},pages:[]
  };
@@ -60,11 +125,36 @@ export async function projectPages() {
   assert.equal(source.split(SLOT).length,2,"Exactly one header slot required in "+p.source);
   assert.ok(!/<header class="site-header">/.test(source),"Duplicate authorial header");
   assert.ok(!/<header class="viewer-header">/.test(source),"NAV-005 excluded");
-  const html=source.replace(SLOT,header(fragment,config.routes[i]));
+  const renderedHeader=header(fragment,config.routes[i],i);
+  const slotStart=source.indexOf(SLOT),slotEnd=slotStart+SLOT.length;
+  const before=source.slice(0,slotStart),after=source.slice(slotEnd);
+  const pageParts=[],pageSegments=[];let pageOffset=0;
+  pageOffset=appendMapped(pageParts,pageSegments,pageOffset,before,"copy",{
+   kind:"page",path:p.source,range:{start:0,end:codePointLength(before)}
+  });
+  const headerOffset=pageOffset;
+  pageParts.push(renderedHeader.text);
+  pageSegments.push(...renderedHeader.segments.map(segment=>({...segment,output:{
+   start:segment.output.start+headerOffset,end:segment.output.end+headerOffset
+  }})));
+  pageOffset+=codePointLength(renderedHeader.text);
+  pageOffset=appendMapped(pageParts,pageSegments,pageOffset,after,"copy",{
+   kind:"page",path:p.source,range:{start:codePointLength(source.slice(0,slotEnd)),
+    end:codePointLength(source)}
+  });
+  const html=pageParts.join("");
   assert.ok(!html.includes(SLOT)&&!html.includes("{{"),"Unresolved page");
+  let mapCursor=0;
+  for(const segment of pageSegments) {
+   assert.equal(segment.output.start,mapCursor,"Source-map gap or overlap in "+p.output);
+   assert.ok(segment.output.end>segment.output.start,"Empty source-map segment in "+p.output);
+   mapCursor=segment.output.end;
+  }
+  assert.equal(mapCursor,codePointLength(html),"Source map must cover every output character in "+p.output);
   manifest.pages.push({route:p.route,source:p.source,output:p.output,
-   sourceGitBlobSha:gitBlobSha(source),outputGitBlobSha:gitBlobSha(html)});
-  pages.push({output:p.output,html});
+   sourceGitBlobSha:gitBlobSha(source),outputGitBlobSha:gitBlobSha(html),
+   sourceMap:{segments:pageSegments}});
+  pages.push({output:p.output,html,sourceMap:pageSegments});
  }
  return {manifest,pages,text:JSON.stringify(manifest,null,2)+"\n"};
 }

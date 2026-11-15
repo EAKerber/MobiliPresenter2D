@@ -1,0 +1,3180 @@
+{
+  "schemaVersion": 1,
+  "review": "ARC-13 admin source review",
+  "reviewedOn": "2026-11-13",
+  "reviewedCommit": "dcf757d",
+  "inventoryPath": "architecture/arc13/ui-text-candidates.json",
+  "inventorySha256": "8765873a096fe95167e4fba74838258e47428fab0e12d16af9b6c92a3e34a51e",
+  "scope": {
+    "owner": "admin",
+    "routes": [
+      "/admin"
+    ],
+    "expectedEntries": 82,
+    "reviewedEntries": 82,
+    "uniqueIds": 82
+  },
+  "method": "Reviewed each owner=admin source record against its producer and consumer in app/admin/admin.js. Consumer references are retained from the inventory. Fixed local error literals are separated from dynamic API/helper diagnostic text.",
+  "dispositionCounts": {
+    "domain_content": 1,
+    "ui_copy": 81
+  },
+  "ownerQuestions": [
+    {
+      "topic": "Admin error-message audience",
+      "sourceIds": [
+        "78b69b4216ab5a48",
+        "27034ef7826b1031",
+        "ab3a38e67aa11e9f",
+        "3da67f5b6d3b08fb",
+        "bf5a7fcf0d583982",
+        "3e5ba077cbec66db",
+        "b044eb6398ef569b",
+        "f0a9027a8dbca426",
+        "6121a3f471cd7ff0"
+      ],
+      "question": "Confirm that Admin operators are expected to understand implementation-version, schema, and authorized-checkpoint terminology before these strings are treated as final interface copy.",
+      "evidence": "The listed fixed messages are displayed in the Admin status sink, while naming v3/v5, schema compatibility, publication verification, or an authorized checkpoint."
+    }
+  ],
+  "entries": [
+    {
+      "id": "a6ccefaebdbd5525",
+      "source": "app/admin/admin.js",
+      "line": 78,
+      "column": 16,
+      "owner": "admin",
+      "routeConsumers": [
+        "/admin"
+      ],
+      "sourceRole": "commercial-ui-labels",
+      "originalClassification": "unreviewed",
+      "originalClassificationHints": [
+        "source-needs-consumer-and-domain-review"
+      ],
+      "useStatus": "active",
+      "consumerLinkStatus": "bounded-static-array-to-heading",
+      "consumerRefs": [
+        {
+          "sinkId": "ee9df32951d24167",
+          "source": "app/admin/admin.js",
+          "line": 1167,
+          "sink": "property:textContent",
+          "expression": "title",
+          "routeConsumers": [
+            "/admin"
+          ],
+          "flow": "bounded-static-array-to-heading"
+        }
+      ],
+      "consumerEvidence": [
+        "consumer traced during bounded source review; see valuePath and routeConsumers"
+      ],
+      "value": "Valores de módulos e acessórios",
+      "expression": "\"Valores de módulos e acessórios\"",
+      "sourceSha256": "2c7e7f68a2330c257fb0b8cf29cf55d2792622c946acc5950854d1dd543dedff",
+      "disposition": "ui_copy",
+      "reason": "Literal is a fixed heading/type/basis label in the Admin pricing editor table at app/admin/admin.js:77-90. The prices and eligibility rules being named are commercial data; this source value labels the control."
+    },
+    {
+      "id": "c5df0af2177074b5",
+      "source": "app/admin/admin.js",
+      "line": 79,
+      "column": 25,
+      "owner": "admin",
+      "routeConsumers": [
+        "/admin"
+      ],
+      "sourceRole": "commercial-ui-labels",
+      "originalClassification": "unreviewed",
+      "originalClassificationHints": [
+        "source-needs-consumer-and-domain-review"
+      ],
+      "useStatus": "active",
+      "consumerLinkStatus": "bounded-static-array-to-heading",
+      "consumerRefs": [
+        {
+          "sinkId": "ee9df32951d24167",
+          "source": "app/admin/admin.js",
+          "line": 1167,
+          "sink": "property:textContent",
+          "expression": "title",
+          "routeConsumers": [
+            "/admin"
+          ],
+          "flow": "bounded-static-array-to-heading"
+        }
+      ],
+      "consumerEvidence": [
+        "consumer traced during bounded source review; see valuePath and routeConsumers"
+      ],
+      "value": "Puxadores",
+      "expression": "\"Puxadores\"",
+      "sourceSha256": "2c7e7f68a2330c257fb0b8cf29cf55d2792622c946acc5950854d1dd543dedff",
+      "disposition": "ui_copy",
+      "reason": "Literal is a fixed heading/type/basis label in the Admin pricing editor table at app/admin/admin.js:77-90. The prices and eligibility rules being named are commercial data; this source value labels the control."
+    },
+    {
+      "id": "097bdf89eeeb0fb1",
+      "source": "app/admin/admin.js",
+      "line": 80,
+      "column": 29,
+      "owner": "admin",
+      "routeConsumers": [
+        "/admin"
+      ],
+      "sourceRole": "commercial-ui-labels",
+      "originalClassification": "unreviewed",
+      "originalClassificationHints": [
+        "source-needs-consumer-and-domain-review"
+      ],
+      "useStatus": "active",
+      "consumerLinkStatus": "bounded-static-array-to-heading",
+      "consumerRefs": [
+        {
+          "sinkId": "ee9df32951d24167",
+          "source": "app/admin/admin.js",
+          "line": 1167,
+          "sink": "property:textContent",
+          "expression": "title",
+          "routeConsumers": [
+            "/admin"
+          ],
+          "flow": "bounded-static-array-to-heading"
+        }
+      ],
+      "consumerEvidence": [
+        "consumer traced during bounded source review; see valuePath and routeConsumers"
+      ],
+      "value": "Adicional por acabamento",
+      "expression": "\"Adicional por acabamento\"",
+      "sourceSha256": "2c7e7f68a2330c257fb0b8cf29cf55d2792622c946acc5950854d1dd543dedff",
+      "disposition": "ui_copy",
+      "reason": "Literal is a fixed heading/type/basis label in the Admin pricing editor table at app/admin/admin.js:77-90. The prices and eligibility rules being named are commercial data; this source value labels the control."
+    },
+    {
+      "id": "bf90902e608895e9",
+      "source": "app/admin/admin.js",
+      "line": 81,
+      "column": 23,
+      "owner": "admin",
+      "routeConsumers": [
+        "/admin"
+      ],
+      "sourceRole": "commercial-ui-labels",
+      "originalClassification": "unreviewed",
+      "originalClassificationHints": [
+        "source-needs-consumer-and-domain-review"
+      ],
+      "useStatus": "active",
+      "consumerLinkStatus": "bounded-static-array-to-heading",
+      "consumerRefs": [
+        {
+          "sinkId": "ee9df32951d24167",
+          "source": "app/admin/admin.js",
+          "line": 1167,
+          "sink": "property:textContent",
+          "expression": "title",
+          "routeConsumers": [
+            "/admin"
+          ],
+          "flow": "bounded-static-array-to-heading"
+        }
+      ],
+      "consumerEvidence": [
+        "consumer traced during bounded source review; see valuePath and routeConsumers"
+      ],
+      "value": "Adicionais locais",
+      "expression": "\"Adicionais locais\"",
+      "sourceSha256": "2c7e7f68a2330c257fb0b8cf29cf55d2792622c946acc5950854d1dd543dedff",
+      "disposition": "ui_copy",
+      "reason": "Literal is a fixed heading/type/basis label in the Admin pricing editor table at app/admin/admin.js:77-90. The prices and eligibility rules being named are commercial data; this source value labels the control."
+    },
+    {
+      "id": "4a7097296873b557",
+      "source": "app/admin/admin.js",
+      "line": 82,
+      "column": 24,
+      "owner": "admin",
+      "routeConsumers": [
+        "/admin"
+      ],
+      "sourceRole": "commercial-ui-labels",
+      "originalClassification": "unreviewed",
+      "originalClassificationHints": [
+        "source-needs-consumer-and-domain-review"
+      ],
+      "useStatus": "active",
+      "consumerLinkStatus": "bounded-static-array-to-heading",
+      "consumerRefs": [
+        {
+          "sinkId": "ee9df32951d24167",
+          "source": "app/admin/admin.js",
+          "line": 1167,
+          "sink": "property:textContent",
+          "expression": "title",
+          "routeConsumers": [
+            "/admin"
+          ],
+          "flow": "bounded-static-array-to-heading"
+        }
+      ],
+      "consumerEvidence": [
+        "consumer traced during bounded source review; see valuePath and routeConsumers"
+      ],
+      "value": "Adicionais globais",
+      "expression": "\"Adicionais globais\"",
+      "sourceSha256": "2c7e7f68a2330c257fb0b8cf29cf55d2792622c946acc5950854d1dd543dedff",
+      "disposition": "ui_copy",
+      "reason": "Literal is a fixed heading/type/basis label in the Admin pricing editor table at app/admin/admin.js:77-90. The prices and eligibility rules being named are commercial data; this source value labels the control."
+    },
+    {
+      "id": "9f583df91add89b9",
+      "source": "app/admin/admin.js",
+      "line": 86,
+      "column": 11,
+      "owner": "admin",
+      "routeConsumers": [
+        "/admin"
+      ],
+      "sourceRole": "commercial-ui-labels",
+      "originalClassification": "unreviewed",
+      "originalClassificationHints": [
+        "source-needs-consumer-and-domain-review"
+      ],
+      "useStatus": "active",
+      "consumerLinkStatus": "bounded-static-map-to-option-with-fallback",
+      "consumerRefs": [
+        {
+          "sinkId": "6bdd9f67da1ba1aa",
+          "source": "app/admin/admin.js",
+          "line": 1189,
+          "sink": "property:textContent",
+          "expression": "pricingTypeLabels[type] || type",
+          "routeConsumers": [
+            "/admin"
+          ],
+          "flow": "bounded-static-map-to-option-with-fallback"
+        }
+      ],
+      "consumerEvidence": [
+        "consumer traced during bounded source review; see valuePath and routeConsumers"
+      ],
+      "value": "Valor fixo",
+      "expression": "\"Valor fixo\"",
+      "sourceSha256": "2c7e7f68a2330c257fb0b8cf29cf55d2792622c946acc5950854d1dd543dedff",
+      "disposition": "ui_copy",
+      "reason": "Literal is a fixed heading/type/basis label in the Admin pricing editor table at app/admin/admin.js:77-90. The prices and eligibility rules being named are commercial data; this source value labels the control."
+    },
+    {
+      "id": "f9acfccc957916ea",
+      "source": "app/admin/admin.js",
+      "line": 87,
+      "column": 15,
+      "owner": "admin",
+      "routeConsumers": [
+        "/admin"
+      ],
+      "sourceRole": "commercial-ui-labels",
+      "originalClassification": "unreviewed",
+      "originalClassificationHints": [
+        "source-needs-consumer-and-domain-review"
+      ],
+      "useStatus": "active",
+      "consumerLinkStatus": "bounded-static-map-to-option-with-fallback",
+      "consumerRefs": [
+        {
+          "sinkId": "6bdd9f67da1ba1aa",
+          "source": "app/admin/admin.js",
+          "line": 1189,
+          "sink": "property:textContent",
+          "expression": "pricingTypeLabels[type] || type",
+          "routeConsumers": [
+            "/admin"
+          ],
+          "flow": "bounded-static-map-to-option-with-fallback"
+        }
+      ],
+      "consumerEvidence": [
+        "consumer traced during bounded source review; see valuePath and routeConsumers"
+      ],
+      "value": "Percentual",
+      "expression": "\"Percentual\"",
+      "sourceSha256": "2c7e7f68a2330c257fb0b8cf29cf55d2792622c946acc5950854d1dd543dedff",
+      "disposition": "ui_copy",
+      "reason": "Literal is a fixed heading/type/basis label in the Admin pricing editor table at app/admin/admin.js:77-90. The prices and eligibility rules being named are commercial data; this source value labels the control."
+    },
+    {
+      "id": "f9e3c01393048a93",
+      "source": "app/admin/admin.js",
+      "line": 90,
+      "column": 27,
+      "owner": "admin",
+      "routeConsumers": [
+        "/admin"
+      ],
+      "sourceRole": "commercial-ui-labels",
+      "originalClassification": "unreviewed",
+      "originalClassificationHints": [
+        "source-needs-consumer-and-domain-review"
+      ],
+      "useStatus": "active",
+      "consumerLinkStatus": "bounded-static-map-to-description-with-fallback",
+      "consumerRefs": [
+        {
+          "sinkId": "4ddb767d4b2fe9c0",
+          "source": "app/admin/admin.js",
+          "line": 1216,
+          "sink": "property:textContent",
+          "expression": "pricingBasisLabels[rule.basis] || `Base: ${rule.basis}`",
+          "routeConsumers": [
+            "/admin"
+          ],
+          "flow": "bounded-static-map-to-description-with-fallback"
+        }
+      ],
+      "consumerEvidence": [
+        "consumer traced during bounded source review; see valuePath and routeConsumers"
+      ],
+      "value": "Base: valor base de cada módulo elegível",
+      "expression": "\"Base: valor base de cada módulo elegível\"",
+      "sourceSha256": "2c7e7f68a2330c257fb0b8cf29cf55d2792622c946acc5950854d1dd543dedff",
+      "disposition": "ui_copy",
+      "reason": "Literal is a fixed heading/type/basis label in the Admin pricing editor table at app/admin/admin.js:77-90. The prices and eligibility rules being named are commercial data; this source value labels the control."
+    },
+    {
+      "id": "771e30220582d4fc",
+      "source": "app/admin/admin.js",
+      "line": 283,
+      "column": 27,
+      "owner": "admin",
+      "routeConsumers": [
+        "/admin"
+      ],
+      "sourceRole": "dimension-labels",
+      "originalClassification": "unreviewed",
+      "originalClassificationHints": [
+        "source-needs-consumer-and-domain-review"
+      ],
+      "useStatus": "active",
+      "consumerLinkStatus": "bounded-static-array-to-field-label",
+      "consumerRefs": [
+        {
+          "sinkId": "d275ee2141e37934",
+          "source": "app/admin/admin.js",
+          "line": 287,
+          "sink": "call:createTextNode",
+          "expression": "axisLabel",
+          "routeConsumers": [
+            "/admin"
+          ],
+          "flow": "bounded-static-array-to-field-label"
+        }
+      ],
+      "consumerEvidence": [
+        "consumer traced during bounded source review; see valuePath and routeConsumers"
+      ],
+      "value": "Largura",
+      "expression": "\"Largura\"",
+      "sourceSha256": "2c7e7f68a2330c257fb0b8cf29cf55d2792622c946acc5950854d1dd543dedff",
+      "disposition": "ui_copy",
+      "reason": "Literal is one of the fixed axis labels in the local dimensions tuple at app/admin/admin.js:283, rendered beside the nominal measurement input and included in its accessible name. The numeric measurement is editable domain data."
+    },
+    {
+      "id": "2efb9d46a1e8eb29",
+      "source": "app/admin/admin.js",
+      "line": 283,
+      "column": 50,
+      "owner": "admin",
+      "routeConsumers": [
+        "/admin"
+      ],
+      "sourceRole": "dimension-labels",
+      "originalClassification": "unreviewed",
+      "originalClassificationHints": [
+        "source-needs-consumer-and-domain-review"
+      ],
+      "useStatus": "active",
+      "consumerLinkStatus": "bounded-static-array-to-field-label",
+      "consumerRefs": [
+        {
+          "sinkId": "d275ee2141e37934",
+          "source": "app/admin/admin.js",
+          "line": 287,
+          "sink": "call:createTextNode",
+          "expression": "axisLabel",
+          "routeConsumers": [
+            "/admin"
+          ],
+          "flow": "bounded-static-array-to-field-label"
+        }
+      ],
+      "consumerEvidence": [
+        "consumer traced during bounded source review; see valuePath and routeConsumers"
+      ],
+      "value": "Altura",
+      "expression": "\"Altura\"",
+      "sourceSha256": "2c7e7f68a2330c257fb0b8cf29cf55d2792622c946acc5950854d1dd543dedff",
+      "disposition": "ui_copy",
+      "reason": "Literal is one of the fixed axis labels in the local dimensions tuple at app/admin/admin.js:283, rendered beside the nominal measurement input and included in its accessible name. The numeric measurement is editable domain data."
+    },
+    {
+      "id": "d5335c94ac2cb9c0",
+      "source": "app/admin/admin.js",
+      "line": 283,
+      "column": 71,
+      "owner": "admin",
+      "routeConsumers": [
+        "/admin"
+      ],
+      "sourceRole": "dimension-labels",
+      "originalClassification": "unreviewed",
+      "originalClassificationHints": [
+        "source-needs-consumer-and-domain-review"
+      ],
+      "useStatus": "active",
+      "consumerLinkStatus": "bounded-static-array-to-field-label",
+      "consumerRefs": [
+        {
+          "sinkId": "d275ee2141e37934",
+          "source": "app/admin/admin.js",
+          "line": 287,
+          "sink": "call:createTextNode",
+          "expression": "axisLabel",
+          "routeConsumers": [
+            "/admin"
+          ],
+          "flow": "bounded-static-array-to-field-label"
+        }
+      ],
+      "consumerEvidence": [
+        "consumer traced during bounded source review; see valuePath and routeConsumers"
+      ],
+      "value": "Profundidade",
+      "expression": "\"Profundidade\"",
+      "sourceSha256": "2c7e7f68a2330c257fb0b8cf29cf55d2792622c946acc5950854d1dd543dedff",
+      "disposition": "ui_copy",
+      "reason": "Literal is one of the fixed axis labels in the local dimensions tuple at app/admin/admin.js:283, rendered beside the nominal measurement input and included in its accessible name. The numeric measurement is editable domain data."
+    },
+    {
+      "id": "3625349edd7ef109",
+      "source": "app/admin/admin.js",
+      "line": 793,
+      "column": 15,
+      "owner": "admin",
+      "routeConsumers": [
+        "/admin"
+      ],
+      "sourceRole": "admin-field-label",
+      "originalClassification": "unreviewed",
+      "originalClassificationHints": [
+        "source-needs-consumer-and-domain-review"
+      ],
+      "useStatus": "active",
+      "consumerLinkStatus": "bounded-helper-or-option-factory",
+      "consumerRefs": [
+        {
+          "sinkId": "3a8446c2873350d7",
+          "source": "app/admin/admin.js",
+          "line": 739,
+          "sink": "call:createTextNode",
+          "expression": "labelText",
+          "routeConsumers": [
+            "/admin"
+          ],
+          "flow": "bounded-helper-or-option-factory"
+        }
+      ],
+      "consumerEvidence": [
+        "app/admin/admin.js:793 argument passed to makeField"
+      ],
+      "value": "Nome público",
+      "expression": "\"Nome público\"",
+      "sourceSha256": "2c7e7f68a2330c257fb0b8cf29cf55d2792622c946acc5950854d1dd543dedff",
+      "disposition": "ui_copy",
+      "reason": "Literal is passed by the Admin renderer to makeField as a fixed input label. The text entered in the field belongs to the edited object/material data; this label is interface copy."
+    },
+    {
+      "id": "e711cb615c82daf2",
+      "source": "app/admin/admin.js",
+      "line": 794,
+      "column": 15,
+      "owner": "admin",
+      "routeConsumers": [
+        "/admin"
+      ],
+      "sourceRole": "admin-field-label",
+      "originalClassification": "unreviewed",
+      "originalClassificationHints": [
+        "source-needs-consumer-and-domain-review"
+      ],
+      "useStatus": "active",
+      "consumerLinkStatus": "bounded-helper-or-option-factory",
+      "consumerRefs": [
+        {
+          "sinkId": "3a8446c2873350d7",
+          "source": "app/admin/admin.js",
+          "line": 739,
+          "sink": "call:createTextNode",
+          "expression": "labelText",
+          "routeConsumers": [
+            "/admin"
+          ],
+          "flow": "bounded-helper-or-option-factory"
+        }
+      ],
+      "consumerEvidence": [
+        "app/admin/admin.js:794 argument passed to makeField"
+      ],
+      "value": "Descrição",
+      "expression": "\"Descrição\"",
+      "sourceSha256": "2c7e7f68a2330c257fb0b8cf29cf55d2792622c946acc5950854d1dd543dedff",
+      "disposition": "ui_copy",
+      "reason": "Literal is passed by the Admin renderer to makeField as a fixed input label. The text entered in the field belongs to the edited object/material data; this label is interface copy."
+    },
+    {
+      "id": "3c733a61dc28bab2",
+      "source": "app/admin/admin.js",
+      "line": 795,
+      "column": 15,
+      "owner": "admin",
+      "routeConsumers": [
+        "/admin"
+      ],
+      "sourceRole": "admin-field-label",
+      "originalClassification": "unreviewed",
+      "originalClassificationHints": [
+        "source-needs-consumer-and-domain-review"
+      ],
+      "useStatus": "active",
+      "consumerLinkStatus": "bounded-helper-or-option-factory",
+      "consumerRefs": [
+        {
+          "sinkId": "3a8446c2873350d7",
+          "source": "app/admin/admin.js",
+          "line": 739,
+          "sink": "call:createTextNode",
+          "expression": "labelText",
+          "routeConsumers": [
+            "/admin"
+          ],
+          "flow": "bounded-helper-or-option-factory"
+        }
+      ],
+      "consumerEvidence": [
+        "app/admin/admin.js:795 argument passed to makeField"
+      ],
+      "value": "Destaques (um por linha)",
+      "expression": "\"Destaques (um por linha)\"",
+      "sourceSha256": "2c7e7f68a2330c257fb0b8cf29cf55d2792622c946acc5950854d1dd543dedff",
+      "disposition": "ui_copy",
+      "reason": "Literal is passed by the Admin renderer to makeField as a fixed input label. The text entered in the field belongs to the edited object/material data; this label is interface copy."
+    },
+    {
+      "id": "0a44264e8eb24af5",
+      "source": "app/admin/admin.js",
+      "line": 796,
+      "column": 15,
+      "owner": "admin",
+      "routeConsumers": [
+        "/admin"
+      ],
+      "sourceRole": "admin-field-label",
+      "originalClassification": "unreviewed",
+      "originalClassificationHints": [
+        "source-needs-consumer-and-domain-review"
+      ],
+      "useStatus": "active",
+      "consumerLinkStatus": "bounded-helper-or-option-factory",
+      "consumerRefs": [
+        {
+          "sinkId": "3a8446c2873350d7",
+          "source": "app/admin/admin.js",
+          "line": 739,
+          "sink": "call:createTextNode",
+          "expression": "labelText",
+          "routeConsumers": [
+            "/admin"
+          ],
+          "flow": "bounded-helper-or-option-factory"
+        }
+      ],
+      "consumerEvidence": [
+        "app/admin/admin.js:796 argument passed to makeField"
+      ],
+      "value": "Componentes (um por linha)",
+      "expression": "\"Componentes (um por linha)\"",
+      "sourceSha256": "2c7e7f68a2330c257fb0b8cf29cf55d2792622c946acc5950854d1dd543dedff",
+      "disposition": "ui_copy",
+      "reason": "Literal is passed by the Admin renderer to makeField as a fixed input label. The text entered in the field belongs to the edited object/material data; this label is interface copy."
+    },
+    {
+      "id": "5b5d6db3a2cc467e",
+      "source": "app/admin/admin.js",
+      "line": 797,
+      "column": 15,
+      "owner": "admin",
+      "routeConsumers": [
+        "/admin"
+      ],
+      "sourceRole": "admin-field-label",
+      "originalClassification": "unreviewed",
+      "originalClassificationHints": [
+        "source-needs-consumer-and-domain-review"
+      ],
+      "useStatus": "active",
+      "consumerLinkStatus": "bounded-helper-or-option-factory",
+      "consumerRefs": [
+        {
+          "sinkId": "3a8446c2873350d7",
+          "source": "app/admin/admin.js",
+          "line": 739,
+          "sink": "call:createTextNode",
+          "expression": "labelText",
+          "routeConsumers": [
+            "/admin"
+          ],
+          "flow": "bounded-helper-or-option-factory"
+        }
+      ],
+      "consumerEvidence": [
+        "app/admin/admin.js:797 argument passed to makeField"
+      ],
+      "value": "Requisitos (um por linha)",
+      "expression": "\"Requisitos (um por linha)\"",
+      "sourceSha256": "2c7e7f68a2330c257fb0b8cf29cf55d2792622c946acc5950854d1dd543dedff",
+      "disposition": "ui_copy",
+      "reason": "Literal is passed by the Admin renderer to makeField as a fixed input label. The text entered in the field belongs to the edited object/material data; this label is interface copy."
+    },
+    {
+      "id": "746ed75f74a39f91",
+      "source": "app/admin/admin.js",
+      "line": 818,
+      "column": 19,
+      "owner": "admin",
+      "routeConsumers": [
+        "/admin"
+      ],
+      "sourceRole": "inline-text-tuple-label",
+      "originalClassification": "unreviewed",
+      "originalClassificationHints": [
+        "source-needs-consumer-and-domain-review"
+      ],
+      "useStatus": "active",
+      "consumerLinkStatus": "bounded-static-array-to-field-label",
+      "consumerRefs": [
+        {
+          "sinkId": "98a56137a83c4958",
+          "source": "app/admin/admin.js",
+          "line": 819,
+          "sink": "call:createTextNode",
+          "expression": "title",
+          "routeConsumers": [
+            "/admin"
+          ],
+          "flow": "bounded-static-array-to-field-label"
+        }
+      ],
+      "consumerEvidence": [
+        "same callback writes tuple slot 1 to a recognized DOM text property at app/admin/admin.js:818"
+      ],
+      "value": "Imagem da cena",
+      "expression": "\"Imagem da cena\"",
+      "sourceSha256": "2c7e7f68a2330c257fb0b8cf29cf55d2792622c946acc5950854d1dd543dedff",
+      "disposition": "ui_copy",
+      "reason": "Literal is a fixed label or enum name in a local Admin tuple and is rendered as a field label or option. The selected asset/material/scope value is data; this literal names the control choice."
+    },
+    {
+      "id": "d692c3319805d890",
+      "source": "app/admin/admin.js",
+      "line": 818,
+      "column": 87,
+      "owner": "admin",
+      "routeConsumers": [
+        "/admin"
+      ],
+      "sourceRole": "inline-text-tuple-label",
+      "originalClassification": "unreviewed",
+      "originalClassificationHints": [
+        "source-needs-consumer-and-domain-review"
+      ],
+      "useStatus": "active",
+      "consumerLinkStatus": "bounded-static-array-to-field-label",
+      "consumerRefs": [
+        {
+          "sinkId": "98a56137a83c4958",
+          "source": "app/admin/admin.js",
+          "line": 819,
+          "sink": "call:createTextNode",
+          "expression": "title",
+          "routeConsumers": [
+            "/admin"
+          ],
+          "flow": "bounded-static-array-to-field-label"
+        }
+      ],
+      "consumerEvidence": [
+        "same callback writes tuple slot 1 to a recognized DOM text property at app/admin/admin.js:818"
+      ],
+      "value": "Imagem dos detalhes",
+      "expression": "\"Imagem dos detalhes\"",
+      "sourceSha256": "2c7e7f68a2330c257fb0b8cf29cf55d2792622c946acc5950854d1dd543dedff",
+      "disposition": "ui_copy",
+      "reason": "Literal is a fixed label or enum name in a local Admin tuple and is rendered as a field label or option. The selected asset/material/scope value is data; this literal names the control choice."
+    },
+    {
+      "id": "ad08aae2e11c9f51",
+      "source": "app/admin/admin.js",
+      "line": 818,
+      "column": 153,
+      "owner": "admin",
+      "routeConsumers": [
+        "/admin"
+      ],
+      "sourceRole": "inline-text-tuple-label",
+      "originalClassification": "unreviewed",
+      "originalClassificationHints": [
+        "source-needs-consumer-and-domain-review"
+      ],
+      "useStatus": "active",
+      "consumerLinkStatus": "bounded-static-array-to-field-label",
+      "consumerRefs": [
+        {
+          "sinkId": "98a56137a83c4958",
+          "source": "app/admin/admin.js",
+          "line": 819,
+          "sink": "call:createTextNode",
+          "expression": "title",
+          "routeConsumers": [
+            "/admin"
+          ],
+          "flow": "bounded-static-array-to-field-label"
+        }
+      ],
+      "consumerEvidence": [
+        "same callback writes tuple slot 1 to a recognized DOM text property at app/admin/admin.js:818"
+      ],
+      "value": "Máscara de acabamento",
+      "expression": "\"Máscara de acabamento\"",
+      "sourceSha256": "2c7e7f68a2330c257fb0b8cf29cf55d2792622c946acc5950854d1dd543dedff",
+      "disposition": "ui_copy",
+      "reason": "Literal is a fixed label or enum name in a local Admin tuple and is rendered as a field label or option. The selected asset/material/scope value is data; this literal names the control choice."
+    },
+    {
+      "id": "c46f44f1f97a5ad2",
+      "source": "app/admin/admin.js",
+      "line": 866,
+      "column": 17,
+      "owner": "admin",
+      "routeConsumers": [
+        "/admin"
+      ],
+      "sourceRole": "inline-text-tuple-label",
+      "originalClassification": "unreviewed",
+      "originalClassificationHints": [
+        "source-needs-consumer-and-domain-review"
+      ],
+      "useStatus": "active",
+      "consumerLinkStatus": "bounded-static-array-to-option",
+      "consumerRefs": [
+        {
+          "sinkId": "ea8d724e8ab2e3ac",
+          "source": "app/admin/admin.js",
+          "line": 867,
+          "sink": "property:textContent",
+          "expression": "label",
+          "routeConsumers": [
+            "/admin"
+          ],
+          "flow": "bounded-static-array-to-option"
+        }
+      ],
+      "consumerEvidence": [
+        "same callback writes tuple slot 1 to a recognized DOM text property at app/admin/admin.js:866"
+      ],
+      "value": "Global · conjunto todo",
+      "expression": "\"Global · conjunto todo\"",
+      "sourceSha256": "2c7e7f68a2330c257fb0b8cf29cf55d2792622c946acc5950854d1dd543dedff",
+      "disposition": "ui_copy",
+      "reason": "Literal is a fixed label or enum name in a local Admin tuple and is rendered as a field label or option. The selected asset/material/scope value is data; this literal names the control choice."
+    },
+    {
+      "id": "7d39661184490344",
+      "source": "app/admin/admin.js",
+      "line": 866,
+      "column": 54,
+      "owner": "admin",
+      "routeConsumers": [
+        "/admin"
+      ],
+      "sourceRole": "inline-text-tuple-label",
+      "originalClassification": "unreviewed",
+      "originalClassificationHints": [
+        "source-needs-consumer-and-domain-review"
+      ],
+      "useStatus": "active",
+      "consumerLinkStatus": "bounded-static-array-to-option",
+      "consumerRefs": [
+        {
+          "sinkId": "ea8d724e8ab2e3ac",
+          "source": "app/admin/admin.js",
+          "line": 867,
+          "sink": "property:textContent",
+          "expression": "label",
+          "routeConsumers": [
+            "/admin"
+          ],
+          "flow": "bounded-static-array-to-option"
+        }
+      ],
+      "consumerEvidence": [
+        "same callback writes tuple slot 1 to a recognized DOM text property at app/admin/admin.js:866"
+      ],
+      "value": "Local · módulo individual",
+      "expression": "\"Local · módulo individual\"",
+      "sourceSha256": "2c7e7f68a2330c257fb0b8cf29cf55d2792622c946acc5950854d1dd543dedff",
+      "disposition": "ui_copy",
+      "reason": "Literal is a fixed label or enum name in a local Admin tuple and is rendered as a field label or option. The selected asset/material/scope value is data; this literal names the control choice."
+    },
+    {
+      "id": "b50a2f28009a9eff",
+      "source": "app/admin/admin.js",
+      "line": 907,
+      "column": 20,
+      "owner": "admin",
+      "routeConsumers": [
+        "/admin"
+      ],
+      "sourceRole": "admin-material-target-option-label",
+      "originalClassification": "unreviewed",
+      "originalClassificationHints": [
+        "source-needs-consumer-and-domain-review"
+      ],
+      "useStatus": "active",
+      "consumerLinkStatus": "bounded-helper-or-option-factory",
+      "consumerRefs": [
+        {
+          "sinkId": "b8dc425240d14303",
+          "source": "app/admin/admin.js",
+          "line": 980,
+          "sink": "call:createTextNode",
+          "expression": "label",
+          "routeConsumers": [
+            "/admin"
+          ],
+          "flow": "bounded-helper-or-option-factory"
+        },
+        {
+          "sinkId": "c6d294e93d53acf0",
+          "source": "app/admin/admin.js",
+          "line": 999,
+          "sink": "property:textContent",
+          "expression": "`${title} · opções válidas`",
+          "routeConsumers": [
+            "/admin"
+          ],
+          "flow": "bounded-helper-or-option-factory"
+        }
+      ],
+      "consumerEvidence": [
+        "app/admin/admin.js:905 return options used by a recognized renderer"
+      ],
+      "value": "Frentes",
+      "expression": "\"Frentes\"",
+      "sourceSha256": "2c7e7f68a2330c257fb0b8cf29cf55d2792622c946acc5950854d1dd543dedff",
+      "disposition": "ui_copy",
+      "reason": "Literal names a built-in material eligibility group in the Admin option factory at app/admin/admin.js:905-909. It is fixed interface wording for the option; group IDs and selected material lists remain structured domain data."
+    },
+    {
+      "id": "b1e3faa80fbfba3a",
+      "source": "app/admin/admin.js",
+      "line": 907,
+      "column": 46,
+      "owner": "admin",
+      "routeConsumers": [
+        "/admin"
+      ],
+      "sourceRole": "admin-material-target-option-label",
+      "originalClassification": "unreviewed",
+      "originalClassificationHints": [
+        "source-needs-consumer-and-domain-review"
+      ],
+      "useStatus": "active",
+      "consumerLinkStatus": "bounded-helper-or-option-factory",
+      "consumerRefs": [
+        {
+          "sinkId": "b8dc425240d14303",
+          "source": "app/admin/admin.js",
+          "line": 980,
+          "sink": "call:createTextNode",
+          "expression": "label",
+          "routeConsumers": [
+            "/admin"
+          ],
+          "flow": "bounded-helper-or-option-factory"
+        },
+        {
+          "sinkId": "c6d294e93d53acf0",
+          "source": "app/admin/admin.js",
+          "line": 999,
+          "sink": "property:textContent",
+          "expression": "`${title} · opções válidas`",
+          "routeConsumers": [
+            "/admin"
+          ],
+          "flow": "bounded-helper-or-option-factory"
+        }
+      ],
+      "consumerEvidence": [
+        "app/admin/admin.js:905 return options used by a recognized renderer"
+      ],
+      "value": "Pedra e rodapé",
+      "expression": "\"Pedra e rodapé\"",
+      "sourceSha256": "2c7e7f68a2330c257fb0b8cf29cf55d2792622c946acc5950854d1dd543dedff",
+      "disposition": "ui_copy",
+      "reason": "Literal names a built-in material eligibility group in the Admin option factory at app/admin/admin.js:905-909. It is fixed interface wording for the option; group IDs and selected material lists remain structured domain data."
+    },
+    {
+      "id": "5f1de35844f2124a",
+      "source": "app/admin/admin.js",
+      "line": 956,
+      "column": 40,
+      "owner": "admin",
+      "routeConsumers": [
+        "/admin"
+      ],
+      "sourceRole": "admin-field-label",
+      "originalClassification": "unreviewed",
+      "originalClassificationHints": [
+        "source-needs-consumer-and-domain-review"
+      ],
+      "useStatus": "active",
+      "consumerLinkStatus": "bounded-helper-or-option-factory",
+      "consumerRefs": [
+        {
+          "sinkId": "3a8446c2873350d7",
+          "source": "app/admin/admin.js",
+          "line": 739,
+          "sink": "call:createTextNode",
+          "expression": "labelText",
+          "routeConsumers": [
+            "/admin"
+          ],
+          "flow": "bounded-helper-or-option-factory"
+        }
+      ],
+      "consumerEvidence": [
+        "app/admin/admin.js:956 argument passed to makeField"
+      ],
+      "value": "Nome",
+      "expression": "\"Nome\"",
+      "sourceSha256": "2c7e7f68a2330c257fb0b8cf29cf55d2792622c946acc5950854d1dd543dedff",
+      "disposition": "ui_copy",
+      "reason": "Literal is passed by the Admin renderer to makeField as a fixed input label. The text entered in the field belongs to the edited object/material data; this label is interface copy."
+    },
+    {
+      "id": "eebfbb1618da8831",
+      "source": "app/admin/admin.js",
+      "line": 964,
+      "column": 16,
+      "owner": "admin",
+      "routeConsumers": [
+        "/admin"
+      ],
+      "sourceRole": "inline-text-tuple-label",
+      "originalClassification": "unreviewed",
+      "originalClassificationHints": [
+        "source-needs-consumer-and-domain-review"
+      ],
+      "useStatus": "active",
+      "consumerLinkStatus": "bounded-static-array-to-option",
+      "consumerRefs": [
+        {
+          "sinkId": "cd24792a8f2260b1",
+          "source": "app/admin/admin.js",
+          "line": 964,
+          "sink": "property:textContent",
+          "expression": "text",
+          "routeConsumers": [
+            "/admin"
+          ],
+          "flow": "bounded-static-array-to-option"
+        }
+      ],
+      "consumerEvidence": [
+        "same callback writes tuple slot 1 to a recognized DOM text property at app/admin/admin.js:964"
+      ],
+      "value": "Cor sólida",
+      "expression": "\"Cor sólida\"",
+      "sourceSha256": "2c7e7f68a2330c257fb0b8cf29cf55d2792622c946acc5950854d1dd543dedff",
+      "disposition": "ui_copy",
+      "reason": "Literal is a fixed label or enum name in a local Admin tuple and is rendered as a field label or option. The selected asset/material/scope value is data; this literal names the control choice."
+    },
+    {
+      "id": "33057c09dd4691d0",
+      "source": "app/admin/admin.js",
+      "line": 964,
+      "column": 43,
+      "owner": "admin",
+      "routeConsumers": [
+        "/admin"
+      ],
+      "sourceRole": "inline-text-tuple-label",
+      "originalClassification": "unreviewed",
+      "originalClassificationHints": [
+        "source-needs-consumer-and-domain-review"
+      ],
+      "useStatus": "active",
+      "consumerLinkStatus": "bounded-static-array-to-option",
+      "consumerRefs": [
+        {
+          "sinkId": "cd24792a8f2260b1",
+          "source": "app/admin/admin.js",
+          "line": 964,
+          "sink": "property:textContent",
+          "expression": "text",
+          "routeConsumers": [
+            "/admin"
+          ],
+          "flow": "bounded-static-array-to-option"
+        }
+      ],
+      "consumerEvidence": [
+        "same callback writes tuple slot 1 to a recognized DOM text property at app/admin/admin.js:964"
+      ],
+      "value": "Textura",
+      "expression": "\"Textura\"",
+      "sourceSha256": "2c7e7f68a2330c257fb0b8cf29cf55d2792622c946acc5950854d1dd543dedff",
+      "disposition": "ui_copy",
+      "reason": "Literal is a fixed label or enum name in a local Admin tuple and is rendered as a field label or option. The selected asset/material/scope value is data; this literal names the control choice."
+    },
+    {
+      "id": "669c4a39fa45ccf4",
+      "source": "app/admin/admin.js",
+      "line": 1007,
+      "column": 42,
+      "owner": "admin",
+      "routeConsumers": [
+        "/admin"
+      ],
+      "sourceRole": "admin-material-availability-heading",
+      "originalClassification": "unreviewed",
+      "originalClassificationHints": [
+        "source-needs-consumer-and-domain-review"
+      ],
+      "useStatus": "active",
+      "consumerLinkStatus": "bounded-helper-or-option-factory",
+      "consumerRefs": [
+        {
+          "sinkId": "2565566956433aef",
+          "source": "app/admin/admin.js",
+          "line": 1028,
+          "sink": "property:textContent",
+          "expression": "`${label} · ${selectedIds.length} disponível(is)`",
+          "routeConsumers": [
+            "/admin"
+          ],
+          "flow": "bounded-helper-or-option-factory"
+        }
+      ],
+      "consumerEvidence": [
+        "app/admin/admin.js:1007 argument passed to appendMaterialAvailabilityList"
+      ],
+      "value": "Cores e materiais deste puxador",
+      "expression": "\"Cores e materiais deste puxador\"",
+      "sourceSha256": "2c7e7f68a2330c257fb0b8cf29cf55d2792622c946acc5950854d1dd543dedff",
+      "disposition": "ui_copy",
+      "reason": "Literal is passed as the fixed section heading for a material availability list; the material labels and dynamic available count are sourced separately from model data."
+    },
+    {
+      "id": "f585dc6e6cbbc5a0",
+      "source": "app/admin/admin.js",
+      "line": 1008,
+      "column": 32,
+      "owner": "admin",
+      "routeConsumers": [
+        "/admin"
+      ],
+      "sourceRole": "admin-rule-select-label",
+      "originalClassification": "unreviewed",
+      "originalClassificationHints": [
+        "source-needs-consumer-and-domain-review"
+      ],
+      "useStatus": "active",
+      "consumerLinkStatus": "bounded-helper-or-option-factory",
+      "consumerRefs": [
+        {
+          "sinkId": "2f3c836739ae6833",
+          "source": "app/admin/admin.js",
+          "line": 941,
+          "sink": "call:createTextNode",
+          "expression": "labelText",
+          "routeConsumers": [
+            "/admin"
+          ],
+          "flow": "bounded-helper-or-option-factory"
+        }
+      ],
+      "consumerEvidence": [
+        "app/admin/admin.js:1008 argument passed to makeRuleSelect"
+      ],
+      "value": "Puxador selecionado inicialmente",
+      "expression": "\"Puxador selecionado inicialmente\"",
+      "sourceSha256": "2c7e7f68a2330c257fb0b8cf29cf55d2792622c946acc5950854d1dd543dedff",
+      "disposition": "ui_copy",
+      "reason": "Literal is a fixed label passed to makeRuleSelect at the Admin renderer. The selected entities, catalog items, and stored rule values are supplied separately from domain data."
+    },
+    {
+      "id": "8f5b6c61da20d201",
+      "source": "app/admin/admin.js",
+      "line": 1008,
+      "column": 124,
+      "owner": "admin",
+      "routeConsumers": [
+        "/admin"
+      ],
+      "sourceRole": "admin-rule-select-option-label",
+      "originalClassification": "unreviewed",
+      "originalClassificationHints": [
+        "source-needs-consumer-and-domain-review"
+      ],
+      "useStatus": "active",
+      "consumerLinkStatus": "bounded-helper-or-option-factory",
+      "consumerRefs": [
+        {
+          "sinkId": "5556251b0531a7a0",
+          "source": "app/admin/admin.js",
+          "line": 943,
+          "sink": "property:textContent",
+          "expression": "text",
+          "routeConsumers": [
+            "/admin"
+          ],
+          "flow": "bounded-helper-or-option-factory"
+        }
+      ],
+      "consumerEvidence": [
+        "app/admin/admin.js:1008 argument passed to makeRuleSelect"
+      ],
+      "value": "Definir depois",
+      "expression": "\"Definir depois\"",
+      "sourceSha256": "2c7e7f68a2330c257fb0b8cf29cf55d2792622c946acc5950854d1dd543dedff",
+      "disposition": "ui_copy",
+      "reason": "Literal is a fixed Portuguese option label for an Admin rule/action/state selector. The stored enum/identifier is separate from this rendered interface label."
+    },
+    {
+      "id": "8e5bb8437268c18d",
+      "source": "app/admin/admin.js",
+      "line": 1011,
+      "column": 27,
+      "owner": "admin",
+      "routeConsumers": [
+        "/admin"
+      ],
+      "sourceRole": "admin-field-label",
+      "originalClassification": "unreviewed",
+      "originalClassificationHints": [
+        "source-needs-consumer-and-domain-review"
+      ],
+      "useStatus": "active",
+      "consumerLinkStatus": "bounded-helper-or-option-factory",
+      "consumerRefs": [
+        {
+          "sinkId": "3a8446c2873350d7",
+          "source": "app/admin/admin.js",
+          "line": 739,
+          "sink": "call:createTextNode",
+          "expression": "labelText",
+          "routeConsumers": [
+            "/admin"
+          ],
+          "flow": "bounded-helper-or-option-factory"
+        }
+      ],
+      "consumerEvidence": [
+        "app/admin/admin.js:1011 argument passed to makeField"
+      ],
+      "value": "Nome da opção",
+      "expression": "\"Nome da opção\"",
+      "sourceSha256": "2c7e7f68a2330c257fb0b8cf29cf55d2792622c946acc5950854d1dd543dedff",
+      "disposition": "ui_copy",
+      "reason": "Literal is passed by the Admin renderer to makeField as a fixed input label. The text entered in the field belongs to the edited object/material data; this label is interface copy."
+    },
+    {
+      "id": "5d7181549655737a",
+      "source": "app/admin/admin.js",
+      "line": 1012,
+      "column": 72,
+      "owner": "admin",
+      "routeConsumers": [
+        "/admin"
+      ],
+      "sourceRole": "admin-material-availability-heading",
+      "originalClassification": "unreviewed",
+      "originalClassificationHints": [
+        "source-needs-consumer-and-domain-review"
+      ],
+      "useStatus": "active",
+      "consumerLinkStatus": "bounded-helper-or-option-factory",
+      "consumerRefs": [
+        {
+          "sinkId": "2565566956433aef",
+          "source": "app/admin/admin.js",
+          "line": 1028,
+          "sink": "property:textContent",
+          "expression": "`${label} · ${selectedIds.length} disponível(is)`",
+          "routeConsumers": [
+            "/admin"
+          ],
+          "flow": "bounded-helper-or-option-factory"
+        }
+      ],
+      "consumerEvidence": [
+        "app/admin/admin.js:1012 argument passed to appendMaterialAvailabilityList"
+      ],
+      "value": "Pedras e texturas disponíveis para bancada e rodapé",
+      "expression": "\"Pedras e texturas disponíveis para bancada e rodapé\"",
+      "sourceSha256": "2c7e7f68a2330c257fb0b8cf29cf55d2792622c946acc5950854d1dd543dedff",
+      "disposition": "ui_copy",
+      "reason": "Literal is passed as the fixed section heading for a material availability list; the material labels and dynamic available count are sourced separately from model data."
+    },
+    {
+      "id": "4659d33c0b3b14fd",
+      "source": "app/admin/admin.js",
+      "line": 1013,
+      "column": 51,
+      "owner": "admin",
+      "routeConsumers": [
+        "/admin"
+      ],
+      "sourceRole": "admin-material-dropdown-label",
+      "originalClassification": "unreviewed",
+      "originalClassificationHints": [
+        "source-needs-consumer-and-domain-review"
+      ],
+      "useStatus": "active",
+      "consumerLinkStatus": "bounded-helper-or-option-factory",
+      "consumerRefs": [
+        {
+          "sinkId": "24137effa2137c32",
+          "source": "app/admin/admin.js",
+          "line": 1048,
+          "sink": "property:textContent",
+          "expression": "`${label} · ${selectedIds.length} selecionado(s)`",
+          "routeConsumers": [
+            "/admin"
+          ],
+          "flow": "bounded-helper-or-option-factory"
+        }
+      ],
+      "consumerEvidence": [
+        "app/admin/admin.js:1013 argument passed to makeMaterialCheckboxDropdown"
+      ],
+      "value": "Materiais válidos para frentes",
+      "expression": "\"Materiais válidos para frentes\"",
+      "sourceSha256": "2c7e7f68a2330c257fb0b8cf29cf55d2792622c946acc5950854d1dd543dedff",
+      "disposition": "ui_copy",
+      "reason": "Literal is the fixed label for the Admin material-selection dropdown; selectable material labels and IDs come from model/catalog data."
+    },
+    {
+      "id": "c3eb8c3a0c0f1f93",
+      "source": "app/admin/admin.js",
+      "line": 1016,
+      "column": 34,
+      "owner": "admin",
+      "routeConsumers": [
+        "/admin"
+      ],
+      "sourceRole": "admin-rule-select-label",
+      "originalClassification": "unreviewed",
+      "originalClassificationHints": [
+        "source-needs-consumer-and-domain-review"
+      ],
+      "useStatus": "active",
+      "consumerLinkStatus": "bounded-helper-or-option-factory",
+      "consumerRefs": [
+        {
+          "sinkId": "2f3c836739ae6833",
+          "source": "app/admin/admin.js",
+          "line": 941,
+          "sink": "call:createTextNode",
+          "expression": "labelText",
+          "routeConsumers": [
+            "/admin"
+          ],
+          "flow": "bounded-helper-or-option-factory"
+        }
+      ],
+      "consumerEvidence": [
+        "app/admin/admin.js:1016 argument passed to makeRuleSelect"
+      ],
+      "value": "Cor selecionada inicialmente",
+      "expression": "\"Cor selecionada inicialmente\"",
+      "sourceSha256": "2c7e7f68a2330c257fb0b8cf29cf55d2792622c946acc5950854d1dd543dedff",
+      "disposition": "ui_copy",
+      "reason": "Literal is a fixed label passed to makeRuleSelect at the Admin renderer. The selected entities, catalog items, and stored rule values are supplied separately from domain data."
+    },
+    {
+      "id": "0c403fee61c64184",
+      "source": "app/admin/admin.js",
+      "line": 1018,
+      "column": 34,
+      "owner": "admin",
+      "routeConsumers": [
+        "/admin"
+      ],
+      "sourceRole": "admin-rule-select-label",
+      "originalClassification": "unreviewed",
+      "originalClassificationHints": [
+        "source-needs-consumer-and-domain-review"
+      ],
+      "useStatus": "active",
+      "consumerLinkStatus": "bounded-helper-or-option-factory",
+      "consumerRefs": [
+        {
+          "sinkId": "2f3c836739ae6833",
+          "source": "app/admin/admin.js",
+          "line": 941,
+          "sink": "call:createTextNode",
+          "expression": "labelText",
+          "routeConsumers": [
+            "/admin"
+          ],
+          "flow": "bounded-helper-or-option-factory"
+        }
+      ],
+      "consumerEvidence": [
+        "app/admin/admin.js:1018 argument passed to makeRuleSelect"
+      ],
+      "value": "Pedra selecionada inicialmente",
+      "expression": "\"Pedra selecionada inicialmente\"",
+      "sourceSha256": "2c7e7f68a2330c257fb0b8cf29cf55d2792622c946acc5950854d1dd543dedff",
+      "disposition": "ui_copy",
+      "reason": "Literal is a fixed label passed to makeRuleSelect at the Admin renderer. The selected entities, catalog items, and stored rule values are supplied separately from domain data."
+    },
+    {
+      "id": "3a01674a59199087",
+      "source": "app/admin/admin.js",
+      "line": 1077,
+      "column": 108,
+      "owner": "admin",
+      "routeConsumers": [
+        "/admin"
+      ],
+      "sourceRole": "admin-event-trigger-option-label",
+      "originalClassification": "unreviewed",
+      "originalClassificationHints": [
+        "source-needs-consumer-and-domain-review"
+      ],
+      "useStatus": "active",
+      "consumerLinkStatus": "bounded-helper-or-option-factory",
+      "consumerRefs": [
+        {
+          "sinkId": "5556251b0531a7a0",
+          "source": "app/admin/admin.js",
+          "line": 943,
+          "sink": "property:textContent",
+          "expression": "text",
+          "routeConsumers": [
+            "/admin"
+          ],
+          "flow": "bounded-helper-or-option-factory"
+        }
+      ],
+      "consumerEvidence": [
+        "app/admin/admin.js:1076 return options used by a recognized renderer"
+      ],
+      "value": "Rodapé de pedra",
+      "expression": "\"Rodapé de pedra\"",
+      "sourceSha256": "2c7e7f68a2330c257fb0b8cf29cf55d2792622c946acc5950854d1dd543dedff",
+      "disposition": "domain_content",
+      "reason": "The literal is paired with the special event target ID stone-skirting in eventTriggerOptions at app/admin/admin.js:1076-1077, alongside entity and service catalog entries. It names a domain service/target rather than an interface instruction; keep it with the domain/entity label source, not the message catalog."
+    },
+    {
+      "id": "9cf7a35bd0112fad",
+      "source": "app/admin/admin.js",
+      "line": 1086,
+      "column": 41,
+      "owner": "admin",
+      "routeConsumers": [
+        "/admin"
+      ],
+      "sourceRole": "admin-rule-select-label",
+      "originalClassification": "unreviewed",
+      "originalClassificationHints": [
+        "source-needs-consumer-and-domain-review"
+      ],
+      "useStatus": "active",
+      "consumerLinkStatus": "bounded-helper-or-option-factory",
+      "consumerRefs": [
+        {
+          "sinkId": "2f3c836739ae6833",
+          "source": "app/admin/admin.js",
+          "line": 941,
+          "sink": "call:createTextNode",
+          "expression": "labelText",
+          "routeConsumers": [
+            "/admin"
+          ],
+          "flow": "bounded-helper-or-option-factory"
+        }
+      ],
+      "consumerEvidence": [
+        "app/admin/admin.js:1086 argument passed to makeRuleSelect"
+      ],
+      "value": "Este item",
+      "expression": "\"Este item\"",
+      "sourceSha256": "2c7e7f68a2330c257fb0b8cf29cf55d2792622c946acc5950854d1dd543dedff",
+      "disposition": "ui_copy",
+      "reason": "Literal is a fixed label passed to makeRuleSelect at the Admin renderer. The selected entities, catalog items, and stored rule values are supplied separately from domain data."
+    },
+    {
+      "id": "4919697876105aed",
+      "source": "app/admin/admin.js",
+      "line": 1086,
+      "column": 121,
+      "owner": "admin",
+      "routeConsumers": [
+        "/admin"
+      ],
+      "sourceRole": "admin-rule-select-label",
+      "originalClassification": "unreviewed",
+      "originalClassificationHints": [
+        "source-needs-consumer-and-domain-review"
+      ],
+      "useStatus": "active",
+      "consumerLinkStatus": "bounded-helper-or-option-factory",
+      "consumerRefs": [
+        {
+          "sinkId": "2f3c836739ae6833",
+          "source": "app/admin/admin.js",
+          "line": 941,
+          "sink": "call:createTextNode",
+          "expression": "labelText",
+          "routeConsumers": [
+            "/admin"
+          ],
+          "flow": "bounded-helper-or-option-factory"
+        }
+      ],
+      "consumerEvidence": [
+        "app/admin/admin.js:1086 argument passed to makeRuleSelect"
+      ],
+      "value": "Requer todos estes itens",
+      "expression": "\"Requer todos estes itens\"",
+      "sourceSha256": "2c7e7f68a2330c257fb0b8cf29cf55d2792622c946acc5950854d1dd543dedff",
+      "disposition": "ui_copy",
+      "reason": "Literal is a fixed label passed to makeRuleSelect at the Admin renderer. The selected entities, catalog items, and stored rule values are supplied separately from domain data."
+    },
+    {
+      "id": "5465fbc46392dda3",
+      "source": "app/admin/admin.js",
+      "line": 1101,
+      "column": 22,
+      "owner": "admin",
+      "routeConsumers": [
+        "/admin"
+      ],
+      "sourceRole": "admin-rule-select-label",
+      "originalClassification": "unreviewed",
+      "originalClassificationHints": [
+        "source-needs-consumer-and-domain-review"
+      ],
+      "useStatus": "active",
+      "consumerLinkStatus": "bounded-helper-or-option-factory",
+      "consumerRefs": [
+        {
+          "sinkId": "2f3c836739ae6833",
+          "source": "app/admin/admin.js",
+          "line": 941,
+          "sink": "call:createTextNode",
+          "expression": "labelText",
+          "routeConsumers": [
+            "/admin"
+          ],
+          "flow": "bounded-helper-or-option-factory"
+        }
+      ],
+      "consumerEvidence": [
+        "app/admin/admin.js:1101 argument passed to makeRuleSelect"
+      ],
+      "value": "Ação",
+      "expression": "\"Ação\"",
+      "sourceSha256": "2c7e7f68a2330c257fb0b8cf29cf55d2792622c946acc5950854d1dd543dedff",
+      "disposition": "ui_copy",
+      "reason": "Literal is a fixed label passed to makeRuleSelect at the Admin renderer. The selected entities, catalog items, and stored rule values are supplied separately from domain data."
+    },
+    {
+      "id": "851be9e316becd1c",
+      "source": "app/admin/admin.js",
+      "line": 1101,
+      "column": 96,
+      "owner": "admin",
+      "routeConsumers": [
+        "/admin"
+      ],
+      "sourceRole": "admin-rule-select-option-label",
+      "originalClassification": "unreviewed",
+      "originalClassificationHints": [
+        "source-needs-consumer-and-domain-review"
+      ],
+      "useStatus": "active",
+      "consumerLinkStatus": "bounded-helper-or-option-factory",
+      "consumerRefs": [
+        {
+          "sinkId": "5556251b0531a7a0",
+          "source": "app/admin/admin.js",
+          "line": 943,
+          "sink": "property:textContent",
+          "expression": "text",
+          "routeConsumers": [
+            "/admin"
+          ],
+          "flow": "bounded-helper-or-option-factory"
+        }
+      ],
+      "consumerEvidence": [
+        "app/admin/admin.js:1101 argument passed to makeRuleSelect"
+      ],
+      "value": "Alterar dimensão de módulo",
+      "expression": "\"Alterar dimensão de módulo\"",
+      "sourceSha256": "2c7e7f68a2330c257fb0b8cf29cf55d2792622c946acc5950854d1dd543dedff",
+      "disposition": "ui_copy",
+      "reason": "Literal is a fixed Portuguese option label for an Admin rule/action/state selector. The stored enum/identifier is separate from this rendered interface label."
+    },
+    {
+      "id": "893525a60341a347",
+      "source": "app/admin/admin.js",
+      "line": 1101,
+      "column": 143,
+      "owner": "admin",
+      "routeConsumers": [
+        "/admin"
+      ],
+      "sourceRole": "admin-rule-select-option-label",
+      "originalClassification": "unreviewed",
+      "originalClassificationHints": [
+        "source-needs-consumer-and-domain-review"
+      ],
+      "useStatus": "active",
+      "consumerLinkStatus": "bounded-helper-or-option-factory",
+      "consumerRefs": [
+        {
+          "sinkId": "5556251b0531a7a0",
+          "source": "app/admin/admin.js",
+          "line": 943,
+          "sink": "property:textContent",
+          "expression": "text",
+          "routeConsumers": [
+            "/admin"
+          ],
+          "flow": "bounded-helper-or-option-factory"
+        }
+      ],
+      "consumerEvidence": [
+        "app/admin/admin.js:1101 argument passed to makeRuleSelect"
+      ],
+      "value": "Ativar ou desativar módulo ou serviço",
+      "expression": "\"Ativar ou desativar módulo ou serviço\"",
+      "sourceSha256": "2c7e7f68a2330c257fb0b8cf29cf55d2792622c946acc5950854d1dd543dedff",
+      "disposition": "ui_copy",
+      "reason": "Literal is a fixed Portuguese option label for an Admin rule/action/state selector. The stored enum/identifier is separate from this rendered interface label."
+    },
+    {
+      "id": "509543c8e196e26d",
+      "source": "app/admin/admin.js",
+      "line": 1101,
+      "column": 199,
+      "owner": "admin",
+      "routeConsumers": [
+        "/admin"
+      ],
+      "sourceRole": "admin-rule-select-option-label",
+      "originalClassification": "unreviewed",
+      "originalClassificationHints": [
+        "source-needs-consumer-and-domain-review"
+      ],
+      "useStatus": "active",
+      "consumerLinkStatus": "bounded-helper-or-option-factory",
+      "consumerRefs": [
+        {
+          "sinkId": "5556251b0531a7a0",
+          "source": "app/admin/admin.js",
+          "line": 943,
+          "sink": "property:textContent",
+          "expression": "text",
+          "routeConsumers": [
+            "/admin"
+          ],
+          "flow": "bounded-helper-or-option-factory"
+        }
+      ],
+      "consumerEvidence": [
+        "app/admin/admin.js:1101 argument passed to makeRuleSelect"
+      ],
+      "value": "Profundidade fixa do Módulo 07",
+      "expression": "\"Profundidade fixa do Módulo 07\"",
+      "sourceSha256": "2c7e7f68a2330c257fb0b8cf29cf55d2792622c946acc5950854d1dd543dedff",
+      "disposition": "ui_copy",
+      "reason": "Literal is a fixed Portuguese option label for an Admin rule/action/state selector. The stored enum/identifier is separate from this rendered interface label."
+    },
+    {
+      "id": "1e9b35999442d7cc",
+      "source": "app/admin/admin.js",
+      "line": 1102,
+      "column": 22,
+      "owner": "admin",
+      "routeConsumers": [
+        "/admin"
+      ],
+      "sourceRole": "admin-rule-select-label",
+      "originalClassification": "unreviewed",
+      "originalClassificationHints": [
+        "source-needs-consumer-and-domain-review"
+      ],
+      "useStatus": "active",
+      "consumerLinkStatus": "bounded-helper-or-option-factory",
+      "consumerRefs": [
+        {
+          "sinkId": "2f3c836739ae6833",
+          "source": "app/admin/admin.js",
+          "line": 941,
+          "sink": "call:createTextNode",
+          "expression": "labelText",
+          "routeConsumers": [
+            "/admin"
+          ],
+          "flow": "bounded-helper-or-option-factory"
+        }
+      ],
+      "consumerEvidence": [
+        "app/admin/admin.js:1102 argument passed to makeRuleSelect"
+      ],
+      "value": "Quando este item",
+      "expression": "\"Quando este item\"",
+      "sourceSha256": "2c7e7f68a2330c257fb0b8cf29cf55d2792622c946acc5950854d1dd543dedff",
+      "disposition": "ui_copy",
+      "reason": "Literal is a fixed label passed to makeRuleSelect at the Admin renderer. The selected entities, catalog items, and stored rule values are supplied separately from domain data."
+    },
+    {
+      "id": "624fb7aeb04167e4",
+      "source": "app/admin/admin.js",
+      "line": 1103,
+      "column": 22,
+      "owner": "admin",
+      "routeConsumers": [
+        "/admin"
+      ],
+      "sourceRole": "admin-rule-select-label",
+      "originalClassification": "unreviewed",
+      "originalClassificationHints": [
+        "source-needs-consumer-and-domain-review"
+      ],
+      "useStatus": "active",
+      "consumerLinkStatus": "bounded-helper-or-option-factory",
+      "consumerRefs": [
+        {
+          "sinkId": "2f3c836739ae6833",
+          "source": "app/admin/admin.js",
+          "line": 941,
+          "sink": "call:createTextNode",
+          "expression": "labelText",
+          "routeConsumers": [
+            "/admin"
+          ],
+          "flow": "bounded-helper-or-option-factory"
+        }
+      ],
+      "consumerEvidence": [
+        "app/admin/admin.js:1103 argument passed to makeRuleSelect"
+      ],
+      "value": "Estiver",
+      "expression": "\"Estiver\"",
+      "sourceSha256": "2c7e7f68a2330c257fb0b8cf29cf55d2792622c946acc5950854d1dd543dedff",
+      "disposition": "ui_copy",
+      "reason": "Literal is a fixed label passed to makeRuleSelect at the Admin renderer. The selected entities, catalog items, and stored rule values are supplied separately from domain data."
+    },
+    {
+      "id": "ce1610ba9ecde6a7",
+      "source": "app/admin/admin.js",
+      "line": 1103,
+      "column": 70,
+      "owner": "admin",
+      "routeConsumers": [
+        "/admin"
+      ],
+      "sourceRole": "admin-rule-select-option-label",
+      "originalClassification": "unreviewed",
+      "originalClassificationHints": [
+        "source-needs-consumer-and-domain-review"
+      ],
+      "useStatus": "active",
+      "consumerLinkStatus": "bounded-helper-or-option-factory",
+      "consumerRefs": [
+        {
+          "sinkId": "5556251b0531a7a0",
+          "source": "app/admin/admin.js",
+          "line": 943,
+          "sink": "property:textContent",
+          "expression": "text",
+          "routeConsumers": [
+            "/admin"
+          ],
+          "flow": "bounded-helper-or-option-factory"
+        }
+      ],
+      "consumerEvidence": [
+        "app/admin/admin.js:1103 argument passed to makeRuleSelect"
+      ],
+      "value": "Ativado",
+      "expression": "\"Ativado\"",
+      "sourceSha256": "2c7e7f68a2330c257fb0b8cf29cf55d2792622c946acc5950854d1dd543dedff",
+      "disposition": "ui_copy",
+      "reason": "Literal is a fixed Portuguese option label for an Admin rule/action/state selector. The stored enum/identifier is separate from this rendered interface label."
+    },
+    {
+      "id": "290dc0f4d3857c06",
+      "source": "app/admin/admin.js",
+      "line": 1103,
+      "column": 95,
+      "owner": "admin",
+      "routeConsumers": [
+        "/admin"
+      ],
+      "sourceRole": "admin-rule-select-option-label",
+      "originalClassification": "unreviewed",
+      "originalClassificationHints": [
+        "source-needs-consumer-and-domain-review"
+      ],
+      "useStatus": "active",
+      "consumerLinkStatus": "bounded-helper-or-option-factory",
+      "consumerRefs": [
+        {
+          "sinkId": "5556251b0531a7a0",
+          "source": "app/admin/admin.js",
+          "line": 943,
+          "sink": "property:textContent",
+          "expression": "text",
+          "routeConsumers": [
+            "/admin"
+          ],
+          "flow": "bounded-helper-or-option-factory"
+        }
+      ],
+      "consumerEvidence": [
+        "app/admin/admin.js:1103 argument passed to makeRuleSelect"
+      ],
+      "value": "Desativado",
+      "expression": "\"Desativado\"",
+      "sourceSha256": "2c7e7f68a2330c257fb0b8cf29cf55d2792622c946acc5950854d1dd543dedff",
+      "disposition": "ui_copy",
+      "reason": "Literal is a fixed Portuguese option label for an Admin rule/action/state selector. The stored enum/identifier is separate from this rendered interface label."
+    },
+    {
+      "id": "ebf0118f6f4dbb95",
+      "source": "app/admin/admin.js",
+      "line": 1108,
+      "column": 34,
+      "owner": "admin",
+      "routeConsumers": [
+        "/admin"
+      ],
+      "sourceRole": "admin-rule-select-label",
+      "originalClassification": "unreviewed",
+      "originalClassificationHints": [
+        "source-needs-consumer-and-domain-review"
+      ],
+      "useStatus": "active",
+      "consumerLinkStatus": "bounded-helper-or-option-factory",
+      "consumerRefs": [
+        {
+          "sinkId": "2f3c836739ae6833",
+          "source": "app/admin/admin.js",
+          "line": 941,
+          "sink": "call:createTextNode",
+          "expression": "labelText",
+          "routeConsumers": [
+            "/admin"
+          ],
+          "flow": "bounded-helper-or-option-factory"
+        }
+      ],
+      "consumerEvidence": [
+        "app/admin/admin.js:1108 argument passed to makeRuleSelect"
+      ],
+      "value": "Aplicar a",
+      "expression": "\"Aplicar a\"",
+      "sourceSha256": "2c7e7f68a2330c257fb0b8cf29cf55d2792622c946acc5950854d1dd543dedff",
+      "disposition": "ui_copy",
+      "reason": "Literal is a fixed label passed to makeRuleSelect at the Admin renderer. The selected entities, catalog items, and stored rule values are supplied separately from domain data."
+    },
+    {
+      "id": "4591a4785d3ad40a",
+      "source": "app/admin/admin.js",
+      "line": 1109,
+      "column": 34,
+      "owner": "admin",
+      "routeConsumers": [
+        "/admin"
+      ],
+      "sourceRole": "admin-rule-select-label",
+      "originalClassification": "unreviewed",
+      "originalClassificationHints": [
+        "source-needs-consumer-and-domain-review"
+      ],
+      "useStatus": "active",
+      "consumerLinkStatus": "bounded-helper-or-option-factory",
+      "consumerRefs": [
+        {
+          "sinkId": "2f3c836739ae6833",
+          "source": "app/admin/admin.js",
+          "line": 941,
+          "sink": "call:createTextNode",
+          "expression": "labelText",
+          "routeConsumers": [
+            "/admin"
+          ],
+          "flow": "bounded-helper-or-option-factory"
+        }
+      ],
+      "consumerEvidence": [
+        "app/admin/admin.js:1109 argument passed to makeRuleSelect"
+      ],
+      "value": "Definir estado",
+      "expression": "\"Definir estado\"",
+      "sourceSha256": "2c7e7f68a2330c257fb0b8cf29cf55d2792622c946acc5950854d1dd543dedff",
+      "disposition": "ui_copy",
+      "reason": "Literal is a fixed label passed to makeRuleSelect at the Admin renderer. The selected entities, catalog items, and stored rule values are supplied separately from domain data."
+    },
+    {
+      "id": "8656f0510852a241",
+      "source": "app/admin/admin.js",
+      "line": 1109,
+      "column": 109,
+      "owner": "admin",
+      "routeConsumers": [
+        "/admin"
+      ],
+      "sourceRole": "admin-rule-select-option-label",
+      "originalClassification": "unreviewed",
+      "originalClassificationHints": [
+        "source-needs-consumer-and-domain-review"
+      ],
+      "useStatus": "active",
+      "consumerLinkStatus": "bounded-helper-or-option-factory",
+      "consumerRefs": [
+        {
+          "sinkId": "5556251b0531a7a0",
+          "source": "app/admin/admin.js",
+          "line": 943,
+          "sink": "property:textContent",
+          "expression": "text",
+          "routeConsumers": [
+            "/admin"
+          ],
+          "flow": "bounded-helper-or-option-factory"
+        }
+      ],
+      "consumerEvidence": [
+        "app/admin/admin.js:1109 argument passed to makeRuleSelect"
+      ],
+      "value": "Ativado",
+      "expression": "\"Ativado\"",
+      "sourceSha256": "2c7e7f68a2330c257fb0b8cf29cf55d2792622c946acc5950854d1dd543dedff",
+      "disposition": "ui_copy",
+      "reason": "Literal is a fixed Portuguese option label for an Admin rule/action/state selector. The stored enum/identifier is separate from this rendered interface label."
+    },
+    {
+      "id": "38cfd9eb6abcd67d",
+      "source": "app/admin/admin.js",
+      "line": 1109,
+      "column": 131,
+      "owner": "admin",
+      "routeConsumers": [
+        "/admin"
+      ],
+      "sourceRole": "admin-rule-select-option-label",
+      "originalClassification": "unreviewed",
+      "originalClassificationHints": [
+        "source-needs-consumer-and-domain-review"
+      ],
+      "useStatus": "active",
+      "consumerLinkStatus": "bounded-helper-or-option-factory",
+      "consumerRefs": [
+        {
+          "sinkId": "5556251b0531a7a0",
+          "source": "app/admin/admin.js",
+          "line": 943,
+          "sink": "property:textContent",
+          "expression": "text",
+          "routeConsumers": [
+            "/admin"
+          ],
+          "flow": "bounded-helper-or-option-factory"
+        }
+      ],
+      "consumerEvidence": [
+        "app/admin/admin.js:1109 argument passed to makeRuleSelect"
+      ],
+      "value": "Desativado",
+      "expression": "\"Desativado\"",
+      "sourceSha256": "2c7e7f68a2330c257fb0b8cf29cf55d2792622c946acc5950854d1dd543dedff",
+      "disposition": "ui_copy",
+      "reason": "Literal is a fixed Portuguese option label for an Admin rule/action/state selector. The stored enum/identifier is separate from this rendered interface label."
+    },
+    {
+      "id": "9c00a44e272a4f9c",
+      "source": "app/admin/admin.js",
+      "line": 1112,
+      "column": 34,
+      "owner": "admin",
+      "routeConsumers": [
+        "/admin"
+      ],
+      "sourceRole": "admin-rule-select-label",
+      "originalClassification": "unreviewed",
+      "originalClassificationHints": [
+        "source-needs-consumer-and-domain-review"
+      ],
+      "useStatus": "active",
+      "consumerLinkStatus": "bounded-helper-or-option-factory",
+      "consumerRefs": [
+        {
+          "sinkId": "2f3c836739ae6833",
+          "source": "app/admin/admin.js",
+          "line": 941,
+          "sink": "call:createTextNode",
+          "expression": "labelText",
+          "routeConsumers": [
+            "/admin"
+          ],
+          "flow": "bounded-helper-or-option-factory"
+        }
+      ],
+      "consumerEvidence": [
+        "app/admin/admin.js:1112 argument passed to makeRuleSelect"
+      ],
+      "value": "Aplicar ao módulo",
+      "expression": "\"Aplicar ao módulo\"",
+      "sourceSha256": "2c7e7f68a2330c257fb0b8cf29cf55d2792622c946acc5950854d1dd543dedff",
+      "disposition": "ui_copy",
+      "reason": "Literal is a fixed label passed to makeRuleSelect at the Admin renderer. The selected entities, catalog items, and stored rule values are supplied separately from domain data."
+    },
+    {
+      "id": "83c4ede37d2e556a",
+      "source": "app/admin/admin.js",
+      "line": 1113,
+      "column": 34,
+      "owner": "admin",
+      "routeConsumers": [
+        "/admin"
+      ],
+      "sourceRole": "admin-rule-select-label",
+      "originalClassification": "unreviewed",
+      "originalClassificationHints": [
+        "source-needs-consumer-and-domain-review"
+      ],
+      "useStatus": "active",
+      "consumerLinkStatus": "bounded-helper-or-option-factory",
+      "consumerRefs": [
+        {
+          "sinkId": "2f3c836739ae6833",
+          "source": "app/admin/admin.js",
+          "line": 941,
+          "sink": "call:createTextNode",
+          "expression": "labelText",
+          "routeConsumers": [
+            "/admin"
+          ],
+          "flow": "bounded-helper-or-option-factory"
+        }
+      ],
+      "consumerEvidence": [
+        "app/admin/admin.js:1113 argument passed to makeRuleSelect"
+      ],
+      "value": "Dimensão",
+      "expression": "\"Dimensão\"",
+      "sourceSha256": "2c7e7f68a2330c257fb0b8cf29cf55d2792622c946acc5950854d1dd543dedff",
+      "disposition": "ui_copy",
+      "reason": "Literal is a fixed label passed to makeRuleSelect at the Admin renderer. The selected entities, catalog items, and stored rule values are supplied separately from domain data."
+    },
+    {
+      "id": "abcc60010b6d9a49",
+      "source": "app/admin/admin.js",
+      "line": 1113,
+      "column": 102,
+      "owner": "admin",
+      "routeConsumers": [
+        "/admin"
+      ],
+      "sourceRole": "admin-rule-select-option-label",
+      "originalClassification": "unreviewed",
+      "originalClassificationHints": [
+        "source-needs-consumer-and-domain-review"
+      ],
+      "useStatus": "active",
+      "consumerLinkStatus": "bounded-helper-or-option-factory",
+      "consumerRefs": [
+        {
+          "sinkId": "5556251b0531a7a0",
+          "source": "app/admin/admin.js",
+          "line": 943,
+          "sink": "property:textContent",
+          "expression": "text",
+          "routeConsumers": [
+            "/admin"
+          ],
+          "flow": "bounded-helper-or-option-factory"
+        }
+      ],
+      "consumerEvidence": [
+        "app/admin/admin.js:1113 argument passed to makeRuleSelect"
+      ],
+      "value": "Largura",
+      "expression": "\"Largura\"",
+      "sourceSha256": "2c7e7f68a2330c257fb0b8cf29cf55d2792622c946acc5950854d1dd543dedff",
+      "disposition": "ui_copy",
+      "reason": "Literal is a fixed Portuguese option label for an Admin rule/action/state selector. The stored enum/identifier is separate from this rendered interface label."
+    },
+    {
+      "id": "b2643302f41b113b",
+      "source": "app/admin/admin.js",
+      "line": 1113,
+      "column": 125,
+      "owner": "admin",
+      "routeConsumers": [
+        "/admin"
+      ],
+      "sourceRole": "admin-rule-select-option-label",
+      "originalClassification": "unreviewed",
+      "originalClassificationHints": [
+        "source-needs-consumer-and-domain-review"
+      ],
+      "useStatus": "active",
+      "consumerLinkStatus": "bounded-helper-or-option-factory",
+      "consumerRefs": [
+        {
+          "sinkId": "5556251b0531a7a0",
+          "source": "app/admin/admin.js",
+          "line": 943,
+          "sink": "property:textContent",
+          "expression": "text",
+          "routeConsumers": [
+            "/admin"
+          ],
+          "flow": "bounded-helper-or-option-factory"
+        }
+      ],
+      "consumerEvidence": [
+        "app/admin/admin.js:1113 argument passed to makeRuleSelect"
+      ],
+      "value": "Altura",
+      "expression": "\"Altura\"",
+      "sourceSha256": "2c7e7f68a2330c257fb0b8cf29cf55d2792622c946acc5950854d1dd543dedff",
+      "disposition": "ui_copy",
+      "reason": "Literal is a fixed Portuguese option label for an Admin rule/action/state selector. The stored enum/identifier is separate from this rendered interface label."
+    },
+    {
+      "id": "c29616c7f1352cce",
+      "source": "app/admin/admin.js",
+      "line": 1113,
+      "column": 146,
+      "owner": "admin",
+      "routeConsumers": [
+        "/admin"
+      ],
+      "sourceRole": "admin-rule-select-option-label",
+      "originalClassification": "unreviewed",
+      "originalClassificationHints": [
+        "source-needs-consumer-and-domain-review"
+      ],
+      "useStatus": "active",
+      "consumerLinkStatus": "bounded-helper-or-option-factory",
+      "consumerRefs": [
+        {
+          "sinkId": "5556251b0531a7a0",
+          "source": "app/admin/admin.js",
+          "line": 943,
+          "sink": "property:textContent",
+          "expression": "text",
+          "routeConsumers": [
+            "/admin"
+          ],
+          "flow": "bounded-helper-or-option-factory"
+        }
+      ],
+      "consumerEvidence": [
+        "app/admin/admin.js:1113 argument passed to makeRuleSelect"
+      ],
+      "value": "Profundidade",
+      "expression": "\"Profundidade\"",
+      "sourceSha256": "2c7e7f68a2330c257fb0b8cf29cf55d2792622c946acc5950854d1dd543dedff",
+      "disposition": "ui_copy",
+      "reason": "Literal is a fixed Portuguese option label for an Admin rule/action/state selector. The stored enum/identifier is separate from this rendered interface label."
+    },
+    {
+      "id": "7e8e5d1d8a1b0db3",
+      "source": "app/admin/admin.js",
+      "line": 1285,
+      "column": 63,
+      "owner": "admin",
+      "routeConsumers": [
+        "/admin"
+      ],
+      "sourceRole": "error-message-source",
+      "originalClassification": "unreviewed",
+      "originalClassificationHints": [
+        "source-needs-consumer-and-domain-review"
+      ],
+      "useStatus": "active",
+      "consumerLinkStatus": "same-file-awaited-call-catch",
+      "consumerRefs": [
+        {
+          "sinkId": "a7e05956dd60723f",
+          "source": "app/admin/admin.js",
+          "line": 1560,
+          "sink": "helper:setMessage",
+          "expression": "error.message || \"Falha ao carregar os dados administrativos.\"",
+          "routeConsumers": [
+            "/admin"
+          ],
+          "flow": "same-file-awaited-call-catch"
+        }
+      ],
+      "consumerEvidence": [
+        "Awaited local call reaches catch .message sink at app/admin/admin.js:1560"
+      ],
+      "value": "A API de configuração ainda não foi publicada.",
+      "expression": "\"A API de configuração ainda não foi publicada.\"",
+      "sourceSha256": "2c7e7f68a2330c257fb0b8cf29cf55d2792622c946acc5950854d1dd543dedff",
+      "disposition": "ui_copy",
+      "reason": "Fixed local Error text selected by loadSettings for a 404 or other failed configuration fetch. Its rejection reaches the Admin error status at app/admin/admin.js:1560; this record is the authored fallback, not a provider response."
+    },
+    {
+      "id": "4f27acd106791455",
+      "source": "app/admin/admin.js",
+      "line": 1285,
+      "column": 114,
+      "owner": "admin",
+      "routeConsumers": [
+        "/admin"
+      ],
+      "sourceRole": "error-message-source",
+      "originalClassification": "unreviewed",
+      "originalClassificationHints": [
+        "source-needs-consumer-and-domain-review"
+      ],
+      "useStatus": "active",
+      "consumerLinkStatus": "same-file-awaited-call-catch",
+      "consumerRefs": [
+        {
+          "sinkId": "a7e05956dd60723f",
+          "source": "app/admin/admin.js",
+          "line": 1560,
+          "sink": "helper:setMessage",
+          "expression": "error.message || \"Falha ao carregar os dados administrativos.\"",
+          "routeConsumers": [
+            "/admin"
+          ],
+          "flow": "same-file-awaited-call-catch"
+        }
+      ],
+      "consumerEvidence": [
+        "Awaited local call reaches catch .message sink at app/admin/admin.js:1560"
+      ],
+      "value": "Não foi possível carregar a configuração.",
+      "expression": "\"Não foi possível carregar a configuração.\"",
+      "sourceSha256": "2c7e7f68a2330c257fb0b8cf29cf55d2792622c946acc5950854d1dd543dedff",
+      "disposition": "ui_copy",
+      "reason": "Fixed local Error text selected by loadSettings for a 404 or other failed configuration fetch. Its rejection reaches the Admin error status at app/admin/admin.js:1560; this record is the authored fallback, not a provider response."
+    },
+    {
+      "id": "9ca86d3dbc91d83b",
+      "source": "app/admin/admin.js",
+      "line": 1858,
+      "column": 43,
+      "owner": "admin",
+      "routeConsumers": [
+        "/admin"
+      ],
+      "sourceRole": "error-message-source",
+      "originalClassification": "unreviewed",
+      "originalClassificationHints": [
+        "source-needs-consumer-and-domain-review"
+      ],
+      "useStatus": "active",
+      "consumerLinkStatus": "same-try-catch",
+      "consumerRefs": [
+        {
+          "sinkId": "df3bb12e50c2df35",
+          "source": "app/admin/admin.js",
+          "line": 1943,
+          "sink": "helper:setMessage",
+          "expression": "error.message || \"Falha ao persistir Puxadores.\"",
+          "routeConsumers": [
+            "/admin"
+          ],
+          "flow": "same-try-catch"
+        }
+      ],
+      "consumerEvidence": [
+        "Error literal in try reaches caught .message sink at app/admin/admin.js:1943"
+      ],
+      "value": "A configuração publicada ainda não foi carregada.",
+      "expression": "\"A configuração publicada ainda não foi carregada.\"",
+      "sourceSha256": "2c7e7f68a2330c257fb0b8cf29cf55d2792622c946acc5950854d1dd543dedff",
+      "disposition": "ui_copy",
+      "reason": "Fixed local validation, authorization, conflict, or readback message thrown by the Puxadores handler and shown by its catch at app/admin/admin.js:1943. At lines 1915 and nearby, any payload/plan/validation message is a separate dynamic diagnostic; this literal is the local fallback."
+    },
+    {
+      "id": "78b69b4216ab5a48",
+      "source": "app/admin/admin.js",
+      "line": 1859,
+      "column": 85,
+      "owner": "admin",
+      "routeConsumers": [
+        "/admin"
+      ],
+      "sourceRole": "error-message-source",
+      "originalClassification": "unreviewed",
+      "originalClassificationHints": [
+        "source-needs-consumer-and-domain-review"
+      ],
+      "useStatus": "active",
+      "consumerLinkStatus": "same-try-catch",
+      "consumerRefs": [
+        {
+          "sinkId": "df3bb12e50c2df35",
+          "source": "app/admin/admin.js",
+          "line": 1943,
+          "sink": "helper:setMessage",
+          "expression": "error.message || \"Falha ao persistir Puxadores.\"",
+          "routeConsumers": [
+            "/admin"
+          ],
+          "flow": "same-try-catch"
+        }
+      ],
+      "consumerEvidence": [
+        "Error literal in try reaches caught .message sink at app/admin/admin.js:1943"
+      ],
+      "value": "A persistência isolada de Puxadores é exclusiva do v3.",
+      "expression": "\"A persistência isolada de Puxadores é exclusiva do v3.\"",
+      "sourceSha256": "2c7e7f68a2330c257fb0b8cf29cf55d2792622c946acc5950854d1dd543dedff",
+      "disposition": "ui_copy",
+      "reason": "Fixed local validation, authorization, conflict, or readback message thrown by the Puxadores handler and shown by its catch at app/admin/admin.js:1943. At lines 1915 and nearby, any payload/plan/validation message is a separate dynamic diagnostic; this literal is the local fallback."
+    },
+    {
+      "id": "023404ed59590efb",
+      "source": "app/admin/admin.js",
+      "line": 1874,
+      "column": 44,
+      "owner": "admin",
+      "routeConsumers": [
+        "/admin"
+      ],
+      "sourceRole": "error-message-source",
+      "originalClassification": "unreviewed",
+      "originalClassificationHints": [
+        "source-needs-consumer-and-domain-review"
+      ],
+      "useStatus": "active",
+      "consumerLinkStatus": "same-try-catch",
+      "consumerRefs": [
+        {
+          "sinkId": "df3bb12e50c2df35",
+          "source": "app/admin/admin.js",
+          "line": 1943,
+          "sink": "helper:setMessage",
+          "expression": "error.message || \"Falha ao persistir Puxadores.\"",
+          "routeConsumers": [
+            "/admin"
+          ],
+          "flow": "same-try-catch"
+        }
+      ],
+      "consumerEvidence": [
+        "Error literal in try reaches caught .message sink at app/admin/admin.js:1943"
+      ],
+      "value": "Não foi possível reler a configuração publicada.",
+      "expression": "\"Não foi possível reler a configuração publicada.\"",
+      "sourceSha256": "2c7e7f68a2330c257fb0b8cf29cf55d2792622c946acc5950854d1dd543dedff",
+      "disposition": "ui_copy",
+      "reason": "Fixed local validation, authorization, conflict, or readback message thrown by the Puxadores handler and shown by its catch at app/admin/admin.js:1943. At lines 1915 and nearby, any payload/plan/validation message is a separate dynamic diagnostic; this literal is the local fallback."
+    },
+    {
+      "id": "4e4bb02a658534f2",
+      "source": "app/admin/admin.js",
+      "line": 1882,
+      "column": 23,
+      "owner": "admin",
+      "routeConsumers": [
+        "/admin"
+      ],
+      "sourceRole": "error-message-source",
+      "originalClassification": "unreviewed",
+      "originalClassificationHints": [
+        "source-needs-consumer-and-domain-review"
+      ],
+      "useStatus": "active",
+      "consumerLinkStatus": "same-try-catch",
+      "consumerRefs": [
+        {
+          "sinkId": "df3bb12e50c2df35",
+          "source": "app/admin/admin.js",
+          "line": 1943,
+          "sink": "helper:setMessage",
+          "expression": "error.message || \"Falha ao persistir Puxadores.\"",
+          "routeConsumers": [
+            "/admin"
+          ],
+          "flow": "same-try-catch"
+        }
+      ],
+      "consumerEvidence": [
+        "Error literal in try reaches caught .message sink at app/admin/admin.js:1943"
+      ],
+      "value": "A configuração mudou desde que o painel foi aberto. O painel foi recarregado; revise o estado antes de tentar novamente.",
+      "expression": "\"A configuração mudou desde que o painel foi aberto. O painel foi recarregado; revise o estado antes de tentar novamente.\"",
+      "sourceSha256": "2c7e7f68a2330c257fb0b8cf29cf55d2792622c946acc5950854d1dd543dedff",
+      "disposition": "ui_copy",
+      "reason": "Fixed local validation, authorization, conflict, or readback message thrown by the Puxadores handler and shown by its catch at app/admin/admin.js:1943. At lines 1915 and nearby, any payload/plan/validation message is a separate dynamic diagnostic; this literal is the local fallback."
+    },
+    {
+      "id": "804a31ac188d40cd",
+      "source": "app/admin/admin.js",
+      "line": 1886,
+      "column": 53,
+      "owner": "admin",
+      "routeConsumers": [
+        "/admin"
+      ],
+      "sourceRole": "error-message-source",
+      "originalClassification": "unreviewed",
+      "originalClassificationHints": [
+        "source-needs-consumer-and-domain-review"
+      ],
+      "useStatus": "active",
+      "consumerLinkStatus": "same-try-catch",
+      "consumerRefs": [
+        {
+          "sinkId": "df3bb12e50c2df35",
+          "source": "app/admin/admin.js",
+          "line": 1943,
+          "sink": "helper:setMessage",
+          "expression": "error.message || \"Falha ao persistir Puxadores.\"",
+          "routeConsumers": [
+            "/admin"
+          ],
+          "flow": "same-try-catch"
+        }
+      ],
+      "consumerEvidence": [
+        "Error literal in try reaches caught .message sink at app/admin/admin.js:1943"
+      ],
+      "value": "Não foi possível preparar a atribuição de Puxadores.",
+      "expression": "\"Não foi possível preparar a atribuição de Puxadores.\"",
+      "sourceSha256": "2c7e7f68a2330c257fb0b8cf29cf55d2792622c946acc5950854d1dd543dedff",
+      "disposition": "ui_copy",
+      "reason": "Fixed local validation, authorization, conflict, or readback message thrown by the Puxadores handler and shown by its catch at app/admin/admin.js:1943. At lines 1915 and nearby, any payload/plan/validation message is a separate dynamic diagnostic; this literal is the local fallback."
+    },
+    {
+      "id": "5cb6e5d2c5b6fe22",
+      "source": "app/admin/admin.js",
+      "line": 1897,
+      "column": 53,
+      "owner": "admin",
+      "routeConsumers": [
+        "/admin"
+      ],
+      "sourceRole": "error-message-source",
+      "originalClassification": "unreviewed",
+      "originalClassificationHints": [
+        "source-needs-consumer-and-domain-review"
+      ],
+      "useStatus": "active",
+      "consumerLinkStatus": "same-try-catch",
+      "consumerRefs": [
+        {
+          "sinkId": "df3bb12e50c2df35",
+          "source": "app/admin/admin.js",
+          "line": 1943,
+          "sink": "helper:setMessage",
+          "expression": "error.message || \"Falha ao persistir Puxadores.\"",
+          "routeConsumers": [
+            "/admin"
+          ],
+          "flow": "same-try-catch"
+        }
+      ],
+      "consumerEvidence": [
+        "Error literal in try reaches caught .message sink at app/admin/admin.js:1943"
+      ],
+      "value": "A alteração proposta não é exclusivamente a atribuição de Puxadores.",
+      "expression": "\"A alteração proposta não é exclusivamente a atribuição de Puxadores.\"",
+      "sourceSha256": "2c7e7f68a2330c257fb0b8cf29cf55d2792622c946acc5950854d1dd543dedff",
+      "disposition": "ui_copy",
+      "reason": "Fixed local validation, authorization, conflict, or readback message thrown by the Puxadores handler and shown by its catch at app/admin/admin.js:1943. At lines 1915 and nearby, any payload/plan/validation message is a separate dynamic diagnostic; this literal is the local fallback."
+    },
+    {
+      "id": "5d74204c74c97947",
+      "source": "app/admin/admin.js",
+      "line": 1913,
+      "column": 77,
+      "owner": "admin",
+      "routeConsumers": [
+        "/admin"
+      ],
+      "sourceRole": "error-message-source",
+      "originalClassification": "unreviewed",
+      "originalClassificationHints": [
+        "source-needs-consumer-and-domain-review"
+      ],
+      "useStatus": "active",
+      "consumerLinkStatus": "same-try-catch",
+      "consumerRefs": [
+        {
+          "sinkId": "df3bb12e50c2df35",
+          "source": "app/admin/admin.js",
+          "line": 1943,
+          "sink": "helper:setMessage",
+          "expression": "error.message || \"Falha ao persistir Puxadores.\"",
+          "routeConsumers": [
+            "/admin"
+          ],
+          "flow": "same-try-catch"
+        }
+      ],
+      "consumerEvidence": [
+        "Error literal in try reaches caught .message sink at app/admin/admin.js:1943"
+      ],
+      "value": "Sua sessão não tem permissão para persistir Puxadores.",
+      "expression": "\"Sua sessão não tem permissão para persistir Puxadores.\"",
+      "sourceSha256": "2c7e7f68a2330c257fb0b8cf29cf55d2792622c946acc5950854d1dd543dedff",
+      "disposition": "ui_copy",
+      "reason": "Fixed local validation, authorization, conflict, or readback message thrown by the Puxadores handler and shown by its catch at app/admin/admin.js:1943. At lines 1915 and nearby, any payload/plan/validation message is a separate dynamic diagnostic; this literal is the local fallback."
+    },
+    {
+      "id": "747fa653f0124aee",
+      "source": "app/admin/admin.js",
+      "line": 1914,
+      "column": 50,
+      "owner": "admin",
+      "routeConsumers": [
+        "/admin"
+      ],
+      "sourceRole": "error-message-source",
+      "originalClassification": "unreviewed",
+      "originalClassificationHints": [
+        "source-needs-consumer-and-domain-review"
+      ],
+      "useStatus": "active",
+      "consumerLinkStatus": "same-try-catch",
+      "consumerRefs": [
+        {
+          "sinkId": "df3bb12e50c2df35",
+          "source": "app/admin/admin.js",
+          "line": 1943,
+          "sink": "helper:setMessage",
+          "expression": "error.message || \"Falha ao persistir Puxadores.\"",
+          "routeConsumers": [
+            "/admin"
+          ],
+          "flow": "same-try-catch"
+        }
+      ],
+      "consumerEvidence": [
+        "Error literal in try reaches caught .message sink at app/admin/admin.js:1943"
+      ],
+      "value": "A configuração mudou durante a gravação. Recarregue o painel antes de tentar novamente.",
+      "expression": "\"A configuração mudou durante a gravação. Recarregue o painel antes de tentar novamente.\"",
+      "sourceSha256": "2c7e7f68a2330c257fb0b8cf29cf55d2792622c946acc5950854d1dd543dedff",
+      "disposition": "ui_copy",
+      "reason": "Fixed local validation, authorization, conflict, or readback message thrown by the Puxadores handler and shown by its catch at app/admin/admin.js:1943. At lines 1915 and nearby, any payload/plan/validation message is a separate dynamic diagnostic; this literal is the local fallback."
+    },
+    {
+      "id": "04219a47f75c8734",
+      "source": "app/admin/admin.js",
+      "line": 1915,
+      "column": 59,
+      "owner": "admin",
+      "routeConsumers": [
+        "/admin"
+      ],
+      "sourceRole": "error-message-source",
+      "originalClassification": "unreviewed",
+      "originalClassificationHints": [
+        "source-needs-consumer-and-domain-review"
+      ],
+      "useStatus": "active",
+      "consumerLinkStatus": "same-try-catch",
+      "consumerRefs": [
+        {
+          "sinkId": "df3bb12e50c2df35",
+          "source": "app/admin/admin.js",
+          "line": 1943,
+          "sink": "helper:setMessage",
+          "expression": "error.message || \"Falha ao persistir Puxadores.\"",
+          "routeConsumers": [
+            "/admin"
+          ],
+          "flow": "same-try-catch"
+        }
+      ],
+      "consumerEvidence": [
+        "Error literal in try reaches caught .message sink at app/admin/admin.js:1943"
+      ],
+      "value": "A API recusou a gravação isolada de Puxadores.",
+      "expression": "\"A API recusou a gravação isolada de Puxadores.\"",
+      "sourceSha256": "2c7e7f68a2330c257fb0b8cf29cf55d2792622c946acc5950854d1dd543dedff",
+      "disposition": "ui_copy",
+      "reason": "Fixed local validation, authorization, conflict, or readback message thrown by the Puxadores handler and shown by its catch at app/admin/admin.js:1943. At lines 1915 and nearby, any payload/plan/validation message is a separate dynamic diagnostic; this literal is the local fallback."
+    },
+    {
+      "id": "27034ef7826b1031",
+      "source": "app/admin/admin.js",
+      "line": 1920,
+      "column": 23,
+      "owner": "admin",
+      "routeConsumers": [
+        "/admin"
+      ],
+      "sourceRole": "error-message-source",
+      "originalClassification": "unreviewed",
+      "originalClassificationHints": [
+        "source-needs-consumer-and-domain-review"
+      ],
+      "useStatus": "active",
+      "consumerLinkStatus": "same-try-catch",
+      "consumerRefs": [
+        {
+          "sinkId": "df3bb12e50c2df35",
+          "source": "app/admin/admin.js",
+          "line": 1943,
+          "sink": "helper:setMessage",
+          "expression": "error.message || \"Falha ao persistir Puxadores.\"",
+          "routeConsumers": [
+            "/admin"
+          ],
+          "flow": "same-try-catch"
+        }
+      ],
+      "consumerEvidence": [
+        "Error literal in try reaches caught .message sink at app/admin/admin.js:1943"
+      ],
+      "value": "A resposta da gravação não corresponde ao candidato v3 esperado.",
+      "expression": "\"A resposta da gravação não corresponde ao candidato v3 esperado.\"",
+      "sourceSha256": "2c7e7f68a2330c257fb0b8cf29cf55d2792622c946acc5950854d1dd543dedff",
+      "disposition": "ui_copy",
+      "reason": "Fixed local validation, authorization, conflict, or readback message thrown by the Puxadores handler and shown by its catch at app/admin/admin.js:1943. At lines 1915 and nearby, any payload/plan/validation message is a separate dynamic diagnostic; this literal is the local fallback."
+    },
+    {
+      "id": "7796d3d535a4c5de",
+      "source": "app/admin/admin.js",
+      "line": 1924,
+      "column": 47,
+      "owner": "admin",
+      "routeConsumers": [
+        "/admin"
+      ],
+      "sourceRole": "error-message-source",
+      "originalClassification": "unreviewed",
+      "originalClassificationHints": [
+        "source-needs-consumer-and-domain-review"
+      ],
+      "useStatus": "active",
+      "consumerLinkStatus": "same-try-catch",
+      "consumerRefs": [
+        {
+          "sinkId": "df3bb12e50c2df35",
+          "source": "app/admin/admin.js",
+          "line": 1943,
+          "sink": "helper:setMessage",
+          "expression": "error.message || \"Falha ao persistir Puxadores.\"",
+          "routeConsumers": [
+            "/admin"
+          ],
+          "flow": "same-try-catch"
+        }
+      ],
+      "consumerEvidence": [
+        "Error literal in try reaches caught .message sink at app/admin/admin.js:1943"
+      ],
+      "value": "Puxadores foi gravado, mas a releitura de confirmação falhou.",
+      "expression": "\"Puxadores foi gravado, mas a releitura de confirmação falhou.\"",
+      "sourceSha256": "2c7e7f68a2330c257fb0b8cf29cf55d2792622c946acc5950854d1dd543dedff",
+      "disposition": "ui_copy",
+      "reason": "Fixed local validation, authorization, conflict, or readback message thrown by the Puxadores handler and shown by its catch at app/admin/admin.js:1943. At lines 1915 and nearby, any payload/plan/validation message is a separate dynamic diagnostic; this literal is the local fallback."
+    },
+    {
+      "id": "ab3a38e67aa11e9f",
+      "source": "app/admin/admin.js",
+      "line": 1927,
+      "column": 23,
+      "owner": "admin",
+      "routeConsumers": [
+        "/admin"
+      ],
+      "sourceRole": "error-message-source",
+      "originalClassification": "unreviewed",
+      "originalClassificationHints": [
+        "source-needs-consumer-and-domain-review"
+      ],
+      "useStatus": "active",
+      "consumerLinkStatus": "same-try-catch",
+      "consumerRefs": [
+        {
+          "sinkId": "df3bb12e50c2df35",
+          "source": "app/admin/admin.js",
+          "line": 1943,
+          "sink": "helper:setMessage",
+          "expression": "error.message || \"Falha ao persistir Puxadores.\"",
+          "routeConsumers": [
+            "/admin"
+          ],
+          "flow": "same-try-catch"
+        }
+      ],
+      "consumerEvidence": [
+        "Error literal in try reaches caught .message sink at app/admin/admin.js:1943"
+      ],
+      "value": "A releitura não corresponde exatamente ao v3 esperado após persistir Puxadores.",
+      "expression": "\"A releitura não corresponde exatamente ao v3 esperado após persistir Puxadores.\"",
+      "sourceSha256": "2c7e7f68a2330c257fb0b8cf29cf55d2792622c946acc5950854d1dd543dedff",
+      "disposition": "ui_copy",
+      "reason": "Fixed local validation, authorization, conflict, or readback message thrown by the Puxadores handler and shown by its catch at app/admin/admin.js:1943. At lines 1915 and nearby, any payload/plan/validation message is a separate dynamic diagnostic; this literal is the local fallback."
+    },
+    {
+      "id": "183ae259f4079dee",
+      "source": "app/admin/admin.js",
+      "line": 1955,
+      "column": 43,
+      "owner": "admin",
+      "routeConsumers": [
+        "/admin"
+      ],
+      "sourceRole": "error-message-source",
+      "originalClassification": "unreviewed",
+      "originalClassificationHints": [
+        "source-needs-consumer-and-domain-review"
+      ],
+      "useStatus": "active",
+      "consumerLinkStatus": "same-try-catch",
+      "consumerRefs": [
+        {
+          "sinkId": "79ec0f58646f3823",
+          "source": "app/admin/admin.js",
+          "line": 2057,
+          "sink": "helper:setMessage",
+          "expression": "error.message || \"Falha ao publicar a configuração.\"",
+          "routeConsumers": [
+            "/admin"
+          ],
+          "flow": "same-try-catch"
+        }
+      ],
+      "consumerEvidence": [
+        "Error literal in try reaches caught .message sink at app/admin/admin.js:2057"
+      ],
+      "value": "A configuração publicada ainda não foi carregada.",
+      "expression": "\"A configuração publicada ainda não foi carregada.\"",
+      "sourceSha256": "2c7e7f68a2330c257fb0b8cf29cf55d2792622c946acc5950854d1dd543dedff",
+      "disposition": "ui_copy",
+      "reason": "Fixed local validation or publication fallback from the Admin save handler, shown by its catch at app/admin/admin.js:2057. API payload text, projection errors, and validation errors may be dynamic diagnostics and are separate from this literal."
+    },
+    {
+      "id": "ba79419ba08f887a",
+      "source": "app/admin/admin.js",
+      "line": 1959,
+      "column": 25,
+      "owner": "admin",
+      "routeConsumers": [
+        "/admin"
+      ],
+      "sourceRole": "error-message-source",
+      "originalClassification": "unreviewed",
+      "originalClassificationHints": [
+        "source-needs-consumer-and-domain-review"
+      ],
+      "useStatus": "active",
+      "consumerLinkStatus": "same-try-catch",
+      "consumerRefs": [
+        {
+          "sinkId": "79ec0f58646f3823",
+          "source": "app/admin/admin.js",
+          "line": 2057,
+          "sink": "helper:setMessage",
+          "expression": "error.message || \"Falha ao publicar a configuração.\"",
+          "routeConsumers": [
+            "/admin"
+          ],
+          "flow": "same-try-catch"
+        }
+      ],
+      "consumerEvidence": [
+        "Error literal in try reaches caught .message sink at app/admin/admin.js:2057"
+      ],
+      "value": "O rascunho não corresponde à revisão publicada. Recarregue antes de salvar.",
+      "expression": "\"O rascunho não corresponde à revisão publicada. Recarregue antes de salvar.\"",
+      "sourceSha256": "2c7e7f68a2330c257fb0b8cf29cf55d2792622c946acc5950854d1dd543dedff",
+      "disposition": "ui_copy",
+      "reason": "Fixed local validation or publication fallback from the Admin save handler, shown by its catch at app/admin/admin.js:2057. API payload text, projection errors, and validation errors may be dynamic diagnostics and are separate from this literal."
+    },
+    {
+      "id": "d91eef452aecc3f4",
+      "source": "app/admin/admin.js",
+      "line": 1974,
+      "column": 25,
+      "owner": "admin",
+      "routeConsumers": [
+        "/admin"
+      ],
+      "sourceRole": "error-message-source",
+      "originalClassification": "unreviewed",
+      "originalClassificationHints": [
+        "source-needs-consumer-and-domain-review"
+      ],
+      "useStatus": "active",
+      "consumerLinkStatus": "same-try-catch",
+      "consumerRefs": [
+        {
+          "sinkId": "79ec0f58646f3823",
+          "source": "app/admin/admin.js",
+          "line": 2057,
+          "sink": "helper:setMessage",
+          "expression": "error.message || \"Falha ao publicar a configuração.\"",
+          "routeConsumers": [
+            "/admin"
+          ],
+          "flow": "same-try-catch"
+        }
+      ],
+      "consumerEvidence": [
+        "Error literal in try reaches caught .message sink at app/admin/admin.js:2057"
+      ],
+      "value": "Sua sessão não tem permissão para publicar esta configuração.",
+      "expression": "\"Sua sessão não tem permissão para publicar esta configuração.\"",
+      "sourceSha256": "2c7e7f68a2330c257fb0b8cf29cf55d2792622c946acc5950854d1dd543dedff",
+      "disposition": "ui_copy",
+      "reason": "Fixed local validation or publication fallback from the Admin save handler, shown by its catch at app/admin/admin.js:2057. API payload text, projection errors, and validation errors may be dynamic diagnostics and are separate from this literal."
+    },
+    {
+      "id": "80fa5eeefd6a0de4",
+      "source": "app/admin/admin.js",
+      "line": 1977,
+      "column": 25,
+      "owner": "admin",
+      "routeConsumers": [
+        "/admin"
+      ],
+      "sourceRole": "error-message-source",
+      "originalClassification": "unreviewed",
+      "originalClassificationHints": [
+        "source-needs-consumer-and-domain-review"
+      ],
+      "useStatus": "active",
+      "consumerLinkStatus": "same-try-catch",
+      "consumerRefs": [
+        {
+          "sinkId": "79ec0f58646f3823",
+          "source": "app/admin/admin.js",
+          "line": 2057,
+          "sink": "helper:setMessage",
+          "expression": "error.message || \"Falha ao publicar a configuração.\"",
+          "routeConsumers": [
+            "/admin"
+          ],
+          "flow": "same-try-catch"
+        }
+      ],
+      "consumerEvidence": [
+        "Error literal in try reaches caught .message sink at app/admin/admin.js:2057"
+      ],
+      "value": "A configuração mudou em outra sessão. Recarregue o painel antes de salvar.",
+      "expression": "\"A configuração mudou em outra sessão. Recarregue o painel antes de salvar.\"",
+      "sourceSha256": "2c7e7f68a2330c257fb0b8cf29cf55d2792622c946acc5950854d1dd543dedff",
+      "disposition": "ui_copy",
+      "reason": "Fixed local validation or publication fallback from the Admin save handler, shown by its catch at app/admin/admin.js:2057. API payload text, projection errors, and validation errors may be dynamic diagnostics and are separate from this literal."
+    },
+    {
+      "id": "3da67f5b6d3b08fb",
+      "source": "app/admin/admin.js",
+      "line": 1979,
+      "column": 79,
+      "owner": "admin",
+      "routeConsumers": [
+        "/admin"
+      ],
+      "sourceRole": "error-message-source",
+      "originalClassification": "unreviewed",
+      "originalClassificationHints": [
+        "source-needs-consumer-and-domain-review"
+      ],
+      "useStatus": "active",
+      "consumerLinkStatus": "same-try-catch",
+      "consumerRefs": [
+        {
+          "sinkId": "79ec0f58646f3823",
+          "source": "app/admin/admin.js",
+          "line": 2057,
+          "sink": "helper:setMessage",
+          "expression": "error.message || \"Falha ao publicar a configuração.\"",
+          "routeConsumers": [
+            "/admin"
+          ],
+          "flow": "same-try-catch"
+        }
+      ],
+      "consumerEvidence": [
+        "Error literal in try reaches caught .message sink at app/admin/admin.js:2057"
+      ],
+      "value": "A API recusou a publicação v5.",
+      "expression": "\"A API recusou a publicação v5.\"",
+      "sourceSha256": "2c7e7f68a2330c257fb0b8cf29cf55d2792622c946acc5950854d1dd543dedff",
+      "disposition": "ui_copy",
+      "reason": "Fixed local validation or publication fallback from the Admin save handler, shown by its catch at app/admin/admin.js:2057. API payload text, projection errors, and validation errors may be dynamic diagnostics and are separate from this literal."
+    },
+    {
+      "id": "bf5a7fcf0d583982",
+      "source": "app/admin/admin.js",
+      "line": 1981,
+      "column": 25,
+      "owner": "admin",
+      "routeConsumers": [
+        "/admin"
+      ],
+      "sourceRole": "error-message-source",
+      "originalClassification": "unreviewed",
+      "originalClassificationHints": [
+        "source-needs-consumer-and-domain-review"
+      ],
+      "useStatus": "active",
+      "consumerLinkStatus": "same-try-catch",
+      "consumerRefs": [
+        {
+          "sinkId": "79ec0f58646f3823",
+          "source": "app/admin/admin.js",
+          "line": 2057,
+          "sink": "helper:setMessage",
+          "expression": "error.message || \"Falha ao publicar a configuração.\"",
+          "routeConsumers": [
+            "/admin"
+          ],
+          "flow": "same-try-catch"
+        }
+      ],
+      "consumerEvidence": [
+        "Error literal in try reaches caught .message sink at app/admin/admin.js:2057"
+      ],
+      "value": "A resposta de publicação v5 não corresponde ao documento esperado.",
+      "expression": "\"A resposta de publicação v5 não corresponde ao documento esperado.\"",
+      "sourceSha256": "2c7e7f68a2330c257fb0b8cf29cf55d2792622c946acc5950854d1dd543dedff",
+      "disposition": "ui_copy",
+      "reason": "Fixed local validation or publication fallback from the Admin save handler, shown by its catch at app/admin/admin.js:2057. API payload text, projection errors, and validation errors may be dynamic diagnostics and are separate from this literal."
+    },
+    {
+      "id": "3e5ba077cbec66db",
+      "source": "app/admin/admin.js",
+      "line": 1988,
+      "column": 25,
+      "owner": "admin",
+      "routeConsumers": [
+        "/admin"
+      ],
+      "sourceRole": "error-message-source",
+      "originalClassification": "unreviewed",
+      "originalClassificationHints": [
+        "source-needs-consumer-and-domain-review"
+      ],
+      "useStatus": "active",
+      "consumerLinkStatus": "same-try-catch",
+      "consumerRefs": [
+        {
+          "sinkId": "79ec0f58646f3823",
+          "source": "app/admin/admin.js",
+          "line": 2057,
+          "sink": "helper:setMessage",
+          "expression": "error.message || \"Falha ao publicar a configuração.\"",
+          "routeConsumers": [
+            "/admin"
+          ],
+          "flow": "same-try-catch"
+        }
+      ],
+      "consumerEvidence": [
+        "Error literal in try reaches caught .message sink at app/admin/admin.js:2057"
+      ],
+      "value": "A publicação v5 foi aceita, mas a releitura de confirmação falhou.",
+      "expression": "\"A publicação v5 foi aceita, mas a releitura de confirmação falhou.\"",
+      "sourceSha256": "2c7e7f68a2330c257fb0b8cf29cf55d2792622c946acc5950854d1dd543dedff",
+      "disposition": "ui_copy",
+      "reason": "Fixed local validation or publication fallback from the Admin save handler, shown by its catch at app/admin/admin.js:2057. API payload text, projection errors, and validation errors may be dynamic diagnostics and are separate from this literal."
+    },
+    {
+      "id": "b044eb6398ef569b",
+      "source": "app/admin/admin.js",
+      "line": 1992,
+      "column": 25,
+      "owner": "admin",
+      "routeConsumers": [
+        "/admin"
+      ],
+      "sourceRole": "error-message-source",
+      "originalClassification": "unreviewed",
+      "originalClassificationHints": [
+        "source-needs-consumer-and-domain-review"
+      ],
+      "useStatus": "active",
+      "consumerLinkStatus": "same-try-catch",
+      "consumerRefs": [
+        {
+          "sinkId": "79ec0f58646f3823",
+          "source": "app/admin/admin.js",
+          "line": 2057,
+          "sink": "helper:setMessage",
+          "expression": "error.message || \"Falha ao publicar a configuração.\"",
+          "routeConsumers": [
+            "/admin"
+          ],
+          "flow": "same-try-catch"
+        }
+      ],
+      "consumerEvidence": [
+        "Error literal in try reaches caught .message sink at app/admin/admin.js:2057"
+      ],
+      "value": "A releitura v5 não corresponde à revisão publicada; nenhuma confirmação foi assumida.",
+      "expression": "\"A releitura v5 não corresponde à revisão publicada; nenhuma confirmação foi assumida.\"",
+      "sourceSha256": "2c7e7f68a2330c257fb0b8cf29cf55d2792622c946acc5950854d1dd543dedff",
+      "disposition": "ui_copy",
+      "reason": "Fixed local validation or publication fallback from the Admin save handler, shown by its catch at app/admin/admin.js:2057. API payload text, projection errors, and validation errors may be dynamic diagnostics and are separate from this literal."
+    },
+    {
+      "id": "f0a9027a8dbca426",
+      "source": "app/admin/admin.js",
+      "line": 2004,
+      "column": 23,
+      "owner": "admin",
+      "routeConsumers": [
+        "/admin"
+      ],
+      "sourceRole": "error-message-source",
+      "originalClassification": "unreviewed",
+      "originalClassificationHints": [
+        "source-needs-consumer-and-domain-review"
+      ],
+      "useStatus": "active",
+      "consumerLinkStatus": "same-try-catch",
+      "consumerRefs": [
+        {
+          "sinkId": "79ec0f58646f3823",
+          "source": "app/admin/admin.js",
+          "line": 2057,
+          "sink": "helper:setMessage",
+          "expression": "error.message || \"Falha ao publicar a configuração.\"",
+          "routeConsumers": [
+            "/admin"
+          ],
+          "flow": "same-try-catch"
+        }
+      ],
+      "consumerEvidence": [
+        "Error literal in try reaches caught .message sink at app/admin/admin.js:2057"
+      ],
+      "value": "O schema publicado não é compatível com este editor.",
+      "expression": "\"O schema publicado não é compatível com este editor.\"",
+      "sourceSha256": "2c7e7f68a2330c257fb0b8cf29cf55d2792622c946acc5950854d1dd543dedff",
+      "disposition": "ui_copy",
+      "reason": "Fixed local validation or publication fallback from the Admin save handler, shown by its catch at app/admin/admin.js:2057. API payload text, projection errors, and validation errors may be dynamic diagnostics and are separate from this literal."
+    },
+    {
+      "id": "bd7b6fa38f3d5d96",
+      "source": "app/admin/admin.js",
+      "line": 2033,
+      "column": 49,
+      "owner": "admin",
+      "routeConsumers": [
+        "/admin"
+      ],
+      "sourceRole": "error-message-source",
+      "originalClassification": "unreviewed",
+      "originalClassificationHints": [
+        "source-needs-consumer-and-domain-review"
+      ],
+      "useStatus": "active",
+      "consumerLinkStatus": "same-try-catch",
+      "consumerRefs": [
+        {
+          "sinkId": "79ec0f58646f3823",
+          "source": "app/admin/admin.js",
+          "line": 2057,
+          "sink": "helper:setMessage",
+          "expression": "error.message || \"Falha ao publicar a configuração.\"",
+          "routeConsumers": [
+            "/admin"
+          ],
+          "flow": "same-try-catch"
+        }
+      ],
+      "consumerEvidence": [
+        "Error literal in try reaches caught .message sink at app/admin/admin.js:2057"
+      ],
+      "value": "A hierarquia não pode ser publicada com segurança.",
+      "expression": "\"A hierarquia não pode ser publicada com segurança.\"",
+      "sourceSha256": "2c7e7f68a2330c257fb0b8cf29cf55d2792622c946acc5950854d1dd543dedff",
+      "disposition": "ui_copy",
+      "reason": "Fixed local validation or publication fallback from the Admin save handler, shown by its catch at app/admin/admin.js:2057. API payload text, projection errors, and validation errors may be dynamic diagnostics and are separate from this literal."
+    },
+    {
+      "id": "399f22fb07291ee7",
+      "source": "app/admin/admin.js",
+      "line": 2043,
+      "column": 77,
+      "owner": "admin",
+      "routeConsumers": [
+        "/admin"
+      ],
+      "sourceRole": "error-message-source",
+      "originalClassification": "unreviewed",
+      "originalClassificationHints": [
+        "source-needs-consumer-and-domain-review"
+      ],
+      "useStatus": "active",
+      "consumerLinkStatus": "same-try-catch",
+      "consumerRefs": [
+        {
+          "sinkId": "79ec0f58646f3823",
+          "source": "app/admin/admin.js",
+          "line": 2057,
+          "sink": "helper:setMessage",
+          "expression": "error.message || \"Falha ao publicar a configuração.\"",
+          "routeConsumers": [
+            "/admin"
+          ],
+          "flow": "same-try-catch"
+        }
+      ],
+      "consumerEvidence": [
+        "Error literal in try reaches caught .message sink at app/admin/admin.js:2057"
+      ],
+      "value": "Sua sessão não tem permissão para publicar esta configuração.",
+      "expression": "\"Sua sessão não tem permissão para publicar esta configuração.\"",
+      "sourceSha256": "2c7e7f68a2330c257fb0b8cf29cf55d2792622c946acc5950854d1dd543dedff",
+      "disposition": "ui_copy",
+      "reason": "Fixed local validation or publication fallback from the Admin save handler, shown by its catch at app/admin/admin.js:2057. API payload text, projection errors, and validation errors may be dynamic diagnostics and are separate from this literal."
+    },
+    {
+      "id": "46d5b7b2af5e7223",
+      "source": "app/admin/admin.js",
+      "line": 2044,
+      "column": 50,
+      "owner": "admin",
+      "routeConsumers": [
+        "/admin"
+      ],
+      "sourceRole": "error-message-source",
+      "originalClassification": "unreviewed",
+      "originalClassificationHints": [
+        "source-needs-consumer-and-domain-review"
+      ],
+      "useStatus": "active",
+      "consumerLinkStatus": "same-try-catch",
+      "consumerRefs": [
+        {
+          "sinkId": "79ec0f58646f3823",
+          "source": "app/admin/admin.js",
+          "line": 2057,
+          "sink": "helper:setMessage",
+          "expression": "error.message || \"Falha ao publicar a configuração.\"",
+          "routeConsumers": [
+            "/admin"
+          ],
+          "flow": "same-try-catch"
+        }
+      ],
+      "consumerEvidence": [
+        "Error literal in try reaches caught .message sink at app/admin/admin.js:2057"
+      ],
+      "value": "A configuração mudou em outra sessão. Recarregue o painel antes de salvar.",
+      "expression": "\"A configuração mudou em outra sessão. Recarregue o painel antes de salvar.\"",
+      "sourceSha256": "2c7e7f68a2330c257fb0b8cf29cf55d2792622c946acc5950854d1dd543dedff",
+      "disposition": "ui_copy",
+      "reason": "Fixed local validation or publication fallback from the Admin save handler, shown by its catch at app/admin/admin.js:2057. API payload text, projection errors, and validation errors may be dynamic diagnostics and are separate from this literal."
+    },
+    {
+      "id": "6121a3f471cd7ff0",
+      "source": "app/admin/admin.js",
+      "line": 2047,
+      "column": 80,
+      "owner": "admin",
+      "routeConsumers": [
+        "/admin"
+      ],
+      "sourceRole": "error-message-source",
+      "originalClassification": "unreviewed",
+      "originalClassificationHints": [
+        "source-needs-consumer-and-domain-review"
+      ],
+      "useStatus": "active",
+      "consumerLinkStatus": "same-try-catch",
+      "consumerRefs": [
+        {
+          "sinkId": "79ec0f58646f3823",
+          "source": "app/admin/admin.js",
+          "line": 2057,
+          "sink": "helper:setMessage",
+          "expression": "error.message || \"Falha ao publicar a configuração.\"",
+          "routeConsumers": [
+            "/admin"
+          ],
+          "flow": "same-try-catch"
+        }
+      ],
+      "consumerEvidence": [
+        "Error literal in try reaches caught .message sink at app/admin/admin.js:2057"
+      ],
+      "value": "A API bloqueou uma publicação hierárquica antes do checkpoint autorizado.",
+      "expression": "\"A API bloqueou uma publicação hierárquica antes do checkpoint autorizado.\"",
+      "sourceSha256": "2c7e7f68a2330c257fb0b8cf29cf55d2792622c946acc5950854d1dd543dedff",
+      "disposition": "ui_copy",
+      "reason": "Fixed local validation or publication fallback from the Admin save handler, shown by its catch at app/admin/admin.js:2057. API payload text, projection errors, and validation errors may be dynamic diagnostics and are separate from this literal."
+    },
+    {
+      "id": "7e50760c2372d21f",
+      "source": "app/admin/admin.js",
+      "line": 2048,
+      "column": 43,
+      "owner": "admin",
+      "routeConsumers": [
+        "/admin"
+      ],
+      "sourceRole": "error-message-source",
+      "originalClassification": "unreviewed",
+      "originalClassificationHints": [
+        "source-needs-consumer-and-domain-review"
+      ],
+      "useStatus": "active",
+      "consumerLinkStatus": "same-try-catch",
+      "consumerRefs": [
+        {
+          "sinkId": "79ec0f58646f3823",
+          "source": "app/admin/admin.js",
+          "line": 2057,
+          "sink": "helper:setMessage",
+          "expression": "error.message || \"Falha ao publicar a configuração.\"",
+          "routeConsumers": [
+            "/admin"
+          ],
+          "flow": "same-try-catch"
+        }
+      ],
+      "consumerEvidence": [
+        "Error literal in try reaches caught .message sink at app/admin/admin.js:2057"
+      ],
+      "value": "A configuração não foi aceita. Confira nomes e itens selecionados.",
+      "expression": "\"A configuração não foi aceita. Confira nomes e itens selecionados.\"",
+      "sourceSha256": "2c7e7f68a2330c257fb0b8cf29cf55d2792622c946acc5950854d1dd543dedff",
+      "disposition": "ui_copy",
+      "reason": "Fixed local validation or publication fallback from the Admin save handler, shown by its catch at app/admin/admin.js:2057. API payload text, projection errors, and validation errors may be dynamic diagnostics and are separate from this literal."
+    }
+  ]
+}

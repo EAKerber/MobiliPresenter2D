@@ -1,0 +1,888 @@
+{
+  "schemaVersion": "ARC13SourceSinkConsistencyJudge/1.0",
+  "status": "complete",
+  "reviewDate": "2026-11-13",
+  "inventory": {
+    "path": "architecture/arc13/ui-text-candidates.json",
+    "sha256": "904c49a3b32722ece528a468e030b10800def07a61cbcf5811f01bfd00cfe391",
+    "sourceEntries": 359,
+    "sinkEntries": 1012
+  },
+  "coverage": {
+    "sourceReceipts": [
+      {
+        "path": "docs/architecture/arc13/source-reviews/2026-11-13/admin.json",
+        "count": 82,
+        "format": "entries[]"
+      },
+      {
+        "path": "docs/architecture/arc13/source-reviews/2026-11-13/public.json",
+        "count": 70,
+        "format": "records[]"
+      },
+      {
+        "path": "docs/architecture/arc13/source-reviews/2026-11-13/config-shared.json",
+        "count": 207,
+        "format": "entries[]; config + shared-runtime"
+      }
+    ],
+    "sourceIds": {
+      "receiptCount": 359,
+      "unique": 359,
+      "inventorySourceEntryCount": 359,
+      "missing": 0,
+      "extra": 0,
+      "duplicates": 0,
+      "exactCoverage": true
+    },
+    "sinkReceipts": {
+      "paths": [
+        "docs/architecture/arc13/reviews/2026-11-13/admin-access.json",
+        "docs/architecture/arc13/reviews/2026-11-13/config.json",
+        "docs/architecture/arc13/reviews/2026-11-13/public.json",
+        "docs/architecture/arc13/reviews/2026-11-13/shared-runtime.json"
+      ],
+      "normalizedIds": 1012,
+      "unique": 1012,
+      "exactInventoryCoverage": true,
+      "sha256": "904c49a3b32722ece528a468e030b10800def07a61cbcf5811f01bfd00cfe391"
+    }
+  },
+  "classificationRollup": {
+    "sourceEntriesByDisposition": {
+      "ui_copy": 110,
+      "editorial_copy": 27,
+      "commercial_content": 4,
+      "domain_content": 143,
+      "diagnostic": 65,
+      "system_message": 1,
+      "passed_but_unused": 7,
+      "unconsumed": 2
+    },
+    "sinkEntriesByDecision": {
+      "catalog_candidate": 749,
+      "commercial_data": 26,
+      "domain_data": 40,
+      "non_localizable": 35,
+      "structural_or_identifier": 85,
+      "symbol_or_decoration": 64,
+      "unknown": 13
+    },
+    "note": "As categorias de fonte e sink têm granularidades distintas; diferenças entre elas não significam conflito semântico por si só."
+  },
+  "comparison": {
+    "consumerReferenceLinks": 96,
+    "sourceRecordsWithLinks": 94,
+    "linkedSinkCallsites": 18,
+    "exactLiteralValuesSharedAcrossLists": 27,
+    "sinkOccurrencesInThoseValueGroups": 65,
+    "sinkRepeatedExactTextGroupsWithConflictingClassification": 0,
+    "sourceRepeatedValueGroups": 37,
+    "sourceOccurrencesInThoseGroups": 87,
+    "sourceGroupsCrossingDispositions": 5,
+    "proposedKeyAudit": {
+      "sourceDraftKeyOccurrences": 21,
+      "sourceDistinctDraftKeyNames": 18,
+      "sinkProposedKeyOccurrences": 749,
+      "sinkDistinctProposalNames": 699,
+      "exactNameIntersection": 0,
+      "sourceRepeatedDraftKeys": [
+        {
+          "key": "admin.bootstrap.error.invalid_data",
+          "ids": [
+            "0be343e987c15750",
+            "4c87ed6ddcd991bf"
+          ],
+          "recommendation": "merge-key",
+          "reason": "Mesmo texto fixo e mesma função de erro de carregamento em dois ramos do retry."
+        },
+        {
+          "key": "theme.mode.light",
+          "ids": [
+            "dd558c3cf00f10ba",
+            "4033e05a7af347d6"
+          ],
+          "recommendation": "merge-key",
+          "reason": "Mesmo rótulo Claro nos controles de tema, versões longa/compacta."
+        },
+        {
+          "key": "theme.mode.dark",
+          "ids": [
+            "18920f9ac043ce3e",
+            "3bdc581badeba4cd"
+          ],
+          "recommendation": "merge-key",
+          "reason": "Mesmo rótulo Escuro nos controles de tema, versões longa/compacta."
+        }
+      ],
+      "caution": "Chaves são propostas. A ausência de nomes idênticos entre os dois esquemas de proposta não demonstra ausência de equivalência semântica."
+    },
+    "sourceSameDispositionGroups": 32,
+    "sourceRepeatedDomainContentGroups": 17,
+    "sinkRepeatedProposalAudit": {
+      "groupsWithReusedProposal": 24,
+      "occurrencesInThoseGroups": 74,
+      "groupsWithDifferentTextOrExpression": 3,
+      "note": "Os 21 grupos restantes repetem a proposta sem divergência de texto/expressão; todas são sugestões, não chaves canônicas."
+    }
+  },
+  "familyJudgements": [
+    {
+      "family": "Rótulos de navegação pública",
+      "pairs": [
+        {
+          "value": "Ambientes",
+          "sourceIds": [
+            "2e2067634c69ddde"
+          ],
+          "sinkIds": [
+            "f839a069588bf593",
+            "afb7f66e8f5ea002",
+            "0e7040a5a2643a7e",
+            "7e5152c7a5781cbc"
+          ]
+        },
+        {
+          "value": "Como funciona",
+          "sourceIds": [
+            "c1c06df9d62ccfae"
+          ],
+          "sinkIds": [
+            "5008d9e5ea609cfd",
+            "3666e075a660db7d",
+            "8fa01a025655ebb7",
+            "274f0b5ee19395b5",
+            "78e85e26a78eb41d"
+          ]
+        },
+        {
+          "value": "Fale conosco",
+          "sourceIds": [
+            "dff1d92286dfc9a4"
+          ],
+          "sinkIds": [
+            "6fb3040be8997e7e",
+            "2a7834ae86806a9d",
+            "d7a3a9da75a0f0d6",
+            "cecb14d39777a757"
+          ]
+        },
+        {
+          "value": "Quem somos",
+          "sourceIds": [
+            "677fcb740da6deda"
+          ],
+          "sinkIds": [
+            "344ba63624621e62",
+            "fee2f45a3719c339",
+            "d2974599fd2c09c5",
+            "8d2e4e64f56cf7e3",
+            "990eecc87b89c65b"
+          ]
+        }
+      ],
+      "routes": [
+        "/",
+        "/about/",
+        "/how-it-works/",
+        "/viewer/"
+      ],
+      "recommendation": "merge-key",
+      "reason": "Cada rótulo tem mesmo texto e papel de destino na navegação; reunir por significado entre páginas. Manter cada rótulo distinto dos títulos de página e de nomes de ambientes.",
+      "owner": "Design/produto aprova a convenção de navegação; sem bloqueio de classificação."
+    },
+    {
+      "family": "Homônimos e dados V5/comerciais",
+      "items": [
+        {
+          "value": "Definir depois",
+          "sourceIds": [
+            "8f5b6c61da20d201",
+            "9aa763817c32aada"
+          ],
+          "routes": [
+            "/admin",
+            "/config/"
+          ],
+          "recommendation": "separate-key",
+          "reason": "Texto de opção de regra no Admin versus rótulo de item comercial do catálogo."
+        },
+        {
+          "value": "Módulos",
+          "sourceIds": [
+            "0a61c2bcd0dc37ac",
+            "551305ebe19c1f39",
+            "cc2c111384abacd0"
+          ],
+          "sinkIds": [
+            "3f4ab38b54242708"
+          ],
+          "routes": [
+            "/config/",
+            "/admin"
+          ],
+          "recommendation": "separate-key",
+          "reason": "Rótulo compacto de interface versus etapa/grupo editável de configuração V5."
+        },
+        {
+          "value": "Puxadores",
+          "sourceIds": [
+            "c5df0af2177074b5",
+            "19647ec42320b5a7"
+          ],
+          "routes": [
+            "/admin",
+            "/config/"
+          ],
+          "recommendation": "separate-key",
+          "reason": "Rótulo fixo da tabela de preços versus seção editável V5."
+        },
+        {
+          "value": "Resumo",
+          "sourceIds": [
+            "641e8fa60f8cbe3e",
+            "881b5a5ab12860f6",
+            "53062b072fdaff91",
+            "4c722670cadc718a"
+          ],
+          "routes": [
+            "/config/",
+            "/admin"
+          ],
+          "recommendation": "separate-key",
+          "reason": "Rótulo compacto de interface versus rótulos de etapa/grupo/seção editáveis."
+        },
+        {
+          "value": "Acabamentos",
+          "sourceIds": [
+            "638942158f62ca93"
+          ],
+          "sinkIds": [
+            "8604ba6c9e917077",
+            "350fef9c13ce11af"
+          ],
+          "routes": [
+            "/admin",
+            "/config/"
+          ],
+          "recommendation": "separate-key",
+          "reason": "Rótulo default editável de etapa; as ocorrências de markup/opção fixa são copy de interface própria. Preservar o dado de catálogo/configuração e classificar a cópia fixa em seu próprio contexto."
+        },
+        {
+          "value": "Serviços",
+          "sourceIds": [
+            "6d1bd5bc5660e999",
+            "05a61575ec139e04"
+          ],
+          "sinkIds": [
+            "cc1d7d1b494fe5c9",
+            "35e4d8bb37ec8cdd"
+          ],
+          "routes": [
+            "/admin",
+            "/config/"
+          ],
+          "recommendation": "separate-key",
+          "reason": "Grupo/etapa V5 editável e texto de escolha fixo em controles não têm o mesmo dono de conteúdo. Preservar o dado de catálogo/configuração e classificar a cópia fixa em seu próprio contexto."
+        },
+        {
+          "value": "Rodapé de pedra",
+          "sourceIds": [
+            "3a01674a59199087",
+            "d180ecc9f3460367",
+            "85707972cab787a8"
+          ],
+          "sinkIds": [
+            "c0faee7a33c1c4ce"
+          ],
+          "routes": [
+            "/admin",
+            "/config/"
+          ],
+          "recommendation": "separate-key",
+          "reason": "Serviço de catálogo e seção default autorável; preservar dado comercial/configurável. Preservar o dado de catálogo/configuração e classificar a cópia fixa em seu próprio contexto."
+        },
+        {
+          "value": "Largura",
+          "sourceIds": [
+            "771e30220582d4fc",
+            "abcc60010b6d9a49"
+          ],
+          "sinkIds": [
+            "665a49a05bd3bd41"
+          ],
+          "routes": [
+            "/admin"
+          ],
+          "recommendation": "merge-key",
+          "reason": "Dois rótulos fixos nomeiam o mesmo eixo/propriedade dimensional no Admin."
+        },
+        {
+          "value": "Cozinha",
+          "sourceIds": [
+            "fc9056a545b706e5",
+            "f509b0feaf5d12f6"
+          ],
+          "sinkIds": [
+            "88b36474d122aeca"
+          ],
+          "routes": [
+            "/",
+            "/how-it-works/"
+          ],
+          "recommendation": "separate-key",
+          "reason": "Nome de ambiente editorial e rótulo de destino do menu; mesmo termo, papéis diferentes. O sink literal relacionado é o nome de ambiente na página Como funciona."
+        },
+        {
+          "value": "Iluminação embutida",
+          "sourceIds": [
+            "efb0b3b1033a2400"
+          ],
+          "sinkIds": [
+            "08444e83e5cc3b00"
+          ],
+          "routes": [
+            "/config/"
+          ],
+          "recommendation": "separate-key",
+          "reason": "Título de acessório no catálogo versus texto fixo local da interface; a ocorrência visível não muda a propriedade do conteúdo comercial."
+        },
+        {
+          "value": "Lista de módulos",
+          "sourceIds": [
+            "376b059c7cfe0b0d"
+          ],
+          "sinkIds": [
+            "ebb48659c04c81d7"
+          ],
+          "routes": [
+            "/config/"
+          ],
+          "recommendation": "separate-key",
+          "reason": "Rótulo de seção V5 editável versus texto fixo de interface; conservar o dado autorável."
+        }
+      ],
+      "pendingOwner": "Nenhuma decisão para as fronteiras classificadas; dono de produto/comercial define separadamente a política de localização de dados V5/catálogo."
+    },
+    {
+      "family": "Conteúdo editorial de Como funciona",
+      "pairs": [
+        {
+          "sourceId": "00cc47cfcbb36c09",
+          "sinkId": "bf81744baba7bc45",
+          "value": "Aproveitamento de material"
+        },
+        {
+          "sourceId": "ad91c0acafd8b6f9",
+          "sinkId": "747c3e8c481fad5d",
+          "value": "Compra em escala"
+        },
+        {
+          "sourceId": "8fec1f4a9cacb304",
+          "sinkId": "458e5ad35dc30681",
+          "value": "Compras coletivas"
+        },
+        {
+          "sourceId": "01dab881d1b27ed6",
+          "sinkId": "702b4edf55e98ac5",
+          "value": "Engenharia já estudada"
+        },
+        {
+          "sourceId": "b4b72b3b551f0675",
+          "sinkId": "15ea032e1d225643",
+          "value": "Escritório"
+        },
+        {
+          "sourceId": "c12f8c993566e2ca",
+          "sinkId": "1f519ebb8eb1ccb1",
+          "value": "Lavanderia"
+        },
+        {
+          "sourceId": "2688c6719c0db702",
+          "sinkId": "b9fa2aca1b31a8e6",
+          "value": "Menos retrabalho"
+        },
+        {
+          "sourceId": "d190809d1dcb8129",
+          "sinkId": "3d6659036c3db3d7",
+          "value": "Produção planejada"
+        },
+        {
+          "sourceId": "41435140b8b99f7d",
+          "sinkId": "c8ed9946f6e866bf",
+          "value": "Quarto"
+        },
+        {
+          "sourceId": "079e82103f0c0335",
+          "sinkId": "d45cf85ad97e775c",
+          "value": "Sala"
+        }
+      ],
+      "routes": [
+        "/how-it-works/"
+      ],
+      "recommendation": "merge-key",
+      "reason": "Texto idêntico, mesma página/conceito de heading/label. Classificar como conteúdo editorial localizável, sem misturar com dados de catálogo.",
+      "owner": "Aprovação factual dos claims públicos é coberta pelos 13 source IDs em pendingPublicClaims (6 em /how-it-works/ e 7 em /); estes 10 pares são headings/rótulos editoriais idênticos, sem pendência individual de classificação."
+    },
+    {
+      "family": "Título de marca e slogan desconectados",
+      "sourceIds": [
+        "21700438e859d2f3",
+        "7a3a8507ce666b71"
+      ],
+      "sinkIds": [
+        "d1c529f21de7c4c3",
+        "bd56a261eb8bbcde",
+        "0ffe83b7e696778d",
+        "c8d3814fe9469b5f",
+        "f5d7e111d4cf30b9",
+        "a793a1218bc0b813",
+        "19f2c8a0c0f6d96d",
+        "c1591396a1d569e8",
+        "0ba38820a6b4a8d3",
+        "f6dc2377b6403b3a",
+        "a5a10dbb20691275",
+        "0670c233d7370689",
+        "017bcbdc766137f7",
+        "303da40a8e68f481",
+        "198ff8b8fe83f6ee",
+        "94be30677b9d01d6",
+        "c5b361f675497db6",
+        "0d927e397895bf41",
+        "1c7e95109c3d5fcc",
+        "90a1fafa8d96c322",
+        "c13dce2db3b4e581"
+      ],
+      "routes": [
+        "/",
+        "/about/",
+        "/how-it-works/",
+        "/viewer/"
+      ],
+      "recommendation": "separate-key",
+      "reason": "Source data fields are unconsumed now. Separate static wordmark/brand copies have active consumers and must be classified on their own; an unconsumed data field does not erase those sinks or become active copy.",
+      "pendingOwner": "Landing owner may decide whether to remove or reconnect the unused fields in a separate product cleanup; no automatic deletion.",
+      "priority": "P3; somente decisão de limpeza/retorno de uso, fora da migração ativa.",
+      "blocks": {
+        "keyDefinition": false,
+        "copyPublicationApproval": false,
+        "cleanupDecision": true
+      }
+    },
+    {
+      "family": "Viewer labels passed but not read",
+      "sourceIds": [
+        "2d6d7c6df940db67",
+        "e555f99c951e364b",
+        "f63e08bbb2e17b94",
+        "d435b5975f2b23e2",
+        "513a942b944239e2",
+        "fe139bb7033613a2",
+        "f7d62fe1a383b54a"
+      ],
+      "exactVisibleSinkOverlaps": [
+        {
+          "value": "Detalhe do módulo",
+          "sinkIds": [
+            "51a37c20f59003d4"
+          ]
+        },
+        {
+          "value": "Vista interna",
+          "sinkIds": [
+            "42b01c318c235fc2",
+            "5e582910e9a64a76"
+          ]
+        }
+      ],
+      "routes": [
+        "/viewer/",
+        "/config/"
+      ],
+      "recommendation": "separate-key",
+      "reason": "viewer/data.js passes spec.label, but technical-views.js does not read it; the exact visible strings elsewhere are independently authored figure captions, not evidence the config value is consumed.",
+      "pendingOwner": "Viewer owner decide se os 7 rótulos devem permanecer por contrato futuro ou ser aposentados em limpeza separada; sem remoção automática.",
+      "priority": "P3; decisão de contrato/limpeza posterior, sem bloqueio para localização ativa.",
+      "blocks": {
+        "keyDefinition": false,
+        "copyPublicationApproval": false,
+        "cleanupDecision": true
+      }
+    },
+    {
+      "family": "Erro interno e fallback visível de imagem",
+      "sourceIds": [
+        "54947311a7ad890a"
+      ],
+      "sinkIds": [
+        "6c6272c3f0e7473c",
+        "1f5cb204af237f66"
+      ],
+      "routes": [
+        "/",
+        "/how-it-works/",
+        "/viewer/"
+      ],
+      "recommendation": "separate-key",
+      "reason": "A string usada internamente para rejeitar imagem não é copy de interface; o fallback Imagem indisponível é visível e localizável. Mesmo valor lexical não significa mesmo fluxo nem mesma chave.",
+      "pendingOwner": "Nenhuma decisão de classificação; manter fronteira de erro/fallback."
+    }
+  ],
+  "sinkProposalCollisions": [
+    {
+      "group": "visible-module-count-fragments",
+      "ids": [
+        "5306d69e7b9f332f",
+        "facfa05b1a083869"
+      ],
+      "routes": [
+        "/config/"
+      ],
+      "recommendation": "needs-owner-decision",
+      "reason": "Fragmentos ' de ' + ' módulos visíveis' precisam formar mensagem completa com pluralização; não são duas mensagens independentes.",
+      "owner": "Produto/localização define redação, ordem e plural por locale.",
+      "priority": "P1 - fechar frase completa e pluralização antes de canonicalizar a chave",
+      "blocks": {
+        "keyDefinition": true,
+        "copyPublicationApproval": false,
+        "futureLocale": false
+      }
+    },
+    {
+      "group": "horizontal-dimension-template",
+      "ids": [
+        "aedae170f2ea45be",
+        "85f5411f0bc1121d"
+      ],
+      "routes": [
+        "/config/",
+        "/viewer/"
+      ],
+      "relatedSourceIds": [
+        "04d941add19084f6",
+        "0de07861b2b5f362",
+        "fda8f4cd396f5c25",
+        "bbebd2aafadce512",
+        "b4805db4058d38f9",
+        "fc297f5682fd2d97",
+        "655bccf3c2389b4e"
+      ],
+      "recommendation": "merge-key",
+      "reason": "Mesmo template de eixo horizontal + medida em mm; números continuam dados de catálogo.",
+      "owner": "Design/produto define notação de eixo/unidade junto à política de dimensão.",
+      "priority": "P1 para locales adicionais; escolher formatação antes de consolidar a mensagem de cota",
+      "blocks": {
+        "keyDefinition": true,
+        "copyPublicationApproval": false,
+        "futureLocale": true
+      }
+    },
+    {
+      "group": "home-link-accessible-name",
+      "ids": [
+        "2f0337ef2f5c5e9a",
+        "a4f19243c147b4fb",
+        "6c06f82283064a24",
+        "c19ee05f1f2c5ce8"
+      ],
+      "relatedEquivalentIds": [
+        "b48d3866e85996bd",
+        "81a6d89bbdea70bc",
+        "7b0753494b736d68"
+      ],
+      "routes": [
+        "/",
+        "/about/",
+        "/how-it-works/",
+        "/viewer/",
+        "/access/",
+        "/access/manage",
+        "/admin"
+      ],
+      "recommendation": "needs-owner-decision",
+      "reason": "Mesmo link para início, mas nomes acessíveis variam vírgula/travessão e propostas por página.",
+      "owner": "Design/acessibilidade aprova texto e pontuação e depois alinha cópias equivalentes.",
+      "priority": "P2 - alinhar nome acessível antes de consolidar cópias compartilhadas",
+      "blocks": {
+        "keyDefinition": true,
+        "copyPublicationApproval": true,
+        "futureLocale": false
+      }
+    }
+  ],
+  "pendingPublicClaims": {
+    "sourceIds": [
+      "d708dced14d5ca21",
+      "f42a451b2563f5ec",
+      "15f3f308777e6e98",
+      "349f54bd7b73fd93",
+      "0cb57479cdea0903",
+      "e56a0cd0325f20ca",
+      "4020743cdb33cd3d",
+      "865a7b0bf1abd926",
+      "c5cd466d02155fe1",
+      "456e1ce16186aa53",
+      "d2d94ac60b73f702",
+      "bdb882c8da1bf22c",
+      "0189716187be3447"
+    ],
+    "routes": [
+      "/how-it-works/",
+      "/"
+    ],
+    "recommendation": "needs-owner-decision",
+    "reason": "13 claims (11 editorial/benefit, 2 commercial) lack factual basis or approved content owner in source. Keep them as localizable authored copy; approval/provenance is separate from technical classification.",
+    "owner": "Marketing, product, and commercial owners confirm evidence and approval, not implementation.",
+    "priority": "P1 para aprovação de conteúdo antes da publicação; não bloqueia classificação nem proposta técnica de chaves.",
+    "blocks": {
+      "keyDefinition": false,
+      "copyPublicationApproval": true,
+      "futureLocale": false
+    }
+  },
+  "pendingAboutClaim": {
+    "ids": [
+      "a6488223e9857f0f",
+      "5b13de22e762e324",
+      "4fe12bdf3711a9aa",
+      "7d4a4c55d4216379",
+      "3979a48772686f05"
+    ],
+    "route": "/about/",
+    "source": "app/about/index.html:22",
+    "recommendation": "needs-owner-decision",
+    "reason": "The 200+ apartments historical claim and its supporting paragraph are hardcoded; no factual provenance was found. Numeric claim remains domain data, surrounding copy remains catalog candidate.",
+    "owner": "About/story owner validates the figure and claim basis.",
+    "relationToSourceClaims": "Adicional à cobertura sourceEntries: este é um grupo estático de /about/ fora dos 359; 5 sinks representam o número 200+, sua qualificação e o parágrafo factual.",
+    "priority": "P1 para aprovação factual antes da publicação; não bloqueia extração de copy.",
+    "blocks": {
+      "keyDefinition": false,
+      "copyPublicationApproval": true,
+      "futureLocale": false
+    }
+  },
+  "pendingAdminLanguage": {
+    "ids": [
+      "78b69b4216ab5a48",
+      "27034ef7826b1031",
+      "ab3a38e67aa11e9f",
+      "3da67f5b6d3b08fb",
+      "bf5a7fcf0d583982",
+      "3e5ba077cbec66db",
+      "b044eb6398ef569b",
+      "f0a9027a8dbca426",
+      "6121a3f471cd7ff0"
+    ],
+    "route": "/admin",
+    "recommendation": "needs-owner-decision",
+    "reason": "Fixed status copy describes implementation versions v3/v5, schema compatibility and an authorized checkpoint. It is classifiable/localizable but audience familiarity and wording are unresolved.",
+    "owner": "Admin/product owner confirms whether operators should see these technical terms and approves alternative wording if needed.",
+    "priority": "P2; necessário antes de fechar copy de Admin para publicação.",
+    "blocks": {
+      "keyDefinition": false,
+      "copyPublicationApproval": true,
+      "futureLocale": false
+    }
+  },
+  "pendingUnknownSinks": [
+    {
+      "group": "identity-provider-errors",
+      "ids": [
+        "09a0896b6fed56a1",
+        "2eb4e3acbf428bd1",
+        "8b8d571a39666acd",
+        "4f0a240cda4e8c1a"
+      ],
+      "routes": [
+        "/admin"
+      ],
+      "recommendation": "needs-owner-decision",
+      "reason": "error.message may be external provider text; fixed local fallback is separately catalogable.",
+      "owner": "Admin/product decides whether stable known error codes map to friendly copy or generic fallback.",
+      "priority": "P1 - erro dinâmico fica fora do catálogo até haver política/código estável",
+      "blocks": {
+        "keyDefinition": true,
+        "copyPublicationApproval": false,
+        "futureLocale": false
+      }
+    },
+    {
+      "group": "hierarchy-validation-diagnostic",
+      "ids": [
+        "8aba48247045874e"
+      ],
+      "routes": [
+        "/admin"
+      ],
+      "recommendation": "needs-owner-decision",
+      "reason": "Technical schema validation diagnostics include English tokens, IDs and paths.",
+      "owner": "Support/Admin owner decides diagnostic-only vs localized friendly messages for common cases.",
+      "priority": "P1 - definir a fronteira de diagnóstico antes de criar mensagens localizadas",
+      "blocks": {
+        "keyDefinition": true,
+        "copyPublicationApproval": false,
+        "futureLocale": false
+      }
+    },
+    {
+      "group": "api-save-publication-errors",
+      "ids": [
+        "df3bb12e50c2df35",
+        "79ec0f58646f3823"
+      ],
+      "routes": [
+        "/admin"
+      ],
+      "recommendation": "needs-owner-decision",
+      "reason": "API, validation, projection and readback failures share catches; fixed fallback is classifiable, raw error.message is not stable copy.",
+      "owner": "Admin/API owner defines stable error codes before mapping to local messages.",
+      "priority": "P1 - erro dinâmico fica fora do catálogo até haver política/código estável",
+      "blocks": {
+        "keyDefinition": true,
+        "copyPublicationApproval": false,
+        "futureLocale": false
+      }
+    }
+  ],
+  "sinkUnknownsResolvedByCallsite": [
+    {
+      "group": "generic-transport-sinks",
+      "ids": [
+        "1de742289f4c4ea4",
+        "314373af94add2e3",
+        "5556251b0531a7a0",
+        "b8dc425240d14303"
+      ],
+      "recommendation": "exclude",
+      "reason": "Helpers/DOM transport carry both fixed copy and data; classify values at callsites and keep the sink helper out of the catalog."
+    },
+    {
+      "group": "native-prompt-fields",
+      "ids": [
+        "461b0ecce2477af4",
+        "7b273ae567fcbfc8"
+      ],
+      "recommendation": "separate-key",
+      "reason": "Fixed prompt title 'Nome da nova seção' is catalog copy; dynamic default value is editable data, not a translation key."
+    }
+  ],
+  "localePolicyGap": {
+    "sourceEntriesGap": "displayAxes is now an inventoried sourceEntry (3c7fb8463b6af8e6); source coverage for this field is closed, while its locale and notation policy remains open.",
+    "evidence": [
+      "app/data/catalog-data.js:87",
+      "app/app.js:865,1064,1455",
+      "app/core/public-module-projection.js:54-55"
+    ],
+    "relatedSourceIds": [
+      "04d941add19084f6",
+      "0de07861b2b5f362",
+      "3c7fb8463b6af8e6",
+      "655bccf3c2389b4e",
+      "b4805db4058d38f9",
+      "bbebd2aafadce512",
+      "fc297f5682fd2d97",
+      "fda8f4cd396f5c25"
+    ],
+    "routes": [
+      "/config/",
+      "/viewer/"
+    ],
+    "recommendation": "keep-data",
+    "reason": "Nominal measurements and formatted dimensions are catalog data; locale must define decimal/grouping separators, units, axis order and multiplication mark. displayAxes is captured as source data; presentation policy remains open.",
+    "owner": "Product/design/localization define metric notation before adding locale.",
+    "priority": "P1 antes de habilitar novo locale; fora do caminho crítico para o locale atual.",
+    "blocks": {
+      "keyDefinition": false,
+      "currentLocale": false,
+      "futureLocale": true,
+      "sourceCoverageCompletion": false
+    }
+  },
+  "componentStateReview": {
+    "sinkIds": {
+      "stageAvailability": "372ab0a32af69fc6",
+      "moduleInitialVisibility": "852e7699499e4703",
+      "viewerInitialVisibility": "709ad1019bfc6a05",
+      "customerAvailability": [
+        "0a351b69a83f435b",
+        "955c512b062561d1"
+      ],
+      "priceDraft": "12a6c7bb28764426",
+      "initialServiceSelection": "7ef47d84204a2578"
+    },
+    "routes": [
+      "/admin"
+    ],
+    "evidence": [
+      "app/admin/admin.js:234-267,704-713,853-860,959-982,1000-1007,1141-1163,1346-1402,1489-1500,1664-1741",
+      "app/admin/admin.css:6,33,88,107,126,134,214-217"
+    ],
+    "judgement": "Common Sense Judge encontrou sete contratos: estado inicial de entidade, seleção inicial de servico, visibilidade inicial no Viewer, disponibilidade de etapa, disponibilidade para clientes, associacao/propriedade e publicação de preços em rascunho. Checkboxes nativos compartilham primitiva/foco, mas não semântica; .initial-staté-option e .switch são familias visuais distintas. Ver parecer detalhado em docs/architecture/arc13/reviews/2026-11-13/consistency-judge.json#componentStatéReview.",
+    "pendingOwner": "Produto/Design deve decidir nomes acessiveis, expectativa de disponibilidade ainda em rascunho, feedback para restrição de última opção, accent/hierarquia visual e excecao de foco 3px. Mudancas visuais requerem a matriz de runtime descrita no parecer detalhado.",
+    "priority": "P1 para wording acessível e expectativa de publicação; P2 para hierarquia/feedback/foco visual.",
+    "blocks": {
+      "keyDefinition": false,
+      "copyPublicationApproval": false,
+      "visualNormalization": true
+    }
+  },
+  "limits": [
+    "Não estabelece chaves canônicas nem altera produto/inventário.",
+    "Contagem/estrutura e comparação dos recibos foram validadas; nenhum teste de aplicação, commit ou validação visual foi executado.",
+    "Grupos de cópia pública com proveniência pendente não impedem classificação/localização técnica, mas precisam de aprovação editorial para publicação."
+  ],
+  "nextCoverageGap": {
+    "name": "No replacement exact field gap assessed",
+    "source": "Bounded lexical/runtime coverage remains open; displayAxes was the specific source field closed in this pass.",
+    "route": "/config/ and /viewer/",
+    "recommendation": "select-next-gap-in-a-separate-coverage-pass",
+    "reason": "Do not infer full source or runtime coverage from closing displayAxes; choose the next exact gap from new evidence.",
+    "priority": "P2; no specific replacement field gap was established in this pass."
+  },
+  "inventorySchemaVersion": 4,
+  "inventorySha256": "904c49a3b32722ece528a468e030b10800def07a61cbcf5811f01bfd00cfe391",
+  "reconciledOn": "2026-11-14",
+  "supersedes": "docs/architecture/arc13/source-reviews/2026-11-13/source-consistency-judge.json",
+  "revalidation": {
+    "kind": "inventory-identity-reconciliation",
+    "priorInventorySha256": "8765873a096fe95167e4fba74838258e47428fab0e12d16af9b6c92a3e34a51e",
+    "currentInventorySha256": "904c49a3b32722ece528a468e030b10800def07a61cbcf5811f01bfd00cfe391",
+    "sinkIdsPreserved": 1012,
+    "sourceEntryIdsPreserved": 359,
+    "existingDispositionsChanged": false,
+    "note": "The additive authoring field changes provenance only; this is not a new semantic review."
+  },
+  "authoringProvenance": {
+    "status": "mapped",
+    "scope": "411 retained HTML sink entries in the three ARC-03C generated primary pages",
+    "mappedSinkOccurrences": 411,
+    "unresolvedSinkOccurrences": 0,
+    "outsideSourceMapOccurrences": 601,
+    "outsideSourceMapMeaning": "not covered by this bounded source map; not an unresolved count",
+    "origins": {
+      "page": 378,
+      "sharedFragment": 33
+    },
+    "transform": "copy",
+    "manifest": "architecture/generated/primary-pages.manifest.json",
+    "manifestSha256": "efd62baac8fd9f2002a18c8b508a85a46ccf734a21e020745005067f2bed0dc7",
+    "outputs": [
+      {
+        "path": "app/index.html",
+        "route": "/",
+        "count": 53
+      },
+      {
+        "path": "app/about/index.html",
+        "route": "/about/",
+        "count": 56
+      },
+      {
+        "path": "app/how-it-works/index.html",
+        "route": "/how-it-works/",
+        "count": 302
+      }
+    ]
+  }
+}

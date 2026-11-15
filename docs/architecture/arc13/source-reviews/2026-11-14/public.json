@@ -1,0 +1,2862 @@
+{
+  "schemaVersion": "ARC13SourceDispositionReview/1.0",
+  "reviewDate": "2026-11-13",
+  "checkout": "work/MobiliPresenter2D-g2-repro-exact-221b54b-20261112",
+  "expectedHead": "dcf757d",
+  "inventoryPath": "architecture/arc13/ui-text-candidates.json",
+  "inventorySha256": "904c49a3b32722ece528a468e030b10800def07a61cbcf5811f01bfd00cfe391",
+  "scope": {
+    "owners": [
+      "access",
+      "how-it-works",
+      "landing",
+      "viewer"
+    ],
+    "ownerCounts": {
+      "access": 2,
+      "how-it-works": 12,
+      "landing": 26,
+      "viewer": 30
+    },
+    "total": 70
+  },
+  "dispositionCounts": {
+    "unconsumed": 2,
+    "ui_copy": 8,
+    "commercial_content": 2,
+    "passed_but_unused": 7,
+    "editorial_copy": 27,
+    "diagnostic": 24
+  },
+  "interpretation": "These are source-level ownership/localizability judgments only. They do not authorize a runtime migration, a message key, or edits to the generated inventory.",
+  "limitations": [
+    "The current generated sourceEntries expose consumerEvidence and consumerLinkStatus, but no literal consumerRefs field. consumerRefs in this review are manually traced references to source definitions and consumers.",
+    "Static source text alone does not establish the factual provenance or approval owner for the identified marketing and operational claims; those entries carry owner questions without blocking the remaining classification."
+  ],
+  "records": [
+    {
+      "id": "42212a1d7a230e2f",
+      "source": "app/access/access.js",
+      "line": 30,
+      "column": 55,
+      "owner": "access",
+      "routes": [
+        "/access/"
+      ],
+      "sourceRole": "error-message-source",
+      "sourceBinding": "Error constructor",
+      "valuePath": "",
+      "expression": "\"invalid_or_expired_link\"",
+      "value": "invalid_or_expired_link",
+      "originalClassification": "diagnostic",
+      "originalUseStatus": "diagnostic",
+      "originalConsumerLinkStatus": "fixed-fallback-only",
+      "consumerEvidence": [
+        "The catch discards the Error and writes a fixed access-status message."
+      ],
+      "consumerRefs": [
+        {
+          "source": "app/access/access.js",
+          "line": "30-35",
+          "relationship": "error-to-fixed-fallback",
+          "evidence": "The invalid response throws this code; the catch writes the fixed access status."
+        }
+      ],
+      "disposition": "diagnostic",
+      "reason": "The Error literal is a failure code for link redemption. The catch writes a separate fixed status message and discards this code; it is diagnostic source text, not catalog copy.",
+      "sourceSha256": "7b69ac6edf56f98cb568922148e25f27bf5785da5dfc3384b48561cd3182c5d8",
+      "failureFallbackRefs": [
+        {
+          "sinkId": "365a382951486cf0",
+          "source": "app/access/access.js",
+          "line": 34,
+          "sink": "property:textContent",
+          "expression": "\"Não foi possível validar este link. Solicite um novo acesso à equipe.\"",
+          "routeConsumers": [
+            "/access/"
+          ],
+          "relationship": "error-to-fixed-fallback",
+          "evidence": "The catch discards the Error and writes a fixed access-status message."
+        }
+      ]
+    },
+    {
+      "id": "e6b1c1890a352c39",
+      "source": "app/access/manage.js",
+      "line": 41,
+      "column": 53,
+      "owner": "access",
+      "routes": [
+        "/access/manage"
+      ],
+      "sourceRole": "error-message-source",
+      "sourceBinding": "Error constructor",
+      "valuePath": "right",
+      "expression": "\"request_failed\"",
+      "value": "request_failed",
+      "originalClassification": "diagnostic",
+      "originalUseStatus": "diagnostic",
+      "originalConsumerLinkStatus": "fixed-fallback-only",
+      "consumerEvidence": [
+        "The refreshGrants catch discards api() errors and writes this fixed status.",
+        "The revoke handler catch discards api() errors and writes this fixed status.",
+        "The grant handler maps the request_failed fallback code to the generic branch of this fixed conditional status; it does not display error.message."
+      ],
+      "consumerRefs": [
+        {
+          "source": "app/access/manage.js",
+          "line": "33-42",
+          "relationship": "error-code-to-caller",
+          "evidence": "api() throws the code when the response is not OK."
+        },
+        {
+          "source": "app/access/manage.js",
+          "line": "45-96",
+          "relationship": "error-to-fixed-fallback",
+          "evidence": "Grant-list and revoke callers show fixed status copy on failure."
+        },
+        {
+          "source": "app/access/manage.js",
+          "line": "110-129",
+          "relationship": "error-to-fixed-fallback",
+          "evidence": "The grant caller maps this code to generic fixed copy; only the separate access_service_not_configured code selects another fixed message."
+        }
+      ],
+      "disposition": "diagnostic",
+      "reason": "The API helper throws this generic code for failed access-manager requests. Callers map it to fixed statuses or a generic branch; the code itself is not rendered.",
+      "sourceSha256": "911e059c0343729027727833318a13e85b6dbd7d999899c79da4a709e4aa8877",
+      "failureFallbackRefs": [
+        {
+          "sinkId": "0e3eaaec6eeabe73",
+          "source": "app/access/manage.js",
+          "line": 95,
+          "sink": "property:textContent",
+          "expression": "\"Não foi possível carregar os acessos. Verifique a configuração do serviço.\"",
+          "routeConsumers": [
+            "/access/manage"
+          ],
+          "relationship": "error-to-fixed-fallback",
+          "evidence": "The refreshGrants catch discards api() errors and writes this fixed status."
+        },
+        {
+          "sinkId": "a28c95206fcc0a19",
+          "source": "app/access/manage.js",
+          "line": 86,
+          "sink": "property:textContent",
+          "expression": "\"Não foi possível revogar agora. Tente novamente.\"",
+          "routeConsumers": [
+            "/access/manage"
+          ],
+          "relationship": "error-to-fixed-fallback",
+          "evidence": "The revoke handler catch discards api() errors and writes this fixed status."
+        },
+        {
+          "sinkId": "2efc9690a11c2224",
+          "source": "app/access/manage.js",
+          "line": 124,
+          "sink": "property:textContent",
+          "expression": "error.message === \"access_service_not_configured\"\r\n      ? \"O envio ainda não está configurado neste ambiente.\"\r\n      : \"Não foi possível enviar o link. Verifique o email e tente novamente.\"",
+          "routeConsumers": [
+            "/access/manage"
+          ],
+          "relationship": "error-to-fixed-fallback",
+          "evidence": "The grant handler maps the request_failed fallback code to the generic branch of this fixed conditional status; it does not display error.message."
+        }
+      ]
+    },
+    {
+      "id": "ad91c0acafd8b6f9",
+      "source": "app/how-it-works/how-it-works.js",
+      "line": 4,
+      "column": 13,
+      "owner": "how-it-works",
+      "routes": [
+        "/how-it-works/"
+      ],
+      "sourceRole": "fixed-ui-table",
+      "sourceBinding": "explanations",
+      "valuePath": "escala.[0]",
+      "expression": "'Compra em escala'",
+      "value": "Compra em escala",
+      "originalClassification": "unreviewed",
+      "originalUseStatus": "active",
+      "originalConsumerLinkStatus": "field-consumer-evidence",
+      "consumerEvidence": [
+        "consumer traced during bounded source review; see valuePath and routeConsumers"
+      ],
+      "consumerRefs": [
+        {
+          "source": "app/how-it-works/how-it-works.js",
+          "line": "4-9",
+          "relationship": "editorial-table-source",
+          "evidence": "Heading is stored as the first value in a static page explanation entry."
+        }
+      ],
+      "disposition": "editorial_copy",
+      "reason": "A page-owned heading for one explanatory accordion item. It is localized editorial content, separate from viewer controls and authored V5/catalog data.",
+      "sourceSha256": "e73830df10c6dc88ac7fde8342c6dc27e00dc03d65345f7f94cda8cc89555a06"
+    },
+    {
+      "id": "d708dced14d5ca21",
+      "source": "app/how-it-works/how-it-works.js",
+      "line": 4,
+      "column": 32,
+      "owner": "how-it-works",
+      "routes": [
+        "/how-it-works/"
+      ],
+      "sourceRole": "fixed-ui-table",
+      "sourceBinding": "explanations",
+      "valuePath": "escala.[1]",
+      "expression": "'Concentrar a compra de chapas, ferragens e outros insumos em mais pedidos ajuda a negociar com fornecedores e programar as aquisições.'",
+      "value": "Concentrar a compra de chapas, ferragens e outros insumos em mais pedidos ajuda a negociar com fornecedores e programar as aquisições.",
+      "originalClassification": "unreviewed",
+      "originalUseStatus": "active",
+      "originalConsumerLinkStatus": "field-consumer-evidence",
+      "consumerEvidence": [
+        "consumer traced during bounded source review; see valuePath and routeConsumers"
+      ],
+      "consumerRefs": [
+        {
+          "source": "app/how-it-works/how-it-works.js",
+          "line": "4-9",
+          "relationship": "editorial-table-source",
+          "evidence": "Paragraph is stored as the second value in a static page explanation entry."
+        },
+        {
+          "source": "app/how-it-works/how-it-works.js",
+          "line": "14",
+          "relationship": "selected-entry-to-dom",
+          "evidence": "The click handler reads the selected entry and assigns its title and description to h3/p textContent."
+        }
+      ],
+      "disposition": "editorial_copy",
+      "reason": "A page-owned explanatory paragraph inserted into the detail panel with textContent after the matching accordion card is selected. It is localizable editorial content, separate from product/catalog data.",
+      "sourceSha256": "e73830df10c6dc88ac7fde8342c6dc27e00dc03d65345f7f94cda8cc89555a06",
+      "pendingOwnerQuestion": "Confirm the factual basis and accountable content owner for this production, purchasing, material-use, engineering, or rework statement. The local source does not record provenance; this is an editorial owner question, not a blocker for classifying the other entries."
+    },
+    {
+      "id": "8fec1f4a9cacb304",
+      "source": "app/how-it-works/how-it-works.js",
+      "line": 5,
+      "column": 16,
+      "owner": "how-it-works",
+      "routes": [
+        "/how-it-works/"
+      ],
+      "sourceRole": "fixed-ui-table",
+      "sourceBinding": "explanations",
+      "valuePath": "coletivas.[0]",
+      "expression": "'Compras coletivas'",
+      "value": "Compras coletivas",
+      "originalClassification": "unreviewed",
+      "originalUseStatus": "active",
+      "originalConsumerLinkStatus": "field-consumer-evidence",
+      "consumerEvidence": [
+        "consumer traced during bounded source review; see valuePath and routeConsumers"
+      ],
+      "consumerRefs": [
+        {
+          "source": "app/how-it-works/how-it-works.js",
+          "line": "4-9",
+          "relationship": "editorial-table-source",
+          "evidence": "Heading is stored as the first value in a static page explanation entry."
+        }
+      ],
+      "disposition": "editorial_copy",
+      "reason": "A page-owned heading for one explanatory accordion item. It is localized editorial content, separate from viewer controls and authored V5/catalog data.",
+      "sourceSha256": "e73830df10c6dc88ac7fde8342c6dc27e00dc03d65345f7f94cda8cc89555a06"
+    },
+    {
+      "id": "f42a451b2563f5ec",
+      "source": "app/how-it-works/how-it-works.js",
+      "line": 5,
+      "column": 36,
+      "owner": "how-it-works",
+      "routes": [
+        "/how-it-works/"
+      ],
+      "sourceRole": "fixed-ui-table",
+      "sourceBinding": "explanations",
+      "valuePath": "coletivas.[1]",
+      "expression": "'Diferentes apartamentos compartilham uma plataforma técnica, sem exigir que todos escolham a mesma composição. Materiais e processos comuns podem ser planejados juntos.'",
+      "value": "Diferentes apartamentos compartilham uma plataforma técnica, sem exigir que todos escolham a mesma composição. Materiais e processos comuns podem ser planejados juntos.",
+      "originalClassification": "unreviewed",
+      "originalUseStatus": "active",
+      "originalConsumerLinkStatus": "field-consumer-evidence",
+      "consumerEvidence": [
+        "consumer traced during bounded source review; see valuePath and routeConsumers"
+      ],
+      "consumerRefs": [
+        {
+          "source": "app/how-it-works/how-it-works.js",
+          "line": "4-9",
+          "relationship": "editorial-table-source",
+          "evidence": "Paragraph is stored as the second value in a static page explanation entry."
+        },
+        {
+          "source": "app/how-it-works/how-it-works.js",
+          "line": "14",
+          "relationship": "selected-entry-to-dom",
+          "evidence": "The click handler reads the selected entry and assigns its title and description to h3/p textContent."
+        }
+      ],
+      "disposition": "editorial_copy",
+      "reason": "A page-owned explanatory paragraph inserted into the detail panel with textContent after the matching accordion card is selected. It is localizable editorial content, separate from product/catalog data.",
+      "sourceSha256": "e73830df10c6dc88ac7fde8342c6dc27e00dc03d65345f7f94cda8cc89555a06",
+      "pendingOwnerQuestion": "Confirm the factual basis and accountable content owner for this production, purchasing, material-use, engineering, or rework statement. The local source does not record provenance; this is an editorial owner question, not a blocker for classifying the other entries."
+    },
+    {
+      "id": "d190809d1dcb8129",
+      "source": "app/how-it-works/how-it-works.js",
+      "line": 6,
+      "column": 15,
+      "owner": "how-it-works",
+      "routes": [
+        "/how-it-works/"
+      ],
+      "sourceRole": "fixed-ui-table",
+      "sourceBinding": "explanations",
+      "valuePath": "producao.[0]",
+      "expression": "'Produção planejada'",
+      "value": "Produção planejada",
+      "originalClassification": "unreviewed",
+      "originalUseStatus": "active",
+      "originalConsumerLinkStatus": "field-consumer-evidence",
+      "consumerEvidence": [
+        "consumer traced during bounded source review; see valuePath and routeConsumers"
+      ],
+      "consumerRefs": [
+        {
+          "source": "app/how-it-works/how-it-works.js",
+          "line": "4-9",
+          "relationship": "editorial-table-source",
+          "evidence": "Heading is stored as the first value in a static page explanation entry."
+        }
+      ],
+      "disposition": "editorial_copy",
+      "reason": "A page-owned heading for one explanatory accordion item. It is localized editorial content, separate from viewer controls and authored V5/catalog data.",
+      "sourceSha256": "e73830df10c6dc88ac7fde8342c6dc27e00dc03d65345f7f94cda8cc89555a06"
+    },
+    {
+      "id": "15f3f308777e6e98",
+      "source": "app/how-it-works/how-it-works.js",
+      "line": 6,
+      "column": 36,
+      "owner": "how-it-works",
+      "routes": [
+        "/how-it-works/"
+      ],
+      "sourceRole": "fixed-ui-table",
+      "sourceBinding": "explanations",
+      "valuePath": "producao.[1]",
+      "expression": "'Projetos individuais exigem programação de máquinas, detalhamento e planos de corte próprios. Os módulos previamente desenvolvidos permitem organizar etapas repetíveis.'",
+      "value": "Projetos individuais exigem programação de máquinas, detalhamento e planos de corte próprios. Os módulos previamente desenvolvidos permitem organizar etapas repetíveis.",
+      "originalClassification": "unreviewed",
+      "originalUseStatus": "active",
+      "originalConsumerLinkStatus": "field-consumer-evidence",
+      "consumerEvidence": [
+        "consumer traced during bounded source review; see valuePath and routeConsumers"
+      ],
+      "consumerRefs": [
+        {
+          "source": "app/how-it-works/how-it-works.js",
+          "line": "4-9",
+          "relationship": "editorial-table-source",
+          "evidence": "Paragraph is stored as the second value in a static page explanation entry."
+        },
+        {
+          "source": "app/how-it-works/how-it-works.js",
+          "line": "14",
+          "relationship": "selected-entry-to-dom",
+          "evidence": "The click handler reads the selected entry and assigns its title and description to h3/p textContent."
+        }
+      ],
+      "disposition": "editorial_copy",
+      "reason": "A page-owned explanatory paragraph inserted into the detail panel with textContent after the matching accordion card is selected. It is localizable editorial content, separate from product/catalog data.",
+      "sourceSha256": "e73830df10c6dc88ac7fde8342c6dc27e00dc03d65345f7f94cda8cc89555a06",
+      "pendingOwnerQuestion": "Confirm the factual basis and accountable content owner for this production, purchasing, material-use, engineering, or rework statement. The local source does not record provenance; this is an editorial owner question, not a blocker for classifying the other entries."
+    },
+    {
+      "id": "00cc47cfcbb36c09",
+      "source": "app/how-it-works/how-it-works.js",
+      "line": 7,
+      "column": 13,
+      "owner": "how-it-works",
+      "routes": [
+        "/how-it-works/"
+      ],
+      "sourceRole": "fixed-ui-table",
+      "sourceBinding": "explanations",
+      "valuePath": "chapas.[0]",
+      "expression": "'Aproveitamento de material'",
+      "value": "Aproveitamento de material",
+      "originalClassification": "unreviewed",
+      "originalUseStatus": "active",
+      "originalConsumerLinkStatus": "field-consumer-evidence",
+      "consumerEvidence": [
+        "consumer traced during bounded source review; see valuePath and routeConsumers"
+      ],
+      "consumerRefs": [
+        {
+          "source": "app/how-it-works/how-it-works.js",
+          "line": "4-9",
+          "relationship": "editorial-table-source",
+          "evidence": "Heading is stored as the first value in a static page explanation entry."
+        }
+      ],
+      "disposition": "editorial_copy",
+      "reason": "A page-owned heading for one explanatory accordion item. It is localized editorial content, separate from viewer controls and authored V5/catalog data.",
+      "sourceSha256": "e73830df10c6dc88ac7fde8342c6dc27e00dc03d65345f7f94cda8cc89555a06"
+    },
+    {
+      "id": "349f54bd7b73fd93",
+      "source": "app/how-it-works/how-it-works.js",
+      "line": 7,
+      "column": 42,
+      "owner": "how-it-works",
+      "routes": [
+        "/how-it-works/"
+      ],
+      "sourceRole": "fixed-ui-table",
+      "sourceBinding": "explanations",
+      "valuePath": "chapas.[1]",
+      "expression": "'Planos de corte organizados ajudam a distribuir melhor as peças nas chapas e reduzir sobras, sem diminuir a qualidade dos materiais.'",
+      "value": "Planos de corte organizados ajudam a distribuir melhor as peças nas chapas e reduzir sobras, sem diminuir a qualidade dos materiais.",
+      "originalClassification": "unreviewed",
+      "originalUseStatus": "active",
+      "originalConsumerLinkStatus": "field-consumer-evidence",
+      "consumerEvidence": [
+        "consumer traced during bounded source review; see valuePath and routeConsumers"
+      ],
+      "consumerRefs": [
+        {
+          "source": "app/how-it-works/how-it-works.js",
+          "line": "4-9",
+          "relationship": "editorial-table-source",
+          "evidence": "Paragraph is stored as the second value in a static page explanation entry."
+        },
+        {
+          "source": "app/how-it-works/how-it-works.js",
+          "line": "14",
+          "relationship": "selected-entry-to-dom",
+          "evidence": "The click handler reads the selected entry and assigns its title and description to h3/p textContent."
+        }
+      ],
+      "disposition": "editorial_copy",
+      "reason": "A page-owned explanatory paragraph inserted into the detail panel with textContent after the matching accordion card is selected. It is localizable editorial content, separate from product/catalog data.",
+      "sourceSha256": "e73830df10c6dc88ac7fde8342c6dc27e00dc03d65345f7f94cda8cc89555a06",
+      "pendingOwnerQuestion": "Confirm the factual basis and accountable content owner for this production, purchasing, material-use, engineering, or rework statement. The local source does not record provenance; this is an editorial owner question, not a blocker for classifying the other entries."
+    },
+    {
+      "id": "01dab881d1b27ed6",
+      "source": "app/how-it-works/how-it-works.js",
+      "line": 8,
+      "column": 17,
+      "owner": "how-it-works",
+      "routes": [
+        "/how-it-works/"
+      ],
+      "sourceRole": "fixed-ui-table",
+      "sourceBinding": "explanations",
+      "valuePath": "engenharia.[0]",
+      "expression": "'Engenharia já estudada'",
+      "value": "Engenharia já estudada",
+      "originalClassification": "unreviewed",
+      "originalUseStatus": "active",
+      "originalConsumerLinkStatus": "field-consumer-evidence",
+      "consumerEvidence": [
+        "consumer traced during bounded source review; see valuePath and routeConsumers"
+      ],
+      "consumerRefs": [
+        {
+          "source": "app/how-it-works/how-it-works.js",
+          "line": "4-9",
+          "relationship": "editorial-table-source",
+          "evidence": "Heading is stored as the first value in a static page explanation entry."
+        }
+      ],
+      "disposition": "editorial_copy",
+      "reason": "A page-owned heading for one explanatory accordion item. It is localized editorial content, separate from viewer controls and authored V5/catalog data.",
+      "sourceSha256": "e73830df10c6dc88ac7fde8342c6dc27e00dc03d65345f7f94cda8cc89555a06"
+    },
+    {
+      "id": "0cb57479cdea0903",
+      "source": "app/how-it-works/how-it-works.js",
+      "line": 8,
+      "column": 42,
+      "owner": "how-it-works",
+      "routes": [
+        "/how-it-works/"
+      ],
+      "sourceRole": "fixed-ui-table",
+      "sourceBinding": "explanations",
+      "valuePath": "engenharia.[1]",
+      "expression": "'Na marcenaria individual, cada projeto demanda uma parcela maior de trabalho técnico desde o início. Aqui, as soluções-base são estudadas para o empreendimento e reaproveitadas em diferentes apartamentos.'",
+      "value": "Na marcenaria individual, cada projeto demanda uma parcela maior de trabalho técnico desde o início. Aqui, as soluções-base são estudadas para o empreendimento e reaproveitadas em diferentes apartamentos.",
+      "originalClassification": "unreviewed",
+      "originalUseStatus": "active",
+      "originalConsumerLinkStatus": "field-consumer-evidence",
+      "consumerEvidence": [
+        "consumer traced during bounded source review; see valuePath and routeConsumers"
+      ],
+      "consumerRefs": [
+        {
+          "source": "app/how-it-works/how-it-works.js",
+          "line": "4-9",
+          "relationship": "editorial-table-source",
+          "evidence": "Paragraph is stored as the second value in a static page explanation entry."
+        },
+        {
+          "source": "app/how-it-works/how-it-works.js",
+          "line": "14",
+          "relationship": "selected-entry-to-dom",
+          "evidence": "The click handler reads the selected entry and assigns its title and description to h3/p textContent."
+        }
+      ],
+      "disposition": "editorial_copy",
+      "reason": "A page-owned explanatory paragraph inserted into the detail panel with textContent after the matching accordion card is selected. It is localizable editorial content, separate from product/catalog data.",
+      "sourceSha256": "e73830df10c6dc88ac7fde8342c6dc27e00dc03d65345f7f94cda8cc89555a06",
+      "pendingOwnerQuestion": "Confirm the factual basis and accountable content owner for this production, purchasing, material-use, engineering, or rework statement. The local source does not record provenance; this is an editorial owner question, not a blocker for classifying the other entries."
+    },
+    {
+      "id": "2688c6719c0db702",
+      "source": "app/how-it-works/how-it-works.js",
+      "line": 9,
+      "column": 17,
+      "owner": "how-it-works",
+      "routes": [
+        "/how-it-works/"
+      ],
+      "sourceRole": "fixed-ui-table",
+      "sourceBinding": "explanations",
+      "valuePath": "retrabalho.[0]",
+      "expression": "'Menos retrabalho'",
+      "value": "Menos retrabalho",
+      "originalClassification": "unreviewed",
+      "originalUseStatus": "active",
+      "originalConsumerLinkStatus": "field-consumer-evidence",
+      "consumerEvidence": [
+        "consumer traced during bounded source review; see valuePath and routeConsumers"
+      ],
+      "consumerRefs": [
+        {
+          "source": "app/how-it-works/how-it-works.js",
+          "line": "4-9",
+          "relationship": "editorial-table-source",
+          "evidence": "Heading is stored as the first value in a static page explanation entry."
+        }
+      ],
+      "disposition": "editorial_copy",
+      "reason": "A page-owned heading for one explanatory accordion item. It is localized editorial content, separate from viewer controls and authored V5/catalog data.",
+      "sourceSha256": "e73830df10c6dc88ac7fde8342c6dc27e00dc03d65345f7f94cda8cc89555a06"
+    },
+    {
+      "id": "e56a0cd0325f20ca",
+      "source": "app/how-it-works/how-it-works.js",
+      "line": 9,
+      "column": 36,
+      "owner": "how-it-works",
+      "routes": [
+        "/how-it-works/"
+      ],
+      "sourceRole": "fixed-ui-table",
+      "sourceBinding": "explanations",
+      "valuePath": "retrabalho.[1]",
+      "expression": "'Padrões, furações e conferências previamente definidos permitem repetir soluções verificadas e reduzir ajustes durante a fabricação.'",
+      "value": "Padrões, furações e conferências previamente definidos permitem repetir soluções verificadas e reduzir ajustes durante a fabricação.",
+      "originalClassification": "unreviewed",
+      "originalUseStatus": "active",
+      "originalConsumerLinkStatus": "field-consumer-evidence",
+      "consumerEvidence": [
+        "consumer traced during bounded source review; see valuePath and routeConsumers"
+      ],
+      "consumerRefs": [
+        {
+          "source": "app/how-it-works/how-it-works.js",
+          "line": "4-9",
+          "relationship": "editorial-table-source",
+          "evidence": "Paragraph is stored as the second value in a static page explanation entry."
+        },
+        {
+          "source": "app/how-it-works/how-it-works.js",
+          "line": "14",
+          "relationship": "selected-entry-to-dom",
+          "evidence": "The click handler reads the selected entry and assigns its title and description to h3/p textContent."
+        }
+      ],
+      "disposition": "editorial_copy",
+      "reason": "A page-owned explanatory paragraph inserted into the detail panel with textContent after the matching accordion card is selected. It is localizable editorial content, separate from product/catalog data.",
+      "sourceSha256": "e73830df10c6dc88ac7fde8342c6dc27e00dc03d65345f7f94cda8cc89555a06",
+      "pendingOwnerQuestion": "Confirm the factual basis and accountable content owner for this production, purchasing, material-use, engineering, or rework statement. The local source does not record provenance; this is an editorial owner question, not a blocker for classifying the other entries."
+    },
+    {
+      "id": "21700438e859d2f3",
+      "source": "app/landing/data.js",
+      "line": 2,
+      "column": 10,
+      "owner": "landing",
+      "routes": [
+        "/"
+      ],
+      "sourceRole": "brand-name",
+      "sourceBinding": "CASA_PUBLIC_LANDING",
+      "valuePath": "title",
+      "expression": "\"Casa em Módulos\"",
+      "value": "Casa em Módulos",
+      "originalClassification": "unreviewed",
+      "originalUseStatus": "unconsumed",
+      "originalConsumerLinkStatus": "manual-consumer-review",
+      "consumerEvidence": [],
+      "consumerRefs": [],
+      "disposition": "unconsumed",
+      "reason": "This public landing data field has no active consumer in the current source: no component reads the brand title or tagline. Do not treat its presence as a current localization requirement.",
+      "sourceSha256": "afcd11965f48adb61f2957ada26cf2bc94665d6d9fb7f08d556c012c046f031e"
+    },
+    {
+      "id": "7a3a8507ce666b71",
+      "source": "app/landing/data.js",
+      "line": 3,
+      "column": 12,
+      "owner": "landing",
+      "routes": [
+        "/"
+      ],
+      "sourceRole": "editorial-tagline",
+      "sourceBinding": "CASA_PUBLIC_LANDING",
+      "valuePath": "tagline",
+      "expression": "\"Móveis inteligentes, pensados para o seu espaço e para o seu orçamento.\"",
+      "value": "Móveis inteligentes, pensados para o seu espaço e para o seu orçamento.",
+      "originalClassification": "unreviewed",
+      "originalUseStatus": "unconsumed",
+      "originalConsumerLinkStatus": "manual-consumer-review",
+      "consumerEvidence": [],
+      "consumerRefs": [],
+      "disposition": "unconsumed",
+      "reason": "This public landing data field has no active consumer in the current source: no component reads the brand title or tagline. Do not treat its presence as a current localization requirement.",
+      "sourceSha256": "afcd11965f48adb61f2957ada26cf2bc94665d6d9fb7f08d556c012c046f031e"
+    },
+    {
+      "id": "fc9056a545b706e5",
+      "source": "app/landing/data.js",
+      "line": 5,
+      "column": 28,
+      "owner": "landing",
+      "routes": [
+        "/"
+      ],
+      "sourceRole": "environment-name",
+      "sourceBinding": "CASA_PUBLIC_LANDING",
+      "valuePath": "environments.[0].name",
+      "expression": "\"Cozinha\"",
+      "value": "Cozinha",
+      "originalClassification": "unreviewed",
+      "originalUseStatus": "active",
+      "originalConsumerLinkStatus": "field-consumer-evidence",
+      "consumerEvidence": [
+        "app/landing/landing.js:87,131 -> textContent"
+      ],
+      "consumerRefs": [
+        {
+          "source": "app/landing/landing.js",
+          "line": "87,131",
+          "relationship": "page-data-to-card-and-feature",
+          "evidence": "The environment name populates both the feature title and the card title."
+        }
+      ],
+      "disposition": "editorial_copy",
+      "reason": "This is the page-owned name of a landing environment card and feature. It is localizable editorial content, not a catalog entity identifier or V5 product record.",
+      "sourceSha256": "afcd11965f48adb61f2957ada26cf2bc94665d6d9fb7f08d556c012c046f031e"
+    },
+    {
+      "id": "fdf93a8ba7b556c2",
+      "source": "app/landing/data.js",
+      "line": 5,
+      "column": 153,
+      "owner": "landing",
+      "routes": [
+        "/"
+      ],
+      "sourceRole": "image-alternative-text",
+      "sourceBinding": "CASA_PUBLIC_LANDING",
+      "valuePath": "environments.[0].alt",
+      "expression": "\"Cozinha modular\"",
+      "value": "Cozinha modular",
+      "originalClassification": "unreviewed",
+      "originalUseStatus": "active",
+      "originalConsumerLinkStatus": "field-consumer-evidence",
+      "consumerEvidence": [
+        "app/landing/landing.js:78 -> img.alt"
+      ],
+      "consumerRefs": [
+        {
+          "source": "app/landing/landing.js",
+          "line": "78",
+          "relationship": "accessible-text-to-alt",
+          "evidence": "The selected environment alt value is assigned to featureImage.alt."
+        }
+      ],
+      "disposition": "ui_copy",
+      "reason": "This string is assigned to an image alt attribute in the landing feature. It is fixed accessible interface text suitable for a message catalog; the phrase describes the image context and is not V5/catalog data.",
+      "sourceSha256": "afcd11965f48adb61f2957ada26cf2bc94665d6d9fb7f08d556c012c046f031e"
+    },
+    {
+      "id": "9ef46864708beae6",
+      "source": "app/landing/data.js",
+      "line": 5,
+      "column": 185,
+      "owner": "landing",
+      "routes": [
+        "/"
+      ],
+      "sourceRole": "environment-description",
+      "sourceBinding": "CASA_PUBLIC_LANDING",
+      "valuePath": "environments.[0].description",
+      "expression": "\"Funcionalidade e beleza para o coração da casa.\"",
+      "value": "Funcionalidade e beleza para o coração da casa.",
+      "originalClassification": "unreviewed",
+      "originalUseStatus": "active",
+      "originalConsumerLinkStatus": "field-consumer-evidence",
+      "consumerEvidence": [
+        "app/landing/landing.js:88,132 -> textContent"
+      ],
+      "consumerRefs": [
+        {
+          "source": "app/landing/landing.js",
+          "line": "88,132",
+          "relationship": "page-data-to-card-and-feature",
+          "evidence": "The environment description populates both featureDescription and the card copy span."
+        }
+      ],
+      "disposition": "editorial_copy",
+      "reason": "This is localizable descriptive copy on the landing environment card and selected feature. It is authored page content, not V5/catalog data.",
+      "sourceSha256": "afcd11965f48adb61f2957ada26cf2bc94665d6d9fb7f08d556c012c046f031e"
+    },
+    {
+      "id": "811a3416bea5de45",
+      "source": "app/landing/data.js",
+      "line": 5,
+      "column": 269,
+      "owner": "landing",
+      "routes": [
+        "/"
+      ],
+      "sourceRole": "environment-action",
+      "sourceBinding": "CASA_PUBLIC_LANDING",
+      "valuePath": "environments.[0].action",
+      "expression": "\"Explorar a cozinha\"",
+      "value": "Explorar a cozinha",
+      "originalClassification": "unreviewed",
+      "originalUseStatus": "active",
+      "originalConsumerLinkStatus": "field-consumer-evidence",
+      "consumerEvidence": [
+        "app/landing/landing.js:94 -> firstChild.textContent"
+      ],
+      "consumerRefs": [
+        {
+          "source": "app/landing/landing.js",
+          "line": "94",
+          "relationship": "action-label-to-button",
+          "evidence": "The action string becomes the button first child text."
+        }
+      ],
+      "disposition": "ui_copy",
+      "reason": "This is the visible label of the landing page action button. It is fixed interface copy suitable for a message catalog, with the destination and environment supplied separately by page data.",
+      "sourceSha256": "afcd11965f48adb61f2957ada26cf2bc94665d6d9fb7f08d556c012c046f031e"
+    },
+    {
+      "id": "079e82103f0c0335",
+      "source": "app/landing/data.js",
+      "line": 6,
+      "column": 25,
+      "owner": "landing",
+      "routes": [
+        "/"
+      ],
+      "sourceRole": "environment-name",
+      "sourceBinding": "CASA_PUBLIC_LANDING",
+      "valuePath": "environments.[1].name",
+      "expression": "\"Sala\"",
+      "value": "Sala",
+      "originalClassification": "unreviewed",
+      "originalUseStatus": "active",
+      "originalConsumerLinkStatus": "field-consumer-evidence",
+      "consumerEvidence": [
+        "app/landing/landing.js:87,131 -> textContent"
+      ],
+      "consumerRefs": [
+        {
+          "source": "app/landing/landing.js",
+          "line": "87,131",
+          "relationship": "page-data-to-card-and-feature",
+          "evidence": "The environment name populates both the feature title and the card title."
+        }
+      ],
+      "disposition": "editorial_copy",
+      "reason": "This is the page-owned name of a landing environment card and feature. It is localizable editorial content, not a catalog entity identifier or V5 product record.",
+      "sourceSha256": "afcd11965f48adb61f2957ada26cf2bc94665d6d9fb7f08d556c012c046f031e"
+    },
+    {
+      "id": "b531d3849928675f",
+      "source": "app/landing/data.js",
+      "line": 6,
+      "column": 141,
+      "owner": "landing",
+      "routes": [
+        "/"
+      ],
+      "sourceRole": "image-alternative-text",
+      "sourceBinding": "CASA_PUBLIC_LANDING",
+      "valuePath": "environments.[1].alt",
+      "expression": "\"Sala modular\"",
+      "value": "Sala modular",
+      "originalClassification": "unreviewed",
+      "originalUseStatus": "active",
+      "originalConsumerLinkStatus": "field-consumer-evidence",
+      "consumerEvidence": [
+        "app/landing/landing.js:78 -> img.alt"
+      ],
+      "consumerRefs": [
+        {
+          "source": "app/landing/landing.js",
+          "line": "78",
+          "relationship": "accessible-text-to-alt",
+          "evidence": "The selected environment alt value is assigned to featureImage.alt."
+        }
+      ],
+      "disposition": "ui_copy",
+      "reason": "This string is assigned to an image alt attribute in the landing feature. It is fixed accessible interface text suitable for a message catalog; the phrase describes the image context and is not V5/catalog data.",
+      "sourceSha256": "afcd11965f48adb61f2957ada26cf2bc94665d6d9fb7f08d556c012c046f031e"
+    },
+    {
+      "id": "362ff74adcf21241",
+      "source": "app/landing/data.js",
+      "line": 6,
+      "column": 170,
+      "owner": "landing",
+      "routes": [
+        "/"
+      ],
+      "sourceRole": "environment-description",
+      "sourceBinding": "CASA_PUBLIC_LANDING",
+      "valuePath": "environments.[1].description",
+      "expression": "\"Conforto e estilo para viver bons momentos.\"",
+      "value": "Conforto e estilo para viver bons momentos.",
+      "originalClassification": "unreviewed",
+      "originalUseStatus": "active",
+      "originalConsumerLinkStatus": "field-consumer-evidence",
+      "consumerEvidence": [
+        "app/landing/landing.js:88,132 -> textContent"
+      ],
+      "consumerRefs": [
+        {
+          "source": "app/landing/landing.js",
+          "line": "88,132",
+          "relationship": "page-data-to-card-and-feature",
+          "evidence": "The environment description populates both featureDescription and the card copy span."
+        }
+      ],
+      "disposition": "editorial_copy",
+      "reason": "This is localizable descriptive copy on the landing environment card and selected feature. It is authored page content, not V5/catalog data.",
+      "sourceSha256": "afcd11965f48adb61f2957ada26cf2bc94665d6d9fb7f08d556c012c046f031e"
+    },
+    {
+      "id": "41435140b8b99f7d",
+      "source": "app/landing/data.js",
+      "line": 7,
+      "column": 27,
+      "owner": "landing",
+      "routes": [
+        "/"
+      ],
+      "sourceRole": "environment-name",
+      "sourceBinding": "CASA_PUBLIC_LANDING",
+      "valuePath": "environments.[2].name",
+      "expression": "\"Quarto\"",
+      "value": "Quarto",
+      "originalClassification": "unreviewed",
+      "originalUseStatus": "active",
+      "originalConsumerLinkStatus": "field-consumer-evidence",
+      "consumerEvidence": [
+        "app/landing/landing.js:87,131 -> textContent"
+      ],
+      "consumerRefs": [
+        {
+          "source": "app/landing/landing.js",
+          "line": "87,131",
+          "relationship": "page-data-to-card-and-feature",
+          "evidence": "The environment name populates both the feature title and the card title."
+        }
+      ],
+      "disposition": "editorial_copy",
+      "reason": "This is the page-owned name of a landing environment card and feature. It is localizable editorial content, not a catalog entity identifier or V5 product record.",
+      "sourceSha256": "afcd11965f48adb61f2957ada26cf2bc94665d6d9fb7f08d556c012c046f031e"
+    },
+    {
+      "id": "0640296be110bb74",
+      "source": "app/landing/data.js",
+      "line": 7,
+      "column": 149,
+      "owner": "landing",
+      "routes": [
+        "/"
+      ],
+      "sourceRole": "image-alternative-text",
+      "sourceBinding": "CASA_PUBLIC_LANDING",
+      "valuePath": "environments.[2].alt",
+      "expression": "\"Quarto modular\"",
+      "value": "Quarto modular",
+      "originalClassification": "unreviewed",
+      "originalUseStatus": "active",
+      "originalConsumerLinkStatus": "field-consumer-evidence",
+      "consumerEvidence": [
+        "app/landing/landing.js:78 -> img.alt"
+      ],
+      "consumerRefs": [
+        {
+          "source": "app/landing/landing.js",
+          "line": "78",
+          "relationship": "accessible-text-to-alt",
+          "evidence": "The selected environment alt value is assigned to featureImage.alt."
+        }
+      ],
+      "disposition": "ui_copy",
+      "reason": "This string is assigned to an image alt attribute in the landing feature. It is fixed accessible interface text suitable for a message catalog; the phrase describes the image context and is not V5/catalog data.",
+      "sourceSha256": "afcd11965f48adb61f2957ada26cf2bc94665d6d9fb7f08d556c012c046f031e"
+    },
+    {
+      "id": "4020743cdb33cd3d",
+      "source": "app/landing/data.js",
+      "line": 7,
+      "column": 180,
+      "owner": "landing",
+      "routes": [
+        "/"
+      ],
+      "sourceRole": "environment-description",
+      "sourceBinding": "CASA_PUBLIC_LANDING",
+      "valuePath": "environments.[2].description",
+      "expression": "\"Soluções inteligentes para o seu descanso.\"",
+      "value": "Soluções inteligentes para o seu descanso.",
+      "originalClassification": "unreviewed",
+      "originalUseStatus": "active",
+      "originalConsumerLinkStatus": "field-consumer-evidence",
+      "consumerEvidence": [
+        "app/landing/landing.js:88,132 -> textContent"
+      ],
+      "consumerRefs": [
+        {
+          "source": "app/landing/landing.js",
+          "line": "88,132",
+          "relationship": "page-data-to-card-and-feature",
+          "evidence": "The environment description populates both featureDescription and the card copy span."
+        }
+      ],
+      "disposition": "editorial_copy",
+      "reason": "This is localizable descriptive copy on the landing environment card and selected feature. It is authored page content, not V5/catalog data.",
+      "sourceSha256": "afcd11965f48adb61f2957ada26cf2bc94665d6d9fb7f08d556c012c046f031e",
+      "pendingOwnerQuestion": "Confirm the page-content owner and approval of this benefit claim; the source file provides no factual/provenance citation. This is an editorial owner question, not an implementation blocker."
+    },
+    {
+      "id": "b4b72b3b551f0675",
+      "source": "app/landing/data.js",
+      "line": 8,
+      "column": 31,
+      "owner": "landing",
+      "routes": [
+        "/"
+      ],
+      "sourceRole": "environment-name",
+      "sourceBinding": "CASA_PUBLIC_LANDING",
+      "valuePath": "environments.[3].name",
+      "expression": "\"Escritório\"",
+      "value": "Escritório",
+      "originalClassification": "unreviewed",
+      "originalUseStatus": "active",
+      "originalConsumerLinkStatus": "field-consumer-evidence",
+      "consumerEvidence": [
+        "app/landing/landing.js:87,131 -> textContent"
+      ],
+      "consumerRefs": [
+        {
+          "source": "app/landing/landing.js",
+          "line": "87,131",
+          "relationship": "page-data-to-card-and-feature",
+          "evidence": "The environment name populates both the feature title and the card title."
+        }
+      ],
+      "disposition": "editorial_copy",
+      "reason": "This is the page-owned name of a landing environment card and feature. It is localizable editorial content, not a catalog entity identifier or V5 product record.",
+      "sourceSha256": "afcd11965f48adb61f2957ada26cf2bc94665d6d9fb7f08d556c012c046f031e"
+    },
+    {
+      "id": "c832281e5cbd7bdd",
+      "source": "app/landing/data.js",
+      "line": 8,
+      "column": 165,
+      "owner": "landing",
+      "routes": [
+        "/"
+      ],
+      "sourceRole": "image-alternative-text",
+      "sourceBinding": "CASA_PUBLIC_LANDING",
+      "valuePath": "environments.[3].alt",
+      "expression": "\"Escritório modular\"",
+      "value": "Escritório modular",
+      "originalClassification": "unreviewed",
+      "originalUseStatus": "active",
+      "originalConsumerLinkStatus": "field-consumer-evidence",
+      "consumerEvidence": [
+        "app/landing/landing.js:78 -> img.alt"
+      ],
+      "consumerRefs": [
+        {
+          "source": "app/landing/landing.js",
+          "line": "78",
+          "relationship": "accessible-text-to-alt",
+          "evidence": "The selected environment alt value is assigned to featureImage.alt."
+        }
+      ],
+      "disposition": "ui_copy",
+      "reason": "This string is assigned to an image alt attribute in the landing feature. It is fixed accessible interface text suitable for a message catalog; the phrase describes the image context and is not V5/catalog data.",
+      "sourceSha256": "afcd11965f48adb61f2957ada26cf2bc94665d6d9fb7f08d556c012c046f031e"
+    },
+    {
+      "id": "865a7b0bf1abd926",
+      "source": "app/landing/data.js",
+      "line": 8,
+      "column": 200,
+      "owner": "landing",
+      "routes": [
+        "/"
+      ],
+      "sourceRole": "environment-description",
+      "sourceBinding": "CASA_PUBLIC_LANDING",
+      "valuePath": "environments.[3].description",
+      "expression": "\"Produtividade com organização e design.\"",
+      "value": "Produtividade com organização e design.",
+      "originalClassification": "unreviewed",
+      "originalUseStatus": "active",
+      "originalConsumerLinkStatus": "field-consumer-evidence",
+      "consumerEvidence": [
+        "app/landing/landing.js:88,132 -> textContent"
+      ],
+      "consumerRefs": [
+        {
+          "source": "app/landing/landing.js",
+          "line": "88,132",
+          "relationship": "page-data-to-card-and-feature",
+          "evidence": "The environment description populates both featureDescription and the card copy span."
+        }
+      ],
+      "disposition": "editorial_copy",
+      "reason": "This is localizable descriptive copy on the landing environment card and selected feature. It is authored page content, not V5/catalog data.",
+      "sourceSha256": "afcd11965f48adb61f2957ada26cf2bc94665d6d9fb7f08d556c012c046f031e",
+      "pendingOwnerQuestion": "Confirm the page-content owner and approval of this benefit claim; the source file provides no factual/provenance citation. This is an editorial owner question, not an implementation blocker."
+    },
+    {
+      "id": "c12f8c993566e2ca",
+      "source": "app/landing/data.js",
+      "line": 9,
+      "column": 31,
+      "owner": "landing",
+      "routes": [
+        "/"
+      ],
+      "sourceRole": "environment-name",
+      "sourceBinding": "CASA_PUBLIC_LANDING",
+      "valuePath": "environments.[4].name",
+      "expression": "\"Lavanderia\"",
+      "value": "Lavanderia",
+      "originalClassification": "unreviewed",
+      "originalUseStatus": "active",
+      "originalConsumerLinkStatus": "field-consumer-evidence",
+      "consumerEvidence": [
+        "app/landing/landing.js:87,131 -> textContent"
+      ],
+      "consumerRefs": [
+        {
+          "source": "app/landing/landing.js",
+          "line": "87,131",
+          "relationship": "page-data-to-card-and-feature",
+          "evidence": "The environment name populates both the feature title and the card title."
+        }
+      ],
+      "disposition": "editorial_copy",
+      "reason": "This is the page-owned name of a landing environment card and feature. It is localizable editorial content, not a catalog entity identifier or V5 product record.",
+      "sourceSha256": "afcd11965f48adb61f2957ada26cf2bc94665d6d9fb7f08d556c012c046f031e"
+    },
+    {
+      "id": "7c846231614a3a3a",
+      "source": "app/landing/data.js",
+      "line": 9,
+      "column": 165,
+      "owner": "landing",
+      "routes": [
+        "/"
+      ],
+      "sourceRole": "image-alternative-text",
+      "sourceBinding": "CASA_PUBLIC_LANDING",
+      "valuePath": "environments.[4].alt",
+      "expression": "\"Lavanderia modular\"",
+      "value": "Lavanderia modular",
+      "originalClassification": "unreviewed",
+      "originalUseStatus": "active",
+      "originalConsumerLinkStatus": "field-consumer-evidence",
+      "consumerEvidence": [
+        "app/landing/landing.js:78 -> img.alt"
+      ],
+      "consumerRefs": [
+        {
+          "source": "app/landing/landing.js",
+          "line": "78",
+          "relationship": "accessible-text-to-alt",
+          "evidence": "The selected environment alt value is assigned to featureImage.alt."
+        }
+      ],
+      "disposition": "ui_copy",
+      "reason": "This string is assigned to an image alt attribute in the landing feature. It is fixed accessible interface text suitable for a message catalog; the phrase describes the image context and is not V5/catalog data.",
+      "sourceSha256": "afcd11965f48adb61f2957ada26cf2bc94665d6d9fb7f08d556c012c046f031e"
+    },
+    {
+      "id": "c5cd466d02155fe1",
+      "source": "app/landing/data.js",
+      "line": 9,
+      "column": 200,
+      "owner": "landing",
+      "routes": [
+        "/"
+      ],
+      "sourceRole": "environment-description",
+      "sourceBinding": "CASA_PUBLIC_LANDING",
+      "valuePath": "environments.[4].description",
+      "expression": "\"Praticidade que facilita o dia a dia.\"",
+      "value": "Praticidade que facilita o dia a dia.",
+      "originalClassification": "unreviewed",
+      "originalUseStatus": "active",
+      "originalConsumerLinkStatus": "field-consumer-evidence",
+      "consumerEvidence": [
+        "app/landing/landing.js:88,132 -> textContent"
+      ],
+      "consumerRefs": [
+        {
+          "source": "app/landing/landing.js",
+          "line": "88,132",
+          "relationship": "page-data-to-card-and-feature",
+          "evidence": "The environment description populates both featureDescription and the card copy span."
+        }
+      ],
+      "disposition": "editorial_copy",
+      "reason": "This is localizable descriptive copy on the landing environment card and selected feature. It is authored page content, not V5/catalog data.",
+      "sourceSha256": "afcd11965f48adb61f2957ada26cf2bc94665d6d9fb7f08d556c012c046f031e",
+      "pendingOwnerQuestion": "Confirm the page-content owner and approval of this benefit claim; the source file provides no factual/provenance citation. This is an editorial owner question, not an implementation blocker."
+    },
+    {
+      "id": "456e1ce16186aa53",
+      "source": "app/landing/data.js",
+      "line": 12,
+      "column": 14,
+      "owner": "landing",
+      "routes": [
+        "/"
+      ],
+      "sourceRole": "benefit-label",
+      "sourceBinding": "CASA_PUBLIC_LANDING",
+      "valuePath": "benefits.[0].label",
+      "expression": "\"Qualidade de móvel planejado\"",
+      "value": "Qualidade de móvel planejado",
+      "originalClassification": "unreviewed",
+      "originalUseStatus": "active",
+      "originalConsumerLinkStatus": "field-consumer-evidence",
+      "consumerEvidence": [
+        "app/landing/landing.js:37 -> textContent"
+      ],
+      "consumerRefs": [
+        {
+          "source": "app/landing/landing.js",
+          "line": "37",
+          "relationship": "benefit-data-to-dom",
+          "evidence": "The benefit label is assigned to a span textContent."
+        }
+      ],
+      "disposition": "editorial_copy",
+      "reason": "This is a short public benefit statement in the landing page strip. It is localizable marketing/editorial copy, not dynamic commercial or V5 data.",
+      "sourceSha256": "afcd11965f48adb61f2957ada26cf2bc94665d6d9fb7f08d556c012c046f031e",
+      "pendingOwnerQuestion": "Confirm the marketing-content owner and approved basis for this quality or modular-practicality statement; the source file provides no provenance. This is an owner question, not an implementation blocker."
+    },
+    {
+      "id": "d2d94ac60b73f702",
+      "source": "app/landing/data.js",
+      "line": 13,
+      "column": 14,
+      "owner": "landing",
+      "routes": [
+        "/"
+      ],
+      "sourceRole": "benefit-label",
+      "sourceBinding": "CASA_PUBLIC_LANDING",
+      "valuePath": "benefits.[1].label",
+      "expression": "\"Praticidade de um sistema modular\"",
+      "value": "Praticidade de um sistema modular",
+      "originalClassification": "unreviewed",
+      "originalUseStatus": "active",
+      "originalConsumerLinkStatus": "field-consumer-evidence",
+      "consumerEvidence": [
+        "app/landing/landing.js:37 -> textContent"
+      ],
+      "consumerRefs": [
+        {
+          "source": "app/landing/landing.js",
+          "line": "37",
+          "relationship": "benefit-data-to-dom",
+          "evidence": "The benefit label is assigned to a span textContent."
+        }
+      ],
+      "disposition": "editorial_copy",
+      "reason": "This is a short public benefit statement in the landing page strip. It is localizable marketing/editorial copy, not dynamic commercial or V5 data.",
+      "sourceSha256": "afcd11965f48adb61f2957ada26cf2bc94665d6d9fb7f08d556c012c046f031e",
+      "pendingOwnerQuestion": "Confirm the marketing-content owner and approved basis for this quality or modular-practicality statement; the source file provides no provenance. This is an owner question, not an implementation blocker."
+    },
+    {
+      "id": "bdb882c8da1bf22c",
+      "source": "app/landing/data.js",
+      "line": 14,
+      "column": 14,
+      "owner": "landing",
+      "routes": [
+        "/"
+      ],
+      "sourceRole": "benefit-label",
+      "sourceBinding": "CASA_PUBLIC_LANDING",
+      "valuePath": "benefits.[2].label",
+      "expression": "\"Preço pensado para o seu projeto\"",
+      "value": "Preço pensado para o seu projeto",
+      "originalClassification": "unreviewed",
+      "originalUseStatus": "active",
+      "originalConsumerLinkStatus": "field-consumer-evidence",
+      "consumerEvidence": [
+        "app/landing/landing.js:37 -> textContent"
+      ],
+      "consumerRefs": [
+        {
+          "source": "app/landing/landing.js",
+          "line": "37",
+          "relationship": "benefit-data-to-dom",
+          "evidence": "The selected benefit label is assigned to a span textContent."
+        }
+      ],
+      "disposition": "commercial_content",
+      "reason": "This is public commercial positioning about project pricing or delivery/installation service, not a price value or V5 product record. It is active landing copy and should retain commercial-content ownership.",
+      "sourceSha256": "afcd11965f48adb61f2957ada26cf2bc94665d6d9fb7f08d556c012c046f031e",
+      "pendingOwnerQuestion": "Confirm the commercial owner and approved basis for this pricing or service statement; no source/approval is documented in the landing data file. This is an ownership/provenance question, not an implementation blocker."
+    },
+    {
+      "id": "0189716187be3447",
+      "source": "app/landing/data.js",
+      "line": 15,
+      "column": 14,
+      "owner": "landing",
+      "routes": [
+        "/"
+      ],
+      "sourceRole": "benefit-label",
+      "sourceBinding": "CASA_PUBLIC_LANDING",
+      "valuePath": "benefits.[3].label",
+      "expression": "\"Entrega e instalação especializada\"",
+      "value": "Entrega e instalação especializada",
+      "originalClassification": "unreviewed",
+      "originalUseStatus": "active",
+      "originalConsumerLinkStatus": "field-consumer-evidence",
+      "consumerEvidence": [
+        "app/landing/landing.js:37 -> textContent"
+      ],
+      "consumerRefs": [
+        {
+          "source": "app/landing/landing.js",
+          "line": "37",
+          "relationship": "benefit-data-to-dom",
+          "evidence": "The selected benefit label is assigned to a span textContent."
+        }
+      ],
+      "disposition": "commercial_content",
+      "reason": "This is public commercial positioning about project pricing or delivery/installation service, not a price value or V5 product record. It is active landing copy and should retain commercial-content ownership.",
+      "sourceSha256": "afcd11965f48adb61f2957ada26cf2bc94665d6d9fb7f08d556c012c046f031e",
+      "pendingOwnerQuestion": "Confirm the commercial owner and approved basis for this pricing or service statement; no source/approval is documented in the landing data file. This is an ownership/provenance question, not an implementation blocker."
+    },
+    {
+      "id": "4ea7a0da65816c69",
+      "source": "app/landing/landing.js",
+      "line": 24,
+      "column": 6,
+      "owner": "landing",
+      "routes": [
+        "/"
+      ],
+      "sourceRole": "inline-text-array",
+      "sourceBinding": "forEach@24",
+      "valuePath": "[0]",
+      "expression": "\"Modular\"",
+      "value": "Modular",
+      "originalClassification": "unreviewed",
+      "originalUseStatus": "active",
+      "originalConsumerLinkStatus": "field-consumer-evidence",
+      "consumerEvidence": [
+        "same callback writes its first parameter to a recognized DOM text property at app/landing/landing.js:24"
+      ],
+      "consumerRefs": [
+        {
+          "source": "app/landing/landing.js",
+          "line": "24,30",
+          "relationship": "page-copy-to-dom",
+          "evidence": "The inline phrase is iterated by renderBenefits() and assigned to strong.textContent."
+        }
+      ],
+      "disposition": "editorial_copy",
+      "reason": "This short phrase is part of a fixed landing-page benefit/positioning strip. It is page-owned editorial copy, not an identifier or product record.",
+      "sourceSha256": "d50203355f34d7c775fe2d4712f9e76fdf8c2da5b0e43981972023411d28639d"
+    },
+    {
+      "id": "ad3713eaaa5e6b72",
+      "source": "app/landing/landing.js",
+      "line": 24,
+      "column": 17,
+      "owner": "landing",
+      "routes": [
+        "/"
+      ],
+      "sourceRole": "inline-text-array",
+      "sourceBinding": "forEach@24",
+      "valuePath": "[1]",
+      "expression": "\"Inteligente\"",
+      "value": "Inteligente",
+      "originalClassification": "unreviewed",
+      "originalUseStatus": "active",
+      "originalConsumerLinkStatus": "field-consumer-evidence",
+      "consumerEvidence": [
+        "same callback writes its first parameter to a recognized DOM text property at app/landing/landing.js:24"
+      ],
+      "consumerRefs": [
+        {
+          "source": "app/landing/landing.js",
+          "line": "24,30",
+          "relationship": "page-copy-to-dom",
+          "evidence": "The inline phrase is iterated by renderBenefits() and assigned to strong.textContent."
+        }
+      ],
+      "disposition": "editorial_copy",
+      "reason": "This short phrase is part of a fixed landing-page benefit/positioning strip. It is page-owned editorial copy, not an identifier or product record.",
+      "sourceSha256": "d50203355f34d7c775fe2d4712f9e76fdf8c2da5b0e43981972023411d28639d"
+    },
+    {
+      "id": "756fd54f68386be5",
+      "source": "app/landing/landing.js",
+      "line": 24,
+      "column": 32,
+      "owner": "landing",
+      "routes": [
+        "/"
+      ],
+      "sourceRole": "inline-text-array",
+      "sourceBinding": "forEach@24",
+      "valuePath": "[2]",
+      "expression": "\"Para a sua vida\"",
+      "value": "Para a sua vida",
+      "originalClassification": "unreviewed",
+      "originalUseStatus": "active",
+      "originalConsumerLinkStatus": "field-consumer-evidence",
+      "consumerEvidence": [
+        "same callback writes its first parameter to a recognized DOM text property at app/landing/landing.js:24"
+      ],
+      "consumerRefs": [
+        {
+          "source": "app/landing/landing.js",
+          "line": "24,30",
+          "relationship": "page-copy-to-dom",
+          "evidence": "The inline phrase is iterated by renderBenefits() and assigned to strong.textContent."
+        }
+      ],
+      "disposition": "editorial_copy",
+      "reason": "This short phrase is part of a fixed landing-page benefit/positioning strip. It is page-owned editorial copy, not an identifier or product record.",
+      "sourceSha256": "d50203355f34d7c775fe2d4712f9e76fdf8c2da5b0e43981972023411d28639d"
+    },
+    {
+      "id": "54947311a7ad890a",
+      "source": "app/landing/landing.js",
+      "line": 54,
+      "column": 46,
+      "owner": "landing",
+      "routes": [
+        "/"
+      ],
+      "sourceRole": "error-message-source",
+      "sourceBinding": "Error constructor",
+      "valuePath": "",
+      "expression": "\"Imagem indisponível\"",
+      "value": "Imagem indisponível",
+      "originalClassification": "diagnostic",
+      "originalUseStatus": "diagnostic",
+      "originalConsumerLinkStatus": "fixed-fallback-only",
+      "consumerEvidence": [
+        "The rejected image load reaches the static HTML fallback; the Error text is discarded."
+      ],
+      "consumerRefs": [
+        {
+          "source": "app/landing/landing.js",
+          "line": "54-61",
+          "relationship": "error-to-fixed-fallback",
+          "evidence": "The rejection handler commits the image-unavailable state and reveals the existing fixed fallback; it does not display error.message."
+        }
+      ],
+      "disposition": "diagnostic",
+      "reason": "This Error text is used to reject a failed image load; the rejection handler selects a separate fixed image-unavailable fallback. The Error literal is not user-facing copy.",
+      "sourceSha256": "d50203355f34d7c775fe2d4712f9e76fdf8c2da5b0e43981972023411d28639d",
+      "failureFallbackRefs": [
+        {
+          "sinkId": "b5c5526f2f3c9ad4",
+          "source": "app/index.html",
+          "line": 48,
+          "sink": "text:p",
+          "expression": "Imagem temporariamente indisponível.",
+          "routeConsumers": [
+            "/"
+          ],
+          "relationship": "error-to-fixed-fallback",
+          "evidence": "The rejected image load reaches the static HTML fallback; the Error text is discarded."
+        }
+      ]
+    },
+    {
+      "id": "2d6d7c6df940db67",
+      "source": "app/viewer/data.js",
+      "line": 7,
+      "column": 21,
+      "owner": "viewer",
+      "routes": [
+        "/viewer/"
+      ],
+      "sourceRole": "view-label",
+      "sourceBinding": "CASA_PUBLIC_VIEWER",
+      "valuePath": "viewTypes.focus.label",
+      "expression": "\"Detalhe do módulo\"",
+      "value": "Detalhe do módulo",
+      "originalClassification": "unreviewed",
+      "originalUseStatus": "passed-but-unused",
+      "originalConsumerLinkStatus": "manual-consumer-review",
+      "consumerEvidence": [
+        "app/viewer/viewer.js:89 -> render argument; app/viewer/technical-views.js does not render label"
+      ],
+      "consumerRefs": [
+        {
+          "source": "app/viewer/viewer.js",
+          "line": "87-89",
+          "relationship": "configuration-passed-to-renderer",
+          "evidence": "spec.label is passed to CASA_PUBLIC_TECHNICAL_VIEWS.render()."
+        },
+        {
+          "source": "app/viewer/technical-views.js",
+          "line": "59-63",
+          "relationship": "renderer-argument-not-read",
+          "evidence": "The render function accepts label but its branches use kind and do not read label."
+        }
+      ],
+      "disposition": "passed_but_unused",
+      "reason": "The label is passed as an argument from the Viewer configuration, but technical-views.js does not read its label parameter; the rendered figure creates its own captions. It has no current user-visible consumer and should not be migrated as active copy on this evidence.",
+      "sourceSha256": "ac523d4cd89350ac054dfd73420b5369a979c23aa2d9bc614768629a7ce9b183",
+      "pendingOwnerQuestion": "Viewer owner to decide whether this unused configuration field is intentionally retained for a future contract or should be retired in a separate cleanup decision."
+    },
+    {
+      "id": "e555f99c951e364b",
+      "source": "app/viewer/data.js",
+      "line": 8,
+      "column": 20,
+      "owner": "viewer",
+      "routes": [
+        "/viewer/"
+      ],
+      "sourceRole": "view-label",
+      "sourceBinding": "CASA_PUBLIC_VIEWER",
+      "valuePath": "viewTypes.open.label",
+      "expression": "\"Perspectiva aberta\"",
+      "value": "Perspectiva aberta",
+      "originalClassification": "unreviewed",
+      "originalUseStatus": "passed-but-unused",
+      "originalConsumerLinkStatus": "manual-consumer-review",
+      "consumerEvidence": [
+        "app/viewer/viewer.js:89 -> render argument; app/viewer/technical-views.js does not render label"
+      ],
+      "consumerRefs": [
+        {
+          "source": "app/viewer/viewer.js",
+          "line": "87-89",
+          "relationship": "configuration-passed-to-renderer",
+          "evidence": "spec.label is passed to CASA_PUBLIC_TECHNICAL_VIEWS.render()."
+        },
+        {
+          "source": "app/viewer/technical-views.js",
+          "line": "59-63",
+          "relationship": "renderer-argument-not-read",
+          "evidence": "The render function accepts label but its branches use kind and do not read label."
+        }
+      ],
+      "disposition": "passed_but_unused",
+      "reason": "The label is passed as an argument from the Viewer configuration, but technical-views.js does not read its label parameter; the rendered figure creates its own captions. It has no current user-visible consumer and should not be migrated as active copy on this evidence.",
+      "sourceSha256": "ac523d4cd89350ac054dfd73420b5369a979c23aa2d9bc614768629a7ce9b183",
+      "pendingOwnerQuestion": "Viewer owner to decide whether this unused configuration field is intentionally retained for a future contract or should be retired in a separate cleanup decision."
+    },
+    {
+      "id": "f63e08bbb2e17b94",
+      "source": "app/viewer/data.js",
+      "line": 9,
+      "column": 24,
+      "owner": "viewer",
+      "routes": [
+        "/viewer/"
+      ],
+      "sourceRole": "view-label",
+      "sourceBinding": "CASA_PUBLIC_VIEWER",
+      "valuePath": "viewTypes.internal.label",
+      "expression": "\"Vista interna\"",
+      "value": "Vista interna",
+      "originalClassification": "unreviewed",
+      "originalUseStatus": "passed-but-unused",
+      "originalConsumerLinkStatus": "manual-consumer-review",
+      "consumerEvidence": [
+        "app/viewer/viewer.js:89 -> render argument; app/viewer/technical-views.js does not render label"
+      ],
+      "consumerRefs": [
+        {
+          "source": "app/viewer/viewer.js",
+          "line": "87-89",
+          "relationship": "configuration-passed-to-renderer",
+          "evidence": "spec.label is passed to CASA_PUBLIC_TECHNICAL_VIEWS.render()."
+        },
+        {
+          "source": "app/viewer/technical-views.js",
+          "line": "59-63",
+          "relationship": "renderer-argument-not-read",
+          "evidence": "The render function accepts label but its branches use kind and do not read label."
+        }
+      ],
+      "disposition": "passed_but_unused",
+      "reason": "The label is passed as an argument from the Viewer configuration, but technical-views.js does not read its label parameter; the rendered figure creates its own captions. It has no current user-visible consumer and should not be migrated as active copy on this evidence.",
+      "sourceSha256": "ac523d4cd89350ac054dfd73420b5369a979c23aa2d9bc614768629a7ce9b183",
+      "pendingOwnerQuestion": "Viewer owner to decide whether this unused configuration field is intentionally retained for a future contract or should be retired in a separate cleanup decision."
+    },
+    {
+      "id": "d435b5975f2b23e2",
+      "source": "app/viewer/data.js",
+      "line": 10,
+      "column": 21,
+      "owner": "viewer",
+      "routes": [
+        "/viewer/"
+      ],
+      "sourceRole": "view-label",
+      "sourceBinding": "CASA_PUBLIC_VIEWER",
+      "valuePath": "viewTypes.front.label",
+      "expression": "\"Vista frontal\"",
+      "value": "Vista frontal",
+      "originalClassification": "unreviewed",
+      "originalUseStatus": "passed-but-unused",
+      "originalConsumerLinkStatus": "manual-consumer-review",
+      "consumerEvidence": [
+        "app/viewer/viewer.js:89 -> render argument; app/viewer/technical-views.js does not render label"
+      ],
+      "consumerRefs": [
+        {
+          "source": "app/viewer/viewer.js",
+          "line": "87-89",
+          "relationship": "configuration-passed-to-renderer",
+          "evidence": "spec.label is passed to CASA_PUBLIC_TECHNICAL_VIEWS.render()."
+        },
+        {
+          "source": "app/viewer/technical-views.js",
+          "line": "59-63",
+          "relationship": "renderer-argument-not-read",
+          "evidence": "The render function accepts label but its branches use kind and do not read label."
+        }
+      ],
+      "disposition": "passed_but_unused",
+      "reason": "The label is passed as an argument from the Viewer configuration, but technical-views.js does not read its label parameter; the rendered figure creates its own captions. It has no current user-visible consumer and should not be migrated as active copy on this evidence.",
+      "sourceSha256": "ac523d4cd89350ac054dfd73420b5369a979c23aa2d9bc614768629a7ce9b183",
+      "pendingOwnerQuestion": "Viewer owner to decide whether this unused configuration field is intentionally retained for a future contract or should be retired in a separate cleanup decision."
+    },
+    {
+      "id": "513a942b944239e2",
+      "source": "app/viewer/data.js",
+      "line": 11,
+      "column": 20,
+      "owner": "viewer",
+      "routes": [
+        "/viewer/"
+      ],
+      "sourceRole": "view-label",
+      "sourceBinding": "CASA_PUBLIC_VIEWER",
+      "valuePath": "viewTypes.side.label",
+      "expression": "\"Vista lateral\"",
+      "value": "Vista lateral",
+      "originalClassification": "unreviewed",
+      "originalUseStatus": "passed-but-unused",
+      "originalConsumerLinkStatus": "manual-consumer-review",
+      "consumerEvidence": [
+        "app/viewer/viewer.js:89 -> render argument; app/viewer/technical-views.js does not render label"
+      ],
+      "consumerRefs": [
+        {
+          "source": "app/viewer/viewer.js",
+          "line": "87-89",
+          "relationship": "configuration-passed-to-renderer",
+          "evidence": "spec.label is passed to CASA_PUBLIC_TECHNICAL_VIEWS.render()."
+        },
+        {
+          "source": "app/viewer/technical-views.js",
+          "line": "59-63",
+          "relationship": "renderer-argument-not-read",
+          "evidence": "The render function accepts label but its branches use kind and do not read label."
+        }
+      ],
+      "disposition": "passed_but_unused",
+      "reason": "The label is passed as an argument from the Viewer configuration, but technical-views.js does not read its label parameter; the rendered figure creates its own captions. It has no current user-visible consumer and should not be migrated as active copy on this evidence.",
+      "sourceSha256": "ac523d4cd89350ac054dfd73420b5369a979c23aa2d9bc614768629a7ce9b183",
+      "pendingOwnerQuestion": "Viewer owner to decide whether this unused configuration field is intentionally retained for a future contract or should be retired in a separate cleanup decision."
+    },
+    {
+      "id": "fe139bb7033613a2",
+      "source": "app/viewer/data.js",
+      "line": 12,
+      "column": 32,
+      "owner": "viewer",
+      "routes": [
+        "/viewer/"
+      ],
+      "sourceRole": "view-label",
+      "sourceBinding": "CASA_PUBLIC_VIEWER",
+      "valuePath": "viewTypes.internal-front.label",
+      "expression": "\"Vista interna / frontal\"",
+      "value": "Vista interna / frontal",
+      "originalClassification": "unreviewed",
+      "originalUseStatus": "passed-but-unused",
+      "originalConsumerLinkStatus": "manual-consumer-review",
+      "consumerEvidence": [
+        "app/viewer/viewer.js:89 -> render argument; app/viewer/technical-views.js does not render label"
+      ],
+      "consumerRefs": [
+        {
+          "source": "app/viewer/viewer.js",
+          "line": "87-89",
+          "relationship": "configuration-passed-to-renderer",
+          "evidence": "spec.label is passed to CASA_PUBLIC_TECHNICAL_VIEWS.render()."
+        },
+        {
+          "source": "app/viewer/technical-views.js",
+          "line": "59-63",
+          "relationship": "renderer-argument-not-read",
+          "evidence": "The render function accepts label but its branches use kind and do not read label."
+        }
+      ],
+      "disposition": "passed_but_unused",
+      "reason": "The label is passed as an argument from the Viewer configuration, but technical-views.js does not read its label parameter; the rendered figure creates its own captions. It has no current user-visible consumer and should not be migrated as active copy on this evidence.",
+      "sourceSha256": "ac523d4cd89350ac054dfd73420b5369a979c23aa2d9bc614768629a7ce9b183",
+      "pendingOwnerQuestion": "Viewer owner to decide whether this unused configuration field is intentionally retained for a future contract or should be retired in a separate cleanup decision."
+    },
+    {
+      "id": "f7d62fe1a383b54a",
+      "source": "app/viewer/data.js",
+      "line": 13,
+      "column": 25,
+      "owner": "viewer",
+      "routes": [
+        "/viewer/"
+      ],
+      "sourceRole": "view-label",
+      "sourceBinding": "CASA_PUBLIC_VIEWER",
+      "valuePath": "viewTypes.isometric.label",
+      "expression": "\"Vista isométrica\"",
+      "value": "Vista isométrica",
+      "originalClassification": "unreviewed",
+      "originalUseStatus": "passed-but-unused",
+      "originalConsumerLinkStatus": "manual-consumer-review",
+      "consumerEvidence": [
+        "app/viewer/viewer.js:89 -> render argument; app/viewer/technical-views.js does not render label"
+      ],
+      "consumerRefs": [
+        {
+          "source": "app/viewer/viewer.js",
+          "line": "87-89",
+          "relationship": "configuration-passed-to-renderer",
+          "evidence": "spec.label is passed to CASA_PUBLIC_TECHNICAL_VIEWS.render()."
+        },
+        {
+          "source": "app/viewer/technical-views.js",
+          "line": "59-63",
+          "relationship": "renderer-argument-not-read",
+          "evidence": "The render function accepts label but its branches use kind and do not read label."
+        }
+      ],
+      "disposition": "passed_but_unused",
+      "reason": "The label is passed as an argument from the Viewer configuration, but technical-views.js does not read its label parameter; the rendered figure creates its own captions. It has no current user-visible consumer and should not be migrated as active copy on this evidence.",
+      "sourceSha256": "ac523d4cd89350ac054dfd73420b5369a979c23aa2d9bc614768629a7ce9b183",
+      "pendingOwnerQuestion": "Viewer owner to decide whether this unused configuration field is intentionally retained for a future contract or should be retired in a separate cleanup decision."
+    },
+    {
+      "id": "85f2b9330b549659",
+      "source": "app/viewer/data.js",
+      "line": 16,
+      "column": 32,
+      "owner": "viewer",
+      "routes": [
+        "/viewer/"
+      ],
+      "sourceRole": "detail-heading",
+      "sourceBinding": "CASA_PUBLIC_VIEWER",
+      "valuePath": "detailLayout.[0].title",
+      "expression": "\"Componentes\"",
+      "value": "Componentes",
+      "originalClassification": "unreviewed",
+      "originalUseStatus": "active",
+      "originalConsumerLinkStatus": "field-consumer-evidence",
+      "consumerEvidence": [
+        "app/viewer/viewer.js:123 -> element text"
+      ],
+      "consumerRefs": [
+        {
+          "source": "app/viewer/viewer.js",
+          "line": "114-123",
+          "relationship": "page-heading-to-dom",
+          "evidence": "The descriptor title is supplied to the h3 textContent in renderDetails()."
+        }
+      ],
+      "disposition": "ui_copy",
+      "reason": "This is a fixed heading in the Viewer details panel, rendered as an h3 when the related public projection contains that section. It is interface copy suitable for a message catalog; the section data itself remains server-projected product content.",
+      "sourceSha256": "ac523d4cd89350ac054dfd73420b5369a979c23aa2d9bc614768629a7ce9b183"
+    },
+    {
+      "id": "69fa9f880ef4d549",
+      "source": "app/viewer/data.js",
+      "line": 17,
+      "column": 34,
+      "owner": "viewer",
+      "routes": [
+        "/viewer/"
+      ],
+      "sourceRole": "detail-heading",
+      "sourceBinding": "CASA_PUBLIC_VIEWER",
+      "valuePath": "detailLayout.[1].title",
+      "expression": "\"Requisitos\"",
+      "value": "Requisitos",
+      "originalClassification": "unreviewed",
+      "originalUseStatus": "active",
+      "originalConsumerLinkStatus": "field-consumer-evidence",
+      "consumerEvidence": [
+        "app/viewer/viewer.js:123 -> element text"
+      ],
+      "consumerRefs": [
+        {
+          "source": "app/viewer/viewer.js",
+          "line": "114-123",
+          "relationship": "page-heading-to-dom",
+          "evidence": "The descriptor title is supplied to the h3 textContent in renderDetails()."
+        }
+      ],
+      "disposition": "ui_copy",
+      "reason": "This is a fixed heading in the Viewer details panel, rendered as an h3 when the related public projection contains that section. It is interface copy suitable for a message catalog; the section data itself remains server-projected product content.",
+      "sourceSha256": "ac523d4cd89350ac054dfd73420b5369a979c23aa2d9bc614768629a7ce9b183"
+    },
+    {
+      "id": "eff366e95ddb3b3f",
+      "source": "app/viewer/public-data.js",
+      "line": 11,
+      "column": 39,
+      "owner": "viewer",
+      "routes": [
+        "/viewer/"
+      ],
+      "sourceRole": "error-message-source",
+      "sourceBinding": "Error constructor",
+      "valuePath": "",
+      "expression": "\"public_modules_unavailable\"",
+      "value": "public_modules_unavailable",
+      "originalClassification": "diagnostic",
+      "originalUseStatus": "diagnostic",
+      "originalConsumerLinkStatus": "fixed-fallback-only",
+      "consumerEvidence": [
+        "The catch ignores the Error and appends a fixed viewer alert."
+      ],
+      "consumerRefs": [
+        {
+          "source": "app/viewer/public-data.js",
+          "line": "11",
+          "relationship": "validation-error-source",
+          "evidence": "The literal is thrown when the public endpoint response or projection fails validation."
+        },
+        {
+          "source": "app/viewer/viewer.js",
+          "line": "174-184",
+          "relationship": "error-to-fixed-alert",
+          "evidence": "The promise catch discards the exception and appends a fixed role=alert message."
+        }
+      ],
+      "disposition": "diagnostic",
+      "reason": "This validation/load exception literal is discarded by the Viewer promise catch, which renders one fixed alert. It describes a failed public projection contract, not user-facing copy or product data.",
+      "sourceSha256": "987c0e7983267566bae6a553fd7ba71de755d8c54e058f0599914c974fa37c1f",
+      "failureFallbackRefs": [
+        {
+          "sinkId": "7d5c29451be070c2",
+          "source": "app/viewer/viewer.js",
+          "line": 183,
+          "sink": "property:textContent",
+          "expression": "\"Informações temporariamente indisponíveis. Tente novamente mais tarde.\"",
+          "routeConsumers": [
+            "/viewer/"
+          ],
+          "relationship": "error-to-fixed-fallback",
+          "evidence": "The catch ignores the Error and appends a fixed viewer alert."
+        }
+      ]
+    },
+    {
+      "id": "d1501f12e5194a37",
+      "source": "app/viewer/public-data.js",
+      "line": 18,
+      "column": 27,
+      "owner": "viewer",
+      "routes": [
+        "/viewer/"
+      ],
+      "sourceRole": "error-message-source",
+      "sourceBinding": "TypeError constructor",
+      "valuePath": "",
+      "expression": "\"invalid_public_module_projection\"",
+      "value": "invalid_public_module_projection",
+      "originalClassification": "diagnostic",
+      "originalUseStatus": "diagnostic",
+      "originalConsumerLinkStatus": "fixed-fallback-only",
+      "consumerEvidence": [
+        "The load rejection is caught by the viewer start chain; the TypeError text is discarded."
+      ],
+      "consumerRefs": [
+        {
+          "source": "app/viewer/public-data.js",
+          "line": "18",
+          "relationship": "validation-error-source",
+          "evidence": "The literal is thrown when the public endpoint response or projection fails validation."
+        },
+        {
+          "source": "app/viewer/viewer.js",
+          "line": "174-184",
+          "relationship": "error-to-fixed-alert",
+          "evidence": "The promise catch discards the exception and appends a fixed role=alert message."
+        }
+      ],
+      "disposition": "diagnostic",
+      "reason": "This validation/load exception literal is discarded by the Viewer promise catch, which renders one fixed alert. It describes a failed public projection contract, not user-facing copy or product data.",
+      "sourceSha256": "987c0e7983267566bae6a553fd7ba71de755d8c54e058f0599914c974fa37c1f",
+      "failureFallbackRefs": [
+        {
+          "sinkId": "7d5c29451be070c2",
+          "source": "app/viewer/viewer.js",
+          "line": 183,
+          "sink": "property:textContent",
+          "expression": "\"Informações temporariamente indisponíveis. Tente novamente mais tarde.\"",
+          "routeConsumers": [
+            "/viewer/"
+          ],
+          "relationship": "error-to-fixed-fallback",
+          "evidence": "The load rejection is caught by the viewer start chain; the TypeError text is discarded."
+        }
+      ]
+    },
+    {
+      "id": "43c8176465fe6313",
+      "source": "app/viewer/public-data.js",
+      "line": 22,
+      "column": 27,
+      "owner": "viewer",
+      "routes": [
+        "/viewer/"
+      ],
+      "sourceRole": "error-message-source",
+      "sourceBinding": "TypeError constructor",
+      "valuePath": "",
+      "expression": "\"invalid_public_module_membership\"",
+      "value": "invalid_public_module_membership",
+      "originalClassification": "diagnostic",
+      "originalUseStatus": "diagnostic",
+      "originalConsumerLinkStatus": "fixed-fallback-only",
+      "consumerEvidence": [
+        "The load rejection is caught by the viewer start chain; the TypeError text is discarded."
+      ],
+      "consumerRefs": [
+        {
+          "source": "app/viewer/public-data.js",
+          "line": "22",
+          "relationship": "validation-error-source",
+          "evidence": "The literal is thrown when the public endpoint response or projection fails validation."
+        },
+        {
+          "source": "app/viewer/viewer.js",
+          "line": "174-184",
+          "relationship": "error-to-fixed-alert",
+          "evidence": "The promise catch discards the exception and appends a fixed role=alert message."
+        }
+      ],
+      "disposition": "diagnostic",
+      "reason": "This validation/load exception literal is discarded by the Viewer promise catch, which renders one fixed alert. It describes a failed public projection contract, not user-facing copy or product data.",
+      "sourceSha256": "987c0e7983267566bae6a553fd7ba71de755d8c54e058f0599914c974fa37c1f",
+      "failureFallbackRefs": [
+        {
+          "sinkId": "7d5c29451be070c2",
+          "source": "app/viewer/viewer.js",
+          "line": 183,
+          "sink": "property:textContent",
+          "expression": "\"Informações temporariamente indisponíveis. Tente novamente mais tarde.\"",
+          "routeConsumers": [
+            "/viewer/"
+          ],
+          "relationship": "error-to-fixed-fallback",
+          "evidence": "The load rejection is caught by the viewer start chain; the TypeError text is discarded."
+        }
+      ]
+    },
+    {
+      "id": "0fd14377571295d0",
+      "source": "app/viewer/public-data.js",
+      "line": 25,
+      "column": 27,
+      "owner": "viewer",
+      "routes": [
+        "/viewer/"
+      ],
+      "sourceRole": "error-message-source",
+      "sourceBinding": "TypeError constructor",
+      "valuePath": "",
+      "expression": "\"invalid_public_finish\"",
+      "value": "invalid_public_finish",
+      "originalClassification": "diagnostic",
+      "originalUseStatus": "diagnostic",
+      "originalConsumerLinkStatus": "fixed-fallback-only",
+      "consumerEvidence": [
+        "The load rejection is caught by the viewer start chain; the TypeError text is discarded."
+      ],
+      "consumerRefs": [
+        {
+          "source": "app/viewer/public-data.js",
+          "line": "25",
+          "relationship": "validation-error-source",
+          "evidence": "The literal is thrown when the public endpoint response or projection fails validation."
+        },
+        {
+          "source": "app/viewer/viewer.js",
+          "line": "174-184",
+          "relationship": "error-to-fixed-alert",
+          "evidence": "The promise catch discards the exception and appends a fixed role=alert message."
+        }
+      ],
+      "disposition": "diagnostic",
+      "reason": "This validation/load exception literal is discarded by the Viewer promise catch, which renders one fixed alert. It describes a failed public projection contract, not user-facing copy or product data.",
+      "sourceSha256": "987c0e7983267566bae6a553fd7ba71de755d8c54e058f0599914c974fa37c1f",
+      "failureFallbackRefs": [
+        {
+          "sinkId": "7d5c29451be070c2",
+          "source": "app/viewer/viewer.js",
+          "line": 183,
+          "sink": "property:textContent",
+          "expression": "\"Informações temporariamente indisponíveis. Tente novamente mais tarde.\"",
+          "routeConsumers": [
+            "/viewer/"
+          ],
+          "relationship": "error-to-fixed-fallback",
+          "evidence": "The load rejection is caught by the viewer start chain; the TypeError text is discarded."
+        }
+      ]
+    },
+    {
+      "id": "f761c690e91eb8f7",
+      "source": "app/viewer/public-data.js",
+      "line": 30,
+      "column": 27,
+      "owner": "viewer",
+      "routes": [
+        "/viewer/"
+      ],
+      "sourceRole": "error-message-source",
+      "sourceBinding": "TypeError constructor",
+      "valuePath": "",
+      "expression": "\"invalid_public_module_visibility\"",
+      "value": "invalid_public_module_visibility",
+      "originalClassification": "diagnostic",
+      "originalUseStatus": "diagnostic",
+      "originalConsumerLinkStatus": "fixed-fallback-only",
+      "consumerEvidence": [
+        "The load rejection is caught by the viewer start chain; the TypeError text is discarded."
+      ],
+      "consumerRefs": [
+        {
+          "source": "app/viewer/public-data.js",
+          "line": "30",
+          "relationship": "validation-error-source",
+          "evidence": "The literal is thrown when the public endpoint response or projection fails validation."
+        },
+        {
+          "source": "app/viewer/viewer.js",
+          "line": "174-184",
+          "relationship": "error-to-fixed-alert",
+          "evidence": "The promise catch discards the exception and appends a fixed role=alert message."
+        }
+      ],
+      "disposition": "diagnostic",
+      "reason": "This validation/load exception literal is discarded by the Viewer promise catch, which renders one fixed alert. It describes a failed public projection contract, not user-facing copy or product data.",
+      "sourceSha256": "987c0e7983267566bae6a553fd7ba71de755d8c54e058f0599914c974fa37c1f",
+      "failureFallbackRefs": [
+        {
+          "sinkId": "7d5c29451be070c2",
+          "source": "app/viewer/viewer.js",
+          "line": 183,
+          "sink": "property:textContent",
+          "expression": "\"Informações temporariamente indisponíveis. Tente novamente mais tarde.\"",
+          "routeConsumers": [
+            "/viewer/"
+          ],
+          "relationship": "error-to-fixed-fallback",
+          "evidence": "The load rejection is caught by the viewer start chain; the TypeError text is discarded."
+        }
+      ]
+    },
+    {
+      "id": "8b3d3746bfeafd3d",
+      "source": "app/viewer/public-data.js",
+      "line": 37,
+      "column": 30,
+      "owner": "viewer",
+      "routes": [
+        "/viewer/"
+      ],
+      "sourceRole": "error-message-source",
+      "sourceBinding": "TypeError constructor",
+      "valuePath": "",
+      "expression": "\"invalid_public_base_price\"",
+      "value": "invalid_public_base_price",
+      "originalClassification": "diagnostic",
+      "originalUseStatus": "diagnostic",
+      "originalConsumerLinkStatus": "fixed-fallback-only",
+      "consumerEvidence": [
+        "The load rejection is caught by the viewer start chain; the TypeError text is discarded."
+      ],
+      "consumerRefs": [
+        {
+          "source": "app/viewer/public-data.js",
+          "line": "37",
+          "relationship": "validation-error-source",
+          "evidence": "The literal is thrown when the public endpoint response or projection fails validation."
+        },
+        {
+          "source": "app/viewer/viewer.js",
+          "line": "174-184",
+          "relationship": "error-to-fixed-alert",
+          "evidence": "The promise catch discards the exception and appends a fixed role=alert message."
+        }
+      ],
+      "disposition": "diagnostic",
+      "reason": "This validation/load exception literal is discarded by the Viewer promise catch, which renders one fixed alert. It describes a failed public projection contract, not user-facing copy or product data.",
+      "sourceSha256": "987c0e7983267566bae6a553fd7ba71de755d8c54e058f0599914c974fa37c1f",
+      "failureFallbackRefs": [
+        {
+          "sinkId": "7d5c29451be070c2",
+          "source": "app/viewer/viewer.js",
+          "line": 183,
+          "sink": "property:textContent",
+          "expression": "\"Informações temporariamente indisponíveis. Tente novamente mais tarde.\"",
+          "routeConsumers": [
+            "/viewer/"
+          ],
+          "relationship": "error-to-fixed-fallback",
+          "evidence": "The load rejection is caught by the viewer start chain; the TypeError text is discarded."
+        }
+      ]
+    },
+    {
+      "id": "5b682f235bf9e9c7",
+      "source": "app/viewer/public-data.js",
+      "line": 40,
+      "column": 29,
+      "owner": "viewer",
+      "routes": [
+        "/viewer/"
+      ],
+      "sourceRole": "error-message-source",
+      "sourceBinding": "TypeError constructor",
+      "valuePath": "",
+      "expression": "\"invalid_public_module_dimensions\"",
+      "value": "invalid_public_module_dimensions",
+      "originalClassification": "diagnostic",
+      "originalUseStatus": "diagnostic",
+      "originalConsumerLinkStatus": "fixed-fallback-only",
+      "consumerEvidence": [
+        "The load rejection is caught by the viewer start chain; the TypeError text is discarded."
+      ],
+      "consumerRefs": [
+        {
+          "source": "app/viewer/public-data.js",
+          "line": "40",
+          "relationship": "validation-error-source",
+          "evidence": "The literal is thrown when the public endpoint response or projection fails validation."
+        },
+        {
+          "source": "app/viewer/viewer.js",
+          "line": "174-184",
+          "relationship": "error-to-fixed-alert",
+          "evidence": "The promise catch discards the exception and appends a fixed role=alert message."
+        }
+      ],
+      "disposition": "diagnostic",
+      "reason": "This validation/load exception literal is discarded by the Viewer promise catch, which renders one fixed alert. It describes a failed public projection contract, not user-facing copy or product data.",
+      "sourceSha256": "987c0e7983267566bae6a553fd7ba71de755d8c54e058f0599914c974fa37c1f",
+      "failureFallbackRefs": [
+        {
+          "sinkId": "7d5c29451be070c2",
+          "source": "app/viewer/viewer.js",
+          "line": 183,
+          "sink": "property:textContent",
+          "expression": "\"Informações temporariamente indisponíveis. Tente novamente mais tarde.\"",
+          "routeConsumers": [
+            "/viewer/"
+          ],
+          "relationship": "error-to-fixed-fallback",
+          "evidence": "The load rejection is caught by the viewer start chain; the TypeError text is discarded."
+        }
+      ]
+    },
+    {
+      "id": "d3dabadc0623ea74",
+      "source": "app/viewer/scene-adapters.js",
+      "line": 101,
+      "column": 40,
+      "owner": "viewer",
+      "routes": [
+        "/viewer/"
+      ],
+      "sourceRole": "error-message-source",
+      "sourceBinding": "Error constructor",
+      "valuePath": "left",
+      "expression": "\"Acabamento inicial ausente do catálogo: \"",
+      "value": "Acabamento inicial ausente do catálogo: ",
+      "originalClassification": "diagnostic",
+      "originalUseStatus": "diagnostic",
+      "originalConsumerLinkStatus": "manual-unlinked-conditional",
+      "consumerEvidence": [
+        "A failure during initial mount would reach viewer.js:176-184, but the public-state checks at scene-adapters.js:276-310 validate finish availability and selection before mount; normal operation cannot produce this missing initial finish. Leave the low-confidence fallback relation unlinked."
+      ],
+      "consumerRefs": [
+        {
+          "source": "app/viewer/scene-adapters.js",
+          "line": "101",
+          "relationship": "conditional-adapter-error",
+          "evidence": "The adapter throws if the initial selected finish is absent from the catalog."
+        },
+        {
+          "source": "app/viewer/scene-adapters.js",
+          "line": "276-310",
+          "relationship": "precondition-review",
+          "evidence": "Public finish selection and availability are validated before the initial adapter mount; the inventory marks this relation manual-unlinked-conditional."
+        },
+        {
+          "source": "app/viewer/viewer.js",
+          "line": "174-184",
+          "relationship": "conditional-candidate-only",
+          "evidence": "Errors during initial start/mount are caught by the Viewer startup promise."
+        }
+      ],
+      "disposition": "diagnostic",
+      "reason": "This conditional adapter error reports an absent initial finish. The recorded public-state checks cover finish selection/availability before mount, so the fallback link is low-confidence and remains explicitly unlinked; the exception is not catalog copy.",
+      "sourceSha256": "667a8da5268868b032ff458e234eb08dc119e62fc865b89b8120a70bdfd08655"
+    },
+    {
+      "id": "c11e172560b2ecd4",
+      "source": "app/viewer/scene-adapters.js",
+      "line": 174,
+      "column": 56,
+      "owner": "viewer",
+      "routes": [
+        "/viewer/"
+      ],
+      "sourceRole": "error-message-source",
+      "sourceBinding": "Error constructor",
+      "valuePath": "",
+      "expression": "\"Viewer scene already mounted on another element\"",
+      "value": "Viewer scene already mounted on another element",
+      "originalClassification": "diagnostic",
+      "originalUseStatus": "diagnostic",
+      "originalConsumerLinkStatus": "fixed-fallback-only",
+      "consumerEvidence": [
+        "The error is thrown while start() creates or mounts the public adapter; start() is the fulfillment callback of the Viewer load promise, whose .catch at viewer.js:176-184 renders this fixed alert."
+      ],
+      "consumerRefs": [
+        {
+          "source": "app/viewer/scene-adapters.js",
+          "line": "174",
+          "relationship": "adapter-error-source",
+          "evidence": "The source literal is thrown during adapter creation, validation, or mount."
+        },
+        {
+          "source": "app/viewer/viewer.js",
+          "line": "174-184",
+          "relationship": "error-to-fixed-alert",
+          "evidence": "The Viewer startup promise catch discards the exception and renders a fixed alert."
+        }
+      ],
+      "disposition": "diagnostic",
+      "reason": "This adapter contract/validation exception is thrown while the public Viewer adapter is created or mounted. The startup promise catch discards its technical message and shows one fixed alert; it is not a user-facing catalog string.",
+      "sourceSha256": "667a8da5268868b032ff458e234eb08dc119e62fc865b89b8120a70bdfd08655",
+      "failureFallbackRefs": [
+        {
+          "sinkId": "7d5c29451be070c2",
+          "source": "app/viewer/viewer.js",
+          "line": 183,
+          "sink": "property:textContent",
+          "expression": "\"Informações temporariamente indisponíveis. Tente novamente mais tarde.\"",
+          "routeConsumers": [
+            "/viewer/"
+          ],
+          "relationship": "error-to-fixed-fallback",
+          "evidence": "The error is thrown while start() creates or mounts the public adapter; start() is the fulfillment callback of the Viewer load promise, whose .catch at viewer.js:176-184 renders this fixed alert."
+        }
+      ]
+    },
+    {
+      "id": "416e5de01cae5dde",
+      "source": "app/viewer/scene-adapters.js",
+      "line": 212,
+      "column": 23,
+      "owner": "viewer",
+      "routes": [
+        "/viewer/"
+      ],
+      "sourceRole": "error-message-source",
+      "sourceBinding": "Error constructor",
+      "valuePath": "",
+      "expression": "\"Contratos Scene2D/ProductCatalog2D incompletos para a integração pública.\"",
+      "value": "Contratos Scene2D/ProductCatalog2D incompletos para a integração pública.",
+      "originalClassification": "diagnostic",
+      "originalUseStatus": "diagnostic",
+      "originalConsumerLinkStatus": "fixed-fallback-only",
+      "consumerEvidence": [
+        "The error is thrown while start() creates or mounts the public adapter; start() is the fulfillment callback of the Viewer load promise, whose .catch at viewer.js:176-184 renders this fixed alert."
+      ],
+      "consumerRefs": [
+        {
+          "source": "app/viewer/scene-adapters.js",
+          "line": "212",
+          "relationship": "adapter-error-source",
+          "evidence": "The source literal is thrown during adapter creation, validation, or mount."
+        },
+        {
+          "source": "app/viewer/viewer.js",
+          "line": "174-184",
+          "relationship": "error-to-fixed-alert",
+          "evidence": "The Viewer startup promise catch discards the exception and renders a fixed alert."
+        }
+      ],
+      "disposition": "diagnostic",
+      "reason": "This adapter contract/validation exception is thrown while the public Viewer adapter is created or mounted. The startup promise catch discards its technical message and shows one fixed alert; it is not a user-facing catalog string.",
+      "sourceSha256": "667a8da5268868b032ff458e234eb08dc119e62fc865b89b8120a70bdfd08655",
+      "failureFallbackRefs": [
+        {
+          "sinkId": "7d5c29451be070c2",
+          "source": "app/viewer/viewer.js",
+          "line": 183,
+          "sink": "property:textContent",
+          "expression": "\"Informações temporariamente indisponíveis. Tente novamente mais tarde.\"",
+          "routeConsumers": [
+            "/viewer/"
+          ],
+          "relationship": "error-to-fixed-fallback",
+          "evidence": "The error is thrown while start() creates or mounts the public adapter; start() is the fulfillment callback of the Viewer load promise, whose .catch at viewer.js:176-184 renders this fixed alert."
+        }
+      ]
+    },
+    {
+      "id": "93ffc0dd716a0aa4",
+      "source": "app/viewer/scene-adapters.js",
+      "line": 218,
+      "column": 23,
+      "owner": "viewer",
+      "routes": [
+        "/viewer/"
+      ],
+      "sourceRole": "error-message-source",
+      "sourceBinding": "Error constructor",
+      "valuePath": "",
+      "expression": "\"Componente compartilhado da cena incompatível com o viewer.\"",
+      "value": "Componente compartilhado da cena incompatível com o viewer.",
+      "originalClassification": "diagnostic",
+      "originalUseStatus": "diagnostic",
+      "originalConsumerLinkStatus": "fixed-fallback-only",
+      "consumerEvidence": [
+        "The error is thrown while start() creates or mounts the public adapter; start() is the fulfillment callback of the Viewer load promise, whose .catch at viewer.js:176-184 renders this fixed alert."
+      ],
+      "consumerRefs": [
+        {
+          "source": "app/viewer/scene-adapters.js",
+          "line": "218",
+          "relationship": "adapter-error-source",
+          "evidence": "The source literal is thrown during adapter creation, validation, or mount."
+        },
+        {
+          "source": "app/viewer/viewer.js",
+          "line": "174-184",
+          "relationship": "error-to-fixed-alert",
+          "evidence": "The Viewer startup promise catch discards the exception and renders a fixed alert."
+        }
+      ],
+      "disposition": "diagnostic",
+      "reason": "This adapter contract/validation exception is thrown while the public Viewer adapter is created or mounted. The startup promise catch discards its technical message and shows one fixed alert; it is not a user-facing catalog string.",
+      "sourceSha256": "667a8da5268868b032ff458e234eb08dc119e62fc865b89b8120a70bdfd08655",
+      "failureFallbackRefs": [
+        {
+          "sinkId": "7d5c29451be070c2",
+          "source": "app/viewer/viewer.js",
+          "line": 183,
+          "sink": "property:textContent",
+          "expression": "\"Informações temporariamente indisponíveis. Tente novamente mais tarde.\"",
+          "routeConsumers": [
+            "/viewer/"
+          ],
+          "relationship": "error-to-fixed-fallback",
+          "evidence": "The error is thrown while start() creates or mounts the public adapter; start() is the fulfillment callback of the Viewer load promise, whose .catch at viewer.js:176-184 renders this fixed alert."
+        }
+      ]
+    },
+    {
+      "id": "3f8698749d86bcf2",
+      "source": "app/viewer/scene-adapters.js",
+      "line": 221,
+      "column": 23,
+      "owner": "viewer",
+      "routes": [
+        "/viewer/"
+      ],
+      "sourceRole": "error-message-source",
+      "sourceBinding": "Error constructor",
+      "valuePath": "",
+      "expression": "\"Contrato de acabamentos incompatível com as máscaras da cena.\"",
+      "value": "Contrato de acabamentos incompatível com as máscaras da cena.",
+      "originalClassification": "diagnostic",
+      "originalUseStatus": "diagnostic",
+      "originalConsumerLinkStatus": "fixed-fallback-only",
+      "consumerEvidence": [
+        "The error is thrown while start() creates or mounts the public adapter; start() is the fulfillment callback of the Viewer load promise, whose .catch at viewer.js:176-184 renders this fixed alert."
+      ],
+      "consumerRefs": [
+        {
+          "source": "app/viewer/scene-adapters.js",
+          "line": "221",
+          "relationship": "adapter-error-source",
+          "evidence": "The source literal is thrown during adapter creation, validation, or mount."
+        },
+        {
+          "source": "app/viewer/viewer.js",
+          "line": "174-184",
+          "relationship": "error-to-fixed-alert",
+          "evidence": "The Viewer startup promise catch discards the exception and renders a fixed alert."
+        }
+      ],
+      "disposition": "diagnostic",
+      "reason": "This adapter contract/validation exception is thrown while the public Viewer adapter is created or mounted. The startup promise catch discards its technical message and shows one fixed alert; it is not a user-facing catalog string.",
+      "sourceSha256": "667a8da5268868b032ff458e234eb08dc119e62fc865b89b8120a70bdfd08655",
+      "failureFallbackRefs": [
+        {
+          "sinkId": "7d5c29451be070c2",
+          "source": "app/viewer/viewer.js",
+          "line": 183,
+          "sink": "property:textContent",
+          "expression": "\"Informações temporariamente indisponíveis. Tente novamente mais tarde.\"",
+          "routeConsumers": [
+            "/viewer/"
+          ],
+          "relationship": "error-to-fixed-fallback",
+          "evidence": "The error is thrown while start() creates or mounts the public adapter; start() is the fulfillment callback of the Viewer load promise, whose .catch at viewer.js:176-184 renders this fixed alert."
+        }
+      ]
+    },
+    {
+      "id": "6c4a2db44cf86f4b",
+      "source": "app/viewer/scene-adapters.js",
+      "line": 231,
+      "column": 29,
+      "owner": "viewer",
+      "routes": [
+        "/viewer/"
+      ],
+      "sourceRole": "error-message-source",
+      "sourceBinding": "TypeError constructor",
+      "valuePath": "left",
+      "expression": "\"Unknown or invalid published module: \"",
+      "value": "Unknown or invalid published module: ",
+      "originalClassification": "diagnostic",
+      "originalUseStatus": "diagnostic",
+      "originalConsumerLinkStatus": "fixed-fallback-only",
+      "consumerEvidence": [
+        "The error is thrown while start() creates or mounts the public adapter; start() is the fulfillment callback of the Viewer load promise, whose .catch at viewer.js:176-184 renders this fixed alert."
+      ],
+      "consumerRefs": [
+        {
+          "source": "app/viewer/scene-adapters.js",
+          "line": "231",
+          "relationship": "adapter-error-source",
+          "evidence": "The source literal is thrown during adapter creation, validation, or mount."
+        },
+        {
+          "source": "app/viewer/viewer.js",
+          "line": "174-184",
+          "relationship": "error-to-fixed-alert",
+          "evidence": "The Viewer startup promise catch discards the exception and renders a fixed alert."
+        }
+      ],
+      "disposition": "diagnostic",
+      "reason": "This adapter contract/validation exception is thrown while the public Viewer adapter is created or mounted. The startup promise catch discards its technical message and shows one fixed alert; it is not a user-facing catalog string.",
+      "sourceSha256": "667a8da5268868b032ff458e234eb08dc119e62fc865b89b8120a70bdfd08655",
+      "failureFallbackRefs": [
+        {
+          "sinkId": "7d5c29451be070c2",
+          "source": "app/viewer/viewer.js",
+          "line": 183,
+          "sink": "property:textContent",
+          "expression": "\"Informações temporariamente indisponíveis. Tente novamente mais tarde.\"",
+          "routeConsumers": [
+            "/viewer/"
+          ],
+          "relationship": "error-to-fixed-fallback",
+          "evidence": "The error is thrown while start() creates or mounts the public adapter; start() is the fulfillment callback of the Viewer load promise, whose .catch at viewer.js:176-184 renders this fixed alert."
+        }
+      ]
+    },
+    {
+      "id": "337f36402584aba1",
+      "source": "app/viewer/scene-adapters.js",
+      "line": 247,
+      "column": 27,
+      "owner": "viewer",
+      "routes": [
+        "/viewer/"
+      ],
+      "sourceRole": "error-message-source",
+      "sourceBinding": "TypeError constructor",
+      "valuePath": "",
+      "expression": "\"Duplicate published module\"",
+      "value": "Duplicate published module",
+      "originalClassification": "diagnostic",
+      "originalUseStatus": "diagnostic",
+      "originalConsumerLinkStatus": "fixed-fallback-only",
+      "consumerEvidence": [
+        "The error is thrown while start() creates or mounts the public adapter; start() is the fulfillment callback of the Viewer load promise, whose .catch at viewer.js:176-184 renders this fixed alert."
+      ],
+      "consumerRefs": [
+        {
+          "source": "app/viewer/scene-adapters.js",
+          "line": "247",
+          "relationship": "adapter-error-source",
+          "evidence": "The source literal is thrown during adapter creation, validation, or mount."
+        },
+        {
+          "source": "app/viewer/viewer.js",
+          "line": "174-184",
+          "relationship": "error-to-fixed-alert",
+          "evidence": "The Viewer startup promise catch discards the exception and renders a fixed alert."
+        }
+      ],
+      "disposition": "diagnostic",
+      "reason": "This adapter contract/validation exception is thrown while the public Viewer adapter is created or mounted. The startup promise catch discards its technical message and shows one fixed alert; it is not a user-facing catalog string.",
+      "sourceSha256": "667a8da5268868b032ff458e234eb08dc119e62fc865b89b8120a70bdfd08655",
+      "failureFallbackRefs": [
+        {
+          "sinkId": "7d5c29451be070c2",
+          "source": "app/viewer/viewer.js",
+          "line": 183,
+          "sink": "property:textContent",
+          "expression": "\"Informações temporariamente indisponíveis. Tente novamente mais tarde.\"",
+          "routeConsumers": [
+            "/viewer/"
+          ],
+          "relationship": "error-to-fixed-fallback",
+          "evidence": "The error is thrown while start() creates or mounts the public adapter; start() is the fulfillment callback of the Viewer load promise, whose .catch at viewer.js:176-184 renders this fixed alert."
+        }
+      ]
+    },
+    {
+      "id": "61e35aec8a90171e",
+      "source": "app/viewer/scene-adapters.js",
+      "line": 249,
+      "column": 42,
+      "owner": "viewer",
+      "routes": [
+        "/viewer/"
+      ],
+      "sourceRole": "error-message-source",
+      "sourceBinding": "Error constructor",
+      "valuePath": "",
+      "expression": "\"O catálogo não contém módulos associados à cena.\"",
+      "value": "O catálogo não contém módulos associados à cena.",
+      "originalClassification": "diagnostic",
+      "originalUseStatus": "diagnostic",
+      "originalConsumerLinkStatus": "fixed-fallback-only",
+      "consumerEvidence": [
+        "The error is thrown while start() creates or mounts the public adapter; start() is the fulfillment callback of the Viewer load promise, whose .catch at viewer.js:176-184 renders this fixed alert."
+      ],
+      "consumerRefs": [
+        {
+          "source": "app/viewer/scene-adapters.js",
+          "line": "249",
+          "relationship": "adapter-error-source",
+          "evidence": "The source literal is thrown during adapter creation, validation, or mount."
+        },
+        {
+          "source": "app/viewer/viewer.js",
+          "line": "174-184",
+          "relationship": "error-to-fixed-alert",
+          "evidence": "The Viewer startup promise catch discards the exception and renders a fixed alert."
+        }
+      ],
+      "disposition": "diagnostic",
+      "reason": "This adapter contract/validation exception is thrown while the public Viewer adapter is created or mounted. The startup promise catch discards its technical message and shows one fixed alert; it is not a user-facing catalog string.",
+      "sourceSha256": "667a8da5268868b032ff458e234eb08dc119e62fc865b89b8120a70bdfd08655",
+      "failureFallbackRefs": [
+        {
+          "sinkId": "7d5c29451be070c2",
+          "source": "app/viewer/viewer.js",
+          "line": 183,
+          "sink": "property:textContent",
+          "expression": "\"Informações temporariamente indisponíveis. Tente novamente mais tarde.\"",
+          "routeConsumers": [
+            "/viewer/"
+          ],
+          "relationship": "error-to-fixed-fallback",
+          "evidence": "The error is thrown while start() creates or mounts the public adapter; start() is the fulfillment callback of the Viewer load promise, whose .catch at viewer.js:176-184 renders this fixed alert."
+        }
+      ]
+    },
+    {
+      "id": "3c54a76a93ae0c3d",
+      "source": "app/viewer/scene-adapters.js",
+      "line": 267,
+      "column": 33,
+      "owner": "viewer",
+      "routes": [
+        "/viewer/"
+      ],
+      "sourceRole": "error-message-source",
+      "sourceBinding": "TypeError constructor",
+      "valuePath": "left",
+      "expression": "\"Invalid public module visibility: \"",
+      "value": "Invalid public module visibility: ",
+      "originalClassification": "diagnostic",
+      "originalUseStatus": "diagnostic",
+      "originalConsumerLinkStatus": "fixed-fallback-only",
+      "consumerEvidence": [
+        "The error is thrown while start() creates or mounts the public adapter; start() is the fulfillment callback of the Viewer load promise, whose .catch at viewer.js:176-184 renders this fixed alert."
+      ],
+      "consumerRefs": [
+        {
+          "source": "app/viewer/scene-adapters.js",
+          "line": "267",
+          "relationship": "adapter-error-source",
+          "evidence": "The source literal is thrown during adapter creation, validation, or mount."
+        },
+        {
+          "source": "app/viewer/viewer.js",
+          "line": "174-184",
+          "relationship": "error-to-fixed-alert",
+          "evidence": "The Viewer startup promise catch discards the exception and renders a fixed alert."
+        }
+      ],
+      "disposition": "diagnostic",
+      "reason": "This adapter contract/validation exception is thrown while the public Viewer adapter is created or mounted. The startup promise catch discards its technical message and shows one fixed alert; it is not a user-facing catalog string.",
+      "sourceSha256": "667a8da5268868b032ff458e234eb08dc119e62fc865b89b8120a70bdfd08655",
+      "failureFallbackRefs": [
+        {
+          "sinkId": "7d5c29451be070c2",
+          "source": "app/viewer/viewer.js",
+          "line": 183,
+          "sink": "property:textContent",
+          "expression": "\"Informações temporariamente indisponíveis. Tente novamente mais tarde.\"",
+          "routeConsumers": [
+            "/viewer/"
+          ],
+          "relationship": "error-to-fixed-fallback",
+          "evidence": "The error is thrown while start() creates or mounts the public adapter; start() is the fulfillment callback of the Viewer load promise, whose .catch at viewer.js:176-184 renders this fixed alert."
+        }
+      ]
+    },
+    {
+      "id": "00f7b4959952057a",
+      "source": "app/viewer/scene-adapters.js",
+      "line": 273,
+      "column": 83,
+      "owner": "viewer",
+      "routes": [
+        "/viewer/"
+      ],
+      "sourceRole": "error-message-source",
+      "sourceBinding": "TypeError constructor",
+      "valuePath": "",
+      "expression": "\"Invalid public module selection\"",
+      "value": "Invalid public module selection",
+      "originalClassification": "diagnostic",
+      "originalUseStatus": "diagnostic",
+      "originalConsumerLinkStatus": "fixed-fallback-only",
+      "consumerEvidence": [
+        "The error is thrown while start() creates or mounts the public adapter; start() is the fulfillment callback of the Viewer load promise, whose .catch at viewer.js:176-184 renders this fixed alert."
+      ],
+      "consumerRefs": [
+        {
+          "source": "app/viewer/scene-adapters.js",
+          "line": "273",
+          "relationship": "adapter-error-source",
+          "evidence": "The source literal is thrown during adapter creation, validation, or mount."
+        },
+        {
+          "source": "app/viewer/viewer.js",
+          "line": "174-184",
+          "relationship": "error-to-fixed-alert",
+          "evidence": "The Viewer startup promise catch discards the exception and renders a fixed alert."
+        }
+      ],
+      "disposition": "diagnostic",
+      "reason": "This adapter contract/validation exception is thrown while the public Viewer adapter is created or mounted. The startup promise catch discards its technical message and shows one fixed alert; it is not a user-facing catalog string.",
+      "sourceSha256": "667a8da5268868b032ff458e234eb08dc119e62fc865b89b8120a70bdfd08655",
+      "failureFallbackRefs": [
+        {
+          "sinkId": "7d5c29451be070c2",
+          "source": "app/viewer/viewer.js",
+          "line": 183,
+          "sink": "property:textContent",
+          "expression": "\"Informações temporariamente indisponíveis. Tente novamente mais tarde.\"",
+          "routeConsumers": [
+            "/viewer/"
+          ],
+          "relationship": "error-to-fixed-fallback",
+          "evidence": "The error is thrown while start() creates or mounts the public adapter; start() is the fulfillment callback of the Viewer load promise, whose .catch at viewer.js:176-184 renders this fixed alert."
+        }
+      ]
+    },
+    {
+      "id": "055f319ec79265b8",
+      "source": "app/viewer/scene-adapters.js",
+      "line": 279,
+      "column": 31,
+      "owner": "viewer",
+      "routes": [
+        "/viewer/"
+      ],
+      "sourceRole": "error-message-source",
+      "sourceBinding": "TypeError constructor",
+      "valuePath": "left",
+      "expression": "\"Unknown public finish: \"",
+      "value": "Unknown public finish: ",
+      "originalClassification": "diagnostic",
+      "originalUseStatus": "diagnostic",
+      "originalConsumerLinkStatus": "fixed-fallback-only",
+      "consumerEvidence": [
+        "The error is thrown while start() creates or mounts the public adapter; start() is the fulfillment callback of the Viewer load promise, whose .catch at viewer.js:176-184 renders this fixed alert."
+      ],
+      "consumerRefs": [
+        {
+          "source": "app/viewer/scene-adapters.js",
+          "line": "279",
+          "relationship": "adapter-error-source",
+          "evidence": "The source literal is thrown during adapter creation, validation, or mount."
+        },
+        {
+          "source": "app/viewer/viewer.js",
+          "line": "174-184",
+          "relationship": "error-to-fixed-alert",
+          "evidence": "The Viewer startup promise catch discards the exception and renders a fixed alert."
+        }
+      ],
+      "disposition": "diagnostic",
+      "reason": "This adapter contract/validation exception is thrown while the public Viewer adapter is created or mounted. The startup promise catch discards its technical message and shows one fixed alert; it is not a user-facing catalog string.",
+      "sourceSha256": "667a8da5268868b032ff458e234eb08dc119e62fc865b89b8120a70bdfd08655",
+      "failureFallbackRefs": [
+        {
+          "sinkId": "7d5c29451be070c2",
+          "source": "app/viewer/viewer.js",
+          "line": 183,
+          "sink": "property:textContent",
+          "expression": "\"Informações temporariamente indisponíveis. Tente novamente mais tarde.\"",
+          "routeConsumers": [
+            "/viewer/"
+          ],
+          "relationship": "error-to-fixed-fallback",
+          "evidence": "The error is thrown while start() creates or mounts the public adapter; start() is the fulfillment callback of the Viewer load promise, whose .catch at viewer.js:176-184 renders this fixed alert."
+        }
+      ]
+    },
+    {
+      "id": "6587a29dd5f61678",
+      "source": "app/viewer/scene-adapters.js",
+      "line": 288,
+      "column": 27,
+      "owner": "viewer",
+      "routes": [
+        "/viewer/"
+      ],
+      "sourceRole": "error-message-source",
+      "sourceBinding": "TypeError constructor",
+      "valuePath": "",
+      "expression": "\"Invalid public finish options\"",
+      "value": "Invalid public finish options",
+      "originalClassification": "diagnostic",
+      "originalUseStatus": "diagnostic",
+      "originalConsumerLinkStatus": "fixed-fallback-only",
+      "consumerEvidence": [
+        "The error is thrown while start() creates or mounts the public adapter; start() is the fulfillment callback of the Viewer load promise, whose .catch at viewer.js:176-184 renders this fixed alert."
+      ],
+      "consumerRefs": [
+        {
+          "source": "app/viewer/scene-adapters.js",
+          "line": "288",
+          "relationship": "adapter-error-source",
+          "evidence": "The source literal is thrown during adapter creation, validation, or mount."
+        },
+        {
+          "source": "app/viewer/viewer.js",
+          "line": "174-184",
+          "relationship": "error-to-fixed-alert",
+          "evidence": "The Viewer startup promise catch discards the exception and renders a fixed alert."
+        }
+      ],
+      "disposition": "diagnostic",
+      "reason": "This adapter contract/validation exception is thrown while the public Viewer adapter is created or mounted. The startup promise catch discards its technical message and shows one fixed alert; it is not a user-facing catalog string.",
+      "sourceSha256": "667a8da5268868b032ff458e234eb08dc119e62fc865b89b8120a70bdfd08655",
+      "failureFallbackRefs": [
+        {
+          "sinkId": "7d5c29451be070c2",
+          "source": "app/viewer/viewer.js",
+          "line": 183,
+          "sink": "property:textContent",
+          "expression": "\"Informações temporariamente indisponíveis. Tente novamente mais tarde.\"",
+          "routeConsumers": [
+            "/viewer/"
+          ],
+          "relationship": "error-to-fixed-fallback",
+          "evidence": "The error is thrown while start() creates or mounts the public adapter; start() is the fulfillment callback of the Viewer load promise, whose .catch at viewer.js:176-184 renders this fixed alert."
+        }
+      ]
+    },
+    {
+      "id": "ceb0024da5186341",
+      "source": "app/viewer/scene-adapters.js",
+      "line": 299,
+      "column": 31,
+      "owner": "viewer",
+      "routes": [
+        "/viewer/"
+      ],
+      "sourceRole": "error-message-source",
+      "sourceBinding": "TypeError constructor",
+      "valuePath": "",
+      "expression": "\"Invalid published finish\"",
+      "value": "Invalid published finish",
+      "originalClassification": "diagnostic",
+      "originalUseStatus": "diagnostic",
+      "originalConsumerLinkStatus": "fixed-fallback-only",
+      "consumerEvidence": [
+        "The error is thrown while start() creates or mounts the public adapter; start() is the fulfillment callback of the Viewer load promise, whose .catch at viewer.js:176-184 renders this fixed alert."
+      ],
+      "consumerRefs": [
+        {
+          "source": "app/viewer/scene-adapters.js",
+          "line": "299",
+          "relationship": "adapter-error-source",
+          "evidence": "The source literal is thrown during adapter creation, validation, or mount."
+        },
+        {
+          "source": "app/viewer/viewer.js",
+          "line": "174-184",
+          "relationship": "error-to-fixed-alert",
+          "evidence": "The Viewer startup promise catch discards the exception and renders a fixed alert."
+        }
+      ],
+      "disposition": "diagnostic",
+      "reason": "This adapter contract/validation exception is thrown while the public Viewer adapter is created or mounted. The startup promise catch discards its technical message and shows one fixed alert; it is not a user-facing catalog string.",
+      "sourceSha256": "667a8da5268868b032ff458e234eb08dc119e62fc865b89b8120a70bdfd08655",
+      "failureFallbackRefs": [
+        {
+          "sinkId": "7d5c29451be070c2",
+          "source": "app/viewer/viewer.js",
+          "line": 183,
+          "sink": "property:textContent",
+          "expression": "\"Informações temporariamente indisponíveis. Tente novamente mais tarde.\"",
+          "routeConsumers": [
+            "/viewer/"
+          ],
+          "relationship": "error-to-fixed-fallback",
+          "evidence": "The error is thrown while start() creates or mounts the public adapter; start() is the fulfillment callback of the Viewer load promise, whose .catch at viewer.js:176-184 renders this fixed alert."
+        }
+      ]
+    },
+    {
+      "id": "17e226a12aae031b",
+      "source": "app/viewer/scene-adapters.js",
+      "line": 310,
+      "column": 27,
+      "owner": "viewer",
+      "routes": [
+        "/viewer/"
+      ],
+      "sourceRole": "error-message-source",
+      "sourceBinding": "TypeError constructor",
+      "valuePath": "",
+      "expression": "\"Invalid public finish availability or selected finish\"",
+      "value": "Invalid public finish availability or selected finish",
+      "originalClassification": "diagnostic",
+      "originalUseStatus": "diagnostic",
+      "originalConsumerLinkStatus": "fixed-fallback-only",
+      "consumerEvidence": [
+        "The error is thrown while start() creates or mounts the public adapter; start() is the fulfillment callback of the Viewer load promise, whose .catch at viewer.js:176-184 renders this fixed alert."
+      ],
+      "consumerRefs": [
+        {
+          "source": "app/viewer/scene-adapters.js",
+          "line": "310",
+          "relationship": "adapter-error-source",
+          "evidence": "The source literal is thrown during adapter creation, validation, or mount."
+        },
+        {
+          "source": "app/viewer/viewer.js",
+          "line": "174-184",
+          "relationship": "error-to-fixed-alert",
+          "evidence": "The Viewer startup promise catch discards the exception and renders a fixed alert."
+        }
+      ],
+      "disposition": "diagnostic",
+      "reason": "This adapter contract/validation exception is thrown while the public Viewer adapter is created or mounted. The startup promise catch discards its technical message and shows one fixed alert; it is not a user-facing catalog string.",
+      "sourceSha256": "667a8da5268868b032ff458e234eb08dc119e62fc865b89b8120a70bdfd08655",
+      "failureFallbackRefs": [
+        {
+          "sinkId": "7d5c29451be070c2",
+          "source": "app/viewer/viewer.js",
+          "line": 183,
+          "sink": "property:textContent",
+          "expression": "\"Informações temporariamente indisponíveis. Tente novamente mais tarde.\"",
+          "routeConsumers": [
+            "/viewer/"
+          ],
+          "relationship": "error-to-fixed-fallback",
+          "evidence": "The error is thrown while start() creates or mounts the public adapter; start() is the fulfillment callback of the Viewer load promise, whose .catch at viewer.js:176-184 renders this fixed alert."
+        }
+      ]
+    }
+  ],
+  "inventorySchemaVersion": 4,
+  "reconciledOn": "2026-11-14",
+  "supersedes": "docs/architecture/arc13/source-reviews/2026-11-13/public.json",
+  "revalidation": {
+    "kind": "inventory-identity-reconciliation",
+    "priorInventorySha256": "8765873a096fe95167e4fba74838258e47428fab0e12d16af9b6c92a3e34a51e",
+    "currentInventorySha256": "904c49a3b32722ece528a468e030b10800def07a61cbcf5811f01bfd00cfe391",
+    "sinkIdsPreserved": 1012,
+    "sourceEntryIdsPreserved": 359,
+    "existingDispositionsChanged": false,
+    "note": "The additive authoring field changes provenance only; this is not a new semantic review."
+  }
+}
