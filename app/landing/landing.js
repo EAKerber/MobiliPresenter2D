@@ -35,7 +35,14 @@
     const renderedWidth = image.naturalWidth * scale;
     const renderedHeight = image.naturalHeight * scale;
     const offsetX = (frameWidth - renderedWidth) / 2;
-    const screen = { left: 333, top: 590, width: 358, height: 719 };
+    // Calibrated in the SVG viewBox; the browser gate pins these bounds to the source artwork.
+    const screen = {
+      left: Number(screenElement.dataset.screenLeft),
+      top: Number(screenElement.dataset.screenTop),
+      width: Number(screenElement.dataset.screenWidth),
+      height: Number(screenElement.dataset.screenHeight)
+    };
+    if (!Object.values(screen).every(Number.isFinite)) return;
     const offsetY = screen.top * scale * 0.3;
 
     image.style.left = `${offsetX}px`;
