@@ -27,3 +27,8 @@
 The changed alt and nine new sinks remain unreviewed in the generated inventory, and all ten still have `ownerDisposition: pending` in the crosswalk. The triage resolves only evidence-based classification recommendations and the already owner-approved “Saiba mais” wording/destination; it does not create or approve a canonical key, catalog membership, or runtime migration.
 
 No Product runtime or generated inventory changed. No tests, preview, or deploy were run for this triage.
+
+
+## Follow-up after opening PR #275 — Draft
+
+The row `bda52494adf51488` remains pending against the reviewed `main@46a52e76` snapshot: its source is still a generic `div` named with `aria-label`. A separate Draft, [Product PR #275](https://github.com/EAKerber/MobiliPresenter2D/pull/275), proposes `role="group"` for “Mais informações” and keeps the canonical page, generated HTML, and source/output hashes synchronized. The change is not in `main` yet and has not been validated with a screen reader. Keep the inventory disposition pending until review and integration; this follow-up does not create a catalog key or approve runtime extraction.
