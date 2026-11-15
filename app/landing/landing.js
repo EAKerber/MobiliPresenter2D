@@ -36,8 +36,8 @@
     const renderedWidth = image.naturalWidth * scale;
     const renderedHeight = image.naturalHeight * scale;
     const offsetX = frameWidth < renderedWidth ? 0 : (frameWidth - renderedWidth) / 2;
-    // Screen bounds are measured on the 1074x1465 source image; keep the overlay on the rendered cover crop.
-    const screen = { left: 184, top: 170, width: 400, height: 973 };
+    // Screen bounds are measured on the 1073x1466 source image; keep the overlay on the rendered cover crop.
+    const screen = { left: 274, top: 353, width: 296, height: 729 };
 
     image.style.left = `${offsetX}px`;
     image.style.top = "0px";
