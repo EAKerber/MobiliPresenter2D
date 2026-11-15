@@ -35,26 +35,22 @@
     const scale = Math.max(coverScale, minimumPhoneScale);
     const renderedWidth = image.naturalWidth * scale;
     const renderedHeight = image.naturalHeight * scale;
-    const offsetX = frameWidth < renderedWidth ? 0 : (frameWidth - renderedWidth) / 2;
-    // Screen bounds are measured on the 1073x1466 source image; keep the overlay on the rendered cover crop.
-    const screen = { left: 274, top: 353, width: 296, height: 729 };
+    const offsetX = (frameWidth - renderedWidth) / 2;
+    const screen = { left: 333, top: 590, width: 358, height: 719 };
+    const offsetY = screen.top * scale * 0.3;
 
     image.style.left = `${offsetX}px`;
-    image.style.top = "0px";
+    image.style.top = `-${offsetY}px`;
     image.style.width = `${renderedWidth}px`;
     image.style.height = `${renderedHeight}px`;
     screenElement.style.left = `${offsetX + screen.left * scale}px`;
-    screenElement.style.top = `${screen.top * scale}px`;
+    screenElement.style.top = `${screen.top * scale - offsetY}px`;
     screenElement.style.width = `${screen.width * scale}px`;
     screenElement.style.height = `${screen.height * scale}px`;
     screenElement.hidden = false;
 
-    const screenStyle = window.getComputedStyle(screenElement);
-    const borderTop = parseFloat(screenStyle.borderTopWidth) || 0;
-    const paddingTop = parseFloat(screenStyle.paddingTop) || 0;
-    const paddingBottom = parseFloat(screenStyle.paddingBottom) || 0;
     const artMinimum = frameWidth <= 680 ? 350 : frameWidth <= 900 ? Math.max(340, Math.min(frameWidth * 0.56, 500)) : 420;
-    const phoneBottom = screen.top * scale + screen.height * scale + borderTop + paddingBottom;
+    const phoneBottom = (screen.top + screen.height + 35) * scale - offsetY;
     art.style.minHeight = `${Math.ceil(Math.max(artMinimum, phoneBottom))}px`;
   }
 
@@ -62,25 +58,39 @@
     const image = document.querySelector(".hero-image-frame > img");
     const screenElement = document.getElementById("heroPhoneScreen");
     const player = screenElement && screenElement.querySelector(".hero-phone-player");
+    const media = document.getElementById("heroPhoneMedia");
     const poster = document.getElementById("heroPhonePoster");
     const videoId = player && player.dataset.videoId;
-    if (!image || !screenElement || !player || !poster || !videoId) return;
+    if (!image || !screenElement || !player || !media || !poster || !videoId) return;
 
     poster.addEventListener("click", () => {
-      if (player.querySelector("iframe")) return;
+      if (media.querySelector("iframe")) return;
       const iframe = document.createElement("iframe");
+      iframe.className = "hero-phone-media__iframe";
       iframe.src = `https://www.youtube-nocookie.com/embed/${encodeURIComponent(videoId)}?autoplay=1&playsinline=1&rel=0&controls=1&fs=1`;
       iframe.title = "Casa em Módulos — apresentação institucional";
       iframe.loading = "eager";
       iframe.referrerPolicy = "strict-origin-when-cross-origin";
       iframe.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen";
       iframe.allowFullscreen = true;
-      poster.replaceWith(iframe);
+      iframe.addEventListener("load", () => {
+        window.requestAnimationFrame(() => {
+          media.classList.add("is-ready");
+          poster.disabled = true;
+          poster.setAttribute("aria-hidden", "true");
+          const removePoster = () => poster.remove();
+          poster.addEventListener("transitionend", (event) => {
+            if (event.propertyName === "opacity") removePoster();
+          }, { once: true });
+          window.setTimeout(removePoster, 360);
+        });
+      }, { once: true });
+      media.append(iframe);
     });
 
     const fullscreen = document.getElementById("heroPhoneFullscreen");
     if (fullscreen) fullscreen.addEventListener("click", () => {
-      const iframe = screenElement.querySelector("iframe");
+      const iframe = media.querySelector("iframe");
       const request = iframe && (iframe.requestFullscreen || iframe.webkitRequestFullscreen);
       if (!iframe || !request) {
         window.open(`https://www.youtube.com/shorts/${encodeURIComponent(videoId)}`, "_blank", "noopener,noreferrer");
