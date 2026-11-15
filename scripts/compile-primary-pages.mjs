@@ -18,8 +18,12 @@ const MAP=[
  {route:"/how-it-works/",source:"architecture/pages/how-it-works.page.html",output:"app/how-it-works/index.html"}
 ];
 const KEYS=["brandHref","ambientesHref","ambientesCurrent","howHref","howCurrent","aboutHref","aboutCurrent","whatsAppIconAriaHidden"];
+function canonicalText(value) { return value.replace(/\r\n/g,"\n"); }
+async function readCanonical(path) {
+ return canonicalText(await readFile(join(ROOT,path),"utf8"));
+}
 function gitBlobSha(data) {
- const canonical=data.replace(/\r\n/g,"\n");
+ const canonical=canonicalText(data);
  return createHash("sha1").update("blob "+Buffer.byteLength(canonical)+"\0").update(canonical).digest("hex");
 }
 function codePointLength(value) { return Array.from(value).length; }
@@ -100,7 +104,7 @@ function header(fragment,r,routeIndex) {
 }
 export async function projectPages() {
  const [routeText,fragment]=await Promise.all([
-  readFile(join(ROOT,ROUTES),"utf8"),readFile(join(ROOT,FRAGMENT),"utf8")
+  readCanonical(ROUTES),readCanonical(FRAGMENT)
  ]);
  const config=JSON.parse(routeText);
  assert.equal(config.schema,"M2DPrimaryHeaderRoutes/0.1");
@@ -111,7 +115,7 @@ export async function projectPages() {
  assert.deepEqual(config.scope.doesNotInclude,["/viewer/","/config/","/admin.html","/access/","/access/manage.html"]);
  assert.equal(config.scope.mayOverwriteAuthoredPages,false);
  assert.equal(config.scope.mayModifyNetlifyBuild,true);
- const compilerSource=await readFile(join(ROOT,COMPILER),"utf8");
+ const compilerSource=await readCanonical(COMPILER);
  const manifest={
   schema:"M2DARC03CPublishedPages/2",authority:"architecture/pages",
   sourceMap:{schema:SOURCE_MAP_SCHEMA,offsetUnit:"unicode-codepoints",
@@ -121,7 +125,7 @@ export async function projectPages() {
  };
  const pages=[];
  for(let i=0;i<MAP.length;i++) {
-  const p=MAP[i],source=await readFile(join(ROOT,p.source),"utf8");
+  const p=MAP[i],source=await readCanonical(p.source);
   assert.equal(source.split(SLOT).length,2,"Exactly one header slot required in "+p.source);
   assert.ok(!/<header class="site-header">/.test(source),"Duplicate authorial header");
   assert.ok(!/<header class="viewer-header">/.test(source),"NAV-005 excluded");
@@ -159,10 +163,10 @@ export async function projectPages() {
  return {manifest,pages,text:JSON.stringify(manifest,null,2)+"\n"};
 }
 async function check(r) {
- assert.equal(await readFile(join(ROOT,MANIFEST),"utf8"),r.text,
+ assert.equal(await readCanonical(MANIFEST),r.text,
   "Generated manifest drift; run pages:sync and review changes");
  for(const p of r.pages)
-  assert.equal(await readFile(join(ROOT,p.output),"utf8"),p.html,
+  assert.equal(await readCanonical(p.output),p.html,
    "Generated HTML drift in "+p.output+"; edit architecture/pages and run pages:sync");
 }
 async function emit(r) {
