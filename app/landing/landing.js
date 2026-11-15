@@ -57,43 +57,136 @@
   function initHeroPhoneScreen() {
     const image = document.querySelector(".hero-image-frame > img");
     const screenElement = document.getElementById("heroPhoneScreen");
-    const player = screenElement && screenElement.querySelector(".hero-phone-player");
     const media = document.getElementById("heroPhoneMedia");
+    const controls = document.getElementById("heroPhoneControls");
     const poster = document.getElementById("heroPhonePoster");
-    const videoId = player && player.dataset.videoId;
-    if (!image || !screenElement || !player || !media || !poster || !videoId) return;
+    const playback = document.getElementById("heroPhonePlayback");
+    const videoId = screenElement && screenElement.querySelector(".hero-phone-player") && screenElement.querySelector(".hero-phone-player").dataset.videoId;
+    if (!image || !screenElement || !media || !controls || !poster || !playback || !videoId) return;
+
+    let apiPromise = null;
+    let youtubePlayer = null;
+    let playerState = null;
+    let playerRequested = false;
+
+    function loadYouTubeIframeApi() {
+      if (window.YT && window.YT.Player) return Promise.resolve(window.YT);
+      if (apiPromise) return apiPromise;
+      apiPromise = new Promise((resolve, reject) => {
+        const previousReady = window.onYouTubeIframeAPIReady;
+        const script = document.createElement("script");
+        script.id = "casaYouTubeIframeApi";
+        script.src = "https://www.youtube.com/iframe_api";
+        script.async = true;
+        window.onYouTubeIframeAPIReady = () => {
+          if (typeof previousReady === "function") {
+            try { previousReady(); } catch (_) {}
+          }
+          resolve(window.YT);
+        };
+        script.addEventListener("error", () => {
+          apiPromise = null;
+          reject(new Error("Não foi possível carregar o player do YouTube."));
+        }, { once: true });
+        document.head.append(script);
+      });
+      return apiPromise;
+    }
+
+    function revealPlayingVideo() {
+      if (media.classList.contains("is-playing")) return;
+      media.classList.add("is-playing");
+      poster.disabled = true;
+      poster.setAttribute("aria-hidden", "true");
+      const removePoster = () => poster.remove();
+      poster.addEventListener("transitionend", (event) => {
+        if (event.propertyName === "opacity") removePoster();
+      }, { once: true });
+      window.setTimeout(removePoster, 320);
+    }
+
+    function handlePlayerError(event) {
+      if (media.classList.contains("is-playing")) return;
+      youtubePlayer = null;
+      playerState = null;
+      playerRequested = false;
+      controls.classList.remove("is-ready");
+      playback.hidden = true;
+      poster.disabled = false;
+      poster.removeAttribute("aria-hidden");
+      const iframe = event && event.target && event.target.getIframe ? event.target.getIframe() : media.querySelector("iframe");
+      if (iframe) iframe.remove();
+    }
 
     poster.addEventListener("click", () => {
-      if (media.querySelector("iframe")) return;
+      if (playerRequested) return;
+      playerRequested = true;
+      poster.disabled = true;
+
       const iframe = document.createElement("iframe");
       iframe.className = "hero-phone-media__iframe";
-      iframe.src = `https://www.youtube-nocookie.com/embed/${encodeURIComponent(videoId)}?autoplay=1&playsinline=1&rel=0&controls=1&fs=1`;
       iframe.title = "Casa em Módulos — apresentação institucional";
       iframe.loading = "eager";
       iframe.referrerPolicy = "strict-origin-when-cross-origin";
       iframe.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen";
       iframe.allowFullscreen = true;
-      iframe.addEventListener("load", () => {
-        window.requestAnimationFrame(() => {
-          media.classList.add("is-ready");
-          poster.disabled = true;
-          poster.setAttribute("aria-hidden", "true");
-          const removePoster = () => poster.remove();
-          poster.addEventListener("transitionend", (event) => {
-            if (event.propertyName === "opacity") removePoster();
-          }, { once: true });
-          window.setTimeout(removePoster, 360);
-        });
-      }, { once: true });
+      const params = new URLSearchParams({
+        autoplay: "1",
+        controls: "0",
+        enablejsapi: "1",
+        fs: "0",
+        origin: window.location.origin,
+        playsinline: "1",
+        rel: "0"
+      });
+      iframe.src = "https://www.youtube-nocookie.com/embed/" + encodeURIComponent(videoId) + "?" + params.toString();
       media.append(iframe);
+
+      loadYouTubeIframeApi().then((YT) => {
+        youtubePlayer = new YT.Player(iframe, {
+          events: {
+            onReady: (event) => event.target.playVideo(),
+            onStateChange: (event) => {
+              playerState = event.data;
+              if (event.data === YT.PlayerState.PLAYING) {
+                controls.classList.add("is-ready");
+                playback.hidden = false;
+                playback.classList.remove("is-paused");
+                playback.setAttribute("aria-label", "Pausar vídeo");
+                revealPlayingVideo();
+              } else if (event.data === YT.PlayerState.PAUSED || event.data === YT.PlayerState.ENDED) {
+                controls.classList.add("is-ready");
+                playback.hidden = false;
+                playback.classList.add("is-paused");
+                playback.setAttribute("aria-label", event.data === YT.PlayerState.ENDED ? "Reproduzir vídeo novamente" : "Reproduzir vídeo");
+              }
+            },
+            onError: handlePlayerError
+          }
+        });
+      }).catch(() => {
+        playerRequested = false;
+        poster.disabled = false;
+        if (iframe.parentNode) iframe.remove();
+      });
+    });
+
+    playback.addEventListener("click", () => {
+      if (!youtubePlayer || !window.YT || !window.YT.PlayerState) return;
+      if (playerState === window.YT.PlayerState.PLAYING) {
+        youtubePlayer.pauseVideo();
+      } else {
+        if (playerState === window.YT.PlayerState.ENDED) youtubePlayer.seekTo(0, true);
+        youtubePlayer.playVideo();
+      }
     });
 
     const fullscreen = document.getElementById("heroPhoneFullscreen");
     if (fullscreen) fullscreen.addEventListener("click", () => {
-      const iframe = media.querySelector("iframe");
+      const iframe = youtubePlayer && youtubePlayer.getIframe();
       const request = iframe && (iframe.requestFullscreen || iframe.webkitRequestFullscreen);
-      if (!iframe || !request) {
-        window.open(`https://www.youtube.com/shorts/${encodeURIComponent(videoId)}`, "_blank", "noopener,noreferrer");
+      if (!request) {
+        window.open("https://www.youtube.com/shorts/" + encodeURIComponent(videoId), "_blank", "noopener");
         return;
       }
       try {
@@ -109,7 +202,6 @@
     if (frame && typeof ResizeObserver === "function") new ResizeObserver(layoutHeroPhoneScreen).observe(frame);
     else window.addEventListener("resize", layoutHeroPhoneScreen);
   }
-
   function renderBenefits() {
     const mini = document.getElementById("miniBenefits");
     ["Modular", "Inteligente", "Para a sua vida"].forEach((title, index) => {
