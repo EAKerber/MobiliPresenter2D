@@ -315,25 +315,9 @@ html[data-theme="light"] .commercial-clarity > p:not(.eyebrow),
 html[data-theme="light"] .launch-card .launch-copy > p {
   color: var(--ds-vis002c-long-copy-light);
 }
+
 /* NAV-005: keep the title within the public narrow-width fallback. */
 @media (max-width: 290px) {
   .how-page .how-hero-copy { padding-inline: 16px; }
   .how-page .how-hero-copy h1 { font-size: clamp(2.6rem, 13vw, 3.4rem); }
-}
-
-
-/* VIS-002: measured light-surface labels and copy only. */
-html[data-theme="light"] .how-hero-copy > p.eyebrow,
-html[data-theme="light"] .finish-copy > p.eyebrow,
-html[data-theme="light"] .production-intro > p.eyebrow,
-html[data-theme="light"] .quality-copy > p.eyebrow,
-html[data-theme="light"] .commercial-clarity > p.eyebrow {
-  color: #70522F;
-}
-
-html[data-theme="light"] .how-hero-note,
-html[data-theme="light"] .finish-copy > p:not(.eyebrow):not(.finish-signature),
-html[data-theme="light"] .commercial-clarity > p:not(.eyebrow),
-html[data-theme="light"] .launch-card .launch-copy > p {
-  color: var(--ds-vis002c-long-copy-light);
 }
