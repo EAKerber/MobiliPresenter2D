@@ -12,7 +12,7 @@ test("three generated pages and provenance manifest match authoritative source",
  assert.equal(await readFile("architecture/generated/primary-pages.manifest.json","utf8"),r.text);
  for(const p of r.pages) {
   assert.equal(await readFile(p.output,"utf8"),p.html);
-  assert.match(p.html,/<header class="site-header">/);
+  assert.match(p.html,/<header class="site-header site-header--public">/);
   assert.doesNotMatch(p.html,/<!-- ARC03_PRIMARY_HEADER -->/);
  }
  const x=gate();assert.equal(x.status,0,x.stderr);
@@ -40,5 +40,5 @@ test("manifest modification fails closed",async()=>{
 test("Viewer NAV-005 stays independently authored",async()=>{
  const html=await readFile("app/viewer/index.html","utf8");
  assert.match(html,/<header class="viewer-header">/);
- assert.doesNotMatch(html,/<header class="site-header">/);
+ assert.doesNotMatch(html,/<header class="site-header/);
 });
