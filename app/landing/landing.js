@@ -157,6 +157,20 @@
       });
     });
 
+    const fullscreen = document.getElementById("heroPhoneFullscreen");
+    if (fullscreen) fullscreen.addEventListener("click", () => {
+      const iframe = screenElement.querySelector("iframe");
+      const request = iframe && (iframe.requestFullscreen || iframe.webkitRequestFullscreen);
+      if (!iframe || !request) {
+        window.open(`https://www.youtube.com/shorts/${encodeURIComponent(videoId)}`, "_blank", "noopener,noreferrer");
+        return;
+      }
+      try {
+        const result = request.call(iframe);
+        if (result && typeof result.catch === "function") result.catch(() => {});
+      } catch (_) {}
+    });
+
     image.addEventListener("load", layoutHeroPhoneScreen);
     image.addEventListener("error", () => { screenElement.hidden = true; });
     if (image.complete && image.naturalWidth) layoutHeroPhoneScreen();
