@@ -1,0 +1,54 @@
+{
+  "schemaVersion": "ARC13SourceFlowRevalidation/1.0",
+  "reviewDate": "2026-11-14",
+  "reviewRole": "independent common-sense source-flow review",
+  "inventory": {
+    "path": "architecture/arc13/ui-text-candidates.json",
+    "sha256": "b3739e5ff57005600665cc6c1a04fbe986649b8f8e8e9b80a6fb09b2d3adf178",
+    "sinkOccurrences": 1021,
+    "sourceEntries": 359
+  },
+  "record": {
+    "previousId": "54947311a7ad890a",
+    "currentId": "6083475eb5f05e96",
+    "source": "app/landing/landing.js",
+    "previousLine": 54,
+    "currentLine": 135,
+    "literal": "Imagem indisponível",
+    "disposition": "diagnostic"
+  },
+  "flow": [
+    {
+      "step": "image_load_rejection",
+      "evidence": "The rejected image load raises Error(\"Imagem indisponível\")."
+    },
+    {
+      "step": "catch_boundary",
+      "evidence": "The catch path removes the failed cache entry and rethrows the Error; it does not render error.message."
+    },
+    {
+      "step": "selection_rejection_callback",
+      "evidence": "The callback discards the rejection value and invokes commit(null, true)."
+    },
+    {
+      "step": "user_visible_output",
+      "sinkId": "5fc74ea3cdccd345",
+      "source": "app/index.html",
+      "line": 65,
+      "text": "Imagem temporariamente indisponível.",
+      "evidence": "The fixed fallback is revealed; the Error literal is not surfaced."
+    }
+  ],
+  "reconciliation": {
+    "previousConsumerLinkStatus": "fixed-fallback-only",
+    "currentScannerStatus": "manual-consumer-review",
+    "previousFallbackSinkId": "b5c5526f2f3c9ad4",
+    "currentFallbackSinkId": "5fc74ea3cdccd345",
+    "reason": "The current scanner does not recover this consumer/fallback relationship automatically. This is a flow-link coverage gap; the examined rendering behavior is unchanged."
+  },
+  "limits": [
+    "This is source-level control-flow review, not browser/runtime error injection.",
+    "The generated inventory row remains unreviewed; this separate overlay records the revalidated disposition and link.",
+    "No catalog key or runtime migration is authorized."
+  ]
+}

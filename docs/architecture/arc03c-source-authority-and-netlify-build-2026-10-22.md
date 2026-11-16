@@ -40,3 +40,15 @@ ARC-03B permanece um checkpoint verificável na branch original e no Design Syst
 - Revisão dos workflows `mobile-browser.yml` e `public-routing-before-clerk.yml`: ambos podem executar sobre `/config/` sem autenticação; o segundo aguarda explicitamente HTML `class="workspace"` na rota privada. Isso conflita com o redirecionamento legitimamente documentado em [issue #232](https://github.com/EAKerber/MobiliPresenter2D/issues/232). **Não reduzir autenticação, não desativar ou falsificar resultado de teste**. Classificar eventuais falhas desses gates por evidência e manter HOLD para merge.
 - `app-build-purity.yml` valida o build próprio de `app/`; `public-routing-before-clerk.yml` valida outras invariantes públicas. Diferenciar essas verificações das provas 60/60 ARC-03C.
 - Próximo passo: **uma única PR draft** de integração para executar os checks reais e eventual preview justificável. Não é autorização de merge ou release, e o checkpoint será atualizado com os resultados exatos quando conhecidos.
+
+## Revalidação de proveniência das páginas — 14/11
+
+- O compilador ARC-03C agora emite o mapa posicional `M2DARC03CProvenanceMap/1` no manifesto de páginas `/2`, com offsets em pontos de código Unicode e origens autorais para trechos da página, fragmento compartilhado, configuração de rota e regras geradas.
+- O scanner ARC-13 valida hashes Git de fontes, compilador, fragmento, configuração e saída, cobertura sem lacunas do HTML e correspondência do conteúdo por faixa posicional. Atributos usam a faixa bruta do valor; uma faixa ambígua, vazia ou atravessando segmentos fica `unresolved`.
+- O inventário schema 4 mapeia 411 ocorrências HTML retidas em `/` (53), `/about/` (56) e `/how-it-works/` (302), sem alterar os HTML compilados. Isso não inclui os 11 registros do ledger de exclusões nem os sinks JavaScript.
+- A verificação local `node scripts/compile-primary-pages.mjs --check` passou. Não houve PR, Preview, merge, deploy, matriz de navegador ou validação física nesta revalidação; o HOLD e os limites documentados acima continuam valendo.
+- Relatório do inventário e identidade dos arquivos: [`arc13/authoring-provenance-source-map-2026-11-14.md`](arc13/authoring-provenance-source-map-2026-11-14.md).
+
+## Revalidation after Product PR #273 — 2026-11-14
+
+Product `main@46a52e76a0eeae4bed4b567b12da5311ed90b475` is the current source base. The page authoring map now covers 419 retained HTML occurrences (`/`: 60, `/about/`: 56, `/how-it-works/`: 303), with 386 page-source origins, 33 shared-header origins, and zero unresolved mappings. The corresponding inventory is SHA-256 `b3739e5ff57005600665cc6c1a04fbe986649b8f8e8e9b80a6fb09b2d3adf178`; manifest SHA-256 `73413efe609ad240a4c52e21752ad85fe31ddf997a04e82cbc1db77e1e62fc3e`. See [`arc13/authoring-provenance-source-map-post-273-2026-11-14.md`](arc13/authoring-provenance-source-map-post-273-2026-11-14.md) and [`arc13/inventory-reconciliation-2026-11-14.md`](arc13/inventory-reconciliation-2026-11-14.md). The earlier 411-entry paragraph above remains a dated pre-#273 snapshot. No browser, preview, or deployment gate is claimed by this update.

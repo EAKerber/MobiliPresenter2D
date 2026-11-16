@@ -1,0 +1,953 @@
+{
+  "schemaVersion": "ARC13InventoryCrosswalk/1.0",
+  "reviewDate": "2026-11-14",
+  "repository": "EAKerber/MobiliPresenter2D",
+  "productMain": {
+    "ref": "main",
+    "commit": "46a52e76a0eeae4bed4b567b12da5311ed90b475"
+  },
+  "lineage": {
+    "previousReviewInventorySha256": "904c49a3b32722ece528a468e030b10800def07a61cbcf5811f01bfd00cfe391",
+    "availableIdentityCounterpartSha256": "8765873a096fe95167e4fba74838258e47428fab0e12d16af9b6c92a3e34a51e",
+    "currentInventorySha256": "b3739e5ff57005600665cc6c1a04fbe986649b8f8e8e9b80a6fb09b2d3adf178",
+    "currentManifestSha256": "73413efe609ad240a4c52e21752ad85fe31ddf997a04e82cbc1db77e1e62fc3e",
+    "limitation": "The review receipts cite 904c49a3, but that complete report is not preserved as a Git blob in this checkout. The committed report at 876 is the identity counterpart; dated receipts state the additive source-map update 876→904 preserved all sink/source IDs and dispositions."
+  },
+  "fingerprintMethod": {
+    "normalization": "SHA-256 of UTF-8 JSON with recursive lexical key sorting and compact separators. Sink projection removes only id, line, column, sourceSha256, and additive authoring. Source projection removes id, line, column, sourceSha256; normalizes sourceBinding @<line> and source-file path:<line> evidence; removes positional sink references but preserves semantic flow fields.",
+    "matching": "Anchor identical IDs first, then match fingerprints. Unique fingerprints map 1:1. Repeated sink fingerprints remain groups; no individual ID pairing is asserted.",
+    "meaning": "Only exact semantic record fingerprints inherit prior disposition. This mapping does not change generated rows from unreviewed or authorize canonical keys/runtime extraction."
+  },
+  "summary": {
+    "baselineSinks": 1012,
+    "currentSinks": 1021,
+    "sinkSameFingerprint": 1011,
+    "sinkIdUnchanged": 977,
+    "sinkIdRemapped": 34,
+    "sinkUniqueRemaps": 28,
+    "sinkAmbiguousRemaps": 6,
+    "sinkChanged": 1,
+    "sinkNew": 9,
+    "baselineSources": 359,
+    "currentSources": 359,
+    "sourceSameFingerprint": 358,
+    "sourceIdUnchanged": 343,
+    "sourceIdRemapped": 15,
+    "sourceChangedAndManuallyRevalidated": 1,
+    "currentUnreviewedSinkOccurrences": 1021
+  },
+  "sinkMappings": [
+    {
+      "oldId": "4becfe33e28ed403",
+      "currentId": "16f5d9f07400cfe7",
+      "fingerprint": "ce568aee13f1c6f87d0f60837dc524c1cd9c9245385ba5e9f11a357140c8a1b4",
+      "source": "app/how-it-works/how-it-works.js",
+      "at": [
+        14,
+        355
+      ],
+      "to": [
+        16,
+        355
+      ]
+    },
+    {
+      "oldId": "f3110321e39fec17",
+      "currentId": "28ee63ebc2f9d55a",
+      "fingerprint": "6d2feac6f96b64191dfdff662b083fe358135cf619f1309d707f106a39f2239c",
+      "source": "app/how-it-works/how-it-works.js",
+      "at": [
+        14,
+        417
+      ],
+      "to": [
+        16,
+        417
+      ]
+    },
+    {
+      "oldId": "22e1d16b89003128",
+      "currentId": "fd1f949711a96aa9",
+      "fingerprint": "a2938885de6f9d94ad120a59eaad54a393acc6471b4bcf4ce1a809abcc57cf19",
+      "source": "app/how-it-works/index.html",
+      "at": [
+        39,
+        333
+      ],
+      "to": [
+        39,
+        360
+      ]
+    },
+    {
+      "oldId": "50ad8ea4c3df9fa6",
+      "currentId": "177254147fcbb77f",
+      "fingerprint": "721354499cccc3e97a3f9d0fc002b2fe8f1f6c551021288a3863b669bd3ff7f6",
+      "source": "app/index.html",
+      "at": [
+        37,
+        5
+      ],
+      "to": [
+        54,
+        5
+      ]
+    },
+    {
+      "oldId": "973819c91b02b946",
+      "currentId": "b6cc897e4bb946e4",
+      "fingerprint": "16fa1859a1508dfea64a21e3955b54c8c895578326e664fad353e913eb0d91aa",
+      "source": "app/index.html",
+      "at": [
+        39,
+        5
+      ],
+      "to": [
+        56,
+        5
+      ]
+    },
+    {
+      "oldId": "63e8df45ad800e5a",
+      "currentId": "dac1babcabebb4c6",
+      "fingerprint": "4a622ddf22559d74fe3584eb0e708954e794eeda985dd4f5b6124618b0dbad9b",
+      "source": "app/index.html",
+      "at": [
+        40,
+        55
+      ],
+      "to": [
+        57,
+        55
+      ]
+    },
+    {
+      "oldId": "2e5152aa394cadbc",
+      "currentId": "6724591515048f84",
+      "fingerprint": "781507140706405d92a1bd00834b2f59a399d5a6b88f3828af905a739f88647e",
+      "source": "app/index.html",
+      "at": [
+        40,
+        112
+      ],
+      "to": [
+        57,
+        112
+      ]
+    },
+    {
+      "oldId": "dbdf127643fdebd3",
+      "currentId": "7916f3c28698b9dc",
+      "fingerprint": "e498f41edc07d46d8ee7232671f96a907ab45d08d635f9e2b07186373a56d0ea",
+      "source": "app/index.html",
+      "at": [
+        44,
+        11
+      ],
+      "to": [
+        61,
+        11
+      ]
+    },
+    {
+      "oldId": "b84f4c5c1da99d0c",
+      "currentId": "aedeee66171e0b25",
+      "fingerprint": "bff88d1540f7525e3b92319744e22db3b2a49192af3fd3af2d26dba363609f96",
+      "source": "app/index.html",
+      "at": [
+        44,
+        85
+      ],
+      "to": [
+        61,
+        85
+      ]
+    },
+    {
+      "oldId": "edca2e41b3a34614",
+      "currentId": "da23ed303f4e4ef7",
+      "fingerprint": "dc82a5132db7ae6176f8ac4281737377573391f868e51d82bcce672db6aa61b6",
+      "source": "app/index.html",
+      "at": [
+        44,
+        95
+      ],
+      "to": [
+        61,
+        95
+      ]
+    },
+    {
+      "oldId": "568a5705ea632967",
+      "currentId": "f1fdcf5debd36391",
+      "fingerprint": "ff222299335f8bfbeab4b0716c030f4c187525ef774ef74ab38b6ac2c712c33d",
+      "source": "app/index.html",
+      "at": [
+        44,
+        174
+      ],
+      "to": [
+        61,
+        174
+      ]
+    },
+    {
+      "oldId": "672364f85994a97f",
+      "currentId": "d282cfce8c7c0f0f",
+      "fingerprint": "ece0bb97ff34f567dba7c933e88cd32d916d21088716e1fd5d18947b8144b00b",
+      "source": "app/index.html",
+      "at": [
+        44,
+        242
+      ],
+      "to": [
+        61,
+        242
+      ]
+    },
+    {
+      "oldId": "b5c5526f2f3c9ad4",
+      "currentId": "5fc74ea3cdccd345",
+      "fingerprint": "9025947a280a8bd5d2daa4f08d1015a81eafe7afb47c87fbea7b5bdd389c176c",
+      "source": "app/index.html",
+      "at": [
+        48,
+        224
+      ],
+      "to": [
+        65,
+        224
+      ]
+    },
+    {
+      "oldId": "4c948c775202baaa",
+      "currentId": "5aeff79f5b192754",
+      "fingerprint": "8cc4e3902e1d7a1bfb3436f5c95038298240a298439b983c6f0a666d4e7d3c65",
+      "source": "app/index.html",
+      "at": [
+        49,
+        54
+      ],
+      "to": [
+        66,
+        54
+      ]
+    },
+    {
+      "oldId": "594ba47f6651c6b2",
+      "currentId": "ec4bfc96b5d831e4",
+      "fingerprint": "bc32f735c606db01613464ee9973c39e27d119c6026ebb72ab759a0b816ca6db",
+      "source": "app/index.html",
+      "at": [
+        49,
+        209
+      ],
+      "to": [
+        66,
+        209
+      ]
+    },
+    {
+      "oldId": "0c7959d14a17bc69",
+      "currentId": "fa000c085abf0ccc",
+      "fingerprint": "63ad911fc3e300a03a46aad5fae440a66f12a93f1e6894a08905ce2adfc40933",
+      "source": "app/index.html",
+      "at": [
+        49,
+        329
+      ],
+      "to": [
+        66,
+        329
+      ]
+    },
+    {
+      "oldId": "a44b8a18ff90e1f9",
+      "currentId": "59b729955cb8523e",
+      "fingerprint": "483a9946561bb28bffa176a9265004f6ceaa62b7fa2730c53acd6a4896c5c2e9",
+      "source": "app/index.html",
+      "at": [
+        53,
+        74
+      ],
+      "to": [
+        70,
+        74
+      ]
+    },
+    {
+      "oldId": "3b996a559d9b91d9",
+      "currentId": "7540b2ccbc5b56a0",
+      "fingerprint": "d6f61f59c6ee423ac3914b8bd7ac353ef4bbad4d5289a7cfd6ce43cf76a3bc97",
+      "source": "app/index.html",
+      "at": [
+        53,
+        106
+      ],
+      "to": [
+        70,
+        106
+      ]
+    },
+    {
+      "oldId": "c0dca7e16bdea85b",
+      "currentId": "00457c25b85aad82",
+      "fingerprint": "4c31e5b7095d36088bc104c1b1b2517715c3939edb9f67df6594b14fa4e13938",
+      "source": "app/index.html",
+      "at": [
+        53,
+        147
+      ],
+      "to": [
+        70,
+        147
+      ]
+    },
+    {
+      "oldId": "5f1dfc12fda4e464",
+      "currentId": "fc0fce4d0f6ff5fb",
+      "fingerprint": "7b3d145f36a71cf4acbe5b341a14d488dd6123a4df2b9240d172ae2b54ad821f",
+      "source": "app/index.html",
+      "at": [
+        53,
+        260
+      ],
+      "to": [
+        70,
+        260
+      ]
+    },
+    {
+      "oldId": "0d927e397895bf41",
+      "currentId": "c6a72caebd767245",
+      "fingerprint": "c532c42e6b81700872f29eb53537bf3a8ddc78eb387355ca0a93758271defb97",
+      "source": "app/index.html",
+      "at": [
+        55,
+        47
+      ],
+      "to": [
+        72,
+        47
+      ]
+    },
+    {
+      "oldId": "4278525d27efdf75",
+      "currentId": "11ea0fc275cb29d4",
+      "fingerprint": "a0ea7dfc08709e0b9d8425dc69bc63aab49bf22762e08c327111bcc6a17a681d",
+      "source": "app/index.html",
+      "at": [
+        55,
+        249
+      ],
+      "to": [
+        72,
+        249
+      ]
+    },
+    {
+      "oldId": "6b4af1bd3f088398",
+      "currentId": "8efadb99ee671ed7",
+      "fingerprint": "01b82a8ef14ea9aa016ec56c05ffcdbdd6809cbb62b2e3eab875aaa2408114c5",
+      "source": "app/index.html",
+      "at": [
+        55,
+        321
+      ],
+      "to": [
+        72,
+        321
+      ]
+    },
+    {
+      "oldId": "4fab0221fdbe2710",
+      "currentId": "bc8f36cbe51b8b04",
+      "fingerprint": "bd27337c43b3b1310fa8fadeb640199aea4fa317f31c4b0e38e930b850ece774",
+      "source": "app/landing/landing.js",
+      "at": [
+        30,
+        56
+      ],
+      "to": [
+        111,
+        56
+      ]
+    },
+    {
+      "oldId": "8abf9a55e93ed5ac",
+      "currentId": "bc79d4c41e390768",
+      "fingerprint": "76f700ce05dcfc525ef9ee454b773d508b6bc4cdbfd86304bc013dd161419376",
+      "source": "app/landing/landing.js",
+      "at": [
+        37,
+        52
+      ],
+      "to": [
+        118,
+        52
+      ]
+    },
+    {
+      "oldId": "30d967a6efcd3181",
+      "currentId": "417d63da4b595698",
+      "fingerprint": "b18342bec98debd2a6d70962e107d4ce76db8338b39e954be5aed81ccd52bb69",
+      "source": "app/landing/landing.js",
+      "at": [
+        78,
+        9
+      ],
+      "to": [
+        159,
+        9
+      ]
+    },
+    {
+      "oldId": "ddb49ff410a7bb14",
+      "currentId": "c54343230ae07b3b",
+      "fingerprint": "adaa4245ea1ef1a8f78f82467d50be064d2664bd35e81851331dbac53a7adc25",
+      "source": "app/landing/landing.js",
+      "at": [
+        94,
+        9
+      ],
+      "to": [
+        175,
+        9
+      ]
+    },
+    {
+      "oldId": "3973077094659398",
+      "currentId": "221aa14c6f1d437b",
+      "fingerprint": "7fd332e961a1cd9763f7c6778a8a75735d1f9fef9e14f587ba1c4d55e920a48a",
+      "source": "app/landing/landing.js",
+      "at": [
+        140,
+        7
+      ],
+      "to": [
+        221,
+        7
+      ]
+    }
+  ],
+  "ambiguousSinkGroups": [
+    {
+      "fingerprint": "65a7af395394dc288de1a745c6ab6d4d239d0d64267612cd342c32c7d3824faf",
+      "old": [
+        {
+          "id": "f01a768e3eafd30f",
+          "source": "app/index.html",
+          "line": 49,
+          "column": 253
+        },
+        {
+          "id": "71bf2a569b7d3720",
+          "source": "app/index.html",
+          "line": 53,
+          "column": 307
+        }
+      ],
+      "current": [
+        {
+          "id": "9113396b45f8a1e8",
+          "source": "app/index.html",
+          "line": 66,
+          "column": 253
+        },
+        {
+          "id": "19d2d4a4b47bc728",
+          "source": "app/index.html",
+          "line": 70,
+          "column": 307
+        }
+      ],
+      "priorDecision": "symbol_or_decoration",
+      "priorDecisionUniform": true
+    },
+    {
+      "fingerprint": "7afc3daba353d8e3dcbdcb795435e9930ab71dacdfd8d43055b75640c5a558f4",
+      "old": [
+        {
+          "id": "8b5184e643156c45",
+          "source": "app/landing/landing.js",
+          "line": 87,
+          "column": 7
+        },
+        {
+          "id": "9947726ee15dca72",
+          "source": "app/landing/landing.js",
+          "line": 131,
+          "column": 55
+        }
+      ],
+      "current": [
+        {
+          "id": "4134aa72e625426b",
+          "source": "app/landing/landing.js",
+          "line": 168,
+          "column": 7
+        },
+        {
+          "id": "dfc15abd2d39402e",
+          "source": "app/landing/landing.js",
+          "line": 212,
+          "column": 55
+        }
+      ],
+      "priorDecision": "domain_data",
+      "priorDecisionUniform": true
+    },
+    {
+      "fingerprint": "ed6143986bf0f419053113d25ea5ee945c0f63eebdf323a790a8fe3a13e14b08",
+      "old": [
+        {
+          "id": "d558b5e794aa5521",
+          "source": "app/landing/landing.js",
+          "line": 88,
+          "column": 7
+        },
+        {
+          "id": "3821b94a97c81f57",
+          "source": "app/landing/landing.js",
+          "line": 132,
+          "column": 52
+        }
+      ],
+      "current": [
+        {
+          "id": "178d2ace77ca7380",
+          "source": "app/landing/landing.js",
+          "line": 169,
+          "column": 7
+        },
+        {
+          "id": "f47a80b4eac1c28d",
+          "source": "app/landing/landing.js",
+          "line": 213,
+          "column": 52
+        }
+      ],
+      "priorDecision": "catalog_candidate",
+      "priorDecisionUniform": true
+    }
+  ],
+  "sourceMappings": [
+    {
+      "oldId": "ad91c0acafd8b6f9",
+      "currentId": "1b7e83f6b3ba4468",
+      "fingerprint": "7f54a7c8779ff4c20010c4d602fabb227ae11a6dc6cb476cea81f29c605b8677",
+      "source": "app/how-it-works/how-it-works.js",
+      "at": [
+        4,
+        13
+      ],
+      "to": [
+        6,
+        13
+      ],
+      "value": "Compra em escala"
+    },
+    {
+      "oldId": "d708dced14d5ca21",
+      "currentId": "80ce4c1741c4a4ba",
+      "fingerprint": "b12365ee6b7741779214eb38496ee20342b77a74f338f7dfdb0e11bfb9767518",
+      "source": "app/how-it-works/how-it-works.js",
+      "at": [
+        4,
+        32
+      ],
+      "to": [
+        6,
+        32
+      ],
+      "value": "Concentrar a compra de chapas, ferragens e outros insumos em mais pedidos ajuda a negociar com fornecedores e programar as aquisições."
+    },
+    {
+      "oldId": "8fec1f4a9cacb304",
+      "currentId": "f697917512def7f1",
+      "fingerprint": "93aea2da180fcd167e0e0bc5afef9fc258691d43ea83b66c6cb8c45c396bfcee",
+      "source": "app/how-it-works/how-it-works.js",
+      "at": [
+        5,
+        16
+      ],
+      "to": [
+        7,
+        16
+      ],
+      "value": "Compras coletivas"
+    },
+    {
+      "oldId": "f42a451b2563f5ec",
+      "currentId": "097c13485a014fca",
+      "fingerprint": "cd6b09ff74ca6b631c192078a7922938bfa9fd12630b31e1151fbcea96428197",
+      "source": "app/how-it-works/how-it-works.js",
+      "at": [
+        5,
+        36
+      ],
+      "to": [
+        7,
+        36
+      ],
+      "value": "Diferentes apartamentos compartilham uma plataforma técnica, sem exigir que todos escolham a mesma composição. Materiais e processos comuns podem ser planejados juntos."
+    },
+    {
+      "oldId": "d190809d1dcb8129",
+      "currentId": "22e3f698ff88353f",
+      "fingerprint": "8438aeaca2225484ab08ca2117622a519eed9c35b108ba96f58ed5be227b398d",
+      "source": "app/how-it-works/how-it-works.js",
+      "at": [
+        6,
+        15
+      ],
+      "to": [
+        8,
+        15
+      ],
+      "value": "Produção planejada"
+    },
+    {
+      "oldId": "15f3f308777e6e98",
+      "currentId": "7ee51b1c2baef928",
+      "fingerprint": "7d6b6da5687da7c9a0347169354c350f8a052ade45557a394458f46b64defff0",
+      "source": "app/how-it-works/how-it-works.js",
+      "at": [
+        6,
+        36
+      ],
+      "to": [
+        8,
+        36
+      ],
+      "value": "Projetos individuais exigem programação de máquinas, detalhamento e planos de corte próprios. Os módulos previamente desenvolvidos permitem organizar etapas repetíveis."
+    },
+    {
+      "oldId": "00cc47cfcbb36c09",
+      "currentId": "54c7396495d494ad",
+      "fingerprint": "310922769fe73caee95b6ab7c81f1b1f6ee6a32941e549fb3c3fdf6b7e938a7d",
+      "source": "app/how-it-works/how-it-works.js",
+      "at": [
+        7,
+        13
+      ],
+      "to": [
+        9,
+        13
+      ],
+      "value": "Aproveitamento de material"
+    },
+    {
+      "oldId": "349f54bd7b73fd93",
+      "currentId": "b2fa68d8b64cc553",
+      "fingerprint": "ce935be5a8b93bf8897f1b2e4626bfbb59061726ca2ba6c731588090c9b19727",
+      "source": "app/how-it-works/how-it-works.js",
+      "at": [
+        7,
+        42
+      ],
+      "to": [
+        9,
+        42
+      ],
+      "value": "Planos de corte organizados ajudam a distribuir melhor as peças nas chapas e reduzir sobras, sem diminuir a qualidade dos materiais."
+    },
+    {
+      "oldId": "01dab881d1b27ed6",
+      "currentId": "c29e30a24361702a",
+      "fingerprint": "675c10260e72441be00cbb17dfee4e92b5f445f920c1284b17f2ef0182be398d",
+      "source": "app/how-it-works/how-it-works.js",
+      "at": [
+        8,
+        17
+      ],
+      "to": [
+        10,
+        17
+      ],
+      "value": "Engenharia já estudada"
+    },
+    {
+      "oldId": "0cb57479cdea0903",
+      "currentId": "a6c85d8e7a12adda",
+      "fingerprint": "5f00c71a7f6e6ca58ab8df9fcca84d8b5638b7065979bb045ab5ecc1483b60f4",
+      "source": "app/how-it-works/how-it-works.js",
+      "at": [
+        8,
+        42
+      ],
+      "to": [
+        10,
+        42
+      ],
+      "value": "Na marcenaria individual, cada projeto demanda uma parcela maior de trabalho técnico desde o início. Aqui, as soluções-base são estudadas para o empreendimento e reaproveitadas em diferentes apartamentos."
+    },
+    {
+      "oldId": "2688c6719c0db702",
+      "currentId": "0346f7608940a8ce",
+      "fingerprint": "3080a00ddb406f16b49f6cbb02be324a88a6d309fa0f305252fad10e96f87e2b",
+      "source": "app/how-it-works/how-it-works.js",
+      "at": [
+        9,
+        17
+      ],
+      "to": [
+        11,
+        17
+      ],
+      "value": "Menos retrabalho"
+    },
+    {
+      "oldId": "e56a0cd0325f20ca",
+      "currentId": "f5a68488bf28979f",
+      "fingerprint": "30b438143c8a1bc0a2ea88708929ce5eae20fd1792d98d511930e56dd8255176",
+      "source": "app/how-it-works/how-it-works.js",
+      "at": [
+        9,
+        36
+      ],
+      "to": [
+        11,
+        36
+      ],
+      "value": "Padrões, furações e conferências previamente definidos permitem repetir soluções verificadas e reduzir ajustes durante a fabricação."
+    },
+    {
+      "oldId": "4ea7a0da65816c69",
+      "currentId": "ae57ca16d0f8977f",
+      "fingerprint": "820d08263b3368952e155d2f7c64cb58af908238c1109af76b7013cb4798b94f",
+      "source": "app/landing/landing.js",
+      "at": [
+        24,
+        6
+      ],
+      "to": [
+        105,
+        6
+      ],
+      "value": "Modular"
+    },
+    {
+      "oldId": "ad3713eaaa5e6b72",
+      "currentId": "50f13498a1b92fe1",
+      "fingerprint": "31a97eb1b13e20604f1eea1f9d69ee04a2c76c11d90aba2561cd8ea045a4fb16",
+      "source": "app/landing/landing.js",
+      "at": [
+        24,
+        17
+      ],
+      "to": [
+        105,
+        17
+      ],
+      "value": "Inteligente"
+    },
+    {
+      "oldId": "756fd54f68386be5",
+      "currentId": "75eeb36cba4ddc01",
+      "fingerprint": "30b5c646bb020046dbe896a1b5d47a2e6762b4c40c3de19f5fab71beb660933a",
+      "source": "app/landing/landing.js",
+      "at": [
+        24,
+        32
+      ],
+      "to": [
+        105,
+        32
+      ],
+      "value": "Para a sua vida"
+    }
+  ],
+  "changed": [
+    {
+      "kind": "sink",
+      "oldId": "931d2fdd94d6cced",
+      "currentId": "fef001dc224c5527",
+      "oldFingerprint": "8181e182e2d7b93bccef53c52aceee6488fef7df904685ba063b7ca9ce1355a2",
+      "currentFingerprint": "fe117de85a7d997bc535906e93680a7a1cd36551599179631f76b8393c3a16a0",
+      "oldValue": "Ambiente planejado com a interface Casa em Módulos",
+      "currentValue": "Ambiente planejado com uma apresentação da Casa em Módulos no celular",
+      "status": "common-sense-review-required"
+    },
+    {
+      "kind": "source",
+      "oldId": "54947311a7ad890a",
+      "currentId": "6083475eb5f05e96",
+      "oldFingerprint": "8cd3d96d010fca3a6c78decaff6dc8ee0ff4bfd2cbf62b5d6036c28ce3d0c06b",
+      "currentFingerprint": "3e9cb3fad9c94d32c0250b14b848f4a3a0e8f51908223f9276e627ec39124e46",
+      "status": "manual-revalidation-recorded",
+      "currentDisposition": "diagnostic"
+    }
+  ],
+  "newSinks": [
+    {
+      "id": "fbd72115b1e559f2",
+      "source": "app/how-it-works/index.html",
+      "line": 40,
+      "column": 498,
+      "sink": "text:button",
+      "value": "Expandir em tela cheia",
+      "expression": "Expandir em tela cheia",
+      "judgeRecommendation": "catalog_candidate",
+      "judgeNote": "Texto visível do controle de tela cheia na página Como funciona.",
+      "ownerDisposition": "pending"
+    },
+    {
+      "id": "bda52494adf51488",
+      "source": "app/index.html",
+      "line": 33,
+      "column": 9,
+      "sink": "attribute:aria-label",
+      "value": "Mais informações",
+      "expression": "Mais informações",
+      "judgeRecommendation": "review_accessible_semantics",
+      "judgeNote": "“Mais informações” rotula uma div genérica; confirmar se essa semântica é necessária e exposta antes de tratar como texto de catálogo.",
+      "ownerDisposition": "pending"
+    },
+    {
+      "id": "e185d906c6f85858",
+      "source": "app/index.html",
+      "line": 34,
+      "column": 29,
+      "sink": "text:a",
+      "value": "Saiba mais",
+      "expression": "Saiba mais",
+      "judgeRecommendation": "catalog_candidate",
+      "judgeNote": "“Saiba mais” foi solicitado pelo owner para o link da Home; a redação está escolhida, mas não há decisão de extração/chave.",
+      "ownerDisposition": "pending"
+    },
+    {
+      "id": "0c5db734ff22f8ae",
+      "source": "app/index.html",
+      "line": 35,
+      "column": 106,
+      "sink": "text:a",
+      "value": "Assistir no YouTube ↗",
+      "expression": "Assistir no YouTube ↗",
+      "judgeRecommendation": "catalog_candidate",
+      "judgeNote": "Link externo “Assistir no YouTube ↗”; decidir separadamente se a seta pertence ao texto localizado ou à convenção visual.",
+      "ownerDisposition": "pending"
+    },
+    {
+      "id": "1deb819af5cc5953",
+      "source": "app/index.html",
+      "line": 41,
+      "column": 11,
+      "sink": "attribute:aria-label",
+      "value": "Vídeo de apresentação no celular",
+      "expression": "Vídeo de apresentação no celular",
+      "judgeRecommendation": "catalog_candidate",
+      "judgeNote": "Nome acessível do grupo do vídeo.",
+      "ownerDisposition": "pending"
+    },
+    {
+      "id": "3abe647cf8ac759d",
+      "source": "app/index.html",
+      "line": 43,
+      "column": 15,
+      "sink": "attribute:aria-label",
+      "value": "Reproduzir o vídeo de apresentação",
+      "expression": "Reproduzir o vídeo de apresentação",
+      "judgeRecommendation": "catalog_candidate",
+      "judgeNote": "Nome acessível do botão de reprodução.",
+      "ownerDisposition": "pending"
+    },
+    {
+      "id": "e84c51cae0cd9c6e",
+      "source": "app/index.html",
+      "line": 47,
+      "column": 15,
+      "sink": "attribute:title",
+      "value": "Tela cheia",
+      "expression": "Tela cheia",
+      "judgeRecommendation": "catalog_candidate",
+      "judgeNote": "Título do controle de tela cheia; avaliar junto aos outros rótulos de tela cheia.",
+      "ownerDisposition": "pending"
+    },
+    {
+      "id": "fd28c05616bfb437",
+      "source": "app/index.html",
+      "line": 47,
+      "column": 15,
+      "sink": "attribute:aria-label",
+      "value": "Abrir vídeo em tela cheia",
+      "expression": "Abrir vídeo em tela cheia",
+      "judgeRecommendation": "catalog_candidate",
+      "judgeNote": "Nome acessível do controle de tela cheia.",
+      "ownerDisposition": "pending"
+    },
+    {
+      "id": "93f686ffaaeffa8e",
+      "source": "app/landing/landing.js",
+      "line": 73,
+      "column": 7,
+      "sink": "property:title",
+      "value": "Casa em Módulos — apresentação institucional",
+      "expression": "\"Casa em Módulos — apresentação institucional\"",
+      "judgeRecommendation": "catalog_candidate",
+      "judgeNote": "Título acessível do iframe, não metadado SEO. Não compartilhar chave com Como funciona sem decisão.",
+      "ownerDisposition": "pending"
+    }
+  ],
+  "manualSourceRevalidation": {
+    "oldId": "54947311a7ad890a",
+    "currentId": "6083475eb5f05e96",
+    "old": {
+      "source": "app/landing/landing.js",
+      "line": 54,
+      "column": 46,
+      "value": "Imagem indisponível",
+      "classification": "diagnostic",
+      "consumerLinkStatus": "fixed-fallback-only",
+      "failureFallbackRefs": [
+        {
+          "sinkId": "b5c5526f2f3c9ad4",
+          "source": "app/index.html",
+          "line": 48,
+          "sink": "text:p",
+          "expression": "Imagem temporariamente indisponível.",
+          "routeConsumers": [
+            "/"
+          ],
+          "relationship": "error-to-fixed-fallback",
+          "evidence": "The rejected image load reaches the static HTML fallback; the Error text is discarded."
+        }
+      ]
+    },
+    "current": {
+      "source": "app/landing/landing.js",
+      "line": 135,
+      "column": 46,
+      "value": "Imagem indisponível",
+      "classification": "unreviewed",
+      "consumerLinkStatus": "manual-consumer-review",
+      "failureFallbackRefs": null
+    },
+    "manualRevalidation": {
+      "disposition": "diagnostic",
+      "currentFallbackSinkId": "5fc74ea3cdccd345",
+      "currentFallbackText": "Imagem temporariamente indisponível.",
+      "evidence": "The rejected image load rejects with this Error. Its rejection callback discards the Error and calls commit(null, true); the fixed fallback renders. Independent review found the relevant source flow unchanged except for the inserted hero code and line movement.",
+      "scannerLimitation": "Current inventory does not record this fallback relationship; it requires manual flow review."
+    }
+  },
+  "authoringMap": {
+    "mapped": 419,
+    "unresolved": 0,
+    "byOrigin": {
+      "page": 386,
+      "shared-fragment": 33
+    },
+    "byRoute": {
+      "/about/": 56,
+      "/how-it-works/": 303,
+      "/": 60
+    }
+  },
+  "localGates": {
+    "primaryPageCompilerCheck": "PASS",
+    "inventoryGeneration": "PASS",
+    "applicationTestSuite": "NOT_RUN",
+    "previewOrDeploy": "NOT_RUN"
+  }
+}
