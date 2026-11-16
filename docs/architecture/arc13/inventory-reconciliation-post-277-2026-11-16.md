@@ -37,7 +37,7 @@ For JavaScript source records, 343 IDs remain unchanged, 16 records have positio
 - “Mais informações” remains at `bda52494adf51488`, now on an element with `role="group"` after the integrated markup correction. The earlier generic-element concern is resolved in current source; catalog disposition and assistive-technology review remain separate.
 - The old hero image Error “Imagem indisponível” moved from line 135 to line 229 (source ID `6083475eb5f05e96` → `32cad218d633d924`). Its rejection callback still discards the Error and displays the fixed fallback “Imagem temporariamente indisponível.” (`app/index.html:67`); retain its diagnostic classification.
 - The new source “Não foi possível carregar o player do YouTube.” (`fac95c91f9fb8815`, `app/landing/landing.js:92`) is also diagnostic: the rejection is caught, the failed iframe is removed, and the poster is restored. It is not visible UI copy and should not be added to the translation catalog.
-- The visual video treatment and controls were accepted by the owner on 2026-11-16. That acceptance does not itself approve alt wording, translation keys, catalog membership, or extraction. Prior review dispositions carry only across exact semantic matches; changed values remain pending.
+- In the #277 review on 2026-11-16, the owner confirmed that the final video treatment pleased the decision-maker. This records acceptance of the visual presentation and controls on Home and Como funciona. It does not approve the Home alt wording, translation keys, catalog membership, extraction, or assistive-technology behavior. Prior review dispositions carry only across exact semantic matches; changed values remain pending.
 
 ## Validation and limits
 
