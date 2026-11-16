@@ -158,18 +158,34 @@
     });
 
     const fullscreen = document.getElementById("heroPhoneFullscreen");
-    if (fullscreen) fullscreen.addEventListener("click", () => {
-      const iframe = screenElement.querySelector("iframe");
-      const request = iframe && (iframe.requestFullscreen || iframe.webkitRequestFullscreen);
-      if (!iframe || !request) {
-        window.open(`https://www.youtube.com/shorts/${encodeURIComponent(videoId)}`, "_blank", "noopener,noreferrer");
-        return;
-      }
-      try {
-        const result = request.call(iframe);
-        if (result && typeof result.catch === "function") result.catch(() => {});
-      } catch (_) {}
-    });
+    const player = screenElement.querySelector(".hero-phone-player");
+    if (fullscreen && player) {
+      const activeFullscreenElement = () => document.fullscreenElement || document.webkitFullscreenElement || null;
+      const syncFullscreenButton = () => {
+        const isFullscreen = activeFullscreenElement() === player;
+        const label = isFullscreen ? "Sair da tela cheia" : "Abrir vídeo em tela cheia";
+        fullscreen.dataset.fullscreen = isFullscreen ? "active" : "inactive";
+        fullscreen.setAttribute("aria-label", label);
+        fullscreen.setAttribute("title", label);
+        fullscreen.setAttribute("aria-pressed", String(isFullscreen));
+      };
+      fullscreen.addEventListener("click", () => {
+        if (activeFullscreenElement() === player) {
+          const exit = document.exitFullscreen || document.webkitExitFullscreen;
+          if (exit) Promise.resolve(exit.call(document)).catch(() => {});
+          return;
+        }
+        const request = player.requestFullscreen || player.webkitRequestFullscreen;
+        if (!request) {
+          window.open(`https://www.youtube.com/shorts/${encodeURIComponent(videoId)}`, "_blank", "noopener,noreferrer");
+          return;
+        }
+        try { Promise.resolve(request.call(player)).catch(() => {}); } catch (_) {}
+      });
+      document.addEventListener("fullscreenchange", syncFullscreenButton);
+      document.addEventListener("webkitfullscreenchange", syncFullscreenButton);
+      syncFullscreenButton();
+    }
 
     image.addEventListener("load", layoutHeroPhoneScreen);
     image.addEventListener("error", () => { screenElement.hidden = true; });
