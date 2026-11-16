@@ -74,6 +74,19 @@ html[data-theme="light"] .hero-description { color: #705C4B; }
 .hero-phone-poster:hover .hero-phone-poster__image { filter: brightness(1.04); }
 .hero-phone-media.is-playing .hero-phone-poster { opacity: 0; pointer-events: none; }
 .hero-phone-poster:focus-visible { outline: 3px solid #c08a4a; outline-offset: -4px; }
+.hero-phone-fullscreen { position: absolute; z-index: 3; right: clamp(6px, 1vw, 10px); bottom: clamp(6px, 1vw, 10px); display: grid; box-sizing: border-box; width: 32px; height: 32px; place-items: center; padding: 0; border: 1px solid rgb(255 255 255 / 80%); border-radius: 50%; background: rgb(34 33 31 / 82%); color: #fff; cursor: pointer; }
+.hero-phone-fullscreen:hover { background: #8b6a40; }
+.hero-phone-fullscreen:focus-visible { outline: 3px solid #8b6a40; outline-offset: 2px; }
+.hero-phone-fullscreen svg { display: block; width: 15px; height: 15px; fill: none; stroke: currentColor; stroke-linecap: round; stroke-linejoin: round; stroke-width: 2; }
+.hero-phone-fullscreen .fullscreen-icon-exit { display: none; }
+.hero-phone-fullscreen[data-fullscreen="active"] .fullscreen-icon-enter { display: none; }
+.hero-phone-fullscreen[data-fullscreen="active"] .fullscreen-icon-exit { display: block; }
+.hero-phone-player:fullscreen,
+.hero-phone-player:-webkit-full-screen { position: fixed !important; inset: 0 !important; z-index: 2147483647; display: grid; width: 100vw !important; height: 100vh !important; height: 100dvh !important; max-width: none !important; max-height: none !important; place-items: center; overflow: hidden; border-radius: 0; background: #000; }
+.hero-phone-player:fullscreen .hero-phone-media,
+.hero-phone-player:-webkit-full-screen .hero-phone-media { position: relative; inset: auto; width: min(100vw, 56.25vh); height: min(100vh, 177.7778vw); height: min(100dvh, 177.7778vw); border-radius: 0; }
+.hero-phone-player:fullscreen .hero-phone-fullscreen,
+.hero-phone-player:-webkit-full-screen .hero-phone-fullscreen { top: max(16px, env(safe-area-inset-top)); right: max(16px, env(safe-area-inset-right)); bottom: auto; width: 44px; height: 44px; }
 .hero-phone-poster__play { position: absolute; top: 50%; left: 50%; display: grid; width: 68px; height: 68px; place-items: center; border-radius: 50%; background: rgb(0 0 0 / 48%); box-shadow: 0 4px 18px rgb(0 0 0 / 24%); color: #fff; transform: translate(-50%, -50%); animation: hero-phone-play-pulse 2.8s ease-in-out infinite; transition: transform .2s ease; }
 .hero-phone-poster:hover .hero-phone-poster__play { transform: translate(-50%, -50%) scale(1.1); animation: none; }
 .hero-phone-poster__play svg { display: block; width: 30px; height: 30px; margin-left: 3px; fill: currentColor; }

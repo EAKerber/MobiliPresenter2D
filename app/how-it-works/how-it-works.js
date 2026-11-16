@@ -1,7 +1,31 @@
 /* Scoped interactive explanation panel. */
 (function(){
-  const fullscreenButton=document.getElementById('howVideoFullscreen'),videoFrame=document.getElementById('howVideoPlayer');
-  if(fullscreenButton&&videoFrame)fullscreenButton.addEventListener('click',()=>{const request=videoFrame.requestFullscreen||videoFrame.webkitRequestFullscreen;if(request)Promise.resolve(request.call(videoFrame)).catch(()=>{});else window.open('https://www.youtube.com/shorts/hgcJ1k7lFkE','_blank','noopener,noreferrer');});
+  const fullscreenButton=document.getElementById("howVideoFullscreen"),videoFrame=document.getElementById("howVideoPlayer");
+  const videoContainer=videoFrame&&videoFrame.closest(".video-embed");
+  if(fullscreenButton&&videoFrame&&videoContainer){
+    const activeFullscreenElement=()=>document.fullscreenElement||document.webkitFullscreenElement||null;
+    const syncFullscreenButton=()=>{
+      const isFullscreen=activeFullscreenElement()===videoContainer;
+      const label=isFullscreen?"Sair da tela cheia":"Abrir vídeo em tela cheia";
+      fullscreenButton.dataset.fullscreen=isFullscreen?"active":"inactive";
+      fullscreenButton.setAttribute("aria-label",label);
+      fullscreenButton.setAttribute("title",label);
+      fullscreenButton.setAttribute("aria-pressed",String(isFullscreen));
+    };
+    fullscreenButton.addEventListener("click",()=>{
+      if(activeFullscreenElement()===videoContainer){
+        const exit=document.exitFullscreen||document.webkitExitFullscreen;
+        if(exit)Promise.resolve(exit.call(document)).catch(()=>{});
+        return;
+      }
+      const request=videoContainer.requestFullscreen||videoContainer.webkitRequestFullscreen;
+      if(!request){window.open("https://www.youtube.com/shorts/hgcJ1k7lFkE","_blank","noopener,noreferrer");return;}
+      try{Promise.resolve(request.call(videoContainer)).catch(()=>{});}catch(_){}
+    });
+    document.addEventListener("fullscreenchange",syncFullscreenButton);
+    document.addEventListener("webkitfullscreenchange",syncFullscreenButton);
+    syncFullscreenButton();
+  }
   const explanations={
     escala:['Compra em escala','Concentrar a compra de chapas, ferragens e outros insumos em mais pedidos ajuda a negociar com fornecedores e programar as aquisições.'],
     coletivas:['Compras coletivas','Diferentes apartamentos compartilham uma plataforma técnica, sem exigir que todos escolham a mesma composição. Materiais e processos comuns podem ser planejados juntos.'],
