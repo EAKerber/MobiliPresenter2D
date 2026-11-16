@@ -28,68 +28,133 @@
     if (!frame || !art || !image || !screenElement || !player || !image.naturalWidth || !image.naturalHeight) return;
 
     const frameWidth = frame.clientWidth;
-    const frameHeight = frame.clientHeight;
-    if (!frameWidth || !frameHeight) return;
-    const coverScale = Math.max(frameWidth / image.naturalWidth, frameHeight / image.naturalHeight);
-    const minimumPhoneScale = Math.min(0.56, Math.max(0.52, frameWidth / 616));
-    const scale = Math.max(coverScale, minimumPhoneScale);
+    if (!frameWidth) return;
+    // The art height is increased below to fit the phone. Using it here feeds the previous layout back into the next scale calculation.
+    const minimumPhoneScale = 0.589;
+    const scale = Math.max(frameWidth / image.naturalWidth, minimumPhoneScale);
     const renderedWidth = image.naturalWidth * scale;
     const renderedHeight = image.naturalHeight * scale;
-    const offsetX = frameWidth < renderedWidth ? 0 : (frameWidth - renderedWidth) / 2;
-    // Screen bounds are measured on the 1074x1465 source image; keep the overlay on the rendered cover crop.
-    const screen = { left: 184, top: 170, width: 400, height: 973 };
+    const offsetX = (frameWidth - renderedWidth) / 2;
+    // Calibrated in the SVG viewBox; the browser gate pins these bounds to the source artwork.
+    const screen = {
+      left: Number(screenElement.dataset.screenLeft),
+      top: Number(screenElement.dataset.screenTop),
+      width: Number(screenElement.dataset.screenWidth),
+      height: Number(screenElement.dataset.screenHeight)
+    };
+    if (!Object.values(screen).every(Number.isFinite)) return;
+    const offsetY = screen.top * scale * 0.3;
 
     image.style.left = `${offsetX}px`;
-    image.style.top = "0px";
+    image.style.top = `-${offsetY}px`;
     image.style.width = `${renderedWidth}px`;
     image.style.height = `${renderedHeight}px`;
     screenElement.style.left = `${offsetX + screen.left * scale}px`;
-    screenElement.style.top = `${screen.top * scale}px`;
+    screenElement.style.top = `${screen.top * scale - offsetY}px`;
     screenElement.style.width = `${screen.width * scale}px`;
     screenElement.style.height = `${screen.height * scale}px`;
     screenElement.hidden = false;
 
-    const screenStyle = window.getComputedStyle(screenElement);
-    const borderTop = parseFloat(screenStyle.borderTopWidth) || 0;
-    const paddingTop = parseFloat(screenStyle.paddingTop) || 0;
-    const paddingBottom = parseFloat(screenStyle.paddingBottom) || 0;
     const artMinimum = frameWidth <= 680 ? 350 : frameWidth <= 900 ? Math.max(340, Math.min(frameWidth * 0.56, 500)) : 420;
-    const phoneBottom = screen.top * scale + screen.height * scale + borderTop + paddingBottom;
+    const phoneBottom = (screen.top + screen.height + 35) * scale - offsetY;
     art.style.minHeight = `${Math.ceil(Math.max(artMinimum, phoneBottom))}px`;
   }
 
   function initHeroPhoneScreen() {
     const image = document.querySelector(".hero-image-frame > img");
     const screenElement = document.getElementById("heroPhoneScreen");
-    const player = screenElement && screenElement.querySelector(".hero-phone-player");
+    const media = document.getElementById("heroPhoneMedia");
     const poster = document.getElementById("heroPhonePoster");
-    const videoId = player && player.dataset.videoId;
-    if (!image || !screenElement || !player || !poster || !videoId) return;
+    const videoId = screenElement && screenElement.querySelector(".hero-phone-player")
+      && screenElement.querySelector(".hero-phone-player").dataset.videoId;
+    if (!image || !screenElement || !media || !poster || !videoId) return;
+
+    let apiPromise = null;
+    let playerRequested = false;
+
+    function loadYouTubeIframeApi() {
+      if (window.YT && window.YT.Player) return Promise.resolve(window.YT);
+      if (apiPromise) return apiPromise;
+      apiPromise = new Promise((resolve, reject) => {
+        const previousReady = window.onYouTubeIframeAPIReady;
+        const script = document.createElement("script");
+        script.id = "casaYouTubeIframeApi";
+        script.src = "https://www.youtube.com/iframe_api";
+        script.async = true;
+        window.onYouTubeIframeAPIReady = () => {
+          if (typeof previousReady === "function") {
+            try { previousReady(); } catch (_) {}
+          }
+          resolve(window.YT);
+        };
+        script.addEventListener("error", () => {
+          apiPromise = null;
+          reject(new Error("Não foi possível carregar o player do YouTube."));
+        }, { once: true });
+        document.head.append(script);
+      });
+      return apiPromise;
+    }
+
+    function revealPlayingVideo() {
+      if (media.classList.contains("is-playing")) return;
+      media.classList.add("is-playing");
+      poster.setAttribute("aria-hidden", "true");
+    }
+
+    function restorePoster() {
+      playerRequested = false;
+      poster.disabled = false;
+      poster.removeAttribute("aria-hidden");
+      media.classList.remove("is-playing");
+    }
+
+    function handlePlayerError(event) {
+      if (media.classList.contains("is-playing")) return;
+      restorePoster();
+      const iframe = event && event.target && event.target.getIframe ? event.target.getIframe() : media.querySelector("iframe");
+      if (iframe) iframe.remove();
+    }
 
     poster.addEventListener("click", () => {
-      if (player.querySelector("iframe")) return;
+      if (playerRequested) return;
+      playerRequested = true;
+      poster.disabled = true;
+
       const iframe = document.createElement("iframe");
-      iframe.src = `https://www.youtube-nocookie.com/embed/${encodeURIComponent(videoId)}?autoplay=1&playsinline=1&rel=0&controls=1&fs=1`;
+      iframe.className = "hero-phone-media__iframe";
       iframe.title = "Casa em Módulos — apresentação institucional";
       iframe.loading = "eager";
       iframe.referrerPolicy = "strict-origin-when-cross-origin";
       iframe.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen";
       iframe.allowFullscreen = true;
-      poster.replaceWith(iframe);
-    });
+      const params = new URLSearchParams({
+        autoplay: "1",
+        controls: "1",
+        enablejsapi: "1",
+        fs: "1",
+        origin: window.location.origin,
+        playsinline: "1",
+        rel: "0"
+      });
+      iframe.src = "https://www.youtube-nocookie.com/embed/" + encodeURIComponent(videoId) + "?" + params.toString();
+      media.append(iframe);
 
-    const fullscreen = document.getElementById("heroPhoneFullscreen");
-    if (fullscreen) fullscreen.addEventListener("click", () => {
-      const iframe = screenElement.querySelector("iframe");
-      const request = iframe && (iframe.requestFullscreen || iframe.webkitRequestFullscreen);
-      if (!iframe || !request) {
-        window.open(`https://www.youtube.com/shorts/${encodeURIComponent(videoId)}`, "_blank", "noopener,noreferrer");
-        return;
-      }
-      try {
-        const result = request.call(iframe);
-        if (result && typeof result.catch === "function") result.catch(() => {});
-      } catch (_) {}
+      loadYouTubeIframeApi().then((YT) => {
+        new YT.Player(iframe, {
+          events: {
+            onReady: (event) => event.target.playVideo(),
+            onStateChange: (event) => {
+              if (event.data === YT.PlayerState.PLAYING) revealPlayingVideo();
+            },
+            onError: handlePlayerError
+          }
+        });
+      }).catch(() => {
+        const activeIframe = media.querySelector("iframe");
+        if (activeIframe) activeIframe.remove();
+        restorePoster();
+      });
     });
 
     image.addEventListener("load", layoutHeroPhoneScreen);
@@ -99,7 +164,6 @@
     if (frame && typeof ResizeObserver === "function") new ResizeObserver(layoutHeroPhoneScreen).observe(frame);
     else window.addEventListener("resize", layoutHeroPhoneScreen);
   }
-
   function renderBenefits() {
     const mini = document.getElementById("miniBenefits");
     ["Modular", "Inteligente", "Para a sua vida"].forEach((title, index) => {
