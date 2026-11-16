@@ -1,12 +1,12 @@
 {
   "schemaVersion": "BranchHygieneBatch 0.1",
   "repository": "EAKerber/MobiliPresenter2D",
-  "wave": "M2D-R11-2026-11-11",
-  "purpose": "Remove only the closed unmerged PR #270 head at its exact SHA; #271 remains the preserved successor.",
+  "wave": "M2D-R12-2026-11-16",
+  "purpose": "Remove only the exact integrated PR #275 head; preserve every other Product branch.",
   "branches": [
     {
-      "branch": "codex/ds04-208-css-contrast-20261111",
-      "sha": "219d9e672bf390a7af4b5815d50f9ea15f723913"
+      "branch": "fix/home-hero-group-a11y-20261114",
+      "sha": "3481ade561deddf561de57225cf8a65491b34654"
     }
   ]
 }

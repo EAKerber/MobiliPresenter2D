@@ -621,6 +621,21 @@
         "supersededByPullRequest": 271
       },
       "note": "Closed unmerged draft PR #270 was superseded by #271. The exact head SHA is pinned here; reobserve branch identity and open-PR/protection state before deletion."
+    },
+    {
+      "branch": "fix/home-hero-group-a11y-20261114",
+      "sha": "3481ade561deddf561de57225cf8a65491b34654",
+      "reason": "merged-pull-request-head",
+      "allowDelete": true,
+      "evidence": {
+        "pullRequest": 275,
+        "mergedMainSha": "64d934dabc7cfb8175dfe2f0a5d04fe1669a41ba"
+      },
+      "squashMerge": {
+        "pullRequest": 275,
+        "mergeCommit": "64d934dabc7cfb8175dfe2f0a5d04fe1669a41ba"
+      },
+      "note": "PR #275 was squash-merged. The exact source head tree matches its merged main commit; reobserve branch identity, open-PR relation, and protection immediately before deletion."
     }
   ]
 }
