@@ -100,7 +100,7 @@ async function startFixture(){
   try{
     fixture=await startFixture();
     browser=await chromium.launch({headless:true,...(process.env.BROWSER_EXECUTABLE?{executablePath:process.env.BROWSER_EXECUTABLE}:{})});
-    const page=await browser.newPage({viewport:{width:1600,height:1050}}),errors=[];
+    const viewport={width:1600,height:1050},page=await browser.newPage({viewport}),errors=[],captures=[];
     page.on('pageerror',error=>errors.push(error.message));
     await page.goto(fixture.configUrl,{waitUntil:'domcontentloaded'});
     await page.waitForFunction(()=>window.CASA_EM_MODULOS_DEBUG&&document.documentElement.dataset.publishedConfigurationStatus==='validated',null,{timeout:30000});
@@ -123,12 +123,13 @@ async function startFixture(){
         const box=document.querySelector('[data-global-service-id="tempered-glass"]');box.checked=glass;box.dispatchEvent(new Event('change',{bubbles:true}));
       },{visibleIds,glass});
       await page.locator('#viewer').screenshot({path:path.join(output,name+'.png'),animations:'disabled'});
+      captures.push({name,visibleModuleIds:[...visibleIds],glass});
     };
     const all=['module-01','module-02','module-03','module-04','module-05','module-06','module-07'];
     await capture('glass-all',all,true);
     await capture('glass-module-02-off',all.filter(id=>id!=='module-02'),true);
     await capture('glass-module-05-off',all.filter(id=>id!=='module-05'),true);
-    await capture('glass-modules-02-05-on',all,true,false);
+    await capture('glass-modules-02-05-on',['module-02','module-05'],true);
     assert.equal(await page.locator('[data-entity-id="tempered-glass"]').count(),1);
     const glassZ=await page.locator('[data-entity-id="tempered-glass"]').evaluate(el=>Number(getComputedStyle(el).zIndex));
     const foregroundZ=await page.locator('.layer-group[data-entity-id="module-05"]').evaluate(el=>Number(getComputedStyle(el).zIndex));
@@ -136,8 +137,9 @@ async function startFixture(){
     await page.evaluate(()=>{const box=document.querySelector('[data-global-service-id="tempered-glass"]');box.checked=true;box.dispatchEvent(new Event('change',{bubbles:true}));});
     assert.equal(await page.locator('[data-entity-id="tempered-glass"]').getAttribute('aria-hidden'),'false');
     assert.deepEqual(errors,[]);
-    fs.writeFileSync(path.join(output,'test.json'),JSON.stringify({passed:true,cases,errors,source:'validated local defaults fixture; no hosted configuration'},null,2));
-    console.log(JSON.stringify({passed:true,cases,errors,configUrl:fixture.configUrl}));
+    const report={passed:true,cases,errors,source:'validated local defaults fixture; no hosted configuration',route:new URL(fixture.configUrl).pathname,viewport,browser:browser.version(),captures};
+    fs.writeFileSync(path.join(output,'test.json'),JSON.stringify(report,null,2));
+    console.log(JSON.stringify({passed:true,cases,errors,configUrl:fixture.configUrl,captures:captures.length}));
   }finally{
     try{if(browser)await browser.close()}finally{if(fixture)await fixture.close()}
   }
