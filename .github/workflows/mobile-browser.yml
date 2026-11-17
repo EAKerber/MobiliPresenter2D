@@ -7,6 +7,7 @@ on:
       - 'app/**'
       - 'tests/mobile-pip-main-browser.cjs'
       - 'tests/home-hero-phone-geometry-browser.cjs'
+      - 'tests/exposed-sides-glass.cjs'
       - '.github/workflows/mobile-browser.yml'
       - 'tests/ci/prepare-local-v5-browser.sh'
       - 'tests/ci/local-buyer-config-server.mjs'
@@ -15,6 +16,7 @@ on:
       - 'app/**'
       - 'tests/mobile-pip-main-browser.cjs'
       - 'tests/home-hero-phone-geometry-browser.cjs'
+      - 'tests/exposed-sides-glass.cjs'
       - '.github/workflows/mobile-browser.yml'
       - 'tests/ci/prepare-local-v5-browser.sh'
       - 'tests/ci/local-buyer-config-server.mjs'
@@ -59,10 +61,19 @@ jobs:
         env:
           NODE_PATH: /tmp/mobile-browser-tools/node_modules
         run: node tests/home-hero-phone-geometry-browser.cjs /tmp/mobile-browser-review
+      - name: Test glass occlusion in the local Configurator
+        if: ${{ !inputs.target_url }}
+        env:
+          NODE_PATH: /tmp/mobile-browser-tools/node_modules
+          EXPOSED_SIDES_GLASS_URL: http://127.0.0.1:8123/config/
+        run: node tests/exposed-sides-glass.cjs /tmp/glass-occlusion-review
       - name: Save mobile review
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: mobile-browser-${{ github.run_id }}
-          path: /tmp/mobile-browser-review
+          path: |
+            /tmp/mobile-browser-review
+            /tmp/glass-occlusion-review
           if-no-files-found: ignore
+
