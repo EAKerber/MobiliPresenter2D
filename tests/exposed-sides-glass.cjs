@@ -155,7 +155,7 @@ async function startFixture(){
           glass:box.checked,
           renderedGlassVisible:glassLayer?.getAttribute('aria-hidden')==='false'
         };
-      },{visibleIds,glass});
+      },{name,visibleIds,glass});
       await page.locator('#viewer').screenshot({path:path.join(output,name+'.png'),animations:'disabled'});
       captures.push(observed);
     };
