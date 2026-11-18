@@ -4,14 +4,16 @@
   "repository": "EAKerber/MobiliPresenter2D",
   "pins": {
     "productMain": "efc40584c3f3ca940cf6cbca408f8fda31e3e1c9",
-    "productPr274Head": "ff2fd40fdbc40eae2a53f8be6ba4a24af3eaea82"
+    "inventorySourceRevision": "ff2fd40fdbc40eae2a53f8be6ba4a24af3eaea82"
   },
   "currentInventory": {
     "path": "architecture/arc13/ui-text-candidates.json",
     "gitBlobSha": "891c61a774730437ca770cdb7d9df0e271788043",
     "contentSha256": "abce38889ad6d78c634fadad5d6f0c63fd9706ac3e0c13bcdf13f78010caeb9e",
     "sinkOccurrences": 1026,
-    "currentGeneratedClassification": "unreviewed"
+    "currentGeneratedClassification": "unreviewed",
+    "sourceRevision": "ff2fd40fdbc40eae2a53f8be6ba4a24af3eaea82",
+    "sourceRevisionRole": "This revision contains the inventory blob identified below; the blob is identical at the live #274 head and this is not a live PR-head pin."
   },
   "priorEvidence": {
     "reviewInventorySha256": "904c49a3b32722ece528a468e030b10800def07a61cbcf5811f01bfd00cfe391",
@@ -298,10 +300,12 @@
       "expression": "label",
       "reviewNote": "dynamic label in how-it-works.js",
       "loc002": {
-        "classification": null,
+        "classification": "accessibility",
         "contentOwner": null,
         "destination": "hold",
-        "status": "pending-semantic-review"
+        "status": "pending-semantic-review",
+        "classificationBasis": "aria-label on the How fullscreen control; the control name changes with fullscreen state.",
+        "classificationConfidence": "high"
       },
       "identityStatus": "existing ARC-13 provenance does not decide LOC-002 class/owner/destination"
     },
@@ -316,10 +320,12 @@
       "expression": "label",
       "reviewNote": "dynamic title",
       "loc002": {
-        "classification": null,
+        "classification": "ui-dynamic",
         "contentOwner": null,
         "destination": "hold",
-        "status": "pending-semantic-review"
+        "status": "pending-semantic-review",
+        "classificationBasis": "title tooltip on the How fullscreen control; it tracks the fullscreen state.",
+        "classificationConfidence": "high"
       },
       "identityStatus": "existing ARC-13 provenance does not decide LOC-002 class/owner/destination"
     },
@@ -334,10 +340,12 @@
       "expression": "Abrir vídeo em tela cheia",
       "reviewNote": "fullscreen aria-label",
       "loc002": {
-        "classification": null,
+        "classification": "accessibility",
         "contentOwner": null,
         "destination": "hold",
-        "status": "pending-semantic-review"
+        "status": "pending-semantic-review",
+        "classificationBasis": "aria-label of the How fullscreen button; runtime synchronizes the name with state.",
+        "classificationConfidence": "high"
       },
       "identityStatus": "existing ARC-13 provenance does not decide LOC-002 class/owner/destination"
     },
@@ -352,10 +360,12 @@
       "expression": "Abrir vídeo em tela cheia",
       "reviewNote": "fullscreen title",
       "loc002": {
-        "classification": null,
+        "classification": "ui-dynamic",
         "contentOwner": null,
         "destination": "hold",
-        "status": "pending-semantic-review"
+        "status": "pending-semantic-review",
+        "classificationBasis": "title tooltip of the How fullscreen button; runtime synchronizes it with state.",
+        "classificationConfidence": "high"
       },
       "identityStatus": "existing ARC-13 provenance does not decide LOC-002 class/owner/destination"
     },
@@ -370,10 +380,12 @@
       "expression": "Cozinha planejada com uma mão segurando um celular",
       "reviewNote": "changed image alt text",
       "loc002": {
-        "classification": null,
+        "classification": "accessibility",
         "contentOwner": null,
         "destination": "hold",
-        "status": "pending-semantic-review"
+        "status": "pending-semantic-review",
+        "classificationBasis": "alt text for the Home hero illustration; class is clear, but descriptive accuracy and image purpose still need the content owner.",
+        "classificationConfidence": "high"
       },
       "identityStatus": "existing ARC-13 provenance does not decide LOC-002 class/owner/destination"
     },
@@ -388,10 +400,12 @@
       "expression": "Abrir vídeo em tela cheia",
       "reviewNote": "changed fullscreen title",
       "loc002": {
-        "classification": null,
+        "classification": "ui-dynamic",
         "contentOwner": null,
         "destination": "hold",
-        "status": "pending-semantic-review"
+        "status": "pending-semantic-review",
+        "classificationBasis": "title tooltip of the Home fullscreen control; it tracks the fullscreen state.",
+        "classificationConfidence": "high"
       },
       "identityStatus": "existing ARC-13 provenance does not decide LOC-002 class/owner/destination"
     },
@@ -406,10 +420,12 @@
       "expression": "label",
       "reviewNote": "dynamic aria-label in landing.js",
       "loc002": {
-        "classification": null,
+        "classification": "accessibility",
         "contentOwner": null,
         "destination": "hold",
-        "status": "pending-semantic-review"
+        "status": "pending-semantic-review",
+        "classificationBasis": "aria-label on the Home fullscreen control; the control name changes with fullscreen state.",
+        "classificationConfidence": "high"
       },
       "identityStatus": "existing ARC-13 provenance does not decide LOC-002 class/owner/destination"
     },
@@ -424,10 +440,12 @@
       "expression": "label",
       "reviewNote": "dynamic title in landing.js",
       "loc002": {
-        "classification": null,
+        "classification": "ui-dynamic",
         "contentOwner": null,
         "destination": "hold",
-        "status": "pending-semantic-review"
+        "status": "pending-semantic-review",
+        "classificationBasis": "title tooltip on the Home fullscreen control; it tracks the fullscreen state.",
+        "classificationConfidence": "high"
       },
       "identityStatus": "existing ARC-13 provenance does not decide LOC-002 class/owner/destination"
     },
@@ -442,10 +460,12 @@
       "expression": "Mais informações",
       "reviewNote": "“Mais informações”; assistive-technology review remains pending",
       "loc002": {
-        "classification": null,
+        "classification": "accessibility",
         "contentOwner": null,
         "destination": "hold",
-        "status": "pending-semantic-review"
+        "status": "pending-semantic-review",
+        "classificationBasis": "aria-label of a role=group containing two links; assistive-technology review must confirm the group adds useful, nonredundant navigation.",
+        "classificationConfidence": "medium"
       },
       "identityStatus": "existing ARC-13 provenance does not decide LOC-002 class/owner/destination"
     },
@@ -460,10 +480,12 @@
       "expression": "Saiba mais",
       "reviewNote": "“Saiba mais”; copy and /about/ destination approved, key/extraction not approved",
       "loc002": {
-        "classification": null,
+        "classification": "ui-static",
         "contentOwner": null,
         "destination": "hold",
-        "status": "pending-semantic-review"
+        "status": "pending-semantic-review",
+        "classificationBasis": "fixed visible anchor text; copy and /about/ destination were previously approved, while accountable owner, key, and extraction remain open.",
+        "classificationConfidence": "high"
       },
       "identityStatus": "existing ARC-13 provenance does not decide LOC-002 class/owner/destination"
     },
@@ -481,7 +503,9 @@
         "classification": null,
         "contentOwner": null,
         "destination": "hold",
-        "status": "pending-semantic-review"
+        "status": "pending-semantic-review",
+        "classificationBasis": "fixed YouTube link text includes a trailing arrow in the same sink; owner must decide whether the arrow is copy or decoration before assigning a class.",
+        "classificationConfidence": "unresolved"
       },
       "identityStatus": "existing ARC-13 provenance does not decide LOC-002 class/owner/destination"
     },
@@ -496,10 +520,12 @@
       "expression": "Vídeo de apresentação no celular",
       "reviewNote": "video group accessible name",
       "loc002": {
-        "classification": null,
+        "classification": "accessibility",
         "contentOwner": null,
         "destination": "hold",
-        "status": "pending-semantic-review"
+        "status": "pending-semantic-review",
+        "classificationBasis": "aria-label of a role=group around the video; assistive-technology review must check usefulness and redundancy with poster/frame names.",
+        "classificationConfidence": "medium"
       },
       "identityStatus": "existing ARC-13 provenance does not decide LOC-002 class/owner/destination"
     },
@@ -514,10 +540,12 @@
       "expression": "Reproduzir o vídeo de apresentação",
       "reviewNote": "play control accessible label; remapped from 3abe647cf8ac759d",
       "loc002": {
-        "classification": null,
+        "classification": "accessibility",
         "contentOwner": null,
         "destination": "hold",
-        "status": "pending-semantic-review"
+        "status": "pending-semantic-review",
+        "classificationBasis": "accessible name of the Home video poster button; wording and screen-reader behavior remain for review.",
+        "classificationConfidence": "high"
       },
       "identityStatus": "existing ARC-13 provenance does not decide LOC-002 class/owner/destination"
     },
@@ -532,10 +560,12 @@
       "expression": "Abrir vídeo em tela cheia",
       "reviewNote": "fullscreen control accessible label; remapped from fd28c05616bfb437",
       "loc002": {
-        "classification": null,
+        "classification": "accessibility",
         "contentOwner": null,
         "destination": "hold",
-        "status": "pending-semantic-review"
+        "status": "pending-semantic-review",
+        "classificationBasis": "aria-label of the Home fullscreen control; runtime changes it with fullscreen state.",
+        "classificationConfidence": "high"
       },
       "identityStatus": "existing ARC-13 provenance does not decide LOC-002 class/owner/destination"
     },
@@ -550,10 +580,12 @@
       "expression": "\"Casa em Módulos — apresentação institucional\"",
       "reviewNote": "iframe title; remapped from 93f686ffaaeffa8e",
       "loc002": {
-        "classification": null,
+        "classification": "accessibility",
         "contentOwner": null,
         "destination": "hold",
-        "status": "pending-semantic-review"
+        "status": "pending-semantic-review",
+        "classificationBasis": "title of the dynamically created YouTube iframe; it labels the frame, with equivalent static frame title on How.",
+        "classificationConfidence": "high"
       },
       "identityStatus": "existing ARC-13 provenance does not decide LOC-002 class/owner/destination"
     }
@@ -561,8 +593,109 @@
   "coverage": {
     "unmatchedBeforeThisOverlay": 25,
     "recoveredIdentityMatches": 10,
-    "remainingWithoutPriorDecision": 15,
+    "candidatesWithIncompleteLoc002": 15,
+    "candidatesClassifiedBySinkFunction": 14,
+    "candidatesWithoutClass": 1,
     "loc002Complete": false,
-    "reason": "Every current occurrence still needs an explicit LOC-002 class, accountable content owner, and final destination. This overlay only restores provenance for ten records and keeps all unresolved rows on hold."
-  }
+    "classificationScope": "Fourteen classes reflect only the observed HTML sink or adjacent state behavior. They do not approve wording, content owner, canonical key, extraction, translation, or accessibility quality.",
+    "reason": "All 15 candidates still lack an accountable content owner and final LOC-002 destination. Fourteen have a supported function class; the YouTube link remains unclassified until the arrow in its text sink is decided."
+  },
+  "pendingDecisionBatches": [
+    {
+      "id": "fullscreen-control-labels",
+      "candidateIds": [
+        "f106ae7ba0829c5b",
+        "ad71d3fcca0702ed",
+        "1fb12e3eb303d497",
+        "fbd8581d0d6f8053",
+        "d6d455c085c0c21f",
+        "49ccb254d443d4ab",
+        "35eff8c8551d4683",
+        "c2c6bd2c037ca454"
+      ],
+      "evidence": "One custom fullscreen interaction appears on Home and Como funciona; aria-label and title both change between enter and exit state.",
+      "pending": [
+        "accountable content owner",
+        "approval of the enter/exit wording once across both pages",
+        "assistive-technology validation of the changing accessible name and tooltip",
+        "canonical key/extraction decision"
+      ]
+    },
+    {
+      "id": "home-illustration-alt",
+      "candidateIds": [
+        "dcd455a9fecf63aa"
+      ],
+      "evidence": "The alt and current changed hero illustration are both pinned.",
+      "pending": [
+        "content owner confirms whether the image is informative and whether the description is accurate"
+      ]
+    },
+    {
+      "id": "more-information-group",
+      "candidateIds": [
+        "bda52494adf51488"
+      ],
+      "evidence": "A role=group with aria-label contains the Saiba mais and YouTube links.",
+      "pending": [
+        "assistive-technology review of usefulness and redundancy; if the group is unnecessary, adjust markup before final content classification",
+        "content owner for wording"
+      ]
+    },
+    {
+      "id": "learn-more-link",
+      "candidateIds": [
+        "e185d906c6f85858"
+      ],
+      "evidence": "The copy and /about/ destination are already approved.",
+      "pending": [
+        "accountable owner",
+        "whether this remains inline or enters a catalog",
+        "key/extraction decision"
+      ]
+    },
+    {
+      "id": "youtube-link-arrow",
+      "candidateIds": [
+        "0c5db734ff22f8ae"
+      ],
+      "evidence": "Fixed link to YouTube Shorts; the text node includes the arrow glyph.",
+      "pending": [
+        "owner approves exact wording and decides whether the arrow is text or decoration",
+        "classification and key/extraction after that decision"
+      ]
+    },
+    {
+      "id": "video-group-name",
+      "candidateIds": [
+        "1deb819af5cc5953"
+      ],
+      "evidence": "A role=group names the video area containing poster/player controls.",
+      "pending": [
+        "assistive-technology review of usefulness and redundancy with child names",
+        "content owner for wording"
+      ]
+    },
+    {
+      "id": "poster-play-name",
+      "candidateIds": [
+        "c014317c6b745a6e"
+      ],
+      "evidence": "A button around the poster has a text accessible name; the play glyph and poster image are hidden from assistive technology.",
+      "pending": [
+        "assistive-technology validation of the button name and content-owner wording"
+      ]
+    },
+    {
+      "id": "iframe-title",
+      "candidateIds": [
+        "244f37c8af92a834"
+      ],
+      "evidence": "The dynamically created Home frame and static Como funciona frame use the same title.",
+      "pending": [
+        "assistive-technology validation that the frame title identifies its content",
+        "content owner confirms exact wording across both pages"
+      ]
+    }
+  ]
 }
