@@ -8,14 +8,14 @@
 
 ## Resultado resumido
 
-A autoridade administrativa gravada hoje é `ConfiguratorAdministration2D 5.0` (V5). V3 permanece como caminho de compatibilidade de leitura/projeção; V4 é uma forma hierárquica intermediária de migração. O fluxo consumido pela interface é derivado e validado a partir desses dados. Buyer e Viewer recebem projeções com fronteiras e allowlists próprias: o DTO Buyer não é o DTO público de módulos, e nenhum deles equivale ao estado administrativo completo.
+A rota principal atual grava `ConfiguratorAdministration2D 5.0` (V5), mas o endpoint preserva gravação legacy V3 quando o documento já armazenado no Blob é V3. Portanto, V3 não é somente caminho de leitura; a versão efetiva depende do dado lido do store. V4 é uma forma hierárquica intermediária de migração. Este inventário não lê os bytes atuais do Blob. Buyer e Viewer recebem projeções com fronteiras próprias: o DTO Buyer não é o DTO público de módulos, e nenhum deles equivale ao estado administrativo completo.
 
 ## 1. Contratos, autoridades e transformações
 
 | Contrato | Autoridade e verificação | Transformação / consumidor | Disposição no pin |
 |---|---|---|---|
-| `ConfiguratorAdministration2D 5.0` | `app/core/administration-v5.js:30, 169–180, 234–279`; `validate` e `normalize` do V5 | `/api/configuration` persiste V5; leitura publicada segue `app/core/published-configuration.js:5–42`; Buyer deriva fluxo e display settings | Autoridade de gravação atual após cutover. |
-| `ConfiguratorAdministration2D 3.0` | `app/core/configuration.js:13, 276–284, 483–509` | Migração/normalização legacy; Buyer ainda o reconhece em `app/core/published-buyer-projection.js:14–31` | Compatibilidade, não autoridade de gravação atual. |
+| `ConfiguratorAdministration2D 5.0` | `app/core/administration-v5.js:30, 169–180, 234–279`; `validate` e `normalize` do V5 | `/api/configuration` grava V5 no caminho V5; leitura publicada segue `app/core/published-configuration.js:5–42`; Buyer deriva fluxo e display settings | Formato principal atual, sem eliminar o caminho legacy V3 condicional da API. |
+| `ConfiguratorAdministration2D 3.0` | `app/core/configuration.js:13, 276–284, 483–509` | Normalização legacy; reconhecido pelo Buyer em `app/core/published-buyer-projection.js:14–31`; endpoint pode continuar gravando V3 se o documento lido da store ainda for V3 | Caminho de leitura e gravação condicional; a versão do documento em Blob precisa ser observada para saber qual autoridade vale. |
 | `ConfiguratorAdministration2D 4.0` | `app/core/hierarchy-administration.js:9, 67–96, 141–213` | `administration-v5.js:288–315` converte o formato hierárquico em V5; pode ser convertido de volta para projeção legacy | Etapa intermediária de migração; o endpoint publicado não o seleciona como formato persistente. |
 | `NormalizedConfiguratorFlow 1.0` | `app/core/flow-model.js:9, 230–307, 324–380` | Derivado de configuração, registry do catálogo e defaults hierárquicos; consumido por Admin/Buyer para semântica de etapas e itens | Modelo de domínio derivado, não uma segunda fonte de autoria. |
 | `ConfiguratorPresentation2D 1.1` | `app/core/presentation-contract.js:4, 105–220` | Defaults em `app/data/presentation-policy-defaults.js:5–46`; aplicado ao layout de seções e ao fluxo | Política de apresentação separada da estrutura/domínio V5. |
@@ -25,15 +25,19 @@ A autoridade administrativa gravada hoje é `ConfiguratorAdministration2D 5.0` (
 | `ConfiguratorLayoutProfiles2D 1.0` | `app/core/layout-profiles.js:4` | Perfilado pelo contrato de apresentação e projeções do renderer | Defaults/layout não substituem política administrativa. |
 | `CommercialEstimatePriceBook 2.0` | `app/data/mock-price-book.js:61` | Fixture local para contratos/cálculos; runtime publicado recebe os dados permitidos pelo endpoint e pelas regras V5 | O arquivo nomeado mock é exemplo/fixture, não prova do conteúdo comercial ativo em produção. |
 
-V3 normaliza entradas históricas para o formato V3 atual e V4 converte os dados em estrutura hierárquica. O V5 aceita/valida seu schema, atualiza V3 ou V4 para a forma administrativa corrente e confirma a ida-e-volta da projeção legacy em pontos de migração. Os validadores verificam, entre outras invariantes, tipos/IDs referenciados pelo catálogo, etapas mínimas, seleções iniciais, disponibilidade de materiais, regras de preço e política de apresentação. Entradas não reconhecidas ou inválidas produzem erros e não devem ser tratadas como uma configuração válida.
+V3 normaliza dados legacy; V4 converte a estrutura para a forma hierárquica; V5 valida e normaliza seu próprio schema e oferece migração/projeção entre versões. O endpoint principal salva V5 quando recebe V5, mas conserva o caminho V3 se a versão atualmente lida da store for V3 (`netlify/functions/configuration.mjs:101–143`). O Admin também mantém fluxos condicionais V3/V5 (`app/admin/admin.js:1873–1923`). Os validadores verificam tipos/IDs do catálogo, etapas mínimas, seleções iniciais, disponibilidade de materiais, preço e política de apresentação. Entradas desconhecidas ou inválidas falham fechado.
 
 ## 2. API, autorização e DTOs
 
 | Superfície | Autorização e operação | Dados de entrada/saída e consumidor |
 |---|---|---|
-| `/api/configuration` — `netlify/functions/configuration.mjs:14–16, 64–80, 101–145` | GET/PUT restritos à sessão Admin; o PUT valida/normaliza e grava a forma V5 após o cutover. | Estado administrativo persistido. A leitura publicada usa `app/core/published-configuration.js:5–42` e conserva a fronteira V3/V5; V4 é intermediário. |
-| `/api/buyer-configuration` — `netlify/functions/buyer-configuration.mjs:24–72` | Exige usuário interno ou grant temporário válido; erro fechado para acesso ausente/inválido ou configuração inválida. | `BuyerConfiguratorPayload 1.0` em `app/core/published-buyer-projection.js:63–109`. Consumidor principal: `app/app.js:1765–1789`; browser de comprador: `tests/buyer-v5-browser.cjs`. |
-| `/api/public-modules` — `netlify/functions/public-modules.mjs:10–25, 79–112` | Leitura pública, somente leitura e limitada a allowlist de campos. Não concede acesso a preço ou regras comerciais por si só. | Projeção `PublicModulePresentation2D 0.1/0.2` por `app/core/public-module-projection.js:118–155`; leitor `app/viewer/public-data.js:6–43` e renderização `app/viewer/viewer.js:60–75`. |
+| `/api/configuration` — `netlify/functions/configuration.mjs:14–16, 24–27, 64–80, 101–145` | GET/PUT restritos à sessão Admin. Há gravação V5 no fluxo V5 e caminho V3 condicional se o documento lido da store for V3. | Consumidor Admin em `app/admin/admin.js:1284` e fluxos de edição V3/V5 em `:1873–1923`. Persistência usa Netlify Blobs store `configurator-settings`, key `published`; a rota seleciona `getStore()` em produção e `getDeployStore()` fora dela. `app/core/published-configuration.js:5–16` lê com consistência forte. O inventário não inspeciona o valor publicado atual. |
+| `/api/buyer-configuration` — `netlify/functions/buyer-configuration.mjs:24–72` | Exige usuário interno ou grant temporário válido; erro fechado para acesso ausente/inválido ou configuração inválida. | `BuyerConfiguratorPayload 1.0` em `app/core/published-buyer-projection.js:63–109`. O fetch está em `app/app.js:2548`; a aplicação do payload preparado está em `:1765–1789`. Browser de comprador: `tests/buyer-v5-browser.cjs`. |
+| `/api/public-modules` — `netlify/functions/public-modules.mjs:10–25, 58–77, 79–112` | Leitura pública, somente leitura e limitada a allowlist de campos. Não concede acesso a preço ou regras comerciais por si só. | Projeção `PublicModulePresentation2D 0.1/0.2` por `app/core/public-module-projection.js:118–155`; leitor `app/viewer/public-data.js:6–43` e renderização `app/viewer/viewer.js:60–75`. Em Deploy Preview sem projeção local, o endpoint pode buscar a API do site primário; registrar a origem efetiva antes de atribuir dados ao Preview. |
+
+### Origem do documento publicado
+
+`netlify/functions/configuration.mjs:24–27` escolhe `getStore()` em produção e `getDeployStore()` fora de produção; a configuração publicada fica no Blob store `configurator-settings`, chave `published`. `app/core/published-configuration.js:5–16` lê com consistência forte. Isso descreve a rota de código; este snapshot não inspeciona a store ou prova qual schema está gravado no ambiente hospedado.
 
 ### Buyer
 
@@ -66,12 +70,12 @@ A distinção essencial é: defaults de domínio (catálogo, cena, etapas/templa
 
 | Contrato/risco | Verificações existentes encontradas | Limite desta auditoria |
 |---|---|---|
-| V5, validação, normalização e upgrade V3/V4 | `app/tools/test-administration-v5.js`; `app/tools/test-v5-normal-save.js`; `app/tools/test-v5-publication-migration.js`; `app/tools/test-postv5-new-material-roundtrip.js` | Arquivos identificados; não executados nesta auditoria. |
+| Admin V3/V5, validação e salvamento | `app/tools/test-administration-v5.js`; `app/tools/test-v5-normal-save.js`; `app/tools/test-v5-publication-migration.js`; `app/tools/test-postv5-new-material-roundtrip.js`; `tests/admin-v5-save-browser.cjs` | Caminhos de edição e migração; arquivos identificados, sem execução nesta auditoria. |
 | Hierarquia e derivação do fluxo | `app/tools/test-hierarchy-administration.js`; `app/tools/test-flow-model.js`; `app/tools/test-flow-layout.js` | Não cobre por si só todos os consumidores hospedados. |
 | Apresentação | `app/tools/test-presentation-contract.js` | Contrato local; não é prova de aparência em todos os deploys. |
-| Publicação Buyer e projeção | `app/tools/test-published-configuration.js`; `app/tools/test-published-buyer-projection.js`; `tests/buyer-v5-browser.cjs` | A fixture browser anônima não prova uma configuração de comprador real nem acesso de produção. |
+| Publicação e inspeção de configuração | `app/tools/test-published-configuration.js`; `app/tools/test-v5-publication-inspection.js`; `app/tools/test-published-buyer-projection.js`; `tests/buyer-v5-browser.cjs` | Inspeção e fixture local não provam quais bytes estão atualmente em produção nem acesso real de comprador. |
 | Autorização e endpoint Buyer | `app/tools/test-v5-endpoint-safety.js` | Mapeamento de fonte; sem execução aqui. |
-| DTO público de módulos e preços-base | `app/tools/test-public-modules-endpoint.js`; `tests/public-module-projection.test.cjs`; `tests/viewer-base-price-publication.test.cjs`; `tests/viewer-price-v5-save.test.cjs`; `tests/summary-pricing-browser.cjs` | Projeção/publicação e UI são camadas distintas; browser local não é prova de produção. |
+| DTO público de módulos e preços-base | `app/tools/test-public-modules-endpoint.js`; `tests/public-module-projection.test.cjs`; `tests/viewer-base-price-publication.test.cjs`; `tests/viewer-price-v5-save.test.cjs`; `tests/viewer-base-price-browser-gate.mjs`; `tests/summary-pricing-browser.cjs` | Projeção/publicação e UI são camadas distintas; browser local não é prova de produção. |
 
 **Método de verificação por contrato:** validar/normalizar entradas V3/V4/V5 nos testes core; validar autorização nos testes de endpoint; verificar allowlists/omissões nos testes de projeção; verificar cálculo e publicação de preço-base nos testes de pricing/Viewer; conferir a renderização browser nos bundles Buyer/Viewer apropriados. Nenhum resultado é promovido sem run ligado ao SHA e ao ambiente corretos.
 
