@@ -10,7 +10,7 @@ const shells = [
   { path: "/about/", placement: ".site-header .header-actions", order: { after: ".header-cta", before: ".menu-toggle" }, keyboard: { start: ".brand", key: "Tab" }, target: { mobile: 44, desktop: 44 } },
   { path: "/how-it-works/", placement: ".site-header .header-actions", order: { after: ".header-cta", before: ".menu-toggle" }, keyboard: { start: ".brand", key: "Tab" }, target: { mobile: 44, desktop: 44 } },
   { path: "/viewer/", placement: ".viewer-header .header-actions", order: { after: ".back-link", before: ".viewer-header__menu-toggle" }, keyboard: { start: ".viewer-brand", key: "Tab" }, target: { mobile: 40, desktop: 40 } },
-  { path: "/config/", placement: ".private-header__actions", order: { first: true }, keyboard: { start: "#restoreButton", key: "Shift+Tab" }, target: { mobile: 44, desktop: 40 } },
+  { path: "/config/", placement: ".private-header__actions", order: { after: "#restoreButton", before: ".private-menu-toggle" }, keyboard: { start: "#restoreButton", key: "Tab" }, target: { mobile: 44, desktop: 40 } },
   { path: "/admin.html", placement: ".private-header__actions", order: { first: true }, keyboard: { start: ".private-header__brand", key: "Tab" }, target: { mobile: 44, desktop: 40 } },
   { path: "/access/manage.html", placement: ".private-header__actions", order: { first: true }, keyboard: { start: ".private-header__brand", key: "Tab" }, target: { mobile: 44, desktop: 40 } },
   { path: "/access/", placement: ".private-header__actions", order: { first: true }, keyboard: { start: ".private-header__brand", key: "Tab" }, target: { mobile: 44, desktop: 40 } }
