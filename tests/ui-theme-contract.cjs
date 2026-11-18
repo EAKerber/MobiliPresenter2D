@@ -15,8 +15,8 @@ const shells = [
 ];
 for (const file of shells) {
   const html = read(file);
-  const themeScript = html.match(/<script\b[^>]*\bsrc="\/core\/ui-theme\.js(?:\?[^"]*)?"[^>]*>/);
-  const themeStylesheet = html.match(/<link\b[^>]*\bhref="\/ui-theme\.css(?:\?[^"]*)?"[^>]*>/);
+  const themeScript = html.match(/<script\b[^>]*\ssrc="\/core\/ui-theme\.js(?:\?[^"]*)?"[^>]*>/);
+  const themeStylesheet = html.match(/<link\b[^>]*\shref="\/ui-theme\.css(?:\?[^"]*)?"[^>]*>/);
   assert(themeScript, file + " theme bootstrap");
   assert(themeStylesheet, file + " theme CSS");
   assert(themeScript.index < themeStylesheet.index, file + " theme before stylesheet");
@@ -67,10 +67,11 @@ assert(read("app/viewer/viewer.js").includes('search.get("technical") === "neutr
 const how = read("app/how-it-works/index.html");
 const about = read("app/about/index.html");
 const howStyles = read("app/how-it-works/how-it-works.css");
-assert(howStyles.includes('.integration-callout img { display: block; width: min(100%, 320px); height: auto;') &&
-  howStyles.includes('aspect-ratio: 2 / 1; object-fit: contain; border-radius: 10px;') &&
-  howStyles.includes('.integration-callout img { width: min(100%, 250px); max-height: 125px; }'),
-  "integration illustration box follows 900x450 original at both breakpoints so rounded corners clip the visible white rectangle");
+assert(howStyles.includes('.integration-image-frame { display: block; position: relative; width: min(100%, 320px); height: auto; max-height: 160px;') &&
+  howStyles.includes('aspect-ratio: 2 / 1; border-radius: 10px;') &&
+  howStyles.includes('.integration-image-frame > img { display: block; width: 100%; height: 100%; object-fit: contain; border-radius: inherit;') &&
+  howStyles.includes('.integration-image-frame { width: min(100%, 250px); max-height: 125px; }'),
+  "integration illustration uses a normalized 2:1 clipped frame at desktop and mobile sizes");
 assert(how.includes('class="header-cta" href="https://wa.me/"') &&
   how.includes('Fale conosco pelo WhatsApp') &&
   how.includes('src="/landing/assets/icons/ui/white/whatsapp.svg"'),

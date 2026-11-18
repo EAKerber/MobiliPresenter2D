@@ -38,14 +38,6 @@ jobs:
           node-version: '22'
       - name: Install image tooling
         run: python -m pip install -r tools/requirements.txt
-      - name: Verify mask, exposed-side pixel, and stone contracts
-        run: |
-          python -m unittest \
-            tests.test_mask_semantics \
-            tests.test_stone_backing \
-            tests.test_stone_cleanplate \
-            tests.test_stone_surface_masks
-          python tests/validate-exposed-side-pixels.py
       - name: Unit-test current candidate contracts
 
         run: >-
@@ -99,3 +91,7 @@ jobs:
           name: current-asset-review-${{ github.run_id }}
           path: /tmp/candidate-review
           if-no-files-found: error
+      - name: Verify current mask semantics
+        run: python -m unittest tests.test_mask_semantics
+      - name: Verify exposed-side pixels
+        run: python tests/validate-exposed-side-pixels.py
