@@ -1,0 +1,568 @@
+{
+  "schemaVersion": "ARC13LOC002IdentityOverlay/1.0",
+  "reviewDate": "2026-11-18",
+  "repository": "EAKerber/MobiliPresenter2D",
+  "pins": {
+    "productMain": "efc40584c3f3ca940cf6cbca408f8fda31e3e1c9",
+    "productPr274Head": "ff2fd40fdbc40eae2a53f8be6ba4a24af3eaea82"
+  },
+  "currentInventory": {
+    "path": "architecture/arc13/ui-text-candidates.json",
+    "gitBlobSha": "891c61a774730437ca770cdb7d9df0e271788043",
+    "contentSha256": "abce38889ad6d78c634fadad5d6f0c63fd9706ac3e0c13bcdf13f78010caeb9e",
+    "sinkOccurrences": 1026,
+    "currentGeneratedClassification": "unreviewed"
+  },
+  "priorEvidence": {
+    "reviewInventorySha256": "904c49a3b32722ece528a468e030b10800def07a61cbcf5811f01bfd00cfe391",
+    "reconciliation14Nov": "docs/architecture/arc13/inventory-crosswalk-2026-11-14.json",
+    "post277Crosswalk": "docs/architecture/arc13/inventory-crosswalk-post-277-2026-11-16.json",
+    "note": "Prior receipts use catalog_candidate, which is a suggested extraction disposition, not a LOC-002 semantic class, content owner, or approved canonical key."
+  },
+  "normalization": {
+    "sourceLineEndings": "Normalize CRLF and CR to LF before comparing expressions or derived source hashes.",
+    "matchRule": "Require a unique counterpart on path, route, sink, and source line; compare normalized expressions when preserved. When prior receipts omit expression/hash, use the identical Git blob at the pinned baseline and current refs plus the receipt's line/consumer.",
+    "scope": "Identity/provenance reconciliation only; no semantic decision is inferred."
+  },
+  "recoveredMatches": [
+    {
+      "previousReceiptId": "acba23e2ed19a7e7",
+      "currentId": "ac799fc64eeaae2c",
+      "path": "app/access/manage.js",
+      "previousLine": 63,
+      "currentLine": 63,
+      "sourceOwner": "access",
+      "route": "/access/manage",
+      "sink": "property:textContent",
+      "priorReceiptDisposition": "catalog_candidate",
+      "previousSourceSha256": "911e059c0343729027727833318a13e85b6dbd7d999899c79da4a709e4aa8877",
+      "currentSourceSha256": "5c20b4bb846fc45343992bd164a6ec709136b77e6fa15bf10ab425b189b7b9de",
+      "previousExpressionPresent": true,
+      "normalizedExpressionEqual": true,
+      "identityEvidence": "Unique path/route/sink/line counterpart; stored source expressions match after CRLF/CR→LF normalization; source Git blob is identical at all three pins.",
+      "loc002": {
+        "classification": null,
+        "contentOwner": null,
+        "destination": "hold",
+        "status": "pending-semantic-review"
+      },
+      "currentExpression": "grant.revoked_at\n        ? \"Revogado\"\n        : expired\n          ? \"Expirado\"\n        : grant.redeemed_at\n          ? `Resgatado · expira ${new Date(grant.expires_at).toLocaleString(\"pt-BR\")}`\n          : `Pendente · expira ${new Date(grant.expires_at).toLocaleString(\"pt-BR\")}`",
+      "sourceGitBlobAtProductMain46": "a1013d476781cafa52cb63b0706ab3a4fd30041e",
+      "sourceGitBlobAtProductMainEfc40584": "a1013d476781cafa52cb63b0706ab3a4fd30041e",
+      "sourceGitBlobAtProductPr274Head": "a1013d476781cafa52cb63b0706ab3a4fd30041e"
+    },
+    {
+      "previousReceiptId": "2efc9690a11c2224",
+      "currentId": "b36f7583ff30e0ae",
+      "path": "app/access/manage.js",
+      "previousLine": 124,
+      "currentLine": 124,
+      "sourceOwner": "access",
+      "route": "/access/manage",
+      "sink": "property:textContent",
+      "priorReceiptDisposition": "catalog_candidate",
+      "previousSourceSha256": "911e059c0343729027727833318a13e85b6dbd7d999899c79da4a709e4aa8877",
+      "currentSourceSha256": "5c20b4bb846fc45343992bd164a6ec709136b77e6fa15bf10ab425b189b7b9de",
+      "previousExpressionPresent": true,
+      "normalizedExpressionEqual": true,
+      "identityEvidence": "Unique path/route/sink/line counterpart; stored source expressions match after CRLF/CR→LF normalization; source Git blob is identical at all three pins.",
+      "loc002": {
+        "classification": null,
+        "contentOwner": null,
+        "destination": "hold",
+        "status": "pending-semantic-review"
+      },
+      "currentExpression": "error.message === \"access_service_not_configured\"\n      ? \"O envio ainda não está configurado neste ambiente.\"\n      : \"Não foi possível enviar o link. Verifique o email e tente novamente.\"",
+      "sourceGitBlobAtProductMain46": "a1013d476781cafa52cb63b0706ab3a4fd30041e",
+      "sourceGitBlobAtProductMainEfc40584": "a1013d476781cafa52cb63b0706ab3a4fd30041e",
+      "sourceGitBlobAtProductPr274Head": "a1013d476781cafa52cb63b0706ab3a4fd30041e"
+    },
+    {
+      "previousReceiptId": "53aac931c5410b82",
+      "currentId": "66974cbbc23cbb39",
+      "path": "app/admin/admin.js",
+      "previousLine": 1159,
+      "currentLine": 1159,
+      "sourceOwner": "admin",
+      "route": "/admin",
+      "sink": "property:textContent",
+      "priorReceiptDisposition": "catalog_candidate",
+      "previousSourceSha256": "2c7e7f68a2330c257fb0b8cf29cf55d2792622c946acc5950854d1dd543dedff",
+      "currentSourceSha256": "ee44adbe63b8db0b09878be676cb37268781d2b969df3f25b1a708067c45b42b",
+      "previousExpressionPresent": true,
+      "normalizedExpressionEqual": true,
+      "identityEvidence": "Unique path/route/sink/line counterpart; stored source expressions match after CRLF/CR→LF normalization; source Git blob is identical at all three pins.",
+      "loc002": {
+        "classification": null,
+        "contentOwner": null,
+        "destination": "hold",
+        "status": "pending-semantic-review"
+      },
+      "currentExpression": "publicationInput.disabled\n    ? \"Esta opção exige uma configuração V5 publicada.\"\n    : \"Inicialmente desativado. Somente os valores base válidos dos módulos publicados e visíveis serão exibidos; não inclui opções e serviços. Alterar esta opção não publica nada até clicar em Publicar configuração.\"",
+      "sourceGitBlobAtProductMain46": "79925345e43096df77bef54fe257e483f922edd8",
+      "sourceGitBlobAtProductMainEfc40584": "79925345e43096df77bef54fe257e483f922edd8",
+      "sourceGitBlobAtProductPr274Head": "79925345e43096df77bef54fe257e483f922edd8"
+    },
+    {
+      "previousReceiptId": "e2c1636d2ebc5a1e",
+      "currentId": "56f290c8b29cee1c",
+      "path": "app/admin/admin.js",
+      "previousLine": 1291,
+      "currentLine": 1291,
+      "sourceOwner": "admin",
+      "route": "/admin",
+      "sink": "helper:setMessage",
+      "priorReceiptDisposition": "catalog_candidate",
+      "previousSourceSha256": "2c7e7f68a2330c257fb0b8cf29cf55d2792622c946acc5950854d1dd543dedff",
+      "currentSourceSha256": "ee44adbe63b8db0b09878be676cb37268781d2b969df3f25b1a708067c45b42b",
+      "previousExpressionPresent": true,
+      "normalizedExpressionEqual": true,
+      "identityEvidence": "Unique path/route/sink/line counterpart; stored source expressions match after CRLF/CR→LF normalization; source Git blob is identical at all three pins.",
+      "loc002": {
+        "classification": null,
+        "contentOwner": null,
+        "destination": "hold",
+        "status": "pending-semantic-review"
+      },
+      "currentExpression": "repair?.ok && repair.needed\n      ? \"Puxadores ainda não está atribuído no v3 publicado. Persista Puxadores no v3 antes da futura publicação hierárquica.\"\n      : published.schemaVersion === hierarchyCore.SCHEMA\n        ? \"Configuração v5 carregada. A hierarquia e os preços tipados podem ser publicados com validação.\"\n        : \"Hierarquia carregada. Alterações estruturais permanecem em rascunho até a publicação hierárquica ser habilitada.\"",
+      "sourceGitBlobAtProductMain46": "79925345e43096df77bef54fe257e483f922edd8",
+      "sourceGitBlobAtProductMainEfc40584": "79925345e43096df77bef54fe257e483f922edd8",
+      "sourceGitBlobAtProductPr274Head": "79925345e43096df77bef54fe257e483f922edd8"
+    },
+    {
+      "previousReceiptId": "bb22ddd803fb5a08",
+      "currentId": "19d84c56608af212",
+      "path": "app/admin/admin.js",
+      "previousLine": 1497,
+      "currentLine": 1497,
+      "sourceOwner": "admin",
+      "route": "/admin",
+      "sink": "helper:setMessage",
+      "priorReceiptDisposition": "catalog_candidate",
+      "previousSourceSha256": "2c7e7f68a2330c257fb0b8cf29cf55d2792622c946acc5950854d1dd543dedff",
+      "currentSourceSha256": "ee44adbe63b8db0b09878be676cb37268781d2b969df3f25b1a708067c45b42b",
+      "previousExpressionPresent": true,
+      "normalizedExpressionEqual": true,
+      "identityEvidence": "Unique path/route/sink/line counterpart; stored source expressions match after CRLF/CR→LF normalization; source Git blob is identical at all three pins.",
+      "loc002": {
+        "classification": null,
+        "contentOwner": null,
+        "destination": "hold",
+        "status": "pending-semantic-review"
+      },
+      "currentExpression": "publicationSwitch.checked\n      ? \"Exibição de preços base ativada apenas no rascunho. Clique em Publicar configuração para autorizar valores públicos.\"\n      : \"Exibição de preços base desativada apenas no rascunho. Clique em Publicar configuração para retirar valores da API pública.\"",
+      "sourceGitBlobAtProductMain46": "79925345e43096df77bef54fe257e483f922edd8",
+      "sourceGitBlobAtProductMainEfc40584": "79925345e43096df77bef54fe257e483f922edd8",
+      "sourceGitBlobAtProductPr274Head": "79925345e43096df77bef54fe257e483f922edd8"
+    },
+    {
+      "previousReceiptId": "0053266102fd41af",
+      "currentId": "9b31383de24c9602",
+      "path": "app/admin/admin.js",
+      "previousLine": 1595,
+      "currentLine": 1595,
+      "sourceOwner": "admin",
+      "route": "/admin",
+      "sink": "property:textContent",
+      "priorReceiptDisposition": "catalog_candidate",
+      "previousSourceSha256": "2c7e7f68a2330c257fb0b8cf29cf55d2792622c946acc5950854d1dd543dedff",
+      "currentSourceSha256": "ee44adbe63b8db0b09878be676cb37268781d2b969df3f25b1a708067c45b42b",
+      "previousExpressionPresent": true,
+      "normalizedExpressionEqual": true,
+      "identityEvidence": "Unique path/route/sink/line counterpart; stored source expressions match after CRLF/CR→LF normalization; source Git blob is identical at all three pins.",
+      "loc002": {
+        "classification": null,
+        "contentOwner": null,
+        "destination": "hold",
+        "status": "pending-semantic-review"
+      },
+      "currentExpression": "type === \"invite\"\n    ? \"Defina uma senha para concluir o convite de administrador.\"\n    : \"Defina uma nova senha para acessar a administração.\"",
+      "sourceGitBlobAtProductMain46": "79925345e43096df77bef54fe257e483f922edd8",
+      "sourceGitBlobAtProductMainEfc40584": "79925345e43096df77bef54fe257e483f922edd8",
+      "sourceGitBlobAtProductPr274Head": "79925345e43096df77bef54fe257e483f922edd8"
+    },
+    {
+      "previousReceiptId": "00eb3801a465f73b",
+      "currentId": "c1b4ef681f5e2c7c",
+      "path": "app/admin/admin.js",
+      "previousLine": 1935,
+      "currentLine": 1935,
+      "sourceOwner": "admin",
+      "route": "/admin",
+      "sink": "helper:setMessage",
+      "priorReceiptDisposition": "catalog_candidate",
+      "previousSourceSha256": "2c7e7f68a2330c257fb0b8cf29cf55d2792622c946acc5950854d1dd543dedff",
+      "currentSourceSha256": "ee44adbe63b8db0b09878be676cb37268781d2b969df3f25b1a708067c45b42b",
+      "previousExpressionPresent": true,
+      "normalizedExpressionEqual": true,
+      "identityEvidence": "Unique path/route/sink/line counterpart; stored source expressions match after CRLF/CR→LF normalization; source Git blob is identical at all three pins.",
+      "loc002": {
+        "classification": null,
+        "contentOwner": null,
+        "destination": "hold",
+        "status": "pending-semantic-review"
+      },
+      "currentExpression": "hasLocalDraft\n        ? \"Puxadores foi persistido em Acabamentos no v3 publicado. O painel foi recarregado a partir do publicado; outras alterações locais não foram enviadas.\"\n        : \"Puxadores foi persistido em Acabamentos no v3 publicado. A publicação hierárquica v5 continua bloqueada.\"",
+      "sourceGitBlobAtProductMain46": "79925345e43096df77bef54fe257e483f922edd8",
+      "sourceGitBlobAtProductMainEfc40584": "79925345e43096df77bef54fe257e483f922edd8",
+      "sourceGitBlobAtProductPr274Head": "79925345e43096df77bef54fe257e483f922edd8"
+    },
+    {
+      "previousReceiptId": "24d7c1b5a22e5665",
+      "currentId": "2af8382659303b7a",
+      "path": "app/app.js",
+      "previousLine": 764,
+      "currentLine": 764,
+      "sourceOwner": "config",
+      "route": "/config/",
+      "sink": "property:textContent",
+      "priorReceiptDisposition": "catalog_candidate",
+      "previousSourceSha256": null,
+      "currentSourceSha256": "6fe209cc73713d199900404f1cec0eb297bb6dd9d294eb22aad98821b2bda850",
+      "previousExpressionPresent": false,
+      "normalizedExpressionEqual": null,
+      "identityEvidence": "Prior receipt omits expression and source hash; unique path/route/sink/line counterpart; source Git blob is identical at Product main46, current main and PR #274 head; current source expression is preserved in the pinned inventory.",
+      "loc002": {
+        "classification": null,
+        "contentOwner": null,
+        "destination": "hold",
+        "status": "pending-semantic-review"
+      },
+      "currentExpression": "value\n        ? handle.description + \" · \" + perFront + \" por frente; \" + formatCurrency(value) + \" no conjunto completo.\"\n        : handle.description",
+      "sourceGitBlobAtProductMain46": "805494f5ff90bc6aa80bfc4279a240a70e84f8b6",
+      "sourceGitBlobAtProductMainEfc40584": "805494f5ff90bc6aa80bfc4279a240a70e84f8b6",
+      "sourceGitBlobAtProductPr274Head": "805494f5ff90bc6aa80bfc4279a240a70e84f8b6"
+    },
+    {
+      "previousReceiptId": "9c431c21e4f04a40",
+      "currentId": "7e4f54f838dd1987",
+      "path": "app/app.js",
+      "previousLine": 1435,
+      "currentLine": 1435,
+      "sourceOwner": "config",
+      "route": "/config/",
+      "sink": "property:textContent",
+      "priorReceiptDisposition": "catalog_candidate",
+      "previousSourceSha256": null,
+      "currentSourceSha256": "6fe209cc73713d199900404f1cec0eb297bb6dd9d294eb22aad98821b2bda850",
+      "previousExpressionPresent": false,
+      "normalizedExpressionEqual": null,
+      "identityEvidence": "Prior receipt omits expression and source hash; unique path/route/sink/line counterpart; source Git blob is identical at Product main46, current main and PR #274 head; current source expression is preserved in the pinned inventory.",
+      "loc002": {
+        "classification": null,
+        "contentOwner": null,
+        "destination": "hold",
+        "status": "pending-semantic-review"
+      },
+      "currentExpression": "product.category === \"Estrutural\"\n        ? \"Valor local do painel. Pedra e serviços aparecem uma única vez no resumo.\"\n        : \"Valor local do módulo. Pedra e serviços aparecem uma única vez no resumo.\"",
+      "sourceGitBlobAtProductMain46": "805494f5ff90bc6aa80bfc4279a240a70e84f8b6",
+      "sourceGitBlobAtProductMainEfc40584": "805494f5ff90bc6aa80bfc4279a240a70e84f8b6",
+      "sourceGitBlobAtProductPr274Head": "805494f5ff90bc6aa80bfc4279a240a70e84f8b6"
+    },
+    {
+      "previousReceiptId": "facfa05b1a083869",
+      "currentId": "5ee227d39762ca9b",
+      "path": "app/config/index.html",
+      "previousLine": 100,
+      "currentLine": 100,
+      "sourceOwner": "config",
+      "route": "/config/",
+      "sink": "text:p",
+      "priorReceiptDisposition": "catalog_candidate",
+      "previousSourceSha256": null,
+      "currentSourceSha256": "cd1b3d3384604301507447e02a13f6682b39804328364b614566dbb917d2c5a4",
+      "previousExpressionPresent": false,
+      "normalizedExpressionEqual": null,
+      "identityEvidence": "Prior receipt omits expression and source hash; unique path/route/sink/line counterpart; source Git blob is identical at Product main46, current main and PR #274 head; current source expression is preserved in the pinned inventory.",
+      "loc002": {
+        "classification": null,
+        "contentOwner": null,
+        "destination": "hold",
+        "status": "pending-semantic-review"
+      },
+      "currentExpression": " módulos visíveis\n          ",
+      "sourceGitBlobAtProductMain46": "ba684d31cf3f79c7bf00c7c669d786f734927acb",
+      "sourceGitBlobAtProductMainEfc40584": "ba684d31cf3f79c7bf00c7c669d786f734927acb",
+      "sourceGitBlobAtProductPr274Head": "ba684d31cf3f79c7bf00c7c669d786f734927acb"
+    }
+  ],
+  "unresolvedCandidates": [
+    {
+      "currentId": "f106ae7ba0829c5b",
+      "path": "app/how-it-works/how-it-works.js",
+      "line": 11,
+      "sourceOwner": "how-it-works",
+      "route": "/how-it-works/",
+      "sink": "call:setAttribute",
+      "sourceSha256": "84a99c51d8e28dc1df8c22d5b4dffbec5a2a75a8513c692ba78197e29ed334c0",
+      "expression": "label",
+      "reviewNote": "dynamic label in how-it-works.js",
+      "loc002": {
+        "classification": null,
+        "contentOwner": null,
+        "destination": "hold",
+        "status": "pending-semantic-review"
+      },
+      "identityStatus": "existing ARC-13 provenance does not decide LOC-002 class/owner/destination"
+    },
+    {
+      "currentId": "ad71d3fcca0702ed",
+      "path": "app/how-it-works/how-it-works.js",
+      "line": 12,
+      "sourceOwner": "how-it-works",
+      "route": "/how-it-works/",
+      "sink": "call:setAttribute",
+      "sourceSha256": "84a99c51d8e28dc1df8c22d5b4dffbec5a2a75a8513c692ba78197e29ed334c0",
+      "expression": "label",
+      "reviewNote": "dynamic title",
+      "loc002": {
+        "classification": null,
+        "contentOwner": null,
+        "destination": "hold",
+        "status": "pending-semantic-review"
+      },
+      "identityStatus": "existing ARC-13 provenance does not decide LOC-002 class/owner/destination"
+    },
+    {
+      "currentId": "1fb12e3eb303d497",
+      "path": "app/how-it-works/index.html",
+      "line": 40,
+      "sourceOwner": "how-it-works",
+      "route": "/how-it-works/",
+      "sink": "attribute:aria-label",
+      "sourceSha256": "65e8abbf631f203fee18f3283fe2718cb68a3b5eacfdb23ff72b0cec97b312ae",
+      "expression": "Abrir vídeo em tela cheia",
+      "reviewNote": "fullscreen aria-label",
+      "loc002": {
+        "classification": null,
+        "contentOwner": null,
+        "destination": "hold",
+        "status": "pending-semantic-review"
+      },
+      "identityStatus": "existing ARC-13 provenance does not decide LOC-002 class/owner/destination"
+    },
+    {
+      "currentId": "fbd8581d0d6f8053",
+      "path": "app/how-it-works/index.html",
+      "line": 40,
+      "sourceOwner": "how-it-works",
+      "route": "/how-it-works/",
+      "sink": "attribute:title",
+      "sourceSha256": "65e8abbf631f203fee18f3283fe2718cb68a3b5eacfdb23ff72b0cec97b312ae",
+      "expression": "Abrir vídeo em tela cheia",
+      "reviewNote": "fullscreen title",
+      "loc002": {
+        "classification": null,
+        "contentOwner": null,
+        "destination": "hold",
+        "status": "pending-semantic-review"
+      },
+      "identityStatus": "existing ARC-13 provenance does not decide LOC-002 class/owner/destination"
+    },
+    {
+      "currentId": "dcd455a9fecf63aa",
+      "path": "app/index.html",
+      "line": 40,
+      "sourceOwner": "landing",
+      "route": "/",
+      "sink": "attribute:alt",
+      "sourceSha256": "a6e2105840cd85196474e04d98a0b1c0b51ec28398f9a985bacfc577a566d01a",
+      "expression": "Cozinha planejada com uma mão segurando um celular",
+      "reviewNote": "changed image alt text",
+      "loc002": {
+        "classification": null,
+        "contentOwner": null,
+        "destination": "hold",
+        "status": "pending-semantic-review"
+      },
+      "identityStatus": "existing ARC-13 provenance does not decide LOC-002 class/owner/destination"
+    },
+    {
+      "currentId": "d6d455c085c0c21f",
+      "path": "app/index.html",
+      "line": 49,
+      "sourceOwner": "landing",
+      "route": "/",
+      "sink": "attribute:title",
+      "sourceSha256": "a6e2105840cd85196474e04d98a0b1c0b51ec28398f9a985bacfc577a566d01a",
+      "expression": "Abrir vídeo em tela cheia",
+      "reviewNote": "changed fullscreen title",
+      "loc002": {
+        "classification": null,
+        "contentOwner": null,
+        "destination": "hold",
+        "status": "pending-semantic-review"
+      },
+      "identityStatus": "existing ARC-13 provenance does not decide LOC-002 class/owner/destination"
+    },
+    {
+      "currentId": "49ccb254d443d4ab",
+      "path": "app/landing/landing.js",
+      "line": 168,
+      "sourceOwner": "landing",
+      "route": "/",
+      "sink": "call:setAttribute",
+      "sourceSha256": "fe167a4422578fbf36bf4a57661411b9ccd180554f59cc234f4147205b31d071",
+      "expression": "label",
+      "reviewNote": "dynamic aria-label in landing.js",
+      "loc002": {
+        "classification": null,
+        "contentOwner": null,
+        "destination": "hold",
+        "status": "pending-semantic-review"
+      },
+      "identityStatus": "existing ARC-13 provenance does not decide LOC-002 class/owner/destination"
+    },
+    {
+      "currentId": "35eff8c8551d4683",
+      "path": "app/landing/landing.js",
+      "line": 169,
+      "sourceOwner": "landing",
+      "route": "/",
+      "sink": "call:setAttribute",
+      "sourceSha256": "fe167a4422578fbf36bf4a57661411b9ccd180554f59cc234f4147205b31d071",
+      "expression": "label",
+      "reviewNote": "dynamic title in landing.js",
+      "loc002": {
+        "classification": null,
+        "contentOwner": null,
+        "destination": "hold",
+        "status": "pending-semantic-review"
+      },
+      "identityStatus": "existing ARC-13 provenance does not decide LOC-002 class/owner/destination"
+    },
+    {
+      "currentId": "bda52494adf51488",
+      "path": "app/index.html",
+      "line": 33,
+      "sourceOwner": "landing",
+      "route": "/",
+      "sink": "attribute:aria-label",
+      "sourceSha256": "a6e2105840cd85196474e04d98a0b1c0b51ec28398f9a985bacfc577a566d01a",
+      "expression": "Mais informações",
+      "reviewNote": "“Mais informações”; assistive-technology review remains pending",
+      "loc002": {
+        "classification": null,
+        "contentOwner": null,
+        "destination": "hold",
+        "status": "pending-semantic-review"
+      },
+      "identityStatus": "existing ARC-13 provenance does not decide LOC-002 class/owner/destination"
+    },
+    {
+      "currentId": "e185d906c6f85858",
+      "path": "app/index.html",
+      "line": 34,
+      "sourceOwner": "landing",
+      "route": "/",
+      "sink": "text:a",
+      "sourceSha256": "a6e2105840cd85196474e04d98a0b1c0b51ec28398f9a985bacfc577a566d01a",
+      "expression": "Saiba mais",
+      "reviewNote": "“Saiba mais”; copy and /about/ destination approved, key/extraction not approved",
+      "loc002": {
+        "classification": null,
+        "contentOwner": null,
+        "destination": "hold",
+        "status": "pending-semantic-review"
+      },
+      "identityStatus": "existing ARC-13 provenance does not decide LOC-002 class/owner/destination"
+    },
+    {
+      "currentId": "0c5db734ff22f8ae",
+      "path": "app/index.html",
+      "line": 35,
+      "sourceOwner": "landing",
+      "route": "/",
+      "sink": "text:a",
+      "sourceSha256": "a6e2105840cd85196474e04d98a0b1c0b51ec28398f9a985bacfc577a566d01a",
+      "expression": "Assistir no YouTube ↗",
+      "reviewNote": "YouTube link arrow treatment pending",
+      "loc002": {
+        "classification": null,
+        "contentOwner": null,
+        "destination": "hold",
+        "status": "pending-semantic-review"
+      },
+      "identityStatus": "existing ARC-13 provenance does not decide LOC-002 class/owner/destination"
+    },
+    {
+      "currentId": "1deb819af5cc5953",
+      "path": "app/index.html",
+      "line": 41,
+      "sourceOwner": "landing",
+      "route": "/",
+      "sink": "attribute:aria-label",
+      "sourceSha256": "a6e2105840cd85196474e04d98a0b1c0b51ec28398f9a985bacfc577a566d01a",
+      "expression": "Vídeo de apresentação no celular",
+      "reviewNote": "video group accessible name",
+      "loc002": {
+        "classification": null,
+        "contentOwner": null,
+        "destination": "hold",
+        "status": "pending-semantic-review"
+      },
+      "identityStatus": "existing ARC-13 provenance does not decide LOC-002 class/owner/destination"
+    },
+    {
+      "currentId": "c014317c6b745a6e",
+      "path": "app/index.html",
+      "line": 44,
+      "sourceOwner": "landing",
+      "route": "/",
+      "sink": "attribute:aria-label",
+      "sourceSha256": "a6e2105840cd85196474e04d98a0b1c0b51ec28398f9a985bacfc577a566d01a",
+      "expression": "Reproduzir o vídeo de apresentação",
+      "reviewNote": "play control accessible label; remapped from 3abe647cf8ac759d",
+      "loc002": {
+        "classification": null,
+        "contentOwner": null,
+        "destination": "hold",
+        "status": "pending-semantic-review"
+      },
+      "identityStatus": "existing ARC-13 provenance does not decide LOC-002 class/owner/destination"
+    },
+    {
+      "currentId": "c2c6bd2c037ca454",
+      "path": "app/index.html",
+      "line": 49,
+      "sourceOwner": "landing",
+      "route": "/",
+      "sink": "attribute:aria-label",
+      "sourceSha256": "a6e2105840cd85196474e04d98a0b1c0b51ec28398f9a985bacfc577a566d01a",
+      "expression": "Abrir vídeo em tela cheia",
+      "reviewNote": "fullscreen control accessible label; remapped from fd28c05616bfb437",
+      "loc002": {
+        "classification": null,
+        "contentOwner": null,
+        "destination": "hold",
+        "status": "pending-semantic-review"
+      },
+      "identityStatus": "existing ARC-13 provenance does not decide LOC-002 class/owner/destination"
+    },
+    {
+      "currentId": "244f37c8af92a834",
+      "path": "app/landing/landing.js",
+      "line": 126,
+      "sourceOwner": "landing",
+      "route": "/",
+      "sink": "property:title",
+      "sourceSha256": "fe167a4422578fbf36bf4a57661411b9ccd180554f59cc234f4147205b31d071",
+      "expression": "\"Casa em Módulos — apresentação institucional\"",
+      "reviewNote": "iframe title; remapped from 93f686ffaaeffa8e",
+      "loc002": {
+        "classification": null,
+        "contentOwner": null,
+        "destination": "hold",
+        "status": "pending-semantic-review"
+      },
+      "identityStatus": "existing ARC-13 provenance does not decide LOC-002 class/owner/destination"
+    }
+  ],
+  "coverage": {
+    "unmatchedBeforeThisOverlay": 25,
+    "recoveredIdentityMatches": 10,
+    "remainingWithoutPriorDecision": 15,
+    "loc002Complete": false,
+    "reason": "Every current occurrence still needs an explicit LOC-002 class, accountable content owner, and final destination. This overlay only restores provenance for ten records and keeps all unresolved rows on hold."
+  }
+}
