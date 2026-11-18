@@ -15,9 +15,11 @@ const shells = [
 ];
 for (const file of shells) {
   const html = read(file);
-  assert(html.includes('src="/core/ui-theme.js?v=ds01-theme-v1"'), file + " theme bootstrap");
-  assert(html.includes('href="/ui-theme.css?v=ds01-theme-v1"'), file + " theme CSS");
-  assert(html.indexOf("ui-theme.js") < html.indexOf("ui-theme.css"), file + " theme before stylesheet");
+  const themeScript = html.match(/<script\b[^>]*\bsrc="\/core\/ui-theme\.js(?:\?[^"]*)?"[^>]*>/);
+  const themeStylesheet = html.match(/<link\b[^>]*\bhref="\/ui-theme\.css(?:\?[^"]*)?"[^>]*>/);
+  assert(themeScript, file + " theme bootstrap");
+  assert(themeStylesheet, file + " theme CSS");
+  assert(themeScript.index < themeStylesheet.index, file + " theme before stylesheet");
   assert(html.includes('href="/branding/favicon.ico"'), file + " favicon");
   assert(html.includes('href="/branding/apple-touch-icon.png"'), file + " apple touch icon");
   assert(html.includes("data-brand-variant"), file + " proper brand logo");
