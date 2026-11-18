@@ -11,17 +11,28 @@ const code = read("app/core/ui-theme.js");
 const shells = [
   "app/index.html", "app/about/index.html", "app/how-it-works/index.html",
   "app/viewer/index.html", "app/config/index.html", "app/admin.html",
-  "app/access/manage.html"
+  "app/access/manage.html", "app/access/index.html"
 ];
+const faviconShells = new Set(shells.filter((file) => file !== "app/access/index.html"));
+const themeScriptPattern = /<script\b[^>]*\ssrc="\/core\/ui-theme\.js(?:\?[^"]*)?"[^>]*>/;
+const themeStylesheetPattern = /<link\b(?=[^>]*\srel="stylesheet")(?=[^>]*\shref="\/ui-theme\.css(?:\?[^"]*)?")[^>]*>/;
+assert.equal(themeScriptPattern.test('<script data-src="/core/ui-theme.js?v=test"></script>'), false,
+  "theme bootstrap requires a real src attribute");
+assert.equal(themeStylesheetPattern.test('<link rel="preload" href="/ui-theme.css?v=test">'), false,
+  "theme CSS requires a stylesheet link");
+assert.equal(themeStylesheetPattern.test('<link rel="stylesheet" data-href="/ui-theme.css?v=test">'), false,
+  "theme stylesheet requires a real href attribute");
 for (const file of shells) {
   const html = read(file);
-  const themeScript = html.match(/<script\b[^>]*\ssrc="\/core\/ui-theme\.js(?:\?[^"]*)?"[^>]*>/);
-  const themeStylesheet = html.match(/<link\b(?=[^>]*\srel="stylesheet")(?=[^>]*\shref="\/ui-theme\.css(?:\?[^"]*)?")[^>]*>/);
+  const themeScript = html.match(themeScriptPattern);
+  const themeStylesheet = html.match(themeStylesheetPattern);
   assert(themeScript, file + " theme bootstrap");
   assert(themeStylesheet, file + " theme CSS");
   assert(themeScript.index < themeStylesheet.index, file + " theme before stylesheet");
-  assert(html.includes('href="/branding/favicon.ico"'), file + " favicon");
-  assert(html.includes('href="/branding/apple-touch-icon.png"'), file + " apple touch icon");
+  if (faviconShells.has(file)) {
+    assert(html.includes('href="/branding/favicon.ico"'), file + " favicon");
+    assert(html.includes('href="/branding/apple-touch-icon.png"'), file + " apple touch icon");
+  }
   assert(html.includes("data-brand-variant"), file + " proper brand logo");
   assert(!html.includes('aria-hidden="true">▱</span>'), file + " no fake mark");
 }
@@ -202,4 +213,4 @@ darkDefault.window.CASA_UI_THEME.setMode("dark");
 assert.equal(attributes.src, "/branding/logo-dark-380.png");
 darkDefault.window.CASA_UI_THEME.setMode("light");
 assert.equal(attributes.src, "/branding/logo-light-380.png");
-console.log("DS-01 asset hashes, seven shells, theme auto/explicit/sync and image switching: PASS");
+console.log("DS-01 asset hashes, eight shells, theme auto/explicit/sync and image switching: PASS");
