@@ -10,10 +10,14 @@ async function stopChild(child){
   if(!child||child.exitCode!==null||child.signalCode!==null)return;
   const exited=new Promise(resolve=>child.once('exit',()=>resolve(true)));
   child.kill('SIGTERM');
-  const stopped=await Promise.race([exited,delay(2000).then(()=>false)]);
+  const shutdownTimeout=new AbortController();
+  const stopped=await Promise.race([exited,delay(2000,null,{signal:shutdownTimeout.signal}).then(()=>false,()=>false)]);
+  shutdownTimeout.abort();
   if(!stopped&&child.exitCode===null&&child.signalCode===null){
     child.kill('SIGKILL');
-    await Promise.race([exited,delay(1000)]);
+    const killTimeout=new AbortController();
+    await Promise.race([exited,delay(1000,null,{signal:killTimeout.signal}).catch(()=>false)]);
+    killTimeout.abort();
   }
 }
 
@@ -96,52 +100,96 @@ async function startFixture(){
 (async()=>{
   const output=path.resolve(process.argv[2]||path.join(os.tmpdir(),'glass-occlusion-browser'));
   fs.mkdirSync(output,{recursive:true});
+  const viewport={width:1600,height:1050};
+  const all=['module-01','module-02','module-03','module-04','module-05','module-06','module-07'];
+  const expectedCaptures=[
+    {name:'glass-all',visibleIds:all},
+    {name:'glass-module-02-off',visibleIds:all.filter(id=>id!=='module-02')},
+    {name:'glass-module-05-off',visibleIds:all.filter(id=>id!=='module-05')},
+    {name:'glass-modules-02-05-on',visibleIds:['module-02','module-05']}
+  ];
+  const outputFiles=['test.json',...expectedCaptures.map(({name})=>name+'.png')];
+  for(const file of outputFiles)fs.rmSync(path.join(output,file),{force:true});
+  const report={passed:false,source:'validated local defaults fixture; no hosted configuration',viewport,captures:[],errors:[]};
   let fixture,browser;
   try{
     fixture=await startFixture();
+    report.route=new URL(fixture.configUrl).pathname;
     browser=await chromium.launch({headless:true,...(process.env.BROWSER_EXECUTABLE?{executablePath:process.env.BROWSER_EXECUTABLE}:{})});
-    const viewport={width:1600,height:1050},page=await browser.newPage({viewport}),errors=[],captures=[];
-    page.on('pageerror',error=>errors.push(error.message));
+    report.browser=browser.version();
+    const page=await browser.newPage({viewport}),captures=report.captures;
+    page.on('pageerror',error=>report.errors.push({message:error.message,stack:error.stack||null}));
     await page.goto(fixture.configUrl,{waitUntil:'domcontentloaded'});
     await page.waitForFunction(()=>window.CASA_EM_MODULOS_DEBUG&&document.documentElement.dataset.publishedConfigurationStatus==='validated',null,{timeout:30000});
     await page.locator('img').evaluateAll(imgs=>Promise.all(imgs.map(i=>i.decode())));
-    const cases=await page.evaluate(()=>{
+    const model=await page.evaluate(()=>{
       const scene=window.CASA_EM_MODULOS_SCENE,core=window.CasaModulesCore,visibility=window.CasaModulesVisibility;let count=0;
-      const modules=scene.entities.filter(e=>e.kind==='module');
-      for(let bits=0;bits<128;bits++)for(const glass of [false,true]){
+      const modules=scene.entities.filter(e=>e.kind==='module'),moduleIds=modules.map(e=>e.id);
+      if(moduleIds.length!==7||new Set(moduleIds).size!==7)throw Error('Expected seven unique module entities before enumerating glass states');
+      for(let bits=0;bits<2**modules.length;bits++)for(const glass of [false,true]){
         const state=core.createInitialState(scene);modules.forEach((e,i)=>core.setEntityVisibility(state,e.id,Boolean(bits&(1<<i))));
         core.setGlobalService(state,'tempered-glass',glass);const resolved=visibility.resolveVisibility(scene,state);
         if(resolved['tempered-glass'].visible!==glass)throw Error('Glass visibility must remain independent of modules');count++;
       }
-      return count;
+      return {count,moduleIds};
     });
-    assert.equal(cases,256);assert.equal(await page.locator('.module-card').count(),7);
+    report.cases=model.count;report.modelModuleIds=model.moduleIds;
+    assert.deepEqual([...model.moduleIds].sort(),all,'the 256-case model must cover the seven expected module IDs');
+    assert.equal(model.count,256);assert.equal(await page.locator('.module-card').count(),7);
     const capture=async(name,visibleIds,glass=true)=>{
-      await page.evaluate(({visibleIds,glass})=>{
-        const state=window.CASA_EM_MODULOS_DEBUG.getState();
-        for(const entity of window.CASA_EM_MODULOS_SCENE.entities.filter(e=>e.kind==='module'))state.visibilityByEntity[entity.id]=visibleIds.includes(entity.id);
-        const box=document.querySelector('[data-global-service-id="tempered-glass"]');box.checked=glass;box.dispatchEvent(new Event('change',{bubbles:true}));
+      const observed=await page.evaluate(async({name,visibleIds,glass})=>{
+        for(const toggle of document.querySelectorAll('#moduleList [data-module-toggle]')){
+          const shouldBeVisible=visibleIds.includes(toggle.dataset.moduleToggle);
+          if(toggle.checked!==shouldBeVisible){toggle.checked=shouldBeVisible;toggle.dispatchEvent(new Event('change',{bubbles:true}))}
+        }
+        const box=document.querySelector('[data-global-service-id="tempered-glass"]');
+        if(!box)throw Error('Tempered-glass control is missing');
+        if(box.checked!==glass){box.checked=glass;box.dispatchEvent(new Event('change',{bubbles:true}))}
+        await new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));
+        const renderedModules=[...document.querySelectorAll('#viewer .layer-group[data-entity-id^="module-"]')];
+        const glassLayer=document.querySelector('#viewer [data-entity-id="tempered-glass"]');
+        return {
+          name,
+          selectedModuleIds:[...document.querySelectorAll('#moduleList [data-module-toggle]:checked')].map(toggle=>toggle.dataset.moduleToggle).sort(),
+          visibleModuleIds:renderedModules.filter(layer=>layer.getAttribute('aria-hidden')==='false').map(layer=>layer.dataset.entityId).sort(),
+          glass:box.checked,
+          renderedGlassVisible:glassLayer?.getAttribute('aria-hidden')==='false'
+        };
       },{visibleIds,glass});
       await page.locator('#viewer').screenshot({path:path.join(output,name+'.png'),animations:'disabled'});
-      captures.push({name,visibleModuleIds:[...visibleIds],glass});
+      captures.push(observed);
     };
-    const all=['module-01','module-02','module-03','module-04','module-05','module-06','module-07'];
-    await capture('glass-all',all,true);
-    await capture('glass-module-02-off',all.filter(id=>id!=='module-02'),true);
-    await capture('glass-module-05-off',all.filter(id=>id!=='module-05'),true);
-    await capture('glass-modules-02-05-on',['module-02','module-05'],true);
-    assert.equal(await page.locator('[data-entity-id="tempered-glass"]').count(),1);
+    for(const expected of expectedCaptures)await capture(expected.name,expected.visibleIds,true);
+    const glassCount=await page.locator('[data-entity-id="tempered-glass"]').count();
     const glassZ=await page.locator('[data-entity-id="tempered-glass"]').evaluate(el=>Number(getComputedStyle(el).zIndex));
     const foregroundZ=await page.locator('.layer-group[data-entity-id="module-05"]').evaluate(el=>Number(getComputedStyle(el).zIndex));
+    await page.evaluate(()=>{
+      const box=document.querySelector('[data-global-service-id="tempered-glass"]');
+      if(!box.checked){box.checked=true;box.dispatchEvent(new Event('change',{bubbles:true}))}
+    });
+    const glassAriaHidden=await page.locator('[data-entity-id="tempered-glass"]').getAttribute('aria-hidden');
+    const mismatchedCaptures=expectedCaptures.flatMap((expected,index)=>{
+      const actual=captures[index],visibleIds=[...expected.visibleIds].sort();
+      return !actual||actual.name!==expected.name||JSON.stringify(actual.selectedModuleIds)!==JSON.stringify(visibleIds)||JSON.stringify(actual.visibleModuleIds)!==JSON.stringify(visibleIds)||actual.glass!==true||actual.renderedGlassVisible!==true
+        ?[{index,expected:{name:expected.name,visibleModuleIds:visibleIds,glass:true},actual:actual||null}]:[];
+    });
+    report.glassCount=glassCount;report.glassZ=glassZ;report.foregroundZ=foregroundZ;report.glassAriaHidden=glassAriaHidden;report.mismatchedCaptures=mismatchedCaptures;
+    assert.equal(captures.length,4,'the browser review must save all four named states');
+    assert.deepEqual(captures.map(({name})=>name),expectedCaptures.map(({name})=>name),'capture names must be unique and match the expected four files');
+    assert.equal(new Set(captures.map(({name})=>name)).size,4,'capture names must not overwrite one another');
+    assert.deepEqual(mismatchedCaptures,[],'capture filenames and actual module/service states must match');
+    assert.equal(glassCount,1);
     assert(glassZ<foregroundZ,'glass must be composited before the furniture and hood');
-    await page.evaluate(()=>{const box=document.querySelector('[data-global-service-id="tempered-glass"]');box.checked=true;box.dispatchEvent(new Event('change',{bubbles:true}));});
-    assert.equal(await page.locator('[data-entity-id="tempered-glass"]').getAttribute('aria-hidden'),'false');
-    assert.deepEqual(errors,[]);
-    const report={passed:true,cases,errors,source:'validated local defaults fixture; no hosted configuration',route:new URL(fixture.configUrl).pathname,viewport,browser:browser.version(),captures};
-    fs.writeFileSync(path.join(output,'test.json'),JSON.stringify(report,null,2));
-    console.log(JSON.stringify({passed:true,cases,errors,configUrl:fixture.configUrl,captures:captures.length}));
+    assert.equal(glassAriaHidden,'false');
+    assert.deepEqual(report.errors,[]);
+    report.passed=true;
+    console.log(JSON.stringify({passed:true,cases:model.count,errors:report.errors,configUrl:fixture.configUrl,captures:captures.length}));
+  }catch(error){
+    report.failure={message:error.message,stack:error.stack||null};
+    throw error;
   }finally{
-    try{if(browser)await browser.close()}finally{if(fixture)await fixture.close()}
+    try{if(browser)await browser.close()}finally{
+      try{if(fixture)await fixture.close()}finally{fs.writeFileSync(path.join(output,'test.json'),JSON.stringify(report,null,2))}
+    }
   }
 })().catch(error=>{console.error(error.stack||error);process.exitCode=1});
-

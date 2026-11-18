@@ -76,4 +76,3 @@ jobs:
             /tmp/mobile-browser-review
             /tmp/glass-occlusion-review
           if-no-files-found: ignore
-
