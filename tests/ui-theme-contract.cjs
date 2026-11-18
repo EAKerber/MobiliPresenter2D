@@ -16,7 +16,7 @@ const shells = [
 for (const file of shells) {
   const html = read(file);
   const themeScript = html.match(/<script\b[^>]*\ssrc="\/core\/ui-theme\.js(?:\?[^"]*)?"[^>]*>/);
-  const themeStylesheet = html.match(/<link\b[^>]*\shref="\/ui-theme\.css(?:\?[^"]*)?"[^>]*>/);
+  const themeStylesheet = html.match(/<link\b(?=[^>]*\srel="stylesheet")(?=[^>]*\shref="\/ui-theme\.css(?:\?[^"]*)?")[^>]*>/);
   assert(themeScript, file + " theme bootstrap");
   assert(themeStylesheet, file + " theme CSS");
   assert(themeScript.index < themeStylesheet.index, file + " theme before stylesheet");

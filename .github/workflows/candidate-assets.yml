@@ -91,7 +91,15 @@ jobs:
           name: current-asset-review-${{ github.run_id }}
           path: /tmp/candidate-review
           if-no-files-found: error
-      - name: Verify current mask semantics
-        run: python -m unittest tests.test_mask_semantics
-      - name: Verify exposed-side pixels
-        run: python tests/validate-exposed-side-pixels.py
+      - name: Verify mask semantics and exposed-side pixels
+        run: |
+          set +e
+          python -m unittest tests.test_mask_semantics
+          MASK_RC=$?
+          python tests/validate-exposed-side-pixels.py
+          PIXEL_RC=$?
+          set -e
+          if [ "$MASK_RC" -ne 0 ] || [ "$PIXEL_RC" -ne 0 ]; then
+            echo "Mask semantics or exposed-side pixel validation failed." >&2
+            exit 1
+          fi
