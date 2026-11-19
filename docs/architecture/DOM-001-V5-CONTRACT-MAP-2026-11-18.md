@@ -1,6 +1,6 @@
 # DOM-001 — Mapa dos contratos de configuração V5
 
-**Estado:** mapa de código e métodos de verificação consolidado para revisão; os testes não foram executados localmente nesta auditoria. O gate Buyer definido abaixo aguarda a execução de CI no head candidato.  
+**Estado:** mapa de código e métodos de verificação revisto; testes não foram executados localmente. O gate Buyer definido abaixo passou no Product PR #274 em `7e440a5bb96fcf3a4ded82df6a0c698504a4b0ae` (run [#44442681429](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/44442681429)). A prova cobre a função sob os contratos e stubs descritos abaixo; não prova os serviços hospedados.  
 **Baseline de runtime:** Produto `main@efc40584c3f3ca940cf6cbca408f8fda31e3e1c9`.  
 **Contexto documental:** este mapa integra a proposta da PR #274, mas sua baseline de runtime é exclusivamente Product `main@efc40584c3f3ca940cf6cbca408f8fda31e3e1c9`; consulte o link da PR para o head candidato atual, sem autorreferenciar um SHA que muda a cada commit. O escopo da proposta não altera `app/**` nem `netlify/**`; o compilador/manifesto de build e as ferramentas de inventário têm suas próprias provas.  
 **Método:** leitura estática do código e identificação de verificações existentes. Os caminhos e linhas abaixo são referências navegáveis no pin indicado; presença de teste não afirma que ele foi executado agora.  
@@ -80,7 +80,7 @@ O plano v0.9 associa este pacote aos contratos ARC-11, ARC-12 e ARC-16. Para evi
 | API pública de módulos / DTO Viewer | `/api/public-modules`, Viewer | `app/tools/test-public-modules-endpoint.js`, `tests/public-module-projection.test.cjs`, `tests/viewer-base-price-publication.test.cjs`; workflows `public-routing-before-clerk.yml` e `viewer-base-price-contract-gate.yml`. |
 | API Buyer / `BuyerConfiguratorPayload 1.0` | Buyer, configuração projetada | `tests/buyer-configuration-endpoint.test.mjs` cobre autorização e deny-before-store, sessão temporária simulada e caminhos Admin/Staff; também confere as chaves exatas do envelope Buyer e de `displaySettings`, além das omissões de campos administrativos. `app/tools/test-published-buyer-projection.js` cobre a projeção de domínio em `app-build-purity.yml`; `.github/workflows/buyer-configuration-boundary.yml` liga mudanças da função, política e projeção a CI. |
 
-**Estado da prova:** os métodos acima são referências de verificação; esta fotografia não afirma que todas as suítes rodaram no SHA atual. Para o endpoint Buyer, o workflow focado está sendo acrescentado neste pacote e sua execução exata continua pendente até o CI da PR terminar.
+**Estado da prova:** os métodos acima são referências, não uma afirmação de que todas as suítes rodaram no SHA atual. O workflow Buyer passou em `7e440a5bb96fcf3a4ded82df6a0c698504a4b0ae` (run [#44442681429](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/44442681429)). A função foi exercitada com política e leitura de cookie reais e stubs de Identity/sessão/Blob; a sessão é fixture e a prova não valida sua expiração/revogação no SQL nem integra os provedores hospedados.
 
 ## 5. Testes e métodos de verificação identificados
 
@@ -107,6 +107,6 @@ O plano v0.9 associa este pacote aos contratos ARC-11, ARC-12 e ARC-16. Para evi
 
 ## 7. Dependências do plano v0.9
 
-- `DOM-001`: mapa documental consolidado; explicitar o subconjunto prioritário ARC-11/12/16 e os métodos associados por linha, além de corrigir a antiga associação entre o teste administrativo e Buyer. A fronteira Buyer tem gate dedicado por path; o DoD continua sujeito ao resultado no SHA exato e à revisão final.
+- `DOM-001`: o mapa explicita o subconjunto prioritário ARC-11/12/16, associa autoridades, consumidores e métodos, e separa as provas Admin, Buyer e Viewer. O gate de autorização Buyer passou no SHA exato `7e440a5bb96fcf3a4ded82df6a0c698504a4b0ae` (run [#44442681429](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/44442681429)); o DoD documental do mapa está satisfeito neste candidato. A integração na `main` continua separada no preflight de GIT-014.
 - `LOC-001`: pode usar este mapa para separar conteúdo editorial de nomes/IDs técnicos, regras comerciais e valores derivados; o inventário ARC-13 continua candidato, não uma ordem de extração automática.
 - `LOC-002`, `DOM-002` e `DOM-003` continuam tarefas distintas. Este documento não aprova catálogo pt-BR, textos/alt, migração de runtime nem mudança de schema.

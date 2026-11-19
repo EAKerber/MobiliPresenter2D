@@ -1,0 +1,85 @@
+name: ARC-13 inventory provenance and determinism
+
+on:
+  pull_request:
+    types: [opened, reopened, synchronize, ready_for_review]
+    branches: [main]
+    paths:
+      - 'app/*.html'
+      - 'app/**/*.html'
+      - 'app/*.js'
+      - 'app/**/*.js'
+      - 'app/*.mjs'
+      - 'app/**/*.mjs'
+      - 'architecture/pages/**'
+      - 'architecture/fragments/primary-header.fragment.html'
+      - 'architecture/fragments/primary-header.routes.json'
+      - 'architecture/generated/primary-pages.manifest.json'
+      - 'architecture/arc13/ui-text-candidates.json'
+      - 'scripts/compile-primary-pages.mjs'
+      - 'tools/arc13/**'
+      - '.github/workflows/arc13-inventory-integrity.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'app/**/*.html'
+      - 'app/**/*.js'
+      - 'app/**/*.mjs'
+      - 'architecture/pages/**'
+      - 'architecture/fragments/primary-header.fragment.html'
+      - 'architecture/fragments/primary-header.routes.json'
+      - 'architecture/generated/primary-pages.manifest.json'
+      - 'architecture/arc13/ui-text-candidates.json'
+      - 'scripts/compile-primary-pages.mjs'
+      - 'tools/arc13/**'
+      - '.github/workflows/arc13-inventory-integrity.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: arc13-inventory-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  inventory:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install the pinned parser
+        run: npm ci --prefix tools/arc13
+      - name: Regenerate the candidate inventory
+        run: npm run inventory --prefix tools/arc13
+      - name: Verify provenance coverage and unreviewed status
+        run: |
+          node <<'NODE'
+          const assert = require('node:assert/strict');
+          const fs = require('node:fs');
+          const inventory = JSON.parse(fs.readFileSync('architecture/arc13/ui-text-candidates.json', 'utf8'));
+          const summary = inventory.summary;
+          assert.equal(inventory.schemaVersion, 4);
+          assert.equal(inventory.status, 'candidate-unreviewed');
+          assert.equal(summary.javascriptParseErrors, 0, 'JavaScript input must parse without errors');
+          assert.equal(inventory.parseErrors.length, 0);
+          assert.equal(summary.javascriptNotScannedSources, 0);
+          assert.equal(summary.unassignedOwnerSites, 0);
+          assert.equal(summary.unassignedRouteSites, 0);
+          assert.equal(summary.primaryPageAuthoringUnresolvedOccurrences, 0);
+          assert.equal(summary.unreviewedOccurrences, inventory.entries.length,
+            'generated candidates remain unreviewed');
+          assert(inventory.entries.every((entry) => entry.classification === 'unreviewed'));
+          assert(inventory.primaryPageAuthoringProvenance.outputs.every((output) => output.status === 'mapped'));
+          assert.equal(summary.primaryPageAuthoringMappedOccurrences,
+            inventory.entries.filter((entry) => entry.authoring?.status === 'mapped'
+              && ['app/index.html', 'app/about/index.html', 'app/how-it-works/index.html'].includes(entry.source)).length);
+          console.log(JSON.stringify(summary, null, 2));
+          NODE
+      - name: Confirm the tracked report is reproducible
+        run: git diff --exit-code -- architecture/arc13/ui-text-candidates.json
