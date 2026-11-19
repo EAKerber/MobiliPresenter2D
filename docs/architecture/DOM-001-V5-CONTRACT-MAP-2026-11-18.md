@@ -1,8 +1,8 @@
 # DOM-001 — Mapa dos contratos de configuração V5
 
-**Estado:** inventário de código consolidado para revisão; sem testes executados nesta auditoria.  
+**Estado:** mapa de código e métodos de verificação consolidado para revisão; os testes não foram executados localmente nesta auditoria. O gate Buyer definido abaixo aguarda a execução de CI no head candidato.  
 **Baseline de runtime:** Produto `main@efc40584c3f3ca940cf6cbca408f8fda31e3e1c9`.  
-**Contexto documental:** PR #274 estava em `7de76978efcc29cbb45cd4df6f6e6d601e32de5d` sobre a mesma main; sua diferença existente é ARC-13/documentação, não muda os contratos de runtime aqui descritos.  
+**Contexto documental:** este mapa integra a proposta da PR #274, mas sua baseline de runtime é exclusivamente Product `main@efc40584c3f3ca940cf6cbca408f8fda31e3e1c9`; consulte o link da PR para o head candidato atual, sem autorreferenciar um SHA que muda a cada commit. O escopo da proposta não altera `app/**` nem `netlify/**`; o compilador/manifesto de build e as ferramentas de inventário têm suas próprias provas.  
 **Método:** leitura estática do código e identificação de verificações existentes. Os caminhos e linhas abaixo são referências navegáveis no pin indicado; presença de teste não afirma que ele foi executado agora.  
 **Finalidade:** entregar o mapa schema → validação/normalização → projeção → consumidor, API → autorização → DTO, preço, defaults e métodos de verificação previstos no DOM-001 do plano v0.9.
 
@@ -32,7 +32,7 @@ V3 normaliza dados legacy; V4 converte a estrutura para a forma hierárquica; V5
 | Superfície | Autorização e operação | Dados de entrada/saída e consumidor |
 |---|---|---|
 | `/api/configuration` — `netlify/functions/configuration.mjs:14–16, 24–27, 64–80, 101–145` | GET/PUT restritos à sessão Admin. Há gravação V5 no fluxo V5 e caminho V3 condicional se o documento lido da store for V3. | Consumidor Admin em `app/admin/admin.js:1284` e fluxos de edição V3/V5 em `:1873–1923`. Persistência usa Netlify Blobs store `configurator-settings`, key `published`; a rota seleciona `getStore()` em produção e `getDeployStore()` fora dela. `app/core/published-configuration.js:5–16` lê com consistência forte. O inventário não inspeciona o valor publicado atual. |
-| `/api/buyer-configuration` — `netlify/functions/buyer-configuration.mjs:24–72` | Exige usuário interno ou grant temporário válido; erro fechado para acesso ausente/inválido ou configuração inválida. | `BuyerConfiguratorPayload 1.0` em `app/core/published-buyer-projection.js:63–109`. O fetch está em `app/app.js:2548`; a aplicação do payload preparado está em `:1765–1789`. Browser de comprador: `tests/buyer-v5-browser.cjs`. |
+| `/api/buyer-configuration` — `netlify/functions/buyer-configuration.mjs:24–72` | Exige usuário interno ou grant temporário válido; nega antes de abrir o Blob; falha fechado em erro de Identity/sessão. O método local está em `tests/buyer-configuration-endpoint.test.mjs`; ele usa a política real e stubs de Identity/sessão/Blob. | `BuyerConfiguratorPayload 1.0` em `app/core/published-buyer-projection.js:63–109`. O fetch está em `app/app.js:2548`; aplicação em `:1765–1789`. `tests/buyer-v5-browser.cjs` intercepta a API e não prova autorização da função. O novo workflow roda o teste de fronteira em mudanças na função e seus contratos importados. |
 | `/api/public-modules` — `netlify/functions/public-modules.mjs:10–25, 58–77, 79–112` | Leitura pública, somente leitura e limitada a allowlist de campos. Não concede acesso a preço ou regras comerciais por si só. | Projeção `PublicModulePresentation2D 0.1/0.2` por `app/core/public-module-projection.js:118–155`; leitor `app/viewer/public-data.js:6–43` e renderização `app/viewer/viewer.js:60–75`. Em Deploy Preview sem projeção local, o endpoint pode buscar a API do site primário; registrar a origem efetiva antes de atribuir dados ao Preview. |
 
 ### Origem do documento publicado
@@ -66,6 +66,22 @@ A formatação monetária ocorre depois do cálculo: `app/app.js:1569–1570` fo
 
 A distinção essencial é: defaults de domínio (catálogo, cena, etapas/templates, regras) definem dados válidos; defaults de apresentação definem como as seções são organizadas; valores gravados pelo Admin sobrepõem o que o schema permite; estado transitório do comprador não se torna fonte autoral.
 
+## 5.1 Escopo prioritário do DOM-001 e método ligado a cada contrato
+
+O plano v0.9 associa este pacote aos contratos ARC-11, ARC-12 e ARC-16. Para evitar ambiguidade, este inventário trata como prioritários os contratos de administração V3/V4/V5, fluxo normalizado, apresentação, preço, catálogo/cena, autorização das APIs e DTOs Buyer/Viewer. `ConfiguratorSettings2D`, `ConfiguratorLayoutProfiles2D` e `CommercialEstimatePriceBook` são inputs/defaults/fixtures de suporte, não contratos prioritários independentes; seus efeitos são verificados pelos consumidores que os usam.
+
+| Contrato prioritário | Consumidor principal | Método de verificação definido |
+|---|---|---|
+| Administração V3/V4/V5 | Admin, leitor publicado, migração | `app/tools/test-administration-v5.js`, `app/tools/test-v5-normal-save.js`, `app/tools/test-v5-publication-migration.js`, `app/tools/test-published-configuration.js`; rota Admin em `app/tools/test-v5-endpoint-safety.js`, executado no novo gate quando `configuration.mjs` muda. |
+| `NormalizedConfiguratorFlow 1.0` | Admin, Buyer e hierarquia publicada | `app/tools/test-flow-model.js`, `app/tools/test-hierarchy-administration.js`, `app/tools/test-postv5-new-material-roundtrip.js`. |
+| `ConfiguratorPresentation2D 1.1` | Organização das seções e apresentação do fluxo | `app/tools/test-presentation-contract.js`, `app/tools/test-flow-layout.js`. |
+| `CommercialPricingRules 1.0` e cálculo de preço | Estimativa Buyer e preço-base Viewer | `app/tools/test-core.js`, `app/tools/test-v5-endpoint-safety.js`, `tests/viewer-base-price-publication.test.cjs`, `tests/summary-pricing-browser.cjs`. |
+| `ProductCatalog2D 1.0` / `Scene2D 1.0` | Validação de capacidades, módulos públicos e renderer | `app/tools/test-item-capabilities.js`, `app/tools/test-core.js`, `app/tools/test-public-modules-endpoint.js`. |
+| API pública de módulos / DTO Viewer | `/api/public-modules`, Viewer | `app/tools/test-public-modules-endpoint.js`, `tests/public-module-projection.test.cjs`, `tests/viewer-base-price-publication.test.cjs`; workflows `public-routing-before-clerk.yml` e `viewer-base-price-contract-gate.yml`. |
+| API Buyer / `BuyerConfiguratorPayload 1.0` | Buyer, configuração projetada | `tests/buyer-configuration-endpoint.test.mjs` cobre autorização e deny-before-store, sessão temporária simulada e caminhos Admin/Staff; também confere as chaves exatas do envelope Buyer e de `displaySettings`, além das omissões de campos administrativos. `app/tools/test-published-buyer-projection.js` cobre a projeção de domínio em `app-build-purity.yml`; `.github/workflows/buyer-configuration-boundary.yml` liga mudanças da função, política e projeção a CI. |
+
+**Estado da prova:** os métodos acima são referências de verificação; esta fotografia não afirma que todas as suítes rodaram no SHA atual. Para o endpoint Buyer, o workflow focado está sendo acrescentado neste pacote e sua execução exata continua pendente até o CI da PR terminar.
+
 ## 5. Testes e métodos de verificação identificados
 
 | Contrato/risco | Verificações existentes encontradas | Limite desta auditoria |
@@ -74,22 +90,23 @@ A distinção essencial é: defaults de domínio (catálogo, cena, etapas/templa
 | Hierarquia e derivação do fluxo | `app/tools/test-hierarchy-administration.js`; `app/tools/test-flow-model.js`; `app/tools/test-flow-layout.js` | Não cobre por si só todos os consumidores hospedados. |
 | Apresentação | `app/tools/test-presentation-contract.js` | Contrato local; não é prova de aparência em todos os deploys. |
 | Publicação e inspeção de configuração | `app/tools/test-published-configuration.js`; `app/tools/test-v5-publication-inspection.js`; `app/tools/test-published-buyer-projection.js`; `tests/buyer-v5-browser.cjs` | Inspeção e fixture local não provam quais bytes estão atualmente em produção nem acesso real de comprador. |
-| Autorização e endpoint Buyer | `app/tools/test-v5-endpoint-safety.js` | Mapeamento de fonte; sem execução aqui. |
+| Autorização `/api/configuration` (Admin) | `app/tools/test-v5-endpoint-safety.js` | Exercita a função administrativa real com Identity/Blob injetados; cobre 401/403 e zero abertura de store para acesso negado. Não cobre a função Buyer. |
+| Autorização `/api/buyer-configuration` e DTO servido | `tests/buyer-configuration-endpoint.test.mjs` + `.github/workflows/buyer-configuration-boundary.yml` | Gate focado chama a função Buyer com política e leitura de cookie reais, sob stubs locais; verifica 401/403 antes de abrir store, falhas fechadas, sessão temporária simulada, acessos Admin/Staff e as chaves exatas do envelope/`displaySettings` Buyer. Não valida expiração/revogação da sessão no SQL nem exercita Identity, Postgres ou Blob hospedados. |
 | DTO público de módulos e preços-base | `app/tools/test-public-modules-endpoint.js`; `tests/public-module-projection.test.cjs`; `tests/viewer-base-price-publication.test.cjs`; `tests/viewer-price-v5-save.test.cjs`; `tests/viewer-base-price-browser-gate.mjs`; `tests/summary-pricing-browser.cjs` | Projeção/publicação e UI são camadas distintas; browser local não é prova de produção. |
 
-**Método de verificação por contrato:** validar/normalizar entradas V3/V4/V5 nos testes core; validar autorização nos testes de endpoint; verificar allowlists/omissões nos testes de projeção; verificar cálculo e publicação de preço-base nos testes de pricing/Viewer; conferir a renderização browser nos bundles Buyer/Viewer apropriados. Nenhum resultado é promovido sem run ligado ao SHA e ao ambiente corretos.
+**Método de verificação por contrato:** validar/normalizar entradas V3/V4/V5 nos testes core; validar autorização nos testes de endpoint; verificar allowlists/omissões nos testes de projeção; verificar cálculo e publicação de preço-base nos testes de pricing/Viewer; conferir a renderização browser nos bundles Buyer/Viewer apropriados. Para a fronteira Buyer, a prova local liga a função de endpoint e a projeção a um workflow por path; o mock devolve uma sessão temporária para o token conferido pelo teste, mas não verifica expiry/revogação em SQL nem o provedor hospedado. Nenhum resultado é promovido sem run ligado ao SHA e ao ambiente corretos.
 
 ## 6. Divergências, exceções e lacunas
 
 1. `docs/architecture/runtime-contract-map-2026-10-05.md` é histórico: descreve V3 como autoridade/produção e migração pendente; isso diverge do cutover atual em `netlify/functions/configuration.mjs:14–16, 101–115` e dos saves V5.
 2. Documentos CP-SD de 07/10 são decisões/recibos datados. Preservam proveniência, mas não substituem esta fotografia de código em `main@efc40584`.
-3. O mapa é uma consolidação estática com links para validadores, projeções, consumers e verificações. Não prova quais bytes estão publicados em Netlify, o conteúdo atual de stores, credenciais, nem uma execução real de endpoints.
+3. O mapa é uma consolidação estática com links para validadores, projeções, consumers e verificações. O novo gate Buyer exercita o código em harness local, mas não prova quais bytes estão publicados em Netlify, o conteúdo atual de stores, credenciais, nem autenticação/consistência real dos provedores.
 4. O leitor público e o DTO Buyer têm fronteiras diferentes; nenhum contrato autoriza inferir acesso global a dados ou preços.
 5. `DOM-005` deve decidir a retirada/alcance dos caminhos históricos V3/V4; até lá, este inventário os trata como compatibilidade existente, não como motivo para introduzir novos consumidores.
 6. Os testes listados são métodos de verificação existentes. Cobertura/executabilidade por contrato e checks no SHA exato devem ser lidos dos runs aplicáveis, não deduzidos da presença dos arquivos.
 
 ## 7. Dependências do plano v0.9
 
-- `DOM-001`: artefato consolidado para revisão. O DoD só pode ser fechado depois de revisão do mapa e confirmação de que cada contrato prioritário tem autoridade, consumidores conhecidos e verificação definida.
+- `DOM-001`: mapa documental consolidado; explicitar o subconjunto prioritário ARC-11/12/16 e os métodos associados por linha, além de corrigir a antiga associação entre o teste administrativo e Buyer. A fronteira Buyer tem gate dedicado por path; o DoD continua sujeito ao resultado no SHA exato e à revisão final.
 - `LOC-001`: pode usar este mapa para separar conteúdo editorial de nomes/IDs técnicos, regras comerciais e valores derivados; o inventário ARC-13 continua candidato, não uma ordem de extração automática.
 - `LOC-002`, `DOM-002` e `DOM-003` continuam tarefas distintas. Este documento não aprova catálogo pt-BR, textos/alt, migração de runtime nem mudança de schema.
