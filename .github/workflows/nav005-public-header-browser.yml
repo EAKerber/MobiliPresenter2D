@@ -12,6 +12,8 @@ on:
       - 'app/viewer/index.html'
       - 'architecture/fragments/**'
       - 'architecture/pages/**'
+      - 'scripts/compile-primary-pages.mjs'
+      - 'tests/arc03c-source-authority.test.mjs'
       - 'tests/ci/public-navigation-semantic-browser.mjs'
       - '.github/workflows/nav005-public-header-browser.yml'
 
