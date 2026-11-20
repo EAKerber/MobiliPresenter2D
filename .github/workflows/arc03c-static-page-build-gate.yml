@@ -1,5 +1,10 @@
 name: ARC-03C real static page build and browser gate
 on:
+  push:
+    branches:
+      - codex/md004-main-trigger-alignment-20261120
+    paths:
+      - ".github/workflows/arc03c-static-page-build-gate.yml"
   workflow_dispatch:
 
 permissions:
