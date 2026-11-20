@@ -1,0 +1,51 @@
+name: Configuration endpoint authorization boundaries
+
+on:
+  pull_request:
+    types: [opened, reopened, synchronize, ready_for_review]
+    branches: [main]
+    paths:
+      - 'app/core/**'
+      - 'app/data/**'
+      - 'app/tools/test-published-buyer-projection.js'
+      - 'app/tools/test-v5-endpoint-safety.js'
+      - 'netlify/access/**'
+      - 'netlify/functions/buyer-configuration.mjs'
+      - 'netlify/functions/configuration.mjs'
+      - 'tests/buyer-configuration-endpoint.test.mjs'
+      - '.github/workflows/buyer-configuration-boundary.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'app/core/**'
+      - 'app/data/**'
+      - 'app/tools/test-published-buyer-projection.js'
+      - 'app/tools/test-v5-endpoint-safety.js'
+      - 'netlify/access/**'
+      - 'netlify/functions/buyer-configuration.mjs'
+      - 'netlify/functions/configuration.mjs'
+      - 'tests/buyer-configuration-endpoint.test.mjs'
+      - '.github/workflows/buyer-configuration-boundary.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: configuration-endpoint-boundary-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  configuration-boundaries:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify administrative configuration endpoint boundary
+        run: node app/tools/test-v5-endpoint-safety.js
+      - name: Verify Buyer DTO allowlist
+        run: node app/tools/test-published-buyer-projection.js
+      - name: Verify Buyer endpoint authorization boundary
+        run: node --test tests/buyer-configuration-endpoint.test.mjs

@@ -1,0 +1,2530 @@
+{
+  "reviewDate": "2026-11-13",
+  "inventory": "architecture/arc13/ui-text-candidates.json",
+  "scope": {
+    "owner": "config",
+    "entries": 197,
+    "sourceFiles": [
+      "app/config/index.html",
+      "app/app.js"
+    ],
+    "routes": [
+      "/config/"
+    ]
+  },
+  "countsByDecision": {
+    "catalog_candidate": 133,
+    "domain_data": 22,
+    "commercial_data": 6,
+    "structural_or_identifier": 17,
+    "symbol_or_decoration": 14,
+    "non_localizable": 5,
+    "unknown": 0
+  },
+  "keyConvention": "Proposed keys use config.ui.<copy-slug>.<ARC-13-ID-prefix> as traceable draft locators; namespace and grouping remain recommendations, not an implemented catalog.",
+  "limitations": [
+    "Review is source-level only. No runtime/locale execution or visual validation was performed, and no tests were run.",
+    "Published V5 hierarchy/object/material/handle data was traced through published-buyer-projection and applyConfiguratorSettings. Actual production payload revisions were not available in this local worktree.",
+    "Price label/disclaimer currently originate in local CommercialEstimatePriceBook 2.0; ConfiguratorAdministration2D 5.0 carries typed pricing rules but does not define these strings.",
+    "Some generic helpers receive both fixed UI labels and dynamic authored labels; decisions mark these as catalog candidates only where the UI frame requires localization and the reason calls out data placeholders."
+  ],
+  "decisions": [
+    {
+      "id": "d0e08ea217aea674",
+      "source": "app/app.js",
+      "line": 291,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "domain_data",
+      "reason": "Rótulo de grupo recebido do fluxo normalizado; published-buyer-projection prepara o fluxo a partir da hierarquia V5 (stage/group/section.label). É texto autorado de configuração, não chave fixa de interface.",
+      "consumer": "app/app.js::mountStageGroups"
+    },
+    {
+      "id": "a3f2bea45e44a72d",
+      "source": "app/app.js",
+      "line": 390,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "domain_data",
+      "reason": "Rótulo de seção do fluxo V5 (section.label) passado ao layout comprador; manter como conteúdo autorado da hierarquia.",
+      "consumer": "app/app.js::mountStageGroups"
+    },
+    {
+      "id": "283b54df3fe25f62",
+      "source": "app/app.js",
+      "line": 391,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "structural_or_identifier",
+      "reason": "Value is a DOM relationship, stable scene/catalog code or generated identifier; translating it would break references or identity.",
+      "consumer": "app/app.js::mountStageGroups"
+    },
+    {
+      "id": "8ca997bcf53f9a54",
+      "source": "app/app.js",
+      "line": 618,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "structural_or_identifier",
+      "reason": "Value is a DOM relationship, stable scene/catalog code or generated identifier; translating it would break references or identity.",
+      "consumer": "app/app.js::stagePanelFor"
+    },
+    {
+      "id": "50cc7cb0dd3f095d",
+      "source": "app/app.js",
+      "line": 654,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "catalog_candidate",
+      "reason": "Fixed user-facing or accessible interface copy in app/app.js::renderModuleControlsFromData; extract a message and preserve any dynamic data as placeholders.",
+      "consumer": "app/app.js::renderModuleControlsFromData",
+      "proposedKey": "config.ui.incluir.50cc7cb0"
+    },
+    {
+      "id": "e21d938237d67878",
+      "source": "app/app.js",
+      "line": 658,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "catalog_candidate",
+      "reason": "Fixed user-facing or accessible interface copy in app/app.js::renderModuleControlsFromData; extract a message and preserve any dynamic data as placeholders.",
+      "consumer": "app/app.js::renderModuleControlsFromData",
+      "proposedKey": "config.ui.controlado_por_um_evento_da_configuracao.e21d9382"
+    },
+    {
+      "id": "4ddc16f081fb0e06",
+      "source": "app/app.js",
+      "line": 662,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "structural_or_identifier",
+      "reason": "Código de cena (scene.entities[].alias, por exemplo 01/02P/03T); identifica camada/peça e deve permanecer estável.",
+      "consumer": "app/app.js::renderModuleControlsFromData"
+    },
+    {
+      "id": "882a6f375903d3c3",
+      "source": "app/app.js",
+      "line": 667,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "domain_data",
+      "reason": "Título editorial de produto. V5 buyer payload inclui displaySettings.objects; applyConfiguratorSettings copia objects[id].title para o catálogo antes do render.",
+      "consumer": "app/app.js::renderModuleControlsFromData"
+    },
+    {
+      "id": "8b3401ea73088e77",
+      "source": "app/app.js",
+      "line": 669,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "domain_data",
+      "reason": "Dimensões calculadas de moduleDimensions e regras de evento V5; os números e a unidade são dados técnicos formatados, não frase de interface.",
+      "consumer": "app/app.js::renderModuleControlsFromData"
+    },
+    {
+      "id": "47a528b0e849971c",
+      "source": "app/app.js",
+      "line": 676,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "structural_or_identifier",
+      "reason": "Value is a DOM relationship, stable scene/catalog code or generated identifier; translating it would break references or identity.",
+      "consumer": "app/app.js::renderModuleControlsFromData"
+    },
+    {
+      "id": "fb0129fdbdc944a3",
+      "source": "app/app.js",
+      "line": 678,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "catalog_candidate",
+      "reason": "Fixed user-facing or accessible interface copy in app/app.js::renderModuleControlsFromData; extract a message and preserve any dynamic data as placeholders.",
+      "consumer": "app/app.js::renderModuleControlsFromData",
+      "proposedKey": "config.ui.ver_detalhes_de.fb0129fd"
+    },
+    {
+      "id": "a17a0bff8fb8e1d7",
+      "source": "app/app.js",
+      "line": 682,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "symbol_or_decoration",
+      "reason": "Glyph or placeholder is decorative/state punctuation, not a linguistic label; keep it separate from localized copy.",
+      "consumer": "app/app.js::renderModuleControlsFromData"
+    },
+    {
+      "id": "16b1534c0035d9d5",
+      "source": "app/app.js",
+      "line": 717,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "domain_data",
+      "reason": "Rótulo de acabamento vem de materials[].label na biblioteca V5 e é apresentado como nome comercial do material.",
+      "consumer": "app/app.js::renderFinishControlsFromData"
+    },
+    {
+      "id": "4ed53894900ff232",
+      "source": "app/app.js",
+      "line": 718,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "catalog_candidate",
+      "reason": "Fixed user-facing or accessible interface copy in app/app.js::renderFinishControlsFromData; extract a message and preserve any dynamic data as placeholders.",
+      "consumer": "app/app.js::renderFinishControlsFromData",
+      "proposedKey": "config.ui.aplicar_ao_conjunto.4ed53894"
+    },
+    {
+      "id": "ef587b3c0ce27e95",
+      "source": "app/app.js",
+      "line": 726,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "catalog_candidate",
+      "reason": "Fixed user-facing or accessible interface copy in app/app.js::renderFinishControlsFromData; extract a message and preserve any dynamic data as placeholders.",
+      "consumer": "app/app.js::renderFinishControlsFromData",
+      "proposedKey": "config.ui.selecionada.ef587b3c"
+    },
+    {
+      "id": "76997ab418e63604",
+      "source": "app/app.js",
+      "line": 734,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "catalog_candidate",
+      "reason": "Fixed user-facing or accessible interface copy in app/app.js::renderHandleControlsFromData; extract a message and preserve any dynamic data as placeholders.",
+      "consumer": "app/app.js::renderHandleControlsFromData",
+      "proposedKey": "config.ui.escolha_global_o_total_e_distribuido_pelas_1.76997ab4"
+    },
+    {
+      "id": "60c7bb9d53aca873",
+      "source": "app/app.js",
+      "line": 744,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "catalog_candidate",
+      "reason": "Fixed user-facing or accessible interface copy in app/app.js::renderHandleControlsFromData; extract a message and preserve any dynamic data as placeholders.",
+      "consumer": "app/app.js::renderHandleControlsFromData",
+      "proposedKey": "config.ui.selecionar_puxador.60c7bb9d"
+    },
+    {
+      "id": "919103d5969e20a8",
+      "source": "app/app.js",
+      "line": 759,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "domain_data",
+      "reason": "Nome do puxador vem de handleProducts[].label no buyer payload V5; é conteúdo de catálogo/comercial escolhido pelo administrador.",
+      "consumer": "app/app.js::renderHandleControlsFromData"
+    },
+    {
+      "id": "24d7c1b5a22e5665",
+      "source": "app/app.js",
+      "line": 764,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "catalog_candidate",
+      "reason": "Descrição V5 do puxador mais fórmula fixa de rateio e preços. Localizar a moldura textual/placeholder; manter description, valores e moeda como dados.",
+      "consumer": "app/app.js::renderHandleControlsFromData",
+      "proposedKey": "config.ui.por_frente_no_conjunto_completo.24d7c1b5"
+    },
+    {
+      "id": "4859c795b23bb2d5",
+      "source": "app/app.js",
+      "line": 784,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "catalog_candidate",
+      "reason": "Fixed user-facing or accessible interface copy in app/app.js::renderStonePackages; extract a message and preserve any dynamic data as placeholders.",
+      "consumer": "app/app.js::renderStonePackages",
+      "proposedKey": "config.ui.selecionar_pedra.4859c795"
+    },
+    {
+      "id": "e4fac794ad5f8009",
+      "source": "app/app.js",
+      "line": 792,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "domain_data",
+      "reason": "Nome da pedra vem de materials[].label no grupo V5 stone-all; manter como rótulo de material autorado.",
+      "consumer": "app/app.js::renderStonePackages"
+    },
+    {
+      "id": "7097c488c66458e4",
+      "source": "app/app.js",
+      "line": 795,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "catalog_candidate",
+      "reason": "Descrição V5 da pedra mais condição/preço do cálculo comercial. Localizar a moldura textual; manter nome, descrição e valor como dados.",
+      "consumer": "app/app.js::renderStonePackages",
+      "proposedKey": "config.ui.sem_adicional.7097c488"
+    },
+    {
+      "id": "5a1dd40c1bbb9184",
+      "source": "app/app.js",
+      "line": 803,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "catalog_candidate",
+      "reason": "Fixed user-facing or accessible interface copy in app/app.js::renderStonePackages; extract a message and preserve any dynamic data as placeholders.",
+      "consumer": "app/app.js::renderStonePackages",
+      "proposedKey": "config.ui.controlado_por_um_evento_da_configuracao.5a1dd40c"
+    },
+    {
+      "id": "d41203a7062b5645",
+      "source": "app/app.js",
+      "line": 823,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "catalog_candidate",
+      "reason": "Fixed user-facing or accessible interface copy in app/app.js::renderServiceChecklist; extract a message and preserve any dynamic data as placeholders.",
+      "consumer": "app/app.js::renderServiceChecklist",
+      "proposedKey": "config.ui.controlado_por_um_evento_da_configuracao.d41203a7"
+    },
+    {
+      "id": "9998ab0f95ed8264",
+      "source": "app/app.js",
+      "line": 824,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "domain_data",
+      "reason": "Título de serviço copiado de displaySettings.objects[id].title da projeção publicada V5.",
+      "consumer": "app/app.js::renderServiceChecklist"
+    },
+    {
+      "id": "0f04fde9568f6eb3",
+      "source": "app/app.js",
+      "line": 827,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "domain_data",
+      "reason": "Título de serviço copiado de displaySettings.objects[id].title da projeção publicada V5.",
+      "consumer": "app/app.js::renderServiceChecklist"
+    },
+    {
+      "id": "3d19db7f4e2a0a99",
+      "source": "app/app.js",
+      "line": 830,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "catalog_candidate",
+      "reason": "Descrição V5 do serviço mais condição/preço do cálculo comercial. Localizar a moldura textual; manter descrição e valor como dados.",
+      "consumer": "app/app.js::renderServiceChecklist",
+      "proposedKey": "config.ui.service.description_with_price"
+    },
+    {
+      "id": "590a9d5b830bcc53",
+      "source": "app/app.js",
+      "line": 903,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "domain_data",
+      "reason": "Texto de benefício/componente chega a createDetailList a partir de product.benefits/components, derivados de objects V5; é conteúdo editorial do produto.",
+      "consumer": "app/app.js::createDetailList"
+    },
+    {
+      "id": "8c5ebe22b9f9ae54",
+      "source": "app/app.js",
+      "line": 912,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "catalog_candidate",
+      "reason": "Fixed user-facing or accessible interface copy in app/app.js::createMaterialFact; extract a message and preserve any dynamic data as placeholders.",
+      "consumer": "app/app.js::createMaterialFact",
+      "proposedKey": "config.ui.label.8c5ebe22"
+    },
+    {
+      "id": "08d475d956f97e33",
+      "source": "app/app.js",
+      "line": 913,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "domain_data",
+      "reason": "Valor de material é selectedFrontFinishLabel (nome da opção V5) ou o nome fixo do material-base; dado de catálogo, não rótulo de campo.",
+      "consumer": "app/app.js::createMaterialFact"
+    },
+    {
+      "id": "97626ca00631294c",
+      "source": "app/app.js",
+      "line": 920,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "catalog_candidate",
+      "reason": "O helper appendPriceBreakdownRow recebe rótulos fixos de interface e globalItemLabel (nome vindo de catálogo/V5); separar label-key dos rótulos de domínio antes de extrair.",
+      "consumer": "app/app.js::appendPriceBreakdownRow",
+      "proposedKey": "config.ui.price_breakdown.row_label"
+    },
+    {
+      "id": "3d40dcd32c031496",
+      "source": "app/app.js",
+      "line": 923,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "commercial_data",
+      "reason": "Valor de preço formatado para a linha de detalhamento; vem do cálculo comercial em cents.",
+      "consumer": "app/app.js::appendPriceBreakdownRow"
+    },
+    {
+      "id": "e1aa61036597be25",
+      "source": "app/app.js",
+      "line": 927,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "catalog_candidate",
+      "reason": "O helper de detalhamento recebe notas fixas de interface e templates com material, puxador ou valores comerciais. Localizar a frase moldura com placeholders; preservar nomes/valores como dados.",
+      "consumer": "app/app.js::appendPriceBreakdownRow",
+      "proposedKey": "config.ui.price_breakdown.detail"
+    },
+    {
+      "id": "42b01c318c235fc2",
+      "source": "app/app.js",
+      "line": 964,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "catalog_candidate",
+      "reason": "Fixed user-facing or accessible interface copy in app/app.js::createOrientativeInternalFront; extract a message and preserve any dynamic data as placeholders.",
+      "consumer": "app/app.js::createOrientativeInternalFront",
+      "proposedKey": "config.ui.vista_interna.42b01c31"
+    },
+    {
+      "id": "bd95cea5abe4ddf3",
+      "source": "app/app.js",
+      "line": 975,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "catalog_candidate",
+      "reason": "Fixed user-facing or accessible interface copy in app/app.js::createCarouselPage; extract a message and preserve any dynamic data as placeholders.",
+      "consumer": "app/app.js::createCarouselPage",
+      "proposedKey": "config.ui.label.bd95cea5"
+    },
+    {
+      "id": "07fde310e3a9c964",
+      "source": "app/app.js",
+      "line": 983,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "catalog_candidate",
+      "reason": "Fixed user-facing or accessible interface copy in app/app.js::createCarouselPage; extract a message and preserve any dynamic data as placeholders.",
+      "consumer": "app/app.js::createCarouselPage",
+      "proposedKey": "config.ui.note.07fde310"
+    },
+    {
+      "id": "41cd2561726139b5",
+      "source": "app/app.js",
+      "line": 998,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "catalog_candidate",
+      "reason": "Fixed user-facing or accessible interface copy in app/app.js::createModuleFocus; extract a message and preserve any dynamic data as placeholders.",
+      "consumer": "app/app.js::createModuleFocus",
+      "proposedKey": "config.ui.recorte_isolado_de.41cd2561"
+    },
+    {
+      "id": "22f95ef3a8971cad",
+      "source": "app/app.js",
+      "line": 1074,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "catalog_candidate",
+      "reason": "Fixed user-facing or accessible interface copy in app/app.js::createProportionalView; extract a message and preserve any dynamic data as placeholders.",
+      "consumer": "app/app.js::createProportionalView",
+      "proposedKey": "config.ui.vista_lateral_vista_frontal.22f95ef3"
+    },
+    {
+      "id": "8fcc65ac257d8a84",
+      "source": "app/app.js",
+      "line": 1085,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "catalog_candidate",
+      "reason": "Fixed user-facing or accessible interface copy in app/app.js::createTechnicalIsometricView; extract a message and preserve any dynamic data as placeholders.",
+      "consumer": "app/app.js::createTechnicalIsometricView",
+      "proposedKey": "config.ui.projecao_isometrica.8fcc65ac"
+    },
+    {
+      "id": "ecb86a93317949bd",
+      "source": "app/app.js",
+      "line": 1122,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "catalog_candidate",
+      "reason": "Fixed user-facing or accessible interface copy in app/app.js::createDetailCarousel; extract a message and preserve any dynamic data as placeholders.",
+      "consumer": "app/app.js::createDetailCarousel",
+      "proposedKey": "config.ui.visualizacoes_do_modulo.ecb86a93"
+    },
+    {
+      "id": "e213232eea5541b1",
+      "source": "app/app.js",
+      "line": 1126,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "catalog_candidate",
+      "reason": "Fixed user-facing or accessible interface copy in app/app.js::createDetailCarousel; extract a message and preserve any dynamic data as placeholders.",
+      "consumer": "app/app.js::createDetailCarousel",
+      "proposedKey": "config.ui.visualizacoes.e213232e"
+    },
+    {
+      "id": "d1731425700120d4",
+      "source": "app/app.js",
+      "line": 1131,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "structural_or_identifier",
+      "reason": "Value is a DOM relationship, stable scene/catalog code or generated identifier; translating it would break references or identity.",
+      "consumer": "app/app.js::createDetailCarousel"
+    },
+    {
+      "id": "2c1cd8158a3a6367",
+      "source": "app/app.js",
+      "line": 1134,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "catalog_candidate",
+      "reason": "Fixed user-facing or accessible interface copy in app/app.js::createDetailCarousel; extract a message and preserve any dynamic data as placeholders.",
+      "consumer": "app/app.js::createDetailCarousel",
+      "proposedKey": "config.ui.navegue_pelo_foco_do_modulo_e_pelas_vistas_o.2c1cd815"
+    },
+    {
+      "id": "2a98687aa00421a5",
+      "source": "app/app.js",
+      "line": 1140,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "catalog_candidate",
+      "reason": "Fixed user-facing or accessible interface copy in app/app.js::createDetailCarousel; extract a message and preserve any dynamic data as placeholders.",
+      "consumer": "app/app.js::createDetailCarousel",
+      "proposedKey": "config.ui.paginas_de_visualizacao.2a98687a"
+    },
+    {
+      "id": "0aa22784a33aaa39",
+      "source": "app/app.js",
+      "line": 1162,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "symbol_or_decoration",
+      "reason": "Glyph or placeholder is decorative/state punctuation, not a linguistic label; keep it separate from localized copy.",
+      "consumer": "app/app.js::createDetailCarousel"
+    },
+    {
+      "id": "bfdcfa470393f373",
+      "source": "app/app.js",
+      "line": 1166,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "symbol_or_decoration",
+      "reason": "Glyph or placeholder is decorative/state punctuation, not a linguistic label; keep it separate from localized copy.",
+      "consumer": "app/app.js::createDetailCarousel"
+    },
+    {
+      "id": "5cd1837d1e9cf062",
+      "source": "app/app.js",
+      "line": 1171,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "catalog_candidate",
+      "reason": "Fixed user-facing or accessible interface copy in app/app.js::createDetailCarousel; extract a message and preserve any dynamic data as placeholders.",
+      "consumer": "app/app.js::createDetailCarousel",
+      "proposedKey": "config.ui.mostrar.5cd1837d"
+    },
+    {
+      "id": "266a18e16516d6d4",
+      "source": "app/app.js",
+      "line": 1172,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "catalog_candidate",
+      "reason": "Fixed user-facing or accessible interface copy in app/app.js::createDetailCarousel; extract a message and preserve any dynamic data as placeholders.",
+      "consumer": "app/app.js::createDetailCarousel",
+      "proposedKey": "config.ui.anterior.266a18e1"
+    },
+    {
+      "id": "8cffaca518e3ecab",
+      "source": "app/app.js",
+      "line": 1173,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "catalog_candidate",
+      "reason": "Fixed user-facing or accessible interface copy in app/app.js::createDetailCarousel; extract a message and preserve any dynamic data as placeholders.",
+      "consumer": "app/app.js::createDetailCarousel",
+      "proposedKey": "config.ui.mostrar.8cffaca5"
+    },
+    {
+      "id": "f7887883f28df807",
+      "source": "app/app.js",
+      "line": 1174,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "catalog_candidate",
+      "reason": "Fixed user-facing or accessible interface copy in app/app.js::createDetailCarousel; extract a message and preserve any dynamic data as placeholders.",
+      "consumer": "app/app.js::createDetailCarousel",
+      "proposedKey": "config.ui.proxima.f7887883"
+    },
+    {
+      "id": "f31e5e47f4321482",
+      "source": "app/app.js",
+      "line": 1210,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "catalog_candidate",
+      "reason": "Fixed user-facing or accessible interface copy in app/app.js::createDetailCarousel; extract a message and preserve any dynamic data as placeholders.",
+      "consumer": "app/app.js::createDetailCarousel",
+      "proposedKey": "config.ui.mostrar_pagina_de.f31e5e47"
+    },
+    {
+      "id": "3764d4cf64f39779",
+      "source": "app/app.js",
+      "line": 1211,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "catalog_candidate",
+      "reason": "Fixed user-facing or accessible interface copy in app/app.js::createDetailCarousel; extract a message and preserve any dynamic data as placeholders.",
+      "consumer": "app/app.js::createDetailCarousel",
+      "proposedKey": "config.ui.page_shortlabel.3764d4cf"
+    },
+    {
+      "id": "5e8ef639084a9584",
+      "source": "app/app.js",
+      "line": 1270,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "catalog_candidate",
+      "reason": "Fixed user-facing or accessible interface copy in app/app.js::createDetailCarousel; extract a message and preserve any dynamic data as placeholders.",
+      "consumer": "app/app.js::createDetailCarousel",
+      "proposedKey": "config.ui.expandir_visualizacoes_recolher_visualizacoe.5e8ef639"
+    },
+    {
+      "id": "09b19a5db76b88ff",
+      "source": "app/app.js",
+      "line": 1271,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "catalog_candidate",
+      "reason": "Fixed user-facing or accessible interface copy in app/app.js::createDetailCarousel; extract a message and preserve any dynamic data as placeholders.",
+      "consumer": "app/app.js::createDetailCarousel",
+      "proposedKey": "config.ui.mostrar_recolher.09b19a5d"
+    },
+    {
+      "id": "b3b57693b2afa342",
+      "source": "app/app.js",
+      "line": 1285,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "catalog_candidate",
+      "reason": "Fixed user-facing or accessible interface copy in app/app.js::createDetailCarousel; extract a message and preserve any dynamic data as placeholders.",
+      "consumer": "app/app.js::createDetailCarousel",
+      "proposedKey": "config.ui.expandir_visualizacoes_recolher_visualizacoe.b3b57693"
+    },
+    {
+      "id": "ed6dbb22b98c73b5",
+      "source": "app/app.js",
+      "line": 1286,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "catalog_candidate",
+      "reason": "Fixed user-facing or accessible interface copy in app/app.js::createDetailCarousel; extract a message and preserve any dynamic data as placeholders.",
+      "consumer": "app/app.js::createDetailCarousel",
+      "proposedKey": "config.ui.mostrar_recolher.ed6dbb22"
+    },
+    {
+      "id": "c603f768c8675c9c",
+      "source": "app/app.js",
+      "line": 1313,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "catalog_candidate",
+      "reason": "Fixed user-facing or accessible interface copy in app/app.js::createModuleNavigationButton; extract a message and preserve any dynamic data as placeholders.",
+      "consumer": "app/app.js::createModuleNavigationButton",
+      "proposedKey": "config.ui.abrir_modulo.c603f768"
+    },
+    {
+      "id": "dab1b3128fe78e1f",
+      "source": "app/app.js",
+      "line": 1314,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "catalog_candidate",
+      "reason": "Fixed user-facing or accessible interface copy in app/app.js::createModuleNavigationButton; extract a message and preserve any dynamic data as placeholders.",
+      "consumer": "app/app.js::createModuleNavigationButton",
+      "proposedKey": "config.ui.modulo.dab1b312"
+    },
+    {
+      "id": "62090a93cb478a3b",
+      "source": "app/app.js",
+      "line": 1315,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "symbol_or_decoration",
+      "reason": "Glyph or placeholder is decorative/state punctuation, not a linguistic label; keep it separate from localized copy.",
+      "consumer": "app/app.js::createModuleNavigationButton"
+    },
+    {
+      "id": "bfe25a57f119cb26",
+      "source": "app/app.js",
+      "line": 1335,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "catalog_candidate",
+      "reason": "Fixed user-facing or accessible interface copy in app/app.js::createModuleSelectionControl; extract a message and preserve any dynamic data as placeholders.",
+      "consumer": "app/app.js::createModuleSelectionControl",
+      "proposedKey": "config.ui.desselecionar_selecionar.bfe25a57"
+    },
+    {
+      "id": "5d55c6285f7fbf63",
+      "source": "app/app.js",
+      "line": 1337,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "catalog_candidate",
+      "reason": "Fixed user-facing or accessible interface copy in app/app.js::createModuleSelectionControl; extract a message and preserve any dynamic data as placeholders.",
+      "consumer": "app/app.js::createModuleSelectionControl",
+      "proposedKey": "config.ui.selecionado_selecionar.5d55c628"
+    },
+    {
+      "id": "13224be60db64538",
+      "source": "app/app.js",
+      "line": 1351,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "catalog_candidate",
+      "reason": "Fixed user-facing or accessible interface copy in app/app.js::createLocalFinishControl; extract a message and preserve any dynamic data as placeholders.",
+      "consumer": "app/app.js::createLocalFinishControl",
+      "proposedKey": "config.ui.acabamento_deste_modulo.13224be6"
+    },
+    {
+      "id": "2cbaddfb1de55465",
+      "source": "app/app.js",
+      "line": 1363,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "catalog_candidate",
+      "reason": "Fixed user-facing or accessible interface copy in app/app.js::createLocalFinishControl; extract a message and preserve any dynamic data as placeholders.",
+      "consumer": "app/app.js::createLocalFinishControl",
+      "proposedKey": "config.ui.finish_publiclabel.2cbaddfb"
+    },
+    {
+      "id": "2a9e47105506c2b0",
+      "source": "app/app.js",
+      "line": 1364,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "catalog_candidate",
+      "reason": "Fixed user-facing or accessible interface copy in app/app.js::createLocalFinishControl; extract a message and preserve any dynamic data as placeholders.",
+      "consumer": "app/app.js::createLocalFinishControl",
+      "proposedKey": "config.ui.aplicar_somente_em.2a9e4710"
+    },
+    {
+      "id": "2286e789028af3a7",
+      "source": "app/app.js",
+      "line": 1385,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "catalog_candidate",
+      "reason": "Fixed user-facing or accessible interface copy in app/app.js::updateSelection; extract a message and preserve any dynamic data as placeholders.",
+      "consumer": "app/app.js::updateSelection",
+      "proposedKey": "config.ui.selecione_um_modulo_na_cena_para_abrir_sua_f.2286e789"
+    },
+    {
+      "id": "c1481467dfd7556a",
+      "source": "app/app.js",
+      "line": 1392,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "catalog_candidate",
+      "reason": "Fixed user-facing or accessible interface copy in app/app.js::updateSelection; extract a message and preserve any dynamic data as placeholders.",
+      "consumer": "app/app.js::updateSelection",
+      "proposedKey": "config.ui.ficha_selecionada.c1481467"
+    },
+    {
+      "id": "a0afd33343bda7b9",
+      "source": "app/app.js",
+      "line": 1398,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "structural_or_identifier",
+      "reason": "Código de cena (scene.entities[].alias, por exemplo 01/02P/03T); identifica camada/peça e deve permanecer estável.",
+      "consumer": "app/app.js::updateSelection"
+    },
+    {
+      "id": "d7aa646017fb09ac",
+      "source": "app/app.js",
+      "line": 1403,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "domain_data",
+      "reason": "Mistura referência de catálogo e categoria de produto, formatadas em caixa alta; são atributos do produto (referenceLabel/category), não UI fixa.",
+      "consumer": "app/app.js::updateSelection"
+    },
+    {
+      "id": "5dd463de5a0b87d3",
+      "source": "app/app.js",
+      "line": 1405,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "domain_data",
+      "reason": "Título editorial do módulo passado pelo registro objects V5 (com valor default em catalog-data.js quando não há publicação).",
+      "consumer": "app/app.js::updateSelection"
+    },
+    {
+      "id": "61e54adba3b2fa4a",
+      "source": "app/app.js",
+      "line": 1419,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "catalog_candidate",
+      "reason": "Fixed user-facing or accessible interface copy in app/app.js::updateSelection; extract a message and preserve any dynamic data as placeholders.",
+      "consumer": "app/app.js::updateSelection",
+      "proposedKey": "config.ui.fechar_detalhes_do_modulo.61e54adb"
+    },
+    {
+      "id": "3eb81b85bee82930",
+      "source": "app/app.js",
+      "line": 1420,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "symbol_or_decoration",
+      "reason": "Glyph or placeholder is decorative/state punctuation, not a linguistic label; keep it separate from localized copy.",
+      "consumer": "app/app.js::updateSelection"
+    },
+    {
+      "id": "c63dc3f646dce06b",
+      "source": "app/app.js",
+      "line": 1430,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "catalog_candidate",
+      "reason": "Fixed user-facing or accessible interface copy in app/app.js::updateSelection; extract a message and preserve any dynamic data as placeholders.",
+      "consumer": "app/app.js::updateSelection",
+      "proposedKey": "config.ui.valor_atual_na_simulacao.c63dc3f6"
+    },
+    {
+      "id": "ba0ca78007228b0c",
+      "source": "app/app.js",
+      "line": 1434,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "commercial_data",
+      "reason": "Valor monetário da estimativa por módulo, obtido do cálculo comercial e formatado em BRL; dado de preço, não mensagem de UI.",
+      "consumer": "app/app.js::updateSelection"
+    },
+    {
+      "id": "9c431c21e4f04a40",
+      "source": "app/app.js",
+      "line": 1435,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "catalog_candidate",
+      "reason": "Fixed user-facing or accessible interface copy in app/app.js::updateSelection; extract a message and preserve any dynamic data as placeholders.",
+      "consumer": "app/app.js::updateSelection",
+      "proposedKey": "config.ui.estrutural_valor_local_do_painel_pedra_e_ser.9c431c21"
+    },
+    {
+      "id": "2595334fcd04f2c1",
+      "source": "app/app.js",
+      "line": 1440,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "catalog_candidate",
+      "reason": "Fixed user-facing or accessible interface copy in app/app.js::updateSelection; extract a message and preserve any dynamic data as placeholders.",
+      "consumer": "app/app.js::updateSelection",
+      "proposedKey": "config.ui.em_configuracao.2595334f"
+    },
+    {
+      "id": "79b716bd7c9582b9",
+      "source": "app/app.js",
+      "line": 1441,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "catalog_candidate",
+      "reason": "Fixed user-facing or accessible interface copy in app/app.js::updateSelection; extract a message and preserve any dynamic data as placeholders.",
+      "consumer": "app/app.js::updateSelection",
+      "proposedKey": "config.ui.o_valor_aparece_quando_a_tabela_de_trabalho.79b716bd"
+    },
+    {
+      "id": "5e2e5fe00b65df22",
+      "source": "app/app.js",
+      "line": 1455,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "catalog_candidate",
+      "reason": "Fixed user-facing or accessible interface copy in app/app.js::updateSelection; extract a message and preserve any dynamic data as placeholders.",
+      "consumer": "app/app.js::updateSelection",
+      "proposedKey": "config.ui.dimensionsummary_product.5e2e5fe0"
+    },
+    {
+      "id": "058aeda1df33d730",
+      "source": "app/app.js",
+      "line": 1456,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "catalog_candidate",
+      "reason": "configurationNote é montada por productForCurrentConfiguration com nomes de dimensão e uma frase fixa em português para eventos V5. Localizar a estrutura da mensagem e preservar dimensão/medida como placeholders.",
+      "consumer": "app/app.js::updateSelection",
+      "proposedKey": "config.ui.module.configuration_dimension_note"
+    },
+    {
+      "id": "65cbd35aebb4a865",
+      "source": "app/app.js",
+      "line": 1461,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "catalog_candidate",
+      "reason": "Fixed user-facing or accessible interface copy in app/app.js::updateSelection; extract a message and preserve any dynamic data as placeholders.",
+      "consumer": "app/app.js::updateSelection",
+      "proposedKey": "config.ui.medidas_nominais.65cbd35a"
+    },
+    {
+      "id": "d126019416a709ea",
+      "source": "app/app.js",
+      "line": 1467,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "catalog_candidate",
+      "reason": "Fixed user-facing or accessible interface copy in app/app.js::updateSelection; extract a message and preserve any dynamic data as placeholders.",
+      "consumer": "app/app.js::updateSelection",
+      "proposedKey": "config.ui.label.d1260194"
+    },
+    {
+      "id": "c56c5e19d46d9608",
+      "source": "app/app.js",
+      "line": 1469,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "domain_data",
+      "reason": "Valor de dimensão numérica de detailDimensionFacts, formatado por Intl.NumberFormat e acompanhado do símbolo de unidade SI mm.",
+      "consumer": "app/app.js::updateSelection"
+    },
+    {
+      "id": "7929dfe373b4ba65",
+      "source": "app/app.js",
+      "line": 1480,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "catalog_candidate",
+      "reason": "Fixed user-facing or accessible interface copy in app/app.js::updateSelection; extract a message and preserve any dynamic data as placeholders.",
+      "consumer": "app/app.js::updateSelection",
+      "proposedKey": "config.ui.destaques.7929dfe3"
+    },
+    {
+      "id": "192046fd566a3727",
+      "source": "app/app.js",
+      "line": 1486,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "catalog_candidate",
+      "reason": "Fixed user-facing or accessible interface copy in app/app.js::updateSelection; extract a message and preserve any dynamic data as placeholders.",
+      "consumer": "app/app.js::updateSelection",
+      "proposedKey": "config.ui.componentes_inclusos.192046fd"
+    },
+    {
+      "id": "67eaf1c2d81ce58b",
+      "source": "app/app.js",
+      "line": 1493,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "catalog_candidate",
+      "reason": "Fixed user-facing or accessible interface copy in app/app.js::updateSelection; extract a message and preserve any dynamic data as placeholders.",
+      "consumer": "app/app.js::updateSelection",
+      "proposedKey": "config.ui.indisponivel_enquanto_o_modulo_estrutural_ne.67eaf1c2"
+    },
+    {
+      "id": "efbb97018b7782b7",
+      "source": "app/app.js",
+      "line": 1495,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "domain_data",
+      "reason": "Requisito editorial do produto vindo de objects[id].requirements na configuração V5 publicada.",
+      "consumer": "app/app.js::updateSelection"
+    },
+    {
+      "id": "29ab065179b11444",
+      "source": "app/app.js",
+      "line": 1498,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "structural_or_identifier",
+      "reason": "Value is a DOM relationship, stable scene/catalog code or generated identifier; translating it would break references or identity.",
+      "consumer": "app/app.js::updateSelection"
+    },
+    {
+      "id": "8555472a3b6da951",
+      "source": "app/app.js",
+      "line": 1503,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "domain_data",
+      "reason": "Descrição editorial do produto, recebida de objects[id].description no payload V5 e exibida sem transformação.",
+      "consumer": "app/app.js::updateSelection"
+    },
+    {
+      "id": "ede2f3f3f1cdeacb",
+      "source": "app/app.js",
+      "line": 1529,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "catalog_candidate",
+      "reason": "Fixed user-facing or accessible interface copy in app/app.js::updateModuleCards; extract a message and preserve any dynamic data as placeholders.",
+      "consumer": "app/app.js::updateModuleCards",
+      "proposedKey": "config.ui.controlado_por_um_evento_da_configuracao.ede2f3f3"
+    },
+    {
+      "id": "7166e8a719cc21c6",
+      "source": "app/app.js",
+      "line": 1530,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "structural_or_identifier",
+      "reason": "Value is a DOM relationship, stable scene/catalog code or generated identifier; translating it would break references or identity.",
+      "consumer": "app/app.js::updateModuleCards"
+    },
+    {
+      "id": "47e6288070ce8e55",
+      "source": "app/app.js",
+      "line": 1534,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "domain_data",
+      "reason": "Dimensões de moduleDimensions e regras de evento V5; conteúdo numérico técnico, formatado para o locale e sem chave textual.",
+      "consumer": "app/app.js::updateModuleCards"
+    },
+    {
+      "id": "871da1d26bc9c9a9",
+      "source": "app/app.js",
+      "line": 1542,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "catalog_candidate",
+      "reason": "Fixed user-facing or accessible interface copy in app/app.js::updateModuleCards; extract a message and preserve any dynamic data as placeholders.",
+      "consumer": "app/app.js::updateModuleCards",
+      "proposedKey": "config.ui.requer_suporte_incluido_incluido_nao_incluid.871da1d2"
+    },
+    {
+      "id": "22dfb9335cda8bc1",
+      "source": "app/app.js",
+      "line": 1558,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "catalog_candidate",
+      "reason": "Fixed user-facing or accessible interface copy in app/app.js::updateAccessoryControls; extract a message and preserve any dynamic data as placeholders.",
+      "consumer": "app/app.js::updateAccessoryControls",
+      "proposedKey": "config.ui.controlado_por_um_evento_da_configuracao_inc.22dfb933"
+    },
+    {
+      "id": "c460cf78037c672e",
+      "source": "app/app.js",
+      "line": 1603,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "catalog_candidate",
+      "reason": "HTML contém estimate.label e valor comerciais mais o rótulo fixo Estimativa. Separar rótulo UI localizável de label/total comercial; preservar a estrutura segura do markup.",
+      "consumer": "app/app.js::renderCurrentValue",
+      "proposedKey": "config.ui.estimate.current_value"
+    },
+    {
+      "id": "6a298a781f13ee30",
+      "source": "app/app.js",
+      "line": 1604,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "commercial_data",
+      "reason": "Termos comerciais do estimate.disclaimer. O consumidor usa CommercialEstimatePriceBook 2.0 local; o esquema V5 publica regras numéricas, não este disclaimer.",
+      "consumer": "app/app.js::renderCurrentValue"
+    },
+    {
+      "id": "5112631234516985",
+      "source": "app/app.js",
+      "line": 1607,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "catalog_candidate",
+      "reason": "HTML contém rótulos fixos de UI Valor do conjunto e Em configuração; extrair como mensagens e manter o markup estrutural.",
+      "consumer": "app/app.js::renderCurrentValue",
+      "proposedKey": "config.ui.estimate.pending_value"
+    },
+    {
+      "id": "4f68e432992615f7",
+      "source": "app/app.js",
+      "line": 1628,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "catalog_candidate",
+      "reason": "Resumo combina referenceLabel/title, preço e nomes de adicionais. A estrutura e os rótulos dos adicionais precisam de mensagem localizável com placeholders; produto e valores continuam dados.",
+      "consumer": "app/app.js::renderSummary",
+      "proposedKey": "config.ui.summary.module_price_line"
+    },
+    {
+      "id": "7f499ee8ff2ec905",
+      "source": "app/app.js",
+      "line": 1633,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "catalog_candidate",
+      "reason": "Fixed user-facing or accessible interface copy in app/app.js::renderSummary; extract a message and preserve any dynamic data as placeholders.",
+      "consumer": "app/app.js::renderSummary",
+      "proposedKey": "config.ui.nenhum_modulo_incluido.7f499ee8"
+    },
+    {
+      "id": "dcfb4fbef49d6613",
+      "source": "app/app.js",
+      "line": 1639,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "catalog_candidate",
+      "reason": "Fixed user-facing or accessible interface copy in app/app.js::renderSummary; extract a message and preserve any dynamic data as placeholders.",
+      "consumer": "app/app.js::renderSummary",
+      "proposedKey": "config.ui.as_cores_podem_ser_globais_ou_escolhidas_por.dcfb4fbe"
+    },
+    {
+      "id": "e53b771af6a0f573",
+      "source": "app/app.js",
+      "line": 1645,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "commercial_data",
+      "reason": "Nome da estimativa fornecido por priceBook.label em CommercialEstimatePriceBook 2.0; metadado comercial, atualmente fixture local.",
+      "consumer": "app/app.js::renderSummary"
+    },
+    {
+      "id": "7677d033f0047a91",
+      "source": "app/app.js",
+      "line": 1647,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "commercial_data",
+      "reason": "Total monetário calculado em cents e formatado em BRL; manter como dado comercial.",
+      "consumer": "app/app.js::renderSummary"
+    },
+    {
+      "id": "896c7b471a4567dd",
+      "source": "app/app.js",
+      "line": 1658,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "commercial_data",
+      "reason": "Termos do estimate.disclaimer do PriceBook local (CommercialEstimatePriceBook 2.0); não confundir com regra de preço V5.",
+      "consumer": "app/app.js::renderSummary"
+    },
+    {
+      "id": "fbd6345acc356f03",
+      "source": "app/app.js",
+      "line": 1661,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "catalog_candidate",
+      "reason": "HTML contém rótulos fixos de UI Valor do conjunto e Em configuração; extrair como mensagens e manter o markup estrutural.",
+      "consumer": "app/app.js::renderSummary",
+      "proposedKey": "config.ui.estimate.pending_value"
+    },
+    {
+      "id": "af42b23debd39eba",
+      "source": "app/app.js",
+      "line": 1677,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "domain_data",
+      "reason": "Nome de etapa autorado na administração V5 e transmitido por displaySettings.stages; não é um rótulo padrão do produto.",
+      "consumer": "app/app.js::renderCustomStage"
+    },
+    {
+      "id": "e3b5eb7ea141f2e2",
+      "source": "app/app.js",
+      "line": 1678,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "catalog_candidate",
+      "reason": "Fixed user-facing or accessible interface copy in app/app.js::renderCustomStage; extract a message and preserve any dynamic data as placeholders.",
+      "consumer": "app/app.js::renderCustomStage",
+      "proposedKey": "config.ui.escolha_os_itens_desta_etapa.e3b5eb7e"
+    },
+    {
+      "id": "7292592228c53968",
+      "source": "app/app.js",
+      "line": 1692,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "catalog_candidate",
+      "reason": "Fixed user-facing or accessible interface copy in app/app.js::renderCustomStage; extract a message and preserve any dynamic data as placeholders.",
+      "consumer": "app/app.js::renderCustomStage",
+      "proposedKey": "config.ui.controlado_por_um_evento_da_configuracao.72925922"
+    },
+    {
+      "id": "f95f0b7850b36e23",
+      "source": "app/app.js",
+      "line": 1693,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "domain_data",
+      "reason": "customStageItemLabel resolve título em catálogo/objects V5; só retorna o ID como fallback. O dado continua ligado ao item, não ao locale do texto.",
+      "consumer": "app/app.js::renderCustomStage"
+    },
+    {
+      "id": "c4c68fe4fb25c4a4",
+      "source": "app/app.js",
+      "line": 1694,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "domain_data",
+      "reason": "customStageItemLabel resolve título em catálogo/objects V5; só retorna o ID como fallback. O dado continua ligado ao item, não ao locale do texto.",
+      "consumer": "app/app.js::renderCustomStage"
+    },
+    {
+      "id": "d1ef1bb4e4353356",
+      "source": "app/app.js",
+      "line": 1694,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "catalog_candidate",
+      "reason": "Fixed user-facing or accessible interface copy in app/app.js::renderCustomStage; extract a message and preserve any dynamic data as placeholders.",
+      "consumer": "app/app.js::renderCustomStage",
+      "proposedKey": "config.ui.modulo_item_opcional.d1ef1bb4"
+    },
+    {
+      "id": "5bd4f9482d71d85f",
+      "source": "app/app.js",
+      "line": 1697,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "catalog_candidate",
+      "reason": "Fixed user-facing or accessible interface copy in app/app.js::renderCustomStage; extract a message and preserve any dynamic data as placeholders.",
+      "consumer": "app/app.js::renderCustomStage",
+      "proposedKey": "config.ui.inclua_itens_na_administracao_para_preencher.5bd4f948"
+    },
+    {
+      "id": "ee511b0071f5058d",
+      "source": "app/app.js",
+      "line": 1752,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "structural_or_identifier",
+      "reason": "Value is a DOM relationship, stable scene/catalog code or generated identifier; translating it would break references or identity.",
+      "consumer": "app/app.js::renderStageNavigation"
+    },
+    {
+      "id": "8d9eba262b0efa05",
+      "source": "app/app.js",
+      "line": 1754,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "non_localizable",
+      "reason": "Value is a proper brand identity or a numeric count/index, not translatable interface prose.",
+      "consumer": "app/app.js::renderStageNavigation"
+    },
+    {
+      "id": "9b481e7290efa50c",
+      "source": "app/app.js",
+      "line": 1757,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "catalog_candidate",
+      "reason": "Rótulos compactos internos são fixos e localizáveis; customStage usa stage.label autorado V5. Manter os dois caminhos distintos, com placeholder para a etapa customizada.",
+      "consumer": "app/app.js::renderStageNavigation",
+      "proposedKey": "config.ui.flow.compact_stage_label"
+    },
+    {
+      "id": "cd92e22851105170",
+      "source": "app/app.js",
+      "line": 1758,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "domain_data",
+      "reason": "Nome de etapa autorado na hierarquia V5; aparece como título da etapa customizada.",
+      "consumer": "app/app.js::renderStageNavigation"
+    },
+    {
+      "id": "f97a23a08b094d53",
+      "source": "app/app.js",
+      "line": 1759,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "domain_data",
+      "reason": "Nome de etapa V5 usado como nome acessível da navegação. Preservar o rótulo autorado; a localização é responsabilidade da configuração de conteúdo.",
+      "consumer": "app/app.js::renderStageNavigation"
+    },
+    {
+      "id": "21ab623c2f30e53b",
+      "source": "app/app.js",
+      "line": 1858,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "catalog_candidate",
+      "reason": "Ação fixa Editar/Continuar para envolve rótulos de etapas V5. Localizar a mensagem com placeholder de stage.label, sem traduzir o nome autorado da etapa.",
+      "consumer": "app/app.js::syncStep",
+      "proposedKey": "config.ui.flow.next_stage_action"
+    },
+    {
+      "id": "6a5f9b85221db095",
+      "source": "app/app.js",
+      "line": 1863,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "catalog_candidate",
+      "reason": "Parâmetro de announce recebe mensagens acessíveis construídas por várias ações /config/: frases fixas e templates com valores V5. Localizar nas origens antes de passar a mensagem pronta.",
+      "consumer": "app/app.js::announce",
+      "proposedKey": "config.ui.accessibility.announcement"
+    },
+    {
+      "id": "f7b29108e95f1feb",
+      "source": "app/app.js",
+      "line": 2051,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "catalog_candidate",
+      "reason": "Fixed user-facing or accessible interface copy in app/app.js::syncPinnedSceneUi; extract a message and preserve any dynamic data as placeholders.",
+      "consumer": "app/app.js::syncPinnedSceneUi",
+      "proposedKey": "config.ui.liberar_cena_fixar_cena.f7b29108"
+    },
+    {
+      "id": "a6a01cd5a7003e7f",
+      "source": "app/app.js",
+      "line": 2052,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "catalog_candidate",
+      "reason": "Fixed user-facing or accessible interface copy in app/app.js::syncPinnedSceneUi; extract a message and preserve any dynamic data as placeholders.",
+      "consumer": "app/app.js::syncPinnedSceneUi",
+      "proposedKey": "config.ui.liberar_cena_fixar_cena.a6a01cd5"
+    },
+    {
+      "id": "fe6c171cefcc3fe3",
+      "source": "app/app.js",
+      "line": 2075,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "catalog_candidate",
+      "reason": "Fixed user-facing or accessible interface copy in app/app.js::setMobileScenePinEnabled; extract a message and preserve any dynamic data as placeholders.",
+      "consumer": "app/app.js::setMobileScenePinEnabled",
+      "proposedKey": "config.ui.cena_fixada_para_contexto_durante_a_configur.fe6c171c"
+    },
+    {
+      "id": "778441f2c57baa7f",
+      "source": "app/app.js",
+      "line": 2086,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "catalog_candidate",
+      "reason": "Fixed user-facing or accessible interface copy in app/app.js::refreshMobileSceneDock; extract a message and preserve any dynamic data as placeholders.",
+      "consumer": "app/app.js::refreshMobileSceneDock",
+      "proposedKey": "config.ui.mini_cena_disponivel_abaixo_das_etapas_selec.778441f2"
+    },
+    {
+      "id": "a8106aee499c5497",
+      "source": "app/app.js",
+      "line": 2097,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "catalog_candidate",
+      "reason": "Fixed user-facing or accessible interface copy in app/app.js::activateScenePipFromLauncher; extract a message and preserve any dynamic data as placeholders.",
+      "consumer": "app/app.js::activateScenePipFromLauncher",
+      "proposedKey": "config.ui.mini_cena_fixada_para_contexto_durante_a_con.a8106aee"
+    },
+    {
+      "id": "1b786729a70d55cc",
+      "source": "app/app.js",
+      "line": 2114,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "catalog_candidate",
+      "reason": "Fixed user-facing or accessible interface copy in app/app.js::activateScenePipFromLauncher; extract a message and preserve any dynamic data as placeholders.",
+      "consumer": "app/app.js::activateScenePipFromLauncher",
+      "proposedKey": "config.ui.mini_cena_disponivel_abaixo_das_etapas_selec.1b786729"
+    },
+    {
+      "id": "c9151806a56ae0a0",
+      "source": "app/app.js",
+      "line": 2152,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "non_localizable",
+      "reason": "Value is a proper brand identity or a numeric count/index, not translatable interface prose.",
+      "consumer": "app/app.js::updateVisibleCount"
+    },
+    {
+      "id": "41dd6104b4d5bdc8",
+      "source": "app/app.js",
+      "line": 2153,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "non_localizable",
+      "reason": "Value is a proper brand identity or a numeric count/index, not translatable interface prose.",
+      "consumer": "app/app.js::updateVisibleCount"
+    },
+    {
+      "id": "2f146b64bffdd6ac",
+      "source": "app/app.js",
+      "line": 2273,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "catalog_candidate",
+      "reason": "Aviso combina nome(s) de produto do catálogo/V5 com frases fixas de dependência. Usar mensagem localizável com placeholders e preservar nomes de itens como dados.",
+      "consumer": "app/app.js::setEntityVisibility",
+      "proposedKey": "config.ui.incluido_como_suporte_necessario_removido_po.2f146b64"
+    },
+    {
+      "id": "6d707f3cc96d302d",
+      "source": "app/app.js",
+      "line": 2315,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "catalog_candidate",
+      "reason": "Aviso combina referência/título do módulo com frase fixa. Localizar a mensagem com placeholders; manter os campos do produto como dados.",
+      "consumer": "app/app.js::selectEntity",
+      "proposedKey": "config.ui.ficha_de_aberta.6d707f3c"
+    },
+    {
+      "id": "bd4945a892960947",
+      "source": "app/app.js",
+      "line": 2339,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "catalog_candidate",
+      "reason": "Fixed user-facing or accessible interface copy in app/app.js::selectEntity; extract a message and preserve any dynamic data as placeholders.",
+      "consumer": "app/app.js::selectEntity",
+      "proposedKey": "config.ui.cor_das_frentes_atualizada_para_o_conjunto.bd4945a8"
+    },
+    {
+      "id": "d6583825797fcac6",
+      "source": "app/app.js",
+      "line": 2349,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "catalog_candidate",
+      "reason": "Fixed user-facing or accessible interface copy in app/app.js::selectEntity; extract a message and preserve any dynamic data as placeholders.",
+      "consumer": "app/app.js::selectEntity",
+      "proposedKey": "config.ui.acabamento_aplicado_somente_ao_modulo_seleci.d6583825"
+    },
+    {
+      "id": "7603af23f401a3a7",
+      "source": "app/app.js",
+      "line": 2370,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "catalog_candidate",
+      "reason": "Fixed user-facing or accessible interface copy in app/app.js::selectEntity; extract a message and preserve any dynamic data as placeholders.",
+      "consumer": "app/app.js::selectEntity",
+      "proposedKey": "config.ui.detalhes_do_modulo_fechados.7603af23"
+    },
+    {
+      "id": "d2f5eeb6083ec52e",
+      "source": "app/app.js",
+      "line": 2404,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "catalog_candidate",
+      "reason": "Fixed user-facing or accessible interface copy in app/app.js::selectEntity; extract a message and preserve any dynamic data as placeholders.",
+      "consumer": "app/app.js::selectEntity",
+      "proposedKey": "config.ui.mini_cena_com_transparencia_ativada_mini_cen.d2f5eeb6"
+    },
+    {
+      "id": "5ca27b82bee45342",
+      "source": "app/app.js",
+      "line": 2411,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "catalog_candidate",
+      "reason": "Fixed user-facing or accessible interface copy in app/app.js::selectEntity; extract a message and preserve any dynamic data as placeholders.",
+      "consumer": "app/app.js::selectEntity",
+      "proposedKey": "config.ui.mini_cena_pequena_mini_cena_media_mini_cena.5ca27b82"
+    },
+    {
+      "id": "22b5d6171e1093b5",
+      "source": "app/app.js",
+      "line": 2488,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "catalog_candidate",
+      "reason": "Aviso de seleção combina uma frase fixa com nome do puxador V5. Localizar a frase e preservar handle.label como dado.",
+      "consumer": "app/app.js::selectEntity",
+      "proposedKey": "config.ui.none_puxador_sera_definido_depois_aplicado_a.22b5d617"
+    },
+    {
+      "id": "c9fa1fd2d99a1b71",
+      "source": "app/app.js",
+      "line": 2501,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "catalog_candidate",
+      "reason": "Aviso combina a ação fixa com stone.label V5. Localizar a frase com placeholder do material.",
+      "consumer": "app/app.js::setStonePackage",
+      "proposedKey": "config.ui.aplicado_ao_conjunto.c9fa1fd2"
+    },
+    {
+      "id": "482a2da8b9e0c88d",
+      "source": "app/app.js",
+      "line": 2522,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "catalog_candidate",
+      "reason": "Fixed user-facing or accessible interface copy in app/app.js::setStonePackage; extract a message and preserve any dynamic data as placeholders.",
+      "consumer": "app/app.js::setStonePackage",
+      "proposedKey": "config.ui.recomecar_a_configuracao_suas_escolhas_atuai.482a2da8"
+    },
+    {
+      "id": "8ab42364f2cca304",
+      "source": "app/app.js",
+      "line": 2535,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "catalog_candidate",
+      "reason": "Fixed user-facing or accessible interface copy in app/app.js::failClosedPublishedConfiguration; extract a message and preserve any dynamic data as placeholders.",
+      "consumer": "app/app.js::failClosedPublishedConfiguration",
+      "proposedKey": "config.ui.nao_foi_possivel_validar_a_configuracao_publ.8ab42364"
+    },
+    {
+      "id": "946cdaee2a2cdeac",
+      "source": "app/config/index.html",
+      "line": 20,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "catalog_candidate",
+      "reason": "Fixed user-facing or accessible interface copy in static /config/ markup; expose it through a locale key while preserving structural markup/attributes.",
+      "consumer": "app/config/index.html:static /config/ markup line 20",
+      "proposedKey": "config.ui.visualizador_interativo_dos_modulos_da_cozin.946cdaee"
+    },
+    {
+      "id": "74408301be7ae582",
+      "source": "app/config/index.html",
+      "line": 24,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "catalog_candidate",
+      "reason": "Fixed user-facing or accessible interface copy in static /config/ markup; expose it through a locale key while preserving structural markup/attributes.",
+      "consumer": "app/config/index.html:static /config/ markup line 24",
+      "proposedKey": "config.ui.casa_em_modulos_configurador.74408301"
+    },
+    {
+      "id": "c1591396a1d569e8",
+      "source": "app/config/index.html",
+      "line": 47,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "non_localizable",
+      "reason": "Nome de marca usado como texto alternativo do logo. É identidade própria Casa em Módulos; preservar a grafia de marca.",
+      "consumer": "app/config/index.html:static /config/ markup line 47"
+    },
+    {
+      "id": "0ba38820a6b4a8d3",
+      "source": "app/config/index.html",
+      "line": 49,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "non_localizable",
+      "reason": "Nome de marca usado no título acessível do site. Preservar a grafia de marca.",
+      "consumer": "app/config/index.html:static /config/ markup line 49"
+    },
+    {
+      "id": "07191f7eefc90dfe",
+      "source": "app/config/index.html",
+      "line": 50,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "catalog_candidate",
+      "reason": "Fixed user-facing or accessible interface copy in static /config/ markup; expose it through a locale key while preserving structural markup/attributes.",
+      "consumer": "app/config/index.html:static /config/ markup line 50",
+      "proposedKey": "config.ui.monte_sua_cozinha_por_modulos.07191f7e"
+    },
+    {
+      "id": "17163130314e5798",
+      "source": "app/config/index.html",
+      "line": 55,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "catalog_candidate",
+      "reason": "Fixed user-facing or accessible interface copy in static /config/ markup; expose it through a locale key while preserving structural markup/attributes.",
+      "consumer": "app/config/index.html:static /config/ markup line 55",
+      "proposedKey": "config.ui.restaurar.17163130"
+    },
+    {
+      "id": "d7195780fb3a72b4",
+      "source": "app/config/index.html",
+      "line": 56,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "symbol_or_decoration",
+      "reason": "Glyph or placeholder is decorative/state punctuation, not a linguistic label; keep it separate from localized copy.",
+      "consumer": "app/config/index.html:static /config/ markup line 56"
+    },
+    {
+      "id": "6fddb808c530d13d",
+      "source": "app/config/index.html",
+      "line": 57,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "catalog_candidate",
+      "reason": "Fixed user-facing or accessible interface copy in static /config/ markup; expose it through a locale key while preserving structural markup/attributes.",
+      "consumer": "app/config/index.html:static /config/ markup line 57",
+      "proposedKey": "config.ui.recomecar.6fddb808"
+    },
+    {
+      "id": "95d0ce96e291d461",
+      "source": "app/config/index.html",
+      "line": 59,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "catalog_candidate",
+      "reason": "Fixed user-facing or accessible interface copy in static /config/ markup; expose it through a locale key while preserving structural markup/attributes.",
+      "consumer": "app/config/index.html:static /config/ markup line 59",
+      "proposedKey": "config.ui.abrir_menu.95d0ce96"
+    },
+    {
+      "id": "4c614614af4665ba",
+      "source": "app/config/index.html",
+      "line": 59,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "structural_or_identifier",
+      "reason": "Value is a DOM relationship, stable scene/catalog code or generated identifier; translating it would break references or identity.",
+      "consumer": "app/config/index.html:static /config/ markup line 59"
+    },
+    {
+      "id": "40ac4b3e1adb46e0",
+      "source": "app/config/index.html",
+      "line": 60,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "catalog_candidate",
+      "reason": "Fixed user-facing or accessible interface copy in static /config/ markup; expose it through a locale key while preserving structural markup/attributes.",
+      "consumer": "app/config/index.html:static /config/ markup line 60",
+      "proposedKey": "config.ui.menu_do_site.40ac4b3e"
+    },
+    {
+      "id": "265895c448ce3518",
+      "source": "app/config/index.html",
+      "line": 73,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "catalog_candidate",
+      "reason": "Fixed user-facing or accessible interface copy in static /config/ markup; expose it through a locale key while preserving structural markup/attributes.",
+      "consumer": "app/config/index.html:static /config/ markup line 73",
+      "proposedKey": "config.ui.visualizacao_da_cozinha.265895c4"
+    },
+    {
+      "id": "041276e8772f31c7",
+      "source": "app/config/index.html",
+      "line": 74,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "catalog_candidate",
+      "reason": "Fixed user-facing or accessible interface copy in static /config/ markup; expose it through a locale key while preserving structural markup/attributes.",
+      "consumer": "app/config/index.html:static /config/ markup line 74",
+      "proposedKey": "config.ui.controles_da_mini_cena.041276e8"
+    },
+    {
+      "id": "edc2f758517548ce",
+      "source": "app/config/index.html",
+      "line": 75,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "catalog_candidate",
+      "reason": "Fixed user-facing or accessible interface copy in static /config/ markup; expose it through a locale key while preserving structural markup/attributes.",
+      "consumer": "app/config/index.html:static /config/ markup line 75",
+      "proposedKey": "config.ui.liberar_cena.edc2f758"
+    },
+    {
+      "id": "86eb8af1756834cf",
+      "source": "app/config/index.html",
+      "line": 75,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "catalog_candidate",
+      "reason": "Fixed user-facing or accessible interface copy in static /config/ markup; expose it through a locale key while preserving structural markup/attributes.",
+      "consumer": "app/config/index.html:static /config/ markup line 75",
+      "proposedKey": "config.ui.liberar_cena.86eb8af1"
+    },
+    {
+      "id": "27a585001637f3a5",
+      "source": "app/config/index.html",
+      "line": 75,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "symbol_or_decoration",
+      "reason": "Glyph or placeholder is decorative/state punctuation, not a linguistic label; keep it separate from localized copy.",
+      "consumer": "app/config/index.html:static /config/ markup line 75"
+    },
+    {
+      "id": "f640a2cb9569b00d",
+      "source": "app/config/index.html",
+      "line": 76,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "catalog_candidate",
+      "reason": "Fixed user-facing or accessible interface copy in static /config/ markup; expose it through a locale key while preserving structural markup/attributes.",
+      "consumer": "app/config/index.html:static /config/ markup line 76",
+      "proposedKey": "config.ui.alternar_transparencia.f640a2cb"
+    },
+    {
+      "id": "de9a09856b365386",
+      "source": "app/config/index.html",
+      "line": 76,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "catalog_candidate",
+      "reason": "Fixed user-facing or accessible interface copy in static /config/ markup; expose it through a locale key while preserving structural markup/attributes.",
+      "consumer": "app/config/index.html:static /config/ markup line 76",
+      "proposedKey": "config.ui.alternar_transparencia.de9a0985"
+    },
+    {
+      "id": "22291dfefde85a93",
+      "source": "app/config/index.html",
+      "line": 76,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "symbol_or_decoration",
+      "reason": "Glyph or placeholder is decorative/state punctuation, not a linguistic label; keep it separate from localized copy.",
+      "consumer": "app/config/index.html:static /config/ markup line 76"
+    },
+    {
+      "id": "9c1b0a94ff31d3f7",
+      "source": "app/config/index.html",
+      "line": 77,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "catalog_candidate",
+      "reason": "Fixed user-facing or accessible interface copy in static /config/ markup; expose it through a locale key while preserving structural markup/attributes.",
+      "consumer": "app/config/index.html:static /config/ markup line 77",
+      "proposedKey": "config.ui.alterar_tamanho_da_mini_cena.9c1b0a94"
+    },
+    {
+      "id": "ca78422044b0d618",
+      "source": "app/config/index.html",
+      "line": 77,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "catalog_candidate",
+      "reason": "Fixed user-facing or accessible interface copy in static /config/ markup; expose it through a locale key while preserving structural markup/attributes.",
+      "consumer": "app/config/index.html:static /config/ markup line 77",
+      "proposedKey": "config.ui.alterar_tamanho.ca784220"
+    },
+    {
+      "id": "3acab6d2ce164944",
+      "source": "app/config/index.html",
+      "line": 77,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "symbol_or_decoration",
+      "reason": "Glyph or placeholder is decorative/state punctuation, not a linguistic label; keep it separate from localized copy.",
+      "consumer": "app/config/index.html:static /config/ markup line 77"
+    },
+    {
+      "id": "e3ff585324c06f45",
+      "source": "app/config/index.html",
+      "line": 81,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "catalog_candidate",
+      "reason": "Fixed user-facing or accessible interface copy in static /config/ markup; expose it through a locale key while preserving structural markup/attributes.",
+      "consumer": "app/config/index.html:static /config/ markup line 81",
+      "proposedKey": "config.ui.cenario_da_cozinha_sem_os_modulos.e3ff5853"
+    },
+    {
+      "id": "d98d522aae6fed36",
+      "source": "app/config/index.html",
+      "line": 92,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "catalog_candidate",
+      "reason": "Fixed user-facing or accessible interface copy in static /config/ markup; expose it through a locale key while preserving structural markup/attributes.",
+      "consumer": "app/config/index.html:static /config/ markup line 92",
+      "proposedKey": "config.ui.modulos_selecionaveis_na_cena.d98d522a"
+    },
+    {
+      "id": "e9ec6fcc5721588f",
+      "source": "app/config/index.html",
+      "line": 100,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "symbol_or_decoration",
+      "reason": "Travessão inicial para estado/contador vazio; é placeholder visual, não texto de idioma.",
+      "consumer": "app/config/index.html:static /config/ markup line 100"
+    },
+    {
+      "id": "5306d69e7b9f332f",
+      "source": "app/config/index.html",
+      "line": 100,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "catalog_candidate",
+      "reason": "Fragmento gramatical entre dois contadores na HTML estática. Não traduzir isoladamente: juntar com visibleCount/totalCount em uma mensagem pluralizada de contagem.",
+      "consumer": "app/config/index.html:static /config/ markup line 100",
+      "proposedKey": "config.ui.scene.visible_module_count"
+    },
+    {
+      "id": "04907bdcdbd5b8dd",
+      "source": "app/config/index.html",
+      "line": 100,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "symbol_or_decoration",
+      "reason": "Travessão final para estado/contador vazio; é placeholder visual, não texto de idioma.",
+      "consumer": "app/config/index.html:static /config/ markup line 100"
+    },
+    {
+      "id": "facfa05b1a083869",
+      "source": "app/config/index.html",
+      "line": 100,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "catalog_candidate",
+      "reason": "Sufixo do contador fixo na HTML. Deve integrar uma mensagem pluralizada com visibleCount e totalCount, em vez de ser localizado como fragmento.",
+      "consumer": "app/config/index.html:static /config/ markup line 100",
+      "proposedKey": "config.ui.scene.visible_module_count"
+    },
+    {
+      "id": "81d69181b6bc2e93",
+      "source": "app/config/index.html",
+      "line": 102,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "catalog_candidate",
+      "reason": "Fixed user-facing or accessible interface copy in static /config/ markup; expose it through a locale key while preserving structural markup/attributes.",
+      "consumer": "app/config/index.html:static /config/ markup line 102",
+      "proposedKey": "config.ui.selecione_um_modulo_na_cena_para_abrir_sua_f.81d69181"
+    },
+    {
+      "id": "d85d695d6ed3fab4",
+      "source": "app/config/index.html",
+      "line": 109,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "catalog_candidate",
+      "reason": "Fixed user-facing or accessible interface copy in static /config/ markup; expose it through a locale key while preserving structural markup/attributes.",
+      "consumer": "app/config/index.html:static /config/ markup line 109",
+      "proposedKey": "config.ui.etapas_da_configuracao.d85d695d"
+    },
+    {
+      "id": "bce4a8f75f445a9d",
+      "source": "app/config/index.html",
+      "line": 110,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "catalog_candidate",
+      "reason": "Fixed user-facing or accessible interface copy in static /config/ markup; expose it through a locale key while preserving structural markup/attributes.",
+      "consumer": "app/config/index.html:static /config/ markup line 110",
+      "proposedKey": "config.ui.fixar_cena_durante_a_configuracao.bce4a8f7"
+    },
+    {
+      "id": "c69dc2ec8519ad73",
+      "source": "app/config/index.html",
+      "line": 110,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "catalog_candidate",
+      "reason": "Fixed user-facing or accessible interface copy in static /config/ markup; expose it through a locale key while preserving structural markup/attributes.",
+      "consumer": "app/config/index.html:static /config/ markup line 110",
+      "proposedKey": "config.ui.fixar_cena.c69dc2ec"
+    },
+    {
+      "id": "430b557269b03778",
+      "source": "app/config/index.html",
+      "line": 113,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "structural_or_identifier",
+      "reason": "Value is a DOM relationship, stable scene/catalog code or generated identifier; translating it would break references or identity.",
+      "consumer": "app/config/index.html:static /config/ markup line 113"
+    },
+    {
+      "id": "3f4ab38b54242708",
+      "source": "app/config/index.html",
+      "line": 116,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "catalog_candidate",
+      "reason": "Fixed user-facing or accessible interface copy in static /config/ markup; expose it through a locale key while preserving structural markup/attributes.",
+      "consumer": "app/config/index.html:static /config/ markup line 116",
+      "proposedKey": "config.ui.modulos.3f4ab38b"
+    },
+    {
+      "id": "3026d170924ad357",
+      "source": "app/config/index.html",
+      "line": 117,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "catalog_candidate",
+      "reason": "Fixed user-facing or accessible interface copy in static /config/ markup; expose it through a locale key while preserving structural markup/attributes.",
+      "consumer": "app/config/index.html:static /config/ markup line 117",
+      "proposedKey": "config.ui.inclua_apenas_o_que_faz_sentido_para_o_seu_a.3026d170"
+    },
+    {
+      "id": "331be4d47fdea77f",
+      "source": "app/config/index.html",
+      "line": 122,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "catalog_candidate",
+      "reason": "Fixed user-facing or accessible interface copy in static /config/ markup; expose it through a locale key while preserving structural markup/attributes.",
+      "consumer": "app/config/index.html:static /config/ markup line 122",
+      "proposedKey": "config.ui.detalhes_do_modulo_selecionado.331be4d4"
+    },
+    {
+      "id": "60a7817d8a7fc8a1",
+      "source": "app/config/index.html",
+      "line": 124,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "catalog_candidate",
+      "reason": "Fixed user-facing or accessible interface copy in static /config/ markup; expose it through a locale key while preserving structural markup/attributes.",
+      "consumer": "app/config/index.html:static /config/ markup line 124",
+      "proposedKey": "config.ui.detalhes_do_modulo.60a7817d"
+    },
+    {
+      "id": "174999a96687fbbe",
+      "source": "app/config/index.html",
+      "line": 125,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "catalog_candidate",
+      "reason": "Fixed user-facing or accessible interface copy in static /config/ markup; expose it through a locale key while preserving structural markup/attributes.",
+      "consumer": "app/config/index.html:static /config/ markup line 125",
+      "proposedKey": "config.ui.selecione_um_modulo_na_cena_ou_na_lista_para.174999a9"
+    },
+    {
+      "id": "5c8547db1d101a76",
+      "source": "app/config/index.html",
+      "line": 127,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "catalog_candidate",
+      "reason": "Fixed user-facing or accessible interface copy in static /config/ markup; expose it through a locale key while preserving structural markup/attributes.",
+      "consumer": "app/config/index.html:static /config/ markup line 127",
+      "proposedKey": "config.ui.detalhes_do_modulo.5c8547db"
+    },
+    {
+      "id": "ebb48659c04c81d7",
+      "source": "app/config/index.html",
+      "line": 129,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "catalog_candidate",
+      "reason": "Fixed user-facing or accessible interface copy in static /config/ markup; expose it through a locale key while preserving structural markup/attributes.",
+      "consumer": "app/config/index.html:static /config/ markup line 129",
+      "proposedKey": "config.ui.lista_de_modulos.ebb48659"
+    },
+    {
+      "id": "350fef9c13ce11af",
+      "source": "app/config/index.html",
+      "line": 135,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "catalog_candidate",
+      "reason": "Fixed user-facing or accessible interface copy in static /config/ markup; expose it through a locale key while preserving structural markup/attributes.",
+      "consumer": "app/config/index.html:static /config/ markup line 135",
+      "proposedKey": "config.ui.acabamentos.350fef9c"
+    },
+    {
+      "id": "88b3aad28b7113e4",
+      "source": "app/config/index.html",
+      "line": 137,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "structural_or_identifier",
+      "reason": "Value is a DOM relationship, stable scene/catalog code or generated identifier; translating it would break references or identity.",
+      "consumer": "app/config/index.html:static /config/ markup line 137"
+    },
+    {
+      "id": "f6a4faa0be3d9387",
+      "source": "app/config/index.html",
+      "line": 139,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "symbol_or_decoration",
+      "reason": "Glyph or placeholder is decorative/state punctuation, not a linguistic label; keep it separate from localized copy.",
+      "consumer": "app/config/index.html:static /config/ markup line 139"
+    },
+    {
+      "id": "fc127bdfc9c6377c",
+      "source": "app/config/index.html",
+      "line": 142,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "catalog_candidate",
+      "reason": "Fixed user-facing or accessible interface copy in static /config/ markup; expose it through a locale key while preserving structural markup/attributes.",
+      "consumer": "app/config/index.html:static /config/ markup line 142",
+      "proposedKey": "config.ui.uma_cor_e_um_puxador_para_a_composicao_a_cai.fc127bdf"
+    },
+    {
+      "id": "2ea95019e6020360",
+      "source": "app/config/index.html",
+      "line": 156,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "catalog_candidate",
+      "reason": "Fixed user-facing or accessible interface copy in static /config/ markup; expose it through a locale key while preserving structural markup/attributes.",
+      "consumer": "app/config/index.html:static /config/ markup line 156",
+      "proposedKey": "config.ui.escolha_global_o_valor_e_rateado_somente_nas.2ea95019"
+    },
+    {
+      "id": "33f42658a839340c",
+      "source": "app/config/index.html",
+      "line": 162,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "structural_or_identifier",
+      "reason": "Value is a DOM relationship, stable scene/catalog code or generated identifier; translating it would break references or identity.",
+      "consumer": "app/config/index.html:static /config/ markup line 162"
+    },
+    {
+      "id": "7acf3f293958e535",
+      "source": "app/config/index.html",
+      "line": 163,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "catalog_candidate",
+      "reason": "Fixed user-facing or accessible interface copy in static /config/ markup; expose it through a locale key while preserving structural markup/attributes.",
+      "consumer": "app/config/index.html:static /config/ markup line 163",
+      "proposedKey": "config.ui.uma_escolha_global_aplicada_uma_vez_a_compos.7acf3f29"
+    },
+    {
+      "id": "1df34de4ba2d8de7",
+      "source": "app/config/index.html",
+      "line": 172,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "structural_or_identifier",
+      "reason": "Value is a DOM relationship, stable scene/catalog code or generated identifier; translating it would break references or identity.",
+      "consumer": "app/config/index.html:static /config/ markup line 172"
+    },
+    {
+      "id": "c0faee7a33c1c4ce",
+      "source": "app/config/index.html",
+      "line": 174,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "catalog_candidate",
+      "reason": "Fixed user-facing or accessible interface copy in static /config/ markup; expose it through a locale key while preserving structural markup/attributes.",
+      "consumer": "app/config/index.html:static /config/ markup line 174",
+      "proposedKey": "config.ui.rodape_de_pedra.c0faee7a"
+    },
+    {
+      "id": "fda509c3f7612b8d",
+      "source": "app/config/index.html",
+      "line": 174,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "catalog_candidate",
+      "reason": "Fixed user-facing or accessible interface copy in static /config/ markup; expose it through a locale key while preserving structural markup/attributes.",
+      "consumer": "app/config/index.html:static /config/ markup line 174",
+      "proposedKey": "config.ui.acabamento_global_para_a_composicao.fda509c3"
+    },
+    {
+      "id": "723002141209c49f",
+      "source": "app/config/index.html",
+      "line": 183,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "structural_or_identifier",
+      "reason": "Value is a DOM relationship, stable scene/catalog code or generated identifier; translating it would break references or identity.",
+      "consumer": "app/config/index.html:static /config/ markup line 183"
+    },
+    {
+      "id": "6400378de61a94f7",
+      "source": "app/config/index.html",
+      "line": 185,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "symbol_or_decoration",
+      "reason": "Glyph or placeholder is decorative/state punctuation, not a linguistic label; keep it separate from localized copy.",
+      "consumer": "app/config/index.html:static /config/ markup line 185"
+    },
+    {
+      "id": "35e4d8bb37ec8cdd",
+      "source": "app/config/index.html",
+      "line": 186,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "catalog_candidate",
+      "reason": "Fixed user-facing or accessible interface copy in static /config/ markup; expose it through a locale key while preserving structural markup/attributes.",
+      "consumer": "app/config/index.html:static /config/ markup line 186",
+      "proposedKey": "config.ui.servicos.35e4d8bb"
+    },
+    {
+      "id": "e14ff9760fb7e5f5",
+      "source": "app/config/index.html",
+      "line": 186,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "catalog_candidate",
+      "reason": "Fixed user-facing or accessible interface copy in static /config/ markup; expose it through a locale key while preserving structural markup/attributes.",
+      "consumer": "app/config/index.html:static /config/ markup line 186",
+      "proposedKey": "config.ui.servicos_globais_que_impactam_uma_vez_o_conj.e14ff976"
+    },
+    {
+      "id": "fe344bc23a3b5236",
+      "source": "app/config/index.html",
+      "line": 190,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "structural_or_identifier",
+      "reason": "Value is a DOM relationship, stable scene/catalog code or generated identifier; translating it would break references or identity.",
+      "consumer": "app/config/index.html:static /config/ markup line 190"
+    },
+    {
+      "id": "08444e83e5cc3b00",
+      "source": "app/config/index.html",
+      "line": 192,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "catalog_candidate",
+      "reason": "Fixed user-facing or accessible interface copy in static /config/ markup; expose it through a locale key while preserving structural markup/attributes.",
+      "consumer": "app/config/index.html:static /config/ markup line 192",
+      "proposedKey": "config.ui.iluminacao_embutida.08444e83"
+    },
+    {
+      "id": "deb7960298c9bba7",
+      "source": "app/config/index.html",
+      "line": 192,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "catalog_candidate",
+      "reason": "Fixed user-facing or accessible interface copy in static /config/ markup; expose it through a locale key while preserving structural markup/attributes.",
+      "consumer": "app/config/index.html:static /config/ markup line 192",
+      "proposedKey": "config.ui.servico_global_que_realca_a_bancada_e_requer.deb79602"
+    },
+    {
+      "id": "7eb9d5aa516426e0",
+      "source": "app/config/index.html",
+      "line": 199,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "structural_or_identifier",
+      "reason": "Value is a DOM relationship, stable scene/catalog code or generated identifier; translating it would break references or identity.",
+      "consumer": "app/config/index.html:static /config/ markup line 199"
+    },
+    {
+      "id": "acfe3b57166b7b61",
+      "source": "app/config/index.html",
+      "line": 201,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "symbol_or_decoration",
+      "reason": "Glyph or placeholder is decorative/state punctuation, not a linguistic label; keep it separate from localized copy.",
+      "consumer": "app/config/index.html:static /config/ markup line 201"
+    },
+    {
+      "id": "30ccef8c08a7e3f0",
+      "source": "app/config/index.html",
+      "line": 202,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "catalog_candidate",
+      "reason": "Fixed user-facing or accessible interface copy in static /config/ markup; expose it through a locale key while preserving structural markup/attributes.",
+      "consumer": "app/config/index.html:static /config/ markup line 202",
+      "proposedKey": "config.ui.sua_composicao.30ccef8c"
+    },
+    {
+      "id": "ed0319c833914ae7",
+      "source": "app/config/index.html",
+      "line": 202,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "catalog_candidate",
+      "reason": "Fixed user-facing or accessible interface copy in static /config/ markup; expose it through a locale key while preserving structural markup/attributes.",
+      "consumer": "app/config/index.html:static /config/ markup line 202",
+      "proposedKey": "config.ui.revise_antes_de_solicitar_a_proposta.ed0319c8"
+    },
+    {
+      "id": "aa25a2c1ca8bed78",
+      "source": "app/config/index.html",
+      "line": 213,
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "decision": "catalog_candidate",
+      "reason": "Fixed user-facing or accessible interface copy in static /config/ markup; expose it through a locale key while preserving structural markup/attributes.",
+      "consumer": "app/config/index.html:static /config/ markup line 213",
+      "proposedKey": "config.ui.continuar_para_acabamentos.aa25a2c1"
+    }
+  ]
+}

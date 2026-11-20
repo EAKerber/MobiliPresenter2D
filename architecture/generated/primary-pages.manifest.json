@@ -1,6 +1,14 @@
 {
-  "schema": "M2DARC03CPublishedPages/1",
+  "schema": "M2DARC03CPublishedPages/2",
   "authority": "architecture/pages",
+  "sourceMap": {
+    "schema": "M2DARC03CProvenanceMap/1",
+    "offsetUnit": "unicode-codepoints",
+    "generator": {
+      "path": "scripts/compile-primary-pages.mjs",
+      "gitBlobSha": "84eaca7c23922bf094bf13a0b1bf337d98b113ec"
+    }
+  },
   "fragment": {
     "path": "architecture/fragments/primary-header.fragment.html",
     "gitBlobSha": "25712fa6f2423372f076d041f9a7253ced088040"
@@ -15,21 +23,881 @@
       "source": "architecture/pages/root.page.html",
       "output": "app/index.html",
       "sourceGitBlobSha": "dcf5b866ce6be55ae8d9e63f539c34fd13788605",
-      "outputGitBlobSha": "8a49e80c28a563d852704b1814bd8b5313184b13"
+      "outputGitBlobSha": "8a49e80c28a563d852704b1814bd8b5313184b13",
+      "sourceMap": {
+        "segments": [
+          {
+            "output": {
+              "start": 0,
+              "end": 1522
+            },
+            "transform": "copy",
+            "origin": {
+              "kind": "page",
+              "path": "architecture/pages/root.page.html",
+              "range": {
+                "start": 0,
+                "end": 1522
+              }
+            }
+          },
+          {
+            "output": {
+              "start": 1522,
+              "end": 1573
+            },
+            "transform": "copy",
+            "origin": {
+              "kind": "shared-fragment",
+              "path": "architecture/fragments/primary-header.fragment.html",
+              "range": {
+                "start": 0,
+                "end": 51
+              }
+            }
+          },
+          {
+            "output": {
+              "start": 1573,
+              "end": 1574
+            },
+            "transform": "route-placeholder-substitution",
+            "origin": {
+              "kind": "route-config",
+              "path": "architecture/fragments/primary-header.routes.json",
+              "pointer": "/routes/0/brandHref",
+              "template": {
+                "path": "architecture/fragments/primary-header.fragment.html",
+                "range": {
+                  "start": 51,
+                  "end": 64
+                }
+              }
+            }
+          },
+          {
+            "output": {
+              "start": 1574,
+              "end": 1876
+            },
+            "transform": "copy",
+            "origin": {
+              "kind": "shared-fragment",
+              "path": "architecture/fragments/primary-header.fragment.html",
+              "range": {
+                "start": 64,
+                "end": 366
+              }
+            }
+          },
+          {
+            "output": {
+              "start": 1876,
+              "end": 1887
+            },
+            "transform": "route-placeholder-substitution",
+            "origin": {
+              "kind": "route-config",
+              "path": "architecture/fragments/primary-header.routes.json",
+              "pointer": "/routes/0/ambientesHref",
+              "template": {
+                "path": "architecture/fragments/primary-header.fragment.html",
+                "range": {
+                  "start": 366,
+                  "end": 383
+                }
+              }
+            }
+          },
+          {
+            "output": {
+              "start": 1887,
+              "end": 1888
+            },
+            "transform": "copy",
+            "origin": {
+              "kind": "shared-fragment",
+              "path": "architecture/fragments/primary-header.fragment.html",
+              "range": {
+                "start": 383,
+                "end": 384
+              }
+            }
+          },
+          {
+            "output": {
+              "start": 1888,
+              "end": 1908
+            },
+            "transform": "conditional-attribute-generation",
+            "origin": {
+              "kind": "generator-rule",
+              "rule": "current-route-to-ambientes-aria-current",
+              "inputs": [
+                {
+                  "kind": "route-config",
+                  "path": "architecture/fragments/primary-header.routes.json",
+                  "pointer": "/routes/0/current"
+                }
+              ],
+              "template": {
+                "path": "architecture/fragments/primary-header.fragment.html",
+                "range": {
+                  "start": 384,
+                  "end": 404
+                }
+              }
+            }
+          },
+          {
+            "output": {
+              "start": 1908,
+              "end": 1931
+            },
+            "transform": "copy",
+            "origin": {
+              "kind": "shared-fragment",
+              "path": "architecture/fragments/primary-header.fragment.html",
+              "range": {
+                "start": 404,
+                "end": 427
+              }
+            }
+          },
+          {
+            "output": {
+              "start": 1931,
+              "end": 1945
+            },
+            "transform": "route-placeholder-substitution",
+            "origin": {
+              "kind": "route-config",
+              "path": "architecture/fragments/primary-header.routes.json",
+              "pointer": "/routes/0/howHref",
+              "template": {
+                "path": "architecture/fragments/primary-header.fragment.html",
+                "range": {
+                  "start": 427,
+                  "end": 438
+                }
+              }
+            }
+          },
+          {
+            "output": {
+              "start": 1945,
+              "end": 1946
+            },
+            "transform": "copy",
+            "origin": {
+              "kind": "shared-fragment",
+              "path": "architecture/fragments/primary-header.fragment.html",
+              "range": {
+                "start": 438,
+                "end": 439
+              }
+            }
+          },
+          {
+            "output": {
+              "start": 1946,
+              "end": 1973
+            },
+            "transform": "copy",
+            "origin": {
+              "kind": "shared-fragment",
+              "path": "architecture/fragments/primary-header.fragment.html",
+              "range": {
+                "start": 453,
+                "end": 480
+              }
+            }
+          },
+          {
+            "output": {
+              "start": 1973,
+              "end": 1980
+            },
+            "transform": "route-placeholder-substitution",
+            "origin": {
+              "kind": "route-config",
+              "path": "architecture/fragments/primary-header.routes.json",
+              "pointer": "/routes/0/aboutHref",
+              "template": {
+                "path": "architecture/fragments/primary-header.fragment.html",
+                "range": {
+                  "start": 480,
+                  "end": 493
+                }
+              }
+            }
+          },
+          {
+            "output": {
+              "start": 1980,
+              "end": 1981
+            },
+            "transform": "copy",
+            "origin": {
+              "kind": "shared-fragment",
+              "path": "architecture/fragments/primary-header.fragment.html",
+              "range": {
+                "start": 493,
+                "end": 494
+              }
+            }
+          },
+          {
+            "output": {
+              "start": 1981,
+              "end": 2200
+            },
+            "transform": "copy",
+            "origin": {
+              "kind": "shared-fragment",
+              "path": "architecture/fragments/primary-header.fragment.html",
+              "range": {
+                "start": 510,
+                "end": 729
+              }
+            }
+          },
+          {
+            "output": {
+              "start": 2200,
+              "end": 2219
+            },
+            "transform": "conditional-attribute-generation",
+            "origin": {
+              "kind": "generator-rule",
+              "rule": "true-config-flag-to-aria-hidden",
+              "inputs": [
+                {
+                  "kind": "route-config",
+                  "path": "architecture/fragments/primary-header.routes.json",
+                  "pointer": "/routes/0/whatsAppIconAriaHidden"
+                }
+              ],
+              "template": {
+                "path": "architecture/fragments/primary-header.fragment.html",
+                "range": {
+                  "start": 729,
+                  "end": 755
+                }
+              }
+            }
+          },
+          {
+            "output": {
+              "start": 2219,
+              "end": 2451
+            },
+            "transform": "copy",
+            "origin": {
+              "kind": "shared-fragment",
+              "path": "architecture/fragments/primary-header.fragment.html",
+              "range": {
+                "start": 755,
+                "end": 987
+              }
+            }
+          },
+          {
+            "output": {
+              "start": 2451,
+              "end": 7733
+            },
+            "transform": "copy",
+            "origin": {
+              "kind": "page",
+              "path": "architecture/pages/root.page.html",
+              "range": {
+                "start": 1551,
+                "end": 6833
+              }
+            }
+          }
+        ]
+      }
     },
     {
       "route": "/about/",
       "source": "architecture/pages/about.page.html",
       "output": "app/about/index.html",
       "sourceGitBlobSha": "69c2c1b2e6f7eb0bf70da35e90edf4348bca8afc",
-      "outputGitBlobSha": "5124d3d930073fdfad1a8602cca999ea3413cd5e"
+      "outputGitBlobSha": "5124d3d930073fdfad1a8602cca999ea3413cd5e",
+      "sourceMap": {
+        "segments": [
+          {
+            "output": {
+              "start": 0,
+              "end": 1112
+            },
+            "transform": "copy",
+            "origin": {
+              "kind": "page",
+              "path": "architecture/pages/about.page.html",
+              "range": {
+                "start": 0,
+                "end": 1112
+              }
+            }
+          },
+          {
+            "output": {
+              "start": 1112,
+              "end": 1163
+            },
+            "transform": "copy",
+            "origin": {
+              "kind": "shared-fragment",
+              "path": "architecture/fragments/primary-header.fragment.html",
+              "range": {
+                "start": 0,
+                "end": 51
+              }
+            }
+          },
+          {
+            "output": {
+              "start": 1163,
+              "end": 1164
+            },
+            "transform": "route-placeholder-substitution",
+            "origin": {
+              "kind": "route-config",
+              "path": "architecture/fragments/primary-header.routes.json",
+              "pointer": "/routes/1/brandHref",
+              "template": {
+                "path": "architecture/fragments/primary-header.fragment.html",
+                "range": {
+                  "start": 51,
+                  "end": 64
+                }
+              }
+            }
+          },
+          {
+            "output": {
+              "start": 1164,
+              "end": 1466
+            },
+            "transform": "copy",
+            "origin": {
+              "kind": "shared-fragment",
+              "path": "architecture/fragments/primary-header.fragment.html",
+              "range": {
+                "start": 64,
+                "end": 366
+              }
+            }
+          },
+          {
+            "output": {
+              "start": 1466,
+              "end": 1477
+            },
+            "transform": "route-placeholder-substitution",
+            "origin": {
+              "kind": "route-config",
+              "path": "architecture/fragments/primary-header.routes.json",
+              "pointer": "/routes/1/ambientesHref",
+              "template": {
+                "path": "architecture/fragments/primary-header.fragment.html",
+                "range": {
+                  "start": 366,
+                  "end": 383
+                }
+              }
+            }
+          },
+          {
+            "output": {
+              "start": 1477,
+              "end": 1478
+            },
+            "transform": "copy",
+            "origin": {
+              "kind": "shared-fragment",
+              "path": "architecture/fragments/primary-header.fragment.html",
+              "range": {
+                "start": 383,
+                "end": 384
+              }
+            }
+          },
+          {
+            "output": {
+              "start": 1478,
+              "end": 1501
+            },
+            "transform": "copy",
+            "origin": {
+              "kind": "shared-fragment",
+              "path": "architecture/fragments/primary-header.fragment.html",
+              "range": {
+                "start": 404,
+                "end": 427
+              }
+            }
+          },
+          {
+            "output": {
+              "start": 1501,
+              "end": 1515
+            },
+            "transform": "route-placeholder-substitution",
+            "origin": {
+              "kind": "route-config",
+              "path": "architecture/fragments/primary-header.routes.json",
+              "pointer": "/routes/1/howHref",
+              "template": {
+                "path": "architecture/fragments/primary-header.fragment.html",
+                "range": {
+                  "start": 427,
+                  "end": 438
+                }
+              }
+            }
+          },
+          {
+            "output": {
+              "start": 1515,
+              "end": 1516
+            },
+            "transform": "copy",
+            "origin": {
+              "kind": "shared-fragment",
+              "path": "architecture/fragments/primary-header.fragment.html",
+              "range": {
+                "start": 438,
+                "end": 439
+              }
+            }
+          },
+          {
+            "output": {
+              "start": 1516,
+              "end": 1543
+            },
+            "transform": "copy",
+            "origin": {
+              "kind": "shared-fragment",
+              "path": "architecture/fragments/primary-header.fragment.html",
+              "range": {
+                "start": 453,
+                "end": 480
+              }
+            }
+          },
+          {
+            "output": {
+              "start": 1543,
+              "end": 1550
+            },
+            "transform": "route-placeholder-substitution",
+            "origin": {
+              "kind": "route-config",
+              "path": "architecture/fragments/primary-header.routes.json",
+              "pointer": "/routes/1/aboutHref",
+              "template": {
+                "path": "architecture/fragments/primary-header.fragment.html",
+                "range": {
+                  "start": 480,
+                  "end": 493
+                }
+              }
+            }
+          },
+          {
+            "output": {
+              "start": 1550,
+              "end": 1551
+            },
+            "transform": "copy",
+            "origin": {
+              "kind": "shared-fragment",
+              "path": "architecture/fragments/primary-header.fragment.html",
+              "range": {
+                "start": 493,
+                "end": 494
+              }
+            }
+          },
+          {
+            "output": {
+              "start": 1551,
+              "end": 1571
+            },
+            "transform": "conditional-attribute-generation",
+            "origin": {
+              "kind": "generator-rule",
+              "rule": "current-route-to-about-aria-current",
+              "inputs": [
+                {
+                  "kind": "route-config",
+                  "path": "architecture/fragments/primary-header.routes.json",
+                  "pointer": "/routes/1/current"
+                }
+              ],
+              "template": {
+                "path": "architecture/fragments/primary-header.fragment.html",
+                "range": {
+                  "start": 494,
+                  "end": 510
+                }
+              }
+            }
+          },
+          {
+            "output": {
+              "start": 1571,
+              "end": 1790
+            },
+            "transform": "copy",
+            "origin": {
+              "kind": "shared-fragment",
+              "path": "architecture/fragments/primary-header.fragment.html",
+              "range": {
+                "start": 510,
+                "end": 729
+              }
+            }
+          },
+          {
+            "output": {
+              "start": 1790,
+              "end": 2022
+            },
+            "transform": "copy",
+            "origin": {
+              "kind": "shared-fragment",
+              "path": "architecture/fragments/primary-header.fragment.html",
+              "range": {
+                "start": 755,
+                "end": 987
+              }
+            }
+          },
+          {
+            "output": {
+              "start": 2022,
+              "end": 6616
+            },
+            "transform": "copy",
+            "origin": {
+              "kind": "page",
+              "path": "architecture/pages/about.page.html",
+              "range": {
+                "start": 1141,
+                "end": 5735
+              }
+            }
+          }
+        ]
+      }
     },
     {
       "route": "/how-it-works/",
       "source": "architecture/pages/how-it-works.page.html",
       "output": "app/how-it-works/index.html",
       "sourceGitBlobSha": "20142055adc78262ac4bcb73d2a25e654d9c6e95",
-      "outputGitBlobSha": "ad5a0bb73388ebad3b39afb06ea9280dbbed82c9"
+      "outputGitBlobSha": "ad5a0bb73388ebad3b39afb06ea9280dbbed82c9",
+      "sourceMap": {
+        "segments": [
+          {
+            "output": {
+              "start": 0,
+              "end": 1186
+            },
+            "transform": "copy",
+            "origin": {
+              "kind": "page",
+              "path": "architecture/pages/how-it-works.page.html",
+              "range": {
+                "start": 0,
+                "end": 1186
+              }
+            }
+          },
+          {
+            "output": {
+              "start": 1186,
+              "end": 1237
+            },
+            "transform": "copy",
+            "origin": {
+              "kind": "shared-fragment",
+              "path": "architecture/fragments/primary-header.fragment.html",
+              "range": {
+                "start": 0,
+                "end": 51
+              }
+            }
+          },
+          {
+            "output": {
+              "start": 1237,
+              "end": 1240
+            },
+            "transform": "route-placeholder-substitution",
+            "origin": {
+              "kind": "route-config",
+              "path": "architecture/fragments/primary-header.routes.json",
+              "pointer": "/routes/2/brandHref",
+              "template": {
+                "path": "architecture/fragments/primary-header.fragment.html",
+                "range": {
+                  "start": 51,
+                  "end": 64
+                }
+              }
+            }
+          },
+          {
+            "output": {
+              "start": 1240,
+              "end": 1542
+            },
+            "transform": "copy",
+            "origin": {
+              "kind": "shared-fragment",
+              "path": "architecture/fragments/primary-header.fragment.html",
+              "range": {
+                "start": 64,
+                "end": 366
+              }
+            }
+          },
+          {
+            "output": {
+              "start": 1542,
+              "end": 1555
+            },
+            "transform": "route-placeholder-substitution",
+            "origin": {
+              "kind": "route-config",
+              "path": "architecture/fragments/primary-header.routes.json",
+              "pointer": "/routes/2/ambientesHref",
+              "template": {
+                "path": "architecture/fragments/primary-header.fragment.html",
+                "range": {
+                  "start": 366,
+                  "end": 383
+                }
+              }
+            }
+          },
+          {
+            "output": {
+              "start": 1555,
+              "end": 1556
+            },
+            "transform": "copy",
+            "origin": {
+              "kind": "shared-fragment",
+              "path": "architecture/fragments/primary-header.fragment.html",
+              "range": {
+                "start": 383,
+                "end": 384
+              }
+            }
+          },
+          {
+            "output": {
+              "start": 1556,
+              "end": 1579
+            },
+            "transform": "copy",
+            "origin": {
+              "kind": "shared-fragment",
+              "path": "architecture/fragments/primary-header.fragment.html",
+              "range": {
+                "start": 404,
+                "end": 427
+              }
+            }
+          },
+          {
+            "output": {
+              "start": 1579,
+              "end": 1581
+            },
+            "transform": "route-placeholder-substitution",
+            "origin": {
+              "kind": "route-config",
+              "path": "architecture/fragments/primary-header.routes.json",
+              "pointer": "/routes/2/howHref",
+              "template": {
+                "path": "architecture/fragments/primary-header.fragment.html",
+                "range": {
+                  "start": 427,
+                  "end": 438
+                }
+              }
+            }
+          },
+          {
+            "output": {
+              "start": 1581,
+              "end": 1582
+            },
+            "transform": "copy",
+            "origin": {
+              "kind": "shared-fragment",
+              "path": "architecture/fragments/primary-header.fragment.html",
+              "range": {
+                "start": 438,
+                "end": 439
+              }
+            }
+          },
+          {
+            "output": {
+              "start": 1582,
+              "end": 1602
+            },
+            "transform": "conditional-attribute-generation",
+            "origin": {
+              "kind": "generator-rule",
+              "rule": "current-route-to-how-aria-current",
+              "inputs": [
+                {
+                  "kind": "route-config",
+                  "path": "architecture/fragments/primary-header.routes.json",
+                  "pointer": "/routes/2/current"
+                }
+              ],
+              "template": {
+                "path": "architecture/fragments/primary-header.fragment.html",
+                "range": {
+                  "start": 439,
+                  "end": 453
+                }
+              }
+            }
+          },
+          {
+            "output": {
+              "start": 1602,
+              "end": 1629
+            },
+            "transform": "copy",
+            "origin": {
+              "kind": "shared-fragment",
+              "path": "architecture/fragments/primary-header.fragment.html",
+              "range": {
+                "start": 453,
+                "end": 480
+              }
+            }
+          },
+          {
+            "output": {
+              "start": 1629,
+              "end": 1638
+            },
+            "transform": "route-placeholder-substitution",
+            "origin": {
+              "kind": "route-config",
+              "path": "architecture/fragments/primary-header.routes.json",
+              "pointer": "/routes/2/aboutHref",
+              "template": {
+                "path": "architecture/fragments/primary-header.fragment.html",
+                "range": {
+                  "start": 480,
+                  "end": 493
+                }
+              }
+            }
+          },
+          {
+            "output": {
+              "start": 1638,
+              "end": 1639
+            },
+            "transform": "copy",
+            "origin": {
+              "kind": "shared-fragment",
+              "path": "architecture/fragments/primary-header.fragment.html",
+              "range": {
+                "start": 493,
+                "end": 494
+              }
+            }
+          },
+          {
+            "output": {
+              "start": 1639,
+              "end": 1858
+            },
+            "transform": "copy",
+            "origin": {
+              "kind": "shared-fragment",
+              "path": "architecture/fragments/primary-header.fragment.html",
+              "range": {
+                "start": 510,
+                "end": 729
+              }
+            }
+          },
+          {
+            "output": {
+              "start": 1858,
+              "end": 1877
+            },
+            "transform": "conditional-attribute-generation",
+            "origin": {
+              "kind": "generator-rule",
+              "rule": "true-config-flag-to-aria-hidden",
+              "inputs": [
+                {
+                  "kind": "route-config",
+                  "path": "architecture/fragments/primary-header.routes.json",
+                  "pointer": "/routes/2/whatsAppIconAriaHidden"
+                }
+              ],
+              "template": {
+                "path": "architecture/fragments/primary-header.fragment.html",
+                "range": {
+                  "start": 729,
+                  "end": 755
+                }
+              }
+            }
+          },
+          {
+            "output": {
+              "start": 1877,
+              "end": 2109
+            },
+            "transform": "copy",
+            "origin": {
+              "kind": "shared-fragment",
+              "path": "architecture/fragments/primary-header.fragment.html",
+              "range": {
+                "start": 755,
+                "end": 987
+              }
+            }
+          },
+          {
+            "output": {
+              "start": 2109,
+              "end": 32597
+            },
+            "transform": "copy",
+            "origin": {
+              "kind": "page",
+              "path": "architecture/pages/how-it-works.page.html",
+              "range": {
+                "start": 1215,
+                "end": 31703
+              }
+            }
+          }
+        ]
+      }
     }
   ]
 }

@@ -1,0 +1,439 @@
+{
+  "schemaVersion": "ARC13ConsistencyJudge 1.0",
+  "reviewDate": "2026-11-13",
+  "inventory": {
+    "path": "architecture/arc13/ui-text-candidates.json",
+    "sha256": "904c49a3b32722ece528a468e030b10800def07a61cbcf5811f01bfd00cfe391",
+    "occurrences": 1012
+  },
+  "receiptReconciliation": {
+    "receipts": [
+      {
+        "file": "public.json",
+        "schema": "decisions[] + entryCount",
+        "ids": 486
+      },
+      {
+        "file": "admin-access.json",
+        "schema": "entries[] + summary.completed; owners admin/access",
+        "ids": 288
+      },
+      {
+        "file": "config.json",
+        "schema": "decisions[] + scope.entries",
+        "ids": 197
+      },
+      {
+        "file": "shared-runtime.json",
+        "schema": "reviews[] + reviewedOccurrences",
+        "ids": 41
+      }
+    ],
+    "normalizedIds": 1012,
+    "uniqueIds": 1012,
+    "duplicates": 0,
+    "missingFromInventory": 0,
+    "extraToInventory": 0,
+    "exactInventoryCoverage": true,
+    "note": "Os quatro formatos foram normalizados e comparados ao conjunto de IDs do inventário. Dois recibos não gravam SHA do inventário; a correspondência foi verificada por cobertura de IDs."
+  },
+  "reviewSummary": {
+    "reviewerDecisions": {
+      "catalog_candidate": 749,
+      "commercial_data": 26,
+      "domain_data": 40,
+      "non_localizable": 35,
+      "structural_or_identifier": 85,
+      "symbol_or_decoration": 64,
+      "unknown": 13
+    },
+    "repeatedExactTextGroupsWithConflictingClassification": 0,
+    "unknownDisposition": [
+      {
+        "group": "generic-transport-sinks",
+        "ids": [
+          "1de742289f4c4ea4",
+          "314373af94add2e3",
+          "5556251b0531a7a0",
+          "b8dc425240d14303"
+        ],
+        "recommendation": "exclude",
+        "decision": "São sinks/helpers de transporte (viewer element, admin setMessage, makeRuleSelect, nó de texto). Não são donos da copy. Classificar strings fixas e dados nos callsites; não deixar esses quatro casos como pendência semântica."
+      },
+      {
+        "group": "native-prompt-fields",
+        "ids": [
+          "461b0ecce2477af4",
+          "7b273ae567fcbfc8"
+        ],
+        "recommendation": "separate-key",
+        "decision": "Em window.prompt, o título fixo Nome da nova seção é candidato ao catálogo; o valor inicial vem de item/configuração e continua dado editável. São campos diferentes, sem pendência de classificação."
+      },
+      {
+        "group": "identity-provider-errors",
+        "ids": [
+          "09a0896b6fed56a1",
+          "2eb4e3acbf428bd1",
+          "8b8d571a39666acd",
+          "4f0a240cda4e8c1a"
+        ],
+        "recommendation": "needs-owner-decision",
+        "decision": "Os sinks combinam error.message externo com fallback fixo. O texto bruto do provider fica fora do catálogo; os fallbacks locais são candidatos separados.",
+        "pendingOwner": "Escolher se códigos estáveis conhecidos serão mapeados para mensagens amistosas ou se a interface usará somente o fallback local genérico."
+      },
+      {
+        "group": "hierarchy-validation-diagnostic",
+        "ids": [
+          "8aba48247045874e"
+        ],
+        "recommendation": "needs-owner-decision",
+        "decision": "validateHierarchyAdministration retorna diagnósticos técnicos em inglês com IDs/caminhos e commitHierarchy os mostra no Admin.",
+        "pendingOwner": "Definir se esses detalhes ficam como diagnóstico de suporte ou se falhas comuns ganham mensagens administrativas localizáveis."
+      },
+      {
+        "group": "api-save-publication-errors",
+        "ids": [
+          "df3bb12e50c2df35",
+          "79ec0f58646f3823"
+        ],
+        "recommendation": "needs-owner-decision",
+        "decision": "Os catch blocks podem receber mensagens dinâmicas da API e têm fallbacks fixos. Catalogar os fallbacks; manter error.message fora do catálogo até distinguir códigos estáveis.",
+        "pendingOwner": "Definir quais erros da API têm códigos estáveis e precisam de copy local."
+      }
+    ],
+    "unknownsAccounted": 13,
+    "unknownSinkOccurrencesStillMixed": 7,
+    "unknownGenericOrFieldBoundaryResolved": 6,
+    "proposedKeyAudit": {
+      "catalogCandidatesWithProposal": 749,
+      "distinctProposedKeyNames": 699,
+      "groupsWithReusedProposal": 24,
+      "occurrencesInThoseGroups": 74,
+      "reusedGroupsWithDifferentTextOrExpression": 3,
+      "note": "Sao propostas do recibo para revisao, nao nomes canonicos de runtime."
+    }
+  },
+  "keyCollisions": [
+    {
+      "group": "visible-module-count-fragments",
+      "ids": [
+        "5306d69e7b9f332f",
+        "facfa05b1a083869"
+      ],
+      "source": "app/config/index.html:100",
+      "route": "/config/",
+      "values": [
+        " de ",
+        " módulos visíveis"
+      ],
+      "proposedKey": "config.ui.scene.visible_module_count",
+      "recommendation": "needs-owner-decision",
+      "rationale": "Os dois fragmentos pertencem à mesma frase e não podem usar a mesma chave isoladamente. Montar mensagem completa com contagens dinâmicas e pluralização.",
+      "pendingOwner": "Definir redação, ordem e regra plural do contador para cada locale."
+    },
+    {
+      "group": "horizontal-dimension-template",
+      "ids": [
+        "aedae170f2ea45be",
+        "85f5411f0bc1121d"
+      ],
+      "source": [
+        "app/core/technical-drawings.js:83",
+        "app/core/technical-drawings.js:124"
+      ],
+      "routes": [
+        "/config/",
+        "/viewer/"
+      ],
+      "proposedKey": "drawing.dimension.horizontal",
+      "recommendation": "merge-key",
+      "rationale": "Ambas as expressões renderizam rótulo horizontal + medida em mm; os valores vêm da vista/eixo e da ficha técnica. É um template reutilizável, sem criar chave canônica neste parecer.",
+      "pendingOwner": "Aprovar política comum de notação de eixo, unidade e formatação das cotas junto ao restante do desenho técnico."
+    },
+    {
+      "group": "home-link-accessible-name",
+      "ids": [
+        "2f0337ef2f5c5e9a",
+        "a4f19243c147b4fb",
+        "6c06f82283064a24",
+        "c19ee05f1f2c5ce8"
+      ],
+      "routes": [
+        "/",
+        "/about/",
+        "/how-it-works/",
+        "/viewer/",
+        "/access/",
+        "/access/manage",
+        "/admin"
+      ],
+      "suggestedKeys": [
+        "navigation.home.accessibleLabel",
+        "access.confirm.line26.*",
+        "access.manage.line45.*",
+        "admin.page.line19.*"
+      ],
+      "values": [
+        "Casa em Módulos, início",
+        "Casa em Módulos — início"
+      ],
+      "recommendation": "needs-owner-decision",
+      "rationale": "Todos nomeiam o link do wordmark para a página inicial. As propostas não são canônicas e o conteúdo diverge em vírgula versus travessão.",
+      "pendingOwner": "Escolher uma pontuação/forma acessível e depois compartilhar o mesmo significado em todas as páginas.",
+      "relatedEquivalentOccurrences": [
+        {
+          "id": "b48d3866e85996bd",
+          "route": "/access/",
+          "source": "app/access/index.html:26",
+          "proposal": "access.confirm.line26.*"
+        },
+        {
+          "id": "81a6d89bbdea70bc",
+          "route": "/access/manage",
+          "source": "app/access/manage.html:45",
+          "proposal": "access.manage.line45.*"
+        },
+        {
+          "id": "7b0753494b736d68",
+          "route": "/admin",
+          "source": "app/admin.html:19",
+          "proposal": "admin.page.line19.*"
+        }
+      ]
+    }
+  ],
+  "componentStateReview": {
+    "reviewer": "Common Sense Judge (read-only source review)",
+    "reviewedOn": "2026-11-13",
+    "inventorySha256": "904c49a3b32722ece528a468e030b10800def07a61cbcf5811f01bfd00cfe391",
+    "routes": [
+      "/admin"
+    ],
+    "evidence": [
+      "app/admin/admin.js:234-267",
+      "app/admin/admin.js:704-713,1664-1672",
+      "app/admin/admin.js:853-860,1346-1364",
+      "app/admin/admin.js:874-888,959-982,1026-1056",
+      "app/admin/admin.js:1000-1007,1393-1402",
+      "app/admin/admin.js:1141-1163,1489-1500,1950-1999",
+      "app/admin/admin.js:1710-1741",
+      "app/app.js:1798",
+      "app/admin/admin.css:6,33,88,107,126,134,214-217"
+    ],
+    "sharedPrimitive": "Todos usam input[type=checkbox] nativo; a maioria segue o foco global, mas o controle de publicação de preço tem regra própria de 3px. O estado marcado/desmarcado sozinho não demonstra equivalência semântica.",
+    "stateFamilies": [
+      {
+        "family": "initial-entity-staté",
+        "sinkIds": [
+          "852e7699499e4703"
+        ],
+        "accessibleNameSinkIds": [
+          "3b963de4bff4c87e"
+        ],
+        "contract": "Definé visibilidade inicial de módulo/objeto no Configurador; app/app.js:1798 aplica initialState.entities a visibilityByEntity. O rótulo do objeto diz ativo, mas o efeito é visibilidade.",
+        "visual": "initial-state-option; 10px/muted; sem accent-color explicito, logo check azul depende do navegador/sistema.",
+        "share": "Compartilhar a familia visual de estado inicial; manter copy e contrato diferenciados por tipo até aprovacao."
+      },
+      {
+        "family": "initial-service-selection",
+        "sinkIds": [
+          "7ef47d84204a2578"
+        ],
+        "accessibleNameSinkIds": [
+          "e0d9bd67f4de94ba"
+        ],
+        "contract": "Para serviços, registra seleção inicial em initialState.services; não é visibilidade de entidade.",
+        "visual": "Usa a mesma classe initial-state-option.",
+        "share": "Pode compartilhar a casca de estado inicial; manter contrato de servico distinto."
+      },
+      {
+        "family": "initial-viewer-visibility",
+        "sinkIds": [
+          "709ad1019bfc6a05"
+        ],
+        "accessibleNameSinkIds": [
+          "53fb3aeaa2fdd8db"
+        ],
+        "contract": "Grava initialState.viewerEntities e controla visibilidade inicial no Viewer, independente do Configurador.",
+        "visual": "initial-state-option, texto e nome acessível referem Viewer.",
+        "share": "Compartilhar apenas layout base; manter estado separado."
+      },
+      {
+        "family": "stage-availability",
+        "sinkIds": [
+          "372ab0a32af69fc6"
+        ],
+        "accessibleNameSinkIds": [
+          "0664edc4b387792d"
+        ],
+        "contract": "Altera stage.enabled, a disponibilidade da etapa inteira, e os modulos/resumo/etapa vazia desativados.",
+        "visual": ".switch; 12px/muted e accent-color var(--accent).",
+        "share": "Manter separado de estado inicial e disponibilidade de item."
+      },
+      {
+        "family": "customer-availability",
+        "sinkIds": [
+          "0a351b69a83f435b",
+          "955c512b062561d1"
+        ],
+        "contract": "Acabamento altera finish.enabled; puxador altera handles-all.materialIds. Ambos mostram Disponível para clientes, mas mantêm regras independentes.",
+        "visual": "Ambos usam .switch e accent da marca.",
+        "share": "A copy e a familia visual podem ser compartilhadas; estado e regra continuam independentes. Acabamento bloqueia preventivamente a última opção; puxador reverte a tentativa e mostra erro."
+      },
+      {
+        "family": "association-and-property",
+        "sinkIds": [
+          "682114dee603c910"
+        ],
+        "evidence": [
+          "app/admin/admin.js:874-888",
+          "app/admin/admin.js:959-982",
+          "app/admin/admin.js:1026-1056"
+        ],
+        "contract": "Associa modulos a acabamentos, matériais a alvos e seleciona matérial por grupo; Sem cor/tinta base altera matérial.color e fica disabled fora de textura.",
+        "visual": "Checkboxes nativos em listas; a maioria recebe accent de tema (admin.css:88,126,134), noColor não tem regra accent explicita.",
+        "share": "Agrupar associações/propriedade por contexto de seleção; não fundir com estado inicial ou disponibilidade geral."
+      },
+      {
+        "family": "draft-price-publication",
+        "sinkIds": [
+          "12a6c7bb28764426"
+        ],
+        "contract": "Altera apenas flag no modelo de rascunho; habilitado apenas com schema V5. A publicação requer botao separado.",
+        "visual": "Classe propria: input 20px, texto bold 14px, accent e foco de 3px; disabled com opacity .65. O aviso explica que o rascunho não publica por si.",
+        "share": "Manter semântica e tratamento visual proprios."
+      }
+    ],
+    "judgement": "As cores azul nativo e bege/de marca refletem regras CSS diferentes, mas não provam hierarquia deliberada. Compartilhar apenas familias apoiadas pelo contrato: estado inicial, .switch para disponibilidade e seleção/associacao contextual. Nao uniformizar todos os checkboxes; as regras funcionais diferem.",
+    "pendingDecisions": [
+      {
+        "priority": "P1",
+        "topic": "Accessible names and staté wording",
+        "questions": [
+          "O controle de modulo deve ser anunciado como visibilidade inicial, alinhando o nome acessível ao efeito?",
+          "Que rótulo descreve o objeto, já que o texto ativo corresponde a visibilidade?",
+          "O nome acessível da etapa deve descrever disponibilidade em vez de “Ativar etapa” quando ela já está ativa?"
+        ],
+        "evidence": [
+          "app/admin/admin.js:241-244",
+          "app/admin/admin.js:263-266",
+          "app/admin/admin.js:711-712",
+          "app/app.js:1798"
+        ],
+        "blocks": "Aprovacao final da copy/semântica acessível do Admin."
+      },
+      {
+        "priority": "P1",
+        "topic": "Draft versus customer-facing availability",
+        "question": "Acabamentos e puxadores mudam um rascunho e so entram em vigor apos Publicar configuracao. O contexto existente basta, ou os rótulos/avisos devem explicitar disponibilidade para a proxima publicação?",
+        "evidence": [
+          "app/admin/admin.js:853-860,1346-1364",
+          "app/admin/admin.js:1000-1007,1393-1402",
+          "app/admin/admin.js:1141-1163,1489-1500"
+        ],
+        "blocks": "Decisao de produto sobre expectativa da acao; não altera a regra de publicação."
+      },
+      {
+        "priority": "P2",
+        "topic": "Minimum-one-option feedback",
+        "question": "A restrição da última opção deve ter o mesmo bloqueio preventivo e motivo para acabamentos e puxadores?",
+        "evidence": [
+          "app/admin/admin.js:858",
+          "app/admin/admin.js:1399-1400"
+        ],
+        "blocks": "Consistencia de feedback e confirmacao do invariante de dominio."
+      },
+      {
+        "priority": "P2",
+        "topic": "Visual hierarchy and accent",
+        "question": "Os defaults por item devem continuar discretos com accent nativo, ou seguir accent de marca? Qual saliência cada familia deve ter?",
+        "evidence": [
+          "app/admin/admin.css:33,88,107,126,134"
+        ],
+        "blocks": "Normalizacao visual; a cor nativa varia com browser/OS e noColor não tem accent explicito."
+      },
+      {
+        "priority": "P2",
+        "topic": "Focus treatment exception",
+        "question": "O foco de 3px no controle de preco e uma excecao intencional ao contorno global de 2px?",
+        "evidence": [
+          "app/admin/admin.css:6,217"
+        ],
+        "blocks": "Revisao visual/acessibilidade antes de harmonizar foco."
+      }
+    ],
+    "runtimeValidationRequired": [
+      "Admin autenticado em claro/escuro; teclado e focus-visible; estado marcado/desmarcado; disabled por motivo; combinacao de foco e seleção; nomes e estados no leitor de tela; medir CSSOM/contraste. Nenhuma validação visual/assistiva foi realizada nesta revisao estatica."
+    ],
+    "limitations": [
+      "Review estatico do codigo e do inventario ARC13, não validação em browser ou leitor de tela.",
+      "Nao aprova alterações de produto, não define chaves, nem presume que todos os controles devam compartilhar estilo."
+    ],
+    "examplesCompared": [
+      {
+        "example": "Iniciar ativo (azul nativo)",
+        "family": "initial-state controls; item subtype is not identifiable from this screenshot alone",
+        "candidateSinkIds": [
+          "852e7699499e4703",
+          "7ef47d84204a2578"
+        ],
+        "evidence": "app/admin/admin.js:244 uses this copy for non-module entity visibility; :266 uses the same copy for initial service selection. Both use .initial-state-option (admin.css:107) without accent-color. Inspect rendered item context before assigning the screenshot to either subtype."
+      },
+      {
+        "example": "Ativa (tom de marca)",
+        "family": "stage-availability",
+        "sinkId": "372ab0a32af69fc6",
+        "evidence": "app/admin/admin.js:704-712; app/admin/admin.css:33. .switch define accent-color: var(--accent)."
+      }
+    ]
+  },
+  "limitations": [
+    "O parecer agrupa equivalências repetidas e padrões de código confirmados; não cria chaves canônicas nem altera código.",
+    "A validação foi estrutural dos recibos/JSON e da cobertura de IDs; nenhuma suíte de aplicação ou revisão visual em browser foi executada."
+  ],
+  "inventorySchemaVersion": 4,
+  "inventorySha256": "904c49a3b32722ece528a468e030b10800def07a61cbcf5811f01bfd00cfe391",
+  "reconciledOn": "2026-11-14",
+  "supersedes": "docs/architecture/arc13/reviews/2026-11-13/consistency-judge.json",
+  "revalidation": {
+    "kind": "inventory-identity-reconciliation",
+    "priorInventorySha256": "8765873a096fe95167e4fba74838258e47428fab0e12d16af9b6c92a3e34a51e",
+    "currentInventorySha256": "904c49a3b32722ece528a468e030b10800def07a61cbcf5811f01bfd00cfe391",
+    "sinkIdsPreserved": 1012,
+    "sourceEntryIdsPreserved": 359,
+    "existingDispositionsChanged": false,
+    "note": "The additive authoring field changes provenance only; this is not a new semantic review."
+  },
+  "authoringProvenance": {
+    "status": "mapped",
+    "scope": "411 retained HTML sink entries in the three ARC-03C generated primary pages",
+    "mappedSinkOccurrences": 411,
+    "unresolvedSinkOccurrences": 0,
+    "outsideSourceMapOccurrences": 601,
+    "outsideSourceMapMeaning": "not covered by this bounded source map; not an unresolved count",
+    "origins": {
+      "page": 378,
+      "sharedFragment": 33
+    },
+    "transform": "copy",
+    "manifest": "architecture/generated/primary-pages.manifest.json",
+    "manifestSha256": "efd62baac8fd9f2002a18c8b508a85a46ccf734a21e020745005067f2bed0dc7",
+    "outputs": [
+      {
+        "path": "app/index.html",
+        "route": "/",
+        "count": 53
+      },
+      {
+        "path": "app/about/index.html",
+        "route": "/about/",
+        "count": 56
+      },
+      {
+        "path": "app/how-it-works/index.html",
+        "route": "/how-it-works/",
+        "count": 302
+      }
+    ]
+  }
+}

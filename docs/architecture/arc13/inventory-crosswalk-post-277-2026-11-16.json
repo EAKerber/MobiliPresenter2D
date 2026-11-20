@@ -1,0 +1,1664 @@
+{
+  "schemaVersion": 1,
+  "reviewDate": "2026-11-16",
+  "repository": "EAKerber/MobiliPresenter2D",
+  "scope": "Inventory-only reconciliation of Product main after the integrated video/fullscreen update; no runtime changes in this PR.",
+  "baseline": {
+    "productMain": {
+      "ref": "main",
+      "commit": "46a52e76a0eeae4bed4b567b12da5311ed90b475"
+    },
+    "sourceHead": "68441080f1ba29f546e6f97926e487a945f7fa2f",
+    "committedInventoryBlobSha256": "3513487ff970876215540b2fb8c8318e81e3b7b9058d9cc5a9191daf67473d77",
+    "priorCrosswalkDeclaredInventorySha256": "b3739e5ff57005600665cc6c1a04fbe986649b8f8e8e9b80a6fb09b2d3adf178",
+    "committedReportStrictJsonValid": false,
+    "integrityFinding": "The committed report contains a literal truncation marker inside an entry value and fails strict JSON parsing. Its blob hash differs from the 2026-11-14 crosswalk declared hash.",
+    "regeneratedInventorySha256": "4e5c81e286cbab81b3b6a69ad7fe899d4e10c940df629aed34a090ed6e38a819",
+    "regeneratedWithSameScannerAndPinnedParser": true,
+    "manifestSha256": "14edfc8f9aafa7e7d3fb4a1ebebeba12b994b77c4ec9d7c64f0f726fe73f4440",
+    "summary": {
+      "htmlFilesScanned": 8,
+      "htmlOccurrences": 608,
+      "excludedHtmlOccurrences": 12,
+      "javascriptFilesScanned": 57,
+      "inlineJavaScriptBlocksScanned": 3,
+      "javascriptSinkSites": 413,
+      "javascriptTextSourceRecords": 359,
+      "javascriptTextSourceRecordsActive": 285,
+      "javascriptTextSourceRecordsPassedButUnused": 7,
+      "javascriptTextSourceRecordsUnconsumed": 2,
+      "javascriptTextSourceRecordsNeedsFlowReview": 1,
+      "javascriptTextSourceRecordsDiagnostic": 64,
+      "javascriptTextSourceRecordsWithSinkLinks": 94,
+      "javascriptTextSourceSinkLinks": 96,
+      "javascriptTextSourceRecordsWithFailureFallbacks": 44,
+      "javascriptTextSourceFailureFallbackLinks": 45,
+      "javascriptTextSourceRoles": {
+        "admin-event-trigger-option-label": 1,
+        "admin-field-label": 7,
+        "admin-material-availability-heading": 2,
+        "admin-material-dropdown-label": 1,
+        "admin-material-target-option-label": 2,
+        "admin-rule-select-label": 12,
+        "admin-rule-select-option-label": 11,
+        "benefit-label": 4,
+        "brand-name": 1,
+        "catalog-accessory-description": 1,
+        "catalog-accessory-title": 1,
+        "catalog-dimension-axis-order": 1,
+        "catalog-dimension-display": 7,
+        "catalog-finish-label": 6,
+        "catalog-handle-description": 4,
+        "catalog-handle-label": 4,
+        "catalog-module-benefit": 21,
+        "catalog-module-category": 7,
+        "catalog-module-component": 21,
+        "catalog-module-reference": 7,
+        "catalog-module-requirement": 4,
+        "catalog-module-title": 7,
+        "catalog-service-description": 3,
+        "catalog-service-title": 3,
+        "catalog-stone-description": 5,
+        "catalog-stone-label": 5,
+        "commercial-ui-labels": 8,
+        "compact-flow-label": 4,
+        "config-default-custom-section-label": 1,
+        "config-default-group-label": 5,
+        "config-default-section-label": 8,
+        "config-default-stage-label": 4,
+        "detail-heading": 2,
+        "dimension-labels": 3,
+        "editorial-tagline": 1,
+        "environment-action": 1,
+        "environment-description": 5,
+        "environment-name": 5,
+        "error-message-source": 100,
+        "fixed-ui-table": 12,
+        "image-alternative-text": 5,
+        "inline-text-array": 3,
+        "inline-text-tuple-label": 7,
+        "navigation-labels": 5,
+        "pricebook-disclaimer": 1,
+        "pricebook-label": 1,
+        "scene-entity-label": 17,
+        "theme-labels": 6,
+        "view-label": 7
+      },
+      "excludedJavaScriptSinks": 11,
+      "javascriptStaticValues": 168,
+      "javascriptDynamicOrMixedValues": 245,
+      "javascriptParseErrors": 0,
+      "javascriptNotScannedSources": 0,
+      "javascriptNotScannedInlineBlocks": 0,
+      "sourceFiles": 66,
+      "unassignedOwnerSites": 0,
+      "unassignedRouteSites": 0,
+      "primaryPageAuthoringMappedOccurrences": 419,
+      "primaryPageAuthoringUnresolvedOccurrences": 0,
+      "unreviewedOccurrences": 1021,
+      "htmlReferenceOccurrences": 48,
+      "altTextOccurrences": 37,
+      "distinctExactExpressions": 803,
+      "exactExpressionDuplicateGroups": 89,
+      "exactExpressionDuplicateOccurrences": 307,
+      "exactExpressionOccurrencesBeyondFirst": 218,
+      "distinctExactStaticValues": 599,
+      "exactStaticValueDuplicateGroups": 67,
+      "exactStaticValueDuplicateOccurrences": 244,
+      "exactStaticValueOccurrencesBeyondFirst": 177
+    }
+  },
+  "current": {
+    "productMain": {
+      "ref": "main",
+      "commit": "efc40584c3f3ca940cf6cbca408f8fda31e3e1c9",
+      "tree": "439fb0fc9a3295f9e45486198e9de83fca8376ee"
+    },
+    "inventoryPath": "architecture/arc13/ui-text-candidates.json",
+    "inventorySha256": "abce38889ad6d78c634fadad5d6f0c63fd9706ac3e0c13bcdf13f78010caeb9e",
+    "manifestSha256": "f313c87db4bf4dafc69d8264ae36e2e60bd37017f7fe87571a1acc185595c9af",
+    "summary": {
+      "htmlFilesScanned": 8,
+      "htmlOccurrences": 609,
+      "excludedHtmlOccurrences": 12,
+      "javascriptFilesScanned": 57,
+      "inlineJavaScriptBlocksScanned": 3,
+      "javascriptSinkSites": 417,
+      "javascriptTextSourceRecords": 360,
+      "javascriptTextSourceRecordsActive": 285,
+      "javascriptTextSourceRecordsPassedButUnused": 7,
+      "javascriptTextSourceRecordsUnconsumed": 2,
+      "javascriptTextSourceRecordsNeedsFlowReview": 2,
+      "javascriptTextSourceRecordsDiagnostic": 64,
+      "javascriptTextSourceRecordsWithSinkLinks": 94,
+      "javascriptTextSourceSinkLinks": 96,
+      "javascriptTextSourceRecordsWithFailureFallbacks": 44,
+      "javascriptTextSourceFailureFallbackLinks": 45,
+      "javascriptTextSourceRoles": {
+        "admin-event-trigger-option-label": 1,
+        "admin-field-label": 7,
+        "admin-material-availability-heading": 2,
+        "admin-material-dropdown-label": 1,
+        "admin-material-target-option-label": 2,
+        "admin-rule-select-label": 12,
+        "admin-rule-select-option-label": 11,
+        "benefit-label": 4,
+        "brand-name": 1,
+        "catalog-accessory-description": 1,
+        "catalog-accessory-title": 1,
+        "catalog-dimension-axis-order": 1,
+        "catalog-dimension-display": 7,
+        "catalog-finish-label": 6,
+        "catalog-handle-description": 4,
+        "catalog-handle-label": 4,
+        "catalog-module-benefit": 21,
+        "catalog-module-category": 7,
+        "catalog-module-component": 21,
+        "catalog-module-reference": 7,
+        "catalog-module-requirement": 4,
+        "catalog-module-title": 7,
+        "catalog-service-description": 3,
+        "catalog-service-title": 3,
+        "catalog-stone-description": 5,
+        "catalog-stone-label": 5,
+        "commercial-ui-labels": 8,
+        "compact-flow-label": 4,
+        "config-default-custom-section-label": 1,
+        "config-default-group-label": 5,
+        "config-default-section-label": 8,
+        "config-default-stage-label": 4,
+        "detail-heading": 2,
+        "dimension-labels": 3,
+        "editorial-tagline": 1,
+        "environment-action": 1,
+        "environment-description": 5,
+        "environment-name": 5,
+        "error-message-source": 101,
+        "fixed-ui-table": 12,
+        "image-alternative-text": 5,
+        "inline-text-array": 3,
+        "inline-text-tuple-label": 7,
+        "navigation-labels": 5,
+        "pricebook-disclaimer": 1,
+        "pricebook-label": 1,
+        "scene-entity-label": 17,
+        "theme-labels": 6,
+        "view-label": 7
+      },
+      "excludedJavaScriptSinks": 11,
+      "javascriptStaticValues": 168,
+      "javascriptDynamicOrMixedValues": 249,
+      "javascriptParseErrors": 0,
+      "javascriptNotScannedSources": 0,
+      "javascriptNotScannedInlineBlocks": 0,
+      "sourceFiles": 66,
+      "unassignedOwnerSites": 0,
+      "unassignedRouteSites": 0,
+      "primaryPageAuthoringMappedOccurrences": 420,
+      "primaryPageAuthoringUnresolvedOccurrences": 0,
+      "unreviewedOccurrences": 1026,
+      "htmlReferenceOccurrences": 48,
+      "altTextOccurrences": 37,
+      "distinctExactExpressions": 801,
+      "exactExpressionDuplicateGroups": 90,
+      "exactExpressionDuplicateOccurrences": 315,
+      "exactExpressionOccurrencesBeyondFirst": 225,
+      "distinctExactStaticValues": 597,
+      "exactStaticValueDuplicateGroups": 68,
+      "exactStaticValueDuplicateOccurrences": 248,
+      "exactStaticValueOccurrencesBeyondFirst": 180
+    }
+  },
+  "sinkContinuity": {
+    "previousCount": 1021,
+    "currentCount": 1026,
+    "delta": 5,
+    "stableIdCount": 982,
+    "positionOnlyRemappedEntryCount": 36,
+    "positionOnlyRemapGroups": [
+      {
+        "source": "app/how-it-works/how-it-works.js",
+        "kind": "javascript-sink",
+        "sink": "property:textContent",
+        "sourceRole": null,
+        "attribute": "text-content",
+        "value": "title",
+        "previousIds": [
+          "16f5d9f07400cfe7"
+        ],
+        "currentIds": [
+          "2d96f1e551b2af3e"
+        ],
+        "previousLines": [
+          16
+        ],
+        "currentLines": [
+          40
+        ],
+        "matchMultiplicity": "unique-content-match"
+      },
+      {
+        "source": "app/how-it-works/how-it-works.js",
+        "kind": "javascript-sink",
+        "sink": "property:textContent",
+        "sourceRole": null,
+        "attribute": "text-content",
+        "value": "description",
+        "previousIds": [
+          "28ee63ebc2f9d55a"
+        ],
+        "currentIds": [
+          "5ae09a29dc136372"
+        ],
+        "previousLines": [
+          16
+        ],
+        "currentLines": [
+          40
+        ],
+        "matchMultiplicity": "unique-content-match"
+      },
+      {
+        "source": "app/index.html",
+        "kind": "html-attribute",
+        "sink": "attribute:aria-label",
+        "sourceRole": null,
+        "attribute": "aria-label",
+        "value": "Reproduzir o vídeo de apresentação",
+        "previousIds": [
+          "3abe647cf8ac759d"
+        ],
+        "currentIds": [
+          "c014317c6b745a6e"
+        ],
+        "previousLines": [
+          43
+        ],
+        "currentLines": [
+          44
+        ],
+        "matchMultiplicity": "unique-content-match"
+      },
+      {
+        "source": "app/index.html",
+        "kind": "html-attribute",
+        "sink": "attribute:aria-label",
+        "sourceRole": null,
+        "attribute": "aria-label",
+        "value": "Abrir vídeo em tela cheia",
+        "previousIds": [
+          "fd28c05616bfb437"
+        ],
+        "currentIds": [
+          "c2c6bd2c037ca454"
+        ],
+        "previousLines": [
+          47
+        ],
+        "currentLines": [
+          49
+        ],
+        "matchMultiplicity": "unique-content-match"
+      },
+      {
+        "source": "app/index.html",
+        "kind": "html-attribute",
+        "sink": "attribute:aria-label",
+        "sourceRole": null,
+        "attribute": "aria-label",
+        "value": "Vantagens Casa em Módulos",
+        "previousIds": [
+          "177254147fcbb77f"
+        ],
+        "currentIds": [
+          "d8b2bf1a8b1d6ca1"
+        ],
+        "previousLines": [
+          54
+        ],
+        "currentLines": [
+          56
+        ],
+        "matchMultiplicity": "unique-content-match"
+      },
+      {
+        "source": "app/index.html",
+        "kind": "html-reference",
+        "sink": "attribute:aria-labelledby",
+        "sourceRole": null,
+        "attribute": "aria-labelledby",
+        "value": "environmentsTitle",
+        "previousIds": [
+          "b6cc897e4bb946e4"
+        ],
+        "currentIds": [
+          "0eecdf273dc51861"
+        ],
+        "previousLines": [
+          56
+        ],
+        "currentLines": [
+          58
+        ],
+        "matchMultiplicity": "unique-content-match"
+      },
+      {
+        "source": "app/index.html",
+        "kind": "html-text",
+        "sink": "text:p",
+        "sourceRole": null,
+        "attribute": null,
+        "value": "Você escolhe o que precisa",
+        "previousIds": [
+          "dac1babcabebb4c6"
+        ],
+        "currentIds": [
+          "2179dbe371bab13e"
+        ],
+        "previousLines": [
+          57
+        ],
+        "currentLines": [
+          59
+        ],
+        "matchMultiplicity": "unique-content-match"
+      },
+      {
+        "source": "app/index.html",
+        "kind": "html-text",
+        "sink": "text:h2",
+        "sourceRole": null,
+        "attribute": null,
+        "value": "A gente já sabe como fazer.",
+        "previousIds": [
+          "6724591515048f84"
+        ],
+        "currentIds": [
+          "097118651052787c"
+        ],
+        "previousLines": [
+          57
+        ],
+        "currentLines": [
+          59
+        ],
+        "matchMultiplicity": "unique-content-match"
+      },
+      {
+        "source": "app/index.html",
+        "kind": "html-attribute",
+        "sink": "attribute:aria-label",
+        "sourceRole": null,
+        "attribute": "aria-label",
+        "value": "Ambientes anteriores",
+        "previousIds": [
+          "7916f3c28698b9dc"
+        ],
+        "currentIds": [
+          "d2ce7b6e7c8f955a"
+        ],
+        "previousLines": [
+          61
+        ],
+        "currentLines": [
+          63
+        ],
+        "matchMultiplicity": "unique-content-match"
+      },
+      {
+        "source": "app/index.html",
+        "kind": "html-text",
+        "sink": "text:button",
+        "sourceRole": null,
+        "attribute": null,
+        "value": "←",
+        "previousIds": [
+          "aedeee66171e0b25"
+        ],
+        "currentIds": [
+          "df91c4c4efbff383"
+        ],
+        "previousLines": [
+          61
+        ],
+        "currentLines": [
+          63
+        ],
+        "matchMultiplicity": "unique-content-match"
+      },
+      {
+        "source": "app/index.html",
+        "kind": "html-attribute",
+        "sink": "attribute:aria-label",
+        "sourceRole": null,
+        "attribute": "aria-label",
+        "value": "Página do carrossel",
+        "previousIds": [
+          "da23ed303f4e4ef7"
+        ],
+        "currentIds": [
+          "24cacc277046458b"
+        ],
+        "previousLines": [
+          61
+        ],
+        "currentLines": [
+          63
+        ],
+        "matchMultiplicity": "unique-content-match"
+      },
+      {
+        "source": "app/index.html",
+        "kind": "html-attribute",
+        "sink": "attribute:aria-label",
+        "sourceRole": null,
+        "attribute": "aria-label",
+        "value": "Próximos ambientes",
+        "previousIds": [
+          "f1fdcf5debd36391"
+        ],
+        "currentIds": [
+          "3b43f30481b235c9"
+        ],
+        "previousLines": [
+          61
+        ],
+        "currentLines": [
+          63
+        ],
+        "matchMultiplicity": "unique-content-match"
+      },
+      {
+        "source": "app/index.html",
+        "kind": "html-text",
+        "sink": "text:button",
+        "sourceRole": null,
+        "attribute": null,
+        "value": "→",
+        "previousIds": [
+          "d282cfce8c7c0f0f"
+        ],
+        "currentIds": [
+          "fb46afca25fdf586"
+        ],
+        "previousLines": [
+          61
+        ],
+        "currentLines": [
+          63
+        ],
+        "matchMultiplicity": "unique-content-match"
+      },
+      {
+        "source": "app/index.html",
+        "kind": "html-text",
+        "sink": "text:p",
+        "sourceRole": null,
+        "attribute": null,
+        "value": "Imagem temporariamente indisponível.",
+        "previousIds": [
+          "5fc74ea3cdccd345"
+        ],
+        "currentIds": [
+          "2578223eb49c4f7b"
+        ],
+        "previousLines": [
+          65
+        ],
+        "currentLines": [
+          67
+        ],
+        "matchMultiplicity": "unique-content-match"
+      },
+      {
+        "source": "app/index.html",
+        "kind": "html-text",
+        "sink": "text:p",
+        "sourceRole": null,
+        "attribute": null,
+        "value": "Seu ambiente, do seu jeito",
+        "previousIds": [
+          "5aeff79f5b192754"
+        ],
+        "currentIds": [
+          "efe1c1597346511f"
+        ],
+        "previousLines": [
+          66
+        ],
+        "currentLines": [
+          68
+        ],
+        "matchMultiplicity": "unique-content-match"
+      },
+      {
+        "source": "app/index.html",
+        "kind": "html-text",
+        "sink": "text:a",
+        "sourceRole": null,
+        "attribute": null,
+        "value": "Explorar a cozinha ",
+        "previousIds": [
+          "ec4bfc96b5d831e4"
+        ],
+        "currentIds": [
+          "16130e2659526abd"
+        ],
+        "previousLines": [
+          66
+        ],
+        "currentLines": [
+          68
+        ],
+        "matchMultiplicity": "unique-content-match"
+      },
+      {
+        "source": "app/index.html",
+        "kind": "html-text",
+        "sink": "text:span",
+        "sourceRole": null,
+        "attribute": null,
+        "value": "→",
+        "previousIds": [
+          "9113396b45f8a1e8",
+          "19d2d4a4b47bc728"
+        ],
+        "currentIds": [
+          "192a2aa0c3cd0242",
+          "2437b2875bf85784"
+        ],
+        "previousLines": [
+          66,
+          70
+        ],
+        "currentLines": [
+          68,
+          72
+        ],
+        "matchMultiplicity": "duplicate-content-group"
+      },
+      {
+        "source": "app/index.html",
+        "kind": "html-text",
+        "sink": "text:p",
+        "sourceRole": null,
+        "attribute": null,
+        "value": "Visualização em breve",
+        "previousIds": [
+          "fa000c085abf0ccc"
+        ],
+        "currentIds": [
+          "dfedcd11ed670313"
+        ],
+        "previousLines": [
+          66
+        ],
+        "currentLines": [
+          68
+        ],
+        "matchMultiplicity": "unique-content-match"
+      },
+      {
+        "source": "app/index.html",
+        "kind": "html-text",
+        "sink": "text:p",
+        "sourceRole": null,
+        "attribute": null,
+        "value": "Simples do início ao fim",
+        "previousIds": [
+          "59b729955cb8523e"
+        ],
+        "currentIds": [
+          "726ba912657048c0"
+        ],
+        "previousLines": [
+          70
+        ],
+        "currentLines": [
+          72
+        ],
+        "matchMultiplicity": "unique-content-match"
+      },
+      {
+        "source": "app/index.html",
+        "kind": "html-text",
+        "sink": "text:h2",
+        "sourceRole": null,
+        "attribute": null,
+        "value": "Do seu espaço ao ambiente pronto.",
+        "previousIds": [
+          "7540b2ccbc5b56a0"
+        ],
+        "currentIds": [
+          "f3b15e24fe29eb81"
+        ],
+        "previousLines": [
+          70
+        ],
+        "currentLines": [
+          72
+        ],
+        "matchMultiplicity": "unique-content-match"
+      },
+      {
+        "source": "app/index.html",
+        "kind": "html-text",
+        "sink": "text:p",
+        "sourceRole": null,
+        "attribute": null,
+        "value": "Escolha o ambiente, conheça os módulos e encontre uma solução que acompanha sua rotina.",
+        "previousIds": [
+          "00457c25b85aad82"
+        ],
+        "currentIds": [
+          "ecf36cc394880912"
+        ],
+        "previousLines": [
+          70
+        ],
+        "currentLines": [
+          72
+        ],
+        "matchMultiplicity": "unique-content-match"
+      },
+      {
+        "source": "app/index.html",
+        "kind": "html-text",
+        "sink": "text:a",
+        "sourceRole": null,
+        "attribute": null,
+        "value": "Encontre seu ambiente ",
+        "previousIds": [
+          "fc0fce4d0f6ff5fb"
+        ],
+        "currentIds": [
+          "5cd964c10d4dab85"
+        ],
+        "previousLines": [
+          70
+        ],
+        "currentLines": [
+          72
+        ],
+        "matchMultiplicity": "unique-content-match"
+      },
+      {
+        "source": "app/index.html",
+        "kind": "html-attribute",
+        "sink": "attribute:alt",
+        "sourceRole": null,
+        "attribute": "alt",
+        "value": "Casa em Módulos",
+        "previousIds": [
+          "c6a72caebd767245"
+        ],
+        "currentIds": [
+          "a7a94de12e00a02d"
+        ],
+        "previousLines": [
+          72
+        ],
+        "currentLines": [
+          74
+        ],
+        "matchMultiplicity": "unique-content-match"
+      },
+      {
+        "source": "app/index.html",
+        "kind": "html-text",
+        "sink": "text:span",
+        "sourceRole": null,
+        "attribute": null,
+        "value": "Móveis modulares pensados para a vida real.",
+        "previousIds": [
+          "11ea0fc275cb29d4"
+        ],
+        "currentIds": [
+          "c4067d8a75e2f445"
+        ],
+        "previousLines": [
+          72
+        ],
+        "currentLines": [
+          74
+        ],
+        "matchMultiplicity": "unique-content-match"
+      },
+      {
+        "source": "app/index.html",
+        "kind": "html-text",
+        "sink": "text:a",
+        "sourceRole": null,
+        "attribute": null,
+        "value": "Voltar aos ambientes ↑",
+        "previousIds": [
+          "8efadb99ee671ed7"
+        ],
+        "currentIds": [
+          "2d741286db2670ba"
+        ],
+        "previousLines": [
+          72
+        ],
+        "currentLines": [
+          74
+        ],
+        "matchMultiplicity": "unique-content-match"
+      },
+      {
+        "source": "app/landing/landing.js",
+        "kind": "javascript-sink",
+        "sink": "property:title",
+        "sourceRole": null,
+        "attribute": "title",
+        "value": "Casa em Módulos — apresentação institucional",
+        "previousIds": [
+          "93f686ffaaeffa8e"
+        ],
+        "currentIds": [
+          "244f37c8af92a834"
+        ],
+        "previousLines": [
+          73
+        ],
+        "currentLines": [
+          126
+        ],
+        "matchMultiplicity": "unique-content-match"
+      },
+      {
+        "source": "app/landing/landing.js",
+        "kind": "javascript-sink",
+        "sink": "property:textContent",
+        "sourceRole": null,
+        "attribute": "text-content",
+        "value": "title",
+        "previousIds": [
+          "bc8f36cbe51b8b04"
+        ],
+        "currentIds": [
+          "debdb81611b0161f"
+        ],
+        "previousLines": [
+          111
+        ],
+        "currentLines": [
+          205
+        ],
+        "matchMultiplicity": "unique-content-match"
+      },
+      {
+        "source": "app/landing/landing.js",
+        "kind": "javascript-sink",
+        "sink": "property:textContent",
+        "sourceRole": null,
+        "attribute": "text-content",
+        "value": "item.label",
+        "previousIds": [
+          "bc79d4c41e390768"
+        ],
+        "currentIds": [
+          "930e431e089d6440"
+        ],
+        "previousLines": [
+          118
+        ],
+        "currentLines": [
+          212
+        ],
+        "matchMultiplicity": "unique-content-match"
+      },
+      {
+        "source": "app/landing/landing.js",
+        "kind": "javascript-sink",
+        "sink": "property:alt",
+        "sourceRole": null,
+        "attribute": "alt",
+        "value": "environment.alt",
+        "previousIds": [
+          "417d63da4b595698"
+        ],
+        "currentIds": [
+          "8caf7b4324efad2f"
+        ],
+        "previousLines": [
+          159
+        ],
+        "currentLines": [
+          253
+        ],
+        "matchMultiplicity": "unique-content-match"
+      },
+      {
+        "source": "app/landing/landing.js",
+        "kind": "javascript-sink",
+        "sink": "property:textContent",
+        "sourceRole": null,
+        "attribute": "text-content",
+        "value": "environment.name",
+        "previousIds": [
+          "4134aa72e625426b",
+          "dfc15abd2d39402e"
+        ],
+        "currentIds": [
+          "622b9b956123ab89",
+          "09906ac777f60ade"
+        ],
+        "previousLines": [
+          168,
+          212
+        ],
+        "currentLines": [
+          262,
+          306
+        ],
+        "matchMultiplicity": "duplicate-content-group"
+      },
+      {
+        "source": "app/landing/landing.js",
+        "kind": "javascript-sink",
+        "sink": "property:textContent",
+        "sourceRole": null,
+        "attribute": "text-content",
+        "value": "environment.description",
+        "previousIds": [
+          "178d2ace77ca7380",
+          "f47a80b4eac1c28d"
+        ],
+        "currentIds": [
+          "7ff0f8a5621775af",
+          "84fd8725e887336b"
+        ],
+        "previousLines": [
+          169,
+          213
+        ],
+        "currentLines": [
+          263,
+          307
+        ],
+        "matchMultiplicity": "duplicate-content-group"
+      },
+      {
+        "source": "app/landing/landing.js",
+        "kind": "javascript-sink",
+        "sink": "property:textContent",
+        "sourceRole": null,
+        "attribute": "text-content",
+        "value": "`${environment.action} `",
+        "previousIds": [
+          "c54343230ae07b3b"
+        ],
+        "currentIds": [
+          "626c1f5f0b5bd1f4"
+        ],
+        "previousLines": [
+          175
+        ],
+        "currentLines": [
+          269
+        ],
+        "matchMultiplicity": "unique-content-match"
+      },
+      {
+        "source": "app/landing/landing.js",
+        "kind": "javascript-sink",
+        "sink": "call:setAttribute",
+        "sourceRole": null,
+        "attribute": "aria-label",
+        "value": "`Mostrar grupo ${index + 1}`",
+        "previousIds": [
+          "221aa14c6f1d437b"
+        ],
+        "currentIds": [
+          "d62e53a51a667dd6"
+        ],
+        "previousLines": [
+          221
+        ],
+        "currentLines": [
+          315
+        ],
+        "matchMultiplicity": "unique-content-match"
+      }
+    ],
+    "addedSemanticEntries": [
+      {
+        "id": "f106ae7ba0829c5b",
+        "source": "app/how-it-works/how-it-works.js",
+        "line": 11,
+        "column": 7,
+        "routeConsumers": [
+          "/how-it-works/"
+        ],
+        "kind": "javascript-sink",
+        "sink": "call:setAttribute",
+        "attribute": "aria-label",
+        "elementTag": null,
+        "expression": "label",
+        "value": null,
+        "classification": "unreviewed",
+        "classificationHints": [
+          "accessibility-text"
+        ]
+      },
+      {
+        "id": "ad71d3fcca0702ed",
+        "source": "app/how-it-works/how-it-works.js",
+        "line": 12,
+        "column": 7,
+        "routeConsumers": [
+          "/how-it-works/"
+        ],
+        "kind": "javascript-sink",
+        "sink": "call:setAttribute",
+        "attribute": "title",
+        "elementTag": null,
+        "expression": "label",
+        "value": null,
+        "classification": "unreviewed",
+        "classificationHints": [
+          "visible-or-accessible-ui"
+        ]
+      },
+      {
+        "id": "1fb12e3eb303d497",
+        "source": "app/how-it-works/index.html",
+        "line": 40,
+        "column": 427,
+        "routeConsumers": [
+          "/how-it-works/"
+        ],
+        "kind": "html-attribute",
+        "sink": "attribute:aria-label",
+        "attribute": "aria-label",
+        "elementTag": null,
+        "expression": "Abrir vídeo em tela cheia",
+        "value": "Abrir vídeo em tela cheia",
+        "classification": "unreviewed",
+        "classificationHints": [
+          "accessibility-text"
+        ]
+      },
+      {
+        "id": "fbd8581d0d6f8053",
+        "source": "app/how-it-works/index.html",
+        "line": 40,
+        "column": 427,
+        "routeConsumers": [
+          "/how-it-works/"
+        ],
+        "kind": "html-attribute",
+        "sink": "attribute:title",
+        "attribute": "title",
+        "elementTag": null,
+        "expression": "Abrir vídeo em tela cheia",
+        "value": "Abrir vídeo em tela cheia",
+        "classification": "unreviewed",
+        "classificationHints": [
+          "visible-or-accessible-ui"
+        ]
+      },
+      {
+        "id": "dcd455a9fecf63aa",
+        "source": "app/index.html",
+        "line": 40,
+        "column": 11,
+        "routeConsumers": [
+          "/"
+        ],
+        "kind": "html-attribute",
+        "sink": "attribute:alt",
+        "attribute": "alt",
+        "elementTag": null,
+        "expression": "Cozinha planejada com uma mão segurando um celular",
+        "value": "Cozinha planejada com uma mão segurando um celular",
+        "classification": "unreviewed",
+        "classificationHints": [
+          "visible-or-accessible-ui"
+        ]
+      },
+      {
+        "id": "d6d455c085c0c21f",
+        "source": "app/index.html",
+        "line": 49,
+        "column": 15,
+        "routeConsumers": [
+          "/"
+        ],
+        "kind": "html-attribute",
+        "sink": "attribute:title",
+        "attribute": "title",
+        "elementTag": null,
+        "expression": "Abrir vídeo em tela cheia",
+        "value": "Abrir vídeo em tela cheia",
+        "classification": "unreviewed",
+        "classificationHints": [
+          "visible-or-accessible-ui"
+        ]
+      },
+      {
+        "id": "49ccb254d443d4ab",
+        "source": "app/landing/landing.js",
+        "line": 168,
+        "column": 9,
+        "routeConsumers": [
+          "/"
+        ],
+        "kind": "javascript-sink",
+        "sink": "call:setAttribute",
+        "attribute": "aria-label",
+        "elementTag": null,
+        "expression": "label",
+        "value": null,
+        "classification": "unreviewed",
+        "classificationHints": [
+          "accessibility-text"
+        ]
+      },
+      {
+        "id": "35eff8c8551d4683",
+        "source": "app/landing/landing.js",
+        "line": 169,
+        "column": 9,
+        "routeConsumers": [
+          "/"
+        ],
+        "kind": "javascript-sink",
+        "sink": "call:setAttribute",
+        "attribute": "title",
+        "elementTag": null,
+        "expression": "label",
+        "value": null,
+        "classification": "unreviewed",
+        "classificationHints": [
+          "visible-or-accessible-ui"
+        ]
+      }
+    ],
+    "removedSemanticEntries": [
+      {
+        "id": "fbd72115b1e559f2",
+        "source": "app/how-it-works/index.html",
+        "line": 40,
+        "column": 498,
+        "routeConsumers": [
+          "/how-it-works/"
+        ],
+        "kind": "html-text",
+        "sink": "text:button",
+        "attribute": null,
+        "elementTag": "button",
+        "expression": "Expandir em tela cheia",
+        "value": "Expandir em tela cheia",
+        "classification": "unreviewed",
+        "classificationHints": [
+          "visible-or-accessible-ui"
+        ]
+      },
+      {
+        "id": "fef001dc224c5527",
+        "source": "app/index.html",
+        "line": 40,
+        "column": 11,
+        "routeConsumers": [
+          "/"
+        ],
+        "kind": "html-attribute",
+        "sink": "attribute:alt",
+        "attribute": "alt",
+        "elementTag": null,
+        "expression": "Ambiente planejado com uma apresentação da Casa em Módulos no celular",
+        "value": "Ambiente planejado com uma apresentação da Casa em Módulos no celular",
+        "classification": "unreviewed",
+        "classificationHints": [
+          "visible-or-accessible-ui"
+        ]
+      },
+      {
+        "id": "e84c51cae0cd9c6e",
+        "source": "app/index.html",
+        "line": 47,
+        "column": 15,
+        "routeConsumers": [
+          "/"
+        ],
+        "kind": "html-attribute",
+        "sink": "attribute:title",
+        "attribute": "title",
+        "elementTag": null,
+        "expression": "Tela cheia",
+        "value": "Tela cheia",
+        "classification": "unreviewed",
+        "classificationHints": [
+          "visible-or-accessible-ui"
+        ]
+      }
+    ],
+    "addedCount": 8,
+    "removedCount": 3
+  },
+  "sourceContinuity": {
+    "previousCount": 359,
+    "currentCount": 360,
+    "delta": 1,
+    "stableIdCount": 343,
+    "positionOnlyRemappedGroups": [
+      {
+        "source": "app/how-it-works/how-it-works.js",
+        "kind": "javascript-text-source",
+        "sink": "source:fixed-ui-table",
+        "sourceRole": "fixed-ui-table",
+        "attribute": null,
+        "value": "Compra em escala",
+        "previousIds": [
+          "1b7e83f6b3ba4468"
+        ],
+        "currentIds": [
+          "e674bcbc059dbe1c"
+        ],
+        "previousLines": [
+          6
+        ],
+        "currentLines": [
+          30
+        ],
+        "matchMultiplicity": "unique-content-match"
+      },
+      {
+        "source": "app/how-it-works/how-it-works.js",
+        "kind": "javascript-text-source",
+        "sink": "source:fixed-ui-table",
+        "sourceRole": "fixed-ui-table",
+        "attribute": null,
+        "value": "Concentrar a compra de chapas, ferragens e outros insumos em mais pedidos ajuda a negociar com fornecedores e programar as aquisições.",
+        "previousIds": [
+          "80ce4c1741c4a4ba"
+        ],
+        "currentIds": [
+          "f6eb4a1feff76aed"
+        ],
+        "previousLines": [
+          6
+        ],
+        "currentLines": [
+          30
+        ],
+        "matchMultiplicity": "unique-content-match"
+      },
+      {
+        "source": "app/how-it-works/how-it-works.js",
+        "kind": "javascript-text-source",
+        "sink": "source:fixed-ui-table",
+        "sourceRole": "fixed-ui-table",
+        "attribute": null,
+        "value": "Compras coletivas",
+        "previousIds": [
+          "f697917512def7f1"
+        ],
+        "currentIds": [
+          "be9a7f9ec1c1c94f"
+        ],
+        "previousLines": [
+          7
+        ],
+        "currentLines": [
+          31
+        ],
+        "matchMultiplicity": "unique-content-match"
+      },
+      {
+        "source": "app/how-it-works/how-it-works.js",
+        "kind": "javascript-text-source",
+        "sink": "source:fixed-ui-table",
+        "sourceRole": "fixed-ui-table",
+        "attribute": null,
+        "value": "Diferentes apartamentos compartilham uma plataforma técnica, sem exigir que todos escolham a mesma composição. Materiais e processos comuns podem ser planejados juntos.",
+        "previousIds": [
+          "097c13485a014fca"
+        ],
+        "currentIds": [
+          "7bdd83c84b4075d5"
+        ],
+        "previousLines": [
+          7
+        ],
+        "currentLines": [
+          31
+        ],
+        "matchMultiplicity": "unique-content-match"
+      },
+      {
+        "source": "app/how-it-works/how-it-works.js",
+        "kind": "javascript-text-source",
+        "sink": "source:fixed-ui-table",
+        "sourceRole": "fixed-ui-table",
+        "attribute": null,
+        "value": "Produção planejada",
+        "previousIds": [
+          "22e3f698ff88353f"
+        ],
+        "currentIds": [
+          "7fd036488aa923b1"
+        ],
+        "previousLines": [
+          8
+        ],
+        "currentLines": [
+          32
+        ],
+        "matchMultiplicity": "unique-content-match"
+      },
+      {
+        "source": "app/how-it-works/how-it-works.js",
+        "kind": "javascript-text-source",
+        "sink": "source:fixed-ui-table",
+        "sourceRole": "fixed-ui-table",
+        "attribute": null,
+        "value": "Projetos individuais exigem programação de máquinas, detalhamento e planos de corte próprios. Os módulos previamente desenvolvidos permitem organizar etapas repetíveis.",
+        "previousIds": [
+          "7ee51b1c2baef928"
+        ],
+        "currentIds": [
+          "a73a4d7c4fb8f6b0"
+        ],
+        "previousLines": [
+          8
+        ],
+        "currentLines": [
+          32
+        ],
+        "matchMultiplicity": "unique-content-match"
+      },
+      {
+        "source": "app/how-it-works/how-it-works.js",
+        "kind": "javascript-text-source",
+        "sink": "source:fixed-ui-table",
+        "sourceRole": "fixed-ui-table",
+        "attribute": null,
+        "value": "Aproveitamento de material",
+        "previousIds": [
+          "54c7396495d494ad"
+        ],
+        "currentIds": [
+          "da0944ccd6556ecb"
+        ],
+        "previousLines": [
+          9
+        ],
+        "currentLines": [
+          33
+        ],
+        "matchMultiplicity": "unique-content-match"
+      },
+      {
+        "source": "app/how-it-works/how-it-works.js",
+        "kind": "javascript-text-source",
+        "sink": "source:fixed-ui-table",
+        "sourceRole": "fixed-ui-table",
+        "attribute": null,
+        "value": "Planos de corte organizados ajudam a distribuir melhor as peças nas chapas e reduzir sobras, sem diminuir a qualidade dos materiais.",
+        "previousIds": [
+          "b2fa68d8b64cc553"
+        ],
+        "currentIds": [
+          "e6aa622132b14771"
+        ],
+        "previousLines": [
+          9
+        ],
+        "currentLines": [
+          33
+        ],
+        "matchMultiplicity": "unique-content-match"
+      },
+      {
+        "source": "app/how-it-works/how-it-works.js",
+        "kind": "javascript-text-source",
+        "sink": "source:fixed-ui-table",
+        "sourceRole": "fixed-ui-table",
+        "attribute": null,
+        "value": "Engenharia já estudada",
+        "previousIds": [
+          "c29e30a24361702a"
+        ],
+        "currentIds": [
+          "3a217978dc815b0b"
+        ],
+        "previousLines": [
+          10
+        ],
+        "currentLines": [
+          34
+        ],
+        "matchMultiplicity": "unique-content-match"
+      },
+      {
+        "source": "app/how-it-works/how-it-works.js",
+        "kind": "javascript-text-source",
+        "sink": "source:fixed-ui-table",
+        "sourceRole": "fixed-ui-table",
+        "attribute": null,
+        "value": "Na marcenaria individual, cada projeto demanda uma parcela maior de trabalho técnico desde o início. Aqui, as soluções-base são estudadas para o empreendimento e reaproveitadas em diferentes apartamentos.",
+        "previousIds": [
+          "a6c85d8e7a12adda"
+        ],
+        "currentIds": [
+          "7d5e66e0878678ff"
+        ],
+        "previousLines": [
+          10
+        ],
+        "currentLines": [
+          34
+        ],
+        "matchMultiplicity": "unique-content-match"
+      },
+      {
+        "source": "app/how-it-works/how-it-works.js",
+        "kind": "javascript-text-source",
+        "sink": "source:fixed-ui-table",
+        "sourceRole": "fixed-ui-table",
+        "attribute": null,
+        "value": "Menos retrabalho",
+        "previousIds": [
+          "0346f7608940a8ce"
+        ],
+        "currentIds": [
+          "09a4b887470e25af"
+        ],
+        "previousLines": [
+          11
+        ],
+        "currentLines": [
+          35
+        ],
+        "matchMultiplicity": "unique-content-match"
+      },
+      {
+        "source": "app/how-it-works/how-it-works.js",
+        "kind": "javascript-text-source",
+        "sink": "source:fixed-ui-table",
+        "sourceRole": "fixed-ui-table",
+        "attribute": null,
+        "value": "Padrões, furações e conferências previamente definidos permitem repetir soluções verificadas e reduzir ajustes durante a fabricação.",
+        "previousIds": [
+          "f5a68488bf28979f"
+        ],
+        "currentIds": [
+          "9f5d858ff6137e50"
+        ],
+        "previousLines": [
+          11
+        ],
+        "currentLines": [
+          35
+        ],
+        "matchMultiplicity": "unique-content-match"
+      },
+      {
+        "source": "app/landing/landing.js",
+        "kind": "javascript-text-source",
+        "sink": "source:inline-text-array",
+        "sourceRole": "inline-text-array",
+        "attribute": null,
+        "value": "Modular",
+        "previousIds": [
+          "ae57ca16d0f8977f"
+        ],
+        "currentIds": [
+          "473323dfc3c9036c"
+        ],
+        "previousLines": [
+          105
+        ],
+        "currentLines": [
+          199
+        ],
+        "matchMultiplicity": "unique-content-match"
+      },
+      {
+        "source": "app/landing/landing.js",
+        "kind": "javascript-text-source",
+        "sink": "source:inline-text-array",
+        "sourceRole": "inline-text-array",
+        "attribute": null,
+        "value": "Inteligente",
+        "previousIds": [
+          "50f13498a1b92fe1"
+        ],
+        "currentIds": [
+          "36c05c6d5d7deadd"
+        ],
+        "previousLines": [
+          105
+        ],
+        "currentLines": [
+          199
+        ],
+        "matchMultiplicity": "unique-content-match"
+      },
+      {
+        "source": "app/landing/landing.js",
+        "kind": "javascript-text-source",
+        "sink": "source:inline-text-array",
+        "sourceRole": "inline-text-array",
+        "attribute": null,
+        "value": "Para a sua vida",
+        "previousIds": [
+          "75eeb36cba4ddc01"
+        ],
+        "currentIds": [
+          "d9d1bfde2e9a5204"
+        ],
+        "previousLines": [
+          105
+        ],
+        "currentLines": [
+          199
+        ],
+        "matchMultiplicity": "unique-content-match"
+      },
+      {
+        "source": "app/landing/landing.js",
+        "kind": "javascript-text-source",
+        "sink": "source:error-message-source",
+        "sourceRole": "error-message-source",
+        "attribute": null,
+        "value": "Imagem indisponível",
+        "previousIds": [
+          "6083475eb5f05e96"
+        ],
+        "currentIds": [
+          "32cad218d633d924"
+        ],
+        "previousLines": [
+          135
+        ],
+        "currentLines": [
+          229
+        ],
+        "matchMultiplicity": "unique-content-match"
+      }
+    ],
+    "addedRecords": [
+      {
+        "id": "fac95c91f9fb8815",
+        "source": "app/landing/landing.js",
+        "line": 92,
+        "column": 28,
+        "sourceRole": "error-message-source",
+        "sourceBinding": "Error constructor",
+        "valuePath": "",
+        "expression": "\"Não foi possível carregar o player do YouTube.\"",
+        "value": "Não foi possível carregar o player do YouTube.",
+        "consumerLinkStatus": "manual-consumer-review"
+      }
+    ],
+    "removedRecords": []
+  },
+  "authoringProvenance": {
+    "previousMapped": 419,
+    "currentMapped": 420,
+    "currentUnresolved": 0,
+    "currentManifestSha256": "f313c87db4bf4dafc69d8264ae36e2e60bd37017f7fe87571a1acc185595c9af"
+  },
+  "changedAndPending": [
+    {
+      "kind": "changed-alt-content",
+      "previousId": "fef001dc224c5527",
+      "currentId": "dcd455a9fecf63aa",
+      "previousValue": "Ambiente planejado com uma apresentação da Casa em Módulos no celular",
+      "currentValue": "Cozinha planejada com uma mão segurando um celular",
+      "ownerDisposition": "pending-content-accuracy",
+      "keyAndExtraction": "not-decided"
+    },
+    {
+      "kind": "removed-visible-fullscreen-label",
+      "previousId": "fbd72115b1e559f2",
+      "previousValue": "Expandir em tela cheia",
+      "replacementCurrentIds": [
+        "1fb12e3eb303d497",
+        "fbd8581d0d6f8053"
+      ],
+      "replacementValue": "Abrir vídeo em tela cheia",
+      "ownerDisposition": "copy-review-pending",
+      "keyAndExtraction": "not-decided"
+    },
+    {
+      "kind": "changed-home-fullscreen-title",
+      "previousId": "e84c51cae0cd9c6e",
+      "previousValue": "Tela cheia",
+      "currentId": "d6d455c085c0c21f",
+      "currentValue": "Abrir vídeo em tela cheia",
+      "ownerDisposition": "copy-review-pending",
+      "keyAndExtraction": "not-decided"
+    },
+    {
+      "kind": "position-remap-home-fullscreen-accessible-name",
+      "previousId": "fd28c05616bfb437",
+      "currentId": "c2c6bd2c037ca454",
+      "value": "Abrir vídeo em tela cheia",
+      "ownerDisposition": "key-and-extraction-pending"
+    },
+    {
+      "kind": "position-remap-home-play-accessible-name",
+      "previousId": "3abe647cf8ac759d",
+      "currentId": "c014317c6b745a6e",
+      "value": "Reproduzir o vídeo de apresentação",
+      "ownerDisposition": "key-and-extraction-pending"
+    },
+    {
+      "kind": "position-remap-home-video-iframe-title",
+      "previousId": "93f686ffaaeffa8e",
+      "currentId": "244f37c8af92a834",
+      "value": "Casa em Módulos — apresentação institucional",
+      "ownerDisposition": "key-and-extraction-pending"
+    },
+    {
+      "kind": "existing-home-learn-more-decision",
+      "currentId": "e185d906c6f85858",
+      "value": "Saiba mais",
+      "destination": "/about/",
+      "ownerDecision": "wording-and-destination-approved",
+      "keyAndExtraction": "not-decided"
+    },
+    {
+      "kind": "group-label-semantics",
+      "currentId": "bda52494adf51488",
+      "value": "Mais informações",
+      "currentMarkupSemantics": "role=group",
+      "markupIssue": "resolved-in-source",
+      "ownerDisposition": "catalog-key-and-assistive-technology-review-pending"
+    }
+  ],
+  "manualRuntimeValueSupplement": [
+    {
+      "route": "/",
+      "source": "app/landing/landing.js",
+      "valueExpressionLine": 166,
+      "values": [
+        {
+          "when": "not fullscreen",
+          "value": "Abrir vídeo em tela cheia"
+        },
+        {
+          "when": "fullscreen",
+          "value": "Sair da tela cheia"
+        }
+      ],
+      "sinkWrites": [
+        {
+          "id": "49ccb254d443d4ab",
+          "attribute": "aria-label",
+          "line": 168
+        },
+        {
+          "id": "35eff8c8551d4683",
+          "attribute": "title",
+          "line": 169
+        }
+      ],
+      "scannerNote": "The two sink sites are counted in entries; their conditional literal values are not emitted in sourceEntries. This supplement adds no sink occurrences."
+    },
+    {
+      "route": "/how-it-works/",
+      "source": "app/how-it-works/how-it-works.js",
+      "valueExpressionLine": 9,
+      "values": [
+        {
+          "when": "not fullscreen",
+          "value": "Abrir vídeo em tela cheia"
+        },
+        {
+          "when": "fullscreen",
+          "value": "Sair da tela cheia"
+        }
+      ],
+      "sinkWrites": [
+        {
+          "id": "f106ae7ba0829c5b",
+          "attribute": "aria-label",
+          "line": 11
+        },
+        {
+          "id": "ad71d3fcca0702ed",
+          "attribute": "title",
+          "line": 12
+        }
+      ],
+      "scannerNote": "The two sink sites are counted in entries; their conditional literal values are not emitted in sourceEntries. This supplement adds no sink occurrences."
+    }
+  ],
+  "diagnosticFlowReview": [
+    {
+      "id": "fac95c91f9fb8815",
+      "source": "app/landing/landing.js",
+      "line": 92,
+      "value": "Não foi possível carregar o player do YouTube.",
+      "disposition": "diagnostic",
+      "evidence": "The rejection is caught; the failed iframe is removed and the static poster is restored. The Error value is discarded."
+    },
+    {
+      "previousId": "6083475eb5f05e96",
+      "currentId": "32cad218d633d924",
+      "source": "app/landing/landing.js",
+      "previousLine": 135,
+      "currentLine": 229,
+      "value": "Imagem indisponível",
+      "disposition": "diagnostic",
+      "evidence": "The rejected Error is discarded; commit(null,true) renders the fixed HTML fallback “Imagem temporariamente indisponível.”."
+    }
+  ],
+  "localGates": {
+    "primaryPageCompilerCheck": "PASS",
+    "inventoryGeneration": "PASS",
+    "strictJsonParse": "PASS",
+    "javascriptParseErrors": 0,
+    "unassignedOwnerSites": 0,
+    "unassignedRouteSites": 0,
+    "applicationTestSuite": "NOT_RUN",
+    "screenReaderReview": "NOT_RUN",
+    "previewOrDeploy": "NOT_RUN"
+  }
+}

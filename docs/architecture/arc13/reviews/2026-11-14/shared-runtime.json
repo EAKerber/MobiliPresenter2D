@@ -1,0 +1,710 @@
+{
+  "reviewDate": "2026-11-13",
+  "productBase": "main@bb3e3a34; candidate inventory reviewed from local branch 413e0fb",
+  "inventoryPath": "architecture/arc13/ui-text-candidates.json",
+  "inventorySha256": "904c49a3b32722ece528a468e030b10800def07a61cbcf5811f01bfd00cfe391",
+  "owner": "shared-runtime",
+  "reviewedOccurrences": 41,
+  "decisionCounts": {
+    "domain_data": 1,
+    "catalog_candidate": 29,
+    "non_localizable": 8,
+    "structural_or_identifier": 1,
+    "symbol_or_decoration": 1,
+    "commercial_data": 1
+  },
+  "completeForOwner": true,
+  "limitations": [
+    "Semantic review of sink occurrences only; not a complete localization catalog or runtime migration.",
+    "Generic rendering helpers are transport sinks; classify/localize caller-owned messages or data at their origins.",
+    "Technical dimension notation and units need an explicit locale-formatting policy before implementation."
+  ],
+  "reviews": [
+    {
+      "id": "9848824af8d888dc",
+      "source": "app/core/browser-compat.js",
+      "line": 40,
+      "owner": "shared-runtime",
+      "routeConsumers": [
+        "/admin",
+        "/config/",
+        "/viewer/"
+      ],
+      "sink": "call:createTextNode",
+      "expression": "String(node)",
+      "decision": "non_localizable",
+      "proposedKey": null,
+      "reason": "Generic text-node polyfill converts caller-provided values and owns no product copy."
+    },
+    {
+      "id": "3bb1183200f384db",
+      "source": "app/core/image-fallback.js",
+      "line": 12,
+      "owner": "shared-runtime",
+      "routeConsumers": [
+        "/",
+        "/how-it-works/"
+      ],
+      "sink": "property:textContent",
+      "expression": "\"▧\"",
+      "decision": "symbol_or_decoration",
+      "proposedKey": null,
+      "reason": "Decorative image-fallback glyph; aria-hidden and not meaningful text."
+    },
+    {
+      "id": "1f5cb204af237f66",
+      "source": "app/core/image-fallback.js",
+      "line": 15,
+      "owner": "shared-runtime",
+      "routeConsumers": [
+        "/",
+        "/how-it-works/"
+      ],
+      "sink": "property:textContent",
+      "expression": "\"Imagem indisponível\"",
+      "decision": "catalog_candidate",
+      "proposedKey": "image.fallback.unavailable",
+      "reason": "Fixed user-facing image failure status."
+    },
+    {
+      "id": "871bb37f6fc241cf",
+      "source": "app/core/image-fallback.js",
+      "line": 36,
+      "owner": "shared-runtime",
+      "routeConsumers": [
+        "/",
+        "/how-it-works/"
+      ],
+      "sink": "property:textContent",
+      "expression": "alt",
+      "decision": "non_localizable",
+      "proposedKey": null,
+      "reason": "Reuses the image's existing alt text; localization belongs to the upstream description."
+    },
+    {
+      "id": "0c6d64eb006667a5",
+      "source": "app/core/image-fallback.js",
+      "line": 38,
+      "owner": "shared-runtime",
+      "routeConsumers": [
+        "/",
+        "/how-it-works/"
+      ],
+      "sink": "call:setAttribute",
+      "expression": "label + \": \" + alt",
+      "decision": "catalog_candidate",
+      "proposedKey": "image.fallback.ariaLabel",
+      "reason": "Fixed status-plus-description template with existing alt text as a placeholder."
+    },
+    {
+      "id": "d49834399afb3aa2",
+      "source": "app/core/private-navigation.js",
+      "line": 18,
+      "owner": "shared-runtime",
+      "routeConsumers": [
+        "/access/",
+        "/access/manage",
+        "/admin",
+        "/config/"
+      ],
+      "sink": "property:textContent",
+      "expression": "label",
+      "decision": "non_localizable",
+      "proposedKey": null,
+      "reason": "Generic link renderer receives caller-owned labels inventoried separately."
+    },
+    {
+      "id": "f290be0c31e40331",
+      "source": "app/core/private-navigation.js",
+      "line": 29,
+      "owner": "shared-runtime",
+      "routeConsumers": [
+        "/access/",
+        "/access/manage",
+        "/admin",
+        "/config/"
+      ],
+      "sink": "property:textContent",
+      "expression": "title",
+      "decision": "non_localizable",
+      "proposedKey": null,
+      "reason": "Generic group renderer receives caller-owned headings inventoried separately."
+    },
+    {
+      "id": "82f10f87198ba232",
+      "source": "app/core/private-navigation.js",
+      "line": 50,
+      "owner": "shared-runtime",
+      "routeConsumers": [
+        "/access/",
+        "/access/manage",
+        "/admin",
+        "/config/"
+      ],
+      "sink": "property:textContent",
+      "expression": "\"Sair\"",
+      "decision": "catalog_candidate",
+      "proposedKey": "auth.logout",
+      "reason": "Fixed logout action label."
+    },
+    {
+      "id": "bd5b171ee185c79c",
+      "source": "app/core/private-navigation.js",
+      "line": 76,
+      "owner": "shared-runtime",
+      "routeConsumers": [
+        "/access/",
+        "/access/manage",
+        "/admin",
+        "/config/"
+      ],
+      "sink": "property:textContent",
+      "expression": "user?.email || \"\"",
+      "decision": "non_localizable",
+      "proposedKey": null,
+      "reason": "Authenticated user's email address is dynamic user data."
+    },
+    {
+      "id": "bc0e0824477a3173",
+      "source": "app/core/private-navigation.js",
+      "line": 78,
+      "owner": "shared-runtime",
+      "routeConsumers": [
+        "/access/",
+        "/access/manage",
+        "/admin",
+        "/config/"
+      ],
+      "sink": "helper:addGroup",
+      "expression": "\"Páginas privadas\"",
+      "decision": "catalog_candidate",
+      "proposedKey": "navigation.privateGroup",
+      "reason": "Fixed private-navigation heading."
+    },
+    {
+      "id": "5f53eac13e4b5555",
+      "source": "app/core/private-navigation.js",
+      "line": 81,
+      "owner": "shared-runtime",
+      "routeConsumers": [
+        "/access/",
+        "/access/manage",
+        "/admin",
+        "/config/"
+      ],
+      "sink": "helper:makeLink",
+      "expression": "\"Configurador\"",
+      "decision": "catalog_candidate",
+      "proposedKey": "navigation.configurator",
+      "reason": "Fixed navigation label; share key with duplicate occurrences."
+    },
+    {
+      "id": "0b584a71ebe4a45c",
+      "source": "app/core/private-navigation.js",
+      "line": 82,
+      "owner": "shared-runtime",
+      "routeConsumers": [
+        "/access/",
+        "/access/manage",
+        "/admin",
+        "/config/"
+      ],
+      "sink": "helper:makeLink",
+      "expression": "\"Administração\"",
+      "decision": "catalog_candidate",
+      "proposedKey": "navigation.administration",
+      "reason": "Fixed navigation label."
+    },
+    {
+      "id": "47fbab684f48543d",
+      "source": "app/core/private-navigation.js",
+      "line": 83,
+      "owner": "shared-runtime",
+      "routeConsumers": [
+        "/access/",
+        "/access/manage",
+        "/admin",
+        "/config/"
+      ],
+      "sink": "helper:makeLink",
+      "expression": "\"Gerenciar acessos\"",
+      "decision": "catalog_candidate",
+      "proposedKey": "navigation.accessManagement",
+      "reason": "Fixed navigation label."
+    },
+    {
+      "id": "47607e8d4c7d2a9e",
+      "source": "app/core/private-navigation.js",
+      "line": 85,
+      "owner": "shared-runtime",
+      "routeConsumers": [
+        "/access/",
+        "/access/manage",
+        "/admin",
+        "/config/"
+      ],
+      "sink": "helper:makeLink",
+      "expression": "\"Configurador\"",
+      "decision": "catalog_candidate",
+      "proposedKey": "navigation.configurator",
+      "reason": "Same Configurador concept and wording as earlier occurrence."
+    },
+    {
+      "id": "a5d8525b41aa251c",
+      "source": "app/core/private-navigation.js",
+      "line": 86,
+      "owner": "shared-runtime",
+      "routeConsumers": [
+        "/access/",
+        "/access/manage",
+        "/admin",
+        "/config/"
+      ],
+      "sink": "helper:makeLink",
+      "expression": "\"Gerenciar acessos\"",
+      "decision": "catalog_candidate",
+      "proposedKey": "navigation.accessManagement",
+      "reason": "Same access-management wording as earlier occurrence."
+    },
+    {
+      "id": "9bbddfb2c5ad4c51",
+      "source": "app/core/private-navigation.js",
+      "line": 88,
+      "owner": "shared-runtime",
+      "routeConsumers": [
+        "/access/",
+        "/access/manage",
+        "/admin",
+        "/config/"
+      ],
+      "sink": "helper:makeLink",
+      "expression": "\"Configurador\"",
+      "decision": "catalog_candidate",
+      "proposedKey": "navigation.configurator",
+      "reason": "Same Configurador label for temporary sessions."
+    },
+    {
+      "id": "44ad94dfdafd7782",
+      "source": "app/core/private-navigation.js",
+      "line": 92,
+      "owner": "shared-runtime",
+      "routeConsumers": [
+        "/access/",
+        "/access/manage",
+        "/admin",
+        "/config/"
+      ],
+      "sink": "property:textContent",
+      "expression": "\"Verificando acesso…\"",
+      "decision": "catalog_candidate",
+      "proposedKey": "auth.checkingAccess",
+      "reason": "Fixed transient access-check status."
+    },
+    {
+      "id": "195a7ae852dc077b",
+      "source": "app/core/private-navigation.js",
+      "line": 95,
+      "owner": "shared-runtime",
+      "routeConsumers": [
+        "/access/",
+        "/access/manage",
+        "/admin",
+        "/config/"
+      ],
+      "sink": "helper:makeLink",
+      "expression": "\"Entrar na administração\"",
+      "decision": "catalog_candidate",
+      "proposedKey": "auth.enterAdministration",
+      "reason": "Fixed login route label."
+    },
+    {
+      "id": "5e6b1c2781e5bc09",
+      "source": "app/core/private-navigation.js",
+      "line": 99,
+      "owner": "shared-runtime",
+      "routeConsumers": [
+        "/access/",
+        "/access/manage",
+        "/admin",
+        "/config/"
+      ],
+      "sink": "property:textContent",
+      "expression": "\"Esta conta não tem acesso às páginas de gestão.\"",
+      "decision": "catalog_candidate",
+      "proposedKey": "auth.insufficientManagementAccess",
+      "reason": "Fixed authorization notice."
+    },
+    {
+      "id": "c160e575e72ff1b5",
+      "source": "app/core/private-navigation.js",
+      "line": 102,
+      "owner": "shared-runtime",
+      "routeConsumers": [
+        "/access/",
+        "/access/manage",
+        "/admin",
+        "/config/"
+      ],
+      "sink": "helper:addGroup",
+      "expression": "\"Páginas públicas\"",
+      "decision": "catalog_candidate",
+      "proposedKey": "navigation.publicGroup",
+      "reason": "Fixed public-navigation heading."
+    },
+    {
+      "id": "699e09178dde41df",
+      "source": "app/core/private-navigation.js",
+      "line": 103,
+      "owner": "shared-runtime",
+      "routeConsumers": [
+        "/access/",
+        "/access/manage",
+        "/admin",
+        "/config/"
+      ],
+      "sink": "helper:makeLink",
+      "expression": "label",
+      "decision": "non_localizable",
+      "proposedKey": null,
+      "reason": "Generic link builder consumes route-owned labels; localize each upstream route label once."
+    },
+    {
+      "id": "b5c5d9699e25a309",
+      "source": "app/core/private-navigation.js",
+      "line": 109,
+      "owner": "shared-runtime",
+      "routeConsumers": [
+        "/access/",
+        "/access/manage",
+        "/admin",
+        "/config/"
+      ],
+      "sink": "call:setAttribute",
+      "expression": "open ? \"Fechar menu\" : \"Abrir menu\"",
+      "decision": "catalog_candidate",
+      "proposedKey": "navigation.menuToggle",
+      "reason": "Fixed accessible open/close labels selected by state."
+    },
+    {
+      "id": "db01b43120582541",
+      "source": "app/core/scene-component.js",
+      "line": 49,
+      "owner": "shared-runtime",
+      "routeConsumers": [
+        "/config/",
+        "/viewer/"
+      ],
+      "sink": "call:setAttribute",
+      "expression": "`Ver ficha de ${labels.reference}, ${labels.title}`",
+      "decision": "catalog_candidate",
+      "proposedKey": "scene.hotspot.accessibleLabel",
+      "reason": "Fixed accessible phrase with product reference and title placeholders."
+    },
+    {
+      "id": "2e7ce5dde20274a5",
+      "source": "app/core/scene-component.js",
+      "line": 50,
+      "owner": "shared-runtime",
+      "routeConsumers": [
+        "/config/",
+        "/viewer/"
+      ],
+      "sink": "property:title",
+      "expression": "`${labels.reference} · ${labels.title}`",
+      "decision": "commercial_data",
+      "proposedKey": null,
+      "reason": "Tooltip contains product reference and title from product data, with only punctuation between them."
+    },
+    {
+      "id": "62a72c1d0e6cf260",
+      "source": "app/core/scene-component.js",
+      "line": 53,
+      "owner": "shared-runtime",
+      "routeConsumers": [
+        "/config/",
+        "/viewer/"
+      ],
+      "sink": "property:textContent",
+      "expression": "entity.alias",
+      "decision": "structural_or_identifier",
+      "proposedKey": null,
+      "reason": "Scene alias such as 02A/03A is a domain identifier."
+    },
+    {
+      "id": "76ad4bacf2d1063b",
+      "source": "app/core/technical-drawings.js",
+      "line": 17,
+      "owner": "shared-runtime",
+      "routeConsumers": [
+        "/config/",
+        "/viewer/"
+      ],
+      "sink": "call:setAttribute:dynamic-attribute",
+      "expression": "String(value)",
+      "decision": "non_localizable",
+      "proposedKey": null,
+      "reason": "Generic SVG attribute writer; classify caller-supplied semantic value instead."
+    },
+    {
+      "id": "223c34a27bf4e574",
+      "source": "app/core/technical-drawings.js",
+      "line": 25,
+      "owner": "shared-runtime",
+      "routeConsumers": [
+        "/config/",
+        "/viewer/"
+      ],
+      "sink": "property:textContent",
+      "expression": "value",
+      "decision": "non_localizable",
+      "proposedKey": null,
+      "reason": "Generic SVG label writer; classify caller-supplied semantic value instead."
+    },
+    {
+      "id": "a78253c03b013010",
+      "source": "app/core/technical-drawings.js",
+      "line": 76,
+      "owner": "shared-runtime",
+      "routeConsumers": [
+        "/config/",
+        "/viewer/"
+      ],
+      "sink": "call:setAttribute",
+      "expression": "`${isSide ? \"Vista lateral\" : \"Vista frontal\"}: ${horizontalLabel} ${dimension(horizontalMm)} milímetros por A ${dimension(spec.faceHeightMm)} milímetros${amplified ? \". A espessura foi ampliada apenas para legibilidade.\" : \".\"}`",
+      "decision": "catalog_candidate",
+      "proposedKey": "drawing.elevation.ariaDescription",
+      "reason": "Fixed view and dimension prose with dynamic labels and measurements."
+    },
+    {
+      "id": "aedae170f2ea45be",
+      "source": "app/core/technical-drawings.js",
+      "line": 83,
+      "owner": "shared-runtime",
+      "routeConsumers": [
+        "/config/",
+        "/viewer/"
+      ],
+      "sink": "helper:label",
+      "expression": "`${horizontalLabel} ${dimension(horizontalMm)} mm`",
+      "decision": "catalog_candidate",
+      "proposedKey": "drawing.dimension.horizontal",
+      "reason": "Visible dimension template with dynamic label and measurement/unit."
+    },
+    {
+      "id": "7ed0ab276304640e",
+      "source": "app/core/technical-drawings.js",
+      "line": 89,
+      "owner": "shared-runtime",
+      "routeConsumers": [
+        "/config/",
+        "/viewer/"
+      ],
+      "sink": "helper:label",
+      "expression": "`A ${dimension(spec.faceHeightMm)} mm`",
+      "decision": "catalog_candidate",
+      "proposedKey": "drawing.dimension.height",
+      "reason": "Visible height template; A abbreviation and unit presentation may vary by locale."
+    },
+    {
+      "id": "360a9124e0be63cf",
+      "source": "app/core/technical-drawings.js",
+      "line": 105,
+      "owner": "shared-runtime",
+      "routeConsumers": [
+        "/config/",
+        "/viewer/"
+      ],
+      "sink": "call:setAttribute",
+      "expression": "`${ariaPrefix}: ${spec.faceHorizontalLabel} ${dimension(spec.faceWidthMm)} milímetros, A ${dimension(spec.faceHeightMm)} milímetros e ${spec.extrusionLabel} ${dimension(spec.extrusionMm)} milímetros${amplified ? \". A espessura foi ampliada apenas para legibilidade.\" : \".\"}`",
+      "decision": "catalog_candidate",
+      "proposedKey": "drawing.isometric.ariaDescription",
+      "reason": "Fixed isometric description and amplification note with measurements."
+    },
+    {
+      "id": "85f5411f0bc1121d",
+      "source": "app/core/technical-drawings.js",
+      "line": 124,
+      "owner": "shared-runtime",
+      "routeConsumers": [
+        "/config/",
+        "/viewer/"
+      ],
+      "sink": "helper:label",
+      "expression": "`${spec.faceHorizontalLabel} ${dimension(spec.faceWidthMm)} mm`",
+      "decision": "catalog_candidate",
+      "proposedKey": "drawing.dimension.horizontal",
+      "reason": "Same horizontal dimension template as elevation."
+    },
+    {
+      "id": "0f7c2f11577c7b38",
+      "source": "app/core/technical-drawings.js",
+      "line": 125,
+      "owner": "shared-runtime",
+      "routeConsumers": [
+        "/config/",
+        "/viewer/"
+      ],
+      "sink": "helper:label",
+      "expression": "`A ${dimension(spec.faceHeightMm)} mm`",
+      "decision": "catalog_candidate",
+      "proposedKey": "drawing.dimension.height",
+      "reason": "Same height dimension template as elevation."
+    },
+    {
+      "id": "bd58b496b8e51c53",
+      "source": "app/core/technical-drawings.js",
+      "line": 126,
+      "owner": "shared-runtime",
+      "routeConsumers": [
+        "/config/",
+        "/viewer/"
+      ],
+      "sink": "helper:label",
+      "expression": "`${spec.extrusionLabel} ${dimension(spec.extrusionMm)} mm`",
+      "decision": "catalog_candidate",
+      "proposedKey": "drawing.dimension.extrusion",
+      "reason": "Visible extrusion template with dynamic axis label and measurement."
+    },
+    {
+      "id": "a48f97478b1912d1",
+      "source": "app/core/technical-drawings.js",
+      "line": 135,
+      "owner": "shared-runtime",
+      "routeConsumers": [
+        "/config/",
+        "/viewer/"
+      ],
+      "sink": "call:setAttribute",
+      "expression": "ariaLabel || `Vista interna frontal: ${describe}.`",
+      "decision": "catalog_candidate",
+      "proposedKey": "drawing.internal.ariaDescription",
+      "reason": "Fixed internal-view accessibility phrase plus generated segment description."
+    },
+    {
+      "id": "f149292cf853d89e",
+      "source": "app/core/technical-drawings.js",
+      "line": 142,
+      "owner": "shared-runtime",
+      "routeConsumers": [
+        "/config/",
+        "/viewer/"
+      ],
+      "sink": "helper:label",
+      "expression": "`L ${dimension(widthMm)} mm`",
+      "decision": "catalog_candidate",
+      "proposedKey": "drawing.dimension.width",
+      "reason": "Visible width template; L abbreviation and unit presentation may vary by locale."
+    },
+    {
+      "id": "7e4f682820264cd3",
+      "source": "app/core/technical-drawings.js",
+      "line": 153,
+      "owner": "shared-runtime",
+      "routeConsumers": [
+        "/config/",
+        "/viewer/"
+      ],
+      "sink": "helper:label",
+      "expression": "segments.map((segment) => dimension(segment.spanMm || segment.span)).join(\" · \")",
+      "decision": "domain_data",
+      "proposedKey": null,
+      "reason": "Measured segment spans are product dimensions; middle dot only separates values."
+    },
+    {
+      "id": "126e4062316603da",
+      "source": "app/core/ui-theme.js",
+      "line": 32,
+      "owner": "shared-runtime",
+      "routeConsumers": [
+        "/",
+        "/about/",
+        "/access/",
+        "/access/manage",
+        "/admin",
+        "/config/",
+        "/how-it-works/",
+        "/viewer/"
+      ],
+      "sink": "call:setAttribute",
+      "expression": "\"Tema atual: \" + FULL[mode] + \". Ativar \" + FULL[nextMode()] + \".\"",
+      "decision": "catalog_candidate",
+      "proposedKey": "theme.toggle.ariaLabel",
+      "reason": "Fixed accessible current/next theme sentence; theme names are catalog values."
+    },
+    {
+      "id": "10449aaa671f852f",
+      "source": "app/core/ui-theme.js",
+      "line": 33,
+      "owner": "shared-runtime",
+      "routeConsumers": [
+        "/",
+        "/about/",
+        "/access/",
+        "/access/manage",
+        "/admin",
+        "/config/",
+        "/how-it-works/",
+        "/viewer/"
+      ],
+      "sink": "call:setAttribute",
+      "expression": "\"Tema: \" + FULL[mode] + \" (próximo: \" + FULL[nextMode()] + \")\"",
+      "decision": "catalog_candidate",
+      "proposedKey": "theme.toggle.title",
+      "reason": "Fixed theme tooltip template; theme names are catalog values."
+    },
+    {
+      "id": "6e1689edfb60a342",
+      "source": "app/core/ui-theme.js",
+      "line": 36,
+      "owner": "shared-runtime",
+      "routeConsumers": [
+        "/",
+        "/about/",
+        "/access/",
+        "/access/manage",
+        "/admin",
+        "/config/",
+        "/how-it-works/",
+        "/viewer/"
+      ],
+      "sink": "property:textContent",
+      "expression": "FULL[mode]",
+      "decision": "catalog_candidate",
+      "proposedKey": "theme.mode.full",
+      "reason": "Visible full theme-mode name selected from a fixed dictionary."
+    },
+    {
+      "id": "dede940b6f6413b3",
+      "source": "app/core/ui-theme.js",
+      "line": 37,
+      "owner": "shared-runtime",
+      "routeConsumers": [
+        "/",
+        "/about/",
+        "/access/",
+        "/access/manage",
+        "/admin",
+        "/config/",
+        "/how-it-works/",
+        "/viewer/"
+      ],
+      "sink": "property:textContent",
+      "expression": "SHORT[mode]",
+      "decision": "catalog_candidate",
+      "proposedKey": "theme.mode.short",
+      "reason": "Visible compact theme-mode name selected from a fixed dictionary."
+    }
+  ],
+  "inventorySchemaVersion": 4,
+  "reconciledOn": "2026-11-14",
+  "supersedes": "docs/architecture/arc13/reviews/2026-11-13/shared-runtime.json",
+  "revalidation": {
+    "kind": "inventory-identity-reconciliation",
+    "priorInventorySha256": "8765873a096fe95167e4fba74838258e47428fab0e12d16af9b6c92a3e34a51e",
+    "currentInventorySha256": "904c49a3b32722ece528a468e030b10800def07a61cbcf5811f01bfd00cfe391",
+    "sinkIdsPreserved": 1012,
+    "sourceEntryIdsPreserved": 359,
+    "existingDispositionsChanged": false,
+    "note": "The additive authoring field changes provenance only; this is not a new semantic review."
+  }
+}
