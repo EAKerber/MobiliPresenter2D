@@ -1,3 +1,4 @@
 # Local Netlify folder
 .netlify
 app/admin/admin.bundle.js
+tools/arc13/node_modules/
