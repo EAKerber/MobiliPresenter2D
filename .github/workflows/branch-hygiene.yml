@@ -3,7 +3,9 @@ name: Branch hygiene
 on:
   pull_request:
     paths:
-      - 'tools/branch_hygiene_*.py'
+      - 'tools/branch_hygiene_apply.py'
+      - 'tools/branch_hygiene_observe.py'
+      - 'tools/branch_hygiene_plan.py'
       - 'ops/branch-dispositions.json'
       - 'tests/test_branch_hygiene_plan.py'
       - '.github/workflows/branch-hygiene.yml'

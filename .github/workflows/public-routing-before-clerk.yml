@@ -14,7 +14,9 @@ on:
       - 'app/data/scene-data.js'
       - 'netlify/functions/public-modules.mjs'
       - 'netlify.toml'
-      - 'tests/public-*.cjs'
+      - 'tests/public-cutover-contract.cjs'
+      - 'tests/public-module-projection.test.cjs'
+      - 'tests/public-pages-smoke.cjs'
       - 'app/tools/test-public-modules-endpoint.js'
       - '.github/workflows/public-routing-before-clerk.yml'
   push:
@@ -30,7 +32,8 @@ on:
       - 'app/data/scene-data.js'
       - 'netlify/functions/public-modules.mjs'
       - 'netlify.toml'
-      - 'tests/public-*.cjs'
+      - 'tests/public-cutover-contract.cjs'
+      - 'tests/public-module-projection.test.cjs'
       - 'app/tools/test-public-modules-endpoint.js'
       - '.github/workflows/public-routing-before-clerk.yml'
 
