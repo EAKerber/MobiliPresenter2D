@@ -1,6 +1,6 @@
 {
   "schemaVersion": "ARC13LOC002IdentityOverlay/1.0",
-  "reviewDate": "2026-11-18",
+  "reviewDate": "2026-11-20",
   "repository": "EAKerber/MobiliPresenter2D",
   "pins": {
     "productMain": "dc066f55619824626ea4752ecc0bafc67f9d9110",
@@ -478,13 +478,13 @@
       "sink": "text:a",
       "sourceSha256": "a6e2105840cd85196474e04d98a0b1c0b51ec28398f9a985bacfc577a566d01a",
       "expression": "Saiba mais",
-      "reviewNote": "“Saiba mais”; copy and /about/ destination approved, key/extraction not approved",
+      "reviewNote": "Owner-approved visible copy and /about/ destination; catalog/extraction decision remains open.",
       "loc002": {
         "classification": "ui-static",
-        "contentOwner": null,
+        "contentOwner": "product-owner",
         "destination": "hold",
         "status": "pending-semantic-review",
-        "classificationBasis": "fixed visible anchor text; copy and /about/ destination were previously approved, while accountable owner, key, and extraction remain open.",
+        "classificationBasis": "Fixed visible anchor text; the owner-approved copy and /about/ destination are recorded in owner-decisions-2026-11-14.md; inline-versus-catalog disposition, key, and extraction remain open.",
         "classificationConfidence": "high"
       },
       "identityStatus": "existing ARC-13 provenance does not decide LOC-002 class/owner/destination"
@@ -597,8 +597,8 @@
     "candidatesClassifiedBySinkFunction": 15,
     "candidatesWithoutClass": 0,
     "loc002Complete": false,
-    "classificationScope": "All 15 classifications reflect only the observed HTML sink or adjacent state behavior. They do not approve wording, content owner, canonical key, extraction, translation, or accessibility quality.",
-    "reason": "All 15 candidates still lack an accountable content owner and final LOC-002 destination. All 15 now have a supported function class, including the YouTube anchor classified as ui-static; its wording and accessible-name treatment remain pending."
+    "classificationScope": "The 15 sink-function classifications describe only the observed HTML sink or adjacent state behavior. Separately, the explicit learn-more-link copy and /about/ destination decision is recorded; no other wording, content owner, canonical key, extraction, translation, or accessibility-quality approval is inferred.",
+    "reason": "Fourteen candidates still lack an accountable content owner, and all 15 remain incomplete in final LOC-002 destination. The user-approved learn-more-link copy and route are recorded; its inline-versus-catalog disposition, key, and extraction remain open. Other batches retain content or assistive-review questions."
   },
   "pendingDecisionBatches": [
     {
@@ -647,9 +647,8 @@
       "candidateIds": [
         "e185d906c6f85858"
       ],
-      "evidence": "The copy and /about/ destination are already approved.",
+      "evidence": "Owner-approved visible wording “Saiba mais” and /about/ destination are recorded in owner-decisions-2026-11-14.md. Record role-level product-owner authority; do not infer it from sourceOwner=landing.",
       "pending": [
-        "accountable owner",
         "whether this remains inline or enters a catalog",
         "key/extraction decision"
       ]
