@@ -3,6 +3,7 @@ on:
   pull_request:
     branches:
       - main
+      - development
     paths:
       - architecture/pages/about.page.html
       - app/about/about.js
@@ -10,8 +11,21 @@ on:
       - architecture/generated/primary-pages.manifest.json
       - tests/about-skip-link-focus.mjs
       - .github/workflows/about-skip-link-focus.yml
-  # Legacy feature push target retired; retain the live PR gate.
-  workflow_dispatch:
+      - package.json
+      - scripts/compile-primary-pages.mjs
+  push:
+    branches:
+      - main
+      - development
+    paths:
+      - architecture/pages/about.page.html
+      - app/about/about.js
+      - app/about/index.html
+      - architecture/generated/primary-pages.manifest.json
+      - tests/about-skip-link-focus.mjs
+      - .github/workflows/about-skip-link-focus.yml
+      - package.json
+      - scripts/compile-primary-pages.mjs
 permissions:
   contents: read
 jobs:

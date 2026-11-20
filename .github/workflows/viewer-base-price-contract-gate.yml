@@ -1,12 +1,31 @@
 name: Viewer base-price publication contract (no Netlify deploy)
 on:
-  push:
-    branches: [integration/viewer-base-prices-main-20261021, main]
+  pull_request:
+    branches: [main, development]
     paths:
       - 'app/admin/**'
       - 'app/admin.html'
       - 'app/core/administration-v5.js'
       - 'app/core/public-module-projection.js'
+      - 'app/data/catalog-data.js'
+      - 'app/data/mock-price-book.js'
+      - 'app/data/scene-data.js'
+      - 'app/tools/test-public-modules-endpoint.js'
+      - 'app/viewer/**'
+      - 'netlify/functions/public-modules.mjs'
+      - 'tests/viewer-base-price*'
+      - 'tests/viewer-price-v5-save.test.cjs'
+      - '.github/workflows/viewer-base-price-contract-gate.yml'
+  push:
+    branches: [integration/viewer-base-prices-main-20261021, development, main]
+    paths:
+      - 'app/admin/**'
+      - 'app/admin.html'
+      - 'app/core/administration-v5.js'
+      - 'app/core/public-module-projection.js'
+      - 'app/data/catalog-data.js'
+      - 'app/data/mock-price-book.js'
+      - 'app/data/scene-data.js'
       - 'app/tools/test-public-modules-endpoint.js'
       - 'app/viewer/**'
       - 'netlify/functions/public-modules.mjs'
@@ -16,7 +35,7 @@ on:
   workflow_dispatch:
 jobs:
   price-contract:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     permissions:
       contents: read
     steps:

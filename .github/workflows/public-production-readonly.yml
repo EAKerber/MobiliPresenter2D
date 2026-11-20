@@ -5,6 +5,7 @@ on:
     paths:
       - 'tests/public-production-readonly.cjs'
       - '.github/workflows/public-production-readonly.yml'
+      - 'app/core/public-module-projection.js'
   push:
     branches: [main]
     paths:
@@ -13,6 +14,7 @@ on:
       - 'app/index.html'
       - 'app/config/**'
       - 'app/viewer/**'
+      - 'app/core/public-module-projection.js'
       - 'netlify/functions/public-modules.mjs'
       - 'netlify.toml'
 
