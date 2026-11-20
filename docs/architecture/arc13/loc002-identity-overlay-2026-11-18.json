@@ -498,14 +498,14 @@
       "sink": "text:a",
       "sourceSha256": "a6e2105840cd85196474e04d98a0b1c0b51ec28398f9a985bacfc577a566d01a",
       "expression": "Assistir no YouTube ↗",
-      "reviewNote": "YouTube link arrow treatment pending",
+      "reviewNote": "Common Sense Judge: classify the whole fixed anchor sink as ui-static. Keep exact wording approval and the arrow's accessible-name treatment pending.",
       "loc002": {
-        "classification": null,
+        "classification": "ui-static",
         "contentOwner": null,
         "destination": "hold",
         "status": "pending-semantic-review",
-        "classificationBasis": "fixed YouTube link text includes a trailing arrow in the same sink; owner must decide whether the arrow is copy or decoration before assigning a class.",
-        "classificationConfidence": "unresolved"
+        "classificationBasis": "Fixed, user-facing anchor label in the Landing hero; href points to the YouTube Short. The whole text sink is static UI copy. The arrow is a trailing marker in the same text node and does not make the whole label decorative; its accessible-name treatment remains pending.",
+        "classificationConfidence": "high"
       },
       "identityStatus": "existing ARC-13 provenance does not decide LOC-002 class/owner/destination"
     },
