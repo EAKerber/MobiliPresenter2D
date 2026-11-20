@@ -478,16 +478,16 @@
       "sink": "text:a",
       "sourceSha256": "a6e2105840cd85196474e04d98a0b1c0b51ec28398f9a985bacfc577a566d01a",
       "expression": "Saiba mais",
-      "reviewNote": "Owner-approved visible copy and /about/ destination; catalog/extraction decision remains open.",
+      "reviewNote": "Owner-approved visible copy and /about/ destination; v0.9 maps ui-static to Catálogo de UI. Canonical key/extraction remains a LOC-003 decision.",
       "loc002": {
         "classification": "ui-static",
         "contentOwner": "product-owner",
-        "destination": "hold",
-        "status": "pending-semantic-review",
-        "classificationBasis": "Fixed visible anchor text; the owner-approved copy and /about/ destination are recorded in owner-decisions-2026-11-14.md; inline-versus-catalog disposition, key, and extraction remain open.",
+        "destination": "catalog",
+        "status": "complete",
+        "classificationBasis": "Fixed visible anchor text. The product owner approved the copy and /about/ destination; Plano Diretor v0.9 maps ui-static to Catálogo de UI. Canonical key and extraction remain LOC-003 work.",
         "classificationConfidence": "high"
       },
-      "identityStatus": "existing ARC-13 provenance does not decide LOC-002 class/owner/destination"
+      "identityStatus": "LOC-002 class, owner and destination are resolved; canonical key and extraction remain LOC-003."
     },
     {
       "currentId": "0c5db734ff22f8ae",
@@ -593,12 +593,12 @@
   "coverage": {
     "unmatchedBeforeThisOverlay": 25,
     "recoveredIdentityMatches": 10,
-    "candidatesWithIncompleteLoc002": 15,
+    "candidatesWithIncompleteLoc002": 14,
     "candidatesClassifiedBySinkFunction": 15,
     "candidatesWithoutClass": 0,
     "loc002Complete": false,
-    "classificationScope": "The 15 sink-function classifications describe only the observed HTML sink or adjacent state behavior. Separately, the explicit learn-more-link copy and /about/ destination decision is recorded; no other wording, content owner, canonical key, extraction, translation, or accessibility-quality approval is inferred.",
-    "reason": "Fourteen candidates still lack an accountable content owner, and all 15 remain incomplete in final LOC-002 destination. The user-approved learn-more-link copy and route are recorded; its inline-versus-catalog disposition, key, and extraction remain open. Other batches retain content or assistive-review questions."
+    "classificationScope": "The 15 sink-function classifications describe only the observed HTML sink or adjacent state behavior. The learn-more candidate e185d906c6f85858 now has an explicit product-owner and plan-based Catalog of UI destination decision. No other wording, content owner, canonical key, extraction, translation, or accessibility-quality approval is inferred.",
+    "reason": "Fourteen candidates still lack an accountable content owner and remain incomplete in LOC-002. The learn-more candidate has a complete LOC-002 classification, owner and catalog destination; its canonical key and extraction remain in LOC-003. Other batches retain content or assistive-review questions."
   },
   "pendingDecisionBatches": [
     {
@@ -647,10 +647,9 @@
       "candidateIds": [
         "e185d906c6f85858"
       ],
-      "evidence": "Owner-approved visible wording “Saiba mais” and /about/ destination are recorded in owner-decisions-2026-11-14.md. Record role-level product-owner authority; do not infer it from sourceOwner=landing.",
+      "evidence": "Owner-approved visible wording “Saiba mais” and /about/ destination are recorded in owner-decisions-2026-11-14.md; Plano Diretor v0.9 maps ui-static to Catálogo de UI.",
       "pending": [
-        "whether this remains inline or enters a catalog",
-        "key/extraction decision"
+        "canonical key and extraction decision (LOC-003)"
       ]
     },
     {
