@@ -1,7 +1,7 @@
 name: VIS-002C P-TOKEN v0.3 product pin
 on:
   pull_request:
-    branches: [main]
+    branches: [main, development]
     paths:
       - app/design-system/vis002c-long-copy-light-v0.3.0.css
       - app/landing/landing.css
@@ -21,6 +21,8 @@ on:
       - scripts/verify-vis002c-product-pin-v03.mjs
       - docs/architecture/vis002c-v03-product-integration-2026-10-24.md
       - .github/workflows/vis002c-v03-product-pin.yml
+      - package.json
+      - scripts/compile-primary-pages.mjs
 permissions:
   contents: read
 jobs:
