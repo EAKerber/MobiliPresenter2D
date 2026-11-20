@@ -8,7 +8,14 @@ on:
       - 'reference/variant-cases.json'
       - 'reference/visual-debt.md'
       - 'tools/**'
-      - 'tests/**'
+      - 'tests/test_candidate_asset_gates.py'
+      - 'tests/test_candidate_asset_sets.py'
+      - 'tests/test_candidate_delta_authoring.py'
+      - 'tests/test_candidate_authoring_provenance.py'
+      - 'tests/test_perspective_editorial_gate.py'
+      - 'tests/test_gap_parallelism_gate.py'
+      - 'tests/test_gap_pixel_gate.py'
+      - 'tests/test_faucet_edge.py'
       - '.github/workflows/candidate-assets.yml'
   push:
     branches: [main]
@@ -18,7 +25,14 @@ on:
       - 'reference/variant-cases.json'
       - 'reference/visual-debt.md'
       - 'tools/**'
-      - 'tests/**'
+      - 'tests/test_candidate_asset_gates.py'
+      - 'tests/test_candidate_asset_sets.py'
+      - 'tests/test_candidate_delta_authoring.py'
+      - 'tests/test_candidate_authoring_provenance.py'
+      - 'tests/test_perspective_editorial_gate.py'
+      - 'tests/test_gap_parallelism_gate.py'
+      - 'tests/test_gap_pixel_gate.py'
+      - 'tests/test_faucet_edge.py'
       - '.github/workflows/candidate-assets.yml'
   workflow_dispatch:
 
