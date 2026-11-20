@@ -5,6 +5,11 @@ on:
     paths:
       - 'app/admin.html'
       - 'app/admin/**'
+      - 'app/core/private-navigation.js'
+      - 'app/data/catalog-data.js'
+      - 'app/data/scene-data.js'
+      - 'app/data/mock-price-book.js'
+      - 'app/data/configurator-settings.js'
       - 'app/core/configuration.js'
       - 'app/core/item-capabilities.js'
       - 'app/data/hierarchy-defaults.js'
@@ -25,6 +30,11 @@ on:
     paths:
       - 'app/admin.html'
       - 'app/admin/**'
+      - 'app/core/private-navigation.js'
+      - 'app/data/catalog-data.js'
+      - 'app/data/scene-data.js'
+      - 'app/data/mock-price-book.js'
+      - 'app/data/configurator-settings.js'
       - 'app/core/configuration.js'
       - 'app/core/item-capabilities.js'
       - 'app/data/hierarchy-defaults.js'
