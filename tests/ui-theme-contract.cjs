@@ -11,15 +11,28 @@ const code = read("app/core/ui-theme.js");
 const shells = [
   "app/index.html", "app/about/index.html", "app/how-it-works/index.html",
   "app/viewer/index.html", "app/config/index.html", "app/admin.html",
-  "app/access/manage.html"
+  "app/access/manage.html", "app/access/index.html"
 ];
+const faviconShells = new Set(shells.filter((file) => file !== "app/access/index.html"));
+const themeScriptPattern = /<script\b[^>]*\ssrc="\/core\/ui-theme\.js(?:\?[^"]*)?"[^>]*>/;
+const themeStylesheetPattern = /<link\b(?=[^>]*\srel="stylesheet")(?=[^>]*\shref="\/ui-theme\.css(?:\?[^"]*)?")[^>]*>/;
+assert.equal(themeScriptPattern.test('<script data-src="/core/ui-theme.js?v=test"></script>'), false,
+  "theme bootstrap requires a real src attribute");
+assert.equal(themeStylesheetPattern.test('<link rel="preload" href="/ui-theme.css?v=test">'), false,
+  "theme CSS requires a stylesheet link");
+assert.equal(themeStylesheetPattern.test('<link rel="stylesheet" data-href="/ui-theme.css?v=test">'), false,
+  "theme stylesheet requires a real href attribute");
 for (const file of shells) {
   const html = read(file);
-  assert(html.includes('src="/core/ui-theme.js?v=ds01-theme-v1"'), file + " theme bootstrap");
-  assert(html.includes('href="/ui-theme.css?v=ds01-theme-v1"'), file + " theme CSS");
-  assert(html.indexOf("ui-theme.js") < html.indexOf("ui-theme.css"), file + " theme before stylesheet");
-  assert(html.includes('href="/branding/favicon.ico"'), file + " favicon");
-  assert(html.includes('href="/branding/apple-touch-icon.png"'), file + " apple touch icon");
+  const themeScript = html.match(themeScriptPattern);
+  const themeStylesheet = html.match(themeStylesheetPattern);
+  assert(themeScript, file + " theme bootstrap");
+  assert(themeStylesheet, file + " theme CSS");
+  assert(themeScript.index < themeStylesheet.index, file + " theme before stylesheet");
+  if (faviconShells.has(file)) {
+    assert(html.includes('href="/branding/favicon.ico"'), file + " favicon");
+    assert(html.includes('href="/branding/apple-touch-icon.png"'), file + " apple touch icon");
+  }
   assert(html.includes("data-brand-variant"), file + " proper brand logo");
   assert(!html.includes('aria-hidden="true">▱</span>'), file + " no fake mark");
 }
@@ -65,10 +78,11 @@ assert(read("app/viewer/viewer.js").includes('search.get("technical") === "neutr
 const how = read("app/how-it-works/index.html");
 const about = read("app/about/index.html");
 const howStyles = read("app/how-it-works/how-it-works.css");
-assert(howStyles.includes('.integration-callout img { display: block; width: min(100%, 320px); height: auto;') &&
-  howStyles.includes('aspect-ratio: 2 / 1; object-fit: contain; border-radius: 10px;') &&
-  howStyles.includes('.integration-callout img { width: min(100%, 250px); max-height: 125px; }'),
-  "integration illustration box follows 900x450 original at both breakpoints so rounded corners clip the visible white rectangle");
+assert(howStyles.includes('.integration-image-frame { display: block; position: relative; width: min(100%, 320px); height: auto; max-height: 160px;') &&
+  howStyles.includes('aspect-ratio: 2 / 1; border-radius: 10px;') &&
+  howStyles.includes('.integration-image-frame > img { display: block; width: 100%; height: 100%; object-fit: contain; border-radius: inherit;') &&
+  howStyles.includes('.integration-image-frame { width: min(100%, 250px); max-height: 125px; }'),
+  "integration illustration uses a normalized 2:1 clipped frame at desktop and mobile sizes");
 assert(how.includes('class="header-cta" href="https://wa.me/"') &&
   how.includes('Fale conosco pelo WhatsApp') &&
   how.includes('src="/landing/assets/icons/ui/white/whatsapp.svg"'),
@@ -199,4 +213,4 @@ darkDefault.window.CASA_UI_THEME.setMode("dark");
 assert.equal(attributes.src, "/branding/logo-dark-380.png");
 darkDefault.window.CASA_UI_THEME.setMode("light");
 assert.equal(attributes.src, "/branding/logo-light-380.png");
-console.log("DS-01 asset hashes, seven shells, theme auto/explicit/sync and image switching: PASS");
+console.log("DS-01 asset hashes, eight shells, theme auto/explicit/sync and image switching: PASS");

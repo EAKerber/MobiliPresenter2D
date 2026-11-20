@@ -16,6 +16,8 @@ on:
       - 'tests/test_gap_parallelism_gate.py'
       - 'tests/test_gap_pixel_gate.py'
       - 'tests/test_faucet_edge.py'
+      - 'tests/test_mask_semantics.py'
+      - 'tests/validate-exposed-side-pixels.py'
       - '.github/workflows/candidate-assets.yml'
   push:
     branches: [main]
@@ -33,6 +35,8 @@ on:
       - 'tests/test_gap_parallelism_gate.py'
       - 'tests/test_gap_pixel_gate.py'
       - 'tests/test_faucet_edge.py'
+      - 'tests/test_mask_semantics.py'
+      - 'tests/validate-exposed-side-pixels.py'
       - '.github/workflows/candidate-assets.yml'
   workflow_dispatch:
 
@@ -104,3 +108,15 @@ jobs:
           name: current-asset-review-${{ github.run_id }}
           path: /tmp/candidate-review
           if-no-files-found: error
+      - name: Verify mask semantics and exposed-side pixels
+        run: |
+          set +e
+          python -m unittest tests.test_mask_semantics
+          MASK_RC=$?
+          python tests/validate-exposed-side-pixels.py
+          PIXEL_RC=$?
+          set -e
+          if [ "$MASK_RC" -ne 0 ] || [ "$PIXEL_RC" -ne 0 ]; then
+            echo "Mask semantics or exposed-side pixel validation failed." >&2
+            exit 1
+          fi
