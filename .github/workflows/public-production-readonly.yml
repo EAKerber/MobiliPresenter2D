@@ -13,6 +13,7 @@ on:
       - 'app/index.html'
       - 'app/config/**'
       - 'app/viewer/**'
+      - 'app/core/public-module-projection.js'
       - 'netlify/functions/public-modules.mjs'
       - 'netlify.toml'
 

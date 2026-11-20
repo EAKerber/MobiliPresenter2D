@@ -21,6 +21,8 @@ on:
       - scripts/verify-vis002c-product-pin-v03.mjs
       - docs/architecture/vis002c-v03-product-integration-2026-10-24.md
       - .github/workflows/vis002c-v03-product-pin.yml
+      - package.json
+      - scripts/compile-primary-pages.mjs
 permissions:
   contents: read
 jobs:

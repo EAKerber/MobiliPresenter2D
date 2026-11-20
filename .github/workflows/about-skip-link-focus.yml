@@ -10,6 +10,8 @@ on:
       - architecture/generated/primary-pages.manifest.json
       - tests/about-skip-link-focus.mjs
       - .github/workflows/about-skip-link-focus.yml
+      - package.json
+      - scripts/compile-primary-pages.mjs
   push:
     branches:
       - fix/focus-ring-about-approved-vis002-20261024
@@ -20,6 +22,8 @@ on:
       - architecture/generated/primary-pages.manifest.json
       - tests/about-skip-link-focus.mjs
       - .github/workflows/about-skip-link-focus.yml
+      - package.json
+      - scripts/compile-primary-pages.mjs
 permissions:
   contents: read
 jobs:
