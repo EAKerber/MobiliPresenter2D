@@ -298,11 +298,11 @@
       "sink": "call:setAttribute",
       "sourceSha256": "84a99c51d8e28dc1df8c22d5b4dffbec5a2a75a8513c692ba78197e29ed334c0",
       "expression": "label",
-      "reviewNote": "dynamic label in how-it-works.js",
+      "reviewNote": "dynamic label in how-it-works.js Destination per Plano Diretor v0.9 LOC-002: UI catalog with semantic context. Content ownership and any wording or assistive-technology decision remain pending.",
       "loc002": {
         "classification": "accessibility",
         "contentOwner": null,
-        "destination": "hold",
+        "destination": "catalog",
         "status": "pending-semantic-review",
         "classificationBasis": "aria-label on the How fullscreen control; the control name changes with fullscreen state.",
         "classificationConfidence": "high"
@@ -318,11 +318,11 @@
       "sink": "call:setAttribute",
       "sourceSha256": "84a99c51d8e28dc1df8c22d5b4dffbec5a2a75a8513c692ba78197e29ed334c0",
       "expression": "label",
-      "reviewNote": "dynamic title",
+      "reviewNote": "dynamic title Destination per Plano Diretor v0.9 LOC-002: parameterized UI catalog entry. Content ownership and any wording or assistive-technology decision remain pending.",
       "loc002": {
         "classification": "ui-dynamic",
         "contentOwner": null,
-        "destination": "hold",
+        "destination": "catalog",
         "status": "pending-semantic-review",
         "classificationBasis": "title tooltip on the How fullscreen control; it tracks the fullscreen state.",
         "classificationConfidence": "high"
@@ -338,11 +338,11 @@
       "sink": "attribute:aria-label",
       "sourceSha256": "65e8abbf631f203fee18f3283fe2718cb68a3b5eacfdb23ff72b0cec97b312ae",
       "expression": "Abrir vídeo em tela cheia",
-      "reviewNote": "fullscreen aria-label",
+      "reviewNote": "fullscreen aria-label Destination per Plano Diretor v0.9 LOC-002: UI catalog with semantic context. Content ownership and any wording or assistive-technology decision remain pending.",
       "loc002": {
         "classification": "accessibility",
         "contentOwner": null,
-        "destination": "hold",
+        "destination": "catalog",
         "status": "pending-semantic-review",
         "classificationBasis": "aria-label of the How fullscreen button; runtime synchronizes the name with state.",
         "classificationConfidence": "high"
@@ -358,11 +358,11 @@
       "sink": "attribute:title",
       "sourceSha256": "65e8abbf631f203fee18f3283fe2718cb68a3b5eacfdb23ff72b0cec97b312ae",
       "expression": "Abrir vídeo em tela cheia",
-      "reviewNote": "fullscreen title",
+      "reviewNote": "fullscreen title Destination per Plano Diretor v0.9 LOC-002: parameterized UI catalog entry. Content ownership and any wording or assistive-technology decision remain pending.",
       "loc002": {
         "classification": "ui-dynamic",
         "contentOwner": null,
-        "destination": "hold",
+        "destination": "catalog",
         "status": "pending-semantic-review",
         "classificationBasis": "title tooltip of the How fullscreen button; runtime synchronizes it with state.",
         "classificationConfidence": "high"
@@ -378,11 +378,11 @@
       "sink": "attribute:alt",
       "sourceSha256": "a6e2105840cd85196474e04d98a0b1c0b51ec28398f9a985bacfc577a566d01a",
       "expression": "Cozinha planejada com uma mão segurando um celular",
-      "reviewNote": "changed image alt text",
+      "reviewNote": "changed image alt text Destination per Plano Diretor v0.9 LOC-002: UI catalog with semantic context. Content ownership and any wording or assistive-technology decision remain pending.",
       "loc002": {
         "classification": "accessibility",
         "contentOwner": null,
-        "destination": "hold",
+        "destination": "catalog",
         "status": "pending-semantic-review",
         "classificationBasis": "alt text for the Home hero illustration; class is clear, but descriptive accuracy and image purpose still need the content owner.",
         "classificationConfidence": "high"
@@ -398,11 +398,11 @@
       "sink": "attribute:title",
       "sourceSha256": "a6e2105840cd85196474e04d98a0b1c0b51ec28398f9a985bacfc577a566d01a",
       "expression": "Abrir vídeo em tela cheia",
-      "reviewNote": "changed fullscreen title",
+      "reviewNote": "changed fullscreen title Destination per Plano Diretor v0.9 LOC-002: parameterized UI catalog entry. Content ownership and any wording or assistive-technology decision remain pending.",
       "loc002": {
         "classification": "ui-dynamic",
         "contentOwner": null,
-        "destination": "hold",
+        "destination": "catalog",
         "status": "pending-semantic-review",
         "classificationBasis": "title tooltip of the Home fullscreen control; it tracks the fullscreen state.",
         "classificationConfidence": "high"
@@ -418,11 +418,11 @@
       "sink": "call:setAttribute",
       "sourceSha256": "fe167a4422578fbf36bf4a57661411b9ccd180554f59cc234f4147205b31d071",
       "expression": "label",
-      "reviewNote": "dynamic aria-label in landing.js",
+      "reviewNote": "dynamic aria-label in landing.js Destination per Plano Diretor v0.9 LOC-002: UI catalog with semantic context. Content ownership and any wording or assistive-technology decision remain pending.",
       "loc002": {
         "classification": "accessibility",
         "contentOwner": null,
-        "destination": "hold",
+        "destination": "catalog",
         "status": "pending-semantic-review",
         "classificationBasis": "aria-label on the Home fullscreen control; the control name changes with fullscreen state.",
         "classificationConfidence": "high"
@@ -438,11 +438,11 @@
       "sink": "call:setAttribute",
       "sourceSha256": "fe167a4422578fbf36bf4a57661411b9ccd180554f59cc234f4147205b31d071",
       "expression": "label",
-      "reviewNote": "dynamic title in landing.js",
+      "reviewNote": "dynamic title in landing.js Destination per Plano Diretor v0.9 LOC-002: parameterized UI catalog entry. Content ownership and any wording or assistive-technology decision remain pending.",
       "loc002": {
         "classification": "ui-dynamic",
         "contentOwner": null,
-        "destination": "hold",
+        "destination": "catalog",
         "status": "pending-semantic-review",
         "classificationBasis": "title tooltip on the Home fullscreen control; it tracks the fullscreen state.",
         "classificationConfidence": "high"
@@ -458,11 +458,11 @@
       "sink": "attribute:aria-label",
       "sourceSha256": "a6e2105840cd85196474e04d98a0b1c0b51ec28398f9a985bacfc577a566d01a",
       "expression": "Mais informações",
-      "reviewNote": "“Mais informações”; assistive-technology review remains pending",
+      "reviewNote": "“Mais informações”; assistive-technology review remains pending Destination per Plano Diretor v0.9 LOC-002: UI catalog with semantic context. Content ownership and any wording or assistive-technology decision remain pending.",
       "loc002": {
         "classification": "accessibility",
         "contentOwner": null,
-        "destination": "hold",
+        "destination": "catalog",
         "status": "pending-semantic-review",
         "classificationBasis": "aria-label of a role=group containing two links; assistive-technology review must confirm the group adds useful, nonredundant navigation.",
         "classificationConfidence": "medium"
@@ -498,11 +498,11 @@
       "sink": "text:a",
       "sourceSha256": "a6e2105840cd85196474e04d98a0b1c0b51ec28398f9a985bacfc577a566d01a",
       "expression": "Assistir no YouTube ↗",
-      "reviewNote": "Common Sense Judge: classify the whole fixed anchor sink as ui-static. Keep exact wording approval and the arrow's accessible-name treatment pending.",
+      "reviewNote": "Common Sense Judge: classify the whole fixed anchor sink as ui-static. Keep exact wording approval and the arrow's accessible-name treatment pending. Destination per Plano Diretor v0.9 LOC-002: Catalog of UI. Content ownership and any wording or assistive-technology decision remain pending.",
       "loc002": {
         "classification": "ui-static",
         "contentOwner": null,
-        "destination": "hold",
+        "destination": "catalog",
         "status": "pending-semantic-review",
         "classificationBasis": "Fixed, user-facing anchor label in the Landing hero; href points to the YouTube Short. The whole text sink is static UI copy. The arrow is a trailing marker in the same text node and does not make the whole label decorative; its accessible-name treatment remains pending.",
         "classificationConfidence": "high"
@@ -518,11 +518,11 @@
       "sink": "attribute:aria-label",
       "sourceSha256": "a6e2105840cd85196474e04d98a0b1c0b51ec28398f9a985bacfc577a566d01a",
       "expression": "Vídeo de apresentação no celular",
-      "reviewNote": "video group accessible name",
+      "reviewNote": "video group accessible name Destination per Plano Diretor v0.9 LOC-002: UI catalog with semantic context. Content ownership and any wording or assistive-technology decision remain pending.",
       "loc002": {
         "classification": "accessibility",
         "contentOwner": null,
-        "destination": "hold",
+        "destination": "catalog",
         "status": "pending-semantic-review",
         "classificationBasis": "aria-label of a role=group around the video; assistive-technology review must check usefulness and redundancy with poster/frame names.",
         "classificationConfidence": "medium"
@@ -538,11 +538,11 @@
       "sink": "attribute:aria-label",
       "sourceSha256": "a6e2105840cd85196474e04d98a0b1c0b51ec28398f9a985bacfc577a566d01a",
       "expression": "Reproduzir o vídeo de apresentação",
-      "reviewNote": "play control accessible label; remapped from 3abe647cf8ac759d",
+      "reviewNote": "play control accessible label; remapped from 3abe647cf8ac759d Destination per Plano Diretor v0.9 LOC-002: UI catalog with semantic context. Content ownership and any wording or assistive-technology decision remain pending.",
       "loc002": {
         "classification": "accessibility",
         "contentOwner": null,
-        "destination": "hold",
+        "destination": "catalog",
         "status": "pending-semantic-review",
         "classificationBasis": "accessible name of the Home video poster button; wording and screen-reader behavior remain for review.",
         "classificationConfidence": "high"
@@ -558,11 +558,11 @@
       "sink": "attribute:aria-label",
       "sourceSha256": "a6e2105840cd85196474e04d98a0b1c0b51ec28398f9a985bacfc577a566d01a",
       "expression": "Abrir vídeo em tela cheia",
-      "reviewNote": "fullscreen control accessible label; remapped from fd28c05616bfb437",
+      "reviewNote": "fullscreen control accessible label; remapped from fd28c05616bfb437 Destination per Plano Diretor v0.9 LOC-002: UI catalog with semantic context. Content ownership and any wording or assistive-technology decision remain pending.",
       "loc002": {
         "classification": "accessibility",
         "contentOwner": null,
-        "destination": "hold",
+        "destination": "catalog",
         "status": "pending-semantic-review",
         "classificationBasis": "aria-label of the Home fullscreen control; runtime changes it with fullscreen state.",
         "classificationConfidence": "high"
@@ -578,11 +578,11 @@
       "sink": "property:title",
       "sourceSha256": "fe167a4422578fbf36bf4a57661411b9ccd180554f59cc234f4147205b31d071",
       "expression": "\"Casa em Módulos — apresentação institucional\"",
-      "reviewNote": "iframe title; remapped from 93f686ffaaeffa8e",
+      "reviewNote": "iframe title; remapped from 93f686ffaaeffa8e Destination per Plano Diretor v0.9 LOC-002: UI catalog with semantic context. Content ownership and any wording or assistive-technology decision remain pending.",
       "loc002": {
         "classification": "accessibility",
         "contentOwner": null,
-        "destination": "hold",
+        "destination": "catalog",
         "status": "pending-semantic-review",
         "classificationBasis": "title of the dynamically created YouTube iframe; it labels the frame, with equivalent static frame title on How.",
         "classificationConfidence": "high"
@@ -597,8 +597,8 @@
     "candidatesClassifiedBySinkFunction": 15,
     "candidatesWithoutClass": 0,
     "loc002Complete": false,
-    "classificationScope": "The 15 sink-function classifications describe only the observed HTML sink or adjacent state behavior. The learn-more candidate e185d906c6f85858 now has an explicit product-owner and plan-based Catalog of UI destination decision. No other wording, content owner, canonical key, extraction, translation, or accessibility-quality approval is inferred.",
-    "reason": "Fourteen candidates still lack an accountable content owner and remain incomplete in LOC-002. The learn-more candidate has a complete LOC-002 classification, owner and catalog destination; its canonical key and extraction remain in LOC-003. Other batches retain content or assistive-review questions."
+    "classificationScope": "All 15 sink-function classifications describe only the observed HTML sink or adjacent state behavior. The plan-based mapping assigns destination=catalog to all 15. Only “Saiba mais” has an explicit product-owner decision and complete LOC-002; the other 14 retain contentOwner=null and pending-semantic-review. No other wording, content, canonical key, extraction, translation, or accessibility-quality approval is inferred.",
+    "reason": "Fourteen candidates still lack a content owner and remain incomplete. Their catalog destination is assigned by the Plano Diretor v0.9 class mapping; content, wording, assistive-review, and sink-retention decisions remain open. The “Saiba mais” candidate has complete LOC-002 classification, owner and destination; canonical key and extraction remain LOC-003."
   },
   "pendingDecisionBatches": [
     {
@@ -618,7 +618,7 @@
         "accountable content owner",
         "approval of the enter/exit wording once across both pages",
         "assistive-technology validation of the changing accessible name and tooltip",
-        "canonical key/extraction decision"
+        "Canonical key and extraction are LOC-003; these do not block the LOC-002 catalog destination."
       ]
     },
     {
@@ -660,7 +660,7 @@
       "evidence": "Fixed YouTube Shorts link whose complete text sink, including its trailing arrow, is classified as ui-static.",
       "pending": [
         "content owner approves exact wording and whether the arrow remains part of the accessible name or is treated as decoration",
-        "canonical key/extraction decision after wording and accessible-name treatment are approved"
+        "Canonical key and extraction are LOC-003; these do not block the LOC-002 catalog destination."
       ]
     },
     {
