@@ -10,6 +10,8 @@ on:
       - 'app/viewer/**'
       - 'app/core/public-module-projection.js'
       - 'app/core/scene-component.js'
+      - 'app/data/catalog-data.js'
+      - 'app/data/scene-data.js'
       - 'netlify/functions/public-modules.mjs'
       - 'netlify.toml'
       - 'tests/public-*.cjs'
@@ -22,7 +24,14 @@ on:
       - 'app/config/**'
       - 'app/landing/**'
       - 'app/viewer/**'
+      - 'app/core/public-module-projection.js'
+      - 'app/core/scene-component.js'
+      - 'app/data/catalog-data.js'
+      - 'app/data/scene-data.js'
       - 'netlify/functions/public-modules.mjs'
+      - 'netlify.toml'
+      - 'tests/public-*.cjs'
+      - 'app/tools/test-public-modules-endpoint.js'
       - '.github/workflows/public-routing-before-clerk.yml'
 
 permissions:
