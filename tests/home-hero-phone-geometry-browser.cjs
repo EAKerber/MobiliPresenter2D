@@ -161,6 +161,43 @@ async function main() {
           const playBox = play.getBoundingClientRect();
           const posterImageFit = getComputedStyle(poster.querySelector("img")).objectFit;
           const scale = imageBox.width / 1024;
+          // Independently anchor the CSS rectangle to the dark screen opening
+          // in the exact, hash-pinned artwork. Rasterize the stretched SVG at
+          // its 1024x1536 viewBox so the embedded image's native dimensions do
+          // not skew the measurement.
+          const canvas = document.createElement("canvas");
+          canvas.width = 1024;
+          canvas.height = 1536;
+          const context = canvas.getContext("2d", { willReadFrequently: true });
+          context.drawImage(image, 0, 0, canvas.width, canvas.height);
+          const pixels = context.getImageData(0, 0, canvas.width, canvas.height).data;
+          const luminance = (x, y) => {
+            const offset = (y * canvas.width + x) * 4;
+            return (pixels[offset] + pixels[offset + 1] + pixels[offset + 2]) / 3;
+          };
+          const longestDarkRun = (axis, fixed) => {
+            const start = axis === "row" ? 256 : 512;
+            const end = axis === "row" ? 768 : 1450;
+            const runs = [];
+            let runStart = null;
+            for (let position = start; position <= end; position += 1) {
+              const x = axis === "row" ? position : fixed;
+              const y = axis === "row" ? fixed : position;
+              const isDark = luminance(x, y) < 20;
+              if (isDark && runStart === null) runStart = position;
+              if ((!isDark || position === end) && runStart !== null) {
+                const runEnd = isDark && position === end ? position : position - 1;
+                runs.push({ start: runStart, end: runEnd, length: runEnd - runStart + 1 });
+                runStart = null;
+              }
+            }
+            return runs.sort((left, right) => right.length - left.length)[0] || null;
+          };
+          const artworkAnchor = {
+            threshold: "mean RGB < 20",
+            horizontal: [900, 1000, 1200].map((y) => ({ y, run: longestDarkRun("row", y) })),
+            vertical: [480, 500].map((x) => ({ x, run: longestDarkRun("column", x) }))
+          };
           return {
             screen: {
               left: Number(screen.dataset.screenLeft),
@@ -176,6 +213,7 @@ async function main() {
             poster: { left: posterBox.left, top: posterBox.top, width: posterBox.width, height: posterBox.height },
             play: { left: playBox.left, top: playBox.top, width: playBox.width, height: playBox.height },
             posterImageFit,
+            artworkAnchor,
             expected: {
               left: imageBox.left + 305 * scale,
               top: imageBox.top + 617 * scale,
@@ -185,6 +223,16 @@ async function main() {
           };
         });
         assert.deepEqual(measured.screen, expected, context + " calibration");
+        for (const anchor of measured.artworkAnchor.horizontal) {
+          assert.ok(anchor.run && Math.abs(anchor.run.start - expected.left) <= 1
+            && Math.abs(anchor.run.length - expected.width) <= 1,
+          context + " artwork horizontal screen edge drift: " + JSON.stringify(measured.artworkAnchor));
+        }
+        for (const anchor of measured.artworkAnchor.vertical) {
+          assert.ok(anchor.run && Math.abs(anchor.run.start - expected.top) <= 1
+            && Math.abs(anchor.run.length - expected.height) <= 1,
+          context + " artwork vertical screen edge drift (1px antialias tolerance): " + JSON.stringify(measured.artworkAnchor));
+        }
         for (const edge of ["left", "top", "width", "height"]) {
           assert.ok(closeEnough(measured.actual[edge], measured.expected[edge]),
             context + " " + edge + " drift: " + JSON.stringify(measured));
