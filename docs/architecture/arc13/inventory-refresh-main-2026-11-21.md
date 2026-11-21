@@ -5,7 +5,7 @@
 ## Resultado do inventário
 
 - Arquivo: `architecture/arc13/ui-text-candidates.json`.
-- SHA-256: `607fcfc0ed4687254a26dc0a34d02dfa0fa2a171ff26225880a1f5d37cc13657`.
+- SHA-256: `9a0650b5b56df2b8890fe973376fdfc4121899776937ba3ed6316e00459ce0ad`.
 - Escopo: 609 ocorrências HTML e 417 pontos de escrita JavaScript, totalizando 1.026 candidatas `unreviewed`.
 - Fontes: 360 registros de texto JavaScript, 57 arquivos JavaScript e 8 arquivos HTML.
 - Integridade: 0 erros de parsing, 0 fontes JavaScript ignoradas, 0 owners técnicos sem atribuição e 0 rotas técnicas sem atribuição.
@@ -16,7 +16,7 @@ O snapshot anterior de `development@4850149342d013314635f4fa12b0599562d432b9` re
 
 ## Proveniência entre compilador e scanner
 
-O compilador ARC-03C emite o manifesto `M2DARC03CPublishedPages/2` com mapas por ponto de código Unicode. A validação local foi feita num checkout Windows com CRLF. Esse caso revelou que o scanner normalizava quebras para calcular hashes, mas não para conferir offsets. O scanner agora normaliza CRLF/LF antes de validar os intervalos do mapa; as 420 ocorrências passaram a ser atribuídas corretamente.
+O compilador ARC-03C emite o manifesto `M2DARC03CPublishedPages/2` com mapas por ponto de código Unicode. A validação local foi feita num checkout Windows com CRLF. Esse caso revelou duas diferenças de sistema operacional: offsets do parser ainda contavam CRLF, e os hashes dos arquivos variavam pela quebra de linha. O scanner agora analisa as páginas compiladas e valida os intervalos em LF canônico; os hashes textuais também são calculados sobre LF. As 420 ocorrências passaram a ser atribuídas corretamente nos dois modos.
 
 ## Evidência local do candidato
 

@@ -70,7 +70,8 @@ VOID_TAGS = {
 
 
 def sha256(data: bytes) -> str:
-    return hashlib.sha256(data).hexdigest()
+    # Text-file identities must not vary with the checkout line ending.
+    return hashlib.sha256(data.replace(b"\r\n", b"\n")).hexdigest()
 
 
 def git_blob_sha(data: bytes) -> str:
@@ -674,6 +675,10 @@ def scan(html_only: bool = False) -> dict:
         raw = path.read_bytes()
         source_hashes[relative] = sha256(raw)
         source_text = raw.decode("utf-8")
+        if relative in PRIMARY_PAGES:
+            # Source-map offsets use canonical LF text. Keep parser offsets in
+            # that same coordinate space when Git checks out CRLF on Windows.
+            source_text = source_text.replace("\r\n", "\n")
         parser = PageParser(
             relative,
             route_for_html(path),
