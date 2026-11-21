@@ -19,6 +19,181 @@
   let hintTimer;
   let hintStopped = false;
 
+  function layoutHeroPhoneScreen() {
+    const frame = document.querySelector(".hero-image-frame");
+    const art = document.querySelector(".hero-art");
+    const image = frame && frame.querySelector("img");
+    const screenElement = document.getElementById("heroPhoneScreen");
+    const player = screenElement && screenElement.querySelector(".hero-phone-player");
+    if (!frame || !art || !image || !screenElement || !player || !image.naturalWidth || !image.naturalHeight) return;
+
+    const frameWidth = frame.clientWidth;
+    if (!frameWidth) return;
+    // The art height is increased below to fit the phone. Using it here feeds the previous layout back into the next scale calculation.
+    const minimumPhoneScale = 0.589;
+    const scale = Math.max(frameWidth / image.naturalWidth, minimumPhoneScale);
+    const renderedWidth = image.naturalWidth * scale;
+    const renderedHeight = image.naturalHeight * scale;
+    const offsetX = (frameWidth - renderedWidth) / 2;
+    // Calibrated in the SVG viewBox; the browser gate pins these bounds to the source artwork.
+    const screen = {
+      left: Number(screenElement.dataset.screenLeft),
+      top: Number(screenElement.dataset.screenTop),
+      width: Number(screenElement.dataset.screenWidth),
+      height: Number(screenElement.dataset.screenHeight)
+    };
+    if (!Object.values(screen).every(Number.isFinite)) return;
+    const offsetY = screen.top * scale * 0.3;
+
+    image.style.left = `${offsetX}px`;
+    image.style.top = `-${offsetY}px`;
+    image.style.width = `${renderedWidth}px`;
+    image.style.height = `${renderedHeight}px`;
+    screenElement.style.left = `${offsetX + screen.left * scale}px`;
+    screenElement.style.top = `${screen.top * scale - offsetY}px`;
+    screenElement.style.width = `${screen.width * scale}px`;
+    screenElement.style.height = `${screen.height * scale}px`;
+    screenElement.hidden = false;
+
+    const artMinimum = frameWidth <= 680 ? 350 : frameWidth <= 900 ? Math.max(340, Math.min(frameWidth * 0.56, 500)) : 420;
+    const phoneBottom = (screen.top + screen.height + 35) * scale - offsetY;
+    art.style.minHeight = `${Math.ceil(Math.max(artMinimum, phoneBottom))}px`;
+  }
+
+  function initHeroPhoneScreen() {
+    const image = document.querySelector(".hero-image-frame > img");
+    const screenElement = document.getElementById("heroPhoneScreen");
+    const media = document.getElementById("heroPhoneMedia");
+    const poster = document.getElementById("heroPhonePoster");
+    const videoId = screenElement && screenElement.querySelector(".hero-phone-player")
+      && screenElement.querySelector(".hero-phone-player").dataset.videoId;
+    if (!image || !screenElement || !media || !poster || !videoId) return;
+
+    let apiPromise = null;
+    let playerRequested = false;
+
+    function loadYouTubeIframeApi() {
+      if (window.YT && window.YT.Player) return Promise.resolve(window.YT);
+      if (apiPromise) return apiPromise;
+      apiPromise = new Promise((resolve, reject) => {
+        const previousReady = window.onYouTubeIframeAPIReady;
+        const script = document.createElement("script");
+        script.id = "casaYouTubeIframeApi";
+        script.src = "https://www.youtube.com/iframe_api";
+        script.async = true;
+        window.onYouTubeIframeAPIReady = () => {
+          if (typeof previousReady === "function") {
+            try { previousReady(); } catch (_) {}
+          }
+          resolve(window.YT);
+        };
+        script.addEventListener("error", () => {
+          apiPromise = null;
+          reject(new Error("Não foi possível carregar o player do YouTube."));
+        }, { once: true });
+        document.head.append(script);
+      });
+      return apiPromise;
+    }
+
+    function revealPlayingVideo() {
+      if (media.classList.contains("is-playing")) return;
+      media.classList.add("is-playing");
+      poster.setAttribute("aria-hidden", "true");
+    }
+
+    function restorePoster() {
+      playerRequested = false;
+      poster.disabled = false;
+      poster.removeAttribute("aria-hidden");
+      media.classList.remove("is-playing");
+    }
+
+    function handlePlayerError(event) {
+      if (media.classList.contains("is-playing")) return;
+      restorePoster();
+      const iframe = event && event.target && event.target.getIframe ? event.target.getIframe() : media.querySelector("iframe");
+      if (iframe) iframe.remove();
+    }
+
+    poster.addEventListener("click", () => {
+      if (playerRequested) return;
+      playerRequested = true;
+      poster.disabled = true;
+
+      const iframe = document.createElement("iframe");
+      iframe.className = "hero-phone-media__iframe";
+      iframe.title = "Casa em Módulos — apresentação institucional";
+      iframe.loading = "eager";
+      iframe.referrerPolicy = "strict-origin-when-cross-origin";
+      iframe.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen";
+      iframe.allowFullscreen = true;
+      const params = new URLSearchParams({
+        autoplay: "1",
+        controls: "1",
+        enablejsapi: "1",
+        fs: "1",
+        origin: window.location.origin,
+        playsinline: "1",
+        rel: "0"
+      });
+      iframe.src = "https://www.youtube-nocookie.com/embed/" + encodeURIComponent(videoId) + "?" + params.toString();
+      media.append(iframe);
+
+      loadYouTubeIframeApi().then((YT) => {
+        new YT.Player(iframe, {
+          events: {
+            onReady: (event) => event.target.playVideo(),
+            onStateChange: (event) => {
+              if (event.data === YT.PlayerState.PLAYING) revealPlayingVideo();
+            },
+            onError: handlePlayerError
+          }
+        });
+      }).catch(() => {
+        const activeIframe = media.querySelector("iframe");
+        if (activeIframe) activeIframe.remove();
+        restorePoster();
+      });
+    });
+
+    const fullscreen = document.getElementById("heroPhoneFullscreen");
+    const player = screenElement.querySelector(".hero-phone-player");
+    if (fullscreen && player) {
+      const activeFullscreenElement = () => document.fullscreenElement || document.webkitFullscreenElement || null;
+      const syncFullscreenButton = () => {
+        const isFullscreen = activeFullscreenElement() === player;
+        const label = isFullscreen ? "Sair da tela cheia" : "Abrir vídeo em tela cheia";
+        fullscreen.dataset.fullscreen = isFullscreen ? "active" : "inactive";
+        fullscreen.setAttribute("aria-label", label);
+        fullscreen.setAttribute("title", label);
+        fullscreen.setAttribute("aria-pressed", String(isFullscreen));
+      };
+      fullscreen.addEventListener("click", () => {
+        if (activeFullscreenElement() === player) {
+          const exit = document.exitFullscreen || document.webkitExitFullscreen;
+          if (exit) Promise.resolve(exit.call(document)).catch(() => {});
+          return;
+        }
+        const request = player.requestFullscreen || player.webkitRequestFullscreen;
+        if (!request) {
+          window.open(`https://www.youtube.com/shorts/${encodeURIComponent(videoId)}`, "_blank", "noopener,noreferrer");
+          return;
+        }
+        try { Promise.resolve(request.call(player)).catch(() => {}); } catch (_) {}
+      });
+      document.addEventListener("fullscreenchange", syncFullscreenButton);
+      document.addEventListener("webkitfullscreenchange", syncFullscreenButton);
+      syncFullscreenButton();
+    }
+
+    image.addEventListener("load", layoutHeroPhoneScreen);
+    image.addEventListener("error", () => { screenElement.hidden = true; });
+    if (image.complete && image.naturalWidth) layoutHeroPhoneScreen();
+    const frame = document.querySelector(".hero-image-frame");
+    if (frame && typeof ResizeObserver === "function") new ResizeObserver(layoutHeroPhoneScreen).observe(frame);
+    else window.addEventListener("resize", layoutHeroPhoneScreen);
+  }
   function renderBenefits() {
     const mini = document.getElementById("miniBenefits");
     ["Modular", "Inteligente", "Para a sua vida"].forEach((title, index) => {
@@ -173,7 +348,7 @@
   }
   function stopHint() { hintStopped = true; window.clearInterval(hintTimer); track.querySelectorAll(".wave").forEach((card) => card.classList.remove("wave")); }
 
-  renderBenefits(); renderCards();
+  renderBenefits(); renderCards(); initHeroPhoneScreen();
   document.getElementById("previousPage").addEventListener("click", () => goToPage(0));
   document.getElementById("nextPage").addEventListener("click", () => goToPage(1));
   windowEl.addEventListener("scroll", () => { if (mobileMode()) { window.clearTimeout(windowEl.settleTimer); windowEl.settleTimer = window.setTimeout(() => { page = windowEl.scrollLeft >= maxScroll() / 2 ? 1 : 0; syncPagination(); }, 100); } }, { passive: true });

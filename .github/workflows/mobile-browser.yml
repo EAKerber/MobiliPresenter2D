@@ -6,6 +6,7 @@ on:
     paths:
       - 'app/**'
       - 'tests/mobile-pip-main-browser.cjs'
+      - 'tests/home-hero-phone-geometry-browser.cjs'
       - '.github/workflows/mobile-browser.yml'
       - 'tests/ci/prepare-local-v5-browser.sh'
       - 'tests/ci/local-buyer-config-server.mjs'
@@ -15,6 +16,7 @@ on:
     paths:
       - 'app/**'
       - 'tests/mobile-pip-main-browser.cjs'
+      - 'tests/home-hero-phone-geometry-browser.cjs'
       - '.github/workflows/mobile-browser.yml'
       - 'tests/ci/prepare-local-v5-browser.sh'
       - 'tests/ci/local-buyer-config-server.mjs'
@@ -57,6 +59,10 @@ jobs:
         env:
           NODE_PATH: /tmp/mobile-browser-tools/node_modules
         run: node tests/mobile-pip-main-browser.cjs /tmp/mobile-browser-review
+      - name: Verify home hero phone screen alignment
+        env:
+          NODE_PATH: /tmp/mobile-browser-tools/node_modules
+        run: node tests/home-hero-phone-geometry-browser.cjs /tmp/mobile-browser-review
       - name: Save mobile review
         if: always()
         uses: actions/upload-artifact@v4
