@@ -121,10 +121,20 @@ const {chromium} = require('playwright');
 
   const firstModuleToggle = page.locator('#moduleList .module-card').first().locator('[data-module-toggle]');
   const firstModuleInspect = page.locator('#moduleList .module-card').first().locator('[data-select-entity]');
+  assert.equal(await firstModuleToggle.isEnabled(), true,
+    'the local V5 fixture exposes the first module checkbox as enabled');
   await firstModuleToggle.focus();
+  assert.equal(await firstModuleToggle.evaluate((element) => element === document.activeElement), true,
+    'keyboard test starts with focus on the first module inclusion checkbox');
   await page.keyboard.press('Tab');
+  const focusAfterTab = await page.evaluate(() => {
+    const element = document.activeElement;
+    return element instanceof HTMLElement
+      ? `${element.tagName.toLowerCase()}#${element.id}[${element.getAttribute('aria-label') || ''}]`
+      : null;
+  });
   assert.equal(await firstModuleInspect.evaluate((element) => element === document.activeElement), true,
-    'Tab moves from inclusion checkbox to the sibling module inspection body');
+    `Tab moves from inclusion checkbox to the sibling module inspection body (active element: ${focusAfterTab})`);
   await page.keyboard.press('Enter');
   await page.waitForFunction(() => document.body.classList.contains('has-module-detail'));
   await page.keyboard.press('Escape');
