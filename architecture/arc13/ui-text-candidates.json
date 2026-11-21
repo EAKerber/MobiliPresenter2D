@@ -37842,7 +37842,8 @@
             "expression": "return respond({ error: \"public_modules_unavailable\" }, 503);",
             "statusCode": 503,
             "relationship": "server-exception-to-fixed-json-response",
-            "evidence": "The handler catches projection/storage/validation failures and returns this fixed JSON error without exposing the exception."
+            "evidence": "The handler catches projection/storage/validation failures and returns this fixed JSON error without exposing the exception.",
+            "sourceSha256": "3da63ae2ebc736b2c684c08dd89410cb4e3783fbe4f1c87bf56f4323c09d695d"
           }
         }
       ],
@@ -37896,7 +37897,8 @@
             "expression": "return respond({ error: \"public_modules_unavailable\" }, 503);",
             "statusCode": 503,
             "relationship": "server-exception-to-fixed-json-response",
-            "evidence": "The handler catches projection/storage/validation failures and returns this fixed JSON error without exposing the exception."
+            "evidence": "The handler catches projection/storage/validation failures and returns this fixed JSON error without exposing the exception.",
+            "sourceSha256": "3da63ae2ebc736b2c684c08dd89410cb4e3783fbe4f1c87bf56f4323c09d695d"
           }
         }
       ],
@@ -37950,7 +37952,8 @@
             "expression": "return respond({ error: \"public_modules_unavailable\" }, 503);",
             "statusCode": 503,
             "relationship": "server-exception-to-fixed-json-response",
-            "evidence": "The handler catches projection/storage/validation failures and returns this fixed JSON error without exposing the exception."
+            "evidence": "The handler catches projection/storage/validation failures and returns this fixed JSON error without exposing the exception.",
+            "sourceSha256": "3da63ae2ebc736b2c684c08dd89410cb4e3783fbe4f1c87bf56f4323c09d695d"
           }
         }
       ],
@@ -38004,7 +38007,8 @@
             "expression": "return respond({ error: \"public_modules_unavailable\" }, 503);",
             "statusCode": 503,
             "relationship": "server-exception-to-fixed-json-response",
-            "evidence": "The handler catches projection/storage/validation failures and returns this fixed JSON error without exposing the exception."
+            "evidence": "The handler catches projection/storage/validation failures and returns this fixed JSON error without exposing the exception.",
+            "sourceSha256": "3da63ae2ebc736b2c684c08dd89410cb4e3783fbe4f1c87bf56f4323c09d695d"
           }
         }
       ],
@@ -38058,7 +38062,8 @@
             "expression": "return respond({ error: \"public_modules_unavailable\" }, 503);",
             "statusCode": 503,
             "relationship": "server-exception-to-fixed-json-response",
-            "evidence": "The handler catches projection/storage/validation failures and returns this fixed JSON error without exposing the exception."
+            "evidence": "The handler catches projection/storage/validation failures and returns this fixed JSON error without exposing the exception.",
+            "sourceSha256": "3da63ae2ebc736b2c684c08dd89410cb4e3783fbe4f1c87bf56f4323c09d695d"
           }
         }
       ],
@@ -38112,7 +38117,8 @@
             "expression": "return respond({ error: \"public_modules_unavailable\" }, 503);",
             "statusCode": 503,
             "relationship": "server-exception-to-fixed-json-response",
-            "evidence": "The handler catches projection/storage/validation failures and returns this fixed JSON error without exposing the exception."
+            "evidence": "The handler catches projection/storage/validation failures and returns this fixed JSON error without exposing the exception.",
+            "sourceSha256": "3da63ae2ebc736b2c684c08dd89410cb4e3783fbe4f1c87bf56f4323c09d695d"
           }
         }
       ],
@@ -38166,7 +38172,8 @@
             "expression": "return respond({ error: \"public_modules_unavailable\" }, 503);",
             "statusCode": 503,
             "relationship": "server-exception-to-fixed-json-response",
-            "evidence": "The handler catches projection/storage/validation failures and returns this fixed JSON error without exposing the exception."
+            "evidence": "The handler catches projection/storage/validation failures and returns this fixed JSON error without exposing the exception.",
+            "sourceSha256": "3da63ae2ebc736b2c684c08dd89410cb4e3783fbe4f1c87bf56f4323c09d695d"
           }
         }
       ],
@@ -38220,7 +38227,8 @@
             "expression": "return respond({ error: \"public_modules_unavailable\" }, 503);",
             "statusCode": 503,
             "relationship": "server-exception-to-fixed-json-response",
-            "evidence": "The handler catches projection/storage/validation failures and returns this fixed JSON error without exposing the exception."
+            "evidence": "The handler catches projection/storage/validation failures and returns this fixed JSON error without exposing the exception.",
+            "sourceSha256": "3da63ae2ebc736b2c684c08dd89410cb4e3783fbe4f1c87bf56f4323c09d695d"
           }
         }
       ],
@@ -38274,7 +38282,8 @@
             "expression": "return respond({ error: \"public_modules_unavailable\" }, 503);",
             "statusCode": 503,
             "relationship": "server-exception-to-fixed-json-response",
-            "evidence": "The handler catches projection/storage/validation failures and returns this fixed JSON error without exposing the exception."
+            "evidence": "The handler catches projection/storage/validation failures and returns this fixed JSON error without exposing the exception.",
+            "sourceSha256": "3da63ae2ebc736b2c684c08dd89410cb4e3783fbe4f1c87bf56f4323c09d695d"
           }
         }
       ],
@@ -38328,7 +38337,8 @@
             "expression": "return respond({ error: \"public_modules_unavailable\" }, 503);",
             "statusCode": 503,
             "relationship": "server-exception-to-fixed-json-response",
-            "evidence": "The handler catches projection/storage/validation failures and returns this fixed JSON error without exposing the exception."
+            "evidence": "The handler catches projection/storage/validation failures and returns this fixed JSON error without exposing the exception.",
+            "sourceSha256": "3da63ae2ebc736b2c684c08dd89410cb4e3783fbe4f1c87bf56f4323c09d695d"
           }
         }
       ],
@@ -38382,7 +38392,8 @@
             "expression": "return respond({ error: \"public_modules_unavailable\" }, 503);",
             "statusCode": 503,
             "relationship": "server-exception-to-fixed-json-response",
-            "evidence": "The handler catches projection/storage/validation failures and returns this fixed JSON error without exposing the exception."
+            "evidence": "The handler catches projection/storage/validation failures and returns this fixed JSON error without exposing the exception.",
+            "sourceSha256": "3da63ae2ebc736b2c684c08dd89410cb4e3783fbe4f1c87bf56f4323c09d695d"
           }
         }
       ],
@@ -38436,7 +38447,8 @@
             "expression": "return respond({ error: \"public_modules_unavailable\" }, 503);",
             "statusCode": 503,
             "relationship": "server-exception-to-fixed-json-response",
-            "evidence": "The handler catches projection/storage/validation failures and returns this fixed JSON error without exposing the exception."
+            "evidence": "The handler catches projection/storage/validation failures and returns this fixed JSON error without exposing the exception.",
+            "sourceSha256": "3da63ae2ebc736b2c684c08dd89410cb4e3783fbe4f1c87bf56f4323c09d695d"
           }
         }
       ],
@@ -38490,7 +38502,8 @@
             "expression": "return respond({ error: \"public_modules_unavailable\" }, 503);",
             "statusCode": 503,
             "relationship": "server-exception-to-fixed-json-response",
-            "evidence": "The handler catches projection/storage/validation failures and returns this fixed JSON error without exposing the exception."
+            "evidence": "The handler catches projection/storage/validation failures and returns this fixed JSON error without exposing the exception.",
+            "sourceSha256": "3da63ae2ebc736b2c684c08dd89410cb4e3783fbe4f1c87bf56f4323c09d695d"
           }
         }
       ],
@@ -38544,7 +38557,8 @@
             "expression": "return respond({ error: \"public_modules_unavailable\" }, 503);",
             "statusCode": 503,
             "relationship": "server-exception-to-fixed-json-response",
-            "evidence": "The handler catches projection/storage/validation failures and returns this fixed JSON error without exposing the exception."
+            "evidence": "The handler catches projection/storage/validation failures and returns this fixed JSON error without exposing the exception.",
+            "sourceSha256": "3da63ae2ebc736b2c684c08dd89410cb4e3783fbe4f1c87bf56f4323c09d695d"
           }
         }
       ],
@@ -38598,7 +38612,8 @@
             "expression": "return respond({ error: \"public_modules_unavailable\" }, 503);",
             "statusCode": 503,
             "relationship": "server-exception-to-fixed-json-response",
-            "evidence": "The handler catches projection/storage/validation failures and returns this fixed JSON error without exposing the exception."
+            "evidence": "The handler catches projection/storage/validation failures and returns this fixed JSON error without exposing the exception.",
+            "sourceSha256": "3da63ae2ebc736b2c684c08dd89410cb4e3783fbe4f1c87bf56f4323c09d695d"
           }
         }
       ],
@@ -38652,7 +38667,8 @@
             "expression": "return respond({ error: \"public_modules_unavailable\" }, 503);",
             "statusCode": 503,
             "relationship": "server-exception-to-fixed-json-response",
-            "evidence": "The handler catches projection/storage/validation failures and returns this fixed JSON error without exposing the exception."
+            "evidence": "The handler catches projection/storage/validation failures and returns this fixed JSON error without exposing the exception.",
+            "sourceSha256": "3da63ae2ebc736b2c684c08dd89410cb4e3783fbe4f1c87bf56f4323c09d695d"
           }
         }
       ],

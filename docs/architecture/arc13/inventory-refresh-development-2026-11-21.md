@@ -4,7 +4,7 @@ Snapshot de entrada: Product `development@95cc0f4f4ed471354cb9aa3d162a025af14303
 
 ## Resultado técnico
 
-- Inventário: `architecture/arc13/ui-text-candidates.json`, SHA-256 `5a5fd50cf534098a648348c7c98c6710a78b399c17a03c19ec4f8e7d7b1e5c77`.
+- Inventário: `architecture/arc13/ui-text-candidates.json`, SHA-256 `c69269408a1deba80dcdab4a87dcb5c1473cdc6834edb087bd92db2d758d7135`.
 - Manifesto ARC-03C: schema v2; compilador `scripts/compile-primary-pages.mjs`, Git blob `f417285ae4b69828f2995cdd5fe4a1cc32c93615`.
 - `pages:check` passou nas três páginas principais. As saídas compiladas coincidem com as três páginas já versionadas no snapshot-base.
 - Duas execuções idênticas produziram o mesmo SHA-256 do inventário.
