@@ -101,6 +101,10 @@ for (const [browserName, engine] of [["chromium", chromium], ["webkit", webkit]]
           fullPage: true, animations: "disabled", caret: "hide"
         }));
         await injected.evaluate(element => element.remove());
+        // WebKit may leave the viewport scrolled after a full-page capture.
+        // Restore the document origin before comparing document-space geometry.
+        await page.evaluate(() => window.scrollTo(0, 0));
+        await page.waitForFunction(() => window.scrollY === 0);
         await page.evaluate(() => new Promise(done => requestAnimationFrame(() =>
           requestAnimationFrame(done))));
         const afterState = await page.evaluate(sample, selectors);
