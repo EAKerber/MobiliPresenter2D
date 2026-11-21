@@ -17,11 +17,18 @@ const WIDTHS=[390,768,1366],NAV005_HOW_WIDTHS=[275,288,290,291,320,321,486,900,9
 const NAV005_PUBLIC_NARROW_WIDTHS=[275,288,290,291,320];
 const widthsFor=path=>path==="/viewer/"?WIDTHS:
   [...new Set([...WIDTHS,...(path==="/how-it-works/"?NAV005_HOW_WIDTHS:NAV005_PUBLIC_NARROW_WIDTHS)])];
-const ENGINES=[["chromium",chromium],["webkit",webkit]];
+const AVAILABLE_ENGINES=[["chromium",chromium],["webkit",webkit]];
+const requestedEngines=(process.env.M2D_PUBLIC_ENGINES||"chromium,webkit").split(",").map(x=>x.trim()).filter(Boolean);
+assert.ok(requestedEngines.length>0&&requestedEngines.every(name=>AVAILABLE_ENGINES.some(([available])=>available===name)),
+  "M2D_PUBLIC_ENGINES must select chromium and/or webkit");
+const ENGINES=AVAILABLE_ENGINES.filter(([name])=>requestedEngines.includes(name));
+const chromiumExecutable=process.env.M2D_PUBLIC_CHROMIUM_EXECUTABLE;
 let passed=0;
 
 for(const [engineName,engine] of ENGINES){
-  const browser=await engine.launch({headless:true});
+  const options={headless:true};
+  if(engineName==="chromium"&&chromiumExecutable)options.executablePath=chromiumExecutable;
+  const browser=await engine.launch(options);
   try{
     for(const {path,active,kind} of ROUTES){
       for(const width of widthsFor(path))for(const theme of THEMES){

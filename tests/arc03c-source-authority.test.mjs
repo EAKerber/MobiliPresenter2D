@@ -1,9 +1,59 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import {readFile,writeFile} from "node:fs/promises";
+import {access,copyFile,mkdtemp,mkdir,readFile,rm,writeFile} from "node:fs/promises";
+import {dirname,join,resolve} from "node:path";
+import {tmpdir} from "node:os";
+import {fileURLToPath} from "node:url";
 import {spawnSync} from "node:child_process";
 import {projectPages} from "../scripts/compile-primary-pages.mjs";
-const gate=(mode="--check")=>spawnSync(process.execPath,["scripts/compile-primary-pages.mjs",mode],{encoding:"utf8"});
+const ROOT=resolve(dirname(fileURLToPath(import.meta.url)),"..");
+const SLOT="<!-- ARC03_PRIMARY_HEADER -->";
+const SOURCE_INPUTS=[
+ "scripts/compile-primary-pages.mjs",
+ "architecture/fragments/primary-header.fragment.html",
+ "architecture/fragments/primary-header.routes.json",
+ "architecture/pages/root.page.html",
+ "architecture/pages/about.page.html",
+ "architecture/pages/how-it-works.page.html"
+];
+const ISOLATED_INPUTS=[
+ ...SOURCE_INPUTS,
+ "architecture/generated/primary-pages.manifest.json",
+ "app/index.html",
+ "app/about/index.html",
+ "app/how-it-works/index.html"
+];
+const gate=(mode="--check",root=ROOT)=>spawnSync(
+ process.execPath,[join(root,"scripts/compile-primary-pages.mjs"),mode],
+ {cwd:root,encoding:"utf8",timeout:20000}
+);
+async function runIsolatedMutation(path,mutate,mode="--check",inputs=ISOLATED_INPUTS) {
+ const root=await mkdtemp(join(tmpdir(),"m2d-arc03-source-authority-"));
+ try {
+  const liveBefore=await readFile(join(ROOT,path),"utf8");
+  for(const file of inputs) {
+   const destination=join(root,file);
+   await mkdir(dirname(destination),{recursive:true});
+   await copyFile(join(ROOT,file),destination);
+  }
+  const target=join(root,path),before=await readFile(target,"utf8");
+  await mutate(target,before);
+  const mutation=await readFile(target,"utf8");
+  const result=gate(mode,root),after=await readFile(target,"utf8");
+  const liveAfter=await readFile(join(ROOT,path),"utf8");
+  return {root,mutation,after,liveBefore,liveAfter,...result};
+ } finally {
+  await rm(root,{recursive:true,force:true});
+ }
+}
+async function assertRejectedMutation(path,mutate,expected) {
+ const r=await runIsolatedMutation(path,mutate,"--check",SOURCE_INPUTS);
+ assert.notEqual(r.status,0,"the isolated invalid source must fail");
+ assert.match(r.stderr,expected);
+ assert.equal(r.after,r.mutation,"the check must leave the negative fixture unchanged");
+ assert.equal(r.liveAfter,r.liveBefore,"the active checkout must remain unchanged");
+ await assert.rejects(access(r.root),{code:"ENOENT"},"the temporary fixture must be removed");
+}
 
 test("three generated pages and provenance manifest match authoritative source",async()=>{
  const r=await projectPages();
@@ -17,25 +67,48 @@ test("three generated pages and provenance manifest match authoritative source",
  }
  const x=gate();assert.equal(x.status,0,x.stderr);
 });
-test("modified generated HTML aborts without silent overwrite",async()=>{
- const path="app/about/index.html",old=await readFile(path,"utf8");
- try {
-  await writeFile(path,old+"\n<!-- MANUAL_DRIFT -->\n");
-  const x=gate("--build");
-  assert.notEqual(x.status,0);
-  assert.match(x.stderr,/Generated HTML drift/);
-  assert.equal(await readFile(path,"utf8"),old+"\n<!-- MANUAL_DRIFT -->\n");
- }finally{await writeFile(path,old)}
- assert.equal(gate().status,0);
+test("generated-page drift fails closed in isolated fixtures",async()=>{
+ const htmlPath="app/about/index.html",htmlBefore=await readFile(join(ROOT,htmlPath),"utf8");
+ const html=await runIsolatedMutation(htmlPath,
+  (target,before)=>writeFile(target,before+"\n<!-- MANUAL_DRIFT -->\n"),"--build");
+ assert.notEqual(html.status,0);
+ assert.match(html.stderr,/Generated HTML drift/);
+ assert.equal(html.after,html.mutation,"the compiler must not overwrite the negative fixture");
+ assert.equal(html.liveAfter,htmlBefore,"the active checkout must remain unchanged");
+ await assert.rejects(access(html.root),{code:"ENOENT"},"the temporary fixture must be removed");
+
+ const manifestPath="architecture/generated/primary-pages.manifest.json";
+ const manifestBefore=await readFile(join(ROOT,manifestPath),"utf8");
+ const manifest=await runIsolatedMutation(manifestPath,
+  (target,before)=>writeFile(target,before+" \n"));
+ assert.notEqual(manifest.status,0);
+ assert.match(manifest.stderr,/Generated manifest drift/);
+ assert.equal(manifest.after,manifest.mutation,"the check must leave the negative fixture unchanged");
+ assert.equal(manifest.liveAfter,manifestBefore,"the active checkout must remain unchanged");
+ await assert.rejects(access(manifest.root),{code:"ENOENT"},"the temporary fixture must be removed");
 });
-test("manifest modification fails closed",async()=>{
- const path="architecture/generated/primary-pages.manifest.json",old=await readFile(path,"utf8");
- try{
-  await writeFile(path,old+" \n");
-  const x=gate();assert.notEqual(x.status,0);
-  assert.match(x.stderr,/Generated manifest drift/);
- }finally{await writeFile(path,old)}
- assert.equal(gate().status,0);
+test("compiler rejects unsafe and out-of-scope sources in isolated fixtures",async()=>{
+ await assertRejectedMutation("architecture/fragments/primary-header.routes.json",
+  async(target)=> {
+   const config=JSON.parse(await readFile(target,"utf8"));
+   config.routes[0].brandHref="javascript:alert(1)";
+   await writeFile(target,JSON.stringify(config,null,2)+"\n");
+  },/Unsafe static link: brandHref/);
+ await assertRejectedMutation("architecture/pages/root.page.html",
+  (target,before)=>writeFile(target,before+"\n"+SLOT+"\n"),
+  /Exactly one header slot required/);
+ await assertRejectedMutation("architecture/pages/root.page.html",
+  (target,before)=>writeFile(target,before+'\n<header class="site-header site-header--public"></header>\n'),
+  /Duplicate authorial header/);
+ await assertRejectedMutation("architecture/pages/root.page.html",
+  (target,before)=>writeFile(target,before+'\n<header class="viewer-header"></header>\n'),
+  /NAV-005 excluded/);
+ await assertRejectedMutation("architecture/fragments/primary-header.routes.json",
+  async(target)=> {
+   const config=JSON.parse(await readFile(target,"utf8"));
+   config.status="EXPERIMENTAL_BUILD_TIME_ONLY_NOT_PUBLISHED";
+   await writeFile(target,JSON.stringify(config,null,2)+"\n");
+  },/BUILD_AUTHORITATIVE_ARC03C/);
 });
 test("Viewer NAV-005 stays independently authored",async()=>{
  const html=await readFile("app/viewer/index.html","utf8");

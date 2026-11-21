@@ -155,7 +155,7 @@ html[data-theme="dark"] .environment-art::after { background-image: url("/landin
 }
 @media (max-width: 760px) {
   html { scroll-padding-top: 72px; }
-  .site-header--public .brand { width: clamp(112px, 36vw, 160px); }
+  .site-header--public .brand { width: clamp(112px, 30vw, 160px); }
   .site-header--public .header-actions > .header-cta { padding: 9px 9px; gap: 6px; font-size: .58rem; }
   .site-header--public .header-actions > .header-cta span:first-child { max-width: 82px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .site-header--public .header-actions > .header-cta img { width: 19px; height: 19px; }
