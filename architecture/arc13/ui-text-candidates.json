@@ -8,7 +8,7 @@
     },
     {
       "path": "tools/arc13/scan-ui-inventory.py",
-      "sha256": "50242da4e70f97fb96d19b6e1838e124d9b8ac07f9b60b1826144129124a3ea9"
+      "sha256": "1f57bc92ea24249ec4e759301ecb64c94a0cc169cf8e3857e7bf9b382606b1ac"
     },
     {
       "path": "tools/arc13/scan-js-sinks.mjs",
@@ -99,7 +99,7 @@
     "javascriptTextSourceRecordsWithSinkLinks": 94,
     "javascriptTextSourceSinkLinks": 96,
     "javascriptTextSourceRecordsWithFailureFallbacks": 44,
-    "javascriptTextSourceFailureFallbackLinks": 46,
+    "javascriptTextSourceFailureFallbackLinks": 45,
     "javascriptTextSourceRoles": {
       "admin-event-trigger-option-label": 1,
       "admin-field-label": 7,
@@ -4038,7 +4038,7 @@
       "kind": "javascript-sink",
       "sink": "property:textContent",
       "attribute": "text-content",
-      "expression": "grant.revoked_at\r\n        ? \"Revogado\"\r\n        : expired\r\n          ? \"Expirado\"\r\n        : grant.redeemed_at\r\n          ? `Resgatado · expira ${new Date(grant.expires_at).toLocaleString(\"pt-BR\")}`\r\n          : `Pendente · expira ${new Date(grant.expires_at).toLocaleString(\"pt-BR\")}`",
+      "expression": "grant.revoked_at\n        ? \"Revogado\"\n        : expired\n          ? \"Expirado\"\n        : grant.redeemed_at\n          ? `Resgatado · expira ${new Date(grant.expires_at).toLocaleString(\"pt-BR\")}`\n          : `Pendente · expira ${new Date(grant.expires_at).toLocaleString(\"pt-BR\")}`",
       "value": null,
       "literalSegments": [
         "Revogado",
@@ -4057,7 +4057,7 @@
         "/access/manage"
       ],
       "sourceSha256": "5c20b4bb846fc45343992bd164a6ec709136b77e6fa15bf10ab425b189b7b9de",
-      "id": "acba23e2ed19a7e7"
+      "id": "ac799fc64eeaae2c"
     },
     {
       "source": "app/access/manage.js",
@@ -4234,7 +4234,7 @@
       "kind": "javascript-sink",
       "sink": "property:textContent",
       "attribute": "text-content",
-      "expression": "error.message === \"access_service_not_configured\"\r\n      ? \"O envio ainda não está configurado neste ambiente.\"\r\n      : \"Não foi possível enviar o link. Verifique o email e tente novamente.\"",
+      "expression": "error.message === \"access_service_not_configured\"\n      ? \"O envio ainda não está configurado neste ambiente.\"\n      : \"Não foi possível enviar o link. Verifique o email e tente novamente.\"",
       "value": null,
       "literalSegments": [
         "access_service_not_configured",
@@ -4252,7 +4252,7 @@
         "/access/manage"
       ],
       "sourceSha256": "5c20b4bb846fc45343992bd164a6ec709136b77e6fa15bf10ab425b189b7b9de",
-      "id": "2efc9690a11c2224"
+      "id": "b36f7583ff30e0ae"
     },
     {
       "source": "app/admin.html",
@@ -8673,7 +8673,7 @@
       "kind": "javascript-sink",
       "sink": "property:textContent",
       "attribute": "text-content",
-      "expression": "publicationInput.disabled\r\n    ? \"Esta opção exige uma configuração V5 publicada.\"\r\n    : \"Inicialmente desativado. Somente os valores base válidos dos módulos publicados e visíveis serão exibidos; não inclui opções e serviços. Alterar esta opção não publica nada até clicar em Publicar configuração.\"",
+      "expression": "publicationInput.disabled\n    ? \"Esta opção exige uma configuração V5 publicada.\"\n    : \"Inicialmente desativado. Somente os valores base válidos dos módulos publicados e visíveis serão exibidos; não inclui opções e serviços. Alterar esta opção não publica nada até clicar em Publicar configuração.\"",
       "value": null,
       "literalSegments": [
         "Esta opção exige uma configuração V5 publicada.",
@@ -8689,7 +8689,7 @@
         "/admin"
       ],
       "sourceSha256": "ee44adbe63b8db0b09878be676cb37268781d2b969df3f25b1a708067c45b42b",
-      "id": "53aac931c5410b82"
+      "id": "66974cbbc23cbb39"
     },
     {
       "source": "app/admin/admin.js",
@@ -8910,7 +8910,7 @@
       "kind": "javascript-sink",
       "sink": "helper:setMessage",
       "attribute": null,
-      "expression": "repair?.ok && repair.needed\r\n      ? \"Puxadores ainda não está atribuído no v3 publicado. Persista Puxadores no v3 antes da futura publicação hierárquica.\"\r\n      : published.schemaVersion === hierarchyCore.SCHEMA\r\n        ? \"Configuração v5 carregada. A hierarquia e os preços tipados podem ser publicados com validação.\"\r\n        : \"Hierarquia carregada. Alterações estruturais permanecem em rascunho até a publicação hierárquica ser habilitada.\"",
+      "expression": "repair?.ok && repair.needed\n      ? \"Puxadores ainda não está atribuído no v3 publicado. Persista Puxadores no v3 antes da futura publicação hierárquica.\"\n      : published.schemaVersion === hierarchyCore.SCHEMA\n        ? \"Configuração v5 carregada. A hierarquia e os preços tipados podem ser publicados com validação.\"\n        : \"Hierarquia carregada. Alterações estruturais permanecem em rascunho até a publicação hierárquica ser habilitada.\"",
       "value": null,
       "literalSegments": [
         "Puxadores ainda não está atribuído no v3 publicado. Persista Puxadores no v3 antes da futura publicação hierárquica.",
@@ -8927,7 +8927,7 @@
         "/admin"
       ],
       "sourceSha256": "ee44adbe63b8db0b09878be676cb37268781d2b969df3f25b1a708067c45b42b",
-      "id": "e2c1636d2ebc5a1e"
+      "id": "56f290c8b29cee1c"
     },
     {
       "source": "app/admin/admin.js",
@@ -9104,7 +9104,7 @@
       "kind": "javascript-sink",
       "sink": "helper:setMessage",
       "attribute": null,
-      "expression": "publicationSwitch.checked\r\n      ? \"Exibição de preços base ativada apenas no rascunho. Clique em Publicar configuração para autorizar valores públicos.\"\r\n      : \"Exibição de preços base desativada apenas no rascunho. Clique em Publicar configuração para retirar valores da API pública.\"",
+      "expression": "publicationSwitch.checked\n      ? \"Exibição de preços base ativada apenas no rascunho. Clique em Publicar configuração para autorizar valores públicos.\"\n      : \"Exibição de preços base desativada apenas no rascunho. Clique em Publicar configuração para retirar valores da API pública.\"",
       "value": null,
       "literalSegments": [
         "Exibição de preços base ativada apenas no rascunho. Clique em Publicar configuração para autorizar valores públicos.",
@@ -9120,7 +9120,7 @@
         "/admin"
       ],
       "sourceSha256": "ee44adbe63b8db0b09878be676cb37268781d2b969df3f25b1a708067c45b42b",
-      "id": "bb22ddd803fb5a08"
+      "id": "19d84c56608af212"
     },
     {
       "source": "app/admin/admin.js",
@@ -9226,7 +9226,7 @@
       "kind": "javascript-sink",
       "sink": "property:textContent",
       "attribute": "text-content",
-      "expression": "type === \"invite\"\r\n    ? \"Defina uma senha para concluir o convite de administrador.\"\r\n    : \"Defina uma nova senha para acessar a administração.\"",
+      "expression": "type === \"invite\"\n    ? \"Defina uma senha para concluir o convite de administrador.\"\n    : \"Defina uma nova senha para acessar a administração.\"",
       "value": null,
       "literalSegments": [
         "invite",
@@ -9243,7 +9243,7 @@
         "/admin"
       ],
       "sourceSha256": "ee44adbe63b8db0b09878be676cb37268781d2b969df3f25b1a708067c45b42b",
-      "id": "0053266102fd41af"
+      "id": "9b31383de24c9602"
     },
     {
       "source": "app/admin/admin.js",
@@ -9690,7 +9690,7 @@
       "kind": "javascript-sink",
       "sink": "helper:setMessage",
       "attribute": null,
-      "expression": "hasLocalDraft\r\n        ? \"Puxadores foi persistido em Acabamentos no v3 publicado. O painel foi recarregado a partir do publicado; outras alterações locais não foram enviadas.\"\r\n        : \"Puxadores foi persistido em Acabamentos no v3 publicado. A publicação hierárquica v5 continua bloqueada.\"",
+      "expression": "hasLocalDraft\n        ? \"Puxadores foi persistido em Acabamentos no v3 publicado. O painel foi recarregado a partir do publicado; outras alterações locais não foram enviadas.\"\n        : \"Puxadores foi persistido em Acabamentos no v3 publicado. A publicação hierárquica v5 continua bloqueada.\"",
       "value": null,
       "literalSegments": [
         "Puxadores foi persistido em Acabamentos no v3 publicado. O painel foi recarregado a partir do publicado; outras alterações locais não foram enviadas.",
@@ -9706,7 +9706,7 @@
         "/admin"
       ],
       "sourceSha256": "ee44adbe63b8db0b09878be676cb37268781d2b969df3f25b1a708067c45b42b",
-      "id": "00eb3801a465f73b"
+      "id": "c1b4ef681f5e2c7c"
     },
     {
       "source": "app/admin/admin.js",
@@ -10412,7 +10412,7 @@
       "kind": "javascript-sink",
       "sink": "property:textContent",
       "attribute": "text-content",
-      "expression": "value\r\n        ? handle.description + \" · \" + perFront + \" por frente; \" + formatCurrency(value) + \" no conjunto completo.\"\r\n        : handle.description",
+      "expression": "value\n        ? handle.description + \" · \" + perFront + \" por frente; \" + formatCurrency(value) + \" no conjunto completo.\"\n        : handle.description",
       "value": null,
       "literalSegments": [
         " · ",
@@ -10429,7 +10429,7 @@
         "/config/"
       ],
       "sourceSha256": "6fe209cc73713d199900404f1cec0eb297bb6dd9d294eb22aad98821b2bda850",
-      "id": "24d7c1b5a22e5665"
+      "id": "2af8382659303b7a"
     },
     {
       "source": "app/app.js",
@@ -11756,7 +11756,7 @@
       "kind": "javascript-sink",
       "sink": "property:textContent",
       "attribute": "text-content",
-      "expression": "product.category === \"Estrutural\"\r\n        ? \"Valor local do painel. Pedra e serviços aparecem uma única vez no resumo.\"\r\n        : \"Valor local do módulo. Pedra e serviços aparecem uma única vez no resumo.\"",
+      "expression": "product.category === \"Estrutural\"\n        ? \"Valor local do painel. Pedra e serviços aparecem uma única vez no resumo.\"\n        : \"Valor local do módulo. Pedra e serviços aparecem uma única vez no resumo.\"",
       "value": null,
       "literalSegments": [
         "Estrutural",
@@ -11774,7 +11774,7 @@
         "/config/"
       ],
       "sourceSha256": "6fe209cc73713d199900404f1cec0eb297bb6dd9d294eb22aad98821b2bda850",
-      "id": "9c431c21e4f04a40"
+      "id": "7e4f54f838dd1987"
     },
     {
       "source": "app/app.js",
@@ -13946,17 +13946,17 @@
       "attribute": null,
       "elementTag": "p",
       "metadataField": null,
-      "expression": " módulos visíveis\r\n          ",
-      "value": " módulos visíveis\r\n          ",
+      "expression": " módulos visíveis\n          ",
+      "value": " módulos visíveis\n          ",
       "literalSegments": [
-        " módulos visíveis\r\n          "
+        " módulos visíveis\n          "
       ],
       "classification": "unreviewed",
       "classificationHints": [
         "visible-or-accessible-ui"
       ],
       "sourceSha256": "cd1b3d3384604301507447e02a13f6682b39804328364b614566dbb917d2c5a4",
-      "id": "facfa05b1a083869"
+      "id": "5ee227d39762ca9b"
     },
     {
       "source": "app/config/index.html",
@@ -33283,18 +33283,6 @@
           ],
           "relationship": "error-to-fixed-fallback",
           "evidence": "The revoke handler catch discards api() errors and writes this fixed status."
-        },
-        {
-          "sinkId": "2efc9690a11c2224",
-          "source": "app/access/manage.js",
-          "line": 124,
-          "sink": "property:textContent",
-          "expression": "error.message === \"access_service_not_configured\"\r\n      ? \"O envio ainda não está configurado neste ambiente.\"\r\n      : \"Não foi possível enviar o link. Verifique o email e tente novamente.\"",
-          "routeConsumers": [
-            "/access/manage"
-          ],
-          "relationship": "error-to-fixed-fallback",
-          "evidence": "The grant handler maps the request_failed fallback code to the generic branch of this fixed conditional status; it does not display error.message."
         }
       ],
       "failureFallbackLinkStatus": "bounded-error-to-fixed-fallback"
