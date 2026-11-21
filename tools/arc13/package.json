@@ -1,0 +1,11 @@
+{
+  "name": "m2d-arc13-ui-inventory",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "inventory": "node run-inventory.mjs"
+  },
+  "devDependencies": {
+    "acorn": "8.19.0"
+  }
+}
