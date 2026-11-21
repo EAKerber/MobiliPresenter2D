@@ -20,6 +20,12 @@ function gitBlobSha(data) {
  const canonical=data.replace(/\r\n/g,"\n");
  return createHash("sha1").update("blob "+Buffer.byteLength(canonical)+"\0").update(canonical).digest("hex");
 }
+function headerHasClass(source,className) {
+ return [...source.matchAll(/<header\b([^>]*)>/gi)].some(([,attributes])=>{
+  const match=attributes.match(/\bclass\s*=\s*(["'])(.*?)\1/i);
+  return match?.[2].split(/\s+/).includes(className)===true;
+ });
+}
 function header(fragment,r) {
  assert.ok(["ambientes","how","about"].includes(r.current),"Invalid menu selection");
  for(const k of ["brandHref","ambientesHref","howHref","aboutHref"])
@@ -58,8 +64,8 @@ export async function projectPages() {
  for(let i=0;i<MAP.length;i++) {
   const p=MAP[i],source=await readFile(join(ROOT,p.source),"utf8");
   assert.equal(source.split(SLOT).length,2,"Exactly one header slot required in "+p.source);
-  assert.ok(!/<header class="site-header">/.test(source),"Duplicate authorial header");
-  assert.ok(!/<header class="viewer-header">/.test(source),"NAV-005 excluded");
+  assert.ok(!headerHasClass(source,"site-header"),"Duplicate authorial header");
+  assert.ok(!headerHasClass(source,"viewer-header"),"NAV-005 excluded");
   const html=source.replace(SLOT,header(fragment,config.routes[i]));
   assert.ok(!html.includes(SLOT)&&!html.includes("{{"),"Unresolved page");
   manifest.pages.push({route:p.route,source:p.source,output:p.output,
