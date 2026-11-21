@@ -673,7 +673,9 @@ def scan(html_only: bool = False) -> dict:
         relative = path.relative_to(ROOT).as_posix()
         raw = path.read_bytes()
         source_hashes[relative] = sha256(raw)
-        source_text = raw.decode("utf-8")
+        # Keep parser offsets and extracted text in a platform-independent
+        # coordinate space; ARC-03C source maps also use LF code points.
+        source_text = raw.decode("utf-8").replace("\r\n", "\n")
         parser = PageParser(
             relative,
             route_for_html(path),
@@ -717,7 +719,10 @@ def scan(html_only: bool = False) -> dict:
             continue
         raw = path.read_bytes()
         source_hashes[relative] = sha256(raw)
-        js_inputs[relative] = {"path": relative, "source": raw.decode("utf-8")}
+        js_inputs[relative] = {
+            "path": relative,
+            "source": raw.decode("utf-8").replace("\r\n", "\n"),
+        }
     if html_only:
         skipped.extend(
             {"source": source, "reason": "not-scanned-html-only"}
