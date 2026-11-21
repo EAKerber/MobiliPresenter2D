@@ -8,6 +8,7 @@ on:
       - 'tests/mobile-pip-main-browser.cjs'
       - 'tests/home-hero-phone-geometry-browser.cjs'
       - 'tests/exposed-sides-glass.cjs'
+      - 'tests/ui-theme-browser.cjs'
       - '.github/workflows/mobile-browser.yml'
       - 'tests/ci/prepare-local-v5-browser.sh'
       - 'tests/ci/local-buyer-config-server.mjs'
@@ -17,6 +18,7 @@ on:
       - 'tests/mobile-pip-main-browser.cjs'
       - 'tests/home-hero-phone-geometry-browser.cjs'
       - 'tests/exposed-sides-glass.cjs'
+      - 'tests/ui-theme-browser.cjs'
       - '.github/workflows/mobile-browser.yml'
       - 'tests/ci/prepare-local-v5-browser.sh'
       - 'tests/ci/local-buyer-config-server.mjs'
@@ -48,6 +50,7 @@ jobs:
             echo "CI_EXPLICIT_BROWSER_TARGET_SPECIFIED"
           else
             bash tests/ci/prepare-local-v5-browser.sh MOBILE_INTERACTIONS_URL
+            echo "CI_LOCAL_V5_BROWSER_TARGET=1" >> "$GITHUB_ENV"
           fi
       - name: Install isolated browser test tooling
         run: |
@@ -61,6 +64,11 @@ jobs:
         env:
           NODE_PATH: /tmp/mobile-browser-tools/node_modules
         run: node tests/home-hero-phone-geometry-browser.cjs /tmp/mobile-browser-review
+      - name: Verify theme controls across all shells
+        if: env.CI_LOCAL_V5_BROWSER_TARGET == '1'
+        env:
+          NODE_PATH: /tmp/mobile-browser-tools/node_modules
+        run: node tests/ui-theme-browser.cjs /tmp/mobile-browser-review
       - name: Test glass occlusion in the local Configurator
         if: ${{ !inputs.target_url }}
         env:
