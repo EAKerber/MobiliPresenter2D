@@ -101,7 +101,12 @@
         utility.appendChild(button);
         header.parentNode.insertBefore(utility, header.nextSibling);
       } else {
-        header.insertBefore(button, header.firstChild);
+        var restoreControl = privateActions && privateActions.querySelector("#restoreButton");
+        if (restoreControl && restoreControl.parentNode === privateActions) {
+          restoreControl.insertAdjacentElement("afterend", button);
+        } else {
+          header.insertBefore(button, header.firstChild);
+        }
       }
     }
     refreshControls();
