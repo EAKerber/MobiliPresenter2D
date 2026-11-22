@@ -359,6 +359,13 @@ async function sectionItemIds(page, stageId, groupId, sectionId) {
 
   await page.locator('[data-admin-tab="finishes"]').click();
   await page.waitForSelector('[data-admin-panel="finishes"]:not([hidden])');
+  const solidMaterialCard = page.locator('[data-material-id="base-light"]');
+  const solidNoColorToggle = solidMaterialCard.locator('[data-material-no-color]');
+  assert.equal(await solidNoColorToggle.isDisabled(), true, "solid material cannot opt out of its authored base color");
+  const solidNoColorReasonId = await solidNoColorToggle.getAttribute("aria-describedby");
+  assert.ok(solidNoColorReasonId, "disabled no-color control is associated with its reason");
+  assert.equal(await page.locator(`#${solidNoColorReasonId}`).isVisible(), true, "solid material reason is visible beside the disabled control");
+  assert.match(await page.locator(`#${solidNoColorReasonId}`).textContent(), /disponível apenas para materiais do tipo Textura/i, "solid material explains why no-color is unavailable");
   await page.locator("#materialPager button").nth(1).click();
   await page.waitForSelector('[data-material-id="stone-existing"]');
   let stoneMaterialCard = page.locator('[data-material-id="stone-existing"]');
@@ -366,6 +373,10 @@ async function sectionItemIds(page, stageId, groupId, sectionId) {
   let stoneColorInput = stoneMaterialCard.locator('[data-material-color]');
   assert.equal(await noColorToggle.isChecked(), true, "stone-existing exposes explicit no-authored-color state");
   assert.equal(await stoneColorInput.isDisabled(), true, "color input is disabled while authored color is null");
+  const stoneColorReasonId = await stoneColorInput.getAttribute("aria-describedby");
+  assert.ok(stoneColorReasonId, "disabled color input is associated with its reason");
+  assert.equal(await page.locator(`#${stoneColorReasonId}`).isVisible(), true, "no-color reason is visible beside the disabled control");
+  assert.match(await page.locator(`#${stoneColorReasonId}`).textContent(), /indisponível enquanto.*Sem cor\/tinta base.*marcado/i, "no-color state explains why base color is unavailable");
 
   await noColorToggle.uncheck();
   stoneMaterialCard = page.locator('[data-material-id="stone-existing"]');
@@ -373,6 +384,7 @@ async function sectionItemIds(page, stageId, groupId, sectionId) {
   stoneColorInput = stoneMaterialCard.locator('[data-material-color]');
   assert.equal(await noColorToggle.isChecked(), false, "clearing no-color creates an explicit authored color");
   assert.equal(await stoneColorInput.isEnabled(), true, "authored color input becomes editable");
+  assert.equal(await stoneColorInput.getAttribute("aria-describedby"), null, "enabled color input no longer exposes a disabled-state reason");
   assert.match(await stoneColorInput.inputValue(), /^#[0-9a-f]{6}$/i, "editor supplies a deterministic authored color choice");
 
   await noColorToggle.check();
