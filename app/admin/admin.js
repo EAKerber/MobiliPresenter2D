@@ -1196,6 +1196,8 @@ function renderPricing() {
   publicationInput.disabled = publishedSource?.schemaVersion !== hierarchyCore.SCHEMA;
   publicationLabel.append(publicationInput, document.createTextNode("Mostrar preços base no Viewer"));
   const publicationNote = document.createElement("p");
+  publicationNote.id = "viewer-base-price-publication-note";
+  publicationInput.setAttribute("aria-describedby", publicationNote.id);
   publicationNote.className = "admin-note";
   publicationNote.textContent = publicationInput.disabled
     ? "Esta opção exige uma configuração V5 publicada."
