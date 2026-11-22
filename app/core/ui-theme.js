@@ -3,8 +3,39 @@
   "use strict";
   var STORAGE_KEY = "casa-ui-theme-mode-v1";
   var MODES = ["auto", "light", "dark"];
-  var FULL = { auto: "Automático", light: "Claro", dark: "Escuro" };
-  var SHORT = { auto: "Auto", light: "Claro", dark: "Escuro" };
+  var COPY = win.CASA_UI_COPY;
+  var COPY_SCHEMA = "M2DUIStringCatalog/1";
+  var copyWarnings = Object.create(null);
+  function getCopy(path, fallback) {
+    var value = COPY;
+    if (!COPY || COPY.schema !== COPY_SCHEMA || COPY.locale !== "pt-BR") value = undefined;
+    else path.split(".").forEach(function (key) { value = value == null ? undefined : value[key]; });
+    if (typeof value === "string" && value.trim()) return value;
+    if (!copyWarnings[path]) {
+      copyWarnings[path] = true;
+      if (win.console && typeof win.console.warn === "function")
+        win.console.warn("Missing pt-BR UI copy for " + path + "; using the built-in fallback.");
+    }
+    return fallback;
+  }
+  var FULL = {
+    auto: getCopy("theme.mode.auto.full", "Automático"),
+    light: getCopy("theme.mode.light", "Claro"),
+    dark: getCopy("theme.mode.dark", "Escuro")
+  };
+  var SHORT = {
+    auto: getCopy("theme.mode.auto.short", "Auto"),
+    light: getCopy("theme.mode.light", "Claro"),
+    dark: getCopy("theme.mode.dark", "Escuro")
+  };
+  var TOGGLE_ARIA = getCopy("theme.toggle.ariaLabel", "Tema atual: {current}. Ativar {next}.");
+  var TOGGLE_TITLE = getCopy("theme.toggle.title", "Tema: {current} (próximo: {next})");
+
+  function format(template, values) {
+    return template.replace(/\{(current|next)\}/g, function (_match, key) {
+      return typeof values[key] === "string" ? values[key] : "";
+    });
+  }
   var mql = typeof win.matchMedia === "function" ? win.matchMedia("(prefers-color-scheme: dark)") : null;
   var root = doc.documentElement;
   var mode = "auto";
@@ -29,8 +60,9 @@
   function refreshControls() {
     doc.querySelectorAll("[data-ui-theme-toggle]").forEach(function (button) {
       button.setAttribute("data-mode", mode);
-      button.setAttribute("aria-label", "Tema atual: " + FULL[mode] + ". Ativar " + FULL[nextMode()] + ".");
-      button.setAttribute("title", "Tema: " + FULL[mode] + " (próximo: " + FULL[nextMode()] + ")");
+      var labels = { current: FULL[mode], next: FULL[nextMode()] };
+      button.setAttribute("aria-label", format(TOGGLE_ARIA, labels));
+      button.setAttribute("title", format(TOGGLE_TITLE, labels));
       var full = button.querySelector(".ui-theme-toggle__label-long");
       var short = button.querySelector(".ui-theme-toggle__label-short");
       if (full) full.textContent = FULL[mode];
@@ -135,6 +167,7 @@
   win.CASA_UI_THEME = {
     getMode: function () { return mode; },
     getResolved: resolved,
-    setMode: function (next) { return select(next, true); }
+    setMode: function (next) { return select(next, true); },
+    getCopy: getCopy
   };
 })(window, document);

@@ -1,0 +1,150 @@
+{
+  "schema": "ARC13LOC002SemanticOverlay/1.0",
+  "evidence": {
+    "sourceRevision": "abb802b05288842a4de0e085c21f12193e04bd8d",
+    "inventoryPath": "architecture/arc13/ui-text-candidates.json",
+    "inventorySha256": "F105C22A9E3CAB79F2A97A58BDA576AF71B36803A2CC301A451D76A95325AE22",
+    "note": "Candidate identities and source hashes refer to the inventory at sourceRevision, before this migration."
+  },
+  "catalog": {
+    "path": "app/core/ui-copy.js",
+    "schema": "M2DUIStringCatalog/1",
+    "locale": "pt-BR",
+    "scope": "Theme control labels and public/private menu open-close labels."
+  },
+  "fallbackPolicy": {
+    "activation": "Use the built-in pt-BR string when the catalog is missing, its schema or locale is invalid, a key is absent/non-string, or its value is blank.",
+    "execution": "Synchronous; theme initialization and menu interaction do not wait for a fetch or fail closed when the catalog is unavailable.",
+    "theme": {
+      "theme.mode.auto.full": "Automático",
+      "theme.mode.auto.short": "Auto",
+      "theme.mode.light": "Claro",
+      "theme.mode.dark": "Escuro",
+      "theme.toggle.ariaLabel": "Tema atual: {current}. Ativar {next}.",
+      "theme.toggle.title": "Tema: {current} (próximo: {next})"
+    },
+    "navigation.menu": {
+      "open": "Abrir menu",
+      "close": "Fechar menu"
+    },
+    "authority": "These literals are resilience copies for each catalog key, not an alternate editorial source. The reviewed catalog remains authoritative whenever a valid non-blank key is available.",
+    "verification": "tests/ui-theme-contract.cjs covers missing catalog, invalid schema, missing and blank theme keys, missing menu key, and public-menu open/close without the theme service."
+  },
+  "decisions": [
+    {
+      "candidateId": "8d62205f6da811c0",
+      "source": "app/core/ui-theme.js",
+      "sourceSha256": "952631529870dea6d86df08f0e0c2a8b377569753cb91c7bff0bbe8751b53eaa",
+      "expression": "\"Automático\"",
+      "classification": "ui-visible",
+      "contentOwner": "shared-runtime",
+      "destinationKey": "theme.mode.auto.full",
+      "consumers": ["/", "/about/", "/access/", "/access/manage", "/admin", "/config/", "/how-it-works/", "/viewer/"],
+      "decision": "Keep the full label distinct from the compact Auto variant."
+    },
+    {
+      "candidateId": "7afd4ac41e1aeb8d",
+      "source": "app/core/ui-theme.js",
+      "sourceSha256": "952631529870dea6d86df08f0e0c2a8b377569753cb91c7bff0bbe8751b53eaa",
+      "expression": "\"Auto\"",
+      "classification": "ui-visible",
+      "contentOwner": "shared-runtime",
+      "destinationKey": "theme.mode.auto.short",
+      "consumers": ["/", "/about/", "/access/", "/access/manage", "/admin", "/config/", "/how-it-works/", "/viewer/"],
+      "decision": "Retain Auto as the compact variant of the automatic theme mode."
+    },
+    {
+      "candidateIds": ["dd558c3cf00f10ba", "4033e05a7af347d6"],
+      "source": "app/core/ui-theme.js",
+      "sourceSha256": "952631529870dea6d86df08f0e0c2a8b377569753cb91c7bff0bbe8751b53eaa",
+      "expression": "\"Claro\"",
+      "classification": "ui-visible",
+      "contentOwner": "shared-runtime",
+      "destinationKey": "theme.mode.light",
+      "consumers": ["/", "/about/", "/access/", "/access/manage", "/admin", "/config/", "/how-it-works/", "/viewer/"],
+      "decision": "The full and compact labels are the same text for one theme mode, so they share one catalog key."
+    },
+    {
+      "candidateIds": ["18920f9ac043ce3e", "3bdc581badeba4cd"],
+      "source": "app/core/ui-theme.js",
+      "sourceSha256": "952631529870dea6d86df08f0e0c2a8b377569753cb91c7bff0bbe8751b53eaa",
+      "expression": "\"Escuro\"",
+      "classification": "ui-visible",
+      "contentOwner": "shared-runtime",
+      "destinationKey": "theme.mode.dark",
+      "consumers": ["/", "/about/", "/access/", "/access/manage", "/admin", "/config/", "/how-it-works/", "/viewer/"],
+      "decision": "The full and compact labels are the same text for one theme mode, so they share one catalog key."
+    },
+    {
+      "candidateId": "126e4062316603da",
+      "source": "app/core/ui-theme.js",
+      "sourceSha256": "952631529870dea6d86df08f0e0c2a8b377569753cb91c7bff0bbe8751b53eaa",
+      "expression": "\"Tema atual: \" + FULL[mode] + \". Ativar \" + FULL[nextMode()] + \".\"",
+      "classification": "aria-accessibility",
+      "contentOwner": "shared-runtime",
+      "destinationKey": "theme.toggle.ariaLabel",
+      "consumers": ["/", "/about/", "/access/", "/access/manage", "/admin", "/config/", "/how-it-works/", "/viewer/"],
+      "decision": "Keep current and next mode labels in the accessible name, preserving sentence and punctuation."
+    },
+    {
+      "candidateId": "10449aaa671f852f",
+      "source": "app/core/ui-theme.js",
+      "sourceSha256": "952631529870dea6d86df08f0e0c2a8b377569753cb91c7bff0bbe8751b53eaa",
+      "expression": "\"Tema: \" + FULL[mode] + \" (próximo: \" + FULL[nextMode()] + \")\"",
+      "classification": "ui-visible",
+      "contentOwner": "shared-runtime",
+      "destinationKey": "theme.toggle.title",
+      "consumers": ["/", "/about/", "/access/", "/access/manage", "/admin", "/config/", "/how-it-works/", "/viewer/"],
+      "decision": "Keep the tooltip separate from the accessible name while sharing current/next mode data."
+    },
+    {
+      "candidateId": "6e1689edfb60a342",
+      "source": "app/core/ui-theme.js",
+      "sourceSha256": "952631529870dea6d86df08f0e0c2a8b377569753cb91c7bff0bbe8751b53eaa",
+      "expression": "FULL[mode]",
+      "classification": "ui-visible",
+      "contentOwner": "shared-runtime",
+      "destinationKey": "theme.mode.*.full",
+      "consumers": ["/", "/about/", "/access/", "/access/manage", "/admin", "/config/", "/how-it-works/", "/viewer/"],
+      "decision": "The visible full label resolves through the mode keys above."
+    },
+    {
+      "candidateId": "dede940b6f6413b3",
+      "source": "app/core/ui-theme.js",
+      "sourceSha256": "952631529870dea6d86df08f0e0c2a8b377569753cb91c7bff0bbe8751b53eaa",
+      "expression": "SHORT[mode]",
+      "classification": "ui-visible",
+      "contentOwner": "shared-runtime",
+      "destinationKey": "theme.mode.*.short",
+      "consumers": ["/", "/about/", "/access/", "/access/manage", "/admin", "/config/", "/how-it-works/", "/viewer/"],
+      "decision": "The visible compact label resolves through the mode keys above."
+    },
+    {
+      "candidateId": "05ad89f85ae4a764",
+      "source": "app/landing/header-menu.js",
+      "sourceSha256": "c15cc8543c51885bea6843a03854ae795d73e5bfe5b9514b2eea95f631b60bb9",
+      "expression": "open ? \"Fechar menu\" : \"Abrir menu\"",
+      "classification": "aria-accessibility",
+      "contentOwner": "landing",
+      "destinationKeys": ["navigation.menu.open", "navigation.menu.close"],
+      "consumers": ["/", "/about/", "/how-it-works/", "/viewer/"],
+      "decision": "Public and private menu toggles share action-state copy; static markup retains its current no-JavaScript label."
+    },
+    {
+      "candidateId": "b5c5d9699e25a309",
+      "source": "app/core/private-navigation.js",
+      "sourceSha256": "113786ea84f67274c6532ed34603fd78fe9301ac4265b6cd501f633b5da9f301",
+      "expression": "open ? \"Fechar menu\" : \"Abrir menu\"",
+      "classification": "aria-accessibility",
+      "contentOwner": "shared-runtime",
+      "destinationKeys": ["navigation.menu.open", "navigation.menu.close"],
+      "consumers": ["/access/", "/access/manage", "/admin", "/config/"],
+      "decision": "Public and private menu toggles share action-state copy; static markup retains its current no-JavaScript label."
+    }
+  ],
+  "limits": [
+    "The three public navigation item labels and visible menu copy remain outside this first migration batch.",
+    "Mobile public navigation still relies on the existing menu controller to reveal links. This migration preserves that dependency and does not change layout or focus behavior.",
+    "The catalog is pt-BR only; no locale selector or language negotiation is introduced."
+  ]
+}

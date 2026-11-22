@@ -14,6 +14,7 @@ on:
       - 'architecture/fragments/primary-header.routes.json'
       - 'architecture/generated/primary-pages.manifest.json'
       - 'architecture/arc13/ui-text-candidates.json'
+      - 'docs/architecture/arc13/loc002-ui-control-copy-2026-11-22.json'
       - 'scripts/compile-primary-pages.mjs'
       - 'tools/arc13/package.json'
       - 'tools/arc13/package-lock.json'
@@ -21,6 +22,7 @@ on:
       - 'tools/arc13/scan-js-sinks.mjs'
       - 'tools/arc13/scan-ui-inventory.py'
       - 'tests/arc13_line_ending_normalization_test.py'
+      - 'tests/ui-theme-contract.cjs'
       - '.github/workflows/arc13-inventory-integrity.yml'
   push:
     branches: [main, development]
@@ -34,6 +36,7 @@ on:
       - 'architecture/fragments/primary-header.routes.json'
       - 'architecture/generated/primary-pages.manifest.json'
       - 'architecture/arc13/ui-text-candidates.json'
+      - 'docs/architecture/arc13/loc002-ui-control-copy-2026-11-22.json'
       - 'scripts/compile-primary-pages.mjs'
       - 'tools/arc13/package.json'
       - 'tools/arc13/package-lock.json'
@@ -41,6 +44,7 @@ on:
       - 'tools/arc13/scan-js-sinks.mjs'
       - 'tools/arc13/scan-ui-inventory.py'
       - 'tests/arc13_line_ending_normalization_test.py'
+      - 'tests/ui-theme-contract.cjs'
       - '.github/workflows/arc13-inventory-integrity.yml'
 
 permissions:
@@ -66,6 +70,10 @@ jobs:
         run: npm ci --prefix tools/arc13
       - name: Verify source-map line-ending normalization
         run: python tests/arc13_line_ending_normalization_test.py
+      - name: Verify catalog-backed theme and menu labels
+        run: node tests/ui-theme-contract.cjs
+      - name: Verify primary page compiler output
+        run: node scripts/compile-primary-pages.mjs --check
       - name: Confirm the generated report remains tracked
         run: git ls-files --error-unmatch architecture/arc13/ui-text-candidates.json
       - name: Regenerate the candidate inventory

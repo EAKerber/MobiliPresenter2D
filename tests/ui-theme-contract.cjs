@@ -8,16 +8,56 @@ const crypto = require("node:crypto");
 const root = path.resolve(__dirname, "..");
 const read = (name) => fs.readFileSync(path.join(root, name), "utf8");
 const code = read("app/core/ui-theme.js");
+const copyCode = read("app/core/ui-copy.js");
+const copyWindow = {};
+vm.runInNewContext(copyCode, { window: copyWindow }, { filename: "app/core/ui-copy.js" });
+const copy = copyWindow.CASA_UI_COPY;
+assert.equal(copy.schema, "M2DUIStringCatalog/1");
+assert.equal(copy.locale, "pt-BR");
+assert.deepEqual(JSON.parse(JSON.stringify(copy.theme.mode)), {
+  auto: { full: "Automático", short: "Auto" },
+  light: "Claro",
+  dark: "Escuro"
+});
+assert.equal(copy.theme.toggle.ariaLabel, "Tema atual: {current}. Ativar {next}.");
+assert.equal(copy.theme.toggle.title, "Tema: {current} (próximo: {next})");
+assert.deepEqual(JSON.parse(JSON.stringify(copy.navigation.menu)), {
+  open: "Abrir menu", close: "Fechar menu"
+});
+const publicMenuCode = read("app/landing/header-menu.js");
+const privateMenuCode = read("app/core/private-navigation.js");
+assert(publicMenuCode.includes('getCopy("navigation.menu." + copyKey, fallback)') &&
+  publicMenuCode.includes('open ? "Fechar menu" : "Abrir menu"'), "public menu uses shared semantic keys with predictable fallback");
+assert(privateMenuCode.includes('getCopy("navigation.menu." + copyKey, fallback)') &&
+  privateMenuCode.includes('open ? "Fechar menu" : "Abrir menu"'), "private menu shares menu keys and fallback behavior");
+assert(code.includes("function getCopy(path, fallback)") &&
+  code.includes('COPY.schema !== COPY_SCHEMA') &&
+  code.includes('typeof value === "string"'), "catalog resolver detects invalid schema and missing/non-string keys");
+for (const file of ["app/index.html", "app/about/index.html", "app/how-it-works/index.html", "app/viewer/index.html"]) {
+  assert(read(file).includes("header-menu.js?v=arc13-loc003-copy-1"), file + " busts the old public menu controller cache");
+}
+for (const file of ["app/access/index.html", "app/access/manage.html", "app/admin.html", "app/config/index.html"]) {
+  assert(read(file).includes("private-navigation.bundle.js?v=arc13-loc003-copy-1"), file + " busts the old private menu bundle cache");
+}
+for (const file of [
+  "app/index.html", "app/about/index.html", "app/how-it-works/index.html", "app/viewer/index.html",
+  "app/access/index.html", "app/access/manage.html", "app/admin.html", "app/config/index.html"
+]) {
+  assert(read(file).includes('aria-label="Abrir menu"'), file + " keeps the static menu label as its no-JavaScript fallback");
+}
 const shells = [
   "app/index.html", "app/about/index.html", "app/how-it-works/index.html",
-  "app/viewer/index.html", "app/config/index.html", "app/admin.html",
-  "app/access/manage.html"
+  "app/viewer/index.html", "app/access/index.html", "app/access/manage.html",
+  "app/config/index.html", "app/admin.html"
 ];
 for (const file of shells) {
   const html = read(file);
-  assert(html.includes('src="/core/ui-theme.js?v=ds01-theme-v1"'), file + " theme bootstrap");
-  assert(html.includes('href="/ui-theme.css?v=ds01-theme-v1"'), file + " theme CSS");
+  assert(html.includes('src="/core/ui-copy.js?v=arc13-loc003-copy-1"'), file + " copy catalog bootstrap");
+  assert(html.includes('src="/core/ui-theme.js?v=arc13-loc003-copy-1"'), file + " theme bootstrap");
+  assert(html.indexOf("ui-copy.js") < html.indexOf("ui-theme.js"), file + " copy catalog before theme bootstrap");
+  assert(html.includes('href="/ui-theme.css?'), file + " theme CSS");
   assert(html.indexOf("ui-theme.js") < html.indexOf("ui-theme.css"), file + " theme before stylesheet");
+  if (file === "app/access/index.html") continue;
   assert(html.includes('href="/branding/favicon.ico"'), file + " favicon");
   assert(html.includes('href="/branding/apple-touch-icon.png"'), file + " apple touch icon");
   assert(html.includes("data-brand-variant"), file + " proper brand logo");
@@ -65,9 +105,9 @@ assert(read("app/viewer/viewer.js").includes('search.get("technical") === "neutr
 const how = read("app/how-it-works/index.html");
 const about = read("app/about/index.html");
 const howStyles = read("app/how-it-works/how-it-works.css");
-assert(howStyles.includes('.integration-callout img { display: block; width: min(100%, 320px); height: auto;') &&
-  howStyles.includes('aspect-ratio: 2 / 1; object-fit: contain; border-radius: 10px;') &&
-  howStyles.includes('.integration-callout img { width: min(100%, 250px); max-height: 125px; }'),
+assert(howStyles.includes('.integration-image-frame { display: block; position: relative; width: min(100%, 320px); height: auto; max-height: 160px; margin-inline: auto; aspect-ratio: 2 / 1; border-radius: 10px; }') &&
+  howStyles.includes('.integration-image-frame > img { display: block; width: 100%; height: 100%; object-fit: contain; border-radius: inherit;') &&
+  howStyles.includes('.integration-image-frame { width: min(100%, 250px); max-height: 125px; }'),
   "integration illustration box follows 900x450 original at both breakpoints so rounded corners clip the visible white rectangle");
 assert(how.includes('class="header-cta" href="https://wa.me/"') &&
   how.includes('Fale conosco pelo WhatsApp') &&
@@ -147,35 +187,110 @@ for (const [file, expected] of Object.entries(expectedBlobs)) {
   const hash = crypto.createHash("sha1").update(`blob ${bytes.length}\0`).update(bytes).digest("hex");
   assert.equal(hash, expected, "homologated asset unchanged: " + file);
 }
-function harness(osDark, initialMode) {
+function harness(osDark, initialMode, copyOverride) {
+  const selectedCopy = arguments.length >= 3 ? copyOverride : copy;
   const saved = initialMode ? { "casa-ui-theme-mode-v1": initialMode } : {};
   const hooks = {};
+  const warnings = [];
   const media = { matches: osDark, addEventListener: (name, cb) => { hooks["media:" + name] = cb; } };
   const attrs = {};
   const rootElement = { style: {}, setAttribute: (k,v) => { attrs[k] = v; } };
   const images = [];
+  const themeLabels = { full: { textContent: "" }, short: { textContent: "" } };
+  const themeButton = {
+    setAttribute(k,v) { attrs["button:" + k] = v; },
+    querySelector(selector) {
+      if (selector === ".ui-theme-toggle__label-long") return themeLabels.full;
+      if (selector === ".ui-theme-toggle__label-short") return themeLabels.short;
+      return null;
+    }
+  };
   const document = {
     documentElement: rootElement,
     readyState: "loading",
-    querySelectorAll(selector) { return selector === "img[data-brand-variant]" ? images : []; },
+    querySelectorAll(selector) {
+      if (selector === "img[data-brand-variant]") return images;
+      if (selector === "[data-ui-theme-toggle]") return [themeButton];
+      return [];
+    },
     querySelector() { return null; },
     addEventListener(name, fn) { hooks["doc:" + name] = fn; }
   };
   const window = {
+    CASA_UI_COPY: selectedCopy,
+    console: { warn(message) { warnings.push(message); } },
     matchMedia() { return media; },
     localStorage: { getItem(k) { return saved[k] || null; }, setItem(k,v) { saved[k] = v; } },
     addEventListener(name, fn) { hooks["win:" + name] = fn; }
   };
   vm.runInNewContext(code, { window, document }, { filename: "app/core/ui-theme.js" });
-  return { hooks, media, attrs, saved, window, images };
+  return { hooks, media, attrs, saved, window, images, themeLabels, warnings };
 }
+const missingCatalog = harness(false, null, undefined);
+assert.equal(missingCatalog.window.CASA_UI_THEME.getMode(), "auto", "theme initializes without the catalog");
+assert.equal(missingCatalog.attrs["data-theme"], "light", "theme still applies its resolved palette without the catalog");
+assert.equal(missingCatalog.attrs["button:aria-label"], "Tema atual: Automático. Ativar Claro.");
+assert.equal(missingCatalog.attrs["button:title"], "Tema: Automático (próximo: Claro)");
+assert.equal(missingCatalog.themeLabels.full.textContent, "Automático");
+assert(missingCatalog.warnings.length >= 1, "missing catalog is diagnosed");
+const invalidSchema = harness(false, null, { schema: "other", locale: "pt-BR" });
+assert.equal(invalidSchema.attrs["button:aria-label"], "Tema atual: Automático. Ativar Claro.", "invalid schema selects the predictable fallback");
+const missingThemeKeys = JSON.parse(JSON.stringify(copy));
+delete missingThemeKeys.theme.mode.auto.short;
+delete missingThemeKeys.theme.toggle.ariaLabel;
+missingThemeKeys.theme.mode.dark = "   ";
+const fallbackForThemeKeys = harness(false, null, missingThemeKeys);
+assert.equal(fallbackForThemeKeys.themeLabels.short.textContent, "Auto", "missing short mode label falls back by key");
+assert.equal(fallbackForThemeKeys.attrs["button:aria-label"], "Tema atual: Automático. Ativar Claro.", "missing aria template falls back by key");
+assert.equal(fallbackForThemeKeys.window.CASA_UI_THEME.getCopy("theme.mode.dark", "Escuro"), "Escuro", "blank copy falls back by key");
+const missingMenuKey = harness(false, null);
+assert.equal(missingMenuKey.window.CASA_UI_THEME.getCopy("navigation.menu.close", "Fechar menu"), "Fechar menu");
+const missingMenuCopy = JSON.parse(JSON.stringify(copy));
+delete missingMenuCopy.navigation.menu.close;
+const fallbackForMenuKey = harness(false, null, missingMenuCopy);
+assert.equal(fallbackForMenuKey.window.CASA_UI_THEME.getCopy("navigation.menu.close", "Fechar menu"), "Fechar menu", "missing menu key selects its explicit fallback");
+assert(fallbackForMenuKey.warnings.some((message) => message.includes("navigation.menu.close")), "missing menu key is diagnosed");
+function publicMenuHarness(themeService) {
+  const handlers = {};
+  const attributes = { "aria-expanded": "false" };
+  const toggle = {
+    closest() { return null; },
+    getAttribute(name) { return attributes[name]; },
+    setAttribute(name, value) { attributes[name] = value; },
+    addEventListener(name, handler) { handlers["toggle:" + name] = handler; }
+  };
+  const nav = {
+    contains() { return false; },
+    querySelector() { return null; },
+    addEventListener(name, handler) { handlers["nav:" + name] = handler; }
+  };
+  const document = {
+    body: { classList: { toggle() {} } },
+    activeElement: null,
+    getElementById(id) { return id === "menuToggle" ? toggle : id === "primaryNav" ? nav : null; },
+    addEventListener(name, handler) { handlers["document:" + name] = handler; }
+  };
+  const window = { CASA_UI_THEME: themeService, matchMedia() { return { matches: false, addEventListener() {} }; } };
+  vm.runInNewContext(publicMenuCode, { window, document, Element: function Element() {} }, { filename: "app/landing/header-menu.js" });
+  handlers["toggle:click"]({ detail: 1 });
+  assert.equal(attributes["aria-label"], "Fechar menu", "menu without theme/catalog uses its open-state fallback");
+  handlers["toggle:click"]({ detail: 1 });
+  assert.equal(attributes["aria-label"], "Abrir menu", "menu without theme/catalog uses its closed-state fallback");
+}
+publicMenuHarness(undefined);
 const darkDefault = harness(true);
 assert.equal(darkDefault.window.CASA_UI_THEME.getMode(), "auto");
 assert.equal(darkDefault.window.CASA_UI_THEME.getResolved(), "dark");
 assert.equal(darkDefault.attrs["data-theme"], "dark");
+assert.equal(darkDefault.attrs["button:aria-label"], "Tema atual: Automático. Ativar Claro.");
+assert.equal(darkDefault.attrs["button:title"], "Tema: Automático (próximo: Claro)");
+assert.equal(darkDefault.themeLabels.full.textContent, "Automático");
+assert.equal(darkDefault.themeLabels.short.textContent, "Auto");
 assert.equal(Object.keys(darkDefault.saved).length, 0, "auto default must not persist");
 assert.equal(darkDefault.window.CASA_UI_THEME.setMode("light"), true);
 assert.equal(darkDefault.attrs["data-theme"], "light");
+assert.equal(darkDefault.attrs["button:aria-label"], "Tema atual: Claro. Ativar Escuro.");
+assert.equal(darkDefault.attrs["button:title"], "Tema: Claro (próximo: Escuro)");
 assert.equal(darkDefault.saved["casa-ui-theme-mode-v1"], "light");
 assert.equal(darkDefault.window.CASA_UI_THEME.setMode("invalid"), false);
 assert.equal(darkDefault.attrs["data-theme"], "light");
@@ -197,6 +312,10 @@ const attributes = {
 darkDefault.images.push({getAttribute(k) {return attributes[k];},setAttribute(k,v) {attributes[k]=v;}});
 darkDefault.window.CASA_UI_THEME.setMode("dark");
 assert.equal(attributes.src, "/branding/logo-dark-380.png");
+assert.equal(darkDefault.attrs["button:aria-label"], "Tema atual: Escuro. Ativar Automático.");
+assert.equal(darkDefault.attrs["button:title"], "Tema: Escuro (próximo: Automático)");
+assert.equal(darkDefault.themeLabels.full.textContent, "Escuro");
+assert.equal(darkDefault.themeLabels.short.textContent, "Escuro");
 darkDefault.window.CASA_UI_THEME.setMode("light");
 assert.equal(attributes.src, "/branding/logo-light-380.png");
-console.log("DS-01 asset hashes, seven shells, theme auto/explicit/sync and image switching: PASS");
+console.log("DS-01 asset hashes, eight shells, catalog-backed theme labels, theme auto/explicit/sync and image switching: PASS");
