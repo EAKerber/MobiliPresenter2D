@@ -17,6 +17,41 @@ async function ready(page){
     await document.fonts.ready;
     await Promise.all([...document.querySelectorAll("[data-image-fallback] img")]
       .map(image=>image.decode?.().catch(()=>{})));
+    // The landing hero's own image-load handler calibrates the phone overlay and
+    // art height. Wait for that real application state before capturing baseline.
+    if(location.pathname==="/"){
+      await new Promise((resolve,reject)=>{
+        const started=performance.now();
+        const poll=()=>{
+          const image=document.querySelector(".hero-image-frame > img");
+          const frame=document.querySelector(".hero-image-frame");
+          const art=document.querySelector(".hero-art");
+          const screen=document.getElementById("heroPhoneScreen");
+          if(image?.complete&&image.naturalWidth>0&&frame&&art&&screen&&!screen.hidden){
+            const frameWidth=frame.clientWidth;
+            const scale=Math.max(frameWidth/image.naturalWidth,.589);
+            const expectedImageWidth=image.naturalWidth*scale;
+            const screenTop=Number(screen.dataset.screenTop);
+            const screenHeight=Number(screen.dataset.screenHeight);
+            const phoneBottom=(screenTop+screenHeight+35)*scale-screenTop*scale*.3;
+            const artMinimum=frameWidth<=680?350:frameWidth<=900?Math.max(340,Math.min(frameWidth*.56,500)):420;
+            const expectedArtHeight=Math.ceil(Math.max(artMinimum,phoneBottom));
+            if(Math.abs(parseFloat(image.style.width)-expectedImageWidth)<1&&
+              Math.abs(parseFloat(art.style.minHeight)-expectedArtHeight)<1){
+              resolve();
+              return;
+            }
+          }
+          if(performance.now()-started>10000){
+            reject(new Error("landing hero layout did not settle before image fallback baseline"));
+          }else setTimeout(poll,25);
+        };
+        poll();
+      });
+    }
+    // Let the resulting style changes and ResizeObserver callbacks reach layout.
+    await new Promise(resolve=>
+      requestAnimationFrame(()=>requestAnimationFrame(resolve)));
   });
   await page.waitForTimeout(180);
 }
@@ -30,6 +65,8 @@ async function inspect(page,index,fail=false){
     if(fail)img.dispatchEvent(new Event("error"));
     const placeholder=frame.querySelector(".image-fallback");
     const box=frame.getBoundingClientRect();
+    const heroArt=frame.closest(".hero-art");
+    const calibratedArtHeight=heroArt?parseFloat(getComputedStyle(heroArt).minHeight):null;
     const pb=placeholder?.getBoundingClientRect();
     const ib=img.getBoundingClientRect();
     const style=placeholder&&getComputedStyle(placeholder);
@@ -45,6 +82,7 @@ async function inspect(page,index,fail=false){
       description:placeholder?.querySelector(".image-fallback__description")?.textContent,
       text:placeholder?.querySelector(".image-fallback__status")?.textContent,
       box:{x:box.x,y:box.y,width:box.width,height:box.height},
+      calibratedArtHeight,
       image:{width:ib.width,height:ib.height},overlay:relative,
       fg,bg,
       clipped:(placeholder?.scrollHeight||0)>(placeholder?.clientHeight||0)+2,
@@ -135,13 +173,32 @@ for(const [engineName,engine] of [["chromium",chromium],["webkit",webkit]]){
           const img=[...f.querySelectorAll("img[alt]")].find(x=>x.alt.trim());
           img.dispatchEvent(new Event("load"));
         },index);
+        // Let both the image listener and WebKit's next layout pass settle
+        // before comparing restored geometry with the captured baseline.
+        await page.evaluate(()=>new Promise(resolve=>
+          requestAnimationFrame(()=>requestAnimationFrame(resolve))));
         const restored=await inspect(page,index);
         assert.equal(restored.hidden,false,context+" image not restored "+index);
         assert.equal(restored.placeholderHidden,true,context+" fallback not concealed "+index);
         assert.equal(restored.tabindex,null,context+" tab stop retained after recovery "+index);
-        assert.ok(close(restored.box.width,before.box.width)&&
-          close(restored.box.height,before.box.height),
-          context+" frame not restored "+index);
+        if(pageSpec.path==="/"&&index===0){
+          // The landing app recalibrates the phone and its art height when the
+          // source image's load handler runs. The home geometry gate covers the
+          // exact phone bounds; this fallback check verifies the restored frame
+          // matches that recalibrated height instead of an uncalibrated baseline.
+          assert.ok(close(restored.box.width,before.box.width)&&
+            close(restored.box.x,before.box.x)&&close(restored.box.y,before.box.y)&&
+            restored.calibratedArtHeight!==null&&
+            close(restored.box.height,restored.calibratedArtHeight),
+            context+" hero frame does not match calibrated layout "+
+            "before="+JSON.stringify(before.box)+" restored="+JSON.stringify(restored.box)+
+            " calibratedArtHeight="+restored.calibratedArtHeight);
+        }else{
+          assert.ok(close(restored.box.width,before.box.width)&&
+            close(restored.box.height,before.box.height),
+            context+" frame not restored "+index+
+            " before="+JSON.stringify(before.box)+" restored="+JSON.stringify(restored.box));
+        }
         visibleFallbacks++;
       }
       const result={engine:engineName,width,theme,path:pageSpec.path,
