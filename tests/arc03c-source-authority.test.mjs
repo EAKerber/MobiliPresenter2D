@@ -5,11 +5,12 @@ import {dirname,join,resolve} from "node:path";
 import {tmpdir} from "node:os";
 import {fileURLToPath} from "node:url";
 import {spawnSync} from "node:child_process";
-import {projectPages} from "../scripts/compile-primary-pages.mjs";
+import {escapeHtml,projectPages} from "../scripts/compile-primary-pages.mjs";
 const ROOT=resolve(dirname(fileURLToPath(import.meta.url)),"..");
 const SLOT="<!-- ARC03_PRIMARY_HEADER -->";
 const SOURCE_INPUTS=[
  "scripts/compile-primary-pages.mjs",
+ "app/core/ui-copy.js",
  "architecture/fragments/primary-header.fragment.html",
  "architecture/fragments/primary-header.routes.json",
  "architecture/pages/root.page.html",
@@ -67,6 +68,33 @@ test("three generated pages and provenance manifest match authoritative source",
  }
  const x=gate();assert.equal(x.status,0,x.stderr);
 });
+test("public navigation copy is catalog-backed and remains static in generated HTML",async()=>{
+ const r=await projectPages(),expected=[
+  ["/navigation/primaryLabel","Navegação principal"],
+  ["/navigation/environments","Ambientes"],
+  ["/navigation/howItWorks","Como funciona"],
+  ["/navigation/about","Quem somos"]
+ ];
+ assert.equal(r.manifest.schema,"M2DARC03CPublishedPages/3");
+ assert.equal(r.manifest.copyCatalog.path,"app/core/ui-copy.js");
+ for(const page of r.pages) {
+  assert.equal((page.html.match(/<script src="\/core\/ui-copy\.js\?v=arc13-loc003-copy-1"><\/script>/g)||[]).length,1,
+   "each generated page loads the shared catalog exactly once");
+  assert.match(page.html,/<nav id="primaryNav" aria-label="Navegação principal">/);
+  for(const [,label] of expected.slice(1))assert.ok(page.html.includes(">"+label+"</a>"),label+" must be present without JS");
+  const mapped=page.sourceMap.filter(segment=>segment.origin.kind==="catalog-key");
+  assert.deepEqual(mapped.map(segment=>segment.origin.pointer),expected.map(([pointer])=>pointer));
+  for(let i=0;i<mapped.length;i++) {
+   const segment=mapped[i];
+   assert.equal(segment.transform,"catalog-key-substitution");
+   assert.equal(segment.origin.path,"app/core/ui-copy.js");
+   assert.equal(Array.from(page.html).slice(segment.output.start,segment.output.end).join(""),expected[i][1]);
+  }
+ }
+});
+test("catalog text escapes HTML-sensitive characters",()=>{
+ assert.equal(escapeHtml(`&<>"'`),"&amp;&lt;&gt;&quot;&#39;");
+});
 test("generated-page drift fails closed in isolated fixtures",async()=>{
  const htmlPath="app/about/index.html",htmlBefore=await readFile(join(ROOT,htmlPath),"utf8");
  const html=await runIsolatedMutation(htmlPath,
@@ -109,6 +137,15 @@ test("compiler rejects unsafe and out-of-scope sources in isolated fixtures",asy
    config.status="EXPERIMENTAL_BUILD_TIME_ONLY_NOT_PUBLISHED";
    await writeFile(target,JSON.stringify(config,null,2)+"\n");
   },/BUILD_AUTHORITATIVE_ARC03C/);
+ await assertRejectedMutation("app/core/ui-copy.js",
+  (target,before)=>writeFile(target,before.replace('howItWorks: "Como funciona"','howItWorks: " "')),
+  /Catalog entry must not be blank/);
+ await assertRejectedMutation("app/core/ui-copy.js",
+  (target,before)=>writeFile(target,before.replace('schema: "M2DUIStringCatalog/1"','schema: "M2DUIStringCatalog/99"')),
+  /Unsupported UI copy catalog schema/);
+ await assertRejectedMutation("app/core/ui-copy.js",
+  (target,before)=>writeFile(target,before.replace('locale: "pt-BR"','locale: "en-US"')),
+  /requires pt-BR copy/);
 });
 test("Viewer NAV-005 stays independently authored",async()=>{
  const html=await readFile("app/viewer/index.html","utf8");

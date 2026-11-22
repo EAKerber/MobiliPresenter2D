@@ -8,7 +8,7 @@
     },
     {
       "path": "tools/arc13/scan-ui-inventory.py",
-      "sha256": "52dcdc1e3e51049bb0be1788d213252dfdd0858bf3a1341eb85d40387801286e"
+      "sha256": "bb2ecef533d95d365cc2ca71021d3ffc50e93c0d4e46c2c1bbb05d2f9dbc6070"
     },
     {
       "path": "tools/arc13/scan-js-sinks.mjs",
@@ -16,15 +16,15 @@
     },
     {
       "path": "scripts/compile-primary-pages.mjs",
-      "sha256": "587aeaba79bd14d513e3bacb5e6c9c945d4f811f7d42a913a37115d7442321f2"
+      "sha256": "268d00399f9895a370fa56b0c4fa2680c83bce7e54d31ecda1a90aa6e12c4b91"
     },
     {
       "path": "architecture/generated/primary-pages.manifest.json",
-      "sha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f"
+      "sha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e"
     },
     {
       "path": "architecture/fragments/primary-header.fragment.html",
-      "sha256": "f20f2e783f3ccab955a1a26647851c4f5728279b40c5d44ed934d54231707cd5"
+      "sha256": "3d0ebbc9cac95977fc713fc894436610e337faa3b9814e29356a2e128424f907"
     },
     {
       "path": "architecture/fragments/primary-header.routes.json",
@@ -175,8 +175,8 @@
   },
   "primaryPageAuthoringProvenance": {
     "manifest": "architecture/generated/primary-pages.manifest.json",
-    "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
-    "sourceMapSchema": "M2DARC03CProvenanceMap/1",
+    "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
+    "sourceMapSchema": "M2DARC03CProvenanceMap/2",
     "offsetUnit": "unicode-codepoints",
     "outputs": [
       {
@@ -646,7 +646,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 641,
           "offsetUnit": "unicode-codepoints"
         }
@@ -688,7 +688,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 752,
           "offsetUnit": "unicode-codepoints"
         }
@@ -730,7 +730,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 1189,
           "offsetUnit": "unicode-codepoints"
         }
@@ -772,7 +772,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 1301,
           "offsetUnit": "unicode-codepoints"
         }
@@ -814,7 +814,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 1505,
           "offsetUnit": "unicode-codepoints"
         }
@@ -847,18 +847,23 @@
       "authoring": {
         "status": "mapped",
         "origin": {
-          "kind": "shared-fragment",
-          "path": "architecture/fragments/primary-header.fragment.html",
-          "offset": 356,
-          "line": 1,
-          "column": 357
+          "kind": "catalog-key",
+          "path": "app/core/ui-copy.js",
+          "pointer": "/navigation/primaryLabel"
         },
-        "transform": "copy",
+        "transform": "catalog-key-substitution",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 1559,
           "offsetUnit": "unicode-codepoints"
+        },
+        "template": {
+          "path": "architecture/fragments/primary-header.fragment.html",
+          "range": {
+            "start": 356,
+            "end": 388
+          }
         }
       },
       "sourceSha256": "314907e13245b85afd769121519f513756d09a82f5113735d43088c09d0cc270",
@@ -889,18 +894,23 @@
       "authoring": {
         "status": "mapped",
         "origin": {
-          "kind": "shared-fragment",
-          "path": "architecture/fragments/primary-header.fragment.html",
-          "offset": 425,
-          "line": 1,
-          "column": 426
+          "kind": "catalog-key",
+          "path": "app/core/ui-copy.js",
+          "pointer": "/navigation/environments"
         },
-        "transform": "copy",
+        "transform": "catalog-key-substitution",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 1602,
           "offsetUnit": "unicode-codepoints"
+        },
+        "template": {
+          "path": "architecture/fragments/primary-header.fragment.html",
+          "range": {
+            "start": 438,
+            "end": 470
+          }
         }
       },
       "sourceSha256": "314907e13245b85afd769121519f513756d09a82f5113735d43088c09d0cc270",
@@ -931,18 +941,23 @@
       "authoring": {
         "status": "mapped",
         "origin": {
-          "kind": "shared-fragment",
-          "path": "architecture/fragments/primary-header.fragment.html",
-          "offset": 474,
-          "line": 1,
-          "column": 475
+          "kind": "catalog-key",
+          "path": "app/core/ui-copy.js",
+          "pointer": "/navigation/howItWorks"
         },
-        "transform": "copy",
+        "transform": "catalog-key-substitution",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 1640,
           "offsetUnit": "unicode-codepoints"
+        },
+        "template": {
+          "path": "architecture/fragments/primary-header.fragment.html",
+          "range": {
+            "start": 510,
+            "end": 540
+          }
         }
       },
       "sourceSha256": "314907e13245b85afd769121519f513756d09a82f5113735d43088c09d0cc270",
@@ -973,18 +988,23 @@
       "authoring": {
         "status": "mapped",
         "origin": {
-          "kind": "shared-fragment",
-          "path": "architecture/fragments/primary-header.fragment.html",
-          "offset": 531,
-          "line": 1,
-          "column": 532
+          "kind": "catalog-key",
+          "path": "app/core/ui-copy.js",
+          "pointer": "/navigation/about"
         },
-        "transform": "copy",
+        "transform": "catalog-key-substitution",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 1695,
           "offsetUnit": "unicode-codepoints"
+        },
+        "template": {
+          "path": "architecture/fragments/primary-header.fragment.html",
+          "range": {
+            "start": 584,
+            "end": 609
+          }
         }
       },
       "sourceSha256": "314907e13245b85afd769121519f513756d09a82f5113735d43088c09d0cc270",
@@ -1017,14 +1037,14 @@
         "origin": {
           "kind": "shared-fragment",
           "path": "architecture/fragments/primary-header.fragment.html",
-          "offset": 635,
+          "offset": 703,
           "line": 1,
-          "column": 636
+          "column": 704
         },
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 1799,
           "offsetUnit": "unicode-codepoints"
         }
@@ -1059,14 +1079,14 @@
         "origin": {
           "kind": "shared-fragment",
           "path": "architecture/fragments/primary-header.fragment.html",
-          "offset": 669,
+          "offset": 737,
           "line": 1,
-          "column": 670
+          "column": 738
         },
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 1833,
           "offsetUnit": "unicode-codepoints"
         }
@@ -1101,14 +1121,14 @@
         "origin": {
           "kind": "shared-fragment",
           "path": "architecture/fragments/primary-header.fragment.html",
-          "offset": 801,
+          "offset": 869,
           "line": 1,
-          "column": 802
+          "column": 870
         },
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 1939,
           "offsetUnit": "unicode-codepoints"
         }
@@ -1143,14 +1163,14 @@
         "origin": {
           "kind": "shared-fragment",
           "path": "architecture/fragments/primary-header.fragment.html",
-          "offset": 932,
+          "offset": 1000,
           "line": 1,
-          "column": 933
+          "column": 1001
         },
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 2070,
           "offsetUnit": "unicode-codepoints"
         }
@@ -1185,14 +1205,14 @@
         "origin": {
           "kind": "shared-fragment",
           "path": "architecture/fragments/primary-header.fragment.html",
-          "offset": 908,
+          "offset": 976,
           "line": 1,
-          "column": 909
+          "column": 977
         },
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 2046,
           "offsetUnit": "unicode-codepoints"
         }
@@ -1234,7 +1254,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 2243,
           "offsetUnit": "unicode-codepoints"
         }
@@ -1276,7 +1296,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 2310,
           "offsetUnit": "unicode-codepoints"
         }
@@ -1318,7 +1338,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 2345,
           "offsetUnit": "unicode-codepoints"
         }
@@ -1360,7 +1380,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 2477,
           "offsetUnit": "unicode-codepoints"
         }
@@ -1402,7 +1422,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 2706,
           "offsetUnit": "unicode-codepoints"
         }
@@ -1444,7 +1464,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 2737,
           "offsetUnit": "unicode-codepoints"
         }
@@ -1486,7 +1506,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 2786,
           "offsetUnit": "unicode-codepoints"
         }
@@ -1528,7 +1548,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 2807,
           "offsetUnit": "unicode-codepoints"
         }
@@ -1570,7 +1590,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 2900,
           "offsetUnit": "unicode-codepoints"
         }
@@ -1612,7 +1632,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 3015,
           "offsetUnit": "unicode-codepoints"
         }
@@ -1654,7 +1674,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 3074,
           "offsetUnit": "unicode-codepoints"
         }
@@ -1696,7 +1716,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 3089,
           "offsetUnit": "unicode-codepoints"
         }
@@ -1738,7 +1758,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 3166,
           "offsetUnit": "unicode-codepoints"
         }
@@ -1780,7 +1800,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 3210,
           "offsetUnit": "unicode-codepoints"
         }
@@ -1822,7 +1842,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 3546,
           "offsetUnit": "unicode-codepoints"
         }
@@ -1864,7 +1884,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 3930,
           "offsetUnit": "unicode-codepoints"
         }
@@ -1906,7 +1926,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 3983,
           "offsetUnit": "unicode-codepoints"
         }
@@ -1948,7 +1968,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 3992,
           "offsetUnit": "unicode-codepoints"
         }
@@ -1990,7 +2010,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 4015,
           "offsetUnit": "unicode-codepoints"
         }
@@ -2032,7 +2052,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 4042,
           "offsetUnit": "unicode-codepoints"
         }
@@ -2074,7 +2094,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 4126,
           "offsetUnit": "unicode-codepoints"
         }
@@ -2116,7 +2136,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 4176,
           "offsetUnit": "unicode-codepoints"
         }
@@ -2158,7 +2178,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 4234,
           "offsetUnit": "unicode-codepoints"
         }
@@ -2200,7 +2220,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 4338,
           "offsetUnit": "unicode-codepoints"
         }
@@ -2242,7 +2262,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 4600,
           "offsetUnit": "unicode-codepoints"
         }
@@ -2284,7 +2304,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 4928,
           "offsetUnit": "unicode-codepoints"
         }
@@ -2326,7 +2346,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 4985,
           "offsetUnit": "unicode-codepoints"
         }
@@ -2368,7 +2388,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 5000,
           "offsetUnit": "unicode-codepoints"
         }
@@ -2410,7 +2430,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 5087,
           "offsetUnit": "unicode-codepoints"
         }
@@ -2452,7 +2472,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 5129,
           "offsetUnit": "unicode-codepoints"
         }
@@ -2494,7 +2514,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 5448,
           "offsetUnit": "unicode-codepoints"
         }
@@ -2536,7 +2556,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 5479,
           "offsetUnit": "unicode-codepoints"
         }
@@ -2578,7 +2598,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 5528,
           "offsetUnit": "unicode-codepoints"
         }
@@ -2620,7 +2640,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 5608,
           "offsetUnit": "unicode-codepoints"
         }
@@ -2662,7 +2682,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 5802,
           "offsetUnit": "unicode-codepoints"
         }
@@ -2704,7 +2724,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 6010,
           "offsetUnit": "unicode-codepoints"
         }
@@ -2746,7 +2766,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 6245,
           "offsetUnit": "unicode-codepoints"
         }
@@ -2788,7 +2808,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 6289,
           "offsetUnit": "unicode-codepoints"
         }
@@ -2830,7 +2850,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 6347,
           "offsetUnit": "unicode-codepoints"
         }
@@ -2872,7 +2892,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 6607,
           "offsetUnit": "unicode-codepoints"
         }
@@ -2914,7 +2934,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 6630,
           "offsetUnit": "unicode-codepoints"
         }
@@ -2956,7 +2976,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 6692,
           "offsetUnit": "unicode-codepoints"
         }
@@ -16454,7 +16474,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 716,
           "offsetUnit": "unicode-codepoints"
         }
@@ -16496,7 +16516,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 821,
           "offsetUnit": "unicode-codepoints"
         }
@@ -16538,7 +16558,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 1367,
           "offsetUnit": "unicode-codepoints"
         }
@@ -16580,7 +16600,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 1571,
           "offsetUnit": "unicode-codepoints"
         }
@@ -16613,18 +16633,23 @@
       "authoring": {
         "status": "mapped",
         "origin": {
-          "kind": "shared-fragment",
-          "path": "architecture/fragments/primary-header.fragment.html",
-          "offset": 356,
-          "line": 1,
-          "column": 357
+          "kind": "catalog-key",
+          "path": "app/core/ui-copy.js",
+          "pointer": "/navigation/primaryLabel"
         },
-        "transform": "copy",
+        "transform": "catalog-key-substitution",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 1625,
           "offsetUnit": "unicode-codepoints"
+        },
+        "template": {
+          "path": "architecture/fragments/primary-header.fragment.html",
+          "range": {
+            "start": 356,
+            "end": 388
+          }
         }
       },
       "sourceSha256": "cb864b230cde3cacab331f9e33ff020c1fc9353911cb8e416bbebafa75e7cc9b",
@@ -16655,18 +16680,23 @@
       "authoring": {
         "status": "mapped",
         "origin": {
-          "kind": "shared-fragment",
-          "path": "architecture/fragments/primary-header.fragment.html",
-          "offset": 425,
-          "line": 1,
-          "column": 426
+          "kind": "catalog-key",
+          "path": "app/core/ui-copy.js",
+          "pointer": "/navigation/environments"
         },
-        "transform": "copy",
+        "transform": "catalog-key-substitution",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 1670,
           "offsetUnit": "unicode-codepoints"
+        },
+        "template": {
+          "path": "architecture/fragments/primary-header.fragment.html",
+          "range": {
+            "start": 438,
+            "end": 470
+          }
         }
       },
       "sourceSha256": "cb864b230cde3cacab331f9e33ff020c1fc9353911cb8e416bbebafa75e7cc9b",
@@ -16697,18 +16727,23 @@
       "authoring": {
         "status": "mapped",
         "origin": {
-          "kind": "shared-fragment",
-          "path": "architecture/fragments/primary-header.fragment.html",
-          "offset": 474,
-          "line": 1,
-          "column": 475
+          "kind": "catalog-key",
+          "path": "app/core/ui-copy.js",
+          "pointer": "/navigation/howItWorks"
         },
-        "transform": "copy",
+        "transform": "catalog-key-substitution",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 1716,
           "offsetUnit": "unicode-codepoints"
+        },
+        "template": {
+          "path": "architecture/fragments/primary-header.fragment.html",
+          "range": {
+            "start": 510,
+            "end": 540
+          }
         }
       },
       "sourceSha256": "cb864b230cde3cacab331f9e33ff020c1fc9353911cb8e416bbebafa75e7cc9b",
@@ -16739,18 +16774,23 @@
       "authoring": {
         "status": "mapped",
         "origin": {
-          "kind": "shared-fragment",
-          "path": "architecture/fragments/primary-header.fragment.html",
-          "offset": 531,
-          "line": 1,
-          "column": 532
+          "kind": "catalog-key",
+          "path": "app/core/ui-copy.js",
+          "pointer": "/navigation/about"
         },
-        "transform": "copy",
+        "transform": "catalog-key-substitution",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 1753,
           "offsetUnit": "unicode-codepoints"
+        },
+        "template": {
+          "path": "architecture/fragments/primary-header.fragment.html",
+          "range": {
+            "start": 584,
+            "end": 609
+          }
         }
       },
       "sourceSha256": "cb864b230cde3cacab331f9e33ff020c1fc9353911cb8e416bbebafa75e7cc9b",
@@ -16783,14 +16823,14 @@
         "origin": {
           "kind": "shared-fragment",
           "path": "architecture/fragments/primary-header.fragment.html",
-          "offset": 635,
+          "offset": 703,
           "line": 1,
-          "column": 636
+          "column": 704
         },
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 1857,
           "offsetUnit": "unicode-codepoints"
         }
@@ -16825,14 +16865,14 @@
         "origin": {
           "kind": "shared-fragment",
           "path": "architecture/fragments/primary-header.fragment.html",
-          "offset": 669,
+          "offset": 737,
           "line": 1,
-          "column": 670
+          "column": 738
         },
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 1891,
           "offsetUnit": "unicode-codepoints"
         }
@@ -16867,14 +16907,14 @@
         "origin": {
           "kind": "shared-fragment",
           "path": "architecture/fragments/primary-header.fragment.html",
-          "offset": 801,
+          "offset": 869,
           "line": 1,
-          "column": 802
+          "column": 870
         },
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 2016,
           "offsetUnit": "unicode-codepoints"
         }
@@ -16909,14 +16949,14 @@
         "origin": {
           "kind": "shared-fragment",
           "path": "architecture/fragments/primary-header.fragment.html",
-          "offset": 932,
+          "offset": 1000,
           "line": 1,
-          "column": 933
+          "column": 1001
         },
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 2147,
           "offsetUnit": "unicode-codepoints"
         }
@@ -16951,14 +16991,14 @@
         "origin": {
           "kind": "shared-fragment",
           "path": "architecture/fragments/primary-header.fragment.html",
-          "offset": 908,
+          "offset": 976,
           "line": 1,
-          "column": 909
+          "column": 977
         },
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 2123,
           "offsetUnit": "unicode-codepoints"
         }
@@ -17000,7 +17040,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 2280,
           "offsetUnit": "unicode-codepoints"
         }
@@ -17042,7 +17082,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 2353,
           "offsetUnit": "unicode-codepoints"
         }
@@ -17084,7 +17124,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 2398,
           "offsetUnit": "unicode-codepoints"
         }
@@ -17126,7 +17166,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 2422,
           "offsetUnit": "unicode-codepoints"
         }
@@ -17168,7 +17208,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 2477,
           "offsetUnit": "unicode-codepoints"
         }
@@ -17210,7 +17250,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 2597,
           "offsetUnit": "unicode-codepoints"
         }
@@ -17252,7 +17292,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 2736,
           "offsetUnit": "unicode-codepoints"
         }
@@ -17294,7 +17334,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 2780,
           "offsetUnit": "unicode-codepoints"
         }
@@ -17336,7 +17376,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 2967,
           "offsetUnit": "unicode-codepoints"
         }
@@ -17378,7 +17418,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 3175,
           "offsetUnit": "unicode-codepoints"
         }
@@ -17420,7 +17460,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 3247,
           "offsetUnit": "unicode-codepoints"
         }
@@ -17462,7 +17502,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 3292,
           "offsetUnit": "unicode-codepoints"
         }
@@ -17504,7 +17544,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 3334,
           "offsetUnit": "unicode-codepoints"
         }
@@ -17546,7 +17586,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 3550,
           "offsetUnit": "unicode-codepoints"
         }
@@ -17588,7 +17628,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 3753,
           "offsetUnit": "unicode-codepoints"
         }
@@ -17630,7 +17670,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 4096,
           "offsetUnit": "unicode-codepoints"
         }
@@ -17672,7 +17712,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 4130,
           "offsetUnit": "unicode-codepoints"
         }
@@ -17714,7 +17754,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 4496,
           "offsetUnit": "unicode-codepoints"
         }
@@ -17756,7 +17796,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 4567,
           "offsetUnit": "unicode-codepoints"
         }
@@ -17798,7 +17838,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 4604,
           "offsetUnit": "unicode-codepoints"
         }
@@ -17840,7 +17880,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 4692,
           "offsetUnit": "unicode-codepoints"
         }
@@ -17882,7 +17922,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 4813,
           "offsetUnit": "unicode-codepoints"
         }
@@ -17924,7 +17964,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 4977,
           "offsetUnit": "unicode-codepoints"
         }
@@ -17966,7 +18006,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 5052,
           "offsetUnit": "unicode-codepoints"
         }
@@ -18008,7 +18048,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 5112,
           "offsetUnit": "unicode-codepoints"
         }
@@ -18050,7 +18090,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 5203,
           "offsetUnit": "unicode-codepoints"
         }
@@ -18092,7 +18132,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 5330,
           "offsetUnit": "unicode-codepoints"
         }
@@ -18134,7 +18174,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 5508,
           "offsetUnit": "unicode-codepoints"
         }
@@ -18176,7 +18216,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 5572,
           "offsetUnit": "unicode-codepoints"
         }
@@ -18218,7 +18258,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 5633,
           "offsetUnit": "unicode-codepoints"
         }
@@ -18260,7 +18300,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 5810,
           "offsetUnit": "unicode-codepoints"
         }
@@ -18302,7 +18342,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 5833,
           "offsetUnit": "unicode-codepoints"
         }
@@ -18344,7 +18384,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 5876,
           "offsetUnit": "unicode-codepoints"
         }
@@ -18386,7 +18426,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 6006,
           "offsetUnit": "unicode-codepoints"
         }
@@ -18428,7 +18468,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 6056,
           "offsetUnit": "unicode-codepoints"
         }
@@ -18470,7 +18510,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 6248,
           "offsetUnit": "unicode-codepoints"
         }
@@ -18512,7 +18552,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 6387,
           "offsetUnit": "unicode-codepoints"
         }
@@ -18554,7 +18594,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 6410,
           "offsetUnit": "unicode-codepoints"
         }
@@ -18596,7 +18636,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 6450,
           "offsetUnit": "unicode-codepoints"
         }
@@ -18638,7 +18678,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 6559,
           "offsetUnit": "unicode-codepoints"
         }
@@ -18680,7 +18720,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 6609,
           "offsetUnit": "unicode-codepoints"
         }
@@ -18722,7 +18762,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 6805,
           "offsetUnit": "unicode-codepoints"
         }
@@ -18764,7 +18804,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 6958,
           "offsetUnit": "unicode-codepoints"
         }
@@ -18806,7 +18846,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 6981,
           "offsetUnit": "unicode-codepoints"
         }
@@ -18848,7 +18888,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 7031,
           "offsetUnit": "unicode-codepoints"
         }
@@ -18890,7 +18930,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 7132,
           "offsetUnit": "unicode-codepoints"
         }
@@ -18932,7 +18972,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 7182,
           "offsetUnit": "unicode-codepoints"
         }
@@ -18974,7 +19014,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 7328,
           "offsetUnit": "unicode-codepoints"
         }
@@ -19016,7 +19056,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 7416,
           "offsetUnit": "unicode-codepoints"
         }
@@ -19058,7 +19098,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 7490,
           "offsetUnit": "unicode-codepoints"
         }
@@ -19100,7 +19140,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 7635,
           "offsetUnit": "unicode-codepoints"
         }
@@ -19142,7 +19182,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 7714,
           "offsetUnit": "unicode-codepoints"
         }
@@ -19184,7 +19224,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 7798,
           "offsetUnit": "unicode-codepoints"
         }
@@ -19226,7 +19266,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 7841,
           "offsetUnit": "unicode-codepoints"
         }
@@ -19268,7 +19308,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 8240,
           "offsetUnit": "unicode-codepoints"
         }
@@ -19310,7 +19350,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 8374,
           "offsetUnit": "unicode-codepoints"
         }
@@ -19352,7 +19392,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 8382,
           "offsetUnit": "unicode-codepoints"
         }
@@ -19394,7 +19434,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 8400,
           "offsetUnit": "unicode-codepoints"
         }
@@ -19436,7 +19476,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 8546,
           "offsetUnit": "unicode-codepoints"
         }
@@ -19478,7 +19518,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 8554,
           "offsetUnit": "unicode-codepoints"
         }
@@ -19520,7 +19560,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 8572,
           "offsetUnit": "unicode-codepoints"
         }
@@ -19562,7 +19602,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 8723,
           "offsetUnit": "unicode-codepoints"
         }
@@ -19604,7 +19644,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 8731,
           "offsetUnit": "unicode-codepoints"
         }
@@ -19646,7 +19686,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 8754,
           "offsetUnit": "unicode-codepoints"
         }
@@ -19688,7 +19728,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 8894,
           "offsetUnit": "unicode-codepoints"
         }
@@ -19730,7 +19770,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 8902,
           "offsetUnit": "unicode-codepoints"
         }
@@ -19772,7 +19812,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 8916,
           "offsetUnit": "unicode-codepoints"
         }
@@ -19814,7 +19854,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 9065,
           "offsetUnit": "unicode-codepoints"
         }
@@ -19856,7 +19896,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 9073,
           "offsetUnit": "unicode-codepoints"
         }
@@ -19898,7 +19938,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 9099,
           "offsetUnit": "unicode-codepoints"
         }
@@ -19940,7 +19980,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 9248,
           "offsetUnit": "unicode-codepoints"
         }
@@ -19982,7 +20022,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 9256,
           "offsetUnit": "unicode-codepoints"
         }
@@ -20024,7 +20064,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 9273,
           "offsetUnit": "unicode-codepoints"
         }
@@ -20066,7 +20106,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 9566,
           "offsetUnit": "unicode-codepoints"
         }
@@ -20108,7 +20148,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 9701,
           "offsetUnit": "unicode-codepoints"
         }
@@ -20150,7 +20190,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 9844,
           "offsetUnit": "unicode-codepoints"
         }
@@ -20192,7 +20232,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 9852,
           "offsetUnit": "unicode-codepoints"
         }
@@ -20234,7 +20274,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 9870,
           "offsetUnit": "unicode-codepoints"
         }
@@ -20276,7 +20316,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 10014,
           "offsetUnit": "unicode-codepoints"
         }
@@ -20318,7 +20358,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 10022,
           "offsetUnit": "unicode-codepoints"
         }
@@ -20360,7 +20400,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 10040,
           "offsetUnit": "unicode-codepoints"
         }
@@ -20402,7 +20442,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 10194,
           "offsetUnit": "unicode-codepoints"
         }
@@ -20444,7 +20484,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 10202,
           "offsetUnit": "unicode-codepoints"
         }
@@ -20486,7 +20526,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 10225,
           "offsetUnit": "unicode-codepoints"
         }
@@ -20528,7 +20568,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 10363,
           "offsetUnit": "unicode-codepoints"
         }
@@ -20570,7 +20610,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 10371,
           "offsetUnit": "unicode-codepoints"
         }
@@ -20612,7 +20652,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 10385,
           "offsetUnit": "unicode-codepoints"
         }
@@ -20654,7 +20694,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 10540,
           "offsetUnit": "unicode-codepoints"
         }
@@ -20696,7 +20736,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 10548,
           "offsetUnit": "unicode-codepoints"
         }
@@ -20738,7 +20778,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 10574,
           "offsetUnit": "unicode-codepoints"
         }
@@ -20780,7 +20820,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 10710,
           "offsetUnit": "unicode-codepoints"
         }
@@ -20822,7 +20862,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 10718,
           "offsetUnit": "unicode-codepoints"
         }
@@ -20864,7 +20904,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 10735,
           "offsetUnit": "unicode-codepoints"
         }
@@ -20906,7 +20946,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 11164,
           "offsetUnit": "unicode-codepoints"
         }
@@ -20948,7 +20988,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 11299,
           "offsetUnit": "unicode-codepoints"
         }
@@ -20990,7 +21030,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 11307,
           "offsetUnit": "unicode-codepoints"
         }
@@ -21032,7 +21072,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 11325,
           "offsetUnit": "unicode-codepoints"
         }
@@ -21074,7 +21114,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 11490,
           "offsetUnit": "unicode-codepoints"
         }
@@ -21116,7 +21156,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 11498,
           "offsetUnit": "unicode-codepoints"
         }
@@ -21158,7 +21198,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 11516,
           "offsetUnit": "unicode-codepoints"
         }
@@ -21200,7 +21240,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 11683,
           "offsetUnit": "unicode-codepoints"
         }
@@ -21242,7 +21282,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 11691,
           "offsetUnit": "unicode-codepoints"
         }
@@ -21284,7 +21324,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 11714,
           "offsetUnit": "unicode-codepoints"
         }
@@ -21326,7 +21366,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 11886,
           "offsetUnit": "unicode-codepoints"
         }
@@ -21368,7 +21408,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 11894,
           "offsetUnit": "unicode-codepoints"
         }
@@ -21410,7 +21450,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 11908,
           "offsetUnit": "unicode-codepoints"
         }
@@ -21452,7 +21492,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 12068,
           "offsetUnit": "unicode-codepoints"
         }
@@ -21494,7 +21534,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 12076,
           "offsetUnit": "unicode-codepoints"
         }
@@ -21536,7 +21576,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 12102,
           "offsetUnit": "unicode-codepoints"
         }
@@ -21578,7 +21618,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 12274,
           "offsetUnit": "unicode-codepoints"
         }
@@ -21620,7 +21660,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 12282,
           "offsetUnit": "unicode-codepoints"
         }
@@ -21662,7 +21702,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 12299,
           "offsetUnit": "unicode-codepoints"
         }
@@ -21704,7 +21744,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 12489,
           "offsetUnit": "unicode-codepoints"
         }
@@ -21746,7 +21786,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 12551,
           "offsetUnit": "unicode-codepoints"
         }
@@ -21788,7 +21828,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 12606,
           "offsetUnit": "unicode-codepoints"
         }
@@ -21830,7 +21870,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 12662,
           "offsetUnit": "unicode-codepoints"
         }
@@ -21872,7 +21912,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 12910,
           "offsetUnit": "unicode-codepoints"
         }
@@ -21914,7 +21954,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 13391,
           "offsetUnit": "unicode-codepoints"
         }
@@ -21956,7 +21996,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 13497,
           "offsetUnit": "unicode-codepoints"
         }
@@ -21998,7 +22038,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 13602,
           "offsetUnit": "unicode-codepoints"
         }
@@ -22040,7 +22080,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 13668,
           "offsetUnit": "unicode-codepoints"
         }
@@ -22082,7 +22122,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 13721,
           "offsetUnit": "unicode-codepoints"
         }
@@ -22124,7 +22164,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 13742,
           "offsetUnit": "unicode-codepoints"
         }
@@ -22166,7 +22206,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 13897,
           "offsetUnit": "unicode-codepoints"
         }
@@ -22208,7 +22248,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 13953,
           "offsetUnit": "unicode-codepoints"
         }
@@ -22250,7 +22290,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 13974,
           "offsetUnit": "unicode-codepoints"
         }
@@ -22292,7 +22332,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 14107,
           "offsetUnit": "unicode-codepoints"
         }
@@ -22334,7 +22374,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 14170,
           "offsetUnit": "unicode-codepoints"
         }
@@ -22376,7 +22416,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 14191,
           "offsetUnit": "unicode-codepoints"
         }
@@ -22418,7 +22458,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 14429,
           "offsetUnit": "unicode-codepoints"
         }
@@ -22460,7 +22500,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 14524,
           "offsetUnit": "unicode-codepoints"
         }
@@ -22502,7 +22542,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 14583,
           "offsetUnit": "unicode-codepoints"
         }
@@ -22544,7 +22584,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 14637,
           "offsetUnit": "unicode-codepoints"
         }
@@ -22586,7 +22626,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 14821,
           "offsetUnit": "unicode-codepoints"
         }
@@ -22628,7 +22668,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 15175,
           "offsetUnit": "unicode-codepoints"
         }
@@ -22670,7 +22710,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 15276,
           "offsetUnit": "unicode-codepoints"
         }
@@ -22712,7 +22752,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 15486,
           "offsetUnit": "unicode-codepoints"
         }
@@ -22754,7 +22794,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 15571,
           "offsetUnit": "unicode-codepoints"
         }
@@ -22796,7 +22836,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 15760,
           "offsetUnit": "unicode-codepoints"
         }
@@ -22838,7 +22878,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 15873,
           "offsetUnit": "unicode-codepoints"
         }
@@ -22880,7 +22920,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 16073,
           "offsetUnit": "unicode-codepoints"
         }
@@ -22922,7 +22962,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 16169,
           "offsetUnit": "unicode-codepoints"
         }
@@ -22964,7 +23004,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 16385,
           "offsetUnit": "unicode-codepoints"
         }
@@ -23006,7 +23046,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 16508,
           "offsetUnit": "unicode-codepoints"
         }
@@ -23048,7 +23088,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 16575,
           "offsetUnit": "unicode-codepoints"
         }
@@ -23090,7 +23130,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 16747,
           "offsetUnit": "unicode-codepoints"
         }
@@ -23132,7 +23172,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 16831,
           "offsetUnit": "unicode-codepoints"
         }
@@ -23174,7 +23214,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 16886,
           "offsetUnit": "unicode-codepoints"
         }
@@ -23216,7 +23256,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 16923,
           "offsetUnit": "unicode-codepoints"
         }
@@ -23258,7 +23298,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 17335,
           "offsetUnit": "unicode-codepoints"
         }
@@ -23300,7 +23340,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 17468,
           "offsetUnit": "unicode-codepoints"
         }
@@ -23342,7 +23382,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 17546,
           "offsetUnit": "unicode-codepoints"
         }
@@ -23384,7 +23424,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 17570,
           "offsetUnit": "unicode-codepoints"
         }
@@ -23426,7 +23466,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 17691,
           "offsetUnit": "unicode-codepoints"
         }
@@ -23468,7 +23508,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 17837,
           "offsetUnit": "unicode-codepoints"
         }
@@ -23510,7 +23550,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 17972,
           "offsetUnit": "unicode-codepoints"
         }
@@ -23552,7 +23592,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 18069,
           "offsetUnit": "unicode-codepoints"
         }
@@ -23594,7 +23634,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 18094,
           "offsetUnit": "unicode-codepoints"
         }
@@ -23636,7 +23676,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 18214,
           "offsetUnit": "unicode-codepoints"
         }
@@ -23678,7 +23718,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 18359,
           "offsetUnit": "unicode-codepoints"
         }
@@ -23720,7 +23760,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 18494,
           "offsetUnit": "unicode-codepoints"
         }
@@ -23762,7 +23802,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 18580,
           "offsetUnit": "unicode-codepoints"
         }
@@ -23804,7 +23844,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 18606,
           "offsetUnit": "unicode-codepoints"
         }
@@ -23846,7 +23886,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 18714,
           "offsetUnit": "unicode-codepoints"
         }
@@ -23888,7 +23928,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 18857,
           "offsetUnit": "unicode-codepoints"
         }
@@ -23930,7 +23970,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 18990,
           "offsetUnit": "unicode-codepoints"
         }
@@ -23972,7 +24012,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 19083,
           "offsetUnit": "unicode-codepoints"
         }
@@ -24014,7 +24054,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 19117,
           "offsetUnit": "unicode-codepoints"
         }
@@ -24056,7 +24096,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 19239,
           "offsetUnit": "unicode-codepoints"
         }
@@ -24098,7 +24138,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 19386,
           "offsetUnit": "unicode-codepoints"
         }
@@ -24140,7 +24180,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 19550,
           "offsetUnit": "unicode-codepoints"
         }
@@ -24182,7 +24222,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 19637,
           "offsetUnit": "unicode-codepoints"
         }
@@ -24224,7 +24264,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 19667,
           "offsetUnit": "unicode-codepoints"
         }
@@ -24266,7 +24306,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 19791,
           "offsetUnit": "unicode-codepoints"
         }
@@ -24308,7 +24348,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 19938,
           "offsetUnit": "unicode-codepoints"
         }
@@ -24350,7 +24390,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 20075,
           "offsetUnit": "unicode-codepoints"
         }
@@ -24392,7 +24432,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 20165,
           "offsetUnit": "unicode-codepoints"
         }
@@ -24434,7 +24474,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 20189,
           "offsetUnit": "unicode-codepoints"
         }
@@ -24476,7 +24516,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 20315,
           "offsetUnit": "unicode-codepoints"
         }
@@ -24518,7 +24558,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 20475,
           "offsetUnit": "unicode-codepoints"
         }
@@ -24560,7 +24600,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 20605,
           "offsetUnit": "unicode-codepoints"
         }
@@ -24602,7 +24642,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 20680,
           "offsetUnit": "unicode-codepoints"
         }
@@ -24644,7 +24684,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 20734,
           "offsetUnit": "unicode-codepoints"
         }
@@ -24686,7 +24726,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 20786,
           "offsetUnit": "unicode-codepoints"
         }
@@ -24728,7 +24768,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 21114,
           "offsetUnit": "unicode-codepoints"
         }
@@ -24770,7 +24810,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 21131,
           "offsetUnit": "unicode-codepoints"
         }
@@ -24812,7 +24852,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 21153,
           "offsetUnit": "unicode-codepoints"
         }
@@ -24854,7 +24894,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 21300,
           "offsetUnit": "unicode-codepoints"
         }
@@ -24896,7 +24936,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 21317,
           "offsetUnit": "unicode-codepoints"
         }
@@ -24938,7 +24978,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 21342,
           "offsetUnit": "unicode-codepoints"
         }
@@ -24980,7 +25020,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 21484,
           "offsetUnit": "unicode-codepoints"
         }
@@ -25022,7 +25062,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 21501,
           "offsetUnit": "unicode-codepoints"
         }
@@ -25064,7 +25104,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 21520,
           "offsetUnit": "unicode-codepoints"
         }
@@ -25106,7 +25146,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 21667,
           "offsetUnit": "unicode-codepoints"
         }
@@ -25148,7 +25188,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 21684,
           "offsetUnit": "unicode-codepoints"
         }
@@ -25190,7 +25230,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 21705,
           "offsetUnit": "unicode-codepoints"
         }
@@ -25232,7 +25272,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 21845,
           "offsetUnit": "unicode-codepoints"
         }
@@ -25274,7 +25314,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 21862,
           "offsetUnit": "unicode-codepoints"
         }
@@ -25316,7 +25356,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 21887,
           "offsetUnit": "unicode-codepoints"
         }
@@ -25358,7 +25398,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 22001,
           "offsetUnit": "unicode-codepoints"
         }
@@ -25400,7 +25440,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 22074,
           "offsetUnit": "unicode-codepoints"
         }
@@ -25442,7 +25482,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 22138,
           "offsetUnit": "unicode-codepoints"
         }
@@ -25484,7 +25524,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 22191,
           "offsetUnit": "unicode-codepoints"
         }
@@ -25526,7 +25566,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 22373,
           "offsetUnit": "unicode-codepoints"
         }
@@ -25568,7 +25608,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 22599,
           "offsetUnit": "unicode-codepoints"
         }
@@ -25610,7 +25650,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 22712,
           "offsetUnit": "unicode-codepoints"
         }
@@ -25652,7 +25692,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 22895,
           "offsetUnit": "unicode-codepoints"
         }
@@ -25694,7 +25734,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 23000,
           "offsetUnit": "unicode-codepoints"
         }
@@ -25736,7 +25776,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 23179,
           "offsetUnit": "unicode-codepoints"
         }
@@ -25778,7 +25818,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 23290,
           "offsetUnit": "unicode-codepoints"
         }
@@ -25820,7 +25860,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 23424,
           "offsetUnit": "unicode-codepoints"
         }
@@ -25862,7 +25902,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 23544,
           "offsetUnit": "unicode-codepoints"
         }
@@ -25904,7 +25944,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 23585,
           "offsetUnit": "unicode-codepoints"
         }
@@ -25946,7 +25986,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 23646,
           "offsetUnit": "unicode-codepoints"
         }
@@ -25988,7 +26028,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 23895,
           "offsetUnit": "unicode-codepoints"
         }
@@ -26030,7 +26070,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 23917,
           "offsetUnit": "unicode-codepoints"
         }
@@ -26072,7 +26112,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 23934,
           "offsetUnit": "unicode-codepoints"
         }
@@ -26114,7 +26154,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 24050,
           "offsetUnit": "unicode-codepoints"
         }
@@ -26156,7 +26196,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 24072,
           "offsetUnit": "unicode-codepoints"
         }
@@ -26198,7 +26238,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 24102,
           "offsetUnit": "unicode-codepoints"
         }
@@ -26240,7 +26280,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 24221,
           "offsetUnit": "unicode-codepoints"
         }
@@ -26282,7 +26322,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 24243,
           "offsetUnit": "unicode-codepoints"
         }
@@ -26324,7 +26364,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 24265,
           "offsetUnit": "unicode-codepoints"
         }
@@ -26366,7 +26406,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 24361,
           "offsetUnit": "unicode-codepoints"
         }
@@ -26408,7 +26448,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 24383,
           "offsetUnit": "unicode-codepoints"
         }
@@ -26450,7 +26490,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 24414,
           "offsetUnit": "unicode-codepoints"
         }
@@ -26492,7 +26532,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 24586,
           "offsetUnit": "unicode-codepoints"
         }
@@ -26534,7 +26574,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 24644,
           "offsetUnit": "unicode-codepoints"
         }
@@ -26576,7 +26616,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 24717,
           "offsetUnit": "unicode-codepoints"
         }
@@ -26618,7 +26658,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 24941,
           "offsetUnit": "unicode-codepoints"
         }
@@ -26660,7 +26700,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 24966,
           "offsetUnit": "unicode-codepoints"
         }
@@ -26702,7 +26742,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 25055,
           "offsetUnit": "unicode-codepoints"
         }
@@ -26744,7 +26784,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 25069,
           "offsetUnit": "unicode-codepoints"
         }
@@ -26786,7 +26826,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 25152,
           "offsetUnit": "unicode-codepoints"
         }
@@ -26828,7 +26868,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 25170,
           "offsetUnit": "unicode-codepoints"
         }
@@ -26870,7 +26910,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 25242,
           "offsetUnit": "unicode-codepoints"
         }
@@ -26912,7 +26952,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 25260,
           "offsetUnit": "unicode-codepoints"
         }
@@ -26954,7 +26994,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 25391,
           "offsetUnit": "unicode-codepoints"
         }
@@ -26996,7 +27036,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 25576,
           "offsetUnit": "unicode-codepoints"
         }
@@ -27038,7 +27078,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 25660,
           "offsetUnit": "unicode-codepoints"
         }
@@ -27080,7 +27120,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 25719,
           "offsetUnit": "unicode-codepoints"
         }
@@ -27122,7 +27162,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 25791,
           "offsetUnit": "unicode-codepoints"
         }
@@ -27164,7 +27204,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 26217,
           "offsetUnit": "unicode-codepoints"
         }
@@ -27206,7 +27246,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 26235,
           "offsetUnit": "unicode-codepoints"
         }
@@ -27248,7 +27288,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 26261,
           "offsetUnit": "unicode-codepoints"
         }
@@ -27290,7 +27330,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 26589,
           "offsetUnit": "unicode-codepoints"
         }
@@ -27332,7 +27372,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 26607,
           "offsetUnit": "unicode-codepoints"
         }
@@ -27374,7 +27414,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 26633,
           "offsetUnit": "unicode-codepoints"
         }
@@ -27416,7 +27456,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 27068,
           "offsetUnit": "unicode-codepoints"
         }
@@ -27458,7 +27498,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 27086,
           "offsetUnit": "unicode-codepoints"
         }
@@ -27500,7 +27540,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 27112,
           "offsetUnit": "unicode-codepoints"
         }
@@ -27542,7 +27582,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 27426,
           "offsetUnit": "unicode-codepoints"
         }
@@ -27584,7 +27624,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 27444,
           "offsetUnit": "unicode-codepoints"
         }
@@ -27626,7 +27666,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 27470,
           "offsetUnit": "unicode-codepoints"
         }
@@ -27668,7 +27708,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 27813,
           "offsetUnit": "unicode-codepoints"
         }
@@ -27710,7 +27750,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 27831,
           "offsetUnit": "unicode-codepoints"
         }
@@ -27752,7 +27792,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 27865,
           "offsetUnit": "unicode-codepoints"
         }
@@ -27794,7 +27834,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 28182,
           "offsetUnit": "unicode-codepoints"
         }
@@ -27836,7 +27876,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 28200,
           "offsetUnit": "unicode-codepoints"
         }
@@ -27878,7 +27918,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 28228,
           "offsetUnit": "unicode-codepoints"
         }
@@ -27920,7 +27960,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 28364,
           "offsetUnit": "unicode-codepoints"
         }
@@ -27962,7 +28002,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 28397,
           "offsetUnit": "unicode-codepoints"
         }
@@ -28004,7 +28044,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 28455,
           "offsetUnit": "unicode-codepoints"
         }
@@ -28046,7 +28086,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 28495,
           "offsetUnit": "unicode-codepoints"
         }
@@ -28088,7 +28128,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 28675,
           "offsetUnit": "unicode-codepoints"
         }
@@ -28130,7 +28170,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 28819,
           "offsetUnit": "unicode-codepoints"
         }
@@ -28172,7 +28212,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 29246,
           "offsetUnit": "unicode-codepoints"
         }
@@ -28214,7 +28254,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 29261,
           "offsetUnit": "unicode-codepoints"
         }
@@ -28256,7 +28296,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 29291,
           "offsetUnit": "unicode-codepoints"
         }
@@ -28298,7 +28338,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 29785,
           "offsetUnit": "unicode-codepoints"
         }
@@ -28340,7 +28380,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 29800,
           "offsetUnit": "unicode-codepoints"
         }
@@ -28382,7 +28422,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 29834,
           "offsetUnit": "unicode-codepoints"
         }
@@ -28424,7 +28464,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 30126,
           "offsetUnit": "unicode-codepoints"
         }
@@ -28466,7 +28506,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 30267,
           "offsetUnit": "unicode-codepoints"
         }
@@ -28508,7 +28548,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 30451,
           "offsetUnit": "unicode-codepoints"
         }
@@ -28550,7 +28590,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 30528,
           "offsetUnit": "unicode-codepoints"
         }
@@ -28592,7 +28632,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 30561,
           "offsetUnit": "unicode-codepoints"
         }
@@ -28634,7 +28674,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 30681,
           "offsetUnit": "unicode-codepoints"
         }
@@ -28676,7 +28716,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 30763,
           "offsetUnit": "unicode-codepoints"
         }
@@ -28718,7 +28758,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 30809,
           "offsetUnit": "unicode-codepoints"
         }
@@ -28760,7 +28800,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 30898,
           "offsetUnit": "unicode-codepoints"
         }
@@ -28802,7 +28842,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 30995,
           "offsetUnit": "unicode-codepoints"
         }
@@ -28844,7 +28884,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 31055,
           "offsetUnit": "unicode-codepoints"
         }
@@ -28886,7 +28926,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 31271,
           "offsetUnit": "unicode-codepoints"
         }
@@ -28928,7 +28968,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 31303,
           "offsetUnit": "unicode-codepoints"
         }
@@ -28970,7 +29010,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 31400,
           "offsetUnit": "unicode-codepoints"
         }
@@ -29012,7 +29052,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 31450,
           "offsetUnit": "unicode-codepoints"
         }
@@ -29054,7 +29094,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 32017,
           "offsetUnit": "unicode-codepoints"
         }
@@ -29096,7 +29136,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 32361,
           "offsetUnit": "unicode-codepoints"
         }
@@ -29138,7 +29178,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 32384,
           "offsetUnit": "unicode-codepoints"
         }
@@ -29180,7 +29220,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 32448,
           "offsetUnit": "unicode-codepoints"
         }
@@ -29222,7 +29262,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 716,
           "offsetUnit": "unicode-codepoints"
         }
@@ -29264,7 +29304,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 771,
           "offsetUnit": "unicode-codepoints"
         }
@@ -29306,7 +29346,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 1165,
           "offsetUnit": "unicode-codepoints"
         }
@@ -29348,7 +29388,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 1424,
           "offsetUnit": "unicode-codepoints"
         }
@@ -29390,7 +29430,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 1489,
           "offsetUnit": "unicode-codepoints"
         }
@@ -29432,7 +29472,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 1536,
           "offsetUnit": "unicode-codepoints"
         }
@@ -29474,7 +29514,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 1550,
           "offsetUnit": "unicode-codepoints"
         }
@@ -29516,7 +29556,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 1568,
           "offsetUnit": "unicode-codepoints"
         }
@@ -29558,7 +29598,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 1583,
           "offsetUnit": "unicode-codepoints"
         }
@@ -29600,7 +29640,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 1701,
           "offsetUnit": "unicode-codepoints"
         }
@@ -29642,7 +29682,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 1905,
           "offsetUnit": "unicode-codepoints"
         }
@@ -29675,18 +29715,23 @@
       "authoring": {
         "status": "mapped",
         "origin": {
-          "kind": "shared-fragment",
-          "path": "architecture/fragments/primary-header.fragment.html",
-          "offset": 356,
-          "line": 1,
-          "column": 357
+          "kind": "catalog-key",
+          "path": "app/core/ui-copy.js",
+          "pointer": "/navigation/primaryLabel"
         },
-        "transform": "copy",
+        "transform": "catalog-key-substitution",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 1959,
           "offsetUnit": "unicode-codepoints"
+        },
+        "template": {
+          "path": "architecture/fragments/primary-header.fragment.html",
+          "range": {
+            "start": 356,
+            "end": 388
+          }
         }
       },
       "sourceSha256": "902e52094549f7d6f8df34f994509ed0d0e5f5890ef3d6ad912472139433b50c",
@@ -29717,18 +29762,23 @@
       "authoring": {
         "status": "mapped",
         "origin": {
-          "kind": "shared-fragment",
-          "path": "architecture/fragments/primary-header.fragment.html",
-          "offset": 425,
-          "line": 1,
-          "column": 426
+          "kind": "catalog-key",
+          "path": "app/core/ui-copy.js",
+          "pointer": "/navigation/environments"
         },
-        "transform": "copy",
+        "transform": "catalog-key-substitution",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 2022,
           "offsetUnit": "unicode-codepoints"
+        },
+        "template": {
+          "path": "architecture/fragments/primary-header.fragment.html",
+          "range": {
+            "start": 438,
+            "end": 470
+          }
         }
       },
       "sourceSha256": "902e52094549f7d6f8df34f994509ed0d0e5f5890ef3d6ad912472139433b50c",
@@ -29759,18 +29809,23 @@
       "authoring": {
         "status": "mapped",
         "origin": {
-          "kind": "shared-fragment",
-          "path": "architecture/fragments/primary-header.fragment.html",
-          "offset": 474,
-          "line": 1,
-          "column": 475
+          "kind": "catalog-key",
+          "path": "app/core/ui-copy.js",
+          "pointer": "/navigation/howItWorks"
         },
-        "transform": "copy",
+        "transform": "catalog-key-substitution",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 2060,
           "offsetUnit": "unicode-codepoints"
+        },
+        "template": {
+          "path": "architecture/fragments/primary-header.fragment.html",
+          "range": {
+            "start": 510,
+            "end": 540
+          }
         }
       },
       "sourceSha256": "902e52094549f7d6f8df34f994509ed0d0e5f5890ef3d6ad912472139433b50c",
@@ -29801,18 +29856,23 @@
       "authoring": {
         "status": "mapped",
         "origin": {
-          "kind": "shared-fragment",
-          "path": "architecture/fragments/primary-header.fragment.html",
-          "offset": 531,
-          "line": 1,
-          "column": 532
+          "kind": "catalog-key",
+          "path": "app/core/ui-copy.js",
+          "pointer": "/navigation/about"
         },
-        "transform": "copy",
+        "transform": "catalog-key-substitution",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 2095,
           "offsetUnit": "unicode-codepoints"
+        },
+        "template": {
+          "path": "architecture/fragments/primary-header.fragment.html",
+          "range": {
+            "start": 584,
+            "end": 609
+          }
         }
       },
       "sourceSha256": "902e52094549f7d6f8df34f994509ed0d0e5f5890ef3d6ad912472139433b50c",
@@ -29845,14 +29905,14 @@
         "origin": {
           "kind": "shared-fragment",
           "path": "architecture/fragments/primary-header.fragment.html",
-          "offset": 635,
+          "offset": 703,
           "line": 1,
-          "column": 636
+          "column": 704
         },
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 2199,
           "offsetUnit": "unicode-codepoints"
         }
@@ -29887,14 +29947,14 @@
         "origin": {
           "kind": "shared-fragment",
           "path": "architecture/fragments/primary-header.fragment.html",
-          "offset": 669,
+          "offset": 737,
           "line": 1,
-          "column": 670
+          "column": 738
         },
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 2233,
           "offsetUnit": "unicode-codepoints"
         }
@@ -29929,14 +29989,14 @@
         "origin": {
           "kind": "shared-fragment",
           "path": "architecture/fragments/primary-header.fragment.html",
-          "offset": 801,
+          "offset": 869,
           "line": 1,
-          "column": 802
+          "column": 870
         },
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 2358,
           "offsetUnit": "unicode-codepoints"
         }
@@ -29971,14 +30031,14 @@
         "origin": {
           "kind": "shared-fragment",
           "path": "architecture/fragments/primary-header.fragment.html",
-          "offset": 932,
+          "offset": 1000,
           "line": 1,
-          "column": 933
+          "column": 1001
         },
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 2489,
           "offsetUnit": "unicode-codepoints"
         }
@@ -30013,14 +30073,14 @@
         "origin": {
           "kind": "shared-fragment",
           "path": "architecture/fragments/primary-header.fragment.html",
-          "offset": 908,
+          "offset": 976,
           "line": 1,
-          "column": 909
+          "column": 977
         },
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 2465,
           "offsetUnit": "unicode-codepoints"
         }
@@ -30062,7 +30122,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 2618,
           "offsetUnit": "unicode-codepoints"
         }
@@ -30104,7 +30164,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 2687,
           "offsetUnit": "unicode-codepoints"
         }
@@ -30146,7 +30206,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 2734,
           "offsetUnit": "unicode-codepoints"
         }
@@ -30188,7 +30248,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 2744,
           "offsetUnit": "unicode-codepoints"
         }
@@ -30230,7 +30290,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 2760,
           "offsetUnit": "unicode-codepoints"
         }
@@ -30272,7 +30332,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 2810,
           "offsetUnit": "unicode-codepoints"
         }
@@ -30314,7 +30374,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 2922,
           "offsetUnit": "unicode-codepoints"
         }
@@ -30356,7 +30416,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 3108,
           "offsetUnit": "unicode-codepoints"
         }
@@ -30398,7 +30458,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 3183,
           "offsetUnit": "unicode-codepoints"
         }
@@ -30440,7 +30500,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 3233,
           "offsetUnit": "unicode-codepoints"
         }
@@ -30482,7 +30542,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 3313,
           "offsetUnit": "unicode-codepoints"
         }
@@ -30524,7 +30584,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 3360,
           "offsetUnit": "unicode-codepoints"
         }
@@ -30566,7 +30626,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 3480,
           "offsetUnit": "unicode-codepoints"
         }
@@ -30608,7 +30668,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 3746,
           "offsetUnit": "unicode-codepoints"
         }
@@ -30650,7 +30710,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 3980,
           "offsetUnit": "unicode-codepoints"
         }
@@ -30692,7 +30752,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 4256,
           "offsetUnit": "unicode-codepoints"
         }
@@ -30734,7 +30794,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 4810,
           "offsetUnit": "unicode-codepoints"
         }
@@ -30776,7 +30836,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 4844,
           "offsetUnit": "unicode-codepoints"
         }
@@ -30818,7 +30878,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 5240,
           "offsetUnit": "unicode-codepoints"
         }
@@ -30860,7 +30920,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 5399,
           "offsetUnit": "unicode-codepoints"
         }
@@ -30902,7 +30962,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 5473,
           "offsetUnit": "unicode-codepoints"
         }
@@ -30944,7 +31004,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 5530,
           "offsetUnit": "unicode-codepoints"
         }
@@ -30986,7 +31046,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 5893,
           "offsetUnit": "unicode-codepoints"
         }
@@ -31028,7 +31088,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 5915,
           "offsetUnit": "unicode-codepoints"
         }
@@ -31070,7 +31130,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 5977,
           "offsetUnit": "unicode-codepoints"
         }
@@ -31112,7 +31172,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 6052,
           "offsetUnit": "unicode-codepoints"
         }
@@ -31154,7 +31214,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 6072,
           "offsetUnit": "unicode-codepoints"
         }
@@ -31196,7 +31256,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 6428,
           "offsetUnit": "unicode-codepoints"
         }
@@ -31238,7 +31298,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 6534,
           "offsetUnit": "unicode-codepoints"
         }
@@ -31280,7 +31340,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 6689,
           "offsetUnit": "unicode-codepoints"
         }
@@ -31322,7 +31382,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 6733,
           "offsetUnit": "unicode-codepoints"
         }
@@ -31364,7 +31424,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 6809,
           "offsetUnit": "unicode-codepoints"
         }
@@ -31406,7 +31466,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 6947,
           "offsetUnit": "unicode-codepoints"
         }
@@ -31448,7 +31508,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 6979,
           "offsetUnit": "unicode-codepoints"
         }
@@ -31490,7 +31550,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 7020,
           "offsetUnit": "unicode-codepoints"
         }
@@ -31532,7 +31592,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 7133,
           "offsetUnit": "unicode-codepoints"
         }
@@ -31574,7 +31634,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 7180,
           "offsetUnit": "unicode-codepoints"
         }
@@ -31616,7 +31676,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 7438,
           "offsetUnit": "unicode-codepoints"
         }
@@ -31658,7 +31718,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 7461,
           "offsetUnit": "unicode-codepoints"
         }
@@ -31700,7 +31760,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "a77fce28d047cee720ff57cb91d45d3b93a5e7e8ca15b6807b43260757b5b53f",
+          "manifestSha256": "8c67c4103f3fcb07194e58120e11960450c4d33932b24d511ec6ca9e403d074e",
           "outputOffset": 7533,
           "offsetUnit": "unicode-codepoints"
         }
@@ -46261,7 +46321,7 @@
     },
     {
       "path": "app/core/ui-copy.js",
-      "sha256": "3b2a6f38013039c4733ab240b30e37b0ef80d5a0fb8f9cce0dad986c042db7e5"
+      "sha256": "2345f2a1a47647096c2734dc4433c57c98fd9ab52af0441d77654ace56ddf6fc"
     },
     {
       "path": "app/core/ui-theme.js",

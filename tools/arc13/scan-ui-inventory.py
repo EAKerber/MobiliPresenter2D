@@ -26,7 +26,8 @@ PRIMARY_PAGE_MANIFEST = ROOT / "architecture" / "generated" / "primary-pages.man
 PRIMARY_PAGE_COMPILER = ROOT / "scripts" / "compile-primary-pages.mjs"
 PRIMARY_FRAGMENT = "architecture/fragments/primary-header.fragment.html"
 PRIMARY_ROUTES = "architecture/fragments/primary-header.routes.json"
-PRIMARY_MAP_SCHEMA = "M2DARC03CProvenanceMap/1"
+PRIMARY_COPY = "app/core/ui-copy.js"
+PRIMARY_MAP_SCHEMA = "M2DARC03CProvenanceMap/2"
 PRIMARY_PAGES = {
     "app/index.html": {"route": "/", "source": "architecture/pages/root.page.html"},
     "app/about/index.html": {"route": "/about/", "source": "architecture/pages/about.page.html"},
@@ -125,12 +126,48 @@ def _source_map_template(fragment: str, template: object, route_index: int) -> s
     return "/routes/" + str(route_index) + "/" + match.group(1)
 
 
+def _source_map_template_key(fragment: str, template: object) -> str:
+    if not isinstance(template, dict) or template.get("path") != PRIMARY_FRAGMENT:
+        raise ValueError("source-map template must point to the shared header fragment")
+    source_range = template.get("range")
+    if not isinstance(source_range, dict):
+        raise ValueError("source-map template range is missing")
+    start, end = source_range.get("start"), source_range.get("end")
+    if not isinstance(start, int) or isinstance(start, bool) or not isinstance(end, int) or isinstance(end, bool):
+        raise ValueError("source-map template offsets must be integers")
+    if start < 0 or end <= start or end > len(fragment):
+        raise ValueError("source-map template range is outside the fragment")
+    placeholder = fragment[start:end]
+    match = re.fullmatch(r"\{\{(copy\.[A-Za-z0-9.]+)\}\}", placeholder)
+    if not match:
+        raise ValueError("source-map template range does not identify one catalog key")
+    return match.group(1)
+
+
+def _load_copy_catalog() -> dict:
+    script = "const c=require(process.argv[1]);process.stdout.write(JSON.stringify(c));"
+    result = subprocess.run(
+        ["node", "-e", script, str(ROOT / PRIMARY_COPY)],
+        check=True, capture_output=True, text=True, encoding="utf-8",
+    )
+    catalog = json.loads(result.stdout)
+    if not isinstance(catalog, dict) or catalog.get("schema") != "M2DUIStringCatalog/1":
+        raise ValueError("shared UI copy catalog schema is invalid")
+    return catalog
+
+
+def _escape_catalog_html(value: str) -> str:
+    return (value.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
+            .replace('"', "&quot;").replace("'", "&#39;"))
+
+
 def _validated_primary_page_context(
     manifest: dict,
     manifest_sha256: str,
     output_path: str,
     route_index: int,
     route_config: dict,
+    copy_catalog: dict,
     shared_texts: dict[str, str],
 ) -> dict:
     expected = PRIMARY_PAGES[output_path]
@@ -153,7 +190,7 @@ def _validated_primary_page_context(
     if not isinstance(segments, list):
         raise ValueError("source-map segments missing for " + output_path)
 
-    known_sources = {expected["source"], PRIMARY_FRAGMENT, PRIMARY_ROUTES}
+    known_sources = {expected["source"], PRIMARY_FRAGMENT, PRIMARY_ROUTES, PRIMARY_COPY}
     cursor = 0
     output_length = len(output_text)
     fragment = shared_texts[PRIMARY_FRAGMENT]
@@ -206,6 +243,23 @@ def _validated_primary_page_context(
                 raise ValueError("route-config placeholder must resolve to a string")
             if output_text[start:end] != value:
                 raise ValueError("route-config output does not match its declared pointer value")
+        elif kind == "catalog-key":
+            pointer = origin.get("pointer")
+            if origin.get("path") != PRIMARY_COPY or transform != "catalog-key-substitution":
+                raise ValueError("catalog-key origin or transform is invalid")
+            key = _source_map_template_key(fragment, origin.get("template"))
+            expected_pointer = "/" + key.removeprefix("copy.").replace(".", "/")
+            if pointer != expected_pointer:
+                raise ValueError("catalog pointer does not match its template key")
+            if manifest.get("copyCatalog", {}).get("schema") != copy_catalog.get("schema"):
+                raise ValueError("UI copy catalog schema differs from the manifest")
+            if manifest.get("copyCatalog", {}).get("locale") != copy_catalog.get("locale"):
+                raise ValueError("UI copy catalog locale differs from the manifest")
+            value = json_pointer_value(copy_catalog, pointer)
+            if not isinstance(value, str) or not value.strip():
+                raise ValueError("catalog key must resolve to a nonblank string")
+            if output_text[start:end] != _escape_catalog_html(value):
+                raise ValueError("catalog-key output does not match its declared key")
         elif kind == "generator-rule":
             if transform != "conditional-attribute-generation":
                 raise ValueError("generator-rule transform is invalid")
@@ -271,8 +325,8 @@ def load_primary_page_contexts() -> dict[str, dict]:
         manifest_bytes = PRIMARY_PAGE_MANIFEST.read_bytes()
         manifest_sha256 = sha256(manifest_bytes)
         manifest = json.loads(manifest_bytes.decode("utf-8"))
-        if manifest.get("schema") != "M2DARC03CPublishedPages/2":
-            raise ValueError("primary-page manifest schema is not /2")
+        if manifest.get("schema") != "M2DARC03CPublishedPages/3":
+            raise ValueError("primary-page manifest schema is not /3")
         source_map = manifest.get("sourceMap")
         if not isinstance(source_map, dict) or source_map.get("schema") != PRIMARY_MAP_SCHEMA:
             raise ValueError("primary-page source-map schema is unsupported")
@@ -293,12 +347,21 @@ def load_primary_page_contexts() -> dict[str, dict]:
             raise ValueError("primary header fragment path mismatch")
         if manifest.get("routesConfig", {}).get("path") != PRIMARY_ROUTES:
             raise ValueError("primary route configuration path mismatch")
+        copy_record = manifest.get("copyCatalog")
+        if not isinstance(copy_record, dict) or copy_record.get("path") != PRIMARY_COPY:
+            raise ValueError("UI copy catalog identity is missing from the manifest")
+        copy_bytes = (ROOT / PRIMARY_COPY).read_bytes()
+        if git_blob_sha(copy_bytes) != copy_record.get("gitBlobSha"):
+            raise ValueError("UI copy catalog Git blob hash mismatch")
+        catalog = _load_copy_catalog()
+        if (copy_record.get("schema"), copy_record.get("locale")) != (catalog.get("schema"), catalog.get("locale")):
+            raise ValueError("UI copy catalog metadata differs from the manifest")
         fragment = decode_source_map_text(fragment_bytes)
         route_config = json.loads(route_bytes.decode("utf-8"))
         shared_texts = {PRIMARY_FRAGMENT: fragment}
         for index, output in enumerate(PRIMARY_PAGES):
             contexts[output] = _validated_primary_page_context(
-                manifest, manifest_sha256, output, index, route_config, shared_texts
+                manifest, manifest_sha256, output, index, route_config, catalog, shared_texts
             )
     except Exception as error:
         reason = "primary-page-provenance-invalid: " + str(error)
@@ -350,6 +413,9 @@ def authoring_at_offset(context: dict, offset: int | None, end_offset: int | Non
             "column": column,
         })
     elif origin["kind"] == "route-config":
+        result["origin"].update({"path": origin["path"], "pointer": origin["pointer"]})
+        result["template"] = origin["template"]
+    elif origin["kind"] == "catalog-key":
         result["origin"].update({"path": origin["path"], "pointer": origin["pointer"]})
         result["template"] = origin["template"]
     else:
