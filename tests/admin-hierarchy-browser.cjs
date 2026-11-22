@@ -171,6 +171,31 @@ async function sectionItemIds(page, stageId, groupId, sectionId) {
   assert.match(await page.locator('[data-initial-service]').first().getAttribute("aria-label"), /ativo inicialmente/, "initial service state remains a separate active-by-default preference");
   assert.match(await stageAvailability.getAttribute("aria-label"), /^Ativar etapa /, "stage text describes whether the step is available");
 
+  for (const stageId of ["modules", "summary"]) {
+    const card = page.locator(`[data-hierarchy-stage="${stageId}"]`);
+    const reason = card.locator(`#stage-policy-${stageId}`);
+    const enabled = card.locator(`[data-stage-enabled="${stageId}"]`);
+    const remove = card.locator(`[data-remove-stage="${stageId}"]`);
+    assert.equal(await enabled.isDisabled(), true, `${stageId} availability is locked by the required-flow policy`);
+    assert.equal(await remove.isDisabled(), true, `${stageId} removal is locked by the required-flow policy`);
+    assert.equal(await reason.textContent(), "Etapa obrigatória: não pode ser desativada nem removida.", `${stageId} exposes the policy that disables both controls`);
+    assert.equal(await reason.isVisible(), true, `${stageId} disabled reason is visible in the editor`);
+    assert.equal(await enabled.getAttribute("aria-describedby"), `stage-policy-${stageId}`, `${stageId} availability references its disabled reason`);
+    assert.equal(await remove.getAttribute("aria-describedby"), `stage-policy-${stageId}`, `${stageId} removal references its disabled reason`);
+  }
+
+  await page.locator("#stageKindInput").selectOption("custom");
+  page.once("dialog", (dialog) => dialog.accept("Etapa vazia"));
+  await page.locator("#addStageButton").click();
+  const emptyStage = page.locator('[data-hierarchy-stage="stage-etapa-vazia"]');
+  const emptyStageToggle = emptyStage.locator('[data-stage-enabled="stage-etapa-vazia"]');
+  const emptyStageReason = emptyStage.locator("#stage-policy-stage-etapa-vazia");
+  assert.equal(await emptyStageToggle.isDisabled(), true, "an empty custom stage cannot be activated");
+  assert.equal(await emptyStage.locator('[data-remove-stage="stage-etapa-vazia"]').isDisabled(), false, "the empty custom stage remains removable");
+  assert.equal(await emptyStageReason.textContent(), "Adicione pelo menos um item antes de ativar esta etapa.", "empty stage explains the prerequisite for activation");
+  assert.equal(await emptyStageToggle.getAttribute("aria-describedby"), "stage-policy-stage-etapa-vazia", "empty stage availability references its prerequisite");
+  assert.equal(putCount, 0, "adding a local stage and viewing its policy reason do not save implicitly");
+
   const accentColors = {};
   for (const theme of ["light", "dark"]) {
     await page.evaluate((nextTheme) => window.CASA_UI_THEME.setMode(nextTheme), theme);
