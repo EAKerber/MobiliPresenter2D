@@ -238,7 +238,7 @@ function appendInitialStateControl(option, itemId, item) {
     initial.type = "checkbox";
     initial.checked = Boolean(model.initialState.entities[itemId]);
     initial.dataset.initialConfiguratorEntity = itemId;
-    initial.setAttribute("aria-label", `${item.label}: ativo inicialmente`);
+    initial.setAttribute("aria-label", `${item.label}: ${kind === "module" ? "visível inicialmente no configurador" : "ativo inicialmente"}`);
     const label = document.createElement("label");
     label.className = "initial-state-option";
     label.append(initial, document.createTextNode(kind === "module" ? "Iniciar visível no configurador" : "Iniciar ativo"));
