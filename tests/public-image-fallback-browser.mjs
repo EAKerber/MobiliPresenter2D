@@ -17,6 +17,9 @@ async function ready(page){
     await document.fonts.ready;
     await Promise.all([...document.querySelectorAll("[data-image-fallback] img")]
       .map(image=>image.decode?.().catch(()=>{})));
+    // Decode can resolve before browser layout observers finish applying image geometry.
+    await new Promise(resolve=>
+      requestAnimationFrame(()=>requestAnimationFrame(resolve)));
   });
   await page.waitForTimeout(180);
 }
