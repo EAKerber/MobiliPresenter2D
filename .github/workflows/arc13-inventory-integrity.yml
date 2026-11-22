@@ -20,6 +20,7 @@ on:
       - 'tools/arc13/run-inventory.mjs'
       - 'tools/arc13/scan-js-sinks.mjs'
       - 'tools/arc13/scan-ui-inventory.py'
+      - 'tests/arc13_line_ending_normalization_test.py'
       - '.github/workflows/arc13-inventory-integrity.yml'
   push:
     branches: [main, development]
@@ -39,6 +40,7 @@ on:
       - 'tools/arc13/run-inventory.mjs'
       - 'tools/arc13/scan-js-sinks.mjs'
       - 'tools/arc13/scan-ui-inventory.py'
+      - 'tests/arc13_line_ending_normalization_test.py'
       - '.github/workflows/arc13-inventory-integrity.yml'
 
 permissions:
@@ -62,6 +64,8 @@ jobs:
           node-version: '22'
       - name: Install the pinned parser
         run: npm ci --prefix tools/arc13
+      - name: Verify source-map line-ending normalization
+        run: python tests/arc13_line_ending_normalization_test.py
       - name: Confirm the generated report remains tracked
         run: git ls-files --error-unmatch architecture/arc13/ui-text-candidates.json
       - name: Regenerate the candidate inventory
