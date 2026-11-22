@@ -8,7 +8,7 @@
     },
     {
       "path": "tools/arc13/scan-ui-inventory.py",
-      "sha256": "72a94118ffc5e20187701cbea93221738e7551037fdf6d86bafdcf5a41f2d02f"
+      "sha256": "52dcdc1e3e51049bb0be1788d213252dfdd0858bf3a1341eb85d40387801286e"
     },
     {
       "path": "tools/arc13/scan-js-sinks.mjs",

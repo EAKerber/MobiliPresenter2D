@@ -73,6 +73,11 @@ def sha256(data: bytes) -> str:
     return hashlib.sha256(data.replace(b"\r\n", b"\n")).hexdigest()
 
 
+def decode_source_map_text(data: bytes) -> str:
+    """Decode source-map text in a platform-independent LF coordinate space."""
+    return data.decode("utf-8").replace("\r\n", "\n")
+
+
 def git_blob_sha(data: bytes) -> str:
     canonical = data.replace(b"\r\n", b"\n")
     return hashlib.sha1(b"blob " + str(len(canonical)).encode("ascii") + b"\0" + canonical).hexdigest()
@@ -141,8 +146,8 @@ def _validated_primary_page_context(
         raise ValueError("source Git blob hash mismatch for " + expected["source"])
     if git_blob_sha(output_bytes) != page.get("outputGitBlobSha"):
         raise ValueError("output Git blob hash mismatch for " + output_path)
-    source_text = source_bytes.decode("utf-8").replace("\r\n", "\n")
-    output_text = output_bytes.decode("utf-8").replace("\r\n", "\n")
+    source_text = decode_source_map_text(source_bytes)
+    output_text = decode_source_map_text(output_bytes)
     source_map = page.get("sourceMap")
     segments = source_map.get("segments") if isinstance(source_map, dict) else None
     if not isinstance(segments, list):
@@ -288,7 +293,7 @@ def load_primary_page_contexts() -> dict[str, dict]:
             raise ValueError("primary header fragment path mismatch")
         if manifest.get("routesConfig", {}).get("path") != PRIMARY_ROUTES:
             raise ValueError("primary route configuration path mismatch")
-        fragment = fragment_bytes.decode("utf-8")
+        fragment = decode_source_map_text(fragment_bytes)
         route_config = json.loads(route_bytes.decode("utf-8"))
         shared_texts = {PRIMARY_FRAGMENT: fragment}
         for index, output in enumerate(PRIMARY_PAGES):
