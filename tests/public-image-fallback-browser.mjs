@@ -68,6 +68,8 @@ async function inspect(page,index,fail=false){
     if(fail)img.dispatchEvent(new Event("error"));
     const placeholder=frame.querySelector(".image-fallback");
     const box=frame.getBoundingClientRect();
+    const heroArt=frame.closest(".hero-art");
+    const calibratedArtHeight=heroArt?parseFloat(getComputedStyle(heroArt).minHeight):null;
     const pb=placeholder?.getBoundingClientRect();
     const ib=img.getBoundingClientRect();
     const style=placeholder&&getComputedStyle(placeholder);
@@ -83,6 +85,7 @@ async function inspect(page,index,fail=false){
       description:placeholder?.querySelector(".image-fallback__description")?.textContent,
       text:placeholder?.querySelector(".image-fallback__status")?.textContent,
       box:{x:box.x,y:box.y,width:box.width,height:box.height},
+      calibratedArtHeight,
       image:{width:ib.width,height:ib.height},overlay:relative,
       fg,bg,
       clipped:(placeholder?.scrollHeight||0)>(placeholder?.clientHeight||0)+2,
@@ -181,10 +184,24 @@ for(const [engineName,engine] of [["chromium",chromium],["webkit",webkit]]){
         assert.equal(restored.hidden,false,context+" image not restored "+index);
         assert.equal(restored.placeholderHidden,true,context+" fallback not concealed "+index);
         assert.equal(restored.tabindex,null,context+" tab stop retained after recovery "+index);
-        assert.ok(close(restored.box.width,before.box.width)&&
-          close(restored.box.height,before.box.height),
-          context+" frame not restored "+index+
-          " before="+JSON.stringify(before.box)+" restored="+JSON.stringify(restored.box));
+        if(pageSpec.path==="/"&&index===0){
+          // The landing app recalibrates the phone and its art height when the
+          // source image's load handler runs. The home geometry gate covers the
+          // exact phone bounds; this fallback check verifies the restored frame
+          // matches that recalibrated height instead of an uncalibrated baseline.
+          assert.ok(close(restored.box.width,before.box.width)&&
+            close(restored.box.x,before.box.x)&&close(restored.box.y,before.box.y)&&
+            restored.calibratedArtHeight!==null&&
+            close(restored.box.height,restored.calibratedArtHeight),
+            context+" hero frame does not match calibrated layout "+
+            "before="+JSON.stringify(before.box)+" restored="+JSON.stringify(restored.box)+
+            " calibratedArtHeight="+restored.calibratedArtHeight);
+        }else{
+          assert.ok(close(restored.box.width,before.box.width)&&
+            close(restored.box.height,before.box.height),
+            context+" frame not restored "+index+
+            " before="+JSON.stringify(before.box)+" restored="+JSON.stringify(restored.box));
+        }
         visibleFallbacks++;
       }
       const result={engine:engineName,width,theme,path:pageSpec.path,
