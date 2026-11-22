@@ -176,7 +176,7 @@ async function sectionItemIds(page, stageId, groupId, sectionId) {
   const globalPolicyNote = finishPolicyPage.locator(`#finish-policy-${globalFinish.id}`);
   assert.equal(await globalFinishToggle.isDisabled(), true, "the last global client finish cannot be disabled");
   assert.equal(await globalFinishToggle.getAttribute("aria-label"), `${sandbox.window.CASA_EM_MODULOS_CATALOG.options.finishes[0].publicLabel}: disponível para clientes`, "global finish availability names the finish");
-  assert.equal(await globalFinishScope.locator('option[value="local"]').isDisabled(), true, "the last global finish cannot be switched to local scope");
+  assert.equal(await globalFinishScope.isDisabled(), true, "the last global finish cannot change scope");
   assert.equal(await globalFinishScope.getAttribute("aria-label"), `${sandbox.window.CASA_EM_MODULOS_CATALOG.options.finishes[0].publicLabel}: aplicação`, "finish scope names the finish");
   assert.equal(await globalPolicyNote.textContent(), "Mantenha pelo menos um acabamento global disponível para clientes.", "last global finish explains both protected actions");
   assert.equal(await globalPolicyNote.isVisible(), true, "global finish policy reason is visible");

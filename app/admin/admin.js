@@ -885,12 +885,12 @@ function renderFinishes() {
     const scope = document.createElement("select");
     scope.dataset.finishScope = finish.id;
     scope.setAttribute("aria-label", `${source.label}: aplicação`);
+    scope.disabled = onlyGlobalFinish;
     [["global", "Global · conjunto todo"], ["local", "Local · módulo individual"]].forEach(([value, label]) => {
       const option = document.createElement("option"); option.value = value; option.textContent = label;
-      option.disabled = value === "local" && finish.enabled && finish.scope === "global" && globalOptions === 1;
       scope.append(option);
     });
-    if (scope.querySelector('option[value="local"]')?.disabled) scope.setAttribute("aria-describedby", globalPolicyId);
+    if (scope.disabled) scope.setAttribute("aria-describedby", globalPolicyId);
     scope.value = finish.scope;
     scopeLabel.append(scope);
     card.append(swatch, heading, active, scopeLabel);
