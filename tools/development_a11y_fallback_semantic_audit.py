@@ -43,7 +43,7 @@ def verify() -> dict:
     split = "  const explanations={"
     first, div, trailing = old_js.partition(split)
     current_first, current_div, current_trailing = actual.partition(split)
-    main_js = git("show", MAIN + ":" + SRC_PATH) + "\\n"
+    main_js = git("show", MAIN + ":" + SRC_PATH) + "\n"
     main_first, main_div, _ = main_js.partition(split)
     require(div == split and current_div == split and main_div == split,
             "EXPLANATION_SECTION_MISSING")
