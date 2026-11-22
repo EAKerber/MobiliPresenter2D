@@ -997,6 +997,11 @@ function renderMaterials() {
     card.append(chip, title, makeField("Nome", material.label, "materialLabel"));
     const colorLabel = document.createElement("label"); colorLabel.className = "data-field"; colorLabel.append(document.createTextNode("Cor base"));
     const color = document.createElement("input"); color.type = "color"; color.value = material.color || "#b7b0a7"; color.disabled = material.color === null; color.dataset.materialColor = "true"; colorLabel.append(color); card.append(colorLabel);
+    if (color.disabled) {
+      const colorReason = document.createElement("p"); colorReason.className = "admin-note"; colorReason.id = `material-color-disabled-reason-${material.id}`;
+      colorReason.textContent = "Cor base indisponível enquanto “Sem cor/tinta base” estiver marcado.";
+      color.setAttribute("aria-describedby", colorReason.id); card.append(colorReason);
+    }
     const noColorLabel = document.createElement("label"); noColorLabel.className = "data-field";
     const noColor = document.createElement("input"); noColor.type = "checkbox"; noColor.checked = material.color === null; noColor.disabled = material.kind !== "texture"; noColor.dataset.materialNoColor = "true";
     noColorLabel.append(noColor, document.createTextNode(" Sem cor/tinta base")); card.append(noColorLabel);
@@ -1004,6 +1009,11 @@ function renderMaterials() {
     const kind = document.createElement("select"); kind.dataset.materialKind = "true";
     [["color", "Cor sólida"], ["texture", "Textura"]].forEach(([value, text]) => { const option = document.createElement("option"); option.value = value; option.textContent = text; kind.append(option); });
     kind.value = material.kind; kindLabel.append(kind); card.append(kindLabel);
+    if (noColor.disabled) {
+      const noColorReason = document.createElement("p"); noColorReason.className = "admin-note"; noColorReason.id = `material-no-color-disabled-reason-${material.id}`;
+      noColorReason.textContent = "Sem cor/tinta base está disponível apenas para materiais do tipo Textura.";
+      noColor.setAttribute("aria-describedby", noColorReason.id); card.append(noColorReason);
+    }
     const assetLabel = document.createElement("label"); assetLabel.className = "data-field"; assetLabel.append(document.createTextNode("Textura (arquivo existente)"));
     const assetSelect = document.createElement("select"); assetSelect.dataset.materialTexture = "true";
     const noTexture = document.createElement("option"); noTexture.value = ""; noTexture.textContent = "Somente cor"; assetSelect.append(noTexture);
