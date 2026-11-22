@@ -106,7 +106,11 @@ if (header) {
     function setOpen(open, restoreFocus = false) {
       menu.hidden = !open;
       toggle.setAttribute("aria-expanded", String(open));
-      toggle.setAttribute("aria-label", open ? "Fechar menu" : "Abrir menu");
+      const copyKey = open ? "close" : "open";
+      const fallback = open ? "Fechar menu" : "Abrir menu";
+      const label = window.CASA_UI_THEME && typeof window.CASA_UI_THEME.getCopy === "function"
+        ? window.CASA_UI_THEME.getCopy("navigation.menu." + copyKey, fallback) : fallback;
+      toggle.setAttribute("aria-label", label);
       if (open) menu.querySelector("a, button")?.focus();
       else if (restoreFocus) toggle.focus();
     }

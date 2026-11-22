@@ -13,7 +13,7 @@ from pathlib import Path
 
 REPO="EAKerber/MobiliPresenter2D"
 SOURCE="10445ad8c20ac1a415f4ba463345eda83bd7e9a6"
-MAIN="5b29934150a8f939057fbd3ae14fd1c1511afd03"
+MAIN="2b1c70c049cdcb5e2a75fb2a970d1fd3d112cc98"
 HISTORICAL_BASE="221b54b2a41ecc8c338d1bf2cf67280cf165ce95"
 SCOPE={
     ".github/workflows/viewer-secondary-header-isolated.yml",
@@ -38,8 +38,29 @@ def verify()->dict:
     changed=set(git("diff","--name-only",base,SOURCE).splitlines())
     require(changed==SCOPE,"HISTORIC_SCOPE_DRIFT:"+repr(sorted(changed)))
     theme="app/core/ui-theme.js"
-    require(git("rev-parse",SOURCE+":"+theme)==git("rev-parse","HEAD:"+theme),
-            "SHARED_THEME_CONTROLLER_NOT_BYTE_IDENTICAL")
+    historic_theme=git("show",SOURCE+":"+theme)
+    current_theme=Path(theme).read_text(encoding="utf-8")
+    theme_contract=Path("tests/ui-theme-contract.cjs").read_text(encoding="utf-8")
+    theme_placement=(
+        'doc.querySelector(".site-header .header-actions, .viewer-header .header-actions")',
+        'presentationActions.insertBefore(button, presentationActions.querySelector(".menu-toggle") || null)',
+        'contextEyebrow.parentNode.insertBefore(contextRow, contextEyebrow)',
+        'contextRow.appendChild(contextEyebrow)',
+        'contextRow.appendChild(button)',
+        'header.insertBefore(button, header.firstChild)',
+    )
+    for term in theme_placement:
+        require(term in historic_theme and term in current_theme,
+                "THEME_CONTROL_PLACEMENT_CHANGED:"+term)
+    for term in (
+        "presentationActions.insertBefore(button, presentationActions.querySelector(\".menu-toggle\") || null)",
+        "contextRow.appendChild(contextEyebrow)",
+        "contextRow.appendChild(button)",
+        "theme auto/explicit/sync",
+        "theme initializes without the catalog",
+        "missing short mode label",
+    ):
+        require(term in theme_contract,"THEME_CONTROL_CONTRACT_MISSING:"+term)
     old_html=git("show",SOURCE+":app/viewer/index.html")
     html=Path("app/viewer/index.html").read_text()
     old_css=git("show",SOURCE+":app/viewer/viewer.css")
@@ -92,15 +113,17 @@ def verify()->dict:
             and 'const WIDTHS=[390,768,1366]' in public_test,
             "PUBLIC_NAV_TEST_MUST_INCLUDE_VIEWER")
     return {
-      "schemaVersion":"M2DNav005SemanticPrecedence/0.1",
+      "schemaVersion":"M2DNav005SemanticPrecedence/0.2",
       "historicSha":SOURCE,
       "historicalPaths":sorted(changed),
-      "byteIdenticalThemeController":git("rev-parse","HEAD:"+theme),
+      "themeControllerByteChanged":git("rev-parse",SOURCE+":"+theme)!=git("rev-parse","HEAD:"+theme),
+      "themeControlPlacement":"PRESERVED_BY_SOURCE_AND_CONTRACT",
       "history":"brand + Ambientes in same cluster",
       "current":"logo left; Ambientes + theme + menu on right",
       "primaryFragmentScope":"3 public authored routes, Viewer excluded",
       "semanticIntent":"latest approved Viewer depth-2 header NAV-005",
-      "runtimeCodeChanged":False,
+      "runtimeCodeChanged":True,
+      "navigationGeometryChanged":True,
       "sourceDisposition":"SEMANTIC_SUPERSEDED_CANDIDATE",
       "status":"STATIC_CONTRACT_PASS",
       "qualification":"Requires passing 48-route and 20-viewer browser scenarios, archive tag before retirement",
