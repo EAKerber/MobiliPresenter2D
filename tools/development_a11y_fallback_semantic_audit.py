@@ -86,7 +86,9 @@ def verify() -> dict:
     script = '<script src="/core/image-fallback.js?v=public-image-fallback-v1"></script>'
     require(script in current_page and script in current_generated,
             "GENERIC_SCRIPT_NOT_LOADED_ON_PUBLISHED_PAGE")
-    require(current_generated.index(script) > current_generated.index('<script src="how-it-works.js"></script>'),
+    page_script = '<script src="how-it-works.js'
+    require(page_script in current_generated and
+            current_generated.index(script) > current_generated.index(page_script),
             "GENERIC_SCRIPT_ORDER_CHANGED")
     for p in ["tests/public-image-fallback.test.mjs", "tests/public-image-fallback-browser.mjs"]:
         require(Path(p).is_file(), "GENERIC_COVERAGE_MISSING:" + p)
