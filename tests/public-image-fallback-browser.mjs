@@ -38,6 +38,9 @@ async function ready(page){
             const expectedArtHeight=Math.ceil(Math.max(artMinimum,phoneBottom));
             if(Math.abs(parseFloat(image.style.width)-expectedImageWidth)<1&&
               Math.abs(parseFloat(art.style.minHeight)-expectedArtHeight)<1){
+              // Normalize any pending WebKit grid sizing through the app's own
+              // load handler before saving the fallback geometry baseline.
+              image.dispatchEvent(new Event("load"));
               resolve();
               return;
             }
