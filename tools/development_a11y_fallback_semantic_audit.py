@@ -10,7 +10,7 @@ import subprocess
 from pathlib import Path
 
 OLD = "6840d8986e44a7860b541e6becb3b5373ef48c09"
-MAIN = "221b54b2a41ecc8c338d1bf2cf67280cf165ce95"
+MAIN = "5b29934150a8f939057fbd3ae14fd1c1511afd03"
 SRC_PATH = "app/how-it-works/how-it-works.js"
 GENERIC_PATH = "app/core/image-fallback.js"
 EXPECTED = {
