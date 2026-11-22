@@ -42,8 +42,15 @@ def verify() -> dict:
     require(old_js.startswith("/* Scoped interactive explanation panel. */\n(function(){\n"), "SOURCE_START_CHANGED")
     split = "  const explanations={"
     first, div, trailing = old_js.partition(split)
-    require(div == split and actual == "/* Scoped interactive explanation panel. */\n(function(){\n" + split + trailing,
-            "LEGACY_PAGE_HANDLER_NOT_ONLY_ADDITION")
+    current_first, current_div, current_trailing = actual.partition(split)
+    main_js = git("show", MAIN + ": " + SRC_PATH).replace(": ", ":") + "\\n"
+    main_first, main_div, _ = main_js.partition(split)
+    require(div == split and current_div == split and main_div == split,
+            "EXPLANATION_SECTION_MISSING")
+    require(current_first == main_first, "CURRENT_PAGE_PREFIX_DIFFERS_FROM_PINNED_MAIN")
+    require(current_trailing == trailing, "LEGACY_EXPLANATION_CONTENT_CHANGED")
+    require('document.querySelectorAll("[data-image-fallback]")' not in current_first,
+            "LEGACY_PAGE_HANDLER_NOT_REMOVED")
     for token in ("document.querySelectorAll(\"[data-image-fallback]\")",
                   'figure.querySelector(".study-space-illustration")',
                   'figure.querySelector(".image-fallback")',
