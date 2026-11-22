@@ -127,7 +127,7 @@ html[data-theme="dark"] .scene-hotspot:focus-visible {
   .technical-view h3 { font-size: .74rem; }
   .technical-view svg { height: 180px; }
   .mobile-view-nav { display: flex; justify-content: center; gap: 7px; margin-top: 10px; }
-  .mobile-view-nav button { width: 7px; height: 7px; padding: 0; border: 0; border-radius: 50%; background: #c9c3bb; }
+  .mobile-view-nav button { width: 7px; height: 7px; padding: 0; border: 0; border-radius: 50%; background: var(--public-muted); }
   .mobile-view-nav button[aria-current="true"] { background: var(--public-accent); }
   .detail-grid, .detail-grid--has-requirements { grid-template-columns: 1fr; gap: 13px; }
   .detail-list { max-height: 190px; }
