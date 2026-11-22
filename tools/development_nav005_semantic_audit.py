@@ -13,7 +13,8 @@ from pathlib import Path
 
 REPO="EAKerber/MobiliPresenter2D"
 SOURCE="10445ad8c20ac1a415f4ba463345eda83bd7e9a6"
-MAIN="221b54b2a41ecc8c338d1bf2cf67280cf165ce95"
+MAIN="5b29934150a8f939057fbd3ae14fd1c1511afd03"
+HISTORICAL_BASE="221b54b2a41ecc8c338d1bf2cf67280cf165ce95"
 SCOPE={
     ".github/workflows/viewer-secondary-header-isolated.yml",
     "app/core/ui-theme.js",
@@ -33,7 +34,7 @@ def require(check:bool, msg:str)->None:
 def verify()->dict:
     require(git("rev-parse","origin/main")==MAIN,"MAIN_PIN_DRIFT")
     require(git("cat-file","-t",SOURCE)=="commit","HISTORIC_SHA_NOT_AVAILABLE")
-    base=git("merge-base",MAIN,SOURCE)
+    base=git("merge-base",HISTORICAL_BASE,SOURCE)
     changed=set(git("diff","--name-only",base,SOURCE).splitlines())
     require(changed==SCOPE,"HISTORIC_SCOPE_DRIFT:"+repr(sorted(changed)))
     theme="app/core/ui-theme.js"
