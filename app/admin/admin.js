@@ -693,12 +693,21 @@ function renderStages() {
 
     const actions = document.createElement("div");
     actions.className = "stage-card__actions";
+    const isRequiredStage = ["modules", "summary"].includes(stage.kind || stage.id);
+    const hasStageItems = stageItemIds(stage).length > 0;
+    const disabledReason = isRequiredStage
+      ? "Etapa obrigatória: não pode ser desativada nem removida."
+      : !hasStageItems
+        ? "Adicione pelo menos um item antes de ativar esta etapa."
+        : "";
+    const disabledReasonId = `stage-policy-${stage.id}`;
     const remove = document.createElement("button");
     remove.type = "button";
     remove.className = "button button--secondary";
     remove.textContent = "Remover etapa";
     remove.dataset.removeStage = stage.id;
-    remove.disabled = ["modules", "summary"].includes(stage.kind || stage.id);
+    remove.disabled = isRequiredStage;
+    if (remove.disabled && disabledReason) remove.setAttribute("aria-describedby", disabledReasonId);
     actions.append(remove);
 
     const enabledLabel = document.createElement("label");
@@ -707,11 +716,19 @@ function renderStages() {
     enabledInput.type = "checkbox";
     enabledInput.checked = stage.enabled;
     enabledInput.dataset.stageEnabled = stage.id;
-    enabledInput.disabled = stage.id === "modules" || stage.id === "summary" || stageItemIds(stage).length === 0;
+    enabledInput.disabled = isRequiredStage || !hasStageItems;
     enabledInput.setAttribute("aria-label", `Ativar etapa ${stage.label}`);
+    if (enabledInput.disabled && disabledReason) enabledInput.setAttribute("aria-describedby", disabledReasonId);
     enabledLabel.append(enabledInput, document.createTextNode(stage.enabled ? "Ativa" : "Inativa"));
     top.append(number, nameLabel, order, actions, enabledLabel);
     card.append(top);
+    if (disabledReason) {
+      const policyNote = document.createElement("p");
+      policyNote.className = "admin-note stage-card__policy-note";
+      policyNote.id = disabledReasonId;
+      policyNote.textContent = disabledReason;
+      card.append(policyNote);
+    }
 
     const hierarchy = document.createElement("div");
     hierarchy.className = "stage-hierarchy";
