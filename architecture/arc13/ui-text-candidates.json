@@ -89,7 +89,7 @@
     "excludedHtmlOccurrences": 12,
     "javascriptFilesScanned": 57,
     "inlineJavaScriptBlocksScanned": 3,
-    "javascriptSinkSites": 433,
+    "javascriptSinkSites": 434,
     "javascriptTextSourceRecords": 360,
     "javascriptTextSourceRecordsActive": 285,
     "javascriptTextSourceRecordsPassedButUnused": 7,
@@ -152,7 +152,7 @@
       "view-label": 7
     },
     "excludedJavaScriptSinks": 11,
-    "javascriptStaticValues": 177,
+    "javascriptStaticValues": 178,
     "javascriptDynamicOrMixedValues": 256,
     "javascriptParseErrors": 0,
     "javascriptNotScannedSources": 0,
@@ -162,14 +162,14 @@
     "unassignedRouteSites": 0,
     "primaryPageAuthoringMappedOccurrences": 420,
     "primaryPageAuthoringUnresolvedOccurrences": 0,
-    "unreviewedOccurrences": 1042,
+    "unreviewedOccurrences": 1043,
     "htmlReferenceOccurrences": 48,
     "altTextOccurrences": 37,
-    "distinctExactExpressions": 816,
+    "distinctExactExpressions": 817,
     "exactExpressionDuplicateGroups": 91,
     "exactExpressionDuplicateOccurrences": 317,
     "exactExpressionOccurrencesBeyondFirst": 226,
-    "distinctExactStaticValues": 604,
+    "distinctExactStaticValues": 605,
     "exactStaticValueDuplicateGroups": 70,
     "exactStaticValueDuplicateOccurrences": 252,
     "exactStaticValueOccurrencesBeyondFirst": 182
@@ -321,7 +321,7 @@
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1625,
+      "line": 1629,
       "column": 30,
       "kind": "javascript-excluded-sink",
       "sink": "call:createTextNode",
@@ -330,11 +330,11 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff"
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1661,
+      "line": 1665,
       "column": 5,
       "kind": "javascript-excluded-sink",
       "sink": "helper:setMessage",
@@ -343,7 +343,7 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff"
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c"
     },
     {
       "source": "app/app.js",
@@ -6098,7 +6098,7 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
       "id": "314373af94add2e3"
     },
     {
@@ -6120,7 +6120,7 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
       "id": "1ed0bb821a51d960"
     },
     {
@@ -6142,7 +6142,7 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
       "id": "8fada856883b4129"
     },
     {
@@ -6167,7 +6167,7 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
       "id": "064500918d629241"
     },
     {
@@ -6190,7 +6190,7 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
       "id": "8aba48247045874e"
     },
     {
@@ -6212,7 +6212,7 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
       "id": "49e7f9e941efbad7"
     },
     {
@@ -6240,7 +6240,7 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
       "id": "619adc6dd3cafa4c"
     },
     {
@@ -6266,7 +6266,7 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
       "id": "852e7699499e4703"
     },
     {
@@ -6291,7 +6291,7 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
       "id": "53fb3aeaa2fdd8db"
     },
     {
@@ -6315,7 +6315,7 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
       "id": "709ad1019bfc6a05"
     },
     {
@@ -6340,7 +6340,7 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
       "id": "e0d9bd67f4de94ba"
     },
     {
@@ -6364,7 +6364,7 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
       "id": "7ef47d84204a2578"
     },
     {
@@ -6388,7 +6388,7 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
       "id": "5520ffc3cf38372c"
     },
     {
@@ -6412,7 +6412,7 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
       "id": "312954581021e94b"
     },
     {
@@ -6434,7 +6434,7 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
       "id": "d275ee2141e37934"
     },
     {
@@ -6459,7 +6459,7 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
       "id": "b69042e51c0c6103"
     },
     {
@@ -6484,7 +6484,7 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
       "id": "38e1ac647c419ecd"
     },
     {
@@ -6509,7 +6509,7 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
       "id": "7f1d273413dd1949"
     },
     {
@@ -6531,7 +6531,7 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
       "id": "b53a7d45cd1c1a6a"
     },
     {
@@ -6556,7 +6556,7 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
       "id": "cde1ab37c52202ab"
     },
     {
@@ -6581,7 +6581,7 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
       "id": "e8534aebb8304456"
     },
     {
@@ -6603,7 +6603,7 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
       "id": "c4eea1ee53575570"
     },
     {
@@ -6628,7 +6628,7 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
       "id": "b73e1dc9df9487d1"
     },
     {
@@ -6652,7 +6652,7 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
       "id": "d8c8230b2d452fe2"
     },
     {
@@ -6674,7 +6674,7 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
       "id": "bd9569d85c384db0"
     },
     {
@@ -6699,7 +6699,7 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
       "id": "a7e309e8eca34248"
     },
     {
@@ -6722,7 +6722,7 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
       "id": "5dc9d37d740dd797"
     },
     {
@@ -6746,7 +6746,7 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
       "id": "82eea74aabccb12e"
     },
     {
@@ -6768,7 +6768,7 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
       "id": "39d1d48433229296"
     },
     {
@@ -6792,7 +6792,7 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
       "id": "cbac3ebec458a246"
     },
     {
@@ -6816,7 +6816,7 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
       "id": "e0f8b0f5b2f67822"
     },
     {
@@ -6840,7 +6840,7 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
       "id": "7436e5c31cb8cd4f"
     },
     {
@@ -6864,7 +6864,7 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
       "id": "a8b86143468c3581"
     },
     {
@@ -6886,7 +6886,7 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
       "id": "f838b217acbc8c0e"
     },
     {
@@ -6910,7 +6910,7 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
       "id": "4056f356e41af4dc"
     },
     {
@@ -6932,7 +6932,7 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
       "id": "ef3713a45fae525c"
     },
     {
@@ -6956,7 +6956,7 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
       "id": "4b7ddf4191680708"
     },
     {
@@ -6980,7 +6980,7 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
       "id": "5f2ae9fd84dacf53"
     },
     {
@@ -7004,7 +7004,7 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
       "id": "2267dc9521c44364"
     },
     {
@@ -7028,7 +7028,7 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
       "id": "665a49a05bd3bd41"
     },
     {
@@ -7053,7 +7053,7 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
       "id": "5da4489d1be4c8a2"
     },
     {
@@ -7077,7 +7077,7 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
       "id": "a65fe3bc44c119ea"
     },
     {
@@ -7101,7 +7101,7 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
       "id": "f66d1e3f6b07b7f2"
     },
     {
@@ -7125,7 +7125,7 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
       "id": "cbd569bfdaf19827"
     },
     {
@@ -7149,7 +7149,7 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
       "id": "434bd81b3e09cf37"
     },
     {
@@ -7172,7 +7172,7 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
       "id": "c32b52962fe484b6"
     },
     {
@@ -7194,7 +7194,7 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
       "id": "865e46ad4d3b31aa"
     },
     {
@@ -7218,7 +7218,7 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
       "id": "bd10d664bfbdff27"
     },
     {
@@ -7242,7 +7242,7 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
       "id": "2d8165a6d2839620"
     },
     {
@@ -7266,7 +7266,7 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
       "id": "11d413a6401830ac"
     },
     {
@@ -7290,7 +7290,7 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
       "id": "f7e0836b9012e1f8"
     },
     {
@@ -7315,7 +7315,7 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
       "id": "298cdd865b02a901"
     },
     {
@@ -7339,7 +7339,7 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
       "id": "87eb0ddf383b2012"
     },
     {
@@ -7363,7 +7363,7 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
       "id": "ec6ed5370892f9b4"
     },
     {
@@ -7388,7 +7388,7 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
       "id": "4f8ce9b8fdeca90a"
     },
     {
@@ -7412,7 +7412,7 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
       "id": "aeccc3cf605cf84e"
     },
     {
@@ -7438,7 +7438,7 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
       "id": "09cf4ffd847e1136"
     },
     {
@@ -7463,7 +7463,7 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
       "id": "e6763049d7e55029"
     },
     {
@@ -7487,7 +7487,7 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
       "id": "3a9f6c73b372725c"
     },
     {
@@ -7509,7 +7509,7 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
       "id": "40e003243b124635"
     },
     {
@@ -7532,7 +7532,7 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
       "id": "af828ee8fa492bc1"
     },
     {
@@ -7554,7 +7554,7 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
       "id": "62125fc71abccb5b"
     },
     {
@@ -7578,7 +7578,7 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
       "id": "bc9ac102f7783b49"
     },
     {
@@ -7604,7 +7604,7 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
       "id": "c18e0eb11eb4f6c9"
     },
     {
@@ -7628,12 +7628,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
       "id": "9fd29e276f8e9f7a"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 836,
+      "line": 837,
       "column": 109,
       "kind": "javascript-sink",
       "sink": "call:createTextNode",
@@ -7650,12 +7650,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "932c71ae82cbb880"
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "88451de62f2eb639"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 838,
+      "line": 839,
       "column": 71,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -7674,12 +7674,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "b910cbe38000d5bc"
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "d1c438f423c71305"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 839,
+      "line": 840,
       "column": 103,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -7696,12 +7696,36 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "920a612571dc761f"
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "1ad5fa2ddcfd0103"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 844,
+      "line": 842,
+      "column": 26,
+      "kind": "javascript-sink",
+      "sink": "call:setAttribute",
+      "attribute": "aria-describedby",
+      "expression": "noteId",
+      "value": "object-asset-policy-",
+      "literalSegments": [],
+      "constantCandidates": [
+        "object-asset-policy-"
+      ],
+      "classification": "unreviewed",
+      "classificationHints": [
+        "non-translatable-reference"
+      ],
+      "owner": "admin",
+      "routeConsumers": [
+        "/admin"
+      ],
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "19e0f177f5305aa7"
+    },
+    {
+      "source": "app/admin/admin.js",
+      "line": 847,
       "column": 77,
       "kind": "javascript-sink",
       "sink": "property:alt",
@@ -7721,12 +7745,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "e12a73d7df861817"
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "7751c6bebab87a7d"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 845,
+      "line": 848,
       "column": 47,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -7745,12 +7769,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "e4a1b40543b29ec8"
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "9f0edb5e728c4c13"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 846,
+      "line": 849,
       "column": 60,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -7769,13 +7793,13 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "8246579df0c1990c"
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "58fd0b0ad5d09311"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 849,
-      "column": 76,
+      "line": 853,
+      "column": 3,
       "kind": "javascript-sink",
       "sink": "property:textContent",
       "attribute": "text-content",
@@ -7795,12 +7819,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "2299ecbd396581fb"
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "cf3de9508a736a6e"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 865,
+      "line": 869,
       "column": 5,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -7817,12 +7841,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "d8f9598808a67737"
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "7197097ec4b0fd2f"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 879,
+      "line": 883,
       "column": 5,
       "kind": "javascript-sink",
       "sink": "call:setAttribute",
@@ -7841,12 +7865,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "495dc62a5445be05"
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "7da7544134b70a84"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 880,
+      "line": 884,
       "column": 27,
       "kind": "javascript-sink",
       "sink": "call:setAttribute",
@@ -7865,12 +7889,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "a05d1a9cf28b0797"
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "ca71d09045c456e8"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 881,
+      "line": 885,
       "column": 28,
       "kind": "javascript-sink",
       "sink": "call:createTextNode",
@@ -7889,12 +7913,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "e56c7aa75310d2c8"
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "af69a7e0102daa90"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 884,
+      "line": 888,
       "column": 23,
       "kind": "javascript-sink",
       "sink": "call:createTextNode",
@@ -7913,12 +7937,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "37a87d93bd408110"
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "bfd5bd6f01638da6"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 887,
+      "line": 891,
       "column": 5,
       "kind": "javascript-sink",
       "sink": "call:setAttribute",
@@ -7937,12 +7961,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "9936c93997b379db"
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "75408c020c8d21e6"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 890,
+      "line": 894,
       "column": 78,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -7959,12 +7983,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "9464a1dada252a03"
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "c0060a2714b1dce1"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 893,
+      "line": 897,
       "column": 25,
       "kind": "javascript-sink",
       "sink": "call:setAttribute",
@@ -7983,12 +8007,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "1616b54d8f845218"
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "2c280768d8188fe8"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 901,
+      "line": 905,
       "column": 7,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -8007,12 +8031,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "5b19c274cd9590b1"
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "cd8e00f6f9ae1b1c"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 907,
+      "line": 911,
       "column": 7,
       "kind": "javascript-sink",
       "sink": "call:setAttribute",
@@ -8031,12 +8055,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "63889f73e096493f"
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "2656574d840f873a"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 917,
+      "line": 921,
       "column": 9,
       "kind": "javascript-sink",
       "sink": "call:setAttribute",
@@ -8056,12 +8080,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "709c270398fa55d7"
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "0333b0b1625801c4"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 918,
+      "line": 922,
       "column": 29,
       "kind": "javascript-sink",
       "sink": "call:setAttribute",
@@ -8081,12 +8105,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "013f62bc3c4bdbf9"
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "d42592be49fd7d14"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 919,
+      "line": 923,
       "column": 29,
       "kind": "javascript-sink",
       "sink": "call:createTextNode",
@@ -8104,12 +8128,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "c4b57e5301b6c25d"
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "3a12e4ec280e6592"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 927,
+      "line": 931,
       "column": 9,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -8128,12 +8152,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "b88e171bf3790f7e"
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "f9cbd38e7b1a1795"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 939,
+      "line": 943,
       "column": 129,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -8152,12 +8176,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "c632496ff90de371"
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "417d35cef81046db"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 941,
+      "line": 945,
       "column": 50,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -8177,12 +8201,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "f84b7b8d7a8e7d8a"
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "e0d7d3781adc73d4"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 942,
+      "line": 946,
       "column": 117,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -8201,12 +8225,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "4e6dcdcbeb7938f1"
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "ddb93914c7585a9b"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 961,
+      "line": 965,
       "column": 58,
       "kind": "javascript-sink",
       "sink": "helper:setMessage",
@@ -8225,12 +8249,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "493ee9273d857f9d"
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "b666defe0d7167ea"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 982,
+      "line": 986,
       "column": 95,
       "kind": "javascript-sink",
       "sink": "call:createTextNode",
@@ -8247,12 +8271,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "76ef112d59505099"
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "2cff9f5d013c4a27"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 984,
+      "line": 988,
       "column": 105,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -8269,12 +8293,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "52e0de101b256b70"
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "586cce48a5a362ab"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 996,
+      "line": 1000,
       "column": 49,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -8291,12 +8315,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "38d584de18c7ee7c"
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "2b9426cd569e63a9"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 998,
+      "line": 1002,
       "column": 112,
       "kind": "javascript-sink",
       "sink": "call:createTextNode",
@@ -8315,12 +8339,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "fd378e7d980c7d82"
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "a0b99a4277231193"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1002,
+      "line": 1006,
       "column": 7,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -8339,12 +8363,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "b17d44e0c1440ee4"
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "3c062372ddbc79d9"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1003,
+      "line": 1007,
       "column": 7,
       "kind": "javascript-sink",
       "sink": "call:setAttribute",
@@ -8361,12 +8385,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "10266bb67a3485af"
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "41164fe9fedea2e2"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1007,
+      "line": 1011,
       "column": 34,
       "kind": "javascript-sink",
       "sink": "call:createTextNode",
@@ -8385,12 +8409,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "c78d85571f3ce960"
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "6583f5584ab49ea3"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1008,
+      "line": 1012,
       "column": 109,
       "kind": "javascript-sink",
       "sink": "call:createTextNode",
@@ -8409,12 +8433,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "097362b2e8b4e4c3"
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "69510d1388c5ccfe"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1010,
+      "line": 1014,
       "column": 155,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -8431,12 +8455,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "0c9edc3df96b7a99"
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "ba49cf7963a6ce6c"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1014,
+      "line": 1018,
       "column": 7,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -8455,12 +8479,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "ba0d3ee31bc5035b"
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "59f55add9c85448d"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1015,
+      "line": 1019,
       "column": 7,
       "kind": "javascript-sink",
       "sink": "call:setAttribute",
@@ -8477,12 +8501,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "41277ad898c7af93"
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "1d8bea722c6215f9"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1017,
+      "line": 1021,
       "column": 112,
       "kind": "javascript-sink",
       "sink": "call:createTextNode",
@@ -8501,12 +8525,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "ecdb745d89437781"
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "17773f9db39d1571"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1019,
+      "line": 1023,
       "column": 79,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -8525,12 +8549,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "d1faaa3332f69587"
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "ae876b9ba31d3415"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1020,
+      "line": 1024,
       "column": 118,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -8547,12 +8571,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "691aa5654787b9c1"
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "284aac835b86f18a"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1022,
+      "line": 1026,
       "column": 160,
       "kind": "javascript-sink",
       "sink": "property:alt",
@@ -8571,12 +8595,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "75db8914ae4ff35a"
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "47d6c55861bde028"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1024,
+      "line": 1028,
       "column": 56,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -8595,12 +8619,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "104164c85aa99c91"
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "80f426a980fe7413"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1031,
+      "line": 1035,
       "column": 33,
       "kind": "javascript-sink",
       "sink": "call:createTextNode",
@@ -8617,12 +8641,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "fa87dd5092f04cd4"
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "5732215433fe39e2"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1034,
+      "line": 1038,
       "column": 137,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -8641,12 +8665,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "939c800e4885c806"
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "616f410ee2f1356d"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1050,
+      "line": 1054,
       "column": 49,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -8665,12 +8689,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "99f9eee54568a464"
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "6010f1deae67c7bc"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1056,
+      "line": 1060,
       "column": 30,
       "kind": "javascript-sink",
       "sink": "call:createTextNode",
@@ -8689,12 +8713,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "2bdc2623720089af"
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "39bbad19642f69b5"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1057,
+      "line": 1061,
       "column": 78,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -8713,12 +8737,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "7b432fac9edaf549"
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "d0cff6ccaf8d1605"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1070,
+      "line": 1074,
       "column": 80,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -8737,12 +8761,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "723650f0f56bb177"
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "f48547e0780237e4"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1079,
+      "line": 1083,
       "column": 49,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -8762,12 +8786,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "edec40f05aaab533"
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "c424e18b874ac31b"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1089,
+      "line": 1093,
       "column": 50,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -8784,12 +8808,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "4c95326f51168b95"
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "288d0d27e7ae652d"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1099,
+      "line": 1103,
       "column": 54,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -8809,12 +8833,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "d59701f87c7f6b48"
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "da6f8dba392699cb"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1105,
+      "line": 1109,
       "column": 34,
       "kind": "javascript-sink",
       "sink": "call:createTextNode",
@@ -8831,12 +8855,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "0dd4d06b5f2aec2b"
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "d0a2cb23c6fd2773"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1136,
+      "line": 1140,
       "column": 51,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -8855,12 +8879,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "14b1ed0429fae10b"
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "748fd8ae3d865ec8"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1138,
+      "line": 1142,
       "column": 147,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -8879,12 +8903,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "4e38b71ab79cd0d4"
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "a8df8f5149334710"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1150,
+      "line": 1154,
       "column": 51,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -8905,12 +8929,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "7d5e27b5b5879aec"
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "04edab3a22882d11"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1156,
+      "line": 1160,
       "column": 102,
       "kind": "javascript-sink",
       "sink": "call:createTextNode",
@@ -8929,12 +8953,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "2e3aef1c30a92c77"
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "75699943289e7434"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1165,
+      "line": 1169,
       "column": 102,
       "kind": "javascript-sink",
       "sink": "call:createTextNode",
@@ -8953,12 +8977,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "9526a5f18a7f44d8"
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "6e95333c89c26e7f"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1168,
+      "line": 1172,
       "column": 137,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -8977,12 +9001,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "9d500ae31463b0da"
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "407853e3ea4bd6b7"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1199,
+      "line": 1203,
       "column": 3,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -9001,12 +9025,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "a9176beccfe01a22"
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "235e7d2ce35e84cb"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1207,
+      "line": 1211,
       "column": 45,
       "kind": "javascript-sink",
       "sink": "call:createTextNode",
@@ -9025,12 +9049,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "0d0ca195cbc7522e"
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "7f2700f138f83ccb"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1210,
+      "line": 1214,
       "column": 3,
       "kind": "javascript-sink",
       "sink": "call:setAttribute",
@@ -9047,12 +9071,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "78bc9253ad66a5ca"
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "a259b271dc585485"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1212,
+      "line": 1216,
       "column": 3,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -9072,12 +9096,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "6fa44f7e3cf78b58"
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "6b87cdd620abe416"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1220,
+      "line": 1224,
       "column": 51,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -9094,12 +9118,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "ecd1bc17630c0f7c"
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "2f9f88b538c15a20"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1230,
+      "line": 1234,
       "column": 7,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -9116,12 +9140,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "8a80a2259deeb952"
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "63f0073a49384d79"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1238,
+      "line": 1242,
       "column": 9,
       "kind": "javascript-sink",
       "sink": "call:setAttribute",
@@ -9140,12 +9164,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "9ee049a76cf82234"
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "4bf5238a86e4d0f9"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1242,
+      "line": 1246,
       "column": 11,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -9162,12 +9186,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "ac08864fa0c07403"
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "6abb19759fc87255"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1259,
+      "line": 1263,
       "column": 7,
       "kind": "javascript-sink",
       "sink": "call:setAttribute",
@@ -9186,12 +9210,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "2db1c11954a717ed"
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "57f90cf7f43d5d6f"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1263,
+      "line": 1267,
       "column": 7,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -9211,12 +9235,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "47c52647e7377c45"
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "2fc3743a63e3ff58"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1269,
+      "line": 1273,
       "column": 9,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -9235,12 +9259,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "142a975afcd55a9f"
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "129f43f357b19b4d"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1278,
+      "line": 1282,
       "column": 3,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -9259,12 +9283,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "70e28b42e0708545"
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "c1937a82473686c9"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1342,
+      "line": 1346,
       "column": 3,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -9284,12 +9308,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "27b0cab397c52b87"
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "53ea9c901dbaf458"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1344,
+      "line": 1348,
       "column": 3,
       "kind": "javascript-sink",
       "sink": "helper:setMessage",
@@ -9310,12 +9334,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "5783c91f43f332ab"
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "b5e61a29060112d6"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1371,
+      "line": 1375,
       "column": 45,
       "kind": "javascript-sink",
       "sink": "property:title",
@@ -9332,12 +9356,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "f97ef088bacdf972"
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "d319bcf0826513a5"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1452,
+      "line": 1456,
       "column": 106,
       "kind": "javascript-sink",
       "sink": "helper:setMessage",
@@ -9356,12 +9380,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "28dc42d922280d8d"
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "107aafbb0abd15b5"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1492,
+      "line": 1496,
       "column": 41,
       "kind": "javascript-sink",
       "sink": "helper:setMessage",
@@ -9380,12 +9404,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "3aeb4b3ba924d751"
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "7a2dffa50af78613"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1496,
+      "line": 1500,
       "column": 17,
       "kind": "javascript-sink",
       "sink": "native-dialog:prompt",
@@ -9404,12 +9428,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "578fc27930c5901d"
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "477cf766ee3f979d"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1496,
+      "line": 1500,
       "column": 17,
       "kind": "javascript-sink",
       "sink": "native-dialog:prompt-default",
@@ -9430,12 +9454,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "34c08e0b2efc24bb"
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "9f01fb463283da65"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1504,
+      "line": 1508,
       "column": 17,
       "kind": "javascript-sink",
       "sink": "native-dialog:prompt",
@@ -9454,12 +9478,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "08bb722565f14c49"
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "630e6573db87377b"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1504,
+      "line": 1508,
       "column": 17,
       "kind": "javascript-sink",
       "sink": "native-dialog:prompt-default",
@@ -9478,12 +9502,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "e39ff0928f63b7f9"
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "9f47b3b746ec0824"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1550,
+      "line": 1554,
       "column": 5,
       "kind": "javascript-sink",
       "sink": "helper:setMessage",
@@ -9503,12 +9527,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "1bc96ed5038ef8b5"
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "991a02f7b94d5758"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1570,
+      "line": 1574,
       "column": 5,
       "kind": "javascript-sink",
       "sink": "helper:setMessage",
@@ -9527,12 +9551,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "f138fdde3b9bd25d"
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "f9eec41bbaed9cd4"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1603,
+      "line": 1607,
       "column": 3,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -9551,12 +9575,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "3401e1730eaff474"
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "bd33ce99e005a933"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1613,
+      "line": 1617,
       "column": 5,
       "kind": "javascript-sink",
       "sink": "helper:setMessage",
@@ -9576,12 +9600,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "b3b2c07059a0eb06"
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "97510311877a7efe"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1618,
+      "line": 1622,
       "column": 5,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -9600,12 +9624,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "ebe0c1552baca9e1"
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "f4ee422a5fba3a5e"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1648,
+      "line": 1652,
       "column": 3,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -9626,12 +9650,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "691bd88d9c839e9d"
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "0f5de9998aa7aa8f"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1651,
+      "line": 1655,
       "column": 3,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -9652,12 +9676,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "e6cad8f1ecc2be0b"
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "0d02104922de339f"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1658,
+      "line": 1662,
       "column": 3,
       "kind": "javascript-sink",
       "sink": "helper:setMessage",
@@ -9676,12 +9700,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "c66e1a132eeb6262"
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "7cbbaabd7ffc88bd"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1663,
+      "line": 1667,
       "column": 5,
       "kind": "javascript-sink",
       "sink": "helper:setMessage",
@@ -9701,12 +9725,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "291574fb29480171"
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "27730934c1fb7859"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1671,
+      "line": 1675,
       "column": 22,
       "kind": "javascript-sink",
       "sink": "helper:setMessage",
@@ -9725,12 +9749,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "db0c8c5b93bae8e4"
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "678d4e1c9d7d6498"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1674,
+      "line": 1678,
       "column": 5,
       "kind": "javascript-sink",
       "sink": "helper:setMessage",
@@ -9749,12 +9773,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "3e3d4115ba23a409"
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "d92a3e91a69ecd11"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1676,
+      "line": 1680,
       "column": 5,
       "kind": "javascript-sink",
       "sink": "helper:setMessage",
@@ -9774,12 +9798,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "63a3544c9bdc5945"
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "abdfefb93e4cea65"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1690,
+      "line": 1694,
       "column": 5,
       "kind": "javascript-sink",
       "sink": "helper:setMessage",
@@ -9799,12 +9823,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "ac207b531667220b"
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "1238b26a418bcd13"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1780,
+      "line": 1784,
       "column": 7,
       "kind": "javascript-sink",
       "sink": "helper:setMessage",
@@ -9823,12 +9847,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "b8cbc91baf54c219"
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "48a942c81cc2a70d"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1846,
+      "line": 1850,
       "column": 19,
       "kind": "javascript-sink",
       "sink": "native-dialog:prompt",
@@ -9847,12 +9871,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "09c97894273c1cb8"
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "15f0f5cf88b2c6ac"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1846,
+      "line": 1850,
       "column": 19,
       "kind": "javascript-sink",
       "sink": "native-dialog:prompt-default",
@@ -9870,12 +9894,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "5c85464767de4aba"
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "723d87364b53d3c8"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1868,
+      "line": 1872,
       "column": 19,
       "kind": "javascript-sink",
       "sink": "native-dialog:prompt",
@@ -9894,12 +9918,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "282298e76c9e6f8d"
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "4ada5eaebe2983d2"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1868,
+      "line": 1872,
       "column": 19,
       "kind": "javascript-sink",
       "sink": "native-dialog:prompt-default",
@@ -9919,12 +9943,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "d65672dbfd87799a"
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "c4f90e51eda7cbd4"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1916,
+      "line": 1920,
       "column": 25,
       "kind": "javascript-sink",
       "sink": "native-dialog:confirm",
@@ -9943,12 +9967,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "31de4cdc229b7813"
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "a9c8c4814d44ea09"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1920,
+      "line": 1924,
       "column": 9,
       "kind": "javascript-sink",
       "sink": "helper:setMessage",
@@ -9967,12 +9991,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "fc3abc08ef04b815"
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "042e6187abb9c989"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1925,
+      "line": 1929,
       "column": 5,
       "kind": "javascript-sink",
       "sink": "helper:setMessage",
@@ -9991,12 +10015,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "1b738bfb46f5192a"
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "57313a365d76e65f"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1945,
+      "line": 1949,
       "column": 7,
       "kind": "javascript-sink",
       "sink": "helper:setMessage",
@@ -10015,12 +10039,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "db2dc9dd2b6df2d3"
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "e67838b845f1cdcd"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1955,
+      "line": 1959,
       "column": 5,
       "kind": "javascript-sink",
       "sink": "helper:setMessage",
@@ -10039,12 +10063,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "f638ea8cbd9e0864"
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "9916c46b0f235260"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1985,
+      "line": 1989,
       "column": 5,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -10064,12 +10088,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "2604e239c8b5a4b2"
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "98250acf4873164e"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1988,
+      "line": 1992,
       "column": 5,
       "kind": "javascript-sink",
       "sink": "helper:setMessage",
@@ -10089,12 +10113,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "44efc46e6eb6a8ab"
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "70e8a9f470fa75c4"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1996,
+      "line": 2000,
       "column": 5,
       "kind": "javascript-sink",
       "sink": "helper:setMessage",
@@ -10114,12 +10138,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "aa34f95ad9b85797"
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "edca02ebea66ff84"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 2018,
+      "line": 2022,
       "column": 7,
       "kind": "javascript-sink",
       "sink": "helper:setMessage",
@@ -10138,12 +10162,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "1b073c817442d7dc"
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "4e8680182c4a31c5"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 2049,
+      "line": 2053,
       "column": 7,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -10163,12 +10187,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "3c9adb973ce13f7c"
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "edd228d52448a4a3"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 2052,
+      "line": 2056,
       "column": 7,
       "kind": "javascript-sink",
       "sink": "helper:setMessage",
@@ -10187,12 +10211,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "7316588e26048d36"
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "f4225e7f59ddbbcd"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 2071,
+      "line": 2075,
       "column": 9,
       "kind": "javascript-sink",
       "sink": "helper:setMessage",
@@ -10211,12 +10235,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "6cf313d271116422"
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "b5733f4a0e37f6d8"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 2079,
+      "line": 2083,
       "column": 9,
       "kind": "javascript-sink",
       "sink": "helper:setMessage",
@@ -10235,12 +10259,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "0ab4e3dfd0cf39ff"
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "6a5faee87b02654f"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 2089,
+      "line": 2093,
       "column": 5,
       "kind": "javascript-sink",
       "sink": "helper:setMessage",
@@ -10259,12 +10283,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "00ed3cc511cd2e29"
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "a18d43a0f3c50b43"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 2105,
+      "line": 2109,
       "column": 5,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -10284,12 +10308,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "668e43b784fb1162"
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "68963011d7a69a45"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 2107,
+      "line": 2111,
       "column": 5,
       "kind": "javascript-sink",
       "sink": "helper:setMessage",
@@ -10308,12 +10332,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "a59987b2e517997f"
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "dae34381167325fc"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 2110,
+      "line": 2114,
       "column": 5,
       "kind": "javascript-sink",
       "sink": "helper:setMessage",
@@ -10333,12 +10357,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "2619b315314b0c18"
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "7fa38b5a0fd95441"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 2145,
+      "line": 2149,
       "column": 5,
       "kind": "javascript-sink",
       "sink": "helper:setMessage",
@@ -10358,8 +10382,8 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "12ddcef5e708685c"
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "6c1594d2c0e6feea"
     },
     {
       "source": "app/app.js",
@@ -33698,7 +33722,7 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
       "id": "a6ccefaebdbd5525"
     },
     {
@@ -33728,7 +33752,7 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
       "id": "c5df0af2177074b5"
     },
     {
@@ -33758,7 +33782,7 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
       "id": "097bdf89eeeb0fb1"
     },
     {
@@ -33788,7 +33812,7 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
       "id": "bf90902e608895e9"
     },
     {
@@ -33818,7 +33842,7 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
       "id": "4a7097296873b557"
     },
     {
@@ -33849,7 +33873,7 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
       "id": "9f583df91add89b9"
     },
     {
@@ -33880,7 +33904,7 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
       "id": "f9acfccc957916ea"
     },
     {
@@ -33911,7 +33935,7 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
       "id": "f9e3c01393048a93"
     },
     {
@@ -33941,7 +33965,7 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
       "id": "771e30220582d4fc",
       "consumerRefs": [
         {
@@ -33984,7 +34008,7 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
       "id": "2efb9d46a1e8eb29",
       "consumerRefs": [
         {
@@ -34027,7 +34051,7 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
       "id": "d5335c94ac2cb9c0",
       "consumerRefs": [
         {
@@ -34070,7 +34094,7 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
       "id": "7226e171e6939184"
     },
     {
@@ -34100,7 +34124,7 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
       "id": "abc78ba95d49f91e"
     },
     {
@@ -34130,7 +34154,7 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
       "id": "3b83f93ce974bce9"
     },
     {
@@ -34160,7 +34184,7 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
       "id": "fcc63fe6d0fcecef"
     },
     {
@@ -34190,17 +34214,17 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
       "id": "3bdbf333fbbb03d6"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 835,
+      "line": 836,
       "column": 19,
       "kind": "javascript-text-source",
       "sink": "source:inline-text-tuple-label",
       "sourceRole": "inline-text-tuple-label",
-      "sourceBinding": "forEach@835",
+      "sourceBinding": "forEach@836",
       "valuePath": "[0].[1]",
       "expression": "\"Imagem da cena\"",
       "value": "Imagem da cena",
@@ -34214,23 +34238,23 @@
       "consumerLinkStatus": "field-consumer-evidence",
       "useStatus": "active",
       "consumerEvidence": [
-        "same callback writes tuple slot 1 to a recognized DOM text property at app/admin/admin.js:835"
+        "same callback writes tuple slot 1 to a recognized DOM text property at app/admin/admin.js:836"
       ],
       "owner": "admin",
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "9914b5b95a08d78f"
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "6f9407ec160583c9"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 835,
+      "line": 836,
       "column": 87,
       "kind": "javascript-text-source",
       "sink": "source:inline-text-tuple-label",
       "sourceRole": "inline-text-tuple-label",
-      "sourceBinding": "forEach@835",
+      "sourceBinding": "forEach@836",
       "valuePath": "[1].[1]",
       "expression": "\"Imagem dos detalhes\"",
       "value": "Imagem dos detalhes",
@@ -34244,23 +34268,23 @@
       "consumerLinkStatus": "field-consumer-evidence",
       "useStatus": "active",
       "consumerEvidence": [
-        "same callback writes tuple slot 1 to a recognized DOM text property at app/admin/admin.js:835"
+        "same callback writes tuple slot 1 to a recognized DOM text property at app/admin/admin.js:836"
       ],
       "owner": "admin",
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "2754aa30dd0472ed"
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "8938c65e3109adf7"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 835,
+      "line": 836,
       "column": 153,
       "kind": "javascript-text-source",
       "sink": "source:inline-text-tuple-label",
       "sourceRole": "inline-text-tuple-label",
-      "sourceBinding": "forEach@835",
+      "sourceBinding": "forEach@836",
       "valuePath": "[2].[1]",
       "expression": "\"Máscara de acabamento\"",
       "value": "Máscara de acabamento",
@@ -34274,23 +34298,23 @@
       "consumerLinkStatus": "field-consumer-evidence",
       "useStatus": "active",
       "consumerEvidence": [
-        "same callback writes tuple slot 1 to a recognized DOM text property at app/admin/admin.js:835"
+        "same callback writes tuple slot 1 to a recognized DOM text property at app/admin/admin.js:836"
       ],
       "owner": "admin",
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "1414542ba28ed07f"
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "a87c00098b2398d0"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 889,
+      "line": 893,
       "column": 17,
       "kind": "javascript-text-source",
       "sink": "source:inline-text-tuple-label",
       "sourceRole": "inline-text-tuple-label",
-      "sourceBinding": "forEach@889",
+      "sourceBinding": "forEach@893",
       "valuePath": "[0].[1]",
       "expression": "\"Global · conjunto todo\"",
       "value": "Global · conjunto todo",
@@ -34304,23 +34328,23 @@
       "consumerLinkStatus": "field-consumer-evidence",
       "useStatus": "active",
       "consumerEvidence": [
-        "same callback writes tuple slot 1 to a recognized DOM text property at app/admin/admin.js:889"
+        "same callback writes tuple slot 1 to a recognized DOM text property at app/admin/admin.js:893"
       ],
       "owner": "admin",
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "5909fe1f43bd9e55"
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "7a8c4961a218a605"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 889,
+      "line": 893,
       "column": 54,
       "kind": "javascript-text-source",
       "sink": "source:inline-text-tuple-label",
       "sourceRole": "inline-text-tuple-label",
-      "sourceBinding": "forEach@889",
+      "sourceBinding": "forEach@893",
       "valuePath": "[1].[1]",
       "expression": "\"Local · módulo individual\"",
       "value": "Local · módulo individual",
@@ -34334,18 +34358,18 @@
       "consumerLinkStatus": "field-consumer-evidence",
       "useStatus": "active",
       "consumerEvidence": [
-        "same callback writes tuple slot 1 to a recognized DOM text property at app/admin/admin.js:889"
+        "same callback writes tuple slot 1 to a recognized DOM text property at app/admin/admin.js:893"
       ],
       "owner": "admin",
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "81a45d29136b553e"
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "5dd9624781fe9b48"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 948,
+      "line": 952,
       "column": 20,
       "kind": "javascript-text-source",
       "sink": "source:admin-material-target-option-label",
@@ -34364,18 +34388,18 @@
       "consumerLinkStatus": "declared-sink-not-indexed",
       "useStatus": "active",
       "consumerEvidence": [
-        "app/admin/admin.js:946 return options used by a recognized renderer"
+        "app/admin/admin.js:950 return options used by a recognized renderer"
       ],
       "owner": "admin",
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "9f5731743ede41e7"
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "0e3732f03c46e2f9"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 948,
+      "line": 952,
       "column": 46,
       "kind": "javascript-text-source",
       "sink": "source:admin-material-target-option-label",
@@ -34394,23 +34418,23 @@
       "consumerLinkStatus": "declared-sink-not-indexed",
       "useStatus": "active",
       "consumerEvidence": [
-        "app/admin/admin.js:946 return options used by a recognized renderer"
+        "app/admin/admin.js:950 return options used by a recognized renderer"
       ],
       "owner": "admin",
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "de5824ce18a982e9"
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "87eb62fc83db30ce"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 997,
+      "line": 1001,
       "column": 40,
       "kind": "javascript-text-source",
       "sink": "source:admin-field-label",
       "sourceRole": "admin-field-label",
-      "sourceBinding": "makeField@997",
+      "sourceBinding": "makeField@1001",
       "valuePath": "",
       "expression": "\"Nome\"",
       "value": "Nome",
@@ -34424,23 +34448,23 @@
       "consumerLinkStatus": "declared-sink-not-indexed",
       "useStatus": "active",
       "consumerEvidence": [
-        "app/admin/admin.js:997 argument passed to makeField"
+        "app/admin/admin.js:1001 argument passed to makeField"
       ],
       "owner": "admin",
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "67b906926aa41759"
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "055f836abeba5484"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1010,
+      "line": 1014,
       "column": 16,
       "kind": "javascript-text-source",
       "sink": "source:inline-text-tuple-label",
       "sourceRole": "inline-text-tuple-label",
-      "sourceBinding": "forEach@1010",
+      "sourceBinding": "forEach@1014",
       "valuePath": "[0].[1]",
       "expression": "\"Cor sólida\"",
       "value": "Cor sólida",
@@ -34454,23 +34478,23 @@
       "consumerLinkStatus": "field-consumer-evidence",
       "useStatus": "active",
       "consumerEvidence": [
-        "same callback writes tuple slot 1 to a recognized DOM text property at app/admin/admin.js:1010"
+        "same callback writes tuple slot 1 to a recognized DOM text property at app/admin/admin.js:1014"
       ],
       "owner": "admin",
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "edf0b7eb46d62a8c"
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "286dbf8490736424"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1010,
+      "line": 1014,
       "column": 43,
       "kind": "javascript-text-source",
       "sink": "source:inline-text-tuple-label",
       "sourceRole": "inline-text-tuple-label",
-      "sourceBinding": "forEach@1010",
+      "sourceBinding": "forEach@1014",
       "valuePath": "[1].[1]",
       "expression": "\"Textura\"",
       "value": "Textura",
@@ -34484,23 +34508,23 @@
       "consumerLinkStatus": "field-consumer-evidence",
       "useStatus": "active",
       "consumerEvidence": [
-        "same callback writes tuple slot 1 to a recognized DOM text property at app/admin/admin.js:1010"
+        "same callback writes tuple slot 1 to a recognized DOM text property at app/admin/admin.js:1014"
       ],
       "owner": "admin",
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "876ffa4d6c01e982"
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "29e59851c15e0f08"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1058,
+      "line": 1062,
       "column": 42,
       "kind": "javascript-text-source",
       "sink": "source:admin-material-availability-heading",
       "sourceRole": "admin-material-availability-heading",
-      "sourceBinding": "appendMaterialAvailabilityList@1058",
+      "sourceBinding": "appendMaterialAvailabilityList@1062",
       "valuePath": "",
       "expression": "\"Cores e materiais deste puxador\"",
       "value": "Cores e materiais deste puxador",
@@ -34514,23 +34538,23 @@
       "consumerLinkStatus": "declared-sink-not-indexed",
       "useStatus": "active",
       "consumerEvidence": [
-        "app/admin/admin.js:1058 argument passed to appendMaterialAvailabilityList"
+        "app/admin/admin.js:1062 argument passed to appendMaterialAvailabilityList"
       ],
       "owner": "admin",
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "92e1d7b9e56aaca8"
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "77484f8d5d044396"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1059,
+      "line": 1063,
       "column": 32,
       "kind": "javascript-text-source",
       "sink": "source:admin-rule-select-label",
       "sourceRole": "admin-rule-select-label",
-      "sourceBinding": "makeRuleSelect@1059",
+      "sourceBinding": "makeRuleSelect@1063",
       "valuePath": "",
       "expression": "\"Puxador selecionado inicialmente\"",
       "value": "Puxador selecionado inicialmente",
@@ -34544,23 +34568,23 @@
       "consumerLinkStatus": "declared-sink-not-indexed",
       "useStatus": "active",
       "consumerEvidence": [
-        "app/admin/admin.js:1059 argument passed to makeRuleSelect"
+        "app/admin/admin.js:1063 argument passed to makeRuleSelect"
       ],
       "owner": "admin",
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "25d198dd89a42409"
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "848988b392b92bd5"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1059,
+      "line": 1063,
       "column": 124,
       "kind": "javascript-text-source",
       "sink": "source:admin-rule-select-option-label",
       "sourceRole": "admin-rule-select-option-label",
-      "sourceBinding": "makeRuleSelect@1059",
+      "sourceBinding": "makeRuleSelect@1063",
       "valuePath": "[0].label",
       "expression": "\"Definir depois\"",
       "value": "Definir depois",
@@ -34574,23 +34598,23 @@
       "consumerLinkStatus": "declared-sink-not-indexed",
       "useStatus": "active",
       "consumerEvidence": [
-        "app/admin/admin.js:1059 argument passed to makeRuleSelect"
+        "app/admin/admin.js:1063 argument passed to makeRuleSelect"
       ],
       "owner": "admin",
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "51063afcbed5f724"
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "12d9c1077cf6cf44"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1062,
+      "line": 1066,
       "column": 27,
       "kind": "javascript-text-source",
       "sink": "source:admin-field-label",
       "sourceRole": "admin-field-label",
-      "sourceBinding": "makeField@1062",
+      "sourceBinding": "makeField@1066",
       "valuePath": "",
       "expression": "\"Nome da opção\"",
       "value": "Nome da opção",
@@ -34604,23 +34628,23 @@
       "consumerLinkStatus": "declared-sink-not-indexed",
       "useStatus": "active",
       "consumerEvidence": [
-        "app/admin/admin.js:1062 argument passed to makeField"
+        "app/admin/admin.js:1066 argument passed to makeField"
       ],
       "owner": "admin",
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "8c0ab6a41553c730"
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "f8e1c138f608d246"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1063,
+      "line": 1067,
       "column": 72,
       "kind": "javascript-text-source",
       "sink": "source:admin-material-availability-heading",
       "sourceRole": "admin-material-availability-heading",
-      "sourceBinding": "appendMaterialAvailabilityList@1063",
+      "sourceBinding": "appendMaterialAvailabilityList@1067",
       "valuePath": "",
       "expression": "\"Pedras e texturas disponíveis para bancada e rodapé\"",
       "value": "Pedras e texturas disponíveis para bancada e rodapé",
@@ -34634,23 +34658,23 @@
       "consumerLinkStatus": "declared-sink-not-indexed",
       "useStatus": "active",
       "consumerEvidence": [
-        "app/admin/admin.js:1063 argument passed to appendMaterialAvailabilityList"
+        "app/admin/admin.js:1067 argument passed to appendMaterialAvailabilityList"
       ],
       "owner": "admin",
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "f5b85274cd28c97a"
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "fa6f1d1fb72354ec"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1064,
+      "line": 1068,
       "column": 51,
       "kind": "javascript-text-source",
       "sink": "source:admin-material-dropdown-label",
       "sourceRole": "admin-material-dropdown-label",
-      "sourceBinding": "makeMaterialCheckboxDropdown@1064",
+      "sourceBinding": "makeMaterialCheckboxDropdown@1068",
       "valuePath": "",
       "expression": "\"Materiais válidos para frentes\"",
       "value": "Materiais válidos para frentes",
@@ -34664,23 +34688,23 @@
       "consumerLinkStatus": "declared-sink-not-indexed",
       "useStatus": "active",
       "consumerEvidence": [
-        "app/admin/admin.js:1064 argument passed to makeMaterialCheckboxDropdown"
+        "app/admin/admin.js:1068 argument passed to makeMaterialCheckboxDropdown"
       ],
       "owner": "admin",
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "85adb8b568eb827e"
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "a21250802ecd770a"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1067,
+      "line": 1071,
       "column": 34,
       "kind": "javascript-text-source",
       "sink": "source:admin-rule-select-label",
       "sourceRole": "admin-rule-select-label",
-      "sourceBinding": "makeRuleSelect@1067",
+      "sourceBinding": "makeRuleSelect@1071",
       "valuePath": "",
       "expression": "\"Cor selecionada inicialmente\"",
       "value": "Cor selecionada inicialmente",
@@ -34694,23 +34718,23 @@
       "consumerLinkStatus": "declared-sink-not-indexed",
       "useStatus": "active",
       "consumerEvidence": [
-        "app/admin/admin.js:1067 argument passed to makeRuleSelect"
+        "app/admin/admin.js:1071 argument passed to makeRuleSelect"
       ],
       "owner": "admin",
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "3ad7038ad553a515"
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "0c65beda9afcc0d8"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1069,
+      "line": 1073,
       "column": 34,
       "kind": "javascript-text-source",
       "sink": "source:admin-rule-select-label",
       "sourceRole": "admin-rule-select-label",
-      "sourceBinding": "makeRuleSelect@1069",
+      "sourceBinding": "makeRuleSelect@1073",
       "valuePath": "",
       "expression": "\"Pedra selecionada inicialmente\"",
       "value": "Pedra selecionada inicialmente",
@@ -34724,18 +34748,18 @@
       "consumerLinkStatus": "declared-sink-not-indexed",
       "useStatus": "active",
       "consumerEvidence": [
-        "app/admin/admin.js:1069 argument passed to makeRuleSelect"
+        "app/admin/admin.js:1073 argument passed to makeRuleSelect"
       ],
       "owner": "admin",
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "64e04ac98e3c1747"
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "0da74d09841333ae"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1128,
+      "line": 1132,
       "column": 108,
       "kind": "javascript-text-source",
       "sink": "source:admin-event-trigger-option-label",
@@ -34754,23 +34778,23 @@
       "consumerLinkStatus": "declared-sink-not-indexed",
       "useStatus": "active",
       "consumerEvidence": [
-        "app/admin/admin.js:1127 return options used by a recognized renderer"
+        "app/admin/admin.js:1131 return options used by a recognized renderer"
       ],
       "owner": "admin",
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "410eb8ce8d83629b"
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "45cb397b4de96a12"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1137,
+      "line": 1141,
       "column": 41,
       "kind": "javascript-text-source",
       "sink": "source:admin-rule-select-label",
       "sourceRole": "admin-rule-select-label",
-      "sourceBinding": "makeRuleSelect@1137",
+      "sourceBinding": "makeRuleSelect@1141",
       "valuePath": "",
       "expression": "\"Este item\"",
       "value": "Este item",
@@ -34784,23 +34808,23 @@
       "consumerLinkStatus": "declared-sink-not-indexed",
       "useStatus": "active",
       "consumerEvidence": [
-        "app/admin/admin.js:1137 argument passed to makeRuleSelect"
+        "app/admin/admin.js:1141 argument passed to makeRuleSelect"
       ],
       "owner": "admin",
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "67bbf2edf8b7d63c"
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "e494e6198b9be8e3"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1137,
+      "line": 1141,
       "column": 121,
       "kind": "javascript-text-source",
       "sink": "source:admin-rule-select-label",
       "sourceRole": "admin-rule-select-label",
-      "sourceBinding": "makeRuleSelect@1137",
+      "sourceBinding": "makeRuleSelect@1141",
       "valuePath": "",
       "expression": "\"Requer todos estes itens\"",
       "value": "Requer todos estes itens",
@@ -34814,23 +34838,23 @@
       "consumerLinkStatus": "declared-sink-not-indexed",
       "useStatus": "active",
       "consumerEvidence": [
-        "app/admin/admin.js:1137 argument passed to makeRuleSelect"
+        "app/admin/admin.js:1141 argument passed to makeRuleSelect"
       ],
       "owner": "admin",
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "a9defc454da71d2d"
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "9723ed03cbad405d"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1152,
+      "line": 1156,
       "column": 22,
       "kind": "javascript-text-source",
       "sink": "source:admin-rule-select-label",
       "sourceRole": "admin-rule-select-label",
-      "sourceBinding": "makeRuleSelect@1152",
+      "sourceBinding": "makeRuleSelect@1156",
       "valuePath": "",
       "expression": "\"Ação\"",
       "value": "Ação",
@@ -34844,23 +34868,23 @@
       "consumerLinkStatus": "declared-sink-not-indexed",
       "useStatus": "active",
       "consumerEvidence": [
-        "app/admin/admin.js:1152 argument passed to makeRuleSelect"
+        "app/admin/admin.js:1156 argument passed to makeRuleSelect"
       ],
       "owner": "admin",
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "ab59c18e03d5ce66"
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "c680e30fbf581282"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1152,
+      "line": 1156,
       "column": 96,
       "kind": "javascript-text-source",
       "sink": "source:admin-rule-select-option-label",
       "sourceRole": "admin-rule-select-option-label",
-      "sourceBinding": "makeRuleSelect@1152",
+      "sourceBinding": "makeRuleSelect@1156",
       "valuePath": "[0].label",
       "expression": "\"Alterar dimensão de módulo\"",
       "value": "Alterar dimensão de módulo",
@@ -34874,23 +34898,23 @@
       "consumerLinkStatus": "declared-sink-not-indexed",
       "useStatus": "active",
       "consumerEvidence": [
-        "app/admin/admin.js:1152 argument passed to makeRuleSelect"
+        "app/admin/admin.js:1156 argument passed to makeRuleSelect"
       ],
       "owner": "admin",
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "ee6b866a4049cfb7"
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "e2afb2d4bef63396"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1152,
+      "line": 1156,
       "column": 143,
       "kind": "javascript-text-source",
       "sink": "source:admin-rule-select-option-label",
       "sourceRole": "admin-rule-select-option-label",
-      "sourceBinding": "makeRuleSelect@1152",
+      "sourceBinding": "makeRuleSelect@1156",
       "valuePath": "[1].label",
       "expression": "\"Ativar ou desativar módulo ou serviço\"",
       "value": "Ativar ou desativar módulo ou serviço",
@@ -34904,23 +34928,23 @@
       "consumerLinkStatus": "declared-sink-not-indexed",
       "useStatus": "active",
       "consumerEvidence": [
-        "app/admin/admin.js:1152 argument passed to makeRuleSelect"
+        "app/admin/admin.js:1156 argument passed to makeRuleSelect"
       ],
       "owner": "admin",
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "15342fd1646fb0a7"
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "3b553a7bbcf1e858"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1152,
+      "line": 1156,
       "column": 199,
       "kind": "javascript-text-source",
       "sink": "source:admin-rule-select-option-label",
       "sourceRole": "admin-rule-select-option-label",
-      "sourceBinding": "makeRuleSelect@1152",
+      "sourceBinding": "makeRuleSelect@1156",
       "valuePath": "[2].label",
       "expression": "\"Profundidade fixa do Módulo 07\"",
       "value": "Profundidade fixa do Módulo 07",
@@ -34934,23 +34958,23 @@
       "consumerLinkStatus": "declared-sink-not-indexed",
       "useStatus": "active",
       "consumerEvidence": [
-        "app/admin/admin.js:1152 argument passed to makeRuleSelect"
+        "app/admin/admin.js:1156 argument passed to makeRuleSelect"
       ],
       "owner": "admin",
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "a8a28705d5cd7dbd"
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "d6140ce3cdd940ad"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1153,
+      "line": 1157,
       "column": 22,
       "kind": "javascript-text-source",
       "sink": "source:admin-rule-select-label",
       "sourceRole": "admin-rule-select-label",
-      "sourceBinding": "makeRuleSelect@1153",
+      "sourceBinding": "makeRuleSelect@1157",
       "valuePath": "",
       "expression": "\"Quando este item\"",
       "value": "Quando este item",
@@ -34964,23 +34988,23 @@
       "consumerLinkStatus": "declared-sink-not-indexed",
       "useStatus": "active",
       "consumerEvidence": [
-        "app/admin/admin.js:1153 argument passed to makeRuleSelect"
+        "app/admin/admin.js:1157 argument passed to makeRuleSelect"
       ],
       "owner": "admin",
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "e1ae075f62828eba"
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "8d7e34d5c6336648"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1154,
+      "line": 1158,
       "column": 22,
       "kind": "javascript-text-source",
       "sink": "source:admin-rule-select-label",
       "sourceRole": "admin-rule-select-label",
-      "sourceBinding": "makeRuleSelect@1154",
+      "sourceBinding": "makeRuleSelect@1158",
       "valuePath": "",
       "expression": "\"Estiver\"",
       "value": "Estiver",
@@ -34994,23 +35018,23 @@
       "consumerLinkStatus": "declared-sink-not-indexed",
       "useStatus": "active",
       "consumerEvidence": [
-        "app/admin/admin.js:1154 argument passed to makeRuleSelect"
+        "app/admin/admin.js:1158 argument passed to makeRuleSelect"
       ],
       "owner": "admin",
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "3baeb4f9d5f62ca1"
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "846874cf1c017bf9"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1154,
+      "line": 1158,
       "column": 70,
       "kind": "javascript-text-source",
       "sink": "source:admin-rule-select-option-label",
       "sourceRole": "admin-rule-select-option-label",
-      "sourceBinding": "makeRuleSelect@1154",
+      "sourceBinding": "makeRuleSelect@1158",
       "valuePath": "[0].label",
       "expression": "\"Ativado\"",
       "value": "Ativado",
@@ -35024,23 +35048,23 @@
       "consumerLinkStatus": "declared-sink-not-indexed",
       "useStatus": "active",
       "consumerEvidence": [
-        "app/admin/admin.js:1154 argument passed to makeRuleSelect"
+        "app/admin/admin.js:1158 argument passed to makeRuleSelect"
       ],
       "owner": "admin",
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "2e51c67b638025cb"
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "51a8eedc2b2485fe"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1154,
+      "line": 1158,
       "column": 95,
       "kind": "javascript-text-source",
       "sink": "source:admin-rule-select-option-label",
       "sourceRole": "admin-rule-select-option-label",
-      "sourceBinding": "makeRuleSelect@1154",
+      "sourceBinding": "makeRuleSelect@1158",
       "valuePath": "[1].label",
       "expression": "\"Desativado\"",
       "value": "Desativado",
@@ -35054,134 +35078,14 @@
       "consumerLinkStatus": "declared-sink-not-indexed",
       "useStatus": "active",
       "consumerEvidence": [
-        "app/admin/admin.js:1154 argument passed to makeRuleSelect"
+        "app/admin/admin.js:1158 argument passed to makeRuleSelect"
       ],
       "owner": "admin",
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "6ab4367875296684"
-    },
-    {
-      "source": "app/admin/admin.js",
-      "line": 1159,
-      "column": 34,
-      "kind": "javascript-text-source",
-      "sink": "source:admin-rule-select-label",
-      "sourceRole": "admin-rule-select-label",
-      "sourceBinding": "makeRuleSelect@1159",
-      "valuePath": "",
-      "expression": "\"Aplicar a\"",
-      "value": "Aplicar a",
-      "literalSegments": [
-        "Aplicar a"
-      ],
-      "classification": "unreviewed",
-      "classificationHints": [
-        "source-needs-consumer-and-domain-review"
-      ],
-      "consumerLinkStatus": "declared-sink-not-indexed",
-      "useStatus": "active",
-      "consumerEvidence": [
-        "app/admin/admin.js:1159 argument passed to makeRuleSelect"
-      ],
-      "owner": "admin",
-      "routeConsumers": [
-        "/admin"
-      ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "70bf5bfeea11b272"
-    },
-    {
-      "source": "app/admin/admin.js",
-      "line": 1160,
-      "column": 34,
-      "kind": "javascript-text-source",
-      "sink": "source:admin-rule-select-label",
-      "sourceRole": "admin-rule-select-label",
-      "sourceBinding": "makeRuleSelect@1160",
-      "valuePath": "",
-      "expression": "\"Definir estado\"",
-      "value": "Definir estado",
-      "literalSegments": [
-        "Definir estado"
-      ],
-      "classification": "unreviewed",
-      "classificationHints": [
-        "source-needs-consumer-and-domain-review"
-      ],
-      "consumerLinkStatus": "declared-sink-not-indexed",
-      "useStatus": "active",
-      "consumerEvidence": [
-        "app/admin/admin.js:1160 argument passed to makeRuleSelect"
-      ],
-      "owner": "admin",
-      "routeConsumers": [
-        "/admin"
-      ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "8b3de64a4c11fb67"
-    },
-    {
-      "source": "app/admin/admin.js",
-      "line": 1160,
-      "column": 109,
-      "kind": "javascript-text-source",
-      "sink": "source:admin-rule-select-option-label",
-      "sourceRole": "admin-rule-select-option-label",
-      "sourceBinding": "makeRuleSelect@1160",
-      "valuePath": "[0].label",
-      "expression": "\"Ativado\"",
-      "value": "Ativado",
-      "literalSegments": [
-        "Ativado"
-      ],
-      "classification": "unreviewed",
-      "classificationHints": [
-        "source-needs-consumer-and-domain-review"
-      ],
-      "consumerLinkStatus": "declared-sink-not-indexed",
-      "useStatus": "active",
-      "consumerEvidence": [
-        "app/admin/admin.js:1160 argument passed to makeRuleSelect"
-      ],
-      "owner": "admin",
-      "routeConsumers": [
-        "/admin"
-      ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "a244612a2134adda"
-    },
-    {
-      "source": "app/admin/admin.js",
-      "line": 1160,
-      "column": 131,
-      "kind": "javascript-text-source",
-      "sink": "source:admin-rule-select-option-label",
-      "sourceRole": "admin-rule-select-option-label",
-      "sourceBinding": "makeRuleSelect@1160",
-      "valuePath": "[1].label",
-      "expression": "\"Desativado\"",
-      "value": "Desativado",
-      "literalSegments": [
-        "Desativado"
-      ],
-      "classification": "unreviewed",
-      "classificationHints": [
-        "source-needs-consumer-and-domain-review"
-      ],
-      "consumerLinkStatus": "declared-sink-not-indexed",
-      "useStatus": "active",
-      "consumerEvidence": [
-        "app/admin/admin.js:1160 argument passed to makeRuleSelect"
-      ],
-      "owner": "admin",
-      "routeConsumers": [
-        "/admin"
-      ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "6a8d1cbe5da3777a"
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "ec8437c228c7cb8c"
     },
     {
       "source": "app/admin/admin.js",
@@ -35192,10 +35096,10 @@
       "sourceRole": "admin-rule-select-label",
       "sourceBinding": "makeRuleSelect@1163",
       "valuePath": "",
-      "expression": "\"Aplicar ao módulo\"",
-      "value": "Aplicar ao módulo",
+      "expression": "\"Aplicar a\"",
+      "value": "Aplicar a",
       "literalSegments": [
-        "Aplicar ao módulo"
+        "Aplicar a"
       ],
       "classification": "unreviewed",
       "classificationHints": [
@@ -35210,8 +35114,8 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "e83eb343a34cc4d9"
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "3d69909a47b75591"
     },
     {
       "source": "app/admin/admin.js",
@@ -35221,6 +35125,126 @@
       "sink": "source:admin-rule-select-label",
       "sourceRole": "admin-rule-select-label",
       "sourceBinding": "makeRuleSelect@1164",
+      "valuePath": "",
+      "expression": "\"Definir estado\"",
+      "value": "Definir estado",
+      "literalSegments": [
+        "Definir estado"
+      ],
+      "classification": "unreviewed",
+      "classificationHints": [
+        "source-needs-consumer-and-domain-review"
+      ],
+      "consumerLinkStatus": "declared-sink-not-indexed",
+      "useStatus": "active",
+      "consumerEvidence": [
+        "app/admin/admin.js:1164 argument passed to makeRuleSelect"
+      ],
+      "owner": "admin",
+      "routeConsumers": [
+        "/admin"
+      ],
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "4cdc8ac6781269c2"
+    },
+    {
+      "source": "app/admin/admin.js",
+      "line": 1164,
+      "column": 109,
+      "kind": "javascript-text-source",
+      "sink": "source:admin-rule-select-option-label",
+      "sourceRole": "admin-rule-select-option-label",
+      "sourceBinding": "makeRuleSelect@1164",
+      "valuePath": "[0].label",
+      "expression": "\"Ativado\"",
+      "value": "Ativado",
+      "literalSegments": [
+        "Ativado"
+      ],
+      "classification": "unreviewed",
+      "classificationHints": [
+        "source-needs-consumer-and-domain-review"
+      ],
+      "consumerLinkStatus": "declared-sink-not-indexed",
+      "useStatus": "active",
+      "consumerEvidence": [
+        "app/admin/admin.js:1164 argument passed to makeRuleSelect"
+      ],
+      "owner": "admin",
+      "routeConsumers": [
+        "/admin"
+      ],
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "f89c32820e70ad28"
+    },
+    {
+      "source": "app/admin/admin.js",
+      "line": 1164,
+      "column": 131,
+      "kind": "javascript-text-source",
+      "sink": "source:admin-rule-select-option-label",
+      "sourceRole": "admin-rule-select-option-label",
+      "sourceBinding": "makeRuleSelect@1164",
+      "valuePath": "[1].label",
+      "expression": "\"Desativado\"",
+      "value": "Desativado",
+      "literalSegments": [
+        "Desativado"
+      ],
+      "classification": "unreviewed",
+      "classificationHints": [
+        "source-needs-consumer-and-domain-review"
+      ],
+      "consumerLinkStatus": "declared-sink-not-indexed",
+      "useStatus": "active",
+      "consumerEvidence": [
+        "app/admin/admin.js:1164 argument passed to makeRuleSelect"
+      ],
+      "owner": "admin",
+      "routeConsumers": [
+        "/admin"
+      ],
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "797014f0f588bd2f"
+    },
+    {
+      "source": "app/admin/admin.js",
+      "line": 1167,
+      "column": 34,
+      "kind": "javascript-text-source",
+      "sink": "source:admin-rule-select-label",
+      "sourceRole": "admin-rule-select-label",
+      "sourceBinding": "makeRuleSelect@1167",
+      "valuePath": "",
+      "expression": "\"Aplicar ao módulo\"",
+      "value": "Aplicar ao módulo",
+      "literalSegments": [
+        "Aplicar ao módulo"
+      ],
+      "classification": "unreviewed",
+      "classificationHints": [
+        "source-needs-consumer-and-domain-review"
+      ],
+      "consumerLinkStatus": "declared-sink-not-indexed",
+      "useStatus": "active",
+      "consumerEvidence": [
+        "app/admin/admin.js:1167 argument passed to makeRuleSelect"
+      ],
+      "owner": "admin",
+      "routeConsumers": [
+        "/admin"
+      ],
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "10b81524064eb36b"
+    },
+    {
+      "source": "app/admin/admin.js",
+      "line": 1168,
+      "column": 34,
+      "kind": "javascript-text-source",
+      "sink": "source:admin-rule-select-label",
+      "sourceRole": "admin-rule-select-label",
+      "sourceBinding": "makeRuleSelect@1168",
       "valuePath": "",
       "expression": "\"Dimensão\"",
       "value": "Dimensão",
@@ -35234,23 +35258,23 @@
       "consumerLinkStatus": "declared-sink-not-indexed",
       "useStatus": "active",
       "consumerEvidence": [
-        "app/admin/admin.js:1164 argument passed to makeRuleSelect"
+        "app/admin/admin.js:1168 argument passed to makeRuleSelect"
       ],
       "owner": "admin",
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "75e04a5dcc29fc02"
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "7eb89132a6f53b0a"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1164,
+      "line": 1168,
       "column": 102,
       "kind": "javascript-text-source",
       "sink": "source:admin-rule-select-option-label",
       "sourceRole": "admin-rule-select-option-label",
-      "sourceBinding": "makeRuleSelect@1164",
+      "sourceBinding": "makeRuleSelect@1168",
       "valuePath": "[0].label",
       "expression": "\"Largura\"",
       "value": "Largura",
@@ -35264,23 +35288,23 @@
       "consumerLinkStatus": "declared-sink-not-indexed",
       "useStatus": "active",
       "consumerEvidence": [
-        "app/admin/admin.js:1164 argument passed to makeRuleSelect"
+        "app/admin/admin.js:1168 argument passed to makeRuleSelect"
       ],
       "owner": "admin",
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "6d988e6bd69bbbc2"
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "c5fb57049d360e5c"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1164,
+      "line": 1168,
       "column": 125,
       "kind": "javascript-text-source",
       "sink": "source:admin-rule-select-option-label",
       "sourceRole": "admin-rule-select-option-label",
-      "sourceBinding": "makeRuleSelect@1164",
+      "sourceBinding": "makeRuleSelect@1168",
       "valuePath": "[1].label",
       "expression": "\"Altura\"",
       "value": "Altura",
@@ -35294,23 +35318,23 @@
       "consumerLinkStatus": "declared-sink-not-indexed",
       "useStatus": "active",
       "consumerEvidence": [
-        "app/admin/admin.js:1164 argument passed to makeRuleSelect"
+        "app/admin/admin.js:1168 argument passed to makeRuleSelect"
       ],
       "owner": "admin",
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "1706adab90aa20c4"
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "b970bfd8118bc72d"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1164,
+      "line": 1168,
       "column": 146,
       "kind": "javascript-text-source",
       "sink": "source:admin-rule-select-option-label",
       "sourceRole": "admin-rule-select-option-label",
-      "sourceBinding": "makeRuleSelect@1164",
+      "sourceBinding": "makeRuleSelect@1168",
       "valuePath": "[2].label",
       "expression": "\"Profundidade\"",
       "value": "Profundidade",
@@ -35324,18 +35348,18 @@
       "consumerLinkStatus": "declared-sink-not-indexed",
       "useStatus": "active",
       "consumerEvidence": [
-        "app/admin/admin.js:1164 argument passed to makeRuleSelect"
+        "app/admin/admin.js:1168 argument passed to makeRuleSelect"
       ],
       "owner": "admin",
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "cbfc69f48b63d26c"
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "98f606b05766cf7a"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1338,
+      "line": 1342,
       "column": 63,
       "kind": "javascript-text-source",
       "sink": "source:error-message-source",
@@ -35354,14 +35378,14 @@
       "consumerLinkStatus": "same-file-awaited-call-catch",
       "useStatus": "active",
       "consumerEvidence": [
-        "Awaited local call reaches catch .message sink at app/admin/admin.js:1613"
+        "Awaited local call reaches catch .message sink at app/admin/admin.js:1617"
       ],
       "sourceExpression": "response.status === 404 ? \"A API de configuração ainda não foi publicada.\" : \"Não foi possível carregar a configuração.\"",
       "selectionOperators": [
         {
           "kind": "conditional",
           "operator": "?:",
-          "line": 1338,
+          "line": 1342,
           "expression": "response.status === 404 ? \"A API de configuração ainda não foi publicada.\" : \"Não foi possível carregar a configuração.\""
         }
       ],
@@ -35369,13 +35393,13 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "0bd84c45d60d012a",
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "f2deba9344c44303",
       "consumerRefs": [
         {
-          "sinkId": "b3b2c07059a0eb06",
+          "sinkId": "97510311877a7efe",
           "source": "app/admin/admin.js",
-          "line": 1613,
+          "line": 1617,
           "sink": "helper:setMessage",
           "expression": "error.message || \"Falha ao carregar os dados administrativos.\"",
           "routeConsumers": [
@@ -35387,7 +35411,7 @@
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1338,
+      "line": 1342,
       "column": 114,
       "kind": "javascript-text-source",
       "sink": "source:error-message-source",
@@ -35406,14 +35430,14 @@
       "consumerLinkStatus": "same-file-awaited-call-catch",
       "useStatus": "active",
       "consumerEvidence": [
-        "Awaited local call reaches catch .message sink at app/admin/admin.js:1613"
+        "Awaited local call reaches catch .message sink at app/admin/admin.js:1617"
       ],
       "sourceExpression": "response.status === 404 ? \"A API de configuração ainda não foi publicada.\" : \"Não foi possível carregar a configuração.\"",
       "selectionOperators": [
         {
           "kind": "conditional",
           "operator": "?:",
-          "line": 1338,
+          "line": 1342,
           "expression": "response.status === 404 ? \"A API de configuração ainda não foi publicada.\" : \"Não foi possível carregar a configuração.\""
         }
       ],
@@ -35421,13 +35445,13 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "d9bbc74b1ef7bdcc",
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "73fe291fc59a149f",
       "consumerRefs": [
         {
-          "sinkId": "b3b2c07059a0eb06",
+          "sinkId": "97510311877a7efe",
           "source": "app/admin/admin.js",
-          "line": 1613,
+          "line": 1617,
           "sink": "helper:setMessage",
           "expression": "error.message || \"Falha ao carregar os dados administrativos.\"",
           "routeConsumers": [
@@ -35439,7 +35463,7 @@
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1911,
+      "line": 1915,
       "column": 43,
       "kind": "javascript-text-source",
       "sink": "source:error-message-source",
@@ -35458,7 +35482,7 @@
       "consumerLinkStatus": "same-try-catch",
       "useStatus": "active",
       "consumerEvidence": [
-        "Error literal in try reaches caught .message sink at app/admin/admin.js:1996"
+        "Error literal in try reaches caught .message sink at app/admin/admin.js:2000"
       ],
       "sourceExpression": "\"A configuração publicada ainda não foi carregada.\"",
       "selectionOperators": [],
@@ -35466,13 +35490,13 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "9be30e526dcfbb8e",
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "3d084cb83c27d359",
       "consumerRefs": [
         {
-          "sinkId": "aa34f95ad9b85797",
+          "sinkId": "edca02ebea66ff84",
           "source": "app/admin/admin.js",
-          "line": 1996,
+          "line": 2000,
           "sink": "helper:setMessage",
           "expression": "error.message || \"Falha ao persistir Puxadores.\"",
           "routeConsumers": [
@@ -35484,7 +35508,7 @@
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1912,
+      "line": 1916,
       "column": 85,
       "kind": "javascript-text-source",
       "sink": "source:error-message-source",
@@ -35503,7 +35527,7 @@
       "consumerLinkStatus": "same-try-catch",
       "useStatus": "active",
       "consumerEvidence": [
-        "Error literal in try reaches caught .message sink at app/admin/admin.js:1996"
+        "Error literal in try reaches caught .message sink at app/admin/admin.js:2000"
       ],
       "sourceExpression": "\"A persistência isolada de Puxadores é exclusiva do v3.\"",
       "selectionOperators": [],
@@ -35511,13 +35535,13 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "f2b228dac97feaf6",
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "d014afa1ed2c9323",
       "consumerRefs": [
         {
-          "sinkId": "aa34f95ad9b85797",
+          "sinkId": "edca02ebea66ff84",
           "source": "app/admin/admin.js",
-          "line": 1996,
+          "line": 2000,
           "sink": "helper:setMessage",
           "expression": "error.message || \"Falha ao persistir Puxadores.\"",
           "routeConsumers": [
@@ -35529,7 +35553,7 @@
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1927,
+      "line": 1931,
       "column": 44,
       "kind": "javascript-text-source",
       "sink": "source:error-message-source",
@@ -35548,7 +35572,7 @@
       "consumerLinkStatus": "same-try-catch",
       "useStatus": "active",
       "consumerEvidence": [
-        "Error literal in try reaches caught .message sink at app/admin/admin.js:1996"
+        "Error literal in try reaches caught .message sink at app/admin/admin.js:2000"
       ],
       "sourceExpression": "\"Não foi possível reler a configuração publicada.\"",
       "selectionOperators": [],
@@ -35556,13 +35580,13 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "e1dfefd41768274c",
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "f70bfdb84f15c517",
       "consumerRefs": [
         {
-          "sinkId": "aa34f95ad9b85797",
+          "sinkId": "edca02ebea66ff84",
           "source": "app/admin/admin.js",
-          "line": 1996,
+          "line": 2000,
           "sink": "helper:setMessage",
           "expression": "error.message || \"Falha ao persistir Puxadores.\"",
           "routeConsumers": [
@@ -35574,7 +35598,7 @@
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1935,
+      "line": 1939,
       "column": 23,
       "kind": "javascript-text-source",
       "sink": "source:error-message-source",
@@ -35593,7 +35617,7 @@
       "consumerLinkStatus": "same-try-catch",
       "useStatus": "active",
       "consumerEvidence": [
-        "Error literal in try reaches caught .message sink at app/admin/admin.js:1996"
+        "Error literal in try reaches caught .message sink at app/admin/admin.js:2000"
       ],
       "sourceExpression": "\"A configuração mudou desde que o painel foi aberto. O painel foi recarregado; revise o estado antes de tentar novamente.\"",
       "selectionOperators": [],
@@ -35601,13 +35625,13 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "d2453b438aff3442",
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "fe76680cdc24c4e0",
       "consumerRefs": [
         {
-          "sinkId": "aa34f95ad9b85797",
+          "sinkId": "edca02ebea66ff84",
           "source": "app/admin/admin.js",
-          "line": 1996,
+          "line": 2000,
           "sink": "helper:setMessage",
           "expression": "error.message || \"Falha ao persistir Puxadores.\"",
           "routeConsumers": [
@@ -35619,7 +35643,7 @@
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1939,
+      "line": 1943,
       "column": 53,
       "kind": "javascript-text-source",
       "sink": "source:error-message-source",
@@ -35638,14 +35662,14 @@
       "consumerLinkStatus": "same-try-catch",
       "useStatus": "active",
       "consumerEvidence": [
-        "Error literal in try reaches caught .message sink at app/admin/admin.js:1996"
+        "Error literal in try reaches caught .message sink at app/admin/admin.js:2000"
       ],
       "sourceExpression": "plan?.message || \"Não foi possível preparar a atribuição de Puxadores.\"",
       "selectionOperators": [
         {
           "kind": "logical",
           "operator": "||",
-          "line": 1939,
+          "line": 1943,
           "expression": "plan?.message || \"Não foi possível preparar a atribuição de Puxadores.\""
         }
       ],
@@ -35653,13 +35677,13 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "e778715faaa04710",
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "9b9fa7d0d25bc2ff",
       "consumerRefs": [
         {
-          "sinkId": "aa34f95ad9b85797",
+          "sinkId": "edca02ebea66ff84",
           "source": "app/admin/admin.js",
-          "line": 1996,
+          "line": 2000,
           "sink": "helper:setMessage",
           "expression": "error.message || \"Falha ao persistir Puxadores.\"",
           "routeConsumers": [
@@ -35671,7 +35695,7 @@
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1950,
+      "line": 1954,
       "column": 53,
       "kind": "javascript-text-source",
       "sink": "source:error-message-source",
@@ -35690,14 +35714,14 @@
       "consumerLinkStatus": "same-try-catch",
       "useStatus": "active",
       "consumerEvidence": [
-        "Error literal in try reaches caught .message sink at app/admin/admin.js:1996"
+        "Error literal in try reaches caught .message sink at app/admin/admin.js:2000"
       ],
       "sourceExpression": "delta.message || \"A alteração proposta não é exclusivamente a atribuição de Puxadores.\"",
       "selectionOperators": [
         {
           "kind": "logical",
           "operator": "||",
-          "line": 1950,
+          "line": 1954,
           "expression": "delta.message || \"A alteração proposta não é exclusivamente a atribuição de Puxadores.\""
         }
       ],
@@ -35705,13 +35729,13 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "2b00e9eb029d8f9f",
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "b9d08965464aad91",
       "consumerRefs": [
         {
-          "sinkId": "aa34f95ad9b85797",
+          "sinkId": "edca02ebea66ff84",
           "source": "app/admin/admin.js",
-          "line": 1996,
+          "line": 2000,
           "sink": "helper:setMessage",
           "expression": "error.message || \"Falha ao persistir Puxadores.\"",
           "routeConsumers": [
@@ -35723,7 +35747,7 @@
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1966,
+      "line": 1970,
       "column": 77,
       "kind": "javascript-text-source",
       "sink": "source:error-message-source",
@@ -35742,7 +35766,7 @@
       "consumerLinkStatus": "same-try-catch",
       "useStatus": "active",
       "consumerEvidence": [
-        "Error literal in try reaches caught .message sink at app/admin/admin.js:1996"
+        "Error literal in try reaches caught .message sink at app/admin/admin.js:2000"
       ],
       "sourceExpression": "\"Sua sessão não tem permissão para persistir Puxadores.\"",
       "selectionOperators": [],
@@ -35750,13 +35774,13 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "a1d3bc0736cca08b",
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "6e1d94d544edfc08",
       "consumerRefs": [
         {
-          "sinkId": "aa34f95ad9b85797",
+          "sinkId": "edca02ebea66ff84",
           "source": "app/admin/admin.js",
-          "line": 1996,
+          "line": 2000,
           "sink": "helper:setMessage",
           "expression": "error.message || \"Falha ao persistir Puxadores.\"",
           "routeConsumers": [
@@ -35768,7 +35792,7 @@
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1967,
+      "line": 1971,
       "column": 50,
       "kind": "javascript-text-source",
       "sink": "source:error-message-source",
@@ -35787,7 +35811,7 @@
       "consumerLinkStatus": "same-try-catch",
       "useStatus": "active",
       "consumerEvidence": [
-        "Error literal in try reaches caught .message sink at app/admin/admin.js:1996"
+        "Error literal in try reaches caught .message sink at app/admin/admin.js:2000"
       ],
       "sourceExpression": "\"A configuração mudou durante a gravação. Recarregue o painel antes de tentar novamente.\"",
       "selectionOperators": [],
@@ -35795,13 +35819,13 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "98b045a14d28fe63",
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "8e13d2899f75500d",
       "consumerRefs": [
         {
-          "sinkId": "aa34f95ad9b85797",
+          "sinkId": "edca02ebea66ff84",
           "source": "app/admin/admin.js",
-          "line": 1996,
+          "line": 2000,
           "sink": "helper:setMessage",
           "expression": "error.message || \"Falha ao persistir Puxadores.\"",
           "routeConsumers": [
@@ -35813,7 +35837,7 @@
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1968,
+      "line": 1972,
       "column": 59,
       "kind": "javascript-text-source",
       "sink": "source:error-message-source",
@@ -35832,14 +35856,14 @@
       "consumerLinkStatus": "same-try-catch",
       "useStatus": "active",
       "consumerEvidence": [
-        "Error literal in try reaches caught .message sink at app/admin/admin.js:1996"
+        "Error literal in try reaches caught .message sink at app/admin/admin.js:2000"
       ],
       "sourceExpression": "payload?.message || \"A API recusou a gravação isolada de Puxadores.\"",
       "selectionOperators": [
         {
           "kind": "logical",
           "operator": "||",
-          "line": 1968,
+          "line": 1972,
           "expression": "payload?.message || \"A API recusou a gravação isolada de Puxadores.\""
         }
       ],
@@ -35847,13 +35871,13 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "7820da449e166ee7",
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "833457ef2ef4be6d",
       "consumerRefs": [
         {
-          "sinkId": "aa34f95ad9b85797",
+          "sinkId": "edca02ebea66ff84",
           "source": "app/admin/admin.js",
-          "line": 1996,
+          "line": 2000,
           "sink": "helper:setMessage",
           "expression": "error.message || \"Falha ao persistir Puxadores.\"",
           "routeConsumers": [
@@ -35865,7 +35889,7 @@
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1973,
+      "line": 1977,
       "column": 23,
       "kind": "javascript-text-source",
       "sink": "source:error-message-source",
@@ -35884,7 +35908,7 @@
       "consumerLinkStatus": "same-try-catch",
       "useStatus": "active",
       "consumerEvidence": [
-        "Error literal in try reaches caught .message sink at app/admin/admin.js:1996"
+        "Error literal in try reaches caught .message sink at app/admin/admin.js:2000"
       ],
       "sourceExpression": "\"A resposta da gravação não corresponde ao candidato v3 esperado.\"",
       "selectionOperators": [],
@@ -35892,13 +35916,13 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "41ad74f262b3d932",
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "effa363e4796b59f",
       "consumerRefs": [
         {
-          "sinkId": "aa34f95ad9b85797",
+          "sinkId": "edca02ebea66ff84",
           "source": "app/admin/admin.js",
-          "line": 1996,
+          "line": 2000,
           "sink": "helper:setMessage",
           "expression": "error.message || \"Falha ao persistir Puxadores.\"",
           "routeConsumers": [
@@ -35910,7 +35934,7 @@
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1977,
+      "line": 1981,
       "column": 47,
       "kind": "javascript-text-source",
       "sink": "source:error-message-source",
@@ -35929,7 +35953,7 @@
       "consumerLinkStatus": "same-try-catch",
       "useStatus": "active",
       "consumerEvidence": [
-        "Error literal in try reaches caught .message sink at app/admin/admin.js:1996"
+        "Error literal in try reaches caught .message sink at app/admin/admin.js:2000"
       ],
       "sourceExpression": "\"Puxadores foi gravado, mas a releitura de confirmação falhou.\"",
       "selectionOperators": [],
@@ -35937,13 +35961,13 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "a6ad427a0c08a39b",
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "62ac22503f6d03f7",
       "consumerRefs": [
         {
-          "sinkId": "aa34f95ad9b85797",
+          "sinkId": "edca02ebea66ff84",
           "source": "app/admin/admin.js",
-          "line": 1996,
+          "line": 2000,
           "sink": "helper:setMessage",
           "expression": "error.message || \"Falha ao persistir Puxadores.\"",
           "routeConsumers": [
@@ -35955,7 +35979,7 @@
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1980,
+      "line": 1984,
       "column": 23,
       "kind": "javascript-text-source",
       "sink": "source:error-message-source",
@@ -35974,7 +35998,7 @@
       "consumerLinkStatus": "same-try-catch",
       "useStatus": "active",
       "consumerEvidence": [
-        "Error literal in try reaches caught .message sink at app/admin/admin.js:1996"
+        "Error literal in try reaches caught .message sink at app/admin/admin.js:2000"
       ],
       "sourceExpression": "\"A releitura não corresponde exatamente ao v3 esperado após persistir Puxadores.\"",
       "selectionOperators": [],
@@ -35982,13 +36006,13 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "4423b30525c6e85b",
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "68d8d28aff3634b0",
       "consumerRefs": [
         {
-          "sinkId": "aa34f95ad9b85797",
+          "sinkId": "edca02ebea66ff84",
           "source": "app/admin/admin.js",
-          "line": 1996,
+          "line": 2000,
           "sink": "helper:setMessage",
           "expression": "error.message || \"Falha ao persistir Puxadores.\"",
           "routeConsumers": [
@@ -36000,7 +36024,7 @@
     },
     {
       "source": "app/admin/admin.js",
-      "line": 2008,
+      "line": 2012,
       "column": 43,
       "kind": "javascript-text-source",
       "sink": "source:error-message-source",
@@ -36019,7 +36043,7 @@
       "consumerLinkStatus": "same-try-catch",
       "useStatus": "active",
       "consumerEvidence": [
-        "Error literal in try reaches caught .message sink at app/admin/admin.js:2110"
+        "Error literal in try reaches caught .message sink at app/admin/admin.js:2114"
       ],
       "sourceExpression": "\"A configuração publicada ainda não foi carregada.\"",
       "selectionOperators": [],
@@ -36027,13 +36051,13 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "e2f5739cc2d0c55e",
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "fbcfd6df7ced2b95",
       "consumerRefs": [
         {
-          "sinkId": "2619b315314b0c18",
+          "sinkId": "7fa38b5a0fd95441",
           "source": "app/admin/admin.js",
-          "line": 2110,
+          "line": 2114,
           "sink": "helper:setMessage",
           "expression": "error.message || \"Falha ao publicar a configuração.\"",
           "routeConsumers": [
@@ -36045,7 +36069,7 @@
     },
     {
       "source": "app/admin/admin.js",
-      "line": 2012,
+      "line": 2016,
       "column": 25,
       "kind": "javascript-text-source",
       "sink": "source:error-message-source",
@@ -36064,7 +36088,7 @@
       "consumerLinkStatus": "same-try-catch",
       "useStatus": "active",
       "consumerEvidence": [
-        "Error literal in try reaches caught .message sink at app/admin/admin.js:2110"
+        "Error literal in try reaches caught .message sink at app/admin/admin.js:2114"
       ],
       "sourceExpression": "\"O rascunho não corresponde à revisão publicada. Recarregue antes de salvar.\"",
       "selectionOperators": [],
@@ -36072,13 +36096,13 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "e6b13262e360a6f0",
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "3eabb55f7a043788",
       "consumerRefs": [
         {
-          "sinkId": "2619b315314b0c18",
+          "sinkId": "7fa38b5a0fd95441",
           "source": "app/admin/admin.js",
-          "line": 2110,
+          "line": 2114,
           "sink": "helper:setMessage",
           "expression": "error.message || \"Falha ao publicar a configuração.\"",
           "routeConsumers": [
@@ -36090,7 +36114,7 @@
     },
     {
       "source": "app/admin/admin.js",
-      "line": 2027,
+      "line": 2031,
       "column": 25,
       "kind": "javascript-text-source",
       "sink": "source:error-message-source",
@@ -36109,7 +36133,7 @@
       "consumerLinkStatus": "same-try-catch",
       "useStatus": "active",
       "consumerEvidence": [
-        "Error literal in try reaches caught .message sink at app/admin/admin.js:2110"
+        "Error literal in try reaches caught .message sink at app/admin/admin.js:2114"
       ],
       "sourceExpression": "\"Sua sessão não tem permissão para publicar esta configuração.\"",
       "selectionOperators": [],
@@ -36117,116 +36141,13 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "5ec7191bd41733df",
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "f070ecf01de8b2cf",
       "consumerRefs": [
         {
-          "sinkId": "2619b315314b0c18",
+          "sinkId": "7fa38b5a0fd95441",
           "source": "app/admin/admin.js",
-          "line": 2110,
-          "sink": "helper:setMessage",
-          "expression": "error.message || \"Falha ao publicar a configuração.\"",
-          "routeConsumers": [
-            "/admin"
-          ],
-          "flow": "same-try-catch"
-        }
-      ]
-    },
-    {
-      "source": "app/admin/admin.js",
-      "line": 2030,
-      "column": 25,
-      "kind": "javascript-text-source",
-      "sink": "source:error-message-source",
-      "sourceRole": "error-message-source",
-      "sourceBinding": "Error constructor",
-      "valuePath": "",
-      "expression": "\"A configuração mudou em outra sessão. Recarregue o painel antes de salvar.\"",
-      "value": "A configuração mudou em outra sessão. Recarregue o painel antes de salvar.",
-      "literalSegments": [
-        "A configuração mudou em outra sessão. Recarregue o painel antes de salvar."
-      ],
-      "classification": "unreviewed",
-      "classificationHints": [
-        "source-needs-consumer-and-domain-review"
-      ],
-      "consumerLinkStatus": "same-try-catch",
-      "useStatus": "active",
-      "consumerEvidence": [
-        "Error literal in try reaches caught .message sink at app/admin/admin.js:2110"
-      ],
-      "sourceExpression": "\"A configuração mudou em outra sessão. Recarregue o painel antes de salvar.\"",
-      "selectionOperators": [],
-      "owner": "admin",
-      "routeConsumers": [
-        "/admin"
-      ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "472c6c6a71a0a196",
-      "consumerRefs": [
-        {
-          "sinkId": "2619b315314b0c18",
-          "source": "app/admin/admin.js",
-          "line": 2110,
-          "sink": "helper:setMessage",
-          "expression": "error.message || \"Falha ao publicar a configuração.\"",
-          "routeConsumers": [
-            "/admin"
-          ],
-          "flow": "same-try-catch"
-        }
-      ]
-    },
-    {
-      "source": "app/admin/admin.js",
-      "line": 2032,
-      "column": 79,
-      "kind": "javascript-text-source",
-      "sink": "source:error-message-source",
-      "sourceRole": "error-message-source",
-      "sourceBinding": "Error constructor",
-      "valuePath": "right",
-      "expression": "\"A API recusou a publicação v5.\"",
-      "value": "A API recusou a publicação v5.",
-      "literalSegments": [
-        "A API recusou a publicação v5."
-      ],
-      "classification": "unreviewed",
-      "classificationHints": [
-        "source-needs-consumer-and-domain-review"
-      ],
-      "consumerLinkStatus": "same-try-catch",
-      "useStatus": "active",
-      "consumerEvidence": [
-        "Error literal in try reaches caught .message sink at app/admin/admin.js:2110"
-      ],
-      "sourceExpression": "payload?.message || payload?.error || \"A API recusou a publicação v5.\"",
-      "selectionOperators": [
-        {
-          "kind": "logical",
-          "operator": "||",
-          "line": 2032,
-          "expression": "payload?.message || payload?.error || \"A API recusou a publicação v5.\""
-        },
-        {
-          "kind": "logical",
-          "operator": "||",
-          "line": 2032,
-          "expression": "payload?.message || payload?.error"
-        }
-      ],
-      "owner": "admin",
-      "routeConsumers": [
-        "/admin"
-      ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "d87e34d72df49e41",
-      "consumerRefs": [
-        {
-          "sinkId": "2619b315314b0c18",
-          "source": "app/admin/admin.js",
-          "line": 2110,
+          "line": 2114,
           "sink": "helper:setMessage",
           "expression": "error.message || \"Falha ao publicar a configuração.\"",
           "routeConsumers": [
@@ -36245,6 +36166,109 @@
       "sourceRole": "error-message-source",
       "sourceBinding": "Error constructor",
       "valuePath": "",
+      "expression": "\"A configuração mudou em outra sessão. Recarregue o painel antes de salvar.\"",
+      "value": "A configuração mudou em outra sessão. Recarregue o painel antes de salvar.",
+      "literalSegments": [
+        "A configuração mudou em outra sessão. Recarregue o painel antes de salvar."
+      ],
+      "classification": "unreviewed",
+      "classificationHints": [
+        "source-needs-consumer-and-domain-review"
+      ],
+      "consumerLinkStatus": "same-try-catch",
+      "useStatus": "active",
+      "consumerEvidence": [
+        "Error literal in try reaches caught .message sink at app/admin/admin.js:2114"
+      ],
+      "sourceExpression": "\"A configuração mudou em outra sessão. Recarregue o painel antes de salvar.\"",
+      "selectionOperators": [],
+      "owner": "admin",
+      "routeConsumers": [
+        "/admin"
+      ],
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "3c885f470d125bad",
+      "consumerRefs": [
+        {
+          "sinkId": "7fa38b5a0fd95441",
+          "source": "app/admin/admin.js",
+          "line": 2114,
+          "sink": "helper:setMessage",
+          "expression": "error.message || \"Falha ao publicar a configuração.\"",
+          "routeConsumers": [
+            "/admin"
+          ],
+          "flow": "same-try-catch"
+        }
+      ]
+    },
+    {
+      "source": "app/admin/admin.js",
+      "line": 2036,
+      "column": 79,
+      "kind": "javascript-text-source",
+      "sink": "source:error-message-source",
+      "sourceRole": "error-message-source",
+      "sourceBinding": "Error constructor",
+      "valuePath": "right",
+      "expression": "\"A API recusou a publicação v5.\"",
+      "value": "A API recusou a publicação v5.",
+      "literalSegments": [
+        "A API recusou a publicação v5."
+      ],
+      "classification": "unreviewed",
+      "classificationHints": [
+        "source-needs-consumer-and-domain-review"
+      ],
+      "consumerLinkStatus": "same-try-catch",
+      "useStatus": "active",
+      "consumerEvidence": [
+        "Error literal in try reaches caught .message sink at app/admin/admin.js:2114"
+      ],
+      "sourceExpression": "payload?.message || payload?.error || \"A API recusou a publicação v5.\"",
+      "selectionOperators": [
+        {
+          "kind": "logical",
+          "operator": "||",
+          "line": 2036,
+          "expression": "payload?.message || payload?.error || \"A API recusou a publicação v5.\""
+        },
+        {
+          "kind": "logical",
+          "operator": "||",
+          "line": 2036,
+          "expression": "payload?.message || payload?.error"
+        }
+      ],
+      "owner": "admin",
+      "routeConsumers": [
+        "/admin"
+      ],
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "2cc8f3f586d64dc4",
+      "consumerRefs": [
+        {
+          "sinkId": "7fa38b5a0fd95441",
+          "source": "app/admin/admin.js",
+          "line": 2114,
+          "sink": "helper:setMessage",
+          "expression": "error.message || \"Falha ao publicar a configuração.\"",
+          "routeConsumers": [
+            "/admin"
+          ],
+          "flow": "same-try-catch"
+        }
+      ]
+    },
+    {
+      "source": "app/admin/admin.js",
+      "line": 2038,
+      "column": 25,
+      "kind": "javascript-text-source",
+      "sink": "source:error-message-source",
+      "sourceRole": "error-message-source",
+      "sourceBinding": "Error constructor",
+      "valuePath": "",
       "expression": "\"A resposta de publicação v5 não corresponde ao documento esperado.\"",
       "value": "A resposta de publicação v5 não corresponde ao documento esperado.",
       "literalSegments": [
@@ -36257,7 +36281,7 @@
       "consumerLinkStatus": "same-try-catch",
       "useStatus": "active",
       "consumerEvidence": [
-        "Error literal in try reaches caught .message sink at app/admin/admin.js:2110"
+        "Error literal in try reaches caught .message sink at app/admin/admin.js:2114"
       ],
       "sourceExpression": "\"A resposta de publicação v5 não corresponde ao documento esperado.\"",
       "selectionOperators": [],
@@ -36265,58 +36289,13 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "dff42a6fa653cd37",
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "85d867ff782f1c7c",
       "consumerRefs": [
         {
-          "sinkId": "2619b315314b0c18",
+          "sinkId": "7fa38b5a0fd95441",
           "source": "app/admin/admin.js",
-          "line": 2110,
-          "sink": "helper:setMessage",
-          "expression": "error.message || \"Falha ao publicar a configuração.\"",
-          "routeConsumers": [
-            "/admin"
-          ],
-          "flow": "same-try-catch"
-        }
-      ]
-    },
-    {
-      "source": "app/admin/admin.js",
-      "line": 2041,
-      "column": 25,
-      "kind": "javascript-text-source",
-      "sink": "source:error-message-source",
-      "sourceRole": "error-message-source",
-      "sourceBinding": "Error constructor",
-      "valuePath": "",
-      "expression": "\"A publicação v5 foi aceita, mas a releitura de confirmação falhou.\"",
-      "value": "A publicação v5 foi aceita, mas a releitura de confirmação falhou.",
-      "literalSegments": [
-        "A publicação v5 foi aceita, mas a releitura de confirmação falhou."
-      ],
-      "classification": "unreviewed",
-      "classificationHints": [
-        "source-needs-consumer-and-domain-review"
-      ],
-      "consumerLinkStatus": "same-try-catch",
-      "useStatus": "active",
-      "consumerEvidence": [
-        "Error literal in try reaches caught .message sink at app/admin/admin.js:2110"
-      ],
-      "sourceExpression": "\"A publicação v5 foi aceita, mas a releitura de confirmação falhou.\"",
-      "selectionOperators": [],
-      "owner": "admin",
-      "routeConsumers": [
-        "/admin"
-      ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "ae648a38f72c9743",
-      "consumerRefs": [
-        {
-          "sinkId": "2619b315314b0c18",
-          "source": "app/admin/admin.js",
-          "line": 2110,
+          "line": 2114,
           "sink": "helper:setMessage",
           "expression": "error.message || \"Falha ao publicar a configuração.\"",
           "routeConsumers": [
@@ -36335,6 +36314,51 @@
       "sourceRole": "error-message-source",
       "sourceBinding": "Error constructor",
       "valuePath": "",
+      "expression": "\"A publicação v5 foi aceita, mas a releitura de confirmação falhou.\"",
+      "value": "A publicação v5 foi aceita, mas a releitura de confirmação falhou.",
+      "literalSegments": [
+        "A publicação v5 foi aceita, mas a releitura de confirmação falhou."
+      ],
+      "classification": "unreviewed",
+      "classificationHints": [
+        "source-needs-consumer-and-domain-review"
+      ],
+      "consumerLinkStatus": "same-try-catch",
+      "useStatus": "active",
+      "consumerEvidence": [
+        "Error literal in try reaches caught .message sink at app/admin/admin.js:2114"
+      ],
+      "sourceExpression": "\"A publicação v5 foi aceita, mas a releitura de confirmação falhou.\"",
+      "selectionOperators": [],
+      "owner": "admin",
+      "routeConsumers": [
+        "/admin"
+      ],
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "461596493d2f8752",
+      "consumerRefs": [
+        {
+          "sinkId": "7fa38b5a0fd95441",
+          "source": "app/admin/admin.js",
+          "line": 2114,
+          "sink": "helper:setMessage",
+          "expression": "error.message || \"Falha ao publicar a configuração.\"",
+          "routeConsumers": [
+            "/admin"
+          ],
+          "flow": "same-try-catch"
+        }
+      ]
+    },
+    {
+      "source": "app/admin/admin.js",
+      "line": 2049,
+      "column": 25,
+      "kind": "javascript-text-source",
+      "sink": "source:error-message-source",
+      "sourceRole": "error-message-source",
+      "sourceBinding": "Error constructor",
+      "valuePath": "",
       "expression": "\"A releitura v5 não corresponde à revisão publicada; nenhuma confirmação foi assumida.\"",
       "value": "A releitura v5 não corresponde à revisão publicada; nenhuma confirmação foi assumida.",
       "literalSegments": [
@@ -36347,7 +36371,7 @@
       "consumerLinkStatus": "same-try-catch",
       "useStatus": "active",
       "consumerEvidence": [
-        "Error literal in try reaches caught .message sink at app/admin/admin.js:2110"
+        "Error literal in try reaches caught .message sink at app/admin/admin.js:2114"
       ],
       "sourceExpression": "\"A releitura v5 não corresponde à revisão publicada; nenhuma confirmação foi assumida.\"",
       "selectionOperators": [],
@@ -36355,13 +36379,13 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "47aee51cc7b20c01",
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "421e231ce4c33389",
       "consumerRefs": [
         {
-          "sinkId": "2619b315314b0c18",
+          "sinkId": "7fa38b5a0fd95441",
           "source": "app/admin/admin.js",
-          "line": 2110,
+          "line": 2114,
           "sink": "helper:setMessage",
           "expression": "error.message || \"Falha ao publicar a configuração.\"",
           "routeConsumers": [
@@ -36373,7 +36397,7 @@
     },
     {
       "source": "app/admin/admin.js",
-      "line": 2057,
+      "line": 2061,
       "column": 23,
       "kind": "javascript-text-source",
       "sink": "source:error-message-source",
@@ -36392,7 +36416,7 @@
       "consumerLinkStatus": "same-try-catch",
       "useStatus": "active",
       "consumerEvidence": [
-        "Error literal in try reaches caught .message sink at app/admin/admin.js:2110"
+        "Error literal in try reaches caught .message sink at app/admin/admin.js:2114"
       ],
       "sourceExpression": "\"O schema publicado não é compatível com este editor.\"",
       "selectionOperators": [],
@@ -36400,13 +36424,13 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "96a9cf6d734c9387",
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "9569ee3245571595",
       "consumerRefs": [
         {
-          "sinkId": "2619b315314b0c18",
+          "sinkId": "7fa38b5a0fd95441",
           "source": "app/admin/admin.js",
-          "line": 2110,
+          "line": 2114,
           "sink": "helper:setMessage",
           "expression": "error.message || \"Falha ao publicar a configuração.\"",
           "routeConsumers": [
@@ -36418,7 +36442,7 @@
     },
     {
       "source": "app/admin/admin.js",
-      "line": 2086,
+      "line": 2090,
       "column": 49,
       "kind": "javascript-text-source",
       "sink": "source:error-message-source",
@@ -36437,14 +36461,14 @@
       "consumerLinkStatus": "same-try-catch",
       "useStatus": "active",
       "consumerEvidence": [
-        "Error literal in try reaches caught .message sink at app/admin/admin.js:2110"
+        "Error literal in try reaches caught .message sink at app/admin/admin.js:2114"
       ],
       "sourceExpression": "projection.errors?.[0] || \"A hierarquia não pode ser publicada com segurança.\"",
       "selectionOperators": [
         {
           "kind": "logical",
           "operator": "||",
-          "line": 2086,
+          "line": 2090,
           "expression": "projection.errors?.[0] || \"A hierarquia não pode ser publicada com segurança.\""
         }
       ],
@@ -36452,13 +36476,13 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "a74311c5ebc8af02",
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "b97143cc51d84ccc",
       "consumerRefs": [
         {
-          "sinkId": "2619b315314b0c18",
+          "sinkId": "7fa38b5a0fd95441",
           "source": "app/admin/admin.js",
-          "line": 2110,
+          "line": 2114,
           "sink": "helper:setMessage",
           "expression": "error.message || \"Falha ao publicar a configuração.\"",
           "routeConsumers": [
@@ -36470,7 +36494,7 @@
     },
     {
       "source": "app/admin/admin.js",
-      "line": 2096,
+      "line": 2100,
       "column": 77,
       "kind": "javascript-text-source",
       "sink": "source:error-message-source",
@@ -36489,7 +36513,7 @@
       "consumerLinkStatus": "same-try-catch",
       "useStatus": "active",
       "consumerEvidence": [
-        "Error literal in try reaches caught .message sink at app/admin/admin.js:2110"
+        "Error literal in try reaches caught .message sink at app/admin/admin.js:2114"
       ],
       "sourceExpression": "\"Sua sessão não tem permissão para publicar esta configuração.\"",
       "selectionOperators": [],
@@ -36497,13 +36521,13 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "f1edaebce297d1b9",
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "75fffaaf9a9920e3",
       "consumerRefs": [
         {
-          "sinkId": "2619b315314b0c18",
+          "sinkId": "7fa38b5a0fd95441",
           "source": "app/admin/admin.js",
-          "line": 2110,
+          "line": 2114,
           "sink": "helper:setMessage",
           "expression": "error.message || \"Falha ao publicar a configuração.\"",
           "routeConsumers": [
@@ -36515,7 +36539,7 @@
     },
     {
       "source": "app/admin/admin.js",
-      "line": 2097,
+      "line": 2101,
       "column": 50,
       "kind": "javascript-text-source",
       "sink": "source:error-message-source",
@@ -36534,7 +36558,7 @@
       "consumerLinkStatus": "same-try-catch",
       "useStatus": "active",
       "consumerEvidence": [
-        "Error literal in try reaches caught .message sink at app/admin/admin.js:2110"
+        "Error literal in try reaches caught .message sink at app/admin/admin.js:2114"
       ],
       "sourceExpression": "\"A configuração mudou em outra sessão. Recarregue o painel antes de salvar.\"",
       "selectionOperators": [],
@@ -36542,13 +36566,13 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "ab2ed89324347578",
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "b530e415ace2e1a4",
       "consumerRefs": [
         {
-          "sinkId": "2619b315314b0c18",
+          "sinkId": "7fa38b5a0fd95441",
           "source": "app/admin/admin.js",
-          "line": 2110,
+          "line": 2114,
           "sink": "helper:setMessage",
           "expression": "error.message || \"Falha ao publicar a configuração.\"",
           "routeConsumers": [
@@ -36560,7 +36584,7 @@
     },
     {
       "source": "app/admin/admin.js",
-      "line": 2100,
+      "line": 2104,
       "column": 80,
       "kind": "javascript-text-source",
       "sink": "source:error-message-source",
@@ -36579,7 +36603,7 @@
       "consumerLinkStatus": "same-try-catch",
       "useStatus": "active",
       "consumerEvidence": [
-        "Error literal in try reaches caught .message sink at app/admin/admin.js:2110"
+        "Error literal in try reaches caught .message sink at app/admin/admin.js:2114"
       ],
       "sourceExpression": "\"A API bloqueou uma publicação hierárquica antes do checkpoint autorizado.\"",
       "selectionOperators": [],
@@ -36587,13 +36611,13 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "b57d457b1fa11618",
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "07e22cd05f68bf0e",
       "consumerRefs": [
         {
-          "sinkId": "2619b315314b0c18",
+          "sinkId": "7fa38b5a0fd95441",
           "source": "app/admin/admin.js",
-          "line": 2110,
+          "line": 2114,
           "sink": "helper:setMessage",
           "expression": "error.message || \"Falha ao publicar a configuração.\"",
           "routeConsumers": [
@@ -36605,7 +36629,7 @@
     },
     {
       "source": "app/admin/admin.js",
-      "line": 2101,
+      "line": 2105,
       "column": 43,
       "kind": "javascript-text-source",
       "sink": "source:error-message-source",
@@ -36624,14 +36648,14 @@
       "consumerLinkStatus": "same-try-catch",
       "useStatus": "active",
       "consumerEvidence": [
-        "Error literal in try reaches caught .message sink at app/admin/admin.js:2110"
+        "Error literal in try reaches caught .message sink at app/admin/admin.js:2114"
       ],
       "sourceExpression": "payload?.message || \"A configuração não foi aceita. Confira nomes e itens selecionados.\"",
       "selectionOperators": [
         {
           "kind": "logical",
           "operator": "||",
-          "line": 2101,
+          "line": 2105,
           "expression": "payload?.message || \"A configuração não foi aceita. Confira nomes e itens selecionados.\""
         }
       ],
@@ -36639,13 +36663,13 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff",
-      "id": "41f4bafa987e84dd",
+      "sourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+      "id": "c710e9fbc0ceaa72",
       "consumerRefs": [
         {
-          "sinkId": "2619b315314b0c18",
+          "sinkId": "7fa38b5a0fd95441",
           "source": "app/admin/admin.js",
-          "line": 2110,
+          "line": 2114,
           "sink": "helper:setMessage",
           "expression": "error.message || \"Falha ao publicar a configuração.\"",
           "routeConsumers": [
@@ -46366,7 +46390,7 @@
     },
     {
       "path": "app/admin/admin.js",
-      "sha256": "873989299ea51f4bebc5701f321871a8fa32a3c7ca921e069bfe3272931d7bff"
+      "sha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c"
     },
     {
       "path": "app/app.js",

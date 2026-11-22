@@ -204,6 +204,26 @@ async function sectionItemIds(page, stageId, groupId, sectionId) {
   await page.goto(baseUrl + "/admin-test.html", { waitUntil: "networkidle" });
   await page.waitForSelector('[data-hierarchy-stage="finishes"] [data-hierarchy-group="cabinet-finishes"]');
 
+  await page.locator('[data-admin-tab="objects"]').click();
+  await page.waitForSelector('[data-admin-panel="objects"]:not([hidden])');
+  await page.locator("#objectSelector").selectOption({ label: "Mover pedra" });
+  await page.locator('[data-object-tab="assets"]').click();
+  const moveStoneAssets = page.locator('[data-asset-object-id="move-stone"]');
+  const moveStoneAssetReason = moveStoneAssets.locator("#object-asset-policy-move-stone");
+  assert.equal(await moveStoneAssetReason.isVisible(), true, "object asset policy reason is visible");
+  assert.match(await moveStoneAssetReason.textContent(), /não possui camada visual própria na cena/i, "non-visual service explains why scene asset selectors are unavailable");
+  for (const field of ["imageAsset", "detailImageAsset", "maskAsset"]) {
+    const selector = moveStoneAssets.locator(`[data-object-asset="${field}"]`);
+    assert.equal(await selector.isDisabled(), true, `${field} is disabled without a scene entity`);
+    assert.equal(await selector.getAttribute("aria-describedby"), "object-asset-policy-move-stone", `${field} references its visible reason`);
+  }
+  await page.locator("#objectSelector").selectOption("0");
+  for (const field of ["imageAsset", "detailImageAsset", "maskAsset"]) {
+    const selector = page.locator(`[data-asset-object-id="${catalog.modules[0].entityId}"] [data-object-asset="${field}"]`);
+    assert.equal(await selector.isEnabled(), true, `${field} remains editable when an object has a scene entity`);
+    assert.equal(await selector.getAttribute("aria-describedby"), null, `${field} exposes no disabled reason while enabled`);
+  }
+
   await page.locator('[data-admin-tab="stages"]').click();
   await page.waitForSelector('[data-admin-panel="stages"]:not([hidden])');
   const initialEntity = page.locator('[data-initial-configurator-entity="module-01"]');
