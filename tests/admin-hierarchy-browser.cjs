@@ -158,6 +158,45 @@ async function sectionItemIds(page, stageId, groupId, sectionId) {
   await page.goto(baseUrl + "/admin-test.html", { waitUntil: "networkidle" });
   await page.waitForSelector('[data-hierarchy-stage="finishes"] [data-hierarchy-group="cabinet-finishes"]');
 
+  await page.locator('[data-admin-tab="stages"]').click();
+  await page.waitForSelector('[data-admin-panel="stages"]:not([hidden])');
+  const initialEntity = page.locator('[data-initial-configurator-entity="module-01"]');
+  const stageAvailability = page.locator('[data-stage-enabled="finishes"]');
+  assert.equal(await initialEntity.getAttribute("type"), "checkbox", "initial configurator state remains a checkbox preference");
+  assert.equal(await initialEntity.locator("xpath=..").getAttribute("class"), "initial-state-option", "initial state keeps its own presentation label");
+  assert.equal(await stageAvailability.getAttribute("type"), "checkbox", "stage availability remains a native checkbox");
+  assert.equal(await stageAvailability.locator("xpath=..").getAttribute("class"), "switch", "stage availability keeps its switch presentation");
+  assert.match(await page.locator('[data-initial-viewer-entity="module-01"]').getAttribute("aria-label"), /visível inicialmente no viewer/, "viewer initial-state text names the public viewer policy");
+  assert.match(await page.locator('[data-initial-service]').first().getAttribute("aria-label"), /ativo inicialmente/, "initial service state remains a separate active-by-default preference");
+  assert.match(await stageAvailability.getAttribute("aria-label"), /^Ativar etapa /, "stage text describes whether the step is available");
+
+  const accentColors = {};
+  for (const theme of ["light", "dark"]) {
+    await page.evaluate((nextTheme) => window.CASA_UI_THEME.setMode(nextTheme), theme);
+    accentColors[theme] = await page.evaluate(() => {
+      const entity = document.querySelector('[data-initial-configurator-entity="module-01"]');
+      const stage = document.querySelector('[data-stage-enabled="finishes"]');
+      return {
+        entity: getComputedStyle(entity).accentColor,
+        stage: getComputedStyle(stage).accentColor
+      };
+    });
+    assert.notEqual(accentColors[theme].entity, "auto", `initial-state checkbox uses a defined ${theme} theme color`);
+    assert.equal(accentColors[theme].entity, accentColors[theme].stage, `${theme} initial-state color follows the existing stage accent`);
+  }
+  assert.notEqual(accentColors.light.entity, accentColors.dark.entity, "initial-state checkbox responds to the selected theme");
+  await page.evaluate(() => window.CASA_UI_THEME.setMode("auto"));
+
+  const initialBefore = await initialEntity.isChecked();
+  const stageBefore = await stageAvailability.isChecked();
+  await initialEntity.setChecked(!initialBefore);
+  await stageAvailability.setChecked(!stageBefore);
+  assert.equal(putCount, 0, "editing initial visibility and stage availability never saves implicitly");
+  await page.reload({ waitUntil: "networkidle" });
+  await page.waitForSelector('[data-hierarchy-stage="finishes"] [data-hierarchy-group="cabinet-finishes"]');
+  assert.equal(await page.locator('[data-initial-configurator-entity="module-01"]').isChecked(), initialBefore, "initial state is discarded when the unsaved editor is reloaded");
+  assert.equal(await page.locator('[data-stage-enabled="finishes"]').isChecked(), stageBefore, "stage availability is discarded when the unsaved editor is reloaded");
+
   assert.deepEqual(await stageGroupIds(page, "finishes"), ["cabinet-finishes", "stone"], "Acabamentos opens as two explicit groups");
   assert.deepEqual(await groupSectionIds(page, "finishes", "cabinet-finishes"), ["fronts", "handles"], "cabinet group exposes fronts and handles sections");
   assert.deepEqual(await groupSectionIds(page, "finishes", "stone"), ["stone-packages", "stone-skirting"], "stone group exposes package and skirting sections");

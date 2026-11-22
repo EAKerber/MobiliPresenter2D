@@ -105,6 +105,7 @@ textarea { min-height:76px; resize:vertical; line-height:1.45; }
 .stage-card__actions { display:flex; gap:6px; }
 .stage-items--custom { grid-template-columns:repeat(auto-fit,minmax(170px,1fr)); }
 .initial-state-option { display:flex; align-items:center; gap:6px; color:var(--muted); font-size:10px; white-space:nowrap; }
+.initial-state-option input[type="checkbox"] { accent-color:var(--accent); }
 .module-nominal-dimensions { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:7px; margin:0; padding:8px; border:1px solid rgba(255,255,255,.08); border-radius:8px; }
 .module-nominal-dimensions legend { padding:0 4px; color:var(--muted); font-size:10px; }
 .module-nominal-dimensions__note { grid-column:1 / -1; color:var(--muted); font-size:10px; line-height:1.4; }
