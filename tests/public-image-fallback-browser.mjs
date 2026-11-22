@@ -24,11 +24,25 @@ async function ready(page){
         const started=performance.now();
         const poll=()=>{
           const image=document.querySelector(".hero-image-frame > img");
+          const frame=document.querySelector(".hero-image-frame");
           const art=document.querySelector(".hero-art");
           const screen=document.getElementById("heroPhoneScreen");
-          if(image?.complete&&image.naturalWidth>0&&art?.style.minHeight&&screen&&!screen.hidden){
-            resolve();
-          }else if(performance.now()-started>10000){
+          if(image?.complete&&image.naturalWidth>0&&frame&&art&&screen&&!screen.hidden){
+            const frameWidth=frame.clientWidth;
+            const scale=Math.max(frameWidth/image.naturalWidth,.589);
+            const expectedImageWidth=image.naturalWidth*scale;
+            const screenTop=Number(screen.dataset.screenTop);
+            const screenHeight=Number(screen.dataset.screenHeight);
+            const phoneBottom=(screenTop+screenHeight+35)*scale-screenTop*scale*.3;
+            const artMinimum=frameWidth<=680?350:frameWidth<=900?Math.max(340,Math.min(frameWidth*.56,500)):420;
+            const expectedArtHeight=Math.ceil(Math.max(artMinimum,phoneBottom));
+            if(Math.abs(parseFloat(image.style.width)-expectedImageWidth)<1&&
+              Math.abs(parseFloat(art.style.minHeight)-expectedArtHeight)<1){
+              resolve();
+              return;
+            }
+          }
+          if(performance.now()-started>10000){
             reject(new Error("landing hero layout did not settle before image fallback baseline"));
           }else setTimeout(poll,25);
         };
