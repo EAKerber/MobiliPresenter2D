@@ -135,13 +135,18 @@ for(const [engineName,engine] of [["chromium",chromium],["webkit",webkit]]){
           const img=[...f.querySelectorAll("img[alt]")].find(x=>x.alt.trim());
           img.dispatchEvent(new Event("load"));
         },index);
+        // Let both the image listener and WebKit's next layout pass settle
+        // before comparing restored geometry with the captured baseline.
+        await page.evaluate(()=>new Promise(resolve=>
+          requestAnimationFrame(()=>requestAnimationFrame(resolve))));
         const restored=await inspect(page,index);
         assert.equal(restored.hidden,false,context+" image not restored "+index);
         assert.equal(restored.placeholderHidden,true,context+" fallback not concealed "+index);
         assert.equal(restored.tabindex,null,context+" tab stop retained after recovery "+index);
         assert.ok(close(restored.box.width,before.box.width)&&
           close(restored.box.height,before.box.height),
-          context+" frame not restored "+index);
+          context+" frame not restored "+index+
+          " before="+JSON.stringify(before.box)+" restored="+JSON.stringify(restored.box));
         visibleFallbacks++;
       }
       const result={engine:engineName,width,theme,path:pageSpec.path,
