@@ -168,9 +168,9 @@ async function sectionItemIds(page, stageId, groupId, sectionId) {
   const finishPolicyErrors = [];
   finishPolicyPage.on("pageerror", (error) => finishPolicyErrors.push(error.message));
   await finishPolicyPage.goto("http://127.0.0.1:" + server.address().port + "/admin-test.html", { waitUntil: "networkidle" });
-  await finishPolicyPage.waitForSelector('#finishesList [data-finish-enabled]');
   await finishPolicyPage.locator('[data-admin-tab="finishes"]').click();
   await finishPolicyPage.waitForSelector('[data-admin-panel="finishes"]:not([hidden])');
+  await finishPolicyPage.waitForSelector('#finishesList [data-finish-enabled]');
   const globalFinishToggle = finishPolicyPage.locator(`[data-finish-enabled="${globalFinish.id}"]`);
   const globalFinishScope = finishPolicyPage.locator(`[data-finish-scope="${globalFinish.id}"]`);
   const globalPolicyNote = finishPolicyPage.locator(`#finish-policy-${globalFinish.id}`);
