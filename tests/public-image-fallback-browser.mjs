@@ -17,7 +17,25 @@ async function ready(page){
     await document.fonts.ready;
     await Promise.all([...document.querySelectorAll("[data-image-fallback] img")]
       .map(image=>image.decode?.().catch(()=>{})));
-    // Decode can resolve before browser layout observers finish applying image geometry.
+    // The landing hero's own image-load handler calibrates the phone overlay and
+    // art height. Wait for that real application state before capturing baseline.
+    if(location.pathname==="/"){
+      await new Promise((resolve,reject)=>{
+        const started=performance.now();
+        const poll=()=>{
+          const image=document.querySelector(".hero-image-frame > img");
+          const art=document.querySelector(".hero-art");
+          const screen=document.getElementById("heroPhoneScreen");
+          if(image?.complete&&image.naturalWidth>0&&art?.style.minHeight&&screen&&!screen.hidden){
+            resolve();
+          }else if(performance.now()-started>10000){
+            reject(new Error("landing hero layout did not settle before image fallback baseline"));
+          }else setTimeout(poll,25);
+        };
+        poll();
+      });
+    }
+    // Let the resulting style changes and ResizeObserver callbacks reach layout.
     await new Promise(resolve=>
       requestAnimationFrame(()=>requestAnimationFrame(resolve)));
   });
