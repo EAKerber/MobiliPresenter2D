@@ -70,7 +70,7 @@ VOID_TAGS = {
 
 
 def sha256(data: bytes) -> str:
-    return hashlib.sha256(data).hexdigest()
+    return hashlib.sha256(data.replace(b"\r\n", b"\n")).hexdigest()
 
 
 def git_blob_sha(data: bytes) -> str:
@@ -141,8 +141,8 @@ def _validated_primary_page_context(
         raise ValueError("source Git blob hash mismatch for " + expected["source"])
     if git_blob_sha(output_bytes) != page.get("outputGitBlobSha"):
         raise ValueError("output Git blob hash mismatch for " + output_path)
-    source_text = source_bytes.decode("utf-8")
-    output_text = output_bytes.decode("utf-8")
+    source_text = source_bytes.decode("utf-8").replace("\r\n", "\n")
+    output_text = output_bytes.decode("utf-8").replace("\r\n", "\n")
     source_map = page.get("sourceMap")
     segments = source_map.get("segments") if isinstance(source_map, dict) else None
     if not isinstance(segments, list):

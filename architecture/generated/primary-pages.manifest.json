@@ -22,14 +22,14 @@
       "route": "/",
       "source": "architecture/pages/root.page.html",
       "output": "app/index.html",
-      "sourceGitBlobSha": "9c0be97c84c0d630c77f29f211adaecd6c786a4a",
-      "outputGitBlobSha": "62231474c525b02eb310d61290555d84208af0ae",
+      "sourceGitBlobSha": "5c92bc0934b2fc7017297a33097da5983203784b",
+      "outputGitBlobSha": "b056993103b8aa4fe75020206fd40c4f84874860",
       "sourceMap": {
         "segments": [
           {
             "output": {
               "start": 0,
-              "end": 1532
+              "end": 1547
             },
             "transform": "copy",
             "origin": {
@@ -37,14 +37,14 @@
               "path": "architecture/pages/root.page.html",
               "range": {
                 "start": 0,
-                "end": 1532
+                "end": 1547
               }
             }
           },
           {
             "output": {
-              "start": 1532,
-              "end": 1603
+              "start": 1547,
+              "end": 1618
             },
             "transform": "copy",
             "origin": {
@@ -58,8 +58,8 @@
           },
           {
             "output": {
-              "start": 1603,
-              "end": 1604
+              "start": 1618,
+              "end": 1619
             },
             "transform": "route-placeholder-substitution",
             "origin": {
@@ -77,8 +77,8 @@
           },
           {
             "output": {
-              "start": 1604,
-              "end": 1906
+              "start": 1619,
+              "end": 1921
             },
             "transform": "copy",
             "origin": {
@@ -92,8 +92,8 @@
           },
           {
             "output": {
-              "start": 1906,
-              "end": 1917
+              "start": 1921,
+              "end": 1932
             },
             "transform": "route-placeholder-substitution",
             "origin": {
@@ -111,8 +111,8 @@
           },
           {
             "output": {
-              "start": 1917,
-              "end": 1918
+              "start": 1932,
+              "end": 1933
             },
             "transform": "copy",
             "origin": {
@@ -126,8 +126,8 @@
           },
           {
             "output": {
-              "start": 1918,
-              "end": 1938
+              "start": 1933,
+              "end": 1953
             },
             "transform": "conditional-attribute-generation",
             "origin": {
@@ -151,8 +151,8 @@
           },
           {
             "output": {
-              "start": 1938,
-              "end": 1961
+              "start": 1953,
+              "end": 1976
             },
             "transform": "copy",
             "origin": {
@@ -166,8 +166,8 @@
           },
           {
             "output": {
-              "start": 1961,
-              "end": 1975
+              "start": 1976,
+              "end": 1990
             },
             "transform": "route-placeholder-substitution",
             "origin": {
@@ -185,8 +185,8 @@
           },
           {
             "output": {
-              "start": 1975,
-              "end": 1976
+              "start": 1990,
+              "end": 1991
             },
             "transform": "copy",
             "origin": {
@@ -200,8 +200,8 @@
           },
           {
             "output": {
-              "start": 1976,
-              "end": 2003
+              "start": 1991,
+              "end": 2018
             },
             "transform": "copy",
             "origin": {
@@ -215,8 +215,8 @@
           },
           {
             "output": {
-              "start": 2003,
-              "end": 2010
+              "start": 2018,
+              "end": 2025
             },
             "transform": "route-placeholder-substitution",
             "origin": {
@@ -234,8 +234,8 @@
           },
           {
             "output": {
-              "start": 2010,
-              "end": 2011
+              "start": 2025,
+              "end": 2026
             },
             "transform": "copy",
             "origin": {
@@ -249,8 +249,8 @@
           },
           {
             "output": {
-              "start": 2011,
-              "end": 2230
+              "start": 2026,
+              "end": 2245
             },
             "transform": "copy",
             "origin": {
@@ -264,8 +264,8 @@
           },
           {
             "output": {
-              "start": 2230,
-              "end": 2249
+              "start": 2245,
+              "end": 2264
             },
             "transform": "conditional-attribute-generation",
             "origin": {
@@ -289,8 +289,8 @@
           },
           {
             "output": {
-              "start": 2249,
-              "end": 2481
+              "start": 2264,
+              "end": 2496
             },
             "transform": "copy",
             "origin": {
@@ -304,16 +304,16 @@
           },
           {
             "output": {
-              "start": 2481,
-              "end": 6060
+              "start": 2496,
+              "end": 7778
             },
             "transform": "copy",
             "origin": {
               "kind": "page",
               "path": "architecture/pages/root.page.html",
               "range": {
-                "start": 1561,
-                "end": 5140
+                "start": 1576,
+                "end": 6858
               }
             }
           }
@@ -601,14 +601,14 @@
       "route": "/how-it-works/",
       "source": "architecture/pages/how-it-works.page.html",
       "output": "app/how-it-works/index.html",
-      "sourceGitBlobSha": "2b8d4407ea9a5afbb0ae6f42c35c16bddd73dd55",
-      "outputGitBlobSha": "1fab091213df862667e898d3bd2439205b929134",
+      "sourceGitBlobSha": "8ca6fc8e7fcf96ad30cfb49c036a3a03bfb55356",
+      "outputGitBlobSha": "9c5ccf607f0cb82d7914093e517e605f93e9d33d",
       "sourceMap": {
         "segments": [
           {
             "output": {
               "start": 0,
-              "end": 1169
+              "end": 1211
             },
             "transform": "copy",
             "origin": {
@@ -616,14 +616,14 @@
               "path": "architecture/pages/how-it-works.page.html",
               "range": {
                 "start": 0,
-                "end": 1169
+                "end": 1211
               }
             }
           },
           {
             "output": {
-              "start": 1169,
-              "end": 1240
+              "start": 1211,
+              "end": 1282
             },
             "transform": "copy",
             "origin": {
@@ -637,8 +637,8 @@
           },
           {
             "output": {
-              "start": 1240,
-              "end": 1243
+              "start": 1282,
+              "end": 1285
             },
             "transform": "route-placeholder-substitution",
             "origin": {
@@ -656,8 +656,8 @@
           },
           {
             "output": {
-              "start": 1243,
-              "end": 1545
+              "start": 1285,
+              "end": 1587
             },
             "transform": "copy",
             "origin": {
@@ -671,8 +671,8 @@
           },
           {
             "output": {
-              "start": 1545,
-              "end": 1558
+              "start": 1587,
+              "end": 1600
             },
             "transform": "route-placeholder-substitution",
             "origin": {
@@ -690,8 +690,8 @@
           },
           {
             "output": {
-              "start": 1558,
-              "end": 1559
+              "start": 1600,
+              "end": 1601
             },
             "transform": "copy",
             "origin": {
@@ -705,8 +705,8 @@
           },
           {
             "output": {
-              "start": 1559,
-              "end": 1582
+              "start": 1601,
+              "end": 1624
             },
             "transform": "copy",
             "origin": {
@@ -720,8 +720,8 @@
           },
           {
             "output": {
-              "start": 1582,
-              "end": 1584
+              "start": 1624,
+              "end": 1626
             },
             "transform": "route-placeholder-substitution",
             "origin": {
@@ -739,8 +739,8 @@
           },
           {
             "output": {
-              "start": 1584,
-              "end": 1585
+              "start": 1626,
+              "end": 1627
             },
             "transform": "copy",
             "origin": {
@@ -754,8 +754,8 @@
           },
           {
             "output": {
-              "start": 1585,
-              "end": 1605
+              "start": 1627,
+              "end": 1647
             },
             "transform": "conditional-attribute-generation",
             "origin": {
@@ -779,8 +779,8 @@
           },
           {
             "output": {
-              "start": 1605,
-              "end": 1632
+              "start": 1647,
+              "end": 1674
             },
             "transform": "copy",
             "origin": {
@@ -794,8 +794,8 @@
           },
           {
             "output": {
-              "start": 1632,
-              "end": 1641
+              "start": 1674,
+              "end": 1683
             },
             "transform": "route-placeholder-substitution",
             "origin": {
@@ -813,8 +813,8 @@
           },
           {
             "output": {
-              "start": 1641,
-              "end": 1642
+              "start": 1683,
+              "end": 1684
             },
             "transform": "copy",
             "origin": {
@@ -828,8 +828,8 @@
           },
           {
             "output": {
-              "start": 1642,
-              "end": 1861
+              "start": 1684,
+              "end": 1903
             },
             "transform": "copy",
             "origin": {
@@ -843,8 +843,8 @@
           },
           {
             "output": {
-              "start": 1861,
-              "end": 1880
+              "start": 1903,
+              "end": 1922
             },
             "transform": "conditional-attribute-generation",
             "origin": {
@@ -868,8 +868,8 @@
           },
           {
             "output": {
-              "start": 1880,
-              "end": 2112
+              "start": 1922,
+              "end": 2154
             },
             "transform": "copy",
             "origin": {
@@ -883,16 +883,16 @@
           },
           {
             "output": {
-              "start": 2112,
-              "end": 32020
+              "start": 2154,
+              "end": 32642
             },
             "transform": "copy",
             "origin": {
               "kind": "page",
               "path": "architecture/pages/how-it-works.page.html",
               "range": {
-                "start": 1198,
-                "end": 31106
+                "start": 1240,
+                "end": 31728
               }
             }
           }

@@ -1,16 +1,16 @@
 # ARC-13 — inventário renovado no buffer de desenvolvimento
 
-Snapshot de entrada: Product `development@4850149342d013314635f4fa12b0599562d432b9`, após ARC-13 e NAV-005. A regeneração usa os 66 arquivos-fonte inventariados nesta árvore, as ferramentas ARC-13 fixadas em Acorn 8.19.0 e o compilador de páginas com mapa de proveniência incorporado.
+Snapshot de entrada: Product `development@44c7cb6495540e4038717b26fb2b1e96b02571f4`, após ARC-13 e NAV-005. Este candidato aplica às fontes autorais os ajustes já aprovados do hero/vídeo e dos cards de comparação; o compilador de desenvolvimento continua preservado. A regeneração usa os 66 arquivos-fonte inventariados, Acorn 8.19.0 fixado e o compilador de páginas com mapa de proveniência.
 
 ## Resultado técnico
 
-- Inventário: `architecture/arc13/ui-text-candidates.json`, SHA-256 `15d3cfd9d4d9c56aa85fd0cc8c13c405318735310137db5ace96b7dea4055368`.
+- Inventário: `architecture/arc13/ui-text-candidates.json`, SHA-256 `83e5148ae2dea4da1a0db4d23646f4083a9ad9b16323068cc2d4ffb6d28d4468`.
 - Manifesto ARC-03C: schema v2; compilador `scripts/compile-primary-pages.mjs`, Git blob `f417285ae4b69828f2995cdd5fe4a1cc32c93615`.
 - `pages:check` passou nas três páginas principais. As saídas compiladas coincidem com as três páginas já versionadas no snapshot-base.
 - Duas execuções idênticas produziram o mesmo SHA-256 do inventário.
-- As fontes HTML e JavaScript são analisadas com quebras de linha LF canônicas; isso mantém offsets ARC-03C e valores extraídos alinhados quando o checkout usa CRLF.
-- A análise encontrou 600 ocorrências HTML e 412 pontos de escrita JavaScript: 1.012 ocorrências candidatas, todas ainda `candidate-unreviewed`.
-- Não houve erros de parsing nem fontes ignoradas. As 411 ocorrências das três páginas principais têm proveniência autoral validada; nenhuma ficou sem mapeamento. As demais ocorrências HTML fora dessas páginas permanecem no escopo normal do scanner.
+- As fontes HTML/JavaScript e o texto validado do mapa ARC-03C são normalizados para LF antes da análise e do hash textual; o checkout CRLF conserva a mesma proveniência e o mesmo recibo.
+- A análise encontrou 609 ocorrências HTML e 417 pontos de escrita JavaScript: 1.026 ocorrências candidatas, todas ainda `candidate-unreviewed`.
+- Não houve erros de parsing nem fontes ignoradas. As 420 ocorrências das três páginas principais têm proveniência autoral validada; nenhuma ficou sem mapeamento. As demais ocorrências HTML fora dessas páginas permanecem no escopo normal do scanner.
 - A atribuição técnica de rota e o mapeamento de fontes não definem owner editorial, texto aprovado, chave de catálogo ou autorização para extração.
 
 ## Julgamento funcional mantido em aberto

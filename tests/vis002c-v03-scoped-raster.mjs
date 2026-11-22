@@ -82,6 +82,14 @@ for (const [browserName, engine] of [["chromium", chromium], ["webkit", webkit]]
         assert.equal(response?.status(), 200, label + " HTTP error");
         assert.equal(await page.locator("html").getAttribute("data-theme"), "light");
         await ready(page, route);
+        if (browserName === "webkit") {
+          // Prime WebKit's full-page capture before recording document geometry.
+          await page.screenshot({fullPage: true, animations: "disabled", caret: "hide"});
+          await page.evaluate(() => new Promise(done => requestAnimationFrame(() =>
+            requestAnimationFrame(done))));
+          await page.evaluate(() => window.scrollTo(0, 0));
+          await page.waitForFunction(() => window.scrollY === 0);
+        }
         const approved = await page.evaluate(sample, selectors);
         expectTargetColor(approved, "rgb(41, 39, 35)", label + " approved");
         assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth),
@@ -101,6 +109,10 @@ for (const [browserName, engine] of [["chromium", chromium], ["webkit", webkit]]
           fullPage: true, animations: "disabled", caret: "hide"
         }));
         await injected.evaluate(element => element.remove());
+        // WebKit may leave the viewport scrolled after a full-page capture.
+        // Restore the document origin before comparing document-space geometry.
+        await page.evaluate(() => window.scrollTo(0, 0));
+        await page.waitForFunction(() => window.scrollY === 0);
         await page.evaluate(() => new Promise(done => requestAnimationFrame(() =>
           requestAnimationFrame(done))));
         const afterState = await page.evaluate(sample, selectors);
