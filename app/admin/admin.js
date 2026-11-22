@@ -872,37 +872,61 @@ function renderFinishes() {
     const enabled = document.createElement("input");
     enabled.type = "checkbox";
     enabled.checked = finish.enabled;
-    enabled.disabled = finish.scope === "global" && finish.enabled && globalOptions === 1;
+    const onlyGlobalFinish = finish.scope === "global" && finish.enabled && globalOptions === 1;
+    const globalPolicyId = `finish-policy-${finish.id}`;
+    enabled.disabled = onlyGlobalFinish;
     enabled.dataset.finishEnabled = finish.id;
+    enabled.setAttribute("aria-label", `${source.label}: disponível para clientes`);
+    if (onlyGlobalFinish) enabled.setAttribute("aria-describedby", globalPolicyId);
     active.append(enabled, document.createTextNode("Disponível para clientes"));
     const scopeLabel = document.createElement("label");
     scopeLabel.className = "data-field";
     scopeLabel.append(document.createTextNode("Aplicação"));
     const scope = document.createElement("select");
     scope.dataset.finishScope = finish.id;
+    scope.setAttribute("aria-label", `${source.label}: aplicação`);
     [["global", "Global · conjunto todo"], ["local", "Local · módulo individual"]].forEach(([value, label]) => {
       const option = document.createElement("option"); option.value = value; option.textContent = label;
       option.disabled = value === "local" && finish.enabled && finish.scope === "global" && globalOptions === 1;
       scope.append(option);
     });
+    if (scope.querySelector('option[value="local"]')?.disabled) scope.setAttribute("aria-describedby", globalPolicyId);
     scope.value = finish.scope;
     scopeLabel.append(scope);
     card.append(swatch, heading, active, scopeLabel);
+    if (onlyGlobalFinish) {
+      const policyNote = document.createElement("p");
+      policyNote.className = "admin-note finish-admin-card__policy-note";
+      policyNote.id = globalPolicyId;
+      policyNote.textContent = "Mantenha pelo menos um acabamento global disponível para clientes.";
+      card.append(policyNote);
+    }
     if (finish.scope === "local") {
       const modules = document.createElement("div");
       modules.className = "finish-module-options";
       modules.setAttribute("aria-label", `Módulos que aceitam ${source.label}`);
+      const onlyModuleId = finish.moduleIds.length === 1 ? finish.moduleIds[0] : null;
+      const modulePolicyId = `finish-module-policy-${finish.id}`;
       catalog.modules.forEach((module) => {
         const label = document.createElement("label");
         const input = document.createElement("input");
         input.type = "checkbox";
         input.checked = finish.moduleIds.includes(module.entityId);
-        input.disabled = input.checked && finish.moduleIds.length === 1;
+        input.disabled = input.checked && module.entityId === onlyModuleId;
         input.dataset.finishModule = `${finish.id}:${module.entityId}`;
+        input.setAttribute("aria-label", `${source.label}: disponível para o módulo ${module.referenceLabel}`);
+        if (input.disabled) input.setAttribute("aria-describedby", modulePolicyId);
         label.append(input, document.createTextNode(module.referenceLabel));
         modules.append(label);
       });
       card.append(modules);
+      if (onlyModuleId) {
+        const policyNote = document.createElement("p");
+        policyNote.className = "admin-note finish-admin-card__policy-note";
+        policyNote.id = modulePolicyId;
+        policyNote.textContent = "Mantenha este acabamento associado a pelo menos um módulo.";
+        card.append(policyNote);
+      }
     }
     finishesList.append(card);
   });
