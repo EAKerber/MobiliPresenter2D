@@ -832,12 +832,15 @@ function renderObjectAssets(id, label) {
   const heading = document.createElement("h2"); heading.textContent = `${label} · arquivos da cena`;
   card.append(heading);
   const hasSceneEntity = scene.entities.some((entity) => entity.id === id);
+  const noteId = `object-asset-policy-${id}`;
   [["imageAsset", "Imagem da cena", assetChoices("imageAsset")], ["detailImageAsset", "Imagem dos detalhes", assetChoices("imageAsset")], ["maskAsset", "Máscara de acabamento", assetChoices("maskAsset")]].forEach(([field, title, choices]) => {
     const labelNode = document.createElement("label"); labelNode.className = "data-field"; labelNode.append(document.createTextNode(title));
     const select = document.createElement("select"); select.dataset.objectAsset = field;
     const empty = document.createElement("option"); empty.value = ""; empty.textContent = "Usar o padrão / sem máscara"; select.append(empty);
     choices.forEach((path) => { const option = document.createElement("option"); option.value = path; option.textContent = path; select.append(option); });
-    select.value = assets[field] || ""; select.disabled = !hasSceneEntity; labelNode.append(select);
+    select.value = assets[field] || ""; select.disabled = !hasSceneEntity;
+    if (select.disabled) select.setAttribute("aria-describedby", noteId);
+    labelNode.append(select);
     const previewPath = assets[field] || (field !== "maskAsset" ? scene.entities.find((entity) => entity.id === id)?.asset || "" : "");
     const preview = document.createElement("div"); preview.className = `asset-preview${field === "maskAsset" ? " asset-preview--mask" : ""}`;
     if (previewPath) {
@@ -846,7 +849,8 @@ function renderObjectAssets(id, label) {
     } else { const empty = document.createElement("span"); empty.textContent = "Sem máscara · usar o recorte padrão"; preview.append(empty); }
     labelNode.append(preview); card.append(labelNode);
   });
-  const note = document.createElement("p"); note.className = "admin-note"; note.textContent = hasSceneEntity ? "A lista contém apenas arquivos já presentes na cena. O painel não carrega arquivos novos nem permite caminhos externos." : "Este item não possui camada visual própria na cena. Configure cores e texturas na biblioteca de materiais.";
+  const note = document.createElement("p"); note.className = "admin-note"; note.id = noteId;
+  note.textContent = hasSceneEntity ? "A lista contém apenas arquivos já presentes na cena. O painel não carrega arquivos novos nem permite caminhos externos." : "Este item não possui camada visual própria na cena. Configure cores e texturas na biblioteca de materiais.";
   card.append(note); objectAssetsList.append(card);
 }
 
