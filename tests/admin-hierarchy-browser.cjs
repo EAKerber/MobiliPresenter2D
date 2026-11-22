@@ -166,6 +166,7 @@ async function sectionItemIds(page, stageId, groupId, sectionId) {
   assert.equal(await initialEntity.locator("xpath=..").getAttribute("class"), "initial-state-option", "initial state keeps its own presentation label");
   assert.equal(await stageAvailability.getAttribute("type"), "checkbox", "stage availability remains a native checkbox");
   assert.equal(await stageAvailability.locator("xpath=..").getAttribute("class"), "switch", "stage availability keeps its switch presentation");
+  assert.match(await initialEntity.getAttribute("aria-label"), /visível inicialmente no configurador/, "module accessible text names configurator visibility");
   assert.match(await page.locator('[data-initial-viewer-entity="module-01"]').getAttribute("aria-label"), /visível inicialmente no viewer/, "viewer initial-state text names the public viewer policy");
   assert.match(await page.locator('[data-initial-service]').first().getAttribute("aria-label"), /ativo inicialmente/, "initial service state remains a separate active-by-default preference");
   assert.match(await stageAvailability.getAttribute("aria-label"), /^Ativar etapa /, "stage text describes whether the step is available");
@@ -355,11 +356,18 @@ async function sectionItemIds(page, stageId, groupId, sectionId) {
 
   await page.reload({ waitUntil: "networkidle" });
   await page.waitForSelector('[data-stage-label="finishes"]');
+  await page.locator('[data-admin-tab="stages"]').click();
+  await page.waitForSelector('[data-admin-panel="stages"]:not([hidden])');
+  const initialModule = page.locator('[data-initial-configurator-entity="module-01"]');
+  const initialModuleBeforeSave = await initialModule.isChecked();
+  await initialModule.setChecked(!initialModuleBeforeSave);
+  assert.equal(putCount, 0, "initial configurator visibility remains an unsaved editor preference");
   await page.locator('[data-stage-label="finishes"]').fill("Acabamentos teste");
   await page.locator("#saveButton").click();
   await page.waitForFunction(() => document.getElementById("saveMessage").textContent.includes("Configuração compatível publicada"));
   assert.equal(putCount, 1, "legacy-equivalent edit performs one production-compatible PUT");
   assert.equal(lastPut.schemaVersion, "ConfiguratorAdministration2D 3.0", "admin never sends v5 to the current production endpoint");
+  assert.equal(lastPut.initialState.entities["module-01"], !initialModuleBeforeSave, "explicit save publishes configurator visibility independently from viewer visibility");
   assert.equal(lastPut.stages.find((stage) => stage.id === "finishes").label, "Acabamentos teste", "representable stage edit survives safe v5 -> v3 projection");
   assert.equal(lastPut.materials.find((material) => material.id === "stone-existing").color, null, "explicit null material color survives safe admin save projection");
   assert.deepEqual(
@@ -367,6 +375,14 @@ async function sectionItemIds(page, stageId, groupId, sectionId) {
     ["move-stone", "tempered-glass", "lighting-08"],
     "unrelated compatible save preserves the original v3 service item order"
   );
+
+  await page.reload({ waitUntil: "networkidle" });
+  await page.waitForSelector('[data-admin-panel="stages"]');
+  await page.locator('[data-admin-tab="stages"]').click();
+  await page.waitForSelector('[data-admin-panel="stages"]:not([hidden])');
+  assert.equal(await page.locator('[data-initial-configurator-entity="module-01"]').isChecked(), !initialModuleBeforeSave, "reloaded Admin reads back the saved configurator visibility");
+  assert.equal(current.initialState.entities["module-01"], !initialModuleBeforeSave, "mocked published state retains the explicit configurator visibility write");
+  assert.equal(putCount, 1, "readback reload performs no additional write");
 
   await page.screenshot({ path: path.join(reviewDir, "admin-hierarchy.png"), fullPage: true });
   fs.writeFileSync(path.join(reviewDir, "result.json"), JSON.stringify({
