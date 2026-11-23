@@ -1,0 +1,33 @@
+{
+  "schemaVersion": "BranchHygieneBatch 0.1",
+  "repository": "EAKerber/MobiliPresenter2D",
+  "auditOnly": true,
+  "wave": "P-DEV-HYG-AUDIT-W1-20261123",
+  "purpose": "AUDIT ONLY. Do not retire branches. PRs 301-303 integrated by squash to development; explicit exact-SHA proof required.",
+  "branches": [
+    {
+      "branch": "codex/cmp017-admin-control-contract-20261122",
+      "sha": "0795860799976903b59c04ef23c6b49f4ea2afa6",
+      "squashMerge": {
+        "pullRequest": 301,
+        "mergeCommit": "e977bb87691e0bc839097fb9a6c92c1bdc4fa1e3"
+      }
+    },
+    {
+      "branch": "codex/cmp017-finish-availability-20261122",
+      "sha": "6d96342250ac34dc2a945b6794e5a09c67e0cdc7",
+      "squashMerge": {
+        "pullRequest": 302,
+        "mergeCommit": "f640f9018e6bc36cbf4ca79313a6576080e9ded4"
+      }
+    },
+    {
+      "branch": "codex/cmp017-price-publication-reason-20261122",
+      "sha": "21a8ae4492ef4f495d120c60d71a1c71e12aa9bf",
+      "squashMerge": {
+        "pullRequest": 303,
+        "mergeCommit": "1188e6e4f355aa4b2a4ab442b02388c8135390cf"
+      }
+    }
+  ]
+}

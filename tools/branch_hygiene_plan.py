@@ -126,7 +126,10 @@ def select_bounded_batch(plan: dict[str, Any], batch: dict[str, Any]) -> list[di
 
     if batch.get("schemaVersion") != "BranchHygieneBatch 0.1":
         raise ValueError("BATCH_SCHEMA_MISMATCH")
-    if batch.get("repository") != plan.get("repository") or plan.get("controlBranch") != "main":
+    if (batch.get("repository") != plan.get("repository")
+            or plan.get("controlBranch") not in {"main", "development"}
+            or (plan.get("controlBranch") == "development"
+                and batch.get("auditOnly") is not True)):
         raise ValueError("BATCH_REPOSITORY_MISMATCH")
     entries = batch.get("branches")
     if not isinstance(entries, list) or not 1 <= len(entries) <= 3:
@@ -141,7 +144,7 @@ def select_bounded_batch(plan: dict[str, Any], batch: dict[str, Any]) -> list[di
         if not isinstance(ref, dict):
             raise ValueError("BATCH_ENTRY_NOT_OBJECT")
         name, sha = ref.get("branch"), ref.get("sha")
-        if (not isinstance(name, str) or name in seen or name == "main"
+        if (not isinstance(name, str) or name in seen or name in {"main", "development"}
                 or not re.fullmatch(r"[a-zA-Z0-9._/-]+", name)
                 or ".." in name or "//" in name or name.startswith("-")
                 or not isinstance(sha, str) or not re.fullmatch("[0-9a-f]{40}", sha)):

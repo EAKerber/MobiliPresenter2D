@@ -31,7 +31,7 @@ def remote_refs() -> dict[str, str]:
 
 
 def verify_squash_merge(repository: str, token: str, entry: dict,
-                        control_sha: str) -> dict | None:
+                        control_sha: str, control_branch: str = "main") -> dict | None:
     """Verify an opt-in squash proof against real PR metadata and Git objects.
 
     Both the original head and the already-merged commit must resolve to the
@@ -49,19 +49,19 @@ def verify_squash_merge(repository: str, token: str, entry: dict,
             or pr.get("merge_commit_sha") != merge_sha
             or pr_head.get("ref") != name or pr_head.get("sha") != head_sha
             or (pr_head.get("repo") or {}).get("full_name") != repository
-            or pr_base.get("ref") != "main"
+            or pr_base.get("ref") != control_branch
             or (pr_base.get("repo") or {}).get("full_name") != repository):
         raise RuntimeError("SQUASH_PR_IDENTITY_MISMATCH:" + name)
 
     # A real squash merge has exactly one parent. Its resulting tree must be
-    # identical to the PR head; the merge and its base must belong to main.
+    # identical to the PR head; the merge and its base must belong to the control branch.
     merge_parents = subprocess.run(
         ["git", "rev-list", "--parents", "-n", "1", merge_sha],
         text=True, capture_output=True, check=True,
     ).stdout.strip().split()
     if len(merge_parents) != 2 or merge_parents[0] != merge_sha:
         raise RuntimeError("SQUASH_NOT_SINGLE_PARENT:" + name)
-    merged_into_main = subprocess.run(
+    merged_into_control = subprocess.run(
         ["git", "merge-base", "--is-ancestor", merge_sha, control_sha],
         check=False,
     ).returncode == 0
@@ -69,7 +69,7 @@ def verify_squash_merge(repository: str, token: str, entry: dict,
         ["git", "merge-base", "--is-ancestor", merge_parents[1], head_sha],
         check=False,
     ).returncode == 0
-    if not merged_into_main or not original_base_present:
+    if not merged_into_control or not original_base_present:
         raise RuntimeError("SQUASH_ANCESTRY_MISMATCH:" + name)
 
     def tree(sha: str) -> str:
@@ -92,7 +92,8 @@ def verify_squash_merge(repository: str, token: str, entry: dict,
     return {
         "branch": name, "sha": head_sha, "pullRequest": pr_number,
         "mergeCommit": merge_sha, "treeSha": original_tree,
-        "controlSha": control_sha, "proof": "SQUASH_TREE_IDENTICAL",
+        "controlSha": control_sha, "controlBranch": control_branch,
+        "proof": "SQUASH_TREE_IDENTICAL",
     }
 
 
@@ -107,6 +108,9 @@ def apply(plan_path: Path, dispositions_path: Path, expected_plan: str,
     supplied = load_json(plan_path)
     if supplied.get("planHash") != expected_plan:
         raise RuntimeError("EXPECTED_PLAN_MISMATCH")
+    # Audit-only for development. Main-targeted deletion remains the sole write path.
+    if not audit_only and supplied.get("controlBranch") != "main":
+        raise RuntimeError("NON_MAIN_APPLY_DISABLED")
 
     dispositions = load_json(dispositions_path)
     fresh = observe(repository, supplied["controlBranch"], token)
@@ -120,7 +124,7 @@ def apply(plan_path: Path, dispositions_path: Path, expected_plan: str,
 
     squash_proofs = [
         result for item in selected
-        if (result := verify_squash_merge(repository, token, item, fresh_plan["controlSha"])) is not None
+        if (result := verify_squash_merge(repository, token, item, fresh_plan["controlSha"], fresh_plan["controlBranch"])) is not None
     ]
 
     if not audit_only:
@@ -187,7 +191,7 @@ def apply(plan_path: Path, dispositions_path: Path, expected_plan: str,
         if remote_refs() != expected_inventory or expected_inventory.get(branch) != sha:
             raise RuntimeError("REF_DRIFT_BEFORE_DELETE:" + branch)
         # Recheck PR identity and exact tree *immediately* before mutation.
-        verify_squash_merge(repository, token, entry, fresh_plan["controlSha"])
+        verify_squash_merge(repository, token, entry, fresh_plan["controlSha"], fresh_plan["controlBranch"])
 
         subprocess.run([
             "git", "push", f"--force-with-lease=refs/heads/{branch}:{sha}",
