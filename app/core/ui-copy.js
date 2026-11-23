@@ -40,6 +40,12 @@
         empty: "Nenhum módulo está visível no viewer neste momento.",
         loading: "Carregando informações publicadas…",
         unavailable: "Informações temporariamente indisponíveis. Tente novamente mais tarde."
+      }),
+      views: Object.freeze({
+        show: "Mostrar vista {index}",
+        previous: "Vista anterior",
+        counter: "{current} / {total}",
+        next: "Próxima vista"
       })
     }),
     theme: Object.freeze({

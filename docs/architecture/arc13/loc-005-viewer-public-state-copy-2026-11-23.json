@@ -3,7 +3,7 @@
   "plan": "MobiliPresenter2D Plano Diretor v0.9",
   "workItem": "LOC-005",
   "family": "viewer-public-state-messages",
-  "status": "candidate-implemented",
+  "status": "integrated-development",
   "scope": {
     "routes": ["/viewer/"],
     "behaviorChanged": false,
@@ -100,6 +100,7 @@
   },
   "evidence": {
     "baseDevelopmentSha": "506d54ee29c2a887017a471877e9332038da4552",
+    "developmentIntegrationSha": "a7e999f82a14f9f3d4e82eaae6e0982924ccc956",
     "inventoryPath": "architecture/arc13/ui-text-candidates.json",
     "inventorySha256": "8FCB6962D61098841718A0E5E064C0A665DC65BF4159661415D6B71B389B26EB",
     "manifestPath": "architecture/generated/primary-pages.manifest.json",
