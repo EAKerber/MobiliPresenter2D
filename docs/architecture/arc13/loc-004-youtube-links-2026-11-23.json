@@ -1,0 +1,88 @@
+{
+  "schema": "ARC13LOC004Extraction/1",
+  "plan": "MobiliPresenter2D Plano Diretor v0.9",
+  "workItem": "LOC-004",
+  "family": "youtube-links-public-pages",
+  "status": "candidate-implemented",
+  "decision": {
+    "visibleText": "Assistir no YouTube ↗",
+    "destination": "https://www.youtube.com/shorts/hgcJ1k7lFkE",
+    "opensInNewTab": true,
+    "rel": "noopener noreferrer",
+    "classification": "ui-static",
+    "subsystemOwner": "public-video",
+    "contentOwner": "User; explicitly requested that the YouTube viewing option remain available",
+    "authority": "User request that YouTube viewing options may remain on the public video pages; exact visible wording and link behavior were revalidated on the current development source.",
+    "catalogKey": "video.youtubeLink"
+  },
+  "evidence": {
+    "baseRevision": "880d0b1fb3df0d56392c15ef9a6181150c99e898",
+    "targetBranch": "development",
+    "inventoryPath": "architecture/arc13/ui-text-candidates.json",
+    "previousInventorySha256": "88BB81BFCCD72DE6169DE07DC49678ADBB1DCCC34369B29E4BB943B822E45E2B",
+    "inventorySha256": "5E88016640FC7C364516C4879C24451DC17B4DA8BAFC1E09AB2B2CE39BC5B5D7",
+    "candidates": [
+      {
+        "candidateId": "0c5db734ff22f8ae",
+        "route": "/",
+        "publishedSource": "app/index.html",
+        "publishedLine": 35,
+        "publishedSourceSha256": "902e52094549f7d6f8df34f994509ed0d0e5f5890ef3d6ad912472139433b50c",
+        "authoringSource": "architecture/pages/root.page.html",
+        "authoringSourceLine": 35,
+        "authoringMap": {
+          "kind": "catalog-key",
+          "pointer": "/video/youtubeLink",
+          "templateRange": {
+            "start": 2578,
+            "end": 2604
+          }
+        }
+      },
+      {
+        "candidateId": "fd1f949711a96aa9",
+        "route": "/how-it-works/",
+        "publishedSource": "app/how-it-works/index.html",
+        "publishedLine": 39,
+        "publishedSourceSha256": "cb864b230cde3cacab331f9e33ff020c1fc9353911cb8e416bbebafa75e7cc9b",
+        "authoringSource": "architecture/pages/how-it-works.page.html",
+        "authoringSourceLine": 39,
+        "authoringMap": {
+          "kind": "catalog-key",
+          "pointer": "/video/youtubeLink",
+          "templateRange": {
+            "start": 2636,
+            "end": 2662
+          }
+        }
+      }
+    ],
+    "catalog": "app/core/ui-copy.js",
+    "catalogPointer": "/video/youtubeLink",
+    "compiler": "scripts/compile-primary-pages.mjs",
+    "inventoryValidator": "tools/arc13/scan-ui-inventory.py",
+    "manifest": "architecture/generated/primary-pages.manifest.json",
+    "manifestSha256": "2E570D353035A7E4884F357F657196A192C41F2E7BAF3E9BDF296F5C86F7DB53"
+  },
+  "implementation": {
+    "htmlRemainsStatic": true,
+    "requiresJavaScriptForText": false,
+    "destinationUnchanged": true,
+    "newTabAndRelUnchanged": true,
+    "generatedPagesChangedVisibly": false,
+    "copySourceIsCatalog": true,
+    "inventoryStatusChanged": false
+  },
+  "validation": {
+    "arc03cSourceAuthority": "passed 6/6",
+    "pagesCheck": "passed",
+    "inventoryGeneration": "two identical runs; 67 sources; 0 parse errors; 420 primary occurrences mapped; 0 unresolved; 1043 global candidates remain unreviewed",
+    "publishedHtml": "app/index.html and app/how-it-works/index.html remain byte-for-byte unchanged",
+    "gitDiffCheck": "passed"
+  },
+  "limits": [
+    "The receipt carries forward only the two current public YouTube link labels; it does not classify other YouTube copy, titles, transcript text, or controls.",
+    "The global inventory remains unreviewed and its candidate count/statuses are unchanged.",
+    "No Deploy Preview, production publication, or main promotion is included."
+  ]
+}
