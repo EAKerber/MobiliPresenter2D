@@ -70,6 +70,12 @@ async function main() {
       const heading = page.locator("#block-overview .overview-title");
       await heading.waitFor({ timeout: 12000 });
       assert.match(await heading.textContent(), /Inferior da pia/);
+      const selectedModule = publicFixture.modules.find((module) => module.id === "module-03");
+      assert(selectedModule, "the selected Viewer module fixture exists");
+      const sceneSelection = page.locator("#sceneSelection");
+      assert.equal(await sceneSelection.textContent(), uiCopy.viewer.scene.selected
+        .replace("{number}", String(selectedModule.number))
+        .replace("{title}", String(selectedModule.title)));
       const viewDots = page.locator("#block-views .mobile-view-nav button");
       const viewCount = await viewDots.count();
       const viewCounter = page.locator("#block-views .view-counter");
@@ -127,6 +133,10 @@ async function main() {
     releaseMissingCatalogProjection();
     await missingCatalogViewer.waitForLoadState("networkidle");
     await missingCatalogViewer.locator("#block-overview .overview-title").waitFor({ timeout: 12000 });
+    const fallbackSelectedModule = publicFixture.modules[0];
+    assert.equal(await missingCatalogViewer.locator("#sceneSelection").textContent(),
+      `Selecionado: ${fallbackSelectedModule.number} · ${fallbackSelectedModule.title}`,
+      "Viewer scene selection caption keeps its local copy fallback without the catalog");
     assert.equal(await missingCatalogViewer.locator("[data-view-previous]").getAttribute("aria-label"), "Vista anterior");
     assert.equal(await missingCatalogViewer.locator("[data-view-next]").getAttribute("aria-label"), "Próxima vista");
     assert.equal(await missingCatalogViewer.locator("#block-views .mobile-view-nav button").first().getAttribute("aria-label"), "Mostrar vista 1");
