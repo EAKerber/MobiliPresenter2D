@@ -402,7 +402,7 @@
         "/how-it-works/",
         "/viewer/"
       ],
-      "sourceSha256": "bea7089681f774672238ee6fa773a6ea9a15d2b4452be869beb2c04b10322095"
+      "sourceSha256": "c7e2235b46ca9b3a78a5e6ea5bad06b8fdf41b20747e96978cc07c77b2b4a456"
     },
     {
       "source": "app/how-it-works/index.html",
@@ -16240,7 +16240,7 @@
         "/how-it-works/",
         "/viewer/"
       ],
-      "sourceSha256": "bea7089681f774672238ee6fa773a6ea9a15d2b4452be869beb2c04b10322095",
+      "sourceSha256": "c7e2235b46ca9b3a78a5e6ea5bad06b8fdf41b20747e96978cc07c77b2b4a456",
       "id": "7e0ddb16b4946155"
     },
     {
@@ -16269,7 +16269,7 @@
         "/how-it-works/",
         "/viewer/"
       ],
-      "sourceSha256": "bea7089681f774672238ee6fa773a6ea9a15d2b4452be869beb2c04b10322095",
+      "sourceSha256": "c7e2235b46ca9b3a78a5e6ea5bad06b8fdf41b20747e96978cc07c77b2b4a456",
       "id": "acc7e11a9ff755f3"
     },
     {
@@ -16298,7 +16298,7 @@
         "/how-it-works/",
         "/viewer/"
       ],
-      "sourceSha256": "bea7089681f774672238ee6fa773a6ea9a15d2b4452be869beb2c04b10322095",
+      "sourceSha256": "c7e2235b46ca9b3a78a5e6ea5bad06b8fdf41b20747e96978cc07c77b2b4a456",
       "id": "869573d83b1fae35"
     },
     {
@@ -16327,7 +16327,7 @@
         "/how-it-works/",
         "/viewer/"
       ],
-      "sourceSha256": "bea7089681f774672238ee6fa773a6ea9a15d2b4452be869beb2c04b10322095",
+      "sourceSha256": "c7e2235b46ca9b3a78a5e6ea5bad06b8fdf41b20747e96978cc07c77b2b4a456",
       "id": "295d517f064a63eb"
     },
     {
@@ -46355,7 +46355,7 @@
     },
     {
       "path": "app/core/ui-theme.js",
-      "sha256": "bea7089681f774672238ee6fa773a6ea9a15d2b4452be869beb2c04b10322095"
+      "sha256": "c7e2235b46ca9b3a78a5e6ea5bad06b8fdf41b20747e96978cc07c77b2b4a456"
     },
     {
       "path": "app/core/v5-normal-save.js",

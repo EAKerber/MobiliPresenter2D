@@ -1,6 +1,6 @@
 # LOC-004 — acessibilidade da marca no cabeçalho público
 
-**Estado:** implementação local validada, pronta para PR em `development`; a família de navegação foi integrada em #308.
+**Estado:** integrada em `development` pela #309 (`2083aac`); a família de navegação foi integrada em #308. `main` permaneceu inalterada.
 
 ## Escopo e autoria
 
@@ -13,10 +13,10 @@ Owner registrado: **Product/UX e marca**. Os valores aprovados foram mantidos pa
 - O compilador e o scanner registram e validam as chaves de catálogo e seus hashes, além do placeholder de origem.
 - Valores continuam escapados para HTML, não vazios e sob schema/locale validados.
 - O teste ARC-03C (6/6) cobre os valores e proveniência das duas mensagens, escaping, rejeições fail-closed e carregamento único do catálogo; o contrato de tema e `pages:check` também passam.
-- O scanner completo passa com zero erros de parse e zero ocorrências primárias sem autoria resolvida. Duas execuções geraram o mesmo inventário, SHA-256 `1305D35F077F798E2CA349343C7E0498A5F3BAB10DA3B734EE0485BF459EE008`.
+- O scanner completo passa com zero erros de parse e zero ocorrências primárias sem autoria resolvida. Duas execuções geraram o mesmo inventário, SHA-256 `8E7393F891F72F12D57677E8B16F6297740BA8743C7BAC8FE46D4A9D97971F9C`; este snapshot também reflete a alteração de fonte do seletor de tema atualmente em revisão na #310.
 - O inventário associa seis ocorrências aos dois ponteiros; o recibo `architecture/arc13/loc-004-public-header-brand.json` mantém a linhagem desse grupo.
 - As três páginas geradas permanecem byte a byte idênticas à base de `development`; a semântica DOM e o layout continuam iguais.
 
 ## Próximo passo
 
-Concluir gates e revisão da PR desta família em `development`. A família de navegação do cabeçalho já está integrada em #308; `main` permanece fora deste pacote.
+Continuar a revisão de LOC-002 por função e consumer. A classificação do inventário continua separada da extração e não agrupa rótulos parecidos quando controlam decisões diferentes.
