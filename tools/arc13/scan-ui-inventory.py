@@ -38,10 +38,14 @@ PRIMARY_PAGES = {
 }
 PRIMARY_PAGE_COPY_KEYS = {
     "architecture/pages/root.page.html": {
+        "copy.actions.exploreEnvironments",
         "copy.home.hero.aboutLink",
         "copy.video.youtubeLink",
     },
-    "architecture/pages/about.page.html": {"copy.footer.homeLink"},
+    "architecture/pages/about.page.html": {
+        "copy.actions.exploreEnvironments",
+        "copy.footer.homeLink",
+    },
     "architecture/pages/how-it-works.page.html": {
         "copy.video.youtubeLink",
         "copy.footer.homeLink",
@@ -409,9 +413,14 @@ def authoring_at_offset(context: dict, offset: int | None, end_offset: int | Non
             if segment["output"]["start"] <= offset
             and end_offset <= segment["output"]["end"]
         ]
-    if len(matches) != 1:
-        return {"status": "unresolved", "reason": "sink-crosses-source-map-segments-or-gap"}
-    segment = matches[0]
+    composed_whitespace = None
+    if len(matches) == 1:
+        segment = matches[0]
+    else:
+        composed = _catalog_key_with_template_whitespace(context, offset, end_offset)
+        if composed is None:
+            return {"status": "unresolved", "reason": "sink-crosses-source-map-segments-or-gap"}
+        segment, composed_whitespace = composed
     origin = dict(segment["origin"])
     result = {
         "status": "mapped",
@@ -424,6 +433,9 @@ def authoring_at_offset(context: dict, offset: int | None, end_offset: int | Non
             "offsetUnit": "unicode-codepoints",
         },
     }
+    if composed_whitespace is not None:
+        result["transform"] = "catalog-key-substitution-plus-template-whitespace"
+        result["evidence"]["templateWhitespaceSuffix"] = composed_whitespace
     if origin["kind"] in {"page", "shared-fragment"}:
         source_offset = origin["range"]["start"] + offset - segment["output"]["start"]
         line, column = offset_location(context["texts"][origin["path"]], source_offset)
@@ -443,6 +455,60 @@ def authoring_at_offset(context: dict, offset: int | None, end_offset: int | Non
         result["origin"].update({"rule": origin["rule"], "inputs": origin["inputs"]})
         result["template"] = origin["template"]
     return result
+
+
+def _catalog_key_with_template_whitespace(context: dict, offset: int, end_offset: int):
+    """Map a static text sink made of one catalog value plus copied template whitespace."""
+    overlapping = sorted(
+        (
+            segment for segment in context["segments"]
+            if segment["output"]["start"] < end_offset
+            and offset < segment["output"]["end"]
+        ),
+        key=lambda segment: segment["output"]["start"],
+    )
+    if len(overlapping) < 2 or overlapping[0]["output"]["start"] != offset:
+        return None
+    first = overlapping[0]
+    first_origin = first.get("origin", {})
+    if first_origin.get("kind") != "catalog-key" or first.get("transform") != "catalog-key-substitution":
+        return None
+    template_path = first_origin.get("template", {}).get("path")
+    if not isinstance(template_path, str) or first["output"]["end"] >= end_offset:
+        return None
+
+    cursor = first["output"]["end"]
+    suffix_parts = []
+    for segment in overlapping[1:]:
+        output_range = segment.get("output", {})
+        start, end = output_range.get("start"), output_range.get("end")
+        origin = segment.get("origin", {})
+        source_range = origin.get("range")
+        source_offset = source_range.get("start") if isinstance(source_range, dict) else None
+        if (
+            not isinstance(start, int) or isinstance(start, bool)
+            or not isinstance(end, int) or isinstance(end, bool)
+            or not isinstance(source_offset, int) or isinstance(source_offset, bool)
+            or start != cursor
+            or origin.get("kind") != "page"
+            or origin.get("path") != template_path
+            or segment.get("transform") != "copy"
+        ):
+            return None
+        portion_end = min(end_offset, end)
+        source_start = source_offset + cursor - start
+        source_end = source_start + portion_end - cursor
+        source = context.get("texts", {}).get(template_path, "")
+        if not isinstance(source_start, int) or source_start < 0 or source_end > len(source):
+            return None
+        suffix = source[source_start:source_end]
+        if not suffix or not suffix.isspace():
+            return None
+        suffix_parts.append(suffix)
+        cursor = portion_end
+        if cursor == end_offset:
+            return first, "".join(suffix_parts)
+    return None
 
 
 def raw_start_tag_attribute_offsets(raw_tag: str) -> list[tuple[str, int | None, int | None]] | None:

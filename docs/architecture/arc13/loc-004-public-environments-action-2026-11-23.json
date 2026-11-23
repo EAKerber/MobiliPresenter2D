@@ -1,0 +1,105 @@
+{
+  "schema": "ARC13LOC004Extraction/1",
+  "plan": "MobiliPresenter2D Plano Diretor v0.9",
+  "workItem": "LOC-004",
+  "family": "public-environments-action",
+  "status": "candidate-implemented",
+  "decision": {
+    "visibleText": "Conheça nossos ambientes",
+    "destination": "/#ambientes",
+    "classification": "ui-static",
+    "subsystemOwner": "landing/about",
+    "contentOwner": "Product/UX; existing approved pt-BR copy retained without editorial changes",
+    "authority": "Existing published wording and destination were preserved; this change only centralizes the repeated static label.",
+    "catalogKey": "actions.exploreEnvironments"
+  },
+  "evidence": {
+    "baseRevision": "f7e2e6f01faf7f90eb4cc864c70a6bb702dc7a76",
+    "targetBranch": "development",
+    "inventoryPath": "architecture/arc13/ui-text-candidates.json",
+    "inventorySha256": "DD1B6D6202F09E1C46CDD9FC3AA60AD7D257116320BE96AECCAF47B2F2107A37",
+    "manifest": "architecture/generated/primary-pages.manifest.json",
+    "manifestSha256": "594fb871eaa4e801b07489756724f86c99a760ef168dcf1ae5a0b26267a8c7c3",
+    "candidates": [
+      {
+        "candidateId": "d4c4f9c7dc7eeb54",
+        "route": "/",
+        "publishedSource": "app/index.html",
+        "authoringSource": "architecture/pages/root.page.html",
+        "authoringMap": {
+          "kind": "catalog-key",
+          "pointer": "/actions/exploreEnvironments",
+          "transform": "catalog-key-substitution-plus-template-whitespace",
+          "templateWhitespaceSuffix": " "
+        }
+      },
+      {
+        "candidateId": "3dd62595c694e5c5",
+        "route": "/about/",
+        "publishedSource": "app/about/index.html",
+        "authoringSource": "architecture/pages/about.page.html",
+        "authoringMap": {
+          "kind": "catalog-key",
+          "pointer": "/actions/exploreEnvironments",
+          "transform": "catalog-key-substitution"
+        }
+      }
+    ]
+  },
+  "implementation": {
+    "htmlRemainsStatic": true,
+    "requiresJavaScriptForText": false,
+    "destinationUnchanged": true,
+    "generatedPagesChangedVisibly": false,
+    "copySourceIsCatalog": true,
+    "inventoryClassificationChanged": false,
+    "decorativeArrowRemainsOutsideCatalog": true
+  },
+  "baseline": {
+    "renderedVisibleDomChanged": false,
+    "visualTestRequired": false,
+    "reason": "The same visible copy, href, arrow, and markup are emitted in static HTML; only catalog cache version and authoring provenance change.",
+    "outputGitBlobs": {
+      "app/index.html": {
+        "before": "d860537c585214bfff3a3f83d838414491934f31",
+        "after": "1e66dc15f182d3849b690fd0cf2fecea4a43edd1",
+        "afterCacheBustNormalization": "d860537c585214bfff3a3f83d838414491934f31"
+      },
+      "app/about/index.html": {
+        "before": "3e715a0c17136687653ccc49979b19820e9f1ef4",
+        "after": "2e6bc6b09d2534405d3498c8cec7a363afdd4a7e",
+        "afterCacheBustNormalization": "3e715a0c17136687653ccc49979b19820e9f1ef4"
+      },
+      "app/how-it-works/index.html": {
+        "before": "b74649e042a6cd51e21c538726494b81c0a77dbd",
+        "after": "c21b37936a845bfd8555df7efd932afa1e9ae17d",
+        "afterCacheBustNormalization": "b74649e042a6cd51e21c538726494b81c0a77dbd"
+      }
+    }
+  },
+  "verification": {
+    "arc03cSourceAuthorityTests": "PASS 6/6",
+    "uiThemeContract": "PASS",
+    "pageCompiler": "PASS --sync and --check",
+    "scannerSyntax": "PASS",
+    "scannerRegressionTests": "PASS 3/3; maps catalog text plus whitespace only and rejects non-whitespace composition",
+    "inventoryGeneration": "PASS; two identical hashes; 420 primary-page occurrences mapped; 0 unresolved; 0 JavaScript parse errors; 1043 global candidates remain unreviewed",
+    "staticTextAndLinks": "PASS; exact text and /#ambientes links remain in generated HTML without JavaScript",
+    "visualTest": "not needed; the rendered DOM and visible text remain unchanged"
+  },
+  "limits": [
+    "This receipt covers only the repeated static environments action on Home and About.",
+    "The How it works label uses different wording and remains a separate content decision.",
+    "It does not close LOC-002 or ARC-13 globally; candidate review status remains unreviewed.",
+    "No main promotion or production publication is included."
+  ],
+  "integration": {
+    "pullRequest": {
+      "number": 327,
+      "url": "https://github.com/EAKerber/MobiliPresenter2D/pull/327",
+      "implementationCommit": "4bec1f3fee174e15bdbfd03275ba1bb7f632cc83",
+      "baseSha": "f7e2e6f01faf7f90eb4cc864c70a6bb702dc7a76"
+    },
+    "developmentIntegrationSha": null
+  }
+}
