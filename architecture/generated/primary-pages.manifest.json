@@ -6,7 +6,7 @@
     "offsetUnit": "unicode-codepoints",
     "generator": {
       "path": "scripts/compile-primary-pages.mjs",
-      "gitBlobSha": "ac5b891ebe0e71119acfec8fb3222d0fe9630160"
+      "gitBlobSha": "c980213a76b5f6e7af198b5ccaf19f475156d421"
     }
   },
   "copyCatalog": {
@@ -28,7 +28,7 @@
       "route": "/",
       "source": "architecture/pages/root.page.html",
       "output": "app/index.html",
-      "sourceGitBlobSha": "870ae6bb3143b0c0d975ece4c65b3feaef4aaabd",
+      "sourceGitBlobSha": "cccce752f4e2231a88626336fd984ab1bffc56d2",
       "outputGitBlobSha": "2a64139e2b05769a60cb69daddd33c6d5e14075c",
       "sourceMap": {
         "segments": [
@@ -1433,7 +1433,7 @@
           {
             "output": {
               "start": 7166,
-              "end": 7472
+              "end": 7449
             },
             "transform": "copy",
             "origin": {
@@ -1441,7 +1441,41 @@
               "path": "architecture/pages/root.page.html",
               "range": {
                 "start": 6284,
-                "end": 6590
+                "end": 6567
+              }
+            }
+          },
+          {
+            "output": {
+              "start": 7449,
+              "end": 7464
+            },
+            "transform": "catalog-key-substitution",
+            "origin": {
+              "kind": "catalog-key",
+              "path": "app/core/ui-copy.js",
+              "pointer": "/brand/logoAlt",
+              "template": {
+                "path": "architecture/pages/root.page.html",
+                "range": {
+                  "start": 6567,
+                  "end": 6589
+                }
+              }
+            }
+          },
+          {
+            "output": {
+              "start": 7464,
+              "end": 7472
+            },
+            "transform": "copy",
+            "origin": {
+              "kind": "page",
+              "path": "architecture/pages/root.page.html",
+              "range": {
+                "start": 6589,
+                "end": 6597
               }
             }
           },
@@ -1458,8 +1492,8 @@
               "template": {
                 "path": "architecture/pages/root.page.html",
                 "range": {
-                  "start": 6590,
-                  "end": 6613
+                  "start": 6597,
+                  "end": 6620
                 }
               }
             }
@@ -1474,8 +1508,8 @@
               "kind": "page",
               "path": "architecture/pages/root.page.html",
               "range": {
-                "start": 6613,
-                "end": 6973
+                "start": 6620,
+                "end": 6980
               }
             }
           }
@@ -1486,7 +1520,7 @@
       "route": "/about/",
       "source": "architecture/pages/about.page.html",
       "output": "app/about/index.html",
-      "sourceGitBlobSha": "ab2ebbfbe591492891b24c40e40f438eae54a495",
+      "sourceGitBlobSha": "97dd83730754e9a6bb2a3dc30252595fda5540f2",
       "outputGitBlobSha": "78f644b7a6c4e2d6d6507fbbfe602e6217ae9085",
       "sourceMap": {
         "segments": [
@@ -2050,7 +2084,7 @@
           {
             "output": {
               "start": 6382,
-              "end": 6641
+              "end": 6618
             },
             "transform": "copy",
             "origin": {
@@ -2058,7 +2092,41 @@
               "path": "architecture/pages/about.page.html",
               "range": {
                 "start": 5493,
-                "end": 5752
+                "end": 5729
+              }
+            }
+          },
+          {
+            "output": {
+              "start": 6618,
+              "end": 6633
+            },
+            "transform": "catalog-key-substitution",
+            "origin": {
+              "kind": "catalog-key",
+              "path": "app/core/ui-copy.js",
+              "pointer": "/brand/logoAlt",
+              "template": {
+                "path": "architecture/pages/about.page.html",
+                "range": {
+                  "start": 5729,
+                  "end": 5751
+                }
+              }
+            }
+          },
+          {
+            "output": {
+              "start": 6633,
+              "end": 6641
+            },
+            "transform": "copy",
+            "origin": {
+              "kind": "page",
+              "path": "architecture/pages/about.page.html",
+              "range": {
+                "start": 5751,
+                "end": 5759
               }
             }
           },
@@ -2075,8 +2143,8 @@
               "template": {
                 "path": "architecture/pages/about.page.html",
                 "range": {
-                  "start": 5752,
-                  "end": 5775
+                  "start": 5759,
+                  "end": 5782
                 }
               }
             }
@@ -2091,8 +2159,8 @@
               "kind": "page",
               "path": "architecture/pages/about.page.html",
               "range": {
-                "start": 5775,
-                "end": 5794
+                "start": 5782,
+                "end": 5801
               }
             }
           },
@@ -2109,8 +2177,8 @@
               "template": {
                 "path": "architecture/pages/about.page.html",
                 "range": {
-                  "start": 5794,
-                  "end": 5818
+                  "start": 5801,
+                  "end": 5825
                 }
               }
             }
@@ -2125,8 +2193,8 @@
               "kind": "page",
               "path": "architecture/pages/about.page.html",
               "range": {
-                "start": 5818,
-                "end": 5847
+                "start": 5825,
+                "end": 5854
               }
             }
           }
@@ -2137,7 +2205,7 @@
       "route": "/how-it-works/",
       "source": "architecture/pages/how-it-works.page.html",
       "output": "app/how-it-works/index.html",
-      "sourceGitBlobSha": "c0ad8ca4889760119e232c4a4b864fc87caaad4c",
+      "sourceGitBlobSha": "5a3ec067401f39a2f9f3a2b30f1c1ef6ea2d0cbd",
       "outputGitBlobSha": "6ddd7d09a6cb4071f968404063d5c889724c8dc8",
       "sourceMap": {
         "segments": [
@@ -4052,7 +4120,7 @@
           {
             "output": {
               "start": 12375,
-              "end": 32395
+              "end": 32372
             },
             "transform": "copy",
             "origin": {
@@ -4060,7 +4128,41 @@
               "path": "architecture/pages/how-it-works.page.html",
               "range": {
                 "start": 12105,
-                "end": 32125
+                "end": 32102
+              }
+            }
+          },
+          {
+            "output": {
+              "start": 32372,
+              "end": 32387
+            },
+            "transform": "catalog-key-substitution",
+            "origin": {
+              "kind": "catalog-key",
+              "path": "app/core/ui-copy.js",
+              "pointer": "/brand/logoAlt",
+              "template": {
+                "path": "architecture/pages/how-it-works.page.html",
+                "range": {
+                  "start": 32102,
+                  "end": 32124
+                }
+              }
+            }
+          },
+          {
+            "output": {
+              "start": 32387,
+              "end": 32395
+            },
+            "transform": "copy",
+            "origin": {
+              "kind": "page",
+              "path": "architecture/pages/how-it-works.page.html",
+              "range": {
+                "start": 32124,
+                "end": 32132
               }
             }
           },
@@ -4077,8 +4179,8 @@
               "template": {
                 "path": "architecture/pages/how-it-works.page.html",
                 "range": {
-                  "start": 32125,
-                  "end": 32148
+                  "start": 32132,
+                  "end": 32155
                 }
               }
             }
@@ -4093,8 +4195,8 @@
               "kind": "page",
               "path": "architecture/pages/how-it-works.page.html",
               "range": {
-                "start": 32148,
-                "end": 32169
+                "start": 32155,
+                "end": 32176
               }
             }
           },
@@ -4111,8 +4213,8 @@
               "template": {
                 "path": "architecture/pages/how-it-works.page.html",
                 "range": {
-                  "start": 32169,
-                  "end": 32193
+                  "start": 32176,
+                  "end": 32200
                 }
               }
             }
@@ -4127,8 +4229,8 @@
               "kind": "page",
               "path": "architecture/pages/how-it-works.page.html",
               "range": {
-                "start": 32193,
-                "end": 32444
+                "start": 32200,
+                "end": 32451
               }
             }
           }
