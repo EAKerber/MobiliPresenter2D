@@ -1,0 +1,78 @@
+{
+  "schema": "ARC13LOC005Extraction/1",
+  "plan": "MobiliPresenter2D Plano Diretor v0.9",
+  "workItem": "LOC-005",
+  "family": "viewer-scene-selection-caption",
+  "status": "candidate-implemented",
+  "scope": {
+    "routes": [
+      "/viewer/"
+    ],
+    "behaviorChanged": false,
+    "visibleWordingChanged": false,
+    "fallbackPreserved": true,
+    "remoteCatalogRequired": false
+  },
+  "decision": {
+    "authority": "Existing product wording preserved.",
+    "subsystemOwner": "public-viewer-scene-selection",
+    "classification": "ui-visible-status",
+    "catalog": "app/core/ui-copy.js",
+    "catalogKey": "/viewer/scene/selected",
+    "value": "Selecionado: {number} · {title}",
+    "interpolation": {
+      "number": "Selected module number from the current Viewer state",
+      "title": "Selected module title from the current Viewer state"
+    },
+    "accessibility": "Preserve the existing scene-caption element and announcement behavior; do not add aria-live or status role."
+  },
+  "inventoryDisposition": {
+    "previousCandidateId": "14d8c54c61ca9902",
+    "previousSource": "app/viewer/viewer.js",
+    "previousLine": 135,
+    "previousSink": "#sceneSelection.textContent",
+    "currentCandidateId": "e6fffc166f0ec788",
+    "currentLine": 136,
+    "reviewedAs": "ui-visible-status",
+    "routeConsumers": [
+      "/viewer/"
+    ],
+    "moduleNumberAndTitleRemainData": true,
+    "falsePositive": false
+  },
+  "implementation": {
+    "catalogAdded": "viewer.scene.selected",
+    "localFallbackPerKey": true,
+    "valuesInsertedWith": "String replacement through textContent; no HTML interpolation",
+    "selectionStateBehaviorChanged": false,
+    "cacheVersionsUpdated": true,
+    "testsExtended": [
+      "tests/ui-theme-contract.cjs",
+      "tests/public-pages-smoke.cjs"
+    ]
+  },
+  "evidence": {
+    "baseDevelopmentSha": "4b4f336bcc77350d30036192ce88990183305b53",
+    "inventoryPath": "architecture/arc13/ui-text-candidates.json",
+    "inventorySha256": "8A064720E324B5F51AB1C04C8D16989D3D7F86EFE140A3FBB63CFDFEE7D94B24",
+    "manifestPath": "architecture/generated/primary-pages.manifest.json",
+    "manifestSha256": "780DB0E7C9B324E7FEF7EA7F7E26AD8661BDB0EFED7279B58063AD25AADE214A",
+    "sourceSha256": {
+      "app/core/ui-copy.js": "DB68FDDD7AE7900A4A615E3170E3E74AD2C171A3C3D72B80020300D762878863",
+      "app/viewer/viewer.js": "8D69D35234961B5A4BA877791DBAADF689CCEE153CE11FEADCF0268A6DA9E441"
+    }
+  },
+  "validation": {
+    "pageCompiler": "passed locally with --sync",
+    "catalogContract": "pending local run",
+    "browserSmoke": "pending exact-head CI",
+    "inventory": "first generation completed; repeat planned to confirm determinism",
+    "deployPreview": "not required; copy-only change"
+  },
+  "limits": [
+    "The classification and crosswalk apply only to this one visible Viewer caption.",
+    "The module number and title remain dynamic product data, not catalog entries.",
+    "No global LOC-005 or CMP-018 completion is claimed.",
+    "No main promotion or production publication is included."
+  ]
+}
