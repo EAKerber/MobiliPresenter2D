@@ -1,0 +1,74 @@
+{
+  "schema": "ARC13LOC002FamilyReview/1",
+  "plan": "MobiliPresenter2D Plano Diretor v0.9",
+  "workItem": "LOC-002",
+  "family": "admin-nominal-dimension-field-labels",
+  "status": "reviewed-hold",
+  "evidence": {
+    "developmentRevision": "a58618d4b3e3fd027e8dbc38b3a31697c6eb8fb9",
+    "inventoryPath": "architecture/arc13/ui-text-candidates.json",
+    "inventorySha256": "8E7393F891F72F12D57677E8B16F6297740BA8743C7BAC8FE46D4A9D97971F9C",
+    "source": "app/admin/admin.js",
+    "sourceGitBlob": "ba9129e27ce92818cb3548eed13b78957d0548f1",
+    "normalizedSourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+    "sourceLine": 283,
+    "consumer": {
+      "route": "/admin",
+      "function": "appendNominalDimensionControls",
+      "sinkId": "d275ee2141e37934",
+      "sinkLine": 287,
+      "sink": "call:createTextNode",
+      "flow": "bounded-static-array-to-field-label"
+    }
+  },
+  "decisions": [
+    {
+      "candidateId": "771e30220582d4fc",
+      "axis": "width",
+      "value": "Largura",
+      "classification": "ui-visible",
+      "subsystemOwner": "admin",
+      "contentOwner": null,
+      "destination": "hold",
+      "decision": "This is a visible field label for the nominal module-width input. Retain the current wording while awaiting product/UX approval and a later LOC-003 catalog-key decision."
+    },
+    {
+      "candidateId": "2efb9d46a1e8eb29",
+      "axis": "height",
+      "value": "Altura",
+      "classification": "ui-visible",
+      "subsystemOwner": "admin",
+      "contentOwner": null,
+      "destination": "hold",
+      "decision": "This is a visible field label for the nominal module-height input. Retain the current wording while awaiting product/UX approval and a later LOC-003 catalog-key decision."
+    },
+    {
+      "candidateId": "d5335c94ac2cb9c0",
+      "axis": "depth",
+      "value": "Profundidade",
+      "classification": "ui-visible",
+      "subsystemOwner": "admin",
+      "contentOwner": null,
+      "destination": "hold",
+      "decision": "This is a visible field label for the nominal module-depth input. Retain the current wording while awaiting product/UX approval and a later LOC-003 catalog-key decision."
+    }
+  ],
+  "notGroupedWith": [
+    {
+      "candidateIds": ["c5fb57049d360e5c", "b970bfd8118bc72d", "98f606b05766cf7a"],
+      "source": "app/admin/admin.js",
+      "sourceLine": 1168,
+      "reason": "The same axis words are options in a rule selector that chooses which dimension an action changes. Their consumer and decision function differ from input field labels, so the strings are not merged into one copy family."
+    }
+  ],
+  "pending": [
+    "Product/UX confirmation of the three existing field labels.",
+    "Choose canonical catalog keys and extraction scope under LOC-003; no source code or catalog entry is changed by this review.",
+    "Review the dynamic accessible name that appends `nominal em milímetros` to the module and axis labels; this receipt does not establish assistive-technology quality."
+  ],
+  "limits": [
+    "Subsystem ownership `admin` does not identify an individual editorial owner.",
+    "The generated inventory remains candidate-unreviewed; the family receipt records a scoped functional review without changing the inventory's global classification count.",
+    "No text, DOM, runtime behavior, or user-facing layout was changed."
+  ]
+}
