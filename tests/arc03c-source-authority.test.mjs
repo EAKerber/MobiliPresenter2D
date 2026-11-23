@@ -81,8 +81,10 @@ test("public copy is catalog-backed and remains static in generated HTML",async(
  assert.equal(r.manifest.schema,"M2DARC03CPublishedPages/3");
  assert.equal(r.manifest.copyCatalog.path,"app/core/ui-copy.js");
  for(const page of r.pages) {
-  const catalogVersion=["app/index.html","app/how-it-works/index.html"].includes(page.output)
+  const catalogVersion=page.output==="app/index.html"
    ? "arc13-loc005-video-fullscreen-1"
+   : ["app/about/index.html","app/how-it-works/index.html"].includes(page.output)
+    ? "arc13-loc004-footer-home-1"
    : "arc13-loc003-copy-1";
   const catalogScript=new RegExp(`<script src="/core/ui-copy\\.js\\?v=${catalogVersion}"></script>`);
   assert.equal((page.html.match(new RegExp(catalogScript.source,"g"))||[]).length,1,
@@ -94,8 +96,10 @@ test("public copy is catalog-backed and remains static in generated HTML",async(
   const pageCopy=page.output==="app/index.html"
    ? [["/home/hero/aboutLink","Saiba mais"],["/video/youtubeLink","Assistir no YouTube ↗"]]
    : page.output==="app/how-it-works/index.html"
-    ? [["/video/youtubeLink","Assistir no YouTube ↗"]]
-    : [];
+    ? [["/video/youtubeLink","Assistir no YouTube ↗"],["/footer/homeLink","Voltar ao início ↑"]]
+    : page.output==="app/about/index.html"
+     ? [["/footer/homeLink","Voltar ao início ↑"]]
+     : [];
   const pageExpected=[...expected,...pageCopy];
   const mapped=page.sourceMap.filter(segment=>segment.origin.kind==="catalog-key");
   assert.deepEqual(mapped.map(segment=>segment.origin.pointer),pageExpected.map(([pointer])=>pointer));
@@ -116,6 +120,12 @@ test("public copy is catalog-backed and remains static in generated HTML",async(
  const howItWorks=r.pages.find(page=>page.output==="app/how-it-works/index.html");
  assert.match(howItWorks.html,/<a class="video-youtube-link" href="https:\/\/www\.youtube\.com\/shorts\/hgcJ1k7lFkE" target="_blank" rel="noopener noreferrer">Assistir no YouTube ↗<\/a>/,
   "the How it works YouTube link keeps its destination and remains usable without JavaScript");
+ assert.match(r.pages.find(page=>page.output==="app/about/index.html").html,/<footer class="site-footer">[\s\S]*?<a href="\/">Voltar ao início ↑<\/a><\/footer>/,
+  "About footer remains a static link to the home route without JavaScript");
+ assert.match(howItWorks.html,/<footer class="site-footer">[\s\S]*?<a href="\.\.\/">Voltar ao início ↑<\/a><\/footer>/,
+  "How it works footer preserves its relative home destination without JavaScript");
+ for(const page of r.pages)assert.doesNotMatch(page.html,/\{\{copy\.[^{}]+\}\}/,
+  "generated HTML contains no unresolved page-copy placeholders");
 });
 test("catalog text escapes HTML-sensitive characters",()=>{
  assert.equal(escapeHtml(`&<>"'`),"&amp;&lt;&gt;&quot;&#39;");

@@ -1,0 +1,83 @@
+{
+  "schema": "M2DLOC004FamilyDecision/1",
+  "plan": "MobiliPresenter2D Plano Diretor v0.9",
+  "workItem": "LOC-004",
+  "family": "public-static-footer-home-link",
+  "status": "candidate-implemented",
+  "copyOwner": "Product/UX; existing approved pt-BR copy retained without editorial changes",
+  "authoring": {
+    "catalog": "app/core/ui-copy.js",
+    "compiler": "scripts/compile-primary-pages.mjs",
+    "sources": [
+      "architecture/pages/about.page.html",
+      "architecture/pages/how-it-works.page.html"
+    ],
+    "outputs": [
+      "app/about/index.html",
+      "app/how-it-works/index.html"
+    ]
+  },
+  "key": {
+    "pointer": "/footer/homeLink",
+    "value": "Voltar ao início ↑",
+    "sink": "visible footer link text"
+  },
+  "preserved": [
+    "About href remains /.",
+    "How it works href remains ../ and resolves to the site root from /how-it-works/.",
+    "Generated HTML contains the complete visible label at build time and remains usable without JavaScript.",
+    "No visible wording, punctuation, element, layout, or interaction changes; only the copy source and its cache version change."
+  ],
+  "baseline": {
+    "about": {
+      "route": "/about/",
+      "href": "/",
+      "text": "Voltar ao início ↑",
+      "outputGitBlobBefore": "aecf4392601eca041f789ac687dac1282c6a6121",
+      "outputGitBlobAfter": "471eeaac060062972c4014a58c311d119848f1d4",
+      "outputGitBlobAfterCacheBustNormalization": "aecf4392601eca041f789ac687dac1282c6a6121"
+    },
+    "howItWorks": {
+      "route": "/how-it-works/",
+      "href": "../",
+      "text": "Voltar ao início ↑",
+      "outputGitBlobBefore": "b400303b0ffc21e69b11fe19323337b20833c0f2",
+      "outputGitBlobAfter": "44345d3dd60ac6eec02e5213bbc0155bfc79d3cc",
+      "outputGitBlobAfterCacheBustNormalization": "b400303b0ffc21e69b11fe19323337b20833c0f2"
+    },
+    "renderedVisibleDomChanged": false,
+    "visualTestRequired": false,
+    "reason": "The exact same text and link targets are emitted in static HTML; no rendered geometry or visual content changes."
+  },
+  "inventory": {
+    "path": "architecture/arc13/ui-text-candidates.json",
+    "sha256": "DBAB44930129AF0CEF7875F2DE5E6E130A150C6A62EF4D0586B1C585785E0784",
+    "manifest": "architecture/generated/primary-pages.manifest.json",
+    "manifestSha256": "BDEC5E5862A6B7AEAFC2899474228628AAC95CD047D258326DDEF02522EA9800",
+    "familyOccurrences": 2,
+    "candidateIds": ["ad8e64299fa6fac5", "4d37d35eb9eea33e"],
+    "authoringStatus": "mapped",
+    "catalogPointer": "/footer/homeLink",
+    "previouslyUnresolvedReason": "ARC-13 scanner allowlist did not include the new About/How page catalog key; corrected to keep all primary-page provenance mapped."
+  },
+  "verification": {
+    "arc03cSourceAuthorityTests": "PASS 6/6",
+    "uiThemeContract": "PASS",
+    "pageCompiler": "PASS --sync and --check",
+    "inventoryGeneration": "PASS; deterministic repeated hash; 420 primary-page occurrences mapped; 0 unresolved; 0 JavaScript parse errors",
+    "lineEndingNormalization": "PASS; 1/1",
+    "generatedLinkTargets": "PASS; / and ../ preserved exactly",
+    "generatedTextWithoutJavaScript": "PASS; complete catalog text is in generated HTML",
+    "visualTest": "not needed; visible DOM and text are unchanged"
+  },
+  "limits": [
+    "This receipt covers only the repeated About and How it works footer link label.",
+    "The two page-specific hrefs remain authored in their respective pages and are not catalog data.",
+    "No main promotion or production publication is included."
+  ],
+  "evidence": {
+    "baseDevelopmentSha": "2bd5ba67c070f42ee8069ed53e665bc1b42e433f",
+    "pullRequest": null,
+    "developmentIntegrationSha": null
+  }
+}

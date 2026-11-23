@@ -3,7 +3,7 @@
   "plan": "MobiliPresenter2D Plano Diretor v0.9",
   "workItem": "LOC-005",
   "family": "viewer-scene-component-copy",
-  "status": "candidate-implemented",
+  "status": "integrated-development",
   "scope": {
     "routes": [
       "/viewer/"
@@ -196,7 +196,8 @@
       "tests/ui-theme-contract.cjs": "A2BFC792ECFA60B6DA6E68A28195F09471BA26E7013709FEE51A990743453CD9",
       "tests/public-pages-smoke.cjs": "4242BCB29228D43CF8DBC45993A3807E4B142BDD0F89B8821B6D099E25C1E8FC"
     },
-    "developmentIntegrationSha": null
+    "developmentIntegrationSha": "2bd5ba67c070f42ee8069ed53e665bc1b42e433f",
+    "pullRequest": 324
   },
   "validation": {
     "inventoryGeneration": "passed; repeat to confirm deterministic hash after final receipt edit",
@@ -204,7 +205,7 @@
     "sceneAdapterUnitTests": "passed locally: 17/17, including catalog-provided normal and fallback state copy",
     "pageCompiler": "passed locally with --sync and --check",
     "syntaxChecks": "passed locally for changed JS and test files",
-    "browserSmoke": "not run locally: Playwright package is absent; exact-head CI pending",
+    "browserSmoke": "local Playwright package absent; PR #324 exact-head CI had 15 successful checks and 3 skipped out-of-scope/disabled jobs",
     "deployPreview": "not requested for copy-only extraction"
   },
   "limits": [
