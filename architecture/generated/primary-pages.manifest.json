@@ -6,12 +6,12 @@
     "offsetUnit": "unicode-codepoints",
     "generator": {
       "path": "scripts/compile-primary-pages.mjs",
-      "gitBlobSha": "bf0dd9f3d1a9b4f9c5e6632e4fffdd6629d923a1"
+      "gitBlobSha": "ac5b891ebe0e71119acfec8fb3222d0fe9630160"
     }
   },
   "copyCatalog": {
     "path": "app/core/ui-copy.js",
-    "gitBlobSha": "81704b6e6dc99c9a3ffd97ff7ae8ff4c432a4669",
+    "gitBlobSha": "79b819d2968e0342b7458007aca775225268b31b",
     "schema": "M2DUIStringCatalog/1",
     "locale": "pt-BR"
   },
@@ -28,7 +28,7 @@
       "route": "/",
       "source": "architecture/pages/root.page.html",
       "output": "app/index.html",
-      "sourceGitBlobSha": "1d3a725752eeede39c0ec482b3b27d532c9c132e",
+      "sourceGitBlobSha": "870ae6bb3143b0c0d975ece4c65b3feaef4aaabd",
       "outputGitBlobSha": "2a64139e2b05769a60cb69daddd33c6d5e14075c",
       "sourceMap": {
         "segments": [
@@ -923,7 +923,7 @@
           {
             "output": {
               "start": 3512,
-              "end": 3991
+              "end": 3757
             },
             "transform": "copy",
             "origin": {
@@ -931,7 +931,41 @@
               "path": "architecture/pages/root.page.html",
               "range": {
                 "start": 2603,
-                "end": 3082
+                "end": 2848
+              }
+            }
+          },
+          {
+            "output": {
+              "start": 3757,
+              "end": 3807
+            },
+            "transform": "catalog-key-substitution",
+            "origin": {
+              "kind": "catalog-key",
+              "path": "app/core/ui-copy.js",
+              "pointer": "/home/hero/artworkAlt",
+              "template": {
+                "path": "architecture/pages/root.page.html",
+                "range": {
+                  "start": 2848,
+                  "end": 2877
+                }
+              }
+            }
+          },
+          {
+            "output": {
+              "start": 3807,
+              "end": 3991
+            },
+            "transform": "copy",
+            "origin": {
+              "kind": "page",
+              "path": "architecture/pages/root.page.html",
+              "range": {
+                "start": 2877,
+                "end": 3061
               }
             }
           },
@@ -948,8 +982,8 @@
               "template": {
                 "path": "architecture/pages/root.page.html",
                 "range": {
-                  "start": 3082,
-                  "end": 3117
+                  "start": 3061,
+                  "end": 3096
                 }
               }
             }
@@ -964,8 +998,8 @@
               "kind": "page",
               "path": "architecture/pages/root.page.html",
               "range": {
-                "start": 3117,
-                "end": 3361
+                "start": 3096,
+                "end": 3340
               }
             }
           },
@@ -982,8 +1016,8 @@
               "template": {
                 "path": "architecture/pages/root.page.html",
                 "range": {
-                  "start": 3361,
-                  "end": 3395
+                  "start": 3340,
+                  "end": 3374
                 }
               }
             }
@@ -998,8 +1032,8 @@
               "kind": "page",
               "path": "architecture/pages/root.page.html",
               "range": {
-                "start": 3395,
-                "end": 3915
+                "start": 3374,
+                "end": 3894
               }
             }
           },
@@ -1016,8 +1050,8 @@
               "template": {
                 "path": "architecture/pages/root.page.html",
                 "range": {
-                  "start": 3915,
-                  "end": 3945
+                  "start": 3894,
+                  "end": 3924
                 }
               }
             }
@@ -1032,8 +1066,8 @@
               "kind": "page",
               "path": "architecture/pages/root.page.html",
               "range": {
-                "start": 3945,
-                "end": 3954
+                "start": 3924,
+                "end": 3933
               }
             }
           },
@@ -1050,8 +1084,8 @@
               "template": {
                 "path": "architecture/pages/root.page.html",
                 "range": {
-                  "start": 3954,
-                  "end": 3984
+                  "start": 3933,
+                  "end": 3963
                 }
               }
             }
@@ -1066,8 +1100,8 @@
               "kind": "page",
               "path": "architecture/pages/root.page.html",
               "range": {
-                "start": 3984,
-                "end": 4355
+                "start": 3963,
+                "end": 4334
               }
             }
           },
@@ -1084,8 +1118,8 @@
               "template": {
                 "path": "architecture/pages/root.page.html",
                 "range": {
-                  "start": 4355,
-                  "end": 4388
+                  "start": 4334,
+                  "end": 4367
                 }
               }
             }
@@ -1100,8 +1134,8 @@
               "kind": "page",
               "path": "architecture/pages/root.page.html",
               "range": {
-                "start": 4388,
-                "end": 4596
+                "start": 4367,
+                "end": 4575
               }
             }
           },
@@ -1118,8 +1152,8 @@
               "template": {
                 "path": "architecture/pages/root.page.html",
                 "range": {
-                  "start": 4596,
-                  "end": 4630
+                  "start": 4575,
+                  "end": 4609
                 }
               }
             }
@@ -1134,8 +1168,8 @@
               "kind": "page",
               "path": "architecture/pages/root.page.html",
               "range": {
-                "start": 4630,
-                "end": 4661
+                "start": 4609,
+                "end": 4640
               }
             }
           },
@@ -1152,8 +1186,8 @@
               "template": {
                 "path": "architecture/pages/root.page.html",
                 "range": {
-                  "start": 4661,
-                  "end": 4695
+                  "start": 4640,
+                  "end": 4674
                 }
               }
             }
@@ -1168,8 +1202,8 @@
               "kind": "page",
               "path": "architecture/pages/root.page.html",
               "range": {
-                "start": 4695,
-                "end": 5031
+                "start": 4674,
+                "end": 5010
               }
             }
           },
@@ -1186,8 +1220,8 @@
               "template": {
                 "path": "architecture/pages/root.page.html",
                 "range": {
-                  "start": 5031,
-                  "end": 5075
+                  "start": 5010,
+                  "end": 5054
                 }
               }
             }
@@ -1202,8 +1236,8 @@
               "kind": "page",
               "path": "architecture/pages/root.page.html",
               "range": {
-                "start": 5075,
-                "end": 5139
+                "start": 5054,
+                "end": 5118
               }
             }
           },
@@ -1220,8 +1254,8 @@
               "template": {
                 "path": "architecture/pages/root.page.html",
                 "range": {
-                  "start": 5139,
-                  "end": 5179
+                  "start": 5118,
+                  "end": 5158
                 }
               }
             }
@@ -1236,8 +1270,8 @@
               "kind": "page",
               "path": "architecture/pages/root.page.html",
               "range": {
-                "start": 5179,
-                "end": 5235
+                "start": 5158,
+                "end": 5214
               }
             }
           },
@@ -1254,8 +1288,8 @@
               "template": {
                 "path": "architecture/pages/root.page.html",
                 "range": {
-                  "start": 5235,
-                  "end": 5275
+                  "start": 5214,
+                  "end": 5254
                 }
               }
             }
@@ -1270,8 +1304,8 @@
               "kind": "page",
               "path": "architecture/pages/root.page.html",
               "range": {
-                "start": 5275,
-                "end": 6152
+                "start": 5254,
+                "end": 6131
               }
             }
           },
@@ -1288,8 +1322,8 @@
               "template": {
                 "path": "architecture/pages/root.page.html",
                 "range": {
-                  "start": 6152,
-                  "end": 6179
+                  "start": 6131,
+                  "end": 6158
                 }
               }
             }
@@ -1304,8 +1338,8 @@
               "kind": "page",
               "path": "architecture/pages/root.page.html",
               "range": {
-                "start": 6179,
-                "end": 6187
+                "start": 6158,
+                "end": 6166
               }
             }
           },
@@ -1322,8 +1356,8 @@
               "template": {
                 "path": "architecture/pages/root.page.html",
                 "range": {
-                  "start": 6187,
-                  "end": 6214
+                  "start": 6166,
+                  "end": 6193
                 }
               }
             }
@@ -1338,8 +1372,8 @@
               "kind": "page",
               "path": "architecture/pages/root.page.html",
               "range": {
-                "start": 6214,
-                "end": 6222
+                "start": 6193,
+                "end": 6201
               }
             }
           },
@@ -1356,8 +1390,8 @@
               "template": {
                 "path": "architecture/pages/root.page.html",
                 "range": {
-                  "start": 6222,
-                  "end": 6253
+                  "start": 6201,
+                  "end": 6232
                 }
               }
             }
@@ -1372,8 +1406,8 @@
               "kind": "page",
               "path": "architecture/pages/root.page.html",
               "range": {
-                "start": 6253,
-                "end": 6279
+                "start": 6232,
+                "end": 6258
               }
             }
           },
@@ -1390,8 +1424,8 @@
               "template": {
                 "path": "architecture/pages/root.page.html",
                 "range": {
-                  "start": 6279,
-                  "end": 6305
+                  "start": 6258,
+                  "end": 6284
                 }
               }
             }
@@ -1406,8 +1440,8 @@
               "kind": "page",
               "path": "architecture/pages/root.page.html",
               "range": {
-                "start": 6305,
-                "end": 6611
+                "start": 6284,
+                "end": 6590
               }
             }
           },
@@ -1424,8 +1458,8 @@
               "template": {
                 "path": "architecture/pages/root.page.html",
                 "range": {
-                  "start": 6611,
-                  "end": 6634
+                  "start": 6590,
+                  "end": 6613
                 }
               }
             }
@@ -1440,8 +1474,8 @@
               "kind": "page",
               "path": "architecture/pages/root.page.html",
               "range": {
-                "start": 6634,
-                "end": 6994
+                "start": 6613,
+                "end": 6973
               }
             }
           }

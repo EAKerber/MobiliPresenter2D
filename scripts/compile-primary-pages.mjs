@@ -38,6 +38,7 @@ const PAGE_COPY_POINTERS={
   "copy.home.hero.heading.enjoy":"/home/hero/heading/enjoy",
   "copy.home.hero.lead":"/home/hero/lead",
   "copy.home.hero.description":"/home/hero/description",
+  "copy.home.hero.artworkAlt":"/home/hero/artworkAlt",
   "copy.home.benefits.miniLabel":"/home/benefits/miniLabel",
   "copy.home.benefits.stripLabel":"/home/benefits/stripLabel",
   "copy.home.hero.video.groupLabel":"/home/hero/video/groupLabel",
