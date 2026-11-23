@@ -44,6 +44,8 @@ PRIMARY_PAGE_COPY_KEYS = {
         "copy.home.hero.heading.enjoy",
         "copy.home.hero.lead",
         "copy.home.hero.description",
+        "copy.home.benefits.miniLabel",
+        "copy.home.benefits.stripLabel",
         "copy.home.hero.video.groupLabel",
         "copy.home.hero.video.playLabel",
         "copy.video.fullscreen.open",

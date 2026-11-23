@@ -1,0 +1,48 @@
+{
+  "schema": "M2DLOC004FamilyDecision/1",
+  "plan": "MobiliPresenter2D Plano Diretor v0.9",
+  "workItem": "LOC-004",
+  "family": "home-benefit-region-labels",
+  "status": "validated-for-development",
+  "copyOwner": "Product/UX; existing pt-BR accessible names retained without editorial changes",
+  "authoring": {
+    "template": "architecture/pages/root.page.html",
+    "catalog": "app/core/ui-copy.js",
+    "compiler": "scripts/compile-primary-pages.mjs",
+    "output": "app/index.html"
+  },
+  "keys": [
+    { "pointer": "/home/benefits/miniLabel", "value": "Vantagens", "sink": "hero mini-benefits region aria-label" },
+    { "pointer": "/home/benefits/stripLabel", "value": "Vantagens Casa em Módulos", "sink": "benefits strip section aria-label" }
+  ],
+  "preserved": [
+    "both existing accessible names remain distinct and exact",
+    "region semantics, element order, generated benefits content, and static no-JavaScript accessibility remain unchanged",
+    "dynamic benefit items and their JavaScript/data sources remain outside this family",
+    "all generated public HTML outputs remain byte-identical to the development base",
+    "global candidate classifications remain unreviewed; this receipt records exact family ownership and provenance only"
+  ],
+  "baseline": {
+    "developmentBase": "c30e6a74ceafe238dc32d3c861318a39ebd0d3ef",
+    "renderedHtmlChanged": false,
+    "visualTestRequired": false,
+    "reason": "The catalog substitutions preserve both accessible attribute values. The generated HTML blob SHAs for all primary pages match development exactly; no visible or behavioral change was introduced."
+  },
+  "inventory": {
+    "path": "architecture/arc13/ui-text-candidates.json",
+    "sha256": "AD81D2FC619A3E48028FE08B55C8FE4147DD31A9D905954905A904CADE7224A1",
+    "familyOccurrences": 2,
+    "candidateIds": ["89a3b943e06a4c4b", "d8b2bf1a8b1d6ca1"],
+    "classificationNote": "Both source-map occurrences resolve to the shared catalog. The inventory remains candidate-unreviewed; no global classification changed."
+  },
+  "verification": {
+    "arc03cSourceAuthorityTests": "PASS 6/6",
+    "uiThemeContract": "PASS",
+    "pagesCheck": "PASS",
+    "lineEndingNormalization": "PASS 3/3",
+    "inventoryScan": "PASS; parse errors 0; unresolved primary-page authoring occurrences 0",
+    "inventoryDeterminism": "PASS; two consecutive runs produced the same candidate inventory SHA-256",
+    "staticOutput": "PASS; app/index.html, app/about/index.html, and app/how-it-works/index.html blob SHAs match development base"
+  },
+  "exceptions": []
+}
