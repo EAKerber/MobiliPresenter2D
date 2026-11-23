@@ -41,7 +41,11 @@ PRIMARY_PAGE_COPY_KEYS = {
         "copy.home.hero.aboutLink",
         "copy.video.youtubeLink",
     },
-    "architecture/pages/how-it-works.page.html": {"copy.video.youtubeLink"},
+    "architecture/pages/about.page.html": {"copy.footer.homeLink"},
+    "architecture/pages/how-it-works.page.html": {
+        "copy.video.youtubeLink",
+        "copy.footer.homeLink",
+    },
 }
 TEXT_ATTRIBUTES = {
     "alt",

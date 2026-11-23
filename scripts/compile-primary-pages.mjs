@@ -33,8 +33,12 @@ const PAGE_COPY_POINTERS={
   "copy.home.hero.aboutLink":"/home/hero/aboutLink",
   "copy.video.youtubeLink":"/video/youtubeLink"
  },
+ "architecture/pages/about.page.html":{
+  "copy.footer.homeLink":"/footer/homeLink"
+ },
  "architecture/pages/how-it-works.page.html":{
-  "copy.video.youtubeLink":"/video/youtubeLink"
+  "copy.video.youtubeLink":"/video/youtubeLink",
+  "copy.footer.homeLink":"/footer/homeLink"
  }
 };
 const require=createRequire(import.meta.url);

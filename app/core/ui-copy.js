@@ -35,6 +35,9 @@
         close: "Sair da tela cheia"
       })
     }),
+    footer: Object.freeze({
+      homeLink: "Voltar ao início ↑"
+    }),
     viewer: Object.freeze({
       state: Object.freeze({
         empty: "Nenhum módulo está visível no viewer neste momento.",
