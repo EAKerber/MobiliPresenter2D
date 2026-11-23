@@ -24,6 +24,78 @@ class SourceMapLineEndingNormalizationTest(unittest.TestCase):
         self.assertEqual(SCANNER.offset_location(normalized_lf, normalized_lf.index("Menu")), (2, 30))
         self.assertEqual(SCANNER.offset_location(normalized_crlf, normalized_crlf.index("Menu")), (2, 30))
 
+    def test_catalog_copy_can_include_only_template_whitespace(self):
+        catalog_text = "Conheça nossos ambientes"
+        suffix = " "
+        template = catalog_text + suffix + "→"
+        context = {
+            "manifestSha256": "fixture",
+            "texts": {"architecture/pages/root.page.html": template},
+            "segments": [
+                {
+                    "output": {"start": 0, "end": len(catalog_text)},
+                    "origin": {
+                        "kind": "catalog-key",
+                        "path": "app/core/ui-copy.js",
+                        "pointer": "/actions/exploreEnvironments",
+                        "template": {"path": "architecture/pages/root.page.html"},
+                    },
+                    "transform": "catalog-key-substitution",
+                },
+                {
+                    "output": {"start": len(catalog_text), "end": len(catalog_text) + len(suffix)},
+                    "origin": {
+                        "kind": "page",
+                        "path": "architecture/pages/root.page.html",
+                        "range": {"start": len(catalog_text), "end": len(catalog_text) + len(suffix)},
+                    },
+                    "transform": "copy",
+                },
+            ],
+        }
+
+        mapped = SCANNER.authoring_at_offset(context, 0, len(catalog_text) + len(suffix))
+
+        self.assertEqual(mapped["status"], "mapped")
+        self.assertEqual(mapped["origin"]["kind"], "catalog-key")
+        self.assertEqual(mapped["transform"], "catalog-key-substitution-plus-template-whitespace")
+        self.assertEqual(mapped["evidence"]["templateWhitespaceSuffix"], suffix)
+
+    def test_catalog_copy_with_non_whitespace_template_suffix_stays_unresolved(self):
+        catalog_text = "Conheça nossos ambientes"
+        suffix = " →"
+        template = catalog_text + suffix
+        context = {
+            "manifestSha256": "fixture",
+            "texts": {"architecture/pages/root.page.html": template},
+            "segments": [
+                {
+                    "output": {"start": 0, "end": len(catalog_text)},
+                    "origin": {
+                        "kind": "catalog-key",
+                        "path": "app/core/ui-copy.js",
+                        "pointer": "/actions/exploreEnvironments",
+                        "template": {"path": "architecture/pages/root.page.html"},
+                    },
+                    "transform": "catalog-key-substitution",
+                },
+                {
+                    "output": {"start": len(catalog_text), "end": len(template)},
+                    "origin": {
+                        "kind": "page",
+                        "path": "architecture/pages/root.page.html",
+                        "range": {"start": len(catalog_text), "end": len(template)},
+                    },
+                    "transform": "copy",
+                },
+            ],
+        }
+
+        mapped = SCANNER.authoring_at_offset(context, 0, len(template))
+
+        self.assertEqual(mapped["status"], "unresolved")
+        self.assertEqual(mapped["reason"], "sink-crosses-source-map-segments-or-gap")
+
 
 if __name__ == "__main__":
     unittest.main()

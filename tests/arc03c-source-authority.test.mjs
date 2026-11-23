@@ -84,7 +84,7 @@ test("public copy is catalog-backed and remains static in generated HTML",async(
  assert.equal(r.manifest.copyCatalog.path,"app/core/ui-copy.js");
  for(const page of r.pages) {
   const catalogVersion=["app/index.html","app/about/index.html","app/how-it-works/index.html"].includes(page.output)
-   ? "arc13-loc004-public-header-contact-1"
+   ? "arc13-loc004-public-environments-action-1"
    : "arc13-loc003-copy-1";
   const catalogScript=new RegExp(`<script src="/core/ui-copy\\.js\\?v=${catalogVersion}"></script>`);
   assert.equal((page.html.match(new RegExp(catalogScript.source,"g"))||[]).length,1,
@@ -96,11 +96,11 @@ test("public copy is catalog-backed and remains static in generated HTML",async(
   assert.match(page.html,/<a class="header-cta" href="https:\/\/wa\.me\/" aria-label="Fale conosco pelo WhatsApp"><span>Fale conosco<\/span>/,
    "contact copy stays visible, accessible, and statically available without JavaScript");
   const pageCopy=page.output==="app/index.html"
-   ? [["/home/hero/aboutLink","Saiba mais"],["/video/youtubeLink","Assistir no YouTube ↗"]]
+   ? [["/actions/exploreEnvironments","Conheça nossos ambientes"],["/home/hero/aboutLink","Saiba mais"],["/video/youtubeLink","Assistir no YouTube ↗"]]
    : page.output==="app/how-it-works/index.html"
     ? [["/video/youtubeLink","Assistir no YouTube ↗"],["/footer/homeLink","Voltar ao início ↑"]]
     : page.output==="app/about/index.html"
-     ? [["/footer/homeLink","Voltar ao início ↑"]]
+     ? [["/actions/exploreEnvironments","Conheça nossos ambientes"],["/footer/homeLink","Voltar ao início ↑"]]
      : [];
   const pageExpected=[...expected,...pageCopy];
   const mapped=page.sourceMap.filter(segment=>segment.origin.kind==="catalog-key");
@@ -113,6 +113,8 @@ test("public copy is catalog-backed and remains static in generated HTML",async(
   }
  }
  const home=r.pages.find(page=>page.output==="app/index.html");
+ assert.match(home.html,/<a class="button button-dark" href="\/#ambientes">Conheça nossos ambientes <span aria-hidden="true">→<\/span><\/a>/,
+  "the environments CTA retains its route and stays usable without JavaScript");
  assert.match(home.html,/<a href="\/about\/">Saiba mais<\/a>/,
   "the approved hero link stays visible and usable without JavaScript");
  assert.match(home.html,/<a href="https:\/\/www\.youtube\.com\/shorts\/hgcJ1k7lFkE" target="_blank" rel="noopener noreferrer">Assistir no YouTube ↗<\/a>/,
@@ -124,6 +126,8 @@ test("public copy is catalog-backed and remains static in generated HTML",async(
   "the How it works YouTube link keeps its destination and remains usable without JavaScript");
  assert.match(r.pages.find(page=>page.output==="app/about/index.html").html,/<footer class="site-footer">[\s\S]*?<a href="\/">Voltar ao início ↑<\/a><\/footer>/,
   "About footer remains a static link to the home route without JavaScript");
+ assert.match(r.pages.find(page=>page.output==="app/about/index.html").html,/<a class="about-text-link" href="\/#ambientes">Conheça nossos ambientes<\/a>/,
+  "About environments CTA retains its route and remains usable without JavaScript");
  assert.match(howItWorks.html,/<footer class="site-footer">[\s\S]*?<a href="\.\.\/">Voltar ao início ↑<\/a><\/footer>/,
   "How it works footer preserves its relative home destination without JavaScript");
  for(const page of r.pages)assert.doesNotMatch(page.html,/\{\{copy\.[^{}]+\}\}/,

@@ -32,10 +32,12 @@ const COPY_POINTERS={
 };
 const PAGE_COPY_POINTERS={
  "architecture/pages/root.page.html":{
+  "copy.actions.exploreEnvironments":"/actions/exploreEnvironments",
   "copy.home.hero.aboutLink":"/home/hero/aboutLink",
   "copy.video.youtubeLink":"/video/youtubeLink"
  },
  "architecture/pages/about.page.html":{
+  "copy.actions.exploreEnvironments":"/actions/exploreEnvironments",
   "copy.footer.homeLink":"/footer/homeLink"
  },
  "architecture/pages/how-it-works.page.html":{

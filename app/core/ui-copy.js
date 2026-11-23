@@ -30,6 +30,9 @@
         aboutLink: "Saiba mais"
       })
     }),
+    actions: Object.freeze({
+      exploreEnvironments: "Conheça nossos ambientes"
+    }),
     video: Object.freeze({
       youtubeLink: "Assistir no YouTube ↗",
       fullscreen: Object.freeze({

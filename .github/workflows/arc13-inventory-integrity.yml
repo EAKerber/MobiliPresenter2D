@@ -68,7 +68,7 @@ jobs:
           node-version: '22'
       - name: Install the pinned parser
         run: npm ci --prefix tools/arc13
-      - name: Verify source-map line-ending normalization
+      - name: Verify source-map normalization and catalog whitespace mapping
         run: python tests/arc13_line_ending_normalization_test.py
       - name: Verify catalog-backed theme and menu labels
         run: node tests/ui-theme-contract.cjs
