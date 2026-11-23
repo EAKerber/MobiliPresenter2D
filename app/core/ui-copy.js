@@ -40,6 +40,12 @@
       environments: Object.freeze({
         eyebrow: "Você escolhe o que precisa",
         heading: "A gente já sabe como fazer."
+      }),
+      story: Object.freeze({
+        eyebrow: "Simples do início ao fim",
+        heading: "Do seu espaço ao ambiente pronto.",
+        description: "Escolha o ambiente, conheça os módulos e encontre uma solução que acompanha sua rotina.",
+        action: "Encontre seu ambiente "
       })
     }),
     actions: Object.freeze({
