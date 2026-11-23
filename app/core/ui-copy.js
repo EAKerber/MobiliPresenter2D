@@ -21,7 +21,9 @@
       primaryLabel: "Navegação principal",
       environments: "Ambientes",
       howItWorks: "Como funciona",
-      about: "Quem somos"
+      about: "Quem somos",
+      contactAriaLabel: "Fale conosco pelo WhatsApp",
+      contact: "Fale conosco"
     }),
     home: Object.freeze({
       hero: Object.freeze({

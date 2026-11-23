@@ -1,0 +1,93 @@
+{
+  "schema": "M2DLOC004FamilyDecision/1",
+  "plan": "MobiliPresenter2D Plano Diretor v0.9",
+  "workItem": "LOC-004",
+  "family": "public-primary-header-contact-cta",
+  "status": "candidate-implemented",
+  "copyOwner": "Product/UX; existing approved pt-BR copy retained without editorial changes",
+  "classification": {
+    "contact": "ui-static",
+    "contactAriaLabel": "accessibility"
+  },
+  "authoring": {
+    "fragment": "architecture/fragments/primary-header.fragment.html",
+    "catalog": "app/core/ui-copy.js",
+    "compiler": "scripts/compile-primary-pages.mjs",
+    "routes": ["/", "/about/", "/how-it-works/"],
+    "outputs": ["app/index.html", "app/about/index.html", "app/how-it-works/index.html"]
+  },
+  "keys": [
+    {
+      "pointer": "/navigation/contactAriaLabel",
+      "value": "Fale conosco pelo WhatsApp",
+      "sink": "aria-label on the existing contact link"
+    },
+    {
+      "pointer": "/navigation/contact",
+      "value": "Fale conosco",
+      "sink": "visible text inside the existing contact link"
+    }
+  ],
+  "preserved": [
+    "Contact href remains https://wa.me/ on all three routes.",
+    "The visible label, accessible name, capitalization, and punctuation remain exact.",
+    "The WhatsApp image keeps empty alt text and the arrow remains aria-hidden.",
+    "The menu's dynamic Abrir menu/Fechar menu labels remain in the controller/catalog path and outside this static family.",
+    "Generated HTML remains complete and usable without JavaScript."
+  ],
+  "baseline": {
+    "renderedVisibleDomChanged": false,
+    "visualTestRequired": false,
+    "reason": "The same text, aria-label, link target, icon, and structure are emitted; only the catalog URL cache version changes.",
+    "outputGitBlobs": {
+      "app/index.html": {
+        "before": "543c4ec5797a0a6dfbad610587c4e6e5d02b6cfe",
+        "after": "d860537c585214bfff3a3f83d838414491934f31",
+        "afterCacheBustNormalization": "543c4ec5797a0a6dfbad610587c4e6e5d02b6cfe"
+      },
+      "app/about/index.html": {
+        "before": "471eeaac060062972c4014a58c311d119848f1d4",
+        "after": "3e715a0c17136687653ccc49979b19820e9f1ef4",
+        "afterCacheBustNormalization": "471eeaac060062972c4014a58c311d119848f1d4"
+      },
+      "app/how-it-works/index.html": {
+        "before": "44345d3dd60ac6eec02e5213bbc0155bfc79d3cc",
+        "after": "b74649e042a6cd51e21c538726494b81c0a77dbd",
+        "afterCacheBustNormalization": "44345d3dd60ac6eec02e5213bbc0155bfc79d3cc"
+      }
+    }
+  },
+  "inventory": {
+    "path": "architecture/arc13/ui-text-candidates.json",
+    "sha256": "A16434F2B9E0AC552703B41433CB37EA33E21B4E7C9D0E40E78B85DDBAE9665A",
+    "manifest": "architecture/generated/primary-pages.manifest.json",
+    "manifestSha256": "8F62556A0FC0D3ADDEE652F64A79EEB75B2290E77DF025C38C9A7A492B33CE8E",
+    "familyOccurrences": 6,
+    "candidateIds": [
+      "9397457031c95359", "22002cbacc463a3a",
+      "68aa7199f5b4acfd", "3ab1ce9e0a647708",
+      "5633f7ac9855e2a0", "1d0e40607ceb4b2d"
+    ],
+    "authoringStatus": "mapped",
+    "sourceMapOrigin": "shared header fragment to semantic catalog key"
+  },
+  "verification": {
+    "arc03cSourceAuthorityTests": "PASS 6/6",
+    "uiThemeContract": "PASS",
+    "pageCompiler": "PASS --sync and --check",
+    "inventoryGeneration": "PASS; deterministic repeated hash; 420 primary-page occurrences mapped; 0 unresolved; 0 JavaScript parse errors",
+    "lineEndingNormalization": "PASS 1/1",
+    "staticTextAndAccessibleName": "PASS; exact copy emitted in generated HTML without JavaScript",
+    "visualTest": "not needed; visible DOM is unchanged"
+  },
+  "limits": [
+    "This receipt covers only the repeated static contact CTA visible label and accessible name.",
+    "It does not reclassify the menu control, contact image, decorative arrow, page editorial copy, or private application strings.",
+    "No main promotion or production publication is included."
+  ],
+  "evidence": {
+    "baseDevelopmentSha": "8d9a721c59a32371258835ea5192269425b4f79b",
+    "pullRequest": null,
+    "developmentIntegrationSha": null
+  }
+}

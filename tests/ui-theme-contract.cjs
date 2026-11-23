@@ -24,6 +24,8 @@ assert.equal(copy.theme.toggle.title, "Tema: {current} (próximo: {next})");
 assert.deepEqual(JSON.parse(JSON.stringify(copy.navigation.menu)), {
   open: "Abrir menu", close: "Fechar menu"
 });
+assert.equal(copy.navigation.contact, "Fale conosco");
+assert.equal(copy.navigation.contactAriaLabel, "Fale conosco pelo WhatsApp");
 assert.deepEqual(JSON.parse(JSON.stringify(copy.video.fullscreen)), {
   open: "Abrir vídeo em tela cheia", close: "Sair da tela cheia"
 });
@@ -107,10 +109,8 @@ const shells = [
 ];
 for (const file of shells) {
   const html = read(file);
-  const copyVersion = file === "app/index.html"
-    ? "arc13-loc005-video-fullscreen-1"
-    : ["app/about/index.html", "app/how-it-works/index.html"].includes(file)
-      ? "arc13-loc004-footer-home-1"
+  const copyVersion = ["app/index.html", "app/about/index.html", "app/how-it-works/index.html"].includes(file)
+    ? "arc13-loc004-public-header-contact-1"
     : file === "app/viewer/index.html"
       ? "arc13-loc005-scene-interaction-1"
     : "arc13-loc003-copy-1";
