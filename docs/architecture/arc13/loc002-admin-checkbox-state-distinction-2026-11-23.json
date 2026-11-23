@@ -29,14 +29,14 @@
           "kind": "object",
           "value": "Iniciar ativo",
           "statePath": "model.initialState.entities[itemId]",
-          "meaning": "Sets the object's initial active state. This is distinct from module visibility, despite sharing a model map and checkbox family."
+          "meaning": "This is the current object label. It writes the same entity-state map used by modules, so source evidence alone does not establish whether object activity and module visibility are separate product policies."
         }
       ],
       "classification": "ui-visible",
       "subsystemOwner": "admin",
       "contentOwner": null,
       "destination": "hold",
-      "decision": "Keep module visibility and object initial activity as distinct meanings. Product/UX must confirm the object wording and whether it can share a catalog key with service preselection before LOC-003 extraction."
+      "decision": "Keep the module and object branches recorded separately because they are separate inventory alternatives. Their relationship as product policies remains undecided; do not infer separate semantics or catalog keys from the current labels alone."
     },
     {
       "candidateId": "7ef47d84204a2578",
@@ -89,8 +89,8 @@
     "decision": "The initial-state and stage-availability checkboxes can share the theme accent while retaining distinct state, wording, and accessibility semantics. This technical normalization does not constitute product/UX approval of the wording or a global checkbox redesign."
   },
   "pending": [
-    "Product/UX confirmation of the current labels and object-versus-service meaning.",
-    "Choose whether the object and service uses of `Iniciar ativo` share a catalog key; retain separate source candidates until decided.",
+    "Product/UX confirmation of whether module visibility and object activity are distinct policies or both describe initial configurator presence, and confirmation of the current labels.",
+    "Choose canonical catalog keys for the module, object, and service alternatives; retain separate source candidates until their semantics are decided.",
     "Review the related accessible names with assistive technology; this receipt records their intended meanings, not an accessibility approval.",
     "No LOC-003 extraction or source changes are authorized by this review."
   ],
