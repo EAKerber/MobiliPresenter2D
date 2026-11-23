@@ -1,0 +1,116 @@
+{
+  "schema": "ARC13LOC004Extraction/1",
+  "plan": "MobiliPresenter2D Plano Diretor v0.9",
+  "workItem": "LOC-004",
+  "family": "how-it-works-comparison-row-labels",
+  "status": "candidate-implemented",
+  "decision": {
+    "classification": "ui-static",
+    "subsystemOwner": "public-pages/how-it-works/comparison",
+    "contentOwner": "Product/UX; existing wording retained without editorial change",
+    "authority": "Six exact row labels are repeated once per each of the three comparison cards; this extraction only gives those labels shared catalog keys.",
+    "catalogKeys": [
+      {
+        "pointer": "/comparison/labels/adaptation",
+        "value": "Adaptação"
+      },
+      {
+        "pointer": "/comparison/labels/quality",
+        "value": "Qualidade"
+      },
+      {
+        "pointer": "/comparison/labels/personalization",
+        "value": "Personalização"
+      },
+      {
+        "pointer": "/comparison/labels/cost",
+        "value": "Custo"
+      },
+      {
+        "pointer": "/comparison/labels/stagedPurchase",
+        "value": "Compra por etapas"
+      },
+      {
+        "pointer": "/comparison/labels/production",
+        "value": "Produção"
+      }
+    ]
+  },
+  "evidence": {
+    "baseRevision": "1d98c05f0418a49bc3fcf99881d3ea8a47bf1c6f",
+    "targetBranch": "development",
+    "inventoryPath": "architecture/arc13/ui-text-candidates.json",
+    "inventorySha256": "28915200052B7BD39B3B870E94E447DA65ABA34FB00EA85B0F9C6F170D480E9D",
+    "manifest": "architecture/generated/primary-pages.manifest.json",
+    "manifestSha256": "51c868ecefe01064ad988300b0819023de85ea34462488e02a4a366d0d9f7c1b",
+    "candidateOccurrences": 18,
+    "candidateIds": [
+      "ad85cc676a6987e1",
+      "43c4ad182d7538b2",
+      "b397c3bd9edee7ec",
+      "c46deab5f8b89504",
+      "889f5d97248b0357",
+      "ef61ec13913c77ba",
+      "6f339c8d151b3185",
+      "4c349f900bafb8ca",
+      "3ac551455bd8d8a2",
+      "7b3a190113e72fd6",
+      "3d5afadba97a2543",
+      "021223248ab24a08",
+      "c8336465d6a9dcae",
+      "99566fd179f6e357",
+      "2c752734cf1bca82",
+      "dbdfc71318e76592",
+      "d1ce2db711114730",
+      "5883a178ed9545ac"
+    ],
+    "authoringSource": "architecture/pages/how-it-works.page.html",
+    "publishedOutput": "app/how-it-works/index.html"
+  },
+  "implementation": {
+    "htmlRemainsStatic": true,
+    "requiresJavaScriptForText": false,
+    "visibleLabelsUnchanged": true,
+    "rowOrderUnchanged": true,
+    "comparisonMarkersUnchanged": true,
+    "cardDescriptionsUnchanged": true,
+    "inventoryClassificationChanged": false
+  },
+  "baseline": {
+    "renderedVisibleDomChanged": false,
+    "visualTestRequired": false,
+    "reason": "The same label text, row order, comparison markers, descriptions, and markup are emitted; only their source and shared catalog URL change.",
+    "outputGitBlobs": {
+      "app/index.html": {
+        "before": "df5ab25f9e512980037d1aa0a49af0edd758d31d",
+        "after": "03e5aabdd1c6f24b6b113bf51cd6a9c1c16392d9",
+        "afterCacheBustNormalization": "df5ab25f9e512980037d1aa0a49af0edd758d31d"
+      },
+      "app/about/index.html": {
+        "before": "bb8f24da0db5215693526eb508fa2848db4753d6",
+        "after": "e62f58aa847ba886d2d0fa72d189d919f716d101",
+        "afterCacheBustNormalization": "bb8f24da0db5215693526eb508fa2848db4753d6"
+      },
+      "app/how-it-works/index.html": {
+        "before": "e380913fbf5af12bad8e64ab8eebcd91069c67d9",
+        "after": "199d2dc536dfc8e6ff7f260eaf1ac2a0a46114e9",
+        "afterCacheBustNormalization": "e380913fbf5af12bad8e64ab8eebcd91069c67d9"
+      }
+    }
+  },
+  "verification": {
+    "pageCompiler": "PASS --sync and --check",
+    "arc03cSourceAuthorityTests": "PASS 6/6; verifies all 18 catalog mappings and exact generated labels",
+    "uiThemeContract": "PASS",
+    "scannerRegressionTests": "PASS 3/3",
+    "inventoryGeneration": "PASS; two identical hashes; 420 primary-page occurrences mapped; 0 unresolved; 0 JavaScript parse errors; 1,043 global candidates remain unreviewed",
+    "staticText": "PASS; all six labels remain in generated HTML without JavaScript",
+    "visualTest": "not needed; exact text lengths and output structure are unchanged"
+  },
+  "limits": [
+    "This receipt covers only the six row labels shared across the three comparison cards.",
+    "The question/check markers and descriptions retain their separate behavior and authorship.",
+    "It does not close LOC-002 or ARC-13 globally; the generated candidate inventory remains unreviewed.",
+    "No main promotion or production publication is included."
+  ]
+}

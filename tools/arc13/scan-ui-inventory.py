@@ -52,6 +52,12 @@ PRIMARY_PAGE_COPY_KEYS = {
         "copy.video.youtubeLink",
         "copy.footer.homeLink",
         "copy.footer.tagline",
+        "copy.comparison.labels.adaptation",
+        "copy.comparison.labels.quality",
+        "copy.comparison.labels.personalization",
+        "copy.comparison.labels.cost",
+        "copy.comparison.labels.stagedPurchase",
+        "copy.comparison.labels.production",
     },
 }
 TEXT_ATTRIBUTES = {

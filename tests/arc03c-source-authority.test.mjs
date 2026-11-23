@@ -84,7 +84,7 @@ test("public copy is catalog-backed and remains static in generated HTML",async(
  assert.equal(r.manifest.copyCatalog.path,"app/core/ui-copy.js");
  for(const page of r.pages) {
   const catalogVersion=["app/index.html","app/about/index.html","app/how-it-works/index.html"].includes(page.output)
-   ? "arc13-loc004-public-footer-tagline-1"
+   ? "arc13-loc004-comparison-labels-1"
    : "arc13-loc003-copy-1";
   const catalogScript=new RegExp(`<script src="/core/ui-copy\\.js\\?v=${catalogVersion}"></script>`);
   assert.equal((page.html.match(new RegExp(catalogScript.source,"g"))||[]).length,1,
@@ -95,10 +95,19 @@ test("public copy is catalog-backed and remains static in generated HTML",async(
   for(const [,label] of expected.slice(3,6))assert.ok(page.html.includes(">"+label+"</a>"),label+" must be present without JS");
   assert.match(page.html,/<a class="header-cta" href="https:\/\/wa\.me\/" aria-label="Fale conosco pelo WhatsApp"><span>Fale conosco<\/span>/,
    "contact copy stays visible, accessible, and statically available without JavaScript");
+  const comparisonRowLabels=[
+   ["/comparison/labels/adaptation","Adaptação"],
+   ["/comparison/labels/quality","Qualidade"],
+   ["/comparison/labels/personalization","Personalização"],
+   ["/comparison/labels/cost","Custo"],
+   ["/comparison/labels/stagedPurchase","Compra por etapas"],
+   ["/comparison/labels/production","Produção"]
+  ];
+  const comparisonLabels=Array.from({length:3},()=>comparisonRowLabels).flat();
   const pageCopy=page.output==="app/index.html"
    ? [["/actions/exploreEnvironments","Conheça nossos ambientes"],["/home/hero/aboutLink","Saiba mais"],["/video/youtubeLink","Assistir no YouTube ↗"],["/footer/tagline","Móveis modulares pensados para a vida real."]]
    : page.output==="app/how-it-works/index.html"
-    ? [["/video/youtubeLink","Assistir no YouTube ↗"],["/footer/tagline","Móveis modulares pensados para a vida real."],["/footer/homeLink","Voltar ao início ↑"]]
+    ? [["/video/youtubeLink","Assistir no YouTube ↗"],...comparisonLabels,["/footer/tagline","Móveis modulares pensados para a vida real."],["/footer/homeLink","Voltar ao início ↑"]]
     : page.output==="app/about/index.html"
      ? [["/actions/exploreEnvironments","Conheça nossos ambientes"],["/footer/tagline","Móveis modulares pensados para a vida real."],["/footer/homeLink","Voltar ao início ↑"]]
      : [];
