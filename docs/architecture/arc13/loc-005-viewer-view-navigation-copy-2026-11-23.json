@@ -3,7 +3,7 @@
   "plan": "MobiliPresenter2D Plano Diretor v0.9",
   "workItem": "LOC-005",
   "family": "viewer-view-navigation-copy",
-  "status": "candidate-implemented",
+  "status": "integrated-development",
   "scope": {
     "routes": [
       "/viewer/"
@@ -124,7 +124,8 @@
     "sourceSha256": {
       "app/core/ui-copy.js": "F57DEF767D323DFB52D43F117E7A4FCF7A1BC82FB7C96B882C07286F72EAAA9A",
       "app/viewer/viewer.js": "F7FFC653C660CCEA0C69C44A734AA2A2E13CFDABF1252CB950F1780AA4429053"
-    }
+    },
+    "developmentIntegrationSha": "4b4f336bcc77350d30036192ce88990183305b53"
   },
   "validation": {
     "pageCompiler": "passed locally via node scripts/compile-primary-pages.mjs --check",
