@@ -78,6 +78,8 @@ async function main() {
       assert.equal(await sceneHeading.textContent(), uiCopy.viewer.scene.heading);
       assert.equal(await sceneInstruction.textContent(), uiCopy.viewer.scene.instruction);
       assert.equal(await sceneStage.getAttribute("aria-label"), uiCopy.viewer.scene.accessibleInstruction);
+      assert.equal(await page.locator("#sceneStage img.scene-layer").first().getAttribute("alt"), uiCopy.viewer.scene.imageAlt);
+      assert.equal(await page.locator("#sceneStage .scene-hotspots").getAttribute("aria-label"), uiCopy.viewer.scene.hotspotsLabel);
       const sceneSelection = page.locator("#sceneSelection");
       assert.equal(await sceneSelection.textContent(), uiCopy.viewer.scene.selected
         .replace("{number}", String(selectedModule.number))
@@ -144,6 +146,8 @@ async function main() {
       "Clique em um módulo ou use ←/→ e as teclas 1–7.");
     assert.equal(await missingCatalogViewer.locator("#sceneStage").getAttribute("aria-label"),
       "Cena da cozinha. Use as setas para percorrer os módulos ou as teclas de 1 a 7 para selecionar pelo número.");
+    assert.equal(await missingCatalogViewer.locator("#sceneStage img.scene-layer").first().getAttribute("alt"), "Composição da cozinha Casa em Módulos");
+    assert.equal(await missingCatalogViewer.locator("#sceneStage .scene-hotspots").getAttribute("aria-label"), "Módulos selecionáveis na cena");
     const fallbackSelectedModule = publicFixture.modules[0];
     assert.equal(await missingCatalogViewer.locator("#sceneSelection").textContent(),
       `Selecionado: ${fallbackSelectedModule.number} · ${fallbackSelectedModule.title}`,

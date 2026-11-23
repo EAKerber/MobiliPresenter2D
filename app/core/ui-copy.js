@@ -51,7 +51,12 @@
         selected: "Selecionado: {number} · {title}",
         heading: "Cena interativa",
         instruction: "Clique em um módulo ou use ←/→ e as teclas 1–7.",
-        accessibleInstruction: "Cena da cozinha. Use as setas para percorrer os módulos ou as teclas de 1 a 7 para selecionar pelo número."
+        accessibleInstruction: "Cena da cozinha. Use as setas para percorrer os módulos ou as teclas de 1 a 7 para selecionar pelo número.",
+        imageAlt: "Composição da cozinha Casa em Módulos",
+        hotspotsLabel: "Módulos selecionáveis na cena",
+        fallbackStatus: "Imagem indisponível",
+        fallbackDescription: "A composição completa da cozinha não pôde ser exibida.",
+        fallbackAccessibleLabel: "Cena da cozinha indisponível. A composição completa não pôde ser exibida."
       })
     }),
     theme: Object.freeze({
