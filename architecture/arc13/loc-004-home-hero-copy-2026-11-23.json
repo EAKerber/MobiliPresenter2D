@@ -1,0 +1,57 @@
+{
+  "schema": "M2DLOC004FamilyDecision/1",
+  "plan": "MobiliPresenter2D Plano Diretor v0.9",
+  "workItem": "LOC-004",
+  "family": "home-hero-copy",
+  "status": "validated-for-development",
+  "copyOwner": "Product/UX; existing pt-BR wording retained without editorial changes",
+  "authoring": {
+    "template": "architecture/pages/root.page.html",
+    "catalog": "app/core/ui-copy.js",
+    "compiler": "scripts/compile-primary-pages.mjs",
+    "output": "app/index.html"
+  },
+  "keys": [
+    { "pointer": "/home/hero/eyebrow", "value": "Casa em Módulos", "sink": "visible eyebrow" },
+    { "pointer": "/home/hero/heading/assemble", "value": "Monte.", "sink": "first h1 line" },
+    { "pointer": "/home/hero/heading/choose", "value": "Escolha.", "sink": "second h1 line" },
+    { "pointer": "/home/hero/heading/enjoy", "value": "Aproveite.", "sink": "emphasized third h1 line" },
+    { "pointer": "/home/hero/lead", "value": "Móveis inteligentes, pensados para o seu espaço e para o seu orçamento.", "sink": "hero lead paragraph" },
+    { "pointer": "/home/hero/description", "value": "Um novo conceito em mobiliário que une projeto, fabricação e instalação em uma solução simples, prática e acessível.", "sink": "hero description paragraph" }
+  ],
+  "preserved": [
+    "all approved wording, punctuation, order, line breaks, em emphasis, and element semantics",
+    "all three generated primary-page HTML outputs remain text-identical to the development base after newline normalization",
+    "copy is emitted as complete static HTML and remains available without JavaScript",
+    "video labels, image alternatives, dynamic advantages, SEO metadata, and brand occurrences remain outside this family"
+  ],
+  "baseline": {
+    "developmentBase": "a4b32a1fc45743f078d9d7f0e58e6d0dbfcabd10",
+    "renderedHtmlChanged": false,
+    "visualTestRequired": false,
+    "reason": "The catalog substitutions reproduce the existing static output exactly; no rendered string, attribute, structure, or layout input changed."
+  },
+  "inventory": {
+    "path": "architecture/arc13/ui-text-candidates.json",
+    "sha256": "A6DB4B15E3A4E9E33EA58128302FE505F91CEC55C146EFD0EAC78A324B081E7E",
+    "familyOccurrences": 6,
+    "candidateIds": [
+      "c5b361f675497db6",
+      "69263e0eafc30710",
+      "3478965fe914c21a",
+      "8159e89a00fe3e99",
+      "c13dce2db3b4e581",
+      "b34cb4b84b63d1c4"
+    ],
+    "classificationNote": "The inventory remains an evidence catalog and keeps these candidates unreviewed; this receipt assigns family ownership without changing global classifications."
+  },
+  "verification": {
+    "arc03cSourceAuthorityTests": "PASS 6/6",
+    "uiThemeContract": "PASS",
+    "pagesCheck": "PASS",
+    "inventoryScan": "PASS; parse errors 0; unresolved primary-page authoring occurrences 0",
+    "inventoryDeterminism": "PASS; two consecutive runs produced identical summary values and candidate inventory SHA-256",
+    "staticOutput": "PASS; all three primary-page outputs are identical to the development base after newline normalization"
+  },
+  "exceptions": []
+}

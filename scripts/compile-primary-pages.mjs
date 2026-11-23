@@ -32,6 +32,12 @@ const COPY_POINTERS={
 };
 const PAGE_COPY_POINTERS={
  "architecture/pages/root.page.html":{
+  "copy.home.hero.eyebrow":"/home/hero/eyebrow",
+  "copy.home.hero.heading.assemble":"/home/hero/heading/assemble",
+  "copy.home.hero.heading.choose":"/home/hero/heading/choose",
+  "copy.home.hero.heading.enjoy":"/home/hero/heading/enjoy",
+  "copy.home.hero.lead":"/home/hero/lead",
+  "copy.home.hero.description":"/home/hero/description",
   "copy.actions.exploreEnvironments":"/actions/exploreEnvironments",
   "copy.home.hero.aboutLink":"/home/hero/aboutLink",
   "copy.video.youtubeLink":"/video/youtubeLink",

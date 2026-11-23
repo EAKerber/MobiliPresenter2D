@@ -38,6 +38,12 @@ PRIMARY_PAGES = {
 }
 PRIMARY_PAGE_COPY_KEYS = {
     "architecture/pages/root.page.html": {
+        "copy.home.hero.eyebrow",
+        "copy.home.hero.heading.assemble",
+        "copy.home.hero.heading.choose",
+        "copy.home.hero.heading.enjoy",
+        "copy.home.hero.lead",
+        "copy.home.hero.description",
         "copy.actions.exploreEnvironments",
         "copy.home.hero.aboutLink",
         "copy.video.youtubeLink",

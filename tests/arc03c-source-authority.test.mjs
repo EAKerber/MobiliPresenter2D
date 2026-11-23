@@ -122,7 +122,7 @@ test("public copy is catalog-backed and remains static in generated HTML",async(
    ])
   ]);
   const pageCopy=page.output==="app/index.html"
-   ? [["/actions/exploreEnvironments","Conheça nossos ambientes"],["/home/hero/aboutLink","Saiba mais"],["/video/youtubeLink","Assistir no YouTube ↗"],["/footer/tagline","Móveis modulares pensados para a vida real."]]
+   ? [["/home/hero/eyebrow","Casa em Módulos"],["/home/hero/heading/assemble","Monte."],["/home/hero/heading/choose","Escolha."],["/home/hero/heading/enjoy","Aproveite."],["/home/hero/lead","Móveis inteligentes, pensados para o seu espaço e para o seu orçamento."],["/home/hero/description","Um novo conceito em mobiliário que une projeto, fabricação e instalação em uma solução simples, prática e acessível."],["/actions/exploreEnvironments","Conheça nossos ambientes"],["/home/hero/aboutLink","Saiba mais"],["/video/youtubeLink","Assistir no YouTube ↗"],["/footer/tagline","Móveis modulares pensados para a vida real."]]
    : page.output==="app/how-it-works/index.html"
     ? [["/video/youtubeLink","Assistir no YouTube ↗"],...comparisonCopy,["/footer/tagline","Móveis modulares pensados para a vida real."],["/footer/homeLink","Voltar ao início ↑"]]
     : page.output==="app/about/index.html"
@@ -141,6 +141,8 @@ test("public copy is catalog-backed and remains static in generated HTML",async(
  const home=r.pages.find(page=>page.output==="app/index.html");
  assert.match(home.html,/<a class="button button-dark" href="\/#ambientes">Conheça nossos ambientes <span aria-hidden="true">→<\/span><\/a>/,
   "the environments CTA retains its route and stays usable without JavaScript");
+ assert.match(home.html,/<p class="eyebrow">Casa em Módulos<\/p>\s*<h1 id="heroTitle">Monte\.<br>Escolha\.<br><em>Aproveite\.<\/em><\/h1>\s*<p class="hero-lead">Móveis inteligentes, pensados para o seu espaço e para o seu orçamento\.<\/p>\s*<p class="hero-description">Um novo conceito em mobiliário que une projeto, fabricação e instalação em uma solução simples, prática e acessível\.<\/p>/,
+  "the Home hero copy remains exact and statically rendered with its original heading markup");
  assert.match(home.html,/<a href="\/about\/">Saiba mais<\/a>/,
   "the approved hero link stays visible and usable without JavaScript");
  assert.match(home.html,/<a href="https:\/\/www\.youtube\.com\/shorts\/hgcJ1k7lFkE" target="_blank" rel="noopener noreferrer">Assistir no YouTube ↗<\/a>/,
