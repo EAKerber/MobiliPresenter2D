@@ -1,0 +1,46 @@
+{
+  "schema": "M2DLOC004FamilyDecision/1",
+  "plan": "MobiliPresenter2D Plano Diretor v0.9",
+  "workItem": "LOC-004",
+  "family": "home-environments-heading",
+  "status": "validated-for-development",
+  "copyOwner": "Product/UX; existing pt-BR wording retained without editorial changes",
+  "authoring": {
+    "template": "architecture/pages/root.page.html",
+    "catalog": "app/core/ui-copy.js",
+    "compiler": "scripts/compile-primary-pages.mjs",
+    "output": "app/index.html"
+  },
+  "keys": [
+    { "pointer": "/home/environments/eyebrow", "value": "Você escolhe o que precisa", "sink": "section eyebrow" },
+    { "pointer": "/home/environments/heading", "value": "A gente já sabe como fazer.", "sink": "section h2" }
+  ],
+  "preserved": [
+    "both approved values, punctuation, order, and original p/h2 semantics",
+    "all generated public HTML outputs remain identical to the development base after newline normalization",
+    "copy is emitted as complete static HTML and stays available without JavaScript",
+    "carousel accessible labels, dynamic environment features, the benefits strip, and the story section remain outside this family"
+  ],
+  "baseline": {
+    "developmentBase": "99d92f6bde6d48804976e0af38cf2d36748de284",
+    "renderedHtmlChanged": false,
+    "visualTestRequired": false,
+    "reason": "The two catalog substitutions reproduce the existing static output exactly; no rendered text, attribute, structure, or layout input changed."
+  },
+  "inventory": {
+    "path": "architecture/arc13/ui-text-candidates.json",
+    "sha256": "C971F75696669BB222D4BBE19BAE21C8B56CB7E7D3145FEB8F86944AED0F155E",
+    "familyOccurrences": 2,
+    "candidateIds": ["2179dbe371bab13e", "097118651052787c"],
+    "classificationNote": "The inventory retains candidate-unreviewed status; this receipt scopes source ownership without changing global classifications."
+  },
+  "verification": {
+    "arc03cSourceAuthorityTests": "PASS 6/6",
+    "uiThemeContract": "PASS",
+    "pagesCheck": "PASS",
+    "inventoryScan": "PASS; parse errors 0; unresolved primary-page authoring occurrences 0",
+    "inventoryDeterminism": "PASS; two consecutive runs produced the same candidate inventory SHA-256",
+    "staticOutput": "PASS; all three primary-page outputs remain identical to the development base after newline normalization"
+  },
+  "exceptions": []
+}

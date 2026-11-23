@@ -44,6 +44,8 @@ PRIMARY_PAGE_COPY_KEYS = {
         "copy.home.hero.heading.enjoy",
         "copy.home.hero.lead",
         "copy.home.hero.description",
+        "copy.home.environments.eyebrow",
+        "copy.home.environments.heading",
         "copy.actions.exploreEnvironments",
         "copy.home.hero.aboutLink",
         "copy.video.youtubeLink",
