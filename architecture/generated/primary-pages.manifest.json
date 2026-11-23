@@ -6,12 +6,12 @@
     "offsetUnit": "unicode-codepoints",
     "generator": {
       "path": "scripts/compile-primary-pages.mjs",
-      "gitBlobSha": "92f0eb06496dbd63c41f81568a35e9e2bd0a669e"
+      "gitBlobSha": "2be815976fd25ea7f392a432c2277bb1e0e9008c"
     }
   },
   "copyCatalog": {
     "path": "app/core/ui-copy.js",
-    "gitBlobSha": "de6bb9b0c168a70f10a03d0920b1f6b74cd4e90c",
+    "gitBlobSha": "6034052bff04989b9222d4a945535c16b36901b2",
     "schema": "M2DUIStringCatalog/1",
     "locale": "pt-BR"
   },
@@ -28,7 +28,7 @@
       "route": "/",
       "source": "architecture/pages/root.page.html",
       "output": "app/index.html",
-      "sourceGitBlobSha": "ff1cc4fa3770af56f23cd0c53d4fcfdd115651c4",
+      "sourceGitBlobSha": "cf0e346910fc1e2fe016c64fb6f8576f3879ea51",
       "outputGitBlobSha": "2a64139e2b05769a60cb69daddd33c6d5e14075c",
       "sourceMap": {
         "segments": [
@@ -957,7 +957,7 @@
           {
             "output": {
               "start": 5568,
-              "end": 7472
+              "end": 6958
             },
             "transform": "copy",
             "origin": {
@@ -965,7 +965,143 @@
               "path": "architecture/pages/root.page.html",
               "range": {
                 "start": 4651,
-                "end": 6555
+                "end": 6041
+              }
+            }
+          },
+          {
+            "output": {
+              "start": 6958,
+              "end": 6982
+            },
+            "transform": "catalog-key-substitution",
+            "origin": {
+              "kind": "catalog-key",
+              "path": "app/core/ui-copy.js",
+              "pointer": "/home/story/eyebrow",
+              "template": {
+                "path": "architecture/pages/root.page.html",
+                "range": {
+                  "start": 6041,
+                  "end": 6068
+                }
+              }
+            }
+          },
+          {
+            "output": {
+              "start": 6982,
+              "end": 6990
+            },
+            "transform": "copy",
+            "origin": {
+              "kind": "page",
+              "path": "architecture/pages/root.page.html",
+              "range": {
+                "start": 6068,
+                "end": 6076
+              }
+            }
+          },
+          {
+            "output": {
+              "start": 6990,
+              "end": 7023
+            },
+            "transform": "catalog-key-substitution",
+            "origin": {
+              "kind": "catalog-key",
+              "path": "app/core/ui-copy.js",
+              "pointer": "/home/story/heading",
+              "template": {
+                "path": "architecture/pages/root.page.html",
+                "range": {
+                  "start": 6076,
+                  "end": 6103
+                }
+              }
+            }
+          },
+          {
+            "output": {
+              "start": 7023,
+              "end": 7031
+            },
+            "transform": "copy",
+            "origin": {
+              "kind": "page",
+              "path": "architecture/pages/root.page.html",
+              "range": {
+                "start": 6103,
+                "end": 6111
+              }
+            }
+          },
+          {
+            "output": {
+              "start": 7031,
+              "end": 7118
+            },
+            "transform": "catalog-key-substitution",
+            "origin": {
+              "kind": "catalog-key",
+              "path": "app/core/ui-copy.js",
+              "pointer": "/home/story/description",
+              "template": {
+                "path": "architecture/pages/root.page.html",
+                "range": {
+                  "start": 6111,
+                  "end": 6142
+                }
+              }
+            }
+          },
+          {
+            "output": {
+              "start": 7118,
+              "end": 7144
+            },
+            "transform": "copy",
+            "origin": {
+              "kind": "page",
+              "path": "architecture/pages/root.page.html",
+              "range": {
+                "start": 6142,
+                "end": 6168
+              }
+            }
+          },
+          {
+            "output": {
+              "start": 7144,
+              "end": 7166
+            },
+            "transform": "catalog-key-substitution",
+            "origin": {
+              "kind": "catalog-key",
+              "path": "app/core/ui-copy.js",
+              "pointer": "/home/story/action",
+              "template": {
+                "path": "architecture/pages/root.page.html",
+                "range": {
+                  "start": 6168,
+                  "end": 6194
+                }
+              }
+            }
+          },
+          {
+            "output": {
+              "start": 7166,
+              "end": 7472
+            },
+            "transform": "copy",
+            "origin": {
+              "kind": "page",
+              "path": "architecture/pages/root.page.html",
+              "range": {
+                "start": 6194,
+                "end": 6500
               }
             }
           },
@@ -982,8 +1118,8 @@
               "template": {
                 "path": "architecture/pages/root.page.html",
                 "range": {
-                  "start": 6555,
-                  "end": 6578
+                  "start": 6500,
+                  "end": 6523
                 }
               }
             }
@@ -998,8 +1134,8 @@
               "kind": "page",
               "path": "architecture/pages/root.page.html",
               "range": {
-                "start": 6578,
-                "end": 6938
+                "start": 6523,
+                "end": 6883
               }
             }
           }

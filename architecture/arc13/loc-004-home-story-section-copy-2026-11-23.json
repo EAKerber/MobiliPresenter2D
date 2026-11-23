@@ -1,0 +1,48 @@
+{
+  "schema": "M2DLOC004FamilyDecision/1",
+  "plan": "MobiliPresenter2D Plano Diretor v0.9",
+  "workItem": "LOC-004",
+  "family": "home-story-section-copy",
+  "status": "validated-for-development",
+  "copyOwner": "Product/UX; existing pt-BR wording retained without editorial changes",
+  "authoring": {
+    "template": "architecture/pages/root.page.html",
+    "catalog": "app/core/ui-copy.js",
+    "compiler": "scripts/compile-primary-pages.mjs",
+    "output": "app/index.html"
+  },
+  "keys": [
+    { "pointer": "/home/story/eyebrow", "value": "Simples do início ao fim", "sink": "section eyebrow" },
+    { "pointer": "/home/story/heading", "value": "Do seu espaço ao ambiente pronto.", "sink": "section h2" },
+    { "pointer": "/home/story/description", "value": "Escolha o ambiente, conheça os módulos e encontre uma solução que acompanha sua rotina.", "sink": "section paragraph" },
+    { "pointer": "/home/story/action", "value": "Encontre seu ambiente ", "sink": "static link text including the original trailing space before the decorative arrow" }
+  ],
+  "preserved": [
+    "all approved words and punctuation, section order, original element semantics, link route, and decorative arrow",
+    "all generated public HTML outputs remain identical to the development base after newline normalization",
+    "copy is emitted as complete static HTML and remains available without JavaScript",
+    "carousel labels, dynamic environment content, the benefits strip, and video accessibility labels remain outside this family"
+  ],
+  "baseline": {
+    "developmentBase": "710630272112b5e8d3f206f025dce19013ac22a0",
+    "renderedHtmlChanged": false,
+    "visualTestRequired": false,
+    "reason": "Catalog substitutions reproduce the existing output exactly, including the CTA's separating whitespace; no rendered layout input changed."
+  },
+  "inventory": {
+    "path": "architecture/arc13/ui-text-candidates.json",
+    "sha256": "0F12540F94E73FC340FFD0927CDB25151DCEB64DF26BD62BA8F001206B088052",
+    "familyOccurrences": 4,
+    "candidateIds": ["726ba912657048c0", "f3b15e24fe29eb81", "ecf36cc394880912", "5cd964c10d4dab85"],
+    "classificationNote": "The inventory remains candidate-unreviewed; family ownership is recorded without changing global classification."
+  },
+  "verification": {
+    "arc03cSourceAuthorityTests": "PASS 6/6",
+    "uiThemeContract": "PASS",
+    "pagesCheck": "PASS",
+    "inventoryScan": "PASS; parse errors 0; unresolved primary-page authoring occurrences 0",
+    "inventoryDeterminism": "PASS; two consecutive runs produced the same candidate inventory SHA-256",
+    "staticOutput": "PASS; all three primary-page outputs are identical to development base after newline normalization"
+  },
+  "exceptions": []
+}
