@@ -1,0 +1,9 @@
+{
+  "schemaVersion": "BranchDispositionSet 0.1",
+  "controlBranch": "development",
+  "preserveBranches": [
+    "main",
+    "development"
+  ],
+  "terminalBranches": []
+}
