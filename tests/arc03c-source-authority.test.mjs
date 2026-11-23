@@ -68,7 +68,7 @@ test("three generated pages and provenance manifest match authoritative source",
  }
  const x=gate();assert.equal(x.status,0,x.stderr);
 });
-test("public header copy is catalog-backed and remains static in generated HTML",async()=>{
+test("public copy is catalog-backed and remains static in generated HTML",async()=>{
  const r=await projectPages(),expected=[
   ["/brand/homeLinkAriaLabel","Casa em Módulos, início"],
   ["/brand/logoAlt","Casa em Módulos"],
@@ -86,15 +86,23 @@ test("public header copy is catalog-backed and remains static in generated HTML"
   assert.match(page.html,/<img[^>]+alt="Casa em Módulos">/);
   assert.match(page.html,/<nav id="primaryNav" aria-label="Navegação principal">/);
   for(const [,label] of expected.slice(3))assert.ok(page.html.includes(">"+label+"</a>"),label+" must be present without JS");
+  const pageExpected=page.output==="app/index.html"
+   ? [...expected,["/home/hero/aboutLink","Saiba mais"]]
+   : expected;
   const mapped=page.sourceMap.filter(segment=>segment.origin.kind==="catalog-key");
-  assert.deepEqual(mapped.map(segment=>segment.origin.pointer),expected.map(([pointer])=>pointer));
+  assert.deepEqual(mapped.map(segment=>segment.origin.pointer),pageExpected.map(([pointer])=>pointer));
   for(let i=0;i<mapped.length;i++) {
    const segment=mapped[i];
    assert.equal(segment.transform,"catalog-key-substitution");
    assert.equal(segment.origin.path,"app/core/ui-copy.js");
-   assert.equal(Array.from(page.html).slice(segment.output.start,segment.output.end).join(""),expected[i][1]);
+   assert.equal(Array.from(page.html).slice(segment.output.start,segment.output.end).join(""),pageExpected[i][1]);
   }
  }
+ const home=r.pages.find(page=>page.output==="app/index.html");
+ assert.match(home.html,/<a href="\/about\/">Saiba mais<\/a>/,
+  "the approved hero link stays visible and usable without JavaScript");
+ assert.equal(home.sourceMap.find(segment=>segment.origin.pointer==="/home/hero/aboutLink")?.origin.template.path,
+  "architecture/pages/root.page.html");
 });
 test("catalog text escapes HTML-sensitive characters",()=>{
  assert.equal(escapeHtml(`&<>"'`),"&amp;&lt;&gt;&quot;&#39;");
@@ -135,6 +143,9 @@ test("compiler rejects unsafe and out-of-scope sources in isolated fixtures",asy
  await assertRejectedMutation("architecture/pages/root.page.html",
   (target,before)=>writeFile(target,before+'\n<header class="viewer-header"></header>\n'),
   /NAV-005 excluded/);
+ await assertRejectedMutation("architecture/pages/root.page.html",
+  (target,before)=>writeFile(target,before.replace("{{copy.home.hero.aboutLink}}","{{copy.home.hero.unapproved}}")),
+  /Page copy placeholder is not approved/);
  await assertRejectedMutation("architecture/fragments/primary-header.routes.json",
   async(target)=> {
    const config=JSON.parse(await readFile(target,"utf8"));

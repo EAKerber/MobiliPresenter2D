@@ -36,6 +36,9 @@ PRIMARY_PAGES = {
         "source": "architecture/pages/how-it-works.page.html",
     },
 }
+PRIMARY_PAGE_COPY_KEYS = {
+    "architecture/pages/root.page.html": {"copy.home.hero.aboutLink"},
+}
 TEXT_ATTRIBUTES = {
     "alt",
     "title",
@@ -126,18 +129,20 @@ def _source_map_template(fragment: str, template: object, route_index: int) -> s
     return "/routes/" + str(route_index) + "/" + match.group(1)
 
 
-def _source_map_template_key(fragment: str, template: object) -> str:
-    if not isinstance(template, dict) or template.get("path") != PRIMARY_FRAGMENT:
-        raise ValueError("source-map template must point to the shared header fragment")
+def _source_map_template_key(template_texts: dict[str, str], template: object) -> str:
+    if not isinstance(template, dict) or template.get("path") not in template_texts:
+        raise ValueError("source-map template must point to an approved page or shared fragment")
+    template_path = template["path"]
+    template_text = template_texts[template_path]
     source_range = template.get("range")
     if not isinstance(source_range, dict):
         raise ValueError("source-map template range is missing")
     start, end = source_range.get("start"), source_range.get("end")
     if not isinstance(start, int) or isinstance(start, bool) or not isinstance(end, int) or isinstance(end, bool):
         raise ValueError("source-map template offsets must be integers")
-    if start < 0 or end <= start or end > len(fragment):
-        raise ValueError("source-map template range is outside the fragment")
-    placeholder = fragment[start:end]
+    if start < 0 or end <= start or end > len(template_text):
+        raise ValueError("source-map template range is outside its source")
+    placeholder = template_text[start:end]
     match = re.fullmatch(r"\{\{(copy\.[A-Za-z0-9.]+)\}\}", placeholder)
     if not match:
         raise ValueError("source-map template range does not identify one catalog key")
@@ -194,6 +199,7 @@ def _validated_primary_page_context(
     cursor = 0
     output_length = len(output_text)
     fragment = shared_texts[PRIMARY_FRAGMENT]
+    template_texts = {**shared_texts, expected["source"]: source_text}
     for segment in segments:
         if not isinstance(segment, dict):
             raise ValueError("source-map segment is not an object")
@@ -247,7 +253,14 @@ def _validated_primary_page_context(
             pointer = origin.get("pointer")
             if origin.get("path") != PRIMARY_COPY or transform != "catalog-key-substitution":
                 raise ValueError("catalog-key origin or transform is invalid")
-            key = _source_map_template_key(fragment, origin.get("template"))
+            template = origin.get("template")
+            key = _source_map_template_key(template_texts, template)
+            template_path = template.get("path")
+            if (
+                template_path != PRIMARY_FRAGMENT
+                and key not in PRIMARY_PAGE_COPY_KEYS.get(template_path, set())
+            ):
+                raise ValueError("page catalog key is outside the approved source map")
             expected_pointer = "/" + key.removeprefix("copy.").replace(".", "/")
             if pointer != expected_pointer:
                 raise ValueError("catalog pointer does not match its template key")
