@@ -122,7 +122,7 @@ test("public copy is catalog-backed and remains static in generated HTML",async(
    ])
   ]);
   const pageCopy=page.output==="app/index.html"
-   ? [["/home/hero/eyebrow","Casa em Módulos"],["/home/hero/heading/assemble","Monte."],["/home/hero/heading/choose","Escolha."],["/home/hero/heading/enjoy","Aproveite."],["/home/hero/lead","Móveis inteligentes, pensados para o seu espaço e para o seu orçamento."],["/home/hero/description","Um novo conceito em mobiliário que une projeto, fabricação e instalação em uma solução simples, prática e acessível."],["/actions/exploreEnvironments","Conheça nossos ambientes"],["/home/hero/aboutLink","Saiba mais"],["/video/youtubeLink","Assistir no YouTube ↗"],["/home/environments/eyebrow","Você escolhe o que precisa"],["/home/environments/heading","A gente já sabe como fazer."],["/home/story/eyebrow","Simples do início ao fim"],["/home/story/heading","Do seu espaço ao ambiente pronto."],["/home/story/description","Escolha o ambiente, conheça os módulos e encontre uma solução que acompanha sua rotina."],["/home/story/action","Encontre seu ambiente "],["/footer/tagline","Móveis modulares pensados para a vida real."]]
+   ? [["/home/hero/eyebrow","Casa em Módulos"],["/home/hero/heading/assemble","Monte."],["/home/hero/heading/choose","Escolha."],["/home/hero/heading/enjoy","Aproveite."],["/home/hero/lead","Móveis inteligentes, pensados para o seu espaço e para o seu orçamento."],["/home/hero/description","Um novo conceito em mobiliário que une projeto, fabricação e instalação em uma solução simples, prática e acessível."],["/actions/exploreEnvironments","Conheça nossos ambientes"],["/home/hero/aboutLink","Saiba mais"],["/video/youtubeLink","Assistir no YouTube ↗"],["/home/hero/video/groupLabel","Vídeo de apresentação no celular"],["/home/hero/video/playLabel","Reproduzir o vídeo de apresentação"],["/video/fullscreen/open","Abrir vídeo em tela cheia"],["/video/fullscreen/open","Abrir vídeo em tela cheia"],["/home/environments/eyebrow","Você escolhe o que precisa"],["/home/environments/heading","A gente já sabe como fazer."],["/home/story/eyebrow","Simples do início ao fim"],["/home/story/heading","Do seu espaço ao ambiente pronto."],["/home/story/description","Escolha o ambiente, conheça os módulos e encontre uma solução que acompanha sua rotina."],["/home/story/action","Encontre seu ambiente "],["/footer/tagline","Móveis modulares pensados para a vida real."]]
    : page.output==="app/how-it-works/index.html"
     ? [["/video/youtubeLink","Assistir no YouTube ↗"],...comparisonCopy,["/footer/tagline","Móveis modulares pensados para a vida real."],["/footer/homeLink","Voltar ao início ↑"]]
     : page.output==="app/about/index.html"
@@ -149,6 +149,12 @@ test("public copy is catalog-backed and remains static in generated HTML",async(
   "the Home story section keeps its exact copy, route, trailing-space boundary, and static markup");
  assert.match(home.html,/<a href="\/about\/">Saiba mais<\/a>/,
   "the approved hero link stays visible and usable without JavaScript");
+ assert.match(home.html,/role="group" aria-label="Vídeo de apresentação no celular" hidden/,
+  "the hero video group keeps its exact accessible name as static HTML");
+ assert.match(home.html,/id="heroPhonePoster" type="button" aria-label="Reproduzir o vídeo de apresentação"/,
+  "the hero video poster keeps its exact accessible name as static HTML");
+ assert.match(home.html,/id="heroPhoneFullscreen" type="button" aria-label="Abrir vídeo em tela cheia" title="Abrir vídeo em tela cheia"/,
+  "the fullscreen button keeps the shared catalog label in both accessible sinks");
  assert.match(home.html,/<a href="https:\/\/www\.youtube\.com\/shorts\/hgcJ1k7lFkE" target="_blank" rel="noopener noreferrer">Assistir no YouTube ↗<\/a>/,
   "the YouTube link keeps its destination and remains usable without JavaScript");
  assert.equal(home.sourceMap.find(segment=>segment.origin.pointer==="/home/hero/aboutLink")?.origin.template.path,
