@@ -133,7 +133,13 @@
         utility.appendChild(button);
         header.parentNode.insertBefore(utility, header.nextSibling);
       } else {
-        header.insertBefore(button, header.firstChild);
+        var restoreControl = privateActions && privateActions.querySelector("#restoreButton");
+        if (restoreControl && restoreControl.parentNode === privateActions) {
+          // Keep keyboard order aligned with the visual configurator actions.
+          restoreControl.insertAdjacentElement("afterend", button);
+        } else {
+          header.insertBefore(button, header.firstChild);
+        }
       }
     }
     refreshControls();
