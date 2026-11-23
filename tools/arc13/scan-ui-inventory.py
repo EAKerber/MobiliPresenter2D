@@ -63,6 +63,7 @@ PRIMARY_PAGE_COPY_KEYS = {
         "copy.home.hero.aboutLink",
         "copy.video.youtubeLink",
         "copy.brand.logoAlt",
+        "copy.home.footer.environmentsLink",
         "copy.footer.tagline",
     },
     "architecture/pages/about.page.html": {
