@@ -94,7 +94,12 @@
     "No main promotion or production publication is included."
   ],
   "integration": {
-    "pullRequest": null,
+    "pullRequest": {
+      "number": 327,
+      "url": "https://github.com/EAKerber/MobiliPresenter2D/pull/327",
+      "implementationCommit": "4bec1f3fee174e15bdbfd03275ba1bb7f632cc83",
+      "baseSha": "f7e2e6f01faf7f90eb4cc864c70a6bb702dc7a76"
+    },
     "developmentIntegrationSha": null
   }
 }
