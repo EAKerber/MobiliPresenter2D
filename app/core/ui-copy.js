@@ -23,6 +23,11 @@
       howItWorks: "Como funciona",
       about: "Quem somos"
     }),
+    home: Object.freeze({
+      hero: Object.freeze({
+        aboutLink: "Saiba mais"
+      })
+    }),
     theme: Object.freeze({
       mode: Object.freeze({
         auto: Object.freeze({ full: "Automático", short: "Auto" }),

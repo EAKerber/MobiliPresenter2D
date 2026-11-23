@@ -28,6 +28,11 @@ const COPY_POINTERS={
  "copy.navigation.howItWorks":"/navigation/howItWorks",
  "copy.navigation.about":"/navigation/about"
 };
+const PAGE_COPY_POINTERS={
+ "architecture/pages/root.page.html":{
+  "copy.home.hero.aboutLink":"/home/hero/aboutLink"
+ }
+};
 const require=createRequire(import.meta.url);
 function canonicalText(value) { return value.replace(/\r\n/g,"\n"); }
 async function readCanonical(path) {
@@ -49,6 +54,38 @@ function appendMapped(parts,segments,offset,value,transform,origin) {
  parts.push(value);
  if(end>start)segments.push({output:{start,end},transform,origin});
  return end;
+}
+function renderPageCopy(source,path,sourceBase,catalog) {
+ const allowed=PAGE_COPY_POINTERS[path]||{};
+ const parts=[],segments=[];let outputOffset=0,cursor=0;
+ for(const match of source.matchAll(/\{\{([^{}]+)\}\}/g)) {
+  const key=match[1],pointer=allowed[key];
+  assert.equal(typeof pointer,"string","Page copy placeholder is not approved for "+path+": "+key);
+  const literal=source.slice(cursor,match.index);
+  if(literal) {
+   const sourceStart=sourceBase+codePointLength(source.slice(0,cursor));
+   outputOffset=appendMapped(parts,segments,outputOffset,literal,"copy",{
+    kind:"page",path,range:{start:sourceStart,end:sourceStart+codePointLength(literal)}
+   });
+  }
+  const value=pointer.split("/").slice(1).reduce((node,keyPart)=>node?.[keyPart],catalog);
+  assert.equal(typeof value,"string","Catalog entry must be a string: "+pointer);
+  assert.notEqual(value.trim(),"","Catalog entry must not be blank: "+pointer);
+  const templateStart=sourceBase+codePointLength(source.slice(0,match.index));
+  outputOffset=appendMapped(parts,segments,outputOffset,escapeHtml(value),"catalog-key-substitution",{
+   kind:"catalog-key",path:COPY_CATALOG,pointer,
+   template:{path,range:{start:templateStart,end:templateStart+codePointLength(match[0])}}
+  });
+  cursor=match.index+match[0].length;
+ }
+ const trailing=source.slice(cursor);
+ if(trailing) {
+  const sourceStart=sourceBase+codePointLength(source.slice(0,cursor));
+  outputOffset=appendMapped(parts,segments,outputOffset,trailing,"copy",{
+   kind:"page",path,range:{start:sourceStart,end:sourceStart+codePointLength(trailing)}
+  });
+ }
+ return {text:parts.join(""),segments};
 }
 function trimRendered(parts,segments) {
  const value=parts.join(""),trimmed=value.trim();
@@ -171,19 +208,24 @@ export async function projectPages() {
   const slotStart=source.indexOf(SLOT),slotEnd=slotStart+SLOT.length;
   const before=source.slice(0,slotStart),after=source.slice(slotEnd);
   const pageParts=[],pageSegments=[];let pageOffset=0;
-  pageOffset=appendMapped(pageParts,pageSegments,pageOffset,before,"copy",{
-   kind:"page",path:p.source,range:{start:0,end:codePointLength(before)}
-  });
+  const renderedBefore=renderPageCopy(before,p.source,0,catalog);
+  pageParts.push(renderedBefore.text);
+  pageSegments.push(...renderedBefore.segments.map(segment=>({...segment,output:{
+   start:segment.output.start+pageOffset,end:segment.output.end+pageOffset
+  }})));
+  pageOffset+=codePointLength(renderedBefore.text);
   const headerOffset=pageOffset;
   pageParts.push(renderedHeader.text);
   pageSegments.push(...renderedHeader.segments.map(segment=>({...segment,output:{
    start:segment.output.start+headerOffset,end:segment.output.end+headerOffset
   }})));
   pageOffset+=codePointLength(renderedHeader.text);
-  pageOffset=appendMapped(pageParts,pageSegments,pageOffset,after,"copy",{
-   kind:"page",path:p.source,range:{start:codePointLength(source.slice(0,slotEnd)),
-    end:codePointLength(source)}
-  });
+  const renderedAfter=renderPageCopy(after,p.source,codePointLength(source.slice(0,slotEnd)),catalog);
+  pageParts.push(renderedAfter.text);
+  pageSegments.push(...renderedAfter.segments.map(segment=>({...segment,output:{
+   start:segment.output.start+pageOffset,end:segment.output.end+pageOffset
+  }})));
+  pageOffset+=codePointLength(renderedAfter.text);
   const html=pageParts.join("");
   assert.ok(!html.includes(SLOT)&&!html.includes("{{"),"Unresolved page");
   let mapCursor=0;

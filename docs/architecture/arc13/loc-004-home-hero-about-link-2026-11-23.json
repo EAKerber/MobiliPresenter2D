@@ -1,0 +1,65 @@
+{
+  "schema": "ARC13LOC004Extraction/1",
+  "plan": "MobiliPresenter2D Plano Diretor v0.9",
+  "workItem": "LOC-004",
+  "family": "home-hero-about-link",
+  "status": "candidate-implemented",
+  "decision": {
+    "visibleText": "Saiba mais",
+    "destination": "/about/",
+    "classification": "ui-static",
+    "subsystemOwner": "landing",
+    "contentOwner": "User; wording and destination explicitly requested",
+    "authority": "Explicit user request for this wording and destination, preserved in the #274 decision record; source identity was revalidated on the current development base.",
+    "catalogKey": "home.hero.aboutLink"
+  },
+  "evidence": {
+    "baseRevision": "64c778e9c8bd10ede7c3fbd5bd2e5422928d9cdb",
+    "targetBranch": "development",
+    "inventoryPath": "architecture/arc13/ui-text-candidates.json",
+    "inventorySha256": "88BB81BFCCD72DE6169DE07DC49678ADBB1DCCC34369B29E4BB943B822E45E2B",
+    "candidateId": "e185d906c6f85858",
+    "publishedSource": "app/index.html",
+    "publishedLine": 34,
+    "publishedSourceSha256": "902e52094549f7d6f8df34f994509ed0d0e5f5890ef3d6ad912472139433b50c",
+    "authoringSource": "architecture/pages/root.page.html",
+    "authoringSourceLine": 34,
+    "authoringSourceGitBlob": "664346d065ab604da2bb151912be82573f4ad2e9",
+    "catalog": "app/core/ui-copy.js",
+    "catalogGitBlob": "315298a02bacf186299a2ec9fed06de500735b89",
+    "catalogPointer": "/home/hero/aboutLink",
+    "compiler": "scripts/compile-primary-pages.mjs",
+    "compilerGitBlob": "8c857c9ccae03934bfd840bf124b79c1dd583f11",
+    "manifest": "architecture/generated/primary-pages.manifest.json",
+    "manifestSha256": "EC42D0DB991AC0F27BB59AF0B78ADAE29DF4BBD1D92B462E3E6EF434F6B727EB",
+    "generatedOutputGitBlob": "c7af00f5bfa20e7d21353c2222ed8157a19ed187",
+    "authoringMap": {
+      "kind": "catalog-key",
+      "transform": "catalog-key-substitution",
+      "templatePath": "architecture/pages/root.page.html",
+      "templateRange": {
+        "start": 2440,
+        "end": 2468
+      }
+    }
+  },
+  "implementation": {
+    "htmlRemainsStatic": true,
+    "requiresJavaScriptForText": false,
+    "destinationUnchanged": true,
+    "generatedPagesChangedVisibly": false,
+    "copySourceIsCatalog": true,
+    "inventoryStatusChanged": false
+  },
+  "validation": {
+    "arc03cSourceAuthority": "passed 6/6",
+    "pagesCheck": "passed on exact worktree",
+    "inventoryGeneration": "two identical runs; 67 sources; 0 parse errors; 420 primary occurrences mapped; 0 unresolved; 1043 global candidates remain unreviewed",
+    "gitDiffCheck": "passed"
+  },
+  "limits": [
+    "The generated visible text and link behavior are byte-for-byte unchanged; only authoring and catalog provenance moved.",
+    "This receipt classifies and extracts one approved static link only; it does not close LOC-002 or ARC-13 globally.",
+    "No Deploy Preview, production publication, or main promotion is included."
+  ]
+}
