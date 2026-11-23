@@ -1,0 +1,144 @@
+{
+  "schema": "ARC13LOC005Extraction/1",
+  "plan": "MobiliPresenter2D Plano Diretor v0.9",
+  "workItem": "LOC-005",
+  "family": "video-fullscreen-labels",
+  "status": "candidate-implemented",
+  "scope": {
+    "routes": ["/", "/how-it-works/"],
+    "behaviorChanged": false,
+    "visibleTextChanged": false,
+    "staticFallbackPreserved": true,
+    "remoteCatalogRequired": false
+  },
+  "decision": {
+    "contentOwner": "User",
+    "authority": "The user requested the fullscreen control, requested an exit control on both pages, and approved the resulting UI. This package preserves the already-visible Portuguese wording.",
+    "subsystemOwner": "public-video-control",
+    "classificationBySink": {
+      "aria-label": "accessibility",
+      "title": "ui-dynamic"
+    },
+    "catalog": "app/core/ui-copy.js",
+    "catalogKeys": {
+      "open": "/video/fullscreen/open",
+      "close": "/video/fullscreen/close"
+    },
+    "values": {
+      "open": "Abrir vídeo em tela cheia",
+      "close": "Sair da tela cheia"
+    }
+  },
+  "inventoryDisposition": {
+    "staticFallbackOccurrences": [
+      {
+        "candidateId": "c2c6bd2c037ca454",
+        "source": "app/index.html",
+        "authoringSource": "architecture/pages/root.page.html",
+        "sink": "aria-label",
+        "destination": "/video/fullscreen/open",
+        "reviewedAs": "accessibility"
+      },
+      {
+        "candidateId": "d6d455c085c0c21f",
+        "source": "app/index.html",
+        "authoringSource": "architecture/pages/root.page.html",
+        "sink": "title",
+        "destination": "/video/fullscreen/open",
+        "reviewedAs": "ui-dynamic"
+      },
+      {
+        "candidateId": "1fb12e3eb303d497",
+        "source": "app/how-it-works/index.html",
+        "authoringSource": "architecture/pages/how-it-works.page.html",
+        "sink": "aria-label",
+        "destination": "/video/fullscreen/open",
+        "reviewedAs": "accessibility"
+      },
+      {
+        "candidateId": "fbd8581d0d6f8053",
+        "source": "app/how-it-works/index.html",
+        "authoringSource": "architecture/pages/how-it-works.page.html",
+        "sink": "title",
+        "destination": "/video/fullscreen/open",
+        "reviewedAs": "ui-dynamic"
+      }
+    ],
+    "dynamicSinkOccurrences": [
+      {
+        "candidateId": "35eff8c8551d4683",
+        "source": "app/landing/landing.js",
+        "sink": "aria-label",
+        "destination": "/video/fullscreen/open|close",
+        "reviewedAs": "accessibility"
+      },
+      {
+        "candidateId": "eb29728911c9ef7d",
+        "source": "app/landing/landing.js",
+        "sink": "title",
+        "destination": "/video/fullscreen/open|close",
+        "reviewedAs": "ui-dynamic"
+      },
+      {
+        "candidateId": "ad71d3fcca0702ed",
+        "source": "app/how-it-works/how-it-works.js",
+        "sink": "aria-label",
+        "destination": "/video/fullscreen/open|close",
+        "reviewedAs": "accessibility"
+      },
+      {
+        "candidateId": "23703f4e6c948be9",
+        "source": "app/how-it-works/how-it-works.js",
+        "sink": "title",
+        "destination": "/video/fullscreen/open|close",
+        "reviewedAs": "ui-dynamic"
+      }
+    ],
+    "globalInventory": {
+      "status": "unreviewed",
+      "candidateCount": 1043,
+      "parserErrors": 0,
+      "primaryMappedOccurrences": 420,
+      "primaryUnresolvedOccurrences": 0
+    }
+  },
+  "implementation": {
+    "catalogAdded": "video.fullscreen.{open,close}",
+    "controllers": ["app/landing/landing.js", "app/how-it-works/how-it-works.js"],
+    "staticInitialLabelRetained": true,
+    "ariaLabelAndTitleStillSynchronize": true,
+    "ariaPressedAndFullscreenEventsUnchanged": true,
+    "cacheVersionsUpdatedForConsumers": true,
+    "generatedPages": ["app/index.html", "app/how-it-works/index.html"],
+    "generatedManifest": "architecture/generated/primary-pages.manifest.json"
+  },
+  "evidence": {
+    "baseDevelopmentSha": "8472dc8b501eb0f8b27064e1c6924e315d6164df",
+    "baseTreeSha": "a0dae404b3a62098d2e912fe2e41d17e4e40c8ea",
+    "inventoryPath": "architecture/arc13/ui-text-candidates.json",
+    "inventorySha256": "CD86FD841E0FD46FF8EED3737B78119C188FDD096CA5CDEBB22303E5ACE74F6D",
+    "manifestPath": "architecture/generated/primary-pages.manifest.json",
+    "manifestSha256": "CAAB17AEA9287A550DCBF758FEEF69DC14904E92465E72DA35D1C95AD7735B3F",
+    "sourceSha256": {
+      "app/core/ui-copy.js": "656CF600E944F62378114CCC91AE46DAF88E9FA0CEAA0E67CCFA7F8DEED7CD9B",
+      "app/landing/landing.js": "3E36CE31A0FE9C2DA90859DE726FCEFBD1C62A2120E268050741A3C33F49948C",
+      "app/how-it-works/how-it-works.js": "1EF1749A6C41F77859C5F6535BC04CC899A6956DFD131EE6718BB569128CC837",
+      "architecture/pages/root.page.html": "B592414FA716285EDA0E238807C34C9F32CCBADB79A4DDE01B703CC83A5871C1",
+      "architecture/pages/how-it-works.page.html": "45E6267B6477CEB0CC047A717CCADC0D3B51252CCFBC65744C56BB7520106965"
+    }
+  },
+  "validation": {
+    "pageCompiler": "passed",
+    "catalogContract": "passed",
+    "arc03cSourceAuthority": "passed 6/6",
+    "javascriptSyntax": "passed",
+    "inventoryGeneration": "two identical generations; 67 sources; 0 parser errors",
+    "gitDiffCheck": "passed",
+    "browserStateReplay": "pending CI; local Playwright package is not installed"
+  },
+  "limits": [
+    "The inventory scanner still reports the four static fallback strings as globally unreviewed; this receipt supplies a scoped decision and does not mark the 1,043-candidate inventory complete.",
+    "The current inventory records runtime sinks but does not attach the new catalog key to JavaScript sourceEntries; automated catalog-to-sink coverage remains future LOC-007 work.",
+    "No Deploy Preview, production publication, or main promotion is included."
+  ]
+}

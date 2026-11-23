@@ -11,7 +11,7 @@
   },
   "copyCatalog": {
     "path": "app/core/ui-copy.js",
-    "gitBlobSha": "9c8dff0d5bd69963511d393274ae69d955fa40ee",
+    "gitBlobSha": "f2f4f3877efb059890f768cbe2d52f9cc1c45424",
     "schema": "M2DUIStringCatalog/1",
     "locale": "pt-BR"
   },
@@ -28,14 +28,14 @@
       "route": "/",
       "source": "architecture/pages/root.page.html",
       "output": "app/index.html",
-      "sourceGitBlobSha": "b8a1dc3009fc5d4c12d7b9d40ff9d2f6aa584694",
-      "outputGitBlobSha": "c7af00f5bfa20e7d21353c2222ed8157a19ed187",
+      "sourceGitBlobSha": "d18af2e81f8c9c9404211135210459a49dfd8aea",
+      "outputGitBlobSha": "543c4ec5797a0a6dfbad610587c4e6e5d02b6cfe",
       "sourceMap": {
         "segments": [
           {
             "output": {
               "start": 0,
-              "end": 1615
+              "end": 1627
             },
             "transform": "copy",
             "origin": {
@@ -43,14 +43,14 @@
               "path": "architecture/pages/root.page.html",
               "range": {
                 "start": 0,
-                "end": 1615
+                "end": 1627
               }
             }
           },
           {
             "output": {
-              "start": 1615,
-              "end": 1686
+              "start": 1627,
+              "end": 1698
             },
             "transform": "copy",
             "origin": {
@@ -64,8 +64,8 @@
           },
           {
             "output": {
-              "start": 1686,
-              "end": 1687
+              "start": 1698,
+              "end": 1699
             },
             "transform": "route-placeholder-substitution",
             "origin": {
@@ -83,8 +83,8 @@
           },
           {
             "output": {
-              "start": 1687,
-              "end": 1701
+              "start": 1699,
+              "end": 1713
             },
             "transform": "copy",
             "origin": {
@@ -98,8 +98,8 @@
           },
           {
             "output": {
-              "start": 1701,
-              "end": 1724
+              "start": 1713,
+              "end": 1736
             },
             "transform": "catalog-key-substitution",
             "origin": {
@@ -117,8 +117,8 @@
           },
           {
             "output": {
-              "start": 1724,
-              "end": 1905
+              "start": 1736,
+              "end": 1917
             },
             "transform": "copy",
             "origin": {
@@ -132,8 +132,8 @@
           },
           {
             "output": {
-              "start": 1905,
-              "end": 1920
+              "start": 1917,
+              "end": 1932
             },
             "transform": "catalog-key-substitution",
             "origin": {
@@ -151,8 +151,8 @@
           },
           {
             "output": {
-              "start": 1920,
-              "end": 1959
+              "start": 1932,
+              "end": 1971
             },
             "transform": "copy",
             "origin": {
@@ -166,8 +166,8 @@
           },
           {
             "output": {
-              "start": 1959,
-              "end": 1978
+              "start": 1971,
+              "end": 1990
             },
             "transform": "catalog-key-substitution",
             "origin": {
@@ -185,8 +185,8 @@
           },
           {
             "output": {
-              "start": 1978,
-              "end": 1989
+              "start": 1990,
+              "end": 2001
             },
             "transform": "copy",
             "origin": {
@@ -200,8 +200,8 @@
           },
           {
             "output": {
-              "start": 1989,
-              "end": 2000
+              "start": 2001,
+              "end": 2012
             },
             "transform": "route-placeholder-substitution",
             "origin": {
@@ -219,8 +219,8 @@
           },
           {
             "output": {
-              "start": 2000,
-              "end": 2001
+              "start": 2012,
+              "end": 2013
             },
             "transform": "copy",
             "origin": {
@@ -234,8 +234,8 @@
           },
           {
             "output": {
-              "start": 2001,
-              "end": 2021
+              "start": 2013,
+              "end": 2033
             },
             "transform": "conditional-attribute-generation",
             "origin": {
@@ -259,8 +259,8 @@
           },
           {
             "output": {
-              "start": 2021,
-              "end": 2022
+              "start": 2033,
+              "end": 2034
             },
             "transform": "copy",
             "origin": {
@@ -274,8 +274,8 @@
           },
           {
             "output": {
-              "start": 2022,
-              "end": 2031
+              "start": 2034,
+              "end": 2043
             },
             "transform": "catalog-key-substitution",
             "origin": {
@@ -293,8 +293,8 @@
           },
           {
             "output": {
-              "start": 2031,
-              "end": 2044
+              "start": 2043,
+              "end": 2056
             },
             "transform": "copy",
             "origin": {
@@ -308,8 +308,8 @@
           },
           {
             "output": {
-              "start": 2044,
-              "end": 2058
+              "start": 2056,
+              "end": 2070
             },
             "transform": "route-placeholder-substitution",
             "origin": {
@@ -327,8 +327,8 @@
           },
           {
             "output": {
-              "start": 2058,
-              "end": 2059
+              "start": 2070,
+              "end": 2071
             },
             "transform": "copy",
             "origin": {
@@ -342,8 +342,8 @@
           },
           {
             "output": {
-              "start": 2059,
-              "end": 2060
+              "start": 2071,
+              "end": 2072
             },
             "transform": "copy",
             "origin": {
@@ -357,8 +357,8 @@
           },
           {
             "output": {
-              "start": 2060,
-              "end": 2073
+              "start": 2072,
+              "end": 2085
             },
             "transform": "catalog-key-substitution",
             "origin": {
@@ -376,8 +376,8 @@
           },
           {
             "output": {
-              "start": 2073,
-              "end": 2086
+              "start": 2085,
+              "end": 2098
             },
             "transform": "copy",
             "origin": {
@@ -391,8 +391,8 @@
           },
           {
             "output": {
-              "start": 2086,
-              "end": 2093
+              "start": 2098,
+              "end": 2105
             },
             "transform": "route-placeholder-substitution",
             "origin": {
@@ -410,8 +410,8 @@
           },
           {
             "output": {
-              "start": 2093,
-              "end": 2094
+              "start": 2105,
+              "end": 2106
             },
             "transform": "copy",
             "origin": {
@@ -425,8 +425,8 @@
           },
           {
             "output": {
-              "start": 2094,
-              "end": 2095
+              "start": 2106,
+              "end": 2107
             },
             "transform": "copy",
             "origin": {
@@ -440,8 +440,8 @@
           },
           {
             "output": {
-              "start": 2095,
-              "end": 2105
+              "start": 2107,
+              "end": 2117
             },
             "transform": "catalog-key-substitution",
             "origin": {
@@ -459,8 +459,8 @@
           },
           {
             "output": {
-              "start": 2105,
-              "end": 2313
+              "start": 2117,
+              "end": 2325
             },
             "transform": "copy",
             "origin": {
@@ -474,8 +474,8 @@
           },
           {
             "output": {
-              "start": 2313,
-              "end": 2332
+              "start": 2325,
+              "end": 2344
             },
             "transform": "conditional-attribute-generation",
             "origin": {
@@ -499,8 +499,8 @@
           },
           {
             "output": {
-              "start": 2332,
-              "end": 2564
+              "start": 2344,
+              "end": 2576
             },
             "transform": "copy",
             "origin": {
@@ -514,23 +514,23 @@
           },
           {
             "output": {
-              "start": 2564,
-              "end": 3360
+              "start": 2576,
+              "end": 3372
             },
             "transform": "copy",
             "origin": {
               "kind": "page",
               "path": "architecture/pages/root.page.html",
               "range": {
-                "start": 1644,
-                "end": 2440
+                "start": 1656,
+                "end": 2452
               }
             }
           },
           {
             "output": {
-              "start": 3360,
-              "end": 3370
+              "start": 3372,
+              "end": 3382
             },
             "transform": "catalog-key-substitution",
             "origin": {
@@ -540,31 +540,31 @@
               "template": {
                 "path": "architecture/pages/root.page.html",
                 "range": {
-                  "start": 2440,
-                  "end": 2468
+                  "start": 2452,
+                  "end": 2480
                 }
               }
             }
           },
           {
             "output": {
-              "start": 3370,
-              "end": 3480
+              "start": 3382,
+              "end": 3492
             },
             "transform": "copy",
             "origin": {
               "kind": "page",
               "path": "architecture/pages/root.page.html",
               "range": {
-                "start": 2468,
-                "end": 2578
+                "start": 2480,
+                "end": 2590
               }
             }
           },
           {
             "output": {
-              "start": 3480,
-              "end": 3501
+              "start": 3492,
+              "end": 3513
             },
             "transform": "catalog-key-substitution",
             "origin": {
@@ -574,24 +574,24 @@
               "template": {
                 "path": "architecture/pages/root.page.html",
                 "range": {
-                  "start": 2578,
-                  "end": 2604
+                  "start": 2590,
+                  "end": 2616
                 }
               }
             }
           },
           {
             "output": {
-              "start": 3501,
-              "end": 7856
+              "start": 3513,
+              "end": 7876
             },
             "transform": "copy",
             "origin": {
               "kind": "page",
               "path": "architecture/pages/root.page.html",
               "range": {
-                "start": 2604,
-                "end": 6959
+                "start": 2616,
+                "end": 6979
               }
             }
           }
@@ -1083,14 +1083,14 @@
       "route": "/how-it-works/",
       "source": "architecture/pages/how-it-works.page.html",
       "output": "app/how-it-works/index.html",
-      "sourceGitBlobSha": "55c6b9ae45630ac650ea27ee7e0fb0e9e3484446",
-      "outputGitBlobSha": "13a1239a413a593182b42ff5107fe703402d49c1",
+      "sourceGitBlobSha": "065915f3377582f017b46ad9a2c8a0d04fb933c4",
+      "outputGitBlobSha": "b400303b0ffc21e69b11fe19323337b20833c0f2",
       "sourceMap": {
         "segments": [
           {
             "output": {
               "start": 0,
-              "end": 1279
+              "end": 1291
             },
             "transform": "copy",
             "origin": {
@@ -1098,14 +1098,14 @@
               "path": "architecture/pages/how-it-works.page.html",
               "range": {
                 "start": 0,
-                "end": 1279
+                "end": 1291
               }
             }
           },
           {
             "output": {
-              "start": 1279,
-              "end": 1350
+              "start": 1291,
+              "end": 1362
             },
             "transform": "copy",
             "origin": {
@@ -1119,8 +1119,8 @@
           },
           {
             "output": {
-              "start": 1350,
-              "end": 1353
+              "start": 1362,
+              "end": 1365
             },
             "transform": "route-placeholder-substitution",
             "origin": {
@@ -1138,8 +1138,8 @@
           },
           {
             "output": {
-              "start": 1353,
-              "end": 1367
+              "start": 1365,
+              "end": 1379
             },
             "transform": "copy",
             "origin": {
@@ -1153,8 +1153,8 @@
           },
           {
             "output": {
-              "start": 1367,
-              "end": 1390
+              "start": 1379,
+              "end": 1402
             },
             "transform": "catalog-key-substitution",
             "origin": {
@@ -1172,8 +1172,8 @@
           },
           {
             "output": {
-              "start": 1390,
-              "end": 1571
+              "start": 1402,
+              "end": 1583
             },
             "transform": "copy",
             "origin": {
@@ -1187,8 +1187,8 @@
           },
           {
             "output": {
-              "start": 1571,
-              "end": 1586
+              "start": 1583,
+              "end": 1598
             },
             "transform": "catalog-key-substitution",
             "origin": {
@@ -1206,8 +1206,8 @@
           },
           {
             "output": {
-              "start": 1586,
-              "end": 1625
+              "start": 1598,
+              "end": 1637
             },
             "transform": "copy",
             "origin": {
@@ -1221,8 +1221,8 @@
           },
           {
             "output": {
-              "start": 1625,
-              "end": 1644
+              "start": 1637,
+              "end": 1656
             },
             "transform": "catalog-key-substitution",
             "origin": {
@@ -1240,8 +1240,8 @@
           },
           {
             "output": {
-              "start": 1644,
-              "end": 1655
+              "start": 1656,
+              "end": 1667
             },
             "transform": "copy",
             "origin": {
@@ -1255,8 +1255,8 @@
           },
           {
             "output": {
-              "start": 1655,
-              "end": 1668
+              "start": 1667,
+              "end": 1680
             },
             "transform": "route-placeholder-substitution",
             "origin": {
@@ -1274,8 +1274,8 @@
           },
           {
             "output": {
-              "start": 1668,
-              "end": 1669
+              "start": 1680,
+              "end": 1681
             },
             "transform": "copy",
             "origin": {
@@ -1289,8 +1289,8 @@
           },
           {
             "output": {
-              "start": 1669,
-              "end": 1670
+              "start": 1681,
+              "end": 1682
             },
             "transform": "copy",
             "origin": {
@@ -1304,8 +1304,8 @@
           },
           {
             "output": {
-              "start": 1670,
-              "end": 1679
+              "start": 1682,
+              "end": 1691
             },
             "transform": "catalog-key-substitution",
             "origin": {
@@ -1323,8 +1323,8 @@
           },
           {
             "output": {
-              "start": 1679,
-              "end": 1692
+              "start": 1691,
+              "end": 1704
             },
             "transform": "copy",
             "origin": {
@@ -1338,8 +1338,8 @@
           },
           {
             "output": {
-              "start": 1692,
-              "end": 1694
+              "start": 1704,
+              "end": 1706
             },
             "transform": "route-placeholder-substitution",
             "origin": {
@@ -1357,8 +1357,8 @@
           },
           {
             "output": {
-              "start": 1694,
-              "end": 1695
+              "start": 1706,
+              "end": 1707
             },
             "transform": "copy",
             "origin": {
@@ -1372,8 +1372,8 @@
           },
           {
             "output": {
-              "start": 1695,
-              "end": 1715
+              "start": 1707,
+              "end": 1727
             },
             "transform": "conditional-attribute-generation",
             "origin": {
@@ -1397,8 +1397,8 @@
           },
           {
             "output": {
-              "start": 1715,
-              "end": 1716
+              "start": 1727,
+              "end": 1728
             },
             "transform": "copy",
             "origin": {
@@ -1412,8 +1412,8 @@
           },
           {
             "output": {
-              "start": 1716,
-              "end": 1729
+              "start": 1728,
+              "end": 1741
             },
             "transform": "catalog-key-substitution",
             "origin": {
@@ -1431,8 +1431,8 @@
           },
           {
             "output": {
-              "start": 1729,
-              "end": 1742
+              "start": 1741,
+              "end": 1754
             },
             "transform": "copy",
             "origin": {
@@ -1446,8 +1446,8 @@
           },
           {
             "output": {
-              "start": 1742,
-              "end": 1751
+              "start": 1754,
+              "end": 1763
             },
             "transform": "route-placeholder-substitution",
             "origin": {
@@ -1465,8 +1465,8 @@
           },
           {
             "output": {
-              "start": 1751,
-              "end": 1752
+              "start": 1763,
+              "end": 1764
             },
             "transform": "copy",
             "origin": {
@@ -1480,8 +1480,8 @@
           },
           {
             "output": {
-              "start": 1752,
-              "end": 1753
+              "start": 1764,
+              "end": 1765
             },
             "transform": "copy",
             "origin": {
@@ -1495,8 +1495,8 @@
           },
           {
             "output": {
-              "start": 1753,
-              "end": 1763
+              "start": 1765,
+              "end": 1775
             },
             "transform": "catalog-key-substitution",
             "origin": {
@@ -1514,8 +1514,8 @@
           },
           {
             "output": {
-              "start": 1763,
-              "end": 1971
+              "start": 1775,
+              "end": 1983
             },
             "transform": "copy",
             "origin": {
@@ -1529,8 +1529,8 @@
           },
           {
             "output": {
-              "start": 1971,
-              "end": 1990
+              "start": 1983,
+              "end": 2002
             },
             "transform": "conditional-attribute-generation",
             "origin": {
@@ -1554,8 +1554,8 @@
           },
           {
             "output": {
-              "start": 1990,
-              "end": 2222
+              "start": 2002,
+              "end": 2234
             },
             "transform": "copy",
             "origin": {
@@ -1569,23 +1569,23 @@
           },
           {
             "output": {
-              "start": 2222,
-              "end": 3550
+              "start": 2234,
+              "end": 3562
             },
             "transform": "copy",
             "origin": {
               "kind": "page",
               "path": "architecture/pages/how-it-works.page.html",
               "range": {
-                "start": 1308,
-                "end": 2636
+                "start": 1320,
+                "end": 2648
               }
             }
           },
           {
             "output": {
-              "start": 3550,
-              "end": 3571
+              "start": 3562,
+              "end": 3583
             },
             "transform": "catalog-key-substitution",
             "origin": {
@@ -1595,24 +1595,24 @@
               "template": {
                 "path": "architecture/pages/how-it-works.page.html",
                 "range": {
-                  "start": 2636,
-                  "end": 2662
+                  "start": 2648,
+                  "end": 2674
                 }
               }
             }
           },
           {
             "output": {
-              "start": 3571,
-              "end": 32720
+              "start": 3583,
+              "end": 32729
             },
             "transform": "copy",
             "origin": {
               "kind": "page",
               "path": "architecture/pages/how-it-works.page.html",
               "range": {
-                "start": 2662,
-                "end": 31811
+                "start": 2674,
+                "end": 31820
               }
             }
           }

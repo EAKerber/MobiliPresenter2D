@@ -3,10 +3,11 @@
   const fullscreenButton=document.getElementById("howVideoFullscreen"),videoFrame=document.getElementById("howVideoPlayer");
   const videoContainer=videoFrame&&videoFrame.closest(".video-embed");
   if(fullscreenButton&&videoFrame&&videoContainer){
+    const videoFullscreenCopy=window.CASA_UI_COPY.video.fullscreen;
     const activeFullscreenElement=()=>document.fullscreenElement||document.webkitFullscreenElement||null;
     const syncFullscreenButton=()=>{
       const isFullscreen=activeFullscreenElement()===videoContainer;
-      const label=isFullscreen?"Sair da tela cheia":"Abrir vídeo em tela cheia";
+      const label=isFullscreen?videoFullscreenCopy.close:videoFullscreenCopy.open;
       fullscreenButton.dataset.fullscreen=isFullscreen?"active":"inactive";
       fullscreenButton.setAttribute("aria-label",label);
       fullscreenButton.setAttribute("title",label);

@@ -111,6 +111,22 @@ function closeEnough(actual, expectedValue, tolerance = 1.25) {
   return Math.abs(actual - expectedValue) <= tolerance;
 }
 
+async function fullscreenCopyTransition(page, buttonSelector, targetSelector) {
+  return page.evaluate(({ buttonSelector, targetSelector }) => {
+    const button = document.querySelector(buttonSelector);
+    const target = document.querySelector(targetSelector);
+    const copy = window.CASA_UI_COPY.video.fullscreen;
+    const open = { label: button.getAttribute("aria-label"), title: button.getAttribute("title"), pressed: button.getAttribute("aria-pressed") };
+    Object.defineProperty(document, "fullscreenElement", { configurable: true, get: () => target });
+    document.dispatchEvent(new Event("fullscreenchange"));
+    const close = { label: button.getAttribute("aria-label"), title: button.getAttribute("title"), pressed: button.getAttribute("aria-pressed") };
+    Object.defineProperty(document, "fullscreenElement", { configurable: true, get: () => null });
+    document.dispatchEvent(new Event("fullscreenchange"));
+    const reopened = { label: button.getAttribute("aria-label"), title: button.getAttribute("title"), pressed: button.getAttribute("aria-pressed") };
+    return { open, close, reopened, copy };
+  }, { buttonSelector, targetSelector });
+}
+
 async function main() {
   await fs.promises.mkdir(reportDir, { recursive: true });
   const origin = await startServer();
@@ -138,6 +154,10 @@ async function main() {
           return image?.complete && image.naturalWidth === 1024
             && image.naturalHeight === 1536 && screen && !screen.hidden;
         }, null, { timeout: 15000 });
+        const fullscreenLabels = await fullscreenCopyTransition(page, "#heroPhoneFullscreen", ".hero-phone-player");
+        assert.deepEqual(fullscreenLabels.open, { label: fullscreenLabels.copy.open, title: fullscreenLabels.copy.open, pressed: "false" }, context + " open fullscreen label");
+        assert.deepEqual(fullscreenLabels.close, { label: fullscreenLabels.copy.close, title: fullscreenLabels.copy.close, pressed: "true" }, context + " close fullscreen label");
+        assert.deepEqual(fullscreenLabels.reopened, { label: fullscreenLabels.copy.open, title: fullscreenLabels.copy.open, pressed: "false" }, context + " restored fullscreen label");
         await page.evaluate(async () => {
           await document.fonts.ready;
           await new Promise(requestAnimationFrame);
@@ -269,6 +289,24 @@ async function main() {
       } finally {
         await page.close();
       }
+    }
+    const howPage = await browser.newPage({ viewport: { width: 1024, height: 900 }, serviceWorkers: "block" });
+    await howPage.route("**/*", (route) => {
+      const requestOrigin = new URL(route.request().url()).origin;
+      return requestOrigin === origin ? route.continue() : route.abort();
+    });
+    try {
+      const response = await howPage.goto(origin + "/how-it-works/", { waitUntil: "domcontentloaded", timeout: 30000 });
+      assert.equal(response?.status(), 200, "How it works fullscreen labels HTTP");
+      await howPage.locator("#howVideoFullscreen").waitFor({ state: "attached" });
+      const fullscreenLabels = await fullscreenCopyTransition(howPage, "#howVideoFullscreen", ".video-embed");
+      assert.deepEqual(fullscreenLabels.open, { label: fullscreenLabels.copy.open, title: fullscreenLabels.copy.open, pressed: "false" }, "How it works open fullscreen label");
+      assert.deepEqual(fullscreenLabels.close, { label: fullscreenLabels.copy.close, title: fullscreenLabels.copy.close, pressed: "true" }, "How it works close fullscreen label");
+      assert.deepEqual(fullscreenLabels.reopened, { label: fullscreenLabels.copy.open, title: fullscreenLabels.copy.open, pressed: "false" }, "How it works restored fullscreen label");
+      console.log("HOME_HERO_PHONE_FULLSCREEN_COPY_CASE PASS");
+      console.log("HOW_IT_WORKS_FULLSCREEN_COPY_CASE PASS");
+    } finally {
+      await howPage.close();
     }
   } finally {
     await browser.close();

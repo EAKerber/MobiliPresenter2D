@@ -80,7 +80,11 @@ test("public copy is catalog-backed and remains static in generated HTML",async(
  assert.equal(r.manifest.schema,"M2DARC03CPublishedPages/3");
  assert.equal(r.manifest.copyCatalog.path,"app/core/ui-copy.js");
  for(const page of r.pages) {
-  assert.equal((page.html.match(/<script src="\/core\/ui-copy\.js\?v=arc13-loc003-copy-1"><\/script>/g)||[]).length,1,
+  const catalogVersion=["app/index.html","app/how-it-works/index.html"].includes(page.output)
+   ? "arc13-loc005-video-fullscreen-1"
+   : "arc13-loc003-copy-1";
+  const catalogScript=new RegExp(`<script src="/core/ui-copy\\.js\\?v=${catalogVersion}"></script>`);
+  assert.equal((page.html.match(new RegExp(catalogScript.source,"g"))||[]).length,1,
    "each generated page loads the shared catalog exactly once");
   assert.match(page.html,/<a class="brand" href="[^"]+" aria-label="Casa em Módulos, início">/);
   assert.match(page.html,/<img[^>]+alt="Casa em Módulos">/);

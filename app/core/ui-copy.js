@@ -29,7 +29,11 @@
       })
     }),
     video: Object.freeze({
-      youtubeLink: "Assistir no YouTube ↗"
+      youtubeLink: "Assistir no YouTube ↗",
+      fullscreen: Object.freeze({
+        open: "Abrir vídeo em tela cheia",
+        close: "Sair da tela cheia"
+      })
     }),
     theme: Object.freeze({
       mode: Object.freeze({
