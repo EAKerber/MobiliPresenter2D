@@ -1,0 +1,215 @@
+{
+  "schema": "ARC13LOC005Extraction/1",
+  "plan": "MobiliPresenter2D Plano Diretor v0.9",
+  "workItem": "LOC-005",
+  "family": "viewer-scene-component-copy",
+  "status": "candidate-implemented",
+  "scope": {
+    "routes": [
+      "/viewer/"
+    ],
+    "behaviorChanged": false,
+    "visibleWordingChanged": false,
+    "fallbackPreserved": true,
+    "remoteCatalogRequired": false
+  },
+  "decision": {
+    "authority": "Existing product wording retained exactly.",
+    "subsystemOwner": "public-viewer-scene-interaction-guidance",
+    "classificationByKey": {
+      "selected": "ui-visible-status",
+      "heading": "ui-visible-heading",
+      "instruction": "ui-visible-instruction",
+      "accessibleInstruction": "ui-accessibility",
+      "imageAlt": "ui-accessibility",
+      "hotspotsLabel": "ui-accessibility",
+      "fallbackStatus": "ui-visible-status",
+      "fallbackDescription": "ui-visible-status",
+      "fallbackAccessibleLabel": "ui-accessibility"
+    },
+    "catalog": "app/core/ui-copy.js",
+    "catalogKeys": {
+      "selected": "/viewer/scene/selected",
+      "heading": "/viewer/scene/heading",
+      "instruction": "/viewer/scene/instruction",
+      "accessibleInstruction": "/viewer/scene/accessible-instruction",
+      "imageAlt": "/viewer/scene/image-alt",
+      "hotspotsLabel": "/viewer/scene/hotspots-label",
+      "fallbackStatus": "/viewer/scene/fallback-status",
+      "fallbackDescription": "/viewer/scene/fallback-description",
+      "fallbackAccessibleLabel": "/viewer/scene/fallback-accessible-label"
+    },
+    "values": {
+      "selected": "Selecionado: {number} · {title}",
+      "heading": "Cena interativa",
+      "instruction": "Clique em um módulo ou use ←/→ e as teclas 1–7.",
+      "accessibleInstruction": "Cena da cozinha. Use as setas para percorrer os módulos ou as teclas de 1 a 7 para selecionar pelo número.",
+      "imageAlt": "Composição da cozinha Casa em Módulos",
+      "hotspotsLabel": "Módulos selecionáveis na cena",
+      "fallbackStatus": "Imagem indisponível",
+      "fallbackDescription": "A composição completa da cozinha não pôde ser exibida.",
+      "fallbackAccessibleLabel": "Cena da cozinha indisponível. A composição completa não pôde ser exibida."
+    },
+    "dynamicData": "Module number/title, module identifiers, and scene entity data remain runtime product data and are not catalog entries.",
+    "accessibility": "Preserve current stage instructions, image alternative text, hotspot group name, role=alert, and unavailable-state announcement. No new live region, focus, or interaction behavior is introduced.",
+    "coverage": "The complete Viewer scene/stage copy set contains nine localized sinks: eight added here and the selection caption already integrated by PR #323."
+  },
+  "inventoryDisposition": {
+    "crosswalk": [
+      {
+        "previousCandidateId": "2e30d37a4e63d8bd",
+        "source": "app/viewer/viewer.js",
+        "previousLine": 147,
+        "catalogKey": "/viewer/scene/heading",
+        "reviewedAs": "ui-visible-heading",
+        "currentCandidateId": "e6a8c8390199b679",
+        "currentLine": 147
+      },
+      {
+        "previousCandidateId": "013d7d651052fd3c",
+        "source": "app/viewer/viewer.js",
+        "previousLine": 147,
+        "catalogKey": "/viewer/scene/instruction",
+        "reviewedAs": "ui-visible-instruction",
+        "currentCandidateId": "ae9710dc72b07566",
+        "currentLine": 147
+      },
+      {
+        "previousCandidateId": "674b26c2023e6372",
+        "source": "app/viewer/scene-adapters.js",
+        "previousLine": 71,
+        "catalogKey": "/viewer/scene/accessible-instruction",
+        "reviewedAs": "ui-accessibility",
+        "currentCandidateId": "398e7abba52c0f40",
+        "currentLine": 78
+      },
+      {
+        "previousCandidateId": "7cc2983b066dfbe6",
+        "source": "app/viewer/scene-adapters.js",
+        "previousLine": 73,
+        "catalogKey": "/viewer/scene/image-alt",
+        "reviewedAs": "ui-accessibility",
+        "currentCandidateId": "25987dea44044911",
+        "currentLine": 80
+      },
+      {
+        "previousCandidateId": "36df5b92bd700a5a",
+        "source": "app/viewer/scene-adapters.js",
+        "previousLine": 75,
+        "catalogKey": "/viewer/scene/hotspots-label",
+        "reviewedAs": "ui-accessibility",
+        "currentCandidateId": "7d00d81fa34913b2",
+        "currentLine": 82
+      },
+      {
+        "previousCandidateId": "a1a303384e2e57e8",
+        "source": "app/viewer/scene-adapters.js",
+        "previousLine": 87,
+        "catalogKey": "/viewer/scene/fallback-status",
+        "reviewedAs": "ui-visible-status",
+        "currentCandidateId": "596e82476bc05de3",
+        "currentLine": 94
+      },
+      {
+        "previousCandidateId": "bf51d9173925eee1",
+        "source": "app/viewer/scene-adapters.js",
+        "previousLine": 90,
+        "catalogKey": "/viewer/scene/fallback-description",
+        "reviewedAs": "ui-visible-status",
+        "currentCandidateId": "11cc576bf7957b2a",
+        "currentLine": 97
+      },
+      {
+        "previousCandidateId": "25886dde8b2b63fa",
+        "source": "app/viewer/scene-adapters.js",
+        "previousLine": 96,
+        "catalogKey": "/viewer/scene/fallback-accessible-label",
+        "reviewedAs": "ui-accessibility",
+        "currentCandidateId": "068d0db8ecd0ecc4",
+        "currentLine": 103
+      }
+    ],
+    "alreadyIntegrated": [
+      {
+        "previousCandidateId": "14d8c54c61ca9902",
+        "source": "app/viewer/viewer.js",
+        "previousLine": 135,
+        "catalogKey": "/viewer/scene/selected",
+        "reviewedAs": "ui-visible-status",
+        "currentCandidateId": "e6fffc166f0ec788",
+        "currentLine": 136,
+        "pullRequest": 323,
+        "integrationSha": "3bb698dbe637761665a984b56bb84543eb6afa6e"
+      }
+    ],
+    "excludedCandidates": [
+      {
+        "candidateId": "8f074e0d04a94b41",
+        "source": "app/viewer/scene-adapters.js",
+        "currentLine": 91,
+        "reason": "Decorative icon text is inside aria-hidden=true and does not carry user-facing wording."
+      }
+    ],
+    "excludedDynamicData": [
+      "module.number",
+      "module.title",
+      "module identifiers",
+      "scene entity IDs"
+    ],
+    "falsePositivesIncluded": false
+  },
+  "implementation": {
+    "catalogAdded": [
+      "viewer.scene.heading",
+      "viewer.scene.instruction",
+      "viewer.scene.accessibleInstruction",
+      "viewer.scene.imageAlt",
+      "viewer.scene.hotspotsLabel",
+      "viewer.scene.fallbackStatus",
+      "viewer.scene.fallbackDescription",
+      "viewer.scene.fallbackAccessibleLabel"
+    ],
+    "localFallbackPerKey": true,
+    "existingFallbackUnchanged": "Cena da cozinha indisponível. A composição completa não pôde ser exibida.",
+    "visibleWordingChanged": false,
+    "behaviorChanged": false,
+    "cacheVersionsUpdated": true,
+    "testsExtended": [
+      "tests/ui-theme-contract.cjs",
+      "tests/public-pages-smoke.cjs",
+      "app/viewer/scene-adapters.test.mjs"
+    ]
+  },
+  "evidence": {
+    "baseDevelopmentSha": "3bb698dbe637761665a984b56bb84543eb6afa6e",
+    "baseInventoryBlob": "f510871395d8e46f4a0e848205c6cd858120f990",
+    "inventoryPath": "architecture/arc13/ui-text-candidates.json",
+    "inventorySha256": "DA054E88C24C15A53786AD4A2D5903FA3DC99ED33D796947FFC6D3C15805BE67",
+    "manifestPath": "architecture/generated/primary-pages.manifest.json",
+    "manifestSha256": "8517046ABFDB5AB380DE2C848B9A070B610539D7C6A3CC95A12052DAC568FDB3",
+    "sourceSha256": {
+      "app/core/ui-copy.js": "308FFB44D8C037154B950358838B27CBB784B7C57A5B4D87415F49DB9577EBBF",
+      "app/viewer/viewer.js": "25998ADF2F8CA5B77DA546C285D08B326D0CDCEB5818EEF945949AF8D7B16F54",
+      "app/viewer/scene-adapters.js": "8E5A2CBF7A07970C300FCAC5805D78723B80245CD56DB7CF220C8CEB1DCF2119",
+      "app/viewer/index.html": "D3319508785BA7FE62695A470780A6C2187F24C8476BF09ED75C636F820A0210",
+      "app/viewer/scene-adapters.test.mjs": "5C12F02F8BEDB1517864AF06A8EA4E66D6F7015F7C92CC80261C2AF29BE2A0A0",
+      "tests/ui-theme-contract.cjs": "A2BFC792ECFA60B6DA6E68A28195F09471BA26E7013709FEE51A990743453CD9",
+      "tests/public-pages-smoke.cjs": "4242BCB29228D43CF8DBC45993A3807E4B142BDD0F89B8821B6D099E25C1E8FC"
+    },
+    "developmentIntegrationSha": null
+  },
+  "validation": {
+    "inventoryGeneration": "passed; repeat to confirm deterministic hash after final receipt edit",
+    "catalogContract": "passed locally",
+    "sceneAdapterUnitTests": "passed locally: 17/17, including catalog-provided normal and fallback state copy",
+    "pageCompiler": "passed locally with --sync and --check",
+    "syntaxChecks": "passed locally for changed JS and test files",
+    "browserSmoke": "not run locally: Playwright package is absent; exact-head CI pending",
+    "deployPreview": "not requested for copy-only extraction"
+  },
+  "limits": [
+    "This receipt covers the complete Viewer scene/stage copy set: nine sinks, with the selected caption already integrated by PR #323.",
+    "The decorative hidden icon and product-driven module/entity data are excluded.",
+    "No global LOC-005 completion or main promotion is claimed."
+  ]
+}

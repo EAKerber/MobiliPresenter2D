@@ -39,7 +39,15 @@ assert.deepEqual(JSON.parse(JSON.stringify(copy.viewer.views)), {
   next: "Próxima vista"
 });
 assert.deepEqual(JSON.parse(JSON.stringify(copy.viewer.scene)), {
-  selected: "Selecionado: {number} · {title}"
+  selected: "Selecionado: {number} · {title}",
+  heading: "Cena interativa",
+  instruction: "Clique em um módulo ou use ←/→ e as teclas 1–7.",
+  accessibleInstruction: "Cena da cozinha. Use as setas para percorrer os módulos ou as teclas de 1 a 7 para selecionar pelo número.",
+  imageAlt: "Composição da cozinha Casa em Módulos",
+  hotspotsLabel: "Módulos selecionáveis na cena",
+  fallbackStatus: "Imagem indisponível",
+  fallbackDescription: "A composição completa da cozinha não pôde ser exibida.",
+  fallbackAccessibleLabel: "Cena da cozinha indisponível. A composição completa não pôde ser exibida."
 });
 const viewerCode = read("app/viewer/viewer.js");
 assert(viewerCode.includes('theme.getCopy("viewer.state." + key, fallback)') &&
@@ -54,8 +62,14 @@ assert(viewerCode.includes('viewerViewCopy("show", "Mostrar vista {index}")') &&
   viewerCode.includes('theme.getCopy("viewer.views." + key, fallback)'),
 "Viewer navigation labels use four canonical keys, with both counter sinks sharing one key");
 assert(viewerCode.includes('viewerSceneCopy("selected", "Selecionado: {number} · {title}")') &&
+  viewerCode.includes('viewerSceneCopy("heading", "Cena interativa")') &&
+  viewerCode.includes('viewerSceneCopy("instruction", "Clique em um módulo ou use ←/→ e as teclas 1–7.")') &&
   viewerCode.includes('theme.getCopy("viewer.scene." + key, fallback)'),
-"Viewer scene selection caption uses its canonical catalog key with local fallback");
+"Viewer scene heading, instruction and selection caption use canonical keys with local fallbacks");
+const sceneAdaptersCode = read("app/viewer/scene-adapters.js");
+assert(['sceneCopy("accessibleInstruction", "Cena da cozinha. Use as setas para percorrer os módulos ou as teclas de 1 a 7 para selecionar pelo número.")', 'sceneCopy("imageAlt", "Composição da cozinha Casa em Módulos")', 'sceneCopy("hotspotsLabel", "Módulos selecionáveis na cena")', 'sceneCopy("fallbackStatus", "Imagem indisponível")', 'sceneCopy("fallbackDescription", "A composição completa da cozinha não pôde ser exibida.")', 'sceneCopy("fallbackAccessibleLabel", "Cena da cozinha indisponível. A composição completa não pôde ser exibida.")'].every(value => sceneAdaptersCode.includes(value)) &&
+  sceneAdaptersCode.includes('theme.getCopy("viewer.scene." + key, fallback)'),
+"Viewer scene image, accessible names, and unavailable-state copy use canonical keys with local fallbacks");
 for (const [file, controller] of [
   ["app/index.html", "app/landing/landing.js"],
   ["app/how-it-works/index.html", "app/how-it-works/how-it-works.js"]
@@ -96,7 +110,7 @@ for (const file of shells) {
   const copyVersion = ["app/index.html", "app/how-it-works/index.html"].includes(file)
     ? "arc13-loc005-video-fullscreen-1"
     : file === "app/viewer/index.html"
-      ? "arc13-loc005-scene-selection-1"
+      ? "arc13-loc005-scene-interaction-1"
     : "arc13-loc003-copy-1";
   assert(html.includes(`src="/core/ui-copy.js?v=${copyVersion}"`), file + " copy catalog bootstrap");
   assert(html.includes('src="/core/ui-theme.js?v=arc13-loc003-copy-1"'), file + " theme bootstrap");

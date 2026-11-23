@@ -144,7 +144,9 @@
     if (blockId === "overview") {
       const block = section("overview", "block-overview"); block.setAttribute("aria-live", "polite"); root.append(block);
     } else if (blockId === "scene") {
-      const block = section("scene", "block-scene", "Cena interativa", "Clique em um módulo ou use ←/→ e as teclas 1–7.");
+      const block = section("scene", "block-scene",
+        viewerSceneCopy("heading", "Cena interativa"),
+        viewerSceneCopy("instruction", "Clique em um módulo ou use ←/→ e as teclas 1–7."));
       const stage = element("div", "scene-stage"); stage.id = "sceneStage";
       const caption = element("div", "scene-caption"); caption.id = "sceneSelection";
       block.append(stage, caption); root.append(block); adapter.mount(stage);

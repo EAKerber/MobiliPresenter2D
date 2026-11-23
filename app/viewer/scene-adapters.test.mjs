@@ -347,6 +347,16 @@ class SceneFallbackTestElement {
 
 test("scene asset errors cover the stage only for the base or a visible layer", () => {
   const previousDocument = fixture.document;
+  const previousTheme = fixture.CASA_UI_THEME;
+  const testCopy = {
+    "viewer.scene.accessibleInstruction": "Cena acessível via catálogo",
+    "viewer.scene.imageAlt": "Alt via catálogo",
+    "viewer.scene.hotspotsLabel": "Grupo via catálogo",
+    "viewer.scene.fallbackStatus": "Status via catálogo",
+    "viewer.scene.fallbackDescription": "Descrição via catálogo",
+    "viewer.scene.fallbackAccessibleLabel": "Erro acessível via catálogo"
+  };
+  fixture.CASA_UI_THEME = { getCopy(key, fallback) { return testCopy[key] || fallback; } };
   fixture.document = { createElement: (tag) => new SceneFallbackTestElement(tag), addEventListener() {} };
   const sceneComponent = {
     createSelectionFrame() { return new SceneFallbackTestElement("div"); },
@@ -378,6 +388,9 @@ test("scene asset errors cover the stage only for the base or a visible layer", 
     const hotspots = stage.children[2];
     const frame = stage.children[3];
     const fallback = stage.children[4];
+    assert.equal(stage.getAttribute("aria-label"), testCopy["viewer.scene.accessibleInstruction"]);
+    assert.equal(base.alt, testCopy["viewer.scene.imageAlt"]);
+    assert.equal(hotspots.getAttribute("aria-label"), testCopy["viewer.scene.hotspotsLabel"]);
     const moduleGroup = layers.children.find((group) => group.dataset.entityId === "module-01");
     const hiddenGroup = layers.children.find((group) => group.dataset.entityId === "tempered-glass");
     hiddenGroup.classList.add("is-hidden");
@@ -392,11 +405,13 @@ test("scene asset errors cover the stage only for the base or a visible layer", 
     errorListener.listener({ target: moduleGroup.children[0] });
     assert.equal(fallback.hidden, false);
     assert.equal(fallback.getAttribute("role"), "alert");
-    assert.match(fallback.children.map((item) => item.textContent).join(" "), /Imagem indisponível/);
-    assert.match(fallback.children.map((item) => item.textContent).join(" "), /composição completa da cozinha/);
+    assert.equal(fallback.children[1].textContent, testCopy["viewer.scene.fallbackStatus"]);
+    assert.equal(fallback.children[2].textContent, testCopy["viewer.scene.fallbackDescription"]);
     assert.deepEqual([base, layers, hotspots, frame].map((node) => node.hidden), [true, true, true, true]);
-    assert.match(stage.getAttribute("aria-label"), /Cena da cozinha indisponível/);
+    assert.equal(stage.getAttribute("aria-label"), testCopy["viewer.scene.fallbackAccessibleLabel"]);
   } finally {
     fixture.document = previousDocument;
+    if (previousTheme === undefined) delete fixture.CASA_UI_THEME;
+    else fixture.CASA_UI_THEME = previousTheme;
   }
 });

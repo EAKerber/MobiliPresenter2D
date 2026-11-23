@@ -1,6 +1,13 @@
 (function (global) {
   "use strict";
 
+  function sceneCopy(key, fallback) {
+    const theme = global.CASA_UI_THEME;
+    return theme && typeof theme.getCopy === "function"
+      ? theme.getCopy("viewer.scene." + key, fallback)
+      : fallback;
+  }
+
   function normalizeModule(product, entity) {
     const id = product.entityId || product.id;
     const number = String(product.referenceLabel || product.sku || id).match(/\d+/)?.[0] || id;
@@ -68,11 +75,11 @@
       if (!stage) return;
       stage.tabIndex = 0;
       stage.dataset.keyboardGlobal = "true";
-      stage.setAttribute("aria-label", "Cena da cozinha. Use as setas para percorrer os módulos ou as teclas de 1 a 7 para selecionar pelo número.");
+      stage.setAttribute("aria-label", sceneCopy("accessibleInstruction", "Cena da cozinha. Use as setas para percorrer os módulos ou as teclas de 1 a 7 para selecionar pelo número."));
       delete stage.dataset.sceneImageUnavailable;
-      const base = document.createElement("img"); base.className = "scene-layer"; base.alt = "Composição da cozinha Casa em Módulos"; base.draggable = false;
+      const base = document.createElement("img"); base.className = "scene-layer"; base.alt = sceneCopy("imageAlt", "Composição da cozinha Casa em Módulos"); base.draggable = false;
       const layers = document.createElement("div");
-      const hotspots = document.createElement("div"); hotspots.className = "scene-hotspots"; hotspots.setAttribute("aria-label", "Módulos selecionáveis na cena");
+      const hotspots = document.createElement("div"); hotspots.className = "scene-hotspots"; hotspots.setAttribute("aria-label", sceneCopy("hotspotsLabel", "Módulos selecionáveis na cena"));
       const frame = sceneComponent.createSelectionFrame();
       const fallback = document.createElement("div");
       fallback.className = "scene-image-fallback";
@@ -84,16 +91,16 @@
       fallbackIcon.textContent = "▧";
       const fallbackStatus = document.createElement("span");
       fallbackStatus.className = "scene-image-fallback__status";
-      fallbackStatus.textContent = "Imagem indisponível";
+      fallbackStatus.textContent = sceneCopy("fallbackStatus", "Imagem indisponível");
       const fallbackDescription = document.createElement("span");
       fallbackDescription.className = "scene-image-fallback__description";
-      fallbackDescription.textContent = "A composição completa da cozinha não pôde ser exibida.";
+      fallbackDescription.textContent = sceneCopy("fallbackDescription", "A composição completa da cozinha não pôde ser exibida.");
       fallback.append(fallbackIcon, fallbackStatus, fallbackDescription);
       function coverScene() {
         [base, layers, hotspots, frame].forEach((node) => { node.hidden = true; });
         fallback.hidden = false;
         stage.dataset.sceneImageUnavailable = "true";
-        stage.setAttribute("aria-label", "Cena da cozinha indisponível. A composição completa não pôde ser exibida.");
+        stage.setAttribute("aria-label", sceneCopy("fallbackAccessibleLabel", "Cena da cozinha indisponível. A composição completa não pôde ser exibida."));
       }
       sceneComponent.renderLayers(renderScene, base, layers, options.inlineMasks || null, options.assetPrefix || "");
       const selectedFinishId = core.globalFinishId(sceneState);
