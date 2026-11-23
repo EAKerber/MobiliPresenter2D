@@ -41,6 +41,10 @@
           playLabel: "Reproduzir o vídeo de apresentação"
         })
       }),
+      benefits: Object.freeze({
+        miniLabel: "Vantagens",
+        stripLabel: "Vantagens Casa em Módulos"
+      }),
       environments: Object.freeze({
         eyebrow: "Você escolhe o que precisa",
         heading: "A gente já sabe como fazer.",
