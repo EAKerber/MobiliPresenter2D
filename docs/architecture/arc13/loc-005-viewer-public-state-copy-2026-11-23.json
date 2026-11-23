@@ -1,0 +1,128 @@
+{
+  "schema": "ARC13LOC005Extraction/1",
+  "plan": "MobiliPresenter2D Plano Diretor v0.9",
+  "workItem": "LOC-005",
+  "family": "viewer-public-state-messages",
+  "status": "candidate-implemented",
+  "scope": {
+    "routes": ["/viewer/"],
+    "behaviorChanged": false,
+    "visibleTextChanged": false,
+    "localFallbackPreserved": true,
+    "remoteCatalogRequired": false
+  },
+  "decision": {
+    "contentOwner": "Existing product copy; wording preserved",
+    "authority": "This package extracts the three existing Viewer loading, empty, and unavailable messages without editorial changes.",
+    "subsystemOwner": "public-viewer-state",
+    "classificationByKey": {
+      "empty": "ui-visible-status",
+      "loading": "ui-visible-status",
+      "unavailable": "ui-visible-alert"
+    },
+    "catalog": "app/core/ui-copy.js",
+    "catalogKeys": {
+      "empty": "/viewer/state/empty",
+      "loading": "/viewer/state/loading",
+      "unavailable": "/viewer/state/unavailable"
+    },
+    "values": {
+      "empty": "Nenhum módulo está visível no viewer neste momento.",
+      "loading": "Carregando informações publicadas…",
+      "unavailable": "Informações temporariamente indisponíveis. Tente novamente mais tarde."
+    }
+  },
+  "inventoryDisposition": {
+    "candidateCrosswalk": [
+      {
+        "previousCandidateId": "338f21a82c53388a",
+        "previousLine": 26,
+        "currentCandidateId": "7a473ccfc8e75e95",
+        "currentLine": 26,
+        "catalogKey": "/viewer/state/empty",
+        "reviewedAs": "ui-visible-status"
+      },
+      {
+        "previousCandidateId": "d2f6790eca9b70a5",
+        "previousLine": 173,
+        "currentCandidateId": "33ee83fb5e5814b8",
+        "currentLine": 173,
+        "catalogKey": "/viewer/state/loading",
+        "reviewedAs": "ui-visible-status"
+      },
+      {
+        "previousCandidateId": "7d5c29451be070c2",
+        "previousLine": 183,
+        "currentCandidateId": "48e34521e94a3fd4",
+        "currentLine": 183,
+        "catalogKey": "/viewer/state/unavailable",
+        "reviewedAs": "ui-visible-alert"
+      }
+    ],
+    "fallbackLinks": {
+      "previousRecords": 38,
+      "currentRecords": 38,
+      "previousReferences": 39,
+      "currentReferences": 39,
+      "viewerErrorTargetUpdated": "app/viewer/viewer.js::viewerCopy(\"unavailable\", \"Informações temporariamente indisponíveis. Tente novamente mais tarde.\")"
+    },
+    "globalInventory": {
+      "status": "unreviewed",
+      "candidateCount": 1043,
+      "parserErrors": 0,
+      "primaryMappedOccurrences": 420,
+      "primaryUnresolvedOccurrences": 0
+    }
+  },
+  "implementation": {
+    "catalogAdded": "viewer.state.{empty,loading,unavailable}",
+    "controller": "app/viewer/viewer.js",
+    "localResolverFallback": "CASA_UI_THEME.getCopy(key, existingPortugueseText); direct fallback if resolver is absent",
+    "emptyStateRolePreserved": "status",
+    "loadingStateAnnouncementChanged": false,
+    "unavailableStateRolePreserved": "alert",
+    "requestAndAdapterLifecycleChanged": false,
+    "cacheVersionsUpdated": true,
+    "testsExtended": ["tests/ui-theme-contract.cjs", "tests/public-pages-smoke.cjs"]
+  },
+  "lifecycleAudit": {
+    "scope": "Viewer page-lifetime controller and public data/adapter boundary only",
+    "controllerClass": "L4 scene/renderer mount",
+    "initialization": "One page-load IIFE starts one public data request; a successful non-empty projection mounts and subscribes one adapter. Empty and rejected paths return before adapter subscription.",
+    "teardown": "Full-page navigation ends the controller lifetime; this extraction adds no listeners, timers, remount path, or asynchronous continuation.",
+    "evidence": [
+      "Loading is rendered before the single CASA_PUBLIC_VIEWER_DATA.load() request resolves.",
+      "The failure path clears the root and emits the existing role=alert message; server and adapter exception details remain undisplayed.",
+      "The empty projection path preserves role=status and returns before mounting the scene adapter.",
+      "No controller behavior or adapter lifecycle code is changed by this copy extraction."
+    ],
+    "cmp018Disposition": "Scoped lifecycle evidence for this LOC-005 family; global CMP-018 remains open."
+  },
+  "evidence": {
+    "baseDevelopmentSha": "506d54ee29c2a887017a471877e9332038da4552",
+    "inventoryPath": "architecture/arc13/ui-text-candidates.json",
+    "inventorySha256": "8FCB6962D61098841718A0E5E064C0A665DC65BF4159661415D6B71B389B26EB",
+    "manifestPath": "architecture/generated/primary-pages.manifest.json",
+    "manifestSha256": "6ACBBC47115EDB2CD1F4FCA5FDA8CDFDA0BCE72CAFD9D58519247EFB6C9E7E94",
+    "sourceSha256": {
+      "app/core/ui-copy.js": "469A808E26EDBA9518A5A89739EC15639FB338D4B643ED4C677954C09A1D0D61",
+      "app/viewer/viewer.js": "F69266DC0584583FA72243E496FAC1A9C1F5970FEACA4E0E44E36C2C04F59188",
+      "tools/arc13/scan-js-sinks.mjs": "B4E4811B6A60433B47272EBC43F1440648F830B289C32D2E5B3F9581E8C2C442"
+    }
+  },
+  "validation": {
+    "pageCompiler": "passed locally via node scripts/compile-primary-pages.mjs --check",
+    "catalogContract": "passed locally",
+    "adapterTests": "pending exact-head CI",
+    "publicPagesBrowserSmoke": "pending exact-head CI; local invocation unavailable because Playwright is not installed in this checkout; covers loading, empty, unavailable, and missing-catalog fallback",
+    "inventoryGeneration": "two identical generations using Python 3.14.6; SHA-256 8FCB6962D61098841718A0E5E064C0A665DC65BF4159661415D6B71B389B26EB; 67 sources; 1,043 unreviewed candidates; 0 parse errors; 420/420 primary-page occurrences mapped; fallback links 38/38 records and 39/39 references",
+    "gitDiffCheck": "passed locally",
+    "deployPreview": "not required; no rendered wording or layout changes"
+  },
+  "limits": [
+    "The global ARC-13 inventory remains unreviewed; this crosswalk is a scoped decision only.",
+    "Loading copy has no live region in the existing markup; this package preserves that behavior and does not claim a new assistive-technology announcement.",
+    "CMP-018 is not globally complete.",
+    "No main promotion or production publication is included."
+  ]
+}

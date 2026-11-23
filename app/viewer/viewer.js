@@ -23,7 +23,7 @@
       const empty = document.createElement("p");
       empty.className = "viewer-empty-state";
       empty.setAttribute("role", "status");
-      empty.textContent = "Nenhum módulo está visível no viewer neste momento.";
+      empty.textContent = viewerCopy("empty", "Nenhum módulo está visível no viewer neste momento.");
       root.replaceChildren(empty);
       return;
     }
@@ -170,7 +170,7 @@
   integration.onSelectionChange?.(adapter.getSelection());
   }
   {
-    root.textContent = "Carregando informações publicadas…";
+    root.textContent = viewerCopy("loading", "Carregando informações publicadas…");
     window.CASA_PUBLIC_VIEWER_DATA.load()
       .then((projection) => start(projection))
       .catch(() => {
@@ -180,8 +180,15 @@
         const message = document.createElement("p");
         message.className = "viewer-public-error";
         message.setAttribute("role", "alert");
-        message.textContent = "Informações temporariamente indisponíveis. Tente novamente mais tarde.";
+        message.textContent = viewerCopy("unavailable", "Informações temporariamente indisponíveis. Tente novamente mais tarde.");
         root.append(message);
       });
+  }
+
+  function viewerCopy(key, fallback) {
+    const theme = window.CASA_UI_THEME;
+    return theme && typeof theme.getCopy === "function"
+      ? theme.getCopy("viewer.state." + key, fallback)
+      : fallback;
   }
 })();
