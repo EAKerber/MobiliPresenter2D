@@ -35,7 +35,11 @@
         }),
         lead: "Móveis inteligentes, pensados para o seu espaço e para o seu orçamento.",
         description: "Um novo conceito em mobiliário que une projeto, fabricação e instalação em uma solução simples, prática e acessível.",
-        aboutLink: "Saiba mais"
+        aboutLink: "Saiba mais",
+        video: Object.freeze({
+          groupLabel: "Vídeo de apresentação no celular",
+          playLabel: "Reproduzir o vídeo de apresentação"
+        })
       }),
       environments: Object.freeze({
         eyebrow: "Você escolhe o que precisa",

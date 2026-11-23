@@ -6,12 +6,12 @@
     "offsetUnit": "unicode-codepoints",
     "generator": {
       "path": "scripts/compile-primary-pages.mjs",
-      "gitBlobSha": "2be815976fd25ea7f392a432c2277bb1e0e9008c"
+      "gitBlobSha": "b7ae6e150e76996d785ffd901be112dc576a00d4"
     }
   },
   "copyCatalog": {
     "path": "app/core/ui-copy.js",
-    "gitBlobSha": "6034052bff04989b9222d4a945535c16b36901b2",
+    "gitBlobSha": "76ddd2d3afd311671b58b67f363468a6a33dd2ee",
     "schema": "M2DUIStringCatalog/1",
     "locale": "pt-BR"
   },
@@ -28,7 +28,7 @@
       "route": "/",
       "source": "architecture/pages/root.page.html",
       "output": "app/index.html",
-      "sourceGitBlobSha": "cf0e346910fc1e2fe016c64fb6f8576f3879ea51",
+      "sourceGitBlobSha": "89ab494cab24b3d45e26e749c8a5035ff71685f0",
       "outputGitBlobSha": "2a64139e2b05769a60cb69daddd33c6d5e14075c",
       "sourceMap": {
         "segments": [
@@ -889,7 +889,7 @@
           {
             "output": {
               "start": 3512,
-              "end": 5484
+              "end": 3991
             },
             "transform": "copy",
             "origin": {
@@ -897,7 +897,143 @@
               "path": "architecture/pages/root.page.html",
               "range": {
                 "start": 2580,
-                "end": 4552
+                "end": 3059
+              }
+            }
+          },
+          {
+            "output": {
+              "start": 3991,
+              "end": 4023
+            },
+            "transform": "catalog-key-substitution",
+            "origin": {
+              "kind": "catalog-key",
+              "path": "app/core/ui-copy.js",
+              "pointer": "/home/hero/video/groupLabel",
+              "template": {
+                "path": "architecture/pages/root.page.html",
+                "range": {
+                  "start": 3059,
+                  "end": 3094
+                }
+              }
+            }
+          },
+          {
+            "output": {
+              "start": 4023,
+              "end": 4267
+            },
+            "transform": "copy",
+            "origin": {
+              "kind": "page",
+              "path": "architecture/pages/root.page.html",
+              "range": {
+                "start": 3094,
+                "end": 3338
+              }
+            }
+          },
+          {
+            "output": {
+              "start": 4267,
+              "end": 4301
+            },
+            "transform": "catalog-key-substitution",
+            "origin": {
+              "kind": "catalog-key",
+              "path": "app/core/ui-copy.js",
+              "pointer": "/home/hero/video/playLabel",
+              "template": {
+                "path": "architecture/pages/root.page.html",
+                "range": {
+                  "start": 3338,
+                  "end": 3372
+                }
+              }
+            }
+          },
+          {
+            "output": {
+              "start": 4301,
+              "end": 4821
+            },
+            "transform": "copy",
+            "origin": {
+              "kind": "page",
+              "path": "architecture/pages/root.page.html",
+              "range": {
+                "start": 3372,
+                "end": 3892
+              }
+            }
+          },
+          {
+            "output": {
+              "start": 4821,
+              "end": 4846
+            },
+            "transform": "catalog-key-substitution",
+            "origin": {
+              "kind": "catalog-key",
+              "path": "app/core/ui-copy.js",
+              "pointer": "/video/fullscreen/open",
+              "template": {
+                "path": "architecture/pages/root.page.html",
+                "range": {
+                  "start": 3892,
+                  "end": 3922
+                }
+              }
+            }
+          },
+          {
+            "output": {
+              "start": 4846,
+              "end": 4855
+            },
+            "transform": "copy",
+            "origin": {
+              "kind": "page",
+              "path": "architecture/pages/root.page.html",
+              "range": {
+                "start": 3922,
+                "end": 3931
+              }
+            }
+          },
+          {
+            "output": {
+              "start": 4855,
+              "end": 4880
+            },
+            "transform": "catalog-key-substitution",
+            "origin": {
+              "kind": "catalog-key",
+              "path": "app/core/ui-copy.js",
+              "pointer": "/video/fullscreen/open",
+              "template": {
+                "path": "architecture/pages/root.page.html",
+                "range": {
+                  "start": 3931,
+                  "end": 3961
+                }
+              }
+            }
+          },
+          {
+            "output": {
+              "start": 4880,
+              "end": 5484
+            },
+            "transform": "copy",
+            "origin": {
+              "kind": "page",
+              "path": "architecture/pages/root.page.html",
+              "range": {
+                "start": 3961,
+                "end": 4565
               }
             }
           },
@@ -914,8 +1050,8 @@
               "template": {
                 "path": "architecture/pages/root.page.html",
                 "range": {
-                  "start": 4552,
-                  "end": 4586
+                  "start": 4565,
+                  "end": 4599
                 }
               }
             }
@@ -930,8 +1066,8 @@
               "kind": "page",
               "path": "architecture/pages/root.page.html",
               "range": {
-                "start": 4586,
-                "end": 4617
+                "start": 4599,
+                "end": 4630
               }
             }
           },
@@ -948,8 +1084,8 @@
               "template": {
                 "path": "architecture/pages/root.page.html",
                 "range": {
-                  "start": 4617,
-                  "end": 4651
+                  "start": 4630,
+                  "end": 4664
                 }
               }
             }
@@ -964,8 +1100,8 @@
               "kind": "page",
               "path": "architecture/pages/root.page.html",
               "range": {
-                "start": 4651,
-                "end": 6041
+                "start": 4664,
+                "end": 6054
               }
             }
           },
@@ -982,8 +1118,8 @@
               "template": {
                 "path": "architecture/pages/root.page.html",
                 "range": {
-                  "start": 6041,
-                  "end": 6068
+                  "start": 6054,
+                  "end": 6081
                 }
               }
             }
@@ -998,8 +1134,8 @@
               "kind": "page",
               "path": "architecture/pages/root.page.html",
               "range": {
-                "start": 6068,
-                "end": 6076
+                "start": 6081,
+                "end": 6089
               }
             }
           },
@@ -1016,8 +1152,8 @@
               "template": {
                 "path": "architecture/pages/root.page.html",
                 "range": {
-                  "start": 6076,
-                  "end": 6103
+                  "start": 6089,
+                  "end": 6116
                 }
               }
             }
@@ -1032,8 +1168,8 @@
               "kind": "page",
               "path": "architecture/pages/root.page.html",
               "range": {
-                "start": 6103,
-                "end": 6111
+                "start": 6116,
+                "end": 6124
               }
             }
           },
@@ -1050,8 +1186,8 @@
               "template": {
                 "path": "architecture/pages/root.page.html",
                 "range": {
-                  "start": 6111,
-                  "end": 6142
+                  "start": 6124,
+                  "end": 6155
                 }
               }
             }
@@ -1066,8 +1202,8 @@
               "kind": "page",
               "path": "architecture/pages/root.page.html",
               "range": {
-                "start": 6142,
-                "end": 6168
+                "start": 6155,
+                "end": 6181
               }
             }
           },
@@ -1084,8 +1220,8 @@
               "template": {
                 "path": "architecture/pages/root.page.html",
                 "range": {
-                  "start": 6168,
-                  "end": 6194
+                  "start": 6181,
+                  "end": 6207
                 }
               }
             }
@@ -1100,8 +1236,8 @@
               "kind": "page",
               "path": "architecture/pages/root.page.html",
               "range": {
-                "start": 6194,
-                "end": 6500
+                "start": 6207,
+                "end": 6513
               }
             }
           },
@@ -1118,8 +1254,8 @@
               "template": {
                 "path": "architecture/pages/root.page.html",
                 "range": {
-                  "start": 6500,
-                  "end": 6523
+                  "start": 6513,
+                  "end": 6536
                 }
               }
             }
@@ -1134,8 +1270,8 @@
               "kind": "page",
               "path": "architecture/pages/root.page.html",
               "range": {
-                "start": 6523,
-                "end": 6883
+                "start": 6536,
+                "end": 6896
               }
             }
           }

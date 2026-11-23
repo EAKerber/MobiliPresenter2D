@@ -1,0 +1,49 @@
+{
+  "schema": "M2DLOC004FamilyDecision/1",
+  "plan": "MobiliPresenter2D Plano Diretor v0.9",
+  "workItem": "LOC-004",
+  "family": "home-hero-video-accessibility-copy",
+  "status": "validated-for-development",
+  "copyOwner": "Product/UX; existing pt-BR accessible names retained without editorial changes",
+  "authoring": {
+    "template": "architecture/pages/root.page.html",
+    "catalog": "app/core/ui-copy.js",
+    "compiler": "scripts/compile-primary-pages.mjs",
+    "output": "app/index.html"
+  },
+  "keys": [
+    { "pointer": "/home/hero/video/groupLabel", "value": "Vídeo de apresentação no celular", "sink": "hero video group aria-label" },
+    { "pointer": "/home/hero/video/playLabel", "value": "Reproduzir o vídeo de apresentação", "sink": "hero video poster aria-label" },
+    { "pointer": "/video/fullscreen/open", "value": "Abrir vídeo em tela cheia", "sink": "hero fullscreen aria-label and title; reuses existing key" }
+  ],
+  "preserved": [
+    "all approved words and punctuation, element semantics, control order, video behavior, and static no-JavaScript accessibility",
+    "the existing fullscreen key is reused for both identical attribute values",
+    "the background illustration alt text remains a separate candidate and was not changed",
+    "all generated public HTML outputs remain byte-identical to the development base",
+    "global candidate classifications remain unreviewed; this receipt records exact family ownership and provenance only"
+  ],
+  "baseline": {
+    "developmentBase": "3c771e28347371156af2a127572e0b3491225452",
+    "renderedHtmlChanged": false,
+    "visualTestRequired": false,
+    "reason": "The catalog substitutions reproduce the same accessible attribute values. All three generated HTML blob SHAs match development exactly; there is no visible or behavioral change."
+  },
+  "inventory": {
+    "path": "architecture/arc13/ui-text-candidates.json",
+    "sha256": "B9726886B7C9D68983337EC12675CDD5EF66F8B95A0A64D2D5075580FEECFE5E",
+    "familyOccurrences": 4,
+    "candidateIds": ["1deb819af5cc5953", "c014317c6b745a6e", "c2c6bd2c037ca454", "d6d455c085c0c21f"],
+    "classificationNote": "All four source-map occurrences resolve to the shared catalog. The inventory remains candidate-unreviewed; no global classification changed."
+  },
+  "verification": {
+    "arc03cSourceAuthorityTests": "PASS 6/6",
+    "uiThemeContract": "PASS",
+    "pagesCheck": "PASS",
+    "lineEndingNormalization": "PASS 3/3",
+    "inventoryScan": "PASS; parse errors 0; unresolved primary-page authoring occurrences 0",
+    "inventoryDeterminism": "PASS; two consecutive runs produced the same candidate inventory SHA-256",
+    "staticOutput": "PASS; app/index.html, app/about/index.html, and app/how-it-works/index.html blob SHAs match development base"
+  },
+  "exceptions": []
+}
