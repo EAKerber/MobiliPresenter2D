@@ -47,7 +47,13 @@ def verify() -> dict:
     main_first, main_div, _ = main_js.partition(split)
     require(div == split and current_div == split and main_div == split,
             "EXPLANATION_SECTION_MISSING")
-    require(current_first == main_first, "CURRENT_PAGE_PREFIX_DIFFERS_FROM_PINNED_MAIN")
+    catalog_binding = "    const videoFullscreenCopy=window.CASA_UI_COPY.video.fullscreen;\n"
+    catalog_label = "const label=isFullscreen?videoFullscreenCopy.close:videoFullscreenCopy.open;"
+    literal_label = 'const label=isFullscreen?"Sair da tela cheia":"Abrir vídeo em tela cheia";'
+    require(current_first.count(catalog_binding) == 1 and current_first.count(catalog_label) == 1,
+            "LOC005_FULLSCREEN_COPY_BINDING_DRIFT")
+    normalized_current_first = current_first.replace(catalog_binding, "", 1).replace(catalog_label, literal_label, 1)
+    require(normalized_current_first == main_first, "CURRENT_PAGE_PREFIX_DIFFERS_FROM_PINNED_MAIN")
     require(current_trailing == trailing, "LEGACY_EXPLANATION_CONTENT_CHANGED")
     require('document.querySelectorAll("[data-image-fallback]")' not in current_first,
             "LEGACY_PAGE_HANDLER_NOT_REMOVED")
