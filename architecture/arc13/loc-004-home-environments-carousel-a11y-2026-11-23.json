@@ -1,0 +1,48 @@
+{
+  "schema": "M2DLOC004FamilyDecision/1",
+  "plan": "MobiliPresenter2D Plano Diretor v0.9",
+  "workItem": "LOC-004",
+  "family": "home-environments-carousel-a11y-labels",
+  "status": "validated-for-development",
+  "copyOwner": "Product/UX; existing pt-BR accessible names retained without editorial changes",
+  "authoring": {
+    "template": "architecture/pages/root.page.html",
+    "catalog": "app/core/ui-copy.js",
+    "compiler": "scripts/compile-primary-pages.mjs",
+    "output": "app/index.html"
+  },
+  "keys": [
+    { "pointer": "/home/environments/carousel/previous", "value": "Ambientes anteriores", "sink": "previous-page button aria-label" },
+    { "pointer": "/home/environments/carousel/page", "value": "Página do carrossel", "sink": "pagination aria-label" },
+    { "pointer": "/home/environments/carousel/next", "value": "Próximos ambientes", "sink": "next-page button aria-label" }
+  ],
+  "preserved": [
+    "all approved words and punctuation, button symbols, routes, visibility, control order, and static no-JavaScript accessibility",
+    "the three existing accessible labels remain exact and are emitted into generated HTML at build time",
+    "all generated public HTML outputs remain byte-identical to the development base",
+    "global candidate classifications remain unreviewed; this receipt records exact family ownership and provenance only"
+  ],
+  "baseline": {
+    "developmentBase": "ea3a6c98ad8582e5c022c81a8357d5904c6b1173",
+    "renderedHtmlChanged": false,
+    "visualTestRequired": false,
+    "reason": "The catalog substitutions preserve all three accessible attribute values. The generated HTML blob SHAs for all primary pages match development exactly; no visible or behavioral change was introduced."
+  },
+  "inventory": {
+    "path": "architecture/arc13/ui-text-candidates.json",
+    "sha256": "EBD130441309C9E5885764DEDAC3F7C537C13CC23A19D02A291CA9547A5CD832",
+    "familyOccurrences": 3,
+    "candidateIds": ["d2ce7b6e7c8f955a", "24cacc277046458b", "3b43f30481b235c9"],
+    "classificationNote": "All three source-map occurrences resolve to the shared catalog. The inventory remains candidate-unreviewed; no global classification changed."
+  },
+  "verification": {
+    "arc03cSourceAuthorityTests": "PASS 6/6",
+    "uiThemeContract": "PASS",
+    "pagesCheck": "PASS",
+    "lineEndingNormalization": "PASS 3/3",
+    "inventoryScan": "PASS; parse errors 0; unresolved primary-page authoring occurrences 0",
+    "inventoryDeterminism": "PASS; two consecutive runs produced the same candidate inventory SHA-256",
+    "staticOutput": "PASS; app/index.html, app/about/index.html, and app/how-it-works/index.html blob SHAs match development base"
+  },
+  "exceptions": []
+}

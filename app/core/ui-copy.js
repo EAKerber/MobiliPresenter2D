@@ -43,7 +43,12 @@
       }),
       environments: Object.freeze({
         eyebrow: "Você escolhe o que precisa",
-        heading: "A gente já sabe como fazer."
+        heading: "A gente já sabe como fazer.",
+        carousel: Object.freeze({
+          previous: "Ambientes anteriores",
+          page: "Página do carrossel",
+          next: "Próximos ambientes"
+        })
       }),
       story: Object.freeze({
         eyebrow: "Simples do início ao fim",
