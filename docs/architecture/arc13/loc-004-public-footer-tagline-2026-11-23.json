@@ -1,0 +1,92 @@
+{
+  "schema": "ARC13LOC004Extraction/1",
+  "plan": "MobiliPresenter2D Plano Diretor v0.9",
+  "workItem": "LOC-004",
+  "family": "public-footer-tagline",
+  "status": "candidate-implemented",
+  "decision": {
+    "visibleText": "Móveis modulares pensados para a vida real.",
+    "classification": "ui-static",
+    "subsystemOwner": "public-pages/footer",
+    "contentOwner": "Product/UX; existing approved pt-BR wording preserved",
+    "authority": "The same published footer tagline already appears unchanged on all three public primary pages; this extraction does not edit copy.",
+    "catalogKey": "footer.tagline"
+  },
+  "evidence": {
+    "baseRevision": "4774aebc37e8c2e33b3f93d2ebcb35073a340b8d",
+    "targetBranch": "development",
+    "inventoryPath": "architecture/arc13/ui-text-candidates.json",
+    "inventorySha256": "B07CA84A4835B1904AA04E4170FEA95CA65BAA089A31D867097E5005C42DAACD",
+    "manifest": "architecture/generated/primary-pages.manifest.json",
+    "manifestSha256": "4f0b222f39d2d395b0fb4f9773eec6ec0e5b935c474f49cd1a2ff5cd0a8f8820",
+    "candidates": [
+      {
+        "candidateId": "c4067d8a75e2f445",
+        "route": "/",
+        "publishedSource": "app/index.html",
+        "authoringSource": "architecture/pages/root.page.html",
+        "pointer": "/footer/tagline"
+      },
+      {
+        "candidateId": "7bfa13ee531219e7",
+        "route": "/about/",
+        "publishedSource": "app/about/index.html",
+        "authoringSource": "architecture/pages/about.page.html",
+        "pointer": "/footer/tagline"
+      },
+      {
+        "candidateId": "03da6293b40d9cb9",
+        "route": "/how-it-works/",
+        "publishedSource": "app/how-it-works/index.html",
+        "authoringSource": "architecture/pages/how-it-works.page.html",
+        "pointer": "/footer/tagline"
+      }
+    ]
+  },
+  "implementation": {
+    "htmlRemainsStatic": true,
+    "requiresJavaScriptForText": false,
+    "visibleTextUnchanged": true,
+    "linkTargetsUnchanged": true,
+    "catalogKeySharedAcrossAllThreeRoutes": true,
+    "inventoryClassificationChanged": false
+  },
+  "baseline": {
+    "renderedVisibleDomChanged": false,
+    "visualTestRequired": false,
+    "reason": "The same text remains in the same footer spans; only its authoring source and shared catalog cache version change.",
+    "outputGitBlobs": {
+      "app/index.html": {
+        "before": "1e66dc15f182d3849b690fd0cf2fecea4a43edd1",
+        "after": "df5ab25f9e512980037d1aa0a49af0edd758d31d",
+        "afterCacheBustNormalization": "1e66dc15f182d3849b690fd0cf2fecea4a43edd1"
+      },
+      "app/about/index.html": {
+        "before": "2e6bc6b09d2534405d3498c8cec7a363afdd4a7e",
+        "after": "bb8f24da0db5215693526eb508fa2848db4753d6",
+        "afterCacheBustNormalization": "2e6bc6b09d2534405d3498c8cec7a363afdd4a7e"
+      },
+      "app/how-it-works/index.html": {
+        "before": "c21b37936a845bfd8555df7efd932afa1e9ae17d",
+        "after": "e380913fbf5af12bad8e64ab8eebcd91069c67d9",
+        "afterCacheBustNormalization": "c21b37936a845bfd8555df7efd932afa1e9ae17d"
+      }
+    }
+  },
+  "verification": {
+    "pageCompiler": "PASS --sync and --check",
+    "arc03cSourceAuthorityTests": "PASS 6/6",
+    "uiThemeContract": "PASS",
+    "scannerSyntax": "PASS",
+    "scannerRegressionTests": "PASS 3/3",
+    "inventoryGeneration": "PASS; two identical hashes; 420 primary-page occurrences mapped; 0 unresolved; 0 JavaScript parse errors; 1,043 global candidates remain unreviewed",
+    "staticCopy": "PASS; exact tagline remains in generated HTML on all three routes without JavaScript",
+    "visualTest": "not needed; no visible text, markup geometry, or link behavior changed"
+  },
+  "limits": [
+    "This receipt covers only the exact repeated static footer tagline on Home, About, and How it works.",
+    "It does not classify the same phrase when used in a distinct metadata sink or other editorial content.",
+    "It does not close LOC-002 or ARC-13 globally; the generated inventory remains unreviewed.",
+    "No main promotion or production publication is included."
+  ]
+}

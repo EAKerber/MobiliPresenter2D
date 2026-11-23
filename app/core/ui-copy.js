@@ -41,6 +41,7 @@
       })
     }),
     footer: Object.freeze({
+      tagline: "Móveis modulares pensados para a vida real.",
       homeLink: "Voltar ao início ↑"
     }),
     viewer: Object.freeze({

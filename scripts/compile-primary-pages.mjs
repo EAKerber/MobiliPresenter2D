@@ -34,15 +34,18 @@ const PAGE_COPY_POINTERS={
  "architecture/pages/root.page.html":{
   "copy.actions.exploreEnvironments":"/actions/exploreEnvironments",
   "copy.home.hero.aboutLink":"/home/hero/aboutLink",
-  "copy.video.youtubeLink":"/video/youtubeLink"
+  "copy.video.youtubeLink":"/video/youtubeLink",
+  "copy.footer.tagline":"/footer/tagline"
  },
  "architecture/pages/about.page.html":{
   "copy.actions.exploreEnvironments":"/actions/exploreEnvironments",
-  "copy.footer.homeLink":"/footer/homeLink"
+  "copy.footer.homeLink":"/footer/homeLink",
+  "copy.footer.tagline":"/footer/tagline"
  },
  "architecture/pages/how-it-works.page.html":{
   "copy.video.youtubeLink":"/video/youtubeLink",
-  "copy.footer.homeLink":"/footer/homeLink"
+  "copy.footer.homeLink":"/footer/homeLink",
+  "copy.footer.tagline":"/footer/tagline"
  }
 };
 const require=createRequire(import.meta.url);

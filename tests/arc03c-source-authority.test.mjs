@@ -84,7 +84,7 @@ test("public copy is catalog-backed and remains static in generated HTML",async(
  assert.equal(r.manifest.copyCatalog.path,"app/core/ui-copy.js");
  for(const page of r.pages) {
   const catalogVersion=["app/index.html","app/about/index.html","app/how-it-works/index.html"].includes(page.output)
-   ? "arc13-loc004-public-environments-action-1"
+   ? "arc13-loc004-public-footer-tagline-1"
    : "arc13-loc003-copy-1";
   const catalogScript=new RegExp(`<script src="/core/ui-copy\\.js\\?v=${catalogVersion}"></script>`);
   assert.equal((page.html.match(new RegExp(catalogScript.source,"g"))||[]).length,1,
@@ -96,11 +96,11 @@ test("public copy is catalog-backed and remains static in generated HTML",async(
   assert.match(page.html,/<a class="header-cta" href="https:\/\/wa\.me\/" aria-label="Fale conosco pelo WhatsApp"><span>Fale conosco<\/span>/,
    "contact copy stays visible, accessible, and statically available without JavaScript");
   const pageCopy=page.output==="app/index.html"
-   ? [["/actions/exploreEnvironments","Conheça nossos ambientes"],["/home/hero/aboutLink","Saiba mais"],["/video/youtubeLink","Assistir no YouTube ↗"]]
+   ? [["/actions/exploreEnvironments","Conheça nossos ambientes"],["/home/hero/aboutLink","Saiba mais"],["/video/youtubeLink","Assistir no YouTube ↗"],["/footer/tagline","Móveis modulares pensados para a vida real."]]
    : page.output==="app/how-it-works/index.html"
-    ? [["/video/youtubeLink","Assistir no YouTube ↗"],["/footer/homeLink","Voltar ao início ↑"]]
+    ? [["/video/youtubeLink","Assistir no YouTube ↗"],["/footer/tagline","Móveis modulares pensados para a vida real."],["/footer/homeLink","Voltar ao início ↑"]]
     : page.output==="app/about/index.html"
-     ? [["/actions/exploreEnvironments","Conheça nossos ambientes"],["/footer/homeLink","Voltar ao início ↑"]]
+     ? [["/actions/exploreEnvironments","Conheça nossos ambientes"],["/footer/tagline","Móveis modulares pensados para a vida real."],["/footer/homeLink","Voltar ao início ↑"]]
      : [];
   const pageExpected=[...expected,...pageCopy];
   const mapped=page.sourceMap.filter(segment=>segment.origin.kind==="catalog-key");
@@ -130,6 +130,8 @@ test("public copy is catalog-backed and remains static in generated HTML",async(
   "About environments CTA retains its route and remains usable without JavaScript");
  assert.match(howItWorks.html,/<footer class="site-footer">[\s\S]*?<a href="\.\.\/">Voltar ao início ↑<\/a><\/footer>/,
   "How it works footer preserves its relative home destination without JavaScript");
+ for(const page of r.pages)assert.match(page.html,/<footer class="site-footer"[^>]*>[\s\S]*?<span>Móveis modulares pensados para a vida real\.<\/span>/,
+  "the shared footer tagline stays static and exact on every primary page");
  for(const page of r.pages)assert.doesNotMatch(page.html,/\{\{copy\.[^{}]+\}\}/,
   "generated HTML contains no unresolved page-copy placeholders");
 });
