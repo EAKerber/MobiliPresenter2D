@@ -5,19 +5,28 @@ import {createHash} from "node:crypto";
 import {readFile,writeFile,mkdir} from "node:fs/promises";
 import {dirname,join,resolve} from "node:path";
 import {fileURLToPath} from "node:url";
+import {createRequire} from "node:module";
 const ROOT=resolve(dirname(fileURLToPath(import.meta.url)),"..");
 const SLOT="<!-- ARC03_PRIMARY_HEADER -->";
 const FRAGMENT="architecture/fragments/primary-header.fragment.html";
 const ROUTES="architecture/fragments/primary-header.routes.json";
+const COPY_CATALOG="app/core/ui-copy.js";
 const MANIFEST="architecture/generated/primary-pages.manifest.json";
 const COMPILER="scripts/compile-primary-pages.mjs";
-const SOURCE_MAP_SCHEMA="M2DARC03CProvenanceMap/1";
+const SOURCE_MAP_SCHEMA="M2DARC03CProvenanceMap/2";
 const MAP=[
  {route:"/",source:"architecture/pages/root.page.html",output:"app/index.html"},
  {route:"/about/",source:"architecture/pages/about.page.html",output:"app/about/index.html"},
  {route:"/how-it-works/",source:"architecture/pages/how-it-works.page.html",output:"app/how-it-works/index.html"}
 ];
-const KEYS=["brandHref","ambientesHref","ambientesCurrent","howHref","howCurrent","aboutHref","aboutCurrent","whatsAppIconAriaHidden"];
+const KEYS=["brandHref","ambientesHref","ambientesCurrent","howHref","howCurrent","aboutHref","aboutCurrent","whatsAppIconAriaHidden","copy.navigation.primaryLabel","copy.navigation.environments","copy.navigation.howItWorks","copy.navigation.about"];
+const COPY_POINTERS={
+ "copy.navigation.primaryLabel":"/navigation/primaryLabel",
+ "copy.navigation.environments":"/navigation/environments",
+ "copy.navigation.howItWorks":"/navigation/howItWorks",
+ "copy.navigation.about":"/navigation/about"
+};
+const require=createRequire(import.meta.url);
 function canonicalText(value) { return value.replace(/\r\n/g,"\n"); }
 async function readCanonical(path) {
  return canonicalText(await readFile(join(ROOT,path),"utf8"));
@@ -56,7 +65,10 @@ function trimRendered(parts,segments) {
  }
  return {text:trimmed,segments:cropped};
 }
-function header(fragment,r,routeIndex) {
+export function escapeHtml(value) {
+ return value.replace(/[&<>"']/g,char=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"})[char]);
+}
+function header(fragment,r,routeIndex,catalog) {
  assert.ok(["ambientes","how","about"].includes(r.current),"Invalid menu selection");
  for(const k of ["brandHref","ambientesHref","howHref","aboutHref"])
   assert.match(r[k],/^(?:\/[^\s"'<>]*|\.\.\/[^\s"'<>]*|\.\/)$/,"Unsafe static link: "+k);
@@ -67,6 +79,12 @@ function header(fragment,r,routeIndex) {
   aboutCurrent:r.current==="about"?' aria-current="page"':"",
   whatsAppIconAriaHidden:r.whatsAppIconAriaHidden?' aria-hidden="true"':""
  };
+ for(const [placeholder,pointer] of Object.entries(COPY_POINTERS)) {
+  const value=pointer.split("/").slice(1).reduce((node,key)=>node?.[key],catalog);
+  assert.equal(typeof value,"string","Catalog entry must be a string: "+pointer);
+  assert.notEqual(value.trim(),"","Catalog entry must not be blank: "+pointer);
+  values[placeholder]=escapeHtml(value);
+ }
  assert.deepEqual([...new Set([...fragment.matchAll(/\{\{([^{}]+)\}\}/g)].map(m=>m[1]))].sort(),[...KEYS].sort());
  const parts=[],segments=[];let outputOffset=0,cursor=0;
  const routeConfigPointer=(key)=>"/routes/"+routeIndex+"/"+(key.endsWith("Current")?"current":key);
@@ -79,8 +97,16 @@ function header(fragment,r,routeIndex) {
    });
   }
   const replacement=values[key];
+  assert.equal(typeof replacement,"string","Placeholder has no resolved value: "+key);
   const placeholderStart=codePointLength(fragment.slice(0,match.index));
   const template={path:FRAGMENT,range:{start:placeholderStart,end:placeholderStart+codePointLength(match[0])}};
+  if(COPY_POINTERS[key]) {
+   outputOffset=appendMapped(parts,segments,outputOffset,replacement,"catalog-key-substitution",{
+    kind:"catalog-key",path:COPY_CATALOG,pointer:COPY_POINTERS[key],template
+   });
+   cursor=match.index+match[0].length;
+   continue;
+  }
   const configOrigin={kind:"route-config",path:ROUTES,pointer:routeConfigPointer(key),template};
   const generatedRules={
    ambientesCurrent:"current-route-to-ambientes-aria-current",
@@ -112,6 +138,9 @@ export async function projectPages() {
  const [routeText,fragment]=await Promise.all([
   readCanonical(ROUTES),readCanonical(FRAGMENT)
  ]);
+ const catalog=require(join(ROOT,COPY_CATALOG));
+ assert.equal(catalog?.schema,"M2DUIStringCatalog/1","Unsupported UI copy catalog schema");
+ assert.equal(catalog?.locale,"pt-BR","This static header family requires pt-BR copy");
  const config=JSON.parse(routeText);
  assert.equal(config.schema,"M2DPrimaryHeaderRoutes/0.1");
  assert.equal(config.status,"BUILD_AUTHORITATIVE_ARC03C");
@@ -123,9 +152,10 @@ export async function projectPages() {
  assert.equal(config.scope.mayModifyNetlifyBuild,true);
  const compilerSource=await readCanonical(COMPILER);
  const manifest={
-  schema:"M2DARC03CPublishedPages/2",authority:"architecture/pages",
+  schema:"M2DARC03CPublishedPages/3",authority:"architecture/pages",
   sourceMap:{schema:SOURCE_MAP_SCHEMA,offsetUnit:"unicode-codepoints",
    generator:{path:COMPILER,gitBlobSha:gitBlobSha(compilerSource)}},
+  copyCatalog:{path:COPY_CATALOG,gitBlobSha:gitBlobSha(await readCanonical(COPY_CATALOG)),schema:catalog.schema,locale:catalog.locale},
   fragment:{path:FRAGMENT,gitBlobSha:gitBlobSha(fragment)},
   routesConfig:{path:ROUTES,gitBlobSha:gitBlobSha(routeText)},pages:[]
  };
@@ -135,7 +165,7 @@ export async function projectPages() {
   assert.equal(source.split(SLOT).length,2,"Exactly one header slot required in "+p.source);
   assert.ok(!headerHasClass(source,"site-header"),"Duplicate authorial header");
   assert.ok(!headerHasClass(source,"viewer-header"),"NAV-005 excluded");
-  const renderedHeader=header(fragment,config.routes[i],i);
+  const renderedHeader=header(fragment,config.routes[i],i,catalog);
   const slotStart=source.indexOf(SLOT),slotEnd=slotStart+SLOT.length;
   const before=source.slice(0,slotStart),after=source.slice(slotEnd);
   const pageParts=[],pageSegments=[];let pageOffset=0;

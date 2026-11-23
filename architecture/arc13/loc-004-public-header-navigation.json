@@ -1,0 +1,52 @@
+{
+  "schema": "M2DLOC004FamilyDecision/1",
+  "plan": "MobiliPresenter2D Plano Diretor v0.9",
+  "workItem": "LOC-004",
+  "family": "public-primary-header-navigation",
+  "status": "implemented-awaiting-integration",
+  "copyOwner": "Product/UX; existing approved pt-BR copy retained without editorial changes",
+  "authoring": {
+    "fragment": "architecture/fragments/primary-header.fragment.html",
+    "catalog": "app/core/ui-copy.js",
+    "generatedRoutes": ["/", "/about/", "/how-it-works/"],
+    "outputs": ["app/index.html", "app/about/index.html", "app/how-it-works/index.html"]
+  },
+  "keys": [
+    { "pointer": "/navigation/primaryLabel", "value": "Navegação principal", "sink": "aria-label" },
+    { "pointer": "/navigation/environments", "value": "Ambientes", "sink": "visible link text" },
+    { "pointer": "/navigation/howItWorks", "value": "Como funciona", "sink": "visible link text" },
+    { "pointer": "/navigation/about", "value": "Quem somos", "sink": "visible link text" }
+  ],
+  "preserved": [
+    "Casa em Módulos, início (brand aria-label, punctuation retained)",
+    "all route hrefs and aria-current conditions from primary-header.routes.json",
+    "all three output pages remain complete with static text and no JavaScript requirement",
+    "NAV-005 Viewer and all non-public headers remain outside scope"
+  ],
+  "baseline": {
+    "fragmentGitBlobBeforeExtraction": "cc4045bf3a2727296787639bf8f28f662a9d8f99",
+    "renderedHtmlChanged": false,
+    "visualTestRequired": false,
+    "reason": "All three generated HTML files are byte-identical to the prior development head; no rendered text, attribute, link, layout, or DOM input changed."
+  },
+  "inventory": {
+    "path": "architecture/arc13/ui-text-candidates.json",
+    "sha256": "806C37ECBB3B5CF652D57BF63817C9C4650F5587D766C77CE87D52AC60A75308",
+    "familyOccurrences": 12,
+    "candidateIds": [
+      "f70882d9f78faef4", "c6636f67757d8de4", "8689fd64c8d16762", "6389b9a6381a0ec0",
+      "4a9335557cdd6f68", "e960bb9254f35792", "143e00d0078937f2", "a99d1ce14f029b3d",
+      "ab8a1db7f39b81c6", "1e47067fae308847", "fcb73e68f50f21f0", "c53de7c29a9f224e"
+    ],
+    "classificationNote": "This receipt scopes the LOC-004 family only. The generated inventory remains an evidence catalog; its overall unreviewed candidate count is not a count of LOC-004 work remaining."
+  },
+  "verification": {
+    "arc03cSourceAuthorityTests": "PASS 5/5",
+    "uiThemeContract": "PASS",
+    "pagesCheck": "PASS",
+    "inventoryScan": "PASS; parse errors 0; unresolved primary-page authoring occurrences 0",
+    "inventoryDeterminism": "PASS; two consecutive SHA-256 values identical",
+    "staticOutput": "PASS; all three generated public HTML files unchanged byte-for-byte"
+  },
+  "exceptions": []
+}
