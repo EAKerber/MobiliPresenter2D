@@ -47,7 +47,7 @@
       "subsystemOwner": "admin",
       "contentOwner": null,
       "destination": "hold",
-      "decision": "This selects a service for the configurator's initial state. The wording matches the object branch above, but the state path and function differ; keep the candidate separate until product/UX decides whether a shared copy key is appropriate."
+      "decision": "This selects a service for the configurator's initial state. The wording matches the object alternative above, but the state path and function differ; keep this service candidate separate until product/UX decides whether a shared copy key is appropriate."
     },
     {
       "candidateId": "09cf4ffd847e1136",
@@ -90,7 +90,7 @@
   },
   "pending": [
     "Product/UX confirmation of whether module visibility and object activity are distinct policies or both describe initial configurator presence, and confirmation of the current labels.",
-    "Choose canonical catalog keys for the module, object, and service alternatives; retain separate source candidates until their semantics are decided.",
+    "Choose canonical catalog keys for the module and object branches within candidate `852e7699499e4703`, and for service candidate `7ef47d84204a2578`; keep the source branches distinct in the review record until their semantics are decided.",
     "Review the related accessible names with assistive technology; this receipt records their intended meanings, not an accessibility approval.",
     "No LOC-003 extraction or source changes are authorized by this review."
   ],
