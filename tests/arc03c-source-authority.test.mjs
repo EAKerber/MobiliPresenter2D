@@ -68,8 +68,10 @@ test("three generated pages and provenance manifest match authoritative source",
  }
  const x=gate();assert.equal(x.status,0,x.stderr);
 });
-test("public navigation copy is catalog-backed and remains static in generated HTML",async()=>{
+test("public header copy is catalog-backed and remains static in generated HTML",async()=>{
  const r=await projectPages(),expected=[
+  ["/brand/homeLinkAriaLabel","Casa em Módulos, início"],
+  ["/brand/logoAlt","Casa em Módulos"],
   ["/navigation/primaryLabel","Navegação principal"],
   ["/navigation/environments","Ambientes"],
   ["/navigation/howItWorks","Como funciona"],
@@ -80,8 +82,10 @@ test("public navigation copy is catalog-backed and remains static in generated H
  for(const page of r.pages) {
   assert.equal((page.html.match(/<script src="\/core\/ui-copy\.js\?v=arc13-loc003-copy-1"><\/script>/g)||[]).length,1,
    "each generated page loads the shared catalog exactly once");
+  assert.match(page.html,/<a class="brand" href="[^"]+" aria-label="Casa em Módulos, início">/);
+  assert.match(page.html,/<img[^>]+alt="Casa em Módulos">/);
   assert.match(page.html,/<nav id="primaryNav" aria-label="Navegação principal">/);
-  for(const [,label] of expected.slice(1))assert.ok(page.html.includes(">"+label+"</a>"),label+" must be present without JS");
+  for(const [,label] of expected.slice(3))assert.ok(page.html.includes(">"+label+"</a>"),label+" must be present without JS");
   const mapped=page.sourceMap.filter(segment=>segment.origin.kind==="catalog-key");
   assert.deepEqual(mapped.map(segment=>segment.origin.pointer),expected.map(([pointer])=>pointer));
   for(let i=0;i<mapped.length;i++) {
