@@ -1,12 +1,16 @@
 {
   "schemaVersion": "BranchHygieneBatch 0.1",
   "repository": "EAKerber/MobiliPresenter2D",
-  "wave": "M2D-R12-2026-11-16",
-  "purpose": "Remove only the exact integrated PR #275 head; preserve every other Product branch.",
+  "wave": "PRODUCT-HYG-2026-11-23-TERMINAL",
+  "purpose": "Retire consumed SHA-pinned head of merged hygiene PR #317 after full tree identity proof, without touching historical HOLD refs.",
   "branches": [
     {
-      "branch": "fix/home-hero-group-a11y-20261114",
-      "sha": "3481ade561deddf561de57225cf8a65491b34654"
+      "branch": "hygiene/product-dev-retire-series-20261123",
+      "sha": "c5f8a4d1cef132441bf51f02232a4e028c19913c",
+      "squashMerge": {
+        "pullRequest": 317,
+        "mergeCommit": "e994172f691e23365747bb1fe2f935b9ea8ab109"
+      }
     }
   ]
 }
