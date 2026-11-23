@@ -76,15 +76,15 @@ test("public copy is catalog-backed and remains static in generated HTML",async(
   ["/navigation/primaryLabel","Navegação principal"],
   ["/navigation/environments","Ambientes"],
   ["/navigation/howItWorks","Como funciona"],
-  ["/navigation/about","Quem somos"]
+  ["/navigation/about","Quem somos"],
+  ["/navigation/contactAriaLabel","Fale conosco pelo WhatsApp"],
+  ["/navigation/contact","Fale conosco"]
  ];
  assert.equal(r.manifest.schema,"M2DARC03CPublishedPages/3");
  assert.equal(r.manifest.copyCatalog.path,"app/core/ui-copy.js");
  for(const page of r.pages) {
-  const catalogVersion=page.output==="app/index.html"
-   ? "arc13-loc005-video-fullscreen-1"
-   : ["app/about/index.html","app/how-it-works/index.html"].includes(page.output)
-    ? "arc13-loc004-footer-home-1"
+  const catalogVersion=["app/index.html","app/about/index.html","app/how-it-works/index.html"].includes(page.output)
+   ? "arc13-loc004-public-header-contact-1"
    : "arc13-loc003-copy-1";
   const catalogScript=new RegExp(`<script src="/core/ui-copy\\.js\\?v=${catalogVersion}"></script>`);
   assert.equal((page.html.match(new RegExp(catalogScript.source,"g"))||[]).length,1,
@@ -92,7 +92,9 @@ test("public copy is catalog-backed and remains static in generated HTML",async(
   assert.match(page.html,/<a class="brand" href="[^"]+" aria-label="Casa em Módulos, início">/);
   assert.match(page.html,/<img[^>]+alt="Casa em Módulos">/);
   assert.match(page.html,/<nav id="primaryNav" aria-label="Navegação principal">/);
-  for(const [,label] of expected.slice(3))assert.ok(page.html.includes(">"+label+"</a>"),label+" must be present without JS");
+  for(const [,label] of expected.slice(3,6))assert.ok(page.html.includes(">"+label+"</a>"),label+" must be present without JS");
+  assert.match(page.html,/<a class="header-cta" href="https:\/\/wa\.me\/" aria-label="Fale conosco pelo WhatsApp"><span>Fale conosco<\/span>/,
+   "contact copy stays visible, accessible, and statically available without JavaScript");
   const pageCopy=page.output==="app/index.html"
    ? [["/home/hero/aboutLink","Saiba mais"],["/video/youtubeLink","Assistir no YouTube ↗"]]
    : page.output==="app/how-it-works/index.html"

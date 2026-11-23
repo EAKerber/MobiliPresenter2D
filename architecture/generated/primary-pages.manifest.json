@@ -6,18 +6,18 @@
     "offsetUnit": "unicode-codepoints",
     "generator": {
       "path": "scripts/compile-primary-pages.mjs",
-      "gitBlobSha": "ff541fa1a77a3696b40adf5503795e24fba37a07"
+      "gitBlobSha": "c8fb20fa727862f6e92365f10162d975c8bc2b59"
     }
   },
   "copyCatalog": {
     "path": "app/core/ui-copy.js",
-    "gitBlobSha": "c40a5144ee239d00ff25d4c3c303087e4ba281d4",
+    "gitBlobSha": "ca176211b1ceeff857a4bb1893725abffec76954",
     "schema": "M2DUIStringCatalog/1",
     "locale": "pt-BR"
   },
   "fragment": {
     "path": "architecture/fragments/primary-header.fragment.html",
-    "gitBlobSha": "9d6cd9d45a48873bd7947a531a731420df1e0a35"
+    "gitBlobSha": "011a594e0dc8c7e65ee0d573513c6d0dda3dca22"
   },
   "routesConfig": {
     "path": "architecture/fragments/primary-header.routes.json",
@@ -28,14 +28,14 @@
       "route": "/",
       "source": "architecture/pages/root.page.html",
       "output": "app/index.html",
-      "sourceGitBlobSha": "d18af2e81f8c9c9404211135210459a49dfd8aea",
-      "outputGitBlobSha": "543c4ec5797a0a6dfbad610587c4e6e5d02b6cfe",
+      "sourceGitBlobSha": "c8a591d9088965cbb404e3a9e48863fe37eb9361",
+      "outputGitBlobSha": "d860537c585214bfff3a3f83d838414491934f31",
       "sourceMap": {
         "segments": [
           {
             "output": {
               "start": 0,
-              "end": 1627
+              "end": 1632
             },
             "transform": "copy",
             "origin": {
@@ -43,14 +43,14 @@
               "path": "architecture/pages/root.page.html",
               "range": {
                 "start": 0,
-                "end": 1627
+                "end": 1632
               }
             }
           },
           {
             "output": {
-              "start": 1627,
-              "end": 1698
+              "start": 1632,
+              "end": 1703
             },
             "transform": "copy",
             "origin": {
@@ -64,8 +64,8 @@
           },
           {
             "output": {
-              "start": 1698,
-              "end": 1699
+              "start": 1703,
+              "end": 1704
             },
             "transform": "route-placeholder-substitution",
             "origin": {
@@ -83,8 +83,8 @@
           },
           {
             "output": {
-              "start": 1699,
-              "end": 1713
+              "start": 1704,
+              "end": 1718
             },
             "transform": "copy",
             "origin": {
@@ -98,8 +98,8 @@
           },
           {
             "output": {
-              "start": 1713,
-              "end": 1736
+              "start": 1718,
+              "end": 1741
             },
             "transform": "catalog-key-substitution",
             "origin": {
@@ -117,8 +117,8 @@
           },
           {
             "output": {
-              "start": 1736,
-              "end": 1917
+              "start": 1741,
+              "end": 1922
             },
             "transform": "copy",
             "origin": {
@@ -132,8 +132,8 @@
           },
           {
             "output": {
-              "start": 1917,
-              "end": 1932
+              "start": 1922,
+              "end": 1937
             },
             "transform": "catalog-key-substitution",
             "origin": {
@@ -151,8 +151,8 @@
           },
           {
             "output": {
-              "start": 1932,
-              "end": 1971
+              "start": 1937,
+              "end": 1976
             },
             "transform": "copy",
             "origin": {
@@ -166,8 +166,8 @@
           },
           {
             "output": {
-              "start": 1971,
-              "end": 1990
+              "start": 1976,
+              "end": 1995
             },
             "transform": "catalog-key-substitution",
             "origin": {
@@ -185,8 +185,8 @@
           },
           {
             "output": {
-              "start": 1990,
-              "end": 2001
+              "start": 1995,
+              "end": 2006
             },
             "transform": "copy",
             "origin": {
@@ -200,8 +200,8 @@
           },
           {
             "output": {
-              "start": 2001,
-              "end": 2012
+              "start": 2006,
+              "end": 2017
             },
             "transform": "route-placeholder-substitution",
             "origin": {
@@ -219,8 +219,8 @@
           },
           {
             "output": {
-              "start": 2012,
-              "end": 2013
+              "start": 2017,
+              "end": 2018
             },
             "transform": "copy",
             "origin": {
@@ -234,8 +234,8 @@
           },
           {
             "output": {
-              "start": 2013,
-              "end": 2033
+              "start": 2018,
+              "end": 2038
             },
             "transform": "conditional-attribute-generation",
             "origin": {
@@ -259,8 +259,8 @@
           },
           {
             "output": {
-              "start": 2033,
-              "end": 2034
+              "start": 2038,
+              "end": 2039
             },
             "transform": "copy",
             "origin": {
@@ -274,8 +274,8 @@
           },
           {
             "output": {
-              "start": 2034,
-              "end": 2043
+              "start": 2039,
+              "end": 2048
             },
             "transform": "catalog-key-substitution",
             "origin": {
@@ -293,8 +293,8 @@
           },
           {
             "output": {
-              "start": 2043,
-              "end": 2056
+              "start": 2048,
+              "end": 2061
             },
             "transform": "copy",
             "origin": {
@@ -308,8 +308,8 @@
           },
           {
             "output": {
-              "start": 2056,
-              "end": 2070
+              "start": 2061,
+              "end": 2075
             },
             "transform": "route-placeholder-substitution",
             "origin": {
@@ -327,8 +327,8 @@
           },
           {
             "output": {
-              "start": 2070,
-              "end": 2071
+              "start": 2075,
+              "end": 2076
             },
             "transform": "copy",
             "origin": {
@@ -342,8 +342,8 @@
           },
           {
             "output": {
-              "start": 2071,
-              "end": 2072
+              "start": 2076,
+              "end": 2077
             },
             "transform": "copy",
             "origin": {
@@ -357,8 +357,8 @@
           },
           {
             "output": {
-              "start": 2072,
-              "end": 2085
+              "start": 2077,
+              "end": 2090
             },
             "transform": "catalog-key-substitution",
             "origin": {
@@ -376,8 +376,8 @@
           },
           {
             "output": {
-              "start": 2085,
-              "end": 2098
+              "start": 2090,
+              "end": 2103
             },
             "transform": "copy",
             "origin": {
@@ -391,8 +391,8 @@
           },
           {
             "output": {
-              "start": 2098,
-              "end": 2105
+              "start": 2103,
+              "end": 2110
             },
             "transform": "route-placeholder-substitution",
             "origin": {
@@ -410,8 +410,8 @@
           },
           {
             "output": {
-              "start": 2105,
-              "end": 2106
+              "start": 2110,
+              "end": 2111
             },
             "transform": "copy",
             "origin": {
@@ -425,8 +425,8 @@
           },
           {
             "output": {
-              "start": 2106,
-              "end": 2107
+              "start": 2111,
+              "end": 2112
             },
             "transform": "copy",
             "origin": {
@@ -440,8 +440,8 @@
           },
           {
             "output": {
-              "start": 2107,
-              "end": 2117
+              "start": 2112,
+              "end": 2122
             },
             "transform": "catalog-key-substitution",
             "origin": {
@@ -459,8 +459,8 @@
           },
           {
             "output": {
-              "start": 2117,
-              "end": 2325
+              "start": 2122,
+              "end": 2216
             },
             "transform": "copy",
             "origin": {
@@ -468,14 +468,82 @@
               "path": "architecture/fragments/primary-header.fragment.html",
               "range": {
                 "start": 625,
-                "end": 833
+                "end": 719
               }
             }
           },
           {
             "output": {
-              "start": 2325,
-              "end": 2344
+              "start": 2216,
+              "end": 2242
+            },
+            "transform": "catalog-key-substitution",
+            "origin": {
+              "kind": "catalog-key",
+              "path": "app/core/ui-copy.js",
+              "pointer": "/navigation/contactAriaLabel",
+              "template": {
+                "path": "architecture/fragments/primary-header.fragment.html",
+                "range": {
+                  "start": 719,
+                  "end": 755
+                }
+              }
+            }
+          },
+          {
+            "output": {
+              "start": 2242,
+              "end": 2250
+            },
+            "transform": "copy",
+            "origin": {
+              "kind": "shared-fragment",
+              "path": "architecture/fragments/primary-header.fragment.html",
+              "range": {
+                "start": 755,
+                "end": 763
+              }
+            }
+          },
+          {
+            "output": {
+              "start": 2250,
+              "end": 2262
+            },
+            "transform": "catalog-key-substitution",
+            "origin": {
+              "kind": "catalog-key",
+              "path": "app/core/ui-copy.js",
+              "pointer": "/navigation/contact",
+              "template": {
+                "path": "architecture/fragments/primary-header.fragment.html",
+                "range": {
+                  "start": 763,
+                  "end": 790
+                }
+              }
+            }
+          },
+          {
+            "output": {
+              "start": 2262,
+              "end": 2330
+            },
+            "transform": "copy",
+            "origin": {
+              "kind": "shared-fragment",
+              "path": "architecture/fragments/primary-header.fragment.html",
+              "range": {
+                "start": 790,
+                "end": 858
+              }
+            }
+          },
+          {
+            "output": {
+              "start": 2330,
+              "end": 2349
             },
             "transform": "conditional-attribute-generation",
             "origin": {
@@ -491,46 +559,46 @@
               "template": {
                 "path": "architecture/fragments/primary-header.fragment.html",
                 "range": {
-                  "start": 833,
-                  "end": 859
+                  "start": 858,
+                  "end": 884
                 }
               }
             }
           },
           {
             "output": {
-              "start": 2344,
-              "end": 2576
+              "start": 2349,
+              "end": 2581
             },
             "transform": "copy",
             "origin": {
               "kind": "shared-fragment",
               "path": "architecture/fragments/primary-header.fragment.html",
               "range": {
-                "start": 859,
-                "end": 1091
+                "start": 884,
+                "end": 1116
               }
             }
           },
           {
             "output": {
-              "start": 2576,
-              "end": 3372
+              "start": 2581,
+              "end": 3377
             },
             "transform": "copy",
             "origin": {
               "kind": "page",
               "path": "architecture/pages/root.page.html",
               "range": {
-                "start": 1656,
-                "end": 2452
+                "start": 1661,
+                "end": 2457
               }
             }
           },
           {
             "output": {
-              "start": 3372,
-              "end": 3382
+              "start": 3377,
+              "end": 3387
             },
             "transform": "catalog-key-substitution",
             "origin": {
@@ -540,31 +608,31 @@
               "template": {
                 "path": "architecture/pages/root.page.html",
                 "range": {
-                  "start": 2452,
-                  "end": 2480
+                  "start": 2457,
+                  "end": 2485
                 }
               }
             }
           },
           {
             "output": {
-              "start": 3382,
-              "end": 3492
+              "start": 3387,
+              "end": 3497
             },
             "transform": "copy",
             "origin": {
               "kind": "page",
               "path": "architecture/pages/root.page.html",
               "range": {
-                "start": 2480,
-                "end": 2590
+                "start": 2485,
+                "end": 2595
               }
             }
           },
           {
             "output": {
-              "start": 3492,
-              "end": 3513
+              "start": 3497,
+              "end": 3518
             },
             "transform": "catalog-key-substitution",
             "origin": {
@@ -574,24 +642,24 @@
               "template": {
                 "path": "architecture/pages/root.page.html",
                 "range": {
-                  "start": 2590,
-                  "end": 2616
+                  "start": 2595,
+                  "end": 2621
                 }
               }
             }
           },
           {
             "output": {
-              "start": 3513,
-              "end": 7876
+              "start": 3518,
+              "end": 7881
             },
             "transform": "copy",
             "origin": {
               "kind": "page",
               "path": "architecture/pages/root.page.html",
               "range": {
-                "start": 2616,
-                "end": 6979
+                "start": 2621,
+                "end": 6984
               }
             }
           }
@@ -602,14 +670,14 @@
       "route": "/about/",
       "source": "architecture/pages/about.page.html",
       "output": "app/about/index.html",
-      "sourceGitBlobSha": "cb2b432d29f22fccf8574835493a4794b61808d6",
-      "outputGitBlobSha": "471eeaac060062972c4014a58c311d119848f1d4",
+      "sourceGitBlobSha": "22235ff2a269e3c531dc0cb9b0b4a8ca9a9feb35",
+      "outputGitBlobSha": "3e715a0c17136687653ccc49979b19820e9f1ef4",
       "sourceMap": {
         "segments": [
           {
             "output": {
               "start": 0,
-              "end": 1222
+              "end": 1232
             },
             "transform": "copy",
             "origin": {
@@ -617,14 +685,14 @@
               "path": "architecture/pages/about.page.html",
               "range": {
                 "start": 0,
-                "end": 1222
+                "end": 1232
               }
             }
           },
           {
             "output": {
-              "start": 1222,
-              "end": 1293
+              "start": 1232,
+              "end": 1303
             },
             "transform": "copy",
             "origin": {
@@ -638,8 +706,8 @@
           },
           {
             "output": {
-              "start": 1293,
-              "end": 1294
+              "start": 1303,
+              "end": 1304
             },
             "transform": "route-placeholder-substitution",
             "origin": {
@@ -657,8 +725,8 @@
           },
           {
             "output": {
-              "start": 1294,
-              "end": 1308
+              "start": 1304,
+              "end": 1318
             },
             "transform": "copy",
             "origin": {
@@ -672,8 +740,8 @@
           },
           {
             "output": {
-              "start": 1308,
-              "end": 1331
+              "start": 1318,
+              "end": 1341
             },
             "transform": "catalog-key-substitution",
             "origin": {
@@ -691,8 +759,8 @@
           },
           {
             "output": {
-              "start": 1331,
-              "end": 1512
+              "start": 1341,
+              "end": 1522
             },
             "transform": "copy",
             "origin": {
@@ -706,8 +774,8 @@
           },
           {
             "output": {
-              "start": 1512,
-              "end": 1527
+              "start": 1522,
+              "end": 1537
             },
             "transform": "catalog-key-substitution",
             "origin": {
@@ -725,8 +793,8 @@
           },
           {
             "output": {
-              "start": 1527,
-              "end": 1566
+              "start": 1537,
+              "end": 1576
             },
             "transform": "copy",
             "origin": {
@@ -740,8 +808,8 @@
           },
           {
             "output": {
-              "start": 1566,
-              "end": 1585
+              "start": 1576,
+              "end": 1595
             },
             "transform": "catalog-key-substitution",
             "origin": {
@@ -759,8 +827,8 @@
           },
           {
             "output": {
-              "start": 1585,
-              "end": 1596
+              "start": 1595,
+              "end": 1606
             },
             "transform": "copy",
             "origin": {
@@ -774,8 +842,8 @@
           },
           {
             "output": {
-              "start": 1596,
-              "end": 1607
+              "start": 1606,
+              "end": 1617
             },
             "transform": "route-placeholder-substitution",
             "origin": {
@@ -793,8 +861,8 @@
           },
           {
             "output": {
-              "start": 1607,
-              "end": 1608
+              "start": 1617,
+              "end": 1618
             },
             "transform": "copy",
             "origin": {
@@ -808,8 +876,8 @@
           },
           {
             "output": {
-              "start": 1608,
-              "end": 1609
+              "start": 1618,
+              "end": 1619
             },
             "transform": "copy",
             "origin": {
@@ -823,8 +891,8 @@
           },
           {
             "output": {
-              "start": 1609,
-              "end": 1618
+              "start": 1619,
+              "end": 1628
             },
             "transform": "catalog-key-substitution",
             "origin": {
@@ -842,8 +910,8 @@
           },
           {
             "output": {
-              "start": 1618,
-              "end": 1631
+              "start": 1628,
+              "end": 1641
             },
             "transform": "copy",
             "origin": {
@@ -857,8 +925,8 @@
           },
           {
             "output": {
-              "start": 1631,
-              "end": 1645
+              "start": 1641,
+              "end": 1655
             },
             "transform": "route-placeholder-substitution",
             "origin": {
@@ -876,8 +944,8 @@
           },
           {
             "output": {
-              "start": 1645,
-              "end": 1646
+              "start": 1655,
+              "end": 1656
             },
             "transform": "copy",
             "origin": {
@@ -891,8 +959,8 @@
           },
           {
             "output": {
-              "start": 1646,
-              "end": 1647
+              "start": 1656,
+              "end": 1657
             },
             "transform": "copy",
             "origin": {
@@ -906,8 +974,8 @@
           },
           {
             "output": {
-              "start": 1647,
-              "end": 1660
+              "start": 1657,
+              "end": 1670
             },
             "transform": "catalog-key-substitution",
             "origin": {
@@ -925,8 +993,8 @@
           },
           {
             "output": {
-              "start": 1660,
-              "end": 1673
+              "start": 1670,
+              "end": 1683
             },
             "transform": "copy",
             "origin": {
@@ -940,8 +1008,8 @@
           },
           {
             "output": {
-              "start": 1673,
-              "end": 1680
+              "start": 1683,
+              "end": 1690
             },
             "transform": "route-placeholder-substitution",
             "origin": {
@@ -959,8 +1027,8 @@
           },
           {
             "output": {
-              "start": 1680,
-              "end": 1681
+              "start": 1690,
+              "end": 1691
             },
             "transform": "copy",
             "origin": {
@@ -974,8 +1042,8 @@
           },
           {
             "output": {
-              "start": 1681,
-              "end": 1701
+              "start": 1691,
+              "end": 1711
             },
             "transform": "conditional-attribute-generation",
             "origin": {
@@ -999,8 +1067,8 @@
           },
           {
             "output": {
-              "start": 1701,
-              "end": 1702
+              "start": 1711,
+              "end": 1712
             },
             "transform": "copy",
             "origin": {
@@ -1014,8 +1082,8 @@
           },
           {
             "output": {
-              "start": 1702,
-              "end": 1712
+              "start": 1712,
+              "end": 1722
             },
             "transform": "catalog-key-substitution",
             "origin": {
@@ -1033,8 +1101,8 @@
           },
           {
             "output": {
-              "start": 1712,
-              "end": 1920
+              "start": 1722,
+              "end": 1816
             },
             "transform": "copy",
             "origin": {
@@ -1042,44 +1110,112 @@
               "path": "architecture/fragments/primary-header.fragment.html",
               "range": {
                 "start": 625,
-                "end": 833
+                "end": 719
               }
             }
           },
           {
             "output": {
-              "start": 1920,
-              "end": 2152
+              "start": 1816,
+              "end": 1842
+            },
+            "transform": "catalog-key-substitution",
+            "origin": {
+              "kind": "catalog-key",
+              "path": "app/core/ui-copy.js",
+              "pointer": "/navigation/contactAriaLabel",
+              "template": {
+                "path": "architecture/fragments/primary-header.fragment.html",
+                "range": {
+                  "start": 719,
+                  "end": 755
+                }
+              }
+            }
+          },
+          {
+            "output": {
+              "start": 1842,
+              "end": 1850
             },
             "transform": "copy",
             "origin": {
               "kind": "shared-fragment",
               "path": "architecture/fragments/primary-header.fragment.html",
               "range": {
-                "start": 859,
-                "end": 1091
+                "start": 755,
+                "end": 763
               }
             }
           },
           {
             "output": {
-              "start": 2152,
-              "end": 6699
+              "start": 1850,
+              "end": 1862
+            },
+            "transform": "catalog-key-substitution",
+            "origin": {
+              "kind": "catalog-key",
+              "path": "app/core/ui-copy.js",
+              "pointer": "/navigation/contact",
+              "template": {
+                "path": "architecture/fragments/primary-header.fragment.html",
+                "range": {
+                  "start": 763,
+                  "end": 790
+                }
+              }
+            }
+          },
+          {
+            "output": {
+              "start": 1862,
+              "end": 1930
+            },
+            "transform": "copy",
+            "origin": {
+              "kind": "shared-fragment",
+              "path": "architecture/fragments/primary-header.fragment.html",
+              "range": {
+                "start": 790,
+                "end": 858
+              }
+            }
+          },
+          {
+            "output": {
+              "start": 1930,
+              "end": 2162
+            },
+            "transform": "copy",
+            "origin": {
+              "kind": "shared-fragment",
+              "path": "architecture/fragments/primary-header.fragment.html",
+              "range": {
+                "start": 884,
+                "end": 1116
+              }
+            }
+          },
+          {
+            "output": {
+              "start": 2162,
+              "end": 6709
             },
             "transform": "copy",
             "origin": {
               "kind": "page",
               "path": "architecture/pages/about.page.html",
               "range": {
-                "start": 1251,
-                "end": 5798
+                "start": 1261,
+                "end": 5808
               }
             }
           },
           {
             "output": {
-              "start": 6699,
-              "end": 6717
+              "start": 6709,
+              "end": 6727
             },
             "transform": "catalog-key-substitution",
             "origin": {
@@ -1089,24 +1225,24 @@
               "template": {
                 "path": "architecture/pages/about.page.html",
                 "range": {
-                  "start": 5798,
-                  "end": 5822
+                  "start": 5808,
+                  "end": 5832
                 }
               }
             }
           },
           {
             "output": {
-              "start": 6717,
-              "end": 6746
+              "start": 6727,
+              "end": 6756
             },
             "transform": "copy",
             "origin": {
               "kind": "page",
               "path": "architecture/pages/about.page.html",
               "range": {
-                "start": 5822,
-                "end": 5851
+                "start": 5832,
+                "end": 5861
               }
             }
           }
@@ -1117,14 +1253,14 @@
       "route": "/how-it-works/",
       "source": "architecture/pages/how-it-works.page.html",
       "output": "app/how-it-works/index.html",
-      "sourceGitBlobSha": "6bc87621ef5f0b3d9db3aff0b675379f6f79ee6e",
-      "outputGitBlobSha": "44345d3dd60ac6eec02e5213bbc0155bfc79d3cc",
+      "sourceGitBlobSha": "00569e0698b7596973f472aacd5a07914de4f513",
+      "outputGitBlobSha": "b74649e042a6cd51e21c538726494b81c0a77dbd",
       "sourceMap": {
         "segments": [
           {
             "output": {
               "start": 0,
-              "end": 1286
+              "end": 1296
             },
             "transform": "copy",
             "origin": {
@@ -1132,14 +1268,14 @@
               "path": "architecture/pages/how-it-works.page.html",
               "range": {
                 "start": 0,
-                "end": 1286
+                "end": 1296
               }
             }
           },
           {
             "output": {
-              "start": 1286,
-              "end": 1357
+              "start": 1296,
+              "end": 1367
             },
             "transform": "copy",
             "origin": {
@@ -1153,8 +1289,8 @@
           },
           {
             "output": {
-              "start": 1357,
-              "end": 1360
+              "start": 1367,
+              "end": 1370
             },
             "transform": "route-placeholder-substitution",
             "origin": {
@@ -1172,8 +1308,8 @@
           },
           {
             "output": {
-              "start": 1360,
-              "end": 1374
+              "start": 1370,
+              "end": 1384
             },
             "transform": "copy",
             "origin": {
@@ -1187,8 +1323,8 @@
           },
           {
             "output": {
-              "start": 1374,
-              "end": 1397
+              "start": 1384,
+              "end": 1407
             },
             "transform": "catalog-key-substitution",
             "origin": {
@@ -1206,8 +1342,8 @@
           },
           {
             "output": {
-              "start": 1397,
-              "end": 1578
+              "start": 1407,
+              "end": 1588
             },
             "transform": "copy",
             "origin": {
@@ -1221,8 +1357,8 @@
           },
           {
             "output": {
-              "start": 1578,
-              "end": 1593
+              "start": 1588,
+              "end": 1603
             },
             "transform": "catalog-key-substitution",
             "origin": {
@@ -1240,8 +1376,8 @@
           },
           {
             "output": {
-              "start": 1593,
-              "end": 1632
+              "start": 1603,
+              "end": 1642
             },
             "transform": "copy",
             "origin": {
@@ -1255,8 +1391,8 @@
           },
           {
             "output": {
-              "start": 1632,
-              "end": 1651
+              "start": 1642,
+              "end": 1661
             },
             "transform": "catalog-key-substitution",
             "origin": {
@@ -1274,8 +1410,8 @@
           },
           {
             "output": {
-              "start": 1651,
-              "end": 1662
+              "start": 1661,
+              "end": 1672
             },
             "transform": "copy",
             "origin": {
@@ -1289,8 +1425,8 @@
           },
           {
             "output": {
-              "start": 1662,
-              "end": 1675
+              "start": 1672,
+              "end": 1685
             },
             "transform": "route-placeholder-substitution",
             "origin": {
@@ -1308,8 +1444,8 @@
           },
           {
             "output": {
-              "start": 1675,
-              "end": 1676
+              "start": 1685,
+              "end": 1686
             },
             "transform": "copy",
             "origin": {
@@ -1323,8 +1459,8 @@
           },
           {
             "output": {
-              "start": 1676,
-              "end": 1677
+              "start": 1686,
+              "end": 1687
             },
             "transform": "copy",
             "origin": {
@@ -1338,8 +1474,8 @@
           },
           {
             "output": {
-              "start": 1677,
-              "end": 1686
+              "start": 1687,
+              "end": 1696
             },
             "transform": "catalog-key-substitution",
             "origin": {
@@ -1357,8 +1493,8 @@
           },
           {
             "output": {
-              "start": 1686,
-              "end": 1699
+              "start": 1696,
+              "end": 1709
             },
             "transform": "copy",
             "origin": {
@@ -1372,8 +1508,8 @@
           },
           {
             "output": {
-              "start": 1699,
-              "end": 1701
+              "start": 1709,
+              "end": 1711
             },
             "transform": "route-placeholder-substitution",
             "origin": {
@@ -1391,8 +1527,8 @@
           },
           {
             "output": {
-              "start": 1701,
-              "end": 1702
+              "start": 1711,
+              "end": 1712
             },
             "transform": "copy",
             "origin": {
@@ -1406,8 +1542,8 @@
           },
           {
             "output": {
-              "start": 1702,
-              "end": 1722
+              "start": 1712,
+              "end": 1732
             },
             "transform": "conditional-attribute-generation",
             "origin": {
@@ -1431,8 +1567,8 @@
           },
           {
             "output": {
-              "start": 1722,
-              "end": 1723
+              "start": 1732,
+              "end": 1733
             },
             "transform": "copy",
             "origin": {
@@ -1446,8 +1582,8 @@
           },
           {
             "output": {
-              "start": 1723,
-              "end": 1736
+              "start": 1733,
+              "end": 1746
             },
             "transform": "catalog-key-substitution",
             "origin": {
@@ -1465,8 +1601,8 @@
           },
           {
             "output": {
-              "start": 1736,
-              "end": 1749
+              "start": 1746,
+              "end": 1759
             },
             "transform": "copy",
             "origin": {
@@ -1480,8 +1616,8 @@
           },
           {
             "output": {
-              "start": 1749,
-              "end": 1758
+              "start": 1759,
+              "end": 1768
             },
             "transform": "route-placeholder-substitution",
             "origin": {
@@ -1499,8 +1635,8 @@
           },
           {
             "output": {
-              "start": 1758,
-              "end": 1759
+              "start": 1768,
+              "end": 1769
             },
             "transform": "copy",
             "origin": {
@@ -1514,8 +1650,8 @@
           },
           {
             "output": {
-              "start": 1759,
-              "end": 1760
+              "start": 1769,
+              "end": 1770
             },
             "transform": "copy",
             "origin": {
@@ -1529,8 +1665,8 @@
           },
           {
             "output": {
-              "start": 1760,
-              "end": 1770
+              "start": 1770,
+              "end": 1780
             },
             "transform": "catalog-key-substitution",
             "origin": {
@@ -1548,8 +1684,8 @@
           },
           {
             "output": {
-              "start": 1770,
-              "end": 1978
+              "start": 1780,
+              "end": 1874
             },
             "transform": "copy",
             "origin": {
@@ -1557,14 +1693,82 @@
               "path": "architecture/fragments/primary-header.fragment.html",
               "range": {
                 "start": 625,
-                "end": 833
+                "end": 719
               }
             }
           },
           {
             "output": {
-              "start": 1978,
-              "end": 1997
+              "start": 1874,
+              "end": 1900
+            },
+            "transform": "catalog-key-substitution",
+            "origin": {
+              "kind": "catalog-key",
+              "path": "app/core/ui-copy.js",
+              "pointer": "/navigation/contactAriaLabel",
+              "template": {
+                "path": "architecture/fragments/primary-header.fragment.html",
+                "range": {
+                  "start": 719,
+                  "end": 755
+                }
+              }
+            }
+          },
+          {
+            "output": {
+              "start": 1900,
+              "end": 1908
+            },
+            "transform": "copy",
+            "origin": {
+              "kind": "shared-fragment",
+              "path": "architecture/fragments/primary-header.fragment.html",
+              "range": {
+                "start": 755,
+                "end": 763
+              }
+            }
+          },
+          {
+            "output": {
+              "start": 1908,
+              "end": 1920
+            },
+            "transform": "catalog-key-substitution",
+            "origin": {
+              "kind": "catalog-key",
+              "path": "app/core/ui-copy.js",
+              "pointer": "/navigation/contact",
+              "template": {
+                "path": "architecture/fragments/primary-header.fragment.html",
+                "range": {
+                  "start": 763,
+                  "end": 790
+                }
+              }
+            }
+          },
+          {
+            "output": {
+              "start": 1920,
+              "end": 1988
+            },
+            "transform": "copy",
+            "origin": {
+              "kind": "shared-fragment",
+              "path": "architecture/fragments/primary-header.fragment.html",
+              "range": {
+                "start": 790,
+                "end": 858
+              }
+            }
+          },
+          {
+            "output": {
+              "start": 1988,
+              "end": 2007
             },
             "transform": "conditional-attribute-generation",
             "origin": {
@@ -1580,46 +1784,46 @@
               "template": {
                 "path": "architecture/fragments/primary-header.fragment.html",
                 "range": {
-                  "start": 833,
-                  "end": 859
+                  "start": 858,
+                  "end": 884
                 }
               }
             }
           },
           {
             "output": {
-              "start": 1997,
-              "end": 2229
+              "start": 2007,
+              "end": 2239
             },
             "transform": "copy",
             "origin": {
               "kind": "shared-fragment",
               "path": "architecture/fragments/primary-header.fragment.html",
               "range": {
-                "start": 859,
-                "end": 1091
+                "start": 884,
+                "end": 1116
               }
             }
           },
           {
             "output": {
-              "start": 2229,
-              "end": 3557
+              "start": 2239,
+              "end": 3567
             },
             "transform": "copy",
             "origin": {
               "kind": "page",
               "path": "architecture/pages/how-it-works.page.html",
               "range": {
-                "start": 1315,
-                "end": 2643
+                "start": 1325,
+                "end": 2653
               }
             }
           },
           {
             "output": {
-              "start": 3557,
-              "end": 3578
+              "start": 3567,
+              "end": 3588
             },
             "transform": "catalog-key-substitution",
             "origin": {
@@ -1629,31 +1833,31 @@
               "template": {
                 "path": "architecture/pages/how-it-works.page.html",
                 "range": {
-                  "start": 2643,
-                  "end": 2669
+                  "start": 2653,
+                  "end": 2679
                 }
               }
             }
           },
           {
             "output": {
-              "start": 3578,
-              "end": 32455
+              "start": 3588,
+              "end": 32465
             },
             "transform": "copy",
             "origin": {
               "kind": "page",
               "path": "architecture/pages/how-it-works.page.html",
               "range": {
-                "start": 2669,
-                "end": 31546
+                "start": 2679,
+                "end": 31556
               }
             }
           },
           {
             "output": {
-              "start": 32455,
-              "end": 32473
+              "start": 32465,
+              "end": 32483
             },
             "transform": "catalog-key-substitution",
             "origin": {
@@ -1663,24 +1867,24 @@
               "template": {
                 "path": "architecture/pages/how-it-works.page.html",
                 "range": {
-                  "start": 31546,
-                  "end": 31570
+                  "start": 31556,
+                  "end": 31580
                 }
               }
             }
           },
           {
             "output": {
-              "start": 32473,
-              "end": 32724
+              "start": 32483,
+              "end": 32734
             },
             "transform": "copy",
             "origin": {
               "kind": "page",
               "path": "architecture/pages/how-it-works.page.html",
               "range": {
-                "start": 31570,
-                "end": 31821
+                "start": 31580,
+                "end": 31831
               }
             }
           }

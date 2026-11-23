@@ -3,7 +3,7 @@
   "plan": "MobiliPresenter2D Plano Diretor v0.9",
   "workItem": "LOC-004",
   "family": "public-static-footer-home-link",
-  "status": "candidate-implemented",
+  "status": "integrated-development",
   "copyOwner": "Product/UX; existing approved pt-BR copy retained without editorial changes",
   "authoring": {
     "catalog": "app/core/ui-copy.js",
@@ -77,7 +77,12 @@
   ],
   "evidence": {
     "baseDevelopmentSha": "2bd5ba67c070f42ee8069ed53e665bc1b42e433f",
-    "pullRequest": null,
-    "developmentIntegrationSha": null
+    "pullRequest": {
+      "number": 325,
+      "headSha": "728e575a250234329bf4ac24d5fd86b95230ec0e",
+      "baseSha": "2bd5ba67c070f42ee8069ed53e665bc1b42e433f",
+      "mergeSha": "8d9a721c59a32371258835ea5192269425b4f79b"
+    },
+    "developmentIntegrationSha": "8d9a721c59a32371258835ea5192269425b4f79b"
   }
 }
