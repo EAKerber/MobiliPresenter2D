@@ -1,0 +1,50 @@
+{
+  "schema": "M2DLOC004FamilyDecision/1",
+  "plan": "MobiliPresenter2D Plano Diretor v0.9",
+  "workItem": "LOC-004",
+  "family": "public-primary-header-brand-accessibility",
+  "status": "implemented-awaiting-integration",
+  "copyOwner": "Product/UX and brand; existing approved pt-BR copy retained verbatim",
+  "decisionReference": "Keep the approved comma in the public brand-home accessible name: Casa em Módulos, início.",
+  "authoring": {
+    "fragment": "architecture/fragments/primary-header.fragment.html",
+    "catalog": "app/core/ui-copy.js",
+    "generatedRoutes": ["/", "/about/", "/how-it-works/"],
+    "outputs": ["app/index.html", "app/about/index.html", "app/how-it-works/index.html"]
+  },
+  "keys": [
+    { "pointer": "/brand/homeLinkAriaLabel", "value": "Casa em Módulos, início", "sink": "link aria-label" },
+    { "pointer": "/brand/logoAlt", "value": "Casa em Módulos", "sink": "image alt" }
+  ],
+  "preserved": [
+    "brand href and route relationships remain in primary-header.routes.json",
+    "all three output pages remain complete with accessible static text and no JavaScript requirement",
+    "NAV-005 Viewer and private headers remain outside scope"
+  ],
+  "baseline": {
+    "fragmentGitBlobBeforeExtraction": "d62227178662b78623d16fd61d9fe229b0e02445",
+    "renderedHtmlChanged": false,
+    "visualTestRequired": false,
+    "reason": "All three generated HTML files remain byte-identical to the current development base; only authoring and provenance metadata changed."
+  },
+  "inventory": {
+    "path": "architecture/arc13/ui-text-candidates.json",
+    "sha256": "1305D35F077F798E2CA349343C7E0498A5F3BAB10DA3B734EE0485BF459EE008",
+    "familyOccurrences": 6,
+    "candidateIds": [
+      "48430961eba1a70f", "d9cadd9b98089c76",
+      "4b79473c56c6dc0c", "c238ebfb2d431559",
+      "f3ad0d0e7f370a3f", "691956221dfb7696"
+    ],
+    "classificationNote": "This receipt scopes the brand accessibility family only; it does not classify the complete ARC-13 inventory."
+  },
+  "verification": {
+    "arc03cSourceAuthorityTests": "PASS 6/6",
+    "uiThemeContract": "PASS",
+    "pagesCheck": "PASS",
+    "inventoryScan": "PASS; parse errors 0; unresolved primary-page authoring occurrences 0",
+    "inventoryDeterminism": "PASS; two consecutive runs produced the same SHA-256",
+    "staticOutput": "PASS; all three generated public HTML files byte-identical to development base"
+  },
+  "exceptions": []
+}

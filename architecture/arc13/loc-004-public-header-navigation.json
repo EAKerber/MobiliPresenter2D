@@ -3,7 +3,7 @@
   "plan": "MobiliPresenter2D Plano Diretor v0.9",
   "workItem": "LOC-004",
   "family": "public-primary-header-navigation",
-  "status": "implemented-awaiting-integration",
+  "status": "integrated-development",
   "copyOwner": "Product/UX; existing approved pt-BR copy retained without editorial changes",
   "authoring": {
     "fragment": "architecture/fragments/primary-header.fragment.html",
@@ -31,7 +31,7 @@
   },
   "inventory": {
     "path": "architecture/arc13/ui-text-candidates.json",
-    "sha256": "806C37ECBB3B5CF652D57BF63817C9C4650F5587D766C77CE87D52AC60A75308",
+    "sha256": "1305D35F077F798E2CA349343C7E0498A5F3BAB10DA3B734EE0485BF459EE008",
     "familyOccurrences": 12,
     "candidateIds": [
       "f70882d9f78faef4", "c6636f67757d8de4", "8689fd64c8d16762", "6389b9a6381a0ec0",

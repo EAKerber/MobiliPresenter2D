@@ -9,6 +9,10 @@
   return Object.freeze({
     schema: "M2DUIStringCatalog/1",
     locale: "pt-BR",
+    brand: Object.freeze({
+      homeLinkAriaLabel: "Casa em Módulos, início",
+      logoAlt: "Casa em Módulos"
+    }),
     navigation: Object.freeze({
       menu: Object.freeze({
         open: "Abrir menu",

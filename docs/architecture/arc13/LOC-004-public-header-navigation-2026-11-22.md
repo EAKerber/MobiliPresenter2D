@@ -1,6 +1,6 @@
 # LOC-004 — navegação pública do cabeçalho
 
-**Estado:** implementação local validada; aguardando integração em `development`.
+**Estado:** integrada em `development` por squash na PR #308 (`4dba382af88a7a8de70aacd187b0787c5fc894ea`).
 
 ## Escopo e autoria
 
