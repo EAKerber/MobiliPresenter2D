@@ -46,6 +46,9 @@
         previous: "Vista anterior",
         counter: "{current} / {total}",
         next: "Próxima vista"
+      }),
+      scene: Object.freeze({
+        selected: "Selecionado: {number} · {title}"
       })
     }),
     theme: Object.freeze({
