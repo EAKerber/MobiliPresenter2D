@@ -38,6 +38,8 @@ const PAGE_COPY_POINTERS={
   "copy.home.hero.heading.enjoy":"/home/hero/heading/enjoy",
   "copy.home.hero.lead":"/home/hero/lead",
   "copy.home.hero.description":"/home/hero/description",
+  "copy.home.environments.eyebrow":"/home/environments/eyebrow",
+  "copy.home.environments.heading":"/home/environments/heading",
   "copy.actions.exploreEnvironments":"/actions/exploreEnvironments",
   "copy.home.hero.aboutLink":"/home/hero/aboutLink",
   "copy.video.youtubeLink":"/video/youtubeLink",
