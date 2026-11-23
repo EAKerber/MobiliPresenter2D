@@ -86,9 +86,12 @@ test("public copy is catalog-backed and remains static in generated HTML",async(
   assert.match(page.html,/<img[^>]+alt="Casa em Módulos">/);
   assert.match(page.html,/<nav id="primaryNav" aria-label="Navegação principal">/);
   for(const [,label] of expected.slice(3))assert.ok(page.html.includes(">"+label+"</a>"),label+" must be present without JS");
-  const pageExpected=page.output==="app/index.html"
-   ? [...expected,["/home/hero/aboutLink","Saiba mais"]]
-   : expected;
+  const pageCopy=page.output==="app/index.html"
+   ? [["/home/hero/aboutLink","Saiba mais"],["/video/youtubeLink","Assistir no YouTube ↗"]]
+   : page.output==="app/how-it-works/index.html"
+    ? [["/video/youtubeLink","Assistir no YouTube ↗"]]
+    : [];
+  const pageExpected=[...expected,...pageCopy];
   const mapped=page.sourceMap.filter(segment=>segment.origin.kind==="catalog-key");
   assert.deepEqual(mapped.map(segment=>segment.origin.pointer),pageExpected.map(([pointer])=>pointer));
   for(let i=0;i<mapped.length;i++) {
@@ -101,8 +104,13 @@ test("public copy is catalog-backed and remains static in generated HTML",async(
  const home=r.pages.find(page=>page.output==="app/index.html");
  assert.match(home.html,/<a href="\/about\/">Saiba mais<\/a>/,
   "the approved hero link stays visible and usable without JavaScript");
+ assert.match(home.html,/<a href="https:\/\/www\.youtube\.com\/shorts\/hgcJ1k7lFkE" target="_blank" rel="noopener noreferrer">Assistir no YouTube ↗<\/a>/,
+  "the YouTube link keeps its destination and remains usable without JavaScript");
  assert.equal(home.sourceMap.find(segment=>segment.origin.pointer==="/home/hero/aboutLink")?.origin.template.path,
   "architecture/pages/root.page.html");
+ const howItWorks=r.pages.find(page=>page.output==="app/how-it-works/index.html");
+ assert.match(howItWorks.html,/<a class="video-youtube-link" href="https:\/\/www\.youtube\.com\/shorts\/hgcJ1k7lFkE" target="_blank" rel="noopener noreferrer">Assistir no YouTube ↗<\/a>/,
+  "the How it works YouTube link keeps its destination and remains usable without JavaScript");
 });
 test("catalog text escapes HTML-sensitive characters",()=>{
  assert.equal(escapeHtml(`&<>"'`),"&amp;&lt;&gt;&quot;&#39;");
