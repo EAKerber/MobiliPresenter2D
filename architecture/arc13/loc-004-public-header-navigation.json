@@ -31,7 +31,7 @@
   },
   "inventory": {
     "path": "architecture/arc13/ui-text-candidates.json",
-    "sha256": "1305D35F077F798E2CA349343C7E0498A5F3BAB10DA3B734EE0485BF459EE008",
+    "sha256": "8E7393F891F72F12D57677E8B16F6297740BA8743C7BAC8FE46D4A9D97971F9C",
     "familyOccurrences": 12,
     "candidateIds": [
       "f70882d9f78faef4", "c6636f67757d8de4", "8689fd64c8d16762", "6389b9a6381a0ec0",

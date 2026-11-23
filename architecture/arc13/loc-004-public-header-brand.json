@@ -3,7 +3,7 @@
   "plan": "MobiliPresenter2D Plano Diretor v0.9",
   "workItem": "LOC-004",
   "family": "public-primary-header-brand-accessibility",
-  "status": "implemented-awaiting-integration",
+  "status": "integrated-development",
   "copyOwner": "Product/UX and brand; existing approved pt-BR copy retained verbatim",
   "decisionReference": "Keep the approved comma in the public brand-home accessible name: Casa em Módulos, início.",
   "authoring": {
@@ -27,9 +27,15 @@
     "visualTestRequired": false,
     "reason": "All three generated HTML files remain byte-identical to the current development base; only authoring and provenance metadata changed."
   },
+  "integration": {
+    "pullRequest": 309,
+    "mergeCommit": "2083aac384216bc6ab3ea388f2d8193fe0002649",
+    "target": "development",
+    "mainUnchanged": true
+  },
   "inventory": {
     "path": "architecture/arc13/ui-text-candidates.json",
-    "sha256": "1305D35F077F798E2CA349343C7E0498A5F3BAB10DA3B734EE0485BF459EE008",
+    "sha256": "8E7393F891F72F12D57677E8B16F6297740BA8743C7BAC8FE46D4A9D97971F9C",
     "familyOccurrences": 6,
     "candidateIds": [
       "48430961eba1a70f", "d9cadd9b98089c76",

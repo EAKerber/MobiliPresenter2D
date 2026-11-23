@@ -78,6 +78,59 @@ assert(code.includes('contextRow.appendChild(contextEyebrow)') &&
   code.includes('contextRow.appendChild(button)'), "viewer eyebrow and toggle share a contextual row");
 assert(code.includes("ui-theme-utility") && code.includes("header.parentNode.insertBefore(utility, header.nextSibling)"),
   "remaining functional fallback remains at top of page");
+function privateHeaderOrder(hasRestoreControl) {
+  const hooks = {};
+  const order = hasRestoreControl ? ["restore", "menu"] : ["menu"];
+  const restoreControl = hasRestoreControl ? {
+    parentNode: null,
+    insertAdjacentElement(position, element) {
+      assert.equal(position, "afterend");
+      order.splice(order.indexOf("restore") + 1, 0, "theme");
+    }
+  } : null;
+  const actions = {
+    firstChild: hasRestoreControl ? restoreControl : order[0],
+    querySelector(selector) { return selector === "#restoreButton" ? restoreControl : null; },
+    insertBefore(_element, reference) {
+      assert.equal(reference, this.firstChild);
+      order.unshift("theme");
+    }
+  };
+  if (restoreControl) restoreControl.parentNode = actions;
+  let themeButton = null;
+  const document = {
+    documentElement: { style: {}, setAttribute() {} },
+    readyState: "loading",
+    querySelector(selector) {
+      if (selector === ".private-header__actions, .topbar__actions, .admin-topbar__actions") return actions;
+      return null;
+    },
+    querySelectorAll(selector) { return selector === "[data-ui-theme-toggle]" && themeButton ? [themeButton] : []; },
+    createElement(tag) {
+      assert.equal(tag, "button");
+      themeButton = {
+        classList: { add() {} },
+        setAttribute() {},
+        addEventListener() {},
+        querySelector() { return null; }
+      };
+      return themeButton;
+    },
+    addEventListener(name, handler) { hooks[name] = handler; }
+  };
+  const window = {
+    CASA_UI_COPY: copy,
+    localStorage: { getItem() { return null; } },
+    addEventListener() {}
+  };
+  vm.runInNewContext(code, { window, document }, { filename: "app/core/ui-theme.js" });
+  hooks.DOMContentLoaded();
+  return order;
+}
+assert.deepEqual(privateHeaderOrder(true), ["restore", "theme", "menu"],
+  "configurator theme control follows restore in both DOM and keyboard order");
+assert.deepEqual(privateHeaderOrder(false), ["theme", "menu"],
+  "admin keeps theme control before the menu when no restore control exists");
 assert(themeCSS.includes('.ui-theme-context-row > .ui-theme-toggle') &&
   themeCSS.includes('min-height: 44px; min-width: 44px;'),
   "contextual control keeps the required 44px touch target");
