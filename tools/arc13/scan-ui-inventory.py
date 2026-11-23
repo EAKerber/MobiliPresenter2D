@@ -37,7 +37,11 @@ PRIMARY_PAGES = {
     },
 }
 PRIMARY_PAGE_COPY_KEYS = {
-    "architecture/pages/root.page.html": {"copy.home.hero.aboutLink"},
+    "architecture/pages/root.page.html": {
+        "copy.home.hero.aboutLink",
+        "copy.video.youtubeLink",
+    },
+    "architecture/pages/how-it-works.page.html": {"copy.video.youtubeLink"},
 }
 TEXT_ATTRIBUTES = {
     "alt",

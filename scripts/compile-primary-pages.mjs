@@ -30,7 +30,11 @@ const COPY_POINTERS={
 };
 const PAGE_COPY_POINTERS={
  "architecture/pages/root.page.html":{
-  "copy.home.hero.aboutLink":"/home/hero/aboutLink"
+  "copy.home.hero.aboutLink":"/home/hero/aboutLink",
+  "copy.video.youtubeLink":"/video/youtubeLink"
+ },
+ "architecture/pages/how-it-works.page.html":{
+  "copy.video.youtubeLink":"/video/youtubeLink"
  }
 };
 const require=createRequire(import.meta.url);

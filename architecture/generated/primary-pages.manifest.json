@@ -6,12 +6,12 @@
     "offsetUnit": "unicode-codepoints",
     "generator": {
       "path": "scripts/compile-primary-pages.mjs",
-      "gitBlobSha": "8c857c9ccae03934bfd840bf124b79c1dd583f11"
+      "gitBlobSha": "6feb8036ff5dff52bdd9cbf2b21c4fcb665276eb"
     }
   },
   "copyCatalog": {
     "path": "app/core/ui-copy.js",
-    "gitBlobSha": "315298a02bacf186299a2ec9fed06de500735b89",
+    "gitBlobSha": "9c8dff0d5bd69963511d393274ae69d955fa40ee",
     "schema": "M2DUIStringCatalog/1",
     "locale": "pt-BR"
   },
@@ -28,7 +28,7 @@
       "route": "/",
       "source": "architecture/pages/root.page.html",
       "output": "app/index.html",
-      "sourceGitBlobSha": "664346d065ab604da2bb151912be82573f4ad2e9",
+      "sourceGitBlobSha": "b8a1dc3009fc5d4c12d7b9d40ff9d2f6aa584694",
       "outputGitBlobSha": "c7af00f5bfa20e7d21353c2222ed8157a19ed187",
       "sourceMap": {
         "segments": [
@@ -549,7 +549,7 @@
           {
             "output": {
               "start": 3370,
-              "end": 7856
+              "end": 3480
             },
             "transform": "copy",
             "origin": {
@@ -557,7 +557,41 @@
               "path": "architecture/pages/root.page.html",
               "range": {
                 "start": 2468,
-                "end": 6954
+                "end": 2578
+              }
+            }
+          },
+          {
+            "output": {
+              "start": 3480,
+              "end": 3501
+            },
+            "transform": "catalog-key-substitution",
+            "origin": {
+              "kind": "catalog-key",
+              "path": "app/core/ui-copy.js",
+              "pointer": "/video/youtubeLink",
+              "template": {
+                "path": "architecture/pages/root.page.html",
+                "range": {
+                  "start": 2578,
+                  "end": 2604
+                }
+              }
+            }
+          },
+          {
+            "output": {
+              "start": 3501,
+              "end": 7856
+            },
+            "transform": "copy",
+            "origin": {
+              "kind": "page",
+              "path": "architecture/pages/root.page.html",
+              "range": {
+                "start": 2604,
+                "end": 6959
               }
             }
           }
@@ -1049,7 +1083,7 @@
       "route": "/how-it-works/",
       "source": "architecture/pages/how-it-works.page.html",
       "output": "app/how-it-works/index.html",
-      "sourceGitBlobSha": "a6d9fcdac2f686cadf0e0d02129066f1c0b3ae78",
+      "sourceGitBlobSha": "55c6b9ae45630ac650ea27ee7e0fb0e9e3484446",
       "outputGitBlobSha": "13a1239a413a593182b42ff5107fe703402d49c1",
       "sourceMap": {
         "segments": [
@@ -1536,7 +1570,7 @@
           {
             "output": {
               "start": 2222,
-              "end": 32720
+              "end": 3550
             },
             "transform": "copy",
             "origin": {
@@ -1544,7 +1578,41 @@
               "path": "architecture/pages/how-it-works.page.html",
               "range": {
                 "start": 1308,
-                "end": 31806
+                "end": 2636
+              }
+            }
+          },
+          {
+            "output": {
+              "start": 3550,
+              "end": 3571
+            },
+            "transform": "catalog-key-substitution",
+            "origin": {
+              "kind": "catalog-key",
+              "path": "app/core/ui-copy.js",
+              "pointer": "/video/youtubeLink",
+              "template": {
+                "path": "architecture/pages/how-it-works.page.html",
+                "range": {
+                  "start": 2636,
+                  "end": 2662
+                }
+              }
+            }
+          },
+          {
+            "output": {
+              "start": 3571,
+              "end": 32720
+            },
+            "transform": "copy",
+            "origin": {
+              "kind": "page",
+              "path": "architecture/pages/how-it-works.page.html",
+              "range": {
+                "start": 2662,
+                "end": 31811
               }
             }
           }

@@ -28,6 +28,9 @@
         aboutLink: "Saiba mais"
       })
     }),
+    video: Object.freeze({
+      youtubeLink: "Assistir no YouTube ↗"
+    }),
     theme: Object.freeze({
       mode: Object.freeze({
         auto: Object.freeze({ full: "Automático", short: "Auto" }),
