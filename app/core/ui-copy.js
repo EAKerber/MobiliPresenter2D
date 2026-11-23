@@ -44,6 +44,16 @@
       tagline: "Móveis modulares pensados para a vida real.",
       homeLink: "Voltar ao início ↑"
     }),
+    comparison: Object.freeze({
+      labels: Object.freeze({
+        adaptation: "Adaptação",
+        quality: "Qualidade",
+        personalization: "Personalização",
+        cost: "Custo",
+        stagedPurchase: "Compra por etapas",
+        production: "Produção"
+      })
+    }),
     viewer: Object.freeze({
       state: Object.freeze({
         empty: "Nenhum módulo está visível no viewer neste momento.",

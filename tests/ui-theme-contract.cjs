@@ -110,7 +110,7 @@ const shells = [
 for (const file of shells) {
   const html = read(file);
   const copyVersion = ["app/index.html", "app/about/index.html", "app/how-it-works/index.html"].includes(file)
-    ? "arc13-loc004-public-footer-tagline-1"
+    ? "arc13-loc004-comparison-labels-1"
     : file === "app/viewer/index.html"
       ? "arc13-loc005-scene-interaction-1"
     : "arc13-loc003-copy-1";

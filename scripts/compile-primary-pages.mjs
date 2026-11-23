@@ -45,7 +45,13 @@ const PAGE_COPY_POINTERS={
  "architecture/pages/how-it-works.page.html":{
   "copy.video.youtubeLink":"/video/youtubeLink",
   "copy.footer.homeLink":"/footer/homeLink",
-  "copy.footer.tagline":"/footer/tagline"
+  "copy.footer.tagline":"/footer/tagline",
+  "copy.comparison.labels.adaptation":"/comparison/labels/adaptation",
+  "copy.comparison.labels.quality":"/comparison/labels/quality",
+  "copy.comparison.labels.personalization":"/comparison/labels/personalization",
+  "copy.comparison.labels.cost":"/comparison/labels/cost",
+  "copy.comparison.labels.stagedPurchase":"/comparison/labels/stagedPurchase",
+  "copy.comparison.labels.production":"/comparison/labels/production"
  }
 };
 const require=createRequire(import.meta.url);

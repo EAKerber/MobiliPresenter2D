@@ -3,7 +3,7 @@
   "plan": "MobiliPresenter2D Plano Diretor v0.9",
   "workItem": "LOC-004",
   "family": "public-footer-tagline",
-  "status": "candidate-implemented",
+  "status": "integrated-development",
   "decision": {
     "visibleText": "Móveis modulares pensados para a vida real.",
     "classification": "ui-static",
@@ -88,5 +88,14 @@
     "It does not classify the same phrase when used in a distinct metadata sink or other editorial content.",
     "It does not close LOC-002 or ARC-13 globally; the generated inventory remains unreviewed.",
     "No main promotion or production publication is included."
-  ]
+  ],
+  "integration": {
+    "pullRequest": {
+      "number": 328,
+      "url": "https://github.com/EAKerber/MobiliPresenter2D/pull/328",
+      "headSha": "8d676d775e6715290a4b96290eced386afd10b82",
+      "baseSha": "4774aebc37e8c2e33b3f93d2ebcb35073a340b8d"
+    },
+    "developmentIntegrationSha": "1d98c05f0418a49bc3fcf99881d3ea8a47bf1c6f"
+  }
 }
