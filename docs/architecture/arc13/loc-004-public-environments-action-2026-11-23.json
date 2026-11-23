@@ -3,7 +3,7 @@
   "plan": "MobiliPresenter2D Plano Diretor v0.9",
   "workItem": "LOC-004",
   "family": "public-environments-action",
-  "status": "candidate-implemented",
+  "status": "integrated-development",
   "decision": {
     "visibleText": "Conheça nossos ambientes",
     "destination": "/#ambientes",
@@ -100,6 +100,6 @@
       "implementationCommit": "4bec1f3fee174e15bdbfd03275ba1bb7f632cc83",
       "baseSha": "f7e2e6f01faf7f90eb4cc864c70a6bb702dc7a76"
     },
-    "developmentIntegrationSha": null
+    "developmentIntegrationSha": "4774aebc37e8c2e33b3f93d2ebcb35073a340b8d"
   }
 }
