@@ -1,0 +1,107 @@
+{
+  "schema": "ARC13LOC004Extraction/1",
+  "plan": "MobiliPresenter2D Plano Diretor v0.9",
+  "workItem": "LOC-004",
+  "family": "how-it-works-comparison-card-copy",
+  "status": "candidate-implemented",
+  "decision": {
+    "classification": "ui-static",
+    "subsystemOwner": "public-pages/how-it-works/comparison",
+    "contentOwner": "Product/UX; exact published wording retained without editorial changes",
+    "authority": "This family covers the three comparison card titles and all 18 card-specific row descriptions; labels, markers, and descriptions are kept as distinct messages.",
+    "catalogKeys": [
+      {
+        "pointer": "/comparison/cards/readyMade",
+        "value": "Móveis prontos"
+      },
+      {
+        "pointer": "/comparison/cards/traditional",
+        "value": "Planejados tradicionais"
+      },
+      {
+        "pointer": "/comparison/cards/modular",
+        "value": "Casa em Módulos"
+      }
+    ]
+  },
+  "evidence": {
+    "baseRevision": "ef428f2755755094434897cc52ede05b2b8a8e2f",
+    "targetBranch": "development",
+    "inventoryPath": "architecture/arc13/ui-text-candidates.json",
+    "inventorySha256": "C3C413C41F0B1E259636FD93C02CBE530FD864596A74E09FB926226184F18775",
+    "manifest": "architecture/generated/primary-pages.manifest.json",
+    "manifestSha256": "98a5edea35c8ccc00ef0ec0c94748588715d1e7a154ec54cb7126cca933f05ae",
+    "candidateOccurrences": 21,
+    "candidateIds": [
+      "637841dcbf07a114",
+      "bdd9fbf1000074ee",
+      "d006451b83b89365",
+      "bd3effb22da1e11b",
+      "61a65cf1b5f8bd6e",
+      "189cdb24a020b3c2",
+      "48c67ea1f39916ac",
+      "a87fa44dbae3260a",
+      "de1f554e8bf30929",
+      "dfea9f34883d8a1f",
+      "a5c8f87938a73906",
+      "d41db96a56d2cf09",
+      "d6dc4772e653c2d7",
+      "5152c4b1a511d056",
+      "a5a10dbb20691275",
+      "dd4970a72fb3feae",
+      "f24ed928e007689c",
+      "e9faf4c3e0672bdb",
+      "6555c7da9b55abb3",
+      "d0ad59bc7b415104",
+      "ce9e39a02bb22481"
+    ],
+    "authoringSource": "architecture/pages/how-it-works.page.html",
+    "publishedOutput": "app/how-it-works/index.html"
+  },
+  "implementation": {
+    "htmlRemainsStatic": true,
+    "requiresJavaScriptForText": false,
+    "visibleCopyUnchanged": true,
+    "comparisonLabelsUnchanged": true,
+    "rowOrderUnchanged": true,
+    "markersUnchanged": true,
+    "inventoryClassificationChanged": false
+  },
+  "baseline": {
+    "renderedVisibleDomChanged": false,
+    "visualTestRequired": false,
+    "reason": "Each original card title and description is emitted unchanged in the same heading or description cell; only catalog source and cache version change.",
+    "outputGitBlobs": {
+      "app/index.html": {
+        "before": "03e5aabdd1c6f24b6b113bf51cd6a9c1c16392d9",
+        "after": "2a64139e2b05769a60cb69daddd33c6d5e14075c",
+        "afterCacheBustNormalization": "03e5aabdd1c6f24b6b113bf51cd6a9c1c16392d9"
+      },
+      "app/about/index.html": {
+        "before": "e62f58aa847ba886d2d0fa72d189d919f716d101",
+        "after": "78f644b7a6c4e2d6d6507fbbfe602e6217ae9085",
+        "afterCacheBustNormalization": "e62f58aa847ba886d2d0fa72d189d919f716d101"
+      },
+      "app/how-it-works/index.html": {
+        "before": "199d2dc536dfc8e6ff7f260eaf1ac2a0a46114e9",
+        "after": "6ddd7d09a6cb4071f968404063d5c889724c8dc8",
+        "afterCacheBustNormalization": "199d2dc536dfc8e6ff7f260eaf1ac2a0a46114e9"
+      }
+    }
+  },
+  "verification": {
+    "pageCompiler": "PASS --sync and --check",
+    "arc03cSourceAuthorityTests": "PASS 6/6; verifies all 39 comparison catalog segments with exact output values",
+    "uiThemeContract": "PASS",
+    "scannerRegressionTests": "PASS 3/3",
+    "inventoryGeneration": "PASS; two identical hashes; 420 primary-page occurrences mapped; 0 unresolved; 0 JavaScript parse errors; 1,043 global candidates remain unreviewed",
+    "staticOutput": "PASS; all card titles and descriptions stay in generated HTML without JavaScript",
+    "visualTest": "not needed; full visible content and geometry remain unchanged"
+  },
+  "limits": [
+    "This receipt covers only the three comparison titles and their 18 descriptions.",
+    "It does not classify the same brand phrase in the logo, footer, or other distinct sinks.",
+    "It does not close LOC-002 or ARC-13 globally; all 1,043 candidates remain unreviewed.",
+    "No main promotion or production publication is included."
+  ]
+}

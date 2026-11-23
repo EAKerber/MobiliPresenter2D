@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="pt-BR" class="public-page-root">
 <head>
-<script src="/core/ui-copy.js?v=arc13-loc004-comparison-labels-1"></script><script src="/core/ui-theme.js?v=arc13-loc003-copy-1"></script>
+<script src="/core/ui-copy.js?v=arc13-loc004-comparison-copy-1"></script><script src="/core/ui-theme.js?v=arc13-loc003-copy-1"></script>
 <link rel="icon" type="image/x-icon" href="/branding/favicon.ico">
 <link rel="icon" type="image/png" sizes="32x32" href="/branding/favicon-32.png">
 <link rel="icon" type="image/png" sizes="192x192" href="/branding/android-chrome-192.png">
@@ -60,38 +60,38 @@
       <div class="comparison-grid">
         <article class="comparison-card">
           <div class="comparison-media"><img class="comparison-illustration" src="assets/comparacao-moveis-prontos-raster-v1.png" alt="" loading="lazy"></div>
-          <h3>Móveis prontos</h3>
+          <h3>{{copy.comparison.cards.readyMade}}</h3>
           <dl>
-            <div><dt><span class="comparison-marker comparison-marker-standard" aria-hidden="true">?</span>{{copy.comparison.labels.adaptation}}</dt><dd>Dimensões e configurações da linha.</dd></div>
-            <div><dt><span class="comparison-marker comparison-marker-standard" aria-hidden="true">?</span>{{copy.comparison.labels.quality}}</dt><dd>Varia conforme o produto e o fabricante.</dd></div>
-            <div><dt><span class="comparison-marker comparison-marker-standard" aria-hidden="true">?</span>{{copy.comparison.labels.personalization}}</dt><dd>Opções oferecidas pela linha.</dd></div>
-            <div><dt><span class="comparison-marker comparison-marker-standard" aria-hidden="true">?</span>{{copy.comparison.labels.cost}}</dt><dd>Varia conforme produto e configuração.</dd></div>
-            <div><dt><span class="comparison-marker comparison-marker-standard" aria-hidden="true">?</span>{{copy.comparison.labels.stagedPurchase}}</dt><dd>Depende da linha e da disponibilidade.</dd></div>
-            <div><dt><span class="comparison-marker comparison-marker-standard" aria-hidden="true">?</span>{{copy.comparison.labels.production}}</dt><dd>Produção da linha do fabricante.</dd></div>
+            <div><dt><span class="comparison-marker comparison-marker-standard" aria-hidden="true">?</span>{{copy.comparison.labels.adaptation}}</dt><dd>{{copy.comparison.details.readyMade.adaptation}}</dd></div>
+            <div><dt><span class="comparison-marker comparison-marker-standard" aria-hidden="true">?</span>{{copy.comparison.labels.quality}}</dt><dd>{{copy.comparison.details.readyMade.quality}}</dd></div>
+            <div><dt><span class="comparison-marker comparison-marker-standard" aria-hidden="true">?</span>{{copy.comparison.labels.personalization}}</dt><dd>{{copy.comparison.details.readyMade.personalization}}</dd></div>
+            <div><dt><span class="comparison-marker comparison-marker-standard" aria-hidden="true">?</span>{{copy.comparison.labels.cost}}</dt><dd>{{copy.comparison.details.readyMade.cost}}</dd></div>
+            <div><dt><span class="comparison-marker comparison-marker-standard" aria-hidden="true">?</span>{{copy.comparison.labels.stagedPurchase}}</dt><dd>{{copy.comparison.details.readyMade.stagedPurchase}}</dd></div>
+            <div><dt><span class="comparison-marker comparison-marker-standard" aria-hidden="true">?</span>{{copy.comparison.labels.production}}</dt><dd>{{copy.comparison.details.readyMade.production}}</dd></div>
           </dl>
         </article>
         <article class="comparison-card">
           <div class="image-fallback-frame comparison-media" data-image-fallback><img class="comparison-illustration" src="assets/comparacao-planejados-raster-v2.png" alt="Ilustração conceitual de módulo inferior para pia e módulo aéreo, com cotas sem medidas numéricas" loading="lazy"></div>
-          <h3>Planejados tradicionais</h3>
+          <h3>{{copy.comparison.cards.traditional}}</h3>
           <dl>
-            <div><dt><span class="comparison-marker comparison-marker-standard" aria-hidden="true">✓</span>{{copy.comparison.labels.adaptation}}</dt><dd>Projeto definido para o ambiente.</dd></div>
-            <div><dt><span class="comparison-marker comparison-marker-standard" aria-hidden="true">?</span>{{copy.comparison.labels.quality}}</dt><dd>Definida por materiais, projeto e execução.</dd></div>
-            <div><dt><span class="comparison-marker comparison-marker-standard" aria-hidden="true">✓</span>{{copy.comparison.labels.personalization}}</dt><dd>Definida durante o projeto.</dd></div>
-            <div><dt><span class="comparison-marker comparison-marker-standard" aria-hidden="true">?</span>{{copy.comparison.labels.cost}}</dt><dd>Varia conforme projeto, materiais e serviço.</dd></div>
-            <div><dt><span class="comparison-marker comparison-marker-standard" aria-hidden="true">?</span>{{copy.comparison.labels.stagedPurchase}}</dt><dd>Definida com o prestador.</dd></div>
-            <div><dt><span class="comparison-marker comparison-marker-standard" aria-hidden="true">✓</span>{{copy.comparison.labels.production}}</dt><dd>Produção conforme o projeto.</dd></div>
+            <div><dt><span class="comparison-marker comparison-marker-standard" aria-hidden="true">✓</span>{{copy.comparison.labels.adaptation}}</dt><dd>{{copy.comparison.details.traditional.adaptation}}</dd></div>
+            <div><dt><span class="comparison-marker comparison-marker-standard" aria-hidden="true">?</span>{{copy.comparison.labels.quality}}</dt><dd>{{copy.comparison.details.traditional.quality}}</dd></div>
+            <div><dt><span class="comparison-marker comparison-marker-standard" aria-hidden="true">✓</span>{{copy.comparison.labels.personalization}}</dt><dd>{{copy.comparison.details.traditional.personalization}}</dd></div>
+            <div><dt><span class="comparison-marker comparison-marker-standard" aria-hidden="true">?</span>{{copy.comparison.labels.cost}}</dt><dd>{{copy.comparison.details.traditional.cost}}</dd></div>
+            <div><dt><span class="comparison-marker comparison-marker-standard" aria-hidden="true">?</span>{{copy.comparison.labels.stagedPurchase}}</dt><dd>{{copy.comparison.details.traditional.stagedPurchase}}</dd></div>
+            <div><dt><span class="comparison-marker comparison-marker-standard" aria-hidden="true">✓</span>{{copy.comparison.labels.production}}</dt><dd>{{copy.comparison.details.traditional.production}}</dd></div>
           </dl>
         </article>
         <article class="comparison-card comparison-card-featured">
           <div class="comparison-media"><img class="comparison-brand-logo" data-brand-variant data-src-light="/branding/logo-light-380.png" data-src-dark="/branding/logo-dark-380.png" src="/branding/logo-light-380.png" width="380" height="136" alt="" loading="lazy"></div>
-          <h3>Casa em Módulos</h3>
+          <h3>{{copy.comparison.cards.modular}}</h3>
           <dl>
-            <div><dt><span class="comparison-marker comparison-marker-featured" aria-hidden="true">✓</span>{{copy.comparison.labels.adaptation}}</dt><dd>Combinação de módulos estudados para o empreendimento.</dd></div>
-            <div><dt><span class="comparison-marker comparison-marker-featured" aria-hidden="true">✓</span>{{copy.comparison.labels.quality}}</dt><dd>Padrão de marcenaria conforme especificações do projeto.</dd></div>
-            <div><dt><span class="comparison-marker comparison-marker-featured" aria-hidden="true">✓</span>{{copy.comparison.labels.personalization}}</dt><dd>Combinações de módulos, acabamentos e acessórios disponíveis.</dd></div>
-            <div><dt><span class="comparison-marker comparison-marker-featured" aria-hidden="true">✓</span>{{copy.comparison.labels.cost}}</dt><dd>Busca valores acessíveis por eficiência e escala.</dd></div>
-            <div><dt><span class="comparison-marker comparison-marker-featured" aria-hidden="true">✓</span>{{copy.comparison.labels.stagedPurchase}}</dt><dd>Possibilidade prevista no modelo, conforme regras comerciais.</dd></div>
-            <div><dt><span class="comparison-marker comparison-marker-featured" aria-hidden="true">✓</span>{{copy.comparison.labels.production}}</dt><dd>Organizada a partir de uma plataforma modular por empreendimento.</dd></div>
+            <div><dt><span class="comparison-marker comparison-marker-featured" aria-hidden="true">✓</span>{{copy.comparison.labels.adaptation}}</dt><dd>{{copy.comparison.details.modular.adaptation}}</dd></div>
+            <div><dt><span class="comparison-marker comparison-marker-featured" aria-hidden="true">✓</span>{{copy.comparison.labels.quality}}</dt><dd>{{copy.comparison.details.modular.quality}}</dd></div>
+            <div><dt><span class="comparison-marker comparison-marker-featured" aria-hidden="true">✓</span>{{copy.comparison.labels.personalization}}</dt><dd>{{copy.comparison.details.modular.personalization}}</dd></div>
+            <div><dt><span class="comparison-marker comparison-marker-featured" aria-hidden="true">✓</span>{{copy.comparison.labels.cost}}</dt><dd>{{copy.comparison.details.modular.cost}}</dd></div>
+            <div><dt><span class="comparison-marker comparison-marker-featured" aria-hidden="true">✓</span>{{copy.comparison.labels.stagedPurchase}}</dt><dd>{{copy.comparison.details.modular.stagedPurchase}}</dd></div>
+            <div><dt><span class="comparison-marker comparison-marker-featured" aria-hidden="true">✓</span>{{copy.comparison.labels.production}}</dt><dd>{{copy.comparison.details.modular.production}}</dd></div>
           </dl>
         </article>
       </div>
