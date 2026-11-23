@@ -1,0 +1,131 @@
+{
+  "schema": "ARC13LOC005Extraction/1",
+  "plan": "MobiliPresenter2D Plano Diretor v0.9",
+  "workItem": "LOC-005",
+  "family": "viewer-scene-interaction-guidance",
+  "status": "candidate-implemented",
+  "scope": {
+    "routes": [
+      "/viewer/"
+    ],
+    "behaviorChanged": false,
+    "visibleWordingChanged": false,
+    "fallbackPreserved": true,
+    "remoteCatalogRequired": false
+  },
+  "decision": {
+    "authority": "Existing product wording retained exactly.",
+    "subsystemOwner": "public-viewer-scene-interaction-guidance",
+    "classificationByKey": {
+      "heading": "ui-visible-heading",
+      "instruction": "ui-visible-instruction",
+      "accessibleInstruction": "ui-accessibility"
+    },
+    "catalog": "app/core/ui-copy.js",
+    "catalogKeys": {
+      "heading": "/viewer/scene/heading",
+      "instruction": "/viewer/scene/instruction",
+      "accessibleInstruction": "/viewer/scene/accessible-instruction"
+    },
+    "values": {
+      "heading": "Cena interativa",
+      "instruction": "Clique em um módulo ou use ←/→ e as teclas 1–7.",
+      "accessibleInstruction": "Cena da cozinha. Use as setas para percorrer os módulos ou as teclas de 1 a 7 para selecionar pelo número."
+    },
+    "dynamicData": "Module number/title, module identifiers, and scene entity data remain runtime product data and are not catalog entries.",
+    "accessibility": "The existing stage aria-label remains; no new live region, role, focus, or interaction behavior is introduced."
+  },
+  "inventoryDisposition": {
+    "crosswalk": [
+      {
+        "previousCandidateId": "2e30d37a4e63d8bd",
+        "source": "app/viewer/viewer.js",
+        "previousLine": 147,
+        "sink": "section('scene') heading",
+        "catalogKey": "/viewer/scene/heading",
+        "reviewedAs": "ui-visible-heading",
+        "currentCandidateId": "e6a8c8390199b679",
+        "currentLine": 147
+      },
+      {
+        "previousCandidateId": "013d7d651052fd3c",
+        "source": "app/viewer/viewer.js",
+        "previousLine": 147,
+        "sink": "section('scene') visible instruction",
+        "catalogKey": "/viewer/scene/instruction",
+        "reviewedAs": "ui-visible-instruction",
+        "currentCandidateId": "ae9710dc72b07566",
+        "currentLine": 147
+      },
+      {
+        "previousCandidateId": "674b26c2023e6372",
+        "source": "app/viewer/scene-adapters.js",
+        "previousLine": 71,
+        "sink": "stage aria-label",
+        "catalogKey": "/viewer/scene/accessible-instruction",
+        "reviewedAs": "ui-accessibility",
+        "currentCandidateId": "398e7abba52c0f40",
+        "currentLine": 78
+      }
+    ],
+    "excludedCandidates": [
+      {
+        "candidateId": "e3703bc56f4b06a7",
+        "reason": "Group name “Módulos selecionáveis na cena”, not interaction guidance."
+      }
+    ],
+    "excludedDynamicData": [
+      "module.number",
+      "module.title",
+      "scene entity IDs"
+    ],
+    "falsePositivesIncluded": false
+  },
+  "implementation": {
+    "catalogAdded": [
+      "viewer.scene.heading",
+      "viewer.scene.instruction",
+      "viewer.scene.accessibleInstruction"
+    ],
+    "localFallbackPerKey": true,
+    "existingFallbackUnchanged": "Cena da cozinha indisponível. A composição completa não pôde ser exibida.",
+    "visibleWordingChanged": false,
+    "behaviorChanged": false,
+    "cacheVersionsUpdated": true,
+    "testsExtended": [
+      "tests/ui-theme-contract.cjs",
+      "tests/public-pages-smoke.cjs"
+    ]
+  },
+  "evidence": {
+    "baseDevelopmentSha": "3bb698dbe637761665a984b56bb84543eb6afa6e",
+    "baseInventoryBlob": "f510871395d8e46f4a0e848205c6cd858120f990",
+    "inventoryPath": "architecture/arc13/ui-text-candidates.json",
+    "inventorySha256": "B08746D5D2B788F928BC5390C82BC2717A1E3D22B8ED271AB77736BA6D24B81D",
+    "manifestPath": "architecture/generated/primary-pages.manifest.json",
+    "manifestSha256": "D565FBB86A21B2A8DE3A78103AE106B0EB548E260AAE0008E8CBEC7625A121B4",
+    "sourceSha256": {
+      "app/core/ui-copy.js": "4491CB58F93427FB001BC4255A5643BF9F5A11E8B646AB7A0835BA0AE1DF7ADB",
+      "app/viewer/viewer.js": "25998ADF2F8CA5B77DA546C285D08B326D0CDCEB5818EEF945949AF8D7B16F54",
+      "app/viewer/scene-adapters.js": "7CEFA356D1FB9A4D9A1C6E3501CFF49BD731C512287F7A94B91D590A039473B9",
+      "app/viewer/index.html": "ED879E99D5A5F63D88B44C05B097656DC5FC26039F66238909C1753A1F8AF34B",
+      "tests/ui-theme-contract.cjs": "B26E7AB155EF12DB7B31C1CD3F4F106AC5EE520BD6F7E3698C579D376142E746",
+      "tests/public-pages-smoke.cjs": "CFDF121C425C87326EEF544FB8E5E80CB53BBF385C706DC23F9BEA23C5097B1B"
+    },
+    "developmentIntegrationSha": null
+  },
+  "validation": {
+    "inventoryGeneration": "passed; repeat file hash unchanged",
+    "catalogContract": "passed locally",
+    "sceneAdapterUnitTests": "passed locally: 17/17",
+    "pageCompiler": "passed locally with --check",
+    "syntaxChecks": "passed locally for changed JS and test files",
+    "browserSmoke": "not run locally: Playwright package is absent; exact-head CI pending",
+    "deployPreview": "not requested for copy-only extraction"
+  },
+  "limits": [
+    "The three reviewed sinks and this family are the only scope of this receipt.",
+    "The scene-unavailable error label remains a separate fallback and was not extracted.",
+    "No global LOC-005 completion or main promotion is claimed."
+  ]
+}

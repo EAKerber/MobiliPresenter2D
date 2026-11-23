@@ -72,6 +72,12 @@ async function main() {
       assert.match(await heading.textContent(), /Inferior da pia/);
       const selectedModule = publicFixture.modules.find((module) => module.id === "module-03");
       assert(selectedModule, "the selected Viewer module fixture exists");
+      const sceneHeading = page.locator("#block-scene .block-heading h2");
+      const sceneInstruction = page.locator("#block-scene .block-heading p");
+      const sceneStage = page.locator("#sceneStage");
+      assert.equal(await sceneHeading.textContent(), uiCopy.viewer.scene.heading);
+      assert.equal(await sceneInstruction.textContent(), uiCopy.viewer.scene.instruction);
+      assert.equal(await sceneStage.getAttribute("aria-label"), uiCopy.viewer.scene.accessibleInstruction);
       const sceneSelection = page.locator("#sceneSelection");
       assert.equal(await sceneSelection.textContent(), uiCopy.viewer.scene.selected
         .replace("{number}", String(selectedModule.number))
@@ -133,6 +139,11 @@ async function main() {
     releaseMissingCatalogProjection();
     await missingCatalogViewer.waitForLoadState("networkidle");
     await missingCatalogViewer.locator("#block-overview .overview-title").waitFor({ timeout: 12000 });
+    assert.equal(await missingCatalogViewer.locator("#block-scene .block-heading h2").textContent(), "Cena interativa");
+    assert.equal(await missingCatalogViewer.locator("#block-scene .block-heading p").textContent(),
+      "Clique em um módulo ou use ←/→ e as teclas 1–7.");
+    assert.equal(await missingCatalogViewer.locator("#sceneStage").getAttribute("aria-label"),
+      "Cena da cozinha. Use as setas para percorrer os módulos ou as teclas de 1 a 7 para selecionar pelo número.");
     const fallbackSelectedModule = publicFixture.modules[0];
     assert.equal(await missingCatalogViewer.locator("#sceneSelection").textContent(),
       `Selecionado: ${fallbackSelectedModule.number} · ${fallbackSelectedModule.title}`,

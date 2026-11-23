@@ -1,6 +1,13 @@
 (function (global) {
   "use strict";
 
+  function sceneCopy(key, fallback) {
+    const theme = global.CASA_UI_THEME;
+    return theme && typeof theme.getCopy === "function"
+      ? theme.getCopy("viewer.scene." + key, fallback)
+      : fallback;
+  }
+
   function normalizeModule(product, entity) {
     const id = product.entityId || product.id;
     const number = String(product.referenceLabel || product.sku || id).match(/\d+/)?.[0] || id;
@@ -68,7 +75,7 @@
       if (!stage) return;
       stage.tabIndex = 0;
       stage.dataset.keyboardGlobal = "true";
-      stage.setAttribute("aria-label", "Cena da cozinha. Use as setas para percorrer os módulos ou as teclas de 1 a 7 para selecionar pelo número.");
+      stage.setAttribute("aria-label", sceneCopy("accessibleInstruction", "Cena da cozinha. Use as setas para percorrer os módulos ou as teclas de 1 a 7 para selecionar pelo número."));
       delete stage.dataset.sceneImageUnavailable;
       const base = document.createElement("img"); base.className = "scene-layer"; base.alt = "Composição da cozinha Casa em Módulos"; base.draggable = false;
       const layers = document.createElement("div");

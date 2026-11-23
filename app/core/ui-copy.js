@@ -48,7 +48,10 @@
         next: "Próxima vista"
       }),
       scene: Object.freeze({
-        selected: "Selecionado: {number} · {title}"
+        selected: "Selecionado: {number} · {title}",
+        heading: "Cena interativa",
+        instruction: "Clique em um módulo ou use ←/→ e as teclas 1–7.",
+        accessibleInstruction: "Cena da cozinha. Use as setas para percorrer os módulos ou as teclas de 1 a 7 para selecionar pelo número."
       })
     }),
     theme: Object.freeze({
