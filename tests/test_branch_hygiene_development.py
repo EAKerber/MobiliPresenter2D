@@ -84,7 +84,7 @@ class DevelopmentAuditTests(unittest.TestCase):
             plan=Path(d)/"plan.json"
             plan.write_text(json.dumps({"planHash":"ok","controlBranch":"development"}))
             with patch.dict(os.environ,{AUTH_ENV:"1","GITHUB_TOKEN":"dummy","GITHUB_REPOSITORY":REPO}):
-                with self.assertRaisesRegex(RuntimeError,"NON_MAIN_APPLY_DISABLED"):
+                with self.assertRaisesRegex(RuntimeError,"DEVELOPMENT_RETIREMENT_AUTHORIZATION_MISSING"):
                     apply(plan,Path(d)/"dispositions.json","ok",
                           Path(d)/"batch.json",Path(d)/"receipt.json",False)
 

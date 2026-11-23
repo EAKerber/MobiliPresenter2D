@@ -129,7 +129,7 @@ def select_bounded_batch(plan: dict[str, Any], batch: dict[str, Any]) -> list[di
     if (batch.get("repository") != plan.get("repository")
             or plan.get("controlBranch") not in {"main", "development"}
             or (plan.get("controlBranch") == "development"
-                and batch.get("auditOnly") is not True)):
+                and (batch.get("auditOnly") is True) == (batch.get("approvedRetirement") is True))):
         raise ValueError("BATCH_REPOSITORY_MISMATCH")
     entries = batch.get("branches")
     if not isinstance(entries, list) or not 1 <= len(entries) <= 3:

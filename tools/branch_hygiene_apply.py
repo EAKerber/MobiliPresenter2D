@@ -15,6 +15,7 @@ from branch_hygiene_observe import observe, api_get
 from branch_hygiene_plan import build_plan, load_json, select_bounded_batch
 
 AUTH_ENV = "MOBILIPRESENTER2D_BRANCH_HYGIENE_AUTHORIZED"
+DEV_AUTH_ENV = "MOBILIPRESENTER2D_DEVELOPMENT_HYGIENE_AUTHORIZED"
 
 
 def remote_refs() -> dict[str, str]:
@@ -108,9 +109,15 @@ def apply(plan_path: Path, dispositions_path: Path, expected_plan: str,
     supplied = load_json(plan_path)
     if supplied.get("planHash") != expected_plan:
         raise RuntimeError("EXPECTED_PLAN_MISMATCH")
-    # Audit-only for development. Main-targeted deletion remains the sole write path.
-    if not audit_only and supplied.get("controlBranch") != "main":
-        raise RuntimeError("NON_MAIN_APPLY_DISABLED")
+    control = supplied.get("controlBranch")
+    if not audit_only and control not in {"main", "development"}:
+        raise RuntimeError("CONTROL_BRANCH_NOT_AUTHORIZED")
+    if not audit_only and control == "development":
+        if os.environ.get(DEV_AUTH_ENV) != "1":
+            raise RuntimeError("DEVELOPMENT_RETIREMENT_AUTHORIZATION_MISSING")
+        approved = load_json(batch_path)
+        if approved.get("approvedRetirement") is not True or approved.get("auditOnly") is True:
+            raise RuntimeError("DEVELOPMENT_RETIREMENT_MANIFEST_NOT_APPROVED")
 
     dispositions = load_json(dispositions_path)
     fresh = observe(repository, supplied["controlBranch"], token)
@@ -118,6 +125,10 @@ def apply(plan_path: Path, dispositions_path: Path, expected_plan: str,
     if fresh_plan["planHash"] != expected_plan:
         raise RuntimeError("PLAN_DRIFT_REOBSERVATION_REQUIRED")
     selected = select_bounded_batch(fresh_plan, load_json(batch_path))
+    if not audit_only and control == "development" and any(
+        "squashMerge" not in item for item in selected
+    ):
+        raise RuntimeError("DEVELOPMENT_REQUIRES_SQUASH_PROOF")
     inventory = {entry["branch"]: entry["sha"] for entry in fresh_plan["entries"]}
     if remote_refs() != inventory:
         raise RuntimeError("REF_INVENTORY_DRIFT_INITIAL")
@@ -133,7 +144,12 @@ def apply(plan_path: Path, dispositions_path: Path, expected_plan: str,
             raise RuntimeError("APPLY_REQUIRES_MAIN_PUSH")
         head = subprocess.run(["git", "rev-parse", "HEAD"], text=True,
                               capture_output=True, check=True).stdout.strip()
-        if head != os.environ.get("GITHUB_SHA") or head != fresh_plan["controlSha"]:
+        if head != os.environ.get("GITHUB_SHA"):
+            raise RuntimeError("WORKFLOW_HEAD_DRIFT")
+        if control == "main":
+            if head != fresh_plan["controlSha"]:
+                raise RuntimeError("MAIN_HEAD_DRIFT")
+        elif remote_refs().get("main") != head:
             raise RuntimeError("MAIN_HEAD_DRIFT")
 
     receipt = {
