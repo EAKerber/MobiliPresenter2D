@@ -27,6 +27,17 @@ assert.deepEqual(JSON.parse(JSON.stringify(copy.navigation.menu)), {
 assert.deepEqual(JSON.parse(JSON.stringify(copy.video.fullscreen)), {
   open: "Abrir vídeo em tela cheia", close: "Sair da tela cheia"
 });
+assert.deepEqual(JSON.parse(JSON.stringify(copy.viewer.state)), {
+  empty: "Nenhum módulo está visível no viewer neste momento.",
+  loading: "Carregando informações publicadas…",
+  unavailable: "Informações temporariamente indisponíveis. Tente novamente mais tarde."
+});
+const viewerCode = read("app/viewer/viewer.js");
+assert(viewerCode.includes('theme.getCopy("viewer.state." + key, fallback)') &&
+  viewerCode.includes('viewerCopy("empty", "Nenhum módulo está visível no viewer neste momento.")') &&
+  viewerCode.includes('viewerCopy("loading", "Carregando informações publicadas…")') &&
+  viewerCode.includes('viewerCopy("unavailable", "Informações temporariamente indisponíveis. Tente novamente mais tarde.")'),
+"Viewer state messages use the canonical catalog with per-key local fallbacks");
 for (const [file, controller] of [
   ["app/index.html", "app/landing/landing.js"],
   ["app/how-it-works/index.html", "app/how-it-works/how-it-works.js"]
@@ -66,6 +77,8 @@ for (const file of shells) {
   const html = read(file);
   const copyVersion = ["app/index.html", "app/how-it-works/index.html"].includes(file)
     ? "arc13-loc005-video-fullscreen-1"
+    : file === "app/viewer/index.html"
+      ? "arc13-loc005-viewer-state-1"
     : "arc13-loc003-copy-1";
   assert(html.includes(`src="/core/ui-copy.js?v=${copyVersion}"`), file + " copy catalog bootstrap");
   assert(html.includes('src="/core/ui-theme.js?v=arc13-loc003-copy-1"'), file + " theme bootstrap");

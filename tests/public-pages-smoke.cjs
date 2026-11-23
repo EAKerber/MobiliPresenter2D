@@ -11,10 +11,14 @@ const hierarchy = require("../app/data/hierarchy-defaults.js");
 const catalog = require("../app/data/catalog-data.js");
 const prices = require("../app/data/mock-price-book.js");
 const scene = require("../app/data/scene-data.js");
+const uiCopy = require("../app/core/ui-copy.js");
 const { project } = require("../app/core/public-module-projection.js");
 const fixture = adminV5.upgrade(config.createDefaultAdministration(defaults, catalog, prices, scene),
   config, flow, catalog, prices, scene, hierarchy);
 const publicFixture = project(fixture, catalog, scene);
+const emptyPublicFixture = JSON.parse(JSON.stringify(publicFixture));
+emptyPublicFixture.publicState.viewerEntities = Object.fromEntries(
+  emptyPublicFixture.modules.map((module) => [module.id, false]));
 
 
 async function main() {
@@ -51,11 +55,18 @@ async function main() {
       await page.screenshot({ path: path.join(outputDir, `landing-${viewport.name}.png`), fullPage: true });
 
       errors.length = 0;
+      let releasePublicProjection;
+      const publicProjectionReady = new Promise(resolve => { releasePublicProjection = resolve; });
       await page.route("**/api/public-modules", async route => {
+        await publicProjectionReady;
         await route.fulfill({ status: 200, contentType: "application/json",
           body: JSON.stringify(publicFixture) });
       });
-      await page.goto(new URL("/viewer/?module=module-03", base).href, { waitUntil: "networkidle" });
+      await page.goto(new URL("/viewer/?module=module-03", base).href, { waitUntil: "domcontentloaded" });
+      assert.equal((await page.locator("#viewerLayout").textContent()).trim(), uiCopy.viewer.state.loading,
+        "viewer exposes the canonical loading text while the published request is pending");
+      releasePublicProjection();
+      await page.waitForLoadState("networkidle");
       const heading = page.locator("#block-overview .overview-title");
       await heading.waitFor({ timeout: 12000 });
       assert.match(await heading.textContent(), /Inferior da pia/);
@@ -72,6 +83,35 @@ async function main() {
       assert.deepEqual(errors, [], "viewer errors: " + errors.join(" | "));
       await page.close();
     }
+    const emptyViewer = await browser.newPage({ viewport: { width: 390, height: 844 } });
+    await emptyViewer.route("**/api/public-modules", route => route.fulfill({
+      status: 200, contentType: "application/json", body: JSON.stringify(emptyPublicFixture)
+    }));
+    await emptyViewer.goto(new URL("/viewer/", base).href, { waitUntil: "domcontentloaded" });
+    const emptyState = emptyViewer.locator("#viewerLayout .viewer-empty-state");
+    await emptyState.waitFor({ timeout: 12000 });
+    assert.equal(await emptyState.getAttribute("role"), "status");
+    assert.equal((await emptyState.textContent()).trim(), uiCopy.viewer.state.empty);
+    await emptyViewer.close();
+    const missingCatalogViewer = await browser.newPage({ viewport: { width: 390, height: 844 } });
+    const missingCatalogErrors = [];
+    missingCatalogViewer.on("pageerror", error => missingCatalogErrors.push(error.message));
+    await missingCatalogViewer.route("**/core/ui-copy.js*", route => route.abort());
+    let releaseMissingCatalogProjection;
+    const missingCatalogProjectionReady = new Promise(resolve => { releaseMissingCatalogProjection = resolve; });
+    await missingCatalogViewer.route("**/api/public-modules", async route => {
+      await missingCatalogProjectionReady;
+      await route.fulfill({ status: 200, contentType: "application/json",
+        body: JSON.stringify(publicFixture) });
+    });
+    await missingCatalogViewer.goto(new URL("/viewer/", base).href, { waitUntil: "domcontentloaded" });
+    assert.equal((await missingCatalogViewer.locator("#viewerLayout").textContent()).trim(),
+      "Carregando informações publicadas…", "Viewer keeps its local loading fallback when the catalog cannot load");
+    releaseMissingCatalogProjection();
+    await missingCatalogViewer.waitForLoadState("networkidle");
+    await missingCatalogViewer.locator("#block-overview .overview-title").waitFor({ timeout: 12000 });
+    assert.deepEqual(missingCatalogErrors, [], "missing copy catalog must not break the Viewer: " + missingCatalogErrors.join(" | "));
+    await missingCatalogViewer.close();
     // Anonymous users must follow the access contract; the private workspace
     // is not part of the public routing smoke test.
     const configPage = await browser.newPage({ viewport: { width: 1366, height: 768 } });
@@ -140,7 +180,7 @@ async function main() {
     await unavailable.goto(new URL("/viewer/", base).href, { waitUntil: "networkidle" });
     const alert = unavailable.locator("#viewerLayout [role=alert]");
     await alert.waitFor({ timeout: 12000 });
-    assert.match(await alert.textContent(), /temporariamente indisponíveis/);
+    assert.equal((await alert.textContent()).trim(), uiCopy.viewer.state.unavailable);
     assert.equal(await unavailable.locator("#block-overview .overview-title").count(), 0,
       "failed public API must not expose static catalog fallback");
     await unavailable.close();

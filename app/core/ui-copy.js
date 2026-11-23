@@ -35,6 +35,13 @@
         close: "Sair da tela cheia"
       })
     }),
+    viewer: Object.freeze({
+      state: Object.freeze({
+        empty: "Nenhum módulo está visível no viewer neste momento.",
+        loading: "Carregando informações publicadas…",
+        unavailable: "Informações temporariamente indisponíveis. Tente novamente mais tarde."
+      })
+    }),
     theme: Object.freeze({
       mode: Object.freeze({
         auto: Object.freeze({ full: "Automático", short: "Auto" }),
