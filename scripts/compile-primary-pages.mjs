@@ -51,7 +51,28 @@ const PAGE_COPY_POINTERS={
   "copy.comparison.labels.personalization":"/comparison/labels/personalization",
   "copy.comparison.labels.cost":"/comparison/labels/cost",
   "copy.comparison.labels.stagedPurchase":"/comparison/labels/stagedPurchase",
-  "copy.comparison.labels.production":"/comparison/labels/production"
+  "copy.comparison.labels.production":"/comparison/labels/production",
+  "copy.comparison.cards.readyMade":"/comparison/cards/readyMade",
+  "copy.comparison.cards.traditional":"/comparison/cards/traditional",
+  "copy.comparison.cards.modular":"/comparison/cards/modular",
+  "copy.comparison.details.readyMade.adaptation":"/comparison/details/readyMade/adaptation",
+  "copy.comparison.details.readyMade.quality":"/comparison/details/readyMade/quality",
+  "copy.comparison.details.readyMade.personalization":"/comparison/details/readyMade/personalization",
+  "copy.comparison.details.readyMade.cost":"/comparison/details/readyMade/cost",
+  "copy.comparison.details.readyMade.stagedPurchase":"/comparison/details/readyMade/stagedPurchase",
+  "copy.comparison.details.readyMade.production":"/comparison/details/readyMade/production",
+  "copy.comparison.details.traditional.adaptation":"/comparison/details/traditional/adaptation",
+  "copy.comparison.details.traditional.quality":"/comparison/details/traditional/quality",
+  "copy.comparison.details.traditional.personalization":"/comparison/details/traditional/personalization",
+  "copy.comparison.details.traditional.cost":"/comparison/details/traditional/cost",
+  "copy.comparison.details.traditional.stagedPurchase":"/comparison/details/traditional/stagedPurchase",
+  "copy.comparison.details.traditional.production":"/comparison/details/traditional/production",
+  "copy.comparison.details.modular.adaptation":"/comparison/details/modular/adaptation",
+  "copy.comparison.details.modular.quality":"/comparison/details/modular/quality",
+  "copy.comparison.details.modular.personalization":"/comparison/details/modular/personalization",
+  "copy.comparison.details.modular.cost":"/comparison/details/modular/cost",
+  "copy.comparison.details.modular.stagedPurchase":"/comparison/details/modular/stagedPurchase",
+  "copy.comparison.details.modular.production":"/comparison/details/modular/production"
  }
 };
 const require=createRequire(import.meta.url);

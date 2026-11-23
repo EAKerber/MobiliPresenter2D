@@ -3,7 +3,7 @@
   "plan": "MobiliPresenter2D Plano Diretor v0.9",
   "workItem": "LOC-004",
   "family": "how-it-works-comparison-row-labels",
-  "status": "candidate-implemented",
+  "status": "integrated-development",
   "decision": {
     "classification": "ui-static",
     "subsystemOwner": "public-pages/how-it-works/comparison",
@@ -112,5 +112,14 @@
     "The question/check markers and descriptions retain their separate behavior and authorship.",
     "It does not close LOC-002 or ARC-13 globally; the generated candidate inventory remains unreviewed.",
     "No main promotion or production publication is included."
-  ]
+  ],
+  "integration": {
+    "pullRequest": {
+      "number": 329,
+      "url": "https://github.com/EAKerber/MobiliPresenter2D/pull/329",
+      "headSha": "65a60fb8a5d5c88cb48ac5c6d4037f580330fe84",
+      "baseSha": "1d98c05f0418a49bc3fcf99881d3ea8a47bf1c6f"
+    },
+    "developmentIntegrationSha": "ef428f2755755094434897cc52ede05b2b8a8e2f"
+  }
 }

@@ -52,6 +52,37 @@
         cost: "Custo",
         stagedPurchase: "Compra por etapas",
         production: "Produção"
+      }),
+      cards: Object.freeze({
+        readyMade: "Móveis prontos",
+        traditional: "Planejados tradicionais",
+        modular: "Casa em Módulos"
+      }),
+      details: Object.freeze({
+        readyMade: Object.freeze({
+          adaptation: "Dimensões e configurações da linha.",
+          quality: "Varia conforme o produto e o fabricante.",
+          personalization: "Opções oferecidas pela linha.",
+          cost: "Varia conforme produto e configuração.",
+          stagedPurchase: "Depende da linha e da disponibilidade.",
+          production: "Produção da linha do fabricante."
+        }),
+        traditional: Object.freeze({
+          adaptation: "Projeto definido para o ambiente.",
+          quality: "Definida por materiais, projeto e execução.",
+          personalization: "Definida durante o projeto.",
+          cost: "Varia conforme projeto, materiais e serviço.",
+          stagedPurchase: "Definida com o prestador.",
+          production: "Produção conforme o projeto."
+        }),
+        modular: Object.freeze({
+          adaptation: "Combinação de módulos estudados para o empreendimento.",
+          quality: "Padrão de marcenaria conforme especificações do projeto.",
+          personalization: "Combinações de módulos, acabamentos e acessórios disponíveis.",
+          cost: "Busca valores acessíveis por eficiência e escala.",
+          stagedPurchase: "Possibilidade prevista no modelo, conforme regras comerciais.",
+          production: "Organizada a partir de uma plataforma modular por empreendimento."
+        })
       })
     }),
     viewer: Object.freeze({
