@@ -1,0 +1,54 @@
+{
+  "schema": "M2DLOC004FamilyDecision/1",
+  "plan": "MobiliPresenter2D Plano Diretor v0.9",
+  "workItem": "LOC-004",
+  "family": "home-hero-artwork-alt",
+  "status": "prepared-for-development-review",
+  "copyOwner": "Product/UX; existing pt-BR alt retained without editorial changes",
+  "authoring": {
+    "template": "architecture/pages/root.page.html",
+    "catalog": "app/core/ui-copy.js",
+    "compiler": "scripts/compile-primary-pages.mjs",
+    "inventoryScanner": "tools/arc13/scan-ui-inventory.py",
+    "output": "app/index.html"
+  },
+  "keys": [
+    {
+      "pointer": "/home/hero/artworkAlt",
+      "value": "Cozinha planejada com uma m\u00e3o segurando um celular",
+      "sink": "Home hero lifestyle artwork img alt"
+    }
+  ],
+  "preserved": [
+    "existing alternative text, punctuation, image, image bounds, and layout remain unchanged",
+    "the hero artwork remains distinct from brand logo alternatives and from labels on the embedded video player",
+    "the alt remains informative because the Home hero illustration communicates a planned kitchen presented on a handheld phone",
+    "global candidate classifications remain unreviewed; this receipt records exact family ownership and provenance only"
+  ],
+  "baseline": {
+    "developmentBase": "5afc4f314b27a1ca9ee7598f8683e23d5adc32e2",
+    "renderedHtmlChanged": false,
+    "visualTestRequired": false,
+    "reason": "The existing alt value is moved into the shared catalog without changing generated HTML. The three generated primary-page Git blob SHAs match development exactly."
+  },
+  "inventory": {
+    "path": "architecture/arc13/ui-text-candidates.json",
+    "sha256": "1a3748fb2d305384afe52d4e61796e1f4dabc221e85702492b7a892f0ab3ad14",
+    "familyOccurrences": 1,
+    "candidateIds": [
+      "dcd455a9fecf63aa"
+    ],
+    "classificationNote": "The candidate now resolves to the shared UI copy catalog. The inventory remains candidate-unreviewed; no global classification changed.",
+    "primaryPageAuthoringMappedOccurrences": 420,
+    "primaryPageAuthoringUnresolvedOccurrences": 0,
+    "javascriptParseErrors": 0,
+    "unreviewedOccurrences": 1043
+  },
+  "verification": {
+    "primaryPagesGeneration": "completed with scripts/compile-primary-pages.mjs --sync",
+    "inventoryGeneration": "completed; exact candidate maps to /home/hero/artworkAlt",
+    "generatedHtml": "app/index.html, app/about/index.html, and app/how-it-works/index.html Git blob SHAs match development",
+    "automatedPullRequestGates": "pending"
+  },
+  "exceptions": []
+}
