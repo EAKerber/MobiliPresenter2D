@@ -132,7 +132,11 @@
   }
 
   renderers.set("overview", (module) => renderOverview(root.querySelector("#block-overview"), module));
-  renderers.set("scene", (module) => { root.querySelector("#sceneSelection").textContent = `Selecionado: ${module.number} · ${module.title}`; });
+  renderers.set("scene", (module) => {
+    root.querySelector("#sceneSelection").textContent = viewerSceneCopy("selected", "Selecionado: {number} · {title}")
+      .replace("{number}", String(module.number))
+      .replace("{title}", String(module.title));
+  });
   renderers.set("views", (module) => renderViews(root.querySelector("#block-views"), module));
   renderers.set("details", (module) => renderDetails(root.querySelector("#block-details"), module));
 
@@ -201,5 +205,11 @@
     return viewerViewCopy("counter", "{current} / {total}")
       .replace("{current}", String(current + 1))
       .replace("{total}", String(total));
+  }
+  function viewerSceneCopy(key, fallback) {
+    const theme = window.CASA_UI_THEME;
+    return theme && typeof theme.getCopy === "function"
+      ? theme.getCopy("viewer.scene." + key, fallback)
+      : fallback;
   }
 })();

@@ -38,6 +38,9 @@ assert.deepEqual(JSON.parse(JSON.stringify(copy.viewer.views)), {
   counter: "{current} / {total}",
   next: "Próxima vista"
 });
+assert.deepEqual(JSON.parse(JSON.stringify(copy.viewer.scene)), {
+  selected: "Selecionado: {number} · {title}"
+});
 const viewerCode = read("app/viewer/viewer.js");
 assert(viewerCode.includes('theme.getCopy("viewer.state." + key, fallback)') &&
   viewerCode.includes('viewerCopy("empty", "Nenhum módulo está visível no viewer neste momento.")') &&
@@ -50,6 +53,9 @@ assert(viewerCode.includes('viewerViewCopy("show", "Mostrar vista {index}")') &&
   viewerCode.includes('viewerViewCopy("counter", "{current} / {total}")') &&
   viewerCode.includes('theme.getCopy("viewer.views." + key, fallback)'),
 "Viewer navigation labels use four canonical keys, with both counter sinks sharing one key");
+assert(viewerCode.includes('viewerSceneCopy("selected", "Selecionado: {number} · {title}")') &&
+  viewerCode.includes('theme.getCopy("viewer.scene." + key, fallback)'),
+"Viewer scene selection caption uses its canonical catalog key with local fallback");
 for (const [file, controller] of [
   ["app/index.html", "app/landing/landing.js"],
   ["app/how-it-works/index.html", "app/how-it-works/how-it-works.js"]
@@ -90,7 +96,7 @@ for (const file of shells) {
   const copyVersion = ["app/index.html", "app/how-it-works/index.html"].includes(file)
     ? "arc13-loc005-video-fullscreen-1"
     : file === "app/viewer/index.html"
-      ? "arc13-loc005-view-navigation-1"
+      ? "arc13-loc005-scene-selection-1"
     : "arc13-loc003-copy-1";
   assert(html.includes(`src="/core/ui-copy.js?v=${copyVersion}"`), file + " copy catalog bootstrap");
   assert(html.includes('src="/core/ui-theme.js?v=arc13-loc003-copy-1"'), file + " theme bootstrap");
