@@ -56,16 +56,19 @@ const PAGE_COPY_POINTERS={
   "copy.actions.exploreEnvironments":"/actions/exploreEnvironments",
   "copy.home.hero.aboutLink":"/home/hero/aboutLink",
   "copy.video.youtubeLink":"/video/youtubeLink",
+  "copy.brand.logoAlt":"/brand/logoAlt",
   "copy.footer.tagline":"/footer/tagline"
  },
  "architecture/pages/about.page.html":{
   "copy.actions.exploreEnvironments":"/actions/exploreEnvironments",
   "copy.footer.homeLink":"/footer/homeLink",
+  "copy.brand.logoAlt":"/brand/logoAlt",
   "copy.footer.tagline":"/footer/tagline"
  },
  "architecture/pages/how-it-works.page.html":{
   "copy.video.youtubeLink":"/video/youtubeLink",
   "copy.footer.homeLink":"/footer/homeLink",
+  "copy.brand.logoAlt":"/brand/logoAlt",
   "copy.footer.tagline":"/footer/tagline",
   "copy.comparison.labels.adaptation":"/comparison/labels/adaptation",
   "copy.comparison.labels.quality":"/comparison/labels/quality",
