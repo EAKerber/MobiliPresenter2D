@@ -36,11 +36,11 @@ def fixtures():
 
 def git_result(args, **kwargs):
     if args[:3] == ["git","rev-list","--parents"]:
-        return SimpleNamespace(stdout=MERGE+" "+BASE+"\\n",returncode=0)
+        return SimpleNamespace(stdout=MERGE+" "+BASE+"\n",returncode=0)
     if args[:3] == ["git","merge-base","--is-ancestor"]:
         return SimpleNamespace(stdout="",returncode=0)
     if args[:3] == ["git","show","-s"]:
-        return SimpleNamespace(stdout=TREE+"\\n",returncode=0)
+        return SimpleNamespace(stdout=TREE+"\n",returncode=0)
     raise AssertionError(args)
 
 class DevelopmentAuditTests(unittest.TestCase):
