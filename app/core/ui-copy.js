@@ -27,6 +27,14 @@
     }),
     home: Object.freeze({
       hero: Object.freeze({
+        eyebrow: "Casa em Módulos",
+        heading: Object.freeze({
+          assemble: "Monte.",
+          choose: "Escolha.",
+          enjoy: "Aproveite."
+        }),
+        lead: "Móveis inteligentes, pensados para o seu espaço e para o seu orçamento.",
+        description: "Um novo conceito em mobiliário que une projeto, fabricação e instalação em uma solução simples, prática e acessível.",
         aboutLink: "Saiba mais"
       })
     }),
