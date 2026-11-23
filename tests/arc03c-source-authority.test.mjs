@@ -7,6 +7,7 @@ import {fileURLToPath} from "node:url";
 import {spawnSync} from "node:child_process";
 import {escapeHtml,projectPages} from "../scripts/compile-primary-pages.mjs";
 const ROOT=resolve(dirname(fileURLToPath(import.meta.url)),"..");
+const normalizeNewlines=value=>value.replace(/\r\n/g,"\n");
 const SLOT="<!-- ARC03_PRIMARY_HEADER -->";
 const SOURCE_INPUTS=[
  "scripts/compile-primary-pages.mjs",
@@ -60,9 +61,9 @@ test("three generated pages and provenance manifest match authoritative source",
  const r=await projectPages();
  assert.equal(r.manifest.authority,"architecture/pages");
  assert.deepEqual(r.manifest.pages.map(x=>x.route),["/","/about/","/how-it-works/"]);
- assert.equal(await readFile("architecture/generated/primary-pages.manifest.json","utf8"),r.text);
+ assert.equal(normalizeNewlines(await readFile("architecture/generated/primary-pages.manifest.json","utf8")),r.text);
  for(const p of r.pages) {
-  assert.equal(await readFile(p.output,"utf8"),p.html);
+  assert.equal(normalizeNewlines(await readFile(p.output,"utf8")),p.html);
   assert.match(p.html,/<header class="site-header site-header--public">/);
   assert.doesNotMatch(p.html,/<!-- ARC03_PRIMARY_HEADER -->/);
  }
@@ -80,7 +81,11 @@ test("public copy is catalog-backed and remains static in generated HTML",async(
  assert.equal(r.manifest.schema,"M2DARC03CPublishedPages/3");
  assert.equal(r.manifest.copyCatalog.path,"app/core/ui-copy.js");
  for(const page of r.pages) {
-  assert.equal((page.html.match(/<script src="\/core\/ui-copy\.js\?v=arc13-loc003-copy-1"><\/script>/g)||[]).length,1,
+  const catalogVersion=["app/index.html","app/how-it-works/index.html"].includes(page.output)
+   ? "arc13-loc005-video-fullscreen-1"
+   : "arc13-loc003-copy-1";
+  const catalogScript=new RegExp(`<script src="/core/ui-copy\\.js\\?v=${catalogVersion}"></script>`);
+  assert.equal((page.html.match(new RegExp(catalogScript.source,"g"))||[]).length,1,
    "each generated page loads the shared catalog exactly once");
   assert.match(page.html,/<a class="brand" href="[^"]+" aria-label="Casa em Módulos, início">/);
   assert.match(page.html,/<img[^>]+alt="Casa em Módulos">/);

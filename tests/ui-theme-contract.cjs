@@ -24,6 +24,18 @@ assert.equal(copy.theme.toggle.title, "Tema: {current} (próximo: {next})");
 assert.deepEqual(JSON.parse(JSON.stringify(copy.navigation.menu)), {
   open: "Abrir menu", close: "Fechar menu"
 });
+assert.deepEqual(JSON.parse(JSON.stringify(copy.video.fullscreen)), {
+  open: "Abrir vídeo em tela cheia", close: "Sair da tela cheia"
+});
+for (const [file, controller] of [
+  ["app/index.html", "app/landing/landing.js"],
+  ["app/how-it-works/index.html", "app/how-it-works/how-it-works.js"]
+]) {
+  const html = read(file), code = read(controller);
+  assert(html.includes('aria-label="Abrir vídeo em tela cheia"') && html.includes('title="Abrir vídeo em tela cheia"'), file + " keeps the static fullscreen label when JavaScript is unavailable");
+  assert(code.includes("videoFullscreenCopy.open") && code.includes("videoFullscreenCopy.close"), controller + " reads both fullscreen labels from the canonical catalog");
+  assert(!code.includes("Abrir vídeo em tela cheia") && !code.includes("Sair da tela cheia"), controller + " does not duplicate catalog labels");
+}
 const publicMenuCode = read("app/landing/header-menu.js");
 const privateMenuCode = read("app/core/private-navigation.js");
 assert(publicMenuCode.includes('getCopy("navigation.menu." + copyKey, fallback)') &&
@@ -52,7 +64,10 @@ const shells = [
 ];
 for (const file of shells) {
   const html = read(file);
-  assert(html.includes('src="/core/ui-copy.js?v=arc13-loc003-copy-1"'), file + " copy catalog bootstrap");
+  const copyVersion = ["app/index.html", "app/how-it-works/index.html"].includes(file)
+    ? "arc13-loc005-video-fullscreen-1"
+    : "arc13-loc003-copy-1";
+  assert(html.includes(`src="/core/ui-copy.js?v=${copyVersion}"`), file + " copy catalog bootstrap");
   assert(html.includes('src="/core/ui-theme.js?v=arc13-loc003-copy-1"'), file + " theme bootstrap");
   assert(html.indexOf("ui-copy.js") < html.indexOf("ui-theme.js"), file + " copy catalog before theme bootstrap");
   assert(html.includes('href="/ui-theme.css?'), file + " theme CSS");

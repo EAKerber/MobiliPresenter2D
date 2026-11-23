@@ -160,10 +160,11 @@
     const fullscreen = document.getElementById("heroPhoneFullscreen");
     const player = screenElement.querySelector(".hero-phone-player");
     if (fullscreen && player) {
+      const videoFullscreenCopy = window.CASA_UI_COPY.video.fullscreen;
       const activeFullscreenElement = () => document.fullscreenElement || document.webkitFullscreenElement || null;
       const syncFullscreenButton = () => {
         const isFullscreen = activeFullscreenElement() === player;
-        const label = isFullscreen ? "Sair da tela cheia" : "Abrir vídeo em tela cheia";
+        const label = isFullscreen ? videoFullscreenCopy.close : videoFullscreenCopy.open;
         fullscreen.dataset.fullscreen = isFullscreen ? "active" : "inactive";
         fullscreen.setAttribute("aria-label", label);
         fullscreen.setAttribute("title", label);

@@ -10,7 +10,7 @@ import subprocess
 from pathlib import Path
 
 OLD = "6840d8986e44a7860b541e6becb3b5373ef48c09"
-MAIN = "2b1c70c049cdcb5e2a75fb2a970d1fd3d112cc98"
+MAIN = "01ded2c100fbfd8b16897e26113dc5068a83e429"
 SRC_PATH = "app/how-it-works/how-it-works.js"
 GENERIC_PATH = "app/core/image-fallback.js"
 EXPECTED = {
@@ -47,7 +47,13 @@ def verify() -> dict:
     main_first, main_div, _ = main_js.partition(split)
     require(div == split and current_div == split and main_div == split,
             "EXPLANATION_SECTION_MISSING")
-    require(current_first == main_first, "CURRENT_PAGE_PREFIX_DIFFERS_FROM_PINNED_MAIN")
+    catalog_binding = "    const videoFullscreenCopy=window.CASA_UI_COPY.video.fullscreen;\n"
+    catalog_label = "const label=isFullscreen?videoFullscreenCopy.close:videoFullscreenCopy.open;"
+    literal_label = 'const label=isFullscreen?"Sair da tela cheia":"Abrir vídeo em tela cheia";'
+    require(current_first.count(catalog_binding) == 1 and current_first.count(catalog_label) == 1,
+            "LOC005_FULLSCREEN_COPY_BINDING_DRIFT")
+    normalized_current_first = current_first.replace(catalog_binding, "", 1).replace(catalog_label, literal_label, 1)
+    require(normalized_current_first == main_first, "CURRENT_PAGE_PREFIX_DIFFERS_FROM_PINNED_MAIN")
     require(current_trailing == trailing, "LEGACY_EXPLANATION_CONTENT_CHANGED")
     require('document.querySelectorAll("[data-image-fallback]")' not in current_first,
             "LEGACY_PAGE_HANDLER_NOT_REMOVED")
