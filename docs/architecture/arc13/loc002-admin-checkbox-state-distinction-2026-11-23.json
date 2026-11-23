@@ -1,0 +1,102 @@
+{
+  "schema": "ARC13LOC002FamilyReview/1",
+  "plan": "MobiliPresenter2D Plano Diretor v0.9",
+  "workItem": "LOC-002",
+  "family": "admin-initial-state-and-stage-availability-checkboxes",
+  "status": "reviewed-hold",
+  "evidence": {
+    "developmentRevision": "e910cc84d6bba504e228327933b635764debac2c",
+    "inventoryPath": "architecture/arc13/ui-text-candidates.json",
+    "inventorySha256": "8E7393F891F72F12D57677E8B16F6297740BA8743C7BAC8FE46D4A9D97971F9C",
+    "source": "app/admin/admin.js",
+    "sourceGitBlob": "ba9129e27ce92818cb3548eed13b78957d0548f1",
+    "normalizedSourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+    "route": "/admin"
+  },
+  "decisions": [
+    {
+      "candidateId": "852e7699499e4703",
+      "sourceLine": 244,
+      "expression": "kind === \"module\" ? \"Iniciar visível no configurador\" : \"Iniciar ativo\"",
+      "alternatives": [
+        {
+          "kind": "module",
+          "value": "Iniciar visível no configurador",
+          "statePath": "model.initialState.entities[itemId]",
+          "meaning": "Sets whether the module is visible in the configurator's initial state."
+        },
+        {
+          "kind": "object",
+          "value": "Iniciar ativo",
+          "statePath": "model.initialState.entities[itemId]",
+          "meaning": "This is the current object label. It writes the same entity-state map used by modules, so source evidence alone does not establish whether object activity and module visibility are separate product policies."
+        }
+      ],
+      "classification": "ui-visible",
+      "subsystemOwner": "admin",
+      "contentOwner": null,
+      "destination": "hold",
+      "decision": "Keep the module and object branches recorded separately because they are separate inventory alternatives. Their relationship as product policies remains undecided; do not infer separate semantics or catalog keys from the current labels alone."
+    },
+    {
+      "candidateId": "7ef47d84204a2578",
+      "sourceLine": 266,
+      "value": "Iniciar ativo",
+      "statePath": "model.initialState.services.includes(itemId)",
+      "classification": "ui-visible",
+      "subsystemOwner": "admin",
+      "contentOwner": null,
+      "destination": "hold",
+      "decision": "This selects a service for the configurator's initial state. The wording matches the object alternative above, but the state path and function differ; keep this service candidate separate until product/UX decides whether a shared copy key is appropriate."
+    },
+    {
+      "candidateId": "09cf4ffd847e1136",
+      "sourceLine": 722,
+      "expression": "stage.enabled ? \"Ativa\" : \"Inativa\"",
+      "statePath": "stage.enabled",
+      "classification": "ui-visible",
+      "subsystemOwner": "admin",
+      "contentOwner": null,
+      "destination": "hold",
+      "decision": "This enables or disables a stage's participation in the flow. It is not the initial activity or selection of an entity/service and must not share that semantic copy key. The checkbox may be disabled for required stages or stages without items."
+    }
+  ],
+  "relatedAccessibleNames": [
+    {
+      "candidateId": "619adc6dd3cafa4c",
+      "sourceLine": 241,
+      "meaning": "Dynamic initial configurator visibility/activity name for module or object."
+    },
+    {
+      "candidateId": "53fb3aeaa2fdd8db",
+      "sourceLine": 251,
+      "meaning": "Initial Viewer visibility; distinct from configurator visibility."
+    },
+    {
+      "candidateId": "e0d9bd67f4de94ba",
+      "sourceLine": 263,
+      "meaning": "Dynamic initial service activity name."
+    },
+    {
+      "candidateId": "4f8ce9b8fdeca90a",
+      "sourceLine": 720,
+      "meaning": "Stage availability action name."
+    }
+  ],
+  "visualTreatment": {
+    "status": "technical-normalization-integrated",
+    "evidence": ["PR #299", "PR #300"],
+    "decision": "The initial-state and stage-availability checkboxes can share the theme accent while retaining distinct state, wording, and accessibility semantics. This technical normalization does not constitute product/UX approval of the wording or a global checkbox redesign."
+  },
+  "pending": [
+    "Product/UX confirmation of whether module visibility and object activity are distinct policies or both describe initial configurator presence, and confirmation of the current labels.",
+    "Choose canonical catalog keys for the module and object branches within candidate `852e7699499e4703`, and for service candidate `7ef47d84204a2578`; keep the source branches distinct in the review record until their semantics are decided.",
+    "Review the related accessible names with assistive technology; this receipt records their intended meanings, not an accessibility approval.",
+    "No LOC-003 extraction or source changes are authorized by this review."
+  ],
+  "limits": [
+    "The inventory candidates remain globally `unreviewed`; this receipt does not change the candidate count or approve copy.",
+    "Visual similarity and a shared accent do not imply shared interaction semantics.",
+    "No text, DOM, runtime behavior, or user-facing layout was changed."
+  ]
+}
