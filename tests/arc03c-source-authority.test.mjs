@@ -7,6 +7,7 @@ import {fileURLToPath} from "node:url";
 import {spawnSync} from "node:child_process";
 import {escapeHtml,projectPages} from "../scripts/compile-primary-pages.mjs";
 const ROOT=resolve(dirname(fileURLToPath(import.meta.url)),"..");
+const normalizeNewlines=value=>value.replace(/\r\n/g,"\n");
 const SLOT="<!-- ARC03_PRIMARY_HEADER -->";
 const SOURCE_INPUTS=[
  "scripts/compile-primary-pages.mjs",
@@ -60,9 +61,9 @@ test("three generated pages and provenance manifest match authoritative source",
  const r=await projectPages();
  assert.equal(r.manifest.authority,"architecture/pages");
  assert.deepEqual(r.manifest.pages.map(x=>x.route),["/","/about/","/how-it-works/"]);
- assert.equal(await readFile("architecture/generated/primary-pages.manifest.json","utf8"),r.text);
+ assert.equal(normalizeNewlines(await readFile("architecture/generated/primary-pages.manifest.json","utf8")),r.text);
  for(const p of r.pages) {
-  assert.equal(await readFile(p.output,"utf8"),p.html);
+  assert.equal(normalizeNewlines(await readFile(p.output,"utf8")),p.html);
   assert.match(p.html,/<header class="site-header site-header--public">/);
   assert.doesNotMatch(p.html,/<!-- ARC03_PRIMARY_HEADER -->/);
  }

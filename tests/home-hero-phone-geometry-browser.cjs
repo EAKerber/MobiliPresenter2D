@@ -82,7 +82,8 @@ const contentTypes = new Map([
 const server = http.createServer(async (request, response) => {
   try {
     const pathname = new URL(request.url, "http://127.0.0.1").pathname;
-    const relative = decodeURIComponent(pathname === "/" ? "/index.html" : pathname).replace(/^\/+/, "");
+    const decodedPath = decodeURIComponent(pathname === "/" ? "/index.html" : pathname);
+    const relative = decodedPath.endsWith("/") ? decodedPath.slice(1) + "index.html" : decodedPath.replace(/^\/+/, "");
     const filePath = path.resolve(appRoot, relative);
     if (filePath !== appRoot && !filePath.startsWith(appRoot + path.sep)) {
       response.writeHead(403).end();
