@@ -70,6 +70,23 @@ async function main() {
       const heading = page.locator("#block-overview .overview-title");
       await heading.waitFor({ timeout: 12000 });
       assert.match(await heading.textContent(), /Inferior da pia/);
+      const viewDots = page.locator("#block-views .mobile-view-nav button");
+      const viewCount = await viewDots.count();
+      const viewCounter = page.locator("#block-views .view-counter");
+      assert(viewCount >= 3, "viewer exposes its configured technical views");
+      assert.equal(await page.locator("[data-view-previous]").getAttribute("aria-label"), uiCopy.viewer.views.previous);
+      assert.equal(await page.locator("[data-view-next]").getAttribute("aria-label"), uiCopy.viewer.views.next);
+      assert.equal(await viewDots.nth(0).getAttribute("aria-label"), uiCopy.viewer.views.show.replace("{index}", "1"));
+      assert.equal((await viewCounter.textContent()).trim(), `1 / ${viewCount}`);
+      await page.locator("[data-view-next]").click();
+      assert.equal((await viewCounter.textContent()).trim(), `2 / ${viewCount}`);
+      assert.equal(await viewDots.nth(1).getAttribute("aria-current"), "true");
+      await viewDots.nth(2).click();
+      assert.equal((await viewCounter.textContent()).trim(), `3 / ${viewCount}`);
+      assert.equal(await viewDots.nth(2).getAttribute("aria-label"), uiCopy.viewer.views.show.replace("{index}", "3"));
+      await page.locator("[data-view-previous]").click();
+      assert.equal((await viewCounter.textContent()).trim(), `2 / ${viewCount}`);
+      await viewDots.nth(0).click();
       assert.equal(await page.locator("#sceneStage [data-select-scene-entity]").count(), 7);
       assert((await page.locator("#block-views .technical-view").count()) >= 3);
       assert((await page.locator("#block-details .detail-row").count()) >= 3);
@@ -110,6 +127,9 @@ async function main() {
     releaseMissingCatalogProjection();
     await missingCatalogViewer.waitForLoadState("networkidle");
     await missingCatalogViewer.locator("#block-overview .overview-title").waitFor({ timeout: 12000 });
+    assert.equal(await missingCatalogViewer.locator("[data-view-previous]").getAttribute("aria-label"), "Vista anterior");
+    assert.equal(await missingCatalogViewer.locator("[data-view-next]").getAttribute("aria-label"), "Próxima vista");
+    assert.equal(await missingCatalogViewer.locator("#block-views .mobile-view-nav button").first().getAttribute("aria-label"), "Mostrar vista 1");
     assert.deepEqual(missingCatalogErrors, [], "missing copy catalog must not break the Viewer: " + missingCatalogErrors.join(" | "));
     await missingCatalogViewer.close();
     // Anonymous users must follow the access contract; the private workspace

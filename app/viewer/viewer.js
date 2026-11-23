@@ -89,17 +89,17 @@
       const view = window.CASA_PUBLIC_TECHNICAL_VIEWS.render(module, spec.kind, spec.label, entity, entity && adapter.getAssetUrl(entity.asset), adapter.getSceneCanvas());
       view.classList.toggle("is-current", index === currentView); view.setAttribute("aria-current", String(index === currentView));
       stage.append(view);
-      const dot = element("button"); dot.type = "button"; dot.setAttribute("aria-label", `Mostrar vista ${index + 1}`); dot.setAttribute("aria-current", String(index === currentView));
+      const dot = element("button"); dot.type = "button"; dot.setAttribute("aria-label", viewerViewCopy("show", "Mostrar vista {index}").replace("{index}", String(index + 1))); dot.setAttribute("aria-current", String(index === currentView));
       dot.addEventListener("click", () => { currentView = index; syncViewNavigation(keys.length); }); nav.append(dot);
     });
-    counter.textContent = `${currentView + 1} / ${keys.length}`;
+    counter.textContent = viewerCounter(currentView, keys.length);
     const previous = target.querySelector("[data-view-previous]"); const next = target.querySelector("[data-view-next]");
     stage.style.setProperty("--view-count", String(keys.length));
     previous.disabled = keys.length < 2; next.disabled = keys.length < 2;
     previous.onclick = () => { currentView = (currentView - 1 + keys.length) % keys.length; syncViewNavigation(keys.length); };
     next.onclick = () => { currentView = (currentView + 1) % keys.length; syncViewNavigation(keys.length); };
     function syncViewNavigation(count) {
-      counter.textContent = `${currentView + 1} / ${count}`;
+      counter.textContent = viewerCounter(currentView, count);
       [...nav.children].forEach((dot, index) => dot.setAttribute("aria-current", String(index === currentView)));
       [...stage.children].forEach((view, index) => {
         view.classList.toggle("is-current", index === currentView);
@@ -147,9 +147,9 @@
     } else if (blockId === "views") {
       const block = section("views", "block-views", "Vistas técnicas", "Desenhos orientativos a partir das dimensões disponíveis.");
       const controls = element("div", "view-controls");
-      const previous = element("button", "", "←"); previous.type = "button"; previous.dataset.viewPrevious = ""; previous.setAttribute("aria-label", "Vista anterior");
+      const previous = element("button", "", "←"); previous.type = "button"; previous.dataset.viewPrevious = ""; previous.setAttribute("aria-label", viewerViewCopy("previous", "Vista anterior"));
       const counter = element("span", "view-counter", "1 / 1");
-      const next = element("button", "", "→"); next.type = "button"; next.dataset.viewNext = ""; next.setAttribute("aria-label", "Próxima vista");
+      const next = element("button", "", "→"); next.type = "button"; next.dataset.viewNext = ""; next.setAttribute("aria-label", viewerViewCopy("next", "Próxima vista"));
       controls.append(previous, counter, next); block.querySelector(".block-heading").append(controls);
       block.append(element("div", "view-stage"), element("div", "mobile-view-nav")); root.append(block);
     } else if (blockId === "details") {
@@ -190,5 +190,16 @@
     return theme && typeof theme.getCopy === "function"
       ? theme.getCopy("viewer.state." + key, fallback)
       : fallback;
+  }
+  function viewerViewCopy(key, fallback) {
+    const theme = window.CASA_UI_THEME;
+    return theme && typeof theme.getCopy === "function"
+      ? theme.getCopy("viewer.views." + key, fallback)
+      : fallback;
+  }
+  function viewerCounter(current, total) {
+    return viewerViewCopy("counter", "{current} / {total}")
+      .replace("{current}", String(current + 1))
+      .replace("{total}", String(total));
   }
 })();
