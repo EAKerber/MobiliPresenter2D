@@ -1,0 +1,53 @@
+{
+  "schema": "M2DLOC004FamilyDecision/1",
+  "plan": "MobiliPresenter2D Plano Diretor v0.9",
+  "workItem": "LOC-004",
+  "family": "home-footer-environments-link",
+  "status": "prepared-for-development-review",
+  "copyOwner": "Product/UX; existing pt-BR navigation label retained without editorial changes",
+  "authoring": {
+    "template": "architecture/pages/root.page.html",
+    "catalog": "app/core/ui-copy.js",
+    "compiler": "scripts/compile-primary-pages.mjs",
+    "inventoryScanner": "tools/arc13/scan-ui-inventory.py",
+    "output": "app/index.html"
+  },
+  "keys": [
+    {
+      "pointer": "/home/footer/environmentsLink",
+      "value": "Voltar aos ambientes \u2191",
+      "sink": "Home footer environments anchor visible link text"
+    }
+  ],
+  "preserved": [
+    "existing wording, arrow, destination /#ambientes, element semantics, and footer layout remain unchanged",
+    "this Home action remains distinct from /footer/homeLink, which returns to the beginning of other pages",
+    "global candidate classifications remain unreviewed; this receipt records exact family ownership and provenance only"
+  ],
+  "baseline": {
+    "developmentBase": "f3ff2bc33b634738f09aa7254544153c136074b4",
+    "renderedHtmlChanged": false,
+    "visualTestRequired": false,
+    "reason": "The existing Home footer link is moved into its own semantic catalog key without changing generated HTML. All three primary-page Git blob SHAs match development."
+  },
+  "inventory": {
+    "path": "architecture/arc13/ui-text-candidates.json",
+    "sha256": "c635ef7eb64f8de5c121ad7a46c85162e2ca61472bcefe9d577c289b23083184",
+    "familyOccurrences": 1,
+    "candidateIds": [
+      "2d741286db2670ba"
+    ],
+    "classificationNote": "The occurrence resolves to /home/footer/environmentsLink. The inventory remains candidate-unreviewed; no global classification changed.",
+    "primaryPageAuthoringMappedOccurrences": 420,
+    "primaryPageAuthoringUnresolvedOccurrences": 0,
+    "javascriptParseErrors": 0,
+    "unreviewedOccurrences": 1043
+  },
+  "verification": {
+    "primaryPagesGeneration": "completed with scripts/compile-primary-pages.mjs --sync",
+    "inventoryGeneration": "completed; exact Home footer link maps to /home/footer/environmentsLink",
+    "generatedHtml": "app/index.html, app/about/index.html, and app/how-it-works/index.html Git blob SHAs match development",
+    "automatedPullRequestGates": "pending"
+  },
+  "exceptions": []
+}

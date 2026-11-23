@@ -57,6 +57,7 @@ const PAGE_COPY_POINTERS={
   "copy.home.hero.aboutLink":"/home/hero/aboutLink",
   "copy.video.youtubeLink":"/video/youtubeLink",
   "copy.brand.logoAlt":"/brand/logoAlt",
+  "copy.home.footer.environmentsLink":"/home/footer/environmentsLink",
   "copy.footer.tagline":"/footer/tagline"
  },
  "architecture/pages/about.page.html":{

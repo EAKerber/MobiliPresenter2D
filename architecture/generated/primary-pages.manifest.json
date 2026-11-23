@@ -6,12 +6,12 @@
     "offsetUnit": "unicode-codepoints",
     "generator": {
       "path": "scripts/compile-primary-pages.mjs",
-      "gitBlobSha": "c980213a76b5f6e7af198b5ccaf19f475156d421"
+      "gitBlobSha": "0eff2c697ba985921ad72cb1687d6c5fc982c46c"
     }
   },
   "copyCatalog": {
     "path": "app/core/ui-copy.js",
-    "gitBlobSha": "79b819d2968e0342b7458007aca775225268b31b",
+    "gitBlobSha": "08158a40c1ad7f01b384ac60e7500cdc01c41820",
     "schema": "M2DUIStringCatalog/1",
     "locale": "pt-BR"
   },
@@ -28,7 +28,7 @@
       "route": "/",
       "source": "architecture/pages/root.page.html",
       "output": "app/index.html",
-      "sourceGitBlobSha": "cccce752f4e2231a88626336fd984ab1bffc56d2",
+      "sourceGitBlobSha": "224377d1ee28de0586d0174f389141c5eb2b0662",
       "outputGitBlobSha": "2a64139e2b05769a60cb69daddd33c6d5e14075c",
       "sourceMap": {
         "segments": [
@@ -1501,7 +1501,7 @@
           {
             "output": {
               "start": 7515,
-              "end": 7875
+              "end": 7544
             },
             "transform": "copy",
             "origin": {
@@ -1509,7 +1509,41 @@
               "path": "architecture/pages/root.page.html",
               "range": {
                 "start": 6620,
-                "end": 6980
+                "end": 6649
+              }
+            }
+          },
+          {
+            "output": {
+              "start": 7544,
+              "end": 7566
+            },
+            "transform": "catalog-key-substitution",
+            "origin": {
+              "kind": "catalog-key",
+              "path": "app/core/ui-copy.js",
+              "pointer": "/home/footer/environmentsLink",
+              "template": {
+                "path": "architecture/pages/root.page.html",
+                "range": {
+                  "start": 6649,
+                  "end": 6686
+                }
+              }
+            }
+          },
+          {
+            "output": {
+              "start": 7566,
+              "end": 7875
+            },
+            "transform": "copy",
+            "origin": {
+              "kind": "page",
+              "path": "architecture/pages/root.page.html",
+              "range": {
+                "start": 6686,
+                "end": 6995
               }
             }
           }

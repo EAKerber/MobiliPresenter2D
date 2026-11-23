@@ -60,6 +60,9 @@
         heading: "Do seu espaço ao ambiente pronto.",
         description: "Escolha o ambiente, conheça os módulos e encontre uma solução que acompanha sua rotina.",
         action: "Encontre seu ambiente "
+      }),
+      footer: Object.freeze({
+        environmentsLink: "Voltar aos ambientes ↑"
       })
     }),
     actions: Object.freeze({
