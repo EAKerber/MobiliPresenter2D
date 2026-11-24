@@ -118,3 +118,10 @@ This snapshot supersedes the c2abdf7 inventory values above for current-state co
 3. Post-merge path review found the replay file was missing from the mobile workflow's `pull_request` filter. PR #381 ran it because the workflow itself also changed, so its green run alone did not prove future test-only changes would trigger it. PR #382 added the path to both `push` and `pull_request` and a focused contract assertion; all 18 selector/inventory tests and the mobile browser job passed on the exact PR head. This is a gate-reachability fix, not product runtime work.
 4. The hosted `tests/public-pages-smoke.cjs` still runs in browser only on non-draft PRs to `main`; a PR to `development` gets syntax validation, not hosted behavior. Keep this as a distinct preview-fixture limitation until a reliable development Deploy Preview is verified.
 5. TST-001 remains incomplete: command-to-reachable-assertion mapping, full event/conditional reachability, and representative end-to-end cost analysis remain open. The current inventory is a verified source map, not proof that each assertion is reachable.
+
+
+## Gate reachability review — archived asset provenance
+
+The archived asset-provenance workflow was dispatch-only, so edits to its source images did not automatically run the existing exact-tag and blob-identity checks. The focused candidate adds pull-request and push triggers on `development` for the 40 exact paths declared by the pinned archive manifest plus the test, audit tool and workflow itself. The existing manual trigger, assertions, two pinned tag checks and artifact publication remain. The trigger-scope crosswalk is in `tst-002-asset-provenance-crosswalk-2026-11-24.md`.
+
+Friction classification: missing automatic reachability, not redundant assertions. This change schedules one existing provenance gate for matching changes and avoids unrelated path fan-out. Duration impact is unknown until an exact-head run is recorded; no time-saving claim is made. No runtime or asset content is changed.
