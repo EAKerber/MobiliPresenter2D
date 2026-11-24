@@ -6,9 +6,9 @@
   "source": {
     "mainSha": "01ded2c100fbfd8b16897e26113dc5068a83e429",
     "mainTree": "d1588ab2a71c5de7e8b7cfaa907d5e5637fa7178",
-    "developmentPin": "c2abdf7e9024e783dd36fdbd91c4acc76dd8c136",
-    "developmentTree": "9e98257547958e8caa504c8eada9893539ded443",
-    "worktreeHead": "c2abdf7e9024e783dd36fdbd91c4acc76dd8c136",
+    "developmentPin": "d7f1b03d8ae3a6a733bb11e56688d78d9bd1a4c6",
+    "developmentTree": "f4bee9b613e3f19f657156dbc0827733372e9c21",
+    "worktreeHead": "d7f1b03d8ae3a6a733bb11e56688d78d9bd1a4c6",
     "worktreeTreeVerifiedAgainstDevelopmentPin": true,
     "openPullRequestsReadback": []
   },
@@ -625,7 +625,7 @@
         "development"
       ],
       "mainDefinition": "5cc41f761dcae09756cbcc02af4dfd893962f48e",
-      "developmentDefinition": "733aa07f9f884a145e965b5258090228d8a8cfcb"
+      "developmentDefinition": "169ead54be75fcf43a115e5623e47953365f3eb4"
     },
     {
       "path": ".github/workflows/module02-fidelity.yml",
@@ -8135,7 +8135,7 @@
     },
     {
       "path": ".github/workflows/mobile-browser.yml",
-      "blobSha": "733aa07f9f884a145e965b5258090228d8a8cfcb",
+      "blobSha": "169ead54be75fcf43a115e5623e47953365f3eb4",
       "name": "Mobile browser (local V5; protected preview separately gated)",
       "events": [
         {
@@ -8150,6 +8150,7 @@
             "!app/tools/test-v5-endpoint-safety.js",
             "tests/mobile-pip-main-browser.cjs",
             "tests/home-hero-phone-geometry-browser.cjs",
+            "tests/exposed-sides-glass.cjs",
             "tests/ui-theme-browser.cjs",
             ".github/workflows/mobile-browser.yml",
             "tests/ci/prepare-local-v5-browser.sh",
@@ -8169,6 +8170,7 @@
             "!app/tools/test-v5-endpoint-safety.js",
             "tests/mobile-pip-main-browser.cjs",
             "tests/home-hero-phone-geometry-browser.cjs",
+            "tests/exposed-sides-glass.cjs",
             "tests/ui-theme-browser.cjs",
             ".github/workflows/mobile-browser.yml",
             "tests/ci/prepare-local-v5-browser.sh",
@@ -8195,7 +8197,7 @@
           "runsOn": "ubuntu-latest",
           "container": null,
           "services": [],
-          "stepCount": 8,
+          "stepCount": 9,
           "actions": [
             "actions/checkout@v4",
             "actions/setup-node@v4"
@@ -8206,7 +8208,7 @@
         "actions/checkout@v4",
         "actions/setup-node@v4"
       ],
-      "commandCount": 5,
+      "commandCount": 6,
       "commands": [
         {
           "job": "browser",
@@ -8241,6 +8243,13 @@
           "step": "Verify theme controls across all shells",
           "sha256": "dc418236b988f3c43d5826162bacb13bbf22ec62c20faaeb7256f4013ec4e92e",
           "command": "node tests/ui-theme-browser.cjs /tmp/mobile-browser-review",
+          "if": null
+        },
+        {
+          "job": "browser",
+          "step": "Test glass occlusion in the local Configurator",
+          "sha256": "21e0912e6792e460a194d0649deeb1ab68399707b047f6daf5c2685ecb4d287b",
+          "command": "node tests/exposed-sides-glass.cjs /tmp/glass-occlusion-review",
           "if": null
         }
       ],
