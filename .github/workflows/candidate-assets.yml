@@ -4,6 +4,7 @@ on:
   pull_request:
     paths:
       - 'app/**'
+      - '!app/tools/test-v5-endpoint-safety.js'
       - 'review-assets/**'
       - 'reference/variant-cases.json'
       - 'reference/visual-debt.md'
@@ -37,6 +38,7 @@ on:
     branches: [main]
     paths:
       - 'app/**'
+      - '!app/tools/test-v5-endpoint-safety.js'
       - 'review-assets/**'
       - 'reference/variant-cases.json'
       - 'reference/visual-debt.md'
