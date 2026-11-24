@@ -6,9 +6,9 @@
   "source": {
     "mainSha": "01ded2c100fbfd8b16897e26113dc5068a83e429",
     "mainTree": "d1588ab2a71c5de7e8b7cfaa907d5e5637fa7178",
-    "developmentPin": "23c93e5c62fdc9fc5fd65374dd0279c38f3b3a2b",
-    "developmentTree": "ab4f1933db1b6975431e00ed720b3799998146e2",
-    "worktreeHead": "23c93e5c62fdc9fc5fd65374dd0279c38f3b3a2b",
+    "developmentPin": "e05b37a7cef712f5eb9bb1a0df5bd5937afd203e",
+    "developmentTree": "3e43cae159f89baf5a3b5fd4c2ea8bea8f9063ad",
+    "worktreeHead": "e05b37a7cef712f5eb9bb1a0df5bd5937afd203e",
     "worktreeTreeVerifiedAgainstDevelopmentPin": true,
     "openPullRequestsReadback": []
   },
@@ -119,7 +119,7 @@
         "development"
       ],
       "mainDefinition": "aaaf6ed9105cc6fd1df4f74001a2823f2b4cf59e",
-      "developmentDefinition": "aaaf6ed9105cc6fd1df4f74001a2823f2b4cf59e"
+      "developmentDefinition": "3debb0f87335921d6ba0997471433488d07ccdfc"
     },
     {
       "path": ".github/workflows/arc03c-static-page-build-gate.yml",
@@ -137,7 +137,7 @@
         "development"
       ],
       "mainDefinition": "5a6f65789b05b33f0be8ffff34cb7b12926a45f7",
-      "developmentDefinition": "ee36c6a0bf787a1e2108dddd9c85c8ab821ac52a"
+      "developmentDefinition": "82358a6472b4c5ae79b208611ce473d1bd5d1151"
     },
     {
       "path": ".github/workflows/branch-hygiene-bounded.yml",
@@ -189,7 +189,7 @@
         "development"
       ],
       "mainDefinition": "c3e6534150f6ade320daf7421a471dd9a98106c5",
-      "developmentDefinition": "4aa42f61d20c47366a0d964078609462b7a7b4fa"
+      "developmentDefinition": "0aa7c75b9b5292c7a2015502d04acf0813888aa7"
     },
     {
       "path": ".github/workflows/development-a11y-semantic-fallback.yml",
@@ -625,7 +625,7 @@
         "development"
       ],
       "mainDefinition": "5cc41f761dcae09756cbcc02af4dfd893962f48e",
-      "developmentDefinition": "8c4c81e9c2d312171f04c3b387e52051f6cee8e6"
+      "developmentDefinition": "733aa07f9f884a145e965b5258090228d8a8cfcb"
     },
     {
       "path": ".github/workflows/module02-fidelity.yml",
@@ -688,7 +688,7 @@
         "development"
       ],
       "mainDefinition": "886fc6264fe38778c13f5bfb9dab6800b37d5c71",
-      "developmentDefinition": "fae4f7fd5332644843c7d6f07499f2de7b45df4d"
+      "developmentDefinition": "eaba263af99d3febba93555afaf98b49e5d58a98"
     },
     {
       "path": ".github/workflows/summary-pricing-browser.yml",
@@ -697,7 +697,7 @@
         "development"
       ],
       "mainDefinition": "5a7d922d666cc2b8ba2b5cd4200d05738a2f02e1",
-      "developmentDefinition": "31b5ca675226a757d17083fd44cc4b93e39e5fb1"
+      "developmentDefinition": "961f5534db4e6619212c739abdd70a83dbd31d7f"
     },
     {
       "path": ".github/workflows/ux-auth-viewer-integration-gate.yml",
@@ -715,7 +715,7 @@
         "development"
       ],
       "mainDefinition": "5e583959f55b6f518ac66dec0037462ea4274565",
-      "developmentDefinition": "36b4c183e41161f98ad527e3a875617d3bf958e8"
+      "developmentDefinition": "4df0b7887ffa9f92e3e00eada3d4ffeef521e4cb"
     },
     {
       "path": ".github/workflows/viewer-base-price-contract-gate.yml",
@@ -1306,6 +1306,118 @@
       "parseWarnings": []
     },
     {
+      "path": ".github/workflows/app-build-purity.yml",
+      "blobSha": "3debb0f87335921d6ba0997471433488d07ccdfc",
+      "name": "App build purity",
+      "events": [
+        {
+          "name": "push",
+          "branches": [
+            "main"
+          ],
+          "branchIgnores": null,
+          "paths": [
+            "app/**",
+            "!app/tools/test-v5-normal-save.js",
+            ".github/workflows/app-build-purity.yml"
+          ],
+          "pathIgnores": null,
+          "types": null
+        },
+        {
+          "name": "pull_request",
+          "branches": null,
+          "branchIgnores": null,
+          "paths": [
+            "app/**",
+            "!app/tools/test-v5-normal-save.js",
+            ".github/workflows/app-build-purity.yml"
+          ],
+          "pathIgnores": null,
+          "types": null
+        },
+        {
+          "name": "workflow_dispatch",
+          "branches": null,
+          "branchIgnores": null,
+          "paths": null,
+          "pathIgnores": null,
+          "types": null
+        }
+      ],
+      "jobs": [
+        {
+          "id": "current-build",
+          "name": null,
+          "if": null,
+          "runsOn": "ubuntu-latest",
+          "container": null,
+          "services": [],
+          "stepCount": 8,
+          "actions": [
+            "actions/checkout@v4",
+            "actions/setup-python@v5"
+          ]
+        }
+      ],
+      "actions": [
+        "actions/checkout@v4",
+        "actions/setup-python@v5"
+      ],
+      "commandCount": 6,
+      "commands": [
+        {
+          "job": "current-build",
+          "step": "Install image tooling",
+          "sha256": "9a9814a4a69e19dee0a708316b0f880425a40ad7df3c45f4608d43a98795769c",
+          "command": "python -m pip install --disable-pip-version-check pillow",
+          "if": null
+        },
+        {
+          "job": "current-build",
+          "step": "Build current app from approved assets",
+          "sha256": "16c0e4305ac213dff39fc82b69b6e08aeeb8758e33cd72d7c409752a70e9f054",
+          "command": "npm run build",
+          "if": null
+        },
+        {
+          "job": "current-build",
+          "step": "Verify build does not rewrite tracked app sources",
+          "sha256": "c1f335f3d79274d54a203661daef8b0f52a9772a927332f532146a84a729e174",
+          "command": "set -euo pipefail\nstatus=\"$(git status --porcelain --untracked-files=no -- app)\"\nif [ -n \"$status\" ]; then\n  echo 'Current app build modified tracked files:' >&2\n  printf '%s\\n' \"$status\" >&2\n  git diff -- app >&2 || true\n  exit 1\nfi",
+          "if": null
+        },
+        {
+          "job": "current-build",
+          "step": "Test current app without historical rematerialization",
+          "sha256": "328e123c63857fd8473bd4bd3581e655b08b7440d7f5d2c31cc375607582f539",
+          "command": "npm test",
+          "if": null
+        },
+        {
+          "job": "current-build",
+          "step": "Verify tests do not rewrite tracked app sources",
+          "sha256": "083147ff4a9d968676025f49df02e4c0faf9f3f237898be50050df8681deb1db",
+          "command": "set -euo pipefail\nstatus=\"$(git status --porcelain --untracked-files=no -- app)\"\nif [ -n \"$status\" ]; then\n  echo 'Current app tests modified tracked files:' >&2\n  printf '%s\\n' \"$status\" >&2\n  git diff -- app >&2 || true\n  exit 1\nfi",
+          "if": null
+        },
+        {
+          "job": "current-build",
+          "step": "Verify explicit historical replay remains available",
+          "sha256": "6b8196302fbfcc98f3fca25489644c4ef06ac40ae1a541dddbb365c95fa9c5b2",
+          "command": "node - <<'NODE'\nconst pkg = require('./app/package.json');\nconst scripts = pkg.scripts || {};\nif (scripts.build !== 'npm run build:current') throw new Error('default build must delegate to build:current');\nif (!scripts['replay:r5a']?.includes('build:stone-layers') || !scripts['replay:r5a']?.includes('build:r5a-pixelperfect')) {\n  throw new Error('historical R5A replay must remain explicit');\n}\nif (!scripts['build:historical-r5a']?.includes('replay:r5a')) throw new Error('historical R5A build wrapper is missing');\nNODE",
+          "if": null
+        }
+      ],
+      "classification": "automated-validation-or-reporting",
+      "mutationSignals": [],
+      "externalIndicators": [
+        "package installation"
+      ],
+      "artifactActions": [],
+      "parseWarnings": []
+    },
+    {
       "path": ".github/workflows/arc03c-static-page-build-gate.yml",
       "blobSha": "c0d4702eceb443d9ac0cf8bb0a8633ae5335312c",
       "name": "ARC-03C real static page build and browser gate",
@@ -1679,7 +1791,7 @@
     },
     {
       "path": ".github/workflows/arc13-inventory-integrity.yml",
-      "blobSha": "ee36c6a0bf787a1e2108dddd9c85c8ab821ac52a",
+      "blobSha": "82358a6472b4c5ae79b208611ce473d1bd5d1151",
       "name": "ARC-13 inventory provenance and determinism",
       "events": [
         {
@@ -1692,6 +1804,7 @@
           "paths": [
             "app/**/*.html",
             "app/**/*.js",
+            "!app/tools/test-v5-normal-save.js",
             "app/**/*.mjs",
             "package.json",
             "architecture/pages/**",
@@ -1728,6 +1841,7 @@
           "paths": [
             "app/**/*.html",
             "app/**/*.js",
+            "!app/tools/test-v5-normal-save.js",
             "app/**/*.mjs",
             "package.json",
             "architecture/pages/**",
@@ -2922,7 +3036,7 @@
     },
     {
       "path": ".github/workflows/candidate-assets.yml",
-      "blobSha": "4aa42f61d20c47366a0d964078609462b7a7b4fa",
+      "blobSha": "0aa7c75b9b5292c7a2015502d04acf0813888aa7",
       "name": "Current asset gates",
       "events": [
         {
@@ -2932,6 +3046,7 @@
           "paths": [
             "app/**",
             "!app/tools/test-v5-endpoint-safety.js",
+            "!app/tools/test-v5-normal-save.js",
             "review-assets/**",
             "reference/variant-cases.json",
             "reference/visual-debt.md",
@@ -2974,6 +3089,7 @@
           "paths": [
             "app/**",
             "!app/tools/test-v5-endpoint-safety.js",
+            "!app/tools/test-v5-normal-save.js",
             "review-assets/**",
             "reference/variant-cases.json",
             "reference/visual-debt.md",
@@ -8027,7 +8143,7 @@
     },
     {
       "path": ".github/workflows/mobile-browser.yml",
-      "blobSha": "8c4c81e9c2d312171f04c3b387e52051f6cee8e6",
+      "blobSha": "733aa07f9f884a145e965b5258090228d8a8cfcb",
       "name": "Mobile browser (local V5; protected preview separately gated)",
       "events": [
         {
@@ -8038,6 +8154,7 @@
           "branchIgnores": null,
           "paths": [
             "app/**",
+            "!app/tools/test-v5-normal-save.js",
             "!app/tools/test-v5-endpoint-safety.js",
             "tests/mobile-pip-main-browser.cjs",
             "tests/home-hero-phone-geometry-browser.cjs",
@@ -8056,6 +8173,7 @@
           "branchIgnores": null,
           "paths": [
             "app/**",
+            "!app/tools/test-v5-normal-save.js",
             "!app/tools/test-v5-endpoint-safety.js",
             "tests/mobile-pip-main-browser.cjs",
             "tests/home-hero-phone-geometry-browser.cjs",
@@ -9025,7 +9143,7 @@
     },
     {
       "path": ".github/workflows/stone-browser.yml",
-      "blobSha": "fae4f7fd5332644843c7d6f07499f2de7b45df4d",
+      "blobSha": "eaba263af99d3febba93555afaf98b49e5d58a98",
       "name": "Stone browser (local V5; protected preview separately gated)",
       "events": [
         {
@@ -9036,6 +9154,7 @@
           "branchIgnores": null,
           "paths": [
             "app/**",
+            "!app/tools/test-v5-normal-save.js",
             "!app/tools/test-v5-endpoint-safety.js",
             "tests/stone-browser.cjs",
             ".github/workflows/stone-browser.yml",
@@ -9052,6 +9171,7 @@
           "branchIgnores": null,
           "paths": [
             "app/**",
+            "!app/tools/test-v5-normal-save.js",
             "!app/tools/test-v5-endpoint-safety.js",
             "tests/stone-browser.cjs",
             ".github/workflows/stone-browser.yml",
@@ -9235,7 +9355,7 @@
     },
     {
       "path": ".github/workflows/summary-pricing-browser.yml",
-      "blobSha": "31b5ca675226a757d17083fd44cc4b93e39e5fb1",
+      "blobSha": "961f5534db4e6619212c739abdd70a83dbd31d7f",
       "name": "Summary pricing browser (local V5; protected preview separately gated)",
       "events": [
         {
@@ -9246,6 +9366,7 @@
           "branchIgnores": null,
           "paths": [
             "app/**",
+            "!app/tools/test-v5-normal-save.js",
             "!app/tools/test-v5-endpoint-safety.js",
             "tests/summary-pricing-browser.cjs",
             ".github/workflows/summary-pricing-browser.yml",
@@ -9262,6 +9383,7 @@
           "branchIgnores": null,
           "paths": [
             "app/**",
+            "!app/tools/test-v5-normal-save.js",
             "!app/tools/test-v5-endpoint-safety.js",
             "tests/summary-pricing-browser.cjs",
             ".github/workflows/summary-pricing-browser.yml",
@@ -9557,7 +9679,7 @@
     },
     {
       "path": ".github/workflows/variant-fidelity.yml",
-      "blobSha": "36b4c183e41161f98ad527e3a875617d3bf958e8",
+      "blobSha": "4df0b7887ffa9f92e3e00eada3d4ffeef521e4cb",
       "name": "Current variant fidelity",
       "events": [
         {
@@ -9567,6 +9689,7 @@
           "paths": [
             "app/**",
             "!app/tools/test-v5-endpoint-safety.js",
+            "!app/tools/test-v5-normal-save.js",
             "reference/variant-cases.json",
             "reference/visual-debt.md",
             "tools/variant_fidelity_manifest.js",
@@ -9586,6 +9709,7 @@
           "paths": [
             "app/**",
             "!app/tools/test-v5-endpoint-safety.js",
+            "!app/tools/test-v5-normal-save.js",
             "reference/variant-cases.json",
             "reference/visual-debt.md",
             "tools/variant_fidelity_manifest.js",
