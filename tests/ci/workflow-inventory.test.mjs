@@ -115,5 +115,5 @@ test('folded workflow run steps preserve their executable shell command', () => 
   const command = workflow.commands.find(({ step }) => step === 'Unit-test current candidate contracts');
   assert(command);
   assert.equal(command.command,
-    'python -m unittest tests.test_candidate_asset_gates tests.test_candidate_asset_sets tests.test_candidate_delta_authoring tests.test_candidate_authoring_provenance tests.test_perspective_editorial_gate tests.test_gap_parallelism_gate tests.test_gap_pixel_gate tests.test_faucet_edge');
+    'python -m unittest tests/test_candidate_asset_gates.py tests/test_candidate_asset_sets.py tests/test_candidate_delta_authoring.py tests/test_candidate_authoring_provenance.py tests/test_perspective_editorial_gate.py tests/test_gap_parallelism_gate.py tests/test_gap_pixel_gate.py tests/test_faucet_edge.py');
 });
