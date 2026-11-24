@@ -54,6 +54,8 @@ test('TST-001 inventory reads exact development push and pull request heads', ()
   assert(pullRequest);
   assert.deepEqual(push.branches, ['development']);
   assert.deepEqual(pullRequest.branches, ['development']);
+  assert.match(source, /ref: \$\{\{ github\.event\.pull_request\.head\.sha \|\| github\.sha \}\}/,
+    'the inventory job checks out the PR head, falling back to the push SHA');
   assert(push.paths.includes('.github/workflows/**'));
   assert(push.paths.includes('tools/ci/build-workflow-inventory.mjs'));
   assert.equal(workflow.events.some(({ name }) => name === 'workflow_dispatch'), false,
