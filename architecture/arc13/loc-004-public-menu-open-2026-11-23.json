@@ -1,0 +1,66 @@
+{
+  "schema": "M2DLOC004FamilyDecision/1",
+  "plan": "MobiliPresenter2D Plano Diretor v0.9",
+  "workItem": "LOC-004",
+  "family": "public-primary-header-menu-open-accessible-name",
+  "status": "prepared-for-development-review",
+  "copyOwner": "Product/UX; existing approved pt-BR copy reused without editorial changes",
+  "authoring": {
+    "fragment": "architecture/fragments/primary-header.fragment.html",
+    "catalog": "app/core/ui-copy.js",
+    "compiler": "scripts/compile-primary-pages.mjs",
+    "routes": ["/", "/about/", "/how-it-works/"],
+    "outputs": ["app/index.html", "app/about/index.html", "app/how-it-works/index.html"]
+  },
+  "keys": [
+    {
+      "pointer": "/navigation/menu/open",
+      "value": "Abrir menu",
+      "sink": "aria-label on the shared public menu button"
+    }
+  ],
+  "preserved": [
+    "Menu button structure, route behavior, and visible rendered page output remain unchanged.",
+    "The existing dynamic Abrir menu/Fechar menu behavior remains with its controller and catalog path.",
+    "Admin, configuration, Viewer, and all non-public-header controls remain outside scope.",
+    "All three generated public HTML pages remain complete and accessible without JavaScript."
+  ],
+  "baseline": {
+    "renderedHtmlChanged": false,
+    "visualTestRequired": false,
+    "reason": "The same accessible name is emitted statically; the change replaces a literal with its existing semantic catalog pointer.",
+    "outputGitBlobs": {
+      "app/index.html": "2a64139e2b05769a60cb69daddd33c6d5e14075c",
+      "app/about/index.html": "78f644b7a6c4e2d6d6507fbbfe602e6217ae9085",
+      "app/how-it-works/index.html": "6ddd7d09a6cb4071f968404063d5c889724c8dc8"
+    }
+  },
+  "inventory": {
+    "path": "architecture/arc13/ui-text-candidates.json",
+    "sha256": "F112D19C90F571769FF01E462FB7FEED99A448F3D55273EA6D3EBE01E371145F",
+    "manifest": "architecture/generated/primary-pages.manifest.json",
+    "familyOccurrences": 3,
+    "candidateIds": [],
+    "authoringStatus": "mapped-by-updated-primary-page-manifest",
+    "sourceMapOrigin": "shared public header fragment to existing semantic catalog key",
+    "classificationNote": "Inventory candidate IDs and determinism are pending the pull request inventory gate; the unchanged base inventory is not represented as refreshed evidence."
+  },
+  "verification": {
+    "arc03cSourceAuthorityTests": "PASS 6/6",
+    "uiThemeContract": "PASS",
+    "pageCompiler": "PASS --check",
+    "inventoryGeneration": "pending pull request gate; local scanner dependency acorn unavailable",
+    "staticAccessibleName": "PASS; exact label emitted in generated public HTML without JavaScript",
+    "automatedPullRequestGates": "pending"
+  },
+  "limits": [
+    "This receipt covers only the public shared-header menu-open accessible name.",
+    "It does not reclassify any global inventory candidate or alter the dynamic open/close controller behavior.",
+    "No main promotion or production publication is included."
+  ],
+  "evidence": {
+    "baseDevelopmentSha": "b0062b9f2735d46df571dbfecaec9c8030f1828c",
+    "pullRequest": null,
+    "developmentIntegrationSha": null
+  }
+}

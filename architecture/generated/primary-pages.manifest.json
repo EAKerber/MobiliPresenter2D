@@ -6,7 +6,7 @@
     "offsetUnit": "unicode-codepoints",
     "generator": {
       "path": "scripts/compile-primary-pages.mjs",
-      "gitBlobSha": "0eff2c697ba985921ad72cb1687d6c5fc982c46c"
+      "gitBlobSha": "767c46cde2756ba8c589060c734a3a53083fa4d6"
     }
   },
   "copyCatalog": {
@@ -17,7 +17,7 @@
   },
   "fragment": {
     "path": "architecture/fragments/primary-header.fragment.html",
-    "gitBlobSha": "011a594e0dc8c7e65ee0d573513c6d0dda3dca22"
+    "gitBlobSha": "71da449df977d58241d5cc9c3c1aec162772f789"
   },
   "routesConfig": {
     "path": "architecture/fragments/primary-header.routes.json",
@@ -568,7 +568,7 @@
           {
             "output": {
               "start": 2343,
-              "end": 2575
+              "end": 2500
             },
             "transform": "copy",
             "origin": {
@@ -576,7 +576,41 @@
               "path": "architecture/fragments/primary-header.fragment.html",
               "range": {
                 "start": 884,
-                "end": 1116
+                "end": 1041
+              }
+            }
+          },
+          {
+            "output": {
+              "start": 2500,
+              "end": 2510
+            },
+            "transform": "catalog-key-substitution",
+            "origin": {
+              "kind": "catalog-key",
+              "path": "app/core/ui-copy.js",
+              "pointer": "/navigation/menu/open",
+              "template": {
+                "path": "architecture/fragments/primary-header.fragment.html",
+                "range": {
+                  "start": 1041,
+                  "end": 1070
+                }
+              }
+            }
+          },
+          {
+            "output": {
+              "start": 2510,
+              "end": 2575
+            },
+            "transform": "copy",
+            "origin": {
+              "kind": "shared-fragment",
+              "path": "architecture/fragments/primary-header.fragment.html",
+              "range": {
+                "start": 1070,
+                "end": 1135
               }
             }
           },
@@ -2069,7 +2103,7 @@
           {
             "output": {
               "start": 1924,
-              "end": 2156
+              "end": 2081
             },
             "transform": "copy",
             "origin": {
@@ -2077,7 +2111,41 @@
               "path": "architecture/fragments/primary-header.fragment.html",
               "range": {
                 "start": 884,
-                "end": 1116
+                "end": 1041
+              }
+            }
+          },
+          {
+            "output": {
+              "start": 2081,
+              "end": 2091
+            },
+            "transform": "catalog-key-substitution",
+            "origin": {
+              "kind": "catalog-key",
+              "path": "app/core/ui-copy.js",
+              "pointer": "/navigation/menu/open",
+              "template": {
+                "path": "architecture/fragments/primary-header.fragment.html",
+                "range": {
+                  "start": 1041,
+                  "end": 1070
+                }
+              }
+            }
+          },
+          {
+            "output": {
+              "start": 2091,
+              "end": 2156
+            },
+            "transform": "copy",
+            "origin": {
+              "kind": "shared-fragment",
+              "path": "architecture/fragments/primary-header.fragment.html",
+              "range": {
+                "start": 1070,
+                "end": 1135
               }
             }
           },
@@ -2779,7 +2847,7 @@
           {
             "output": {
               "start": 2001,
-              "end": 2233
+              "end": 2158
             },
             "transform": "copy",
             "origin": {
@@ -2787,7 +2855,41 @@
               "path": "architecture/fragments/primary-header.fragment.html",
               "range": {
                 "start": 884,
-                "end": 1116
+                "end": 1041
+              }
+            }
+          },
+          {
+            "output": {
+              "start": 2158,
+              "end": 2168
+            },
+            "transform": "catalog-key-substitution",
+            "origin": {
+              "kind": "catalog-key",
+              "path": "app/core/ui-copy.js",
+              "pointer": "/navigation/menu/open",
+              "template": {
+                "path": "architecture/fragments/primary-header.fragment.html",
+                "range": {
+                  "start": 1041,
+                  "end": 1070
+                }
+              }
+            }
+          },
+          {
+            "output": {
+              "start": 2168,
+              "end": 2233
+            },
+            "transform": "copy",
+            "origin": {
+              "kind": "shared-fragment",
+              "path": "architecture/fragments/primary-header.fragment.html",
+              "range": {
+                "start": 1070,
+                "end": 1135
               }
             }
           },

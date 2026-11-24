@@ -78,7 +78,8 @@ test("public copy is catalog-backed and remains static in generated HTML",async(
   ["/navigation/howItWorks","Como funciona"],
   ["/navigation/about","Quem somos"],
   ["/navigation/contactAriaLabel","Fale conosco pelo WhatsApp"],
-  ["/navigation/contact","Fale conosco"]
+  ["/navigation/contact","Fale conosco"],
+  ["/navigation/menu/open","Abrir menu"]
  ];
  assert.equal(r.manifest.schema,"M2DARC03CPublishedPages/3");
  assert.equal(r.manifest.copyCatalog.path,"app/core/ui-copy.js");
@@ -92,6 +93,8 @@ test("public copy is catalog-backed and remains static in generated HTML",async(
   assert.match(page.html,/<a class="brand" href="[^"]+" aria-label="Casa em Módulos, início">/);
   assert.match(page.html,/<img[^>]+alt="Casa em Módulos">/);
   assert.match(page.html,/<nav id="primaryNav" aria-label="Navegação principal">/);
+  assert.match(page.html,/<button class="menu-toggle"[^>]+aria-label="Abrir menu">/,
+   "the public menu control stays accessible without JavaScript");
   for(const [,label] of expected.slice(3,6))assert.ok(page.html.includes(">"+label+"</a>"),label+" must be present without JS");
   assert.match(page.html,/<a class="header-cta" href="https:\/\/wa\.me\/" aria-label="Fale conosco pelo WhatsApp"><span>Fale conosco<\/span>/,
    "contact copy stays visible, accessible, and statically available without JavaScript");
