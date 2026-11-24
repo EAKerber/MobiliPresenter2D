@@ -333,8 +333,11 @@ async function sectionItemIds(page, stageId, groupId, sectionId) {
   await page.waitForSelector('[data-admin-panel="pricing"]:not([hidden])');
   const publicationToggle = page.locator('[data-viewer-base-price-publication]');
   const publicationReason = page.locator("#viewer-base-price-publication-note");
+  const publicationCopy = await page.evaluate(() => window.CASA_UI_COPY.admin.pricing.viewerBasePricePublication);
+  assert.equal(await page.locator(".pricing-publication-card h2").textContent(), publicationCopy.title, "publication title comes from the shared copy catalog");
+  assert.equal((await publicationToggle.locator("xpath=..").textContent()).trim(), publicationCopy.label, "publication checkbox name comes from the shared copy catalog");
   assert.equal(await publicationToggle.isDisabled(), true, "legacy configuration cannot enable V5 base-price publication");
-  assert.equal(await publicationReason.textContent(), "Esta opção exige uma configuração V5 publicada.", "disabled publication explains its V5 prerequisite");
+  assert.equal(await publicationReason.textContent(), publicationCopy.requiresV5, "disabled publication explains its V5 prerequisite from the shared copy catalog");
   assert.equal(await publicationReason.isVisible(), true, "publication prerequisite stays visible beside the control");
   assert.equal(await publicationToggle.getAttribute("aria-describedby"), "viewer-base-price-publication-note", "publication control references its explanatory note");
   const module01Price = page.locator('input[data-price-role="itemBase"][data-price-id="module-01"]');

@@ -23,6 +23,8 @@ const hierarchyCore = window.CasaModulesAdministrationV5;
 const hierarchyEditor = window.CasaModulesHierarchyEditor;
 const legacyStageRepair = window.CasaModulesLegacyStageRepair;
 const hierarchyDefaults = window.CASA_EM_MODULOS_HIERARCHY_DEFAULTS;
+const uiCopy = window.CASA_UI_COPY;
+const viewerBasePricePublicationCopy = uiCopy.admin.pricing.viewerBasePricePublication;
 let catalogPricing = null;
 let adminDataPromise = null;
 let adminViewRun = 0;
@@ -1200,7 +1202,7 @@ function renderPricing() {
   const publicationCard = document.createElement("article");
   publicationCard.className = "editor-card pricing-publication-card";
   const publicationTitle = document.createElement("h2");
-  publicationTitle.textContent = "Exibição pública no Viewer";
+  publicationTitle.textContent = viewerBasePricePublicationCopy.title;
   const publicationLabel = document.createElement("label");
   publicationLabel.className = "pricing-publication-switch";
   const publicationInput = document.createElement("input");
@@ -1208,14 +1210,14 @@ function renderPricing() {
   publicationInput.dataset.viewerBasePricePublication = "true";
   publicationInput.checked = model.viewerPricePublication?.enabled === true;
   publicationInput.disabled = publishedSource?.schemaVersion !== hierarchyCore.SCHEMA;
-  publicationLabel.append(publicationInput, document.createTextNode("Mostrar preços base no Viewer"));
+  publicationLabel.append(publicationInput, document.createTextNode(viewerBasePricePublicationCopy.label));
   const publicationNote = document.createElement("p");
   publicationNote.id = "viewer-base-price-publication-note";
   publicationInput.setAttribute("aria-describedby", publicationNote.id);
   publicationNote.className = "admin-note";
   publicationNote.textContent = publicationInput.disabled
-    ? "Esta opção exige uma configuração V5 publicada."
-    : "Inicialmente desativado. Somente os valores base válidos dos módulos publicados e visíveis serão exibidos; não inclui opções e serviços. Alterar esta opção não publica nada até clicar em Publicar configuração.";
+    ? viewerBasePricePublicationCopy.requiresV5
+    : viewerBasePricePublicationCopy.explanation;
   publicationCard.append(publicationTitle, publicationLabel, publicationNote);
   pricingList.append(publicationCard);
   pricingRoles.forEach(([role, title]) => {
@@ -1552,8 +1554,8 @@ pricingList.addEventListener("change", (event) => {
     }
     model.viewerPricePublication = { enabled: publicationSwitch.checked };
     setMessage(saveMessage, publicationSwitch.checked
-      ? "Exibição de preços base ativada apenas no rascunho. Clique em Publicar configuração para autorizar valores públicos."
-      : "Exibição de preços base desativada apenas no rascunho. Clique em Publicar configuração para retirar valores da API pública.");
+      ? viewerBasePricePublicationCopy.enabledDraft
+      : viewerBasePricePublicationCopy.disabledDraft);
     return;
   }
   const typeSelect = event.target.closest("[data-price-rule-type]");

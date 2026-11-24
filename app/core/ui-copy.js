@@ -1,4 +1,4 @@
-/* ARC-13 LOC-003/004: canonical pt-BR catalog for shared UI. */
+/* ARC-13 LOC-003/004/006: canonical pt-BR catalog for shared UI. */
 (function (root, factory) {
   "use strict";
   var catalog = factory();
@@ -78,6 +78,18 @@
     footer: Object.freeze({
       tagline: "Móveis modulares pensados para a vida real.",
       homeLink: "Voltar ao início ↑"
+    }),
+    admin: Object.freeze({
+      pricing: Object.freeze({
+        viewerBasePricePublication: Object.freeze({
+          title: "Exibição pública no Viewer",
+          label: "Mostrar preços base no Viewer",
+          requiresV5: "Esta opção exige uma configuração V5 publicada.",
+          explanation: "Inicialmente desativado. Somente os valores base válidos dos módulos publicados e visíveis serão exibidos; não inclui opções e serviços. Alterar esta opção não publica nada até clicar em Publicar configuração.",
+          enabledDraft: "Exibição de preços base ativada apenas no rascunho. Clique em Publicar configuração para autorizar valores públicos.",
+          disabledDraft: "Exibição de preços base desativada apenas no rascunho. Clique em Publicar configuração para retirar valores da API pública."
+        })
+      })
     }),
     comparison: Object.freeze({
       labels: Object.freeze({
