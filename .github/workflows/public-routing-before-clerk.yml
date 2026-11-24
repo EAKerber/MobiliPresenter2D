@@ -51,6 +51,8 @@ jobs:
           node-version: '22'
       - name: Root/config routing invariants
         run: node tests/public-cutover-contract.cjs
+      - name: Syntax-check hosted public smoke source
+        run: node --check tests/public-pages-smoke.cjs
       - name: Public allowlist / no leak tests
         run: |
           node --test tests/public-module-projection.test.cjs

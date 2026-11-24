@@ -66,6 +66,9 @@ permissions:
 jobs:
   browser:
     runs-on: ubuntu-latest
+    container:
+      image: mcr.microsoft.com/playwright:v1.62.1-noble
+      options: --ipc=host
     timeout-minutes: 18
     steps:
       - uses: actions/checkout@v4
@@ -85,7 +88,6 @@ jobs:
       - name: Install browser test tooling
         run: |
           npm install --prefix /tmp/flow-layout-tools --no-audit --no-fund playwright@1.62.1
-          /tmp/flow-layout-tools/node_modules/.bin/playwright install --with-deps chromium webkit
       - name: Test hierarchy-driven buyer layout
         env:
           NODE_PATH: /tmp/flow-layout-tools/node_modules
