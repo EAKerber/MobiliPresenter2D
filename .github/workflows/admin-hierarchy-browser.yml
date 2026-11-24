@@ -57,16 +57,16 @@ permissions:
 jobs:
   browser:
     runs-on: ubuntu-latest
+    container:
+      image: mcr.microsoft.com/playwright:v1.62.1-noble
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - name: Install browser test tooling
-        run: |
-          npm install --prefix /tmp/admin-hierarchy-tools --no-audit --no-fund playwright@1.62.1
-          /tmp/admin-hierarchy-tools/node_modules/.bin/playwright install --with-deps chromium
+      - name: Install Playwright Node package
+        run: npm install --prefix /tmp/admin-hierarchy-tools --no-audit --no-fund playwright@1.62.1
       - name: Test hierarchy administration
         env:
           NODE_PATH: /tmp/admin-hierarchy-tools/node_modules
