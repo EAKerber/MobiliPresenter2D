@@ -2,7 +2,7 @@
 """Read-only provenance and contract check for the ARC03/03B preview-only compiler."""
 import json, subprocess
 from pathlib import Path
-MAIN="221b54b2a41ecc8c338d1bf2cf67280cf165ce95"
+MAIN="01ded2c100fbfd8b16897e26113dc5068a83e429"
 OLD="e459b9bd85c4e9c8bb96813ae6758789de75dc13"
 FRAGMENT="architecture/fragments/primary-header.fragment.html"
 SOURCE_PATHS={
@@ -29,8 +29,11 @@ def main():
     require(changed==SOURCE_PATHS,"HISTORIC_SCOPE_CHANGED:"+repr(sorted(changed)))
     frag_old=git("rev-parse",OLD+":"+FRAGMENT)
     frag_new=git("rev-parse","HEAD:"+FRAGMENT)
-    require(frag_old==frag_new=="25712fa6f2423372f076d041f9a7253ced088040",
-            "PRIMARY_HEADER_FRAGMENT_CHANGED")
+    # The experimental prototype predates LOC-004; current ARC-03C now uses copy keys.
+    require(frag_old=="25712fa6f2423372f076d041f9a7253ced088040",
+            "HISTORIC_PRIMARY_HEADER_FRAGMENT_DRIFT")
+    require(frag_new=="141f30c9a32ea582f8e0a30a24955ca598667108",
+            "CURRENT_ARC03C_PRIMARY_HEADER_FRAGMENT_DRIFT")
     old_routes=json.loads(git("show",OLD+":architecture/fragments/primary-header.routes.json"))
     new_routes=json.loads(Path("architecture/fragments/primary-header.routes.json").read_text())
     require(old_routes["status"]=="EXPERIMENTAL_BUILD_TIME_ONLY_NOT_PUBLISHED",

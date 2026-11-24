@@ -3,7 +3,7 @@
 import json, subprocess
 from pathlib import Path
 
-MAIN="221b54b2a41ecc8c338d1bf2cf67280cf165ce95"
+MAIN="01ded2c100fbfd8b16897e26113dc5068a83e429"
 SOURCES={
  "experiment/shared-public-header-controller-20261020":{
   "sha":"fdeb931af285f6cf76795ccdd50a8b75d0f25aef",
@@ -36,7 +36,7 @@ def main():
     require('const toggle = document.getElementById("menuToggle")' in current,"MENU_TOGGLE_LOST")
     require('const nav = document.getElementById("primaryNav")' in current,"MENU_NAV_LOST")
     for snippet in ('aria-expanded','aria-label','event.detail === 0','Escape',
-                    'toggle.focus()','pointerdown','nav.querySelectorAll("a")'):
+                    'toggle.focus()','pointerdown','nav.querySelector("a[href]")'):
         require(snippet in current,"LATEST_CONTROLLER_MISSING:"+snippet)
     require("PNG.sync.read" in test and "withinRasterTolerance" in test,
             "NEWER_PCOMP_PIXEL_DIFFERENTIAL_LOST")
