@@ -198,7 +198,7 @@ test('Buyer assertion crosswalk resolves each assurance to its source and reacha
     assert(event, execution.workflow + ' must declare ' + eventName);
     assert.deepEqual(event.branches, execution.branches,
       execution.workflow + ' branch filter must match the crosswalk');
-    assert(event.paths.includes(execution.path),
+    assert(event.paths.includes(execution.pathFilter),
       execution.workflow + ' ' + eventName + ' paths must reach ' + execution.path);
   }
 
@@ -224,7 +224,7 @@ test('Buyer assertion crosswalk resolves each assurance to its source and reacha
     assert.equal(assertion.trigger.command, execution.command);
     assert.deepEqual(assertion.trigger.events, execution.events);
     assert.deepEqual(assertion.trigger.branches, execution.branches);
-    assert.equal(assertion.trigger.path, execution.path);
+    assert.equal(assertion.trigger.path, execution.pathFilter);
 
     const sourcePath = path.join(root, assertion.source.file);
     assert(existsSync(sourcePath), assertion.assertionId + ' source file must exist');
