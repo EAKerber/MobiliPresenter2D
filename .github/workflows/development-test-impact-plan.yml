@@ -104,7 +104,7 @@ jobs:
           test "$development_sha" = "$GITHUB_SHA"
           development_tree="$(git rev-parse 'HEAD^{tree}')"
           mkdir -p artifacts
-          gh pr list --state open --json number,url,headRefName,headRefOid,baseRefName,baseRefOid > artifacts/open-prs.json
+          gh pr list --state open --limit 1000 --json number,url,headRefName,headRefOid,baseRefName,baseRefOid > artifacts/open-prs.json
           echo "main_sha=$main_sha" >> "$GITHUB_OUTPUT"
           echo "development_sha=$development_sha" >> "$GITHUB_OUTPUT"
           echo "development_tree=$development_tree" >> "$GITHUB_OUTPUT"
