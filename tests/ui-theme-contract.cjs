@@ -113,6 +113,8 @@ for (const file of shells) {
     ? "arc13-loc004-comparison-copy-1"
     : file === "app/viewer/index.html"
       ? "arc13-loc005-scene-interaction-1"
+    : file === "app/admin.html"
+      ? "arc13-loc006-admin-price-copy-1"
     : "arc13-loc003-copy-1";
   assert(html.includes(`src="/core/ui-copy.js?v=${copyVersion}"`), file + " copy catalog bootstrap");
   assert(html.includes('src="/core/ui-theme.js?v=arc13-loc003-copy-1"'), file + " theme bootstrap");

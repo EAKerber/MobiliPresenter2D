@@ -125,6 +125,18 @@ async function main() {
 
     assert.equal(await page.locator("#persistHandlesButton").isHidden(), true, "v3-only repair action must stay hidden for v5");
     await page.locator('[data-admin-tab="pricing"]').click();
+    const publicationCopy = await page.evaluate(() => window.CASA_UI_COPY.admin.pricing.viewerBasePricePublication);
+    const publicationToggle = page.locator('[data-viewer-base-price-publication]');
+    const publicationNote = page.locator("#viewer-base-price-publication-note");
+    assert.equal(await publicationToggle.isDisabled(), false, "a validated V5 source enables editing the publication draft");
+    assert.equal(await publicationToggle.isChecked(), false, "base-price publication remains off by default");
+    assert.equal(await publicationNote.textContent(), publicationCopy.explanation, "enabled-state explanation comes from the shared copy catalog");
+    await publicationToggle.check();
+    assert.equal(await page.locator("#saveMessage").textContent(), publicationCopy.enabledDraft, "enabling the option explains that this changes only the draft");
+    assert.equal(putCount, 0, "changing the switch alone never publishes or saves");
+    await publicationToggle.uncheck();
+    assert.equal(await page.locator("#saveMessage").textContent(), publicationCopy.disabledDraft, "disabling the option explains the draft-only removal");
+    assert.equal(putCount, 0, "turning the switch off also requires explicit Save");
     const cocoa = page.locator('input[data-price-role="frontFinishAdjustment"][data-price-id="cocoa"]');
     const type = page.locator('[data-price-rule-type][data-price-role="frontFinishAdjustment"][data-price-id="cocoa"]');
     await type.selectOption("amount");
