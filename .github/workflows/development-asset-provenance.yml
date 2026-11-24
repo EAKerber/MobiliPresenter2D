@@ -1,6 +1,98 @@
 name: Development 07 archived asset provenance — offline Git DAG
 
 on:
+  pull_request:
+    branches: [development]
+    paths:
+      - app/how-it-works/assets/amostras-mdf-r2.webp
+      - app/how-it-works/assets/comparacao-casa-em-modulos.svg
+      - app/how-it-works/assets/comparacao-moveis-prontos-raster-v1.png
+      - app/how-it-works/assets/comparacao-planejados-raster-v2.png
+      - app/how-it-works/assets/economia-chapas.webp
+      - app/how-it-works/assets/economia-coletiva.webp
+      - app/how-it-works/assets/economia-escala.webp
+      - app/how-it-works/assets/economia-producao.webp
+      - app/how-it-works/assets/economia-retrabalho.webp
+      - app/how-it-works/assets/estudo-espaco.webp
+      - app/how-it-works/assets/etapa-cozinha.webp
+      - app/how-it-works/assets/etapa-escritorio.webp
+      - app/how-it-works/assets/etapa-lavanderia.webp
+      - app/how-it-works/assets/etapa-quarto.webp
+      - app/how-it-works/assets/etapa-sala-v1.webp
+      - app/how-it-works/assets/hero-abertura.webp
+      - app/how-it-works/assets/hero-encerramento.webp
+      - app/how-it-works/assets/integracao-modular.webp
+      - app/how-it-works/assets/modulo-aereo-cinza-v1.webp
+      - app/how-it-works/assets/modulo-gaveteiro-cinza-v1.webp
+      - app/how-it-works/assets/modulo-inferior-cinza-v1.webp
+      - app/how-it-works/assets/modulo-torre-cinza-v1.webp
+      - app/how-it-works/assets/puxadores-lineares-v1.webp
+      - app/how-it-works/assets/puxadores-ponto-r2.webp
+      - app/landing/assets/hero/lifestyle-phone.webp
+      - app/landing/assets/icons/large/cozinha.webp
+      - app/landing/assets/icons/large/escritorio.webp
+      - app/landing/assets/icons/large/lavanderia.webp
+      - app/landing/assets/icons/large/quarto.webp
+      - app/landing/assets/icons/large/sala.webp
+      - app/landing/assets/icons/small/cozinha.webp
+      - app/landing/assets/icons/small/escritorio.webp
+      - app/landing/assets/icons/small/lavanderia.webp
+      - app/landing/assets/icons/small/quarto.webp
+      - app/landing/assets/icons/small/sala.webp
+      - app/viewer/assets/icon-placeholder.svg
+      - app/how-it-works/assets/modulo-aereo-cutout-v2.png
+      - app/how-it-works/assets/modulo-gaveteiro-cutout-v1.webp
+      - app/how-it-works/assets/modulo-inferior-cutout-v2.png
+      - app/how-it-works/assets/modulo-torre-cutout-v1.webp
+      - tests/test_development_asset_provenance.py
+      - tools/development_asset_provenance_audit.py
+      - .github/workflows/development-asset-provenance.yml
+  push:
+    branches: [development]
+    paths:
+      - app/how-it-works/assets/amostras-mdf-r2.webp
+      - app/how-it-works/assets/comparacao-casa-em-modulos.svg
+      - app/how-it-works/assets/comparacao-moveis-prontos-raster-v1.png
+      - app/how-it-works/assets/comparacao-planejados-raster-v2.png
+      - app/how-it-works/assets/economia-chapas.webp
+      - app/how-it-works/assets/economia-coletiva.webp
+      - app/how-it-works/assets/economia-escala.webp
+      - app/how-it-works/assets/economia-producao.webp
+      - app/how-it-works/assets/economia-retrabalho.webp
+      - app/how-it-works/assets/estudo-espaco.webp
+      - app/how-it-works/assets/etapa-cozinha.webp
+      - app/how-it-works/assets/etapa-escritorio.webp
+      - app/how-it-works/assets/etapa-lavanderia.webp
+      - app/how-it-works/assets/etapa-quarto.webp
+      - app/how-it-works/assets/etapa-sala-v1.webp
+      - app/how-it-works/assets/hero-abertura.webp
+      - app/how-it-works/assets/hero-encerramento.webp
+      - app/how-it-works/assets/integracao-modular.webp
+      - app/how-it-works/assets/modulo-aereo-cinza-v1.webp
+      - app/how-it-works/assets/modulo-gaveteiro-cinza-v1.webp
+      - app/how-it-works/assets/modulo-inferior-cinza-v1.webp
+      - app/how-it-works/assets/modulo-torre-cinza-v1.webp
+      - app/how-it-works/assets/puxadores-lineares-v1.webp
+      - app/how-it-works/assets/puxadores-ponto-r2.webp
+      - app/landing/assets/hero/lifestyle-phone.webp
+      - app/landing/assets/icons/large/cozinha.webp
+      - app/landing/assets/icons/large/escritorio.webp
+      - app/landing/assets/icons/large/lavanderia.webp
+      - app/landing/assets/icons/large/quarto.webp
+      - app/landing/assets/icons/large/sala.webp
+      - app/landing/assets/icons/small/cozinha.webp
+      - app/landing/assets/icons/small/escritorio.webp
+      - app/landing/assets/icons/small/lavanderia.webp
+      - app/landing/assets/icons/small/quarto.webp
+      - app/landing/assets/icons/small/sala.webp
+      - app/viewer/assets/icon-placeholder.svg
+      - app/how-it-works/assets/modulo-aereo-cutout-v2.png
+      - app/how-it-works/assets/modulo-gaveteiro-cutout-v1.webp
+      - app/how-it-works/assets/modulo-inferior-cutout-v2.png
+      - app/how-it-works/assets/modulo-torre-cutout-v1.webp
+      - tests/test_development_asset_provenance.py
+      - tools/development_asset_provenance_audit.py
+      - .github/workflows/development-asset-provenance.yml
   workflow_dispatch:
 
 permissions:
