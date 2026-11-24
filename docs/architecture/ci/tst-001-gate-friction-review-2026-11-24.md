@@ -81,3 +81,22 @@ Evidence key: publication test blob `72359965`; V5 save test blob `e9ad71cb`; wi
 Do not retire additional workflows based on filename or command overlap alone. Complete the contract/path/command-to-assertion crosswalk, review event and conditional execution paths, and measure end-to-end run cost on representative PRs. The current inventory is a verified source map, not proof of full assertion reachability or a cost reduction.
 
 The NAV overlap fixes, earlier asset-trigger correction, and the scoped V5 normal-save trigger correction are integrated in `development`. PRs #360–#362 reduce measured setup time and false fan-out while preserving unique assertions. The Viewer price slice above is mapped; the full 74-workflow crosswalk, event/condition review, command-to-assertion reachability and representative run-cost analysis remain open.
+
+
+## Exact TST-001 snapshot after PR #379
+
+This section supplements the historical PR-base snapshot above; it does not rewrite that earlier evidence.
+
+- Product `main`: `01ded2c100fbfd8b16897e26113dc5068a83e429`, tree `d1588ab2a71c5de7e8b7cfaa907d5e5637fa7178`.
+- Product `development`: `c2abdf7e9024e783dd36fdbd91c4acc76dd8c136`, tree `9e98257547958e8caa504c8eada9893539ded443`; the inventory confirms the worktree head and tree against this pin. No open PRs were listed in the live readback at generation time.
+- Exact push workflow run [45366885475](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/45366885475) passed. Artifact [14907610868](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/45366885475) is `tst-001-workflow-inventory-c2abdf7e9024e783dd36fdbd91c4acc76dd8c136`, 49,837 bytes, digest `sha256:5c1b541b9204216d12e6ffc01efbbf2974e3c352b2491458e56732f2641aeaa5`. The exact JSON was read back from the successful job log and refreshed in the checked-in inventory file by this PR.
+- The snapshot has 27 workflow files on `main`, 75 on `development`, 25 shared paths, 2 main-only and 50 development-only. Across those paths it contains 96 branch-version definitions and 373 declared run commands, with zero parser warnings. These are workflow/command counts, not test-case counts.
+- Development trigger declarations: 26 `pull_request`, 61 `push`, 63 `workflow_dispatch`, and 1 `schedule`; event counts overlap. Twelve workflows are dispatch-only. The inventory identifies 12 branch-version definitions with write-capable signals across 9 workflow paths; this flags operational review, not a permission/security conclusion.
+- The historical “988 candidates” figure must not be read as 988 independent test suites. This inventory does not define that figure as test count. The selector remains advisory and is not a replacement for the workflow gates.
+
+## Gate friction reviewed after the exact snapshot
+
+1. PR #379 initially failed because its new regex assertion counted zero YAML command strings; 16 of 17 selector/inventory tests passed. Replacing the escaped-path regex with literal occurrence counting fixed the assertion. The corrected head passed the advisory workflow (run [45366677060](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/45366677060)), and the post-merge push inventory run passed at the exact development SHA above.
+2. PR #377's browser image setup change did not demonstrate a reliable time reduction in the available non-controlled samples, so it remains excluded. Browser assertions stay in place.
+3. `tests/public-pages-smoke.cjs` is executed in browser only on non-draft PRs to `main`; PRs to `development` only check its syntax, and neither push path executes it. This is a deliberate preview-availability boundary in the current workflow, not proof that browser behavior was validated on development. Keep this distinction explicit until a reliable development Deploy Preview fixture is verified.
+4. The remaining TST-001 work is still material: map command bodies to reachable assertions, review event/conditional reachability across the exact definitions, and measure representative end-to-end cost. The inventory is now current and readable, but those reviews are not complete.
