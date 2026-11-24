@@ -170,16 +170,17 @@ class WorkflowDependencyTests(unittest.TestCase):
             with patch.dict(os.environ, {
                 "GITHUB_TOKEN": "test-token",
                 "GITHUB_REPOSITORY": REPO,
-            }), patch("branch_hygiene_apply.observe", return_value=obs), \\
-                 patch("branch_hygiene_apply.remote_refs", return_value={
-                     "main": control_sha, NAME: candidate_sha,
-                 }), patch(
-                     "branch_hygiene_apply.verify_no_workflow_dependency",
-                     side_effect=RuntimeError("ACTIVE_WORKFLOW_REF:" + NAME),
-                 ) as guard:
-                with self.assertRaisesRegex(RuntimeError, "ACTIVE_WORKFLOW_REF"):
-                    apply(plan_path, dispositions_path, plan["planHash"],
-                          batch_path, receipt_path, audit_only=True)
+            }):
+                with patch("branch_hygiene_apply.observe", return_value=obs), \
+                     patch("branch_hygiene_apply.remote_refs", return_value={
+                         "main": control_sha, NAME: candidate_sha,
+                     }), patch(
+                         "branch_hygiene_apply.verify_no_workflow_dependency",
+                         side_effect=RuntimeError("ACTIVE_WORKFLOW_REF:" + NAME),
+                     ) as guard:
+                    with self.assertRaisesRegex(RuntimeError, "ACTIVE_WORKFLOW_REF"):
+                        apply(plan_path, dispositions_path, plan["planHash"],
+                              batch_path, receipt_path, audit_only=True)
             guard.assert_called_once_with(NAME)
             self.assertFalse(receipt_path.exists())
 
