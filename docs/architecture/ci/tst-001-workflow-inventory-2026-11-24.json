@@ -6,9 +6,9 @@
   "source": {
     "mainSha": "01ded2c100fbfd8b16897e26113dc5068a83e429",
     "mainTree": "d1588ab2a71c5de7e8b7cfaa907d5e5637fa7178",
-    "developmentPin": "c055a7ed25976337748de2c924ea2279cab7efa3",
-    "developmentTree": "8b4d1bd8b18dd5deac4c6f8529a1e75d14b5734f",
-    "worktreeHead": "c055a7ed25976337748de2c924ea2279cab7efa3",
+    "developmentPin": "29cd75c6535a81e47b9801eb58fb4394ec411937",
+    "developmentTree": "63e6c093171e502d74642c5de9f8633e09d1d0d4",
+    "worktreeHead": "29cd75c6535a81e47b9801eb58fb4394ec411937",
     "worktreeTreeVerifiedAgainstDevelopmentPin": true,
     "openPullRequestsReadback": []
   },
@@ -3102,8 +3102,8 @@
           "jobId": "current-asset-gates",
           "jobIf": null,
           "step": "Unit-test current candidate contracts",
-          "sha256": "943444433dcd55af5e4b12cf0c7925ee0ee62a54385a3b39704ce31c618d6cb7",
-          "command": "python -m unittest\ntests/test_candidate_asset_gates.py\ntests/test_candidate_asset_sets.py\ntests/test_candidate_delta_authoring.py\ntests/test_candidate_authoring_provenance.py\ntests/test_perspective_editorial_gate.py\ntests/test_gap_parallelism_gate.py\ntests/test_gap_pixel_gate.py\ntests/test_faucet_edge.py",
+          "sha256": "10784641e29930a72e5f9a40eb43216365a4cc59fe135119d04aa6d7636dbe4c",
+          "command": "python -m unittest tests/test_candidate_asset_gates.py tests/test_candidate_asset_sets.py tests/test_candidate_delta_authoring.py tests/test_candidate_authoring_provenance.py tests/test_perspective_editorial_gate.py tests/test_gap_parallelism_gate.py tests/test_gap_pixel_gate.py tests/test_faucet_edge.py",
           "if": null
         },
         {
@@ -3323,8 +3323,8 @@
           "jobId": "current-asset-gates",
           "jobIf": null,
           "step": "Unit-test current candidate contracts",
-          "sha256": "943444433dcd55af5e4b12cf0c7925ee0ee62a54385a3b39704ce31c618d6cb7",
-          "command": "python -m unittest\ntests/test_candidate_asset_gates.py\ntests/test_candidate_asset_sets.py\ntests/test_candidate_delta_authoring.py\ntests/test_candidate_authoring_provenance.py\ntests/test_perspective_editorial_gate.py\ntests/test_gap_parallelism_gate.py\ntests/test_gap_pixel_gate.py\ntests/test_faucet_edge.py",
+          "sha256": "10784641e29930a72e5f9a40eb43216365a4cc59fe135119d04aa6d7636dbe4c",
+          "command": "python -m unittest tests/test_candidate_asset_gates.py tests/test_candidate_asset_sets.py tests/test_candidate_delta_authoring.py tests/test_candidate_authoring_provenance.py tests/test_perspective_editorial_gate.py tests/test_gap_parallelism_gate.py tests/test_gap_pixel_gate.py tests/test_faucet_edge.py",
           "if": null
         },
         {
