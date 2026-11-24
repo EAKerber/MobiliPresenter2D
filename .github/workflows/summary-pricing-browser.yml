@@ -10,7 +10,6 @@ on:
       - 'tests/ci/prepare-local-v5-browser.sh'
       - 'tests/ci/local-buyer-config-server.mjs'
       - 'package.json'
-      - 'scripts/compile-primary-pages.mjs'
   pull_request:
     paths:
       - 'app/**'
@@ -19,7 +18,6 @@ on:
       - 'tests/ci/prepare-local-v5-browser.sh'
       - 'tests/ci/local-buyer-config-server.mjs'
       - 'package.json'
-      - 'scripts/compile-primary-pages.mjs'
   workflow_dispatch:
     inputs:
       target_url:
