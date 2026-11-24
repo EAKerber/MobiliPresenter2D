@@ -237,3 +237,76 @@ test('Buyer assertion crosswalk resolves each assurance to its source and reacha
   }
   assert.equal(ids.size, 6, 'this reviewed slice currently maps six assertion groups');
 });
+
+const maskAssertionCrosswalk = JSON.parse(readFileSync(
+  path.join(root, 'tools/ci/tst-004-mask-assertion-crosswalk.json'), 'utf8'
+));
+
+test('TST-004 mask assertions resolve to exact sources and the reachable asset gate', () => {
+  assert.equal(maskAssertionCrosswalk.schema, 'M2DAssertionContractCrosswalk/1');
+  assert.equal(maskAssertionCrosswalk.workItem, 'TST-004');
+  assert.equal(maskAssertionCrosswalk.status, 'partial');
+  assert(maskAssertionCrosswalk.scopeLimit.includes('does not complete TST-004'));
+
+  const execution = maskAssertionCrosswalk.execution;
+  const bundle = map.bundles.find((candidate) => candidate.id === maskAssertionCrosswalk.slice);
+  assert(bundle, 'the mask slice must resolve to an impact bundle');
+  assert(bundle.contract.includes('approved asset pixel/mask contracts'));
+  assert.equal(bundle.execution[0].scope, execution.scope);
+
+  const workflowSource = readFileSync(path.join(root, execution.workflow), 'utf8');
+  const parsedWorkflow = definition(workflowSource, execution.workflow, 'current-workflow-blob');
+  const triggerEvents = new Map(parsedWorkflow.events.map((event) => [event.name, event]));
+  for (const [eventName, expected] of Object.entries(execution.routes)) {
+    const event = triggerEvents.get(eventName);
+    assert(event, execution.workflow + ' must declare ' + eventName);
+    assert.deepEqual(event.branches, expected.branches,
+      execution.workflow + ' ' + eventName + ' branch filter must match the crosswalk');
+    if (expected.pathIncludes === null) {
+      assert.equal(event.paths, null,
+        execution.workflow + ' ' + eventName + ' must remain unfiltered by paths');
+    } else {
+      for (const pathFilter of expected.pathIncludes) {
+        assert(event.paths.includes(pathFilter),
+          execution.workflow + ' ' + eventName + ' must watch ' + pathFilter);
+      }
+    }
+  }
+
+  const route = parsedWorkflow.commands.find((candidate) =>
+    candidate.jobId === execution.job && candidate.step === execution.step
+  );
+  assert(route, 'the named job must execute the mask validation step');
+  assert.equal(route.jobIf, execution.jobCondition, 'the mapped job condition must be recorded');
+  assert.equal(route.if, execution.stepCondition, 'the mapped step condition must be recorded');
+  for (const command of execution.commands) {
+    assert(route.command.includes(command), 'mask gate command is missing: ' + command);
+  }
+  assert(route.command.includes('if [ "$MASK_RC" -ne 0 ] || [ "$PIXEL_RC" -ne 0 ]; then'));
+
+  const ids = new Set();
+  for (const assertion of maskAssertionCrosswalk.assertions) {
+    assert(!ids.has(assertion.assertionId), 'assertion IDs must be unique: ' + assertion.assertionId);
+    ids.add(assertion.assertionId);
+    assert(assertion.contract.length && assertion.risk && assertion.consumer.length);
+    assert(assertion.state && assertion.fixture && assertion.owner);
+    assert.equal(assertion.trigger.workflow, execution.workflow);
+    assert.equal(assertion.trigger.job, execution.job);
+    assert.equal(assertion.trigger.step, execution.step);
+    assert.deepEqual(assertion.trigger.events, Object.keys(execution.routes));
+
+    const sourcePath = path.join(root, assertion.source.file);
+    assert(existsSync(sourcePath), assertion.assertionId + ' source file must exist');
+    const source = readFileSync(sourcePath, 'utf8');
+    if (assertion.source.test) {
+      assert(source.includes('def ' + assertion.source.test + '('),
+        assertion.assertionId + ' must resolve to its named Python test');
+    }
+    for (const anchor of assertion.source.anchors) {
+      assert(source.includes(anchor), assertion.assertionId + ' source anchor is missing: ' + anchor);
+    }
+  }
+  assert.equal(ids.size, 3, 'this reviewed slice maps three mask assertion groups');
+  assert.equal(maskAssertionCrosswalk.runtimeEvidence.conclusion, 'success');
+  assert.equal(maskAssertionCrosswalk.runtimeEvidence.job, execution.job);
+});
