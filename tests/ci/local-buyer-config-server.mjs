@@ -4,29 +4,12 @@
 import http from "node:http";
 import {readFile,stat} from "node:fs/promises";
 import {resolve,extname,sep} from "node:path";
-import configCore from "../../app/core/configuration.js";
-import administrationV5 from "../../app/core/administration-v5.js";
-import publishedReader from "../../app/core/published-configuration.js";
-import projection from "../../app/core/published-buyer-projection.js";
-import flow from "../../app/core/flow-model.js";
-import hierarchy from "../../app/data/hierarchy-defaults.js";
-import defaults from "../../app/data/configurator-settings.js";
-import catalog from "../../app/data/catalog-data.js";
-import priceBook from "../../app/data/mock-price-book.js";
-import scene from "../../app/data/scene-data.js";
-import pricingContract from "../../app/core/pricing-contract.js";
-import presentationPolicy from "../../app/data/presentation-policy-defaults.js";
+import {createLocalBuyerFixture} from "./local-buyer-config-fixture.mjs";
 const root=resolve("app");
 const port=Number(process.env.CI_LOCAL_CONFIG_PORT||8123);
 if(!Number.isInteger(port)||port<0||port>65535)throw new Error("CI_LOCAL_CONFIG_PORT must be an integer from 0 to 65535");
-const v3=configCore.createDefaultAdministration(defaults,catalog,priceBook,scene);
-const inspected=publishedReader.inspectPublishedRaw({kind:"stored",etag:"LOCAL_ONLY",value:v3},
-  {configuration:configCore,administrationV5,catalog,priceBook,scene});
-if(inspected.kind!=="valid")throw new Error("CI_LOCAL_FIXTURE_INVALID");
-const payload=projection.project(inspected.value,{
- configuration:configCore,administrationV5,flow,catalog,priceBook,scene,
- hierarchyDefaults:hierarchy,pricingContract,defaultPresentationPolicy:presentationPolicy
-});
+const fixture=createLocalBuyerFixture();
+const payload=fixture.payload;
 const json=JSON.stringify(payload);
 const mime={".html":"text/html; charset=utf-8",".js":"application/javascript; charset=utf-8",
  ".css":"text/css; charset=utf-8",".json":"application/json; charset=utf-8",
@@ -75,6 +58,6 @@ process.once("SIGINT",stop);
 process.once("SIGTERM",stop);
 server.listen(port,"127.0.0.1",()=>console.log("CI_LOCAL_BUYER_DEFAULTS_FIXTURE_READY "+JSON.stringify({
  port:server.address().port,
- source:"checked-in defaults",schema:v3.schemaVersion,buyerSchema:payload.schemaVersion,
+ source:"checked-in defaults upgraded and validated in memory",schema:fixture.sourceSchema,buyerSchema:payload.schemaVersion,
  warning:"Local testing only; not a Netlify published Blob"
 })));
