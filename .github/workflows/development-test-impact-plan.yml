@@ -1,0 +1,39 @@
+name: Development test impact plan (advisory)
+
+on:
+  pull_request:
+    branches: [development]
+    paths:
+      - 'app/**'
+      - 'architecture/**'
+      - 'netlify/**'
+      - 'reference/**'
+      - 'review-assets/**'
+      - 'scripts/**'
+      - 'tests/**'
+      - 'tools/**'
+      - 'package.json'
+      - 'package-lock.json'
+      - '.github/workflows/**'
+
+permissions:
+  contents: read
+
+jobs:
+  plan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: ${{ github.event.pull_request.head.sha }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate impact map and historical path cases
+        run: node --test tests/ci/test-impact-selector.test.mjs
+      - name: Report affected contract bundles
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: node tools/ci/select-test-bundles.mjs --base "$BASE_SHA" --head "$HEAD_SHA"

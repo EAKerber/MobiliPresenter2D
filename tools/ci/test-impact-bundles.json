@@ -1,0 +1,120 @@
+{
+  "schema": "M2DTestImpactMap/1",
+  "fallbackPolicy": "Select every catalogued bundle and preserve all existing path-triggered workflows. This first version is advisory; it never skips a workflow.",
+  "bundles": [
+    {
+      "id": "public-navigation",
+      "contract": ["NAV-004", "NAV-005", "ARC-03C"],
+      "consumer": ["/", "/about/", "/how-it-works/", "/viewer/"],
+      "risks": ["broken route/header behavior", "lost keyboard or focus behavior", "generated HTML no longer matches its source"],
+      "paths": [
+        "app/landing/header-menu.js",
+        "app/landing/landing.css",
+        "app/about/**",
+        "app/how-it-works/**",
+        "app/index.html",
+        "app/viewer/index.html",
+        "architecture/fragments/**",
+        "architecture/generated/**",
+        "architecture/pages/**",
+        "scripts/compile-primary-pages.mjs",
+        "tests/arc03c-source-authority.test.mjs",
+        "tests/public-cutover-contract.cjs",
+        "tests/ci/public-navigation-semantic-browser.mjs",
+        "tests/ui-theme-focus-token-contract.cjs",
+        ".github/workflows/development-public-navigation-semantic.yml",
+        ".github/workflows/nav005-public-header-browser.yml"
+      ],
+      "execution": [
+        {
+          "workflow": ".github/workflows/development-public-navigation-semantic.yml",
+          "scope": "pull_request and push on development",
+          "commands": ["node --test tests/arc03c-source-authority.test.mjs", "npm run pages:check", "node tests/public-cutover-contract.cjs", "node tests/ui-theme-focus-token-contract.cjs", "node tests/ci/public-navigation-semantic-browser.mjs"],
+          "assertion": "124 NAV-004/NAV-005 behavior scenarios in Chromium and WebKit plus static source, compiler, routing, and theme-focus contracts"
+        },
+        {
+          "workflow": ".github/workflows/nav005-public-header-browser.yml",
+          "scope": "main pull_request only",
+          "commands": ["node tests/ci/public-navigation-semantic-browser.mjs"],
+          "assertion": "NAV-005 browser behavior on production-bound pull requests"
+        }
+      ]
+    },
+    {
+      "id": "candidate-assets",
+      "contract": ["ARC-11 asset provenance and candidate integrity", "approved asset pixel/mask contracts"],
+      "consumer": ["candidate asset pipeline", "scene composition", "approved stone/faucet/range integrations"],
+      "risks": ["alpha-mask semantics regress", "pixels escape approved regions", "candidate provenance or variant integrity is lost"],
+      "paths": [
+        "app/assets/**",
+        "review-assets/**",
+        "reference/variant-cases.json",
+        "reference/visual-debt.md",
+        "tools/requirements.txt",
+        "tools/variant_fidelity_manifest.js",
+        "tools/render_variant_fidelity.py",
+        "tools/validate_approved_stone.py",
+        "tools/validate_approved_faucet.py",
+        "tools/validate_approved_range.py",
+        "tools/validate_candidate_assets.py",
+        "tools/validate_authoring_provenance.py",
+        "tools/render_candidate_review.py",
+        "tools/render_candidate_set_review.py",
+        "tools/extract_candidate_delta.py",
+        "tools/gap_pixel_gate.py",
+        "tools/materialize_faucet_edge.py",
+        "tools/gap_parallelism_gate.py",
+        "tools/perspective_editorial_gate.py",
+        "tests/test_candidate_asset_gates.py",
+        "tests/test_candidate_asset_sets.py",
+        "tests/test_candidate_delta_authoring.py",
+        "tests/test_candidate_authoring_provenance.py",
+        "tests/test_perspective_editorial_gate.py",
+        "tests/test_gap_parallelism_gate.py",
+        "tests/test_gap_pixel_gate.py",
+        "tests/test_faucet_edge.py",
+        "tests/test_mask_semantics.py",
+        "tests/validate-exposed-side-pixels.py",
+        ".github/workflows/candidate-assets.yml"
+      ],
+      "execution": [
+        {
+          "workflow": ".github/workflows/candidate-assets.yml",
+          "scope": "pull_request and push on main",
+          "commands": ["python -m unittest tests.test_candidate_asset_gates tests.test_candidate_asset_sets tests.test_candidate_delta_authoring tests.test_candidate_authoring_provenance tests.test_perspective_editorial_gate tests.test_gap_parallelism_gate tests.test_gap_pixel_gate tests.test_faucet_edge", "python -m unittest tests.test_mask_semantics", "python tests/validate-exposed-side-pixels.py", "python tools/validate_candidate_assets.py", "python tools/validate_authoring_provenance.py"],
+          "assertion": "candidate integrity, authoring provenance, mask alpha semantics, exposed-side pixel bounds, and approved runtime asset pixels"
+        }
+      ]
+    },
+    {
+      "id": "viewer-pricing",
+      "contract": ["DOM-008 typed pricing", "DOM-010 Viewer base-price authorization", "DOM-012 restricted Buyer projection", "V5 publication and save"],
+      "consumer": ["Admin V5", "public-modules endpoint", "Viewer"],
+      "risks": ["unauthorized or stale base prices", "public DTO leaks private fields", "save/ETag behavior changes", "Viewer derives a price from an invalid source"],
+      "paths": [
+        "app/admin/**",
+        "app/admin.html",
+        "app/core/administration-v5.js",
+        "app/core/public-module-projection.js",
+        "app/data/catalog-data.js",
+        "app/data/mock-price-book.js",
+        "app/data/scene-data.js",
+        "app/tools/test-public-modules-endpoint.js",
+        "app/viewer/**",
+        "netlify/functions/public-modules.mjs",
+        "tests/viewer-base-price*",
+        "tests/viewer-price-v5-save.test.cjs",
+        "tests/ci/viewer-price-wire-contract.test.cjs",
+        ".github/workflows/viewer-base-price-contract-gate.yml"
+      ],
+      "execution": [
+        {
+          "workflow": ".github/workflows/viewer-base-price-contract-gate.yml",
+          "scope": "pull_request on main and development; push on main and development",
+          "commands": ["node --test tests/viewer-base-price-publication.test.cjs tests/viewer-price-v5-save.test.cjs", "node app/tools/test-administration-v5.js", "node app/tools/test-v5-normal-save.js", "node app/tools/test-v5-endpoint-safety.js", "node app/tools/test-public-modules-endpoint.js", "node tests/viewer-base-price-browser-gate.mjs"],
+          "assertion": "typed price publication, save/ETag contract, endpoint safety, public projection, and local cross-browser Viewer behavior"
+        }
+      ]
+    }
+  ]
+}
