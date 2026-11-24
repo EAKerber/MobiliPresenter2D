@@ -6,9 +6,9 @@
   "source": {
     "mainSha": "01ded2c100fbfd8b16897e26113dc5068a83e429",
     "mainTree": "d1588ab2a71c5de7e8b7cfaa907d5e5637fa7178",
-    "developmentPin": "48851b786af12cbba4741af774b6ace801c30878",
-    "developmentTree": "01b715018bc4f8d9a09c2009fefaa3173282781e",
-    "worktreeHead": "6b1b51ce8065b4192d4c5b028757a06fa148f75b",
+    "developmentPin": "23c93e5c62fdc9fc5fd65374dd0279c38f3b3a2b",
+    "developmentTree": "ab4f1933db1b6975431e00ed720b3799998146e2",
+    "worktreeHead": "23c93e5c62fdc9fc5fd65374dd0279c38f3b3a2b",
     "worktreeTreeVerifiedAgainstDevelopmentPin": true,
     "openPullRequestsReadback": []
   },
@@ -73,19 +73,23 @@
       ".github/workflows/development-vis002c-arc03c-triad.yml"
     ],
     "developmentEventCounts": {
-      "pull_request": 23,
-      "push": 60,
-      "workflow_dispatch": 62,
+      "pull_request": 25,
+      "push": 61,
+      "workflow_dispatch": 63,
       "schedule": 1
     },
-    "developmentDispatchOnlyCount": 0,
+    "developmentDispatchOnlyCount": 12,
     "workflowDefinitions": 77,
     "workflowsWithWriteSignals": [
       ".github/workflows/branch-hygiene-bounded.yml",
       ".github/workflows/branch-hygiene-development-retirement.yml",
+      ".github/workflows/branch-hygiene.yml",
+      ".github/workflows/development-aux-retirement.yml",
       ".github/workflows/development-aux-terminal.yml",
+      ".github/workflows/development-branch-reconciliation.yml",
       ".github/workflows/development-pr-archive.yml",
-      ".github/workflows/development-retirement-batch.yml"
+      ".github/workflows/development-retirement-batch.yml",
+      ".github/workflows/public-routing-before-clerk.yml"
     ],
     "parseWarningCount": 0
   },
@@ -176,7 +180,7 @@
         "development"
       ],
       "mainDefinition": "c209320c7c686f75d86f8dba5de4b6300fd3ffdb",
-      "developmentDefinition": "c209320c7c686f75d86f8dba5de4b6300fd3ffdb"
+      "developmentDefinition": "85cc3248848970112051bdadb63f2bc28a07516e"
     },
     {
       "path": ".github/workflows/candidate-assets.yml",
@@ -185,7 +189,7 @@
         "development"
       ],
       "mainDefinition": "c3e6534150f6ade320daf7421a471dd9a98106c5",
-      "developmentDefinition": "c4897300f80be934d09cd73b0c43e622d8ed40f2"
+      "developmentDefinition": "4aa42f61d20c47366a0d964078609462b7a7b4fa"
     },
     {
       "path": ".github/workflows/development-a11y-semantic-fallback.yml",
@@ -225,7 +229,7 @@
         "development"
       ],
       "mainDefinition": null,
-      "developmentDefinition": "a7d6aa14d60be4ffbdb4dec134dc3c313ac7f550"
+      "developmentDefinition": "3043dd0312c61a2346de1d2114f113f9f7127a7d"
     },
     {
       "path": ".github/workflows/development-asset-provenance.yml",
@@ -489,7 +493,7 @@
         "development"
       ],
       "mainDefinition": null,
-      "developmentDefinition": "cbe95cfa029c16b67827f5e2d38600550db0bf53"
+      "developmentDefinition": "bafd5a9b720ab142f826adf4c8e20bb8f89b64d1"
     },
     {
       "path": ".github/workflows/development-public-navigation-semantic.yml",
@@ -521,7 +525,7 @@
         "development"
       ],
       "mainDefinition": null,
-      "developmentDefinition": "4edb8a895656ee709065e702966fc4861c12b368"
+      "developmentDefinition": "dd03ad9af3c6c949d5ebdd2b728f6e482738a52f"
     },
     {
       "path": ".github/workflows/development-ux04-geometry.yml",
@@ -538,7 +542,7 @@
         "development"
       ],
       "mainDefinition": null,
-      "developmentDefinition": "40d4af4dcb31e108d72f4d51aa063fff76242094"
+      "developmentDefinition": "49794223049162853df19dc0023d409b07692ec6"
     },
     {
       "path": ".github/workflows/development-viewer-price-gate.yml",
@@ -621,7 +625,7 @@
         "development"
       ],
       "mainDefinition": "5cc41f761dcae09756cbcc02af4dfd893962f48e",
-      "developmentDefinition": "4845fd4afd23b4276755981df92308e24cec0dbd"
+      "developmentDefinition": "8c4c81e9c2d312171f04c3b387e52051f6cee8e6"
     },
     {
       "path": ".github/workflows/module02-fidelity.yml",
@@ -684,7 +688,7 @@
         "development"
       ],
       "mainDefinition": "886fc6264fe38778c13f5bfb9dab6800b37d5c71",
-      "developmentDefinition": "ae7eac27643ab244cd937fd1d76ea30b40e808d1"
+      "developmentDefinition": "fae4f7fd5332644843c7d6f07499f2de7b45df4d"
     },
     {
       "path": ".github/workflows/summary-pricing-browser.yml",
@@ -693,7 +697,7 @@
         "development"
       ],
       "mainDefinition": "5a7d922d666cc2b8ba2b5cd4200d05738a2f02e1",
-      "developmentDefinition": "9cfbfe77a157572585e4fe2c47da55d2cb4fc688"
+      "developmentDefinition": "31b5ca675226a757d17083fd44cc4b93e39e5fb1"
     },
     {
       "path": ".github/workflows/ux-auth-viewer-integration-gate.yml",
@@ -711,7 +715,7 @@
         "development"
       ],
       "mainDefinition": "5e583959f55b6f518ac66dec0037462ea4274565",
-      "developmentDefinition": "5e583959f55b6f518ac66dec0037462ea4274565"
+      "developmentDefinition": "36b4c183e41161f98ad527e3a875617d3bf958e8"
     },
     {
       "path": ".github/workflows/viewer-base-price-contract-gate.yml",
@@ -798,24 +802,29 @@
           "job": "browser",
           "step": "Build the published pages and check ARC-03C hashes",
           "sha256": "28263e1f92ed1b400ac999aa952661c62e1762d8953b0080e3513a6f0b75fa8e",
+          "command": "npm install --no-save --no-package-lock esbuild@0.28.2 playwright@1.56.0\nnode --check app/about/about.js\nnode --check tests/about-skip-link-focus.mjs\nnpm run build\nnpm run pages:check",
           "if": null
         },
         {
           "job": "browser",
           "step": "Serve the actual publish folder",
           "sha256": "0552739628dd4d0f1ded1447c96bebd14970fb4e2f726d9527e8c47199bb18c9",
+          "command": "python3 -m http.server 8123 --bind 127.0.0.1 --directory app >/tmp/about-skip-link-http.log 2>&1 &\nsleep 2\ncurl --fail http://127.0.0.1:8123/about/ >/dev/null",
           "if": null
         },
         {
           "job": "browser",
           "step": "Verify keyboard activation moves focus to main",
           "sha256": "70a2f230083abe85035c3933959e3905131760e9b1cc642309943c46b2749fc5",
+          "command": "node tests/about-skip-link-focus.mjs",
           "if": null
         }
       ],
       "classification": "automated-validation-or-reporting",
       "mutationSignals": [],
       "externalIndicators": [
+        "network/http access",
+        "browser dependency",
         "package installation"
       ],
       "artifactActions": [],
@@ -890,24 +899,29 @@
           "job": "browser",
           "step": "Build the published pages and check ARC-03C hashes",
           "sha256": "28263e1f92ed1b400ac999aa952661c62e1762d8953b0080e3513a6f0b75fa8e",
+          "command": "npm install --no-save --no-package-lock esbuild@0.28.2 playwright@1.56.0\nnode --check app/about/about.js\nnode --check tests/about-skip-link-focus.mjs\nnpm run build\nnpm run pages:check",
           "if": null
         },
         {
           "job": "browser",
           "step": "Serve the actual publish folder",
           "sha256": "0552739628dd4d0f1ded1447c96bebd14970fb4e2f726d9527e8c47199bb18c9",
+          "command": "python3 -m http.server 8123 --bind 127.0.0.1 --directory app >/tmp/about-skip-link-http.log 2>&1 &\nsleep 2\ncurl --fail http://127.0.0.1:8123/about/ >/dev/null",
           "if": null
         },
         {
           "job": "browser",
           "step": "Verify keyboard activation moves focus to main",
           "sha256": "70a2f230083abe85035c3933959e3905131760e9b1cc642309943c46b2749fc5",
+          "command": "node tests/about-skip-link-focus.mjs",
           "if": null
         }
       ],
       "classification": "automated-validation-or-reporting",
       "mutationSignals": [],
       "externalIndicators": [
+        "network/http access",
+        "browser dependency",
         "package installation"
       ],
       "artifactActions": [],
@@ -1008,30 +1022,35 @@
           "job": "browser",
           "step": "Install browser test tooling",
           "sha256": "b03229018fc3690a80f69bef7d12a2dbe71bcdd0e4f8d3317cf073ad860e9c06",
+          "command": "npm install --prefix /tmp/admin-hierarchy-tools --no-audit --no-fund playwright@1.62.1\n/tmp/admin-hierarchy-tools/node_modules/.bin/playwright install --with-deps chromium",
           "if": null
         },
         {
           "job": "browser",
           "step": "Test hierarchy administration",
           "sha256": "a6fc4594b677877870de15079f0fdadd8361ab7cf940844a83ecb053429be14e",
+          "command": "node tests/admin-hierarchy-browser.cjs /tmp/admin-hierarchy-review",
           "if": null
         },
         {
           "job": "browser",
           "step": "Test isolated Puxadores persistence",
           "sha256": "633fab48f7aa9dcba274c36faedff8ad66ec4c97f7d592750f58b15220e0ba86",
+          "command": "node tests/admin-handles-persistence-browser.cjs",
           "if": null
         },
         {
           "job": "browser",
           "step": "Verify native v5 admin Save and exact readback",
           "sha256": "5f1c9c02f5df504039937f99bca3bfa62d4d4a301421aacb40729bf1948c4966",
+          "command": "node tests/admin-v5-save-browser.cjs",
           "if": null
         }
       ],
       "classification": "automated-validation-or-reporting",
       "mutationSignals": [],
       "externalIndicators": [
+        "browser dependency",
         "package installation"
       ],
       "artifactActions": [],
@@ -1142,30 +1161,35 @@
           "job": "browser",
           "step": "Install browser test tooling",
           "sha256": "b03229018fc3690a80f69bef7d12a2dbe71bcdd0e4f8d3317cf073ad860e9c06",
+          "command": "npm install --prefix /tmp/admin-hierarchy-tools --no-audit --no-fund playwright@1.62.1\n/tmp/admin-hierarchy-tools/node_modules/.bin/playwright install --with-deps chromium",
           "if": null
         },
         {
           "job": "browser",
           "step": "Test hierarchy administration",
           "sha256": "a6fc4594b677877870de15079f0fdadd8361ab7cf940844a83ecb053429be14e",
+          "command": "node tests/admin-hierarchy-browser.cjs /tmp/admin-hierarchy-review",
           "if": null
         },
         {
           "job": "browser",
           "step": "Test isolated Puxadores persistence",
           "sha256": "633fab48f7aa9dcba274c36faedff8ad66ec4c97f7d592750f58b15220e0ba86",
+          "command": "node tests/admin-handles-persistence-browser.cjs",
           "if": null
         },
         {
           "job": "browser",
           "step": "Verify native v5 admin Save and exact readback",
           "sha256": "5f1c9c02f5df504039937f99bca3bfa62d4d4a301421aacb40729bf1948c4966",
+          "command": "node tests/admin-v5-save-browser.cjs",
           "if": null
         }
       ],
       "classification": "automated-validation-or-reporting",
       "mutationSignals": [],
       "externalIndicators": [
+        "browser dependency",
         "package installation"
       ],
       "artifactActions": [],
@@ -1234,36 +1258,42 @@
           "job": "current-build",
           "step": "Install image tooling",
           "sha256": "9a9814a4a69e19dee0a708316b0f880425a40ad7df3c45f4608d43a98795769c",
+          "command": "python -m pip install --disable-pip-version-check pillow",
           "if": null
         },
         {
           "job": "current-build",
           "step": "Build current app from approved assets",
           "sha256": "16c0e4305ac213dff39fc82b69b6e08aeeb8758e33cd72d7c409752a70e9f054",
+          "command": "npm run build",
           "if": null
         },
         {
           "job": "current-build",
           "step": "Verify build does not rewrite tracked app sources",
           "sha256": "c1f335f3d79274d54a203661daef8b0f52a9772a927332f532146a84a729e174",
+          "command": "set -euo pipefail\nstatus=\"$(git status --porcelain --untracked-files=no -- app)\"\nif [ -n \"$status\" ]; then\n  echo 'Current app build modified tracked files:' >&2\n  printf '%s\\n' \"$status\" >&2\n  git diff -- app >&2 || true\n  exit 1\nfi",
           "if": null
         },
         {
           "job": "current-build",
           "step": "Test current app without historical rematerialization",
           "sha256": "328e123c63857fd8473bd4bd3581e655b08b7440d7f5d2c31cc375607582f539",
+          "command": "npm test",
           "if": null
         },
         {
           "job": "current-build",
           "step": "Verify tests do not rewrite tracked app sources",
           "sha256": "083147ff4a9d968676025f49df02e4c0faf9f3f237898be50050df8681deb1db",
+          "command": "set -euo pipefail\nstatus=\"$(git status --porcelain --untracked-files=no -- app)\"\nif [ -n \"$status\" ]; then\n  echo 'Current app tests modified tracked files:' >&2\n  printf '%s\\n' \"$status\" >&2\n  git diff -- app >&2 || true\n  exit 1\nfi",
           "if": null
         },
         {
           "job": "current-build",
           "step": "Verify explicit historical replay remains available",
           "sha256": "6b8196302fbfcc98f3fca25489644c4ef06ac40ae1a541dddbb365c95fa9c5b2",
+          "command": "node - <<'NODE'\nconst pkg = require('./app/package.json');\nconst scripts = pkg.scripts || {};\nif (scripts.build !== 'npm run build:current') throw new Error('default build must delegate to build:current');\nif (!scripts['replay:r5a']?.includes('build:stone-layers') || !scripts['replay:r5a']?.includes('build:r5a-pixelperfect')) {\n  throw new Error('historical R5A replay must remain explicit');\n}\nif (!scripts['build:historical-r5a']?.includes('replay:r5a')) throw new Error('historical R5A build wrapper is missing');\nNODE",
           "if": null
         }
       ],
@@ -1347,48 +1377,58 @@
           "job": "build-and-source",
           "step": "Deterministic source and fail-closed tampering checks",
           "sha256": "6bb4a7a77bdebccd7913acdad521635daee734ba63086b24b03a7ebcfbd58550",
+          "command": "node --check scripts/compile-primary-pages.mjs\nnode --test tests/arc03c-source-authority.test.mjs\nnpm run pages:check",
           "if": null
         },
         {
           "job": "build-and-source",
           "step": "Execute the actual Netlify publish-folder build",
           "sha256": "ff7ac1ef4f784601984fedf1dd0b7b06b54e5f92fcac0f76e25008b8e7b3b6e3",
+          "command": "npm install --no-save --no-package-lock esbuild@0.28.2\nnpm run build\nnpm run pages:check",
           "if": null
         },
         {
           "job": "build-and-source",
           "step": "Protect private app surfaces and contain the public menu update",
           "sha256": "da5d308defc5f1155acfee9a85bbbedab5cfa2101f4b4ac508b3f8450b37e681",
+          "command": "git fetch origin main\ngit diff --quiet origin/main...HEAD -- app/config app/admin app/access netlify netlify.toml\nfor path in $(git diff --name-only origin/main...HEAD -- app); do\n  case \"$path\" in\n    app/index.html|app/about/index.html|app/how-it-works/index.html|app/viewer/index.html|app/landing/header-menu.js|app/landing/landing.js|app/how-it-works/how-it-works.js) ;;\n    *) echo \"Unexpected app mutation: $path\"; exit 1 ;;\n  esac\ndone\necho ARC03C_SCOPE_PASS",
           "if": null
         },
         {
           "job": "browser-baseline",
           "step": "Build actual Netlify publish folder",
           "sha256": "26e9387c74599a4b9784e8d44448e71dba3d44fd6ff1eaf31f2cf50d41b25438",
+          "command": "npm install --no-save --no-package-lock esbuild@0.28.2 playwright@1.56.0 pngjs@7.0.0\nnpm run build\nnpm run pages:check",
           "if": null
         },
         {
           "job": "browser-baseline",
           "step": "Materialize immutable pre-cutover public HTML",
           "sha256": "39de3670902f388cf8ce8c71a69dd655e1baa4799c04b4213878b41e7323a6bb",
+          "command": "git config --global --add safe.directory \"$GITHUB_WORKSPACE\"\nmkdir -p artifacts/arc03c/baseline/about artifacts/arc03c/baseline/how-it-works\ngit show 303468b4ddbb07a761316abca28901ccaea219df:app/index.html > artifacts/arc03c/baseline/index.html\ngit show 303468b4ddbb07a761316abca28901ccaea219df:app/about/index.html > artifacts/arc03c/baseline/about/index.html\ngit show 303468b4ddbb07a761316abca28901ccaea219df:app/how-it-works/index.html > artifacts/arc03c/baseline/how-it-works/index.html",
           "if": null
         },
         {
           "job": "browser-baseline",
           "step": "Serve generated publish directory",
           "sha256": "1e96ff1253102ec8be7a3153743f901b276205e240ee60b48a56849975ca88b5",
+          "command": "python3 -m http.server 8123 --bind 127.0.0.1 --directory app >/tmp/arc03c-http.log 2>&1 &\nsleep 2\ncurl --fail http://127.0.0.1:8123/ >/dev/null",
           "if": null
         },
         {
           "job": "browser-baseline",
           "step": "Compare DOM CSS keyboard and screenshots in Chromium and WebKit",
           "sha256": "958ab76a4b18e60980a47cc52cba5ce51965d4c709c510d952968c7430a019b2",
+          "command": "node tests/arc03c-published-pages-browser-differential.mjs",
           "if": null
         }
       ],
       "classification": "automated-validation-or-reporting",
       "mutationSignals": [],
       "externalIndicators": [
+        "network/http access",
+        "browser dependency",
+        "Netlify dependency",
         "package installation"
       ],
       "artifactActions": [],
@@ -1446,48 +1486,58 @@
           "job": "build-and-source",
           "step": "Deterministic source and fail-closed tampering checks",
           "sha256": "6bb4a7a77bdebccd7913acdad521635daee734ba63086b24b03a7ebcfbd58550",
+          "command": "node --check scripts/compile-primary-pages.mjs\nnode --test tests/arc03c-source-authority.test.mjs\nnpm run pages:check",
           "if": null
         },
         {
           "job": "build-and-source",
           "step": "Execute the actual Netlify publish-folder build",
           "sha256": "ff7ac1ef4f784601984fedf1dd0b7b06b54e5f92fcac0f76e25008b8e7b3b6e3",
+          "command": "npm install --no-save --no-package-lock esbuild@0.28.2\nnpm run build\nnpm run pages:check",
           "if": null
         },
         {
           "job": "build-and-source",
           "step": "Protect private app surfaces and contain the public menu update",
           "sha256": "da5d308defc5f1155acfee9a85bbbedab5cfa2101f4b4ac508b3f8450b37e681",
+          "command": "git fetch origin main\ngit diff --quiet origin/main...HEAD -- app/config app/admin app/access netlify netlify.toml\nfor path in $(git diff --name-only origin/main...HEAD -- app); do\n  case \"$path\" in\n    app/index.html|app/about/index.html|app/how-it-works/index.html|app/viewer/index.html|app/landing/header-menu.js|app/landing/landing.js|app/how-it-works/how-it-works.js) ;;\n    *) echo \"Unexpected app mutation: $path\"; exit 1 ;;\n  esac\ndone\necho ARC03C_SCOPE_PASS",
           "if": null
         },
         {
           "job": "browser-baseline",
           "step": "Build actual Netlify publish folder",
           "sha256": "26e9387c74599a4b9784e8d44448e71dba3d44fd6ff1eaf31f2cf50d41b25438",
+          "command": "npm install --no-save --no-package-lock esbuild@0.28.2 playwright@1.56.0 pngjs@7.0.0\nnpm run build\nnpm run pages:check",
           "if": null
         },
         {
           "job": "browser-baseline",
           "step": "Materialize immutable pre-cutover public HTML",
           "sha256": "39de3670902f388cf8ce8c71a69dd655e1baa4799c04b4213878b41e7323a6bb",
+          "command": "git config --global --add safe.directory \"$GITHUB_WORKSPACE\"\nmkdir -p artifacts/arc03c/baseline/about artifacts/arc03c/baseline/how-it-works\ngit show 303468b4ddbb07a761316abca28901ccaea219df:app/index.html > artifacts/arc03c/baseline/index.html\ngit show 303468b4ddbb07a761316abca28901ccaea219df:app/about/index.html > artifacts/arc03c/baseline/about/index.html\ngit show 303468b4ddbb07a761316abca28901ccaea219df:app/how-it-works/index.html > artifacts/arc03c/baseline/how-it-works/index.html",
           "if": null
         },
         {
           "job": "browser-baseline",
           "step": "Serve generated publish directory",
           "sha256": "1e96ff1253102ec8be7a3153743f901b276205e240ee60b48a56849975ca88b5",
+          "command": "python3 -m http.server 8123 --bind 127.0.0.1 --directory app >/tmp/arc03c-http.log 2>&1 &\nsleep 2\ncurl --fail http://127.0.0.1:8123/ >/dev/null",
           "if": null
         },
         {
           "job": "browser-baseline",
           "step": "Compare DOM CSS keyboard and screenshots in Chromium and WebKit",
           "sha256": "958ab76a4b18e60980a47cc52cba5ce51965d4c709c510d952968c7430a019b2",
+          "command": "node tests/arc03c-published-pages-browser-differential.mjs",
           "if": null
         }
       ],
       "classification": "manual-or-event-driven",
       "mutationSignals": [],
       "externalIndicators": [
+        "network/http access",
+        "browser dependency",
+        "Netlify dependency",
         "package installation"
       ],
       "artifactActions": [],
@@ -1587,30 +1637,35 @@
           "job": "inventory",
           "step": "Install the pinned parser",
           "sha256": "a3121c343bdf1c2b110ef9e1ad07b461e8cab3604132d526eadc2b4dc677ef71",
+          "command": "npm ci --prefix tools/arc13",
           "if": null
         },
         {
           "job": "inventory",
           "step": "Confirm the generated report remains tracked",
           "sha256": "a1e49af4faec19417257d2549700edc4f363fe05ad3b283d98f9ad49cc94f43b",
+          "command": "git ls-files --error-unmatch architecture/arc13/ui-text-candidates.json",
           "if": null
         },
         {
           "job": "inventory",
           "step": "Regenerate the candidate inventory",
           "sha256": "52c8498a536562f6a44d165e02f27c2ec45c0805d587ff4e6700f0c0bdc98d54",
+          "command": "npm run inventory --prefix tools/arc13",
           "if": null
         },
         {
           "job": "inventory",
           "step": "Verify provenance coverage and unreviewed status",
           "sha256": "4759ea778617d249b6695a43a374d5f5ca4d22ca4383bc4c235b5456be72dc0e",
+          "command": "node <<'NODE'\nconst assert = require('node:assert/strict');\nconst fs = require('node:fs');\nconst inventory = JSON.parse(fs.readFileSync('architecture/arc13/ui-text-candidates.json', 'utf8'));\nconst summary = inventory.summary;\nassert.equal(inventory.schemaVersion, 4);\nassert.equal(inventory.status, 'candidate-unreviewed');\nassert.equal(summary.javascriptParseErrors, 0, 'JavaScript input must parse without errors');\nassert.equal(inventory.parseErrors.length, 0);\nassert.equal(summary.javascriptNotScannedSources, 0,\n  'the normal AST-backed scan must run instead of HTML-only mode');\nassert.equal(summary.unassignedOwnerSites, 0,\n  'source-path technical ownership must be assigned');\nassert.equal(summary.unassignedRouteSites, 0,\n  'JavaScript sink routes must be assigned');\nassert.equal(summary.primaryPageAuthoringUnresolvedOccurrences, 0);\nassert.equal(summary.unreviewedOccurrences, inventory.entries.length,\n  'generated candidates remain unreviewed');\nassert(inventory.entries.every((entry) => entry.classification === 'unreviewed'));\nconst expectedOutputs = [\n  { path: 'app/index.html', route: '/' },\n  { path: 'app/about/index.html', route: '/about/' },\n  { path: 'app/how-it-works/index.html', route: '/how-it-works/' }\n];\nassert.deepEqual(\n  inventory.primaryPageAuthoringProvenance.outputs.map(({ path, route, status }) => ({ path, route, status })),\n  expectedOutputs.map(({ path, route }) => ({ path, route, status: 'mapped' }))\n);\nfor (const { path } of expectedOutputs) {\n  const occurrences = inventory.entries.filter((entry) => entry.source === path);\n  assert(occurrences.length > 0, `expected inventoried occurrences for ${path}`);\n  assert(occurrences.every((entry) => entry.authoring?.status === 'mapped'),\n    `every occurrence in ${path} must resolve to authoring provenance`);\n}\nassert.equal(summary.primaryPageAuthoringMappedOccurrences,\n  inventory.entries.filter((entry) => entry.authoring?.status === 'mapped'\n    && ['app/index.html', 'app/about/index.html', 'app/how-it-works/index.html'].includes(entry.source)).length);\nconsole.log(JSON.stringify(summary, null, 2));\nNODE",
           "if": null
         },
         {
           "job": "inventory",
           "step": "Confirm the tracked report is reproducible",
           "sha256": "ff233470a1dce4aa011b8f162a3ca3ddd94961da65bc469dc55a48c9b9100c37",
+          "command": "git diff --exit-code -- architecture/arc13/ui-text-candidates.json",
           "if": null
         }
       ],
@@ -1722,48 +1777,56 @@
           "job": "inventory",
           "step": "Install the pinned parser",
           "sha256": "a3121c343bdf1c2b110ef9e1ad07b461e8cab3604132d526eadc2b4dc677ef71",
+          "command": "npm ci --prefix tools/arc13",
           "if": null
         },
         {
           "job": "inventory",
           "step": "Verify source-map normalization and catalog whitespace mapping",
           "sha256": "e0d3cac261d5dc65bc2be0159852520cbe4a4fd26a020fc1a5b86ad548f7fcf9",
+          "command": "python tests/arc13_line_ending_normalization_test.py",
           "if": null
         },
         {
           "job": "inventory",
           "step": "Verify catalog-backed theme and menu labels",
           "sha256": "b828eb081edfd5e547429527fa45bcfca0b3ef8a9cc888fa540b378f846a76cf",
+          "command": "node tests/ui-theme-contract.cjs",
           "if": null
         },
         {
           "job": "inventory",
           "step": "Verify primary page compiler output",
           "sha256": "863116dde3d204c53a6cdee3ab1ea08ced321fd3ed6936fc0f27aa76757b61a0",
+          "command": "node scripts/compile-primary-pages.mjs --check",
           "if": null
         },
         {
           "job": "inventory",
           "step": "Confirm the generated report remains tracked",
           "sha256": "a1e49af4faec19417257d2549700edc4f363fe05ad3b283d98f9ad49cc94f43b",
+          "command": "git ls-files --error-unmatch architecture/arc13/ui-text-candidates.json",
           "if": null
         },
         {
           "job": "inventory",
           "step": "Regenerate the candidate inventory",
           "sha256": "52c8498a536562f6a44d165e02f27c2ec45c0805d587ff4e6700f0c0bdc98d54",
+          "command": "npm run inventory --prefix tools/arc13",
           "if": null
         },
         {
           "job": "inventory",
           "step": "Verify provenance coverage and unreviewed status",
           "sha256": "4759ea778617d249b6695a43a374d5f5ca4d22ca4383bc4c235b5456be72dc0e",
+          "command": "node <<'NODE'\nconst assert = require('node:assert/strict');\nconst fs = require('node:fs');\nconst inventory = JSON.parse(fs.readFileSync('architecture/arc13/ui-text-candidates.json', 'utf8'));\nconst summary = inventory.summary;\nassert.equal(inventory.schemaVersion, 4);\nassert.equal(inventory.status, 'candidate-unreviewed');\nassert.equal(summary.javascriptParseErrors, 0, 'JavaScript input must parse without errors');\nassert.equal(inventory.parseErrors.length, 0);\nassert.equal(summary.javascriptNotScannedSources, 0,\n  'the normal AST-backed scan must run instead of HTML-only mode');\nassert.equal(summary.unassignedOwnerSites, 0,\n  'source-path technical ownership must be assigned');\nassert.equal(summary.unassignedRouteSites, 0,\n  'JavaScript sink routes must be assigned');\nassert.equal(summary.primaryPageAuthoringUnresolvedOccurrences, 0);\nassert.equal(summary.unreviewedOccurrences, inventory.entries.length,\n  'generated candidates remain unreviewed');\nassert(inventory.entries.every((entry) => entry.classification === 'unreviewed'));\nconst expectedOutputs = [\n  { path: 'app/index.html', route: '/' },\n  { path: 'app/about/index.html', route: '/about/' },\n  { path: 'app/how-it-works/index.html', route: '/how-it-works/' }\n];\nassert.deepEqual(\n  inventory.primaryPageAuthoringProvenance.outputs.map(({ path, route, status }) => ({ path, route, status })),\n  expectedOutputs.map(({ path, route }) => ({ path, route, status: 'mapped' }))\n);\nfor (const { path } of expectedOutputs) {\n  const occurrences = inventory.entries.filter((entry) => entry.source === path);\n  assert(occurrences.length > 0, `expected inventoried occurrences for ${path}`);\n  assert(occurrences.every((entry) => entry.authoring?.status === 'mapped'),\n    `every occurrence in ${path} must resolve to authoring provenance`);\n}\nassert.equal(summary.primaryPageAuthoringMappedOccurrences,\n  inventory.entries.filter((entry) => entry.authoring?.status === 'mapped'\n    && ['app/index.html', 'app/about/index.html', 'app/how-it-works/index.html'].includes(entry.source)).length);\nconsole.log(JSON.stringify(summary, null, 2));\nNODE",
           "if": null
         },
         {
           "job": "inventory",
           "step": "Confirm the tracked report is reproducible",
           "sha256": "ff233470a1dce4aa011b8f162a3ca3ddd94961da65bc469dc55a48c9b9100c37",
+          "command": "git diff --exit-code -- architecture/arc13/ui-text-candidates.json",
           "if": null
         }
       ],
@@ -1869,48 +1932,56 @@
           "job": "audit",
           "step": "Bounded-batch safety regression tests",
           "sha256": "846eb2e626bbe0f6cf91fb798dba2f6140b1b8286d3f52f1a54e83ce4ecbb649",
+          "command": "python -m unittest discover -s tests -p 'test_branch_hygiene_*.py'\npython -m py_compile tools/branch_hygiene_plan.py tools/branch_hygiene_observe.py tools/branch_hygiene_apply.py tools/branch_hygiene_merged_pr_cleanup.py",
           "if": null
         },
         {
           "job": "audit",
           "step": "Observe and build exact plan",
           "sha256": "773e4ad1845fe1300281dd63639de603f3a18c67c5e465a878e55050b51166fa",
+          "command": "python tools/branch_hygiene_observe.py --output /tmp/batch-observation.json\npython tools/branch_hygiene_plan.py --observation /tmp/batch-observation.json --dispositions ops/branch-dispositions.json --output /tmp/batch-plan.json >/dev/null",
           "if": null
         },
         {
           "job": "audit",
           "step": "Detect whether this PR supplies a new exact branch batch",
           "sha256": "50387536b6e1b8a82004a30c30c3a70e0b0720282aad279378c5a5d30a57ff65",
+          "command": "git fetch origin main\nif git diff --quiet origin/main...HEAD -- ops/branch-hygiene-batch.json; then\n  echo 'changed=false' >> \"$GITHUB_OUTPUT\"\nelse\n  echo 'changed=true' >> \"$GITHUB_OUTPUT\"\nfi",
           "if": null
         },
         {
           "job": "audit",
           "step": "Audit only selected refs; do not mutate PR branches",
           "sha256": "de141358c9cac5aaaaa48df189ec5df505601ba09a0064a487acff4f4ce73609",
+          "command": "python tools/branch_hygiene_apply.py \\\n  --plan /tmp/batch-plan.json \\\n  --dispositions ops/branch-dispositions.json \\\n  --expected-plan \"$(python -c 'import json; print(json.load(open(\"/tmp/batch-plan.json\"))[\"planHash\"])')\" \\\n  --batch ops/branch-hygiene-batch.json \\\n  --receipt /tmp/batch-receipt.json \\\n  --audit-only",
           "if": null
         },
         {
           "job": "apply",
           "step": "Bounded-batch safety regression tests",
           "sha256": "846eb2e626bbe0f6cf91fb798dba2f6140b1b8286d3f52f1a54e83ce4ecbb649",
+          "command": "python -m unittest discover -s tests -p 'test_branch_hygiene_*.py'\npython -m py_compile tools/branch_hygiene_plan.py tools/branch_hygiene_observe.py tools/branch_hygiene_apply.py tools/branch_hygiene_merged_pr_cleanup.py",
           "if": null
         },
         {
           "job": "apply",
           "step": "Observe and build exact plan",
           "sha256": "773e4ad1845fe1300281dd63639de603f3a18c67c5e465a878e55050b51166fa",
+          "command": "python tools/branch_hygiene_observe.py --output /tmp/batch-observation.json\npython tools/branch_hygiene_plan.py --observation /tmp/batch-observation.json --dispositions ops/branch-dispositions.json --output /tmp/batch-plan.json >/dev/null",
           "if": null
         },
         {
           "job": "apply",
           "step": "Apply only exact pinned refs, reobserve and read back after every deletion",
           "sha256": "460d313b778e1ad7465bcad25188c42e8ddd271a2f348e7f65b07917205419a3",
+          "command": "python tools/branch_hygiene_apply.py \\\n  --plan /tmp/batch-plan.json \\\n  --dispositions ops/branch-dispositions.json \\\n  --expected-plan \"$(python -c 'import json; print(json.load(open(\"/tmp/batch-plan.json\"))[\"planHash\"])')\" \\\n  --batch ops/branch-hygiene-batch.json \\\n  --receipt /tmp/batch-receipt.json",
           "if": null
         },
         {
           "job": "cleanup-merged-pr-head",
           "step": "Verify merged PR identity and clean its exact head branch",
           "sha256": "9b1d11688102493b4c9ebd6aecb530234ee781f05aeef6f43ae04ffc1b091bb6",
+          "command": "python tools/branch_hygiene_merged_pr_cleanup.py \\\n  --event \"$GITHUB_EVENT_PATH\" \\\n  --receipt /tmp/merged-pr-head-cleanup.json",
           "if": null
         }
       ],
@@ -2001,42 +2072,49 @@
           "job": "audit",
           "step": "Bounded-batch safety regression tests",
           "sha256": "a44093c25b090e9e858e89df0338df2130abdd38bcd2ba22eeefb64fe5bd836e",
+          "command": "python -m unittest discover -s tests -p 'test_branch_hygiene_*.py'\npython -m py_compile tools/branch_hygiene_plan.py tools/branch_hygiene_observe.py tools/branch_hygiene_apply.py",
           "if": null
         },
         {
           "job": "audit",
           "step": "Observe and build exact plan",
           "sha256": "773e4ad1845fe1300281dd63639de603f3a18c67c5e465a878e55050b51166fa",
+          "command": "python tools/branch_hygiene_observe.py --output /tmp/batch-observation.json\npython tools/branch_hygiene_plan.py --observation /tmp/batch-observation.json --dispositions ops/branch-dispositions.json --output /tmp/batch-plan.json >/dev/null",
           "if": null
         },
         {
           "job": "audit",
           "step": "Detect whether this PR supplies a new exact branch batch",
           "sha256": "50387536b6e1b8a82004a30c30c3a70e0b0720282aad279378c5a5d30a57ff65",
+          "command": "git fetch origin main\nif git diff --quiet origin/main...HEAD -- ops/branch-hygiene-batch.json; then\n  echo 'changed=false' >> \"$GITHUB_OUTPUT\"\nelse\n  echo 'changed=true' >> \"$GITHUB_OUTPUT\"\nfi",
           "if": null
         },
         {
           "job": "audit",
           "step": "Audit only selected refs; do not mutate PR branches",
           "sha256": "de141358c9cac5aaaaa48df189ec5df505601ba09a0064a487acff4f4ce73609",
+          "command": "python tools/branch_hygiene_apply.py \\\n  --plan /tmp/batch-plan.json \\\n  --dispositions ops/branch-dispositions.json \\\n  --expected-plan \"$(python -c 'import json; print(json.load(open(\"/tmp/batch-plan.json\"))[\"planHash\"])')\" \\\n  --batch ops/branch-hygiene-batch.json \\\n  --receipt /tmp/batch-receipt.json \\\n  --audit-only",
           "if": null
         },
         {
           "job": "apply",
           "step": "Bounded-batch safety regression tests",
           "sha256": "a44093c25b090e9e858e89df0338df2130abdd38bcd2ba22eeefb64fe5bd836e",
+          "command": "python -m unittest discover -s tests -p 'test_branch_hygiene_*.py'\npython -m py_compile tools/branch_hygiene_plan.py tools/branch_hygiene_observe.py tools/branch_hygiene_apply.py",
           "if": null
         },
         {
           "job": "apply",
           "step": "Observe and build exact plan",
           "sha256": "773e4ad1845fe1300281dd63639de603f3a18c67c5e465a878e55050b51166fa",
+          "command": "python tools/branch_hygiene_observe.py --output /tmp/batch-observation.json\npython tools/branch_hygiene_plan.py --observation /tmp/batch-observation.json --dispositions ops/branch-dispositions.json --output /tmp/batch-plan.json >/dev/null",
           "if": null
         },
         {
           "job": "apply",
           "step": "Apply only exact pinned refs, reobserve and read back after every deletion",
           "sha256": "460d313b778e1ad7465bcad25188c42e8ddd271a2f348e7f65b07917205419a3",
+          "command": "python tools/branch_hygiene_apply.py \\\n  --plan /tmp/batch-plan.json \\\n  --dispositions ops/branch-dispositions.json \\\n  --expected-plan \"$(python -c 'import json; print(json.load(open(\"/tmp/batch-plan.json\"))[\"planHash\"])')\" \\\n  --batch ops/branch-hygiene-batch.json \\\n  --receipt /tmp/batch-receipt.json",
           "if": null
         }
       ],
@@ -2102,12 +2180,14 @@
           "job": "audit",
           "step": "Regression tests",
           "sha256": "821fd744149eb8ada9e0df392b87d36f5d51607672a42ee9289c4619187ead48",
+          "command": "python -m unittest discover -s tests -p 'test_branch_hygiene_*.py'\npython -m py_compile tools/branch_hygiene_observe.py tools/branch_hygiene_plan.py tools/branch_hygiene_apply.py",
           "if": null
         },
         {
           "job": "audit",
           "step": "SHA-pinned development audit, never apply",
           "sha256": "43488b0447af9a1e501277f027231cdc8099b72f381c5bcac5d3f49b5b226e72",
+          "command": "python tools/branch_hygiene_observe.py --control development --output /tmp/dev-observation.json\npython tools/branch_hygiene_plan.py --observation /tmp/dev-observation.json --dispositions ops/branch-dispositions-development.json --output /tmp/dev-plan.json >/dev/null\npython tools/branch_hygiene_apply.py \\\n  --plan /tmp/dev-plan.json \\\n  --dispositions ops/branch-dispositions-development.json \\\n  --expected-plan \"$(python -c 'import json; print(json.load(open(\"/tmp/dev-plan.json\"))[\"planHash\"])')\" \\\n  --batch ops/branch-hygiene-development-batch.json \\\n  --receipt /tmp/dev-receipt.json \\\n  --audit-only",
           "if": null
         }
       ],
@@ -2195,24 +2275,28 @@
           "job": "audit",
           "step": "Regression safety tests",
           "sha256": "5e1e57855dc4d449c1ae1bd44bbdd40cfad4a651c80e5ed6dcee1c936f63a477",
+          "command": "python -m unittest discover -s tests -p 'test_branch_hygiene_*.py'\npython -m py_compile tools/branch_hygiene_series.py",
           "if": null
         },
         {
           "job": "audit",
           "step": "Audit each exact batch; no deletions",
           "sha256": "57a575721e56473ee940f077f247e7cd04311bdb6ffa3a4be8fc60b27870cfa5",
+          "command": "python tools/branch_hygiene_series.py \\\n  --manifest ops/branch-hygiene-development-retirement.json \\\n  --receipts /tmp/retirement-audit --audit-only",
           "if": null
         },
         {
           "job": "apply",
           "step": "Regression safety tests",
           "sha256": "1265854da36e63be36daf17a546762d9a6cc206d8f30ba385888467cf403166c",
+          "command": "python -m unittest discover -s tests -p 'test_branch_hygiene_*.py",
           "if": null
         },
         {
           "job": "apply",
           "step": "Apply waves with full SHA/readback validation",
           "sha256": "a638e5b8d2778d67dac0230698809e91ae0bbda5c0462d85a06cd2a38b24f563",
+          "command": "python tools/branch_hygiene_series.py \\\n  --manifest ops/branch-hygiene-development-retirement.json \\\n  --receipts /tmp/retirement-apply",
           "if": null
         }
       ],
@@ -2299,29 +2383,35 @@
           "job": "plan",
           "step": "Unit tests",
           "sha256": "bc7711bcbfa3a1c286400fdb92151a71a7a23231dc6482541e7c56cfeaa03757",
+          "command": "python -m unittest tests/test_branch_hygiene_plan.py",
           "if": null
         },
         {
           "job": "plan",
           "step": "Compile tools",
           "sha256": "d8f639a5ff11ca9149425f2f5201846911c208c44caf5801850964d1d211bcdc",
+          "command": "python -m py_compile tools/branch_hygiene_plan.py tools/branch_hygiene_observe.py tools/branch_hygiene_apply.py",
           "if": null
         },
         {
           "job": "plan",
           "step": "Materialize fresh observation",
           "sha256": "fe6f9064bf434c3c7f257bef7a483da1cc97e59b3ae5b607bc073d4442ed427f",
+          "command": "python tools/branch_hygiene_observe.py --output /tmp/branch-observation.json",
           "if": null
         },
         {
           "job": "plan",
           "step": "Build exact plan",
           "sha256": "1c71e965632d0eb368da5b6c18c586ab56df9b874b82580fcf90612a330668c2",
+          "command": "python tools/branch_hygiene_plan.py \\\n  --observation /tmp/branch-observation.json \\\n  --dispositions ops/branch-dispositions.json \\\n  --output /tmp/branch-plan.json\npython - <<'PY'\nimport json\np=json.load(open('/tmp/branch-plan.json'))\nopen('/tmp/branch-plan-hash.txt','w').write(p['planHash'])\nprint('DELETE_CANDIDATES', [e['branch'] for e in p['entries'] if e['action']=='delete-candidate'])\nPY",
           "if": null
         }
       ],
-      "classification": "automated-validation-or-reporting",
-      "mutationSignals": [],
+      "classification": "operational-or-write-capable",
+      "mutationSignals": [
+        "possible operational command; manual review required"
+      ],
       "externalIndicators": [
         "package installation"
       ],
@@ -2401,29 +2491,35 @@
           "job": "plan",
           "step": "Unit tests",
           "sha256": "bc7711bcbfa3a1c286400fdb92151a71a7a23231dc6482541e7c56cfeaa03757",
+          "command": "python -m unittest tests/test_branch_hygiene_plan.py",
           "if": null
         },
         {
           "job": "plan",
           "step": "Compile tools",
           "sha256": "d8f639a5ff11ca9149425f2f5201846911c208c44caf5801850964d1d211bcdc",
+          "command": "python -m py_compile tools/branch_hygiene_plan.py tools/branch_hygiene_observe.py tools/branch_hygiene_apply.py",
           "if": null
         },
         {
           "job": "plan",
           "step": "Materialize fresh observation",
           "sha256": "fe6f9064bf434c3c7f257bef7a483da1cc97e59b3ae5b607bc073d4442ed427f",
+          "command": "python tools/branch_hygiene_observe.py --output /tmp/branch-observation.json",
           "if": null
         },
         {
           "job": "plan",
           "step": "Build exact plan",
           "sha256": "1c71e965632d0eb368da5b6c18c586ab56df9b874b82580fcf90612a330668c2",
+          "command": "python tools/branch_hygiene_plan.py \\\n  --observation /tmp/branch-observation.json \\\n  --dispositions ops/branch-dispositions.json \\\n  --output /tmp/branch-plan.json\npython - <<'PY'\nimport json\np=json.load(open('/tmp/branch-plan.json'))\nopen('/tmp/branch-plan-hash.txt','w').write(p['planHash'])\nprint('DELETE_CANDIDATES', [e['branch'] for e in p['entries'] if e['action']=='delete-candidate'])\nPY",
           "if": null
         }
       ],
-      "classification": "automated-validation-or-reporting",
-      "mutationSignals": [],
+      "classification": "operational-or-write-capable",
+      "mutationSignals": [
+        "possible operational command; manual review required"
+      ],
       "externalIndicators": [
         "package installation"
       ],
@@ -2508,18 +2604,143 @@
           "job": "configuration-boundaries",
           "step": "Verify administrative configuration endpoint boundary",
           "sha256": "6deedd60f4817390ecc248ba4a635e261c08e6d123e384a952b33c59a652386e",
+          "command": "node app/tools/test-v5-endpoint-safety.js",
           "if": null
         },
         {
           "job": "configuration-boundaries",
           "step": "Verify Buyer DTO allowlist",
           "sha256": "34030bef38359c51bddef869a19c078a16300eeb8a12ef51264029c8581cb567",
+          "command": "node app/tools/test-published-buyer-projection.js",
           "if": null
         },
         {
           "job": "configuration-boundaries",
           "step": "Verify Buyer endpoint authorization boundary",
           "sha256": "71b096d124a7488d714030729df464ac7d2285baf137e74a2274b1efbe06c84d",
+          "command": "node --test tests/buyer-configuration-endpoint.test.mjs",
+          "if": null
+        }
+      ],
+      "classification": "automated-validation-or-reporting",
+      "mutationSignals": [],
+      "externalIndicators": [
+        "package installation"
+      ],
+      "artifactActions": [],
+      "parseWarnings": []
+    },
+    {
+      "path": ".github/workflows/buyer-configuration-boundary.yml",
+      "blobSha": "85cc3248848970112051bdadb63f2bc28a07516e",
+      "name": "Configuration endpoint authorization boundaries",
+      "events": [
+        {
+          "name": "pull_request",
+          "branches": [
+            "main",
+            "development"
+          ],
+          "branchIgnores": null,
+          "paths": [
+            "app/core/**",
+            "app/data/**",
+            "app/tools/test-published-buyer-projection.js",
+            "app/tools/test-v5-endpoint-safety.js",
+            "app/tools/test-published-configuration.js",
+            "app/tools/test-v5-normal-save.js",
+            "netlify/access/**",
+            "netlify/functions/buyer-configuration.mjs",
+            "netlify/functions/configuration.mjs",
+            "tests/buyer-configuration-endpoint.test.mjs",
+            ".github/workflows/buyer-configuration-boundary.yml"
+          ],
+          "pathIgnores": null,
+          "types": [
+            "opened",
+            "reopened",
+            "synchronize",
+            "ready_for_review"
+          ]
+        },
+        {
+          "name": "push",
+          "branches": [
+            "main",
+            "development"
+          ],
+          "branchIgnores": null,
+          "paths": [
+            "app/core/**",
+            "app/data/**",
+            "app/tools/test-published-buyer-projection.js",
+            "app/tools/test-v5-endpoint-safety.js",
+            "app/tools/test-published-configuration.js",
+            "app/tools/test-v5-normal-save.js",
+            "netlify/access/**",
+            "netlify/functions/buyer-configuration.mjs",
+            "netlify/functions/configuration.mjs",
+            "tests/buyer-configuration-endpoint.test.mjs",
+            ".github/workflows/buyer-configuration-boundary.yml"
+          ],
+          "pathIgnores": null,
+          "types": null
+        }
+      ],
+      "jobs": [
+        {
+          "id": "configuration-boundaries",
+          "name": null,
+          "if": null,
+          "runsOn": "ubuntu-latest",
+          "container": null,
+          "services": [],
+          "stepCount": 7,
+          "actions": [
+            "actions/checkout@v4",
+            "actions/setup-node@v4"
+          ]
+        }
+      ],
+      "actions": [
+        "actions/checkout@v4",
+        "actions/setup-node@v4"
+      ],
+      "commandCount": 5,
+      "commands": [
+        {
+          "job": "configuration-boundaries",
+          "step": "Verify published V3/V5 reads and fail-closed invalid states",
+          "sha256": "d895506f2256d949d920399773f0f454ea3c6e0dbc0a8feb0aa4c6a33daf2b35",
+          "command": "node app/tools/test-published-configuration.js",
+          "if": null
+        },
+        {
+          "job": "configuration-boundaries",
+          "step": "Verify V5 normal save CAS and exact readback",
+          "sha256": "55d9fe1d5d77d5fe0fe1a0f73bcd9d0adea0e47e5a784d4084be770dee6a5e33",
+          "command": "node app/tools/test-v5-normal-save.js",
+          "if": null
+        },
+        {
+          "job": "configuration-boundaries",
+          "step": "Verify administrative configuration endpoint boundary",
+          "sha256": "6deedd60f4817390ecc248ba4a635e261c08e6d123e384a952b33c59a652386e",
+          "command": "node app/tools/test-v5-endpoint-safety.js",
+          "if": null
+        },
+        {
+          "job": "configuration-boundaries",
+          "step": "Verify Buyer DTO allowlist",
+          "sha256": "34030bef38359c51bddef869a19c078a16300eeb8a12ef51264029c8581cb567",
+          "command": "node app/tools/test-published-buyer-projection.js",
+          "if": null
+        },
+        {
+          "job": "configuration-boundaries",
+          "step": "Verify Buyer endpoint authorization boundary",
+          "sha256": "71b096d124a7488d714030729df464ac7d2285baf137e74a2274b1efbe06c84d",
+          "command": "node --test tests/buyer-configuration-endpoint.test.mjs",
           "if": null
         }
       ],
@@ -2624,60 +2845,70 @@
           "job": "current-asset-gates",
           "step": "Install image tooling",
           "sha256": "96b4e7a58919c5d3b9e33f54ec6ca991a7a1df28d55be926c61b18c035881953",
+          "command": "python -m pip install -r tools/requirements.txt",
           "if": null
         },
         {
           "job": "current-asset-gates",
           "step": "Unit-test current candidate contracts",
           "sha256": "943444433dcd55af5e4b12cf0c7925ee0ee62a54385a3b39704ce31c618d6cb7",
+          "command": "python -m unittest\ntests/test_candidate_asset_gates.py\ntests/test_candidate_asset_sets.py\ntests/test_candidate_delta_authoring.py\ntests/test_candidate_authoring_provenance.py\ntests/test_perspective_editorial_gate.py\ntests/test_gap_parallelism_gate.py\ntests/test_gap_pixel_gate.py\ntests/test_faucet_edge.py",
           "if": null
         },
         {
           "job": "current-asset-gates",
           "step": "Validate current app runtime and asset invariants",
           "sha256": "328e123c63857fd8473bd4bd3581e655b08b7440d7f5d2c31cc375607582f539",
+          "command": "npm test",
           "if": null
         },
         {
           "job": "current-asset-gates",
           "step": "Derive current target variants",
           "sha256": "f1b300786ef0661c7c6ea5ca48eeae85a6affb282828d04e98a29778d2a242ab",
+          "command": "mkdir -p /tmp/candidate-review\nnode tools/variant_fidelity_manifest.js \\\n  --cases reference/variant-cases.json \\\n  --output /tmp/candidate-review/variant-manifest.json\npython tools/render_variant_fidelity.py \\\n  --manifest /tmp/candidate-review/variant-manifest.json \\\n  --output-dir /tmp/candidate-review/variants",
           "if": null
         },
         {
           "job": "current-asset-gates",
           "step": "Validate approved stone runtime integration",
           "sha256": "ca55f22f535359a411754fd7113c23c8dda7c0d256e7a6068d9d2bba525918d9",
+          "command": "python tools/validate_approved_stone.py \\\n  --manifest /tmp/candidate-review/variant-manifest.json \\\n  --output-dir /tmp/candidate-review/approved-stone",
           "if": null
         },
         {
           "job": "current-asset-gates",
           "step": "Verify approved faucet runtime pixels and host visibility",
           "sha256": "eff7b5b34698489dbfcf332aec9d90eb958db36ea5b68ffa80acdbd0e8cdc24e",
+          "command": "python tools/validate_approved_faucet.py \\\n  --manifest /tmp/candidate-review/variant-manifest.json \\\n  --output-dir /tmp/candidate-review/approved-faucet",
           "if": null
         },
         {
           "job": "current-asset-gates",
           "step": "Verify approved range runtime pixels",
           "sha256": "8092e2761e222365718f24dfd6a5f540bd771bcd0dea5c5ec4347cb154ea460b",
+          "command": "python tools/validate_approved_range.py \\\n  --manifest /tmp/candidate-review/variant-manifest.json \\\n  --output-dir /tmp/candidate-review/approved-range",
           "if": null
         },
         {
           "job": "current-asset-gates",
           "step": "Structural candidate intake",
           "sha256": "70f7641fbe811b70fd7ff4f7a35664006da71de0975c0a3cefeda69e0fd33f1d",
+          "command": "python tools/validate_candidate_assets.py --output /tmp/candidate-review/intake.json\ncat /tmp/candidate-review/intake.json",
           "if": null
         },
         {
           "job": "current-asset-gates",
           "step": "Validate candidate authoring provenance",
           "sha256": "f8293d65eed3f8cf90d9c7ff4cc6fcf2986a08f3c48cfd0cef5ea78752d9512e",
+          "command": "python tools/validate_authoring_provenance.py --output /tmp/candidate-review/authoring-provenance.json\ncat /tmp/candidate-review/authoring-provenance.json",
           "if": null
         },
         {
           "job": "current-asset-gates",
           "step": "Verify mask semantics and exposed-side pixels",
           "sha256": "aa5ec5378d364c0f74ab798460cc31552a8c80734cd1e4ff7619df3948b53d67",
+          "command": "set +e\npython -m unittest tests.test_mask_semantics\nMASK_RC=$?\npython tests/validate-exposed-side-pixels.py\nPIXEL_RC=$?\nset -e\nif [ \"$MASK_RC\" -ne 0 ] || [ \"$PIXEL_RC\" -ne 0 ]; then\n  echo \"Mask semantics or exposed-side pixel validation failed.\" >&2\n  exit 1\nfi",
           "if": null
         }
       ],
@@ -2691,7 +2922,7 @@
     },
     {
       "path": ".github/workflows/candidate-assets.yml",
-      "blobSha": "c4897300f80be934d09cd73b0c43e622d8ed40f2",
+      "blobSha": "4aa42f61d20c47366a0d964078609462b7a7b4fa",
       "name": "Current asset gates",
       "events": [
         {
@@ -2700,6 +2931,7 @@
           "branchIgnores": null,
           "paths": [
             "app/**",
+            "!app/tools/test-v5-endpoint-safety.js",
             "review-assets/**",
             "reference/variant-cases.json",
             "reference/visual-debt.md",
@@ -2741,6 +2973,7 @@
           "branchIgnores": null,
           "paths": [
             "app/**",
+            "!app/tools/test-v5-endpoint-safety.js",
             "review-assets/**",
             "reference/variant-cases.json",
             "reference/visual-debt.md",
@@ -2810,60 +3043,70 @@
           "job": "current-asset-gates",
           "step": "Install image tooling",
           "sha256": "96b4e7a58919c5d3b9e33f54ec6ca991a7a1df28d55be926c61b18c035881953",
+          "command": "python -m pip install -r tools/requirements.txt",
           "if": null
         },
         {
           "job": "current-asset-gates",
           "step": "Unit-test current candidate contracts",
           "sha256": "943444433dcd55af5e4b12cf0c7925ee0ee62a54385a3b39704ce31c618d6cb7",
+          "command": "python -m unittest\ntests/test_candidate_asset_gates.py\ntests/test_candidate_asset_sets.py\ntests/test_candidate_delta_authoring.py\ntests/test_candidate_authoring_provenance.py\ntests/test_perspective_editorial_gate.py\ntests/test_gap_parallelism_gate.py\ntests/test_gap_pixel_gate.py\ntests/test_faucet_edge.py",
           "if": null
         },
         {
           "job": "current-asset-gates",
           "step": "Verify mask semantics and exposed-side pixels",
           "sha256": "aa5ec5378d364c0f74ab798460cc31552a8c80734cd1e4ff7619df3948b53d67",
+          "command": "set +e\npython -m unittest tests.test_mask_semantics\nMASK_RC=$?\npython tests/validate-exposed-side-pixels.py\nPIXEL_RC=$?\nset -e\nif [ \"$MASK_RC\" -ne 0 ] || [ \"$PIXEL_RC\" -ne 0 ]; then\n  echo \"Mask semantics or exposed-side pixel validation failed.\" >&2\n  exit 1\nfi",
           "if": null
         },
         {
           "job": "current-asset-gates",
           "step": "Validate current app runtime and asset invariants",
           "sha256": "328e123c63857fd8473bd4bd3581e655b08b7440d7f5d2c31cc375607582f539",
+          "command": "npm test",
           "if": null
         },
         {
           "job": "current-asset-gates",
           "step": "Derive current target variants",
           "sha256": "f1b300786ef0661c7c6ea5ca48eeae85a6affb282828d04e98a29778d2a242ab",
+          "command": "mkdir -p /tmp/candidate-review\nnode tools/variant_fidelity_manifest.js \\\n  --cases reference/variant-cases.json \\\n  --output /tmp/candidate-review/variant-manifest.json\npython tools/render_variant_fidelity.py \\\n  --manifest /tmp/candidate-review/variant-manifest.json \\\n  --output-dir /tmp/candidate-review/variants",
           "if": null
         },
         {
           "job": "current-asset-gates",
           "step": "Validate approved stone runtime integration",
           "sha256": "ca55f22f535359a411754fd7113c23c8dda7c0d256e7a6068d9d2bba525918d9",
+          "command": "python tools/validate_approved_stone.py \\\n  --manifest /tmp/candidate-review/variant-manifest.json \\\n  --output-dir /tmp/candidate-review/approved-stone",
           "if": null
         },
         {
           "job": "current-asset-gates",
           "step": "Verify approved faucet runtime pixels and host visibility",
           "sha256": "eff7b5b34698489dbfcf332aec9d90eb958db36ea5b68ffa80acdbd0e8cdc24e",
+          "command": "python tools/validate_approved_faucet.py \\\n  --manifest /tmp/candidate-review/variant-manifest.json \\\n  --output-dir /tmp/candidate-review/approved-faucet",
           "if": null
         },
         {
           "job": "current-asset-gates",
           "step": "Verify approved range runtime pixels",
           "sha256": "8092e2761e222365718f24dfd6a5f540bd771bcd0dea5c5ec4347cb154ea460b",
+          "command": "python tools/validate_approved_range.py \\\n  --manifest /tmp/candidate-review/variant-manifest.json \\\n  --output-dir /tmp/candidate-review/approved-range",
           "if": null
         },
         {
           "job": "current-asset-gates",
           "step": "Structural candidate intake",
           "sha256": "70f7641fbe811b70fd7ff4f7a35664006da71de0975c0a3cefeda69e0fd33f1d",
+          "command": "python tools/validate_candidate_assets.py --output /tmp/candidate-review/intake.json\ncat /tmp/candidate-review/intake.json",
           "if": null
         },
         {
           "job": "current-asset-gates",
           "step": "Validate candidate authoring provenance",
           "sha256": "f8293d65eed3f8cf90d9c7ff4cc6fcf2986a08f3c48cfd0cef5ea78752d9512e",
+          "command": "python tools/validate_authoring_provenance.py --output /tmp/candidate-review/authoring-provenance.json\ncat /tmp/candidate-review/authoring-provenance.json",
           "if": null
         }
       ],
@@ -2965,36 +3208,43 @@
           "job": "Pinned legacy scope and current reusable image handler",
           "step": "Materialize and pin exact original and main commits",
           "sha256": "778819dedc2a0ec0d89dfe9b108e566f03638ea490186383a891caaef8ad7d7c",
+          "command": "git fetch --no-tags origin main\n# Commit objects remain reachable via the historical archival tag.\n# Never bind a test workflow to a branch eligible for retirement.\ngit fetch --no-tags origin 6840d8986e44a7860b541e6becb3b5373ef48c09\ntest \"$(git cat-file -t 6840d8986e44a7860b541e6becb3b5373ef48c09)\" = commit",
           "if": null
         },
         {
           "job": "Pinned legacy scope and current reusable image handler",
           "step": "Verify legacy behavior was superseded without copying HTML or JS",
           "sha256": "fb9cef02c0868ba7500ec9b998865f9fe19411f87c07777de0122d0602971371",
+          "command": "python3 -m py_compile tools/development_a11y_fallback_semantic_audit.py\npython3 tools/development_a11y_fallback_semantic_audit.py\nnode --check app/core/image-fallback.js\nnode --check app/how-it-works/how-it-works.js\nnode tests/public-image-fallback.test.mjs\nnpm run pages:check",
           "if": null
         },
         {
           "job": "Chromium + WebKit 16 viewports/routes, 152 image failure/recovery cases",
           "step": "Build real publish folder, no Netlify deployment",
           "sha256": "38920ee2af360b62a99e4db305fe44f31c99e9d3101765e4ef0c5e6f2e19c36b",
+          "command": "npm install --no-save --no-package-lock esbuild@0.28.2 playwright@1.56.0\nnpm run build\nnpm run pages:check",
           "if": null
         },
         {
           "job": "Chromium + WebKit 16 viewports/routes, 152 image failure/recovery cases",
           "step": "Serve only local built site",
           "sha256": "130b2214084b42c463c33a1c336b7153334cf2fb00ddbe6247b9e78fe7f79a4a",
+          "command": "python3 -m http.server 8123 --bind 127.0.0.1 --directory app >/tmp/a11y-fallback-http.log 2>&1 &\nsleep 2\ncurl --fail http://127.0.0.1:8123/how-it-works/ >/dev/null",
           "if": null
         },
         {
           "job": "Chromium + WebKit 16 viewports/routes, 152 image failure/recovery cases",
           "step": "Verify 19 informative frames, alt, contrast, layout, keyboard, error and recovery",
           "sha256": "b1185eaf6992d146e0267dc02b33d348da75a9963480fd41c2ade666c79374ce",
+          "command": "node tests/public-image-fallback-browser.mjs",
           "if": null
         }
       ],
       "classification": "automated-validation-or-reporting",
       "mutationSignals": [],
       "externalIndicators": [
+        "network/http access",
+        "browser dependency",
         "package installation"
       ],
       "artifactActions": [
@@ -3035,6 +3285,7 @@
           "job": "historic-receipt",
           "step": "Recorded outcome (no mutation)",
           "sha256": "150833b019535bfeda5f5fba719fe08e2ae485b6d8632c32325447e5709bc1b2",
+          "command": "echo 'Consumed. Audit and apply PASS in run 40566796709; 63 to 62 refs, all 60 historical heads preserved. Never re-run the one-shot executor.",
           "if": null
         }
       ],
@@ -3100,18 +3351,21 @@
           "job": "authorization-contract",
           "step": "Verify syntax",
           "sha256": "9778c0bab759517145e801bc089540df1bf38f586090fe2bc2e7054b3f9c215a",
+          "command": "node --check netlify/functions/configuration.mjs\nnode --check netlify/functions/buyer-configuration.mjs\nnode --check app/tools/test-v5-endpoint-safety.js",
           "if": null
         },
         {
           "job": "authorization-contract",
           "step": "Test authorization and role policy without credentials or network",
           "sha256": "945e6a63721ed180261faf5eb8a4cb61074842618b84c943246b68919f6e7807",
+          "command": "node app/tools/test-access-policy.mjs\nnode app/tools/test-v5-endpoint-safety.js\nnode --test tests/ci/access-dto-boundary.test.mjs\nnode app/tools/test-published-buyer-projection.js\nnode --test tests/auth-first-login-recovery.test.mjs",
           "if": null
         }
       ],
       "classification": "automated-validation-or-reporting",
       "mutationSignals": [],
       "externalIndicators": [
+        "Netlify dependency",
         "package installation"
       ],
       "artifactActions": [],
@@ -3169,24 +3423,29 @@
           "job": "Newest source test + historical fixed baseline, Chromium and WebKit",
           "step": "Verify newer test provenance and scoped compatibility fix",
           "sha256": "d30586525ec026d25bfa027debe4775932a298f40f93bf3a5c8ad113924bbdca",
+          "command": "git config --global --add safe.directory \"$GITHUB_WORKSPACE\"\ngit fetch --no-tags origin 6260df944b6b82f3a86d9eed4d9bc3eacd8bc48b\ntest \"$(git rev-parse FETCH_HEAD:tests/how-accordion-grid-browser-gate.mjs)\" = 42cfde7bb249bd4f20a24607a0e82e32a80dd0b3\ngrep -q 'return locator.screenshot({animations:\"disabled\"})' tests/how-accordion-grid-browser-gate.mjs\ngrep -q 'const before=await inspect' tests/how-accordion-grid-browser-gate.mjs\ngrep -q 'const after=await inspect' tests/how-accordion-grid-browser-gate.mjs\nnode --check tests/how-accordion-grid-browser-gate.mjs\nnpm install --no-save --no-package-lock playwright@1.56.0",
           "if": null
         },
         {
           "job": "Newest source test + historical fixed baseline, Chromium and WebKit",
           "step": "Serve only static local candidate and historical baseline",
           "sha256": "3828c0b7d701f8b6e555aa9bee1d3238a15468ad7831675f624120a9f5da2a72",
+          "command": "python3 -m http.server 8123 --bind 127.0.0.1 --directory app >/tmp/how-current.log 2>&1 &\npython3 -m http.server 8124 --bind 127.0.0.1 --directory baseline/app >/tmp/how-baseline.log 2>&1 &\nsleep 3\ncurl --fail http://127.0.0.1:8123/how-it-works/ >/dev/null\ncurl --fail http://127.0.0.1:8124/how-it-works/ >/dev/null",
           "if": null
         },
         {
           "job": "Newest source test + historical fixed baseline, Chromium and WebKit",
           "step": "Exercise independent native details, keyboard and visual parity",
           "sha256": "3ea593cab6de0ef4d93303e5ae37a2001f7f24350dcaefd06a3cc5270ac509f9",
+          "command": "node tests/how-accordion-grid-browser-gate.mjs",
           "if": null
         }
       ],
       "classification": "automated-validation-or-reporting",
       "mutationSignals": [],
       "externalIndicators": [
+        "network/http access",
+        "browser dependency",
         "package installation"
       ],
       "artifactActions": [
@@ -3196,9 +3455,28 @@
     },
     {
       "path": ".github/workflows/development-arc03-prototype-semantic.yml",
-      "blobSha": "a7d6aa14d60be4ffbdb4dec134dc3c313ac7f550",
+      "blobSha": "3043dd0312c61a2346de1d2114f113f9f7127a7d",
       "name": "Development 15 — ARC03 preview prototype supersession, fail-closed guards",
       "events": [
+        {
+          "name": "pull_request",
+          "branches": [
+            "development"
+          ],
+          "branchIgnores": null,
+          "paths": [
+            "tests/arc03c-historical-prototype-guards.test.mjs",
+            "tools/development_arc03_prototype_semantic_audit.py",
+            ".github/workflows/development-arc03-prototype-semantic.yml"
+          ],
+          "pathIgnores": null,
+          "types": [
+            "opened",
+            "reopened",
+            "synchronize",
+            "ready_for_review"
+          ]
+        },
         {
           "name": "push",
           "branches": [
@@ -3224,15 +3502,16 @@
       ],
       "jobs": [
         {
-          "id": "arc03-source-and-browser",
+          "id": "arc03-source-reconciliation",
           "name": null,
           "if": null,
           "runsOn": "ubuntu-latest",
-          "container": "mcr.microsoft.com/playwright:v1.62.1-noble",
+          "container": null,
           "services": [],
-          "stepCount": 8,
+          "stepCount": 6,
           "actions": [
             "actions/checkout@v4",
+            "actions/setup-python@v5",
             "actions/setup-node@v4",
             "actions/upload-artifact@v4"
           ]
@@ -3240,39 +3519,24 @@
       ],
       "actions": [
         "actions/checkout@v4",
+        "actions/setup-python@v5",
         "actions/setup-node@v4",
         "actions/upload-artifact@v4"
       ],
-      "commandCount": 5,
+      "commandCount": 2,
       "commands": [
         {
-          "job": "arc03-source-and-browser",
+          "job": "arc03-source-reconciliation",
           "step": "Pin legacy 12-path DAG and prove newer compiler build authority",
           "sha256": "74579783a56dd1965fe8105168d0ef7c724823180bc82aaa575057445e5038fb",
+          "command": "git config --global --add safe.directory \"$GITHUB_WORKSPACE\"\ngit fetch --no-tags origin main\ngit fetch --no-tags origin e459b9bd85c4e9c8bb96813ae6758789de75dc13\nmkdir -p artifacts/development-arc03-prototype-reconciliation\npython3 -m py_compile tools/development_arc03_prototype_semantic_audit.py\npython3 tools/development_arc03_prototype_semantic_audit.py | tee artifacts/development-arc03-prototype-reconciliation/source.json",
           "if": null
         },
         {
-          "job": "arc03-source-and-browser",
+          "job": "arc03-source-reconciliation",
           "step": "Assert current authoritative pages match output and fail closed on drift",
           "sha256": "6a23a02f60cc16ba762bb843168195813c9287db92eec7abc8ca86b8d5ed4ed4",
-          "if": null
-        },
-        {
-          "job": "arc03-source-and-browser",
-          "step": "Use pinned Chromium and WebKit runners, local only",
-          "sha256": "23da094f4d8056e0d08b16311575e0d58cbd4d37671fadea2a16ff1150c0cf6b",
-          "if": null
-        },
-        {
-          "job": "arc03-source-and-browser",
-          "step": "Serve current generated pages without deploying or mutating app",
-          "sha256": "e8fbb2d5d23e0edea5437519d57298d8dc99d3dd4a2bf4d1e32e4499bafdb563",
-          "if": null
-        },
-        {
-          "job": "arc03-source-and-browser",
-          "step": "Check primary headers and independent Viewer in 48 Chromium/WebKit cases",
-          "sha256": "e5b690d84d6e954bfcdf31bbcc8222c6e362a877998f6aa66ef99b6bbadb3add",
+          "command": "node --check scripts/compile-primary-pages.mjs\nnode --check tests/arc03c-historical-prototype-guards.test.mjs\nnpm run pages:check\nnode --test tests/arc03c-source-authority.test.mjs\nnode --test tests/arc03c-historical-prototype-guards.test.mjs\nnode tests/public-cutover-contract.cjs",
           "if": null
         }
       ],
@@ -3323,18 +3587,21 @@
           "job": "provenance",
           "step": "Verify negative guards (no network, no image rebuild)",
           "sha256": "2d77fa576e3c9c17bc5013da79545f5fbda9d68e86ee1c41f1adda99dd236860",
+          "command": "python3 -m unittest tests/test_development_asset_provenance.py",
           "if": null
         },
         {
           "job": "provenance",
           "step": "Fetch only the two pinned archive tags for read-only object comparison",
           "sha256": "144fa5cebb708e63e8f35621cbbf22e2d31ebb75535a6f72d96e184e22967bd5",
+          "command": "git fetch --no-tags origin \\\n  '+refs/tags/archive/m2d/ds02-imagens-originais-e9c405bf:refs/tags/archive/m2d/ds02-imagens-originais-e9c405bf' \\\n  '+refs/tags/archive/m2d/pr34-exposed-sides-glass-20040da8:refs/tags/archive/m2d/pr34-exposed-sides-glass-20040da8'\ntest \"$(git rev-parse refs/tags/archive/m2d/ds02-imagens-originais-e9c405bf)\" = e9c405bfc0189baed8b4b679a1113c37b6ddbd21\ntest \"$(git rev-parse refs/tags/archive/m2d/pr34-exposed-sides-glass-20040da8)\" = 20040da835d6da66b03f73642c0c44db109dd6e8",
           "if": null
         },
         {
           "job": "provenance",
           "step": "Reconcile all 40 original image Git blob identities and scene assets",
           "sha256": "2adc895a0ec8486f8fb4b47d96962049101938e532b78f57fc829deb21ce1db1",
+          "command": "python3 tools/development_asset_provenance_audit.py --output artifacts/asset-provenance/report.json",
           "if": null
         }
       ],
@@ -3377,11 +3644,14 @@
           "job": "archived",
           "step": "Non-executable consumed wave placeholder",
           "sha256": "744bb8e715ac94a5cfe508b307f41a3c841ce219a7b85baeb4cc1766a246e83f",
+          "command": "echo 'A1/A2 manifests consumed. This workflow cannot delete refs. See development handover.",
           "if": null
         }
       ],
-      "classification": "manual-or-event-driven",
-      "mutationSignals": [],
+      "classification": "operational-or-write-capable",
+      "mutationSignals": [
+        "possible operational command; manual review required"
+      ],
       "externalIndicators": [],
       "artifactActions": [],
       "parseWarnings": []
@@ -3448,24 +3718,28 @@
           "job": "audit",
           "step": "Negative terminal gates and syntax",
           "sha256": "c4434966e27a45be670d4befbdfdc14d58b9b18e4e275dfb88df94f799a14177",
+          "command": "python -m unittest discover -s tests -p 'test_development_aux_terminal.py' -v\npython -m py_compile tools/development_aux_terminal.py",
           "if": null
         },
         {
           "job": "audit",
           "step": "Read-only exact-63-ref terminal audit",
           "sha256": "ee635b99fcf730f88842a831d24f0c56781632e5e14ed2ed06625a5882ed068d",
+          "command": "python tools/development_aux_terminal.py --mode audit",
           "if": null
         },
         {
           "job": "apply",
           "step": "Require same negative tests",
           "sha256": "673282fde4b02b3bf63d531bf67aa6a9f4d715bc413b581b0e4981b3d11ee7be",
+          "command": "python -m unittest discover -s tests -p 'test_development_aux_terminal.py' -v",
           "if": null
         },
         {
           "job": "apply",
           "step": "One-shot exact-SHA operational ref retirement after fresh gates",
           "sha256": "fd3726b95d0930d4f57cb71a86ea0652f771701437c96bf265dcb5a1e9bd6548",
+          "command": "python tools/development_aux_terminal.py --mode apply",
           "if": null
         }
       ],
@@ -3534,11 +3808,14 @@
           "job": "read-only-audit",
           "step": "Read-only scan of pinned historical inventory minus ledger-backed retirements",
           "sha256": "c3b31425dc467450c8ddb33a35b23ac9448785dd2bb0403b15452304f55590dc",
+          "command": "python3 -m py_compile tools/development_branch_reconciliation_scan.py\ngit fetch --no-tags origin '+refs/heads/*:refs/remotes/origin/*'\n# A ledger push can be followed by documentation commits before this\n# queued job starts. Audit the freshly fetched development snapshot,\n# but only if it fast-forwards the triggering checkout. No force,\n# no remote writes, and the scanner still checks live refs/PRs.\nlatest=\"$(git rev-parse origin/development)\"\nif [ \"$(git rev-parse HEAD)\" != \"$latest\" ]; then\n  git merge-base --is-ancestor HEAD \"$latest\" || {\n    echo \"NON_FAST_FORWARD_DEVELOPMENT_REF_DRIFT\"; exit 1;\n  }\n  git checkout --detach \"$latest\"\nfi\npython3 tools/development_branch_reconciliation_scan.py",
           "if": null
         }
       ],
-      "classification": "automated-validation-or-reporting",
-      "mutationSignals": [],
+      "classification": "operational-or-write-capable",
+      "mutationSignals": [
+        "possible operational command; manual review required"
+      ],
       "externalIndicators": [],
       "artifactActions": [
         "actions/upload-artifact@v4"
@@ -3598,6 +3875,7 @@
           "job": "preflight-unit",
           "step": "Check pure preflight; no tokens, role, site or network",
           "sha256": "08fe7ba19f164fb95abd91aa367e812095942bea927c3cbdd8c4d5be6d2b569a",
+          "command": "node --check tests/ci/preview-identity-attestation.mjs\nnode --check tests/ci/preview-identity-attestation.test.mjs\nnode --test tests/ci/preview-identity-attestation.test.mjs",
           "if": null
         }
       ],
@@ -3662,12 +3940,14 @@
           "job": "offline-proof",
           "step": "Verify exact original Git blobs and security-boundary differences",
           "sha256": "22aaf5d5a9edae464a308c0430b6ebdcf3658b472288b0ba3bf299e2a60b1ee9",
+          "command": "python3 -m unittest discover -s tests -p test_development_ci_auth_lineage.py -v",
           "if": null
         },
         {
           "job": "offline-proof",
           "step": "Revalidate pure preview identity rejection, without network",
           "sha256": "f0bbd060aeae386c10c22263e5d276b3bae15ca7d2c716c0fc7e9c6179b9a400",
+          "command": "node --check tests/ci/preview-identity-attestation.mjs\nnode --test tests/ci/preview-identity-attestation.test.mjs",
           "if": null
         }
       ],
@@ -3733,12 +4013,14 @@
           "job": "source-and-contract",
           "step": "Check historic provenance and isolation (never execute historic probes)",
           "sha256": "5017cf5319c65ae7d62d361f7bcf89399aebdf2e109391f2a12bdaf3a8de0a5e",
+          "command": "python3 -m unittest discover -s tests -p test_development_ci_baseline_cluster.py -v",
           "if": null
         },
         {
           "job": "source-and-contract",
           "step": "Run existing V5 public projection tests and guards",
           "sha256": "2e12902ca9708a04c01b9ab4367652eff996e6069da107df3a4413338a44dee9",
+          "command": "node --test tests/public-module-projection.test.cjs\nnode app/tools/test-public-modules-endpoint.js\nnode --test app/viewer/scene-adapters.test.mjs\nnpm run pages:check",
           "if": null
         }
       ],
@@ -3802,24 +4084,28 @@
           "job": "nav-label500",
           "step": "Verify source and prepare isolated V5 loopback",
           "sha256": "9dcbb548bdf043f29fb33248b8ea9676985a4c7c04c5f337e31d19c13a4bb507",
+          "command": "node --check tests/ci/nav-label500-invariant.cjs\nbash tests/ci/prepare-local-v5-browser.sh FLOW_LAYOUT_URL",
           "if": null
         },
         {
           "job": "nav-label500",
           "step": "Resolve exact Playwright package against preinstalled Chromium/WebKit",
           "sha256": "382ab685cecbea7a26069ebfdeff95840780f44c2546aa3a788b235c44a7dfc8",
+          "command": "npm install --prefix /tmp/m2d-label500 --no-audit --no-fund playwright@1.62.1\nnode -e 'const p=require(\"/tmp/m2d-label500/node_modules/playwright/package.json\");if(p.version!==\"1.62.1\") process.exit(1);'",
           "if": null
         },
         {
           "job": "nav-label500",
           "step": "Verify 136 computed container states; no production call",
           "sha256": "6f83db038a965f8d76a4fd0bcd5fd71984c2701073f392f73d785a7fd60dffeb",
+          "command": "node tests/ci/nav-label500-invariant.cjs",
           "if": null
         }
       ],
       "classification": "automated-validation-or-reporting",
       "mutationSignals": [],
       "externalIndicators": [
+        "browser dependency",
         "package installation"
       ],
       "artifactActions": [],
@@ -3877,24 +4163,28 @@
           "job": "responsive-boundaries",
           "step": "Syntax and known local V5 fixture preparation",
           "sha256": "fe01703098a26058c07c54432a0ca104bcd49ce6aeeccc91a390f1db468c90b4",
+          "command": "node --check tests/ci/nav-flow-responsive-crossbrowser.cjs\nbash tests/ci/prepare-local-v5-browser.sh FLOW_LAYOUT_URL",
           "if": null
         },
         {
           "job": "responsive-boundaries",
           "step": "Resolve Playwright package against baked-in browsers",
           "sha256": "31a91420535031fabf2ae3f7305f6da6021b434958c3fb7c1b1fc7d6edce8de6",
+          "command": "npm install --prefix /tmp/m2d-dev-boundary-tools --no-audit --no-fund playwright@1.62.1\nnode -e 'const p=require(\"/tmp/m2d-dev-boundary-tools/node_modules/playwright/package.json\");if(p.version!==\"1.62.1\") process.exit(1);console.log(\"R9_PLAYWRIGHT_VERSION_PIN_PASS \"+p.version)'",
           "if": null
         },
         {
           "job": "responsive-boundaries",
           "step": "Run 32 local V5 boundary and stage-survival scenarios",
           "sha256": "39d0772f3b2596a75d3181b685267c1e4786924599710bbe5cf85a29c3984b3e",
+          "command": "node tests/ci/nav-flow-responsive-crossbrowser.cjs",
           "if": null
         }
       ],
       "classification": "automated-validation-or-reporting",
       "mutationSignals": [],
       "externalIndicators": [
+        "browser dependency",
         "package installation"
       ],
       "artifactActions": [],
@@ -3985,54 +4275,63 @@
           "job": "exact-source-and-main-authority",
           "step": "Check old/new CSS Git blobs and query ownership",
           "sha256": "605741dcc0112684214ce8e56b6594282b50a5657aee44505ad2234e4ad3ce0a",
+          "command": "python3 -m unittest discover -s tests -p test_development_ci_nav_css_causality.py -v",
           "if": null
         },
         {
           "job": "exact-source-and-main-authority",
           "step": "Current main-equivalent pages and JS validation",
           "sha256": "9baeb2dc314f0c507464248fa456e2c005da1e89fd07a5dfcc5944914e887e3d",
+          "command": "node --check tests/ci/ci-v5-nav-css-container-differential.cjs\nnpm run pages:check",
           "if": null
         },
         {
           "job": "chromium-webkit-differential",
           "step": "Build validated buyer V5 locally (no Netlify deploy)",
           "sha256": "cc5a39d087d51440c24f114a7c70db62b7bd8cd096b5e6d4fc343567c68b2a02",
+          "command": "bash tests/ci/prepare-local-v5-browser.sh FLOW_LAYOUT_URL",
           "if": null
         },
         {
           "job": "chromium-webkit-differential",
           "step": "Install package matching baked-in Chromium and WebKit",
           "sha256": "cc0dc4b92491e5fa6eb25aefa38cb4590f12bc671e6f2f2c681257b195b74862",
+          "command": "npm install --prefix /tmp/m2d-nav-css-boundary-tools --no-audit --no-fund playwright@1.62.1",
           "if": null
         },
         {
           "job": "chromium-webkit-differential",
           "step": "Compare 20 CSS ownership boundary cases on V5",
           "sha256": "8fcb0f6262345edc368b075311b0d244948ceb888b72c5ece01b684a288d26cc",
+          "command": "node tests/ci/ci-v5-nav-css-container-differential.cjs /tmp/m2d-ci-css-causal",
           "if": null
         },
         {
           "job": "full-profile-theme-detail-differential",
           "step": "Build validated V5 browser scenario without deployment",
           "sha256": "cc5a39d087d51440c24f114a7c70db62b7bd8cd096b5e6d4fc343567c68b2a02",
+          "command": "bash tests/ci/prepare-local-v5-browser.sh FLOW_LAYOUT_URL",
           "if": null
         },
         {
           "job": "full-profile-theme-detail-differential",
           "step": "Match built-in Chromium WebKit",
           "sha256": "f13c3cc2c22efd42d5d3409f1d78159af390cf4f8114e4413051d23555bdfc85",
+          "command": "npm install --prefix /tmp/m2d-nav-css-matrix-tools --no-audit --no-fund playwright@1.62.1",
           "if": null
         },
         {
           "job": "full-profile-theme-detail-differential",
           "step": "Measure 56 original CSS differential states in both engines",
           "sha256": "841b48d6a0d7951578581e67694d2592b44cad145879e41635469b1ab9709d71",
+          "command": "node tests/ci/ci-v5-nav-css-container-differential.cjs /tmp/m2d-ci-css-full-matrix",
           "if": null
         }
       ],
       "classification": "automated-validation-or-reporting",
       "mutationSignals": [],
       "externalIndicators": [
+        "browser dependency",
         "package installation"
       ],
       "artifactActions": [
@@ -4107,36 +4406,42 @@
           "job": "pinned-archive-and-contract",
           "step": null,
           "sha256": "2d27bd4a01deb6c11dd7a78dc35f2ab6f636c5684298b41b1b2b583a69702b87",
+          "command": "python3 -m unittest discover -s tests -p test_development_ci_nav_legacy.py -v",
           "if": null
         },
         {
           "job": "pinned-archive-and-contract",
           "step": null,
           "sha256": "43a250b997404be911967c48832d04048dc05f9fa2ad0a75e7ad09d691bdb75a",
+          "command": "node --check tests/ci/nav-flow-responsive-crossbrowser.cjs\nnode app/tools/test-flow-layout.js\nnode app/tools/test-flow-model.js\nnpm run pages:check",
           "if": null
         },
         {
           "job": "browser-v5-navigation",
           "step": "Validated V5 buyer localhost only",
           "sha256": "cc5a39d087d51440c24f114a7c70db62b7bd8cd096b5e6d4fc343567c68b2a02",
+          "command": "bash tests/ci/prepare-local-v5-browser.sh FLOW_LAYOUT_URL",
           "if": null
         },
         {
           "job": "browser-v5-navigation",
           "step": "Match Chromium and WebKit baked-in browser versions",
           "sha256": "91eb34eddfd88fb536c9e73c3d3400f0ef3ece0e30c6910613e125285a821eaf",
+          "command": "npm install --prefix /tmp/m2d-nav-legacy-tools --no-audit --no-fund playwright@1.62.1",
           "if": null
         },
         {
           "job": "browser-v5-navigation",
           "step": "Run all 32 published V5 nav scenarios (2 browsers x 8 widths x 2 themes)",
           "sha256": "39d0772f3b2596a75d3181b685267c1e4786924599710bbe5cf85a29c3984b3e",
+          "command": "node tests/ci/nav-flow-responsive-crossbrowser.cjs",
           "if": null
         }
       ],
       "classification": "automated-validation-or-reporting",
       "mutationSignals": [],
       "externalIndicators": [
+        "browser dependency",
         "package installation"
       ],
       "artifactActions": [],
@@ -4196,12 +4501,14 @@
           "job": "provenance",
           "step": null,
           "sha256": "c8fe695235501fb69183f67c4163cdf3c66a05c6f4c37fc41802fb1e76e174bc",
+          "command": "python3 -m unittest discover -s tests -p test_development_ci_v5_nav_clean.py -v",
           "if": null
         },
         {
           "job": "provenance",
           "step": null,
           "sha256": "5a0d442d0b85890ef226f061d6c097f5964a69c17b58e5378ee0b5fa2eb7a1f1",
+          "command": "node --check tests/ci/nav-flow-responsive-crossbrowser.cjs\nnode app/tools/test-layout-profiles.js\nnpm run pages:check",
           "if": null
         }
       ],
@@ -4264,12 +4571,14 @@
           "job": "provenance-only",
           "step": "Verify preserved legacy source against current main (no legacy execution)",
           "sha256": "1f7e8e20549ebb98ef963387cf4b1900c5743d1ec4fb6d91b7dd00a857480526",
+          "command": "python3 -m unittest discover -s tests -p test_development_ci_v5_local_provenance.py -v",
           "if": null
         },
         {
           "job": "provenance-only",
           "step": "Parse modern offline navigation and fixture scripts",
           "sha256": "4c30e1a513215acbf9dc6eb1d586bcee9f623a1f92c600535c4c9a2a0cfa6794",
+          "command": "node --check tests/ci/nav-flow-responsive-crossbrowser.cjs\nnode --check tests/ci/config-unlocked-local-diagnostic.mjs\nnode --check tests/ci/local-buyer-config-server.mjs",
           "if": null
         }
       ],
@@ -4350,42 +4659,49 @@
           "job": "dto-and-source",
           "step": "Verify exact historical provenance and no runtime edits",
           "sha256": "e6bd91ff9bdb67def7edf320a3f2456901bf7c15f3de89c172fc35d53d5452a0",
+          "command": "python3 -m unittest discover -s tests -p test_development_ci_v5local_semantic.py -v",
           "if": null
         },
         {
           "job": "dto-and-source",
           "step": "Compare projected V3 direct vs pre-upgraded V5",
           "sha256": "f4e69cf9971b5ca0d08a18646f74a18c6c337c9a9f128c8f7b0bbd37c8183368",
+          "command": "node --test tests/ci/legacy-v5local-dto-parity.test.cjs",
           "if": null
         },
         {
           "job": "browser-local-only",
           "step": "Build and serve checked-in Buyer configuration on loopback",
           "sha256": "cc5a39d087d51440c24f114a7c70db62b7bd8cd096b5e6d4fc343567c68b2a02",
+          "command": "bash tests/ci/prepare-local-v5-browser.sh FLOW_LAYOUT_URL",
           "if": null
         },
         {
           "job": "browser-local-only",
           "step": "Use Playwright matching container browsers",
           "sha256": "9d042b1622c0b5dc23167a5d97bfd2076bca976af52891e6cb9a4ff1b780b062",
+          "command": "npm install --prefix /tmp/m2d-v5local-semantic --no-audit --no-fund playwright@1.62.1",
           "if": null
         },
         {
           "job": "browser-local-only",
           "step": "Existing published V3/V5 buyer browser contract",
           "sha256": "e4095bb1ac0f1fd9fc42bbeb4422f533e6cdba242c82ced0fa110a901cc93263",
+          "command": "node tests/buyer-v5-browser.cjs /tmp/m2d-v5local-browser-existing",
           "if": null
         },
         {
           "job": "browser-local-only",
           "step": "Hit-target and scroll semantics from legacy probe, not legacy runtime",
           "sha256": "00e88c5f50df8bfe819907766f94154a435d5dc3584d61a0575e339030d3d033",
+          "command": "node tests/ci/v5-local-hit-target-semantic.cjs /tmp/m2d-v5local-hit-target",
           "if": null
         }
       ],
       "classification": "automated-validation-or-reporting",
       "mutationSignals": [],
       "externalIndicators": [
+        "browser dependency",
         "package installation"
       ],
       "artifactActions": [
@@ -4461,42 +4777,49 @@
           "job": "parity",
           "step": "Historic vs current V5 DTO differential",
           "sha256": "fc43d935f1463bd0ed6212afe72103d049ac9a6f48516335eda0b61d7143359f",
+          "command": "node --test tests/ci/cp-public-dto-parity.test.cjs",
           "if": null
         },
         {
           "job": "parity",
           "step": "Current access session contracts (no live grants)",
           "sha256": "f3444a38825f37ff0a8d249be143563735ec4dc211d6739e49579dd1981e4f91",
+          "command": "node --test tests/ci/cp-public-session-contract.test.mjs",
           "if": null
         },
         {
           "job": "parity",
           "step": "Existing V5 projection and public contract tests",
           "sha256": "4ecc21a95d5af98e616d36b25f0e181c5014b89bcf1225faca8334aa8c18d8fc",
+          "command": "node app/tools/test-published-buyer-projection.js\nnode app/tools/test-core.js\nnode app/tools/test-runtime-contracts.js\nnode app/tools/test-v5-endpoint-safety.js\nnode app/tools/test-public-modules-endpoint.js\nnode --test tests/public-module-projection.test.cjs\nnpm run pages:check",
           "if": null
         },
         {
           "job": "browser-loopback",
           "step": "Prepare compiled V5 on localhost, never deploy",
           "sha256": "cc5a39d087d51440c24f114a7c70db62b7bd8cd096b5e6d4fc343567c68b2a02",
+          "command": "bash tests/ci/prepare-local-v5-browser.sh FLOW_LAYOUT_URL",
           "if": null
         },
         {
           "job": "browser-loopback",
           "step": "Install chromium for private buyer contract tests",
           "sha256": "95c1a82b9eaf4cc42ecf36dd04dbe91836085b454f611b935caed8f85dc3d78a",
+          "command": "npm install --prefix /tmp/cp-public-browser-tools --no-audit --no-fund playwright@1.62.1\n/tmp/cp-public-browser-tools/node_modules/.bin/playwright install --with-deps chromium",
           "if": null
         },
         {
           "job": "browser-loopback",
           "step": "Browser V5 buyer payload and invalid publication fail-closed",
           "sha256": "e03572de2e3ed9b90776731725946e37d8d0878aeb079fd4440a6022e53c6840",
+          "command": "node tests/buyer-v5-browser.cjs /tmp/cp-public-buyer-v5",
           "if": null
         }
       ],
       "classification": "automated-validation-or-reporting",
       "mutationSignals": [],
       "externalIndicators": [
+        "browser dependency",
         "package installation"
       ],
       "artifactActions": [],
@@ -4557,12 +4880,14 @@
           "job": "contracts",
           "step": "Verify exact source blobs and newer V5 auth-first authority",
           "sha256": "354e6eefed67e849e9c36f327c034da9d03db795878cd3a51af728fef982bca4",
+          "command": "python3 -m unittest discover -s tests -p test_development_cp_public_family.py -v",
           "if": null
         },
         {
           "job": "contracts",
           "step": "Exercise current V5 role and DTO contracts, without network",
           "sha256": "1602cd83f671d13c5da0f70a76a2c404db17277e7c006e3923f4320ca5ab1f50",
+          "command": "node --test tests/ci/cp-public-current-role-boundary.test.mjs\nnode app/tools/test-published-buyer-projection.js\nnode --test tests/public-module-projection.test.cjs\nnode app/tools/test-public-modules-endpoint.js\nnpm run pages:check",
           "if": null
         }
       ],
@@ -4626,6 +4951,7 @@
           "job": "lineage",
           "step": "Offline full-history, endpoints, PR and source proof without external services",
           "sha256": "66fd90ad8f56ad1bf318ac9d3a7ce3b7060fb2b069fe3f7da198096ae557b558",
+          "command": "python3 -m unittest discover -s tests -p test_development_cp_public_lineage.py -v",
           "if": null
         }
       ],
@@ -4689,24 +5015,28 @@
           "job": "public-contract",
           "step": "Prove exact PR graph, Git blob absorption, routes and isolated fixture",
           "sha256": "46a346fc58840115ae8b89783199017b83f1c900b0f15065f7a6218e7f8065da",
+          "command": "python3 -m unittest discover -s tests -p test_development_cp_public_prs_175_180.py -v",
           "if": null
         },
         {
           "job": "public-contract",
           "step": "Public projection no-leak tests on current schema",
           "sha256": "4d116e8cf37315a31c8437c8af092cec5c9697b6bac608d79bbb439deb7d2391",
+          "command": "node --test tests/public-module-projection.test.cjs",
           "if": null
         },
         {
           "job": "public-contract",
           "step": "API in-memory stub, no HTTP calls to external service",
           "sha256": "97dc56d02067f250ad8309dd489fd386ccf744f00aa961987a5bbeffc4b9a378",
+          "command": "node app/tools/test-public-modules-endpoint.js",
           "if": null
         },
         {
           "job": "public-contract",
           "step": "Viewer adapter contract in memory",
           "sha256": "3b511640394e38228adab78bbfee0bc4e3d07f10a55e380b93c5d56d332b8ce0",
+          "command": "node --test app/viewer/scene-adapters.test.mjs",
           "if": null
         }
       ],
@@ -4772,12 +5102,14 @@
           "job": "offline-contracts",
           "step": "Source-exact archive and current v5 boundary",
           "sha256": "17a04210257de0e3a88c9dfa0e4d1cf3d94c74960703d0e12cb1a2dd7b8fc4d4",
+          "command": "python3 -m unittest discover -s tests -p test_development_cpux_cluster.py -v",
           "if": null
         },
         {
           "job": "offline-contracts",
           "step": "Existing live hierarchy and flow test coverage",
           "sha256": "8f64bd5bab2fedf8cefb201e8b7946ef17f4e579567dd2cb0a98ed90d19328b1",
+          "command": "node app/tools/test-flow-layout.js\nnode app/tools/test-hierarchy-administration.js\nnpm run pages:check",
           "if": null
         }
       ],
@@ -4843,12 +5175,14 @@
           "job": "main-v5-contracts",
           "step": "Pin original Git blobs and enforce MAIN modern endpoint boundary",
           "sha256": "878069983a1310e0cc12dc08d10ad11d05ce01fe99a22f245868f86d80f7fe55",
+          "command": "python3 -m unittest discover -s tests -p test_development_cpux_main_v5.py -v",
           "if": null
         },
         {
           "job": "main-v5-contracts",
           "step": "Main-equivalent V5 server and current hierarchy contracts",
           "sha256": "9c26fed753b6eecc7a8930eb1b2216b450a582049cdf972173239b7cef638d7e",
+          "command": "node app/tools/test-v5-endpoint-safety.js\nnode app/tools/test-hierarchy-administration.js\nnode app/tools/test-flow-model.js\nnode app/tools/test-flow-layout.js\nnode app/tools/test-public-modules-endpoint.js\nnpm run pages:check",
           "if": null
         }
       ],
@@ -4911,6 +5245,7 @@
           "job": "immutable-documentation",
           "step": "Verify source subtree and nineteen SHA256 hashes",
           "sha256": "27bc4297a18073b203fd9a81bfa5f419f8b72f9f7e0b6562a5caa89f2baf27fb",
+          "command": "python3 -m unittest discover -s tests -p test_development_ds05a_snapshot.py -v",
           "if": null
         }
       ],
@@ -4987,42 +5322,49 @@
           "job": "exact-parity",
           "step": "Exact 216 old browser assertion and nine scenario contracts",
           "sha256": "f5628907fccb07f31ce22d7b8ce5747075e1b4218b46efef784ebc20a8f14d21",
+          "command": "python3 -m unittest discover -s tests -p test_development_flow_v5_fixture.py -v",
           "if": null
         },
         {
           "job": "exact-parity",
           "step": "Main equivalent V5 flow/layout/navigation unit contracts",
           "sha256": "b05b136c7f734cee079cc70c7dd5d6c53a10442111dd1d53ae6a8fb61db07c01",
+          "command": "node app/tools/test-flow-layout.js\nnode app/tools/test-flow-model.js\nnode app/tools/test-hierarchy-administration.js\nnode app/tools/test-v5-endpoint-safety.js\nnpm run pages:check",
           "if": null
         },
         {
           "job": "browser-local-v5",
           "step": "Build and serve validated V5 locally, no Netlify deploy",
           "sha256": "cc5a39d087d51440c24f114a7c70db62b7bd8cd096b5e6d4fc343567c68b2a02",
+          "command": "bash tests/ci/prepare-local-v5-browser.sh FLOW_LAYOUT_URL",
           "if": null
         },
         {
           "job": "browser-local-v5",
           "step": "Use matching Playwright package for baked-in Chromium",
           "sha256": "3dd46c6ac1139e9823713bc35f839e8e4f45179343dd64d925ea0af6627d491b",
+          "command": "npm install --prefix /tmp/m2d-flow-fixture-browser --no-audit --no-fund playwright@1.62.1",
           "if": null
         },
         {
           "job": "browser-local-v5",
           "step": "Run all 216 current historical assertions on V5 buyer",
           "sha256": "e35eb18e82bf192caf933b32228848518b76b3e2a60d46851f94e1af2be06442",
+          "command": "node tests/flow-layout-browser.cjs /tmp/m2d-flow-fixture-browser",
           "if": null
         },
         {
           "job": "browser-local-v5",
           "step": "Browser-check buyer V5 projection and fail-closed invalid raw",
           "sha256": "ae40af417b2e7f0c54a09c04578535befc652be383cdc951351dd98023a3b6d2",
+          "command": "node tests/buyer-v5-browser.cjs /tmp/m2d-flow-buyer-v5",
           "if": null
         }
       ],
       "classification": "automated-validation-or-reporting",
       "mutationSignals": [],
       "externalIndicators": [
+        "browser dependency",
         "package installation"
       ],
       "artifactActions": [],
@@ -5080,12 +5422,14 @@
           "job": "pure-guards",
           "step": "Compile and verify deny-by-default selection (no deletes)",
           "sha256": "2a7b92660e16f9cac38fce24694765bff4c8f385aced64fc773645eb97295b92",
+          "command": "python3 -m py_compile tools/development_retirement_batch.py\npython3 -m unittest tests/test_development_retirement_batch.py",
           "if": null
         },
         {
           "job": "pure-guards",
           "step": "Confirm durable archival checkpoint is retained",
           "sha256": "c5d78db3ac15f1c9a64b26602e41e57af47bfa108b0f16a201848a5422e168c9",
+          "command": "test -s docs/handoffs/ARCHITECTURE_CHECKPOINT_2026-10-23_ARCHIVED.md\ngrep -q 'BEGIN-ARCHIVED-20261023-EXACT-26-LINES' docs/handoffs/ARCHITECTURE_CHECKPOINT_2026-10-23_ARCHIVED.md",
           "if": null
         }
       ],
@@ -5150,12 +5494,14 @@
           "job": "current-contracts",
           "step": "Verify historical blobs and exact pinned main authority",
           "sha256": "34976f9423fb0bb5c61d04942de7fa70621346530411d12d5110350aeedeb8de",
+          "command": "python3 -m unittest discover -s tests -p test_development_main_authority_public.py -v",
           "if": null
         },
         {
           "job": "current-contracts",
           "step": "Execute current main-equivalent viewer price/public contracts",
           "sha256": "401877e7a52c2c8e19b0695d6948fa923afe941215d26a045a40fe6be45ad576",
+          "command": "node --test tests/viewer-base-price-publication.test.cjs tests/viewer-price-v5-save.test.cjs\nnode app/tools/test-public-modules-endpoint.js\nnpm run pages:check",
           "if": null
         }
       ],
@@ -5221,24 +5567,28 @@
           "job": "source-inspector",
           "step": "Verify legacy executable and fixtures are byte-identical, and handover retained",
           "sha256": "af01109f5db9bf58e6082919faa44d1fe6c53cfce8cc01e8b28d4c527d03a66d",
+          "command": "git fetch --no-tags origin 2b00351acc1d1369116d8eeb546146a6b363072e\ntest \"$(git rev-parse 2b00351acc1d1369116d8eeb546146a6b363072e:tools/migration-inspector.mjs)\" = 0d862e435898daa8443ada12f7d093c5ab6232bc\ntest \"$(git rev-parse HEAD:tools/migration-inspector.mjs)\" = 0d862e435898daa8443ada12f7d093c5ab6232bc\ntest \"$(git rev-parse 2b00351acc1d1369116d8eeb546146a6b363072e:tests/migration-inspector.test.mjs)\" = abe491f840c82b12e93c578442a9c548f47f8a5a\ntest \"$(git rev-parse HEAD:tests/migration-inspector.test.mjs)\" = abe491f840c82b12e93c578442a9c548f47f8a5a\ntest \"$(git rev-parse 2b00351acc1d1369116d8eeb546146a6b363072e:docs/handoffs/MIGRATION_INSPECTOR_V0_2026-10-23.md)\" = 4f7cc27e51ee0840c6df90ea335a17cc770b8266\ntest \"$(git rev-parse HEAD:docs/handoffs/MIGRATION_INSPECTOR_V0_2026-10-23.md)\" = 4f7cc27e51ee0840c6df90ea335a17cc770b8266\necho 'SOURCE_AND_HANDOVER_BLOBS_PRESERVED'",
           "if": null
         },
         {
           "job": "source-inspector",
           "step": "Static/fixture contract",
           "sha256": "96503eb6404d690e655fad0aaf063de0af4425bbe3edf7ff9163794649401a0e",
+          "command": "node --check tools/migration-inspector.mjs\nnode --test tests/migration-inspector.test.mjs",
           "if": null
         },
         {
           "job": "source-inspector",
           "step": "Deterministic read-only product inventory",
           "sha256": "219bd6718e8eee288f931ca7a6bad4813a9b2300bfa03910d5fefbd569858865",
+          "command": "node tools/migration-inspector.mjs --focus site-header --out /tmp/migration-1.json\nnode tools/migration-inspector.mjs --focus site-header --out /tmp/migration-2.json\ncmp /tmp/migration-1.json /tmp/migration-2.json\nnode -e 'const x=require(\"/tmp/migration-1.json\");if(x.schema!==\"M2DMigrationInspector/0.1\"||x.coverage.negativeImpact!==\"NOT_PROVEN\"||x.summary.found<6) process.exit(1);console.log(\"M2D_DEV_MIGRATION_INSPECTOR_PASS \"+JSON.stringify(x.summary))'",
           "if": null
         },
         {
           "job": "source-inspector",
           "step": "Preserve legacy per-route diagnostics as investigation hints only",
           "sha256": "ab69045d0bf8a1b05c4821f254148772610fcb6830cfbe0ff6d9fd680ed86eeb",
+          "command": "node -e 'const x=require(\"/tmp/migration-1.json\"); for(const r of x.routes){ const matches=x.diagnostics.filter(d=>d.route===r.id); if(matches.length)console.log(\"M2D_MIGRATION_INSPECTOR_DIAGNOSTICS \"+JSON.stringify({route:r.id,count:matches.length,entries:matches})); } console.log(\"M2D_MIGRATION_INSPECTOR_COVERAGE \"+JSON.stringify(x.coverage));'",
           "if": null
         }
       ],
@@ -5283,6 +5633,7 @@
           "job": "consumed",
           "step": null,
           "sha256": "c0ce95b304c960c666e0d2701426de4da0090f560d82a96b5f12ce3d36b102f5",
+          "command": "echo 'NAV-05 auxiliary cleanup already completed in Actions",
           "if": null
         }
       ],
@@ -5343,6 +5694,7 @@
           "job": "provenance",
           "step": "Offline full DAG and exact visual contract audit; no live auth or Netlify",
           "sha256": "fd901e5ad681bfc3e83b0560b7de45207c69fe134cd51987d192115db55b87bd",
+          "command": "python3 -m unittest discover -s tests -p test_development_pr_ancestors_vis002c.py -v",
           "if": null
         }
       ],
@@ -5404,12 +5756,14 @@
           "job": "audit",
           "step": "Verify source, 12 PR SHA pins, history roster and existing tags",
           "sha256": "7390cd1da6b7f8f57329acc342e9a64d676ff15851f35a10aa9fb598e6880eeb",
+          "command": "python3 tools/development_pr_archive.py --mode audit",
           "if": null
         },
         {
           "job": "apply",
           "step": "Create only SHA-exact archival tags for at most 2 PRs, read back",
           "sha256": "88794f7fa361ed7878de4a89e331b709bf51639b0afbcf45fc358fec5b929938",
+          "command": "python3 tools/development_pr_archive.py --mode apply",
           "if": null
         }
       ],
@@ -5481,18 +5835,21 @@
           "job": "guard",
           "step": "Compile strict PR, archive, and bounded branch retirement logic",
           "sha256": "93689e73c21c73763dc88b5c6e4b73cd2464369770970fca7f4b708d41f64517",
+          "command": "python3 -m py_compile tools/development_retirement_batch.py tools/development_pr_roster_probe.py\npython3 -m unittest tests/test_development_retirement_batch.py tests/test_development_pr_roster_transition.py tests/test_development_cp_public_lineage.py tests/test_development_cp_public_prs_175_180.py -v",
           "if": null
         },
         {
           "job": "guard",
           "step": "Read-only GitHub check of live PRs, pinned branches and archive tags",
           "sha256": "9d7a23e8da26cc4fae9905d8410c9a84cb1cb69a32fb3ff2ef5c2ae87057054a",
+          "command": "python3 tools/development_pr_roster_probe.py",
           "if": null
         },
         {
           "job": "guard",
           "step": "Public projection, endpoint and viewer contracts without external services",
           "sha256": "b2cd9bdecadac61022934d4fbd71b879f5b76f40c9d58a2e20bf8025db0dd5b3",
+          "command": "node --test tests/public-module-projection.test.cjs\nnode app/tools/test-public-modules-endpoint.js\nnode --test app/viewer/scene-adapters.test.mjs",
           "if": null
         }
       ],
@@ -5562,30 +5919,36 @@
           "job": "audit",
           "step": "Pin gate, static generation, syntax",
           "sha256": "aec6a20c7af10b6bf4fc1292b910c6b1019e58b2c4a588dd493f2e48614520aa",
+          "command": "node --check tests/ci/public-text-contrast-semantic.mjs\nnode --test tests/ci/vis002-context-pin.test.mjs\nnpm run pages:check",
           "if": null
         },
         {
           "job": "audit",
           "step": "Install matching browser client only",
           "sha256": "ae121efe3e32bd2d224e686ea68d69a13b8274c812b2c6d88afa2e6e7abc93ae",
+          "command": "npm install --prefix /tmp/m2d-public-contrast --no-audit --no-fund playwright@1.62.1\nnode -e 'if(require(\"/tmp/m2d-public-contrast/node_modules/playwright/package.json\").version!==\"1.62.1\")process.exit(1)'",
           "if": null
         },
         {
           "job": "audit",
           "step": "Serve local public pages, not Netlify",
           "sha256": "b189dfa7769f560362de542839b1e0d56761eda24b40e2c54b26e81b553d48b4",
+          "command": "python3 -m http.server 8123 --bind 127.0.0.1 --directory app >/tmp/m2d-public-contrast.log 2>&1 &\nfor i in $(seq 1 30); do\n  if curl -fsS http://127.0.0.1:8123/ >/dev/null; then break; fi\n  sleep 1\ndone\ncurl -fsS http://127.0.0.1:8123/about/ >/dev/null\ncurl -fsS http://127.0.0.1:8123/how-it-works/ >/dev/null",
           "if": null
         },
         {
           "job": "audit",
           "step": "Audit current computed CSS",
           "sha256": "895a098c24b51c2048357f2615ddd341caaf72c5c3069b68ab2a820980c7b1a3",
+          "command": "node tests/ci/public-text-contrast-semantic.mjs",
           "if": null
         }
       ],
       "classification": "automated-validation-or-reporting",
       "mutationSignals": [],
       "externalIndicators": [
+        "network/http access",
+        "browser dependency",
         "package installation"
       ],
       "artifactActions": [
@@ -5626,6 +5989,7 @@
           "job": "receipt-only",
           "step": "Historic receipt",
           "sha256": "c40954cce4984ae69fdc1a0c90a536bd9bf066b05fef1ff83f2b74a1560deaf1",
+          "command": "echo 'CP-PUBLIC-03 aux retirement was consumed by Actions",
           "if": null
         }
       ],
@@ -5689,18 +6053,21 @@
           "job": "no-leak-contract",
           "step": "Verify strict read-only function and fixture source",
           "sha256": "382fa839ed542b45208c68caf03a7899899873b4661665411bd876657fa4f458",
+          "command": "node --check app/tools/test-public-modules-endpoint.js\nnode --check netlify/functions/public-modules.mjs\nnode --test tests/public-module-projection.test.cjs tests/viewer-base-price-publication.test.cjs",
           "if": null
         },
         {
           "job": "no-leak-contract",
           "step": "Adversarial primary-public DTO fallback, no real network",
           "sha256": "97dc56d02067f250ad8309dd489fd386ccf744f00aa961987a5bbeffc4b9a378",
+          "command": "node app/tools/test-public-modules-endpoint.js",
           "if": null
         }
       ],
       "classification": "automated-validation-or-reporting",
       "mutationSignals": [],
       "externalIndicators": [
+        "Netlify dependency",
         "package installation"
       ],
       "artifactActions": [],
@@ -5708,9 +6075,27 @@
     },
     {
       "path": ".github/workflows/development-public-menu-legacy-semantic.yml",
-      "blobSha": "cbe95cfa029c16b67827f5e2d38600550db0bf53",
-      "name": "Development 14 — prior public-menu implementations semantic reconciliation",
+      "blobSha": "bafd5a9b720ab142f826adf4c8e20bb8f89b64d1",
+      "name": "Development 14 — prior public-menu source reconciliation",
       "events": [
+        {
+          "name": "pull_request",
+          "branches": [
+            "development"
+          ],
+          "branchIgnores": null,
+          "paths": [
+            "tools/development_public_menu_semantic_audit.py",
+            ".github/workflows/development-public-menu-legacy-semantic.yml"
+          ],
+          "pathIgnores": null,
+          "types": [
+            "opened",
+            "reopened",
+            "synchronize",
+            "ready_for_review"
+          ]
+        },
         {
           "name": "push",
           "branches": [
@@ -5739,11 +6124,12 @@
           "name": null,
           "if": null,
           "runsOn": "ubuntu-latest",
-          "container": "mcr.microsoft.com/playwright:v1.62.1-noble",
+          "container": null,
           "services": [],
-          "stepCount": 8,
+          "stepCount": 6,
           "actions": [
             "actions/checkout@v4",
+            "actions/setup-python@v5",
             "actions/setup-node@v4",
             "actions/upload-artifact@v4"
           ]
@@ -5751,39 +6137,24 @@
       ],
       "actions": [
         "actions/checkout@v4",
+        "actions/setup-python@v5",
         "actions/setup-node@v4",
         "actions/upload-artifact@v4"
       ],
-      "commandCount": 5,
+      "commandCount": 2,
       "commands": [
         {
           "job": "public-menu-contract",
           "step": "Pin both source histories and verify current controller authority",
           "sha256": "24a57fbeb6eb54ba3f210687a4c46e13873427305bb2cf1aa42d5712eabc2729",
+          "command": "git config --global --add safe.directory \"$GITHUB_WORKSPACE\"\ngit fetch --no-tags origin main\ngit fetch --no-tags origin fdeb931af285f6cf76795ccdd50a8b75d0f25aef\ngit fetch --no-tags origin 4ba9384733a8cb46ad8a6c7c8ef3b9aebe25cd93\nmkdir -p artifacts/development-public-menu-reconciliation\npython3 -m py_compile tools/development_public_menu_semantic_audit.py\npython3 tools/development_public_menu_semantic_audit.py | tee artifacts/development-public-menu-reconciliation/static.json",
           "if": null
         },
         {
           "job": "public-menu-contract",
           "step": "Validate current authored pages, menu JS and source-only contracts",
           "sha256": "1f37f875d11e195ca8823cd5490802c9d026d2de4b5f0e637eccbdb12fdfd609",
-          "if": null
-        },
-        {
-          "job": "public-menu-contract",
-          "step": "Use exact preinstalled Chromium and WebKit revision",
-          "sha256": "01fd65634eff775d1f2404cb4d113691b3f93958de420382f5e56290bc98a842",
-          "if": null
-        },
-        {
-          "job": "public-menu-contract",
-          "step": "Run only loopback static public app",
-          "sha256": "d408009e2b00cf3bcc961bd616aaf715556413225278013c08366921b760a7c5",
-          "if": null
-        },
-        {
-          "job": "public-menu-contract",
-          "step": "Verify latest shared controller semantics in 48 Chromium/WebKit scenarios",
-          "sha256": "e5b690d84d6e954bfcdf31bbcc8222c6e362a877998f6aa66ef99b6bbadb3add",
+          "command": "node --check app/landing/header-menu.js\nnode --check tests/ci/public-navigation-semantic-browser.mjs\nnode --test tests/arc03c-source-authority.test.mjs\nnpm run pages:check\nnode tests/public-cutover-contract.cjs",
           "if": null
         }
       ],
@@ -5900,30 +6271,36 @@
           "job": "public-nav-contract",
           "step": "Source and generated-page integrity, no rewrite",
           "sha256": "822f16438f1bf82f526fec8569f6af71cf519ac2f68b45dae1540a5b9c1b893c",
+          "command": "node --check app/landing/header-menu.js\nnode --check app/how-it-works/how-it-works.js\nnode --check tests/ci/public-navigation-semantic-browser.mjs\nnode --test tests/arc03c-source-authority.test.mjs\nnpm run pages:check\nnode tests/public-cutover-contract.cjs\nnode tests/ui-theme-focus-token-contract.cjs",
           "if": null
         },
         {
           "job": "public-nav-contract",
           "step": "Resolve package against preinstalled Playwright browsers",
           "sha256": "6f3b24f5a621345de70e81477de69f0e9ebe4ad7eb6860903857f73817d66d5e",
+          "command": "npm install --prefix /tmp/m2d-public-nav --no-audit --no-fund playwright@1.62.1\nnode -e 'const p=require(\"/tmp/m2d-public-nav/node_modules/playwright/package.json\");if(p.version!==\"1.62.1\") process.exit(1)'",
           "if": null
         },
         {
           "job": "public-nav-contract",
           "step": "Serve only the local static public app",
           "sha256": "af5626a35e06afb61b617572af6ef9f7227aa763b7f99ff5b95be03512550229",
+          "command": "python3 -m http.server 8123 --bind 127.0.0.1 --directory app >/tmp/m2d-public-nav-http.log 2>&1 &\nfor i in $(seq 1 30); do\n  if curl --silent --show-error --fail http://127.0.0.1:8123/ >/dev/null; then break; fi\n  sleep 1\ndone\ncurl --fail http://127.0.0.1:8123/about/ >/dev/null\ncurl --fail http://127.0.0.1:8123/how-it-works/ >/dev/null\ncurl --fail http://127.0.0.1:8123/viewer/ >/dev/null",
           "if": null
         },
         {
           "job": "public-nav-contract",
           "step": "Verify 124 NAV-004 / NAV-005 behavioral scenarios across 2 engines",
           "sha256": "e5b690d84d6e954bfcdf31bbcc8222c6e362a877998f6aa66ef99b6bbadb3add",
+          "command": "node tests/ci/public-navigation-semantic-browser.mjs",
           "if": null
         }
       ],
       "classification": "automated-validation-or-reporting",
       "mutationSignals": [],
       "externalIndicators": [
+        "network/http access",
+        "browser dependency",
         "package installation"
       ],
       "artifactActions": [],
@@ -5985,24 +6362,28 @@
           "job": "audit",
           "step": "Run pure negative selection tests",
           "sha256": "2a7b92660e16f9cac38fce24694765bff4c8f385aced64fc773645eb97295b92",
+          "command": "python3 -m py_compile tools/development_retirement_batch.py\npython3 -m unittest tests/test_development_retirement_batch.py",
           "if": null
         },
         {
           "job": "audit",
           "step": "Exact-ref, PR, ruleset, archival delta and tag audit (READ-ONLY)",
           "sha256": "da179f4070a6081e3d00d3a4b74268694d6d41cae982e9ec4ea49bc73b9b5f81",
+          "command": "python3 tools/development_retirement_batch.py --mode audit",
           "if": null
         },
         {
           "job": "apply",
           "step": "Repeat negative tests before applying explicit batch",
           "sha256": "328def42a7e5e30f85fbae68d839d832210d38c899a4a32abb0279623e37d9d7",
+          "command": "python3 -m unittest tests/test_development_retirement_batch.py",
           "if": null
         },
         {
           "job": "apply",
           "step": "Create archive tag before deleting divergent ref; use SHA leases and readback",
           "sha256": "db2946fe812d967d7b17b5c63343d648d9bfc2aa5c0f580ace1275acfba180aa",
+          "command": "python3 tools/development_retirement_batch.py --mode apply",
           "if": null
         }
       ],
@@ -6049,6 +6430,7 @@
           "job": "historic-receipt",
           "step": "Recorded outcome (no mutation)",
           "sha256": "86cf1f21a888634464b1b6ed1569cea48929ceb2474e6b8b16a7d854ac79c5f1",
+          "command": "echo 'Consumed. Audit and apply PASS in run 40572051580; 63 to 62 refs, all 60 historical heads preserved. The one-shot executor must not run again.",
           "if": null
         }
       ],
@@ -6060,9 +6442,30 @@
     },
     {
       "path": ".github/workflows/development-test-impact-plan.yml",
-      "blobSha": "4edb8a895656ee709065e702966fc4861c12b368",
+      "blobSha": "dd03ad9af3c6c949d5ebdd2b728f6e482738a52f",
       "name": "Development test impact plan (advisory)",
       "events": [
+        {
+          "name": "push",
+          "branches": [
+            "development"
+          ],
+          "branchIgnores": null,
+          "paths": [
+            ".github/workflows/**",
+            "tools/ci/build-workflow-inventory.mjs"
+          ],
+          "pathIgnores": null,
+          "types": null
+        },
+        {
+          "name": "workflow_dispatch",
+          "branches": null,
+          "branchIgnores": null,
+          "paths": null,
+          "pathIgnores": null,
+          "types": null
+        },
         {
           "name": "pull_request",
           "branches": [
@@ -6090,7 +6493,7 @@
         {
           "id": "plan",
           "name": null,
-          "if": null,
+          "if": "github.event_name == 'pull_request",
           "runsOn": "ubuntu-latest",
           "container": null,
           "services": [],
@@ -6099,24 +6502,76 @@
             "actions/checkout@v4",
             "actions/setup-node@v4"
           ]
+        },
+        {
+          "id": "inventory",
+          "name": null,
+          "if": "github.event_name == 'workflow_dispatch",
+          "runsOn": "ubuntu-latest",
+          "container": null,
+          "services": [],
+          "stepCount": 4,
+          "actions": [
+            "actions/checkout@v4",
+            "actions/setup-node@v4",
+            "actions/upload-artifact@v4"
+          ]
+        },
+        {
+          "id": "inventory_on_push",
+          "name": null,
+          "if": "github.event_name == 'push",
+          "runsOn": "ubuntu-latest",
+          "container": null,
+          "services": [],
+          "stepCount": 5,
+          "actions": [
+            "actions/checkout@v4",
+            "actions/setup-node@v4",
+            "actions/upload-artifact@v4"
+          ]
         }
       ],
       "actions": [
         "actions/checkout@v4",
-        "actions/setup-node@v4"
+        "actions/setup-node@v4",
+        "actions/upload-artifact@v4"
       ],
-      "commandCount": 2,
+      "commandCount": 5,
       "commands": [
         {
           "job": "plan",
-          "step": "Validate impact map and historical path cases",
-          "sha256": "ac6d001ff74be10de058eb6a17e9d3ca0898fe3a09c5897a57f638ae08af4a36",
+          "step": "Validate impact map, inventory evidence and historical path cases",
+          "sha256": "33ef808f1aaf2b89a4ede5962633bcbee9ab4176dd6152e534846c648373b3ba",
+          "command": "node --test tests/ci/test-impact-selector.test.mjs tests/ci/workflow-inventory.test.mjs",
           "if": null
         },
         {
           "job": "plan",
           "step": "Report affected contract bundles",
           "sha256": "964245cb9afae176d9a09cc724bd9d91e467c6bbd78f71551232293de24deb9b",
+          "command": "node tools/ci/select-test-bundles.mjs --base \"$BASE_SHA\" --head \"$HEAD_SHA",
+          "if": null
+        },
+        {
+          "job": "inventory",
+          "step": "Generate SHA-pinned workflow inventory",
+          "sha256": "40b7da7eb899b508a14308b3ac1860208de5286d349b3a1557aed87216d83fe3",
+          "command": "test \"$(git rev-parse HEAD)\" = \"$DEVELOPMENT_SHA\"\nnode tools/ci/build-workflow-inventory.mjs \\\n  --main-sha \"$MAIN_SHA\" \\\n  --development-pin \"$DEVELOPMENT_SHA\" \\\n  --development-tree \"$(git rev-parse 'HEAD^{tree}')\" \\\n  --open-prs-json '[]' \\\n  --output artifacts/tst-001-workflow-inventory.json",
+          "if": null
+        },
+        {
+          "job": "inventory_on_push",
+          "step": "Capture exact inventory refs and open PRs",
+          "sha256": "1df3c13bf1ba0fe90db75f3b48d88cf85ef8e7f0184653a503bc697b528fdf4b",
+          "command": "git fetch origin main\nmain_sha=\"$(git rev-parse FETCH_HEAD)\"\ndevelopment_sha=\"$(git rev-parse HEAD)\"\ntest \"$development_sha\" = \"$GITHUB_SHA\"\ndevelopment_tree=\"$(git rev-parse 'HEAD^{tree}')\"\nmkdir -p artifacts\ngh pr list --state open --limit 1000 --json number,url,headRefName,headRefOid,baseRefName,baseRefOid > artifacts/open-prs.json\necho \"main_sha=$main_sha\" >> \"$GITHUB_OUTPUT\"\necho \"development_sha=$development_sha\" >> \"$GITHUB_OUTPUT\"\necho \"development_tree=$development_tree\" >> \"$GITHUB_OUTPUT\"",
+          "if": null
+        },
+        {
+          "job": "inventory_on_push",
+          "step": "Generate SHA-pinned workflow inventory",
+          "sha256": "4ec4fcfd556bee102e72ecdf046d27618ae7138c301ef1d9dd8479ea68674c4d",
+          "command": "node tools/ci/build-workflow-inventory.mjs \\\n  --main-sha \"${{ steps.refs.outputs.main_sha }}\" \\\n  --development-pin \"${{ steps.refs.outputs.development_sha }}\" \\\n  --development-tree \"${{ steps.refs.outputs.development_tree }}\" \\\n  --open-prs-json \"$(cat artifacts/open-prs.json)\" \\\n  --output artifacts/tst-001-workflow-inventory.json",
           "if": null
         }
       ],
@@ -6125,7 +6580,9 @@
       "externalIndicators": [
         "package installation"
       ],
-      "artifactActions": [],
+      "artifactActions": [
+        "actions/upload-artifact@v4"
+      ],
       "parseWarnings": []
     },
     {
@@ -6200,42 +6657,49 @@
           "job": "exact-archive-and-static-intent",
           "step": null,
           "sha256": "287f1c495ce1cc0035e94a69782c9dfa01326b9174bb91969361b7c7327f44ca",
+          "command": "python3 -m unittest discover -s tests -p test_development_ux04_authority.py -v",
           "if": null
         },
         {
           "job": "exact-archive-and-static-intent",
           "step": null,
           "sha256": "145ee5100e73dfbdf9e8048934e86ef2879041dd733a60f1c8c6378b62b1d9ef",
+          "command": "node app/tools/test-flow-layout.js\nnode app/tools/test-flow-model.js\nnode app/tools/test-hierarchy-administration.js\nnode --check tests/ci/ux04-geometry-focus-v5.cjs\nnpm run pages:check",
           "if": null
         },
         {
           "job": "live-local-browser",
           "step": "Build validated buyer V5, local isolated server",
           "sha256": "cc5a39d087d51440c24f114a7c70db62b7bd8cd096b5e6d4fc343567c68b2a02",
+          "command": "bash tests/ci/prepare-local-v5-browser.sh FLOW_LAYOUT_URL",
           "if": null
         },
         {
           "job": "live-local-browser",
           "step": "Use matching Chromium package",
           "sha256": "0378536269a437d03ab7b0d7e3f511b2978490831ee438fdf316ec0208671ef1",
+          "command": "npm install --prefix /tmp/m2d-ux04-tools --no-audit --no-fund playwright@1.62.1",
           "if": null
         },
         {
           "job": "live-local-browser",
           "step": "Verify responsive geometry and historical keyboard-focus obligation",
           "sha256": "3eaa28454ea6907f212196879dc462108ef1157eb405e25d96630f7e8818fb7f",
+          "command": "node tests/ci/ux04-geometry-focus-v5.cjs /tmp/m2d-ux04-proof",
           "if": null
         },
         {
           "job": "live-local-browser",
           "step": "Execute full V5 keyboard navigation browser regression",
           "sha256": "bfca859986349c0aeec9aeedff5ecd3cfa071ea28c2d49de47c0010f73a63742",
+          "command": "node tests/keyboard-browser.cjs /tmp/m2d-ux04-keyboard",
           "if": null
         }
       ],
       "classification": "automated-validation-or-reporting",
       "mutationSignals": [],
       "externalIndicators": [
+        "browser dependency",
         "package installation"
       ],
       "artifactActions": [
@@ -6245,7 +6709,7 @@
     },
     {
       "path": ".github/workflows/development-viewer-nav005-semantic.yml",
-      "blobSha": "40d4af4dcb31e108d72f4d51aa063fff76242094",
+      "blobSha": "49794223049162853df19dc0023d409b07692ec6",
       "name": "Development 13 — Viewer NAV005 newer-intent semantic reconciliation (offline)",
       "events": [
         {
@@ -6258,7 +6722,6 @@
             "tools/development_nav005_semantic_audit.py",
             "tests/ui-theme-contract.cjs",
             "tests/viewer-secondary-header-browser-gate.mjs",
-            "tests/ci/public-navigation-semantic-browser.mjs",
             "app/viewer/index.html",
             "app/viewer/viewer.css",
             "app/core/ui-theme.js",
@@ -6283,7 +6746,6 @@
             "tools/development_nav005_semantic_audit.py",
             "tests/ui-theme-contract.cjs",
             "tests/viewer-secondary-header-browser-gate.mjs",
-            "tests/ci/public-navigation-semantic-browser.mjs",
             "app/viewer/index.html",
             "app/viewer/viewer.css",
             "app/core/ui-theme.js",
@@ -6310,7 +6772,7 @@
           "runsOn": "ubuntu-latest",
           "container": "mcr.microsoft.com/playwright:v1.62.1-noble",
           "services": [],
-          "stepCount": 8,
+          "stepCount": 7,
           "actions": [
             "actions/checkout@v4",
             "actions/setup-node@v4",
@@ -6323,42 +6785,42 @@
         "actions/setup-node@v4",
         "actions/upload-artifact@v4"
       ],
-      "commandCount": 5,
+      "commandCount": 4,
       "commands": [
         {
           "job": "source-and-browsers",
           "step": "Pin old NAV005 commit, source scope and current design intent",
-          "sha256": "d6dfe92db5bf1a38eecc516bc7ff8af55d20c2e00765ac4a465d16c7929aa103",
+          "sha256": "0bc620eda1b9b315526c7343ad3f399c40dbd727860bcc3dc3af48d8b958cc54",
+          "command": "git config --global --add safe.directory \"$GITHUB_WORKSPACE\"\ngit fetch --no-tags origin 10445ad8c20ac1a415f4ba463345eda83bd7e9a6\ngit fetch --no-tags origin main\npython3 -m py_compile tools/development_nav005_semantic_audit.py\npython3 tools/development_nav005_semantic_audit.py\nnode tests/ui-theme-contract.cjs\nnode --check tests/viewer-secondary-header-browser-gate.mjs\nnpm run pages:check",
           "if": null
         },
         {
           "job": "source-and-browsers",
           "step": "Resolve exact Playwright package for preinstalled browsers",
           "sha256": "d992f345b359ab562b6f4bfed9f5dde35f66ce07503876464fb17058ea62651e",
+          "command": "npm install --no-save --no-package-lock --no-audit --no-fund playwright@1.62.1\nnode -e 'if(require(\"playwright/package.json\").version!==\"1.62.1\")process.exit(1)'",
           "if": null
         },
         {
           "job": "source-and-browsers",
           "step": "Serve local static site only, no Netlify",
           "sha256": "c2384b1e16dd8d8e1af4c1389cb1bab2aa0766b8170eac1d2692d06e10260e05",
-          "if": null
-        },
-        {
-          "job": "source-and-browsers",
-          "step": "Latest primary and secondary header interaction contract (48 cases)",
-          "sha256": "e5b690d84d6e954bfcdf31bbcc8222c6e362a877998f6aa66ef99b6bbadb3add",
+          "command": "python3 -m http.server 8123 --bind 127.0.0.1 --directory app >/tmp/nav005-intent-http.log 2>&1 &\nfor i in $(seq 1 30); do\n  if curl --silent --show-error --fail http://127.0.0.1:8123/viewer/ >/dev/null; then break; fi\n  sleep 1\ndone\ncurl --fail http://127.0.0.1:8123/ >/dev/null\ncurl --fail http://127.0.0.1:8123/about/ >/dev/null\ncurl --fail http://127.0.0.1:8123/how-it-works/ >/dev/null",
           "if": null
         },
         {
           "job": "source-and-browsers",
           "step": "Depth-2 Viewer geometry, links, theme and keyboard contract (20 cases)",
           "sha256": "26d8edaf81bf9cb29ed5cc952d7ff83e3abbfd81d76eee787a049b4d3d8715bc",
+          "command": "node tests/viewer-secondary-header-browser-gate.mjs",
           "if": null
         }
       ],
       "classification": "automated-validation-or-reporting",
       "mutationSignals": [],
       "externalIndicators": [
+        "network/http access",
+        "browser dependency",
         "package installation"
       ],
       "artifactActions": [
@@ -6439,30 +6901,36 @@
           "job": "price-contract",
           "step": "V5 publication and client wire fail-closed contracts (no real network)",
           "sha256": "3de644bf42abe8717008032a7ad816abf658f8f75069bae9c270ca408b75a3e9",
+          "command": "node --test tests/viewer-base-price-publication.test.cjs tests/viewer-price-v5-save.test.cjs tests/ci/viewer-price-wire-contract.test.cjs\nnode app/tools/test-public-modules-endpoint.js\nnode --check app/viewer/public-data.js\nnode --check app/viewer/viewer.js",
           "if": null
         },
         {
           "job": "price-browser",
           "step": "Install pinned Playwright client matching system browsers",
           "sha256": "f9ac9ea3190d37e5c5176d7feea02245fe17fad090ff17bde419592f7696cebe",
+          "command": "npm install --no-save --no-package-lock --no-audit --no-fund playwright@1.62.1",
           "if": null
         },
         {
           "job": "price-browser",
           "step": "Serve Viewer locally without production or preview",
           "sha256": "5cd0f0bd1e936ba79227d5d16d6a18872355a306fbae1c4146991667c30336da",
+          "command": "python3 -m http.server 8123 --bind 127.0.0.1 --directory app >/tmp/m2d-dev-viewer-price.log 2>&1 &\nsleep 2\ncurl --fail http://127.0.0.1:8123/viewer/ >/dev/null",
           "if": null
         },
         {
           "job": "price-browser",
           "step": "Browser price ON/OFF in Chromium and WebKit",
           "sha256": "fca0367773f4aef1caa385b10efe224473512c44f6e36802ffc4a2ea29134c57",
+          "command": "node tests/viewer-base-price-browser-gate.mjs",
           "if": null
         }
       ],
       "classification": "automated-validation-or-reporting",
       "mutationSignals": [],
       "externalIndicators": [
+        "network/http access",
+        "browser dependency",
         "package installation"
       ],
       "artifactActions": [],
@@ -6501,6 +6969,7 @@
           "job": "historic-receipt",
           "step": "Recorded outcome (no mutation)",
           "sha256": "b15936c2132892b5b24274cc09a97d4d6d29d228272cf07888e79a9a10d92c1c",
+          "command": "echo 'Consumed. Audit and apply PASS in run 40569779277; 63 to 62 refs, all 60 historical heads preserved. Never re-run the one-shot executor.",
           "if": null
         }
       ],
@@ -6543,6 +7012,7 @@
           "job": "receipt-only",
           "step": "Historic receipt, no mutation",
           "sha256": "d3cf7135ff12294b25c1ffeaac88682643c569815d7a077625dcad08a73279d2",
+          "command": "echo 'VIS002 one-shot consumed by Actions",
           "if": null
         }
       ],
@@ -6610,30 +7080,36 @@
           "job": "scoped-readonly",
           "step": "Source, provenance, strict contrast and generated pages",
           "sha256": "beff886a4e16d0a71ff627ea79d98828304af1487a1304fd2b9c526adefe6ce7",
+          "command": "node --check tests/ci/vis002-context-browser.mjs\nnode --test tests/ci/vis002-context-pin.test.mjs\nnpm run pages:check",
           "if": null
         },
         {
           "job": "scoped-readonly",
           "step": "Install matching Playwright npm package only",
           "sha256": "782101a2ea6165380b43c318889c9e29d263a7ccef42104d892c52377ebd5143",
+          "command": "npm install --prefix /tmp/m2d-vis002 --no-audit --no-fund playwright@1.62.1\nnode -e 'if(require(\"/tmp/m2d-vis002/node_modules/playwright/package.json\").version!==\"1.62.1\")process.exit(1)'",
           "if": null
         },
         {
           "job": "scoped-readonly",
           "step": "Local static server; no Netlify",
           "sha256": "f53fc2f513a95a8b32d57ba525c6447564ff81ac8855665fc1d780c4e8f61af3",
+          "command": "python3 -m http.server 8123 --bind 127.0.0.1 --directory app >/tmp/m2d-vis002.log 2>&1 &\nfor i in $(seq 1 30); do\n  if curl --silent --fail http://127.0.0.1:8123/ >/dev/null; then break; fi\n  sleep 1\ndone\ncurl --fail http://127.0.0.1:8123/about/ >/dev/null\ncurl --fail http://127.0.0.1:8123/how-it-works/ >/dev/null",
           "if": null
         },
         {
           "job": "scoped-readonly",
           "step": "Read rendered CSS on 24 theme/route/engine viewport combinations",
           "sha256": "96904433479b8739ff45de19982805d47368843a891508abaf60dfa8bfb11a93",
+          "command": "node tests/ci/vis002-context-browser.mjs",
           "if": null
         }
       ],
       "classification": "automated-validation-or-reporting",
       "mutationSignals": [],
       "externalIndicators": [
+        "network/http access",
+        "browser dependency",
         "package installation"
       ],
       "artifactActions": [],
@@ -6693,30 +7169,36 @@
           "job": "cluster",
           "step": "Verify 5 historical sources, 14 original blobs, current 10 contexts and pages",
           "sha256": "b382f0f20a29a60945f77a8e770959e18eae4012af7babf406ada57d1d22909b",
+          "command": "git config --global --add safe.directory \"$GITHUB_WORKSPACE\"\npython3 -m unittest discover -s tests -p test_development_vis002_cluster.py -v\nnode --test tests/ci/vis002-context-pin.test.mjs\nnpm run pages:check",
           "if": null
         },
         {
           "job": "cluster",
           "step": "Install matching local browser client",
           "sha256": "fee712e9fbaf5b93db4ac42398a202676b115f96a760a1890b0ccb6c2045a921",
+          "command": "npm install --prefix /tmp/m2d-vis002-family --no-audit --no-fund playwright@1.62.1\nnode -e 'if(require(\"/tmp/m2d-vis002-family/node_modules/playwright/package.json\").version!==\"1.62.1\")process.exit(1)'",
           "if": null
         },
         {
           "job": "cluster",
           "step": "Serve local pages, never Netlify",
           "sha256": "68b93c9d04ebfb315cfda7b6f2c9c8cb13d42c7d674124bd9d4b06842e1ab45e",
+          "command": "python3 -m http.server 8123 --bind 127.0.0.1 --directory app >/tmp/m2d-vis002-family.log 2>&1 &\nfor i in $(seq 1 30); do\n  if curl -fsS http://127.0.0.1:8123/ >/dev/null; then break; fi\n  sleep 1\ndone\ncurl -fsS http://127.0.0.1:8123/about/ >/dev/null",
           "if": null
         },
         {
           "job": "cluster",
           "step": "Check availability alternative states on 8 browser fixtures",
           "sha256": "3cb174ec6ed97f3ad45227b11da5891ed9064548e9c29785f4ddfe6f1e60136a",
+          "command": "node tests/ci/vis002-family-state-browser.mjs",
           "if": null
         }
       ],
       "classification": "automated-validation-or-reporting",
       "mutationSignals": [],
       "externalIndicators": [
+        "network/http access",
+        "browser dependency",
         "package installation"
       ],
       "artifactActions": [],
@@ -6781,30 +7263,36 @@
           "job": "provenance-and-computed-css",
           "step": "Recover pinned source metadata and prove no reference was activated",
           "sha256": "982d84597d324535648f88293d66613d931807be637f60460f225977a2a5fe96",
+          "command": "git config --global --add safe.directory \"$GITHUB_WORKSPACE\"\ngit fetch --no-tags origin main\ngit fetch --no-tags origin 854cc05896523567e503f42af2b8e209c7591b31\nmkdir -p artifacts/development-vis002-reference\npython3 -m py_compile tools/development_vis002_reference_pin_audit.py\npython3 tools/development_vis002_reference_pin_audit.py | tee artifacts/development-vis002-reference/source.json\nnode --check scripts/verify-design-system-reference-pin.mjs\nnode --check tests/design-system-computed-style-readonly-audit.mjs\nnode scripts/verify-design-system-reference-pin.mjs\nnode --test tests/design-system-reference-pin.test.mjs | tee artifacts/development-vis002-reference/tests.txt",
           "if": null
         },
         {
           "job": "provenance-and-computed-css",
           "step": "Resolve Playwright against preinstalled browsers",
           "sha256": "d992f345b359ab562b6f4bfed9f5dde35f66ce07503876464fb17058ea62651e",
+          "command": "npm install --no-save --no-package-lock --no-audit --no-fund playwright@1.62.1\nnode -e 'if(require(\"playwright/package.json\").version!==\"1.62.1\")process.exit(1)'",
           "if": null
         },
         {
           "job": "provenance-and-computed-css",
           "step": "Local static page fixture (never Netlify)",
           "sha256": "2130ce093a22062baefc5c70c055bccf85fa702f6e2f66d03767dbc78c7a1d4e",
+          "command": "python3 -m http.server 8123 --bind 127.0.0.1 --directory app >/tmp/m2d-reference-pin-http.log 2>&1 &\nfor i in $(seq 1 30); do\n  if curl -fsS http://127.0.0.1:8123/ >/dev/null; then break; fi\n  sleep 1\ndone\ncurl -fsS http://127.0.0.1:8123/about/ >/dev/null\ncurl -fsS http://127.0.0.1:8123/how-it-works/ >/dev/null\ncurl -fsS http://127.0.0.1:8123/viewer/ >/dev/null",
           "if": null
         },
         {
           "job": "provenance-and-computed-css",
           "step": "Observe current CSS on 32 browser scenarios without changing any styles",
           "sha256": "6d3d90f8cd07987fb831e294825df1d4a45691d3ca203e3e281190beec23a1db",
+          "command": "node tests/design-system-computed-style-readonly-audit.mjs\ncp artifacts/p-token-02a/computed-style-observations.json artifacts/development-vis002-reference/",
           "if": null
         }
       ],
       "classification": "automated-validation-or-reporting",
       "mutationSignals": [],
       "externalIndicators": [
+        "network/http access",
+        "browser dependency",
         "package installation"
       ],
       "artifactActions": [
@@ -6865,12 +7353,14 @@
           "job": "triad-offline",
           "step": "Inspect exact Git ancestry, archived candidates, ARC source-output and copy contracts",
           "sha256": "37f6bdf7efd9858290cac5f16c8c1bac73480eb0917fecf2a1d478edbcac3b7a",
+          "command": "python3 -m unittest discover -s tests -p test_development_vis002c_triad.py -v",
           "if": null
         },
         {
           "job": "triad-offline",
           "step": "Revalidate current ARC03C outputs and the ten v03 CSS consumers",
           "sha256": "eb3ae1e087bc5160ba6566cfdadd5f26f4d5c6ec58aea5309168b862d781aa68",
+          "command": "node scripts/compile-primary-pages.mjs --check\nnode scripts/verify-vis002c-product-pin-v03.mjs",
           "if": null
         }
       ],
@@ -6971,36 +7461,42 @@
           "job": "browser",
           "step": "Resolve browser target (validated V5 loopback by default)",
           "sha256": "4e9573a2d9867e8e300916ad8684688f337ef02be3310083aee7c9bf0202bb6c",
+          "command": "if [ -n \"${{ inputs.target_url }}\" ]; then\n  target=\"${{ inputs.target_url }}\"\n  echo \"FLOW_LAYOUT_URL=$target\" >> \"$GITHUB_ENV\"\n  echo \"CI_EXPLICIT_BROWSER_TARGET_SPECIFIED\"\nelse\n  bash tests/ci/prepare-local-v5-browser.sh FLOW_LAYOUT_URL\nfi",
           "if": null
         },
         {
           "job": "browser",
           "step": "Install browser test tooling",
           "sha256": "9102bd3a7141c04854ed17b30d7e482dfa323f4b088e4b82becf33394e287d08",
+          "command": "npm install --prefix /tmp/flow-layout-tools --no-audit --no-fund playwright@1.62.1\n/tmp/flow-layout-tools/node_modules/.bin/playwright install --with-deps chromium webkit",
           "if": null
         },
         {
           "job": "browser",
           "step": "Test hierarchy-driven buyer layout",
           "sha256": "e59e64acece8210c8e64c64076a64a9d1e06ef79c4f4ad2e294276ba40ac54d3",
+          "command": "node tests/flow-layout-browser.cjs /tmp/flow-layout-review",
           "if": null
         },
         {
           "job": "browser",
           "step": "Verify buyer v3/v5 response parity and invalid-v5 failure",
           "sha256": "e80dd1efbcfcd1a5c484e30ad5b6ddd0affc432a4c8725b17932685f2f5f81e0",
+          "command": "node tests/buyer-v5-browser.cjs /tmp/buyer-v5-review",
           "if": null
         },
         {
           "job": "browser",
           "step": "Test dynamic navigation across 700/701 and 1050/1051 breakpoints",
           "sha256": "39d0772f3b2596a75d3181b685267c1e4786924599710bbe5cf85a29c3984b3e",
+          "command": "node tests/ci/nav-flow-responsive-crossbrowser.cjs",
           "if": null
         }
       ],
       "classification": "automated-validation-or-reporting",
       "mutationSignals": [],
       "externalIndicators": [
+        "browser dependency",
         "package installation"
       ],
       "artifactActions": [],
@@ -7115,36 +7611,42 @@
           "job": "browser",
           "step": "Resolve browser target (validated V5 loopback by default)",
           "sha256": "4e9573a2d9867e8e300916ad8684688f337ef02be3310083aee7c9bf0202bb6c",
+          "command": "if [ -n \"${{ inputs.target_url }}\" ]; then\n  target=\"${{ inputs.target_url }}\"\n  echo \"FLOW_LAYOUT_URL=$target\" >> \"$GITHUB_ENV\"\n  echo \"CI_EXPLICIT_BROWSER_TARGET_SPECIFIED\"\nelse\n  bash tests/ci/prepare-local-v5-browser.sh FLOW_LAYOUT_URL\nfi",
           "if": null
         },
         {
           "job": "browser",
           "step": "Install browser test tooling",
           "sha256": "9102bd3a7141c04854ed17b30d7e482dfa323f4b088e4b82becf33394e287d08",
+          "command": "npm install --prefix /tmp/flow-layout-tools --no-audit --no-fund playwright@1.62.1\n/tmp/flow-layout-tools/node_modules/.bin/playwright install --with-deps chromium webkit",
           "if": null
         },
         {
           "job": "browser",
           "step": "Test hierarchy-driven buyer layout",
           "sha256": "e59e64acece8210c8e64c64076a64a9d1e06ef79c4f4ad2e294276ba40ac54d3",
+          "command": "node tests/flow-layout-browser.cjs /tmp/flow-layout-review",
           "if": null
         },
         {
           "job": "browser",
           "step": "Verify buyer v3/v5 response parity and invalid-v5 failure",
           "sha256": "e80dd1efbcfcd1a5c484e30ad5b6ddd0affc432a4c8725b17932685f2f5f81e0",
+          "command": "node tests/buyer-v5-browser.cjs /tmp/buyer-v5-review",
           "if": null
         },
         {
           "job": "browser",
           "step": "Test dynamic navigation across 700/701 and 1050/1051 breakpoints",
           "sha256": "39d0772f3b2596a75d3181b685267c1e4786924599710bbe5cf85a29c3984b3e",
+          "command": "node tests/ci/nav-flow-responsive-crossbrowser.cjs",
           "if": null
         }
       ],
       "classification": "automated-validation-or-reporting",
       "mutationSignals": [],
       "externalIndicators": [
+        "browser dependency",
         "package installation"
       ],
       "artifactActions": [],
@@ -7237,24 +7739,28 @@
           "job": "browser",
           "step": "Resolve browser target (validated V5 loopback by default)",
           "sha256": "a489ac357e625d0f22d83f17239117872412733e0de459591ee05e0c58433475",
+          "command": "if [ -n \"${{ inputs.target_url }}\" ]; then\n  target=\"${{ inputs.target_url }}\"\n  echo \"KEYBOARD_BROWSER_URL=$target\" >> \"$GITHUB_ENV\"\n  echo \"CI_EXPLICIT_BROWSER_TARGET_SPECIFIED\"\nelse\n  bash tests/ci/prepare-local-v5-browser.sh KEYBOARD_BROWSER_URL\nfi",
           "if": null
         },
         {
           "job": "browser",
           "step": "Install browser test tooling",
           "sha256": "fdcbb425230dc564e8716542e1c013222f01b642bdc14d61283c0d176b439186",
+          "command": "npm install --prefix /tmp/keyboard-browser-tools --no-audit --no-fund playwright@1.62.1\n/tmp/keyboard-browser-tools/node_modules/.bin/playwright install --with-deps chromium",
           "if": null
         },
         {
           "job": "browser",
           "step": "Test keyboard shortcuts",
           "sha256": "263ee262f260593dac5235b29e134abd8b19b165d372b701a33a829455cf3ceb",
+          "command": "node tests/keyboard-browser.cjs /tmp/keyboard-browser-review",
           "if": null
         }
       ],
       "classification": "automated-validation-or-reporting",
       "mutationSignals": [],
       "externalIndicators": [
+        "browser dependency",
         "package installation"
       ],
       "artifactActions": [],
@@ -7369,24 +7875,28 @@
           "job": "browser",
           "step": "Resolve browser target (validated V5 loopback by default)",
           "sha256": "a489ac357e625d0f22d83f17239117872412733e0de459591ee05e0c58433475",
+          "command": "if [ -n \"${{ inputs.target_url }}\" ]; then\n  target=\"${{ inputs.target_url }}\"\n  echo \"KEYBOARD_BROWSER_URL=$target\" >> \"$GITHUB_ENV\"\n  echo \"CI_EXPLICIT_BROWSER_TARGET_SPECIFIED\"\nelse\n  bash tests/ci/prepare-local-v5-browser.sh KEYBOARD_BROWSER_URL\nfi",
           "if": null
         },
         {
           "job": "browser",
           "step": "Install browser test tooling",
           "sha256": "fdcbb425230dc564e8716542e1c013222f01b642bdc14d61283c0d176b439186",
+          "command": "npm install --prefix /tmp/keyboard-browser-tools --no-audit --no-fund playwright@1.62.1\n/tmp/keyboard-browser-tools/node_modules/.bin/playwright install --with-deps chromium",
           "if": null
         },
         {
           "job": "browser",
           "step": "Test keyboard shortcuts",
           "sha256": "263ee262f260593dac5235b29e134abd8b19b165d372b701a33a829455cf3ceb",
+          "command": "node tests/keyboard-browser.cjs /tmp/keyboard-browser-review",
           "if": null
         }
       ],
       "classification": "automated-validation-or-reporting",
       "mutationSignals": [],
       "externalIndicators": [
+        "browser dependency",
         "package installation"
       ],
       "artifactActions": [],
@@ -7467,42 +7977,49 @@
           "job": "browser",
           "step": "Resolve browser target (validated V5 loopback by default)",
           "sha256": "3c935e5720719c4651dac13a095e031254496b96ea0cd38dd6de49c84bb0b869",
+          "command": "if [ -n \"${{ inputs.target_url }}\" ]; then\n  target=\"${{ inputs.target_url }}\"\n  echo \"MOBILE_INTERACTIONS_URL=$target\" >> \"$GITHUB_ENV\"\n  echo \"CI_EXPLICIT_BROWSER_TARGET_SPECIFIED\"\nelse\n  bash tests/ci/prepare-local-v5-browser.sh MOBILE_INTERACTIONS_URL\n  echo \"CI_LOCAL_V5_BROWSER_TARGET=1\" >> \"$GITHUB_ENV\"\nfi",
           "if": null
         },
         {
           "job": "browser",
           "step": "Install isolated browser test tooling",
           "sha256": "30f2ed201229eb635010f76f14455f9ce73eaa5939d73c51ec619ba0fa9ceeda",
+          "command": "npm install --prefix /tmp/mobile-browser-tools --no-audit --no-fund playwright@1.62.1\n/tmp/mobile-browser-tools/node_modules/.bin/playwright install --with-deps chromium",
           "if": null
         },
         {
           "job": "browser",
           "step": "Test mobile PiP and touch interactions",
           "sha256": "6de29a3de130640331420bce4b2dd70efdf1ea959ec55e1bac98765a74970a24",
+          "command": "node tests/mobile-pip-main-browser.cjs /tmp/mobile-browser-review",
           "if": null
         },
         {
           "job": "browser",
           "step": "Verify home hero phone screen alignment",
           "sha256": "8bac2a2773da116d1e993d7b9b1296671345d264ffb6999984548819a424365f",
+          "command": "node tests/home-hero-phone-geometry-browser.cjs /tmp/mobile-browser-review",
           "if": null
         },
         {
           "job": "browser",
           "step": "Verify theme controls across all shells",
           "sha256": "dc418236b988f3c43d5826162bacb13bbf22ec62c20faaeb7256f4013ec4e92e",
+          "command": "node tests/ui-theme-browser.cjs /tmp/mobile-browser-review",
           "if": null
         },
         {
           "job": "browser",
           "step": "Test glass occlusion in the local Configurator",
           "sha256": "21e0912e6792e460a194d0649deeb1ab68399707b047f6daf5c2685ecb4d287b",
+          "command": "node tests/exposed-sides-glass.cjs /tmp/glass-occlusion-review",
           "if": null
         }
       ],
       "classification": "automated-validation-or-reporting",
       "mutationSignals": [],
       "externalIndicators": [
+        "browser dependency",
         "package installation"
       ],
       "artifactActions": [],
@@ -7510,7 +8027,7 @@
     },
     {
       "path": ".github/workflows/mobile-browser.yml",
-      "blobSha": "4845fd4afd23b4276755981df92308e24cec0dbd",
+      "blobSha": "8c4c81e9c2d312171f04c3b387e52051f6cee8e6",
       "name": "Mobile browser (local V5; protected preview separately gated)",
       "events": [
         {
@@ -7521,6 +8038,7 @@
           "branchIgnores": null,
           "paths": [
             "app/**",
+            "!app/tools/test-v5-endpoint-safety.js",
             "tests/mobile-pip-main-browser.cjs",
             "tests/home-hero-phone-geometry-browser.cjs",
             "tests/ui-theme-browser.cjs",
@@ -7538,6 +8056,7 @@
           "branchIgnores": null,
           "paths": [
             "app/**",
+            "!app/tools/test-v5-endpoint-safety.js",
             "tests/mobile-pip-main-browser.cjs",
             "tests/home-hero-phone-geometry-browser.cjs",
             "tests/ui-theme-browser.cjs",
@@ -7583,36 +8102,42 @@
           "job": "browser",
           "step": "Resolve browser target (validated V5 loopback by default)",
           "sha256": "3c935e5720719c4651dac13a095e031254496b96ea0cd38dd6de49c84bb0b869",
+          "command": "if [ -n \"${{ inputs.target_url }}\" ]; then\n  target=\"${{ inputs.target_url }}\"\n  echo \"MOBILE_INTERACTIONS_URL=$target\" >> \"$GITHUB_ENV\"\n  echo \"CI_EXPLICIT_BROWSER_TARGET_SPECIFIED\"\nelse\n  bash tests/ci/prepare-local-v5-browser.sh MOBILE_INTERACTIONS_URL\n  echo \"CI_LOCAL_V5_BROWSER_TARGET=1\" >> \"$GITHUB_ENV\"\nfi",
           "if": null
         },
         {
           "job": "browser",
           "step": "Install isolated browser test tooling",
           "sha256": "30f2ed201229eb635010f76f14455f9ce73eaa5939d73c51ec619ba0fa9ceeda",
+          "command": "npm install --prefix /tmp/mobile-browser-tools --no-audit --no-fund playwright@1.62.1\n/tmp/mobile-browser-tools/node_modules/.bin/playwright install --with-deps chromium",
           "if": null
         },
         {
           "job": "browser",
           "step": "Test mobile PiP and touch interactions",
           "sha256": "6de29a3de130640331420bce4b2dd70efdf1ea959ec55e1bac98765a74970a24",
+          "command": "node tests/mobile-pip-main-browser.cjs /tmp/mobile-browser-review",
           "if": null
         },
         {
           "job": "browser",
           "step": "Verify home hero phone screen alignment",
           "sha256": "8bac2a2773da116d1e993d7b9b1296671345d264ffb6999984548819a424365f",
+          "command": "node tests/home-hero-phone-geometry-browser.cjs /tmp/mobile-browser-review",
           "if": null
         },
         {
           "job": "browser",
           "step": "Verify theme controls across all shells",
           "sha256": "dc418236b988f3c43d5826162bacb13bbf22ec62c20faaeb7256f4013ec4e92e",
+          "command": "node tests/ui-theme-browser.cjs /tmp/mobile-browser-review",
           "if": null
         }
       ],
       "classification": "automated-validation-or-reporting",
       "mutationSignals": [],
       "externalIndicators": [
+        "browser dependency",
         "package installation"
       ],
       "artifactActions": [],
@@ -7657,30 +8182,35 @@
           "job": "module02-fidelity",
           "step": "Install image tooling",
           "sha256": "96b4e7a58919c5d3b9e33f54ec6ca991a7a1df28d55be926c61b18c035881953",
+          "command": "python -m pip install -r tools/requirements.txt",
           "if": null
         },
         {
           "job": "module02-fidelity",
           "step": "Materialize parent visual evidence",
           "sha256": "e2a893188c7c8f81b67f455eed8900d910d6231d0c4914841b64a675a5f8488b",
+          "command": "mkdir -p /tmp/r4-parent /tmp/r4-review\ngit show d8ec0dd15c7dc9e61623b5eb3a4bd346b4e7d587:app/assets/kitchen/composicao-completa.png > /tmp/r4-parent/golden.png\ngit show d8ec0dd15c7dc9e61623b5eb3a4bd346b4e7d587:app/assets/kitchen/layers/02_inferior_fogao.png > /tmp/r4-parent/module02.png",
           "if": null
         },
         {
           "job": "module02-fidelity",
           "step": "Validate exact historical checkpoint",
           "sha256": "3916cf0d053354fc1644dbcab1caf3704b57d5709317e03022e9a449fdaf67c8",
+          "command": "python tools/validate-baseline.py",
           "if": null
         },
         {
           "job": "module02-fidelity",
           "step": "Validate checkpoint app runtime and assets",
           "sha256": "328e123c63857fd8473bd4bd3581e655b08b7440d7f5d2c31cc375607582f539",
+          "command": "npm test",
           "if": null
         },
         {
           "job": "module02-fidelity",
           "step": "Replay bounded R4 visual transition when applicable",
           "sha256": "75db8b306d752d1b79cba19d12ff33230ca5d0b39f6506cb1aa2958161f291bb",
+          "command": "baseline_id=\"$(python - <<'PY'\nimport json\nfrom pathlib import Path\nprint(json.loads(Path('reference/baseline-manifest.json').read_text(encoding='utf-8'))['baselineId'])\nPY\n)\"\ncase \"$baseline_id\" in\n  cozinha-01-r4-*)\n    python tools/validate-r4-module02.py \\\n      --previous-golden /tmp/r4-parent/golden.png \\\n      --previous-module /tmp/r4-parent/module02.png \\\n      --output-dir /tmp/r4-review\n    ;;\n  *)\n    BASELINE_ID=\"$baseline_id\" python - <<'PY'\nimport json\nimport os\nfrom pathlib import Path\npath = Path('/tmp/r4-review/summary.json')\npath.write_text(json.dumps({\n    'status': 'SKIPPED',\n    'code': 'R4_TRANSITION_GATE_NOT_APPLICABLE',\n    'baselineId': os.environ['BASELINE_ID'],\n    'detail': 'The selected historical ref is not an R4 checkpoint.'\n}, indent=2) + '\\n', encoding='utf-8')\nPY\n    ;;\nesac\ncat /tmp/r4-review/summary.json",
           "if": null
         }
       ],
@@ -7750,30 +8280,36 @@
           "job": "public-header-browser",
           "step": "Check authored and generated page integrity",
           "sha256": "3e94d1981bcaedb8934ac87913e0d2bc78bee5979d7309e14ccb9932605380f4",
+          "command": "node --check app/landing/header-menu.js\nnode --check tests/ci/public-navigation-semantic-browser.mjs\nnode --test tests/arc03c-source-authority.test.mjs\nnpm run pages:check",
           "if": null
         },
         {
           "job": "public-header-browser",
           "step": "Install Playwright package matching the container browsers",
           "sha256": "75461be58279baa51c7eef1e9efd9248bdacea80ae73c03eb8d395ddd4d533df",
+          "command": "npm install --prefix /tmp/m2d-nav005 --no-audit --no-fund playwright@1.62.1\nnode -e 'const p=require(\"/tmp/m2d-nav005/node_modules/playwright/package.json\");if(p.version!==\"1.62.1\")process.exit(1)'",
           "if": null
         },
         {
           "job": "public-header-browser",
           "step": "Serve only the local static app",
           "sha256": "50700102728fbe51be68716c7aa2c30769078ad33a11c3c7ce9b67f54145b38e",
+          "command": "python3 -m http.server 8123 --bind 127.0.0.1 --directory app >/tmp/m2d-nav005-http.log 2>&1 &\nfor i in $(seq 1 30); do\n  if curl --silent --show-error --fail http://127.0.0.1:8123/ >/dev/null; then break; fi\n  sleep 1\ndone\ncurl --fail http://127.0.0.1:8123/about/ >/dev/null\ncurl --fail http://127.0.0.1:8123/how-it-works/ >/dev/null\ncurl --fail http://127.0.0.1:8123/viewer/ >/dev/null",
           "if": null
         },
         {
           "job": "public-header-browser",
           "step": "Verify 124 public navigation scenarios in Chromium and WebKit",
           "sha256": "e5b690d84d6e954bfcdf31bbcc8222c6e362a877998f6aa66ef99b6bbadb3add",
+          "command": "node tests/ci/public-navigation-semantic-browser.mjs",
           "if": null
         }
       ],
       "classification": "automated-validation-or-reporting",
       "mutationSignals": [],
       "externalIndicators": [
+        "network/http access",
+        "browser dependency",
         "package installation"
       ],
       "artifactActions": [],
@@ -7828,36 +8364,43 @@
           "job": "Four public menus / Chromium and WebKit / no deploy",
           "step": "Validate source syntax and public contract",
           "sha256": "dd1c64806bcbc5f5dc96de98c61be3a2cf3d60d26fa467631b3b94a69ddd2121",
+          "command": "node --check app/landing/header-menu.js\nnode --check app/landing/landing.js\nnode --check app/how-it-works/how-it-works.js\nnode --check tests/public-header-controller-gate.mjs\nnode tests/public-cutover-contract.cjs",
           "if": null
         },
         {
           "job": "Four public menus / Chromium and WebKit / no deploy",
           "step": "Install isolated browser test dependencies",
           "sha256": "00902136ea51a3789568661d4ac190f2eb7db1b74e53560a8074fa971dd7fa80",
+          "command": "npm install --no-save --no-package-lock playwright@1.56.0 pngjs@7.0.0\nnpx playwright install --with-deps chromium webkit",
           "if": null
         },
         {
           "job": "Four public menus / Chromium and WebKit / no deploy",
           "step": "Start localhost-only source servers",
           "sha256": "af5150fff8a4c27e6e0673537d2be521e57338f016436eeea8a81135ac26ad6e",
+          "command": "python3 -m http.server 8123 --bind 127.0.0.1 --directory app >/tmp/p-comp-01-candidate.log 2>&1 &\npython3 -m http.server 8124 --bind 127.0.0.1 --directory baseline/app >/tmp/p-comp-01-baseline.log 2>&1 &\nsleep 2\ncurl --fail http://127.0.0.1:8123/ >/dev/null\ncurl --fail http://127.0.0.1:8124/ >/dev/null\ncurl --fail http://127.0.0.1:8123/viewer/ >/dev/null",
           "if": null
         },
         {
           "job": "Four public menus / Chromium and WebKit / no deploy",
           "step": "Compare baseline pixels and test navigation behavior",
           "sha256": "511ac53b0c48e96e128a72902d3890688aee598645febffb69ba3e84a63acae4",
+          "command": "node tests/public-header-controller-gate.mjs",
           "if": null
         },
         {
           "job": "Four public menus / Chromium and WebKit / no deploy",
           "step": "Verify approved Viewer NAV-005 layout",
           "sha256": "26d8edaf81bf9cb29ed5cc952d7ff83e3abbfd81d76eee787a049b4d3d8715bc",
+          "command": "node tests/viewer-secondary-header-browser-gate.mjs",
           "if": null
         }
       ],
       "classification": "automated-validation-or-reporting",
       "mutationSignals": [],
       "externalIndicators": [
+        "network/http access",
+        "browser dependency",
         "package installation"
       ],
       "artifactActions": [],
@@ -7923,6 +8466,7 @@
           "job": "production-readonly",
           "step": "Probe current production HTML and published viewer DTO without writes",
           "sha256": "3c6157e4da8b91f94b96ef1b22652820d41ea6d32dc43d2d68ed57aa6b04b954",
+          "command": "node tests/public-production-readonly.cjs",
           "if": null
         }
       ],
@@ -7996,6 +8540,7 @@
           "job": "production-readonly",
           "step": "Probe current production HTML and published viewer DTO without writes",
           "sha256": "3c6157e4da8b91f94b96ef1b22652820d41ea6d32dc43d2d68ed57aa6b04b954",
+          "command": "node tests/public-production-readonly.cjs",
           "if": null
         }
       ],
@@ -8093,48 +8638,60 @@
           "job": "static-and-contract",
           "step": "Root/config routing invariants",
           "sha256": "5eb72cf8b9cdd69052d380c286dedf55b0fb96e0eaecd800c9aeee52e336413a",
+          "command": "node tests/public-cutover-contract.cjs",
           "if": null
         },
         {
           "job": "static-and-contract",
           "step": "Public allowlist / no leak tests",
           "sha256": "b2cd9bdecadac61022934d4fbd71b879f5b76f40c9d58a2e20bf8025db0dd5b3",
+          "command": "node --test tests/public-module-projection.test.cjs\nnode app/tools/test-public-modules-endpoint.js\nnode --test app/viewer/scene-adapters.test.mjs",
           "if": null
         },
         {
           "job": "browser",
           "step": "Set preview",
           "sha256": "baa62232167faccc70c322c766c3f7a1ce6f4e214af25056b7f08b7fa32d3457",
+          "command": "echo \"PUBLIC_PAGES_URL=https://deploy-preview-${PR_ID}--mobilipresenter2d.netlify.app\" >> \"$GITHUB_ENV\"",
           "if": null
         },
         {
           "job": "browser",
           "step": "Wait for complete Netlify HTML cutover",
           "sha256": "364188f6fe57a2499f290b9998a3871695ee6a16a26d7d25deda83853c2e86fc",
+          "command": "set -euo pipefail\nfor i in $(seq 1 90); do\n  root=$(curl -L -sS --max-time 6 \"$PUBLIC_PAGES_URL/\" || true)\n  config=$(curl -sS -o /dev/null -w '%{http_code}\\t%{redirect_url}' --max-time 6 \"$PUBLIC_PAGES_URL/config/\" || true)\n  access=$(curl -L -sS --max-time 6 \"$PUBLIC_PAGES_URL/access/\" || true)\n  config_status=${config%%$'\\t'*}\n  config_location=${config#*$'\\t'}\n  if [[ \"$root\" == *'id=\"environmentTrack\"'* \\\n    && \"$config_status\" =~ ^30[12378]$ \\\n    && \"$config_location\" == \"$PUBLIC_PAGES_URL/access/\"* \\\n    && \"$access\" == *'Confirmar acesso ao configurador'* ]]; then\n    echo \"Netlify preview public root and anonymous access redirect ready\"\n    break\n  fi\n  sleep 3\ndone\n[[ \"$root\" == *'id=\"environmentTrack\"'* \\\n  && \"$config_status\" =~ ^30[12378]$ \\\n  && \"$config_location\" == \"$PUBLIC_PAGES_URL/access/\"* \\\n  && \"$access\" == *'Confirmar acesso ao configurador'* ]]",
           "if": null
         },
         {
           "job": "browser",
           "step": "Public projection and negative endpoint checks",
           "sha256": "b39f9f4e12ec6e9e5d809230532adb182482ce8fdb14a9604450f2ca95ec7515",
+          "command": "set -euo pipefail\nstatus=$(curl -sS -o /tmp/public-projection.json -w '%{http_code}' \"$PUBLIC_PAGES_URL/api/public-modules\")\necho \"Deploy-preview public-modules HTTP status: $status\"\ntest \"$status\" = 200\nnode <<'NODE'\nconst assert = require(\"node:assert/strict\");\nconst value = JSON.parse(require(\"node:fs\").readFileSync(\"/tmp/public-projection.json\", \"utf8\"));\nassert.equal(value.schemaVersion, \"PublicModulePresentation2D 0.1\");\nassert(Array.isArray(value.modules) && value.modules.length > 0);\nassert.deepEqual(Object.keys(value).sort(), [\"modules\", \"publicState\", \"schemaVersion\"]);\nNODE\ntest \"$(curl -sS -o /dev/null -w '%{http_code}' -X PUT \"$PUBLIC_PAGES_URL/api/public-modules\")\" = 405\ntest \"$(curl -sS -o /dev/null -w '%{http_code}' \"$PUBLIC_PAGES_URL/api/public-modules?inspection=raw\")\" = 400",
           "if": null
         },
         {
           "job": "browser",
           "step": "Install isolated browser",
           "sha256": "0ea2a2ef2d6d1eb6da0991da45aa4748e90bb928287b208cd1a2e81ab8c6b77f",
+          "command": "npm install --prefix /tmp/public-cutover-tools --no-audit --no-fund playwright@1.62.1\n/tmp/public-cutover-tools/node_modules/.bin/playwright install --with-deps chromium",
           "if": null
         },
         {
           "job": "browser",
           "step": "Desktop and mobile landing/viewer/config smoke",
           "sha256": "99be88aa7f58c9fb73a3ed63a197406b14bf0ecaa2f24df23131b669994ecca3",
+          "command": "node tests/public-pages-smoke.cjs /tmp/public-cutover-screens",
           "if": null
         }
       ],
-      "classification": "automated-validation-or-reporting",
-      "mutationSignals": [],
+      "classification": "operational-or-write-capable",
+      "mutationSignals": [
+        "write/deploy command in run step"
+      ],
       "externalIndicators": [
+        "network/http access",
+        "browser dependency",
+        "Netlify dependency",
         "package installation"
       ],
       "artifactActions": [],
@@ -8239,48 +8796,60 @@
           "job": "static-and-contract",
           "step": "Root/config routing invariants",
           "sha256": "5eb72cf8b9cdd69052d380c286dedf55b0fb96e0eaecd800c9aeee52e336413a",
+          "command": "node tests/public-cutover-contract.cjs",
           "if": null
         },
         {
           "job": "static-and-contract",
           "step": "Public allowlist / no leak tests",
           "sha256": "b2cd9bdecadac61022934d4fbd71b879f5b76f40c9d58a2e20bf8025db0dd5b3",
+          "command": "node --test tests/public-module-projection.test.cjs\nnode app/tools/test-public-modules-endpoint.js\nnode --test app/viewer/scene-adapters.test.mjs",
           "if": null
         },
         {
           "job": "browser",
           "step": "Set preview",
           "sha256": "baa62232167faccc70c322c766c3f7a1ce6f4e214af25056b7f08b7fa32d3457",
+          "command": "echo \"PUBLIC_PAGES_URL=https://deploy-preview-${PR_ID}--mobilipresenter2d.netlify.app\" >> \"$GITHUB_ENV\"",
           "if": null
         },
         {
           "job": "browser",
           "step": "Wait for complete Netlify HTML cutover",
           "sha256": "364188f6fe57a2499f290b9998a3871695ee6a16a26d7d25deda83853c2e86fc",
+          "command": "set -euo pipefail\nfor i in $(seq 1 90); do\n  root=$(curl -L -sS --max-time 6 \"$PUBLIC_PAGES_URL/\" || true)\n  config=$(curl -sS -o /dev/null -w '%{http_code}\\t%{redirect_url}' --max-time 6 \"$PUBLIC_PAGES_URL/config/\" || true)\n  access=$(curl -L -sS --max-time 6 \"$PUBLIC_PAGES_URL/access/\" || true)\n  config_status=${config%%$'\\t'*}\n  config_location=${config#*$'\\t'}\n  if [[ \"$root\" == *'id=\"environmentTrack\"'* \\\n    && \"$config_status\" =~ ^30[12378]$ \\\n    && \"$config_location\" == \"$PUBLIC_PAGES_URL/access/\"* \\\n    && \"$access\" == *'Confirmar acesso ao configurador'* ]]; then\n    echo \"Netlify preview public root and anonymous access redirect ready\"\n    break\n  fi\n  sleep 3\ndone\n[[ \"$root\" == *'id=\"environmentTrack\"'* \\\n  && \"$config_status\" =~ ^30[12378]$ \\\n  && \"$config_location\" == \"$PUBLIC_PAGES_URL/access/\"* \\\n  && \"$access\" == *'Confirmar acesso ao configurador'* ]]",
           "if": null
         },
         {
           "job": "browser",
           "step": "Public projection and negative endpoint checks",
           "sha256": "b39f9f4e12ec6e9e5d809230532adb182482ce8fdb14a9604450f2ca95ec7515",
+          "command": "set -euo pipefail\nstatus=$(curl -sS -o /tmp/public-projection.json -w '%{http_code}' \"$PUBLIC_PAGES_URL/api/public-modules\")\necho \"Deploy-preview public-modules HTTP status: $status\"\ntest \"$status\" = 200\nnode <<'NODE'\nconst assert = require(\"node:assert/strict\");\nconst value = JSON.parse(require(\"node:fs\").readFileSync(\"/tmp/public-projection.json\", \"utf8\"));\nassert.equal(value.schemaVersion, \"PublicModulePresentation2D 0.1\");\nassert(Array.isArray(value.modules) && value.modules.length > 0);\nassert.deepEqual(Object.keys(value).sort(), [\"modules\", \"publicState\", \"schemaVersion\"]);\nNODE\ntest \"$(curl -sS -o /dev/null -w '%{http_code}' -X PUT \"$PUBLIC_PAGES_URL/api/public-modules\")\" = 405\ntest \"$(curl -sS -o /dev/null -w '%{http_code}' \"$PUBLIC_PAGES_URL/api/public-modules?inspection=raw\")\" = 400",
           "if": null
         },
         {
           "job": "browser",
           "step": "Install isolated browser",
           "sha256": "0ea2a2ef2d6d1eb6da0991da45aa4748e90bb928287b208cd1a2e81ab8c6b77f",
+          "command": "npm install --prefix /tmp/public-cutover-tools --no-audit --no-fund playwright@1.62.1\n/tmp/public-cutover-tools/node_modules/.bin/playwright install --with-deps chromium",
           "if": null
         },
         {
           "job": "browser",
           "step": "Desktop and mobile landing/viewer/config smoke",
           "sha256": "99be88aa7f58c9fb73a3ed63a197406b14bf0ecaa2f24df23131b669994ecca3",
+          "command": "node tests/public-pages-smoke.cjs /tmp/public-cutover-screens",
           "if": null
         }
       ],
-      "classification": "automated-validation-or-reporting",
-      "mutationSignals": [],
+      "classification": "operational-or-write-capable",
+      "mutationSignals": [
+        "write/deploy command in run step"
+      ],
       "externalIndicators": [
+        "network/http access",
+        "browser dependency",
+        "Netlify dependency",
         "package installation"
       ],
       "artifactActions": [],
@@ -8325,18 +8894,21 @@
           "job": "Historical R0 exact contract",
           "step": "Install validation tooling",
           "sha256": "96b4e7a58919c5d3b9e33f54ec6ca991a7a1df28d55be926c61b18c035881953",
+          "command": "python -m pip install -r tools/requirements.txt",
           "if": null
         },
         {
           "job": "Historical R0 exact contract",
           "step": "Compile historical validation tooling",
           "sha256": "3bdd7a5cc9e3fa63ca7843792de057414efa0de1317b8c893e26d1e402c5f100",
+          "command": "python -m py_compile tools/check-r0-contract.py tools/inventory-baseline-source.py tools/validate-baseline.py",
           "if": null
         },
         {
           "job": "Historical R0 exact contract",
           "step": "Replay R0 state",
           "sha256": "b1197706857b3a7ccf4518f8c1dff30e882f0d70d521c488ec5a7fc1e8c9f527",
+          "command": "python tools/check-r0-contract.py",
           "if": null
         }
       ],
@@ -8417,30 +8989,35 @@
           "job": "browser",
           "step": "Test runtime configuration contracts",
           "sha256": "c678445ae7f849d950e1b869bfd0838dfbe9281f5afbec6b5250177467c902ed",
+          "command": "node app/tools/test-runtime-contracts.js",
           "if": null
         },
         {
           "job": "browser",
           "step": "Resolve browser target (validated V5 loopback by default)",
           "sha256": "00b84074f33982a0a93a09adb9c6ed5adc6dad5a7c90a93ad9d2d1516ae09a09",
+          "command": "if [ -n \"${{ inputs.target_url }}\" ]; then\n  target=\"${{ inputs.target_url }}\"\n  echo \"STONE_BROWSER_URL=$target\" >> \"$GITHUB_ENV\"\n  echo \"CI_EXPLICIT_BROWSER_TARGET_SPECIFIED\"\nelse\n  bash tests/ci/prepare-local-v5-browser.sh STONE_BROWSER_URL\nfi",
           "if": null
         },
         {
           "job": "browser",
           "step": "Install isolated browser test tooling",
           "sha256": "2f512d7fa4b2bf31d8cbfb875473793dff6ff6dd9e375f2605a8224dbba803b7",
+          "command": "npm install --prefix /tmp/stone-browser-tools --no-audit --no-fund playwright@1.62.1\n/tmp/stone-browser-tools/node_modules/.bin/playwright install --with-deps chromium",
           "if": null
         },
         {
           "job": "browser",
           "step": "Test current stone and skirting controls",
           "sha256": "511255527039b4b97938021a9bd24e2b81b24db816ed420794ddc491715f9567",
+          "command": "node tests/stone-browser.cjs /tmp/stone-browser-review",
           "if": null
         }
       ],
       "classification": "automated-validation-or-reporting",
       "mutationSignals": [],
       "externalIndicators": [
+        "browser dependency",
         "package installation"
       ],
       "artifactActions": [],
@@ -8448,7 +9025,7 @@
     },
     {
       "path": ".github/workflows/stone-browser.yml",
-      "blobSha": "ae7eac27643ab244cd937fd1d76ea30b40e808d1",
+      "blobSha": "fae4f7fd5332644843c7d6f07499f2de7b45df4d",
       "name": "Stone browser (local V5; protected preview separately gated)",
       "events": [
         {
@@ -8459,6 +9036,7 @@
           "branchIgnores": null,
           "paths": [
             "app/**",
+            "!app/tools/test-v5-endpoint-safety.js",
             "tests/stone-browser.cjs",
             ".github/workflows/stone-browser.yml",
             "tests/ci/prepare-local-v5-browser.sh",
@@ -8474,6 +9052,7 @@
           "branchIgnores": null,
           "paths": [
             "app/**",
+            "!app/tools/test-v5-endpoint-safety.js",
             "tests/stone-browser.cjs",
             ".github/workflows/stone-browser.yml",
             "tests/ci/prepare-local-v5-browser.sh",
@@ -8517,30 +9096,35 @@
           "job": "browser",
           "step": "Test runtime configuration contracts",
           "sha256": "c678445ae7f849d950e1b869bfd0838dfbe9281f5afbec6b5250177467c902ed",
+          "command": "node app/tools/test-runtime-contracts.js",
           "if": null
         },
         {
           "job": "browser",
           "step": "Resolve browser target (validated V5 loopback by default)",
           "sha256": "00b84074f33982a0a93a09adb9c6ed5adc6dad5a7c90a93ad9d2d1516ae09a09",
+          "command": "if [ -n \"${{ inputs.target_url }}\" ]; then\n  target=\"${{ inputs.target_url }}\"\n  echo \"STONE_BROWSER_URL=$target\" >> \"$GITHUB_ENV\"\n  echo \"CI_EXPLICIT_BROWSER_TARGET_SPECIFIED\"\nelse\n  bash tests/ci/prepare-local-v5-browser.sh STONE_BROWSER_URL\nfi",
           "if": null
         },
         {
           "job": "browser",
           "step": "Install isolated browser test tooling",
           "sha256": "2f512d7fa4b2bf31d8cbfb875473793dff6ff6dd9e375f2605a8224dbba803b7",
+          "command": "npm install --prefix /tmp/stone-browser-tools --no-audit --no-fund playwright@1.62.1\n/tmp/stone-browser-tools/node_modules/.bin/playwright install --with-deps chromium",
           "if": null
         },
         {
           "job": "browser",
           "step": "Test current stone and skirting controls",
           "sha256": "511255527039b4b97938021a9bd24e2b81b24db816ed420794ddc491715f9567",
+          "command": "node tests/stone-browser.cjs /tmp/stone-browser-review",
           "if": null
         }
       ],
       "classification": "automated-validation-or-reporting",
       "mutationSignals": [],
       "externalIndicators": [
+        "browser dependency",
         "package installation"
       ],
       "artifactActions": [],
@@ -8615,30 +9199,35 @@
           "job": "browser",
           "step": "Static summary ownership gate",
           "sha256": "9d9b98e592f722f9fed444bde52c227493870450d84c8ef8df6827a84b962c8e",
+          "command": "test \"$(grep -c 'function renderCurrentValue' app/app.js)\" -eq 1\ntest \"$(grep -c 'function renderSummary' app/app.js)\" -eq 1\n! grep -q 'estimate.status === \"legacy\"' app/app.js\ngrep -q 'estimate.status === \"estimate\"' app/app.js\nnode --check app/app.js\nnode app/tools/test-core.js",
           "if": null
         },
         {
           "job": "browser",
           "step": "Resolve browser target (validated V5 loopback by default)",
           "sha256": "bfd12ba0638d34ec8592cb5f8106946c4089ad964b5fbb154e1e13543dd4beac",
+          "command": "if [ -n \"${{ inputs.target_url }}\" ]; then\n  target=\"${{ inputs.target_url }}\"\n  echo \"SUMMARY_PRICING_BROWSER_URL=$target\" >> \"$GITHUB_ENV\"\n  echo \"CI_EXPLICIT_BROWSER_TARGET_SPECIFIED\"\nelse\n  bash tests/ci/prepare-local-v5-browser.sh SUMMARY_PRICING_BROWSER_URL\nfi",
           "if": null
         },
         {
           "job": "browser",
           "step": "Install isolated browser test tooling",
           "sha256": "b877e30cf56031073130bbd344161e969942fde75332312cf05baeef03604186",
+          "command": "npm install --prefix /tmp/summary-pricing-tools --no-audit --no-fund playwright@1.62.1\n/tmp/summary-pricing-tools/node_modules/.bin/playwright install --with-deps chromium",
           "if": null
         },
         {
           "job": "browser",
           "step": "Test summary and pricing ownership",
           "sha256": "0d5d85815da6024eb9a5a0d253a27cee8cf26b07761d7503e60d8d8e0e9b4c7f",
+          "command": "node tests/summary-pricing-browser.cjs /tmp/summary-pricing-review",
           "if": null
         }
       ],
       "classification": "automated-validation-or-reporting",
       "mutationSignals": [],
       "externalIndicators": [
+        "browser dependency",
         "package installation"
       ],
       "artifactActions": [],
@@ -8646,7 +9235,7 @@
     },
     {
       "path": ".github/workflows/summary-pricing-browser.yml",
-      "blobSha": "9cfbfe77a157572585e4fe2c47da55d2cb4fc688",
+      "blobSha": "31b5ca675226a757d17083fd44cc4b93e39e5fb1",
       "name": "Summary pricing browser (local V5; protected preview separately gated)",
       "events": [
         {
@@ -8657,6 +9246,7 @@
           "branchIgnores": null,
           "paths": [
             "app/**",
+            "!app/tools/test-v5-endpoint-safety.js",
             "tests/summary-pricing-browser.cjs",
             ".github/workflows/summary-pricing-browser.yml",
             "tests/ci/prepare-local-v5-browser.sh",
@@ -8672,6 +9262,7 @@
           "branchIgnores": null,
           "paths": [
             "app/**",
+            "!app/tools/test-v5-endpoint-safety.js",
             "tests/summary-pricing-browser.cjs",
             ".github/workflows/summary-pricing-browser.yml",
             "tests/ci/prepare-local-v5-browser.sh",
@@ -8715,30 +9306,35 @@
           "job": "browser",
           "step": "Static summary ownership gate",
           "sha256": "9d9b98e592f722f9fed444bde52c227493870450d84c8ef8df6827a84b962c8e",
+          "command": "test \"$(grep -c 'function renderCurrentValue' app/app.js)\" -eq 1\ntest \"$(grep -c 'function renderSummary' app/app.js)\" -eq 1\n! grep -q 'estimate.status === \"legacy\"' app/app.js\ngrep -q 'estimate.status === \"estimate\"' app/app.js\nnode --check app/app.js\nnode app/tools/test-core.js",
           "if": null
         },
         {
           "job": "browser",
           "step": "Resolve browser target (validated V5 loopback by default)",
           "sha256": "bfd12ba0638d34ec8592cb5f8106946c4089ad964b5fbb154e1e13543dd4beac",
+          "command": "if [ -n \"${{ inputs.target_url }}\" ]; then\n  target=\"${{ inputs.target_url }}\"\n  echo \"SUMMARY_PRICING_BROWSER_URL=$target\" >> \"$GITHUB_ENV\"\n  echo \"CI_EXPLICIT_BROWSER_TARGET_SPECIFIED\"\nelse\n  bash tests/ci/prepare-local-v5-browser.sh SUMMARY_PRICING_BROWSER_URL\nfi",
           "if": null
         },
         {
           "job": "browser",
           "step": "Install isolated browser test tooling",
           "sha256": "b877e30cf56031073130bbd344161e969942fde75332312cf05baeef03604186",
+          "command": "npm install --prefix /tmp/summary-pricing-tools --no-audit --no-fund playwright@1.62.1\n/tmp/summary-pricing-tools/node_modules/.bin/playwright install --with-deps chromium",
           "if": null
         },
         {
           "job": "browser",
           "step": "Test summary and pricing ownership",
           "sha256": "0d5d85815da6024eb9a5a0d253a27cee8cf26b07761d7503e60d8d8e0e9b4c7f",
+          "command": "node tests/summary-pricing-browser.cjs /tmp/summary-pricing-review",
           "if": null
         }
       ],
       "classification": "automated-validation-or-reporting",
       "mutationSignals": [],
       "externalIndicators": [
+        "browser dependency",
         "package installation"
       ],
       "artifactActions": [],
@@ -8797,42 +9393,50 @@
           "job": "Four independent changes combined / no Netlify deploy",
           "step": "Read-only auth tests and static route contract",
           "sha256": "73180fbbe1fca59fb756909535c1a0eff16e0f9d5838fc8eaf1c6b2a8dc0c6df",
+          "command": "node --test tests/auth-first-login-recovery.test.mjs\nnode tests/public-cutover-contract.cjs\nnode --check app/admin/admin.js\nnode --check app/core/private-navigation.js\nnode --check app/core/ui-theme.js\nnode --check app/viewer/viewer.js",
           "if": null
         },
         {
           "job": "Four independent changes combined / no Netlify deploy",
           "step": "Install only Playwright outside project dependencies",
           "sha256": "ac2b2d5f8e1ea338968b4425ee5a678248187a3d090a6908bca8089352470890",
+          "command": "npm install --prefix /tmp/ux-integrated-playwright --no-save --no-package-lock playwright@1.56.0\nln -s /tmp/ux-integrated-playwright/node_modules ./node_modules\n/tmp/ux-integrated-playwright/node_modules/.bin/playwright install --with-deps chromium webkit",
           "if": null
         },
         {
           "job": "Four independent changes combined / no Netlify deploy",
           "step": "Serve main and candidate on loopback",
           "sha256": "2aba4cae2027e8ed97632fdca38ce740f1d7756592d4034c3a9f9692a17fa6eb",
+          "command": "python3 -m http.server 8123 --bind 127.0.0.1 --directory app >/tmp/ux-candidate.log 2>&1 &\npython3 -m http.server 8124 --bind 127.0.0.1 --directory baseline/app >/tmp/ux-baseline.log 2>&1 &\nsleep 2\ncurl --fail http://127.0.0.1:8123/viewer/ >/dev/null\ncurl --fail http://127.0.0.1:8124/viewer/ >/dev/null",
           "if": null
         },
         {
           "job": "Four independent changes combined / no Netlify deploy",
           "step": "How-it-works accordion visual and keyboard differential",
           "sha256": "3ea593cab6de0ef4d93303e5ae37a2001f7f24350dcaefd06a3cc5270ac509f9",
+          "command": "node tests/how-accordion-grid-browser-gate.mjs",
           "if": null
         },
         {
           "job": "Four independent changes combined / no Netlify deploy",
           "step": "Viewer NAV-005 depth-2 header and menu cross-engine",
           "sha256": "26d8edaf81bf9cb29ed5cc952d7ff83e3abbfd81d76eee787a049b4d3d8715bc",
+          "command": "node tests/viewer-secondary-header-browser-gate.mjs",
           "if": null
         },
         {
           "job": "Four independent changes combined / no Netlify deploy",
           "step": "Viewer editorial public-projection comparison",
           "sha256": "9e0d8c2092442a4fec279f8fa1b38f1c3c90988e2c3fe086faba50031a771401",
+          "command": "node tests/viewer-overview-editorial-browser-gate.mjs",
           "if": null
         }
       ],
       "classification": "automated-validation-or-reporting",
       "mutationSignals": [],
       "externalIndicators": [
+        "network/http access",
+        "browser dependency",
         "package installation"
       ],
       "artifactActions": [],
@@ -8911,30 +9515,150 @@
           "job": "variants",
           "step": "Install image validation tooling",
           "sha256": "96b4e7a58919c5d3b9e33f54ec6ca991a7a1df28d55be926c61b18c035881953",
+          "command": "python -m pip install -r tools/requirements.txt",
           "if": null
         },
         {
           "job": "variants",
           "step": "Validate current app runtime",
           "sha256": "328e123c63857fd8473bd4bd3581e655b08b7440d7f5d2c31cc375607582f539",
+          "command": "npm test",
           "if": null
         },
         {
           "job": "variants",
           "step": "Derive variant manifests from current Scene2D state",
           "sha256": "59d826f0fa3368c1d501fc005455bf367f0715eca60ebc72a46decf5f2e5e355",
+          "command": "node tools/variant_fidelity_manifest.js \\\n  --cases reference/variant-cases.json \\\n  --output /tmp/variant-fidelity/manifest.json",
           "if": null
         },
         {
           "job": "variants",
           "step": "Render current variant fixtures",
           "sha256": "afdcacbd71834c1130833f62e6edcffc3149125e2b49902fa0959162fc85d21b",
+          "command": "python tools/render_variant_fidelity.py \\\n  --manifest /tmp/variant-fidelity/manifest.json \\\n  --output-dir /tmp/variant-fidelity/rendered",
           "if": null
         },
         {
           "job": "variants",
           "step": "Show fidelity summary",
           "sha256": "3f097b74649bc1812cf805225c3518936ad03478ffd83fcaec639a70443399d0",
+          "command": "cat /tmp/variant-fidelity/rendered/summary.json",
+          "if": null
+        }
+      ],
+      "classification": "automated-validation-or-reporting",
+      "mutationSignals": [],
+      "externalIndicators": [
+        "package installation"
+      ],
+      "artifactActions": [],
+      "parseWarnings": []
+    },
+    {
+      "path": ".github/workflows/variant-fidelity.yml",
+      "blobSha": "36b4c183e41161f98ad527e3a875617d3bf958e8",
+      "name": "Current variant fidelity",
+      "events": [
+        {
+          "name": "pull_request",
+          "branches": null,
+          "branchIgnores": null,
+          "paths": [
+            "app/**",
+            "!app/tools/test-v5-endpoint-safety.js",
+            "reference/variant-cases.json",
+            "reference/visual-debt.md",
+            "tools/variant_fidelity_manifest.js",
+            "tools/render_variant_fidelity.py",
+            ".github/workflows/variant-fidelity.yml",
+            "docs/work/r2-variant-fidelity.md"
+          ],
+          "pathIgnores": null,
+          "types": null
+        },
+        {
+          "name": "push",
+          "branches": [
+            "main"
+          ],
+          "branchIgnores": null,
+          "paths": [
+            "app/**",
+            "!app/tools/test-v5-endpoint-safety.js",
+            "reference/variant-cases.json",
+            "reference/visual-debt.md",
+            "tools/variant_fidelity_manifest.js",
+            "tools/render_variant_fidelity.py",
+            ".github/workflows/variant-fidelity.yml",
+            "docs/work/r2-variant-fidelity.md"
+          ],
+          "pathIgnores": null,
+          "types": null
+        },
+        {
+          "name": "workflow_dispatch",
+          "branches": null,
+          "branchIgnores": null,
+          "paths": null,
+          "pathIgnores": null,
+          "types": null
+        }
+      ],
+      "jobs": [
+        {
+          "id": "variants",
+          "name": null,
+          "if": null,
+          "runsOn": "ubuntu-latest",
+          "container": null,
+          "services": [],
+          "stepCount": 8,
+          "actions": [
+            "actions/checkout@v4",
+            "actions/setup-python@v5"
+          ]
+        }
+      ],
+      "actions": [
+        "actions/checkout@v4",
+        "actions/setup-python@v5"
+      ],
+      "commandCount": 5,
+      "commands": [
+        {
+          "job": "variants",
+          "step": "Install image validation tooling",
+          "sha256": "96b4e7a58919c5d3b9e33f54ec6ca991a7a1df28d55be926c61b18c035881953",
+          "command": "python -m pip install -r tools/requirements.txt",
+          "if": null
+        },
+        {
+          "job": "variants",
+          "step": "Validate current app runtime",
+          "sha256": "328e123c63857fd8473bd4bd3581e655b08b7440d7f5d2c31cc375607582f539",
+          "command": "npm test",
+          "if": null
+        },
+        {
+          "job": "variants",
+          "step": "Derive variant manifests from current Scene2D state",
+          "sha256": "59d826f0fa3368c1d501fc005455bf367f0715eca60ebc72a46decf5f2e5e355",
+          "command": "node tools/variant_fidelity_manifest.js \\\n  --cases reference/variant-cases.json \\\n  --output /tmp/variant-fidelity/manifest.json",
+          "if": null
+        },
+        {
+          "job": "variants",
+          "step": "Render current variant fixtures",
+          "sha256": "afdcacbd71834c1130833f62e6edcffc3149125e2b49902fa0959162fc85d21b",
+          "command": "python tools/render_variant_fidelity.py \\\n  --manifest /tmp/variant-fidelity/manifest.json \\\n  --output-dir /tmp/variant-fidelity/rendered",
+          "if": null
+        },
+        {
+          "job": "variants",
+          "step": "Show fidelity summary",
+          "sha256": "3f097b74649bc1812cf805225c3518936ad03478ffd83fcaec639a70443399d0",
+          "command": "cat /tmp/variant-fidelity/rendered/summary.json",
           "if": null
         }
       ],
@@ -9007,42 +9731,50 @@
           "job": "price-contract",
           "step": null,
           "sha256": "45ed1348060a46b06d461b22ee05eac0deb16cb4821083a2cad03215cc22bb40",
+          "command": "node --test tests/viewer-base-price-publication.test.cjs tests/viewer-price-v5-save.test.cjs",
           "if": null
         },
         {
           "job": "price-contract",
           "step": null,
           "sha256": "5d960d5b77f684e9a8c4c04419c719939bb8d885984bce2ae1de97efb8d545a6",
+          "command": "node app/tools/test-administration-v5.js && node app/tools/test-v5-normal-save.js && node app/tools/test-v5-endpoint-safety.js && node app/tools/test-public-modules-endpoint.js",
           "if": null
         },
         {
           "job": "price-contract",
           "step": null,
           "sha256": "f5c152ec6f2125bfdbd415c3bf3ae15d24f820e62be5e17bddfc22374ab09fe2",
+          "command": "node --check app/core/administration-v5.js && node --check app/core/public-module-projection.js && node --check netlify/functions/public-modules.mjs && node --check app/viewer/public-data.js && node --check app/viewer/scene-adapters.js && node --check app/viewer/viewer.js",
           "if": null
         },
         {
           "job": "price-contract",
           "step": null,
           "sha256": "1f85493d50a0b320d637200129ed2e49bef9f3020c414893cba00ea44db521e3",
+          "command": "npm install --no-audit --no-fund",
           "if": null
         },
         {
           "job": "price-contract",
           "step": null,
           "sha256": "16c0e4305ac213dff39fc82b69b6e08aeeb8758e33cd72d7c409752a70e9f054",
+          "command": "npm run build",
           "if": null
         },
         {
           "job": "price-contract",
           "step": "Playwright cross-engine (without Netlify)",
           "sha256": "8ca467b98fad267b613c0b4f86635179c490e64a9894c38de6ede2ec6329db01",
+          "command": "npm install --no-save --no-package-lock playwright@1.56.0\nnpx playwright install --with-deps chromium webkit\npython3 -m http.server 8123 --bind 127.0.0.1 --directory app >/tmp/viewer-base-price-local.log 2>&1 &\nsleep 2\nnode tests/viewer-base-price-browser-gate.mjs",
           "if": null
         }
       ],
       "classification": "automated-validation-or-reporting",
       "mutationSignals": [],
       "externalIndicators": [
+        "browser dependency",
+        "Netlify dependency",
         "package installation"
       ],
       "artifactActions": [],
@@ -9138,42 +9870,50 @@
           "job": "price-contract",
           "step": null,
           "sha256": "45ed1348060a46b06d461b22ee05eac0deb16cb4821083a2cad03215cc22bb40",
+          "command": "node --test tests/viewer-base-price-publication.test.cjs tests/viewer-price-v5-save.test.cjs",
           "if": null
         },
         {
           "job": "price-contract",
           "step": null,
           "sha256": "5d960d5b77f684e9a8c4c04419c719939bb8d885984bce2ae1de97efb8d545a6",
+          "command": "node app/tools/test-administration-v5.js && node app/tools/test-v5-normal-save.js && node app/tools/test-v5-endpoint-safety.js && node app/tools/test-public-modules-endpoint.js",
           "if": null
         },
         {
           "job": "price-contract",
           "step": null,
           "sha256": "f5c152ec6f2125bfdbd415c3bf3ae15d24f820e62be5e17bddfc22374ab09fe2",
+          "command": "node --check app/core/administration-v5.js && node --check app/core/public-module-projection.js && node --check netlify/functions/public-modules.mjs && node --check app/viewer/public-data.js && node --check app/viewer/scene-adapters.js && node --check app/viewer/viewer.js",
           "if": null
         },
         {
           "job": "price-contract",
           "step": null,
           "sha256": "1f85493d50a0b320d637200129ed2e49bef9f3020c414893cba00ea44db521e3",
+          "command": "npm install --no-audit --no-fund",
           "if": null
         },
         {
           "job": "price-contract",
           "step": null,
           "sha256": "16c0e4305ac213dff39fc82b69b6e08aeeb8758e33cd72d7c409752a70e9f054",
+          "command": "npm run build",
           "if": null
         },
         {
           "job": "price-contract",
           "step": "Playwright cross-engine (without Netlify)",
           "sha256": "8ca467b98fad267b613c0b4f86635179c490e64a9894c38de6ede2ec6329db01",
+          "command": "npm install --no-save --no-package-lock playwright@1.56.0\nnpx playwright install --with-deps chromium webkit\npython3 -m http.server 8123 --bind 127.0.0.1 --directory app >/tmp/viewer-base-price-local.log 2>&1 &\nsleep 2\nnode tests/viewer-base-price-browser-gate.mjs",
           "if": null
         }
       ],
       "classification": "automated-validation-or-reporting",
       "mutationSignals": [],
       "externalIndicators": [
+        "browser dependency",
+        "Netlify dependency",
         "package installation"
       ],
       "artifactActions": [],
@@ -9254,36 +9994,43 @@
           "job": "verify-pinned-consumers",
           "step": "Verify copied source blobs, seven contexts, token consumers and theme scope",
           "sha256": "bf570c9b267b15dd5f8ffb55c73128ea91bb35a82fc62e4e2855dc94245ee518",
+          "command": "node --check scripts/verify-vis002c-product-pin-v03.mjs\nnode scripts/verify-vis002c-product-pin-v03.mjs\nnode --check app/core/image-fallback.js\nnode --check app/how-it-works/how-it-works.js\nnode tests/public-image-fallback.test.mjs",
           "if": null
         },
         {
           "job": "scoped-raster",
           "step": "Compile actual public pages and install scoped visual test dependencies",
           "sha256": "17decebca34abc88b53fa8894afa605ad2f01634be70d3c04462a0a0d9d1b661",
+          "command": "npm install --no-save --no-package-lock esbuild@0.28.2 playwright@1.56.0 pngjs@7.0.0\nnode --check tests/vis002c-v03-scoped-raster.mjs\nnode --check tests/public-image-fallback-browser.mjs\nnpm run build\nnpm run pages:check",
           "if": null
         },
         {
           "job": "scoped-raster",
           "step": "Serve built public pages locally, no Deploy Preview",
           "sha256": "ff56ae0b327f0f1f2404dc47634866b840387a5d6000265422d7ca57c14168b8",
+          "command": "python3 -m http.server 8123 --bind 127.0.0.1 --directory app > /tmp/vis002c-v03-http.log 2>&1 &\nsleep 2\ncurl --fail --silent http://127.0.0.1:8123/about/ >/dev/null",
           "if": null
         },
         {
           "job": "scoped-raster",
           "step": "Assert v0.3 colors and full-page raster containment",
           "sha256": "f2e86d6a1571858af9ea16469354f6eeeec019ea4a02277204d1e7fa7f9c3841",
+          "command": "node tests/vis002c-v03-scoped-raster.mjs",
           "if": null
         },
         {
           "job": "scoped-raster",
           "step": "Verify 19 informative fallbacks on both themes and browsers",
           "sha256": "b1185eaf6992d146e0267dc02b33d348da75a9963480fd41c2ade666c79374ce",
+          "command": "node tests/public-image-fallback-browser.mjs",
           "if": null
         }
       ],
       "classification": "automated-validation-or-reporting",
       "mutationSignals": [],
       "externalIndicators": [
+        "network/http access",
+        "browser dependency",
         "package installation"
       ],
       "artifactActions": [
@@ -9369,36 +10116,43 @@
           "job": "verify-pinned-consumers",
           "step": "Verify copied source blobs, seven contexts, token consumers and theme scope",
           "sha256": "bf570c9b267b15dd5f8ffb55c73128ea91bb35a82fc62e4e2855dc94245ee518",
+          "command": "node --check scripts/verify-vis002c-product-pin-v03.mjs\nnode scripts/verify-vis002c-product-pin-v03.mjs\nnode --check app/core/image-fallback.js\nnode --check app/how-it-works/how-it-works.js\nnode tests/public-image-fallback.test.mjs",
           "if": null
         },
         {
           "job": "scoped-raster",
           "step": "Compile actual public pages and install scoped visual test dependencies",
           "sha256": "17decebca34abc88b53fa8894afa605ad2f01634be70d3c04462a0a0d9d1b661",
+          "command": "npm install --no-save --no-package-lock esbuild@0.28.2 playwright@1.56.0 pngjs@7.0.0\nnode --check tests/vis002c-v03-scoped-raster.mjs\nnode --check tests/public-image-fallback-browser.mjs\nnpm run build\nnpm run pages:check",
           "if": null
         },
         {
           "job": "scoped-raster",
           "step": "Serve built public pages locally, no Deploy Preview",
           "sha256": "ff56ae0b327f0f1f2404dc47634866b840387a5d6000265422d7ca57c14168b8",
+          "command": "python3 -m http.server 8123 --bind 127.0.0.1 --directory app > /tmp/vis002c-v03-http.log 2>&1 &\nsleep 2\ncurl --fail --silent http://127.0.0.1:8123/about/ >/dev/null",
           "if": null
         },
         {
           "job": "scoped-raster",
           "step": "Assert v0.3 colors and full-page raster containment",
           "sha256": "f2e86d6a1571858af9ea16469354f6eeeec019ea4a02277204d1e7fa7f9c3841",
+          "command": "node tests/vis002c-v03-scoped-raster.mjs",
           "if": null
         },
         {
           "job": "scoped-raster",
           "step": "Verify 19 informative fallbacks on both themes and browsers",
           "sha256": "b1185eaf6992d146e0267dc02b33d348da75a9963480fd41c2ade666c79374ce",
+          "command": "node tests/public-image-fallback-browser.mjs",
           "if": null
         }
       ],
       "classification": "automated-validation-or-reporting",
       "mutationSignals": [],
       "externalIndicators": [
+        "network/http access",
+        "browser dependency",
         "package installation"
       ],
       "artifactActions": [
@@ -9410,9 +10164,8 @@
   "parseWarnings": [],
   "caveats": [
     "The YAML reader extracts the trigger/job/step fields used by the current repository; it is not a general YAML validator.",
-    "Command digests identify the exact declared run-step text by repository blob and SHA-256; they do not prove every assertion in a command is reachable.",
+    "Command text and SHA-256 identify the exact declared run-step source; they do not prove every assertion in a command is reachable.",
     "Write-capable classification is a signal for review, not a security proof. Inspect permissions and external side effects before calling a workflow validation-only.",
     "Open PR list is a live GitHub readback supplied to this snapshot; Draft PR workflow candidates are recorded only when present in that readback."
   ]
 }
-
