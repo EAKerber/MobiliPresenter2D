@@ -64,6 +64,12 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
+      - name: Capture open PRs for exact inventory refs
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p artifacts
+          gh pr list --state open --limit 1000 --json number,url,headRefName,headRefOid,baseRefName,baseRefOid > artifacts/open-prs.json
       - name: Generate SHA-pinned workflow inventory
         env:
           MAIN_SHA: ${{ inputs.main_sha }}
@@ -74,7 +80,7 @@ jobs:
             --main-sha "$MAIN_SHA" \
             --development-pin "$DEVELOPMENT_SHA" \
             --development-tree "$(git rev-parse 'HEAD^{tree}')" \
-            --open-prs-json '[]' \
+            --open-prs-json "$(cat artifacts/open-prs.json)" \
             --output artifacts/tst-001-workflow-inventory.json
       - uses: actions/upload-artifact@v4
         with:
