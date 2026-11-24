@@ -38,7 +38,7 @@ test('Viewer navigation changes retain both navigation and pricing contracts', (
 
 test('changes to workflow or selector infrastructure select every known bundle', () => {
   const selection = selectBundles(['.github/workflows/candidate-assets.yml'], map);
-  assert.deepEqual(ids(selection), ['public-navigation', 'candidate-assets', 'viewer-pricing', 'v5-normal-save-concurrency']);
+  assert.deepEqual(ids(selection), ['public-navigation', 'candidate-assets', 'viewer-pricing', 'v5-normal-save-concurrency', 'buyer-configuration-boundary']);
   assert.equal(selection.fallback.enabled, true);
   assert(selection.fallback.reasons.includes('test-selection-or-ci-infrastructure-changed'));
 });
@@ -53,15 +53,38 @@ test('candidate asset tool triggers are limited to files that the gate consumes'
   assert(!workflow.includes("'tools/**'"), 'the broad tools trigger would run asset checks for unrelated CI tooling');
 });
 
-test('V5 normal-save concurrency selects only its specific boundary bundle', () => {
+test('V5 normal-save maps to both its concurrency and configuration-boundary contracts', () => {
   const selection = selectBundles(['app/tools/test-v5-normal-save.js'], map);
-  assert.deepEqual(ids(selection), ['v5-normal-save-concurrency']);
+  assert.deepEqual(ids(selection), ['v5-normal-save-concurrency', 'buyer-configuration-boundary']);
   assert.equal(selection.fallback.enabled, false);
   assert.deepEqual(selection.unknownPaths, []);
-  assert(selection.selectedBundles[0].execution.some((entry) =>
+  assert(selection.selectedBundles.some((bundle) => bundle.execution.some((entry) =>
     entry.workflow === '.github/workflows/buyer-configuration-boundary.yml' &&
     entry.commands.includes('node app/tools/test-v5-normal-save.js')
-  ));
+  )));
+});
+
+test('published configuration handler and endpoint safety select the configuration boundary', () => {
+  const selection = selectBundles([
+    'netlify/functions/configuration.mjs',
+    'app/tools/test-v5-endpoint-safety.js'
+  ], map);
+  assert.deepEqual(ids(selection), ['buyer-configuration-boundary']);
+  assert.equal(selection.fallback.enabled, false);
+  assert.deepEqual(selection.unknownPaths, []);
+  assert(selection.selectedBundles[0].execution[0].commands.includes('node app/tools/test-published-configuration.js'));
+  assert(selection.selectedBundles[0].execution[0].commands.includes('node app/tools/test-v5-endpoint-safety.js'));
+});
+
+test('Buyer endpoint access and DTO tests select the configuration boundary', () => {
+  const selection = selectBundles([
+    'netlify/access/private-endpoint.mjs',
+    'tests/buyer-configuration-endpoint.test.mjs',
+    'app/tools/test-published-buyer-projection.js'
+  ], map);
+  assert.deepEqual(ids(selection), ['buyer-configuration-boundary']);
+  assert.equal(selection.fallback.enabled, false);
+  assert.deepEqual(selection.unknownPaths, []);
 });
 
 test('V5 normal-save test is excluded from unrelated broad app gates', () => {
@@ -83,7 +106,7 @@ test('V5 normal-save test is excluded from unrelated broad app gates', () => {
 
 test('unclassified historical paths trigger the conservative fallback', () => {
   const selection = selectBundles(['app/unknown/new-contract.js'], map);
-  assert.deepEqual(ids(selection), ['public-navigation', 'candidate-assets', 'viewer-pricing', 'v5-normal-save-concurrency']);
+  assert.deepEqual(ids(selection), ['public-navigation', 'candidate-assets', 'viewer-pricing', 'v5-normal-save-concurrency', 'buyer-configuration-boundary']);
   assert.deepEqual(selection.unknownPaths, ['app/unknown/new-contract.js']);
   assert(selection.fallback.reasons.includes('unclassified-path'));
 });
@@ -92,9 +115,9 @@ test('empty or mixed known/unknown diffs do not narrow validation', () => {
   const empty = selectBundles([], map);
   const mixed = selectBundles(['app/landing/header-menu.js', 'architecture/new-contract.md'], map);
   assert.equal(empty.fallback.enabled, true);
-  assert.deepEqual(ids(empty), ['public-navigation', 'candidate-assets', 'viewer-pricing', 'v5-normal-save-concurrency']);
+  assert.deepEqual(ids(empty), ['public-navigation', 'candidate-assets', 'viewer-pricing', 'v5-normal-save-concurrency', 'buyer-configuration-boundary']);
   assert.equal(mixed.fallback.enabled, true);
-  assert.deepEqual(ids(mixed), ['public-navigation', 'candidate-assets', 'viewer-pricing', 'v5-normal-save-concurrency']);
+  assert.deepEqual(ids(mixed), ['public-navigation', 'candidate-assets', 'viewer-pricing', 'v5-normal-save-concurrency', 'buyer-configuration-boundary']);
 });
 
 test('each bundle names at least one workflow, executable command, assertion, path, and risk', () => {
