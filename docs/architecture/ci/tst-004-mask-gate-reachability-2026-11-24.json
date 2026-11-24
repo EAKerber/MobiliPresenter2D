@@ -1,0 +1,43 @@
+{
+  "schema": "M2DTSTWorkflowReachabilityReceipt/1",
+  "plan": "MobiliPresenter2D Plano Diretor v0.9",
+  "workItem": "TST-004",
+  "status": "prepared-for-development-review",
+  "baseDevelopmentSha": "b135aea4cc4a861d1b2ce1646e9fad71194b4774",
+  "findings": [
+    {
+      "priority": "P0",
+      "contract": "mask-alpha semantics and exposed-side pixel bounds",
+      "baseline": "tests/test_mask_semantics.py and tests/validate-exposed-side-pixels.py existed in development but were not invoked by candidate-assets.yml",
+      "change": "Add both test paths to push and pull_request filters and invoke both tests in the current asset gate",
+      "localVerification": {
+        "command": "python -m unittest tests.test_mask_semantics",
+        "result": "PASS 2/2"
+      },
+      "pixelVerification": {
+        "command": "python tests/validate-exposed-side-pixels.py",
+        "result": "PASS; glass bounds (495, 266, 523, 900), foreground and transparent-gap assertions passed"
+      }
+    },
+    {
+      "priority": "P0",
+      "contract": "About skip-link focus",
+      "baseline": "The workflow watched scripts/compile-primary-pages.mjs although its actual About output, source page, manifest, script, test, and workflow paths are already explicit",
+      "change": "Remove only the compiler path from push and pull_request; retain the About source/output/manifest/test/workflow and package paths"
+    }
+  ],
+  "governance": {
+    "requiredChecks": "Authenticated read-only GitHub settings review on 2026-11-24 found no branch rules, rulesets, or required status checks",
+    "scopeLimit": "This closes only two proven reachability gaps/false positives; TST-004's full workflow inventory, synthetic path scenarios, command/assertion map, dispatch review, and cost census remain in progress.",
+    "tst022": "No impact-based bundle selector is implemented by this receipt."
+  },
+  "verification": {
+    "gitDiffCheck": "PASS",
+    "candidateAssetsWorkflow": "pending pull request gates",
+    "aboutSkipLinkWorkflow": "pending pull request gate"
+  },
+  "evidence": {
+    "pullRequest": null,
+    "developmentIntegrationSha": null
+  }
+}

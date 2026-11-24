@@ -12,7 +12,6 @@ on:
       - tests/about-skip-link-focus.mjs
       - .github/workflows/about-skip-link-focus.yml
       - package.json
-      - scripts/compile-primary-pages.mjs
   push:
     branches:
       - main
@@ -25,7 +24,6 @@ on:
       - tests/about-skip-link-focus.mjs
       - .github/workflows/about-skip-link-focus.yml
       - package.json
-      - scripts/compile-primary-pages.mjs
 permissions:
   contents: read
 jobs:
