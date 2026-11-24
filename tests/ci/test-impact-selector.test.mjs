@@ -38,7 +38,7 @@ test('Viewer navigation changes retain both navigation and pricing contracts', (
 
 test('changes to workflow or selector infrastructure select every known bundle', () => {
   const selection = selectBundles(['.github/workflows/candidate-assets.yml'], map);
-  assert.deepEqual(ids(selection), ['public-navigation', 'candidate-assets', 'viewer-pricing']);
+  assert.deepEqual(ids(selection), ['public-navigation', 'candidate-assets', 'viewer-pricing', 'v5-normal-save-concurrency']);
   assert.equal(selection.fallback.enabled, true);
   assert(selection.fallback.reasons.includes('test-selection-or-ci-infrastructure-changed'));
 });
@@ -83,7 +83,7 @@ test('V5 normal-save test is excluded from unrelated broad app gates', () => {
 
 test('unclassified historical paths trigger the conservative fallback', () => {
   const selection = selectBundles(['app/unknown/new-contract.js'], map);
-  assert.deepEqual(ids(selection), ['public-navigation', 'candidate-assets', 'viewer-pricing']);
+  assert.deepEqual(ids(selection), ['public-navigation', 'candidate-assets', 'viewer-pricing', 'v5-normal-save-concurrency']);
   assert.deepEqual(selection.unknownPaths, ['app/unknown/new-contract.js']);
   assert(selection.fallback.reasons.includes('unclassified-path'));
 });
@@ -92,9 +92,9 @@ test('empty or mixed known/unknown diffs do not narrow validation', () => {
   const empty = selectBundles([], map);
   const mixed = selectBundles(['app/landing/header-menu.js', 'architecture/new-contract.md'], map);
   assert.equal(empty.fallback.enabled, true);
-  assert.deepEqual(ids(empty), ['public-navigation', 'candidate-assets', 'viewer-pricing']);
+  assert.deepEqual(ids(empty), ['public-navigation', 'candidate-assets', 'viewer-pricing', 'v5-normal-save-concurrency']);
   assert.equal(mixed.fallback.enabled, true);
-  assert.deepEqual(ids(mixed), ['public-navigation', 'candidate-assets', 'viewer-pricing']);
+  assert.deepEqual(ids(mixed), ['public-navigation', 'candidate-assets', 'viewer-pricing', 'v5-normal-save-concurrency']);
 });
 
 test('each bundle names at least one workflow, executable command, assertion, path, and risk', () => {
