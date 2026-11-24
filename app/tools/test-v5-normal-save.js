@@ -23,12 +23,15 @@ function mockStore(initial = v5, mode = "") {
   let document = initial === null ? null : structuredClone(initial);
   let etag = '"original-v5"';
   let writes = 0;
+  let readCount = 0;
   return {
     get writes() { return writes; },
     get document() { return document; },
     async getWithMetadata(key, options) {
       assert.equal(key, "published");
       assert.deepEqual(options, { type: "text", consistency: "strong" });
+      readCount++;
+      if (mode === "missing-readback" && readCount > 1) return null;
       if (document === null) return null;
       return { etag, data: typeof document === "string" ? document : JSON.stringify(document), metadata: {} };
     },
@@ -163,6 +166,7 @@ async function main() {
     ...payload, pricing: { ...payload.pricing, schemaVersion: "CommercialPricingRules 0.0" }
   }, "invalid_v5_configuration");
   await fails("missing required policy", mockStore(), { ...payload, presentationPolicy: null }, "invalid_v5_configuration");
+  await fails("missing readback", mockStore(v5, "missing-readback"), payload, "readback_missing_or_invalid", 1);
   await fails("lost etag", mockStore(v5, "conflict"), payload, "source_etag_conflict", 1);
   await fails("missing etag from write", mockStore(v5, "missing-write-etag"), payload, "write_etag_missing", 1);
   await fails("phantom successful write", mockStore(v5, "phantom"), payload, "readback_etag_mismatch", 1);
