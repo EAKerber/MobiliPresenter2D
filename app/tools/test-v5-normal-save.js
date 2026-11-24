@@ -88,6 +88,7 @@ async function concurrentEditRace() {
     },
     async setJSON(key, value, options) {
       assert.equal(key, "published");
+      assert.deepEqual(options, { onlyIfMatch: '"original-v5"' });
       writes += 1;
       if (options.onlyIfMatch !== etag) return { modified: false };
       successfulWrites += 1;
