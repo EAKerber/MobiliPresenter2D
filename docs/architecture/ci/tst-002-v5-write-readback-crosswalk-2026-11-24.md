@@ -16,8 +16,8 @@ Evidence: E0/source-inspected means the named assertions exist and the workflow 
 |---|---|---|
 | Endpoint contract fixture | app/tools/test-v5-endpoint-safety.js | 04beaf50607225602cac1ba3ae32ec325efc2e17 |
 | Normal-save fixture | app/tools/test-v5-normal-save.js | 1e0377916e9d38b441c609bd3a55e28beb824bbe |
-| HTTP endpoint consumer | netlify/functions/configuration.mjs | current source in the pinned base; see repository history |
-| Save contract consumer | app/core/v5-normal-save.js | current source in the pinned base; see repository history |
+| HTTP endpoint consumer | netlify/functions/configuration.mjs | d5aac8c4a015bde329272c61571d86c6c2e24a40 |
+| Save contract consumer | app/core/v5-normal-save.js | e9da3059ec2bbb566a0ac4c087553d383451e2e7 |
 | Workflow | .github/workflows/buyer-configuration-boundary.yml | 85cc3248848970112051bdadb63f2bc28a07516e |
 
 The workflow directly runs node app/tools/test-v5-normal-save.js and node app/tools/test-v5-endpoint-safety.js. Both pull_request and push target main and development; filters include the test files, app/core/**, app/data/**, the endpoint, and the workflow. A docs-only change does not trigger this gate.
