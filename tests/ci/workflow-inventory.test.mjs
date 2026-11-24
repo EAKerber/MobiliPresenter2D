@@ -91,6 +91,27 @@ test('glass browser test changes reach both push and pull request gates', () => 
   assert(pullRequest.includes("'tests/exposed-sides-glass.cjs'"));
 });
 
+test('measured browser setup uses the matching pinned Playwright image without reinstalling Chromium', () => {
+  const browserWorkflows = [
+    '.github/workflows/mobile-browser.yml',
+    '.github/workflows/stone-browser.yml',
+    '.github/workflows/summary-pricing-browser.yml'
+  ];
+  for (const file of browserWorkflows) {
+    const source = readFileSync(path.join(root, file), 'utf8');
+    const workflow = definition(source, file, 'blob-sha');
+    const browserJob = workflow.jobs.find(({ id }) => id === 'browser');
+    assert(browserJob, `${file} should retain its browser job`);
+    assert.equal(browserJob.container, 'mcr.microsoft.com/playwright:v1.62.1-noble');
+    const install = workflow.commands.find(({ jobId, step }) =>
+      jobId === 'browser' && step === 'Install isolated browser test tooling');
+    assert(install, `${file} should retain isolated Playwright tooling`);
+    assert.match(install.command, /playwright@1\.62\.1/);
+    assert.doesNotMatch(install.command, /playwright install/,
+      `${file} should use the browser already present in the pinned image`);
+  }
+});
+
 
 test('read-only output, comments, and identifiers do not become mutation signals', () => {
   const source = [
