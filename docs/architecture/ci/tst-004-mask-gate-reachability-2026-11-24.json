@@ -2,7 +2,7 @@
   "schema": "M2DTSTWorkflowReachabilityReceipt/1",
   "plan": "MobiliPresenter2D Plano Diretor v0.9",
   "workItem": "TST-004",
-  "status": "prepared-for-development-review",
+  "status": "integrated-in-development; broader-inventory-in-progress",
   "baseDevelopmentSha": "b135aea4cc4a861d1b2ce1646e9fad71194b4774",
   "findings": [
     {
@@ -24,20 +24,45 @@
       "contract": "About skip-link focus",
       "baseline": "The workflow watched scripts/compile-primary-pages.mjs although its actual About output, source page, manifest, script, test, and workflow paths are already explicit",
       "change": "Remove only the compiler path from push and pull_request; retain the About source/output/manifest/test/workflow and package paths"
+    },
+    {
+      "priority": "P0",
+      "contract": "NAV-004/NAV-005 cross-engine public navigation behavior",
+      "baseline": "Two development workflows ran the same 124 browser scenarios for development pull requests",
+      "change": "Keep the dedicated NAV-005 workflow on main pull requests and make the development semantic workflow watch NAV-005 workflow edits; retain its additional source, compiler, routing, and theme-focus contracts",
+      "pullRequest": 343,
+      "headSha": "043c660a667a08af82b080d4f68ff9300fe71367",
+      "developmentIntegrationSha": "fdb414a8477eecc5f335c79f8598070890d99919"
+    },
+    {
+      "priority": "P0",
+      "contract": "historical TST-004 priority discrepancies",
+      "finding": "ARC-03C is dispatch-only by design and still has active source/build/browser coverage in development; public-routing-before-clerk no longer watches the absent public-pages-integrated.cjs test and runs public-pages-smoke.cjs on production-bound PRs; viewer-base-price-contract-gate.yml now has main/development pull_request coverage. These are reconciled as resolved or intentional, not open current gaps."
     }
   ],
   "governance": {
     "requiredChecks": "Authenticated read-only GitHub settings review on 2026-11-24 found no branch rules, rulesets, or required status checks",
-    "scopeLimit": "This closes only two proven reachability gaps/false positives; TST-004's full workflow inventory, synthetic path scenarios, command/assertion map, dispatch review, and cost census remain in progress.",
+    "scopeLimit": "This receipt records the mask reachability fix, the false About trigger removal, and the NAV duplicate-run reduction. The full 74-workflow inventory, contract/path matrix, synthetic scenario coverage, complete command-to-assertion map, dispatch/condition review, and broad-trigger cost census remain in progress.",
     "tst022": "No impact-based bundle selector is implemented by this receipt."
   },
   "verification": {
     "gitDiffCheck": "PASS",
-    "candidateAssetsWorkflow": "pending pull request gates",
-    "aboutSkipLinkWorkflow": "pending pull request gate"
+    "candidateAssetsWorkflow": "PASS on PR #342 head bb29d300026d3c39374440d4bb29cfce185fa32f; six applicable gates passed",
+    "aboutSkipLinkWorkflow": "PASS on PR #342 head bb29d300026d3c39374440d4bb29cfce185fa32f",
+    "developmentNavigationWorkflow": "PASS on PR #343 head 043c660a667a08af82b080d4f68ff9300fe71367; 124 scenario gate passed"
   },
   "evidence": {
-    "pullRequest": null,
-    "developmentIntegrationSha": null
+    "pullRequest": {
+      "number": 342,
+      "url": "https://github.com/EAKerber/MobiliPresenter2D/pull/342",
+      "headSha": "bb29d300026d3c39374440d4bb29cfce185fa32f"
+    },
+    "developmentIntegrationSha": "65661fa6968570ce4912e5bb7d34116a876fec2c",
+    "followUpPullRequest": {
+      "number": 343,
+      "url": "https://github.com/EAKerber/MobiliPresenter2D/pull/343",
+      "headSha": "043c660a667a08af82b080d4f68ff9300fe71367",
+      "developmentIntegrationSha": "fdb414a8477eecc5f335c79f8598070890d99919"
+    }
   }
 }

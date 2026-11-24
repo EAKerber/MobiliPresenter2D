@@ -1,0 +1,54 @@
+{
+  "schema": "M2DTSTImpactBundleReceipt/1",
+  "plan": "MobiliPresenter2D Plano Diretor v0.9",
+  "workItem": "TST-022",
+  "status": "candidate-for-development-review",
+  "baseDevelopmentSha": "fdb414a8477eecc5f335c79f8598070890d99919",
+  "implementation": {
+    "selector": "tools/ci/select-test-bundles.mjs",
+    "map": "tools/ci/test-impact-bundles.json",
+    "workflow": ".github/workflows/development-test-impact-plan.yml",
+    "test": "tests/ci/test-impact-selector.test.mjs",
+    "bundles": [
+      "public-navigation",
+      "candidate-assets",
+      "viewer-pricing"
+    ],
+    "reportedFields": [
+      "changed paths",
+      "matched contract bundles",
+      "consumers",
+      "risks",
+      "current workflows and commands",
+      "unclassified paths",
+      "fallback reasons"
+    ]
+  },
+  "fallback": {
+    "conditions": [
+      "empty diff",
+      "unclassified path",
+      "workflow file changed",
+      "selector/CI infrastructure changed",
+      "package manifest changed"
+    ],
+    "behavior": "select all catalogued bundles and preserve all existing path-triggered workflows"
+  },
+  "validation": {
+    "localTestCommand": "node --test tests/ci/test-impact-selector.test.mjs",
+    "localTestResult": "PASS 8/8",
+    "nodeSyntax": "PASS",
+    "gitDiffCheck": "PASS",
+    "pullRequestWorkflow": "pending"
+  },
+  "limits": [
+    "The selector is advisory and does not skip, cancel, or replace existing workflows.",
+    "The first map covers three high-impact families; unclassified paths select all mapped bundles while existing path-triggered gates remain authoritative.",
+    "This is not yet a complete TST-002 assertion inventory, proof that every critical contract is covered, a CI cost reduction, or authorization to consolidate other workflows.",
+    "Future additions to bundles require current trigger/command review and historical path cases before any gate can be removed."
+  ],
+  "evidence": {
+    "pullRequest": null,
+    "developmentIntegrationSha": null
+  }
+}
