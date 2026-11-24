@@ -3,7 +3,7 @@
 import json, subprocess
 from pathlib import Path
 
-MAIN="221b54b2a41ecc8c338d1bf2cf67280cf165ce95"
+MAIN="01ded2c100fbfd8b16897e26113dc5068a83e429"
 SOURCES={
  "experiment/shared-public-header-controller-20261020":{
   "sha":"fdeb931af285f6cf76795ccdd50a8b75d0f25aef",
