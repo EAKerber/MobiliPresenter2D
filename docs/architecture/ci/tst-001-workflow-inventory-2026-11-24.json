@@ -6,9 +6,9 @@
   "source": {
     "mainSha": "01ded2c100fbfd8b16897e26113dc5068a83e429",
     "mainTree": "d1588ab2a71c5de7e8b7cfaa907d5e5637fa7178",
-    "developmentPin": "e05b37a7cef712f5eb9bb1a0df5bd5937afd203e",
-    "developmentTree": "3e43cae159f89baf5a3b5fd4c2ea8bea8f9063ad",
-    "worktreeHead": "e05b37a7cef712f5eb9bb1a0df5bd5937afd203e",
+    "developmentPin": "c2abdf7e9024e783dd36fdbd91c4acc76dd8c136",
+    "developmentTree": "9e98257547958e8caa504c8eada9893539ded443",
+    "worktreeHead": "c2abdf7e9024e783dd36fdbd91c4acc76dd8c136",
     "worktreeTreeVerifiedAgainstDevelopmentPin": true,
     "openPullRequestsReadback": []
   },
@@ -73,7 +73,7 @@
       ".github/workflows/development-vis002c-arc03c-triad.yml"
     ],
     "developmentEventCounts": {
-      "pull_request": 25,
+      "pull_request": 26,
       "push": 61,
       "workflow_dispatch": 63,
       "schedule": 1
@@ -101,7 +101,7 @@
         "development"
       ],
       "mainDefinition": "5273aeffc6d36342efcc009b45451f43470f01aa",
-      "developmentDefinition": "415929b64543de7f3dea9edec83b6fc48af62d1f"
+      "developmentDefinition": "c235cc76b8872ede686542026481252cc52c4053"
     },
     {
       "path": ".github/workflows/admin-hierarchy-browser.yml",
@@ -110,7 +110,7 @@
         "development"
       ],
       "mainDefinition": "bb6374561d873e35a032dea6e9f74cdc7ca01a42",
-      "developmentDefinition": "ce0802090768f32902a3d0270234c1c436e6e94c"
+      "developmentDefinition": "139116120889201e28fa60f60bb50e844e032ade"
     },
     {
       "path": ".github/workflows/app-build-purity.yml",
@@ -525,7 +525,7 @@
         "development"
       ],
       "mainDefinition": null,
-      "developmentDefinition": "dd03ad9af3c6c949d5ebdd2b728f6e482738a52f"
+      "developmentDefinition": "7299221395260c10e25e137e68a7e6e78709c8d1"
     },
     {
       "path": ".github/workflows/development-ux04-geometry.yml",
@@ -550,7 +550,7 @@
         "development"
       ],
       "mainDefinition": null,
-      "developmentDefinition": "cf376a5cf8b17773422677b3a1054a16dec63dce"
+      "developmentDefinition": "83425307d97dc8a5dffc76caade44cc7adc26c71"
     },
     {
       "path": ".github/workflows/development-viewer_price_aux-retire.yml",
@@ -607,7 +607,7 @@
         "development"
       ],
       "mainDefinition": "8466590ee15ce96f8f255ad93b978dea98abf325",
-      "developmentDefinition": "95627f18b5e6d80757093cbce0bf00f3d9a73858"
+      "developmentDefinition": "dae0bfb8bb54b4978960756af1ff3ff5f24820ce"
     },
     {
       "path": ".github/workflows/keyboard-browser.yml",
@@ -616,7 +616,7 @@
         "development"
       ],
       "mainDefinition": "de0bedd5391167491a1c544163d565ac5abf2045",
-      "developmentDefinition": "49e431323703b1806e75494d57e0c425741038cc"
+      "developmentDefinition": "e01828624ad6b118dadfb7421443bf65dc579d7a"
     },
     {
       "path": ".github/workflows/mobile-browser.yml",
@@ -670,7 +670,7 @@
         "development"
       ],
       "mainDefinition": "3e72f09b04502542fdc55faeb4a7b342752fee36",
-      "developmentDefinition": "90e1e2762b8bc67c1ed8b0173ab61de57840acff"
+      "developmentDefinition": "2ec113563971729bed3d24fe83333e9d6ff445c0"
     },
     {
       "path": ".github/workflows/r0-contract.yml",
@@ -724,7 +724,7 @@
         "development"
       ],
       "mainDefinition": "902bc9ba9fd4543d03169a8ca3028725ce0bb510",
-      "developmentDefinition": "dbb42592a17449e8d887a1cc4ef020041eb34af4"
+      "developmentDefinition": "b953e086b2b2d134b3649bbe106dc046d322268c"
     },
     {
       "path": ".github/workflows/vis002c-v03-product-pin.yml",
@@ -832,7 +832,7 @@
     },
     {
       "path": ".github/workflows/about-skip-link-focus.yml",
-      "blobSha": "415929b64543de7f3dea9edec83b6fc48af62d1f",
+      "blobSha": "c235cc76b8872ede686542026481252cc52c4053",
       "name": "About skip-link destination focus",
       "events": [
         {
@@ -846,7 +846,7 @@
             "architecture/pages/about.page.html",
             "app/about/about.js",
             "app/about/index.html",
-            "architecture/generated/primary-pages.manifest.json",
+            "scripts/compile-primary-pages.mjs",
             "tests/about-skip-link-focus.mjs",
             ".github/workflows/about-skip-link-focus.yml",
             "package.json"
@@ -865,7 +865,7 @@
             "architecture/pages/about.page.html",
             "app/about/about.js",
             "app/about/index.html",
-            "architecture/generated/primary-pages.manifest.json",
+            "scripts/compile-primary-pages.mjs",
             "tests/about-skip-link-focus.mjs",
             ".github/workflows/about-skip-link-focus.yml",
             "package.json"
@@ -1058,7 +1058,7 @@
     },
     {
       "path": ".github/workflows/admin-hierarchy-browser.yml",
-      "blobSha": "ce0802090768f32902a3d0270234c1c436e6e94c",
+      "blobSha": "139116120889201e28fa60f60bb50e844e032ade",
       "name": "Admin hierarchy browser",
       "events": [
         {
@@ -1142,7 +1142,7 @@
           "name": null,
           "if": null,
           "runsOn": "ubuntu-latest",
-          "container": null,
+          "container": "mcr.microsoft.com/playwright:v1.62.1-noble",
           "services": [],
           "stepCount": 7,
           "actions": [
@@ -1159,9 +1159,9 @@
       "commands": [
         {
           "job": "browser",
-          "step": "Install browser test tooling",
-          "sha256": "b03229018fc3690a80f69bef7d12a2dbe71bcdd0e4f8d3317cf073ad860e9c06",
-          "command": "npm install --prefix /tmp/admin-hierarchy-tools --no-audit --no-fund playwright@1.62.1\n/tmp/admin-hierarchy-tools/node_modules/.bin/playwright install --with-deps chromium",
+          "step": "Install Playwright Node package",
+          "sha256": "8a8d9a1cf7b3d51ac513c3fe25a96b0fcf0197af4a82dcf4a1655de71e93c45d",
+          "command": "npm install --prefix /tmp/admin-hierarchy-tools --no-audit --no-fund playwright@1.62.1",
           "if": null
         },
         {
@@ -6558,7 +6558,7 @@
     },
     {
       "path": ".github/workflows/development-test-impact-plan.yml",
-      "blobSha": "dd03ad9af3c6c949d5ebdd2b728f6e482738a52f",
+      "blobSha": "7299221395260c10e25e137e68a7e6e78709c8d1",
       "name": "Development test impact plan (advisory)",
       "events": [
         {
@@ -6626,7 +6626,7 @@
           "runsOn": "ubuntu-latest",
           "container": null,
           "services": [],
-          "stepCount": 4,
+          "stepCount": 6,
           "actions": [
             "actions/checkout@v4",
             "actions/setup-node@v4",
@@ -6640,7 +6640,7 @@
           "runsOn": "ubuntu-latest",
           "container": null,
           "services": [],
-          "stepCount": 5,
+          "stepCount": 6,
           "actions": [
             "actions/checkout@v4",
             "actions/setup-node@v4",
@@ -6653,7 +6653,7 @@
         "actions/setup-node@v4",
         "actions/upload-artifact@v4"
       ],
-      "commandCount": 5,
+      "commandCount": 8,
       "commands": [
         {
           "job": "plan",
@@ -6671,9 +6671,23 @@
         },
         {
           "job": "inventory",
+          "step": "Capture open PRs for exact inventory refs",
+          "sha256": "d43207a1b219618764e756f058992619158970c9accbb7d143ac62bfad0e7668",
+          "command": "mkdir -p artifacts\ngh pr list --state open --limit 1000 --json number,url,headRefName,headRefOid,baseRefName,baseRefOid > artifacts/open-prs.json",
+          "if": null
+        },
+        {
+          "job": "inventory",
           "step": "Generate SHA-pinned workflow inventory",
-          "sha256": "40b7da7eb899b508a14308b3ac1860208de5286d349b3a1557aed87216d83fe3",
-          "command": "test \"$(git rev-parse HEAD)\" = \"$DEVELOPMENT_SHA\"\nnode tools/ci/build-workflow-inventory.mjs \\\n  --main-sha \"$MAIN_SHA\" \\\n  --development-pin \"$DEVELOPMENT_SHA\" \\\n  --development-tree \"$(git rev-parse 'HEAD^{tree}')\" \\\n  --open-prs-json '[]' \\\n  --output artifacts/tst-001-workflow-inventory.json",
+          "sha256": "e398cd965311e3781447375c0250503d762b3eb18cac48ee752003244a76e9b0",
+          "command": "test \"$(git rev-parse HEAD)\" = \"$DEVELOPMENT_SHA\"\nnode tools/ci/build-workflow-inventory.mjs \\\n  --main-sha \"$MAIN_SHA\" \\\n  --development-pin \"$DEVELOPMENT_SHA\" \\\n  --development-tree \"$(git rev-parse 'HEAD^{tree}')\" \\\n  --open-prs-json \"$(cat artifacts/open-prs.json)\" \\\n  --output artifacts/tst-001-workflow-inventory.json",
+          "if": null
+        },
+        {
+          "job": "inventory",
+          "step": "Emit exact inventory JSON for readback",
+          "sha256": "eefd8cd715da6b12a4540057c433e9bd3aef5b2a1092705e9a1808890ee11a17",
+          "command": "echo 'BEGIN_TST001_INVENTORY_JSON'\ncat artifacts/tst-001-workflow-inventory.json\necho 'END_TST001_INVENTORY_JSON'",
           "if": null
         },
         {
@@ -6688,6 +6702,13 @@
           "step": "Generate SHA-pinned workflow inventory",
           "sha256": "4ec4fcfd556bee102e72ecdf046d27618ae7138c301ef1d9dd8479ea68674c4d",
           "command": "node tools/ci/build-workflow-inventory.mjs \\\n  --main-sha \"${{ steps.refs.outputs.main_sha }}\" \\\n  --development-pin \"${{ steps.refs.outputs.development_sha }}\" \\\n  --development-tree \"${{ steps.refs.outputs.development_tree }}\" \\\n  --open-prs-json \"$(cat artifacts/open-prs.json)\" \\\n  --output artifacts/tst-001-workflow-inventory.json",
+          "if": null
+        },
+        {
+          "job": "inventory_on_push",
+          "step": "Emit exact inventory JSON for readback",
+          "sha256": "eefd8cd715da6b12a4540057c433e9bd3aef5b2a1092705e9a1808890ee11a17",
+          "command": "echo 'BEGIN_TST001_INVENTORY_JSON'\ncat artifacts/tst-001-workflow-inventory.json\necho 'END_TST001_INVENTORY_JSON'",
           "if": null
         }
       ],
@@ -6946,9 +6967,23 @@
     },
     {
       "path": ".github/workflows/development-viewer-price-gate.yml",
-      "blobSha": "cf376a5cf8b17773422677b3a1054a16dec63dce",
+      "blobSha": "83425307d97dc8a5dffc76caade44cc7adc26c71",
       "name": "Development 06 Viewer price/publication gate (offline and localhost)",
       "events": [
+        {
+          "name": "pull_request",
+          "branches": [
+            "development"
+          ],
+          "branchIgnores": null,
+          "paths": [
+            "tests/ci/viewer-price-wire-contract.test.cjs",
+            "app/viewer/public-data.js",
+            ".github/workflows/development-viewer-price-gate.yml"
+          ],
+          "pathIgnores": null,
+          "types": null
+        },
         {
           "name": "push",
           "branches": [
@@ -6957,14 +6992,7 @@
           "branchIgnores": null,
           "paths": [
             "tests/ci/viewer-price-wire-contract.test.cjs",
-            "tests/viewer-base-price-publication.test.cjs",
-            "tests/viewer-price-v5-save.test.cjs",
-            "tests/viewer-base-price-browser-gate.mjs",
-            "app/core/administration-v5.js",
-            "app/core/public-module-projection.js",
-            "app/viewer/**",
-            "app/admin/admin.js",
-            "netlify/functions/public-modules.mjs",
+            "app/viewer/public-data.js",
             ".github/workflows/development-viewer-price-gate.yml"
           ],
           "pathIgnores": null,
@@ -6992,61 +7020,25 @@
             "actions/checkout@v4",
             "actions/setup-node@v4"
           ]
-        },
-        {
-          "id": "price-browser",
-          "name": null,
-          "if": null,
-          "runsOn": "ubuntu-latest",
-          "container": "mcr.microsoft.com/playwright:v1.62.1-noble",
-          "services": [],
-          "stepCount": 6,
-          "actions": [
-            "actions/checkout@v4",
-            "actions/setup-node@v4"
-          ]
         }
       ],
       "actions": [
         "actions/checkout@v4",
         "actions/setup-node@v4"
       ],
-      "commandCount": 4,
+      "commandCount": 1,
       "commands": [
         {
           "job": "price-contract",
-          "step": "V5 publication and client wire fail-closed contracts (no real network)",
-          "sha256": "3de644bf42abe8717008032a7ad816abf658f8f75069bae9c270ca408b75a3e9",
-          "command": "node --test tests/viewer-base-price-publication.test.cjs tests/viewer-price-v5-save.test.cjs tests/ci/viewer-price-wire-contract.test.cjs\nnode app/tools/test-public-modules-endpoint.js\nnode --check app/viewer/public-data.js\nnode --check app/viewer/viewer.js",
-          "if": null
-        },
-        {
-          "job": "price-browser",
-          "step": "Install pinned Playwright client matching system browsers",
-          "sha256": "f9ac9ea3190d37e5c5176d7feea02245fe17fad090ff17bde419592f7696cebe",
-          "command": "npm install --no-save --no-package-lock --no-audit --no-fund playwright@1.62.1",
-          "if": null
-        },
-        {
-          "job": "price-browser",
-          "step": "Serve Viewer locally without production or preview",
-          "sha256": "5cd0f0bd1e936ba79227d5d16d6a18872355a306fbae1c4146991667c30336da",
-          "command": "python3 -m http.server 8123 --bind 127.0.0.1 --directory app >/tmp/m2d-dev-viewer-price.log 2>&1 &\nsleep 2\ncurl --fail http://127.0.0.1:8123/viewer/ >/dev/null",
-          "if": null
-        },
-        {
-          "job": "price-browser",
-          "step": "Browser price ON/OFF in Chromium and WebKit",
-          "sha256": "fca0367773f4aef1caa385b10efe224473512c44f6e36802ffc4a2ea29134c57",
-          "command": "node tests/viewer-base-price-browser-gate.mjs",
+          "step": "Validate the browser wire adapter against authorized price contracts",
+          "sha256": "5a314ffa91cf40ec0f5e3ec79ef537fcc55c25f3a6f189761b51d82192c8d5e3",
+          "command": "node --test tests/ci/viewer-price-wire-contract.test.cjs",
           "if": null
         }
       ],
       "classification": "automated-validation-or-reporting",
       "mutationSignals": [],
       "externalIndicators": [
-        "network/http access",
-        "browser dependency",
         "package installation"
       ],
       "artifactActions": [],
@@ -7620,7 +7612,7 @@
     },
     {
       "path": ".github/workflows/flow-layout-browser.yml",
-      "blobSha": "95627f18b5e6d80757093cbce0bf00f3d9a73858",
+      "blobSha": "dae0bfb8bb54b4978960756af1ff3ff5f24820ce",
       "name": "Flow layout browser (local V5; protected preview separately gated)",
       "events": [
         {
@@ -7708,7 +7700,7 @@
           "name": null,
           "if": null,
           "runsOn": "ubuntu-latest",
-          "container": null,
+          "container": "mcr.microsoft.com/playwright:v1.62.1-noble",
           "services": [],
           "stepCount": 8,
           "actions": [
@@ -7733,8 +7725,8 @@
         {
           "job": "browser",
           "step": "Install browser test tooling",
-          "sha256": "9102bd3a7141c04854ed17b30d7e482dfa323f4b088e4b82becf33394e287d08",
-          "command": "npm install --prefix /tmp/flow-layout-tools --no-audit --no-fund playwright@1.62.1\n/tmp/flow-layout-tools/node_modules/.bin/playwright install --with-deps chromium webkit",
+          "sha256": "7f7bf1ad8269a8e9fc21a0a2c266173fcb64076af883ce759f8aa2a82e44a983",
+          "command": "npm install --prefix /tmp/flow-layout-tools --no-audit --no-fund playwright@1.62.1",
           "if": null
         },
         {
@@ -7884,7 +7876,7 @@
     },
     {
       "path": ".github/workflows/keyboard-browser.yml",
-      "blobSha": "49e431323703b1806e75494d57e0c425741038cc",
+      "blobSha": "e01828624ad6b118dadfb7421443bf65dc579d7a",
       "name": "Keyboard browser (local V5; protected preview separately gated)",
       "events": [
         {
@@ -7972,7 +7964,7 @@
           "name": null,
           "if": null,
           "runsOn": "ubuntu-latest",
-          "container": null,
+          "container": "mcr.microsoft.com/playwright:v1.62.1-noble",
           "services": [],
           "stepCount": 6,
           "actions": [
@@ -7997,8 +7989,8 @@
         {
           "job": "browser",
           "step": "Install browser test tooling",
-          "sha256": "fdcbb425230dc564e8716542e1c013222f01b642bdc14d61283c0d176b439186",
-          "command": "npm install --prefix /tmp/keyboard-browser-tools --no-audit --no-fund playwright@1.62.1\n/tmp/keyboard-browser-tools/node_modules/.bin/playwright install --with-deps chromium",
+          "sha256": "2b1ee687858da2838f981b5feecc12d58f52dbab89154502d684f6d41a210b8b",
+          "command": "npm install --prefix /tmp/keyboard-browser-tools --no-audit --no-fund playwright@1.62.1",
           "if": null
         },
         {
@@ -8817,7 +8809,7 @@
     },
     {
       "path": ".github/workflows/public-routing-before-clerk.yml",
-      "blobSha": "90e1e2762b8bc67c1ed8b0173ab61de57840acff",
+      "blobSha": "2ec113563971729bed3d24fe83333e9d6ff445c0",
       "name": "Public routing before Clerk",
       "events": [
         {
@@ -8884,7 +8876,7 @@
           "runsOn": "ubuntu-latest",
           "container": null,
           "services": [],
-          "stepCount": 4,
+          "stepCount": 5,
           "actions": [
             "actions/checkout@v4",
             "actions/setup-node@v4"
@@ -8908,13 +8900,20 @@
         "actions/checkout@v4",
         "actions/setup-node@v4"
       ],
-      "commandCount": 7,
+      "commandCount": 8,
       "commands": [
         {
           "job": "static-and-contract",
           "step": "Root/config routing invariants",
           "sha256": "5eb72cf8b9cdd69052d380c286dedf55b0fb96e0eaecd800c9aeee52e336413a",
           "command": "node tests/public-cutover-contract.cjs",
+          "if": null
+        },
+        {
+          "job": "static-and-contract",
+          "step": "Syntax-check hosted public smoke source",
+          "sha256": "67b075bc74cd8c7d7d25b9a29772b84cdd99bafc43b1fc52b32724654031a258",
+          "command": "node --check tests/public-pages-smoke.cjs",
           "if": null
         },
         {
@@ -9906,7 +9905,7 @@
     },
     {
       "path": ".github/workflows/viewer-base-price-contract-gate.yml",
-      "blobSha": "dbb42592a17449e8d887a1cc4ef020041eb34af4",
+      "blobSha": "b953e086b2b2d134b3649bbe106dc046d322268c",
       "name": "Viewer base-price publication contract (no Netlify deploy)",
       "events": [
         {
@@ -9937,7 +9936,6 @@
         {
           "name": "push",
           "branches": [
-            "integration/viewer-base-prices-main-20261021",
             "development",
             "main"
           ],
@@ -9975,7 +9973,7 @@
           "name": null,
           "if": null,
           "runsOn": "ubuntu-24.04",
-          "container": null,
+          "container": "mcr.microsoft.com/playwright:v1.56.0-noble",
           "services": [],
           "stepCount": 9,
           "actions": [
@@ -10028,8 +10026,8 @@
         {
           "job": "price-contract",
           "step": "Playwright cross-engine (without Netlify)",
-          "sha256": "8ca467b98fad267b613c0b4f86635179c490e64a9894c38de6ede2ec6329db01",
-          "command": "npm install --no-save --no-package-lock playwright@1.56.0\nnpx playwright install --with-deps chromium webkit\npython3 -m http.server 8123 --bind 127.0.0.1 --directory app >/tmp/viewer-base-price-local.log 2>&1 &\nsleep 2\nnode tests/viewer-base-price-browser-gate.mjs",
+          "sha256": "8e2e535c9ff997ed4c7f272a3e638250e635d212bb30ebfe334339dcc884cee2",
+          "command": "npm install --no-save --no-package-lock playwright@1.56.0\npython3 -m http.server 8123 --bind 127.0.0.1 --directory app >/tmp/viewer-base-price-local.log 2>&1 &\nsleep 2\nnode tests/viewer-base-price-browser-gate.mjs",
           "if": null
         }
       ],
