@@ -8,7 +8,7 @@ on:
       - architecture/pages/about.page.html
       - app/about/about.js
       - app/about/index.html
-      - architecture/generated/primary-pages.manifest.json
+      - scripts/compile-primary-pages.mjs
       - tests/about-skip-link-focus.mjs
       - .github/workflows/about-skip-link-focus.yml
       - package.json
@@ -20,7 +20,7 @@ on:
       - architecture/pages/about.page.html
       - app/about/about.js
       - app/about/index.html
-      - architecture/generated/primary-pages.manifest.json
+      - scripts/compile-primary-pages.mjs
       - tests/about-skip-link-focus.mjs
       - .github/workflows/about-skip-link-focus.yml
       - package.json
