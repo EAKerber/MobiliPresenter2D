@@ -37,19 +37,24 @@
   },
   "inventory": {
     "path": "architecture/arc13/ui-text-candidates.json",
-    "sha256": "F112D19C90F571769FF01E462FB7FEED99A448F3D55273EA6D3EBE01E371145F",
+    "sha256": "3AD718780463A9AE1907613250EEFB7C2508E9FE1A8619D2844CBB9CED80B195",
     "manifest": "architecture/generated/primary-pages.manifest.json",
+    "manifestSha256": "2B3A5557BD17CF95A21FCF7F84188A94C06ED1D7C01599D24B4D0DD00EDF15A4",
     "familyOccurrences": 3,
-    "candidateIds": [],
+    "candidateIds": ["d01bb4284ec09ab0", "d2de7c48d645e2db", "95fa05532af8bdc7"],
     "authoringStatus": "mapped-by-updated-primary-page-manifest",
     "sourceMapOrigin": "shared public header fragment to existing semantic catalog key",
-    "classificationNote": "Inventory candidate IDs and determinism are pending the pull request inventory gate; the unchanged base inventory is not represented as refreshed evidence."
+    "primaryPageAuthoringMappedOccurrences": 420,
+    "primaryPageAuthoringUnresolvedOccurrences": 0,
+    "javascriptParseErrors": 0,
+    "unreviewedOccurrences": 1043,
+    "classificationNote": "The three family occurrences map to /navigation/menu/open. Global inventory entries remain unreviewed; aggregate counts are not LOC-004 completion estimates."
   },
   "verification": {
     "arc03cSourceAuthorityTests": "PASS 6/6",
     "uiThemeContract": "PASS",
     "pageCompiler": "PASS --check",
-    "inventoryGeneration": "pending pull request gate; local scanner dependency acorn unavailable",
+    "inventoryGeneration": "PASS; two consecutive SHA-256 values identical; 420 primary-page occurrences mapped; 0 unresolved; 0 JavaScript parse errors",
     "staticAccessibleName": "PASS; exact label emitted in generated public HTML without JavaScript",
     "automatedPullRequestGates": "pending"
   },
