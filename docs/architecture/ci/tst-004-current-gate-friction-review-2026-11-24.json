@@ -2,8 +2,8 @@
   "schema": "M2DTSTWorkflowReachabilityReceipt/1",
   "plan": "MobiliPresenter2D Plano Diretor v0.9",
   "workItem": "TST-004",
-  "status": "in_progress; current trigger and friction slice reviewed",
-  "baseDevelopmentSha": "b3f78a5eefc9d243f007af3d6618abe3d6a09142",
+  "status": "in_progress; exact-head gate friction review continued and Playwright image batch prepared",
+  "baseDevelopmentSha": "da0dc5d471cca012cbd6f417b411c82471786737",
   "inventory": {
     "run": 45340082315,
     "artifactId": 14895742011,
@@ -76,9 +76,9 @@
     }
   ],
   "remaining": [
+    "Measure the three PR-triggered Playwright image batch runs against before-change samples; review CP-PUBLIC only if an exact-head pre-merge validation path is justified.",
     "Read back and reconcile the exact-head inventory artifact rows; the temporary download reference could not be consumed by the available file transport, so current counts remain UNKNOWN.",
     "Complete the assertion-to-contract matrix for CSS/theme, assets, and localization, then reconcile the remaining 75 workflow definitions against paths, internal conditions, commands, assertions and outcomes.",
-    "Measure exact candidate and representative high-fanout/browser run costs before claiming setup savings or further consolidation.",
     "Classify historical branch filters, Dispatch-only workflows, and tests not invoked by workflows; preserve local/manual intent where verified.",
     "Continue DOM-005 only after exact V5 store/Deploy Preview preflight; proceed with CMP-017 by control meaning and reconcile the DAG.",
     "Classify main-only commits for selective promotion without merging the full development tree."
@@ -91,8 +91,8 @@
     "No workflow, required gate, product runtime, Viewer behavior, mask content, Netlify settings, or Production state was changed by this receipt."
   ],
   "latestReadback": {
-    "currentDevelopmentSha": "8a54b586e2a9a533dcf122a119a27723c5f2f8e7",
-    "currentDevelopmentTree": "d2ba692c0e37ab784a25dbdf776ae28160203a76",
+    "currentDevelopmentSha": "da0dc5d471cca012cbd6f417b411c82471786737",
+    "currentDevelopmentTree": "7f307531871a4db7f4add3e6f75d4dd6183c6e8e",
     "inventoryGeneratedAtSha": "eee44926e5aa5ce90cf61fc13b0b02a7eef1b1a7",
     "inventoryRun": 45353425858,
     "inventoryArtifactId": 14900584471,
@@ -100,7 +100,7 @@
     "inventoryArtifactDigest": "sha256:7deeea415f746b64a294671c94385f54c51940f7db3de473280776906dcaf536",
     "inventoryArtifactExpires": "2026-12-24",
     "artifactRowsReadBack": false,
-    "countStatus": "UNKNOWN for the latest artifact; do not apply the historical e05b37a or b3f78a5 counts to this artifact without decoding its contents.",
+    "countStatus": "75 workflow YAML paths were read directly from the exact current development tree; the older inventory artifact rows remain unread, so command-hash totals and artifact-derived counts are not refreshed.",
     "interveningCommits": [
       {
         "pullRequest": 373,
@@ -116,6 +116,11 @@
         "pullRequest": 376,
         "sha": "8a54b586e2a9a533dcf122a119a27723c5f2f8e7",
         "scope": "documentation-only; published configuration and Buyer projection crosswalk"
+      },
+      {
+        "pullRequest": 377,
+        "sha": "da0dc5d471cca012cbd6f417b411c82471786737",
+        "scope": "workflow setup and TST-002/TST-004 documentation; no assertions or runtime changes"
       }
     ],
     "openPullRequestsAtReadback": 0
@@ -153,7 +158,20 @@
         "Use the project-pinned Playwright 1.62.1 Noble container in Keyboard Browser and Flow Layout instead of downloading browser binaries in each job; retain all assertions and filters.",
         "Run a cheap node --check for the hosted public smoke source on development PRs; keep deployed browser behavior gated on a main Deploy Preview."
       ],
-      "verification": "pending exact candidate-head workflows; no runtime or mask changes"
+      "verification": "integrated by squash at da0dc5d471cca012cbd6f417b411c82471786737; exact-head Keyboard, Flow Layout, public-routing static/contract, and advisory workflows passed; runs 45357801720, 45357801896, 45357801836, 45357801683; total run durations 52s, 148s, 22s, and 13s respectively; no matched before-run baseline, so no savings claim."
     }
+  },
+  "tst004SetupBatchCandidate": {
+    "branch": "codex/tst004-browser-image-setup-20261124",
+    "expectedPullRequest": 378,
+    "baseSha": "da0dc5d471cca012cbd6f417b411c82471786737",
+    "workflowPaths": [
+      ".github/workflows/mobile-browser.yml",
+      ".github/workflows/stone-browser.yml",
+      ".github/workflows/summary-pricing-browser.yml"
+    ],
+    "scope": "Use the pinned Playwright 1.62.1 Noble image for three PR-triggered Chromium browser jobs; retain Node Playwright 1.62.1, fixtures, assertions, filters, and artifacts.",
+    "deferred": "CP-PUBLIC is push-to-development/workflow_dispatch only, so no pre-merge run can validate its setup change; Public Routing's hosted browser is main Deploy Preview only. Both are deferred until an appropriate exact-head validation exists.",
+    "verification": "pending exact candidate-head workflows; no test assertions, Viewer runtime, or mask data changed."
   }
 }
