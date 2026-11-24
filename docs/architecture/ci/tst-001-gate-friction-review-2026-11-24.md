@@ -1,5 +1,15 @@
 # Gate inventory and friction review — 2026-11-24
 
+## Current CMP-001 / TST-001 component-to-gate slice — Admin stage availability
+
+This focused readback is pinned to Product `development@8ba626f6026ce8ea7016e4414dacbf74f39de30f` (tree `47398369f5b904caed49d9acb7fc26f6e1999069`). It records one operational component and its existing assertions; CMP-001 and TST-001 remain partial.
+
+| Component | Owner / consumer / state | Variants and risk | Existing assertions | Gate and evidence |
+|---|---|---|---|---|
+| Admin stage availability (`[data-stage-enabled]`; `app/admin/admin.js:612–746`, change handler `1723–1731`) | Owner: **UNKNOWN** (not explicitly assigned). Consumer: Admin hierarchy editor. The checkbox edits `model.stages[].enabled` through a cloned candidate and `commitHierarchy`; it updates the in-memory editor model. | Required stages are locked with a visible reason; an empty custom stage cannot be activated but remains removable. This is distinct from initial configurator/viewer/service visibility (`model.initialState.entities`, `viewerEntities`, `services`; `.initial-state-option`). Both happen to use checkboxes and share theme accent colors; their state and meaning are not interchangeable. Risk: confusing initial selection with whether an entire step is available. | `tests/admin-hierarchy-browser.cjs:230–241` distinguishes the locators, presentations, and accessible names; `252–259` checks required-stage locks and descriptions; `266–273` checks the empty-stage rule; `279–299` verifies no implicit save and that unsaved changes disappear on reload. | `.github/workflows/admin-hierarchy-browser.yml`: PR and `main` push with relevant source/test path filters, plus manual dispatch. Job `browser` runs `node tests/admin-hierarchy-browser.cjs /tmp/admin-hierarchy-review`, then the persistence and V5 Save browser tests. The exact PR #410 candidate run [#45501943629](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/45501943629) passed. At the current `development` pin, the Admin source, browser test, and workflow blobs match that tested candidate. The harness uses local browser fixtures; it does **not** prove hosted Admin/API behavior. A documentation-only crosswalk change does not trigger this browser gate. |
+
+This is an inventory and reachability record, not a request to standardize checkbox visuals or to extract a generic checkbox component. The existing test already covers the semantic distinction; adding another test for the same contract would duplicate evidence. The stage-control owner and hosted-runtime behavior remain open evidence gaps.
+
 ## Exact post-archive inventory readback
 
 The seven consumed echo-only receipt workflows listed below were removed from `.github/workflows` by PR #389 and recorded with their original blob IDs and historic run links in [`retired-workflow-receipts-2026-11-24.md`](retired-workflow-receipts-2026-11-24.md). The separate write-capable `development-pr-archive.yml` was left untouched.
