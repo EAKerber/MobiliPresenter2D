@@ -6,9 +6,9 @@
   "source": {
     "mainSha": "01ded2c100fbfd8b16897e26113dc5068a83e429",
     "mainTree": "d1588ab2a71c5de7e8b7cfaa907d5e5637fa7178",
-    "developmentPin": "29cd75c6535a81e47b9801eb58fb4394ec411937",
-    "developmentTree": "63e6c093171e502d74642c5de9f8633e09d1d0d4",
-    "worktreeHead": "29cd75c6535a81e47b9801eb58fb4394ec411937",
+    "developmentPin": "fa4e482209933e20bab7a3f512fc29337a95b449",
+    "developmentTree": "10727f83889874c0f6a302dbc9adbc187143f4e7",
+    "worktreeHead": "fa4e482209933e20bab7a3f512fc29337a95b449",
     "worktreeTreeVerifiedAgainstDevelopmentPin": true,
     "openPullRequestsReadback": []
   },
@@ -68,7 +68,7 @@
     "developmentEventCounts": {
       "pull_request": 27,
       "push": 62,
-      "workflow_dispatch": 55,
+      "workflow_dispatch": 54,
       "schedule": 1
     },
     "developmentDispatchOnlyCount": 4,
@@ -476,7 +476,7 @@
         "development"
       ],
       "mainDefinition": null,
-      "developmentDefinition": "7299221395260c10e25e137e68a7e6e78709c8d1"
+      "developmentDefinition": "dbcc99de7547e94fecfeb60c259450fdb12f9518"
     },
     {
       "path": ".github/workflows/development-ux04-geometry.yml",
@@ -6868,7 +6868,7 @@
     },
     {
       "path": ".github/workflows/development-test-impact-plan.yml",
-      "blobSha": "7299221395260c10e25e137e68a7e6e78709c8d1",
+      "blobSha": "dbcc99de7547e94fecfeb60c259450fdb12f9518",
       "name": "Development test impact plan (advisory)",
       "events": [
         {
@@ -6881,14 +6881,6 @@
             ".github/workflows/**",
             "tools/ci/build-workflow-inventory.mjs"
           ],
-          "pathIgnores": null,
-          "types": null
-        },
-        {
-          "name": "workflow_dispatch",
-          "branches": null,
-          "branchIgnores": null,
-          "paths": null,
           "pathIgnores": null,
           "types": null
         },
@@ -6930,20 +6922,6 @@
           ]
         },
         {
-          "id": "inventory",
-          "name": null,
-          "if": "github.event_name == 'workflow_dispatch'",
-          "runsOn": "ubuntu-latest",
-          "container": null,
-          "services": [],
-          "stepCount": 6,
-          "actions": [
-            "actions/checkout@v4",
-            "actions/setup-node@v4",
-            "actions/upload-artifact@v4"
-          ]
-        },
-        {
           "id": "inventory_on_push",
           "name": null,
           "if": "github.event_name == 'push'",
@@ -6963,7 +6941,7 @@
         "actions/setup-node@v4",
         "actions/upload-artifact@v4"
       ],
-      "commandCount": 8,
+      "commandCount": 5,
       "commands": [
         {
           "job": "plan",
@@ -6981,33 +6959,6 @@
           "step": "Report affected contract bundles",
           "sha256": "ca0d523e42ef2eef089b7c04ec91c2b39659d12cdd92a26837d6f2890b9dbc7a",
           "command": "node tools/ci/select-test-bundles.mjs --base \"$BASE_SHA\" --head \"$HEAD_SHA\"",
-          "if": null
-        },
-        {
-          "job": "inventory",
-          "jobId": "inventory",
-          "jobIf": "github.event_name == 'workflow_dispatch'",
-          "step": "Capture open PRs for exact inventory refs",
-          "sha256": "d43207a1b219618764e756f058992619158970c9accbb7d143ac62bfad0e7668",
-          "command": "mkdir -p artifacts\ngh pr list --state open --limit 1000 --json number,url,headRefName,headRefOid,baseRefName,baseRefOid > artifacts/open-prs.json",
-          "if": null
-        },
-        {
-          "job": "inventory",
-          "jobId": "inventory",
-          "jobIf": "github.event_name == 'workflow_dispatch'",
-          "step": "Generate SHA-pinned workflow inventory",
-          "sha256": "e398cd965311e3781447375c0250503d762b3eb18cac48ee752003244a76e9b0",
-          "command": "test \"$(git rev-parse HEAD)\" = \"$DEVELOPMENT_SHA\"\nnode tools/ci/build-workflow-inventory.mjs \\\n  --main-sha \"$MAIN_SHA\" \\\n  --development-pin \"$DEVELOPMENT_SHA\" \\\n  --development-tree \"$(git rev-parse 'HEAD^{tree}')\" \\\n  --open-prs-json \"$(cat artifacts/open-prs.json)\" \\\n  --output artifacts/tst-001-workflow-inventory.json",
-          "if": null
-        },
-        {
-          "job": "inventory",
-          "jobId": "inventory",
-          "jobIf": "github.event_name == 'workflow_dispatch'",
-          "step": "Emit exact inventory JSON for readback",
-          "sha256": "eefd8cd715da6b12a4540057c433e9bd3aef5b2a1092705e9a1808890ee11a17",
-          "command": "echo 'BEGIN_TST001_INVENTORY_JSON'\ncat artifacts/tst-001-workflow-inventory.json\necho 'END_TST001_INVENTORY_JSON'",
           "if": null
         },
         {
