@@ -36,7 +36,7 @@ def main():
     require('const toggle = document.getElementById("menuToggle")' in current,"MENU_TOGGLE_LOST")
     require('const nav = document.getElementById("primaryNav")' in current,"MENU_NAV_LOST")
     for snippet in ('aria-expanded','aria-label','event.detail === 0','Escape',
-                    'toggle.focus()','pointerdown','nav.querySelectorAll("a")'):
+                    'toggle.focus()','pointerdown','nav.querySelector("a[href]")'):
         require(snippet in current,"LATEST_CONTROLLER_MISSING:"+snippet)
     require("PNG.sync.read" in test and "withinRasterTolerance" in test,
             "NEWER_PCOMP_PIXEL_DIFFERENTIAL_LOST")
