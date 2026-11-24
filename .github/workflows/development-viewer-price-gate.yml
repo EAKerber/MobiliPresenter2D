@@ -1,6 +1,20 @@
 name: Development 06 Viewer price/publication gate (offline and localhost)
 
 on:
+  pull_request:
+    branches:
+      - development
+    paths:
+      - 'tests/ci/viewer-price-wire-contract.test.cjs'
+      - 'tests/viewer-base-price-publication.test.cjs'
+      - 'tests/viewer-price-v5-save.test.cjs'
+      - 'tests/viewer-base-price-browser-gate.mjs'
+      - 'app/core/administration-v5.js'
+      - 'app/core/public-module-projection.js'
+      - 'app/viewer/**'
+      - 'app/admin/admin.js'
+      - 'netlify/functions/public-modules.mjs'
+      - '.github/workflows/development-viewer-price-gate.yml'
   push:
     branches:
       - development
