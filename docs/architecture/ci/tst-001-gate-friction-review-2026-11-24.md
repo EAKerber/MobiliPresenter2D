@@ -1,6 +1,18 @@
 # Gate inventory and friction review — 2026-11-24
 
-## Current dispatch and mutation-signal review — exact workflow inventory pin `650eee3b5ffa7c564611136a72d097d6777ad221`
+## Exact post-archive inventory readback
+
+The seven consumed echo-only receipt workflows listed below were removed from `.github/workflows` by PR #389 and recorded with their original blob IDs and historic run links in [`retired-workflow-receipts-2026-11-24.md`](retired-workflow-receipts-2026-11-24.md). The separate write-capable `development-pr-archive.yml` was left untouched.
+
+The resulting exact development push [#45380581114](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/45380581114) succeeded at `development@f2f706539da72696885ff16814a01cc31d0f6d90` (tree `4d1eae7c37b53e860b7e317de098a8a40d3f4ef2`). Inventory artifact ID `14912828734`, digest `sha256:2f5714ccc84cd2424327cd9156cd19c5dee1f2c32ab33d27cab1ac4ff762ded0`.
+
+- `main`: 27 workflow files; `development`: 68; 25 shared, 2 main-only, and 43 development-only.
+- Development event counts: 27 `pull_request`, 62 `push`, 55 `workflow_dispatch`, and 1 `schedule` (overlapping trigger counts). Four workflows are dispatch-only.
+- The union contains 70 branch-version definitions. Eight workflow paths retain conservative mutation/operation signals; they remain review signals, not proof of mutation. YAML-subset parse warnings: 0. Open PR readback: 0.
+- TST-001 remains incomplete: command text and hashes do not prove a command reaches an assertion under the workflow's trigger, job condition, and step condition. Continue with the focused false-positive fixtures and command-to-assertion reachability crosswalk below.
+
+
+## Historical dispatch and mutation-signal review — exact workflow inventory pin `650eee3b5ffa7c564611136a72d097d6777ad221`
 
 This slice distinguishes runnable manual gates, consumed receipt files, and conservative mutation signals. It does not change workflow behavior.
 
@@ -34,7 +46,7 @@ The inventory reports nine workflow paths with write or operational signals. Thi
 
 The write-capable workflows still require permission/job-condition review. The inventory’s current heuristic mixes text signals, permission presence, and effects; TST-001 remains open until the crosswalk separates those categories and ties each command to its reachable assertion.
 
-### Next gate work
+### Actions identified at the historical pin
 
 1. Archive the seven consumed echo-only workflow definitions outside `.github/workflows`, preserving their source and run links.
 2. Keep `development-pr-archive.yml` inert while its dispatch/apply event contract and exact archive manifest are reviewed.
