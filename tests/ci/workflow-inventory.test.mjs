@@ -87,7 +87,7 @@ test('read-only output, comments, and identifiers do not become mutation signals
     '        run: |',
     '          # Do not delete branch refs from this read-only report.',
     '          echo "branch deletion is only historical context"',
-    '          node -e \\'const deleteBranchPlan = false;\\'',
+    '          node -e "const deleteBranchPlan = false;"',
   ].join('\n');
   const workflow = definition(source, '.github/workflows/read-only.yml', 'blob-sha');
   assert.deepEqual(workflow.mutationSignals, []);
