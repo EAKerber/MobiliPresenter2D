@@ -1,12 +1,12 @@
 # Gate inventory and friction review — 2026-11-24
 
-## Current pinned state
+## Exact readback at PR base
 
 - Product `main`: `01ded2c100fbfd8b16897e26113dc5068a83e429` (tree `d1588ab2a71c5de7e8b7cfaa907d5e5637fa7178`).
-- Product `development`: `c6362970f0cd29a99c5d1122d08e85d8b88601c5`; the exact-head inventory run records no open PRs.
+- Product `development`: `c6362970f0cd29a99c5d1122d08e85d8b88601c5` (base of PR #363). The pre-PR readback showed no open PRs; the artifact’s internal PR list was not inspected.
 - Inventory run [45331965279](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/45331965279) succeeded. Artifact ID `14891304182`, name `tst-001-workflow-inventory-c6362970f0cd29a99c5d1122d08e85d8b88601c5`, digest `sha256:29ae6ace8e25ecf266af344e2f08139a3f80f7b868e2c4b5940d9b4d35e0b964`, created `2026-11-24T05:15:14Z`.
 - The checked-in JSON remains an earlier snapshot pinned to `development@e05b37a7cef712f5eb9bb1a0df5bd5937afd203e`; its counts are historical and are not counts for `c6362970`. The exact-head artifact is present, but this update records only its metadata; its internal rows have not been reconciled into the checked-in JSON.
-- Product currently has 20 branches and no open PRs. This exceeds the soft cap; reuse and retirement triage should continue, while preserving refs with unique work.
+- Before this work, Product had 20 branches and no open PRs. The temporary ref for PR #363 raises the count to 21, with one PR open; this is an explicit temporary soft-cap overage. Once integrated, the ref is eligible for retirement if its tree matches integration and no open PR depends on it.
 ## Inventory results — historical snapshot at `e05b37a7`
 
 - `main`: 27 workflow files; `development`: 75; 25 are shared, 2 exist only on `main`, and 50 only on `development`.
@@ -38,7 +38,7 @@
 
 ## TST-002 crosswalk slice — Viewer base-price publication
 
-The IDs below are persisted crosswalk identifiers for this slice, mapped to named test cases and source blobs observed at `development@c6362970`. They are review-level IDs and do not exist as annotations inside test code. This is partial TST-002 work, not a full workflow/assertion crosswalk.
+The IDs below are persisted crosswalk identifiers for this slice, mapped to named test cases and source blobs observed at PR base `development@c6362970`. They are review-level IDs and do not exist as annotations inside test code. This is partial TST-002 work, not a full workflow/assertion crosswalk.
 
 Trigger key: **P** = `.github/workflows/viewer-base-price-contract-gate.yml` (PR to main/development or push on integration/development/main, matching its path filters, or manual dispatch); **D** = `.github/workflows/development-viewer-price-gate.yml` (PR to development, push to development, matching its source/test/workflow paths, or manual dispatch). P runs publication/save tests, related V5/endpoint/syntax/build steps and the browser gate. D runs only `tests/ci/viewer-price-wire-contract.test.cjs`.
 
@@ -74,7 +74,7 @@ Evidence key: publication test blob `72359965`; V5 save test blob `e9ad71cb`; wi
 | VP-BR-02 | browser gate: ON presentation | Show localized price and keep dimension/price inside footer. | `.overview-base-price`, `.dimension-pill`, `.overview-footer`. | E0+E3 earlier SHA; not rerun at c636. | Eight ON combinations across browser/viewport/theme. | browser blob; P run above. | Expected label/currency and bounding boxes. | P | UNKNOWN |
 | VP-BR-03 | browser gate: OFF/layout/runtime | Hide price; keep dimensions; no overflow or JS errors. | Viewer DOM and page-error channel. | E0+E3 earlier SHA; not rerun at c636. | Eight OFF combinations. | browser blob; P run above. | No price, one dimension, no horizontal overflow/errors. | P | UNKNOWN |
 
-**Limits:** the 27 IDs above cover this bounded family only. Owner assignment is unverified; trigger details are summarized by P/D and the workflow blobs above. The wire job passed at the exact current SHA. Publication/save and browser tests passed on earlier heads with unchanged test blobs, but their execution is not exact-head evidence. The whole 74-workflow crosswalk, complete event/condition review, command-to-assertion reachability and representative end-to-end cost analysis remain open.
+**Limits:** the 27 IDs above cover this bounded family only. This readback is at the PR base, not the post-merge development SHA. Owner assignment is unverified; trigger details are summarized by P/D and the workflow blobs above. The wire job passed at the exact current SHA. Publication/save and browser tests passed on earlier heads with unchanged test blobs, but their execution is not exact-head evidence. The whole 74-workflow crosswalk, complete event/condition review, command-to-assertion reachability and representative end-to-end cost analysis remain open.
 
 ## Remaining TST-001 work
 
