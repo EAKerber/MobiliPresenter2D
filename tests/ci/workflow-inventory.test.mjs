@@ -61,3 +61,12 @@ test('inventory jobs emit the exact JSON artifact to readable logs', () => {
   assert.equal(occurrences(workflow, 'cat artifacts/tst-001-workflow-inventory.json'), 2);
   assert.equal(occurrences(workflow, 'END_TST001_INVENTORY_JSON'), 2);
 });
+
+
+test('glass browser test changes reach both push and pull request gates', () => {
+  const workflow = readFileSync(path.join(root, '.github/workflows/mobile-browser.yml'), 'utf8');
+  const push = workflow.slice(workflow.indexOf('  push:'), workflow.indexOf('  pull_request:'));
+  const pullRequest = workflow.slice(workflow.indexOf('  pull_request:'), workflow.indexOf('  workflow_dispatch:'));
+  assert(push.includes("'tests/exposed-sides-glass.cjs'"));
+  assert(pullRequest.includes("'tests/exposed-sides-glass.cjs'"));
+});
