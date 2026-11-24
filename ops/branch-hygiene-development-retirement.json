@@ -14,6 +14,22 @@
             "pullRequest": 399,
             "mergeCommit": "fbe6b9b409dd67884dd9447b02f87752a7d0f8ff"
           }
+        },
+        {
+          "branch": "codex/dom011-buyer-fixture-v5-validation-20261124",
+          "sha": "1f5515c5416ce877fcc8072db2b869bb3046625c",
+          "squashMerge": {
+            "pullRequest": 409,
+            "mergeCommit": "c78a20ca0ccc8c6bd0f870caa78a8814b9363bd7"
+          }
+        },
+        {
+          "branch": "codex/cmp001-admin-stage-availability-20261124",
+          "sha": "0dec2e67e3fb997b66e444f8805ee607a28453b2",
+          "squashMerge": {
+            "pullRequest": 411,
+            "mergeCommit": "116800e11016fb9093ce4ab5e3c0ed1e8527fe15"
+          }
         }
       ]
     }
