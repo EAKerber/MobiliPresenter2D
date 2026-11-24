@@ -2,7 +2,7 @@
 """Read-only provenance and contract check for the ARC03/03B preview-only compiler."""
 import json, subprocess
 from pathlib import Path
-MAIN="221b54b2a41ecc8c338d1bf2cf67280cf165ce95"
+MAIN="01ded2c100fbfd8b16897e26113dc5068a83e429"
 OLD="e459b9bd85c4e9c8bb96813ae6758789de75dc13"
 FRAGMENT="architecture/fragments/primary-header.fragment.html"
 SOURCE_PATHS={
