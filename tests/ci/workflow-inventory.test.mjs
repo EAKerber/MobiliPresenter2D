@@ -53,3 +53,10 @@ test('manual inventory dispatch captures open PRs instead of recording an empty 
   assert(dispatch.includes('--open-prs-json "$(cat artifacts/open-prs.json)"'));
   assert(!dispatch.includes("--open-prs-json '[]'"));
 });
+
+test('inventory jobs emit the exact JSON artifact to readable logs', () => {
+  const workflow = readFileSync(path.join(root, '.github/workflows/development-test-impact-plan.yml'), 'utf8');
+  assert.equal((workflow.match(/BEGIN_TST001_INVENTORY_JSON/g) ?? []).length, 2);
+  assert.equal((workflow.match(/cat artifacts\/tst-001-workflow-inventory\\.json/g) ?? []).length, 2);
+  assert.equal((workflow.match(/END_TST001_INVENTORY_JSON/g) ?? []).length, 2);
+});
