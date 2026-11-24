@@ -128,3 +128,16 @@ test("buyer DTO does not expose stored administrative state or raw ETag",()=>{
  const prepared=buyer.consume(project(v5));
  assert.deepEqual(prepared.displaySettings.stages,project(v5).displaySettings.stages);
 });
+test("local Buyer server fixture upgrades to validated V5 and refuses invalid V5",async()=>{
+ const {createLocalBuyerFixture}=await import("./local-buyer-config-fixture.mjs");
+ const fixture=createLocalBuyerFixture();
+ assert.equal(fixture.sourceSchema,administrationV5.SCHEMA);
+ assert.equal(fixture.administration.schemaVersion,administrationV5.SCHEMA);
+ assert.deepEqual(administrationV5.validate(fixture.administration,configuration,catalog,priceBook,scene),[]);
+ assert.equal(fixture.payload.schemaVersion,buyer.BUYER_SCHEMA);
+ same("server fixture Buyer projection",fixture.payload,project(v5));
+
+ const invalid=structuredClone(fixture.administration);
+ invalid.presentationPolicy=null;
+ assert.throws(()=>createLocalBuyerFixture({administration:invalid}),/CI_LOCAL_FIXTURE_INVALID_V5/);
+});
