@@ -57,6 +57,7 @@ jobs:
         with:
           node-version: '22'
       - name: Capture exact inventory refs and open PRs
+        id: refs
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
@@ -71,7 +72,6 @@ jobs:
           echo "development_sha=$development_sha" >> "$GITHUB_OUTPUT"
           echo "development_tree=$development_tree" >> "$GITHUB_OUTPUT"
       - name: Generate SHA-pinned workflow inventory
-        id: refs
         run: |
           node tools/ci/build-workflow-inventory.mjs \
             --main-sha "${{ steps.refs.outputs.main_sha }}" \
