@@ -6,11 +6,20 @@
   "source": {
     "mainSha": "01ded2c100fbfd8b16897e26113dc5068a83e429",
     "mainTree": "d1588ab2a71c5de7e8b7cfaa907d5e5637fa7178",
-    "developmentPin": "fa4e482209933e20bab7a3f512fc29337a95b449",
-    "developmentTree": "10727f83889874c0f6a302dbc9adbc187143f4e7",
-    "worktreeHead": "fa4e482209933e20bab7a3f512fc29337a95b449",
+    "developmentPin": "81207f32d0bd2100421172fb7b6585099c3fa78a",
+    "developmentTree": "d5f57b82c68d66169eed52ca663f85eafbba23f8",
+    "worktreeHead": "81207f32d0bd2100421172fb7b6585099c3fa78a",
     "worktreeTreeVerifiedAgainstDevelopmentPin": true,
-    "openPullRequestsReadback": []
+    "openPullRequestsReadback": [
+      {
+        "number": 400,
+        "url": "https://github.com/EAKerber/MobiliPresenter2D/pull/400",
+        "headRefName": "codex/hygiene-retire-tst004-crosswalk-20261124",
+        "headRefOid": "d2f1f3aef4751f8e3baab23997d55a7ef33b1875",
+        "baseRefName": "main",
+        "baseRefOid": "01ded2c100fbfd8b16897e26113dc5068a83e429"
+      }
+    ]
   },
   "summary": {
     "mainWorkflowCount": 27,
@@ -476,7 +485,7 @@
         "development"
       ],
       "mainDefinition": null,
-      "developmentDefinition": "dbcc99de7547e94fecfeb60c259450fdb12f9518"
+      "developmentDefinition": "cfefabb61e4bcb62a4a2b1a3d5cf4e8334050f11"
     },
     {
       "path": ".github/workflows/development-ux04-geometry.yml",
@@ -6868,7 +6877,7 @@
     },
     {
       "path": ".github/workflows/development-test-impact-plan.yml",
-      "blobSha": "dbcc99de7547e94fecfeb60c259450fdb12f9518",
+      "blobSha": "cfefabb61e4bcb62a4a2b1a3d5cf4e8334050f11",
       "name": "Development test impact plan (advisory)",
       "events": [
         {
@@ -6922,9 +6931,9 @@
           ]
         },
         {
-          "id": "inventory_on_push",
+          "id": "inventory",
           "name": null,
-          "if": "github.event_name == 'push'",
+          "if": "github.event_name == 'push' || github.event_name == 'pull_request'",
           "runsOn": "ubuntu-latest",
           "container": null,
           "services": [],
@@ -6962,27 +6971,27 @@
           "if": null
         },
         {
-          "job": "inventory_on_push",
-          "jobId": "inventory_on_push",
-          "jobIf": "github.event_name == 'push'",
+          "job": "inventory",
+          "jobId": "inventory",
+          "jobIf": "github.event_name == 'push' || github.event_name == 'pull_request'",
           "step": "Capture exact inventory refs and open PRs",
-          "sha256": "1df3c13bf1ba0fe90db75f3b48d88cf85ef8e7f0184653a503bc697b528fdf4b",
-          "command": "git fetch origin main\nmain_sha=\"$(git rev-parse FETCH_HEAD)\"\ndevelopment_sha=\"$(git rev-parse HEAD)\"\ntest \"$development_sha\" = \"$GITHUB_SHA\"\ndevelopment_tree=\"$(git rev-parse 'HEAD^{tree}')\"\nmkdir -p artifacts\ngh pr list --state open --limit 1000 --json number,url,headRefName,headRefOid,baseRefName,baseRefOid > artifacts/open-prs.json\necho \"main_sha=$main_sha\" >> \"$GITHUB_OUTPUT\"\necho \"development_sha=$development_sha\" >> \"$GITHUB_OUTPUT\"\necho \"development_tree=$development_tree\" >> \"$GITHUB_OUTPUT\"",
+          "sha256": "5ddcfbd65cc875568ebe2994d67326c5b4ab4c4726045521f24fcf9fa181d57a",
+          "command": "git fetch origin main\nmain_sha=\"$(git rev-parse FETCH_HEAD)\"\ndevelopment_sha=\"$(git rev-parse HEAD)\"\nexpected_development_sha=\"$GITHUB_SHA\"\nif [ \"$GITHUB_EVENT_NAME\" = \"pull_request\" ]; then\n  expected_development_sha=\"${{ github.event.pull_request.head.sha }}\"\nfi\ntest \"$development_sha\" = \"$expected_development_sha\"\ndevelopment_tree=\"$(git rev-parse 'HEAD^{tree}')\"\nmkdir -p artifacts\ngh pr list --state open --limit 1000 --json number,url,headRefName,headRefOid,baseRefName,baseRefOid > artifacts/open-prs.json\necho \"main_sha=$main_sha\" >> \"$GITHUB_OUTPUT\"\necho \"development_sha=$development_sha\" >> \"$GITHUB_OUTPUT\"\necho \"development_tree=$development_tree\" >> \"$GITHUB_OUTPUT\"",
           "if": null
         },
         {
-          "job": "inventory_on_push",
-          "jobId": "inventory_on_push",
-          "jobIf": "github.event_name == 'push'",
+          "job": "inventory",
+          "jobId": "inventory",
+          "jobIf": "github.event_name == 'push' || github.event_name == 'pull_request'",
           "step": "Generate SHA-pinned workflow inventory",
           "sha256": "4ec4fcfd556bee102e72ecdf046d27618ae7138c301ef1d9dd8479ea68674c4d",
           "command": "node tools/ci/build-workflow-inventory.mjs \\\n  --main-sha \"${{ steps.refs.outputs.main_sha }}\" \\\n  --development-pin \"${{ steps.refs.outputs.development_sha }}\" \\\n  --development-tree \"${{ steps.refs.outputs.development_tree }}\" \\\n  --open-prs-json \"$(cat artifacts/open-prs.json)\" \\\n  --output artifacts/tst-001-workflow-inventory.json",
           "if": null
         },
         {
-          "job": "inventory_on_push",
-          "jobId": "inventory_on_push",
-          "jobIf": "github.event_name == 'push'",
+          "job": "inventory",
+          "jobId": "inventory",
+          "jobIf": "github.event_name == 'push' || github.event_name == 'pull_request'",
           "step": "Emit exact inventory JSON for readback",
           "sha256": "eefd8cd715da6b12a4540057c433e9bd3aef5b2a1092705e9a1808890ee11a17",
           "command": "echo 'BEGIN_TST001_INVENTORY_JSON'\ncat artifacts/tst-001-workflow-inventory.json\necho 'END_TST001_INVENTORY_JSON'",
