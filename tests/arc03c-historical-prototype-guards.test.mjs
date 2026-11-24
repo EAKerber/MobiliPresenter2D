@@ -55,7 +55,7 @@ test("current ARC03C renders the same single-current NAV004 header and preserves
   for(let i=0;i<r.pages.length;i++){
     const {html,output}=r.pages[i],route=config.routes[i];
     assert.equal(html,readFileSync(output,"utf8"),"generated markup must be byte-identical to checked-in page");
-    const fragments=[...html.matchAll(/<header class="site-header(?:\\s[^"]*)?">[\\s\\S]*?<\\/header>/g)];
+    const fragments=[...html.matchAll(/<header class="site-header(?:\s[^"]*)?">[\s\S]*?<\/header>/g)];
     assert.equal(fragments.length,1);
     const header=fragments[0][0];
     assert.equal((header.match(/aria-current="page"/g)||[]).length,1);
