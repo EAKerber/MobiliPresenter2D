@@ -64,6 +64,11 @@ test('main Viewer price gate reaches its mapped inputs and runs without job-leve
 
   const job = sectionAt('  price-contract:');
   assert(!job.some((line) => /^    if:/.test(line)), 'price-contract must not have a job-level skip condition');
+  assert(workflow.includes('runs-on: ubuntu-24.04'), 'price-contract must use the supported Ubuntu runner');
+  assert(workflow.includes('image: mcr.microsoft.com/playwright:v1.56.0-noble'),
+    'price-contract must use the Playwright image with matching preinstalled browsers');
+  assert(!workflow.includes('npx playwright install --with-deps chromium webkit'),
+    'price-contract must not download Playwright browsers on the host runner');
   for (const command of [
     'node --test tests/viewer-base-price-publication.test.cjs tests/viewer-price-v5-save.test.cjs',
     'node --test tests/ci/viewer-base-price-trigger-contract.test.cjs',
