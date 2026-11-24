@@ -6,15 +6,15 @@
   "source": {
     "mainSha": "01ded2c100fbfd8b16897e26113dc5068a83e429",
     "mainTree": "d1588ab2a71c5de7e8b7cfaa907d5e5637fa7178",
-    "developmentPin": "650eee3b5ffa7c564611136a72d097d6777ad221",
-    "developmentTree": "dec3eba81832f1e365c0bef56c0ab79af13fd9ea",
-    "worktreeHead": "650eee3b5ffa7c564611136a72d097d6777ad221",
+    "developmentPin": "f2f706539da72696885ff16814a01cc31d0f6d90",
+    "developmentTree": "4d1eae7c37b53e860b7e317de098a8a40d3f4ef2",
+    "worktreeHead": "f2f706539da72696885ff16814a01cc31d0f6d90",
     "worktreeTreeVerifiedAgainstDevelopmentPin": true,
     "openPullRequestsReadback": []
   },
   "summary": {
     "mainWorkflowCount": 27,
-    "developmentWorkflowCount": 75,
+    "developmentWorkflowCount": 68,
     "sharedCount": 25,
     "mainOnly": [
       ".github/workflows/branch-hygiene-development-audit.yml",
@@ -22,12 +22,10 @@
     ],
     "developmentOnly": [
       ".github/workflows/development-a11y-semantic-fallback.yml",
-      ".github/workflows/development-access-dto-aux-retire.yml",
       ".github/workflows/development-access-dto-boundary.yml",
       ".github/workflows/development-accordion-semantic-reconcile.yml",
       ".github/workflows/development-arc03-prototype-semantic.yml",
       ".github/workflows/development-asset-provenance.yml",
-      ".github/workflows/development-aux-retirement.yml",
       ".github/workflows/development-aux-terminal.yml",
       ".github/workflows/development-branch-reconciliation.yml",
       ".github/workflows/development-ci-auth-identity.yml",
@@ -51,22 +49,17 @@
       ".github/workflows/development-hygiene-safety.yml",
       ".github/workflows/development-main-authority-public.yml",
       ".github/workflows/development-migration-inspector.yml",
-      ".github/workflows/development-nav-aux-retire.yml",
       ".github/workflows/development-pr-ancestors-vis002c.yml",
       ".github/workflows/development-pr-archive.yml",
       ".github/workflows/development-pr-roster-transition.yml",
       ".github/workflows/development-public-contrast-semantic.yml",
-      ".github/workflows/development-public-dto-aux-retire.yml",
       ".github/workflows/development-public-dto-fallback.yml",
       ".github/workflows/development-public-menu-legacy-semantic.yml",
       ".github/workflows/development-public-navigation-semantic.yml",
       ".github/workflows/development-retirement-batch.yml",
-      ".github/workflows/development-scene-asset-aux-retire.yml",
       ".github/workflows/development-test-impact-plan.yml",
       ".github/workflows/development-viewer-nav005-semantic.yml",
       ".github/workflows/development-viewer-price-gate.yml",
-      ".github/workflows/development-viewer_price_aux-retire.yml",
-      ".github/workflows/development-vis002-aux-retire.yml",
       ".github/workflows/development-vis002-context-audit.yml",
       ".github/workflows/development-vis002-family-cluster.yml",
       ".github/workflows/development-vis002-reference-pin.yml",
@@ -75,16 +68,15 @@
     "developmentEventCounts": {
       "pull_request": 27,
       "push": 62,
-      "workflow_dispatch": 62,
+      "workflow_dispatch": 55,
       "schedule": 1
     },
-    "developmentDispatchOnlyCount": 11,
-    "workflowDefinitions": 77,
+    "developmentDispatchOnlyCount": 4,
+    "workflowDefinitions": 70,
     "workflowsWithWriteSignals": [
       ".github/workflows/branch-hygiene-bounded.yml",
       ".github/workflows/branch-hygiene-development-retirement.yml",
       ".github/workflows/branch-hygiene.yml",
-      ".github/workflows/development-aux-retirement.yml",
       ".github/workflows/development-aux-terminal.yml",
       ".github/workflows/development-branch-reconciliation.yml",
       ".github/workflows/development-pr-archive.yml",
@@ -200,14 +192,6 @@
       "developmentDefinition": "abdb8dc239a45f326ed545039528e7e2bd85f495"
     },
     {
-      "path": ".github/workflows/development-access-dto-aux-retire.yml",
-      "presence": [
-        "development"
-      ],
-      "mainDefinition": null,
-      "developmentDefinition": "a254ceadb572375e2a5cefaf97bebd485e385354"
-    },
-    {
       "path": ".github/workflows/development-access-dto-boundary.yml",
       "presence": [
         "development"
@@ -238,14 +222,6 @@
       ],
       "mainDefinition": null,
       "developmentDefinition": "d99726152500ad03548b01b67897413aa79868d2"
-    },
-    {
-      "path": ".github/workflows/development-aux-retirement.yml",
-      "presence": [
-        "development"
-      ],
-      "mainDefinition": null,
-      "developmentDefinition": "b94c7561bc85285634268b12226b96a72a7c5d35"
     },
     {
       "path": ".github/workflows/development-aux-terminal.yml",
@@ -432,14 +408,6 @@
       "developmentDefinition": "6e78748afee0b99420a877927f50b7a5a2f72c1c"
     },
     {
-      "path": ".github/workflows/development-nav-aux-retire.yml",
-      "presence": [
-        "development"
-      ],
-      "mainDefinition": null,
-      "developmentDefinition": "68dec5e02243f9de35790ca6b078399687c8fd1d"
-    },
-    {
       "path": ".github/workflows/development-pr-ancestors-vis002c.yml",
       "presence": [
         "development"
@@ -470,14 +438,6 @@
       ],
       "mainDefinition": null,
       "developmentDefinition": "d036651cfa56d5dc76296414ea7047cc8754c850"
-    },
-    {
-      "path": ".github/workflows/development-public-dto-aux-retire.yml",
-      "presence": [
-        "development"
-      ],
-      "mainDefinition": null,
-      "developmentDefinition": "c8131dbb7628140aaf758768f404f2fddac09896"
     },
     {
       "path": ".github/workflows/development-public-dto-fallback.yml",
@@ -512,14 +472,6 @@
       "developmentDefinition": "3c4236fc184fd144a4d7b8caf9fdfbc74d392e94"
     },
     {
-      "path": ".github/workflows/development-scene-asset-aux-retire.yml",
-      "presence": [
-        "development"
-      ],
-      "mainDefinition": null,
-      "developmentDefinition": "ec527be624e0a1e2f2b6e43f68c54847dbe4f072"
-    },
-    {
       "path": ".github/workflows/development-test-impact-plan.yml",
       "presence": [
         "development"
@@ -551,22 +503,6 @@
       ],
       "mainDefinition": null,
       "developmentDefinition": "83425307d97dc8a5dffc76caade44cc7adc26c71"
-    },
-    {
-      "path": ".github/workflows/development-viewer_price_aux-retire.yml",
-      "presence": [
-        "development"
-      ],
-      "mainDefinition": null,
-      "developmentDefinition": "ebfc1f4fd04df96f04b203d36bdc034a5611e918"
-    },
-    {
-      "path": ".github/workflows/development-vis002-aux-retire.yml",
-      "presence": [
-        "development"
-      ],
-      "mainDefinition": null,
-      "developmentDefinition": "98f6e0a67adc29fa954f57e183db51885f701895"
     },
     {
       "path": ".github/workflows/development-vis002-context-audit.yml",
@@ -3369,49 +3305,6 @@
       "parseWarnings": []
     },
     {
-      "path": ".github/workflows/development-access-dto-aux-retire.yml",
-      "blobSha": "a254ceadb572375e2a5cefaf97bebd485e385354",
-      "name": "Consumed CP-PUBLIC-03a auxiliary retirement — receipt only",
-      "events": [
-        {
-          "name": "workflow_dispatch",
-          "branches": null,
-          "branchIgnores": null,
-          "paths": null,
-          "pathIgnores": null,
-          "types": null
-        }
-      ],
-      "jobs": [
-        {
-          "id": "historic-receipt",
-          "name": null,
-          "if": null,
-          "runsOn": "ubuntu-latest",
-          "container": null,
-          "services": [],
-          "stepCount": 1,
-          "actions": []
-        }
-      ],
-      "actions": [],
-      "commandCount": 1,
-      "commands": [
-        {
-          "job": "historic-receipt",
-          "step": "Recorded outcome (no mutation)",
-          "sha256": "150833b019535bfeda5f5fba719fe08e2ae485b6d8632c32325447e5709bc1b2",
-          "command": "echo 'Consumed. Audit and apply PASS in run 40566796709; 63 to 62 refs, all 60 historical heads preserved. Never re-run the one-shot executor.",
-          "if": null
-        }
-      ],
-      "classification": "manual-or-event-driven",
-      "mutationSignals": [],
-      "externalIndicators": [],
-      "artifactActions": [],
-      "parseWarnings": []
-    },
-    {
       "path": ".github/workflows/development-access-dto-boundary.yml",
       "blobSha": "d650d93157c0263cd209d6109972f4a61418e47b",
       "name": "Development CP-PUBLIC-03a authorization boundary (offline)",
@@ -3823,51 +3716,6 @@
       ],
       "classification": "automated-validation-or-reporting",
       "mutationSignals": [],
-      "externalIndicators": [],
-      "artifactActions": [],
-      "parseWarnings": []
-    },
-    {
-      "path": ".github/workflows/development-aux-retirement.yml",
-      "blobSha": "b94c7561bc85285634268b12226b96a72a7c5d35",
-      "name": "Consumed development A1/A2 cleanup — no execution",
-      "events": [
-        {
-          "name": "workflow_dispatch",
-          "branches": null,
-          "branchIgnores": null,
-          "paths": null,
-          "pathIgnores": null,
-          "types": null
-        }
-      ],
-      "jobs": [
-        {
-          "id": "archived",
-          "name": null,
-          "if": null,
-          "runsOn": "ubuntu-latest",
-          "container": null,
-          "services": [],
-          "stepCount": 1,
-          "actions": []
-        }
-      ],
-      "actions": [],
-      "commandCount": 1,
-      "commands": [
-        {
-          "job": "archived",
-          "step": "Non-executable consumed wave placeholder",
-          "sha256": "744bb8e715ac94a5cfe508b307f41a3c841ce219a7b85baeb4cc1766a246e83f",
-          "command": "echo 'A1/A2 manifests consumed. This workflow cannot delete refs. See development handover.",
-          "if": null
-        }
-      ],
-      "classification": "operational-or-write-capable",
-      "mutationSignals": [
-        "possible operational command; manual review required"
-      ],
       "externalIndicators": [],
       "artifactActions": [],
       "parseWarnings": []
@@ -5817,49 +5665,6 @@
       "parseWarnings": []
     },
     {
-      "path": ".github/workflows/development-nav-aux-retire.yml",
-      "blobSha": "68dec5e02243f9de35790ca6b078399687c8fd1d",
-      "name": "Consumed NAV-05 auxiliary one-shot hygiene — non-executable",
-      "events": [
-        {
-          "name": "workflow_dispatch",
-          "branches": null,
-          "branchIgnores": null,
-          "paths": null,
-          "pathIgnores": null,
-          "types": null
-        }
-      ],
-      "jobs": [
-        {
-          "id": "consumed",
-          "name": null,
-          "if": null,
-          "runsOn": "ubuntu-latest",
-          "container": null,
-          "services": [],
-          "stepCount": 1,
-          "actions": []
-        }
-      ],
-      "actions": [],
-      "commandCount": 1,
-      "commands": [
-        {
-          "job": "consumed",
-          "step": null,
-          "sha256": "c0ce95b304c960c666e0d2701426de4da0090f560d82a96b5f12ce3d36b102f5",
-          "command": "echo 'NAV-05 auxiliary cleanup already completed in Actions",
-          "if": null
-        }
-      ],
-      "classification": "manual-or-event-driven",
-      "mutationSignals": [],
-      "externalIndicators": [],
-      "artifactActions": [],
-      "parseWarnings": []
-    },
-    {
       "path": ".github/workflows/development-pr-ancestors-vis002c.yml",
       "blobSha": "945966772b8b0daabc4cf33f637464a781561ebb",
       "name": "Development PR ancestor and VIS002C semantic provenance (offline)",
@@ -6170,49 +5975,6 @@
       "artifactActions": [
         "actions/upload-artifact@v4"
       ],
-      "parseWarnings": []
-    },
-    {
-      "path": ".github/workflows/development-public-dto-aux-retire.yml",
-      "blobSha": "c8131dbb7628140aaf758768f404f2fddac09896",
-      "name": "Consumed CP-PUBLIC-03 DTO auxiliary hygiene — no deletion",
-      "events": [
-        {
-          "name": "workflow_dispatch",
-          "branches": null,
-          "branchIgnores": null,
-          "paths": null,
-          "pathIgnores": null,
-          "types": null
-        }
-      ],
-      "jobs": [
-        {
-          "id": "receipt-only",
-          "name": null,
-          "if": null,
-          "runsOn": "ubuntu-latest",
-          "container": null,
-          "services": [],
-          "stepCount": 1,
-          "actions": []
-        }
-      ],
-      "actions": [],
-      "commandCount": 1,
-      "commands": [
-        {
-          "job": "receipt-only",
-          "step": "Historic receipt",
-          "sha256": "c40954cce4984ae69fdc1a0c90a536bd9bf066b05fef1ff83f2b74a1560deaf1",
-          "command": "echo 'CP-PUBLIC-03 aux retirement was consumed by Actions",
-          "if": null
-        }
-      ],
-      "classification": "manual-or-event-driven",
-      "mutationSignals": [],
-      "externalIndicators": [],
-      "artifactActions": [],
       "parseWarnings": []
     },
     {
@@ -6611,49 +6373,6 @@
       "artifactActions": [
         "actions/upload-artifact@v4"
       ],
-      "parseWarnings": []
-    },
-    {
-      "path": ".github/workflows/development-scene-asset-aux-retire.yml",
-      "blobSha": "ec527be624e0a1e2f2b6e43f68c54847dbe4f072",
-      "name": "Consumed 07 asset provenance auxiliary retirement — receipt only",
-      "events": [
-        {
-          "name": "workflow_dispatch",
-          "branches": null,
-          "branchIgnores": null,
-          "paths": null,
-          "pathIgnores": null,
-          "types": null
-        }
-      ],
-      "jobs": [
-        {
-          "id": "historic-receipt",
-          "name": null,
-          "if": null,
-          "runsOn": "ubuntu-latest",
-          "container": null,
-          "services": [],
-          "stepCount": 1,
-          "actions": []
-        }
-      ],
-      "actions": [],
-      "commandCount": 1,
-      "commands": [
-        {
-          "job": "historic-receipt",
-          "step": "Recorded outcome (no mutation)",
-          "sha256": "86cf1f21a888634464b1b6ed1569cea48929ceb2474e6b8b16a7d854ac79c5f1",
-          "command": "echo 'Consumed. Audit and apply PASS in run 40572051580; 63 to 62 refs, all 60 historical heads preserved. The one-shot executor must not run again.",
-          "if": null
-        }
-      ],
-      "classification": "manual-or-event-driven",
-      "mutationSignals": [],
-      "externalIndicators": [],
-      "artifactActions": [],
       "parseWarnings": []
     },
     {
@@ -7141,92 +6860,6 @@
       "externalIndicators": [
         "package installation"
       ],
-      "artifactActions": [],
-      "parseWarnings": []
-    },
-    {
-      "path": ".github/workflows/development-viewer_price_aux-retire.yml",
-      "blobSha": "ebfc1f4fd04df96f04b203d36bdc034a5611e918",
-      "name": "Consumed Viewer price auxiliary retirement — receipt only",
-      "events": [
-        {
-          "name": "workflow_dispatch",
-          "branches": null,
-          "branchIgnores": null,
-          "paths": null,
-          "pathIgnores": null,
-          "types": null
-        }
-      ],
-      "jobs": [
-        {
-          "id": "historic-receipt",
-          "name": null,
-          "if": null,
-          "runsOn": "ubuntu-latest",
-          "container": null,
-          "services": [],
-          "stepCount": 1,
-          "actions": []
-        }
-      ],
-      "actions": [],
-      "commandCount": 1,
-      "commands": [
-        {
-          "job": "historic-receipt",
-          "step": "Recorded outcome (no mutation)",
-          "sha256": "b15936c2132892b5b24274cc09a97d4d6d29d228272cf07888e79a9a10d92c1c",
-          "command": "echo 'Consumed. Audit and apply PASS in run 40569779277; 63 to 62 refs, all 60 historical heads preserved. Never re-run the one-shot executor.",
-          "if": null
-        }
-      ],
-      "classification": "manual-or-event-driven",
-      "mutationSignals": [],
-      "externalIndicators": [],
-      "artifactActions": [],
-      "parseWarnings": []
-    },
-    {
-      "path": ".github/workflows/development-vis002-aux-retire.yml",
-      "blobSha": "98f6e0a67adc29fa954f57e183db51885f701895",
-      "name": "Consumed development VIS002 one-shot hygiene — no deletion",
-      "events": [
-        {
-          "name": "workflow_dispatch",
-          "branches": null,
-          "branchIgnores": null,
-          "paths": null,
-          "pathIgnores": null,
-          "types": null
-        }
-      ],
-      "jobs": [
-        {
-          "id": "receipt-only",
-          "name": null,
-          "if": null,
-          "runsOn": "ubuntu-latest",
-          "container": null,
-          "services": [],
-          "stepCount": 1,
-          "actions": []
-        }
-      ],
-      "actions": [],
-      "commandCount": 1,
-      "commands": [
-        {
-          "job": "receipt-only",
-          "step": "Historic receipt, no mutation",
-          "sha256": "d3cf7135ff12294b25c1ffeaac88682643c569815d7a077625dcad08a73279d2",
-          "command": "echo 'VIS002 one-shot consumed by Actions",
-          "if": null
-        }
-      ],
-      "classification": "manual-or-event-driven",
-      "mutationSignals": [],
-      "externalIndicators": [],
       "artifactActions": [],
       "parseWarnings": []
     },
