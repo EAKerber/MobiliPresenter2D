@@ -1,0 +1,40 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import { countDispatchOnlyWorkflows, definition } from '../../tools/ci/build-workflow-inventory.mjs';
+
+test('inventory preserves exact run commands and derives operational signals from them', () => {
+  const source = `name: Bounded branch operation
+on:
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Publish branch update
+        run: git push origin HEAD
+`;
+  const workflow = definition(source, '.github/workflows/bounded.yml', 'blob-sha');
+  assert.equal(workflow.commandCount, 1);
+  assert.equal(workflow.commands[0].command, 'git push origin HEAD');
+  assert.equal(workflow.commands[0].sha256.length, 64);
+  assert(workflow.mutationSignals.includes('write permission declared'));
+  assert(workflow.mutationSignals.includes('write/deploy command in run step'));
+  assert.equal(workflow.classification, 'operational-or-write-capable');
+});
+
+test('dispatch-only count uses each workflow development definition pin', () => {
+  const definitionBySha = new Map([
+    ['manual', { events: [{ name: 'workflow_dispatch' }] }],
+    ['push', { events: [{ name: 'push' }, { name: 'workflow_dispatch' }] }],
+    ['pull', { events: [{ name: 'pull_request' }] }]
+  ]);
+  const workflows = [
+    { path: 'manual.yml', developmentDefinition: 'manual' },
+    { path: 'push.yml', developmentDefinition: 'push' },
+    { path: 'pull.yml', developmentDefinition: 'pull' },
+    { path: 'main-only.yml', developmentDefinition: null }
+  ];
+  assert.equal(countDispatchOnlyWorkflows(workflows, definitionBySha), 1);
+});
