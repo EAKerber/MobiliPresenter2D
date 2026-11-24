@@ -1,6 +1,11 @@
 name: Development test impact plan (advisory)
 
 on:
+  push:
+    branches: [development]
+    paths:
+      - '.github/workflows/**'
+      - 'tools/ci/build-workflow-inventory.mjs'
   workflow_dispatch:
     inputs:
       main_sha:
@@ -26,6 +31,7 @@ on:
 
 permissions:
   contents: read
+  pull-requests: read
 
 jobs:
   plan:
@@ -73,5 +79,45 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: tst-001-workflow-inventory-${{ inputs.development_sha }}
+          path: artifacts/tst-001-workflow-inventory.json
+          retention-days: 30
+
+  inventory_on_push:
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: ${{ github.sha }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Capture exact inventory refs and open PRs
+        id: refs
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          git fetch origin main
+          main_sha="$(git rev-parse FETCH_HEAD)"
+          development_sha="$(git rev-parse HEAD)"
+          test "$development_sha" = "$GITHUB_SHA"
+          development_tree="$(git rev-parse 'HEAD^{tree}')"
+          mkdir -p artifacts
+          gh pr list --state open --json number,url,headRefName,headRefOid,baseRefName,baseRefOid > artifacts/open-prs.json
+          echo "main_sha=$main_sha" >> "$GITHUB_OUTPUT"
+          echo "development_sha=$development_sha" >> "$GITHUB_OUTPUT"
+          echo "development_tree=$development_tree" >> "$GITHUB_OUTPUT"
+      - name: Generate SHA-pinned workflow inventory
+        run: |
+          node tools/ci/build-workflow-inventory.mjs \
+            --main-sha "${{ steps.refs.outputs.main_sha }}" \
+            --development-pin "${{ steps.refs.outputs.development_sha }}" \
+            --development-tree "${{ steps.refs.outputs.development_tree }}" \
+            --open-prs-json "$(cat artifacts/open-prs.json)" \
+            --output artifacts/tst-001-workflow-inventory.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: tst-001-workflow-inventory-${{ github.sha }}
           path: artifacts/tst-001-workflow-inventory.json
           retention-days: 30
