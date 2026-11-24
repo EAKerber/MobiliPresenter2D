@@ -1,0 +1,73 @@
+{
+  "schema": "M2DTSTRequiredChecksReceipt/1",
+  "plan": "MobiliPresenter2D Plano Diretor v0.9",
+  "workItem": "TST-005",
+  "status": "unknown; branch protection unreadable by current GitHub integration",
+  "observedAt": "2026-11-24",
+  "refs": {
+    "main": "01ded2c100fbfd8b16897e26113dc5068a83e429",
+    "development": "f4bac9210616d11766607d57a898b9b431af9496"
+  },
+  "branchRules": {
+    "branchProtection": {
+      "main": {
+        "result": "UNKNOWN",
+        "httpStatus": 403,
+        "reason": "Resource not accessible by integration",
+        "endpoint": "/repos/EAKerber/MobiliPresenter2D/branches/main/protection"
+      },
+      "development": {
+        "result": "UNKNOWN",
+        "httpStatus": 403,
+        "reason": "Resource not accessible by integration",
+        "endpoint": "/repos/EAKerber/MobiliPresenter2D/branches/development/protection"
+      }
+    },
+    "repositoryRulesets": {
+      "result": "read succeeded; empty response",
+      "endpoint": "/repos/EAKerber/MobiliPresenter2D/rulesets?includes_parents=true",
+      "limitation": "An empty visible ruleset list does not establish that branch-protection rules or required checks are absent."
+    },
+    "requiredChecks": "UNKNOWN for main and development. No inference is made from 403, successful merges, or the empty ruleset response."
+  },
+  "observedConditionalChecks": {
+    "pullRequest": 369,
+    "head": "854b9f27a8785208af2c51b04c8b5d37d6e66fcf",
+    "base": "development",
+    "evidence": "https://github.com/EAKerber/MobiliPresenter2D/pull/369",
+    "checks": [
+      {
+        "name": "browser",
+        "conclusion": "success",
+        "meaning": "The Admin browser gate ran for this test-file change."
+      },
+      {
+        "name": "plan",
+        "conclusion": "success",
+        "meaning": "The plan consistency gate ran."
+      },
+      {
+        "name": "inventory",
+        "conclusion": "skipped",
+        "meaning": "Its path conditions did not select it for this change."
+      },
+      {
+        "name": "inventory_on_push",
+        "conclusion": "skipped",
+        "meaning": "Push-only trigger; this was a pull request."
+      },
+      {
+        "name": "Supabase Preview",
+        "conclusion": "skipped",
+        "meaning": "The branch has no associated Supabase preview branch."
+      }
+    ],
+    "limitation": "This PR is one observed example of conditional outcomes; it does not identify which contexts branch rules require."
+  },
+  "policyProposal": {
+    "principle": "Do not require a path-filtered job directly unless every relevant PR path can produce a conclusive status.",
+    "nextStep": "Inspect required checks for both target branches with a connection authorized to read branch protection; then choose stable always-reporting gate contexts and verify their trigger coverage against TST-004.",
+    "permissionBoundary": "No branch protection or required-check setting was changed."
+  },
+  "resolutionAction": "A repository administrator must either grant read access to branch-protection settings for the GitHub integration or verify the main/development rules in repository Settings and provide the exact required contexts."
+}
