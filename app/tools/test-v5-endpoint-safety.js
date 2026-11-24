@@ -238,6 +238,45 @@ async function main() {
 
     const afterLegacyAttempts = await sendV5("GET");
     assert.deepEqual(afterLegacyAttempts.body, saved.body, "v5 document must remain identical after all rejected legacy operations");
+    // An invalid stored v5 document must fail closed at the HTTP boundary.
+    // It must not be normalized into plausible defaults or overwritten.
+    const invalidV5 = structuredClone(v5);
+    invalidV5.stages = null;
+    const invalidV5Store = makeStore(invalidV5);
+    globalThis.__v5ReadinessHarness = {
+      ...globalThis.__v5ReadinessHarness,
+      getDeployStore: () => invalidV5Store
+    };
+    const invalidEndpoint = await import("data:text/javascript;base64," +
+      Buffer.from(moduleSource + "\n// invalid-v5-fixture").toString("base64"));
+    const sendInvalid = async (method, body) => {
+      const response = await invalidEndpoint.default(
+        new Request("https://unit-test.invalid/api/configuration", {
+          method,
+          headers: { "Content-Type": "application/json" },
+          body: body === undefined ? undefined : JSON.stringify(body)
+        }),
+        previewContext
+      );
+      return { status: response.status, body: await response.json() };
+    };
+    assert.deepEqual(await sendInvalid("GET"), {
+      status: 422, body: { error: "stored_configuration_invalid", code: "invalid_v5" }
+    });
+    const invalidWrite = await sendInvalid("PUT", v5);
+    assert.deepEqual(invalidWrite, {
+      status: 409, body: { error: "stored_configuration_invalid", code: "invalid_v5" }
+    });
+    assert.equal(invalidV5Store.writes, 0, "invalid stored v5 must not be replaced");
+
+    // The body limit applies to the actual UTF-8 payload even without a
+    // Content-Length header, before any configuration read or write.
+    const oversized = structuredClone(v5);
+    oversized.largeFixture = "x".repeat(65 * 1024);
+    const tooLarge = await sendInvalid("PUT", oversized);
+    assert.deepEqual(tooLarge, { status: 413, body: { error: "payload_too_large" } });
+    assert.equal(invalidV5Store.writes, 0, "oversized payload must not write");
+
     console.log("v5 endpoint preview/admin/storage isolation: PASS");
   } finally {
     delete globalThis.__v5ReadinessHarness;
