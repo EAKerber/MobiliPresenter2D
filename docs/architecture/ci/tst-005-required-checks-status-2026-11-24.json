@@ -2,8 +2,8 @@
   "schema": "M2DTSTRequiredChecksReceipt/1",
   "plan": "MobiliPresenter2D Plano Diretor v0.9",
   "workItem": "TST-005",
-  "status": "unknown; branch protection unreadable by current GitHub integration",
-  "observedAt": "2026-11-24",
+  "status": "resolved for the observed refs; no required status checks are configured",
+  "observedAt": "2026-11-24 07:41:59 UTC",
   "refs": {
     "main": "01ded2c100fbfd8b16897e26113dc5068a83e429",
     "development": "f4bac9210616d11766607d57a898b9b431af9496"
@@ -14,21 +14,43 @@
         "result": "UNKNOWN",
         "httpStatus": 403,
         "reason": "Resource not accessible by integration",
-        "endpoint": "/repos/EAKerber/MobiliPresenter2D/branches/main/protection"
+        "endpoint": "/repos/EAKerber/MobiliPresenter2D/branches/main/protection",
+        "branchMetadataReadback": {
+          "result": "confirmed-unprotected",
+          "protected": false,
+          "protectionEnabled": false,
+          "requiredStatusChecks": {
+            "enforcementLevel": "off",
+            "contexts": [],
+            "checks": []
+          },
+          "endpoint": "/repos/EAKerber/MobiliPresenter2D/branches/main"
+        }
       },
       "development": {
         "result": "UNKNOWN",
         "httpStatus": 403,
         "reason": "Resource not accessible by integration",
-        "endpoint": "/repos/EAKerber/MobiliPresenter2D/branches/development/protection"
+        "endpoint": "/repos/EAKerber/MobiliPresenter2D/branches/development/protection",
+        "branchMetadataReadback": {
+          "result": "confirmed-unprotected",
+          "protected": false,
+          "protectionEnabled": false,
+          "requiredStatusChecks": {
+            "enforcementLevel": "off",
+            "contexts": [],
+            "checks": []
+          },
+          "endpoint": "/repos/EAKerber/MobiliPresenter2D/branches/development"
+        }
       }
     },
     "repositoryRulesets": {
       "result": "read succeeded; empty response",
       "endpoint": "/repos/EAKerber/MobiliPresenter2D/rulesets?includes_parents=true",
-      "limitation": "An empty visible ruleset list does not establish that branch-protection rules or required checks are absent."
+      "limitation": "No visible repository or inherited rulesets were returned with includes_parents=true. Combined with each branch metadata response, no required status checks are configured for these observed refs."
     },
-    "requiredChecks": "UNKNOWN for main and development. No inference is made from 403, successful merges, or the empty ruleset response."
+    "requiredChecks": "CONFIRMED_EMPTY on main and development at the observed SHAs. The branch metadata endpoints returned protected=false, protection.enabled=false, and enforcement off with empty contexts/checks; the repository rulesets endpoint returned an empty list."
   },
   "observedConditionalChecks": {
     "pullRequest": 369,
@@ -65,9 +87,9 @@
     "limitation": "This PR is one observed example of conditional outcomes; it does not identify which contexts branch rules require."
   },
   "policyProposal": {
-    "principle": "Do not require a path-filtered job directly unless every relevant PR path can produce a conclusive status.",
+    "principle": "No required-check policy is active today. Before enabling protection, finish the TST-004 trigger/condition crosswalk, then select stable always-reporting aggregate checks; do not require path-filtered jobs directly.",
     "nextStep": "Inspect required checks for both target branches with a connection authorized to read branch protection; then choose stable always-reporting gate contexts and verify their trigger coverage against TST-004.",
     "permissionBoundary": "No branch protection or required-check setting was changed."
   },
-  "resolutionAction": "A repository administrator must either grant read access to branch-protection settings for the GitHub integration or verify the main/development rules in repository Settings and provide the exact required contexts."
+  "resolutionAction": "No action is needed to resolve the current state. Recheck branch metadata and rulesets after repository settings change; the branch-protection detail endpoint remains inaccessible, so retain its 403 as a secondary access limitation."
 }
