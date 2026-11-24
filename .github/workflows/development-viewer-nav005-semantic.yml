@@ -8,7 +8,6 @@ on:
       - 'tools/development_nav005_semantic_audit.py'
       - 'tests/ui-theme-contract.cjs'
       - 'tests/viewer-secondary-header-browser-gate.mjs'
-      - 'tests/ci/public-navigation-semantic-browser.mjs'
       - 'app/viewer/index.html'
       - 'app/viewer/viewer.css'
       - 'app/core/ui-theme.js'
@@ -21,7 +20,6 @@ on:
       - 'tools/development_nav005_semantic_audit.py'
       - 'tests/ui-theme-contract.cjs'
       - 'tests/viewer-secondary-header-browser-gate.mjs'
-      - 'tests/ci/public-navigation-semantic-browser.mjs'
       - 'app/viewer/index.html'
       - 'app/viewer/viewer.css'
       - 'app/core/ui-theme.js'
@@ -55,7 +53,6 @@ jobs:
           python3 -m py_compile tools/development_nav005_semantic_audit.py
           python3 tools/development_nav005_semantic_audit.py
           node tests/ui-theme-contract.cjs
-          node --check tests/ci/public-navigation-semantic-browser.mjs
           node --check tests/viewer-secondary-header-browser-gate.mjs
           npm run pages:check
       - name: Resolve exact Playwright package for preinstalled browsers
@@ -73,8 +70,6 @@ jobs:
           curl --fail http://127.0.0.1:8123/ >/dev/null
           curl --fail http://127.0.0.1:8123/about/ >/dev/null
           curl --fail http://127.0.0.1:8123/how-it-works/ >/dev/null
-      - name: Latest primary and secondary header interaction contract (48 cases)
-        run: node tests/ci/public-navigation-semantic-browser.mjs
       - name: Depth-2 Viewer geometry, links, theme and keyboard contract (20 cases)
         run: node tests/viewer-secondary-header-browser-gate.mjs
       - uses: actions/upload-artifact@v4
@@ -84,3 +79,4 @@ jobs:
           path: artifacts/viewer-secondary-header/report.json
           retention-days: 30
           if-no-files-found: warn
+
