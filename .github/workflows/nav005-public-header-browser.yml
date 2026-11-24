@@ -3,7 +3,7 @@ name: NAV-005 public header browser gate (local only)
 on:
   pull_request:
     types: [opened, reopened, synchronize, ready_for_review]
-    branches: [main, development]
+    branches: [main]
     paths:
       - 'app/about/index.html'
       - 'app/how-it-works/**'
