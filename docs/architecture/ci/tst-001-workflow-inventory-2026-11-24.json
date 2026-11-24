@@ -6,9 +6,9 @@
   "source": {
     "mainSha": "01ded2c100fbfd8b16897e26113dc5068a83e429",
     "mainTree": "d1588ab2a71c5de7e8b7cfaa907d5e5637fa7178",
-    "developmentPin": "54787e51528ae989fb2bc2b6690f87b6aa8b773a",
-    "developmentTree": "5534e223ec539f487f959076225a2d5e3171efbf",
-    "worktreeHead": "54787e51528ae989fb2bc2b6690f87b6aa8b773a",
+    "developmentPin": "650eee3b5ffa7c564611136a72d097d6777ad221",
+    "developmentTree": "dec3eba81832f1e365c0bef56c0ab79af13fd9ea",
+    "worktreeHead": "650eee3b5ffa7c564611136a72d097d6777ad221",
     "worktreeTreeVerifiedAgainstDevelopmentPin": true,
     "openPullRequestsReadback": []
   },
@@ -75,7 +75,7 @@
     "developmentEventCounts": {
       "pull_request": 27,
       "push": 62,
-      "workflow_dispatch": 63,
+      "workflow_dispatch": 62,
       "schedule": 1
     },
     "developmentDispatchOnlyCount": 11,
@@ -237,7 +237,7 @@
         "development"
       ],
       "mainDefinition": null,
-      "developmentDefinition": "7a2961741ea231717d371203dab39afbe783c704"
+      "developmentDefinition": "d99726152500ad03548b01b67897413aa79868d2"
     },
     {
       "path": ".github/workflows/development-aux-retirement.yml",
@@ -3668,7 +3668,7 @@
     },
     {
       "path": ".github/workflows/development-asset-provenance.yml",
-      "blobSha": "7a2961741ea231717d371203dab39afbe783c704",
+      "blobSha": "d99726152500ad03548b01b67897413aa79868d2",
       "name": "Development 07 archived asset provenance — offline Git DAG",
       "events": [
         {
@@ -3776,14 +3776,6 @@
             "tools/development_asset_provenance_audit.py",
             ".github/workflows/development-asset-provenance.yml"
           ],
-          "pathIgnores": null,
-          "types": null
-        },
-        {
-          "name": "workflow_dispatch",
-          "branches": null,
-          "branchIgnores": null,
-          "paths": null,
           "pathIgnores": null,
           "types": null
         }
