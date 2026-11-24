@@ -81,7 +81,7 @@
         {
           "workflow": ".github/workflows/candidate-assets.yml",
           "scope": "pull_request and push on main",
-          "commands": ["python -m unittest tests.test_candidate_asset_gates tests.test_candidate_asset_sets tests.test_candidate_delta_authoring tests.test_candidate_authoring_provenance tests.test_perspective_editorial_gate tests.test_gap_parallelism_gate tests.test_gap_pixel_gate tests.test_faucet_edge", "python -m unittest tests.test_mask_semantics", "python tests/validate-exposed-side-pixels.py", "python tools/validate_candidate_assets.py", "python tools/validate_authoring_provenance.py"],
+          "commands": ["python -m unittest tests/test_candidate_asset_gates.py tests/test_candidate_asset_sets.py tests/test_candidate_delta_authoring.py tests/test_candidate_authoring_provenance.py tests/test_perspective_editorial_gate.py tests/test_gap_parallelism_gate.py tests/test_gap_pixel_gate.py tests/test_faucet_edge.py", "python -m unittest tests.test_mask_semantics", "python tests/validate-exposed-side-pixels.py", "python tools/validate_candidate_assets.py", "python tools/validate_authoring_provenance.py"],
           "assertion": "candidate integrity, authoring provenance, mask alpha semantics, exposed-side pixel bounds, and approved runtime asset pixels"
         }
       ]
