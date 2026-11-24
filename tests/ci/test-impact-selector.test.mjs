@@ -43,6 +43,16 @@ test('changes to workflow or selector infrastructure select every known bundle',
   assert(selection.fallback.reasons.includes('test-selection-or-ci-infrastructure-changed'));
 });
 
+test('candidate asset tool triggers are limited to files that the gate consumes', () => {
+  const bundle = map.bundles.find((entry) => entry.id === 'candidate-assets');
+  const workflowPath = path.join(root, '.github/workflows/candidate-assets.yml');
+  const workflow = readFileSync(workflowPath, 'utf8');
+  const toolPaths = bundle.paths.filter((entry) => entry.startsWith('tools/'));
+  assert(toolPaths.length > 0);
+  for (const toolPath of toolPaths) assert(workflow.includes(`'${toolPath}'`), `candidate-assets.yml must watch ${toolPath}`);
+  assert(!workflow.includes("'tools/**'"), 'the broad tools trigger would run asset checks for unrelated CI tooling');
+});
+
 test('unclassified historical paths trigger the conservative fallback', () => {
   const selection = selectBundles(['app/unknown/new-contract.js'], map);
   assert.deepEqual(ids(selection), ['public-navigation', 'candidate-assets', 'viewer-pricing']);
