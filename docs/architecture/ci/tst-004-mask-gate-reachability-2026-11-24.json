@@ -37,7 +37,15 @@
     {
       "priority": "P0",
       "contract": "historical TST-004 priority discrepancies",
-      "finding": "ARC-03C is dispatch-only by design and still has active source/build/browser coverage in development; public-routing-before-clerk no longer watches the absent public-pages-integrated.cjs test and runs public-pages-smoke.cjs on production-bound PRs; viewer-base-price-contract-gate.yml now has main/development pull_request coverage. These are reconciled as resolved or intentional, not open current gaps."
+      "finding": "ARC-03C is dispatch-only by design and still has active source/build/browser coverage in development; public-routing-before-clerk no longer watches the absent public-pages-integrated.cjs test and runs public-pages-smoke.cjs on production-bound PRs; viewer-base-price-contract-gate.yml has main/development pull_request coverage in development. The main definition lacked that route and remains unpromoted. Candidate PR #407 adds the path-filtered main route; its exact head passed the full price-contract workflow, including the Chromium/WebKit matrix, in run #45441405237. Main-side integration remains a separate promotion step.",
+      "candidate": {
+        "pullRequest": 407,
+        "headSha": "b986159d0c9d87d57aa5133eca9d26b2f8b31137",
+        "workflowRun": 45441405237,
+        "workflowResult": "PASS",
+        "mainPromotion": "pending separate decision",
+        "runtimeChanged": false
+      }
     },
     {
       "priority": "P1",
