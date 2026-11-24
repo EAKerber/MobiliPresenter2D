@@ -35,6 +35,9 @@ permissions:
 jobs:
   browser:
     runs-on: ubuntu-latest
+    container:
+      image: mcr.microsoft.com/playwright:v1.62.1-noble
+      options: --ipc=host
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
@@ -62,7 +65,7 @@ jobs:
       - name: Install isolated browser test tooling
         run: |
           npm install --prefix /tmp/summary-pricing-tools --no-audit --no-fund playwright@1.62.1
-          /tmp/summary-pricing-tools/node_modules/.bin/playwright install --with-deps chromium
+
       - name: Test summary and pricing ownership
         env:
           NODE_PATH: /tmp/summary-pricing-tools/node_modules
