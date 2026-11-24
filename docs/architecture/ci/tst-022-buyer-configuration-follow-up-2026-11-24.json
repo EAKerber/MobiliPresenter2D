@@ -7,7 +7,7 @@
   "implementation": {
     "selector": "tools/ci/select-test-bundles.mjs",
     "map": "tools/ci/test-impact-bundles.json",
-    "workflow": "/.github/workflows/development-test-impact-plan.yml",
+    "workflow": ".github/workflows/development-test-impact-plan.yml",
     "test": "tests/ci/test-impact-selector.test.mjs",
     "bundles": [
       "public-navigation",
