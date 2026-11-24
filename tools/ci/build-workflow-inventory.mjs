@@ -17,7 +17,10 @@ function scalar(value) {
   if (clean.startsWith('[') && clean.endsWith(']')) {
     return clean.slice(1, -1).split(',').map((part) => part.trim().replace(/^['"]|['"]$/g, '')).filter(Boolean);
   }
-  return clean.replace(/^['"]|['"]$/g, '');
+  if ((clean.startsWith("'") && clean.endsWith("'")) || (clean.startsWith('"') && clean.endsWith('"'))) {
+    return clean.slice(1, -1);
+  }
+  return clean;
 }
 
 function collectSequence(lines, start, keyIndent) {
