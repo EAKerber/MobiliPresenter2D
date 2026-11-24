@@ -100,3 +100,21 @@ This section supplements the historical PR-base snapshot above; it does not rewr
 2. PR #377's browser image setup change did not demonstrate a reliable time reduction in the available non-controlled samples, so it remains excluded. Browser assertions stay in place.
 3. `tests/public-pages-smoke.cjs` is executed in browser only on non-draft PRs to `main`; PRs to `development` only check its syntax, and neither push path executes it. This is a deliberate preview-availability boundary in the current workflow, not proof that browser behavior was validated on development. Keep this distinction explicit until a reliable development Deploy Preview fixture is verified.
 4. The remaining TST-001 work is still material: map command bodies to reachable assertions, review event/conditional reachability across the exact definitions, and measure representative end-to-end cost. The inventory is now current and readable, but those reviews are not complete.
+
+
+## Exact TST-001 snapshot after PR #382
+
+This snapshot supersedes the c2abdf7 inventory values above for current-state counts while preserving the earlier source pins and review history.
+
+- Product `main`: `01ded2c100fbfd8b16897e26113dc5068a83e429`, tree `d1588ab2a71c5de7e8b7cfaa907d5e5637fa7178`.
+- Product `development`: `d7f1b03d8ae3a6a733bb11e56688d78d9bd1a4c6`, tree `f4bee9b613e3f19f657156dbc0827733372e9c21`; the generated inventory verified the worktree head/tree against this pin. The live PR list was empty at generation time.
+- Exact push run [45369586472](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/45369586472) passed. Artifact [14907483664](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/45369586472) is `tst-001-workflow-inventory-d7f1b03d8ae3a6a733bb11e56688d78d9bd1a4c6`, 49,841 bytes, digest `sha256:c18a69a43235886262943d529d16e2f0b124a68fbc82b60a3473681b5c7c2f26`. Its exact JSON was read from the successful run log and refreshed into the checked-in snapshot by this PR.
+- Counts remain 27 workflows on `main`, 75 on `development`, 25 shared paths, 2 main-only, and 50 development-only. The inventory has 77 workflow paths, 96 branch-version definitions, 374 declared run commands, and zero parse warnings. Event declarations remain 26 `pull_request`, 61 `push`, 63 `workflow_dispatch`, and 1 `schedule`; those event counts overlap. Twelve workflows are dispatch-only. These are not test-case counts.
+
+## Gate friction and reachability — PRs #381–#382
+
+1. PR #381 changed the shared local buyer fixture, so five browser workflows ran alongside the advisory selector: Mobile, Keyboard, Stone, Summary Pricing and Flow Layout. All six jobs passed. The five browser workflows each consume the shared fixture but execute distinct suite contracts. Observed single-run durations were 68 s, 48 s, 55 s, 34 s and 147 s respectively; the advisory run took 13 s. The 147 s Flow Layout job was still testing its existing responsive navigation matrix, not waiting for the new glass replay. These are single observations, not a controlled benchmark.
+2. The new mobile glass replay passed 256 model combinations and four browser captures through the real Configurator controls. It confirmed that the `module-02` + `module-05` capture now matches the selected/rendered state.
+3. Post-merge path review found the replay file was missing from the mobile workflow's `pull_request` filter. PR #381 ran it because the workflow itself also changed, so its green run alone did not prove future test-only changes would trigger it. PR #382 added the path to both `push` and `pull_request` and a focused contract assertion; all 18 selector/inventory tests and the mobile browser job passed on the exact PR head. This is a gate-reachability fix, not product runtime work.
+4. The hosted `tests/public-pages-smoke.cjs` still runs in browser only on non-draft PRs to `main`; a PR to `development` gets syntax validation, not hosted behavior. Keep this as a distinct preview-fixture limitation until a reliable development Deploy Preview is verified.
+5. TST-001 remains incomplete: command-to-reachable-assertion mapping, full event/conditional reachability, and representative end-to-end cost analysis remain open. The current inventory is a verified source map, not proof that each assertion is reachable.
