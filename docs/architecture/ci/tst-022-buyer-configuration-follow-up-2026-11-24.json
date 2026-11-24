@@ -1,0 +1,68 @@
+{
+  "schema": "M2DTSTImpactBundleReceipt/1",
+  "plan": "MobiliPresenter2D Plano Diretor v0.9",
+  "workItem": "TST-022",
+  "status": "follow-up implemented; advisory selector only",
+  "baseDevelopmentSha": "c205095ea31fa1e26fd3006d4a34f798377406c3",
+  "implementation": {
+    "selector": "tools/ci/select-test-bundles.mjs",
+    "map": "tools/ci/test-impact-bundles.json",
+    "workflow": "/.github/workflows/development-test-impact-plan.yml",
+    "test": "tests/ci/test-impact-selector.test.mjs",
+    "bundles": [
+      "public-navigation",
+      "candidate-assets",
+      "viewer-pricing",
+      "v5-normal-save-concurrency",
+      "buyer-configuration-boundary"
+    ],
+    "reportedFields": [
+      "changed paths",
+      "matched contract bundles",
+      "consumers",
+      "risks",
+      "current workflows and commands",
+      "unclassified paths",
+      "fallback reasons"
+    ],
+    "newCoverage": {
+      "workflow": ".github/workflows/buyer-configuration-boundary.yml",
+      "paths": [
+        "netlify/functions/configuration.mjs",
+        "app/tools/test-v5-endpoint-safety.js",
+        "app/tools/test-published-configuration.js",
+        "app/tools/test-published-buyer-projection.js",
+        "tests/buyer-configuration-endpoint.test.mjs",
+        "netlify/access/**"
+      ],
+      "overlap": [
+        "app/tools/test-v5-normal-save.js maps to both buyer-configuration-boundary and v5-normal-save-concurrency"
+      ]
+    }
+  },
+  "fallback": {
+    "conditions": [
+      "empty diff",
+      "unclassified path",
+      "workflow file changed",
+      "selector/CI infrastructure changed",
+      "package manifest changed"
+    ],
+    "behavior": "select all catalogued bundles and preserve all existing path-triggered workflows"
+  },
+  "validation": {
+    "selectorTestCases": [
+      "configuration.mjs and endpoint safety select Buyer Configuration only",
+      "normal-save selects both Buyer Configuration and concurrency",
+      "unknown and CI infrastructure paths keep the all-bundle fallback"
+    ],
+    "workflowStatus": "The linked pull request check suite is authoritative for the exact tested head."
+  },
+  "limits": [
+    "The selector remains advisory; no workflow is skipped, cancelled, or replaced.",
+    "The initial three-bundle receipt is preserved as historical evidence.",
+    "Generic app/core/** and app/data/** trigger paths remain governed by the existing workflow and the conservative unknown-path fallback; they are not claimed as Buyer-specific contract coverage.",
+    "This follow-up does not change workflow triggers, runtime, Viewer behavior, masks, Netlify settings, or Production."
+  ],
+  "supersedes": "docs/architecture/ci/tst-022-initial-impact-selector-2026-11-24.json"
+}
