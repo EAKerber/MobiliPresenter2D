@@ -66,6 +66,9 @@ permissions:
 jobs:
   browser:
     runs-on: ubuntu-latest
+    container:
+      image: mcr.microsoft.com/playwright:v1.62.1-noble
+      options: --ipc=host
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
@@ -85,7 +88,6 @@ jobs:
       - name: Install browser test tooling
         run: |
           npm install --prefix /tmp/keyboard-browser-tools --no-audit --no-fund playwright@1.62.1
-          /tmp/keyboard-browser-tools/node_modules/.bin/playwright install --with-deps chromium
       - name: Test keyboard shortcuts
         env:
           NODE_PATH: /tmp/keyboard-browser-tools/node_modules
