@@ -112,7 +112,7 @@
       "execution": [
         {
           "workflow": ".github/workflows/candidate-assets.yml",
-          "scope": "pull_request and push on main",
+          "scope": "pull_request (path-filtered, all base branches); push on main (path-filtered); workflow_dispatch (unfiltered)",
           "commands": [
             "python -m unittest tests/test_candidate_asset_gates.py tests/test_candidate_asset_sets.py tests/test_candidate_delta_authoring.py tests/test_candidate_authoring_provenance.py tests/test_perspective_editorial_gate.py tests/test_gap_parallelism_gate.py tests/test_gap_pixel_gate.py tests/test_faucet_edge.py",
             "python -m unittest tests.test_mask_semantics",

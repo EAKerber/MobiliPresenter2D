@@ -1,0 +1,191 @@
+{
+  "schema": "M2DAssertionContractCrosswalk/1",
+  "plan": "MobiliPresenter2D Plano Diretor v0.9",
+  "workItem": "TST-004",
+  "status": "partial",
+  "slice": "candidate-assets",
+  "scopeLimit": "This maps only the current candidate-assets mask/pixel assertions and their trigger route. It does not complete TST-004, authorize mask changes, or recommend removing any gate.",
+  "sourcePin": {
+    "developmentSha": "3b339fbedd16679e42e204b461d9b77301491141",
+    "developmentTree": "89bc98b24bfa5172a98cc22e3b4a6d243ac88e30",
+    "files": {
+      "workflow": {
+        "path": ".github/workflows/candidate-assets.yml",
+        "blobSha": "0aa7c75b9b5292c7a2015502d04acf0813888aa7"
+      },
+      "maskTests": {
+        "path": "tests/test_mask_semantics.py",
+        "blobSha": "b2a317da7097e7d9c70979fc10983c230e3b94a5"
+      },
+      "exposedPixelScript": {
+        "path": "tests/validate-exposed-side-pixels.py",
+        "blobSha": "5bf0f37c3b31e23786efc6a0c51f4a2041be0d11"
+      },
+      "technicalData": {
+        "path": "app/data/technical-data.json",
+        "blobSha": "342966481c9e2852425ccc90396f1549d4edea2a"
+      },
+      "inlineMaskData": {
+        "path": "app/data/mask-data.js",
+        "blobSha": "4de91735896809c994c26c044fc2041c83d95b2b"
+      },
+      "canonicalMasks": {
+        "app/assets/kitchen/masks/01.png": "3b08616db3d0bc4707e88506b186166b40fa93f2",
+        "app/assets/kitchen/masks/02.png": "736c19b006642470e6d498f4e6e6d91b69e6ea5e",
+        "app/assets/kitchen/masks/07.png": "5c516dedcc5abce9119790f3f0a813f557495be3"
+      }
+    }
+  },
+  "execution": {
+    "workflow": ".github/workflows/candidate-assets.yml",
+    "job": "current-asset-gates",
+    "step": "Verify mask semantics and exposed-side pixels",
+    "commands": [
+      "python -m unittest tests.test_mask_semantics",
+      "python tests/validate-exposed-side-pixels.py"
+    ],
+    "failIf": "The shell captures both exit codes and fails the step if either is nonzero.",
+    "scope": "pull_request (path-filtered, all base branches); push on main (path-filtered); workflow_dispatch (unfiltered)",
+    "routes": {
+      "pull_request": {
+        "branches": null,
+        "pathIncludes": [
+          "tests/test_mask_semantics.py",
+          "tests/validate-exposed-side-pixels.py"
+        ]
+      },
+      "push": {
+        "branches": [
+          "main"
+        ],
+        "pathIncludes": [
+          "tests/test_mask_semantics.py",
+          "tests/validate-exposed-side-pixels.py"
+        ]
+      },
+      "workflow_dispatch": {
+        "branches": null,
+        "pathIncludes": null
+      }
+    },
+    "jobCondition": null,
+    "stepCondition": null
+  },
+  "assertions": [
+    {
+      "assertionId": "mask-alpha-bounds-01-07",
+      "source": {
+        "file": "tests/test_mask_semantics.py",
+        "test": "test_finish_masks_have_transparent_alpha_support",
+        "anchors": [
+          "for number in range(1, 8):",
+          "self.assertIn(\"A\", image.getbands(), path.name)",
+          "self.assertEqual(alpha.getpixel((0, 0)), 0, path.name)",
+          "self.assertEqual(list(alpha.getbbox()), expected, path.name)"
+        ]
+      },
+      "contract": [
+        "ARC-11 approved asset integrity",
+        "transparent alpha semantics"
+      ],
+      "risk": "A canonical finish mask loses transparency or its alpha bounds drift from technical-data metadata.",
+      "consumer": [
+        "candidate asset pipeline",
+        "scene composition"
+      ],
+      "state": "The check applies to canonical mask images 01 through 07.",
+      "fixture": "app/assets/kitchen/masks/01.png through 07.png and files.alphaBounds in app/data/technical-data.json.",
+      "owner": "TST-004 / candidate-assets",
+      "trigger": {
+        "workflow": ".github/workflows/candidate-assets.yml",
+        "job": "current-asset-gates",
+        "step": "Verify mask semantics and exposed-side pixels",
+        "events": [
+          "pull_request",
+          "push",
+          "workflow_dispatch"
+        ]
+      }
+    },
+    {
+      "assertionId": "mask-inline-module02-byte-identity",
+      "source": {
+        "file": "tests/test_mask_semantics.py",
+        "test": "test_inline_module02_mask_preserves_alpha_bytes",
+        "anchors": [
+          "self.assertEqual(inline.convert(\"RGBA\").tobytes(), canonical.convert(\"RGBA\").tobytes())"
+        ]
+      },
+      "contract": [
+        "ARC-11 approved asset integrity",
+        "inline mask provenance"
+      ],
+      "risk": "The embedded Module 02 PNG diverges from the canonical RGBA mask bytes.",
+      "consumer": [
+        "Module 02 viewer",
+        "inline mask data"
+      ],
+      "state": "The check compares decoded RGBA bytes and does not modify either source.",
+      "fixture": "app/data/mask-data.js embedded assets/kitchen/masks/02.png and the canonical PNG.",
+      "owner": "TST-004 / candidate-assets",
+      "trigger": {
+        "workflow": ".github/workflows/candidate-assets.yml",
+        "job": "current-asset-gates",
+        "step": "Verify mask semantics and exposed-side pixels",
+        "events": [
+          "pull_request",
+          "push",
+          "workflow_dispatch"
+        ]
+      }
+    },
+    {
+      "assertionId": "exposed-side-pixel-bounds-and-occlusion",
+      "source": {
+        "file": "tests/validate-exposed-side-pixels.py",
+        "test": null,
+        "anchors": [
+          "assert glass.getbbox() == (495, 266, 523, 900), glass.getbbox()",
+          "assert glass.getpixel((500, 200)) == 0",
+          "assert glass.getpixel((500, 280)) > 0 and m05.getpixel((500, 280)) == 255",
+          "assert glass.getpixel((500, 340)) > 0 and m05.getpixel((500, 340)) == 0",
+          "assert stone02.getpixel((500, 560)) == 0 and stone03.getpixel((500, 560)) == 0",
+          "assert m02.getpixel((497, 600)) == 0",
+          "assert m02.getpixel((500, 600)) == 255"
+        ]
+      },
+      "contract": [
+        "ARC-11 approved asset pixel bounds",
+        "foreground occlusion"
+      ],
+      "risk": "Glass extends outside its approved strip, foreground visibility is inverted, wall pixels fill the exposed pane gap, or the module silhouette is lost.",
+      "consumer": [
+        "kitchen scene composition",
+        "glass overlay",
+        "hood and module foreground"
+      ],
+      "state": "The script uses explicit alpha pixels and approved exposed-side coordinates.",
+      "fixture": "Canonical glass overlay, hood layer 05, module layer 02 and exposed stone variants.",
+      "owner": "TST-004 / candidate-assets",
+      "trigger": {
+        "workflow": ".github/workflows/candidate-assets.yml",
+        "job": "current-asset-gates",
+        "step": "Verify mask semantics and exposed-side pixels",
+        "events": [
+          "pull_request",
+          "push",
+          "workflow_dispatch"
+        ]
+      }
+    }
+  ],
+  "runtimeEvidence": {
+    "run": 45307538355,
+    "url": "https://github.com/EAKerber/MobiliPresenter2D/actions/runs/45307538355",
+    "headSha": "111f7f41b3d8dbc4d5299e178281cb950e42990f",
+    "event": "pull_request",
+    "job": "current-asset-gates",
+    "conclusion": "success",
+    "limits": "The current workflow filter source differs from that run, but the mask-validation step text is identical. The two test scripts, technical-data, inline mask data and canonical mask blobs listed in sourcePin match the current development tree."
+  }
+}
