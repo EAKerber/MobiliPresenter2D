@@ -1,6 +1,11 @@
+import { readFileSync } from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { countDispatchOnlyWorkflows, definition } from '../../tools/ci/build-workflow-inventory.mjs';
+
+const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
 
 test('inventory preserves exact run commands and derives operational signals from them', () => {
   const source = `name: Bounded branch operation
@@ -37,4 +42,14 @@ test('dispatch-only count uses each workflow development definition pin', () => 
     { path: 'main-only.yml', developmentDefinition: null }
   ];
   assert.equal(countDispatchOnlyWorkflows(workflows, definitionBySha), 1);
+});
+
+
+test('manual inventory dispatch captures open PRs instead of recording an empty list', () => {
+  const workflow = readFileSync(path.join(root, '.github/workflows/development-test-impact-plan.yml'), 'utf8');
+  const dispatch = workflow.slice(workflow.indexOf('  inventory:'), workflow.indexOf('  inventory_on_push:'));
+  assert.match(dispatch, /GH_TOKEN:\\s*\\$\\{\\{ github\\.token \\}\\}/);
+  assert.match(dispatch, /gh pr list --state open --limit 1000 --json number,url,headRefName,headRefOid,baseRefName,baseRefOid/);
+  assert.match(dispatch, /--open-prs-json "\\$\\(cat artifacts\\/open-prs\\.json\\)"/);
+  assert.doesNotMatch(dispatch, /--open-prs-json '\\[\\]'/);
 });
