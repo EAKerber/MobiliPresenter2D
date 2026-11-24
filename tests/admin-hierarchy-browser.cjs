@@ -236,6 +236,15 @@ async function sectionItemIds(page, stageId, groupId, sectionId) {
   assert.match(await page.locator('[data-initial-viewer-entity="module-01"]').getAttribute("aria-label"), /visível inicialmente no viewer/, "viewer initial-state text names the public viewer policy");
   assert.match(await page.locator('[data-initial-service]').first().getAttribute("aria-label"), /ativo inicialmente/, "initial service state remains a separate active-by-default preference");
   assert.match(await stageAvailability.getAttribute("aria-label"), /^Ativar etapa /, "stage text describes whether the step is available");
+  for (const theme of ["light", "dark"]) {
+    await page.evaluate((mode) => window.CASA_UI_THEME.setMode(mode), theme);
+    const [entityAccent, stageAccent] = await Promise.all([
+      initialEntity.evaluate((input) => getComputedStyle(input).accentColor),
+      stageAvailability.evaluate((input) => getComputedStyle(input).accentColor)
+    ]);
+    assert.equal(entityAccent, stageAccent, `initial-state and stage-availability controls share the ${theme} theme accent`);
+  }
+  await page.evaluate(() => window.CASA_UI_THEME.setMode("auto"));
 
   for (const stageId of ["modules", "summary"]) {
     const card = page.locator(`[data-hierarchy-stage="${stageId}"]`);
