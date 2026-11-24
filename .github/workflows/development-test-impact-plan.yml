@@ -45,14 +45,14 @@ jobs:
           HEAD_SHA: ${{ github.event.pull_request.head.sha }}
         run: node tools/ci/select-test-bundles.mjs --base "$BASE_SHA" --head "$HEAD_SHA"
 
-  inventory_on_push:
-    if: github.event_name == 'push'
+  inventory:
+    if: github.event_name == 'push' || github.event_name == 'pull_request'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          ref: ${{ github.sha }}
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
@@ -64,7 +64,11 @@ jobs:
           git fetch origin main
           main_sha="$(git rev-parse FETCH_HEAD)"
           development_sha="$(git rev-parse HEAD)"
-          test "$development_sha" = "$GITHUB_SHA"
+          expected_development_sha="$GITHUB_SHA"
+          if [ "$GITHUB_EVENT_NAME" = "pull_request" ]; then
+            expected_development_sha="${{ github.event.pull_request.head.sha }}"
+          fi
+          test "$development_sha" = "$expected_development_sha"
           development_tree="$(git rev-parse 'HEAD^{tree}')"
           mkdir -p artifacts
           gh pr list --state open --limit 1000 --json number,url,headRefName,headRefOid,baseRefName,baseRefOid > artifacts/open-prs.json
@@ -86,6 +90,6 @@ jobs:
           echo 'END_TST001_INVENTORY_JSON'
       - uses: actions/upload-artifact@v4
         with:
-          name: tst-001-workflow-inventory-${{ github.sha }}
+          name: tst-001-workflow-inventory-${{ github.event_name }}-${{ github.run_id }}-${{ steps.refs.outputs.development_sha }}
           path: artifacts/tst-001-workflow-inventory.json
           retention-days: 30

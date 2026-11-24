@@ -45,27 +45,35 @@ test('dispatch-only count uses each workflow development definition pin', () => 
 });
 
 
-test('TST-001 current inventory is reachable from development pushes and pins exact refs', () => {
+test('TST-001 inventory reads exact development push and pull request heads', () => {
   const source = readFileSync(path.join(root, '.github/workflows/development-test-impact-plan.yml'), 'utf8');
   const workflow = definition(source, '.github/workflows/development-test-impact-plan.yml', 'blob-sha');
   const push = workflow.events.find(({ name }) => name === 'push');
+  const pullRequest = workflow.events.find(({ name }) => name === 'pull_request');
   assert(push);
+  assert(pullRequest);
   assert.deepEqual(push.branches, ['development']);
+  assert.deepEqual(pullRequest.branches, ['development']);
+  assert.match(source, /ref: \$\{\{ github\.event\.pull_request\.head\.sha \|\| github\.sha \}\}/,
+    'the inventory job checks out the PR head, falling back to the push SHA');
   assert(push.paths.includes('.github/workflows/**'));
   assert(push.paths.includes('tools/ci/build-workflow-inventory.mjs'));
   assert.equal(workflow.events.some(({ name }) => name === 'workflow_dispatch'), false,
     'the development-only workflow must not advertise the inaccessible default-branch dispatch path');
 
-  const inventory = workflow.jobs.find(({ id }) => id === 'inventory_on_push');
+  const inventory = workflow.jobs.find(({ id }) => id === 'inventory');
   assert(inventory);
-  assert.equal(inventory.if, "github.event_name == 'push'");
+  assert.equal(inventory.if, "github.event_name == 'push' || github.event_name == 'pull_request'");
   const capture = workflow.commands.find(({ jobId, step }) =>
-    jobId === 'inventory_on_push' && step === 'Capture exact inventory refs and open PRs');
+    jobId === 'inventory' && step === 'Capture exact inventory refs and open PRs');
   assert(capture);
-  assert.match(capture.command, /test "\$development_sha" = "\$GITHUB_SHA"/);
-  assert.match(capture.command, /gh pr list --state open/);
+  assert.match(capture.command, /expected_development_sha="\$GITHUB_SHA"/);
+  assert.match(capture.command, /test "\$development_sha" = "\$expected_development_sha"/);
+  assert.match(capture.command, /GITHUB_EVENT_NAME.*pull_request/);
+  assert.match(capture.command, /github\.event\.pull_request\.head\.sha/);
+  assert.match(capture.command, /gh pr list --state open --limit 1000/);
   const generate = workflow.commands.find(({ jobId, step }) =>
-    jobId === 'inventory_on_push' && step === 'Generate SHA-pinned workflow inventory');
+    jobId === 'inventory' && step === 'Generate SHA-pinned workflow inventory');
   assert(generate);
   assert.match(generate.command, /--main-sha/);
   assert.match(generate.command, /--development-pin/);
@@ -74,12 +82,13 @@ test('TST-001 current inventory is reachable from development pushes and pins ex
   assert(inventory.actions.includes('actions/upload-artifact@v4'));
 });
 
-test('the push inventory job emits the exact JSON artifact to readable logs', () => {
+test('the inventory job emits the exact JSON to readable logs and uniquely named artifacts', () => {
   const workflow = readFileSync(path.join(root, '.github/workflows/development-test-impact-plan.yml'), 'utf8');
   const occurrences = (text, literal) => text.split(literal).length - 1;
   assert.equal(occurrences(workflow, 'BEGIN_TST001_INVENTORY_JSON'), 1);
   assert.equal(occurrences(workflow, 'cat artifacts/tst-001-workflow-inventory.json'), 1);
   assert.equal(occurrences(workflow, 'END_TST001_INVENTORY_JSON'), 1);
+  assert.match(workflow, /tst-001-workflow-inventory-\$\{\{ github\.event_name \}\}-\$\{\{ github\.run_id \}\}-\$\{\{ steps\.refs\.outputs\.development_sha \}\}/);
 });
 
 
