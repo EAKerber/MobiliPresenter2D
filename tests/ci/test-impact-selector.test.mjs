@@ -170,3 +170,70 @@ test('impact-map commands resolve to workflow triggers, jobs, and executable ste
     }
   }
 });
+
+const assertionCrosswalk = JSON.parse(readFileSync(
+  path.join(root, 'tools/ci/tst-002-buyer-boundary-crosswalk.json'), 'utf8'
+));
+
+test('Buyer assertion crosswalk resolves each assurance to its source and reachable CI route', () => {
+  assert.equal(assertionCrosswalk.schema, 'M2DAssertionContractCrosswalk/1');
+  assert.equal(assertionCrosswalk.workItem, 'TST-002');
+  assert.equal(assertionCrosswalk.status, 'partial');
+  assert(assertionCrosswalk.scopeLimit.includes('does not claim full TST-002 coverage'));
+  assert.equal(assertionCrosswalk.sourcePin.developmentSha, '17f345aea52eb18ce487b990cd6cb51cc4cf83e0');
+
+  const execution = assertionCrosswalk.execution;
+  const bundle = map.bundles.find((candidate) => candidate.id === assertionCrosswalk.slice);
+  assert(bundle, 'the crosswalk slice must resolve to an impact bundle');
+  assert(bundle.contract.includes('DOM-013'));
+  assert(bundle.execution.some((entry) =>
+    entry.workflow === execution.workflow && entry.commands.includes(execution.command)
+  ), 'the impact bundle must identify the same executable route');
+
+  const workflowSource = readFileSync(path.join(root, execution.workflow), 'utf8');
+  const parsedWorkflow = definition(workflowSource, execution.workflow, 'current-workflow-blob');
+  const triggerEvents = new Map(parsedWorkflow.events.map((event) => [event.name, event]));
+  for (const eventName of execution.events) {
+    const event = triggerEvents.get(eventName);
+    assert(event, execution.workflow + ' must declare ' + eventName);
+    assert.deepEqual(event.branches, execution.branches,
+      execution.workflow + ' branch filter must match the crosswalk');
+    assert(event.paths.includes(execution.path),
+      execution.workflow + ' ' + eventName + ' paths must reach ' + execution.path);
+  }
+
+  const route = parsedWorkflow.commands.find((candidate) =>
+    candidate.jobId === execution.job && candidate.command.includes(execution.command)
+  );
+  assert(route, 'the named job must execute the exact test command');
+  assert.equal(route.jobIf, null, 'the mapped job must not be conditionally skipped');
+  assert.equal(route.if, null, 'the mapped test step must not be conditionally skipped');
+  assert.equal(route.sha256.length, 64);
+
+  const ids = new Set();
+  for (const assertion of assertionCrosswalk.assertions) {
+    assert(!ids.has(assertion.assertionId), 'assertion IDs must be unique: ' + assertion.assertionId);
+    ids.add(assertion.assertionId);
+    assert(assertion.source.file && assertion.source.test);
+    assert(assertion.contract.length && assertion.risk && assertion.consumer);
+    assert(assertion.state && assertion.fixture && assertion.owner);
+    assert(['E0', 'E1', 'E2', 'E3', 'E4', 'E5', 'E6'].includes(assertion.evidence.level));
+    assert.equal(assertion.evidence.level, 'E2');
+    assert.equal(assertion.trigger.workflow, execution.workflow);
+    assert.equal(assertion.trigger.job, execution.job);
+    assert.equal(assertion.trigger.command, execution.command);
+    assert.deepEqual(assertion.trigger.events, execution.events);
+    assert.deepEqual(assertion.trigger.branches, execution.branches);
+    assert.equal(assertion.trigger.path, execution.path);
+
+    const sourcePath = path.join(root, assertion.source.file);
+    assert(existsSync(sourcePath), assertion.assertionId + ' source file must exist');
+    const source = readFileSync(sourcePath, 'utf8');
+    assert(source.includes('test("' + assertion.source.test + '"'),
+      assertion.assertionId + ' must resolve to its named runtime test');
+    for (const anchor of assertion.source.anchors) {
+      assert(source.includes(anchor), assertion.assertionId + ' source assertion anchor is missing: ' + anchor);
+    }
+  }
+  assert.equal(ids.size, 6, 'this reviewed slice currently maps six assertion groups');
+});
