@@ -1,0 +1,321 @@
+{
+  "schema": "M2DAssertionContractCrosswalk/1",
+  "plan": "MobiliPresenter2D Plano Diretor v0.9",
+  "workItem": "TST-004",
+  "status": "partial",
+  "slice": "public-navigation",
+  "scopeLimit": "This slice maps the 124-scenario public navigation browser assertions to their two exact workflow routes. It does not map every setup/static command in those workflows, complete TST-004, change triggers, or authorize removing any gate.",
+  "sourcePin": {
+    "mainSha": "01ded2c100fbfd8b16897e26113dc5068a83e429",
+    "developmentSha": "40873103c5b09bd40cc525145a5aeb13e49feda1",
+    "developmentTree": "8251d011d5d046db98d3207c3425b52d478e99b8",
+    "files": {
+      "developmentWorkflow": {
+        "path": ".github/workflows/development-public-navigation-semantic.yml",
+        "blobSha": "1730308d9c995b5a729c9945396af4e64c4ea9d7"
+      },
+      "productionWorkflow": {
+        "path": ".github/workflows/nav005-public-header-browser.yml",
+        "blobSha": "061def109141b03096f5652d24ad36832a5ef0a8"
+      },
+      "browserAssertions": {
+        "path": "tests/ci/public-navigation-semantic-browser.mjs",
+        "blobSha": "13ca0c56da21e72b7701a2b857a21eee6c8d8148"
+      },
+      "impactMap": {
+        "path": "tools/ci/test-impact-bundles.json",
+        "blobSha": "f732ddc801f8b43ee1c30cd40570c6813b1b34f2"
+      }
+    }
+  },
+  "scenarioModel": {
+    "count": 124,
+    "engines": [
+      "Chromium",
+      "WebKit"
+    ],
+    "themes": [
+      "light",
+      "dark"
+    ],
+    "routes": [
+      "/",
+      "/about/",
+      "/how-it-works/",
+      "/viewer/"
+    ],
+    "statement": "31 route/width combinations × 2 themes × 2 engines. The Viewer depth-2 20-case contract is separate and is not included in this count."
+  },
+  "executions": [
+    {
+      "id": "development-public-navigation",
+      "workflow": ".github/workflows/development-public-navigation-semantic.yml",
+      "job": "public-nav-contract",
+      "step": "Verify 124 NAV-004 / NAV-005 behavioral scenarios across 2 engines",
+      "command": "node tests/ci/public-navigation-semantic-browser.mjs",
+      "jobCondition": null,
+      "stepCondition": null,
+      "scope": "pull_request and push on development; workflow_dispatch without path or branch filters",
+      "routes": {
+        "pull_request": {
+          "branches": [
+            "development"
+          ],
+          "types": null,
+          "pathIncludes": [
+            "tests/ci/public-navigation-semantic-browser.mjs",
+            ".github/workflows/development-public-navigation-semantic.yml",
+            ".github/workflows/nav005-public-header-browser.yml",
+            "architecture/fragments/**",
+            "architecture/pages/**",
+            "architecture/generated/**",
+            "scripts/compile-primary-pages.mjs",
+            "tests/arc03c-source-authority.test.mjs",
+            "tests/public-cutover-contract.cjs",
+            "tests/ui-theme-focus-token-contract.cjs",
+            "app/core/ui-theme.js",
+            "app/public-theme.css",
+            "package.json",
+            "app/landing/header-menu.js",
+            "app/landing/landing.css",
+            "app/ui-theme.css",
+            "app/how-it-works/how-it-works.css",
+            "app/about/index.html",
+            "app/how-it-works/index.html",
+            "app/index.html",
+            "app/viewer/index.html"
+          ]
+        },
+        "push": {
+          "branches": [
+            "development"
+          ],
+          "types": null,
+          "pathIncludes": [
+            "tests/ci/public-navigation-semantic-browser.mjs",
+            ".github/workflows/development-public-navigation-semantic.yml",
+            ".github/workflows/nav005-public-header-browser.yml",
+            "architecture/fragments/**",
+            "architecture/pages/**",
+            "architecture/generated/**",
+            "scripts/compile-primary-pages.mjs",
+            "tests/arc03c-source-authority.test.mjs",
+            "tests/public-cutover-contract.cjs",
+            "tests/ui-theme-focus-token-contract.cjs",
+            "app/core/ui-theme.js",
+            "app/public-theme.css",
+            "package.json",
+            "app/landing/header-menu.js",
+            "app/landing/landing.css",
+            "app/ui-theme.css",
+            "app/how-it-works/how-it-works.css",
+            "app/about/index.html",
+            "app/how-it-works/index.html",
+            "app/index.html",
+            "app/viewer/index.html"
+          ]
+        },
+        "workflow_dispatch": {
+          "branches": null,
+          "types": null,
+          "pathIncludes": null
+        }
+      }
+    },
+    {
+      "id": "main-nav005-public-header",
+      "workflow": ".github/workflows/nav005-public-header-browser.yml",
+      "job": "public-header-browser",
+      "step": "Verify 124 public navigation scenarios in Chromium and WebKit",
+      "command": "node tests/ci/public-navigation-semantic-browser.mjs",
+      "jobCondition": null,
+      "stepCondition": null,
+      "scope": "pull_request targeting main only, for opened, reopened, synchronize, and ready_for_review",
+      "routes": {
+        "pull_request": {
+          "branches": [
+            "main"
+          ],
+          "types": [
+            "opened",
+            "reopened",
+            "synchronize",
+            "ready_for_review"
+          ],
+          "pathIncludes": [
+            "app/about/index.html",
+            "app/how-it-works/**",
+            "app/index.html",
+            "app/landing/**",
+            "app/viewer/index.html",
+            "architecture/fragments/**",
+            "architecture/pages/**",
+            "scripts/compile-primary-pages.mjs",
+            "tests/arc03c-source-authority.test.mjs",
+            "tests/ci/public-navigation-semantic-browser.mjs",
+            ".github/workflows/nav005-public-header-browser.yml"
+          ]
+        }
+      }
+    }
+  ],
+  "assertions": [
+    {
+      "assertionId": "nav-routes-controller-theme-state",
+      "source": {
+        "file": "tests/ci/public-navigation-semantic-browser.mjs",
+        "test": null,
+        "anchors": [
+          "id+\" route must load\"",
+          "id+\" one shared nav\"",
+          "id+\" exactly one controller\"",
+          "id+\" active nav must match route (Viewer has none)\"",
+          "id+\" icon-only and visible theme control keeps its accessible name\""
+        ]
+      },
+      "executionIds": [
+        "development-public-navigation",
+        "main-nav005-public-header"
+      ],
+      "contract": [
+        "NAV-004 public route state",
+        "NAV-005 shared menu controller",
+        "theme control accessible naming"
+      ],
+      "risk": "A route exposes duplicated or stale navigation state, an incorrect active link, or an unnamed theme control.",
+      "consumer": [
+        "Landing",
+        "About",
+        "Como funciona",
+        "Viewer"
+      ],
+      "state": "Validated in light and dark themes across Chromium and WebKit.",
+      "fixture": "Local static app on loopback; external browser traffic is blocked.",
+      "owner": "TST-004 / public-navigation"
+    },
+    {
+      "assertionId": "public-header-fit-and-how-hero-visibility",
+      "source": {
+        "file": "tests/ci/public-navigation-semantic-browser.mjs",
+        "test": null,
+        "anchors": [
+          "id+\" one public contact link\"",
+          "id+\" narrow public page has no horizontal overflow\"",
+          "id+\" 291px header remains on one row\"",
+          "id+\" how-it-works title text stays visible inside the hero copy\""
+        ]
+      },
+      "executionIds": [
+        "development-public-navigation",
+        "main-nav005-public-header"
+      ],
+      "contract": [
+        "NAV-005 compact header geometry",
+        "ARC-03C public page composition"
+      ],
+      "risk": "The public header, contact action, or how-it-works hero overflows or becomes clipped at narrow widths.",
+      "consumer": [
+        "Landing",
+        "About",
+        "Como funciona"
+      ],
+      "state": "Uses route-specific widths including narrow transition points and 320px; only the how-it-works hero text checks apply to that route.",
+      "fixture": "Local static page routes with fixed 844px viewport height and reduced motion.",
+      "owner": "TST-004 / public-navigation"
+    },
+    {
+      "assertionId": "menu-keyboard-pointer-and-focus",
+      "source": {
+        "file": "tests/ci/public-navigation-semantic-browser.mjs",
+        "test": null,
+        "anchors": [
+          "id+\" Enter must open\"",
+          "id+\" keyboard activation focuses first link\"",
+          "id+\" Escape returns focus\"",
+          "id+\" pointer outside closes\"",
+          "id+\" keyboard order reaches contact after public navigation\""
+        ]
+      },
+      "executionIds": [
+        "development-public-navigation",
+        "main-nav005-public-header"
+      ],
+      "contract": [
+        "NAV-004 keyboard interaction",
+        "NAV-005 focus management"
+      ],
+      "risk": "Menu state, focus return, or reachable contact action diverges between pointer and keyboard use.",
+      "consumer": [
+        "public header menu"
+      ],
+      "state": "The open/close, Escape, pointer-outside, focus, and resize-preservation checks run when the relevant control is visible.",
+      "fixture": "Browser interactions against loopback pages with no authenticated session.",
+      "owner": "TST-004 / public-navigation"
+    },
+    {
+      "assertionId": "viewer-shared-first-level-header",
+      "source": {
+        "file": "tests/ci/public-navigation-semantic-browser.mjs",
+        "test": null,
+        "anchors": [
+          "id+\" Viewer theme precedes menu\"",
+          "id+\" desktop nav\""
+        ]
+      },
+      "executionIds": [
+        "development-public-navigation",
+        "main-nav005-public-header"
+      ],
+      "contract": [
+        "NAV-005 Viewer first-level header"
+      ],
+      "risk": "Viewer accidentally receives the public-page shell or loses its own first-level header and desktop navigation.",
+      "consumer": [
+        "Viewer"
+      ],
+      "state": "This shared 124-case suite covers Viewer first-level shell placement; it does not replace the separate 20-case depth-2 Viewer contract.",
+      "fixture": "The /viewer/ local static route across the suite's three widths, two themes, and two engines.",
+      "owner": "TST-004 / public-navigation"
+    },
+    {
+      "assertionId": "about-skip-link-and-how-economy-disclosure",
+      "source": {
+        "file": "tests/ci/public-navigation-semantic-browser.mjs",
+        "test": null,
+        "anchors": [
+          "id+\" skip link\"",
+          "id+\" only selected card is expanded\"",
+          "id+\" selecting another card collapses previous\""
+        ]
+      },
+      "executionIds": [
+        "development-public-navigation",
+        "main-nav005-public-header"
+      ],
+      "contract": [
+        "About skip-link target",
+        "Como funciona economy disclosure semantics"
+      ],
+      "risk": "A skip link loses its target or the comparison disclosure allows multiple cards to remain expanded.",
+      "consumer": [
+        "About",
+        "Como funciona"
+      ],
+      "state": "Checks the exact skip target and that selecting a second economy card collapses the first.",
+      "fixture": "Local About and how-it-works routes.",
+      "owner": "TST-004 / public-navigation"
+    }
+  ],
+  "adjacentIndependentGate": {
+    "workflow": ".github/workflows/development-viewer-nav005-semantic.yml",
+    "workflowBlobSha": "49794223049162853df19dc0023d409b07692ec6",
+    "browserTest": "tests/viewer-secondary-header-browser-gate.mjs",
+    "browserTestBlobSha": "61dfede70c979a055dd3229e3311af2d568e9cd3",
+    "scenarioCount": 20,
+    "boundary": "Depth-2 Viewer geometry, links, theme and keyboard contract. It is independently scoped and not duplicated or counted by the shared 124-case suite."
+  },
+  "exclusions": [
+    "No workflow, trigger, path filter, condition, gate, product runtime, mask, Netlify setting, or Production state is changed by this crosswalk.",
+    "No runtime pass is inferred from source mapping; exact candidate-head workflow results remain pending."
+  ]
+}

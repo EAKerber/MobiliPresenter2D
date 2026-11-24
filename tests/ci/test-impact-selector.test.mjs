@@ -310,3 +310,95 @@ test('TST-004 mask assertions resolve to exact sources and the reachable asset g
   assert.equal(maskAssertionCrosswalk.runtimeEvidence.conclusion, 'success');
   assert.equal(maskAssertionCrosswalk.runtimeEvidence.job, execution.job);
 });
+
+const publicNavigationCrosswalk = JSON.parse(readFileSync(
+  path.join(root, 'tools/ci/tst-004-public-navigation-crosswalk.json'), 'utf8'
+));
+
+test('TST-004 public navigation assertions resolve to exact reachable workflow routes', () => {
+  assert.equal(publicNavigationCrosswalk.schema, 'M2DAssertionContractCrosswalk/1');
+  assert.equal(publicNavigationCrosswalk.workItem, 'TST-004');
+  assert.equal(publicNavigationCrosswalk.status, 'partial');
+  assert(publicNavigationCrosswalk.scopeLimit.includes('does not map every setup/static command'));
+
+  const bundle = map.bundles.find((candidate) => candidate.id === publicNavigationCrosswalk.slice);
+  assert(bundle, 'the public navigation slice must resolve to an impact bundle');
+  assert.deepEqual(publicNavigationCrosswalk.executions.map((entry) => entry.workflow),
+    bundle.execution.map((entry) => entry.workflow),
+    'crosswalk routes must match the existing impact bundle routes');
+  assert.equal(publicNavigationCrosswalk.executions.length, 2);
+  assert.equal(publicNavigationCrosswalk.scenarioModel.count, 124);
+  assert(publicNavigationCrosswalk.scenarioModel.statement.includes('Viewer depth-2 20-case contract is separate'));
+
+  const routesById = new Map();
+  for (const execution of publicNavigationCrosswalk.executions) {
+    assert(!routesById.has(execution.id), 'execution IDs must be unique');
+    routesById.set(execution.id, execution);
+    const bundleExecution = bundle.execution.find((entry) => entry.workflow === execution.workflow);
+    assert(bundleExecution, 'each execution must exist in the impact bundle');
+    assert(bundleExecution.commands.includes(execution.command),
+      execution.workflow + ' impact entry must map the same browser command');
+
+    const source = readFileSync(path.join(root, execution.workflow), 'utf8');
+    const parsed = definition(source, execution.workflow, 'current-workflow-blob');
+    const eventMap = new Map(parsed.events.map((event) => [event.name, event]));
+    for (const [eventName, expected] of Object.entries(execution.routes)) {
+      const event = eventMap.get(eventName);
+      assert(event, execution.workflow + ' must declare ' + eventName);
+      assert.deepEqual(event.branches, expected.branches,
+        execution.workflow + ' ' + eventName + ' branch filter must match the crosswalk');
+      assert.deepEqual(event.types, expected.types,
+        execution.workflow + ' ' + eventName + ' activity types must match the crosswalk');
+      if (expected.pathIncludes === null) {
+        assert.equal(event.paths, null,
+          execution.workflow + ' ' + eventName + ' must remain unfiltered by paths');
+      } else {
+        assert.deepEqual(event.paths, expected.pathIncludes,
+          execution.workflow + ' ' + eventName + ' path filters must match exactly');
+      }
+    }
+
+    const route = parsed.commands.find((candidate) =>
+      candidate.jobId === execution.job && candidate.step === execution.step
+    );
+    assert(route, 'the named workflow step must exist');
+    assert(route.command.includes(execution.command),
+      execution.workflow + ' must execute the mapped browser command');
+    assert.equal(route.jobIf, execution.jobCondition, 'the mapped job condition must be recorded');
+    assert.equal(route.if, execution.stepCondition, 'the mapped step condition must be recorded');
+  }
+
+  const development = routesById.get('development-public-navigation');
+  const production = routesById.get('main-nav005-public-header');
+  assert.deepEqual(development.routes.pull_request.branches, ['development']);
+  assert.deepEqual(production.routes.pull_request.branches, ['main']);
+  assert.deepEqual(development.routes.push.branches, ['development']);
+  assert(development.routes.pull_request.pathIncludes.includes('tests/ci/public-navigation-semantic-browser.mjs'),
+    'the development PR route must watch the shared browser test');
+  assert(production.routes.pull_request.pathIncludes.includes('tests/ci/public-navigation-semantic-browser.mjs'),
+    'the main PR route must watch the shared browser test');
+
+  const browserSource = readFileSync(path.join(root, 'tests/ci/public-navigation-semantic-browser.mjs'), 'utf8');
+  const assertionIds = new Set();
+  for (const assertion of publicNavigationCrosswalk.assertions) {
+    assert(!assertionIds.has(assertion.assertionId), 'assertion IDs must be unique');
+    assertionIds.add(assertion.assertionId);
+    assert(assertion.contract.length && assertion.risk && assertion.consumer.length);
+    assert(assertion.state && assertion.fixture && assertion.owner);
+    assert(assertion.executionIds.length > 0);
+    for (const executionId of assertion.executionIds) {
+      assert(routesById.has(executionId), assertion.assertionId + ' must resolve to a declared workflow route');
+    }
+    for (const anchor of assertion.source.anchors) {
+      assert(browserSource.includes(anchor), assertion.assertionId + ' source assertion anchor is missing: ' + anchor);
+    }
+  }
+  assert.equal(assertionIds.size, 5, 'this slice maps five meaningful assertion groups');
+
+  const viewer = publicNavigationCrosswalk.adjacentIndependentGate;
+  assert.equal(viewer.scenarioCount, 20);
+  assert.notEqual(viewer.workflow, development.workflow,
+    'the depth-2 Viewer gate remains independent of the shared 124-case route');
+  assert.notEqual(viewer.workflow, production.workflow,
+    'the depth-2 Viewer gate remains independent of the production-bound shared route');
+});
