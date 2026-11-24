@@ -76,12 +76,12 @@
     }
   ],
   "remaining": [
-    "Decode and reconcile the exact-head inventory artifact before publishing updated workflow counts.",
-    "Continue the TST-002 contract-first matrix for public DTO/pricing, navigation and keyboard, CSS/theme, assets, and localization; keep source inspection distinct from execution evidence.",
-    "Map all 75 development workflow definitions to changed paths, internal job conditions, commands, assertions, outcomes, and representative costs.",
-    "Enumerate test files not invoked by any current workflow and distinguish intentional local/manual tests.",
-    "Classify historical branch filters and Draft-only workflow candidates from exact live refs.",
-    "Measure costs for representative high-fanout and browser PRs before proposing further consolidation."
+    "Read back and reconcile the exact-head inventory artifact rows; the temporary download reference could not be consumed by the available file transport, so current counts remain UNKNOWN.",
+    "Complete the assertion-to-contract matrix for CSS/theme, assets, and localization, then reconcile the remaining 75 workflow definitions against paths, internal conditions, commands, assertions and outcomes.",
+    "Measure exact candidate and representative high-fanout/browser run costs before claiming setup savings or further consolidation.",
+    "Classify historical branch filters, Dispatch-only workflows, and tests not invoked by workflows; preserve local/manual intent where verified.",
+    "Continue DOM-005 only after exact V5 store/Deploy Preview preflight; proceed with CMP-017 by control meaning and reconcile the DAG.",
+    "Classify main-only commits for selective promotion without merging the full development tree."
   ],
   "limits": [
     "The YAML inventory parser covers repository syntax but is not a general YAML validator.",
@@ -91,8 +91,8 @@
     "No workflow, required gate, product runtime, Viewer behavior, mask content, Netlify settings, or Production state was changed by this receipt."
   ],
   "latestReadback": {
-    "currentDevelopmentSha": "2a7b1651cfa77732dd5918a2d8c2a86e748dd48e",
-    "currentDevelopmentTree": "33315b2916241c6e812ded1ed0e50776aa47a6d1",
+    "currentDevelopmentSha": "8a54b586e2a9a533dcf122a119a27723c5f2f8e7",
+    "currentDevelopmentTree": "d2ba692c0e37ab784a25dbdf776ae28160203a76",
     "inventoryGeneratedAtSha": "eee44926e5aa5ce90cf61fc13b0b02a7eef1b1a7",
     "inventoryRun": 45353425858,
     "inventoryArtifactId": 14900584471,
@@ -111,12 +111,17 @@
         "pullRequest": 374,
         "sha": "2a7b1651cfa77732dd5918a2d8c2a86e748dd48e",
         "scope": "documentation-only; V5 endpoint/save crosswalk"
+      },
+      {
+        "pullRequest": 376,
+        "sha": "8a54b586e2a9a533dcf122a119a27723c5f2f8e7",
+        "scope": "documentation-only; published configuration and Buyer projection crosswalk"
       }
     ],
-    "openPullRequests": 0
+    "openPullRequestsAtReadback": 0
   },
   "tst002CrosswalkProgress": {
-    "status": "in_progress; two additional bounded slices integrated in development",
+    "status": "in_progress; three additional slices integrated in development and one navigation/keyboard candidate prepared",
     "pullRequests": [
       {
         "number": 373,
@@ -129,8 +134,26 @@
         "path": "docs/architecture/ci/tst-002-v5-write-readback-crosswalk-2026-11-24.md",
         "assertionIds": 11,
         "scope": "V5 endpoint authorization, stored-state failures, CAS and exact readback"
+      },
+      {
+        "number": 376,
+        "path": "docs/architecture/ci/tst-002-published-projections-crosswalk-2026-11-24.md",
+        "assertionIds": 10,
+        "scope": "V3/V5 published reads, Viewer projection, hierarchy and Buyer DTO"
       }
     ],
-    "limits": "Both slices are source-inspected E0; no exact-head test execution or live service evidence is claimed."
+    "limits": "Both slices are source-inspected E0; no exact-head test execution or live service evidence is claimed.",
+    "candidate": {
+      "branch": "codex/tst002-nav-keyboard-browser-friction-20261124",
+      "expectedPullRequest": 377,
+      "baseSha": "8a54b586e2a9a533dcf122a119a27723c5f2f8e7",
+      "crosswalkPath": "docs/architecture/ci/tst-002-navigation-keyboard-crosswalk-2026-11-24.md",
+      "assertionIds": 11,
+      "gateChanges": [
+        "Use the project-pinned Playwright 1.62.1 Noble container in Keyboard Browser and Flow Layout instead of downloading browser binaries in each job; retain all assertions and filters.",
+        "Run a cheap node --check for the hosted public smoke source on development PRs; keep deployed browser behavior gated on a main Deploy Preview."
+      ],
+      "verification": "pending exact candidate-head workflows; no runtime or mask changes"
+    }
   }
 }
