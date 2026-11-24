@@ -16,7 +16,7 @@ Evidence status at authoring: E0/source-inspected. The workflow's exact-head run
 | Negative and parity fixtures | `tests/test_development_asset_provenance.py` | `aaf99c83d9fddb737e55bf2e026ef1a7fd105230` |
 | Workflow | `.github/workflows/development-asset-provenance.yml` | `2ad5aa93c90fdd1c2ee9bc72f5451e4b89198ed9` |
 | Archived manifest | `archive/m2d/ds02-imagens-originais-e9c405bf:manifest.json` | `e1ef704920e8be04091a4ff48815747176521255` |
-| Pinned archive commit | `EAKerber/MobiliPresenter2D` | `e9c405bfc0189baed8b4b679a1113c37b6ddbd21` |
+| Pinned archive commit | `archive/m2d/ds02-imagens-originais-e9c405bf` | `e9c405bfc0189baed8b4b679a1113c37b6ddbd21` |
 
 The archive manifest declares 40 source paths (36 active, 4 legacy). Its exact path set is watched by both the `pull_request` and `push` events for `development`; the test, checker and workflow files are watched in both events as well. Manual dispatch remains available.
 
