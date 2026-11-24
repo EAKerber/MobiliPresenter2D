@@ -45,7 +45,7 @@
       "python tests/validate-exposed-side-pixels.py"
     ],
     "failIf": "The shell captures both exit codes and fails the step if either is nonzero.",
-    "scope": "pull_request (path-filtered, no base-branch filter); push on main (path-filtered); workflow_dispatch (unfiltered)",
+    "scope": "pull_request (path-filtered, all base branches); push on main (path-filtered); workflow_dispatch (unfiltered)",
     "routes": {
       "pull_request": {
         "branches": null,
