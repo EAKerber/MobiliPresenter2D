@@ -17,7 +17,7 @@ on:
       - 'tests/viewer-price-v5-save.test.cjs'
       - '.github/workflows/viewer-base-price-contract-gate.yml'
   push:
-    branches: [integration/viewer-base-prices-main-20261021, development, main]
+    branches: [development, main]
     paths:
       - 'app/admin/**'
       - 'app/admin.html'
