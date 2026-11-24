@@ -9,6 +9,8 @@ on:
       - 'app/data/**'
       - 'app/tools/test-published-buyer-projection.js'
       - 'app/tools/test-v5-endpoint-safety.js'
+      - 'app/tools/test-published-configuration.js'
+      - 'app/tools/test-v5-normal-save.js'
       - 'netlify/access/**'
       - 'netlify/functions/buyer-configuration.mjs'
       - 'netlify/functions/configuration.mjs'
@@ -21,6 +23,8 @@ on:
       - 'app/data/**'
       - 'app/tools/test-published-buyer-projection.js'
       - 'app/tools/test-v5-endpoint-safety.js'
+      - 'app/tools/test-published-configuration.js'
+      - 'app/tools/test-v5-normal-save.js'
       - 'netlify/access/**'
       - 'netlify/functions/buyer-configuration.mjs'
       - 'netlify/functions/configuration.mjs'
@@ -43,6 +47,10 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
+      - name: Verify published V3/V5 reads and fail-closed invalid states
+        run: node app/tools/test-published-configuration.js
+      - name: Verify V5 normal save CAS and exact readback
+        run: node app/tools/test-v5-normal-save.js
       - name: Verify administrative configuration endpoint boundary
         run: node app/tools/test-v5-endpoint-safety.js
       - name: Verify Buyer DTO allowlist
