@@ -180,3 +180,14 @@ This snapshot supersedes the c2abdf7 inventory values above for current-state co
 The archived asset-provenance workflow was dispatch-only, so edits to its source images did not automatically run the existing exact-tag and blob-identity checks. The focused candidate adds pull-request and push triggers on `development` for the 40 exact paths declared by the pinned archive manifest plus the test, audit tool and workflow itself. The existing manual trigger, assertions, two pinned tag checks and artifact publication remain. The trigger-scope crosswalk is in `tst-002-asset-provenance-crosswalk-2026-11-24.md`.
 
 Friction classification: missing automatic reachability, not redundant assertions. This change schedules one existing provenance gate for matching changes and avoids unrelated path fan-out. Duration impact is unknown until an exact-head run is recorded; no time-saving claim is made. No runtime or asset content is changed.
+
+
+## TST-001 signal precision readback
+
+The inventory builder and focused fixtures were integrated by PR #391. The new exact development push [#45382930493](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/45382930493) succeeded at \`development@c055a7ed25976337748de2c924ea2279cab7efa3\` (tree \`8b4d1bd8b18dd5deac4c6f8529a1e75d14b5734f\`). Artifact ID \`14915131539\`, digest \`sha256:90162d99db29f5e89e445082d03f6fd1d98821d5b799599dc3cf7aa4becdedb1\`.
+
+The refreshed inventory still records 27 \`pull_request\`, 62 \`push\`, 55 \`workflow_dispatch\`, and 1 \`schedule\` events across 68 development workflow files; 4 definitions are dispatch-only. The union has 70 branch-version definitions, 7 paths with conservative mutation/operation signals, zero YAML-subset parse warnings, and an empty open-PR readback.
+
+The public-routing workflow's expected \`PUT\` probe is now represented separately with its \`405\` assertion, job ID, and exact job condition. In the development definition the browser job is limited to non-draft PRs targeting \`main\`; the inventory no longer counts that rejected probe as a write signal. This fixes one known false positive while keeping write-command and permission signals visible.
+
+TST-001 remains open: command-to-assertion reachability and exact execution outcomes have not been mapped across all critical contract families. The updated inventory adds job IDs and job conditions to command rows; it does not claim that command capture alone proves assertion coverage.
