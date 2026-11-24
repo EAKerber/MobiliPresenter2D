@@ -1,0 +1,71 @@
+{
+  "schema": "M2DLOC004FamilyDecision/1",
+  "plan": "MobiliPresenter2D Plano Diretor v0.9",
+  "workItem": "LOC-004",
+  "family": "public-primary-header-menu-open-accessible-name",
+  "status": "prepared-for-development-review",
+  "copyOwner": "Product/UX; existing approved pt-BR copy reused without editorial changes",
+  "authoring": {
+    "fragment": "architecture/fragments/primary-header.fragment.html",
+    "catalog": "app/core/ui-copy.js",
+    "compiler": "scripts/compile-primary-pages.mjs",
+    "routes": ["/", "/about/", "/how-it-works/"],
+    "outputs": ["app/index.html", "app/about/index.html", "app/how-it-works/index.html"]
+  },
+  "keys": [
+    {
+      "pointer": "/navigation/menu/open",
+      "value": "Abrir menu",
+      "sink": "aria-label on the shared public menu button"
+    }
+  ],
+  "preserved": [
+    "Menu button structure, route behavior, and visible rendered page output remain unchanged.",
+    "The existing dynamic Abrir menu/Fechar menu behavior remains with its controller and catalog path.",
+    "Admin, configuration, Viewer, and all non-public-header controls remain outside scope.",
+    "All three generated public HTML pages remain complete and accessible without JavaScript."
+  ],
+  "baseline": {
+    "renderedHtmlChanged": false,
+    "visualTestRequired": false,
+    "reason": "The same accessible name is emitted statically; the change replaces a literal with its existing semantic catalog pointer.",
+    "outputGitBlobs": {
+      "app/index.html": "2a64139e2b05769a60cb69daddd33c6d5e14075c",
+      "app/about/index.html": "78f644b7a6c4e2d6d6507fbbfe602e6217ae9085",
+      "app/how-it-works/index.html": "6ddd7d09a6cb4071f968404063d5c889724c8dc8"
+    }
+  },
+  "inventory": {
+    "path": "architecture/arc13/ui-text-candidates.json",
+    "sha256": "3AD718780463A9AE1907613250EEFB7C2508E9FE1A8619D2844CBB9CED80B195",
+    "manifest": "architecture/generated/primary-pages.manifest.json",
+    "manifestSha256": "2B3A5557BD17CF95A21FCF7F84188A94C06ED1D7C01599D24B4D0DD00EDF15A4",
+    "familyOccurrences": 3,
+    "candidateIds": ["d01bb4284ec09ab0", "d2de7c48d645e2db", "95fa05532af8bdc7"],
+    "authoringStatus": "mapped-by-updated-primary-page-manifest",
+    "sourceMapOrigin": "shared public header fragment to existing semantic catalog key",
+    "primaryPageAuthoringMappedOccurrences": 420,
+    "primaryPageAuthoringUnresolvedOccurrences": 0,
+    "javascriptParseErrors": 0,
+    "unreviewedOccurrences": 1043,
+    "classificationNote": "The three family occurrences map to /navigation/menu/open. Global inventory entries remain unreviewed; aggregate counts are not LOC-004 completion estimates."
+  },
+  "verification": {
+    "arc03cSourceAuthorityTests": "PASS 6/6",
+    "uiThemeContract": "PASS",
+    "pageCompiler": "PASS --check",
+    "inventoryGeneration": "PASS; two consecutive SHA-256 values identical; 420 primary-page occurrences mapped; 0 unresolved; 0 JavaScript parse errors",
+    "staticAccessibleName": "PASS; exact label emitted in generated public HTML without JavaScript",
+    "automatedPullRequestGates": "pending"
+  },
+  "limits": [
+    "This receipt covers only the public shared-header menu-open accessible name.",
+    "It does not reclassify any global inventory candidate or alter the dynamic open/close controller behavior.",
+    "No main promotion or production publication is included."
+  ],
+  "evidence": {
+    "baseDevelopmentSha": "b0062b9f2735d46df571dbfecaec9c8030f1828c",
+    "pullRequest": null,
+    "developmentIntegrationSha": null
+  }
+}

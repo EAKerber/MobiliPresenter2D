@@ -19,11 +19,12 @@ const MAP=[
  {route:"/about/",source:"architecture/pages/about.page.html",output:"app/about/index.html"},
  {route:"/how-it-works/",source:"architecture/pages/how-it-works.page.html",output:"app/how-it-works/index.html"}
 ];
-const KEYS=["brandHref","ambientesHref","ambientesCurrent","howHref","howCurrent","aboutHref","aboutCurrent","whatsAppIconAriaHidden","copy.brand.homeLinkAriaLabel","copy.brand.logoAlt","copy.navigation.primaryLabel","copy.navigation.environments","copy.navigation.howItWorks","copy.navigation.about","copy.navigation.contactAriaLabel","copy.navigation.contact"];
+const KEYS=["brandHref","ambientesHref","ambientesCurrent","howHref","howCurrent","aboutHref","aboutCurrent","whatsAppIconAriaHidden","copy.brand.homeLinkAriaLabel","copy.brand.logoAlt","copy.navigation.primaryLabel","copy.navigation.menu.open","copy.navigation.environments","copy.navigation.howItWorks","copy.navigation.about","copy.navigation.contactAriaLabel","copy.navigation.contact"];
 const COPY_POINTERS={
  "copy.brand.homeLinkAriaLabel":"/brand/homeLinkAriaLabel",
  "copy.brand.logoAlt":"/brand/logoAlt",
  "copy.navigation.primaryLabel":"/navigation/primaryLabel",
+ "copy.navigation.menu.open":"/navigation/menu/open",
  "copy.navigation.environments":"/navigation/environments",
  "copy.navigation.howItWorks":"/navigation/howItWorks",
  "copy.navigation.about":"/navigation/about",
