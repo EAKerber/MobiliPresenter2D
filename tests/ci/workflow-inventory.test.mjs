@@ -73,21 +73,22 @@ test('glass browser test changes reach both push and pull request gates', () => 
 
 
 test('read-only output, comments, and identifiers do not become mutation signals', () => {
-  const source = \`name: Read-only receipt
-on:
-  workflow_dispatch:
-permissions:
-  contents: read
-jobs:
-  inspect:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Print historical context
-        run: |
-          # Do not delete branch refs from this read-only report.
-          echo "branch deletion is only historical context"
-          node -e 'const deleteBranchPlan = false;'
-\`;
+  const source = [
+    'name: Read-only receipt',
+    'on:',
+    '  workflow_dispatch:',
+    'permissions:',
+    '  contents: read',
+    'jobs:',
+    '  inspect:',
+    '    runs-on: ubuntu-latest',
+    '    steps:',
+    '      - name: Print historical context',
+    '        run: |',
+    '          # Do not delete branch refs from this read-only report.',
+    '          echo "branch deletion is only historical context"',
+    '          node -e \\'const deleteBranchPlan = false;\\'',
+  ].join('\n');
   const workflow = definition(source, '.github/workflows/read-only.yml', 'blob-sha');
   assert.deepEqual(workflow.mutationSignals, []);
   assert.equal(workflow.classification, 'manual-or-event-driven');
