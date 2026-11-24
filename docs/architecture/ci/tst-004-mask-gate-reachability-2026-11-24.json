@@ -2,8 +2,8 @@
   "schema": "M2DTSTWorkflowReachabilityReceipt/1",
   "plan": "MobiliPresenter2D Plano Diretor v0.9",
   "workItem": "TST-004",
-  "status": "integrated-in-development; broader-inventory-in-progress",
-  "baseDevelopmentSha": "b135aea4cc4a861d1b2ce1646e9fad71194b4774",
+  "status": "integrated-in-development; initial full inventory captured; assertion crosswalk in progress",
+  "baseDevelopmentSha": "48851b786af12cbba4741af774b6ace801c30878",
   "findings": [
     {
       "priority": "P0",
@@ -48,18 +48,26 @@
       "candidatePullRequest": 344,
       "evidenceHeadSha": "111f7f41b3d8dbc4d5299e178281cb950e42990f",
       "workflowRerun": "PASS at evidenceHeadSha; run https://github.com/EAKerber/MobiliPresenter2D/actions/runs/45307538355"
+    },
+    {
+      "priority": "P1",
+      "contract": "workflow inventory and remaining high-friction NAV overlap",
+      "finding": "Pinned TST-001 inventory now records 27 main and 75 development workflow files (25 shared; 2 main-only; 50 development-only), with 93 unique file versions parsed and zero warnings. Three development workflows beyond the primary semantic gate still invoke the same NAV browser script; two also retain historical source/provenance checks, and one adds a distinct 20-case secondary-header gate. The full command-to-assertion map and run-cost evidence are still pending.",
+      "inventory": "docs/architecture/ci/tst-001-workflow-inventory-2026-11-24.json",
+      "review": "docs/architecture/ci/tst-001-gate-friction-review-2026-11-24.md"
     }
   ],
   "governance": {
     "requiredChecks": "Authenticated read-only GitHub settings review on 2026-11-24 found no branch rules, rulesets, or required status checks",
-    "scopeLimit": "This receipt records the mask reachability fix, the false About trigger removal, and the NAV duplicate-run reduction. The full 74-workflow inventory, contract/path matrix, synthetic scenario coverage, complete command-to-assertion map, dispatch/condition review, and broad-trigger cost census remain in progress.",
-    "tst022": "No impact-based bundle selector is implemented by this receipt."
+    "scopeLimit": "This receipt records the mask reachability fix, the false About trigger removal, the NAV duplicate-run reduction, and the initial pinned 27/75 workflow inventory. The complete contract/path matrix, synthetic scenario coverage, full command-to-assertion map, dispatch/condition review, and run-cost census remain in progress.",
+    "tst022": "The advisory three-family selector is integrated in development by PR #344; it does not suppress or replace existing gates."
   },
   "verification": {
     "gitDiffCheck": "PASS",
     "candidateAssetsWorkflow": "PASS on PR #342 head bb29d300026d3c39374440d4bb29cfce185fa32f; six applicable gates passed",
     "aboutSkipLinkWorkflow": "PASS on PR #342 head bb29d300026d3c39374440d4bb29cfce185fa32f",
-    "developmentNavigationWorkflow": "PASS on PR #343 head 043c660a667a08af82b080d4f68ff9300fe71367; 124 scenario gate passed"
+    "developmentNavigationWorkflow": "PASS on PR #343 head 043c660a667a08af82b080d4f68ff9300fe71367; 124 scenario gate passed",
+    "workflowInventory": "Generated from pinned main/development sources with zero parser warnings; PR-level current refs were independently compared to the pins on 2026-11-24"
   },
   "evidence": {
     "pullRequest": {
@@ -76,3 +84,4 @@
     }
   }
 }
+

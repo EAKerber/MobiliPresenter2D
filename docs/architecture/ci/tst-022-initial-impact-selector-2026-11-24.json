@@ -2,8 +2,8 @@
   "schema": "M2DTSTImpactBundleReceipt/1",
   "plan": "MobiliPresenter2D Plano Diretor v0.9",
   "workItem": "TST-022",
-  "status": "candidate-for-development-review",
-  "baseDevelopmentSha": "fdb414a8477eecc5f335c79f8598070890d99919",
+  "status": "integrated-in-development; advisory selector only",
+  "baseDevelopmentSha": "48851b786af12cbba4741af774b6ace801c30878",
   "implementation": {
     "selector": "tools/ci/select-test-bundles.mjs",
     "map": "tools/ci/test-impact-bundles.json",
@@ -39,17 +39,23 @@
     "localTestResult": "PASS 9/9",
     "nodeSyntax": "PASS",
     "gitDiffCheck": "PASS",
-    "pullRequestWorkflow": "pending"
+    "pullRequestWorkflow": "PASS on PR #344 final head 4f9c37b7a4e050874a4815a14971f6cd7af3b211; current asset gates run 45307942537 and impact-plan run 45307942399 passed; Supabase Preview skipped because Preview branches are disabled"
   },
   "limits": [
     "The selector is advisory and does not skip, cancel, or replace existing workflows.",
     "The first map covers three high-impact families; unclassified paths select all mapped bundles while existing path-triggered gates remain authoritative.",
     "The candidate asset workflow's broad app/** trigger is retained because it runs app/npm test and exercises runtime asset consumers; only its unrelated tools/** trigger was narrowed to consumed helper files.",
+    "PR #344 merged into development at 48851b786af12cbba4741af774b6ace801c30878.",
     "This is not yet a complete TST-002 assertion inventory, proof that every critical contract is covered, a CI cost reduction, or authorization to consolidate other workflows.",
     "Future additions to bundles require current trigger/command review and historical path cases before any gate can be removed."
   ],
   "evidence": {
-    "pullRequest": null,
-    "developmentIntegrationSha": null
+    "pullRequest": {
+      "number": 344,
+      "url": "https://github.com/EAKerber/MobiliPresenter2D/pull/344",
+      "headSha": "4f9c37b7a4e050874a4815a14971f6cd7af3b211"
+    },
+    "developmentIntegrationSha": "48851b786af12cbba4741af774b6ace801c30878"
   }
 }
+
