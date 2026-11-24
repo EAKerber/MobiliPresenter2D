@@ -1,0 +1,276 @@
+{
+  "schema": "M2DAssertionContractCrosswalk/1",
+  "plan": "MobiliPresenter2D Plano Diretor v0.9",
+  "workItem": "TST-002",
+  "status": "partial",
+  "slice": "buyer-configuration-boundary",
+  "sourcePin": {
+    "repository": "EAKerber/MobiliPresenter2D",
+    "developmentSha": "17f345aea52eb18ce487b990cd6cb51cc4cf83e0"
+  },
+  "scopeLimit": "This slice maps the Buyer configuration endpoint authorization and DTO assertions only. It does not claim full TST-002 coverage or a passing result for a future candidate SHA.",
+  "execution": {
+    "workflow": ".github/workflows/buyer-configuration-boundary.yml",
+    "job": "configuration-boundaries",
+    "command": "node --test tests/buyer-configuration-endpoint.test.mjs",
+    "events": [
+      "pull_request",
+      "push"
+    ],
+    "branches": [
+      "main",
+      "development"
+    ],
+    "pathFilter": "tests/buyer-configuration-endpoint.test.mjs",
+    "runtime": "ubuntu-latest; Node.js 22",
+    "resultEvidence": "The assertion group is executed by the declared command. Record the actual result against the exact candidate SHA in its GitHub Actions run."
+  },
+  "assertions": [
+    {
+      "assertionId": "BUYER.AUTH.ANONYMOUS_DENY_BEFORE_STORAGE",
+      "source": {
+        "file": "tests/buyer-configuration-endpoint.test.mjs",
+        "test": "Buyer endpoint denies before storage and exposes only the projected DTO",
+        "anchors": [
+          "assert.equal(result.status,401,\"anonymous access is denied\");",
+          "assert.equal(counts.previewOpens,0,\"anonymous denial happens before opening Blob storage\");",
+          "assert.equal(counts.reads,0);"
+        ]
+      },
+      "contract": [
+        "DOM-013"
+      ],
+      "risk": "An anonymous request reads the published configuration or initializes preview storage before authorization.",
+      "consumer": "GET /api/buyer-configuration",
+      "state": "No identity and no access token.",
+      "fixture": "Injected Identity and Blob store; counters observe store initialization and reads.",
+      "evidence": {
+        "level": "E2",
+        "kind": "local integration test of the endpoint with injected access and storage dependencies"
+      },
+      "trigger": {
+        "workflow": ".github/workflows/buyer-configuration-boundary.yml",
+        "job": "configuration-boundaries",
+        "command": "node --test tests/buyer-configuration-endpoint.test.mjs",
+        "events": [
+          "pull_request",
+          "push"
+        ],
+        "branches": [
+          "main",
+          "development"
+        ],
+        "path": "tests/buyer-configuration-endpoint.test.mjs"
+      },
+      "negative": true,
+      "owner": "Buyer configuration endpoint and Netlify access policy"
+    },
+    {
+      "assertionId": "BUYER.AUTH.NO_GRANT_DENY_BEFORE_STORAGE",
+      "source": {
+        "file": "tests/buyer-configuration-endpoint.test.mjs",
+        "test": "Buyer endpoint denies before storage and exposes only the projected DTO",
+        "anchors": [
+          "assert.equal(result.status,403,\"a buyer without an active grant is denied\");",
+          "assert.equal(counts.previewOpens,0,\"buyer denial happens before opening Blob storage\");",
+          "assert.equal(counts.reads,0);"
+        ]
+      },
+      "contract": [
+        "DOM-013"
+      ],
+      "risk": "An authenticated ordinary buyer without an active temporary grant can read published configuration.",
+      "consumer": "GET /api/buyer-configuration",
+      "state": "Identity is a user without an active session grant.",
+      "fixture": "Injected user identity, absent temporary session, and Blob store counters.",
+      "evidence": {
+        "level": "E2",
+        "kind": "local integration test of the endpoint with injected access and storage dependencies"
+      },
+      "trigger": {
+        "workflow": ".github/workflows/buyer-configuration-boundary.yml",
+        "job": "configuration-boundaries",
+        "command": "node --test tests/buyer-configuration-endpoint.test.mjs",
+        "events": [
+          "pull_request",
+          "push"
+        ],
+        "branches": [
+          "main",
+          "development"
+        ],
+        "path": "tests/buyer-configuration-endpoint.test.mjs"
+      },
+      "negative": true,
+      "owner": "Buyer configuration endpoint and Netlify access policy"
+    },
+    {
+      "assertionId": "BUYER.AUTH.TEMPORARY_SESSION_FAIL_CLOSED",
+      "source": {
+        "file": "tests/buyer-configuration-endpoint.test.mjs",
+        "test": "Buyer endpoint denies before storage and exposes only the projected DTO",
+        "anchors": [
+          "assert.equal(result.status,403,\"a missing temporary session is denied\");",
+          "assert.equal(counts.previewOpens,0,\"missing-session denial happens before opening Blob storage\");",
+          "assert.equal(result.status,503,\"temporary-session store failure is fail-closed\");",
+          "assert.equal(counts.reads,0);"
+        ]
+      },
+      "contract": [
+        "DOM-013"
+      ],
+      "risk": "A missing or unavailable temporary-session record is treated as authorization or permits a configuration read.",
+      "consumer": "GET /api/buyer-configuration",
+      "state": "Buyer token without an active session, then access-session storage unavailable.",
+      "fixture": "Injected token lookup and controlled session-store failure; Blob store counters.",
+      "evidence": {
+        "level": "E2",
+        "kind": "local integration test of the endpoint with injected access and storage dependencies"
+      },
+      "trigger": {
+        "workflow": ".github/workflows/buyer-configuration-boundary.yml",
+        "job": "configuration-boundaries",
+        "command": "node --test tests/buyer-configuration-endpoint.test.mjs",
+        "events": [
+          "pull_request",
+          "push"
+        ],
+        "branches": [
+          "main",
+          "development"
+        ],
+        "path": "tests/buyer-configuration-endpoint.test.mjs"
+      },
+      "negative": true,
+      "owner": "Buyer configuration endpoint and Netlify access policy"
+    },
+    {
+      "assertionId": "BUYER.AUTH.IDENTITY_FAILURE_FAIL_CLOSED",
+      "source": {
+        "file": "tests/buyer-configuration-endpoint.test.mjs",
+        "test": "Buyer endpoint denies before storage and exposes only the projected DTO",
+        "anchors": [
+          "assert.equal(result.status,503,\"Identity failure is fail-closed\");",
+          "assert.equal(counts.previewOpens,0);",
+          "assert.equal(counts.reads,0);"
+        ]
+      },
+      "contract": [
+        "DOM-013"
+      ],
+      "risk": "Unavailable Identity is interpreted as an anonymous success or reaches storage.",
+      "consumer": "GET /api/buyer-configuration",
+      "state": "Identity provider throws while resolving the request principal.",
+      "fixture": "Injected Identity failure and Blob store counters.",
+      "evidence": {
+        "level": "E2",
+        "kind": "local integration test of the endpoint with injected access and storage dependencies"
+      },
+      "trigger": {
+        "workflow": ".github/workflows/buyer-configuration-boundary.yml",
+        "job": "configuration-boundaries",
+        "command": "node --test tests/buyer-configuration-endpoint.test.mjs",
+        "events": [
+          "pull_request",
+          "push"
+        ],
+        "branches": [
+          "main",
+          "development"
+        ],
+        "path": "tests/buyer-configuration-endpoint.test.mjs"
+      },
+      "negative": true,
+      "owner": "Buyer configuration endpoint and Netlify access policy"
+    },
+    {
+      "assertionId": "BUYER.DTO.AUTHORIZED_SESSION_ALLOWLIST",
+      "source": {
+        "file": "tests/buyer-configuration-endpoint.test.mjs",
+        "test": "Buyer endpoint denies before storage and exposes only the projected DTO",
+        "anchors": [
+          "assert.deepEqual(Object.keys(payload).sort(),[",
+          "assert.deepEqual(Object.keys(payload.displaySettings).sort(),[",
+          "assert.equal(Object.hasOwn(payload,\"source\"),false,\"raw administrative source is not exposed\");",
+          "assert.equal(Object.hasOwn(payload.displaySettings,\"revision\"),false,\"admin revision is not exposed\");",
+          "assert.equal(Object.hasOwn(payload.displaySettings,\"pricing\"),false,\"admin pricing storage is not exposed\");",
+          "assert.equal(result.status,200,\"a valid temporary session may read the buyer projection\");",
+          "assertBuyerPayload(result.body);",
+          "assert.equal(result.headers.get(\"cache-control\"),\"no-store, max-age=0\");",
+          "assert.equal(counts.siteOpens,0);"
+        ]
+      },
+      "contract": [
+        "DOM-012",
+        "DOM-013"
+      ],
+      "risk": "An authorized Buyer response leaks the raw administrative source, revision, or private pricing storage, or reads the production store for a preview request.",
+      "consumer": "GET /api/buyer-configuration in Deploy Preview",
+      "state": "Buyer has a valid temporary session grant and requests the published V5 projection.",
+      "fixture": "Valid temporary session, V5 in-memory document, explicit DTO key allowlists, and separate site/deploy store counters.",
+      "evidence": {
+        "level": "E2",
+        "kind": "local integration test of the endpoint and projected DTO with injected dependencies"
+      },
+      "trigger": {
+        "workflow": ".github/workflows/buyer-configuration-boundary.yml",
+        "job": "configuration-boundaries",
+        "command": "node --test tests/buyer-configuration-endpoint.test.mjs",
+        "events": [
+          "pull_request",
+          "push"
+        ],
+        "branches": [
+          "main",
+          "development"
+        ],
+        "path": "tests/buyer-configuration-endpoint.test.mjs"
+      },
+      "negative": true,
+      "owner": "Published Buyer projection and configuration endpoint"
+    },
+    {
+      "assertionId": "BUYER.AUTH.INTERNAL_ROLES_USE_PROJECTION",
+      "source": {
+        "file": "tests/buyer-configuration-endpoint.test.mjs",
+        "test": "Buyer endpoint denies before storage and exposes only the projected DTO",
+        "anchors": [
+          "assert.equal(result.status,200,\"an internal admin may read the buyer projection\");",
+          "assertBuyerPayload(result.body);",
+          "assert.equal(counts.sessionLookups,3,\"internal access does not consult the temporary-session store\");",
+          "assert.equal(result.status,200,\"internal staff may read the buyer projection\");",
+          "assert.equal(counts.sessionLookups,3,\"internal staff access does not consult the temporary-session store\");",
+          "assert.equal(counts.siteOpens,0,\"a preview request never opens the production store\");"
+        ]
+      },
+      "contract": [
+        "DOM-012",
+        "DOM-013"
+      ],
+      "risk": "An internal role is routed through temporary Buyer grants or can access the administrative source through the Buyer endpoint.",
+      "consumer": "GET /api/buyer-configuration in Deploy Preview",
+      "state": "Internal admin and staff principals request the Buyer projection.",
+      "fixture": "Injected admin/staff identities, in-memory V5 document, session lookup counter, and separated site/deploy stores.",
+      "evidence": {
+        "level": "E2",
+        "kind": "local integration test of the endpoint and projected DTO with injected dependencies"
+      },
+      "trigger": {
+        "workflow": ".github/workflows/buyer-configuration-boundary.yml",
+        "job": "configuration-boundaries",
+        "command": "node --test tests/buyer-configuration-endpoint.test.mjs",
+        "events": [
+          "pull_request",
+          "push"
+        ],
+        "branches": [
+          "main",
+          "development"
+        ],
+        "path": "tests/buyer-configuration-endpoint.test.mjs"
+      },
+      "negative": false,
+      "owner": "Published Buyer projection and configuration endpoint"
+    }
+  ]
+}
