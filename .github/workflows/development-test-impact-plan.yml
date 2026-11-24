@@ -82,6 +82,11 @@ jobs:
             --development-tree "$(git rev-parse 'HEAD^{tree}')" \
             --open-prs-json "$(cat artifacts/open-prs.json)" \
             --output artifacts/tst-001-workflow-inventory.json
+      - name: Emit exact inventory JSON for readback
+        run: |
+          echo 'BEGIN_TST001_INVENTORY_JSON'
+          cat artifacts/tst-001-workflow-inventory.json
+          echo 'END_TST001_INVENTORY_JSON'
       - uses: actions/upload-artifact@v4
         with:
           name: tst-001-workflow-inventory-${{ inputs.development_sha }}
@@ -122,6 +127,11 @@ jobs:
             --development-tree "${{ steps.refs.outputs.development_tree }}" \
             --open-prs-json "$(cat artifacts/open-prs.json)" \
             --output artifacts/tst-001-workflow-inventory.json
+      - name: Emit exact inventory JSON for readback
+        run: |
+          echo 'BEGIN_TST001_INVENTORY_JSON'
+          cat artifacts/tst-001-workflow-inventory.json
+          echo 'END_TST001_INVENTORY_JSON'
       - uses: actions/upload-artifact@v4
         with:
           name: tst-001-workflow-inventory-${{ github.sha }}
