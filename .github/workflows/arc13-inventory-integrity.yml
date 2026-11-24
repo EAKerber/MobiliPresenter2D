@@ -7,6 +7,7 @@ on:
     paths:
       - 'app/**/*.html'
       - 'app/**/*.js'
+      - '!app/tools/test-v5-normal-save.js'
       - 'app/**/*.mjs'
       - 'package.json'
       - 'architecture/pages/**'
@@ -29,6 +30,7 @@ on:
     paths:
       - 'app/**/*.html'
       - 'app/**/*.js'
+      - '!app/tools/test-v5-normal-save.js'
       - 'app/**/*.mjs'
       - 'package.json'
       - 'architecture/pages/**'
