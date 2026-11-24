@@ -48,8 +48,8 @@ test('dispatch-only count uses each workflow development definition pin', () => 
 test('manual inventory dispatch captures open PRs instead of recording an empty list', () => {
   const workflow = readFileSync(path.join(root, '.github/workflows/development-test-impact-plan.yml'), 'utf8');
   const dispatch = workflow.slice(workflow.indexOf('  inventory:'), workflow.indexOf('  inventory_on_push:'));
-  assert.match(dispatch, /GH_TOKEN:\\s*\\$\\{\\{ github\\.token \\}\\}/);
-  assert.match(dispatch, /gh pr list --state open --limit 1000 --json number,url,headRefName,headRefOid,baseRefName,baseRefOid/);
-  assert.match(dispatch, /--open-prs-json "\\$\\(cat artifacts\\/open-prs\\.json\\)"/);
-  assert.doesNotMatch(dispatch, /--open-prs-json '\\[\\]'/);
+  assert(dispatch.includes('GH_TOKEN: ${{ github.token }}'));
+  assert(dispatch.includes('gh pr list --state open --limit 1000 --json number,url,headRefName,headRefOid,baseRefName,baseRefOid'));
+  assert(dispatch.includes('--open-prs-json "$(cat artifacts/open-prs.json)"'));
+  assert(!dispatch.includes("--open-prs-json '[]'"));
 });
