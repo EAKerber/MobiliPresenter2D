@@ -4,6 +4,7 @@ import { existsSync, readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 import { selectBundles } from '../../tools/ci/select-test-bundles.mjs';
+import { definition } from '../../tools/ci/build-workflow-inventory.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
 const map = JSON.parse(readFileSync(path.join(root, 'tools/ci/test-impact-bundles.json'), 'utf8'));
@@ -138,6 +139,34 @@ test('each bundle names at least one workflow, executable command, assertion, pa
           assert(workflow.includes(referencedFile), `${bundle.id} maps a command that is absent from ${entry.workflow}: ${referencedFile}`);
         }
       }
+    }
+  }
+});
+
+
+test('impact-map commands resolve to workflow triggers, jobs, and executable steps', () => {
+  for (const bundle of map.bundles) {
+    for (const execution of bundle.execution) {
+      const workflowSource = readFileSync(path.join(root, execution.workflow), 'utf8');
+      const parsed = definition(workflowSource, execution.workflow, 'current-workflow-blob');
+      const declaredEvents = new Set(parsed.events.map(({ name }) => name));
+      for (const event of ['pull_request', 'push', 'workflow_dispatch', 'schedule']) {
+        if (execution.scope.includes(event)) {
+          assert(declaredEvents.has(event),
+            bundle.id + ' claims ' + event + ' scope absent from ' + execution.workflow);
+        }
+      }
+
+      for (const expectedCommand of execution.commands) {
+        const routes = parsed.commands.filter(({ command }) => command.includes(expectedCommand));
+        assert(routes.length > 0,
+          bundle.id + ' maps a command that is not an executable run step in ' + execution.workflow + ': ' + expectedCommand);
+        assert(routes.some((route) => route.jobId && Object.hasOwn(route, 'jobIf')
+          && Object.hasOwn(route, 'if') && typeof route.sha256 === 'string' && route.sha256.length === 64),
+        bundle.id + ' command route must retain its job, conditions, and command digest: ' + expectedCommand);
+      }
+      assert(execution.assertion,
+        bundle.id + ' executable routes must remain connected to a named assertion');
     }
   }
 });

@@ -107,3 +107,13 @@ test('expected rejected HTTP write-method probes carry their assertion and execu
   assert.deepEqual(workflow.mutationSignals, [],
     'an HTTP method that is asserted to be rejected is not a mutation signal');
 });
+
+
+test('folded workflow run steps preserve their executable shell command', () => {
+  const source = readFileSync(path.join(root, '.github/workflows/candidate-assets.yml'), 'utf8');
+  const workflow = definition(source, '.github/workflows/candidate-assets.yml', 'blob-sha');
+  const command = workflow.commands.find(({ step }) => step === 'Unit-test current candidate contracts');
+  assert(command);
+  assert.equal(command.command,
+    'python -m unittest tests/test_candidate_asset_gates.py tests/test_candidate_asset_sets.py tests/test_candidate_delta_authoring.py tests/test_candidate_authoring_provenance.py tests/test_perspective_editorial_gate.py tests/test_gap_parallelism_gate.py tests/test_gap_pixel_gate.py tests/test_faucet_edge.py');
+});

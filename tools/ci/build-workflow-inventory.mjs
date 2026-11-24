@@ -106,7 +106,8 @@ function parseSteps(lines) {
           if (line.trim() && (line.length - line.trimStart().length) < 10) break;
           commands.push(line.replace(/^\s{10}/, ''));
         }
-        step.run = commands.join('\n').trimEnd();
+        const folded = ['>', '>-', '>+'].includes(runLine.trim());
+        step.run = folded ? commands.join(' ').replace(/\s+/g, ' ').trim() : commands.join('\n').trimEnd();
       }
     }
     if (step.name || step.uses || step.run || step.if) steps.push(step);
