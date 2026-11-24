@@ -45,21 +45,41 @@ test('dispatch-only count uses each workflow development definition pin', () => 
 });
 
 
-test('manual inventory dispatch captures open PRs instead of recording an empty list', () => {
-  const workflow = readFileSync(path.join(root, '.github/workflows/development-test-impact-plan.yml'), 'utf8');
-  const dispatch = workflow.slice(workflow.indexOf('  inventory:'), workflow.indexOf('  inventory_on_push:'));
-  assert(dispatch.includes('GH_TOKEN: ${{ github.token }}'));
-  assert(dispatch.includes('gh pr list --state open --limit 1000 --json number,url,headRefName,headRefOid,baseRefName,baseRefOid'));
-  assert(dispatch.includes('--open-prs-json "$(cat artifacts/open-prs.json)"'));
-  assert(!dispatch.includes("--open-prs-json '[]'"));
+test('TST-001 current inventory is reachable from development pushes and pins exact refs', () => {
+  const source = readFileSync(path.join(root, '.github/workflows/development-test-impact-plan.yml'), 'utf8');
+  const workflow = definition(source, '.github/workflows/development-test-impact-plan.yml', 'blob-sha');
+  const push = workflow.events.find(({ name }) => name === 'push');
+  assert(push);
+  assert.deepEqual(push.branches, ['development']);
+  assert(push.paths.includes('.github/workflows/**'));
+  assert(push.paths.includes('tools/ci/build-workflow-inventory.mjs'));
+  assert.equal(workflow.events.some(({ name }) => name === 'workflow_dispatch'), false,
+    'the development-only workflow must not advertise the inaccessible default-branch dispatch path');
+
+  const inventory = workflow.jobs.find(({ id }) => id === 'inventory_on_push');
+  assert(inventory);
+  assert.equal(inventory.if, "github.event_name == 'push'");
+  const capture = workflow.commands.find(({ jobId, step }) =>
+    jobId === 'inventory_on_push' && step === 'Capture exact inventory refs and open PRs');
+  assert(capture);
+  assert.match(capture.command, /test "\$development_sha" = "\$GITHUB_SHA"/);
+  assert.match(capture.command, /gh pr list --state open/);
+  const generate = workflow.commands.find(({ jobId, step }) =>
+    jobId === 'inventory_on_push' && step === 'Generate SHA-pinned workflow inventory');
+  assert(generate);
+  assert.match(generate.command, /--main-sha/);
+  assert.match(generate.command, /--development-pin/);
+  assert.match(generate.command, /--development-tree/);
+  assert.match(generate.command, /--open-prs-json/);
+  assert(inventory.actions.includes('actions/upload-artifact@v4'));
 });
 
-test('inventory jobs emit the exact JSON artifact to readable logs', () => {
+test('the push inventory job emits the exact JSON artifact to readable logs', () => {
   const workflow = readFileSync(path.join(root, '.github/workflows/development-test-impact-plan.yml'), 'utf8');
   const occurrences = (text, literal) => text.split(literal).length - 1;
-  assert.equal(occurrences(workflow, 'BEGIN_TST001_INVENTORY_JSON'), 2);
-  assert.equal(occurrences(workflow, 'cat artifacts/tst-001-workflow-inventory.json'), 2);
-  assert.equal(occurrences(workflow, 'END_TST001_INVENTORY_JSON'), 2);
+  assert.equal(occurrences(workflow, 'BEGIN_TST001_INVENTORY_JSON'), 1);
+  assert.equal(occurrences(workflow, 'cat artifacts/tst-001-workflow-inventory.json'), 1);
+  assert.equal(occurrences(workflow, 'END_TST001_INVENTORY_JSON'), 1);
 });
 
 
