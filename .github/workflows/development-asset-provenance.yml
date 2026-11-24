@@ -93,7 +93,6 @@ on:
       - tests/test_development_asset_provenance.py
       - tools/development_asset_provenance_audit.py
       - .github/workflows/development-asset-provenance.yml
-  workflow_dispatch:
 
 permissions:
   contents: read
