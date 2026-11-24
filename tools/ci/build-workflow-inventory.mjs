@@ -170,7 +170,7 @@ function blob(sha, file) {
   return git(['rev-parse', `${sha}:${file}`]).trim();
 }
 
-function definition(source, file, blobSha) {
+export function definition(source, file, blobSha) {
   const eventResult = parseEvents(source);
   const jobResult = parseJobs(source);
   const name = source.match(/^name:\s*(.*)$/m)?.[1]?.trim() ?? path.basename(file, path.extname(file));
@@ -179,6 +179,7 @@ function definition(source, file, blobSha) {
     job: job.name ?? job.id,
     step: step.name,
     sha256: createHash('sha256').update(step.run).digest('hex'),
+    command: step.run,
     if: step.if
   })));
   const jobSummaries = jobResult.jobs.map((job) => ({
@@ -239,6 +240,14 @@ function parseArgs(argv) {
   return options;
 }
 
+export function countDispatchOnlyWorkflows(workflows, definitionBySha) {
+  return workflows.filter((workflow) => {
+    if (!workflow.developmentDefinition) return false;
+    const definition = definitionBySha.get(workflow.developmentDefinition);
+    return definition?.events.length === 1 && definition.events[0].name === 'workflow_dispatch';
+  }).length;
+}
+
 export function buildInventory({ mainSha, developmentPin, expectedDevelopmentTree, openPrs = [] }) {
   const mainTree = git(['rev-parse', `${mainSha}^{tree}`]).trim();
   const checkoutSha = git(['rev-parse', 'HEAD']).trim();
@@ -297,7 +306,7 @@ export function buildInventory({ mainSha, developmentPin, expectedDevelopmentTre
       mainOnly: mainFiles.filter((file) => !devSet.has(file)),
       developmentOnly: developmentFiles.filter((file) => !mainSet.has(file)),
       developmentEventCounts: devCounts,
-      developmentDispatchOnlyCount: workflows.filter((workflow) => workflow.development && workflow.development.events.length === 1 && workflow.development.events[0].name === 'workflow_dispatch').length,
+      developmentDispatchOnlyCount: countDispatchOnlyWorkflows(workflows, definitionBySha),
       workflowDefinitions: workflows.length,
       workflowsWithWriteSignals: [...new Set(withWriteSignals)],
       parseWarningCount: warnings.length
@@ -307,7 +316,7 @@ export function buildInventory({ mainSha, developmentPin, expectedDevelopmentTre
     parseWarnings: warnings,
     caveats: [
       'The YAML reader extracts the trigger/job/step fields used by the current repository; it is not a general YAML validator.',
-      'Command digests identify the exact declared run-step text by repository blob and SHA-256; they do not prove every assertion in a command is reachable.',
+      'Command text and SHA-256 identify the exact declared run-step source; they do not prove every assertion in a command is reachable.',
       'Write-capable classification is a signal for review, not a security proof. Inspect permissions and external side effects before calling a workflow validation-only.',
       'Open PR list is a live GitHub readback supplied to this snapshot; Draft PR workflow candidates are recorded only when present in that readback.'
     ]
