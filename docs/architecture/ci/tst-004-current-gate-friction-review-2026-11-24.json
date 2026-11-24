@@ -1,0 +1,91 @@
+{
+  "schema": "M2DTSTWorkflowReachabilityReceipt/1",
+  "plan": "MobiliPresenter2D Plano Diretor v0.9",
+  "workItem": "TST-004",
+  "status": "in_progress; current trigger and friction slice reviewed",
+  "baseDevelopmentSha": "b3f78a5eefc9d243f007af3d6618abe3d6a09142",
+  "inventory": {
+    "run": 45340082315,
+    "artifactId": 14895742011,
+    "artifactUrl": "https://github.com/EAKerber/MobiliPresenter2D/actions/runs/45340082315/artifacts/14895742011",
+    "mainSha": "01ded2c100fbfd8b16897e26113dc5068a83e429",
+    "developmentSha": "b3f78a5eefc9d243f007af3d6618abe3d6a09142",
+    "workflowPaths": {
+      "main": 27,
+      "development": 75,
+      "shared": 25,
+      "mainOnly": 2,
+      "developmentOnly": 50
+    },
+    "developmentEventCounts": {
+      "pull_request": 26,
+      "push": 61,
+      "workflow_dispatch": 63,
+      "schedule": 1
+    },
+    "developmentCommandCounts": {
+      "definitions": 75,
+      "runSteps": 268,
+      "distinctCommandHashes": 242,
+      "repeatedCommandHashes": 15,
+      "additionalOccurrences": 26
+    },
+    "parserWarnings": 0,
+    "openPullRequests": []
+  },
+  "findings": [
+    {
+      "contract": "Admin V5 configuration and readback",
+      "evidence": "PR #364 passed configuration-boundary, build, plan, and Admin browser checks. The Admin browser suite retained hierarchy, isolated handles persistence, and exact V5 save/readback tests.",
+      "measuredFriction": {
+        "beforeRun": 45337731741,
+        "beforeSetupSeconds": 258,
+        "beforeBrowserAssertionsSeconds": 14,
+        "afterRun": 45338943325,
+        "afterPackageInstallSeconds": 2,
+        "afterImagePullSeconds": 20,
+        "afterWholeJobSeconds": 41
+      },
+      "change": "PR #365 uses the matching Playwright 1.62.1 image with Chromium already present; all three browser tests remain.",
+      "limits": "Observed run timings are evidence for this gate pair, not a controlled benchmark of all browser workflows."
+    },
+    {
+      "contract": "NAV-004/NAV-005 public navigation",
+      "observation": "The shared 124-scenario browser command is present in the development public-navigation workflow and the production-bound NAV-005 workflow. The latter is main-pull-request-only; the former is development-pull-request/push. Their ordinary PR paths do not execute the same command twice.",
+      "viewerSpecificGate": "development-viewer-nav005-semantic.yml now runs the unique 20-case depth-2 Viewer contract; it no longer invokes the shared 124-case suite. A Viewer source change can run both the public suite and the 20-case contract because their assertions differ.",
+      "disposition": "No duplicate assertion removal proposed."
+    },
+    {
+      "contract": "Local V5 responsive scenarios",
+      "observation": "nav-flow-responsive-crossbrowser.cjs appears in three workflows: development-ci-nav-boundary (development push on its test/workflow paths), development-ci-nav-legacy (development push on historical audit inputs after its archival checks), and flow-layout-browser (main push and pull requests on layout/consumer paths).",
+      "disposition": "Same command text is not evidence of same triggering diff or equivalent setup. These workflows do not all run for the same ordinary event; preserve pending a full path-to-condition crosswalk."
+    },
+    {
+      "contract": "Local buyer V5 preparation",
+      "observation": "prepare-local-v5-browser.sh FLOW_LAYOUT_URL appears in seven steps across six development workflows, including two independent jobs in development-ci-nav-css-causality.",
+      "disposition": "Candidate setup repetition only. Separate jobs rebuild isolated fixtures; no duration evidence yet supports a shared artifact or reduced coverage."
+    },
+    {
+      "contract": "Existing scoped trigger improvements",
+      "evidence": [
+        "#344 removed candidate-assets tools/** fan-out while retaining consumed tools and app/** runtime coverage.",
+        "#341 removed only the unrelated compile-primary-pages path from five admin/browser workflow filters.",
+        "#343 and #346 retain the shared navigation suite on its proper branch scope and the Viewer-specific 20-case gate."
+      ],
+      "disposition": "Preserve mask alpha and exposed-pixel assertions; no current evidence supports further broad narrowing."
+    }
+  ],
+  "remaining": [
+    "Map all 75 development workflow definitions to changed paths, internal job conditions, commands, assertions, outcomes, and representative costs.",
+    "Enumerate test files not invoked by any current workflow and distinguish intentional local/manual tests.",
+    "Classify historical branch filters and Draft-only workflow candidates from exact live refs.",
+    "Measure costs for representative high-fanout and browser PRs before proposing any further consolidation."
+  ],
+  "limits": [
+    "The YAML inventory parser covers repository syntax but is not a general YAML validator.",
+    "Command text hashes identify declared steps; they do not prove assertion reachability or equivalence.",
+    "Repeat counts can combine separate jobs or different branch scopes and are not a duplicate-test count.",
+    "Workflow setup indicators do not include a full run-duration census.",
+    "No workflow, required gate, product runtime, Viewer behavior, mask content, Netlify settings, or Production state was changed by this receipt."
+  ]
+}
