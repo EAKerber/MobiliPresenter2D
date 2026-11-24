@@ -3,7 +3,7 @@
   "plan": "MobiliPresenter2D Plano Diretor v0.9",
   "workItem": "TST-004",
   "status": "partial",
-  "slice": "candidate-assets-mask-semantics",
+  "slice": "candidate-assets",
   "scopeLimit": "This maps only the current candidate-assets mask/pixel assertions and their trigger route. It does not complete TST-004, authorize mask changes, or recommend removing any gate.",
   "sourcePin": {
     "developmentSha": "3b339fbedd16679e42e204b461d9b77301491141",
