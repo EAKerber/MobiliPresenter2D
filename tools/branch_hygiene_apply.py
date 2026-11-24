@@ -17,6 +17,25 @@ from branch_hygiene_plan import build_plan, load_json, select_bounded_batch
 AUTH_ENV = "MOBILIPRESENTER2D_BRANCH_HYGIENE_AUTHORIZED"
 
 
+def verify_no_workflow_dependency(branch: str,
+                                  workflow_dir: Path = Path(".github/workflows")) -> list[str]:
+    """Fail closed when a live workflow names a ref selected for retirement.
+
+    GitHub Actions accepts both YAML extensions. This check applies to every
+    selected ref, including ancestry-based candidates with no squash proof.
+    """
+    if not workflow_dir.exists():
+        return []
+    matches = []
+    for pattern in ("*.yml", "*.yaml"):
+        for item in workflow_dir.glob(pattern):
+            if branch in item.read_text(encoding="utf-8"):
+                matches.append(item.name)
+    if matches:
+        raise RuntimeError("ACTIVE_WORKFLOW_REF:" + branch + ":" + ",".join(sorted(matches)))
+    return []
+
+
 def remote_refs() -> dict[str, str]:
     proc = subprocess.run(
         ["git", "ls-remote", "--heads", "origin"],
@@ -82,13 +101,7 @@ def verify_squash_merge(repository: str, token: str, entry: dict,
             or len(original_tree) != 40):
         raise RuntimeError("SQUASH_TREE_MISMATCH:" + name)
 
-    # Do not retire an old branch while a live workflow still names it.
-    workflow_dir = Path(".github/workflows")
-    if workflow_dir.exists() and any(
-        name in item.read_text(encoding="utf-8")
-        for item in workflow_dir.glob("*.yml")
-    ):
-        raise RuntimeError("SQUASH_ACTIVE_WORKFLOW_REF:" + name)
+    verify_no_workflow_dependency(name)
     return {
         "branch": name, "sha": head_sha, "pullRequest": pr_number,
         "mergeCommit": merge_sha, "treeSha": original_tree,
@@ -118,6 +131,11 @@ def apply(plan_path: Path, dispositions_path: Path, expected_plan: str,
     if remote_refs() != inventory:
         raise RuntimeError("REF_INVENTORY_DRIFT_INITIAL")
 
+    # Check every selected ref before accepting the audit. The squash proof
+    # repeats this check internally; ancestry-based candidates need it here too.
+    for item in selected:
+        if item.get("squashMerge") is None:
+            verify_no_workflow_dependency(item["branch"])
     squash_proofs = [
         result for item in selected
         if (result := verify_squash_merge(repository, token, item, fresh_plan["controlSha"])) is not None
@@ -186,8 +204,12 @@ def apply(plan_path: Path, dispositions_path: Path, expected_plan: str,
             raise RuntimeError("NEW_PROTECTION_OR_MISSING_REF:" + branch)
         if remote_refs() != expected_inventory or expected_inventory.get(branch) != sha:
             raise RuntimeError("REF_DRIFT_BEFORE_DELETE:" + branch)
+        # Recheck workflow references for ancestry and squash candidates alike
+        # immediately before mutation; the squash verifier also checks its proof.
+        verify_no_workflow_dependency(branch)
         # Recheck PR identity and exact tree *immediately* before mutation.
-        verify_squash_merge(repository, token, entry, fresh_plan["controlSha"])
+        if entry.get("squashMerge") is not None:
+            verify_squash_merge(repository, token, entry, fresh_plan["controlSha"])
 
         subprocess.run([
             "git", "push", f"--force-with-lease=refs/heads/{branch}:{sha}",
