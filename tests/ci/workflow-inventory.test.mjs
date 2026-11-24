@@ -70,3 +70,39 @@ test('glass browser test changes reach both push and pull request gates', () => 
   assert(push.includes("'tests/exposed-sides-glass.cjs'"));
   assert(pullRequest.includes("'tests/exposed-sides-glass.cjs'"));
 });
+
+
+test('read-only output, comments, and identifiers do not become mutation signals', () => {
+  const source = \`name: Read-only receipt
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Print historical context
+        run: |
+          # Do not delete branch refs from this read-only report.
+          echo "branch deletion is only historical context"
+          node -e 'const deleteBranchPlan = false;'
+\`;
+  const workflow = definition(source, '.github/workflows/read-only.yml', 'blob-sha');
+  assert.deepEqual(workflow.mutationSignals, []);
+  assert.equal(workflow.classification, 'manual-or-event-driven');
+});
+
+test('expected rejected HTTP write-method probes carry their assertion and execution conditions', () => {
+  const source = readFileSync(path.join(root, '.github/workflows/public-routing-before-clerk.yml'), 'utf8');
+  const workflow = definition(source, '.github/workflows/public-routing-before-clerk.yml', 'blob-sha');
+  const probe = workflow.negativeHttpMethodProbes.find(({ method }) => method === 'PUT');
+  assert(probe, 'the inventory should retain the expected negative PUT probe');
+  assert.equal(probe.expectedStatus, 405);
+  assert.equal(probe.jobId, 'browser');
+  assert.equal(probe.jobIf, "github.event_name == 'pull_request' && github.event.pull_request.draft != true && github.base_ref == 'main'");
+  assert.equal(probe.step, 'Public projection and negative endpoint checks');
+  assert.match(probe.commandLine, /test .*curl.*-X PUT.*= 405/);
+  assert.deepEqual(workflow.mutationSignals, [],
+    'an HTTP method that is asserted to be rejected is not a mutation signal');
+});
