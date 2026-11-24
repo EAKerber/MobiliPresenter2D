@@ -1,5 +1,48 @@
 # Gate inventory and friction review — 2026-11-24
 
+## Current dispatch and mutation-signal review — exact workflow inventory pin `650eee3b5ffa7c564611136a72d097d6777ad221`
+
+This slice distinguishes runnable manual gates, consumed receipt files, and conservative mutation signals. It does not change workflow behavior.
+
+### Dispatch-only definitions
+
+At the exact inventory pin, 11 development workflow definitions declared only `workflow_dispatch`. Three are also present on `main` and therefore have a viable default-branch manual entry: `arc03c-static-page-build-gate.yml`, `module02-fidelity.yml`, and `r0-contract.yml`.
+
+Eight definitions exist only on `development`, so their manual-dispatch event is not a dependable entry point while the files remain absent from the default branch:
+
+| Workflow | Current source behavior | Disposition |
+|---|---|---|
+| `development-access-dto-aux-retire.yml` | Echoes a completed historical outcome; read-only permission. | Consumed receipt; no active check. |
+| `development-aux-retirement.yml` | Echoes that A1/A2 manifests were consumed and that the workflow cannot delete refs; read-only permission. | Consumed placeholder; no active check. |
+| `development-nav-aux-retire.yml` | Echoes that NAV-05 auxiliary cleanup already completed; read-only permission. | Consumed receipt; no active check. |
+| `development-public-dto-aux-retire.yml` | Echoes a completed CP-PUBLIC-03 outcome; read-only permission. | Consumed receipt; no active check. |
+| `development-scene-asset-aux-retire.yml` | Echoes a completed asset-provenance cleanup; read-only permission. | Consumed receipt; no active check. |
+| `development-viewer_price_aux-retire.yml` | Echoes a completed Viewer-price cleanup; read-only permission. | Consumed receipt; no active check. |
+| `development-vis002-aux-retire.yml` | Echoes a completed VIS002 outcome; read-only permission. | Consumed receipt; no active check. |
+| `development-pr-archive.yml` | Manual audit job plus a write-capable tag-apply job whose condition requires `github.event_name == 'push'`; no push trigger is declared. | Apply is unreachable under the declared events. Keep inert; do not add a trigger until its manifest and replacement path are re-audited. |
+
+The seven echo-only definitions inflate the active-workflow inventory and advertise controls that cannot perform their namesake operation. Their historical run IDs remain in Actions and their source remains in Git history. A follow-up may move them to an archival docs directory after confirming no non-workflow automation depends on their paths; do not convert them to automatic gates. The PR-archive flow is a separate hold because it has a write-capable job.
+
+### Mutation-signal precision
+
+The inventory reports nine workflow paths with write or operational signals. This is a conservative review queue, not a count of workflows that mutate repository state. Source inspection confirmed several non-write cases:
+
+- `development-aux-retirement.yml` only echoes that it cannot delete refs.
+- `development-branch-reconciliation.yml` fetches refs and runs a read-only scanner; it has `contents: read` and explicitly rejects non-fast-forward drift.
+- `branch-hygiene.yml` observes refs and prints delete candidates; it has no write permission or apply step.
+- `public-routing-before-clerk.yml` sends a negative HTTP `PUT` probe whose assertion expects 405; the scanner treats the method token as an operational signal, not as evidence that the endpoint changed state.
+
+The write-capable workflows still require permission/job-condition review. The inventory’s current heuristic mixes text signals, permission presence, and effects; TST-001 remains open until the crosswalk separates those categories and ties each command to its reachable assertion.
+
+### Next gate work
+
+1. Archive the seven consumed echo-only workflow definitions outside `.github/workflows`, preserving their source and run links.
+2. Keep `development-pr-archive.yml` inert while its dispatch/apply event contract and exact archive manifest are reviewed.
+3. Add focused inventory cases for read-only output, comments/identifiers, and expected negative HTTP-method probes before changing the signal classifier.
+4. Re-run inventory on the resulting exact development push, then refresh the checked-in snapshot from that artifact.
+
+
+
 ## Exact readback at PR base
 
 - Product `main`: `01ded2c100fbfd8b16897e26113dc5068a83e429` (tree `d1588ab2a71c5de7e8b7cfaa907d5e5637fa7178`).
