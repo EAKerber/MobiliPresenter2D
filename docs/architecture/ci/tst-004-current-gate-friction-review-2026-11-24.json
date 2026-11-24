@@ -76,10 +76,12 @@
     }
   ],
   "remaining": [
+    "Decode and reconcile the exact-head inventory artifact before publishing updated workflow counts.",
+    "Continue the TST-002 contract-first matrix for public DTO/pricing, navigation and keyboard, CSS/theme, assets, and localization; keep source inspection distinct from execution evidence.",
     "Map all 75 development workflow definitions to changed paths, internal job conditions, commands, assertions, outcomes, and representative costs.",
     "Enumerate test files not invoked by any current workflow and distinguish intentional local/manual tests.",
     "Classify historical branch filters and Draft-only workflow candidates from exact live refs.",
-    "Measure costs for representative high-fanout and browser PRs before proposing any further consolidation."
+    "Measure costs for representative high-fanout and browser PRs before proposing further consolidation."
   ],
   "limits": [
     "The YAML inventory parser covers repository syntax but is not a general YAML validator.",
@@ -87,5 +89,48 @@
     "Repeat counts can combine separate jobs or different branch scopes and are not a duplicate-test count.",
     "Workflow setup indicators do not include a full run-duration census.",
     "No workflow, required gate, product runtime, Viewer behavior, mask content, Netlify settings, or Production state was changed by this receipt."
-  ]
+  ],
+  "latestReadback": {
+    "currentDevelopmentSha": "2a7b1651cfa77732dd5918a2d8c2a86e748dd48e",
+    "currentDevelopmentTree": "33315b2916241c6e812ded1ed0e50776aa47a6d1",
+    "inventoryGeneratedAtSha": "eee44926e5aa5ce90cf61fc13b0b02a7eef1b1a7",
+    "inventoryRun": 45353425858,
+    "inventoryArtifactId": 14900584471,
+    "inventoryArtifactName": "tst-001-workflow-inventory-eee44926e5aa5ce90cf61fc13b0b02a7eef1b1a7",
+    "inventoryArtifactDigest": "sha256:7deeea415f746b64a294671c94385f54c51940f7db3de473280776906dcaf536",
+    "inventoryArtifactExpires": "2026-12-24",
+    "artifactRowsReadBack": false,
+    "countStatus": "UNKNOWN for the latest artifact; do not apply the historical e05b37a or b3f78a5 counts to this artifact without decoding its contents.",
+    "interveningCommits": [
+      {
+        "pullRequest": 373,
+        "sha": "189bc7dc563e9d4bcc0079d54f152fdac9092bb4",
+        "scope": "documentation-only; Buyer authorization crosswalk"
+      },
+      {
+        "pullRequest": 374,
+        "sha": "2a7b1651cfa77732dd5918a2d8c2a86e748dd48e",
+        "scope": "documentation-only; V5 endpoint/save crosswalk"
+      }
+    ],
+    "openPullRequests": 0
+  },
+  "tst002CrosswalkProgress": {
+    "status": "in_progress; two additional bounded slices integrated in development",
+    "pullRequests": [
+      {
+        "number": 373,
+        "path": "docs/architecture/ci/tst-002-buyer-auth-boundary-crosswalk-2026-11-24.md",
+        "assertionIds": 8,
+        "scope": "Buyer endpoint authorization and DTO allowlist"
+      },
+      {
+        "number": 374,
+        "path": "docs/architecture/ci/tst-002-v5-write-readback-crosswalk-2026-11-24.md",
+        "assertionIds": 10,
+        "scope": "V5 endpoint authorization, stored-state failures, CAS and exact readback"
+      }
+    ],
+    "limits": "Both slices are source-inspected E0; no exact-head test execution or live service evidence is claimed."
+  }
 }
