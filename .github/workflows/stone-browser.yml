@@ -4,6 +4,7 @@ on:
     branches: [main]
     paths:
       - 'app/**'
+      - '!app/tools/test-v5-normal-save.js'
       - '!app/tools/test-v5-endpoint-safety.js'
       - 'tests/stone-browser.cjs'
       - '.github/workflows/stone-browser.yml'
@@ -13,6 +14,7 @@ on:
   pull_request:
     paths:
       - 'app/**'
+      - '!app/tools/test-v5-normal-save.js'
       - '!app/tools/test-v5-endpoint-safety.js'
       - 'tests/stone-browser.cjs'
       - '.github/workflows/stone-browser.yml'

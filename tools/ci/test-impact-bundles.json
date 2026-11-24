@@ -115,6 +115,34 @@
           "assertion": "typed price publication, save/ETag contract, endpoint safety, public projection, and local cross-browser Viewer behavior"
         }
       ]
+    },
+    {
+      "id": "v5-normal-save-concurrency",
+      "contract": [
+        "DOM-004 concurrent configuration edits",
+        "TST-009 concurrent save conflict"
+      ],
+      "consumer": [
+        "Admin V5 normal save",
+        "configuration publication"
+      ],
+      "risks": [
+        "a stale edit silently overwrites a newer save",
+        "a save conflict is retried or misclassified"
+      ],
+      "paths": [
+        "app/tools/test-v5-normal-save.js"
+      ],
+      "execution": [
+        {
+          "workflow": ".github/workflows/buyer-configuration-boundary.yml",
+          "scope": "pull_request and push (all branches)",
+          "commands": [
+            "node app/tools/test-v5-normal-save.js"
+          ],
+          "assertion": "Compare-and-set preserves one winning edit and returns one source_etag_conflict loser without retry."
+        }
+      ]
     }
   ]
 }

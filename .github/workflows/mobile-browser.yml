@@ -5,6 +5,7 @@ on:
     branches: [main]
     paths:
       - 'app/**'
+      - '!app/tools/test-v5-normal-save.js'
       - '!app/tools/test-v5-endpoint-safety.js'
       - 'tests/mobile-pip-main-browser.cjs'
       - 'tests/home-hero-phone-geometry-browser.cjs'
@@ -16,6 +17,7 @@ on:
   pull_request:
     paths:
       - 'app/**'
+      - '!app/tools/test-v5-normal-save.js'
       - '!app/tools/test-v5-endpoint-safety.js'
       - 'tests/mobile-pip-main-browser.cjs'
       - 'tests/home-hero-phone-geometry-browser.cjs'

@@ -5,10 +5,12 @@ on:
     branches: [main]
     paths:
       - 'app/**'
+      - '!app/tools/test-v5-normal-save.js'
       - '.github/workflows/app-build-purity.yml'
   pull_request:
     paths:
       - 'app/**'
+      - '!app/tools/test-v5-normal-save.js'
       - '.github/workflows/app-build-purity.yml'
   workflow_dispatch:
 

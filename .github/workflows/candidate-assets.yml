@@ -5,6 +5,7 @@ on:
     paths:
       - 'app/**'
       - '!app/tools/test-v5-endpoint-safety.js'
+      - '!app/tools/test-v5-normal-save.js'
       - 'review-assets/**'
       - 'reference/variant-cases.json'
       - 'reference/visual-debt.md'
@@ -39,6 +40,7 @@ on:
     paths:
       - 'app/**'
       - '!app/tools/test-v5-endpoint-safety.js'
+      - '!app/tools/test-v5-normal-save.js'
       - 'review-assets/**'
       - 'reference/variant-cases.json'
       - 'reference/visual-debt.md'

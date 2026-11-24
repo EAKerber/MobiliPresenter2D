@@ -53,6 +53,34 @@ test('candidate asset tool triggers are limited to files that the gate consumes'
   assert(!workflow.includes("'tools/**'"), 'the broad tools trigger would run asset checks for unrelated CI tooling');
 });
 
+test('V5 normal-save concurrency selects only its specific boundary bundle', () => {
+  const selection = selectBundles(['app/tools/test-v5-normal-save.js'], map);
+  assert.deepEqual(ids(selection), ['v5-normal-save-concurrency']);
+  assert.equal(selection.fallback.enabled, false);
+  assert.deepEqual(selection.unknownPaths, []);
+  assert(selection.selectedBundles[0].execution.some((entry) =>
+    entry.workflow === '.github/workflows/buyer-configuration-boundary.yml' &&
+    entry.commands.includes('node app/tools/test-v5-normal-save.js')
+  ));
+});
+
+test('V5 normal-save test is excluded from unrelated broad app gates', () => {
+  const unrelated = [
+    '.github/workflows/app-build-purity.yml',
+    '.github/workflows/candidate-assets.yml',
+    '.github/workflows/variant-fidelity.yml',
+    '.github/workflows/mobile-browser.yml',
+    '.github/workflows/stone-browser.yml',
+    '.github/workflows/summary-pricing-browser.yml',
+    '.github/workflows/arc13-inventory-integrity.yml'
+  ];
+  for (const workflowPath of unrelated) {
+    const workflow = readFileSync(path.join(root, workflowPath), 'utf8');
+    const exclusions = workflow.match(/- '!app\/tools\/test-v5-normal-save\.js'/g) ?? [];
+    assert.equal(exclusions.length, 2, `${workflowPath} must exclude the test from both push and pull_request fan-out`);
+  }
+});
+
 test('unclassified historical paths trigger the conservative fallback', () => {
   const selection = selectBundles(['app/unknown/new-contract.js'], map);
   assert.deepEqual(ids(selection), ['public-navigation', 'candidate-assets', 'viewer-pricing']);
