@@ -191,3 +191,14 @@ The refreshed inventory still records 27 \`pull_request\`, 62 \`push\`, 55 \`wor
 The public-routing workflow's expected \`PUT\` probe is now represented separately with its \`405\` assertion, job ID, and exact job condition. In the development definition the browser job is limited to non-draft PRs targeting \`main\`; the inventory no longer counts that rejected probe as a write signal. This fixes one known false positive while keeping write-command and permission signals visible.
 
 TST-001 remains open: command-to-assertion reachability and exact execution outcomes have not been mapped across all critical contract families. The updated inventory adds job IDs and job conditions to command rows; it does not claim that command capture alone proves assertion coverage.
+
+
+## TST-001 command reachability readback
+
+PR #393 integrated the first executable command-route validation slice. On that PR head, the development test-impact gate passed at run #45384699031. The subsequent exact development push [#45384782187](https://github.com/EAKerber/MobiliPresenter2D/actions/runs/45384782187) succeeded at \`development@29cd75c6535a81e47b9801eb58fb4394ec411937\` (tree \`63e6c093171e502d74642c5de9f8633e09d1d0d4\`). Inventory artifact ID \`14915292924\`, digest \`sha256:f20f0f7fca387b59d3b770e7d66bdf4caa1dc865c7ac3e40f5914385ce931acc\`.
+
+The inventory remains at 27 \`main\` workflow files and 68 \`development\` files (25 shared; 2 main-only; 43 development-only). It records 27 \`pull_request\`, 62 \`push\`, 55 \`workflow_dispatch\`, and 1 \`schedule\` event across development definitions; 4 definitions are dispatch-only. The union has 70 branch-version definitions, 7 conservative mutation/operation-signal paths, zero parser warnings, and no open PRs at the inventory readback.
+
+The selector crosswalk test now resolves every declared command in all five impact bundles to an actual parsed workflow \`run\` step, checks each entry names an event the workflow declares, and confirms the route retains job ID, job/step conditions, and command digest. This caught and corrected a stale candidate-assets command: the workflow runs the \`tests/*.py\` files directly, not dotted unittest module names. The inventory parser now folds YAML \`>-\` run blocks into their shell command form.
+
+This is a verified reachability slice for the current impact map. The assertion description still sits at the execution-entry level rather than attaching an independently named assertion and observed result to every command. Do not mark the full workflow → trigger → job → command → assertion → result crosswalk complete on this evidence alone.
