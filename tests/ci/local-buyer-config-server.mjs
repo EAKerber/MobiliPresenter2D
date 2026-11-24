@@ -18,6 +18,7 @@ import pricingContract from "../../app/core/pricing-contract.js";
 import presentationPolicy from "../../app/data/presentation-policy-defaults.js";
 const root=resolve("app");
 const port=Number(process.env.CI_LOCAL_CONFIG_PORT||8123);
+if(!Number.isInteger(port)||port<0||port>65535)throw new Error("CI_LOCAL_CONFIG_PORT must be an integer from 0 to 65535");
 const v3=configCore.createDefaultAdministration(defaults,catalog,priceBook,scene);
 const inspected=publishedReader.inspectPublishedRaw({kind:"stored",etag:"LOCAL_ONLY",value:v3},
   {configuration:configCore,administrationV5,catalog,priceBook,scene});
@@ -62,7 +63,18 @@ const server=http.createServer(async(req,res)=>{
   res.writeHead(404,{"Content-Type":"text/plain"});res.end("not found");
  }
 });
+let stopping=false;
+const stop=()=>{
+ if(stopping)return;
+ stopping=true;
+ server.close(error=>{
+  if(error){console.error("CI_LOCAL_BUYER_DEFAULTS_FIXTURE_CLOSE_FAILED "+error.message);process.exitCode=1}
+ });
+};
+process.once("SIGINT",stop);
+process.once("SIGTERM",stop);
 server.listen(port,"127.0.0.1",()=>console.log("CI_LOCAL_BUYER_DEFAULTS_FIXTURE_READY "+JSON.stringify({
+ port:server.address().port,
  source:"checked-in defaults",schema:v3.schemaVersion,buyerSchema:payload.schemaVersion,
  warning:"Local testing only; not a Netlify published Blob"
 })));
