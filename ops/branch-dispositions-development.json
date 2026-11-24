@@ -5,5 +5,18 @@
     "main",
     "development"
   ],
-  "terminalBranches": []
+  "terminalBranches": [
+    {
+      "branch": "codex/tst004-mask-assertion-crosswalk-20261124",
+      "sha": "531c2814235c9524289ccb9efd909f43e01d908b",
+      "reason": "merged-pull-request-head",
+      "allowDelete": true,
+      "evidence": {
+        "pullRequest": 399,
+        "mergedDevelopmentSha": "fbe6b9b409dd67884dd9447b02f87752a7d0f8ff",
+        "treeSha": "80d486ab8044a398286de26f26aa70853489df08"
+      },
+      "note": "Exact PR head #399 is integrated into development; full source tree equals squash merge and current development. The PR audit rechecks exact SHA, open-PR state, protection, workflow references, and readback before any mutation."
+    }
+  ]
 }
