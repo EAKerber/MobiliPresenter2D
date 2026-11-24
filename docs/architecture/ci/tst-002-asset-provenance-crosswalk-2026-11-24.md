@@ -6,7 +6,7 @@ This slice maps the archived image-provenance audit and its negative fixtures to
 
 Source pin before this candidate: Product development @ `5349f1c2a3e9d8b03ca67856443ba8be8ee54089`. The candidate changes only a GitHub Actions workflow and CI documentation. No Product runtime, Viewer, mask data, asset bytes, or asset consumers change.
 
-Evidence status: exact PR-head and post-merge development runs passed on the source below. These runs prove automated assertion execution and archive reconciliation; they do not approve visual promotion.
+Evidence status: exact PR-head and post-merge development runs passed. The current workflow blob is pinned below; PR #386 also removed the inaccessible manual entry and passed the same gate on both its PR head and integrated push. These runs prove automated assertion execution and archive reconciliation; they do not approve visual promotion.
 
 ## Source pins
 
@@ -14,7 +14,7 @@ Evidence status: exact PR-head and post-merge development runs passed on the sou
 |---|---|---|
 | Provenance checker | `tools/development_asset_provenance_audit.py` | `f5a1cef7e04345688348e727caf96ad13848d572` |
 | Negative and parity fixtures | `tests/test_development_asset_provenance.py` | `aaf99c83d9fddb737e55bf2e026ef1a7fd105230` |
-| Workflow | `.github/workflows/development-asset-provenance.yml` | `7a2961741ea231717d371203dab39afbe783c704` |
+| Workflow | `.github/workflows/development-asset-provenance.yml` | `d99726152500ad03548b01b67897413aa79868d2` |
 | Archived manifest | `archive/m2d/ds02-imagens-originais-e9c405bf:manifest.json` | `e1ef704920e8be04091a4ff48815747176521255` |
 | Pinned archive commit | `archive/m2d/ds02-imagens-originais-e9c405bf` | `e9c405bfc0189baed8b4b679a1113c37b6ddbd21` |
 
@@ -33,6 +33,6 @@ The workflow runs the existing Python unittest fixture set, fetches only two exa
 
 ## Reviewed friction and limits
 
-Before PR #384, the audit was only `workflow_dispatch`, which was unavailable as a dependable manual entry point because this workflow is absent from the default branch; edits to an in-scope source image could bypass automatic execution. PR #384 added scoped PR and push triggers for all 40 exact paths and the four control files. Its exact-head run #45372393480 passed on `f661bd7a1f942d223b1ddec9d79ba4ffb28c4226`; the post-merge push run #45372633717 passed on `54787e51528ae989fb2bc2b6690f87b6aa8b773a`. The post-merge provenance job passed negative guards, fetched only the two pinned archive tags, reconciled all 40 original image Git blobs and scene assets, and uploaded proof-only artifact `14909786529` (`sha256:21551bc3325b1809223ab6a54edd6215435cb5b28b660afbc5bdd5c38a20d4b1`). The gate remains read-only. No assertion was removed or weakened.
+Before PR #384, the audit was only `workflow_dispatch`, which was unavailable as a dependable manual entry point because this workflow is absent from the default branch; edits to an in-scope source image could bypass automatic execution. PR #384 added scoped PR and push triggers for all 40 exact paths and the four control files. Its exact-head run #45372393480 passed on `f661bd7a1f942d223b1ddec9d79ba4ffb28c4226`; the post-merge push run #45372633717 passed on `54787e51528ae989fb2bc2b6690f87b6aa8b773a`. The post-merge provenance job passed negative guards, fetched only the two pinned archive tags, reconciled all 40 original image Git blobs and scene assets, and uploaded proof-only artifact `14909786529` (`sha256:21551bc3325b1809223ab6a54edd6215435cb5b28b660afbc5bdd5c38a20d4b1`). The gate remains read-only. The follow-up change in PR #386 removed only the dead `workflow_dispatch` declaration; its PR check passed at `187e5d654e8fe28322666d9c6a7e9c3c539bf5d4` in run #45376800161, and the current workflow blob `d99726152500ad03548b01b67897413aa79868d2` passed post-merge run #45376907364 on `650eee3b5ffa7c564611136a72d097d6777ad221`. That run uploaded artifact `14912370706` (`sha256:6c26b41532092f772d5e931fe2db5da59c0668ffc6925d313c4148d42e4a33ee`). No assertion was removed or weakened.
 
 This readback corrects the earlier E0/pending statement: exact execution is now confirmed for this slice. It is not complete TST-002 or TST-001: it does not map every asset family, every workflow command, all event conditions, owners, or representative end-to-end cost. It makes no claim of visual/human approval and no change to masks or Viewer behavior.
