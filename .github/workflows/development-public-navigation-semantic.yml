@@ -7,6 +7,7 @@ on:
     paths:
       - 'tests/ci/public-navigation-semantic-browser.mjs'
       - '.github/workflows/development-public-navigation-semantic.yml'
+      - '.github/workflows/nav005-public-header-browser.yml'
       - 'architecture/fragments/**'
       - 'architecture/pages/**'
       - 'architecture/generated/**'
@@ -31,6 +32,7 @@ on:
     paths:
       - 'tests/ci/public-navigation-semantic-browser.mjs'
       - '.github/workflows/development-public-navigation-semantic.yml'
+      - '.github/workflows/nav005-public-header-browser.yml'
       - 'architecture/fragments/**'
       - 'architecture/pages/**'
       - 'architecture/generated/**'
