@@ -1,14 +1,11 @@
 name: Development test impact plan (advisory)
 
 on:
-  workflow_dispatch:
-    inputs:
-      main_sha:
-        description: Exact main commit to inventory
-        required: true
-      development_sha:
-        description: Exact development commit to inventory
-        required: true
+  push:
+    branches: [development]
+    paths:
+      - '.github/workflows/**'
+      - 'tools/ci/build-workflow-inventory.mjs'
   pull_request:
     branches: [development]
     paths:
@@ -26,6 +23,7 @@ on:
 
 permissions:
   contents: read
+  pull-requests: read
 
 jobs:
   plan:
@@ -48,30 +46,41 @@ jobs:
         run: node tools/ci/select-test-bundles.mjs --base "$BASE_SHA" --head "$HEAD_SHA"
 
   inventory:
-    if: github.event_name == 'workflow_dispatch'
+    if: github.event_name == 'push'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          ref: ${{ inputs.development_sha }}
+          ref: ${{ github.sha }}
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - name: Generate SHA-pinned workflow inventory
+      - name: Capture exact inventory refs and open PRs
         env:
-          MAIN_SHA: ${{ inputs.main_sha }}
-          DEVELOPMENT_SHA: ${{ inputs.development_sha }}
+          GH_TOKEN: ${{ github.token }}
         run: |
-          test "$(git rev-parse HEAD)" = "$DEVELOPMENT_SHA"
+          git fetch origin main
+          main_sha="$(git rev-parse FETCH_HEAD)"
+          development_sha="$(git rev-parse HEAD)"
+          test "$development_sha" = "$GITHUB_SHA"
+          development_tree="$(git rev-parse 'HEAD^{tree}')"
+          mkdir -p artifacts
+          gh pr list --state open --json number,url,headRefName,headRefOid,baseRefName,baseRefOid > artifacts/open-prs.json
+          echo "main_sha=$main_sha" >> "$GITHUB_OUTPUT"
+          echo "development_sha=$development_sha" >> "$GITHUB_OUTPUT"
+          echo "development_tree=$development_tree" >> "$GITHUB_OUTPUT"
+      - name: Generate SHA-pinned workflow inventory
+        id: refs
+        run: |
           node tools/ci/build-workflow-inventory.mjs \
-            --main-sha "$MAIN_SHA" \
-            --development-pin "$DEVELOPMENT_SHA" \
-            --development-tree "$(git rev-parse 'HEAD^{tree}')" \
-            --open-prs-json '[]' \
+            --main-sha "${{ steps.refs.outputs.main_sha }}" \
+            --development-pin "${{ steps.refs.outputs.development_sha }}" \
+            --development-tree "${{ steps.refs.outputs.development_tree }}" \
+            --open-prs-json "$(cat artifacts/open-prs.json)" \
             --output artifacts/tst-001-workflow-inventory.json
       - uses: actions/upload-artifact@v4
         with:
-          name: tst-001-workflow-inventory-${{ inputs.development_sha }}
+          name: tst-001-workflow-inventory-${{ github.sha }}
           path: artifacts/tst-001-workflow-inventory.json
           retention-days: 30
