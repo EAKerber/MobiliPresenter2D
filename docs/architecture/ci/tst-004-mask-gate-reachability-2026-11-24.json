@@ -46,8 +46,8 @@
       "change": "Replace tools/** in pull_request and push filters with the exact 15 scripts, renderers, helpers, and requirements file consumed by the candidate asset workflow; retain app/** because that gate runs app/npm test and reads runtime asset consumers",
       "localVerification": "PASS 9/9 test-impact-selector cases, including exact tool-path mapping and rejection of the broad tools/** trigger",
       "candidatePullRequest": 344,
-      "candidateHeadSha": "934612eb37d1fce550e2431ec6b88cf4d321ea9c",
-      "workflowRerun": "pending updated PR head"
+      "evidenceHeadSha": "111f7f41b3d8dbc4d5299e178281cb950e42990f",
+      "workflowRerun": "PASS at evidenceHeadSha; run https://github.com/EAKerber/MobiliPresenter2D/actions/runs/45307538355"
     }
   ],
   "governance": {
