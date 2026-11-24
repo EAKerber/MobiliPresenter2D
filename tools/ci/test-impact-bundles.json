@@ -143,6 +143,36 @@
           "assertion": "Compare-and-set preserves one winning edit and returns one source_etag_conflict loser without retry."
         }
       ]
+    },
+    {
+      "id": "buyer-configuration-boundary",
+      "contract": ["DOM-003 published-source states", "DOM-004 V5 save, CAS, and readback", "TST-009 configuration endpoint safety"],
+      "consumer": ["Admin published configuration", "V5 normal save", "Buyer configuration endpoint"],
+      "risks": ["missing or invalid published state is presented as valid", "a stale edit overwrites a newer save or readback is misclassified", "endpoint authorization or Buyer DTO boundaries regress"],
+      "paths": [
+        "app/tools/test-published-configuration.js",
+        "app/tools/test-published-buyer-projection.js",
+        "app/tools/test-v5-endpoint-safety.js",
+        "app/tools/test-v5-normal-save.js",
+        "netlify/access/**",
+        "netlify/functions/buyer-configuration.mjs",
+        "netlify/functions/configuration.mjs",
+        "tests/buyer-configuration-endpoint.test.mjs"
+      ],
+      "execution": [
+        {
+          "workflow": ".github/workflows/buyer-configuration-boundary.yml",
+          "scope": "pull_request and push on main/development (path filtered)",
+          "commands": [
+            "node app/tools/test-published-configuration.js",
+            "node app/tools/test-v5-normal-save.js",
+            "node app/tools/test-v5-endpoint-safety.js",
+            "node app/tools/test-published-buyer-projection.js",
+            "node --test tests/buyer-configuration-endpoint.test.mjs"
+          ],
+          "assertion": "Published-source states, V5 CAS/readback, configuration endpoint authorization and payload safety, and the Buyer DTO allowlist."
+        }
+      ]
     }
   ]
 }
