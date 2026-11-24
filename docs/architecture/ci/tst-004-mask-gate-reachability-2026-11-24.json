@@ -52,9 +52,13 @@
     {
       "priority": "P1",
       "contract": "workflow inventory and remaining high-friction NAV overlap",
-      "finding": "Pinned TST-001 inventory now records 27 main and 75 development workflow files (25 shared; 2 main-only; 50 development-only), with 93 unique file versions parsed and zero warnings. Three development workflows beyond the primary semantic gate still invoke the same NAV browser script; two also retain historical source/provenance checks, and one adds a distinct 20-case secondary-header gate. The full command-to-assertion map and run-cost evidence are still pending.",
+      "finding": "Pinned TST-001 inventory records 27 main and 75 development workflow files (25 shared; 2 main-only; 50 development-only), with 93 unique file versions parsed and zero warnings. Follow-up PR #346 removed the duplicate shared NAV browser invocation from the Viewer reconciliation workflow while preserving its 20 exclusive cases and historical audit. Two narrowly triggered historical workflows still invoke the shared NAV suite when their audit inputs change; their separate provenance artifacts remain intact. The full command-to-assertion map and run-cost evidence are still pending.",
       "inventory": "docs/architecture/ci/tst-001-workflow-inventory-2026-11-24.json",
-      "review": "docs/architecture/ci/tst-001-gate-friction-review-2026-11-24.md"
+      "review": "docs/architecture/ci/tst-001-gate-friction-review-2026-11-24.md",
+      "followUpPullRequest": 346,
+      "followUpHeadSha": "59826c9bbb073a3751483e1df9e307dd31409ea3",
+      "developmentIntegrationSha": "e143cc078d943f2ac0938a1aeb27e84f2c429438",
+      "viewerSpecificGateRun": "PASS; run https://github.com/EAKerber/MobiliPresenter2D/actions/runs/45311264303"
     }
   ],
   "governance": {
@@ -67,7 +71,8 @@
     "candidateAssetsWorkflow": "PASS on PR #342 head bb29d300026d3c39374440d4bb29cfce185fa32f; six applicable gates passed",
     "aboutSkipLinkWorkflow": "PASS on PR #342 head bb29d300026d3c39374440d4bb29cfce185fa32f",
     "developmentNavigationWorkflow": "PASS on PR #343 head 043c660a667a08af82b080d4f68ff9300fe71367; 124 scenario gate passed",
-    "workflowInventory": "Generated from pinned main/development sources with zero parser warnings; PR-level current refs were independently compared to the pins on 2026-11-24"
+    "workflowInventory": "Generated from pinned main/development sources with zero parser warnings; PR-level current refs were independently compared to the pins on 2026-11-24",
+    "viewerNavDeduplication": "PASS on PR #346 head 59826c9bbb073a3751483e1df9e307dd31409ea3; retained 20-case Viewer-specific browser gate"
   },
   "evidence": {
     "pullRequest": {
