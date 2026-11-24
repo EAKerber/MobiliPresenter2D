@@ -51,6 +51,22 @@ function makeStore(initial) {
   };
 }
 
+function makeRawStore(data, etag = '"fixture-raw"') {
+  let writeCount = 0;
+  return {
+    get writes() { return writeCount; },
+    async getWithMetadata(key, options) {
+      assert.equal(key, "published");
+      assert.deepEqual(options, { type: "text", consistency: "strong" });
+      return { data, etag, metadata: {} };
+    },
+    async setJSON() {
+      writeCount++;
+      return { modified: false };
+    }
+  };
+}
+
 async function main() {
   const endpointPath = path.resolve(__dirname, "../../netlify/functions/configuration.mjs");
   const source = fs.readFileSync(endpointPath, "utf8");
@@ -268,6 +284,69 @@ async function main() {
       status: 409, body: { error: "stored_configuration_invalid", code: "invalid_v5" }
     });
     assert.equal(invalidV5Store.writes, 0, "invalid stored v5 must not be replaced");
+
+    // Missing, malformed, unsupported and invalid legacy sources must stay
+    // distinct at the HTTP boundary; none may become an editable default.
+    const assertStoredState = async (store, name, expectedGet, expectedPut) => {
+      viewer = { id: "admin-1", roles: ["admin"] };
+      globalThis.__v5ReadinessHarness = {
+        ...globalThis.__v5ReadinessHarness,
+        getDeployStore: () => store
+      };
+      const stateEndpoint = await import("data:text/javascript;base64," +
+        Buffer.from(moduleSource + "\\n// stored-state-" + name).toString("base64"));
+      const send = async (method) => {
+        const response = await stateEndpoint.default(
+          new Request("https://unit-test.invalid/api/configuration", {
+            method,
+            headers: method === "PUT" ? { "Content-Type": "application/json" } : {},
+            body: method === "PUT" ? JSON.stringify(v5) : undefined
+          }),
+          previewContext
+        );
+        return { status: response.status, body: await response.json() };
+      };
+      assert.deepEqual(await send("GET"), expectedGet, name + " GET");
+      assert.deepEqual(await send("PUT"), expectedPut, name + " PUT");
+      assert.equal(store.writes, 0, name + " source must not be replaced");
+    };
+
+    const missingStore = makeStore(null);
+    await assertStoredState(
+      missingStore, "missing",
+      { status: 404, body: { error: "published_configuration_missing" } },
+      { status: 409, body: { error: "published_configuration_missing" } }
+    );
+
+    const malformedStore = makeRawStore("{not-json");
+    await assertStoredState(
+      malformedStore, "malformed-json",
+      { status: 422, body: { error: "stored_configuration_invalid", code: "invalid_stored_json" } },
+      { status: 409, body: { error: "stored_configuration_invalid", code: "invalid_stored_json" } }
+    );
+
+    const badMetadataStore = makeRawStore(JSON.stringify(v3), "");
+    await assertStoredState(
+      badMetadataStore, "invalid-metadata",
+      { status: 422, body: { error: "stored_configuration_invalid", code: "invalid_blob_metadata" } },
+      { status: 409, body: { error: "stored_configuration_invalid", code: "invalid_blob_metadata" } }
+    );
+
+    const unknownSchemaStore = makeStore({ ...v3, schemaVersion: "ConfiguratorAdministration2D 9.0" });
+    await assertStoredState(
+      unknownSchemaStore, "unknown-schema",
+      { status: 422, body: { error: "stored_configuration_invalid", code: "unsupported_stored_schema" } },
+      { status: 409, body: { error: "stored_configuration_invalid", code: "unsupported_stored_schema" } }
+    );
+
+    const invalidV3 = structuredClone(v3);
+    invalidV3.stages = null;
+    const invalidV3Store = makeStore(invalidV3);
+    await assertStoredState(
+      invalidV3Store, "invalid-v3",
+      { status: 422, body: { error: "stored_configuration_invalid", code: "invalid_v3" } },
+      { status: 409, body: { error: "stored_configuration_invalid", code: "invalid_v3" } }
+    );
 
     // The body limit applies to the actual UTF-8 payload even without a
     // Content-Length header, before any configuration read or write.
