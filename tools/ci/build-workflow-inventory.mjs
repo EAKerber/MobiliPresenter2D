@@ -170,6 +170,48 @@ function blob(sha, file) {
   return git(['rev-parse', `${sha}:${file}`]).trim();
 }
 
+function stripShellComment(line) {
+  let quote = null;
+  let escaped = false;
+  for (let index = 0; index < line.length; index += 1) {
+    const character = line[index];
+    if (escaped) {
+      escaped = false;
+      continue;
+    }
+    if (character === '\\' && quote !== "'") {
+      escaped = true;
+      continue;
+    }
+    if (quote) {
+      if (character === quote) quote = null;
+      continue;
+    }
+    if (character === "'" || character === '"') {
+      quote = character;
+      continue;
+    }
+    if (character === '#' && (index === 0 || /\s/.test(line[index - 1]))) return line.slice(0, index);
+  }
+  return line;
+}
+
+function expectedNegativeHttpMethodProbe(line) {
+  const clean = stripShellComment(line);
+  const method = clean.match(/\bcurl\b[^;\n]*?(?:-X\s*|--request\s+)(POST|PUT|PATCH|DELETE)\b/i)?.[1]?.toUpperCase() ?? null;
+  const asserted = /(?:^|\s)test\s+["']?\$\(/i.test(clean)
+    && /(?:=|==)\s*["']?405["']?\s*$/.test(clean);
+  return method && asserted ? { method, expectedStatus: 405, commandLine: clean.trim() } : null;
+}
+
+function operationalCommandLines(commands) {
+  return commands.flatMap(({ command }) => command.split(/\r?\n/))
+    .map(stripShellComment)
+    .filter((line) => line.trim())
+    .filter((line) => !/^\s*(?:echo|printf)\b/i.test(line) || /(?:&&|\|\||;|\|)/.test(line))
+    .filter((line) => !expectedNegativeHttpMethodProbe(line));
+}
+
 export function definition(source, file, blobSha) {
   const eventResult = parseEvents(source);
   const jobResult = parseJobs(source);
@@ -177,11 +219,24 @@ export function definition(source, file, blobSha) {
   const actions = [...new Set(jobResult.jobs.flatMap((job) => job.steps.map((step) => step.uses).filter(Boolean)))];
   const commands = jobResult.jobs.flatMap((job) => job.steps.filter((step) => step.run).map((step) => ({
     job: job.name ?? job.id,
+    jobId: job.id,
+    jobIf: job.if,
     step: step.name,
     sha256: createHash('sha256').update(step.run).digest('hex'),
     command: step.run,
     if: step.if
   })));
+  const negativeHttpMethodProbes = commands.flatMap((command) => command.command.split(/\r?\n/)
+    .map(expectedNegativeHttpMethodProbe)
+    .filter(Boolean)
+    .map((probe) => ({
+      job: command.job,
+      jobId: command.jobId,
+      jobIf: command.jobIf,
+      step: command.step,
+      stepIf: command.if,
+      ...probe
+    })));
   const jobSummaries = jobResult.jobs.map((job) => ({
     id: job.id,
     name: job.name,
@@ -193,7 +248,7 @@ export function definition(source, file, blobSha) {
     actions: [...new Set(job.steps.map((step) => step.uses).filter(Boolean))]
   }));
   const permissionLines = source.split(/\r?\n/).filter((line) => /^\s+[A-Za-z0-9_-]+:\s*(?:write|read|none)\s*$/.test(line) && /write\s*$/.test(line));
-  const commandsText = commands.map((item) => item.command).join('\n');
+  const commandsText = operationalCommandLines(commands).join('\n');
   const mutationSignals = [];
   if (permissionLines.length) mutationSignals.push('write permission declared');
   if (/\bgit\s+push\b|\bgh\s+pr\s+merge\b|\bgh\s+api\b[^\n]*(?:POST|PATCH|PUT|DELETE)|\bcurl\b[^\n]*-X\s*(?:POST|PATCH|PUT|DELETE)|\bnetlify\s+deploy\b|\bsupabase\s+db\s+push\b/i.test(commandsText)) mutationSignals.push('write/deploy command in run step');
@@ -217,6 +272,7 @@ export function definition(source, file, blobSha) {
     actions,
     commandCount: commands.length,
     commands,
+    negativeHttpMethodProbes,
     classification,
     mutationSignals,
     externalIndicators: [...new Set(externalIndicators)],
