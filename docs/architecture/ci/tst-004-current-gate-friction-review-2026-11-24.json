@@ -127,7 +127,7 @@
       {
         "number": 374,
         "path": "docs/architecture/ci/tst-002-v5-write-readback-crosswalk-2026-11-24.md",
-        "assertionIds": 10,
+        "assertionIds": 11,
         "scope": "V5 endpoint authorization, stored-state failures, CAS and exact readback"
       }
     ],
