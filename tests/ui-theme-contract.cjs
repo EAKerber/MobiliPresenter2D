@@ -59,6 +59,13 @@ assert.deepEqual(JSON.parse(JSON.stringify(copy.admin.objectAssets)), {
   sceneEntityPolicy: "A lista contém apenas arquivos já presentes na cena. O painel não carrega arquivos novos nem permite caminhos externos.",
   nonSceneEntityPolicy: "Este item não possui camada visual própria na cena. Configure cores e texturas na biblioteca de materiais."
 });
+assert.deepEqual(JSON.parse(JSON.stringify(copy.admin.objectContentFields)), {
+  publicName: "Nome público",
+  description: "Descrição",
+  benefitsPerLine: "Destaques (um por linha)",
+  componentsPerLine: "Componentes (um por linha)",
+  requirementsPerLine: "Requisitos (um por linha)"
+});
 assert.deepEqual(JSON.parse(JSON.stringify(copy.viewer.state)), {
   empty: "Nenhum módulo está visível no viewer neste momento.",
   loading: "Carregando informações publicadas…",
@@ -146,7 +153,7 @@ for (const file of shells) {
     : file === "app/viewer/index.html"
       ? "arc13-loc005-scene-interaction-1"
     : file === "app/admin.html"
-      ? "arc13-loc006-admin-scene-asset-policy-copy-1"
+      ? "arc13-loc006-admin-object-content-fields-copy-1"
     : "arc13-loc003-copy-1";
   assert(html.includes(`src="/core/ui-copy.js?v=${copyVersion}"`), file + " copy catalog bootstrap");
   assert(html.includes('src="/core/ui-theme.js?v=arc13-loc003-copy-1"'), file + " theme bootstrap");

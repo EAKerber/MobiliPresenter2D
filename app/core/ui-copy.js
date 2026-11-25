@@ -110,6 +110,13 @@
         sceneEntityPolicy: "A lista contém apenas arquivos já presentes na cena. O painel não carrega arquivos novos nem permite caminhos externos.",
         nonSceneEntityPolicy: "Este item não possui camada visual própria na cena. Configure cores e texturas na biblioteca de materiais."
       }),
+      objectContentFields: Object.freeze({
+        publicName: "Nome público",
+        description: "Descrição",
+        benefitsPerLine: "Destaques (um por linha)",
+        componentsPerLine: "Componentes (um por linha)",
+        requirementsPerLine: "Requisitos (um por linha)"
+      }),
       pricing: Object.freeze({
         viewerBasePricePublication: Object.freeze({
           title: "Exibição pública no Viewer",

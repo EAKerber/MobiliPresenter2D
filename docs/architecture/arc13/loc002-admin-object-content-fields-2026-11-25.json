@@ -1,0 +1,68 @@
+{
+  "schema": "ARC13LOC002FamilyReview/1",
+  "plan": "MobiliPresenter2D Plano Diretor v0.9",
+  "workItems": ["LOC-002", "LOC-006"],
+  "family": "admin-object-editorial-content-fields",
+  "status": "candidate-implemented",
+  "evidence": {
+    "baseRevision": "d20b50c6d763271c548d201125f678e3806cc66d",
+    "inventoryPath": "architecture/arc13/ui-text-candidates.json",
+    "inventorySha256": "90278C40140AD3CFA883DEAAFBDF7FE8656ECA5310C50254DD38F2A5D12E2515",
+    "source": "app/admin/admin.js",
+    "sourceGitBlob": "f63044eab4f65e9fb1d7d84a263e6afaf7fdb829",
+    "sourceSha256": "c8bc3d54bf1ae39dace5fee04363da261b527324ed82f18caa5fbf75f1f1dff3",
+    "sharedCatalog": "app/core/ui-copy.js",
+    "sharedCatalogGitBlob": "667b716717a75a9fc51688e57077ae744614a2af",
+    "sharedCatalogSha256": "7CC4103EFF96408508A6681B029CCB3D985AC556E2E2FBA6A8CE4474607CA39E",
+    "generatedPrimaryPageManifest": "architecture/generated/primary-pages.manifest.json",
+    "generatedPrimaryPageManifestSha256": "65524E082B988926615A71FB17B158B8E12BF79C702B760E126F21AAD356A2A6",
+    "implementationBranch": "codex/loc006-admin-object-content-fields-20261125",
+    "route": "/admin"
+  },
+  "state": {
+    "statePath": "model.objects[id].{title,description,benefits,components,requirements}",
+    "consumer": "Admin object-content authoring form",
+    "meaning": "Labels five distinct editorial fields without treating their customer-facing content as UI copy or changing the stored object model.",
+    "catalogKeys": [
+      "admin.objectContentFields.publicName",
+      "admin.objectContentFields.description",
+      "admin.objectContentFields.benefitsPerLine",
+      "admin.objectContentFields.componentsPerLine",
+      "admin.objectContentFields.requirementsPerLine"
+    ],
+    "preservedText": [
+      "Nome público",
+      "Descrição",
+      "Destaques (um por linha)",
+      "Componentes (um por linha)",
+      "Requisitos (um por linha)"
+    ]
+  },
+  "candidateSourceIdsAtBase": [
+    "52b2a81fbb2aad3c",
+    "e68db3fd0382a656",
+    "4017e65327c9bfac",
+    "838581183e544e3e",
+    "93ad1f391a7aab0f"
+  ],
+  "candidateInventoryAtBase": {
+    "revision": "d20b50c6d763271c548d201125f678e3806cc66d",
+    "sourceGitBlob": "1615076b6ce2057793d0c938cf26efa949f14733",
+    "sourceSha256": "c9224da35c15f32c3bda6aff5475e501cfa4c58283b94d8844387919fff7a614"
+  },
+  "validation": {
+    "passed": [
+      "node --check app/admin/admin.js",
+      "node tests/ui-theme-contract.cjs",
+      "node scripts/compile-primary-pages.mjs --check",
+      "ARC-13 inventory: deterministic generation, 1041 unreviewed occurrences, 0 parse errors, 420/420 generated primary-page occurrences mapped"
+    ],
+    "pending": ["Admin hierarchy browser gate in CI."]
+  },
+  "limits": [
+    "Preserves exact current pt-BR labels; editorial meaning and stored content remain separate.",
+    "Does not change model.objects values, editing controls, persistence, public content, validation, or commercial authority.",
+    "The five source IDs refer to the exact pre-extraction inventory at baseRevision; the refreshed inventory records the changed source provenance and the canonical catalog consumer.",
+    "Candidate inventory entries remain globally unreviewed; this bounded receipt does not complete LOC-002 or LOC-006."
+  ]
+}

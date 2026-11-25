@@ -28,6 +28,7 @@ const initialStateCopy = uiCopy.admin.initialState;
 const finishAvailabilityCopy = uiCopy.admin.finishes;
 const stageAvailabilityCopy = uiCopy.admin.stages;
 const objectAssetPolicyCopy = uiCopy.admin.objectAssets;
+const objectContentFieldCopy = uiCopy.admin.objectContentFields;
 const viewerBasePricePublicationCopy = uiCopy.admin.pricing.viewerBasePricePublication;
 let catalogPricing = null;
 let adminDataPromise = null;
@@ -815,11 +816,11 @@ function renderObjects() {
   card.className = "editor-card object-editor-card";
   const heading = document.createElement("h2"); heading.textContent = label;
   card.append(heading,
-    makeField("Nome público", data.title, "objectTitle"),
-    makeField("Descrição", data.description, "objectDescription"),
-    makeField("Destaques (um por linha)", data.benefits, "objectBenefits", true),
-    makeField("Componentes (um por linha)", data.components, "objectComponents", true),
-    makeField("Requisitos (um por linha)", data.requirements, "objectRequirements", true));
+    makeField(objectContentFieldCopy.publicName, data.title, "objectTitle"),
+    makeField(objectContentFieldCopy.description, data.description, "objectDescription"),
+    makeField(objectContentFieldCopy.benefitsPerLine, data.benefits, "objectBenefits", true),
+    makeField(objectContentFieldCopy.componentsPerLine, data.components, "objectComponents", true),
+    makeField(objectContentFieldCopy.requirementsPerLine, data.requirements, "objectRequirements", true));
   const handleProduct = model.handleProducts.find((item) => item.priceEntryId === id);
   if (handleProduct) {
     const section = document.createElement("section"); section.className = "handle-colors";
