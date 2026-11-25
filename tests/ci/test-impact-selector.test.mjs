@@ -458,3 +458,48 @@ test('configuration boundary ignores only the unrelated shared UI copy catalog',
     assert.doesNotMatch(source, /ui-copy\.js/, consumerPath + ' does not consume the UI copy catalog');
   }
 });
+test('Admin and temporary-session access changes select their authorization boundary bundle', () => {
+  const focusedPaths = [
+    'app/core/private-navigation.js',
+    'netlify/functions/access-grants.mjs',
+    'tests/ci/access-surface-boundaries.test.mjs',
+    'tests/access-session-browser.cjs'
+  ];
+  const selection = selectBundles(focusedPaths, map);
+  assert.deepEqual(ids(selection), ['access-surface']);
+  assert.equal(selection.fallback.enabled, false);
+  assert.deepEqual(selection.unknownPaths, []);
+
+  const workflowPath = '.github/workflows/development-access-dto-boundary.yml';
+  const workflow = definition(readFileSync(path.join(root, workflowPath), 'utf8'), workflowPath, 'current-workflow-blob');
+  for (const eventName of ['pull_request', 'push']) {
+    const event = workflow.events.find((candidate) => candidate.name === eventName);
+    assert(event, workflowPath + ' must retain ' + eventName);
+    assert.deepEqual(event.branches, ['development']);
+    for (const changedPath of focusedPaths) {
+      assert(event.paths.includes(changedPath), workflowPath + ' must watch ' + changedPath);
+    }
+  }
+
+  const routes = [
+    ['authorization-contract', 'node --test tests/ci/access-surface-boundaries.test.mjs'],
+    ['access-session-browser', 'node tests/access-session-browser.cjs']
+  ];
+  for (const [jobId, command] of routes) {
+    assert(selection.selectedBundles[0].execution.some((entry) =>
+      entry.workflow === workflowPath && entry.commands.includes(command)
+    ), 'impact map must preserve the exact command for ' + jobId);
+    assert(workflow.commands.some((entry) => entry.jobId === jobId && entry.command.includes(command)),
+      workflowPath + ' must run the command in ' + jobId);
+  }
+});
+
+test('Admin and Identity policy changes retain their distinct access and configuration contracts', () => {
+  const admin = selectBundles(['app/admin/admin.js'], map);
+  assert.deepEqual(ids(admin), ['viewer-pricing', 'access-surface'],
+    'Admin source has both pricing and authorization contracts');
+
+  const policy = selectBundles(['netlify/access/identity-policy.mjs'], map);
+  assert.deepEqual(ids(policy), ['buyer-configuration-boundary', 'access-surface'],
+    'shared identity policy feeds both Buyer and broader session authorization contracts');
+});
