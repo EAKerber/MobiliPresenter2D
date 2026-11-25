@@ -362,19 +362,19 @@
           "source": "Product PR #399",
           "sha": "531c2814235c9524289ccb9efd909f43e01d908b",
           "detail": "Recorte parcial de navegação pública mapeado a workflows; a matriz completa de caminhos, condições, comandos, asserções e custo permanece aberta."
-        },
-        {
-          "source": "Product PR #415 Actions run #45541550403",
-          "sha": "55bab531205798979589732db9663f4202b4ad16",
-          "detail": "A auditoria mediu 124 cenários disparados por alteração apenas do hash do manifesto gerado, sem mudança nos HTMLs públicos; ARC-13 validou separadamente catálogo, compilador, manifesto e proveniência."
-        },
-        {
-          "source": "Product PR #415 Actions run #45541551282",
-          "sha": "55bab531205798979589732db9663f4202b4ad16",
-          "detail": "O gate de fronteira de configuração executou devido apenas a app/core/ui-copy.js; os comandos e consumidores cobertos não importam o catálogo visual compartilhado."
+      },
+      {
+        "source": "Product PR #415 Actions run #45541550403",
+        "sha": "55bab531205798979589732db9663f4202b4ad16",
+        "detail": "A auditoria mediu 124 cenários disparados por alteração apenas do hash do manifesto gerado, sem mudança nos HTMLs públicos; ARC-13 validou separadamente catálogo, compilador, manifesto e proveniência."
+      },
+      {
+        "source": "Product PR #415 Actions run #45541551282",
+        "sha": "55bab531205798979589732db9663f4202b4ad16",
+        "detail": "O gate de fronteira de configuração executou devido apenas a app/core/ui-copy.js; os comandos e consumidores cobertos não importam o catálogo visual compartilhado."
         }
       ],
-      "nextAction": "Mapear as famílias e condições restantes; os filtros atuais excluem somente o manifesto exato do browser de navegação e o catálogo UI do gate de configuração, preservando os respectivos gates consumidores e os demais caminhos."
+    "nextAction": "Mapear as famílias e condições restantes; os filtros atuais excluem somente o manifesto exato do browser de navegação e o catálogo UI do gate de configuração, preservando os respectivos gates consumidores e os demais caminhos."
     },
     {
       "order": 22,
@@ -1719,11 +1719,11 @@
           "source": "Product PR #419 and receipt docs/architecture/arc13/loc002-admin-stage-availability-2026-11-25.json",
           "sha": "5d3902ae408f3addd4cecfeb960fbeec4a9f291a",
           "detail": "Estado stage.enabled e suas duas políticas de elegibilidade extraídos com texto preservado; Admin browser e ARC-13 passaram. Permanece distinto de visibilidade inicial de entidades/serviços e disponibilidade de acabamentos."
-        },
-        {
-          "source": "Product PR #421 and receipt docs/architecture/arc13/loc002-admin-object-content-fields-2026-11-25.json",
-          "sha": "1292afe149e711dce01fce0e727fd0da033a38d4",
-          "detail": "Cinco rótulos de campos editoriais integrados em development sob admin.objectContentFields, com conteúdo e modelo preservados; browser Admin e todos os gates disparados passaram. main permanece sem este pacote."
+      },
+      {
+        "source": "Product PR #421 and receipt docs/architecture/arc13/loc002-admin-object-content-fields-2026-11-25.json",
+        "sha": "1292afe149e711dce01fce0e727fd0da033a38d4",
+        "detail": "Cinco rótulos de campos editoriais integrados em development sob admin.objectContentFields, com conteúdo e modelo preservados; browser Admin e todos os gates disparados passaram. main permanece sem este pacote."
         }
       ],
       "nextAction": "Continuar a classificação ARC-13 por estado e consumidor, preservando hold quando semântica ou autoridade do texto não estiver comprovada."
@@ -1826,11 +1826,11 @@
           "source": "Product PR #419 and receipt docs/architecture/arc13/loc002-admin-stage-availability-2026-11-25.json",
           "sha": "5d3902ae408f3addd4cecfeb960fbeec4a9f291a",
           "detail": "Família de disponibilidade da etapa extraída em admin.stages sem alterar stage.enabled, elegibilidade ou comportamento; o Admin browser e a integridade ARC-13 passaram. LOC-006 continua aberto para outras famílias."
-        },
-        {
-          "source": "Product PR #421 and receipt docs/architecture/arc13/loc002-admin-object-content-fields-2026-11-25.json",
-          "sha": "1292afe149e711dce01fce0e727fd0da033a38d4",
-          "detail": "Cinco rótulos de campos do Admin integrados em development sem migrar dados editoriais/comerciais nem alterar estado; browser e demais gates disparados passaram. LOC-006 continua parcial para outras famílias do Admin/Configurador."
+      },
+      {
+        "source": "Product PR #421 and receipt docs/architecture/arc13/loc002-admin-object-content-fields-2026-11-25.json",
+        "sha": "1292afe149e711dce01fce0e727fd0da033a38d4",
+        "detail": "Cinco rótulos de campos do Admin integrados em development sem migrar dados editoriais/comerciais nem alterar estado; browser e demais gates disparados passaram. LOC-006 continua parcial para outras famílias do Admin/Configurador."
         }
       ],
       "nextAction": "Extrair outras famílias Admin/Configurador com seus estados, consumidores e testes; manter conteúdo comercial sob sua autoridade própria."
