@@ -28,6 +28,8 @@ on:
       - '.github/workflows/flow-layout-browser.yml'
       - 'tests/ci/prepare-local-v5-browser.sh'
       - 'tests/ci/local-buyer-config-server.mjs'
+      - 'tests/ci/stop-local-v5-browser.sh'
+      - 'tests/ci/assert-local-v5-url.cjs'
   pull_request:
     paths:
       - 'app/data/hierarchy-defaults.js'
@@ -55,6 +57,8 @@ on:
       - '.github/workflows/flow-layout-browser.yml'
       - 'tests/ci/prepare-local-v5-browser.sh'
       - 'tests/ci/local-buyer-config-server.mjs'
+      - 'tests/ci/stop-local-v5-browser.sh'
+      - 'tests/ci/assert-local-v5-url.cjs'
   workflow_dispatch:
     inputs:
       target_url:
@@ -109,3 +113,8 @@ jobs:
             /tmp/flow-layout-review
             /tmp/buyer-v5-review
           if-no-files-found: ignore
+
+      - name: Stop local Buyer V5 fixture
+        if: always()
+        shell: bash
+        run: bash tests/ci/stop-local-v5-browser.sh

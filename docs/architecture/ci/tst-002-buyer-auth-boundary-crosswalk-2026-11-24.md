@@ -45,7 +45,7 @@ The workflow runs `node --test tests/buyer-configuration-endpoint.test.mjs`. Its
 
 ## Continuation — endpoint failure boundaries and context selection — 2026-11-25
 
-The working-tree continuation extends the same test with method/query rejection before Identity lookup, expired temporary-session denial, production-versus-preview store selection, and fail-closed missing/invalid published V5 states. Local command `node --test tests/buyer-configuration-endpoint.test.mjs` passed after these additions. This is local evidence only until the exact change is integrated and its CI run is read back.
+Product PR #422 extends the test with method/query rejection before Identity lookup, expired temporary-session denial, production-versus-preview store selection, and fail-closed missing/invalid published V5 states. The focused local tests passed; the endpoint boundary and impact-selector Actions runs #45601575331 and #45601575165 passed on PR head `08669ae5f726b978582dbef519ed5773dfc311a1`. The squash is integrated in development at `5f8c3161f3177ae28e30adf5236dbe822db7b590`. These are injected-dependency/local fixture checks, not live Identity or Blob proof.
 
 | Added assertion group | Contract and negative boundary | Evidence limit |
 |---|---|---|

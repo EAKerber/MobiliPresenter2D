@@ -59,6 +59,11 @@ jobs:
           if-no-files-found: ignore
           retention-days: 30
 
+      - name: Stop local Buyer V5 fixture
+        if: always()
+        shell: bash
+        run: bash tests/ci/stop-local-v5-browser.sh
+
   full-profile-theme-detail-differential:
     needs: exact-source-and-main-authority
     runs-on: ubuntu-latest
@@ -88,3 +93,8 @@ jobs:
           path: /tmp/m2d-ci-css-full-matrix/result.json
           if-no-files-found: ignore
           retention-days: 30
+
+      - name: Stop local Buyer V5 fixture
+        if: always()
+        shell: bash
+        run: bash tests/ci/stop-local-v5-browser.sh

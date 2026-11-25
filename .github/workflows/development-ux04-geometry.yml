@@ -9,6 +9,10 @@ on:
       - 'app/app.js'
       - 'tests/keyboard-browser.cjs'
       - 'tests/ci/ux04-geometry-focus-v5.cjs'
+      - 'tests/ci/local-buyer-config-server.mjs'
+      - 'tests/ci/prepare-local-v5-browser.sh'
+      - 'tests/ci/stop-local-v5-browser.sh'
+      - 'tests/ci/assert-local-v5-url.cjs'
       - 'docs/work/DEVELOPMENT_UX04_GEOMETRY_FOCUS_2026-10-28.md'
       - '.github/workflows/development-ux04-geometry.yml'
   workflow_dispatch:
@@ -56,8 +60,7 @@ jobs:
       - name: Execute full V5 keyboard navigation browser regression
         env:
           NODE_PATH: /tmp/m2d-ux04-tools/node_modules
-          KEYBOARD_BROWSER_URL: http://127.0.0.1:8123/config/
-        run: node tests/keyboard-browser.cjs /tmp/m2d-ux04-keyboard
+        run: KEYBOARD_BROWSER_URL="$FLOW_LAYOUT_URL" node tests/keyboard-browser.cjs /tmp/m2d-ux04-keyboard
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -67,3 +70,8 @@ jobs:
             /tmp/m2d-ux04-keyboard/result.json
           if-no-files-found: ignore
           retention-days: 14
+
+      - name: Stop local Buyer V5 fixture
+        if: always()
+        shell: bash
+        run: bash tests/ci/stop-local-v5-browser.sh

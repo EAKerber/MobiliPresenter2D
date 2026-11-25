@@ -49,3 +49,8 @@ jobs:
         env:
           NODE_PATH: /tmp/m2d-nav-legacy-tools/node_modules
         run: node tests/ci/nav-flow-responsive-crossbrowser.cjs
+
+      - name: Stop local Buyer V5 fixture
+        if: always()
+        shell: bash
+        run: bash tests/ci/stop-local-v5-browser.sh

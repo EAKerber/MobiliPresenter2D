@@ -16,6 +16,12 @@ on:
       - 'netlify/functions/buyer-configuration.mjs'
       - 'netlify/functions/configuration.mjs'
       - 'tests/buyer-configuration-endpoint.test.mjs'
+      - 'tests/ci/local-buyer-config-fixture.mjs'
+      - 'tests/ci/local-buyer-config-server.mjs'
+      - 'tests/ci/local-buyer-config-server-contract.test.mjs'
+      - 'tests/ci/prepare-local-v5-browser.sh'
+      - 'tests/ci/stop-local-v5-browser.sh'
+      - 'tests/ci/assert-local-v5-url.cjs'
       - '.github/workflows/buyer-configuration-boundary.yml'
   push:
     branches: [main, development]
@@ -31,6 +37,12 @@ on:
       - 'netlify/functions/buyer-configuration.mjs'
       - 'netlify/functions/configuration.mjs'
       - 'tests/buyer-configuration-endpoint.test.mjs'
+      - 'tests/ci/local-buyer-config-fixture.mjs'
+      - 'tests/ci/local-buyer-config-server.mjs'
+      - 'tests/ci/local-buyer-config-server-contract.test.mjs'
+      - 'tests/ci/prepare-local-v5-browser.sh'
+      - 'tests/ci/stop-local-v5-browser.sh'
+      - 'tests/ci/assert-local-v5-url.cjs'
       - '.github/workflows/buyer-configuration-boundary.yml'
 
 permissions:
@@ -59,3 +71,5 @@ jobs:
         run: node app/tools/test-published-buyer-projection.js
       - name: Verify Buyer endpoint authorization boundary
         run: node --test tests/buyer-configuration-endpoint.test.mjs
+      - name: Verify local Buyer V5 fixture readiness and shutdown
+        run: node --test tests/ci/local-buyer-config-server-contract.test.mjs

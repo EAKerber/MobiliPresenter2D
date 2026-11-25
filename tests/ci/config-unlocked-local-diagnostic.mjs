@@ -4,7 +4,8 @@ import {spawnSync} from "node:child_process";
 import {mkdir,writeFile,mkdtemp,rm} from "node:fs/promises";
 import {tmpdir} from "node:os";
 import {join} from "node:path";
-const site="http://127.0.0.1:8123/config/";
+const assertLocalV5Url=(await import("./assert-local-v5-url.cjs")).default;
+const site=assertLocalV5Url(process.env.FLOW_LAYOUT_URL||"http://127.0.0.1:8123/config/");
 const cases=[
  ["mobile","tests/mobile-pip-main-browser.cjs","MOBILE_INTERACTIONS_URL"],
  ["keyboard","tests/keyboard-browser.cjs","KEYBOARD_BROWSER_URL"],

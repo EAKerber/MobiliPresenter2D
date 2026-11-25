@@ -54,3 +54,8 @@ jobs:
         env:
           NODE_PATH: /tmp/cp-public-browser-tools/node_modules
         run: node tests/buyer-v5-browser.cjs /tmp/cp-public-buyer-v5
+
+      - name: Stop local Buyer V5 fixture
+        if: always()
+        shell: bash
+        run: bash tests/ci/stop-local-v5-browser.sh
