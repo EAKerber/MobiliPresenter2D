@@ -47,13 +47,22 @@ def verify() -> dict:
     main_first, main_div, _ = main_js.partition(split)
     require(div == split and current_div == split and main_div == split,
             "EXPLANATION_SECTION_MISSING")
-    catalog_binding = "    const videoFullscreenCopy=window.CASA_UI_COPY.video.fullscreen;\n"
-    catalog_label = "const label=isFullscreen?videoFullscreenCopy.close:videoFullscreenCopy.open;"
-    literal_label = 'const label=isFullscreen?"Sair da tela cheia":"Abrir vídeo em tela cheia";'
-    require(current_first.count(catalog_binding) == 1 and current_first.count(catalog_label) == 1,
-            "LOC005_FULLSCREEN_COPY_BINDING_DRIFT")
-    normalized_current_first = current_first.replace(catalog_binding, "", 1).replace(catalog_label, literal_label, 1)
-    require(normalized_current_first == main_first, "CURRENT_PAGE_PREFIX_DIFFERS_FROM_PINNED_MAIN")
+    legacy_fullscreen_start = "    const activeFullscreenElement=()=>document.fullscreenElement||document.webkitFullscreenElement||null;\n"
+    legacy_fullscreen_end = "    syncFullscreenButton();\n  }\n"
+    shared_fullscreen_start = "    window.CasaPublicVideoFullscreen.bind(\n"
+    shared_fullscreen_end = "    );\n  }\n"
+    require(main_first.count(legacy_fullscreen_start) == 1 and main_first.count(legacy_fullscreen_end) == 1,
+            "PINNED_MAIN_FULLSCREEN_SCOPE_DRIFT")
+    require(current_first.count(shared_fullscreen_start) == 1 and current_first.count(shared_fullscreen_end) == 1,
+            "LOC005_SHARED_FULLSCREEN_BINDING_DRIFT")
+    main_before, main_sep, main_after = main_first.partition(legacy_fullscreen_start)
+    _, main_end_sep, main_after = main_after.partition(legacy_fullscreen_end)
+    current_before, current_sep, current_after = current_first.partition(shared_fullscreen_start)
+    _, current_end_sep, current_after = current_after.partition(shared_fullscreen_end)
+    require(all((main_sep, main_end_sep, current_sep, current_end_sep)), "FULLSCREEN_SCOPE_BOUNDARY_MISSING")
+    normalized_main_first = main_before + "    [shared fullscreen control]\n  }\n" + main_after
+    normalized_current_first = current_before + "    [shared fullscreen control]\n  }\n" + current_after
+    require(normalized_current_first == normalized_main_first, "CURRENT_PAGE_PREFIX_DIFFERS_FROM_PINNED_MAIN")
     require(current_trailing == trailing, "LEGACY_EXPLANATION_CONTENT_CHANGED")
     require('document.querySelectorAll("[data-image-fallback]")' not in current_first,
             "LEGACY_PAGE_HANDLER_NOT_REMOVED")

@@ -78,9 +78,11 @@ for (const [file, controller] of [
 ]) {
   const html = read(file), code = read(controller);
   assert(html.includes('aria-label="Abrir vídeo em tela cheia"') && html.includes('title="Abrir vídeo em tela cheia"'), file + " keeps the static fullscreen label when JavaScript is unavailable");
-  assert(code.includes("videoFullscreenCopy.open") && code.includes("videoFullscreenCopy.close"), controller + " reads both fullscreen labels from the canonical catalog");
+  assert(code.includes("window.CasaPublicVideoFullscreen.bind") && code.includes("window.CASA_UI_COPY.video.fullscreen"), controller + " delegates fullscreen behavior with canonical labels to the shared controller");
   assert(!code.includes("Abrir vídeo em tela cheia") && !code.includes("Sair da tela cheia"), controller + " does not duplicate catalog labels");
 }
+const sharedFullscreenCode = read("app/core/public-video-fullscreen.js");
+assert(sharedFullscreenCode.includes("copy.close") && sharedFullscreenCode.includes("copy.open"), "shared fullscreen controller uses both labels supplied by the canonical catalog");
 const publicMenuCode = read("app/landing/header-menu.js");
 const privateMenuCode = read("app/core/private-navigation.js");
 assert(publicMenuCode.includes('getCopy("navigation.menu." + copyKey, fallback)') &&
