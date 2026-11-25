@@ -125,6 +125,42 @@
       ]
     },
     {
+      "id": "public-video-player",
+      "contract": [
+        "shared public video fullscreen behavior",
+        "ARC-03C generated page script order"
+      ],
+      "consumer": [
+        "home hero phone player",
+        "how-it-works video embed"
+      ],
+      "risks": [
+        "fullscreen entry or exit stops working on either page",
+        "accessible fullscreen label and pressed state drift between consumers",
+        "phone screen geometry or poster crop regresses"
+      ],
+      "paths": [
+        "app/core/public-video-fullscreen.js",
+        "app/landing/landing.js",
+        "app/how-it-works/**",
+        "app/index.html",
+        "architecture/pages/root.page.html",
+        "architecture/pages/how-it-works.page.html",
+        "tests/home-hero-phone-geometry-browser.cjs",
+        ".github/workflows/mobile-browser.yml"
+      ],
+      "execution": [
+        {
+          "workflow": ".github/workflows/mobile-browser.yml",
+          "scope": "pull_request on all bases and push on main (app/** path-filtered); workflow_dispatch",
+          "commands": [
+            "node tests/home-hero-phone-geometry-browser.cjs /tmp/mobile-browser-review"
+          ],
+          "assertion": "four viewport phone-screen geometry plus shared fullscreen labels and enter/exit behavior on both public pages"
+        }
+      ]
+    },
+    {
       "id": "viewer-pricing",
       "contract": [
         "DOM-008 typed pricing",
