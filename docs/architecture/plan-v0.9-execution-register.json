@@ -1666,12 +1666,12 @@
           "detail": "Família parcial do Admin classificada por estado consumidor: módulo e objeto compartilham visibilidade inicial do configurador; Viewer, serviços e disponibilidade de etapa permanecem semânticas distintas. Não cobre o inventário LOC-002 completo."
         },
         {
-          "source": "Product local candidate docs/architecture/arc13/loc002-admin-finish-availability-2026-11-25.json",
-          "sha": "573b50d91dbb58762f9464b69df98aadcd4440cc",
-          "detail": "No branch codex/loc006-admin-finish-availability-copy-20261125, a disponibilidade ao cliente, o escopo global/local e a associação a módulos foram tratados como estados distintos; os textos existentes foram preservados. Integração em development ainda pendente."
+          "source": "Product PR #418 and receipt docs/architecture/arc13/loc002-admin-finish-availability-2026-11-25.json",
+          "sha": "eb02f3332766f150ca6eff015772598a14b58431",
+          "detail": "Integração em development da disponibilidade ao cliente, escopo global/local e associação a módulos como estados distintos; textos preservados, gates da PR incluindo browser do Admin aprovados. A classificação ARC-13 completa permanece parcial."
         }
       ],
-      "nextAction": "Integrar e validar esta família em development; continuar a classificação ARC-13 por estado e consumidor, preservando hold quando semântica ou autoridade do texto não estiver comprovada."
+      "nextAction": "Continuar a classificação ARC-13 por estado e consumidor, preservando hold quando semântica ou autoridade do texto não estiver comprovada."
     },
     {
       "order": 102,
@@ -1763,12 +1763,12 @@
           "detail": "Família parcial de textos e nomes acessíveis do estado inicial do Admin movida ao catálogo compartilhado e coberta por contrato de tema e browser hierárquico; não inclui restante do Admin/Configurador nem homologação de todo conteúdo."
         },
         {
-          "source": "Product local candidate docs/architecture/arc13/loc002-admin-finish-availability-2026-11-25.json",
-          "sha": "573b50d91dbb58762f9464b69df98aadcd4440cc",
-          "detail": "Família de disponibilidade, escopo e associação de acabamento extraída para admin.finishes, preservando semânticas e textos; conteúdo comercial, persistência, validação, Buyer projection e estado do modelo não foram alterados. Integração em development ainda pendente."
+          "source": "Product PR #418 and receipt docs/architecture/arc13/loc002-admin-finish-availability-2026-11-25.json",
+          "sha": "eb02f3332766f150ca6eff015772598a14b58431",
+          "detail": "Disponibilidade, escopo e associação de acabamento extraídos em admin.finishes no Admin; textos e semânticas preservados, sem mudança de conteúdo comercial, persistência, validação, Buyer projection ou estado do modelo. Gates incluindo browser do Admin aprovados."
         }
       ],
-      "nextAction": "Integrar e validar esta família em development; depois extrair outra família Admin/Configurador com seus estados, consumidores e testes, mantendo conteúdo comercial sob sua autoridade própria."
+      "nextAction": "Extrair outras famílias Admin/Configurador com seus estados, consumidores e testes; manter conteúdo comercial sob sua autoridade própria."
     },
     {
       "order": 107,
@@ -2090,7 +2090,7 @@
   "baselineReadback": {
     "capturedAt": "2026-11-25",
     "productMainSha": "01ded2c100fbfd8b16897e26113dc5068a83e429",
-    "productDevelopmentSha": "573b50d91dbb58762f9464b69df98aadcd4440cc",
+    "productDevelopmentSha": "eb02f3332766f150ca6eff015772598a14b58431",
     "designSystemMainSha": "c6ff6545e9ae2071e695109fd94ac91676e7fb0a",
     "meaning": "Snapshot read back before this package; the Design System has no development branch."
   }

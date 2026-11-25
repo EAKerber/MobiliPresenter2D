@@ -26,6 +26,7 @@ const hierarchyDefaults = window.CASA_EM_MODULOS_HIERARCHY_DEFAULTS;
 const uiCopy = window.CASA_UI_COPY;
 const initialStateCopy = uiCopy.admin.initialState;
 const finishAvailabilityCopy = uiCopy.admin.finishes;
+const stageAvailabilityCopy = uiCopy.admin.stages;
 const viewerBasePricePublicationCopy = uiCopy.admin.pricing.viewerBasePricePublication;
 let catalogPricing = null;
 let adminDataPromise = null;
@@ -700,9 +701,9 @@ function renderStages() {
     const isRequiredStage = ["modules", "summary"].includes(stage.kind || stage.id);
     const hasStageItems = stageItemIds(stage).length > 0;
     const disabledReason = isRequiredStage
-      ? "Etapa obrigatória: não pode ser desativada nem removida."
+      ? stageAvailabilityCopy.requiredAvailabilityPolicy
       : !hasStageItems
-        ? "Adicione pelo menos um item antes de ativar esta etapa."
+        ? stageAvailabilityCopy.emptyAvailabilityPolicy
         : "";
     const disabledReasonId = `stage-policy-${stage.id}`;
     const remove = document.createElement("button");
@@ -721,9 +722,11 @@ function renderStages() {
     enabledInput.checked = stage.enabled;
     enabledInput.dataset.stageEnabled = stage.id;
     enabledInput.disabled = isRequiredStage || !hasStageItems;
-    enabledInput.setAttribute("aria-label", `Ativar etapa ${stage.label}`);
+    enabledInput.setAttribute("aria-label", stageAvailabilityCopy.availabilityAriaLabel.replace("{stage}", stage.label));
     if (enabledInput.disabled && disabledReason) enabledInput.setAttribute("aria-describedby", disabledReasonId);
-    enabledLabel.append(enabledInput, document.createTextNode(stage.enabled ? "Ativa" : "Inativa"));
+    enabledLabel.append(enabledInput, document.createTextNode(
+      stage.enabled ? stageAvailabilityCopy.availabilityActive : stageAvailabilityCopy.availabilityInactive
+    ));
     top.append(number, nameLabel, order, actions, enabledLabel);
     card.append(top);
     if (disabledReason) {
