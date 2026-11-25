@@ -4,7 +4,12 @@
   "stableMain": {
     "sha": "221b54b2a41ecc8c338d1bf2cf67280cf165ce95",
     "cssBlob": "d43e6fb5e66133d2389b5c39b165b76b13cfa868",
-    "role": "authoritative stable CSS"
+    "role": "historical authoritative CSS snapshot"
+  },
+  "currentMain": {
+    "sha": "01ded2c100fbfd8b16897e26113dc5068a83e429",
+    "cssBlob": "eb346a41ad91f6dc53875cb954e9018fdc1dd713",
+    "role": "current authoritative main CSS at the development readback"
   },
   "older": {
     "branch": "fix/ci-baseline-v5-nav-flow-clean-20261023",
@@ -15,8 +20,8 @@
   },
   "present": {
     "branch": "development",
-    "baselineSha": "79f3ed1e9d247076cc77ee44f100104e35eebdaa",
-    "cssBlob": "d43e6fb5e66133d2389b5c39b165b76b13cfa868"
+    "baselineSha": "c1f3be2be89c1e7f5843f568cf0d3ae38adf3541",
+    "cssBlob": "eb346a41ad91f6dc53875cb954e9018fdc1dd713"
   },
   "cause": {
     "oldSelector": ".controls",
@@ -48,7 +53,7 @@
       "historical-css",
       "stable-main-css"
     ],
-    "target": "http://127.0.0.1:8123/config/",
+    "target": "http://127.0.0.1:<ephemeral-port>/config/",
     "source": "validated local V5",
     "rasterHashes": "collected not assumed equal",
     "observation": "Measure paired old 514px controls content query versus main 500px nav content query, do not assume identical effective thresholds."

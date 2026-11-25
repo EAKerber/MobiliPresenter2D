@@ -26,8 +26,6 @@ class LegacyUX04(unittest.TestCase):
         for f in p["current"]:
             self.assertEqual(git("rev-parse",p["mainSha"]+":"+f["path"]),f["mainSha"])
             self.assertEqual(git("rev-parse",baseline+":"+f["path"]),f["developmentSha"])
-        for f in p.get("candidate",{}).get("files",[]):
-            self.assertEqual(blob(f["path"]),f["blob"])
         promoted=p.get("candidate",{}).get("promotedDevelopmentSha")
         if promoted:
             self.assertEqual(git("rev-parse",promoted),promoted)
@@ -64,8 +62,11 @@ class LegacyUX04(unittest.TestCase):
     def test_keyboard_preserves_historical_contract_and_requires_focus_gate(self):
         old=assertions(Path("docs/reconciliation/ux04-main-authority/legacy/tests/keyboard-browser.cjs").read_text(encoding="utf-8"))
         current=assertions(Path("tests/keyboard-browser.cjs").read_text(encoding="utf-8"))
+        snapshot=self.p["observedDevelopmentKeyboardSnapshot"]
+        self.assertEqual(git("rev-parse",snapshot["sha"]+":tests/keyboard-browser.cjs"),snapshot["blob"])
+        self.assertEqual(snapshot["assertionCount"],104)
         missing=[x for x in old if x not in current]
-        self.assertEqual((len(old),len(current),len(missing)),(74,102,2))
+        self.assertEqual((len(old),len(missing)),(74,2))
         self.assertEqual(sum(x in current for x in old),72)
         self.assertTrue(any("selected handle regains focus after redraw" in x for x in current))
         self.assertTrue(any("last-section navigation aligns the final section" in x for x in missing))

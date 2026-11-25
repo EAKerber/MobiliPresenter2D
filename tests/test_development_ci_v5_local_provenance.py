@@ -4,6 +4,8 @@ from pathlib import Path
 
 SOURCE = "5ce7327a9e4c8c11483163507d29af4bb8b1312a"
 MAIN = "221b54b2a41ecc8c338d1bf2cf67280cf165ce95"
+DEVELOPMENT_BASE = "5f8c3161f3177ae28e30adf5236dbe822db7b590"
+TST006 = "c1f3be2be89c1e7f5843f568cf0d3ae38adf3541"
 OLD = {
     "tests/ci/v5-local-navigation-probe.mjs": "c6f889903e3013dffe5473fad414048975837678",
     ".github/workflows/ci-baseline-01-local-diagnostic.yml": "1c04f12949b137ea6f4a98b9bdb5063e5611cedd",
@@ -12,10 +14,10 @@ OLD = {
     "tests/ci/config-local-visibility-probe.mjs": "9aca354f3ed9641fcb268d3a515df73365135588",
     "tests/ci/config-auth-isolation.mjs": "97c014e91ce57fcac7aa696dbaf9b4a9caa4450d",
 }
-MODERN = {
+MODERN_MAIN = {
     "tests/ci/config-unlocked-local-diagnostic.mjs": "74c3eab7ccfa6bd124e7133b04e793b94340edd3",
-    "tests/ci/local-buyer-config-server.mjs": "1b75eb62cf41112041b1dbce753753aa415d36c8",
 }
+DEVELOPMENT_CONFIG_UNLOCKED = "53eb4b850d58a9058d7015c82ca997dea6600823"
 
 def git(*args):
     return subprocess.check_output(["git", *args], text=True, stderr=subprocess.PIPE).strip()
@@ -41,10 +43,18 @@ class CIv5LocalHistory(unittest.TestCase):
                 self.assertEqual(git("rev-parse", "HEAD:" + oldpath), OLD[path])
 
     def test_modern_main_contracts_not_replaced(self):
-        for path, sha in MODERN.items():
+        for path, sha in MODERN_MAIN.items():
             with self.subTest(path=path):
                 self.assertEqual(git("rev-parse", MAIN + ":" + path), sha)
-                self.assertEqual(git("rev-parse", "HEAD:" + path), sha)
+        config = "tests/ci/config-unlocked-local-diagnostic.mjs"
+        self.assertEqual(git("rev-parse", TST006 + ":" + config), DEVELOPMENT_CONFIG_UNLOCKED)
+        self.assertEqual(git("rev-parse", "HEAD:" + config), DEVELOPMENT_CONFIG_UNLOCKED)
+        server = "tests/ci/local-buyer-config-server.mjs"
+        development_server = "9c37286eb9eafccf0c57e1dd055f5d09df146245"
+        self.assertEqual(git("rev-parse", MAIN + ":" + server),
+                         "1b75eb62cf41112041b1dbce753753aa415d36c8")
+        self.assertEqual(git("rev-parse", DEVELOPMENT_BASE + ":" + server), development_server)
+        self.assertEqual(git("rev-parse", "HEAD:" + server), development_server)
 
     def test_development_only_dynamic_nav_is_not_misclassified_as_main(self):
         path = "tests/ci/nav-flow-responsive-crossbrowser.cjs"
@@ -67,7 +77,7 @@ class CIv5LocalHistory(unittest.TestCase):
         old_browser = git("show", SOURCE + ":tests/ci/local-buyer-config-server.mjs")
         current = Path("tests/ci/local-buyer-config-server.mjs").read_text()
         self.assertIn("administrationV5.upgrade(", old_browser)
-        self.assertIn("createDefaultAdministration(", current)
+        self.assertIn("createLocalBuyerFixture(", current)
         self.assertNotIn("const v5=administrationV5.upgrade(", current)
 
 if __name__ == "__main__":

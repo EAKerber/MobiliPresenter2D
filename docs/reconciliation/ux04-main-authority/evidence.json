@@ -118,12 +118,17 @@
       "developmentSha": "e7d9643f00212b257eedbc6fb046ea2804462446"
     }
   ],
+  "observedDevelopmentKeyboardSnapshot": {
+    "sha": "c1f3be2be89c1e7f5843f568cf0d3ae38adf3541",
+    "blob": "65fdbd8ccf87274037c8d16497130d922fd9eea5",
+    "assertionCount": 104
+  },
   "browserAssertionCounts": {
     "historicalFlow": 29,
     "currentFlow": 216,
     "missingLiteral": 6,
     "historicalKeyboard": 74,
-    "currentKeyboard": 102,
+    "currentKeyboard": 104,
     "keyboardPreservedLiteral": 72,
     "keyboardMissingLiteral": 2
   },
