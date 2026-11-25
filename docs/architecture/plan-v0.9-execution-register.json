@@ -1,10 +1,11 @@
 {
   "schema": "PlanV09OperationalRegister/1",
-  "updatedAt": "2026-11-24",
+  "updatedAt": "2026-11-25",
   "statusSemantics": {
     "planState": "Copiado do Anexo A; é o estado editorial inicial, não uma afirmação de implementação atual.",
     "unreviewed": "Reconciliação operacional ainda não feita; não significa ausência de código.",
     "unknown": "Esta dimensão ainda não foi provada na árvore exata atual.",
+    "not_present": "A árvore de destino foi verificada e o recorte citado não está integrado nela.",
     "partial": "Somente o recorte e as evidências anexas foram confirmados; o ID permanece aberto.",
     "done": "Usar somente após provar o DoD completo do ID e integrá-lo no destino requerido.",
     "blocked": "Usar somente com impedimento atual nomeado e próxima ação registrada.",
@@ -355,9 +356,14 @@
           "source": "Product PR #399",
           "sha": "531c2814235c9524289ccb9efd909f43e01d908b",
           "detail": "Recorte parcial de navegação pública mapeado a workflows; a matriz completa de caminhos, condições, comandos, asserções e custo permanece aberta."
+      },
+      {
+        "source": "Product PR #415 Actions run #45541550403",
+        "sha": "55bab531205798979589732db9663f4202b4ad16",
+        "detail": "A auditoria mediu 124 cenários disparados por alteração apenas do hash do manifesto gerado, sem mudança nos HTMLs públicos; ARC-13 validou separadamente catálogo, compilador, manifesto e proveniência."
         }
       ],
-      "nextAction": "Reconciliar as famílias restantes e preservar os gates existentes até comprovar cobertura equivalente."
+    "nextAction": "Mapear as famílias e condições restantes; este recorte exclui somente o manifesto exato do browser de navegação, mantendo a checagem ARC-13 dedicada e os demais artefatos gerados no gatilho."
     },
     {
       "order": 22,
@@ -1642,14 +1648,20 @@
       "chapter": "V",
       "priority": "P0",
       "planState": "not_started",
-      "reconciliation": "unreviewed",
-      "local": "unknown",
-      "development": "unknown",
-      "main": "unknown",
-      "technicalValidation": "unknown",
+      "reconciliation": "partial",
+      "local": "partial",
+      "development": "partial",
+      "main": "not_present",
+      "technicalValidation": "partial",
       "approvalPublication": "unknown",
-      "evidence": [],
-      "nextAction": "Reconciliar este ID com código, consumidores, testes e evidência exata de branch/PR antes de alterar o estado."
+      "evidence": [
+        {
+          "source": "Product PR #415",
+          "sha": "ed89f243a1f54d80701908c707e5edc61e1ffff4",
+          "detail": "Família parcial do Admin classificada por estado consumidor: módulo e objeto compartilham visibilidade inicial do configurador; Viewer, serviços e disponibilidade de etapa permanecem semânticas distintas. Não cobre o inventário LOC-002 completo."
+        }
+      ],
+      "nextAction": "Continuar a classificação ARC-13 por estado e consumidor, preservando hold quando semântica ou autoridade do texto não estiver comprovada."
     },
     {
       "order": 102,
@@ -1728,14 +1740,20 @@
       "chapter": "V",
       "priority": "P1/P2",
       "planState": "not_started",
-      "reconciliation": "unreviewed",
-      "local": "unknown",
-      "development": "unknown",
-      "main": "unknown",
-      "technicalValidation": "unknown",
+      "reconciliation": "partial",
+      "local": "partial",
+      "development": "partial",
+      "main": "not_present",
+      "technicalValidation": "partial",
       "approvalPublication": "unknown",
-      "evidence": [],
-      "nextAction": "Reconciliar este ID com código, consumidores, testes e evidência exata de branch/PR antes de alterar o estado."
+      "evidence": [
+        {
+          "source": "Product PR #415",
+          "sha": "ed89f243a1f54d80701908c707e5edc61e1ffff4",
+          "detail": "Família parcial de textos e nomes acessíveis do estado inicial do Admin movida ao catálogo compartilhado e coberta por contrato de tema e browser hierárquico; não inclui restante do Admin/Configurador nem homologação de todo conteúdo."
+        }
+      ],
+      "nextAction": "Extrair as próximas famílias do Admin/Configurador com seus estados, consumidores e testes; manter conteúdo comercial sob sua autoridade própria."
     },
     {
       "order": 107,
@@ -1824,14 +1842,20 @@
       "chapter": "VI",
       "priority": "P0/P1",
       "planState": "not_started",
-      "reconciliation": "unreviewed",
-      "local": "unknown",
-      "development": "unknown",
-      "main": "unknown",
-      "technicalValidation": "unknown",
+      "reconciliation": "partial",
+      "local": "partial",
+      "development": "partial",
+      "main": "not_present",
+      "technicalValidation": "partial",
       "approvalPublication": "unknown",
-      "evidence": [],
-      "nextAction": "Reconciliar este ID com código, consumidores, testes e evidência exata de branch/PR antes de alterar o estado."
+      "evidence": [
+        {
+          "source": "Product PR #414",
+          "sha": "942ebcc62ead98b72e5654c3a0d73c18120367e3",
+          "detail": "Bundle consultivo public-video-player, seletor e assertions implementados e integrados em development; o seletor ainda preserva fallback amplo, é advisory e não cobre a DoD completa de TST-022."
+        }
+      ],
+      "nextAction": "Completar o mapa path→contrato→consumidor→risco→assertion, validar casos históricos e medir a seleção; conservar fallback conservador e não pular workflows sem evidência."
     },
     {
       "order": 113,
@@ -2049,10 +2073,10 @@
     "blobSha": "59bb530b14172eb9772b9f89bb62272173f4381c"
   },
   "baselineReadback": {
-    "capturedAt": "2026-11-24",
+    "capturedAt": "2026-11-25",
     "productMainSha": "01ded2c100fbfd8b16897e26113dc5068a83e429",
-    "productDevelopmentSha": "def19b2815cd7a3be30abfa33b3f1c03c1041a17",
+    "productDevelopmentSha": "ed89f243a1f54d80701908c707e5edc61e1ffff4",
     "designSystemMainSha": "c6ff6545e9ae2071e695109fd94ac91676e7fb0a",
-    "meaning": "Snapshot pins captured before this register PR; not asserted as live heads after subsequent merges."
+    "meaning": "Snapshot read back before this package; the Design System has no development branch."
   }
 }

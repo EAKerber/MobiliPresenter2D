@@ -392,6 +392,18 @@ test('TST-004 public navigation assertions resolve to exact reachable workflow r
   assert.deepEqual(development.routes.push.branches, ['development']);
   assert(development.routes.pull_request.pathIncludes.includes('tests/ci/public-navigation-semantic-browser.mjs'),
     'the development PR route must watch the shared browser test');
+  assert(development.routes.pull_request.pathIncludes.includes('architecture/generated/**'),
+    'the development route still watches other generated artifacts');
+  assert(development.routes.pull_request.pathIncludes.includes('!architecture/generated/primary-pages.manifest.json'),
+    'the generated primary-page manifest is routed to its dedicated integrity check instead of the 124-case browser run');
+  const inventoryWorkflow = definition(readFileSync(
+    path.join(root, '.github/workflows/arc13-inventory-integrity.yml'), 'utf8'
+  ), '.github/workflows/arc13-inventory-integrity.yml', 'current-workflow-blob');
+  for (const eventName of ['pull_request', 'push']) {
+    const event = inventoryWorkflow.events.find((candidate) => candidate.name === eventName);
+    assert(event?.paths.includes('architecture/generated/primary-pages.manifest.json'),
+      'ARC-13 must keep its exact manifest integrity trigger for ' + eventName);
+  }
   assert(production.routes.pull_request.pathIncludes.includes('tests/ci/public-navigation-semantic-browser.mjs'),
     'the main PR route must watch the shared browser test');
 
