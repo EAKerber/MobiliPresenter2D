@@ -111,10 +111,10 @@ class RetryTests(unittest.TestCase):
         self.batch["branches"]=[{"branch":"absent","sha":original,
             "squashMerge":{"pullRequest":42,"mergeCommit":self.sha}},
             {"branch":"live","sha":self.sha}]
-        pr={"number":42,"merged":True,"state":"closed",
+        pr={"number":42,"merged":True,"merged_at":"2026-11-25T00:00:00Z","state":"closed",
             "merge_commit_sha":self.sha,"head":{"sha":original,"ref":"absent",
             "repo":{"full_name":R}},"base":{"ref":"main","repo":{"full_name":R}}}
-        with patch("branch_hygiene_apply.api_get",return_value={**pr,"merged":False}):
+        with patch("branch_hygiene_apply.api_get",return_value={**pr,"merged":False,"merged_at":None}):
             with self.assertRaises((ValueError,RuntimeError)):
                 self.execute()
         self.assertIn("live",remote_refs())
