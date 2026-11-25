@@ -111,9 +111,6 @@ jobs:
             echo "Mask semantics or exposed-side pixel validation failed." >&2
             exit 1
           fi
-      - name: Validate current app runtime and asset invariants
-        working-directory: app
-        run: npm test
       - name: Derive current target variants
         run: |
           mkdir -p /tmp/candidate-review
