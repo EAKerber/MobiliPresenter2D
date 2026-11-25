@@ -41,6 +41,18 @@
         "treeSha": "59935c9821de7f747f5c41e0a291b06be501a662"
       },
       "note": "Exact PR head #411 is integrated into development; full source tree equals squash merge and current development. The PR audit rechecks exact SHA, open-PR state, protection, workflow references, and readback before any mutation."
+    },
+    {
+      "branch": "codex/tst001-current-snapshot-20261124",
+      "sha": "586dcf600dfe6a0bc745fdfd5ef787cbe3569433",
+      "reason": "merged-pull-request-head",
+      "allowDelete": true,
+      "evidence": {
+        "pullRequest": 412,
+        "mergedDevelopmentSha": "def19b2815cd7a3be30abfa33b3f1c03c1041a17",
+        "treeSha": "5a4e6e593f5c36cab2b400187a00723a37a547cf"
+      },
+      "note": "Exact PR head #412 is integrated into development; current branch tree matches the squash tree through the exact development base and identical updated document blobs. The PR audit rechecks exact SHA, open-PR state, protection, workflow references, and readback before any mutation."
     }
   ]
 }
