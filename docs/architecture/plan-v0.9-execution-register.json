@@ -362,19 +362,19 @@
           "source": "Product PR #399",
           "sha": "531c2814235c9524289ccb9efd909f43e01d908b",
           "detail": "Recorte parcial de navegação pública mapeado a workflows; a matriz completa de caminhos, condições, comandos, asserções e custo permanece aberta."
-      },
-      {
-        "source": "Product PR #415 Actions run #45541550403",
-        "sha": "55bab531205798979589732db9663f4202b4ad16",
-        "detail": "A auditoria mediu 124 cenários disparados por alteração apenas do hash do manifesto gerado, sem mudança nos HTMLs públicos; ARC-13 validou separadamente catálogo, compilador, manifesto e proveniência."
-      },
-      {
-        "source": "Product PR #415 Actions run #45541551282",
-        "sha": "55bab531205798979589732db9663f4202b4ad16",
-        "detail": "O gate de fronteira de configuração executou devido apenas a app/core/ui-copy.js; os comandos e consumidores cobertos não importam o catálogo visual compartilhado."
+        },
+        {
+          "source": "Product PR #415 Actions run #45541550403",
+          "sha": "55bab531205798979589732db9663f4202b4ad16",
+          "detail": "A auditoria mediu 124 cenários disparados por alteração apenas do hash do manifesto gerado, sem mudança nos HTMLs públicos; ARC-13 validou separadamente catálogo, compilador, manifesto e proveniência."
+        },
+        {
+          "source": "Product PR #415 Actions run #45541551282",
+          "sha": "55bab531205798979589732db9663f4202b4ad16",
+          "detail": "O gate de fronteira de configuração executou devido apenas a app/core/ui-copy.js; os comandos e consumidores cobertos não importam o catálogo visual compartilhado."
         }
       ],
-    "nextAction": "Mapear as famílias e condições restantes; os filtros atuais excluem somente o manifesto exato do browser de navegação e o catálogo UI do gate de configuração, preservando os respectivos gates consumidores e os demais caminhos."
+      "nextAction": "Mapear as famílias e condições restantes; os filtros atuais excluem somente o manifesto exato do browser de navegação e o catálogo UI do gate de configuração, preservando os respectivos gates consumidores e os demais caminhos."
     },
     {
       "order": 22,
@@ -1425,14 +1425,20 @@
       "chapter": "V",
       "priority": "P0",
       "planState": "not_started",
-      "reconciliation": "unreviewed",
-      "local": "unknown",
-      "development": "unknown",
-      "main": "unknown",
-      "technicalValidation": "unknown",
-      "approvalPublication": "unknown",
-      "evidence": [],
-      "nextAction": "Reconciliar este ID com código, consumidores, testes e evidência exata de branch/PR antes de alterar o estado."
+      "reconciliation": "done",
+      "local": "done",
+      "development": "done",
+      "main": "not_present",
+      "technicalValidation": "done",
+      "approvalPublication": "not_applicable",
+      "evidence": [
+        {
+          "source": "Product PR #426; exact PR and post-merge authorization gates",
+          "sha": "4506fe5860b55a7ad482f55dd0fbf15072ada145",
+          "detail": "PR #426 head bd75b0baf79b799418452379247e9d9f55d9dd1f integrou em development como squash 4506fe5860b55a7ad482f55dd0fbf15072ada145. No head exato, o run de PR #45613294609 passou nos jobs authorization-contract e access-session-browser; após o merge, o run push-only #45613520369 passou nos mesmos dois jobs. O advisory #45613520505 também passou. O pacote cobre configuração/bootstrap Admin, concessão e logs, endpoints de sessão temporária, gate de rotas, estados da navegação privada e exposição do token de convite; não altera runtime do produto. O teste Playwright usa token sintético e sessão local. Não há prova de sessão hospedada real: validar a integração real de Identity/cookie no preview exige uma conta de teste não produtiva e grant sintético, sem dados de usuário; falhas de Identity, Blob e sessão permanecem simuladas."
+        }
+      ],
+      "nextAction": "DoD DOM-013 concluído em development: a autorização foi verificada nas fronteiras de backend e rotas; a navegação apenas representa a sessão conhecida. Runtime de produção não foi alterado. Prosseguir para o próximo P0 conforme a sequência do plano."
     },
     {
       "order": 86,
@@ -1441,20 +1447,25 @@
       "chapter": "VI",
       "priority": "P0",
       "planState": "not_started",
-      "reconciliation": "partial",
-      "local": "partial",
-      "development": "partial",
-      "main": "unknown",
-      "technicalValidation": "partial",
-      "approvalPublication": "unknown",
+      "reconciliation": "done",
+      "local": "done",
+      "development": "done",
+      "main": "not_present",
+      "technicalValidation": "done",
+      "approvalPublication": "not_applicable",
       "evidence": [
         {
           "source": "Buyer auth-boundary crosswalk and local endpoint test continuation",
           "sha": "1292afe149e711dce01fce0e727fd0da033a38d4",
           "detail": "Buyer endpoint has behavioral coverage for anonymous, unauthorized, valid/expired temporary session, Identity/session-store failure, authorization before storage, and Buyer DTO allowlist. This is one surface only; delayed session, logout, administrative endpoint, menu representation, sensitive log/screenshot handling, and hosted-auth cases remain unreviewed."
+        },
+        {
+          "source": "Product PR #426; exact PR and post-merge authorization gates",
+          "sha": "4506fe5860b55a7ad482f55dd0fbf15072ada145",
+          "detail": "PR #426 head bd75b0baf79b799418452379247e9d9f55d9dd1f integrou em development como squash 4506fe5860b55a7ad482f55dd0fbf15072ada145. No head exato, o run de PR #45613294609 passou nos jobs authorization-contract e access-session-browser; após o merge, o run push-only #45613520369 passou nos mesmos dois jobs. O advisory #45613520505 também passou. O pacote cobre configuração/bootstrap Admin, concessão e logs, endpoints de sessão temporária, gate de rotas, estados da navegação privada e exposição do token de convite; não altera runtime do produto. O teste Playwright usa token sintético e sessão local. Não há prova de sessão hospedada real: validar a integração real de Identity/cookie no preview exige uma conta de teste não produtiva e grant sintético, sem dados de usuário; falhas de Identity, Blob e sessão permanecem simuladas."
         }
       ],
-      "nextAction": "Map the remaining protected surfaces and UI session states; keep the local fixture separate from real hosted-session evidence."
+      "nextAction": "DoD TST-010 concluído em development. Cobertura sintética local e gate de navegador passaram no PR e após integração. Manter como limite documentado: validação real de Identity/cookie requer preview não produtivo com conta de teste autorizada; não foi executada neste pacote."
     },
     {
       "order": 87,
@@ -1708,11 +1719,11 @@
           "source": "Product PR #419 and receipt docs/architecture/arc13/loc002-admin-stage-availability-2026-11-25.json",
           "sha": "5d3902ae408f3addd4cecfeb960fbeec4a9f291a",
           "detail": "Estado stage.enabled e suas duas políticas de elegibilidade extraídos com texto preservado; Admin browser e ARC-13 passaram. Permanece distinto de visibilidade inicial de entidades/serviços e disponibilidade de acabamentos."
-      },
-      {
-        "source": "Product PR #421 and receipt docs/architecture/arc13/loc002-admin-object-content-fields-2026-11-25.json",
-        "sha": "1292afe149e711dce01fce0e727fd0da033a38d4",
-        "detail": "Cinco rótulos de campos editoriais integrados em development sob admin.objectContentFields, com conteúdo e modelo preservados; browser Admin e todos os gates disparados passaram. main permanece sem este pacote."
+        },
+        {
+          "source": "Product PR #421 and receipt docs/architecture/arc13/loc002-admin-object-content-fields-2026-11-25.json",
+          "sha": "1292afe149e711dce01fce0e727fd0da033a38d4",
+          "detail": "Cinco rótulos de campos editoriais integrados em development sob admin.objectContentFields, com conteúdo e modelo preservados; browser Admin e todos os gates disparados passaram. main permanece sem este pacote."
         }
       ],
       "nextAction": "Continuar a classificação ARC-13 por estado e consumidor, preservando hold quando semântica ou autoridade do texto não estiver comprovada."
@@ -1815,11 +1826,11 @@
           "source": "Product PR #419 and receipt docs/architecture/arc13/loc002-admin-stage-availability-2026-11-25.json",
           "sha": "5d3902ae408f3addd4cecfeb960fbeec4a9f291a",
           "detail": "Família de disponibilidade da etapa extraída em admin.stages sem alterar stage.enabled, elegibilidade ou comportamento; o Admin browser e a integridade ARC-13 passaram. LOC-006 continua aberto para outras famílias."
-      },
-      {
-        "source": "Product PR #421 and receipt docs/architecture/arc13/loc002-admin-object-content-fields-2026-11-25.json",
-        "sha": "1292afe149e711dce01fce0e727fd0da033a38d4",
-        "detail": "Cinco rótulos de campos do Admin integrados em development sem migrar dados editoriais/comerciais nem alterar estado; browser e demais gates disparados passaram. LOC-006 continua parcial para outras famílias do Admin/Configurador."
+        },
+        {
+          "source": "Product PR #421 and receipt docs/architecture/arc13/loc002-admin-object-content-fields-2026-11-25.json",
+          "sha": "1292afe149e711dce01fce0e727fd0da033a38d4",
+          "detail": "Cinco rótulos de campos do Admin integrados em development sem migrar dados editoriais/comerciais nem alterar estado; browser e demais gates disparados passaram. LOC-006 continua parcial para outras famílias do Admin/Configurador."
         }
       ],
       "nextAction": "Extrair outras famílias Admin/Configurador com seus estados, consumidores e testes; manter conteúdo comercial sob sua autoridade própria."
