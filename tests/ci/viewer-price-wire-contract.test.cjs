@@ -22,7 +22,7 @@ function fixture(version = UNPRICED) {
     publicState: {
       viewerEntities: { "module-01": true },
       finishId: "base-light",
-      availableFinishes: [{ id: "base-light", label: "Branco" }]
+      availableFinishes: [{ id: "base-light", label: "Branco", color: "#faf9f6", textureAsset: "", textureSize: "cover" }]
     }
   };
 }
@@ -93,6 +93,24 @@ test("module membership and published scene state remain authoritative", async (
     assert.match(String(error?.message), /^invalid_public_/, "invalid published state must be denied");
   }
 });
+test("public DTO rejects unknown fields and non-exact nested memberships", async () => {
+  const invalid = [
+    (v) => { v.admin = { pricing: { secret: true } }; },
+    (v) => { v.modules[0].adminNotes = "private"; },
+    (v) => { v.modules[0].nominalDimensionsMm.widthMm = 1000; },
+    (v) => { v.publicState.viewerEntities["unpublished-module"] = true; },
+    (v) => { v.publicState.availableFinishes[0].internalCost = 12; },
+    (v) => { v.publicState.availableFinishes[0].textureAsset = "https://example.test/finish.png"; },
+    (v) => { v.publicState.debug = true; }
+  ];
+  for (const mutate of invalid) {
+    const body = fixture();
+    mutate(body);
+    const { result, error } = await invoke(body);
+    assert.equal(result, undefined);
+    assert.match(String(error?.message), /^invalid_public_/);
+  }
+});
 test("HTTP failure, network failure, unknown schema: no fallback to local catalog", async () => {
   for (const options of [{ status: 503 }, { reject: true }]) {
     const { result, error } = await invoke(fixture(PRICED), options);
@@ -105,3 +123,4 @@ test("HTTP failure, network failure, unknown schema: no fallback to local catalo
   assert.equal(result, undefined);
   assert.match(error.message, /invalid_public_module_projection/);
 });
+

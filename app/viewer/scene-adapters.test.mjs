@@ -229,7 +229,9 @@ test("public loader requests only allowlisted endpoint; rejects invalid response
     calls.push({ url, init });
     return { ok: true, async json() {
       return { schemaVersion: "PublicModulePresentation2D 0.1",
-        modules: [{ id: "module-03", title: "Nome publicado" }],
+        modules: [{ id: "module-03", title: "Nome publicado",
+          dimensionLabel: "1000 × 800 × 550 mm",
+          nominalDimensionsMm: { width: 1000, height: 800, depth: 550 } }],
         publicState: { entities: { "module-03": true },
           finishId: "base-light", availableFinishes: [{
             id: "base-light", label: "Branco", color: "#faf9f6", textureAsset: "", textureSize: "cover"

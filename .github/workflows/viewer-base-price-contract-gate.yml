@@ -6,14 +6,20 @@ on:
       - 'app/admin/**'
       - 'app/admin.html'
       - 'app/core/administration-v5.js'
+      - 'app/core/flow-model.js'
+      - 'app/core/pricing-contract.js'
       - 'app/core/public-module-projection.js'
       - 'app/data/catalog-data.js'
+      - 'app/data/configurator-settings.js'
+      - 'app/data/hierarchy-defaults.js'
       - 'app/data/mock-price-book.js'
+      - 'app/data/presentation-policy-defaults.js'
       - 'app/data/scene-data.js'
       - 'app/tools/test-public-modules-endpoint.js'
       - 'app/viewer/**'
       - 'netlify/functions/public-modules.mjs'
       - 'tests/viewer-base-price*'
+      - 'tests/ci/viewer-price-wire-contract.test.cjs'
       - 'tests/viewer-price-v5-save.test.cjs'
       - '.github/workflows/viewer-base-price-contract-gate.yml'
   push:
@@ -22,14 +28,20 @@ on:
       - 'app/admin/**'
       - 'app/admin.html'
       - 'app/core/administration-v5.js'
+      - 'app/core/flow-model.js'
+      - 'app/core/pricing-contract.js'
       - 'app/core/public-module-projection.js'
       - 'app/data/catalog-data.js'
+      - 'app/data/configurator-settings.js'
+      - 'app/data/hierarchy-defaults.js'
       - 'app/data/mock-price-book.js'
+      - 'app/data/presentation-policy-defaults.js'
       - 'app/data/scene-data.js'
       - 'app/tools/test-public-modules-endpoint.js'
       - 'app/viewer/**'
       - 'netlify/functions/public-modules.mjs'
       - 'tests/viewer-base-price*'
+      - 'tests/ci/viewer-price-wire-contract.test.cjs'
       - 'tests/viewer-price-v5-save.test.cjs'
       - '.github/workflows/viewer-base-price-contract-gate.yml'
   workflow_dispatch:
@@ -46,6 +58,7 @@ jobs:
         with:
           node-version: "22"
       - run: node --test tests/viewer-base-price-publication.test.cjs tests/viewer-price-v5-save.test.cjs
+      - run: node --test tests/ci/viewer-price-wire-contract.test.cjs tests/public-module-projection.test.cjs
       - run: node app/tools/test-administration-v5.js && node app/tools/test-v5-normal-save.js && node app/tools/test-v5-endpoint-safety.js && node app/tools/test-public-modules-endpoint.js
       - run: node --check app/core/administration-v5.js && node --check app/core/public-module-projection.js && node --check netlify/functions/public-modules.mjs && node --check app/viewer/public-data.js && node --check app/viewer/scene-adapters.js && node --check app/viewer/viewer.js
       - run: npm install --no-audit --no-fund
@@ -64,3 +77,4 @@ jobs:
           path: artifacts/viewer-base-price/
           if-no-files-found: ignore
           retention-days: 7
+
