@@ -241,3 +241,12 @@ Exact pins in the main development-retirement receipt:
 - PR #315: `codex/loc004-youtube-links-20261123@f99be7c657fb897a513e19e13aa0dafbe64175db`.
 
 **Readback limit:** run-level and job/step conclusions are verified from GitHub Actions. Where a run SHA differs from the current source pin, matching workflow-blob identity proves only that the workflow definition is unchanged; it does not prove every script, manifest, or test input is identical. Four apply receipts were read and their exact effects recorded; all receipts and their branch counts are historical, while the current branch list is a separate live snapshot. This is a result matrix for the seven operational paths, not completion of TST-001: the other validation workflows, candidate/historical workflow classification, uninvoked test files, assertion links, and representative run-cost analysis remain open.
+
+
+## TST-001 exact inventory refresh — 2026-11-24
+
+The inventory was regenerated in an isolated checkout at the exact live refs: Product `main@01ded2c100fbfd8b16897e26113dc5068a83e429` (tree `d1588ab2a71c5de7e8b7cfaa907d5e5637fa7178`) and `development@116800e11016fb9093ce4ab5e3c0ed1e8527fe15` (tree `59935c9821de7f747f5c41e0a291b06be501a662`). The generator confirmed the development worktree head and tree against the pin. The live open-PR readback contained #400 and #407, both targeting `main` at the pinned base SHA.
+
+This local readback records 27 workflow files on `main`, 68 on `development`, 25 shared paths, 2 main-only paths and 43 development-only paths. The union contains 70 workflow paths and 89 distinct branch-version definitions with 364 declared run-command entries. Development definitions declare 27 `pull_request`, 62 `push`, 54 `workflow_dispatch` and 1 `schedule` events; event counts overlap. Four definitions are dispatch-only, seven carry conservative write/operation signals, and parser warnings are zero.
+
+This is a local exact-source regeneration, not a hosted Actions artifact. The PR validation and post-integration push readback remain pending. The inventory is still a source map: command-to-assertion reachability across the full set, event/conditional execution outcomes and representative end-to-end cost analysis remain open. No reduction in test count or runtime is claimed.
