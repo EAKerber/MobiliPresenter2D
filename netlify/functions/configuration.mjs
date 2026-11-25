@@ -37,6 +37,7 @@ async function readPublished(store) {
   if (inspected.kind === "missing" || inspected.code === "invalid_v3") {
     return {
       kind: "fallback", schema: configCore.SCHEMA,
+      code: inspected.kind === "missing" ? "published_configuration_missing" : inspected.code,
       value: configCore.createDefaultAdministration(defaults, catalog, priceBook)
     };
   }
@@ -62,7 +63,12 @@ export default async (request, context) => {
   }
 
   if (request.method === "GET") {
-    const user = await getUser();
+    let user;
+    try {
+      user = await getUser();
+    } catch {
+      return respond({ error: "identity_unavailable" }, 503);
+    }
     if (!canManageAdministration(user)) {
       return respond({ error: user ? "forbidden" : "unauthorized" }, user ? 403 : 401);
     }
@@ -73,10 +79,15 @@ export default async (request, context) => {
       : respond(published.value);
   }
 
-  const user = await getUser();
-  const roles = [...(user?.roles || []), ...(user?.app_metadata?.roles || [])];
-  if (!user) return respond({ error: "unauthorized" }, 401);
-  if (!roles.includes("admin")) return respond({ error: "forbidden" }, 403);
+  let user;
+  try {
+    user = await getUser();
+  } catch {
+    return respond({ error: "identity_unavailable" }, 503);
+  }
+  if (!canManageAdministration(user)) {
+    return respond({ error: user ? "forbidden" : "unauthorized" }, user ? 403 : 401);
+  }
   const store = getConfigurationStore(context);
 
   const declaredLength = Number(request.headers.get("content-length") || 0);
@@ -99,6 +110,11 @@ export default async (request, context) => {
   }
 
   const currentRead = await readPublished(store);
+  if (currentRead.kind === "fallback") {
+    return currentRead.code === "published_configuration_missing"
+      ? respond({ error: "published_configuration_missing" }, 409)
+      : respond({ error: "stored_configuration_invalid", code: currentRead.code }, 409);
+  }
   if (currentRead.kind === "invalid") {
     return respond({ error: "stored_configuration_invalid", code: currentRead.code }, 409);
   }

@@ -67,6 +67,7 @@ async function main() {
   } = globalThis.__v5ReadinessHarness;\n`;
 
   let viewer = null;
+  const identityFailure = Symbol("mock_identity_unavailable");
   const siteStore = makeStore(v3);
   const previewStore = makeStore(v3);
   let siteOpens = 0;
@@ -82,7 +83,10 @@ async function main() {
       assert.deepEqual(options, { name: "configurator-settings", consistency: "strong" });
       return previewStore;
     },
-    async getUser() { return viewer; },
+    async getUser() {
+      if (viewer === identityFailure) throw new Error("identity fixture unavailable");
+      return viewer;
+    },
     configCore: configuration, administrationV5, publishedReader, v5Migration,
     v5Inspection, v5NormalSave, flow, hierarchyDefaults, legacyStageRepair,
     defaults, catalog, priceBook, scene,
@@ -111,6 +115,19 @@ async function main() {
     const staffRead = await invoke("GET", "/api/configuration");
     assert.equal(staffRead.status, 403, "staff cannot read the administrative raw configuration API");
     assert.equal(previewOpens, 0, "staff-denied reads must not open a Blob store");
+    viewer = identityFailure;
+    for (const method of ["GET", "PUT"]) {
+      assert.deepEqual(await invoke(method, "/api/configuration", method === "PUT" ? v3 : undefined),
+        { status: 503, body: { error: "identity_unavailable" } });
+    }
+    assert.equal(previewOpens, 0, "identity failure must not open Blob");
+    viewer = null;
+    viewer = { roles: ["admin"] };
+    for (const method of ["GET", "PUT"]) {
+      assert.deepEqual(await invoke(method, "/api/configuration", method === "PUT" ? v3 : undefined),
+        { status: 403, body: { error: "forbidden" } });
+    }
+    assert.equal(previewOpens, 0, "role claims without a principal ID must not open Blob");
     viewer = { id: "admin-1", roles: ["admin"] };
     const adminRead = await invoke("GET", "/api/configuration");
     assert.equal(adminRead.status, 200);
@@ -165,6 +182,42 @@ async function main() {
     assert.equal(currentAdmin.body.schemaVersion, configuration.SCHEMA);
     assert.equal(siteOpens, 1, "only explicit production mock context opens site store");
     assert.equal(siteStore.writes, 0);
+
+    // Preserve the approved historical GET fallback, but never use fallback
+    // defaults as source data for a PUT after missing or invalid v3 storage.
+    const assertLegacyFallback = async (store, name, expectedError) => {
+      globalThis.__v5ReadinessHarness = {
+        ...globalThis.__v5ReadinessHarness,
+        getDeployStore: () => store
+      };
+      const fallbackModule = await import("data:text/javascript;base64," +
+        Buffer.from(moduleSource + "\n// legacy-fallback-" + name).toString("base64"));
+      const send = async (method, body) => {
+        const response = await fallbackModule.default(
+          new Request("https://unit-test.invalid/api/configuration", {
+            method,
+            headers: method === "PUT" ? { "Content-Type": "application/json" } : {},
+            body: method === "PUT" ? JSON.stringify(body) : undefined
+          }),
+          previewContext
+        );
+        return { status: response.status, body: await response.json() };
+      };
+      viewer = { id: "admin-1", roles: ["admin"] };
+      const read = await send("GET");
+      assert.equal(read.status, 200, name + " GET keeps historical resilience");
+      assert.equal(read.body.schemaVersion, configuration.SCHEMA);
+      assert.deepEqual(await send("PUT", v3), expectedError, name + " PUT rejects fallback source");
+      assert.equal(store.writes, 0, name + " fallback source must never be persisted");
+    };
+    await assertLegacyFallback(makeStore(null), "missing", {
+      status: 409, body: { error: "published_configuration_missing" }
+    });
+    const invalidV3 = structuredClone(v3);
+    invalidV3.stages = null;
+    await assertLegacyFallback(makeStore(invalidV3), "invalid-v3", {
+      status: 409, body: { error: "stored_configuration_invalid", code: "invalid_v3" }
+    });
 
     // Test native v5 editing only with an already-v5 preview store. The real
     // migration stays OFF and no production site-wide store is changed.
