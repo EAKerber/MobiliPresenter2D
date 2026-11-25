@@ -7,76 +7,112 @@
   ],
   "terminalBranches": [
     {
-      "branch": "codex/tst004-mask-assertion-crosswalk-20261124",
-      "sha": "531c2814235c9524289ccb9efd909f43e01d908b",
+      "branch": "codex/v09-test-bundle-impact-20261124",
+      "sha": "53dc42d5922b40ac900fdd7046159e2ec9867c8e",
       "reason": "merged-pull-request-head",
       "allowDelete": true,
       "evidence": {
-        "pullRequest": 399,
-        "mergedDevelopmentSha": "fbe6b9b409dd67884dd9447b02f87752a7d0f8ff",
-        "treeSha": "80d486ab8044a398286de26f26aa70853489df08"
+        "pullRequest": 414,
+        "mergedDevelopmentSha": "942ebcc62ead98b72e5654c3a0d73c18120367e3",
+        "treeSha": "0ba81d6c1967e8ff2675642432ccc6b93b5861e5"
       },
-      "note": "Exact PR head #399 is integrated into development; full source tree equals squash merge. The PR audit rechecks exact SHA, open-PR state, protection, workflow references, and readback before any mutation."
+      "note": "Exact integrated PR head; full Git tree matches reachable development squash commit. Live safety checks mandatory."
     },
     {
-      "branch": "codex/dom011-buyer-fixture-v5-validation-20261124",
-      "sha": "1f5515c5416ce877fcc8072db2b869bb3046625c",
+      "branch": "codex/loc006-admin-initial-state-copy-20261125",
+      "sha": "55bab531205798979589732db9663f4202b4ad16",
       "reason": "merged-pull-request-head",
       "allowDelete": true,
       "evidence": {
-        "pullRequest": 409,
-        "mergedDevelopmentSha": "c78a20ca0ccc8c6bd0f870caa78a8814b9363bd7",
-        "treeSha": "08d7d36db42003731713e370687e33c3fee3cec4"
+        "pullRequest": 415,
+        "mergedDevelopmentSha": "ed89f243a1f54d80701908c707e5edc61e1ffff4",
+        "treeSha": "77191dc54239c89bfa5fded54bcc7a9432817778"
       },
-      "note": "Exact PR head #409 is integrated into development; full source tree equals squash merge. The PR audit rechecks exact SHA, open-PR state, protection, workflow references, and readback before any mutation."
+      "note": "Exact integrated PR head; full Git tree matches reachable development squash commit. Live safety checks mandatory."
     },
     {
-      "branch": "codex/cmp001-admin-stage-availability-20261124",
-      "sha": "0dec2e67e3fb997b66e444f8805ee607a28453b2",
+      "branch": "codex/tst004-public-nav-manifest-trigger-20261125",
+      "sha": "eb407b0a341764bd2da4c2b5b830c7696b38b8d3",
       "reason": "merged-pull-request-head",
       "allowDelete": true,
       "evidence": {
-        "pullRequest": 411,
-        "mergedDevelopmentSha": "116800e11016fb9093ce4ab5e3c0ed1e8527fe15",
-        "treeSha": "59935c9821de7f747f5c41e0a291b06be501a662"
+        "pullRequest": 416,
+        "mergedDevelopmentSha": "acedcda23b4534b2eb848133b7231b288ccf2a36",
+        "treeSha": "8a44acf75418648f0b8ffc3c4f55cd101c3d8e1a"
       },
-      "note": "Exact PR head #411 is integrated into development; full source tree equals squash merge and current development. The PR audit rechecks exact SHA, open-PR state, protection, workflow references, and readback before any mutation."
+      "note": "Exact integrated PR head; full Git tree matches reachable development squash commit. Live safety checks mandatory."
     },
     {
-      "branch": "codex/tst001-current-snapshot-20261124",
-      "sha": "586dcf600dfe6a0bc745fdfd5ef787cbe3569433",
+      "branch": "codex/tst004-config-ui-copy-trigger-20261125",
+      "sha": "63fa2e53af055c0a3e8136de34046e75c2c5d56b",
       "reason": "merged-pull-request-head",
       "allowDelete": true,
       "evidence": {
-        "pullRequest": 412,
-        "mergedDevelopmentSha": "def19b2815cd7a3be30abfa33b3f1c03c1041a17",
-        "treeSha": "5a4e6e593f5c36cab2b400187a00723a37a547cf"
+        "pullRequest": 417,
+        "mergedDevelopmentSha": "573b50d91dbb58762f9464b69df98aadcd4440cc",
+        "treeSha": "efcae92b6aea328ec63f0eefb857acc065340006"
       },
-      "note": "Exact PR head #412 is integrated into development; current branch tree matches the squash tree through the exact development base and identical updated document blobs. The PR audit rechecks exact SHA, open-PR state, protection, workflow references, and readback before any mutation."
+      "note": "Exact integrated PR head; full Git tree matches reachable development squash commit. Live safety checks mandatory."
     },
     {
-      "branch": "codex/v09-operational-register-20261124",
-      "sha": "a973c54ffee2e7b2e262fb5c23f8d391c9707eb1",
+      "branch": "codex/loc006-admin-finish-availability-copy-20261125",
+      "sha": "d47544e64a668bc14076783d0d9247691adfc6e8",
       "reason": "merged-pull-request-head",
       "allowDelete": true,
       "evidence": {
-        "pullRequest": 413,
-        "mergedDevelopmentSha": "6fbddd5a522dfe5ecc218132253647980720ba37",
-        "treeSha": "1be000795a13cbc99bc18cffe61b41116d100e12"
+        "pullRequest": 418,
+        "mergedDevelopmentSha": "eb02f3332766f150ca6eff015772598a14b58431",
+        "treeSha": "67de76506b9b9b48cd25bd5ece326ee39245f312"
       },
-      "note": "PR #413 is merged to development; exact branch head and squash merge have the same tree. The automatic gate rechecks exact SHA, current PR usage, protection, workflow references and readback before removal."
+      "note": "Exact integrated PR head; full Git tree matches reachable development squash commit. Live safety checks mandatory."
     },
     {
-      "branch": "codex/loc006-viewer-price-copy-20261124",
-      "sha": "ace3fa3d5d29fe1da37e989c4def6583ee1c5859",
+      "branch": "codex/loc006-admin-stage-availability-copy-20261125",
+      "sha": "6d8bf64578b293e4fdb447ef7c4995942b1c9124",
       "reason": "merged-pull-request-head",
       "allowDelete": true,
       "evidence": {
-        "pullRequest": 410,
-        "mergedDevelopmentSha": "8ba626f6026ce8ea7016e4414dacbf74f39de30f",
-        "treeSha": "47398369f5b904caed49d9acb7fc26f6e1999069"
+        "pullRequest": 419,
+        "mergedDevelopmentSha": "5d3902ae408f3addd4cecfeb960fbeec4a9f291a",
+        "treeSha": "5e391a2e9f94d964ff122b598abbac03f5ed4440"
       },
-      "note": "Exact PR #410 head is integrated into development; its full tree equals the squash merge tree. The retirement audit rechecks exact SHA, open-PR state, protection, workflow references, and readback before any deletion."
+      "note": "Exact integrated PR head; full Git tree matches reachable development squash commit. Live safety checks mandatory."
+    },
+    {
+      "branch": "codex/loc006-admin-scene-asset-policy-copy-20261125",
+      "sha": "abe7768c1ed2c771dd2d8873e9a7949ec740f6f7",
+      "reason": "merged-pull-request-head",
+      "allowDelete": true,
+      "evidence": {
+        "pullRequest": 420,
+        "mergedDevelopmentSha": "d20b50c6d763271c548d201125f678e3806cc66d",
+        "treeSha": "5c0faf9ab972f49cddc52de448d840311fb2e97f"
+      },
+      "note": "Exact integrated PR head; full Git tree matches reachable development squash commit. Live safety checks mandatory."
+    },
+    {
+      "branch": "codex/loc006-admin-object-content-fields-20261125",
+      "sha": "cae906d9c2d08804397b8059919953df15d92ecb",
+      "reason": "merged-pull-request-head",
+      "allowDelete": true,
+      "evidence": {
+        "pullRequest": 421,
+        "mergedDevelopmentSha": "1292afe149e711dce01fce0e727fd0da033a38d4",
+        "treeSha": "0f09e2884e15df311d1a24f75d4b9eb9908a06f5"
+      },
+      "note": "Exact integrated PR head; full Git tree matches reachable development squash commit. Live safety checks mandatory."
+    },
+    {
+      "branch": "codex/dom011-buyer-boundary-reconcile-20261125",
+      "sha": "08669ae5f726b978582dbef519ed5773dfc311a1",
+      "reason": "merged-pull-request-head",
+      "allowDelete": true,
+      "evidence": {
+        "pullRequest": 422,
+        "mergedDevelopmentSha": "5f8c3161f3177ae28e30adf5236dbe822db7b590",
+        "treeSha": "2bcf7977dc57f5b4dfb6cbb54777e541941ac08d"
+      },
+      "note": "Exact integrated PR head; full Git tree matches reachable development squash commit. Live safety checks mandatory."
     }
   ]
 }

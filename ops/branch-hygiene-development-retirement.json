@@ -8,27 +8,27 @@
       "id": "batch-1",
       "branches": [
         {
-          "branch": "codex/tst004-mask-assertion-crosswalk-20261124",
-          "sha": "531c2814235c9524289ccb9efd909f43e01d908b",
+          "branch": "codex/v09-test-bundle-impact-20261124",
+          "sha": "53dc42d5922b40ac900fdd7046159e2ec9867c8e",
           "squashMerge": {
-            "pullRequest": 399,
-            "mergeCommit": "fbe6b9b409dd67884dd9447b02f87752a7d0f8ff"
+            "pullRequest": 414,
+            "mergeCommit": "942ebcc62ead98b72e5654c3a0d73c18120367e3"
           }
         },
         {
-          "branch": "codex/dom011-buyer-fixture-v5-validation-20261124",
-          "sha": "1f5515c5416ce877fcc8072db2b869bb3046625c",
+          "branch": "codex/loc006-admin-initial-state-copy-20261125",
+          "sha": "55bab531205798979589732db9663f4202b4ad16",
           "squashMerge": {
-            "pullRequest": 409,
-            "mergeCommit": "c78a20ca0ccc8c6bd0f870caa78a8814b9363bd7"
+            "pullRequest": 415,
+            "mergeCommit": "ed89f243a1f54d80701908c707e5edc61e1ffff4"
           }
         },
         {
-          "branch": "codex/cmp001-admin-stage-availability-20261124",
-          "sha": "0dec2e67e3fb997b66e444f8805ee607a28453b2",
+          "branch": "codex/tst004-public-nav-manifest-trigger-20261125",
+          "sha": "eb407b0a341764bd2da4c2b5b830c7696b38b8d3",
           "squashMerge": {
-            "pullRequest": 411,
-            "mergeCommit": "116800e11016fb9093ce4ab5e3c0ed1e8527fe15"
+            "pullRequest": 416,
+            "mergeCommit": "acedcda23b4534b2eb848133b7231b288ccf2a36"
           }
         }
       ]
@@ -37,27 +37,56 @@
       "id": "batch-2",
       "branches": [
         {
-          "branch": "codex/tst001-current-snapshot-20261124",
-          "sha": "586dcf600dfe6a0bc745fdfd5ef787cbe3569433",
+          "branch": "codex/tst004-config-ui-copy-trigger-20261125",
+          "sha": "63fa2e53af055c0a3e8136de34046e75c2c5d56b",
           "squashMerge": {
-            "pullRequest": 412,
-            "mergeCommit": "def19b2815cd7a3be30abfa33b3f1c03c1041a17"
+            "pullRequest": 417,
+            "mergeCommit": "573b50d91dbb58762f9464b69df98aadcd4440cc"
           }
         },
         {
-          "branch": "codex/v09-operational-register-20261124",
-          "sha": "a973c54ffee2e7b2e262fb5c23f8d391c9707eb1",
+          "branch": "codex/loc006-admin-finish-availability-copy-20261125",
+          "sha": "d47544e64a668bc14076783d0d9247691adfc6e8",
           "squashMerge": {
-            "pullRequest": 413,
-            "mergeCommit": "6fbddd5a522dfe5ecc218132253647980720ba37"
+            "pullRequest": 418,
+            "mergeCommit": "eb02f3332766f150ca6eff015772598a14b58431"
           }
         },
         {
-          "branch": "codex/loc006-viewer-price-copy-20261124",
-          "sha": "ace3fa3d5d29fe1da37e989c4def6583ee1c5859",
+          "branch": "codex/loc006-admin-stage-availability-copy-20261125",
+          "sha": "6d8bf64578b293e4fdb447ef7c4995942b1c9124",
           "squashMerge": {
-            "pullRequest": 410,
-            "mergeCommit": "8ba626f6026ce8ea7016e4414dacbf74f39de30f"
+            "pullRequest": 419,
+            "mergeCommit": "5d3902ae408f3addd4cecfeb960fbeec4a9f291a"
+          }
+        }
+      ]
+    },
+    {
+      "id": "batch-3",
+      "branches": [
+        {
+          "branch": "codex/loc006-admin-scene-asset-policy-copy-20261125",
+          "sha": "abe7768c1ed2c771dd2d8873e9a7949ec740f6f7",
+          "squashMerge": {
+            "pullRequest": 420,
+            "mergeCommit": "d20b50c6d763271c548d201125f678e3806cc66d"
+          }
+        },
+        {
+          "branch": "codex/loc006-admin-object-content-fields-20261125",
+          "sha": "cae906d9c2d08804397b8059919953df15d92ecb",
+          "squashMerge": {
+            "pullRequest": 421,
+            "mergeCommit": "1292afe149e711dce01fce0e727fd0da033a38d4"
+          }
+        },
+        {
+          "branch": "codex/dom011-buyer-boundary-reconcile-20261125",
+          "sha": "08669ae5f726b978582dbef519ed5773dfc311a1",
+          "squashMerge": {
+            "pullRequest": 422,
+            "mergeCommit": "5f8c3161f3177ae28e30adf5236dbe822db7b590"
           }
         }
       ]
