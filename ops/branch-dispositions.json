@@ -653,6 +653,55 @@
         "originalHead": "d1fe79faafa1ed7345aff8afeb33bbf5e4a21e22"
       },
       "note": "Entire ops tree identical at merged commit; difference only pre-existing #440 workflow changes. Original HEAD is a direct parent of the exact archive commit; preserve archive."
+    },
+    {
+      "branch": "codex/nav005-development-buffer-20261121",
+      "sha": "9c18dd97bfc4cf50e55fa60349a6496fa3d723e4",
+      "reason": "superseded-exact-archive-preserved",
+      "allowDelete": true,
+      "evidence": {
+        "pullRequest": 294,
+        "successorPRs": [
+          295,
+          296
+        ],
+        "archiveRef": "archive/product-hygiene-20261125",
+        "archiveSha": "7d729bda2138e40baa87d50a5ba4ade0ace1d48d",
+        "originalHead": "9c18dd97bfc4cf50e55fa60349a6496fa3d723e4"
+      },
+      "note": "Incorrect squash ancestry in follow-up; successor gate fixes integrated. Original HEAD preserved as direct parent of archive; not a runtime merge."
+    },
+    {
+      "branch": "codex/arc13-localization-menu-theme-20261122",
+      "sha": "fc12bb628b949fe156bb969cbed1acf8df72e668",
+      "reason": "superseded-exact-archive-preserved",
+      "allowDelete": true,
+      "evidence": {
+        "pullRequest": 314,
+        "successorPRs": [
+          315
+        ],
+        "archiveRef": "archive/product-hygiene-20261125",
+        "archiveSha": "7d729bda2138e40baa87d50a5ba4ade0ace1d48d",
+        "originalHead": "fc12bb628b949fe156bb969cbed1acf8df72e668"
+      },
+      "note": "PR explicitly closed as replaced by #315 on clean development base. Original HEAD preserved as direct parent of archive; not a runtime merge."
+    },
+    {
+      "branch": "codex/tst001-refreshable-inventory-20261124",
+      "sha": "6f7a0d3f93ba3f0f4483ffb143785d81cb0c5ed2",
+      "reason": "superseded-exact-archive-preserved",
+      "allowDelete": true,
+      "evidence": {
+        "pullRequest": 354,
+        "successorPRs": [
+          355
+        ],
+        "archiveRef": "archive/product-hygiene-20261125",
+        "archiveSha": "7d729bda2138e40baa87d50a5ba4ade0ace1d48d",
+        "originalHead": "6f7a0d3f93ba3f0f4483ffb143785d81cb0c5ed2"
+      },
+      "note": "Successor adds push-triggered inventory, retaining manual path. Original HEAD preserved as direct parent of archive; not a runtime merge."
     }
   ]
 }
