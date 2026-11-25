@@ -13,7 +13,7 @@ from pathlib import Path
 
 REPO="EAKerber/MobiliPresenter2D"
 SOURCE="10445ad8c20ac1a415f4ba463345eda83bd7e9a6"
-MAIN="01ded2c100fbfd8b16897e26113dc5068a83e429"
+MAIN="2f1b7e1ee8fbc81b8bc8d22014cfe29d599da37f"
 HISTORICAL_BASE="221b54b2a41ecc8c338d1bf2cf67280cf165ce95"
 SCOPE={
     ".github/workflows/viewer-secondary-header-isolated.yml",
