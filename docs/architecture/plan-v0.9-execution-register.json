@@ -18,15 +18,21 @@
       "title": "Criar snapshot operacional dos repositórios",
       "chapter": "VII",
       "priority": "P0",
-      "planState": "not_started",
-      "reconciliation": "unreviewed",
-      "local": "unknown",
-      "development": "unknown",
-      "main": "unknown",
-      "technicalValidation": "unknown",
-      "approvalPublication": "unknown",
-      "evidence": [],
-      "nextAction": "Reconciliar este ID com código, consumidores, testes e evidência exata de branch/PR antes de alterar o estado."
+      "planState": "done",
+      "reconciliation": "done",
+      "local": "done",
+      "development": "done",
+      "main": "done",
+      "technicalValidation": "not_applicable",
+      "approvalPublication": "not_applicable",
+      "evidence": [
+        {
+          "source": "docs/architecture/git/git-001-operational-snapshot-2026-11-25.json",
+          "sha": "d0f63d0c62ed25a78067bb8b2e98d88fded5a1a7",
+          "detail": "Read-only operational snapshot captured 2026-11-25T12:58:31Z: exact remote refs and workflows, open/draft PRs and changed paths, Product main/development relation and merge base, local active worktree dirty-path record, production deploy/commit, relevant ready preview, and access limits. Protection/required-check APIs returned 403; Design System development lookup returned 404; compare file list is capped at 300."
+        }
+      ],
+      "nextAction": "GIT-001 snapshot is recorded. Use it as the base for GIT-002/GIT-003/GIT-004; re-read fast-moving refs and protections immediately before any dependent Git operation."
     },
     {
       "order": 2,
@@ -345,9 +351,14 @@
           "source": "Product PR #428; access-surface crosswalk and exact selector run",
           "sha": "24900259d21c3efcbfc1194cad92f5fad498656e",
           "detail": "PR #428 head f74ceaf3fdefcb67fa921970340e645c6c5b3e52 integrou como 24900259d21c3efcbfc1194cad92f5fad498656e. O novo crosswalk docs/architecture/ci/tst-002-access-surface-crosswalk-2026-11-25.md fixa os testes Admin/sessão/menu/convite no snapshot base 8de7fa6e29f06c988be07a56dba16b585e5cf021 e limita a prova a fixtures locais/sintéticas. O bundle access-surface agora está coberto pelo seletor, com comandos e filtros do workflow validados no run PR #45616269814 (sucesso). Os caminhos Admin e política Identity selecionam também os bundles independentes viewer-pricing/Buyer; testes foram ajustados para registrar essa cobertura dupla. TST-002 segue parcial: a matriz completa ainda falta e o crosswalk Buyer legado tem pin antigo."
+        },
+        {
+          "source": "Product PR #430; refreshed Buyer crosswalk pin and exact impact-plan run #45618020713",
+          "sha": "d0f63d0c62ed25a78067bb8b2e98d88fded5a1a7",
+          "detail": "PR #430 refreshed the Buyer crosswalk to the current code-source pin 8517b708c5b05693c1522894d410e28e8686c593, corrected the literal placeholder in the readback base, and merged as d0f63d0c62ed25a78067bb8b2e98d88fded5a1a7. Exact-head advisory jobs plan and inventory passed in run #45618020713. Local Buyer test remains 1/1; no hosted Identity/Blob validation or post-merge run is claimed. The broader TST-002 matrix remains partial."
         }
       ],
-      "nextAction": "Continuar a matriz TST-002 por risco. Atualizar o crosswalk Buyer com o pin atual antes de usá-lo como evidência corrente; manter as slices distintas e os níveis local/hospedado explícitos. Nenhuma redução de gate foi autorizada por este slice."
+      "nextAction": "Expand TST-002 by risk beyond the Buyer and access-surface slices; keep fixture-only, exact-head CI, and hosted Identity/Blob evidence distinguished. The stale Buyer source pin has been refreshed."
     },
     {
       "order": 21,
@@ -367,19 +378,19 @@
           "source": "Product PR #399",
           "sha": "531c2814235c9524289ccb9efd909f43e01d908b",
           "detail": "Recorte parcial de navegação pública mapeado a workflows; a matriz completa de caminhos, condições, comandos, asserções e custo permanece aberta."
-      },
-      {
-        "source": "Product PR #415 Actions run #45541550403",
-        "sha": "55bab531205798979589732db9663f4202b4ad16",
-        "detail": "A auditoria mediu 124 cenários disparados por alteração apenas do hash do manifesto gerado, sem mudança nos HTMLs públicos; ARC-13 validou separadamente catálogo, compilador, manifesto e proveniência."
-      },
-      {
-        "source": "Product PR #415 Actions run #45541551282",
-        "sha": "55bab531205798979589732db9663f4202b4ad16",
-        "detail": "O gate de fronteira de configuração executou devido apenas a app/core/ui-copy.js; os comandos e consumidores cobertos não importam o catálogo visual compartilhado."
+        },
+        {
+          "source": "Product PR #415 Actions run #45541550403",
+          "sha": "55bab531205798979589732db9663f4202b4ad16",
+          "detail": "A auditoria mediu 124 cenários disparados por alteração apenas do hash do manifesto gerado, sem mudança nos HTMLs públicos; ARC-13 validou separadamente catálogo, compilador, manifesto e proveniência."
+        },
+        {
+          "source": "Product PR #415 Actions run #45541551282",
+          "sha": "55bab531205798979589732db9663f4202b4ad16",
+          "detail": "O gate de fronteira de configuração executou devido apenas a app/core/ui-copy.js; os comandos e consumidores cobertos não importam o catálogo visual compartilhado."
         }
       ],
-    "nextAction": "Mapear as famílias e condições restantes; os filtros atuais excluem somente o manifesto exato do browser de navegação e o catálogo UI do gate de configuração, preservando os respectivos gates consumidores e os demais caminhos."
+      "nextAction": "Mapear as famílias e condições restantes; os filtros atuais excluem somente o manifesto exato do browser de navegação e o catálogo UI do gate de configuração, preservando os respectivos gates consumidores e os demais caminhos."
     },
     {
       "order": 22,
@@ -1724,11 +1735,11 @@
           "source": "Product PR #419 and receipt docs/architecture/arc13/loc002-admin-stage-availability-2026-11-25.json",
           "sha": "5d3902ae408f3addd4cecfeb960fbeec4a9f291a",
           "detail": "Estado stage.enabled e suas duas políticas de elegibilidade extraídos com texto preservado; Admin browser e ARC-13 passaram. Permanece distinto de visibilidade inicial de entidades/serviços e disponibilidade de acabamentos."
-      },
-      {
-        "source": "Product PR #421 and receipt docs/architecture/arc13/loc002-admin-object-content-fields-2026-11-25.json",
-        "sha": "1292afe149e711dce01fce0e727fd0da033a38d4",
-        "detail": "Cinco rótulos de campos editoriais integrados em development sob admin.objectContentFields, com conteúdo e modelo preservados; browser Admin e todos os gates disparados passaram. main permanece sem este pacote."
+        },
+        {
+          "source": "Product PR #421 and receipt docs/architecture/arc13/loc002-admin-object-content-fields-2026-11-25.json",
+          "sha": "1292afe149e711dce01fce0e727fd0da033a38d4",
+          "detail": "Cinco rótulos de campos editoriais integrados em development sob admin.objectContentFields, com conteúdo e modelo preservados; browser Admin e todos os gates disparados passaram. main permanece sem este pacote."
         }
       ],
       "nextAction": "Continuar a classificação ARC-13 por estado e consumidor, preservando hold quando semântica ou autoridade do texto não estiver comprovada."
@@ -1831,11 +1842,11 @@
           "source": "Product PR #419 and receipt docs/architecture/arc13/loc002-admin-stage-availability-2026-11-25.json",
           "sha": "5d3902ae408f3addd4cecfeb960fbeec4a9f291a",
           "detail": "Família de disponibilidade da etapa extraída em admin.stages sem alterar stage.enabled, elegibilidade ou comportamento; o Admin browser e a integridade ARC-13 passaram. LOC-006 continua aberto para outras famílias."
-      },
-      {
-        "source": "Product PR #421 and receipt docs/architecture/arc13/loc002-admin-object-content-fields-2026-11-25.json",
-        "sha": "1292afe149e711dce01fce0e727fd0da033a38d4",
-        "detail": "Cinco rótulos de campos do Admin integrados em development sem migrar dados editoriais/comerciais nem alterar estado; browser e demais gates disparados passaram. LOC-006 continua parcial para outras famílias do Admin/Configurador."
+        },
+        {
+          "source": "Product PR #421 and receipt docs/architecture/arc13/loc002-admin-object-content-fields-2026-11-25.json",
+          "sha": "1292afe149e711dce01fce0e727fd0da033a38d4",
+          "detail": "Cinco rótulos de campos do Admin integrados em development sem migrar dados editoriais/comerciais nem alterar estado; browser e demais gates disparados passaram. LOC-006 continua parcial para outras famílias do Admin/Configurador."
         }
       ],
       "nextAction": "Extrair outras famílias Admin/Configurador com seus estados, consumidores e testes; manter conteúdo comercial sob sua autoridade própria."
@@ -2160,8 +2171,8 @@
   "baselineReadback": {
     "capturedAt": "2026-11-25",
     "productMainSha": "01ded2c100fbfd8b16897e26113dc5068a83e429",
-    "productDevelopmentSha": "2c028dcfca812038dde547c14f7cc565e64891ba",
+    "productDevelopmentSha": "d0f63d0c62ed25a78067bb8b2e98d88fded5a1a7",
     "designSystemMainSha": "c6ff6545e9ae2071e695109fd94ac91676e7fb0a",
-    "meaning": "Readback exato das branches remotas em 2026-11-25 após a integração TST-006; o Design System continua sem branch development."
+    "meaning": "Exact GitHub readback captured 2026-11-25 after Product PR #430; Design System has no development branch. See the GIT-001 snapshot for refs, PRs, workflows, deploy state, and access limitations."
   }
 }
