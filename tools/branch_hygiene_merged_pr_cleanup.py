@@ -1,12 +1,10 @@
 #!/usr/bin/env python3
-"""Retire only the exact source branch of a merged PR that changed this workflow.
+"""Exact same-repository merged PR cleanup under a trusted, pre-approved policy.
 
-The GitHub closed/merged event supplies the PR identity. The script rechecks that
-identity through the API, observes the complete live inventory and protections,
-then deletes only the exact event head with a force-with-lease and full readback.
+No semantic or terminal dispositions are inferred. Reuse the bounded executor's
+proofs, dependency gates, ruleset guard and lease/readback primitive.
 """
 from __future__ import annotations
-
 import argparse
 import json
 import os
@@ -18,6 +16,10 @@ from typing import Any
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from branch_hygiene_observe import api_get, observe
+from branch_hygiene_plan import build_plan, load_json
+from branch_hygiene_apply import (AUTH_ENV, remote_refs, verify_squash_merge,
+    verify_no_workflow_dependency, verify_control_workflow_dependencies,
+    verify_no_rulesets, delete_exact_ref)
 
 
 def merged_head_identity(event: dict[str, Any], repository: str) -> dict[str, Any]:
@@ -28,120 +30,110 @@ def merged_head_identity(event: dict[str, Any], repository: str) -> dict[str, An
         raise RuntimeError("PR_EVENT_NOT_MERGED")
     number = pr.get("number")
     head, base = pr.get("head") or {}, pr.get("base") or {}
-    head_repo = (head.get("repo") or {}).get("full_name")
-    base_repo = (base.get("repo") or {}).get("full_name")
-    branch, sha = head.get("ref"), head.get("sha")
-    merge_sha = pr.get("merge_commit_sha")
+    branch, sha, control = head.get("ref"), head.get("sha"), base.get("ref")
+    merge = pr.get("merge_commit_sha")
     if (type(number) is not int or number <= 0
-            or base_repo != repository or base.get("ref") != "main"
-            or head_repo != repository
-            or not isinstance(branch, str) or not branch or branch == "main"
-            or not isinstance(sha, str) or re.fullmatch(r"[0-9a-f]{40}", sha) is None
-            or not isinstance(merge_sha, str) or re.fullmatch(r"[0-9a-f]{40}", merge_sha) is None):
+            or (base.get("repo") or {}).get("full_name") != repository
+            or (head.get("repo") or {}).get("full_name") != repository
+            or control not in {"main", "development"}
+            or not isinstance(branch, str) or not branch
+            or branch in {"main", "development"} or branch.startswith("archive/")
+            or not re.fullmatch(r"[a-zA-Z0-9._/-]+", branch)
+            or ".." in branch or "//" in branch or branch.startswith("-")
+            or not isinstance(sha, str) or not re.fullmatch(r"[0-9a-f]{40}", sha)
+            or not isinstance(merge, str) or not re.fullmatch(r"[0-9a-f]{40}", merge)):
         raise RuntimeError("PR_EVENT_IDENTITY_INVALID")
-    return {"number": number, "branch": branch, "sha": sha, "mergeSha": merge_sha}
-
-
-def remote_refs() -> dict[str, str]:
-    proc = subprocess.run(
-        ["git", "ls-remote", "--heads", "origin"],
-        text=True, capture_output=True, check=True,
-    )
-    result = {}
-    for line in proc.stdout.splitlines():
-        sha, ref = line.split("\t", 1)
-        result[ref.removeprefix("refs/heads/")] = sha
-    return result
+    return {"number": number, "branch": branch, "sha": sha,
+            "mergeSha": merge, "controlBranch": control}
 
 
 def cleanup(event_path: Path, receipt_path: Path) -> dict[str, Any]:
-    token = os.environ.get("GITHUB_TOKEN")
-    repository = os.environ.get("GITHUB_REPOSITORY")
+    if (os.environ.get(AUTH_ENV) != "1" or
+            os.environ.get("GITHUB_EVENT_NAME") != "pull_request_target"):
+        raise RuntimeError("MERGED_CLEANUP_AUTHORIZATION_MISSING")
+    token, repository = os.environ.get("GITHUB_TOKEN"), os.environ.get("GITHUB_REPOSITORY")
     if not token or not repository:
         raise RuntimeError("GITHUB_CONTEXT_MISSING")
-    event = json.loads(event_path.read_text(encoding="utf-8"))
-    identity = merged_head_identity(event, repository)
-
+    identity = merged_head_identity(json.loads(event_path.read_text()), repository)
+    branch, sha, control = identity["branch"], identity["sha"], identity["controlBranch"]
     pr = api_get(repository, f"pulls/{identity['number']}", token)
     head, base = pr.get("head") or {}, pr.get("base") or {}
     if (pr.get("state") != "closed" or not pr.get("merged_at")
             or pr.get("merge_commit_sha") != identity["mergeSha"]
-            or head.get("ref") != identity["branch"]
-            or head.get("sha") != identity["sha"]
+            or head.get("ref") != branch or head.get("sha") != sha
             or (head.get("repo") or {}).get("full_name") != repository
-            or base.get("ref") != "main"
+            or base.get("ref") != control
             or (base.get("repo") or {}).get("full_name") != repository):
         raise RuntimeError("MERGED_PR_API_IDENTITY_MISMATCH")
-
-    observed = observe(repository, "main", token)
-    if subprocess.run(
-        ["git", "merge-base", "--is-ancestor", identity["mergeSha"], observed["controlSha"]],
-        check=False,
-    ).returncode != 0:
-        raise RuntimeError("MERGE_COMMIT_NOT_ON_MAIN")
-
-    inventory = {item["name"]: item["sha"] for item in observed["branches"]}
-    if remote_refs() != inventory:
-        raise RuntimeError("REF_INVENTORY_DRIFT_INITIAL")
-    receipt: dict[str, Any] = {
-        "schemaVersion": "MergedPrHeadCleanupReceipt 0.1",
-        "repository": repository,
-        "pullRequest": identity["number"],
-        "mergeSha": identity["mergeSha"],
-        "branch": identity["branch"],
-        "sha": identity["sha"],
-        "deleted": False,
-        "readback": "NOT_APPLIED",
-    }
-
-    current_sha = inventory.get(identity["branch"])
-    if current_sha is None:
-        receipt["status"] = "PASS"
-        receipt["result"] = "ALREADY_ABSENT"
-        receipt["readback"] = "PASS"
-        receipt_path.write_text(json.dumps(receipt, indent=2) + "\n", encoding="utf-8")
+    receipt = {"schemaVersion":"MergedPrHeadCleanupReceipt 0.1",
+               "repository":repository, "pullRequest":identity["number"],
+               **identity, "deleted":False, "readback":"NOT_APPLIED"}
+    def finish(result, reason=None, remaining=None):
+        receipt.update(status="PASS", result=result)
+        if reason:
+            receipt["reason"] = reason
+        if remaining is not None:
+            receipt["remainingBranchCount"] = remaining
+        receipt_path.write_text(json.dumps(receipt, indent=2)+"\n", encoding="utf-8")
         return receipt
-    if current_sha != identity["sha"]:
-        raise RuntimeError("SOURCE_BRANCH_HEAD_MOVED")
-    live = next(item for item in observed["branches"] if item["name"] == identity["branch"])
-    if live.get("protected"):
-        raise RuntimeError("SOURCE_BRANCH_PROTECTED")
-    if identity["branch"] in observed["openPrHeads"] or identity["branch"] in observed["openPrBases"]:
-        raise RuntimeError("SOURCE_BRANCH_HAS_OPEN_PR")
-    if remote_refs() != inventory:
-        raise RuntimeError("REF_DRIFT_BEFORE_DELETE")
-
-    subprocess.run([
-        "git", "push",
-        f"--force-with-lease=refs/heads/{identity['branch']}:{identity['sha']}",
-        "origin", f":refs/heads/{identity['branch']}",
-    ], check=True)
-    inventory.pop(identity["branch"])
-    if remote_refs() != inventory:
-        raise RuntimeError("REF_READBACK_FAILED")
-    receipt["deleted"] = True
-    receipt["readback"] = "PASS"
-    receipt["status"] = "PASS"
-    receipt["remainingBranchCount"] = len(inventory)
-    receipt_path.write_text(json.dumps(receipt, indent=2) + "\n", encoding="utf-8")
-    return receipt
+    observed = observe(repository, control, token)
+    inventory = {item["name"]:item["sha"] for item in observed["branches"]}
+    trusted = subprocess.run(["git", "rev-parse", "HEAD"], text=True,
+                             capture_output=True, check=True).stdout.strip()
+    if inventory.get("main") != trusted or remote_refs() != inventory:
+        raise RuntimeError("TRUSTED_MAIN_OR_INVENTORY_DRIFT")
+    if subprocess.run(["git","merge-base","--is-ancestor",identity["mergeSha"],
+                       observed["controlSha"]], check=False).returncode != 0:
+        raise RuntimeError("MERGE_COMMIT_NOT_ON_CONTROL")
+    if branch not in inventory:
+        receipt["readback"] = "PASS"
+        return finish("ALREADY_ABSENT", remaining=len(inventory))
+    if inventory[branch] != sha:
+        return finish("PRESERVED", "SOURCE_BRANCH_HEAD_MOVED", len(inventory))
+    disposition_path = Path("ops/branch-dispositions-development.json" if control == "development"
+                            else "ops/branch-dispositions.json")
+    plan = build_plan(observed, load_json(disposition_path))
+    entry = next(x for x in plan["entries"] if x["branch"] == branch)
+    if entry["protections"]:
+        return finish("PRESERVED", ",".join(entry["protections"]), len(inventory))
+    # Both an exact PR identity and preservation proof are mandatory.
+    if not any(e["kind"] == "ancestor-of-control" for e in entry["evidence"]):
+        entry["squashMerge"] = {"pullRequest":identity["number"],"mergeCommit":identity["mergeSha"]}
+    try:
+        verify_no_rulesets(repository, token)
+        verify_no_workflow_dependency(branch)
+        verify_control_workflow_dependencies(branch, inventory)
+        proof = verify_squash_merge(repository,token,entry,observed["controlSha"],control)
+    except RuntimeError as error:
+        if str(error).startswith(("RULESETS_REQUIRE_REVIEW","ACTIVE_WORKFLOW_REF:",
+                                    "ACTIVE_CONTROL_WORKFLOW_REF:","SQUASH_TREE_MISMATCH:",
+                                    "SQUASH_ANCESTRY_MISMATCH:","SQUASH_NOT_SINGLE_PARENT:")):
+            return finish("PRESERVED", str(error), len(inventory))
+        raise
+    receipt["proof"] = proof or {"proof":"ANCESTOR_OF_CONTROL","controlSha":observed["controlSha"]}
+    fresh = observe(repository,control,token)
+    fresh_inventory = {x["name"]:x["sha"] for x in fresh["branches"]}
+    if fresh_inventory != inventory or fresh["controlSha"] != observed["controlSha"]:
+        raise RuntimeError("CONCURRENT_INVENTORY_DRIFT")
+    live = next(x for x in fresh["branches"] if x["name"] == branch)
+    if live["protected"] or branch in fresh["openPrHeads"] or branch in fresh["openPrBases"]:
+        return finish("PRESERVED","NEW_PROTECTION_OR_OPEN_PR",len(inventory))
+    verify_no_rulesets(repository,token)
+    verify_no_workflow_dependency(branch)
+    verify_control_workflow_dependencies(branch,fresh_inventory)
+    verify_squash_merge(repository,token,entry,fresh["controlSha"],control)
+    expected = delete_exact_ref(branch,sha,fresh_inventory)
+    receipt.update(deleted=True,readback="PASS")
+    return finish("DELETED",remaining=len(expected))
 
 
 def main() -> int:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--event", type=Path, required=True)
-    parser.add_argument("--receipt", type=Path, required=True)
+    parser.add_argument("--event",type=Path,required=True)
+    parser.add_argument("--receipt",type=Path,required=True)
     args = parser.parse_args()
-    receipt = cleanup(args.event, args.receipt)
-    print(json.dumps({
-        "status": receipt["status"],
-        "result": receipt.get("result", "DELETED" if receipt["deleted"] else "NOOP"),
-        "branch": receipt["branch"],
-        "sha": receipt["sha"],
-        "readback": receipt["readback"],
-    }, sort_keys=True))
+    print(json.dumps(cleanup(args.event,args.receipt),sort_keys=True))
     return 0
-
 
 if __name__ == "__main__":
     raise SystemExit(main())
