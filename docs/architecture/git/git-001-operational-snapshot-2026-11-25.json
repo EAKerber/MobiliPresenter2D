@@ -615,7 +615,9 @@
     ],
     "mergeSha": "d0f63d0c62ed25a78067bb8b2e98d88fded5a1a7",
     "postMergeWorkflowRuns": "none reported for this documentation-only merge",
-    "latestRegisterBlobBeforeReconciliation": "2ded741e450507bca316cc68cc479b455389681e"
+    "latestRegisterBlobBeforeReconciliation": "2ded741e450507bca316cc68cc479b455389681e",
+    "requiredChecksKnown": [],
+    "requiredChecksUnverified": "Repository branch-protection endpoints returned 403. The Actions jobs in run 45618020713 are observed passing jobs, not verified required checks."
   },
   "limits": [
     "Branch-protection endpoints returned 403, so required checks and rulesets are UNKNOWN.",
