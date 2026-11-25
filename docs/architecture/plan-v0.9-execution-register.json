@@ -1674,6 +1674,11 @@
           "source": "Product PR #419 and receipt docs/architecture/arc13/loc002-admin-stage-availability-2026-11-25.json",
           "sha": "5d3902ae408f3addd4cecfeb960fbeec4a9f291a",
           "detail": "Estado stage.enabled e suas duas políticas de elegibilidade extraídos com texto preservado; Admin browser e ARC-13 passaram. Permanece distinto de visibilidade inicial de entidades/serviços e disponibilidade de acabamentos."
+      },
+      {
+        "source": "Product LOC-002/LOC-006 Admin object-content fields candidate; receipt docs/architecture/arc13/loc002-admin-object-content-fields-2026-11-25.json",
+        "sha": "d20b50c6d763271c548d201125f678e3806cc66d",
+        "detail": "Em implementação local: cinco rótulos de campos editoriais extraídos para admin.objectContentFields, preservando texto e o modelo de dados. Contrato de catálogo, compilação e inventário passaram; browser e integração em development ainda pendentes."
         }
       ],
       "nextAction": "Continuar a classificação ARC-13 por estado e consumidor, preservando hold quando semântica ou autoridade do texto não estiver comprovada."
@@ -1776,6 +1781,11 @@
           "source": "Product PR #419 and receipt docs/architecture/arc13/loc002-admin-stage-availability-2026-11-25.json",
           "sha": "5d3902ae408f3addd4cecfeb960fbeec4a9f291a",
           "detail": "Família de disponibilidade da etapa extraída em admin.stages sem alterar stage.enabled, elegibilidade ou comportamento; o Admin browser e a integridade ARC-13 passaram. LOC-006 continua aberto para outras famílias."
+      },
+      {
+        "source": "Product LOC-002/LOC-006 Admin object-content fields candidate; receipt docs/architecture/arc13/loc002-admin-object-content-fields-2026-11-25.json",
+        "sha": "d20b50c6d763271c548d201125f678e3806cc66d",
+        "detail": "Em implementação local: cinco rótulos de campos editoriais extraídos para admin.objectContentFields, sem migrar valores de conteúdo comercial nem alterar estado. Gates locais estáticos passaram; browser e integração em development ainda pendentes."
         }
       ],
       "nextAction": "Extrair outras famílias Admin/Configurador com seus estados, consumidores e testes; manter conteúdo comercial sob sua autoridade própria."

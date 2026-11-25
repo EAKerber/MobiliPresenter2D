@@ -208,6 +208,11 @@ async function sectionItemIds(page, stageId, groupId, sectionId) {
 
   await page.locator('[data-admin-tab="objects"]').click();
   await page.waitForSelector('[data-admin-panel="objects"]:not([hidden])');
+  assert.deepEqual(
+    await page.locator("#objectsList .object-editor-card > label.data-field").allTextContents(),
+    ["Nome público", "Descrição", "Destaques (um por linha)", "Componentes (um por linha)", "Requisitos (um por linha)"],
+    "object content fields retain distinct labels in the authoring form"
+  );
   await page.locator("#objectSelector").selectOption({ label: "Mover pedra" });
   await page.locator('[data-object-tab="assets"]').click();
   const moveStoneAssets = page.locator('[data-asset-object-id="move-stone"]');
