@@ -1,32 +1,28 @@
 {
   "schemaVersion": "BranchHygieneBatch 0.1",
   "repository": "EAKerber/MobiliPresenter2D",
-  "wave": "PRODUCT-HYG-20261125-MAIN-1",
-  "purpose": "Retire exact full-tree equivalent main-integrated heads; keep control and archive refs.",
+  "wave": "PRODUCT-HYG-20261125-MAIN-2",
+  "purpose": "Retire two full-tree equivalent integrated hygiene heads and archived #400 exact head (ops tree identical).",
   "branches": [
     {
-      "branch": "codex/tst003-dedupe-main-20261125",
-      "sha": "1ad87c70be490878f14a533989ae461e35c16d04",
+      "branch": "hygiene/product-retire-wave-4-20261125",
+      "sha": "c61e5ddb8bd21c0c0a2415febe9241b029fa8308",
       "squashMerge": {
-        "pullRequest": 440,
-        "mergeCommit": "e462f5df33e2354c81bbbc18170106c1a9d79ead"
+        "pullRequest": 452,
+        "mergeCommit": "b9b223ac0b674bb4af5030ca809f83696a4ea90a"
       }
     },
     {
-      "branch": "hygiene/product-retire-wave-2-20261125",
-      "sha": "5da8c098f7bd0acecb5d4e6454efea67a86ff6a0",
+      "branch": "hygiene/product-retire-wave-5-20261125",
+      "sha": "1753d074293dc68f73c909a11fdc9da898a41ed7",
       "squashMerge": {
-        "pullRequest": 450,
-        "mergeCommit": "07cafda66f9e365055047109f73762192466c335"
+        "pullRequest": 453,
+        "mergeCommit": "8668cd3acb52de8fe442ba4b5b7ec5ca27e0616e"
       }
     },
     {
-      "branch": "hygiene/product-retire-wave-3-20261125",
-      "sha": "d402aa95b909196a836b0dff0d809298195f78d2",
-      "squashMerge": {
-        "pullRequest": 451,
-        "mergeCommit": "e1279b6b39564bad2404137670da62b69ec18a29"
-      }
+      "branch": "codex/hygiene-retire-tst004-crosswalk-20261124",
+      "sha": "d1fe79faafa1ed7345aff8afeb33bbf5e4a21e22"
     }
   ]
 }
