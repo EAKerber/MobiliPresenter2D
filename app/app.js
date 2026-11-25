@@ -115,7 +115,7 @@
   const selectedFinishDescription = document.getElementById("selectedFinishDescription");
   const catalogByEntityId = new Map(catalog.modules.map((module) => [module.entityId, module]));
   const serviceById = new Map(catalog.services.map((service) => [service.id, service]));
-  const stageConfig = (id) => configuratorSettings.stages.find((stage) => stage.id === id);
+  const stageConfig = (id) => normalizedFlow?.stages?.find((stage) => stage.id === id) || null;
   const stageKind = (stage) => stage?.kind || stage?.id;
   const boundFlowSectionFor = (element) => {
     if (!element) return null;
@@ -127,9 +127,9 @@
   };
   const itemAvailable = (itemId) => flowCore.itemAvailable(normalizedFlow, itemId);
   const stageOwns = (stageId, itemId) => flowCore.stageOwns(normalizedFlow, stageId, itemId);
-  const enabledStages = () => configuratorSettings.stages.filter((stage) => stage.enabled);
+  const enabledStages = () => (normalizedFlow?.stages || []).filter((stage) => stage.enabled);
   const moduleIdSet = new Set(catalog.modules.map((item) => item.entityId));
-  const configuredModuleIds = () => new Set(enabledStages().flatMap((stage) => stage.items).filter((id) => moduleIdSet.has(id)));
+  const configuredModuleIds = () => new Set(enabledStages().flatMap((stage) => stage.groups.flatMap((group) => group.sections.flatMap((section) => section.itemIds))).filter((id) => moduleIdSet.has(id)));
   const requirementsForEntity = (entityId) => [...new Set([
     ...(scene.entities.find((entity) => entity.id === entityId)?.requiresVisibleIds || []),
     ...dynamicDependencies.filter((rule) => rule.dependentId === entityId).flatMap((rule) => rule.requires)
@@ -1819,7 +1819,7 @@
     enabled.filter((stage) => stageKind(stage) === "custom").forEach(renderCustomStage);
     document.querySelectorAll("[data-configurable-item]").forEach((element) => {
       const itemId = element.dataset.configurableItem;
-      const visible = configuratorSettings.stages.some((stage) => stage.enabled && stage.items.includes(itemId));
+      const visible = itemAvailable(itemId);
       element.hidden = !visible;
     });
     applyBuyerFlowLayout();
