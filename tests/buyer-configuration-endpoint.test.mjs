@@ -33,13 +33,15 @@ const v5=administrationV5.upgrade(
 
 test("Buyer endpoint denies before storage and exposes only the projected DTO",async()=>{
  let actor=null,identityUnavailable=false,activeSession=null,sessionStoreUnavailable=false;
- const counts={siteOpens:0,previewOpens:0,reads:0,sessionLookups:0};
+ let expiredSession=false;
+ let publishedEntry={data:JSON.stringify(v5),etag:'"fixture-v5"',metadata:{}};
+ const counts={siteOpens:0,previewOpens:0,reads:0,sessionLookups:0,identityLookups:0};
  const store={
   async getWithMetadata(key,options) {
    counts.reads++;
    assert.equal(key,"published");
    assert.deepEqual(options,{type:"text",consistency:"strong"});
-   return {data:JSON.stringify(v5),etag:'"fixture-v5"',metadata:{}};
+   return publishedEntry;
   }
  };
  const harness={
@@ -54,6 +56,7 @@ test("Buyer endpoint denies before storage and exposes only the projected DTO",a
    return store;
   },
   async getUser() {
+   counts.identityLookups++;
    if(identityUnavailable)throw new Error("fixture identity unavailable");
    return actor;
   },
@@ -64,6 +67,7 @@ test("Buyer endpoint denies before storage and exposes only the projected DTO",a
    counts.sessionLookups++;
    assert.equal(token,"buyer-fixture-token");
    if(sessionStoreUnavailable)throw new Error("fixture access store unavailable");
+   if(expiredSession)return null;
    return activeSession;
   },
   ACCESS_COOKIE_NAME
@@ -81,11 +85,11 @@ test("Buyer endpoint denies before storage and exposes only the projected DTO",a
  globalThis.__buyerConfigurationEndpointHarness=harness;
  try {
   const endpoint=await import(moduleUrl);
-  const invoke=async(token=null)=>{
+  const invoke=async(token=null,{method="GET",suffix="",deployContext="deploy-preview"}={})=>{
    const headers=token?{cookie:ACCESS_COOKIE_NAME+"="+token}:{};
    const response=await endpoint.default(
-    new Request("https://unit-test.invalid/api/buyer-configuration",{method:"GET",headers}),
-    {deploy:{context:"deploy-preview"}}
+    new Request("https://unit-test.invalid/api/buyer-configuration"+suffix,{method,headers}),
+    {deploy:{context:deployContext}}
    );
    return {status:response.status,body:await response.json(),headers:response.headers};
   };
@@ -103,7 +107,19 @@ test("Buyer endpoint denies before storage and exposes only the projected DTO",a
    assert.equal(Object.hasOwn(payload.displaySettings,"pricing"),false,"admin pricing storage is not exposed");
   };
 
-  let result=await invoke();
+  let result=await invoke(null,{method:"POST"});
+  assert.equal(result.status,405,"unsupported methods are rejected");
+  assert.equal(counts.identityLookups,0,"method rejection happens before Identity lookup");
+  assert.equal(counts.previewOpens,0);
+  assert.equal(counts.reads,0);
+
+  result=await invoke(null,{suffix:"?unexpected=1"});
+  assert.equal(result.status,400,"unsupported query parameters are rejected");
+  assert.equal(counts.identityLookups,0,"query rejection happens before Identity lookup");
+  assert.equal(counts.previewOpens,0);
+  assert.equal(counts.reads,0);
+
+  result=await invoke();
   assert.equal(result.status,401,"anonymous access is denied");
   assert.equal(counts.previewOpens,0,"anonymous denial happens before opening Blob storage");
   assert.equal(counts.reads,0);
@@ -119,9 +135,18 @@ test("Buyer endpoint denies before storage and exposes only the projected DTO",a
   assert.equal(counts.sessionLookups,1);
   assert.equal(counts.previewOpens,0,"missing-session denial happens before opening Blob storage");
 
+  expiredSession=true;
+  result=await invoke("buyer-fixture-token");
+  assert.equal(result.status,403,"an expired temporary session is denied");
+  assert.equal(counts.sessionLookups,2);
+  assert.equal(counts.previewOpens,0,"expired-session denial happens before opening Blob storage");
+  assert.equal(counts.reads,0);
+  expiredSession=false;
+
   sessionStoreUnavailable=true;
   result=await invoke("buyer-fixture-token");
   assert.equal(result.status,503,"temporary-session store failure is fail-closed");
+  assert.equal(counts.sessionLookups,3);
   assert.equal(counts.previewOpens,0);
   assert.equal(counts.reads,0);
   sessionStoreUnavailable=false;
@@ -146,19 +171,43 @@ test("Buyer endpoint denies before storage and exposes only the projected DTO",a
   result=await invoke();
   assert.equal(result.status,200,"an internal admin may read the buyer projection");
   assertBuyerPayload(result.body);
-  assert.equal(counts.sessionLookups,3,"internal access does not consult the temporary-session store");
+  assert.equal(counts.sessionLookups,4,"internal access does not consult the temporary-session store");
   assert.equal(counts.previewOpens,2);
   assert.equal(counts.reads,2);
-  assert.equal(counts.siteOpens,0,"a preview request never opens the production store");
+  assert.equal(counts.siteOpens,0,"preview requests do not open the production store");
 
   actor={id:"staff-1",roles:["staff"]};
   result=await invoke();
   assert.equal(result.status,200,"internal staff may read the buyer projection");
   assertBuyerPayload(result.body);
-  assert.equal(counts.sessionLookups,3,"internal staff access does not consult the temporary-session store");
+  assert.equal(counts.sessionLookups,4,"internal staff access does not consult the temporary-session store");
   assert.equal(counts.previewOpens,3);
   assert.equal(counts.reads,3);
   assert.equal(counts.siteOpens,0);
+
+  result=await invoke(null,{deployContext:"production"});
+  assert.equal(result.status,200,"an authorized production request may read the site store");
+  assertBuyerPayload(result.body);
+  assert.equal(counts.siteOpens,1,"production context selects the site-wide store");
+  assert.equal(counts.previewOpens,3,"production context does not open the deploy store");
+  assert.equal(counts.reads,4);
+
+  actor={id:"admin-1",roles:["admin"]};
+  publishedEntry=null;
+  result=await invoke();
+  assert.equal(result.status,503,"missing published configuration fails closed");
+  assert.equal(result.body.error,"published_configuration_unavailable");
+  assert.equal(counts.previewOpens,4);
+  assert.equal(counts.reads,5,"missing configuration never falls back to defaults");
+  assert.equal(counts.siteOpens,1);
+
+  publishedEntry={data:JSON.stringify({...v5,presentationPolicy:null}),etag:'"invalid-v5"',metadata:{}};
+  result=await invoke();
+  assert.equal(result.status,503,"invalid published V5 configuration fails closed");
+  assert.equal(result.body.error,"published_configuration_invalid");
+  assert.equal(counts.previewOpens,5);
+  assert.equal(counts.reads,6,"invalid configuration never falls back to defaults");
+  assert.equal(counts.siteOpens,1);
  } finally {
   delete globalThis.__buyerConfigurationEndpointHarness;
  }
