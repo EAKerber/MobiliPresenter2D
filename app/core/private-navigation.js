@@ -34,12 +34,14 @@ if (header) {
       parent.append(section);
       return list;
     };
+    const copy = (key, fallback) => window.CASA_UI_THEME && typeof window.CASA_UI_THEME.getCopy === "function"
+      ? window.CASA_UI_THEME.getCopy(key, fallback) : fallback;
     const publicPages = [
-      ["/#ambientes", "Ambientes"],
+      ["/#ambientes", copy("navigation.environments", "Ambientes")],
       ["/viewer/", "Cozinha"],
-      ["/how-it-works/", "Como funciona"],
-      ["/about/", "Quem somos"],
-      ["https://wa.me/", "Fale conosco"],
+      ["/how-it-works/", copy("navigation.howItWorks", "Como funciona")],
+      ["/about/", copy("navigation.about", "Quem somos")],
+      ["https://wa.me/", copy("navigation.contact", "Fale conosco")],
     ];
     const existingLogout = document.getElementById("logoutButton");
     let logoutButton = existingLogout;
