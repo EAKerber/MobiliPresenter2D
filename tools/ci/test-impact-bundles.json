@@ -290,6 +290,71 @@
           "assertion": "Published-source states, V5 CAS/readback, configuration endpoint authorization and payload safety, Buyer DTO allowlist, and local V5 fixture readiness/shutdown."
         }
       ]
+    },
+    {
+      "id": "access-surface",
+      "contract": [
+        "DOM-013 backend authorization by surface",
+        "TST-010 authorization and session lifecycle"
+      ],
+      "consumer": [
+        "Admin configuration/bootstrap",
+        "temporary access and invitation",
+        "private configuration routes",
+        "Buyer and public Viewer boundaries"
+      ],
+      "risks": [
+        "authorization inferred from DOM instead of backend",
+        "protected data read before authorization",
+        "stale session changes private navigation",
+        "session expiry/logout failure",
+        "tokens or identity details exposed in logs or page capture"
+      ],
+      "paths": [
+        "app/access/**",
+        "app/admin/admin.js",
+        "app/core/admin-bootstrap-retry.mjs",
+        "app/core/private-navigation.js",
+        ".github/workflows/development-access-dto-boundary.yml",
+        "app/tools/test-v5-endpoint-safety.js",
+        "app/tools/test-access-policy.mjs",
+        "netlify/access/**",
+        "netlify/edge-functions/access-gate.mjs",
+        "netlify/functions/access-check.mjs",
+        "netlify/functions/access-grants.mjs",
+        "netlify/functions/access-redeem.mjs",
+        "netlify/functions/access-session-logout.mjs",
+        "netlify/functions/access-session-status.mjs",
+        "netlify/functions/admin-bootstrap.mjs",
+        "netlify/functions/configuration.mjs",
+        "tests/ci/access-dto-boundary.test.mjs",
+        "tests/access-session-browser.cjs",
+        "tests/ci/access-surface-boundaries.test.mjs",
+        "tests/auth-first-login-recovery.test.mjs"
+      ],
+      "execution": [
+        {
+          "workflow": ".github/workflows/development-access-dto-boundary.yml",
+          "scope": "pull_request and push on development (path-filtered)",
+          "commands": [
+            "node app/tools/test-access-policy.mjs",
+            "node app/tools/test-v5-endpoint-safety.js",
+            "node --test tests/ci/access-dto-boundary.test.mjs",
+            "node --test tests/ci/access-surface-boundaries.test.mjs",
+            "node app/tools/test-published-buyer-projection.js",
+            "node --test tests/auth-first-login-recovery.test.mjs"
+          ],
+          "assertion": "Admin configuration/bootstrap and grants, temporary sessions, edge route authorization, authoritative private-menu state, stale async-session behavior, logging redaction, and token-free invitation UI."
+        },
+        {
+          "workflow": ".github/workflows/development-access-dto-boundary.yml",
+          "scope": "pull_request and push on development; dedicated Playwright container",
+          "commands": [
+            "node tests/access-session-browser.cjs"
+          ],
+          "assertion": "Browser-level removal of invitation token from URL before interaction; token is absent from rendered page state and is sent only to same-origin redemption."
+        }
+      ]
     }
   ]
 }
