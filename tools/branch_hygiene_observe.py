@@ -131,17 +131,87 @@ def observe(repository: str, control_branch: str, token: str) -> dict[str, Any]:
     return payload
 
 
+def discover_merged_heads(observation: dict[str, Any], token: str) -> dict[str, Any]:
+    """Read-only factual correlation, not authorization or an apply manifest."""
+    repository = observation["repository"]
+    control = observation["controlBranch"]
+    control_sha = observation["controlSha"]
+    refs = {item["name"]: item for item in observation["branches"]}
+    protected = set(observation["openPrHeads"]) | set(observation["openPrBases"])
+    closed = paginate(repository, "pulls?state=closed", token)
+    facts = {name: [] for name in refs}
+    import re
+
+    def ancestor(a: str, b: str) -> bool:
+        result = subprocess.run(["git", "merge-base", "--is-ancestor", a, b],
+                                capture_output=True, check=False).returncode
+        if result not in (0, 1):
+            raise RuntimeError("DISCOVERY_ANCESTRY_UNAVAILABLE")
+        return result == 0
+
+    for pr in closed:
+        head, base = pr.get("head") or {}, pr.get("base") or {}
+        name = head.get("ref")
+        if name not in refs or (head.get("repo") or {}).get("full_name") != repository:
+            continue
+        if (base.get("repo") or {}).get("full_name") != repository:
+            continue
+        item = refs[name]
+        exact = head.get("sha") == item["sha"]
+        fact = {"pullRequest": pr["number"], "base": base.get("ref"),
+                "headSha": head.get("sha"), "exactHead": exact,
+                "merged": bool(pr.get("merged_at")),
+                "title": pr.get("title"), "mergeCommit": pr.get("merge_commit_sha")}
+        facts[name].append(fact)
+        merge = fact["mergeCommit"]
+        if (not exact or not fact["merged"] or fact["base"] != control
+                or name in protected or item.get("protected")
+                or name in {"main", "development"} or name.startswith("archive/")
+                or not isinstance(merge, str) or not re.fullmatch(r"[0-9a-f]{40}", merge)):
+            continue
+        # Missing historical objects are insufficient evidence, never approval.
+        if subprocess.run(["git", "cat-file", "-e", merge+"^{commit}"],
+                          capture_output=True, check=False).returncode:
+            fact["proofFailure"] = "MERGE_OBJECT_UNAVAILABLE"
+            continue
+        parents = run("git", "rev-list", "--parents", "-n", "1", merge).split()
+        fact["mergeReachable"] = ancestor(merge, control_sha)
+        fact["treeEqual"] = run("git", "show", "-s", "--format=%T", merge) == item["treeSha"]
+        fact["singleParent"] = len(parents) == 2 and parents[0] == merge
+        fact["originalBaseReachable"] = (fact["singleParent"]
+                                        and ancestor(parents[1], item["sha"]))
+        if all(fact[k] for k in ("mergeReachable", "treeEqual", "singleParent",
+                                  "originalBaseReachable")):
+            fact["squashMerge"] = {"pullRequest": pr["number"], "mergeCommit": merge}
+    # Match the same observation identity; do not plan against a stale inventory.
+    current = run("git", "ls-remote", "--heads", "origin")
+    remote = {line.split()[1].removeprefix("refs/heads/"): line.split()[0]
+              for line in current.splitlines() if line.strip()}
+    if remote != {name: item["sha"] for name, item in refs.items()}:
+        raise RuntimeError("DISCOVERY_INVENTORY_DRIFT")
+    return {"schemaVersion": "BranchMergedHeadEvidence 0.1",
+            "repository": repository, "controlBranch": control,
+            "observationHash": observation["observationHash"],
+            "facts": {name: sorted(items, key=lambda x: x["pullRequest"])
+                      for name, items in sorted(facts.items())}}
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--repository", default=os.environ.get("GITHUB_REPOSITORY"))
     parser.add_argument("--control", default="main")
     parser.add_argument("--output", type=Path, required=True)
+    parser.add_argument("--merged-head-evidence", type=Path,
+                        help="Optional read-only closed-PR correlation, separate from apply observation")
     args = parser.parse_args()
     token = os.environ.get("GITHUB_TOKEN")
     if not args.repository or not token:
         raise SystemExit("GITHUB_REPOSITORY and GITHUB_TOKEN are required")
     payload = observe(args.repository, args.control, token)
     args.output.write_text(json.dumps(payload, indent=2, ensure_ascii=False, sort_keys=True) + "\n", encoding="utf-8")
+    if args.merged_head_evidence:
+        evidence = discover_merged_heads(payload, token)
+        args.merged_head_evidence.write_text(json.dumps(evidence, indent=2, ensure_ascii=False, sort_keys=True) + "\n", encoding="utf-8")
     print(json.dumps({
         "status": "PASS",
         "branches": len(payload["branches"]),
