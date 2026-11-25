@@ -1741,7 +1741,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "65524e082b988926615a71fb17b158b8e12bf79c702b760e126f21aad356a2a6",
+          "manifestSha256": "c5b4c6f2c92d6bf0d5df38af66a3e748e6f2d1232d1cc205a56653e35c924115",
           "outputOffset": 3100,
           "offsetUnit": "unicode-codepoints"
         }
@@ -5165,7 +5165,7 @@
       "classificationHints": [
         "visible-or-accessible-ui"
       ],
-      "sourceSha256": "78a1c17da7dae36c68f8b4128d400cdb7a98a222b831d45655553030bac9adbe",
+      "sourceSha256": "c6518ad21dcc45a80bb3a8de349551f4779b861bd9f64d532fc7f614348a0bd2",
       "id": "9340962148d905ba"
     },
     {
@@ -6727,12 +6727,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "c8bc3d54bf1ae39dace5fee04363da261b527324ed82f18caa5fbf75f1f1dff3",
-      "id": "cfdc4f4e81fffdb5"
+      "sourceSha256": "4085bd454df6d707eebbcc04b734bd434349f0c626ce9c0bde1bac38afb0f6a9",
+      "id": "5e48400b91877f98"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 405,
+      "line": 406,
       "column": 5,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -8238,12 +8238,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "c8bc3d54bf1ae39dace5fee04363da261b527324ed82f18caa5fbf75f1f1dff3",
-      "id": "7ad04058492e852d"
+      "sourceSha256": "4085bd454df6d707eebbcc04b734bd434349f0c626ce9c0bde1bac38afb0f6a9",
+      "id": "378821dbb13d06d2"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 956,
+      "line": 957,
       "column": 117,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -9771,12 +9771,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "c8bc3d54bf1ae39dace5fee04363da261b527324ed82f18caa5fbf75f1f1dff3",
-      "id": "8154436039e2b9da"
+      "sourceSha256": "4085bd454df6d707eebbcc04b734bd434349f0c626ce9c0bde1bac38afb0f6a9",
+      "id": "e24ef6566380f2d4"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1688,
+      "line": 1689,
       "column": 5,
       "kind": "javascript-sink",
       "sink": "helper:setMessage",
@@ -18077,7 +18077,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "65524e082b988926615a71fb17b158b8e12bf79c702b760e126f21aad356a2a6",
+          "manifestSha256": "c5b4c6f2c92d6bf0d5df38af66a3e748e6f2d1232d1cc205a56653e35c924115",
           "outputOffset": 5123,
           "offsetUnit": "unicode-codepoints"
         }
@@ -20873,7 +20873,7 @@
         "transform": "catalog-key-substitution",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "65524e082b988926615a71fb17b158b8e12bf79c702b760e126f21aad356a2a6",
+          "manifestSha256": "c5b4c6f2c92d6bf0d5df38af66a3e748e6f2d1232d1cc205a56653e35c924115",
           "outputOffset": 10559,
           "offsetUnit": "unicode-codepoints"
         },
@@ -23648,7 +23648,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "65524e082b988926615a71fb17b158b8e12bf79c702b760e126f21aad356a2a6",
+          "manifestSha256": "c5b4c6f2c92d6bf0d5df38af66a3e748e6f2d1232d1cc205a56653e35c924115",
           "outputOffset": 17581,
           "offsetUnit": "unicode-codepoints"
         }
@@ -26336,7 +26336,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "65524e082b988926615a71fb17b158b8e12bf79c702b760e126f21aad356a2a6",
+          "manifestSha256": "c5b4c6f2c92d6bf0d5df38af66a3e748e6f2d1232d1cc205a56653e35c924115",
           "outputOffset": 23945,
           "offsetUnit": "unicode-codepoints"
         }
@@ -29024,7 +29024,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "65524e082b988926615a71fb17b158b8e12bf79c702b760e126f21aad356a2a6",
+          "manifestSha256": "c5b4c6f2c92d6bf0d5df38af66a3e748e6f2d1232d1cc205a56653e35c924115",
           "outputOffset": 30909,
           "offsetUnit": "unicode-codepoints"
         }
@@ -31881,7 +31881,7 @@
         "transform": "catalog-key-substitution",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "65524e082b988926615a71fb17b158b8e12bf79c702b760e126f21aad356a2a6",
+          "manifestSha256": "c5b4c6f2c92d6bf0d5df38af66a3e748e6f2d1232d1cc205a56653e35c924115",
           "outputOffset": 6990,
           "offsetUnit": "unicode-codepoints"
         },
@@ -35674,7 +35674,7 @@
       "consumerLinkStatus": "same-try-catch",
       "useStatus": "active",
       "consumerEvidence": [
-        "Error literal in try reaches caught .message sink at app/admin/admin.js:2010"
+        "Error literal in try reaches caught .message sink at app/admin/admin.js:2011"
       ],
       "sourceExpression": "\"A persistência isolada de Puxadores é exclusiva do v3.\"",
       "selectionOperators": [],
@@ -36668,13 +36668,13 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "c8bc3d54bf1ae39dace5fee04363da261b527324ed82f18caa5fbf75f1f1dff3",
-      "id": "c5f6a88a3ffacadb",
+      "sourceSha256": "4085bd454df6d707eebbcc04b734bd434349f0c626ce9c0bde1bac38afb0f6a9",
+      "id": "563806ebb0f02763",
       "consumerRefs": [
         {
-          "sinkId": "7101bab2e5cba04a",
+          "sinkId": "938454579d2fa422",
           "source": "app/admin/admin.js",
-          "line": 2124,
+          "line": 2125,
           "sink": "helper:setMessage",
           "expression": "error.message || \"Falha ao publicar a configuração.\"",
           "routeConsumers": [
