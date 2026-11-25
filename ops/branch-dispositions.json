@@ -742,6 +742,20 @@
         "originalHead": "a69e991d89e790f86f74389f34e320540442c7ee"
       },
       "note": "Both changed PR blobs identical at merged commit; tree difference is parallel #443 app.js and ARC-13 inventory only. Original HEAD preserved as direct parent of archive; not a runtime merge."
+    },
+    {
+      "branch": "docs/arc13-post-273-reconciliation-20261114",
+      "sha": "82cca3b5b5b9cdc91c84f7dc50167c965bd231a7",
+      "reason": "historical-docs-exact-archive-preserved",
+      "allowDelete": true,
+      "evidence": {
+        "pullRequest": 274,
+        "archiveRef": "archive/product-hygiene-20261125",
+        "archiveSha": "7d729bda2138e40baa87d50a5ba4ade0ace1d48d",
+        "originalHead": "82cca3b5b5b9cdc91c84f7dc50167c965bd231a7",
+        "remainingAction": "Selective review/extraction of 34 unique docs; not completed by hygiene."
+      },
+      "note": "34 of 35 documentation paths absent at both control snapshots; preserve original tree for future selective extraction, not runtime integration. Exact original tree and history remain reachable as direct parent of archive."
     }
   ]
 }
