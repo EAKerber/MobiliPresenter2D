@@ -32,6 +32,27 @@
           }
         }
       ]
+    },
+    {
+      "id": "batch-2",
+      "branches": [
+        {
+          "branch": "codex/tst001-current-snapshot-20261124",
+          "sha": "586dcf600dfe6a0bc745fdfd5ef787cbe3569433",
+          "squashMerge": {
+            "pullRequest": 412,
+            "mergeCommit": "def19b2815cd7a3be30abfa33b3f1c03c1041a17"
+          }
+        },
+        {
+          "branch": "codex/v09-operational-register-20261124",
+          "sha": "a973c54ffee2e7b2e262fb5c23f8d391c9707eb1",
+          "squashMerge": {
+            "pullRequest": 413,
+            "mergeCommit": "6fbddd5a522dfe5ecc218132253647980720ba37"
+          }
+        }
+      ]
     }
   ]
 }

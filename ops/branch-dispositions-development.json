@@ -53,6 +53,18 @@
         "treeSha": "5a4e6e593f5c36cab2b400187a00723a37a547cf"
       },
       "note": "Exact PR head #412 is integrated into development; current branch tree matches the squash tree through the exact development base and identical updated document blobs. The PR audit rechecks exact SHA, open-PR state, protection, workflow references, and readback before any mutation."
+    },
+    {
+      "branch": "codex/v09-operational-register-20261124",
+      "sha": "a973c54ffee2e7b2e262fb5c23f8d391c9707eb1",
+      "reason": "merged-pull-request-head",
+      "allowDelete": true,
+      "evidence": {
+        "pullRequest": 413,
+        "mergedDevelopmentSha": "6fbddd5a522dfe5ecc218132253647980720ba37",
+        "treeSha": "1be000795a13cbc99bc18cffe61b41116d100e12"
+      },
+      "note": "PR #413 is merged to development; exact branch head and squash merge have the same tree. The automatic gate rechecks exact SHA, current PR usage, protection, workflow references and readback before removal."
     }
   ]
 }
