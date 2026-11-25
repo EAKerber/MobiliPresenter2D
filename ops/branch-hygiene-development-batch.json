@@ -2,31 +2,31 @@
   "schemaVersion": "BranchHygieneBatch 0.1",
   "repository": "EAKerber/MobiliPresenter2D",
   "auditOnly": true,
-  "wave": "P-DEV-HYG-AUDIT-20261125-W2",
+  "wave": "P-DEV-HYG-AUDIT-20261125-W3",
   "purpose": "Audit first three exact merged heads; series audit validates all nine.",
   "branches": [
     {
-      "branch": "codex/v09-test-bundle-impact-20261124",
-      "sha": "53dc42d5922b40ac900fdd7046159e2ec9867c8e",
+      "branch": "codex/tst006-ephemeral-fixture-lifecycle-20261125",
+      "sha": "bb1960c70a74b5db1281c03c7b20528b160cb99f",
       "squashMerge": {
-        "pullRequest": 414,
-        "mergeCommit": "942ebcc62ead98b72e5654c3a0d73c18120367e3"
+        "pullRequest": 423,
+        "mergeCommit": "c1f3be2be89c1e7f5843f568cf0d3ae38adf3541"
       }
     },
     {
-      "branch": "codex/loc006-admin-initial-state-copy-20261125",
-      "sha": "55bab531205798979589732db9663f4202b4ad16",
+      "branch": "codex/tst006-postpush-evidence-20261125",
+      "sha": "683a1b980281b652ae23bbd5c2effcebc489bdcd",
       "squashMerge": {
-        "pullRequest": 415,
-        "mergeCommit": "ed89f243a1f54d80701908c707e5edc61e1ffff4"
+        "pullRequest": 424,
+        "mergeCommit": "2c028dcfca812038dde547c14f7cc565e64891ba"
       }
     },
     {
-      "branch": "codex/tst004-public-nav-manifest-trigger-20261125",
-      "sha": "eb407b0a341764bd2da4c2b5b830c7696b38b8d3",
+      "branch": "codex/tst006-register-closure-20261125",
+      "sha": "407c55ba5051310de82faff8c8b223021a893169",
       "squashMerge": {
-        "pullRequest": 416,
-        "mergeCommit": "acedcda23b4534b2eb848133b7231b288ccf2a36"
+        "pullRequest": 425,
+        "mergeCommit": "627997ed2b04cd5c37d53248794ebf99ce0a424f"
       }
     }
   ]
