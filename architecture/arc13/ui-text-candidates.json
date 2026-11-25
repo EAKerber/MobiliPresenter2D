@@ -90,8 +90,8 @@
     "javascriptFilesScanned": 59,
     "inlineJavaScriptBlocksScanned": 3,
     "javascriptSinkSites": 432,
-    "javascriptTextSourceRecords": 347,
-    "javascriptTextSourceRecordsActive": 272,
+    "javascriptTextSourceRecords": 343,
+    "javascriptTextSourceRecordsActive": 268,
     "javascriptTextSourceRecordsPassedButUnused": 7,
     "javascriptTextSourceRecordsUnconsumed": 2,
     "javascriptTextSourceRecordsNeedsFlowReview": 20,
@@ -144,7 +144,7 @@
       "image-alternative-text": 5,
       "inline-text-array": 3,
       "inline-text-tuple-label": 5,
-      "navigation-labels": 5,
+      "navigation-labels": 1,
       "pricebook-disclaimer": 1,
       "pricebook-label": 1,
       "scene-entity-label": 17,
@@ -15389,7 +15389,7 @@
         "/admin",
         "/config/"
       ],
-      "sourceSha256": "a19a9ef024c2dbf64e8c760cddeedd46530e88cb91568724a39c1eab4ecbb26b",
+      "sourceSha256": "841a962eb4f138a820cd5717f638df7fe08b8d5806f12031ee0288b4b9a587e3",
       "id": "d49834399afb3aa2"
     },
     {
@@ -15414,12 +15414,12 @@
         "/admin",
         "/config/"
       ],
-      "sourceSha256": "a19a9ef024c2dbf64e8c760cddeedd46530e88cb91568724a39c1eab4ecbb26b",
+      "sourceSha256": "841a962eb4f138a820cd5717f638df7fe08b8d5806f12031ee0288b4b9a587e3",
       "id": "f290be0c31e40331"
     },
     {
       "source": "app/core/private-navigation.js",
-      "line": 50,
+      "line": 52,
       "column": 7,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -15441,12 +15441,12 @@
         "/admin",
         "/config/"
       ],
-      "sourceSha256": "a19a9ef024c2dbf64e8c760cddeedd46530e88cb91568724a39c1eab4ecbb26b",
-      "id": "82f10f87198ba232"
+      "sourceSha256": "841a962eb4f138a820cd5717f638df7fe08b8d5806f12031ee0288b4b9a587e3",
+      "id": "21a74273e77c8615"
     },
     {
       "source": "app/core/private-navigation.js",
-      "line": 76,
+      "line": 78,
       "column": 7,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -15469,12 +15469,12 @@
         "/admin",
         "/config/"
       ],
-      "sourceSha256": "a19a9ef024c2dbf64e8c760cddeedd46530e88cb91568724a39c1eab4ecbb26b",
-      "id": "bd5b171ee185c79c"
+      "sourceSha256": "841a962eb4f138a820cd5717f638df7fe08b8d5806f12031ee0288b4b9a587e3",
+      "id": "3ff5aa626f7bf913"
     },
     {
       "source": "app/core/private-navigation.js",
-      "line": 78,
+      "line": 80,
       "column": 28,
       "kind": "javascript-sink",
       "sink": "helper:addGroup",
@@ -15496,12 +15496,12 @@
         "/admin",
         "/config/"
       ],
-      "sourceSha256": "a19a9ef024c2dbf64e8c760cddeedd46530e88cb91568724a39c1eab4ecbb26b",
-      "id": "bc0e0824477a3173"
+      "sourceSha256": "841a962eb4f138a820cd5717f638df7fe08b8d5806f12031ee0288b4b9a587e3",
+      "id": "acadf2d8a0d6c542"
     },
     {
       "source": "app/core/private-navigation.js",
-      "line": 81,
+      "line": 83,
       "column": 29,
       "kind": "javascript-sink",
       "sink": "helper:makeLink",
@@ -15523,12 +15523,12 @@
         "/admin",
         "/config/"
       ],
-      "sourceSha256": "a19a9ef024c2dbf64e8c760cddeedd46530e88cb91568724a39c1eab4ecbb26b",
-      "id": "5f53eac13e4b5555"
+      "sourceSha256": "841a962eb4f138a820cd5717f638df7fe08b8d5806f12031ee0288b4b9a587e3",
+      "id": "e75b13a7c2b0d886"
     },
     {
       "source": "app/core/private-navigation.js",
-      "line": 82,
+      "line": 84,
       "column": 29,
       "kind": "javascript-sink",
       "sink": "helper:makeLink",
@@ -15550,35 +15550,8 @@
         "/admin",
         "/config/"
       ],
-      "sourceSha256": "a19a9ef024c2dbf64e8c760cddeedd46530e88cb91568724a39c1eab4ecbb26b",
-      "id": "0b584a71ebe4a45c"
-    },
-    {
-      "source": "app/core/private-navigation.js",
-      "line": 83,
-      "column": 29,
-      "kind": "javascript-sink",
-      "sink": "helper:makeLink",
-      "attribute": null,
-      "expression": "\"Gerenciar acessos\"",
-      "value": "Gerenciar acessos",
-      "literalSegments": [
-        "Gerenciar acessos"
-      ],
-      "constantCandidates": [],
-      "classification": "unreviewed",
-      "classificationHints": [
-        "visible-or-accessible-ui"
-      ],
-      "owner": "shared-runtime",
-      "routeConsumers": [
-        "/access/",
-        "/access/manage",
-        "/admin",
-        "/config/"
-      ],
-      "sourceSha256": "a19a9ef024c2dbf64e8c760cddeedd46530e88cb91568724a39c1eab4ecbb26b",
-      "id": "47fbab684f48543d"
+      "sourceSha256": "841a962eb4f138a820cd5717f638df7fe08b8d5806f12031ee0288b4b9a587e3",
+      "id": "33566e1de2f0d9a9"
     },
     {
       "source": "app/core/private-navigation.js",
@@ -15587,6 +15560,33 @@
       "kind": "javascript-sink",
       "sink": "helper:makeLink",
       "attribute": null,
+      "expression": "\"Gerenciar acessos\"",
+      "value": "Gerenciar acessos",
+      "literalSegments": [
+        "Gerenciar acessos"
+      ],
+      "constantCandidates": [],
+      "classification": "unreviewed",
+      "classificationHints": [
+        "visible-or-accessible-ui"
+      ],
+      "owner": "shared-runtime",
+      "routeConsumers": [
+        "/access/",
+        "/access/manage",
+        "/admin",
+        "/config/"
+      ],
+      "sourceSha256": "841a962eb4f138a820cd5717f638df7fe08b8d5806f12031ee0288b4b9a587e3",
+      "id": "8979f0bc834665b1"
+    },
+    {
+      "source": "app/core/private-navigation.js",
+      "line": 87,
+      "column": 29,
+      "kind": "javascript-sink",
+      "sink": "helper:makeLink",
+      "attribute": null,
       "expression": "\"Configurador\"",
       "value": "Configurador",
       "literalSegments": [
@@ -15604,12 +15604,12 @@
         "/admin",
         "/config/"
       ],
-      "sourceSha256": "a19a9ef024c2dbf64e8c760cddeedd46530e88cb91568724a39c1eab4ecbb26b",
-      "id": "47607e8d4c7d2a9e"
+      "sourceSha256": "841a962eb4f138a820cd5717f638df7fe08b8d5806f12031ee0288b4b9a587e3",
+      "id": "aa73d25e6b771a79"
     },
     {
       "source": "app/core/private-navigation.js",
-      "line": 86,
+      "line": 88,
       "column": 29,
       "kind": "javascript-sink",
       "sink": "helper:makeLink",
@@ -15631,12 +15631,12 @@
         "/admin",
         "/config/"
       ],
-      "sourceSha256": "a19a9ef024c2dbf64e8c760cddeedd46530e88cb91568724a39c1eab4ecbb26b",
-      "id": "a5d8525b41aa251c"
+      "sourceSha256": "841a962eb4f138a820cd5717f638df7fe08b8d5806f12031ee0288b4b9a587e3",
+      "id": "b593f00dcc9a42ec"
     },
     {
       "source": "app/core/private-navigation.js",
-      "line": 88,
+      "line": 90,
       "column": 29,
       "kind": "javascript-sink",
       "sink": "helper:makeLink",
@@ -15658,12 +15658,12 @@
         "/admin",
         "/config/"
       ],
-      "sourceSha256": "a19a9ef024c2dbf64e8c760cddeedd46530e88cb91568724a39c1eab4ecbb26b",
-      "id": "9bbddfb2c5ad4c51"
+      "sourceSha256": "841a962eb4f138a820cd5717f638df7fe08b8d5806f12031ee0288b4b9a587e3",
+      "id": "107b837b97e42922"
     },
     {
       "source": "app/core/private-navigation.js",
-      "line": 92,
+      "line": 94,
       "column": 9,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -15685,12 +15685,12 @@
         "/admin",
         "/config/"
       ],
-      "sourceSha256": "a19a9ef024c2dbf64e8c760cddeedd46530e88cb91568724a39c1eab4ecbb26b",
-      "id": "44ad94dfdafd7782"
+      "sourceSha256": "841a962eb4f138a820cd5717f638df7fe08b8d5806f12031ee0288b4b9a587e3",
+      "id": "d13dcdbadcf4ec4c"
     },
     {
       "source": "app/core/private-navigation.js",
-      "line": 95,
+      "line": 97,
       "column": 29,
       "kind": "javascript-sink",
       "sink": "helper:makeLink",
@@ -15712,12 +15712,12 @@
         "/admin",
         "/config/"
       ],
-      "sourceSha256": "a19a9ef024c2dbf64e8c760cddeedd46530e88cb91568724a39c1eab4ecbb26b",
-      "id": "195a7ae852dc077b"
+      "sourceSha256": "841a962eb4f138a820cd5717f638df7fe08b8d5806f12031ee0288b4b9a587e3",
+      "id": "40de5887a49409fb"
     },
     {
       "source": "app/core/private-navigation.js",
-      "line": 99,
+      "line": 101,
       "column": 9,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -15739,12 +15739,12 @@
         "/admin",
         "/config/"
       ],
-      "sourceSha256": "a19a9ef024c2dbf64e8c760cddeedd46530e88cb91568724a39c1eab4ecbb26b",
-      "id": "5e6b1c2781e5bc09"
+      "sourceSha256": "841a962eb4f138a820cd5717f638df7fe08b8d5806f12031ee0288b4b9a587e3",
+      "id": "d8b6ac99f29770ea"
     },
     {
       "source": "app/core/private-navigation.js",
-      "line": 102,
+      "line": 104,
       "column": 27,
       "kind": "javascript-sink",
       "sink": "helper:addGroup",
@@ -15766,12 +15766,12 @@
         "/admin",
         "/config/"
       ],
-      "sourceSha256": "a19a9ef024c2dbf64e8c760cddeedd46530e88cb91568724a39c1eab4ecbb26b",
-      "id": "c160e575e72ff1b5"
+      "sourceSha256": "841a962eb4f138a820cd5717f638df7fe08b8d5806f12031ee0288b4b9a587e3",
+      "id": "87818ba9befd55e9"
     },
     {
       "source": "app/core/private-navigation.js",
-      "line": 103,
+      "line": 105,
       "column": 67,
       "kind": "javascript-sink",
       "sink": "helper:makeLink",
@@ -15791,12 +15791,12 @@
         "/admin",
         "/config/"
       ],
-      "sourceSha256": "a19a9ef024c2dbf64e8c760cddeedd46530e88cb91568724a39c1eab4ecbb26b",
-      "id": "699e09178dde41df"
+      "sourceSha256": "841a962eb4f138a820cd5717f638df7fe08b8d5806f12031ee0288b4b9a587e3",
+      "id": "85ecde16f5a81307"
     },
     {
       "source": "app/core/private-navigation.js",
-      "line": 113,
+      "line": 115,
       "column": 7,
       "kind": "javascript-sink",
       "sink": "call:setAttribute",
@@ -15816,8 +15816,8 @@
         "/admin",
         "/config/"
       ],
-      "sourceSha256": "a19a9ef024c2dbf64e8c760cddeedd46530e88cb91568724a39c1eab4ecbb26b",
-      "id": "4c0ea665ec3bb610"
+      "sourceSha256": "841a962eb4f138a820cd5717f638df7fe08b8d5806f12031ee0288b4b9a587e3",
+      "id": "645a73dc807c7a0e"
     },
     {
       "source": "app/core/public-video-fullscreen.js",
@@ -37896,40 +37896,7 @@
     },
     {
       "source": "app/core/private-navigation.js",
-      "line": 38,
-      "column": 23,
-      "kind": "javascript-text-source",
-      "sink": "source:navigation-labels",
-      "sourceRole": "navigation-labels",
-      "sourceBinding": "publicPages",
-      "valuePath": "[0].[1]",
-      "expression": "\"Ambientes\"",
-      "value": "Ambientes",
-      "literalSegments": [
-        "Ambientes"
-      ],
-      "classification": "unreviewed",
-      "classificationHints": [
-        "source-needs-consumer-and-domain-review"
-      ],
-      "consumerLinkStatus": "field-consumer-evidence",
-      "useStatus": "active",
-      "consumerEvidence": [
-        "consumer traced during bounded source review; see valuePath and routeConsumers"
-      ],
-      "owner": "shared-runtime",
-      "routeConsumers": [
-        "/access/",
-        "/access/manage",
-        "/admin",
-        "/config/"
-      ],
-      "sourceSha256": "a19a9ef024c2dbf64e8c760cddeedd46530e88cb91568724a39c1eab4ecbb26b",
-      "id": "2e2067634c69ddde"
-    },
-    {
-      "source": "app/core/private-navigation.js",
-      "line": 39,
+      "line": 41,
       "column": 20,
       "kind": "javascript-text-source",
       "sink": "source:navigation-labels",
@@ -37957,111 +37924,12 @@
         "/admin",
         "/config/"
       ],
-      "sourceSha256": "a19a9ef024c2dbf64e8c760cddeedd46530e88cb91568724a39c1eab4ecbb26b",
-      "id": "f509b0feaf5d12f6"
+      "sourceSha256": "841a962eb4f138a820cd5717f638df7fe08b8d5806f12031ee0288b4b9a587e3",
+      "id": "1bbdcd8771c00c3f"
     },
     {
       "source": "app/core/private-navigation.js",
-      "line": 40,
-      "column": 26,
-      "kind": "javascript-text-source",
-      "sink": "source:navigation-labels",
-      "sourceRole": "navigation-labels",
-      "sourceBinding": "publicPages",
-      "valuePath": "[2].[1]",
-      "expression": "\"Como funciona\"",
-      "value": "Como funciona",
-      "literalSegments": [
-        "Como funciona"
-      ],
-      "classification": "unreviewed",
-      "classificationHints": [
-        "source-needs-consumer-and-domain-review"
-      ],
-      "consumerLinkStatus": "field-consumer-evidence",
-      "useStatus": "active",
-      "consumerEvidence": [
-        "consumer traced during bounded source review; see valuePath and routeConsumers"
-      ],
-      "owner": "shared-runtime",
-      "routeConsumers": [
-        "/access/",
-        "/access/manage",
-        "/admin",
-        "/config/"
-      ],
-      "sourceSha256": "a19a9ef024c2dbf64e8c760cddeedd46530e88cb91568724a39c1eab4ecbb26b",
-      "id": "c1c06df9d62ccfae"
-    },
-    {
-      "source": "app/core/private-navigation.js",
-      "line": 41,
-      "column": 19,
-      "kind": "javascript-text-source",
-      "sink": "source:navigation-labels",
-      "sourceRole": "navigation-labels",
-      "sourceBinding": "publicPages",
-      "valuePath": "[3].[1]",
-      "expression": "\"Quem somos\"",
-      "value": "Quem somos",
-      "literalSegments": [
-        "Quem somos"
-      ],
-      "classification": "unreviewed",
-      "classificationHints": [
-        "source-needs-consumer-and-domain-review"
-      ],
-      "consumerLinkStatus": "field-consumer-evidence",
-      "useStatus": "active",
-      "consumerEvidence": [
-        "consumer traced during bounded source review; see valuePath and routeConsumers"
-      ],
-      "owner": "shared-runtime",
-      "routeConsumers": [
-        "/access/",
-        "/access/manage",
-        "/admin",
-        "/config/"
-      ],
-      "sourceSha256": "a19a9ef024c2dbf64e8c760cddeedd46530e88cb91568724a39c1eab4ecbb26b",
-      "id": "677fcb740da6deda"
-    },
-    {
-      "source": "app/core/private-navigation.js",
-      "line": 42,
-      "column": 26,
-      "kind": "javascript-text-source",
-      "sink": "source:navigation-labels",
-      "sourceRole": "navigation-labels",
-      "sourceBinding": "publicPages",
-      "valuePath": "[4].[1]",
-      "expression": "\"Fale conosco\"",
-      "value": "Fale conosco",
-      "literalSegments": [
-        "Fale conosco"
-      ],
-      "classification": "unreviewed",
-      "classificationHints": [
-        "source-needs-consumer-and-domain-review"
-      ],
-      "consumerLinkStatus": "field-consumer-evidence",
-      "useStatus": "active",
-      "consumerEvidence": [
-        "consumer traced during bounded source review; see valuePath and routeConsumers"
-      ],
-      "owner": "shared-runtime",
-      "routeConsumers": [
-        "/access/",
-        "/access/manage",
-        "/admin",
-        "/config/"
-      ],
-      "sourceSha256": "a19a9ef024c2dbf64e8c760cddeedd46530e88cb91568724a39c1eab4ecbb26b",
-      "id": "dff1d92286dfc9a4"
-    },
-    {
-      "source": "app/core/private-navigation.js",
-      "line": 188,
+      "line": 190,
       "column": 41,
       "kind": "javascript-text-source",
       "sink": "source:error-message-source",
@@ -38091,8 +37959,8 @@
         "/admin",
         "/config/"
       ],
-      "sourceSha256": "a19a9ef024c2dbf64e8c760cddeedd46530e88cb91568724a39c1eab4ecbb26b",
-      "id": "4110b7ec9a2a4dd2"
+      "sourceSha256": "841a962eb4f138a820cd5717f638df7fe08b8d5806f12031ee0288b4b9a587e3",
+      "id": "8de27044fa478937"
     },
     {
       "source": "app/core/public-module-projection.js",
@@ -45743,7 +45611,7 @@
     },
     {
       "path": "app/core/private-navigation.js",
-      "sha256": "a19a9ef024c2dbf64e8c760cddeedd46530e88cb91568724a39c1eab4ecbb26b"
+      "sha256": "841a962eb4f138a820cd5717f638df7fe08b8d5806f12031ee0288b4b9a587e3"
     },
     {
       "path": "app/core/public-module-projection.js",
