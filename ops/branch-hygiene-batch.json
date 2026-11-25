@@ -1,20 +1,20 @@
 {
   "schemaVersion": "BranchHygieneBatch 0.1",
   "repository": "EAKerber/MobiliPresenter2D",
-  "wave": "PRODUCT-HYG-20261125-ARCHIVE-1",
-  "purpose": "Retire three superseded exact heads after lossless archive and successor proof.",
+  "wave": "PRODUCT-HYG-20261125-ARCHIVE-2",
+  "purpose": "Retire two rejected browser-image experiment heads and path-equivalent #444 after lossless archive.",
   "branches": [
     {
-      "branch": "codex/nav005-development-buffer-20261121",
-      "sha": "9c18dd97bfc4cf50e55fa60349a6496fa3d723e4"
+      "branch": "codex/tst004-browser-image-setup-20261124",
+      "sha": "c8c7f71f3f66fcad2345388c875192f20e0e4f08"
     },
     {
-      "branch": "codex/arc13-localization-menu-theme-20261122",
-      "sha": "fc12bb628b949fe156bb969cbed1acf8df72e668"
+      "branch": "codex/tst004-playwright-image-current-20261124",
+      "sha": "e1e92abd81da9bd550feaebc1f789c41db606118"
     },
     {
-      "branch": "codex/tst001-refreshable-inventory-20261124",
-      "sha": "6f7a0d3f93ba3f0f4483ffb143785d81cb0c5ed2"
+      "branch": "codex/dom001-buyer-dto-boundary-20261125",
+      "sha": "a69e991d89e790f86f74389f34e320540442c7ee"
     }
   ]
 }
