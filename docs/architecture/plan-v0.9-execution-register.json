@@ -335,9 +335,14 @@
           "source": "Product PR #412",
           "sha": "def19b2815cd7a3be30abfa33b3f1c03c1041a17",
           "detail": "Inventário exato de workflows atualizado em development. A leitura é local/documental e não equivale a artefato de execução hospedada."
+        },
+        {
+          "source": "Product PR #436 exact-head inventory run #45626479134, post-merge tree readback, and current snapshot",
+          "sha": "a873dd3ec5a8b168f24461402504661b88ebb48f",
+          "detail": "New receipt docs/architecture/ci/tst-001-workflow-inventory-2026-11-25.json is generated from exact main@01ded2c and the PR candidate tree at f761a80; that tree exactly matches integrated development@71bc086. Current development@a873dd3 differs from the merge only by the execution-register document, so workflow definitions remain the same. Inventory: 27 main workflows, 68 development workflows, 25 shared, 70 distinct workflow names, zero parser warnings; development event counts are pull_request 28, push 62, workflow_dispatch 54, schedule 1. Command assertions/results remain separate; current open Product PR readback is refreshed in the receipt."
         }
       ],
-      "nextAction": "Completar o mapa de asserções para comandos e atualizar a fotografia quando mudarem as definições."
+      "nextAction": "Complete the command→assertion→contract result crosswalk for the remaining families and refresh this snapshot whenever workflow definitions change; preserve the distinction between declared command and observed run result."
     },
     {
       "order": 20,
@@ -520,9 +525,9 @@
       "approvalPublication": "not_applicable",
       "evidence": [
         {
-          "source": "GitHub compare Product development...main after Product PR #436",
-          "sha": "71bc086114741fe2d5967099123a7d420cba80eb",
-          "detail": "Exact compare reports 574 commits present on development but absent from main, and 17 present on main but absent from development, at merge base 221b54b2a41ecc8c338d1bf2cf67280cf165ce95. The reverse comparison yields 72 main-side paths; main...development's file list is capped at 300. The 72 paths span public page/theme sources, generated page artifacts, tests/CI, ARC-13 inventory tooling, and branch-hygiene tooling. These families are coupled; no whole-tree merge or branch-count inference follows."
+          "source": "GitHub compare Product main...development after Product PR #437",
+          "sha": "a873dd3ec5a8b168f24461402504661b88ebb48f",
+          "detail": "Exact compare reports 575 commits present on development but absent from main and 17 present on main but absent from development, at merge base 221b54b2a41ecc8c338d1bf2cf67280cf165ce95. The reverse comparison still yields 72 main-side paths; the main...development file response is capped at 300. Paths span coupled public source/generated artifacts, tests and CI, ARC-13 inventory, and branch-hygiene tooling. No whole-tree merge is implied."
         },
         {
           "source": "Exact Product main/development V5 source and test comparison; Product PR #432",
@@ -2260,8 +2265,8 @@
   "baselineReadback": {
     "capturedAt": "2026-11-25",
     "productMainSha": "01ded2c100fbfd8b16897e26113dc5068a83e429",
-    "productDevelopmentSha": "71bc086114741fe2d5967099123a7d420cba80eb",
+    "productDevelopmentSha": "a873dd3ec5a8b168f24461402504661b88ebb48f",
     "designSystemMainSha": "c6ff6545e9ae2071e695109fd94ac91676e7fb0a",
-    "meaning": "Exact Product and Design System refs re-read after Product PR #436. Main/development compare is current at this readback; the GIT-001 snapshot remains an earlier timestamped receipt."
+    "meaning": "Exact refs and compare re-read after Product PR #437. The TST-001 workflow inventory is generated on a candidate tree identical to merged development; the only later tree change through this readback is the execution-register document."
   }
 }
