@@ -1425,14 +1425,20 @@
       "chapter": "V",
       "priority": "P0",
       "planState": "not_started",
-      "reconciliation": "unreviewed",
-      "local": "unknown",
-      "development": "unknown",
-      "main": "unknown",
-      "technicalValidation": "unknown",
-      "approvalPublication": "unknown",
-      "evidence": [],
-      "nextAction": "Reconciliar este ID com código, consumidores, testes e evidência exata de branch/PR antes de alterar o estado."
+      "reconciliation": "done",
+      "local": "done",
+      "development": "done",
+      "main": "not_present",
+      "technicalValidation": "done",
+      "approvalPublication": "not_applicable",
+      "evidence": [
+        {
+          "source": "Product PR #426; exact PR and post-merge authorization gates",
+          "sha": "4506fe5860b55a7ad482f55dd0fbf15072ada145",
+          "detail": "PR #426 head bd75b0baf79b799418452379247e9d9f55d9dd1f integrou em development como squash 4506fe5860b55a7ad482f55dd0fbf15072ada145. No head exato, o run de PR #45613294609 passou nos jobs authorization-contract e access-session-browser; após o merge, o run push-only #45613520369 passou nos mesmos dois jobs. O advisory #45613520505 também passou. O pacote cobre configuração/bootstrap Admin, concessão e logs, endpoints de sessão temporária, gate de rotas, estados da navegação privada e exposição do token de convite; não altera runtime do produto. O teste Playwright usa token sintético e sessão local. Não há prova de sessão hospedada real: validar a integração real de Identity/cookie no preview exige uma conta de teste não produtiva e grant sintético, sem dados de usuário; falhas de Identity, Blob e sessão permanecem simuladas."
+        }
+      ],
+      "nextAction": "DoD DOM-013 concluído em development: a autorização foi verificada nas fronteiras de backend e rotas; a navegação apenas representa a sessão conhecida. Runtime de produção não foi alterado. Prosseguir para o próximo P0 conforme a sequência do plano."
     },
     {
       "order": 86,
@@ -1441,20 +1447,25 @@
       "chapter": "VI",
       "priority": "P0",
       "planState": "not_started",
-      "reconciliation": "partial",
-      "local": "partial",
-      "development": "partial",
-      "main": "unknown",
-      "technicalValidation": "partial",
-      "approvalPublication": "unknown",
+      "reconciliation": "done",
+      "local": "done",
+      "development": "done",
+      "main": "not_present",
+      "technicalValidation": "done",
+      "approvalPublication": "not_applicable",
       "evidence": [
         {
           "source": "Buyer auth-boundary crosswalk and local endpoint test continuation",
           "sha": "1292afe149e711dce01fce0e727fd0da033a38d4",
           "detail": "Buyer endpoint has behavioral coverage for anonymous, unauthorized, valid/expired temporary session, Identity/session-store failure, authorization before storage, and Buyer DTO allowlist. This is one surface only; delayed session, logout, administrative endpoint, menu representation, sensitive log/screenshot handling, and hosted-auth cases remain unreviewed."
+        },
+        {
+          "source": "Product PR #426; exact PR and post-merge authorization gates",
+          "sha": "4506fe5860b55a7ad482f55dd0fbf15072ada145",
+          "detail": "PR #426 head bd75b0baf79b799418452379247e9d9f55d9dd1f integrou em development como squash 4506fe5860b55a7ad482f55dd0fbf15072ada145. No head exato, o run de PR #45613294609 passou nos jobs authorization-contract e access-session-browser; após o merge, o run push-only #45613520369 passou nos mesmos dois jobs. O advisory #45613520505 também passou. O pacote cobre configuração/bootstrap Admin, concessão e logs, endpoints de sessão temporária, gate de rotas, estados da navegação privada e exposição do token de convite; não altera runtime do produto. O teste Playwright usa token sintético e sessão local. Não há prova de sessão hospedada real: validar a integração real de Identity/cookie no preview exige uma conta de teste não produtiva e grant sintético, sem dados de usuário; falhas de Identity, Blob e sessão permanecem simuladas."
         }
       ],
-      "nextAction": "Map the remaining protected surfaces and UI session states; keep the local fixture separate from real hosted-session evidence."
+      "nextAction": "DoD TST-010 concluído em development. Cobertura sintética local e gate de navegador passaram no PR e após integração. Manter como limite documentado: validação real de Identity/cookie requer preview não produtivo com conta de teste autorizada; não foi executada neste pacote."
     },
     {
       "order": 87,
