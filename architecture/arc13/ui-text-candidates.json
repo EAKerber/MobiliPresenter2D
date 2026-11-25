@@ -96,8 +96,8 @@
     "javascriptTextSourceRecordsUnconsumed": 2,
     "javascriptTextSourceRecordsNeedsFlowReview": 20,
     "javascriptTextSourceRecordsDiagnostic": 46,
-    "javascriptTextSourceRecordsWithSinkLinks": 33,
-    "javascriptTextSourceSinkLinks": 33,
+    "javascriptTextSourceRecordsWithSinkLinks": 32,
+    "javascriptTextSourceSinkLinks": 32,
     "javascriptTextSourceRecordsWithFailureFallbacks": 2,
     "javascriptTextSourceFailureFallbackLinks": 3,
     "javascriptTextSourceRoles": {
@@ -346,7 +346,7 @@
     },
     {
       "source": "app/app.js",
-      "line": 273,
+      "line": 274,
       "column": 11,
       "kind": "javascript-excluded-sink",
       "sink": "property:textContent",
@@ -355,7 +355,7 @@
       "routeConsumers": [
         "/config/"
       ],
-      "sourceSha256": "1932885bb59a5ec1d90c9450995d668af928801ecff88f9bf4bd3d0cb667b5e8"
+      "sourceSha256": "d0f84639f34f694d8014a82293918d30ee079cece6dd2d63be1ade4afccdfd27"
     },
     {
       "source": "app/core/scene-component.js",
@@ -10414,7 +10414,7 @@
     },
     {
       "source": "app/app.js",
-      "line": 291,
+      "line": 292,
       "column": 9,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -10432,12 +10432,12 @@
       "routeConsumers": [
         "/config/"
       ],
-      "sourceSha256": "1932885bb59a5ec1d90c9450995d668af928801ecff88f9bf4bd3d0cb667b5e8",
-      "id": "d0e08ea217aea674"
+      "sourceSha256": "d0f84639f34f694d8014a82293918d30ee079cece6dd2d63be1ade4afccdfd27",
+      "id": "f43e8ae1ef7d33d5"
     },
     {
       "source": "app/app.js",
-      "line": 390,
+      "line": 391,
       "column": 7,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -10455,12 +10455,12 @@
       "routeConsumers": [
         "/config/"
       ],
-      "sourceSha256": "1932885bb59a5ec1d90c9450995d668af928801ecff88f9bf4bd3d0cb667b5e8",
-      "id": "a3f2bea45e44a72d"
+      "sourceSha256": "d0f84639f34f694d8014a82293918d30ee079cece6dd2d63be1ade4afccdfd27",
+      "id": "fe3e0d666a515e7d"
     },
     {
       "source": "app/app.js",
-      "line": 391,
+      "line": 392,
       "column": 7,
       "kind": "javascript-sink",
       "sink": "call:setAttribute",
@@ -10477,12 +10477,12 @@
       "routeConsumers": [
         "/config/"
       ],
-      "sourceSha256": "1932885bb59a5ec1d90c9450995d668af928801ecff88f9bf4bd3d0cb667b5e8",
-      "id": "283b54df3fe25f62"
+      "sourceSha256": "d0f84639f34f694d8014a82293918d30ee079cece6dd2d63be1ade4afccdfd27",
+      "id": "bb5fc2afae0db987"
     },
     {
       "source": "app/app.js",
-      "line": 618,
+      "line": 619,
       "column": 7,
       "kind": "javascript-sink",
       "sink": "call:setAttribute",
@@ -10501,12 +10501,12 @@
       "routeConsumers": [
         "/config/"
       ],
-      "sourceSha256": "1932885bb59a5ec1d90c9450995d668af928801ecff88f9bf4bd3d0cb667b5e8",
-      "id": "8ca997bcf53f9a54"
+      "sourceSha256": "d0f84639f34f694d8014a82293918d30ee079cece6dd2d63be1ade4afccdfd27",
+      "id": "473188d5b67975f4"
     },
     {
       "source": "app/app.js",
-      "line": 654,
+      "line": 655,
       "column": 9,
       "kind": "javascript-sink",
       "sink": "call:setAttribute",
@@ -10526,12 +10526,12 @@
       "routeConsumers": [
         "/config/"
       ],
-      "sourceSha256": "1932885bb59a5ec1d90c9450995d668af928801ecff88f9bf4bd3d0cb667b5e8",
-      "id": "50cc7cb0dd3f095d"
+      "sourceSha256": "d0f84639f34f694d8014a82293918d30ee079cece6dd2d63be1ade4afccdfd27",
+      "id": "3e64d01c188c45cd"
     },
     {
       "source": "app/app.js",
-      "line": 658,
+      "line": 659,
       "column": 9,
       "kind": "javascript-sink",
       "sink": "property:title",
@@ -10551,12 +10551,12 @@
       "routeConsumers": [
         "/config/"
       ],
-      "sourceSha256": "1932885bb59a5ec1d90c9450995d668af928801ecff88f9bf4bd3d0cb667b5e8",
-      "id": "e21d938237d67878"
+      "sourceSha256": "d0f84639f34f694d8014a82293918d30ee079cece6dd2d63be1ade4afccdfd27",
+      "id": "932a00a3d23cede4"
     },
     {
       "source": "app/app.js",
-      "line": 662,
+      "line": 663,
       "column": 9,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -10574,12 +10574,12 @@
       "routeConsumers": [
         "/config/"
       ],
-      "sourceSha256": "1932885bb59a5ec1d90c9450995d668af928801ecff88f9bf4bd3d0cb667b5e8",
-      "id": "4ddc16f081fb0e06"
+      "sourceSha256": "d0f84639f34f694d8014a82293918d30ee079cece6dd2d63be1ade4afccdfd27",
+      "id": "674fc7694fa9ef0e"
     },
     {
       "source": "app/app.js",
-      "line": 667,
+      "line": 668,
       "column": 9,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -10597,12 +10597,12 @@
       "routeConsumers": [
         "/config/"
       ],
-      "sourceSha256": "1932885bb59a5ec1d90c9450995d668af928801ecff88f9bf4bd3d0cb667b5e8",
-      "id": "882a6f375903d3c3"
+      "sourceSha256": "d0f84639f34f694d8014a82293918d30ee079cece6dd2d63be1ade4afccdfd27",
+      "id": "4537757a4b650464"
     },
     {
       "source": "app/app.js",
-      "line": 669,
+      "line": 670,
       "column": 9,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -10620,12 +10620,12 @@
       "routeConsumers": [
         "/config/"
       ],
-      "sourceSha256": "1932885bb59a5ec1d90c9450995d668af928801ecff88f9bf4bd3d0cb667b5e8",
-      "id": "8b3401ea73088e77"
+      "sourceSha256": "d0f84639f34f694d8014a82293918d30ee079cece6dd2d63be1ade4afccdfd27",
+      "id": "84639ab1d3e83ef7"
     },
     {
       "source": "app/app.js",
-      "line": 676,
+      "line": 677,
       "column": 9,
       "kind": "javascript-sink",
       "sink": "call:setAttribute",
@@ -10644,12 +10644,12 @@
       "routeConsumers": [
         "/config/"
       ],
-      "sourceSha256": "1932885bb59a5ec1d90c9450995d668af928801ecff88f9bf4bd3d0cb667b5e8",
-      "id": "47a528b0e849971c"
+      "sourceSha256": "d0f84639f34f694d8014a82293918d30ee079cece6dd2d63be1ade4afccdfd27",
+      "id": "706d64ac595abb58"
     },
     {
       "source": "app/app.js",
-      "line": 678,
+      "line": 679,
       "column": 9,
       "kind": "javascript-sink",
       "sink": "call:setAttribute",
@@ -10669,12 +10669,12 @@
       "routeConsumers": [
         "/config/"
       ],
-      "sourceSha256": "1932885bb59a5ec1d90c9450995d668af928801ecff88f9bf4bd3d0cb667b5e8",
-      "id": "fb0129fdbdc944a3"
+      "sourceSha256": "d0f84639f34f694d8014a82293918d30ee079cece6dd2d63be1ade4afccdfd27",
+      "id": "86a2d686a34a10f8"
     },
     {
       "source": "app/app.js",
-      "line": 682,
+      "line": 683,
       "column": 9,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -10694,12 +10694,12 @@
       "routeConsumers": [
         "/config/"
       ],
-      "sourceSha256": "1932885bb59a5ec1d90c9450995d668af928801ecff88f9bf4bd3d0cb667b5e8",
-      "id": "a17a0bff8fb8e1d7"
+      "sourceSha256": "d0f84639f34f694d8014a82293918d30ee079cece6dd2d63be1ade4afccdfd27",
+      "id": "86b293e9331fbe33"
     },
     {
       "source": "app/app.js",
-      "line": 717,
+      "line": 718,
       "column": 7,
       "kind": "javascript-sink",
       "sink": "property:title",
@@ -10716,12 +10716,12 @@
       "routeConsumers": [
         "/config/"
       ],
-      "sourceSha256": "1932885bb59a5ec1d90c9450995d668af928801ecff88f9bf4bd3d0cb667b5e8",
-      "id": "16b1534c0035d9d5"
+      "sourceSha256": "d0f84639f34f694d8014a82293918d30ee079cece6dd2d63be1ade4afccdfd27",
+      "id": "472b75d9be08434c"
     },
     {
       "source": "app/app.js",
-      "line": 718,
+      "line": 719,
       "column": 7,
       "kind": "javascript-sink",
       "sink": "call:setAttribute",
@@ -10741,12 +10741,12 @@
       "routeConsumers": [
         "/config/"
       ],
-      "sourceSha256": "1932885bb59a5ec1d90c9450995d668af928801ecff88f9bf4bd3d0cb667b5e8",
-      "id": "4ed53894900ff232"
+      "sourceSha256": "d0f84639f34f694d8014a82293918d30ee079cece6dd2d63be1ade4afccdfd27",
+      "id": "84c780139f2a54c3"
     },
     {
       "source": "app/app.js",
-      "line": 726,
+      "line": 727,
       "column": 7,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -10767,12 +10767,12 @@
       "routeConsumers": [
         "/config/"
       ],
-      "sourceSha256": "1932885bb59a5ec1d90c9450995d668af928801ecff88f9bf4bd3d0cb667b5e8",
-      "id": "ef587b3c0ce27e95"
+      "sourceSha256": "d0f84639f34f694d8014a82293918d30ee079cece6dd2d63be1ade4afccdfd27",
+      "id": "53240dceaec34994"
     },
     {
       "source": "app/app.js",
-      "line": 734,
+      "line": 735,
       "column": 15,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -10791,12 +10791,12 @@
       "routeConsumers": [
         "/config/"
       ],
-      "sourceSha256": "1932885bb59a5ec1d90c9450995d668af928801ecff88f9bf4bd3d0cb667b5e8",
-      "id": "76997ab418e63604"
+      "sourceSha256": "d0f84639f34f694d8014a82293918d30ee079cece6dd2d63be1ade4afccdfd27",
+      "id": "d0046cf43e03c058"
     },
     {
       "source": "app/app.js",
-      "line": 744,
+      "line": 745,
       "column": 7,
       "kind": "javascript-sink",
       "sink": "call:setAttribute",
@@ -10815,12 +10815,12 @@
       "routeConsumers": [
         "/config/"
       ],
-      "sourceSha256": "1932885bb59a5ec1d90c9450995d668af928801ecff88f9bf4bd3d0cb667b5e8",
-      "id": "60c7bb9d53aca873"
+      "sourceSha256": "d0f84639f34f694d8014a82293918d30ee079cece6dd2d63be1ade4afccdfd27",
+      "id": "d8b4c0a357d6505c"
     },
     {
       "source": "app/app.js",
-      "line": 759,
+      "line": 760,
       "column": 7,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -10837,12 +10837,12 @@
       "routeConsumers": [
         "/config/"
       ],
-      "sourceSha256": "1932885bb59a5ec1d90c9450995d668af928801ecff88f9bf4bd3d0cb667b5e8",
-      "id": "919103d5969e20a8"
+      "sourceSha256": "d0f84639f34f694d8014a82293918d30ee079cece6dd2d63be1ade4afccdfd27",
+      "id": "f9037e642a1cd7c4"
     },
     {
       "source": "app/app.js",
-      "line": 764,
+      "line": 765,
       "column": 7,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -10863,12 +10863,12 @@
       "routeConsumers": [
         "/config/"
       ],
-      "sourceSha256": "1932885bb59a5ec1d90c9450995d668af928801ecff88f9bf4bd3d0cb667b5e8",
-      "id": "2af8382659303b7a"
+      "sourceSha256": "d0f84639f34f694d8014a82293918d30ee079cece6dd2d63be1ade4afccdfd27",
+      "id": "9848209261a9c072"
     },
     {
       "source": "app/app.js",
-      "line": 784,
+      "line": 785,
       "column": 7,
       "kind": "javascript-sink",
       "sink": "call:setAttribute",
@@ -10887,12 +10887,12 @@
       "routeConsumers": [
         "/config/"
       ],
-      "sourceSha256": "1932885bb59a5ec1d90c9450995d668af928801ecff88f9bf4bd3d0cb667b5e8",
-      "id": "4859c795b23bb2d5"
+      "sourceSha256": "d0f84639f34f694d8014a82293918d30ee079cece6dd2d63be1ade4afccdfd27",
+      "id": "643904774c32917e"
     },
     {
       "source": "app/app.js",
-      "line": 792,
+      "line": 793,
       "column": 7,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -10909,12 +10909,12 @@
       "routeConsumers": [
         "/config/"
       ],
-      "sourceSha256": "1932885bb59a5ec1d90c9450995d668af928801ecff88f9bf4bd3d0cb667b5e8",
-      "id": "e4fac794ad5f8009"
+      "sourceSha256": "d0f84639f34f694d8014a82293918d30ee079cece6dd2d63be1ade4afccdfd27",
+      "id": "bbc2f640591fe799"
     },
     {
       "source": "app/app.js",
-      "line": 795,
+      "line": 796,
       "column": 7,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -10934,12 +10934,12 @@
       "routeConsumers": [
         "/config/"
       ],
-      "sourceSha256": "1932885bb59a5ec1d90c9450995d668af928801ecff88f9bf4bd3d0cb667b5e8",
-      "id": "7097c488c66458e4"
+      "sourceSha256": "d0f84639f34f694d8014a82293918d30ee079cece6dd2d63be1ade4afccdfd27",
+      "id": "ed3649f73490629b"
     },
     {
       "source": "app/app.js",
-      "line": 803,
+      "line": 804,
       "column": 7,
       "kind": "javascript-sink",
       "sink": "property:title",
@@ -10959,37 +10959,37 @@
       "routeConsumers": [
         "/config/"
       ],
-      "sourceSha256": "1932885bb59a5ec1d90c9450995d668af928801ecff88f9bf4bd3d0cb667b5e8",
-      "id": "5a1dd40c1bbb9184"
-    },
-    {
-      "source": "app/app.js",
-      "line": 823,
-      "column": 7,
-      "kind": "javascript-sink",
-      "sink": "property:title",
-      "attribute": "title",
-      "expression": "override ? \"Controlado por um evento da configuração.\" : \"\"",
-      "value": null,
-      "literalSegments": [
-        "Controlado por um evento da configuração.",
-        ""
-      ],
-      "constantCandidates": [],
-      "classification": "unreviewed",
-      "classificationHints": [
-        "visible-or-accessible-ui"
-      ],
-      "owner": "config",
-      "routeConsumers": [
-        "/config/"
-      ],
-      "sourceSha256": "1932885bb59a5ec1d90c9450995d668af928801ecff88f9bf4bd3d0cb667b5e8",
-      "id": "d41203a7062b5645"
+      "sourceSha256": "d0f84639f34f694d8014a82293918d30ee079cece6dd2d63be1ade4afccdfd27",
+      "id": "7bea2b935493a904"
     },
     {
       "source": "app/app.js",
       "line": 824,
+      "column": 7,
+      "kind": "javascript-sink",
+      "sink": "property:title",
+      "attribute": "title",
+      "expression": "override ? \"Controlado por um evento da configuração.\" : \"\"",
+      "value": null,
+      "literalSegments": [
+        "Controlado por um evento da configuração.",
+        ""
+      ],
+      "constantCandidates": [],
+      "classification": "unreviewed",
+      "classificationHints": [
+        "visible-or-accessible-ui"
+      ],
+      "owner": "config",
+      "routeConsumers": [
+        "/config/"
+      ],
+      "sourceSha256": "d0f84639f34f694d8014a82293918d30ee079cece6dd2d63be1ade4afccdfd27",
+      "id": "10920e47feb415b9"
+    },
+    {
+      "source": "app/app.js",
+      "line": 825,
       "column": 7,
       "kind": "javascript-sink",
       "sink": "call:setAttribute",
@@ -11007,12 +11007,12 @@
       "routeConsumers": [
         "/config/"
       ],
-      "sourceSha256": "1932885bb59a5ec1d90c9450995d668af928801ecff88f9bf4bd3d0cb667b5e8",
-      "id": "9998ab0f95ed8264"
+      "sourceSha256": "d0f84639f34f694d8014a82293918d30ee079cece6dd2d63be1ade4afccdfd27",
+      "id": "1c80e290566ea692"
     },
     {
       "source": "app/app.js",
-      "line": 827,
+      "line": 828,
       "column": 7,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -11030,12 +11030,12 @@
       "routeConsumers": [
         "/config/"
       ],
-      "sourceSha256": "1932885bb59a5ec1d90c9450995d668af928801ecff88f9bf4bd3d0cb667b5e8",
-      "id": "0f04fde9568f6eb3"
+      "sourceSha256": "d0f84639f34f694d8014a82293918d30ee079cece6dd2d63be1ade4afccdfd27",
+      "id": "1591937983dc5307"
     },
     {
       "source": "app/app.js",
-      "line": 830,
+      "line": 831,
       "column": 7,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -11057,12 +11057,12 @@
       "routeConsumers": [
         "/config/"
       ],
-      "sourceSha256": "1932885bb59a5ec1d90c9450995d668af928801ecff88f9bf4bd3d0cb667b5e8",
-      "id": "3d19db7f4e2a0a99"
+      "sourceSha256": "d0f84639f34f694d8014a82293918d30ee079cece6dd2d63be1ade4afccdfd27",
+      "id": "0ff2c559485941e8"
     },
     {
       "source": "app/app.js",
-      "line": 903,
+      "line": 904,
       "column": 7,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -11080,12 +11080,12 @@
       "routeConsumers": [
         "/config/"
       ],
-      "sourceSha256": "1932885bb59a5ec1d90c9450995d668af928801ecff88f9bf4bd3d0cb667b5e8",
-      "id": "590a9d5b830bcc53"
+      "sourceSha256": "d0f84639f34f694d8014a82293918d30ee079cece6dd2d63be1ade4afccdfd27",
+      "id": "9cce1eb3e8781c96"
     },
     {
       "source": "app/app.js",
-      "line": 912,
+      "line": 913,
       "column": 5,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -11102,12 +11102,12 @@
       "routeConsumers": [
         "/config/"
       ],
-      "sourceSha256": "1932885bb59a5ec1d90c9450995d668af928801ecff88f9bf4bd3d0cb667b5e8",
-      "id": "8c5ebe22b9f9ae54"
+      "sourceSha256": "d0f84639f34f694d8014a82293918d30ee079cece6dd2d63be1ade4afccdfd27",
+      "id": "4413d00c0cf1f406"
     },
     {
       "source": "app/app.js",
-      "line": 913,
+      "line": 914,
       "column": 26,
       "kind": "javascript-sink",
       "sink": "call:createTextNode",
@@ -11124,12 +11124,12 @@
       "routeConsumers": [
         "/config/"
       ],
-      "sourceSha256": "1932885bb59a5ec1d90c9450995d668af928801ecff88f9bf4bd3d0cb667b5e8",
-      "id": "08d475d956f97e33"
+      "sourceSha256": "d0f84639f34f694d8014a82293918d30ee079cece6dd2d63be1ade4afccdfd27",
+      "id": "2d396adbdc68ea7e"
     },
     {
       "source": "app/app.js",
-      "line": 920,
+      "line": 921,
       "column": 5,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -11146,12 +11146,12 @@
       "routeConsumers": [
         "/config/"
       ],
-      "sourceSha256": "1932885bb59a5ec1d90c9450995d668af928801ecff88f9bf4bd3d0cb667b5e8",
-      "id": "97626ca00631294c"
+      "sourceSha256": "d0f84639f34f694d8014a82293918d30ee079cece6dd2d63be1ade4afccdfd27",
+      "id": "e8b1c665ee0f5720"
     },
     {
       "source": "app/app.js",
-      "line": 923,
+      "line": 924,
       "column": 5,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -11168,12 +11168,12 @@
       "routeConsumers": [
         "/config/"
       ],
-      "sourceSha256": "1932885bb59a5ec1d90c9450995d668af928801ecff88f9bf4bd3d0cb667b5e8",
-      "id": "3d40dcd32c031496"
+      "sourceSha256": "d0f84639f34f694d8014a82293918d30ee079cece6dd2d63be1ade4afccdfd27",
+      "id": "b84cd17913613227"
     },
     {
       "source": "app/app.js",
-      "line": 927,
+      "line": 928,
       "column": 7,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -11190,12 +11190,12 @@
       "routeConsumers": [
         "/config/"
       ],
-      "sourceSha256": "1932885bb59a5ec1d90c9450995d668af928801ecff88f9bf4bd3d0cb667b5e8",
-      "id": "e1aa61036597be25"
+      "sourceSha256": "d0f84639f34f694d8014a82293918d30ee079cece6dd2d63be1ade4afccdfd27",
+      "id": "a094108a6a2a5b54"
     },
     {
       "source": "app/app.js",
-      "line": 964,
+      "line": 965,
       "column": 5,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -11214,12 +11214,12 @@
       "routeConsumers": [
         "/config/"
       ],
-      "sourceSha256": "1932885bb59a5ec1d90c9450995d668af928801ecff88f9bf4bd3d0cb667b5e8",
-      "id": "42b01c318c235fc2"
+      "sourceSha256": "d0f84639f34f694d8014a82293918d30ee079cece6dd2d63be1ade4afccdfd27",
+      "id": "963ee1dfcca3b196"
     },
     {
       "source": "app/app.js",
-      "line": 975,
+      "line": 976,
       "column": 5,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -11236,12 +11236,12 @@
       "routeConsumers": [
         "/config/"
       ],
-      "sourceSha256": "1932885bb59a5ec1d90c9450995d668af928801ecff88f9bf4bd3d0cb667b5e8",
-      "id": "bd95cea5abe4ddf3"
+      "sourceSha256": "d0f84639f34f694d8014a82293918d30ee079cece6dd2d63be1ade4afccdfd27",
+      "id": "47f0db26b8cfdb90"
     },
     {
       "source": "app/app.js",
-      "line": 983,
+      "line": 984,
       "column": 7,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -11258,12 +11258,12 @@
       "routeConsumers": [
         "/config/"
       ],
-      "sourceSha256": "1932885bb59a5ec1d90c9450995d668af928801ecff88f9bf4bd3d0cb667b5e8",
-      "id": "07fde310e3a9c964"
+      "sourceSha256": "d0f84639f34f694d8014a82293918d30ee079cece6dd2d63be1ade4afccdfd27",
+      "id": "fe3f67ca4fba4cfa"
     },
     {
       "source": "app/app.js",
-      "line": 998,
+      "line": 999,
       "column": 5,
       "kind": "javascript-sink",
       "sink": "property:alt",
@@ -11283,12 +11283,12 @@
       "routeConsumers": [
         "/config/"
       ],
-      "sourceSha256": "1932885bb59a5ec1d90c9450995d668af928801ecff88f9bf4bd3d0cb667b5e8",
-      "id": "41cd2561726139b5"
+      "sourceSha256": "d0f84639f34f694d8014a82293918d30ee079cece6dd2d63be1ade4afccdfd27",
+      "id": "4063ba9027c1de65"
     },
     {
       "source": "app/app.js",
-      "line": 1074,
+      "line": 1075,
       "column": 5,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -11308,12 +11308,12 @@
       "routeConsumers": [
         "/config/"
       ],
-      "sourceSha256": "1932885bb59a5ec1d90c9450995d668af928801ecff88f9bf4bd3d0cb667b5e8",
-      "id": "22f95ef3a8971cad"
+      "sourceSha256": "d0f84639f34f694d8014a82293918d30ee079cece6dd2d63be1ade4afccdfd27",
+      "id": "b81aac13d477a019"
     },
     {
       "source": "app/app.js",
-      "line": 1085,
+      "line": 1086,
       "column": 5,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -11332,12 +11332,12 @@
       "routeConsumers": [
         "/config/"
       ],
-      "sourceSha256": "1932885bb59a5ec1d90c9450995d668af928801ecff88f9bf4bd3d0cb667b5e8",
-      "id": "8fcc65ac257d8a84"
+      "sourceSha256": "d0f84639f34f694d8014a82293918d30ee079cece6dd2d63be1ade4afccdfd27",
+      "id": "136a4a69c9af2d32"
     },
     {
       "source": "app/app.js",
-      "line": 1122,
+      "line": 1123,
       "column": 5,
       "kind": "javascript-sink",
       "sink": "call:setAttribute",
@@ -11356,12 +11356,12 @@
       "routeConsumers": [
         "/config/"
       ],
-      "sourceSha256": "1932885bb59a5ec1d90c9450995d668af928801ecff88f9bf4bd3d0cb667b5e8",
-      "id": "ecb86a93317949bd"
+      "sourceSha256": "d0f84639f34f694d8014a82293918d30ee079cece6dd2d63be1ade4afccdfd27",
+      "id": "3b9792679e6b9cf4"
     },
     {
       "source": "app/app.js",
-      "line": 1126,
+      "line": 1127,
       "column": 5,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -11380,12 +11380,12 @@
       "routeConsumers": [
         "/config/"
       ],
-      "sourceSha256": "1932885bb59a5ec1d90c9450995d668af928801ecff88f9bf4bd3d0cb667b5e8",
-      "id": "e213232eea5541b1"
+      "sourceSha256": "d0f84639f34f694d8014a82293918d30ee079cece6dd2d63be1ade4afccdfd27",
+      "id": "39c9dcda1c68fac3"
     },
     {
       "source": "app/app.js",
-      "line": 1131,
+      "line": 1132,
       "column": 5,
       "kind": "javascript-sink",
       "sink": "call:setAttribute",
@@ -11405,12 +11405,12 @@
       "routeConsumers": [
         "/config/"
       ],
-      "sourceSha256": "1932885bb59a5ec1d90c9450995d668af928801ecff88f9bf4bd3d0cb667b5e8",
-      "id": "d1731425700120d4"
+      "sourceSha256": "d0f84639f34f694d8014a82293918d30ee079cece6dd2d63be1ade4afccdfd27",
+      "id": "fe69aa08e5237fbf"
     },
     {
       "source": "app/app.js",
-      "line": 1134,
+      "line": 1135,
       "column": 5,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -11429,12 +11429,12 @@
       "routeConsumers": [
         "/config/"
       ],
-      "sourceSha256": "1932885bb59a5ec1d90c9450995d668af928801ecff88f9bf4bd3d0cb667b5e8",
-      "id": "2c1cd8158a3a6367"
+      "sourceSha256": "d0f84639f34f694d8014a82293918d30ee079cece6dd2d63be1ade4afccdfd27",
+      "id": "dfdbb1b77e1839a8"
     },
     {
       "source": "app/app.js",
-      "line": 1140,
+      "line": 1141,
       "column": 5,
       "kind": "javascript-sink",
       "sink": "call:setAttribute",
@@ -11453,12 +11453,12 @@
       "routeConsumers": [
         "/config/"
       ],
-      "sourceSha256": "1932885bb59a5ec1d90c9450995d668af928801ecff88f9bf4bd3d0cb667b5e8",
-      "id": "2a98687aa00421a5"
+      "sourceSha256": "d0f84639f34f694d8014a82293918d30ee079cece6dd2d63be1ade4afccdfd27",
+      "id": "c08321049d5e6239"
     },
     {
       "source": "app/app.js",
-      "line": 1162,
+      "line": 1163,
       "column": 5,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -11478,12 +11478,12 @@
       "routeConsumers": [
         "/config/"
       ],
-      "sourceSha256": "1932885bb59a5ec1d90c9450995d668af928801ecff88f9bf4bd3d0cb667b5e8",
-      "id": "0aa22784a33aaa39"
+      "sourceSha256": "d0f84639f34f694d8014a82293918d30ee079cece6dd2d63be1ade4afccdfd27",
+      "id": "ba56c51d21fc0394"
     },
     {
       "source": "app/app.js",
-      "line": 1166,
+      "line": 1167,
       "column": 5,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -11503,12 +11503,12 @@
       "routeConsumers": [
         "/config/"
       ],
-      "sourceSha256": "1932885bb59a5ec1d90c9450995d668af928801ecff88f9bf4bd3d0cb667b5e8",
-      "id": "bfdcfa470393f373"
+      "sourceSha256": "d0f84639f34f694d8014a82293918d30ee079cece6dd2d63be1ade4afccdfd27",
+      "id": "0fe03247db23d52e"
     },
     {
       "source": "app/app.js",
-      "line": 1171,
+      "line": 1172,
       "column": 7,
       "kind": "javascript-sink",
       "sink": "call:setAttribute",
@@ -11527,12 +11527,12 @@
       "routeConsumers": [
         "/config/"
       ],
-      "sourceSha256": "1932885bb59a5ec1d90c9450995d668af928801ecff88f9bf4bd3d0cb667b5e8",
-      "id": "5cd1837d1e9cf062"
+      "sourceSha256": "d0f84639f34f694d8014a82293918d30ee079cece6dd2d63be1ade4afccdfd27",
+      "id": "f375fbee436d9611"
     },
     {
       "source": "app/app.js",
-      "line": 1172,
+      "line": 1173,
       "column": 7,
       "kind": "javascript-sink",
       "sink": "property:title",
@@ -11551,12 +11551,12 @@
       "routeConsumers": [
         "/config/"
       ],
-      "sourceSha256": "1932885bb59a5ec1d90c9450995d668af928801ecff88f9bf4bd3d0cb667b5e8",
-      "id": "266a18e16516d6d4"
+      "sourceSha256": "d0f84639f34f694d8014a82293918d30ee079cece6dd2d63be1ade4afccdfd27",
+      "id": "6ac2da81cdefd734"
     },
     {
       "source": "app/app.js",
-      "line": 1173,
+      "line": 1174,
       "column": 7,
       "kind": "javascript-sink",
       "sink": "call:setAttribute",
@@ -11575,12 +11575,12 @@
       "routeConsumers": [
         "/config/"
       ],
-      "sourceSha256": "1932885bb59a5ec1d90c9450995d668af928801ecff88f9bf4bd3d0cb667b5e8",
-      "id": "8cffaca518e3ecab"
+      "sourceSha256": "d0f84639f34f694d8014a82293918d30ee079cece6dd2d63be1ade4afccdfd27",
+      "id": "d7034f2dd3cfc985"
     },
     {
       "source": "app/app.js",
-      "line": 1174,
+      "line": 1175,
       "column": 7,
       "kind": "javascript-sink",
       "sink": "property:title",
@@ -11599,12 +11599,12 @@
       "routeConsumers": [
         "/config/"
       ],
-      "sourceSha256": "1932885bb59a5ec1d90c9450995d668af928801ecff88f9bf4bd3d0cb667b5e8",
-      "id": "f7887883f28df807"
+      "sourceSha256": "d0f84639f34f694d8014a82293918d30ee079cece6dd2d63be1ade4afccdfd27",
+      "id": "bfe7feca175ea4e0"
     },
     {
       "source": "app/app.js",
-      "line": 1210,
+      "line": 1211,
       "column": 7,
       "kind": "javascript-sink",
       "sink": "call:setAttribute",
@@ -11634,12 +11634,12 @@
       "routeConsumers": [
         "/config/"
       ],
-      "sourceSha256": "1932885bb59a5ec1d90c9450995d668af928801ecff88f9bf4bd3d0cb667b5e8",
-      "id": "f31e5e47f4321482"
+      "sourceSha256": "d0f84639f34f694d8014a82293918d30ee079cece6dd2d63be1ade4afccdfd27",
+      "id": "0c91666613616c56"
     },
     {
       "source": "app/app.js",
-      "line": 1211,
+      "line": 1212,
       "column": 7,
       "kind": "javascript-sink",
       "sink": "property:title",
@@ -11656,12 +11656,12 @@
       "routeConsumers": [
         "/config/"
       ],
-      "sourceSha256": "1932885bb59a5ec1d90c9450995d668af928801ecff88f9bf4bd3d0cb667b5e8",
-      "id": "3764d4cf64f39779"
+      "sourceSha256": "d0f84639f34f694d8014a82293918d30ee079cece6dd2d63be1ade4afccdfd27",
+      "id": "149035f017d6d6cd"
     },
     {
       "source": "app/app.js",
-      "line": 1270,
+      "line": 1271,
       "column": 5,
       "kind": "javascript-sink",
       "sink": "call:setAttribute",
@@ -11681,12 +11681,12 @@
       "routeConsumers": [
         "/config/"
       ],
-      "sourceSha256": "1932885bb59a5ec1d90c9450995d668af928801ecff88f9bf4bd3d0cb667b5e8",
-      "id": "5e8ef639084a9584"
+      "sourceSha256": "d0f84639f34f694d8014a82293918d30ee079cece6dd2d63be1ade4afccdfd27",
+      "id": "0d1afacbd5eb9d20"
     },
     {
       "source": "app/app.js",
-      "line": 1271,
+      "line": 1272,
       "column": 5,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -11706,12 +11706,12 @@
       "routeConsumers": [
         "/config/"
       ],
-      "sourceSha256": "1932885bb59a5ec1d90c9450995d668af928801ecff88f9bf4bd3d0cb667b5e8",
-      "id": "09b19a5db76b88ff"
+      "sourceSha256": "d0f84639f34f694d8014a82293918d30ee079cece6dd2d63be1ade4afccdfd27",
+      "id": "fc4f86b6acdb0e66"
     },
     {
       "source": "app/app.js",
-      "line": 1285,
+      "line": 1286,
       "column": 7,
       "kind": "javascript-sink",
       "sink": "call:setAttribute",
@@ -11731,12 +11731,12 @@
       "routeConsumers": [
         "/config/"
       ],
-      "sourceSha256": "1932885bb59a5ec1d90c9450995d668af928801ecff88f9bf4bd3d0cb667b5e8",
-      "id": "b3b57693b2afa342"
+      "sourceSha256": "d0f84639f34f694d8014a82293918d30ee079cece6dd2d63be1ade4afccdfd27",
+      "id": "fc45047363e2b76f"
     },
     {
       "source": "app/app.js",
-      "line": 1286,
+      "line": 1287,
       "column": 7,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -11756,12 +11756,12 @@
       "routeConsumers": [
         "/config/"
       ],
-      "sourceSha256": "1932885bb59a5ec1d90c9450995d668af928801ecff88f9bf4bd3d0cb667b5e8",
-      "id": "ed6dbb22b98c73b5"
+      "sourceSha256": "d0f84639f34f694d8014a82293918d30ee079cece6dd2d63be1ade4afccdfd27",
+      "id": "c72e0614678572c3"
     },
     {
       "source": "app/app.js",
-      "line": 1313,
+      "line": 1314,
       "column": 5,
       "kind": "javascript-sink",
       "sink": "call:setAttribute",
@@ -11785,12 +11785,12 @@
       "routeConsumers": [
         "/config/"
       ],
-      "sourceSha256": "1932885bb59a5ec1d90c9450995d668af928801ecff88f9bf4bd3d0cb667b5e8",
-      "id": "c603f768c8675c9c"
+      "sourceSha256": "d0f84639f34f694d8014a82293918d30ee079cece6dd2d63be1ade4afccdfd27",
+      "id": "041a574a3cab18df"
     },
     {
       "source": "app/app.js",
-      "line": 1314,
+      "line": 1315,
       "column": 5,
       "kind": "javascript-sink",
       "sink": "property:title",
@@ -11814,12 +11814,12 @@
       "routeConsumers": [
         "/config/"
       ],
-      "sourceSha256": "1932885bb59a5ec1d90c9450995d668af928801ecff88f9bf4bd3d0cb667b5e8",
-      "id": "dab1b3128fe78e1f"
+      "sourceSha256": "d0f84639f34f694d8014a82293918d30ee079cece6dd2d63be1ade4afccdfd27",
+      "id": "aaf1a351c5b7e0e7"
     },
     {
       "source": "app/app.js",
-      "line": 1315,
+      "line": 1316,
       "column": 5,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -11840,12 +11840,12 @@
       "routeConsumers": [
         "/config/"
       ],
-      "sourceSha256": "1932885bb59a5ec1d90c9450995d668af928801ecff88f9bf4bd3d0cb667b5e8",
-      "id": "62090a93cb478a3b"
+      "sourceSha256": "d0f84639f34f694d8014a82293918d30ee079cece6dd2d63be1ade4afccdfd27",
+      "id": "681691ce8d5c3e6a"
     },
     {
       "source": "app/app.js",
-      "line": 1335,
+      "line": 1336,
       "column": 5,
       "kind": "javascript-sink",
       "sink": "call:setAttribute",
@@ -11867,12 +11867,12 @@
       "routeConsumers": [
         "/config/"
       ],
-      "sourceSha256": "1932885bb59a5ec1d90c9450995d668af928801ecff88f9bf4bd3d0cb667b5e8",
-      "id": "bfe25a57f119cb26"
+      "sourceSha256": "d0f84639f34f694d8014a82293918d30ee079cece6dd2d63be1ade4afccdfd27",
+      "id": "f39e503240ca560e"
     },
     {
       "source": "app/app.js",
-      "line": 1337,
+      "line": 1338,
       "column": 5,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -11892,12 +11892,12 @@
       "routeConsumers": [
         "/config/"
       ],
-      "sourceSha256": "1932885bb59a5ec1d90c9450995d668af928801ecff88f9bf4bd3d0cb667b5e8",
-      "id": "5d55c6285f7fbf63"
+      "sourceSha256": "d0f84639f34f694d8014a82293918d30ee079cece6dd2d63be1ade4afccdfd27",
+      "id": "72aa9a4ee2a28feb"
     },
     {
       "source": "app/app.js",
-      "line": 1351,
+      "line": 1352,
       "column": 5,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -11916,12 +11916,12 @@
       "routeConsumers": [
         "/config/"
       ],
-      "sourceSha256": "1932885bb59a5ec1d90c9450995d668af928801ecff88f9bf4bd3d0cb667b5e8",
-      "id": "13224be60db64538"
+      "sourceSha256": "d0f84639f34f694d8014a82293918d30ee079cece6dd2d63be1ade4afccdfd27",
+      "id": "f818e7eb24469556"
     },
     {
       "source": "app/app.js",
-      "line": 1363,
+      "line": 1364,
       "column": 7,
       "kind": "javascript-sink",
       "sink": "property:title",
@@ -11938,12 +11938,12 @@
       "routeConsumers": [
         "/config/"
       ],
-      "sourceSha256": "1932885bb59a5ec1d90c9450995d668af928801ecff88f9bf4bd3d0cb667b5e8",
-      "id": "2cbaddfb1de55465"
+      "sourceSha256": "d0f84639f34f694d8014a82293918d30ee079cece6dd2d63be1ade4afccdfd27",
+      "id": "2f21483ed1c3f4ed"
     },
     {
       "source": "app/app.js",
-      "line": 1364,
+      "line": 1365,
       "column": 7,
       "kind": "javascript-sink",
       "sink": "call:setAttribute",
@@ -11964,12 +11964,12 @@
       "routeConsumers": [
         "/config/"
       ],
-      "sourceSha256": "1932885bb59a5ec1d90c9450995d668af928801ecff88f9bf4bd3d0cb667b5e8",
-      "id": "2a9e47105506c2b0"
+      "sourceSha256": "d0f84639f34f694d8014a82293918d30ee079cece6dd2d63be1ade4afccdfd27",
+      "id": "e44e7e2ba31f3cfe"
     },
     {
       "source": "app/app.js",
-      "line": 1385,
+      "line": 1386,
       "column": 7,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -11988,12 +11988,12 @@
       "routeConsumers": [
         "/config/"
       ],
-      "sourceSha256": "1932885bb59a5ec1d90c9450995d668af928801ecff88f9bf4bd3d0cb667b5e8",
-      "id": "2286e789028af3a7"
+      "sourceSha256": "d0f84639f34f694d8014a82293918d30ee079cece6dd2d63be1ade4afccdfd27",
+      "id": "3c49101a18f8f811"
     },
     {
       "source": "app/app.js",
-      "line": 1392,
+      "line": 1393,
       "column": 5,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -12013,12 +12013,12 @@
       "routeConsumers": [
         "/config/"
       ],
-      "sourceSha256": "1932885bb59a5ec1d90c9450995d668af928801ecff88f9bf4bd3d0cb667b5e8",
-      "id": "c1481467dfd7556a"
+      "sourceSha256": "d0f84639f34f694d8014a82293918d30ee079cece6dd2d63be1ade4afccdfd27",
+      "id": "300e67eb0a9499fe"
     },
     {
       "source": "app/app.js",
-      "line": 1398,
+      "line": 1399,
       "column": 5,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -12036,12 +12036,12 @@
       "routeConsumers": [
         "/config/"
       ],
-      "sourceSha256": "1932885bb59a5ec1d90c9450995d668af928801ecff88f9bf4bd3d0cb667b5e8",
-      "id": "a0afd33343bda7b9"
+      "sourceSha256": "d0f84639f34f694d8014a82293918d30ee079cece6dd2d63be1ade4afccdfd27",
+      "id": "a771d5b00243693d"
     },
     {
       "source": "app/app.js",
-      "line": 1403,
+      "line": 1404,
       "column": 5,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -12062,12 +12062,12 @@
       "routeConsumers": [
         "/config/"
       ],
-      "sourceSha256": "1932885bb59a5ec1d90c9450995d668af928801ecff88f9bf4bd3d0cb667b5e8",
-      "id": "d7aa646017fb09ac"
+      "sourceSha256": "d0f84639f34f694d8014a82293918d30ee079cece6dd2d63be1ade4afccdfd27",
+      "id": "7fe3f1dc35ba4782"
     },
     {
       "source": "app/app.js",
-      "line": 1405,
+      "line": 1406,
       "column": 5,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -12085,12 +12085,12 @@
       "routeConsumers": [
         "/config/"
       ],
-      "sourceSha256": "1932885bb59a5ec1d90c9450995d668af928801ecff88f9bf4bd3d0cb667b5e8",
-      "id": "5dd463de5a0b87d3"
+      "sourceSha256": "d0f84639f34f694d8014a82293918d30ee079cece6dd2d63be1ade4afccdfd27",
+      "id": "92dc839b7b16b16f"
     },
     {
       "source": "app/app.js",
-      "line": 1419,
+      "line": 1420,
       "column": 5,
       "kind": "javascript-sink",
       "sink": "call:setAttribute",
@@ -12109,12 +12109,12 @@
       "routeConsumers": [
         "/config/"
       ],
-      "sourceSha256": "1932885bb59a5ec1d90c9450995d668af928801ecff88f9bf4bd3d0cb667b5e8",
-      "id": "61e54adba3b2fa4a"
+      "sourceSha256": "d0f84639f34f694d8014a82293918d30ee079cece6dd2d63be1ade4afccdfd27",
+      "id": "76663b3a6825813b"
     },
     {
       "source": "app/app.js",
-      "line": 1420,
+      "line": 1421,
       "column": 5,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -12134,12 +12134,12 @@
       "routeConsumers": [
         "/config/"
       ],
-      "sourceSha256": "1932885bb59a5ec1d90c9450995d668af928801ecff88f9bf4bd3d0cb667b5e8",
-      "id": "3eb81b85bee82930"
+      "sourceSha256": "d0f84639f34f694d8014a82293918d30ee079cece6dd2d63be1ade4afccdfd27",
+      "id": "4024d1608730c332"
     },
     {
       "source": "app/app.js",
-      "line": 1430,
+      "line": 1431,
       "column": 5,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -12158,12 +12158,12 @@
       "routeConsumers": [
         "/config/"
       ],
-      "sourceSha256": "1932885bb59a5ec1d90c9450995d668af928801ecff88f9bf4bd3d0cb667b5e8",
-      "id": "c63dc3f646dce06b"
+      "sourceSha256": "d0f84639f34f694d8014a82293918d30ee079cece6dd2d63be1ade4afccdfd27",
+      "id": "e30bf76a411718f1"
     },
     {
       "source": "app/app.js",
-      "line": 1434,
+      "line": 1435,
       "column": 7,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -12181,12 +12181,12 @@
       "routeConsumers": [
         "/config/"
       ],
-      "sourceSha256": "1932885bb59a5ec1d90c9450995d668af928801ecff88f9bf4bd3d0cb667b5e8",
-      "id": "ba0ca78007228b0c"
+      "sourceSha256": "d0f84639f34f694d8014a82293918d30ee079cece6dd2d63be1ade4afccdfd27",
+      "id": "517b5e544d99de19"
     },
     {
       "source": "app/app.js",
-      "line": 1435,
+      "line": 1436,
       "column": 7,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -12208,12 +12208,12 @@
       "routeConsumers": [
         "/config/"
       ],
-      "sourceSha256": "1932885bb59a5ec1d90c9450995d668af928801ecff88f9bf4bd3d0cb667b5e8",
-      "id": "7e4f54f838dd1987"
+      "sourceSha256": "d0f84639f34f694d8014a82293918d30ee079cece6dd2d63be1ade4afccdfd27",
+      "id": "a6b9a49baaa91159"
     },
     {
       "source": "app/app.js",
-      "line": 1440,
+      "line": 1441,
       "column": 7,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -12232,12 +12232,12 @@
       "routeConsumers": [
         "/config/"
       ],
-      "sourceSha256": "1932885bb59a5ec1d90c9450995d668af928801ecff88f9bf4bd3d0cb667b5e8",
-      "id": "2595334fcd04f2c1"
+      "sourceSha256": "d0f84639f34f694d8014a82293918d30ee079cece6dd2d63be1ade4afccdfd27",
+      "id": "887fc42a4a64ae8d"
     },
     {
       "source": "app/app.js",
-      "line": 1441,
+      "line": 1442,
       "column": 7,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -12256,12 +12256,12 @@
       "routeConsumers": [
         "/config/"
       ],
-      "sourceSha256": "1932885bb59a5ec1d90c9450995d668af928801ecff88f9bf4bd3d0cb667b5e8",
-      "id": "79b716bd7c9582b9"
+      "sourceSha256": "d0f84639f34f694d8014a82293918d30ee079cece6dd2d63be1ade4afccdfd27",
+      "id": "93e9047a74963eba"
     },
     {
       "source": "app/app.js",
-      "line": 1455,
+      "line": 1456,
       "column": 5,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -12279,12 +12279,12 @@
       "routeConsumers": [
         "/config/"
       ],
-      "sourceSha256": "1932885bb59a5ec1d90c9450995d668af928801ecff88f9bf4bd3d0cb667b5e8",
-      "id": "5e2e5fe00b65df22"
+      "sourceSha256": "d0f84639f34f694d8014a82293918d30ee079cece6dd2d63be1ade4afccdfd27",
+      "id": "082a825691fa88fb"
     },
     {
       "source": "app/app.js",
-      "line": 1456,
+      "line": 1457,
       "column": 36,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -12306,12 +12306,12 @@
       "routeConsumers": [
         "/config/"
       ],
-      "sourceSha256": "1932885bb59a5ec1d90c9450995d668af928801ecff88f9bf4bd3d0cb667b5e8",
-      "id": "058aeda1df33d730"
+      "sourceSha256": "d0f84639f34f694d8014a82293918d30ee079cece6dd2d63be1ade4afccdfd27",
+      "id": "6a60a50b78b1c7d8"
     },
     {
       "source": "app/app.js",
-      "line": 1461,
+      "line": 1462,
       "column": 5,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -12330,12 +12330,12 @@
       "routeConsumers": [
         "/config/"
       ],
-      "sourceSha256": "1932885bb59a5ec1d90c9450995d668af928801ecff88f9bf4bd3d0cb667b5e8",
-      "id": "65cbd35aebb4a865"
+      "sourceSha256": "d0f84639f34f694d8014a82293918d30ee079cece6dd2d63be1ade4afccdfd27",
+      "id": "02cc98e1211763c0"
     },
     {
       "source": "app/app.js",
-      "line": 1467,
+      "line": 1468,
       "column": 7,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -12352,12 +12352,12 @@
       "routeConsumers": [
         "/config/"
       ],
-      "sourceSha256": "1932885bb59a5ec1d90c9450995d668af928801ecff88f9bf4bd3d0cb667b5e8",
-      "id": "d126019416a709ea"
+      "sourceSha256": "d0f84639f34f694d8014a82293918d30ee079cece6dd2d63be1ade4afccdfd27",
+      "id": "a74d6baceda423d4"
     },
     {
       "source": "app/app.js",
-      "line": 1469,
+      "line": 1470,
       "column": 7,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -12376,12 +12376,12 @@
       "routeConsumers": [
         "/config/"
       ],
-      "sourceSha256": "1932885bb59a5ec1d90c9450995d668af928801ecff88f9bf4bd3d0cb667b5e8",
-      "id": "c56c5e19d46d9608"
+      "sourceSha256": "d0f84639f34f694d8014a82293918d30ee079cece6dd2d63be1ade4afccdfd27",
+      "id": "94165da86c9d37c0"
     },
     {
       "source": "app/app.js",
-      "line": 1480,
+      "line": 1481,
       "column": 5,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -12400,12 +12400,12 @@
       "routeConsumers": [
         "/config/"
       ],
-      "sourceSha256": "1932885bb59a5ec1d90c9450995d668af928801ecff88f9bf4bd3d0cb667b5e8",
-      "id": "7929dfe373b4ba65"
+      "sourceSha256": "d0f84639f34f694d8014a82293918d30ee079cece6dd2d63be1ade4afccdfd27",
+      "id": "3e5f54c8432c652f"
     },
     {
       "source": "app/app.js",
-      "line": 1486,
+      "line": 1487,
       "column": 5,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -12424,12 +12424,12 @@
       "routeConsumers": [
         "/config/"
       ],
-      "sourceSha256": "1932885bb59a5ec1d90c9450995d668af928801ecff88f9bf4bd3d0cb667b5e8",
-      "id": "192046fd566a3727"
+      "sourceSha256": "d0f84639f34f694d8014a82293918d30ee079cece6dd2d63be1ade4afccdfd27",
+      "id": "5970108161942a9f"
     },
     {
       "source": "app/app.js",
-      "line": 1493,
+      "line": 1494,
       "column": 7,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -12448,12 +12448,12 @@
       "routeConsumers": [
         "/config/"
       ],
-      "sourceSha256": "1932885bb59a5ec1d90c9450995d668af928801ecff88f9bf4bd3d0cb667b5e8",
-      "id": "67eaf1c2d81ce58b"
+      "sourceSha256": "d0f84639f34f694d8014a82293918d30ee079cece6dd2d63be1ade4afccdfd27",
+      "id": "9ed2f716c377919e"
     },
     {
       "source": "app/app.js",
-      "line": 1495,
+      "line": 1496,
       "column": 7,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -12471,12 +12471,12 @@
       "routeConsumers": [
         "/config/"
       ],
-      "sourceSha256": "1932885bb59a5ec1d90c9450995d668af928801ecff88f9bf4bd3d0cb667b5e8",
-      "id": "efbb97018b7782b7"
+      "sourceSha256": "d0f84639f34f694d8014a82293918d30ee079cece6dd2d63be1ade4afccdfd27",
+      "id": "db098663fde1dbc6"
     },
     {
       "source": "app/app.js",
-      "line": 1498,
+      "line": 1499,
       "column": 5,
       "kind": "javascript-sink",
       "sink": "call:setAttribute",
@@ -12493,12 +12493,12 @@
       "routeConsumers": [
         "/config/"
       ],
-      "sourceSha256": "1932885bb59a5ec1d90c9450995d668af928801ecff88f9bf4bd3d0cb667b5e8",
-      "id": "29ab065179b11444"
+      "sourceSha256": "d0f84639f34f694d8014a82293918d30ee079cece6dd2d63be1ade4afccdfd27",
+      "id": "7ad0a57d64d8b92f"
     },
     {
       "source": "app/app.js",
-      "line": 1503,
+      "line": 1504,
       "column": 7,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -12516,12 +12516,12 @@
       "routeConsumers": [
         "/config/"
       ],
-      "sourceSha256": "1932885bb59a5ec1d90c9450995d668af928801ecff88f9bf4bd3d0cb667b5e8",
-      "id": "8555472a3b6da951"
+      "sourceSha256": "d0f84639f34f694d8014a82293918d30ee079cece6dd2d63be1ade4afccdfd27",
+      "id": "c0ba1bbbe9d04cc7"
     },
     {
       "source": "app/app.js",
-      "line": 1529,
+      "line": 1530,
       "column": 9,
       "kind": "javascript-sink",
       "sink": "property:title",
@@ -12541,12 +12541,12 @@
       "routeConsumers": [
         "/config/"
       ],
-      "sourceSha256": "1932885bb59a5ec1d90c9450995d668af928801ecff88f9bf4bd3d0cb667b5e8",
-      "id": "ede2f3f3f1cdeacb"
+      "sourceSha256": "d0f84639f34f694d8014a82293918d30ee079cece6dd2d63be1ade4afccdfd27",
+      "id": "fe0292f7a9ea7d5f"
     },
     {
       "source": "app/app.js",
-      "line": 1530,
+      "line": 1531,
       "column": 9,
       "kind": "javascript-sink",
       "sink": "call:setAttribute",
@@ -12567,12 +12567,12 @@
       "routeConsumers": [
         "/config/"
       ],
-      "sourceSha256": "1932885bb59a5ec1d90c9450995d668af928801ecff88f9bf4bd3d0cb667b5e8",
-      "id": "7166e8a719cc21c6"
+      "sourceSha256": "d0f84639f34f694d8014a82293918d30ee079cece6dd2d63be1ade4afccdfd27",
+      "id": "03482d63ebd6d826"
     },
     {
       "source": "app/app.js",
-      "line": 1534,
+      "line": 1535,
       "column": 38,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -12590,12 +12590,12 @@
       "routeConsumers": [
         "/config/"
       ],
-      "sourceSha256": "1932885bb59a5ec1d90c9450995d668af928801ecff88f9bf4bd3d0cb667b5e8",
-      "id": "47e6288070ce8e55"
+      "sourceSha256": "d0f84639f34f694d8014a82293918d30ee079cece6dd2d63be1ade4afccdfd27",
+      "id": "f116016c6c080556"
     },
     {
       "source": "app/app.js",
-      "line": 1542,
+      "line": 1543,
       "column": 7,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -12616,12 +12616,12 @@
       "routeConsumers": [
         "/config/"
       ],
-      "sourceSha256": "1932885bb59a5ec1d90c9450995d668af928801ecff88f9bf4bd3d0cb667b5e8",
-      "id": "871da1d26bc9c9a9"
+      "sourceSha256": "d0f84639f34f694d8014a82293918d30ee079cece6dd2d63be1ade4afccdfd27",
+      "id": "c4cba1679ef75b13"
     },
     {
       "source": "app/app.js",
-      "line": 1558,
+      "line": 1559,
       "column": 5,
       "kind": "javascript-sink",
       "sink": "property:title",
@@ -12642,12 +12642,12 @@
       "routeConsumers": [
         "/config/"
       ],
-      "sourceSha256": "1932885bb59a5ec1d90c9450995d668af928801ecff88f9bf4bd3d0cb667b5e8",
-      "id": "22dfb9335cda8bc1"
+      "sourceSha256": "d0f84639f34f694d8014a82293918d30ee079cece6dd2d63be1ade4afccdfd27",
+      "id": "4a175ceb57a80098"
     },
     {
       "source": "app/app.js",
-      "line": 1603,
+      "line": 1604,
       "column": 7,
       "kind": "javascript-sink",
       "sink": "property:innerHTML",
@@ -12669,12 +12669,12 @@
       "routeConsumers": [
         "/config/"
       ],
-      "sourceSha256": "1932885bb59a5ec1d90c9450995d668af928801ecff88f9bf4bd3d0cb667b5e8",
-      "id": "c460cf78037c672e"
+      "sourceSha256": "d0f84639f34f694d8014a82293918d30ee079cece6dd2d63be1ade4afccdfd27",
+      "id": "b77ab13cf57df0c1"
     },
     {
       "source": "app/app.js",
-      "line": 1604,
+      "line": 1605,
       "column": 7,
       "kind": "javascript-sink",
       "sink": "property:title",
@@ -12691,12 +12691,12 @@
       "routeConsumers": [
         "/config/"
       ],
-      "sourceSha256": "1932885bb59a5ec1d90c9450995d668af928801ecff88f9bf4bd3d0cb667b5e8",
-      "id": "6a298a781f13ee30"
+      "sourceSha256": "d0f84639f34f694d8014a82293918d30ee079cece6dd2d63be1ade4afccdfd27",
+      "id": "29d93538921cf3af"
     },
     {
       "source": "app/app.js",
-      "line": 1607,
+      "line": 1608,
       "column": 5,
       "kind": "javascript-sink",
       "sink": "property:innerHTML",
@@ -12716,12 +12716,12 @@
       "routeConsumers": [
         "/config/"
       ],
-      "sourceSha256": "1932885bb59a5ec1d90c9450995d668af928801ecff88f9bf4bd3d0cb667b5e8",
-      "id": "5112631234516985"
+      "sourceSha256": "d0f84639f34f694d8014a82293918d30ee079cece6dd2d63be1ade4afccdfd27",
+      "id": "bdc35d9dd3ff2fa1"
     },
     {
       "source": "app/app.js",
-      "line": 1628,
+      "line": 1629,
       "column": 7,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -12747,12 +12747,12 @@
       "routeConsumers": [
         "/config/"
       ],
-      "sourceSha256": "1932885bb59a5ec1d90c9450995d668af928801ecff88f9bf4bd3d0cb667b5e8",
-      "id": "4f68e432992615f7"
+      "sourceSha256": "d0f84639f34f694d8014a82293918d30ee079cece6dd2d63be1ade4afccdfd27",
+      "id": "cade1973212bbe8d"
     },
     {
       "source": "app/app.js",
-      "line": 1633,
+      "line": 1634,
       "column": 7,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -12771,12 +12771,12 @@
       "routeConsumers": [
         "/config/"
       ],
-      "sourceSha256": "1932885bb59a5ec1d90c9450995d668af928801ecff88f9bf4bd3d0cb667b5e8",
-      "id": "7f499ee8ff2ec905"
+      "sourceSha256": "d0f84639f34f694d8014a82293918d30ee079cece6dd2d63be1ade4afccdfd27",
+      "id": "7eda4b3d8e1015a0"
     },
     {
       "source": "app/app.js",
-      "line": 1639,
+      "line": 1640,
       "column": 5,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -12795,12 +12795,12 @@
       "routeConsumers": [
         "/config/"
       ],
-      "sourceSha256": "1932885bb59a5ec1d90c9450995d668af928801ecff88f9bf4bd3d0cb667b5e8",
-      "id": "dcfb4fbef49d6613"
+      "sourceSha256": "d0f84639f34f694d8014a82293918d30ee079cece6dd2d63be1ade4afccdfd27",
+      "id": "3237643e49f6988e"
     },
     {
       "source": "app/app.js",
-      "line": 1645,
+      "line": 1646,
       "column": 7,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -12817,12 +12817,12 @@
       "routeConsumers": [
         "/config/"
       ],
-      "sourceSha256": "1932885bb59a5ec1d90c9450995d668af928801ecff88f9bf4bd3d0cb667b5e8",
-      "id": "e53b771af6a0f573"
+      "sourceSha256": "d0f84639f34f694d8014a82293918d30ee079cece6dd2d63be1ade4afccdfd27",
+      "id": "28e88c57f6f0ba86"
     },
     {
       "source": "app/app.js",
-      "line": 1647,
+      "line": 1648,
       "column": 7,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -12839,12 +12839,12 @@
       "routeConsumers": [
         "/config/"
       ],
-      "sourceSha256": "1932885bb59a5ec1d90c9450995d668af928801ecff88f9bf4bd3d0cb667b5e8",
-      "id": "7677d033f0047a91"
+      "sourceSha256": "d0f84639f34f694d8014a82293918d30ee079cece6dd2d63be1ade4afccdfd27",
+      "id": "cced9f42c1a5c50c"
     },
     {
       "source": "app/app.js",
-      "line": 1658,
+      "line": 1659,
       "column": 7,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -12861,12 +12861,12 @@
       "routeConsumers": [
         "/config/"
       ],
-      "sourceSha256": "1932885bb59a5ec1d90c9450995d668af928801ecff88f9bf4bd3d0cb667b5e8",
-      "id": "896c7b471a4567dd"
+      "sourceSha256": "d0f84639f34f694d8014a82293918d30ee079cece6dd2d63be1ade4afccdfd27",
+      "id": "0858c14fd752367e"
     },
     {
       "source": "app/app.js",
-      "line": 1661,
+      "line": 1662,
       "column": 7,
       "kind": "javascript-sink",
       "sink": "property:innerHTML",
@@ -12886,12 +12886,12 @@
       "routeConsumers": [
         "/config/"
       ],
-      "sourceSha256": "1932885bb59a5ec1d90c9450995d668af928801ecff88f9bf4bd3d0cb667b5e8",
-      "id": "fbd6345acc356f03"
+      "sourceSha256": "d0f84639f34f694d8014a82293918d30ee079cece6dd2d63be1ade4afccdfd27",
+      "id": "6ddb01e26a1c25ec"
     },
     {
       "source": "app/app.js",
-      "line": 1677,
+      "line": 1678,
       "column": 104,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -12909,12 +12909,12 @@
       "routeConsumers": [
         "/config/"
       ],
-      "sourceSha256": "1932885bb59a5ec1d90c9450995d668af928801ecff88f9bf4bd3d0cb667b5e8",
-      "id": "af42b23debd39eba"
+      "sourceSha256": "d0f84639f34f694d8014a82293918d30ee079cece6dd2d63be1ade4afccdfd27",
+      "id": "2a66255a771e7901"
     },
     {
       "source": "app/app.js",
-      "line": 1678,
+      "line": 1679,
       "column": 54,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -12933,12 +12933,12 @@
       "routeConsumers": [
         "/config/"
       ],
-      "sourceSha256": "1932885bb59a5ec1d90c9450995d668af928801ecff88f9bf4bd3d0cb667b5e8",
-      "id": "e3b5eb7ea141f2e2"
+      "sourceSha256": "d0f84639f34f694d8014a82293918d30ee079cece6dd2d63be1ade4afccdfd27",
+      "id": "3498a4adc5656750"
     },
     {
       "source": "app/app.js",
-      "line": 1692,
+      "line": 1694,
       "column": 7,
       "kind": "javascript-sink",
       "sink": "property:title",
@@ -12958,12 +12958,12 @@
       "routeConsumers": [
         "/config/"
       ],
-      "sourceSha256": "1932885bb59a5ec1d90c9450995d668af928801ecff88f9bf4bd3d0cb667b5e8",
-      "id": "7292592228c53968"
+      "sourceSha256": "d0f84639f34f694d8014a82293918d30ee079cece6dd2d63be1ade4afccdfd27",
+      "id": "45dacf0adaff0bde"
     },
     {
       "source": "app/app.js",
-      "line": 1693,
+      "line": 1695,
       "column": 7,
       "kind": "javascript-sink",
       "sink": "call:setAttribute",
@@ -12981,12 +12981,12 @@
       "routeConsumers": [
         "/config/"
       ],
-      "sourceSha256": "1932885bb59a5ec1d90c9450995d668af928801ecff88f9bf4bd3d0cb667b5e8",
-      "id": "f95f0b7850b36e23"
+      "sourceSha256": "d0f84639f34f694d8014a82293918d30ee079cece6dd2d63be1ade4afccdfd27",
+      "id": "24c80120bf60b5a0"
     },
     {
       "source": "app/app.js",
-      "line": 1694,
+      "line": 1696,
       "column": 102,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -13004,12 +13004,12 @@
       "routeConsumers": [
         "/config/"
       ],
-      "sourceSha256": "1932885bb59a5ec1d90c9450995d668af928801ecff88f9bf4bd3d0cb667b5e8",
-      "id": "c4c68fe4fb25c4a4"
+      "sourceSha256": "d0f84639f34f694d8014a82293918d30ee079cece6dd2d63be1ade4afccdfd27",
+      "id": "f41cd480be40de6e"
     },
     {
       "source": "app/app.js",
-      "line": 1694,
+      "line": 1696,
       "column": 196,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -13030,13 +13030,13 @@
       "routeConsumers": [
         "/config/"
       ],
-      "sourceSha256": "1932885bb59a5ec1d90c9450995d668af928801ecff88f9bf4bd3d0cb667b5e8",
-      "id": "d1ef1bb4e4353356"
+      "sourceSha256": "d0f84639f34f694d8014a82293918d30ee079cece6dd2d63be1ade4afccdfd27",
+      "id": "a600ea1dc1fbc1ad"
     },
     {
       "source": "app/app.js",
-      "line": 1697,
-      "column": 105,
+      "line": 1699,
+      "column": 101,
       "kind": "javascript-sink",
       "sink": "property:textContent",
       "attribute": "text-content",
@@ -13054,12 +13054,12 @@
       "routeConsumers": [
         "/config/"
       ],
-      "sourceSha256": "1932885bb59a5ec1d90c9450995d668af928801ecff88f9bf4bd3d0cb667b5e8",
-      "id": "5bd4f9482d71d85f"
+      "sourceSha256": "d0f84639f34f694d8014a82293918d30ee079cece6dd2d63be1ade4afccdfd27",
+      "id": "060a2d8a99a1d7c8"
     },
     {
       "source": "app/app.js",
-      "line": 1752,
+      "line": 1754,
       "column": 7,
       "kind": "javascript-sink",
       "sink": "call:setAttribute",
@@ -13076,12 +13076,12 @@
       "routeConsumers": [
         "/config/"
       ],
-      "sourceSha256": "1932885bb59a5ec1d90c9450995d668af928801ecff88f9bf4bd3d0cb667b5e8",
-      "id": "ee511b0071f5058d"
+      "sourceSha256": "d0f84639f34f694d8014a82293918d30ee079cece6dd2d63be1ade4afccdfd27",
+      "id": "c102ae6ba4a8ac7c"
     },
     {
       "source": "app/app.js",
-      "line": 1754,
+      "line": 1756,
       "column": 7,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -13098,12 +13098,12 @@
       "routeConsumers": [
         "/config/"
       ],
-      "sourceSha256": "1932885bb59a5ec1d90c9450995d668af928801ecff88f9bf4bd3d0cb667b5e8",
-      "id": "8d9eba262b0efa05"
+      "sourceSha256": "d0f84639f34f694d8014a82293918d30ee079cece6dd2d63be1ade4afccdfd27",
+      "id": "151f60cd10884dca"
     },
     {
       "source": "app/app.js",
-      "line": 1757,
+      "line": 1759,
       "column": 7,
       "kind": "javascript-sink",
       "sink": "css-generated-content:data-compact-label",
@@ -13127,12 +13127,12 @@
       "routeConsumers": [
         "/config/"
       ],
-      "sourceSha256": "1932885bb59a5ec1d90c9450995d668af928801ecff88f9bf4bd3d0cb667b5e8",
-      "id": "9b481e7290efa50c"
+      "sourceSha256": "d0f84639f34f694d8014a82293918d30ee079cece6dd2d63be1ade4afccdfd27",
+      "id": "296b24c980c6fdf0"
     },
     {
       "source": "app/app.js",
-      "line": 1758,
+      "line": 1760,
       "column": 7,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -13150,12 +13150,12 @@
       "routeConsumers": [
         "/config/"
       ],
-      "sourceSha256": "1932885bb59a5ec1d90c9450995d668af928801ecff88f9bf4bd3d0cb667b5e8",
-      "id": "cd92e22851105170"
+      "sourceSha256": "d0f84639f34f694d8014a82293918d30ee079cece6dd2d63be1ade4afccdfd27",
+      "id": "c391c50326f3b528"
     },
     {
       "source": "app/app.js",
-      "line": 1759,
+      "line": 1761,
       "column": 7,
       "kind": "javascript-sink",
       "sink": "call:setAttribute",
@@ -13173,12 +13173,12 @@
       "routeConsumers": [
         "/config/"
       ],
-      "sourceSha256": "1932885bb59a5ec1d90c9450995d668af928801ecff88f9bf4bd3d0cb667b5e8",
-      "id": "f97a23a08b094d53"
+      "sourceSha256": "d0f84639f34f694d8014a82293918d30ee079cece6dd2d63be1ade4afccdfd27",
+      "id": "53bf6ac317b5b149"
     },
     {
       "source": "app/app.js",
-      "line": 1858,
+      "line": 1860,
       "column": 5,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -13202,12 +13202,12 @@
       "routeConsumers": [
         "/config/"
       ],
-      "sourceSha256": "1932885bb59a5ec1d90c9450995d668af928801ecff88f9bf4bd3d0cb667b5e8",
-      "id": "21ab623c2f30e53b"
+      "sourceSha256": "d0f84639f34f694d8014a82293918d30ee079cece6dd2d63be1ade4afccdfd27",
+      "id": "0104d1ce49c28067"
     },
     {
       "source": "app/app.js",
-      "line": 1863,
+      "line": 1865,
       "column": 36,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -13224,12 +13224,12 @@
       "routeConsumers": [
         "/config/"
       ],
-      "sourceSha256": "1932885bb59a5ec1d90c9450995d668af928801ecff88f9bf4bd3d0cb667b5e8",
-      "id": "6a5f9b85221db095"
+      "sourceSha256": "d0f84639f34f694d8014a82293918d30ee079cece6dd2d63be1ade4afccdfd27",
+      "id": "56c151ac44784d23"
     },
     {
       "source": "app/app.js",
-      "line": 2051,
+      "line": 2053,
       "column": 7,
       "kind": "javascript-sink",
       "sink": "call:setAttribute",
@@ -13249,12 +13249,12 @@
       "routeConsumers": [
         "/config/"
       ],
-      "sourceSha256": "1932885bb59a5ec1d90c9450995d668af928801ecff88f9bf4bd3d0cb667b5e8",
-      "id": "f7b29108e95f1feb"
+      "sourceSha256": "d0f84639f34f694d8014a82293918d30ee079cece6dd2d63be1ade4afccdfd27",
+      "id": "9d871f3972ad20b9"
     },
     {
       "source": "app/app.js",
-      "line": 2052,
+      "line": 2054,
       "column": 7,
       "kind": "javascript-sink",
       "sink": "property:title",
@@ -13274,12 +13274,12 @@
       "routeConsumers": [
         "/config/"
       ],
-      "sourceSha256": "1932885bb59a5ec1d90c9450995d668af928801ecff88f9bf4bd3d0cb667b5e8",
-      "id": "a6a01cd5a7003e7f"
+      "sourceSha256": "d0f84639f34f694d8014a82293918d30ee079cece6dd2d63be1ade4afccdfd27",
+      "id": "ed1cc8feef8becde"
     },
     {
       "source": "app/app.js",
-      "line": 2075,
+      "line": 2077,
       "column": 5,
       "kind": "javascript-sink",
       "sink": "helper:announce",
@@ -13299,12 +13299,12 @@
       "routeConsumers": [
         "/config/"
       ],
-      "sourceSha256": "1932885bb59a5ec1d90c9450995d668af928801ecff88f9bf4bd3d0cb667b5e8",
-      "id": "fe6c171cefcc3fe3"
+      "sourceSha256": "d0f84639f34f694d8014a82293918d30ee079cece6dd2d63be1ade4afccdfd27",
+      "id": "ff169370beddba9e"
     },
     {
       "source": "app/app.js",
-      "line": 2086,
+      "line": 2088,
       "column": 19,
       "kind": "javascript-sink",
       "sink": "helper:announce",
@@ -13323,12 +13323,12 @@
       "routeConsumers": [
         "/config/"
       ],
-      "sourceSha256": "1932885bb59a5ec1d90c9450995d668af928801ecff88f9bf4bd3d0cb667b5e8",
-      "id": "778441f2c57baa7f"
+      "sourceSha256": "d0f84639f34f694d8014a82293918d30ee079cece6dd2d63be1ade4afccdfd27",
+      "id": "8b2a00ec9f35dfda"
     },
     {
       "source": "app/app.js",
-      "line": 2097,
+      "line": 2099,
       "column": 7,
       "kind": "javascript-sink",
       "sink": "helper:announce",
@@ -13347,12 +13347,12 @@
       "routeConsumers": [
         "/config/"
       ],
-      "sourceSha256": "1932885bb59a5ec1d90c9450995d668af928801ecff88f9bf4bd3d0cb667b5e8",
-      "id": "a8106aee499c5497"
+      "sourceSha256": "d0f84639f34f694d8014a82293918d30ee079cece6dd2d63be1ade4afccdfd27",
+      "id": "8aaefe8f43638f6c"
     },
     {
       "source": "app/app.js",
-      "line": 2114,
+      "line": 2116,
       "column": 21,
       "kind": "javascript-sink",
       "sink": "helper:announce",
@@ -13371,12 +13371,12 @@
       "routeConsumers": [
         "/config/"
       ],
-      "sourceSha256": "1932885bb59a5ec1d90c9450995d668af928801ecff88f9bf4bd3d0cb667b5e8",
-      "id": "1b786729a70d55cc"
+      "sourceSha256": "d0f84639f34f694d8014a82293918d30ee079cece6dd2d63be1ade4afccdfd27",
+      "id": "7677e41358875095"
     },
     {
       "source": "app/app.js",
-      "line": 2152,
+      "line": 2154,
       "column": 5,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -13393,12 +13393,12 @@
       "routeConsumers": [
         "/config/"
       ],
-      "sourceSha256": "1932885bb59a5ec1d90c9450995d668af928801ecff88f9bf4bd3d0cb667b5e8",
-      "id": "c9151806a56ae0a0"
+      "sourceSha256": "d0f84639f34f694d8014a82293918d30ee079cece6dd2d63be1ade4afccdfd27",
+      "id": "019b97f43c737976"
     },
     {
       "source": "app/app.js",
-      "line": 2153,
+      "line": 2155,
       "column": 5,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -13416,12 +13416,12 @@
       "routeConsumers": [
         "/config/"
       ],
-      "sourceSha256": "1932885bb59a5ec1d90c9450995d668af928801ecff88f9bf4bd3d0cb667b5e8",
-      "id": "41dd6104b4d5bdc8"
+      "sourceSha256": "d0f84639f34f694d8014a82293918d30ee079cece6dd2d63be1ade4afccdfd27",
+      "id": "dbe1022cc00fde0f"
     },
     {
       "source": "app/app.js",
-      "line": 2273,
+      "line": 2275,
       "column": 7,
       "kind": "javascript-sink",
       "sink": "helper:announce",
@@ -13442,12 +13442,12 @@
       "routeConsumers": [
         "/config/"
       ],
-      "sourceSha256": "1932885bb59a5ec1d90c9450995d668af928801ecff88f9bf4bd3d0cb667b5e8",
-      "id": "2f146b64bffdd6ac"
+      "sourceSha256": "d0f84639f34f694d8014a82293918d30ee079cece6dd2d63be1ade4afccdfd27",
+      "id": "749274caa2d8a2d8"
     },
     {
       "source": "app/app.js",
-      "line": 2315,
+      "line": 2317,
       "column": 5,
       "kind": "javascript-sink",
       "sink": "helper:announce",
@@ -13469,12 +13469,12 @@
       "routeConsumers": [
         "/config/"
       ],
-      "sourceSha256": "1932885bb59a5ec1d90c9450995d668af928801ecff88f9bf4bd3d0cb667b5e8",
-      "id": "6d707f3cc96d302d"
+      "sourceSha256": "d0f84639f34f694d8014a82293918d30ee079cece6dd2d63be1ade4afccdfd27",
+      "id": "312f95fbddf39fca"
     },
     {
       "source": "app/app.js",
-      "line": 2339,
+      "line": 2341,
       "column": 5,
       "kind": "javascript-sink",
       "sink": "helper:announce",
@@ -13493,12 +13493,12 @@
       "routeConsumers": [
         "/config/"
       ],
-      "sourceSha256": "1932885bb59a5ec1d90c9450995d668af928801ecff88f9bf4bd3d0cb667b5e8",
-      "id": "bd4945a892960947"
+      "sourceSha256": "d0f84639f34f694d8014a82293918d30ee079cece6dd2d63be1ade4afccdfd27",
+      "id": "484cb17d9c639816"
     },
     {
       "source": "app/app.js",
-      "line": 2349,
+      "line": 2351,
       "column": 5,
       "kind": "javascript-sink",
       "sink": "helper:announce",
@@ -13517,12 +13517,12 @@
       "routeConsumers": [
         "/config/"
       ],
-      "sourceSha256": "1932885bb59a5ec1d90c9450995d668af928801ecff88f9bf4bd3d0cb667b5e8",
-      "id": "d6583825797fcac6"
+      "sourceSha256": "d0f84639f34f694d8014a82293918d30ee079cece6dd2d63be1ade4afccdfd27",
+      "id": "8ee74ebf9babd724"
     },
     {
       "source": "app/app.js",
-      "line": 2370,
+      "line": 2372,
       "column": 5,
       "kind": "javascript-sink",
       "sink": "helper:announce",
@@ -13541,12 +13541,12 @@
       "routeConsumers": [
         "/config/"
       ],
-      "sourceSha256": "1932885bb59a5ec1d90c9450995d668af928801ecff88f9bf4bd3d0cb667b5e8",
-      "id": "7603af23f401a3a7"
+      "sourceSha256": "d0f84639f34f694d8014a82293918d30ee079cece6dd2d63be1ade4afccdfd27",
+      "id": "daec70cd9cc31eaa"
     },
     {
       "source": "app/app.js",
-      "line": 2404,
+      "line": 2406,
       "column": 5,
       "kind": "javascript-sink",
       "sink": "helper:announce",
@@ -13566,12 +13566,12 @@
       "routeConsumers": [
         "/config/"
       ],
-      "sourceSha256": "1932885bb59a5ec1d90c9450995d668af928801ecff88f9bf4bd3d0cb667b5e8",
-      "id": "d2f5eeb6083ec52e"
+      "sourceSha256": "d0f84639f34f694d8014a82293918d30ee079cece6dd2d63be1ade4afccdfd27",
+      "id": "327227f14a35cb8c"
     },
     {
       "source": "app/app.js",
-      "line": 2411,
+      "line": 2413,
       "column": 5,
       "kind": "javascript-sink",
       "sink": "helper:announce",
@@ -13592,12 +13592,12 @@
       "routeConsumers": [
         "/config/"
       ],
-      "sourceSha256": "1932885bb59a5ec1d90c9450995d668af928801ecff88f9bf4bd3d0cb667b5e8",
-      "id": "5ca27b82bee45342"
+      "sourceSha256": "d0f84639f34f694d8014a82293918d30ee079cece6dd2d63be1ade4afccdfd27",
+      "id": "e219b69fb0709f10"
     },
     {
       "source": "app/app.js",
-      "line": 2493,
+      "line": 2495,
       "column": 5,
       "kind": "javascript-sink",
       "sink": "helper:announce",
@@ -13618,12 +13618,12 @@
       "routeConsumers": [
         "/config/"
       ],
-      "sourceSha256": "1932885bb59a5ec1d90c9450995d668af928801ecff88f9bf4bd3d0cb667b5e8",
-      "id": "a3fe54f589365cd1"
+      "sourceSha256": "d0f84639f34f694d8014a82293918d30ee079cece6dd2d63be1ade4afccdfd27",
+      "id": "98b42636d3de7450"
     },
     {
       "source": "app/app.js",
-      "line": 2506,
+      "line": 2508,
       "column": 5,
       "kind": "javascript-sink",
       "sink": "helper:announce",
@@ -13642,12 +13642,12 @@
       "routeConsumers": [
         "/config/"
       ],
-      "sourceSha256": "1932885bb59a5ec1d90c9450995d668af928801ecff88f9bf4bd3d0cb667b5e8",
-      "id": "627a38547dac4842"
+      "sourceSha256": "d0f84639f34f694d8014a82293918d30ee079cece6dd2d63be1ade4afccdfd27",
+      "id": "9b070a64ef75f2e7"
     },
     {
       "source": "app/app.js",
-      "line": 2527,
+      "line": 2529,
       "column": 10,
       "kind": "javascript-sink",
       "sink": "native-dialog:confirm",
@@ -13666,12 +13666,12 @@
       "routeConsumers": [
         "/config/"
       ],
-      "sourceSha256": "1932885bb59a5ec1d90c9450995d668af928801ecff88f9bf4bd3d0cb667b5e8",
-      "id": "62fb5943707f2ad5"
+      "sourceSha256": "d0f84639f34f694d8014a82293918d30ee079cece6dd2d63be1ade4afccdfd27",
+      "id": "36a6ae9e90494b9f"
     },
     {
       "source": "app/app.js",
-      "line": 2540,
+      "line": 2542,
       "column": 5,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -13690,8 +13690,8 @@
       "routeConsumers": [
         "/config/"
       ],
-      "sourceSha256": "1932885bb59a5ec1d90c9450995d668af928801ecff88f9bf4bd3d0cb667b5e8",
-      "id": "c0098e0657ee3203"
+      "sourceSha256": "d0f84639f34f694d8014a82293918d30ee079cece6dd2d63be1ade4afccdfd27",
+      "id": "71de895d059a484a"
     },
     {
       "source": "app/config/index.html",
@@ -36860,12 +36860,12 @@
       "routeConsumers": [
         "/config/"
       ],
-      "sourceSha256": "1932885bb59a5ec1d90c9450995d668af928801ecff88f9bf4bd3d0cb667b5e8",
+      "sourceSha256": "d0f84639f34f694d8014a82293918d30ee079cece6dd2d63be1ade4afccdfd27",
       "id": "63d2bb02bfcc0547"
     },
     {
       "source": "app/app.js",
-      "line": 1757,
+      "line": 1759,
       "column": 48,
       "kind": "javascript-text-source",
       "sink": "source:compact-flow-label",
@@ -36886,19 +36886,19 @@
       "contentDomain": "compact-configurator-ui-copy",
       "reviewNote": "CSS ::after displays this data attribute; the full stage.label is also the button accessible name.",
       "consumerEvidence": [
-        "app/app.js:1757 data-compact-label is rendered through CSS generated content"
+        "app/app.js:1759 data-compact-label is rendered through CSS generated content"
       ],
       "owner": "config",
       "routeConsumers": [
         "/config/"
       ],
-      "sourceSha256": "1932885bb59a5ec1d90c9450995d668af928801ecff88f9bf4bd3d0cb667b5e8",
-      "id": "0a61c2bcd0dc37ac",
+      "sourceSha256": "d0f84639f34f694d8014a82293918d30ee079cece6dd2d63be1ade4afccdfd27",
+      "id": "f2063db2af2a333e",
       "consumerRefs": [
         {
-          "sinkId": "9b481e7290efa50c",
+          "sinkId": "296b24c980c6fdf0",
           "source": "app/app.js",
-          "line": 1757,
+          "line": 1759,
           "sink": "css-generated-content:data-compact-label",
           "expression": "({ modules: \"Módulos\", finishes: \"Acab.\", services: \"Serv.\", summary: \"Resumo\", custom: stage.label })[stageKind(stage)]",
           "routeConsumers": [
@@ -36910,7 +36910,7 @@
     },
     {
       "source": "app/app.js",
-      "line": 1757,
+      "line": 1759,
       "column": 69,
       "kind": "javascript-text-source",
       "sink": "source:compact-flow-label",
@@ -36931,19 +36931,19 @@
       "contentDomain": "compact-configurator-ui-copy",
       "reviewNote": "CSS ::after displays this data attribute; the full stage.label is also the button accessible name.",
       "consumerEvidence": [
-        "app/app.js:1757 data-compact-label is rendered through CSS generated content"
+        "app/app.js:1759 data-compact-label is rendered through CSS generated content"
       ],
       "owner": "config",
       "routeConsumers": [
         "/config/"
       ],
-      "sourceSha256": "1932885bb59a5ec1d90c9450995d668af928801ecff88f9bf4bd3d0cb667b5e8",
-      "id": "243bab4f28cf1fca",
+      "sourceSha256": "d0f84639f34f694d8014a82293918d30ee079cece6dd2d63be1ade4afccdfd27",
+      "id": "34a8afa50337508a",
       "consumerRefs": [
         {
-          "sinkId": "9b481e7290efa50c",
+          "sinkId": "296b24c980c6fdf0",
           "source": "app/app.js",
-          "line": 1757,
+          "line": 1759,
           "sink": "css-generated-content:data-compact-label",
           "expression": "({ modules: \"Módulos\", finishes: \"Acab.\", services: \"Serv.\", summary: \"Resumo\", custom: stage.label })[stageKind(stage)]",
           "routeConsumers": [
@@ -36955,7 +36955,7 @@
     },
     {
       "source": "app/app.js",
-      "line": 1757,
+      "line": 1759,
       "column": 88,
       "kind": "javascript-text-source",
       "sink": "source:compact-flow-label",
@@ -36976,19 +36976,19 @@
       "contentDomain": "compact-configurator-ui-copy",
       "reviewNote": "CSS ::after displays this data attribute; the full stage.label is also the button accessible name.",
       "consumerEvidence": [
-        "app/app.js:1757 data-compact-label is rendered through CSS generated content"
+        "app/app.js:1759 data-compact-label is rendered through CSS generated content"
       ],
       "owner": "config",
       "routeConsumers": [
         "/config/"
       ],
-      "sourceSha256": "1932885bb59a5ec1d90c9450995d668af928801ecff88f9bf4bd3d0cb667b5e8",
-      "id": "0374c450ed0327e0",
+      "sourceSha256": "d0f84639f34f694d8014a82293918d30ee079cece6dd2d63be1ade4afccdfd27",
+      "id": "0f0f514cffc1ac8d",
       "consumerRefs": [
         {
-          "sinkId": "9b481e7290efa50c",
+          "sinkId": "296b24c980c6fdf0",
           "source": "app/app.js",
-          "line": 1757,
+          "line": 1759,
           "sink": "css-generated-content:data-compact-label",
           "expression": "({ modules: \"Módulos\", finishes: \"Acab.\", services: \"Serv.\", summary: \"Resumo\", custom: stage.label })[stageKind(stage)]",
           "routeConsumers": [
@@ -37000,7 +37000,7 @@
     },
     {
       "source": "app/app.js",
-      "line": 1757,
+      "line": 1759,
       "column": 106,
       "kind": "javascript-text-source",
       "sink": "source:compact-flow-label",
@@ -37021,19 +37021,19 @@
       "contentDomain": "compact-configurator-ui-copy",
       "reviewNote": "CSS ::after displays this data attribute; the full stage.label is also the button accessible name.",
       "consumerEvidence": [
-        "app/app.js:1757 data-compact-label is rendered through CSS generated content"
+        "app/app.js:1759 data-compact-label is rendered through CSS generated content"
       ],
       "owner": "config",
       "routeConsumers": [
         "/config/"
       ],
-      "sourceSha256": "1932885bb59a5ec1d90c9450995d668af928801ecff88f9bf4bd3d0cb667b5e8",
-      "id": "641e8fa60f8cbe3e",
+      "sourceSha256": "d0f84639f34f694d8014a82293918d30ee079cece6dd2d63be1ade4afccdfd27",
+      "id": "cc1149e4de5d857b",
       "consumerRefs": [
         {
-          "sinkId": "9b481e7290efa50c",
+          "sinkId": "296b24c980c6fdf0",
           "source": "app/app.js",
-          "line": 1757,
+          "line": 1759,
           "sink": "css-generated-content:data-compact-label",
           "expression": "({ modules: \"Módulos\", finishes: \"Acab.\", services: \"Serv.\", summary: \"Resumo\", custom: stage.label })[stageKind(stage)]",
           "routeConsumers": [
@@ -37045,7 +37045,7 @@
     },
     {
       "source": "app/app.js",
-      "line": 2556,
+      "line": 2558,
       "column": 58,
       "kind": "javascript-text-source",
       "sink": "source:error-message-source",
@@ -37072,12 +37072,12 @@
       "routeConsumers": [
         "/config/"
       ],
-      "sourceSha256": "1932885bb59a5ec1d90c9450995d668af928801ecff88f9bf4bd3d0cb667b5e8",
-      "id": "161274db40303243"
+      "sourceSha256": "d0f84639f34f694d8014a82293918d30ee079cece6dd2d63be1ade4afccdfd27",
+      "id": "57b0f1d37c9a43ce"
     },
     {
       "source": "app/app.js",
-      "line": 2557,
+      "line": 2559,
       "column": 25,
       "kind": "javascript-text-source",
       "sink": "source:error-message-source",
@@ -37104,8 +37104,8 @@
       "routeConsumers": [
         "/config/"
       ],
-      "sourceSha256": "1932885bb59a5ec1d90c9450995d668af928801ecff88f9bf4bd3d0cb667b5e8",
-      "id": "bba035a0b739073d"
+      "sourceSha256": "d0f84639f34f694d8014a82293918d30ee079cece6dd2d63be1ade4afccdfd27",
+      "id": "c89cb98400fd9f12"
     },
     {
       "source": "app/core/admin-bootstrap-retry.mjs",
@@ -39828,7 +39828,7 @@
         "domain-bound-text-review",
         "behavior-coupled-value"
       ],
-      "consumerLinkStatus": "catalog-dimension-format-to-config-detail",
+      "consumerLinkStatus": "declared-sink-not-indexed",
       "useStatus": "active",
       "contentDomain": "technical-product-data",
       "reviewNote": "This value couples visible dimension notation and ordering. Keep it as catalog/formatting data, not a translatable UI message; define locale notation separately before adding a locale.",
@@ -39844,20 +39844,7 @@
         "/viewer/"
       ],
       "sourceSha256": "b49759edbf47a92a6f4b51610974989dbcb592242eb40323246484ccff01b0b6",
-      "id": "3c7fb8463b6af8e6",
-      "consumerRefs": [
-        {
-          "sinkId": "5e2e5fe00b65df22",
-          "source": "app/app.js",
-          "line": 1455,
-          "sink": "property:textContent",
-          "expression": "dimensionSummary(product)",
-          "routeConsumers": [
-            "/config/"
-          ],
-          "flow": "catalog-dimension-format-to-config-detail"
-        }
-      ]
+      "id": "3c7fb8463b6af8e6"
     },
     {
       "source": "app/data/catalog-data.js",
@@ -45531,7 +45518,7 @@
     },
     {
       "path": "app/app.js",
-      "sha256": "1932885bb59a5ec1d90c9450995d668af928801ecff88f9bf4bd3d0cb667b5e8"
+      "sha256": "d0f84639f34f694d8014a82293918d30ee079cece6dd2d63be1ade4afccdfd27"
     },
     {
       "path": "app/config/index.html",
