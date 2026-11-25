@@ -10,7 +10,7 @@ import unittest
 from pathlib import Path
 
 ROOT=Path(__file__).resolve().parents[1]
-SPEC=importlib.util.spec_from_file_location("devbatch_roster",ROOT/"tools/development_retirement_batch.py")
+SPEC=importlib.util.spec_from_file_location("devbatch_roster",ROOT/"tools/historical_pr_retention.py")
 mod=importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(mod)
 

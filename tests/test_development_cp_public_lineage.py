@@ -8,7 +8,7 @@ import unittest
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-SPEC = importlib.util.spec_from_file_location("pr_retention_guard", ROOT / "tools/development_retirement_batch.py")
+SPEC = importlib.util.spec_from_file_location("pr_retention_guard", ROOT / "tools/historical_pr_retention.py")
 guard = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(guard)
 
@@ -166,8 +166,8 @@ class CPPublicLineage(unittest.TestCase):
             self.assertIn(p,doc)
 
     def test_unchanged_runtime_and_no_preview_or_database(self):
-        # The only app-path delta since the pinned baseline is this test-only assertion refresh.
-        changed = git("diff","--name-only",PR_ROSTER_BASELINE,"HEAD","--",
+        # Historical delta ends at the exact assertion-refresh commit, not today's HEAD.
+        changed = git("diff","--name-only",PR_ROSTER_BASELINE,"7ce2bb822d3f5431434f7731f235b570d0763ffc","--",
                       "app","netlify","scripts","architecture","design-system").splitlines()
         self.assertEqual(changed, ["app/tools/test-v5-publication-migration.js"])
         workflow=Path(".github/workflows/development-cp-public-lineage.yml").read_text(encoding="utf-8")
