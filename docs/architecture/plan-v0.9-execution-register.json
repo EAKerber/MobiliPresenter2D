@@ -1,16 +1,3 @@
-Warning: truncated output (original token count: 20993)
-Total output lines: 2160
-
-InvalidOperation: 
-Line |
-  49 |  … ing(0,$start)+$block+$raw.Substring($end); $raw=$raw -replace '("prod …
-     |                                                         ~~~~~~~~
-     | The -replace operator allows only two elements to follow it, not 4.
-InvalidOperation: 
-Line |
-  49 |  … dcfca812038dde547c14f7cc565e64891ba'+'$2'; $raw=$raw -replace '("mean …
-     |                                                         ~~~~~~~~
-     | The -replace operator allows only two elements to follow it, not 4.
 {
   "schema": "PlanV09OperationalRegister/1",
   "updatedAt": "2026-11-25",
@@ -1078,7 +1065,117 @@ Line |
       "id": "CMP-011",
       "title": "Revisar o piloto declarativo da Landing",
       "chapter": "IV",
-      "p…993 tokens truncated… interações acessíveis não verificadas",
+      "priority": "P2",
+      "planState": "not_started",
+      "reconciliation": "unreviewed",
+      "local": "unknown",
+      "development": "unknown",
+      "main": "unknown",
+      "technicalValidation": "unknown",
+      "approvalPublication": "unknown",
+      "evidence": [],
+      "nextAction": "Reconciliar este ID com código, consumidores, testes e evidência exata de branch/PR antes de alterar o estado."
+    },
+    {
+      "order": 65,
+      "id": "CMP-012",
+      "title": "Consolidar o carrossel e a seleção de ambientes",
+      "chapter": "IV",
+      "priority": "P2",
+      "planState": "not_started",
+      "reconciliation": "unreviewed",
+      "local": "unknown",
+      "development": "unknown",
+      "main": "unknown",
+      "technicalValidation": "unknown",
+      "approvalPublication": "unknown",
+      "evidence": [],
+      "nextAction": "Reconciliar este ID com código, consumidores, testes e evidência exata de branch/PR antes de alterar o estado."
+    },
+    {
+      "order": 66,
+      "id": "CMP-013",
+      "title": "Consolidar o painel expansível de Como funciona",
+      "chapter": "IV",
+      "priority": "P1",
+      "planState": "not_started",
+      "reconciliation": "unreviewed",
+      "local": "unknown",
+      "development": "unknown",
+      "main": "unknown",
+      "technicalValidation": "unknown",
+      "approvalPublication": "unknown",
+      "evidence": [],
+      "nextAction": "Reconciliar este ID com código, consumidores, testes e evidência exata de branch/PR antes de alterar o estado."
+    },
+    {
+      "order": 67,
+      "id": "CMP-019",
+      "title": "Formalizar o limite entre build-time e runtime",
+      "chapter": "IV",
+      "priority": "P1",
+      "planState": "not_started",
+      "reconciliation": "unreviewed",
+      "local": "unknown",
+      "development": "unknown",
+      "main": "unknown",
+      "technicalValidation": "unknown",
+      "approvalPublication": "unknown",
+      "evidence": [],
+      "nextAction": "Reconciliar este ID com código, consumidores, testes e evidência exata de branch/PR antes de alterar o estado."
+    },
+    {
+      "order": 68,
+      "id": "TST-017",
+      "title": "Separar provas geométricas de provas visuais",
+      "chapter": "VI",
+      "priority": "P1",
+      "planState": "not_started",
+      "reconciliation": "unreviewed",
+      "local": "unknown",
+      "development": "unknown",
+      "main": "unknown",
+      "technicalValidation": "unknown",
+      "approvalPublication": "unknown",
+      "evidence": [],
+      "nextAction": "Reconciliar este ID com código, consumidores, testes e evidência exata de branch/PR antes de alterar o estado."
+    },
+    {
+      "order": 69,
+      "id": "GIT-015",
+      "title": "Revisar e concluir PR #278 — geometria do hero",
+      "chapter": "VII",
+      "priority": "P1",
+      "planState": "not_started",
+      "reconciliation": "unreviewed",
+      "local": "unknown",
+      "development": "unknown",
+      "main": "unknown",
+      "technicalValidation": "unknown",
+      "approvalPublication": "unknown",
+      "evidence": [],
+      "nextAction": "Reconciliar este ID com código, consumidores, testes e evidência exata de branch/PR antes de alterar o estado."
+    },
+    {
+      "order": 70,
+      "id": "TST-019",
+      "title": "Estabelecer política de screenshots e referências visuais",
+      "chapter": "VI",
+      "priority": "P1",
+      "planState": "not_started",
+      "reconciliation": "unreviewed",
+      "local": "unknown",
+      "development": "unknown",
+      "main": "unknown",
+      "technicalValidation": "unknown",
+      "approvalPublication": "unknown",
+      "evidence": [],
+      "nextAction": "Reconciliar este ID com código, consumidores, testes e evidência exata de branch/PR antes de alterar o estado."
+    },
+    {
+      "order": 71,
+      "id": "TST-021",
+      "title": "Cobrir interações acessíveis não verificadas",
       "chapter": "VI",
       "priority": "P1",
       "planState": "not_started",
@@ -1304,7 +1401,8 @@ Line |
         }
       ],
       "nextAction": "DoD TST-006 concluído em development. A mudança afeta apenas a infraestrutura de testes; main não recebeu este pacote e publicação do produto não se aplica. Prosseguir para o pacote DOM-013/TST-010, mantendo prova de autenticação hospedada separada."
-    },    {
+    },
+    {
       "order": 84,
       "id": "DOM-012",
       "title": "Consolidar o Viewer como consumidor público restrito",
@@ -2046,8 +2144,8 @@ Line |
   "baselineReadback": {
     "capturedAt": "2026-11-25",
     "productMainSha": "01ded2c100fbfd8b16897e26113dc5068a83e429",
-    "productDevelopmentSha": "5d3902ae408f3addd4cecfeb960fbeec4a9f291a",
+    "productDevelopmentSha": "2c028dcfca812038dde547c14f7cc565e64891ba",
     "designSystemMainSha": "c6ff6545e9ae2071e695109fd94ac91676e7fb0a",
-    "meaning": "Snapshot read back before this package; the Design System has no development branch."
+    "meaning": "Readback exato das branches remotas em 2026-11-25 após a integração TST-006; o Design System continua sem branch development."
   }
 }
