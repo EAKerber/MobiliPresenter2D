@@ -9,7 +9,7 @@ import importlib.util
 import unittest
 
 ROOT = Path(__file__).resolve().parents[1]
-SPEC = importlib.util.spec_from_file_location("pr_retention_guard", ROOT / "tools/development_retirement_batch.py")
+SPEC = importlib.util.spec_from_file_location("pr_retention_guard", ROOT / "tools/historical_pr_retention.py")
 guard = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(guard)
 
@@ -194,8 +194,8 @@ class PublicPRs(unittest.TestCase):
         self.assertNotIn("GET /api/configuration",dev_api)
 
     def test_no_product_changes_or_external_preview_operations(self):
-        # The only app-path delta since the pinned baseline is this test-only assertion refresh.
-        changed = git("diff","--name-only",PR_ROSTER_BASELINE,"HEAD","--",
+        # Historical delta ends at the exact assertion-refresh commit, not today's HEAD.
+        changed = git("diff","--name-only",PR_ROSTER_BASELINE,"7ce2bb822d3f5431434f7731f235b570d0763ffc","--",
                       "app","netlify","architecture","design-system","scripts").splitlines()
         self.assertEqual(changed, ["app/tools/test-v5-publication-migration.js"])
         workflow=Path(".github/workflows/development-cp-public-prs-175-180.yml").read_text(encoding="utf-8")

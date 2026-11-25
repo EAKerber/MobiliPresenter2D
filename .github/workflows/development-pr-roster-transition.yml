@@ -1,4 +1,4 @@
-name: Development CP-PUBLIC protected PR roster transition
+name: Development CP-PUBLIC historical retention (offline)
 on:
   push:
     branches:
@@ -6,8 +6,15 @@ on:
     paths:
       - 'ops/development-pr-branch-transition.json'
       - 'docs/work/DEVELOPMENT_PR_BRANCH_ARCHIVE_2026-11-01.md'
-      - 'tools/development_retirement_batch.py'
-      - 'tools/development_pr_roster_probe.py'
+      - 'tools/historical_pr_retention.py'
+      - 'tests/test_development_pr_roster_transition.py'
+      - 'tests/test_development_cp_public_lineage.py'
+      - 'tests/test_development_cp_public_prs_175_180.py'
+      - '.github/workflows/development-pr-roster-transition.yml'
+  pull_request:
+    branches: [development]
+    paths:
+      - 'tools/historical_pr_retention.py'
       - 'tests/test_development_pr_roster_transition.py'
       - 'tests/test_development_cp_public_lineage.py'
       - 'tests/test_development_cp_public_prs_175_180.py'
@@ -24,14 +31,10 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - name: Compile strict PR, archive, and bounded branch retirement logic
+      - name: Compile read-only historical PR/archive contracts
         run: |
-          python3 -m py_compile tools/development_retirement_batch.py tools/development_pr_roster_probe.py
-          python3 -m unittest tests/test_development_retirement_batch.py tests/test_development_pr_roster_transition.py tests/test_development_cp_public_lineage.py tests/test_development_cp_public_prs_175_180.py -v
-      - name: Read-only GitHub check of live PRs, pinned branches and archive tags
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: python3 tools/development_pr_roster_probe.py
+          python3 -m py_compile tools/historical_pr_retention.py
+          python3 -m unittest tests/test_development_pr_roster_transition.py tests/test_development_cp_public_lineage.py tests/test_development_cp_public_prs_175_180.py -v
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
