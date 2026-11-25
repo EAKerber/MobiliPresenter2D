@@ -1,0 +1,90 @@
+{
+  "schema": "M2DTSTDuplicateGateReview/1",
+  "workItem": "TST-003",
+  "capturedAt": "2026-11-25T14:08:38Z",
+  "scope": "Compare app npm test ownership and reachability in Product main and development before selective promotion.",
+  "refs": {
+    "main": {
+      "sha": "01ded2c100fbfd8b16897e26113dc5068a83e429",
+      "tree": "d1588ab2a71c5de7e8b7cfaa907d5e5637fa7178"
+    },
+    "developmentWorkflowSnapshot": {
+      "sha": "a873dd3ec5a8b168f24461402504661b88ebb48f",
+      "currentDevelopmentDocumentationHead": "6b31beadcb460b3c13f125e528ca80f925da7f43",
+      "note": "PR #438 changed only documentation; workflow definitions remain byte-identical to the inspected development ref."
+    }
+  },
+  "workflows": [
+    {
+      "path": ".github/workflows/app-build-purity.yml",
+      "mainBlob": "aaaf6ed9105cc6fd1df4f74001a2823f2b4cf59e",
+      "developmentBlob": "3debb0f87335921d6ba0997471433488d07ccdfc",
+      "main": {
+        "pullRequestPath": "app/**",
+        "npmTest": true
+      },
+      "development": {
+        "pullRequestPath": "app/**",
+        "excluding": [
+          "app/tools/test-v5-normal-save.js"
+        ],
+        "npmTest": true
+      },
+      "role": "Owner of the full current app npm test suite for app source changes."
+    },
+    {
+      "path": ".github/workflows/candidate-assets.yml",
+      "mainBlob": "c3e6534150f6ade320daf7421a471dd9a98106c5",
+      "developmentBlob": "23c1f7573d00ad1c5cb2890482a8a43b6899162f",
+      "main": {
+        "pullRequestPath": "app/**",
+        "npmTest": true
+      },
+      "development": {
+        "pullRequestPath": "app/**",
+        "excluding": [
+          "app/tools/test-v5-endpoint-safety.js",
+          "app/tools/test-v5-normal-save.js"
+        ],
+        "npmTest": false
+      },
+      "role": "Owns candidate asset, mask semantics, rendering, and asset provenance assertions."
+    },
+    {
+      "path": ".github/workflows/variant-fidelity.yml",
+      "mainBlob": "5e583959f55b6f518ac66dec0037462ea4274565",
+      "developmentBlob": "33fa8ba638c32fbc5094360d89d71413376865db",
+      "main": {
+        "pullRequestPath": "app/**",
+        "npmTest": true
+      },
+      "development": {
+        "pullRequestPath": "app/**",
+        "excluding": [
+          "app/tools/test-v5-endpoint-safety.js",
+          "app/tools/test-v5-normal-save.js"
+        ],
+        "npmTest": false
+      },
+      "role": "Owns variant derivation, rendering, and fidelity artifact assertions."
+    }
+  ],
+  "evidence": [
+    {
+      "source": "Product PR #436 exact-head validation and integration",
+      "sha": "71bc086114741fe2d5967099123a7d420cba80eb",
+      "detail": "On development, the duplicated app npm test step was removed only from candidate-assets and variant-fidelity. Their specialized assertions remain, and app-build-purity retains npm test for app/** changes. The #436 PR-head asset, variant, and impact-plan runs passed."
+    },
+    {
+      "source": "Exact main workflow file readback",
+      "sha": "01ded2c100fbfd8b16897e26113dc5068a83e429",
+      "detail": "Main still runs npm test in all three workflows for the overlapping app/** pull-request paths; the same suite remains protected by app-build-purity if the two specialized invocations are removed."
+    }
+  ],
+  "recommendation": "Prepare a selective main PR that removes only the npm test step from candidate-assets.yml and variant-fidelity.yml. Keep the full npm test in app-build-purity.yml and keep every specialized asset, mask, render, and variant check.",
+  "limits": [
+    "This is workflow-source equivalence and reachability evidence, not a live run result.",
+    "The exact PR checks for the proposed main workflow change have not run yet.",
+    "This does not establish equivalence for any other repeated assertions."
+  ]
+}

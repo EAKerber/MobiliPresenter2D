@@ -340,6 +340,11 @@
           "source": "Product PR #436 exact-head inventory run #45626479134, post-merge tree readback, and current snapshot",
           "sha": "a873dd3ec5a8b168f24461402504661b88ebb48f",
           "detail": "New receipt docs/architecture/ci/tst-001-workflow-inventory-2026-11-25.json is generated from exact main@01ded2c and the PR candidate tree at f761a80; that tree exactly matches integrated development@71bc086. Current development@a873dd3 differs from the merge only by the execution-register document, so workflow definitions remain the same. Inventory: 27 main workflows, 68 development workflows, 25 shared, 70 distinct workflow names, zero parser warnings; development event counts are pull_request 28, push 62, workflow_dispatch 54, schedule 1. Command assertions/results remain separate; current open Product PR readback is refreshed in the receipt."
+        },
+        {
+          "source": "Product PR #438 merge and post-merge development readback",
+          "sha": "6b31beadcb460b3c13f125e528ca80f925da7f43",
+          "detail": "PR #438 integrated the exact TST-001 workflow snapshot into development. The post-merge compare from 71bc086 to 6b31bea shows only the inventory document and execution register changed; workflow definitions remain byte-identical. The source snapshot still distinguishes declared commands from observed assertions/results."
         }
       ],
       "nextAction": "Complete the command→assertion→contract result crosswalk for the remaining families and refresh this snapshot whenever workflow definitions change; preserve the distinction between declared command and observed run result."
@@ -533,9 +538,14 @@
           "source": "Exact Product main/development V5 source and test comparison; Product PR #432",
           "sha": "8ebfdad9ef335bf0a9701718ebd947162adea2c3",
           "detail": "Shared V5 read/inspection/save core has matching blobs across both refs. A selective main candidate adds only deterministic CAS-race and missing-readback assertions; seven main gates passed and Preview was READY. Merge remains subject to the user's specific decision. Admin endpoint behavior differs for missing/invalid V3: main may fall back to defaults, development returns explicit missing/invalid; hold this runtime package pending policy decision."
+        },
+        {
+          "source": "GitHub compare Product main...development after Product PR #438",
+          "sha": "6b31beadcb460b3c13f125e528ca80f925da7f43",
+          "detail": "Exact compare reports 576 commits present on development but absent from main and 17 present on main but absent from development, at merge base 221b54b2a41ecc8c338d1bf2cf67280cf165ce95. Reverse compare lists 72 main-side paths; the forward compare file response remains capped at 300. The classified families remain coupled and do not authorize a whole-tree merge."
         }
       ],
-      "nextAction": "Review the 72 main-side paths by source authority and consumer family. Keep generated pages paired with their compiler, manifest, and tests; keep CI/branch-hygiene changes separate from product behavior. No safe whole-tree promotion."
+      "nextAction": "Continue the 72-path family classification; prepare selective packages only where source authority, consumers, generated artifacts, and exact gates are closed. Keep the public page/compiler/manifest family and branch-hygiene workflows separate."
     },
     {
       "order": 27,
@@ -2005,9 +2015,14 @@
           "source": "Product PR #436, merged in development",
           "sha": "f761a80f64c9cd6de4608fcf0543ffe6d1b309e4",
           "detail": "Removed only the duplicated app/npm test step from candidate-assets and variant-fidelity. Their asset, mask, rendering, and variant assertions remain; app-build-purity keeps the complete npm test suite for app/** changes. Exact PR-head gates passed: Current asset gates run 45626479378, Development test impact plan 45626479134, Current variant fidelity 45626479193. Squash commit 71bc086114741fe2d5967099123a7d420cba80eb. Main retains its prior workflows; no guarantee was removed from main."
+        },
+        {
+          "source": "docs/architecture/ci/tst-003-main-duplicate-app-test-review-2026-11-25.json",
+          "sha": "6b31beadcb460b3c13f125e528ca80f925da7f43",
+          "detail": "Exact source readback shows main app-build-purity, candidate-assets and variant-fidelity all run app/npm test on overlapping app/** pull-request changes. Development retains app/npm test in app-build-purity and removed only the duplicate invocation from the two specialized workflows in PR #436. Their domain-specific assertions remain. This justifies preparing the same narrow removal on main; exact main PR validation remains pending."
         }
       ],
-      "nextAction": "Measure the same duplication on main separately and review other repeated assertions by contract; preserve specialized gates unless consumer/assertion equivalence and trigger reachability are proven."
+      "nextAction": "Prepare a selective main PR removing only the duplicated app/npm test steps from candidate-assets and variant-fidelity. Preserve app-build-purity and all specialized asset, mask, rendering, and variant assertions; validate the exact PR head before integration."
     },
     {
       "order": 111,
@@ -2265,8 +2280,8 @@
   "baselineReadback": {
     "capturedAt": "2026-11-25",
     "productMainSha": "01ded2c100fbfd8b16897e26113dc5068a83e429",
-    "productDevelopmentSha": "a873dd3ec5a8b168f24461402504661b88ebb48f",
+    "productDevelopmentSha": "6b31beadcb460b3c13f125e528ca80f925da7f43",
     "designSystemMainSha": "c6ff6545e9ae2071e695109fd94ac91676e7fb0a",
-    "meaning": "Exact refs and compare re-read after Product PR #437. The TST-001 workflow inventory is generated on a candidate tree identical to merged development; the only later tree change through this readback is the execution-register document."
+    "meaning": "Exact refs and compare re-read after Product PR #438. The TST-001 inventory was generated from a candidate tree identical to development at PR #436 integration; PR #438 changed only the inventory and execution-register documentation after that source snapshot, leaving workflow definitions unchanged."
   }
 }
