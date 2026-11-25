@@ -1,15 +1,6 @@
 {
   "schema": "PlanV09OperationalRegister/1",
   "updatedAt": "2026-11-24",
-  "authority": {
-    "planRepository": "EAKerber/MobiliPresenter2D_DesignSystem",
-    "planPath": "docs/architecture/MOBILIPRESENTER2D_PLANO_DIRETOR_CONSOLIDADO_v0.9.md",
-    "planMainSha": "c6ff6545e9ae2071e695109fd94ac91676e7fb0a",
-    "planBlobSha": "59bb530b14172eb9772b9f89bb62272173f4381c",
-    "productMainSha": "01ded2c100fbfd8b16897e26113dc5068a83e429",
-    "productDevelopmentSha": "def19b2815cd7a3be30abfa33b3f1c03c1041a17",
-    "designSystemMainSha": "c6ff6545e9ae2071e695109fd94ac91676e7fb0a"
-  },
   "statusSemantics": {
     "planState": "Copiado do Anexo A; é o estado editorial inicial, não uma afirmação de implementação atual.",
     "unreviewed": "Reconciliação operacional ainda não feita; não significa ausência de código.",
@@ -2050,5 +2041,18 @@
       "evidence": [],
       "nextAction": "Reconciliar este ID com código, consumidores, testes e evidência exata de branch/PR antes de alterar o estado."
     }
-  ]
+  ],
+  "planSource": {
+    "repository": "EAKerber/MobiliPresenter2D_DesignSystem",
+    "path": "docs/architecture/MOBILIPRESENTER2D_PLANO_DIRETOR_CONSOLIDADO_v0.9.md",
+    "ref": "main",
+    "blobSha": "59bb530b14172eb9772b9f89bb62272173f4381c"
+  },
+  "baselineReadback": {
+    "capturedAt": "2026-11-24",
+    "productMainSha": "01ded2c100fbfd8b16897e26113dc5068a83e429",
+    "productDevelopmentSha": "def19b2815cd7a3be30abfa33b3f1c03c1041a17",
+    "designSystemMainSha": "c6ff6545e9ae2071e695109fd94ac91676e7fb0a",
+    "meaning": "Snapshot pins captured before this register PR; not asserted as live heads after subsequent merges."
+  }
 }
