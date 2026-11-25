@@ -37,6 +37,17 @@ assert.deepEqual(JSON.parse(JSON.stringify(copy.admin.initialState)), {
   serviceActive: "Iniciar ativo",
   serviceActiveAriaLabel: "{item}: ativo inicialmente"
 });
+assert.deepEqual(JSON.parse(JSON.stringify(copy.admin.finishes)), {
+  customerAvailability: "Disponível para clientes",
+  customerAvailabilityAriaLabel: "{finish}: disponível para clientes",
+  scopeLabel: "Aplicação",
+  scopeAriaLabel: "{finish}: aplicação",
+  scopeOptions: { global: "Global · conjunto todo", local: "Local · módulo individual" },
+  globalAvailabilityPolicy: "Mantenha pelo menos um acabamento global disponível para clientes.",
+  moduleOptionsAriaLabel: "Módulos que aceitam {finish}",
+  moduleAvailabilityAriaLabel: "{finish}: disponível para o módulo {module}",
+  localAssociationPolicy: "Mantenha este acabamento associado a pelo menos um módulo."
+});
 assert.deepEqual(JSON.parse(JSON.stringify(copy.viewer.state)), {
   empty: "Nenhum módulo está visível no viewer neste momento.",
   loading: "Carregando informações publicadas…",
@@ -124,7 +135,7 @@ for (const file of shells) {
     : file === "app/viewer/index.html"
       ? "arc13-loc005-scene-interaction-1"
     : file === "app/admin.html"
-      ? "arc13-loc006-admin-initial-state-copy-1"
+      ? "arc13-loc006-admin-finishes-copy-1"
     : "arc13-loc003-copy-1";
   assert(html.includes(`src="/core/ui-copy.js?v=${copyVersion}"`), file + " copy catalog bootstrap");
   assert(html.includes('src="/core/ui-theme.js?v=arc13-loc003-copy-1"'), file + " theme bootstrap");

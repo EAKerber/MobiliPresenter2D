@@ -25,6 +25,7 @@ const legacyStageRepair = window.CasaModulesLegacyStageRepair;
 const hierarchyDefaults = window.CASA_EM_MODULOS_HIERARCHY_DEFAULTS;
 const uiCopy = window.CASA_UI_COPY;
 const initialStateCopy = uiCopy.admin.initialState;
+const finishAvailabilityCopy = uiCopy.admin.finishes;
 const viewerBasePricePublicationCopy = uiCopy.admin.pricing.viewerBasePricePublication;
 let catalogPricing = null;
 let adminDataPromise = null;
@@ -883,17 +884,17 @@ function renderFinishes() {
     const globalPolicyId = `finish-policy-${finish.id}`;
     enabled.disabled = onlyGlobalFinish;
     enabled.dataset.finishEnabled = finish.id;
-    enabled.setAttribute("aria-label", `${source.label}: disponível para clientes`);
+    enabled.setAttribute("aria-label", finishAvailabilityCopy.customerAvailabilityAriaLabel.replace("{finish}", source.label));
     if (onlyGlobalFinish) enabled.setAttribute("aria-describedby", globalPolicyId);
-    active.append(enabled, document.createTextNode("Disponível para clientes"));
+    active.append(enabled, document.createTextNode(finishAvailabilityCopy.customerAvailability));
     const scopeLabel = document.createElement("label");
     scopeLabel.className = "data-field";
-    scopeLabel.append(document.createTextNode("Aplicação"));
+    scopeLabel.append(document.createTextNode(finishAvailabilityCopy.scopeLabel));
     const scope = document.createElement("select");
     scope.dataset.finishScope = finish.id;
-    scope.setAttribute("aria-label", `${source.label}: aplicação`);
+    scope.setAttribute("aria-label", finishAvailabilityCopy.scopeAriaLabel.replace("{finish}", source.label));
     scope.disabled = onlyGlobalFinish;
-    [["global", "Global · conjunto todo"], ["local", "Local · módulo individual"]].forEach(([value, label]) => {
+    Object.entries(finishAvailabilityCopy.scopeOptions).forEach(([value, label]) => {
       const option = document.createElement("option"); option.value = value; option.textContent = label;
       scope.append(option);
     });
@@ -905,13 +906,13 @@ function renderFinishes() {
       const policyNote = document.createElement("p");
       policyNote.className = "admin-note finish-admin-card__policy-note";
       policyNote.id = globalPolicyId;
-      policyNote.textContent = "Mantenha pelo menos um acabamento global disponível para clientes.";
+      policyNote.textContent = finishAvailabilityCopy.globalAvailabilityPolicy;
       card.append(policyNote);
     }
     if (finish.scope === "local") {
       const modules = document.createElement("div");
       modules.className = "finish-module-options";
-      modules.setAttribute("aria-label", `Módulos que aceitam ${source.label}`);
+      modules.setAttribute("aria-label", finishAvailabilityCopy.moduleOptionsAriaLabel.replace("{finish}", source.label));
       const onlyModuleId = finish.moduleIds.length === 1 ? finish.moduleIds[0] : null;
       const modulePolicyId = `finish-module-policy-${finish.id}`;
       catalog.modules.forEach((module) => {
@@ -921,7 +922,8 @@ function renderFinishes() {
         input.checked = finish.moduleIds.includes(module.entityId);
         input.disabled = input.checked && module.entityId === onlyModuleId;
         input.dataset.finishModule = `${finish.id}:${module.entityId}`;
-        input.setAttribute("aria-label", `${source.label}: disponível para o módulo ${module.referenceLabel}`);
+        input.setAttribute("aria-label", finishAvailabilityCopy.moduleAvailabilityAriaLabel
+          .replace("{finish}", source.label).replace("{module}", module.referenceLabel));
         if (input.disabled) input.setAttribute("aria-describedby", modulePolicyId);
         label.append(input, document.createTextNode(module.referenceLabel));
         modules.append(label);
@@ -931,7 +933,7 @@ function renderFinishes() {
         const policyNote = document.createElement("p");
         policyNote.className = "admin-note finish-admin-card__policy-note";
         policyNote.id = modulePolicyId;
-        policyNote.textContent = "Mantenha este acabamento associado a pelo menos um módulo.";
+        policyNote.textContent = finishAvailabilityCopy.localAssociationPolicy;
         card.append(policyNote);
       }
     }

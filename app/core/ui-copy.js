@@ -88,6 +88,17 @@
         serviceActive: "Iniciar ativo",
         serviceActiveAriaLabel: "{item}: ativo inicialmente"
       }),
+      finishes: Object.freeze({
+        customerAvailability: "Disponível para clientes",
+        customerAvailabilityAriaLabel: "{finish}: disponível para clientes",
+        scopeLabel: "Aplicação",
+        scopeAriaLabel: "{finish}: aplicação",
+        scopeOptions: Object.freeze({ global: "Global · conjunto todo", local: "Local · módulo individual" }),
+        globalAvailabilityPolicy: "Mantenha pelo menos um acabamento global disponível para clientes.",
+        moduleOptionsAriaLabel: "Módulos que aceitam {finish}",
+        moduleAvailabilityAriaLabel: "{finish}: disponível para o módulo {module}",
+        localAssociationPolicy: "Mantenha este acabamento associado a pelo menos um módulo."
+      }),
       pricing: Object.freeze({
         viewerBasePricePublication: Object.freeze({
           title: "Exibição pública no Viewer",
