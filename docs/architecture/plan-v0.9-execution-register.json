@@ -334,11 +334,11 @@
       "title": "Construir matriz assertion → contrato → risco",
       "chapter": "VI",
       "priority": "P0",
-      "planState": "not_started",
+      "planState": "in_progress",
       "reconciliation": "partial",
       "local": "partial",
       "development": "partial",
-      "main": "unknown",
+      "main": "not_present",
       "technicalValidation": "partial",
       "approvalPublication": "unknown",
       "evidence": [
@@ -358,7 +358,7 @@
           "detail": "PR #430 refreshed the Buyer crosswalk to the current code-source pin 8517b708c5b05693c1522894d410e28e8686c593, corrected the literal placeholder in the readback base, and merged as d0f63d0c62ed25a78067bb8b2e98d88fded5a1a7. Exact-head advisory jobs plan and inventory passed in run #45618020713. Local Buyer test remains 1/1; no hosted Identity/Blob validation or post-merge run is claimed. The broader TST-002 matrix remains partial."
         }
       ],
-      "nextAction": "Expand TST-002 by risk beyond the Buyer and access-surface slices; keep fixture-only, exact-head CI, and hosted Identity/Blob evidence distinguished. The stale Buyer source pin has been refreshed."
+      "nextAction": "Expand TST-002 by risk beyond the Buyer and access-surface slices; keep fixture-only, exact-head CI, and hosted Identity/Blob evidence distinguished. The stale Buyer source pin has been refreshed; crosswalks and impact bundle are not yet integrated in main."
     },
     {
       "order": 21,
@@ -1216,8 +1216,8 @@
       "title": "Consolidar a leitura da configuração publicada",
       "chapter": "V",
       "priority": "P0",
-      "planState": "done",
-      "reconciliation": "done",
+      "planState": "in_progress",
+      "reconciliation": "partial",
       "local": "done",
       "development": "done",
       "main": "partial",
@@ -1230,7 +1230,7 @@
           "detail": "Reader/inspector, endpoint Admin e consumidores distinguem missing/stored/valid/invalid; testes de V3/V5, schema inválido, metadados, defaults, ETag privado e Preview/prod passaram localmente com blobs iguais à development. Mocks e estado hosted permanecem limitados; main tem endpoint/workflow/testes diferentes."
         }
       ],
-      "nextAction": "Nenhuma lacuna local conhecida nesta fatia; manter a ressalva de provider/Identity hospedados e preparar promoção seletiva somente após reconciliação main/dev e autorização específica."
+      "nextAction": "Development DoD is covered for the current slice. Reconcile the differing Admin endpoint, tests, and workflow on main during selective promotion; keep provider-level and hosted state unclaimed."
     },
     {
       "order": 73,
@@ -1238,8 +1238,8 @@
       "title": "Consolidar publicação V5, revisão e ETag",
       "chapter": "V",
       "priority": "P0",
-      "planState": "done",
-      "reconciliation": "done",
+      "planState": "in_progress",
+      "reconciliation": "partial",
       "local": "done",
       "development": "done",
       "main": "partial",
@@ -1252,7 +1252,7 @@
           "detail": "Save V5 e testes cobrem validação, revisão, normalização/incremento, onlyIfMatch, um vencedor em concorrência, conflito sem retry, confirmação de escrita, readback por ETag/digest/assinatura, recusa de downgrade/migração e não escrita em estado inválido. Cinco testes de leitura/save/endpoint/Buyer passaram com hashes iguais à development. Atomicidade do provider real não comprovada."
         }
       ],
-      "nextAction": "Nenhuma lacuna de aplicação/teste no código de desenvolvimento nesta fatia; deixar atomicidade provider-level como limitação explícita e reconciliar diferença com main antes de qualquer promoção."
+      "nextAction": "Development DoD is covered for the current slice. Reconcile the differing Admin endpoint, tests, and workflow on main during selective promotion; retain provider-level atomicity as UNKNOWN."
     },
     {
       "order": 74,
@@ -1260,8 +1260,8 @@
       "title": "Fechar a cobertura de publicação V5",
       "chapter": "VI",
       "priority": "P0",
-      "planState": "done",
-      "reconciliation": "done",
+      "planState": "in_progress",
+      "reconciliation": "partial",
       "local": "done",
       "development": "done",
       "main": "partial",
@@ -1274,7 +1274,7 @@
           "detail": "Crosswalk conecta asserts de sucesso/falha, CAS, concorrência, readback, downgrade, migração, DTO, caminho sem escrita e trigger PR/push às ameaças correspondentes. Os cinco comandos de teste passaram localmente em fontes com blobs idênticos à development; sessão Identity e atomicidade Blob hospedadas permanecem fora da prova. Gate de proteção requerida não acessível (403)."
         }
       ],
-      "nextAction": "Manter a matriz por contrato sincronizada ao mudar fontes; não declarar prova hosted/provider. A diferença de main permanece registrada para a etapa de promoção seletiva."
+      "nextAction": "The development crosswalk is complete for this bounded publication slice. During selective main promotion, reconcile main's test and workflow paths before claiming cross-branch completion."
     },
     {
       "order": 75,
