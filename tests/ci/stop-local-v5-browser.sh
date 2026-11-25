@@ -12,8 +12,18 @@ if [[ ! "$pid" =~ ^[0-9]+$ ]]; then
   echo "::error::Invalid local V5 fixture process id"
   exit 2
 fi
+process_state() {
+  ps -p "$pid" -o stat= 2>/dev/null | awk '{print $1}'
+}
+
+is_active_process() {
+  local state
+  state=$(process_state)
+  [[ -n "$state" && "${state:0:1}" != "Z" ]]
+}
+
 command_line=$(ps -p "$pid" -o args= 2>/dev/null || true)
-if [[ -z "$command_line" ]]; then
+if ! is_active_process; then
   echo "CI_LOCAL_V5_FIXTURE_STOP: server process already exited"
 elif [[ "$command_line" != *local-buyer-config-server.mjs* ]]; then
   echo "::error::Refusing to stop a process that is not the local Buyer fixture"
@@ -21,15 +31,15 @@ elif [[ "$command_line" != *local-buyer-config-server.mjs* ]]; then
 else
   kill -TERM "$pid"
   for _ in $(seq 1 10); do
-    if ! kill -0 "$pid" 2>/dev/null; then break; fi
+    if ! is_active_process; then break; fi
     sleep 1
   done
-  if kill -0 "$pid" 2>/dev/null; then kill -KILL "$pid"; fi
+  if is_active_process; then kill -KILL "$pid"; fi
   for _ in $(seq 1 5); do
-    if ! kill -0 "$pid" 2>/dev/null; then break; fi
+    if ! is_active_process; then break; fi
     sleep 1
   done
-  if kill -0 "$pid" 2>/dev/null; then
+  if is_active_process; then
     echo "::error::Local Buyer fixture process did not stop"
     exit 4
   fi
