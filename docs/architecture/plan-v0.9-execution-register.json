@@ -68,9 +68,14 @@
           "source": "Product current entry points and retained handovers",
           "sha": "cc495684f8ace2c4d84443022d79ecd48a6ad47b",
           "detail": "README/CURRENT_STATE now distinguish v0.9 method, Product execution register, Design System decisions, Product implementation, and evidence receipts. Current-sounding October handovers are labeled historical without deleting their contents. Product development only; Design System handover and remaining current pointers still need reconciliation."
+        },
+        {
+          "source": "Product PR #433, squash merged into development",
+          "sha": "c1cc51bd557b5dd564d1f5888791b3e96da29b68",
+          "detail": "README and CURRENT_STATE now point to the v0.9 method, Product execution register, Design System decisions, and exact Product refs. Three dated October handovers are explicitly historical and retained. This closes the Product entry-point slice; Design System handover PR #137 is updated but still open, and other current-sounding pointers remain to be checked."
         }
       ],
-      "nextAction": "Refresh the Design System current handover in its existing PR, then search for any remaining current-sounding pointers and label only those proven stale; preserve historical evidence."
+      "nextAction": "Reconcile the updated Design System handover in PR #137 through review, then search the remaining current entry points for stale authority claims; preserve historical evidence."
     },
     {
       "order": 4,
@@ -420,15 +425,36 @@
       "title": "Inventariar a intenção das PRs abertas",
       "chapter": "VII",
       "priority": "P0",
-      "planState": "not_started",
-      "reconciliation": "unreviewed",
-      "local": "unknown",
-      "development": "unknown",
-      "main": "unknown",
-      "technicalValidation": "unknown",
-      "approvalPublication": "unknown",
-      "evidence": [],
-      "nextAction": "Reconciliar este ID com código, consumidores, testes e evidência exata de branch/PR antes de alterar o estado."
+      "planState": "in_progress",
+      "reconciliation": "partial",
+      "local": "done",
+      "development": "partial",
+      "main": "partial",
+      "technicalValidation": "partial",
+      "approvalPublication": "not_applicable",
+      "evidence": [
+        {
+          "source": "Live Product PR #400, base main@01ded2c100fbfd8b16897e26113dc5068a83e429, head d1fe79faafa1ed7345aff8afeb33bbf5e4a21e22",
+          "sha": "d1fe79faafa1ed7345aff8afeb33bbf5e4a21e22",
+          "detail": "Intent: prepare exact-SHA branch-retirement batches for six refs whose PRs are said to be integrated. Current PR is open and mergeable. Its own description contains dated inventory claims; no refs were deleted by this PR update. Do not apply based on the description alone; re-read each exact target, protection, and consumers at execution time."
+        },
+        {
+          "source": "Live Product PR #407, base main@01ded2c100fbfd8b16897e26113dc5068a83e429, head b986159d0c9d87d57aa5133eca9d26b2f8b31137",
+          "sha": "b986159d0c9d87d57aa5133eca9d26b2f8b31137",
+          "detail": "Intent: make the Viewer pricing gate reachable on main-targeting pull requests and align its path/build triggers. CI-only plus contract test; PR evidence reports local and Actions passes. No runtime behavior; revert the workflow/test commit if trigger behavior regresses. Open and mergeable."
+        },
+        {
+          "source": "Live Product PR #432, base main@01ded2c100fbfd8b16897e26113dc5068a83e429, head 8ebfdad9ef335bf0a9701718ebd947162adea2c3",
+          "sha": "8ebfdad9ef335bf0a9701718ebd947162adea2c3",
+          "detail": "Intent: test-only deterministic V5 CAS contention and missing-readback assertions, reachable through main's app-build-purity workflow. Seven triggered gates passed and Preview was READY at last exact readback; merge is awaiting the user's specific authorization. No runtime change."
+        },
+        {
+          "source": "Live Design System PR #137, base main@c6ff6545e9ae2071e695109fd94ac91676e7fb0a, refreshed head a0c31655135d957da212d07835c2a7d84acd258c",
+          "sha": "a0c31655135d957da212d07835c2a7d84acd258c",
+          "detail": "Intent: refresh only docs/HANDOVER_CURRENT.md with the v0.9 authority hierarchy, exact Product refs, PR intents, V3 policy hold, and evidence limits. Open and mergeable; no runtime, production, or access-control change. Integration into Design System main has not been authorized."
+        }
+      ],
+      "nextAction": "Keep the four live PR dispositions current; do not merge PR #432 without its specific approval or Design System #137 without approval for that repository. Recheck PR #400 target refs before any retirement operation; continue documenting intent, changed contract, exact validation, dependencies, rollback, and final disposition."
     },
     {
       "order": 24,
@@ -480,15 +506,26 @@
       "title": "Classificar a divergência `development` versus `main`",
       "chapter": "VII",
       "priority": "P0",
-      "planState": "not_started",
-      "reconciliation": "unreviewed",
-      "local": "unknown",
-      "development": "unknown",
-      "main": "unknown",
-      "technicalValidation": "unknown",
-      "approvalPublication": "unknown",
-      "evidence": [],
-      "nextAction": "Reconciliar este ID com código, consumidores, testes e evidência exata de branch/PR antes de alterar o estado."
+      "planState": "in_progress",
+      "reconciliation": "partial",
+      "local": "done",
+      "development": "partial",
+      "main": "partial",
+      "technicalValidation": "partial",
+      "approvalPublication": "not_applicable",
+      "evidence": [
+        {
+          "source": "GitHub compare main...development after Product PR #433",
+          "sha": "c1cc51bd557b5dd564d1f5888791b3e96da29b68",
+          "detail": "Exact compare reports 571 commits ahead on development and 17 commits behind main, with merge base 221b54b2a41ecc8c338d1bf2cf67280cf165ce95. Its file response is capped and does not provide the full per-file promotion audit; no whole-tree merge is justified by commit counts."
+        },
+        {
+          "source": "Exact Product main/development V5 source and test comparison; Product PR #432",
+          "sha": "8ebfdad9ef335bf0a9701718ebd947162adea2c3",
+          "detail": "Shared V5 read/inspection/save core has matching blobs across both refs. A selective main candidate adds only deterministic CAS-race and missing-readback assertions; seven main gates passed and Preview was READY. Merge remains subject to the user's specific decision. Admin endpoint behavior differs for missing/invalid V3: main may fall back to defaults, development returns explicit missing/invalid; hold this runtime package pending policy decision."
+        }
+      ],
+      "nextAction": "Continue the selective file/consumer comparison by contract family, starting with the two verified V5 test assertions; resolve the Admin V3 fallback policy before endpoint promotion and do not merge the divergent tree."
     },
     {
       "order": 27,
@@ -2201,8 +2238,8 @@
   "baselineReadback": {
     "capturedAt": "2026-11-25",
     "productMainSha": "01ded2c100fbfd8b16897e26113dc5068a83e429",
-    "productDevelopmentSha": "d0f63d0c62ed25a78067bb8b2e98d88fded5a1a7",
+    "productDevelopmentSha": "c1cc51bd557b5dd564d1f5888791b3e96da29b68",
     "designSystemMainSha": "c6ff6545e9ae2071e695109fd94ac91676e7fb0a",
-    "meaning": "Exact GitHub readback captured 2026-11-25 after Product PR #430; Design System has no development branch. See the GIT-001 snapshot for refs, PRs, workflows, deploy state, and access limitations."
+    "meaning": "Exact refs re-read after Product PR #433 merged. The GIT-001 snapshot remains the earlier point-in-time receipt; see its timestamp and refresh fast-moving data before dependent operations."
   }
 }
