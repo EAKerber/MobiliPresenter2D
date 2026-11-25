@@ -8,27 +8,27 @@
       "id": "batch-1",
       "branches": [
         {
-          "branch": "codex/git002-current-authority-pointers-20261125",
-          "sha": "2db41c0739c1126fa69db71822dda6c368095345",
+          "branch": "codex/tst010-gate-trigger-coverage-20261125",
+          "sha": "613d40509736ea45530a0085189eae062cec4e4a",
           "squashMerge": {
-            "pullRequest": 433,
-            "mergeCommit": "c1cc51bd557b5dd564d1f5888791b3e96da29b68"
+            "pullRequest": 446,
+            "mergeCommit": "34614093a08513a2ed3211f6bf9316eb7af30309"
           }
         },
         {
-          "branch": "codex/v09-git-reconciliation-20261125",
-          "sha": "66a4c140dda9d3f25d7c21cbc1e13140a7bfe319",
+          "branch": "codex/tst002-hierarchy-roundtrip-20261125",
+          "sha": "97909a8bd8e628c8700d953ed2dd390f0d3ba6c4",
           "squashMerge": {
-            "pullRequest": 434,
-            "mergeCommit": "8cad624f8f90a8fa8e8cb576ba3778f6bf612067"
+            "pullRequest": 447,
+            "mergeCommit": "0ae7312a2a0aba5404c852e0ccce973e7e8bb5f1"
           }
         },
         {
-          "branch": "codex/v09-main-delta-classification-20261125",
-          "sha": "3a6181856957ed238785f1b64b87ba3005dae713",
+          "branch": "codex/tst002-roundtrip-gate-receipt-20261125",
+          "sha": "914aa686383459a4ba820e896d5d4cc032330b04",
           "squashMerge": {
-            "pullRequest": 435,
-            "mergeCommit": "2848d13e347c2d2345e0142ed6d166325547e212"
+            "pullRequest": 448,
+            "mergeCommit": "9fc5c70345edfa94c92c7093f0a4692e6c9f1841"
           }
         }
       ]
@@ -37,56 +37,11 @@
       "id": "batch-2",
       "branches": [
         {
-          "branch": "codex/tst003-deduplicate-app-test-gates-20261125",
-          "sha": "f761a80f64c9cd6de4608fcf0543ffe6d1b309e4",
+          "branch": "codex/tst002-admin-impact-bundle-20261125",
+          "sha": "30709413574561a6142c235aaab5c832ab464e66",
           "squashMerge": {
-            "pullRequest": 436,
-            "mergeCommit": "71bc086114741fe2d5967099123a7d420cba80eb"
-          }
-        },
-        {
-          "branch": "codex/v09-arc13-and-gate-readback-20261125",
-          "sha": "fe02310f8a0e4169961ee1becb91f596c7498ce0",
-          "squashMerge": {
-            "pullRequest": 437,
-            "mergeCommit": "a873dd3ec5a8b168f24461402504661b88ebb48f"
-          }
-        },
-        {
-          "branch": "codex/tst001-current-snapshot-20261125",
-          "sha": "9977cc027cced3cd7dcb828040f3940f742ab905",
-          "squashMerge": {
-            "pullRequest": 438,
-            "mergeCommit": "6b31beadcb460b3c13f125e528ca80f925da7f43"
-          }
-        }
-      ]
-    },
-    {
-      "id": "batch-3",
-      "branches": [
-        {
-          "branch": "codex/tst003-main-duplicate-evidence-20261125",
-          "sha": "f5c0c4284e3c2aad5f5f27bd51484ed15071acaf",
-          "squashMerge": {
-            "pullRequest": 439,
-            "mergeCommit": "1745444db8a3901df5d5935fa398bee8828728f0"
-          }
-        },
-        {
-          "branch": "codex/loc006-private-nav-catalog-20261125",
-          "sha": "3e363935a963b134c280586fb3711ccce9e23094",
-          "squashMerge": {
-            "pullRequest": 441,
-            "mergeCommit": "6e043ee7fb399d1599840c8d07fc57ec2dcf31e3"
-          }
-        },
-        {
-          "branch": "codex/dom006-normalized-flow-authority-20261125",
-          "sha": "51bb94ae9e75d5da8f6edeb9c9ad2fbacca4ac5b",
-          "squashMerge": {
-            "pullRequest": 443,
-            "mergeCommit": "5c89e08e3a700e640f31927fd01d6c8373b6d64f"
+            "pullRequest": 449,
+            "mergeCommit": "b85313662bb71fdf5e625fc012904c68d3752fc1"
           }
         }
       ]
