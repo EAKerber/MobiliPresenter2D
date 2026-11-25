@@ -4,7 +4,7 @@
 
 This is a second, bounded TST-002 slice for the Buyer configuration endpoint. It maps the current test source to its contract, risk, consumer, fixture, negative assertions and workflow trigger. It is not a claim that all authentication, DTO, V5, or workflow assertions have been inventoried.
 
-Readback base: Product `development@${base}`.
+Readback base: Product `development@8517b708c5b05693c1522894d410e28e8686c593`.
 
 The test is a Node fixture that imports the production endpoint source after replacing its imports with injected test dependencies. Identity, Blob stores and temporary sessions are mocked; it does not contact Netlify or validate a live deployment.
 
