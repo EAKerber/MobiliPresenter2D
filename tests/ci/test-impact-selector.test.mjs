@@ -431,3 +431,30 @@ test('TST-004 public navigation assertions resolve to exact reachable workflow r
   assert.notEqual(viewer.workflow, production.workflow,
     'the depth-2 Viewer gate remains independent of the production-bound shared route');
 });
+
+test('configuration boundary ignores only the unrelated shared UI copy catalog', () => {
+  const workflowPath = '.github/workflows/buyer-configuration-boundary.yml';
+  const workflow = definition(readFileSync(path.join(root, workflowPath), 'utf8'), workflowPath, 'current-workflow-blob');
+  const expectedConsumerPaths = [
+    'app/tools/test-published-configuration.js',
+    'app/tools/test-v5-normal-save.js',
+    'app/tools/test-v5-endpoint-safety.js',
+    'app/tools/test-published-buyer-projection.js',
+    'netlify/functions/configuration.mjs',
+    'netlify/functions/buyer-configuration.mjs',
+    'tests/buyer-configuration-endpoint.test.mjs'
+  ];
+  for (const eventName of ['pull_request', 'push']) {
+    const event = workflow.events.find((candidate) => candidate.name === eventName);
+    assert(event, workflowPath + ' must retain ' + eventName);
+    assert(event.paths.includes('app/core/**'), 'other core configuration contracts remain watched');
+    assert(event.paths.includes('!app/core/ui-copy.js'), 'the copy catalog is excluded by exact path only');
+    for (const consumerPath of expectedConsumerPaths) {
+      assert(event.paths.includes(consumerPath), 'configuration boundary must still watch ' + consumerPath);
+    }
+  }
+  for (const consumerPath of expectedConsumerPaths) {
+    const source = readFileSync(path.join(root, consumerPath), 'utf8');
+    assert.doesNotMatch(source, /ui-copy\.js/, consumerPath + ' does not consume the UI copy catalog');
+  }
+});
