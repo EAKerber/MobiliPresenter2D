@@ -5,8 +5,7 @@
     "experiment/public-landing-commercial-viewer",
     "feat/exposed-sides-and-glass",
     "main",
-    "development",
-    "archive/product-hygiene-20261125"
+    "development"
   ],
   "terminalBranches": [
     {
@@ -756,6 +755,28 @@
         "remainingAction": "Selective review/extraction of 34 unique docs; not completed by hygiene."
       },
       "note": "34 of 35 documentation paths absent at both control snapshots; preserve original tree for future selective extraction, not runtime integration. Exact original tree and history remain reachable as direct parent of archive."
+    },
+    {
+      "branch": "archive/product-hygiene-20261125",
+      "sha": "7d729bda2138e40baa87d50a5ba4ade0ace1d48d",
+      "reason": "archive-ref-to-tag",
+      "allowDelete": true,
+      "archiveTag": "archive/m2d/product-hygiene-20261125-7d729bda",
+      "evidence": {
+        "originalArchive": "7d729bda2138e40baa87d50a5ba4ade0ace1d48d",
+        "parents": [
+          "b85313662bb71fdf5e625fc012904c68d3752fc1",
+          "82cca3b5b5b9cdc91c84f7dc50167c965bd231a7",
+          "9c18dd97bfc4cf50e55fa60349a6496fa3d723e4",
+          "fc12bb628b949fe156bb969cbed1acf8df72e668",
+          "6f7a0d3f93ba3f0f4483ffb143785d81cb0c5ed2",
+          "c8c7f71f3f66fcad2345388c875192f20e0e4f08",
+          "e1e92abd81da9bd550feaebc1f789c41db606118",
+          "a69e991d89e790f86f74389f34e320540442c7ee",
+          "d1fe79faafa1ed7345aff8afeb33bbf5e4a21e22"
+        ]
+      },
+      "note": "Exact archival commit preserved by verified tag before source branch retirement. No integration or loss of historical trees."
     }
   ]
 }

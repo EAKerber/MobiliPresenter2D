@@ -1,12 +1,12 @@
 {
   "schemaVersion": "BranchHygieneBatch 0.1",
   "repository": "EAKerber/MobiliPresenter2D",
-  "wave": "PRODUCT-HYG-20261125-ARCHIVE-FINAL",
-  "purpose": "Retire final historical documentation ref after lossless archive. Preserve unique docs for later selective review. Expected terminal roster: main, development, four open promotion heads, one archive ref.",
+  "wave": "VNEXT-ARCHIVE-TAG",
+  "purpose": "Transfer lossless archive to exact verified tag",
   "branches": [
     {
-      "branch": "docs/arc13-post-273-reconciliation-20261114",
-      "sha": "82cca3b5b5b9cdc91c84f7dc50167c965bd231a7"
+      "branch": "archive/product-hygiene-20261125",
+      "sha": "7d729bda2138e40baa87d50a5ba4ade0ace1d48d"
     }
   ]
 }

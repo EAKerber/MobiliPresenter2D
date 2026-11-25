@@ -17,7 +17,8 @@ on:
   workflow_dispatch:
 
 concurrency:
-  group: branch-hygiene
+  group: m2d-branch-hygiene-mutations
+  queue: max
   cancel-in-progress: false
 
 permissions:
