@@ -1669,6 +1669,11 @@
           "source": "Product PR #418 and receipt docs/architecture/arc13/loc002-admin-finish-availability-2026-11-25.json",
           "sha": "eb02f3332766f150ca6eff015772598a14b58431",
           "detail": "Integração em development da disponibilidade ao cliente, escopo global/local e associação a módulos como estados distintos; textos preservados, gates da PR incluindo browser do Admin aprovados. A classificação ARC-13 completa permanece parcial."
+        },
+        {
+          "source": "Product PR #419 and receipt docs/architecture/arc13/loc002-admin-stage-availability-2026-11-25.json",
+          "sha": "5d3902ae408f3addd4cecfeb960fbeec4a9f291a",
+          "detail": "Estado stage.enabled e suas duas políticas de elegibilidade extraídos com texto preservado; Admin browser e ARC-13 passaram. Permanece distinto de visibilidade inicial de entidades/serviços e disponibilidade de acabamentos."
         }
       ],
       "nextAction": "Continuar a classificação ARC-13 por estado e consumidor, preservando hold quando semântica ou autoridade do texto não estiver comprovada."
@@ -1766,6 +1771,11 @@
           "source": "Product PR #418 and receipt docs/architecture/arc13/loc002-admin-finish-availability-2026-11-25.json",
           "sha": "eb02f3332766f150ca6eff015772598a14b58431",
           "detail": "Disponibilidade, escopo e associação de acabamento extraídos em admin.finishes no Admin; textos e semânticas preservados, sem mudança de conteúdo comercial, persistência, validação, Buyer projection ou estado do modelo. Gates incluindo browser do Admin aprovados."
+        },
+        {
+          "source": "Product PR #419 and receipt docs/architecture/arc13/loc002-admin-stage-availability-2026-11-25.json",
+          "sha": "5d3902ae408f3addd4cecfeb960fbeec4a9f291a",
+          "detail": "Família de disponibilidade da etapa extraída em admin.stages sem alterar stage.enabled, elegibilidade ou comportamento; o Admin browser e a integridade ARC-13 passaram. LOC-006 continua aberto para outras famílias."
         }
       ],
       "nextAction": "Extrair outras famílias Admin/Configurador com seus estados, consumidores e testes; manter conteúdo comercial sob sua autoridade própria."
@@ -2090,7 +2100,7 @@
   "baselineReadback": {
     "capturedAt": "2026-11-25",
     "productMainSha": "01ded2c100fbfd8b16897e26113dc5068a83e429",
-    "productDevelopmentSha": "eb02f3332766f150ca6eff015772598a14b58431",
+    "productDevelopmentSha": "5d3902ae408f3addd4cecfeb960fbeec4a9f291a",
     "designSystemMainSha": "c6ff6545e9ae2071e695109fd94ac91676e7fb0a",
     "meaning": "Snapshot read back before this package; the Design System has no development branch."
   }

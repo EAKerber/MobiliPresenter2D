@@ -213,13 +213,17 @@ async function sectionItemIds(page, stageId, groupId, sectionId) {
   const moveStoneAssets = page.locator('[data-asset-object-id="move-stone"]');
   const moveStoneAssetReason = moveStoneAssets.locator("#object-asset-policy-move-stone");
   assert.equal(await moveStoneAssetReason.isVisible(), true, "object asset policy reason is visible");
-  assert.match(await moveStoneAssetReason.textContent(), /não possui camada visual própria na cena/i, "non-visual service explains why scene asset selectors are unavailable");
+  assert.equal(await moveStoneAssetReason.textContent(), "Este item não possui camada visual própria na cena. Configure cores e texturas na biblioteca de materiais.", "non-visual service explains why scene asset selectors are unavailable");
   for (const field of ["imageAsset", "detailImageAsset", "maskAsset"]) {
     const selector = moveStoneAssets.locator(`[data-object-asset="${field}"]`);
     assert.equal(await selector.isDisabled(), true, `${field} is disabled without a scene entity`);
     assert.equal(await selector.getAttribute("aria-describedby"), "object-asset-policy-move-stone", `${field} references its visible reason`);
   }
   await page.locator("#objectSelector").selectOption("0");
+  const visualObjectAssets = page.locator(`[data-asset-object-id="${catalog.modules[0].entityId}"]`);
+  assert.equal(await visualObjectAssets.locator("#object-asset-policy-" + catalog.modules[0].entityId).textContent(),
+    "A lista contém apenas arquivos já presentes na cena. O painel não carrega arquivos novos nem permite caminhos externos.",
+    "scene-backed asset selectors explain their bounded file list");
   for (const field of ["imageAsset", "detailImageAsset", "maskAsset"]) {
     const selector = page.locator(`[data-asset-object-id="${catalog.modules[0].entityId}"] [data-object-asset="${field}"]`);
     assert.equal(await selector.isEnabled(), true, `${field} remains editable when an object has a scene entity`);

@@ -6,6 +6,7 @@
   "status": "candidate-implemented",
   "evidence": {
     "baseRevision": "eb02f3332766f150ca6eff015772598a14b58431",
+    "developmentRevision": "5d3902ae408f3addd4cecfeb960fbeec4a9f291a",
     "inventoryPath": "architecture/arc13/ui-text-candidates.json",
     "inventorySha256": "42BA478E80209C3F7C4B0A41FBADF18E918C2E786057D1DEF97EEDF086B7C92F",
     "source": "app/admin/admin.js",
@@ -52,9 +53,9 @@
       "node --check app/admin/admin.js",
       "node tests/ui-theme-contract.cjs",
       "node scripts/compile-primary-pages.mjs --check",
-      "ARC-13 inventory: 1041 candidate occurrences, 0 parse errors, 420/420 mapped primary-page occurrences"
-    ],
-    "pending": ["Admin hierarchy browser gate in CI."]
+      "ARC-13 inventory: 1041 candidate occurrences, 0 parse errors, 420/420 mapped primary-page occurrences",
+      "Product PR #419 Admin hierarchy browser run #45548487143: success"
+    ]
   },
   "limits": [
     "Preserves exact current pt-BR strings and eligibility rules; it does not approve future editorial changes or establish a named content owner.",
