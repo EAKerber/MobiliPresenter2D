@@ -24,6 +24,7 @@ const hierarchyEditor = window.CasaModulesHierarchyEditor;
 const legacyStageRepair = window.CasaModulesLegacyStageRepair;
 const hierarchyDefaults = window.CASA_EM_MODULOS_HIERARCHY_DEFAULTS;
 const uiCopy = window.CASA_UI_COPY;
+const initialStateCopy = uiCopy.admin.initialState;
 const viewerBasePricePublicationCopy = uiCopy.admin.pricing.viewerBasePricePublication;
 let catalogPricing = null;
 let adminDataPromise = null;
@@ -240,20 +241,20 @@ function appendInitialStateControl(option, itemId, item) {
     initial.type = "checkbox";
     initial.checked = Boolean(model.initialState.entities[itemId]);
     initial.dataset.initialConfiguratorEntity = itemId;
-    initial.setAttribute("aria-label", `${item.label}: ${kind === "module" ? "visível inicialmente no configurador" : "ativo inicialmente"}`);
+    initial.setAttribute("aria-label", initialStateCopy.entityVisibilityAriaLabel.replace("{item}", item.label));
     const label = document.createElement("label");
     label.className = "initial-state-option";
-    label.append(initial, document.createTextNode(kind === "module" ? "Iniciar visível no configurador" : "Iniciar ativo"));
+    label.append(initial, document.createTextNode(initialStateCopy.entityVisibility));
     option.append(label);
     if (kind === "module") {
       const viewer = document.createElement("input");
       viewer.type = "checkbox";
       viewer.checked = Boolean(model.initialState.viewerEntities[itemId]);
       viewer.dataset.initialViewerEntity = itemId;
-      viewer.setAttribute("aria-label", `${item.label}: visível inicialmente no viewer`);
+      viewer.setAttribute("aria-label", initialStateCopy.viewerVisibilityAriaLabel.replace("{item}", item.label));
       const viewerLabel = document.createElement("label");
       viewerLabel.className = "initial-state-option";
-      viewerLabel.append(viewer, document.createTextNode("Iniciar visível no viewer"));
+      viewerLabel.append(viewer, document.createTextNode(initialStateCopy.viewerVisibility));
       option.append(viewerLabel);
       appendNominalDimensionControls(option, itemId, item.label);
     }
@@ -262,10 +263,10 @@ function appendInitialStateControl(option, itemId, item) {
     initial.type = "checkbox";
     initial.checked = model.initialState.services.includes(itemId);
     initial.dataset.initialService = itemId;
-    initial.setAttribute("aria-label", `${item.label}: ativo inicialmente`);
+    initial.setAttribute("aria-label", initialStateCopy.serviceActiveAriaLabel.replace("{item}", item.label));
     const label = document.createElement("label");
     label.className = "initial-state-option";
-    label.append(initial, document.createTextNode("Iniciar ativo"));
+    label.append(initial, document.createTextNode(initialStateCopy.serviceActive));
     option.append(label);
   }
 }

@@ -80,6 +80,14 @@
       homeLink: "Voltar ao início ↑"
     }),
     admin: Object.freeze({
+      initialState: Object.freeze({
+        entityVisibility: "Iniciar visível no configurador",
+        entityVisibilityAriaLabel: "{item}: visível inicialmente no configurador",
+        viewerVisibility: "Iniciar visível no viewer",
+        viewerVisibilityAriaLabel: "{item}: visível inicialmente no viewer",
+        serviceActive: "Iniciar ativo",
+        serviceActiveAriaLabel: "{item}: ativo inicialmente"
+      }),
       pricing: Object.freeze({
         viewerBasePricePublication: Object.freeze({
           title: "Exibição pública no Viewer",

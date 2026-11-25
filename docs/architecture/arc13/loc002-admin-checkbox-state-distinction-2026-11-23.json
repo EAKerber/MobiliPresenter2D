@@ -3,14 +3,17 @@
   "plan": "MobiliPresenter2D Plano Diretor v0.9",
   "workItem": "LOC-002",
   "family": "admin-initial-state-and-stage-availability-checkboxes",
-  "status": "reviewed-hold",
+  "status": "candidate-implemented",
   "evidence": {
-    "developmentRevision": "e910cc84d6bba504e228327933b635764debac2c",
+    "developmentRevision": "942ebcc62ead98b72e5654c3a0d73c18120367e3",
     "inventoryPath": "architecture/arc13/ui-text-candidates.json",
-    "inventorySha256": "8E7393F891F72F12D57677E8B16F6297740BA8743C7BAC8FE46D4A9D97971F9C",
+    "inventorySha256": "A4E65500EA2715B670F35944C6966786644436C972B8236FE96BA4354468165F",
     "source": "app/admin/admin.js",
-    "sourceGitBlob": "ba9129e27ce92818cb3548eed13b78957d0548f1",
-    "normalizedSourceSha256": "a1342d6a9d37a143330cb399f51342c5596207bc75f76bd91286b3b3b221520c",
+    "sourceGitBlob": "406e31ccfd08ca71305f56b9942ca27c21afe03f",
+    "sourceSha256": "68b3e07d4b077d7b048eefc012a4db0a5c4552d30835c94c96aed6b342176b23",
+    "sharedCatalog": "app/core/ui-copy.js",
+    "sharedCatalogGitBlob": "6743eb52b687ac083fc268ea2aa341ffd71bcd1c",
+    "implementationBranch": "codex/loc006-admin-initial-state-copy-20261125",
     "route": "/admin"
   },
   "decisions": [
@@ -27,16 +30,16 @@
         },
         {
           "kind": "object",
-          "value": "Iniciar ativo",
+          "value": "Iniciar visível no configurador",
           "statePath": "model.initialState.entities[itemId]",
-          "meaning": "This is the current object label. It writes the same entity-state map used by modules, so source evidence alone does not establish whether object activity and module visibility are separate product policies."
+          "meaning": "Objects and modules write the same initial entity visibility map and are both projected through the scene visibility resolver; there is no separate initial object-activity state."
         }
       ],
       "classification": "ui-visible",
       "subsystemOwner": "admin",
       "contentOwner": null,
-      "destination": "hold",
-      "decision": "Keep the module and object branches recorded separately because they are separate inventory alternatives. Their relationship as product policies remains undecided; do not infer separate semantics or catalog keys from the current labels alone."
+      "destination": "shared-catalog",
+      "decision": "Use the same visible label and accessible-name template for modules and scene objects because both control initial configurator visibility through model.initialState.entities[itemId]. Catalog key: admin.initialState.entityVisibility. The object label no longer implies a separate active-state policy."
     },
     {
       "candidateId": "7ef47d84204a2578",
@@ -46,8 +49,8 @@
       "classification": "ui-visible",
       "subsystemOwner": "admin",
       "contentOwner": null,
-      "destination": "hold",
-      "decision": "This selects a service for the configurator's initial state. The wording matches the object alternative above, but the state path and function differ; keep this service candidate separate until product/UX decides whether a shared copy key is appropriate."
+      "destination": "shared-catalog",
+      "decision": "Keep service activation separate from scene-entity visibility: services use model.initialState.services and a different selection consumer. Catalog key: admin.initialState.serviceActive."
     },
     {
       "candidateId": "09cf4ffd847e1136",
@@ -65,17 +68,20 @@
     {
       "candidateId": "619adc6dd3cafa4c",
       "sourceLine": 241,
-      "meaning": "Dynamic initial configurator visibility/activity name for module or object."
+      "meaning": "Dynamic initial configurator visibility name shared by module and scene object.",
+      "resolvedByKey": "admin.initialState.entityVisibilityAriaLabel"
     },
     {
       "candidateId": "53fb3aeaa2fdd8db",
       "sourceLine": 251,
-      "meaning": "Initial Viewer visibility; distinct from configurator visibility."
+      "meaning": "Initial Viewer visibility; distinct from configurator visibility.",
+      "resolvedByKey": "admin.initialState.viewerVisibilityAriaLabel"
     },
     {
       "candidateId": "e0d9bd67f4de94ba",
       "sourceLine": 263,
-      "meaning": "Dynamic initial service activity name."
+      "meaning": "Dynamic initial service activity name; separate from scene-entity visibility.",
+      "resolvedByKey": "admin.initialState.serviceActiveAriaLabel"
     },
     {
       "candidateId": "4f8ce9b8fdeca90a",
@@ -89,14 +95,13 @@
     "decision": "The initial-state and stage-availability checkboxes can share the theme accent while retaining distinct state, wording, and accessibility semantics. This technical normalization does not constitute product/UX approval of the wording or a global checkbox redesign."
   },
   "pending": [
-    "Product/UX confirmation of whether module visibility and object activity are distinct policies or both describe initial configurator presence, and confirmation of the current labels.",
-    "Choose canonical catalog keys for the module and object branches within candidate `852e7699499e4703`, and for service candidate `7ef47d84204a2578`; keep the source branches distinct in the review record until their semantics are decided.",
+    "CI and integration of the candidate into development; main and production remain unchanged.",
     "Review the related accessible names with assistive technology; this receipt records their intended meanings, not an accessibility approval.",
-    "No LOC-003 extraction or source changes are authorized by this review."
+    "The stage enabled/disabled copy remains outside this family and retains its own state and visual treatment."
   ],
   "limits": [
     "The inventory candidates remain globally `unreviewed`; this receipt does not change the candidate count or approve copy.",
     "Visual similarity and a shared accent do not imply shared interaction semantics.",
-    "No text, DOM, runtime behavior, or user-facing layout was changed."
+    "This candidate changes only initial-state copy and catalog wiring; it does not alter stored state, persistence, DOM hierarchy, checkbox styling, stage availability, or production."
   ]
 }
