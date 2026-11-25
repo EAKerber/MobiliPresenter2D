@@ -2,31 +2,31 @@
   "schemaVersion": "BranchHygieneBatch 0.1",
   "repository": "EAKerber/MobiliPresenter2D",
   "auditOnly": true,
-  "wave": "P-DEV-HYG-AUDIT-2026-11-24",
-  "purpose": "AUDIT ONLY. Verify exact integrated PR #399, #409, and #411 heads and current workflow/protection/open-PR state; do not retire branches.",
+  "wave": "P-DEV-HYG-AUDIT-20261125-W2",
+  "purpose": "Audit first three exact merged heads; series audit validates all nine.",
   "branches": [
     {
-      "branch": "codex/tst004-mask-assertion-crosswalk-20261124",
-      "sha": "531c2814235c9524289ccb9efd909f43e01d908b",
+      "branch": "codex/v09-test-bundle-impact-20261124",
+      "sha": "53dc42d5922b40ac900fdd7046159e2ec9867c8e",
       "squashMerge": {
-        "pullRequest": 399,
-        "mergeCommit": "fbe6b9b409dd67884dd9447b02f87752a7d0f8ff"
+        "pullRequest": 414,
+        "mergeCommit": "942ebcc62ead98b72e5654c3a0d73c18120367e3"
       }
     },
     {
-      "branch": "codex/dom011-buyer-fixture-v5-validation-20261124",
-      "sha": "1f5515c5416ce877fcc8072db2b869bb3046625c",
+      "branch": "codex/loc006-admin-initial-state-copy-20261125",
+      "sha": "55bab531205798979589732db9663f4202b4ad16",
       "squashMerge": {
-        "pullRequest": 409,
-        "mergeCommit": "c78a20ca0ccc8c6bd0f870caa78a8814b9363bd7"
+        "pullRequest": 415,
+        "mergeCommit": "ed89f243a1f54d80701908c707e5edc61e1ffff4"
       }
     },
     {
-      "branch": "codex/cmp001-admin-stage-availability-20261124",
-      "sha": "0dec2e67e3fb997b66e444f8805ee607a28453b2",
+      "branch": "codex/tst004-public-nav-manifest-trigger-20261125",
+      "sha": "eb407b0a341764bd2da4c2b5b830c7696b38b8d3",
       "squashMerge": {
-        "pullRequest": 411,
-        "mergeCommit": "116800e11016fb9093ce4ab5e3c0ed1e8527fe15"
+        "pullRequest": 416,
+        "mergeCommit": "acedcda23b4534b2eb848133b7231b288ccf2a36"
       }
     }
   ]
