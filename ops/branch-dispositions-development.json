@@ -7,52 +7,37 @@
   ],
   "terminalBranches": [
     {
-      "branch": "codex/tst010-gate-trigger-coverage-20261125",
-      "sha": "613d40509736ea45530a0085189eae062cec4e4a",
+      "branch": "hygiene/vnext-foundation-20261125",
+      "sha": "77b255e0d1a51a5ce6ae960445828a8f763961bf",
       "reason": "merged-pull-request-head",
       "allowDelete": true,
       "evidence": {
-        "pullRequest": 446,
-        "mergedDevelopmentSha": "34614093a08513a2ed3211f6bf9316eb7af30309",
-        "treeSha": "59e933d08680c4e602b349be2dd1fd9151f09d0c"
-      },
-      "note": "Exact integrated PR head; full Git tree matches reachable development squash commit. Live safety checks mandatory."
+        "pullRequest": 459,
+        "mergedDevelopmentSha": "1aa8f2f774c93bba45a0704e889b0b8f424c2305",
+        "treeSha": "2ab8211e15684a8829b7af9f8101106d06084b2c"
+      }
     },
     {
-      "branch": "codex/tst002-hierarchy-roundtrip-20261125",
-      "sha": "97909a8bd8e628c8700d953ed2dd390f0d3ba6c4",
+      "branch": "hygiene/vnext-discovery-20261125",
+      "sha": "71d171877fc41bdda5f28d1cceea02dca217567e",
       "reason": "merged-pull-request-head",
       "allowDelete": true,
       "evidence": {
-        "pullRequest": 447,
-        "mergedDevelopmentSha": "0ae7312a2a0aba5404c852e0ccce973e7e8bb5f1",
-        "treeSha": "017b794f496a1483aaacfe69b536350f6c12cb60"
-      },
-      "note": "Exact integrated PR head; full Git tree matches reachable development squash commit. Live safety checks mandatory."
+        "pullRequest": 460,
+        "mergedDevelopmentSha": "1054e1c85da892658c8be6fea0acfb378053212e",
+        "treeSha": "d232828325ee96fa29067832b1f56777bab7b578"
+      }
     },
     {
-      "branch": "codex/tst002-roundtrip-gate-receipt-20261125",
-      "sha": "914aa686383459a4ba820e896d5d4cc032330b04",
+      "branch": "hygiene/vnext-archive-and-cleanup-20261125",
+      "sha": "74b4849cf9209db870b8d8843669ff71f585f111",
       "reason": "merged-pull-request-head",
       "allowDelete": true,
       "evidence": {
-        "pullRequest": 448,
-        "mergedDevelopmentSha": "9fc5c70345edfa94c92c7093f0a4692e6c9f1841",
-        "treeSha": "6f9e7b0ba681f32cd61a9de3a1982731ec4af7a8"
-      },
-      "note": "Exact integrated PR head; full Git tree matches reachable development squash commit. Live safety checks mandatory."
-    },
-    {
-      "branch": "codex/tst002-admin-impact-bundle-20261125",
-      "sha": "30709413574561a6142c235aaab5c832ab464e66",
-      "reason": "merged-pull-request-head",
-      "allowDelete": true,
-      "evidence": {
-        "pullRequest": 449,
-        "mergedDevelopmentSha": "b85313662bb71fdf5e625fc012904c68d3752fc1",
-        "treeSha": "d5b03f64e452db2fcaeb4520f058a9511e26f0c3"
-      },
-      "note": "Exact integrated PR head; full Git tree matches reachable development squash commit. Live safety checks mandatory."
+        "pullRequest": 461,
+        "mergedDevelopmentSha": "58056b4450590bc1a03d865f0c7a031502e03d66",
+        "treeSha": "e4396674487e13447b623253ebe487038dc98420"
+      }
     }
   ]
 }

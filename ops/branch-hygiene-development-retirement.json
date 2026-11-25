@@ -5,43 +5,30 @@
   "approvedRetirement": true,
   "waves": [
     {
-      "id": "batch-1",
+      "id": "vnext-close",
       "branches": [
         {
-          "branch": "codex/tst010-gate-trigger-coverage-20261125",
-          "sha": "613d40509736ea45530a0085189eae062cec4e4a",
+          "branch": "hygiene/vnext-foundation-20261125",
+          "sha": "77b255e0d1a51a5ce6ae960445828a8f763961bf",
           "squashMerge": {
-            "pullRequest": 446,
-            "mergeCommit": "34614093a08513a2ed3211f6bf9316eb7af30309"
+            "pullRequest": 459,
+            "mergeCommit": "1aa8f2f774c93bba45a0704e889b0b8f424c2305"
           }
         },
         {
-          "branch": "codex/tst002-hierarchy-roundtrip-20261125",
-          "sha": "97909a8bd8e628c8700d953ed2dd390f0d3ba6c4",
+          "branch": "hygiene/vnext-discovery-20261125",
+          "sha": "71d171877fc41bdda5f28d1cceea02dca217567e",
           "squashMerge": {
-            "pullRequest": 447,
-            "mergeCommit": "0ae7312a2a0aba5404c852e0ccce973e7e8bb5f1"
+            "pullRequest": 460,
+            "mergeCommit": "1054e1c85da892658c8be6fea0acfb378053212e"
           }
         },
         {
-          "branch": "codex/tst002-roundtrip-gate-receipt-20261125",
-          "sha": "914aa686383459a4ba820e896d5d4cc032330b04",
+          "branch": "hygiene/vnext-archive-and-cleanup-20261125",
+          "sha": "74b4849cf9209db870b8d8843669ff71f585f111",
           "squashMerge": {
-            "pullRequest": 448,
-            "mergeCommit": "9fc5c70345edfa94c92c7093f0a4692e6c9f1841"
-          }
-        }
-      ]
-    },
-    {
-      "id": "batch-2",
-      "branches": [
-        {
-          "branch": "codex/tst002-admin-impact-bundle-20261125",
-          "sha": "30709413574561a6142c235aaab5c832ab464e66",
-          "squashMerge": {
-            "pullRequest": 449,
-            "mergeCommit": "b85313662bb71fdf5e625fc012904c68d3752fc1"
+            "pullRequest": 461,
+            "mergeCommit": "58056b4450590bc1a03d865f0c7a031502e03d66"
           }
         }
       ]
