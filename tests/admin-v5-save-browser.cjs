@@ -160,11 +160,69 @@ async function main() {
     assert.equal(putCount, 2);
     assert.equal(current.pricing.roles.frontFinishAdjustment.cocoa.type, "amount");
 
+    page.once("dialog", (dialog) => dialog.accept("Puxadores em grupo separado"));
+    await page.locator('[data-split-hierarchy-section="finishes|cabinet-finishes|handles"]').click();
+    await page.waitForSelector('[data-hierarchy-group="puxadores-em-grupo-separado"]');
+    assert.deepEqual(await page.locator('[data-hierarchy-stage="finishes"] [data-hierarchy-group]').evaluateAll(
+      (groups) => groups.map((group) => group.dataset.hierarchyGroup)
+    ),
+      ["stone", "cabinet-finishes", "puxadores-em-grupo-separado"],
+      "splitting a section in Admin creates a peer group in the v5 draft");
+    assert.deepEqual(await page.locator('[data-hierarchy-group="puxadores-em-grupo-separado"] [data-hierarchy-section]').evaluateAll(
+      (sections) => sections.map((section) => section.dataset.hierarchySection)
+    ), ["handles"]);
+    await page.locator("#saveButton").click();
+    await page.waitForFunction(() => document.querySelector("#saveMessage")?.textContent.includes("v5 publicada e verificada"));
+    assert.deepEqual(current.stages.find((s) => s.id === "finishes").groups[2].sections[0].itemIds, ["handles-all"],
+      "v5 save preserves the split section's exact item ownership");
+    assert.equal(putCount, 3);
+
+    await page.reload({ waitUntil: "networkidle" });
+    await page.waitForSelector('[data-hierarchy-group="puxadores-em-grupo-separado"]');
+    assert.deepEqual(current.stages.find((s) => s.id === "finishes").groups.map((group) => group.id),
+      ["stone", "cabinet-finishes", "puxadores-em-grupo-separado"],
+      "reloading Admin reads back the persisted split hierarchy");
+    assert.deepEqual(await page.locator('[data-hierarchy-stage="finishes"] [data-hierarchy-group]').evaluateAll(
+      (groups) => groups.map((group) => group.dataset.hierarchyGroup)
+    ), ["stone", "cabinet-finishes", "puxadores-em-grupo-separado"]);
+    assert.deepEqual(await page.locator('[data-hierarchy-group="puxadores-em-grupo-separado"] [data-hierarchy-section]').evaluateAll(
+      (sections) => sections.map((section) => section.dataset.hierarchySection)
+    ), ["handles"]);
+
+    await page.locator('[data-merge-hierarchy-group="finishes|puxadores-em-grupo-separado|previous"]').click();
+    await page.waitForSelector('[data-hierarchy-group="puxadores-em-grupo-separado"]', { state: "detached" });
+    assert.deepEqual(await page.locator('[data-hierarchy-stage="finishes"] [data-hierarchy-group]').evaluateAll(
+      (groups) => groups.map((group) => group.dataset.hierarchyGroup)
+    ), ["stone", "cabinet-finishes"],
+      "merging the group restores the adjacent hierarchy structure in the Admin draft");
+    assert.deepEqual(await page.locator('[data-hierarchy-group="cabinet-finishes"] [data-hierarchy-section]').evaluateAll(
+      (sections) => sections.map((section) => section.dataset.hierarchySection)
+    ), ["fronts", "handles"]);
+    await page.locator("#saveButton").click();
+    await page.waitForFunction(() => document.querySelector("#saveMessage")?.textContent.includes("v5 publicada e verificada"));
+    assert.deepEqual(current.stages.find((s) => s.id === "finishes").groups[1].sections[1].itemIds, ["handles-all"],
+      "v5 save preserves exact item ownership after merging the group");
+    assert.equal(putCount, 4);
+
+    await page.reload({ waitUntil: "networkidle" });
+    await page.waitForSelector('[data-hierarchy-group="cabinet-finishes"]');
+    assert.deepEqual(current.stages.find((s) => s.id === "finishes").groups.map((group) => group.id),
+      ["stone", "cabinet-finishes"],
+      "reloading Admin reads back the persisted merged hierarchy");
+    assert.deepEqual(current.stages.find((s) => s.id === "finishes").groups[1].sections.map((section) => section.id),
+      ["fronts", "handles"]);
+    assert.deepEqual(await page.locator('[data-hierarchy-stage="finishes"] [data-hierarchy-group]').evaluateAll(
+      (groups) => groups.map((group) => group.dataset.hierarchyGroup)
+    ), ["stone", "cabinet-finishes"]);
+    assert.deepEqual(await page.locator('[data-hierarchy-group="cabinet-finishes"] [data-hierarchy-section]').evaluateAll(
+      (sections) => sections.map((section) => section.dataset.hierarchySection)
+    ), ["fronts", "handles"]);
+
     await page.locator('[data-stage-label="finishes"]').fill("Acabamentos rejeitados");
     forceConflict = true;
     await page.locator("#saveButton").click();
     await page.waitForFunction(() => document.querySelector("#saveMessage")?.textContent.includes("Recarregue o painel"));
-    assert.equal(putCount, 3);
+    assert.equal(putCount, 5);
     assert.equal(current.stages.find((s) => s.id === "finishes").label !== "Acabamentos rejeitados", true);
     forceConflict = false;
 
@@ -174,7 +232,7 @@ async function main() {
     await page.locator('[data-stage-label="finishes"]').fill("Publicação sem confirmação");
     await page.locator("#saveButton").click();
     await page.waitForFunction(() => document.querySelector("#saveMessage")?.textContent.includes("releitura v5 não corresponde"));
-    assert.equal(putCount, 4);
+    assert.equal(putCount, 6);
     assert.notEqual((await page.locator("#saveMessage").getAttribute("data-kind")), "success",
       "readback mismatch may not be reported as success");
     assert.deepEqual(errors, [], "v5 admin Save fixture has no uncaught browser errors");
