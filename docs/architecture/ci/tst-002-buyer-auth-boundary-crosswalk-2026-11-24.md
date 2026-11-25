@@ -42,3 +42,17 @@ The workflow runs `node --test tests/buyer-configuration-endpoint.test.mjs`. Its
 - Source-level reachability is established. Execution evidence at the exact base SHA is not established by this slice.
 - The table covers the named Buyer endpoint test groups, not every assertion in the V5 endpoint safety, normal-save, or projection tests. Those remain separate crosswalk work.
 - No new guarantee is inferred from the DTO field list; this slice records what the current test asserts.
+
+## Continuation — endpoint failure boundaries and context selection — 2026-11-25
+
+The working-tree continuation extends the same test with method/query rejection before Identity lookup, expired temporary-session denial, production-versus-preview store selection, and fail-closed missing/invalid published V5 states. Local command `node --test tests/buyer-configuration-endpoint.test.mjs` passed after these additions. This is local evidence only until the exact change is integrated and its CI run is read back.
+
+| Added assertion group | Contract and negative boundary | Evidence limit |
+|---|---|---|
+| BUYER-DISPATCH-01 | Non-GET and unsupported query return 405/400 before Identity or Blob access | Source plus local test run; no hosted request |
+| BUYER-AUTH-08 | Expired/unresolvable temporary session returns 403 before configuration access | Session service is injected and returns no active session; does not prove hosted expiry timing |
+| BUYER-STORE-01 | Production context selects the site store; deploy-preview context selects only the deploy store | Store selection is exercised through injected doubles |
+| BUYER-PUB-01 | Missing publication returns 503 without defaults fallback | In-memory missing source |
+| BUYER-PUB-02 | Invalid V5 returns 503 without defaults fallback | In-memory invalid V5 document |
+
+These additions do not complete the broader TST-002 inventory or TST-010's full access-surface coverage.

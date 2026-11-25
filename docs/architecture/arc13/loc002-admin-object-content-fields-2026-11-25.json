@@ -6,6 +6,7 @@
   "status": "candidate-implemented",
   "evidence": {
     "baseRevision": "d20b50c6d763271c548d201125f678e3806cc66d",
+    "developmentRevision": "1292afe149e711dce01fce0e727fd0da033a38d4",
     "inventoryPath": "architecture/arc13/ui-text-candidates.json",
     "inventorySha256": "90278C40140AD3CFA883DEAAFBDF7FE8656ECA5310C50254DD38F2A5D12E2515",
     "source": "app/admin/admin.js",
@@ -55,9 +56,10 @@
       "node --check app/admin/admin.js",
       "node tests/ui-theme-contract.cjs",
       "node scripts/compile-primary-pages.mjs --check",
-      "ARC-13 inventory: deterministic generation, 1041 unreviewed occurrences, 0 parse errors, 420/420 generated primary-page occurrences mapped"
-    ],
-    "pending": ["Admin hierarchy browser gate in CI."]
+      "ARC-13 inventory: deterministic generation, 1041 unreviewed occurrences, 0 parse errors, 420/420 generated primary-page occurrences mapped",
+      "Product PR #421 Admin hierarchy browser run #45550717054: success",
+      "Product PR #421: all 11 triggered Actions runs succeeded"
+    ]
   },
   "limits": [
     "Preserves exact current pt-BR labels; editorial meaning and stored content remain separate.",
