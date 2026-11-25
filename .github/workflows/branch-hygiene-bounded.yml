@@ -73,7 +73,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: m2d-branch-batch-audit-${{ github.run_id }}
+          name: m2d-branch-batch-audit-${{ github.run_id }}-${{ github.run_attempt }}
           path: /tmp/batch-receipt.json
           if-no-files-found: warn
 
@@ -115,7 +115,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: m2d-branch-batch-receipt-${{ github.run_id }}
+          name: m2d-branch-batch-receipt-${{ github.run_id }}-${{ github.run_attempt }}
           path: /tmp/batch-receipt.json
           if-no-files-found: warn
 
