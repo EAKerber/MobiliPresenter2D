@@ -1,0 +1,628 @@
+{
+  "schema": "V09GitOperationalSnapshot/1",
+  "capturedAt": "2026-11-25T12:58:31Z",
+  "readMethod": "GitHub REST read through the connected GitHub app; local read-only git status; Netlify read-only project/deploy lookup.",
+  "repositories": {
+    "product": {
+      "repository": "EAKerber/MobiliPresenter2D",
+      "remoteBranches": [
+        {
+          "name": "codex/arc13-localization-menu-theme-20261122",
+          "sha": "fc12bb628b949fe156bb969cbed1acf8df72e668",
+          "protected": false
+        },
+        {
+          "name": "codex/cmp001-admin-stage-availability-20261124",
+          "sha": "0dec2e67e3fb997b66e444f8805ee607a28453b2",
+          "protected": false
+        },
+        {
+          "name": "codex/dom011-buyer-boundary-reconcile-20261125",
+          "sha": "08669ae5f726b978582dbef519ed5773dfc311a1",
+          "protected": false
+        },
+        {
+          "name": "codex/dom011-buyer-fixture-v5-validation-20261124",
+          "sha": "1f5515c5416ce877fcc8072db2b869bb3046625c",
+          "protected": false
+        },
+        {
+          "name": "codex/dom013-tst010-access-boundaries-20261125",
+          "sha": "bd75b0baf79b799418452379247e9d9f55d9dd1f",
+          "protected": false
+        },
+        {
+          "name": "codex/dom013-tst010-evidence-20261125",
+          "sha": "3bbb2954213c24e41493e19afce90d0755882359",
+          "protected": false
+        },
+        {
+          "name": "codex/hygiene-retire-tst004-crosswalk-20261124",
+          "sha": "d1fe79faafa1ed7345aff8afeb33bbf5e4a21e22",
+          "protected": false
+        },
+        {
+          "name": "codex/loc006-admin-finish-availability-copy-20261125",
+          "sha": "d47544e64a668bc14076783d0d9247691adfc6e8",
+          "protected": false
+        },
+        {
+          "name": "codex/loc006-admin-initial-state-copy-20261125",
+          "sha": "55bab531205798979589732db9663f4202b4ad16",
+          "protected": false
+        },
+        {
+          "name": "codex/loc006-admin-object-content-fields-20261125",
+          "sha": "cae906d9c2d08804397b8059919953df15d92ecb",
+          "protected": false
+        },
+        {
+          "name": "codex/loc006-admin-scene-asset-policy-copy-20261125",
+          "sha": "abe7768c1ed2c771dd2d8873e9a7949ec740f6f7",
+          "protected": false
+        },
+        {
+          "name": "codex/loc006-admin-stage-availability-copy-20261125",
+          "sha": "6d8bf64578b293e4fdb447ef7c4995942b1c9124",
+          "protected": false
+        },
+        {
+          "name": "codex/loc006-viewer-price-copy-20261124",
+          "sha": "ace3fa3d5d29fe1da37e989c4def6583ee1c5859",
+          "protected": false
+        },
+        {
+          "name": "codex/nav005-development-buffer-20261121",
+          "sha": "9c18dd97bfc4cf50e55fa60349a6496fa3d723e4",
+          "protected": false
+        },
+        {
+          "name": "codex/tst001-current-snapshot-20261124",
+          "sha": "586dcf600dfe6a0bc745fdfd5ef787cbe3569433",
+          "protected": false
+        },
+        {
+          "name": "codex/tst001-refreshable-inventory-20261124",
+          "sha": "6f7a0d3f93ba3f0f4483ffb143785d81cb0c5ed2",
+          "protected": false
+        },
+        {
+          "name": "codex/tst002-access-surface-crosswalk-20261125",
+          "sha": "f74ceaf3fdefcb67fa921970340e645c6c5b3e52",
+          "protected": false
+        },
+        {
+          "name": "codex/tst002-access-surface-evidence-20261125",
+          "sha": "3ac803b34b5a4528b365b3c15e994a5ed01a2cd5",
+          "protected": false
+        },
+        {
+          "name": "codex/tst002-refresh-buyer-crosswalk-20261125",
+          "sha": "2d5d4331a03702bdaaf876379cf6289d3283edd4",
+          "protected": false
+        },
+        {
+          "name": "codex/tst004-browser-image-setup-20261124",
+          "sha": "c8c7f71f3f66fcad2345388c875192f20e0e4f08",
+          "protected": false
+        },
+        {
+          "name": "codex/tst004-config-ui-copy-trigger-20261125",
+          "sha": "63fa2e53af055c0a3e8136de34046e75c2c5d56b",
+          "protected": false
+        },
+        {
+          "name": "codex/tst004-mask-assertion-crosswalk-20261124",
+          "sha": "531c2814235c9524289ccb9efd909f43e01d908b",
+          "protected": false
+        },
+        {
+          "name": "codex/tst004-playwright-image-current-20261124",
+          "sha": "e1e92abd81da9bd550feaebc1f789c41db606118",
+          "protected": false
+        },
+        {
+          "name": "codex/tst004-public-nav-manifest-trigger-20261125",
+          "sha": "eb407b0a341764bd2da4c2b5b830c7696b38b8d3",
+          "protected": false
+        },
+        {
+          "name": "codex/tst004-viewer-price-main-pr-trigger-20261124",
+          "sha": "b986159d0c9d87d57aa5133eca9d26b2f8b31137",
+          "protected": false
+        },
+        {
+          "name": "codex/tst006-ephemeral-fixture-lifecycle-20261125",
+          "sha": "bb1960c70a74b5db1281c03c7b20528b160cb99f",
+          "protected": false
+        },
+        {
+          "name": "codex/tst006-postpush-evidence-20261125",
+          "sha": "683a1b980281b652ae23bbd5c2effcebc489bdcd",
+          "protected": false
+        },
+        {
+          "name": "codex/tst006-register-closure-20261125",
+          "sha": "407c55ba5051310de82faff8c8b223021a893169",
+          "protected": false
+        },
+        {
+          "name": "codex/v09-operational-register-20261124",
+          "sha": "a973c54ffee2e7b2e262fb5c23f8d391c9707eb1",
+          "protected": false
+        },
+        {
+          "name": "codex/v09-test-bundle-impact-20261124",
+          "sha": "53dc42d5922b40ac900fdd7046159e2ec9867c8e",
+          "protected": false
+        },
+        {
+          "name": "development",
+          "sha": "d0f63d0c62ed25a78067bb8b2e98d88fded5a1a7",
+          "protected": false
+        },
+        {
+          "name": "docs/arc13-post-273-reconciliation-20261114",
+          "sha": "82cca3b5b5b9cdc91c84f7dc50167c965bd231a7",
+          "protected": false
+        },
+        {
+          "name": "main",
+          "sha": "01ded2c100fbfd8b16897e26113dc5068a83e429",
+          "protected": false
+        }
+      ],
+      "mainSha": "01ded2c100fbfd8b16897e26113dc5068a83e429",
+      "developmentSha": "d0f63d0c62ed25a78067bb8b2e98d88fded5a1a7",
+      "openPullRequests": [
+        {
+          "number": 407,
+          "title": "ci(tst-004): run Viewer pricing gate on main PRs",
+          "base": "main",
+          "head": "codex/tst004-viewer-price-main-pr-trigger-20261124",
+          "headSha": "b986159d0c9d87d57aa5133eca9d26b2f8b31137",
+          "draft": false,
+          "changedFiles": [
+            ".github/workflows/viewer-base-price-contract-gate.yml",
+            "tests/ci/viewer-base-price-trigger-contract.test.cjs"
+          ]
+        },
+        {
+          "number": 400,
+          "title": "chore(hygiene): retire six verified integrated heads",
+          "base": "main",
+          "head": "codex/hygiene-retire-tst004-crosswalk-20261124",
+          "headSha": "d1fe79faafa1ed7345aff8afeb33bbf5e4a21e22",
+          "draft": false,
+          "changedFiles": [
+            "ops/branch-dispositions-development.json",
+            "ops/branch-hygiene-development-batch.json",
+            "ops/branch-hygiene-development-retirement.json"
+          ]
+        }
+      ],
+      "openDraftPullRequests": [],
+      "mainDevelopmentRelation": {
+        "status": "diverged",
+        "aheadBy": 569,
+        "behindBy": 17,
+        "mergeBase": "221b54b2a41ecc8c338d1bf2cf67280cf165ce95",
+        "commitsReported": 569,
+        "filesReturned": 300,
+        "fileListComplete": false
+      },
+      "workflows": [
+        {
+          "path": ".github/workflows/about-skip-link-focus.yml",
+          "blobSha": "c235cc76b8872ede686542026481252cc52c4053"
+        },
+        {
+          "path": ".github/workflows/admin-hierarchy-browser.yml",
+          "blobSha": "139116120889201e28fa60f60bb50e844e032ade"
+        },
+        {
+          "path": ".github/workflows/app-build-purity.yml",
+          "blobSha": "3debb0f87335921d6ba0997471433488d07ccdfc"
+        },
+        {
+          "path": ".github/workflows/arc03c-static-page-build-gate.yml",
+          "blobSha": "8a85e9bcc6336b3e0e9a1f3b0f0e2fa1a11316cd"
+        },
+        {
+          "path": ".github/workflows/arc13-inventory-integrity.yml",
+          "blobSha": "82358a6472b4c5ae79b208611ce473d1bd5d1151"
+        },
+        {
+          "path": ".github/workflows/branch-hygiene-bounded.yml",
+          "blobSha": "61d2969a77aa3a2a6cfd61ac7754267e8b473a7d"
+        },
+        {
+          "path": ".github/workflows/branch-hygiene.yml",
+          "blobSha": "7e04fcae8f19283a3e5cbe530f4da1d61402c6c1"
+        },
+        {
+          "path": ".github/workflows/buyer-configuration-boundary.yml",
+          "blobSha": "b5668220e3e6799542fbfd93e4cd1d7595435d2d"
+        },
+        {
+          "path": ".github/workflows/candidate-assets.yml",
+          "blobSha": "0aa7c75b9b5292c7a2015502d04acf0813888aa7"
+        },
+        {
+          "path": ".github/workflows/development-a11y-semantic-fallback.yml",
+          "blobSha": "abdb8dc239a45f326ed545039528e7e2bd85f495"
+        },
+        {
+          "path": ".github/workflows/development-access-dto-boundary.yml",
+          "blobSha": "6a213c4ad9b3c83d4dcb52287e83662e9787d502"
+        },
+        {
+          "path": ".github/workflows/development-accordion-semantic-reconcile.yml",
+          "blobSha": "4f8674373fe24f554953f2aa9493393186bd64fa"
+        },
+        {
+          "path": ".github/workflows/development-arc03-prototype-semantic.yml",
+          "blobSha": "3043dd0312c61a2346de1d2114f113f9f7127a7d"
+        },
+        {
+          "path": ".github/workflows/development-asset-provenance.yml",
+          "blobSha": "d99726152500ad03548b01b67897413aa79868d2"
+        },
+        {
+          "path": ".github/workflows/development-aux-terminal.yml",
+          "blobSha": "ebdb7cc7a63057d827cea975f5b8f51ad4ccb8a6"
+        },
+        {
+          "path": ".github/workflows/development-branch-reconciliation.yml",
+          "blobSha": "718bd85d24b1542e8c7d997f67d098ccd7d97fac"
+        },
+        {
+          "path": ".github/workflows/development-ci-auth-identity.yml",
+          "blobSha": "2fea0a784a9efa9a80947c4b31f35d42c2b0fa29"
+        },
+        {
+          "path": ".github/workflows/development-ci-auth-lineage.yml",
+          "blobSha": "ee9e90de1fb04cd758783f66fffed58ee7d0f0db"
+        },
+        {
+          "path": ".github/workflows/development-ci-baseline-cluster.yml",
+          "blobSha": "8f28fa132de80d6316b834c786875fb8f123e8fd"
+        },
+        {
+          "path": ".github/workflows/development-ci-label500.yml",
+          "blobSha": "d25e7cd13b801bd2e9a51fd8d6877f7c6f8027aa"
+        },
+        {
+          "path": ".github/workflows/development-ci-nav-boundary.yml",
+          "blobSha": "f4989c4837a02d67bd9a96122607b2c86a1dadaf"
+        },
+        {
+          "path": ".github/workflows/development-ci-nav-css-causality.yml",
+          "blobSha": "40702e0d496f2b6b824c66bd0bbf39bddfbbf729"
+        },
+        {
+          "path": ".github/workflows/development-ci-nav-legacy.yml",
+          "blobSha": "98a7b4fdcaeb10aa2d1191842020f9c81a00d6b8"
+        },
+        {
+          "path": ".github/workflows/development-ci-v5-nav-clean.yml",
+          "blobSha": "229fca0f4ceffe5cccaaaf5080002785d1a34f3b"
+        },
+        {
+          "path": ".github/workflows/development-ci-v5local-provenance.yml",
+          "blobSha": "113a1cf118bde87a4ee802828d2923d1c034d95c"
+        },
+        {
+          "path": ".github/workflows/development-ci-v5local-semantic.yml",
+          "blobSha": "bfe6c4700217f3c5c8764aa1b2c34059cda94696"
+        },
+        {
+          "path": ".github/workflows/development-cp-public-dto-parity.yml",
+          "blobSha": "9ccea2891007ffbc3be5653a79e31d3b1cc958f9"
+        },
+        {
+          "path": ".github/workflows/development-cp-public-family.yml",
+          "blobSha": "bb18234abd4be3d220b1561713bcab0091e16c09"
+        },
+        {
+          "path": ".github/workflows/development-cp-public-lineage.yml",
+          "blobSha": "578a05e7a61a869842ca06e7d1b65cd56431ad5d"
+        },
+        {
+          "path": ".github/workflows/development-cp-public-prs-175-180.yml",
+          "blobSha": "f44e38386e41286ef17a91e3ac64ee11b2b6c92a"
+        },
+        {
+          "path": ".github/workflows/development-cpux-cluster.yml",
+          "blobSha": "ae1623292292627fd69ed5e6c267a94df8c68c38"
+        },
+        {
+          "path": ".github/workflows/development-cpux-main-v5.yml",
+          "blobSha": "ed418bdd921f4371da0735bf63a426114429ecf1"
+        },
+        {
+          "path": ".github/workflows/development-ds05a-snapshot.yml",
+          "blobSha": "5ca7541e8087bcf74cf2b955c50a94c8513fe5c7"
+        },
+        {
+          "path": ".github/workflows/development-flow-v5-fixture.yml",
+          "blobSha": "50852f2c90a35a974bd15aeeb0c64cbbc870e938"
+        },
+        {
+          "path": ".github/workflows/development-hygiene-safety.yml",
+          "blobSha": "7c2ed662499317e2876e3017493b85fb181cca52"
+        },
+        {
+          "path": ".github/workflows/development-main-authority-public.yml",
+          "blobSha": "11cf4789b2a1fda4d1815277624dfa516119c28b"
+        },
+        {
+          "path": ".github/workflows/development-migration-inspector.yml",
+          "blobSha": "6e78748afee0b99420a877927f50b7a5a2f72c1c"
+        },
+        {
+          "path": ".github/workflows/development-pr-ancestors-vis002c.yml",
+          "blobSha": "945966772b8b0daabc4cf33f637464a781561ebb"
+        },
+        {
+          "path": ".github/workflows/development-pr-archive.yml",
+          "blobSha": "b7289745e882be7e475470821c0078a1f9cd67b9"
+        },
+        {
+          "path": ".github/workflows/development-pr-roster-transition.yml",
+          "blobSha": "8a0f9815caec1432ba2c7ffb1274338ba07fc2c6"
+        },
+        {
+          "path": ".github/workflows/development-public-contrast-semantic.yml",
+          "blobSha": "d036651cfa56d5dc76296414ea7047cc8754c850"
+        },
+        {
+          "path": ".github/workflows/development-public-dto-fallback.yml",
+          "blobSha": "8f69d59de64cbc5ad9ad1289a1a15737c9360198"
+        },
+        {
+          "path": ".github/workflows/development-public-menu-legacy-semantic.yml",
+          "blobSha": "bafd5a9b720ab142f826adf4c8e20bb8f89b64d1"
+        },
+        {
+          "path": ".github/workflows/development-public-navigation-semantic.yml",
+          "blobSha": "e3b35470c884094ffe5cd697dc5b1a02db9a5545"
+        },
+        {
+          "path": ".github/workflows/development-retirement-batch.yml",
+          "blobSha": "3c4236fc184fd144a4d7b8caf9fdfbc74d392e94"
+        },
+        {
+          "path": ".github/workflows/development-test-impact-plan.yml",
+          "blobSha": "cfefabb61e4bcb62a4a2b1a3d5cf4e8334050f11"
+        },
+        {
+          "path": ".github/workflows/development-ux04-geometry.yml",
+          "blobSha": "0ddd8c01e2cbcee6d2c4309bfbb89d67a71d095b"
+        },
+        {
+          "path": ".github/workflows/development-viewer-nav005-semantic.yml",
+          "blobSha": "49794223049162853df19dc0023d409b07692ec6"
+        },
+        {
+          "path": ".github/workflows/development-viewer-price-gate.yml",
+          "blobSha": "83425307d97dc8a5dffc76caade44cc7adc26c71"
+        },
+        {
+          "path": ".github/workflows/development-vis002-context-audit.yml",
+          "blobSha": "669791cc5bee299dbec3930d5e64c1af3813230c"
+        },
+        {
+          "path": ".github/workflows/development-vis002-family-cluster.yml",
+          "blobSha": "72475d9ac21d5b55dc83b3afb4b73103a205be39"
+        },
+        {
+          "path": ".github/workflows/development-vis002-reference-pin.yml",
+          "blobSha": "43104d3ec8b3c8b596ba308e6bb458f3cb548cdc"
+        },
+        {
+          "path": ".github/workflows/development-vis002c-arc03c-triad.yml",
+          "blobSha": "710ef413949b6fa203c67c33b13ad1a9a174c839"
+        },
+        {
+          "path": ".github/workflows/flow-layout-browser.yml",
+          "blobSha": "1d1c2c88f2c6d483fc3b2e3f0c27debc1499b9fc"
+        },
+        {
+          "path": ".github/workflows/keyboard-browser.yml",
+          "blobSha": "c2d2599601ab894eaf1d407220d171138505eb12"
+        },
+        {
+          "path": ".github/workflows/mobile-browser.yml",
+          "blobSha": "e4e53ff888164ee0c83f6189c0d2512cc4e52287"
+        },
+        {
+          "path": ".github/workflows/module02-fidelity.yml",
+          "blobSha": "8209d69048b9408739e5b119db55efc641e15348"
+        },
+        {
+          "path": ".github/workflows/nav005-public-header-browser.yml",
+          "blobSha": "061def109141b03096f5652d24ad36832a5ef0a8"
+        },
+        {
+          "path": ".github/workflows/p-comp-01-public-menu-gate.yml",
+          "blobSha": "2c6d03edadd5d63a098c73d60ecd70a10e1ee7f5"
+        },
+        {
+          "path": ".github/workflows/public-production-readonly.yml",
+          "blobSha": "a7962531494b8dd0a552151bd986b5214b7627c5"
+        },
+        {
+          "path": ".github/workflows/public-routing-before-clerk.yml",
+          "blobSha": "2ec113563971729bed3d24fe83333e9d6ff445c0"
+        },
+        {
+          "path": ".github/workflows/r0-contract.yml",
+          "blobSha": "f454abb893a3b0ba77f3e2bcc2a92955a4abfa53"
+        },
+        {
+          "path": ".github/workflows/stone-browser.yml",
+          "blobSha": "e459427f2af95b6e98e14e9e7d68f3ce6fd82f7c"
+        },
+        {
+          "path": ".github/workflows/summary-pricing-browser.yml",
+          "blobSha": "98c1ab924653e58b1026d745c07143bbafa48182"
+        },
+        {
+          "path": ".github/workflows/ux-auth-viewer-integration-gate.yml",
+          "blobSha": "27dc08eac66ee712ec62b3b1c76d82116f94111b"
+        },
+        {
+          "path": ".github/workflows/variant-fidelity.yml",
+          "blobSha": "4df0b7887ffa9f92e3e00eada3d4ffeef521e4cb"
+        },
+        {
+          "path": ".github/workflows/viewer-base-price-contract-gate.yml",
+          "blobSha": "b953e086b2b2d134b3649bbe106dc046d322268c"
+        },
+        {
+          "path": ".github/workflows/vis002c-v03-product-pin.yml",
+          "blobSha": "9351343ef185f553eb9aea539f0f4fbd775af5d4"
+        }
+      ],
+      "branchRules": {
+        "branchApiProtectedFlag": false,
+        "protectionEndpoint": "403 FORBIDDEN; exact required checks/ruleset not accessible"
+      },
+      "relevantPullRequestFiles": {
+        "400": [
+          "ops/branch-dispositions-development.json",
+          "ops/branch-hygiene-development-batch.json",
+          "ops/branch-hygiene-development-retirement.json"
+        ],
+        "407": [
+          ".github/workflows/viewer-base-price-contract-gate.yml",
+          "tests/ci/viewer-base-price-trigger-contract.test.cjs"
+        ]
+      },
+      "productionDeploy": {
+        "id": "6b045acbbb56d5e17bde8f8a",
+        "state": "ready",
+        "branch": "main",
+        "commitSha": "01ded2c100fbfd8b16897e26113dc5068a83e429",
+        "publishedAt": "2026-11-23T15:25:27.964Z",
+        "url": "https://casaemmodulos.casa"
+      },
+      "activeRelevantPreview": {
+        "id": "6b0649874a4ba3a7a71979d9",
+        "state": "ready",
+        "pullRequest": 400,
+        "branch": "codex/hygiene-retire-tst004-crosswalk-20261124",
+        "commitSha": "d1fe79faafa1ed7345aff8afeb33bbf5e4a21e22",
+        "url": "https://deploy-preview-400--mobilipresenter2d.netlify.app/"
+      }
+    },
+    "designSystem": {
+      "repository": "EAKerber/MobiliPresenter2D_DesignSystem",
+      "remoteBranches": [
+        {
+          "name": "codex/handover-live-reconciliation-20261124",
+          "sha": "385bf35d0f9badb8b2bdab1d21de55e7bae8aceb",
+          "protected": false
+        },
+        {
+          "name": "main",
+          "sha": "c6ff6545e9ae2071e695109fd94ac91676e7fb0a",
+          "protected": false
+        }
+      ],
+      "mainSha": "c6ff6545e9ae2071e695109fd94ac91676e7fb0a",
+      "developmentBranch": {
+        "state": "not_found_404"
+      },
+      "openPullRequests": [
+        {
+          "number": 137,
+          "title": "docs: link the v0.9 register and refresh live handover",
+          "base": "main",
+          "head": "codex/handover-live-reconciliation-20261124",
+          "headSha": "385bf35d0f9badb8b2bdab1d21de55e7bae8aceb",
+          "draft": false,
+          "changedFiles": [
+            "docs/HANDOVER_CURRENT.md"
+          ]
+        }
+      ],
+      "openDraftPullRequests": [],
+      "workflows": [
+        {
+          "path": ".github/workflows/branch-hygiene-bounded.yml",
+          "blobSha": "6d37a969b49b49268b1bb266ec0b831562fd460b"
+        },
+        {
+          "path": ".github/workflows/branch-hygiene.yml",
+          "blobSha": "d5be89669a1d2547b910df7bb0810c1a0fee37bb"
+        },
+        {
+          "path": ".github/workflows/ds-dag-tag-retain.yml",
+          "blobSha": "1209915e4bcacfe94036e3ccb0a518a158fdfc5a"
+        },
+        {
+          "path": ".github/workflows/ds-terminal-operational.yml",
+          "blobSha": "a9508b13fcedbd61bbd83eeed473b7fab0ce1ddc"
+        },
+        {
+          "path": ".github/workflows/p-token-01-reference-export-gate.yml",
+          "blobSha": "9c6787b2f7d6100620b1d0aa333f0e126c87e25e"
+        },
+        {
+          "path": ".github/workflows/p-token-02b-contextual-export.yml",
+          "blobSha": "06bfd2f8cfb2f383f0ec3359d4cde2563e44d9a3"
+        },
+        {
+          "path": ".github/workflows/vis002c-long-copy-v03.yml",
+          "blobSha": "d60b034af05fa9ac8c07698bfcdc777361d2851f"
+        }
+      ],
+      "mainRules": {
+        "branchApiProtectedFlag": false,
+        "protectionEndpoint": "403 FORBIDDEN; exact required checks/ruleset not accessible"
+      }
+    }
+  },
+  "localCheckout": {
+    "repository": "EAKerber/MobiliPresenter2D",
+    "currentBranch": "codex/tst006-postpush-evidence-20261125",
+    "headSha": "683a1b980281b652ae23bbd5c2effcebc489bdcd",
+    "dirtyPaths": [
+      ".github/workflows/development-access-dto-boundary.yml",
+      "app/about/index.html",
+      "app/how-it-works/index.html",
+      "app/index.html",
+      "tests/access-session-browser.cjs",
+      "tests/ci/access-surface-boundaries.test.mjs"
+    ],
+    "note": "These local changes are preserved as observed; no local file or ref was changed for this snapshot."
+  },
+  "gateEvidence": {
+    "buyerCrosswalkRefreshPullRequest": 430,
+    "buyerCrosswalkRefreshHead": "2d5d4331a03702bdaaf876379cf6289d3283edd4",
+    "advisoryRun": 45618020713,
+    "jobs": [
+      {
+        "name": "plan",
+        "conclusion": "success"
+      },
+      {
+        "name": "inventory",
+        "conclusion": "success"
+      }
+    ],
+    "mergeSha": "d0f63d0c62ed25a78067bb8b2e98d88fded5a1a7",
+    "postMergeWorkflowRuns": "none reported for this documentation-only merge",
+    "latestRegisterBlobBeforeReconciliation": "2ded741e450507bca316cc68cc479b455389681e",
+    "requiredChecksKnown": [],
+    "requiredChecksUnverified": "Repository branch-protection endpoints returned 403. The Actions jobs in run 45618020713 are observed passing jobs, not verified required checks."
+  },
+  "limits": [
+    "Branch-protection endpoints returned 403, so required checks and rulesets are UNKNOWN.",
+    "Product compare reports 300 files; this response is capped and is not a complete file-level divergence list.",
+    "Design System development branch lookup returned 404.",
+    "Local checkout records only its active worktree state; remote branch refs are separately enumerated above."
+  ]
+}
