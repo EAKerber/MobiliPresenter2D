@@ -82,25 +82,25 @@ test('V5 normal-save maps to both its concurrency and configuration-boundary con
   )));
 });
 
-test('published configuration handler and endpoint safety select the configuration boundary', () => {
+test('published configuration handler selects Buyer and access boundaries', () => {
   const selection = selectBundles([
     'netlify/functions/configuration.mjs',
     'app/tools/test-v5-endpoint-safety.js'
   ], map);
-  assert.deepEqual(ids(selection), ['buyer-configuration-boundary']);
+  assert.deepEqual(ids(selection), ['buyer-configuration-boundary', 'access-surface']);
   assert.equal(selection.fallback.enabled, false);
   assert.deepEqual(selection.unknownPaths, []);
   assert(selection.selectedBundles[0].execution[0].commands.includes('node app/tools/test-published-configuration.js'));
   assert(selection.selectedBundles[0].execution[0].commands.includes('node app/tools/test-v5-endpoint-safety.js'));
 });
 
-test('Buyer endpoint access and DTO tests select the configuration boundary', () => {
+test('Buyer endpoint access and DTO changes keep both authorization contracts reachable', () => {
   const selection = selectBundles([
     'netlify/access/private-endpoint.mjs',
     'tests/buyer-configuration-endpoint.test.mjs',
     'app/tools/test-published-buyer-projection.js'
   ], map);
-  assert.deepEqual(ids(selection), ['buyer-configuration-boundary']);
+  assert.deepEqual(ids(selection), ['buyer-configuration-boundary', 'access-surface']);
   assert.equal(selection.fallback.enabled, false);
   assert.deepEqual(selection.unknownPaths, []);
 });
@@ -458,6 +458,7 @@ test('configuration boundary ignores only the unrelated shared UI copy catalog',
     assert.doesNotMatch(source, /ui-copy\.js/, consumerPath + ' does not consume the UI copy catalog');
   }
 });
+
 test('Admin and temporary-session access changes select their authorization boundary bundle', () => {
   const focusedPaths = [
     'app/core/private-navigation.js',
