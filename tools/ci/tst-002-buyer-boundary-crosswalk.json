@@ -6,7 +6,7 @@
   "slice": "buyer-configuration-boundary",
   "sourcePin": {
     "repository": "EAKerber/MobiliPresenter2D",
-    "developmentSha": "17f345aea52eb18ce487b990cd6cb51cc4cf83e0"
+    "developmentSha": "1292afe149e711dce01fce0e727fd0da033a38d4"
   },
   "scopeLimit": "This slice maps the Buyer configuration endpoint authorization and DTO assertions only. It does not claim full TST-002 coverage or a passing result for a future candidate SHA.",
   "execution": {
@@ -113,7 +113,9 @@
           "assert.equal(result.status,403,\"a missing temporary session is denied\");",
           "assert.equal(counts.previewOpens,0,\"missing-session denial happens before opening Blob storage\");",
           "assert.equal(result.status,503,\"temporary-session store failure is fail-closed\");",
-          "assert.equal(counts.reads,0);"
+          "assert.equal(counts.reads,0);",
+          "assert.equal(result.status,403,\"an expired temporary session is denied\");",
+          "assert.equal(counts.sessionLookups,2);"
         ]
       },
       "contract": [
@@ -237,10 +239,12 @@
         "anchors": [
           "assert.equal(result.status,200,\"an internal admin may read the buyer projection\");",
           "assertBuyerPayload(result.body);",
-          "assert.equal(counts.sessionLookups,3,\"internal access does not consult the temporary-session store\");",
+          "assert.equal(counts.sessionLookups,4,\"internal access does not consult the temporary-session store\");",
           "assert.equal(result.status,200,\"internal staff may read the buyer projection\");",
-          "assert.equal(counts.sessionLookups,3,\"internal staff access does not consult the temporary-session store\");",
-          "assert.equal(counts.siteOpens,0,\"a preview request never opens the production store\");"
+          "assert.equal(counts.sessionLookups,4,\"internal staff access does not consult the temporary-session store\");",
+          "assert.equal(counts.siteOpens,0,\"preview requests do not open the production store\");",
+          "assert.equal(counts.siteOpens,1,\"production context selects the site-wide store\");",
+          "assert.equal(counts.previewOpens,3,\"production context does not open the deploy store\");"
         ]
       },
       "contract": [
@@ -271,6 +275,89 @@
       },
       "negative": false,
       "owner": "Published Buyer projection and configuration endpoint"
+    },
+    {
+      "source": {
+        "file": "tests/buyer-configuration-endpoint.test.mjs",
+        "test": "Buyer endpoint denies before storage and exposes only the projected DTO",
+        "anchors": [
+          "assert.equal(result.status,405,\"unsupported methods are rejected\");",
+          "assert.equal(result.status,400,\"unsupported query parameters are rejected\");",
+          "assert.equal(counts.identityLookups,0,\"method rejection happens before Identity lookup\");",
+          "assert.equal(counts.identityLookups,0,\"query rejection happens before Identity lookup\");"
+        ]
+      },
+      "trigger": {
+        "workflow": ".github/workflows/buyer-configuration-boundary.yml",
+        "job": "configuration-boundaries",
+        "command": "node --test tests/buyer-configuration-endpoint.test.mjs",
+        "events": [
+          "pull_request",
+          "push"
+        ],
+        "branches": [
+          "main",
+          "development"
+        ],
+        "path": "tests/buyer-configuration-endpoint.test.mjs"
+      },
+      "evidence": {
+        "level": "E2",
+        "kind": "local integration test of endpoint behavior with injected dependencies"
+      },
+      "negative": true,
+      "owner": "Buyer configuration endpoint",
+      "assertionId": "BUYER.DISPATCH.REJECTS_BEFORE_IDENTITY",
+      "contract": [
+        "DOM-011",
+        "DOM-013"
+      ],
+      "risk": "Unsupported request shapes cause unnecessary identity/storage access or reach Buyer data.",
+      "consumer": "GET /api/buyer-configuration",
+      "state": "Non-GET method or unsupported query string.",
+      "fixture": "Injected endpoint with Identity and Blob counters."
+    },
+    {
+      "source": {
+        "file": "tests/buyer-configuration-endpoint.test.mjs",
+        "test": "Buyer endpoint denies before storage and exposes only the projected DTO",
+        "anchors": [
+          "assert.equal(result.status,503,\"missing published configuration fails closed\");",
+          "assert.equal(result.body.error,\"published_configuration_unavailable\");",
+          "assert.equal(result.status,503,\"invalid published V5 configuration fails closed\");",
+          "assert.equal(result.body.error,\"published_configuration_invalid\");",
+          "assert.equal(counts.reads,5,\"missing configuration never falls back to defaults\");",
+          "assert.equal(counts.reads,6,\"invalid configuration never falls back to defaults\");"
+        ]
+      },
+      "trigger": {
+        "workflow": ".github/workflows/buyer-configuration-boundary.yml",
+        "job": "configuration-boundaries",
+        "command": "node --test tests/buyer-configuration-endpoint.test.mjs",
+        "events": [
+          "pull_request",
+          "push"
+        ],
+        "branches": [
+          "main",
+          "development"
+        ],
+        "path": "tests/buyer-configuration-endpoint.test.mjs"
+      },
+      "evidence": {
+        "level": "E2",
+        "kind": "local integration test of endpoint behavior with injected dependencies"
+      },
+      "negative": true,
+      "owner": "Buyer configuration endpoint",
+      "assertionId": "BUYER.PUBLICATION.MISSING_OR_INVALID_FAIL_CLOSED",
+      "contract": [
+        "DOM-011"
+      ],
+      "risk": "Missing or invalid published Buyer data silently becomes a plausible default configuration.",
+      "consumer": "GET /api/buyer-configuration and local V5 reproduction",
+      "state": "Authorized admin with absent or invalid stored V5.",
+      "fixture": "In-memory missing entry and invalid V5 document, with storage read counters."
     }
   ]
 }
