@@ -7,12 +7,12 @@
   "scopeLimit": "This slice maps the 124-scenario public navigation browser assertions to their two exact workflow routes. It does not map every setup/static command in those workflows or complete TST-004. The development browser route excludes only the generated primary-page manifest because ARC-13 validates that exact file; no gate is removed and all other generated paths remain included.",
   "sourcePin": {
     "mainSha": "01ded2c100fbfd8b16897e26113dc5068a83e429",
-    "developmentSha": "ed89f243a1f54d80701908c707e5edc61e1ffff4",
-    "developmentTree": "77191dc54239c89bfa5fded54bcc7a9432817778",
+    "developmentSha": "f216326786b706b519ab11303a3ef692cbd240a0",
+    "developmentTree": "18a9fcc43d432c3edccdb49e2074218209fa7d4d",
     "files": {
       "developmentWorkflow": {
         "path": ".github/workflows/development-public-navigation-semantic.yml",
-        "blobSha": "1730308d9c995b5a729c9945396af4e64c4ea9d7"
+        "blobSha": "e3b35470c884094ffe5cd697dc5b1a02db9a5545"
       },
       "productionWorkflow": {
         "path": ".github/workflows/nav005-public-header-browser.yml",
