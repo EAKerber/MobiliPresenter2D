@@ -171,7 +171,8 @@ class WorkflowDependencyTests(unittest.TestCase):
                 "GITHUB_TOKEN": "test-token",
                 "GITHUB_REPOSITORY": REPO,
             }):
-                with patch("branch_hygiene_apply.observe", return_value=obs), \
+                with patch("branch_hygiene_apply.verify_no_rulesets"), \
+                     patch("branch_hygiene_apply.observe", return_value=obs), \
                      patch("branch_hygiene_apply.remote_refs", return_value={
                          "main": control_sha, NAME: candidate_sha,
                      }), patch(

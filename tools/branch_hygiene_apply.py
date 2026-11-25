@@ -11,7 +11,7 @@ import os
 import subprocess
 from pathlib import Path
 
-from branch_hygiene_observe import observe, api_get
+from branch_hygiene_observe import observe, api_get, paginate
 from branch_hygiene_plan import build_plan, load_json, select_bounded_batch
 
 AUTH_ENV = "MOBILIPRESENTER2D_BRANCH_HYGIENE_AUTHORIZED"
@@ -122,6 +122,64 @@ def verify_squash_merge(repository: str, token: str, entry: dict,
     }
 
 
+def verify_no_rulesets(repository: str, token: str) -> None:
+    """Preserve the historical fail-closed rule until applicable rules are modeled."""
+    if paginate(repository, "rulesets?includes_parents=true", token):
+        raise RuntimeError("RULESETS_REQUIRE_REVIEW")
+
+
+def archive_proof(entry: dict, create: bool = False) -> dict | None:
+    """Exact terminal disposition only; never overwrite an existing archive tag."""
+    terminal = next((e for e in entry["evidence"]
+                     if e["kind"] == "explicit-terminal-disposition"), None)
+    ancestry = any(e["kind"] == "ancestor-of-control" for e in entry["evidence"])
+    if (ancestry or entry.get("squashMerge")) and not (terminal or {}).get("archiveTransfer"):
+        return None
+    if not terminal:
+        raise RuntimeError("ARCHIVE_DISPOSITION_MISSING:" + entry["branch"])
+    tag, sha = terminal.get("archiveTag"), entry["sha"]
+    import re
+    if (not isinstance(tag, str) or not re.fullmatch(r"archive/m2d/[a-z0-9][a-z0-9._/-]*", tag)
+            or subprocess.run(["git", "check-ref-format", "refs/tags/"+tag],
+                              capture_output=True, check=False).returncode):
+        raise RuntimeError("ARCHIVE_TAG_REQUIRED:" + entry["branch"])
+    ref = "refs/tags/" + tag
+
+    def read_tag():
+        proc = subprocess.run(["git", "ls-remote", "--tags", "origin", ref, ref+"^{}"],
+                              text=True, capture_output=True, check=True)
+        refs = dict((name, value) for value, name in
+                    (line.split() for line in proc.stdout.splitlines() if line.strip()))
+        if ref not in refs:
+            if refs:
+                raise RuntimeError("ARCHIVE_TAG_READBACK_INVALID:" + tag)
+            return None
+        return refs.get(ref+"^{}", refs[ref])
+
+    value = read_tag()
+    if value is not None and value != sha:
+        raise RuntimeError("ARCHIVE_TAG_COLLISION:" + tag)
+    if value is None and create:
+        subprocess.run(["git", "push", f"--force-with-lease={ref}:", "origin", f"{sha}:{ref}"], check=True)
+        value = read_tag()
+        if value != sha:
+            raise RuntimeError("ARCHIVE_TAG_READBACK_FAILED:" + tag)
+    return {"branch": entry["branch"], "sha": sha, "tag": tag,
+            "status": "VERIFIED" if value == sha else "WOULD_CREATE"}
+
+
+def delete_exact_ref(branch: str, sha: str, inventory: dict[str, str]) -> dict[str, str]:
+    """Shared mutating primitive. Callers must independently prove eligibility."""
+    if branch in {"main", "development"} or inventory.get(branch) != sha or remote_refs() != inventory:
+        raise RuntimeError("REF_DRIFT_BEFORE_DELETE:" + branch)
+    subprocess.run(["git", "push", f"--force-with-lease=refs/heads/{branch}:{sha}",
+                    "origin", f":refs/heads/{branch}"], check=True)
+    expected = {name: value for name, value in inventory.items() if name != branch}
+    if remote_refs() != expected:
+        raise RuntimeError("REF_READBACK_FAILED:" + branch)
+    return expected
+
+
 def apply(plan_path: Path, dispositions_path: Path, expected_plan: str,
           batch_path: Path, receipt_path: Path, audit_only: bool) -> dict:
     if not audit_only and os.environ.get(AUTH_ENV) != "1":
@@ -157,6 +215,7 @@ def apply(plan_path: Path, dispositions_path: Path, expected_plan: str,
     if remote_refs() != inventory:
         raise RuntimeError("REF_INVENTORY_DRIFT_INITIAL")
 
+    verify_no_rulesets(repository, token)
     for item in selected:
         verify_no_workflow_dependency(item["branch"])
         verify_control_workflow_dependencies(item["branch"], inventory)
@@ -165,6 +224,8 @@ def apply(plan_path: Path, dispositions_path: Path, expected_plan: str,
         result for item in selected
         if (result := verify_squash_merge(repository, token, item, fresh_plan["controlSha"], fresh_plan["controlBranch"])) is not None
     ]
+
+    archive_proofs = [proof for item in selected if (proof := archive_proof(item)) is not None]
 
     if not audit_only:
         if (os.environ.get("GITHUB_EVENT_NAME") != "push"
@@ -188,6 +249,7 @@ def apply(plan_path: Path, dispositions_path: Path, expected_plan: str,
         "batch": batch_path.name,
         "approvedPins": [{"branch": x["branch"], "sha": x["sha"]} for x in selected],
         "squashProofs": squash_proofs,
+        "archiveProofs": archive_proofs,
         "mode": "audit" if audit_only else "apply",
         "deleted": [],
         "readback": "NOT_APPLIED" if audit_only else "PENDING",
@@ -234,18 +296,21 @@ def apply(plan_path: Path, dispositions_path: Path, expected_plan: str,
             raise RuntimeError("NEW_PROTECTION_OR_MISSING_REF:" + branch)
         if remote_refs() != expected_inventory or expected_inventory.get(branch) != sha:
             raise RuntimeError("REF_DRIFT_BEFORE_DELETE:" + branch)
+        verify_no_rulesets(repository, token)
         verify_no_workflow_dependency(branch)
         verify_control_workflow_dependencies(branch, live_inventory)
         # Recheck PR identity and exact tree *immediately* before mutation.
         verify_squash_merge(repository, token, entry, fresh_plan["controlSha"], fresh_plan["controlBranch"])
 
-        subprocess.run([
-            "git", "push", f"--force-with-lease=refs/heads/{branch}:{sha}",
-            "origin", f":refs/heads/{branch}"
-        ], check=True)
-        expected_inventory.pop(branch)
-        if remote_refs() != expected_inventory:
-            raise RuntimeError("REF_READBACK_FAILED:" + branch)
+        archived = archive_proof(entry, create=True)
+        if archived is not None:
+            if archived["status"] != "VERIFIED":
+                raise RuntimeError("ARCHIVE_NOT_VERIFIED:" + branch)
+            receipt["archiveProofs"] = [p for p in receipt["archiveProofs"] if p["branch"] != branch] + [archived]
+            save()
+        expected_inventory = delete_exact_ref(branch, sha, expected_inventory)
+        if archived is not None and archive_proof(entry)["status"] != "VERIFIED":
+            raise RuntimeError("ARCHIVE_TAG_LOST:" + branch)
         receipt["deleted"].append({"branch": branch, "sha": sha})
         save()
 

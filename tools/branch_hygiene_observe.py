@@ -58,6 +58,8 @@ def observe(repository: str, control_branch: str, token: str) -> dict[str, Any]:
     branch_api = paginate(repository, "branches", token)
     prs = paginate(repository, "pulls?state=open", token)
 
+    if any(not isinstance(item.get("protected"), bool) for item in branch_api):
+        raise RuntimeError("branch protection observation incomplete")
     protection = {
         item.get("name"): bool(item.get("protected"))
         for item in branch_api
@@ -89,11 +91,13 @@ def observe(repository: str, control_branch: str, token: str) -> dict[str, Any]:
 
     branches: list[dict[str, Any]] = []
     for name, sha in sorted(refs.items()):
-        ancestor = subprocess.run(
+        result = subprocess.run(
             ["git", "merge-base", "--is-ancestor", sha, control_sha],
-            capture_output=True,
-            check=False,
-        ).returncode == 0
+            capture_output=True, check=False,
+        ).returncode
+        if result not in (0, 1):
+            raise RuntimeError("branch ancestry observation incomplete:" + name)
+        ancestor = result == 0
         tree_sha = run("git", "show", "-s", "--format=%T", sha)
         branches.append({
             "name": name,
@@ -177,6 +181,11 @@ def discover_merged_heads(observation: dict[str, Any], token: str) -> dict[str, 
         parents = run("git", "rev-list", "--parents", "-n", "1", merge).split()
         fact["mergeReachable"] = ancestor(merge, control_sha)
         fact["treeEqual"] = run("git", "show", "-s", "--format=%T", merge) == item["treeSha"]
+        if fact["mergeReachable"] and not fact["treeEqual"]:
+            # Facts for interpretation only. Never promote a path-only proof.
+            proc = subprocess.run(["git", "diff", "--name-only", "--no-renames", "-z", item["sha"], merge],
+                                  text=True, capture_output=True, check=True)
+            fact["treeDiffPaths"] = sorted(p for p in proc.stdout.split("\0") if p)
         fact["singleParent"] = len(parents) == 2 and parents[0] == merge
         fact["originalBaseReachable"] = (fact["singleParent"]
                                         and ancestor(parents[1], item["sha"]))
