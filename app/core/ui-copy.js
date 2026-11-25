@@ -106,6 +106,10 @@
         requiredAvailabilityPolicy: "Etapa obrigatória: não pode ser desativada nem removida.",
         emptyAvailabilityPolicy: "Adicione pelo menos um item antes de ativar esta etapa."
       }),
+      objectAssets: Object.freeze({
+        sceneEntityPolicy: "A lista contém apenas arquivos já presentes na cena. O painel não carrega arquivos novos nem permite caminhos externos.",
+        nonSceneEntityPolicy: "Este item não possui camada visual própria na cena. Configure cores e texturas na biblioteca de materiais."
+      }),
       pricing: Object.freeze({
         viewerBasePricePublication: Object.freeze({
           title: "Exibição pública no Viewer",

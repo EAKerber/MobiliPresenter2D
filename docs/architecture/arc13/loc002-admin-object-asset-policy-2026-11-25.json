@@ -1,0 +1,51 @@
+{
+  "schema": "ARC13LOC002FamilyReview/1",
+  "plan": "MobiliPresenter2D Plano Diretor v0.9",
+  "workItems": ["LOC-002", "LOC-006"],
+  "family": "admin-scene-object-asset-selector-policy",
+  "status": "candidate-implemented",
+  "evidence": {
+    "baseRevision": "5d3902ae408f3addd4cecfeb960fbeec4a9f291a",
+    "inventoryPath": "architecture/arc13/ui-text-candidates.json",
+    "inventorySha256": "27F1BD97472399D1C5CDE6266593926A75987757D5FC92FEEFADD8A4B7AA7CCE",
+    "source": "app/admin/admin.js",
+    "sourceGitBlob": "1615076b6ce2057793d0c938cf26efa949f14733",
+    "sourceSha256": "794088A44EDAB07D4B7931F6A8C1C471B4ED637F5D4A2AA543CD47CA150A234C",
+    "sharedCatalog": "app/core/ui-copy.js",
+    "sharedCatalogGitBlob": "d8c1b6e0279ec8e5b13a17b83a8ad86f783de7c7",
+    "sharedCatalogSha256": "393471AA9546DA4EEC52340C6B0317152529864312A40AE524100FD3AE90F453",
+    "generatedPrimaryPageManifest": "architecture/generated/primary-pages.manifest.json",
+    "generatedPrimaryPageManifestSha256": "41A213C7BAC9668D3F3460FD290B40D8CF497A772CC988885D1538B4A1E444F0",
+    "implementationBranch": "codex/loc006-admin-scene-asset-policy-copy-20261125",
+    "route": "/admin"
+  },
+  "state": {
+    "statePath": "scene.entities.some(entity => entity.id === id)",
+    "consumer": "Admin object asset selectors",
+    "meaning": "Explains the bounds of selectable scene assets when the object is represented in the scene and directs non-scene objects to the material library.",
+    "catalogKeys": [
+      "admin.objectAssets.sceneEntityPolicy",
+      "admin.objectAssets.nonSceneEntityPolicy"
+    ],
+    "preservedText": [
+      "A lista contém apenas arquivos já presentes na cena. O painel não carrega arquivos novos nem permite caminhos externos.",
+      "Este item não possui camada visual própria na cena. Configure cores e texturas na biblioteca de materiais."
+    ]
+  },
+  "candidateSinkIds": ["c39ba69c88cea947"],
+  "limits": [
+    "Preserves exact current wording; editorial authority remains unconfirmed. The statement about external paths is recorded as UI behavior only, not as a general server-side security guarantee.",
+    "Does not change asset choices, selectors, disabled states, previews, labels, aria-describedby wiring, persistence, or scene data.",
+    "The inventory records the conditional output as one dynamic sink; it does not assign separate literal candidate IDs to both catalog values.",
+    "Candidate inventory entries remain globally unreviewed; this bounded receipt does not complete LOC-002 or LOC-006."
+  ],
+  "validation": {
+    "passed": [
+      "node --check app/admin/admin.js",
+      "node tests/ui-theme-contract.cjs",
+      "node scripts/compile-primary-pages.mjs --check",
+      "ARC-13 inventory: 1041 candidate occurrences, 0 parse errors, 420/420 mapped primary-page occurrences"
+    ],
+    "pending": ["Admin hierarchy browser gate in CI."]
+  }
+}

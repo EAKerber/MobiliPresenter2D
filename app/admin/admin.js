@@ -27,6 +27,7 @@ const uiCopy = window.CASA_UI_COPY;
 const initialStateCopy = uiCopy.admin.initialState;
 const finishAvailabilityCopy = uiCopy.admin.finishes;
 const stageAvailabilityCopy = uiCopy.admin.stages;
+const objectAssetPolicyCopy = uiCopy.admin.objectAssets;
 const viewerBasePricePublicationCopy = uiCopy.admin.pricing.viewerBasePricePublication;
 let catalogPricing = null;
 let adminDataPromise = null;
@@ -857,7 +858,7 @@ function renderObjectAssets(id, label) {
     labelNode.append(preview); card.append(labelNode);
   });
   const note = document.createElement("p"); note.className = "admin-note"; note.id = noteId;
-  note.textContent = hasSceneEntity ? "A lista contém apenas arquivos já presentes na cena. O painel não carrega arquivos novos nem permite caminhos externos." : "Este item não possui camada visual própria na cena. Configure cores e texturas na biblioteca de materiais.";
+  note.textContent = hasSceneEntity ? objectAssetPolicyCopy.sceneEntityPolicy : objectAssetPolicyCopy.nonSceneEntityPolicy;
   card.append(note); objectAssetsList.append(card);
 }
 
