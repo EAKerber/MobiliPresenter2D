@@ -6,7 +6,7 @@
 
 ## Lacunas específicas encontradas
 
-1. O arquivo histórico `tests/ci/local-buyer-config-server.mjs@678a1fc2ea9a0d50f32cb17860cc1b20f02b4adb` faz upgrade V3→V5 **antes** de inspecionar/publicar a projeção Buyer. A main atual (`1b75eb62cf41112041b1dbce753753aa415d36c8`) inspeciona a V3 original, e `published-buyer-projection.project()` suporta os dois esquemas. O teste browser existente `tests/buyer-v5-browser.cjs` compara V3 convertido em V5 e V5 nos dois caminhos, portanto **não prova sozinho** que o endpoint atual de V3 direto produz o mesmo DTO.
+1. O arquivo histórico `tests/ci/local-buyer-config-server.mjs@678a1fc2ea9a0d50f32cb17860cc1b20f02b4adb` faz upgrade V3→V5 **antes** de inspecionar/publicar a projeção Buyer. A autoridade histórica `main@221b54b2a41ecc8c338d1bf2cf67280cf165ce95` (`1b75eb62cf41112041b1dbce753753aa415d36c8`) inspeciona a V3 original, e `published-buyer-projection.project()` suporta os dois esquemas. O teste browser existente `tests/buyer-v5-browser.cjs` compara V3 convertido em V5 e V5 nos dois caminhos, portanto **não prova sozinho** que o endpoint atual de V3 direto produz o mesmo DTO.
 2. A sonda exploratória `tests/ci/config-local-visibility-probe.mjs@9aca354f3ed9641fcb268d3a515df73365135588` mediu alvo clicável, ancestors, scroll do sentinel e tempos de estabilização em 1050/1366px. Esta fonte antiga está agora preservada, byte-a-byte, em `docs/reconciliation/ci-v5local/legacy/tests/ci/config-local-visibility-probe.mjs`; o script legado **nunca é executado** pelo workflow novo. A suíte R9 vigente já garante tamanho mínimo da nav, mas não declara explicitamente cobertura de hit-test de centro e scroll da sonda antiga.
 
 ## Gate construtivo
@@ -30,3 +30,7 @@ A branch original **permanece HOLD**. Seus componentes `config-auth-isolation.mj
 - A equivalência é de **semântica pública após conversão**, não igualdade byte-a-byte de DTO, nem sessão Netlify, grant, DB ou testes de todas as larguras/dispositivos. `main` e a intenção de design corrente prevalecem.
 
 A fonte original `ci/ci-baseline-01-v5-local-diagnostics-20261023@5ce7327a9e4c8c11483163507d29af4bb8b1312a` continua HOLD por integrar scripts sensíveis de autorização/preview que não são cobertos pelo gate local. Recomenda-se integrar apenas o novo teste e proveniência, manter a fonte antiga e remover a auxiliar **depois** do FF, dos gates de destino e do manifesto SHA-leased de aposentadoria.
+
+## Atualização de ciclo de vida da fixture local (25/11/2026)
+
+TST-006 foi integrado em `development@c1f3be2be89c1e7f5843f568cf0d3ae38adf3541`. O servidor de teste local já usava `createLocalBuyerFixture()` no `development@5f8c3161f3177ae28e30adf5236dbe822db7b590` anterior ao TST-006; sua árvore (`tests/ci/local-buyer-config-server.mjs` blob `9c37286eb9eafccf0c57e1dd055f5d09df146245`) permaneceu igual. TST-006 atualizou o ciclo de vida e a orquestração dos consumidores e ajustou `config-unlocked-local-diagnostic.mjs` para a URL dinâmica, sem alterar o servidor ou o runtime do produto (`app/` e `netlify/`). O gate foi corrigido para separar os hashes históricos de main das versões vigentes no development.
