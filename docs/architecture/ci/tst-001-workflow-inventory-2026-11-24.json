@@ -6,16 +6,24 @@
   "source": {
     "mainSha": "01ded2c100fbfd8b16897e26113dc5068a83e429",
     "mainTree": "d1588ab2a71c5de7e8b7cfaa907d5e5637fa7178",
-    "developmentPin": "81207f32d0bd2100421172fb7b6585099c3fa78a",
-    "developmentTree": "d5f57b82c68d66169eed52ca663f85eafbba23f8",
-    "worktreeHead": "81207f32d0bd2100421172fb7b6585099c3fa78a",
+    "developmentPin": "116800e11016fb9093ce4ab5e3c0ed1e8527fe15",
+    "developmentTree": "59935c9821de7f747f5c41e0a291b06be501a662",
+    "worktreeHead": "116800e11016fb9093ce4ab5e3c0ed1e8527fe15",
     "worktreeTreeVerifiedAgainstDevelopmentPin": true,
     "openPullRequestsReadback": [
+      {
+        "number": 407,
+        "url": "https://github.com/EAKerber/MobiliPresenter2D/pull/407",
+        "headRefName": "codex/tst004-viewer-price-main-pr-trigger-20261124",
+        "headRefOid": "b986159d0c9d87d57aa5133eca9d26b2f8b31137",
+        "baseRefName": "main",
+        "baseRefOid": "01ded2c100fbfd8b16897e26113dc5068a83e429"
+      },
       {
         "number": 400,
         "url": "https://github.com/EAKerber/MobiliPresenter2D/pull/400",
         "headRefName": "codex/hygiene-retire-tst004-crosswalk-20261124",
-        "headRefOid": "d2f1f3aef4751f8e3baab23997d55a7ef33b1875",
+        "headRefOid": "626493b5237da60ed675352382145dd271166fb0",
         "baseRefName": "main",
         "baseRefOid": "01ded2c100fbfd8b16897e26113dc5068a83e429"
       }
