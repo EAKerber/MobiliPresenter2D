@@ -1,10 +1,10 @@
-# TST-002 crosswalk slice — Buyer configuration authorization boundary — 2026-11-24
+# TST-002 crosswalk slice — Buyer configuration authorization boundary — 2026-11-25
 
 ## Scope and evidence limits
 
 This is a second, bounded TST-002 slice for the Buyer configuration endpoint. It maps the current test source to its contract, risk, consumer, fixture, negative assertions and workflow trigger. It is not a claim that all authentication, DTO, V5, or workflow assertions have been inventoried.
 
-Readback base: Product `development@eee44926e5aa5ce90cf61fc13b0b02a7eef1b1a7`.
+Readback base: Product `development@8517b708c5b05693c1522894d410e28e8686c593`.
 
 The test is a Node fixture that imports the production endpoint source after replacing its imports with injected test dependencies. Identity, Blob stores and temporary sessions are mocked; it does not contact Netlify or validate a live deployment.
 
@@ -14,11 +14,11 @@ Evidence level: **E0/source-inspected** means the named assertion and its path t
 
 | Role | Path | Blob at base |
 |---|---|---|
-| Test and assertions | `tests/buyer-configuration-endpoint.test.mjs` | `3c342cfbbc2c479d84f60978ccef2e35928e60ad` |
+| Test and assertions | `tests/buyer-configuration-endpoint.test.mjs` | `f61eb8d670f76b65f44967781dbde5f26e50efc2` |
 | Endpoint consumer | `netlify/functions/buyer-configuration.mjs` | `aaace7bc2187aca4b1c484962f239ae00b20de80` |
 | DTO projection | `app/core/published-buyer-projection.js` | `c1f8e099f2dce29bd003577e8c0a724d7b6475fa` |
 | Identity policy | `netlify/access/identity-policy.mjs` | `fc529362c8b611b9f4e1b566a3b4b52f00bd7ca5` |
-| Workflow | `.github/workflows/buyer-configuration-boundary.yml` | `85cc3248848970112051bdadb63f2bc28a07516e` |
+| Workflow | `.github/workflows/buyer-configuration-boundary.yml` | `b5668220e3e6799542fbfd93e4cd1d7595435d2d` |
 
 The workflow runs `node --test tests/buyer-configuration-endpoint.test.mjs`. Its `pull_request` and `push` events target `main` and `development`; the explicit path filters include this test, its endpoint, access policy, projection dependencies and the workflow itself. The test therefore has a declared route to execution when these paths change. A docs-only change does not trigger it.
 
@@ -56,3 +56,10 @@ Product PR #422 extends the test with method/query rejection before Identity loo
 | BUYER-PUB-02 | Invalid V5 returns 503 without defaults fallback | In-memory invalid V5 document |
 
 These additions do not complete the broader TST-002 inventory or TST-010's full access-surface coverage.
+
+
+## Current exact-source readback — 2026-11-25
+
+The current source pins above were compared with the local checkout at `683a1b980281b652ae23bbd5c2effcebc489bdcd`. The Buyer test, endpoint, projection, Identity policy, and workflow blobs match the exact Product development source snapshot `8517b708c5b05693c1522894d410e28e8686c593`. The focused local command `node --test tests/buyer-configuration-endpoint.test.mjs` passed 1/1.
+
+This is local execution evidence only. No exact-head GitHub Actions run for the Buyer-specific command or hosted Identity/Blob session is claimed. The existing path-filtered workflow remains the intended PR/push route; this crosswalk refresh does not change its behavior.
