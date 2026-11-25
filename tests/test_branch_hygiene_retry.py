@@ -98,3 +98,27 @@ class RetryTests(unittest.TestCase):
         self.assertIn("live",remote_refs())
         self.git("push","origin",divergent+":refs/tags/archive/m2d/retry")
         self.assertEqual(len(self.execute()["alreadyAbsent"]),1)
+
+    def test_absent_squash_requires_exact_merged_pr(self):
+        base=self.sha
+        self.git("commit","--allow-empty","-m","original")
+        original=self.git("rev-parse","HEAD")
+        self.git("reset","--hard",base)
+        self.git("commit","--allow-empty","-m","squash")
+        self.sha=self.git("rev-parse","HEAD")
+        self.git("push","origin","main","HEAD:refs/heads/development","HEAD:refs/heads/live")
+        self.env["GITHUB_SHA"]=self.sha
+        self.batch["branches"]=[{"branch":"absent","sha":original,
+            "squashMerge":{"pullRequest":42,"mergeCommit":self.sha}},
+            {"branch":"live","sha":self.sha}]
+        pr={"number":42,"merged":True,"state":"closed",
+            "merge_commit_sha":self.sha,"head":{"sha":original,"ref":"absent",
+            "repo":{"full_name":R}},"base":{"ref":"main","repo":{"full_name":R}}}
+        with patch("branch_hygiene_apply.api_get",return_value={**pr,"merged":False}):
+            with self.assertRaises((ValueError,RuntimeError)):
+                self.execute()
+        self.assertIn("live",remote_refs())
+        with patch("branch_hygiene_apply.api_get",return_value=pr):
+            result=self.execute()
+        self.assertEqual(result["alreadyAbsent"],[{"branch":"absent","sha":original}])
+        self.assertEqual(result["deleted"],[{"branch":"live","sha":self.sha}])
