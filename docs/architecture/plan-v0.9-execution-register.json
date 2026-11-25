@@ -361,9 +361,14 @@
         "source": "Product PR #415 Actions run #45541550403",
         "sha": "55bab531205798979589732db9663f4202b4ad16",
         "detail": "A auditoria mediu 124 cenários disparados por alteração apenas do hash do manifesto gerado, sem mudança nos HTMLs públicos; ARC-13 validou separadamente catálogo, compilador, manifesto e proveniência."
+      },
+      {
+        "source": "Product PR #415 Actions run #45541551282",
+        "sha": "55bab531205798979589732db9663f4202b4ad16",
+        "detail": "O gate de fronteira de configuração executou devido apenas a app/core/ui-copy.js; os comandos e consumidores cobertos não importam o catálogo visual compartilhado."
         }
       ],
-    "nextAction": "Mapear as famílias e condições restantes; este recorte exclui somente o manifesto exato do browser de navegação, mantendo a checagem ARC-13 dedicada e os demais artefatos gerados no gatilho."
+    "nextAction": "Mapear as famílias e condições restantes; os filtros atuais excluem somente o manifesto exato do browser de navegação e o catálogo UI do gate de configuração, preservando os respectivos gates consumidores e os demais caminhos."
     },
     {
       "order": 22,
@@ -2075,7 +2080,7 @@
   "baselineReadback": {
     "capturedAt": "2026-11-25",
     "productMainSha": "01ded2c100fbfd8b16897e26113dc5068a83e429",
-    "productDevelopmentSha": "ed89f243a1f54d80701908c707e5edc61e1ffff4",
+    "productDevelopmentSha": "acedcda23b4534b2eb848133b7231b288ccf2a36",
     "designSystemMainSha": "c6ff6545e9ae2071e695109fd94ac91676e7fb0a",
     "meaning": "Snapshot read back before this package; the Design System has no development branch."
   }

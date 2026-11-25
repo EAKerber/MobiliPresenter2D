@@ -6,6 +6,7 @@ on:
     branches: [main, development]
     paths:
       - 'app/core/**'
+      - '!app/core/ui-copy.js'
       - 'app/data/**'
       - 'app/tools/test-published-buyer-projection.js'
       - 'app/tools/test-v5-endpoint-safety.js'
@@ -20,6 +21,7 @@ on:
     branches: [main, development]
     paths:
       - 'app/core/**'
+      - '!app/core/ui-copy.js'
       - 'app/data/**'
       - 'app/tools/test-published-buyer-projection.js'
       - 'app/tools/test-v5-endpoint-safety.js'
