@@ -29,6 +29,7 @@ const finishAvailabilityCopy = uiCopy.admin.finishes;
 const stageAvailabilityCopy = uiCopy.admin.stages;
 const objectAssetPolicyCopy = uiCopy.admin.objectAssets;
 const objectContentFieldCopy = uiCopy.admin.objectContentFields;
+const materialAvailabilityCopy = uiCopy.admin.materials;
 const viewerBasePricePublicationCopy = uiCopy.admin.pricing.viewerBasePricePublication;
 let catalogPricing = null;
 let adminDataPromise = null;
@@ -1009,23 +1010,23 @@ function renderMaterials() {
     const chip = document.createElement("span"); chip.className = "material-chip"; chip.style.backgroundColor = material.color || "transparent"; if (material.textureAsset) chip.style.backgroundImage = `url("${material.textureAsset}")`;
     const title = document.createElement("h2"); title.textContent = material.label;
     card.append(chip, title, makeField("Nome", material.label, "materialLabel"));
-    const colorLabel = document.createElement("label"); colorLabel.className = "data-field"; colorLabel.append(document.createTextNode("Cor base"));
+    const colorLabel = document.createElement("label"); colorLabel.className = "data-field"; colorLabel.append(document.createTextNode(materialAvailabilityCopy.baseColor));
     const color = document.createElement("input"); color.type = "color"; color.value = material.color || "#b7b0a7"; color.disabled = material.color === null; color.dataset.materialColor = "true"; colorLabel.append(color); card.append(colorLabel);
     if (color.disabled) {
       const colorReason = document.createElement("p"); colorReason.className = "admin-note"; colorReason.id = `material-color-disabled-reason-${material.id}`;
-      colorReason.textContent = "Cor base indisponível enquanto “Sem cor/tinta base” estiver marcado.";
+      colorReason.textContent = materialAvailabilityCopy.colorDisabledReason;
       color.setAttribute("aria-describedby", colorReason.id); card.append(colorReason);
     }
     const noColorLabel = document.createElement("label"); noColorLabel.className = "data-field";
     const noColor = document.createElement("input"); noColor.type = "checkbox"; noColor.checked = material.color === null; noColor.disabled = material.kind !== "texture"; noColor.dataset.materialNoColor = "true";
-    noColorLabel.append(noColor, document.createTextNode(" Sem cor/tinta base")); card.append(noColorLabel);
+    noColorLabel.append(noColor, document.createTextNode(` ${materialAvailabilityCopy.noColor}`)); card.append(noColorLabel);
     const kindLabel = document.createElement("label"); kindLabel.className = "data-field"; kindLabel.append(document.createTextNode("Tipo de material"));
     const kind = document.createElement("select"); kind.dataset.materialKind = "true";
     [["color", "Cor sólida"], ["texture", "Textura"]].forEach(([value, text]) => { const option = document.createElement("option"); option.value = value; option.textContent = text; kind.append(option); });
     kind.value = material.kind; kindLabel.append(kind); card.append(kindLabel);
     if (noColor.disabled) {
       const noColorReason = document.createElement("p"); noColorReason.className = "admin-note"; noColorReason.id = `material-no-color-disabled-reason-${material.id}`;
-      noColorReason.textContent = "Sem cor/tinta base está disponível apenas para materiais do tipo Textura.";
+      noColorReason.textContent = materialAvailabilityCopy.noColorDisabledReason;
       noColor.setAttribute("aria-describedby", noColorReason.id); card.append(noColorReason);
     }
     const assetLabel = document.createElement("label"); assetLabel.className = "data-field"; assetLabel.append(document.createTextNode("Textura (arquivo existente)"));
