@@ -1,15 +1,31 @@
 {
   "schemaVersion": "BranchHygieneBatch 0.1",
   "repository": "EAKerber/MobiliPresenter2D",
-  "wave": "PRODUCT-HYG-2026-11-23-TERMINAL",
-  "purpose": "Retire consumed SHA-pinned head of merged hygiene PR #317 after full tree identity proof, without touching historical HOLD refs.",
+  "wave": "PRODUCT-HYG-20261125-MAIN-1",
+  "purpose": "Retire exact full-tree equivalent main-integrated heads; keep control and archive refs.",
   "branches": [
     {
-      "branch": "hygiene/product-dev-retire-series-20261123",
-      "sha": "c5f8a4d1cef132441bf51f02232a4e028c19913c",
+      "branch": "codex/tst003-dedupe-main-20261125",
+      "sha": "1ad87c70be490878f14a533989ae461e35c16d04",
       "squashMerge": {
-        "pullRequest": 317,
-        "mergeCommit": "e994172f691e23365747bb1fe2f935b9ea8ab109"
+        "pullRequest": 440,
+        "mergeCommit": "e462f5df33e2354c81bbbc18170106c1a9d79ead"
+      }
+    },
+    {
+      "branch": "hygiene/product-retire-wave-2-20261125",
+      "sha": "5da8c098f7bd0acecb5d4e6454efea67a86ff6a0",
+      "squashMerge": {
+        "pullRequest": 450,
+        "mergeCommit": "07cafda66f9e365055047109f73762192466c335"
+      }
+    },
+    {
+      "branch": "hygiene/product-retire-wave-3-20261125",
+      "sha": "d402aa95b909196a836b0dff0d809298195f78d2",
+      "squashMerge": {
+        "pullRequest": 451,
+        "mergeCommit": "e1279b6b39564bad2404137670da62b69ec18a29"
       }
     }
   ]

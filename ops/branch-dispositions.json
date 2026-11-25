@@ -3,7 +3,10 @@
   "controlBranch": "main",
   "preserveBranches": [
     "experiment/public-landing-commercial-viewer",
-    "feat/exposed-sides-and-glass"
+    "feat/exposed-sides-and-glass",
+    "main",
+    "development",
+    "archive/product-hygiene-20261125"
   ],
   "terminalBranches": [
     {
