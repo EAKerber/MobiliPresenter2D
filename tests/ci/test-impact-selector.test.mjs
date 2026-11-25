@@ -197,7 +197,7 @@ test('Buyer assertion crosswalk resolves each assurance to its source and reacha
   assert.equal(assertionCrosswalk.workItem, 'TST-002');
   assert.equal(assertionCrosswalk.status, 'partial');
   assert(assertionCrosswalk.scopeLimit.includes('does not claim full TST-002 coverage'));
-  assert.equal(assertionCrosswalk.sourcePin.developmentSha, '1292afe149e711dce01fce0e727fd0da033a38d4');
+  assert.equal(assertionCrosswalk.sourcePin.developmentSha, '8517b708c5b05693c1522894d410e28e8686c593');
 
   const execution = assertionCrosswalk.execution;
   const bundle = map.bundles.find((candidate) => candidate.id === assertionCrosswalk.slice);
