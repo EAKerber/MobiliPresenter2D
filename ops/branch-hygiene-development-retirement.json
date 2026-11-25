@@ -5,7 +5,7 @@
   "approvedRetirement": true,
   "waves": [
     {
-      "id": "vnext-close",
+      "id": "batch-1",
       "branches": [
         {
           "branch": "hygiene/vnext-foundation-20261125",
