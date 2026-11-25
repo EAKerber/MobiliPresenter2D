@@ -693,9 +693,14 @@
           "source": "docs/architecture/ci/tst-009-v5-publication-crosswalk-2026-11-25.md",
           "sha": "d0f63d0c62ed25a78067bb8b2e98d88fded5a1a7",
           "detail": "Mapeamento read-only da fatia de publicação V5: reader/inspection/save, endpoint Admin, Buyer projection/endpoint, principais consumidores, testes e trigger. Execução local exata passou em cinco comandos após confirmar hashes iguais à development. O inventário amplo de schemas, DTOs, preços, defaults e compatibilidades continua aberto."
+        },
+        {
+          "source": "Product PR #444 exact-head test and Actions evidence; source-pinned against development",
+          "sha": "8dadf220a282bdb111947f27a207351629e786e0",
+          "detail": "Added adversarial nested DTO assertions for unknown Admin metadata in objects, asset records and presentation policy, preserved published fields, and verified that Buyer flow clears the internal source revision. The exact-head local projection test passed 1/1 and all nine triggered workflows passed. This closes only a bounded Buyer-projection regression gap; DOM-001 remains partial because schema/default/price compatibility inventory and its CMP-001 dependency are still open."
         }
       ],
-      "nextAction": "Completar schemas e validadores prioritários, defaults, DTOs/consumidores restantes, dados comerciais/preço e caminhos de compatibilidade; preservar separação entre Admin, Buyer e Viewer público."
+      "nextAction": "Continue the schema-to-projection-to-consumer inventory for Admin, Buyer and public Viewer, including defaults, prices and compatibility paths; reconcile CMP-001 before claiming DOM-001 complete."
     },
     {
       "order": 36,
@@ -1361,15 +1366,21 @@
       "title": "Consolidar `NormalizedConfiguratorFlow`",
       "chapter": "V",
       "priority": "P1",
-      "planState": "not_started",
-      "reconciliation": "unreviewed",
-      "local": "unknown",
-      "development": "unknown",
-      "main": "unknown",
-      "technicalValidation": "unknown",
+      "planState": "in_progress",
+      "reconciliation": "partial",
+      "local": "done",
+      "development": "done",
+      "main": "partial",
+      "technicalValidation": "done",
       "approvalPublication": "unknown",
-      "evidence": [],
-      "nextAction": "Reconciliar este ID com código, consumidores, testes e evidência exata de branch/PR antes de alterar o estado."
+      "evidence": [
+        {
+          "source": "Product PR #443; exact-head tests and Actions; squash integration into development",
+          "sha": "5c89e08e3a700e640f31927fd01d6c8373b6d64f",
+          "detail": "PR #443 changed app/app.js so enabled stages, stage lookup, module ownership and item availability are derived from NormalizedConfiguratorFlow; custom-stage controls flatten normalized sections. The generated ARC-13 candidate inventory was refreshed for the changed app.js hash and lines. Focused tests passed 4/4, the inventory reproduced without diff, and all ten exact-head workflows passed before squash integration at this SHA. Product main still has the older app/app.js consumer reads (blob 805494f5ff90bc6aa80bfc4279a240a70e84f8b6); cross-destination DoD remains partial."
+        }
+      ],
+      "nextAction": "Prepare the same consumer-authority correction for main after comparing its current app.js structure; keep production integration gated by the applicable main publication approval."
     },
     {
       "order": 77,
@@ -2279,9 +2290,9 @@
   },
   "baselineReadback": {
     "capturedAt": "2026-11-25",
-    "productMainSha": "01ded2c100fbfd8b16897e26113dc5068a83e429",
-    "productDevelopmentSha": "6b31beadcb460b3c13f125e528ca80f925da7f43",
+    "productMainSha": "e462f5df33e2354c81bbbc18170106c1a9d79ead",
+    "productDevelopmentSha": "5c89e08e3a700e640f31927fd01d6c8373b6d64f",
     "designSystemMainSha": "c6ff6545e9ae2071e695109fd94ac91676e7fb0a",
-    "meaning": "Exact refs and compare re-read after Product PR #438. The TST-001 inventory was generated from a candidate tree identical to development at PR #436 integration; PR #438 changed only the inventory and execution-register documentation after that source snapshot, leaving workflow definitions unchanged."
+    "meaning": "Exact refs re-read after Product PR #443 was squash-merged into development. Design System development lookup returned 404. PR #444 is a source-pinned test candidate and is not part of this captured development SHA."
   }
 }
