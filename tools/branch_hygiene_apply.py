@@ -15,25 +15,37 @@ from branch_hygiene_observe import observe, api_get
 from branch_hygiene_plan import build_plan, load_json, select_bounded_batch
 
 AUTH_ENV = "MOBILIPRESENTER2D_BRANCH_HYGIENE_AUTHORIZED"
+DEV_AUTH_ENV = "MOBILIPRESENTER2D_DEVELOPMENT_HYGIENE_AUTHORIZED"
 
 
 def verify_no_workflow_dependency(branch: str,
                                   workflow_dir: Path = Path(".github/workflows")) -> list[str]:
-    """Fail closed when a live workflow names a ref selected for retirement.
-
-    GitHub Actions accepts both YAML extensions. This check applies to every
-    selected ref, including ancestry-based candidates with no squash proof.
-    """
-    if not workflow_dir.exists():
-        return []
+    """Conservative literal reference check for the candidate checkout."""
     matches = []
     for pattern in ("*.yml", "*.yaml"):
         for item in workflow_dir.glob(pattern):
             if branch in item.read_text(encoding="utf-8"):
-                matches.append(item.name)
+                matches.append(str(item))
     if matches:
-        raise RuntimeError("ACTIVE_WORKFLOW_REF:" + branch + ":" + ",".join(sorted(matches)))
-    return []
+        raise RuntimeError("ACTIVE_WORKFLOW_REF:" + branch + ":" + ",".join(matches))
+    return matches
+
+
+def verify_control_workflow_dependencies(branch: str, inventory: dict[str, str]) -> None:
+    """Inspect immutable live control trees; never rely on checkout alone."""
+    for control in ("main", "development"):
+        sha = inventory.get(control)
+        if not sha:
+            raise RuntimeError("CONTROL_REF_MISSING:" + control)
+        proc = subprocess.run(
+            ["git", "grep", "-F", "-l", "-e", branch, sha, "--",
+             ":(glob).github/workflows/*.yml", ":(glob).github/workflows/*.yaml"],
+            text=True, capture_output=True, check=False,
+        )
+        if proc.returncode == 0:
+            raise RuntimeError("ACTIVE_CONTROL_WORKFLOW_REF:" + branch + ":" + control)
+        if proc.returncode != 1:
+            raise RuntimeError("CONTROL_WORKFLOW_SCAN_FAILED:" + control)
 
 
 def remote_refs() -> dict[str, str]:
@@ -50,7 +62,7 @@ def remote_refs() -> dict[str, str]:
 
 
 def verify_squash_merge(repository: str, token: str, entry: dict,
-                        control_sha: str) -> dict | None:
+                        control_sha: str, control_branch: str = "main") -> dict | None:
     """Verify an opt-in squash proof against real PR metadata and Git objects.
 
     Both the original head and the already-merged commit must resolve to the
@@ -68,19 +80,19 @@ def verify_squash_merge(repository: str, token: str, entry: dict,
             or pr.get("merge_commit_sha") != merge_sha
             or pr_head.get("ref") != name or pr_head.get("sha") != head_sha
             or (pr_head.get("repo") or {}).get("full_name") != repository
-            or pr_base.get("ref") != "main"
+            or pr_base.get("ref") != control_branch
             or (pr_base.get("repo") or {}).get("full_name") != repository):
         raise RuntimeError("SQUASH_PR_IDENTITY_MISMATCH:" + name)
 
     # A real squash merge has exactly one parent. Its resulting tree must be
-    # identical to the PR head; the merge and its base must belong to main.
+    # identical to the PR head; the merge and its base must belong to the control branch.
     merge_parents = subprocess.run(
         ["git", "rev-list", "--parents", "-n", "1", merge_sha],
         text=True, capture_output=True, check=True,
     ).stdout.strip().split()
     if len(merge_parents) != 2 or merge_parents[0] != merge_sha:
         raise RuntimeError("SQUASH_NOT_SINGLE_PARENT:" + name)
-    merged_into_main = subprocess.run(
+    merged_into_control = subprocess.run(
         ["git", "merge-base", "--is-ancestor", merge_sha, control_sha],
         check=False,
     ).returncode == 0
@@ -88,7 +100,7 @@ def verify_squash_merge(repository: str, token: str, entry: dict,
         ["git", "merge-base", "--is-ancestor", merge_parents[1], head_sha],
         check=False,
     ).returncode == 0
-    if not merged_into_main or not original_base_present:
+    if not merged_into_control or not original_base_present:
         raise RuntimeError("SQUASH_ANCESTRY_MISMATCH:" + name)
 
     def tree(sha: str) -> str:
@@ -105,7 +117,8 @@ def verify_squash_merge(repository: str, token: str, entry: dict,
     return {
         "branch": name, "sha": head_sha, "pullRequest": pr_number,
         "mergeCommit": merge_sha, "treeSha": original_tree,
-        "controlSha": control_sha, "proof": "SQUASH_TREE_IDENTICAL",
+        "controlSha": control_sha, "controlBranch": control_branch,
+        "proof": "SQUASH_TREE_IDENTICAL",
     }
 
 
@@ -120,6 +133,15 @@ def apply(plan_path: Path, dispositions_path: Path, expected_plan: str,
     supplied = load_json(plan_path)
     if supplied.get("planHash") != expected_plan:
         raise RuntimeError("EXPECTED_PLAN_MISMATCH")
+    control = supplied.get("controlBranch")
+    if not audit_only and control not in {"main", "development"}:
+        raise RuntimeError("CONTROL_BRANCH_NOT_AUTHORIZED")
+    if not audit_only and control == "development":
+        if os.environ.get(DEV_AUTH_ENV) != "1":
+            raise RuntimeError("DEVELOPMENT_RETIREMENT_AUTHORIZATION_MISSING")
+        approved = load_json(batch_path)
+        if approved.get("approvedRetirement") is not True or approved.get("auditOnly") is True:
+            raise RuntimeError("DEVELOPMENT_RETIREMENT_MANIFEST_NOT_APPROVED")
 
     dispositions = load_json(dispositions_path)
     fresh = observe(repository, supplied["controlBranch"], token)
@@ -127,18 +149,21 @@ def apply(plan_path: Path, dispositions_path: Path, expected_plan: str,
     if fresh_plan["planHash"] != expected_plan:
         raise RuntimeError("PLAN_DRIFT_REOBSERVATION_REQUIRED")
     selected = select_bounded_batch(fresh_plan, load_json(batch_path))
+    if not audit_only and control == "development" and any(
+        "squashMerge" not in item for item in selected
+    ):
+        raise RuntimeError("DEVELOPMENT_REQUIRES_SQUASH_PROOF")
     inventory = {entry["branch"]: entry["sha"] for entry in fresh_plan["entries"]}
     if remote_refs() != inventory:
         raise RuntimeError("REF_INVENTORY_DRIFT_INITIAL")
 
-    # Check every selected ref before accepting the audit. The squash proof
-    # repeats this check internally; ancestry-based candidates need it here too.
     for item in selected:
-        if item.get("squashMerge") is None:
-            verify_no_workflow_dependency(item["branch"])
+        verify_no_workflow_dependency(item["branch"])
+        verify_control_workflow_dependencies(item["branch"], inventory)
+
     squash_proofs = [
         result for item in selected
-        if (result := verify_squash_merge(repository, token, item, fresh_plan["controlSha"])) is not None
+        if (result := verify_squash_merge(repository, token, item, fresh_plan["controlSha"], fresh_plan["controlBranch"])) is not None
     ]
 
     if not audit_only:
@@ -147,7 +172,12 @@ def apply(plan_path: Path, dispositions_path: Path, expected_plan: str,
             raise RuntimeError("APPLY_REQUIRES_MAIN_PUSH")
         head = subprocess.run(["git", "rev-parse", "HEAD"], text=True,
                               capture_output=True, check=True).stdout.strip()
-        if head != os.environ.get("GITHUB_SHA") or head != fresh_plan["controlSha"]:
+        if head != os.environ.get("GITHUB_SHA"):
+            raise RuntimeError("WORKFLOW_HEAD_DRIFT")
+        if control == "main":
+            if head != fresh_plan["controlSha"]:
+                raise RuntimeError("MAIN_HEAD_DRIFT")
+        elif remote_refs().get("main") != head:
             raise RuntimeError("MAIN_HEAD_DRIFT")
 
     receipt = {
@@ -204,12 +234,10 @@ def apply(plan_path: Path, dispositions_path: Path, expected_plan: str,
             raise RuntimeError("NEW_PROTECTION_OR_MISSING_REF:" + branch)
         if remote_refs() != expected_inventory or expected_inventory.get(branch) != sha:
             raise RuntimeError("REF_DRIFT_BEFORE_DELETE:" + branch)
-        # Recheck workflow references for ancestry and squash candidates alike
-        # immediately before mutation; the squash verifier also checks its proof.
         verify_no_workflow_dependency(branch)
+        verify_control_workflow_dependencies(branch, live_inventory)
         # Recheck PR identity and exact tree *immediately* before mutation.
-        if entry.get("squashMerge") is not None:
-            verify_squash_merge(repository, token, entry, fresh_plan["controlSha"])
+        verify_squash_merge(repository, token, entry, fresh_plan["controlSha"], fresh_plan["controlBranch"])
 
         subprocess.run([
             "git", "push", f"--force-with-lease=refs/heads/{branch}:{sha}",
