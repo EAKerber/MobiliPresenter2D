@@ -74,7 +74,13 @@ def build_plan(observation: dict[str, Any], dispositions: dict[str, Any]) -> dic
             protections.append("control-branch")
         if branch.get("protected") is True:
             protections.append("github-protected")
-        if name in preserve or name.startswith("archive/"):
+        terminal_record = terminal.get(name)
+        transfer = (name.startswith("archive/") and terminal_record is not None
+                    and terminal_record.get("reason") == "archive-ref-to-tag"
+                    and terminal_record.get("sha") == sha
+                    and terminal_record.get("allowDelete") is True
+                    and isinstance(terminal_record.get("archiveTag"), str))
+        if name in preserve or (name.startswith("archive/") and not transfer):
             protections.append("explicit-preserve")
         if name in open_heads:
             protections.append("open-pr-head")
@@ -85,7 +91,6 @@ def build_plan(observation: dict[str, Any], dispositions: dict[str, Any]) -> dic
         if branch.get("ancestorOfControl") is True and name != control_branch:
             evidence.append({"kind": "ancestor-of-control", "controlSha": control_sha})
 
-        terminal_record = terminal.get(name)
         if terminal_record:
             expected_sha = terminal_record.get("sha")
             if expected_sha == sha and terminal_record.get("allowDelete") is True:
@@ -93,6 +98,8 @@ def build_plan(observation: dict[str, Any], dispositions: dict[str, Any]) -> dic
                     "kind": "explicit-terminal-disposition",
                     "reason": terminal_record.get("reason"),
                     "recordedSha": expected_sha,
+                    **({"archiveTag": terminal_record["archiveTag"]} if "archiveTag" in terminal_record else {}),
+                    **({"archiveTransfer": True} if transfer else {}),
                 })
 
         delete_candidate = bool(evidence) and not protections
