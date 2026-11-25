@@ -8,27 +8,27 @@
       "id": "batch-1",
       "branches": [
         {
-          "branch": "codex/cmp017-admin-control-contract-20261122",
-          "sha": "0795860799976903b59c04ef23c6b49f4ea2afa6",
+          "branch": "codex/tst004-mask-assertion-crosswalk-20261124",
+          "sha": "531c2814235c9524289ccb9efd909f43e01d908b",
           "squashMerge": {
-            "pullRequest": 301,
-            "mergeCommit": "e977bb87691e0bc839097fb9a6c92c1bdc4fa1e3"
+            "pullRequest": 399,
+            "mergeCommit": "fbe6b9b409dd67884dd9447b02f87752a7d0f8ff"
           }
         },
         {
-          "branch": "codex/cmp017-finish-availability-20261122",
-          "sha": "6d96342250ac34dc2a945b6794e5a09c67e0cdc7",
+          "branch": "codex/dom011-buyer-fixture-v5-validation-20261124",
+          "sha": "1f5515c5416ce877fcc8072db2b869bb3046625c",
           "squashMerge": {
-            "pullRequest": 302,
-            "mergeCommit": "f640f9018e6bc36cbf4ca79313a6576080e9ded4"
+            "pullRequest": 409,
+            "mergeCommit": "c78a20ca0ccc8c6bd0f870caa78a8814b9363bd7"
           }
         },
         {
-          "branch": "codex/cmp017-price-publication-reason-20261122",
-          "sha": "21a8ae4492ef4f495d120c60d71a1c71e12aa9bf",
+          "branch": "codex/cmp001-admin-stage-availability-20261124",
+          "sha": "0dec2e67e3fb997b66e444f8805ee607a28453b2",
           "squashMerge": {
-            "pullRequest": 303,
-            "mergeCommit": "1188e6e4f355aa4b2a4ab442b02388c8135390cf"
+            "pullRequest": 411,
+            "mergeCommit": "116800e11016fb9093ce4ab5e3c0ed1e8527fe15"
           }
         }
       ]
@@ -37,40 +37,27 @@
       "id": "batch-2",
       "branches": [
         {
-          "branch": "codex/cmp017-material-disabled-reasons-20261122",
-          "sha": "204221d37314a2e5e84740a0d4e00c28c2bc78dc",
+          "branch": "codex/tst001-current-snapshot-20261124",
+          "sha": "586dcf600dfe6a0bc745fdfd5ef787cbe3569433",
           "squashMerge": {
-            "pullRequest": 304,
-            "mergeCommit": "e7869487d87c69de4461b31902129968f4fb056c"
+            "pullRequest": 412,
+            "mergeCommit": "def19b2815cd7a3be30abfa33b3f1c03c1041a17"
           }
         },
         {
-          "branch": "codex/cmp017-object-asset-disabled-reason-20261122",
-          "sha": "f162838dcab60975ce19cc38f2cc39678c2a5994",
+          "branch": "codex/v09-operational-register-20261124",
+          "sha": "a973c54ffee2e7b2e262fb5c23f8d391c9707eb1",
           "squashMerge": {
-            "pullRequest": 305,
-            "mergeCommit": "613f28d9ee3aaa66d7bce24f772100d5f1354732"
+            "pullRequest": 413,
+            "mergeCommit": "6fbddd5a522dfe5ecc218132253647980720ba37"
           }
         },
         {
-          "branch": "codex/arc13-deterministic-scan-20261122",
-          "sha": "25a37ab0e74e772c1bf72d23e523574e6fe6e955",
+          "branch": "codex/loc006-viewer-price-copy-20261124",
+          "sha": "ace3fa3d5d29fe1da37e989c4def6583ee1c5859",
           "squashMerge": {
-            "pullRequest": 306,
-            "mergeCommit": "abb802b05288842a4de0e085c21f12193e04bd8d"
-          }
-        }
-      ]
-    },
-    {
-      "id": "batch-3",
-      "branches": [
-        {
-          "branch": "codex/loc004-youtube-links-20261123",
-          "sha": "f99be7c657fb897a513e19e13aa0dafbe64175db",
-          "squashMerge": {
-            "pullRequest": 315,
-            "mergeCommit": "8472dc8b501eb0f8b27064e1c6924e315d6164df"
+            "pullRequest": 410,
+            "mergeCommit": "8ba626f6026ce8ea7016e4414dacbf74f39de30f"
           }
         }
       ]
