@@ -340,9 +340,14 @@
           "source": "docs/architecture/ci/tst-002-buyer-auth-boundary-crosswalk-2026-11-24.md plus 2026-11-25 continuation",
           "sha": "1292afe149e711dce01fce0e727fd0da033a38d4",
           "detail": "Buyer auth/published-state slice maps endpoint, projection, denial ordering, fixture, negative assertions, and workflow; local test continuation adds expired session, request dispatch, store context, and missing/invalid V5. Broader TST-002 matrix remains open."
+        },
+        {
+          "source": "Product PR #428; access-surface crosswalk and exact selector run",
+          "sha": "24900259d21c3efcbfc1194cad92f5fad498656e",
+          "detail": "PR #428 head f74ceaf3fdefcb67fa921970340e645c6c5b3e52 integrou como 24900259d21c3efcbfc1194cad92f5fad498656e. O novo crosswalk docs/architecture/ci/tst-002-access-surface-crosswalk-2026-11-25.md fixa os testes Admin/sessão/menu/convite no snapshot base 8de7fa6e29f06c988be07a56dba16b585e5cf021 e limita a prova a fixtures locais/sintéticas. O bundle access-surface agora está coberto pelo seletor, com comandos e filtros do workflow validados no run PR #45616269814 (sucesso). Os caminhos Admin e política Identity selecionam também os bundles independentes viewer-pricing/Buyer; testes foram ajustados para registrar essa cobertura dupla. TST-002 segue parcial: a matriz completa ainda falta e o crosswalk Buyer legado tem pin antigo."
         }
       ],
-      "nextAction": "Continue by risk priority with remaining assertion families; keep each source pin and execution level explicit."
+      "nextAction": "Continuar a matriz TST-002 por risco. Atualizar o crosswalk Buyer com o pin atual antes de usá-lo como evidência corrente; manter as slices distintas e os níveis local/hospedado explícitos. Nenhuma redução de gate foi autorizada por este slice."
     },
     {
       "order": 21,
