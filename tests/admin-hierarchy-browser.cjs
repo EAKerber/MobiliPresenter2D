@@ -227,9 +227,14 @@ async function sectionItemIds(page, stageId, groupId, sectionId) {
   await page.locator('[data-admin-tab="stages"]').click();
   await page.waitForSelector('[data-admin-panel="stages"]:not([hidden])');
   const initialEntity = page.locator('[data-initial-configurator-entity="module-01"]');
+  const initialObject = page.locator('[data-initial-configurator-entity="lighting-08"]');
   const stageAvailability = page.locator('[data-stage-enabled="finishes"]');
   assert.equal(await initialEntity.getAttribute("type"), "checkbox", "initial configurator state remains a checkbox preference");
   assert.equal(await initialEntity.locator("xpath=..").getAttribute("class"), "initial-state-option", "initial state keeps its own presentation label");
+  assert.equal(await initialObject.getAttribute("type"), "checkbox", "accessory object keeps the same initial-visibility control");
+  assert.equal(await initialEntity.locator("xpath=..").innerText(), "Iniciar visível no configurador", "module label names its initial configurator visibility");
+  assert.equal(await initialObject.locator("xpath=..").innerText(), "Iniciar visível no configurador", "object shares the same visibility wording for the same state map");
+  assert.match(await initialObject.getAttribute("aria-label"), /visível inicialmente no configurador/, "object accessible name describes entity visibility");
   assert.equal(await stageAvailability.getAttribute("type"), "checkbox", "stage availability remains a native checkbox");
   assert.equal(await stageAvailability.locator("xpath=..").getAttribute("class"), "switch", "stage availability keeps its switch presentation");
   assert.match(await initialEntity.getAttribute("aria-label"), /visível inicialmente no configurador/, "module accessible text names configurator visibility");

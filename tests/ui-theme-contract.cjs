@@ -29,6 +29,14 @@ assert.equal(copy.navigation.contactAriaLabel, "Fale conosco pelo WhatsApp");
 assert.deepEqual(JSON.parse(JSON.stringify(copy.video.fullscreen)), {
   open: "Abrir vídeo em tela cheia", close: "Sair da tela cheia"
 });
+assert.deepEqual(JSON.parse(JSON.stringify(copy.admin.initialState)), {
+  entityVisibility: "Iniciar visível no configurador",
+  entityVisibilityAriaLabel: "{item}: visível inicialmente no configurador",
+  viewerVisibility: "Iniciar visível no viewer",
+  viewerVisibilityAriaLabel: "{item}: visível inicialmente no viewer",
+  serviceActive: "Iniciar ativo",
+  serviceActiveAriaLabel: "{item}: ativo inicialmente"
+});
 assert.deepEqual(JSON.parse(JSON.stringify(copy.viewer.state)), {
   empty: "Nenhum módulo está visível no viewer neste momento.",
   loading: "Carregando informações publicadas…",
@@ -116,7 +124,7 @@ for (const file of shells) {
     : file === "app/viewer/index.html"
       ? "arc13-loc005-scene-interaction-1"
     : file === "app/admin.html"
-      ? "arc13-loc006-admin-price-copy-1"
+      ? "arc13-loc006-admin-initial-state-copy-1"
     : "arc13-loc003-copy-1";
   assert(html.includes(`src="/core/ui-copy.js?v=${copyVersion}"`), file + " copy catalog bootstrap");
   assert(html.includes('src="/core/ui-theme.js?v=arc13-loc003-copy-1"'), file + " theme bootstrap");
