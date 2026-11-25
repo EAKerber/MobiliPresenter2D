@@ -639,6 +639,20 @@
         "mergeCommit": "64d934dabc7cfb8175dfe2f0a5d04fe1669a41ba"
       },
       "note": "PR #275 was squash-merged. The exact source head tree matches its merged main commit; reobserve branch identity, open-PR relation, and protection immediately before deletion."
+    },
+    {
+      "branch": "codex/hygiene-retire-tst004-crosswalk-20261124",
+      "sha": "d1fe79faafa1ed7345aff8afeb33bbf5e4a21e22",
+      "reason": "merged-path-equivalent-archive-preserved",
+      "allowDelete": true,
+      "evidence": {
+        "pullRequest": 400,
+        "mergedMainSha": "19f5ab1db5f545ab38e43eba9535d9a8e7a727ac",
+        "archiveRef": "archive/product-hygiene-20261125",
+        "archiveSha": "7d729bda2138e40baa87d50a5ba4ade0ace1d48d",
+        "originalHead": "d1fe79faafa1ed7345aff8afeb33bbf5e4a21e22"
+      },
+      "note": "Entire ops tree identical at merged commit; difference only pre-existing #440 workflow changes. Original HEAD is a direct parent of the exact archive commit; preserve archive."
     }
   ]
 }
