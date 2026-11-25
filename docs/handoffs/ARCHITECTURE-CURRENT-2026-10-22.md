@@ -1,3 +1,5 @@
+> **Historical snapshot — 2026-10-22.** Preserved as provenance, not the current handover or an authorization to repeat operations. Use [CURRENT_STATE.md](../../CURRENT_STATE.md) for current authority and re-read exact remote refs before acting. Any branch/ref inventory in this document is historical and unverified against today's remote state.
+
 # HANDOVER CANÔNICO — MobiliPresenter2D / consolidação Vanilla + Design System
 
 ## Estado reobservado em 2026-11-01
