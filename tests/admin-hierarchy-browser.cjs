@@ -178,11 +178,13 @@ async function sectionItemIds(page, stageId, groupId, sectionId) {
   assert.equal(await globalFinishToggle.getAttribute("aria-label"), `${sandbox.window.CASA_EM_MODULOS_CATALOG.options.finishes[0].publicLabel}: disponível para clientes`, "global finish availability names the finish");
   assert.equal(await globalFinishScope.isDisabled(), true, "the last global finish cannot change scope");
   assert.equal(await globalFinishScope.getAttribute("aria-label"), `${sandbox.window.CASA_EM_MODULOS_CATALOG.options.finishes[0].publicLabel}: aplicação`, "finish scope names the finish");
+  assert.deepEqual(await globalFinishScope.locator("option").allTextContents(), ["Global · conjunto todo", "Local · módulo individual"], "finish scope keeps global and module-local policies distinct");
   assert.equal(await globalPolicyNote.textContent(), "Mantenha pelo menos um acabamento global disponível para clientes.", "last global finish explains both protected actions");
   assert.equal(await globalPolicyNote.isVisible(), true, "global finish policy reason is visible");
   assert.equal(await globalFinishToggle.getAttribute("aria-describedby"), `finish-policy-${globalFinish.id}`, "global availability references its policy reason");
   assert.equal(await globalFinishScope.getAttribute("aria-describedby"), `finish-policy-${globalFinish.id}`, "global scope references its policy reason");
   const localModuleId = catalog.modules[0].entityId;
+  assert.equal(await finishPolicyPage.locator(`[data-finish-module="${localFinish.id}:${localModuleId}"]`).locator("xpath=../..").getAttribute("aria-label"), `Módulos que aceitam ${catalog.options.finishes[1].publicLabel}`, "local module associations remain grouped under their own finish");
   const localFinishModule = finishPolicyPage.locator(`[data-finish-module="${localFinish.id}:${localModuleId}"]`);
   assert.equal(await localFinishModule.isDisabled(), true, "the last module association for a local finish cannot be removed");
   assert.equal(await localFinishModule.getAttribute("aria-label"), `${sandbox.window.CASA_EM_MODULOS_CATALOG.options.finishes[1].publicLabel}: disponível para o módulo ${catalog.modules[0].referenceLabel}`, "local finish association names both finish and module");
