@@ -151,8 +151,8 @@
       "view-label": 7
     },
     "excludedJavaScriptSinks": 11,
-    "javascriptStaticValues": 157,
-    "javascriptDynamicOrMixedValues": 275,
+    "javascriptStaticValues": 153,
+    "javascriptDynamicOrMixedValues": 279,
     "javascriptParseErrors": 0,
     "javascriptNotScannedSources": 0,
     "javascriptNotScannedInlineBlocks": 0,
@@ -342,7 +342,7 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "c8bc3d54bf1ae39dace5fee04363da261b527324ed82f18caa5fbf75f1f1dff3"
+      "sourceSha256": "4085bd454df6d707eebbcc04b734bd434349f0c626ce9c0bde1bac38afb0f6a9"
     },
     {
       "source": "app/app.js",
@@ -770,7 +770,7 @@
         "transform": "catalog-key-substitution",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "65524e082b988926615a71fb17b158b8e12bf79c702b760e126f21aad356a2a6",
+          "manifestSha256": "c5b4c6f2c92d6bf0d5df38af66a3e748e6f2d1232d1cc205a56653e35c924115",
           "outputOffset": 1312,
           "offsetUnit": "unicode-codepoints"
         },
@@ -958,7 +958,7 @@
         "transform": "catalog-key-substitution",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "65524e082b988926615a71fb17b158b8e12bf79c702b760e126f21aad356a2a6",
+          "manifestSha256": "c5b4c6f2c92d6bf0d5df38af66a3e748e6f2d1232d1cc205a56653e35c924115",
           "outputOffset": 1651,
           "offsetUnit": "unicode-codepoints"
         },
@@ -1148,7 +1148,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "65524e082b988926615a71fb17b158b8e12bf79c702b760e126f21aad356a2a6",
+          "manifestSha256": "c5b4c6f2c92d6bf0d5df38af66a3e748e6f2d1232d1cc205a56653e35c924115",
           "outputOffset": 1950,
           "offsetUnit": "unicode-codepoints"
         }
@@ -1321,7 +1321,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "65524e082b988926615a71fb17b158b8e12bf79c702b760e126f21aad356a2a6",
+          "manifestSha256": "c5b4c6f2c92d6bf0d5df38af66a3e748e6f2d1232d1cc205a56653e35c924115",
           "outputOffset": 2321,
           "offsetUnit": "unicode-codepoints"
         }
@@ -1489,7 +1489,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "65524e082b988926615a71fb17b158b8e12bf79c702b760e126f21aad356a2a6",
+          "manifestSha256": "c5b4c6f2c92d6bf0d5df38af66a3e748e6f2d1232d1cc205a56653e35c924115",
           "outputOffset": 2748,
           "offsetUnit": "unicode-codepoints"
         }
@@ -1657,7 +1657,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "65524e082b988926615a71fb17b158b8e12bf79c702b760e126f21aad356a2a6",
+          "manifestSha256": "c5b4c6f2c92d6bf0d5df38af66a3e748e6f2d1232d1cc205a56653e35c924115",
           "outputOffset": 3026,
           "offsetUnit": "unicode-codepoints"
         }
@@ -1825,7 +1825,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "65524e082b988926615a71fb17b158b8e12bf79c702b760e126f21aad356a2a6",
+          "manifestSha256": "c5b4c6f2c92d6bf0d5df38af66a3e748e6f2d1232d1cc205a56653e35c924115",
           "outputOffset": 3221,
           "offsetUnit": "unicode-codepoints"
         }
@@ -1993,7 +1993,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "65524e082b988926615a71fb17b158b8e12bf79c702b760e126f21aad356a2a6",
+          "manifestSha256": "c5b4c6f2c92d6bf0d5df38af66a3e748e6f2d1232d1cc205a56653e35c924115",
           "outputOffset": 4003,
           "offsetUnit": "unicode-codepoints"
         }
@@ -2161,7 +2161,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "65524e082b988926615a71fb17b158b8e12bf79c702b760e126f21aad356a2a6",
+          "manifestSha256": "c5b4c6f2c92d6bf0d5df38af66a3e748e6f2d1232d1cc205a56653e35c924115",
           "outputOffset": 4187,
           "offsetUnit": "unicode-codepoints"
         }
@@ -2329,7 +2329,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "65524e082b988926615a71fb17b158b8e12bf79c702b760e126f21aad356a2a6",
+          "manifestSha256": "c5b4c6f2c92d6bf0d5df38af66a3e748e6f2d1232d1cc205a56653e35c924115",
           "outputOffset": 4939,
           "offsetUnit": "unicode-codepoints"
         }
@@ -2497,7 +2497,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "65524e082b988926615a71fb17b158b8e12bf79c702b760e126f21aad356a2a6",
+          "manifestSha256": "c5b4c6f2c92d6bf0d5df38af66a3e748e6f2d1232d1cc205a56653e35c924115",
           "outputOffset": 5140,
           "offsetUnit": "unicode-codepoints"
         }
@@ -2665,7 +2665,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "65524e082b988926615a71fb17b158b8e12bf79c702b760e126f21aad356a2a6",
+          "manifestSha256": "c5b4c6f2c92d6bf0d5df38af66a3e748e6f2d1232d1cc205a56653e35c924115",
           "outputOffset": 5619,
           "offsetUnit": "unicode-codepoints"
         }
@@ -2833,7 +2833,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "65524e082b988926615a71fb17b158b8e12bf79c702b760e126f21aad356a2a6",
+          "manifestSha256": "c5b4c6f2c92d6bf0d5df38af66a3e748e6f2d1232d1cc205a56653e35c924115",
           "outputOffset": 6300,
           "offsetUnit": "unicode-codepoints"
         }
@@ -3014,7 +3014,7 @@
         "transform": "catalog-key-substitution",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "65524e082b988926615a71fb17b158b8e12bf79c702b760e126f21aad356a2a6",
+          "manifestSha256": "c5b4c6f2c92d6bf0d5df38af66a3e748e6f2d1232d1cc205a56653e35c924115",
           "outputOffset": 6703,
           "offsetUnit": "unicode-codepoints"
         },
@@ -4415,7 +4415,7 @@
       "classificationHints": [
         "visible-or-accessible-ui"
       ],
-      "sourceSha256": "78a1c17da7dae36c68f8b4128d400cdb7a98a222b831d45655553030bac9adbe",
+      "sourceSha256": "c6518ad21dcc45a80bb3a8de349551f4779b861bd9f64d532fc7f614348a0bd2",
       "id": "19f2c8a0c0f6d96d"
     },
     {
@@ -4515,7 +4515,7 @@
       "classificationHints": [
         "accessibility-text"
       ],
-      "sourceSha256": "78a1c17da7dae36c68f8b4128d400cdb7a98a222b831d45655553030bac9adbe",
+      "sourceSha256": "c6518ad21dcc45a80bb3a8de349551f4779b861bd9f64d532fc7f614348a0bd2",
       "id": "42744b3303a51cf3"
     },
     {
@@ -4615,7 +4615,7 @@
       "classificationHints": [
         "visible-or-accessible-ui"
       ],
-      "sourceSha256": "78a1c17da7dae36c68f8b4128d400cdb7a98a222b831d45655553030bac9adbe",
+      "sourceSha256": "c6518ad21dcc45a80bb3a8de349551f4779b861bd9f64d532fc7f614348a0bd2",
       "id": "96bbd4622b1c0a1c"
     },
     {
@@ -4715,7 +4715,7 @@
       "classificationHints": [
         "accessibility-text"
       ],
-      "sourceSha256": "78a1c17da7dae36c68f8b4128d400cdb7a98a222b831d45655553030bac9adbe",
+      "sourceSha256": "c6518ad21dcc45a80bb3a8de349551f4779b861bd9f64d532fc7f614348a0bd2",
       "id": "51e59854977e6938"
     },
     {
@@ -4815,7 +4815,7 @@
       "classificationHints": [
         "visible-or-accessible-ui"
       ],
-      "sourceSha256": "78a1c17da7dae36c68f8b4128d400cdb7a98a222b831d45655553030bac9adbe",
+      "sourceSha256": "c6518ad21dcc45a80bb3a8de349551f4779b861bd9f64d532fc7f614348a0bd2",
       "id": "a6b2ee5ea50de376"
     },
     {
@@ -4915,7 +4915,7 @@
       "classificationHints": [
         "accessibility-text"
       ],
-      "sourceSha256": "78a1c17da7dae36c68f8b4128d400cdb7a98a222b831d45655553030bac9adbe",
+      "sourceSha256": "c6518ad21dcc45a80bb3a8de349551f4779b861bd9f64d532fc7f614348a0bd2",
       "id": "28c821213a5c5783"
     },
     {
@@ -5015,7 +5015,7 @@
       "classificationHints": [
         "visible-or-accessible-ui"
       ],
-      "sourceSha256": "78a1c17da7dae36c68f8b4128d400cdb7a98a222b831d45655553030bac9adbe",
+      "sourceSha256": "c6518ad21dcc45a80bb3a8de349551f4779b861bd9f64d532fc7f614348a0bd2",
       "id": "e170a5898970cf07"
     },
     {
@@ -5115,7 +5115,7 @@
       "classificationHints": [
         "visible-or-accessible-ui"
       ],
-      "sourceSha256": "78a1c17da7dae36c68f8b4128d400cdb7a98a222b831d45655553030bac9adbe",
+      "sourceSha256": "c6518ad21dcc45a80bb3a8de349551f4779b861bd9f64d532fc7f614348a0bd2",
       "id": "6c2d6a0a17af1c05"
     },
     {
@@ -5215,7 +5215,7 @@
       "classificationHints": [
         "visible-or-accessible-ui"
       ],
-      "sourceSha256": "78a1c17da7dae36c68f8b4128d400cdb7a98a222b831d45655553030bac9adbe",
+      "sourceSha256": "c6518ad21dcc45a80bb3a8de349551f4779b861bd9f64d532fc7f614348a0bd2",
       "id": "d187f6dda5294892"
     },
     {
@@ -5315,7 +5315,7 @@
       "classificationHints": [
         "visible-or-accessible-ui"
       ],
-      "sourceSha256": "78a1c17da7dae36c68f8b4128d400cdb7a98a222b831d45655553030bac9adbe",
+      "sourceSha256": "c6518ad21dcc45a80bb3a8de349551f4779b861bd9f64d532fc7f614348a0bd2",
       "id": "6c0c3f5843b5f0bc"
     },
     {
@@ -5415,7 +5415,7 @@
       "classificationHints": [
         "visible-or-accessible-ui"
       ],
-      "sourceSha256": "78a1c17da7dae36c68f8b4128d400cdb7a98a222b831d45655553030bac9adbe",
+      "sourceSha256": "c6518ad21dcc45a80bb3a8de349551f4779b861bd9f64d532fc7f614348a0bd2",
       "id": "448cf5773fe99a20"
     },
     {
@@ -5515,7 +5515,7 @@
       "classificationHints": [
         "visible-or-accessible-ui"
       ],
-      "sourceSha256": "78a1c17da7dae36c68f8b4128d400cdb7a98a222b831d45655553030bac9adbe",
+      "sourceSha256": "c6518ad21dcc45a80bb3a8de349551f4779b861bd9f64d532fc7f614348a0bd2",
       "id": "ca26070625ed5e3b"
     },
     {
@@ -5615,7 +5615,7 @@
       "classificationHints": [
         "visible-or-accessible-ui"
       ],
-      "sourceSha256": "78a1c17da7dae36c68f8b4128d400cdb7a98a222b831d45655553030bac9adbe",
+      "sourceSha256": "c6518ad21dcc45a80bb3a8de349551f4779b861bd9f64d532fc7f614348a0bd2",
       "id": "eff67c83e992f08f"
     },
     {
@@ -5715,7 +5715,7 @@
       "classificationHints": [
         "accessibility-text"
       ],
-      "sourceSha256": "78a1c17da7dae36c68f8b4128d400cdb7a98a222b831d45655553030bac9adbe",
+      "sourceSha256": "c6518ad21dcc45a80bb3a8de349551f4779b861bd9f64d532fc7f614348a0bd2",
       "id": "59bb913c9f67678a"
     },
     {
@@ -5815,7 +5815,7 @@
       "classificationHints": [
         "visible-or-accessible-ui"
       ],
-      "sourceSha256": "78a1c17da7dae36c68f8b4128d400cdb7a98a222b831d45655553030bac9adbe",
+      "sourceSha256": "c6518ad21dcc45a80bb3a8de349551f4779b861bd9f64d532fc7f614348a0bd2",
       "id": "05a47637ab216c21"
     },
     {
@@ -5915,7 +5915,7 @@
       "classificationHints": [
         "visible-or-accessible-ui"
       ],
-      "sourceSha256": "78a1c17da7dae36c68f8b4128d400cdb7a98a222b831d45655553030bac9adbe",
+      "sourceSha256": "c6518ad21dcc45a80bb3a8de349551f4779b861bd9f64d532fc7f614348a0bd2",
       "id": "d07306f05d26cfd6"
     },
     {
@@ -6015,7 +6015,7 @@
       "classificationHints": [
         "visible-or-accessible-ui"
       ],
-      "sourceSha256": "78a1c17da7dae36c68f8b4128d400cdb7a98a222b831d45655553030bac9adbe",
+      "sourceSha256": "c6518ad21dcc45a80bb3a8de349551f4779b861bd9f64d532fc7f614348a0bd2",
       "id": "1186253a46e49477"
     },
     {
@@ -6115,7 +6115,7 @@
       "classificationHints": [
         "visible-or-accessible-ui"
       ],
-      "sourceSha256": "78a1c17da7dae36c68f8b4128d400cdb7a98a222b831d45655553030bac9adbe",
+      "sourceSha256": "c6518ad21dcc45a80bb3a8de349551f4779b861bd9f64d532fc7f614348a0bd2",
       "id": "cdb0886045a63bf2"
     },
     {
@@ -6206,12 +6206,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "c8bc3d54bf1ae39dace5fee04363da261b527324ed82f18caa5fbf75f1f1dff3",
-      "id": "f23a2000356b3579"
+      "sourceSha256": "4085bd454df6d707eebbcc04b734bd434349f0c626ce9c0bde1bac38afb0f6a9",
+      "id": "05db8f1906a5892e"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 113,
+      "line": 114,
       "column": 3,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -6301,12 +6301,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "c8bc3d54bf1ae39dace5fee04363da261b527324ed82f18caa5fbf75f1f1dff3",
-      "id": "1ad12e573e71bb0e"
+      "sourceSha256": "4085bd454df6d707eebbcc04b734bd434349f0c626ce9c0bde1bac38afb0f6a9",
+      "id": "1feadf839a199c71"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 251,
+      "line": 252,
       "column": 27,
       "kind": "javascript-sink",
       "sink": "call:createTextNode",
@@ -6395,12 +6395,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "c8bc3d54bf1ae39dace5fee04363da261b527324ed82f18caa5fbf75f1f1dff3",
-      "id": "3b8826530d1d4ec1"
+      "sourceSha256": "4085bd454df6d707eebbcc04b734bd434349f0c626ce9c0bde1bac38afb0f6a9",
+      "id": "710bd704f7a4cd3a"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 273,
+      "line": 274,
       "column": 27,
       "kind": "javascript-sink",
       "sink": "call:createTextNode",
@@ -6487,12 +6487,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "c8bc3d54bf1ae39dace5fee04363da261b527324ed82f18caa5fbf75f1f1dff3",
-      "id": "59cb218795f6a47a"
+      "sourceSha256": "4085bd454df6d707eebbcc04b734bd434349f0c626ce9c0bde1bac38afb0f6a9",
+      "id": "85da641f3c979ace"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 303,
+      "line": 304,
       "column": 5,
       "kind": "javascript-sink",
       "sink": "call:setAttribute",
@@ -6584,12 +6584,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "c8bc3d54bf1ae39dace5fee04363da261b527324ed82f18caa5fbf75f1f1dff3",
-      "id": "0cc49534bb286150"
+      "sourceSha256": "4085bd454df6d707eebbcc04b734bd434349f0c626ce9c0bde1bac38afb0f6a9",
+      "id": "fe0cf95104121c73"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 322,
+      "line": 323,
       "column": 3,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -6681,12 +6681,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "c8bc3d54bf1ae39dace5fee04363da261b527324ed82f18caa5fbf75f1f1dff3",
-      "id": "d10b091d57eec32c"
+      "sourceSha256": "4085bd454df6d707eebbcc04b734bd434349f0c626ce9c0bde1bac38afb0f6a9",
+      "id": "acc9d4fd773a8575"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 391,
+      "line": 392,
       "column": 3,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -6775,12 +6775,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "c8bc3d54bf1ae39dace5fee04363da261b527324ed82f18caa5fbf75f1f1dff3",
-      "id": "8071071d800771a2"
+      "sourceSha256": "4085bd454df6d707eebbcc04b734bd434349f0c626ce9c0bde1bac38afb0f6a9",
+      "id": "e2fd518933d674a2"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 439,
+      "line": 440,
       "column": 20,
       "kind": "javascript-sink",
       "sink": "call:createTextNode",
@@ -6869,12 +6869,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "c8bc3d54bf1ae39dace5fee04363da261b527324ed82f18caa5fbf75f1f1dff3",
-      "id": "5865ca1b4f2d8407"
+      "sourceSha256": "4085bd454df6d707eebbcc04b734bd434349f0c626ce9c0bde1bac38afb0f6a9",
+      "id": "6e6162eec57902ef"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 485,
+      "line": 486,
       "column": 15,
       "kind": "javascript-sink",
       "sink": "call:createTextNode",
@@ -6963,12 +6963,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "c8bc3d54bf1ae39dace5fee04363da261b527324ed82f18caa5fbf75f1f1dff3",
-      "id": "47b5163a099b44e6"
+      "sourceSha256": "4085bd454df6d707eebbcc04b734bd434349f0c626ce9c0bde1bac38afb0f6a9",
+      "id": "02e57611ca74ff52"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 526,
+      "line": 527,
       "column": 7,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -7057,12 +7057,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "c8bc3d54bf1ae39dace5fee04363da261b527324ed82f18caa5fbf75f1f1dff3",
-      "id": "ea08e4780f710859"
+      "sourceSha256": "4085bd454df6d707eebbcc04b734bd434349f0c626ce9c0bde1bac38afb0f6a9",
+      "id": "555c4adedebc4da7"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 579,
+      "line": 580,
       "column": 15,
       "kind": "javascript-sink",
       "sink": "call:createTextNode",
@@ -7154,12 +7154,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "c8bc3d54bf1ae39dace5fee04363da261b527324ed82f18caa5fbf75f1f1dff3",
-      "id": "cdc1b85f6795d95e"
+      "sourceSha256": "4085bd454df6d707eebbcc04b734bd434349f0c626ce9c0bde1bac38afb0f6a9",
+      "id": "c437a56cdcc9c6a9"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 633,
+      "line": 634,
       "column": 3,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -7247,12 +7247,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "c8bc3d54bf1ae39dace5fee04363da261b527324ed82f18caa5fbf75f1f1dff3",
-      "id": "2c685912057c07eb"
+      "sourceSha256": "4085bd454df6d707eebbcc04b734bd434349f0c626ce9c0bde1bac38afb0f6a9",
+      "id": "3e943913c974f6d4"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 656,
+      "line": 657,
       "column": 5,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -7343,12 +7343,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "c8bc3d54bf1ae39dace5fee04363da261b527324ed82f18caa5fbf75f1f1dff3",
-      "id": "617bfbf0338cbd12"
+      "sourceSha256": "4085bd454df6d707eebbcc04b734bd434349f0c626ce9c0bde1bac38afb0f6a9",
+      "id": "1f55a395e2782396"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 690,
+      "line": 691,
       "column": 5,
       "kind": "javascript-sink",
       "sink": "call:setAttribute",
@@ -7441,12 +7441,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "c8bc3d54bf1ae39dace5fee04363da261b527324ed82f18caa5fbf75f1f1dff3",
-      "id": "da58c0a4863a509f"
+      "sourceSha256": "4085bd454df6d707eebbcc04b734bd434349f0c626ce9c0bde1bac38afb0f6a9",
+      "id": "8f21998a0c6dc37b"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 728,
+      "line": 729,
       "column": 50,
       "kind": "javascript-sink",
       "sink": "call:setAttribute",
@@ -7534,12 +7534,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "c8bc3d54bf1ae39dace5fee04363da261b527324ed82f18caa5fbf75f1f1dff3",
-      "id": "9bad279c705dbe3e"
+      "sourceSha256": "4085bd454df6d707eebbcc04b734bd434349f0c626ce9c0bde1bac38afb0f6a9",
+      "id": "4d23ae5d7cbc9d46"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 765,
+      "line": 766,
       "column": 16,
       "kind": "javascript-sink",
       "sink": "call:createTextNode",
@@ -7625,12 +7625,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "c8bc3d54bf1ae39dace5fee04363da261b527324ed82f18caa5fbf75f1f1dff3",
-      "id": "586d04a3f4192a3a"
+      "sourceSha256": "4085bd454df6d707eebbcc04b734bd434349f0c626ce9c0bde1bac38afb0f6a9",
+      "id": "66d3126009765867"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 829,
+      "line": 830,
       "column": 5,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -7721,12 +7721,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "c8bc3d54bf1ae39dace5fee04363da261b527324ed82f18caa5fbf75f1f1dff3",
-      "id": "f577706a10b40563"
+      "sourceSha256": "4085bd454df6d707eebbcc04b734bd434349f0c626ce9c0bde1bac38afb0f6a9",
+      "id": "9d6ccf7297844661"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 849,
+      "line": 850,
       "column": 103,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -7816,12 +7816,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "c8bc3d54bf1ae39dace5fee04363da261b527324ed82f18caa5fbf75f1f1dff3",
-      "id": "f2599c9c85dbba99"
+      "sourceSha256": "4085bd454df6d707eebbcc04b734bd434349f0c626ce9c0bde1bac38afb0f6a9",
+      "id": "8cba9f01f528f1cf"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 858,
+      "line": 859,
       "column": 60,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -7909,12 +7909,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "c8bc3d54bf1ae39dace5fee04363da261b527324ed82f18caa5fbf75f1f1dff3",
-      "id": "29a232b57b794aa8"
+      "sourceSha256": "4085bd454df6d707eebbcc04b734bd434349f0c626ce9c0bde1bac38afb0f6a9",
+      "id": "23d40740b304d7f1"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 893,
+      "line": 894,
       "column": 27,
       "kind": "javascript-sink",
       "sink": "call:setAttribute",
@@ -8001,12 +8001,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "c8bc3d54bf1ae39dace5fee04363da261b527324ed82f18caa5fbf75f1f1dff3",
-      "id": "c3c84bd84b29cbd2"
+      "sourceSha256": "4085bd454df6d707eebbcc04b734bd434349f0c626ce9c0bde1bac38afb0f6a9",
+      "id": "0cb1766602c0a7de"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 903,
+      "line": 904,
       "column": 78,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -8093,12 +8093,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "c8bc3d54bf1ae39dace5fee04363da261b527324ed82f18caa5fbf75f1f1dff3",
-      "id": "e098ec2a6b65dc10"
+      "sourceSha256": "4085bd454df6d707eebbcc04b734bd434349f0c626ce9c0bde1bac38afb0f6a9",
+      "id": "ba4d54315af5a23c"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 930,
+      "line": 931,
       "column": 9,
       "kind": "javascript-sink",
       "sink": "call:setAttribute",
@@ -8189,12 +8189,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "c8bc3d54bf1ae39dace5fee04363da261b527324ed82f18caa5fbf75f1f1dff3",
-      "id": "1765452cca754f1a"
+      "sourceSha256": "4085bd454df6d707eebbcc04b734bd434349f0c626ce9c0bde1bac38afb0f6a9",
+      "id": "a7cefd41dbf2124c"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 953,
+      "line": 954,
       "column": 129,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -8286,12 +8286,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "c8bc3d54bf1ae39dace5fee04363da261b527324ed82f18caa5fbf75f1f1dff3",
-      "id": "5a6222863dd6e6ff"
+      "sourceSha256": "4085bd454df6d707eebbcc04b734bd434349f0c626ce9c0bde1bac38afb0f6a9",
+      "id": "2c9ab2daa267552f"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 996,
+      "line": 997,
       "column": 95,
       "kind": "javascript-sink",
       "sink": "call:createTextNode",
@@ -8374,21 +8374,19 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "c8bc3d54bf1ae39dace5fee04363da261b527324ed82f18caa5fbf75f1f1dff3",
-      "id": "782ca1d03243b05c"
+      "sourceSha256": "4085bd454df6d707eebbcc04b734bd434349f0c626ce9c0bde1bac38afb0f6a9",
+      "id": "70e98923dced9301"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1016,
+      "line": 1017,
       "column": 7,
       "kind": "javascript-sink",
       "sink": "property:textContent",
       "attribute": "text-content",
-      "expression": "\"Cor base indisponível enquanto “Sem cor/tinta base” estiver marcado.\"",
-      "value": "Cor base indisponível enquanto “Sem cor/tinta base” estiver marcado.",
-      "literalSegments": [
-        "Cor base indisponível enquanto “Sem cor/tinta base” estiver marcado."
-      ],
+      "expression": "materialAvailabilityCopy.colorDisabledReason",
+      "value": null,
+      "literalSegments": [],
       "constantCandidates": [],
       "classification": "unreviewed",
       "classificationHints": [
@@ -8490,21 +8488,19 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "c8bc3d54bf1ae39dace5fee04363da261b527324ed82f18caa5fbf75f1f1dff3",
-      "id": "3f335aa3e5934c47"
+      "sourceSha256": "4085bd454df6d707eebbcc04b734bd434349f0c626ce9c0bde1bac38afb0f6a9",
+      "id": "49bc91bf4428532f"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1028,
+      "line": 1029,
       "column": 7,
       "kind": "javascript-sink",
       "sink": "property:textContent",
       "attribute": "text-content",
-      "expression": "\"Sem cor/tinta base está disponível apenas para materiais do tipo Textura.\"",
-      "value": "Sem cor/tinta base está disponível apenas para materiais do tipo Textura.",
-      "literalSegments": [
-        "Sem cor/tinta base está disponível apenas para materiais do tipo Textura."
-      ],
+      "expression": "materialAvailabilityCopy.noColorDisabledReason",
+      "value": null,
+      "literalSegments": [],
       "constantCandidates": [],
       "classification": "unreviewed",
       "classificationHints": [
@@ -8584,12 +8580,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "c8bc3d54bf1ae39dace5fee04363da261b527324ed82f18caa5fbf75f1f1dff3",
-      "id": "56beca2ab3870978"
+      "sourceSha256": "4085bd454df6d707eebbcc04b734bd434349f0c626ce9c0bde1bac38afb0f6a9",
+      "id": "842f28fa3b24364e"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1034,
+      "line": 1035,
       "column": 118,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -8676,12 +8672,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "c8bc3d54bf1ae39dace5fee04363da261b527324ed82f18caa5fbf75f1f1dff3",
-      "id": "c34a7f79d5a3ac00"
+      "sourceSha256": "4085bd454df6d707eebbcc04b734bd434349f0c626ce9c0bde1bac38afb0f6a9",
+      "id": "8eca7ab6ba670bb6"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1048,
+      "line": 1049,
       "column": 137,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -8772,12 +8768,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "c8bc3d54bf1ae39dace5fee04363da261b527324ed82f18caa5fbf75f1f1dff3",
-      "id": "b2d50b105cc25feb"
+      "sourceSha256": "4085bd454df6d707eebbcc04b734bd434349f0c626ce9c0bde1bac38afb0f6a9",
+      "id": "a3c153fef391a2b1"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1084,
+      "line": 1085,
       "column": 80,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -8868,12 +8864,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "c8bc3d54bf1ae39dace5fee04363da261b527324ed82f18caa5fbf75f1f1dff3",
-      "id": "5f94fdf3d353ab08"
+      "sourceSha256": "4085bd454df6d707eebbcc04b734bd434349f0c626ce9c0bde1bac38afb0f6a9",
+      "id": "28316e3e34e2577d"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1119,
+      "line": 1120,
       "column": 34,
       "kind": "javascript-sink",
       "sink": "call:createTextNode",
@@ -8964,12 +8960,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "c8bc3d54bf1ae39dace5fee04363da261b527324ed82f18caa5fbf75f1f1dff3",
-      "id": "662b512c1c8d171b"
+      "sourceSha256": "4085bd454df6d707eebbcc04b734bd434349f0c626ce9c0bde1bac38afb0f6a9",
+      "id": "944331a97da3c013"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1170,
+      "line": 1171,
       "column": 102,
       "kind": "javascript-sink",
       "sink": "call:createTextNode",
@@ -9058,12 +9054,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "c8bc3d54bf1ae39dace5fee04363da261b527324ed82f18caa5fbf75f1f1dff3",
-      "id": "13bd62f13fc49489"
+      "sourceSha256": "4085bd454df6d707eebbcc04b734bd434349f0c626ce9c0bde1bac38afb0f6a9",
+      "id": "1021f8da7c38775b"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1221,
+      "line": 1222,
       "column": 45,
       "kind": "javascript-sink",
       "sink": "call:createTextNode",
@@ -9146,12 +9142,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "c8bc3d54bf1ae39dace5fee04363da261b527324ed82f18caa5fbf75f1f1dff3",
-      "id": "1b401b6b9195ecc4"
+      "sourceSha256": "4085bd454df6d707eebbcc04b734bd434349f0c626ce9c0bde1bac38afb0f6a9",
+      "id": "32702376c47b5d69"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1244,
+      "line": 1245,
       "column": 7,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -9238,12 +9234,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "c8bc3d54bf1ae39dace5fee04363da261b527324ed82f18caa5fbf75f1f1dff3",
-      "id": "e421ee3511c507a7"
+      "sourceSha256": "4085bd454df6d707eebbcc04b734bd434349f0c626ce9c0bde1bac38afb0f6a9",
+      "id": "17f368510a62c614"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1277,
+      "line": 1278,
       "column": 7,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -9336,12 +9332,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "c8bc3d54bf1ae39dace5fee04363da261b527324ed82f18caa5fbf75f1f1dff3",
-      "id": "9f98006073389d50"
+      "sourceSha256": "4085bd454df6d707eebbcc04b734bd434349f0c626ce9c0bde1bac38afb0f6a9",
+      "id": "0b98280925319845"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1358,
+      "line": 1359,
       "column": 3,
       "kind": "javascript-sink",
       "sink": "helper:setMessage",
@@ -9432,12 +9428,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "c8bc3d54bf1ae39dace5fee04363da261b527324ed82f18caa5fbf75f1f1dff3",
-      "id": "61fa94bf89b5ea6e"
+      "sourceSha256": "4085bd454df6d707eebbcc04b734bd434349f0c626ce9c0bde1bac38afb0f6a9",
+      "id": "8161545b7da2b54d"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1510,
+      "line": 1511,
       "column": 17,
       "kind": "javascript-sink",
       "sink": "native-dialog:prompt",
@@ -9530,12 +9526,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "c8bc3d54bf1ae39dace5fee04363da261b527324ed82f18caa5fbf75f1f1dff3",
-      "id": "7debf8e63ddce54d"
+      "sourceSha256": "4085bd454df6d707eebbcc04b734bd434349f0c626ce9c0bde1bac38afb0f6a9",
+      "id": "1ef7307757a29242"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1564,
+      "line": 1565,
       "column": 5,
       "kind": "javascript-sink",
       "sink": "helper:setMessage",
@@ -9625,12 +9621,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "c8bc3d54bf1ae39dace5fee04363da261b527324ed82f18caa5fbf75f1f1dff3",
-      "id": "6a85b93b756aa817"
+      "sourceSha256": "4085bd454df6d707eebbcc04b734bd434349f0c626ce9c0bde1bac38afb0f6a9",
+      "id": "5022b0177139d4cf"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1632,
+      "line": 1633,
       "column": 5,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -9725,12 +9721,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "c8bc3d54bf1ae39dace5fee04363da261b527324ed82f18caa5fbf75f1f1dff3",
-      "id": "e1660b892af76ea1"
+      "sourceSha256": "4085bd454df6d707eebbcc04b734bd434349f0c626ce9c0bde1bac38afb0f6a9",
+      "id": "149854b2091e4369"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1677,
+      "line": 1678,
       "column": 5,
       "kind": "javascript-sink",
       "sink": "helper:setMessage",
@@ -9823,12 +9819,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "c8bc3d54bf1ae39dace5fee04363da261b527324ed82f18caa5fbf75f1f1dff3",
-      "id": "cfc5e5f433c2a702"
+      "sourceSha256": "4085bd454df6d707eebbcc04b734bd434349f0c626ce9c0bde1bac38afb0f6a9",
+      "id": "468cef3a2b34676e"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1704,
+      "line": 1705,
       "column": 5,
       "kind": "javascript-sink",
       "sink": "helper:setMessage",
@@ -9919,12 +9915,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "c8bc3d54bf1ae39dace5fee04363da261b527324ed82f18caa5fbf75f1f1dff3",
-      "id": "174b9b0a27617621"
+      "sourceSha256": "4085bd454df6d707eebbcc04b734bd434349f0c626ce9c0bde1bac38afb0f6a9",
+      "id": "a02ee2ed503e1220"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1882,
+      "line": 1883,
       "column": 19,
       "kind": "javascript-sink",
       "sink": "native-dialog:prompt",
@@ -10016,12 +10012,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "c8bc3d54bf1ae39dace5fee04363da261b527324ed82f18caa5fbf75f1f1dff3",
-      "id": "1e33c45f20e60363"
+      "sourceSha256": "4085bd454df6d707eebbcc04b734bd434349f0c626ce9c0bde1bac38afb0f6a9",
+      "id": "67322854c590dc6d"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1939,
+      "line": 1940,
       "column": 5,
       "kind": "javascript-sink",
       "sink": "helper:setMessage",
@@ -10113,12 +10109,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "c8bc3d54bf1ae39dace5fee04363da261b527324ed82f18caa5fbf75f1f1dff3",
-      "id": "0dfe9e3188c125ff"
+      "sourceSha256": "4085bd454df6d707eebbcc04b734bd434349f0c626ce9c0bde1bac38afb0f6a9",
+      "id": "ff105b1a324dcfb1"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 2002,
+      "line": 2003,
       "column": 5,
       "kind": "javascript-sink",
       "sink": "helper:setMessage",
@@ -10212,12 +10208,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "c8bc3d54bf1ae39dace5fee04363da261b527324ed82f18caa5fbf75f1f1dff3",
-      "id": "9fea763180605343"
+      "sourceSha256": "4085bd454df6d707eebbcc04b734bd434349f0c626ce9c0bde1bac38afb0f6a9",
+      "id": "754c140f0e6f78a4"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 2066,
+      "line": 2067,
       "column": 7,
       "kind": "javascript-sink",
       "sink": "helper:setMessage",
@@ -10308,12 +10304,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "c8bc3d54bf1ae39dace5fee04363da261b527324ed82f18caa5fbf75f1f1dff3",
-      "id": "4e60aa014a0d79a6"
+      "sourceSha256": "4085bd454df6d707eebbcc04b734bd434349f0c626ce9c0bde1bac38afb0f6a9",
+      "id": "eb2b3f45b533940d"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 2119,
+      "line": 2120,
       "column": 5,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -10407,8 +10403,8 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "c8bc3d54bf1ae39dace5fee04363da261b527324ed82f18caa5fbf75f1f1dff3",
-      "id": "3b8e6b72ff81de39"
+      "sourceSha256": "4085bd454df6d707eebbcc04b734bd434349f0c626ce9c0bde1bac38afb0f6a9",
+      "id": "948494f9644bdd85"
     },
     {
       "source": "app/app.js",
@@ -16605,7 +16601,7 @@
         "transform": "catalog-key-substitution",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "65524e082b988926615a71fb17b158b8e12bf79c702b760e126f21aad356a2a6",
+          "manifestSha256": "c5b4c6f2c92d6bf0d5df38af66a3e748e6f2d1232d1cc205a56653e35c924115",
           "outputOffset": 1582,
           "offsetUnit": "unicode-codepoints"
         },
@@ -16793,7 +16789,7 @@
         "transform": "catalog-key-substitution",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "65524e082b988926615a71fb17b158b8e12bf79c702b760e126f21aad356a2a6",
+          "manifestSha256": "c5b4c6f2c92d6bf0d5df38af66a3e748e6f2d1232d1cc205a56653e35c924115",
           "outputOffset": 1764,
           "offsetUnit": "unicode-codepoints"
         },
@@ -16976,7 +16972,7 @@
         "transform": "catalog-key-substitution",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "65524e082b988926615a71fb17b158b8e12bf79c702b760e126f21aad356a2a6",
+          "manifestSha256": "c5b4c6f2c92d6bf0d5df38af66a3e748e6f2d1232d1cc205a56653e35c924115",
           "outputOffset": 2158,
           "offsetUnit": "unicode-codepoints"
         },
@@ -17151,7 +17147,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "65524e082b988926615a71fb17b158b8e12bf79c702b760e126f21aad356a2a6",
+          "manifestSha256": "c5b4c6f2c92d6bf0d5df38af66a3e748e6f2d1232d1cc205a56653e35c924115",
           "outputOffset": 2409,
           "offsetUnit": "unicode-codepoints"
         }
@@ -17319,7 +17315,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "65524e082b988926615a71fb17b158b8e12bf79c702b760e126f21aad356a2a6",
+          "manifestSha256": "c5b4c6f2c92d6bf0d5df38af66a3e748e6f2d1232d1cc205a56653e35c924115",
           "outputOffset": 2747,
           "offsetUnit": "unicode-codepoints"
         }
@@ -17487,7 +17483,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "65524e082b988926615a71fb17b158b8e12bf79c702b760e126f21aad356a2a6",
+          "manifestSha256": "c5b4c6f2c92d6bf0d5df38af66a3e748e6f2d1232d1cc205a56653e35c924115",
           "outputOffset": 3258,
           "offsetUnit": "unicode-codepoints"
         }
@@ -17660,7 +17656,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "65524e082b988926615a71fb17b158b8e12bf79c702b760e126f21aad356a2a6",
+          "manifestSha256": "c5b4c6f2c92d6bf0d5df38af66a3e748e6f2d1232d1cc205a56653e35c924115",
           "outputOffset": 3764,
           "offsetUnit": "unicode-codepoints"
         }
@@ -17828,7 +17824,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "65524e082b988926615a71fb17b158b8e12bf79c702b760e126f21aad356a2a6",
+          "manifestSha256": "c5b4c6f2c92d6bf0d5df38af66a3e748e6f2d1232d1cc205a56653e35c924115",
           "outputOffset": 4578,
           "offsetUnit": "unicode-codepoints"
         }
@@ -17996,7 +17992,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "65524e082b988926615a71fb17b158b8e12bf79c702b760e126f21aad356a2a6",
+          "manifestSha256": "c5b4c6f2c92d6bf0d5df38af66a3e748e6f2d1232d1cc205a56653e35c924115",
           "outputOffset": 4988,
           "offsetUnit": "unicode-codepoints"
         }
@@ -18164,7 +18160,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "65524e082b988926615a71fb17b158b8e12bf79c702b760e126f21aad356a2a6",
+          "manifestSha256": "c5b4c6f2c92d6bf0d5df38af66a3e748e6f2d1232d1cc205a56653e35c924115",
           "outputOffset": 5341,
           "offsetUnit": "unicode-codepoints"
         }
@@ -18332,7 +18328,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "65524e082b988926615a71fb17b158b8e12bf79c702b760e126f21aad356a2a6",
+          "manifestSha256": "c5b4c6f2c92d6bf0d5df38af66a3e748e6f2d1232d1cc205a56653e35c924115",
           "outputOffset": 5821,
           "offsetUnit": "unicode-codepoints"
         }
@@ -18500,7 +18496,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "65524e082b988926615a71fb17b158b8e12bf79c702b760e126f21aad356a2a6",
+          "manifestSha256": "c5b4c6f2c92d6bf0d5df38af66a3e748e6f2d1232d1cc205a56653e35c924115",
           "outputOffset": 6067,
           "offsetUnit": "unicode-codepoints"
         }
@@ -18668,7 +18664,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "65524e082b988926615a71fb17b158b8e12bf79c702b760e126f21aad356a2a6",
+          "manifestSha256": "c5b4c6f2c92d6bf0d5df38af66a3e748e6f2d1232d1cc205a56653e35c924115",
           "outputOffset": 6461,
           "offsetUnit": "unicode-codepoints"
         }
@@ -18836,7 +18832,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "65524e082b988926615a71fb17b158b8e12bf79c702b760e126f21aad356a2a6",
+          "manifestSha256": "c5b4c6f2c92d6bf0d5df38af66a3e748e6f2d1232d1cc205a56653e35c924115",
           "outputOffset": 6969,
           "offsetUnit": "unicode-codepoints"
         }
@@ -19004,7 +19000,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "65524e082b988926615a71fb17b158b8e12bf79c702b760e126f21aad356a2a6",
+          "manifestSha256": "c5b4c6f2c92d6bf0d5df38af66a3e748e6f2d1232d1cc205a56653e35c924115",
           "outputOffset": 7193,
           "offsetUnit": "unicode-codepoints"
         }
@@ -19172,7 +19168,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "65524e082b988926615a71fb17b158b8e12bf79c702b760e126f21aad356a2a6",
+          "manifestSha256": "c5b4c6f2c92d6bf0d5df38af66a3e748e6f2d1232d1cc205a56653e35c924115",
           "outputOffset": 7646,
           "offsetUnit": "unicode-codepoints"
         }
@@ -19338,7 +19334,7 @@
         "transform": "catalog-key-substitution",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "65524e082b988926615a71fb17b158b8e12bf79c702b760e126f21aad356a2a6",
+          "manifestSha256": "c5b4c6f2c92d6bf0d5df38af66a3e748e6f2d1232d1cc205a56653e35c924115",
           "outputOffset": 8251,
           "offsetUnit": "unicode-codepoints"
         },
@@ -19523,7 +19519,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "65524e082b988926615a71fb17b158b8e12bf79c702b760e126f21aad356a2a6",
+          "manifestSha256": "c5b4c6f2c92d6bf0d5df38af66a3e748e6f2d1232d1cc205a56653e35c924115",
           "outputOffset": 8557,
           "offsetUnit": "unicode-codepoints"
         }
@@ -19699,7 +19695,7 @@
         "transform": "catalog-key-substitution",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "65524e082b988926615a71fb17b158b8e12bf79c702b760e126f21aad356a2a6",
+          "manifestSha256": "c5b4c6f2c92d6bf0d5df38af66a3e748e6f2d1232d1cc205a56653e35c924115",
           "outputOffset": 8742,
           "offsetUnit": "unicode-codepoints"
         },
@@ -19882,7 +19878,7 @@
         "transform": "catalog-key-substitution",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "65524e082b988926615a71fb17b158b8e12bf79c702b760e126f21aad356a2a6",
+          "manifestSha256": "c5b4c6f2c92d6bf0d5df38af66a3e748e6f2d1232d1cc205a56653e35c924115",
           "outputOffset": 8927,
           "offsetUnit": "unicode-codepoints"
         },
@@ -20067,7 +20063,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "65524e082b988926615a71fb17b158b8e12bf79c702b760e126f21aad356a2a6",
+          "manifestSha256": "c5b4c6f2c92d6bf0d5df38af66a3e748e6f2d1232d1cc205a56653e35c924115",
           "outputOffset": 9259,
           "offsetUnit": "unicode-codepoints"
         }
@@ -20243,7 +20239,7 @@
         "transform": "catalog-key-substitution",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "65524e082b988926615a71fb17b158b8e12bf79c702b760e126f21aad356a2a6",
+          "manifestSha256": "c5b4c6f2c92d6bf0d5df38af66a3e748e6f2d1232d1cc205a56653e35c924115",
           "outputOffset": 9712,
           "offsetUnit": "unicode-codepoints"
         },
@@ -20428,7 +20424,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "65524e082b988926615a71fb17b158b8e12bf79c702b760e126f21aad356a2a6",
+          "manifestSha256": "c5b4c6f2c92d6bf0d5df38af66a3e748e6f2d1232d1cc205a56653e35c924115",
           "outputOffset": 10025,
           "offsetUnit": "unicode-codepoints"
         }
@@ -20604,7 +20600,7 @@
         "transform": "catalog-key-substitution",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "65524e082b988926615a71fb17b158b8e12bf79c702b760e126f21aad356a2a6",
+          "manifestSha256": "c5b4c6f2c92d6bf0d5df38af66a3e748e6f2d1232d1cc205a56653e35c924115",
           "outputOffset": 10213,
           "offsetUnit": "unicode-codepoints"
         },
@@ -20787,7 +20783,7 @@
         "transform": "catalog-key-substitution",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "65524e082b988926615a71fb17b158b8e12bf79c702b760e126f21aad356a2a6",
+          "manifestSha256": "c5b4c6f2c92d6bf0d5df38af66a3e748e6f2d1232d1cc205a56653e35c924115",
           "outputOffset": 10396,
           "offsetUnit": "unicode-codepoints"
         },
@@ -20972,7 +20968,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "65524e082b988926615a71fb17b158b8e12bf79c702b760e126f21aad356a2a6",
+          "manifestSha256": "c5b4c6f2c92d6bf0d5df38af66a3e748e6f2d1232d1cc205a56653e35c924115",
           "outputOffset": 10721,
           "offsetUnit": "unicode-codepoints"
         }
@@ -21155,7 +21151,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "65524e082b988926615a71fb17b158b8e12bf79c702b760e126f21aad356a2a6",
+          "manifestSha256": "c5b4c6f2c92d6bf0d5df38af66a3e748e6f2d1232d1cc205a56653e35c924115",
           "outputOffset": 11310,
           "offsetUnit": "unicode-codepoints"
         }
@@ -21331,7 +21327,7 @@
         "transform": "catalog-key-substitution",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "65524e082b988926615a71fb17b158b8e12bf79c702b760e126f21aad356a2a6",
+          "manifestSha256": "c5b4c6f2c92d6bf0d5df38af66a3e748e6f2d1232d1cc205a56653e35c924115",
           "outputOffset": 11509,
           "offsetUnit": "unicode-codepoints"
         },
@@ -21514,7 +21510,7 @@
         "transform": "catalog-key-substitution",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "65524e082b988926615a71fb17b158b8e12bf79c702b760e126f21aad356a2a6",
+          "manifestSha256": "c5b4c6f2c92d6bf0d5df38af66a3e748e6f2d1232d1cc205a56653e35c924115",
           "outputOffset": 11725,
           "offsetUnit": "unicode-codepoints"
         },
@@ -21699,7 +21695,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "65524e082b988926615a71fb17b158b8e12bf79c702b760e126f21aad356a2a6",
+          "manifestSha256": "c5b4c6f2c92d6bf0d5df38af66a3e748e6f2d1232d1cc205a56653e35c924115",
           "outputOffset": 12079,
           "offsetUnit": "unicode-codepoints"
         }
@@ -21875,7 +21871,7 @@
         "transform": "catalog-key-substitution",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "65524e082b988926615a71fb17b158b8e12bf79c702b760e126f21aad356a2a6",
+          "manifestSha256": "c5b4c6f2c92d6bf0d5df38af66a3e748e6f2d1232d1cc205a56653e35c924115",
           "outputOffset": 12293,
           "offsetUnit": "unicode-codepoints"
         },
@@ -22055,7 +22051,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "65524e082b988926615a71fb17b158b8e12bf79c702b760e126f21aad356a2a6",
+          "manifestSha256": "c5b4c6f2c92d6bf0d5df38af66a3e748e6f2d1232d1cc205a56653e35c924115",
           "outputOffset": 12617,
           "offsetUnit": "unicode-codepoints"
         }
@@ -22223,7 +22219,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "65524e082b988926615a71fb17b158b8e12bf79c702b760e126f21aad356a2a6",
+          "manifestSha256": "c5b4c6f2c92d6bf0d5df38af66a3e748e6f2d1232d1cc205a56653e35c924115",
           "outputOffset": 13508,
           "offsetUnit": "unicode-codepoints"
         }
@@ -22391,7 +22387,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "65524e082b988926615a71fb17b158b8e12bf79c702b760e126f21aad356a2a6",
+          "manifestSha256": "c5b4c6f2c92d6bf0d5df38af66a3e748e6f2d1232d1cc205a56653e35c924115",
           "outputOffset": 13753,
           "offsetUnit": "unicode-codepoints"
         }
@@ -22559,7 +22555,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "65524e082b988926615a71fb17b158b8e12bf79c702b760e126f21aad356a2a6",
+          "manifestSha256": "c5b4c6f2c92d6bf0d5df38af66a3e748e6f2d1232d1cc205a56653e35c924115",
           "outputOffset": 14118,
           "offsetUnit": "unicode-codepoints"
         }
@@ -22727,7 +22723,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "65524e082b988926615a71fb17b158b8e12bf79c702b760e126f21aad356a2a6",
+          "manifestSha256": "c5b4c6f2c92d6bf0d5df38af66a3e748e6f2d1232d1cc205a56653e35c924115",
           "outputOffset": 14535,
           "offsetUnit": "unicode-codepoints"
         }
@@ -22895,7 +22891,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "65524e082b988926615a71fb17b158b8e12bf79c702b760e126f21aad356a2a6",
+          "manifestSha256": "c5b4c6f2c92d6bf0d5df38af66a3e748e6f2d1232d1cc205a56653e35c924115",
           "outputOffset": 15186,
           "offsetUnit": "unicode-codepoints"
         }
@@ -23063,7 +23059,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "65524e082b988926615a71fb17b158b8e12bf79c702b760e126f21aad356a2a6",
+          "manifestSha256": "c5b4c6f2c92d6bf0d5df38af66a3e748e6f2d1232d1cc205a56653e35c924115",
           "outputOffset": 15771,
           "offsetUnit": "unicode-codepoints"
         }
@@ -23231,7 +23227,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "65524e082b988926615a71fb17b158b8e12bf79c702b760e126f21aad356a2a6",
+          "manifestSha256": "c5b4c6f2c92d6bf0d5df38af66a3e748e6f2d1232d1cc205a56653e35c924115",
           "outputOffset": 16396,
           "offsetUnit": "unicode-codepoints"
         }
@@ -23399,7 +23395,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "65524e082b988926615a71fb17b158b8e12bf79c702b760e126f21aad356a2a6",
+          "manifestSha256": "c5b4c6f2c92d6bf0d5df38af66a3e748e6f2d1232d1cc205a56653e35c924115",
           "outputOffset": 16842,
           "offsetUnit": "unicode-codepoints"
         }
@@ -23567,7 +23563,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "65524e082b988926615a71fb17b158b8e12bf79c702b760e126f21aad356a2a6",
+          "manifestSha256": "c5b4c6f2c92d6bf0d5df38af66a3e748e6f2d1232d1cc205a56653e35c924115",
           "outputOffset": 17479,
           "offsetUnit": "unicode-codepoints"
         }
@@ -23735,7 +23731,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "65524e082b988926615a71fb17b158b8e12bf79c702b760e126f21aad356a2a6",
+          "manifestSha256": "c5b4c6f2c92d6bf0d5df38af66a3e748e6f2d1232d1cc205a56653e35c924115",
           "outputOffset": 17848,
           "offsetUnit": "unicode-codepoints"
         }
@@ -23903,7 +23899,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "65524e082b988926615a71fb17b158b8e12bf79c702b760e126f21aad356a2a6",
+          "manifestSha256": "c5b4c6f2c92d6bf0d5df38af66a3e748e6f2d1232d1cc205a56653e35c924115",
           "outputOffset": 18225,
           "offsetUnit": "unicode-codepoints"
         }
@@ -24071,7 +24067,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "65524e082b988926615a71fb17b158b8e12bf79c702b760e126f21aad356a2a6",
+          "manifestSha256": "c5b4c6f2c92d6bf0d5df38af66a3e748e6f2d1232d1cc205a56653e35c924115",
           "outputOffset": 18617,
           "offsetUnit": "unicode-codepoints"
         }
@@ -24239,7 +24235,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "65524e082b988926615a71fb17b158b8e12bf79c702b760e126f21aad356a2a6",
+          "manifestSha256": "c5b4c6f2c92d6bf0d5df38af66a3e748e6f2d1232d1cc205a56653e35c924115",
           "outputOffset": 19094,
           "offsetUnit": "unicode-codepoints"
         }
@@ -24407,7 +24403,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "65524e082b988926615a71fb17b158b8e12bf79c702b760e126f21aad356a2a6",
+          "manifestSha256": "c5b4c6f2c92d6bf0d5df38af66a3e748e6f2d1232d1cc205a56653e35c924115",
           "outputOffset": 19561,
           "offsetUnit": "unicode-codepoints"
         }
@@ -24575,7 +24571,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "65524e082b988926615a71fb17b158b8e12bf79c702b760e126f21aad356a2a6",
+          "manifestSha256": "c5b4c6f2c92d6bf0d5df38af66a3e748e6f2d1232d1cc205a56653e35c924115",
           "outputOffset": 19949,
           "offsetUnit": "unicode-codepoints"
         }
@@ -24743,7 +24739,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "65524e082b988926615a71fb17b158b8e12bf79c702b760e126f21aad356a2a6",
+          "manifestSha256": "c5b4c6f2c92d6bf0d5df38af66a3e748e6f2d1232d1cc205a56653e35c924115",
           "outputOffset": 20326,
           "offsetUnit": "unicode-codepoints"
         }
@@ -24911,7 +24907,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "65524e082b988926615a71fb17b158b8e12bf79c702b760e126f21aad356a2a6",
+          "manifestSha256": "c5b4c6f2c92d6bf0d5df38af66a3e748e6f2d1232d1cc205a56653e35c924115",
           "outputOffset": 20745,
           "offsetUnit": "unicode-codepoints"
         }
@@ -25079,7 +25075,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "65524e082b988926615a71fb17b158b8e12bf79c702b760e126f21aad356a2a6",
+          "manifestSha256": "c5b4c6f2c92d6bf0d5df38af66a3e748e6f2d1232d1cc205a56653e35c924115",
           "outputOffset": 21164,
           "offsetUnit": "unicode-codepoints"
         }
@@ -25247,7 +25243,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "65524e082b988926615a71fb17b158b8e12bf79c702b760e126f21aad356a2a6",
+          "manifestSha256": "c5b4c6f2c92d6bf0d5df38af66a3e748e6f2d1232d1cc205a56653e35c924115",
           "outputOffset": 21495,
           "offsetUnit": "unicode-codepoints"
         }
@@ -25415,7 +25411,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "65524e082b988926615a71fb17b158b8e12bf79c702b760e126f21aad356a2a6",
+          "manifestSha256": "c5b4c6f2c92d6bf0d5df38af66a3e748e6f2d1232d1cc205a56653e35c924115",
           "outputOffset": 21695,
           "offsetUnit": "unicode-codepoints"
         }
@@ -25583,7 +25579,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "65524e082b988926615a71fb17b158b8e12bf79c702b760e126f21aad356a2a6",
+          "manifestSha256": "c5b4c6f2c92d6bf0d5df38af66a3e748e6f2d1232d1cc205a56653e35c924115",
           "outputOffset": 21898,
           "offsetUnit": "unicode-codepoints"
         }
@@ -25751,7 +25747,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "65524e082b988926615a71fb17b158b8e12bf79c702b760e126f21aad356a2a6",
+          "manifestSha256": "c5b4c6f2c92d6bf0d5df38af66a3e748e6f2d1232d1cc205a56653e35c924115",
           "outputOffset": 22202,
           "offsetUnit": "unicode-codepoints"
         }
@@ -25919,7 +25915,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "65524e082b988926615a71fb17b158b8e12bf79c702b760e126f21aad356a2a6",
+          "manifestSha256": "c5b4c6f2c92d6bf0d5df38af66a3e748e6f2d1232d1cc205a56653e35c924115",
           "outputOffset": 22906,
           "offsetUnit": "unicode-codepoints"
         }
@@ -26087,7 +26083,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "65524e082b988926615a71fb17b158b8e12bf79c702b760e126f21aad356a2a6",
+          "manifestSha256": "c5b4c6f2c92d6bf0d5df38af66a3e748e6f2d1232d1cc205a56653e35c924115",
           "outputOffset": 23435,
           "offsetUnit": "unicode-codepoints"
         }
@@ -26255,7 +26251,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "65524e082b988926615a71fb17b158b8e12bf79c702b760e126f21aad356a2a6",
+          "manifestSha256": "c5b4c6f2c92d6bf0d5df38af66a3e748e6f2d1232d1cc205a56653e35c924115",
           "outputOffset": 23906,
           "offsetUnit": "unicode-codepoints"
         }
@@ -26423,7 +26419,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "65524e082b988926615a71fb17b158b8e12bf79c702b760e126f21aad356a2a6",
+          "manifestSha256": "c5b4c6f2c92d6bf0d5df38af66a3e748e6f2d1232d1cc205a56653e35c924115",
           "outputOffset": 24083,
           "offsetUnit": "unicode-codepoints"
         }
@@ -26591,7 +26587,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "65524e082b988926615a71fb17b158b8e12bf79c702b760e126f21aad356a2a6",
+          "manifestSha256": "c5b4c6f2c92d6bf0d5df38af66a3e748e6f2d1232d1cc205a56653e35c924115",
           "outputOffset": 24276,
           "offsetUnit": "unicode-codepoints"
         }
@@ -26759,7 +26755,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "65524e082b988926615a71fb17b158b8e12bf79c702b760e126f21aad356a2a6",
+          "manifestSha256": "c5b4c6f2c92d6bf0d5df38af66a3e748e6f2d1232d1cc205a56653e35c924115",
           "outputOffset": 24597,
           "offsetUnit": "unicode-codepoints"
         }
@@ -26927,7 +26923,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "65524e082b988926615a71fb17b158b8e12bf79c702b760e126f21aad356a2a6",
+          "manifestSha256": "c5b4c6f2c92d6bf0d5df38af66a3e748e6f2d1232d1cc205a56653e35c924115",
           "outputOffset": 24977,
           "offsetUnit": "unicode-codepoints"
         }
@@ -27095,7 +27091,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "65524e082b988926615a71fb17b158b8e12bf79c702b760e126f21aad356a2a6",
+          "manifestSha256": "c5b4c6f2c92d6bf0d5df38af66a3e748e6f2d1232d1cc205a56653e35c924115",
           "outputOffset": 25181,
           "offsetUnit": "unicode-codepoints"
         }
@@ -27263,7 +27259,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "65524e082b988926615a71fb17b158b8e12bf79c702b760e126f21aad356a2a6",
+          "manifestSha256": "c5b4c6f2c92d6bf0d5df38af66a3e748e6f2d1232d1cc205a56653e35c924115",
           "outputOffset": 25587,
           "offsetUnit": "unicode-codepoints"
         }
@@ -27431,7 +27427,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "65524e082b988926615a71fb17b158b8e12bf79c702b760e126f21aad356a2a6",
+          "manifestSha256": "c5b4c6f2c92d6bf0d5df38af66a3e748e6f2d1232d1cc205a56653e35c924115",
           "outputOffset": 26228,
           "offsetUnit": "unicode-codepoints"
         }
@@ -27599,7 +27595,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "65524e082b988926615a71fb17b158b8e12bf79c702b760e126f21aad356a2a6",
+          "manifestSha256": "c5b4c6f2c92d6bf0d5df38af66a3e748e6f2d1232d1cc205a56653e35c924115",
           "outputOffset": 26618,
           "offsetUnit": "unicode-codepoints"
         }
@@ -27767,7 +27763,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "65524e082b988926615a71fb17b158b8e12bf79c702b760e126f21aad356a2a6",
+          "manifestSha256": "c5b4c6f2c92d6bf0d5df38af66a3e748e6f2d1232d1cc205a56653e35c924115",
           "outputOffset": 27123,
           "offsetUnit": "unicode-codepoints"
         }
@@ -27935,7 +27931,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "65524e082b988926615a71fb17b158b8e12bf79c702b760e126f21aad356a2a6",
+          "manifestSha256": "c5b4c6f2c92d6bf0d5df38af66a3e748e6f2d1232d1cc205a56653e35c924115",
           "outputOffset": 27824,
           "offsetUnit": "unicode-codepoints"
         }
@@ -28103,7 +28099,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "65524e082b988926615a71fb17b158b8e12bf79c702b760e126f21aad356a2a6",
+          "manifestSha256": "c5b4c6f2c92d6bf0d5df38af66a3e748e6f2d1232d1cc205a56653e35c924115",
           "outputOffset": 28211,
           "offsetUnit": "unicode-codepoints"
         }
@@ -28271,7 +28267,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "65524e082b988926615a71fb17b158b8e12bf79c702b760e126f21aad356a2a6",
+          "manifestSha256": "c5b4c6f2c92d6bf0d5df38af66a3e748e6f2d1232d1cc205a56653e35c924115",
           "outputOffset": 28466,
           "offsetUnit": "unicode-codepoints"
         }
@@ -28439,7 +28435,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "65524e082b988926615a71fb17b158b8e12bf79c702b760e126f21aad356a2a6",
+          "manifestSha256": "c5b4c6f2c92d6bf0d5df38af66a3e748e6f2d1232d1cc205a56653e35c924115",
           "outputOffset": 29257,
           "offsetUnit": "unicode-codepoints"
         }
@@ -28607,7 +28603,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "65524e082b988926615a71fb17b158b8e12bf79c702b760e126f21aad356a2a6",
+          "manifestSha256": "c5b4c6f2c92d6bf0d5df38af66a3e748e6f2d1232d1cc205a56653e35c924115",
           "outputOffset": 29811,
           "offsetUnit": "unicode-codepoints"
         }
@@ -28775,7 +28771,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "65524e082b988926615a71fb17b158b8e12bf79c702b760e126f21aad356a2a6",
+          "manifestSha256": "c5b4c6f2c92d6bf0d5df38af66a3e748e6f2d1232d1cc205a56653e35c924115",
           "outputOffset": 30462,
           "offsetUnit": "unicode-codepoints"
         }
@@ -28943,7 +28939,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "65524e082b988926615a71fb17b158b8e12bf79c702b760e126f21aad356a2a6",
+          "manifestSha256": "c5b4c6f2c92d6bf0d5df38af66a3e748e6f2d1232d1cc205a56653e35c924115",
           "outputOffset": 30774,
           "offsetUnit": "unicode-codepoints"
         }
@@ -29111,7 +29107,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "65524e082b988926615a71fb17b158b8e12bf79c702b760e126f21aad356a2a6",
+          "manifestSha256": "c5b4c6f2c92d6bf0d5df38af66a3e748e6f2d1232d1cc205a56653e35c924115",
           "outputOffset": 31066,
           "offsetUnit": "unicode-codepoints"
         }
@@ -29279,7 +29275,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "65524e082b988926615a71fb17b158b8e12bf79c702b760e126f21aad356a2a6",
+          "manifestSha256": "c5b4c6f2c92d6bf0d5df38af66a3e748e6f2d1232d1cc205a56653e35c924115",
           "outputOffset": 31461,
           "offsetUnit": "unicode-codepoints"
         }
@@ -29455,7 +29451,7 @@
         "transform": "catalog-key-substitution",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "65524e082b988926615a71fb17b158b8e12bf79c702b760e126f21aad356a2a6",
+          "manifestSha256": "c5b4c6f2c92d6bf0d5df38af66a3e748e6f2d1232d1cc205a56653e35c924115",
           "outputOffset": 32459,
           "offsetUnit": "unicode-codepoints"
         },
@@ -29630,7 +29626,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "65524e082b988926615a71fb17b158b8e12bf79c702b760e126f21aad356a2a6",
+          "manifestSha256": "c5b4c6f2c92d6bf0d5df38af66a3e748e6f2d1232d1cc205a56653e35c924115",
           "outputOffset": 1435,
           "offsetUnit": "unicode-codepoints"
         }
@@ -29798,7 +29794,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "65524e082b988926615a71fb17b158b8e12bf79c702b760e126f21aad356a2a6",
+          "manifestSha256": "c5b4c6f2c92d6bf0d5df38af66a3e748e6f2d1232d1cc205a56653e35c924115",
           "outputOffset": 1579,
           "offsetUnit": "unicode-codepoints"
         }
@@ -29974,7 +29970,7 @@
         "transform": "catalog-key-substitution",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "65524e082b988926615a71fb17b158b8e12bf79c702b760e126f21aad356a2a6",
+          "manifestSha256": "c5b4c6f2c92d6bf0d5df38af66a3e748e6f2d1232d1cc205a56653e35c924115",
           "outputOffset": 1970,
           "offsetUnit": "unicode-codepoints"
         },
@@ -30162,7 +30158,7 @@
         "transform": "catalog-key-substitution",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "65524e082b988926615a71fb17b158b8e12bf79c702b760e126f21aad356a2a6",
+          "manifestSha256": "c5b4c6f2c92d6bf0d5df38af66a3e748e6f2d1232d1cc205a56653e35c924115",
           "outputOffset": 2210,
           "offsetUnit": "unicode-codepoints"
         },
@@ -30347,7 +30343,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "65524e082b988926615a71fb17b158b8e12bf79c702b760e126f21aad356a2a6",
+          "manifestSha256": "c5b4c6f2c92d6bf0d5df38af66a3e748e6f2d1232d1cc205a56653e35c924115",
           "outputOffset": 2476,
           "offsetUnit": "unicode-codepoints"
         }
@@ -30523,7 +30519,7 @@
         "transform": "catalog-key-substitution",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "65524e082b988926615a71fb17b158b8e12bf79c702b760e126f21aad356a2a6",
+          "manifestSha256": "c5b4c6f2c92d6bf0d5df38af66a3e748e6f2d1232d1cc205a56653e35c924115",
           "outputOffset": 2755,
           "offsetUnit": "unicode-codepoints"
         },
@@ -30711,7 +30707,7 @@
         "transform": "catalog-key-substitution",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "65524e082b988926615a71fb17b158b8e12bf79c702b760e126f21aad356a2a6",
+          "manifestSha256": "c5b4c6f2c92d6bf0d5df38af66a3e748e6f2d1232d1cc205a56653e35c924115",
           "outputOffset": 3119,
           "offsetUnit": "unicode-codepoints"
         },
@@ -30890,7 +30886,7 @@
         "transform": "catalog-key-substitution",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "65524e082b988926615a71fb17b158b8e12bf79c702b760e126f21aad356a2a6",
+          "manifestSha256": "c5b4c6f2c92d6bf0d5df38af66a3e748e6f2d1232d1cc205a56653e35c924115",
           "outputOffset": 3371,
           "offsetUnit": "unicode-codepoints"
         },
@@ -31078,7 +31074,7 @@
         "transform": "catalog-key-substitution",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "65524e082b988926615a71fb17b158b8e12bf79c702b760e126f21aad356a2a6",
+          "manifestSha256": "c5b4c6f2c92d6bf0d5df38af66a3e748e6f2d1232d1cc205a56653e35c924115",
           "outputOffset": 4267,
           "offsetUnit": "unicode-codepoints"
         },
@@ -31268,7 +31264,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "65524e082b988926615a71fb17b158b8e12bf79c702b760e126f21aad356a2a6",
+          "manifestSha256": "c5b4c6f2c92d6bf0d5df38af66a3e748e6f2d1232d1cc205a56653e35c924115",
           "outputOffset": 5410,
           "offsetUnit": "unicode-codepoints"
         }
@@ -31451,7 +31447,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "65524e082b988926615a71fb17b158b8e12bf79c702b760e126f21aad356a2a6",
+          "manifestSha256": "c5b4c6f2c92d6bf0d5df38af66a3e748e6f2d1232d1cc205a56653e35c924115",
           "outputOffset": 5926,
           "offsetUnit": "unicode-codepoints"
         }
@@ -31629,7 +31625,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "65524e082b988926615a71fb17b158b8e12bf79c702b760e126f21aad356a2a6",
+          "manifestSha256": "c5b4c6f2c92d6bf0d5df38af66a3e748e6f2d1232d1cc205a56653e35c924115",
           "outputOffset": 6439,
           "offsetUnit": "unicode-codepoints"
         }
@@ -31797,7 +31793,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "65524e082b988926615a71fb17b158b8e12bf79c702b760e126f21aad356a2a6",
+          "manifestSha256": "c5b4c6f2c92d6bf0d5df38af66a3e748e6f2d1232d1cc205a56653e35c924115",
           "outputOffset": 6820,
           "offsetUnit": "unicode-codepoints"
         }
@@ -31978,7 +31974,7 @@
         "transform": "catalog-key-substitution",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "65524e082b988926615a71fb17b158b8e12bf79c702b760e126f21aad356a2a6",
+          "manifestSha256": "c5b4c6f2c92d6bf0d5df38af66a3e748e6f2d1232d1cc205a56653e35c924115",
           "outputOffset": 7144,
           "offsetUnit": "unicode-codepoints"
         },
@@ -32161,7 +32157,7 @@
         "transform": "catalog-key-substitution",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "65524e082b988926615a71fb17b158b8e12bf79c702b760e126f21aad356a2a6",
+          "manifestSha256": "c5b4c6f2c92d6bf0d5df38af66a3e748e6f2d1232d1cc205a56653e35c924115",
           "outputOffset": 7544,
           "offsetUnit": "unicode-codepoints"
         },
@@ -34181,12 +34177,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "c8bc3d54bf1ae39dace5fee04363da261b527324ed82f18caa5fbf75f1f1dff3",
-      "id": "0040c38509beb709"
+      "sourceSha256": "4085bd454df6d707eebbcc04b734bd434349f0c626ce9c0bde1bac38afb0f6a9",
+      "id": "8de9913071b1dda9"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 88,
+      "line": 89,
       "column": 23,
       "kind": "javascript-text-source",
       "sink": "source:commercial-ui-labels",
@@ -34303,12 +34299,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "c8bc3d54bf1ae39dace5fee04363da261b527324ed82f18caa5fbf75f1f1dff3",
-      "id": "963a095a069a80ec"
+      "sourceSha256": "4085bd454df6d707eebbcc04b734bd434349f0c626ce9c0bde1bac38afb0f6a9",
+      "id": "82cb45b091d338db"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 97,
+      "line": 98,
       "column": 27,
       "kind": "javascript-text-source",
       "sink": "source:commercial-ui-labels",
@@ -34424,17 +34420,17 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "c8bc3d54bf1ae39dace5fee04363da261b527324ed82f18caa5fbf75f1f1dff3",
-      "id": "28d79bad87bd6718"
+      "sourceSha256": "4085bd454df6d707eebbcc04b734bd434349f0c626ce9c0bde1bac38afb0f6a9",
+      "id": "da0dcb433752e72c"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 845,
+      "line": 846,
       "column": 19,
       "kind": "javascript-text-source",
       "sink": "source:inline-text-tuple-label",
       "sourceRole": "inline-text-tuple-label",
-      "sourceBinding": "forEach@845",
+      "sourceBinding": "forEach@846",
       "valuePath": "[0].[1]",
       "expression": "\"Imagem da cena\"",
       "value": "Imagem da cena",
@@ -34538,18 +34534,18 @@
       "consumerLinkStatus": "declared-sink-not-indexed",
       "useStatus": "active",
       "consumerEvidence": [
-        "app/admin/admin.js:960 return options used by a recognized renderer"
+        "app/admin/admin.js:961 return options used by a recognized renderer"
       ],
       "owner": "admin",
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "c8bc3d54bf1ae39dace5fee04363da261b527324ed82f18caa5fbf75f1f1dff3",
-      "id": "4577206798a2c158"
+      "sourceSha256": "4085bd454df6d707eebbcc04b734bd434349f0c626ce9c0bde1bac38afb0f6a9",
+      "id": "5c35695163e3c047"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 962,
+      "line": 963,
       "column": 46,
       "kind": "javascript-text-source",
       "sink": "source:admin-material-target-option-label",
@@ -34658,23 +34654,23 @@
       "consumerLinkStatus": "field-consumer-evidence",
       "useStatus": "active",
       "consumerEvidence": [
-        "same callback writes tuple slot 1 to a recognized DOM text property at app/admin/admin.js:1024"
+        "same callback writes tuple slot 1 to a recognized DOM text property at app/admin/admin.js:1025"
       ],
       "owner": "admin",
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "c8bc3d54bf1ae39dace5fee04363da261b527324ed82f18caa5fbf75f1f1dff3",
-      "id": "2dfa6a35309eb670"
+      "sourceSha256": "4085bd454df6d707eebbcc04b734bd434349f0c626ce9c0bde1bac38afb0f6a9",
+      "id": "856ff3412024c974"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1072,
+      "line": 1073,
       "column": 42,
       "kind": "javascript-text-source",
       "sink": "source:admin-material-availability-heading",
       "sourceRole": "admin-material-availability-heading",
-      "sourceBinding": "appendMaterialAvailabilityList@1072",
+      "sourceBinding": "appendMaterialAvailabilityList@1073",
       "valuePath": "",
       "expression": "\"Cores e materiais deste puxador\"",
       "value": "Cores e materiais deste puxador",
@@ -34778,23 +34774,23 @@
       "consumerLinkStatus": "declared-sink-not-indexed",
       "useStatus": "active",
       "consumerEvidence": [
-        "app/admin/admin.js:1076 argument passed to makeField"
+        "app/admin/admin.js:1077 argument passed to makeField"
       ],
       "owner": "admin",
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "c8bc3d54bf1ae39dace5fee04363da261b527324ed82f18caa5fbf75f1f1dff3",
-      "id": "5a55398c3a159575"
+      "sourceSha256": "4085bd454df6d707eebbcc04b734bd434349f0c626ce9c0bde1bac38afb0f6a9",
+      "id": "c4ef342469a68843"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1077,
+      "line": 1078,
       "column": 72,
       "kind": "javascript-text-source",
       "sink": "source:admin-material-availability-heading",
       "sourceRole": "admin-material-availability-heading",
-      "sourceBinding": "appendMaterialAvailabilityList@1077",
+      "sourceBinding": "appendMaterialAvailabilityList@1078",
       "valuePath": "",
       "expression": "\"Pedras e texturas disponíveis para bancada e rodapé\"",
       "value": "Pedras e texturas disponíveis para bancada e rodapé",
@@ -34898,18 +34894,18 @@
       "consumerLinkStatus": "declared-sink-not-indexed",
       "useStatus": "active",
       "consumerEvidence": [
-        "app/admin/admin.js:1083 argument passed to makeRuleSelect"
+        "app/admin/admin.js:1084 argument passed to makeRuleSelect"
       ],
       "owner": "admin",
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "c8bc3d54bf1ae39dace5fee04363da261b527324ed82f18caa5fbf75f1f1dff3",
-      "id": "6c6d3c0bb92e1c1a"
+      "sourceSha256": "4085bd454df6d707eebbcc04b734bd434349f0c626ce9c0bde1bac38afb0f6a9",
+      "id": "ecfbbabd43003140"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1142,
+      "line": 1143,
       "column": 108,
       "kind": "javascript-text-source",
       "sink": "source:admin-event-trigger-option-label",
@@ -35018,23 +35014,23 @@
       "consumerLinkStatus": "declared-sink-not-indexed",
       "useStatus": "active",
       "consumerEvidence": [
-        "app/admin/admin.js:1166 argument passed to makeRuleSelect"
+        "app/admin/admin.js:1167 argument passed to makeRuleSelect"
       ],
       "owner": "admin",
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "c8bc3d54bf1ae39dace5fee04363da261b527324ed82f18caa5fbf75f1f1dff3",
-      "id": "57488849ac01e18f"
+      "sourceSha256": "4085bd454df6d707eebbcc04b734bd434349f0c626ce9c0bde1bac38afb0f6a9",
+      "id": "0fd0dbe454a46520"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1166,
+      "line": 1167,
       "column": 96,
       "kind": "javascript-text-source",
       "sink": "source:admin-rule-select-option-label",
       "sourceRole": "admin-rule-select-option-label",
-      "sourceBinding": "makeRuleSelect@1166",
+      "sourceBinding": "makeRuleSelect@1167",
       "valuePath": "[0].label",
       "expression": "\"Alterar dimensão de módulo\"",
       "value": "Alterar dimensão de módulo",
@@ -35138,23 +35134,23 @@
       "consumerLinkStatus": "declared-sink-not-indexed",
       "useStatus": "active",
       "consumerEvidence": [
-        "app/admin/admin.js:1167 argument passed to makeRuleSelect"
+        "app/admin/admin.js:1168 argument passed to makeRuleSelect"
       ],
       "owner": "admin",
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "c8bc3d54bf1ae39dace5fee04363da261b527324ed82f18caa5fbf75f1f1dff3",
-      "id": "db5b6b875682eb5a"
+      "sourceSha256": "4085bd454df6d707eebbcc04b734bd434349f0c626ce9c0bde1bac38afb0f6a9",
+      "id": "804ef3c7ca44081f"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1168,
+      "line": 1169,
       "column": 22,
       "kind": "javascript-text-source",
       "sink": "source:admin-rule-select-label",
       "sourceRole": "admin-rule-select-label",
-      "sourceBinding": "makeRuleSelect@1168",
+      "sourceBinding": "makeRuleSelect@1169",
       "valuePath": "",
       "expression": "\"Estiver\"",
       "value": "Estiver",
@@ -35258,23 +35254,23 @@
       "consumerLinkStatus": "declared-sink-not-indexed",
       "useStatus": "active",
       "consumerEvidence": [
-        "app/admin/admin.js:1173 argument passed to makeRuleSelect"
+        "app/admin/admin.js:1174 argument passed to makeRuleSelect"
       ],
       "owner": "admin",
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "c8bc3d54bf1ae39dace5fee04363da261b527324ed82f18caa5fbf75f1f1dff3",
-      "id": "708e7c24c4042625"
+      "sourceSha256": "4085bd454df6d707eebbcc04b734bd434349f0c626ce9c0bde1bac38afb0f6a9",
+      "id": "8004a8eee779ffbd"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1174,
+      "line": 1175,
       "column": 34,
       "kind": "javascript-text-source",
       "sink": "source:admin-rule-select-label",
       "sourceRole": "admin-rule-select-label",
-      "sourceBinding": "makeRuleSelect@1174",
+      "sourceBinding": "makeRuleSelect@1175",
       "valuePath": "",
       "expression": "\"Definir estado\"",
       "value": "Definir estado",
@@ -35378,23 +35374,23 @@
       "consumerLinkStatus": "declared-sink-not-indexed",
       "useStatus": "active",
       "consumerEvidence": [
-        "app/admin/admin.js:1177 argument passed to makeRuleSelect"
+        "app/admin/admin.js:1178 argument passed to makeRuleSelect"
       ],
       "owner": "admin",
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "c8bc3d54bf1ae39dace5fee04363da261b527324ed82f18caa5fbf75f1f1dff3",
-      "id": "2360bf036d67e711"
+      "sourceSha256": "4085bd454df6d707eebbcc04b734bd434349f0c626ce9c0bde1bac38afb0f6a9",
+      "id": "de1faf119588a6f7"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1178,
+      "line": 1179,
       "column": 34,
       "kind": "javascript-text-source",
       "sink": "source:admin-rule-select-label",
       "sourceRole": "admin-rule-select-label",
-      "sourceBinding": "makeRuleSelect@1178",
+      "sourceBinding": "makeRuleSelect@1179",
       "valuePath": "",
       "expression": "\"Dimensão\"",
       "value": "Dimensão",
@@ -35498,18 +35494,18 @@
       "consumerLinkStatus": "declared-sink-not-indexed",
       "useStatus": "active",
       "consumerEvidence": [
-        "app/admin/admin.js:1178 argument passed to makeRuleSelect"
+        "app/admin/admin.js:1179 argument passed to makeRuleSelect"
       ],
       "owner": "admin",
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "c8bc3d54bf1ae39dace5fee04363da261b527324ed82f18caa5fbf75f1f1dff3",
-      "id": "3536c937d6edaf32"
+      "sourceSha256": "4085bd454df6d707eebbcc04b734bd434349f0c626ce9c0bde1bac38afb0f6a9",
+      "id": "d47bc8feb5c86adb"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1352,
+      "line": 1353,
       "column": 63,
       "kind": "javascript-text-source",
       "sink": "source:error-message-source",
@@ -35580,14 +35576,14 @@
       "consumerLinkStatus": "same-file-awaited-call-catch",
       "useStatus": "active",
       "consumerEvidence": [
-        "Awaited local call reaches catch .message sink at app/admin/admin.js:1627"
+        "Awaited local call reaches catch .message sink at app/admin/admin.js:1628"
       ],
       "sourceExpression": "response.status === 404 ? \"A API de configuração ainda não foi publicada.\" : \"Não foi possível carregar a configuração.\"",
       "selectionOperators": [
         {
           "kind": "conditional",
           "operator": "?:",
-          "line": 1352,
+          "line": 1353,
           "expression": "response.status === 404 ? \"A API de configuração ainda não foi publicada.\" : \"Não foi possível carregar a configuração.\""
         }
       ],
@@ -35640,13 +35636,13 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "c8bc3d54bf1ae39dace5fee04363da261b527324ed82f18caa5fbf75f1f1dff3",
-      "id": "71aeb3d2ee93d942",
+      "sourceSha256": "4085bd454df6d707eebbcc04b734bd434349f0c626ce9c0bde1bac38afb0f6a9",
+      "id": "fd9ad747b1fa65ee",
       "consumerRefs": [
         {
-          "sinkId": "08486eb62c4e8521",
+          "sinkId": "5260c707b45fb9ea",
           "source": "app/admin/admin.js",
-          "line": 2010,
+          "line": 2011,
           "sink": "helper:setMessage",
           "expression": "error.message || \"Falha ao persistir Puxadores.\"",
           "routeConsumers": [
@@ -35703,7 +35699,7 @@
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1941,
+      "line": 1942,
       "column": 44,
       "kind": "javascript-text-source",
       "sink": "source:error-message-source",
@@ -35767,7 +35763,7 @@
       "consumerLinkStatus": "same-try-catch",
       "useStatus": "active",
       "consumerEvidence": [
-        "Error literal in try reaches caught .message sink at app/admin/admin.js:2010"
+        "Error literal in try reaches caught .message sink at app/admin/admin.js:2011"
       ],
       "sourceExpression": "\"A configuração mudou desde que o painel foi aberto. O painel foi recarregado; revise o estado antes de tentar novamente.\"",
       "selectionOperators": [],
@@ -35827,13 +35823,13 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "c8bc3d54bf1ae39dace5fee04363da261b527324ed82f18caa5fbf75f1f1dff3",
-      "id": "58d82f3493a8ee3c",
+      "sourceSha256": "4085bd454df6d707eebbcc04b734bd434349f0c626ce9c0bde1bac38afb0f6a9",
+      "id": "a9ee9e8c23faeab6",
       "consumerRefs": [
         {
-          "sinkId": "08486eb62c4e8521",
+          "sinkId": "5260c707b45fb9ea",
           "source": "app/admin/admin.js",
-          "line": 2010,
+          "line": 2011,
           "sink": "helper:setMessage",
           "expression": "error.message || \"Falha ao persistir Puxadores.\"",
           "routeConsumers": [
@@ -35897,7 +35893,7 @@
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1980,
+      "line": 1981,
       "column": 77,
       "kind": "javascript-text-source",
       "sink": "source:error-message-source",
@@ -35961,7 +35957,7 @@
       "consumerLinkStatus": "same-try-catch",
       "useStatus": "active",
       "consumerEvidence": [
-        "Error literal in try reaches caught .message sink at app/admin/admin.js:2010"
+        "Error literal in try reaches caught .message sink at app/admin/admin.js:2011"
       ],
       "sourceExpression": "\"A configuração mudou durante a gravação. Recarregue o painel antes de tentar novamente.\"",
       "selectionOperators": [],
@@ -36021,13 +36017,13 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "c8bc3d54bf1ae39dace5fee04363da261b527324ed82f18caa5fbf75f1f1dff3",
-      "id": "d0466a12d3b30bf4",
+      "sourceSha256": "4085bd454df6d707eebbcc04b734bd434349f0c626ce9c0bde1bac38afb0f6a9",
+      "id": "4eedffda685c09dd",
       "consumerRefs": [
         {
-          "sinkId": "08486eb62c4e8521",
+          "sinkId": "5260c707b45fb9ea",
           "source": "app/admin/admin.js",
-          "line": 2010,
+          "line": 2011,
           "sink": "helper:setMessage",
           "expression": "error.message || \"Falha ao persistir Puxadores.\"",
           "routeConsumers": [
@@ -36084,7 +36080,7 @@
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1991,
+      "line": 1992,
       "column": 47,
       "kind": "javascript-text-source",
       "sink": "source:error-message-source",
@@ -36148,7 +36144,7 @@
       "consumerLinkStatus": "same-try-catch",
       "useStatus": "active",
       "consumerEvidence": [
-        "Error literal in try reaches caught .message sink at app/admin/admin.js:2010"
+        "Error literal in try reaches caught .message sink at app/admin/admin.js:2011"
       ],
       "sourceExpression": "\"A releitura não corresponde exatamente ao v3 esperado após persistir Puxadores.\"",
       "selectionOperators": [],
@@ -36201,13 +36197,13 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "c8bc3d54bf1ae39dace5fee04363da261b527324ed82f18caa5fbf75f1f1dff3",
-      "id": "351e876d23979332",
+      "sourceSha256": "4085bd454df6d707eebbcc04b734bd434349f0c626ce9c0bde1bac38afb0f6a9",
+      "id": "bb9fdc8a49fc8cda",
       "consumerRefs": [
         {
-          "sinkId": "7101bab2e5cba04a",
+          "sinkId": "938454579d2fa422",
           "source": "app/admin/admin.js",
-          "line": 2124,
+          "line": 2125,
           "sink": "helper:setMessage",
           "expression": "error.message || \"Falha ao publicar a configuração.\"",
           "routeConsumers": [
@@ -36264,7 +36260,7 @@
     },
     {
       "source": "app/admin/admin.js",
-      "line": 2041,
+      "line": 2042,
       "column": 25,
       "kind": "javascript-text-source",
       "sink": "source:error-message-source",
@@ -36328,7 +36324,7 @@
       "consumerLinkStatus": "same-try-catch",
       "useStatus": "active",
       "consumerEvidence": [
-        "Error literal in try reaches caught .message sink at app/admin/admin.js:2124"
+        "Error literal in try reaches caught .message sink at app/admin/admin.js:2125"
       ],
       "sourceExpression": "\"A configuração mudou em outra sessão. Recarregue o painel antes de salvar.\"",
       "selectionOperators": [],
@@ -36394,13 +36390,13 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "c8bc3d54bf1ae39dace5fee04363da261b527324ed82f18caa5fbf75f1f1dff3",
-      "id": "ec73ee1d70f5cf61",
+      "sourceSha256": "4085bd454df6d707eebbcc04b734bd434349f0c626ce9c0bde1bac38afb0f6a9",
+      "id": "2c8b37b681929a03",
       "consumerRefs": [
         {
-          "sinkId": "7101bab2e5cba04a",
+          "sinkId": "938454579d2fa422",
           "source": "app/admin/admin.js",
-          "line": 2124,
+          "line": 2125,
           "sink": "helper:setMessage",
           "expression": "error.message || \"Falha ao publicar a configuração.\"",
           "routeConsumers": [
@@ -36457,7 +36453,7 @@
     },
     {
       "source": "app/admin/admin.js",
-      "line": 2055,
+      "line": 2056,
       "column": 25,
       "kind": "javascript-text-source",
       "sink": "source:error-message-source",
@@ -36521,7 +36517,7 @@
       "consumerLinkStatus": "same-try-catch",
       "useStatus": "active",
       "consumerEvidence": [
-        "Error literal in try reaches caught .message sink at app/admin/admin.js:2124"
+        "Error literal in try reaches caught .message sink at app/admin/admin.js:2125"
       ],
       "sourceExpression": "\"A releitura v5 não corresponde à revisão publicada; nenhuma confirmação foi assumida.\"",
       "selectionOperators": [],
@@ -36574,13 +36570,13 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "c8bc3d54bf1ae39dace5fee04363da261b527324ed82f18caa5fbf75f1f1dff3",
-      "id": "8e2380c0db8743f6",
+      "sourceSha256": "4085bd454df6d707eebbcc04b734bd434349f0c626ce9c0bde1bac38afb0f6a9",
+      "id": "0e42df5c17b8fec6",
       "consumerRefs": [
         {
-          "sinkId": "7101bab2e5cba04a",
+          "sinkId": "938454579d2fa422",
           "source": "app/admin/admin.js",
-          "line": 2124,
+          "line": 2125,
           "sink": "helper:setMessage",
           "expression": "error.message || \"Falha ao publicar a configuração.\"",
           "routeConsumers": [
@@ -36644,7 +36640,7 @@
     },
     {
       "source": "app/admin/admin.js",
-      "line": 2110,
+      "line": 2111,
       "column": 77,
       "kind": "javascript-text-source",
       "sink": "source:error-message-source",
@@ -36708,7 +36704,7 @@
       "consumerLinkStatus": "same-try-catch",
       "useStatus": "active",
       "consumerEvidence": [
-        "Error literal in try reaches caught .message sink at app/admin/admin.js:2124"
+        "Error literal in try reaches caught .message sink at app/admin/admin.js:2125"
       ],
       "sourceExpression": "\"A configuração mudou em outra sessão. Recarregue o painel antes de salvar.\"",
       "selectionOperators": [],
@@ -36761,13 +36757,13 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "c8bc3d54bf1ae39dace5fee04363da261b527324ed82f18caa5fbf75f1f1dff3",
-      "id": "848afe8505e72297",
+      "sourceSha256": "4085bd454df6d707eebbcc04b734bd434349f0c626ce9c0bde1bac38afb0f6a9",
+      "id": "ba9954bc19ef74bc",
       "consumerRefs": [
         {
-          "sinkId": "7101bab2e5cba04a",
+          "sinkId": "938454579d2fa422",
           "source": "app/admin/admin.js",
-          "line": 2124,
+          "line": 2125,
           "sink": "helper:setMessage",
           "expression": "error.message || \"Falha ao publicar a configuração.\"",
           "routeConsumers": [
@@ -45597,11 +45593,11 @@
     },
     {
       "path": "app/admin.html",
-      "sha256": "78a1c17da7dae36c68f8b4128d400cdb7a98a222b831d45655553030bac9adbe"
+      "sha256": "c6518ad21dcc45a80bb3a8de349551f4779b861bd9f64d532fc7f614348a0bd2"
     },
     {
       "path": "app/admin/admin.js",
-      "sha256": "c8bc3d54bf1ae39dace5fee04363da261b527324ed82f18caa5fbf75f1f1dff3"
+      "sha256": "4085bd454df6d707eebbcc04b734bd434349f0c626ce9c0bde1bac38afb0f6a9"
     },
     {
       "path": "app/app.js",
