@@ -1392,7 +1392,7 @@
         {
           "source": "Local TST-006 candidate based on Product development@5f8c3161f3177ae28e30adf5236dbe822db7b590",
           "sha": "5f8c3161f3177ae28e30adf5236dbe822db7b590",
-          "detail": "Focused tests passed 35/35, including the actual loopback V5 server contract, dynamic-port URL guard, cleanup-script shutdown, Buyer endpoint, local DTO parity, impact-selector and workflow inventory. Candidate is not yet integrated; browser consumers still require exact-head Actions validation."
+          "detail": "Focused tests passed 35/35 at the pre-PR candidate snapshot, including the actual loopback V5 server contract, dynamic-port URL guard, cleanup-script shutdown, Buyer endpoint, local DTO parity, impact-selector and workflow inventory. This evidence predates PR #423; exact-head consumer gates and post-integration passes are recorded in the later evidence entry."
         },
         {
           "source": "Product PR #423 and #424; exact development push-only consumer runs",
