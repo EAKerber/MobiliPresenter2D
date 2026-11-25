@@ -7,7 +7,7 @@ import unittest
 from pathlib import Path
 from unittest.mock import patch
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]/"tools"))
-from branch_hygiene_apply import archive_proof, verify_no_rulesets, verify_control_workflow_dependencies
+from branch_hygiene_apply import archive_proof, verify_no_rulesets, verify_control_workflow_dependencies, delete_exact_ref
 from branch_hygiene_plan import build_plan, select_bounded_batch
 
 class ArchiveTests(unittest.TestCase):
@@ -61,6 +61,15 @@ class ArchiveTests(unittest.TestCase):
         with self.assertRaisesRegex(RuntimeError,"ACTIVE_CONTROL_WORKFLOW_REF:retired:development"):
             verify_control_workflow_dependencies("retired",{"main":main,"development":dev})
         verify_control_workflow_dependencies("another-ref",{"main":main,"development":dev})
+
+    def test_shared_exact_delete_and_stale_inventory_real_git(self):
+        self.git("push","origin","HEAD:refs/heads/retired")
+        refs={"main":self.sha,"retired":self.sha}
+        with self.assertRaisesRegex(RuntimeError,"REF_DRIFT_BEFORE_DELETE"):
+            delete_exact_ref("retired","9"*40,refs)
+        self.assertIn("refs/heads/retired",self.git("ls-remote","--heads","origin"))
+        self.assertEqual(delete_exact_ref("retired",self.sha,refs),{"main":self.sha})
+        self.assertNotIn("refs/heads/retired",self.git("ls-remote","--heads","origin"))
 
     def test_rulesets_fail_closed(self):
         with patch("branch_hygiene_apply.paginate",return_value=[{"id":1}]):
