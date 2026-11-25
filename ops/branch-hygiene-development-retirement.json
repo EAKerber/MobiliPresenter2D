@@ -51,6 +51,14 @@
             "pullRequest": 413,
             "mergeCommit": "6fbddd5a522dfe5ecc218132253647980720ba37"
           }
+        },
+        {
+          "branch": "codex/loc006-viewer-price-copy-20261124",
+          "sha": "ace3fa3d5d29fe1da37e989c4def6583ee1c5859",
+          "squashMerge": {
+            "pullRequest": 410,
+            "mergeCommit": "8ba626f6026ce8ea7016e4414dacbf74f39de30f"
+          }
         }
       ]
     }
