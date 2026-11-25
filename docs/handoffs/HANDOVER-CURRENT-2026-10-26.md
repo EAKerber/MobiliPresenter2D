@@ -1,3 +1,5 @@
+> **Historical snapshot — 2026-10-26.** Preserved as provenance, not the current handover or an authorization to repeat operations. Use [CURRENT_STATE.md](../../CURRENT_STATE.md) for current authority and re-read exact remote refs before acting. Any branch/ref inventory in this document is historical and unverified against today's remote state.
+
 # Handover canônico — MobiliPresenter2D + MobiliPresenter2D_DesignSystem
 
 **Checkpoint:** 26/10/2026, America/Sao_Paulo. **Destinatário:** próximo chat/agente, sem acesso ao contexto desta conversa. **Missão:** retomar implementação e reconciliação incremental, sem reabrir decisões homologadas nem descartar conteúdo exclusivo.
