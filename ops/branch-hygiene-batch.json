@@ -1,20 +1,12 @@
 {
   "schemaVersion": "BranchHygieneBatch 0.1",
   "repository": "EAKerber/MobiliPresenter2D",
-  "wave": "PRODUCT-HYG-20261125-ARCHIVE-2",
-  "purpose": "Retire two rejected browser-image experiment heads and path-equivalent #444 after lossless archive.",
+  "wave": "PRODUCT-HYG-20261125-ARCHIVE-FINAL",
+  "purpose": "Retire final historical documentation ref after lossless archive. Preserve unique docs for later selective review. Expected terminal roster: main, development, four open promotion heads, one archive ref.",
   "branches": [
     {
-      "branch": "codex/tst004-browser-image-setup-20261124",
-      "sha": "c8c7f71f3f66fcad2345388c875192f20e0e4f08"
-    },
-    {
-      "branch": "codex/tst004-playwright-image-current-20261124",
-      "sha": "e1e92abd81da9bd550feaebc1f789c41db606118"
-    },
-    {
-      "branch": "codex/dom001-buyer-dto-boundary-20261125",
-      "sha": "a69e991d89e790f86f74389f34e320540442c7ee"
+      "branch": "docs/arc13-post-273-reconciliation-20261114",
+      "sha": "82cca3b5b5b9cdc91c84f7dc50167c965bd231a7"
     }
   ]
 }
