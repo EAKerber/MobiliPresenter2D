@@ -2,31 +2,31 @@
   "schemaVersion": "BranchHygieneBatch 0.1",
   "repository": "EAKerber/MobiliPresenter2D",
   "auditOnly": true,
-  "wave": "P-DEV-HYG-AUDIT-20261125-W4",
-  "purpose": "Audit first three exact merged heads; series audit validates all nine.",
+  "wave": "P-DEV-HYG-AUDIT-20261125-W5",
+  "purpose": "Audit first three exact merged heads; series audit validates all four.",
   "branches": [
     {
-      "branch": "codex/git002-current-authority-pointers-20261125",
-      "sha": "2db41c0739c1126fa69db71822dda6c368095345",
+      "branch": "codex/tst010-gate-trigger-coverage-20261125",
+      "sha": "613d40509736ea45530a0085189eae062cec4e4a",
       "squashMerge": {
-        "pullRequest": 433,
-        "mergeCommit": "c1cc51bd557b5dd564d1f5888791b3e96da29b68"
+        "pullRequest": 446,
+        "mergeCommit": "34614093a08513a2ed3211f6bf9316eb7af30309"
       }
     },
     {
-      "branch": "codex/v09-git-reconciliation-20261125",
-      "sha": "66a4c140dda9d3f25d7c21cbc1e13140a7bfe319",
+      "branch": "codex/tst002-hierarchy-roundtrip-20261125",
+      "sha": "97909a8bd8e628c8700d953ed2dd390f0d3ba6c4",
       "squashMerge": {
-        "pullRequest": 434,
-        "mergeCommit": "8cad624f8f90a8fa8e8cb576ba3778f6bf612067"
+        "pullRequest": 447,
+        "mergeCommit": "0ae7312a2a0aba5404c852e0ccce973e7e8bb5f1"
       }
     },
     {
-      "branch": "codex/v09-main-delta-classification-20261125",
-      "sha": "3a6181856957ed238785f1b64b87ba3005dae713",
+      "branch": "codex/tst002-roundtrip-gate-receipt-20261125",
+      "sha": "914aa686383459a4ba820e896d5d4cc032330b04",
       "squashMerge": {
-        "pullRequest": 435,
-        "mergeCommit": "2848d13e347c2d2345e0142ed6d166325547e212"
+        "pullRequest": 448,
+        "mergeCommit": "9fc5c70345edfa94c92c7093f0a4692e6c9f1841"
       }
     }
   ]
