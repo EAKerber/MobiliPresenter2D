@@ -28,8 +28,8 @@
       "route": "/",
       "source": "architecture/pages/root.page.html",
       "output": "app/index.html",
-      "sourceGitBlobSha": "224377d1ee28de0586d0174f389141c5eb2b0662",
-      "outputGitBlobSha": "2a64139e2b05769a60cb69daddd33c6d5e14075c",
+      "sourceGitBlobSha": "3231ae3546e775c7335c8febd61199d5b908053b",
+      "outputGitBlobSha": "a31beed14383005a2fc88514c002c95c931f316d",
       "sourceMap": {
         "segments": [
           {
@@ -1569,7 +1569,7 @@
           {
             "output": {
               "start": 7566,
-              "end": 7875
+              "end": 7959
             },
             "transform": "copy",
             "origin": {
@@ -1577,7 +1577,7 @@
               "path": "architecture/pages/root.page.html",
               "range": {
                 "start": 6686,
-                "end": 6995
+                "end": 7079
               }
             }
           }
@@ -2307,8 +2307,8 @@
       "route": "/how-it-works/",
       "source": "architecture/pages/how-it-works.page.html",
       "output": "app/how-it-works/index.html",
-      "sourceGitBlobSha": "5a3ec067401f39a2f9f3a2b30f1c1ef6ea2d0cbd",
-      "outputGitBlobSha": "6ddd7d09a6cb4071f968404063d5c889724c8dc8",
+      "sourceGitBlobSha": "5abb5eda67428d994b4c62f0e1ec57d48b28317b",
+      "outputGitBlobSha": "b4eb9711c5369f41c87ea96b64e2677aa7fe544e",
       "sourceMap": {
         "segments": [
           {
@@ -4358,7 +4358,7 @@
           {
             "output": {
               "start": 32477,
-              "end": 32728
+              "end": 32815
             },
             "transform": "copy",
             "origin": {
@@ -4366,7 +4366,7 @@
               "path": "architecture/pages/how-it-works.page.html",
               "range": {
                 "start": 32200,
-                "end": 32451
+                "end": 32538
               }
             }
           }

@@ -48,6 +48,8 @@ function readScreenAttributes(html, label) {
 
 const canonicalHtml = fs.readFileSync(path.join(repoRoot, "architecture", "pages", "root.page.html"), "utf8");
 const publishedHtml = fs.readFileSync(path.join(appRoot, "index.html"), "utf8");
+const canonicalHowHtml = fs.readFileSync(path.join(repoRoot, "architecture", "pages", "how-it-works.page.html"), "utf8");
+const publishedHowHtml = fs.readFileSync(path.join(appRoot, "how-it-works", "index.html"), "utf8");
 readScreenAttributes(canonicalHtml, "canonical root page");
 readScreenAttributes(publishedHtml, "published home page");
 for (const [html, label] of [[canonicalHtml, "canonical root page"], [publishedHtml, "published home page"]]) {
@@ -55,9 +57,18 @@ for (const [html, label] of [[canonicalHtml, "canonical root page"], [publishedH
   assert.match(html, /hero-phone-poster__play/, label + " centered poster play button");
   assert.doesNotMatch(html, /hero-phone-controls|heroPhonePlayToggle/, label + " must use native YouTube controls");
 }
+for (const [html, label] of [[canonicalHtml, "canonical home page"], [publishedHtml, "published home page"], [canonicalHowHtml, "canonical how-it-works page"], [publishedHowHtml, "published how-it-works page"]]) {
+  assert.match(html, /\/core\/public-video-fullscreen\.js\?v=public-video-fullscreen-v1/, label + " must load the shared fullscreen controller");
+}
 
 const landingJs = fs.readFileSync(path.join(appRoot, "landing", "landing.js"), "utf8");
+const howJs = fs.readFileSync(path.join(appRoot, "how-it-works", "how-it-works.js"), "utf8");
+const fullscreenController = fs.readFileSync(path.join(appRoot, "core", "public-video-fullscreen.js"), "utf8");
 const landingCss = fs.readFileSync(path.join(appRoot, "landing", "landing.css"), "utf8");
+assert.match(landingJs, /CasaPublicVideoFullscreen\.bind/, "home must use the shared fullscreen controller");
+assert.match(howJs, /CasaPublicVideoFullscreen\.bind/, "how-it-works must use the shared fullscreen controller");
+assert.match(fullscreenController, /webkitRequestFullscreen/, "shared controller must retain prefixed fullscreen support");
+assert.match(fullscreenController, /webkitExitFullscreen/, "shared controller must retain prefixed fullscreen exit support");
 assert.ok(landingJs.includes('controls: "1"'), "YouTube progress and native controls must remain enabled");
 assert.ok(!landingJs.includes("cc_load_policy"), "caption visibility must follow the viewer preference");
 assert.ok(landingCss.includes(".hero-phone-player { position: absolute; inset: 2px;"), "player must be inset 2px to reveal the phone bezel");
@@ -128,6 +139,46 @@ async function fullscreenCopyTransition(page, buttonSelector, targetSelector) {
   }, { buttonSelector, targetSelector });
 }
 
+async function fullscreenButtonActions(page, buttonSelector, targetSelector) {
+  return page.evaluate(({ buttonSelector, targetSelector }) => {
+    const button = document.querySelector(buttonSelector);
+    const target = document.querySelector(targetSelector);
+    let requested = null;
+    let exited = false;
+    Object.defineProperty(target, "requestFullscreen", {
+      configurable: true,
+      value() { requested = this; return Promise.resolve(); }
+    });
+    Object.defineProperty(document, "exitFullscreen", {
+      configurable: true,
+      value() { exited = true; return Promise.resolve(); }
+    });
+    Object.defineProperty(document, "fullscreenElement", {
+      configurable: true,
+      get: () => null
+    });
+    button.click();
+    const entered = requested === target;
+    Object.defineProperty(document, "fullscreenElement", {
+      configurable: true,
+      get: () => target
+    });
+    document.dispatchEvent(new Event("fullscreenchange"));
+    button.click();
+    Object.defineProperty(document, "fullscreenElement", {
+      configurable: true,
+      get: () => null
+    });
+    document.dispatchEvent(new Event("fullscreenchange"));
+    return {
+      entered,
+      exited,
+      restoredLabel: button.getAttribute("aria-label"),
+      restoredPressed: button.getAttribute("aria-pressed")
+    };
+  }, { buttonSelector, targetSelector });
+}
+
 async function main() {
   await fs.promises.mkdir(reportDir, { recursive: true });
   const origin = await startServer();
@@ -159,6 +210,11 @@ async function main() {
         assert.deepEqual(fullscreenLabels.open, { label: fullscreenLabels.copy.open, title: fullscreenLabels.copy.open, pressed: "false" }, context + " open fullscreen label");
         assert.deepEqual(fullscreenLabels.close, { label: fullscreenLabels.copy.close, title: fullscreenLabels.copy.close, pressed: "true" }, context + " close fullscreen label");
         assert.deepEqual(fullscreenLabels.reopened, { label: fullscreenLabels.copy.open, title: fullscreenLabels.copy.open, pressed: "false" }, context + " restored fullscreen label");
+        if (width === 390) {
+          assert.deepEqual(await fullscreenButtonActions(page, "#heroPhoneFullscreen", ".hero-phone-player"), {
+            entered: true, exited: true, restoredLabel: fullscreenLabels.copy.open, restoredPressed: "false"
+          }, context + " shared fullscreen button actions");
+        }
         await page.evaluate(async () => {
           await document.fonts.ready;
           await new Promise(requestAnimationFrame);
@@ -304,6 +360,9 @@ async function main() {
       assert.deepEqual(fullscreenLabels.open, { label: fullscreenLabels.copy.open, title: fullscreenLabels.copy.open, pressed: "false" }, "How it works open fullscreen label");
       assert.deepEqual(fullscreenLabels.close, { label: fullscreenLabels.copy.close, title: fullscreenLabels.copy.close, pressed: "true" }, "How it works close fullscreen label");
       assert.deepEqual(fullscreenLabels.reopened, { label: fullscreenLabels.copy.open, title: fullscreenLabels.copy.open, pressed: "false" }, "How it works restored fullscreen label");
+      assert.deepEqual(await fullscreenButtonActions(howPage, "#howVideoFullscreen", ".video-embed"), {
+        entered: true, exited: true, restoredLabel: fullscreenLabels.copy.open, restoredPressed: "false"
+      }, "How it works shared fullscreen button actions");
       console.log("HOME_HERO_PHONE_FULLSCREEN_COPY_CASE PASS");
       console.log("HOW_IT_WORKS_FULLSCREEN_COPY_CASE PASS");
     } finally {
