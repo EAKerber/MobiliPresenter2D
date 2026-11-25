@@ -409,13 +409,22 @@ async function sectionItemIds(page, stageId, groupId, sectionId) {
 
   await page.locator('[data-admin-tab="finishes"]').click();
   await page.waitForSelector('[data-admin-panel="finishes"]:not([hidden])');
+  const materialStateCopy = await page.evaluate(() => window.CASA_UI_COPY.admin.materials);
+  assert.deepEqual(materialStateCopy, {
+    baseColor: "Cor base",
+    noColor: "Sem cor/tinta base",
+    colorDisabledReason: "Cor base indisponível enquanto “Sem cor/tinta base” estiver marcado.",
+    noColorDisabledReason: "Sem cor/tinta base está disponível apenas para materiais do tipo Textura."
+  }, "fixed material-state copy stays in the canonical pt-BR catalog");
   const solidMaterialCard = page.locator('[data-material-id="base-light"]');
+  assert.equal((await solidMaterialCard.locator('label:has([data-material-color])').textContent()).trim(), materialStateCopy.baseColor, "base color label comes from the catalog");
+  assert.equal((await solidMaterialCard.locator('label:has([data-material-no-color])').textContent()).trim(), materialStateCopy.noColor, "no-color label comes from the catalog");
   const solidNoColorToggle = solidMaterialCard.locator('[data-material-no-color]');
   assert.equal(await solidNoColorToggle.isDisabled(), true, "solid material cannot opt out of its authored base color");
   const solidNoColorReasonId = await solidNoColorToggle.getAttribute("aria-describedby");
   assert.ok(solidNoColorReasonId, "disabled no-color control is associated with its reason");
   assert.equal(await page.locator(`#${solidNoColorReasonId}`).isVisible(), true, "solid material reason is visible beside the disabled control");
-  assert.match(await page.locator(`#${solidNoColorReasonId}`).textContent(), /disponível apenas para materiais do tipo Textura/i, "solid material explains why no-color is unavailable");
+  assert.equal(await page.locator(`#${solidNoColorReasonId}`).textContent(), materialStateCopy.noColorDisabledReason, "solid material reason matches the catalog exactly");
   await page.locator("#materialPager button").nth(1).click();
   await page.waitForSelector('[data-material-id="stone-existing"]');
   let stoneMaterialCard = page.locator('[data-material-id="stone-existing"]');
@@ -426,7 +435,7 @@ async function sectionItemIds(page, stageId, groupId, sectionId) {
   const stoneColorReasonId = await stoneColorInput.getAttribute("aria-describedby");
   assert.ok(stoneColorReasonId, "disabled color input is associated with its reason");
   assert.equal(await page.locator(`#${stoneColorReasonId}`).isVisible(), true, "no-color reason is visible beside the disabled control");
-  assert.match(await page.locator(`#${stoneColorReasonId}`).textContent(), /indisponível enquanto.*Sem cor\/tinta base.*marcado/i, "no-color state explains why base color is unavailable");
+  assert.equal(await page.locator(`#${stoneColorReasonId}`).textContent(), materialStateCopy.colorDisabledReason, "no-color state reason matches the catalog exactly");
 
   await noColorToggle.uncheck();
   stoneMaterialCard = page.locator('[data-material-id="stone-existing"]');
