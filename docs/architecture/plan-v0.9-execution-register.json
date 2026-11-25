@@ -1377,12 +1377,12 @@
       "chapter": "VI",
       "priority": "P0",
       "planState": "not_started",
-      "reconciliation": "partial",
-      "local": "partial",
-      "development": "partial",
-      "main": "unknown",
-      "technicalValidation": "partial",
-      "approvalPublication": "unknown",
+      "reconciliation": "done",
+      "local": "done",
+      "development": "done",
+      "main": "not_present",
+      "technicalValidation": "done",
+      "approvalPublication": "not_applicable",
       "evidence": [
         {
           "source": "Product PR #409 local Buyer V5 fixture integration",
@@ -1392,10 +1392,15 @@
         {
           "source": "Local TST-006 candidate based on Product development@5f8c3161f3177ae28e30adf5236dbe822db7b590",
           "sha": "5f8c3161f3177ae28e30adf5236dbe822db7b590",
-          "detail": "Focused tests passed 35/35, including the actual loopback V5 server contract, dynamic-port URL guard, cleanup-script shutdown, Buyer endpoint, local DTO parity, impact-selector and workflow inventory. Candidate is not yet integrated; browser consumers still require exact-head Actions validation."
+          "detail": "Focused tests passed 35/35 at the pre-PR candidate snapshot, including the actual loopback V5 server contract, dynamic-port URL guard, cleanup-script shutdown, Buyer endpoint, local DTO parity, impact-selector and workflow inventory. This evidence predates PR #423; exact-head consumer gates and post-integration passes are recorded in the later evidence entry."
+        },
+        {
+          "source": "Product PR #423 and #424; exact development push-only consumer runs",
+          "sha": "2c028dcfca812038dde547c14f7cc565e64891ba",
+          "detail": "PR #423 (head bb1960c70a74b5db1281c03c7b20528b160cb99f) integrou o lifecycle efêmero do Buyer V5 em c1f3be2be89c1e7f5843f568cf0d3ae38adf3541. PR #424 (head 683a1b980281b652ae23bbd5c2effcebc489bdcd) corrigiu pins de proveniência e integrou como 2c028dcfca812038dde547c14f7cc565e64891ba. Os 12 consumers push-only passaram nos SHAs exatos: 45605643315, 45605643309, 45605643132, 45605643067, 45605643058, 45605643053, 45605643039, 45608379068, 45608379245, 45608379208, 45608379087, 45608379295. Os três falsos bloqueios iniciais eram pins documentais obsoletos e foram substituídos por proveniência histórica + snapshot atual, sem alterar runtime do produto."
         }
       ],
-      "nextAction": "Run the changed browser consumers on the exact PR head, integrate to development, and confirm push-only consumer runs before marking TST-006 done."
+      "nextAction": "DoD TST-006 concluído em development. A mudança afeta apenas a infraestrutura de testes; main não recebeu este pacote e publicação do produto não se aplica. Prosseguir para o pacote DOM-013/TST-010, mantendo prova de autenticação hospedada separada."
     },
     {
       "order": 84,
@@ -2139,8 +2144,8 @@
   "baselineReadback": {
     "capturedAt": "2026-11-25",
     "productMainSha": "01ded2c100fbfd8b16897e26113dc5068a83e429",
-    "productDevelopmentSha": "5d3902ae408f3addd4cecfeb960fbeec4a9f291a",
+    "productDevelopmentSha": "2c028dcfca812038dde547c14f7cc565e64891ba",
     "designSystemMainSha": "c6ff6545e9ae2071e695109fd94ac91676e7fb0a",
-    "meaning": "Snapshot read back before this package; the Design System has no development branch."
+    "meaning": "Readback exato das branches remotas em 2026-11-25 após a integração TST-006; o Design System continua sem branch development."
   }
 }
