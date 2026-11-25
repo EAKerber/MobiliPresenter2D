@@ -6,13 +6,14 @@
   "status": "candidate-implemented",
   "evidence": {
     "baseRevision": "573b50d91dbb58762f9464b69df98aadcd4440cc",
+    "developmentRevision": "eb02f3332766f150ca6eff015772598a14b58431",
     "inventoryPath": "architecture/arc13/ui-text-candidates.json",
     "inventorySha256": "70D15AAED90983C2663DCA762F0081650C8EFA0A6FD97D0B5893D9767AF85A6F",
     "source": "app/admin/admin.js",
     "sourceGitBlob": "ede2b88bbfe8cc510842a70d84d15968cd458bee",
     "sourceSha256": "D4F692E1C5AED62684344BDAD588793C3A55BC5C16A7791F301E19776287471F",
     "sharedCatalog": "app/core/ui-copy.js",
-    "sharedCatalogGitBlob": "abcf18aa171a5e78c36abe893608fa7eb7576844",
+    "sharedCatalogGitBlob": "7aadc399e870733d19b57bea6e8e33d11f7f4d5c",
     "sharedCatalogSha256": "42E16540ABFC6019EE7B329C8ACA0544BEAFD1A115B3F017109D74C7C749F746",
     "generatedPrimaryPageManifest": "architecture/generated/primary-pages.manifest.json",
     "generatedPrimaryPageManifestSha256": "B5ABB30C9AE29E4AFB58E35BD65EFD5A78B454D5A4A6632BF80BC7A70703B3C9",
@@ -67,10 +68,8 @@
       "node --check app/admin/admin.js",
       "node tests/ui-theme-contract.cjs",
       "node scripts/compile-primary-pages.mjs --check",
-      "ARC-13 inventory: 1041 candidate occurrences, 0 parse errors, 420/420 mapped primary-page occurrences"
-    ],
-    "pending": [
-      "Admin hierarchy browser gate in CI; local Playwright package is unavailable in this checkout."
+      "ARC-13 inventory: 1041 candidate occurrences, 0 parse errors, 420/420 mapped primary-page occurrences",
+      "Product PR #418 Admin hierarchy browser run #45546312192: success"
     ]
   },
   "limits": [

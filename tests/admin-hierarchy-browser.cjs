@@ -243,6 +243,8 @@ async function sectionItemIds(page, stageId, groupId, sectionId) {
   assert.match(await page.locator('[data-initial-viewer-entity="module-01"]').getAttribute("aria-label"), /visível inicialmente no viewer/, "viewer initial-state text names the public viewer policy");
   assert.match(await page.locator('[data-initial-service]').first().getAttribute("aria-label"), /ativo inicialmente/, "initial service state remains a separate active-by-default preference");
   assert.match(await stageAvailability.getAttribute("aria-label"), /^Ativar etapa /, "stage text describes whether the step is available");
+  assert.equal((await stageAvailability.locator("xpath=..").textContent()).trim(),
+    await stageAvailability.isChecked() ? "Ativa" : "Inativa", "stage status text follows its stored enabled state");
   for (const theme of ["light", "dark"]) {
     await page.evaluate((mode) => window.CASA_UI_THEME.setMode(mode), theme);
     const [entityAccent, stageAccent] = await Promise.all([

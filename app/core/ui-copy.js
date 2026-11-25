@@ -99,6 +99,13 @@
         moduleAvailabilityAriaLabel: "{finish}: disponível para o módulo {module}",
         localAssociationPolicy: "Mantenha este acabamento associado a pelo menos um módulo."
       }),
+      stages: Object.freeze({
+        availabilityActive: "Ativa",
+        availabilityInactive: "Inativa",
+        availabilityAriaLabel: "Ativar etapa {stage}",
+        requiredAvailabilityPolicy: "Etapa obrigatória: não pode ser desativada nem removida.",
+        emptyAvailabilityPolicy: "Adicione pelo menos um item antes de ativar esta etapa."
+      }),
       pricing: Object.freeze({
         viewerBasePricePublication: Object.freeze({
           title: "Exibição pública no Viewer",

@@ -1,0 +1,64 @@
+{
+  "schema": "ARC13LOC002FamilyReview/1",
+  "plan": "MobiliPresenter2D Plano Diretor v0.9",
+  "workItems": ["LOC-002", "LOC-006"],
+  "family": "admin-stage-flow-availability-toggle",
+  "status": "candidate-implemented",
+  "evidence": {
+    "baseRevision": "eb02f3332766f150ca6eff015772598a14b58431",
+    "inventoryPath": "architecture/arc13/ui-text-candidates.json",
+    "inventorySha256": "42BA478E80209C3F7C4B0A41FBADF18E918C2E786057D1DEF97EEDF086B7C92F",
+    "source": "app/admin/admin.js",
+    "sourceGitBlob": "888333c62ed4012696ce212422ebc2aa77fd120f",
+    "sourceSha256": "03AA356DED954C3422B8C0D7DAEFB2AC8F48481A54984B54EF4BDA303A992835",
+    "sharedCatalog": "app/core/ui-copy.js",
+    "sharedCatalogGitBlob": "8ff5f2fc6412f3d8bce118ea712e776ca8175f2f",
+    "sharedCatalogSha256": "2D67875A753F375E62988798BFC5A85CEC6867C12BFCF52984DC3FF58B02AE6C",
+    "generatedPrimaryPageManifest": "architecture/generated/primary-pages.manifest.json",
+    "generatedPrimaryPageManifestSha256": "B681C947570E99118E9463F34ABFF1CFABC8993E016A74ADDA4912EE1CF345EF",
+    "implementationBranch": "codex/loc006-admin-stage-availability-copy-20261125",
+    "route": "/admin"
+  },
+  "state": {
+    "statePath": "model.stages[].enabled",
+    "consumer": "Admin hierarchy editor stage card",
+    "meaning": "Controls whether a stage participates in the flow. This is separate from entity initial visibility, service activation, and finish availability.",
+    "eligibleWhen": "The stage is not required and contains at least one item.",
+    "disabledReasons": [
+      "Etapa obrigatória: não pode ser desativada nem removida.",
+      "Adicione pelo menos um item antes de ativar esta etapa."
+    ],
+    "catalogKeys": [
+      "admin.stages.availabilityActive",
+      "admin.stages.availabilityInactive",
+      "admin.stages.availabilityAriaLabel",
+      "admin.stages.requiredAvailabilityPolicy",
+      "admin.stages.emptyAvailabilityPolicy"
+    ],
+    "preservedText": ["Ativa", "Inativa", "Ativar etapa {stage}"]
+  },
+  "candidateSinkIds": [
+    "5aaddeea4c00c978",
+    "5559359562ed241c",
+    "827131262f3cbd98"
+  ],
+  "exclusions": [
+    "The separate Remove stage action is not extracted or behaviorally changed.",
+    "The empty-stage drop hint is a different hierarchy consumer and remains outside this family.",
+    "Disabled-reason strings are passed through a dynamic sink; the inventory does not assign them independent literal candidate IDs."
+  ],
+  "validation": {
+    "passed": [
+      "node --check app/admin/admin.js",
+      "node tests/ui-theme-contract.cjs",
+      "node scripts/compile-primary-pages.mjs --check",
+      "ARC-13 inventory: 1041 candidate occurrences, 0 parse errors, 420/420 mapped primary-page occurrences"
+    ],
+    "pending": ["Admin hierarchy browser gate in CI."]
+  },
+  "limits": [
+    "Preserves exact current pt-BR strings and eligibility rules; it does not approve future editorial changes or establish a named content owner.",
+    "Does not change stage.enabled, enablement eligibility, remove-stage behavior, styling, persistence, or the hierarchy DOM.",
+    "Candidate inventory entries remain globally unreviewed; this bounded receipt does not complete LOC-002 or LOC-006."
+  ]
+}
