@@ -382,9 +382,14 @@
           "source": "Product PR #447 exact-head Admin hierarchy run #45653257500; receipt update PR #448",
           "sha": "9fc5c70345edfa94c92c7093f0a4692e6c9f1841",
           "detail": "PR #447 head 97909a8bd8e628c8700d953ed2dd390f0d3ba6c4 added Admin V5 section split/group merge with save and reload readback; the exact-head Admin hierarchy browser gate and advisory impact plan passed, and the PR was squash-integrated at 0ae7312a2a0aba5404c852e0ccce973e7e8bb5f1. PR #448 updated the crosswalk with those results and integrated at this development SHA. Evidence is a local browser fixture with an in-memory V5 endpoint and Identity stub; live Netlify Blobs/Identity and full TST-002 coverage remain unproven."
+        },
+        {
+          "source": "Product PR #449 hierarchy transfer and round-trip continuation",
+          "sha": "b85313662bb71fdf5e625fc012904c68d3752fc1",
+          "detail": "Added a representative cross-group section transfer with V5 save and reload readback, retaining section identity and exact item ownership; split/merge cases continue afterward. Added the advisory admin-hierarchy-editing impact bundle and selector assertions routed to the existing Admin browser workflow. PR description reports the local Admin V5 browser fixture, selector tests (23/23), and workflow inventory (8/8) passed; evidence uses an in-memory V5 endpoint and Identity stub and does not establish live Netlify/Identity behavior. Integrated in development at this squash SHA. TST-002 remains partial."
         }
       ],
-      "nextAction": "Expand the risk-based assertion matrix beyond Buyer, access-surface, and the representative Admin hierarchy round-trip; keep fixture-only, exact-head CI, and hosted Identity/Blob evidence distinct. Confirm the Admin hierarchy impact bundle and V5 section-transfer case in the current development PR before recording their integration."
+      "nextAction": "Expand the risk-based assertion matrix beyond Buyer, access-surface, and the representative Admin transfer/split/merge round-trips; keep fixture-only, exact-head CI, and live Identity/Blob evidence distinct. Continue the remaining schema, denial, recovery, and consumer-boundary assertions; TST-002 remains partial."
     },
     {
       "order": 21,
@@ -1934,7 +1939,7 @@
       "title": "Extrair textos do Admin e Configurador sem migrar conteúdo comercial",
       "chapter": "V",
       "priority": "P1/P2",
-      "planState": "not_started",
+      "planState": "in_progress",
       "reconciliation": "partial",
       "local": "partial",
       "development": "partial",
@@ -1961,6 +1966,11 @@
           "source": "Product PR #421 and receipt docs/architecture/arc13/loc002-admin-object-content-fields-2026-11-25.json",
           "sha": "1292afe149e711dce01fce0e727fd0da033a38d4",
           "detail": "Cinco rótulos de campos do Admin integrados em development sem migrar dados editoriais/comerciais nem alterar estado; browser e demais gates disparados passaram. LOC-006 continua parcial para outras famílias do Admin/Configurador."
+        },
+        {
+          "source": "Product PR #468; exact-head gates and development readback",
+          "sha": "77616e45d38f2105a03ab9ed11f07ab74e25a7bb",
+          "detail": "Admin material-state copy now uses the canonical pt-BR uiCopy.admin.materials catalog for base color, no-color, and both disabled-state reasons; exact existing wording and behavior are preserved. The Admin browser contract asserts catalog text against rendered labels/reasons. The generated primary-page provenance manifest and ARC-13 candidate inventory were reconciled. Exact PR head 2852773c9e3a01b268519262a20a894b4fd419ad passed all applicable exact-head gates (Admin browsers, build, inventory, source/browser, price and authorization contracts, assets, plan, variants); Supabase Preview was skipped because project preview branches are disabled. Squash-integrated into development at this SHA; main remains unchanged. LOC-006 remains partial for remaining Admin/Configurator families."
         }
       ],
       "nextAction": "Extrair outras famílias Admin/Configurador com seus estados, consumidores e testes; manter conteúdo comercial sob sua autoridade própria."
