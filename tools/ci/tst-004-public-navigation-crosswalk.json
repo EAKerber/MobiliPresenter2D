@@ -4,11 +4,11 @@
   "workItem": "TST-004",
   "status": "partial",
   "slice": "public-navigation",
-  "scopeLimit": "This slice maps the 124-scenario public navigation browser assertions to their two exact workflow routes. It does not map every setup/static command in those workflows, complete TST-004, change triggers, or authorize removing any gate.",
+  "scopeLimit": "This slice maps the 124-scenario public navigation browser assertions to their two exact workflow routes. It does not map every setup/static command in those workflows or complete TST-004. The development browser route excludes only the generated primary-page manifest because ARC-13 validates that exact file; no gate is removed and all other generated paths remain included.",
   "sourcePin": {
     "mainSha": "01ded2c100fbfd8b16897e26113dc5068a83e429",
-    "developmentSha": "40873103c5b09bd40cc525145a5aeb13e49feda1",
-    "developmentTree": "8251d011d5d046db98d3207c3425b52d478e99b8",
+    "developmentSha": "ed89f243a1f54d80701908c707e5edc61e1ffff4",
+    "developmentTree": "77191dc54239c89bfa5fded54bcc7a9432817778",
     "files": {
       "developmentWorkflow": {
         "path": ".github/workflows/development-public-navigation-semantic.yml",
@@ -24,7 +24,7 @@
       },
       "impactMap": {
         "path": "tools/ci/test-impact-bundles.json",
-        "blobSha": "f732ddc801f8b43ee1c30cd40570c6813b1b34f2"
+        "blobSha": "d7e3f97eff796f6214774771750b4062f97df87e"
       }
     }
   },
@@ -45,6 +45,12 @@
       "/viewer/"
     ],
     "statement": "31 route/width combinations × 2 themes × 2 engines. The Viewer depth-2 20-case contract is separate and is not included in this count."
+  },
+  "triggerDecision": {
+    "excludedPath": "architecture/generated/primary-pages.manifest.json",
+    "observedUnnecessaryRun": "https://github.com/EAKerber/MobiliPresenter2D/actions/runs/45541550403",
+    "reason": "PR #415 changed the manifest catalog blob pin without changing public page outputs. The separate ARC-13 integrity workflow watches this exact manifest and validates primary-page compiler output and provenance.",
+    "preservedCoverage": "The development public navigation workflow still runs for source fragments, page templates, compiler, public HTML, shared browser assertions, and every other generated path; workflow_dispatch remains available."
   },
   "executions": [
     {
@@ -69,6 +75,7 @@
             "architecture/fragments/**",
             "architecture/pages/**",
             "architecture/generated/**",
+            "!architecture/generated/primary-pages.manifest.json",
             "scripts/compile-primary-pages.mjs",
             "tests/arc03c-source-authority.test.mjs",
             "tests/public-cutover-contract.cjs",
@@ -98,6 +105,7 @@
             "architecture/fragments/**",
             "architecture/pages/**",
             "architecture/generated/**",
+            "!architecture/generated/primary-pages.manifest.json",
             "scripts/compile-primary-pages.mjs",
             "tests/arc03c-source-authority.test.mjs",
             "tests/public-cutover-contract.cjs",
