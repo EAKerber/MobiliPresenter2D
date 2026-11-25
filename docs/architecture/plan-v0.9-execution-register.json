@@ -452,6 +452,11 @@
           "source": "Live Design System PR #137, base main@c6ff6545e9ae2071e695109fd94ac91676e7fb0a, refreshed head a0c31655135d957da212d07835c2a7d84acd258c",
           "sha": "a0c31655135d957da212d07835c2a7d84acd258c",
           "detail": "Intent: refresh only docs/HANDOVER_CURRENT.md with the v0.9 authority hierarchy, exact Product refs, PR intents, V3 policy hold, and evidence limits. Open and mergeable; no runtime, production, or access-control change. Integration into Design System main has not been authorized."
+        },
+        {
+          "source": "Product PR #436 disposition",
+          "sha": "71bc086114741fe2d5967099123a7d420cba80eb",
+          "detail": "CI-maintenance item #436 was merged into development after exact-head asset, variant, and impact-plan gates passed. It removes only repeated npm test invocations from two specialized workflows; runtime and main were not changed."
         }
       ],
       "nextAction": "Keep the four live PR dispositions current; do not merge PR #432 without its specific approval or Design System #137 without approval for that repository. Recheck PR #400 target refs before any retirement operation; continue documenting intent, changed contract, exact validation, dependencies, rollback, and final disposition."
@@ -515,9 +520,9 @@
       "approvalPublication": "not_applicable",
       "evidence": [
         {
-          "source": "GitHub compare Product development...main after Product PR #434",
-          "sha": "8cad624f8f90a8fa8e8cb576ba3778f6bf612067",
-          "detail": "Exact compare reports 17 commits present on main but absent from development and 572 commits present on development but absent from main, with merge base 221b54b2a41ecc8c338d1bf2cf67280cf165ce95. The main-only comparison returns 72 changed paths: groups include public pages/hero/theme, UI source and generated page artifacts, tests and CI definitions, ARC-13 inventory tooling, and branch-hygiene tooling/manifests. These are multiple coupled families, not a safe whole-tree package. The 72-path set is a candidate inventory for family-level review, not approval to merge."
+          "source": "GitHub compare Product development...main after Product PR #436",
+          "sha": "71bc086114741fe2d5967099123a7d420cba80eb",
+          "detail": "Exact compare reports 574 commits present on development but absent from main, and 17 present on main but absent from development, at merge base 221b54b2a41ecc8c338d1bf2cf67280cf165ce95. The reverse comparison yields 72 main-side paths; main...development's file list is capped at 300. The 72 paths span public page/theme sources, generated page artifacts, tests/CI, ARC-13 inventory tooling, and branch-hygiene tooling. These families are coupled; no whole-tree merge or branch-count inference follows."
         },
         {
           "source": "Exact Product main/development V5 source and test comparison; Product PR #432",
@@ -525,7 +530,7 @@
           "detail": "Shared V5 read/inspection/save core has matching blobs across both refs. A selective main candidate adds only deterministic CAS-race and missing-readback assertions; seven main gates passed and Preview was READY. Merge remains subject to the user's specific decision. Admin endpoint behavior differs for missing/invalid V3: main may fall back to defaults, development returns explicit missing/invalid; hold this runtime package pending policy decision."
         }
       ],
-      "nextAction": "Review the 72 main-only paths by source-of-truth and consumer family. Start with one bounded package at a time; keep generated page artifacts paired with their compiler/source and tests, separate branch-hygiene operations from product behavior, and leave coupled families on hold until exact contracts and rollback are established."
+      "nextAction": "Review the 72 main-side paths by source authority and consumer family. Keep generated pages paired with their compiler, manifest, and tests; keep CI/branch-hygiene changes separate from product behavior. No safe whole-tree promotion."
     },
     {
       "order": 27,
@@ -1764,15 +1769,26 @@
       "title": "Consolidar o inventário ARC-13",
       "chapter": "V",
       "priority": "P0",
-      "planState": "not_started",
-      "reconciliation": "unreviewed",
-      "local": "unknown",
-      "development": "unknown",
-      "main": "unknown",
-      "technicalValidation": "unknown",
-      "approvalPublication": "unknown",
-      "evidence": [],
-      "nextAction": "Reconciliar este ID com código, consumidores, testes e evidência exata de branch/PR antes de alterar o estado."
+      "planState": "in_progress",
+      "reconciliation": "partial",
+      "local": "done",
+      "development": "partial",
+      "main": "partial",
+      "technicalValidation": "partial",
+      "approvalPublication": "not_applicable",
+      "evidence": [
+        {
+          "source": "Current development ARC-13 candidate inventory at exact Product development HEAD",
+          "sha": "71bc086114741fe2d5967099123a7d420cba80eb",
+          "detail": "Inventory blob bd7be1d5f0e5d90cf4f22d09cb0fbf4e2a887946; SHA-256 90278c40140ad3cfa883deaafbdf7fe8656eca5310c50254dd38f2a5d12e2515. Schema v4; Python scanner plus Acorn 8.19.0; 609 HTML occurrences, 432 JS sink sites, 347 source records, 1,041 unreviewed occurrences, zero parse errors, 68 source files, 420 primary-page authoring mappings and zero unresolved mappings. All 11 generator-input hashes and all 68 source-file hashes were independently recomputed from exact HEAD content and matched."
+        },
+        {
+          "source": "Current main ARC-13 candidate inventory at exact Product main HEAD",
+          "sha": "01ded2c100fbfd8b16897e26113dc5068a83e429",
+          "detail": "Inventory blob 951a2a61ca4d6f646c757cedd3081ec92fbd36dd; SHA-256 beb8f9e9554fca6bdf0f8f884982406a34c99d442768d4374212603ab484667e. Schema v4; Acorn 8.19.0; 609 HTML occurrences, 417 JS sink sites, 360 source records, 1,026 unreviewed occurrences, zero parse errors, 66 source files, and 420 primary-page authoring mappings. All 11 generator-input hashes and all 66 source-file hashes were independently recomputed and matched. This inventory is distinct from development's current source tree."
+        }
+      ],
+      "nextAction": "Reconcile the 1,041 development candidates and 1,026 main candidates by stable source/consumer identity; preserve unreviewed state until authority, sink, content owner, and consumer are resolved. Do not transfer positional IDs across snapshots."
     },
     {
       "order": 101,
@@ -1972,15 +1988,21 @@
       "title": "Classificar redundâncias sem eliminar garantias",
       "chapter": "VI",
       "priority": "P1",
-      "planState": "not_started",
-      "reconciliation": "unreviewed",
-      "local": "unknown",
-      "development": "unknown",
-      "main": "unknown",
-      "technicalValidation": "unknown",
-      "approvalPublication": "unknown",
-      "evidence": [],
-      "nextAction": "Reconciliar este ID com código, consumidores, testes e evidência exata de branch/PR antes de alterar o estado."
+      "planState": "in_progress",
+      "reconciliation": "partial",
+      "local": "done",
+      "development": "done",
+      "main": "partial",
+      "technicalValidation": "partial",
+      "approvalPublication": "not_applicable",
+      "evidence": [
+        {
+          "source": "Product PR #436, merged in development",
+          "sha": "f761a80f64c9cd6de4608fcf0543ffe6d1b309e4",
+          "detail": "Removed only the duplicated app/npm test step from candidate-assets and variant-fidelity. Their asset, mask, rendering, and variant assertions remain; app-build-purity keeps the complete npm test suite for app/** changes. Exact PR-head gates passed: Current asset gates run 45626479378, Development test impact plan 45626479134, Current variant fidelity 45626479193. Squash commit 71bc086114741fe2d5967099123a7d420cba80eb. Main retains its prior workflows; no guarantee was removed from main."
+        }
+      ],
+      "nextAction": "Measure the same duplication on main separately and review other repeated assertions by contract; preserve specialized gates unless consumer/assertion equivalence and trigger reachability are proven."
     },
     {
       "order": 111,
@@ -2238,8 +2260,8 @@
   "baselineReadback": {
     "capturedAt": "2026-11-25",
     "productMainSha": "01ded2c100fbfd8b16897e26113dc5068a83e429",
-    "productDevelopmentSha": "8cad624f8f90a8fa8e8cb576ba3778f6bf612067",
+    "productDevelopmentSha": "71bc086114741fe2d5967099123a7d420cba80eb",
     "designSystemMainSha": "c6ff6545e9ae2071e695109fd94ac91676e7fb0a",
-    "meaning": "Exact GitHub ref and compare readback after Product PR #434. GIT-001 remains the earlier timestamped snapshot; this update records a newer comparison without replacing that receipt."
+    "meaning": "Exact Product and Design System refs re-read after Product PR #436. Main/development compare is current at this readback; the GIT-001 snapshot remains an earlier timestamped receipt."
   }
 }
