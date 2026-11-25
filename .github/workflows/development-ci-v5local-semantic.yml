@@ -62,3 +62,8 @@ jobs:
             /tmp/m2d-v5local-hit-target/result.json
           retention-days: 14
           if-no-files-found: ignore
+
+      - name: Stop local Buyer V5 fixture
+        if: always()
+        shell: bash
+        run: bash tests/ci/stop-local-v5-browser.sh

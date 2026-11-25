@@ -15,6 +15,8 @@ on:
       - 'tests/ci/prepare-local-v5-browser.sh'
       - 'tests/ci/local-buyer-config-server.mjs'
       - 'package.json'
+      - 'tests/ci/stop-local-v5-browser.sh'
+      - 'tests/ci/assert-local-v5-url.cjs'
   pull_request:
     paths:
       - 'app/**'
@@ -28,6 +30,8 @@ on:
       - 'tests/ci/prepare-local-v5-browser.sh'
       - 'tests/ci/local-buyer-config-server.mjs'
       - 'package.json'
+      - 'tests/ci/stop-local-v5-browser.sh'
+      - 'tests/ci/assert-local-v5-url.cjs'
   workflow_dispatch:
     inputs:
       target_url:
@@ -79,8 +83,7 @@ jobs:
         if: ${{ !inputs.target_url }}
         env:
           NODE_PATH: /tmp/mobile-browser-tools/node_modules
-          EXPOSED_SIDES_GLASS_URL: http://127.0.0.1:8123/config/
-        run: node tests/exposed-sides-glass.cjs /tmp/glass-occlusion-review
+        run: EXPOSED_SIDES_GLASS_URL="$MOBILE_INTERACTIONS_URL" node tests/exposed-sides-glass.cjs /tmp/glass-occlusion-review
       - name: Save mobile review
         if: always()
         uses: actions/upload-artifact@v4
@@ -90,3 +93,8 @@ jobs:
             /tmp/mobile-browser-review
             /tmp/glass-occlusion-review
           if-no-files-found: ignore
+
+      - name: Stop local Buyer V5 fixture
+        if: always()
+        shell: bash
+        run: bash tests/ci/stop-local-v5-browser.sh

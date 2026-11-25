@@ -66,3 +66,8 @@ jobs:
             /tmp/m2d-flow-buyer-v5/result.json
           if-no-files-found: ignore
           retention-days: 14
+
+      - name: Stop local Buyer V5 fixture
+        if: always()
+        shell: bash
+        run: bash tests/ci/stop-local-v5-browser.sh

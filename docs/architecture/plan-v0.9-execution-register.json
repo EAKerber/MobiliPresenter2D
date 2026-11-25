@@ -1355,20 +1355,20 @@
       "chapter": "V",
       "priority": "P0",
       "planState": "not_started",
-      "reconciliation": "partial",
-      "local": "partial",
-      "development": "partial",
+      "reconciliation": "done",
+      "local": "done",
+      "development": "done",
       "main": "unknown",
-      "technicalValidation": "partial",
+      "technicalValidation": "done",
       "approvalPublication": "unknown",
       "evidence": [
         {
-          "source": "Product PR #409 integration plus local 2026-11-25 Buyer endpoint test",
-          "sha": "c78a20ca0ccc8c6bd0f870caa78a8814b9363bd7",
-          "detail": "Fixture V5 is built from validated defaults/catalog, read by the production reader, projected through the real Buyer DTO, and served on loopback; browser evidence covers V3/V5 parity and visible fail-closed V5 UI. Current endpoint-test continuation passes locally for auth ordering, valid/expired session, production/preview store selection, and absent/invalid publication. Hosted authentication remains explicitly unproven."
+          "source": "Product PR #409 and #422; Buyer boundary Actions run #45601575331; impact-selector Actions run #45601575165",
+          "sha": "5f8c3161f3177ae28e30adf5236dbe822db7b590",
+          "detail": "DOM-011 DoD is integrated in development: local V5 fixture derives from validated defaults/catalog, uses the production reader and Buyer projector, and the endpoint fails closed for missing/invalid publication and unauthorized access. PR #422 adds the endpoint assertions and exact-head gates passed before squash integration. Hosted authentication remains outside local fixture proof and is not required by this DoD."
         }
       ],
-      "nextAction": "Integrate the endpoint-test continuation in development, then preserve the hosted-auth limitation; do not require hosted proof for the local V5 reproduction DoD."
+      "nextAction": "No remaining DOM-011 DoD action; retain the hosted-auth limitation in evidence and continue with TST-006/TST-010 as separate work."
     },
     {
       "order": 83,
@@ -1387,10 +1387,15 @@
         {
           "source": "Product PR #409 local Buyer V5 fixture integration",
           "sha": "c78a20ca0ccc8c6bd0f870caa78a8814b9363bd7",
-          "detail": "The loopback fixture validates V5 and DTO before serving it, reports anonymous session status, supports the existing browser consumers, and passed local DTO parity plus five browser gates. The current snapshot still uses fixed port 8123 and the shared prepare helper does not guarantee explicit cleanup/no-overlap."
+          "detail": "At the #409 integration snapshot, the loopback fixture validated V5/DTO and passed local DTO parity plus five browser gates; the shared helper still used fixed port 8123 and lacked explicit cleanup. The current TST-006 candidate replaces this orchestration with ephemeral readiness, runtime schema checks, and an always-run cleanup step in each consumer."
+        },
+        {
+          "source": "Local TST-006 candidate based on Product development@5f8c3161f3177ae28e30adf5236dbe822db7b590",
+          "sha": "5f8c3161f3177ae28e30adf5236dbe822db7b590",
+          "detail": "Focused tests passed 35/35, including the actual loopback V5 server contract, dynamic-port URL guard, cleanup-script shutdown, Buyer endpoint, local DTO parity, impact-selector and workflow inventory. Candidate is not yet integrated; browser consumers still require exact-head Actions validation."
         }
       ],
-      "nextAction": "Finish readiness and lifecycle contract for all consumers, preferring ephemeral ports and explicit cleanup without mixing product behavior changes."
+      "nextAction": "Run the changed browser consumers on the exact PR head, integrate to development, and confirm push-only consumer runs before marking TST-006 done."
     },
     {
       "order": 84,

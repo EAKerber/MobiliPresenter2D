@@ -245,7 +245,9 @@
         "DOM-003 published-source states",
         "DOM-004 V5 save, CAS, and readback",
         "TST-009 configuration endpoint safety",
-        "DOM-013"
+        "DOM-013",
+        "DOM-011 Buyer V5 reproduction",
+        "TST-006 local Buyer fixture lifecycle"
       ],
       "consumer": [
         "Admin published configuration",
@@ -265,7 +267,13 @@
         "netlify/access/**",
         "netlify/functions/buyer-configuration.mjs",
         "netlify/functions/configuration.mjs",
-        "tests/buyer-configuration-endpoint.test.mjs"
+        "tests/buyer-configuration-endpoint.test.mjs",
+        "tests/ci/local-buyer-config-fixture.mjs",
+        "tests/ci/local-buyer-config-server.mjs",
+        "tests/ci/local-buyer-config-server-contract.test.mjs",
+        "tests/ci/prepare-local-v5-browser.sh",
+        "tests/ci/stop-local-v5-browser.sh",
+        "tests/ci/assert-local-v5-url.cjs"
       ],
       "execution": [
         {
@@ -276,9 +284,10 @@
             "node app/tools/test-v5-normal-save.js",
             "node app/tools/test-v5-endpoint-safety.js",
             "node app/tools/test-published-buyer-projection.js",
-            "node --test tests/buyer-configuration-endpoint.test.mjs"
+            "node --test tests/buyer-configuration-endpoint.test.mjs",
+            "node --test tests/ci/local-buyer-config-server-contract.test.mjs"
           ],
-          "assertion": "Published-source states, V5 CAS/readback, configuration endpoint authorization and payload safety, and the Buyer DTO allowlist."
+          "assertion": "Published-source states, V5 CAS/readback, configuration endpoint authorization and payload safety, Buyer DTO allowlist, and local V5 fixture readiness/shutdown."
         }
       ]
     }

@@ -11,6 +11,8 @@ on:
       - 'tests/ci/prepare-local-v5-browser.sh'
       - 'tests/ci/local-buyer-config-server.mjs'
       - 'package.json'
+      - 'tests/ci/stop-local-v5-browser.sh'
+      - 'tests/ci/assert-local-v5-url.cjs'
   pull_request:
     paths:
       - 'app/**'
@@ -21,6 +23,8 @@ on:
       - 'tests/ci/prepare-local-v5-browser.sh'
       - 'tests/ci/local-buyer-config-server.mjs'
       - 'package.json'
+      - 'tests/ci/stop-local-v5-browser.sh'
+      - 'tests/ci/assert-local-v5-url.cjs'
   workflow_dispatch:
     inputs:
       target_url:
@@ -65,3 +69,8 @@ jobs:
           name: stone-browser-${{ github.run_id }}
           path: /tmp/stone-browser-review
           if-no-files-found: ignore
+
+      - name: Stop local Buyer V5 fixture
+        if: always()
+        shell: bash
+        run: bash tests/ci/stop-local-v5-browser.sh

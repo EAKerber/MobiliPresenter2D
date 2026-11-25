@@ -28,6 +28,8 @@ on:
       - '.github/workflows/keyboard-browser.yml'
       - 'tests/ci/prepare-local-v5-browser.sh'
       - 'tests/ci/local-buyer-config-server.mjs'
+      - 'tests/ci/stop-local-v5-browser.sh'
+      - 'tests/ci/assert-local-v5-url.cjs'
   pull_request:
     paths:
       - 'app/data/hierarchy-defaults.js'
@@ -55,6 +57,8 @@ on:
       - '.github/workflows/keyboard-browser.yml'
       - 'tests/ci/prepare-local-v5-browser.sh'
       - 'tests/ci/local-buyer-config-server.mjs'
+      - 'tests/ci/stop-local-v5-browser.sh'
+      - 'tests/ci/assert-local-v5-url.cjs'
   workflow_dispatch:
     inputs:
       target_url:
@@ -99,3 +103,8 @@ jobs:
           name: keyboard-browser-${{ github.run_id }}
           path: /tmp/keyboard-browser-review
           if-no-files-found: ignore
+
+      - name: Stop local Buyer V5 fixture
+        if: always()
+        shell: bash
+        run: bash tests/ci/stop-local-v5-browser.sh
