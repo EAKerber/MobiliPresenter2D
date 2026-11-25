@@ -702,6 +702,46 @@
         "originalHead": "6f7a0d3f93ba3f0f4483ffb143785d81cb0c5ed2"
       },
       "note": "Successor adds push-triggered inventory, retaining manual path. Original HEAD preserved as direct parent of archive; not a runtime merge."
+    },
+    {
+      "branch": "codex/tst004-browser-image-setup-20261124",
+      "sha": "c8c7f71f3f66fcad2345388c875192f20e0e4f08",
+      "reason": "rejected-exact-archive-preserved",
+      "allowDelete": true,
+      "evidence": {
+        "pullRequest": 378,
+        "archiveRef": "archive/product-hygiene-20261125",
+        "archiveSha": "7d729bda2138e40baa87d50a5ba4ade0ace1d48d",
+        "originalHead": "c8c7f71f3f66fcad2345388c875192f20e0e4f08"
+      },
+      "note": "Browser image experiment increased observed total runtime; preserve evidence only. Original HEAD preserved as direct parent of archive; not a runtime merge."
+    },
+    {
+      "branch": "codex/tst004-playwright-image-current-20261124",
+      "sha": "e1e92abd81da9bd550feaebc1f789c41db606118",
+      "reason": "rejected-exact-archive-preserved",
+      "allowDelete": true,
+      "evidence": {
+        "pullRequest": 402,
+        "archiveRef": "archive/product-hygiene-20261125",
+        "archiveSha": "7d729bda2138e40baa87d50a5ba4ade0ace1d48d",
+        "originalHead": "e1e92abd81da9bd550feaebc1f789c41db606118"
+      },
+      "note": "Second browser image experiment rejected on net runtime regression. Original HEAD preserved as direct parent of archive; not a runtime merge."
+    },
+    {
+      "branch": "codex/dom001-buyer-dto-boundary-20261125",
+      "sha": "a69e991d89e790f86f74389f34e320540442c7ee",
+      "reason": "merged-path-equivalent-exact-archive-preserved",
+      "allowDelete": true,
+      "evidence": {
+        "pullRequest": 444,
+        "mergedDevelopmentSha": "02c6ace2c59b96a11e3a2c87ab444eae00a27f3b",
+        "archiveRef": "archive/product-hygiene-20261125",
+        "archiveSha": "7d729bda2138e40baa87d50a5ba4ade0ace1d48d",
+        "originalHead": "a69e991d89e790f86f74389f34e320540442c7ee"
+      },
+      "note": "Both changed PR blobs identical at merged commit; tree difference is parallel #443 app.js and ARC-13 inventory only. Original HEAD preserved as direct parent of archive; not a runtime merge."
     }
   ]
 }
