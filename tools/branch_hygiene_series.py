@@ -49,7 +49,7 @@ def run(manifest, receipts, audit_only):
         raise RuntimeError("GITHUB_CONTEXT_MISSING")
     batches = split_waves(load_json(manifest), repo)
     receipts.mkdir(parents=True, exist_ok=True)
-    total_deleted, total_proofs = 0, 0
+    total_deleted, total_proofs, total_absent = 0, 0, 0
     for i, batch in enumerate(batches, 1):
         obs = observe(repo, "development", token)
         plan = build_plan(obs, load_json(Path("ops/branch-dispositions-development.json")))
@@ -62,10 +62,11 @@ def run(manifest, receipts, audit_only):
         if result.get("status") != "PASS":
             raise RuntimeError("WAVE_FAILED:" + str(i))
         total_deleted += len(result["deleted"])
+        total_absent += len(result["alreadyAbsent"])
         total_proofs += len(result["squashProofs"])
     print(json.dumps({"status":"PASS","waves":len(batches),
         "mode":"audit" if audit_only else "apply",
-        "deleted":total_deleted,"proofs":total_proofs},sort_keys=True))
+        "deleted":total_deleted,"alreadyAbsent":total_absent,"proofs":total_proofs},sort_keys=True))
 
 if __name__ == "__main__":
     p=argparse.ArgumentParser()

@@ -8,6 +8,7 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import re
 import subprocess
 from pathlib import Path
 
@@ -180,6 +181,49 @@ def delete_exact_ref(branch: str, sha: str, inventory: dict[str, str]) -> dict[s
     return expected
 
 
+def retry_selection(observation: dict, dispositions: dict, batch: dict) -> list[dict]:
+    """Re-prove absent pins on a retry, never put them in the live inventory.
+
+    The original bounded manifest remains the authority. An absent pin is
+    not a deletion receipt. The caller must verify preservation independently
+    before applying any remaining live pin.
+    """
+    refs = batch.get("branches")
+    if (batch.get("schemaVersion") != "BranchHygieneBatch 0.1"
+            or batch.get("repository") != observation["repository"]
+            or not isinstance(refs, list) or not 1 <= len(refs) <= 3):
+        raise ValueError("INVALID_RETRY_BATCH")
+    known = {item["name"] for item in observation["branches"]}
+    absent = []
+    for pin in refs:
+        if not isinstance(pin, dict):
+            raise ValueError("INVALID_RETRY_PIN")
+        name, sha = pin.get("branch"), pin.get("sha")
+        if (not isinstance(name, str) or not re.fullmatch(r"[a-zA-Z0-9._/-]+", name)
+                or ".." in name or "//" in name or name.startswith("-")
+                or name in {"main", "development"}
+                or not isinstance(sha, str) or not re.fullmatch(r"[0-9a-f]{40}", sha)):
+            raise ValueError("INVALID_RETRY_PIN")
+        if name in known:
+            continue
+        if subprocess.run(["git", "cat-file", "-e", sha+"^{commit}"],
+                          capture_output=True, check=False).returncode:
+            # A squashed or archived original may not be in a fresh clone.
+            subprocess.run(["git", "fetch", "--no-tags", "origin", sha], check=True)
+        tree = subprocess.run(["git", "show", "-s", "--format=%T", sha],
+                              text=True, capture_output=True, check=True).stdout.strip()
+        ancestry = subprocess.run(["git", "merge-base", "--is-ancestor", sha,
+                                  observation["controlSha"]], check=False).returncode
+        if ancestry not in (0, 1):
+            raise RuntimeError("RETRY_ANCESTRY_UNAVAILABLE:" + name)
+        absent.append({"name":name, "sha":sha, "treeSha":tree,
+                       "protected":False, "ancestorOfControl":ancestry == 0})
+    # This proof-only plan is not used for hashes, inventory or deletion.
+    proof_plan = build_plan({**observation, "branches":observation["branches"]+absent},
+                            dispositions)
+    return select_bounded_batch(proof_plan, batch)
+
+
 def apply(plan_path: Path, dispositions_path: Path, expected_plan: str,
           batch_path: Path, receipt_path: Path, audit_only: bool) -> dict:
     if not audit_only and os.environ.get(AUTH_ENV) != "1":
@@ -206,7 +250,17 @@ def apply(plan_path: Path, dispositions_path: Path, expected_plan: str,
     fresh_plan = build_plan(fresh, dispositions)
     if fresh_plan["planHash"] != expected_plan:
         raise RuntimeError("PLAN_DRIFT_REOBSERVATION_REQUIRED")
-    selected = select_bounded_batch(fresh_plan, load_json(batch_path))
+    batch = load_json(batch_path)
+    # Only GitHub's retry of the same authorized main push may reconcile absence.
+    # New PR audits and new first-attempt manifests keep their strict live-pin gate.
+    retry = (not audit_only and os.environ.get("GITHUB_ACTIONS") == "true"
+             and os.environ.get("GITHUB_EVENT_NAME") == "push"
+             and os.environ.get("GITHUB_REF") == "refs/heads/main"
+             and os.environ.get("GITHUB_RUN_ATTEMPT", "1").isdigit()
+             and int(os.environ.get("GITHUB_RUN_ATTEMPT", "1")) > 1
+             and bool(os.environ.get("GITHUB_RUN_ID")))
+    selected = (retry_selection(fresh, dispositions, batch) if retry
+                else select_bounded_batch(fresh_plan, batch))
     if not audit_only and control == "development" and any(
         "squashMerge" not in item for item in selected
     ):
@@ -226,6 +280,14 @@ def apply(plan_path: Path, dispositions_path: Path, expected_plan: str,
     ]
 
     archive_proofs = [proof for item in selected if (proof := archive_proof(item)) is not None]
+    absent = [item for item in selected if item["branch"] not in inventory]
+    for item in absent:
+        archived = next((p for p in archive_proofs if p["branch"] == item["branch"]), None)
+        if archived is not None and archived["status"] != "VERIFIED":
+            raise RuntimeError("RETRY_ARCHIVE_NOT_VERIFIED:" + item["branch"])
+    # Missing pins must have passed the same ancestry/squash/archive checks,
+    # but must never be counted as a deletion performed by this attempt.
+    live_selected = [item for item in selected if item["branch"] in inventory]
 
     if not audit_only:
         if (os.environ.get("GITHUB_EVENT_NAME") != "push"
@@ -252,6 +314,7 @@ def apply(plan_path: Path, dispositions_path: Path, expected_plan: str,
         "archiveProofs": archive_proofs,
         "mode": "audit" if audit_only else "apply",
         "deleted": [],
+        "alreadyAbsent": [{"branch": x["branch"], "sha": x["sha"]} for x in absent],
         "readback": "NOT_APPLIED" if audit_only else "PENDING",
     }
 
@@ -267,7 +330,7 @@ def apply(plan_path: Path, dispositions_path: Path, expected_plan: str,
         return receipt
 
     expected_inventory = inventory.copy()
-    for entry in selected:
+    for entry in live_selected:
         branch, sha = entry["branch"], entry["sha"]
         # Re-observe the full inventory, PRs and protection for every candidate.
         # GitHub REST can briefly lag Git refs after the previous deletion.
@@ -314,6 +377,12 @@ def apply(plan_path: Path, dispositions_path: Path, expected_plan: str,
         receipt["deleted"].append({"branch": branch, "sha": sha})
         save()
 
+    if remote_refs() != expected_inventory:
+        raise RuntimeError("FINAL_INVENTORY_DRIFT")
+    for item in absent:
+        archived = archive_proof(item)
+        if archived is not None and archived["status"] != "VERIFIED":
+            raise RuntimeError("RETRY_ARCHIVE_LOST:" + item["branch"])
     receipt["readback"] = "PASS"
     receipt["status"] = "PASS"
     receipt["remainingBranchCount"] = len(expected_inventory)
@@ -336,6 +405,7 @@ def main() -> int:
         "status": receipt["status"],
         "mode": receipt["mode"],
         "count": len(receipt["deleted"]),
+        "alreadyAbsent": len(receipt["alreadyAbsent"]),
         "batch": receipt["batch"],
         "readback": receipt["readback"],
     }))

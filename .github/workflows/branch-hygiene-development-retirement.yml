@@ -58,7 +58,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: product-development-retirement-audit-${{ github.run_id }}
+          name: product-development-retirement-audit-${{ github.run_id }}-${{ github.run_attempt }}
           path: /tmp/retirement-audit/receipt-*.json
           if-no-files-found: warn
   apply:
@@ -89,6 +89,6 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: product-development-retirement-${{ github.run_id }}
+          name: product-development-retirement-${{ github.run_id }}-${{ github.run_attempt }}
           path: /tmp/retirement-apply/receipt-*.json
           if-no-files-found: warn
