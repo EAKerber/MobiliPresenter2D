@@ -37,6 +37,31 @@ async function result(response) {
   return { status: response.status, body: await response.json(), headers: response.headers };
 }
 
+test("Buyer authorization gate watches the endpoint, DTO projection and route mapping on push and PR", async () => {
+  const workflow = (await readFile(resolve(ROOT, ".github/workflows/development-access-dto-boundary.yml"), "utf8"))
+    .replace(/\r\n/g, "\n");
+  const pushStart = workflow.indexOf("  push:\n");
+  const pullStart = workflow.indexOf("  pull_request:\n");
+  const dispatchStart = workflow.indexOf("  workflow_dispatch:\n");
+  assert.ok(pushStart >= 0 && pullStart > pushStart && dispatchStart > pullStart, "workflow triggers have stable boundaries");
+  const push = workflow.slice(pushStart, pullStart);
+  const pullRequest = workflow.slice(pullStart, dispatchStart);
+  const testedSources = [
+    "netlify/functions/buyer-configuration.mjs",
+    "app/core/published-buyer-projection.js",
+    "netlify.toml",
+  ];
+  for (const source of testedSources) {
+    assert.ok(push.includes(`      - '${source}'`), `push gate watches ${source}`);
+    assert.ok(pullRequest.includes(`      - '${source}'`), `pull-request gate watches ${source}`);
+  }
+
+  const netlify = await readFile(resolve(ROOT, "netlify.toml"), "utf8");
+  const buyerRoute = netlify.match(/\[\[redirects\]\]\s+from = "\/api\/buyer-configuration"[\s\S]*?force = true/);
+  assert.ok(buyerRoute, "the Buyer endpoint has an explicit same-origin redirect");
+  assert.match(buyerRoute[0], /to = "\/\.netlify\/functions\/buyer-configuration"/);
+});
+
 test("administrative configuration and bootstrap require admin before protected reads", async () => {
   let actor = null;
   let identityDown = false;
