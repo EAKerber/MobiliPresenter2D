@@ -1,14 +1,13 @@
 # MobiliPresenter2D
 
-> **Handover atual (22/10/2026):** [consolidação Vanilla + Design System, PRs, issues, gates e ARC-03B](docs/handoffs/ARCHITECTURE-CURRENT-2026-10-22.md). Este README preserva histórico antigo da fase de rendering; não descreve sozinho as rotas, autenticação e implementação atuais. Consulte HEADs e o handover antes de editar ou publicar.
+> **Current project entry point:** [CURRENT_STATE.md](CURRENT_STATE.md). It identifies the live authority sources and preserves dated checkpoints as historical records.
+>
+> **Architecture method:** [Plano Diretor v0.9](https://github.com/EAKerber/MobiliPresenter2D_DesignSystem/blob/main/docs/architecture/MOBILIPRESENTER2D_PLANO_DIRETOR_CONSOLIDADO_v0.9.md).  
+> **Execution state:** [operational register](https://github.com/EAKerber/MobiliPresenter2D/blob/development/docs/architecture/plan-v0.9-execution-register.json).  
+> **Design decisions:** [Design System decisions](https://github.com/EAKerber/MobiliPresenter2D_DesignSystem/blob/main/decisions.json).
 
+MobiliPresenter2D is a fixed-camera 2D configurator for modular furniture, with public presentation, Viewer, Admin, and configuration flows.
 
-Configurador fotográfico 2D em câmera fixa, canvas 1536 × 1024 e runtime determinístico.
+Before changing or publishing behavior, read the current state pointer and confirm the exact remote branch and commit. `main` is the stable publication branch; `development` is the integration buffer. Promotion is selective and requires the relevant contract checks.
 
-**Estado atual: Fase 4 — cor da pedra / R6 publicada.** Componentes aprovados e controle independente da pedra estão na `main`, com textura preservada e reset. A entrega funcional foi integrada pelo PR #25 no commit `9ec9cb052c43cccf2ffd5cbb8c1b2c947ef2bc27` e está disponível em <https://mobilipresenter2d.netlify.app/>. A avaliação estética fina dos novos tons continua separada da validação funcional.
-
-Leia [Estado atual e próximos passos](docs/work/STATUS-ATUAL.md) para retomar o projeto sem reconstruir o histórico.
-O [guia geral](app/docs/GUIA-IMPLEMENTACAO-2D-DATA-DRIVEN.md) descreve as fases 0–9.
-
-Abra `app/index.html` para usar o configurador. A execução local não exige servidor.
-Validação: `cd app && npm test`. As alterações seguem branches de trabalho; main permanece protegida.
+For local development, open `app/index.html`. The application test suite is run with `cd app && npm test`.

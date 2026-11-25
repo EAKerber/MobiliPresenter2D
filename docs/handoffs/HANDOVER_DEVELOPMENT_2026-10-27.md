@@ -1,3 +1,5 @@
+> **Historical snapshot — 2026-10-27.** Preserved as provenance, not the current handover or an authorization to repeat operations. Use [CURRENT_STATE.md](../../CURRENT_STATE.md) for current authority and re-read exact remote refs before acting. Any branch/ref inventory in this document is historical and unverified against today's remote state.
+
 # Handover corrente — estratégia de desenvolvimento por blocos (27/10/2026)
 
 ## Objetivo homologado no chat

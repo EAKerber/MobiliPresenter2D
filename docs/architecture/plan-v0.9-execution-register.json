@@ -56,15 +56,21 @@
       "title": "Consolidar a hierarquia documental",
       "chapter": "VII",
       "priority": "P0",
-      "planState": "not_started",
-      "reconciliation": "unreviewed",
-      "local": "unknown",
-      "development": "unknown",
-      "main": "unknown",
-      "technicalValidation": "unknown",
-      "approvalPublication": "unknown",
-      "evidence": [],
-      "nextAction": "Reconciliar este ID com código, consumidores, testes e evidência exata de branch/PR antes de alterar o estado."
+      "planState": "in_progress",
+      "reconciliation": "partial",
+      "local": "done",
+      "development": "partial",
+      "main": "partial",
+      "technicalValidation": "not_applicable",
+      "approvalPublication": "not_applicable",
+      "evidence": [
+        {
+          "source": "Product current entry points and retained handovers",
+          "sha": "cc495684f8ace2c4d84443022d79ecd48a6ad47b",
+          "detail": "README/CURRENT_STATE now distinguish v0.9 method, Product execution register, Design System decisions, Product implementation, and evidence receipts. Current-sounding October handovers are labeled historical without deleting their contents. Product development only; Design System handover and remaining current pointers still need reconciliation."
+        }
+      ],
+      "nextAction": "Refresh the Design System current handover in its existing PR, then search for any remaining current-sounding pointers and label only those proven stale; preserve historical evidence."
     },
     {
       "order": 4,
