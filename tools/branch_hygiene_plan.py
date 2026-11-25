@@ -70,11 +70,17 @@ def build_plan(observation: dict[str, Any], dispositions: dict[str, Any]) -> dic
             raise ValueError("invalid branch record")
 
         protections: list[str] = []
-        if name == control_branch:
+        if name in {"main", "development", control_branch}:
             protections.append("control-branch")
         if branch.get("protected") is True:
             protections.append("github-protected")
-        if name in preserve:
+        terminal_record = terminal.get(name)
+        transfer = (name.startswith("archive/") and terminal_record is not None
+                    and terminal_record.get("reason") == "archive-ref-to-tag"
+                    and terminal_record.get("sha") == sha
+                    and terminal_record.get("allowDelete") is True
+                    and isinstance(terminal_record.get("archiveTag"), str))
+        if name in preserve or (name.startswith("archive/") and not transfer):
             protections.append("explicit-preserve")
         if name in open_heads:
             protections.append("open-pr-head")
@@ -85,7 +91,6 @@ def build_plan(observation: dict[str, Any], dispositions: dict[str, Any]) -> dic
         if branch.get("ancestorOfControl") is True and name != control_branch:
             evidence.append({"kind": "ancestor-of-control", "controlSha": control_sha})
 
-        terminal_record = terminal.get(name)
         if terminal_record:
             expected_sha = terminal_record.get("sha")
             if expected_sha == sha and terminal_record.get("allowDelete") is True:
@@ -93,6 +98,8 @@ def build_plan(observation: dict[str, Any], dispositions: dict[str, Any]) -> dic
                     "kind": "explicit-terminal-disposition",
                     "reason": terminal_record.get("reason"),
                     "recordedSha": expected_sha,
+                    **({"archiveTag": terminal_record["archiveTag"]} if "archiveTag" in terminal_record else {}),
+                    **({"archiveTransfer": True} if transfer else {}),
                 })
 
         delete_candidate = bool(evidence) and not protections
@@ -188,13 +195,68 @@ def select_bounded_batch(plan: dict[str, Any], batch: dict[str, Any]) -> list[di
     return result
 
 
+def discovery_report(plan: dict[str, Any], facts: dict[str, Any]) -> dict[str, Any]:
+    """Suggest bounded pins; never emit an approved or executable manifest."""
+    if (facts.get("schemaVersion") != "BranchMergedHeadEvidence 0.1"
+            or any(facts.get(k) != plan.get(k) for k in
+                   ("repository", "controlBranch", "observationHash"))):
+        raise ValueError("DISCOVERY_OBSERVATION_MISMATCH")
+    by_name = facts["facts"]
+    if set(by_name) != {entry["branch"] for entry in plan["entries"]}:
+        raise ValueError("DISCOVERY_INVENTORY_MISMATCH")
+    rows, pins = [], []
+    for entry in plan["entries"]:
+        name, sha = entry["branch"], entry["sha"]
+        related = by_name[name]
+        pin = {"branch": name, "sha": sha}
+        proof = next((f["squashMerge"] for f in related
+                      if f.get("exactHead") is True and f.get("headSha") == sha
+                      and f.get("merged") is True and f.get("base") == plan["controlBranch"]
+                      and all(f.get(k) is True for k in ("mergeReachable", "treeEqual",
+                              "singleParent", "originalBaseReachable"))
+                      and "squashMerge" in f), None)
+        if entry["protections"]:
+            state = "preserve"
+        elif proof:
+            pin["squashMerge"] = proof
+            pins.append(pin)
+            state = "candidate"
+        elif plan["controlBranch"] == "main" and any(
+            e["kind"] == "ancestor-of-control" for e in entry["evidence"]
+        ):
+            pins.append(pin)
+            state = "candidate"
+        else:
+            state = "review"
+        rows.append({"branch": name, "sha": sha, "state": state,
+                     "protections": entry["protections"], "evidence": entry["evidence"],
+                     "relatedPullRequests": related})
+    batches = [pins[i:i+3] for i in range(0, len(pins), 3)]
+    return {"schemaVersion": "BranchHygieneDiscovery 0.1",
+            "repository": plan["repository"], "controlBranch": plan["controlBranch"],
+            "controlSha": plan["controlSha"], "observationHash": plan["observationHash"],
+            "authorization": "NONE", "executorAuditRequired": True,
+            "counts": {s: sum(r["state"] == s for r in rows)
+                       for s in ("preserve", "candidate", "review")},
+            "entries": rows, "suggestedBatches": batches}
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--observation", type=Path, required=True)
     parser.add_argument("--dispositions", type=Path, required=True)
     parser.add_argument("--output", type=Path)
+    parser.add_argument("--merged-head-evidence", type=Path)
+    parser.add_argument("--discovery-output", type=Path)
     args = parser.parse_args()
     plan = build_plan(load_json(args.observation), load_json(args.dispositions))
+    if bool(args.merged_head_evidence) != bool(args.discovery_output):
+        parser.error("--merged-head-evidence and --discovery-output must be paired")
+    if args.discovery_output:
+        report = discovery_report(plan, load_json(args.merged_head_evidence))
+        args.discovery_output.write_text(json.dumps(report, indent=2, ensure_ascii=False, sort_keys=True) + "\n", encoding="utf-8")
+        print(json.dumps({"discovery": report["counts"], "controlBranch": report["controlBranch"],
+                          "authorization": report["authorization"]}, sort_keys=True))
     text = json.dumps(plan, indent=2, ensure_ascii=False, sort_keys=True) + "\n"
     if args.output:
         args.output.write_text(text, encoding="utf-8")

@@ -2,13 +2,10 @@ name: Bounded branch hygiene (explicit SHA batch)
 
 on:
   pull_request:
-    types: [opened, synchronize, reopened, closed]
+    types: [opened, synchronize, reopened]
     paths:
       - 'ops/branch-hygiene-batch.json'
-      - 'tools/branch_hygiene_apply.py'
-      - 'tools/branch_hygiene_plan.py'
-      - 'tools/branch_hygiene_observe.py'
-      - 'tools/branch_hygiene_merged_pr_cleanup.py'
+      - 'tools/branch_hygiene_*.py'
       - 'tests/test_branch_hygiene_*.py'
       - '.github/workflows/branch-hygiene-bounded.yml'
   push:
@@ -17,7 +14,7 @@ on:
       - 'ops/branch-hygiene-batch.json'
 
 concurrency:
-  group: m2d-bounded-branch-hygiene
+  group: m2d-branch-hygiene-mutations
   queue: max
   cancel-in-progress: false
 
@@ -51,9 +48,10 @@ jobs:
           python tools/branch_hygiene_plan.py --observation /tmp/batch-observation.json --dispositions ops/branch-dispositions.json --output /tmp/batch-plan.json >/dev/null
       - name: Detect whether this PR supplies a new exact branch batch
         id: batch-change
+        env:
+          PR_BASE_SHA: ${{ github.event.pull_request.base.sha }}
         run: |
-          git fetch origin main
-          if git diff --quiet origin/main...HEAD -- ops/branch-hygiene-batch.json; then
+          if git diff --quiet "$PR_BASE_SHA"...HEAD -- ops/branch-hygiene-batch.json; then
             echo 'changed=false' >> "$GITHUB_OUTPUT"
           else
             echo 'changed=true' >> "$GITHUB_OUTPUT"
@@ -121,31 +119,3 @@ jobs:
           path: /tmp/batch-receipt.json
           if-no-files-found: warn
 
-  cleanup-merged-pr-head:
-    if: github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-      pull-requests: read
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          ref: main
-          fetch-depth: 0
-          persist-credentials: true
-      - uses: actions/setup-python@v5
-        with:
-          python-version: '3.12'
-      - name: Verify merged PR identity and clean its exact head branch
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
-        run: |
-          python tools/branch_hygiene_merged_pr_cleanup.py \
-            --event "$GITHUB_EVENT_PATH" \
-            --receipt /tmp/merged-pr-head-cleanup.json
-      - uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: m2d-merged-pr-head-cleanup-${{ github.run_id }}
-          path: /tmp/merged-pr-head-cleanup.json
-          if-no-files-found: warn

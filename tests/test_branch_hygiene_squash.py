@@ -1,14 +1,17 @@
 #!/usr/bin/env python3
 """Fail-closed tests for the optional merged-squash full-tree proof."""
 import copy
+import json
+import os
 import sys
+import tempfile
 import unittest
 from pathlib import Path
 from types import SimpleNamespace
 from unittest.mock import patch
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "tools"))
-from branch_hygiene_apply import verify_squash_merge
+from branch_hygiene_apply import apply, verify_no_workflow_dependency, verify_squash_merge
 from branch_hygiene_plan import build_plan, select_bounded_batch
 
 HEAD = "2" * 40
@@ -111,6 +114,76 @@ class SquashBatchTests(unittest.TestCase):
         b["repository"] = "wrong/repository"
         with self.assertRaises(ValueError):
             self.select(b)
+
+
+class WorkflowDependencyTests(unittest.TestCase):
+    def test_both_workflow_yaml_extensions_are_scanned(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            for filename in ("live.yml", "live.yaml"):
+                workflow = root / filename
+                workflow.write_text("branch: " + NAME + "\\n", encoding="utf-8")
+                with self.subTest(filename=filename):
+                    with self.assertRaisesRegex(RuntimeError, "ACTIVE_WORKFLOW_REF"):
+                        verify_no_workflow_dependency(NAME, root)
+                workflow.unlink()
+
+    def test_ancestor_candidate_is_checked_before_audit_receipt(self):
+        control_sha = "1" * 40
+        candidate_sha = "2" * 40
+        obs = {
+            "schemaVersion": "BranchObservation 0.1",
+            "repository": REPO,
+            "controlBranch": "main",
+            "controlSha": control_sha,
+            "observedAt": "2026-11-24T00:00:00Z",
+            "complete": True,
+            "observationHash": "o" * 64,
+            "openPrHeads": [],
+            "openPrBases": [],
+            "branches": [
+                {"name": "main", "sha": control_sha, "treeSha": "a" * 40,
+                 "protected": False, "ancestorOfControl": True},
+                {"name": NAME, "sha": candidate_sha, "treeSha": TREE,
+                 "protected": False, "ancestorOfControl": True},
+            ],
+        }
+        dispositions = {
+            "schemaVersion": "BranchDispositionSet 0.1",
+            "controlBranch": "main",
+            "preserveBranches": [],
+            "terminalBranches": [],
+        }
+        plan = build_plan(obs, dispositions)
+        batch_payload = {
+            "schemaVersion": "BranchHygieneBatch 0.1",
+            "repository": REPO,
+            "branches": [{"branch": NAME, "sha": candidate_sha}],
+        }
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            plan_path, dispositions_path = root / "plan.json", root / "dispositions.json"
+            batch_path, receipt_path = root / "batch.json", root / "receipt.json"
+            plan_path.write_text(json.dumps(plan), encoding="utf-8")
+            dispositions_path.write_text(json.dumps(dispositions), encoding="utf-8")
+            batch_path.write_text(json.dumps(batch_payload), encoding="utf-8")
+            with patch.dict(os.environ, {
+                "GITHUB_TOKEN": "test-token",
+                "GITHUB_REPOSITORY": REPO,
+            }):
+                with patch("branch_hygiene_apply.verify_no_rulesets"), \
+                     patch("branch_hygiene_apply.observe", return_value=obs), \
+                     patch("branch_hygiene_apply.remote_refs", return_value={
+                         "main": control_sha, NAME: candidate_sha,
+                     }), patch(
+                         "branch_hygiene_apply.verify_no_workflow_dependency",
+                         side_effect=RuntimeError("ACTIVE_WORKFLOW_REF:" + NAME),
+                     ) as guard:
+                    with self.assertRaisesRegex(RuntimeError, "ACTIVE_WORKFLOW_REF"):
+                        apply(plan_path, dispositions_path, plan["planHash"],
+                              batch_path, receipt_path, audit_only=True)
+            guard.assert_called_once_with(NAME)
+            self.assertFalse(receipt_path.exists())
 
 
 class RuntimeProofTests(unittest.TestCase):

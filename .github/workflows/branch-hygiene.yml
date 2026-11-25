@@ -3,9 +3,11 @@ name: Branch hygiene
 on:
   pull_request:
     paths:
-      - 'tools/branch_hygiene_*.py'
+      - 'tools/branch_hygiene_apply.py'
+      - 'tools/branch_hygiene_observe.py'
+      - 'tools/branch_hygiene_plan.py'
       - 'ops/branch-dispositions.json'
-      - 'tests/test_branch_hygiene_plan.py'
+      - 'tests/test_branch_hygiene_*.py'
       - '.github/workflows/branch-hygiene.yml'
       - 'docs/work/r1-branch-hygiene.md'
   push:
@@ -39,19 +41,32 @@ jobs:
       - name: Materialize fresh observation
         env:
           GITHUB_TOKEN: ${{ github.token }}
-        run: python tools/branch_hygiene_observe.py --output /tmp/branch-observation.json
+        run: python tools/branch_hygiene_observe.py --output /tmp/branch-observation.json --merged-head-evidence /tmp/merged-head-evidence.json
       - name: Build exact plan
         run: |
           python tools/branch_hygiene_plan.py \
             --observation /tmp/branch-observation.json \
             --dispositions ops/branch-dispositions.json \
-            --output /tmp/branch-plan.json
+            --output /tmp/branch-plan.json \
+            --merged-head-evidence /tmp/merged-head-evidence.json \
+            --discovery-output /tmp/branch-discovery.json
           python - <<'PY'
           import json
           p=json.load(open('/tmp/branch-plan.json'))
           open('/tmp/branch-plan-hash.txt','w').write(p['planHash'])
           print('DELETE_CANDIDATES', [e['branch'] for e in p['entries'] if e['action']=='delete-candidate'])
           PY
+      - name: Discover development candidates (read-only)
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          if git show refs/remotes/origin/main:ops/branch-dispositions-development.json > /tmp/dev-dispositions.json; then
+            python tools/branch_hygiene_observe.py --control development --output /tmp/dev-observation.json --merged-head-evidence /tmp/dev-merged-head-evidence.json
+            python tools/branch_hygiene_plan.py --observation /tmp/dev-observation.json --dispositions /tmp/dev-dispositions.json --merged-head-evidence /tmp/dev-merged-head-evidence.json --discovery-output /tmp/dev-discovery.json >/dev/null
+            python -c 'import json; print(json.load(open("/tmp/dev-discovery.json"))["counts"])'
+          else
+            echo 'Development discovery policy unavailable; no suggestions generated.'
+          fi
       # Audit-only: branch removal requires a separately reviewed, explicit batch.
       - name: Upload evidence
         if: always()
@@ -62,4 +77,9 @@ jobs:
             /tmp/branch-observation.json
             /tmp/branch-plan.json
             /tmp/branch-plan-hash.txt
+            /tmp/merged-head-evidence.json
+            /tmp/branch-discovery.json
+            /tmp/dev-observation.json
+            /tmp/dev-merged-head-evidence.json
+            /tmp/dev-discovery.json
           if-no-files-found: warn
