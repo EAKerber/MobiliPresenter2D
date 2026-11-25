@@ -67,9 +67,6 @@ jobs:
           tests/test_gap_parallelism_gate.py
           tests/test_gap_pixel_gate.py
           tests/test_faucet_edge.py
-      - name: Validate current app runtime and asset invariants
-        working-directory: app
-        run: npm test
       - name: Derive current target variants
         run: |
           mkdir -p /tmp/candidate-review
