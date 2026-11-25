@@ -6,7 +6,7 @@
   "slice": "buyer-configuration-boundary",
   "sourcePin": {
     "repository": "EAKerber/MobiliPresenter2D",
-    "developmentSha": "1292afe149e711dce01fce0e727fd0da033a38d4"
+    "developmentSha": "8517b708c5b05693c1522894d410e28e8686c593"
   },
   "scopeLimit": "This slice maps the Buyer configuration endpoint authorization and DTO assertions only. It does not claim full TST-002 coverage or a passing result for a future candidate SHA.",
   "execution": {
@@ -23,7 +23,7 @@
     ],
     "pathFilter": "tests/buyer-configuration-endpoint.test.mjs",
     "runtime": "ubuntu-latest; Node.js 22",
-    "resultEvidence": "The assertion group is executed by the declared command. Record the actual result against the exact candidate SHA in its GitHub Actions run."
+    "resultEvidence": "Local execution: node --test tests/buyer-configuration-endpoint.test.mjs passed 1/1 at local checkout HEAD 683a1b980281b652ae23bbd5c2effcebc489bdcd. The test, endpoint, projection, Identity policy, and workflow blobs match the source pins recorded in the companion Markdown at development@8517b708c5b05693c1522894d410e28e8686c593. No exact-head GitHub Actions run for this Buyer-specific command or hosted Identity/Blob session is claimed."
   },
   "assertions": [
     {
