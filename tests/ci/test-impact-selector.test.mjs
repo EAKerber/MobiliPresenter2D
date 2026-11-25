@@ -495,10 +495,42 @@ test('Admin and temporary-session access changes select their authorization boun
   }
 });
 
+test('Admin hierarchy edit and V5 round-trip changes select the existing browser gate', () => {
+  const focusedPaths = [
+    'app/core/hierarchy-editor.js',
+    'tests/admin-v5-save-browser.cjs'
+  ];
+  const selection = selectBundles(focusedPaths, map);
+  assert.deepEqual(ids(selection), ['admin-hierarchy-editing']);
+  assert.equal(selection.fallback.enabled, false);
+  assert.deepEqual(selection.unknownPaths, []);
+
+  const bundle = selection.selectedBundles[0];
+  const workflowPath = '.github/workflows/admin-hierarchy-browser.yml';
+  const execution = bundle.execution.find((entry) => entry.workflow === workflowPath);
+  assert(execution, 'hierarchy round-trip maps to the existing Admin browser gate');
+  assert(execution.commands.includes('node tests/admin-v5-save-browser.cjs'));
+
+  const workflow = definition(readFileSync(path.join(root, workflowPath), 'utf8'), workflowPath, 'current-workflow-blob');
+  for (const eventName of ['pull_request', 'push']) {
+    const event = workflow.events.find((candidate) => candidate.name === eventName);
+    assert(event, workflowPath + ' must retain ' + eventName);
+    assert(event.paths.includes('app/admin/**'), workflowPath + ' must watch Admin hierarchy source');
+    for (const changedPath of ['app/core/hierarchy-editor.js', 'app/core/administration-v5.js', 'tests/admin-v5-save-browser.cjs']) {
+      assert(event.paths.includes(changedPath), workflowPath + ' must watch ' + changedPath);
+    }
+  }
+  assert.deepEqual(workflow.events.find((event) => event.name === 'push').branches, ['main']);
+  for (const command of execution.commands) {
+    assert(workflow.commands.some((entry) => entry.command.includes(command)),
+      workflowPath + ' must run mapped command: ' + command);
+  }
+});
+
 test('Admin and Identity policy changes retain their distinct access and configuration contracts', () => {
   const admin = selectBundles(['app/admin/admin.js'], map);
-  assert.deepEqual(ids(admin), ['viewer-pricing', 'access-surface'],
-    'Admin source has both pricing and authorization contracts');
+  assert.deepEqual(ids(admin), ['viewer-pricing', 'admin-hierarchy-editing', 'access-surface'],
+    'Admin source has independent pricing, hierarchy, and authorization contracts');
 
   const policy = selectBundles(['netlify/access/identity-policy.mjs'], map);
   assert.deepEqual(ids(policy), ['buyer-configuration-boundary', 'access-surface'],

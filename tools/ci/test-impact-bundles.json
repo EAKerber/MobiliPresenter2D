@@ -212,6 +212,43 @@
       ]
     },
     {
+      "id": "admin-hierarchy-editing",
+      "contract": [
+        "TST-002 Admin hierarchy edit/save/readback",
+        "DOM-001 hierarchy authority slice"
+      ],
+      "consumer": [
+        "Admin hierarchy editor",
+        "V5 administration save and reload"
+      ],
+      "risks": [
+        "a section move, split, or merge is lost or reordered during V5 persistence",
+        "the UI draft and persisted item ownership diverge",
+        "hierarchy changes fall back to the general advisory bundle set"
+      ],
+      "paths": [
+        "app/admin/admin.js",
+        "app/core/hierarchy-editor.js",
+        "app/core/hierarchy-administration.js",
+        "app/core/administration-v5.js",
+        "tests/admin-hierarchy-browser.cjs",
+        "tests/admin-v5-save-browser.cjs",
+        "docs/architecture/ci/tst-002-admin-hierarchy-roundtrip-crosswalk-2026-11-25.md"
+      ],
+      "execution": [
+        {
+          "workflow": ".github/workflows/admin-hierarchy-browser.yml",
+          "scope": "pull_request on all bases; push on main (path-filtered)",
+          "commands": [
+            "node tests/admin-hierarchy-browser.cjs /tmp/admin-hierarchy-review",
+            "node tests/admin-handles-persistence-browser.cjs",
+            "node tests/admin-v5-save-browser.cjs"
+          ],
+          "assertion": "Admin hierarchy editing, native V5 save and readback, isolated Puxadores persistence, and conflict/mismatched-readback rejection."
+        }
+      ]
+    },
+    {
       "id": "v5-normal-save-concurrency",
       "contract": [
         "DOM-004 concurrent configuration edits",

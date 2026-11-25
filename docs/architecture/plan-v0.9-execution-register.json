@@ -377,9 +377,14 @@
           "source": "Product PR #430; refreshed Buyer crosswalk pin and exact impact-plan run #45618020713",
           "sha": "d0f63d0c62ed25a78067bb8b2e98d88fded5a1a7",
           "detail": "PR #430 refreshed the Buyer crosswalk to the current code-source pin 8517b708c5b05693c1522894d410e28e8686c593, corrected the literal placeholder in the readback base, and merged as d0f63d0c62ed25a78067bb8b2e98d88fded5a1a7. Exact-head advisory jobs plan and inventory passed in run #45618020713. Local Buyer test remains 1/1; no hosted Identity/Blob validation or post-merge run is claimed. The broader TST-002 matrix remains partial."
+        },
+        {
+          "source": "Product PR #447 exact-head Admin hierarchy run #45653257500; receipt update PR #448",
+          "sha": "9fc5c70345edfa94c92c7093f0a4692e6c9f1841",
+          "detail": "PR #447 head 97909a8bd8e628c8700d953ed2dd390f0d3ba6c4 added Admin V5 section split/group merge with save and reload readback; the exact-head Admin hierarchy browser gate and advisory impact plan passed, and the PR was squash-integrated at 0ae7312a2a0aba5404c852e0ccce973e7e8bb5f1. PR #448 updated the crosswalk with those results and integrated at this development SHA. Evidence is a local browser fixture with an in-memory V5 endpoint and Identity stub; live Netlify Blobs/Identity and full TST-002 coverage remain unproven."
         }
       ],
-      "nextAction": "Expand TST-002 by risk beyond the Buyer and access-surface slices; keep fixture-only, exact-head CI, and hosted Identity/Blob evidence distinguished. The stale Buyer source pin has been refreshed; crosswalks and impact bundle are not yet integrated in main."
+      "nextAction": "Expand the risk-based assertion matrix beyond Buyer, access-surface, and the representative Admin hierarchy round-trip; keep fixture-only, exact-head CI, and hosted Identity/Blob evidence distinct. Confirm the Admin hierarchy impact bundle and V5 section-transfer case in the current development PR before recording their integration."
     },
     {
       "order": 21,
