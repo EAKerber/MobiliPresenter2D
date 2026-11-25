@@ -4365,7 +4365,7 @@
       "classificationHints": [
         "accessibility-text"
       ],
-      "sourceSha256": "78a1c17da7dae36c68f8b4128d400cdb7a98a222b831d45655553030bac9adbe",
+      "sourceSha256": "c6518ad21dcc45a80bb3a8de349551f4779b861bd9f64d532fc7f614348a0bd2",
       "id": "7b0753494b736d68"
     },
     {
@@ -5965,7 +5965,7 @@
       "classificationHints": [
         "visible-or-accessible-ui"
       ],
-      "sourceSha256": "78a1c17da7dae36c68f8b4128d400cdb7a98a222b831d45655553030bac9adbe",
+      "sourceSha256": "c6518ad21dcc45a80bb3a8de349551f4779b861bd9f64d532fc7f614348a0bd2",
       "id": "190977b486744c14"
     },
     {
@@ -7488,12 +7488,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "c8bc3d54bf1ae39dace5fee04363da261b527324ed82f18caa5fbf75f1f1dff3",
-      "id": "8f77b83e69725723"
+      "sourceSha256": "4085bd454df6d707eebbcc04b734bd434349f0c626ce9c0bde1bac38afb0f6a9",
+      "id": "760fa5195901e79e"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 738,
+      "line": 739,
       "column": 7,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -9009,12 +9009,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "c8bc3d54bf1ae39dace5fee04363da261b527324ed82f18caa5fbf75f1f1dff3",
-      "id": "bcadd1bd1b947c2c"
+      "sourceSha256": "4085bd454df6d707eebbcc04b734bd434349f0c626ce9c0bde1bac38afb0f6a9",
+      "id": "0d9c52dd6f34537d"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1182,
+      "line": 1183,
       "column": 137,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -16696,7 +16696,7 @@
         "transform": "catalog-key-substitution",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "65524e082b988926615a71fb17b158b8e12bf79c702b760e126f21aad356a2a6",
+          "manifestSha256": "c5b4c6f2c92d6bf0d5df38af66a3e748e6f2d1232d1cc205a56653e35c924115",
           "outputOffset": 1681,
           "offsetUnit": "unicode-codepoints"
         },
@@ -19424,7 +19424,7 @@
         "transform": "catalog-key-substitution",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "65524e082b988926615a71fb17b158b8e12bf79c702b760e126f21aad356a2a6",
+          "manifestSha256": "c5b4c6f2c92d6bf0d5df38af66a3e748e6f2d1232d1cc205a56653e35c924115",
           "outputOffset": 8393,
           "offsetUnit": "unicode-codepoints"
         },
@@ -22304,7 +22304,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "65524e082b988926615a71fb17b158b8e12bf79c702b760e126f21aad356a2a6",
+          "manifestSha256": "c5b4c6f2c92d6bf0d5df38af66a3e748e6f2d1232d1cc205a56653e35c924115",
           "outputOffset": 13679,
           "offsetUnit": "unicode-codepoints"
         }
@@ -24992,7 +24992,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "65524e082b988926615a71fb17b158b8e12bf79c702b760e126f21aad356a2a6",
+          "manifestSha256": "c5b4c6f2c92d6bf0d5df38af66a3e748e6f2d1232d1cc205a56653e35c924115",
           "outputOffset": 21125,
           "offsetUnit": "unicode-codepoints"
         }
@@ -27680,7 +27680,7 @@
         "transform": "copy",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "65524e082b988926615a71fb17b158b8e12bf79c702b760e126f21aad356a2a6",
+          "manifestSha256": "c5b4c6f2c92d6bf0d5df38af66a3e748e6f2d1232d1cc205a56653e35c924115",
           "outputOffset": 27079,
           "offsetUnit": "unicode-codepoints"
         }
@@ -30426,7 +30426,7 @@
         "transform": "catalog-key-substitution",
         "evidence": {
           "manifest": "architecture/generated/primary-pages.manifest.json",
-          "manifestSha256": "65524e082b988926615a71fb17b158b8e12bf79c702b760e126f21aad356a2a6",
+          "manifestSha256": "c5b4c6f2c92d6bf0d5df38af66a3e748e6f2d1232d1cc205a56653e35c924115",
           "outputOffset": 2698,
           "offsetUnit": "unicode-codepoints"
         },
@@ -34835,23 +34835,23 @@
       "consumerLinkStatus": "declared-sink-not-indexed",
       "useStatus": "active",
       "consumerEvidence": [
-        "app/admin/admin.js:1078 argument passed to makeMaterialCheckboxDropdown"
+        "app/admin/admin.js:1079 argument passed to makeMaterialCheckboxDropdown"
       ],
       "owner": "admin",
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "c8bc3d54bf1ae39dace5fee04363da261b527324ed82f18caa5fbf75f1f1dff3",
-      "id": "27e0315ded1969f9"
+      "sourceSha256": "4085bd454df6d707eebbcc04b734bd434349f0c626ce9c0bde1bac38afb0f6a9",
+      "id": "a29eba5e191bf8b7"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1081,
+      "line": 1082,
       "column": 34,
       "kind": "javascript-text-source",
       "sink": "source:admin-rule-select-label",
       "sourceRole": "admin-rule-select-label",
-      "sourceBinding": "makeRuleSelect@1081",
+      "sourceBinding": "makeRuleSelect@1082",
       "valuePath": "",
       "expression": "\"Cor selecionada inicialmente\"",
       "value": "Cor selecionada inicialmente",
@@ -36171,7 +36171,7 @@
     },
     {
       "source": "app/admin/admin.js",
-      "line": 2022,
+      "line": 2023,
       "column": 43,
       "kind": "javascript-text-source",
       "sink": "source:error-message-source",
