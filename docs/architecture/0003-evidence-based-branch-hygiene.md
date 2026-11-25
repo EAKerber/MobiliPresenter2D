@@ -43,3 +43,7 @@ python tools/branch_hygiene_plan.py --observation /tmp/obs.json --dispositions o
 ```
 
 Use development with the corresponding current disposition file when the control is development. The scheduled/PR Branch hygiene workflow emits both discovery reports as artifacts; agents can consume the JSON and action logs using existing connectors. Review paths and related PR facts when proof is incomplete. A soft cap is a review signal, not authorization. Never execute a suggested batch as-is without the existing explicit authorization and independent gates.
+
+### Retry after partial application
+
+Re-run the same failed GitHub Actions run; do not dispatch a new batch from a consumed manifest. Only a later attempt of the original main push may reconcile absent pins. It must re-prove exact preservation (ancestry, the merged-PR full-tree proof, or an existing verified archive tag), while changed or unproved refs still block the batch. Remaining live pins pass the normal gates. Receipts distinguish `alreadyAbsent` from `deleted` and retain each run attempt separately. The executor does not schedule retries itself.
