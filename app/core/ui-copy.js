@@ -117,6 +117,12 @@
         componentsPerLine: "Componentes (um por linha)",
         requirementsPerLine: "Requisitos (um por linha)"
       }),
+      materials: Object.freeze({
+        baseColor: "Cor base",
+        noColor: "Sem cor/tinta base",
+        colorDisabledReason: "Cor base indisponível enquanto “Sem cor/tinta base” estiver marcado.",
+        noColorDisabledReason: "Sem cor/tinta base está disponível apenas para materiais do tipo Textura."
+      }),
       pricing: Object.freeze({
         viewerBasePricePublication: Object.freeze({
           title: "Exibição pública no Viewer",
