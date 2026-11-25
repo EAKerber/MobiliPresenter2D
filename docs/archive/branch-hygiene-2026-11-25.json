@@ -1,0 +1,77 @@
+{
+  "schemaVersion": "M2DBranchArchive/1",
+  "repository": "EAKerber/MobiliPresenter2D",
+  "purpose": "Lossless archive of exact retired heads, NOT a runtime merge or publication. Archive tree uses development baseline plus this receipt; each original commit is a direct parent, accessible independently by SHA. Extract only reviewed useful material.",
+  "developmentBaseline": "b85313662bb71fdf5e625fc012904c68d3752fc1",
+  "createdDate": "2026-11-25",
+  "entries": [
+    {
+      "n": 274,
+      "branch": "docs/arc13-post-273-reconciliation-20261114",
+      "sha": "82cca3b5b5b9cdc91c84f7dc50167c965bd231a7",
+      "status": "historical-docs-pending-review",
+      "reason": "34 of 35 documentation paths absent at both control snapshots; preserve original tree for future selective extraction, not runtime integration."
+    },
+    {
+      "n": 294,
+      "branch": "codex/nav005-development-buffer-20261121",
+      "sha": "9c18dd97bfc4cf50e55fa60349a6496fa3d723e4",
+      "status": "superseded",
+      "successorPRs": [
+        295,
+        296
+      ],
+      "reason": "Incorrect squash ancestry in follow-up; successor gate fixes integrated."
+    },
+    {
+      "n": 314,
+      "branch": "codex/arc13-localization-menu-theme-20261122",
+      "sha": "fc12bb628b949fe156bb969cbed1acf8df72e668",
+      "status": "superseded",
+      "successorPRs": [
+        315
+      ],
+      "reason": "PR explicitly closed as replaced by #315 on clean development base."
+    },
+    {
+      "n": 354,
+      "branch": "codex/tst001-refreshable-inventory-20261124",
+      "sha": "6f7a0d3f93ba3f0f4483ffb143785d81cb0c5ed2",
+      "status": "superseded",
+      "successorPRs": [
+        355
+      ],
+      "reason": "Successor adds push-triggered inventory, retaining manual path."
+    },
+    {
+      "n": 378,
+      "branch": "codex/tst004-browser-image-setup-20261124",
+      "sha": "c8c7f71f3f66fcad2345388c875192f20e0e4f08",
+      "status": "rejected",
+      "reason": "Browser image experiment increased observed total runtime; preserve evidence only."
+    },
+    {
+      "n": 402,
+      "branch": "codex/tst004-playwright-image-current-20261124",
+      "sha": "e1e92abd81da9bd550feaebc1f789c41db606118",
+      "status": "rejected",
+      "reason": "Second browser image experiment rejected on net runtime regression."
+    },
+    {
+      "n": 444,
+      "branch": "codex/dom001-buyer-dto-boundary-20261125",
+      "sha": "a69e991d89e790f86f74389f34e320540442c7ee",
+      "status": "merged-path-equivalent",
+      "merge": "02c6ace2c59b96a11e3a2c87ab444eae00a27f3b",
+      "reason": "Both changed PR blobs identical at merged commit; tree difference is parallel #443 app.js and ARC-13 inventory only."
+    },
+    {
+      "n": 400,
+      "branch": "codex/hygiene-retire-tst004-crosswalk-20261124",
+      "sha": "d1fe79faafa1ed7345aff8afeb33bbf5e4a21e22",
+      "status": "merged-path-equivalent",
+      "merge": "19f5ab1db5f545ab38e43eba9535d9a8e7a727ac",
+      "reason": "Entire ops tree identical at merged commit; difference only pre-existing #440 workflow changes."
+    }
+  ]
+}
