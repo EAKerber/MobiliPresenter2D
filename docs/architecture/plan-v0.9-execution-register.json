@@ -1,6 +1,16 @@
-Warning: truncated output (original token count: 20890)
-Total output lines: 2151
+Warning: truncated output (original token count: 20993)
+Total output lines: 2160
 
+InvalidOperation: 
+Line |
+  49 |  … ing(0,$start)+$block+$raw.Substring($end); $raw=$raw -replace '("prod …
+     |                                                         ~~~~~~~~
+     | The -replace operator allows only two elements to follow it, not 4.
+InvalidOperation: 
+Line |
+  49 |  … dcfca812038dde547c14f7cc565e64891ba'+'$2'; $raw=$raw -replace '("mean …
+     |                                                         ~~~~~~~~
+     | The -replace operator allows only two elements to follow it, not 4.
 {
   "schema": "PlanV09OperationalRegister/1",
   "updatedAt": "2026-11-25",
@@ -365,19 +375,19 @@ Total output lines: 2151
           "source": "Product PR #399",
           "sha": "531c2814235c9524289ccb9efd909f43e01d908b",
           "detail": "Recorte parcial de navegação pública mapeado a workflows; a matriz completa de caminhos, condições, comandos, asserções e custo permanece aberta."
-        },
-        {
-          "source": "Product PR #415 Actions run #45541550403",
-          "sha": "55bab531205798979589732db9663f4202b4ad16",
-          "detail": "A auditoria mediu 124 cenários disparados por alteração apenas do hash do manifesto gerado, sem mudança nos HTMLs públicos; ARC-13 validou separadamente catálogo, compilador, manifesto e proveniência."
-        },
-        {
-          "source": "Product PR #415 Actions run #45541551282",
-          "sha": "55bab531205798979589732db9663f4202b4ad16",
-          "detail": "O gate de fronteira de configuração executou devido apenas a app/core/ui-copy.js; os comandos e consumidores cobertos não importam o catálogo visual compartilhado."
+      },
+      {
+        "source": "Product PR #415 Actions run #45541550403",
+        "sha": "55bab531205798979589732db9663f4202b4ad16",
+        "detail": "A auditoria mediu 124 cenários disparados por alteração apenas do hash do manifesto gerado, sem mudança nos HTMLs públicos; ARC-13 validou separadamente catálogo, compilador, manifesto e proveniência."
+      },
+      {
+        "source": "Product PR #415 Actions run #45541551282",
+        "sha": "55bab531205798979589732db9663f4202b4ad16",
+        "detail": "O gate de fronteira de configuração executou devido apenas a app/core/ui-copy.js; os comandos e consumidores cobertos não importam o catálogo visual compartilhado."
         }
       ],
-      "nextAction": "Mapear as famílias e condições restantes; os filtros atuais excluem somente o manifesto exato do browser de navegação e o catálogo UI do gate de configuração, preservando os respectivos gates consumidores e os demais caminhos."
+    "nextAction": "Mapear as famílias e condições restantes; os filtros atuais excluem somente o manifesto exato do browser de navegação e o catálogo UI do gate de configuração, preservando os respectivos gates consumidores e os demais caminhos."
     },
     {
       "order": 22,
@@ -1068,21 +1078,10 @@ Total output lines: 2151
       "id": "CMP-011",
       "title": "Revisar o piloto declarativo da Landing",
       "chapter": "IV",
-      "priority": "P2",
+      "p…993 tokens truncated… interações acessíveis não verificadas",
+      "chapter": "VI",
+      "priority": "P1",
       "planState": "not_started",
-      "reconciliation": "unreviewed",
-      "local": "unknown",
-      "development": "unknown",
-      "main": "unknown",
-      "technicalValidation": "unknown",
-      "approvalPublication": "unknown",
-      "evidence": [],
-      "nextAction": "Reconciliar este ID com código, consumidores, testes e evidência exata de branch/PR antes de alterar o estado."
-    },
-    {
-      "order": 65,
-      "id": "CMP-012",
-      "title": "Consolidar o …890 tokens truncated…      "planState": "not_started",
       "reconciliation": "unreviewed",
       "local": "unknown",
       "development": "unknown",
@@ -1305,8 +1304,7 @@ Total output lines: 2151
         }
       ],
       "nextAction": "DoD TST-006 concluído em development. A mudança afeta apenas a infraestrutura de testes; main não recebeu este pacote e publicação do produto não se aplica. Prosseguir para o pacote DOM-013/TST-010, mantendo prova de autenticação hospedada separada."
-    },
-    {
+    },    {
       "order": 84,
       "id": "DOM-012",
       "title": "Consolidar o Viewer como consumidor público restrito",
@@ -1612,11 +1610,11 @@ Total output lines: 2151
           "source": "Product PR #419 and receipt docs/architecture/arc13/loc002-admin-stage-availability-2026-11-25.json",
           "sha": "5d3902ae408f3addd4cecfeb960fbeec4a9f291a",
           "detail": "Estado stage.enabled e suas duas políticas de elegibilidade extraídos com texto preservado; Admin browser e ARC-13 passaram. Permanece distinto de visibilidade inicial de entidades/serviços e disponibilidade de acabamentos."
-        },
-        {
-          "source": "Product PR #421 and receipt docs/architecture/arc13/loc002-admin-object-content-fields-2026-11-25.json",
-          "sha": "1292afe149e711dce01fce0e727fd0da033a38d4",
-          "detail": "Cinco rótulos de campos editoriais integrados em development sob admin.objectContentFields, com conteúdo e modelo preservados; browser Admin e todos os gates disparados passaram. main permanece sem este pacote."
+      },
+      {
+        "source": "Product PR #421 and receipt docs/architecture/arc13/loc002-admin-object-content-fields-2026-11-25.json",
+        "sha": "1292afe149e711dce01fce0e727fd0da033a38d4",
+        "detail": "Cinco rótulos de campos editoriais integrados em development sob admin.objectContentFields, com conteúdo e modelo preservados; browser Admin e todos os gates disparados passaram. main permanece sem este pacote."
         }
       ],
       "nextAction": "Continuar a classificação ARC-13 por estado e consumidor, preservando hold quando semântica ou autoridade do texto não estiver comprovada."
@@ -1719,11 +1717,11 @@ Total output lines: 2151
           "source": "Product PR #419 and receipt docs/architecture/arc13/loc002-admin-stage-availability-2026-11-25.json",
           "sha": "5d3902ae408f3addd4cecfeb960fbeec4a9f291a",
           "detail": "Família de disponibilidade da etapa extraída em admin.stages sem alterar stage.enabled, elegibilidade ou comportamento; o Admin browser e a integridade ARC-13 passaram. LOC-006 continua aberto para outras famílias."
-        },
-        {
-          "source": "Product PR #421 and receipt docs/architecture/arc13/loc002-admin-object-content-fields-2026-11-25.json",
-          "sha": "1292afe149e711dce01fce0e727fd0da033a38d4",
-          "detail": "Cinco rótulos de campos do Admin integrados em development sem migrar dados editoriais/comerciais nem alterar estado; browser e demais gates disparados passaram. LOC-006 continua parcial para outras famílias do Admin/Configurador."
+      },
+      {
+        "source": "Product PR #421 and receipt docs/architecture/arc13/loc002-admin-object-content-fields-2026-11-25.json",
+        "sha": "1292afe149e711dce01fce0e727fd0da033a38d4",
+        "detail": "Cinco rótulos de campos do Admin integrados em development sem migrar dados editoriais/comerciais nem alterar estado; browser e demais gates disparados passaram. LOC-006 continua parcial para outras famílias do Admin/Configurador."
         }
       ],
       "nextAction": "Extrair outras famílias Admin/Configurador com seus estados, consumidores e testes; manter conteúdo comercial sob sua autoridade própria."
@@ -2048,8 +2046,8 @@ Total output lines: 2151
   "baselineReadback": {
     "capturedAt": "2026-11-25",
     "productMainSha": "01ded2c100fbfd8b16897e26113dc5068a83e429",
-    "productDevelopmentSha": "2c028dcfca812038dde547c14f7cc565e64891ba",
+    "productDevelopmentSha": "5d3902ae408f3addd4cecfeb960fbeec4a9f291a",
     "designSystemMainSha": "c6ff6545e9ae2071e695109fd94ac91676e7fb0a",
-    "meaning": "Readback exato das branches remotas em 2026-11-25 após a integração TST-006; o Design System continua sem branch development."
+    "meaning": "Snapshot read back before this package; the Design System has no development branch."
   }
 }
