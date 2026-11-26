@@ -1984,8 +1984,8 @@
         },
         {
           "source": "Product LOC-006 dependency and event copy — local validation",
-          "sha": "bf04a8ee6d809760530b888ea47382890dc74a54",
-          "detail": "Fixed Admin copy for the Dependencies and Events panel now uses uiCopy.admin.rules, including shell guidance, labels, action/state/dimension options, conditional headings, and accessible control text. IDs, action codes, enum values, target/entity/service names, and numeric bounds remain data-backed or unchanged. Removed a duplicate stone-skirting trigger option; its label now comes only from catalog.services. The Admin hierarchy browser covers all three event variants, code/label contracts, dynamic entity names, unique service trigger, and no implicit writes. Local build, ARC-03C page check, DS-01 theme contract, Admin hierarchy, persistence, native v5 save, core model test, and ARC-13 inventory passed. Exact PR gates and development integration pending; main unchanged. LOC-006 remains partial."
+          "sha": "eeab835510dfca46af317c20d7acd08adce5765f",
+          "detail": "Fixed Admin copy for the Dependencies and Events panel now uses uiCopy.admin.rules, including shell guidance, labels, action/state/dimension options, conditional headings, and accessible control text. IDs, action codes, enum values, target/entity/service names, and numeric bounds remain data-backed or unchanged. Event trigger options are deduplicated by ID while preserving the first scene-backed label; stone-skirting now appears once from catalog.services. The Admin hierarchy browser covers all three event variants, code/label contracts, dynamic entity names, unique trigger IDs, and no implicit writes. Final local build, ARC-03C page check, DS-01 theme contract, Admin hierarchy, persistence, native v5 save, core model test, and ARC-13 inventory passed. Exact PR gates and development integration pending; main unchanged. LOC-006 remains partial."
         }
       ],
       "nextAction": "Extrair outras famílias Admin/Configurador com seus estados, consumidores e testes; manter conteúdo comercial sob sua autoridade própria."
