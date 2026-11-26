@@ -4,6 +4,7 @@ import {createHash} from "node:crypto";
 import {readFile} from "node:fs/promises";
 import {execFileSync} from "node:child_process";
 import {resolve} from "node:path";
+import {validateVis002cPinLifecycle} from "./vis002c-pin-lifecycle.mjs";
 const read=path=>readFile(new URL("../"+path,import.meta.url),"utf8");
 const canonicalText=text=>{
   assert.doesNotMatch(text, /\r(?!\n)/, "Text pin contains a lone CR byte");
@@ -19,7 +20,8 @@ const mapText=await read(pin.mapping.path);
 const manifestText=await read(pin.manifest.path);
 const mapping=JSON.parse(mapText),manifest=JSON.parse(manifestText);
 assert.equal(pin.schema,"M2DProductContextualTextPin/0.3");
-assert.equal(pin.status,"SCOPED_INTEGRATION_CANDIDATE_NOT_RELEASED");
+assert.equal(pin.status,"SCOPED_RUNTIME_AUTHORIZED_AND_RELEASED");
+assert.equal(pin.runtimeStatus,"PRODUCTION_VERIFIED");
 assert.equal(pin.designSystem.repository,"EAKerber/MobiliPresenter2D_DesignSystem");
 assert.equal(pin.designSystem.sourceCommit,"2f11ecf8948c779706a0ce0795e088d29633fb7e");
 const dsSourceRoot=process.env.VIS002C_DS_SOURCE_ROOT;
@@ -70,6 +72,8 @@ assert.doesNotMatch(css,/\bcolor\s*:/i);
 assert.doesNotMatch(css,/:root\s*\{/);
 const importRule='@import url("/design-system/vis002c-long-copy-light-v0.3.0.css?v=vis002c-0.3.0");';
 const landing=await read("app/landing/landing.css");
+const lifecycle=validateVis002cPinLifecycle(pin,{environment:pin.runtimeVerification?.environment,consumerImported:landing.startsWith(importRule),manifest,mappingContexts:mapping.contexts});
+assert.equal(lifecycle,"runtime-authorized");
 assert.ok(landing.startsWith(importRule),"Scoped artifact must be imported before page styles");
 const pageCss={
  "app/landing/landing.css":[
