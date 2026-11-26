@@ -349,16 +349,14 @@ class SceneFallbackTestElement {
 
 test("scene asset errors cover the stage only for the base or a visible layer", () => {
   const previousDocument = fixture.document;
-  const previousTheme = fixture.CASA_UI_THEME;
-  const testCopy = {
-    "viewer.scene.accessibleInstruction": "Cena acessível via catálogo",
-    "viewer.scene.imageAlt": "Alt via catálogo",
-    "viewer.scene.hotspotsLabel": "Grupo via catálogo",
-    "viewer.scene.fallbackStatus": "Status via catálogo",
-    "viewer.scene.fallbackDescription": "Descrição via catálogo",
-    "viewer.scene.fallbackAccessibleLabel": "Erro acessível via catálogo"
+  const expectedCopy = {
+    "viewer.scene.accessibleInstruction": "Cena da cozinha. Use as setas para percorrer os módulos ou as teclas de 1 a 7 para selecionar pelo número.",
+    "viewer.scene.imageAlt": "Composição da cozinha Casa em Módulos",
+    "viewer.scene.hotspotsLabel": "Módulos selecionáveis na cena",
+    "viewer.scene.fallbackStatus": "Imagem indisponível",
+    "viewer.scene.fallbackDescription": "A composição completa da cozinha não pôde ser exibida.",
+    "viewer.scene.fallbackAccessibleLabel": "Cena da cozinha indisponível. A composição completa não pôde ser exibida."
   };
-  fixture.CASA_UI_THEME = { getCopy(key, fallback) { return testCopy[key] || fallback; } };
   fixture.document = { createElement: (tag) => new SceneFallbackTestElement(tag), addEventListener() {} };
   const sceneComponent = {
     createSelectionFrame() { return new SceneFallbackTestElement("div"); },
@@ -390,9 +388,9 @@ test("scene asset errors cover the stage only for the base or a visible layer", 
     const hotspots = stage.children[2];
     const frame = stage.children[3];
     const fallback = stage.children[4];
-    assert.equal(stage.getAttribute("aria-label"), testCopy["viewer.scene.accessibleInstruction"]);
-    assert.equal(base.alt, testCopy["viewer.scene.imageAlt"]);
-    assert.equal(hotspots.getAttribute("aria-label"), testCopy["viewer.scene.hotspotsLabel"]);
+    assert.equal(stage.getAttribute("aria-label"), expectedCopy["viewer.scene.accessibleInstruction"]);
+    assert.equal(base.alt, expectedCopy["viewer.scene.imageAlt"]);
+    assert.equal(hotspots.getAttribute("aria-label"), expectedCopy["viewer.scene.hotspotsLabel"]);
     const moduleGroup = layers.children.find((group) => group.dataset.entityId === "module-01");
     const hiddenGroup = layers.children.find((group) => group.dataset.entityId === "tempered-glass");
     hiddenGroup.classList.add("is-hidden");
@@ -407,13 +405,11 @@ test("scene asset errors cover the stage only for the base or a visible layer", 
     errorListener.listener({ target: moduleGroup.children[0] });
     assert.equal(fallback.hidden, false);
     assert.equal(fallback.getAttribute("role"), "alert");
-    assert.equal(fallback.children[1].textContent, testCopy["viewer.scene.fallbackStatus"]);
-    assert.equal(fallback.children[2].textContent, testCopy["viewer.scene.fallbackDescription"]);
+    assert.equal(fallback.children[1].textContent, expectedCopy["viewer.scene.fallbackStatus"]);
+    assert.equal(fallback.children[2].textContent, expectedCopy["viewer.scene.fallbackDescription"]);
     assert.deepEqual([base, layers, hotspots, frame].map((node) => node.hidden), [true, true, true, true]);
-    assert.equal(stage.getAttribute("aria-label"), testCopy["viewer.scene.fallbackAccessibleLabel"]);
+    assert.equal(stage.getAttribute("aria-label"), expectedCopy["viewer.scene.fallbackAccessibleLabel"]);
   } finally {
     fixture.document = previousDocument;
-    if (previousTheme === undefined) delete fixture.CASA_UI_THEME;
-    else fixture.CASA_UI_THEME = previousTheme;
   }
 });
