@@ -83,9 +83,14 @@
           "source": "Leitura ao vivo pós-PR #137 no Design System",
           "sha": "9261c5782c5987bc91d70f87dde3f8a4779c004d",
           "detail": "PR #137 foi integrada ao Design System main em 9261c57 e não há PR aberta. O HANDOVER_CURRENT.md ainda diz que o conteúdo está na PR aberta #137 e reporta Product development@c04efa2; portanto, o documento integrado ficou temporalmente obsoleto e precisa de novo refresh com o retrato atual. Product development não deve ser usado como fonte antiga sem revalidação."
+        },
+        {
+          "source": "Readback do HANDOVER_CURRENT no Design System main após PR #139",
+          "sha": "5a67a551daac70b888907fec9bc246207591204a",
+          "detail": "O Design System main atual é 4c075fc8f8653b5d87f1f07f7471959718b106b2, mas HANDOVER_CURRENT.md ainda reporta Product development@eff75d93655cb2796f1823ab3b9789c0aa9c591c; o Product development live é 212796fcab4b610ffa0bd721a26b823a05191a5c. O próprio documento diz que a captura é de 08:20 UTC e requer nova leitura. Reconciliar o handover, sem tratar esse retrato como evidência atual."
         }
       ],
-      "nextAction": "Atualizar o HANDOVER_CURRENT do Design System após a integração de #137, varrer os demais ponteiros de autoridade ainda atuais e revalidar refs antes de qualquer alteração; preservar registros históricos."
+      "nextAction": "Atualizar HANDOVER_CURRENT no Design System com o Product development@212796fc e refs atuais; depois varrer os demais ponteiros de autoridade ainda atuais. Preservar registros históricos e revalidar refs antes de cada integração."
     },
     {
       "order": 4,
@@ -609,6 +614,11 @@
           "source": "Compare ao vivo Product main ↔ development em 2026-11-26",
           "sha": "daede4b89525ffe4e2caafd89da9a1cda7684665",
           "detail": "Refs verificadas: main@5c6e652693bd30218e6915bf8cb160bde03ac719 e development@daede4b89525ffe4e2caafd89da9a1cda7684665; merge base 221b54b2a41ecc8c338d1bf2cf67280cf165ce95. Há 35 commits exclusivos de main e 604 exclusivos de development; a comparação development→main lista 92 caminhos de main. A divergência segue ampla e multiclasse, então não autoriza merge de árvore inteira."
+        },
+        {
+          "source": "Compare ao vivo Product main...development após PR #487",
+          "sha": "212796fcab4b610ffa0bd721a26b823a05191a5c",
+          "detail": "Refs atuais: main@5c6e652693bd30218e6915bf8cb160bde03ac719 e development@212796fcab4b610ffa0bd721a26b823a05191a5c; merge base 221b54b2a41ecc8c338d1bf2cf67280cf165ce95; compare reports 610 commits on development absent from main and 35 on main absent from development; 92 main-side paths. PRs Product abertas: 0; refs Product: main, development e codex/v09-loc006-register-correction-20261126. Nenhuma integração da árvore inteira é indicada."
         }
       ],
       "nextAction": "Concluir a disposição por família dos 92 caminhos de main em relação à development, com contrato, gate, rollback e checkpoint de promoção; não usar merge integral."
@@ -791,14 +801,20 @@
       "chapter": "VII",
       "priority": "P1",
       "planState": "not_started",
-      "reconciliation": "unreviewed",
+      "reconciliation": "done",
       "local": "unknown",
-      "development": "unknown",
-      "main": "unknown",
-      "technicalValidation": "unknown",
-      "approvalPublication": "unknown",
-      "evidence": [],
-      "nextAction": "Reconciliar este ID com código, consumidores, testes e evidência exata de branch/PR antes de alterar o estado."
+      "development": "not_applicable",
+      "main": "done",
+      "technicalValidation": "done",
+      "approvalPublication": "done",
+      "evidence": [
+        {
+          "source": "Design System PR #119 e recibo GIT-018 de validação de links",
+          "sha": "e5b3662b7daf717bcb9c1bf2704b21caceb024c7",
+          "detail": "O recibo git-018-external-link-check-2026-11-19.json está integrado ao Design System main atual; PR #119 foi integrada em 9f29e3fb8810b33bdda0904826b0e55fc7019506 e o main atual descende desse commit. Escopo: destinos Markdown inline nos 29 arquivos .md alterados; não cobre todo CommonMark, navegador HTTP nem fragmentos. Crawler inacessível permanece desconhecido e não foi contado como sucesso."
+        }
+      ],
+      "nextAction": "GIT-018 concluído no escopo do recibo. Manter explícitas as limitações de parser, verificação HTTP e fragmentos; não generalizar como prova universal de links."
     },
     {
       "order": 38,
@@ -941,14 +957,20 @@
       "chapter": "III",
       "priority": "P1",
       "planState": "not_started",
-      "reconciliation": "unreviewed",
+      "reconciliation": "done",
       "local": "unknown",
       "development": "unknown",
       "main": "unknown",
       "technicalValidation": "unknown",
       "approvalPublication": "unknown",
-      "evidence": [],
-      "nextAction": "Reconciliar este ID com código, consumidores, testes e evidência exata de branch/PR antes de alterar o estado."
+      "evidence": [
+        {
+          "source": "Product PR #271 metadados, head exato, Actions e leitura do destino",
+          "sha": "9452184f7d46751f2d07604b1fba0c77f3b44bb3",
+          "detail": "PR #271 (head badbc062cd0771939c0aceda33b0a49578175ba0) foi integrada por squash em main neste commit; os 10 workflows do head exato passaram. A entrega registra correções de contraste medido. Limites permanecem: CSS-02 conclui o registro desta PR, não CSS-03/04/05 nem o gate integral DS-05A; a medida de .module-number era fixture sintética e /config/ não tinha configuração publicada válida; issue #208 seguia aberto."
+        }
+      ],
+      "nextAction": "Registro da PR #271 reconciliado. Manter CSS-03, CSS-04, CSS-05 e DS-05A separados, com seus próprios critérios e provas."
     },
     {
       "order": 45,
@@ -1128,14 +1150,20 @@
       "chapter": "VII",
       "priority": "P0",
       "planState": "not_started",
-      "reconciliation": "unreviewed",
+      "reconciliation": "done",
       "local": "unknown",
       "development": "unknown",
       "main": "unknown",
       "technicalValidation": "unknown",
       "approvalPublication": "unknown",
-      "evidence": [],
-      "nextAction": "Reconciliar este ID com código, consumidores, testes e evidência exata de branch/PR antes de alterar o estado."
+      "evidence": [
+        {
+          "source": "Product PR #269 metadados, checks, Deploy Preview e revisão visual",
+          "sha": "d715f8e27a81aee2dfb74584ebc40d084130258e",
+          "detail": "PR #269 (head 64cb6928fea347534ea03f7927b50f39ec30fc1e) foi integrada por squash em main neste commit; 14/14 workflows passaram no head exato, o Deploy Preview ficou READY e a revisão visual cobriu quatro rotas em três larguras. O compare atual confirma o commit integrado na main. O recibo descreve o contrato compacto público NAV-005."
+        }
+      ],
+      "nextAction": "Registro da PR #269 reconciliado. Conservar seu recibo e repetir a leitura de refs antes de qualquer nova promoção de NAV-005."
     },
     {
       "order": 56,
@@ -1352,14 +1380,20 @@
       "chapter": "VII",
       "priority": "P1",
       "planState": "not_started",
-      "reconciliation": "unreviewed",
+      "reconciliation": "done",
       "local": "unknown",
       "development": "unknown",
       "main": "unknown",
       "technicalValidation": "unknown",
       "approvalPublication": "unknown",
-      "evidence": [],
-      "nextAction": "Reconciliar este ID com código, consumidores, testes e evidência exata de branch/PR antes de alterar o estado."
+      "evidence": [
+        {
+          "source": "Product PR #278 metadados, gate Mobile e destino main",
+          "sha": "c1d45167f59fff97c215ba47e84fb28c7c82bc2b",
+          "detail": "PR #278 (head a87a0d0c0453a08940ccdbb984c0308e3c725fc3) foi integrada por squash em main neste commit. O workflow Mobile passou (run 44830471800). A PR é uma alteração de teste geométrico; não prova mudança de runtime nem aprovação visual. O registro reconcilia a PR sem generalizar sua cobertura."
+        }
+      ],
+      "nextAction": "Registro da PR #278 reconciliado. Tratar separadamente qualquer validação de runtime/visual e a divergência do gate geométrico entre main e development."
     },
     {
       "order": 70,
@@ -1482,7 +1516,7 @@
       "chapter": "V",
       "priority": "P1",
       "planState": "in_progress",
-      "reconciliation": "partial",
+      "reconciliation": "done",
       "local": "done",
       "development": "done",
       "main": "done",
@@ -1498,9 +1532,14 @@
           "source": "Product PR #445 exact-head validation, main integration, and Netlify production readback",
           "sha": "9112bacc3341718696c61b7cb0488beb713e4682",
           "detail": "PR #445 integrou por squash a autoridade de fluxo normalizado em app/app.js e atualizou o inventário ARC-13; head 566b40d3a1fae69c008f735d097893585e9d2966 passou os gates exatos e teve preview pronto. Netlify publicou então o main em 9112bacc. O commit subsequente #432 alterou apenas o teste V5; o deploy de produção mais recente está READY no SHA atual da main 5c6e652693bd30218e6915bf8cb160bde03ac719. O recorte de autoridade de fluxo está integrado e publicado em ambos os destinos relevantes."
+        },
+        {
+          "source": "Readback atual de Product main/development após PRs #443 e #445",
+          "sha": "212796fcab4b610ffa0bd721a26b823a05191a5c",
+          "detail": "Os merges #443 (development@5c89e08) e #445 (main@9112bacc) são ancestrais das refs atuais; os heads exatos passaram 10/10 e 9/9 workflows, respectivamente. O runtime em ambos os destinos usa NormalizedConfiguratorFlow como autoridade em app/app.js. O deploy atual de main foi reportado READY no SHA 5c6e652; a leitura de deploy não foi repetida nesta reconciliação. Preservar os gates de fluxo e recibos ARC-13."
         }
       ],
-      "nextAction": "DOM-006 consolidado nos destinos verificados; preservar os testes de fluxo e os recibos ARC-13 como contrato de futuras mudanças."
+      "nextAction": "DOM-006 está reconciliado como concluído nos destinos verificados. Revalidar deploy antes de afirmar publicação atual; preservar os testes de fluxo e recibos ARC-13."
     },
     {
       "order": 77,
@@ -2111,9 +2150,19 @@
           "source": "Product PR #475 exact-head gates and post-merge readback",
           "sha": "ef943910f5513c423ce22b84b4ced548f9c042f2",
           "detail": "PR #475 head c04826106119e799493c431d079491630d327809 was squash-integrated into development at ef943910f5513c423ce22b84b4ced548f9c042f2; 12/12 workflow runs passed, including Admin hierarchy browser, app build, ARC-13 inventory, and asset gates. Post-merge blobs match the candidate for app/admin/admin.js (0a2ec1f5c7d92a11e4ff702f07f6f5527dfbe833), app/core/ui-copy.js (bf459fc644bdb7d82c6de5a444d40ae4e4207a95), tests/admin-hierarchy-browser.cjs (094544d200fc75083b527ff7b0c8994d0f238082), and its receipt (3fbed72f34d1d1a934cf22b0a18215ffbf6b8dfe). This moved fixed labels, heading, default, alt, empty, and broken-preview copy for existing scene-asset selectors into uiCopy.admin.objectAssets. It did not change selector values, paths, mask content/geometry, rendering, persistence, server validation, or commercial content. Product main still has the hard-coded scene copy (app/admin/admin.js blob 79925345e43096df77bef54fe257e483f922edd8; ui-copy has no objectAssets fields), so this slice is development-only. LOC-006 remains partial because the complete Admin/Config fixed-copy inventory is not closed."
+        },
+        {
+          "source": "Product PR #486; exact-head gates e integração em development",
+          "sha": "0d929f0d3898d976e3e8b510b1495ac987c3cd7f",
+          "detail": "PR #486 head cfba842bd646d33cc185cb36e75f2b21b7ba75b0 centralizou cópia do cabeçalho/estado vazio de materiais e atualizou browser assertion, manifest gerado e inventário ARC-13. Integrada por squash em development neste SHA; main permaneceu inalterada. A família de Admin copy segue parcial."
+        },
+        {
+          "source": "Product PR #487; 11 gates exatos e readback em development",
+          "sha": "212796fcab4b610ffa0bd721a26b823a05191a5c",
+          "detail": "PR #487 head e58afb1e1cd34c6e0cbfeeb5b2370bec9391a523 moveu rótulos compartilhados de paginação para uiCopy.admin.pagination, verificou dois pagers e limites desabilitados, e atualizou manifest/ARC-13. Os 11 workflows aplicáveis passaram no head exato; integração por squash confirmada no development atual. Não foi promovida a main. LOC-006 continua parcial para as famílias Admin/Config ainda não fechadas."
         }
       ],
-      "nextAction": "Use the current ARC-13 inventory to identify remaining fixed interface copy in Admin and Config, classify data-backed or dynamic content separately, then complete the next bounded copy family with consumers and assertions. Do not repeat the integrated authentication and scene-asset slices; keep main unchanged until the full item scope and promotion evidence are closed."
+      "nextAction": "Usar o ARC-13 atual para localizar a próxima família restante de texto fixo em Admin/Config, classificar separadamente conteúdo dinâmico e comercial, e fechar esse lote com consumidores e assertions. Não repetir famílias já integradas; manter main estável até fechar a DoD completa."
     },
     {
       "order": 107,
@@ -2451,8 +2500,8 @@
   "baselineReadback": {
     "capturedAt": "2026-11-26",
     "productMainSha": "5c6e652693bd30218e6915bf8cb160bde03ac719",
-    "productDevelopmentSha": "daede4b89525ffe4e2caafd89da9a1cda7684665",
-    "designSystemMainSha": "9261c5782c5987bc91d70f87dde3f8a4779c004d",
-    "meaning": "Refs verificadas ao vivo em 2026-11-26. Product main permanece em 5c6e652693bd30218e6915bf8cb160bde03ac719; development em daede4b89525ffe4e2caafd89da9a1cda7684665. Design System main está em 9261c5782c5987bc91d70f87dde3f8a4779c004d e não possui branch development. Compare Product com merge base 221b54b2: 35 commits exclusivos de main, 604 exclusivos de development e 92 caminhos no sentido development→main; não fazer merge de árvore inteira. PR #481 foi integrada a Product development com 16/16 gates passando; PR #137 foi integrada ao Design System main. Não há PRs abertas. Refs observadas: Product main/development/codex-v09-loc006-register-correction; DS main/codex-handover-live-reconciliation. A branch local LOC-006 é um candidato não publicado e permanece fora deste snapshot remoto. Production/deploy não foi revalidado nesta captura. Cada estado de publicação, proteção e higiene requer nova leitura."
+    "productDevelopmentSha": "212796fcab4b610ffa0bd721a26b823a05191a5c",
+    "designSystemMainSha": "4c075fc8f8653b5d87f1f07f7471959718b106b2",
+    "meaning": "Leitura ao vivo em 2026-11-26: Product main@5c6e652693bd30218e6915bf8cb160bde03ac719; development@212796fcab4b610ffa0bd721a26b823a05191a5c; Design System main@4c075fc8f8653b5d87f1f07f7471959718b106b2, sem branch development. Compare Product: merge base 221b54b2a41ecc8c338d1bf2cf67280cf165ce95, 35 commits exclusivos de main, 610 de development e 92 caminhos do lado main. Branches Product verificadas: main, development e codex/v09-loc006-register-correction-20261126@f64d7f8c05b305f2536a44c2873008f8f2eb6d86. Não havia PR aberta no Product nessa leitura. #487 foi integrado em development; os 11 gates aplicáveis passaram no head exato. O handover do Design System em main ainda registra development@eff75d9 e precisa ser atualizado. Produção não foi revalidada nesta captura. Preservar main estável e continuar promoção seletiva por famílias; não fazer merge integral da árvore."
   }
 }
