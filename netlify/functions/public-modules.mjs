@@ -30,31 +30,75 @@ function storeFor(context) {
   const options = { name: "configurator-settings", consistency: "strong" };
   return context?.deploy?.context === "production" ? getStore(options) : getDeployStore(options);
 }
-function isPublicProjection(value) {
-  const visibility = value?.publicState?.viewerEntities || value?.publicState?.entities;
-  if (![PUBLIC_SCHEMA, PRICED_SCHEMA].includes(value?.schemaVersion) || !Array.isArray(value.modules) || !value.modules.length
-    || !value.publicState || typeof value.publicState !== "object"
-    || !visibility || typeof visibility !== "object"
-    || Array.isArray(visibility)
-    || !Array.isArray(value.publicState.availableFinishes)
-    || typeof value.publicState.finishId !== "string") return false;
-
-  if (value.modules.some((module) => !module || Object.keys(module).some((key) => !PUBLIC_MODULE_KEYS.has(key))
-    || (Object.hasOwn(module, "basePriceCents")
-      && (value.schemaVersion !== PRICED_SCHEMA || !Number.isSafeInteger(module.basePriceCents)
-        || module.basePriceCents <= 0 || module.basePriceCents > 100000000)))) return false;
-
-  const moduleIds = value.modules.map((module) => module?.id);
-  if (moduleIds.some((id) => typeof id !== "string" || !id)
-    || new Set(moduleIds).size !== moduleIds.length
-    || moduleIds.some((id) => typeof visibility[id] !== "boolean")) return false;
-
-  const finishIds = value.publicState.availableFinishes.map((finish) => finish?.id);
-  return finishIds.length > 0
-    && finishIds.every((id) => typeof id === "string" && id)
-    && new Set(finishIds).size === finishIds.length
-    && finishIds.includes(value.publicState.finishId);
+// A preview reads the primary site's PUBLIC 0.1 DTO only. This is a trust
+// boundary: reject additional nested fields rather than forwarding unknown
+// values (notably administrative metadata or priced 0.2 DTOs) to the viewer.
+function isRecord(value) {
+  return value !== null && typeof value === "object" && !Array.isArray(value);
 }
+function onlyKeys(value, names) {
+  return isRecord(value) && Object.keys(value).every((key) => names.has(key));
+}
+function isPublicProjection(value) {
+  const topKeys = new Set(["schemaVersion", "modules", "publicState"]);
+  const stateKeys = new Set(["viewerEntities", "entities", "finishId", "availableFinishes"]);
+  const moduleKeys = new Set([
+    "id", "referenceLabel", "title", "description", "category", "dimensionLabel",
+    "nominalDimensionsMm", "benefits", "components", "requirements"
+  ]);
+  const finishKeys = new Set(["id", "label", "color", "textureAsset", "textureSize"]);
+  const dims = new Set(["width", "height", "depth"]);
+  if (!onlyKeys(value, topKeys) || value.schemaVersion !== PUBLIC_SCHEMA
+    || !Array.isArray(value.modules) || value.modules.length === 0
+    || !onlyKeys(value.publicState, stateKeys)) return false;
+
+  const state = value.publicState;
+  const hasViewer = Object.hasOwn(state, "viewerEntities");
+  const hasLegacy = Object.hasOwn(state, "entities");
+  // Only one explicit visibility authority per DTO.
+  if (hasViewer === hasLegacy || typeof state.finishId !== "string"
+    || !Array.isArray(state.availableFinishes) || !state.availableFinishes.length) return false;
+  const visibility = hasViewer ? state.viewerEntities : state.entities;
+  if (!isRecord(visibility)) return false;
+
+  const ids = [];
+  for (const module of value.modules) {
+    if (!onlyKeys(module, moduleKeys)
+      || typeof module.id !== "string" || !module.id
+      || typeof module.title !== "string" || !module.title.trim()) return false;
+    for (const key of ["referenceLabel", "description", "category", "dimensionLabel"]) {
+      if (Object.hasOwn(module, key) && typeof module[key] !== "string") return false;
+    }
+    for (const key of ["benefits", "components", "requirements"]) {
+      if (Object.hasOwn(module, key) && (!Array.isArray(module[key])
+        || module[key].some((text) => typeof text !== "string"))) return false;
+    }
+    if (Object.hasOwn(module, "nominalDimensionsMm")) {
+      const mm = module.nominalDimensionsMm;
+      if (!onlyKeys(mm, dims) || Object.keys(mm).length !== 3
+        || ["width", "height", "depth"].some((axis) =>
+          !Number.isFinite(mm[axis]) || mm[axis] < 1 || mm[axis] > 5000)) return false;
+    }
+    ids.push(module.id);
+  }
+  if (new Set(ids).size !== ids.length
+    || Object.keys(visibility).length !== ids.length
+    || ids.some((id) => typeof visibility[id] !== "boolean")) return false;
+
+  const finishIds = [];
+  for (const finish of state.availableFinishes) {
+    if (!onlyKeys(finish, finishKeys) || typeof finish.id !== "string" || !finish.id
+      || typeof finish.label !== "string" || !finish.label.trim()
+      || typeof finish.textureAsset !== "string"
+      || typeof finish.textureSize !== "string"
+      || !(finish.color === null || typeof finish.color === "string"
+        && /^#[0-9a-fA-F]{6}$/.test(finish.color))) return false;
+    finishIds.push(finish.id);
+  }
+  return new Set(finishIds).size === finishIds.length
+    && finishIds.includes(state.finishId);
+}
+
 async function readPrimaryPublicProjection(context, request) {
   const siteUrl = context?.site?.url;
   if (typeof siteUrl !== "string") return null;
