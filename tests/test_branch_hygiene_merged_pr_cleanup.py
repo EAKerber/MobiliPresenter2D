@@ -99,7 +99,11 @@ class RuntimeCleanupTests(unittest.TestCase):
                  patch.multiple(subject, api_get=lambda *args:pr,
                    load_json=lambda *args:disp,remote_refs=lambda:refs,
                    verify_no_workflow_dependency=lambda *args:None,
-                   verify_control_workflow_dependencies=lambda *args:None), \
+                   verify_control_workflow_dependencies=lambda *args:None,
+                   reserve_operation=lambda *args:("key",None),
+                   pin_marker=lambda *args:None,
+                   write_pin_marker=lambda *args:{},
+                   mark_applied=lambda *args:{}), \
                  patch.object(subject,"observe",side_effect=[obs,fresh]), \
                  patch.object(subject.subprocess,"run",return_value=SimpleNamespace(stdout=refs["main"],returncode=0)), \
                  patch.object(subject,"verify_no_rulesets",side_effect=RuntimeError("RULESETS_REQUIRE_REVIEW") if ruleset else None), \
@@ -138,6 +142,42 @@ class RuntimeCleanupTests(unittest.TestCase):
 
     def test_concurrent_drift_blocks(self):
         self.run_case(drift=True)
+
+    def test_applied_cleanup_preserves_recreated_exact_head(self):
+        payload=event()
+        pr=copy.deepcopy(payload["pull_request"])
+        pr["merged_at"]="2026-11-25T12:00:00Z"
+        name=pr["head"]["ref"]
+        refs={"main":"3"*40,"development":"4"*40,name:SHA}
+        obs={"schemaVersion":"BranchObservation 0.1","repository":REPO,
+             "controlBranch":"development","controlSha":refs["development"],
+             "observationHash":"z"*64,"complete":True,"openPrHeads":[],"openPrBases":[],
+             "branches":[{"name":n,"sha":s,"treeSha":"5"*40,"protected":False,
+                          "ancestorOfControl":False} for n,s in refs.items()]}
+        disp={"schemaVersion":"BranchDispositionSet 0.1","controlBranch":"development",
+              "preserveBranches":["main","development"],"terminalBranches":[]}
+        with tempfile.TemporaryDirectory() as tmp:
+            event_path,receipt_path=Path(tmp)/"event.json",Path(tmp)/"receipt.json"
+            event_path.write_text(json.dumps(payload))
+            with patch.dict(os.environ,{"GITHUB_TOKEN":"test","GITHUB_REPOSITORY":REPO,
+                   "GITHUB_EVENT_NAME":"pull_request_target","GITHUB_RUN_ID":"run-2",
+                   "GITHUB_SHA":"7"*40,
+                   "MOBILIPRESENTER2D_BRANCH_HYGIENE_AUTHORIZED":"1"},clear=True), \
+                 patch.multiple(subject,api_get=lambda *args:pr,load_json=lambda *args:disp,
+                   remote_refs=lambda:refs,verify_no_workflow_dependency=lambda *args:None,
+                   verify_control_workflow_dependencies=lambda *args:None,
+                   reserve_operation=lambda *args:("key",{"runId":"run-1"}),
+                   pin_marker=lambda *args:None,write_pin_marker=lambda *args:{},
+                   mark_applied=lambda *args:{}), \
+                 patch.object(subject,"observe",return_value=obs), \
+                 patch.object(subject.subprocess,"run",return_value=SimpleNamespace(stdout=refs["main"],returncode=0)), \
+                 patch.object(subject,"verify_no_rulesets"), \
+                 patch.object(subject,"verify_squash_merge",return_value={"proof":"SQUASH_TREE_IDENTICAL"}), \
+                 patch.object(subject,"delete_exact_ref") as delete:
+                result=cleanup(event_path,receipt_path)
+                self.assertEqual(result["result"],"PRESERVED")
+                self.assertEqual(result["reason"],"CONSUMED_HEAD_RECREATED")
+                delete.assert_not_called()
 
     def test_no_authorization_blocks_before_reading_event(self):
         with patch.dict(os.environ,{},clear=True):

@@ -9,6 +9,7 @@ from pathlib import Path
 from unittest.mock import patch
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]/"tools"))
 from branch_hygiene_apply import apply, AUTH_ENV, remote_refs
+import branch_hygiene_apply as subject
 from branch_hygiene_plan import build_plan
 
 R="owner/repo"
@@ -68,6 +69,35 @@ class RetryTests(unittest.TestCase):
         self.assertEqual(result["deleted"],[])
         self.assertEqual(len(result["alreadyAbsent"]),2)
         self.assertEqual(set(remote_refs()),{"main","development"})
+
+    def test_same_sha_recreation_after_applied_batch_is_blocked(self):
+        self.execute()
+        self.git("push","origin",self.sha+":refs/heads/live")
+        with self.assertRaisesRegex(RuntimeError,"CONSUMED_BRANCH_RECREATED"):
+            self.execute()
+        self.assertEqual(remote_refs()["live"],self.sha)
+
+    def test_same_run_retry_reconciles_interrupted_delete(self):
+        original=subject.write_pin_marker
+        def fail_done(key,stage,*args,**kwargs):
+            if stage=="done":
+                raise RuntimeError("simulated crash before done receipt")
+            return original(key,stage,*args,**kwargs)
+        with patch.object(subject,"write_pin_marker",side_effect=fail_done):
+            with self.assertRaisesRegex(RuntimeError,"simulated crash"):
+                self.execute()
+        self.assertNotIn("live",remote_refs())
+        result=self.execute()
+        self.assertEqual(result["readback"],"PASS")
+        self.assertEqual(set(remote_refs()),{"main","development"})
+
+    def test_same_run_intent_with_live_ref_fails_closed(self):
+        with patch.object(subject,"delete_exact_ref",side_effect=RuntimeError("simulated stop")):
+            with self.assertRaisesRegex(RuntimeError,"simulated stop"):
+                self.execute()
+        with self.assertRaisesRegex(RuntimeError,"INTENT_BRANCH_PRESENT_AMBIGUOUS"):
+            self.execute()
+        self.assertIn("live",remote_refs())
 
     def test_first_attempt_and_audit_are_strict(self):
         self.env["GITHUB_RUN_ATTEMPT"]="1"

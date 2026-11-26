@@ -2446,14 +2446,20 @@
       "chapter": "VII",
       "priority": "P1",
       "planState": "in_progress",
-      "reconciliation": "unreviewed",
+      "reconciliation": "partial",
       "local": "unknown",
       "development": "unknown",
       "main": "unknown",
-      "technicalValidation": "unknown",
+      "technicalValidation": "partial",
       "approvalPublication": "unknown",
-      "evidence": [],
-      "nextAction": "Reconciliar este ID com código, consumidores, testes e evidência exata de branch/PR antes de alterar o estado."
+      "evidence": [
+        {
+          "source": "Product PR #510 exact head 32e91a36a8b18a1007d5f913dda28be18066e077; Branch Hygiene Actions run 45871309555",
+          "sha": "32e91a36a8b18a1007d5f913dda28be18066e077",
+          "detail": "PR adds append-only annotated-tag reservation/intent/done/applied markers and exact authorization identities for bounded main batches, development series waves, and merged-PR cleanup. Same-SHA recreation is blocked after consumption; same-run partial recovery only reconciles an absent ref, while an ambiguous live ref fails closed. Full branch-hygiene suite (78 tests) and py_compile passed on this exact PR head. Not yet integrated into development or main. Tag ruleset protection remains unverified, so markers prevent operational replay but not deliberate deletion by an actor with tag-write access."
+        }
+      ],
+      "nextAction": "Review and integrate the guarded executor into development, confirm whether GitHub can protect the consumption-tag namespace, then port it to main through a scoped PR and record exact live readback. Keep GIT-021 partial until integration and the tag-protection limit are resolved or formally accepted."
     },
     {
       "order": 118,
