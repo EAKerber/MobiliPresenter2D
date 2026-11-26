@@ -33,8 +33,9 @@ for(const [engineName,engine] of ENGINES){
     for(const {path,active,kind} of ROUTES){
       for(const width of widthsFor(path))for(const theme of THEMES){
         const id=[engineName,path,width,theme].join("|");
+        const firstClickCase=path==="/"&&width===390&&theme==="light";
         const context=await browser.newContext({viewport:{width,height:844},
-          reducedMotion:"reduce",locale:"pt-BR",serviceWorkers:"block"});
+          reducedMotion:firstClickCase?"no-preference":"reduce",locale:"pt-BR",serviceWorkers:"block"});
         // Keep all network traffic on the localhost static fixture.
         await context.route("**/*",async route=>{
           const url=new URL(route.request().url());
@@ -54,6 +55,20 @@ for(const [engineName,engine] of ENGINES){
           await page.locator("[data-ui-theme-toggle]").first().waitFor({timeout:14000});
           const toggle=page.locator("#menuToggle"),nav=page.locator("#primaryNav");
           assert.equal(await toggle.count(),1,id+" one toggle");
+          if(firstClickCase){
+            await page.waitForFunction(()=>{
+              const splash=document.querySelector("#introSplash");
+              if(!splash)return false;
+              const style=getComputedStyle(splash),opacity=Number(style.opacity);
+              return style.visibility!=="hidden"&&opacity>0&&opacity<1;
+            },null,{timeout:6000});
+            await toggle.click();
+            assert.equal(await toggle.getAttribute("aria-expanded"),"true",
+              id+" first visible menu click passes through the intro fade");
+            await toggle.click();
+            assert.equal(await toggle.getAttribute("aria-expanded"),"false",
+              id+" menu closes after the first fade click");
+          }
           assert.equal(await nav.count(),1,id+" one shared nav");
           assert.equal(await page.locator('script[src*="/landing/header-menu.js"]').count(),1,
             id+" exactly one controller");
