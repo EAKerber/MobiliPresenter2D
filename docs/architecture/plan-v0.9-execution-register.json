@@ -423,7 +423,7 @@
           "detail": "The plan and inventory jobs passed on PR #526 head 4523c3da2b4d4d1805d1328208cefbd23aaf2a12. Exact inventory JSON preserved at docs/architecture/ci/tst-001-workflow-inventory-live-2026-11-26-run-45904223459.json; workflow artifact 15156629898 has zip digest sha256:e5824ea6acd3850ac0571763a2aa4a6ef4fbffc80e70f2d7d82c120896f641ac. Source pins: main@ecaa38cf0be54e8d586458a86d1062b90c0b9691 (tree 45dafef8c70e8421a360a044b71ee96b03737f8a), development@4bcfa26911498a9bf5c3c94c517e9931746b437b (tree 65dced666488a0fa28181f45d3b584c6a22ec141), and candidate PR #526 (tree d34ef65fef2068a64d16a5f594fa3a8783814917). Summary: 28 main workflows, 65 development workflows, 26 shared, 86 unique definitions, 0 parser warnings, 1 candidate workflow change, 0 candidate write-signal workflows. The exact open-PR readback included #526 and #528 against the current development SHA, plus draft #517 still pinned to development@f864fed; this is inventory evidence, not branch count. TST-001 remains partial because its 21-command/21-workflow assertion and contract audit is unfinished."
         }
       ],
-      "nextAction": "Continue the 21-command/21-workflow command→assertion→contract/result audit and identify which rows are covered by reachable gates. The exact live-ref inventory and candidate readback are now preserved at main@ecaa38c and development@4bcfa26; generation alone does not close TST-001."
+      "nextAction": "The inventory reference in this register is pinned to development@4bcfa26, while the live ref is development@6750d9b. Regenerate and preserve the exact current-ref 21-workflow inventory before continuing the 21-command/21-workflow command→assertion→contract/result audit; generation alone does not close TST-001."
     },
     {
       "order": 20,
@@ -563,9 +563,14 @@
           "source": "Leitura ao vivo de PRs e refs em 2026-11-26",
           "sha": "daede4b89525ffe4e2caafd89da9a1cda7684665",
           "detail": "Product e Design System não têm PR aberta. Product tem refs main, development e codex/v09-loc006-register-correction-20261126; Design System tem main e codex/handover-live-reconciliation-20261124. PR #481 foi integrada em development@daede4; PR #137 foi integrada em Design System main@9261c57. A lista atual de PRs está vazia; branches auxiliares permanecem preservadas, sem inferir elegibilidade de higiene."
+        },
+        {
+          "source": "Live open Product PR readback",
+          "sha": "6750d9b67a9b5d8b52c022093fdac50f288c0339",
+          "detail": "Only open Product PR is draft #517, head 3079610c6688e50604a26a4fb10580b8e3d7304d, based on development@f864fed27026b5bddbd3b79318e68b3cf470036c. The current development ref has advanced to 6750d9b67a9b5d8b52c022093fdac50f288c0339; #517 remains a proposal and its source-readback/real-clone shadow evidence is not current."
         }
       ],
-      "nextAction": "Atualizar intenção, contrato, gates, dependências, rollback e disposição para cada novo pacote; no retrato atual não há PRs abertas. Revalidar antes de cada integração."
+      "nextAction": "Keep #517 as a draft proposal until its tests and real-clone shadow comparison are run against current Product and Design System refs; refresh the open-PR register before each new package."
     },
     {
       "order": 24,
@@ -590,9 +595,14 @@
           "source": "Current main branch-hygiene merged-PR workflow and executor/tests",
           "sha": "789263e657d6d4c86eaed5d6d87c31330fa914a3",
           "detail": "O workflow em main (blob 789263e657d6d4c86eaed5d6d87c31330fa914a3) só dispara em PR merged para main/development, não executa código do head e delega ao executor protegido. Testes do executor (blob a2721fa0d7d896a218744c585d609b7675146522) cobrem identidade, proteção/ruleset, PR aberta, dependências, ancestralidade, árvore do squash, drift concorrente, lease e readback. O recibo direto mais recente disponível é #462, PASS com SQUASH_TREE_IDENTICAL. Inventário vivo subsequente mostra apenas main e development; API detalhada de ruleset retorna 403."
+        },
+        {
+          "source": "Branch Hygiene vNext read-only run #356, artifact #15158385866",
+          "sha": "ecaa38cf0be54e8d586458a86d1062b90c0b9691",
+          "detail": "Run #45906365744 observed 16 Product refs at main@ecaa38cf0be54e8d586458a86d1062b90c0b9691 and development@6750d9b67a9b5d8b52c022093fdac50f288c0339. Plan hash a61dfe057cf9bd1b14df766a4b638a57cdd94b28ca66160eefea6ced06b4e765 reported authorization NONE and zero delete-candidates. Discovery counts (main 2 candidate/3 preserve/11 review; development 5 candidate/3 preserve/8 review) are advisory only and do not authorize deletion."
         }
       ],
-      "nextAction": "A auditoria do mecanismo vNext foi concluída; em cada integração futura, conferir o recibo daquele merge e a leitura integral das refs."
+      "nextAction": "Before each retirement batch, obtain the current vNext observation and exact reviewed batch receipt. The latest run #356 authorized no deletion; do not infer an eligible batch from discovery counts."
     },
     {
       "order": 25,
@@ -684,9 +694,14 @@
           "source": "Live Product main/development compare on 2026-11-26",
           "sha": "7ebacc86018c60e54df4d0e15c95ecd3eed46a77",
           "detail": "Exact live refs: main@7ebacc86018c60e54df4d0e15c95ecd3eed46a77; development@4bcfa26911498a9bf5c3c94c517e9931746b437b; merge base 221b54b2a41ecc8c338d1bf2cf67280cf165ce95; compare reports 45 commits only on main and 645 only on development. The tree remains widely divergent; this is not authorization for a whole-tree merge. Rebuild the exact path/semantic family map at these refs."
+        },
+        {
+          "source": "Live Product main/development compare",
+          "sha": "6750d9b67a9b5d8b52c022093fdac50f288c0339",
+          "detail": "Exact refs main@ecaa38cf0be54e8d586458a86d1062b90c0b9691 and development@6750d9b67a9b5d8b52c022093fdac50f288c0339, merge base 221b54b2a41ecc8c338d1bf2cf67280cf165ce95; development is 647 commits ahead and main 46 commits ahead. The compare API returned a maximum of 300 paths, so this is not a complete tree-difference or family classification."
         }
       ],
-      "nextAction": "Regenerate the complete exact tree-difference map at current refs, classify each path by consumer and contract, then port only complete coherent families with their gates."
+      "nextAction": "Build the complete exact tree-difference map beyond the compare API's 300-path response, classify paths by family, consumer, contract and gate, then port only complete cohesive families."
     },
     {
       "order": 27,
@@ -2334,9 +2349,14 @@
           "source": "Product PR #489; exact-head gates and post-merge development readback",
           "sha": "65fab1a5e04e50cedb4d2e177d56736d74a7a343",
           "detail": "PR #489 head 29835e84c6902d64a36d984d3616347943342ff9 moved fixed Admin publication and isolated Puxadores persistence feedback into uiCopy.admin.publication, preserving wording and behavior. The Admin browser assertions cover compatible and blocked publication plus isolated v3 Puxadores persistence. The exact head passed all 13 applicable workflow checks; Supabase Preview was skipped because project preview branches are disabled. Local build, page check, theme contract, ARC-03C source-authority tests, syntax checks, and the deterministic ARC-13 inventory generation passed. Squash readback confirms development at 65fab1a5e04e50cedb4d2e177d56736d74a7a343; main remains 5c6e652693bd30218e6915bf8cb160bde03ac719 and unchanged. LOC-006 remains partial for remaining Admin/Configurator families."
+        },
+        {
+          "source": "Product PR #491 exact-head gates and current development blob readback",
+          "sha": "a6ec80a1d1b36204fb313e11393f61451d145d95",
+          "detail": "PR #491 merged to development at 0ca4a203be03a3085253129c7b9422b40fef01e2. All 12 applicable workflows passed on this exact PR head. Seven source, test, ARC-13 inventory, and generated-manifest blobs were re-read and are byte-identical between the PR head and current development@6750d9b67a9b5d8b52c022093fdac50f288c0339. This proves only the Admin editor-shell copy slice (masthead, primary/object tabs and object pager); LOC-006 remains partial, and main is intentionally unchanged."
         }
       ],
-      "nextAction": "Usar o ARC-13 atual para localizar a próxima família restante de texto fixo em Admin/Config, classificar separadamente conteúdo dinâmico e comercial, e fechar esse lote com consumidores e assertions. Não repetir famílias já integradas; manter main estável até fechar a DoD completa."
+      "nextAction": "Use the current ARC-13 inventory to select the next remaining fixed Admin/Config copy family; keep dynamic and commercial content separate, close its consumers/assertions, and do not promote this Admin shell slice to main as an isolated patch."
     },
     {
       "order": 107,
@@ -2688,13 +2708,13 @@
     "blobSha": "59bb530b14172eb9772b9f89bb62272173f4381c"
   },
   "baselineReadback": {
-    "capturedAt": "2026-11-26",
-    "productMainSha": "ef9f073542c54ec44bf3c8808ab13d880222d329",
-    "productDevelopmentSha": "6c5830279595768571a7ad09133084e523fc2fda",
-    "designSystemMainSha": "8686df1cf13f84f18f755cb7de2067fda4f7c66d",
-    "productMainTree": "90662fc073fe22846e66e214a8b8a88e4544bfea",
-    "productDevelopmentTree": "5c71e5e69c9ae5c03147aaeae89d088a63f23f10",
-    "designSystemMainTree": "a0b6807cc9cf6414e78562064e200583776a6445",
-    "meaning": "Live branch readback captured at 2026-11-26T16:52Z immediately before this register-only evidence update: Product main@ef9f073542c54ec44bf3c8808ab13d880222d329 (tree 90662fc073fe22846e66e214a8b8a88e4544bfea), Product development@6c5830279595768571a7ad09133084e523fc2fda (tree 5c71e5e69c9ae5c03147aaeae89d088a63f23f10), and Design System main@8686df1cf13f84f18f755cb7de2067fda4f7c66d (tree a0b6807cc9cf6414e78562064e200583776a6445). The next development commit updates this register only and does not change runtime code. Product PR #507 selectively hardens the authenticated Buyer projection and is Production READY at deploy 6b0863681f476b4faf17d7cb on exact main commit ef9f073542c54ec44bf3c8808ab13d880222d329; its exact PR head passed all 8 applicable workflows and its Deploy Preview was READY. No whole-tree merge was performed. Design System has only main. Re-read moving refs before dependent operations."
+    "capturedAt": "2026-11-26T22:46:56Z",
+    "productMainSha": "ecaa38cf0be54e8d586458a86d1062b90c0b9691",
+    "productDevelopmentSha": "6750d9b67a9b5d8b52c022093fdac50f288c0339",
+    "designSystemMainSha": "a405dff0b77ec3780cd8bcfb313dbad76e9be461",
+    "productMainTree": "45dafef8c70e8421a360a044b71ee96b03737f8a",
+    "productDevelopmentTree": "42bd2231cd6236dbc76c4848d0c6abd27e453f22",
+    "designSystemMainTree": "d0daa64675d7ce9a1792944809dfd866a63ebc0e",
+    "meaning": "Live refs read immediately before this register update. Product main remains the stable release line and development the integration buffer; Design System has only main. Product compare: merge base 221b54b2a41ecc8c338d1bf2cf67280cf165ce95, development 647 commits ahead and main 46 commits ahead; GitHub returned at most 300 changed paths, so the full family map remains open. One Product PR is open: draft #517, head 3079610c6688e50604a26a4fb10580b8e3d7304d based on stale development f864fed27026b5bddbd3b79318e68b3cf470036c. Current Branch Hygiene vNext read-only run #356 observed 16 refs and authorized zero deletions. Register update branch is created from development@6750d9b and will itself advance the ref after merge."
   }
 }
