@@ -1983,12 +1983,17 @@
           "detail": "The Admin stage hierarchy editor now reads fixed labels, instructions, accessible names, validation text, and section/group creation prompts from uiCopy.admin.hierarchyEditor. Entity and editable stage/group/section/item names remain data-backed, including the suggested group name; IDs, hierarchy values, persistence and publication behavior are unchanged. The expanded Admin hierarchy browser verifies catalog-to-DOM copy, prompt text and data-backed defaults, empty-stage/limit states, and no implicit writes. The exact PR head passed all 12 applicable GitHub workflows. Squash-integrated into development as a031c3b0835c7f55b7f09f35f4bea1eadabdaf75; live readback confirmed development at that SHA and main unchanged at 2f1b7e1ee8fbc81b8bc8d22014cfe29d599da37f. LOC-006 remains partial."
         },
         {
-          "source": "Product LOC-006 dependency and event copy — local validation",
-          "sha": "eeab835510dfca46af317c20d7acd08adce5765f",
-          "detail": "Fixed Admin copy for the Dependencies and Events panel now uses uiCopy.admin.rules, including shell guidance, labels, action/state/dimension options, conditional headings, and accessible control text. IDs, action codes, enum values, target/entity/service names, and numeric bounds remain data-backed or unchanged. Event trigger options are deduplicated by ID while preserving the first scene-backed label; stone-skirting now appears once from catalog.services. The Admin hierarchy browser covers all three event variants, code/label contracts, dynamic entity names, unique trigger IDs, and no implicit writes. Final local build, ARC-03C page check, DS-01 theme contract, Admin hierarchy, persistence, native v5 save, core model test, and ARC-13 inventory passed. Exact PR gates and development integration pending; main unchanged. LOC-006 remains partial."
+          "source": "Product PR #472; exact-head gates and development readback",
+          "sha": "7c7c12577f4a7a83c299b4ca6a2c7fd94403a2cd",
+          "detail": "Fixed Admin copy for the Dependencies and Events panel now uses uiCopy.admin.rules, including shell guidance, labels, action/state/dimension options, conditional headings, and accessible control text. IDs, action codes, enum values, target/entity/service names, and numeric bounds remain data-backed or unchanged. Event trigger options are deduplicated by ID while preserving the first scene-backed label; stone-skirting now appears once from catalog.services. The Admin hierarchy browser covers all three event variants, code/label contracts, dynamic entity names, unique trigger IDs, and no implicit writes. The exact PR head passed all 12 applicable GitHub workflows. Squash-integrated into development as a16adde74cc6af1fb9dfe1884a217f2f716f6472; live readback confirmed development at that SHA and main unchanged at 2f1b7e1ee8fbc81b8bc8d22014cfe29d599da37f. LOC-006 remains partial."
+        },
+        {
+          "source": "Product commit bbae4bc9029e2b44eb863ad470635391af4cd5ca; ARC-13 receipt docs/architecture/arc13/loc002-admin-nominal-dimensions-copy-2026-11-25.json",
+          "sha": "bbae4bc9029e2b44eb863ad470635391af4cd5ca",
+          "detail": "Fixed Admin copy for nominal-dimension inputs now uses uiCopy.admin.nominalDimensions; the existing wording, data-backed module name, axis keys, numeric constraints, validation, model state and Buyer projection remain unchanged. Build, pages compiler, theme contract, Admin hierarchy browser in Chrome, core model test, Buyer projection and deterministic ARC-13 inventory passed locally. Exact-head GitHub workflows and development integration are pending; main is unchanged. LOC-006 remains partial."
         }
       ],
-      "nextAction": "Extrair outras famílias Admin/Configurador com seus estados, consumidores e testes; manter conteúdo comercial sob sua autoridade própria."
+      "nextAction": "Integrar este pacote validado na development após os gates exatos; em seguida continuar extraindo famílias Admin/Configurador com seus estados, consumidores e testes, mantendo conteúdo comercial sob sua autoridade."
     },
     {
       "order": 107,
