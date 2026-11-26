@@ -15,7 +15,7 @@
 @keyframes intro-word { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
 @keyframes intro-exit { 0% { pointer-events: none; } to { visibility: hidden; opacity: 0; } }
 @media (prefers-reduced-motion: reduce) {
-  .intro-splash { animation: intro-exit .01s linear .01s forwards; }
+  .intro-splash { pointer-events: none; animation: intro-exit .01s linear .01s forwards; }
   .intro-mark, .intro-mark span, .intro-words i { animation: none; }
   .intro-mark span { width: 38%; }
   .intro-words i { opacity: 1; }
