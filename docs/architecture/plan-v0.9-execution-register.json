@@ -416,9 +416,14 @@
           "source": "Product main PR #527 current readback for TST-001",
           "sha": "ecaa38cf0be54e8d586458a86d1062b90c0b9691",
           "detail": "main advanced from 7ebacc8 to ecaa38cf0be54e8d586458a86d1062b90c0b9691 with a test-only change; its tree is 45dafef8c70e8421a360a044b71ee96b03737f8a and equals PR #527's exact head tree. Run #45903783463 passed on the merged tree. The previous exact TST-001 inventory artifact 15157010588 still pins main@7ebacc86018c60e54df4d0e15c95ecd3eed46a77; it remains historical for its exact inputs. This documentation update triggers a new candidate inventory run that can refresh main/development refs; TST-001 stays partial until the assertion audit is complete."
+        },
+        {
+          "source": "Product exact TST-001 workflow inventory run #45904223459",
+          "sha": "4523c3da2b4d4d1805d1328208cefbd23aaf2a12",
+          "detail": "The plan and inventory jobs passed on PR #526 head 4523c3da2b4d4d1805d1328208cefbd23aaf2a12. Exact inventory JSON preserved at docs/architecture/ci/tst-001-workflow-inventory-live-2026-11-26-run-45904223459.json; workflow artifact 15156629898 has zip digest sha256:e5824ea6acd3850ac0571763a2aa4a6ef4fbffc80e70f2d7d82c120896f641ac. Source pins: main@ecaa38cf0be54e8d586458a86d1062b90c0b9691 (tree 45dafef8c70e8421a360a044b71ee96b03737f8a), development@4bcfa26911498a9bf5c3c94c517e9931746b437b (tree 65dced666488a0fa28181f45d3b584c6a22ec141), and candidate PR #526 (tree d34ef65fef2068a64d16a5f594fa3a8783814917). Summary: 28 main workflows, 65 development workflows, 26 shared, 86 unique definitions, 0 parser warnings, 1 candidate workflow change, 0 candidate write-signal workflows. The exact open-PR readback included #526 and #528 against the current development SHA, plus draft #517 still pinned to development@f864fed; this is inventory evidence, not branch count. TST-001 remains partial because its 21-command/21-workflow assertion and contract audit is unfinished."
         }
       ],
-      "nextAction": "Regenerate and read back the exact workflow inventory after the latest main change at ecaa38c, then continue the 21-command/21-workflow command→assertion→contract/result audit. Keep TST-001 partial; inventory generation is not assertion validation."
+      "nextAction": "Continue the 21-command/21-workflow command→assertion→contract/result audit and identify which rows are covered by reachable gates. The exact live-ref inventory and candidate readback are now preserved at main@ecaa38c and development@4bcfa26; generation alone does not close TST-001."
     },
     {
       "order": 20,
