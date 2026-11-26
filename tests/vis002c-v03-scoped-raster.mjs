@@ -16,30 +16,80 @@ assert.equal(source.contexts.length, 10);
 assert.equal(source.roleRef, "VIS-002.approvedPalette.colors.textPrimary.light");
 assert.equal(source.value.toLowerCase(), "#292723");
 const routes = ["/", "/about/", "/how-it-works/"];
+const colorToRgb = value => {
+  const match = /^#([0-9a-f]{6})$/i.exec(value);
+  assert.ok(match, "Expected a six-digit mapped background: " + value);
+  const hex = match[1];
+  return "rgb(" + [0, 2, 4].map(i => parseInt(hex.slice(i, i + 2), 16)).join(", ") + ")";
+};
 const byRoute = routes.map(route => ({
   route,
-  selectors: source.contexts.filter(item => item.route === route).map(item => item.selector)
+  selectors: source.contexts.filter(item => item.route === route).map(item => ({
+    selector: item.selector,
+    expectedBackground: colorToRgb(item.background)
+  }))
 }));
 assert.deepEqual(byRoute.map(x => x.selectors.length), [3, 3, 4]);
 
 const resultDir = "artifacts/vis002c-v03-scoped-raster";
 await mkdir(resultDir, { recursive: true });
 const results = [];
-const sample = selectors => selectors.map(selector => {
+const sample = targets => targets.map(({selector, expectedBackground}) => {
+  // Fixed mapped targets only: verify their element/ancestor solid surfaces; this does not
+  // claim to inspect unrelated pseudo-element artwork or provide human visual approval.
+  const solidBackground = element => {
+    let current = element, resolved = null;
+    while (current && current.nodeType === 1) {
+      const css = getComputedStyle(current);
+      const masked = (css.maskImage && css.maskImage !== "none")
+        || (css.webkitMaskImage && css.webkitMaskImage !== "none");
+      const compositing = css.opacity !== "1" || css.filter !== "none"
+        || (css.backdropFilter && css.backdropFilter !== "none")
+        || (css.webkitBackdropFilter && css.webkitBackdropFilter !== "none")
+        || css.mixBlendMode !== "normal" || masked;
+      if (compositing) return {error: "composited-ancestor"};
+      if (resolved === null) {
+        if (css.backgroundImage !== "none") return {error: "image-or-gradient"};
+        const match = /^rgba?\((.*)\)$/.exec(css.backgroundColor);
+        if (!match) return {error: "unparsed-background"};
+        const channels = match[1].split(/[,\s/]+/).filter(Boolean);
+        const alpha = channels.length >= 4 ? Number(channels[3]) : 1;
+        if (!Number.isFinite(alpha) || alpha < 0 || alpha > 1)
+          return {error: "unparsed-alpha"};
+        if (alpha > 0 && alpha < 1) return {error: "translucent-surface"};
+        if (alpha === 1) resolved = css.backgroundColor;
+      }
+      current = current.parentElement;
+    }
+    return resolved === null ? {error: "no-solid-surface"} : {color: resolved};
+  };
   const elements = [...document.querySelectorAll(selector)].filter(element => {
     const rect = element.getBoundingClientRect(), css = getComputedStyle(element);
     return rect.width > 0 && rect.height > 0 && css.display !== "none"
       && css.visibility !== "hidden" && Number(css.opacity) > 0;
   }).map(element => {
     const rect = element.getBoundingClientRect();
+    const surface = solidBackground(element);
     return {
-      selector, color: getComputedStyle(element).color,
+      selector, expectedBackground, background: surface.color ?? null,
+      backgroundError: surface.error ?? null, color: getComputedStyle(element).color,
       x: rect.left + scrollX, y: rect.top + scrollY,
       width: rect.width, height: rect.height
     };
   });
   return { selector, elements };
 });
+const expectTargetBackground = (rows, label) => {
+  for (const item of rows) {
+    assert.ok(item.elements.length > 0, label + " missing visible " + item.selector);
+    for (const element of item.elements) {
+      assert.equal(element.backgroundError, null,
+        label + " unverified background: " + item.selector + " (" + element.backgroundError + ")");
+      assert.equal(element.background, element.expectedBackground,
+        label + " wrong solid background: " + item.selector);
+    }
+  }
+};
 const ready = async (page, route) => {
   await page.evaluate(async () => {
     for (const img of document.images) img.loading = "eager";
@@ -92,19 +142,21 @@ for (const [browserName, engine] of [["chromium", chromium], ["webkit", webkit]]
         }
         const approved = await page.evaluate(sample, selectors);
         expectTargetColor(approved, "rgb(41, 39, 35)", label + " approved");
+        expectTargetBackground(approved, label + " approved");
         assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth),
           true, label + " horizontal overflow");
 
         // Deliberately synthetic former text color, not a production baseline.
         // The DOM, dimensions, media, text and image state stay identical.
-        const oldCss = selectors.map(s =>
-          'html[data-theme="light"] ' + s + ' { color: #705C4B !important; }'
+        const oldCss = selectors.map(({selector}) =>
+          'html[data-theme="light"] ' + selector + ' { color: #705C4B !important; }'
         ).join("\n");
         const injected = await page.addStyleTag({content: oldCss});
         await page.evaluate(() => new Promise(done => requestAnimationFrame(() =>
           requestAnimationFrame(done))));
         const legacy = await page.evaluate(sample, selectors);
         expectTargetColor(legacy, "rgb(112, 92, 75)", label + " synthetic reference");
+        expectTargetBackground(legacy, label + " synthetic reference");
         const before = PNG.sync.read(await page.screenshot({
           fullPage: true, animations: "disabled", caret: "hide"
         }));
