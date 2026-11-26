@@ -25,18 +25,12 @@ const css00Shells=[
   {route:"/access/manage.html",shell:"access/manage.html"}
 ];
 function parseAttributes(tag){
-  return Object.fromEntries([...tag.matchAll(/([^\\s=]+)\\s*=\\s*["']([^"']*)["']/g)].map(match=>[match[1].toLowerCase(),match[2]]));
+  return Object.fromEntries([...tag.matchAll(/([^\s=]+)\s*=\s*["']([^"']*)["']/g)].map(match=>[match[1].toLowerCase(),match[2]]));
 }
 function localRelativePath(url,baseUrl){
   const resolved=new URL(url,baseUrl);
   if(resolved.origin!=="https://css-audit.invalid")return null;
-  return decodeURIComponent(resolved.pathname).replace(/^\\/+/, "");
-}
-async function hashFile(relativePath){
-  const absolute=path.resolve(siteRoot,relativePath);
-  assert.ok(absolute===siteRoot||absolute.startsWith(siteRoot+path.sep),"CSS path escapes audited app root: "+relativePath);
-  const content=await readFile(absolute);
-  return createHash("sha256").update(content).digest("hex");
+  return decodeURIComponent(resolved.pathname).replace(/^\/+/, "");
 }
 async function scanCss(relativePath,visited=new Set()){
   assert.ok(!visited.has(relativePath),"CSS @import cycle detected: "+relativePath);
@@ -44,9 +38,9 @@ async function scanCss(relativePath,visited=new Set()){
   const absolute=path.resolve(siteRoot,relativePath);
   assert.ok(absolute.startsWith(siteRoot+path.sep),"CSS import escapes audited app root: "+relativePath);
   const content=await readFile(absolute,"utf8");
-  const withoutComments=content.replace(/\\/\\*[\\s\\S]*?\\*\\//g,"");
+  const withoutComments=content.replace(/\/\*[\s\S]*?\*\//g,"");
   const imports=[];
-  for(const match of withoutComments.matchAll(/@import\\s+(?:url\\(\\s*)?["']?([^"'()\\s;]+)["']?\\s*\\)?[^;]*;/gi)){
+  for(const match of withoutComments.matchAll(/@import\s+(?:url\(\s*)?["']?([^"'()\s;]+)["']?\s*\)?[^;]*;/gi)){
     const imported=localRelativePath(match[1],"https://css-audit.invalid/"+relativePath);
     if(imported)imports.push(await scanCss(imported,new Set(visited)));
     else imports.push({url:match[1],external:true});
@@ -59,9 +53,9 @@ async function captureStaticInventory(){
     const html=await readFile(path.resolve(siteRoot,shell),"utf8");
     const baseUrl="https://css-audit.invalid/"+shell;
     const stylesheetHrefs=[];
-    for(const match of html.matchAll(/<link\\b[^>]*>/gi)){
+    for(const match of html.matchAll(/<link\b[^>]*>/gi)){
       const attrs=parseAttributes(match[0]);
-      if((attrs.rel||"").toLowerCase().split(/\\s+/).includes("stylesheet")&&attrs.href)stylesheetHrefs.push(attrs.href);
+      if((attrs.rel||"").toLowerCase().split(/\s+/).includes("stylesheet")&&attrs.href)stylesheetHrefs.push(attrs.href);
     }
     assert.ok(stylesheetHrefs.length>0,"No linked stylesheet found for "+route);
     const stylesheets=[];
@@ -69,10 +63,10 @@ async function captureStaticInventory(){
       const localPath=localRelativePath(href,baseUrl);
       stylesheets.push(localPath?await scanCss(localPath):{url:href,external:true});
     }
-    const inlineStyles=[...html.matchAll(/<style\\b[^>]*>([\\s\\S]*?)<\\/style>/gi)].map(match=>createHash("sha256").update(match[1]).digest("hex"));
+    const inlineStyles=[...html.matchAll(/<style\b[^>]*>([\s\S]*?)<\/style>/gi)].map(match=>createHash("sha256").update(match[1]).digest("hex"));
     routes.push({route,shell,shellSha256:createHash("sha256").update(html).digest("hex"),stylesheets,
       inlineStyleBlockCount:inlineStyles.length,inlineStyleBlockSha256:inlineStyles,
-      styleAttributeCount:[...html.matchAll(/\\sstyle\\s*=/gi)].length});
+      styleAttributeCount:[...html.matchAll(/\sstyle\s*=/gi)].length});
   }
   return {schema:"M2DCSS00StaticInventory/1",sourceRef:process.env.CSS_AUDIT_SOURCE_REF||"unspecified",
     sourceRoot:siteRoot,routes,limits:["Static shell/import inventory only; runtime-created styles remain separate observations.",
@@ -90,7 +84,7 @@ const report={schema:"M2DPToken02AComputedStyles/0.1",status:"browser observatio
   ]};
 await mkdir(out,{recursive:true});
 report.staticInventory=await captureStaticInventory();
-await writeFile(out+"/css-00-static-inventory.json",JSON.stringify(report.staticInventory,null,2)+"\\n");
+await writeFile(out+"/css-00-static-inventory.json",JSON.stringify(report.staticInventory,null,2)+"\n");
 for(const engine of [chromium,webkit]){
   const browser=await engine.launch({headless:true});
   try{
