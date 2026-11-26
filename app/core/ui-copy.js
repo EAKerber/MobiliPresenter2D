@@ -244,6 +244,7 @@
         handleTargetPrefix: "Puxador",
         handleAvailabilityNote: "Definir depois não é um puxador e não recebe materiais.",
         handleMaterialsHeading: "Cores e materiais deste puxador",
+        handleMaterialsEmptyState: "Nenhum material associado. Configure a lista na aba Cores e acabamentos.",
         initialHandleLabel: "Puxador selecionado inicialmente",
         defineLater: "Definir depois",
         stoneAvailabilityHeading: "Pedras e texturas disponíveis para bancada e rodapé",

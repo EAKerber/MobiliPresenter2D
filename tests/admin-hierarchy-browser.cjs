@@ -337,6 +337,15 @@ async function sectionItemIds(page, stageId, groupId, sectionId) {
     ["Nome público", "Descrição", "Destaques (um por linha)", "Componentes (um por linha)", "Requisitos (um por linha)"],
     "object content fields retain distinct labels in the authoring form"
   );
+  const objectMaterialCopy = await page.evaluate(() => window.CASA_UI_COPY.admin.materials);
+  await page.locator("#objectSelector").selectOption({ label: "Puxador · Tango / Íris" });
+  const tangoObjectMaterials = page.locator("#objectsList .handle-colors");
+  assert.equal(await tangoObjectMaterials.locator("h3").textContent(), objectMaterialCopy.handleMaterialsHeading, "handle-material heading reuses canonical catalog copy");
+  assert.equal(await tangoObjectMaterials.locator(".admin-note").textContent(), "Cromado", "associated material names remain data-backed");
+  await page.locator("#objectSelector").selectOption({ label: "Puxador · Ponto" });
+  const pointObjectMaterials = page.locator("#objectsList .handle-colors");
+  assert.equal(await pointObjectMaterials.locator("h3").textContent(), objectMaterialCopy.handleMaterialsHeading, "empty handle still uses canonical heading");
+  assert.equal(await pointObjectMaterials.locator(".admin-note").textContent(), objectMaterialCopy.handleMaterialsEmptyState, "empty handle-material guidance comes from the catalog");
   await page.locator("#objectSelector").selectOption({ label: "Mover pedra" });
   await page.locator('[data-object-tab="assets"]').click();
   const moveStoneAssets = page.locator('[data-asset-object-id="move-stone"]');
@@ -689,6 +698,7 @@ async function sectionItemIds(page, stageId, groupId, sectionId) {
     handleTargetPrefix: "Puxador",
     handleAvailabilityNote: "Definir depois não é um puxador e não recebe materiais.",
     handleMaterialsHeading: "Cores e materiais deste puxador",
+    handleMaterialsEmptyState: "Nenhum material associado. Configure a lista na aba Cores e acabamentos.",
     initialHandleLabel: "Puxador selecionado inicialmente",
     defineLater: "Definir depois",
     stoneAvailabilityHeading: "Pedras e texturas disponíveis para bancada e rodapé",

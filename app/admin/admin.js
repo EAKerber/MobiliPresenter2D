@@ -837,9 +837,9 @@ function renderObjects() {
   const handleProduct = model.handleProducts.find((item) => item.priceEntryId === id);
   if (handleProduct) {
     const section = document.createElement("section"); section.className = "handle-colors";
-    const title = document.createElement("h3"); title.textContent = "Materiais deste puxador";
+    const title = document.createElement("h3"); title.textContent = materialAvailabilityCopy.handleMaterialsHeading;
     const note = document.createElement("p"); note.className = "admin-note";
-    note.textContent = handleProduct.materialIds.map((materialId) => model.materials.find((item) => item.id === materialId)?.label).filter(Boolean).join(" · ") || "Nenhum material associado. Configure a lista na aba Cores e acabamentos.";
+    note.textContent = handleProduct.materialIds.map((materialId) => model.materials.find((item) => item.id === materialId)?.label).filter(Boolean).join(" · ") || materialAvailabilityCopy.handleMaterialsEmptyState;
     section.append(title, note); card.append(section);
   }
   card.dataset.objectId = id;
