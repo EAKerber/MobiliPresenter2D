@@ -903,9 +903,14 @@
           "source": "docs/architecture/css-00-current-baseline-2026-11-26.json",
           "sha": "4aa791855d4fef1cb066a6fa58c06d6f615c42cc",
           "detail": "Source-pinned CSS-00 readback at Product main@5c6e652 and development@eff75d9, Design System main@2f898c5. Exact inventory: main has 9 CSS paths; development has those 9 runtime app sheets plus 9 reference/fixture/historical CSS paths. Eight active shells and their stylesheet order are pinned; VIS-002C is indirectly imported by landing.css on three public routes. Five runtime sheets differ, four are byte-identical. Build provenance and selected runtime style owners are recorded. The selector-to-consumer crosswalk, authenticated/token state evidence, and exact-head CSS-00 check remain incomplete/UNKNOWN; CSS-00 stays partial."
+        },
+        {
+          "source": "docs/architecture/css-00-current-baseline-2026-11-26.json",
+          "sha": "df1b80888032638137e5c09cf245f7a3c4aa71ad",
+          "detail": "Follow-on static selector candidate index from Product development@eff75d9 (the current 8f8726f descendant is docs-only). Pinned 67 fetched HTML/JS paths; route closure is 61 paths (8 shells + 53 JS). All 1,769 selector alternatives across the 9 runtime CSS files are bucketed into literal match, dynamic/template candidate, CSS-only, or no literal consumer, with route, state, and candidate source counts. This remains lexical candidate evidence: no-literal matches are unresolved rather than dead code; Admin/Config auth states and exact-head browser/CSSOM evidence remain UNKNOWN."
         }
       ],
-      "nextAction": "Complete the per-selector stylesheet → route → theme/state → recursive consumer crosswalk, classify remaining dynamic/template classes and non-runtime references, and attach exact-head CSSOM/runtime or other applicable gate receipts. Keep the historical 98-ID list separate for CSS-01; do not close CSS-00 from lexical counts."
+      "nextAction": "Resolve the candidate matches into semantic selector ownership across states, investigate no-literal-consumer cases against data/generated DOM, and attach an exact-head browser/CSSOM receipt or document a specific inaccessible-state limit. Keep CSS-00 partial until those gaps are closed; keep the historical 98 IDs separate for CSS-01."
     },
     {
       "order": 43,

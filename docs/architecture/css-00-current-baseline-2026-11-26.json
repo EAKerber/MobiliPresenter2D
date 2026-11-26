@@ -488,10 +488,11 @@
     ]
   },
   "selectorConsumerCrosswalk": {
-    "status": "incomplete",
+    "status": "candidate-index-added-semantics-incomplete",
     "mapped": "shell→stylesheet order, theme owner files, top-level runtime style owners, and selected route JS source owners",
-    "remaining": "Complete per-selector mapping to stylesheet, route, theme/state, and recursively resolved source consumer; classify classes generated from templates, JS-created DOM, and bundled outputs without treating lexical matches as semantic ownership.",
-    "lexicalCounts": "Not recorded as closure: scans can find candidates but do not prove semantic consumer ownership and do not correspond to the separate historical 98-ID inventory."
+    "remaining": "Resolve the candidate matches into semantic same-element/state ownership, investigate no-literal-consumer selectors, and attach exact-head browser/CSSOM evidence where available. The matrix is lexical and cannot close CSS-00 by itself.",
+    "lexicalCounts": "Not recorded as closure: scans can find candidates but do not prove semantic consumer ownership and do not correspond to the separate historical 98-ID inventory.",
+    "candidateScanPath": "docs/architecture/css-00-current-baseline-2026-11-26.json#selectorCandidateScan"
   },
   "accessAndRuntimeLimits": {
     "themeStates": "Light/dark theme is controlled by app/core/ui-theme.js; no exact-head CSSOM/browser runtime evidence was observed in this audit.",
@@ -499,5 +500,764 @@
     "exactHeadChecks": "UNKNOWN. Existing theme-contract/browser/focus and navigation-causality checks are scoped and no CSS-00-specific exact-head run receipt was found.",
     "generatedDom": "Dynamic geometry, masks, swatches, video/hero, and view-count style surfaces are listed under dynamicStyleOwners; complete route/state coverage remains open."
   },
-  "summary": "At these exact refs, the eight active Product shells load ui-theme.css last; the VIS-002C export is runtime-loaded indirectly by landing.css on three public routes. Main has nine CSS paths, all runtime app assets; development has those same nine plus nine reference/fixture/historical CSS paths. Five app CSS files differ by final blob: admin, how-it-works, landing, styles, and ui-theme; four are byte-identical. Static build compiles three authored HTML pages and JS bundles, not CSS. The selector→consumer matrix and exact-head runtime/gate evidence are incomplete, so CSS-00 remains partial."
+  "summary": "At these exact refs, the eight active Product shells load ui-theme.css last; the VIS-002C export is runtime-loaded indirectly by landing.css on three public routes. Main has nine CSS paths, all runtime app assets; development has those same nine plus nine reference/fixture/historical CSS paths. Five app CSS files differ by final blob: admin, how-it-works, landing, styles, and ui-theme; four are byte-identical. Static build compiles three authored HTML pages and JS bundles, not CSS. The selector→consumer matrix and exact-head runtime/gate evidence are incomplete, so CSS-00 remains partial. A route-import scan then indexed 1,769 selector alternatives across nine runtime sheets against 61 route-reachable source paths, with 67 pinned HTML/JS files fetched; the categorization remains lexical, so CSS-00 stays partial.",
+  "selectorCandidateScan": {
+    "readbackUTC": "2026-11-26T08:54:17Z",
+    "scannedRef": "eff75d93655cb2796f1823ab3b9789c0aa9c591c",
+    "scannedTree": "ec3467b8cbd57b365762cfec28c74e9f980db58a",
+    "developmentNow": "8f8726f6045df36705a306f159b42746aa7d3cb1",
+    "developmentNowReason": "PR #484 merged after the scan and changed only the CSS-00 report and operational register; no app HTML/CSS/JS source changed.",
+    "sourceGraph": {
+      "uniqueFetchedPaths": 67,
+      "routeClosurePaths": 61,
+      "routeClosureHtml": 8,
+      "routeClosureJs": 53,
+      "nonRouteFetchedJs": 6,
+      "method": "Traversed script/module imports from the eight active HTML shells, mapped generated browser bundles to source files, and matched CSS selector class/ID/attribute tokens against the static route source graph.",
+      "pins": [
+        {
+          "path": "app/about/about.js",
+          "sha": "67c32598126d3929bfcfec777384cc827734d574",
+          "routeReachable": true
+        },
+        {
+          "path": "app/about/index.html",
+          "sha": "78f644b7a6c4e2d6d6507fbbfe602e6217ae9085",
+          "routeReachable": true
+        },
+        {
+          "path": "app/access/access.js",
+          "sha": "e2b99d775576fe24d6757c8f24cf52fb8b498ac4",
+          "routeReachable": true
+        },
+        {
+          "path": "app/access/index.html",
+          "sha": "2bde509caba4ce55a7f45c39909eaf5264fd9dce",
+          "routeReachable": true
+        },
+        {
+          "path": "app/access/manage.html",
+          "sha": "eeaf9736b89f068e3fd6c401854ec9c37ef7fee5",
+          "routeReachable": true
+        },
+        {
+          "path": "app/access/manage.js",
+          "sha": "a1013d476781cafa52cb63b0706ab3a4fd30041e",
+          "routeReachable": true
+        },
+        {
+          "path": "app/admin.html",
+          "sha": "2f98dd33beb95b7ddb8558df1e41e785815d0168",
+          "routeReachable": true
+        },
+        {
+          "path": "app/admin/admin.js",
+          "sha": "0a2ec1f5c7d92a11e4ff702f07f6f5527dfbe833",
+          "routeReachable": true
+        },
+        {
+          "path": "app/app.js",
+          "sha": "1a029524d8f7fb65f1870c159d5842fbb037bf84",
+          "routeReachable": true
+        },
+        {
+          "path": "app/config/index.html",
+          "sha": "82b4e9cdff677693f0a34c68f727087d8a4d8d43",
+          "routeReachable": true
+        },
+        {
+          "path": "app/core/admin-bootstrap-retry.mjs",
+          "sha": "78d23e7d0d28c700e3481a49a918d7773d0afc23",
+          "routeReachable": true
+        },
+        {
+          "path": "app/core/administration-v5.js",
+          "sha": "fce8319c7ed56d6e0e7e525742275aa2f0e25a32",
+          "routeReachable": true
+        },
+        {
+          "path": "app/core/browser-compat.js",
+          "sha": "ce9fef7bc39b9db3cc3ca22802adc3c0f4e4d936",
+          "routeReachable": true
+        },
+        {
+          "path": "app/core/configuration.js",
+          "sha": "99a24b4c98bc018bdb7732513a63610800fb4ffe",
+          "routeReachable": true
+        },
+        {
+          "path": "app/core/fingerprint.js",
+          "sha": "3353604acacdcd77614f487a936aeb23a27867f0",
+          "routeReachable": true
+        },
+        {
+          "path": "app/core/finishes.js",
+          "sha": "530c6e46f09550269c51758441e4e602f20fe04e",
+          "routeReachable": true
+        },
+        {
+          "path": "app/core/flow-layout.js",
+          "sha": "48d0b255a9d47f32815a54eeb5d51fea6891b23e",
+          "routeReachable": true
+        },
+        {
+          "path": "app/core/flow-model.js",
+          "sha": "0d27cd8effda1b0d70e89f55c423fa58d067e8ed",
+          "routeReachable": true
+        },
+        {
+          "path": "app/core/hierarchy-administration.js",
+          "sha": "17e37bd3ca3a86e715e579b6907b5e20a5c27a9f",
+          "routeReachable": true
+        },
+        {
+          "path": "app/core/hierarchy-editor.js",
+          "sha": "5d47b1b83d30789b80d2471680b479b70b415780",
+          "routeReachable": true
+        },
+        {
+          "path": "app/core/image-fallback.js",
+          "sha": "5307a5b2c9d4bf813a116aa7a0490d64e53cfadf",
+          "routeReachable": true
+        },
+        {
+          "path": "app/core/item-capabilities.js",
+          "sha": "98ef550b3d57e2f8a06e88ec9e67b841c508f905",
+          "routeReachable": true
+        },
+        {
+          "path": "app/core/keyboard-shortcuts.js",
+          "sha": "c87577e9f577d6ae757248830d1cb4659fec12c3",
+          "routeReachable": true
+        },
+        {
+          "path": "app/core/layout-profiles.js",
+          "sha": "9f12bf877e234a48de23723074730f5058c2bacc",
+          "routeReachable": true
+        },
+        {
+          "path": "app/core/legacy-stage-repair.js",
+          "sha": "3ae4a3e6ecb2e8a094b2773b6bae2d2a85c3b053",
+          "routeReachable": true
+        },
+        {
+          "path": "app/core/presentation-contract.js",
+          "sha": "db6774c799d66ce98a9267fc2f24832d0fa5898c",
+          "routeReachable": true
+        },
+        {
+          "path": "app/core/pricing-contract.js",
+          "sha": "d16e7954e80216c4448ddc82410012d8aa889b8b",
+          "routeReachable": true
+        },
+        {
+          "path": "app/core/pricing.js",
+          "sha": "b0f095320bd9ab1d789f9c4004a83d6f27d873e7",
+          "routeReachable": true
+        },
+        {
+          "path": "app/core/private-navigation.js",
+          "sha": "0e35731a01e3b51f225942bee18ba353036ed2d3",
+          "routeReachable": true
+        },
+        {
+          "path": "app/core/public-module-projection.js",
+          "sha": "fff325e9699f806f0e4d599b05374aa7c3d2c43f",
+          "routeReachable": false
+        },
+        {
+          "path": "app/core/public-video-fullscreen.js",
+          "sha": "3913d4d1f04f671e9539cc102a3f13befb588405",
+          "routeReachable": true
+        },
+        {
+          "path": "app/core/published-buyer-projection.js",
+          "sha": "c1f8e099f2dce29bd003577e8c0a724d7b6475fa",
+          "routeReachable": true
+        },
+        {
+          "path": "app/core/published-configuration.js",
+          "sha": "7b5d13dfb43983a0efa622c1ad4a4531820a8ad0",
+          "routeReachable": false
+        },
+        {
+          "path": "app/core/runtime-contracts.js",
+          "sha": "593ae7046d01182a05f4e29e1e64f2b2935bd364",
+          "routeReachable": true
+        },
+        {
+          "path": "app/core/scene-component.js",
+          "sha": "6fa00bb31d2ecd3eeccb1d0e5eabcf410acdcab6",
+          "routeReachable": true
+        },
+        {
+          "path": "app/core/scene-geometry.js",
+          "sha": "91f5d37d72c4183d1bb38695fbf74c67a110c8b0",
+          "routeReachable": true
+        },
+        {
+          "path": "app/core/state.js",
+          "sha": "792b89525e5421c889f0ab42ee5977f3fdd1069b",
+          "routeReachable": true
+        },
+        {
+          "path": "app/core/stone.js",
+          "sha": "bbe9531e2d5371f4c9cdfc7631a75a86391e26c5",
+          "routeReachable": true
+        },
+        {
+          "path": "app/core/technical-drawings.js",
+          "sha": "5df0515c5378781fd6fc8fc4044bd8837f47f871",
+          "routeReachable": true
+        },
+        {
+          "path": "app/core/ui-copy.js",
+          "sha": "bf459fc644bdb7d82c6de5a444d40ae4e4207a95",
+          "routeReachable": true
+        },
+        {
+          "path": "app/core/ui-theme.js",
+          "sha": "8c212061cf6c8f46099f23c28cf297cfb48ce50d",
+          "routeReachable": true
+        },
+        {
+          "path": "app/core/v5-normal-save.js",
+          "sha": "e9da3059ec2bbb566a0ac4c087553d383451e2e7",
+          "routeReachable": false
+        },
+        {
+          "path": "app/core/v5-publication-inspection.js",
+          "sha": "0da4510829237478927792350fcc459b12517f63",
+          "routeReachable": false
+        },
+        {
+          "path": "app/core/v5-publication-migration.js",
+          "sha": "638cf679a8ec34425cdaaf9b39df36df121c2303",
+          "routeReachable": false
+        },
+        {
+          "path": "app/core/validation.js",
+          "sha": "74ce846a1cb934990ef38200d82175c0425162fb",
+          "routeReachable": true
+        },
+        {
+          "path": "app/core/visibility.js",
+          "sha": "d7af0f76530233e0d3dfb32f2ca08397f855e176",
+          "routeReachable": true
+        },
+        {
+          "path": "app/data/catalog-data.js",
+          "sha": "b457ec513a7e838e52bbf69b7d7ae10b55d7948e",
+          "routeReachable": true
+        },
+        {
+          "path": "app/data/configurator-settings.js",
+          "sha": "c380ea16e5cec9851ab213d38e1c71bae4b52015",
+          "routeReachable": true
+        },
+        {
+          "path": "app/data/hierarchy-defaults.js",
+          "sha": "c7029771a0ce289ea9f25ceddcf33d0abbaf6adb",
+          "routeReachable": true
+        },
+        {
+          "path": "app/data/mask-data.js",
+          "sha": "4de91735896809c994c26c044fc2041c83d95b2b",
+          "routeReachable": true
+        },
+        {
+          "path": "app/data/mock-price-book.js",
+          "sha": "e34d0967b83aa03181b6d6b17902056bc074efa2",
+          "routeReachable": true
+        },
+        {
+          "path": "app/data/presentation-policy-defaults.js",
+          "sha": "e7d9643f00212b257eedbc6fb046ea2804462446",
+          "routeReachable": true
+        },
+        {
+          "path": "app/data/scene-data.js",
+          "sha": "6fb6f79bc4d360d0c8d4d1e799fe6a7ae617cefd",
+          "routeReachable": true
+        },
+        {
+          "path": "app/data/stone-data.js",
+          "sha": "1d2e9cf8dec27871730bfde130172ecb4a2b63b7",
+          "routeReachable": true
+        },
+        {
+          "path": "app/how-it-works/how-it-works.js",
+          "sha": "5f2a047aa709cb1e970e7d193e3755ff5fba1831",
+          "routeReachable": true
+        },
+        {
+          "path": "app/how-it-works/index.html",
+          "sha": "b4eb9711c5369f41c87ea96b64e2677aa7fe544e",
+          "routeReachable": true
+        },
+        {
+          "path": "app/index.html",
+          "sha": "a31beed14383005a2fc88514c002c95c931f316d",
+          "routeReachable": true
+        },
+        {
+          "path": "app/landing/data.js",
+          "sha": "69da87e4750c336eeb15daf8c773a87ef99c68bf",
+          "routeReachable": true
+        },
+        {
+          "path": "app/landing/header-menu.js",
+          "sha": "b56900009aca9cc7212b5f2134a310ff539be86b",
+          "routeReachable": true
+        },
+        {
+          "path": "app/landing/landing.js",
+          "sha": "43af31f8a4a47636abf292c3d59264ffb133c724",
+          "routeReachable": true
+        },
+        {
+          "path": "app/tools/v5-publication-preflight.js",
+          "sha": "6c3cfa55d2620f45d4a9b9f7bd12ea374dda43ca",
+          "routeReachable": false
+        },
+        {
+          "path": "app/viewer/data.js",
+          "sha": "f4b19fb8a5da6e950b314b3bf84b459e0b445947",
+          "routeReachable": true
+        },
+        {
+          "path": "app/viewer/index.html",
+          "sha": "c737119749cac07d7da77f81020e8c39eb0931eb",
+          "routeReachable": true
+        },
+        {
+          "path": "app/viewer/public-data.js",
+          "sha": "fde86e84745daa16e803d769af22f1e6c3857919",
+          "routeReachable": true
+        },
+        {
+          "path": "app/viewer/scene-adapters.js",
+          "sha": "2bc8f6af0c174708bdad469ae78d5288462aadb8",
+          "routeReachable": true
+        },
+        {
+          "path": "app/viewer/technical-views.js",
+          "sha": "5d8bc557f7b4f8a9f8cac191f57011ba92d06292",
+          "routeReachable": true
+        },
+        {
+          "path": "app/viewer/viewer.js",
+          "sha": "bd26be7d4050b8a61e98cf7aee453bcaf8554a34",
+          "routeReachable": true
+        }
+      ]
+    },
+    "totalSelectorAlternatives": 1769,
+    "classificationMeaning": "Buckets describe lexical candidate matches, not a semantic owner proof or same-element/cascade proof. Dynamic/template, CSS-only, and no-literal-consumer categories remain explicit. State labels are source-condition candidates; their numeric counts do not prove a runtime state was rendered. Consumer counts can overlap by file.",
+    "routeSourceCounts": {
+      "/": 8,
+      "/about/": 5,
+      "/how-it-works/": 7,
+      "/viewer/": 20,
+      "/config/": 36,
+      "/admin.html": 22,
+      "/access/": 5,
+      "/access/manage.html": 5
+    },
+    "sheets": [
+      {
+        "path": "app/about/about.css",
+        "routes": [
+          "/about/"
+        ],
+        "rules": 46,
+        "selectorAlternatives": 65,
+        "buckets": {
+          "exactLiteral": 61,
+          "dynamicTemplate": 4,
+          "cssOnly": 0,
+          "noLiteralConsumer": 0
+        },
+        "consumerCandidates": [
+          [
+            "app/about/index.html",
+            61
+          ],
+          [
+            "app/about/about.js",
+            3
+          ],
+          [
+            "app/core/ui-theme.js",
+            5
+          ]
+        ],
+        "stateCandidates": [
+          "light 4",
+          "focus 3",
+          "max-width 760/420"
+        ]
+      },
+      {
+        "path": "app/admin/admin.css",
+        "routes": [
+          "/admin.html"
+        ],
+        "rules": 227,
+        "selectorAlternatives": 291,
+        "buckets": {
+          "exactLiteral": 201,
+          "dynamicTemplate": 56,
+          "cssOnly": 19,
+          "noLiteralConsumer": 15
+        },
+        "consumerCandidates": [
+          [
+            "app/admin.html",
+            72
+          ],
+          [
+            "app/admin/admin.js",
+            155
+          ],
+          [
+            "app/core/ui-theme.js",
+            16
+          ],
+          [
+            "app/core/private-navigation.js",
+            10
+          ],
+          [
+            "admin/core contracts also appear",
+            null
+          ]
+        ],
+        "stateCandidates": [
+          "light 48",
+          "max-width 650",
+          "focus/hover/disabled/active/has"
+        ]
+      },
+      {
+        "path": "app/design-system/vis002c-long-copy-light-v0.3.0.css",
+        "routes": [
+          "/",
+          "/about/",
+          "/how-it-works/"
+        ],
+        "rules": 1,
+        "selectorAlternatives": 10,
+        "buckets": {
+          "exactLiteral": 0,
+          "dynamicTemplate": 10,
+          "cssOnly": 0,
+          "noLiteralConsumer": 0
+        },
+        "consumerCandidates": [
+          [
+            "indirect import in three public shells / theme source",
+            10
+          ]
+        ],
+        "stateCandidates": [
+          "light 10",
+          ":not() 6"
+        ]
+      },
+      {
+        "path": "app/how-it-works/how-it-works.css",
+        "routes": [
+          "/how-it-works/"
+        ],
+        "rules": 317,
+        "selectorAlternatives": 354,
+        "buckets": {
+          "exactLiteral": 337,
+          "dynamicTemplate": 12,
+          "cssOnly": 0,
+          "noLiteralConsumer": 5
+        },
+        "consumerCandidates": [
+          [
+            "app/how-it-works/index.html",
+            337
+          ],
+          [
+            "app/core/ui-theme.js",
+            20
+          ],
+          [
+            "app/how-it-works/how-it-works.js",
+            12
+          ]
+        ],
+        "stateCandidates": [
+          "light 11",
+          "dark 1",
+          "max-width 900/680/420/290",
+          "min-width 901",
+          "reduced motion",
+          "focus/hover"
+        ]
+      },
+      {
+        "path": "app/landing/landing.css",
+        "routes": [
+          "/",
+          "/about/",
+          "/how-it-works/"
+        ],
+        "rules": 203,
+        "selectorAlternatives": 224,
+        "buckets": {
+          "exactLiteral": 208,
+          "dynamicTemplate": 11,
+          "cssOnly": 1,
+          "noLiteralConsumer": 4
+        },
+        "consumerCandidates": [
+          [
+            "app/index.html",
+            193
+          ],
+          [
+            "app/about/index.html",
+            60
+          ],
+          [
+            "app/how-it-works/index.html",
+            85
+          ],
+          [
+            "app/landing/landing.js",
+            59
+          ],
+          [
+            "app/core/ui-theme.js",
+            38
+          ],
+          [
+            "app/landing/header-menu.js",
+            29
+          ],
+          [
+            "app/core/public-video-fullscreen.js",
+            3
+          ]
+        ],
+        "stateCandidates": [
+          "light 7",
+          "dark 1",
+          "reduced motion 10",
+          "multiple widths",
+          "landscape",
+          "hover/focus"
+        ]
+      },
+      {
+        "path": "app/public-theme.css",
+        "routes": [
+          "/",
+          "/about/",
+          "/how-it-works/",
+          "/viewer/",
+          "/access/",
+          "/access/manage.html"
+        ],
+        "rules": 17,
+        "selectorAlternatives": 22,
+        "buckets": {
+          "exactLiteral": 8,
+          "dynamicTemplate": 0,
+          "cssOnly": 14,
+          "noLiteralConsumer": 0
+        },
+        "consumerCandidates": [
+          [
+            "app/index.html",
+            5
+          ],
+          [
+            "app/how-it-works/index.html",
+            5
+          ],
+          [
+            "app/core/image-fallback.js",
+            6
+          ],
+          [
+            "app/viewer/scene-adapters.js",
+            6
+          ],
+          [
+            "app/access/index.html",
+            1
+          ],
+          [
+            "app/access/manage.html",
+            1
+          ]
+        ],
+        "stateCandidates": [
+          "reduced motion 3",
+          "dark 1",
+          "focus 2"
+        ]
+      },
+      {
+        "path": "app/styles.css",
+        "routes": [
+          "/config/"
+        ],
+        "rules": 360,
+        "selectorAlternatives": 418,
+        "buckets": {
+          "exactLiteral": 388,
+          "dynamicTemplate": 7,
+          "cssOnly": 23,
+          "noLiteralConsumer": 0
+        },
+        "consumerCandidates": [
+          [
+            "app/app.js",
+            281
+          ],
+          [
+            "app/config/index.html",
+            204
+          ],
+          [
+            "app/core/keyboard-shortcuts.js",
+            74
+          ],
+          [
+            "app/core/scene-component.js",
+            30
+          ],
+          [
+            "plus UI/theme/config/scene data sources",
+            null
+          ]
+        ],
+        "stateCandidates": [
+          "width 700/520/500/430/360/300",
+          "reduced motion 5",
+          "focus 19",
+          "hover 14"
+        ]
+      },
+      {
+        "path": "app/ui-theme.css",
+        "routes": [
+          "all 8 active shells"
+        ],
+        "rules": 181,
+        "selectorAlternatives": 227,
+        "buckets": {
+          "exactLiteral": 216,
+          "dynamicTemplate": 11,
+          "cssOnly": 0,
+          "noLiteralConsumer": 0
+        },
+        "consumerCandidates": [
+          [
+            "app/access/index.html",
+            175
+          ],
+          [
+            "app/access/manage.html",
+            175
+          ],
+          [
+            "app/admin.html",
+            89
+          ],
+          [
+            "app/config/index.html",
+            79
+          ],
+          [
+            "app/core/ui-theme.js",
+            71
+          ],
+          [
+            "app/core/private-navigation.js",
+            59
+          ],
+          [
+            "app/app.js",
+            38
+          ],
+          [
+            "public shells/menu/viewer/scene sources",
+            null
+          ]
+        ],
+        "stateCandidates": [
+          "light 51",
+          "dark 70",
+          "width 1150/760/650/480/400/380/320/290",
+          "hover/focus/has"
+        ]
+      },
+      {
+        "path": "app/viewer/viewer.css",
+        "routes": [
+          "/viewer/"
+        ],
+        "rules": 144,
+        "selectorAlternatives": 158,
+        "buckets": {
+          "exactLiteral": 143,
+          "dynamicTemplate": 10,
+          "cssOnly": 0,
+          "noLiteralConsumer": 5
+        },
+        "consumerCandidates": [
+          [
+            "app/viewer/viewer.js",
+            52
+          ],
+          [
+            "app/viewer/index.html",
+            47
+          ],
+          [
+            "app/viewer/scene-adapters.js",
+            16
+          ],
+          [
+            "app/viewer/technical-views.js",
+            14
+          ],
+          [
+            "app/core/scene-component.js",
+            22
+          ]
+        ],
+        "stateCandidates": [
+          "light 1",
+          "dark 1",
+          "width 980/700/480/350",
+          "focus 20",
+          "hover 7",
+          "has 1"
+        ]
+      }
+    ],
+    "unresolvedExamples": [
+      ".item-option*",
+      ".material-picker*",
+      ".story-text-section-evolution",
+      ".check-list*",
+      ".button-primary*",
+      ".page-content*",
+      ".viewer-block",
+      ".carcass-note",
+      ".carcass-swatch"
+    ],
+    "inaccessible": "Authenticated Admin and token-gated Config states had no exact fixture in this scan; no browser/CSSOM runtime pass or exact-head CSS-00 receipt was found.",
+    "countMethod": "Ordinary CSS rule blocks exclude at-rules and keyframe blocks; selector alternatives are counted after comma-splitting. Route source counts include the shell and imported modules; shared files can be counted in multiple route closures."
+  }
 }
