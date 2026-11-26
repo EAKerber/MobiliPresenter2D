@@ -2098,9 +2098,9 @@
           "detail": "Fixed login, denied-access, invitation, password-recovery, status, and reveal-control text now uses uiCopy.admin.authentication. Provider errors and user/session/token data stay outside the catalog; Identity calls and timing are unchanged. Exact PR head da9cd50c32739d3f7b5a74d108901a3de9c659a2 passed 15 check-runs; Supabase Preview was skipped because project preview branches are disabled. Squash-integrated into development as c26b5b4018f7a2e23206d16a9bf68a23e5bdb941; live main stayed at 2f1b7e1ee8fbc81b8bc8d22014cfe29d599da37f."
         },
         {
-          "source": "Product LOC-006 Admin scene asset copy — local candidate",
-          "sha": "DB7BB66473704FF3078FB85F688C3D0F821F93A36CB988D7C2C6D23BB77BA1A0",
-          "detail": "Moves only fixed heading, field labels, default option, image alt, preview error, and empty-preview copy for existing Admin scene-asset selectors into uiCopy.admin.objectAssets. Scene and asset paths, mask behavior, values, save/publication path, and commercial content remain unchanged. Local build, page compiler, theme contract, scene core, ARC-03C and auth recovery tests pass. ARC-13 inventory ran twice with identical SHA DB7BB66473704FF3078FB85F688C3D0F821F93A36CB988D7C2C6D23BB77BA1A0: 1,021 unreviewed occurrences, 0 parse errors, 420 primary-page authoring occurrences mapped, 0 unresolved. Local Admin browser is unavailable because Playwright is not installed in this checkout; exact PR browser gates remain pending. LOC-006 remains partial."
+          "source": "Product PR #475 exact-head gates and post-merge readback",
+          "sha": "ef943910f5513c423ce22b84b4ced548f9c042f2",
+          "detail": "PR #475 head c04826106119e799493c431d079491630d327809 was squash-integrated into development at ef943910f5513c423ce22b84b4ced548f9c042f2; 12/12 workflow runs passed, including Admin hierarchy browser, app build, ARC-13 inventory, and asset gates. Post-merge blobs match the candidate for app/admin/admin.js (0a2ec1f5c7d92a11e4ff702f07f6f5527dfbe833), app/core/ui-copy.js (bf459fc644bdb7d82c6de5a444d40ae4e4207a95), tests/admin-hierarchy-browser.cjs (094544d200fc75083b527ff7b0c8994d0f238082), and its receipt (3fbed72f34d1d1a934cf22b0a18215ffbf6b8dfe). This moved fixed labels, heading, default, alt, empty, and broken-preview copy for existing scene-asset selectors into uiCopy.admin.objectAssets. It did not change selector values, paths, mask content/geometry, rendering, persistence, server validation, or commercial content. Product main still has the hard-coded scene copy (app/admin/admin.js blob 79925345e43096df77bef54fe257e483f922edd8; ui-copy has no objectAssets fields), so this slice is development-only. LOC-006 remains partial because the complete Admin/Config fixed-copy inventory is not closed."
         },
         {
           "source": "Candidato local LOC-006 após Product development@c26b5b4",
@@ -2108,7 +2108,7 @@
           "detail": "Candidato local `codex/loc006-admin-assets-copy-20261126` contém extração de cópia fixa dos seletores de arquivos de cena do Admin e correção da proveniência ARC-13. O HEAD está dois commits à frente da base local c26b5b4; live development já avançou a daede4 e não há branch remota/PR aberta para este candidato. Não está integrado nem promovido; gates exatos de PR ainda precisam rodar."
         }
       ],
-      "nextAction": "Portar o candidato local para a development atual sem perder as mudanças posteriores a c26b5b4; reconciliar os arquivos ARC-13/manifesto e executar os gates de Admin no head exato. Integrar em development após todos os gates, mantendo main estável."
+      "nextAction": "Use the current ARC-13 inventory to identify remaining fixed interface copy in Admin and Config, classify data-backed or dynamic content separately, then complete the next bounded copy family with consumers and assertions. Do not repeat the integrated authentication and scene-asset slices; keep main unchanged until the full item scope and promotion evidence are closed."
     },
     {
       "order": 107,
