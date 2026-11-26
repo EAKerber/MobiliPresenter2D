@@ -735,6 +735,11 @@ async function sectionItemIds(page, stageId, groupId, sectionId) {
   assert.equal(await page.locator(`#${solidNoColorReasonId}`).isVisible(), true, "solid material reason is visible beside the disabled control");
   assert.equal(await page.locator(`#${solidNoColorReasonId}`).textContent(), materialStateCopy.noColorDisabledReason, "solid material reason matches the catalog exactly");
   const targetCard = page.locator("#materialGroupsList .material-target-page");
+  const paginationCopy = await page.evaluate(() => window.CASA_UI_COPY.admin.pagination);
+  const targetPager = page.locator("#materialTargetPager");
+  assert.deepEqual(await targetPager.locator("button").allTextContents(), [paginationCopy.previous, paginationCopy.next], "material-target pager uses canonical previous/next copy");
+  assert.equal(await targetPager.locator("button").first().isDisabled(), true, "first material-target page disables previous");
+  assert.equal(await targetPager.locator("button").last().isDisabled(), false, "first material-target page enables next");
   assert.equal(await targetCard.locator("h2").textContent(), `${materialStateCopy.frontTarget} · ${materialStateCopy.validOptionsSuffix}`, "front group heading is composed from catalog copy");
   assert.ok((await targetCard.locator('label:has([data-material-group-label])').textContent()).startsWith(materialStateCopy.groupName), "material group field label comes from the catalog");
   assert.equal(await targetCard.locator('[data-material-group-label]').inputValue(), "Frentes", "group names continue to come from authored data");
@@ -755,7 +760,6 @@ async function sectionItemIds(page, stageId, groupId, sectionId) {
   assert.equal((await targetCard.locator('label:has([data-handle-availability])').textContent()).trim(), customerAvailability, "customer availability reuses the existing canonical catalog label");
   assert.ok((await targetCard.locator('label:has(select[data-initial-handle])').textContent()).startsWith(materialStateCopy.initialHandleLabel), "initial handle field label comes from the catalog");
   assert.equal(await targetCard.locator('select[data-initial-handle] option[value="none"]').textContent(), materialStateCopy.defineLater, "initial handle empty option comes from the catalog");
-  const targetPager = page.locator("#materialTargetPager");
   await targetPager.locator("button").first().click();
   await targetPager.locator("button").first().click();
   const frontPicker = targetCard.locator(".multi-picker");
@@ -790,7 +794,11 @@ async function sectionItemIds(page, stageId, groupId, sectionId) {
   await page.waitForSelector('[data-hierarchy-stage="finishes"] [data-hierarchy-group="cabinet-finishes"]');
   await page.locator('[data-admin-tab="finishes"]').click();
   await page.waitForSelector('[data-admin-panel="finishes"]:not([hidden])');
-  await page.locator("#materialPager button").nth(1).click();
+  const materialPager = page.locator("#materialPager");
+  assert.deepEqual(await materialPager.locator("button").allTextContents(), [paginationCopy.previous, paginationCopy.next], "material pager shares the canonical pager copy");
+  assert.equal(await materialPager.locator("button").first().isDisabled(), true, "first material page disables previous");
+  assert.equal(await materialPager.locator("button").last().isDisabled(), false, "first material page enables next");
+  await materialPager.locator("button").nth(1).click();
   await page.waitForSelector('[data-material-id="stone-existing"]');
   let stoneMaterialCard = page.locator('[data-material-id="stone-existing"]');
   let noColorToggle = stoneMaterialCard.locator('[data-material-no-color]');
