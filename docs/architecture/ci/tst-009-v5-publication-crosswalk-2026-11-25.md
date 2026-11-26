@@ -61,3 +61,37 @@ This closes the specific endpoint-trigger gap for `configuration.mjs` without du
 - No real published configuration was modified.
 - DOM-003 and DOM-004 behavior is present and locally validated in the development snapshot. TST-009's V5 test map is complete for this bounded publication slice; DOM-001 remains broader and open for other schema, DTO, commercial-price, and consumer families.
 - `main` has the core reader/inspection/save modules at the same blobs, while the Admin endpoint, test files, workflow, and some consumers differ. No promotion to `main` is performed by this crosswalk.
+
+
+## Live reconciliation — 2026-11-26
+
+The original snapshot above remains a valid historical read of `development@d0f63d0c`; it is not the current branch snapshot. This supplemental read is pinned to:
+
+- Product `main@7ebacc86018c60e54df4d0e15c95ecd3eed46a77`
+- Product `development@4bcfa26911498a9bf5c3c94c517e9931746b437b`
+- merge base `221b54b2a41ecc8c338d1bf2cf67280cf165ce95`
+
+### Current source comparison
+
+| Role | main blob | development blob | Result |
+|---|---|---|---|
+| Published configuration reader | `7b5d13dfb43983a0efa622c1ad4a4531820a8ad0` | same | identical |
+| V5 inspection | `0da4510829237478927792350fcc459b12517f63` | same | identical |
+| V5 conditional save/CAS | `e9da3059ec2bbb566a0ac4c087553d383451e2e7` | same | identical |
+| Configuration endpoint | `2bd8ec2fe0adb6b861b819d40f5b4285450f1051` | `344a9cd7fdc2dc22abf7afb5e3ce7193ac06c8e3` | differs |
+| Admin consumer | `79925345e43096df77bef54fe257e483f922edd8` | `4702ad57579fa6649ca6b7b08cd0a3fec97df93f` | differs |
+| Endpoint safety tests | `fe16a7d94c254f1f8b7d860ef897816d6a04e399` | `f580e2d27302d63c4fb3d724b9db08758206a8b1` | differs |
+| App-build purity workflow | `39a2511dd02a10a2f85afb289bc487e9a867d2f7` | `3debb0f87335921d6ba0997471433488d07ccdfc` | differs |
+
+The endpoint and test diffs still need file-level contract reconciliation before either is called identical. Both current source/test paths preserve the read-only Admin fallback for missing or invalid legacy V3; malformed JSON, unsupported schema, metadata-invalid state, and V5 remain fail-closed, and fallback is never accepted as a write source.
+
+### Main gate receipts
+
+- PR #522 head `46e8a21a18526ff5ccfd2be6dcb3691483f89f64`: all 9 PR checks passed, including App build purity and Configuration endpoint authorization boundaries. The change adds exact tests for missing/invalid V3 fallback and malformed, unsupported-schema, and metadata-invalid stored states.
+- PR #523 head `7d44f9bb0d9ccfe82aaa2c9dc9e7747a5f9f08e9`: App build purity run #45898340031 passed after `netlify/functions/configuration.mjs` was added to its path filters. This closes the handler-only trigger gap on main.
+
+The current development `buyer-configuration-boundary.yml` blob is `b5668220e3e6799542fbfd93e4cd1d7595435d2d`; it does list `netlify/functions/configuration.mjs` in its trigger paths. This remains an exact source observation; whether a check is required by branch protection is still UNKNOWN.
+
+### Status boundary
+
+The V5 reader, inspection, and CAS/save core are already shared byte-for-byte. Main has current passing endpoint tests and the handler trigger route; development has its own endpoint contract workflow and test set. Do not port whole files solely to equalize blobs. Complete the endpoint/test semantic diff and current TST-001 inventory before marking the cross-branch slice reconciled. Hosted Identity, live Admin behavior, and provider-level Blob atomicity remain UNKNOWN.
