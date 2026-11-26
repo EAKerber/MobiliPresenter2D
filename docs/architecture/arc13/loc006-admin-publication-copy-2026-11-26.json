@@ -59,8 +59,8 @@
     },
     "generatedInventory": {
       "path": "architecture/arc13/ui-text-candidates.json",
-      "gitBlob": "6fbe50c47b991cb6e63aebcac55235a193c48415",
-      "sha256": "305B1117F54E7DBE3844BAF036B8A63AF34F940ED8739A3D82D87A7B9675AFE6",
+      "gitBlob": "5142f95856d88d8bd8a2349cd477627596e92723",
+      "sha256": "E9AE76D0E7B3ED016734C2753D790FA8DDF36918C31D9D902F544FE8D94BE8DE",
       "repeatedGeneration": "two consecutive full scans produced the same SHA-256",
       "summary": {
         "unreviewedOccurrences": 1021,

@@ -193,18 +193,6 @@
   "parseErrors": [],
   "skippedSources": [
     {
-      "source": "app/access/manage.bundle.js",
-      "reason": "generated-or-minified"
-    },
-    {
-      "source": "app/admin/admin.bundle.js",
-      "reason": "generated-or-minified"
-    },
-    {
-      "source": "app/core/private-navigation.bundle.js",
-      "reason": "generated-or-minified"
-    },
-    {
       "source": "app/tools/test-access-policy.mjs",
       "reason": "test"
     },
