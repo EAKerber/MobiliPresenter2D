@@ -5,10 +5,12 @@ on:
     branches: [main]
     paths:
       - 'app/**'
+      - 'netlify/functions/configuration.mjs'
       - '.github/workflows/app-build-purity.yml'
   pull_request:
     paths:
       - 'app/**'
+      - 'netlify/functions/configuration.mjs'
       - '.github/workflows/app-build-purity.yml'
   workflow_dispatch:
 
