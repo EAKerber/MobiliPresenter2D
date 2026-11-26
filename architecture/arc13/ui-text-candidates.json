@@ -94,8 +94,8 @@
     "javascriptTextSourceRecordsActive": 285,
     "javascriptTextSourceRecordsPassedButUnused": 7,
     "javascriptTextSourceRecordsUnconsumed": 2,
-    "javascriptTextSourceRecordsNeedsFlowReview": 14,
-    "javascriptTextSourceRecordsDiagnostic": 55,
+    "javascriptTextSourceRecordsNeedsFlowReview": 15,
+    "javascriptTextSourceRecordsDiagnostic": 54,
     "javascriptTextSourceRecordsWithSinkLinks": 93,
     "javascriptTextSourceSinkLinks": 95,
     "javascriptTextSourceRecordsWithFailureFallbacks": 31,
@@ -39219,7 +39219,7 @@
       "routeConsumers": [
         "/config/"
       ],
-      "sourceSha256": "41470542e7e6a19a2c0e83c7d8827f33110ac8d721d912896e6e741be4704093",
+      "sourceSha256": "1ef93c35ff810cb54310a507c77b300e8325baa33ef6fd97219cea88a56611d7",
       "id": "db812fdaf1878549",
       "failureFallbackLinkStatus": "declared-fallback-not-indexed"
     },
@@ -39252,7 +39252,7 @@
       "routeConsumers": [
         "/config/"
       ],
-      "sourceSha256": "41470542e7e6a19a2c0e83c7d8827f33110ac8d721d912896e6e741be4704093",
+      "sourceSha256": "1ef93c35ff810cb54310a507c77b300e8325baa33ef6fd97219cea88a56611d7",
       "id": "2e29c34bff8b0e72",
       "failureFallbackLinkStatus": "declared-fallback-not-indexed"
     },
@@ -39285,13 +39285,13 @@
       "routeConsumers": [
         "/config/"
       ],
-      "sourceSha256": "41470542e7e6a19a2c0e83c7d8827f33110ac8d721d912896e6e741be4704093",
+      "sourceSha256": "1ef93c35ff810cb54310a507c77b300e8325baa33ef6fd97219cea88a56611d7",
       "id": "009ca3ec62f688c2",
       "failureFallbackLinkStatus": "declared-fallback-not-indexed"
     },
     {
       "source": "app/core/published-buyer-projection.js",
-      "line": 100,
+      "line": 166,
       "column": 27,
       "kind": "javascript-text-source",
       "sink": "source:error-message-source",
@@ -39303,14 +39303,14 @@
       "literalSegments": [
         "invalid published buyer payload"
       ],
-      "classification": "diagnostic",
+      "classification": "unreviewed",
       "classificationHints": [
-        "error-literal-not-displayed-fixed-fallback-is-shown"
+        "source-needs-consumer-and-domain-review"
       ],
-      "consumerLinkStatus": "fixed-fallback-only",
-      "useStatus": "diagnostic",
+      "consumerLinkStatus": "manual-consumer-review",
+      "useStatus": "diagnostic-or-user-message-review",
       "consumerEvidence": [
-        "app/app.js:1766 calls consume() from applyConfiguratorSettings() inside the fetch promise's .then; the single .catch at :2558 renders this fixed alert."
+        "no bounded display flow has been linked yet; review the catch/source boundary"
       ],
       "sourceExpression": "\"invalid published buyer payload\"",
       "selectionOperators": [],
@@ -39318,9 +39318,8 @@
       "routeConsumers": [
         "/config/"
       ],
-      "sourceSha256": "41470542e7e6a19a2c0e83c7d8827f33110ac8d721d912896e6e741be4704093",
-      "id": "e4826c637134d079",
-      "failureFallbackLinkStatus": "declared-fallback-not-indexed"
+      "sourceSha256": "1ef93c35ff810cb54310a507c77b300e8325baa33ef6fd97219cea88a56611d7",
+      "id": "d3cf7642f3b80abd"
     },
     {
       "source": "app/core/ui-theme.js",
@@ -46829,7 +46828,7 @@
     },
     {
       "path": "app/core/published-buyer-projection.js",
-      "sha256": "41470542e7e6a19a2c0e83c7d8827f33110ac8d721d912896e6e741be4704093"
+      "sha256": "1ef93c35ff810cb54310a507c77b300e8325baa33ef6fd97219cea88a56611d7"
     },
     {
       "path": "app/core/published-configuration.js",
