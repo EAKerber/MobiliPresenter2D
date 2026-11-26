@@ -31,7 +31,7 @@ const objectAssetPolicyCopy = uiCopy.admin.objectAssets;
 const objectContentFieldCopy = uiCopy.admin.objectContentFields;
 const materialAvailabilityCopy = uiCopy.admin.materials;
 const hierarchyEditorCopy = uiCopy.admin.hierarchyEditor;
-const rulesCopy = uiCopy.admin.rules;
+const rulesCopy = uiCopy.admin.rules, nominalDimensionsCopy = uiCopy.admin.nominalDimensions;
 const viewerBasePricePublicationCopy = uiCopy.admin.pricing.viewerBasePricePublication;
 let catalogPricing = null;
 let adminDataPromise = null;
@@ -284,13 +284,13 @@ function appendNominalDimensionControls(option, itemId, label) {
   const fieldset = document.createElement("fieldset");
   fieldset.className = "module-nominal-dimensions";
   const legend = document.createElement("legend");
-  legend.textContent = "Medidas nominais (mm)";
+  legend.textContent = nominalDimensionsCopy.legend;
   fieldset.append(legend);
   const note = document.createElement("small");
   note.className = "module-nominal-dimensions__note";
-  note.textContent = "Atualiza as cotas e vistas técnicas; não altera a geometria da cena.";
+  note.textContent = nominalDimensionsCopy.note;
   fieldset.append(note);
-  const axes = [["width", "Largura"], ["height", "Altura"], ["depth", "Profundidade"]];
+  const axes = Object.entries(nominalDimensionsCopy.axisLabels);
   axes.forEach(([axis, axisLabel]) => {
     const fieldLabel = document.createElement("label");
     fieldLabel.className = "module-nominal-dimensions__field";
@@ -303,7 +303,7 @@ function appendNominalDimensionControls(option, itemId, label) {
     input.value = String(dimensions[axis]);
     input.dataset.moduleDimension = itemId;
     input.dataset.dimensionAxis = axis;
-    input.setAttribute("aria-label", `${label}: ${axisLabel} nominal em milímetros`);
+    input.setAttribute("aria-label", nominalDimensionsCopy.axisAriaLabel.replace("{module}", () => label).replace("{axis}", () => axisLabel));
     fieldLabel.append(input);
     fieldset.append(fieldLabel);
   });
@@ -1809,7 +1809,7 @@ stagesList.addEventListener("change", (event) => {
     const value = Number(nominalDimension.value);
     if (!Number.isFinite(value) || Math.abs(value * 10 - Math.round(value * 10)) > 1e-6 || value < 1 || value > 5000) {
       nominalDimension.value = String(model.moduleDimensions[itemId]?.[axis] || "");
-      setMessage(saveMessage, "Informe uma medida nominal entre 1 e 5.000 mm, com até uma casa decimal.", "error");
+      setMessage(saveMessage, nominalDimensionsCopy.invalidValueMessage, "error");
       return;
     }
     if (model.moduleDimensions[itemId] && ["width", "height", "depth"].includes(axis)) {

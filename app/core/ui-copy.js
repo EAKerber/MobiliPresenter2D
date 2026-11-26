@@ -171,6 +171,13 @@
         legacyDepthTargetLabel: "Aplicar ao {target} · Profundidade em mm",
         removeEvent: "Remover evento"
       }),
+      nominalDimensions: Object.freeze({
+        legend: "Medidas nominais (mm)",
+        note: "Atualiza as cotas e vistas técnicas; não altera a geometria da cena.",
+        axisLabels: Object.freeze({ width: "Largura", height: "Altura", depth: "Profundidade" }),
+        axisAriaLabel: "{module}: {axis} nominal em milímetros",
+        invalidValueMessage: "Informe uma medida nominal entre 1 e 5.000 mm, com até uma casa decimal."
+      }),
       objectAssets: Object.freeze({
         sceneEntityPolicy: "A lista contém apenas arquivos já presentes na cena. O painel não carrega arquivos novos nem permite caminhos externos.",
         nonSceneEntityPolicy: "Este item não possui camada visual própria na cena. Configure cores e texturas na biblioteca de materiais."
