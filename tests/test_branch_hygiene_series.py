@@ -9,14 +9,15 @@ from branch_hygiene_series import split_waves
 R="EAKerber/MobiliPresenter2D"
 def fixture():
     return {"schemaVersion":"BranchHygieneSeries 0.1","repository":R,
-            "controlBranch":"development","approvedRetirement":True,
+            "controlBranch":"development","approvedRetirement":True,"seriesId":"dev-r1",
             "waves":[{"id":"batch-1","branches":[{"branch":"example","sha":"a"*40,
                        "squashMerge":{"pullRequest":301,"mergeCommit":"b"*40}}]}]}
 class SeriesTests(unittest.TestCase):
     def test_valid(self):
         self.assertEqual(len(split_waves(fixture(),R)),1)
+        self.assertEqual(split_waves(fixture(),R)[0]["wave"],"dev-r1/batch-1")
     def test_wrong_authority(self):
-        for key,value in [("repository","other/repo"),("controlBranch","main"),
+        for key,value in [("repository","other/repo"),("controlBranch","main"),("seriesId","bad id"),
                           ("approvedRetirement",False),("auditOnly",True)]:
             x=fixture(); x[key]=value
             with self.subTest(key=key),self.assertRaises(ValueError):
