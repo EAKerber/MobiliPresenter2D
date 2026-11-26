@@ -93,9 +93,14 @@
           "source": "Design System PR #141 merge and Product authority-map branch readback",
           "sha": "7f57633cb869d388d8279c7ac5d5ccab3a11a17f",
           "detail": "Design System HANDOVER_CURRENT was refreshed and squash-integrated at 7f57633. Live refs at readback: Product main@94560aa, development@3c84c65, Design System main@7f57633; no open PRs, Product has 3 refs and Design System 4, production deploy 6b083a82 is READY at exact Product main. Product CURRENT_STATE was refreshed on codex/v09-git002-authority-map-20261126 at 6ad59cc but is not yet integrated. GIT-002 remains partial until this Product change lands and the remaining current-sounding pointers are audited."
+        },
+        {
+          "source": "Product PR #499 integrated and current authority readback",
+          "sha": "adb83d7e4f3384e8757316b5952579d79dda9565",
+          "detail": "Product PR #499 was squash-integrated into development at adb83d7. It refreshes Product CURRENT_STATE and the 125-ID register with the Design System handover PR #141 merge (7f57633), Product main (94560aa), current Production deploy (6b083a82 READY on that exact main), and the known access limits. Product CURRENT_STATE now treats development/register as moving references to be re-read rather than pinning a stale self-changing blob. GIT-002 remains partial until the paired post-#499 handover readback and scan of remaining current-sounding pointers are complete."
         }
       ],
-      "nextAction": "Integrate the targeted Product authority-map and register update into development, then scan the remaining current-sounding architecture, handover, and gate-matrix pointers in both repositories. Keep GIT-002 partial until the hierarchy DoD is proven; promote to Product main selectively only where the authority entry point requires it."
+      "nextAction": "Integrate the paired post-#499 handover refresh. Then inventory remaining current-sounding architecture, handover, gate-matrix and authority pointers in both repositories; keep dated records as history, and mark GIT-002 done only when an agent can identify the authoritative source for each information type without reconstructing handovers."
     },
     {
       "order": 4,
