@@ -411,9 +411,14 @@
           "source": "Product TST-001 live inventory gate run #45902210791 and artifact readback",
           "sha": "a13cd23af0483b3a8426bb494df757538d21542f",
           "detail": "Plan and inventory jobs passed on PR #526 predecessor head a13cd23af0483b3a8426bb494df757538d21542f. Artifact 15155409887 (sha256:97afb78d6f105a9a62224936ae86c55af50da58d5414fd2eca1bc8a7f57572d9) is preserved at docs/architecture/ci/tst-001-workflow-inventory-live-2026-11-26-run-45902210791.json. Exact source refs: main@7ebacc86018c60e54df4d0e15c95ecd3eed46a77, development@4bcfa26911498a9bf5c3c94c517e9931746b437b, candidate PR #526 tree 99f96a282444443b22c2f38330fbf1ac503a0330. Inventory: main 28, development 65, shared 26, unique definitions 86, parse warnings 0; one candidate workflow change and no candidate write signals. This supersedes the old 11/25 snapshot for these refs only. The report's push:59 is workflow-trigger declarations, not branches. Candidate open-PR readback also included draft #517 against development@f864fed; preserve as stale pinned evidence, not current code authority. TST-001 remains partial because generation does not validate each command's assertions/contracts or prove all 21 baseline commands/workflows satisfy the full DoD."
+        },
+        {
+          "source": "Product main PR #527 current readback for TST-001",
+          "sha": "ecaa38cf0be54e8d586458a86d1062b90c0b9691",
+          "detail": "main advanced from 7ebacc8 to ecaa38cf0be54e8d586458a86d1062b90c0b9691 with a test-only change; its tree is 45dafef8c70e8421a360a044b71ee96b03737f8a and equals PR #527's exact head tree. Run #45903783463 passed on the merged tree. The previous exact TST-001 inventory artifact 15157010588 still pins main@7ebacc86018c60e54df4d0e15c95ecd3eed46a77; it remains historical for its exact inputs. This documentation update triggers a new candidate inventory run that can refresh main/development refs; TST-001 stays partial until the assertion audit is complete."
         }
       ],
-      "nextAction": "Continue the command→assertion→contract/result audit for the 21-command/21-workflow baseline and validate which cases are exercised by reachable gates. The exact live ref inventory and candidate readback are now preserved; do not treat generation alone as assertion validation."
+      "nextAction": "Regenerate and read back the exact workflow inventory after the latest main change at ecaa38c, then continue the 21-command/21-workflow command→assertion→contract/result audit. Keep TST-001 partial; inventory generation is not assertion validation."
     },
     {
       "order": 20,
@@ -1569,7 +1574,7 @@
           "detail": "Buyer endpoint and projection source blobs are identical across current refs. However, main tests/buyer-configuration-endpoint.test.mjs at 3c342cfb lacks assertions for missing published configuration and invalid V5; the development test at f61eb8d6 covers both and asserts 503 without defaults. The source behavior exists but is not yet established by main's test evidence. Keep DOM-003/TST-009 main partial until these two assertions are ported and the main boundary gate passes."
         }
       ],
-      "nextAction": "Port the missing-state and invalid-V5 Buyer endpoint assertions from current development to main's test file, then require the current configuration-boundary gate; keep hosted Identity/live state unknown."
+      "nextAction": "Keep DOM-003 partial for its broader configuration-read/consumer scope. The Buyer fail-closed cases are now tested on main; do not treat closure of this TST-009 slice as completion of the broader DOM-003 family."
     },
     {
       "order": 73,
@@ -1608,7 +1613,7 @@
       "reconciliation": "partial",
       "local": "done",
       "development": "done",
-      "main": "partial",
+      "main": "done",
       "technicalValidation": "done",
       "approvalPublication": "unknown",
       "evidence": [
@@ -1626,9 +1631,14 @@
           "source": "Live Buyer contract comparison at Product main@7ebacc8 and development@4bcfa26",
           "sha": "7ebacc86018c60e54df4d0e15c95ecd3eed46a77",
           "detail": "Buyer endpoint and projection source blobs are identical across current refs. However, main tests/buyer-configuration-endpoint.test.mjs at 3c342cfb lacks assertions for missing published configuration and invalid V5; the development test at f61eb8d6 covers both and asserts 503 without defaults. The source behavior exists but is not yet established by main's test evidence. Keep DOM-003/TST-009 main partial until these two assertions are ported and the main boundary gate passes."
+        },
+        {
+          "source": "Product PR #527 test-only promotion and exact main gate",
+          "sha": "ecaa38cf0be54e8d586458a86d1062b90c0b9691",
+          "detail": "PR #527 squash-merged to main@ecaa38cf0be54e8d586458a86d1062b90c0b9691; recursive tree 45dafef8c70e8421a360a044b71ee96b03737f8a exactly matches the PR head tree. The Buyer endpoint and projection remain byte-identical across main/development; main test blob is e9051dfbb87bbf144edc13833ed7a4971a97e7c1 and now asserts 503 for both missing published configuration and invalid V5. Configuration endpoint authorization boundaries run #45903783463 passed all three validation steps at exact PR head d030e21d065e22176ec74518885e7211af1fd910. This closes the code/test/gate gap for the bounded TST-009 V5 publication slice; hosted Identity and provider-level Blob atomicity are not proven."
         }
       ],
-      "nextAction": "The exact main TST-001 inventory trigger now includes docs/architecture/ci/** in the current candidate. Refresh the snapshot, port the two missing Buyer endpoint assertions to main, and validate the main boundary gate before closing this coverage gap."
+      "nextAction": "The bounded V5 publication coverage is implemented and gated on main and development. Keep hosted Identity behavior and provider-level Netlify Blob atomicity UNKNOWN; do not widen this status to the broader DOM-003 or DOM-001 scope."
     },
     {
       "order": 75,
