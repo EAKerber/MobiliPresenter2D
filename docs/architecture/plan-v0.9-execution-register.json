@@ -639,9 +639,14 @@
           "source": "Exact Product main-versus-development compare and GIT-003 family map",
           "sha": "00fed1150d4926811b4419f480ca64c04b26ed36",
           "detail": "Live refs: Product main@94560aa, development@00fed11; merge base 221b54b. Compare reports 36 commits only on main and 622 only on development. The exact main-ahead side is 98 changed paths, grouped in docs/architecture/git/git-003-main-ahead-family-map-2026-11-26.json into ARC-13 inventory provenance, branch-hygiene governance, VIS-002C lifecycle, Buyer/V5 boundary, public presentation/navigation/compiler, and cross-cutting shell/test infrastructure. The reverse comparison returns 300 paths (API list cap), so its exact full changed-path count is unknown. This is a family map, not a merge approval; compare remains too broad for a whole-tree integration."
+        },
+        {
+          "source": "Exact recursive Git blob comparison and corrected GIT-003 map",
+          "sha": "45b690e93209a654b81b9ed73c4c794c4f2b014f",
+          "detail": "At Product main@94560aa and development@45b690e, both recursive trees were complete. Exact blob comparison: main 816 files, development 1225; 7 paths exist only in main, 416 only in development, and 86 shared paths have different blobs. Thus 93 paths are absent/different from development's perspective and 502 from development's perspective. The earlier 98/300 compare rows are merge-base-relative history, not net tree deltas; the previous map mislabeled these and is superseded by schema /2. Product v0.9 register remains partial pending semantic disposition and safe family packages."
         }
       ],
-      "nextAction": "For each of the six family groups, inspect exact current-tree changes, consumers, and gates; decide whether the main-side change is still relevant, already superseded, or historical. Only build coherent packages with exact-head validation and rollback. No whole-tree merge."
+      "nextAction": "Inspect the 93 main-perspective blob differences in the corrected map against current consumers, workflows, and semantic contracts. For each, decide whether development is missing the behavior, already has an equivalent/newer version, or intentionally differs. Build only coherent packages after exact-head gates and rollback are defined; do not infer promotion from merge-base history."
     },
     {
       "order": 27,
