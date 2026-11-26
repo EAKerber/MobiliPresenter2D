@@ -19,6 +19,7 @@ const catalog = require("../data/catalog-data.js");
 const priceBook = require("../data/mock-price-book.js");
 const scene = require("../data/scene-data.js");
 
+const legacyAdminFallback = configuration.createDefaultAdministration(defaults, catalog, priceBook);
 const v3 = configuration.normalizeConfiguratorSettings(
   configuration.createDefaultAdministration(defaults, catalog, priceBook, scene),
   catalog, priceBook, scene
@@ -47,6 +48,22 @@ function makeStore(initial) {
       value = structuredClone(next);
       etag = '"fixture-' + (++writeCount) + '"';
       return { modified: true, etag };
+    }
+  };
+}
+
+function makeRawStore(data, etag = '"fixture-raw"') {
+  let writeCount = 0;
+  return {
+    get writes() { return writeCount; },
+    async getWithMetadata(key, options) {
+      assert.equal(key, "published");
+      assert.deepEqual(options, { type: "text", consistency: "strong" });
+      return { data, etag, metadata: {} };
+    },
+    async setJSON() {
+      writeCount++;
+      return { modified: false };
     }
   };
 }
@@ -206,7 +223,7 @@ async function main() {
       viewer = { id: "admin-1", roles: ["admin"] };
       const read = await send("GET");
       assert.equal(read.status, 200, name + " GET keeps historical resilience");
-      assert.equal(read.body.schemaVersion, configuration.SCHEMA);
+      assert.deepEqual(read.body, legacyAdminFallback, name + " GET preserves the approved Admin fallback exactly");
       assert.deepEqual(await send("PUT", v3), expectedError, name + " PUT rejects fallback source");
       assert.equal(store.writes, 0, name + " fallback source must never be persisted");
     };
@@ -218,6 +235,46 @@ async function main() {
     await assertLegacyFallback(makeStore(invalidV3), "invalid-v3", {
       status: 409, body: { error: "stored_configuration_invalid", code: "invalid_v3" }
     });
+
+    // Malformed, unsupported, and metadata-invalid stored values fail closed on
+    // GET and PUT. These cases are distinct from the approved legacy V3 fallback.
+    const assertInvalidStoredState = async (store, name, getCode, putCode = getCode) => {
+      globalThis.__v5ReadinessHarness = {
+        ...globalThis.__v5ReadinessHarness,
+        getDeployStore: () => store
+      };
+      const stateEndpoint = await import("data:text/javascript;base64," +
+        Buffer.from(moduleSource + "\\n// invalid-stored-state-" + name).toString("base64"));
+      const send = async (method) => {
+        const response = await stateEndpoint.default(
+          new Request("https://unit-test.invalid/api/configuration", {
+            method,
+            headers: method === "PUT" ? { "Content-Type": "application/json" } : {},
+            body: method === "PUT" ? JSON.stringify(v5) : undefined
+          }),
+          previewContext
+        );
+        return { status: response.status, body: await response.json() };
+      };
+      assert.deepEqual(await send("GET"), {
+        status: 422, body: { error: "stored_configuration_invalid", code: getCode }
+      }, name + " GET fails closed");
+      assert.deepEqual(await send("PUT"), {
+        status: 409, body: { error: "stored_configuration_invalid", code: putCode }
+      }, name + " PUT fails closed");
+      assert.equal(store.writes, 0, name + " invalid source must not be replaced");
+    };
+
+    await assertInvalidStoredState(
+      makeRawStore("{not-json"), "malformed-json", "invalid_stored_json"
+    );
+    await assertInvalidStoredState(
+      makeRawStore(JSON.stringify(v3), ""), "invalid-metadata", "invalid_blob_metadata"
+    );
+    await assertInvalidStoredState(
+      makeStore({ ...v3, schemaVersion: "ConfiguratorAdministration2D 9.0" }),
+      "unknown-schema", "unsupported_stored_schema"
+    );
 
     // Test native v5 editing only with an already-v5 preview store. The real
     // migration stays OFF and no production site-wide store is changed.
