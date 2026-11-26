@@ -19,6 +19,14 @@ const viewports = [
   { name: "mobile", width: 375, height: 812 },
   { name: "desktop", width: 1280, height: 900 }
 ];
+const visuallyHiddenRule = /\.visually-hidden\s*\{/g;
+const sharedCss = fs.readFileSync(path.join(__dirname, "../app/ui-theme.css"), "utf8");
+const adminCss = fs.readFileSync(path.join(__dirname, "../app/admin/admin.css"), "utf8");
+assert.equal((sharedCss.match(visuallyHiddenRule) || []).length, 1,
+  "ui-theme.css owns the single shared visually-hidden definition");
+assert.equal((adminCss.match(visuallyHiddenRule) || []).length, 0,
+  "Admin CSS does not duplicate the shared visually-hidden definition");
+
 const targetUrl = new URL(process.env.MOBILE_INTERACTIONS_URL || "http://127.0.0.1:8123/config/");
 assert(["127.0.0.1", "localhost"].includes(targetUrl.hostname),
   "theme shell browser gate must use the anonymous local V5 fixture, not a deployed site");
@@ -51,11 +59,15 @@ async function main() {
             timeout: 20000
           });
           assert.equal(response && response.status(), 200, shell.path + " HTTP");
-          if (shell.path === "/admin.html" || shell.path === "/config/") {
-            const selector = shell.path === "/admin.html"
-              ? ".private-header__brand strong.visually-hidden"
-              : "h1.visually-hidden";
-            const utility = page.locator(selector);
+          const hiddenSelector = shell.path === "/admin.html"
+            ? ".private-header__brand strong.visually-hidden"
+            : shell.path === "/config/"
+              ? "h1.visually-hidden"
+              : null;
+          const visuallyHiddenUtility = hiddenSelector ? page.locator(hiddenSelector) : null;
+          if (visuallyHiddenUtility) {
+            const utility = visuallyHiddenUtility;
+            assert.equal(await utility.count(), 1, shell.path + " has one visually-hidden consumer");
             const measuredUtility = await utility.evaluate((element) => {
               const style = getComputedStyle(element);
               return {
@@ -64,7 +76,12 @@ async function main() {
                 width: style.width,
                 height: style.height,
                 overflow: style.overflow,
+                clip: style.clip,
+                margin: style.margin,
                 whiteSpace: style.whiteSpace,
+                rectWidth: element.getBoundingClientRect().width,
+                rectHeight: element.getBoundingClientRect().height,
+                tabIndex: element.tabIndex,
                 ariaHidden: element.getAttribute("aria-hidden")
               };
             });
@@ -72,9 +89,22 @@ async function main() {
             assert.equal(measuredUtility.position, "absolute", shell.path + " visually-hidden utility is applied");
             assert.equal(measuredUtility.width, "1px", shell.path + " utility width");
             assert.equal(measuredUtility.height, "1px", shell.path + " utility height");
-            assert.equal(measuredUtility.overflow, "hidden", shell.path + " utility clipping");
+            assert.equal(measuredUtility.overflow, "hidden", shell.path + " utility clips overflow");
+            assert.equal(measuredUtility.clip, "rect(0px, 0px, 0px, 0px)", shell.path + " utility clips the full visual box");
+            assert.equal(measuredUtility.margin, "-1px", shell.path + " utility removes its one-pixel box from layout");
             assert.equal(measuredUtility.whiteSpace, "nowrap", shell.path + " utility text does not wrap");
+            assert.equal(measuredUtility.rectWidth, 1, shell.path + " utility box stays one pixel wide");
+            assert.equal(measuredUtility.rectHeight, 1, shell.path + " utility box stays one pixel high");
+            assert.equal(measuredUtility.tabIndex, -1, shell.path + " utility is not a keyboard stop");
             assert.equal(measuredUtility.ariaHidden, null, shell.path + " text remains in the accessibility tree");
+            const accessibleConsumer = shell.path === "/admin.html"
+              ? page.getByRole("link", { name: "Casa em Módulos, início" })
+              : page.getByRole("heading", { name: "Casa em Módulos" });
+            assert.equal(await accessibleConsumer.count(), 1,
+              shell.path + " keeps its accessible brand name or heading");
+            await utility.evaluate((element) => element.focus());
+            assert.equal(await utility.evaluate((element) => document.activeElement === element), false,
+              shell.path + " visually-hidden text cannot receive focus");
           }
 
           const control = page.locator("[data-ui-theme-toggle]");
@@ -119,6 +149,10 @@ async function main() {
           let reachedByKeyboard = false;
           for (let step = 0; step < 20; step += 1) {
             await page.keyboard.press(shell.keyboard.key);
+            if (visuallyHiddenUtility) {
+              assert.equal(await visuallyHiddenUtility.evaluate((element) => document.activeElement === element), false,
+                shell.path + " Tab navigation skips the non-interactive hidden text");
+            }
             reachedByKeyboard = await control.evaluate((button) => document.activeElement === button);
             if (reachedByKeyboard) break;
           }
