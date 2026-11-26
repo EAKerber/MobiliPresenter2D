@@ -64,7 +64,14 @@ def read_marker(key: str, stage: str, pin: dict[str, str] | None = None) -> dict
         value = json.loads(message)
     except json.JSONDecodeError as error:
         raise RuntimeError("CONSUMPTION_MARKER_INVALID_JSON") from error
+    identity = value.get("identity")
+    repository, flow = value.get("repository"), value.get("flow")
+    try:
+        recomputed_key = operation_key(repository, flow, identity)
+    except (TypeError, ValueError):
+        recomputed_key = None
     if (value.get("schemaVersion") != SCHEMA or value.get("key") != key
+            or recomputed_key != key
             or value.get("stage") != stage or value.get("commitSha") != fields.get("object")
             or (pin is not None and value.get("pin") != pin)):
         raise RuntimeError("CONSUMPTION_MARKER_IDENTITY_MISMATCH")
