@@ -815,9 +815,14 @@
           "source": "Product PR #507; Buyer DTO allowlist integrated in main and Production",
           "sha": "ef9f073542c54ec44bf3c8808ab13d880222d329",
           "detail": "Promoted only the nested Buyer DTO boundary from development: allowlists now filter unknown administrative metadata in object, asset, and presentation-policy records, and the internal flow revision is nulled before transport. Adversarial assertions verify filtered fields and preservation of approved title/asset fields. Exact head 4f8f666a858e496f4e6d826c30c9431b87ad324b passed all 8 applicable GitHub workflows (Buyer boundary, build, variants, ARC-13 determinism, asset gates, mobile/stone/summary-pricing browsers); Supabase Preview was skipped because no Supabase branch is associated. Deploy Preview 6b0862d3a734b5f89195aa1b was READY on the exact head; squash merge ef9f073542c54ec44bf3c8808ab13d880222d329 is now Production READY as deploy 6b0863681f476b4faf17d7cb. ARC-13 candidate inventory was regenerated deterministically; its generated records remain unreviewed and no localization candidates were approved by this change. DOM-001 remains partial: the Admin schema/form and compatibility crosswalk, hosted Identity/Blob write-readback proof, and full route/consumer closure are still open."
+        },
+        {
+          "source": "docs/architecture/dom-001-admin-v5-form-field-map-2026-11-26.md",
+          "sha": "bb4a4a2e21a9a3ecab12491ad1e3fcec2b9f867c",
+          "detail": "Bounded read-only mapping of the Admin V5 editor to persisted schema paths, editable versus retained fields, UI constraints, normalization/save/readback behavior, and existing test ownership. Reviewed source code on main@463327ce25687f29859a152a41f0915af51e9264 and development@6e6bf126870af9ce1489ea4dafad3b9b3b4fcb5c; later live refs main@ef9f073542c54ec44bf3c8808ab13d880222d329 and development@ab518623bbfe59ef37a36a8bbc347ff9e03882c0 were checked for relevant Admin/schema/test changes. No tests were run. This closes the observed form-to-schema field map only; field-level UI round trips, exhaustive default/compatibility and route closure, hosted Identity/Blob concurrency, and real hosted save/readback remain open."
         }
       ],
-      "nextAction": "Complete the Admin field-to-schema/default/compatibility map and CMP-001 cross-route consumer closure; keep hosted Identity/Blob proof separate from mocked tests. Reconcile the intentional Buyer projection fields against the full Admin contract and retain DOM-001 partial until its complete DoD is met."
+      "nextAction": "Close field-level Admin-to-persisted V5 round-trip gaps for object copy/assets, materials, finishes, initial-state controls, dependencies/events and retained fields; complete defaults/compatibility and CMP-001 route-consumer closure; separately obtain hosted Identity/Blob save/readback evidence. Keep DOM-001 partial until the full DoD is proven."
     },
     {
       "order": 36,
