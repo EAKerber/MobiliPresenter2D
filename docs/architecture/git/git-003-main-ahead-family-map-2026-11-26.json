@@ -1,0 +1,650 @@
+{
+  "schema": "ProductMainAheadFamilyMap/1",
+  "readAt": "2026-11-26T14:20:00Z",
+  "repository": "EAKerber/MobiliPresenter2D",
+  "scope": "Files changed on main relative to development, classified by primary family for GIT-003. Classification is not approval to merge.",
+  "refs": {
+    "main": "94560aa9c4dfc2871a6eb1035b6ecaa283224453",
+    "development": "00fed1150d4926811b4419f480ca64c04b26ed36",
+    "mergeBase": "221b54b2a41ecc8c338d1bf2cf67280cf165ce95"
+  },
+  "comparison": {
+    "mainOnlyCommits": 36,
+    "developmentOnlyCommits": 622,
+    "mainAheadChangedPaths": 98,
+    "reverseCompareReturnedPaths": 98,
+    "reverseComparePathListCapped": true
+  },
+  "familyMap": [
+    {
+      "family": "ARC-13 inventory provenance",
+      "pathCount": 11,
+      "disposition": "needs exact-tree relevance and consumer reconciliation before any promotion",
+      "paths": [
+        {
+          "path": ".github/workflows/arc13-inventory-integrity.yml",
+          "status": "added",
+          "additions": 111,
+          "deletions": 0
+        },
+        {
+          "path": "architecture/arc13/ui-text-candidates.json",
+          "status": "added",
+          "additions": 46984,
+          "deletions": 0
+        },
+        {
+          "path": "docs/architecture/arc13/inventory-refresh-development-2026-11-21.md",
+          "status": "added",
+          "additions": 23,
+          "deletions": 0
+        },
+        {
+          "path": "docs/architecture/arc13/inventory-refresh-main-2026-11-21.md",
+          "status": "added",
+          "additions": 31,
+          "deletions": 0
+        },
+        {
+          "path": "tests/arc03c-source-authority.test.mjs",
+          "status": "modified",
+          "additions": 95,
+          "deletions": 22
+        },
+        {
+          "path": "tools/arc13/README.md",
+          "status": "added",
+          "additions": 41,
+          "deletions": 0
+        },
+        {
+          "path": "tools/arc13/package-lock.json",
+          "status": "added",
+          "additions": 26,
+          "deletions": 0
+        },
+        {
+          "path": "tools/arc13/package.json",
+          "status": "added",
+          "additions": 11,
+          "deletions": 0
+        },
+        {
+          "path": "tools/arc13/run-inventory.mjs",
+          "status": "added",
+          "additions": 26,
+          "deletions": 0
+        },
+        {
+          "path": "tools/arc13/scan-js-sinks.mjs",
+          "status": "added",
+          "additions": 1353,
+          "deletions": 0
+        },
+        {
+          "path": "tools/arc13/scan-ui-inventory.py",
+          "status": "added",
+          "additions": 1125,
+          "deletions": 0
+        }
+      ]
+    },
+    {
+      "family": "branch hygiene governance",
+      "pathCount": 28,
+      "disposition": "needs exact-tree relevance and consumer reconciliation before any promotion",
+      "paths": [
+        {
+          "path": ".github/workflows/branch-hygiene-bounded.yml",
+          "status": "modified",
+          "additions": 12,
+          "deletions": 10
+        },
+        {
+          "path": ".github/workflows/branch-hygiene-development-audit.yml",
+          "status": "added",
+          "additions": 61,
+          "deletions": 0
+        },
+        {
+          "path": ".github/workflows/branch-hygiene-development-retirement.yml",
+          "status": "added",
+          "additions": 94,
+          "deletions": 0
+        },
+        {
+          "path": ".github/workflows/branch-hygiene-merged-pr-cleanup.yml",
+          "status": "added",
+          "additions": 47,
+          "deletions": 0
+        },
+        {
+          "path": ".github/workflows/branch-hygiene.yml",
+          "status": "modified",
+          "additions": 26,
+          "deletions": 5
+        },
+        {
+          "path": "docs/architecture/0003-evidence-based-branch-hygiene.md",
+          "status": "modified",
+          "additions": 24,
+          "deletions": 1
+        },
+        {
+          "path": "docs/work/r1-branch-hygiene.md",
+          "status": "modified",
+          "additions": 1,
+          "deletions": 1
+        },
+        {
+          "path": "ops/branch-hygiene-batch.json",
+          "status": "modified",
+          "additions": 4,
+          "deletions": 24
+        },
+        {
+          "path": "ops/branch-hygiene-development-batch.json",
+          "status": "added",
+          "additions": 33,
+          "deletions": 0
+        },
+        {
+          "path": "ops/branch-hygiene-development-retirement.json",
+          "status": "added",
+          "additions": 37,
+          "deletions": 0
+        },
+        {
+          "path": "tests/fixtures/branch-hygiene-20261125.json",
+          "status": "added",
+          "additions": 466,
+          "deletions": 0
+        },
+        {
+          "path": "tests/test_branch_hygiene_archive.py",
+          "status": "added",
+          "additions": 93,
+          "deletions": 0
+        },
+        {
+          "path": "tests/test_branch_hygiene_batch.py",
+          "status": "modified",
+          "additions": 21,
+          "deletions": 2
+        },
+        {
+          "path": "tests/test_branch_hygiene_campaign_replay.py",
+          "status": "added",
+          "additions": 44,
+          "deletions": 0
+        },
+        {
+          "path": "tests/test_branch_hygiene_control_workflows.py",
+          "status": "added",
+          "additions": 48,
+          "deletions": 0
+        },
+        {
+          "path": "tests/test_branch_hygiene_development.py",
+          "status": "added",
+          "additions": 92,
+          "deletions": 0
+        },
+        {
+          "path": "tests/test_branch_hygiene_development_retire.py",
+          "status": "added",
+          "additions": 85,
+          "deletions": 0
+        },
+        {
+          "path": "tests/test_branch_hygiene_discovery.py",
+          "status": "added",
+          "additions": 51,
+          "deletions": 0
+        },
+        {
+          "path": "tests/test_branch_hygiene_merged_pr_cleanup.py",
+          "status": "added",
+          "additions": 149,
+          "deletions": 0
+        },
+        {
+          "path": "tests/test_branch_hygiene_migration.py",
+          "status": "added",
+          "additions": 11,
+          "deletions": 0
+        },
+        {
+          "path": "tests/test_branch_hygiene_retry.py",
+          "status": "added",
+          "additions": 124,
+          "deletions": 0
+        },
+        {
+          "path": "tests/test_branch_hygiene_series.py",
+          "status": "added",
+          "additions": 36,
+          "deletions": 0
+        },
+        {
+          "path": "tests/test_branch_hygiene_squash.py",
+          "status": "modified",
+          "additions": 74,
+          "deletions": 1
+        },
+        {
+          "path": "tools/branch_hygiene_apply.py",
+          "status": "modified",
+          "additions": 212,
+          "deletions": 27
+        },
+        {
+          "path": "tools/branch_hygiene_merged_pr_cleanup.py",
+          "status": "added",
+          "additions": 139,
+          "deletions": 0
+        },
+        {
+          "path": "tools/branch_hygiene_observe.py",
+          "status": "modified",
+          "additions": 83,
+          "deletions": 4
+        },
+        {
+          "path": "tools/branch_hygiene_plan.py",
+          "status": "modified",
+          "additions": 81,
+          "deletions": 6
+        },
+        {
+          "path": "tools/branch_hygiene_series.py",
+          "status": "added",
+          "additions": 77,
+          "deletions": 0
+        }
+      ]
+    },
+    {
+      "family": "VIS-002C token lifecycle",
+      "pathCount": 6,
+      "disposition": "needs exact-tree relevance and consumer reconciliation before any promotion",
+      "paths": [
+        {
+          "path": ".github/workflows/vis002c-v03-product-pin.yml",
+          "status": "modified",
+          "additions": 14,
+          "deletions": 1
+        },
+        {
+          "path": "design-system/pins/vis-002/context-v0.3.0/PIN.json",
+          "status": "modified",
+          "additions": 88,
+          "deletions": 3
+        },
+        {
+          "path": "docs/architecture/vis002c-v03-product-integration-2026-10-24.md",
+          "status": "modified",
+          "additions": 5,
+          "deletions": 3
+        },
+        {
+          "path": "scripts/verify-vis002c-product-pin-v03.mjs",
+          "status": "modified",
+          "additions": 37,
+          "deletions": 2
+        },
+        {
+          "path": "scripts/vis002c-pin-lifecycle.mjs",
+          "status": "added",
+          "additions": 77,
+          "deletions": 0
+        },
+        {
+          "path": "tests/vis002c-v03-scoped-raster.mjs",
+          "status": "modified",
+          "additions": 173,
+          "deletions": 151
+        }
+      ]
+    },
+    {
+      "family": "Buyer/configuration V5 boundary",
+      "pathCount": 8,
+      "disposition": "needs exact-tree relevance and consumer reconciliation before any promotion",
+      "paths": [
+        {
+          "path": ".github/workflows/buyer-configuration-boundary.yml",
+          "status": "added",
+          "additions": 51,
+          "deletions": 0
+        },
+        {
+          "path": "app/access/manage.html",
+          "status": "modified",
+          "additions": 1,
+          "deletions": 0
+        },
+        {
+          "path": "app/tools/test-v5-endpoint-safety.js",
+          "status": "modified",
+          "additions": 54,
+          "deletions": 1
+        },
+        {
+          "path": "app/tools/test-v5-normal-save.js",
+          "status": "modified",
+          "additions": 77,
+          "deletions": 0
+        },
+        {
+          "path": "app/tools/test-v5-publication-migration.js",
+          "status": "modified",
+          "additions": 2,
+          "deletions": 2
+        },
+        {
+          "path": "netlify/functions/configuration.mjs",
+          "status": "modified",
+          "additions": 21,
+          "deletions": 5
+        },
+        {
+          "path": "tests/buyer-configuration-endpoint.test.mjs",
+          "status": "added",
+          "additions": 165,
+          "deletions": 0
+        },
+        {
+          "path": "tests/ci/local-buyer-config-server.mjs",
+          "status": "modified",
+          "additions": 80,
+          "deletions": 68
+        }
+      ]
+    },
+    {
+      "family": "public presentation, navigation, and page compiler",
+      "pathCount": 30,
+      "disposition": "needs exact-tree relevance and consumer reconciliation before any promotion",
+      "paths": [
+        {
+          "path": ".github/workflows/candidate-assets.yml",
+          "status": "modified",
+          "additions": 32,
+          "deletions": 5
+        },
+        {
+          "path": ".github/workflows/development-ux04-geometry.yml",
+          "status": "added",
+          "additions": 69,
+          "deletions": 0
+        },
+        {
+          "path": ".github/workflows/keyboard-browser.yml",
+          "status": "modified",
+          "additions": 2,
+          "deletions": 0
+        },
+        {
+          "path": ".github/workflows/mobile-browser.yml",
+          "status": "modified",
+          "additions": 25,
+          "deletions": 1
+        },
+        {
+          "path": ".github/workflows/nav005-public-header-browser.yml",
+          "status": "added",
+          "additions": 64,
+          "deletions": 0
+        },
+        {
+          "path": ".github/workflows/public-routing-before-clerk.yml",
+          "status": "modified",
+          "additions": 2,
+          "deletions": 1
+        },
+        {
+          "path": ".github/workflows/variant-fidelity.yml",
+          "status": "modified",
+          "additions": 0,
+          "deletions": 3
+        },
+        {
+          "path": "app/about/index.html",
+          "status": "modified",
+          "additions": 2,
+          "deletions": 2
+        },
+        {
+          "path": "app/how-it-works/how-it-works.css",
+          "status": "modified",
+          "additions": 14,
+          "deletions": 2
+        },
+        {
+          "path": "app/how-it-works/how-it-works.js",
+          "status": "modified",
+          "additions": 26,
+          "deletions": 0
+        },
+        {
+          "path": "app/how-it-works/index.html",
+          "status": "modified",
+          "additions": 9,
+          "deletions": 9
+        },
+        {
+          "path": "app/landing/assets/hero/home-video-poster.png",
+          "status": "added",
+          "additions": 0,
+          "deletions": 0
+        },
+        {
+          "path": "app/landing/assets/hero/lifestyle-phone-expanded.svg",
+          "status": "added",
+          "additions": 1,
+          "deletions": 0
+        },
+        {
+          "path": "app/landing/header-menu.js",
+          "status": "modified",
+          "additions": 50,
+          "deletions": 1
+        },
+        {
+          "path": "app/landing/landing.css",
+          "status": "modified",
+          "additions": 68,
+          "deletions": 10
+        },
+        {
+          "path": "app/landing/landing.js",
+          "status": "modified",
+          "additions": 176,
+          "deletions": 1
+        },
+        {
+          "path": "architecture/fragments/primary-header.fragment.html",
+          "status": "modified",
+          "additions": 1,
+          "deletions": 1
+        },
+        {
+          "path": "architecture/fragments/primary-header.routes.json",
+          "status": "modified",
+          "additions": 1,
+          "deletions": 1
+        },
+        {
+          "path": "architecture/generated/primary-pages.manifest.json",
+          "status": "modified",
+          "additions": 877,
+          "deletions": 9
+        },
+        {
+          "path": "architecture/pages/about.page.html",
+          "status": "modified",
+          "additions": 1,
+          "deletions": 1
+        },
+        {
+          "path": "architecture/pages/how-it-works.page.html",
+          "status": "modified",
+          "additions": 8,
+          "deletions": 8
+        },
+        {
+          "path": "architecture/pages/root.page.html",
+          "status": "modified",
+          "additions": 24,
+          "deletions": 5
+        },
+        {
+          "path": "scripts/compile-primary-pages.mjs",
+          "status": "modified",
+          "additions": 116,
+          "deletions": 15
+        },
+        {
+          "path": "tests/ci/nav-flow-responsive-crossbrowser.cjs",
+          "status": "modified",
+          "additions": 22,
+          "deletions": 2
+        },
+        {
+          "path": "tests/ci/public-navigation-semantic-browser.mjs",
+          "status": "added",
+          "additions": 279,
+          "deletions": 0
+        },
+        {
+          "path": "tests/home-hero-phone-geometry-browser.cjs",
+          "status": "added",
+          "additions": 293,
+          "deletions": 0
+        },
+        {
+          "path": "tests/keyboard-browser.cjs",
+          "status": "modified",
+          "additions": 11,
+          "deletions": 1
+        },
+        {
+          "path": "tests/public-image-fallback-browser.mjs",
+          "status": "modified",
+          "additions": 183,
+          "deletions": 161
+        },
+        {
+          "path": "tests/ui-theme-browser.cjs",
+          "status": "added",
+          "additions": 150,
+          "deletions": 0
+        },
+        {
+          "path": "tests/ui-theme-contract.cjs",
+          "status": "modified",
+          "additions": 25,
+          "deletions": 11
+        }
+      ]
+    },
+    {
+      "family": "cross-cutting shell and remaining test infrastructure",
+      "pathCount": 15,
+      "disposition": "needs exact-tree relevance and consumer reconciliation before any promotion",
+      "paths": [
+        {
+          "path": ".github/workflows/viewer-base-price-contract-gate.yml",
+          "status": "modified",
+          "additions": 48,
+          "deletions": 3
+        },
+        {
+          "path": ".gitignore",
+          "status": "modified",
+          "additions": 1,
+          "deletions": 0
+        },
+        {
+          "path": "app/admin/admin.css",
+          "status": "modified",
+          "additions": 3,
+          "deletions": 0
+        },
+        {
+          "path": "app/app.js",
+          "status": "modified",
+          "additions": 8,
+          "deletions": 6
+        },
+        {
+          "path": "app/core/ui-theme.js",
+          "status": "modified",
+          "additions": 6,
+          "deletions": 1
+        },
+        {
+          "path": "app/index.html",
+          "status": "modified",
+          "additions": 25,
+          "deletions": 6
+        },
+        {
+          "path": "app/package.json",
+          "status": "modified",
+          "additions": 1,
+          "deletions": 1
+        },
+        {
+          "path": "app/styles.css",
+          "status": "modified",
+          "additions": 3,
+          "deletions": 3
+        },
+        {
+          "path": "app/ui-theme.css",
+          "status": "modified",
+          "additions": 3,
+          "deletions": 2
+        },
+        {
+          "path": "app/viewer/viewer.css",
+          "status": "modified",
+          "additions": 1,
+          "deletions": 1
+        },
+        {
+          "path": "ops/branch-dispositions-development.json",
+          "status": "added",
+          "additions": 43,
+          "deletions": 0
+        },
+        {
+          "path": "ops/branch-dispositions.json",
+          "status": "modified",
+          "additions": 168,
+          "deletions": 1
+        },
+        {
+          "path": "tests/ci/viewer-base-price-trigger-contract.test.cjs",
+          "status": "added",
+          "additions": 88,
+          "deletions": 0
+        },
+        {
+          "path": "tests/ci/vis002-context-pin.test.mjs",
+          "status": "added",
+          "additions": 123,
+          "deletions": 0
+        },
+        {
+          "path": "tests/exposed-sides-glass.cjs",
+          "status": "modified",
+          "additions": 191,
+          "deletions": 38
+        }
+      ]
+    }
+  ]
+}
