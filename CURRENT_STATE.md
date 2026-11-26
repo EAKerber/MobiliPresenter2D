@@ -1,5 +1,21 @@
 # CURRENT_STATE — MobiliPresenter2D
 
+## Current authority map — 2026-11-26
+
+This is a point-in-time pointer. Re-read moving refs and evidence before any dependent change or release.
+
+- **Architecture method and intended DoD:** [Plano Diretor v0.9](https://github.com/EAKerber/MobiliPresenter2D_DesignSystem/blob/main/docs/architecture/MOBILIPRESENTER2D_PLANO_DIRETOR_CONSOLIDADO_v0.9.md), blob `59bb530b14172eb9772b9f89bb62272173f4381c`.
+- **Execution status:** Product's [125-ID execution register](https://github.com/EAKerber/MobiliPresenter2D/blob/development/docs/architecture/plan-v0.9-execution-register.json) is maintained on the moving `development` branch. Resolve its exact HEAD and file before relying on any item state.
+- **Design decisions:** Design System [`decisions.json`](https://github.com/EAKerber/MobiliPresenter2D_DesignSystem/blob/main/decisions.json), blob `63b60f8d87327c6fd1e80c8cdf4ff832c4089bfa`.
+- **Implementation authority:** Product `main@ef9f073542c54ec44bf3c8808ab13d880222d329` is the stable publication snapshot; Product `development@ab518623bbfe59ef37a36a8bbc347ff9e03882c0` is the integration buffer. Re-read both moving refs before work. They remain divergent; promote bounded architectural families selectively, never by whole-tree merge.
+- **Design System authority:** `main@8686df1cf13f84f18f755cb7de2067fda4f7c66d); no `development` branch was found in the live readback.
+- **Validation and release:** exact source, consumers, tests, workflow runs, preview, production deployment, and approval are separate evidence. A source read or Preview does not prove publication.
+
+## Historical checkpoints
+
+The dated records below are preserved for provenance. Their refs, status, deployments, and operational instructions describe earlier snapshots and are not current authorization. Resolve live refs before acting.
+
+
 > **RETOMADA MAIS RECENTE — ARQUITETURA/DS (22/10/2026):** antes dos registros históricos abaixo, leia [HANDOVER CANÔNICO — consolidação de componentes, tokens, CI e ARC-03B](docs/handoffs/ARCHITECTURE-CURRENT-2026-10-22.md), verificado nos dois repositórios. Produto `main@303468b` antes deste commit documental; ARC-03B **60/60 PASS em branch, sem cutover/build publicado**; PR #231 de tokens **DRAFT/HOLD**; #232 de fixture autenticada **ABERTA**; #233 corrigida em main. **A afirmação datada de 08/10 de que `/config/` era pública é histórica**: em 22/10, o diagnóstico anônimo documentado observou redirecionamento `/config/ → /access/` em produção e preview. Não usar conteúdo anterior como estado atual sem ler HEAD.
 
 
