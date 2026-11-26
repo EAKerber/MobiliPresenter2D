@@ -244,7 +244,7 @@ async function main() {
         getDeployStore: () => store
       };
       const stateEndpoint = await import("data:text/javascript;base64," +
-        Buffer.from(moduleSource + "\\n// invalid-stored-state-" + name).toString("base64"));
+        Buffer.from(moduleSource + "\n// invalid-stored-state-" + name).toString("base64"));
       const send = async (method) => {
         const response = await stateEndpoint.default(
           new Request("https://unit-test.invalid/api/configuration", {
