@@ -34,6 +34,7 @@ const paginationCopy = uiCopy.admin.pagination;
 const hierarchyEditorCopy = uiCopy.admin.hierarchyEditor;
 const rulesCopy = uiCopy.admin.rules, nominalDimensionsCopy = uiCopy.admin.nominalDimensions;
 const authenticationCopy = uiCopy.admin.authentication;
+const publicationCopy = uiCopy.admin.publication;
 const viewerBasePricePublicationCopy = uiCopy.admin.pricing.viewerBasePricePublication;
 let catalogPricing = null;
 let adminDataPromise = null;
@@ -1948,23 +1949,23 @@ persistHandlesButton.addEventListener("click", async () => {
   persistHandlesButton.disabled = true;
   saveButton.disabled = true;
   try {
-    if (!publishedSource) throw new Error("A configuração publicada ainda não foi carregada.");
-    if (publishedSource.schemaVersion !== configurationCore.SCHEMA) throw new Error("A persistência isolada de Puxadores é exclusiva do v3.");
+    if (!publishedSource) throw new Error(publicationCopy.publishedSettingsNotLoaded);
+    if (publishedSource.schemaVersion !== configurationCore.SCHEMA) throw new Error(publicationCopy.handlesRequireV3);
     const baseline = baselineHierarchyFor(publishedSource);
     const hasLocalDraft = JSON.stringify(model) !== JSON.stringify(baseline);
     if (hasLocalDraft) {
       const confirmed = window.confirm(
-        "Há alterações locais no painel. Esta operação publicará somente Puxadores no schema v3 e recarregará o painel; outras alterações locais não serão publicadas. Continuar?"
+        publicationCopy.handlesConfirmation
       );
       if (!confirmed) {
-        setMessage(saveMessage, "Persistência de Puxadores cancelada; nenhuma alteração foi publicada.");
+        setMessage(saveMessage, publicationCopy.handlesCancelled);
         return;
       }
     }
 
-    setMessage(saveMessage, "Relendo a configuração publicada antes de persistir Puxadores…");
+    setMessage(saveMessage, publicationCopy.handlesRechecking);
     const freshResponse = await fetch("/api/configuration", { credentials: "same-origin", cache: "no-store" });
-    if (!freshResponse.ok) throw new Error("Não foi possível reler a configuração publicada.");
+    if (!freshResponse.ok) throw new Error(publicationCopy.configurationReadFailed);
     const fresh = await freshResponse.json();
 
     if (JSON.stringify(fresh) !== JSON.stringify(publishedSource)) {
@@ -1972,27 +1973,27 @@ persistHandlesButton.addEventListener("click", async () => {
       model = baselineHierarchyFor(fresh);
       refreshHandlesRepairState();
       renderAdminTabs();
-      throw new Error("A configuração mudou desde que o painel foi aberto. O painel foi recarregado; revise o estado antes de tentar novamente.");
+      throw new Error(publicationCopy.handlesReloadBeforeRetry);
     }
 
     const plan = handlesRepairPlan(fresh);
-    if (!plan?.ok) throw new Error(plan?.message || "Não foi possível preparar a atribuição de Puxadores.");
+    if (!plan?.ok) throw new Error(plan?.message || publicationCopy.handlesPlanFallback);
     if (!plan.needed) {
       publishedSource = structuredClone(fresh);
       model = baselineHierarchyFor(fresh);
       refreshHandlesRepairState();
       renderAdminTabs();
-      setMessage(saveMessage, "Puxadores já está persistido em Acabamentos.", "success");
+      setMessage(saveMessage, publicationCopy.handlesAlreadyPersisted, "success");
       return;
     }
 
     const delta = legacyStageRepair.verifyHandlesOnlyDelta(fresh, plan.candidate, configurationCore.SCHEMA);
-    if (!delta.ok) throw new Error(delta.message || "A alteração proposta não é exclusivamente a atribuição de Puxadores.");
+    if (!delta.ok) throw new Error(delta.message || publicationCopy.handlesDeltaFallback);
 
     const validationErrors = configurationCore.validateConfiguratorSettings(plan.candidate, catalog, priceBook, scene);
     if (validationErrors.length) throw new Error(validationErrors[0]);
 
-    setMessage(saveMessage, "Persistindo apenas Puxadores em Acabamentos no schema v3…");
+    setMessage(saveMessage, publicationCopy.handlesPersisting);
     const response = await fetch("/api/configuration", {
       method: "PUT",
       credentials: "same-origin",
@@ -2003,21 +2004,21 @@ persistHandlesButton.addEventListener("click", async () => {
       body: JSON.stringify(plan.candidate)
     });
     const payload = await response.json().catch(() => null);
-    if (response.status === 401 || response.status === 403) throw new Error("Sua sessão não tem permissão para persistir Puxadores.");
-    if (response.status === 409) throw new Error("A configuração mudou durante a gravação. Recarregue o painel antes de tentar novamente.");
-    if (!response.ok) throw new Error(payload?.message || "A API recusou a gravação isolada de Puxadores.");
+    if (response.status === 401 || response.status === 403) throw new Error(publicationCopy.handlesForbidden);
+    if (response.status === 409) throw new Error(publicationCopy.handlesConflict);
+    if (!response.ok) throw new Error(payload?.message || publicationCopy.handlesWriteFallback);
 
     const expected = configurationCore.normalizeConfiguratorSettings(plan.candidate, catalog, priceBook, scene);
     expected.revision = fresh.revision + 1;
     if (JSON.stringify(payload) !== JSON.stringify(expected)) {
-      throw new Error("A resposta da gravação não corresponde ao candidato v3 esperado.");
+      throw new Error(publicationCopy.handlesWriteMismatch);
     }
 
     const readbackResponse = await fetch("/api/configuration", { credentials: "same-origin", cache: "no-store" });
-    if (!readbackResponse.ok) throw new Error("Puxadores foi gravado, mas a releitura de confirmação falhou.");
+    if (!readbackResponse.ok) throw new Error(publicationCopy.handlesReadbackFailed);
     const readback = await readbackResponse.json();
     if (JSON.stringify(readback) !== JSON.stringify(expected)) {
-      throw new Error("A releitura não corresponde exatamente ao v3 esperado após persistir Puxadores.");
+      throw new Error(publicationCopy.handlesReadbackMismatch);
     }
 
     publishedSource = structuredClone(readback);
@@ -2027,13 +2028,11 @@ persistHandlesButton.addEventListener("click", async () => {
     renderAdminTabs();
     setMessage(
       saveMessage,
-      hasLocalDraft
-        ? "Puxadores foi persistido em Acabamentos no v3 publicado. O painel foi recarregado a partir do publicado; outras alterações locais não foram enviadas."
-        : "Puxadores foi persistido em Acabamentos no v3 publicado. A publicação hierárquica v5 continua bloqueada.",
+      hasLocalDraft ? publicationCopy.handlesPersistedWithDraft : publicationCopy.handlesPersisted,
       "success"
     );
   } catch (error) {
-    setMessage(saveMessage, error.message || "Falha ao persistir Puxadores.", "error");
+    setMessage(saveMessage, error.message || publicationCopy.handlesFailureFallback, "error");
   } finally {
     saveButton.disabled = false;
     if (!persistHandlesButton.hidden) persistHandlesButton.disabled = false;
@@ -2045,17 +2044,17 @@ saveButton.addEventListener("click", async () => {
   try {
     const hierarchyValidation = hierarchyErrors(model);
     if (hierarchyValidation.length) throw new Error(hierarchyValidation[0]);
-    if (!publishedSource) throw new Error("A configuração publicada ainda não foi carregada.");
+    if (!publishedSource) throw new Error(publicationCopy.publishedSettingsNotLoaded);
 
     if (publishedSource.schemaVersion === hierarchyCore.SCHEMA) {
       if (model.revision !== publishedSource.revision) {
-        throw new Error("O rascunho não corresponde à revisão publicada. Recarregue antes de salvar.");
+        throw new Error(publicationCopy.hierarchyRevisionMismatch);
       }
       const candidate = hierarchyCore.normalize(model);
       const expected = hierarchyCore.normalize({
         ...structuredClone(candidate), revision: publishedSource.revision + 1
       });
-      setMessage(saveMessage, "Publicando configuração hierárquica v5…");
+      setMessage(saveMessage, publicationCopy.hierarchyPublishing);
       const response = await fetch("/api/configuration", {
         method: "PUT",
         credentials: "same-origin",
@@ -2064,37 +2063,37 @@ saveButton.addEventListener("click", async () => {
       });
       const payload = await response.json().catch(() => null);
       if (response.status === 401 || response.status === 403) {
-        throw new Error("Sua sessão não tem permissão para publicar esta configuração.");
+        throw new Error(publicationCopy.publishForbidden);
       }
       if (response.status === 409) {
-        throw new Error("A configuração mudou em outra sessão. Recarregue o painel antes de salvar.");
+        throw new Error(publicationCopy.publishConflict);
       }
-      if (!response.ok) throw new Error(payload?.message || payload?.error || "A API recusou a publicação v5.");
+      if (!response.ok) throw new Error(payload?.message || payload?.error || publicationCopy.hierarchyPublishFallback);
       if (JSON.stringify(payload) !== JSON.stringify(expected)) {
-        throw new Error("A resposta de publicação v5 não corresponde ao documento esperado.");
+        throw new Error(publicationCopy.hierarchyWriteMismatch);
       }
 
       const readbackResponse = await fetch("/api/configuration", {
         credentials: "same-origin", cache: "no-store"
       });
       if (!readbackResponse.ok) {
-        throw new Error("A publicação v5 foi aceita, mas a releitura de confirmação falhou.");
+        throw new Error(publicationCopy.hierarchyReadbackFailed);
       }
       const readback = await readbackResponse.json();
       if (JSON.stringify(readback) !== JSON.stringify(expected)) {
-        throw new Error("A releitura v5 não corresponde à revisão publicada; nenhuma confirmação foi assumida.");
+        throw new Error(publicationCopy.hierarchyReadbackMismatch);
       }
       publishedSource = structuredClone(readback);
       model = baselineHierarchyFor(readback);
       byId("revisionLabel").textContent = `Versão ${model.revision} · editor hierárquico`;
       refreshHandlesRepairState();
       renderAdminTabs();
-      setMessage(saveMessage, "Configuração v5 publicada e verificada por releitura.", "success");
+      setMessage(saveMessage, publicationCopy.hierarchyPublished, "success");
       return;
     }
 
     if (publishedSource.schemaVersion !== configurationCore.SCHEMA) {
-      throw new Error("O schema publicado não é compatível com este editor.");
+      throw new Error(publicationCopy.incompatibleSchema);
     }
 
     const projection = hierarchyCore.projectToLegacy(
@@ -2110,7 +2109,7 @@ saveButton.addEventListener("click", async () => {
       if (projection.code === "hierarchy_requires_publication") {
         setMessage(
           saveMessage,
-          "A hierarquia foi alterada. Este rascunho não será achatado no schema publicado; publique a hierarquia apenas no checkpoint autenticado.",
+          publicationCopy.hierarchyDraftBlocked,
           "error"
         );
         return;
@@ -2118,36 +2117,36 @@ saveButton.addEventListener("click", async () => {
       if (projection.code === "pricing_requires_publication") {
         setMessage(
           saveMessage,
-          "Este tipo de preço exige a futura publicação consolidada. Nenhuma configuração foi publicada; use Percentual para manter compatibilidade com o schema atual.",
+          publicationCopy.pricePublicationBlocked,
           "error"
         );
         return;
       }
-      throw new Error(projection.errors?.[0] || "A hierarquia não pode ser publicada com segurança.");
+      throw new Error(projection.errors?.[0] || publicationCopy.hierarchyProjectionFallback);
     }
 
-    setMessage(saveMessage, "Publicando configuração compatível…");
+    setMessage(saveMessage, publicationCopy.compatiblePublishing);
     const response = await fetch("/api/configuration", {
       method: "PUT",
       credentials: "same-origin",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(projection.value)
     });
-    if (response.status === 401 || response.status === 403) throw new Error("Sua sessão não tem permissão para publicar esta configuração.");
-    if (response.status === 409) throw new Error("A configuração mudou em outra sessão. Recarregue o painel antes de salvar.");
+    if (response.status === 401 || response.status === 403) throw new Error(publicationCopy.publishForbidden);
+    if (response.status === 409) throw new Error(publicationCopy.publishConflict);
     const payload = await response.json().catch(() => null);
     if (!response.ok) {
-      if (payload?.error === "hierarchy_publication_required") throw new Error("A API bloqueou uma publicação hierárquica antes do checkpoint autorizado.");
-      throw new Error(payload?.message || "A configuração não foi aceita. Confira nomes e itens selecionados.");
+      if (payload?.error === "hierarchy_publication_required") throw new Error(publicationCopy.hierarchyCheckpointBlocked);
+      throw new Error(payload?.message || publicationCopy.compatiblePayloadRejected);
     }
     model = hierarchyCore.upgrade(payload, configurationCore, flowCore, catalog, priceBook, scene, hierarchyDefaults);
     publishedSource = structuredClone(payload);
     byId("revisionLabel").textContent = `Versão ${model.revision} · editor hierárquico`;
     refreshHandlesRepairState();
-    setMessage(saveMessage, "Configuração compatível publicada. A hierarquia estrutural continua protegida contra publicação prematura.", "success");
+    setMessage(saveMessage, publicationCopy.compatiblePublished, "success");
     renderAdminTabs();
   } catch (error) {
-    setMessage(saveMessage, error.message || "Falha ao publicar a configuração.", "error");
+    setMessage(saveMessage, error.message || publicationCopy.publicationFailureFallback, "error");
   } finally {
     saveButton.disabled = false;
   }
