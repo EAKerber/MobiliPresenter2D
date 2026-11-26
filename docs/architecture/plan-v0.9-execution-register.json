@@ -1971,6 +1971,11 @@
           "source": "Product PR #468; exact-head gates and development readback",
           "sha": "77616e45d38f2105a03ab9ed11f07ab74e25a7bb",
           "detail": "Admin material-state copy now uses the canonical pt-BR uiCopy.admin.materials catalog for base color, no-color, and both disabled-state reasons; exact existing wording and behavior are preserved. The Admin browser contract asserts catalog text against rendered labels/reasons. The generated primary-page provenance manifest and ARC-13 candidate inventory were reconciled. Exact PR head 2852773c9e3a01b268519262a20a894b4fd419ad passed all applicable exact-head gates (Admin browsers, build, inventory, source/browser, price and authorization contracts, assets, plan, variants); Supabase Preview was skipped because project preview branches are disabled. Squash-integrated into development at this SHA; main remains unchanged. LOC-006 remains partial for remaining Admin/Configurator families."
+        },
+        {
+          "source": "Product PR #470; exact-head gates and development integration",
+          "sha": "505e072e2234cc905c23217e5c2191c1076768f7",
+          "detail": "Fixed copy in the Admin materials library now uses uiCopy.admin.materials while commercial labels remain data-backed and availability behavior is unchanged. The Admin hierarchy browser checks the full copy catalog against the DOM and both last-item guards; persistence browsers, build, page compiler, theme contract and ARC-13 inventory pass locally. Exact PR head 505e072e2234cc905c23217e5c2191c1076768f7 passed all applicable GitHub gates, including ARC-13 determinism, Admin hierarchy browser, build purity, assets, variants, browser, price and authorization contracts. Supabase Preview was skipped because project preview branches are disabled; no Netlify Deploy Preview was returned for this PR. This family is integrated into development by this PR; main remains unchanged. LOC-006 stays partial for remaining Admin/Configurator families."
         }
       ],
       "nextAction": "Extrair outras famílias Admin/Configurador com seus estados, consumidores e testes; manter conteúdo comercial sob sua autoridade própria."
