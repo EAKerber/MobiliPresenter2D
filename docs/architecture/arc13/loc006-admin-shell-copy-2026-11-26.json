@@ -1,0 +1,72 @@
+{
+  "schema": "ARC13LOC002FamilyReview/1",
+  "plan": "MobiliPresenter2D Plano Diretor v0.9",
+  "workItems": [
+    "LOC-002",
+    "LOC-006"
+  ],
+  "family": "admin-editor-shell-copy",
+  "status": "candidate-implemented",
+  "evidence": {
+    "baseRevision": "8fe2e605f878eb4bb9c9d92f6588f73a78236794",
+    "inventoryPath": "architecture/arc13/ui-text-candidates.json",
+    "inventorySha256": "123D8236CC51818B59ABCEDF8A8C716571D157A98AC83C324B4A153A24B584FE",
+    "source": "app/admin/admin.js",
+    "sourceGitBlob": "4702ad57579fa6649ca6b7b08cd0a3fec97df93f",
+    "sourceSha256": "E642F95046144F558B694C02D33A7C14535D6E2024B0E0F2D036C80D2A8C610D",
+    "sharedCatalog": "app/core/ui-copy.js",
+    "sharedCatalogGitBlob": "221f4a78a15b464f171e34de1421156df74e8233",
+    "sharedCatalogSha256": "2D227CA0ED5F5B099D4D024DF835F023D062081F403DC4ECDB23B9C38611B3A5",
+    "adminShell": "app/admin.html",
+    "adminShellGitBlob": "390735675673917149e49e21b4f7355c79eeaba8",
+    "adminShellSha256": "F123E6347DADF9AE72FBB1C05700993D9AC9BA722954BF9366A0FCFE40CCC77A",
+    "browserContract": "tests/admin-hierarchy-browser.cjs",
+    "browserContractGitBlob": "35006f4f1c84a2fd9797804e45e4952868f3d8b3",
+    "browserContractSha256": "A55C618F1655FC58C3FDA0A3822783177A9C72F79752907EB7CE6F373942FABB",
+    "generatedPrimaryPageManifest": "architecture/generated/primary-pages.manifest.json",
+    "generatedPrimaryPageManifestGitBlob": "6776b3c87b146694baa29c76d55cea57a041950e",
+    "generatedPrimaryPageManifestSha256": "69C88BD5DA7691AAE1799381B7515676391C977528E230D069D7134A0875D8B4",
+    "implementationBranch": "codex/loc006-admin-shell-copy-20261126",
+    "route": "/admin"
+  },
+  "state": {
+    "consumer": "Admin editor masthead, primary and object tabs, and object pager",
+    "meaning": "Moves fixed editor-shell wording into the shared Admin copy catalog while preserving the existing wording, labels, hierarchy controls, and explicit-save boundary.",
+    "catalogPrefix": "admin.shell",
+    "preservedContracts": [
+      "Netlify Identity authentication and access checks are untouched",
+      "Tab roles, identifiers, order, selected state, panel visibility, and event handling remain unchanged",
+      "Object pager IDs, data selection, and previous/next behavior remain unchanged",
+      "Object labels and all editable/commercial content remain runtime data",
+      "No implicit API writes or persistence occur while rendering or navigating the shell"
+    ]
+  },
+  "validation": {
+    "localPassed": [
+      "node scripts/compile-primary-pages.mjs --sync",
+      "node scripts/compile-primary-pages.mjs --check",
+      "node tests/ui-theme-contract.cjs",
+      "node --test tests/arc03c-source-authority.test.mjs: 6 passed",
+      "node --check app/admin/admin.js",
+      "node --check tests/admin-hierarchy-browser.cjs"
+    ],
+    "arc13Inventory": {
+      "runs": 2,
+      "sameSha256": true,
+      "sha256": "123D8236CC51818B59ABCEDF8A8C716571D157A98AC83C324B4A153A24B584FE",
+      "unreviewedOccurrences": 1007,
+      "javascriptParseErrors": 0,
+      "javascriptNotScannedSources": 0,
+      "primaryPageAuthoringMappedOccurrences": 420,
+      "primaryPageAuthoringUnresolvedOccurrences": 0,
+      "unassignedOwnerSites": 0,
+      "unassignedRouteSites": 0
+    },
+    "developmentPullRequestGates": "All 12 applicable workflows passed on exact code/test head a31769f8cd794463c339374312f6e98b1262615e; this receipt-only follow-up changes no implementation or test content."
+  },
+  "limits": [
+    "This family covers only fixed Admin editor-shell copy; other Admin and Config copy families remain partial.",
+    "The ARC-13 candidate inventory remains globally unreviewed; this receipt does not complete LOC-002 or LOC-006.",
+    "No main integration or publication is claimed."
+  ]
+}

@@ -244,6 +244,45 @@ async function sectionItemIds(page, stageId, groupId, sectionId) {
   await page.goto(baseUrl + "/admin-test.html", { waitUntil: "networkidle" });
   await page.waitForSelector('[data-hierarchy-stage="finishes"] [data-hierarchy-group="cabinet-finishes"]');
 
+  const shellCopy = await page.evaluate(() => window.CASA_UI_COPY.admin.shell);
+  assert.deepEqual(shellCopy, {
+    documentTitle: "Administração — Casa em Módulos",
+    eyebrow: "Configurador público",
+    heading: "Administração do catálogo",
+    intro: "Configure etapas, conteúdo dos objetos, acabamentos e valores publicados.",
+    tablistLabel: "Áreas de administração",
+    tabs: {
+      stages: "Etapas",
+      objects: "Dados dos objetos",
+      finishes: "Cores e acabamentos",
+      rules: "Dependências e eventos",
+      pricing: "Preços"
+    },
+    objectPager: { previous: "← Anterior", label: "Objeto", next: "Próximo →" },
+    objectTablistLabel: "Dados do objeto",
+    objectTabs: { content: "Conteúdo", assets: "Imagens e máscaras" }
+  }, "Admin editor shell copy retains its existing wording");
+  assert.equal(await page.title(), shellCopy.documentTitle, "document title is bound to the Admin shell catalog");
+  assert.equal(await page.locator(".admin-heading .eyebrow").textContent(), shellCopy.eyebrow, "editor eyebrow is catalog-backed");
+  assert.equal(await page.locator(".admin-heading h1").textContent(), shellCopy.heading, "editor heading is catalog-backed");
+  assert.equal(await page.locator(".admin-heading .intro").textContent(), shellCopy.intro, "editor introduction is catalog-backed");
+  const primaryAdminTabs = page.locator('.admin-tabs[role="tablist"]').first();
+  assert.equal(await primaryAdminTabs.getAttribute("aria-label"), shellCopy.tablistLabel, "primary tablist has its catalog accessible name");
+  assert.deepEqual(await primaryAdminTabs.locator('[role="tab"]').evaluateAll((nodes) => nodes.map((node) => node.textContent.trim())), Object.values(shellCopy.tabs), "primary tab labels match the catalog");
+  const objectTabs = page.locator('.admin-tabs--nested[role="tablist"]');
+  assert.equal(await objectTabs.getAttribute("aria-label"), shellCopy.objectTablistLabel, "object tablist has its catalog accessible name");
+  assert.deepEqual(await objectTabs.locator('[role="tab"]').evaluateAll((nodes) => nodes.map((node) => node.textContent.trim())), Object.values(shellCopy.objectTabs), "object tab labels match the catalog");
+  assert.equal(await page.locator("#objectPrevious").textContent(), shellCopy.objectPager.previous, "object pager previous label is catalog-backed");
+  assert.equal(await page.locator('[data-admin-shell-copy="objectPager.label"]').textContent(), shellCopy.objectPager.label, "object selector label is catalog-backed");
+  assert.equal(await page.locator("#objectNext").textContent(), shellCopy.objectPager.next, "object pager next label is catalog-backed");
+  await page.locator('[data-admin-tab="objects"]').click();
+  await page.waitForSelector('[data-admin-panel="objects"]:not([hidden])');
+  assert.equal(await primaryAdminTabs.locator('[data-admin-tab="objects"]').getAttribute("aria-selected"), "true", "object tab behavior and selection remain intact");
+  await page.locator('[data-object-tab="assets"]').click();
+  await page.waitForSelector('[data-object-panel="assets"]:not([hidden])');
+  assert.equal(await objectTabs.locator('[data-object-tab="assets"]').getAttribute("aria-selected"), "true", "nested object tab behavior and selection remain intact");
+  assert.equal(putCount, 0, "reviewing Admin shell copy performs no save");
+
   await page.locator('[data-admin-tab="rules"]').click();
   await page.waitForSelector('[data-admin-panel="rules"]:not([hidden])');
   const rulesCopy = await page.evaluate(() => window.CASA_UI_COPY.admin.rules);

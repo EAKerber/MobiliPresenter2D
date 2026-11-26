@@ -11,7 +11,7 @@
   },
   "copyCatalog": {
     "path": "app/core/ui-copy.js",
-    "gitBlobSha": "ad5ddf09cfa903d6ac3d9bf11454aa88e9009354",
+    "gitBlobSha": "f15a278a6bd9d237f23682d404288758e0c6d0d9",
     "schema": "M2DUIStringCatalog/1",
     "locale": "pt-BR"
   },

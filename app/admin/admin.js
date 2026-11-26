@@ -35,6 +35,7 @@ const hierarchyEditorCopy = uiCopy.admin.hierarchyEditor;
 const rulesCopy = uiCopy.admin.rules, nominalDimensionsCopy = uiCopy.admin.nominalDimensions;
 const authenticationCopy = uiCopy.admin.authentication;
 const publicationCopy = uiCopy.admin.publication;
+const adminShellCopy = uiCopy.admin.shell;
 const viewerBasePricePublicationCopy = uiCopy.admin.pricing.viewerBasePricePublication;
 let catalogPricing = null;
 let adminDataPromise = null;
@@ -77,6 +78,21 @@ document.querySelectorAll("[data-admin-auth-copy]").forEach((element) => {
   const key = element.dataset.adminAuthCopy;
   if (typeof authenticationCopy[key] === "string") element.textContent = authenticationCopy[key];
 });
+
+function adminShellCopyValue(path) {
+  return path.split(".").reduce((value, key) => value?.[key], adminShellCopy);
+}
+
+document.querySelectorAll("[data-admin-shell-copy]").forEach((element) => {
+  const value = adminShellCopyValue(element.dataset.adminShellCopy);
+  if (typeof value === "string") element.textContent = value;
+});
+
+document.querySelectorAll("[data-admin-shell-aria-label]").forEach((element) => {
+  const value = adminShellCopyValue(element.dataset.adminShellAriaLabel);
+  if (typeof value === "string") element.setAttribute("aria-label", value);
+});
+
 
 function configuredHierarchyItemLabel(itemId) {
   for (const stage of Object.values(hierarchyDefaults?.stages || {})) {

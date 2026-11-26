@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="pt-BR">
   <head>
-<script src="/core/ui-copy.js?v=arc13-loc006-admin-scene-assets-copy-1"></script><script src="/core/ui-theme.js?v=arc13-loc003-copy-1"></script>
+<script src="/core/ui-copy.js?v=arc13-loc006-admin-shell-copy-1"></script><script src="/core/ui-theme.js?v=arc13-loc003-copy-1"></script>
 <link rel="icon" type="image/x-icon" href="/branding/favicon.ico">
 <link rel="icon" type="image/png" sizes="32x32" href="/branding/favicon-32.png">
 <link rel="icon" type="image/png" sizes="192x192" href="/branding/android-chrome-192.png">
@@ -10,7 +10,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="robots" content="noindex, nofollow" />
-    <title>Administração — Casa em Módulos</title>
+    <title data-admin-shell-copy="documentTitle"></title>
     <link rel="stylesheet" href="admin/admin.css?v=viewer-price-main-v1" />
   <link rel="stylesheet" href="/ui-theme.css?v=arc03-fnd01-v1">
 </head>
@@ -67,20 +67,20 @@
 
       <section id="editorPanel" hidden>
         <div class="admin-heading">
-          <div><p class="eyebrow">Configurador público</p><h1>Administração do catálogo</h1><p class="intro">Configure etapas, conteúdo dos objetos, acabamentos e valores publicados.</p></div>
+          <div><p class="eyebrow" data-admin-shell-copy="eyebrow"></p><h1 data-admin-shell-copy="heading"></h1><p class="intro" data-admin-shell-copy="intro"></p></div>
           <div class="admin-heading__meta"><span id="revisionLabel">Versão —</span><span id="userLabel"></span></div>
         </div>
-        <nav class="admin-tabs" role="tablist" aria-label="Áreas de administração">
-          <button class="admin-tab is-active" type="button" role="tab" aria-selected="true" data-admin-tab="stages">Etapas</button>
-          <button class="admin-tab" type="button" role="tab" aria-selected="false" data-admin-tab="objects">Dados dos objetos</button>
-          <button class="admin-tab" type="button" role="tab" aria-selected="false" data-admin-tab="finishes">Cores e acabamentos</button>
-          <button class="admin-tab" type="button" role="tab" aria-selected="false" data-admin-tab="rules">Dependências e eventos</button>
-          <button class="admin-tab" type="button" role="tab" aria-selected="false" data-admin-tab="pricing">Preços</button>
+        <nav class="admin-tabs" role="tablist" data-admin-shell-aria-label="tablistLabel">
+          <button class="admin-tab is-active" type="button" role="tab" aria-selected="true" data-admin-tab="stages" data-admin-shell-copy="tabs.stages"></button>
+          <button class="admin-tab" type="button" role="tab" aria-selected="false" data-admin-tab="objects" data-admin-shell-copy="tabs.objects"></button>
+          <button class="admin-tab" type="button" role="tab" aria-selected="false" data-admin-tab="finishes" data-admin-shell-copy="tabs.finishes"></button>
+          <button class="admin-tab" type="button" role="tab" aria-selected="false" data-admin-tab="rules" data-admin-shell-copy="tabs.rules"></button>
+          <button class="admin-tab" type="button" role="tab" aria-selected="false" data-admin-tab="pricing" data-admin-shell-copy="tabs.pricing"></button>
         </nav>
         <section class="admin-tab-panel" role="tabpanel" data-admin-panel="stages"><div class="panel-toolbar"><p id="stagePanelNote" class="admin-note"></p><div class="stage-add-tools"><select id="stageKindInput"><option value="custom"></option><option value="finishes"></option><option value="services"></option></select><button id="addStageButton" class="button button--secondary" type="button"></button></div></div><div id="stagesList" class="stages-list"></div></section>
         <section class="admin-tab-panel" role="tabpanel" data-admin-panel="objects" hidden>
-          <div class="object-pager"><button id="objectPrevious" class="button button--secondary" type="button">← Anterior</button><label class="data-field">Objeto<select id="objectSelector"></select></label><button id="objectNext" class="button button--secondary" type="button">Próximo →</button></div>
-          <nav class="admin-tabs admin-tabs--nested" role="tablist" aria-label="Dados do objeto"><button class="admin-tab is-active" type="button" role="tab" aria-selected="true" data-object-tab="content">Conteúdo</button><button class="admin-tab" type="button" role="tab" aria-selected="false" data-object-tab="assets">Imagens e máscaras</button></nav>
+          <div class="object-pager"><button id="objectPrevious" class="button button--secondary" type="button" data-admin-shell-copy="objectPager.previous"></button><label class="data-field"><span data-admin-shell-copy="objectPager.label"></span><select id="objectSelector"></select></label><button id="objectNext" class="button button--secondary" type="button" data-admin-shell-copy="objectPager.next"></button></div>
+          <nav class="admin-tabs admin-tabs--nested" role="tablist" data-admin-shell-aria-label="objectTablistLabel"><button class="admin-tab is-active" type="button" role="tab" aria-selected="true" data-object-tab="content" data-admin-shell-copy="objectTabs.content"></button><button class="admin-tab" type="button" role="tab" aria-selected="false" data-object-tab="assets" data-admin-shell-copy="objectTabs.assets"></button></nav>
           <section class="object-tab-panel" data-object-panel="content"><div id="objectsList" class="editor-grid"></div></section>
           <section class="object-tab-panel" data-object-panel="assets" hidden><div id="objectAssetsList" class="editor-grid"></div></section>
         </section>
