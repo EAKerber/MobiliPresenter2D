@@ -32,7 +32,13 @@ def require(check:bool, msg:str)->None:
     if not check: raise RuntimeError(msg)
 
 def verify()->dict:
-    require(git("rev-parse","origin/main")==MAIN,"MAIN_PIN_DRIFT")
+    ancestor_check=subprocess.run(
+        ["git","merge-base","--is-ancestor",MAIN,"origin/main"],
+        capture_output=True,text=True
+    )
+    if ancestor_check.returncode not in (0,1):
+        raise RuntimeError("MAIN_ANCESTRY_CHECK_FAILED " + ancestor_check.stderr[:300])
+    require(ancestor_check.returncode==0,"MAIN_PIN_NOT_IN_HISTORY")
     require(git("cat-file","-t",SOURCE)=="commit","HISTORIC_SHA_NOT_AVAILABLE")
     base=git("merge-base",HISTORICAL_BASE,SOURCE)
     changed=set(git("diff","--name-only",base,SOURCE).splitlines())
