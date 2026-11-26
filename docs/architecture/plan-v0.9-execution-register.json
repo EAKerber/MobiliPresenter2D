@@ -916,14 +916,20 @@
       "chapter": "III",
       "priority": "P0",
       "planState": "not_started",
-      "reconciliation": "unreviewed",
+      "reconciliation": "done",
       "local": "unknown",
-      "development": "unknown",
-      "main": "unknown",
-      "technicalValidation": "unknown",
-      "approvalPublication": "unknown",
-      "evidence": [],
-      "nextAction": "Reconciliar este ID com código, consumidores, testes e evidência exata de branch/PR antes de alterar o estado."
+      "development": "done",
+      "main": "done",
+      "technicalValidation": "done",
+      "approvalPublication": "done",
+      "evidence": [
+        {
+          "source": "Product PR #514, exact-head VIS-002C gate, current Production readback, and Netlify deploy receipt",
+          "sha": "af40a4782f9cd61402fa248e2f4d24cd7b39a69a",
+          "detail": "PR #514 added the solid-background assertion and was squash-integrated into development at af40a4782f9cd61402fa248e2f4d24cd7b39a69a; test source blob f694c6671ded54dbe9391ae9e8766de741dc0116. Exact PR-head 092263c064f3bc7ce513f9d25be3bca2db425a66 passed workflow 45880712584: verify-pinned-consumers and scoped-raster, including 12 Chromium/WebKit × viewport × route scenarios, 40 mapped selector cases, declared solid-background equality, synthetic-state containment, and the existing 19-fallback checks. Artifact 15145874246. Current main is 9f422ffe2112c06efd296425adb84dcb607bb563; Netlify Production deploy 6b087a681f3c99dd67c32fb9 is READY on that exact commit. Anonymous runtime readback on 2026-11-26 observed all ten mapped colors rgb(41,39,35), nine opaque backgrounds rgb(240,237,232) and the story-section background rgb(232,227,220); dark-theme controls returned rgb(196,188,178) for all ten. Mapping, artifact and manifest blobs match the pinned Design System source; the global reference palette remains inactive. Limit: local dimension stays UNKNOWN because this source-pinned gate was executed remotely, not in the dirty local checkout; this check is not human visual approval or historical-site comparison."
+        }
+      ],
+      "nextAction": "DoD reconciled on current main, development and Production. Keep the local dimension UNKNOWN; proceed with the next priority family without broadening VIS-002C or changing the global reference palette."
     },
     {
       "order": 40,
