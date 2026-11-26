@@ -208,10 +208,7 @@ async function main() {
           const activated = await control.evaluate((button) => ({
             mode: button.getAttribute("data-mode"),
             label: button.getAttribute("aria-label"),
-            stored: localStorage.getItem("casa-ui-theme-mode-v1"),
-            focusColor: getComputedStyle(button).outlineColor,
-            focusWidth: getComputedStyle(button).outlineWidth,
-            focusOffset: getComputedStyle(button).outlineOffset
+            stored: localStorage.getItem("casa-ui-theme-mode-v1")
           }));
           assert.equal(activated.mode, "light", shell.path + " keyboard activation selects light mode");
           assert.equal(activated.stored, "light", shell.path + " keyboard activation persists the mode");
@@ -232,7 +229,7 @@ async function main() {
             measuredHeightCssPx: measured.height,
             keyboardFocusVisible: focusStyle.visible,
             darkFocus: darkGlobalFocus,
-            lightFocus: lightGlobalFocus
+            lightFocus: lightGlobalFocus,
             keyboardActivation: activated.mode
           });
         } finally {
