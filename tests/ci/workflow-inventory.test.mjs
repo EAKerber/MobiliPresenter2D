@@ -128,6 +128,7 @@ jobs:
     const expectedDevelopmentTree = git(['rev-parse', 'HEAD^{tree}']);
 
     git(['checkout', '-b', 'candidate']);
+    rmSync(path.join(repoRoot, '.github', 'workflows', 'development-only.yml'));
     writeWorkflow('shared.yml', 'candidate');
     writeWorkflow('candidate-only.yml', 'candidate-only');
     git(['add', '.']);
