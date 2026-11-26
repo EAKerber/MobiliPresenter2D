@@ -94,9 +94,11 @@ async function main() {
     const approvedProjection = {
       schemaVersion: "PublicModulePresentation2D 0.1",
       modules: [
-        { id: "module-07", title: "Nome publicado 07",
+        { id: "module-07", title: "Nome publicado 07", dimensionLabel: "700 × 700 × 350 mm",
+          nominalDimensionsMm: { width: 700, height: 700, depth: 350 },
           benefits: ["Destaque publicado 07"], components: ["Componente 07"], requirements: [] },
-        { id: "module-03", title: "Nome publicado 03",
+        { id: "module-03", title: "Nome publicado 03", dimensionLabel: "1000 × 800 × 550 mm",
+          nominalDimensionsMm: { width: 1000, height: 800, depth: 550 },
           benefits: ["Destaque publicado 03"], components: ["Componente 03"],
           requirements: ["Requisito publicado 03"] }
       ],

@@ -90,16 +90,16 @@
     "javascriptFilesScanned": 57,
     "inlineJavaScriptBlocksScanned": 3,
     "javascriptSinkSites": 417,
-    "javascriptTextSourceRecords": 360,
+    "javascriptTextSourceRecords": 363,
     "javascriptTextSourceRecordsActive": 285,
     "javascriptTextSourceRecordsPassedButUnused": 7,
     "javascriptTextSourceRecordsUnconsumed": 2,
-    "javascriptTextSourceRecordsNeedsFlowReview": 4,
-    "javascriptTextSourceRecordsDiagnostic": 62,
+    "javascriptTextSourceRecordsNeedsFlowReview": 14,
+    "javascriptTextSourceRecordsDiagnostic": 55,
     "javascriptTextSourceRecordsWithSinkLinks": 93,
     "javascriptTextSourceSinkLinks": 95,
-    "javascriptTextSourceRecordsWithFailureFallbacks": 38,
-    "javascriptTextSourceFailureFallbackLinks": 39,
+    "javascriptTextSourceRecordsWithFailureFallbacks": 31,
+    "javascriptTextSourceFailureFallbackLinks": 32,
     "javascriptTextSourceRoles": {
       "admin-event-trigger-option-label": 1,
       "admin-field-label": 7,
@@ -139,7 +139,7 @@
       "environment-action": 1,
       "environment-description": 5,
       "environment-name": 5,
-      "error-message-source": 101,
+      "error-message-source": 104,
       "fixed-ui-table": 12,
       "image-alternative-text": 5,
       "inline-text-array": 3,
@@ -38359,7 +38359,7 @@
             "statusCode": 503,
             "relationship": "server-exception-to-fixed-json-response",
             "evidence": "The handler catches projection/storage/validation failures and returns this fixed JSON error without exposing the exception.",
-            "sourceSha256": "e7a762a37829aeed7f8b7dc1a4ced230ba8186cfede763cf2160cb2f31e5af4b"
+            "sourceSha256": "3da63ae2ebc736b2c684c08dd89410cb4e3783fbe4f1c87bf56f4323c09d695d"
           }
         }
       ],
@@ -38414,7 +38414,7 @@
             "statusCode": 503,
             "relationship": "server-exception-to-fixed-json-response",
             "evidence": "The handler catches projection/storage/validation failures and returns this fixed JSON error without exposing the exception.",
-            "sourceSha256": "e7a762a37829aeed7f8b7dc1a4ced230ba8186cfede763cf2160cb2f31e5af4b"
+            "sourceSha256": "3da63ae2ebc736b2c684c08dd89410cb4e3783fbe4f1c87bf56f4323c09d695d"
           }
         }
       ],
@@ -38469,7 +38469,7 @@
             "statusCode": 503,
             "relationship": "server-exception-to-fixed-json-response",
             "evidence": "The handler catches projection/storage/validation failures and returns this fixed JSON error without exposing the exception.",
-            "sourceSha256": "e7a762a37829aeed7f8b7dc1a4ced230ba8186cfede763cf2160cb2f31e5af4b"
+            "sourceSha256": "3da63ae2ebc736b2c684c08dd89410cb4e3783fbe4f1c87bf56f4323c09d695d"
           }
         }
       ],
@@ -38524,7 +38524,7 @@
             "statusCode": 503,
             "relationship": "server-exception-to-fixed-json-response",
             "evidence": "The handler catches projection/storage/validation failures and returns this fixed JSON error without exposing the exception.",
-            "sourceSha256": "e7a762a37829aeed7f8b7dc1a4ced230ba8186cfede763cf2160cb2f31e5af4b"
+            "sourceSha256": "3da63ae2ebc736b2c684c08dd89410cb4e3783fbe4f1c87bf56f4323c09d695d"
           }
         }
       ],
@@ -38579,7 +38579,7 @@
             "statusCode": 503,
             "relationship": "server-exception-to-fixed-json-response",
             "evidence": "The handler catches projection/storage/validation failures and returns this fixed JSON error without exposing the exception.",
-            "sourceSha256": "e7a762a37829aeed7f8b7dc1a4ced230ba8186cfede763cf2160cb2f31e5af4b"
+            "sourceSha256": "3da63ae2ebc736b2c684c08dd89410cb4e3783fbe4f1c87bf56f4323c09d695d"
           }
         }
       ],
@@ -38634,7 +38634,7 @@
             "statusCode": 503,
             "relationship": "server-exception-to-fixed-json-response",
             "evidence": "The handler catches projection/storage/validation failures and returns this fixed JSON error without exposing the exception.",
-            "sourceSha256": "e7a762a37829aeed7f8b7dc1a4ced230ba8186cfede763cf2160cb2f31e5af4b"
+            "sourceSha256": "3da63ae2ebc736b2c684c08dd89410cb4e3783fbe4f1c87bf56f4323c09d695d"
           }
         }
       ],
@@ -38689,7 +38689,7 @@
             "statusCode": 503,
             "relationship": "server-exception-to-fixed-json-response",
             "evidence": "The handler catches projection/storage/validation failures and returns this fixed JSON error without exposing the exception.",
-            "sourceSha256": "e7a762a37829aeed7f8b7dc1a4ced230ba8186cfede763cf2160cb2f31e5af4b"
+            "sourceSha256": "3da63ae2ebc736b2c684c08dd89410cb4e3783fbe4f1c87bf56f4323c09d695d"
           }
         }
       ],
@@ -38744,7 +38744,7 @@
             "statusCode": 503,
             "relationship": "server-exception-to-fixed-json-response",
             "evidence": "The handler catches projection/storage/validation failures and returns this fixed JSON error without exposing the exception.",
-            "sourceSha256": "e7a762a37829aeed7f8b7dc1a4ced230ba8186cfede763cf2160cb2f31e5af4b"
+            "sourceSha256": "3da63ae2ebc736b2c684c08dd89410cb4e3783fbe4f1c87bf56f4323c09d695d"
           }
         }
       ],
@@ -38799,7 +38799,7 @@
             "statusCode": 503,
             "relationship": "server-exception-to-fixed-json-response",
             "evidence": "The handler catches projection/storage/validation failures and returns this fixed JSON error without exposing the exception.",
-            "sourceSha256": "e7a762a37829aeed7f8b7dc1a4ced230ba8186cfede763cf2160cb2f31e5af4b"
+            "sourceSha256": "3da63ae2ebc736b2c684c08dd89410cb4e3783fbe4f1c87bf56f4323c09d695d"
           }
         }
       ],
@@ -38854,7 +38854,7 @@
             "statusCode": 503,
             "relationship": "server-exception-to-fixed-json-response",
             "evidence": "The handler catches projection/storage/validation failures and returns this fixed JSON error without exposing the exception.",
-            "sourceSha256": "e7a762a37829aeed7f8b7dc1a4ced230ba8186cfede763cf2160cb2f31e5af4b"
+            "sourceSha256": "3da63ae2ebc736b2c684c08dd89410cb4e3783fbe4f1c87bf56f4323c09d695d"
           }
         }
       ],
@@ -38909,7 +38909,7 @@
             "statusCode": 503,
             "relationship": "server-exception-to-fixed-json-response",
             "evidence": "The handler catches projection/storage/validation failures and returns this fixed JSON error without exposing the exception.",
-            "sourceSha256": "e7a762a37829aeed7f8b7dc1a4ced230ba8186cfede763cf2160cb2f31e5af4b"
+            "sourceSha256": "3da63ae2ebc736b2c684c08dd89410cb4e3783fbe4f1c87bf56f4323c09d695d"
           }
         }
       ],
@@ -38964,7 +38964,7 @@
             "statusCode": 503,
             "relationship": "server-exception-to-fixed-json-response",
             "evidence": "The handler catches projection/storage/validation failures and returns this fixed JSON error without exposing the exception.",
-            "sourceSha256": "e7a762a37829aeed7f8b7dc1a4ced230ba8186cfede763cf2160cb2f31e5af4b"
+            "sourceSha256": "3da63ae2ebc736b2c684c08dd89410cb4e3783fbe4f1c87bf56f4323c09d695d"
           }
         }
       ],
@@ -39019,7 +39019,7 @@
             "statusCode": 503,
             "relationship": "server-exception-to-fixed-json-response",
             "evidence": "The handler catches projection/storage/validation failures and returns this fixed JSON error without exposing the exception.",
-            "sourceSha256": "e7a762a37829aeed7f8b7dc1a4ced230ba8186cfede763cf2160cb2f31e5af4b"
+            "sourceSha256": "3da63ae2ebc736b2c684c08dd89410cb4e3783fbe4f1c87bf56f4323c09d695d"
           }
         }
       ],
@@ -39074,7 +39074,7 @@
             "statusCode": 503,
             "relationship": "server-exception-to-fixed-json-response",
             "evidence": "The handler catches projection/storage/validation failures and returns this fixed JSON error without exposing the exception.",
-            "sourceSha256": "e7a762a37829aeed7f8b7dc1a4ced230ba8186cfede763cf2160cb2f31e5af4b"
+            "sourceSha256": "3da63ae2ebc736b2c684c08dd89410cb4e3783fbe4f1c87bf56f4323c09d695d"
           }
         }
       ],
@@ -39129,7 +39129,7 @@
             "statusCode": 503,
             "relationship": "server-exception-to-fixed-json-response",
             "evidence": "The handler catches projection/storage/validation failures and returns this fixed JSON error without exposing the exception.",
-            "sourceSha256": "e7a762a37829aeed7f8b7dc1a4ced230ba8186cfede763cf2160cb2f31e5af4b"
+            "sourceSha256": "3da63ae2ebc736b2c684c08dd89410cb4e3783fbe4f1c87bf56f4323c09d695d"
           }
         }
       ],
@@ -39184,7 +39184,7 @@
             "statusCode": 503,
             "relationship": "server-exception-to-fixed-json-response",
             "evidence": "The handler catches projection/storage/validation failures and returns this fixed JSON error without exposing the exception.",
-            "sourceSha256": "e7a762a37829aeed7f8b7dc1a4ced230ba8186cfede763cf2160cb2f31e5af4b"
+            "sourceSha256": "3da63ae2ebc736b2c684c08dd89410cb4e3783fbe4f1c87bf56f4323c09d695d"
           }
         }
       ],
@@ -45744,7 +45744,7 @@
     },
     {
       "source": "app/viewer/public-data.js",
-      "line": 11,
+      "line": 24,
       "column": 39,
       "kind": "javascript-text-source",
       "sink": "source:error-message-source",
@@ -45756,14 +45756,14 @@
       "literalSegments": [
         "public_modules_unavailable"
       ],
-      "classification": "diagnostic",
+      "classification": "unreviewed",
       "classificationHints": [
-        "error-literal-not-displayed-fixed-fallback-is-shown"
+        "source-needs-consumer-and-domain-review"
       ],
-      "consumerLinkStatus": "fixed-fallback-only",
-      "useStatus": "diagnostic",
+      "consumerLinkStatus": "manual-consumer-review",
+      "useStatus": "diagnostic-or-user-message-review",
       "consumerEvidence": [
-        "The catch ignores the Error and appends a fixed viewer alert."
+        "no bounded display flow has been linked yet; review the catch/source boundary"
       ],
       "sourceExpression": "\"public_modules_unavailable\"",
       "selectionOperators": [],
@@ -45771,27 +45771,12 @@
       "routeConsumers": [
         "/viewer/"
       ],
-      "sourceSha256": "13569064e216d86c37b4721b0cd491e54c3def3c5a7a2300d9f4eca7eebf9ebc",
-      "id": "eff366e95ddb3b3f",
-      "failureFallbackRefs": [
-        {
-          "sinkId": "7d5c29451be070c2",
-          "source": "app/viewer/viewer.js",
-          "line": 183,
-          "sink": "property:textContent",
-          "expression": "\"Informações temporariamente indisponíveis. Tente novamente mais tarde.\"",
-          "routeConsumers": [
-            "/viewer/"
-          ],
-          "relationship": "error-to-fixed-fallback",
-          "evidence": "The catch ignores the Error and appends a fixed viewer alert."
-        }
-      ],
-      "failureFallbackLinkStatus": "bounded-error-to-fixed-fallback"
+      "sourceSha256": "3048b1d34ece4ca58d007b57cc309d68003172563e176249f719f1a441e516d7",
+      "id": "b7db74ace03baa6c"
     },
     {
       "source": "app/viewer/public-data.js",
-      "line": 18,
+      "line": 32,
       "column": 27,
       "kind": "javascript-text-source",
       "sink": "source:error-message-source",
@@ -45803,14 +45788,14 @@
       "literalSegments": [
         "invalid_public_module_projection"
       ],
-      "classification": "diagnostic",
+      "classification": "unreviewed",
       "classificationHints": [
-        "error-literal-not-displayed-fixed-fallback-is-shown"
+        "source-needs-consumer-and-domain-review"
       ],
-      "consumerLinkStatus": "fixed-fallback-only",
-      "useStatus": "diagnostic",
+      "consumerLinkStatus": "manual-consumer-review",
+      "useStatus": "diagnostic-or-user-message-review",
       "consumerEvidence": [
-        "The load rejection is caught by the viewer start chain; the TypeError text is discarded."
+        "no bounded display flow has been linked yet; review the catch/source boundary"
       ],
       "sourceExpression": "\"invalid_public_module_projection\"",
       "selectionOperators": [],
@@ -45818,121 +45803,12 @@
       "routeConsumers": [
         "/viewer/"
       ],
-      "sourceSha256": "13569064e216d86c37b4721b0cd491e54c3def3c5a7a2300d9f4eca7eebf9ebc",
-      "id": "d1501f12e5194a37",
-      "failureFallbackRefs": [
-        {
-          "sinkId": "7d5c29451be070c2",
-          "source": "app/viewer/viewer.js",
-          "line": 183,
-          "sink": "property:textContent",
-          "expression": "\"Informações temporariamente indisponíveis. Tente novamente mais tarde.\"",
-          "routeConsumers": [
-            "/viewer/"
-          ],
-          "relationship": "error-to-fixed-fallback",
-          "evidence": "The load rejection is caught by the viewer start chain; the TypeError text is discarded."
-        }
-      ],
-      "failureFallbackLinkStatus": "bounded-error-to-fixed-fallback"
+      "sourceSha256": "3048b1d34ece4ca58d007b57cc309d68003172563e176249f719f1a441e516d7",
+      "id": "3492c90e3f6a8760"
     },
     {
       "source": "app/viewer/public-data.js",
-      "line": 22,
-      "column": 27,
-      "kind": "javascript-text-source",
-      "sink": "source:error-message-source",
-      "sourceRole": "error-message-source",
-      "sourceBinding": "TypeError constructor",
-      "valuePath": "",
-      "expression": "\"invalid_public_module_membership\"",
-      "value": "invalid_public_module_membership",
-      "literalSegments": [
-        "invalid_public_module_membership"
-      ],
-      "classification": "diagnostic",
-      "classificationHints": [
-        "error-literal-not-displayed-fixed-fallback-is-shown"
-      ],
-      "consumerLinkStatus": "fixed-fallback-only",
-      "useStatus": "diagnostic",
-      "consumerEvidence": [
-        "The load rejection is caught by the viewer start chain; the TypeError text is discarded."
-      ],
-      "sourceExpression": "\"invalid_public_module_membership\"",
-      "selectionOperators": [],
-      "owner": "viewer",
-      "routeConsumers": [
-        "/viewer/"
-      ],
-      "sourceSha256": "13569064e216d86c37b4721b0cd491e54c3def3c5a7a2300d9f4eca7eebf9ebc",
-      "id": "43c8176465fe6313",
-      "failureFallbackRefs": [
-        {
-          "sinkId": "7d5c29451be070c2",
-          "source": "app/viewer/viewer.js",
-          "line": 183,
-          "sink": "property:textContent",
-          "expression": "\"Informações temporariamente indisponíveis. Tente novamente mais tarde.\"",
-          "routeConsumers": [
-            "/viewer/"
-          ],
-          "relationship": "error-to-fixed-fallback",
-          "evidence": "The load rejection is caught by the viewer start chain; the TypeError text is discarded."
-        }
-      ],
-      "failureFallbackLinkStatus": "bounded-error-to-fixed-fallback"
-    },
-    {
-      "source": "app/viewer/public-data.js",
-      "line": 25,
-      "column": 27,
-      "kind": "javascript-text-source",
-      "sink": "source:error-message-source",
-      "sourceRole": "error-message-source",
-      "sourceBinding": "TypeError constructor",
-      "valuePath": "",
-      "expression": "\"invalid_public_finish\"",
-      "value": "invalid_public_finish",
-      "literalSegments": [
-        "invalid_public_finish"
-      ],
-      "classification": "diagnostic",
-      "classificationHints": [
-        "error-literal-not-displayed-fixed-fallback-is-shown"
-      ],
-      "consumerLinkStatus": "fixed-fallback-only",
-      "useStatus": "diagnostic",
-      "consumerEvidence": [
-        "The load rejection is caught by the viewer start chain; the TypeError text is discarded."
-      ],
-      "sourceExpression": "\"invalid_public_finish\"",
-      "selectionOperators": [],
-      "owner": "viewer",
-      "routeConsumers": [
-        "/viewer/"
-      ],
-      "sourceSha256": "13569064e216d86c37b4721b0cd491e54c3def3c5a7a2300d9f4eca7eebf9ebc",
-      "id": "0fd14377571295d0",
-      "failureFallbackRefs": [
-        {
-          "sinkId": "7d5c29451be070c2",
-          "source": "app/viewer/viewer.js",
-          "line": 183,
-          "sink": "property:textContent",
-          "expression": "\"Informações temporariamente indisponíveis. Tente novamente mais tarde.\"",
-          "routeConsumers": [
-            "/viewer/"
-          ],
-          "relationship": "error-to-fixed-fallback",
-          "evidence": "The load rejection is caught by the viewer start chain; the TypeError text is discarded."
-        }
-      ],
-      "failureFallbackLinkStatus": "bounded-error-to-fixed-fallback"
-    },
-    {
-      "source": "app/viewer/public-data.js",
-      "line": 30,
+      "line": 35,
       "column": 27,
       "kind": "javascript-text-source",
       "sink": "source:error-message-source",
@@ -45944,14 +45820,14 @@
       "literalSegments": [
         "invalid_public_module_visibility"
       ],
-      "classification": "diagnostic",
+      "classification": "unreviewed",
       "classificationHints": [
-        "error-literal-not-displayed-fixed-fallback-is-shown"
+        "source-needs-consumer-and-domain-review"
       ],
-      "consumerLinkStatus": "fixed-fallback-only",
-      "useStatus": "diagnostic",
+      "consumerLinkStatus": "manual-consumer-review",
+      "useStatus": "diagnostic-or-user-message-review",
       "consumerEvidence": [
-        "The load rejection is caught by the viewer start chain; the TypeError text is discarded."
+        "no bounded display flow has been linked yet; review the catch/source boundary"
       ],
       "sourceExpression": "\"invalid_public_module_visibility\"",
       "selectionOperators": [],
@@ -45959,27 +45835,172 @@
       "routeConsumers": [
         "/viewer/"
       ],
-      "sourceSha256": "13569064e216d86c37b4721b0cd491e54c3def3c5a7a2300d9f4eca7eebf9ebc",
-      "id": "f761c690e91eb8f7",
-      "failureFallbackRefs": [
-        {
-          "sinkId": "7d5c29451be070c2",
-          "source": "app/viewer/viewer.js",
-          "line": 183,
-          "sink": "property:textContent",
-          "expression": "\"Informações temporariamente indisponíveis. Tente novamente mais tarde.\"",
-          "routeConsumers": [
-            "/viewer/"
-          ],
-          "relationship": "error-to-fixed-fallback",
-          "evidence": "The load rejection is caught by the viewer start chain; the TypeError text is discarded."
-        }
-      ],
-      "failureFallbackLinkStatus": "bounded-error-to-fixed-fallback"
+      "sourceSha256": "3048b1d34ece4ca58d007b57cc309d68003172563e176249f719f1a441e516d7",
+      "id": "ae0cfb8c5f367424"
     },
     {
       "source": "app/viewer/public-data.js",
-      "line": 37,
+      "line": 39,
+      "column": 27,
+      "kind": "javascript-text-source",
+      "sink": "source:error-message-source",
+      "sourceRole": "error-message-source",
+      "sourceBinding": "TypeError constructor",
+      "valuePath": "",
+      "expression": "\"invalid_public_module_membership\"",
+      "value": "invalid_public_module_membership",
+      "literalSegments": [
+        "invalid_public_module_membership"
+      ],
+      "classification": "unreviewed",
+      "classificationHints": [
+        "source-needs-consumer-and-domain-review"
+      ],
+      "consumerLinkStatus": "manual-consumer-review",
+      "useStatus": "diagnostic-or-user-message-review",
+      "consumerEvidence": [
+        "no bounded display flow has been linked yet; review the catch/source boundary"
+      ],
+      "sourceExpression": "\"invalid_public_module_membership\"",
+      "selectionOperators": [],
+      "owner": "viewer",
+      "routeConsumers": [
+        "/viewer/"
+      ],
+      "sourceSha256": "3048b1d34ece4ca58d007b57cc309d68003172563e176249f719f1a441e516d7",
+      "id": "09e3654ec8d6b152"
+    },
+    {
+      "source": "app/viewer/public-data.js",
+      "line": 45,
+      "column": 27,
+      "kind": "javascript-text-source",
+      "sink": "source:error-message-source",
+      "sourceRole": "error-message-source",
+      "sourceBinding": "TypeError constructor",
+      "valuePath": "",
+      "expression": "\"invalid_public_finish\"",
+      "value": "invalid_public_finish",
+      "literalSegments": [
+        "invalid_public_finish"
+      ],
+      "classification": "unreviewed",
+      "classificationHints": [
+        "source-needs-consumer-and-domain-review"
+      ],
+      "consumerLinkStatus": "manual-consumer-review",
+      "useStatus": "diagnostic-or-user-message-review",
+      "consumerEvidence": [
+        "no bounded display flow has been linked yet; review the catch/source boundary"
+      ],
+      "sourceExpression": "\"invalid_public_finish\"",
+      "selectionOperators": [],
+      "owner": "viewer",
+      "routeConsumers": [
+        "/viewer/"
+      ],
+      "sourceSha256": "3048b1d34ece4ca58d007b57cc309d68003172563e176249f719f1a441e516d7",
+      "id": "9e30bfe6f26307a1"
+    },
+    {
+      "source": "app/viewer/public-data.js",
+      "line": 52,
+      "column": 27,
+      "kind": "javascript-text-source",
+      "sink": "source:error-message-source",
+      "sourceRole": "error-message-source",
+      "sourceBinding": "TypeError constructor",
+      "valuePath": "",
+      "expression": "\"invalid_public_module_visibility\"",
+      "value": "invalid_public_module_visibility",
+      "literalSegments": [
+        "invalid_public_module_visibility"
+      ],
+      "classification": "unreviewed",
+      "classificationHints": [
+        "source-needs-consumer-and-domain-review"
+      ],
+      "consumerLinkStatus": "manual-consumer-review",
+      "useStatus": "diagnostic-or-user-message-review",
+      "consumerEvidence": [
+        "no bounded display flow has been linked yet; review the catch/source boundary"
+      ],
+      "sourceExpression": "\"invalid_public_module_visibility\"",
+      "selectionOperators": [],
+      "owner": "viewer",
+      "routeConsumers": [
+        "/viewer/"
+      ],
+      "sourceSha256": "3048b1d34ece4ca58d007b57cc309d68003172563e176249f719f1a441e516d7",
+      "id": "895ea681bac31ac6"
+    },
+    {
+      "source": "app/viewer/public-data.js",
+      "line": 62,
+      "column": 29,
+      "kind": "javascript-text-source",
+      "sink": "source:error-message-source",
+      "sourceRole": "error-message-source",
+      "sourceBinding": "TypeError constructor",
+      "valuePath": "",
+      "expression": "\"invalid_public_finish\"",
+      "value": "invalid_public_finish",
+      "literalSegments": [
+        "invalid_public_finish"
+      ],
+      "classification": "unreviewed",
+      "classificationHints": [
+        "source-needs-consumer-and-domain-review"
+      ],
+      "consumerLinkStatus": "manual-consumer-review",
+      "useStatus": "diagnostic-or-user-message-review",
+      "consumerEvidence": [
+        "no bounded display flow has been linked yet; review the catch/source boundary"
+      ],
+      "sourceExpression": "\"invalid_public_finish\"",
+      "selectionOperators": [],
+      "owner": "viewer",
+      "routeConsumers": [
+        "/viewer/"
+      ],
+      "sourceSha256": "3048b1d34ece4ca58d007b57cc309d68003172563e176249f719f1a441e516d7",
+      "id": "8045c0651fd44b08"
+    },
+    {
+      "source": "app/viewer/public-data.js",
+      "line": 72,
+      "column": 29,
+      "kind": "javascript-text-source",
+      "sink": "source:error-message-source",
+      "sourceRole": "error-message-source",
+      "sourceBinding": "TypeError constructor",
+      "valuePath": "",
+      "expression": "\"invalid_public_module_projection\"",
+      "value": "invalid_public_module_projection",
+      "literalSegments": [
+        "invalid_public_module_projection"
+      ],
+      "classification": "unreviewed",
+      "classificationHints": [
+        "source-needs-consumer-and-domain-review"
+      ],
+      "consumerLinkStatus": "manual-consumer-review",
+      "useStatus": "diagnostic-or-user-message-review",
+      "consumerEvidence": [
+        "no bounded display flow has been linked yet; review the catch/source boundary"
+      ],
+      "sourceExpression": "\"invalid_public_module_projection\"",
+      "selectionOperators": [],
+      "owner": "viewer",
+      "routeConsumers": [
+        "/viewer/"
+      ],
+      "sourceSha256": "3048b1d34ece4ca58d007b57cc309d68003172563e176249f719f1a441e516d7",
+      "id": "07633d023d21c205"
+    },
+    {
+      "source": "app/viewer/public-data.js",
+      "line": 78,
       "column": 30,
       "kind": "javascript-text-source",
       "sink": "source:error-message-source",
@@ -45991,14 +46012,14 @@
       "literalSegments": [
         "invalid_public_base_price"
       ],
-      "classification": "diagnostic",
+      "classification": "unreviewed",
       "classificationHints": [
-        "error-literal-not-displayed-fixed-fallback-is-shown"
+        "source-needs-consumer-and-domain-review"
       ],
-      "consumerLinkStatus": "fixed-fallback-only",
-      "useStatus": "diagnostic",
+      "consumerLinkStatus": "manual-consumer-review",
+      "useStatus": "diagnostic-or-user-message-review",
       "consumerEvidence": [
-        "The load rejection is caught by the viewer start chain; the TypeError text is discarded."
+        "no bounded display flow has been linked yet; review the catch/source boundary"
       ],
       "sourceExpression": "\"invalid_public_base_price\"",
       "selectionOperators": [],
@@ -46006,27 +46027,12 @@
       "routeConsumers": [
         "/viewer/"
       ],
-      "sourceSha256": "13569064e216d86c37b4721b0cd491e54c3def3c5a7a2300d9f4eca7eebf9ebc",
-      "id": "8b3d3746bfeafd3d",
-      "failureFallbackRefs": [
-        {
-          "sinkId": "7d5c29451be070c2",
-          "source": "app/viewer/viewer.js",
-          "line": 183,
-          "sink": "property:textContent",
-          "expression": "\"Informações temporariamente indisponíveis. Tente novamente mais tarde.\"",
-          "routeConsumers": [
-            "/viewer/"
-          ],
-          "relationship": "error-to-fixed-fallback",
-          "evidence": "The load rejection is caught by the viewer start chain; the TypeError text is discarded."
-        }
-      ],
-      "failureFallbackLinkStatus": "bounded-error-to-fixed-fallback"
+      "sourceSha256": "3048b1d34ece4ca58d007b57cc309d68003172563e176249f719f1a441e516d7",
+      "id": "3bdf585591f42c5d"
     },
     {
       "source": "app/viewer/public-data.js",
-      "line": 40,
+      "line": 83,
       "column": 29,
       "kind": "javascript-text-source",
       "sink": "source:error-message-source",
@@ -46038,14 +46044,14 @@
       "literalSegments": [
         "invalid_public_module_dimensions"
       ],
-      "classification": "diagnostic",
+      "classification": "unreviewed",
       "classificationHints": [
-        "error-literal-not-displayed-fixed-fallback-is-shown"
+        "source-needs-consumer-and-domain-review"
       ],
-      "consumerLinkStatus": "fixed-fallback-only",
-      "useStatus": "diagnostic",
+      "consumerLinkStatus": "manual-consumer-review",
+      "useStatus": "diagnostic-or-user-message-review",
       "consumerEvidence": [
-        "The load rejection is caught by the viewer start chain; the TypeError text is discarded."
+        "no bounded display flow has been linked yet; review the catch/source boundary"
       ],
       "sourceExpression": "\"invalid_public_module_dimensions\"",
       "selectionOperators": [],
@@ -46053,23 +46059,8 @@
       "routeConsumers": [
         "/viewer/"
       ],
-      "sourceSha256": "13569064e216d86c37b4721b0cd491e54c3def3c5a7a2300d9f4eca7eebf9ebc",
-      "id": "5b682f235bf9e9c7",
-      "failureFallbackRefs": [
-        {
-          "sinkId": "7d5c29451be070c2",
-          "source": "app/viewer/viewer.js",
-          "line": 183,
-          "sink": "property:textContent",
-          "expression": "\"Informações temporariamente indisponíveis. Tente novamente mais tarde.\"",
-          "routeConsumers": [
-            "/viewer/"
-          ],
-          "relationship": "error-to-fixed-fallback",
-          "evidence": "The load rejection is caught by the viewer start chain; the TypeError text is discarded."
-        }
-      ],
-      "failureFallbackLinkStatus": "bounded-error-to-fixed-fallback"
+      "sourceSha256": "3048b1d34ece4ca58d007b57cc309d68003172563e176249f719f1a441e516d7",
+      "id": "81ccd8997bb25411"
     },
     {
       "source": "app/viewer/scene-adapters.js",
@@ -46962,7 +46953,7 @@
     },
     {
       "path": "app/viewer/public-data.js",
-      "sha256": "13569064e216d86c37b4721b0cd491e54c3def3c5a7a2300d9f4eca7eebf9ebc"
+      "sha256": "3048b1d34ece4ca58d007b57cc309d68003172563e176249f719f1a441e516d7"
     },
     {
       "path": "app/viewer/scene-adapters.js",

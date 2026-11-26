@@ -53,6 +53,7 @@ test('main Viewer price gate reaches its mapped inputs and runs without job-leve
     'netlify/functions/public-modules.mjs',
     'tests/viewer-base-price*',
     'tests/viewer-price-v5-save.test.cjs',
+    'tests/ci/viewer-price-wire-contract.test.cjs',
     'tests/ci/viewer-base-price-trigger-contract.test.cjs',
     'package.json',
     'package-lock.json',
@@ -77,6 +78,7 @@ test('main Viewer price gate reaches its mapped inputs and runs without job-leve
   for (const command of [
     'node --test tests/viewer-base-price-publication.test.cjs tests/viewer-price-v5-save.test.cjs',
     'node --test tests/ci/viewer-base-price-trigger-contract.test.cjs',
+    'node --test tests/ci/viewer-price-wire-contract.test.cjs',
     'node app/tools/test-administration-v5.js',
     'node app/tools/test-v5-normal-save.js',
     'node app/tools/test-v5-endpoint-safety.js',
