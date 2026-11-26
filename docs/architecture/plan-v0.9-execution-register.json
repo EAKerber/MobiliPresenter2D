@@ -388,12 +388,27 @@
           "detail": "PR #438 integrated the exact TST-001 workflow snapshot into development. The post-merge compare from 71bc086 to 6b31bea shows only the inventory document and execution register changed; workflow definitions remain byte-identical. The source snapshot still distinguishes declared commands from observed assertions/results."
         },
         {
-          "source": "TST-001 exact-ref workflow run #45894653957, artifact #15152847796",
+          "source": "Product PR #516 exact-head gates and post-merge inventory run #45885782458; snapshot docs/architecture/ci/tst-001-workflow-inventory-2026-11-26.json",
+          "sha": "f864fed27026b5bddbd3b79318e68b3cf470036c",
+          "detail": "PR #516 corrected the TST-001 runner to read stable development from the exact pull_request.base.sha and record pull_request.head.sha in a separate candidate layer; push runs use the exact GITHUB_SHA. A synthetic three-ref Git fixture covers main/development/candidate workflow additions, modifications, removals, tree mismatch, and push-without-candidate. Exact-head plan and inventory jobs passed on PR head aad9f179; PR #516 was squash-integrated into development at this SHA. Post-merge push run #45885782458 passed and generated the current snapshot from main@9f422ffe2112c06efd296425adb84dcb607bb563 and development@f864fed27026b5bddbd3b79318e68b3cf470036c: 28 main workflows, 67 development workflows, 26 shared, 2 main-only, 41 development-only, 87 unique workflow definitions, 0 parser warnings, and 6 workflow files flagged for write-signal review. No open PRs were present in that exact readback. This is definition inventory and exact-run evidence; it does not complete the full assertion-to-contract/result crosswalk or exhaustive draft-PR head workflow analysis."
+        },
+        {
+          "source": "Product PR #517 exact Draft workflow readback; artifact 15149661184, run #45885998363; docs/architecture/ci/tst-001-draft-pr-readback-2026-11-26.json",
+          "sha": "3079610c6688e50604a26a4fb10580b8e3d7304d",
+          "detail": "At exact event refs main@9f422ffe and development base@f864fed, the open PR readback contained Draft #517 at head 3079610/tree b92a914. Both plan and inventory jobs passed; candidate workflow delta is zero across its eight tool-only files. Current development@5a07f018 differs from the event base only by the two TST-001 documentation paths, so workflow definitions are unchanged. This closes the exact Draft-PR workflow-layer readback for this candidate only; its tool commands/assertions/contracts are not mapped by this receipt."
+        },
+        {
+          "source": "Product merged-PR cleanup run #45885782903 for PR #516",
+          "sha": "aad9f179a719a68d3b35575732bdfdeb0119e918",
+          "detail": "The pull_request_target cleanup job failed during operation-marker reservation with CONSUMPTION_GIT_FAILED at the local `git tag -a` command. The command sequence failed before delete_exact_ref; no cleanup receipt artifact was produced. The subprocess error text was omitted, so the underlying cause remains unknown. Record this as an observed operational failure, not a completed branch deletion or proof that the cleanup policy is safe."
+        },
+        {
+          "source": "TST-001 exact-ref workflow run #45894653957; artifact #15152847796",
           "sha": "e2602338adfca0ac9c9bf5c9dddb3f80457cfe04",
-          "detail": "Both jobs passed on exact PR head e2602338adfca0ac9c9bf5c9dddb3f80457cfe04. Artifact 15152847796 records main@279622acb090c53f86e8263d6ce90d7bc5e92492 (tree 286045e14060794b7da1ba9e814cfb72b6928a9a), development@0d077dc2b19595236b76a569cb1860ac2eb54093 (tree 3b5f229793b942ef2cb93d0d4fbd14ec9acf4144), and candidate PR #521 at e2602338 (tree cd89ac7a67585884489e2c7008ac67ac1d98962a; 1 candidate workflow definition change). Inventory: 28 main workflows, 67 development workflows, 26 shared, 2 main-only, 41 development-only, 69 names, 88 distinct definitions across refs, 0 parser warnings and 6 write-signal paths. PR #517 was read at head 3079610 / base f864fed. This refreshes exact workflow definitions and candidate metadata only; command-to-assertion/contract/results crosswalk and six write-signal classifications remain open."
+          "detail": "The plan and inventory jobs passed. The artifact pins main@279622acb090c53f86e8263d6ce90d7bc5e92492 (tree 286045e14060794b7da1ba9e814cfb72b6928a9a), development@0d077dc2b19595236b76a569cb1860ac2eb54093 (tree 3b5f229793b942ef2cb93d0d4fbd14ec9acf4144), and candidate PR #521 at e2602338 (tree cd89ac7a67585884489e2c7008ac67ac1d98962a). Inventory: 28 main workflows, 67 development workflows, 26 shared, 2 main-only, 41 development-only, 69 names, 88 distinct definitions across refs, 0 parser warnings, 6 write-signal paths. The later c5ab776 commit changed only the inventory and execution register; it has no separate run receipt. Preserve this as exact event evidence, not as a gate on c5ab776."
         }
       ],
-      "nextAction": "Complete the command→assertion→contract/result crosswalk; classify the six write-signal paths with exact source and observed outcomes, including the unresolved cleanup reservation failure; reconcile uninvoked tests and historical/candidate workflow status. Keep this inventory scoped to the exact refs above."
+      "nextAction": "Complete the command→assertion→contract/result crosswalk; classify the six write-signal paths with exact source and observed outcomes, including the unresolved cleanup reservation failure; reconcile uninvoked tests and historical/candidate workflow status. Keep this inventory tied to its exact event refs."
     },
     {
       "order": 20,
