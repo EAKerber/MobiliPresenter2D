@@ -99,7 +99,7 @@ async function main() {
             const root = document.documentElement;
             return root.dataset.theme === "dark" &&
               getComputedStyle(root).getPropertyValue("--ui-theme-focus").trim() === "#d8bc7c";
-          }, { timeout: 5000 });
+          }, undefined, { timeout: 5000 });
           const hiddenSelector = shell.path === "/admin.html"
             ? ".private-header__brand strong.visually-hidden"
             : shell.path === "/config/"
@@ -211,14 +211,23 @@ async function main() {
 
 
           await page.keyboard.press("Enter");
+          const autoActivated = await control.evaluate((button) => ({
+            mode: button.getAttribute("data-mode"),
+            label: button.getAttribute("aria-label"),
+            stored: localStorage.getItem("casa-ui-theme-mode-v1")
+          }));
+          assert.equal(autoActivated.mode, "auto", shell.path + " keyboard activation selects automatic mode after dark");
+          assert.equal(autoActivated.stored, "auto", shell.path + " keyboard activation persists automatic mode");
+          assert(autoActivated.label.includes("Ativar Claro"), shell.path + " announces the next mode from automatic");
+          await page.keyboard.press("Enter");
           const activated = await control.evaluate((button) => ({
             mode: button.getAttribute("data-mode"),
             label: button.getAttribute("aria-label"),
             stored: localStorage.getItem("casa-ui-theme-mode-v1")
           }));
-          assert.equal(activated.mode, "light", shell.path + " keyboard activation selects light mode");
-          assert.equal(activated.stored, "light", shell.path + " keyboard activation persists the mode");
-          assert(activated.label.includes("Ativar Escuro"), shell.path + " announces the next mode");
+          assert.equal(activated.mode, "light", shell.path + " keyboard activation selects light mode after automatic");
+          assert.equal(activated.stored, "light", shell.path + " keyboard activation persists light mode");
+          assert(activated.label.includes("Ativar Escuro"), shell.path + " announces the next mode from light");
           const lightGlobalFocus = viewport.name === "mobile" && shell.path === "/"
             ? await measureGlobalFocus(page, "rgb(110, 81, 46)", shell.path + " light")
             : null;
