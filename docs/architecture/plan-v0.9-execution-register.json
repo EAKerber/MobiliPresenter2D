@@ -98,9 +98,14 @@
           "source": "Product PR #499 integrated and current authority readback",
           "sha": "adb83d7e4f3384e8757316b5952579d79dda9565",
           "detail": "Product PR #499 was squash-integrated into development at adb83d7. It refreshes Product CURRENT_STATE and the 125-ID register with the Design System handover PR #141 merge (7f57633), Product main (94560aa), current Production deploy (6b083a82 READY on that exact main), and the known access limits. Product CURRENT_STATE now treats development/register as moving references to be re-read rather than pinning a stale self-changing blob. GIT-002 remains partial until the paired post-#499 handover readback and scan of remaining current-sounding pointers are complete."
+        },
+        {
+          "source": "Product PR #500 and Design System PR #142 exact integration readback",
+          "sha": "00fed1150d4926811b4419f480ca64c04b26ed36",
+          "detail": "Product PR #500 refreshed CURRENT_STATE to resolve the moving development/register branch live and integrated the post-#499 authority correction at 00fed11. Design System PR #142 refreshed HANDOVER_CURRENT after Product #499 and integrated at 8686df1. GIT-002 still needs a broader scan of current-sounding pointers and a selective review of whether Product main's current entrypoint should be updated."
         }
       ],
-      "nextAction": "Integrate the paired post-#499 handover refresh. Then inventory remaining current-sounding architecture, handover, gate-matrix and authority pointers in both repositories; keep dated records as history, and mark GIT-002 done only when an agent can identify the authoritative source for each information type without reconstructing handovers."
+      "nextAction": "Inventory the remaining current-sounding architecture, handover, gate-matrix and authority pointers in both repositories. Keep historical records intact and dated. Promote Product CURRENT_STATE to main only after checking the main-side release implications; mark GIT-002 done only when an agent can identify each authoritative source without reconstructing handovers."
     },
     {
       "order": 4,
@@ -629,9 +634,14 @@
           "source": "Compare ao vivo Product main...development após PR #487",
           "sha": "212796fcab4b610ffa0bd721a26b823a05191a5c",
           "detail": "Refs atuais: main@5c6e652693bd30218e6915bf8cb160bde03ac719 e development@212796fcab4b610ffa0bd721a26b823a05191a5c; merge base 221b54b2a41ecc8c338d1bf2cf67280cf165ce95; compare reports 610 commits on development absent from main and 35 on main absent from development; 92 main-side paths. PRs Product abertas: 0; refs Product: main, development e codex/v09-loc006-register-correction-20261126. Nenhuma integração da árvore inteira é indicada."
+        },
+        {
+          "source": "Exact Product main-versus-development compare and GIT-003 family map",
+          "sha": "00fed1150d4926811b4419f480ca64c04b26ed36",
+          "detail": "Live refs: Product main@94560aa, development@00fed11; merge base 221b54b. Compare reports 36 commits only on main and 622 only on development. The exact main-ahead side is 98 changed paths, grouped in docs/architecture/git/git-003-main-ahead-family-map-2026-11-26.json into ARC-13 inventory provenance, branch-hygiene governance, VIS-002C lifecycle, Buyer/V5 boundary, public presentation/navigation/compiler, and cross-cutting shell/test infrastructure. The reverse comparison returns 300 paths (API list cap), so its exact full changed-path count is unknown. This is a family map, not a merge approval; compare remains too broad for a whole-tree integration."
         }
       ],
-      "nextAction": "Concluir a disposição por família dos 92 caminhos de main em relação à development, com contrato, gate, rollback e checkpoint de promoção; não usar merge integral."
+      "nextAction": "For each of the six family groups, inspect exact current-tree changes, consumers, and gates; decide whether the main-side change is still relevant, already superseded, or historical. Only build coherent packages with exact-head validation and rollback. No whole-tree merge."
     },
     {
       "order": 27,
