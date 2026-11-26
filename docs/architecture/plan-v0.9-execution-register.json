@@ -898,9 +898,14 @@
           "source": "Matriz CSS do Product main/development após #477 e #478",
           "sha": "4f352c56268335ead6655653828ccc5620bfdfe6",
           "detail": "Inventário por leitura de código em main@5c6e652 e development@4f352c5. Hashes main/development: about c1d0b0c0/c1d0b0c0; admin 81b115d4/9ca5a964; VIS002C 9e7f2430/9e7f2430; how-it-works 938fb698/435e2328; landing e5696eb8/ba798615; public-theme b8122a6a/b8122a6a; styles eb346a41/eb346a41; ui-theme c1ca2a4c/921a6794; viewer 5dd315b4/5dd315b4. Cobertura observada: 8 shells carregam ui-theme por último; Admin tem classes dinâmicas em admin.js; Config tem renderizadores e styles inline; stone.js injeta z-index de canvas/mask; public-theme atende fallback; temas, breakpoints e reduced-motion têm usos específicos. Scan lexical derivado encontrou 107 nomes duplicados, 79 em folhas co-carregadas; não equivale aos 98 IDs históricos. Permanecem classes sem consumidor identificado e lacuna de CSSOM/runtime. Sem afirmação de equivalência visual ou browser runtime."
+        },
+        {
+          "source": "docs/architecture/css-00-current-baseline-2026-11-26.json",
+          "sha": "4aa791855d4fef1cb066a6fa58c06d6f615c42cc",
+          "detail": "Source-pinned CSS-00 readback at Product main@5c6e652 and development@eff75d9, Design System main@2f898c5. Exact inventory: main has 9 CSS paths; development has those 9 runtime app sheets plus 9 reference/fixture/historical CSS paths. Eight active shells and their stylesheet order are pinned; VIS-002C is indirectly imported by landing.css on three public routes. Five runtime sheets differ, four are byte-identical. Build provenance and selected runtime style owners are recorded. The selector-to-consumer crosswalk, authenticated/token state evidence, and exact-head CSS-00 check remain incomplete/UNKNOWN; CSS-00 stays partial."
         }
       ],
-      "nextAction": "Completar atribuição de consumidores para classes órfãs/duplicadas, recuperar origem dos 98 IDs e executar matriz CSSOM/runtime por rota e estado; conservar os hashes e os snapshots atuais separados."
+      "nextAction": "Complete the per-selector stylesheet → route → theme/state → recursive consumer crosswalk, classify remaining dynamic/template classes and non-runtime references, and attach exact-head CSSOM/runtime or other applicable gate receipts. Keep the historical 98-ID list separate for CSS-01; do not close CSS-00 from lexical counts."
     },
     {
       "order": 43,
