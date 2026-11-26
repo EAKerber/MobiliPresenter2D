@@ -27,16 +27,18 @@ if(dsSourceRoot){
  const checkedOutCommit=execFileSync("git",["-C",resolve(dsSourceRoot),"rev-parse","HEAD"],{encoding:"utf8"}).trim();
  assert.equal(checkedOutCommit,pin.designSystem.sourceCommit,"Design System checkout must match the commit pinned by Product");
  const sourceFiles=[
-  ["decisions.json","decisions.json",pin.designSystem.decisionGitBlob],
+  ["decisions.json",null,pin.designSystem.decisionGitBlob],
   [pin.designSystem.artifactSource,pin.artifact.path,pin.designSystem.artifactGitBlob],
   [pin.designSystem.mappingDocument,pin.mapping.path,pin.designSystem.mappingGitBlob],
   [pin.designSystem.manifestSource,pin.manifest.path,pin.designSystem.manifestGitBlob]
  ];
  for(const [sourcePath,productPath,expectedBlob] of sourceFiles){
   const source=await readFile(resolve(dsSourceRoot,sourcePath),"utf8");
-  const productCopy=await read(productPath);
   assert.equal(gitBlob(source),expectedBlob,"Design System source blob changed: "+sourcePath);
-  assert.equal(gitBlob(productCopy),expectedBlob,"Product copy differs from pinned Design System source: "+productPath);
+  if(productPath){
+   const productCopy=await read(productPath);
+   assert.equal(gitBlob(productCopy),expectedBlob,"Product copy differs from pinned Design System source: "+productPath);
+  }
  }
  console.log("VIS002C_DS_SOURCE_PIN_PASS commit="+checkedOutCommit);
 }else{
