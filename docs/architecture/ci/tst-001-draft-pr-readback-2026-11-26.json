@@ -1,0 +1,64 @@
+{
+  "schema": "M2DTST001CandidateReadback/1",
+  "workItem": "TST-001",
+  "capturedAt": "2026-11-26T19:45:37Z",
+  "inventoryArtifact": {
+    "runId": 45885998363,
+    "runUrl": "https://github.com/EAKerber/MobiliPresenter2D/actions/runs/45885998363",
+    "artifactId": 15149661184,
+    "artifactName": "tst-001-workflow-inventory-pull_request-45885998363-f864fed27026b5bddbd3b79318e68b3cf470036c",
+    "digest": "sha256:fbe95042ecd55c8f9496afb1fd08bd54e4b6c39df16d34fd7fcf7fca58af74c6",
+    "jobResults": {
+      "plan": "success",
+      "inventory": "success"
+    }
+  },
+  "refs": {
+    "main": {
+      "sha": "9f422ffe2112c06efd296425adb84dcb607bb563",
+      "tree": "0619960b6accefe79215c1b76e3cc0091d06bbcc"
+    },
+    "developmentBase": {
+      "sha": "f864fed27026b5bddbd3b79318e68b3cf470036c",
+      "tree": "a32318ba7c5b7f4e0ac3b8f49d272697333dc833"
+    },
+    "currentDevelopmentAtCapture": {
+      "sha": "5a07f018a4af63e7941c5760107d40cabcd908d6",
+      "workflowDefinitionsUnchangedSinceBase": true,
+      "compareChangedPaths": [
+        "docs/architecture/ci/tst-001-workflow-inventory-2026-11-26.json",
+        "docs/architecture/plan-v0.9-execution-register.json"
+      ]
+    }
+  },
+  "openPullRequests": [
+    {
+      "number": 517,
+      "url": "https://github.com/EAKerber/MobiliPresenter2D/pull/517",
+      "draft": true,
+      "baseRefName": "development",
+      "baseRefOid": "f864fed27026b5bddbd3b79318e68b3cf470036c",
+      "headRefName": "proposal/m2d-operations-v01-20261126",
+      "headRefOid": "3079610c6688e50604a26a4fb10580b8e3d7304d",
+      "headTree": "b92a9145a10550cfadb31e2efed0d695c6c35063"
+    }
+  ],
+  "candidateWorkflowLayer": {
+    "workflowChangeCount": 0,
+    "changes": []
+  },
+  "inventoryCounts": {
+    "main": 28,
+    "development": 67,
+    "shared": 26,
+    "mainOnly": 2,
+    "developmentOnly": 41,
+    "uniqueDefinitions": 87,
+    "parseWarnings": 0
+  },
+  "limitations": [
+    "The candidate contains no workflow-file changes; this readback does not map its eight tools/m2d_ops files to assertions or contracts.",
+    "A zero candidate workflow delta does not complete the command-to-assertion-to-contract/result crosswalk.",
+    "The snapshot is based on the PR event's exact development base; the later development change to 5a07f018 contains only the two listed documentation paths."
+  ]
+}
