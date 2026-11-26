@@ -298,7 +298,7 @@ function parseArgs(argv) {
     else if (argv[index] === '--output') options.output = path.resolve(argv[++index]);
     else if (argv[index] === '--open-prs-json') options.openPrs = JSON.parse(argv[++index]);
     else if (argv[index] === '--help') options.help = true;
-    else throw new Error(\`Unknown argument: \${argv[index]}\`);
+    else throw new Error(`Unknown argument: ${argv[index]}`);
   }
   if (!options.help && (!options.mainSha || !options.developmentSha || !options.expectedDevelopmentTree))
     throw new Error('--main-sha, --development-sha, and --development-tree are required.');
@@ -334,17 +334,17 @@ export function buildInventory({
   candidateHeadSha = null, expectedCandidateTree = null,
   candidatePrNumber = null, candidateIsDraft = null, openPrs = [], repoRoot = root
 }) {
-  const mainTree = git(['rev-parse', \`\${mainSha}^{tree}\`], 'utf8', repoRoot).trim();
+  const mainTree = git(['rev-parse', `${mainSha}^{tree}`], 'utf8', repoRoot).trim();
   const resolvedDevelopmentSha = git(['rev-parse', developmentSha], 'utf8', repoRoot).trim();
-  const developmentTree = git(['rev-parse', \`\${resolvedDevelopmentSha}^{tree}\`], 'utf8', repoRoot).trim();
+  const developmentTree = git(['rev-parse', `${resolvedDevelopmentSha}^{tree}`], 'utf8', repoRoot).trim();
   if (developmentTree !== expectedDevelopmentTree)
-    throw new Error(\`Development tree mismatch: expected \${expectedDevelopmentTree}, found \${developmentTree}\`);
+    throw new Error(`Development tree mismatch: expected ${expectedDevelopmentTree}, found ${developmentTree}`);
   const resolvedCandidateSha = candidateHeadSha
     ? git(['rev-parse', candidateHeadSha], 'utf8', repoRoot).trim() : null;
   const candidateTree = resolvedCandidateSha
-    ? git(['rev-parse', \`\${resolvedCandidateSha}^{tree}\`], 'utf8', repoRoot).trim() : null;
+    ? git(['rev-parse', `${resolvedCandidateSha}^{tree}`], 'utf8', repoRoot).trim() : null;
   if (resolvedCandidateSha && candidateTree !== expectedCandidateTree)
-    throw new Error(\`PR candidate tree mismatch: expected \${expectedCandidateTree}, found \${candidateTree}\`);
+    throw new Error(`PR candidate tree mismatch: expected ${expectedCandidateTree}, found ${candidateTree}`);
 
   const mainFiles = fileInventoryFromGit(mainSha, repoRoot);
   const developmentFiles = fileInventoryFromGit(resolvedDevelopmentSha, repoRoot);
@@ -388,7 +388,7 @@ export function buildInventory({
       developmentEventCounts[event.name] = (developmentEventCounts[event.name] ?? 0) + 1;
   }
   const warnings = [...definitions.values()].flatMap((value) =>
-    value.parseWarnings.map((warning) => \`\${value.path}: \${warning}\`));
+    value.parseWarnings.map((warning) => `${value.path}: ${warning}`));
   const withWriteSignals = workflows.filter((workflow) =>
     [workflow.mainDefinition, workflow.developmentDefinition].filter(Boolean)
       .some((sha) => definitionBySha.get(sha).mutationSignals.length > 0))
