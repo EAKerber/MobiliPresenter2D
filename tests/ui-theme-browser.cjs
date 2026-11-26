@@ -173,9 +173,29 @@ async function main() {
               visible: button.matches(":focus-visible") && style.outlineStyle !== "none",
               color: style.outlineColor,
               width: style.outlineWidth,
-              offset: style.outlineOffset
+              offset: style.outlineOffset,
+              outlineStyle: style.outlineStyle,
+              theme: document.documentElement.dataset.theme,
+              themeMode: document.documentElement.dataset.themeMode,
+              token: getComputedStyle(document.documentElement).getPropertyValue("--ui-theme-focus").trim(),
+              className: button.className,
+              matchingFocusRules: [...document.styleSheets].flatMap((sheet) => {
+                const matches = [];
+                const visit = (rules) => {
+                  for (const rule of rules) {
+                    if (rule.selectorText && rule.selectorText.includes(":focus-visible")) {
+                      let applies = false;
+                      try { applies = button.matches(rule.selectorText); } catch (_error) {}
+                      if (applies) matches.push({ selector: rule.selectorText, cssText: rule.style.cssText, href: sheet.href });
+                    } else if (rule.cssRules) visit(rule.cssRules);
+                  }
+                };
+                try { visit(sheet.cssRules); } catch (_error) {}
+                return matches;
+              })
             };
           });
+          console.log("THEME_FOCUS_DEBUG " + JSON.stringify({ shell: shell.path, viewport: viewport.name, ...focusStyle }));
           assert(focusStyle.visible, shell.path + " keyboard focus is visibly indicated");
           assert.equal(focusStyle.color, "rgb(216, 188, 124)", shell.path + " dark focus color preserves the baseline");
           assert.equal(focusStyle.width, "3px", shell.path + " dark focus width preserves the baseline");
