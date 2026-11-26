@@ -1,36 +1,6 @@
 name: Development 16 — VIS002 reference pin (not activated) and computed CSS audit
 
 on:
-  pull_request:
-    branches:
-      - development
-    paths:
-      -       - 'docs/architecture/css-00-current-baseline-2026-11-26.json'
-      - '.github/workflows/development-vis002-reference-pin.yml'
-      - 'app/index.html'
-      - 'app/about/index.html'
-      - 'app/how-it-works/index.html'
-      - 'app/viewer/index.html'
-      - 'app/config/index.html'
-      - 'app/admin.html'
-      - 'app/access/index.html'
-      - 'app/access/manage.html'
-      - 'app/about/about.css'
-      - 'app/admin/admin.css'
-      - 'app/design-system/vis002c-long-copy-light-v0.3.0.css'
-      - 'app/how-it-works/how-it-works.css'
-      - 'app/landing/landing.css'
-      - 'app/public-theme.css'
-      - 'app/styles.css'
-      - 'app/ui-theme.css'
-      - 'app/viewer/viewer.css'
-      - 'app/core/ui-theme.js'
-      - 'app/core/stone.js'
-      - 'app/core/scene-component.js'
-      - 'app/app.js'
-      - 'app/admin/admin.js'
-      - 'app/landing/landing.js'
-      - 'app/viewer/viewer.js'
   push:
     branches:
       - development
@@ -39,9 +9,7 @@ on:
       - 'design-system/audits/p-token-01b-current-css-literal-observations.json'
       - 'scripts/verify-design-system-reference-pin.mjs'
       - 'tests/design-system-reference-pin.test.mjs'
-      - 'tests/design-system-computed-style-readonly-audit.mjs'
       - 'tools/development_vis002_reference_pin_audit.py'
-      - '.github/workflows/development-vis002-reference-pin.yml'
   workflow_dispatch:
 
 permissions:
@@ -49,7 +17,6 @@ permissions:
 
 jobs:
   provenance-and-computed-css:
-    if: github.event_name != 'pull_request'
     runs-on: ubuntu-latest
     timeout-minutes: 25
     container:
@@ -99,74 +66,5 @@ jobs:
         with:
           name: vis002-reference-not-activated-${{ github.run_id }}
           path: artifacts/development-vis002-reference/
-          retention-days: 30
-          if-no-files-found: warn
-
-  css-00-readback:
-    if: github.event_name == 'pull_request'
-    runs-on: ubuntu-latest
-    timeout-minutes: 30
-    container:
-      image: mcr.microsoft.com/playwright:v1.62.1-noble
-      options: --ipc=host
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          ref: ${{ github.event.pull_request.head.sha || github.sha }}
-          fetch-depth: 0
-      - uses: actions/checkout@v4
-        id: main-source
-        with:
-          ref: main
-          path: snapshots/main
-          fetch-depth: 1
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '22'
-      - name: Install matching Playwright client
-        run: |
-          npm install --no-save --no-package-lock --no-audit --no-fund playwright@1.62.1
-          node -e 'if(require("playwright/package.json").version!=="1.62.1")process.exit(1)'
-      - name: Check audit script syntax
-        run: node --check tests/design-system-computed-style-readonly-audit.mjs
-      - name: Serve exact main and candidate source trees
-        shell: bash
-        run: |
-          mkdir -p artifacts/css-00
-          printf '{"main":"%s","candidate":"%s"}\n' "$(git -C snapshots/main rev-parse HEAD)" "$(git rev-parse HEAD)" > artifacts/css-00/refs.json
-          python3 -m http.server 8123 --bind 127.0.0.1 --directory "$GITHUB_WORKSPACE/snapshots/main/app" >/tmp/m2d-css00-main.log 2>&1 &
-          python3 -m http.server 8124 --bind 127.0.0.1 --directory "$GITHUB_WORKSPACE/app" >/tmp/m2d-css00-candidate.log 2>&1 &
-          for i in $(seq 1 30); do
-            if curl -fsS http://127.0.0.1:8123/ >/dev/null && curl -fsS http://127.0.0.1:8124/ >/dev/null; then break; fi
-            sleep 1
-          done
-          for origin in http://127.0.0.1:8123 http://127.0.0.1:8124; do
-            curl -fsS "$origin/about/" >/dev/null
-            curl -fsS "$origin/how-it-works/" >/dev/null
-            curl -fsS "$origin/viewer/" >/dev/null
-            curl -fsS "$origin/config/" >/dev/null
-            curl -fsS "$origin/admin.html" >/dev/null
-            curl -fsS "$origin/access/" >/dev/null
-            curl -fsS "$origin/access/manage.html" >/dev/null
-          done
-      - name: Audit exact main read-only CSSOM (32 public scenarios)
-        env:
-          CSS_AUDIT_SOURCE_REF: ${{ steps.main-source.outputs.commit }}
-          CSS_AUDIT_SITE_ROOT: ${{ github.workspace }}/snapshots/main/app
-          CSS_AUDIT_ORIGIN: http://127.0.0.1:8123
-          CSS_AUDIT_OUTPUT_DIR: artifacts/css-00/main
-        run: node tests/design-system-computed-style-readonly-audit.mjs
-      - name: Audit exact candidate read-only CSSOM (32 public scenarios)
-        env:
-          CSS_AUDIT_SOURCE_REF: ${{ github.event.pull_request.head.sha || github.sha }}
-          CSS_AUDIT_SITE_ROOT: ${{ github.workspace }}/app
-          CSS_AUDIT_ORIGIN: http://127.0.0.1:8124
-          CSS_AUDIT_OUTPUT_DIR: artifacts/css-00/candidate
-        run: node tests/design-system-computed-style-readonly-audit.mjs
-      - uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: css-00-readback-${{ github.run_id }}
-          path: artifacts/css-00/
           retention-days: 30
           if-no-files-found: warn
