@@ -2,7 +2,7 @@
   "schema": "ProductMainDevelopmentTreeDifference/2",
   "readAt": "2026-11-26T14:25:00Z",
   "repository": "EAKerber/MobiliPresenter2D",
-  "scope": "Exact current blob-by-path differences between the two refs. Same-path different blobs count on both perspectives; paths absent from one tree are classified as one-sided. This is an inventory, not merge approval.",
+  "scope": "Exact current-tree blob-by-path differences from main's perspective, with a summarized reverse perspective. Same-path different blobs count on both sides; paths absent from one tree are classified as one-sided. This is an inventory, not merge approval.",
   "supersedes": "docs/architecture/git/git-003-main-ahead-family-map-2026-11-26.json schema ProductMainAheadFamilyMap/1; its 98 merge-base paths were mislabeled as net main-ahead differences and its reverse-row count field was wrong.",
   "refs": {
     "main": "94560aa9c4dfc2871a6eb1035b6ecaa283224453",
