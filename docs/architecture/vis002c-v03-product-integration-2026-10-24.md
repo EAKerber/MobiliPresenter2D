@@ -17,6 +17,6 @@ A cópia da distribuição, do mapa e do manifesto fica fixada em `design-system
 
 ## Revisão e proveniência
 
-O verificador compara os hashes Git dos três arquivos copiados com o pin, confere os dez seletores exatos e confirma o import, a atribuição contextual e a permanência do tema escuro. O gate agora também faz checkout do Design System no commit exato fixado e compara a decisão, o CSS, o mapeamento e o manifesto originais com as cópias do Product; hashes de texto são normalizados para LF antes do cálculo de Git blob, evitando divergência falsa em checkout Windows CRLF.
+O verificador compara os hashes Git dos três arquivos copiados com o pin, confere os dez seletores exatos e confirma o import, a atribuição contextual e a permanência do tema escuro. Em Product development no commit `a7f34f593e7d7f82d17c0165e9de7c80455ee240`, o gate faz checkout do Design System no commit exato fixado e compara a decisão canônica e os três artefatos originais com as cópias do Product. Hashes de texto normalizam CRLF para LF e rejeitam CR isolado. O PR #495 e o workflow exato passaram; Product main continua no gate anterior.
 
 A revisão visual registrada na PR #241 ocorreu em preview em 2026-10-25, antes da integração. O readback de Production confirma que o CSS está na fonte publicada, mas não substitui a conciliação do campo `runtimeStatus`, nem demonstra por si só a aparência computada nos dez contextos. Até a atualização do registro, manter separados: decisão estética anterior, integração de código, deploy pronto e verificação runtime atual.
