@@ -21,8 +21,8 @@
     "adminShellGitBlob": "390735675673917149e49e21b4f7355c79eeaba8",
     "adminShellSha256": "F123E6347DADF9AE72FBB1C05700993D9AC9BA722954BF9366A0FCFE40CCC77A",
     "browserContract": "tests/admin-hierarchy-browser.cjs",
-    "browserContractGitBlob": "daec7a15b63ed0ac66bd5ff7c8eb0234f3f7788c",
-    "browserContractSha256": "F5FF27E2AD417056330C6C3C714D7EF697BC34CE1C94B13630606D970E4DA6F6",
+    "browserContractGitBlob": "35006f4f1c84a2fd9797804e45e4952868f3d8b3",
+    "browserContractSha256": "A55C618F1655FC58C3FDA0A3822783177A9C72F79752907EB7CE6F373942FABB",
     "generatedPrimaryPageManifest": "architecture/generated/primary-pages.manifest.json",
     "generatedPrimaryPageManifestGitBlob": "6776b3c87b146694baa29c76d55cea57a041950e",
     "generatedPrimaryPageManifestSha256": "69C88BD5DA7691AAE1799381B7515676391C977528E230D069D7134A0875D8B4",
@@ -62,7 +62,7 @@
       "unassignedOwnerSites": 0,
       "unassignedRouteSites": 0
     },
-    "developmentPullRequestGates": "pending exact PR head; local browser execution is not installed in this worktree"
+    "developmentPullRequestGates": "All 12 applicable workflows passed on exact code/test head a31769f8cd794463c339374312f6e98b1262615e; this receipt-only follow-up changes no implementation or test content."
   },
   "limits": [
     "This family covers only fixed Admin editor-shell copy; other Admin and Config copy families remain partial.",
