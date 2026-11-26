@@ -384,14 +384,6 @@ def apply(plan_path: Path, dispositions_path: Path, expected_plan: str,
     for entry in live_selected:
         branch, sha = entry["branch"], entry["sha"]
         pin = {"branch": branch, "sha": sha}
-        if pin_marker(key, "done", pin) is not None:
-            raise RuntimeError("CONSUMED_BRANCH_RECREATED:" + branch)
-        if pin_marker(key, "intent", pin) is not None:
-            raise RuntimeError("INTENT_BRANCH_PRESENT_AMBIGUOUS:" + branch)
-        write_pin_marker(
-            key, "intent", repository, flow, operation_identity, run_id or "",
-            os.environ["GITHUB_SHA"], pin,
-        )
         # Re-observe the full inventory, PRs and protection for every candidate.
         # GitHub REST can briefly lag Git refs after the previous deletion.
         # Retry only cross-provider synchronization, never a changed inventory.
@@ -431,6 +423,16 @@ def apply(plan_path: Path, dispositions_path: Path, expected_plan: str,
                 raise RuntimeError("ARCHIVE_NOT_VERIFIED:" + branch)
             receipt["archiveProofs"] = [p for p in receipt["archiveProofs"] if p["branch"] != branch] + [archived]
             save()
+        if pin_marker(key, "done", pin) is not None:
+            raise RuntimeError("CONSUMED_BRANCH_RECREATED:" + branch)
+        if pin_marker(key, "intent", pin) is not None:
+            raise RuntimeError("INTENT_BRANCH_PRESENT_AMBIGUOUS:" + branch)
+        # Write intent only after all remote eligibility checks and archival
+        # proof succeed; from here to lease/readback, retries must fail closed.
+        write_pin_marker(
+            key, "intent", repository, flow, operation_identity, run_id or "",
+            os.environ["GITHUB_SHA"], pin,
+        )
         expected_inventory = delete_exact_ref(branch, sha, expected_inventory)
         write_pin_marker(
             key, "done", repository, flow, operation_identity, run_id or "",
