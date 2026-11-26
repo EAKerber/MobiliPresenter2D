@@ -15,12 +15,16 @@ on:
       - app/how-it-works/index.html
       - app/public-theme.css
       - tests/public-image-fallback.test.mjs
+      - tests/ci/vis002-context-pin.test.mjs
       - tests/vis002c-v03-scoped-raster.mjs
       - tests/public-image-fallback-browser.mjs
       - design-system/pins/vis-002/context-v0.3.0/**
       - scripts/verify-vis002c-product-pin-v03.mjs
+      - scripts/vis002c-pin-lifecycle.mjs
       - docs/architecture/vis002c-v03-product-integration-2026-10-24.md
       - .github/workflows/vis002c-v03-product-pin.yml
+      - package.json
+      - scripts/compile-primary-pages.mjs
 permissions:
   contents: read
 jobs:
@@ -29,13 +33,22 @@ jobs:
     timeout-minutes: 5
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          repository: EAKerber/MobiliPresenter2D_DesignSystem
+          ref: 2f11ecf8948c779706a0ce0795e088d29633fb7e
+          path: .work/design-system-source
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - name: Verify copied source blobs, seven contexts, token consumers and theme scope
+      - name: Verify pinned source, ten contexts, token consumers and theme scope
+        env:
+          VIS002C_DS_SOURCE_ROOT: .work/design-system-source
         run: |
           node --check scripts/verify-vis002c-product-pin-v03.mjs
+          node --check scripts/vis002c-pin-lifecycle.mjs
           node scripts/verify-vis002c-product-pin-v03.mjs
+          node --test tests/ci/vis002-context-pin.test.mjs
           node --check app/core/image-fallback.js
           node --check app/how-it-works/how-it-works.js
           node tests/public-image-fallback.test.mjs
