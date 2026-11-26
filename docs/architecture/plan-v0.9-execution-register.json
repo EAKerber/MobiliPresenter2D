@@ -88,9 +88,14 @@
           "source": "Readback do HANDOVER_CURRENT no Design System main após PR #139",
           "sha": "5a67a551daac70b888907fec9bc246207591204a",
           "detail": "O Design System main atual é 4c075fc8f8653b5d87f1f07f7471959718b106b2, mas HANDOVER_CURRENT.md ainda reporta Product development@eff75d93655cb2796f1823ab3b9789c0aa9c591c; o Product development live é 212796fcab4b610ffa0bd721a26b823a05191a5c. O próprio documento diz que a captura é de 08:20 UTC e requer nova leitura. Reconciliar o handover, sem tratar esse retrato como evidência atual."
+        },
+        {
+          "source": "Design System PR #141 merge and Product authority-map branch readback",
+          "sha": "7f57633cb869d388d8279c7ac5d5ccab3a11a17f",
+          "detail": "Design System HANDOVER_CURRENT was refreshed and squash-integrated at 7f57633. Live refs at readback: Product main@94560aa, development@3c84c65, Design System main@7f57633; no open PRs, Product has 3 refs and Design System 4, production deploy 6b083a82 is READY at exact Product main. Product CURRENT_STATE was refreshed on codex/v09-git002-authority-map-20261126 at 6ad59cc but is not yet integrated. GIT-002 remains partial until this Product change lands and the remaining current-sounding pointers are audited."
         }
       ],
-      "nextAction": "Refresh HANDOVER_CURRENT in the Design System from current refs (Product main 5c6e652693bd30218e6915bf8cb160bde03ac719, development 65fab1a5e04e50cedb4d2e177d56736d74a7a343; Design System main 026c6c4f4d9a6d29102a241862afdb50c35de147), then scan remaining current-authority pointers. Preserve dated handovers as historical records and revalidate refs before integration."
+      "nextAction": "Integrate the targeted Product authority-map and register update into development, then scan the remaining current-sounding architecture, handover, and gate-matrix pointers in both repositories. Keep GIT-002 partial until the hierarchy DoD is proven; promote to Product main selectively only where the authority entry point requires it."
     },
     {
       "order": 4,
@@ -829,11 +834,11 @@
       "chapter": "III",
       "priority": "P0",
       "planState": "in_progress",
-      "reconciliation": "partial",
+      "reconciliation": "done",
       "local": "partial",
-      "development": "partial",
-      "main": "partial",
-      "technicalValidation": "partial",
+      "development": "done",
+      "main": "done",
+      "technicalValidation": "done",
       "approvalPublication": "done",
       "evidence": [
         {
@@ -855,9 +860,19 @@
           "source": "Live Production DOM/CSSOM readback 2026-11-26",
           "sha": "5c6e652693bd30218e6915bf8cb160bde03ac719",
           "detail": "Netlify deploy 6b07bd0f17cb2fd1e0d65b34 is READY on main@5c6e652. Anonymous browser CSSOM confirmed the exact imported stylesheet, the scoped custom property #292723, and computed rgb(41,39,35) on all 10 mapped selectors across /, /about/, and /how-it-works/ in light theme. Existing approval is anchored by manifest constraints.visualChangeAuthorized plus merged DS #52 and Product #241 receipts; the deploy alone is not treated as approval. Dark-theme runtime was not remeasured in this readback."
+        },
+        {
+          "source": "Product PR #497 exact-head lifecycle/source gate",
+          "sha": "3c84c658439eae10ce5f3a13ecc8a71fb613d7e5",
+          "detail": "PR #497 was validated by exact-head run 45832739322 and squash-integrated into development. Workflow checks out the pinned Design System source commit and compares canonical Product/Design System blobs. Lifecycle tests cover REFERENCE_ONLY, SCOPED_INTEGRATION_CANDIDATE_NOT_RELEASED, and SCOPED_RUNTIME_AUTHORIZED_AND_RELEASED, including invalid transitions; gate scope preserves the ten mapped selectors and light-theme token."
+        },
+        {
+          "source": "Product PR #498 exact-head gate, selective main integration, and Production deploy readback",
+          "sha": "94560aa9c4dfc2871a6eb1035b6ecaa283224453",
+          "detail": "PR #498 exact head 837468649095a41ff03e9c4727cb74b304308e92 passed workflow 45833613512 (verify-pinned-consumers and scoped-raster), then was squash-integrated into main at 94560aa. Diff was limited to the lifecycle pin/gate/tests/docs; no app/CSS/runtime files changed. Netlify Production deploy 6b083a82b6dff365f89fa2bf is READY on this exact main commit. Existing live CSSOM evidence remains valid because the release was non-runtime. Local checkout validation remains partial."
         }
       ],
-      "nextAction": "Validate the explicit reference/candidate/runtime-authorized state machine and source gate on the exact Product development head; if all focused gates pass, port this non-runtime contract package to main. Keep Product CSS and page behavior unchanged."
+      "nextAction": "TOK-00's lifecycle DoD is satisfied on exact Product development and main refs; keep the local dimension partial because the active workspace was not used for this source-pinned change. Continue with GIT-002 and the next P0 work."
     },
     {
       "order": 39,
