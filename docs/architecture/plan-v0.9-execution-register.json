@@ -600,9 +600,14 @@
           "source": "Branch Hygiene vNext read-only run #356, artifact #15158385866",
           "sha": "ecaa38cf0be54e8d586458a86d1062b90c0b9691",
           "detail": "Run #45906365744 observed 16 Product refs at main@ecaa38cf0be54e8d586458a86d1062b90c0b9691 and development@6750d9b67a9b5d8b52c022093fdac50f288c0339. Plan hash a61dfe057cf9bd1b14df766a4b638a57cdd94b28ca66160eefea6ced06b4e765 reported authorization NONE and zero delete-candidates. Discovery counts (main 2 candidate/3 preserve/11 review; development 5 candidate/3 preserve/8 review) are advisory only and do not authorize deletion."
+        },
+        {
+          "source": "Branch Hygiene vNext post-merge cleanup retries and live ref readback, 2026-11-26",
+          "sha": "ca9be99f1ea3a3e89a1c9588ae32cdeaf75d8860",
+          "detail": "The read-only run #356 observed 16 refs and authorized zero deletions. Seven previously failed exact post-merge cleanup jobs were then retried individually; each revalidated its target and completed with receipt status PASS, result DELETED, deleted=true, readback PASS, proof SQUASH_TREE_IDENTICAL: #512 run 45872428781 branch codex/git021-consumption-guard-main-20261126 @ 444b6304; #513 run 45872793188 branch codex/git021-main-readback-20261126 @ 6579516d; #514 run 45881145982 branch codex/vis002c-solid-background-gate-20261126 @ 092263c0; #515 run 45882362132 branch codex/tok01-production-receipt-refresh-20261126 @ ac47f22a; #518 run 45886297565 branch codex/tst001-inventory-refresh-20261126 @ 3be24f0a; #519 run 45887541965 branch codex/tst001-pr517-readback-20261126 @ 128ade99; #520 run 45891893301 branch codex/tok02-focus-alias-main-port-20261126 @ 1a1798b5. Final live readback confirms all seven refs absent, Product main@ecaa38cf0be54e8d586458a86d1062b90c0b9691 unchanged, development@ca9be99f1ea3a3e89a1c9588ae32cdeaf75d8860, and 9 Product refs. The exact retained-ref list was captured in the current readback; no further cleanup is implied."
         }
       ],
-      "nextAction": "Before each retirement batch, obtain the current vNext observation and exact reviewed batch receipt. The latest run #356 authorized no deletion; do not infer an eligible batch from discovery counts."
+      "nextAction": "Keep GIT-019 done for the tested mechanism. The seven exact retries passed and reduced Product refs to 9; before any later retirement, obtain a fresh vNext observation and a reviewed receipt for those exact targets. Discovery counts alone are not authority."
     },
     {
       "order": 25,
