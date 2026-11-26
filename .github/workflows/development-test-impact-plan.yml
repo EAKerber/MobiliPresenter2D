@@ -60,29 +60,56 @@ jobs:
         id: refs
         env:
           GH_TOKEN: ${{ github.token }}
+          BASE_SHA: ${{ github.event.pull_request.base.sha || '' }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha || '' }}
+          PR_NUMBER: ${{ github.event.pull_request.number || '' }}
+          PR_DRAFT: ${{ github.event.pull_request.draft || false }}
         run: |
           git fetch origin main
           main_sha="$(git rev-parse FETCH_HEAD)"
-          development_sha="$(git rev-parse HEAD)"
-          expected_development_sha="$GITHUB_SHA"
+          development_sha="$GITHUB_SHA"
+          candidate_sha=""
+          candidate_tree=""
+          candidate_pr_number=""
+          candidate_is_draft=""
           if [ "$GITHUB_EVENT_NAME" = "pull_request" ]; then
-            expected_development_sha="${{ github.event.pull_request.head.sha }}"
+            development_sha="$BASE_SHA"
+            candidate_sha="$HEAD_SHA"
+            candidate_pr_number="$PR_NUMBER"
+            candidate_is_draft="$PR_DRAFT"
+            candidate_tree="$(git rev-parse "${candidate_sha}^{tree}")"
           fi
-          test "$development_sha" = "$expected_development_sha"
-          development_tree="$(git rev-parse 'HEAD^{tree}')"
+          git cat-file -e "$main_sha^{commit}"
+          git cat-file -e "$development_sha^{commit}"
+          development_tree="$(git rev-parse "${development_sha}^{tree}")"
           mkdir -p artifacts
-          gh pr list --state open --limit 1000 --json number,url,headRefName,headRefOid,baseRefName,baseRefOid > artifacts/open-prs.json
+          gh pr list --state open --limit 1000 --json number,url,headRefName,headRefOid,baseRefName,baseRefOid,isDraft > artifacts/open-prs.json
           echo "main_sha=$main_sha" >> "$GITHUB_OUTPUT"
           echo "development_sha=$development_sha" >> "$GITHUB_OUTPUT"
           echo "development_tree=$development_tree" >> "$GITHUB_OUTPUT"
+          echo "candidate_sha=$candidate_sha" >> "$GITHUB_OUTPUT"
+          echo "candidate_tree=$candidate_tree" >> "$GITHUB_OUTPUT"
+          echo "candidate_pr_number=$candidate_pr_number" >> "$GITHUB_OUTPUT"
+          echo "candidate_is_draft=$candidate_is_draft" >> "$GITHUB_OUTPUT"
       - name: Generate SHA-pinned workflow inventory
         run: |
-          node tools/ci/build-workflow-inventory.mjs \
-            --main-sha "${{ steps.refs.outputs.main_sha }}" \
-            --development-pin "${{ steps.refs.outputs.development_sha }}" \
-            --development-tree "${{ steps.refs.outputs.development_tree }}" \
-            --open-prs-json "$(cat artifacts/open-prs.json)" \
+          inventory_args=(
+            --main-sha "${{ steps.refs.outputs.main_sha }}"
+            --development-sha "${{ steps.refs.outputs.development_sha }}"
+            --development-tree "${{ steps.refs.outputs.development_tree }}"
+            --open-prs-json "$(cat artifacts/open-prs.json)"
             --output artifacts/tst-001-workflow-inventory.json
+          )
+          candidate_sha="${{ steps.refs.outputs.candidate_sha }}"
+          if [ -n "$candidate_sha" ]; then
+            inventory_args+=(
+              --candidate-head-sha "$candidate_sha"
+              --candidate-tree "${{ steps.refs.outputs.candidate_tree }}"
+              --candidate-pr-number "${{ steps.refs.outputs.candidate_pr_number }}"
+              --candidate-is-draft "${{ steps.refs.outputs.candidate_is_draft }}"
+            )
+          fi
+          node tools/ci/build-workflow-inventory.mjs "${inventory_args[@]}"
       - name: Emit exact inventory JSON for readback
         run: |
           echo 'BEGIN_TST001_INVENTORY_JSON'
