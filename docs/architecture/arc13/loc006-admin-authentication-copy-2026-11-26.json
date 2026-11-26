@@ -1,9 +1,12 @@
 {
   "schema": "ARC13LOC002FamilyReview/1",
   "plan": "MobiliPresenter2D Plano Diretor v0.9",
-  "workItems": ["LOC-002", "LOC-006"],
+  "workItems": [
+    "LOC-002",
+    "LOC-006"
+  ],
   "family": "admin-authentication-invitation-and-password-recovery-copy",
-  "status": "candidate-implemented",
+  "status": "integrated-development",
   "evidence": {
     "baseRevision": "23485dc9d6dd7ea5a3a871360c6f423da7dbc2de",
     "inventoryPath": "architecture/arc13/ui-text-candidates.json",
@@ -51,11 +54,19 @@
       "unassignedOwnerSites": 0,
       "unassignedRouteSites": 0
     },
-    "developmentPullRequestGates": "Pending for the exact PR head"
+    "developmentPullRequestGates": "Exact PR head da9cd50c32739d3f7b5a74d108901a3de9c659a2: all checks completed; 15 check-runs succeeded and Supabase Preview was skipped because project preview branches are disabled."
   },
   "limits": [
     "No Identity API, authorization, persistence, session, token, provider-error, or deployment behavior is changed.",
     "No commercial content or configured data is moved into the copy catalog.",
     "LOC-006 and the global ARC-13 candidate inventory remain partial/unreviewed; this receipt covers only the named Admin authentication-copy family."
-  ]
+  ],
+  "developmentIntegration": {
+    "pullRequest": 474,
+    "head": "da9cd50c32739d3f7b5a74d108901a3de9c659a2",
+    "mergeCommit": "c26b5b4018f7a2e23206d16a9bf68a23e5bdb941",
+    "developmentReadback": "c26b5b4018f7a2e23206d16a9bf68a23e5bdb941",
+    "mainReadback": "2f1b7e1ee8fbc81b8bc8d22014cfe29d599da37f",
+    "mainChanged": false
+  }
 }
