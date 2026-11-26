@@ -401,9 +401,14 @@
           "source": "Product merged-PR cleanup run #45885782903 for PR #516",
           "sha": "aad9f179a719a68d3b35575732bdfdeb0119e918",
           "detail": "The pull_request_target cleanup job failed during operation-marker reservation with CONSUMPTION_GIT_FAILED at the local `git tag -a` command. The command sequence failed before delete_exact_ref; no cleanup receipt artifact was produced. The subprocess error text was omitted, so the underlying cause remains unknown. Record this as an observed operational failure, not a completed branch deletion or proof that the cleanup policy is safe."
+        },
+        {
+          "source": "Live Product ref and TST-001 artifact audit on 2026-11-26",
+          "sha": "4bcfa26911498a9bf5c3c94c517e9931746b437b",
+          "detail": "Live refs: main@7ebacc86018c60e54df4d0e15c95ecd3eed46a77 and development@4bcfa26911498a9bf5c3c94c517e9931746b437b. The active frozen-inventory auxiliary and PR-archive executors were retired in development; dated October inventory/closure records remain historical. The older TST-001 inventory and open draft PR #521 are pinned to earlier refs and still list the retired workflow. In that inventory, push:60 counts workflow push-trigger declarations, not Git branches. Do not present either as current; refresh the exact inventory at these live refs."
         }
       ],
-      "nextAction": "Complete the remaining command→assertion→contract/result crosswalk; classify the six current write-signal paths using exact source and observed outcomes, including the unresolved merged-PR cleanup failure; reconcile uninvoked tests and historical/candidate workflow status without conflating current refs."
+      "nextAction": "Generate a fresh exact-ref workflow inventory and candidate readback at current main/development refs; preserve October inventories as dated history, and close or supersede draft PR #521 without merging its stale snapshot."
     },
     {
       "order": 20,
@@ -659,9 +664,14 @@
           "source": "Exact recursive Git blob comparison and corrected GIT-003 map",
           "sha": "45b690e93209a654b81b9ed73c4c794c4f2b014f",
           "detail": "At Product main@94560aa and development@45b690e, both recursive trees were complete. Exact blob comparison: main 816 files, development 1225; 7 paths exist only in main, 416 only in development, and 86 shared paths have different blobs. Thus 93 paths are absent/different from development's perspective and 502 from development's perspective. The earlier 98/300 compare rows are merge-base-relative history, not net tree deltas; the previous map mislabeled these and is superseded by schema /2. Product v0.9 register remains partial pending semantic disposition and safe family packages."
+        },
+        {
+          "source": "Live Product main/development compare on 2026-11-26",
+          "sha": "7ebacc86018c60e54df4d0e15c95ecd3eed46a77",
+          "detail": "Exact live refs: main@7ebacc86018c60e54df4d0e15c95ecd3eed46a77; development@4bcfa26911498a9bf5c3c94c517e9931746b437b; merge base 221b54b2a41ecc8c338d1bf2cf67280cf165ce95; compare reports 45 commits only on main and 645 only on development. The tree remains widely divergent; this is not authorization for a whole-tree merge. Rebuild the exact path/semantic family map at these refs."
         }
       ],
-      "nextAction": "Inspect the 93 main-perspective blob differences in the corrected map against current consumers, workflows, and semantic contracts. For each, decide whether development is missing the behavior, already has an equivalent/newer version, or intentionally differs. Build only coherent packages after exact-head gates and rollback are defined; do not infer promotion from merge-base history."
+      "nextAction": "Regenerate the complete exact tree-difference map at current refs, classify each path by consumer and contract, then port only complete coherent families with their gates."
     },
     {
       "order": 27,
@@ -1542,9 +1552,14 @@
           "source": "docs/architecture/ci/tst-009-v5-publication-crosswalk-2026-11-25.md",
           "sha": "d0f63d0c62ed25a78067bb8b2e98d88fded5a1a7",
           "detail": "Reader/inspector, endpoint Admin e consumidores distinguem missing/stored/valid/invalid; testes de V3/V5, schema inválido, metadados, defaults, ETag privado e Preview/prod passaram localmente com blobs iguais à development. Mocks e estado hosted permanecem limitados; main tem endpoint/workflow/testes diferentes."
+        },
+        {
+          "source": "Product main PR #522 and PR #523 exact-head gates; live source/blob comparison",
+          "sha": "7ebacc86018c60e54df4d0e15c95ecd3eed46a77",
+          "detail": "At current main@7ebacc8, the shared reader, V5 inspection, and conditional-save core blobs match development exactly (published-configuration.js 7b5d13d; v5-publication-inspection.js 0da45108; v5-normal-save.js e9da3059). Endpoint/Admin/test/workflow blobs differ. Main endpoint tests and authorization-boundary gate passed all 9 PR #522 checks at head 46e8a21; PR #523 added configuration.mjs to app-build-purity trigger paths and run #45898340031 passed. Main app-build-purity blob is 39a2511; development is 3debb0f. This validates the bounded source/test/gate slice, not hosted Identity behavior or real Netlify Blob atomicity."
         }
       ],
-      "nextAction": "Development DoD is covered for the current slice. Reconcile the differing Admin endpoint, tests, and workflow on main during selective promotion; keep provider-level and hosted state unclaimed."
+      "nextAction": "Reconcile the current endpoint/Admin/test blob deltas with development's same fail-closed V5 and read-only legacy fallback contract. Keep hosted Admin and provider behavior explicitly unknown until independently observed."
     },
     {
       "order": 73,
@@ -1564,9 +1579,14 @@
           "source": "docs/architecture/ci/tst-009-v5-publication-crosswalk-2026-11-25.md",
           "sha": "d0f63d0c62ed25a78067bb8b2e98d88fded5a1a7",
           "detail": "Save V5 e testes cobrem validação, revisão, normalização/incremento, onlyIfMatch, um vencedor em concorrência, conflito sem retry, confirmação de escrita, readback por ETag/digest/assinatura, recusa de downgrade/migração e não escrita em estado inválido. Cinco testes de leitura/save/endpoint/Buyer passaram com hashes iguais à development. Atomicidade do provider real não comprovada."
+        },
+        {
+          "source": "Product main PR #522 and PR #523 exact-head gates; live source/blob comparison",
+          "sha": "7ebacc86018c60e54df4d0e15c95ecd3eed46a77",
+          "detail": "At current main@7ebacc8, the shared reader, V5 inspection, and conditional-save core blobs match development exactly (published-configuration.js 7b5d13d; v5-publication-inspection.js 0da45108; v5-normal-save.js e9da3059). Endpoint/Admin/test/workflow blobs differ. Main endpoint tests and authorization-boundary gate passed all 9 PR #522 checks at head 46e8a21; PR #523 added configuration.mjs to app-build-purity trigger paths and run #45898340031 passed. Main app-build-purity blob is 39a2511; development is 3debb0f. This validates the bounded source/test/gate slice, not hosted Identity behavior or real Netlify Blob atomicity."
         }
       ],
-      "nextAction": "Development DoD is covered for the current slice. Reconcile the differing Admin endpoint, tests, and workflow on main during selective promotion; retain provider-level atomicity as UNKNOWN."
+      "nextAction": "The shared V5 CAS/save core is identical across live refs and main gates pass. Reconcile the endpoint/test/workflow deltas by contract; retain provider-level atomicity as UNKNOWN."
     },
     {
       "order": 74,
@@ -1586,9 +1606,14 @@
           "source": "docs/architecture/ci/tst-009-v5-publication-crosswalk-2026-11-25.md",
           "sha": "d0f63d0c62ed25a78067bb8b2e98d88fded5a1a7",
           "detail": "Crosswalk conecta asserts de sucesso/falha, CAS, concorrência, readback, downgrade, migração, DTO, caminho sem escrita e trigger PR/push às ameaças correspondentes. Os cinco comandos de teste passaram localmente em fontes com blobs idênticos à development; sessão Identity e atomicidade Blob hospedadas permanecem fora da prova. Gate de proteção requerida não acessível (403)."
+        },
+        {
+          "source": "Product main PR #522 and PR #523 exact-head gates; live source/blob comparison",
+          "sha": "7ebacc86018c60e54df4d0e15c95ecd3eed46a77",
+          "detail": "At current main@7ebacc8, the shared reader, V5 inspection, and conditional-save core blobs match development exactly (published-configuration.js 7b5d13d; v5-publication-inspection.js 0da45108; v5-normal-save.js e9da3059). Endpoint/Admin/test/workflow blobs differ. Main endpoint tests and authorization-boundary gate passed all 9 PR #522 checks at head 46e8a21; PR #523 added configuration.mjs to app-build-purity trigger paths and run #45898340031 passed. Main app-build-purity blob is 39a2511; development is 3debb0f. This validates the bounded source/test/gate slice, not hosted Identity behavior or real Netlify Blob atomicity."
         }
       ],
-      "nextAction": "The development crosswalk is complete for this bounded publication slice. During selective main promotion, reconcile main's test and workflow paths before claiming cross-branch completion."
+      "nextAction": "Refresh this crosswalk from exact current refs, record the main PR #522/#523 gate receipts, and compare development's current route without duplicating an existing endpoint suite. Keep hosted Identity and provider atomicity outside the claim."
     },
     {
       "order": 75,
