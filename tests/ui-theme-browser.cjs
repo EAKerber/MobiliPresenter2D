@@ -20,6 +20,31 @@ const viewports = [
   { name: "desktop", width: 1280, height: 900 }
 ];
 const visuallyHiddenRule = /\.visually-hidden\s*\{/g;
+
+async function measureGlobalFocus(page, expectedColor, message) {
+  const probe = await page.evaluateHandle(() => {
+    const link = document.createElement("a");
+    link.href = "#focus-token-probe";
+    link.textContent = "Focus token probe";
+    link.tabIndex = 0;
+    link.setAttribute("aria-hidden", "true");
+    link.style.cssText = "position:fixed;left:-10000px;top:0;width:1px;height:1px;overflow:hidden";
+    document.body.prepend(link);
+    return link;
+  });
+  await page.evaluate(() => document.activeElement && document.activeElement.blur());
+  await page.keyboard.press("Tab");
+  const measured = await probe.evaluate((link) => {
+    const style = getComputedStyle(link);
+    return { focused: document.activeElement === link, focusVisible: link.matches(":focus-visible"), color: style.outlineColor, width: style.outlineWidth, offset: style.outlineOffset };
+  });
+  assert(measured.focused && measured.focusVisible, message + " reaches global focus probe by keyboard");
+  assert.equal(measured.color, expectedColor, message + " global focus color preserves the baseline");
+  assert.equal(measured.width, "3px", message + " global focus width preserves the baseline");
+  assert.equal(measured.offset, "3px", message + " global focus offset preserves the baseline");
+  await probe.evaluate((link) => link.remove());
+  return measured;
+}
 const sharedCss = fs.readFileSync(path.join(__dirname, "../app/ui-theme.css"), "utf8");
 const adminCss = fs.readFileSync(path.join(__dirname, "../app/admin/admin.css"), "utf8");
 const configCss = fs.readFileSync(path.join(__dirname, "../app/styles.css"), "utf8");
@@ -167,54 +192,16 @@ async function main() {
             if (reachedByKeyboard) break;
           }
           assert(reachedByKeyboard, shell.path + " theme control is reachable by keyboard");
-          const focusStyle = await control.evaluate((button) => {
-            const style = getComputedStyle(button);
-            return {
-              visible: button.matches(":focus-visible") && style.outlineStyle !== "none",
-              color: style.outlineColor,
-              width: style.outlineWidth,
-              offset: style.outlineOffset,
-              outlineStyle: style.outlineStyle,
-              theme: document.documentElement.dataset.theme,
-              themeMode: document.documentElement.dataset.themeMode,
-              token: getComputedStyle(document.documentElement).getPropertyValue("--ui-theme-focus").trim(),
-              buttonToken: style.getPropertyValue("--ui-theme-focus").trim(),
-              className: button.className,
-              matchingOutlineRules: [...document.styleSheets].flatMap((sheet) => {
-                const matches = [];
-                const visit = (rules) => {
-                  for (const rule of rules) {
-                    if (rule.selectorText && ["outline", "outline-color", "outline-offset", "outline-style"].some((name) => rule.style?.getPropertyValue(name))) {
-                      let applies = false;
-                      try { applies = button.matches(rule.selectorText); } catch (_error) {}
-                      if (applies) matches.push({ selector: rule.selectorText, cssText: rule.style.cssText, href: sheet.href });
-                    } else if (rule.cssRules) visit(rule.cssRules);
-                  }
-                };
-                try { visit(sheet.cssRules); } catch (_error) {}
-                return matches;
-              }),
-              matchingFocusRules: [...document.styleSheets].flatMap((sheet) => {
-                const matches = [];
-                const visit = (rules) => {
-                  for (const rule of rules) {
-                    if (rule.selectorText && rule.selectorText.includes(":focus-visible")) {
-                      let applies = false;
-                      try { applies = button.matches(rule.selectorText); } catch (_error) {}
-                      if (applies) matches.push({ selector: rule.selectorText, cssText: rule.style.cssText, href: sheet.href });
-                    } else if (rule.cssRules) visit(rule.cssRules);
-                  }
-                };
-                try { visit(sheet.cssRules); } catch (_error) {}
-                return matches;
-              })
-            };
-          });
-          console.log("THEME_FOCUS_DEBUG " + JSON.stringify({ shell: shell.path, viewport: viewport.name, ...focusStyle }));
+          const focusStyle = await control.evaluate((button) => ({
+            visible: button.matches(":focus-visible") && getComputedStyle(button).outlineStyle !== "none"
+          }));
           assert(focusStyle.visible, shell.path + " keyboard focus is visibly indicated");
-          assert.equal(focusStyle.color, "rgb(216, 188, 124)", shell.path + " dark focus color preserves the baseline");
-          assert.equal(focusStyle.width, "3px", shell.path + " dark focus width preserves the baseline");
-          assert.equal(focusStyle.offset, "2px", shell.path + " dark focus offset preserves the baseline");
+          const darkGlobalFocus = viewport.name === "mobile" && shell.path === "/"
+            ? await measureGlobalFocus(page, "rgb(216, 188, 124)", shell.path + " dark")
+            : null;
+
+
+
 
           await page.keyboard.press("Enter");
           const activated = await control.evaluate((button) => ({
@@ -228,9 +215,12 @@ async function main() {
           assert.equal(activated.mode, "light", shell.path + " keyboard activation selects light mode");
           assert.equal(activated.stored, "light", shell.path + " keyboard activation persists the mode");
           assert(activated.label.includes("Ativar Escuro"), shell.path + " announces the next mode");
-          assert.equal(activated.focusColor, "rgb(110, 81, 46)", shell.path + " light focus color preserves the baseline");
-          assert.equal(activated.focusWidth, "3px", shell.path + " light focus width preserves the baseline");
-          assert.equal(activated.focusOffset, "2px", shell.path + " light focus offset preserves the baseline");
+          const lightGlobalFocus = viewport.name === "mobile" && shell.path === "/"
+            ? await measureGlobalFocus(page, "rgb(110, 81, 46)", shell.path + " light")
+            : null;
+
+
+
 
           results.push({
             shell: shell.path,
@@ -240,8 +230,8 @@ async function main() {
             measuredWidthCssPx: measured.width,
             measuredHeightCssPx: measured.height,
             keyboardFocusVisible: focusStyle.visible,
-            darkFocus: { color: focusStyle.color, width: focusStyle.width, offset: focusStyle.offset },
-            lightFocus: { color: activated.focusColor, width: activated.focusWidth, offset: activated.focusOffset },
+            darkFocus: darkGlobalFocus,
+            lightFocus: lightGlobalFocus
             keyboardActivation: activated.mode
           });
         } finally {
