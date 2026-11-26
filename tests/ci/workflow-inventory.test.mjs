@@ -56,7 +56,7 @@ test('TST-001 pins stable development separately from the PR candidate', () => {
   assert(pullRequest);
   assert.deepEqual(push.branches, ['development']);
   assert.deepEqual(pullRequest.branches, ['development']);
-  assert.match(source, /ref: \\$\\{\\{ github\\.event\\.pull_request\\.head\\.sha \\}\\}/,
+  assert.match(source, /ref: \$\{\{ github\.event\.pull_request\.head\.sha \}\}/,
     'the checkout is the candidate tree, while the inventory separately reads the exact base SHA');
   assert(push.paths.includes('.github/workflows/**'));
   assert(push.paths.includes('tools/ci/build-workflow-inventory.mjs'));
@@ -69,11 +69,11 @@ test('TST-001 pins stable development separately from the PR candidate', () => {
   const capture = workflow.commands.find(({ jobId, step }) =>
     jobId === 'inventory' && step === 'Capture exact inventory refs and open PRs');
   assert(capture);
-  assert.match(capture.command, /development_sha="\\$GITHUB_SHA"/,
+  assert.match(capture.command, /development_sha="\$GITHUB_SHA"/,
     'push inventories pin the exact development event SHA');
-  assert.match(capture.command, /development_sha="\\$BASE_SHA"/,
+  assert.match(capture.command, /development_sha="\$BASE_SHA"/,
     'PR inventories pin stable development to the event base SHA');
-  assert.match(capture.command, /candidate_sha="\\$HEAD_SHA"/,
+  assert.match(capture.command, /candidate_sha="\$HEAD_SHA"/,
     'PR-head definitions remain a separate candidate layer');
   assert.match(capture.command, /candidate_tree=/);
   assert.match(capture.command, /isDraft/);
