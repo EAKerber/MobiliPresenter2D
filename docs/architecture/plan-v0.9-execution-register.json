@@ -906,7 +906,7 @@
         },
         {
           "source": "docs/architecture/css-00-current-baseline-2026-11-26.json",
-          "sha": "993210bbb3c09120ef00e919b00c03ac64ecdb90",
+          "sha": "f43e2dcd2d17bc2ae8cb650387aee6079f539b05",
           "detail": "Follow-on static selector candidate index from Product development@eff75d9 (the current 8f8726f descendant is docs-only). Pinned 67 fetched HTML/JS paths; route closure is 61 paths (8 shells + 53 JS). All 1,769 selector alternatives across the 9 runtime CSS files are bucketed into literal match, dynamic/template candidate, CSS-only, or no literal consumer, with route, state, and candidate source counts. This remains lexical candidate evidence: no-literal matches are unresolved rather than dead code; Admin/Config auth states and exact-head browser/CSSOM evidence remain UNKNOWN."
         }
       ],
