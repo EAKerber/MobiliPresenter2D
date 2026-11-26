@@ -60,6 +60,12 @@ test("Buyer authorization gate watches the endpoint, DTO projection and route ma
   const buyerRoute = netlify.match(/\[\[redirects\]\]\s+from = "\/api\/buyer-configuration"[\s\S]*?force = true/);
   assert.ok(buyerRoute, "the Buyer endpoint has an explicit same-origin redirect");
   assert.match(buyerRoute[0], /to = "\/\.netlify\/functions\/buyer-configuration"/);
+
+  const sessionStatus = await readFile(resolve(ROOT, "netlify/functions/access-session-status.mjs"), "utf8");
+  assert.doesNotMatch(sessionStatus, /export const config\s*=\s*\{\s*path:/,
+    "a custom path would disable the default function URL used by the session redirect");
+  const sessionRoute = netlify.match(/\[\[redirects\]\]\s+from = "\/api\/access\/session"\s+to = "\/\.netlify\/functions\/access-session-status"\s+status = 200\s+force = true/);
+  assert.ok(sessionRoute, "the session endpoint rewrite targets the function's default URL");
 });
 
 test("administrative configuration and bootstrap require admin before protected reads", async () => {
