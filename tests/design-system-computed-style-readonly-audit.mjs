@@ -37,7 +37,12 @@ async function scanCss(relativePath,visited=new Set()){
   visited.add(relativePath);
   const absolute=path.resolve(siteRoot,relativePath);
   assert.ok(absolute.startsWith(siteRoot+path.sep),"CSS import escapes audited app root: "+relativePath);
-  const content=await readFile(absolute,"utf8");
+  let content;
+  try{content=await readFile(absolute,"utf8");}
+  catch(error){
+    if(error.code==="ENOENT")return {path:relativePath,sha256:null,missing:true,imports:[]};
+    throw error;
+  }
   const withoutComments=content.replace(/\/\*[\s\S]*?\*\//g,"");
   const imports=[];
   for(const match of withoutComments.matchAll(/@import\s+(?:url\(\s*)?["']?([^"'()\s;]+)["']?\s*\)?[^;]*;/gi)){
@@ -68,9 +73,18 @@ async function captureStaticInventory(){
       inlineStyleBlockCount:inlineStyles.length,inlineStyleBlockSha256:inlineStyles,
       styleAttributeCount:[...html.matchAll(/\sstyle\s*=/gi)].length});
   }
+  const missingLocalCss=routes.flatMap(route=>route.stylesheets.flatMap(sheet=>[
+    ...(sheet.missing?[{route:route.route,shell:route.shell,path:sheet.path}]:[]),
+    ...(sheet.imports||[]).filter(imported=>imported.missing).map(imported=>({route:route.route,shell:route.shell,path:imported.path}))
+  ]));
+  const unexpectedMissing=missingLocalCss.filter(item=>item.path!=="config/styles.css");
+  assert.deepEqual(unexpectedMissing,[],"Unexpected local CSS links/imports are missing");
   return {schema:"M2DCSS00StaticInventory/1",sourceRef:process.env.CSS_AUDIT_SOURCE_REF||"unspecified",
-    sourceRoot:siteRoot,routes,limits:["Static shell/import inventory only; runtime-created styles remain separate observations.",
-      "Authenticated Admin and token-gated Config states are not established by this static scan."]};
+    sourceRoot:siteRoot,routes,missingLocalCss,limits:[
+      "Static shell/import inventory only; runtime-created styles remain separate observations.",
+      "The existing Config link to config/styles.css is recorded as missing in the static app tree; this audit does not change it.",
+      "Authenticated Admin and token-gated Config states are not established by this static scan."
+    ]};
 }
 const widths=[390,1366],themes=["light","dark"];
 const keys=["--public-bg","--public-surface","--public-surface-soft","--public-text",
