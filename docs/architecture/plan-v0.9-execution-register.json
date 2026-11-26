@@ -73,9 +73,14 @@
           "source": "Product PR #433, squash merged into development",
           "sha": "c1cc51bd557b5dd564d1f5888791b3e96da29b68",
           "detail": "README and CURRENT_STATE now point to the v0.9 method, Product execution register, Design System decisions, and exact Product refs. Three dated October handovers are explicitly historical and retained. This closes the Product entry-point slice; Design System handover PR #137 is updated but still open, and other current-sounding pointers remain to be checked."
+        },
+        {
+          "source": "Leitura ao vivo do Design System e reconciliação pós-PR #131",
+          "sha": "9261c5782c5987bc91d70f87dde3f8a4779c004d",
+          "detail": "PR #131 foi integrado ao DS main; a leitura ao vivo confirma main em 9261c57 e nenhuma PR aberta. A hierarquia do Product aponta para o plano v0.9, o registro de execução e decisões DS. GIT-002 permanece parcial: ainda é preciso varrer os demais documentos apontados para afirmações de autoridade atuais e reconciliar a branch de handover retida."
         }
       ],
-      "nextAction": "Reconcile the updated Design System handover in PR #137 through review, then search the remaining current entry points for stale authority claims; preserve historical evidence."
+      "nextAction": "Continuar a busca por ponteiros atuais obsoletos em Product e Design System, preservando handovers como históricos; revalidar os heads antes de alterar qualquer fonte documental."
     },
     {
       "order": 4,
@@ -196,14 +201,20 @@
       "chapter": "I",
       "priority": "P0",
       "planState": "not_started",
-      "reconciliation": "unreviewed",
-      "local": "unknown",
-      "development": "unknown",
-      "main": "unknown",
-      "technicalValidation": "unknown",
+      "reconciliation": "partial",
+      "local": "done",
+      "development": "partial",
+      "main": "partial",
+      "technicalValidation": "not_applicable",
       "approvalPublication": "unknown",
-      "evidence": [],
-      "nextAction": "Reconciliar este ID com código, consumidores, testes e evidência exata de branch/PR antes de alterar o estado."
+      "evidence": [
+        {
+          "source": "Compare atual de Product main e development",
+          "sha": "4f352c56268335ead6655653828ccc5620bfdfe6",
+          "detail": "Baseline de reconciliação verificada: main@5c6e652693bd30218e6915bf8cb160bde03ac719; development@4f352c56268335ead6655653828ccc5620bfdfe6; merge base 221b54b2a41ecc8c338d1bf2cf67280cf165ce95; 35 commits exclusivos de main, 601 de development e 92 paths no lado main. Política aplicada: conservar main estável, usar development como buffer e integrar mudanças da main em pacotes coerentes por família, sem merge de árvore inteira. DS tem apenas main@9261c57 como ramo de release e não possui development."
+        }
+      ],
+      "nextAction": "Completar a disposição por família dos 92 caminhos de main, documentar checkpoints e gates de promoção por classe e revalidar refs antes de cada pacote."
     },
     {
       "order": 12,
@@ -477,9 +488,14 @@
           "source": "Product PR #436 disposition",
           "sha": "71bc086114741fe2d5967099123a7d420cba80eb",
           "detail": "CI-maintenance item #436 was merged into development after exact-head asset, variant, and impact-plan gates passed. It removes only repeated npm test invocations from two specialized workflows; runtime and main were not changed."
+        },
+        {
+          "source": "Leitura ao vivo das PRs abertas e integrações recentes",
+          "sha": "4f352c56268335ead6655653828ccc5620bfdfe6",
+          "detail": "Em 2026-11-26, Product não possui PR aberta. PR #477 foi integrada a development em e7df178 após 10 gates exatos com sucesso; PR #478 foi integrada em 4f352c5 e o workflow pós-merge #45764735114 terminou com authorization-contract e access-session-browser ambos em sucesso. Design System também não possui PR aberta; #131 está integrada em main@9261c57. O critério de todas as PRs atualmente abertas com disposição está satisfeito; a reconciliação documental completa de intenção/dependências/rollback permanece parcial."
         }
       ],
-      "nextAction": "Keep the four live PR dispositions current; do not merge PR #432 without its specific approval or Design System #137 without approval for that repository. Recheck PR #400 target refs before any retirement operation; continue documenting intent, changed contract, exact validation, dependencies, rollback, and final disposition."
+      "nextAction": "Revalidar a lista de PRs abertas após cada novo pacote e registrar intenção, contrato, gates, dependências, rollback e disposição do pacote antes da integração; não há PR aberta pendente neste snapshot."
     },
     {
       "order": 24,
@@ -568,9 +584,14 @@
           "source": "GitHub compare Product development@ef943910f5513c423ce22b84b4ced548f9c042f2 ↔ main@5c6e652693bd30218e6915bf8cb160bde03ac719",
           "sha": "5c6e652693bd30218e6915bf8cb160bde03ac719",
           "detail": "Readback exato em 2026-11-26: merge base 221b54b2a41ecc8c338d1bf2cf67280cf165ce95; main contém 35 commits e 92 caminhos ausentes de development, enquanto development contém 598 commits ausentes de main. Os caminhos abrangem runtime, fontes/artefatos gerados, testes e CI/higiene. A medida confirma que o compare é grande e não autoriza merge integral; classificar por famílias coesas."
+        },
+        {
+          "source": "Product live compare main...development e classificação dos 92 caminhos",
+          "sha": "4f352c56268335ead6655653828ccc5620bfdfe6",
+          "detail": "Compare atual: base main@5c6e652, head development@4f352c5, merge base 221b54b2; 35 commits só em main, 601 só em development e 92 caminhos do lado main. Os caminhos pertencem a famílias separáveis: páginas públicas/mídia/tema/compiler/manifests e gates; inventário ARC-13; Admin/V5/buyer endpoints com diferenças de política; gate de preço-base do viewer; higiene de branches; tema/rasters. Blobs compartilhados idênticos confirmam o núcleo normalizado flow-model.js e flow-layout.js já presente nos dois destinos. Nenhuma integração integral é indicada."
         }
       ],
-      "nextAction": "Classificar os 92 caminhos exclusivos de main em famílias e preparar apenas pacotes coesos com autoridade, consumidores, artefatos e gates exatos fechados; manter público/compilador/manifesto e higiene como famílias separadas."
+      "nextAction": "Decompor os caminhos de main em pacotes verticais com contratos e gates próprios; começar por famílias sem diferenças de política em runtime e fazer promoção seletiva após integração em development."
     },
     {
       "order": 27,
@@ -777,6 +798,11 @@
           "source": "Product main@5c6e652 / development@ef943910 and local exact-blob token checks at Design System main@c6ff6545",
           "sha": "c6ff6545e9ae2071e695109fd94ac91676e7fb0a",
           "detail": "Product main e development importam o CSS VIS-002C com blob correspondente ao Design System e carregam mapping/manifesto/pin correspondentes; não importam os CSS de paleta de referência nem de texto contextual antigo. No checkout temporário do Design System, os gates P_TOKEN_01 passaram com testes 6/6, P_TOKEN_02B com 3/3 e VIS002C_LONG_COPY_V03_PASS após ler os arquivos fonte e artefatos como os blobs canônicos. Limite: core.autocrlf=true converte esses arquivos LF para CRLF e causa falsos erros de hash/saída no checkout Windows comum; não houve workflow novo no SHA atual nem reconciliação do estado semântico PREVIEW_PENDING no PIN."
+        },
+        {
+          "source": "Product PR #477 e pin VIS-002C após PR #478",
+          "sha": "4f352c56268335ead6655653828ccc5620bfdfe6",
+          "detail": "PR #477 passou os 10 workflows no head exato e foi integrada em development; o gate de pin VIS-002C passou. O registro/pin ainda declara PREVIEW_PENDING; não foi feita verificação runtime em preview exato. DS está em main@9261c57. O contrato DS→Product continua parcial até atualizar o recibo de preview e reconciliar o pin."
         }
       ],
       "nextAction": "Tratar a divergência de line endings do checkout Windows e reconciliar o PIN VIS-002C que ainda diz PREVIEW_PENDING antes de afirmar contrato DS→Produto totalmente fechado."
@@ -847,9 +873,14 @@
           "source": "CSS-00 read-only cross-ref audit of Product main@5c6e652 and development@ef943910",
           "sha": "5c6e652693bd30218e6915bf8cb160bde03ac719",
           "detail": "Baseline slice covers the Config and Admin shells: both load ui-theme.css last, but main/development CSS blobs differ for app/admin/admin.css and app/ui-theme.css; app/styles.css matches. The 8 public/private shells load the pinned theme stylesheet. Config includes an inline mobile style block; app/core/stone.js injects dynamic mask/z-index CSS, while other runtime style assignments are instance/material/geometry values. Full 98-class/stylesheet inventory is not complete. Main/dev app/styles.css sha eb346a41ad91f6dc53875cb954e9018fdc1dd713; main/admin.css 81b115d4a15409d5c46ba5590a19ef587d785a0f vs dev 9ca5a964d6e64a49f58ee36c798f2d3641e64de4; main/ui-theme.css c1ca2a4c36e9195f15cd9045c64ef1857f9af07e vs dev 921a679466b4f401df4f8f3c953c2785e96aec0d."
+        },
+        {
+          "source": "Matriz CSS do Product main/development após #477 e #478",
+          "sha": "4f352c56268335ead6655653828ccc5620bfdfe6",
+          "detail": "Inventário por leitura de código em main@5c6e652 e development@4f352c5. Hashes main/development: about c1d0b0c0/c1d0b0c0; admin 81b115d4/9ca5a964; VIS002C 9e7f2430/9e7f2430; how-it-works 938fb698/435e2328; landing e5696eb8/ba798615; public-theme b8122a6a/b8122a6a; styles eb346a41/eb346a41; ui-theme c1ca2a4c/921a6794; viewer 5dd315b4/5dd315b4. Cobertura observada: 8 shells carregam ui-theme por último; Admin tem classes dinâmicas em admin.js; Config tem renderizadores e styles inline; stone.js injeta z-index de canvas/mask; public-theme atende fallback; temas, breakpoints e reduced-motion têm usos específicos. Scan lexical derivado encontrou 107 nomes duplicados, 79 em folhas co-carregadas; não equivale aos 98 IDs históricos. Permanecem classes sem consumidor identificado e lacuna de CSSOM/runtime. Sem afirmação de equivalência visual ou browser runtime."
         }
       ],
-      "nextAction": "Completar a matriz de todas as folhas, blocos inline e estilos dinâmicos nos dois destinos; registrar ownership, import/load order e pin/hash, e classificar as 98 incertezas antes de declarar baseline fechada."
+      "nextAction": "Completar atribuição de consumidores para classes órfãs/duplicadas, recuperar origem dos 98 IDs e executar matriz CSSOM/runtime por rota e estado; conservar os hashes e os snapshots atuais separados."
     },
     {
       "order": 43,
@@ -858,14 +889,20 @@
       "chapter": "III",
       "priority": "P1",
       "planState": "not_started",
-      "reconciliation": "unreviewed",
-      "local": "unknown",
-      "development": "unknown",
-      "main": "unknown",
+      "reconciliation": "partial",
+      "local": "partial",
+      "development": "partial",
+      "main": "partial",
       "technicalValidation": "unknown",
-      "approvalPublication": "unknown",
-      "evidence": [],
-      "nextAction": "Reconciliar este ID com código, consumidores, testes e evidência exata de branch/PR antes de alterar o estado."
+      "approvalPublication": "not_applicable",
+      "evidence": [
+        {
+          "source": "Busca dos inventários arquivados e scan lexical das folhas atuais",
+          "sha": "4f352c56268335ead6655653828ccc5620bfdfe6",
+          "detail": "A origem do conjunto histórico de 98 pares ainda não foi localizada. Os snapshots preservados visual-inventory (Product 1878ae1), dom-css-static-crosswalk-2026-10-20 e v0b-css-class-coload-and-ownership-2026-10-21 (Product 840a0c9) não carregam aqueles IDs. O scan atual deriva 107 nomes duplicados e 79 co-carregados; estes resultados não podem substituir nem ser mapeados por inferência para os 98 IDs. Todos os 98 permanecem UNKNOWN até recuperar a lista e classificar U1-U8."
+        }
+      ],
+      "nextAction": "Localizar o recibo/lista original dos 98 IDs e classificar cada linha com contexto/consumidor; não usar a lista lexical atual como substituta."
     },
     {
       "order": 44,
@@ -2379,8 +2416,8 @@
   "baselineReadback": {
     "capturedAt": "2026-11-26",
     "productMainSha": "5c6e652693bd30218e6915bf8cb160bde03ac719",
-    "productDevelopmentSha": "ef943910f5513c423ce22b84b4ced548f9c042f2",
-    "designSystemMainSha": "c6ff6545e9ae2071e695109fd94ac91676e7fb0a",
-    "meaning": "Refs exatas relidas após a integração de #432 na main do Product e antes desta atualização documental. Compare development...main: merge base 221b54b2a41ecc8c338d1bf2cf67280cf165ce95, 35 commits exclusivos da main, 598 exclusivos de development e 92 caminhos alterados no lado main; nenhuma integração de árvore inteira está autorizada por esse snapshot. Design System development não foi encontrado."
+    "productDevelopmentSha": "4f352c56268335ead6655653828ccc5620bfdfe6",
+    "designSystemMainSha": "9261c5782c5987bc91d70f87dde3f8a4779c004d",
+    "meaning": "Refs verificadas ao vivo em 2026-11-26. Product main permanece em 5c6e652; development está em 4f352c562. Design System main está em 9261c57; a branch development do DS não existe. Product compare base=main, head=development: merge base 221b54b2, 35 commits exclusivos de main, 601 exclusivos de development e 92 caminhos do lado main; sem merge de árvore inteira. Product sem PRs abertas e com duas branches (main/development); DS sem PRs abertas e com duas branches (main e codex/handover-live-reconciliation-20261124). Produção Product continua vinculada ao main; esta atualização documental não muda main."
   }
 }
