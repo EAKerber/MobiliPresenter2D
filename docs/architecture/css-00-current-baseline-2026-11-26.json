@@ -1,6 +1,6 @@
 {
   "schema": "MobiliPresenter2D.CSS00CurrentBaseline/1",
-  "readbackUTC": "2026-11-26T08:34:09Z",
+  "readbackUTC": "2026-11-26T12:53:40Z",
   "completion": "partial",
   "method": {
     "plan": "Design System docs/architecture/MOBILIPRESENTER2D_PLANO_DIRETOR_CONSOLIDADO_v0.9.md",
@@ -24,10 +24,10 @@
   },
   "refs": {
     "productMain": "5c6e652693bd30218e6915bf8cb160bde03ac719",
-    "productDevelopment": "eff75d93655cb2796f1823ab3b9789c0aa9c591c",
-    "designSystemMain": "2f898c59dc4554d1ea2fea21c05711e70405c5f8",
+    "productDevelopment": "77931b673d1026358fa3dfe6b6d71446fe59794b",
+    "designSystemMain": "026c6c4f4d9a6d29102a241862afdb50c35de147",
     "productMainTree": "c9c9cf8a7a8ca7faa3f169144fdee84f0bc34ec8",
-    "productDevelopmentTree": "ec3467b8cbd57b365762cfec28c74e9f980db58a"
+    "productDevelopmentTree": "a74badf8bc86679e5ecbcde1c5326ed977c7f039"
   },
   "repositoryInventory": {
     "mainCssPathCount": 9,
@@ -247,7 +247,7 @@
       "route": "/admin.html",
       "shell": "app/admin.html",
       "mainShellBlob": "28e57028e235944dfd581820ed90078866af93bc",
-      "developmentShellBlob": "2f98dd33beb95b7ddb8558df1e41e785815d0168",
+      "developmentShellBlob": "390735675673917149e49e21b4f7355c79eeaba8",
       "main": [
         "admin/admin.css?v=viewer-price-main-v1",
         "/ui-theme.css?v=private-header-nav005-v2"
@@ -360,7 +360,7 @@
     {
       "file": "app/admin/admin.js",
       "mainBlob": "79925345e43096df77bef54fe257e483f922edd8",
-      "developmentBlob": "0a2ec1f5c7d92a11e4ff702f07f6f5527dfbe833",
+      "developmentBlob": "4702ad57579fa6649ca6b7b08cd0a3fec97df93f",
       "surface": "material and texture swatch style values; source bundled by build"
     },
     {
@@ -488,25 +488,25 @@
     ]
   },
   "selectorConsumerCrosswalk": {
-    "status": "candidate-index-added-semantics-incomplete",
-    "mapped": "shell→stylesheet order, theme owner files, top-level runtime style owners, and selected route JS source owners",
-    "remaining": "Resolve the candidate matches into semantic same-element/state ownership, investigate no-literal-consumer selectors, and attach exact-head browser/CSSOM evidence where available. The matrix is lexical and cannot close CSS-00 by itself.",
+    "status": "candidate-index-added; exact public CSSOM observed; semantics incomplete",
+    "mapped": "Exact shell→stylesheet order, theme owner files, top-level runtime style owners, selected route JS owners, and a 32-scenario-per-source public computed-style observation are recorded.",
+    "remaining": "Resolve candidate selectors to semantic same-element/state ownership, investigate no-literal-consumer selectors against generated DOM/data, account for the changed Admin source after LOC-006, and attach authorized exact-head runtime evidence for authenticated/token-gated states where available. The lexical scan is not a substitute for semantic ownership.",
     "lexicalCounts": "Not recorded as closure: scans can find candidates but do not prove semantic consumer ownership and do not correspond to the separate historical 98-ID inventory.",
     "candidateScanPath": "docs/architecture/css-00-current-baseline-2026-11-26.json#selectorCandidateScan"
   },
   "accessAndRuntimeLimits": {
-    "themeStates": "Light/dark theme is controlled by app/core/ui-theme.js; no exact-head CSSOM/browser runtime evidence was observed in this audit.",
-    "authStates": "Admin/Access routes require Netlify Identity; Config is token-gated. No exact authenticated/token fixture was used here, so those states remain inaccessible/UNKNOWN for this receipt.",
-    "exactHeadChecks": "UNKNOWN. Existing theme-contract/browser/focus and navigation-causality checks are scoped and no CSS-00-specific exact-head run receipt was found.",
-    "generatedDom": "Dynamic geometry, masks, swatches, video/hero, and view-count style surfaces are listed under dynamicStyleOwners; complete route/state coverage remains open."
+    "themeStates": "Exact post-merge CSS-00 readback 45823065330 observed light/dark computed styles on four public routes at 390/1366px in Chromium/WebKit for both current main and development. This is representative CSSOM evidence, not full contrast approval for every surface.",
+    "authStates": "Admin and Access require Identity; Config is token-gated. The exact CSS-00 run inventories their static shells but does not establish authenticated/token runtime states.",
+    "exactHeadChecks": "PARTIAL: exact current main@5c6e652 and development@77931 CSS-00 run 45823065330 passed; each source completed 32 public scenarios and the eight-shell static inventory. Admin/Access authenticated and Config token-gated runtime states remain unobserved.",
+    "generatedDom": "Dynamic geometry, masks, swatches, video/hero, and view-count surfaces have selected source-owner pins. Complete route/state and semantic selector ownership remain open."
   },
-  "summary": "At these exact refs, the eight active Product shells load ui-theme.css last; the VIS-002C export is runtime-loaded indirectly by landing.css on three public routes. Main has nine CSS paths, all runtime app assets; development has those same nine plus nine reference/fixture/historical CSS paths. Five app CSS files differ by final blob: admin, how-it-works, landing, styles, and ui-theme; four are byte-identical. Static build compiles three authored HTML pages and JS bundles, not CSS. The selector→consumer matrix and exact-head runtime/gate evidence are incomplete, so CSS-00 remains partial. A route-import scan then indexed 1,769 selector alternatives across nine runtime sheets against 61 route-reachable source paths, with 67 pinned HTML/JS files fetched; the categorization remains lexical, so CSS-00 stays partial.",
+  "summary": "At Product main@5c6e652, development@77931b6, and Design System main@026c6c4, eight active shells and nine runtime CSS files are hash-pinned; main and development still differ in five app CSS files, with four byte-identical. The VIS-002C sheet is imported by landing.css on three public routes. Post-merge run 45823065330 passed 32 public CSSOM scenarios for each exact Product source and captured all eight static shell inventories. The Config shell references missing config/styles.css. The semantic selector→consumer map remains incomplete; Admin, Access, and Config authenticated/token-gated states remain unknown. CSS-00 stays partial.",
   "selectorCandidateScan": {
     "readbackUTC": "2026-11-26T08:54:17Z",
     "scannedRef": "eff75d93655cb2796f1823ab3b9789c0aa9c591c",
     "scannedTree": "ec3467b8cbd57b365762cfec28c74e9f980db58a",
-    "developmentNow": "8f8726f6045df36705a306f159b42746aa7d3cb1",
-    "developmentNowReason": "PR #484 merged after the scan and changed only the CSS-00 report and operational register; no app HTML/CSS/JS source changed.",
+    "developmentNow": "77931b673d1026358fa3dfe6b6d71446fe59794b",
+    "developmentNowReason": "The prior lexical source graph remains pinned to development@eff75d9. Since then PR #491 changed app/admin.html and app/admin/admin.js; PR #492 added the audit workflow. Its old candidate counts and pins are retained as historical evidence and must not be presented as the exact current source graph.",
     "sourceGraph": {
       "uniqueFetchedPaths": 67,
       "routeClosurePaths": 61,
@@ -1259,5 +1259,70 @@
     ],
     "inaccessible": "Authenticated Admin and token-gated Config states had no exact fixture in this scan; no browser/CSSOM runtime pass or exact-head CSS-00 receipt was found.",
     "countMethod": "Ordinary CSS rule blocks exclude at-rules and keyframe blocks; selector alternatives are counted after comma-splitting. Route source counts include the shell and imported modules; shared files can be counted in multiple route closures."
+  },
+  "exactReadback": {
+    "capturedAt": "2026-11-26T12:53:40Z",
+    "product": {
+      "main": "5c6e652693bd30218e6915bf8cb160bde03ac719",
+      "development": "77931b673d1026358fa3dfe6b6d71446fe59794b",
+      "mainTree": "c9c9cf8a7a8ca7faa3f169144fdee84f0bc34ec8",
+      "developmentTree": "a74badf8bc86679e5ecbcde1c5326ed977c7f039"
+    },
+    "designSystemMain": "026c6c4f4d9a6d29102a241862afdb50c35de147",
+    "comparison": {
+      "status": "diverged",
+      "developmentAheadOfMain": 615,
+      "mainAheadOfDevelopment": 35,
+      "mergeBase": "221b54b2a41ecc8c338d1bf2cf67280cf165ce95"
+    },
+    "css00": {
+      "pullRequest": 492,
+      "pullRequestHead": "17b6a7109278783db04283c68de5ba807845a38c",
+      "integrationCommit": "77931b673d1026358fa3dfe6b6d71446fe59794b",
+      "postMergeWorkflowRun": 45823065330,
+      "result": "success",
+      "scenariosPerSource": 32,
+      "routes": [
+        "/",
+        "/about/",
+        "/how-it-works/",
+        "/viewer/"
+      ],
+      "widths": [
+        390,
+        1366
+      ],
+      "themes": [
+        "light",
+        "dark"
+      ],
+      "engines": [
+        "chromium",
+        "webkit"
+      ],
+      "artifact": {
+        "id": 15118289039,
+        "name": "css-00-readback-45823065330",
+        "sha256": "e60aff5eb4c6b0ee88e5a7ec4bfd8cced794289814693ea00290c8afee528283"
+      }
+    },
+    "staticInventory": {
+      "activeShellCount": 8,
+      "mainAndDevelopmentInventoried": true,
+      "missingLocalCss": [
+        {
+          "route": "/config/",
+          "path": "config/styles.css",
+          "presentInMain": false,
+          "presentInDevelopment": false
+        }
+      ]
+    },
+    "limits": [
+      "Runtime CSSOM matrix covers public routes only; private routes are inventoried statically.",
+      "No authenticated Admin, Access, or token-gated Config fixture was used.",
+      "The separate selector candidate scan is pinned to an older development tree and remains lexical; it is not a current semantic crosswalk.",
+      "CSS-00 remains partial."
+    ]
   }
 }
