@@ -41,6 +41,8 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
+      - name: Verify focus token alias contract
+        run: node tests/ui-theme-focus-token-contract.cjs
       - name: Resolve browser target (validated V5 loopback by default)
         shell: bash
         run: |
