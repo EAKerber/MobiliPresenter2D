@@ -19,6 +19,7 @@ const catalog = require("../data/catalog-data.js");
 const priceBook = require("../data/mock-price-book.js");
 const scene = require("../data/scene-data.js");
 
+const legacyAdminFallback = configuration.createDefaultAdministration(defaults, catalog, priceBook);
 const v3 = configuration.normalizeConfiguratorSettings(
   configuration.createDefaultAdministration(defaults, catalog, priceBook, scene),
   catalog, priceBook, scene
@@ -285,8 +286,8 @@ async function main() {
     });
     assert.equal(invalidV5Store.writes, 0, "invalid stored v5 must not be replaced");
 
-    // Missing, malformed, unsupported and invalid legacy sources must stay
-    // distinct at the HTTP boundary; none may become an editable default.
+    // Missing and invalid legacy V3 retain the approved read-only Admin fallback.
+    // Malformed/unsupported data and V5 remain fail-closed; fallback never permits a write.
     const assertStoredState = async (store, name, expectedGet, expectedPut) => {
       viewer = { id: "admin-1", roles: ["admin"] };
       globalThis.__v5ReadinessHarness = {
@@ -314,7 +315,7 @@ async function main() {
     const missingStore = makeStore(null);
     await assertStoredState(
       missingStore, "missing",
-      { status: 404, body: { error: "published_configuration_missing" } },
+      { status: 200, body: legacyAdminFallback },
       { status: 409, body: { error: "published_configuration_missing" } }
     );
 
@@ -344,7 +345,7 @@ async function main() {
     const invalidV3Store = makeStore(invalidV3);
     await assertStoredState(
       invalidV3Store, "invalid-v3",
-      { status: 422, body: { error: "stored_configuration_invalid", code: "invalid_v3" } },
+      { status: 200, body: legacyAdminFallback },
       { status: 409, body: { error: "stored_configuration_invalid", code: "invalid_v3" } }
     );
 
