@@ -408,7 +408,7 @@
           "detail": "Live refs: main@7ebacc86018c60e54df4d0e15c95ecd3eed46a77 and development@4bcfa26911498a9bf5c3c94c517e9931746b437b. The active frozen-inventory auxiliary and PR-archive executors were retired in development; dated October inventory/closure records remain historical. The older TST-001 inventory and open draft PR #521 are pinned to earlier refs and still list the retired workflow. In that inventory, push:60 counts workflow push-trigger declarations, not Git branches. Do not present either as current; refresh the exact inventory at these live refs."
         }
       ],
-      "nextAction": "Generate a fresh exact-ref workflow inventory and candidate readback at current main/development refs; preserve October inventories as dated history, and close or supersede draft PR #521 without merging its stale snapshot."
+      "nextAction": "The candidate now includes TST-001 trigger paths for workflow receipts and the v0.9 register. Read the exact PR gate artifact at current refs, then refresh the committed inventory/readback from its result. Preserve historical October counts as historical."
     },
     {
       "order": 20,
@@ -1557,9 +1557,14 @@
           "source": "Product main PR #522 and PR #523 exact-head gates; live source/blob comparison",
           "sha": "7ebacc86018c60e54df4d0e15c95ecd3eed46a77",
           "detail": "At current main@7ebacc8, the shared reader, V5 inspection, and conditional-save core blobs match development exactly (published-configuration.js 7b5d13d; v5-publication-inspection.js 0da45108; v5-normal-save.js e9da3059). Endpoint/Admin/test/workflow blobs differ. Main endpoint tests and authorization-boundary gate passed all 9 PR #522 checks at head 46e8a21; PR #523 added configuration.mjs to app-build-purity trigger paths and run #45898340031 passed. Main app-build-purity blob is 39a2511; development is 3debb0f. This validates the bounded source/test/gate slice, not hosted Identity behavior or real Netlify Blob atomicity."
+        },
+        {
+          "source": "Live Buyer contract comparison at Product main@7ebacc8 and development@4bcfa26",
+          "sha": "7ebacc86018c60e54df4d0e15c95ecd3eed46a77",
+          "detail": "Buyer endpoint and projection source blobs are identical across current refs. However, main tests/buyer-configuration-endpoint.test.mjs at 3c342cfb lacks assertions for missing published configuration and invalid V5; the development test at f61eb8d6 covers both and asserts 503 without defaults. The source behavior exists but is not yet established by main's test evidence. Keep DOM-003/TST-009 main partial until these two assertions are ported and the main boundary gate passes."
         }
       ],
-      "nextAction": "Reconcile the current endpoint/Admin/test blob deltas with development's same fail-closed V5 and read-only legacy fallback contract. Keep hosted Admin and provider behavior explicitly unknown until independently observed."
+      "nextAction": "Port the missing-state and invalid-V5 Buyer endpoint assertions from current development to main's test file, then require the current configuration-boundary gate; keep hosted Identity/live state unknown."
     },
     {
       "order": 73,
@@ -1571,7 +1576,7 @@
       "reconciliation": "partial",
       "local": "done",
       "development": "done",
-      "main": "partial",
+      "main": "done",
       "technicalValidation": "done",
       "approvalPublication": "unknown",
       "evidence": [
@@ -1586,7 +1591,7 @@
           "detail": "At current main@7ebacc8, the shared reader, V5 inspection, and conditional-save core blobs match development exactly (published-configuration.js 7b5d13d; v5-publication-inspection.js 0da45108; v5-normal-save.js e9da3059). Endpoint/Admin/test/workflow blobs differ. Main endpoint tests and authorization-boundary gate passed all 9 PR #522 checks at head 46e8a21; PR #523 added configuration.mjs to app-build-purity trigger paths and run #45898340031 passed. Main app-build-purity blob is 39a2511; development is 3debb0f. This validates the bounded source/test/gate slice, not hosted Identity behavior or real Netlify Blob atomicity."
         }
       ],
-      "nextAction": "The shared V5 CAS/save core is identical across live refs and main gates pass. Reconcile the endpoint/test/workflow deltas by contract; retain provider-level atomicity as UNKNOWN."
+      "nextAction": "Code-level V5 CAS/revision/readback contract and mocked race coverage are verified in main and share the same core blobs as development. Keep Netlify Blob atomicity and live hosted publication UNKNOWN."
     },
     {
       "order": 74,
@@ -1611,9 +1616,14 @@
           "source": "Product main PR #522 and PR #523 exact-head gates; live source/blob comparison",
           "sha": "7ebacc86018c60e54df4d0e15c95ecd3eed46a77",
           "detail": "At current main@7ebacc8, the shared reader, V5 inspection, and conditional-save core blobs match development exactly (published-configuration.js 7b5d13d; v5-publication-inspection.js 0da45108; v5-normal-save.js e9da3059). Endpoint/Admin/test/workflow blobs differ. Main endpoint tests and authorization-boundary gate passed all 9 PR #522 checks at head 46e8a21; PR #523 added configuration.mjs to app-build-purity trigger paths and run #45898340031 passed. Main app-build-purity blob is 39a2511; development is 3debb0f. This validates the bounded source/test/gate slice, not hosted Identity behavior or real Netlify Blob atomicity."
+        },
+        {
+          "source": "Live Buyer contract comparison at Product main@7ebacc8 and development@4bcfa26",
+          "sha": "7ebacc86018c60e54df4d0e15c95ecd3eed46a77",
+          "detail": "Buyer endpoint and projection source blobs are identical across current refs. However, main tests/buyer-configuration-endpoint.test.mjs at 3c342cfb lacks assertions for missing published configuration and invalid V5; the development test at f61eb8d6 covers both and asserts 503 without defaults. The source behavior exists but is not yet established by main's test evidence. Keep DOM-003/TST-009 main partial until these two assertions are ported and the main boundary gate passes."
         }
       ],
-      "nextAction": "Refresh this crosswalk from exact current refs, record the main PR #522/#523 gate receipts, and compare development's current route without duplicating an existing endpoint suite. Keep hosted Identity and provider atomicity outside the claim."
+      "nextAction": "The exact main TST-001 inventory trigger now includes docs/architecture/ci/** in the current candidate. Refresh the snapshot, port the two missing Buyer endpoint assertions to main, and validate the main boundary gate before closing this coverage gap."
     },
     {
       "order": 75,
