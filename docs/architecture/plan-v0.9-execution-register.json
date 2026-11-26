@@ -2101,11 +2101,6 @@
           "source": "Product PR #475 exact-head gates and post-merge readback",
           "sha": "ef943910f5513c423ce22b84b4ced548f9c042f2",
           "detail": "PR #475 head c04826106119e799493c431d079491630d327809 was squash-integrated into development at ef943910f5513c423ce22b84b4ced548f9c042f2; 12/12 workflow runs passed, including Admin hierarchy browser, app build, ARC-13 inventory, and asset gates. Post-merge blobs match the candidate for app/admin/admin.js (0a2ec1f5c7d92a11e4ff702f07f6f5527dfbe833), app/core/ui-copy.js (bf459fc644bdb7d82c6de5a444d40ae4e4207a95), tests/admin-hierarchy-browser.cjs (094544d200fc75083b527ff7b0c8994d0f238082), and its receipt (3fbed72f34d1d1a934cf22b0a18215ffbf6b8dfe). This moved fixed labels, heading, default, alt, empty, and broken-preview copy for existing scene-asset selectors into uiCopy.admin.objectAssets. It did not change selector values, paths, mask content/geometry, rendering, persistence, server validation, or commercial content. Product main still has the hard-coded scene copy (app/admin/admin.js blob 79925345e43096df77bef54fe257e483f922edd8; ui-copy has no objectAssets fields), so this slice is development-only. LOC-006 remains partial because the complete Admin/Config fixed-copy inventory is not closed."
-        },
-        {
-          "source": "Candidato local LOC-006 após Product development@c26b5b4",
-          "sha": "c04826106119e799493c431d079491630d327809",
-          "detail": "Candidato local `codex/loc006-admin-assets-copy-20261126` contém extração de cópia fixa dos seletores de arquivos de cena do Admin e correção da proveniência ARC-13. O HEAD está dois commits à frente da base local c26b5b4; live development já avançou a daede4 e não há branch remota/PR aberta para este candidato. Não está integrado nem promovido; gates exatos de PR ainda precisam rodar."
         }
       ],
       "nextAction": "Use the current ARC-13 inventory to identify remaining fixed interface copy in Admin and Config, classify data-backed or dynamic content separately, then complete the next bounded copy family with consumers and assertions. Do not repeat the integrated authentication and scene-asset slices; keep main unchanged until the full item scope and promotion evidence are closed."
