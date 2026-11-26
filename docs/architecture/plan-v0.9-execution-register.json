@@ -1679,13 +1679,19 @@
       "chapter": "VI",
       "priority": "P0",
       "planState": "not_started",
-      "reconciliation": "unreviewed",
+      "reconciliation": "partial",
       "local": "unknown",
-      "development": "unknown",
-      "main": "unknown",
-      "technicalValidation": "unknown",
+      "development": "partial",
+      "main": "partial",
+      "technicalValidation": "partial",
       "approvalPublication": "unknown",
-      "evidence": [],
+      "evidence": [
+        {
+          "source": "Product PR #506, gate de preço em development",
+          "sha": "6e6bf126870af9ce1489ea4dafad3b9b3b4fcb5c",
+          "detail": "A PR #506 foi integrada por squash em development após 2 workflows aplicáveis passarem no head exato 7bde6e4535bac17f4bd0e0b78de4b075a7cfaa50: o gate Viewer base-price publication contract (incluindo contrato de roteamento, contratos de DTO/projeção, validações V5, build e Playwright cross-engine) e o plano advisory. Supabase Preview foi skipped porque a branch não está associada a Supabase Branch. O squash adiciona teste de roteamento e caminhos explícitos ao gate em development; nenhum código de produto ou main foi alterado. TST-011 permanece parcial: validação de publicação/preço em main e downstream de dados persistidos ainda requerem fechamento do DoD do contrato completo."
+        }
+      ],
       "nextAction": "Reconciliar este ID com código, consumidores, testes e evidência exata de branch/PR antes de alterar o estado."
     },
     {
@@ -2577,11 +2583,11 @@
   "baselineReadback": {
     "capturedAt": "2026-11-26",
     "productMainSha": "463327ce25687f29859a152a41f0915af51e9264",
-    "productDevelopmentSha": "ba6e851ef0fa7ac029bf59774f26f654ced564f9",
+    "productDevelopmentSha": "6e6bf126870af9ce1489ea4dafad3b9b3b4fcb5c",
     "designSystemMainSha": "8686df1cf13f84f18f755cb7de2067fda4f7c66d",
     "productMainTree": "8114fd0beef69a98bac65e0f4115fb272c725f08",
-    "productDevelopmentTree": "71e0cc671170f3ea2c1a6614ff91a6ab3455bf19",
+    "productDevelopmentTree": "4c81b117cf798f6f99d9d08084ba66adc0fd157c",
     "designSystemMainTree": "a0b6807cc9cf6414e78562064e200583776a6445",
-    "meaning": "Live readback captured at 2026-11-26T16:18Z immediately before this documentation-only register update: Product main@463327ce25687f29859a152a41f0915af51e9264 (tree 8114fd0beef69a98bac65e0f4115fb272c725f08), Product development code@ba6e851ef0fa7ac029bf59774f26f654ced564f9 (tree 71e0cc671170f3ea2c1a6614ff91a6ab3455bf19), and Design System main@8686df1cf13f84f18f755cb7de2067fda4f7c66d (tree a0b6807cc9cf6414e78562064e200583776a6445). This register-only commit advances Product development after the readback but does not alter implementation. DOM-010 PR #505 passed 9/9 exact-head workflows; its Preview and the production deploy are READY at the expected revisions. No whole-tree Product merge occurred. The observed remote refs were Product=3 and Design System=5; the Design System count is a review signal only, not a deletion order."
+    "meaning": "Live branch readback captured at 2026-11-26T16:35Z after PR #506 integration: Product main@463327ce25687f29859a152a41f0915af51e9264 (tree 8114fd0beef69a98bac65e0f4115fb272c725f08), Product development@6e6bf126870af9ce1489ea4dafad3b9b3b4fcb5c (tree 4c81b117cf798f6f99d9d08084ba66adc0fd157c), and Design System main@8686df1cf13f84f18f755cb7de2067fda4f7c66d (tree a0b6807cc9cf6414e78562064e200583776a6445). PR #506 was squash-integrated into development after all 2 applicable workflows passed on exact head 7bde6e4535bac17f4bd0e0b78de4b075a7cfaa50; Supabase Preview was skipped because no associated Supabase branch exists. PR #505 remains at Product main and Production READY on the exact expected main. No whole-tree merge was performed. These branch heads are moving refs and must be re-read before any dependent Git operation."
   }
 }
