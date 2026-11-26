@@ -411,12 +411,48 @@ async function sectionItemIds(page, stageId, groupId, sectionId) {
   await page.waitForSelector('[data-admin-panel="finishes"]:not([hidden])');
   const materialStateCopy = await page.evaluate(() => window.CASA_UI_COPY.admin.materials);
   assert.deepEqual(materialStateCopy, {
+    name: "Nome",
+    groupName: "Nome da opção",
+    kindLabel: "Tipo de material",
+    kindOptions: { solidColor: "Cor sólida", texture: "Textura" },
+    textureAssetLabel: "Textura (arquivo existente)",
+    onlyColor: "Somente cor",
+    texturePreviewAlt: "Textura de {material}",
+    validForSummary: "Válido para…",
+    removeMaterial: "Remover material",
+    validOptionsSuffix: "opções válidas",
+    frontTarget: "Frentes",
+    stoneTarget: "Pedra e rodapé",
+    handleTargetPrefix: "Puxador",
+    handleAvailabilityNote: "Definir depois não é um puxador e não recebe materiais.",
+    handleMaterialsHeading: "Cores e materiais deste puxador",
+    initialHandleLabel: "Puxador selecionado inicialmente",
+    defineLater: "Definir depois",
+    stoneAvailabilityHeading: "Pedras e texturas disponíveis para bancada e rodapé",
+    frontMaterialsLabel: "Materiais válidos para frentes",
+    initialColorLabel: "Cor selecionada inicialmente",
+    initialStoneLabel: "Pedra selecionada inicialmente",
+    baseboardAvailabilityNote: "A disponibilidade do serviço de rodapé é controlada separadamente na etapa; pedra e rodapé compartilham o material escolhido.",
+    lastMaterialValidation: "Mantenha pelo menos um material nesta opção.",
+    lastHandleAvailabilityValidation: "Mantenha pelo menos um puxador disponível.",
+    availableCountSuffix: "disponível(is)",
+    selectedCountSuffix: "selecionado(s)",
     baseColor: "Cor base",
     noColor: "Sem cor/tinta base",
     colorDisabledReason: "Cor base indisponível enquanto “Sem cor/tinta base” estiver marcado.",
     noColorDisabledReason: "Sem cor/tinta base está disponível apenas para materiais do tipo Textura."
-  }, "fixed material-state copy stays in the canonical pt-BR catalog");
+  }, "fixed material editor copy stays in the canonical pt-BR catalog");
   const solidMaterialCard = page.locator('[data-material-id="base-light"]');
+  const authoredBaseLabel = await page.evaluate(() => window.CASA_EM_MODULOS_CATALOG.options.finishes.find((item) => item.id === "base-light").publicLabel);
+  assert.equal((await solidMaterialCard.locator("h2").textContent()).trim(), authoredBaseLabel, "material names continue to come from authored data");
+  assert.equal(await solidMaterialCard.locator(".material-texture-preview").getAttribute("alt"), materialStateCopy.texturePreviewAlt.replace("{material}", authoredBaseLabel), "texture preview alt preserves the data-backed material name through a catalog template");
+  assert.ok((await solidMaterialCard.locator('label:has([data-material-label])').textContent()).startsWith(materialStateCopy.name), "material name field label comes from the catalog");
+  assert.ok((await solidMaterialCard.locator('label:has([data-material-kind])').textContent()).startsWith(materialStateCopy.kindLabel), "material kind field label comes from the catalog");
+  assert.deepEqual(await solidMaterialCard.locator("[data-material-kind] option").allTextContents(), [materialStateCopy.kindOptions.solidColor, materialStateCopy.kindOptions.texture], "material kinds use catalog values");
+  assert.ok((await solidMaterialCard.locator('label:has([data-material-texture])').textContent()).startsWith(materialStateCopy.textureAssetLabel), "existing texture field label comes from the catalog");
+  assert.equal(await solidMaterialCard.locator("[data-material-texture] option").first().textContent(), materialStateCopy.onlyColor, "empty texture option comes from the catalog");
+  assert.equal(await solidMaterialCard.locator(".material-targets > summary").textContent(), materialStateCopy.validForSummary, "valid-target summary comes from the catalog");
+  assert.equal(await solidMaterialCard.locator("[data-remove-material]").textContent(), materialStateCopy.removeMaterial, "remove action comes from the catalog");
   assert.equal((await solidMaterialCard.locator('label:has([data-material-color])').textContent()).trim(), materialStateCopy.baseColor, "base color label comes from the catalog");
   assert.equal((await solidMaterialCard.locator('label:has([data-material-no-color])').textContent()).trim(), materialStateCopy.noColor, "no-color label comes from the catalog");
   const solidNoColorToggle = solidMaterialCard.locator('[data-material-no-color]');
@@ -425,6 +461,62 @@ async function sectionItemIds(page, stageId, groupId, sectionId) {
   assert.ok(solidNoColorReasonId, "disabled no-color control is associated with its reason");
   assert.equal(await page.locator(`#${solidNoColorReasonId}`).isVisible(), true, "solid material reason is visible beside the disabled control");
   assert.equal(await page.locator(`#${solidNoColorReasonId}`).textContent(), materialStateCopy.noColorDisabledReason, "solid material reason matches the catalog exactly");
+  const targetCard = page.locator("#materialGroupsList .material-target-page");
+  assert.equal(await targetCard.locator("h2").textContent(), `${materialStateCopy.frontTarget} · ${materialStateCopy.validOptionsSuffix}`, "front group heading is composed from catalog copy");
+  assert.ok((await targetCard.locator('label:has([data-material-group-label])').textContent()).startsWith(materialStateCopy.groupName), "material group field label comes from the catalog");
+  assert.equal(await targetCard.locator('[data-material-group-label]').inputValue(), "Frentes", "group names continue to come from authored data");
+  assert.ok((await targetCard.locator('label:has(select[data-initial-finish])').textContent()).startsWith(materialStateCopy.initialColorLabel), "initial color field label comes from the catalog");
+  const frontSelectionSummary = await targetCard.locator(".multi-picker > summary").textContent();
+  assert.ok(frontSelectionSummary.startsWith(`${materialStateCopy.frontMaterialsLabel} · `) && frontSelectionSummary.endsWith(` ${materialStateCopy.selectedCountSuffix}`), "front-material selection count uses catalog copy");
+  await page.locator("#materialTargetPager button").last().click();
+  assert.equal(await targetCard.locator("h2").textContent(), `${materialStateCopy.stoneTarget} · ${materialStateCopy.validOptionsSuffix}`, "stone group heading is composed from catalog copy");
+  const stoneAvailabilityHeading = await targetCard.locator(".material-availability-list h3").textContent();
+  assert.ok(stoneAvailabilityHeading.startsWith(`${materialStateCopy.stoneAvailabilityHeading} · `) && stoneAvailabilityHeading.endsWith(` ${materialStateCopy.availableCountSuffix}`), "stone availability count uses catalog copy");
+  assert.ok((await targetCard.locator('label:has(select[data-initial-stone])').textContent()).startsWith(materialStateCopy.initialStoneLabel), "initial stone field label comes from the catalog");
+  assert.equal(await targetCard.locator(".admin-note").first().textContent(), materialStateCopy.baseboardAvailabilityNote, "baseboard availability note comes from the catalog");
+  await page.locator("#materialTargetPager button").last().click();
+  assert.match(await targetCard.locator("h2").textContent(), new RegExp(`^${materialStateCopy.handleTargetPrefix} · .+ · ${materialStateCopy.validOptionsSuffix}$`), "handle target keeps its data-backed name and uses catalog prefix/suffix");
+  assert.ok((await targetCard.locator(".material-availability-list h3").first().textContent()).startsWith(`${materialStateCopy.handleMaterialsHeading} · `), "handle availability heading comes from the catalog");
+  assert.equal(await targetCard.locator(".admin-note").first().textContent(), materialStateCopy.handleAvailabilityNote, "handle availability note comes from the catalog");
+  const customerAvailability = await page.evaluate(() => window.CASA_UI_COPY.admin.finishes.customerAvailability);
+  assert.equal((await targetCard.locator('label:has([data-handle-availability])').textContent()).trim(), customerAvailability, "customer availability reuses the existing canonical catalog label");
+  assert.ok((await targetCard.locator('label:has(select[data-initial-handle])').textContent()).startsWith(materialStateCopy.initialHandleLabel), "initial handle field label comes from the catalog");
+  assert.equal(await targetCard.locator('select[data-initial-handle] option[value="none"]').textContent(), materialStateCopy.defineLater, "initial handle empty option comes from the catalog");
+  const targetPager = page.locator("#materialTargetPager");
+  await targetPager.locator("button").first().click();
+  await targetPager.locator("button").first().click();
+  const frontPicker = targetCard.locator(".multi-picker");
+  while (await frontPicker.locator('input[type="checkbox"]:checked').count() > 1) {
+    if (!await frontPicker.evaluate((details) => details.open)) await frontPicker.locator("summary").click();
+    const checkedMaterial = frontPicker.locator('input[type="checkbox"]:checked').first();
+    const checkedMaterialId = await checkedMaterial.getAttribute("data-material-id");
+    await frontPicker.locator(`input[data-material-id="${checkedMaterialId}"]`).uncheck();
+  }
+  if (!await frontPicker.evaluate((details) => details.open)) await frontPicker.locator("summary").click();
+  const finalMaterial = frontPicker.locator('input[type="checkbox"]:checked').first();
+  await finalMaterial.click();
+  assert.equal(await page.locator("#saveMessage").textContent(), materialStateCopy.lastMaterialValidation, "last material validation uses the catalog");
+  assert.equal(await frontPicker.locator('input[type="checkbox"]:checked').count(), 1, "the last available material remains selected after the blocked change");
+
+  const targetPages = Number((await targetPager.locator("span").textContent()).split("/")[1].trim());
+  for (let pageIndex = 0; pageIndex < targetPages; pageIndex += 1) {
+    const heading = await targetCard.locator("h2").textContent();
+    if (heading.startsWith(`${materialStateCopy.handleTargetPrefix} · `)) {
+      const handleAvailability = targetCard.locator("[data-handle-availability]");
+      if (pageIndex < targetPages - 1 && await handleAvailability.isChecked()) await handleAvailability.uncheck();
+      if (pageIndex === targetPages - 1) {
+        assert.equal(await handleAvailability.isChecked(), true, "one available handle remains before the final blocked change");
+        await handleAvailability.click();
+        assert.equal(await page.locator("#saveMessage").textContent(), materialStateCopy.lastHandleAvailabilityValidation, "last handle validation uses the catalog");
+        assert.equal(await targetCard.locator("[data-handle-availability]").isChecked(), true, "the last available handle remains selected after the blocked change");
+      }
+    }
+    if (pageIndex < targetPages - 1) await targetPager.locator("button").last().click();
+  }
+  await page.reload({ waitUntil: "networkidle" });
+  await page.waitForSelector('[data-hierarchy-stage="finishes"] [data-hierarchy-group="cabinet-finishes"]');
+  await page.locator('[data-admin-tab="finishes"]').click();
+  await page.waitForSelector('[data-admin-panel="finishes"]:not([hidden])');
   await page.locator("#materialPager button").nth(1).click();
   await page.waitForSelector('[data-material-id="stone-existing"]');
   let stoneMaterialCard = page.locator('[data-material-id="stone-existing"]');
