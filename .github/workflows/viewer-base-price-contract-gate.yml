@@ -16,6 +16,14 @@ on:
       - 'app/data/presentation-policy-defaults.js'
       - 'app/data/scene-data.js'
       - 'app/tools/test-public-modules-endpoint.js'
+      - 'app/tools/test-administration-v5.js'
+      - 'app/tools/test-v5-normal-save.js'
+      - 'app/tools/test-v5-endpoint-safety.js'
+      - 'tests/public-module-projection.test.cjs'
+      - 'tests/ci/viewer-base-price-trigger-contract.test.cjs'
+      - 'package.json'
+      - 'package-lock.json'
+      - 'scripts/compile-primary-pages.mjs'
       - 'app/viewer/**'
       - 'netlify/functions/public-modules.mjs'
       - 'tests/viewer-base-price*'
@@ -38,6 +46,14 @@ on:
       - 'app/data/presentation-policy-defaults.js'
       - 'app/data/scene-data.js'
       - 'app/tools/test-public-modules-endpoint.js'
+      - 'app/tools/test-administration-v5.js'
+      - 'app/tools/test-v5-normal-save.js'
+      - 'app/tools/test-v5-endpoint-safety.js'
+      - 'tests/public-module-projection.test.cjs'
+      - 'tests/ci/viewer-base-price-trigger-contract.test.cjs'
+      - 'package.json'
+      - 'package-lock.json'
+      - 'scripts/compile-primary-pages.mjs'
       - 'app/viewer/**'
       - 'netlify/functions/public-modules.mjs'
       - 'tests/viewer-base-price*'
@@ -58,6 +74,7 @@ jobs:
         with:
           node-version: "22"
       - run: node --test tests/viewer-base-price-publication.test.cjs tests/viewer-price-v5-save.test.cjs
+      - run: node --test tests/ci/viewer-base-price-trigger-contract.test.cjs
       - run: node --test tests/ci/viewer-price-wire-contract.test.cjs tests/public-module-projection.test.cjs
       - run: node app/tools/test-administration-v5.js && node app/tools/test-v5-normal-save.js && node app/tools/test-v5-endpoint-safety.js && node app/tools/test-public-modules-endpoint.js
       - run: node --check app/core/administration-v5.js && node --check app/core/public-module-projection.js && node --check netlify/functions/public-modules.mjs && node --check app/viewer/public-data.js && node --check app/viewer/scene-adapters.js && node --check app/viewer/viewer.js
