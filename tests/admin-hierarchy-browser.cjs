@@ -237,6 +237,88 @@ async function sectionItemIds(page, stageId, groupId, sectionId) {
 
   await page.locator('[data-admin-tab="stages"]').click();
   await page.waitForSelector('[data-admin-panel="stages"]:not([hidden])');
+  const hierarchyEditorCopy = await page.evaluate(() => window.CASA_UI_COPY.admin.hierarchyEditor);
+  assert.deepEqual(hierarchyEditorCopy, {
+    stagePanelNote: "Arraste os itens entre etapas. Itens sem etapa aparecem na lista de disponíveis. Etapas de módulos e resumo são essenciais.",
+    newStageTypeLabel: "Tipo da nova etapa",
+    newStageTypes: { custom: "Personalizada", finishes: "Acabamentos", services: "Serviços" },
+    addStage: "Adicionar etapa",
+    newStagePrompt: "Nome da nova etapa",
+    newSectionPrompt: "Nome da nova seção",
+    newGroupPrompt: "Nome do novo grupo",
+    stageLimitValidation: "O limite é {limit} etapas.",
+    moveUpAriaLabel: "Mover {item} para cima",
+    moveDownAriaLabel: "Mover {item} para baixo",
+    choiceOptionsSummary: "Opções do item · {count} disponível(is)",
+    choiceOptionsNote: "Estas são opções do item, não itens hierárquicos independentes. Disponibilidade e dados comerciais continuam nas abas próprias.",
+    choiceAvailable: "Disponível",
+    choiceUnavailable: "Indisponível",
+    moveItemLabel: "Mover para",
+    newSection: "Nova seção",
+    removeItem: "Retirar",
+    sectionName: "Seção",
+    componentLabel: "Componente",
+    moveSectionToGroup: "Mover seção para grupo",
+    moveSectionToNewGroup: "Mover para novo grupo",
+    mergeSection: "Remover seção e unir",
+    groupName: "Grupo",
+    groupWidth: "Largura",
+    groupColumnOptions: { one: "1 coluna", two: "2 colunas" },
+    mergeGroup: "Remover grupo e unir conteúdo",
+    availableItemsAriaLabel: "Itens do catálogo sem seção",
+    availableItemsHeading: "Itens disponíveis",
+    availableItemsHint: "Itens pertencem a seções explícitas. Escolha uma seção compatível ou crie a estrutura inicial de uma etapa vazia.",
+    emptyStageDestination: "criar grupo/seção inicial",
+    addItem: "Adicionar",
+    allItemsPlaced: "Todos os itens compatíveis já pertencem a uma seção.",
+    stageNameLabel: "Nome da etapa",
+    stageNameAriaLabel: "Nome da etapa {stage}",
+    removeStage: "Remover etapa",
+    emptyStageHint: "Etapa vazia. Adicione um item disponível para criar o primeiro grupo e seção."
+  }, "hierarchy editor copy stays in its own canonical catalog family");
+  assert.equal(await page.locator("#stagePanelNote").textContent(), hierarchyEditorCopy.stagePanelNote, "stage guidance is supplied by the copy catalog");
+  assert.equal(await page.locator("#stageKindInput").getAttribute("aria-label"), hierarchyEditorCopy.newStageTypeLabel, "new-stage type selector has catalog-backed accessible text");
+  assert.deepEqual(await page.locator("#stageKindInput option").allTextContents(), Object.values(hierarchyEditorCopy.newStageTypes), "stage types use catalog labels");
+  assert.equal(await page.locator("#addStageButton").textContent(), hierarchyEditorCopy.addStage, "stage creation action uses catalog copy");
+  const availableItems = page.locator(".stage-unassigned");
+  assert.equal(await availableItems.getAttribute("aria-label"), hierarchyEditorCopy.availableItemsAriaLabel, "unassigned item region uses catalog accessible text");
+  assert.equal(await availableItems.locator("h2").textContent(), hierarchyEditorCopy.availableItemsHeading, "unassigned item heading uses catalog copy");
+  assert.equal(await availableItems.locator("p.admin-note").textContent(), hierarchyEditorCopy.availableItemsHint, "unassigned item guidance uses catalog copy");
+  const finishesStage = page.locator('[data-hierarchy-stage="finishes"]');
+  const stageLabel = await finishesStage.locator("[data-stage-label]").inputValue();
+  assert.equal(await finishesStage.locator("[data-stage-label]").getAttribute("aria-label"), hierarchyEditorCopy.stageNameAriaLabel.replace("{stage}", stageLabel), "stage accessible name interpolates the data-backed stage label");
+  assert.ok((await finishesStage.locator('label:has([data-stage-label])').textContent()).startsWith(hierarchyEditorCopy.stageNameLabel), "stage name field label comes from the copy catalog");
+  const hierarchyDefaultsInBrowser = await page.evaluate(() => window.CASA_EM_MODULOS_HIERARCHY_DEFAULTS);
+  const cabinetGroup = finishesStage.locator('[data-hierarchy-group="cabinet-finishes"]');
+  const expectedCabinetGroup = hierarchyDefaultsInBrowser.stages.finishes.groups.find((group) => group.id === "cabinet-finishes");
+  assert.equal(await cabinetGroup.locator("[data-group-label]").inputValue(), expectedCabinetGroup.label, "group name remains sourced from hierarchy defaults");
+  assert.ok((await cabinetGroup.locator('label:has([data-group-label])').textContent()).startsWith(hierarchyEditorCopy.groupName), "group name control label comes from the copy catalog");
+  assert.ok((await cabinetGroup.locator('label:has([data-group-span])').textContent()).startsWith(hierarchyEditorCopy.groupWidth), "group width control label comes from the copy catalog");
+  assert.deepEqual(await cabinetGroup.locator("[data-group-span] option").allTextContents(), [hierarchyEditorCopy.groupColumnOptions.one, hierarchyEditorCopy.groupColumnOptions.two], "group column choices use catalog labels");
+  const frontSection = finishesStage.locator('[data-hierarchy-section="fronts"]');
+  const expectedFrontSection = expectedCabinetGroup.sections.find((section) => section.id === "fronts");
+  assert.equal(await frontSection.locator("[data-section-label]").inputValue(), expectedFrontSection.label, "section name remains sourced from hierarchy defaults");
+  assert.ok((await frontSection.locator('label:has([data-section-label])').textContent()).startsWith(hierarchyEditorCopy.sectionName), "section name control label comes from the copy catalog");
+  assert.ok((await frontSection.locator('label:has([data-section-component])').textContent()).startsWith(hierarchyEditorCopy.componentLabel), "component control label comes from the copy catalog");
+  assert.ok((await finishesStage.locator('label:has([data-move-section-group])').first().textContent()).startsWith(hierarchyEditorCopy.moveSectionToGroup), "section group selector uses catalog copy");
+  assert.equal(await frontSection.locator("[data-split-hierarchy-section]").textContent(), hierarchyEditorCopy.moveSectionToNewGroup, "section split action uses catalog copy");
+  assert.equal(await frontSection.locator("[data-merge-hierarchy-section]").textContent(), hierarchyEditorCopy.mergeSection, "section merge action uses catalog copy");
+  assert.equal(await cabinetGroup.locator("[data-merge-hierarchy-group]").textContent(), hierarchyEditorCopy.mergeGroup, "group merge action uses catalog copy");
+  assert.equal(await finishesStage.locator('[data-remove-hierarchy-item="fronts-all"]').textContent(), hierarchyEditorCopy.removeItem, "item removal action uses catalog copy");
+  assert.ok((await page.locator('[data-hierarchy-item="tempered-glass"] [data-split-hierarchy-item]').first().textContent()) === hierarchyEditorCopy.newSection, "item section split action uses catalog copy");
+  assert.equal(await finishesStage.locator('[data-move-hierarchy-group="finishes|cabinet-finishes|-1"]').getAttribute("aria-label"), hierarchyEditorCopy.moveUpAriaLabel.replace("{item}", () => expectedCabinetGroup.label), "ordering control exposes a catalog-backed accessible action with the authored group name");
+  const frontChoicesPanel = page.locator('[data-hierarchy-choice-list="fronts-all"]');
+  const frontChoiceCount = await frontChoicesPanel.locator("[data-hierarchy-choice-option][data-available=true]").count();
+  assert.equal(await frontChoicesPanel.locator("summary").textContent(), hierarchyEditorCopy.choiceOptionsSummary.replace("{count}", String(frontChoiceCount)), "hierarchy option summary uses catalog copy and live availability count");
+  assert.equal(await frontChoicesPanel.locator(".hierarchy-choice-options__note").textContent(), hierarchyEditorCopy.choiceOptionsNote, "hierarchy option note uses catalog copy");
+  assert.equal(await frontChoicesPanel.locator('[data-available="true"] small').first().textContent(), hierarchyEditorCopy.choiceAvailable, "available hierarchy option status uses catalog copy");
+  if (await frontChoicesPanel.locator('[data-available="false"]').count()) {
+    assert.equal(await frontChoicesPanel.locator('[data-available="false"] small').first().textContent(), hierarchyEditorCopy.choiceUnavailable, "unavailable hierarchy option status uses catalog copy when that state is present");
+  } else {
+    assert.equal(hierarchyEditorCopy.choiceUnavailable, "Indisponível", "unavailable hierarchy status remains in the catalog for states absent from this fixture");
+  }
+  assert.ok((await page.locator('[data-move-hierarchy-item-target="fronts-all"]').locator("xpath=..").textContent()).trim().startsWith(hierarchyEditorCopy.moveItemLabel), "item destination selector label comes from the copy catalog");
+  assert.equal(await page.locator('[data-remove-stage="finishes"]').textContent(), hierarchyEditorCopy.removeStage, "stage removal action uses catalog copy");
   const initialEntity = page.locator('[data-initial-configurator-entity="module-01"]');
   const initialObject = page.locator('[data-initial-configurator-entity="lighting-08"]');
   const stageAvailability = page.locator('[data-stage-enabled="finishes"]');
@@ -278,7 +360,10 @@ async function sectionItemIds(page, stageId, groupId, sectionId) {
   }
 
   await page.locator("#stageKindInput").selectOption("custom");
-  page.once("dialog", (dialog) => dialog.accept("Etapa vazia"));
+  page.once("dialog", (dialog) => {
+    assert.equal(dialog.message(), hierarchyEditorCopy.newStagePrompt, "new stage prompt comes from the copy catalog");
+    dialog.accept("Etapa vazia");
+  });
   await page.locator("#addStageButton").click();
   const emptyStage = page.locator('[data-hierarchy-stage="stage-etapa-vazia"]');
   const emptyStageToggle = emptyStage.locator('[data-stage-enabled="stage-etapa-vazia"]');
@@ -287,6 +372,9 @@ async function sectionItemIds(page, stageId, groupId, sectionId) {
   assert.equal(await emptyStage.locator('[data-remove-stage="stage-etapa-vazia"]').isDisabled(), false, "the empty custom stage remains removable");
   assert.equal(await emptyStageReason.textContent(), "Adicione pelo menos um item antes de ativar esta etapa.", "empty stage explains the prerequisite for activation");
   assert.equal(await emptyStageToggle.getAttribute("aria-describedby"), "stage-policy-stage-etapa-vazia", "empty stage availability references its prerequisite");
+  assert.equal(await emptyStage.locator(".stage-drop-hint").textContent(), hierarchyEditorCopy.emptyStageHint, "empty hierarchy prompt uses catalog copy");
+  assert.equal(await emptyStage.locator("[data-stage-label]").getAttribute("aria-label"), hierarchyEditorCopy.stageNameAriaLabel.replace("{stage}", "Etapa vazia"), "custom stage accessible name uses its authored label");
+  assert.equal(await page.locator('[data-move-hierarchy-item-target="tempered-glass"] option[value="stage-etapa-vazia||"]').textContent(), `Etapa vazia · ${hierarchyEditorCopy.emptyStageDestination}`, "empty-stage destination label combines fixed copy with the data-backed stage name");
   assert.equal(putCount, 0, "adding a local stage and viewing its policy reason do not save implicitly");
 
   const accentColors = {};
@@ -547,6 +635,33 @@ async function sectionItemIds(page, stageId, groupId, sectionId) {
 
   await page.locator('[data-admin-tab="stages"]').click();
   await page.waitForSelector('[data-admin-panel="stages"]:not([hidden])');
+  const frontSectionLabel = await frontSection.locator("[data-section-label]").inputValue();
+  page.once("dialog", (dialog) => {
+    assert.equal(dialog.message(), hierarchyEditorCopy.newGroupPrompt, "new-group prompt comes from the copy catalog");
+    assert.equal(dialog.defaultValue(), frontSectionLabel, "new group suggestion remains the current section's data-backed name");
+    dialog.accept("Grupo de teste");
+  });
+  await frontSection.locator("[data-split-hierarchy-section]").click();
+  assert.ok((await page.locator("[data-group-label]").evaluateAll((nodes) => nodes.map((node) => node.value))).includes("Grupo de teste"), "group creation uses the authored prompt value");
+  assert.equal(putCount, 0, "creating a local group does not save implicitly");
+  await page.reload({ waitUntil: "networkidle" });
+  await page.waitForSelector('[data-hierarchy-stage="finishes"] [data-hierarchy-group="cabinet-finishes"]');
+  await page.locator('[data-admin-tab="stages"]').click();
+  await page.waitForSelector('[data-admin-panel="stages"]:not([hidden])');
+  const glassItem = page.locator('[data-hierarchy-item="tempered-glass"]');
+  const glassLabel = await glassItem.locator("strong").textContent();
+  page.once("dialog", (dialog) => {
+    assert.equal(dialog.message(), hierarchyEditorCopy.newSectionPrompt, "new-section prompt comes from the copy catalog");
+    assert.equal(dialog.defaultValue(), glassLabel, "new section suggestion remains the item data-backed label");
+    dialog.accept("Vidro em seção nova");
+  });
+  await glassItem.locator("[data-split-hierarchy-item]").click();
+  assert.equal(await page.locator('[data-hierarchy-section] [data-section-label]').evaluateAll((nodes) => nodes.map((node) => node.value).includes("Vidro em seção nova")), true, "section creation uses the authored prompt value");
+  assert.equal(putCount, 0, "creating a local section does not save implicitly");
+  await page.reload({ waitUntil: "networkidle" });
+  await page.waitForSelector('[data-hierarchy-stage="finishes"] [data-hierarchy-group="cabinet-finishes"]');
+  await page.locator('[data-admin-tab="stages"]').click();
+  await page.waitForSelector('[data-admin-panel="stages"]:not([hidden])');
   await page.locator('[data-move-hierarchy-group="finishes|stone|-1"]').click();
   assert.deepEqual(await stageGroupIds(page, "finishes"), ["stone", "cabinet-finishes"], "group reorder updates the in-memory hierarchy and rendered ancestry");
 
@@ -584,6 +699,8 @@ async function sectionItemIds(page, stageId, groupId, sectionId) {
   await page.waitForSelector('[data-hierarchy-item="tempered-glass"]');
   await page.locator('[data-remove-hierarchy-item="tempered-glass"]').click();
   await page.waitForSelector('[data-place-hierarchy-item="tempered-glass"]');
+  assert.equal(await page.locator(".stage-unassigned h2").textContent(), hierarchyEditorCopy.availableItemsHeading, "available item heading remains visible after an item is unassigned");
+  assert.equal(await page.locator(".stage-unassigned button[data-place-hierarchy-item='tempered-glass']").textContent(), hierarchyEditorCopy.addItem, "pool action uses catalog copy");
   const pool = page.locator('[data-place-hierarchy-item="tempered-glass"]').locator("xpath=..");
   const target = pool.locator('[data-place-hierarchy-item-target="tempered-glass"]');
   await target.selectOption("services|services|additional-services");
@@ -623,6 +740,23 @@ async function sectionItemIds(page, stageId, groupId, sectionId) {
   assert.equal(await page.locator('[data-initial-configurator-entity="module-01"]').isChecked(), !initialModuleBeforeSave, "reloaded Admin reads back the saved configurator visibility");
   assert.equal(current.initialState.entities["module-01"], !initialModuleBeforeSave, "mocked published state retains the explicit configurator visibility write");
   assert.equal(putCount, 1, "readback reload performs no additional write");
+
+  const initialStageCount = await page.locator("[data-hierarchy-stage]").count();
+  for (let stageIndex = initialStageCount; stageIndex < 12; stageIndex += 1) {
+    page.once("dialog", (dialog) => {
+      assert.equal(dialog.message(), hierarchyEditorCopy.newStagePrompt, "every stage creation uses the catalog prompt");
+      dialog.accept(`Etapa de teste ${stageIndex}`);
+    });
+    await page.locator("#addStageButton").click();
+  }
+  assert.equal(await page.locator("[data-hierarchy-stage]").count(), 12, "the existing stage limit remains unchanged");
+  await page.locator("#addStageButton").click();
+  assert.equal(await page.locator("#saveMessage").textContent(), hierarchyEditorCopy.stageLimitValidation.replace("{limit}", "12"), "stage limit validation uses catalog copy");
+  assert.equal(putCount, 1, "stage-limit validation does not write configuration");
+  await page.reload({ waitUntil: "networkidle" });
+  await page.waitForSelector('[data-hierarchy-stage="finishes"]');
+  await page.locator('[data-admin-tab="stages"]').click();
+  await page.waitForSelector('[data-admin-panel="stages"]:not([hidden])');
 
   await page.screenshot({ path: path.join(reviewDir, "admin-hierarchy.png"), fullPage: true });
   fs.writeFileSync(path.join(reviewDir, "result.json"), JSON.stringify({
