@@ -6,6 +6,7 @@ import administrationV5 from "../../app/core/administration-v5.js";
 import publishedReader from "../../app/core/published-configuration.js";
 import v5NormalSave from "../../app/core/v5-normal-save.js";
 import legacyStageRepair from "../../app/core/legacy-stage-repair.js";
+import defaults from "../../app/data/configurator-settings.js";
 import catalog from "../../app/data/catalog-data.js";
 import priceBook from "../../app/data/mock-price-book.js";
 import scene from "../../app/data/scene-data.js";
@@ -30,7 +31,16 @@ async function readPublished(store) {
   const inspected = publishedReader.inspectPublishedRaw(raw, {
     configuration: configCore, administrationV5, catalog, priceBook, scene
   });
-  if (inspected.kind === "valid" || inspected.kind === "missing") return inspected;
+  if (inspected.kind === "valid") return inspected;
+  // Preserve the approved Admin-only fallback for missing/invalid legacy V3.
+  // Never turn unsupported or invalid V5 storage into plausible defaults.
+  if (inspected.kind === "missing" || inspected.code === "invalid_v3") {
+    return {
+      kind: "fallback", schema: configCore.SCHEMA,
+      code: inspected.kind === "missing" ? "published_configuration_missing" : inspected.code,
+      value: configCore.createDefaultAdministration(defaults, catalog, priceBook)
+    };
+  }
   return { kind: "invalid", code: inspected.code };
 }
 
@@ -64,9 +74,6 @@ export default async (request, context) => {
     }
     const store = getConfigurationStore(context);
     const published = await readPublished(store);
-    if (published.kind === "missing") {
-      return respond({ error: "published_configuration_missing" }, 404);
-    }
     return published.kind === "invalid"
       ? respond({ error: "stored_configuration_invalid", code: published.code }, 422)
       : respond(published.value);
@@ -103,6 +110,11 @@ export default async (request, context) => {
   }
 
   const currentRead = await readPublished(store);
+  if (currentRead.kind === "fallback") {
+    return currentRead.code === "published_configuration_missing"
+      ? respond({ error: "published_configuration_missing" }, 409)
+      : respond({ error: "stored_configuration_invalid", code: currentRead.code }, 409);
+  }
   if (currentRead.kind === "missing") {
     return respond({ error: "published_configuration_missing" }, 409);
   }
