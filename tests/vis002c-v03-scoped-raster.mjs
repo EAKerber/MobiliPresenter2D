@@ -35,14 +35,17 @@ const resultDir = "artifacts/vis002c-v03-scoped-raster";
 await mkdir(resultDir, { recursive: true });
 const results = [];
 const sample = targets => targets.map(({selector, expectedBackground}) => {
+  // Fixed mapped targets only: verify their element/ancestor solid surfaces; this does not
+  // claim to inspect unrelated pseudo-element artwork or provide human visual approval.
   const solidBackground = element => {
     let current = element, resolved = null;
     while (current && current.nodeType === 1) {
       const css = getComputedStyle(current);
-      const mask = css.maskImage || css.webkitMaskImage || "none";
+      const masked = (css.maskImage && css.maskImage !== "none")
+        || (css.webkitMaskImage && css.webkitMaskImage !== "none");
       const compositing = css.opacity !== "1" || css.filter !== "none"
-        || css.backdropFilter !== "none" || css.mixBlendMode !== "normal"
-        || (mask !== "none");
+        || (css.backdropFilter || css.webkitBackdropFilter || "none") !== "none"
+        || css.mixBlendMode !== "normal" || masked;
       if (compositing) return {error: "composited-ancestor"};
       if (resolved === null) {
         if (css.backgroundImage !== "none") return {error: "image-or-gradient"};
@@ -144,8 +147,8 @@ for (const [browserName, engine] of [["chromium", chromium], ["webkit", webkit]]
 
         // Deliberately synthetic former text color, not a production baseline.
         // The DOM, dimensions, media, text and image state stay identical.
-        const oldCss = selectors.map(s =>
-          'html[data-theme="light"] ' + s + ' { color: #705C4B !important; }'
+        const oldCss = selectors.map(({selector}) =>
+          'html[data-theme="light"] ' + selector + ' { color: #705C4B !important; }'
         ).join("\n");
         const injected = await page.addStyleTag({content: oldCss});
         await page.evaluate(() => new Promise(done => requestAnimationFrame(() =>
