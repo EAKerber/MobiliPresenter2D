@@ -109,6 +109,30 @@
         updatePasswordFallback: "Não foi possível atualizar a senha.",
         accessInitializationFallback: "Não foi possível concluir o acesso."
       }),
+      shell: Object.freeze({
+        documentTitle: "Administração — Casa em Módulos",
+        eyebrow: "Configurador público",
+        heading: "Administração do catálogo",
+        intro: "Configure etapas, conteúdo dos objetos, acabamentos e valores publicados.",
+        tablistLabel: "Áreas de administração",
+        tabs: Object.freeze({
+          stages: "Etapas",
+          objects: "Dados dos objetos",
+          finishes: "Cores e acabamentos",
+          rules: "Dependências e eventos",
+          pricing: "Preços"
+        }),
+        objectPager: Object.freeze({
+          previous: "← Anterior",
+          label: "Objeto",
+          next: "Próximo →"
+        }),
+        objectTablistLabel: "Dados do objeto",
+        objectTabs: Object.freeze({
+          content: "Conteúdo",
+          assets: "Imagens e máscaras"
+        })
+      }),
       initialState: Object.freeze({
         entityVisibility: "Iniciar visível no configurador",
         entityVisibilityAriaLabel: "{item}: visível inicialmente no configurador",
