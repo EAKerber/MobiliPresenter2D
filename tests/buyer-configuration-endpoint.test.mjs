@@ -33,13 +33,14 @@ const v5=administrationV5.upgrade(
 
 test("Buyer endpoint denies before storage and exposes only the projected DTO",async()=>{
  let actor=null,identityUnavailable=false,activeSession=null,sessionStoreUnavailable=false;
+ let publishedEntry={data:JSON.stringify(v5),etag:'"fixture-v5"',metadata:{}};
  const counts={siteOpens:0,previewOpens:0,reads:0,sessionLookups:0};
  const store={
   async getWithMetadata(key,options) {
    counts.reads++;
    assert.equal(key,"published");
    assert.deepEqual(options,{type:"text",consistency:"strong"});
-   return {data:JSON.stringify(v5),etag:'"fixture-v5"',metadata:{}};
+   return publishedEntry;
   }
  };
  const harness={
@@ -159,6 +160,24 @@ test("Buyer endpoint denies before storage and exposes only the projected DTO",a
   assert.equal(counts.previewOpens,3);
   assert.equal(counts.reads,3);
   assert.equal(counts.siteOpens,0);
+
+  actor={id:"admin-1",roles:["admin"]};
+  publishedEntry=null;
+  result=await invoke();
+  assert.equal(result.status,503,"missing published configuration fails closed");
+  assert.equal(result.body.error,"published_configuration_unavailable");
+  assert.equal(counts.previewOpens,4);
+  assert.equal(counts.reads,4,"missing configuration never falls back to defaults");
+  assert.equal(counts.siteOpens,0);
+
+  publishedEntry={data:JSON.stringify({...v5,presentationPolicy:null}),etag:'"invalid-v5"',metadata:{}};
+  result=await invoke();
+  assert.equal(result.status,503,"invalid published V5 configuration fails closed");
+  assert.equal(result.body.error,"published_configuration_invalid");
+  assert.equal(counts.previewOpens,5);
+  assert.equal(counts.reads,5,"invalid configuration never falls back to defaults");
+  assert.equal(counts.siteOpens,0);
+
  } finally {
   delete globalThis.__buyerConfigurationEndpointHarness;
  }
