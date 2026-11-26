@@ -80,10 +80,14 @@ The original snapshot above remains a valid historical read of `development@d0f6
 | V5 conditional save/CAS | `e9da3059ec2bbb566a0ac4c087553d383451e2e7` | same | identical |
 | Configuration endpoint | `2bd8ec2fe0adb6b861b819d40f5b4285450f1051` | `344a9cd7fdc2dc22abf7afb5e3ce7193ac06c8e3` | differs |
 | Admin consumer | `79925345e43096df77bef54fe257e483f922edd8` | `4702ad57579fa6649ca6b7b08cd0a3fec97df93f` | differs |
+| Buyer endpoint and public projection | `aaace7bc2187aca4b1c484962f239ae00b20de80`; `c1f8e099f2dce29bd003577e8c0a724d7b6475fa` | same | identical |
+| Buyer endpoint tests | `3c342cfbbc2c479d84f60978ccef2e35928e60ad` | `f61eb8d670f76b65f44967781dbde5f26e50efc2` | main lacks missing/invalid-V5 assertions |
 | Endpoint safety tests | `fe16a7d94c254f1f8b7d860ef897816d6a04e399` | `f580e2d27302d63c4fb3d724b9db08758206a8b1` | differs |
 | App-build purity workflow | `39a2511dd02a10a2f85afb289bc487e9a867d2f7` | `3debb0f87335921d6ba0997471433488d07ccdfc` | differs |
 
-The endpoint and test diffs still need file-level contract reconciliation before either is called identical. Both current source/test paths preserve the read-only Admin fallback for missing or invalid legacy V3; malformed JSON, unsupported schema, metadata-invalid state, and V5 remain fail-closed, and fallback is never accepted as a write source.
+The Admin endpoint files differ structurally but have equivalent read/write behavior for the checked legacy/V5 states. Both preserve the read-only Admin fallback for missing or invalid legacy V3; malformed JSON, unsupported schema, metadata-invalid state, and V5 remain fail-closed, and fallback is never accepted as a write source. Development contains one later `currentRead.kind === 'missing'` check after `readPublished()` already maps missing to `fallback`; that branch is unreachable and does not change runtime behavior.
+
+The Buyer endpoint and public projection are byte-identical across the refs (`buyer-configuration.mjs` `aaace7bc`; `published-buyer-projection.js` `c1f8e099`). The Buyer endpoint returns 503 for missing or invalid published data on both refs. The evidence gap is in main's test file: `tests/buyer-configuration-endpoint.test.mjs` at `3c342cfb` omits missing-storage and invalid-V5 cases that development's `f61eb8d6` asserts as 503 with no defaults. Keep DOM-003/TST-009 `main=partial` until those two tests are ported and the main authorization-boundary gate passes.
 
 ### Main gate receipts
 
@@ -95,3 +99,10 @@ The current development `buyer-configuration-boundary.yml` blob is `b5668220e3e6
 ### Status boundary
 
 The V5 reader, inspection, and CAS/save core are already shared byte-for-byte. Main has current passing endpoint tests and the handler trigger route; development has its own endpoint contract workflow and test set. Do not port whole files solely to equalize blobs. Complete the endpoint/test semantic diff and current TST-001 inventory before marking the cross-branch slice reconciled. Hosted Identity, live Admin behavior, and provider-level Blob atomicity remain UNKNOWN.
+
+
+### TST-001 gate reachability and status correction
+
+The current development test-impact workflow did not observe `docs/architecture/ci/**` or `docs/architecture/plan-v0.9-execution-register.json`, so this crosswalk/register update produced no inventory check. This PR adds both paths to push and pull_request triggers in `.github/workflows/development-test-impact-plan.yml`. The exact candidate inventory artifact and plan-test result are pending on this PR head; no fresh inventory is claimed until that run and artifact readback complete.
+
+DOM-004 is `main=done` for the code-level CAS/revision/readback contract and mocked tests because the shared V5 core matches and main gates pass. Hosted Netlify Blob atomicity remains UNKNOWN. DOM-003 and TST-009 remain `main=partial` only for the missing two Buyer negative assertions above.
