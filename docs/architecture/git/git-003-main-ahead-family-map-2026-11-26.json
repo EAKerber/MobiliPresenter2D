@@ -1,650 +1,650 @@
 {
-  "schema": "ProductMainAheadFamilyMap/1",
-  "readAt": "2026-11-26T14:20:00Z",
+  "schema": "ProductMainDevelopmentTreeDifference/2",
+  "readAt": "2026-11-26T14:25:00Z",
   "repository": "EAKerber/MobiliPresenter2D",
-  "scope": "Files changed on main relative to development, classified by primary family for GIT-003. Classification is not approval to merge.",
+  "scope": "Exact current-tree blob-by-path differences from main's perspective, with a summarized reverse perspective. Same-path different blobs count on both sides; paths absent from one tree are classified as one-sided. This is an inventory, not merge approval.",
+  "supersedes": "docs/architecture/git/git-003-main-ahead-family-map-2026-11-26.json schema ProductMainAheadFamilyMap/1; its 98 merge-base paths were mislabeled as net main-ahead differences and its reverse-row count field was wrong.",
   "refs": {
     "main": "94560aa9c4dfc2871a6eb1035b6ecaa283224453",
-    "development": "00fed1150d4926811b4419f480ca64c04b26ed36",
-    "mergeBase": "221b54b2a41ecc8c338d1bf2cf67280cf165ce95"
+    "development": "45b690e93209a654b81b9ed73c4c794c4f2b014f",
+    "mergeBase": "221b54b2a41ecc8c338d1bf2cf67280cf165ce95",
+    "mainTree": "649388636ca6a92eb8b44c5ce78ac96e6e087bad",
+    "developmentTree": "a15f24cb9787269bd005be4a5b6a270af7f3b41a"
   },
   "comparison": {
     "mainOnlyCommits": 36,
-    "developmentOnlyCommits": 622,
-    "mainAheadChangedPaths": 98,
-    "reverseCompareReturnedPaths": 98,
-    "reverseComparePathListCapped": true
+    "developmentOnlyCommits": 623,
+    "mergeBaseRelativePathRows": {
+      "mainSide": 98,
+      "developmentSideReturned": 300,
+      "developmentSideCapped": true,
+      "meaning": "commits-diff paths relative to the shared merge base; not a net current-tree delta"
+    },
+    "exactCurrentTree": {
+      "mainTreeTruncated": false,
+      "developmentTreeTruncated": false,
+      "mainBlobCount": 816,
+      "developmentBlobCount": 1225,
+      "onlyMain": 7,
+      "onlyDevelopment": 416,
+      "samePathDifferentBlob": 86,
+      "mainPathsAbsentOrDifferent": 93,
+      "developmentPathsAbsentOrDifferent": 502
+    }
   },
-  "familyMap": [
+  "mainPerspectiveFamilies": [
     {
-      "family": "ARC-13 inventory provenance",
-      "pathCount": 11,
-      "disposition": "needs exact-tree relevance and consumer reconciliation before any promotion",
+      "family": "CI workflows",
+      "pathCount": 20,
       "paths": [
+        {
+          "path": ".github/workflows/about-skip-link-focus.yml",
+          "mainBlob": "5273aeffc6d36342efcc009b45451f43470f01aa",
+          "developmentBlob": "c235cc76b8872ede686542026481252cc52c4053",
+          "status": "different_blob"
+        },
+        {
+          "path": ".github/workflows/admin-hierarchy-browser.yml",
+          "mainBlob": "bb6374561d873e35a032dea6e9f74cdc7ca01a42",
+          "developmentBlob": "139116120889201e28fa60f60bb50e844e032ade",
+          "status": "different_blob"
+        },
+        {
+          "path": ".github/workflows/app-build-purity.yml",
+          "mainBlob": "aaaf6ed9105cc6fd1df4f74001a2823f2b4cf59e",
+          "developmentBlob": "3debb0f87335921d6ba0997471433488d07ccdfc",
+          "status": "different_blob"
+        },
+        {
+          "path": ".github/workflows/arc03c-static-page-build-gate.yml",
+          "mainBlob": "c0d4702eceb443d9ac0cf8bb0a8633ae5335312c",
+          "developmentBlob": "8a85e9bcc6336b3e0e9a1f3b0f0e2fa1a11316cd",
+          "status": "different_blob"
+        },
         {
           "path": ".github/workflows/arc13-inventory-integrity.yml",
-          "status": "added",
-          "additions": 111,
-          "deletions": 0
-        },
-        {
-          "path": "architecture/arc13/ui-text-candidates.json",
-          "status": "added",
-          "additions": 46984,
-          "deletions": 0
-        },
-        {
-          "path": "docs/architecture/arc13/inventory-refresh-development-2026-11-21.md",
-          "status": "added",
-          "additions": 23,
-          "deletions": 0
-        },
-        {
-          "path": "docs/architecture/arc13/inventory-refresh-main-2026-11-21.md",
-          "status": "added",
-          "additions": 31,
-          "deletions": 0
-        },
-        {
-          "path": "tests/arc03c-source-authority.test.mjs",
-          "status": "modified",
-          "additions": 95,
-          "deletions": 22
-        },
-        {
-          "path": "tools/arc13/README.md",
-          "status": "added",
-          "additions": 41,
-          "deletions": 0
-        },
-        {
-          "path": "tools/arc13/package-lock.json",
-          "status": "added",
-          "additions": 26,
-          "deletions": 0
-        },
-        {
-          "path": "tools/arc13/package.json",
-          "status": "added",
-          "additions": 11,
-          "deletions": 0
-        },
-        {
-          "path": "tools/arc13/run-inventory.mjs",
-          "status": "added",
-          "additions": 26,
-          "deletions": 0
-        },
-        {
-          "path": "tools/arc13/scan-js-sinks.mjs",
-          "status": "added",
-          "additions": 1353,
-          "deletions": 0
-        },
-        {
-          "path": "tools/arc13/scan-ui-inventory.py",
-          "status": "added",
-          "additions": 1125,
-          "deletions": 0
-        }
-      ]
-    },
-    {
-      "family": "branch hygiene governance",
-      "pathCount": 28,
-      "disposition": "needs exact-tree relevance and consumer reconciliation before any promotion",
-      "paths": [
-        {
-          "path": ".github/workflows/branch-hygiene-bounded.yml",
-          "status": "modified",
-          "additions": 12,
-          "deletions": 10
+          "mainBlob": "5a6f65789b05b33f0be8ffff34cb7b12926a45f7",
+          "developmentBlob": "82358a6472b4c5ae79b208611ce473d1bd5d1151",
+          "status": "different_blob"
         },
         {
           "path": ".github/workflows/branch-hygiene-development-audit.yml",
-          "status": "added",
-          "additions": 61,
-          "deletions": 0
+          "mainBlob": "697ff3521f2b09c105913e387f0936b6478eb921",
+          "developmentBlob": null,
+          "status": "main_only"
         },
         {
           "path": ".github/workflows/branch-hygiene-development-retirement.yml",
-          "status": "added",
-          "additions": 94,
-          "deletions": 0
+          "mainBlob": "a09b416e8f983a944c507fcaff6c0a6e3d29fcbf",
+          "developmentBlob": null,
+          "status": "main_only"
         },
-        {
-          "path": ".github/workflows/branch-hygiene-merged-pr-cleanup.yml",
-          "status": "added",
-          "additions": 47,
-          "deletions": 0
-        },
-        {
-          "path": ".github/workflows/branch-hygiene.yml",
-          "status": "modified",
-          "additions": 26,
-          "deletions": 5
-        },
-        {
-          "path": "docs/architecture/0003-evidence-based-branch-hygiene.md",
-          "status": "modified",
-          "additions": 24,
-          "deletions": 1
-        },
-        {
-          "path": "docs/work/r1-branch-hygiene.md",
-          "status": "modified",
-          "additions": 1,
-          "deletions": 1
-        },
-        {
-          "path": "ops/branch-hygiene-batch.json",
-          "status": "modified",
-          "additions": 4,
-          "deletions": 24
-        },
-        {
-          "path": "ops/branch-hygiene-development-batch.json",
-          "status": "added",
-          "additions": 33,
-          "deletions": 0
-        },
-        {
-          "path": "ops/branch-hygiene-development-retirement.json",
-          "status": "added",
-          "additions": 37,
-          "deletions": 0
-        },
-        {
-          "path": "tests/fixtures/branch-hygiene-20261125.json",
-          "status": "added",
-          "additions": 466,
-          "deletions": 0
-        },
-        {
-          "path": "tests/test_branch_hygiene_archive.py",
-          "status": "added",
-          "additions": 93,
-          "deletions": 0
-        },
-        {
-          "path": "tests/test_branch_hygiene_batch.py",
-          "status": "modified",
-          "additions": 21,
-          "deletions": 2
-        },
-        {
-          "path": "tests/test_branch_hygiene_campaign_replay.py",
-          "status": "added",
-          "additions": 44,
-          "deletions": 0
-        },
-        {
-          "path": "tests/test_branch_hygiene_control_workflows.py",
-          "status": "added",
-          "additions": 48,
-          "deletions": 0
-        },
-        {
-          "path": "tests/test_branch_hygiene_development.py",
-          "status": "added",
-          "additions": 92,
-          "deletions": 0
-        },
-        {
-          "path": "tests/test_branch_hygiene_development_retire.py",
-          "status": "added",
-          "additions": 85,
-          "deletions": 0
-        },
-        {
-          "path": "tests/test_branch_hygiene_discovery.py",
-          "status": "added",
-          "additions": 51,
-          "deletions": 0
-        },
-        {
-          "path": "tests/test_branch_hygiene_merged_pr_cleanup.py",
-          "status": "added",
-          "additions": 149,
-          "deletions": 0
-        },
-        {
-          "path": "tests/test_branch_hygiene_migration.py",
-          "status": "added",
-          "additions": 11,
-          "deletions": 0
-        },
-        {
-          "path": "tests/test_branch_hygiene_retry.py",
-          "status": "added",
-          "additions": 124,
-          "deletions": 0
-        },
-        {
-          "path": "tests/test_branch_hygiene_series.py",
-          "status": "added",
-          "additions": 36,
-          "deletions": 0
-        },
-        {
-          "path": "tests/test_branch_hygiene_squash.py",
-          "status": "modified",
-          "additions": 74,
-          "deletions": 1
-        },
-        {
-          "path": "tools/branch_hygiene_apply.py",
-          "status": "modified",
-          "additions": 212,
-          "deletions": 27
-        },
-        {
-          "path": "tools/branch_hygiene_merged_pr_cleanup.py",
-          "status": "added",
-          "additions": 139,
-          "deletions": 0
-        },
-        {
-          "path": "tools/branch_hygiene_observe.py",
-          "status": "modified",
-          "additions": 83,
-          "deletions": 4
-        },
-        {
-          "path": "tools/branch_hygiene_plan.py",
-          "status": "modified",
-          "additions": 81,
-          "deletions": 6
-        },
-        {
-          "path": "tools/branch_hygiene_series.py",
-          "status": "added",
-          "additions": 77,
-          "deletions": 0
-        }
-      ]
-    },
-    {
-      "family": "VIS-002C token lifecycle",
-      "pathCount": 6,
-      "disposition": "needs exact-tree relevance and consumer reconciliation before any promotion",
-      "paths": [
-        {
-          "path": ".github/workflows/vis002c-v03-product-pin.yml",
-          "status": "modified",
-          "additions": 14,
-          "deletions": 1
-        },
-        {
-          "path": "design-system/pins/vis-002/context-v0.3.0/PIN.json",
-          "status": "modified",
-          "additions": 88,
-          "deletions": 3
-        },
-        {
-          "path": "docs/architecture/vis002c-v03-product-integration-2026-10-24.md",
-          "status": "modified",
-          "additions": 5,
-          "deletions": 3
-        },
-        {
-          "path": "scripts/verify-vis002c-product-pin-v03.mjs",
-          "status": "modified",
-          "additions": 37,
-          "deletions": 2
-        },
-        {
-          "path": "scripts/vis002c-pin-lifecycle.mjs",
-          "status": "added",
-          "additions": 77,
-          "deletions": 0
-        },
-        {
-          "path": "tests/vis002c-v03-scoped-raster.mjs",
-          "status": "modified",
-          "additions": 173,
-          "deletions": 151
-        }
-      ]
-    },
-    {
-      "family": "Buyer/configuration V5 boundary",
-      "pathCount": 8,
-      "disposition": "needs exact-tree relevance and consumer reconciliation before any promotion",
-      "paths": [
         {
           "path": ".github/workflows/buyer-configuration-boundary.yml",
-          "status": "added",
-          "additions": 51,
-          "deletions": 0
+          "mainBlob": "c209320c7c686f75d86f8dba5de4b6300fd3ffdb",
+          "developmentBlob": "b5668220e3e6799542fbfd93e4cd1d7595435d2d",
+          "status": "different_blob"
         },
-        {
-          "path": "app/access/manage.html",
-          "status": "modified",
-          "additions": 1,
-          "deletions": 0
-        },
-        {
-          "path": "app/tools/test-v5-endpoint-safety.js",
-          "status": "modified",
-          "additions": 54,
-          "deletions": 1
-        },
-        {
-          "path": "app/tools/test-v5-normal-save.js",
-          "status": "modified",
-          "additions": 77,
-          "deletions": 0
-        },
-        {
-          "path": "app/tools/test-v5-publication-migration.js",
-          "status": "modified",
-          "additions": 2,
-          "deletions": 2
-        },
-        {
-          "path": "netlify/functions/configuration.mjs",
-          "status": "modified",
-          "additions": 21,
-          "deletions": 5
-        },
-        {
-          "path": "tests/buyer-configuration-endpoint.test.mjs",
-          "status": "added",
-          "additions": 165,
-          "deletions": 0
-        },
-        {
-          "path": "tests/ci/local-buyer-config-server.mjs",
-          "status": "modified",
-          "additions": 80,
-          "deletions": 68
-        }
-      ]
-    },
-    {
-      "family": "public presentation, navigation, and page compiler",
-      "pathCount": 30,
-      "disposition": "needs exact-tree relevance and consumer reconciliation before any promotion",
-      "paths": [
         {
           "path": ".github/workflows/candidate-assets.yml",
-          "status": "modified",
-          "additions": 32,
-          "deletions": 5
+          "mainBlob": "8653cd79cd60bdd1e0d1773bb9b71d0601cbced9",
+          "developmentBlob": "23c1f7573d00ad1c5cb2890482a8a43b6899162f",
+          "status": "different_blob"
         },
         {
           "path": ".github/workflows/development-ux04-geometry.yml",
-          "status": "added",
-          "additions": 69,
-          "deletions": 0
+          "mainBlob": "96703ca3ae3c195153f10742134dca7aa69b0faf",
+          "developmentBlob": "0ddd8c01e2cbcee6d2c4309bfbb89d67a71d095b",
+          "status": "different_blob"
+        },
+        {
+          "path": ".github/workflows/flow-layout-browser.yml",
+          "mainBlob": "8466590ee15ce96f8f255ad93b978dea98abf325",
+          "developmentBlob": "1d1c2c88f2c6d483fc3b2e3f0c27debc1499b9fc",
+          "status": "different_blob"
         },
         {
           "path": ".github/workflows/keyboard-browser.yml",
-          "status": "modified",
-          "additions": 2,
-          "deletions": 0
+          "mainBlob": "de0bedd5391167491a1c544163d565ac5abf2045",
+          "developmentBlob": "c2d2599601ab894eaf1d407220d171138505eb12",
+          "status": "different_blob"
         },
         {
           "path": ".github/workflows/mobile-browser.yml",
-          "status": "modified",
-          "additions": 25,
-          "deletions": 1
+          "mainBlob": "5cc41f761dcae09756cbcc02af4dfd893962f48e",
+          "developmentBlob": "e4e53ff888164ee0c83f6189c0d2512cc4e52287",
+          "status": "different_blob"
         },
         {
-          "path": ".github/workflows/nav005-public-header-browser.yml",
-          "status": "added",
-          "additions": 64,
-          "deletions": 0
+          "path": ".github/workflows/public-production-readonly.yml",
+          "mainBlob": "38581f092ec554fb81271d4aca41895ad0dd9128",
+          "developmentBlob": "a7962531494b8dd0a552151bd986b5214b7627c5",
+          "status": "different_blob"
         },
         {
           "path": ".github/workflows/public-routing-before-clerk.yml",
-          "status": "modified",
-          "additions": 2,
-          "deletions": 1
+          "mainBlob": "3e72f09b04502542fdc55faeb4a7b342752fee36",
+          "developmentBlob": "2ec113563971729bed3d24fe83333e9d6ff445c0",
+          "status": "different_blob"
+        },
+        {
+          "path": ".github/workflows/stone-browser.yml",
+          "mainBlob": "886fc6264fe38778c13f5bfb9dab6800b37d5c71",
+          "developmentBlob": "e459427f2af95b6e98e14e9e7d68f3ce6fd82f7c",
+          "status": "different_blob"
+        },
+        {
+          "path": ".github/workflows/summary-pricing-browser.yml",
+          "mainBlob": "5a7d922d666cc2b8ba2b5cd4200d05738a2f02e1",
+          "developmentBlob": "98c1ab924653e58b1026d745c07143bbafa48182",
+          "status": "different_blob"
         },
         {
           "path": ".github/workflows/variant-fidelity.yml",
-          "status": "modified",
-          "additions": 0,
-          "deletions": 3
+          "mainBlob": "d7904092e49a6b0c6ce87a069f0aa9886a368c9a",
+          "developmentBlob": "33fa8ba638c32fbc5094360d89d71413376865db",
+          "status": "different_blob"
         },
-        {
-          "path": "app/about/index.html",
-          "status": "modified",
-          "additions": 2,
-          "deletions": 2
-        },
-        {
-          "path": "app/how-it-works/how-it-works.css",
-          "status": "modified",
-          "additions": 14,
-          "deletions": 2
-        },
-        {
-          "path": "app/how-it-works/how-it-works.js",
-          "status": "modified",
-          "additions": 26,
-          "deletions": 0
-        },
-        {
-          "path": "app/how-it-works/index.html",
-          "status": "modified",
-          "additions": 9,
-          "deletions": 9
-        },
-        {
-          "path": "app/landing/assets/hero/home-video-poster.png",
-          "status": "added",
-          "additions": 0,
-          "deletions": 0
-        },
-        {
-          "path": "app/landing/assets/hero/lifestyle-phone-expanded.svg",
-          "status": "added",
-          "additions": 1,
-          "deletions": 0
-        },
-        {
-          "path": "app/landing/header-menu.js",
-          "status": "modified",
-          "additions": 50,
-          "deletions": 1
-        },
-        {
-          "path": "app/landing/landing.css",
-          "status": "modified",
-          "additions": 68,
-          "deletions": 10
-        },
-        {
-          "path": "app/landing/landing.js",
-          "status": "modified",
-          "additions": 176,
-          "deletions": 1
-        },
-        {
-          "path": "architecture/fragments/primary-header.fragment.html",
-          "status": "modified",
-          "additions": 1,
-          "deletions": 1
-        },
-        {
-          "path": "architecture/fragments/primary-header.routes.json",
-          "status": "modified",
-          "additions": 1,
-          "deletions": 1
-        },
-        {
-          "path": "architecture/generated/primary-pages.manifest.json",
-          "status": "modified",
-          "additions": 877,
-          "deletions": 9
-        },
-        {
-          "path": "architecture/pages/about.page.html",
-          "status": "modified",
-          "additions": 1,
-          "deletions": 1
-        },
-        {
-          "path": "architecture/pages/how-it-works.page.html",
-          "status": "modified",
-          "additions": 8,
-          "deletions": 8
-        },
-        {
-          "path": "architecture/pages/root.page.html",
-          "status": "modified",
-          "additions": 24,
-          "deletions": 5
-        },
-        {
-          "path": "scripts/compile-primary-pages.mjs",
-          "status": "modified",
-          "additions": 116,
-          "deletions": 15
-        },
-        {
-          "path": "tests/ci/nav-flow-responsive-crossbrowser.cjs",
-          "status": "modified",
-          "additions": 22,
-          "deletions": 2
-        },
-        {
-          "path": "tests/ci/public-navigation-semantic-browser.mjs",
-          "status": "added",
-          "additions": 279,
-          "deletions": 0
-        },
-        {
-          "path": "tests/home-hero-phone-geometry-browser.cjs",
-          "status": "added",
-          "additions": 293,
-          "deletions": 0
-        },
-        {
-          "path": "tests/keyboard-browser.cjs",
-          "status": "modified",
-          "additions": 11,
-          "deletions": 1
-        },
-        {
-          "path": "tests/public-image-fallback-browser.mjs",
-          "status": "modified",
-          "additions": 183,
-          "deletions": 161
-        },
-        {
-          "path": "tests/ui-theme-browser.cjs",
-          "status": "added",
-          "additions": 150,
-          "deletions": 0
-        },
-        {
-          "path": "tests/ui-theme-contract.cjs",
-          "status": "modified",
-          "additions": 25,
-          "deletions": 11
-        }
-      ]
-    },
-    {
-      "family": "cross-cutting shell and remaining test infrastructure",
-      "pathCount": 15,
-      "disposition": "needs exact-tree relevance and consumer reconciliation before any promotion",
-      "paths": [
         {
           "path": ".github/workflows/viewer-base-price-contract-gate.yml",
-          "status": "modified",
-          "additions": 48,
-          "deletions": 3
+          "mainBlob": "8ce9e1a4cb5719d3718b8b94aa655d44a76cc086",
+          "developmentBlob": "eca1a6ac819de551cf40e86ab2d8dc451b70d8f7",
+          "status": "different_blob"
         },
         {
-          "path": ".gitignore",
-          "status": "modified",
-          "additions": 1,
-          "deletions": 0
+          "path": ".github/workflows/vis002c-v03-product-pin.yml",
+          "mainBlob": "279bd63c1284e7724b7451f87986c0ffc8bbb526",
+          "developmentBlob": "b0d440818e2993a0db29937d95f320202697e411",
+          "status": "different_blob"
+        }
+      ],
+      "disposition": "needs semantic relevance and consumer review; tree difference alone does not imply promotion"
+    },
+    {
+      "family": "Documentation",
+      "pathCount": 8,
+      "paths": [
+        {
+          "path": "CURRENT_STATE.md",
+          "mainBlob": "a352025da148a4f92e61c018fb06eba9c9a0dbaf",
+          "developmentBlob": "a9f5b54aff7d83878547c146855bd8c8352182f3",
+          "status": "different_blob"
+        },
+        {
+          "path": "README.md",
+          "mainBlob": "d73b25a280b807bc301d3fce2a0cb4139d6a7eff",
+          "developmentBlob": "7e024ce3249ebbce5dc158043535af6f42022f81",
+          "status": "different_blob"
+        },
+        {
+          "path": "docs/architecture/arc13/inventory-refresh-development-2026-11-21.md",
+          "mainBlob": "f2cfe1aa21776e4c15cd4f25f53b0dd825c1018f",
+          "developmentBlob": "52b902af2e2751cf94e3414d76f286bc0c679323",
+          "status": "different_blob"
+        },
+        {
+          "path": "docs/architecture/arc13/inventory-refresh-main-2026-11-21.md",
+          "mainBlob": "74df3aa851dc7a72756c2ded1f95c3c86dd069d5",
+          "developmentBlob": null,
+          "status": "main_only"
+        },
+        {
+          "path": "docs/architecture/vis002c-v03-product-integration-2026-10-24.md",
+          "mainBlob": "6f98468fa254a3961d2616c69efded5c877c9e6d",
+          "developmentBlob": "8d33a1f1cac743a7e93de5ec89f2516638de3b34",
+          "status": "different_blob"
+        },
+        {
+          "path": "docs/handoffs/ARCHITECTURE-CURRENT-2026-10-22.md",
+          "mainBlob": "6398ff9922585f632c762d92d9ea483b022573d2",
+          "developmentBlob": "4f0f345a45db9543e9f03f3c188b5689923b4349",
+          "status": "different_blob"
+        },
+        {
+          "path": "docs/handoffs/HANDOVER-CURRENT-2026-10-26.md",
+          "mainBlob": "78cc3662ce778862265b793fe44ab3df6956297f",
+          "developmentBlob": "7a4e07e40ed9fa5ba3a03f73c0edda968aae012d",
+          "status": "different_blob"
+        },
+        {
+          "path": "docs/work/r1-branch-hygiene.md",
+          "mainBlob": "ccf335f742b1c1539f5836fea138fc4a332ba71c",
+          "developmentBlob": "93761ba67175b4e421f55b429b69be237e7ca7a0",
+          "status": "different_blob"
+        }
+      ],
+      "disposition": "needs semantic relevance and consumer review; tree difference alone does not imply promotion"
+    },
+    {
+      "family": "Product app/runtime",
+      "pathCount": 29,
+      "paths": [
+        {
+          "path": "app/about/index.html",
+          "mainBlob": "0a13c02c185dc54526f8ec6e3001954857dfad6f",
+          "developmentBlob": "78f644b7a6c4e2d6d6507fbbfe602e6217ae9085",
+          "status": "different_blob"
+        },
+        {
+          "path": "app/access/index.html",
+          "mainBlob": "869db1be19d808e30ee5fe5202ef6b174b5b5417",
+          "developmentBlob": "2bde509caba4ce55a7f45c39909eaf5264fd9dce",
+          "status": "different_blob"
+        },
+        {
+          "path": "app/access/manage.html",
+          "mainBlob": "835682c1f55e793e936acb5e62debac24f2b8d1d",
+          "developmentBlob": "eeaf9736b89f068e3fd6c401854ec9c37ef7fee5",
+          "status": "different_blob"
+        },
+        {
+          "path": "app/admin.html",
+          "mainBlob": "28e57028e235944dfd581820ed90078866af93bc",
+          "developmentBlob": "390735675673917149e49e21b4f7355c79eeaba8",
+          "status": "different_blob"
         },
         {
           "path": "app/admin/admin.css",
-          "status": "modified",
-          "additions": 3,
-          "deletions": 0
+          "mainBlob": "81b115d4a15409d5c46ba5590a19ef587d785a0f",
+          "developmentBlob": "a0649f7c42071200f83617592251e4698951245a",
+          "status": "different_blob"
+        },
+        {
+          "path": "app/admin/admin.js",
+          "mainBlob": "79925345e43096df77bef54fe257e483f922edd8",
+          "developmentBlob": "4702ad57579fa6649ca6b7b08cd0a3fec97df93f",
+          "status": "different_blob"
         },
         {
           "path": "app/app.js",
-          "status": "modified",
-          "additions": 8,
-          "deletions": 6
+          "mainBlob": "a635ef55864019f44a026fa9b1e86b2ced836377",
+          "developmentBlob": "1a029524d8f7fb65f1870c159d5842fbb037bf84",
+          "status": "different_blob"
+        },
+        {
+          "path": "app/config/index.html",
+          "mainBlob": "ba684d31cf3f79c7bf00c7c669d786f734927acb",
+          "developmentBlob": "82b4e9cdff677693f0a34c68f727087d8a4d8d43",
+          "status": "different_blob"
+        },
+        {
+          "path": "app/core/private-navigation.js",
+          "mainBlob": "3d701cda54bb27a374e9788837e85c868fba2b94",
+          "developmentBlob": "0e35731a01e3b51f225942bee18ba353036ed2d3",
+          "status": "different_blob"
+        },
+        {
+          "path": "app/core/published-buyer-projection.js",
+          "mainBlob": "4a3818187f577b0056ccba4c39f24f1881bdb0e2",
+          "developmentBlob": "c1f8e099f2dce29bd003577e8c0a724d7b6475fa",
+          "status": "different_blob"
         },
         {
           "path": "app/core/ui-theme.js",
-          "status": "modified",
-          "additions": 6,
-          "deletions": 1
+          "mainBlob": "afe45eca6fda4f3303c25e15c358a40019eb5e90",
+          "developmentBlob": "8c212061cf6c8f46099f23c28cf297cfb48ce50d",
+          "status": "different_blob"
+        },
+        {
+          "path": "app/how-it-works/how-it-works.css",
+          "mainBlob": "938fb6986bb0a210689b20320cda99aac8eeee80",
+          "developmentBlob": "435e23287921d1d45b5ab0e75ee2c6759f8aa957",
+          "status": "different_blob"
+        },
+        {
+          "path": "app/how-it-works/how-it-works.js",
+          "mainBlob": "289d2abf5e4a0036885c4f2d5a5761af40ec2084",
+          "developmentBlob": "5f2a047aa709cb1e970e7d193e3755ff5fba1831",
+          "status": "different_blob"
+        },
+        {
+          "path": "app/how-it-works/index.html",
+          "mainBlob": "9c5ccf607f0cb82d7914093e517e605f93e9d33d",
+          "developmentBlob": "b4eb9711c5369f41c87ea96b64e2677aa7fe544e",
+          "status": "different_blob"
         },
         {
           "path": "app/index.html",
-          "status": "modified",
-          "additions": 25,
-          "deletions": 6
+          "mainBlob": "b056993103b8aa4fe75020206fd40c4f84874860",
+          "developmentBlob": "a31beed14383005a2fc88514c002c95c931f316d",
+          "status": "different_blob"
+        },
+        {
+          "path": "app/landing/header-menu.js",
+          "mainBlob": "baf1d9fbea28e65e0c780ffa53da78f4dea8cbe4",
+          "developmentBlob": "b56900009aca9cc7212b5f2134a310ff539be86b",
+          "status": "different_blob"
+        },
+        {
+          "path": "app/landing/landing.css",
+          "mainBlob": "e5696eb85aff84d585f18cd953dbd0d20a67102b",
+          "developmentBlob": "ba7986155558b09b335f506da9cc125ed84f8ac7",
+          "status": "different_blob"
+        },
+        {
+          "path": "app/landing/landing.js",
+          "mainBlob": "6d096a57c0ba6b5c3d608e9f13fe0fd2e393c99e",
+          "developmentBlob": "43af31f8a4a47636abf292c3d59264ffb133c724",
+          "status": "different_blob"
         },
         {
           "path": "app/package.json",
-          "status": "modified",
-          "additions": 1,
-          "deletions": 1
+          "mainBlob": "0bf6f1621052156d69221f4a0f991941b473fb6c",
+          "developmentBlob": "200b2286c28d609774e7bd7a5ed544a2daf76787",
+          "status": "different_blob"
         },
         {
           "path": "app/styles.css",
-          "status": "modified",
-          "additions": 3,
-          "deletions": 3
+          "mainBlob": "eb346a41ad91f6dc53875cb954e9018fdc1dd713",
+          "developmentBlob": "02c82a1a925c5b672a2e625b861b4a79f2630f43",
+          "status": "different_blob"
+        },
+        {
+          "path": "app/tools/test-public-modules-endpoint.js",
+          "mainBlob": "7ea5e6fa1a2059b779d57065d222e2ce39d9e457",
+          "developmentBlob": "6c6c05cf4256a9871c1d613a4e6aae592a190cdc",
+          "status": "different_blob"
+        },
+        {
+          "path": "app/tools/test-published-buyer-projection.js",
+          "mainBlob": "c13cbbf59b761b7add3a1a3ee26d88571d610531",
+          "developmentBlob": "0789d415f59274b4127a5d5ba11a0110111b4a5f",
+          "status": "different_blob"
+        },
+        {
+          "path": "app/tools/test-v5-endpoint-safety.js",
+          "mainBlob": "b3568066aa55496db8d57ffb43cf9651a49edd81",
+          "developmentBlob": "f580e2d27302d63c4fb3d724b9db08758206a8b1",
+          "status": "different_blob"
         },
         {
           "path": "app/ui-theme.css",
-          "status": "modified",
-          "additions": 3,
-          "deletions": 2
+          "mainBlob": "c1ca2a4c36e9195f15cd9045c64ef1857f9af07e",
+          "developmentBlob": "aa0d160110fc1a3bde187bfab4ea97f26290e143",
+          "status": "different_blob"
         },
         {
-          "path": "app/viewer/viewer.css",
-          "status": "modified",
-          "additions": 1,
-          "deletions": 1
+          "path": "app/viewer/index.html",
+          "mainBlob": "6c88ea5654b939585bb142f0f86ea754aee16585",
+          "developmentBlob": "c737119749cac07d7da77f81020e8c39eb0931eb",
+          "status": "different_blob"
         },
+        {
+          "path": "app/viewer/public-data.js",
+          "mainBlob": "68b78120ba4be4798ff367eaa6ba840278abe6eb",
+          "developmentBlob": "fde86e84745daa16e803d769af22f1e6c3857919",
+          "status": "different_blob"
+        },
+        {
+          "path": "app/viewer/scene-adapters.js",
+          "mainBlob": "32bc0e56872a105e557ee65d79f97ce310f6c8f7",
+          "developmentBlob": "2bc8f6af0c174708bdad469ae78d5288462aadb8",
+          "status": "different_blob"
+        },
+        {
+          "path": "app/viewer/scene-adapters.test.mjs",
+          "mainBlob": "a794f6e349d6b384f236ece478d134d2c7a1dfdb",
+          "developmentBlob": "c281a8e399c0b7b8c4267f5d11b09fa8b99d1d09",
+          "status": "different_blob"
+        },
+        {
+          "path": "app/viewer/viewer.js",
+          "mainBlob": "17c8cca26aecfd70d154a71c6bb1ee176e2527bd",
+          "developmentBlob": "bd26be7d4050b8a61e98cf7aee453bcaf8554a34",
+          "status": "different_blob"
+        }
+      ],
+      "disposition": "needs semantic relevance and consumer review; tree difference alone does not imply promotion"
+    },
+    {
+      "family": "Architecture sources/generated pages",
+      "pathCount": 6,
+      "paths": [
+        {
+          "path": "architecture/arc13/ui-text-candidates.json",
+          "mainBlob": "a0c06a157724d0293bc91742bb524ed546a0f22b",
+          "developmentBlob": "eecc370f8a1673cd47cdfa9a05d1800d47752325",
+          "status": "different_blob"
+        },
+        {
+          "path": "architecture/fragments/primary-header.fragment.html",
+          "mainBlob": "cc4045bf3a2727296787639bf8f28f662a9d8f99",
+          "developmentBlob": "141f30c9a32ea582f8e0a30a24955ca598667108",
+          "status": "different_blob"
+        },
+        {
+          "path": "architecture/generated/primary-pages.manifest.json",
+          "mainBlob": "7b1d669a4916727d918944f4bac05e4ba5c7b4e0",
+          "developmentBlob": "6776b3c87b146694baa29c76d55cea57a041950e",
+          "status": "different_blob"
+        },
+        {
+          "path": "architecture/pages/about.page.html",
+          "mainBlob": "e8ec490048a68f9022144d5d9762ba54cc3639c4",
+          "developmentBlob": "1e1d7341d748ff55d97094b6eb9104c1857dbcdc",
+          "status": "different_blob"
+        },
+        {
+          "path": "architecture/pages/how-it-works.page.html",
+          "mainBlob": "8ca6fc8e7fcf96ad30cfb49c036a3a03bfb55356",
+          "developmentBlob": "c1bb3ac8bf87a9da30c44535c54a079c600a0d69",
+          "status": "different_blob"
+        },
+        {
+          "path": "architecture/pages/root.page.html",
+          "mainBlob": "5c92bc0934b2fc7017297a33097da5983203784b",
+          "developmentBlob": "c438e9b14ddf1692ddf2b86916e99f98f2887266",
+          "status": "different_blob"
+        }
+      ],
+      "disposition": "needs semantic relevance and consumer review; tree difference alone does not imply promotion"
+    },
+    {
+      "family": "Netlify backend",
+      "pathCount": 3,
+      "paths": [
+        {
+          "path": "netlify/functions/access-session-status.mjs",
+          "mainBlob": "aca87d744e342a792f0aa2e9d935a637fa697020",
+          "developmentBlob": "d272bcf01648362e39e5564240e991220d9e9ac9",
+          "status": "different_blob"
+        },
+        {
+          "path": "netlify/functions/configuration.mjs",
+          "mainBlob": "2bd8ec2fe0adb6b861b819d40f5b4285450f1051",
+          "developmentBlob": "344a9cd7fdc2dc22abf7afb5e3ce7193ac06c8e3",
+          "status": "different_blob"
+        },
+        {
+          "path": "netlify/functions/public-modules.mjs",
+          "mainBlob": "62e80a0dee12b5b306c1ef33a4337e5d6822fe4c",
+          "developmentBlob": "d89b2654149d27bdb04e57e03f713b60d8a4e3b3",
+          "status": "different_blob"
+        }
+      ],
+      "disposition": "needs semantic relevance and consumer review; tree difference alone does not imply promotion"
+    },
+    {
+      "family": "Branch hygiene",
+      "pathCount": 5,
+      "paths": [
         {
           "path": "ops/branch-dispositions-development.json",
-          "status": "added",
-          "additions": 43,
-          "deletions": 0
+          "mainBlob": "5c639e9af96e4bc0144ef44e9f83c3237732594f",
+          "developmentBlob": null,
+          "status": "main_only"
         },
         {
           "path": "ops/branch-dispositions.json",
-          "status": "modified",
-          "additions": 168,
-          "deletions": 1
+          "mainBlob": "bd600ca3242923ff888c3eeea35a71ef9973500d",
+          "developmentBlob": "5419da46988f7774681a093fbbecbc574b200972",
+          "status": "different_blob"
+        },
+        {
+          "path": "ops/branch-hygiene-batch.json",
+          "mainBlob": "07c57298a46cfcac7dbc272c1f2d353619b80d74",
+          "developmentBlob": "f6893a2cde9a0819265ea409aca70230fbd4300d",
+          "status": "different_blob"
+        },
+        {
+          "path": "ops/branch-hygiene-development-batch.json",
+          "mainBlob": "0e4a329a1e36a5897772dfe5597cd55ace0d5410",
+          "developmentBlob": null,
+          "status": "main_only"
+        },
+        {
+          "path": "ops/branch-hygiene-development-retirement.json",
+          "mainBlob": "980a30ab6e180858b015ea7c0cba35b3e43e68ac",
+          "developmentBlob": null,
+          "status": "main_only"
+        }
+      ],
+      "disposition": "needs semantic relevance and consumer review; tree difference alone does not imply promotion"
+    },
+    {
+      "family": "Tests and tooling",
+      "pathCount": 22,
+      "paths": [
+        {
+          "path": "scripts/compile-primary-pages.mjs",
+          "mainBlob": "f417285ae4b69828f2995cdd5fe4a1cc32c93615",
+          "developmentBlob": "767c46cde2756ba8c589060c734a3a53083fa4d6",
+          "status": "different_blob"
+        },
+        {
+          "path": "tests/admin-hierarchy-browser.cjs",
+          "mainBlob": "55e915b4d4cf61667538196acfc64d5de345a7f2",
+          "developmentBlob": "35006f4f1c84a2fd9797804e45e4952868f3d8b3",
+          "status": "different_blob"
+        },
+        {
+          "path": "tests/admin-v5-save-browser.cjs",
+          "mainBlob": "a3322a2745f33052474796502943f137f82206a6",
+          "developmentBlob": "35b590781e8246ec3d55cf20ce13dc0e0ce12fea",
+          "status": "different_blob"
+        },
+        {
+          "path": "tests/arc03c-source-authority.test.mjs",
+          "mainBlob": "3c7fc6dce5d734af88f2ec0ea0bc48e01fba5c42",
+          "developmentBlob": "45d895de0baea14a693d06b82152f0c952f18233",
+          "status": "different_blob"
+        },
+        {
+          "path": "tests/buyer-configuration-endpoint.test.mjs",
+          "mainBlob": "3c342cfbbc2c479d84f60978ccef2e35928e60ad",
+          "developmentBlob": "f61eb8d670f76b65f44967781dbde5f26e50efc2",
+          "status": "different_blob"
+        },
+        {
+          "path": "tests/ci/config-unlocked-local-diagnostic.mjs",
+          "mainBlob": "74c3eab7ccfa6bd124e7133b04e793b94340edd3",
+          "developmentBlob": "53eb4b850d58a9058d7015c82ca997dea6600823",
+          "status": "different_blob"
+        },
+        {
+          "path": "tests/ci/local-buyer-config-server.mjs",
+          "mainBlob": "7331bf690fce947554595e3326ab6a92a5dc7be9",
+          "developmentBlob": "9c37286eb9eafccf0c57e1dd055f5d09df146245",
+          "status": "different_blob"
+        },
+        {
+          "path": "tests/ci/nav-flow-responsive-crossbrowser.cjs",
+          "mainBlob": "becdd2227abf491470587befeaab3fa12b1f3f28",
+          "developmentBlob": "8a4e200863f5d631c0799ba1501021451f07e00d",
+          "status": "different_blob"
+        },
+        {
+          "path": "tests/ci/prepare-local-v5-browser.sh",
+          "mainBlob": "74ad21559161765feadfb0c0b4e1b655a3f9b2be",
+          "developmentBlob": "78954f67bac3ea1b2661da2897726d007949e86b",
+          "status": "different_blob"
+        },
+        {
+          "path": "tests/ci/public-navigation-semantic-browser.mjs",
+          "mainBlob": "3ce12589c71334594f9caa9bd63d74d0e3201c32",
+          "developmentBlob": "0f50fc57e24c4faafd7fdf62fcede01da1af54f4",
+          "status": "different_blob"
         },
         {
           "path": "tests/ci/viewer-base-price-trigger-contract.test.cjs",
-          "status": "added",
-          "additions": 88,
-          "deletions": 0
+          "mainBlob": "1bbdf72908be8be9baf1e983e775e98257f67e46",
+          "developmentBlob": null,
+          "status": "main_only"
         },
         {
-          "path": "tests/ci/vis002-context-pin.test.mjs",
-          "status": "added",
-          "additions": 123,
-          "deletions": 0
+          "path": "tests/home-hero-phone-geometry-browser.cjs",
+          "mainBlob": "1111a96a66f5e68f35cb002ae740451c22796afb",
+          "developmentBlob": "694a49e9c7e34e600536ffaffb4e18e1c710ed73",
+          "status": "different_blob"
         },
         {
-          "path": "tests/exposed-sides-glass.cjs",
-          "status": "modified",
-          "additions": 191,
-          "deletions": 38
+          "path": "tests/how-accordion-grid-browser-gate.mjs",
+          "mainBlob": "3012904473e0071b29c34ecc39f602ccb3b3c7e5",
+          "developmentBlob": "ff94b32e9fc1f738526adcdd99d7574333a8452a",
+          "status": "different_blob"
+        },
+        {
+          "path": "tests/keyboard-browser.cjs",
+          "mainBlob": "1def721adbc4ad1627862b3c75fd52837618e80f",
+          "developmentBlob": "65fdbd8ccf87274037c8d16497130d922fd9eea5",
+          "status": "different_blob"
+        },
+        {
+          "path": "tests/public-image-fallback-browser.mjs",
+          "mainBlob": "bffeef3dcb5ca9490d0c36d94693fd0f2e07e2ff",
+          "developmentBlob": "192b823e5a90861de701e994dba2e9d0529d8f0b",
+          "status": "different_blob"
+        },
+        {
+          "path": "tests/public-pages-smoke.cjs",
+          "mainBlob": "ba519f729b241b15a7f6170b2949236073a317a0",
+          "developmentBlob": "328f9d9769c6ae8cb94f238c3c8171b279465752",
+          "status": "different_blob"
+        },
+        {
+          "path": "tests/ui-theme-browser.cjs",
+          "mainBlob": "7a91ce19de426f09f2fceb8d230c17064769eb1a",
+          "developmentBlob": "13e2b6aeffd1eb90e79b8d82992a290b64b317db",
+          "status": "different_blob"
+        },
+        {
+          "path": "tests/ui-theme-contract.cjs",
+          "mainBlob": "4bf1f223b0f3317e9178efd45efc60074ff52346",
+          "developmentBlob": "771f1604adc025066e55794ca8d25d58a570c39e",
+          "status": "different_blob"
+        },
+        {
+          "path": "tests/vis002c-v03-scoped-raster.mjs",
+          "mainBlob": "90a5e1b9dedcffb82091a453b59ec55a084337d1",
+          "developmentBlob": "15b21818abdd41305b38cf7409e21ec821a26cd0",
+          "status": "different_blob"
+        },
+        {
+          "path": "tools/arc13/README.md",
+          "mainBlob": "f68bff143d79ddec54a85d1dcb4ff4ceccfd8b94",
+          "developmentBlob": "6f76a83dca63313cab222cb35e679d11e1199539",
+          "status": "different_blob"
+        },
+        {
+          "path": "tools/arc13/scan-js-sinks.mjs",
+          "mainBlob": "ee942863203548f08e9b3ef53b535137a8f055dd",
+          "developmentBlob": "2b35a5cba0fa2c22fc904fd0a2173760ccc5a4e4",
+          "status": "different_blob"
+        },
+        {
+          "path": "tools/arc13/scan-ui-inventory.py",
+          "mainBlob": "54e5e3b275869f4455fccd135a87f2ad0712fe3b",
+          "developmentBlob": "e193c3b409a984fce5c2387e6845ec4b215d404b",
+          "status": "different_blob"
         }
-      ]
+      ],
+      "disposition": "needs semantic relevance and consumer review; tree difference alone does not imply promotion"
     }
-  ]
+  ],
+  "developmentPerspectiveSummary": {
+    "onlyDevelopmentPaths": 416,
+    "samePathDifferentBlob": 86,
+    "developmentPathsAbsentOrDifferent": 502,
+    "paths": "See exact recursive tree comparison at the pinned refs; full path list to be added only if needed for a family package."
+  }
 }
