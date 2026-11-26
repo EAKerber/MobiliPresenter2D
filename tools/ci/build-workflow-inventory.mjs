@@ -1,14 +1,14 @@
 #!/usr/bin/env node
 import { execFileSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
-import { readFileSync, readdirSync, writeFileSync } from 'node:fs';
+import { writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
 
-function git(args, encoding = 'utf8') {
-  return execFileSync('git', args, { cwd: root, encoding, maxBuffer: 32 * 1024 * 1024 });
+function git(args, encoding = 'utf8', repoRoot = root) {
+  return execFileSync('git', args, { cwd: repoRoot, encoding, maxBuffer: 32 * 1024 * 1024 });
 }
 
 function scalar(value) {
@@ -157,21 +157,16 @@ export function parseJobs(source) {
   return { jobs, warnings: jobs.length ? [] : ['No job entries parsed beneath jobs:'] };
 }
 
-function fileInventoryFromGit(sha) {
-  return git(['ls-tree', '-r', '--name-only', sha, '--', '.github/workflows']).trim().split(/\r?\n/).filter((p) => /\.ya?ml$/i.test(p)).sort();
+function fileInventoryFromGit(sha, repoRoot = root) {
+  return git(['ls-tree', '-r', '--name-only', sha, '--', '.github/workflows'], 'utf8', repoRoot).trim().split(/\r?\n/).filter((p) => /\.ya?ml$/i.test(p)).sort();
 }
 
-function fileInventoryFromWorktree() {
-  const directory = path.join(root, '.github/workflows');
-  return readdirSync(directory, { withFileTypes: true }).filter((entry) => entry.isFile() && /\.ya?ml$/i.test(entry.name)).map((entry) => `.github/workflows/${entry.name}`).sort();
+function readGitFile(sha, file, repoRoot = root) {
+  return git(['show', `${sha}:${file}`], 'utf8', repoRoot);
 }
 
-function readGitFile(sha, file) {
-  return git(['show', `${sha}:${file}`]);
-}
-
-function blob(sha, file) {
-  return git(['rev-parse', `${sha}:${file}`]).trim();
+function blob(sha, file, repoRoot = root) {
+  return git(['rev-parse', `${sha}:${file}`], 'utf8', repoRoot).trim();
 }
 
 function stripShellComment(line) {
@@ -286,17 +281,29 @@ export function definition(source, file, blobSha) {
 }
 
 function parseArgs(argv) {
-  const options = { mainSha: null, developmentPin: null, expectedDevelopmentTree: null, output: null, openPrs: [] };
+  const options = {
+    mainSha: null, developmentSha: null, expectedDevelopmentTree: null,
+    candidateHeadSha: null, expectedCandidateTree: null,
+    candidatePrNumber: null, candidateIsDraft: null,
+    output: null, openPrs: [], repoRoot: root
+  };
   for (let index = 0; index < argv.length; index += 1) {
     if (argv[index] === '--main-sha') options.mainSha = argv[++index];
-    else if (argv[index] === '--development-pin') options.developmentPin = argv[++index];
+    else if (argv[index] === '--development-sha') options.developmentSha = argv[++index];
     else if (argv[index] === '--development-tree') options.expectedDevelopmentTree = argv[++index];
+    else if (argv[index] === '--candidate-head-sha') options.candidateHeadSha = argv[++index] || null;
+    else if (argv[index] === '--candidate-tree') options.expectedCandidateTree = argv[++index] || null;
+    else if (argv[index] === '--candidate-pr-number') options.candidatePrNumber = argv[++index] ? Number(argv[index]) : null;
+    else if (argv[index] === '--candidate-is-draft') options.candidateIsDraft = argv[++index] === 'true';
     else if (argv[index] === '--output') options.output = path.resolve(argv[++index]);
     else if (argv[index] === '--open-prs-json') options.openPrs = JSON.parse(argv[++index]);
     else if (argv[index] === '--help') options.help = true;
-    else throw new Error(`Unknown argument: ${argv[index]}`);
+    else throw new Error(\`Unknown argument: \${argv[index]}\`);
   }
-  if (!options.help && (!options.mainSha || !options.developmentPin || !options.expectedDevelopmentTree)) throw new Error('--main-sha, --development-pin, and --development-tree are required.');
+  if (!options.help && (!options.mainSha || !options.developmentSha || !options.expectedDevelopmentTree))
+    throw new Error('--main-sha, --development-sha, and --development-tree are required.');
+  if (options.candidateHeadSha && !options.expectedCandidateTree)
+    throw new Error('--candidate-tree is required when --candidate-head-sha is provided.');
   return options;
 }
 
@@ -308,25 +315,52 @@ export function countDispatchOnlyWorkflows(workflows, definitionBySha) {
   }).length;
 }
 
-export function buildInventory({ mainSha, developmentPin, expectedDevelopmentTree, openPrs = [] }) {
-  const mainTree = git(['rev-parse', `${mainSha}^{tree}`]).trim();
-  const checkoutSha = git(['rev-parse', 'HEAD']).trim();
-  const checkoutTree = git(['rev-parse', 'HEAD^{tree}']).trim();
-  if (checkoutTree !== expectedDevelopmentTree) throw new Error(`Development worktree tree mismatch: expected ${expectedDevelopmentTree}, found ${checkoutTree}`);
-  const mainFiles = fileInventoryFromGit(mainSha);
-  const developmentFiles = fileInventoryFromWorktree();
+export function candidateWorkflowChanges(developmentRecords, candidateRecords) {
+  const developmentByPath = new Map(developmentRecords.map(({path, blobSha}) => [path, blobSha]));
+  const candidateByPath = new Map(candidateRecords.map(({path, blobSha}) => [path, blobSha]));
+  const paths = [...new Set([...developmentByPath.keys(), ...candidateByPath.keys()])].sort();
+  return paths.map((path) => {
+    const developmentDefinition = developmentByPath.get(path) ?? null;
+    const candidateDefinition = candidateByPath.get(path) ?? null;
+    const change = developmentDefinition === null ? 'added'
+      : candidateDefinition === null ? 'removed'
+      : developmentDefinition === candidateDefinition ? 'unchanged' : 'modified';
+    return {path, change, developmentDefinition, candidateDefinition};
+  }).filter(({change}) => change !== 'unchanged');
+}
+
+export function buildInventory({
+  mainSha, developmentSha, expectedDevelopmentTree,
+  candidateHeadSha = null, expectedCandidateTree = null,
+  candidatePrNumber = null, candidateIsDraft = null, openPrs = [], repoRoot = root
+}) {
+  const mainTree = git(['rev-parse', \`\${mainSha}^{tree}\`], 'utf8', repoRoot).trim();
+  const resolvedDevelopmentSha = git(['rev-parse', developmentSha], 'utf8', repoRoot).trim();
+  const developmentTree = git(['rev-parse', \`\${resolvedDevelopmentSha}^{tree}\`], 'utf8', repoRoot).trim();
+  if (developmentTree !== expectedDevelopmentTree)
+    throw new Error(\`Development tree mismatch: expected \${expectedDevelopmentTree}, found \${developmentTree}\`);
+  const resolvedCandidateSha = candidateHeadSha
+    ? git(['rev-parse', candidateHeadSha], 'utf8', repoRoot).trim() : null;
+  const candidateTree = resolvedCandidateSha
+    ? git(['rev-parse', \`\${resolvedCandidateSha}^{tree}\`], 'utf8', repoRoot).trim() : null;
+  if (resolvedCandidateSha && candidateTree !== expectedCandidateTree)
+    throw new Error(\`PR candidate tree mismatch: expected \${expectedCandidateTree}, found \${candidateTree}\`);
+
+  const mainFiles = fileInventoryFromGit(mainSha, repoRoot);
+  const developmentFiles = fileInventoryFromGit(resolvedDevelopmentSha, repoRoot);
+  const candidateFiles = resolvedCandidateSha ? fileInventoryFromGit(resolvedCandidateSha, repoRoot) : [];
   const mainSet = new Set(mainFiles);
-  const devSet = new Set(developmentFiles);
+  const developmentSet = new Set(developmentFiles);
   const paths = [...new Set([...mainFiles, ...developmentFiles])].sort();
   const definitions = new Map();
-  const addDefinition = (sha, file, source) => {
-    const blobSha = blob(sha, file);
-    if (!definitions.has(blobSha)) definitions.set(blobSha, definition(source, file, blobSha));
+  const addDefinition = (sha, file) => {
+    const blobSha = blob(sha, file, repoRoot);
+    if (!definitions.has(blobSha)) definitions.set(blobSha, definition(readGitFile(sha, file, repoRoot), file, blobSha));
     return blobSha;
   };
   const workflows = paths.map((file) => {
-    const mainDefinition = mainSet.has(file) ? addDefinition(mainSha, file, readGitFile(mainSha, file)) : null;
-    const developmentDefinition = devSet.has(file) ? addDefinition(checkoutSha, file, readFileSync(path.join(root, file), 'utf8')) : null;
+    const mainDefinition = mainSet.has(file) ? addDefinition(mainSha, file) : null;
+    const developmentDefinition = developmentSet.has(file) ? addDefinition(resolvedDevelopmentSha, file) : null;
     return {
       path: file,
       presence: [mainDefinition ? 'main' : null, developmentDefinition ? 'development' : null].filter(Boolean),
@@ -334,51 +368,80 @@ export function buildInventory({ mainSha, developmentPin, expectedDevelopmentTre
       developmentDefinition
     };
   });
+  const candidateChanges = resolvedCandidateSha
+    ? candidateWorkflowChanges(
+      developmentFiles.map((file) => ({path: file, blobSha: blob(resolvedDevelopmentSha, file, repoRoot)})),
+      candidateFiles.map((file) => ({path: file, blobSha: blob(resolvedCandidateSha, file, repoRoot)}))
+    ).map((change) => ({
+      ...change,
+      developmentDefinition: change.developmentDefinition
+        ? addDefinition(resolvedDevelopmentSha, change.path) : null,
+      candidateDefinition: change.candidateDefinition
+        ? addDefinition(resolvedCandidateSha, change.path) : null
+    }))
+    : [];
   const definitionBySha = new Map([...definitions].map(([sha, value]) => [sha, value]));
-  const devCounts = {};
+  const developmentEventCounts = {};
   for (const workflow of workflows) {
     if (!workflow.developmentDefinition) continue;
-    for (const event of definitionBySha.get(workflow.developmentDefinition).events) devCounts[event.name] = (devCounts[event.name] ?? 0) + 1;
+    for (const event of definitionBySha.get(workflow.developmentDefinition).events)
+      developmentEventCounts[event.name] = (developmentEventCounts[event.name] ?? 0) + 1;
   }
-  const warnings = [...definitions.values()].flatMap((value) => value.parseWarnings.map((warning) => `${value.path}: ${warning}`));
-  const withWriteSignals = workflows.filter((workflow) => [workflow.mainDefinition, workflow.developmentDefinition]
-    .filter(Boolean)
-    .some((sha) => definitionBySha.get(sha).mutationSignals.length > 0))
+  const warnings = [...definitions.values()].flatMap((value) =>
+    value.parseWarnings.map((warning) => \`\${value.path}: \${warning}\`));
+  const withWriteSignals = workflows.filter((workflow) =>
+    [workflow.mainDefinition, workflow.developmentDefinition].filter(Boolean)
+      .some((sha) => definitionBySha.get(sha).mutationSignals.length > 0))
     .map((workflow) => workflow.path);
+  const candidateWithWriteSignals = candidateChanges.filter((change) =>
+    change.candidateDefinition && definitionBySha.get(change.candidateDefinition).mutationSignals.length > 0)
+    .map((change) => change.path);
   return {
-    schema: 'M2DTSTWorkflowInventory/1',
+    schema: 'M2DTSTWorkflowInventory/2',
     plan: 'MobiliPresenter2D Plano Diretor v0.9',
     workItem: 'TST-001',
     status: warnings.length ? 'generated-with-parse-warnings' : 'generated; command assertion validation remains separate',
     source: {
       mainSha,
       mainTree,
-      developmentPin,
-      developmentTree: checkoutTree,
-      worktreeHead: checkoutSha,
-      worktreeTreeVerifiedAgainstDevelopmentPin: true,
+      developmentSha: resolvedDevelopmentSha,
+      developmentTree,
+      candidateHeadSha: resolvedCandidateSha,
+      candidateTree,
+      candidatePrNumber,
+      candidateIsDraft,
       openPullRequestsReadback: openPrs
     },
     summary: {
       mainWorkflowCount: mainFiles.length,
       developmentWorkflowCount: developmentFiles.length,
-      sharedCount: mainFiles.filter((file) => devSet.has(file)).length,
-      mainOnly: mainFiles.filter((file) => !devSet.has(file)),
+      sharedCount: mainFiles.filter((file) => developmentSet.has(file)).length,
+      mainOnly: mainFiles.filter((file) => !developmentSet.has(file)),
       developmentOnly: developmentFiles.filter((file) => !mainSet.has(file)),
-      developmentEventCounts: devCounts,
+      developmentEventCounts,
       developmentDispatchOnlyCount: countDispatchOnlyWorkflows(workflows, definitionBySha),
       workflowDefinitions: workflows.length,
+      candidateWorkflowChangeCount: candidateChanges.length,
       workflowsWithWriteSignals: [...new Set(withWriteSignals)],
+      candidateWorkflowsWithWriteSignals: [...new Set(candidateWithWriteSignals)],
+      uniqueDefinitionCount: definitions.size,
       parseWarningCount: warnings.length
     },
     workflows,
+    prHeadCandidate: resolvedCandidateSha ? {
+      prNumber: candidatePrNumber,
+      isDraft: candidateIsDraft,
+      headSha: resolvedCandidateSha,
+      tree: candidateTree,
+      workflows: candidateChanges
+    } : null,
     definitions: [...definitions.values()],
     parseWarnings: warnings,
     caveats: [
       'The YAML reader extracts the trigger/job/step fields used by the current repository; it is not a general YAML validator.',
       'Command text and SHA-256 identify the exact declared run-step source; they do not prove every assertion in a command is reachable.',
       'Write-capable classification is a signal for review, not a security proof. Inspect permissions and external side effects before calling a workflow validation-only.',
-      'Open PR list is a live GitHub readback supplied to this snapshot; Draft PR workflow candidates are recorded only when present in that readback.'
+      'The stable development inventory is read from the exact development SHA; PR-head workflow changes are reported in a separate candidate layer.'
     ]
   };
 }
@@ -386,7 +449,7 @@ export function buildInventory({ mainSha, developmentPin, expectedDevelopmentTre
 function main() {
   const options = parseArgs(process.argv.slice(2));
   if (options.help) {
-    process.stdout.write('Usage: build-workflow-inventory.mjs --main-sha SHA --development-pin SHA --development-tree TREE [--open-prs-json JSON] [--output FILE]\n');
+    process.stdout.write('Usage: build-workflow-inventory.mjs --main-sha SHA --development-sha SHA --development-tree TREE [--candidate-head-sha SHA --candidate-tree TREE] [--open-prs-json JSON] [--output FILE]\n');
     return;
   }
   const inventory = buildInventory(options);
