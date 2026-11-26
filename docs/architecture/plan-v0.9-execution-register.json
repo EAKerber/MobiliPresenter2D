@@ -487,21 +487,26 @@
       "title": "Auditar o mecanismo de branch hygiene",
       "chapter": "VII",
       "priority": "P0",
-      "planState": "in_progress",
-      "reconciliation": "partial",
-      "local": "unknown",
-      "development": "unknown",
-      "main": "unknown",
-      "technicalValidation": "partial",
-      "approvalPublication": "unknown",
+      "planState": "done",
+      "reconciliation": "done",
+      "local": "done",
+      "development": "done",
+      "main": "done",
+      "technicalValidation": "done",
+      "approvalPublication": "not_applicable",
       "evidence": [
         {
           "source": "Product PR #400",
           "sha": "3616f964be889003c9e2e6ec7cf1e380c874ee0c",
           "detail": "Lote aberto de higiene com quatro refs integradas e verificadas. Auditoria passou; aplicação foi ignorada; nenhuma ref foi removida."
+        },
+        {
+          "source": "Current main branch-hygiene merged-PR workflow and executor/tests",
+          "sha": "789263e657d6d4c86eaed5d6d87c31330fa914a3",
+          "detail": "O workflow em main (blob 789263e657d6d4c86eaed5d6d87c31330fa914a3) só dispara em PR merged para main/development, não executa código do head e delega ao executor protegido. Testes do executor (blob a2721fa0d7d896a218744c585d609b7675146522) cobrem identidade, proteção/ruleset, PR aberta, dependências, ancestralidade, árvore do squash, drift concorrente, lease e readback. O recibo direto mais recente disponível é #462, PASS com SQUASH_TREE_IDENTICAL. Inventário vivo subsequente mostra apenas main e development; API detalhada de ruleset retorna 403."
         }
       ],
-      "nextAction": "Concluir após gate do lote direcionado à main e leitura posterior das refs."
+      "nextAction": "A auditoria do mecanismo vNext foi concluída; em cada integração futura, conferir o recibo daquele merge e a leitura integral das refs."
     },
     {
       "order": 25,
@@ -521,9 +526,14 @@
           "source": "Product PR #400",
           "sha": "3616f964be889003c9e2e6ec7cf1e380c874ee0c",
           "detail": "O fluxo de retirada após integração está preparado, mas não aplicado; as quatro refs seguem no remoto."
+        },
+        {
+          "source": "Current Product ref readback after PR #432 and Branch Hygiene vNext receipt audit",
+          "sha": "5c6e652693bd30218e6915bf8cb160bde03ac719",
+          "detail": "Readback vivo em 2026-11-26: somente main@5c6e652693bd30218e6915bf8cb160bde03ac719 e development@ef943910f5513c423ce22b84b4ced548f9c042f2; API de PRs abertas retornou vazio. O recibo diretamente confirmado #462 removeu a branch exata após árvore idêntica e readback. Não foi possível associar recibos específicos de auto-cleanup aos merges #407/#432/#445/#475; as refs ausentes não provam, sozinhas, que vNext as removeu."
         }
       ],
-      "nextAction": "Validar proteção, PRs abertas, referências de workflow e árvore exata antes de cada retirada."
+      "nextAction": "No próximo merge, verificar run/artifact do pull_request_target e o ref readback para confirmar causalidade; não remover refs manualmente sem plano e recibo exatos."
     },
     {
       "order": 26,
@@ -553,9 +563,14 @@
           "source": "GitHub compare Product main...development after Product PR #438",
           "sha": "6b31beadcb460b3c13f125e528ca80f925da7f43",
           "detail": "Exact compare reports 576 commits present on development but absent from main and 17 present on main but absent from development, at merge base 221b54b2a41ecc8c338d1bf2cf67280cf165ce95. Reverse compare lists 72 main-side paths; the forward compare file response remains capped at 300. The classified families remain coupled and do not authorize a whole-tree merge."
+        },
+        {
+          "source": "GitHub compare Product development@ef943910f5513c423ce22b84b4ced548f9c042f2 ↔ main@5c6e652693bd30218e6915bf8cb160bde03ac719",
+          "sha": "5c6e652693bd30218e6915bf8cb160bde03ac719",
+          "detail": "Readback exato em 2026-11-26: merge base 221b54b2a41ecc8c338d1bf2cf67280cf165ce95; main contém 35 commits e 92 caminhos ausentes de development, enquanto development contém 598 commits ausentes de main. Os caminhos abrangem runtime, fontes/artefatos gerados, testes e CI/higiene. A medida confirma que o compare é grande e não autoriza merge integral; classificar por famílias coesas."
         }
       ],
-      "nextAction": "Continue the 72-path family classification; prepare selective packages only where source authority, consumers, generated artifacts, and exact gates are closed. Keep the public page/compiler/manifest family and branch-hygiene workflows separate."
+      "nextAction": "Classificar os 92 caminhos exclusivos de main em famílias e preparar apenas pacotes coesos com autoridade, consumidores, artefatos e gates exatos fechados; manter público/compilador/manifesto e higiene como famílias separadas."
     },
     {
       "order": 27,
@@ -751,14 +766,20 @@
       "chapter": "III",
       "priority": "P0",
       "planState": "not_started",
-      "reconciliation": "unreviewed",
-      "local": "unknown",
-      "development": "unknown",
-      "main": "unknown",
-      "technicalValidation": "unknown",
+      "reconciliation": "partial",
+      "local": "done",
+      "development": "partial",
+      "main": "partial",
+      "technicalValidation": "partial",
       "approvalPublication": "unknown",
-      "evidence": [],
-      "nextAction": "Reconciliar este ID com código, consumidores, testes e evidência exata de branch/PR antes de alterar o estado."
+      "evidence": [
+        {
+          "source": "Product main@5c6e652 / development@ef943910 and local exact-blob token checks at Design System main@c6ff6545",
+          "sha": "c6ff6545e9ae2071e695109fd94ac91676e7fb0a",
+          "detail": "Product main e development importam o CSS VIS-002C com blob correspondente ao Design System e carregam mapping/manifesto/pin correspondentes; não importam os CSS de paleta de referência nem de texto contextual antigo. No checkout temporário do Design System, os gates P_TOKEN_01 passaram com testes 6/6, P_TOKEN_02B com 3/3 e VIS002C_LONG_COPY_V03_PASS após ler os arquivos fonte e artefatos como os blobs canônicos. Limite: core.autocrlf=true converte esses arquivos LF para CRLF e causa falsos erros de hash/saída no checkout Windows comum; não houve workflow novo no SHA atual nem reconciliação do estado semântico PREVIEW_PENDING no PIN."
+        }
+      ],
+      "nextAction": "Tratar a divergência de line endings do checkout Windows e reconciliar o PIN VIS-002C que ainda diz PREVIEW_PENDING antes de afirmar contrato DS→Produto totalmente fechado."
     },
     {
       "order": 39,
@@ -814,15 +835,21 @@
       "title": "Reconstruir a baseline CSS atual",
       "chapter": "III",
       "priority": "P0",
-      "planState": "not_started",
-      "reconciliation": "unreviewed",
-      "local": "unknown",
-      "development": "unknown",
-      "main": "unknown",
-      "technicalValidation": "unknown",
+      "planState": "in_progress",
+      "reconciliation": "partial",
+      "local": "partial",
+      "development": "partial",
+      "main": "partial",
+      "technicalValidation": "partial",
       "approvalPublication": "unknown",
-      "evidence": [],
-      "nextAction": "Reconciliar este ID com código, consumidores, testes e evidência exata de branch/PR antes de alterar o estado."
+      "evidence": [
+        {
+          "source": "CSS-00 read-only cross-ref audit of Product main@5c6e652 and development@ef943910",
+          "sha": "5c6e652693bd30218e6915bf8cb160bde03ac719",
+          "detail": "Baseline slice covers the Config and Admin shells: both load ui-theme.css last, but main/development CSS blobs differ for app/admin/admin.css and app/ui-theme.css; app/styles.css matches. The 8 public/private shells load the pinned theme stylesheet. Config includes an inline mobile style block; app/core/stone.js injects dynamic mask/z-index CSS, while other runtime style assignments are instance/material/geometry values. Full 98-class/stylesheet inventory is not complete. Main/dev app/styles.css sha eb346a41ad91f6dc53875cb954e9018fdc1dd713; main/admin.css 81b115d4a15409d5c46ba5590a19ef587d785a0f vs dev 9ca5a964d6e64a49f58ee36c798f2d3641e64de4; main/ui-theme.css c1ca2a4c36e9195f15cd9045c64ef1857f9af07e vs dev 921a679466b4f401df4f8f3c953c2785e96aec0d."
+        }
+      ],
+      "nextAction": "Completar a matriz de todas as folhas, blocos inline e estilos dinâmicos nos dois destinos; registrar ownership, import/load order e pin/hash, e classificar as 98 incertezas antes de declarar baseline fechada."
     },
     {
       "order": 43,
@@ -910,15 +937,21 @@
       "title": "Extrair a primeira primitiva neutra",
       "chapter": "III",
       "priority": "P1",
-      "planState": "not_started",
-      "reconciliation": "unreviewed",
-      "local": "unknown",
-      "development": "unknown",
-      "main": "unknown",
-      "technicalValidation": "unknown",
+      "planState": "in_progress",
+      "reconciliation": "partial",
+      "local": "partial",
+      "development": "not_present",
+      "main": "not_present",
+      "technicalValidation": "partial",
       "approvalPublication": "unknown",
-      "evidence": [],
-      "nextAction": "Reconciliar este ID com código, consumidores, testes e evidência exata de branch/PR antes de alterar o estado."
+      "evidence": [
+        {
+          "source": "FND-01 candidate and consumers audit at Product main@5c6e652 and development@ef943910",
+          "sha": "5c6e652693bd30218e6915bf8cb160bde03ac719",
+          "detail": "Candidate: .visually-hidden, identically defined in app/styles.css and app/admin/admin.css. Exact runtime consumers are Config h1 and Admin brand text; neither is focusable. .sr-only is a separate Config-only rule used by the dynamic section heading and live region; keep it unchanged. ui-theme.css is already last-loaded in 8 shells and has no current definition. Existing gates cover theme imports and broad browser/build paths but no direct uniqueness/rendered-semantic contract for .visually-hidden. No implementation has been extracted."
+        }
+      ],
+      "nextAction": "Concluir MD-001/MD-008 e a matriz CSS-00/ownership; confirmar se o destino global é artefato derivado e como atualizar seu pin. Em seguida adicionar contrato direto de unicidade e teste renderizado, preservando .sr-only e seus consumidores."
     },
     {
       "order": 49,
@@ -1380,17 +1413,22 @@
       "reconciliation": "partial",
       "local": "done",
       "development": "done",
-      "main": "partial",
+      "main": "done",
       "technicalValidation": "done",
-      "approvalPublication": "unknown",
+      "approvalPublication": "done",
       "evidence": [
         {
           "source": "Product PR #443; exact-head tests and Actions; squash integration into development",
           "sha": "5c89e08e3a700e640f31927fd01d6c8373b6d64f",
           "detail": "PR #443 changed app/app.js so enabled stages, stage lookup, module ownership and item availability are derived from NormalizedConfiguratorFlow; custom-stage controls flatten normalized sections. The generated ARC-13 candidate inventory was refreshed for the changed app.js hash and lines. Focused tests passed 4/4, the inventory reproduced without diff, and all ten exact-head workflows passed before squash integration at this SHA. Product main still has the older app/app.js consumer reads (blob 805494f5ff90bc6aa80bfc4279a240a70e84f8b6); cross-destination DoD remains partial."
+        },
+        {
+          "source": "Product PR #445 exact-head validation, main integration, and Netlify production readback",
+          "sha": "9112bacc3341718696c61b7cb0488beb713e4682",
+          "detail": "PR #445 integrou por squash a autoridade de fluxo normalizado em app/app.js e atualizou o inventário ARC-13; head 566b40d3a1fae69c008f735d097893585e9d2966 passou os gates exatos e teve preview pronto. Netlify publicou então o main em 9112bacc. O commit subsequente #432 alterou apenas o teste V5; o deploy de produção mais recente está READY no SHA atual da main 5c6e652693bd30218e6915bf8cb160bde03ac719. O recorte de autoridade de fluxo está integrado e publicado em ambos os destinos relevantes."
         }
       ],
-      "nextAction": "Prepare the same consumer-authority correction for main after comparing its current app.js structure; keep production integration gated by the applicable main publication approval."
+      "nextAction": "DOM-006 consolidado nos destinos verificados; preservar os testes de fluxo e os recibos ARC-13 como contrato de futuras mudanças."
     },
     {
       "order": 77,
@@ -2059,12 +2097,12 @@
       "title": "Classificar redundâncias sem eliminar garantias",
       "chapter": "VI",
       "priority": "P1",
-      "planState": "in_progress",
-      "reconciliation": "partial",
+      "planState": "done",
+      "reconciliation": "done",
       "local": "done",
       "development": "done",
-      "main": "partial",
-      "technicalValidation": "partial",
+      "main": "done",
+      "technicalValidation": "done",
       "approvalPublication": "not_applicable",
       "evidence": [
         {
@@ -2076,9 +2114,14 @@
           "source": "docs/architecture/ci/tst-003-main-duplicate-app-test-review-2026-11-25.json",
           "sha": "6b31beadcb460b3c13f125e528ca80f925da7f43",
           "detail": "Exact source readback shows main app-build-purity, candidate-assets and variant-fidelity all run app/npm test on overlapping app/** pull-request changes. Development retains app/npm test in app-build-purity and removed only the duplicate invocation from the two specialized workflows in PR #436. Their domain-specific assertions remain. This justifies preparing the same narrow removal on main; exact main PR validation remains pending."
+        },
+        {
+          "source": "Leitura byte-exata dos workflows no Product main@5c6e652 e development@ef943910, após a integração de PR #432",
+          "sha": "5c6e652693bd30218e6915bf8cb160bde03ac719",
+          "detail": "No main, app-build-purity.yml (blob aaaf6ed9105cc6fd1df4f74001a2823f2b4cf59e) executa npm test uma vez para app/**; candidate-assets.yml (blob 8653cd79cd60bdd1e0d1773bb9b71d0601cbced9) executa apenas contratos Python de assets/máscaras e proveniência; variant-fidelity.yml (blob d7904092e49a6b0c6ce87a069f0aa9886a368c9a) deriva manifests e renderiza variantes. development conserva as mesmas responsabilidades com blobs 3debb0f87335921d6ba0997471433488d07ccdfc, 23c1f7573d00ad1c5cb2890482a8a43b6899162f e 33fa8ba638c32fbc5094360d89d71413376865db. Não há chamada duplicada de npm test nesses dois gates especializados; portanto a remoção aplicada em #436 no buffer não deve ser transplantada como mudança adicional para main. Asserções especializadas permanecem separadas."
         }
       ],
-      "nextAction": "Prepare a selective main PR removing only the duplicated app/npm test steps from candidate-assets and variant-fidelity. Preserve app-build-purity and all specialized asset, mask, rendering, and variant assertions; validate the exact PR head before integration."
+      "nextAction": "Nenhuma remoção adicional é necessária na main: conservar app-build-purity e as verificações especializadas de assets/máscaras e fidelidade de variantes."
     },
     {
       "order": 111,
@@ -2334,10 +2377,10 @@
     "blobSha": "59bb530b14172eb9772b9f89bb62272173f4381c"
   },
   "baselineReadback": {
-    "capturedAt": "2026-11-25",
-    "productMainSha": "e462f5df33e2354c81bbbc18170106c1a9d79ead",
-    "productDevelopmentSha": "5c89e08e3a700e640f31927fd01d6c8373b6d64f",
+    "capturedAt": "2026-11-26",
+    "productMainSha": "5c6e652693bd30218e6915bf8cb160bde03ac719",
+    "productDevelopmentSha": "ef943910f5513c423ce22b84b4ced548f9c042f2",
     "designSystemMainSha": "c6ff6545e9ae2071e695109fd94ac91676e7fb0a",
-    "meaning": "Exact refs re-read after Product PR #443 was squash-merged into development. Design System development lookup returned 404. PR #444 is a source-pinned test candidate and is not part of this captured development SHA."
+    "meaning": "Refs exatas relidas após a integração de #432 na main do Product e antes desta atualização documental. Compare development...main: merge base 221b54b2a41ecc8c338d1bf2cf67280cf165ce95, 35 commits exclusivos da main, 598 exclusivos de development e 92 caminhos alterados no lado main; nenhuma integração de árvore inteira está autorizada por esse snapshot. Design System development não foi encontrado."
   }
 }
