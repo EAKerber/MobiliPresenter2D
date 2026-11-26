@@ -2449,7 +2449,7 @@
       "reconciliation": "partial",
       "local": "unknown",
       "development": "partial",
-      "main": "unknown",
+      "main": "partial",
       "technicalValidation": "partial",
       "approvalPublication": "unknown",
       "evidence": [
@@ -2462,9 +2462,14 @@
           "source": "Product PR #510 squash integration and development readback",
           "sha": "6fc4e507262277397b880d822d9fbf05a4e77b64",
           "detail": "PR #510 merged by squash into Product development at this exact commit. Its head ran the full 78-test branch-hygiene suite and py_compile successfully (Actions run 45871476960); the post-merge development ref resolves to the same squash commit. The implementation now covers bounded main batches, development series waves, and merged-PR cleanup. No destructive production batch was run. Main has not received the change. GitHub returned an empty repository rulesets list, while the classic tag-protection endpoint is unavailable through the connected read interface; deliberate removal of consumption tags remains an unresolved protection limit."
+        },
+        {
+          "source": "Product PR #512 squash integration and main readback",
+          "sha": "0db1d021f6917cd7a030debd0ab92c04ca28e39e",
+          "detail": "PR #512 ported exactly eight replay-guard code/test/workflow files from the tested development slice onto main without importing the 636-commit development delta. The base-relative PR audit and branch-hygiene tests passed; main now resolves to 0db1d02 with the shared marker helper, executor, series, merged-PR cleanup, tests, and bounded workflow in place. Post-merge Current Asset Gates and the main plan checks passed. No site runtime files or batch manifest changed, so this was not a product UI deployment or a destructive branch run. Tag ruleset/classic tag-protection state remains unverified."
         }
       ],
-      "nextAction": "Prepare a narrowly scoped main promotion containing the replay-guard code and tests only, after confirming its base-relative diff does not include unrelated development work. Preserve main as the release buffer; then verify the exact main readback and revisit whether consumption-tag deletion can be restricted."
+      "nextAction": "Resolve the remaining tag-write protection question. If an enforceable tag rule cannot be confirmed, keep GIT-021 partial and record the accepted residual risk instead of claiming tamper-resistant consumption. Reconfirm the exact main/development refs after any policy change."
     },
     {
       "order": 118,
