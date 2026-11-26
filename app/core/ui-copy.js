@@ -228,6 +228,10 @@
         componentsPerLine: "Componentes (um por linha)",
         requirementsPerLine: "Requisitos (um por linha)"
       }),
+      pagination: Object.freeze({
+        previous: "← Anterior",
+        next: "Próxima →"
+      }),
       materials: Object.freeze({
         name: "Nome",
         groupName: "Nome da opção",

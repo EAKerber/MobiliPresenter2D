@@ -30,6 +30,7 @@ const stageAvailabilityCopy = uiCopy.admin.stages;
 const objectAssetsCopy = uiCopy.admin.objectAssets;
 const objectContentFieldCopy = uiCopy.admin.objectContentFields;
 const materialAvailabilityCopy = uiCopy.admin.materials;
+const paginationCopy = uiCopy.admin.pagination;
 const hierarchyEditorCopy = uiCopy.admin.hierarchyEditor;
 const rulesCopy = uiCopy.admin.rules, nominalDimensionsCopy = uiCopy.admin.nominalDimensions;
 const authenticationCopy = uiCopy.admin.authentication;
@@ -964,10 +965,10 @@ function renderFinishes() {
 function renderPager(container, index, pages, onPage) {
   if (!container) return;
   container.replaceChildren();
-  const previous = document.createElement("button"); previous.type = "button"; previous.className = "button button--secondary"; previous.textContent = "← Anterior"; previous.disabled = index <= 0;
+  const previous = document.createElement("button"); previous.type = "button"; previous.className = "button button--secondary"; previous.textContent = paginationCopy.previous; previous.disabled = index <= 0;
   previous.addEventListener("click", () => onPage(index - 1));
   const status = document.createElement("span"); status.textContent = `${index + 1} / ${pages}`; status.setAttribute("aria-live", "polite");
-  const next = document.createElement("button"); next.type = "button"; next.className = "button button--secondary"; next.textContent = "Próxima →"; next.disabled = index >= pages - 1;
+  const next = document.createElement("button"); next.type = "button"; next.className = "button button--secondary"; next.textContent = paginationCopy.next; next.disabled = index >= pages - 1;
   next.addEventListener("click", () => onPage(index + 1)); container.append(previous, status, next);
 }
 
