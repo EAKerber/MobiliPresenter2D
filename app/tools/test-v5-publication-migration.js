@@ -129,8 +129,8 @@ async function main() {
   assert.doesNotMatch(endpoint, /import v5Migration from/, "historical migration service must not be bundled in the live endpoint");
   assert.match(endpoint, /if \(operation === "publish-v5-migration"\)/);
   assert.match(endpoint, /return respond\(\{ error: "v5_migration_retired" \}, 410\)/);
-  const auth = endpoint.indexOf("const user = await getUser()");
-  const role = endpoint.indexOf('roles.includes("admin")');
+  const auth = endpoint.lastIndexOf("user = await getUser()");
+  const role = endpoint.lastIndexOf("if (!canManageAdministration(user))");
   const oldOperation = endpoint.indexOf('operation === "publish-v5-migration"');
   assert(auth !== -1 && auth < role && role < oldOperation,
     "authentication and admin authorization must precede rejection of the retired operation");
