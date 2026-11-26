@@ -10,7 +10,7 @@
   "evidence": {
     "baseRevision": "8fe2e605f878eb4bb9c9d92f6588f73a78236794",
     "inventoryPath": "architecture/arc13/ui-text-candidates.json",
-    "inventorySha256": "71D34EDA96DFEB3876B1E6D1446CDBCB78296B986ABC0CB6378ADC1C9952B8A8",
+    "inventorySha256": "123D8236CC51818B59ABCEDF8A8C716571D157A98AC83C324B4A153A24B584FE",
     "source": "app/admin/admin.js",
     "sourceGitBlob": "4702ad57579fa6649ca6b7b08cd0a3fec97df93f",
     "sourceSha256": "E642F95046144F558B694C02D33A7C14535D6E2024B0E0F2D036C80D2A8C610D",
@@ -24,8 +24,8 @@
     "browserContractGitBlob": "daec7a15b63ed0ac66bd5ff7c8eb0234f3f7788c",
     "browserContractSha256": "F5FF27E2AD417056330C6C3C714D7EF697BC34CE1C94B13630606D970E4DA6F6",
     "generatedPrimaryPageManifest": "architecture/generated/primary-pages.manifest.json",
-    "generatedPrimaryPageManifestGitBlob": "51c15e7813d753d7bffca9dd868ae5ab2997f673",
-    "generatedPrimaryPageManifestSha256": "4D377C11D3B3D05BCDC40BFD9263779C3CBD701C466D7B7EBBCE34151D16C79B",
+    "generatedPrimaryPageManifestGitBlob": "6776b3c87b146694baa29c76d55cea57a041950e",
+    "generatedPrimaryPageManifestSha256": "69C88BD5DA7691AAE1799381B7515676391C977528E230D069D7134A0875D8B4",
     "implementationBranch": "codex/loc006-admin-shell-copy-20261126",
     "route": "/admin"
   },
@@ -43,6 +43,7 @@
   },
   "validation": {
     "localPassed": [
+      "node scripts/compile-primary-pages.mjs --sync",
       "node scripts/compile-primary-pages.mjs --check",
       "node tests/ui-theme-contract.cjs",
       "node --test tests/arc03c-source-authority.test.mjs: 6 passed",
@@ -52,7 +53,7 @@
     "arc13Inventory": {
       "runs": 2,
       "sameSha256": true,
-      "sha256": "71D34EDA96DFEB3876B1E6D1446CDBCB78296B986ABC0CB6378ADC1C9952B8A8",
+      "sha256": "123D8236CC51818B59ABCEDF8A8C716571D157A98AC83C324B4A153A24B584FE",
       "unreviewedOccurrences": 1007,
       "javascriptParseErrors": 0,
       "javascriptNotScannedSources": 0,
