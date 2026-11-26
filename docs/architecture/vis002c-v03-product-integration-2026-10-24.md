@@ -1,6 +1,6 @@
 # VIS-002C v0.3 — consumo de texto corrido no produto
 
-**Estado:** candidata integrada à branch da PR #241; precisa de novos gates e revisão do preview após a ampliação. Não mergeada nem publicada.
+**Estado atual (readback 2026-11-26):** Product `main@5c6e652693bd30218e6915bf8cb160bde03ac719` is served by READY Production deploy `6b07bd0f17cb2fd1e0d65b34`. The previously user-authorized scoped mapping from Design System PR #52 and Product PR #241 is active: anonymous DOM/CSSOM readback confirmed the exact import and `rgb(41, 39, 35)` on all ten mapped selectors across `/`, `/about/`, and `/how-it-works/` in light theme. No dark-theme runtime claim is added.
 
 ## Fonte e escopo
 
@@ -15,6 +15,8 @@
 
 A cópia da distribuição, do mapa e do manifesto fica fixada em `design-system/pins/vis-002/context-v0.3.0/`. `app/landing/landing.css` importa o CSS gerado, carregado pelas três rotas públicas. Cada um dos dez contextos de página consome `var(--ds-vis002c-long-copy-light)`; as declarações ficam sob `html[data-theme="light"]`. Não há uso em `:root` nem alteração de `decisions.json`.
 
-## Revisão
+## Revisão e proveniência
 
-O verificador compara os hashes Git dos três arquivos copiados com o pin, confere os dez seletores exatos e confirma o import, a atribuição contextual e a permanência do tema escuro. Os gates da PR #241 e a revisão manual do preview atualizado precisam passar antes de qualquer integração.
+O verificador compara os hashes Git dos três arquivos copiados com o pin, confere os dez seletores exatos e confirma o import, a atribuição contextual e a permanência do tema escuro. Em Product development no commit `a7f34f593e7d7f82d17c0165e9de7c80455ee240`, o gate faz checkout do Design System no commit exato fixado e compara a decisão canônica e os três artefatos originais com as cópias do Product. Hashes de texto normalizam CRLF para LF e rejeitam CR isolado. O PR #495 e o workflow exato passaram; Product main continua no gate anterior.
+
+The runtime state is recorded from the existing scoped authorization and merged PRs, not inferred from deployment alone. The Production readback identifies the deployed commit and exact CSSOM contexts. The pin lifecycle gate now distinguishes `REFERENCE_ONLY`, `SCOPED_INTEGRATION_CANDIDATE_NOT_RELEASED`, and `SCOPED_RUNTIME_AUTHORIZED_AND_RELEASED`: reference artifacts cannot be runtime consumers; candidates cannot claim Production; authorized release requires the merged decision and Product receipts plus a ready Production deploy and every mapped context. The lifecycle state machine and source gate passed the exact Product `development` head in PR #497 (merge `3c84c658439eae10ce5f3a13ecc8a71fb613d7e5`). This PR selectively promotes that non-runtime contract package to Product `main`; it changes no CSS or page behavior.
