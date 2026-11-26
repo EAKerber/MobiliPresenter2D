@@ -20,6 +20,37 @@ const viewports = [
   { name: "desktop", width: 1280, height: 900 }
 ];
 const visuallyHiddenRule = /\.visually-hidden\s*\{/g;
+
+async function measureGlobalFocus(page, expectedColor, message) {
+  const probe = await page.evaluateHandle(() => {
+    const link = document.createElement("a");
+    link.href = "#focus-token-probe";
+    link.textContent = "Focus token probe";
+    link.tabIndex = 0;
+    link.setAttribute("aria-hidden", "true");
+    link.style.cssText = "position:fixed;left:-10000px;top:0;width:1px;height:1px;overflow:hidden";
+    document.body.prepend(link);
+    return link;
+  });
+  await page.evaluate(() => document.activeElement && document.activeElement.blur());
+  await page.keyboard.press("Tab");
+  await page.waitForFunction((expectedColor) => {
+    const link = document.activeElement;
+    const style = getComputedStyle(link);
+    return link.matches(":focus-visible") && style.outlineColor === expectedColor &&
+      style.outlineWidth === "3px" && style.outlineOffset === "3px";
+  }, expectedColor, { timeout: 1000 });
+  const measured = await probe.evaluate((link) => {
+    const style = getComputedStyle(link);
+    return { focused: document.activeElement === link, focusVisible: link.matches(":focus-visible"), color: style.outlineColor, width: style.outlineWidth, offset: style.outlineOffset };
+  });
+  assert(measured.focused && measured.focusVisible, message + " reaches global focus probe by keyboard");
+  assert.equal(measured.color, expectedColor, message + " global focus color preserves the baseline");
+  assert.equal(measured.width, "3px", message + " global focus width preserves the baseline");
+  assert.equal(measured.offset, "3px", message + " global focus offset preserves the baseline");
+  await probe.evaluate((link) => link.remove());
+  return measured;
+}
 const sharedCss = fs.readFileSync(path.join(__dirname, "../app/ui-theme.css"), "utf8");
 const adminCss = fs.readFileSync(path.join(__dirname, "../app/admin/admin.css"), "utf8");
 const configCss = fs.readFileSync(path.join(__dirname, "../app/styles.css"), "utf8");
@@ -50,6 +81,9 @@ async function main() {
           reducedMotion: "reduce",
           serviceWorkers: "block"
         });
+        await page.addInitScript(() => {
+          localStorage.setItem("casa-ui-theme-mode-v1", "dark");
+        });
         await page.route("**/*", (route) => {
           const requestOrigin = new URL(route.request().url()).origin;
           return requestOrigin === origin ? route.continue() : route.abort();
@@ -61,6 +95,11 @@ async function main() {
             timeout: 20000
           });
           assert.equal(response && response.status(), 200, shell.path + " HTTP");
+          await page.waitForFunction(() => {
+            const root = document.documentElement;
+            return root.dataset.theme === "dark" &&
+              getComputedStyle(root).getPropertyValue("--ui-theme-focus").trim() === "#d8bc7c";
+          }, undefined, { timeout: 5000 });
           const hiddenSelector = shell.path === "/admin.html"
             ? ".private-header__brand strong.visually-hidden"
             : shell.path === "/config/"
@@ -144,6 +183,9 @@ async function main() {
           assert(measured.ariaLabel && measured.ariaLabel.length > 8, shell.path + " has an accessible name");
           assert(measured.title, shell.path + " has a concise title");
 
+          const darkGlobalFocus = viewport.name === "mobile" && shell.path === "/"
+            ? await measureGlobalFocus(page, "rgb(216, 188, 124)", shell.path + " dark")
+            : null;
           const keyboardStart = page.locator(shell.keyboard.start).first();
           await keyboardStart.focus();
           assert(await keyboardStart.evaluate((element) => document.activeElement === element),
@@ -159,22 +201,37 @@ async function main() {
             if (reachedByKeyboard) break;
           }
           assert(reachedByKeyboard, shell.path + " theme control is reachable by keyboard");
-          const focusVisible = await control.evaluate((button) => {
-            const style = getComputedStyle(button);
-            return button.matches(":focus-visible") && style.outlineStyle !== "none"
-              && parseFloat(style.outlineWidth) >= 2;
-          });
-          assert(focusVisible, shell.path + " keyboard focus is visibly indicated");
+          const focusStyle = await control.evaluate((button) => ({
+            visible: button.matches(":focus-visible") && getComputedStyle(button).outlineStyle !== "none"
+          }));
+          assert(focusStyle.visible, shell.path + " keyboard focus is visibly indicated");
 
+
+
+
+
+          await page.keyboard.press("Enter");
+          const autoActivated = await control.evaluate((button) => ({
+            mode: button.getAttribute("data-mode"),
+            label: button.getAttribute("aria-label"),
+            stored: localStorage.getItem("casa-ui-theme-mode-v1")
+          }));
+          assert.equal(autoActivated.mode, "auto", shell.path + " keyboard activation selects automatic mode after dark");
+          assert.equal(autoActivated.stored, "auto", shell.path + " keyboard activation persists automatic mode");
+          assert(autoActivated.label.includes("Ativar Claro"), shell.path + " announces the next mode from automatic");
           await page.keyboard.press("Enter");
           const activated = await control.evaluate((button) => ({
             mode: button.getAttribute("data-mode"),
             label: button.getAttribute("aria-label"),
             stored: localStorage.getItem("casa-ui-theme-mode-v1")
           }));
-          assert.equal(activated.mode, "light", shell.path + " keyboard activation selects light mode");
-          assert.equal(activated.stored, "light", shell.path + " keyboard activation persists the mode");
-          assert(activated.label.includes("Ativar Escuro"), shell.path + " announces the next mode");
+          assert.equal(activated.mode, "light", shell.path + " keyboard activation selects light mode after automatic");
+          assert.equal(activated.stored, "light", shell.path + " keyboard activation persists light mode");
+          assert(activated.label.includes("Ativar Escuro"), shell.path + " announces the next mode from light");
+
+
+
+
 
           results.push({
             shell: shell.path,
@@ -183,7 +240,8 @@ async function main() {
             measuredTargetMinimumCssPx: minTarget,
             measuredWidthCssPx: measured.width,
             measuredHeightCssPx: measured.height,
-            keyboardFocusVisible: focusVisible,
+            keyboardFocusVisible: focusStyle.visible,
+            darkFocus: darkGlobalFocus,
             keyboardActivation: activated.mode
           });
         } finally {
