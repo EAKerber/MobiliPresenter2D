@@ -741,15 +741,21 @@
       "title": "Criar o inventário operacional dos componentes",
       "chapter": "IV",
       "priority": "P0",
-      "planState": "not_started",
-      "reconciliation": "unreviewed",
+      "planState": "in_progress",
+      "reconciliation": "partial",
       "local": "unknown",
-      "development": "unknown",
-      "main": "unknown",
-      "technicalValidation": "unknown",
-      "approvalPublication": "unknown",
-      "evidence": [],
-      "nextAction": "Reconciliar este ID com código, consumidores, testes e evidência exata de branch/PR antes de alterar o estado."
+      "development": "partial",
+      "main": "partial",
+      "technicalValidation": "partial",
+      "approvalPublication": "not_applicable",
+      "evidence": [
+        {
+          "source": "CMP-001 scene/hotspot subinventory in docs/architecture/cmp-001-scene-subinventory-2026-11-26.md",
+          "sha": "224444252a69649a16b3bd770233b606d4f6d358",
+          "detail": "Read-only inventory anchored to Product development@89c258dfe058c72a359f95f39e5589458a9c3cff, main@5c6e652693bd30218e6915bf8cb160bde03ac719, and Design System main@026c6c4f4d9a6d29102a241862afdb50c35de147. Confirms shared-existing scene-component and geometry primitives, two concrete consumers (Configurator and Viewer), their distinct state/data policies, selected dynamic DOM/classes/datasets, keyboard/click behavior, CSS contexts, public V5 projection dependency, and related tests. Runtime source blobs for scene primitives/tests are shared across main/dev. Gaps remain: full inventory of all prioritized components/routes and every consumer, human owner, complete text/event/auth source map, repo-wide consumer closure, semantic CSS/state coverage, and focal real-renderer tests in both consumers. CMP-001 remains partial; CMP-014 remains open."
+        }
+      ],
+      "nextAction": "Complete the component inventory for all prioritized candidates across all route shells: name technical/human owner, consumer, state/data authority, variants, CSS context, dynamic DOM, events/listeners, text source, auth/public-projection dependence, risk and related tests. Reconcile the contradictory Viewer integration guide and perform a repo-wide consumer closure. Then design CMP-014's focal real-renderer test for both consumers without merging domain state/policy or changing main."
     },
     {
       "order": 35,
