@@ -338,11 +338,11 @@ async function sectionItemIds(page, stageId, groupId, sectionId) {
     "object content fields retain distinct labels in the authoring form"
   );
   const objectMaterialCopy = await page.evaluate(() => window.CASA_UI_COPY.admin.materials);
-  await page.locator("#objectSelector").selectOption("tango-chrome");
+  await page.locator("#objectSelector").selectOption({ label: "Puxador · Tango / Íris" });
   const tangoObjectMaterials = page.locator("#objectsList .handle-colors");
   assert.equal(await tangoObjectMaterials.locator("h3").textContent(), objectMaterialCopy.handleMaterialsHeading, "handle-material heading reuses canonical catalog copy");
   assert.equal(await tangoObjectMaterials.locator(".admin-note").textContent(), "Cromado", "associated material names remain data-backed");
-  await page.locator("#objectSelector").selectOption("ponto");
+  await page.locator("#objectSelector").selectOption({ label: "Puxador · Ponto" });
   const pointObjectMaterials = page.locator("#objectsList .handle-colors");
   assert.equal(await pointObjectMaterials.locator("h3").textContent(), objectMaterialCopy.handleMaterialsHeading, "empty handle still uses canonical heading");
   assert.equal(await pointObjectMaterials.locator(".admin-note").textContent(), objectMaterialCopy.handleMaterialsEmptyState, "empty handle-material guidance comes from the catalog");
