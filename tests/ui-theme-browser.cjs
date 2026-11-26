@@ -64,6 +64,11 @@ async function main() {
             timeout: 20000
           });
           assert.equal(response && response.status(), 200, shell.path + " HTTP");
+          await page.waitForFunction(() => {
+            const root = document.documentElement;
+            return root.dataset.theme === "dark" &&
+              getComputedStyle(root).getPropertyValue("--ui-theme-focus").trim() === "#d8bc7c";
+          }, { timeout: 5000 });
           const hiddenSelector = shell.path === "/admin.html"
             ? ".private-header__brand strong.visually-hidden"
             : shell.path === "/config/"
