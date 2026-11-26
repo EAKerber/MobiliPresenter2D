@@ -14,6 +14,7 @@ from pathlib import Path
 
 from branch_hygiene_observe import observe, api_get, paginate
 from branch_hygiene_plan import build_plan, load_json, select_bounded_batch
+from branch_hygiene_consumption import (reserve_operation, pin_marker, write_pin_marker, mark_applied)
 
 AUTH_ENV = "MOBILIPRESENTER2D_BRANCH_HYGIENE_AUTHORIZED"
 DEV_AUTH_ENV = "MOBILIPRESENTER2D_DEVELOPMENT_HYGIENE_AUTHORIZED"
@@ -329,9 +330,60 @@ def apply(plan_path: Path, dispositions_path: Path, expected_plan: str,
         save()
         return receipt
 
+    # Bind the durable receipt to the authorization wave and exact selected pins.
+    run_id = os.environ.get("GITHUB_RUN_ID")
+    auth_id = batch.get("wave") or batch.get("batchId")
+    if not isinstance(auth_id, str) or not auth_id:
+        auth_id = "pins-" + __import__("hashlib").sha256(json.dumps(
+            [{"branch": x["branch"], "sha": x["sha"]} for x in selected],
+            sort_keys=True, separators=(",", ":"),
+        ).encode("utf-8")).hexdigest()
+    operation_identity = {
+        "controlBranch": fresh_plan["controlBranch"],
+        "authorizationId": auth_id,
+        "pins": sorted(
+            [{"branch": x["branch"], "sha": x["sha"]} for x in selected],
+            key=lambda x: (x["branch"], x["sha"]),
+        ),
+    }
+    flow = "main-batch" if control == "main" else "development-retirement"
+    key, applied_marker = reserve_operation(
+        repository, flow, operation_identity, run_id or "", os.environ["GITHUB_SHA"]
+    )
+    if applied_marker is not None:
+        recreated = [x["branch"] for x in selected if x["branch"] in inventory]
+        if recreated:
+            raise RuntimeError("CONSUMED_BRANCH_RECREATED:" + ",".join(recreated))
+        if remote_refs() != inventory:
+            raise RuntimeError("CONSUMED_READBACK_DRIFT")
+        receipt["alreadyAbsent"] = [
+            {"branch": x["branch"], "sha": x["sha"]} for x in selected
+        ]
+        receipt["readback"] = "PASS"
+        receipt["status"] = "PASS"
+        receipt["remainingBranchCount"] = len(inventory)
+        save()
+        return receipt
+
     expected_inventory = inventory.copy()
+    # Resume only a same-run interrupted delete whose exact ref remains absent.
+    for entry in absent:
+        pin = {"branch": entry["branch"], "sha": entry["sha"]}
+        intent = pin_marker(key, "intent", pin)
+        done = pin_marker(key, "done", pin)
+        if done is not None and done.get("runId") != run_id:
+            raise RuntimeError("CONSUMPTION_PIN_OWNED_BY_OTHER_RUN:" + entry["branch"])
+        if intent is not None:
+            if intent.get("runId") != run_id:
+                raise RuntimeError("CONSUMPTION_PIN_OWNED_BY_OTHER_RUN:" + entry["branch"])
+            if done is None:
+                write_pin_marker(
+                    key, "done", repository, flow, operation_identity, run_id or "",
+                    os.environ["GITHUB_SHA"], pin,
+                )
     for entry in live_selected:
         branch, sha = entry["branch"], entry["sha"]
+        pin = {"branch": branch, "sha": sha}
         # Re-observe the full inventory, PRs and protection for every candidate.
         # GitHub REST can briefly lag Git refs after the previous deletion.
         # Retry only cross-provider synchronization, never a changed inventory.
@@ -371,7 +423,21 @@ def apply(plan_path: Path, dispositions_path: Path, expected_plan: str,
                 raise RuntimeError("ARCHIVE_NOT_VERIFIED:" + branch)
             receipt["archiveProofs"] = [p for p in receipt["archiveProofs"] if p["branch"] != branch] + [archived]
             save()
+        if pin_marker(key, "done", pin) is not None:
+            raise RuntimeError("CONSUMED_BRANCH_RECREATED:" + branch)
+        if pin_marker(key, "intent", pin) is not None:
+            raise RuntimeError("INTENT_BRANCH_PRESENT_AMBIGUOUS:" + branch)
+        # Write intent only after all remote eligibility checks and archival
+        # proof succeed; from here to lease/readback, retries must fail closed.
+        write_pin_marker(
+            key, "intent", repository, flow, operation_identity, run_id or "",
+            os.environ["GITHUB_SHA"], pin,
+        )
         expected_inventory = delete_exact_ref(branch, sha, expected_inventory)
+        write_pin_marker(
+            key, "done", repository, flow, operation_identity, run_id or "",
+            os.environ["GITHUB_SHA"], pin,
+        )
         if archived is not None and archive_proof(entry)["status"] != "VERIFIED":
             raise RuntimeError("ARCHIVE_TAG_LOST:" + branch)
         receipt["deleted"].append({"branch": branch, "sha": sha})
@@ -383,6 +449,9 @@ def apply(plan_path: Path, dispositions_path: Path, expected_plan: str,
         archived = archive_proof(item)
         if archived is not None and archived["status"] != "VERIFIED":
             raise RuntimeError("RETRY_ARCHIVE_LOST:" + item["branch"])
+    mark_applied(
+        key, repository, flow, operation_identity, run_id or "", os.environ["GITHUB_SHA"]
+    )
     receipt["readback"] = "PASS"
     receipt["status"] = "PASS"
     receipt["remainingBranchCount"] = len(expected_inventory)
