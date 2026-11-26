@@ -3,6 +3,7 @@ import assert from "node:assert/strict";
 import {readFile} from "node:fs/promises";
 import {createHash} from "node:crypto";
 import {resolve} from "node:path";
+import {validateVis002cPinLifecycle} from "../../scripts/vis002c-pin-lifecycle.mjs";
 
 const root="design-system/pins/vis-002/context-v0.3.0/";
 const json=async file=>JSON.parse(await readFile(resolve(file),"utf8"));
@@ -41,7 +42,8 @@ test("VIS-002 pin matches content-addressed decision, mapping, CSS, and manifest
     assert.equal(await blobSha(entry.path),entry.gitBlob,
       "non-silent blob mismatch: "+entry.path);
   }
-  assert.equal(pin.status,"SCOPED_INTEGRATION_CANDIDATE_NOT_RELEASED");
+  assert.equal(pin.status,"SCOPED_RUNTIME_AUTHORIZED_AND_RELEASED");
+  assert.equal(pin.runtimeStatus,"PRODUCTION_VERIFIED");
   assert.equal(pin.changesCanonicalDecision,false);
   assert.equal(pin.darkThemeUnchanged,true);
   assert.equal(mapping.constraints.globalUsage,false);
@@ -96,4 +98,26 @@ test("contrast is independently recomputed, without rounding threshold",async()=
       "decision-recorded contrast and recomputation disagree "+fg+"/"+bg);
   }
   // These approvals do NOT authorize a global token or a component mapping.
+});
+
+
+test("VIS-002C lifecycle distinguishes reference, candidate, and authorized runtime",async()=>{
+  const [pin,mapping,manifest]=await Promise.all([
+    json(root+"PIN.json"),json(root+"contextual-mapping.json"),json(root+"manifest.json")
+  ]);
+  const reference={status:"REFERENCE_ONLY",runtimeStatus:"NOT_INTEGRATED"};
+  assert.equal(validateVis002cPinLifecycle(reference,{environment:"reference",consumerImported:false}),"reference-only");
+  assert.throws(()=>validateVis002cPinLifecycle(reference,{environment:"preview",consumerImported:true}),/reference-only artifact cannot be a runtime consumer/);
+
+  const candidate={status:"SCOPED_INTEGRATION_CANDIDATE_NOT_RELEASED",runtimeStatus:"PREVIEW_PENDING"};
+  assert.equal(validateVis002cPinLifecycle(candidate,{environment:"preview",consumerImported:true}),"candidate");
+  assert.throws(()=>validateVis002cPinLifecycle(candidate,{environment:"production",consumerImported:true}),/candidate state cannot claim Production/);
+
+  assert.equal(validateVis002cPinLifecycle(pin,{
+    environment:"production",consumerImported:true,manifest,mappingContexts:mapping.contexts
+  }),"runtime-authorized");
+  const incomplete={...pin,runtimeVerification:{...pin.runtimeVerification,contexts:pin.runtimeVerification.contexts.slice(0,-1)}};
+  assert.throws(()=>validateVis002cPinLifecycle(incomplete,{
+    environment:"production",consumerImported:true,manifest,mappingContexts:mapping.contexts
+  }),/cover every mapped context/);
 });
