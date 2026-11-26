@@ -368,7 +368,7 @@
       "reconciliation": "partial",
       "local": "partial",
       "development": "partial",
-      "main": "unknown",
+      "main": "partial",
       "technicalValidation": "partial",
       "approvalPublication": "unknown",
       "evidence": [
@@ -406,9 +406,14 @@
           "source": "Live Product ref and TST-001 artifact audit on 2026-11-26",
           "sha": "4bcfa26911498a9bf5c3c94c517e9931746b437b",
           "detail": "Live refs: main@7ebacc86018c60e54df4d0e15c95ecd3eed46a77 and development@4bcfa26911498a9bf5c3c94c517e9931746b437b. The active frozen-inventory auxiliary and PR-archive executors were retired in development; dated October inventory/closure records remain historical. The older TST-001 inventory and open draft PR #521 are pinned to earlier refs and still list the retired workflow. In that inventory, push:60 counts workflow push-trigger declarations, not Git branches. Do not present either as current; refresh the exact inventory at these live refs."
+        },
+        {
+          "source": "Product TST-001 live inventory gate run #45902210791 and artifact readback",
+          "sha": "a13cd23af0483b3a8426bb494df757538d21542f",
+          "detail": "Plan and inventory jobs passed on PR #526 predecessor head a13cd23af0483b3a8426bb494df757538d21542f. Artifact 15155409887 (sha256:97afb78d6f105a9a62224936ae86c55af50da58d5414fd2eca1bc8a7f57572d9) is preserved at docs/architecture/ci/tst-001-workflow-inventory-live-2026-11-26-run-45902210791.json. Exact source refs: main@7ebacc86018c60e54df4d0e15c95ecd3eed46a77, development@4bcfa26911498a9bf5c3c94c517e9931746b437b, candidate PR #526 tree 99f96a282444443b22c2f38330fbf1ac503a0330. Inventory: main 28, development 65, shared 26, unique definitions 86, parse warnings 0; one candidate workflow change and no candidate write signals. This supersedes the old 11/25 snapshot for these refs only. The report's push:59 is workflow-trigger declarations, not branches. Candidate open-PR readback also included draft #517 against development@f864fed; preserve as stale pinned evidence, not current code authority. TST-001 remains partial because generation does not validate each command's assertions/contracts or prove all 21 baseline commands/workflows satisfy the full DoD."
         }
       ],
-      "nextAction": "The candidate now includes TST-001 trigger paths for workflow receipts and the v0.9 register. Read the exact PR gate artifact at current refs, then refresh the committed inventory/readback from its result. Preserve historical October counts as historical."
+      "nextAction": "Continue the command→assertion→contract/result audit for the 21-command/21-workflow baseline and validate which cases are exercised by reachable gates. The exact live ref inventory and candidate readback are now preserved; do not treat generation alone as assertion validation."
     },
     {
       "order": 20,
