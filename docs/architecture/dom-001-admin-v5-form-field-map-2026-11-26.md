@@ -6,7 +6,7 @@
 
 ## Ref identity
 
-Reviewed Product `main@ef9f073542c54ec44bf3c8808ab13d880222d329` and `development@e4228a99a6ba5abb7e57d0e94800849726ce76b0`. The current development head subsequently advanced for register-only documentation; the Admin form, schema, and tests did not change in those commits. Main and development Admin shells/controllers differ (`app/admin.html`, `app/admin/admin.js`); the V5 schema and core contracts listed below are shared.
+Source code was reviewed on Product `main@463327ce25687f29859a152a41f0915af51e9264` and `development@6e6bf126870af9ce1489ea4dafad3b9b3b4fcb5c`. Subsequent live readbacks were Product `main@ef9f073542c54ec44bf3c8808ab13d880222d329` and `development@ab518623bbfe59ef37a36a8bbc347ff9e03882c0`; intervening changes do not touch the Admin form, V5 schema, defaults, or tests. Main and development Admin shells/controllers differ (`app/admin.html`, `app/admin/admin.js`); the V5 schema and core contracts listed below are shared.
 
 ## Editable controls and persisted paths
 
