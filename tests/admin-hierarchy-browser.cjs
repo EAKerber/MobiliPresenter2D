@@ -273,7 +273,7 @@ async function sectionItemIds(page, stageId, groupId, sectionId) {
   assert.equal(await objectTabs.getAttribute("aria-label"), shellCopy.objectTablistLabel, "object tablist has its catalog accessible name");
   assert.deepEqual(await objectTabs.locator('[role="tab"]').evaluateAll((nodes) => nodes.map((node) => node.textContent.trim())), Object.values(shellCopy.objectTabs), "object tab labels match the catalog");
   assert.equal(await page.locator("#objectPrevious").textContent(), shellCopy.objectPager.previous, "object pager previous label is catalog-backed");
-  assert.equal((await page.locator(".object-pager label").textContent()).trim(), shellCopy.objectPager.label, "object selector label is catalog-backed");
+  assert.equal(await page.locator('[data-admin-shell-copy="objectPager.label"]').textContent(), shellCopy.objectPager.label, "object selector label is catalog-backed");
   assert.equal(await page.locator("#objectNext").textContent(), shellCopy.objectPager.next, "object pager next label is catalog-backed");
   await page.locator('[data-admin-tab="objects"]').click();
   await page.waitForSelector('[data-admin-panel="objects"]:not([hidden])');
