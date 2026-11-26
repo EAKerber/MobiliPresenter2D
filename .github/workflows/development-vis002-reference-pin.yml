@@ -86,6 +86,7 @@ jobs:
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
           fetch-depth: 0
       - uses: actions/checkout@v4
+        id: main-source
         with:
           ref: main
           path: snapshots/main
