@@ -1,18 +1,18 @@
 # CURRENT_STATE — MobiliPresenter2D
 
-## Current authority map — 2026-11-25
+## Current authority map — 2026-11-26
 
 This section is the current entry point. The dated material below is preserved as history and is not a live instruction or permission to repeat an operation.
 
 - **Architecture method and intended DoD:** the Design System repository's [Plano Diretor v0.9](https://github.com/EAKerber/MobiliPresenter2D_DesignSystem/blob/main/docs/architecture/MOBILIPRESENTER2D_PLANO_DIRETOR_CONSOLIDADO_v0.9.md), pinned at blob `59bb530b14172eb9772b9f89bb62272173f4381c`.
-- **Execution status for the 125 work items:** the Product [v0.9 execution register](https://github.com/EAKerber/MobiliPresenter2D/blob/development/docs/architecture/plan-v0.9-execution-register.json), last updated in Product development at commit `cc495684f8ace2c4d84443022d79ecd48a6ad47b`. Re-read its live blob before relying on a status.
-- **Design decisions:** Design System [`decisions.json`](https://github.com/EAKerber/MobiliPresenter2D_DesignSystem/blob/main/decisions.json), blob `63b60f8d87327c6fd1e80c8cdf4ff832c4089bfa`.
-- **Implementation authority:** exact Product code and consumers at the named remote ref. Product main is `01ded2c100fbfd8b16897e26113dc5068a83e429`; development is `cc495684f8ace2c4d84443022d79ecd48a6ad47b`. They are divergent; use the GIT-003 selective comparison and do not infer that a whole-tree merge is safe.
-- **Validation authority:** source-pinned crosswalks, exact Actions runs, and recorded local/hosted evidence in the register. A source read, local test, CI run, preview, and production deployment are distinct evidence.
-- **Production readback:** Netlify deploy `6b045acbbb56d5e17bde8f8a` is READY on Product `main` at the same SHA `01ded2c100fbfd8b16897e26113dc5068a83e429`.
-- **Access limits:** the connected GitHub API returned 403 for branch-protection details. Required checks/rulesets remain UNKNOWN and must be re-read if an operation depends on them.
+- **Execution status for the 125 work items:** the Product [v0.9 execution register](https://github.com/EAKerber/MobiliPresenter2D/blob/development/docs/architecture/plan-v0.9-execution-register.json), current at Product `development@3c84c658439eae10ce5f3a13ecc8a71fb613d7e5`, blob `2fd092846394dd1f08f9a5b0e962268f34956c45`. Re-read the live register before relying on any item status.
+- **Design decisions:** Design System [`decisions.json`](https://github.com/EAKerber/MobiliPresenter2D_DesignSystem/blob/main/decisions.json), current blob `63b60f8d87327c6fd1e80c8cdf4ff832c4089bfa`.
+- **Implementation authority:** exact Product source and consumers at the named remote ref. Product `main@94560aa9c4dfc2871a6eb1035b6ecaa283224453`; Product `development@3c84c658439eae10ce5f3a13ecc8a71fb613d7e5`. They remain divergent; use GIT-003 selective family classification, not a whole-tree merge.
+- **Validation authority:** source-pinned crosswalks, exact Actions runs, and recorded local/hosted evidence in the register. A source read, local test, CI run, preview, Production deployment, and approval are distinct evidence.
+- **Production readback:** Netlify deploy `6b083a82b6dff365f89fa2bf` is READY on Product `main` at the exact SHA `94560aa9c4dfc2871a6eb1035b6ecaa283224453`.
+- **Access limits:** the live branch endpoint reported Product `main` and `development` as unprotected. Ruleset-level enforcement was not separately confirmed; re-read before an operation that depends on it.
 
-The read-only GIT-001 snapshot is retained at [git-001-operational-snapshot-2026-11-25.json](docs/architecture/git/git-001-operational-snapshot-2026-11-25.json); it is a point-in-time receipt captured before later PR activity. Refresh live refs and PRs before any Git write.
+The read-only GIT-001 snapshot is retained at [git-001-operational-snapshot-2026-11-25.json](docs/architecture/git/git-001-operational-snapshot-2026-11-25.json); it is a point-in-time receipt from before later PR activity, not current state. Refresh live refs and PRs before any dependent Git operation.
 
 ## Historical checkpoints
 
