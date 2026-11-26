@@ -6,10 +6,13 @@ import {resolve} from "node:path";
 
 const root="design-system/pins/vis-002/context-v0.3.0/";
 const json=async file=>JSON.parse(await readFile(resolve(file),"utf8"));
-const blobSha=async path=>{
-  const data=await readFile(resolve(path));
+const blobText=text=>{
+  assert.doesNotMatch(text, /\r(?!\n)/, "Text pin contains a lone CR byte");
+  const canonical=text.replace(/\r\n/g, "\n");
+  const data=Buffer.from(canonical,"utf8");
   return createHash("sha1").update(Buffer.from("blob "+data.length+"\0")).update(data).digest("hex");
 };
+const blobSha=async path=>blobText((await readFile(resolve(path))).toString("utf8"));
 function luminance(hex){
   const s=hex.slice(1);const v=[0,2,4].map(i=>parseInt(s.slice(i,i+2),16)/255)
     .map(x=>x<=0.04045?x/12.92:((x+0.055)/1.055)**2.4);
@@ -21,7 +24,7 @@ function contrast(a,b){
 }
 test("Git blob hashing is stable for Windows CRLF checkouts",async()=>{
   const lf=await readFile(resolve(root+"PIN.json"),"utf8");
-  const crlf=lf.replace(/\\n/g,"\\r\\n");
+  const crlf=lf.replace(/\n/g,"\r\n");
   assert.equal(blobText(crlf),blobText(lf));
 });
 
