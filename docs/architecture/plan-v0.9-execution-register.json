@@ -2448,7 +2448,7 @@
       "planState": "in_progress",
       "reconciliation": "partial",
       "local": "unknown",
-      "development": "unknown",
+      "development": "partial",
       "main": "unknown",
       "technicalValidation": "partial",
       "approvalPublication": "unknown",
@@ -2457,9 +2457,14 @@
           "source": "Product PR #510 exact head 32e91a36a8b18a1007d5f913dda28be18066e077; Branch Hygiene Actions run 45871309555",
           "sha": "32e91a36a8b18a1007d5f913dda28be18066e077",
           "detail": "PR adds append-only annotated-tag reservation/intent/done/applied markers and exact authorization identities for bounded main batches, development series waves, and merged-PR cleanup. Same-SHA recreation is blocked after consumption; same-run partial recovery only reconciles an absent ref, while an ambiguous live ref fails closed. Full branch-hygiene suite (78 tests) and py_compile passed on this exact PR head. Not yet integrated into development or main. Tag ruleset protection remains unverified, so markers prevent operational replay but not deliberate deletion by an actor with tag-write access."
+        },
+        {
+          "source": "Product PR #510 squash integration and development readback",
+          "sha": "6fc4e507262277397b880d822d9fbf05a4e77b64",
+          "detail": "PR #510 merged by squash into Product development at this exact commit. Its head ran the full 78-test branch-hygiene suite and py_compile successfully (Actions run 45871476960); the post-merge development ref resolves to the same squash commit. The implementation now covers bounded main batches, development series waves, and merged-PR cleanup. No destructive production batch was run. Main has not received the change. GitHub returned an empty repository rulesets list, while the classic tag-protection endpoint is unavailable through the connected read interface; deliberate removal of consumption tags remains an unresolved protection limit."
         }
       ],
-      "nextAction": "Review and integrate the guarded executor into development, confirm whether GitHub can protect the consumption-tag namespace, then port it to main through a scoped PR and record exact live readback. Keep GIT-021 partial until integration and the tag-protection limit are resolved or formally accepted."
+      "nextAction": "Prepare a narrowly scoped main promotion containing the replay-guard code and tests only, after confirming its base-relative diff does not include unrelated development work. Preserve main as the release buffer; then verify the exact main readback and revisit whether consumption-tag deletion can be restricted."
     },
     {
       "order": 118,
