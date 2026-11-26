@@ -502,7 +502,7 @@
   },
   "summary": "At these exact refs, the eight active Product shells load ui-theme.css last; the VIS-002C export is runtime-loaded indirectly by landing.css on three public routes. Main has nine CSS paths, all runtime app assets; development has those same nine plus nine reference/fixture/historical CSS paths. Five app CSS files differ by final blob: admin, how-it-works, landing, styles, and ui-theme; four are byte-identical. Static build compiles three authored HTML pages and JS bundles, not CSS. The selector→consumer matrix and exact-head runtime/gate evidence are incomplete, so CSS-00 remains partial. A route-import scan then indexed 1,769 selector alternatives across nine runtime sheets against 61 route-reachable source paths, with 67 pinned HTML/JS files fetched; the categorization remains lexical, so CSS-00 stays partial.",
   "selectorCandidateScan": {
-    "readbackUTC": "2026-11-26T08:53:00Z",
+    "readbackUTC": "2026-11-26T08:54:17 UTCZ",
     "scannedRef": "eff75d93655cb2796f1823ab3b9789c0aa9c591c",
     "scannedTree": "ec3467b8cbd57b365762cfec28c74e9f980db58a",
     "developmentNow": "8f8726f6045df36705a306f159b42746aa7d3cb1",
@@ -853,7 +853,7 @@
       ]
     },
     "totalSelectorAlternatives": 1769,
-    "classificationMeaning": "Buckets describe lexical candidate matches, not a semantic owner proof or same-element/cascade proof. Dynamic/template, CSS-only, and no-literal-consumer categories remain explicit.",
+    "classificationMeaning": "Buckets describe lexical candidate matches, not a semantic owner proof or same-element/cascade proof. Dynamic/template, CSS-only, and no-literal-consumer categories remain explicit. State labels are source-condition candidates; their numeric counts do not prove a runtime state was rendered. Consumer counts can overlap by file.",
     "routeSourceCounts": {
       "/": 8,
       "/about/": 5,
@@ -892,7 +892,7 @@
             5
           ]
         ],
-        "states": [
+        "stateCandidates": [
           "light 4",
           "focus 3",
           "max-width 760/420"
@@ -933,7 +933,7 @@
             null
           ]
         ],
-        "states": [
+        "stateCandidates": [
           "light 48",
           "max-width 650",
           "focus/hover/disabled/active/has"
@@ -960,7 +960,7 @@
             10
           ]
         ],
-        "states": [
+        "stateCandidates": [
           "light 10",
           ":not() 6"
         ]
@@ -992,7 +992,7 @@
             12
           ]
         ],
-        "states": [
+        "stateCandidates": [
           "light 11",
           "dark 1",
           "max-width 900/680/420/290",
@@ -1046,7 +1046,7 @@
             3
           ]
         ],
-        "states": [
+        "stateCandidates": [
           "light 7",
           "dark 1",
           "reduced motion 10",
@@ -1099,7 +1099,7 @@
             1
           ]
         ],
-        "states": [
+        "stateCandidates": [
           "reduced motion 3",
           "dark 1",
           "focus 2"
@@ -1140,7 +1140,7 @@
             null
           ]
         ],
-        "states": [
+        "stateCandidates": [
           "width 700/520/500/430/360/300",
           "reduced motion 5",
           "focus 19",
@@ -1194,7 +1194,7 @@
             null
           ]
         ],
-        "states": [
+        "stateCandidates": [
           "light 51",
           "dark 70",
           "width 1150/760/650/480/400/380/320/290",
@@ -1236,7 +1236,7 @@
             22
           ]
         ],
-        "states": [
+        "stateCandidates": [
           "light 1",
           "dark 1",
           "width 980/700/480/350",
@@ -1257,6 +1257,7 @@
       ".carcass-note",
       ".carcass-swatch"
     ],
-    "inaccessible": "Authenticated Admin and token-gated Config states had no exact fixture in this scan; no browser/CSSOM runtime pass or exact-head CSS-00 receipt was found."
+    "inaccessible": "Authenticated Admin and token-gated Config states had no exact fixture in this scan; no browser/CSSOM runtime pass or exact-head CSS-00 receipt was found.",
+    "countMethod": "Ordinary CSS rule blocks exclude at-rules and keyframe blocks; selector alternatives are counted after comma-splitting. Route source counts include the shell and imported modules; shared files can be counted in multiple route closures."
   }
 }
