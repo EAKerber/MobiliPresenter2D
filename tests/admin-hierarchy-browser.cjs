@@ -267,7 +267,11 @@ async function sectionItemIds(page, stageId, groupId, sectionId) {
   assert.equal(await eventCard.locator("[data-remove-event]").textContent(), rulesCopy.removeEvent);
   const module07Trigger = await eventCard.locator('[data-event-trigger] option[value="module-07"]').textContent();
   assert.equal(await eventCard.locator('label:has([data-event-depth])').textContent(), rulesCopy.legacyDepthTargetLabel.replace("{target}", module07Trigger), "legacy target wording keeps its entity name data-backed");
-  assert.deepEqual(await eventCard.locator("[data-event-trigger] option").evaluateAll((options) => options.map((option) => option.value).filter((id) => id === "stone-skirting").length), 1, "service trigger options do not duplicate the catalog-backed stone-skirting item");
+  const triggerOptions = await eventCard.locator("[data-event-trigger] option").evaluateAll((options) => options.map((option) => [option.value, option.textContent]));
+  const triggerIds = triggerOptions.map(([id]) => id);
+  assert.equal(new Set(triggerIds).size, triggerIds.length, "event trigger options have unique IDs across scene entities and services");
+  assert.equal(triggerOptions.filter(([id]) => id === "stone-skirting").length, 1, "stone-skirting uses its catalog-backed service option once");
+  assert.deepEqual(triggerOptions.filter(([id]) => id === "tempered-glass").map(([, label]) => label), [scene.entities.find((entity) => entity.id === "tempered-glass").label], "scene entity label keeps precedence over a duplicate service entry");
   await eventCard.locator("[data-event-action]").selectOption("set-dimension");
   const dimensionEvent = page.locator("#eventsList [data-event-id]").first();
   assert.equal(await dimensionEvent.locator("h2").textContent(), rulesCopy.eventHeadings.dimension);

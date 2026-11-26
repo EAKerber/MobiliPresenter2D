@@ -1146,7 +1146,10 @@ function entityOptions() {
 }
 
 function eventTriggerOptions() {
-  return [...entityOptions(), ...catalog.services.map((item) => [item.id, item.title])];
+  const options = [...entityOptions(), ...catalog.services.map((item) => [item.id, item.title])];
+  const unique = new Map();
+  options.forEach(([id, label]) => { if (!unique.has(id)) unique.set(id, [id, label]); });
+  return [...unique.values()];
 }
 
 function renderDependencies() {
