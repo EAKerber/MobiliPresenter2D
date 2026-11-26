@@ -159,6 +159,24 @@ test("Buyer endpoint denies before storage and exposes only the projected DTO",a
   assert.equal(counts.previewOpens,3);
   assert.equal(counts.reads,3);
   assert.equal(counts.siteOpens,0);
+
+  actor={id:"admin-1",roles:["admin"]};
+  publishedEntry=null;
+  result=await invoke();
+  assert.equal(result.status,503,"missing published configuration fails closed");
+  assert.equal(result.body.error,"published_configuration_unavailable");
+  assert.equal(counts.previewOpens,4);
+  assert.equal(counts.reads,4,"missing configuration never falls back to defaults");
+  assert.equal(counts.siteOpens,0);
+
+  publishedEntry={data:JSON.stringify({...v5,presentationPolicy:null}),etag:'"invalid-v5"',metadata:{}};
+  result=await invoke();
+  assert.equal(result.status,503,"invalid published V5 configuration fails closed");
+  assert.equal(result.body.error,"published_configuration_invalid");
+  assert.equal(counts.previewOpens,5);
+  assert.equal(counts.reads,5,"invalid configuration never falls back to defaults");
+  assert.equal(counts.siteOpens,0);
+
  } finally {
   delete globalThis.__buyerConfigurationEndpointHarness;
  }
