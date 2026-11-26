@@ -951,7 +951,7 @@
           "detail": "Candidate: .visually-hidden, identically defined in app/styles.css and app/admin/admin.css. Exact runtime consumers are Config h1 and Admin brand text; neither is focusable. .sr-only is a separate Config-only rule used by the dynamic section heading and live region; keep it unchanged. ui-theme.css is already last-loaded in 8 shells and has no current definition. Existing gates cover theme imports and broad browser/build paths but no direct uniqueness/rendered-semantic contract for .visually-hidden. No implementation has been extracted."
         }
       ],
-      "nextAction": "Concluir MD-001/MD-008 e CSS-00 ownership/classification preconditions (AR2-01/02 são análises exigidas pelo plano, não IDs do backlog canônico de 125); então consolidar somente .visually-hidden em um owner global e adicionar assertion direta nos testes existentes. Preservar .sr-only e todos os nomes/marcação."
+      "nextAction": "Concluir MD-001/MD-008 e a matriz CSS-00/ownership; confirmar se o destino global é artefato derivado e como atualizar seu pin. Em seguida adicionar contrato direto de unicidade e teste renderizado, preservando .sr-only e seus consumidores."
     },
     {
       "order": 49,
