@@ -44,7 +44,8 @@ const sample = targets => targets.map(({selector, expectedBackground}) => {
       const masked = (css.maskImage && css.maskImage !== "none")
         || (css.webkitMaskImage && css.webkitMaskImage !== "none");
       const compositing = css.opacity !== "1" || css.filter !== "none"
-        || (css.backdropFilter || css.webkitBackdropFilter || "none") !== "none"
+        || (css.backdropFilter && css.backdropFilter !== "none")
+        || (css.webkitBackdropFilter && css.webkitBackdropFilter !== "none")
         || css.mixBlendMode !== "normal" || masked;
       if (compositing) return {error: "composited-ancestor"};
       if (resolved === null) {
