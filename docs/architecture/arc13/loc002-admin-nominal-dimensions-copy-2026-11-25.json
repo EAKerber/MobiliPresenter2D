@@ -1,0 +1,78 @@
+{
+  "schema": "ARC13LOC002FamilyReview/1",
+  "plan": "MobiliPresenter2D Plano Diretor v0.9",
+  "workItems": [
+    "LOC-002",
+    "LOC-006"
+  ],
+  "family": "admin-nominal-dimension-editor-copy",
+  "status": "candidate-implemented",
+  "supersedesReview": "docs/architecture/arc13/loc002-admin-nominal-dimensions-2026-11-23.json",
+  "evidence": {
+    "baseRevision": "a16adde74cc6af1fb9dfe1884a217f2f716f6472",
+    "implementationRevision": "bbae4bc9029e2b44eb863ad470635391af4cd5ca",
+    "implementationBranch": "codex/loc006-admin-copy-next-20261125",
+    "inventoryPath": "architecture/arc13/ui-text-candidates.json",
+    "inventorySha256": "7746C008EE291FDE2E7AE0B675B19FAF7C2C4ACD04347628E1E827B0EC88ED09",
+    "source": "app/admin/admin.js",
+    "sourceGitBlob": "afe43f20eb095f7b412ae03f288988782ca15cf9",
+    "sourceSha256": "2E8FDC26FB0E4EAF55C47E169AB82AD5C9AA680B1BF0C4648285E4E32B43F0E3",
+    "sharedCatalog": "app/core/ui-copy.js",
+    "sharedCatalogGitBlob": "a1ddc1f1a541cdce8d8808306e499819c671fbd8",
+    "sharedCatalogSha256": "17E0870B0BAD2C462BA8DB4141327D71EDF8658A38CF8C22C7A4C5AE07868785",
+    "generatedPrimaryPageManifest": "architecture/generated/primary-pages.manifest.json",
+    "generatedPrimaryPageManifestSha256": "99A6B21E64D6429FF6BCB8A84DEBD19BD8E4808880AC50EDB611ED2A281B3080",
+    "route": "/admin"
+  },
+  "decision": {
+    "rationale": "Preserve every existing pt-BR phrase and move only fixed Admin interface copy into its dedicated catalog family. Resolve the earlier hold by retaining the existing field wording exactly; module naming continues to come from product catalog data.",
+    "catalogKeys": [
+      "admin.nominalDimensions.legend",
+      "admin.nominalDimensions.note",
+      "admin.nominalDimensions.axisLabels.width",
+      "admin.nominalDimensions.axisLabels.height",
+      "admin.nominalDimensions.axisLabels.depth",
+      "admin.nominalDimensions.axisAriaLabel",
+      "admin.nominalDimensions.invalidValueMessage"
+    ],
+    "previousReviewBoundary": "The rule-event dimension selector is a separate consumer and retains its own copy family."
+  },
+  "state": {
+    "statePath": "model.moduleDimensions[moduleId][axis]",
+    "consumer": "Admin hierarchy editor nominal-dimension inputs",
+    "axisKeys": [
+      "width",
+      "height",
+      "depth"
+    ],
+    "numericConstraints": {
+      "min": 1,
+      "max": 5000,
+      "step": 0.1,
+      "maxDecimalPlaces": 1
+    },
+    "invalidBehavior": "Restore the current model value and show catalog-backed guidance; do not persist.",
+    "moduleNameSource": "Catalog module referenceLabel and title",
+    "geometryAndPublication": "No changes; nominal dimensions remain separate from scene geometry and continue through the existing buyer projection."
+  },
+  "validation": {
+    "passed": [
+      "npm run build",
+      "npm run pages:check",
+      "node tests/ui-theme-contract.cjs",
+      "node tests/admin-hierarchy-browser.cjs using installed Chrome via PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH",
+      "node app/tools/test-core.js",
+      "node app/tools/test-published-buyer-projection.js",
+      "ARC-13 inventory generated twice with identical SHA-256; 0 parse errors and 0 unresolved primary-page mappings",
+      "git diff --check"
+    ],
+    "pending": [
+      "Exact-head GitHub workflows and development integration."
+    ]
+  },
+  "limits": [
+    "No commercial or editorial module data was moved into the UI copy catalog.",
+    "No axis keys, numeric bounds, model writes, persistence, viewer projection, scene geometry, styling, or user-facing wording changed.",
+    "Candidate inventory entries remain globally unreviewed; this bounded receipt does not complete LOC-002 or LOC-006."
+  ]
+}

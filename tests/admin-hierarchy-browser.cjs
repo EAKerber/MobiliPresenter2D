@@ -147,7 +147,9 @@ async function sectionItemIds(page, stageId, groupId, sectionId) {
   const address = server.address();
   const baseUrl = "http://127.0.0.1:" + address.port;
 
-  browser = await chromium.launch({ headless: true });
+  const browserOptions = { headless: true };
+  if (process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH) browserOptions.executablePath = process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH;
+  browser = await chromium.launch(browserOptions);
   const defaultCurrent = structuredClone(current);
   const finishPolicyFixture = structuredClone(current);
   const globalFinish = finishPolicyFixture.finishes[0];
@@ -419,6 +421,43 @@ async function sectionItemIds(page, stageId, groupId, sectionId) {
   assert.match(await initialEntity.getAttribute("aria-label"), /visível inicialmente no configurador/, "module accessible text names configurator visibility");
   assert.match(await page.locator('[data-initial-viewer-entity="module-01"]').getAttribute("aria-label"), /visível inicialmente no viewer/, "viewer initial-state text names the public viewer policy");
   assert.match(await page.locator('[data-initial-service]').first().getAttribute("aria-label"), /ativo inicialmente/, "initial service state remains a separate active-by-default preference");
+  const nominalDimensionsCopy = await page.evaluate(() => window.CASA_UI_COPY.admin.nominalDimensions);
+  assert.deepEqual(nominalDimensionsCopy, {
+    legend: "Medidas nominais (mm)",
+    note: "Atualiza as cotas e vistas técnicas; não altera a geometria da cena.",
+    axisLabels: { width: "Largura", height: "Altura", depth: "Profundidade" },
+    axisAriaLabel: "{module}: {axis} nominal em milímetros",
+    invalidValueMessage: "Informe uma medida nominal entre 1 e 5.000 mm, com até uma casa decimal."
+  }, "nominal dimension controls use their dedicated fixed-copy family");
+  const nominalDimensions = page.locator('[data-module-dimension="module-01"]');
+  const module = catalog.modules.find((item) => item.entityId === "module-01");
+  const moduleName = `${module.referenceLabel} · ${module.title}`;
+  assert.equal(await nominalDimensions.count(), 3, "nominal dimensions preserve the width, height and depth axes");
+  assert.deepEqual(await nominalDimensions.evaluateAll((inputs) => inputs.map((input) => [
+    input.dataset.dimensionAxis, input.getAttribute("aria-label"), input.min, input.max, input.step
+  ])), [
+    ["width", `${moduleName}: ${nominalDimensionsCopy.axisLabels.width} nominal em milímetros`, "1", "5000", "0.1"],
+    ["height", `${moduleName}: ${nominalDimensionsCopy.axisLabels.height} nominal em milímetros`, "1", "5000", "0.1"],
+    ["depth", `${moduleName}: ${nominalDimensionsCopy.axisLabels.depth} nominal em milímetros`, "1", "5000", "0.1"]
+  ], "axis keys, accessible names, and numeric constraints remain stable and module names remain data-backed");
+  const nominalFieldset = nominalDimensions.first().locator("xpath=ancestor::fieldset");
+  assert.equal(await nominalFieldset.locator("legend").textContent(), nominalDimensionsCopy.legend, "nominal dimension legend comes from the copy catalog");
+  assert.equal(await nominalFieldset.locator(".module-nominal-dimensions__note").textContent(), nominalDimensionsCopy.note, "nominal dimension guidance comes from the copy catalog");
+  assert.deepEqual(await nominalFieldset.locator(".module-nominal-dimensions__field").evaluateAll((labels) => labels.map((label) => label.firstChild.textContent)),
+    Object.values(nominalDimensionsCopy.axisLabels), "visible axis labels come from the copy catalog");
+  const originalWidth = current.moduleDimensions["module-01"].width;
+  const nominalWidth = page.locator('[data-module-dimension="module-01"][data-dimension-axis="width"]');
+  await nominalWidth.fill("0");
+  await nominalWidth.dispatchEvent("change");
+  assert.equal(await nominalWidth.inputValue(), String(originalWidth), "invalid nominal dimensions restore the existing model value");
+  assert.equal(await page.locator("#saveMessage").textContent(), nominalDimensionsCopy.invalidValueMessage, "invalid nominal dimensions use catalog validation copy");
+  assert.equal(current.moduleDimensions["module-01"].width, originalWidth, "invalid nominal dimensions do not alter the persisted configuration fixture");
+  await nominalWidth.fill("800.5");
+  await nominalWidth.dispatchEvent("change");
+  assert.equal(await nominalWidth.inputValue(), "800.5", "valid fractional nominal dimensions remain accepted in the unsaved draft");
+  assert.equal(putCount, 0, "reviewing nominal dimension constraints performs no save");
+  await page.reload({ waitUntil: "networkidle" });
+  await page.waitForSelector('[data-hierarchy-stage="finishes"] [data-hierarchy-group="cabinet-finishes"]');
   assert.match(await stageAvailability.getAttribute("aria-label"), /^Ativar etapa /, "stage text describes whether the step is available");
   assert.equal((await stageAvailability.locator("xpath=..").textContent()).trim(),
     await stageAvailability.isChecked() ? "Ativa" : "Inativa", "stage status text follows its stored enabled state");
