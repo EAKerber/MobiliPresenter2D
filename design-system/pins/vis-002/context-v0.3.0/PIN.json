@@ -58,11 +58,11 @@
   "runtimeVerification": {
     "environment": "production",
     "siteUrl": "https://casaemmodulos.casa",
-    "deployId": "6b07bd0f17cb2fd1e0d65b34",
+    "deployId": "6b087a681f3c99dd67c32fb9",
     "deployState": "ready",
-    "deployedProductCommit": "5c6e652693bd30218e6915bf8cb160bde03ac719",
+    "deployedProductCommit": "9f422ffe2112c06efd296425adb84dcb607bb563",
     "observedAt": "2026-11-26",
-    "method": "anonymous public-page DOM/CSSOM readback in the ChatGPT in-app browser",
+    "method": "anonymous production DOM/CSSOM readback in an isolated Chromium context; deploy identity cross-checked with Netlify",
     "stylesheetImport": "https://casaemmodulos.casa/design-system/vis002c-long-copy-light-v0.3.0.css?v=vis002c-0.3.0",
     "tokenValue": "#292723",
     "computedColor": "rgb(41, 39, 35)",
@@ -71,53 +71,120 @@
       {
         "route": "/",
         "selector": ".hero-description",
-        "computedColor": "rgb(41, 39, 35)"
+        "computedColor": "rgb(41, 39, 35)",
+        "effectiveBackground": "rgb(240, 237, 232)"
       },
       {
         "route": "/how-it-works/",
         "selector": ".how-hero-note",
-        "computedColor": "rgb(41, 39, 35)"
+        "computedColor": "rgb(41, 39, 35)",
+        "effectiveBackground": "rgb(240, 237, 232)"
       },
       {
         "route": "/about/",
         "selector": ".about-scale p:not(.eyebrow)",
-        "computedColor": "rgb(41, 39, 35)"
+        "computedColor": "rgb(41, 39, 35)",
+        "effectiveBackground": "rgb(240, 237, 232)"
       },
       {
         "route": "/",
         "selector": ".story-section > p:not(.eyebrow)",
-        "computedColor": "rgb(41, 39, 35)"
+        "computedColor": "rgb(41, 39, 35)",
+        "effectiveBackground": "rgb(232, 227, 220)"
       },
       {
         "route": "/",
         "selector": ".feature-copy > p:not(.eyebrow):not(.feature-availability)",
-        "computedColor": "rgb(41, 39, 35)"
+        "computedColor": "rgb(41, 39, 35)",
+        "effectiveBackground": "rgb(240, 237, 232)"
       },
       {
         "route": "/about/",
         "selector": ".about-closing > p:not(.eyebrow):not(.about-closing__signature)",
-        "computedColor": "rgb(41, 39, 35)"
+        "computedColor": "rgb(41, 39, 35)",
+        "effectiveBackground": "rgb(240, 237, 232)"
       },
       {
         "route": "/about/",
         "selector": ".about-scale__stat > span",
-        "computedColor": "rgb(41, 39, 35)"
+        "computedColor": "rgb(41, 39, 35)",
+        "effectiveBackground": "rgb(240, 237, 232)"
       },
       {
         "route": "/how-it-works/",
         "selector": ".finish-copy > p:not(.eyebrow):not(.finish-signature)",
-        "computedColor": "rgb(41, 39, 35)"
+        "computedColor": "rgb(41, 39, 35)",
+        "effectiveBackground": "rgb(240, 237, 232)"
       },
       {
         "route": "/how-it-works/",
         "selector": ".commercial-clarity > p:not(.eyebrow)",
-        "computedColor": "rgb(41, 39, 35)"
+        "computedColor": "rgb(41, 39, 35)",
+        "effectiveBackground": "rgb(240, 237, 232)"
       },
       {
         "route": "/how-it-works/",
         "selector": ".launch-card .launch-copy > p",
-        "computedColor": "rgb(41, 39, 35)"
+        "computedColor": "rgb(41, 39, 35)",
+        "effectiveBackground": "rgb(240, 237, 232)"
       }
-    ]
+    ],
+    "backgroundResolution": "All ten contexts resolved to the mapped opaque background; no background image or filter was observed in their ancestor chains.",
+    "darkThemeControl": {
+      "theme": "dark",
+      "contexts": [
+        {
+          "route": "/",
+          "selector": ".hero-description",
+          "computedColor": "rgb(196, 188, 178)"
+        },
+        {
+          "route": "/how-it-works/",
+          "selector": ".how-hero-note",
+          "computedColor": "rgb(196, 188, 178)"
+        },
+        {
+          "route": "/about/",
+          "selector": ".about-scale p:not(.eyebrow)",
+          "computedColor": "rgb(196, 188, 178)"
+        },
+        {
+          "route": "/",
+          "selector": ".story-section > p:not(.eyebrow)",
+          "computedColor": "rgb(196, 188, 178)"
+        },
+        {
+          "route": "/",
+          "selector": ".feature-copy > p:not(.eyebrow):not(.feature-availability)",
+          "computedColor": "rgb(196, 188, 178)"
+        },
+        {
+          "route": "/about/",
+          "selector": ".about-closing > p:not(.eyebrow):not(.about-closing__signature)",
+          "computedColor": "rgb(196, 188, 178)"
+        },
+        {
+          "route": "/about/",
+          "selector": ".about-scale__stat > span",
+          "computedColor": "rgb(196, 188, 178)"
+        },
+        {
+          "route": "/how-it-works/",
+          "selector": ".finish-copy > p:not(.eyebrow):not(.finish-signature)",
+          "computedColor": "rgb(196, 188, 178)"
+        },
+        {
+          "route": "/how-it-works/",
+          "selector": ".commercial-clarity > p:not(.eyebrow)",
+          "computedColor": "rgb(196, 188, 178)"
+        },
+        {
+          "route": "/how-it-works/",
+          "selector": ".launch-card .launch-copy > p",
+          "computedColor": "rgb(196, 188, 178)"
+        }
+      ],
+      "note": "All ten mapped targets reverted to the existing dark-theme computed color; the candidate remains scoped to light theme."
+    }
   }
 }
