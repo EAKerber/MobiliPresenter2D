@@ -19,6 +19,12 @@ function contrast(a,b){
   const x=luminance(a),y=luminance(b);
   return (Math.max(x,y)+0.05)/(Math.min(x,y)+0.05);
 }
+test("Git blob hashing is stable for Windows CRLF checkouts",async()=>{
+  const lf=await readFile(resolve(root+"PIN.json"),"utf8");
+  const crlf=lf.replace(/\\n/g,"\\r\\n");
+  assert.equal(blobText(crlf),blobText(lf));
+});
+
 test("VIS-002 pin matches content-addressed decision, mapping, CSS, and manifest",async()=>{
   const [pin,mapping,manifest]=await Promise.all([
     json(root+"PIN.json"),json(root+"contextual-mapping.json"),json(root+"manifest.json")]);
