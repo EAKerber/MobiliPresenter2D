@@ -86,4 +86,52 @@ const brokenHierarchy = structuredClone(v5);
 brokenHierarchy.stages[0].groups[0].sections[0].itemIds = [];
 assert.throws(() => prepare(brokenHierarchy, runtime));
 
+const boundaryInput = structuredClone(v5);
+boundaryInput.revision = 97;
+const internalObjectId = Object.keys(boundaryInput.objects)[0];
+const internalAssetId = Object.keys(boundaryInput.objectAssets)[0];
+assert(internalObjectId && internalAssetId);
+boundaryInput.objects[internalObjectId].adminOnlyNotes = ["not for buyer"];
+boundaryInput.objectAssets[internalAssetId].privateStoragePath = "/internal/storage/key";
+const policyEntry = Object.entries(boundaryInput.presentationPolicy.stageViews)
+  .flatMap(([stageId, stagePolicy]) => (stagePolicy.views || []).map((view) => ({ stageId, view })))[0];
+assert(policyEntry, "fixture has an authored presentation view");
+policyEntry.view.adminOnlyNotes = ["internal"];
+if (policyEntry.view.relation) policyEntry.view.relation.adminOwnerId = "internal-owner";
+boundaryInput.presentationPolicy.scene.pip.adminOnlySettings = { audit: true };
+boundaryInput.presentationPolicy.shell.bottomDock.adminOnlySettings = { audit: true };
+
+const boundaryPrepared = prepare(boundaryInput, runtime);
+assert.deepEqual(boundaryPrepared.source.objects[internalObjectId].adminOnlyNotes, ["not for buyer"],
+  "the source fixture retains nested administrative fields before transport projection");
+assert.equal(boundaryPrepared.source.objectAssets[internalAssetId].privateStoragePath, "/internal/storage/key",
+  "the source fixture retains private asset metadata before transport projection");
+assert.equal(boundaryPrepared.flow.source.revision, 97,
+  "the internal normalized flow retains the administrative source revision");
+
+const safePayload = buyerProjection.project(boundaryInput, runtime);
+assert.equal(safePayload.flow.source.revision, null, "Buyer flow omits the internal source revision");
+assert.equal(Object.hasOwn(safePayload.displaySettings.objects[internalObjectId], "adminOnlyNotes"), false,
+  "Buyer object DTO filters unknown nested administration fields");
+assert.equal(Object.hasOwn(safePayload.displaySettings.objectAssets[internalAssetId], "privateStoragePath"), false,
+  "Buyer asset DTO filters private storage metadata");
+const safePolicyView = safePayload.presentationPolicy.stageViews[policyEntry.stageId].views
+  .find((view) => view.id === policyEntry.view.id);
+assert(safePolicyView);
+assert.equal(Object.hasOwn(safePolicyView, "adminOnlyNotes"), false,
+  "Buyer presentation view filters unknown nested administration fields");
+if (policyEntry.view.relation) {
+  assert.equal(Object.hasOwn(safePolicyView.relation, "adminOwnerId"), false,
+    "Buyer presentation relation filters unknown nested administration fields");
+}
+assert.equal(Object.hasOwn(safePayload.presentationPolicy.scene.pip, "adminOnlySettings"), false,
+  "Buyer PiP policy filters unknown nested administration fields");
+assert.equal(Object.hasOwn(safePayload.presentationPolicy.shell.bottomDock, "adminOnlySettings"), false,
+  "Buyer dock policy filters unknown nested administration fields");
+assert.equal(safePayload.displaySettings.objects[internalObjectId].title, boundaryInput.objects[internalObjectId].title,
+  "Buyer projection preserves the authored object title");
+assert.equal(safePayload.displaySettings.objectAssets[internalAssetId].imageAsset,
+  boundaryInput.objectAssets[internalAssetId].imageAsset,
+  "Buyer projection preserves the published asset reference");
+
 console.log("published buyer v3/v5 projection and allowlisted DTO contract: PASS");
