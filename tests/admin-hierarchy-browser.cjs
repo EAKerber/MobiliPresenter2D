@@ -624,6 +624,7 @@ async function sectionItemIds(page, stageId, groupId, sectionId) {
   const publicationToggle = page.locator('[data-viewer-base-price-publication]');
   const publicationReason = page.locator("#viewer-base-price-publication-note");
   const publicationCopy = await page.evaluate(() => window.CASA_UI_COPY.admin.pricing.viewerBasePricePublication);
+  const adminPublicationCopy = await page.evaluate(() => window.CASA_UI_COPY.admin.publication);
   assert.equal(await page.locator(".pricing-publication-card h2").textContent(), publicationCopy.title, "publication title comes from the shared copy catalog");
   assert.equal((await publicationToggle.locator("xpath=..").textContent()).trim(), publicationCopy.label, "publication checkbox name comes from the shared copy catalog");
   assert.equal(await publicationToggle.isDisabled(), true, "legacy configuration cannot enable V5 base-price publication");
@@ -657,6 +658,7 @@ async function sectionItemIds(page, stageId, groupId, sectionId) {
 
   await page.locator("#saveButton").click();
   await page.waitForFunction(() => document.getElementById("saveMessage").textContent.includes("futura publicação consolidada"));
+  assert.equal(await page.locator("#saveMessage").textContent(), adminPublicationCopy.pricePublicationBlocked, "legacy projection guard consumes the shared Admin publication copy");
   assert.equal(putCount, 0, "non-representable finish amount is blocked before any production PUT");
 
   await cocoaType.selectOption("percentage");
@@ -669,6 +671,7 @@ async function sectionItemIds(page, stageId, groupId, sectionId) {
   await cocoaPrice.press("Tab");
   await page.locator("#saveButton").click();
   await page.waitForFunction(() => document.getElementById("saveMessage").textContent.includes("Configuração compatível publicada"));
+  assert.equal(await page.locator("#saveMessage").textContent(), adminPublicationCopy.compatiblePublished, "compatible save success consumes the shared Admin publication copy");
   assert.equal(putCount, 1, "representable percentage pricing performs one v3-compatible PUT");
   assert.equal(lastPut.schemaVersion, "ConfiguratorAdministration2D 3.0", "admin still sends only v3 to the current production-compatible harness");
   assert.equal(lastPut.pricing.frontFinishRatesBps.cocoa, 1500, "restored percentage projects to exact basis points");
@@ -915,6 +918,7 @@ async function sectionItemIds(page, stageId, groupId, sectionId) {
   await page.locator('[data-stage-label="finishes"]').fill("Acabamentos teste");
   await page.locator("#saveButton").click();
   await page.waitForFunction(() => document.getElementById("saveMessage").textContent.includes("Configuração compatível publicada"));
+  assert.equal(await page.locator("#saveMessage").textContent(), adminPublicationCopy.compatiblePublished, "subsequent compatible save preserves the shared publication result copy");
   assert.equal(putCount, 1, "legacy-equivalent edit performs one production-compatible PUT");
   assert.equal(lastPut.schemaVersion, "ConfiguratorAdministration2D 3.0", "admin never sends v5 to the current production endpoint");
   assert.equal(lastPut.initialState.entities["module-01"], !initialModuleBeforeSave, "explicit save publishes configurator visibility independently from viewer visibility");
@@ -950,6 +954,21 @@ async function sectionItemIds(page, stageId, groupId, sectionId) {
   await page.waitForSelector('[data-hierarchy-stage="finishes"]');
   await page.locator('[data-admin-tab="stages"]').click();
   await page.waitForSelector('[data-admin-panel="stages"]:not([hidden])');
+
+  current = configuration.createDefaultAdministration(defaults, catalog, priceBook, scene);
+  const legacyFinishes = current.stages.find((stage) => stage.id === "finishes");
+  assert.ok(legacyFinishes, "v3 fixture includes the published Acabamentos stage");
+  legacyFinishes.items = legacyFinishes.items.filter((itemId) => itemId !== "handles-all");
+  putCount = 0;
+  lastPut = null;
+  await page.reload({ waitUntil: "networkidle" });
+  await page.waitForFunction(() => !document.getElementById("persistHandlesButton").hidden);
+  await page.locator("#persistHandlesButton").click();
+  await page.waitForFunction(() => document.getElementById("saveMessage").textContent.includes("v3 publicado"));
+  assert.equal(await page.locator("#saveMessage").textContent(), adminPublicationCopy.handlesPersisted, "isolated handle persistence consumes the shared publication copy");
+  assert.equal(putCount, 1, "isolated handle persistence performs exactly one v3 write");
+  assert.equal(lastPut.schemaVersion, "ConfiguratorAdministration2D 3.0", "isolated handle persistence preserves the v3 publication contract");
+  assert.ok(lastPut.stages.find((stage) => stage.id === "finishes").items.includes("handles-all"), "isolated handle persistence adds the item to Acabamentos");
 
   await page.screenshot({ path: path.join(reviewDir, "admin-hierarchy.png"), fullPage: true });
   fs.writeFileSync(path.join(reviewDir, "result.json"), JSON.stringify({

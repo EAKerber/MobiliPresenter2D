@@ -1,0 +1,102 @@
+{
+  "schema": "ARC13LOC002FamilyReview/1",
+  "plan": "MobiliPresenter2D Plano Diretor v0.9",
+  "workItems": [
+    "LOC-002",
+    "LOC-006"
+  ],
+  "family": "admin-configuration-publication-and-isolated-handle-persistence-copy",
+  "status": "development-candidate",
+  "evidence": {
+    "baseRevision": "ea66294bae4190ac09d8793b615cf00338d0795a",
+    "route": "/admin",
+    "inventoryPath": "architecture/arc13/ui-text-candidates.json",
+    "inventoryBaseBlob": "2d58fb9860a112b46fcd96bf378cc754babeb664",
+    "inventoryBaseSha256": "B3DE237A6DE5DFC151C94786EE861B792038627E0D074C0B77932C3233DC934E",
+    "reviewedCandidateSinkIds": [
+      "980f7f47f28ecc4b",
+      "635cb24ed55d476f",
+      "c74fb7c84b5400f9",
+      "0690cc8c267662b0",
+      "63a1fae61d45985d",
+      "cfb8cf48ef8eaa95",
+      "ea2ca5f7f51d330a",
+      "f55111c9ee1e00f4",
+      "dc3c21da1446f8a4",
+      "8ca426295f727d35",
+      "53c93c9c1b0e568f",
+      "c7435988dce9d370",
+      "f9b7b622ec6d9ab0",
+      "b36677fa4dfe1d62",
+      "447a0c2531d7a66a",
+      "085d6338f31a588a",
+      "6140bc610d40e7b1"
+    ],
+    "source": {
+      "path": "app/admin/admin.js",
+      "gitBlob": "9387cefd60ea7ff54e70650c17c0182049d94408",
+      "sha256": "41ACD2B6A67CF88656F768EC1676AE20FD9166565B9F3C6EB344511D3EDB572F"
+    },
+    "sharedCatalog": {
+      "path": "app/core/ui-copy.js",
+      "prefix": "admin.publication",
+      "gitBlob": "ad5ddf09cfa903d6ac3d9bf11454aa88e9009354",
+      "sha256": "F475A77436BE290C4FD215E440A5127603E013B029038E5C6D3EADAE9DDD84AD"
+    },
+    "browserContract": {
+      "path": "tests/admin-hierarchy-browser.cjs",
+      "gitBlob": "9ffdcc92f3d34e59211985c210503fec19cb0653",
+      "sha256": "6FB1D047C479552B14C69032A5740476BD9B5127907CC1491285D6C569340D20",
+      "covers": [
+        "compatible publication and blocked price projection read the catalog copy",
+        "isolated v3 Puxadores persistence reads the catalog success copy and preserves the v3 write"
+      ]
+    },
+    "generatedPrimaryPageManifest": {
+      "path": "architecture/generated/primary-pages.manifest.json",
+      "gitBlob": "8d430697b526e7670b2d75e6c353b210a2165602",
+      "sha256": "6C1003B52626BA74A19498707B00CDB706F96F7DB08ABABADA5A893E6FE340E9"
+    },
+    "generatedInventory": {
+      "path": "architecture/arc13/ui-text-candidates.json",
+      "gitBlob": "6fbe50c47b991cb6e63aebcac55235a193c48415",
+      "sha256": "305B1117F54E7DBE3844BAF036B8A63AF34F940ED8739A3D82D87A7B9675AFE6",
+      "repeatedGeneration": "two consecutive full scans produced the same SHA-256",
+      "summary": {
+        "unreviewedOccurrences": 1021,
+        "javascriptParseErrors": 0,
+        "primaryPageAuthoringMappedOccurrences": 420,
+        "primaryPageAuthoringUnresolvedOccurrences": 0
+      }
+    }
+  },
+  "state": {
+    "consumer": "Admin configuration publication and isolated Puxadores persistence feedback",
+    "meaning": "Moves fixed Portuguese confirmation, progress, guard, error-fallback, and success copy for v3 handle persistence, legacy-compatible projection, and authenticated v5 publication into the shared Admin catalog without changing wording.",
+    "preservedContracts": [
+      "Provider-owned error.message and API payload messages remain pass-through and outside the catalog.",
+      "Dynamic validation errors, product/configuration data, IDs, schema codes, and server responses remain data-backed.",
+      "Netlify Identity, authorization, endpoint requests, schema selection, persistence, revision checks, and readback behavior are unchanged.",
+      "The admin browser harness retains its authorization and write mocks; it does not establish hosted authentication or Blob behavior."
+    ]
+  },
+  "validation": {
+    "passedLocally": [
+      "npm run build",
+      "npm run pages:check",
+      "node tests/ui-theme-contract.cjs",
+      "node --test tests/arc03c-source-authority.test.mjs: 3 passed",
+      "Full ARC-13 inventory generated twice with identical SHA-256"
+    ],
+    "notRunLocally": [
+      "tests/admin-hierarchy-browser.cjs: Playwright is not installed in the isolated checkout"
+    ],
+    "requiredExactHeadGate": ".github/workflows/admin-hierarchy-browser.yml installs Playwright and runs the hierarchy browser, isolated-handle persistence browser, and native v5 save browser; pending on the PR head.",
+    "productionOrPreview": "Not claimed; this candidate does not validate a hosted preview or authenticated Netlify services."
+  },
+  "limits": [
+    "The 1,021-candidate ARC-13 inventory remains globally unreviewed; this receipt makes a decision only for the named 17 Admin sink sites.",
+    "LOC-006 remains partial for other Admin and Configurator families.",
+    "Main and Design System are unchanged."
+  ]
+}
