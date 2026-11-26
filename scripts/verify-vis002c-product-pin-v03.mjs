@@ -2,8 +2,17 @@
 import assert from "node:assert/strict";
 import {createHash} from "node:crypto";
 import {readFile} from "node:fs/promises";
+import {execFileSync} from "node:child_process";
+import {resolve} from "node:path";
 const read=path=>readFile(new URL("../"+path,import.meta.url),"utf8");
-const gitBlob=text=>createHash("sha1").update("blob "+Buffer.byteLength(text,"utf8")+"\0").update(text,"utf8").digest("hex");
+const canonicalText=text=>{
+  assert.doesNotMatch(text, /\r(?!\n)/, "Text pin contains a lone CR byte");
+  return text.replace(/\r\n/g, "\n");
+};
+const gitBlob=text=>{
+  const canonical=canonicalText(text);
+  return createHash("sha1").update("blob "+Buffer.byteLength(canonical,"utf8")+"\0").update(canonical,"utf8").digest("hex");
+};
 const pin=JSON.parse(await read("design-system/pins/vis-002/context-v0.3.0/PIN.json"));
 const css=await read(pin.artifact.path);
 const mapText=await read(pin.mapping.path);
@@ -13,6 +22,28 @@ assert.equal(pin.schema,"M2DProductContextualTextPin/0.3");
 assert.equal(pin.status,"SCOPED_INTEGRATION_CANDIDATE_NOT_RELEASED");
 assert.equal(pin.designSystem.repository,"EAKerber/MobiliPresenter2D_DesignSystem");
 assert.equal(pin.designSystem.sourceCommit,"2f11ecf8948c779706a0ce0795e088d29633fb7e");
+const dsSourceRoot=process.env.VIS002C_DS_SOURCE_ROOT;
+if(dsSourceRoot){
+ const checkedOutCommit=execFileSync("git",["-C",resolve(dsSourceRoot),"rev-parse","HEAD"],{encoding:"utf8"}).trim();
+ assert.equal(checkedOutCommit,pin.designSystem.sourceCommit,"Design System checkout must match the commit pinned by Product");
+ const sourceFiles=[
+  ["decisions.json",null,pin.designSystem.decisionGitBlob],
+  [pin.designSystem.artifactSource,pin.artifact.path,pin.designSystem.artifactGitBlob],
+  [pin.designSystem.mappingDocument,pin.mapping.path,pin.designSystem.mappingGitBlob],
+  [pin.designSystem.manifestSource,pin.manifest.path,pin.designSystem.manifestGitBlob]
+ ];
+ for(const [sourcePath,productPath,expectedBlob] of sourceFiles){
+  const source=await readFile(resolve(dsSourceRoot,sourcePath),"utf8");
+  assert.equal(gitBlob(source),expectedBlob,"Design System source blob changed: "+sourcePath);
+  if(productPath){
+   const productCopy=await read(productPath);
+   assert.equal(gitBlob(productCopy),expectedBlob,"Product copy differs from pinned Design System source: "+productPath);
+  }
+ }
+ console.log("VIS002C_DS_SOURCE_PIN_PASS commit="+checkedOutCommit);
+}else{
+ console.log("VIS002C_DS_SOURCE_PIN_SKIPPED set VIS002C_DS_SOURCE_ROOT for cross-repository source verification");
+}
 assert.equal(pin.designSystem.decisionGitBlob,"63b60f8d87327c6fd1e80c8cdf4ff832c4089bfa");
 assert.equal(gitBlob(css),pin.artifact.gitBlob);
 assert.equal(gitBlob(mapText),pin.mapping.gitBlob);
