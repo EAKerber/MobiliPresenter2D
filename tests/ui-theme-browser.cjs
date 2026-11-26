@@ -34,6 +34,12 @@ async function measureGlobalFocus(page, expectedColor, message) {
   });
   await page.evaluate(() => document.activeElement && document.activeElement.blur());
   await page.keyboard.press("Tab");
+  await page.waitForFunction((expectedColor) => {
+    const link = document.activeElement;
+    const style = getComputedStyle(link);
+    return link.matches(":focus-visible") && style.outlineColor === expectedColor &&
+      style.outlineWidth === "3px" && style.outlineOffset === "3px";
+  }, expectedColor, { timeout: 1000 });
   const measured = await probe.evaluate((link) => {
     const style = getComputedStyle(link);
     return { focused: document.activeElement === link, focusVisible: link.matches(":focus-visible"), color: style.outlineColor, width: style.outlineWidth, offset: style.outlineOffset };
