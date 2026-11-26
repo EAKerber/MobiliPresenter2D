@@ -66,17 +66,83 @@
     "moduleDimensions", "finishes", "materials", "handleProducts", "materialGroups"
   ]);
 
+  // The published V5 document is not the buyer transport schema. Construct
+  // allowlisted nested records instead of copying arbitrary administrative
+  // fields; preserve authored IDs, materials, geometry, labels and choices.
+  const pick = (value, keys) => Object.fromEntries(keys
+    .filter((key) => Object.hasOwn(value, key))
+    .map((key) => [key, structuredClone(value[key])]));
+
+  function pickRecords(records, keys) {
+    return Object.fromEntries(Object.entries(records).map(([id, value]) => [id, pick(value, keys)]));
+  }
+
+  function pickItems(items, keys) {
+    return items.map((value) => pick(value, keys));
+  }
+
+  function buyerPolicy(policy) {
+    return {
+      schemaVersion: policy.schemaVersion,
+      stageViews: Object.fromEntries(Object.entries(policy.stageViews).map(([id, stage]) => [
+        id, { views: stage.views.map((view) => ({
+          ...pick(view, ["id", "sourceSectionId", "component", "role"]),
+          ...(view.relation ? { relation: pick(view.relation, ["kind", "of"]) } : {}),
+          ...(view.projectionByProfile
+            ? { projectionByProfile: structuredClone(view.projectionByProfile) }
+            : {})
+        })) }
+      ])),
+      scene: {
+        pip: {
+          availableProfiles: [...policy.scene.pip.availableProfiles],
+          activationByProfile: structuredClone(policy.scene.pip.activationByProfile)
+        }
+      },
+      shell: {
+        bottomDock: pick(policy.shell.bottomDock, ["enabled", "slots"])
+      }
+    };
+  }
+
+  function buyerDisplaySettings(value) {
+    return {
+      stages: pickItems(value.stages, ["id", "kind", "label", "enabled", "items"]),
+      dependencies: pickItems(value.dependencies, ["id", "dependentId", "requires"]),
+      events: pickItems(value.events, ["id", "triggerId", "when", "action", "targetId", "enabled", "valueMm"]),
+      objectAssets: pickRecords(value.objectAssets, ["imageAsset", "detailImageAsset", "maskAsset"]),
+      objects: pickRecords(value.objects, ["title", "description", "benefits", "components", "requirements"]),
+      initialState: pick(value.initialState, [
+        "entities", "viewerEntities", "services", "finishId", "handleId", "stonePackageId"
+      ]),
+      ...(value.moduleDimensions != null ? {
+        moduleDimensions: pickRecords(value.moduleDimensions, ["width", "height", "depth"])
+      } : {}),
+      finishes: pickItems(value.finishes, ["id", "enabled", "scope", "moduleIds"]),
+      materials: pickItems(value.materials, [
+        "id", "label", "kind", "color", "textureAsset", "textureSize", "groupIds"
+      ]),
+      handleProducts: pickItems(value.handleProducts, [
+        "id", "label", "description", "priceEntryId", "materialIds"
+      ]),
+      materialGroups: pickItems(value.materialGroups, [
+        "id", "label", "materialIds", "mode", "scope", "moduleIds", "linkedItemIds"
+      ])
+    };
+  }
+
   function project(value, dependencies) {
     const prepared = prepare(value, dependencies);
-    const displaySettings = Object.fromEntries(BUYER_SETTING_FIELDS
-      .filter((key) => Object.hasOwn(prepared.displaySettings, key))
-      .map((key) => [key, structuredClone(prepared.displaySettings[key])]));
+    const flow = structuredClone(prepared.flow);
+    // The normalized flow keeps source revision for internal comparisons; the
+    // wire DTO must not expose this administrative storage counter.
+    flow.source.revision = null;
     return {
       schemaVersion: BUYER_SCHEMA,
-      displaySettings,
-      flow: structuredClone(prepared.flow),
+      displaySettings: buyerDisplaySettings(prepared.displaySettings),
+      flow,
       pricingRules: structuredClone(prepared.pricingRules),
-      presentationPolicy: structuredClone(prepared.presentationPolicy)
+      presentationPolicy: buyerPolicy(prepared.presentationPolicy)
     };
   }
 
