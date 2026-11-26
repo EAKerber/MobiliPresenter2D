@@ -20,6 +20,9 @@ from branch_hygiene_plan import build_plan, load_json
 from branch_hygiene_apply import (AUTH_ENV, remote_refs, verify_squash_merge,
     verify_no_workflow_dependency, verify_control_workflow_dependencies,
     verify_no_rulesets, delete_exact_ref)
+from branch_hygiene_consumption import (
+    reserve_operation, pin_marker, write_pin_marker, mark_applied,
+)
 
 
 def merged_head_identity(event: dict[str, Any], repository: str) -> dict[str, Any]:
@@ -85,7 +88,33 @@ def cleanup(event_path: Path, receipt_path: Path) -> dict[str, Any]:
     if subprocess.run(["git","merge-base","--is-ancestor",identity["mergeSha"],
                        observed["controlSha"]], check=False).returncode != 0:
         raise RuntimeError("MERGE_COMMIT_NOT_ON_CONTROL")
+    operation_identity = {
+        "pullRequest": identity["number"], "mergeSha": identity["mergeSha"],
+        "controlBranch": control, "branch": branch, "headSha": sha,
+    }
+    run_id = os.environ.get("GITHUB_RUN_ID")
+    key, applied_marker = reserve_operation(
+        repository, "merged-pr-cleanup", operation_identity, run_id or "", trusted
+    )
+    pin = {"branch": branch, "sha": sha}
+    if applied_marker is not None:
+        if branch in inventory:
+            return finish("PRESERVED", "CONSUMED_HEAD_RECREATED", len(inventory))
+        receipt["readback"] = "PASS"
+        return finish("ALREADY_ABSENT", remaining=len(inventory))
     if branch not in inventory:
+        intent = pin_marker(key, "intent", pin)
+        done = pin_marker(key, "done", pin)
+        if intent is not None and done is None:
+            write_pin_marker(
+                key, "done", repository, "merged-pr-cleanup", operation_identity,
+                run_id or "", trusted, pin,
+            )
+        if remote_refs() != inventory:
+            raise RuntimeError("CONCURRENT_INVENTORY_DRIFT")
+        mark_applied(
+            key, repository, "merged-pr-cleanup", operation_identity, run_id or "", trusted
+        )
         receipt["readback"] = "PASS"
         return finish("ALREADY_ABSENT", remaining=len(inventory))
     if inventory[branch] != sha:
@@ -122,7 +151,24 @@ def cleanup(event_path: Path, receipt_path: Path) -> dict[str, Any]:
     verify_no_workflow_dependency(branch)
     verify_control_workflow_dependencies(branch,fresh_inventory)
     verify_squash_merge(repository,token,entry,fresh["controlSha"],control)
+    if pin_marker(key, "done", pin) is not None:
+        return finish("PRESERVED", "CONSUMED_HEAD_RECREATED", len(fresh_inventory))
+    if pin_marker(key, "intent", pin) is not None:
+        return finish("PRESERVED", "INTENT_HEAD_PRESENT_AMBIGUOUS", len(fresh_inventory))
+    write_pin_marker(
+        key, "intent", repository, "merged-pr-cleanup", operation_identity,
+        run_id or "", trusted, pin,
+    )
     expected = delete_exact_ref(branch,sha,fresh_inventory)
+    write_pin_marker(
+        key, "done", repository, "merged-pr-cleanup", operation_identity,
+        run_id or "", trusted, pin,
+    )
+    if remote_refs() != expected:
+        raise RuntimeError("FINAL_INVENTORY_DRIFT")
+    mark_applied(
+        key, repository, "merged-pr-cleanup", operation_identity, run_id or "", trusted
+    )
     receipt.update(deleted=True,readback="PASS")
     return finish("DELETED",remaining=len(expected))
 
