@@ -1,0 +1,10 @@
+{
+  "schema": "M2DOpsNotes/0.1",
+  "authority": "agent_assertion_not_verified",
+  "nodes": [{"id":"artifact:public-projection", "kind":"implementation", "reference":"SYNTHETIC: commit/path"}],
+  "edges": [{"from":"DOM-010", "to":"DOM-004", "type":"requires", "reason":"SYNTHETIC: publication precedes price authorization", "evidence":["SYNTHETIC: plan section"]}, {"from":"DOM-010", "to":"artifact:public-projection", "type":"consumes", "reason":"SYNTHETIC: projection consumer", "evidence":["SYNTHETIC: code location"]}],
+  "bites": [{"id":"B-example", "members":["objective:DOM-010"], "intent":"SYNTHETIC: restrict DTO", "acceptance":"SYNTHETIC: reject extra fields", "validation":["SYNTHETIC: contract test"], "rollback":"SYNTHETIC: revert isolated package", "destination":"development"}],
+  "receipts": [],
+  "dispositions": [],
+  "hygieneReceipts": []
+}
