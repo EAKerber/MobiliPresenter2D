@@ -960,8 +960,8 @@ function renderPager(container, index, pages, onPage) {
 
 function materialTargetOptions() {
   return [
-    ["fronts-all", "Frentes"], ["stone-all", "Pedra e rodapé"],
-    ...model.handleProducts.map((item) => [`handle:${item.id}`, `Puxador · ${item.label}`])
+    ["fronts-all", materialAvailabilityCopy.frontTarget], ["stone-all", materialAvailabilityCopy.stoneTarget],
+    ...model.handleProducts.map((item) => [`handle:${item.id}`, `${materialAvailabilityCopy.handleTargetPrefix} · ${item.label}`])
   ];
 }
 
@@ -973,7 +973,7 @@ function setMaterialTarget(materialId, targetId, enabled) {
     return;
   }
   const group = model.materialGroups.find((item) => item.id === targetId); if (!group) return;
-  if (!enabled && group.materialIds.length === 1) return setMessage(saveMessage, "Mantenha pelo menos um material nesta opção.", "error");
+  if (!enabled && group.materialIds.length === 1) return setMessage(saveMessage, materialAvailabilityCopy.lastMaterialValidation, "error");
   group.materialIds = enabled ? [...new Set([...group.materialIds, materialId])] : group.materialIds.filter((id) => id !== materialId);
   material.groupIds = model.materialGroups.filter((item) => ["fronts-all", "stone-all"].includes(item.id) && item.materialIds.includes(materialId)).map((item) => item.id);
   if (targetId === "fronts-all") {
@@ -1009,7 +1009,7 @@ function renderMaterials() {
     const card = document.createElement("article"); card.className = "editor-card material-editor-card"; card.dataset.materialId = material.id;
     const chip = document.createElement("span"); chip.className = "material-chip"; chip.style.backgroundColor = material.color || "transparent"; if (material.textureAsset) chip.style.backgroundImage = `url("${material.textureAsset}")`;
     const title = document.createElement("h2"); title.textContent = material.label;
-    card.append(chip, title, makeField("Nome", material.label, "materialLabel"));
+    card.append(chip, title, makeField(materialAvailabilityCopy.name, material.label, "materialLabel"));
     const colorLabel = document.createElement("label"); colorLabel.className = "data-field"; colorLabel.append(document.createTextNode(materialAvailabilityCopy.baseColor));
     const color = document.createElement("input"); color.type = "color"; color.value = material.color || "#b7b0a7"; color.disabled = material.color === null; color.dataset.materialColor = "true"; colorLabel.append(color); card.append(colorLabel);
     if (color.disabled) {
@@ -1020,23 +1020,23 @@ function renderMaterials() {
     const noColorLabel = document.createElement("label"); noColorLabel.className = "data-field";
     const noColor = document.createElement("input"); noColor.type = "checkbox"; noColor.checked = material.color === null; noColor.disabled = material.kind !== "texture"; noColor.dataset.materialNoColor = "true";
     noColorLabel.append(noColor, document.createTextNode(` ${materialAvailabilityCopy.noColor}`)); card.append(noColorLabel);
-    const kindLabel = document.createElement("label"); kindLabel.className = "data-field"; kindLabel.append(document.createTextNode("Tipo de material"));
+    const kindLabel = document.createElement("label"); kindLabel.className = "data-field"; kindLabel.append(document.createTextNode(materialAvailabilityCopy.kindLabel));
     const kind = document.createElement("select"); kind.dataset.materialKind = "true";
-    [["color", "Cor sólida"], ["texture", "Textura"]].forEach(([value, text]) => { const option = document.createElement("option"); option.value = value; option.textContent = text; kind.append(option); });
+    [["color", materialAvailabilityCopy.kindOptions.solidColor], ["texture", materialAvailabilityCopy.kindOptions.texture]].forEach(([value, text]) => { const option = document.createElement("option"); option.value = value; option.textContent = text; kind.append(option); });
     kind.value = material.kind; kindLabel.append(kind); card.append(kindLabel);
     if (noColor.disabled) {
       const noColorReason = document.createElement("p"); noColorReason.className = "admin-note"; noColorReason.id = `material-no-color-disabled-reason-${material.id}`;
       noColorReason.textContent = materialAvailabilityCopy.noColorDisabledReason;
       noColor.setAttribute("aria-describedby", noColorReason.id); card.append(noColorReason);
     }
-    const assetLabel = document.createElement("label"); assetLabel.className = "data-field"; assetLabel.append(document.createTextNode("Textura (arquivo existente)"));
+    const assetLabel = document.createElement("label"); assetLabel.className = "data-field"; assetLabel.append(document.createTextNode(materialAvailabilityCopy.textureAssetLabel));
     const assetSelect = document.createElement("select"); assetSelect.dataset.materialTexture = "true";
-    const noTexture = document.createElement("option"); noTexture.value = ""; noTexture.textContent = "Somente cor"; assetSelect.append(noTexture);
+    const noTexture = document.createElement("option"); noTexture.value = ""; noTexture.textContent = materialAvailabilityCopy.onlyColor; assetSelect.append(noTexture);
     materialAssetChoices().forEach((path) => { const option = document.createElement("option"); option.value = path; option.textContent = path; assetSelect.append(option); });
     assetSelect.value = material.textureAsset || ""; assetLabel.append(assetSelect); card.append(assetLabel);
-    if (material.textureAsset) { const thumb = document.createElement("img"); thumb.className = "material-texture-preview"; thumb.src = material.textureAsset; thumb.alt = `Textura ${material.label}`; thumb.loading = "lazy"; card.append(thumb); }
+    if (material.textureAsset) { const thumb = document.createElement("img"); thumb.className = "material-texture-preview"; thumb.src = material.textureAsset; thumb.alt = materialAvailabilityCopy.texturePreviewAlt.replace("{material}", () => material.label); thumb.loading = "lazy"; card.append(thumb); }
     const targetSelect = document.createElement("details"); targetSelect.className = "material-targets";
-    const summary = document.createElement("summary"); summary.textContent = "Válido para…"; targetSelect.append(summary);
+    const summary = document.createElement("summary"); summary.textContent = materialAvailabilityCopy.validForSummary; targetSelect.append(summary);
     const targetList = document.createElement("div"); targetList.className = "material-targets__list";
     materialTargetOptions().forEach(([id, label]) => {
       const selected = id.startsWith("handle:")
@@ -1046,7 +1046,7 @@ function renderMaterials() {
       optionLabel.append(input, document.createTextNode(label)); targetList.append(optionLabel);
     });
     targetSelect.append(targetList); card.append(targetSelect);
-    const remove = document.createElement("button"); remove.type = "button"; remove.className = "button button--secondary rule-remove"; remove.textContent = "Remover material"; remove.dataset.removeMaterial = material.id;
+    const remove = document.createElement("button"); remove.type = "button"; remove.className = "button button--secondary rule-remove"; remove.textContent = materialAvailabilityCopy.removeMaterial; remove.dataset.removeMaterial = material.id;
     remove.disabled = (material.locked && ["base-light", "stone-existing", "none"].includes(material.id)) || material.groupIds.some((id) => model.materialGroups.find((group) => group.id === id)?.materialIds.length <= 1);
     card.append(remove); materialsList.append(card);
   });
@@ -1062,27 +1062,27 @@ function renderMaterialGroups() {
   selectedMaterialTarget = targetId;
   const card = document.createElement("article"); card.className = "editor-card material-target-page";
   if (!targetId.startsWith("handle:")) card.dataset.materialGroupId = targetId;
-  const heading = document.createElement("h2"); heading.textContent = `${title} · opções válidas`; card.append(heading);
+  const heading = document.createElement("h2"); heading.textContent = `${title} · ${materialAvailabilityCopy.validOptionsSuffix}`; card.append(heading);
   if (targetId.startsWith("handle:")) {
     const product = model.handleProducts.find((item) => item.id === targetId.slice(7));
     const handles = model.materialGroups.find((item) => item.id === "handles-all");
     const available = document.createElement("label"); available.className = "switch material-availability";
     const toggle = document.createElement("input"); toggle.type = "checkbox"; toggle.checked = handles.materialIds.includes(product.id); toggle.dataset.handleAvailability = product.id;
-    available.append(toggle, document.createTextNode("Disponível para clientes")); card.append(available);
-    const note = document.createElement("p"); note.className = "admin-note"; note.textContent = "Definir depois não é um puxador e não recebe materiais."; card.append(note);
-    appendMaterialAvailabilityList(card, "Cores e materiais deste puxador", model.materials, product.materialIds, `handle:${product.id}`);
-    card.append(makeRuleSelect("Puxador selecionado inicialmente", model.initialState.handleId, "initialHandle", [["none", "Definir depois"], ...handles.materialIds.map((id) => { const item = model.handleProducts.find((entry) => entry.id === id); return [item?.priceEntryId || "", item?.label || id]; })]));
+    available.append(toggle, document.createTextNode(finishAvailabilityCopy.customerAvailability)); card.append(available);
+    const note = document.createElement("p"); note.className = "admin-note"; note.textContent = materialAvailabilityCopy.handleAvailabilityNote; card.append(note);
+    appendMaterialAvailabilityList(card, materialAvailabilityCopy.handleMaterialsHeading, model.materials, product.materialIds, `handle:${product.id}`);
+    card.append(makeRuleSelect(materialAvailabilityCopy.initialHandleLabel, model.initialState.handleId, "initialHandle", [["none", materialAvailabilityCopy.defineLater], ...handles.materialIds.map((id) => { const item = model.handleProducts.find((entry) => entry.id === id); return [item?.priceEntryId || "", item?.label || id]; })]));
   } else {
     const group = model.materialGroups.find((item) => item.id === targetId);
-    card.append(makeField("Nome da opção", group.label, "materialGroupLabel"));
-    if (targetId === "stone-all") appendMaterialAvailabilityList(card, "Pedras e texturas disponíveis para bancada e rodapé", model.materials, group.materialIds, targetId);
-    else card.append(makeMaterialCheckboxDropdown("Materiais válidos para frentes", model.materials.map((item) => [item.id, item.label, item.color, item.textureAsset]), group.materialIds, targetId));
+    card.append(makeField(materialAvailabilityCopy.groupName, group.label, "materialGroupLabel"));
+    if (targetId === "stone-all") appendMaterialAvailabilityList(card, materialAvailabilityCopy.stoneAvailabilityHeading, model.materials, group.materialIds, targetId);
+    else card.append(makeMaterialCheckboxDropdown(materialAvailabilityCopy.frontMaterialsLabel, model.materials.map((item) => [item.id, item.label, item.color, item.textureAsset]), group.materialIds, targetId));
     if (targetId === "fronts-all") {
       const available = model.finishes.filter((finish) => finish.enabled && finish.scope === "global" && group.materialIds.includes(finish.id));
-      card.append(makeRuleSelect("Cor selecionada inicialmente", model.initialState.finishId, "initialFinish", available.map((finish) => [finish.id, model.materials.find((item) => item.id === finish.id)?.label || finish.id])));
+      card.append(makeRuleSelect(materialAvailabilityCopy.initialColorLabel, model.initialState.finishId, "initialFinish", available.map((finish) => [finish.id, model.materials.find((item) => item.id === finish.id)?.label || finish.id])));
     } else {
-      card.append(makeRuleSelect("Pedra selecionada inicialmente", model.initialState.stonePackageId, "initialStone", group.materialIds.map((id) => [id, model.materials.find((item) => item.id === id)?.label || id])));
-      const note = document.createElement("p"); note.className = "admin-note"; note.textContent = "A disponibilidade do serviço de rodapé é controlada separadamente na etapa; pedra e rodapé compartilham o material escolhido."; card.append(note);
+      card.append(makeRuleSelect(materialAvailabilityCopy.initialStoneLabel, model.initialState.stonePackageId, "initialStone", group.materialIds.map((id) => [id, model.materials.find((item) => item.id === id)?.label || id])));
+      const note = document.createElement("p"); note.className = "admin-note"; note.textContent = materialAvailabilityCopy.baseboardAvailabilityNote; card.append(note);
     }
   }
   materialGroupsList.append(card);
@@ -1091,7 +1091,7 @@ function renderMaterialGroups() {
 
 function appendMaterialAvailabilityList(container, label, materials, selectedIds, targetId) {
   const section = document.createElement("section"); section.className = "material-availability-list";
-  const heading = document.createElement("h3"); heading.textContent = `${label} · ${selectedIds.length} disponível(is)`;
+  const heading = document.createElement("h3"); heading.textContent = `${label} · ${selectedIds.length} ${materialAvailabilityCopy.availableCountSuffix}`;
   const options = materials.slice().sort((left, right) => left.label.localeCompare(right.label, "pt-BR"));
   const pages = Math.max(1, Math.ceil(options.length / MATERIALS_PER_PAGE));
   materialAvailabilityPage = Math.min(materialAvailabilityPage, pages - 1);
@@ -1111,7 +1111,7 @@ function appendMaterialAvailabilityList(container, label, materials, selectedIds
 
 function makeMaterialCheckboxDropdown(label, options, selectedIds, targetId) {
   const details = document.createElement("details"); details.className = "multi-picker";
-  const summary = document.createElement("summary"); summary.textContent = `${label} · ${selectedIds.length} selecionado(s)`; details.append(summary);
+  const summary = document.createElement("summary"); summary.textContent = `${label} · ${selectedIds.length} ${materialAvailabilityCopy.selectedCountSuffix}`; details.append(summary);
   const list = document.createElement("div"); list.className = "multi-picker__list";
   options.forEach(([id, name, color, texture]) => {
     const option = document.createElement("label"); option.className = "multi-picker__option";
@@ -1464,7 +1464,7 @@ materialGroupsList.addEventListener("change", (event) => {
   if (event.target.matches("[data-target-material]")) setMaterialTarget(event.target.dataset.materialId, event.target.dataset.targetMaterial, event.target.checked);
   if (event.target.matches("[data-handle-availability]")) {
     const handles = model.materialGroups.find((item) => item.id === "handles-all"); const id = event.target.dataset.handleAvailability;
-    if (!event.target.checked && handles.materialIds.length === 1) { event.target.checked = true; return setMessage(saveMessage, "Mantenha pelo menos um puxador disponível.", "error"); }
+    if (!event.target.checked && handles.materialIds.length === 1) { event.target.checked = true; return setMessage(saveMessage, materialAvailabilityCopy.lastHandleAvailabilityValidation, "error"); }
     handles.materialIds = event.target.checked ? [...new Set([...handles.materialIds, id])] : handles.materialIds.filter((item) => item !== id);
     reconcileInitialMaterials();
   }
