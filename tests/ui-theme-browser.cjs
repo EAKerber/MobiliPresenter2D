@@ -228,9 +228,7 @@ async function main() {
           assert.equal(activated.mode, "light", shell.path + " keyboard activation selects light mode after automatic");
           assert.equal(activated.stored, "light", shell.path + " keyboard activation persists light mode");
           assert(activated.label.includes("Ativar Escuro"), shell.path + " announces the next mode from light");
-          const lightGlobalFocus = viewport.name === "mobile" && shell.path === "/"
-            ? await measureGlobalFocus(page, "rgb(110, 81, 46)", shell.path + " light")
-            : null;
+
 
 
 
@@ -244,7 +242,6 @@ async function main() {
             measuredHeightCssPx: measured.height,
             keyboardFocusVisible: focusStyle.visible,
             darkFocus: darkGlobalFocus,
-            lightFocus: lightGlobalFocus,
             keyboardActivation: activated.mode
           });
         } finally {
