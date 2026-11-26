@@ -177,6 +177,9 @@ async function main() {
           assert(measured.ariaLabel && measured.ariaLabel.length > 8, shell.path + " has an accessible name");
           assert(measured.title, shell.path + " has a concise title");
 
+          const darkGlobalFocus = viewport.name === "mobile" && shell.path === "/"
+            ? await measureGlobalFocus(page, "rgb(216, 188, 124)", shell.path + " dark")
+            : null;
           const keyboardStart = page.locator(shell.keyboard.start).first();
           await keyboardStart.focus();
           assert(await keyboardStart.evaluate((element) => document.activeElement === element),
@@ -196,9 +199,7 @@ async function main() {
             visible: button.matches(":focus-visible") && getComputedStyle(button).outlineStyle !== "none"
           }));
           assert(focusStyle.visible, shell.path + " keyboard focus is visibly indicated");
-          const darkGlobalFocus = viewport.name === "mobile" && shell.path === "/"
-            ? await measureGlobalFocus(page, "rgb(216, 188, 124)", shell.path + " dark")
-            : null;
+
 
 
 
