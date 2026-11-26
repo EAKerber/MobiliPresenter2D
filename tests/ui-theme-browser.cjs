@@ -178,7 +178,22 @@ async function main() {
               theme: document.documentElement.dataset.theme,
               themeMode: document.documentElement.dataset.themeMode,
               token: getComputedStyle(document.documentElement).getPropertyValue("--ui-theme-focus").trim(),
+              buttonToken: style.getPropertyValue("--ui-theme-focus").trim(),
               className: button.className,
+              matchingOutlineRules: [...document.styleSheets].flatMap((sheet) => {
+                const matches = [];
+                const visit = (rules) => {
+                  for (const rule of rules) {
+                    if (rule.selectorText && ["outline", "outline-color", "outline-offset", "outline-style"].some((name) => rule.style?.getPropertyValue(name))) {
+                      let applies = false;
+                      try { applies = button.matches(rule.selectorText); } catch (_error) {}
+                      if (applies) matches.push({ selector: rule.selectorText, cssText: rule.style.cssText, href: sheet.href });
+                    } else if (rule.cssRules) visit(rule.cssRules);
+                  }
+                };
+                try { visit(sheet.cssRules); } catch (_error) {}
+                return matches;
+              }),
               matchingFocusRules: [...document.styleSheets].flatMap((sheet) => {
                 const matches = [];
                 const visit = (rules) => {
