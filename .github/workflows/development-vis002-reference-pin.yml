@@ -9,9 +9,7 @@ on:
       - 'design-system/audits/p-token-01b-current-css-literal-observations.json'
       - 'scripts/verify-design-system-reference-pin.mjs'
       - 'tests/design-system-reference-pin.test.mjs'
-      - 'tests/design-system-computed-style-readonly-audit.mjs'
       - 'tools/development_vis002_reference_pin_audit.py'
-      - '.github/workflows/development-vis002-reference-pin.yml'
   workflow_dispatch:
 
 permissions:
