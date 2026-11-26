@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="pt-BR">
   <head>
-<script src="/core/ui-copy.js?v=arc13-loc006-admin-material-editor-copy-1"></script><script src="/core/ui-theme.js?v=arc13-loc003-copy-1"></script>
+<script src="/core/ui-copy.js?v=arc13-loc006-admin-hierarchy-editor-copy-1"></script><script src="/core/ui-theme.js?v=arc13-loc003-copy-1"></script>
 <link rel="icon" type="image/x-icon" href="/branding/favicon.ico">
 <link rel="icon" type="image/png" sizes="32x32" href="/branding/favicon-32.png">
 <link rel="icon" type="image/png" sizes="192x192" href="/branding/android-chrome-192.png">
@@ -77,7 +77,7 @@
           <button class="admin-tab" type="button" role="tab" aria-selected="false" data-admin-tab="rules">Dependências e eventos</button>
           <button class="admin-tab" type="button" role="tab" aria-selected="false" data-admin-tab="pricing">Preços</button>
         </nav>
-        <section class="admin-tab-panel" role="tabpanel" data-admin-panel="stages"><div class="panel-toolbar"><p class="admin-note">Arraste os itens entre etapas. Itens sem etapa aparecem na lista de disponíveis. Etapas de módulos e resumo são essenciais.</p><div class="stage-add-tools"><select id="stageKindInput" aria-label="Tipo da nova etapa"><option value="custom">Personalizada</option><option value="finishes">Acabamentos</option><option value="services">Serviços</option></select><button id="addStageButton" class="button button--secondary" type="button">Adicionar etapa</button></div></div><div id="stagesList" class="stages-list"></div></section>
+        <section class="admin-tab-panel" role="tabpanel" data-admin-panel="stages"><div class="panel-toolbar"><p id="stagePanelNote" class="admin-note"></p><div class="stage-add-tools"><select id="stageKindInput"><option value="custom"></option><option value="finishes"></option><option value="services"></option></select><button id="addStageButton" class="button button--secondary" type="button"></button></div></div><div id="stagesList" class="stages-list"></div></section>
         <section class="admin-tab-panel" role="tabpanel" data-admin-panel="objects" hidden>
           <div class="object-pager"><button id="objectPrevious" class="button button--secondary" type="button">← Anterior</button><label class="data-field">Objeto<select id="objectSelector"></select></label><button id="objectNext" class="button button--secondary" type="button">Próximo →</button></div>
           <nav class="admin-tabs admin-tabs--nested" role="tablist" aria-label="Dados do objeto"><button class="admin-tab is-active" type="button" role="tab" aria-selected="true" data-object-tab="content">Conteúdo</button><button class="admin-tab" type="button" role="tab" aria-selected="false" data-object-tab="assets">Imagens e máscaras</button></nav>

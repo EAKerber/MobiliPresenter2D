@@ -30,6 +30,7 @@ const stageAvailabilityCopy = uiCopy.admin.stages;
 const objectAssetPolicyCopy = uiCopy.admin.objectAssets;
 const objectContentFieldCopy = uiCopy.admin.objectContentFields;
 const materialAvailabilityCopy = uiCopy.admin.materials;
+const hierarchyEditorCopy = uiCopy.admin.hierarchyEditor;
 const viewerBasePricePublicationCopy = uiCopy.admin.pricing.viewerBasePricePublication;
 let catalogPricing = null;
 let adminDataPromise = null;
@@ -211,7 +212,7 @@ function compatibleDestinationOptions(itemId) {
     if (!stage.groups.length) {
       options.push({
         value: `${stage.id}||`,
-        label: `${stage.label} · criar grupo/seção inicial`
+        label: `${stage.label} · ${hierarchyEditorCopy.emptyStageDestination}`
       });
       return;
     }
@@ -314,14 +315,14 @@ function makeOrderButtons(upData, downData, index, length, label) {
   const up = document.createElement("button");
   up.type = "button";
   up.textContent = "↑";
-  up.title = `Mover ${label} para cima`;
+  up.title = hierarchyEditorCopy.moveUpAriaLabel.replace("{item}", () => label);
   up.setAttribute("aria-label", up.title);
   up.disabled = index === 0;
   Object.entries(upData).forEach(([key, value]) => { up.dataset[key] = value; });
   const down = document.createElement("button");
   down.type = "button";
   down.textContent = "↓";
-  down.title = `Mover ${label} para baixo`;
+  down.title = hierarchyEditorCopy.moveDownAriaLabel.replace("{item}", () => label);
   down.setAttribute("aria-label", down.title);
   down.disabled = index === length - 1;
   Object.entries(downData).forEach(([key, value]) => { down.dataset[key] = value; });
@@ -385,11 +386,11 @@ function appendHierarchyChoiceOptions(container, itemId) {
 
   const summary = document.createElement("summary");
   const availableCount = choices.filter((choice) => choice.available).length;
-  summary.textContent = `Opções do item · ${availableCount} disponível(is)`;
+  summary.textContent = hierarchyEditorCopy.choiceOptionsSummary.replace("{count}", String(availableCount));
 
   const note = document.createElement("p");
   note.className = "admin-note hierarchy-choice-options__note";
-  note.textContent = "Estas são opções do item, não itens hierárquicos independentes. Disponibilidade e dados comerciais continuam nas abas próprias.";
+  note.textContent = hierarchyEditorCopy.choiceOptionsNote;
 
   const list = document.createElement("div");
   list.className = "hierarchy-choice-options__list";
@@ -403,7 +404,7 @@ function appendHierarchyChoiceOptions(container, itemId) {
     label.textContent = choice.label;
 
     const status = document.createElement("small");
-    status.textContent = choice.available ? "Disponível" : "Indisponível";
+    status.textContent = choice.available ? hierarchyEditorCopy.choiceAvailable : hierarchyEditorCopy.choiceUnavailable;
     row.append(label, status);
     list.append(row);
   });
@@ -437,7 +438,7 @@ function renderItem(stage, group, section, itemId, itemIndex) {
 
   const moveLabel = document.createElement("label");
   moveLabel.className = "hierarchy-move";
-  moveLabel.append(document.createTextNode("Mover para"));
+  moveLabel.append(document.createTextNode(hierarchyEditorCopy.moveItemLabel));
   const move = document.createElement("select");
   move.dataset.moveHierarchyItemTarget = itemId;
   const current = `${stage.id}|${group.id}|${section.id}`;
@@ -457,7 +458,7 @@ function renderItem(stage, group, section, itemId, itemIndex) {
     const split = document.createElement("button");
     split.type = "button";
     split.className = "button button--secondary button--compact";
-    split.textContent = "Nova seção";
+    split.textContent = hierarchyEditorCopy.newSection;
     split.dataset.splitHierarchyItem = itemId;
     split.dataset.stageId = stage.id;
     split.dataset.groupId = group.id;
@@ -467,7 +468,7 @@ function renderItem(stage, group, section, itemId, itemIndex) {
   const remove = document.createElement("button");
   remove.type = "button";
   remove.className = "button button--secondary button--compact";
-  remove.textContent = "Retirar";
+  remove.textContent = hierarchyEditorCopy.removeItem;
   remove.dataset.removeHierarchyItem = itemId;
   actions.append(remove);
   option.append(actions);
@@ -483,7 +484,7 @@ function renderSection(stage, group, section, sectionIndex) {
   header.className = "hierarchy-section__header";
   const name = document.createElement("label");
   name.className = "hierarchy-name";
-  name.append(document.createTextNode("Seção"));
+  name.append(document.createTextNode(hierarchyEditorCopy.sectionName));
   const input = document.createElement("input");
   input.type = "text";
   input.value = section.label;
@@ -493,7 +494,7 @@ function renderSection(stage, group, section, sectionIndex) {
 
   const presentation = document.createElement("label");
   presentation.className = "hierarchy-field";
-  presentation.append(document.createTextNode("Componente"));
+  presentation.append(document.createTextNode(hierarchyEditorCopy.componentLabel));
   const select = document.createElement("select");
   select.dataset.sectionComponent = `${stage.id}|${group.id}|${section.id}`;
   hierarchyCore.COMPONENTS.filter((value) => presentationCore.componentSupportsBehavior(value, section.behavior)).forEach((value) => {
@@ -518,7 +519,7 @@ function renderSection(stage, group, section, sectionIndex) {
   if (stage.groups.length > 1) {
     const moveGroupLabel = document.createElement("label");
     moveGroupLabel.className = "hierarchy-move";
-    moveGroupLabel.append(document.createTextNode("Mover seção para grupo"));
+    moveGroupLabel.append(document.createTextNode(hierarchyEditorCopy.moveSectionToGroup));
     const moveGroup = document.createElement("select");
     moveGroup.dataset.moveSectionGroup = `${stage.id}|${group.id}|${section.id}`;
     stage.groups.forEach((candidate) => {
@@ -543,14 +544,14 @@ function renderSection(stage, group, section, sectionIndex) {
     const split = document.createElement("button");
     split.type = "button";
     split.className = "button button--secondary button--compact";
-    split.textContent = "Mover para novo grupo";
+    split.textContent = hierarchyEditorCopy.moveSectionToNewGroup;
     split.dataset.splitHierarchySection = `${stage.id}|${group.id}|${section.id}`;
     actions.append(split);
 
     const merge = document.createElement("button");
     merge.type = "button";
     merge.className = "button button--secondary button--compact";
-    merge.textContent = "Remover seção e unir";
+    merge.textContent = hierarchyEditorCopy.mergeSection;
     merge.dataset.mergeHierarchySection = `${stage.id}|${group.id}|${section.id}|${sectionIndex === 0 ? "next" : "previous"}`;
     actions.append(merge);
   }
@@ -567,7 +568,7 @@ function renderGroup(stage, group, groupIndex) {
   header.className = "hierarchy-group__header";
   const name = document.createElement("label");
   name.className = "hierarchy-name";
-  name.append(document.createTextNode("Grupo"));
+  name.append(document.createTextNode(hierarchyEditorCopy.groupName));
   const input = document.createElement("input");
   input.type = "text";
   input.value = group.label;
@@ -577,13 +578,13 @@ function renderGroup(stage, group, groupIndex) {
 
   const span = document.createElement("label");
   span.className = "hierarchy-field";
-  span.append(document.createTextNode("Largura"));
+  span.append(document.createTextNode(hierarchyEditorCopy.groupWidth));
   const select = document.createElement("select");
   select.dataset.groupSpan = `${stage.id}|${group.id}`;
   hierarchyCore.COLUMN_SPANS.forEach((value) => {
     const option = document.createElement("option");
     option.value = String(value);
-    option.textContent = value === 2 ? "2 colunas" : "1 coluna";
+    option.textContent = value === 2 ? hierarchyEditorCopy.groupColumnOptions.two : hierarchyEditorCopy.groupColumnOptions.one;
     option.selected = value === group.columnSpan;
     select.append(option);
   });
@@ -608,7 +609,7 @@ function renderGroup(stage, group, groupIndex) {
     const merge = document.createElement("button");
     merge.type = "button";
     merge.className = "button button--secondary button--compact hierarchy-group__merge";
-    merge.textContent = "Remover grupo e unir conteúdo";
+    merge.textContent = hierarchyEditorCopy.mergeGroup;
     merge.dataset.mergeHierarchyGroup = `${stage.id}|${group.id}|${groupIndex === 0 ? "next" : "previous"}`;
     card.append(merge);
   }
@@ -616,6 +617,7 @@ function renderGroup(stage, group, groupIndex) {
 }
 
 function renderStages() {
+  byId("stagePanelNote").textContent = hierarchyEditorCopy.stagePanelNote;
   stagesList.replaceChildren();
   const assigned = new Set(model.stages.flatMap(stageItemIds));
   const availableById = new Map();
@@ -629,12 +631,12 @@ function renderStages() {
 
   const availableItems = document.createElement("section");
   availableItems.className = "stage-unassigned";
-  availableItems.setAttribute("aria-label", "Itens do catálogo sem seção");
+  availableItems.setAttribute("aria-label", hierarchyEditorCopy.availableItemsAriaLabel);
   const availableHeading = document.createElement("h2");
-  availableHeading.textContent = "Itens disponíveis";
+  availableHeading.textContent = hierarchyEditorCopy.availableItemsHeading;
   const availableHint = document.createElement("p");
   availableHint.className = "admin-note";
-  availableHint.textContent = "Itens pertencem a seções explícitas. Escolha uma seção compatível ou crie a estrutura inicial de uma etapa vazia.";
+  availableHint.textContent = hierarchyEditorCopy.availableItemsHint;
   const availableGrid = document.createElement("div");
   availableGrid.className = "stage-unassigned__items";
 
@@ -654,7 +656,7 @@ function renderStages() {
     const add = document.createElement("button");
     add.type = "button";
     add.className = "button button--secondary button--compact";
-    add.textContent = "Adicionar";
+    add.textContent = hierarchyEditorCopy.addItem;
     add.dataset.placeHierarchyItem = item.id;
     add.disabled = !select.options.length;
     chip.append(title, select, add);
@@ -663,7 +665,7 @@ function renderStages() {
   if (!availableById.size) {
     const empty = document.createElement("span");
     empty.className = "admin-note";
-    empty.textContent = "Todos os itens compatíveis já pertencem a uma seção.";
+    empty.textContent = hierarchyEditorCopy.allItemsPlaced;
     availableGrid.append(empty);
   }
   availableItems.append(availableHeading, availableHint, availableGrid);
@@ -682,13 +684,13 @@ function renderStages() {
 
     const nameLabel = document.createElement("label");
     nameLabel.className = "stage-name";
-    nameLabel.append(document.createTextNode("Nome da etapa"));
+    nameLabel.append(document.createTextNode(hierarchyEditorCopy.stageNameLabel));
     const nameInput = document.createElement("input");
     nameInput.type = "text";
     nameInput.maxLength = 40;
     nameInput.value = stage.label;
     nameInput.dataset.stageLabel = stage.id;
-    nameInput.setAttribute("aria-label", `Nome da etapa ${stage.label}`);
+    nameInput.setAttribute("aria-label", hierarchyEditorCopy.stageNameAriaLabel.replace("{stage}", () => stage.label));
     nameLabel.append(nameInput);
 
     const order = makeOrderButtons(
@@ -712,7 +714,7 @@ function renderStages() {
     const remove = document.createElement("button");
     remove.type = "button";
     remove.className = "button button--secondary";
-    remove.textContent = "Remover etapa";
+    remove.textContent = hierarchyEditorCopy.removeStage;
     remove.dataset.removeStage = stage.id;
     remove.disabled = isRequiredStage;
     if (remove.disabled && disabledReason) remove.setAttribute("aria-describedby", disabledReasonId);
@@ -747,7 +749,7 @@ function renderStages() {
     } else {
       const empty = document.createElement("p");
       empty.className = "stage-drop-hint";
-      empty.textContent = "Etapa vazia. Adicione um item disponível para criar o primeiro grupo e seção.";
+      empty.textContent = hierarchyEditorCopy.emptyStageHint;
       hierarchy.append(empty);
     }
     card.append(hierarchy);
@@ -755,9 +757,12 @@ function renderStages() {
   });
 
   const stageKindInput = byId("stageKindInput");
+  stageKindInput.setAttribute("aria-label", hierarchyEditorCopy.newStageTypeLabel);
   [...stageKindInput.options].forEach((option) => {
+    option.textContent = hierarchyEditorCopy.newStageTypes[option.value] || option.textContent;
     option.disabled = option.value !== "custom" && model.stages.some((stage) => (stage.kind || stage.id) === option.value);
   });
+  byId("addStageButton").textContent = hierarchyEditorCopy.addStage;
 }
 
 function makeField(labelText, value, name, multiline = false) {
@@ -1504,11 +1509,11 @@ function newRuleId(prefix, records) {
   let index = 1; while (records.some((item) => item.id === `${prefix}-${index}`)) index += 1; return `${prefix}-${index}`;
 }
 byId("addStageButton").addEventListener("click", () => {
-  if (model.stages.length >= 12) return setMessage(saveMessage, "O limite é 12 etapas.", "error");
+  if (model.stages.length >= 12) return setMessage(saveMessage, hierarchyEditorCopy.stageLimitValidation.replace("{limit}", "12"), "error");
   const kind = byId("stageKindInput").value;
   if (kind !== "custom" && model.stages.some((stage) => (stage.kind || stage.id) === kind)) return;
   const defaultLabel = kind === "finishes" ? "Acabamentos" : kind === "services" ? "Serviços" : "Nova etapa";
-  const label = window.prompt("Nome da nova etapa", defaultLabel);
+  const label = window.prompt(hierarchyEditorCopy.newStagePrompt, defaultLabel);
   if (!label?.trim()) return;
   let id = `stage-${label.trim().toLocaleLowerCase("pt-BR").normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").slice(0, 28) || "extra"}`;
   const base = id; let suffix = 2; while (model.stages.some((stage) => stage.id === id)) id = `${base}-${suffix++}`;
@@ -1858,7 +1863,7 @@ stagesList.addEventListener("click", (event) => {
 
   const splitItem = event.target.closest("[data-split-hierarchy-item]");
   if (splitItem) {
-    const label = window.prompt("Nome da nova seção", itemLabel(splitItem.dataset.stageId, splitItem.dataset.splitHierarchyItem));
+    const label = window.prompt(hierarchyEditorCopy.newSectionPrompt, itemLabel(splitItem.dataset.stageId, splitItem.dataset.splitHierarchyItem));
     if (!label?.trim()) return;
     const stage = model.stages.find((entry) => entry.id === splitItem.dataset.stageId);
     const sectionIds = new Set((stage?.groups || []).flatMap((group) => group.sections.map((section) => section.id)));
@@ -1880,7 +1885,7 @@ stagesList.addEventListener("click", (event) => {
     const [stageId, groupId, sectionId] = splitSection.dataset.splitHierarchySection.split("|");
     const stage = model.stages.find((entry) => entry.id === stageId);
     const section = stage?.groups.find((group) => group.id === groupId)?.sections.find((entry) => entry.id === sectionId);
-    const label = window.prompt("Nome do novo grupo", section?.label || "Novo grupo");
+    const label = window.prompt(hierarchyEditorCopy.newGroupPrompt, section?.label || "Novo grupo");
     if (!label?.trim()) return;
     const groupIds = new Set((stage?.groups || []).map((group) => group.id));
     const nextGroupId = hierarchyEditor.uniqueId(groupIds, label, "grupo");

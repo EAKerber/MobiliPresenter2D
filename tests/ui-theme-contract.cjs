@@ -153,7 +153,7 @@ for (const file of shells) {
     : file === "app/viewer/index.html"
       ? "arc13-loc005-scene-interaction-1"
     : file === "app/admin.html"
-      ? "arc13-loc006-admin-material-editor-copy-1"
+      ? "arc13-loc006-admin-hierarchy-editor-copy-1"
     : "arc13-loc003-copy-1";
   assert(html.includes(`src="/core/ui-copy.js?v=${copyVersion}"`), file + " copy catalog bootstrap");
   assert(html.includes('src="/core/ui-theme.js?v=arc13-loc003-copy-1"'), file + " theme bootstrap");
