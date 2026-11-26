@@ -386,9 +386,14 @@
           "source": "Product PR #438 merge and post-merge development readback",
           "sha": "6b31beadcb460b3c13f125e528ca80f925da7f43",
           "detail": "PR #438 integrated the exact TST-001 workflow snapshot into development. The post-merge compare from 71bc086 to 6b31bea shows only the inventory document and execution register changed; workflow definitions remain byte-identical. The source snapshot still distinguishes declared commands from observed assertions/results."
+        },
+        {
+          "source": "TST-001 exact-ref workflow run #45894653957, artifact #15152847796",
+          "sha": "e2602338adfca0ac9c9bf5c9dddb3f80457cfe04",
+          "detail": "Both jobs passed on exact PR head e2602338adfca0ac9c9bf5c9dddb3f80457cfe04. Artifact 15152847796 records main@279622acb090c53f86e8263d6ce90d7bc5e92492 (tree 286045e14060794b7da1ba9e814cfb72b6928a9a), development@0d077dc2b19595236b76a569cb1860ac2eb54093 (tree 3b5f229793b942ef2cb93d0d4fbd14ec9acf4144), and candidate PR #521 at e2602338 (tree cd89ac7a67585884489e2c7008ac67ac1d98962a; 1 candidate workflow definition change). Inventory: 28 main workflows, 67 development workflows, 26 shared, 2 main-only, 41 development-only, 69 names, 88 distinct definitions across refs, 0 parser warnings and 6 write-signal paths. PR #517 was read at head 3079610 / base f864fed. This refreshes exact workflow definitions and candidate metadata only; command-to-assertion/contract/results crosswalk and six write-signal classifications remain open."
         }
       ],
-      "nextAction": "Complete the command→assertion→contract result crosswalk for the remaining families and refresh this snapshot whenever workflow definitions change; preserve the distinction between declared command and observed run result."
+      "nextAction": "Complete the command→assertion→contract/result crosswalk; classify the six write-signal paths with exact source and observed outcomes, including the unresolved cleanup reservation failure; reconcile uninvoked tests and historical/candidate workflow status. Keep this inventory scoped to the exact refs above."
     },
     {
       "order": 20,
