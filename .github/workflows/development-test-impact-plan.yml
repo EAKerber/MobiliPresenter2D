@@ -6,6 +6,8 @@ on:
     paths:
       - '.github/workflows/**'
       - 'tools/ci/build-workflow-inventory.mjs'
+      - 'docs/architecture/ci/**'
+      - 'docs/architecture/plan-v0.9-execution-register.json'
   pull_request:
     branches: [development]
     paths:
@@ -19,6 +21,8 @@ on:
       - 'tools/**'
       - 'package.json'
       - 'package-lock.json'
+      - 'docs/architecture/ci/**'
+      - 'docs/architecture/plan-v0.9-execution-register.json'
       - '.github/workflows/**'
 
 permissions:
