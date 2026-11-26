@@ -46,9 +46,9 @@ const sample = targets => targets.map(({selector, expectedBackground}) => {
       if (compositing) return {error: "composited-ancestor"};
       if (resolved === null) {
         if (css.backgroundImage !== "none") return {error: "image-or-gradient"};
-        const match = /^rgba?\\((.*)\\)$/.exec(css.backgroundColor);
+        const match = /^rgba?\((.*)\)$/.exec(css.backgroundColor);
         if (!match) return {error: "unparsed-background"};
-        const channels = match[1].split(/[,\\s/]+/).filter(Boolean);
+        const channels = match[1].split(/[,\s/]+/).filter(Boolean);
         const alpha = channels.length >= 4 ? Number(channels[3]) : 1;
         if (!Number.isFinite(alpha) || alpha < 0 || alpha > 1)
           return {error: "unparsed-alpha"};
